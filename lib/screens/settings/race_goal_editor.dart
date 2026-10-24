@@ -1,0 +1,343 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../providers/planner_providers.dart';
+import '../../widgets/app_widgets.dart';
+import '../../utils/decimal.dart';
+
+Future<void> showRaceGoalEditor(BuildContext context) =>
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: panel,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
+      ),
+      builder: (_) => const FractionallySizedBox(
+        heightFactor: .72,
+        child: RaceGoalEditor(),
+      ),
+    );
+
+class RaceGoalEditor extends ConsumerStatefulWidget {
+  const RaceGoalEditor({super.key});
+  @override
+  ConsumerState<RaceGoalEditor> createState() => _RaceEditorState();
+}
+
+class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
+  final name = TextEditingController(),
+      km = TextEditingController(),
+      elevation = TextEditingController();
+  final form = GlobalKey<FormState>();
+  DateTime? date;
+  String sport = 'running', priority = 'a';
+  String? dateError;
+  bool saving = false;
+  @override
+  void dispose() {
+    name.dispose();
+    km.dispose();
+    elevation.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    const accent = Colors.orange;
+    Widget label(String text) => Padding(
+      padding: const EdgeInsets.only(top: 20, bottom: 8),
+      child: Text(
+        text,
+        style: const TextStyle(
+          color: muted,
+          fontSize: 10,
+          letterSpacing: 1.1,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    );
+    InputDecoration decoration(String hint) => InputDecoration(
+      hintText: hint,
+      hintStyle: const TextStyle(color: muted),
+      filled: false,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Colors.white12),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Colors.white12),
+      ),
+    );
+    Widget number(
+      TextEditingController controller,
+      String hint, {
+      bool optional = false,
+    }) => TextFormField(
+      controller: controller,
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      decoration: decoration(hint),
+      style: const TextStyle(fontSize: 14),
+      validator: (value) {
+        if (optional && (value == null || value.trim().isEmpty)) return null;
+        final v = parseDecimal(value);
+        return v == null || !v.isFinite || (optional ? v < 0 : v <= 0)
+            ? 'Enter a valid number'
+            : null;
+      },
+    );
+    return ColoredBox(
+      color: panel,
+      child: Column(
+        children: [
+          const SizedBox(height: 14),
+          Container(
+            width: 36,
+            height: 4,
+            decoration: BoxDecoration(
+              color: Colors.white24,
+              borderRadius: BorderRadius.circular(3),
+            ),
+          ),
+          Expanded(
+            child: Form(
+              key: form,
+              child: ListView(
+                padding: EdgeInsets.fromLTRB(
+                  20,
+                  16,
+                  20,
+                  MediaQuery.viewInsetsOf(context).bottom + 24,
+                ),
+                children: [
+                  const Text(
+                    'Add Race Goal',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                  ),
+                  label('RACE NAME'),
+                  TextFormField(
+                    controller: name,
+                    decoration: decoration('e.g. UTMB 2027'),
+                    style: const TextStyle(fontSize: 14),
+                    validator: (v) => v == null || v.trim().isEmpty
+                        ? 'Enter a race name'
+                        : null,
+                  ),
+                  label('SPORT'),
+                  Wrap(
+                    spacing: 6,
+                    runSpacing: 6,
+                    children: [
+                      for (final e in const {
+                        'running': 'Running',
+                        'trail_running': 'Trail Running',
+                        'cycling_road': 'Road Cycling',
+                        'cycling_gravel': 'Gravel',
+                        'cycling_mtb': 'MTB',
+                        'swimming': 'Swimming',
+                        'triathlon': 'Triathlon',
+                        'indoor_rowing': 'Indoor Rowing',
+                      }.entries)
+                        ChoiceChip(
+                          label: Text(e.value),
+                          selected: sport == e.key,
+                          onSelected: saving
+                              ? null
+                              : (_) => setState(() => sport = e.key),
+                          padding: EdgeInsets.zero,
+                          labelPadding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                          ),
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
+                          selectedColor: accent.withValues(alpha: .15),
+                          backgroundColor: Colors.white.withValues(alpha: .04),
+                          side: BorderSide(
+                            color: sport == e.key ? accent : Colors.white12,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(9),
+                          ),
+                          labelStyle: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'Roboto',
+                            color: sport == e.key ? accent : Colors.white70,
+                          ),
+                        ),
+                    ],
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            label('DISTANCE (km)'),
+                            number(km, 'e.g. 42.2'),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            label('PRIORITY'),
+                            Row(
+                              children: [
+                                for (final p in ['a', 'b', 'c'])
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(right: 4),
+                                      child: OutlinedButton(
+                                        style: OutlinedButton.styleFrom(
+                                          padding: EdgeInsets.zero,
+                                          minimumSize: const Size(0, 44),
+                                          foregroundColor: p == priority
+                                              ? accent
+                                              : Colors.white70,
+                                          backgroundColor: p == priority
+                                              ? accent.withValues(alpha: .15)
+                                              : Colors.white.withValues(
+                                                  alpha: .04,
+                                                ),
+                                          side: BorderSide(
+                                            color: p == priority
+                                                ? accent
+                                                : Colors.white12,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              9,
+                                            ),
+                                          ),
+                                        ),
+                                        onPressed: saving
+                                            ? null
+                                            : () =>
+                                                  setState(() => priority = p),
+                                        child: Text(p.toUpperCase()),
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  label('ELEVATION GAIN (m)'),
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 8),
+                    child: Text(
+                      'Optional total climbing for this race.',
+                      style: TextStyle(fontSize: 12, color: Colors.white70),
+                    ),
+                  ),
+                  number(elevation, 'e.g. 2400 (optional)', optional: true),
+                  label('RACE DATE'),
+                  OutlinedButton.icon(
+                    style: OutlinedButton.styleFrom(
+                      alignment: Alignment.centerLeft,
+                      foregroundColor: date == null ? muted : Colors.white,
+                      side: const BorderSide(color: Colors.white12),
+                      minimumSize: const Size(double.infinity, 48),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    icon: const Icon(Icons.calendar_month_outlined, size: 20),
+                    label: Text(date == null ? 'Select date' : dayText(date!)),
+                    onPressed: saving
+                        ? null
+                        : () async {
+                            final now = DateUtils.dateOnly(DateTime.now());
+                            final chosen = await showDatePicker(
+                              context: context,
+                              initialDate:
+                                  date ?? now.add(const Duration(days: 90)),
+                              firstDate: now,
+                              lastDate: DateTime(
+                                now.year + 10,
+                                now.month,
+                                now.day,
+                              ),
+                            );
+                            if (chosen != null && mounted) {
+                              setState(() {
+                                date = chosen;
+                                dateError = null;
+                              });
+                            }
+                          },
+                  ),
+                  if (dateError != null)
+                    Text(
+                      dateError!,
+                      style: const TextStyle(
+                        color: Colors.redAccent,
+                        fontSize: 12,
+                      ),
+                    ),
+                  const SizedBox(height: 24),
+                  FilledButton(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: accent,
+                      foregroundColor: Colors.black,
+                      minimumSize: const Size(double.infinity, 48),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    onPressed: saving
+                        ? null
+                        : () async {
+                            final valid = form.currentState!.validate();
+                            setState(
+                              () => dateError = date == null
+                                  ? 'Select a race date'
+                                  : null,
+                            );
+                            if (!valid || date == null) {
+                              return;
+                            }
+                            setState(() => saving = true);
+                            await runUiAction(context, () async {
+                              await ref
+                                  .read(raceGoalServiceProvider)
+                                  .create(
+                                    name: name.text.trim(),
+                                    primarySport: sport,
+                                    distanceM: parseDecimal(km.text)! * 1000,
+                                    elevationM: elevation.text.trim().isEmpty
+                                        ? null
+                                        : parseDecimal(elevation.text),
+                                    raceDate: date!,
+                                    priority: priority,
+                                  );
+                              ref.invalidate(upcomingRaceGoalsProvider);
+                              ref.invalidate(primaryRaceGoalProvider);
+                              if (context.mounted) Navigator.pop(context);
+                            });
+                            if (mounted) setState(() => saving = false);
+                          },
+                    child: Text(
+                      saving ? 'Saving…' : 'Add Goal',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

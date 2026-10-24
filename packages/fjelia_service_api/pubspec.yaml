@@ -1,0 +1,7 @@
+name: fjelia_service_api
+description: Interfaces for the optional Fjelia service package (Aktiia / Hilo).
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.13.5

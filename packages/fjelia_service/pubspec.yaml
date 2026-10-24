@@ -1,0 +1,13 @@
+name: fjelia_service
+description: >
+  Stub of the optional Fjelia service package. Builds that use this stub have
+  no Aktiia / Hilo support; every call reports that the feature is unavailable.
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.13.5
+
+dependencies:
+  fjelia_service_api:
+    path: ../fjelia_service_api
