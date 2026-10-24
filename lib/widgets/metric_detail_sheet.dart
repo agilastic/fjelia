@@ -163,33 +163,38 @@ class _MetricDetailState extends ConsumerState<MetricDetailSheet> {
                   ),
                 ],
               ),
-              HistoryChart(
-                points: points,
-                bars: widget.metric == HealthMetric.steps,
-                minY: window.range.minimum,
-                maxY: window.range.maximum,
-                color: widget.metric.isBody
-                    ? const Color(0xFF7D8CFF)
-                    : Colors.lightBlue,
-                referenceLine: widget.metric.isBody ? null : window.average,
-                height: 240,
-              ),
-              if (!widget.metric.isBody)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: LoadLegend('${days}D average', mint, line: true),
-                ),
               if (widget.metric == HealthMetric.hrv)
                 HrvCombinedCard(
                   start: start,
                   end: end,
                   sleepPoints: points,
+                  average: window.average,
+                  averageLabel: '${days}D avg',
+                )
+              else ...[
+                HistoryChart(
+                  points: points,
+                  bars: widget.metric == HealthMetric.steps,
+                  minY: window.range.minimum,
+                  maxY: window.range.maximum,
+                  color: widget.metric.isBody
+                      ? const Color(0xFF7D8CFF)
+                      : Colors.lightBlue,
+                  referenceLine: widget.metric.isBody ? null : window.average,
+                  height: 240,
                 ),
+                if (!widget.metric.isBody)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: LoadLegend('${days}D average', mint, line: true),
+                  ),
+              ],
               if (widget.metric == HealthMetric.hrv)
-                const SectionCard(
+                const Padding(
+                  padding: EdgeInsets.only(top: 14),
                   child: Text(
                     'Overnight HRV reflects recovery. Compare your readings with your own baseline over time.',
-                    style: TextStyle(fontSize: 12, color: muted),
+                    style: TextStyle(fontSize: 11, color: muted, height: 1.4),
                   ),
                 ),
             ],

@@ -13,6 +13,7 @@ import '../../widgets/app_widgets.dart';
 import '../../widgets/history_sync_card.dart';
 import '../../widgets/day_navigator.dart';
 import '../../widgets/plan_view_switcher.dart';
+import '../../widgets/spinning_sync_icon.dart';
 import '../../widgets/day_summary_card.dart';
 import '../../widgets/health_monitor_grid.dart';
 import '../../widgets/hr_timeline_card.dart';
@@ -79,10 +80,11 @@ class _HomeState extends ConsumerState<HomeScreen> {
               ),
               PopupMenuButton<String>(
                 tooltip: 'Sync',
-                icon: Icon(
-                  Icons.sync,
+                icon: SpinningSyncIcon(
+                  spinning:
+                      sync.status == SyncStatus.syncing ||
+                      ref.watch(historicSyncProvider).running,
                   color: sync.status == SyncStatus.syncing ? mint : muted,
-                  size: 20,
                 ),
                 onSelected: (choice) => runUiAction(context, () async {
                   if (choice == 'today') {
