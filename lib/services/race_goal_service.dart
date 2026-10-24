@@ -4,6 +4,22 @@ import 'package:uuid/uuid.dart';
 import '../api/garmin_client.dart';
 import '../db/database.dart';
 
+/// Usual race distances in km.
+const _standardRaceKm = [5.0, 10.0, 21.0975, 42.195, 50.0, 100.0];
+
+/// A distance the user probably meant when [km] is a standard distance times
+/// ten or divided by ten (422 for 42.2, 4.22 for 42.2), else null. Real races
+/// of other lengths, such as 73 km, give null.
+double? likelyRaceDistanceKm(double km) {
+  bool near(double value, double target, double tolerance) =>
+      (value - target).abs() <= target * tolerance;
+  if (_standardRaceKm.any((s) => near(km, s, .03))) return null;
+  for (final s in _standardRaceKm) {
+    if (near(km / 10, s, .02) || near(km * 10, s, .02)) return s;
+  }
+  return null;
+}
+
 /// Target races. Priority `a` is the season goal the plan builds toward.
 class RaceGoalService {
   RaceGoalService(this._db);
@@ -11,9 +27,9 @@ class RaceGoalService {
   final AppDatabase _db;
 
   Future<List<RaceGoal>> getAll() {
-    return (_db.select(_db.raceGoals)
-          ..orderBy([(t) => OrderingTerm(expression: t.raceDate)]))
-        .get();
+    return (_db.select(
+      _db.raceGoals,
+    )..orderBy([(t) => OrderingTerm(expression: t.raceDate)])).get();
   }
 
   Future<List<RaceGoal>> getUpcoming() {
@@ -27,13 +43,42 @@ class RaceGoalService {
   Future<RaceGoal?> getPrimaryGoal() {
     final now = DateTime.now();
     return (_db.select(_db.raceGoals)
-          ..where((t) =>
-              t.priority.equals('a') & t.raceDate.isBiggerOrEqualValue(now))
+          ..where(
+            (t) =>
+                t.priority.equals('a') & t.raceDate.isBiggerOrEqualValue(now),
+          )
           ..orderBy([
-            (t) => OrderingTerm(expression: t.raceDate, mode: OrderingMode.asc)
+            (t) => OrderingTerm(expression: t.raceDate, mode: OrderingMode.asc),
           ])
           ..limit(1))
         .getSingleOrNull();
+  }
+
+  /// Fixes a marathon or half marathon saved with ten times its distance
+  /// (422 km for 42.2 km), the only case recognisable from the name.
+  /// Returns how many goals were changed.
+  Future<int> repairImplausibleDistances() async {
+    var fixed = 0;
+    for (final g in await getAll()) {
+      final name = g.name.toLowerCase();
+      final half = name.contains('half') || name.contains('halb');
+      final km = g.distanceM / 1000;
+      final suggestion = likelyRaceDistanceKm(km);
+      final target = half ? 21.0975 : 42.195;
+      if (!name.contains('marathon') ||
+          suggestion == null ||
+          (suggestion - target).abs() > 0.01) {
+        continue;
+      }
+      await (_db.update(_db.raceGoals)..where((t) => t.id.equals(g.id))).write(
+        RaceGoalsCompanion(
+          distanceM: Value(target * 1000),
+          updatedAt: Value(DateTime.now()),
+        ),
+      );
+      fixed++;
+    }
+    return fixed;
   }
 
   Future<void> create({
@@ -47,20 +92,24 @@ class RaceGoalService {
     String? garminEventId,
     String source = 'manual',
   }) async {
-    await _db.into(_db.raceGoals).insert(RaceGoalsCompanion.insert(
-          id: const Uuid().v4(),
-          athleteId: 'self',
-          name: name,
-          primarySport: primarySport,
-          distanceM: distanceM,
-          targetFinishSeconds: Value(targetFinishSeconds),
-          raceDate: raceDate,
-          priority: priority,
-          elevationM: Value(elevationM),
-          source: source,
-          garminEventId: Value(garminEventId),
-          createdAt: DateTime.now(),
-        ));
+    await _db
+        .into(_db.raceGoals)
+        .insert(
+          RaceGoalsCompanion.insert(
+            id: const Uuid().v4(),
+            athleteId: 'self',
+            name: name,
+            primarySport: primarySport,
+            distanceM: distanceM,
+            targetFinishSeconds: Value(targetFinishSeconds),
+            raceDate: raceDate,
+            priority: priority,
+            elevationM: Value(elevationM),
+            source: source,
+            garminEventId: Value(garminEventId),
+            createdAt: DateTime.now(),
+          ),
+        );
   }
 
   Future<void> updatePriority(String id, String priority) async {
@@ -90,7 +139,8 @@ class RaceGoalService {
       final eventId = (event['id'] ?? event['eventId'])?.toString();
       final date = DateTime.tryParse(event['date'] as String? ?? '');
       if (eventId == null || date == null) continue;
-      final name = event['title'] as String? ??
+      final name =
+          event['title'] as String? ??
           event['name'] as String? ??
           'Race ${date.year}-${date.month.toString().padLeft(2, '0')}-'
               '${date.day.toString().padLeft(2, '0')}';
@@ -99,20 +149,21 @@ class RaceGoalService {
       final distanceM = rawDistance > 0 && rawDistance < 1000
           ? rawDistance * 1000
           : rawDistance;
-      final sport =
-          _garminSportToFjelia(event['sportType'] as String? ?? '');
+      final sport = _garminSportToFjelia(event['sportType'] as String? ?? '');
 
       final existingId = byGarminId[eventId];
       if (existingId != null) {
-        await (_db.update(_db.raceGoals)
-              ..where((t) => t.id.equals(existingId)))
-            .write(RaceGoalsCompanion(
-          name: Value(name),
-          raceDate: Value(date),
-          distanceM: Value(distanceM),
-          primarySport: Value(sport),
-          updatedAt: Value(DateTime.now()),
-        ));
+        await (_db.update(
+          _db.raceGoals,
+        )..where((t) => t.id.equals(existingId))).write(
+          RaceGoalsCompanion(
+            name: Value(name),
+            raceDate: Value(date),
+            distanceM: Value(distanceM),
+            primarySport: Value(sport),
+            updatedAt: Value(DateTime.now()),
+          ),
+        );
       } else {
         await create(
           name: name,

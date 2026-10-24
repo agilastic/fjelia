@@ -15,6 +15,13 @@ void main() {
       expect(parseDecimal('1.234,5'), 1234.5);
       expect(parseDecimal('1,234.5'), 1234.5);
     });
+    test('copes with the spaces and separators other keyboards bring', () {
+      expect(parseDecimal('42\u066B2'), 42.2); // Arabic decimal separator
+      expect(parseDecimal('42\uFF0C2'), 42.2); // full-width comma
+      expect(parseDecimal('42\uFF0E2'), 42.2); // full-width point
+      expect(parseDecimal('1\u202F234,5'), 1234.5); // narrow no-break space
+      expect(parseDecimal('42\u00A0'), 42);
+    });
     test('rejects empty and garbage', () {
       expect(parseDecimal(null), isNull);
       expect(parseDecimal(''), isNull);
@@ -34,8 +41,10 @@ void main() {
     test('Sunday-first', () {
       expect(weekStartOf(wed, mondayFirst: false), DateTime(2026, 10, 18));
       expect(weekdayIndex(DateTime(2026, 10, 25), mondayFirst: false), 0);
-      expect(weekStartOf(DateTime(2026, 10, 25), mondayFirst: false),
-          DateTime(2026, 10, 25));
+      expect(
+        weekStartOf(DateTime(2026, 10, 25), mondayFirst: false),
+        DateTime(2026, 10, 25),
+      );
       expect(weekdayInitials(mondayFirst: false).first, 'S');
     });
     test('week numbers follow ISO for the Monday inside the week', () {

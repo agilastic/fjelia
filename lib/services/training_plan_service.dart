@@ -217,6 +217,45 @@ const _weekTemplates = <String, List<_SessionSlot>>{
   ],
 };
 
+/// Sports that may appear in a plan: the ones the athlete chose plus the race
+/// sport. A triathlon brings running, cycling and swimming with it.
+Set<String> allowedPlanSports({
+  required String mainSport,
+  required List<String> chosen,
+}) {
+  final allowed = {mainSport, ...chosen};
+  if (allowed.contains('triathlon')) {
+    allowed.addAll(const ['running', 'cycling_road', 'swimming']);
+  }
+  return allowed;
+}
+
+/// Keeps a week's slots to the sports the athlete asked for. A slot of another
+/// endurance sport (a road ride in a gravel week) becomes [mainSport]; yoga,
+/// pilates and stretching are dropped unless chosen. Strength is planned only
+/// with strength days, which are the athlete's own setting for it.
+List<_SessionSlot> _restrictSlotsToSports(
+  List<_SessionSlot> slots, {
+  required Set<String> allowed,
+  required String mainSport,
+  required bool strength,
+}) {
+  const optional = {'yoga', 'pilates', 'stretching'};
+  final out = <_SessionSlot>[];
+  for (final s in slots) {
+    if (s.sport == 'strength') {
+      if (strength || allowed.contains('strength')) out.add(s);
+    } else if (allowed.contains(s.sport)) {
+      out.add(s);
+    } else if (optional.contains(s.sport)) {
+      continue;
+    } else {
+      out.add(s.copyWith(sport: mainSport));
+    }
+  }
+  return out;
+}
+
 /// Sports used for general athletic development; running-type sports first.
 List<String> _gadSportRotation(List<String> sports) {
   final valid = sports.where(_supportedSports.contains).toList();
@@ -1093,6 +1132,10 @@ class TrainingPlanService {
     final today = _day(DateTime.now());
     final rotation = _gadSportRotation(gadSports.isEmpty ? [sport] : gadSports);
     final mainSport = _supportedSports.contains(sport) ? sport : rotation.first;
+    final allowedSports = allowedPlanSports(
+      mainSport: mainSport,
+      chosen: gadSports,
+    );
     var fitness = await _readFitnessSnapshot(athleteId, mainSport);
     // No measured zones: estimate them from age (and sex).
     if (fitness.hrZones.length < 4 && athlete.estimatedHrZones.isNotEmpty) {
@@ -1253,6 +1296,12 @@ class TrainingPlanService {
       var slots = phase == 'recovery'
           ? _recoveryWeekSlots(mainSport)
           : List<_SessionSlot>.of(baseSlots);
+      slots = _restrictSlotsToSports(
+        slots,
+        allowed: allowedSports,
+        mainSport: mainSport,
+        strength: strengthDays.isNotEmpty,
+      );
       if (phase == 'taper') {
         slots = slots
             .where((s) => s.sessionType != 'long' || s.weekday == 6)

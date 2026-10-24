@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/planner_providers.dart';
 import '../../widgets/app_widgets.dart';
+import '../../services/race_goal_service.dart';
 import '../../utils/decimal.dart';
 
 Future<void> showRaceGoalEditor(BuildContext context) =>
@@ -304,6 +305,37 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                             if (!valid || date == null) {
                               return;
                             }
+                            var distanceKm = parseDecimal(km.text)!;
+                            // 422 for 42.2: ask before saving a ten-fold distance.
+                            final likely = likelyRaceDistanceKm(distanceKm);
+                            if (likely != null) {
+                              final useLikely = await showDialog<bool>(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text(
+                                    'Distance of ${_km(distanceKm)} km?',
+                                  ),
+                                  content: Text(
+                                    'That is ten times (or a tenth of) the usual ${_km(likely)} km. '
+                                    'Use ${_km(likely)} km instead?',
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, false),
+                                      child: Text('Keep ${_km(distanceKm)} km'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, true),
+                                      child: Text('Use ${_km(likely)} km'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                              if (useLikely == null || !context.mounted) return;
+                              if (useLikely) distanceKm = likely;
+                            }
                             setState(() => saving = true);
                             await runUiAction(context, () async {
                               await ref
@@ -311,7 +343,7 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                                   .create(
                                     name: name.text.trim(),
                                     primarySport: sport,
-                                    distanceM: parseDecimal(km.text)! * 1000,
+                                    distanceM: distanceKm * 1000,
                                     elevationM: elevation.text.trim().isEmpty
                                         ? null
                                         : parseDecimal(elevation.text),
@@ -341,3 +373,7 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
     );
   }
 }
+
+String _km(double km) => km == km.roundToDouble()
+    ? km.round().toString()
+    : km.toStringAsFixed(km < 100 ? 1 : 0);

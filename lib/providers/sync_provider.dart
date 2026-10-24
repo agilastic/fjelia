@@ -31,6 +31,8 @@ import 'user_profile_provider.dart';
 import 'workout_generation_provider.dart';
 
 const _storage = FlutterSecureStorage();
+const _matchRepairKey = 'session_match_repair_v1';
+const _raceDistanceRepairKey = 'race_distance_repair_v1';
 
 final syncServiceProvider = Provider<SyncService>(
   (ref) => SyncService(
@@ -416,6 +418,20 @@ class SyncNotifier extends StateNotifier<SyncState> {
     try {
       final scorer = _ref.read(postWorkoutScorerProvider);
       final db = _ref.read(databaseProvider);
+      // Once: undo completions that the earlier matching put on the wrong
+      // day or sport, and score those workouts again.
+      if (await _storage.read(key: _matchRepairKey) == null) {
+        final reset = await scorer.repairMatches();
+        await _storage.write(key: _matchRepairKey, value: '1');
+        log('[Sync] session matching repaired: $reset sessions reset');
+      }
+      if (await _storage.read(key: _raceDistanceRepairKey) == null) {
+        final fixed = await _ref
+            .read(raceGoalServiceProvider)
+            .repairImplausibleDistances();
+        await _storage.write(key: _raceDistanceRepairKey, value: '1');
+        log('[Sync] race goal distances repaired: $fixed');
+      }
       final now = DateTime.now();
       final today = DateTime(now.year, now.month, now.day);
       final from = today.subtract(const Duration(days: 7));
@@ -435,6 +451,7 @@ class SyncNotifier extends StateNotifier<SyncState> {
           log('[Sync] scorer error for activity ${a.activityId}: $e');
         }
       }
+      await scorer.closePastSessions();
     } catch (e) {
       log('[Sync] post-workout scorer error: $e');
     }

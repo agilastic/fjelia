@@ -1793,6 +1793,30 @@ void main() {
     await tester.pump(Duration.zero);
     await tester.binding.setSurfaceSize(null);
   });
+  testWidgets('a ten-fold distance is questioned, both separators work', (
+    tester,
+  ) async {
+    await render(tester, const RaceGoalEditor(), 'race-goal-ten-fold');
+    await tester.enterText(find.byType(TextFormField).at(0), 'marathon Hannover');
+    // 422 is what 42,2 became when the separator got lost.
+    await tester.enterText(find.byType(TextFormField).at(1), '422');
+    await tester.ensureVisible(find.text('Select date'));
+    await tester.tap(find.text('Select date'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('OK'));
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('Add Goal'));
+    await tester.tap(find.text('Add Goal'));
+    await tester.pumpAndSettle();
+    expect(find.text('Distance of 422 km?'), findsOneWidget);
+    expect(await db.select(db.raceGoals).get(), isEmpty);
+    await tester.tap(find.text('Use 42.2 km'));
+    await tester.pumpAndSettle();
+    expect((await db.select(db.raceGoals).get()).single.distanceM, 42195);
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(Duration.zero);
+    await tester.binding.setSurfaceSize(null);
+  });
   testWidgets(
     'Plan shows race countdown, phased upcoming workouts and expands days',
     (tester) async {

@@ -3,7 +3,11 @@ import 'weather_location_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../db/database.dart';
+import '../../models/weekly_hours.dart';
+import '../../providers/activity_history_provider.dart';
 import '../../providers/user_profile_provider.dart';
+import '../../providers/week_start_provider.dart';
 import '../../providers/planner_providers.dart';
 import '../../providers/plan_view_provider.dart';
 import '../../providers/day_data_provider.dart';
@@ -215,6 +219,34 @@ class TrainingTab extends ConsumerWidget {
                 Text('3 h', style: TextStyle(color: muted, fontSize: 10)),
                 Text('25 h', style: TextStyle(color: muted, fontSize: 10)),
               ],
+            ),
+            Builder(
+              builder: (context) {
+                final recent = WeeklyHours.of(
+                  [
+                    for (final a
+                        in ref.watch(loadActivitiesProvider).valueOrNull ??
+                            const <ActivityRecord>[])
+                      (a.startDate, a.durationSeconds),
+                  ],
+                  now: DateTime.now(),
+                  mondayFirst: ref.watch(weekStartsOnMondayProvider),
+                );
+                if (recent == null) return const SizedBox.shrink();
+                final far = recent.isFarAbove(p.hoursPerWeek);
+                return Padding(
+                  padding: const EdgeInsets.only(top: 6),
+                  child: Text(
+                    'Your last 12 weeks: ${valueText(recent.average)} h on average, '
+                    'busiest week ${valueText(recent.peak)} h.'
+                    '${far ? ' ${valueText(p.hoursPerWeek)} h is far above that; the plan builds up from what you do and will stay below it.' : ''}',
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: far ? Colors.orangeAccent : muted,
+                    ),
+                  ),
+                );
+              },
             ),
           ],
           const SectionLabel('Heat Acclimation', color: Colors.orange),
