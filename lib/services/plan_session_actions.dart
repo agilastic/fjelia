@@ -8,9 +8,20 @@ class PlanSessionActions {
   PlanSessionActions(this.db, this.garmin);
   final AppDatabase db;
   final GarminClient garmin;
-  Future<TrainingSession> moveDay(TrainingSession session, int days) async {
+  Future<TrainingSession> moveDay(TrainingSession session, int days) {
     final d = session.sessionDate;
-    final target = DateTime(d.year, d.month, d.day + days);
+    return moveToDate(session, DateTime(d.year, d.month, d.day + days));
+  }
+
+  /// Moves a session to [day] (the date only; the steps stay as they are).
+  /// The first date it was planned for is kept, and the week number follows
+  /// the plan's calendar weeks.
+  Future<TrainingSession> moveToDate(
+    TrainingSession session,
+    DateTime day,
+  ) async {
+    final d = session.sessionDate;
+    final target = DateTime(day.year, day.month, day.day);
     final plan = await (db.select(
       db.trainingPlans,
     )..where((t) => t.id.equals(session.planId))).getSingleOrNull();

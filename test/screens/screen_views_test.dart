@@ -1700,37 +1700,54 @@ void main() {
       garmin: garmin,
     );
     await tester.scrollUntilVisible(
-      find.text('Next day'),
+      find.text('MOVE THIS WORKOUT'),
       250,
       scrollable: find.byType(Scrollable).first,
     );
     await tester.pumpAndSettle();
-    await tester.ensureVisible(find.text('Next day'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Next day'));
+    // Tap the next day on the strip: the workout moves, with an undo.
+    await tester.tap(find.bySemanticsLabel(RegExp('^Wednesday 28 October')));
+    await tester.pump(const Duration(seconds: 2));
     await tester.pumpAndSettle();
     expect(
       (await db.select(db.trainingSessions).get()).single.sessionDate,
       DateTime(2026, 10, 28),
     );
-    await tester.pumpAndSettle();
-    await tester.ensureVisible(find.text('Previous day'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Previous day'));
+    // No snackbar: the way back is a line on the card.
+    expect(find.byType(SnackBar), findsNothing);
+    expect(find.text('Moved from Tuesday 27 October'), findsOneWidget);
+    await tester.tap(find.text('Undo'));
+    await tester.pump(const Duration(seconds: 2));
     await tester.pumpAndSettle();
     expect(
       (await db.select(db.trainingSessions).get()).single.sessionDate,
       DateTime(2026, 10, 27),
     );
+    // And back to the day before by tapping it.
+    await tester.tap(find.bySemanticsLabel(RegExp('^Monday 26 October')));
+    await tester.pump(const Duration(seconds: 2));
+    await tester.pumpAndSettle();
+    expect(
+      (await db.select(db.trainingSessions).get()).single.sessionDate,
+      DateTime(2026, 10, 26),
+    );
+    await tester.tap(find.bySemanticsLabel(RegExp('^Tuesday 27 October')));
+    await tester.pump(const Duration(seconds: 2));
+    await tester.pumpAndSettle();
+    expect(
+      (await db.select(db.trainingSessions).get()).single.sessionDate,
+      DateTime(2026, 10, 27),
+    );
+    // The undo snackbar goes away by itself before the next action.
+    await tester.pump(const Duration(seconds: 6));
+    await tester.pumpAndSettle();
     await tester.scrollUntilVisible(
       find.text('Push to Garmin'),
       200,
       scrollable: find.byType(Scrollable).first,
     );
     await tester.pumpAndSettle();
-    await tester.ensureVisible(find.text('Push to Garmin'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Push to Garmin'));
+    await tapLow(tester, find.text('Push to Garmin'));
     await tester.pumpAndSettle();
     expect(garmin.creates, 1);
     expect(garmin.dates.single, DateTime(2026, 10, 27));
@@ -1742,9 +1759,12 @@ void main() {
       scrollable: find.byType(Scrollable).first,
     );
     await tester.pumpAndSettle();
-    await tester.ensureVisible(find.text('Mark as Rest'));
+    // The snackbar of the push sits over the buttons; clear it first.
+    tester
+        .state<ScaffoldMessengerState>(find.byType(ScaffoldMessenger).first)
+        .clearSnackBars();
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Mark as Rest'));
+    await tapLow(tester, find.text('Mark as Rest'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Cancel'));
     await tester.pumpAndSettle();
@@ -1753,9 +1773,7 @@ void main() {
       'planned',
     );
     await tester.pumpAndSettle();
-    await tester.ensureVisible(find.text('Mark as Rest'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Mark as Rest'));
+    await tapLow(tester, find.text('Mark as Rest'));
     await tester.pumpAndSettle();
     // The reason is asked for; it is stored with the skip.
     expect(find.text('Illness'), findsOneWidget);

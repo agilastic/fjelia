@@ -20,6 +20,7 @@ import '../../services/plan_session_actions.dart';
 import '../../services/workout_destination.dart';
 import '../../utils/target_time.dart';
 import '../../widgets/app_widgets.dart';
+import '../../widgets/move_workout_card.dart';
 import '../../widgets/workout_profile_bar.dart';
 import '../../widgets/workout_structure_list.dart';
 import '../ai_coach/ai_coach_screen.dart';
@@ -34,6 +35,10 @@ class PlanSessionSheet extends ConsumerStatefulWidget {
 class _SessionState extends ConsumerState<PlanSessionSheet> {
   late TrainingSession session = widget.session;
   bool busy = false;
+
+  /// Where the workout was before it was moved in this sheet, for the undo.
+  DateTime? movedFrom;
+  bool movedOnWatch = false;
   Future<void> perform(Future<void> Function() action) async {
     if (busy) return;
     setState(() => busy = true);
@@ -85,6 +90,74 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
     final fromSteps = zoneFractionsOf(profile);
     final fractions =
         fromSteps ?? plannedZoneFractions(s.plannedZonesJson, s.primaryZone);
+    // The days a move can go to: today up to the day before the race (or 60
+    // days out), each with what is on it.
+    final profileSettings = ref.watch(userProfileProvider).valueOrNull;
+    final restDays = profileSettings?.restDays ?? const <int>[];
+    final perDay = profileSettings?.maxSessionsPerDay ?? 1;
+    final raceDay = ref.watch(primaryRaceGoalProvider).valueOrNull?.raceDate;
+    final others = [
+      for (final u
+          in ref.watch(upcomingSessionsProvider).valueOrNull ??
+              const <TrainingSession>[])
+        if (u.id != s.id && u.status != 'skipped') u,
+    ];
+    final today0 = DateUtils.dateOnly(DateTime.now());
+    final horizon = DateTime(today0.year, today0.month, today0.day + 60);
+    var lastDay = raceDay == null
+        ? horizon
+        : DateTime(raceDay.year, raceDay.month, raceDay.day - 1);
+    if (lastDay.isAfter(horizon)) lastDay = horizon;
+    if (lastDay.isBefore(s.sessionDate)) lastDay = s.sessionDate;
+    final moveDays = [
+      for (
+        var d = today0;
+        !d.isAfter(lastDay);
+        d = DateTime(d.year, d.month, d.day + 1)
+      )
+        () {
+          final count = others
+              .where((u) => DateUtils.isSameDay(u.sessionDate, d))
+              .length;
+          return MoveDay(
+            date: d,
+            sessions: count,
+            isRestDay: restDays.contains(d.weekday),
+            isFull: count >= perDay,
+          );
+        }(),
+    ];
+
+    Future<void> moveTo(DateTime day) async {
+      final info = moveDays.where((m) => DateUtils.isSameDay(m.date, day));
+      final target = info.isEmpty ? null : info.first;
+      final warning = target == null
+          ? null
+          : target.isRestDay
+          ? '${DateFormat('EEEE').format(day)} is a rest day in your plan.'
+          : target.isFull
+          ? '${DateFormat('EEEE d MMMM').format(day)} already has '
+                '${target.sessions} ${target.sessions == 1 ? 'session' : 'sessions'}.'
+          : null;
+      if (warning != null &&
+          !await confirmAction(context, 'Move anyway?', warning)) {
+        return;
+      }
+      final previous = s.sessionDate;
+      final onWatch =
+          s.garminWorkoutId != null || s.garminAlternativeId != null;
+      await perform(() async {
+        await actions.moveToDate(s, day);
+      });
+      if (!mounted) return;
+      // The way back stays on the card, with the first day it left; no
+      // message that has to be swiped away.
+      setState(() {
+        movedFrom ??= previous;
+        movedOnWatch = movedOnWatch || onWatch;
+      });
+    }
+
     final totals = blockTotals(profile);
     final planned = s.plannedDurationMin * 60.0;
     final stepsDiffer =
@@ -342,39 +415,42 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
               style: const TextStyle(fontSize: 12, color: Colors.white70),
             ),
           ],
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton.icon(
-                  style: style(Colors.white70),
-                  onPressed: !editable || busy
-                      ? null
-                      : () => perform(() async {
-                          await actions.moveDay(s, -1);
-                        }),
-                  icon: const Icon(Icons.chevron_left, size: 18),
-                  label: const Text(
-                    'Previous day',
-                    style: TextStyle(fontSize: 12),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: OutlinedButton.icon(
-                  style: style(Colors.white70),
-                  onPressed: !editable || busy
-                      ? null
-                      : () => perform(() async {
-                          await actions.moveDay(s, 1);
-                        }),
-                  icon: const Icon(Icons.chevron_right, size: 18),
-                  iconAlignment: IconAlignment.end,
-                  label: const Text('Next day', style: TextStyle(fontSize: 12)),
-                ),
-              ),
-            ],
+          const SizedBox(height: 12),
+          MoveWorkoutCard(
+            title: s.title,
+            current: s.sessionDate,
+            days: moveDays,
+            enabled: editable && !busy,
+            onMove: moveTo,
+            movedFrom:
+                movedFrom != null &&
+                    !DateUtils.isSameDay(movedFrom, s.sessionDate)
+                ? movedFrom
+                : null,
+            note: movedOnWatch
+                ? 'Push again to update your watch calendar.'
+                : null,
+            onUndo: () => perform(() async {
+              final back = movedFrom;
+              if (back == null) return;
+              await actions.moveToDate(session, back);
+              if (mounted) setState(() => movedFrom = null);
+            }),
+            onPickDate: () async {
+              final today = DateUtils.dateOnly(DateTime.now());
+              final last = moveDays.isEmpty ? today : moveDays.last.date;
+              final chosen = await showDatePicker(
+                context: context,
+                initialDate: s.sessionDate.isBefore(today)
+                    ? today
+                    : s.sessionDate.isAfter(last)
+                    ? last
+                    : s.sessionDate,
+                firstDate: today,
+                lastDate: last.isBefore(today) ? today : last,
+              );
+              if (chosen != null) await moveTo(chosen);
+            },
           ),
           const SizedBox(height: 32),
           OutlinedButton.icon(

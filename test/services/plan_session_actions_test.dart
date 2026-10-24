@@ -178,6 +178,25 @@ void main() {
       expect(after.garminAlternativeId, 'schedule-2');
     },
   );
+  test(
+    'a session moves to any day, keeps its first date and moves back',
+    () async {
+      final actions = PlanSessionActions(db, garmin);
+      final first = session.sessionDate;
+      final far = DateTime(first.year, first.month, first.day + 19, 15, 30);
+      final moved = await actions.moveToDate(session, far);
+      // Date only, whatever time of day was passed.
+      expect(moved.sessionDate, DateTime(far.year, far.month, far.day));
+      expect(moved.sessionDateOriginal, first.toIso8601String());
+      expect(moved.isMovedFromDifferentWeek, isTrue);
+      // Moving back is the same call; the first date stays the first date.
+      final back = await actions.moveToDate(moved, first);
+      expect(back.sessionDate, DateTime(first.year, first.month, first.day));
+      expect(back.sessionDateOriginal, first.toIso8601String());
+      expect(back.weekNumber, session.weekNumber);
+    },
+  );
+
   test('restore undoes a skip and its reason', () async {
     final actions = PlanSessionActions(db, garmin);
     final rest = await actions.markRest(session, reason: 'Fatigue');

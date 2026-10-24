@@ -45,7 +45,9 @@ void main() {
             id: 's',
             planId: 'p',
             athleteId: 'self',
-            sessionDate: DateTime.now().add(const Duration(days: 3)),
+            sessionDate: DateUtils.dateOnly(
+              DateTime.now().add(const Duration(days: 3)),
+            ),
             sessionNumber: 1,
             weekNumber: 1,
             sport: 'running',
@@ -407,4 +409,107 @@ void main() {
       await close(tester);
     },
   );
+
+  testWidgets('moving onto a rest day asks first, and can be undone', (
+    tester,
+  ) async {
+    await show(tester, WorkoutDestination.garmin);
+    // The profile's default rest day is Sunday: find the next one.
+    final today = DateUtils.dateOnly(DateTime.now());
+    var sunday = today.add(const Duration(days: 1));
+    while (sunday.weekday != DateTime.sunday) {
+      sunday = sunday.add(const Duration(days: 1));
+    }
+    String label(DateTime d) => RegExp.escape(
+      '${const ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'][d.weekday - 1]} ${d.day} '
+      '${const ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][d.month - 1]}',
+    );
+    await tester.scrollUntilVisible(
+      find.text('MOVE THIS WORKOUT'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.drag(find.byType(Scrollable).first, const Offset(0, -150));
+    await tester.pumpAndSettle();
+    final before =
+        (await db.select(db.trainingSessions).getSingle()).sessionDate;
+    final chip = find.bySemanticsLabel(RegExp('^${label(sunday)}'));
+    await tester.tap(chip);
+    await tester.pumpAndSettle();
+    expect(find.text('Move anyway?'), findsOneWidget);
+    expect(find.textContaining('is a rest day in your plan'), findsOneWidget);
+    await tester.tap(find.text('Cancel'));
+    await tester.pumpAndSettle();
+    expect(
+      (await db.select(db.trainingSessions).getSingle()).sessionDate,
+      before,
+    );
+    await tester.tap(chip);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Continue'));
+    await tester.pump(const Duration(seconds: 2));
+    await tester.pumpAndSettle();
+    expect(
+      (await db.select(db.trainingSessions).getSingle()).sessionDate,
+      sunday,
+    );
+    expect(find.text('Undo'), findsOneWidget);
+    await tester.tap(find.text('Undo'));
+    await tester.pump(const Duration(seconds: 2));
+    await tester.pumpAndSettle();
+    expect(
+      (await db.select(db.trainingSessions).getSingle()).sessionDate,
+      before,
+    );
+    await close(tester);
+  });
+
+  testWidgets('a move leaves no snackbar, the undo is a line on the card', (
+    tester,
+  ) async {
+    await show(tester, WorkoutDestination.garmin);
+    final today = DateUtils.dateOnly(DateTime.now());
+    var day = today.add(const Duration(days: 5));
+    while (day.weekday == DateTime.sunday) {
+      day = day.add(const Duration(days: 1));
+    }
+    const names = [
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday',
+    ];
+    await tester.scrollUntilVisible(
+      find.text('MOVE THIS WORKOUT'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.drag(find.byType(Scrollable).first, const Offset(0, -150));
+    await tester.pumpAndSettle();
+    expect(find.text('Undo'), findsNothing);
+    await tester.tap(
+      find.bySemanticsLabel(RegExp('^${names[day.weekday - 1]} ${day.day} ')),
+    );
+    await tester.pump(const Duration(seconds: 2));
+    await tester.pumpAndSettle();
+    expect(find.byType(SnackBar), findsNothing);
+    expect(find.textContaining('Moved from'), findsOneWidget);
+    expect(find.text('Undo'), findsOneWidget);
+    // It stays: there is nothing to swipe away, and the way back is still there.
+    await tester.pump(const Duration(seconds: 10));
+    await tester.pumpAndSettle();
+    expect(find.text('Undo'), findsOneWidget);
+    await tester.tap(find.text('Undo'));
+    await tester.pump(const Duration(seconds: 2));
+    await tester.pumpAndSettle();
+    expect(find.text('Undo'), findsNothing);
+    expect(
+      (await db.select(db.trainingSessions).getSingle()).sessionDate,
+      DateTime(today.year, today.month, today.day + 3),
+    );
+    await close(tester);
+  });
 }
