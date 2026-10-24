@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' hide isNull;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fjelia/db/database.dart';
@@ -104,7 +104,47 @@ void main() {
       (await db.customSelect('PRAGMA user_version').getSingle()).read<int>(
         'user_version',
       ),
-      44,
+      db.schemaVersion,
     );
+  });
+
+  test('v45 upgrade adds the activity link and keeps completions', () async {
+    final folder = await Directory.systemTemp.createTemp('fjelia-link-');
+    addTearDown(() => folder.delete(recursive: true));
+    final path = File('${folder.path}/db.sqlite');
+    final old = AppDatabase(NativeDatabase(path));
+    await old
+        .into(old.sessionActuals)
+        .insert(
+          SessionActualsCompanion.insert(
+            sessionId: 'done',
+            executionScore: const Value(80),
+          ),
+        );
+    await old.customStatement(
+      'DROP INDEX IF EXISTS idx_session_actuals_activity',
+    );
+    await old.customStatement(
+      'ALTER TABLE session_actuals DROP COLUMN activity_id',
+    );
+    await old.customStatement('PRAGMA user_version = 44');
+    await old.close();
+    final db = AppDatabase(NativeDatabase(path));
+    addTearDown(db.close);
+    final row = (await db.select(db.sessionActuals).get()).single;
+    expect(row.executionScore, 80);
+    expect(row.activityId, isNull);
+    expect(
+      (await db.customSelect('PRAGMA user_version').getSingle()).read<int>(
+        'user_version',
+      ),
+      45,
+    );
+    final index = await db
+        .customSelect(
+          "SELECT name FROM sqlite_master WHERE name = 'idx_session_actuals_activity'",
+        )
+        .get();
+    expect(index, hasLength(1));
   });
 }

@@ -396,18 +396,14 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
             onPressed: !editable || busy
                 ? null
                 : () async {
-                    if (!await confirmAction(
+                    final reason = await _pickSkipReason(
                       context,
-                      'Mark as rest?',
-                      'Skip this planned workout${s.garminAlternativeId == null ? '' : ' and remove its Garmin calendar entry'}?',
-                    )) {
-                      return;
-                    }
-                    if (mounted) {
-                      await perform(() async {
-                        await actions.markRest(s);
-                      });
-                    }
+                      onGarmin: s.garminAlternativeId != null,
+                    );
+                    if (reason == null || !mounted) return;
+                    await perform(() async {
+                      await actions.markRest(s, reason: reason);
+                    });
                   },
             icon: const Icon(Icons.bed_outlined, size: 20),
             label: const Text(
@@ -415,8 +411,55 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
             ),
           ),
+          if (s.status == 'skipped') ...[
+            const SizedBox(height: 8),
+            OutlinedButton.icon(
+              style: style(mint),
+              onPressed: busy
+                  ? null
+                  : () => perform(() async {
+                      await actions.restore(s);
+                    }),
+              icon: const Icon(Icons.undo, size: 20),
+              label: const Text(
+                'Restore workout',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+              ),
+            ),
+          ],
         ],
       ),
     );
   }
 }
+
+/// Asks why a session is skipped; null when cancelled.
+Future<String?> _pickSkipReason(
+  BuildContext context, {
+  required bool onGarmin,
+}) => showDialog<String>(
+  context: context,
+  builder: (context) => SimpleDialog(
+    title: const Text('Skip this workout?'),
+    children: [
+      Padding(
+        padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
+        child: Text(
+          onGarmin
+              ? 'Why? It is also taken off your Garmin calendar. Nothing is added to make it up.'
+              : 'Why? Nothing is added to make it up.',
+          style: const TextStyle(fontSize: 13, color: Colors.white70),
+        ),
+      ),
+      for (final reason in skipReasons)
+        SimpleDialogOption(
+          onPressed: () => Navigator.pop(context, reason),
+          child: Text(reason),
+        ),
+      SimpleDialogOption(
+        onPressed: () => Navigator.pop(context),
+        child: const Text('Cancel', style: TextStyle(color: Colors.white54)),
+      ),
+    ],
+  ),
+);

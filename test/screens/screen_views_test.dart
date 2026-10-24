@@ -1748,13 +1748,31 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Mark as Rest'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Continue'));
+    // The reason is asked for; it is stored with the skip.
+    expect(find.text('Illness'), findsOneWidget);
+    await tester.tap(find.text('Travel'));
     await tester.pumpAndSettle();
     expect(
       (await db.select(db.trainingSessions).get()).single.status,
       'skipped',
     );
+    expect(
+      (await db.select(db.sessionActuals).get()).single.skipReason,
+      'Travel',
+    );
     expect(garmin.removedSchedules, ['schedule-1']);
+    // The skip can be undone.
+    await tester.ensureVisible(find.text('Restore workout'));
+    await tester.drag(find.byType(Scrollable).first, const Offset(0, -200));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Restore workout'));
+    await tester.pump(const Duration(seconds: 2));
+    await tester.pumpAndSettle();
+    expect(
+      (await db.select(db.trainingSessions).get()).single.status,
+      'planned',
+    );
+    expect(await db.select(db.sessionActuals).get(), isEmpty);
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox());
     await tester.pump(Duration.zero);
@@ -1797,7 +1815,10 @@ void main() {
     tester,
   ) async {
     await render(tester, const RaceGoalEditor(), 'race-goal-ten-fold');
-    await tester.enterText(find.byType(TextFormField).at(0), 'marathon Hannover');
+    await tester.enterText(
+      find.byType(TextFormField).at(0),
+      'marathon Hannover',
+    );
     // 422 is what 42,2 became when the separator got lost.
     await tester.enterText(find.byType(TextFormField).at(1), '422');
     await tester.ensureVisible(find.text('Select date'));

@@ -18437,6 +18437,17 @@ class $SessionActualsTable extends SessionActuals
     type: DriftSqlType.dateTime,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _activityIdMeta = const VerificationMeta(
+    'activityId',
+  );
+  @override
+  late final GeneratedColumn<String> activityId = GeneratedColumn<String>(
+    'activity_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     sessionId,
@@ -18463,6 +18474,7 @@ class $SessionActualsTable extends SessionActuals
     executionVerdict,
     startedAt,
     completedAt,
+    activityId,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -18673,6 +18685,12 @@ class $SessionActualsTable extends SessionActuals
         ),
       );
     }
+    if (data.containsKey('activity_id')) {
+      context.handle(
+        _activityIdMeta,
+        activityId.isAcceptableOrUnknown(data['activity_id']!, _activityIdMeta),
+      );
+    }
     return context;
   }
 
@@ -18778,6 +18796,10 @@ class $SessionActualsTable extends SessionActuals
         DriftSqlType.dateTime,
         data['${effectivePrefix}completed_at'],
       ),
+      activityId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}activity_id'],
+      ),
     );
   }
 
@@ -18812,6 +18834,11 @@ class SessionActual extends DataClass implements Insertable<SessionActual> {
   final String? executionVerdict;
   final DateTime? startedAt;
   final DateTime? completedAt;
+
+  /// The activity that completed the session. One activity completes at most
+  /// one session (a unique index); null for skips and for completions from
+  /// before the link existed.
+  final String? activityId;
   const SessionActual({
     required this.sessionId,
     required this.z1ActualSeconds,
@@ -18837,6 +18864,7 @@ class SessionActual extends DataClass implements Insertable<SessionActual> {
     this.executionVerdict,
     this.startedAt,
     this.completedAt,
+    this.activityId,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -18897,6 +18925,9 @@ class SessionActual extends DataClass implements Insertable<SessionActual> {
     if (!nullToAbsent || completedAt != null) {
       map['completed_at'] = Variable<DateTime>(completedAt);
     }
+    if (!nullToAbsent || activityId != null) {
+      map['activity_id'] = Variable<String>(activityId);
+    }
     return map;
   }
 
@@ -18956,6 +18987,9 @@ class SessionActual extends DataClass implements Insertable<SessionActual> {
       completedAt: completedAt == null && nullToAbsent
           ? const Value.absent()
           : Value(completedAt),
+      activityId: activityId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(activityId),
     );
   }
 
@@ -18995,6 +19029,7 @@ class SessionActual extends DataClass implements Insertable<SessionActual> {
       executionVerdict: serializer.fromJson<String?>(json['executionVerdict']),
       startedAt: serializer.fromJson<DateTime?>(json['startedAt']),
       completedAt: serializer.fromJson<DateTime?>(json['completedAt']),
+      activityId: serializer.fromJson<String?>(json['activityId']),
     );
   }
   @override
@@ -19025,6 +19060,7 @@ class SessionActual extends DataClass implements Insertable<SessionActual> {
       'executionVerdict': serializer.toJson<String?>(executionVerdict),
       'startedAt': serializer.toJson<DateTime?>(startedAt),
       'completedAt': serializer.toJson<DateTime?>(completedAt),
+      'activityId': serializer.toJson<String?>(activityId),
     };
   }
 
@@ -19053,6 +19089,7 @@ class SessionActual extends DataClass implements Insertable<SessionActual> {
     Value<String?> executionVerdict = const Value.absent(),
     Value<DateTime?> startedAt = const Value.absent(),
     Value<DateTime?> completedAt = const Value.absent(),
+    Value<String?> activityId = const Value.absent(),
   }) => SessionActual(
     sessionId: sessionId ?? this.sessionId,
     z1ActualSeconds: z1ActualSeconds ?? this.z1ActualSeconds,
@@ -19096,6 +19133,7 @@ class SessionActual extends DataClass implements Insertable<SessionActual> {
         : this.executionVerdict,
     startedAt: startedAt.present ? startedAt.value : this.startedAt,
     completedAt: completedAt.present ? completedAt.value : this.completedAt,
+    activityId: activityId.present ? activityId.value : this.activityId,
   );
   SessionActual copyWithCompanion(SessionActualsCompanion data) {
     return SessionActual(
@@ -19159,6 +19197,9 @@ class SessionActual extends DataClass implements Insertable<SessionActual> {
       completedAt: data.completedAt.present
           ? data.completedAt.value
           : this.completedAt,
+      activityId: data.activityId.present
+          ? data.activityId.value
+          : this.activityId,
     );
   }
 
@@ -19188,7 +19229,8 @@ class SessionActual extends DataClass implements Insertable<SessionActual> {
           ..write('polarizationIndex: $polarizationIndex, ')
           ..write('executionVerdict: $executionVerdict, ')
           ..write('startedAt: $startedAt, ')
-          ..write('completedAt: $completedAt')
+          ..write('completedAt: $completedAt, ')
+          ..write('activityId: $activityId')
           ..write(')'))
         .toString();
   }
@@ -19219,6 +19261,7 @@ class SessionActual extends DataClass implements Insertable<SessionActual> {
     executionVerdict,
     startedAt,
     completedAt,
+    activityId,
   ]);
   @override
   bool operator ==(Object other) =>
@@ -19247,7 +19290,8 @@ class SessionActual extends DataClass implements Insertable<SessionActual> {
           other.polarizationIndex == this.polarizationIndex &&
           other.executionVerdict == this.executionVerdict &&
           other.startedAt == this.startedAt &&
-          other.completedAt == this.completedAt);
+          other.completedAt == this.completedAt &&
+          other.activityId == this.activityId);
 }
 
 class SessionActualsCompanion extends UpdateCompanion<SessionActual> {
@@ -19275,6 +19319,7 @@ class SessionActualsCompanion extends UpdateCompanion<SessionActual> {
   final Value<String?> executionVerdict;
   final Value<DateTime?> startedAt;
   final Value<DateTime?> completedAt;
+  final Value<String?> activityId;
   final Value<int> rowid;
   const SessionActualsCompanion({
     this.sessionId = const Value.absent(),
@@ -19301,6 +19346,7 @@ class SessionActualsCompanion extends UpdateCompanion<SessionActual> {
     this.executionVerdict = const Value.absent(),
     this.startedAt = const Value.absent(),
     this.completedAt = const Value.absent(),
+    this.activityId = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   SessionActualsCompanion.insert({
@@ -19328,6 +19374,7 @@ class SessionActualsCompanion extends UpdateCompanion<SessionActual> {
     this.executionVerdict = const Value.absent(),
     this.startedAt = const Value.absent(),
     this.completedAt = const Value.absent(),
+    this.activityId = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : sessionId = Value(sessionId);
   static Insertable<SessionActual> custom({
@@ -19355,6 +19402,7 @@ class SessionActualsCompanion extends UpdateCompanion<SessionActual> {
     Expression<String>? executionVerdict,
     Expression<DateTime>? startedAt,
     Expression<DateTime>? completedAt,
+    Expression<String>? activityId,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -19384,6 +19432,7 @@ class SessionActualsCompanion extends UpdateCompanion<SessionActual> {
       if (executionVerdict != null) 'execution_verdict': executionVerdict,
       if (startedAt != null) 'started_at': startedAt,
       if (completedAt != null) 'completed_at': completedAt,
+      if (activityId != null) 'activity_id': activityId,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -19413,6 +19462,7 @@ class SessionActualsCompanion extends UpdateCompanion<SessionActual> {
     Value<String?>? executionVerdict,
     Value<DateTime?>? startedAt,
     Value<DateTime?>? completedAt,
+    Value<String?>? activityId,
     Value<int>? rowid,
   }) {
     return SessionActualsCompanion(
@@ -19440,6 +19490,7 @@ class SessionActualsCompanion extends UpdateCompanion<SessionActual> {
       executionVerdict: executionVerdict ?? this.executionVerdict,
       startedAt: startedAt ?? this.startedAt,
       completedAt: completedAt ?? this.completedAt,
+      activityId: activityId ?? this.activityId,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -19519,6 +19570,9 @@ class SessionActualsCompanion extends UpdateCompanion<SessionActual> {
     if (completedAt.present) {
       map['completed_at'] = Variable<DateTime>(completedAt.value);
     }
+    if (activityId.present) {
+      map['activity_id'] = Variable<String>(activityId.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -19552,6 +19606,7 @@ class SessionActualsCompanion extends UpdateCompanion<SessionActual> {
           ..write('executionVerdict: $executionVerdict, ')
           ..write('startedAt: $startedAt, ')
           ..write('completedAt: $completedAt, ')
+          ..write('activityId: $activityId, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -37722,6 +37777,7 @@ typedef $$SessionActualsTableCreateCompanionBuilder =
       Value<String?> executionVerdict,
       Value<DateTime?> startedAt,
       Value<DateTime?> completedAt,
+      Value<String?> activityId,
       Value<int> rowid,
     });
 typedef $$SessionActualsTableUpdateCompanionBuilder =
@@ -37750,6 +37806,7 @@ typedef $$SessionActualsTableUpdateCompanionBuilder =
       Value<String?> executionVerdict,
       Value<DateTime?> startedAt,
       Value<DateTime?> completedAt,
+      Value<String?> activityId,
       Value<int> rowid,
     });
 
@@ -37879,6 +37936,11 @@ class $$SessionActualsTableFilterComposer
 
   ColumnFilters<DateTime> get completedAt => $composableBuilder(
     column: $table.completedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get activityId => $composableBuilder(
+    column: $table.activityId,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -38011,6 +38073,11 @@ class $$SessionActualsTableOrderingComposer
     column: $table.completedAt,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get activityId => $composableBuilder(
+    column: $table.activityId,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$SessionActualsTableAnnotationComposer
@@ -38129,6 +38196,11 @@ class $$SessionActualsTableAnnotationComposer
     column: $table.completedAt,
     builder: (column) => column,
   );
+
+  GeneratedColumn<String> get activityId => $composableBuilder(
+    column: $table.activityId,
+    builder: (column) => column,
+  );
 }
 
 class $$SessionActualsTableTableManager
@@ -38188,6 +38260,7 @@ class $$SessionActualsTableTableManager
                 Value<String?> executionVerdict = const Value.absent(),
                 Value<DateTime?> startedAt = const Value.absent(),
                 Value<DateTime?> completedAt = const Value.absent(),
+                Value<String?> activityId = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => SessionActualsCompanion(
                 sessionId: sessionId,
@@ -38214,6 +38287,7 @@ class $$SessionActualsTableTableManager
                 executionVerdict: executionVerdict,
                 startedAt: startedAt,
                 completedAt: completedAt,
+                activityId: activityId,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -38242,6 +38316,7 @@ class $$SessionActualsTableTableManager
                 Value<String?> executionVerdict = const Value.absent(),
                 Value<DateTime?> startedAt = const Value.absent(),
                 Value<DateTime?> completedAt = const Value.absent(),
+                Value<String?> activityId = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => SessionActualsCompanion.insert(
                 sessionId: sessionId,
@@ -38268,6 +38343,7 @@ class $$SessionActualsTableTableManager
                 executionVerdict: executionVerdict,
                 startedAt: startedAt,
                 completedAt: completedAt,
+                activityId: activityId,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

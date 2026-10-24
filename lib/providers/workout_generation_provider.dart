@@ -56,6 +56,7 @@ class WorkoutGenerationNotifier extends StateNotifier<AsyncValue<int?>> {
             maxSessionsPerDay: profile.maxSessionsPerDay,
             gadSports: profile.preferredSports,
             existingPlanId: active?.id,
+            weekStartsOnMonday: profile.weekStartsOnMonday,
             athlete: planAthleteOf(profile),
           );
       final sessions =

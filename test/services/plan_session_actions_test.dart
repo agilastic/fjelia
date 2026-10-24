@@ -1,9 +1,11 @@
-import 'package:drift/drift.dart' hide isNull;
+import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/models/planned_workout_presentation.dart';
+import 'package:fjelia/services/daily_readiness_service.dart';
 import 'package:fjelia/services/plan_session_actions.dart';
+import 'package:fjelia/services/session_adaptation_service.dart';
 import 'package:fjelia/services/training_plan_service.dart';
 import 'package:fjelia/services/workout_template_library.dart';
 import '../support/fake_workout_garmin.dart';
@@ -127,18 +129,63 @@ void main() {
       );
     },
   );
-  test('failed Garmin unscheduling leaves planned status unchanged', () async {
-    await TrainingPlanService(db, garmin).pushToGarmin(session.id);
-    session = (await db.select(db.trainingSessions).get()).single;
-    garmin.failUnschedule = true;
-    await expectLater(
-      PlanSessionActions(db, garmin).markRest(session),
-      throwsException,
-    );
-    expect(
-      (await db.select(db.trainingSessions).get()).single.status,
-      'planned',
-    );
+  test(
+    'a failed Garmin release still records the skip and keeps the entry',
+    () async {
+      await TrainingPlanService(db, garmin).pushToGarmin(session.id);
+      session = (await db.select(db.trainingSessions).get()).single;
+      garmin.failUnschedule = true;
+      final rest = await PlanSessionActions(
+        db,
+        garmin,
+      ).markRest(session, reason: 'Illness');
+      // The athlete's decision does not wait for the network.
+      expect(rest.status, 'skipped');
+      expect(rest.garminAlternativeId, isNotNull);
+      expect(
+        (await db.select(db.sessionActuals).get()).single.skipReason,
+        'Illness',
+      );
+      // A later attempt releases the entry.
+      garmin.failUnschedule = false;
+      await PlanSessionActions(db, garmin).releaseGarminEntry(rest);
+      expect(
+        (await db.select(db.trainingSessions).get()).single.garminAlternativeId,
+        isNull,
+      );
+    },
+  );
+  test(
+    'an adapted session goes to the watch as new content, not a reschedule',
+    () async {
+      final plans = TrainingPlanService(db, garmin);
+      await plans.pushToGarmin(session.id);
+      expect(garmin.creates, 1);
+      session = (await db.select(db.trainingSessions).get()).single;
+      await SessionAdaptationService(db).adapt(
+        session,
+        const ReadinessResult(level: ReadinessLevel.yellow, flagCount: 2),
+      );
+      final adapted = (await db.select(db.trainingSessions).get()).single;
+      expect(adapted.status, 'adapted');
+      expect(adapted.garminWorkoutId, isNull);
+      await plans.pushToGarmin(adapted.id);
+      // A second workout was created and the first calendar entry taken down.
+      expect(garmin.creates, 2);
+      expect(garmin.removedSchedules, ['schedule-1']);
+      final after = (await db.select(db.trainingSessions).get()).single;
+      expect(after.garminWorkoutId, 'workout-2');
+      expect(after.garminAlternativeId, 'schedule-2');
+    },
+  );
+  test('restore undoes a skip and its reason', () async {
+    final actions = PlanSessionActions(db, garmin);
+    final rest = await actions.markRest(session, reason: 'Fatigue');
+    final back = await actions.restore(rest);
+    expect(back.status, 'planned');
+    expect(await db.select(db.sessionActuals).get(), isEmpty);
+    // Only a skipped session is restored.
+    expect((await actions.restore(back)).status, 'planned');
   });
   test('retry after scheduling failure reuses the created workout', () async {
     garmin.failSchedule = true;

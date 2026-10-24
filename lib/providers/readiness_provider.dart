@@ -1,5 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../services/replan_triggers.dart';
+import '../utils/week.dart';
 
 import '../db/database.dart';
 import '../services/daily_readiness_service.dart';
@@ -60,6 +62,13 @@ class MorningAdaptationNotifier extends StateNotifier<MorningAdaptationState> {
       final tomorrow = today.add(const Duration(days: 1));
 
       final replanned = await _replanIfNeeded(readiness);
+      // A session the readiness released leaves the watch calendar too.
+      final actions = _ref.read(planSessionActionsProvider);
+      for (final a in adapted) {
+        if (a.session.status == 'skipped') {
+          await actions.releaseGarminEntry(a.session);
+        }
+      }
       if (adapted.any((a) => a.adapted)) {
         await _pushAdaptedSessions(today, adapted);
       }
@@ -155,9 +164,17 @@ class MorningAdaptationNotifier extends StateNotifier<MorningAdaptationState> {
       return null;
     }
 
+    // Two completed weeks only: the plan also holds summaries of future weeks
+    // and the running week, which say nothing about what was done.
+    final now = DateTime.now();
+    final thisWeek = weekStartOf(DateTime(now.year, now.month, now.day));
     final weeks =
         await (db.select(db.weekSummaries)
-              ..where((t) => t.athleteId.equals('self'))
+              ..where(
+                (t) =>
+                    t.athleteId.equals('self') &
+                    t.weekStart.isSmallerThanValue(thisWeek),
+              )
               ..orderBy([(t) => OrderingTerm.desc(t.weekStart)])
               ..limit(2))
             .get();
@@ -171,15 +188,20 @@ class MorningAdaptationNotifier extends StateNotifier<MorningAdaptationState> {
 
     final reasons = <String>[];
     if (weeks.length == 2) {
-      final current = nts(weeks[0]);
-      final previous = nts(weeks[1]);
-      if (previous > 0 && current > previous * 1.15) {
-        reasons.add('ATL spike >15%');
+      final jump = zoneTimeJump(nts(weeks[0]), nts(weeks[1]));
+      if (jump != null) {
+        reasons.add('Zone time +${jump.round()}% vs the week before');
       }
     }
-    final hrv = readiness.hrvToday, base = readiness.hrvBaseline;
-    if (hrv != null && base != null && base > 0 && hrv < base * (1 - 0.1)) {
-      reasons.add('HRV suppressed >10%');
+    // One poor night is not a trend: HRV must be low on two nights running.
+    final yesterday = await db.getHrvForDate(
+      DateTime(now.year, now.month, now.day - 1),
+    );
+    if (hrvSuppressed([
+      readiness.hrvToday,
+      yesterday?.hrvLastNight,
+    ], readiness.hrvBaseline)) {
+      reasons.add('HRV suppressed >10% on two nights');
     }
     if (reasons.isEmpty) return null;
 

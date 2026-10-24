@@ -25,6 +25,7 @@ class PostWorkoutScorer {
     ActivityRecord activity, {
     Set<String> alreadyScored = const {},
   }) async {
+    if (await _isLinked(activity.activityId)) return false;
     final session = await _matchSession(
       activity.startDate,
       activity.type,
@@ -40,6 +41,8 @@ class PostWorkoutScorer {
   }
 
   Future<bool> score(ActivityRecord activity) async {
+    // An activity completes one session, however often it syncs.
+    if (await _isLinked(activity.activityId)) return false;
     final session = await _matchSession(
       activity.startDate,
       activity.type,
@@ -109,6 +112,7 @@ class PostWorkoutScorer {
             avgPowerWatts: Value(activity.avgWatts?.round()),
             polarizationIndex: Value(pi),
             executionVerdict: Value(verdict),
+            activityId: Value(activity.activityId),
             startedAt: Value(activity.startDate),
             completedAt: Value(
               activity.startDate.add(
@@ -514,6 +518,44 @@ class PostWorkoutScorer {
       zones[i - 1] = durationSec * pct / 100;
     }
     return any ? zones : null;
+  }
+
+  /// Whether [activityId] already completed a session.
+  Future<bool> _isLinked(String activityId) async =>
+      (await (_db.select(_db.sessionActuals)
+                ..where((t) => t.activityId.equals(activityId))
+                ..limit(1))
+              .getSingleOrNull()) !=
+          null;
+
+  /// Links completions from before the link existed to their activity, only
+  /// where it is certain: the activity starts at exactly the recorded start
+  /// and no other activity does. Anything less stays unlinked and can be
+  /// corrected later. Returns how many were linked.
+  Future<int> linkExistingCompletions() async {
+    final open = await (_db.select(_db.sessionActuals)
+          ..where((t) => t.activityId.isNull() & t.startedAt.isNotNull()))
+        .get();
+    if (open.isEmpty) return 0;
+    final taken = (await _db.select(_db.sessionActuals).get())
+        .map((a) => a.activityId)
+        .whereType<String>()
+        .toSet();
+    var linked = 0;
+    for (final a in open) {
+      final candidates = await (_db.select(_db.activityRecords)
+            ..where((t) => t.startDate.equals(a.startedAt!)))
+          .get();
+      final free = candidates.where((c) => !taken.contains(c.activityId));
+      if (candidates.length != 1 || free.length != 1) continue;
+      final id = free.single.activityId;
+      await (_db.update(_db.sessionActuals)
+            ..where((t) => t.sessionId.equals(a.sessionId)))
+          .write(SessionActualsCompanion(activityId: Value(id)));
+      taken.add(id);
+      linked++;
+    }
+    return linked;
   }
 
   /// Undoes completions that an earlier matching put on the wrong day, scores

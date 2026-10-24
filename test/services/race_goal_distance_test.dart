@@ -1,4 +1,3 @@
-import 'package:drift/drift.dart' hide isNull;
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/services/race_goal_service.dart';

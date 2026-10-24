@@ -8,8 +8,10 @@ import 'package:uuid/uuid.dart';
 import '../api/garmin_client.dart';
 import '../db/database.dart';
 import 'hr_zone_model.dart';
+import 'workout_semantics.dart';
 import '../providers/training_load_provider.dart';
 import '../utils/log.dart';
+import '../utils/week.dart';
 
 /// Every sport the planner can schedule.
 const _supportedSports = {
@@ -928,14 +930,28 @@ class TrainingPlanService {
       if (bySub.isNotEmpty) pool = bySub;
     }
 
-    final lo = (durationMin * 0.6).floor();
-    final hi = (durationMin * 1.4).ceil();
-    final byDuration = pool
+    // Close to the wanted length: within 15 %, else within 40 %, else the
+    // nearest few. Never an arbitrary template of the pool, whose steps would
+    // run for a different time than the plan shows.
+    List<WorkoutTemplate> within(double share) => pool
         .where(
-          (t) => t.estimatedDurationMin >= lo && t.estimatedDurationMin <= hi,
+          (t) =>
+              (t.estimatedDurationMin - durationMin).abs() <=
+              durationMin * share,
         )
         .toList();
-    if (byDuration.isNotEmpty) pool = byDuration;
+    var closest = within(0.15);
+    if (closest.isEmpty) closest = within(0.4);
+    if (closest.isEmpty) {
+      final byCloseness = [...pool]
+        ..sort(
+          (a, b) => (a.estimatedDurationMin - durationMin).abs().compareTo(
+            (b.estimatedDurationMin - durationMin).abs(),
+          ),
+        );
+      closest = byCloseness.take(3).toList();
+    }
+    pool = closest;
 
     return pool[seed % pool.length];
   }
@@ -1030,62 +1046,6 @@ class TrainingPlanService {
     return jsonEncode(steps.map((s) => _resolveStep(s, ftp, fitness)).toList());
   }
 
-  double _trimpFromSteps(String stepsJson) {
-    try {
-      final steps = (jsonDecode(stepsJson) as List)
-          .cast<Map<String, dynamic>>();
-      return _trimpFromStepList(steps, 1);
-    } catch (_) {
-      return 0.0;
-    }
-  }
-
-  double _trimpFromStepList(List<Map<String, dynamic>> steps, int repeat) {
-    var total = 0.0;
-    for (final s in steps) {
-      if (s['type'] == 'RepeatGroupDTO') {
-        final n = (s['numberOfIterations'] as num?)?.toInt() ?? 1;
-        final inner =
-            (s['workoutSteps'] as List?)?.cast<Map<String, dynamic>>() ??
-            const <Map<String, dynamic>>[];
-        total += _trimpFromStepList(inner, n);
-        continue;
-      }
-      final seconds = (s['endConditionValue'] as num?)?.toDouble() ?? 0.0;
-      final zone = ((s['zoneNumber'] as num?)?.toInt() ?? 1).clamp(1, 5);
-      total += seconds / 60.0 * repeat * _zoneWeights[zone - 1];
-    }
-    return total;
-  }
-
-  int _dominantZoneFromSteps(String stepsJson, int fallback) {
-    final minutes = <int, double>{};
-    void collect(List<Map<String, dynamic>> steps, int repeat) {
-      for (final s in steps) {
-        if (s['type'] == 'RepeatGroupDTO') {
-          collect(
-            (s['workoutSteps'] as List?)?.cast<Map<String, dynamic>>() ??
-                const [],
-            repeat * ((s['numberOfIterations'] as num?)?.toInt() ?? 1),
-          );
-          continue;
-        }
-        final type = (s['stepType'] as Map?)?['stepTypeKey'];
-        if (type == 'warmup' || type == 'cooldown') continue;
-        final zone = (s['zoneNumber'] as num?)?.toInt();
-        if (zone == null || zone == 0) continue;
-        final secs = (s['endConditionValue'] as num?)?.toDouble() ?? 0;
-        minutes[zone] = (minutes[zone] ?? 0) + secs * repeat;
-      }
-    }
-
-    try {
-      collect((jsonDecode(stepsJson) as List).cast<Map<String, dynamic>>(), 1);
-    } catch (_) {}
-    if (minutes.isEmpty) return fallback;
-    return minutes.entries.reduce((a, b) => a.value >= b.value ? a : b).key;
-  }
-
   ({String? text, int? minutes}) _extractWarmUpDescription(String stepsJson) {
     try {
       final steps = (jsonDecode(stepsJson) as List)
@@ -1127,6 +1087,7 @@ class TrainingPlanService {
     List<String> gadSports = const [],
     String? coachId,
     String? existingPlanId,
+    bool weekStartsOnMonday = true,
     PlanAthleteProfile athlete = const PlanAthleteProfile(),
   }) async {
     final today = _day(DateTime.now());
@@ -1182,15 +1143,33 @@ class TrainingPlanService {
     }
 
     final end = raceDate.isAfter(today) ? _day(raceDate) : _addDays(today, 28);
-    final weeks =
-        (DateTime.utc(end.year, end.month, end.day)
-                    .difference(
-                      DateTime.utc(today.year, today.month, today.day),
-                    )
-                    .inDays /
-                7)
-            .ceil()
-            .clamp(1, 104);
+
+    // The season anchor: where the plan began. Phases and the recovery cycle
+    // are counted from it, so a replan carries on in the same block instead of
+    // starting over at the day it ran. A different race starts a new season.
+    var anchor = today;
+    if (existingPlanId != null) {
+      final existing = await (_db.select(
+        _db.trainingPlans,
+      )..where((t) => t.id.equals(existingPlanId))).getSingleOrNull();
+      if (existing != null &&
+          existing.raceGoalId == raceGoalId &&
+          existing.startDate.isBefore(today)) {
+        anchor = _day(existing.startDate);
+      }
+    }
+    // Weeks follow the calendar week the athlete chose, counted from the
+    // anchor's week; the week index is the plan's block position.
+    final anchorWeek = weekStartOf(anchor, mondayFirst: weekStartsOnMonday);
+    final currentWeek = weekStartOf(today, mondayFirst: weekStartsOnMonday);
+    final lastWeek = weekStartOf(end, mondayFirst: weekStartsOnMonday);
+    int weeksBetween(DateTime a, DateTime b) =>
+        DateTime.utc(b.year, b.month, b.day)
+            .difference(DateTime.utc(a.year, a.month, a.day))
+            .inDays ~/
+        7;
+    final firstIndex = weeksBetween(anchorWeek, currentWeek);
+    final weeks = (weeksBetween(anchorWeek, lastWeek) + 1).clamp(1, 156);
 
     // Plan row.
     String planId;
@@ -1208,7 +1187,7 @@ class TrainingPlanService {
         _db.trainingPlans,
       )..where((t) => t.id.equals(planId))).write(
         TrainingPlansCompanion(
-          startDate: Value(today),
+          startDate: Value(anchor),
           endDate: Value(end),
           raceGoalId: Value(raceGoalId),
           lastReplannedAt: Value(DateTime.now()),
@@ -1263,12 +1242,14 @@ class TrainingPlanService {
     var sessionNumber = 0;
     var gadIndex = 0;
 
-    for (var w = 0; w < weeks; w++) {
-      final weekStart = _addDays(today, w * 7);
+    for (var g = firstIndex; g < weeks; g++) {
+      // g counts from the season anchor, w from this plan run.
+      final w = g - firstIndex;
+      final weekStart = _addDays(anchorWeek, g * 7);
       var phase = (prependRecovery && w == 0)
           ? 'recovery'
-          : _phase(w, weeks, cycle: athlete.recoveryCycle);
-      final weeksIntoBlock = w % athlete.recoveryCycle;
+          : _phase(g, weeks, cycle: athlete.recoveryCycle);
+      final weeksIntoBlock = g % athlete.recoveryCycle;
       final progression = phase == 'taper' || phase == 'recovery'
           ? 1.0
           : 1.0 + athlete.progressionPerWeek * weeksIntoBlock;
@@ -1361,7 +1342,10 @@ class TrainingPlanService {
         final candidates = <int>[];
         for (var off = 0; off < 7; off++) {
           final date = _addDays(weekStart, off);
-          if (date.isAfter(raceDay)) continue;
+          // The race day belongs to the race, not to an ordinary session.
+          if (!date.isBefore(raceDay)) continue;
+          // Days already gone cannot take a session.
+          if (date.isBefore(today)) continue;
           if (restDays.contains(date.weekday)) continue;
           if (isPreRaceRest(date)) continue;
           final count = used[off] ?? 0;
@@ -1410,7 +1394,6 @@ class TrainingPlanService {
         );
         if (phase == 'taper') duration = (duration * 0.7).round();
         if (phase == 'recovery') duration = (duration * 0.7).round();
-        if (date == raceDay) duration = (duration * 0.5).round();
         if (slot.sessionType == 'long' && _footSports.contains(slot.sport)) {
           duration = math.min(duration, _maxLongRunMin(category));
         }
@@ -1453,7 +1436,11 @@ class TrainingPlanService {
         }
         duration = duration.clamp(20, 240);
 
-        final template = _pickTemplateFromCache(
+        // The workout is chosen first and its steps decide the duration, so
+        // what the app shows, what the load estimate counts and what the watch
+        // executes are the same. A steady session is fitted to the wanted
+        // length; a structured one is chosen close to it and left whole.
+        var template = _pickTemplateFromCache(
           templates,
           slot.sport,
           slot.sessionType,
@@ -1462,25 +1449,61 @@ class TrainingPlanService {
           duration,
           w + sessionNumber,
         );
-        final stepsJson = template == null
-            ? null
-            : _resolveStepsJson(template.stepsJson, ftp, fitness);
-
-        var trimp = stepsJson == null ? 0.0 : _trimpFromSteps(stepsJson);
-        if (trimp <= 0) {
-          trimp = duration * _zoneWeights[(slot.zone - 1).clamp(0, 4)];
-        } else if (template != null && template.estimatedDurationMin > 0) {
-          trimp *= duration / template.estimatedDurationMin;
+        String? stepsJson;
+        var scaled = false;
+        var semantics = const WorkoutSemantics();
+        void compile(WorkoutTemplate t, int wantedMin) {
+          final resolved = _resolveStepsJson(t.stepsJson, ftp, fitness);
+          final fitted = fitSteadyWorkout(resolved, wantedMin * 60.0);
+          stepsJson = fitted.stepsJson;
+          scaled = fitted.scaled;
+          semantics = WorkoutSemantics.of(stepsJson, sport: slot.sport);
         }
-        if (weekPlannedTrimp + trimp > weekTssCap &&
+
+        if (template != null) compile(template, duration);
+        // A hard session that would take the week over its load cap is
+        // replaced by a lighter one of the same kind, not clipped on paper.
+        if (template != null &&
             slot.sessionType == 'key' &&
-            phase != 'peak') {
-          trimp = math.max(0, weekTssCap - weekPlannedTrimp).toDouble();
+            phase != 'peak' &&
+            weekPlannedTrimp + semantics.legacyLoad > weekTssCap) {
+          final lighter = _pickTemplateFromCache(
+            templates,
+            slot.sport,
+            slot.sessionType,
+            slot.subType,
+            phase,
+            (duration * 0.75).round(),
+            w + sessionNumber,
+          );
+          if (lighter != null && lighter.id != template.id) {
+            final before = semantics.legacyLoad;
+            final previous = (template, stepsJson, scaled, semantics);
+            compile(lighter, (duration * 0.75).round());
+            if (semantics.legacyLoad < before) {
+              template = lighter;
+            } else {
+              template = previous.$1;
+              stepsJson = previous.$2;
+              scaled = previous.$3;
+              semantics = previous.$4;
+            }
+          }
+        }
+        var title =
+            template?.name ??
+            '${slot.sessionType[0].toUpperCase()}${slot.sessionType.substring(1)} '
+                '${slot.sport.replaceAll('_', ' ')}';
+        var trimp = 0.0;
+        if (semantics.isEmpty) {
+          trimp = duration * _zoneWeights[(slot.zone - 1).clamp(0, 4)];
+        } else {
+          duration = semantics.totalMinutes.clamp(1, 600);
+          trimp = semantics.legacyLoad;
+          if (scaled) title = retimeTitle(title, duration);
         }
 
-        final zone = stepsJson == null
-            ? slot.zone
-            : _dominantZoneFromSteps(stepsJson, slot.zone);
+        final zone = semantics.dominantZone ?? slot.zone;
         final hr = fitness.hrRangeForZone(zone);
         final hrJson = jsonEncode({
           'low': hr.low,
@@ -1515,11 +1538,7 @@ class TrainingPlanService {
 
         final warm = stepsJson == null
             ? (text: null, minutes: null)
-            : _extractWarmUpDescription(stepsJson);
-        final title =
-            template?.name ??
-            '${slot.sessionType[0].toUpperCase()}${slot.sessionType.substring(1)} '
-                '${slot.sport.replaceAll('_', ' ')}';
+            : _extractWarmUpDescription(stepsJson!);
 
         sessionNumber++;
         weekSessions++;
@@ -1538,7 +1557,7 @@ class TrainingPlanService {
                 coachId: Value(coachId),
                 sessionDate: date,
                 sessionNumber: sessionNumber,
-                weekNumber: w + 1,
+                weekNumber: g + 1,
                 sport: slot.sport,
                 sessionType: slot.sessionType,
                 subType: Value(slot.subType),
@@ -1570,7 +1589,7 @@ class TrainingPlanService {
             WeekSummariesCompanion.insert(
               athleteId: athleteId,
               weekStart: weekStartMonday,
-              weekNumber: w + 1,
+              weekNumber: g + 1,
               phase: phase,
               isRecoveryWeek: Value(phase == 'recovery'),
               plannedTrimp: Value(weekPlannedTrimp),
@@ -1637,6 +1656,9 @@ class TrainingPlanService {
               ..where(
                 (t) =>
                     t.athleteId.equals(plan.athleteId) &
+                    // The same policy as the manual generation: the next goal
+                    // of priority A, not whichever race comes first.
+                    t.priority.equals('a') &
                     t.raceDate.isBiggerOrEqualValue(today),
               )
               ..orderBy([(t) => OrderingTerm.asc(t.raceDate)])
@@ -1658,6 +1680,7 @@ class TrainingPlanService {
       gadSports: preferredSports,
       coachId: plan.coachId,
       existingPlanId: planId,
+      weekStartsOnMonday: weekStartsOnMonday,
       athlete: athlete,
     );
   }
@@ -1764,6 +1787,13 @@ class TrainingPlanService {
     }
     if (s.stepsJson == null) {
       throw StateError('No workout structure is available to push.');
+    }
+    // A calendar entry of an earlier definition (the session changed since)
+    // comes down before the new one goes up.
+    if (s.garminAlternativeId != null) {
+      await _garmin.unscheduleWorkout(s.garminAlternativeId!);
+      await (_db.update(_db.trainingSessions)..where((t) => t.id.equals(s.id)))
+          .write(const TrainingSessionsCompanion(garminAlternativeId: Value(null)));
     }
     final thresholds = await (_db.select(
       _db.athleteThresholds,

@@ -417,6 +417,11 @@ class SessionActuals extends Table {
   DateTimeColumn get startedAt => dateTime().nullable()();
   DateTimeColumn get completedAt => dateTime().nullable()();
 
+  /// The activity that completed the session. One activity completes at most
+  /// one session (a unique index); null for skips and for completions from
+  /// before the link existed.
+  TextColumn get activityId => text().nullable()();
+
   @override
   Set<Column> get primaryKey => {sessionId};
 }
@@ -696,7 +701,7 @@ class AppDatabase extends _$AppDatabase {
       defaultSourcePriorities[group.name]!;
 
   @override
-  int get schemaVersion => 44;
+  int get schemaVersion => 45;
 
   Future<void> saveHeartRateSamples(List<TimedHeartRate> samples) async {
     if (samples.isEmpty) return;
@@ -1512,8 +1517,25 @@ class AppDatabase extends _$AppDatabase {
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
-    beforeOpen: (details) => _clearBlankActivityJson(),
+    beforeOpen: (details) async {
+      await _clearBlankActivityJson();
+      // An activity completes one session; the index makes that a rule of
+      // the data, not only of the code. Null links stay unconstrained.
+      await customStatement(
+        'CREATE UNIQUE INDEX IF NOT EXISTS idx_session_actuals_activity '
+        'ON session_actuals(activity_id) WHERE activity_id IS NOT NULL',
+      );
+    },
     onUpgrade: (m, from, to) async {
+      if (from < 45) {
+        await _addColumnIfMissing(
+          'session_actuals',
+          'activity_id',
+          () => customStatement(
+            'ALTER TABLE session_actuals ADD COLUMN activity_id TEXT',
+          ),
+        );
+      }
       if (from < 44) await m.createTable(spotHrvMeasurements);
       if (from < 41) await m.createTable(heartRateSamples);
       if (from < 42) {

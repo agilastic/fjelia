@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:drift/drift.dart';
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:uuid/uuid.dart';
 
 import '../db/database.dart';
@@ -102,25 +103,27 @@ class DailyReadinessService {
 
   Future<ReadinessResult> compute(DateTime date) async {
     final day = _day(date);
-    final hrv7 = (await _db.getHrvRange(7))
-        .where((r) => r.date.isBefore(day))
-        .toList();
-    final hrv30 = (await _db.getHrvRange(30))
-        .where((r) => r.date.isBefore(day))
-        .toList();
+    final hrv7 = (await _db.getHrvRange(
+      7,
+    )).where((r) => r.date.isBefore(day)).toList();
+    final hrv30 = (await _db.getHrvRange(
+      30,
+    )).where((r) => r.date.isBefore(day)).toList();
     final hrvToday = await _db.getHrvForDate(day);
     final sleep = await _db.getSleepForDate(day);
     final wellness = await _db.getWellnessForDate(day);
-    final sleepHistory = (await _db.getSleepRange(67))
-        .where((r) => r.date.isBefore(day))
-        .toList();
-    final tsb = await _computeTsb();
+    final sleepHistory = (await _db.getSleepRange(
+      67,
+    )).where((r) => r.date.isBefore(day)).toList();
+    final tsb = await _computeTsb(day);
 
     // HRV drop vs 7-day baseline.
-    final hrvBaseline = _mean(hrv7
-        .where((r) => r.hrvLastNight != null)
-        .map((r) => r.hrvLastNight!)
-        .toList());
+    final hrvBaseline = _mean(
+      hrv7
+          .where((r) => r.hrvLastNight != null)
+          .map((r) => r.hrvLastNight!)
+          .toList(),
+    );
     final hrvNow = hrvToday?.hrvLastNight;
     double? hrvDrop;
     if (hrvBaseline != null && hrvNow != null && hrvBaseline > 0) {
@@ -129,32 +132,39 @@ class DailyReadinessService {
     final hrvLow = hrvDrop != null && hrvDrop > 0.08;
 
     // Resting HR elevation.
-    final rhrBaseline = _mean(hrv7
-        .where((r) => r.restingHeartRate != null)
-        .map((r) => r.restingHeartRate!.toDouble())
-        .toList());
+    final rhrBaseline = _mean(
+      hrv7
+          .where((r) => r.restingHeartRate != null)
+          .map((r) => r.restingHeartRate!.toDouble())
+          .toList(),
+    );
     final rhrNow = hrvToday?.restingHeartRate?.toDouble();
-    final rhrElevation =
-        rhrBaseline != null && rhrNow != null ? rhrNow - rhrBaseline : null;
+    final rhrElevation = rhrBaseline != null && rhrNow != null
+        ? rhrNow - rhrBaseline
+        : null;
     final rhrHigh = rhrElevation != null && rhrElevation > 5.0;
 
     // Breathing rate.
-    final respBaseline = _mean(hrv7
-        .where((r) => r.respirationRate != null)
-        .map((r) => r.respirationRate!)
-        .toList());
+    final respBaseline = _mean(
+      hrv7
+          .where((r) => r.respirationRate != null)
+          .map((r) => r.respirationRate!)
+          .toList(),
+    );
     final respNow = hrvToday?.respirationRate;
-    final respHigh = respBaseline != null &&
-        respNow != null &&
-        respNow - respBaseline > 1.0;
+    final respHigh =
+        respBaseline != null && respNow != null && respNow - respBaseline > 1.0;
 
     // Stress.
-    final stressBaseline = _mean(hrv7
-        .where((r) => r.stressLevel != null)
-        .map((r) => r.stressLevel!)
-        .toList());
+    final stressBaseline = _mean(
+      hrv7
+          .where((r) => r.stressLevel != null)
+          .map((r) => r.stressLevel!)
+          .toList(),
+    );
     final stressNow = wellness?.averageStress ?? hrvToday?.stressLevel;
-    final stressHigh = stressNow != null &&
+    final stressHigh =
+        stressNow != null &&
         stressNow > 35.0 &&
         stressBaseline != null &&
         stressNow - stressBaseline > 8.0;
@@ -174,14 +184,13 @@ class DailyReadinessService {
         final ratio = (sleep.totalSleepSeconds / need).clamp(0.0, 1.5);
         sleepShort = ratio < 0.75 && (sleepScore == null || sleepScore < 70);
       }
-      final valid =
-          sleepHistory.where((s) => s.totalSleepSeconds > 0).toList();
-      final remBase = _mean(valid
-          .map((s) => s.remSleepSeconds / s.totalSleepSeconds)
-          .toList());
-      final deepBase = _mean(valid
-          .map((s) => s.deepSleepSeconds / s.totalSleepSeconds)
-          .toList());
+      final valid = sleepHistory.where((s) => s.totalSleepSeconds > 0).toList();
+      final remBase = _mean(
+        valid.map((s) => s.remSleepSeconds / s.totalSleepSeconds).toList(),
+      );
+      final deepBase = _mean(
+        valid.map((s) => s.deepSleepSeconds / s.totalSleepSeconds).toList(),
+      );
       final remNow = sleep.remSleepSeconds / sleep.totalSleepSeconds;
       final deepNow = sleep.deepSleepSeconds / sleep.totalSleepSeconds;
       remLow = remBase != null && remBase > 0 && remNow < remBase * 0.5;
@@ -189,22 +198,34 @@ class DailyReadinessService {
     }
 
     // Body battery.
-    final battery = (wellness?.bodyBatteryHighest ??
-            hrvToday?.bodyBattery ??
-            hrvToday?.computedEnergie)
-        ?.round();
+    final battery =
+        (wellness?.bodyBatteryHighest ??
+                hrvToday?.bodyBattery ??
+                hrvToday?.computedEnergie)
+            ?.round();
     final batteryLow = battery != null && battery < 25;
 
     // Skin temperature.
-    final skinTemp = hrvToday?.skinTempDelta ?? sleep?.avgOvernightHrv;
-    final skinShift = hrvToday?.skinTempDelta != null &&
+    // Only a temperature: an HRV value is a different unit and no fallback.
+    final skinTemp = hrvToday?.skinTempDelta;
+    final skinShift =
+        hrvToday?.skinTempDelta != null &&
         hrvToday!.skinTempDelta!.abs() >= 0.5;
 
     final fatigue = tsb != null && tsb < -20.0;
 
     final flags = [
-      hrvLow, rhrHigh, respHigh, stressHigh, spo2Low, sleepShort, remLow,
-      deepLow, batteryLow, skinShift, fatigue,
+      hrvLow,
+      rhrHigh,
+      respHigh,
+      stressHigh,
+      spo2Low,
+      sleepShort,
+      remLow,
+      deepLow,
+      batteryLow,
+      skinShift,
+      fatigue,
     ];
     final flagCount = flags.where((f) => f).length;
 
@@ -252,7 +273,9 @@ class DailyReadinessService {
       severity: severity.severity,
     );
 
-    await _db.into(_db.dailyReadinessRecords).insertOnConflictUpdate(
+    await _db
+        .into(_db.dailyReadinessRecords)
+        .insertOnConflictUpdate(
           DailyReadinessRecordsCompanion(
             id: Value(const Uuid().v4()),
             athleteId: const Value('self'),
@@ -285,29 +308,39 @@ class DailyReadinessService {
 
   /// Severity for the training plan: from the composite and TSB.
   Future<TrainingSeverityResult> computeSeverity(DateTime date) async {
-    final tsb = await _computeTsb();
+    final tsb = await _computeTsb(date);
     final composite = await computeCompositeScore(date);
     if (composite != null) {
       if (composite < 3.5) {
-        return TrainingSeverityResult(TrainingSeverity.rest,
-            'Readiness ${composite.toStringAsFixed(1)}/10 — rest recommended');
+        return TrainingSeverityResult(
+          TrainingSeverity.rest,
+          'Readiness ${composite.toStringAsFixed(1)}/10 — rest recommended',
+        );
       }
       if (composite < 5.5) {
-        return TrainingSeverityResult(TrainingSeverity.tierDown,
-            'Readiness ${composite.toStringAsFixed(1)}/10 — reduced effort recommended');
+        return TrainingSeverityResult(
+          TrainingSeverity.tierDown,
+          'Readiness ${composite.toStringAsFixed(1)}/10 — reduced effort recommended',
+        );
       }
       if (tsb == null || tsb >= -20) {
-        return TrainingSeverityResult(TrainingSeverity.normal,
-            'Readiness ${composite.toStringAsFixed(1)}/10 — good to train');
+        return TrainingSeverityResult(
+          TrainingSeverity.normal,
+          'Readiness ${composite.toStringAsFixed(1)}/10 — good to train',
+        );
       }
     }
     if (tsb != null && tsb < -20.0) {
-      return TrainingSeverityResult(TrainingSeverity.tierDown,
-          'TSB ${tsb.toStringAsFixed(1)} — accumulated fatigue');
+      return TrainingSeverityResult(
+        TrainingSeverity.tierDown,
+        'TSB ${tsb.toStringAsFixed(1)} — accumulated fatigue',
+      );
     }
     if (tsb != null && tsb > 10.0) {
-      return TrainingSeverityResult(TrainingSeverity.normal,
-          'TSB ${tsb.toStringAsFixed(1)} — fresh and primed');
+      return TrainingSeverityResult(
+        TrainingSeverity.normal,
+        'TSB ${tsb.toStringAsFixed(1)} — fresh and primed',
+      );
     }
     return const TrainingSeverityResult(TrainingSeverity.normal);
   }
@@ -316,16 +349,15 @@ class DailyReadinessService {
   /// Null when less than 40 % of the weight has data.
   Future<double?> computeCompositeScore(DateTime date) async {
     final day = _day(date);
-    final history = (await _db.getHrvRange(30))
-        .where((r) => r.date.isBefore(day))
-        .toList();
+    final history = (await _db.getHrvRange(
+      30,
+    )).where((r) => r.date.isBefore(day)).toList();
     final today = await _db.getHrvForDate(day);
     final sleep = await _db.getSleepForDate(day);
-    final sleepHistory = (await _db.getSleepRange(30))
-        .where((r) => r.date.isBefore(day))
-        .toList();
+    final sleepHistory = (await _db.getSleepRange(
+      30,
+    )).where((r) => r.date.isBefore(day)).toList();
     final wellness = await _db.getWellnessForDate(day);
-    await _computeTsb();
 
     double? score(double? value, List<double> baseline, {bool invert = false}) {
       if (value == null || baseline.length < 3) return null;
@@ -337,14 +369,21 @@ class DailyReadinessService {
         history.map(f).whereType<double>().toList();
 
     final hrv = score(today?.hrvLastNight, pick((r) => r.hrvLastNight));
-    final rhr = score(today?.restingHeartRate?.toDouble(),
-        pick((r) => r.restingHeartRate?.toDouble()),
-        invert: true);
-    final resp = score(today?.respirationRate, pick((r) => r.respirationRate),
-        invert: true);
+    final rhr = score(
+      today?.restingHeartRate?.toDouble(),
+      pick((r) => r.restingHeartRate?.toDouble()),
+      invert: true,
+    );
+    final resp = score(
+      today?.respirationRate,
+      pick((r) => r.respirationRate),
+      invert: true,
+    );
     final stress = score(
-        wellness?.averageStress ?? today?.stressLevel, pick((r) => r.stressLevel),
-        invert: true);
+      wellness?.averageStress ?? today?.stressLevel,
+      pick((r) => r.stressLevel),
+      invert: true,
+    );
     final spo2Value = wellness?.avgSpo2 ?? today?.spo2;
     final spo2 = spo2Value == null
         ? null
@@ -401,7 +440,7 @@ class DailyReadinessService {
     final mean = values.reduce((a, b) => a + b) / values.length;
     final variance =
         values.map((v) => (v - mean) * (v - mean)).reduce((a, b) => a + b) /
-            values.length;
+        values.length;
     return math.sqrt(variance);
   }
 
@@ -411,7 +450,11 @@ class DailyReadinessService {
   }
 
   /// Training-stress balance (CTL − ATL) over the daily strain history.
-  Future<double?> _computeTsb() async {
+  /// Form (CTL − ATL) at the start of [date], from the days before it only.
+  @visibleForTesting
+  Future<double?> tsbAsOf(DateTime date) => _computeTsb(date);
+
+  Future<double?> _computeTsb([DateTime? asOf]) async {
     final scores = await _db.getAllScores();
     final load = <DateTime, double>{};
     for (final s in scores) {
@@ -424,10 +467,13 @@ class DailyReadinessService {
     var ctl = 0.0, atl = 0.0;
     const ctlAlpha = 2 / 43; // 42-day EWMA
     const atlAlpha = 0.25; // 7-day EWMA
-    final today = _day(DateTime.now());
-    for (var d = days.first;
-        d.isBefore(today);
-        d = DateTime(d.year, d.month, d.day + 1)) {
+    // The requested day, not today: a past date must not see later load.
+    final today = _day(asOf ?? DateTime.now());
+    for (
+      var d = days.first;
+      d.isBefore(today);
+      d = DateTime(d.year, d.month, d.day + 1)
+    ) {
       final l = load[d] ?? 0.0;
       ctl += ctlAlpha * (l - ctl);
       atl += atlAlpha * (l - atl);

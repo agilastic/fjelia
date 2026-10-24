@@ -31,6 +31,9 @@ Map<String, dynamic> _decodeBackup(List<int> bytes) {
 }
 
 /// Portable data/settings backup. Credentials and provider API keys are excluded.
+/// Oldest backup schema that restores into the current database.
+const _oldestRestorableSchema = 44;
+
 class BackupService {
   BackupService(this.db);
   final AppDatabase db;
@@ -149,9 +152,15 @@ class BackupService {
     AppDatabase? source,
     void Function(BackupRestoreProgress)? onProgress,
   }) async {
+    // A backup from the previous schema restores: the later versions only
+    // added columns, which an older row simply leaves empty. Anything older
+    // or newer than that is refused.
+    final schema = payload['schema'];
     if (payload['format'] != 'fjelia-backup' ||
         payload['version'] != 1 ||
-        payload['schema'] != db.schemaVersion) {
+        schema is! int ||
+        schema < _oldestRestorableSchema ||
+        schema > db.schemaVersion) {
       throw const FormatException(
         'Backup format or database version does not match.',
       );

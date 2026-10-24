@@ -33,6 +33,7 @@ import 'workout_generation_provider.dart';
 const _storage = FlutterSecureStorage();
 const _matchRepairKey = 'session_match_repair_v1';
 const _raceDistanceRepairKey = 'race_distance_repair_v1';
+const _activityLinkKey = 'session_activity_links_v1';
 
 final syncServiceProvider = Provider<SyncService>(
   (ref) => SyncService(
@@ -424,6 +425,11 @@ class SyncNotifier extends StateNotifier<SyncState> {
         final reset = await scorer.repairMatches();
         await _storage.write(key: _matchRepairKey, value: '1');
         log('[Sync] session matching repaired: $reset sessions reset');
+      }
+      if (await _storage.read(key: _activityLinkKey) == null) {
+        final linked = await scorer.linkExistingCompletions();
+        await _storage.write(key: _activityLinkKey, value: '1');
+        log('[Sync] completions linked to their activity: $linked');
       }
       if (await _storage.read(key: _raceDistanceRepairKey) == null) {
         final fixed = await _ref

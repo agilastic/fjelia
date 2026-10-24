@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:archive/archive.dart';
+import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -59,6 +60,63 @@ void main() {
       );
     },
   );
+  test(
+    'a backup of the previous schema restores, newer or older ones do not',
+    () async {
+      await db
+          .into(db.sessionActuals)
+          .insert(
+            SessionActualsCompanion.insert(
+              sessionId: 'session',
+              skipReason: const Value('Travel'),
+            ),
+          );
+      final file = await BackupService(db).export(directory: dir);
+      final original =
+          jsonDecode(
+                utf8.decode(
+                  ZipDecoder()
+                          .decodeBytes(await file.readAsBytes())
+                          .findFile('backup.json')!
+                          .content
+                      as List<int>,
+                ),
+              )
+              as Map<String, dynamic>;
+
+      List<int> zipOf(int schema, {bool dropNewColumn = false}) {
+        final copy = jsonDecode(jsonEncode(original)) as Map<String, dynamic>;
+        copy['schema'] = schema;
+        if (dropNewColumn) {
+          for (final row in (copy['tables']['session_actuals'] as List)) {
+            (row as Map).remove('activity_id');
+          }
+        }
+        final bytes = utf8.encode(jsonEncode(copy));
+        return ZipEncoder().encode(
+          Archive()..addFile(ArchiveFile('backup.json', bytes.length, bytes)),
+        );
+      }
+
+      // A schema-44 backup has no activity link in its rows.
+      await db.customStatement('DELETE FROM session_actuals');
+      await BackupService(db).restore(zipOf(44, dropNewColumn: true));
+      final restored = (await db.select(db.sessionActuals).get()).single;
+      expect(restored.skipReason, 'Travel');
+      expect(restored.activityId, isNull);
+
+      await expectLater(
+        BackupService(db).restore(zipOf(43)),
+        throwsFormatException,
+      );
+      await expectLater(
+        BackupService(db).restore(zipOf(db.schemaVersion + 1)),
+        throwsFormatException,
+      );
+      // Refused backups leave the data alone.
+      expect(await db.select(db.sessionActuals).get(), hasLength(1));
+    },
+  );
   test('invalid backup fails before removing data', () async {
     await db.upsertHrv(
       HrvRecordsCompanion.insert(date: DateTime(2026, 10, 19)),
@@ -113,8 +171,9 @@ void main() {
           ),
       );
       final progress = <BackupRestoreProgress>[];
-      final result = await BackupService(db)
-          .restore(zip, onProgress: progress.add);
+      final result = await BackupService(
+        db,
+      ).restore(zip, onProgress: progress.add);
       expect(result.activities, 1);
       expect(
         (await db.select(db.activityRecords).get()).single.name,
@@ -140,8 +199,9 @@ void main() {
     test(
       'import provided original app backup including PLAN records',
       () async {
-        final result = await BackupService(db)
-            .restore(await File(fixture).readAsBytes());
+        final result = await BackupService(
+          db,
+        ).restore(await File(fixture).readAsBytes());
         expect(result.activities, 1372);
         expect(result.plannedSessions, 194);
         expect(result.scheduledWorkouts, 2);

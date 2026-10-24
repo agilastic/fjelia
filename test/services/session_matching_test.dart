@@ -128,6 +128,85 @@ void main() {
     });
   });
 
+  group('activity identity', () {
+    test(
+      'a scored activity is linked and cannot complete a second session',
+      () async {
+        await plan('first', DateTime(2026, 10, 20), 'running');
+        await plan('second', DateTime(2026, 10, 20), 'running');
+        final run = await activity('r', DateTime(2026, 10, 20, 9), 'running');
+        expect(await scorer.score(run), isTrue);
+        final linked = (await db.select(db.sessionActuals).get()).single;
+        expect(linked.activityId, 'r');
+        // Syncing it again, however often, completes nothing else.
+        expect(await scorer.score(run), isFalse);
+        expect(await scorer.scoreIfUnscored(run), isFalse);
+        expect(await db.select(db.sessionActuals).get(), hasLength(1));
+        // A different activity still can.
+        final other = await activity(
+          'o',
+          DateTime(2026, 10, 20, 18),
+          'running',
+        );
+        expect(await scorer.score(other), isTrue);
+        expect(await db.select(db.sessionActuals).get(), hasLength(2));
+      },
+    );
+
+    test('the database refuses one activity on two sessions', () async {
+      await plan('a', DateTime(2026, 10, 20), 'running');
+      await plan('b', DateTime(2026, 10, 21), 'running');
+      Future<void> link(String session) => db
+          .into(db.sessionActuals)
+          .insert(
+            SessionActualsCompanion.insert(
+              sessionId: session,
+              activityId: const Value('same'),
+            ),
+          );
+      await link('a');
+      await expectLater(link('b'), throwsA(isA<Object>()));
+      // Skips and old completions carry no link and do not clash.
+      await db
+          .into(db.sessionActuals)
+          .insert(SessionActualsCompanion.insert(sessionId: 'x'));
+      await db
+          .into(db.sessionActuals)
+          .insert(SessionActualsCompanion.insert(sessionId: 'y'));
+    });
+
+    test(
+      'old completions are linked only when the activity is certain',
+      () async {
+        final start = DateTime(2026, 10, 20, 9);
+        await activity('only', start, 'running');
+        await activity('twin-1', DateTime(2026, 10, 21, 9), 'running');
+        await activity('twin-2', DateTime(2026, 10, 21, 9), 'running');
+        Future<void> actual(String id, DateTime? at) => db
+            .into(db.sessionActuals)
+            .insert(
+              SessionActualsCompanion.insert(
+                sessionId: id,
+                startedAt: Value(at),
+              ),
+            );
+        await actual('certain', start);
+        await actual('ambiguous', DateTime(2026, 10, 21, 9));
+        await actual('unknown', null);
+        await actual('nothing', DateTime(2026, 10, 22, 9));
+        expect(await scorer.linkExistingCompletions(), 1);
+        Future<String?> link(String id) async => (await (db.select(
+          db.sessionActuals,
+        )..where((t) => t.sessionId.equals(id))).getSingle()).activityId;
+        expect(await link('certain'), 'only');
+        expect(await link('ambiguous'), isNull);
+        expect(await link('unknown'), isNull);
+        expect(await link('nothing'), isNull);
+        expect(await scorer.linkExistingCompletions(), 0);
+      },
+    );
+  });
+
   group('repair', () {
     test('a completion on the wrong day is undone and closed', () async {
       await plan(
