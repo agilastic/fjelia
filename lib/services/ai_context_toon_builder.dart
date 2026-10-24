@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import '../db/database.dart';
 import '../providers/training_load_provider.dart';
 import 'bio_age_service.dart';
+import 'ai_data_status.dart';
 import 'open_meteo_client.dart';
 
 /// Inputs from the training monitor.
@@ -85,6 +86,19 @@ class AiContextToonBuilder {
       '[Context:V4][Today:${_date(today)},Weekday:${_weekday(today)},'
           'TimeNow:${_time(now)}][Range:60d,Grip:90d]'
           '[Excludes:PII,GPS,GPX,ActivityNames,PlanNames]',
+      aiDataStatusLine(
+        now: now,
+        activityDays: [for (final a in activities) a.startDate],
+        hrvDays: [
+          for (final r in hrv)
+            if (r.hrvLastNight != null) r.date,
+        ],
+        sleepDays: [
+          for (final r in sleep)
+            if (r.totalSleepSeconds > 0) r.date,
+        ],
+        dailyDays: [for (final r in wellness) r.date],
+      ),
       if (raceGoals.trim().isNotEmpty) '[RaceGoals:${_clean(raceGoals)}]',
       if (weatherSummary != null && weatherSummary.trim().isNotEmpty)
         weatherSummary.trim(),

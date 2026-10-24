@@ -1,4 +1,5 @@
 import 'garmin_data.dart';
+import 'planned_workout_presentation.dart';
 
 String workoutDurationLabel(double seconds) {
   final duration = Duration(seconds: seconds.round());
@@ -86,4 +87,66 @@ String workoutSummary(ScheduledWorkout workout) {
       '${(distance / 1000).toStringAsFixed(1)} km',
   ];
   return parts.isEmpty ? 'Structured workout' : parts.join(' · ');
+}
+
+/// The role of a step: warm-up, interval, recovery and so on, from its
+/// intensity or name. Anything else is a plain workout step.
+String workoutStepRole(WorkoutStep step) {
+  final text = '${step.intensity ?? ''} ${step.stepName ?? ''}'.toLowerCase();
+  if (text.contains('warm')) return 'Warm-up';
+  if (text.contains('cool')) return 'Cool-down';
+  if (text.contains('recov')) return 'Recovery';
+  if (text.contains('rest')) return 'Rest';
+  if (text.contains('interval') || text.contains('active')) return 'Interval';
+  return 'Workout';
+}
+
+/// The steps of a Garmin workout as lines of the structure list, repeat
+/// groups included, with their target and note.
+List<PlannedStepLine> workoutStepLines(List<WorkoutStep> steps) {
+  final output = <PlannedStepLine>[];
+  void read(List<WorkoutStep> items, int depth) {
+    if (depth > 8) return;
+    for (final step in items) {
+      if (output.length >= 200) return;
+      if (step.steps.isNotEmpty) {
+        output.add(
+          PlannedStepLine(
+            '${step.repeatCount ?? 1}× repeat',
+            '',
+            null,
+            depth,
+            true,
+          ),
+        );
+        read(step.steps, depth + 1);
+        continue;
+      }
+      final description = step.description?.trim();
+      output.add(
+        PlannedStepLine(
+          workoutStepDuration(step),
+          workoutStepRole(step),
+          step.targetZone,
+          depth,
+          false,
+          target: workoutStepTarget(step),
+          note: description == null || description.isEmpty ? null : description,
+          colorZone:
+              step.targetZone ??
+              (const {
+                    'Warm-up',
+                    'Cool-down',
+                    'Recovery',
+                    'Rest',
+                  }.contains(workoutStepRole(step))
+                  ? 1
+                  : 3),
+        ),
+      );
+    }
+  }
+
+  read(steps, 0);
+  return output;
 }

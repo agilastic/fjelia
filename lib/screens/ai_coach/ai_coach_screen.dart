@@ -3,17 +3,28 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 import '../../db/database.dart';
+import '../../models/coach_context_card.dart';
 import '../../providers/ai_coach_provider.dart';
 import '../../providers/user_profile_provider.dart';
 import '../../services/ai_coach_client.dart';
 import '../../services/ai_coach_settings.dart';
+import '../../services/coach_tasks.dart';
 import '../../widgets/app_widgets.dart';
+import '../../widgets/coach_context_card.dart';
 import '../../utils/log.dart';
 import '../settings/ai_settings_tab.dart';
 
 class AiCoachScreen extends ConsumerStatefulWidget {
-  const AiCoachScreen({super.key, this.initialPrompt, this.activity});
+  const AiCoachScreen({
+    super.key,
+    this.initialPrompt,
+    this.activity,
+    this.contextCard,
+  });
   final String? initialPrompt;
+
+  /// The session the chat is about, shown as a card above the conversation.
+  final CoachContextCard? contextCard;
 
   /// When set, the chat is about this activity and its context is the
   /// activity plus the last 30 days and the year's progression.
@@ -102,7 +113,12 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
       }
       final reply = await ref
           .read(aiCoachClientProvider)
-          .send(settings, List.of(messages), toon, consent);
+          .send(
+            settings,
+            List.of(messages),
+            widget.contextCard?.withContext(toon) ?? toon,
+            consent,
+          );
       if (mounted) {
         setState(() => messages.add(ChatMessage(text: reply, isUser: false)));
       }
@@ -131,141 +147,217 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) => Column(
-    children: [
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
-          children: [
-            const Expanded(
-              child: Text(
-                'AI Coach',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            ),
-            IconButton(
-              tooltip: 'AI settings',
-              onPressed: () => showAppSheet(context, const AiSettingsTab()),
-              icon: const Icon(Icons.tune),
-            ),
+  CoachTask get _task {
+    final line = widget.contextCard?.contextLine ?? '';
+    return line.isEmpty && widget.activity != null
+        ? CoachTask.evaluateActivity
+        : coachTaskFor(line);
+  }
+
+  /// Follow-up questions under the last answer, up to three.
+  List<String> get _followUps =>
+      sending || error != null || messages.isEmpty || messages.last.isUser
+      ? const []
+      : followUpQuestions(
+          _task,
+          asked: [
+            for (final m in messages)
+              if (m.isUser) m.text,
+            ...?widget.contextCard?.questions,
           ],
+        );
+
+  @override
+  Widget build(BuildContext context) {
+    final followUps = _followUps;
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            children: [
+              const Expanded(
+                child: Text(
+                  'AI Coach',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+              IconButton(
+                tooltip: 'AI settings',
+                onPressed: () => showAppSheet(context, const AiSettingsTab()),
+                icon: const Icon(Icons.tune),
+              ),
+            ],
+          ),
         ),
-      ),
-      Expanded(
-        child: messages.isEmpty && error == null
-            ? ListView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                children: const [
-                  EmptyState(
-                    'Ask about your recovery, training, or today’s plan.',
-                  ),
-                ],
-              )
-            : ListView.builder(
-                physics: const AlwaysScrollableScrollPhysics(),
-                controller: scroll,
-                padding: const EdgeInsets.all(16),
-                itemCount: messages.length + (error == null ? 0 : 1),
-                itemBuilder: (c, i) {
-                  if (i == messages.length) {
-                    return Container(
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        color: panel,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+        Expanded(
+          child: messages.isEmpty && error == null
+              ? ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: widget.contextCard == null
+                      ? null
+                      : const EdgeInsets.all(16),
+                  children: [
+                    if (widget.contextCard case final card?) ...[
+                      CoachContextCardView(card: card),
+                      const SizedBox(height: 16),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
                         children: [
-                          Text(
-                            error!,
-                            style: const TextStyle(
-                              color: Colors.orange,
-                              fontSize: 13,
+                          for (final q in card.questions)
+                            ActionChip(
+                              label: Text(
+                                q,
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                              onPressed: sending
+                                  ? null
+                                  : () {
+                                      input.text = q;
+                                      send();
+                                    },
                             ),
-                          ),
-                          Row(
-                            children: [
-                              TextButton(
-                                onPressed: sending
-                                    ? null
-                                    : () => send(retry: true),
-                                child: const Text('Retry'),
-                              ),
-                              TextButton(
-                                onPressed: () => setState(() => error = null),
-                                child: const Text('Dismiss'),
-                              ),
-                            ],
-                          ),
                         ],
                       ),
-                    );
-                  }
-                  final m = messages[i];
-                  return Align(
-                    alignment: m.isUser
-                        ? Alignment.centerRight
-                        : Alignment.centerLeft,
-                    child: Container(
-                      margin: const EdgeInsets.only(bottom: 12),
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        color: m.isUser ? mint.withValues(alpha: .12) : panel,
-                        borderRadius: BorderRadius.circular(16),
+                    ] else
+                      const EmptyState(
+                        'Ask about your recovery, training, or today’s plan.',
                       ),
-                      child: MarkdownBody(data: m.text, selectable: true),
-                    ),
-                  );
-                },
-              ),
-      ),
-      if (sending) const LinearProgressIndicator(),
-      Padding(
-        padding: const EdgeInsets.all(12),
-        child: Row(
-          children: [
-            Expanded(
-              child: TextField(
-                controller: input,
-                minLines: 1,
-                maxLines: 4,
-                decoration: const InputDecoration(hintText: 'Ask your coach…'),
-                onSubmitted: (_) => send(),
-              ),
-            ),
-            IconButton(
-              tooltip: 'Send message',
-              onPressed: sending ? null : send,
-              icon: const Icon(Icons.arrow_upward, color: mint),
-            ),
-          ],
+                  ],
+                )
+              : ListView.builder(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  controller: scroll,
+                  padding: const EdgeInsets.all(16),
+                  itemCount:
+                      (widget.contextCard == null ? 0 : 1) +
+                      messages.length +
+                      (error != null || followUps.isNotEmpty ? 1 : 0),
+                  itemBuilder: (c, index) {
+                    final card = widget.contextCard;
+                    if (card != null && index == 0) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: CoachContextCardView(card: card),
+                      );
+                    }
+                    final i = index - (card == null ? 0 : 1);
+                    if (i == messages.length && error == null) {
+                      return Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          for (final q in followUps)
+                            ActionChip(
+                              label: Text(
+                                q,
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                              onPressed: () {
+                                input.text = q;
+                                send();
+                              },
+                            ),
+                        ],
+                      );
+                    }
+                    if (i == messages.length) {
+                      return Container(
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: panel,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              error!,
+                              style: const TextStyle(
+                                color: Colors.orange,
+                                fontSize: 13,
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                TextButton(
+                                  onPressed: sending
+                                      ? null
+                                      : () => send(retry: true),
+                                  child: const Text('Retry'),
+                                ),
+                                TextButton(
+                                  onPressed: () => setState(() => error = null),
+                                  child: const Text('Dismiss'),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                    final m = messages[i];
+                    return Align(
+                      alignment: m.isUser
+                          ? Alignment.centerRight
+                          : Alignment.centerLeft,
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: m.isUser ? mint.withValues(alpha: .12) : panel,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: MarkdownBody(data: m.text, selectable: true),
+                      ),
+                    );
+                  },
+                ),
         ),
-      ),
-    ],
-  );
+        if (sending) const LinearProgressIndicator(),
+        Padding(
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: input,
+                  minLines: 1,
+                  maxLines: 4,
+                  decoration: const InputDecoration(
+                    hintText: 'Ask your coach…',
+                  ),
+                  onSubmitted: (_) => send(),
+                ),
+              ),
+              IconButton(
+                tooltip: 'Send message',
+                onPressed: sending ? null : send,
+                icon: const Icon(Icons.arrow_upward, color: mint),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 }
 
-/// Opens the coach chat in a sheet with an editable [prompt] draft.
-void showCoachSheet(
+/// Opens the coach tab about a session: closes the sheets on top, then the
+/// home screen shows the coach with [card] above the chat, [prompt] as the
+/// draft question and, for an [activity], its training context.
+void openCoachTab(
   BuildContext context, {
-  required String title,
   required String prompt,
   ActivityRecord? activity,
+  CoachContextCard? card,
 }) {
-  showAppSheet(
-    context,
-    Builder(
-      builder: (sheetContext) => Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.viewInsetsOf(sheetContext).bottom,
-        ),
-        child: SheetPage(
-          title: title,
-          child: AiCoachScreen(initialPrompt: prompt, activity: activity),
-        ),
-      ),
-    ),
+  final container = ProviderScope.containerOf(context);
+  container.read(coachRequestProvider.notifier).state = CoachRequest(
+    prompt: prompt,
+    activity: activity,
+    card: card,
   );
+  Navigator.of(context, rootNavigator: true).popUntil((r) => r.isFirst);
 }

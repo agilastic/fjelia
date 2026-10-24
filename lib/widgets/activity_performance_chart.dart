@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../models/activity_axis.dart';
 import '../models/garmin_data.dart';
 import '../providers/hr_zones_provider.dart';
 import 'app_widgets.dart';
@@ -23,7 +24,9 @@ List<int> _bounds(WidgetRef ref, String type) {
 String _pace(double minutes) =>
     '${minutes.floor()}′${((minutes % 1) * 60).round().clamp(0, 59).toString().padLeft(2, '0')}″';
 
-/// Stored samples share a distance axis. HR colors and guides use the configured sport zones.
+/// Stored samples share one axis: distance, or time for activities that record
+/// no distance (strength, yoga, indoor). HR colors and guides use the
+/// configured sport zones.
 class ActivityPerformanceChart extends ConsumerWidget {
   const ActivityPerformanceChart({
     super.key,
@@ -36,14 +39,21 @@ class ActivityPerformanceChart extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final running = activity.type.toLowerCase().contains('run');
     final bounds = _bounds(ref, activity.type);
+    final axis = activityAxisFor(activity.samples);
+    final byTime = axis == ActivityAxis.time;
+    final minutes = byTime
+        ? sampleMinutes(activity.samples, activity.duration)
+        : const <double>[];
     final series = <(String, Color, List<FlSpot>)>[];
     void add(String label, Color color, double? Function(ActivitySample) read) {
       final points = <FlSpot>[];
-      for (final sample in activity.samples) {
+      for (var i = 0; i < activity.samples.length; i++) {
+        final sample = activity.samples[i];
         final value = read(sample);
-        if (value != null &&
-            value.isFinite &&
-            sample.distanceMeters.isFinite &&
+        if (value == null || !value.isFinite) continue;
+        if (byTime) {
+          points.add(FlSpot(minutes[i], value));
+        } else if (sample.distanceMeters.isFinite &&
             sample.distanceMeters >= 0) {
           points.add(FlSpot(sample.distanceMeters / 1000, value));
         }
@@ -174,12 +184,14 @@ class ActivityPerformanceChart extends ConsumerWidget {
                   bottomTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: last,
-                      interval: maxX / 6,
+                      interval: byTime ? niceMinuteInterval(maxX) : maxX / 6,
                       reservedSize: 24,
                       minIncluded: true,
                       maxIncluded: false,
                       getTitlesWidget: (v, _) => Text(
-                        '${v.toStringAsFixed(v == 0 ? 0 : 1)} km',
+                        byTime
+                            ? formatAxisMinutes(v, maxX)
+                            : '${v.toStringAsFixed(v == 0 ? 0 : 1)} km',
                         style: const TextStyle(
                           fontSize: 9,
                           color: Colors.white70,
@@ -213,11 +225,11 @@ class ActivityPerformanceChart extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 12),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12),
           child: Text(
-            'PERFORMANCE / DISTANCE',
-            style: TextStyle(
+            byTime ? 'PERFORMANCE / TIME' : 'PERFORMANCE / DISTANCE',
+            style: const TextStyle(
               fontSize: 11,
               color: Colors.white70,
               letterSpacing: 1,
@@ -243,7 +255,9 @@ class ActivityPerformanceChart extends ConsumerWidget {
                     onPressed: () => showAppSheet(
                       context,
                       SheetPage(
-                        title: 'Performance / Distance',
+                        title: byTime
+                            ? 'Performance / Time'
+                            : 'Performance / Distance',
                         backgroundColor: panel,
                         child: ListView(
                           padding: const EdgeInsets.all(12),

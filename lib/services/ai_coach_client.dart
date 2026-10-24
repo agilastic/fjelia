@@ -4,8 +4,10 @@ import 'dart:io' show Platform;
 import 'package:foundation_models_framework/foundation_models_framework.dart';
 import 'package:http/http.dart' as http;
 
+import 'ai_coach_rules.dart';
 import 'ai_coach_settings.dart';
 import 'apple_coach_request.dart';
+import 'coach_tasks.dart';
 import '../models/chat_message.dart';
 import '../utils/log.dart';
 export '../models/chat_message.dart';
@@ -38,6 +40,16 @@ const _afternoonUserPrompt =
 const _eveningUserPrompt =
     'Give me my evening briefing. Reflect on today\'s training and recovery. Check tomorrow\'s scheduled workout and tell me whether to do it as planned or adjust — based on today\'s fatigue and HRV trend. Give one sleep/recovery tip for tonight. Plain text only, no markdown, no bullet points, 3-5 sentences max.';
 
+/// Sends one prepared prompt to the on-device model and returns its reply.
+typedef AppleSender = Future<String> Function(AppleCoachRequest request);
+
+/// The system prompt of a request: the task prompt followed by the answer
+/// standard that every task shares.
+String _system(String? taskPrompt, [String context = '']) =>
+    (taskPrompt ?? _coachPrompt) +
+    coachAnswerStandard +
+    (taskPrompt == null ? coachTaskTemplate(coachTaskFor(context)) : '');
+
 /// Proof that the user just agreed to send health data to a cloud model.
 class AiConsentToken {
   const AiConsentToken._(this.confirmedAt);
@@ -53,9 +65,17 @@ class AiConsentToken {
 /// Chat and daily briefings against the configured provider. Health data is
 /// sent as a compact TOON context appended to the system prompt.
 class AiCoachClient {
-  AiCoachClient({http.Client? client, AiCoachSettingsStore? store})
-      : _http = client ?? http.Client(),
-        _store = store ?? const AiCoachSettingsStore();
+  AiCoachClient({
+    http.Client? client,
+    AiCoachSettingsStore? store,
+    AppleSender? appleSender,
+  })  : _http = client ?? http.Client(),
+        _store = store ?? const AiCoachSettingsStore(),
+        // ignore: prefer_initializing_formals
+        _appleSender = appleSender;
+
+  /// Replaces the on-device model, for tests.
+  final AppleSender? _appleSender;
 
   final http.Client _http;
   final AiCoachSettingsStore _store;
@@ -194,7 +214,7 @@ class AiCoachClient {
       'model': model,
       'temperature': 0.3,
       'messages': [
-        {'role': 'system', 'content': systemPrompt ?? _coachPrompt},
+        {'role': 'system', 'content': _system(systemPrompt, toonContext)},
         {'role': 'system', 'content': 'HEALTH_CONTEXT:\n$toonContext'},
         for (final m in messages)
           {'role': m.isUser ? 'user' : 'assistant', 'content': m.text},
@@ -234,7 +254,7 @@ class AiCoachClient {
       'model': model,
       'max_tokens': 16000,
       'output_config': {'effort': 'low'},
-      'system': '${systemPrompt ?? _coachPrompt}\n\nHEALTH_CONTEXT:\n$toonContext',
+      'system': '${_system(systemPrompt, toonContext)}\n\nHEALTH_CONTEXT:\n$toonContext',
       'messages': [
         for (final m in messages)
           {'role': m.isUser ? 'user' : 'assistant', 'content': m.text},
@@ -276,7 +296,7 @@ class AiCoachClient {
     final body = jsonEncode(<String, Object>{
       'systemInstruction': {
         'parts': [
-          {'text': '${systemPrompt ?? _coachPrompt}\n\nHEALTH_CONTEXT:\n$toonContext'},
+          {'text': '${_system(systemPrompt, toonContext)}\n\nHEALTH_CONTEXT:\n$toonContext'},
         ],
       },
       'contents': [
@@ -308,15 +328,18 @@ class AiCoachClient {
     String? systemPrompt,
   }) async {
     final fm = FoundationModelsFramework.instance;
-    final availability = await fm.checkAvailability();
-    log('[AiCoach] Apple availability=${availability.isAvailable} '
-        'reason=${availability.reasonCode} ${availability.osVersion}');
-    if (!availability.isAvailable) return null;
+    if (_appleSender == null) {
+      final availability = await fm.checkAvailability();
+      log('[AiCoach] Apple availability=${availability.isAvailable} '
+          'reason=${availability.reasonCode} ${availability.osVersion}');
+      if (!availability.isAvailable) return null;
+    }
 
     final locale = Platform.localeName.split('.').first.split('@').first;
     var budget = 3000;
     var strict = false;
     var bare = false;
+    var echoed = false;
     for (var attempt = 0; attempt < 4; attempt++) {
       final request = AppleCoachRequest.build(messages, toonContext,
           briefingInstructions: systemPrompt,
@@ -328,13 +351,35 @@ class AiCoachClient {
           'attempt=${attempt + 1}, locale=$locale, strict=$strict, bare=$bare');
       try {
         // sendPrompt creates and disposes a fresh native session per request.
-        final response = await fm.sendPrompt(request.prompt,
-            instructions: request.instructions,
-            options: GenerationOptionsRequest(maximumResponseTokens: 512));
-        final text = response.content.trim();
+        final text = (_appleSender != null
+                ? await _appleSender(request)
+                : (await fm.sendPrompt(request.prompt,
+                        instructions: request.instructions,
+                        // A low temperature keeps a small model from drifting into
+                        // loops and invented figures; the token limit only guards
+                        // against a runaway reply (the length comes from the
+                        // prompt, as Apple advises).
+                        options: GenerationOptionsRequest(
+                            temperature: 0.3, maximumResponseTokens: 400)))
+                    .content)
+            .trim();
+        if (looksLikeContextEcho(text) || looksLikeRepetition(text)) {
+          // The model repeated the data or itself instead of answering. Try
+          // once more with less data; a second failure is reported,
+          // never shown.
+          log('[AiCoach] Apple gave an unusable reply (attempt=${attempt + 1})');
+          if (!echoed) {
+            echoed = true;
+            budget = 2200;
+            continue;
+          }
+          throw const AiCoachException(
+              'Apple Intelligence could not produce a usable answer: it repeated itself or your data. Try rephrasing the question, or choose another AI provider in the settings.');
+        }
         log('[AiCoach] Apple ✓ attempt=${attempt + 1} strict=$strict bare=$bare');
         return text.isEmpty ? 'No response.' : text;
       } catch (e) {
+        if (e is AiCoachException) rethrow;
         log('[AiCoach] Apple request failed: $e');
         final msg = e.toString().toLowerCase();
         final contextExceeded = msg.contains('context window') ||

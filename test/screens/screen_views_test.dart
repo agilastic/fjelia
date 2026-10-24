@@ -47,6 +47,9 @@ import 'package:fjelia/screens/activities/heat_weather_sheet.dart';
 import 'package:fjelia/screens/planner/plan_screen.dart';
 import 'package:fjelia/screens/planner/plan_session_sheet.dart';
 import 'package:fjelia/screens/ai_coach/ai_coach_screen.dart';
+import 'package:fjelia/widgets/coach_context_card.dart';
+import 'package:fjelia/services/activity_decoder.dart';
+import 'package:fjelia/models/coach_context_card.dart';
 import 'package:fjelia/providers/ai_coach_provider.dart';
 import 'package:fjelia/providers/auth_provider.dart';
 import 'package:fjelia/api/garmin_client.dart';
@@ -742,7 +745,7 @@ void main() {
       await tester.tap(find.text('LOAD').last);
       await tester.pumpAndSettle();
       await capture(tester, 'load-shell');
-      expect(find.byTooltip('Debug'), findsOneWidget);
+      expect(find.byTooltip('Send feedback or report a bug'), findsOneWidget);
       expect(find.byTooltip('Add measurement'), findsOneWidget);
       await tester.pumpWidget(const SizedBox());
       await tester.pump(Duration.zero);
@@ -753,8 +756,8 @@ void main() {
     tester,
   ) async {
     await render(tester, const StrainScreen(embedded: true), 'load');
-    tester.view.physicalSize = const Size(393, 2100);
-    await tester.binding.setSurfaceSize(const Size(393, 2100));
+    tester.view.physicalSize = const Size(393, 2250);
+    await tester.binding.setSurfaceSize(const Size(393, 2250));
     await tester.pumpAndSettle();
     await capture(tester, 'load-overview-all');
     expect(find.text('ZONE POLARIZATION'), findsOneWidget);
@@ -1532,16 +1535,16 @@ void main() {
       await tester.pumpAndSettle();
       await capture(tester, 'activity-zones');
       await tester.scrollUntilVisible(
-        find.text('Delete activity'),
+        find.text('Delete'),
         300,
         scrollable: find.byType(Scrollable).first,
       );
-      await tester.tap(find.text('Delete activity'));
+      await tester.tap(find.text('Delete'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Cancel'));
       await tester.pumpAndSettle();
       expect((await db.select(db.activityRecords).get()).length, 1);
-      await tester.tap(find.text('Delete activity'));
+      await tester.tap(find.text('Delete'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Continue'));
       await tester.pumpAndSettle();
@@ -1561,16 +1564,21 @@ void main() {
       ActivityDetailSheet(activity: row),
       'activity-chat-button',
     );
-    final button = find.text('Chat with AI about this activity');
+    final button = find.text('Chat AI');
     await tester.scrollUntilVisible(
       button,
       300,
       scrollable: find.byType(Scrollable).first,
     );
     await tester.pumpAndSettle();
+    // Side by side: same row, chat to the right of delete.
     expect(
-      tester.getTopLeft(button).dy,
-      greaterThan(tester.getTopLeft(find.text('Delete activity')).dy),
+      tester.getCenter(button).dy,
+      closeTo(tester.getCenter(find.text('Delete')).dy, 1),
+    );
+    expect(
+      tester.getTopLeft(button).dx,
+      greaterThan(tester.getTopLeft(find.text('Delete')).dx),
     );
     final container = ProviderScope.containerOf(
       tester.element(find.byType(ActivityDetailSheet)),
@@ -1579,27 +1587,54 @@ void main() {
         'Unrelated pending prompt';
     await tester.tap(button);
     await tester.pumpAndSettle();
-    expect(find.byType(AiCoachScreen), findsOneWidget);
-    final input = tester.widget<TextField>(find.byType(TextField).last);
-    expect(input.controller!.text, contains(row.name));
-    expect(input.controller!.text, contains('Distance: 7.58 km'));
-    expect(input.controller!.text, contains('Avg HR: 150 bpm'));
-    expect(input.controller!.text, contains('HR zone percentages:'));
-    expect(input.controller!.text, isNot(contains(row.activityId)));
+    // The coach opens in the Coach tab: the sheet only hands over a request.
+    final request = container.read(coachRequestProvider)!;
+    expect(request.prompt, startsWith('How did this session go'));
+    expect(request.prompt, isNot(contains(row.name)));
+    expect(request.activity?.activityId, row.activityId);
+    expect(request.card?.title, row.name);
+    expect(request.card?.status.label, 'Completed');
+    expect(request.card?.facts, contains('7.6 km'));
     expect(
       container.read(pendingCoachPromptProvider),
       'Unrelated pending prompt',
     );
-    expect(find.byTooltip('Send message'), findsOneWidget);
-    await tester.enterText(
-      find.byType(TextField).last,
-      'How should I recover from this run?',
-    );
     expect(tester.takeException(), isNull);
-    await tester.tap(find.byTooltip('Close').last);
-    await tester.pumpAndSettle();
-    expect(find.byType(ActivityDetailSheet), findsOneWidget);
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(Duration.zero);
+    await tester.binding.setSurfaceSize(null);
+  });
+  testWidgets('a coach request shows the Coach tab with the session card', (
+    tester,
+  ) async {
+    final row = (await db.select(db.activityRecords).get()).single;
+    await render(tester, const HomeScreen(), 'coach-tab');
     expect(find.byType(AiCoachScreen), findsNothing);
+    final container = ProviderScope.containerOf(
+      tester.element(find.byType(HomeScreen)),
+    );
+    container.read(coachRequestProvider.notifier).state = CoachRequest(
+      prompt: 'How did this session go?',
+      activity: row,
+      card: CoachContextCard.completed(decodeActivityRecord(row)),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byType(AiCoachScreen), findsOneWidget);
+    final card = find.byType(CoachContextCardView);
+    expect(card, findsOneWidget);
+    expect(
+      find.descendant(of: card, matching: find.text(row.name)),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(of: card, matching: find.text('Completed')),
+      findsOneWidget,
+    );
+    final input = tester.widget<TextField>(find.byType(TextField).last);
+    expect(input.controller!.text, 'How did this session go?');
+    // The request is consumed: opening the tab again later does not repeat it.
+    expect(container.read(coachRequestProvider), isNull);
+    expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox());
     await tester.pump(Duration.zero);
     await tester.binding.setSurfaceSize(null);

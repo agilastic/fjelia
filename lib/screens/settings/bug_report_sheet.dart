@@ -15,7 +15,7 @@ class BugReportSheet extends StatefulWidget {
 class _BugReportState extends State<BugReportSheet> {
   final _form = GlobalKey<FormState>();
   final email = TextEditingController();
-  final subject = TextEditingController(text: 'Fjelia bug report');
+  final subject = TextEditingController(text: 'Fjelia feedback');
   final notes = TextEditingController();
   bool _diagnostics = false;
   bool _sending = false;
@@ -69,159 +69,369 @@ class _BugReportState extends State<BugReportSheet> {
     }
   }
 
+  /// Hides the keyboard, so a tap next to a field or a drag ends the input.
+  void _dismissKeyboard() => FocusManager.instance.primaryFocus?.unfocus();
+
+  InputDecoration _decoration(String label, {String? hint}) {
+    OutlineInputBorder border(Color color, [double width = 1]) =>
+        OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide(color: color, width: width),
+        );
+    return InputDecoration(
+      labelText: label,
+      hintText: hint,
+      filled: true,
+      fillColor: _fieldFill,
+      floatingLabelBehavior: FloatingLabelBehavior.auto,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      border: border(Colors.transparent),
+      enabledBorder: border(const Color(0x14FFFFFF)),
+      focusedBorder: border(mint, 1.5),
+      errorBorder: border(Colors.redAccent),
+      focusedErrorBorder: border(Colors.redAccent, 1.5),
+      labelStyle: const TextStyle(color: muted),
+      floatingLabelStyle: WidgetStateTextStyle.resolveWith(
+        (states) => TextStyle(
+          color: states.contains(WidgetState.error)
+              ? Colors.redAccent
+              : states.contains(WidgetState.focused)
+              ? mint
+              : muted,
+        ),
+      ),
+      hintStyle: const TextStyle(color: Color(0x66FFFFFF)),
+    );
+  }
+
+  /// Character counter that only appears when a field is nearly full, so the
+  /// form is not cluttered by "0/254" under every field.
+  Widget? _counter(
+    BuildContext context, {
+    required int currentLength,
+    required bool isFocused,
+    required int? maxLength,
+  }) {
+    if (maxLength == null || currentLength < maxLength * .8) return null;
+    return Text(
+      '$currentLength/$maxLength',
+      style: TextStyle(
+        fontSize: 11,
+        color: currentLength >= maxLength ? Colors.redAccent : muted,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) => SheetPage(
-    title: 'Report a Bug',
+    title: 'Feedback & bug report',
     child: _sent
         ? Padding(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(32),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.check_circle_outline, color: mint, size: 56),
-                const SizedBox(height: 16),
-                const Text('Report sent. Thank you!'),
-                const SizedBox(height: 16),
-                FilledButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Done'),
+                const Icon(Icons.check_circle_outline, color: mint, size: 64),
+                const SizedBox(height: 18),
+                const Text(
+                  'Report sent. Thank you!',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'We read every message. If you left your email, you may get a reply.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: muted, fontSize: 13, height: 1.4),
+                ),
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  child: FilledButton(
+                    style: _primaryButton,
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('Done'),
+                  ),
                 ),
               ],
             ),
           )
-        : Form(
-            key: _form,
-            child: ListView(
-              padding: EdgeInsets.fromLTRB(
-                16,
-                16,
-                16,
-                MediaQuery.viewInsetsOf(context).bottom + 16,
-              ),
-              children: [
-                const Text(
-                  'Tell us what happened and what you expected. Please leave out passwords, API keys and personal health readings.',
-                  style: TextStyle(fontSize: 12, color: muted),
+        : GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: _dismissKeyboard,
+            child: Form(
+              key: _form,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              child: ListView(
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                padding: EdgeInsets.fromLTRB(
+                  20,
+                  12,
+                  20,
+                  MediaQuery.viewInsetsOf(context).bottom + 24,
                 ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: email,
-                  enabled: !_sending,
-                  keyboardType: TextInputType.emailAddress,
-                  autofillHints: const [AutofillHints.email],
-                  autocorrect: false,
-                  maxLength: 254,
-                  decoration: const InputDecoration(labelText: 'Your email'),
-                  validator: (value) =>
-                      RegExp(
-                        r'^[^\s@]+@[^\s@]+\.[^\s@]+$',
-                      ).hasMatch((value ?? '').trim())
-                      ? null
-                      : 'Enter a valid email address.',
-                ),
-                TextFormField(
-                  controller: subject,
-                  enabled: !_sending,
-                  maxLength: 200,
-                  decoration: const InputDecoration(labelText: 'Subject'),
-                  validator: (value) =>
-                      (value ?? '').trim().isEmpty ? 'Enter a subject.' : null,
-                ),
-                TextFormField(
-                  controller: notes,
-                  enabled: !_sending,
-                  minLines: 4,
-                  maxLines: 8,
-                  maxLength: 8000,
-                  decoration: const InputDecoration(
-                    labelText: 'What happened?',
+                children: [
+                  const Text(
+                    'Share an idea, suggest an improvement, or tell us what happened and what you expected.',
+                    style: TextStyle(fontSize: 13, color: muted, height: 1.45),
                   ),
-                  validator: (value) => (value ?? '').trim().length < 10
-                      ? 'Describe the problem in at least 10 characters.'
-                      : null,
-                ),
-                SwitchListTile(
-                  contentPadding: EdgeInsets.zero,
-                  title: const Text('Include diagnostics'),
-                  subtitle: const Text(
-                    'Optional. Logs may contain account or health details. Review them below before sending.',
+                  const SizedBox(height: 18),
+                  TextFormField(
+                    controller: email,
+                    enabled: !_sending,
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
+                    autofillHints: const [AutofillHints.email],
+                    autocorrect: false,
+                    maxLength: 254,
+                    buildCounter: _counter,
+                    onTapOutside: (_) => _dismissKeyboard(),
+                    decoration: _decoration('Your email'),
+                    validator: (value) =>
+                        RegExp(
+                          r'^[^\s@]+@[^\s@]+\.[^\s@]+$',
+                        ).hasMatch((value ?? '').trim())
+                        ? null
+                        : 'Enter a valid email address.',
                   ),
-                  value: _diagnostics,
-                  onChanged: _sending
-                      ? null
-                      : (value) => setState(() => _diagnostics = value),
-                ),
-                if (_diagnostics) ...[
-                  const SectionLabel('Diagnostics preview'),
-                  SizedBox(
-                    height: 150,
-                    child: SingleChildScrollView(
-                      child: SelectableText(
-                        DebugLog.lines.join('\n'),
-                        style: const TextStyle(
-                          fontFamily: 'monospace',
-                          fontSize: 9,
-                          color: muted,
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: subject,
+                    enabled: !_sending,
+                    textInputAction: TextInputAction.next,
+                    maxLength: 200,
+                    buildCounter: _counter,
+                    onTapOutside: (_) => _dismissKeyboard(),
+                    decoration: _decoration('Subject'),
+                    validator: (value) => (value ?? '').trim().isEmpty
+                        ? 'Enter a subject.'
+                        : null,
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: notes,
+                    enabled: !_sending,
+                    minLines: 5,
+                    maxLines: 10,
+                    maxLength: 8000,
+                    keyboardType: TextInputType.multiline,
+                    textCapitalization: TextCapitalization.sentences,
+                    buildCounter: _counter,
+                    onTapOutside: (_) => _dismissKeyboard(),
+                    decoration: _decoration(
+                      'Message',
+                      hint: 'What happened, and what did you expect?',
+                    ).copyWith(alignLabelWithHint: true),
+                    validator: (value) => (value ?? '').trim().length < 10
+                        ? 'Enter a message of at least 10 characters.'
+                        : null,
+                  ),
+                  const SizedBox(height: 4),
+                  const Text(
+                    'Please leave out passwords, API keys and personal health readings.',
+                    style: TextStyle(fontSize: 11, color: muted),
+                  ),
+                  const SizedBox(height: 18),
+                  Material(
+                    color: const Color(0xFF1E1E1E),
+                    clipBehavior: Clip.antiAlias,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      side: const BorderSide(color: Color(0x14FFFFFF)),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 4, 8, 4),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SwitchListTile(
+                            contentPadding: EdgeInsets.zero,
+                            activeThumbColor: mint,
+                            title: const Text(
+                              'Include diagnostics',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            subtitle: const Padding(
+                              padding: EdgeInsets.only(top: 2),
+                              child: Text(
+                                'Optional. Logs may contain account or health details. Review them below before sending.',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: muted,
+                                  height: 1.4,
+                                ),
+                              ),
+                            ),
+                            value: _diagnostics,
+                            onChanged: _sending
+                                ? null
+                                : (value) {
+                                    _dismissKeyboard();
+                                    setState(() => _diagnostics = value);
+                                  },
+                          ),
+                          if (_diagnostics) ...[
+                            const Divider(height: 16, color: Color(0x14FFFFFF)),
+                            const Text(
+                              'DIAGNOSTICS PREVIEW',
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: muted,
+                                letterSpacing: .8,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            SizedBox(
+                              height: 150,
+                              child: SingleChildScrollView(
+                                child: SelectableText(
+                                  DebugLog.lines.join('\n'),
+                                  style: const TextStyle(
+                                    fontFamily: 'monospace',
+                                    fontSize: 9,
+                                    color: muted,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  const Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(top: 1),
+                        child: Icon(Icons.lock_outline, size: 14, color: muted),
+                      ),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'Sending shares your email, subject, message and any selected diagnostics with Fjelia support at cloud.ebeling-hoppe.de.',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: muted,
+                            height: 1.4,
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-                const SizedBox(height: 12),
-                const Text(
-                  'Sending shares your email, subject, message and any selected diagnostics with Fjelia support at cloud.ebeling-hoppe.de.',
-                  style: TextStyle(fontSize: 12, color: muted),
-                ),
-                if (_error != null)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    child: Text(
-                      _error!,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.error,
+                  if (_error != null)
+                    Container(
+                      margin: const EdgeInsets.only(top: 14),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.redAccent.withValues(alpha: .12),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: Colors.redAccent.withValues(alpha: .4),
+                        ),
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Icon(
+                            Icons.error_outline,
+                            size: 18,
+                            color: Colors.redAccent,
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              _error!,
+                              style: const TextStyle(fontSize: 13),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                const SizedBox(height: 12),
-                FilledButton.icon(
-                  onPressed: _sending ? null : _send,
-                  icon: _sending
-                      ? const SizedBox(
-                          width: 18,
-                          height: 18,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Icon(Icons.send_outlined),
-                  label: Text(_sending ? 'Sending…' : 'Send report'),
-                ),
-                OutlinedButton(
-                  onPressed: _sending
-                      ? null
-                      : () => runUiAction(context, () async {
-                          await Clipboard.setData(
-                            ClipboardData(text: report()),
-                          );
-                        }),
-                  child: const Text('Copy report'),
-                ),
-                TextButton(
-                  onPressed: _sending
-                      ? null
-                      : () => runUiAction(context, () async {
-                          final box = context.findRenderObject() as RenderBox?;
-                          await SharePlus.instance.share(
-                            ShareParams(
-                              text: report(),
-                              sharePositionOrigin: box == null
-                                  ? null
-                                  : box.localToGlobal(Offset.zero) & box.size,
+                  const SizedBox(height: 20),
+                  FilledButton.icon(
+                    style: _primaryButton,
+                    onPressed: _sending ? null : _send,
+                    icon: _sending
+                        ? const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.black,
                             ),
-                          );
-                        }),
-                  child: const Text('Share report instead'),
-                ),
-              ],
+                          )
+                        : const Icon(Icons.send_outlined, size: 18),
+                    label: Text(_sending ? 'Sending…' : 'Send report'),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          style: _secondaryButton,
+                          onPressed: _sending
+                              ? null
+                              : () => runUiAction(context, () async {
+                                  await Clipboard.setData(
+                                    ClipboardData(text: report()),
+                                  );
+                                }),
+                          icon: const Icon(Icons.copy_rounded, size: 16),
+                          label: const Text('Copy report'),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          style: _secondaryButton,
+                          onPressed: _sending
+                              ? null
+                              : () => runUiAction(context, () async {
+                                  final box =
+                                      context.findRenderObject() as RenderBox?;
+                                  await SharePlus.instance.share(
+                                    ShareParams(
+                                      text: report(),
+                                      sharePositionOrigin: box == null
+                                          ? null
+                                          : box.localToGlobal(Offset.zero) &
+                                                box.size,
+                                    ),
+                                  );
+                                }),
+                          icon: const Icon(Icons.ios_share, size: 16),
+                          label: const Text('Share report'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
   );
 }
+
+const _fieldFill = Color(0xFF262626);
+
+final _primaryButton = FilledButton.styleFrom(
+  backgroundColor: mint,
+  foregroundColor: Colors.black,
+  minimumSize: const Size.fromHeight(52),
+  textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+);
+
+final _secondaryButton = OutlinedButton.styleFrom(
+  foregroundColor: mint,
+  minimumSize: const Size.fromHeight(46),
+  side: const BorderSide(color: Color(0x3300D4A0)),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+);

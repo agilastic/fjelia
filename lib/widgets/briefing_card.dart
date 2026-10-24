@@ -121,6 +121,20 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
                 },
               ),
             ),
+          if (_expanded &&
+              text != null &&
+              settings.briefingMode == BriefingMode.ai &&
+              !fallback)
+            TextButton.icon(
+              style: TextButton.styleFrom(foregroundColor: mint),
+              icon: const Icon(Icons.help_outline, size: 18),
+              label: const Text('Why this recommendation?'),
+              onPressed: () {
+                ref.read(pendingCoachPromptProvider.notifier).state =
+                    'Why this recommendation? Which of my figures and which gaps in the data led to it, and what would change it?\n\n$text';
+                widget.openCoach();
+              },
+            ),
         ],
       ),
     );

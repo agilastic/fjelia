@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:foundation_models_framework/foundation_models_framework.dart';
 
 import '../db/database.dart';
+import '../models/coach_context_card.dart';
 import '../services/activity_coach_context.dart';
 import '../services/ai_coach_client.dart';
 import '../services/ai_coach_settings.dart';
@@ -40,6 +41,23 @@ final activityCoachContextProvider = FutureProvider.autoDispose
         ref.read(databaseProvider),
       ).build(activity),
     );
+
+/// A request to open the coach tab about one session: the draft question,
+/// the activity whose context is loaded and the card shown above the chat.
+class CoachRequest {
+  CoachRequest({required this.prompt, this.activity, this.card})
+    : id = DateTime.now().microsecondsSinceEpoch;
+
+  /// Tells requests apart, so a new request starts a fresh conversation.
+  final int id;
+  final String prompt;
+  final ActivityRecord? activity;
+  final CoachContextCard? card;
+}
+
+/// Set by the places that offer "ask the coach about this session"; the home
+/// screen takes it, shows the coach tab and clears it.
+final coachRequestProvider = StateProvider<CoachRequest?>((ref) => null);
 
 /// A prompt handed from elsewhere in the app to the coach chat.
 final pendingCoachPromptProvider = StateProvider<String?>((ref) => null);

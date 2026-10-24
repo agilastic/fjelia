@@ -258,11 +258,16 @@ class LoadWeekBars extends StatelessWidget {
     this.weekNumbers = false,
     this.limit = false,
     this.mondayFirst = true,
+    this.inProgressLast = false,
   });
   final bool mondayFirst;
   final List<DateTime> dates;
   final List<double> values;
   final bool weekNumbers, limit;
+
+  /// The last bar is a week that is still running: drawn lighter with an
+  /// outline and labelled "so far", so a smaller bar does not read as a drop.
+  final bool inProgressLast;
   @override
   Widget build(BuildContext context) {
     final limits = [
@@ -288,7 +293,8 @@ class LoadWeekBars extends StatelessWidget {
                     Expanded(
                       child: Tooltip(
                         message:
-                            '${DateFormat('d MMM').format(dates[i])}: ${valueText(values[i], 1)}',
+                            '${DateFormat('d MMM').format(dates[i])}: ${valueText(values[i], 1)}'
+                            '${inProgressLast && i == values.length - 1 ? ' (so far)' : ''}',
                         child: LayoutBuilder(
                           builder: (context, box) => ClipRRect(
                             borderRadius: BorderRadius.circular(3),
@@ -306,7 +312,11 @@ class LoadWeekBars extends StatelessWidget {
                                       decoration: BoxDecoration(
                                         color: limit
                                             ? i == values.length - 1
-                                                  ? mint
+                                                  ? inProgressLast
+                                                        ? mint.withValues(
+                                                            alpha: .5,
+                                                          )
+                                                        : mint
                                                   : i > 0 &&
                                                         values[i] > limits[i]
                                                   ? loadOrange.withValues(
@@ -319,6 +329,11 @@ class LoadWeekBars extends StatelessWidget {
                                                 alpha: .19,
                                               ),
                                         borderRadius: BorderRadius.circular(3),
+                                        border:
+                                            inProgressLast &&
+                                                i == values.length - 1
+                                            ? Border.all(color: mint)
+                                            : null,
                                       ),
                                     ),
                                   ),

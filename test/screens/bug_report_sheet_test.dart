@@ -26,7 +26,7 @@ Future<void> fill(WidgetTester tester) async {
     'tester@example.com',
   );
   await tester.enterText(
-    find.widgetWithText(TextFormField, 'What happened?'),
+    find.widgetWithText(TextFormField, 'Message'),
     'My latest workout is missing.',
   );
   await tester.ensureVisible(find.text('Send report'));

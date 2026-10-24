@@ -5,8 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/day_data_provider.dart';
 import '../../db/database.dart';
 import '../../widgets/app_widgets.dart';
+import '../ai_coach/ai_coach_screen.dart';
 import 'activities_screen.dart';
 import 'load_visuals.dart';
+import '../../models/week_progress.dart';
 import '../../utils/week.dart';
 import '../../providers/week_start_provider.dart';
 
@@ -30,7 +32,8 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
         DateTime(monday.year, monday.month, monday.day - i * 7): 0.0,
     };
     final sports = <String, List<double>>{};
-    double current = 0, previous = 0;
+    final progress = WeekProgress(weekStart: monday, now: DateTime.now());
+    double current = 0, previous = 0, previousComparable = 0;
     double value(ActivityRecord a) => switch (metric) {
       'Time' => a.durationSeconds / 3600,
       'Distance' => (a.distanceMeters ?? 0) / 1000,
@@ -46,9 +49,15 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
         current += load;
       } else {
         previous += load;
+        // A running week is compared with the same span of the week before.
+        if (a.startDate.isBefore(progress.previousCutoff)) {
+          previousComparable += load;
+        }
       }
     }
-    final change = previous > 0 ? (current - previous) / previous * 100 : null;
+    final change = previousComparable > 0
+        ? (current - previousComparable) / previousComparable * 100
+        : null;
     final limit = previous * 1.1;
     return LoadCard(
       child: Column(
@@ -79,6 +88,16 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
               if (change != null) LoadBadge('${change.round()}%'),
             ],
           ),
+          const SizedBox(height: 8),
+          Text(
+            weeklyLoadHeadline(
+              weekNumber: loadWeekNumber(monday, mondayFirst: mondayFirst),
+              current: current,
+              previousComparable: previousComparable,
+              progress: progress,
+            ),
+            style: const TextStyle(fontSize: 12, color: Color(0xFFBBBBBB)),
+          ),
           const SizedBox(height: 14),
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -87,7 +106,10 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('THIS WEEK', style: loadCaption),
+                    Text(
+                      progress.inProgress ? 'THIS WEEK · SO FAR' : 'WEEK',
+                      style: loadCaption,
+                    ),
                     const SizedBox(height: 8),
                     Text.rich(
                       TextSpan(
@@ -220,11 +242,14 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
             ),
           ),
           const SizedBox(height: 10),
-          const Wrap(
+          Wrap(
             spacing: 12,
             children: [
-              LoadLegend('10% limit', Colors.amber, line: true),
-              LoadLegend('current', mint),
+              const LoadLegend('10% limit', Colors.amber, line: true),
+              LoadLegend(
+                progress.inProgress ? 'this week (so far)' : 'selected week',
+                mint,
+              ),
             ],
           ),
           const SizedBox(height: 10),
@@ -234,7 +259,34 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
             weekNumbers: true,
             limit: true,
             mondayFirst: mondayFirst,
+            inProgressLast: progress.inProgress,
           ),
+          if (current > 0 || previous > 0)
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton.icon(
+                style: TextButton.styleFrom(
+                  foregroundColor: mint,
+                  padding: const EdgeInsets.only(top: 8),
+                ),
+                icon: const Icon(Icons.chat_bubble_outline, size: 16),
+                label: Text(
+                  change != null && change < 0
+                      ? 'What explains this drop?'
+                      : 'What explains this rise?',
+                ),
+                onPressed: () => openCoachTab(
+                  context,
+                  prompt:
+                      'My training load this week is ${valueText(current)} points'
+                      '${progress.inProgress ? ' so far' : ''}, last week it was '
+                      '${valueText(previous)}'
+                      '${change == null ? '' : ' (${change.round()}% against the same point of last week)'}. '
+                      '${change != null && change < 0 ? 'What explains this drop' : 'What explains this rise'}, '
+                      'and which sessions drove it?',
+                ),
+              ),
+            ),
         ],
       ),
     );

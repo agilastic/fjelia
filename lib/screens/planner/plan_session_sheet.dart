@@ -3,11 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../db/database.dart';
+import '../../models/coach_context_card.dart';
 import '../../models/planned_workout_presentation.dart';
+import '../../models/workout_profile.dart';
+import '../../providers/ftp_provider.dart';
+import '../../providers/hr_zones_provider.dart';
 import '../../providers/planner_providers.dart';
 import '../../providers/day_data_provider.dart';
 import '../../services/plan_session_actions.dart';
 import '../../widgets/app_widgets.dart';
+import '../../widgets/workout_profile_bar.dart';
+import '../../widgets/workout_structure_list.dart';
 import '../ai_coach/ai_coach_screen.dart';
 
 class PlanSessionSheet extends ConsumerStatefulWidget {
@@ -39,8 +45,39 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
   @override
   Widget build(BuildContext context) {
     final s = session;
-    final steps = plannedStepLines(s.stepsJson);
-    final fractions = plannedZoneFractions(s.plannedZonesJson, s.primaryZone);
+    final sport = s.sport.toLowerCase();
+    final zones = ref.watch(hrZonesProvider);
+    final zoneBounds =
+        (sport.contains('cycl') || sport.contains('bik')
+                ? zones.cycling
+                : zones.running)
+            .bounds;
+    // Ranges are worked out from today's zones and FTP, not from what was
+    // stored when the plan was made; both change over time.
+    final ftp = sport.contains('cycl') || sport.contains('bik')
+        ? ref.watch(ftpProvider).valueOrNull?.ftpWatts
+        : null;
+    final steps = plannedStepLines(
+      s.stepsJson,
+      primaryZone: s.primaryZone,
+      zoneTarget: (z) => zoneTargetText(z, hrFloors: zoneBounds, ftp: ftp),
+    );
+    final profile = workoutProfile(
+      s.stepsJson,
+      primaryZone: s.primaryZone,
+      sport: s.sport,
+    );
+    // The split comes from the steps when they are known; a stored split or
+    // the typical one for the main zone only stands in without steps.
+    final fromSteps = zoneFractionsOf(profile);
+    final fractions =
+        fromSteps ?? plannedZoneFractions(s.plannedZonesJson, s.primaryZone);
+    final totals = blockTotals(profile);
+    final planned = s.plannedDurationMin * 60.0;
+    final stepsDiffer =
+        profile.isNotEmpty &&
+        !totals.anyEstimated &&
+        (planned - totals.total).abs() >= 120;
     final editable = ['planned', 'adapted'].contains(s.status);
     const blue = Color(0xFF4FC3F7);
     const colors = [
@@ -121,47 +158,12 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
             style: const TextStyle(fontSize: 13, color: Colors.white70),
           ),
           const SizedBox(height: 20),
-          Row(
-            children: [
-              for (final e in [
-                ('${s.plannedDurationMin} min', 'DURATION'),
-                ('${s.plannedTrimp}', 'TRIMP'),
-                ('Z${s.primaryZone}', 'PRIMARY ZONE'),
-                ('${s.weekNumber}', 'WEEK'),
-              ])
-                Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.only(right: 6),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 5,
-                      vertical: 12,
-                    ),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF282828),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      children: [
-                        FittedBox(
-                          child: Text(
-                            e.$1,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        FittedBox(
-                          child: Text(
-                            e.$2,
-                            style: const TextStyle(fontSize: 8, color: muted),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+          WorkoutStatTiles(
+            items: [
+              ('${s.plannedDurationMin} min', 'DURATION'),
+              ('${s.plannedTrimp}', 'TRIMP'),
+              ('Z${s.primaryZone}', 'PRIMARY ZONE'),
+              ('${s.weekNumber}', 'WEEK'),
             ],
           ),
           if (s.sessionNotes?.isNotEmpty ?? false) ...[
@@ -190,6 +192,18 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
             ),
           ],
           heading('WORKOUT STRUCTURE'),
+          if (profile.isNotEmpty) ...[
+            WorkoutProfileBar(blocks: profile),
+            if (stepsDiffer)
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text(
+                  'The steps add up to ${formatBlockDuration(totals.total)}; the plan counts ${s.plannedDurationMin} min.',
+                  style: const TextStyle(fontSize: 11, color: muted),
+                ),
+              ),
+            const SizedBox(height: 14),
+          ],
           if (steps.isEmpty)
             Text(
               [s.warmUp, s.coolDown]
@@ -204,57 +218,16 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                     ].whereType<String>().where((s) => s.isNotEmpty).join('\n'),
               style: const TextStyle(fontSize: 13, color: Colors.white70),
             ),
-          for (final step in steps)
-            Padding(
-              padding: EdgeInsets.only(left: step.depth * 12, bottom: 6),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 3,
-                    height: 15,
-                    margin: const EdgeInsets.only(top: 2, right: 9),
-                    decoration: BoxDecoration(
-                      color: step.repeat
-                          ? Colors.white12
-                          : step.label == 'Interval'
-                          ? mint
-                          : step.label == 'Recovery'
-                          ? blue
-                          : Colors.grey,
-                      borderRadius: BorderRadius.circular(3),
-                    ),
-                  ),
-                  Expanded(
-                    child: Text.rich(
-                      TextSpan(
-                        children: [
-                          TextSpan(
-                            text: step.amount,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                            ),
-                          ),
-                          if (step.label.isNotEmpty)
-                            TextSpan(
-                              text: '  ${step.label}',
-                              style: const TextStyle(color: Colors.white70),
-                            ),
-                          if (step.zone != null)
-                            TextSpan(
-                              text: ' Z${step.zone}',
-                              style: const TextStyle(color: muted),
-                            ),
-                        ],
-                      ),
-                      style: const TextStyle(fontSize: 13, height: 1.4),
-                    ),
-                  ),
-                ],
+          WorkoutStructureList(steps: steps),
+          heading('TARGETS'),
+          if (fromSteps == null)
+            const Padding(
+              padding: EdgeInsets.only(bottom: 8),
+              child: Text(
+                'Typical split for this kind of session; no steps to calculate it from.',
+                style: TextStyle(fontSize: 11, color: muted),
               ),
             ),
-          heading('TARGETS'),
           SectionCard(
             color: const Color(0xFF282828),
             child: Column(
@@ -276,16 +249,36 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                           ),
                         ),
                         SizedBox(
-                          width: 71,
-                          child: Text(
-                            const [
-                              'Recovery',
-                              'Aerobic',
-                              'Tempo',
-                              'Threshold',
-                              'VO2max',
-                            ][i],
-                            style: const TextStyle(fontSize: 10, color: muted),
+                          width: 84,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                const [
+                                  'Recovery',
+                                  'Aerobic',
+                                  'Tempo',
+                                  'Threshold',
+                                  'VO2max',
+                                ][i],
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                  color: muted,
+                                ),
+                              ),
+                              for (final part in zoneTargetText(
+                                i + 1,
+                                hrFloors: zoneBounds,
+                                ftp: ftp,
+                              ).split(' · ').skip(1))
+                                Text(
+                                  part,
+                                  style: const TextStyle(
+                                    fontSize: 9,
+                                    color: Colors.white38,
+                                  ),
+                                ),
+                            ],
                           ),
                         ),
                         Expanded(
@@ -359,21 +352,14 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
           const SizedBox(height: 32),
           OutlinedButton.icon(
             style: style(mint, filled: true),
-            onPressed: () => showCoachSheet(
+            onPressed: () => openCoachTab(
               context,
-              title: 'Workout Coach',
-              prompt: [
-                'Help me prepare for this planned workout: its purpose, how to pace it, and whether I should adjust it based on my current recovery and training load.',
-                '',
-                'Workout: ${s.title}',
-                'Date: ${DateFormat('EEEE, yyyy-MM-dd').format(s.sessionDate)}',
-                'Sport: ${s.sport.replaceAll('_', ' ')}',
-                'Type: ${s.sessionType} (${s.phase} phase, week ${s.weekNumber})',
-                'Planned: ${s.plannedDurationMin} min, TRIMP ${s.plannedTrimp}, primary zone Z${s.primaryZone}',
-                if (steps.isNotEmpty) 'Structure:',
-                for (final l in steps)
-                  '${'  ' * l.depth}- ${l.amount} ${l.label}${l.zone == null ? '' : ' (Z${l.zone})'}',
-              ].join('\n'),
+              prompt: 'How do I execute this workout?',
+              card: CoachContextCard.planned(
+                s,
+                zoneTarget: (z) =>
+                    zoneTargetText(z, hrFloors: zoneBounds, ftp: ftp),
+              ),
             ),
             icon: const Icon(Icons.chat_bubble_outline, size: 20),
             label: const Text(

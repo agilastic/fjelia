@@ -15,10 +15,40 @@ class ActivityCoachContextBuilder {
     final from = DateTime(activity.startDate.year - 1, 1, 1);
     final days = DateTime.now().difference(from).inDays + 1;
     final all = await _db.getActivitiesInRange(days);
-    return buildFrom(activity, all);
+    return buildFrom(activity, all, hrvLine: await _hrvAround(activity));
   }
 
-  static String buildFrom(ActivityRecord activity, List<ActivityRecord> all) {
+  /// HRV before and after the activity, when it was recorded: the night
+  /// before and the night after (watch), and Polar H10 spot readings taken
+  /// before the start and after the end.
+  Future<String> _hrvAround(ActivityRecord a) async {
+    final end = a.startDate.add(Duration(seconds: a.durationSeconds));
+    final day = DateTime(a.startDate.year, a.startDate.month, a.startDate.day);
+    final before = await _db.getHrvForDate(day);
+    final after = await _db.getHrvForDate(
+      DateTime(day.year, day.month, day.day + 1),
+    );
+    final spots = await _db.getSpotHrvBetween(
+      a.startDate.subtract(const Duration(hours: 6)),
+      end.add(const Duration(hours: 8)),
+    );
+    return hrvAroundLine(
+      start: a.startDate,
+      end: end,
+      preNight: before?.hrvLastNight,
+      preDate: before?.date,
+      weeklyAverage: before?.hrvWeeklyAvg,
+      postNight: after?.hrvLastNight,
+      postDate: after?.date,
+      spots: spots,
+    );
+  }
+
+  static String buildFrom(
+    ActivityRecord activity,
+    List<ActivityRecord> all, {
+    String? hrvLine,
+  }) {
     final anchor = activity.startDate;
     final end = DateTime(anchor.year, anchor.month, anchor.day + 1);
     final start30 = end.subtract(const Duration(days: 30));
@@ -27,9 +57,18 @@ class ActivityCoachContextBuilder {
         if (!a.startDate.isBefore(start30) && a.startDate.isBefore(end)) a,
     ];
     final sport = _sport(activity.type);
+    final earlier = [
+      for (final a in all)
+        if (a.startDate.isBefore(anchor)) a.startDate,
+    ]..sort();
     final out = <String>[
       '[Activity:${_date(anchor)} ${_weekday(anchor)},Sport:$sport,'
           '${_stats(activity)}]',
+      // A long gap may be a pause or missing data: the model must not treat
+      // it as rest.
+      '[DataStatus:PreviousActivity:${earlier.isEmpty ? 'NoneInLoadedHistory' : '${_date(earlier.last)},DaysBefore:${DateTime(anchor.year, anchor.month, anchor.day).difference(DateTime(earlier.last.year, earlier.last.month, earlier.last.day)).inDays}'},'
+          'MissingRecord:Unknown]',
+      ?hrvLine,
     ];
 
     // Last 30 days.
@@ -66,6 +105,7 @@ class ActivityCoachContextBuilder {
     if (same.isNotEmpty) {
       final s = _Totals.of(same);
       final hr = _avg(same.map((a) => a.avgHeartRate));
+      out.add(_compare(activity, sport, s, hr));
       out.add(
         '[Similar30d:$sport,N:${s.n},AvgMin:${_int(s.hours * 60 / s.n)},'
         'AvgKm:${_dec(s.km / s.n)},AvgHR:${_int(hr)},AvgLoad:${_int(s.load / s.n)}'
@@ -111,6 +151,35 @@ class ActivityCoachContextBuilder {
       }).join(';')}]',
     );
     return out.join('\n');
+  }
+
+  /// This activity against the average of the other sessions of the sport:
+  /// the figures and their ratios are worked out here, so a model does not
+  /// have to compare numbers itself.
+  static String _compare(
+    ActivityRecord a,
+    String sport,
+    _Totals others,
+    double? othersHr,
+  ) {
+    String ratio(double mine, double avg) =>
+        avg > 0 ? ' (${(mine / avg).toStringAsFixed(1)}x)' : '';
+    final minutes = a.durationSeconds / 60;
+    final avgMinutes = others.hours * 60 / others.n;
+    final km = (a.distanceMeters ?? 0) / 1000;
+    final avgKm = others.km / others.n;
+    final load = effectiveLoad(a);
+    final avgLoad = others.load / others.n;
+    final parts = <String>[
+      'Min:${_int(minutes)} vs ${_int(avgMinutes)}${ratio(minutes, avgMinutes)}',
+      if (km > 0 && avgKm > 0)
+        'Km:${_dec(km)} vs ${_dec(avgKm)}${ratio(km, avgKm)}',
+      'Load:${_int(load)} vs ${_int(avgLoad)}${ratio(load, avgLoad)}',
+      if (a.avgHeartRate != null && othersHr != null)
+        'AvgHR:${_int(a.avgHeartRate)} vs ${_int(othersHr)}'
+            ' (${a.avgHeartRate! - othersHr >= 0 ? '+' : '-'}${(a.avgHeartRate! - othersHr).abs().round()} bpm)',
+    ];
+    return '[Compare:$sport,N:${others.n},${parts.join(',')}]';
   }
 
   static String _stats(ActivityRecord a) {
@@ -217,4 +286,64 @@ class _Totals {
   final int n;
   final double hours, km, load;
   final int movingSeconds;
+}
+
+/// One TOON line with the HRV around an activity, the changes already worked
+/// out. Overnight HRV and H10 spot readings are measured differently, so the
+/// line states both separately and flags that.
+String hrvAroundLine({
+  required DateTime start,
+  required DateTime end,
+  double? preNight,
+  DateTime? preDate,
+  double? weeklyAverage,
+  double? postNight,
+  DateTime? postDate,
+  List<SpotHrvMeasurement> spots = const [],
+}) {
+  String date(DateTime d) =>
+      '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+  String time(DateTime d) =>
+      '${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')}';
+  String ms(double v) => '${v.round()}ms';
+  String change(double from, double to) {
+    final d = (to - from).round();
+    final pct = from > 0 ? ((to - from) / from * 100).round() : null;
+    return '${d >= 0 ? '+' : '-'}${d.abs()}ms${pct == null ? '' : '(${pct >= 0 ? '+' : '-'}${pct.abs()}%)'}';
+  }
+
+  // The reading closest before the start and the first one after the end.
+  SpotHrvMeasurement? before, after;
+  for (final s in spots) {
+    if (s.startedAt.isBefore(start)) {
+      before = s;
+    } else if (after == null &&
+        !s.startedAt.isBefore(end.subtract(const Duration(minutes: 10)))) {
+      after = s;
+    }
+  }
+  String spot(SpotHrvMeasurement s, {bool afterTraining = false}) {
+    final posture = s.posture == 'supine' ? 'lying' : 'seated';
+    final minutes = afterTraining && s.minutesAfterTraining != null
+        ? ',${s.minutesAfterTraining}min after training'
+        : '';
+    return '${ms(s.rmssdMs)}(${time(s.startedAt)},$posture,'
+        '${(s.durationSeconds / 60).round()}min$minutes)';
+  }
+
+  final parts = <String>[
+    if (preNight != null && preDate != null)
+      'PreNight:${ms(preNight)}(${date(preDate)})',
+    if (postNight != null && postDate != null)
+      'PostNight:${ms(postNight)}(${date(postDate)})',
+    if (preNight != null && postNight != null)
+      'NightChange:${change(preNight, postNight)}',
+    if (weeklyAverage != null) 'WeeklyAvg:${ms(weeklyAverage)}',
+    if (before != null) 'SpotBefore:${spot(before)}',
+    if (after != null) 'SpotAfter:${spot(after, afterTraining: true)}',
+    if (before != null && after != null)
+      'SpotChange:${change(before.rmssdMs, after.rmssdMs)}',
+  ];
+  if (parts.isEmpty) return '[HRV:AroundActivity,Unavailable]';
+  return '[HRV:AroundActivity,${parts.join(',')},Note:MethodsDiffer]';
 }

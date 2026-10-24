@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../providers/ai_coach_provider.dart';
 import '../../providers/day_data_provider.dart';
 import '../../providers/sync_provider.dart';
 import '../../providers/user_profile_provider.dart';
@@ -21,6 +22,7 @@ import '../../widgets/grip_strength_sheet.dart';
 import '../../widgets/bio_age_card.dart';
 import '../../widgets/briefing_card.dart';
 import '../settings/settings_sheet.dart';
+import '../settings/bug_report_sheet.dart';
 import '../ocr/manual_entry_sheet.dart';
 import '../bloodpressure/bp_screen.dart';
 import '../renpho/renpho_screen.dart';
@@ -37,8 +39,21 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeState extends ConsumerState<HomeScreen> {
   int tab = 0;
+
+  /// The session the coach tab was last opened for.
+  CoachRequest? coachRequest;
   @override
   Widget build(BuildContext context) {
+    // "Ask the coach about this session" from anywhere in the app: show the
+    // coach tab with that session loaded.
+    ref.listen<CoachRequest?>(coachRequestProvider, (previous, next) {
+      if (next == null) return;
+      setState(() {
+        coachRequest = next;
+        tab = 3;
+      });
+      ref.read(coachRequestProvider.notifier).state = null;
+    });
     final sync = ref.watch(syncProvider),
         debug = ref.watch(userProfileProvider).valueOrNull?.debugMode ?? false;
     final current = tab == 4 && !debug ? 0 : tab;
@@ -62,16 +77,16 @@ class _HomeState extends ConsumerState<HomeScreen> {
                       : const DayNavigator(),
                 ),
               ),
-              if (debug)
-                IconButton(
-                  tooltip: 'Debug',
-                  icon: const Icon(
-                    Icons.bug_report_outlined,
-                    size: 20,
-                    color: muted,
-                  ),
-                  onPressed: () => setState(() => tab = 4),
+              IconButton(
+                tooltip: 'Send feedback or report a bug',
+                icon: const Icon(
+                  Icons.feedback_outlined,
+                  size: 20,
+                  color: muted,
                 ),
+                onPressed: () =>
+                    showAppSheet(context, const BugReportSheet()),
+              ),
               IconButton(
                 tooltip: 'Add measurement',
                 icon: const Icon(Icons.add, size: 20, color: muted),
@@ -148,7 +163,12 @@ class _HomeState extends ConsumerState<HomeScreen> {
                 ),
                 1 => const PlanScreen(),
                 2 => const StrainScreen(embedded: true),
-                3 => const AiCoachScreen(),
+                3 => AiCoachScreen(
+                  key: ValueKey(coachRequest?.id ?? 0),
+                  initialPrompt: coachRequest?.prompt,
+                  activity: coachRequest?.activity,
+                  contextCard: coachRequest?.card,
+                ),
                 _ => const DebugScreen(),
               },
             ),

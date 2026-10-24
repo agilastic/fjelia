@@ -1169,6 +1169,21 @@ class AppDatabase extends _$AppDatabase {
         .get();
   }
 
+  /// Polar H10 spot HRV readings that started in [from, to), oldest first.
+  Future<List<SpotHrvMeasurement>> getSpotHrvBetween(
+    DateTime from,
+    DateTime to,
+  ) {
+    return (select(spotHrvMeasurements)
+          ..where(
+            (t) =>
+                t.startedAt.isBiggerOrEqualValue(from) &
+                t.startedAt.isSmallerThanValue(to),
+          )
+          ..orderBy([(t) => OrderingTerm(expression: t.startedAt)]))
+        .get();
+  }
+
   Future<List<BpMeasurement>> getRecentBp(int days) {
     final since = DateTime.now().subtract(Duration(days: days));
     return (select(bpMeasurements)

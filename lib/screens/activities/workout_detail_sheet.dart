@@ -2,46 +2,84 @@ import '../../models/workout_presentation.dart';
 
 import 'package:flutter/material.dart';
 
+import '../../models/coach_context_card.dart';
 import '../../models/garmin_data.dart';
+import '../../models/workout_profile.dart';
 import '../../widgets/app_widgets.dart';
+import '../../widgets/workout_profile_bar.dart';
+import '../../widgets/workout_structure_list.dart';
 import '../ai_coach/ai_coach_screen.dart';
+import 'weekly_load_card.dart' show sportName;
 
 class WorkoutDetailSheet extends StatelessWidget {
   const WorkoutDetailSheet({super.key, required this.workout});
   final ScheduledWorkout workout;
+
+  Widget _heading(String title) => Padding(
+    padding: const EdgeInsets.only(top: 22, bottom: 10),
+    child: Text(
+      title,
+      style: const TextStyle(
+        fontSize: 11,
+        color: muted,
+        fontWeight: FontWeight.w700,
+        letterSpacing: .8,
+      ),
+    ),
+  );
+
   @override
-  Widget build(BuildContext context) => SheetPage(
-    title: workout.name,
-    child: ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        const Padding(
-          padding: EdgeInsets.only(bottom: 16),
-          child: Text(
-            'Garmin Workout',
-            style: TextStyle(color: muted, fontSize: 12),
+  Widget build(BuildContext context) {
+    final lines = workoutStepLines(workout.steps);
+    final blocks = workoutStepBlocks(workout.steps, sport: workout.sportType);
+    final seconds =
+        workout.estimatedDuration?.inSeconds.toDouble() ??
+        workoutStepsSeconds(workout.steps);
+    final distance = workout.estimatedDistanceMeters;
+    return SheetPage(
+      title: workout.name,
+      child: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          Text(
+            'Garmin Workout · ${dayText(workout.scheduledDate)}',
+            style: const TextStyle(fontSize: 13, color: Colors.white70),
           ),
-        ),
-        SectionCard(
-          title: dayText(workout.scheduledDate),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(workout.sportType.replaceAll('_', ' ')),
-              Text(
-                workoutSummary(workout),
-                style: const TextStyle(color: mint),
-              ),
+          const SizedBox(height: 16),
+          WorkoutStatTiles(
+            items: [
+              if (seconds != null && seconds > 0)
+                (workoutDurationLabel(seconds), 'DURATION'),
+              if (distance != null && distance > 0)
+                ('${(distance / 1000).toStringAsFixed(1)} km', 'DISTANCE'),
+              (sportName(workout.sportType), 'SPORT'),
+              if (lines.any((l) => l.repeat))
+                ('${lines.where((l) => l.repeat).length}', 'REPEAT SETS'),
             ],
           ),
-        ),
-        if (workout.description != null)
-          SectionCard(title: 'Description', child: Text(workout.description!)),
-        for (final step in workout.steps) _Step(step),
+          if (workout.description?.isNotEmpty ?? false) ...[
+            _heading('ABOUT THIS WORKOUT'),
+            Text(
+              workout.description!,
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.white70,
+                height: 1.6,
+              ),
+            ),
+          ],
+          if (lines.isNotEmpty) ...[
+            _heading('WORKOUT STRUCTURE'),
+            if (blocks.isNotEmpty) ...[
+              WorkoutProfileBar(blocks: blocks),
+              const SizedBox(height: 14),
+            ],
+            WorkoutStructureList(steps: lines),
+          ],
         if (workout.userNote != null)
           SectionCard(title: 'Your note', child: Text(workout.userNote!)),
-        const SizedBox(height: 8),
-        OutlinedButton.icon(
+          const SizedBox(height: 16),
+          OutlinedButton.icon(
           style: OutlinedButton.styleFrom(
             foregroundColor: mint,
             side: const BorderSide(color: mint),
@@ -49,24 +87,25 @@ class WorkoutDetailSheet extends StatelessWidget {
           ),
           icon: const Icon(Icons.chat_bubble_outline, size: 18),
           label: const Text('Ask AI Coach'),
-          onPressed: () => showCoachSheet(
+          onPressed: () => openCoachTab(
             context,
-            title: 'Workout Coach',
-            prompt: [
-              'Help me prepare for this planned workout: its purpose, how to pace it, and whether I should adjust it based on my current recovery and training load.',
-              '',
-              'Workout: ${workout.name}',
-              'Date: ${dayText(workout.scheduledDate)}',
-              'Sport: ${workout.sportType.replaceAll('_', ' ')}',
-              'Planned: ${workoutSummary(workout)}',
-              if (workout.steps.isNotEmpty) 'Structure:',
-              for (final step in workout.steps) ..._stepLines(step, 0),
-            ].join('\n'),
+            prompt: 'How do I execute this workout?',
+            card: CoachContextCard.scheduled(
+              sport: workout.sportType,
+              title: workout.name,
+              date: workout.scheduledDate,
+              summary: workoutSummary(workout),
+              structure: [
+                for (final step in workout.steps)
+                  ..._stepLines(step, 0).map((l) => l.trim().replaceFirst('- ', '')),
+              ],
+            ),
           ),
         ),
       ],
     ),
-  );
+    );
+  }
 }
 
 List<String> _stepLines(WorkoutStep step, int depth) {
@@ -76,27 +115,4 @@ List<String> _stepLines(WorkoutStep step, int depth) {
         '${target == null ? '' : ' @ $target'}',
     for (final child in step.steps) ..._stepLines(child, depth + 1),
   ];
-}
-
-class _Step extends StatelessWidget {
-  const _Step(this.step);
-  final WorkoutStep step;
-  @override
-  Widget build(BuildContext context) => SectionCard(
-    title: step.stepName ?? step.type,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (step.description != null) Text(step.description!),
-        Text(
-          [
-            workoutStepDuration(step),
-            if (workoutStepTarget(step) != null) workoutStepTarget(step)!,
-          ].join(' · '),
-          style: const TextStyle(color: muted, fontSize: 12),
-        ),
-        for (final child in step.steps) _Step(child),
-      ],
-    ),
-  );
 }

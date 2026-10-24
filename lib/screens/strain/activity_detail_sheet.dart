@@ -17,6 +17,7 @@ import '../../widgets/activity_route_map.dart';
 import '../../widgets/activity_heat_card.dart';
 import '../planner/plan_overview_cards.dart';
 import '../activities/activities_screen.dart';
+import '../../models/coach_context_card.dart';
 import '../ai_coach/ai_coach_screen.dart';
 
 class ActivityDetailSheet extends ConsumerWidget {
@@ -208,56 +209,55 @@ class ActivityDetailSheet extends ConsumerWidget {
               title: 'Planned Workout',
               child: Text(a.plannedWorkoutName!),
             ),
-          OutlinedButton.icon(
-            style: OutlinedButton.styleFrom(
-              foregroundColor: Colors.redAccent,
-              side: BorderSide(color: Colors.redAccent.withValues(alpha: .5)),
-              minimumSize: const Size(double.infinity, 44),
-            ),
-            icon: const Icon(Icons.delete_outline, size: 16),
-            label: const Text('Delete activity'),
-            onPressed: () async {
-              if (!await confirmAction(
-                context,
-                'Delete activity?',
-                'Remove this activity from the local history? A later provider sync may import it again.',
-              )) {
-                return;
-              }
-              if (!context.mounted) return;
-              await runUiAction(context, () async {
-                await ref.read(deleteActivityProvider)(a.id);
-                if (context.mounted) Navigator.pop(context);
-              });
-            },
-          ),
-          const SizedBox(height: 10),
-          OutlinedButton.icon(
-            style: OutlinedButton.styleFrom(
-              foregroundColor: mint,
-              side: const BorderSide(color: mint),
-              minimumSize: const Size(double.infinity, 44),
-            ),
-            icon: const Icon(Icons.chat_bubble_outline, size: 18),
-            label: const Text('Chat with AI about this activity'),
-            onPressed: () {
-              final prompt = [
-                'Coach me on this activity: intensity, pacing and recovery needs, and how it fits my last 30 days and this year\'s progression. What should I improve?',
-                '',
-                'Activity: ${a.name}',
-                'Sport: ${a.type.replaceAll('_', ' ')}',
-                'Started: ${DateFormat('yyyy-MM-dd HH:mm').format(a.startTime)}',
-                for (final cell in cells) '${cell.$1}: ${cell.$2}',
-                if (a.hrZoneSeconds.isNotEmpty)
-                  'HR zone percentages: ${a.hrZoneSeconds.entries.map((e) => '${e.key}: ${valueText(e.value, 1)}%').join(', ')}',
-              ].join('\n');
-              showCoachSheet(
-                context,
-                title: 'Activity Coach',
-                prompt: prompt,
-                activity: activity,
-              );
-            },
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.redAccent,
+                    side: BorderSide(
+                      color: Colors.redAccent.withValues(alpha: .5),
+                    ),
+                    minimumSize: const Size(0, 44),
+                  ),
+                  icon: const Icon(Icons.delete_outline, size: 16),
+                  label: const Text('Delete'),
+                  onPressed: () async {
+                    if (!await confirmAction(
+                      context,
+                      'Delete activity?',
+                      'Remove this activity from the local history? A later provider sync may import it again.',
+                    )) {
+                      return;
+                    }
+                    if (!context.mounted) return;
+                    await runUiAction(context, () async {
+                      await ref.read(deleteActivityProvider)(a.id);
+                      if (context.mounted) Navigator.pop(context);
+                    });
+                  },
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: OutlinedButton.icon(
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: mint,
+                    side: const BorderSide(color: mint),
+                    minimumSize: const Size(0, 44),
+                  ),
+                  icon: const Icon(Icons.chat_bubble_outline, size: 18),
+                  label: const Text('Chat AI'),
+                  onPressed: () => openCoachTab(
+                    context,
+                    prompt:
+                        'How did this session go, and what does it mean for my next days?',
+                    activity: activity,
+                    card: CoachContextCard.completed(a),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
