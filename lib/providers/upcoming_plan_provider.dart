@@ -6,22 +6,37 @@ import 'day_data_provider.dart';
 import 'planner_providers.dart';
 
 class UpcomingPlanEntry {
-  const UpcomingPlanEntry({required this.date, this.session, this.workout});
+  const UpcomingPlanEntry({
+    required this.date,
+    this.session,
+    this.workout,
+    this.skipReason,
+  });
   final DateTime date;
   final TrainingSession? session;
   final ScheduledWorkout? workout;
+
+  /// Why the session was cancelled, when it was.
+  final String? skipReason;
+
+  bool get skipped => session?.status == 'skipped';
 }
 
 List<UpcomingPlanEntry> mergeUpcomingPlan(
   List<TrainingSession> sessions,
-  List<ScheduledWorkout> workouts,
-) {
+  List<ScheduledWorkout> workouts, {
+  Map<String, String> skipReasons = const {},
+}) {
   final linked = {
     for (final s in sessions) ...[s.garminWorkoutId, s.garminAlternativeId],
   }..remove(null);
   return [
     for (final s in sessions)
-      UpcomingPlanEntry(date: s.sessionDate, session: s),
+      UpcomingPlanEntry(
+        date: s.sessionDate,
+        session: s,
+        skipReason: s.status == 'skipped' ? skipReasons[s.id] : null,
+      ),
     for (final w in workouts)
       if (!linked.contains(w.workoutId))
         UpcomingPlanEntry(date: w.scheduledDate, workout: w),
@@ -33,5 +48,10 @@ final upcomingPlanProvider = FutureProvider<List<UpcomingPlanEntry>>((
 ) async {
   final sessions = ref.watch(upcomingSessionsProvider.future);
   final workouts = ref.watch(scheduledWorkoutsProvider.future);
-  return mergeUpcomingPlan(await sessions, await workouts);
+  final reasons = ref.watch(sessionSkipReasonsProvider.future);
+  return mergeUpcomingPlan(
+    await sessions,
+    await workouts,
+    skipReasons: await reasons,
+  );
 });

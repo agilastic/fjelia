@@ -11,6 +11,7 @@ import '../utils/log.dart';
 import 'database_provider.dart';
 import 'planner_providers.dart';
 import 'user_profile_provider.dart';
+import 'workout_destination_provider.dart';
 import 'workout_generation_provider.dart' show planAthleteOf;
 
 final dailyReadinessServiceProvider = Provider<DailyReadinessService>(
@@ -124,6 +125,9 @@ class MorningAdaptationNotifier extends StateNotifier<MorningAdaptationState> {
     List<AdaptationResult> adapted,
   ) async {
     try {
+      // Changed sessions go to the watch by themselves only where Fjelia can
+      // send them.
+      if (!(await _ref.read(workoutDestinationProvider.future)).canPush) return;
       final db = _ref.read(databaseProvider);
       final sessions =
           await (db.select(db.trainingSessions)

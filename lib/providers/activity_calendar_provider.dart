@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart';
 
+import '../db/database.dart';
 import '../models/calendar_activity.dart';
+import '../services/post_workout_scorer.dart' show noActivityReason;
 import 'database_provider.dart';
 
 /// Load the displayed month, including historic and far-future planned entries.
@@ -15,6 +17,7 @@ final planCalendarActivitiesProvider =
               db.activityRecords,
               db.trainingSessions,
               db.scheduledWorkoutRecords,
+              db.sessionActuals,
             },
           )
           .watch()
@@ -40,6 +43,18 @@ final planCalendarActivitiesProvider =
               month.year,
               month.month,
             );
+            // Sessions the athlete cancelled, with the reason given. A past
+            // session nothing was recorded for is unconfirmed, not cancelled.
+            final reasons = {
+              for (final a in await (db.select(
+                db.sessionActuals,
+              )..where((t) => t.skipReason.isNotNull())).get())
+                a.sessionId: a.skipReason!,
+            };
+            bool cancelled(TrainingSession s) =>
+                s.status == 'skipped' &&
+                reasons[s.id] != null &&
+                reasons[s.id] != noActivityReason;
             final linked = {
               for (final s in sessions) ...[
                 s.garminWorkoutId,
@@ -55,6 +70,17 @@ final planCalendarActivitiesProvider =
                     phase: s.phase,
                     title: s.title,
                     completed: false,
+                  ),
+              for (final s in sessions)
+                if (cancelled(s))
+                  CalendarActivity(
+                    date: s.sessionDate,
+                    sport: s.sport,
+                    phase: s.phase,
+                    title: s.title,
+                    completed: false,
+                    skipped: true,
+                    skipReason: reasons[s.id],
                   ),
               for (final w in scheduled)
                 if (!linked.contains(w.workoutId))

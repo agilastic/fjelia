@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:drift/drift.dart' hide isNull;
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
@@ -56,12 +58,17 @@ void main() {
     String? raceGoalId,
     String? existingPlanId,
     bool mondayFirst = true,
+    double distanceM = 42195,
+    double? elevationM,
+    int? targetSeconds,
   }) => service.generatePlan(
     athleteId: 'self',
     raceGoalId: raceGoalId,
     raceDate: raceDate,
     sport: 'running',
-    raceDistanceM: 42195,
+    raceDistanceM: distanceM,
+    raceElevationM: elevationM,
+    targetFinishSeconds: targetSeconds,
     daysPerWeek: 6,
     restDays: const [1],
     strengthDays: const [2, 4],
@@ -217,5 +224,98 @@ void main() {
     expect(plan.endDate, main.raceDate);
     expect(plan.raceGoalId, main.id);
     expect(minor.raceDate.isBefore(main.raceDate), isTrue);
+  });
+
+  group('race target and climbing', () {
+    test(
+      'a target time gives run paces from the goal, marked as such',
+      () async {
+        await generate(
+          raceDate: inDays(16 * 7),
+          elevationM: 100,
+          targetSeconds: 12600,
+        );
+        final runs = [
+          for (final s in await db.select(db.trainingSessions).get())
+            if (s.paceRangesJson != null)
+              (s, jsonDecode(s.paceRangesJson!) as Map<String, dynamic>),
+        ];
+        expect(runs, isNotEmpty);
+        for (final (_, pace) in runs) {
+          expect(pace['basis'], 'goal');
+          // 3:30 over 42.2 km is about 4:59/km; on the flat about 4:57.
+          expect(pace['goal_sec_per_km'], inInclusiveRange(290, 300));
+          expect(pace['low_sec_per_km'], lessThan(pace['high_sec_per_km']));
+        }
+        // Easier sessions get slower paces.
+        final byZone = {
+          for (final (s, pace) in runs)
+            s.primaryZone: pace['low_sec_per_km'] as int,
+        };
+        final zones = byZone.keys.toList()..sort();
+        if (zones.length > 1) {
+          expect(byZone[zones.first]!, greaterThan(byZone[zones.last]!));
+        }
+      },
+    );
+
+    test('without a target or a measured threshold there is no pace', () async {
+      await generate(raceDate: inDays(12 * 7));
+      for (final s in await db.select(db.trainingSessions).get()) {
+        expect(s.paceRangesJson, isNull);
+      }
+    });
+
+    test('a measured threshold pace wins over the goal', () async {
+      await db
+          .into(db.athleteThresholds)
+          .insert(
+            AthleteThresholdsCompanion.insert(
+              athleteId: 'self',
+              thresholdPaceMps: const Value(4.0),
+            ),
+          );
+      await generate(raceDate: inDays(12 * 7), targetSeconds: 12600);
+      final paces = [
+        for (final s in await db.select(db.trainingSessions).get())
+          if (s.paceRangesJson != null)
+            jsonDecode(s.paceRangesJson!) as Map<String, dynamic>,
+      ];
+      expect(paces, isNotEmpty);
+      expect(paces.every((p) => p['basis'] == 'threshold'), isTrue);
+    });
+
+    test('the longest long run follows the target time', () {
+      expect(maxLongRunMinutes('marathon'), 180);
+      expect(maxLongRunMinutes('marathon', targetMin: 210), 179);
+      expect(maxLongRunMinutes('marathon', targetMin: 240), 204);
+      expect(maxLongRunMinutes('marathon', targetMin: 180), 153);
+      // Bounded on both sides.
+      expect(maxLongRunMinutes('marathon', targetMin: 60), 126);
+      expect(maxLongRunMinutes('marathon', targetMin: 600), 216);
+      expect(maxLongRunMinutes('ultra', targetMin: 690), 288);
+    });
+
+    Future<int> hillSessions(double distanceM, double? elevationM) async {
+      await db.delete(db.trainingSessions).go();
+      await generate(
+        raceDate: inDays(24 * 7),
+        distanceM: distanceM,
+        elevationM: elevationM,
+      );
+      return (await db.select(db.trainingSessions).get())
+          .where((s) => s.subType == 'hills')
+          .length;
+    }
+
+    test('a hilly race gets hill sessions, a flat one does not', () async {
+      expect(await hillSessions(42195, 100), 0);
+      expect(await hillSessions(42195, null), 0);
+      final hilly = await hillSessions(30000, 800);
+      final mountain = await hillSessions(30000, 1800);
+      expect(hilly, greaterThan(0));
+      // Every week of build and peak on a mountain, every other on hills.
+      expect(mountain, greaterThan(hilly));
+    });
   });
 }

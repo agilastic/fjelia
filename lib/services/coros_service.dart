@@ -4,6 +4,8 @@ import 'package:drift/drift.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
+import '../api/coros_workout.dart';
+import '../models/prepared_workout.dart';
 import '../api/coros_client.dart';
 import '../db/database.dart';
 import '../models/heart_rate.dart';
@@ -141,6 +143,57 @@ class CorosService {
     await _storage.delete(key: 'coros_region');
   }
 
+  // ── workouts ──────────────────────────────────────────────────────────────
+
+  static const _sentKey = 'coros_workouts_sent_v1';
+
+  Future<Map<String, int>> _sent() async {
+    final raw = await _storage.read(key: _sentKey);
+    if (raw == null) return {};
+    try {
+      return (jsonDecode(raw) as Map).map(
+        (k, v) => MapEntry(k as String, (v as num).toInt()),
+      );
+    } catch (_) {
+      return {};
+    }
+  }
+
+  /// Puts a planned workout on the COROS calendar through the Training Hub's
+  /// unpublished interface. The same workout is not sent twice; a changed one
+  /// is sent again, and the earlier one has to be removed in the Training Hub
+  /// by hand, because this interface offers no way to take it down here.
+  /// Throws [CorosUnsupportedWorkout] for a sport or step COROS has no form
+  /// for, and [CorosException] when COROS refuses.
+  Future<void> pushWorkout(PreparedWorkout workout) async {
+    final built = buildCorosWorkout(
+      workout,
+      firstId: 1000000 + DateTime.now().millisecondsSinceEpoch % 90000000,
+      createdAtSeconds: DateTime.now().millisecondsSinceEpoch ~/ 1000,
+    );
+    final sent = await _sent();
+    if (sent[workout.sessionId] == built.fingerprint) {
+      throw CorosException('This workout is already on your COROS calendar.');
+    }
+    var auth = await _loadAuth();
+    if (auth == null) throw CorosException('COROS is not connected.');
+    if (auth.isExpired && await _relogin()) auth = await _loadAuth();
+    _client.adopt(auth!);
+    try {
+      await _client.uploadWorkout(built, workout.date);
+    } on CorosAuthException {
+      // The token went stale between the check and the call: renew once.
+      if (!await _relogin()) rethrow;
+      _client.adopt((await _loadAuth())!);
+      await _client.uploadWorkout(built, workout.date);
+    }
+    sent[workout.sessionId] = built.fingerprint;
+    await _storage.write(key: _sentKey, value: jsonEncode(sent));
+    log(
+      '[Coros] workout sent for ${workout.date.toIso8601String().substring(0, 10)}',
+    );
+  }
+
   // ── sync ──────────────────────────────────────────────────────────────────
 
   Future<CorosSyncResult> sync({int days = 30}) async {
@@ -187,11 +240,7 @@ class CorosService {
     return result;
   }
 
-  Future<void> _syncSleep(
-    CorosSyncResult r,
-    DateTime from,
-    DateTime to,
-  ) async {
+  Future<void> _syncSleep(CorosSyncResult r, DateTime from, DateTime to) async {
     List<Map<String, dynamic>> days;
     try {
       days = await _client.sleep(from, to);
@@ -331,9 +380,7 @@ class CorosService {
     }
   }
 
-  Future<_ActivitySaveResult> _saveActivity(
-    Map<String, dynamic> row,
-  ) async {
+  Future<_ActivitySaveResult> _saveActivity(Map<String, dynamic> row) async {
     final labelId = row['labelId']?.toString();
     if (labelId == null || labelId.isEmpty) {
       return _ActivitySaveResult.missingLabelId;

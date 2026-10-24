@@ -13,6 +13,7 @@ import '../services/training_plan_service.dart';
 import '../services/workout_template_library.dart';
 import 'auth_provider.dart';
 import 'database_provider.dart';
+import 'user_profile_provider.dart';
 
 final athleteThresholdsServiceProvider = Provider<AthleteThresholdsService>(
   (ref) => AthleteThresholdsService(ref.watch(databaseProvider)),
@@ -36,18 +37,23 @@ final workoutTemplateLibraryProvider = Provider<WorkoutTemplateLibrary>(
   (ref) => WorkoutTemplateLibrary(ref.watch(databaseProvider)),
 );
 
-final trainingPlanServiceProvider = Provider<TrainingPlanService>(
-  (ref) => TrainingPlanService(
+final trainingPlanServiceProvider = Provider<TrainingPlanService>((ref) {
+  // Power targets only on the bike and only when the athlete has said so.
+  final bikePower =
+      ref.watch(userProfileProvider).valueOrNull?.bikePowerTargets ?? false;
+  return TrainingPlanService(
     ref.watch(databaseProvider),
     ref.watch(garminClientProvider),
-  ),
-);
+    usesPower: (sport) => bikePower && sport.startsWith('cycl'),
+  );
+});
 
 final postWorkoutScorerProvider = Provider<PostWorkoutScorer>(
   (ref) => PostWorkoutScorer(ref.watch(databaseProvider)),
 );
 
-/// Planned or adapted sessions for the next 60 days.
+/// Planned, adapted or cancelled sessions for the next 60 days. A cancelled
+/// session stays in the list, marked, so the plan shows what was dropped.
 final upcomingSessionsProvider = FutureProvider<List<TrainingSession>>((
   ref,
 ) async {
@@ -67,30 +73,22 @@ final upcomingSessionsProvider = FutureProvider<List<TrainingSession>>((
               t.planId.isIn(active.map((p) => p.id)) &
               t.sessionDate.isBiggerOrEqualValue(today) &
               t.sessionDate.isSmallerOrEqualValue(until) &
-              (t.status.equals('planned') | t.status.equals('adapted')),
+              (t.status.equals('planned') |
+                  t.status.equals('adapted') |
+                  t.status.equals('skipped')),
         )
         ..orderBy([(t) => OrderingTerm.asc(t.sessionDate)]))
       .get();
 });
 
+/// What the athlete's recent running predicts for the race: an estimate that
+/// never replaces the target time they set.
 final raceFinishEstimateProvider = FutureProvider.family<int?, RaceGoal>((
   ref,
   goal,
-) async {
+) {
   ref.watch(syncStatusListenerProvider);
-  if (goal.targetFinishSeconds != null) return goal.targetFinishSeconds;
-  if (!{'running', 'trail_running'}.contains(goal.primarySport) ||
-      goal.distanceM <= 0) {
-    return null;
-  }
-  final anchor = await RacePredictor.bestRunAnchor(ref.watch(databaseProvider));
-  if (anchor == null || anchor.distM <= 0) return null;
-  return RacePredictor.predict(
-    anchor.timeSec,
-    anchor.distM,
-    goal.distanceM,
-    elevationGainM: goal.elevationM,
-  );
+  return RacePredictor.estimateFinish(ref.watch(databaseProvider), goal);
 });
 
 final planSessionActionsProvider = Provider<PlanSessionActions>(
@@ -108,6 +106,21 @@ final raceGoalImportProvider = Provider<Future<void> Function()>(
     ref.invalidate(primaryRaceGoalProvider);
   },
 );
+
+/// Why sessions were skipped, by session id: the reason the athlete chose or
+/// the readiness check gave.
+final sessionSkipReasonsProvider = FutureProvider<Map<String, String>>((
+  ref,
+) async {
+  ref.watch(syncStatusListenerProvider);
+  final db = ref.watch(databaseProvider);
+  return {
+    for (final a in await (db.select(
+      db.sessionActuals,
+    )..where((t) => t.skipReason.isNotNull())).get())
+      a.sessionId: a.skipReason!,
+  };
+});
 
 final plannedSessionProvider = FutureProvider.family<TrainingSession?, String>((
   ref,

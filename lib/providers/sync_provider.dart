@@ -26,6 +26,7 @@ import 'planner_providers.dart';
 import 'polar_provider.dart';
 import 'readiness_provider.dart';
 import 'source_priority_provider.dart';
+import 'workout_destination_provider.dart';
 import 'suunto_provider.dart';
 import 'user_profile_provider.dart';
 import 'workout_generation_provider.dart';
@@ -159,6 +160,15 @@ Future<void> _autoGeneratePlanIfNeeded(
   if (generated == null) return;
   await _storage.delete(key: _planNeedsHistoryKey);
   ref.invalidate(upcomingSessionsProvider);
+  // Only a watch Fjelia can send to gets the plan automatically; for the
+  // others the athlete shares a workout when they want it.
+  final destination = await ref.read(workoutDestinationProvider.future);
+  if (!destination.canPush) {
+    log(
+      '[Sync] plan generated — ${destination.label} gets workouts on request',
+    );
+    return;
+  }
   log('[Sync] plan generated — pushing to Garmin');
   try {
     await plans.pushPlanToGarmin('self');

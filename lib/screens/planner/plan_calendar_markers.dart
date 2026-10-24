@@ -14,7 +14,8 @@ class CalendarActivityBubbles extends StatelessWidget {
     // One bubble per sport/status; the day's tooltip lists every activity.
     final groups = <String, CalendarActivity>{
       for (final activity in activities)
-        '${activity.sport}:${activity.completed}:${activity.phase}': activity,
+        '${activity.sport}:${activity.completed}:${activity.phase}:${activity.skipped}':
+            activity,
     };
     final visible = groups.values.toList();
     return FittedBox(
@@ -27,21 +28,31 @@ class CalendarActivityBubbles extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 1.5),
               child: Semantics(
                 label:
-                    '${activity.title}, ${activity.sport}, ${activity.completed ? 'completed' : 'planned'}',
-                child: Container(
-                  width: 6,
-                  height: 6,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: activity.completed
-                        ? calendarActivityColor(activity)
-                        : Colors.transparent,
-                    border: Border.all(
-                      color: calendarActivityColor(activity),
-                      width: 1.4,
-                    ),
-                  ),
-                ),
+                    '${activity.title}, ${activity.sport}, ${activity.statusLabel.toLowerCase()}',
+                // A cancelled session is a small cross in its sport's colour,
+                // not a dot: it is still in the plan, but it will not happen.
+                child: activity.skipped
+                    ? Icon(
+                        Icons.close,
+                        size: 9,
+                        color: calendarActivityColor(
+                          activity,
+                        ).withValues(alpha: .6),
+                      )
+                    : Container(
+                        width: 6,
+                        height: 6,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: activity.completed
+                              ? calendarActivityColor(activity)
+                              : Colors.transparent,
+                          border: Border.all(
+                            color: calendarActivityColor(activity),
+                            width: 1.4,
+                          ),
+                        ),
+                      ),
               ),
             ),
         ],

@@ -100,7 +100,10 @@ void main() {
   );
 
   group('planner resolves power templates', () {
-    Future<List<Map<String, dynamic>>> cyclingSteps({int? ftp}) async {
+    Future<List<Map<String, dynamic>>> cyclingSteps({
+      int? ftp,
+      bool power = false,
+    }) async {
       if (ftp != null) {
         await db
             .into(db.athleteThresholds)
@@ -112,7 +115,11 @@ void main() {
             );
       }
       await WorkoutTemplateLibrary(db).seedIfEmpty();
-      final service = TrainingPlanService(db, FakeWorkoutGarmin());
+      final service = TrainingPlanService(
+        db,
+        FakeWorkoutGarmin(),
+        usesPower: (sport) => power && sport.startsWith('cycl'),
+      );
       final planId = await service.generatePlan(
         athleteId: 'self',
         raceDate: DateTime.now().add(const Duration(days: 12 * 7)),
@@ -133,8 +140,8 @@ void main() {
       ];
     }
 
-    test('with an FTP: watts', () async {
-      final steps = await cyclingSteps(ftp: 250);
+    test('with an FTP and a power meter: watts', () async {
+      final steps = await cyclingSteps(ftp: 250, power: true);
       final power = steps.where(
         (s) => (s['targetType'] as Map)['workoutTargetTypeKey'] == 'power.zone',
       );
@@ -143,6 +150,25 @@ void main() {
         expect(s['targetValueOne'] as num, greaterThan(40));
         expect(s.containsKey('ftpFraction'), isFalse);
       }
+    });
+
+    test('with an FTP but no power meter: heart rate, not watts', () async {
+      final steps = await cyclingSteps(ftp: 250);
+      expect(
+        steps.where(
+          (s) =>
+              (s['targetType'] as Map)['workoutTargetTypeKey'] == 'power.zone',
+        ),
+        isEmpty,
+      );
+      expect(
+        steps.where(
+          (s) =>
+              (s['targetType'] as Map)['workoutTargetTypeKey'] ==
+              'heart.rate.zone',
+        ),
+        isNotEmpty,
+      );
     });
 
     test('without an FTP: heart-rate zone targets instead of watts', () async {

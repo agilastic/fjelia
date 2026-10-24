@@ -8,6 +8,10 @@ import 'package:uuid/uuid.dart';
 import '../api/garmin_client.dart';
 import '../db/database.dart';
 import 'hr_zone_model.dart';
+import '../models/workout_profile.dart' show formatBlockDuration;
+import '../models/prepared_workout.dart';
+import '../models/race_profile.dart';
+import '../utils/target_time.dart';
 import 'workout_semantics.dart';
 import '../providers/training_load_provider.dart';
 import '../utils/log.dart';
@@ -328,6 +332,19 @@ String _distanceCategory(double? meters) {
   return 'ultra';
 }
 
+/// The longest long run for a race of [category]. With a target time the cap
+/// follows it: about 85 % of the race time, but no less than 70 % and no more
+/// than 120 % of the category's cap, so a slow marathon is not capped as for a
+/// fast one and a six-hour ultra is not capped as for a four-hour one.
+int maxLongRunMinutes(String category, {int? targetMin}) {
+  final base = _maxLongRunMin(category);
+  if (targetMin == null || targetMin <= 0) return base;
+  return (targetMin * 0.85).round().clamp(
+    (base * 0.7).round(),
+    (base * 1.2).round(),
+  );
+}
+
 int _maxLongRunMin(String category) => switch (category) {
   'sprint' => 45,
   '5k' => 60,
@@ -337,6 +354,16 @@ int _maxLongRunMin(String category) => switch (category) {
   'ultra' => 240,
   _ => 180,
 };
+
+/// The zone a share of FTP belongs to (Coggan: up to 55 %, 75 %, 90 %, 105 %,
+/// above). Used for templates written as a share of FTP, which carry no zone.
+int zoneForFtpFraction(double fraction) {
+  if (fraction <= 0.55) return 1;
+  if (fraction <= 0.75) return 2;
+  if (fraction <= 0.90) return 3;
+  if (fraction <= 1.05) return 4;
+  return 5;
+}
 
 /// Athlete attributes from the user profile that shape the plan.
 class PlanAthleteProfile {
@@ -610,6 +637,8 @@ class _AthleteFitnessSnapshot {
     this.lt2Bpm,
     this.lt1Bpm,
     this.hrZones = const [],
+    this.hrFloors = const [],
+    this.maxHr,
     required this.tier,
     this.hrvRatio = 1.0,
     this.sleepScore,
@@ -624,6 +653,13 @@ class _AthleteFitnessSnapshot {
 
   /// Upper HR bound of zones 1–4 (zone 5 is open-ended).
   final List<int> hrZones;
+
+  /// Lower HR bound of zones 1 to 5, when known. Preferred over [hrZones]:
+  /// a zone then runs from its floor to the next floor minus one.
+  final List<int> hrFloors;
+
+  /// The athlete's maximum heart rate, the upper end of zone 5.
+  final int? maxHr;
   final String tier;
   final double hrvRatio;
   final int? sleepScore;
@@ -639,6 +675,8 @@ class _AthleteFitnessSnapshot {
         lt2Bpm: lt2Bpm,
         lt1Bpm: lt1Bpm,
         hrZones: zones,
+        hrFloors: hrFloors,
+        maxHr: maxHr,
         tier: tier,
         hrvRatio: hrvRatio,
         sleepScore: sleepScore,
@@ -646,6 +684,14 @@ class _AthleteFitnessSnapshot {
       );
 
   ({int? low, int? high}) hrRangeForZone(int zone) {
+    if (hrFloors.length >= 5 && zone >= 1) {
+      final z = zone.clamp(1, 5);
+      final low = hrFloors[z - 1];
+      final high = z == 5
+          ? (maxHr != null && maxHr! > low ? maxHr : null)
+          : hrFloors[z] - 1;
+      return (low: low, high: high);
+    }
     if (hrZones.length < 4 || zone < 1) return (low: null, high: null);
     final z = zone.clamp(1, 5);
     final low = z == 1 ? null : hrZones[z - 2];
@@ -655,10 +701,19 @@ class _AthleteFitnessSnapshot {
 }
 
 class TrainingPlanService {
-  TrainingPlanService(this._db, this._garmin);
+  /// [usesPower] says for which sports workouts carry power targets. By
+  /// default none do: heart rate is the target, because a power meter is not
+  /// something every athlete has on every bike, and running power is not
+  /// available to everyone either.
+  TrainingPlanService(
+    this._db,
+    this._garmin, {
+    bool Function(String sport)? usesPower,
+  }) : _usesPower = usesPower ?? ((_) => false);
 
   final AppDatabase _db;
   final GarminClient _garmin;
+  final bool Function(String sport) _usesPower;
 
   static DateTime _day(DateTime d) => DateTime(d.year, d.month, d.day);
   static DateTime _addDays(DateTime d, int days) =>
@@ -680,6 +735,7 @@ class TrainingPlanService {
 
     // HR zones: explicit JSON, else derived from the sport's threshold HR.
     var hrZones = <int>[];
+    var hrFloors = <int>[];
     final zonesJson = cycling
         ? thresholds?.bikeHrZonesJson
         : swim
@@ -688,11 +744,11 @@ class TrainingPlanService {
     if (zonesJson != null) {
       try {
         // Stored as five zone floors; targets need the upper bounds.
-        hrZones = zoneUpperBounds(
-          (jsonDecode(zonesJson) as List)
-              .map((e) => (e as num).round())
-              .toList(),
-        );
+        final stored = (jsonDecode(zonesJson) as List)
+            .map((e) => (e as num).round())
+            .toList();
+        hrZones = zoneUpperBounds(stored);
+        if (stored.length >= 5) hrFloors = stored;
       } catch (_) {}
     }
     final thrHr = cycling
@@ -805,6 +861,8 @@ class TrainingPlanService {
       lt2Bpm: lastThreshold?.lt2Bpm ?? thrHr,
       lt1Bpm: lastThreshold?.lt1Bpm,
       hrZones: hrZones,
+      hrFloors: hrFloors,
+      maxHr: thresholds?.maxHrBpm,
       tier: tier,
       hrvRatio: hrvRatio,
       sleepScore: readiness?.sleepScore,
@@ -956,12 +1014,19 @@ class TrainingPlanService {
     return pool[seed % pool.length];
   }
 
-  /// Fills FTP-relative and zone targets so the steps are concrete for Garmin.
+  /// Makes the targets of a step concrete.
+  ///
+  /// Every step gets its zone number, taken from the template or, for a
+  /// template written as a share of FTP, worked out from that share. The target
+  /// is then heart rate in the athlete's zones. Only where [power] is true and
+  /// an FTP is known does a step keep a power target in watts: a heart-rate
+  /// workout must not turn into a power workout for someone without a meter.
   Map<String, dynamic> _resolveStep(
     Map<String, dynamic> step,
     int? ftp,
-    _AthleteFitnessSnapshot fitness,
-  ) {
+    _AthleteFitnessSnapshot fitness, {
+    required bool power,
+  }) {
     if (step['type'] == 'RepeatGroupDTO') {
       final iterations =
           (step['numberOfIterations'] as num?)?.toInt() ??
@@ -970,7 +1035,7 @@ class TrainingPlanService {
       final inner =
           (step['workoutSteps'] as List?)
               ?.cast<Map<String, dynamic>>()
-              .map((s) => _resolveStep(s, ftp, fitness))
+              .map((s) => _resolveStep(s, ftp, fitness, power: power))
               .toList() ??
           <Map<String, dynamic>>[];
       return Map<String, dynamic>.of(step)
@@ -979,8 +1044,18 @@ class TrainingPlanService {
     }
 
     final out = Map<String, dynamic>.from(step);
-    if (ftp != null &&
-        (out.containsKey('ftpFraction') || out.containsKey('ftpLow'))) {
+    final hasFraction =
+        out.containsKey('ftpFraction') || out.containsKey('ftpLow');
+    final fraction = _stepFraction(out, ftp);
+    var zone = (out['zoneNumber'] as num?)?.toInt();
+    if ((zone == null || zone < 1 || zone > 5) && fraction != null) {
+      zone = zoneForFtpFraction(fraction);
+    }
+    if (zone != null && zone >= 1 && zone <= 5) out['zoneNumber'] = zone;
+
+    final key = (out['targetType'] as Map?)?['workoutTargetTypeKey'];
+    final isPowerStep = hasFraction || key == 'power.zone';
+    if (power && ftp != null && hasFraction) {
       if (out.containsKey('ftpFraction')) {
         final f = (out['ftpFraction'] as num).toDouble();
         out['targetValueOne'] = (ftp * f * 0.95).round().toDouble();
@@ -998,11 +1073,13 @@ class TrainingPlanService {
         'workoutTargetTypeKey': 'power.zone',
         'displayOrder': 2,
       };
-    } else if (out.containsKey('ftpFraction') || out.containsKey('ftpLow')) {
-      // No FTP: use the step's heart-rate zone, except for very short
-      // efforts where a heart-rate target is meaningless.
-      final zone = (out['zoneNumber'] as num?)?.toInt();
-      final seconds = (out['endConditionValue'] as num?)?.toInt() ?? 0;
+    } else if (isPowerStep && !(power && ftp != null)) {
+      // Heart rate instead, except for very short efforts where a heart-rate
+      // target means nothing.
+      final condition = (out['endCondition'] as Map?)?['conditionTypeKey'];
+      final seconds = condition == 'time' || condition == null
+          ? (out['endConditionValue'] as num?)?.toInt() ?? 0
+          : 999;
       final useHr = zone != null && zone >= 1 && zone <= 5 && seconds >= 45;
       out['targetType'] = useHr
           ? {
@@ -1025,9 +1102,9 @@ class TrainingPlanService {
 
     final target = out['targetType'] as Map?;
     if (target?['workoutTargetTypeKey'] == 'heart.rate.zone') {
-      final zone = (out['zoneNumber'] as num?)?.toInt();
-      if (zone != null) {
-        final r = fitness.hrRangeForZone(zone);
+      final z = (out['zoneNumber'] as num?)?.toInt();
+      if (z != null) {
+        final r = fitness.hrRangeForZone(z);
         if (r.low != null || r.high != null) {
           out['targetValueOne'] = (r.low ?? (r.high! - 15)).toDouble();
           out['targetValueTwo'] = (r.high ?? (r.low! + 15)).toDouble();
@@ -1037,13 +1114,33 @@ class TrainingPlanService {
     return out;
   }
 
+  /// The share of FTP a step asks for: from its own fields, or from the
+  /// target values (fractions below 3, watts above 5 with an [ftp]).
+  static double? _stepFraction(Map<String, dynamic> step, int? ftp) {
+    double? number(Object? v) => v is num && v.isFinite ? v.toDouble() : null;
+    final single = number(step['ftpFraction']);
+    if (single != null) return single;
+    final low = number(step['ftpLow']), high = number(step['ftpHigh']);
+    if (low != null && high != null) return (low + high) / 2;
+    final one = number(step['targetValueOne']);
+    final two = number(step['targetValueTwo']);
+    if (one == null || two == null) return null;
+    final mean = (one + two) / 2;
+    if (mean > 0 && mean < 3) return mean;
+    if (mean > 5 && ftp != null && ftp > 0) return mean / ftp;
+    return null;
+  }
+
   String _resolveStepsJson(
     String stepsJson,
     int? ftp,
-    _AthleteFitnessSnapshot fitness,
-  ) {
+    _AthleteFitnessSnapshot fitness, {
+    required bool power,
+  }) {
     final steps = (jsonDecode(stepsJson) as List).cast<Map<String, dynamic>>();
-    return jsonEncode(steps.map((s) => _resolveStep(s, ftp, fitness)).toList());
+    return jsonEncode(
+      steps.map((s) => _resolveStep(s, ftp, fitness, power: power)).toList(),
+    );
   }
 
   ({String? text, int? minutes}) _extractWarmUpDescription(String stepsJson) {
@@ -1079,6 +1176,8 @@ class TrainingPlanService {
     required DateTime raceDate,
     required String sport,
     double? raceDistanceM,
+    double? raceElevationM,
+    int? targetFinishSeconds,
     int daysPerWeek = 5,
     List<int> restDays = const [7],
     List<int> strengthDays = const [3],
@@ -1164,9 +1263,11 @@ class TrainingPlanService {
     final currentWeek = weekStartOf(today, mondayFirst: weekStartsOnMonday);
     final lastWeek = weekStartOf(end, mondayFirst: weekStartsOnMonday);
     int weeksBetween(DateTime a, DateTime b) =>
-        DateTime.utc(b.year, b.month, b.day)
-            .difference(DateTime.utc(a.year, a.month, a.day))
-            .inDays ~/
+        DateTime.utc(
+          b.year,
+          b.month,
+          b.day,
+        ).difference(DateTime.utc(a.year, a.month, a.day)).inDays ~/
         7;
     final firstIndex = weeksBetween(anchorWeek, currentWeek);
     final weeks = (weeksBetween(anchorWeek, lastWeek) + 1).clamp(1, 156);
@@ -1233,6 +1334,21 @@ class TrainingPlanService {
 
     final templates = await _db.select(_db.workoutTemplates).get();
     final category = _distanceCategory(raceDistanceM);
+    final raceProfile = raceDistanceM != null && raceDistanceM > 0
+        ? RaceProfile(
+            sport: mainSport,
+            distanceM: raceDistanceM,
+            elevationM: raceElevationM,
+            targetSeconds: targetFinishSeconds,
+          )
+        : null;
+    final terrain = raceProfile?.terrain ?? Terrain.flat;
+    final longRunCap = maxLongRunMinutes(
+      category,
+      targetMin: targetFinishSeconds == null
+          ? null
+          : (targetFinishSeconds / 60).round(),
+    );
     final baseSlots = _weekTemplates[mainSport] ?? _weekTemplates['running']!;
     final targetWeeklyMin = hoursPerWeek * 60;
     final baseWeeklyTss = math.max(fitness.weeklyTss, 50.0);
@@ -1317,6 +1433,21 @@ class TrainingPlanService {
           }
         }
       }
+      // A hilly race gets hill work in the build and peak: one tempo session
+      // becomes a hill session, every other week on rolling to hilly courses
+      // and every week on mountainous ones.
+      if ((phase == 'build' || phase == 'peak') &&
+          _footSports.contains(mainSport) &&
+          (terrain == Terrain.mountainous ||
+              (terrain == Terrain.hilly && g.isEven))) {
+        final i = slots.indexWhere(
+          (s) =>
+              s.sessionType == 'key' &&
+              s.subType == 'tempo' &&
+              _footSports.contains(s.sport),
+        );
+        if (i >= 0) slots[i] = slots[i].copyWith(subType: 'hills', zone: 4);
+      }
       // Strength slots go on the athlete's strength days.
       final strength = slots.where((s) => s.sport == 'strength').toList();
       slots.removeWhere((s) => s.sport == 'strength');
@@ -1395,12 +1526,12 @@ class TrainingPlanService {
         if (phase == 'taper') duration = (duration * 0.7).round();
         if (phase == 'recovery') duration = (duration * 0.7).round();
         if (slot.sessionType == 'long' && _footSports.contains(slot.sport)) {
-          duration = math.min(duration, _maxLongRunMin(category));
+          duration = math.min(duration, longRunCap);
         }
         if (slot.sessionType == 'long' && phase == 'peak') {
           duration = (duration * 1.4).round();
           if (_footSports.contains(slot.sport)) {
-            duration = math.min(duration, _maxLongRunMin(category));
+            duration = math.min(duration, longRunCap);
           }
         }
         final sportHistory = history.forSport(slot.sport);
@@ -1453,7 +1584,12 @@ class TrainingPlanService {
         var scaled = false;
         var semantics = const WorkoutSemantics();
         void compile(WorkoutTemplate t, int wantedMin) {
-          final resolved = _resolveStepsJson(t.stepsJson, ftp, fitness);
+          final resolved = _resolveStepsJson(
+            t.stepsJson,
+            ftp,
+            fitness,
+            power: _usesPower(slot.sport),
+          );
           final fitted = fitSteadyWorkout(resolved, wantedMin * 60.0);
           stepsJson = fitted.stepsJson;
           scaled = fitted.scaled;
@@ -1514,7 +1650,10 @@ class TrainingPlanService {
         });
 
         String? paceJson;
-        final pace = thresholds?.thresholdPaceMps;
+        // Measured threshold pace first; without one, the goal pace gives an
+        // estimate (and says so).
+        final measuredPace = thresholds?.thresholdPaceMps;
+        final pace = measuredPace ?? raceProfile?.estimatedThresholdSpeedMps;
         if ((slot.sport == 'running' || slot.sport == 'trail_running') &&
             pace != null &&
             pace > 0) {
@@ -1523,6 +1662,10 @@ class TrainingPlanService {
             'low_sec_per_km': (1000 / (pace * z.hi)).round(),
             'high_sec_per_km': (1000 / (pace * z.lo)).round(),
             'zone': zone,
+            'basis': measuredPace != null ? 'threshold' : 'goal',
+            if (raceProfile?.flatEquivalentPaceSecPerKm != null)
+              'goal_sec_per_km': raceProfile!.flatEquivalentPaceSecPerKm!
+                  .round(),
           });
         }
         String? powerJson;
@@ -1672,6 +1815,8 @@ class TrainingPlanService {
       raceDate: goal?.raceDate ?? plan.endDate,
       sport: goal?.primarySport ?? rotation.first,
       raceDistanceM: goal?.distanceM,
+      raceElevationM: goal?.elevationM,
+      targetFinishSeconds: goal?.targetFinishSeconds,
       daysPerWeek: daysPerWeek,
       restDays: restDays,
       strengthDays: strengthDays,
@@ -1792,39 +1937,18 @@ class TrainingPlanService {
     // comes down before the new one goes up.
     if (s.garminAlternativeId != null) {
       await _garmin.unscheduleWorkout(s.garminAlternativeId!);
-      await (_db.update(_db.trainingSessions)..where((t) => t.id.equals(s.id)))
-          .write(const TrainingSessionsCompanion(garminAlternativeId: Value(null)));
+      await (_db.update(
+        _db.trainingSessions,
+      )..where((t) => t.id.equals(s.id))).write(
+        const TrainingSessionsCompanion(garminAlternativeId: Value(null)),
+      );
     }
-    final thresholds = await (_db.select(
-      _db.athleteThresholds,
-    )..where((t) => t.athleteId.equals(s.athleteId))).getSingleOrNull();
-    final fitness = _AthleteFitnessSnapshot(
-      ctl: 0,
-      tsb: 0,
-      tier: 'intermediate',
-      hrZones: _zonesFromJson(
-        s.sport.contains('swim')
-            ? thresholds?.swimHrZonesJson
-            : s.sport.contains('cycl')
-            ? thresholds?.bikeHrZonesJson
-            : thresholds?.runHrZonesJson,
-      ),
-    );
-    final ftp = thresholds?.ftpWatts;
-    final steps = (jsonDecode(s.stepsJson!) as List)
-        .cast<Map<String, dynamic>>()
-        .map((st) => _resolveStep(st, ftp, fitness))
-        .toList()
-        .asMap()
-        .entries
-        .map((e) => {...e.value, 'stepOrder': e.key + 1})
-        .toList();
-
+    final prepared = await _prepareWorkout(s);
     final workoutId = await _garmin.createWorkout(
       s.title,
       _garminSportName(s.sport),
-      steps,
-      description: s.sessionNotes,
+      prepared.steps,
+      description: prepared.description,
     );
     // Save the definition before scheduling so a retry cannot create duplicates.
     await (_db.update(_db.trainingSessions)..where((t) => t.id.equals(s.id)))
@@ -1839,6 +1963,246 @@ class TrainingPlanService {
         dateModified: Value(DateTime.now()),
       ),
     );
+  }
+
+  /// The session's steps with concrete targets and its description, the same
+  /// for every watch: heart-rate zones from the athlete's settings first,
+  /// power only where it is switched on, notes on every step.
+  Future<PreparedWorkout> _prepareWorkout(TrainingSession s) async {
+    if (s.stepsJson == null) {
+      throw StateError('No workout structure is available.');
+    }
+    final thresholds = await (_db.select(
+      _db.athleteThresholds,
+    )..where((t) => t.athleteId.equals(s.athleteId))).getSingleOrNull();
+    final floors = _zonesFromJson(
+      s.sport.contains('swim')
+          ? thresholds?.swimHrZonesJson
+          : s.sport.contains('cycl')
+          ? thresholds?.bikeHrZonesJson
+          : thresholds?.runHrZonesJson,
+    );
+    // Five stored values are the zone floors; the planner's upper-bound list
+    // is derived from them, never the floors passed off as upper bounds.
+    final fitness = _AthleteFitnessSnapshot(
+      ctl: 0,
+      tsb: 0,
+      tier: 'intermediate',
+      hrZones: floors.length >= 5 ? zoneUpperBounds(floors) : floors,
+      hrFloors: floors.length >= 5 ? floors : const [],
+      maxHr: thresholds?.maxHrBpm,
+    );
+    final ftp = thresholds?.ftpWatts;
+    final power = _usesPower(s.sport);
+    final steps = _withNotes(
+      (jsonDecode(s.stepsJson!) as List)
+          .cast<Map<String, dynamic>>()
+          .map((st) => _resolveStep(st, ftp, fitness, power: power))
+          .toList()
+          .asMap()
+          .entries
+          .map((e) => {...e.value, 'stepOrder': e.key + 1})
+          .toList(),
+    );
+
+    final plan = await (_db.select(
+      _db.trainingPlans,
+    )..where((t) => t.id.equals(s.planId))).getSingleOrNull();
+    final goal = plan?.raceGoalId == null
+        ? null
+        : await (_db.select(
+            _db.raceGoals,
+          )..where((t) => t.id.equals(plan!.raceGoalId!))).getSingleOrNull();
+    // Threshold heart rate: the latest test, else the sport's stored value,
+    // else the lowest bound of zone 5, where the zones are built on it.
+    final lastThreshold =
+        await (_db.select(_db.thresholdRecords)
+              ..where((t) => t.lt2Bpm.isNotNull())
+              ..orderBy([(t) => OrderingTerm.desc(t.date)])
+              ..limit(1))
+            .getSingleOrNull();
+    final sportThreshold = s.sport.contains('cycl')
+        ? thresholds?.thresholdHrCyclingBpm
+        : s.sport.contains('swim')
+        ? thresholds?.thresholdHrSwimBpm
+        : thresholds?.thresholdHrBpm;
+    final thresholdHr =
+        sportThreshold ??
+        lastThreshold?.lt2Bpm ??
+        (floors.length >= 5 ? floors[4] : null);
+    return PreparedWorkout(
+      sessionId: s.id,
+      title: s.title,
+      date: s.sessionDate,
+      sport: s.sport,
+      steps: steps,
+      description: _garminDescription(s, steps, power: power, goal: goal),
+      thresholdHr: thresholdHr,
+    );
+  }
+
+  /// The session ready for a watch platform: steps with targets, notes and
+  /// the threshold heart rate.
+  Future<PreparedWorkout> prepareWorkout(String sessionId) async {
+    final s = await (_db.select(
+      _db.trainingSessions,
+    )..where((t) => t.id.equals(sessionId))).getSingleOrNull();
+    if (s == null) throw StateError('Workout no longer exists.');
+    return _prepareWorkout(s);
+  }
+
+  /// The workout as text for the athlete: title, date and everything the
+  /// watch would show. For watches that cannot receive it from Fjelia.
+  Future<({String title, DateTime date, String text})> workoutText(
+    String sessionId,
+  ) async {
+    final w = await prepareWorkout(sessionId);
+    return (title: w.title, date: w.date, text: w.description);
+  }
+
+  /// Lines about the race goal and, for a run, the pace that goes with this
+  /// session. The pace is a guide; the heart-rate target decides.
+  static List<String>? _goalLines(TrainingSession s, RaceGoal? goal) {
+    final lines = <String>[];
+    if (goal != null && goal.targetFinishSeconds != null) {
+      final profile = RaceProfile(
+        sport: goal.primarySport,
+        distanceM: goal.distanceM,
+        elevationM: goal.elevationM,
+        targetSeconds: goal.targetFinishSeconds,
+      );
+      final flat = profile.flatEquivalentPaceSecPerKm;
+      lines.add(
+        'Race goal: ${formatTargetTime(goal.targetFinishSeconds!)} for '
+        '${(goal.distanceM / 1000).toStringAsFixed(1)} km'
+        '${profile.isRide
+            ? ' (${profile.goalSpeedKmh!.toStringAsFixed(1)} km/h)'
+            : flat == null
+            ? ''
+            : ' (${formatPace(profile.goalPaceSecPerKm!)}, ${formatPace(flat)} on the flat)'}.',
+      );
+    }
+    try {
+      final json = s.paceRangesJson;
+      if (json != null) {
+        final pace = jsonDecode(json) as Map<String, dynamic>;
+        final low = pace['low_sec_per_km'], high = pace['high_sec_per_km'];
+        if (low is num && high is num) {
+          lines.add(
+            'Pace guide: ${formatPace(low.toDouble())} to ${formatPace(high.toDouble())}'
+            '${pace['basis'] == 'goal' ? ', estimated from your goal' : ''}. '
+            'Heart rate decides.',
+          );
+        }
+      }
+    } catch (_) {}
+    return lines.isEmpty ? null : lines;
+  }
+
+  /// Each step gets its target as a note ("Z2 · 110–127 bpm") so the watch
+  /// shows what is asked even where it hides the target type.
+  static List<Map<String, dynamic>> _withNotes(
+    List<Map<String, dynamic>> steps,
+  ) => [
+    for (final step in steps)
+      if (step['workoutSteps'] is List)
+        {
+          ...step,
+          'workoutSteps': _withNotes(
+            (step['workoutSteps'] as List).cast<Map<String, dynamic>>(),
+          ),
+        }
+      else
+        () {
+          final note = _stepNote(step);
+          if (note == null) return step;
+          final own = (step['description'] as String?)?.trim();
+          return {
+            ...step,
+            'description': own == null || own.isEmpty ? note : '$note · $own',
+          };
+        }(),
+  ];
+
+  static String? _stepNote(Map<String, dynamic> step) {
+    final zone = (step['zoneNumber'] as num?)?.toInt();
+    final key = (step['targetType'] as Map?)?['workoutTargetTypeKey'];
+    final one = step['targetValueOne'], two = step['targetValueTwo'];
+    final parts = <String>[
+      if (zone != null && zone >= 1) 'Z$zone',
+      if (key == 'heart.rate.zone' && one is num && two is num)
+        '${one.round()}–${two.round()} bpm',
+      if (key == 'power.zone' && one is num && two is num)
+        '${one.round()}–${two.round()} W',
+    ];
+    return parts.isEmpty ? null : parts.join(' · ');
+  }
+
+  /// The comment on the Garmin workout: the session's notes, then everything
+  /// the athlete needs to carry it out, so nothing depends on reading the
+  /// targets from the watch screen.
+  String _garminDescription(
+    TrainingSession s,
+    List<Map<String, dynamic>> steps, {
+    required bool power,
+    RaceGoal? goal,
+  }) {
+    String label(Map<String, dynamic> step) {
+      final type = (step['stepType'] as Map?)?['stepTypeKey'];
+      return switch (type) {
+        'warmup' => 'Warm-up',
+        'cooldown' => 'Cool-down',
+        'recovery' => 'Recovery',
+        'rest' => 'Rest',
+        'interval' => 'Interval',
+        _ => 'Step',
+      };
+    }
+
+    String length(Map<String, dynamic> step) {
+      final condition = (step['endCondition'] as Map?)?['conditionTypeKey'];
+      final value = (step['endConditionValue'] as num?)?.toDouble();
+      if (value == null || value <= 0) return 'Until lap press';
+      return condition == 'distance'
+          ? (value >= 1000
+                ? '${(value / 1000).toStringAsFixed(1)} km'
+                : '${value.round()} m')
+          : formatBlockDuration(value);
+    }
+
+    final lines = <String>[];
+    void walk(List<Map<String, dynamic>> items, String indent) {
+      for (final step in items) {
+        if (step['workoutSteps'] is List) {
+          final n = (step['numberOfIterations'] as num?)?.toInt() ?? 1;
+          lines.add('$indent$n× repeat');
+          walk(
+            (step['workoutSteps'] as List).cast<Map<String, dynamic>>(),
+            '$indent  ',
+          );
+          continue;
+        }
+        final note = _stepNote(step);
+        lines.add(
+          '$indent${length(step)} ${label(step)}${note == null ? '' : ' · $note'}',
+        );
+      }
+    }
+
+    walk(steps, '');
+    final total = WorkoutSemantics.of(jsonEncode(steps), sport: s.sport);
+    final notes = s.sessionNotes?.trim();
+    final text = [
+      if (notes != null && notes.isNotEmpty) ...[notes, ''],
+      power
+          ? 'TARGETS: heart rate is the guide; power is shown where it is set.'
+          : 'TARGETS: heart rate in your zones. No power or pace targets.',
+      ...lines,
+      'Total ${total.totalMinutes} min${total.isExact ? '' : ' (partly estimated)'}.',
+      ...?_goalLines(s, goal),
+    ].join('\n');
+    // The description has a length limit; keep the targets, shorten the rest.
+    return text.length <= 1500 ? text : '${text.substring(0, 1497)}...';
   }
 
   static List<int> _zonesFromJson(String? json) {

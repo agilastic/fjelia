@@ -109,7 +109,7 @@ void main() {
   });
 
   test(
-    'HR targets use stored zone floors (zone N = floor N … floor N+1)',
+    'HR targets use stored zone floors (zone N = floor N … floor N+1 − 1)',
     () async {
       await db
           .into(db.athleteThresholds)
@@ -134,8 +134,9 @@ void main() {
           .where((s) => s.hrRangesJson != null)
           .map((s) => jsonDecode(s.hrRangesJson!) as Map<String, dynamic>)
           .firstWhere((hr) => hr['zone'] == 2);
+      // Zone 2 starts at its floor and ends one below the next zone's floor.
       expect(z2['low'], 145);
-      expect(z2['high'], 155);
+      expect(z2['high'], 154);
     },
   );
 

@@ -10,6 +10,10 @@ import '../providers/training_load_provider.dart';
 import '../utils/log.dart';
 import 'athlete_thresholds_service.dart';
 
+/// The reason stored for a past session nothing was recorded for. It is not
+/// something the athlete decided.
+const noActivityReason = 'No matching activity';
+
 /// After a workout syncs: match it to the planned session, score execution,
 /// record zone time / XP / normalized training stress and refresh the week.
 class PostWorkoutScorer {
@@ -666,7 +670,7 @@ class PostWorkoutScorer {
             .insertOnConflictUpdate(
               SessionActualsCompanion.insert(
                 sessionId: s.id,
-                skipReason: const Value('No matching activity'),
+                skipReason: const Value(noActivityReason),
               ),
             );
       });

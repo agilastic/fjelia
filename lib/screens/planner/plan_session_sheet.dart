@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../db/database.dart';
 import '../../models/coach_context_card.dart';
@@ -9,8 +12,13 @@ import '../../models/workout_profile.dart';
 import '../../providers/ftp_provider.dart';
 import '../../providers/hr_zones_provider.dart';
 import '../../providers/planner_providers.dart';
+import '../../providers/user_profile_provider.dart';
+import '../../providers/workout_destination_provider.dart';
+import '../../providers/workout_push_provider.dart';
 import '../../providers/day_data_provider.dart';
 import '../../services/plan_session_actions.dart';
+import '../../services/workout_destination.dart';
+import '../../utils/target_time.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/workout_profile_bar.dart';
 import '../../widgets/workout_structure_list.dart';
@@ -35,6 +43,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
         plannedSessionProvider(session.id).future,
       );
       if (fresh != null && mounted) setState(() => session = fresh);
+      ref.invalidate(sessionSkipReasonsProvider);
       ref.invalidate(upcomingSessionsProvider);
       ref.invalidate(scheduledWorkoutsProvider);
     });
@@ -45,6 +54,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
   @override
   Widget build(BuildContext context) {
     final s = session;
+    final skipReason = ref.watch(sessionSkipReasonsProvider).valueOrNull?[s.id];
     final sport = s.sport.toLowerCase();
     final zones = ref.watch(hrZonesProvider);
     final zoneBounds =
@@ -54,7 +64,10 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
             .bounds;
     // Ranges are worked out from today's zones and FTP, not from what was
     // stored when the plan was made; both change over time.
-    final ftp = sport.contains('cycl') || sport.contains('bik')
+    final powerOn =
+        ref.watch(userProfileProvider).valueOrNull?.bikePowerTargets ?? false;
+    // Watts only where power targets are on; heart rate is the primary guide.
+    final ftp = powerOn && (sport.contains('cycl') || sport.contains('bik'))
         ? ref.watch(ftpProvider).valueOrNull?.ftpWatts
         : null;
     final steps = plannedStepLines(
@@ -144,7 +157,13 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                 ),
               ),
               const SizedBox(width: 8),
-              badge(s.status == 'skipped' ? 'REST' : s.status.toUpperCase()),
+              badge(
+                s.status == 'skipped'
+                    ? (skipReason == null
+                          ? 'SKIPPED'
+                          : 'SKIPPED · ${skipReason.toUpperCase()}')
+                    : s.status.toUpperCase(),
+              ),
             ],
           ),
           const SizedBox(height: 10),
@@ -166,6 +185,14 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
               ('${s.weekNumber}', 'WEEK'),
             ],
           ),
+          if (_paceGuide(s) case final guide?)
+            Padding(
+              padding: const EdgeInsets.only(top: 12),
+              child: Text(
+                guide,
+                style: const TextStyle(fontSize: 12, color: Colors.white70),
+              ),
+            ),
           if (s.sessionNotes?.isNotEmpty ?? false) ...[
             heading('ABOUT THIS WORKOUT'),
             Text(
@@ -357,6 +384,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
               prompt: 'How do I execute this workout?',
               card: CoachContextCard.planned(
                 s,
+                skipReason: skipReason,
                 zoneTarget: (z) =>
                     zoneTargetText(z, hrFloors: zoneBounds, ftp: ftp),
               ),
@@ -368,27 +396,151 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
             ),
           ),
           const SizedBox(height: 8),
-          OutlinedButton.icon(
-            style: style(blue, filled: true),
-            onPressed: !editable || busy || s.stepsJson == null
-                ? null
-                : () => perform(() async {
-                    await ref
-                        .read(trainingPlanServiceProvider)
-                        .pushToGarmin(s.id);
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Workout pushed to Garmin'),
+          Builder(
+            builder: (buttonContext) {
+              // One button per connected watch platform.
+              final targets =
+                  ref.watch(workoutTargetsProvider).valueOrNull ??
+                  const <WorkoutTarget>[
+                    (
+                      destination: WorkoutDestination.garmin,
+                      route: WorkoutRoute.push,
+                    ),
+                  ];
+              Future<void> share(String? why) async {
+                final workout = await ref
+                    .read(trainingPlanServiceProvider)
+                    .workoutText(s.id);
+                final box = buttonContext.findRenderObject() as RenderBox?;
+                if (why != null && context.mounted) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(why)));
+                }
+                await SharePlus.instance.share(
+                  ShareParams(
+                    subject: workout.title,
+                    text:
+                        '${workout.title}\n${dayText(workout.date)}\n\n${workout.text}',
+                    sharePositionOrigin: box == null
+                        ? null
+                        : box.localToGlobal(Offset.zero) & box.size,
+                  ),
+                );
+              }
+
+              Widget button(WorkoutTarget t, {required bool first}) {
+                final destination = t.destination;
+                final pushes = t.route == WorkoutRoute.push;
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    OutlinedButton.icon(
+                      style: style(blue, filled: first),
+                      onPressed: !editable || busy || s.stepsJson == null
+                          ? null
+                          : () => perform(() async {
+                              if (!pushes) return share(null);
+                              final result = await ref.read(
+                                pushWorkoutProvider,
+                              )(s.id, destination);
+                              if (!result.sent) {
+                                return share(
+                                  '${result.shareReason} Shared as text.',
+                                );
+                              }
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Workout sent to ${destination.label}',
+                                    ),
+                                  ),
+                                );
+                              }
+                            }),
+                      icon: Icon(
+                        pushes ? Icons.watch_outlined : Icons.ios_share,
+                        size: 20,
+                      ),
+                      label: Text(
+                        busy
+                            ? 'Updating…'
+                            : pushes
+                            ? 'Push to ${destination.label}'
+                            : 'Share workout for ${destination.label}',
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
                         ),
-                      );
-                    }
-                  }),
-            icon: const Icon(Icons.watch_outlined, size: 20),
-            label: Text(
-              busy ? 'Updating…' : 'Push to Garmin',
-              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
-            ),
+                      ),
+                    ),
+                    if (!pushes && destination.unavailableNote != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 6),
+                        child: Text(
+                          destination.unavailableNote!,
+                          style: const TextStyle(fontSize: 11, color: muted),
+                        ),
+                      ),
+                    if (!pushes && destination == WorkoutDestination.coros)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: OutlinedButton.icon(
+                          style: style(mint),
+                          icon: const Icon(Icons.science_outlined, size: 20),
+                          onPressed: () async {
+                            if (!await confirmAction(
+                              context,
+                              'Send workouts to COROS?',
+                              'COROS has no workout import, so this uses the Training Hub\'s unofficial web interface with your COROS login. It is not endorsed by COROS, can stop working, and a workout should be checked in the Training Hub afterwards. Turn it on?',
+                            )) {
+                              return;
+                            }
+                            final profile = ref
+                                .read(userProfileProvider)
+                                .valueOrNull;
+                            if (profile == null || !context.mounted) return;
+                            await runUiAction(
+                              context,
+                              () => ref
+                                  .read(userProfileProvider.notifier)
+                                  .save(
+                                    profile.copyWith(corosWorkoutPush: true),
+                                  ),
+                            );
+                          },
+                          label: const Text(
+                            'Send to COROS instead (experimental)',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    if (pushes && destination != WorkoutDestination.garmin)
+                      const Padding(
+                        padding: EdgeInsets.only(top: 6),
+                        child: Text(
+                          'Experimental: sent through the COROS Training Hub\'s unofficial interface. Check the workout in the Training Hub; a changed workout has to be removed there by hand.',
+                          style: TextStyle(fontSize: 11, color: muted),
+                        ),
+                      ),
+                  ],
+                );
+              }
+
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  for (var i = 0; i < targets.length; i++) ...[
+                    if (i > 0) const SizedBox(height: 8),
+                    button(targets[i], first: i == 0),
+                  ],
+                ],
+              );
+            },
           ),
           const SizedBox(height: 8),
           OutlinedButton.icon(
@@ -463,3 +615,22 @@ Future<String?> _pickSkipReason(
     ],
   ),
 );
+
+/// "Pace guide 5:20/km to 5:50/km, estimated from your goal" for a run that has
+/// one; heart rate stays the target.
+String? _paceGuide(TrainingSession s) {
+  final json = s.paceRangesJson;
+  if (json == null) return null;
+  try {
+    final pace = jsonDecode(json) as Map<String, dynamic>;
+    final low = pace['low_sec_per_km'], high = pace['high_sec_per_km'];
+    if (low is! num || high is! num) return null;
+    final goal = pace['goal_sec_per_km'];
+    return 'Pace guide ${formatPace(low.toDouble())} to ${formatPace(high.toDouble())}'
+        '${pace['basis'] == 'goal' ? ', estimated from your goal' : ''}'
+        '${goal is num ? ' · goal pace on the flat ${formatPace(goal.toDouble())}' : ''}. '
+        'Heart rate decides.';
+  } catch (_) {
+    return null;
+  }
+}

@@ -33,8 +33,12 @@ String appleFactLine(String line) {
         (v) =>
             ' Time in heart-rate zones 1 to 5 (percent): ${v.replaceAll('/', ', ')}.',
       );
+      final reason = part(
+        'SkipReason',
+        (v) => ' It was cancelled because of: $v. Do not suggest making it up.',
+      );
       return 'Session (${f['Status'] ?? 'unknown status'}) ${f['Date'] ?? ''}: '
-          '$facts.${structure ?? ''}${zones ?? ''}';
+          '$facts.${structure ?? ''}${zones ?? ''}${reason ?? ''}';
     case 'Activity':
       if (parsed.lead.isEmpty) return line;
       final facts = join([
@@ -60,6 +64,26 @@ String appleFactLine(String line) {
         part('PrevWeekH', (v) => 'last week $v h'),
       ]);
       return 'Training monitor, estimated by a model and not measured: $facts.';
+    case 'TodayWorkout':
+      if (f['Status'] != 'cancelled') return line;
+      return 'Today\'s planned workout was cancelled (${f['Reason'] ?? 'no reason given'}). '
+          'This is not a plain rest day; illness or injury means NO training today.';
+    case 'RaceGoal':
+      final target = f['Target'] == null || f['Target'] == 'none'
+          ? 'no target time set'
+          : 'target ${f['Target']}'
+                '${f['PaceSecKm'] == null || f['PaceSecKm'] == 'na' ? '' : ' (${_pace(f['PaceSecKm']!)})'}';
+      final ahead = int.tryParse(f['GoalAheadOfEstimate%'] ?? '');
+      return 'Race goal: ${f['DistKm']} km ${f['Sport']?.replaceAll('_', ' ')} '
+          'on ${f['Date']}, ${f['Terrain']} course'
+          '${f['ElevM'] == null || f['ElevM'] == 'na' ? '' : ' with ${f['ElevM']} m of climbing'}; '
+          '$target'
+          '${f['Estimate'] == null || f['Estimate'] == 'na' ? '' : ', current estimate ${f['Estimate']}'}'
+          '${ahead != null && ahead >= 5 ? '. The goal is $ahead% faster than the estimate: a stretch.' : '.'}';
+    case 'Cancelled':
+      return '${f['Sessions'] ?? 'Some'} planned sessions around today were cancelled '
+          '(reasons: ${(f['Reasons'] ?? 'unknown').replaceAll('/', ', ')}). '
+          'Illness or injury means rest, never a replacement workout.';
     case 'DataStatus':
       return _dataStatus(parsed);
     case 'Compare':
@@ -163,6 +187,13 @@ String _dataStatus(_Toon t) {
 
 /// A parsed `[Tag:...]` line: loose parts, key:value fields and named groups
 /// such as `Activities(Last:...,DaysAgo:...)`.
+String _pace(String seconds) {
+  final total = double.tryParse(seconds)?.round();
+  return total == null
+      ? seconds
+      : '${total ~/ 60}:${(total % 60).toString().padLeft(2, '0')}/km';
+}
+
 class _Toon {
   _Toon(this.tag, this.raw, this.lead, this.fields, this.groups);
 

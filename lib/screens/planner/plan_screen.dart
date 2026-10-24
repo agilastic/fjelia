@@ -113,7 +113,7 @@ class _PlanState extends ConsumerState<PlanScreen> {
                     return Tooltip(
                       message: activities.isEmpty
                           ? dayText(d)
-                          : '${dayText(d)}\n${activities.map((a) => '${a.title} · ${a.completed ? 'Completed' : 'Planned'}').join('\n')}',
+                          : '${dayText(d)}\n${activities.map((a) => '${a.title} · ${a.statusLabel}').join('\n')}',
                       child: InkWell(
                         onTap: () =>
                             ref.read(selectedDateProvider.notifier).state = d,
@@ -171,7 +171,7 @@ class _PlanState extends ConsumerState<PlanScreen> {
               children: [
                 for (final entry in {
                   for (final a in calendar)
-                    '${a.sport}:${a.completed}:${a.phase}': a,
+                    '${a.sport}:${a.completed}:${a.phase}:${a.skipped}': a,
                 }.values)
                   Row(
                     mainAxisSize: MainAxisSize.min,
@@ -183,13 +183,13 @@ class _PlanState extends ConsumerState<PlanScreen> {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        '${entry.sport.replaceAll('_', ' ')}${entry.completed ? '' : ' · ${entry.phase ?? 'planned'}'}',
+                        '${entry.sport.replaceAll('_', ' ')}${entry.completed ? '' : entry.skipped ? ' · skipped' : ' · ${entry.phase ?? 'planned'}'}',
                         style: const TextStyle(fontSize: 9, color: muted),
                       ),
                     ],
                   ),
                 const Text(
-                  '○ Planned   ● Completed',
+                  '○ Planned   ● Completed   ✕ Skipped',
                   style: TextStyle(fontSize: 9, color: muted),
                 ),
               ],

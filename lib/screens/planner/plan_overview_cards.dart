@@ -18,6 +18,8 @@ import '../../services/race_predictor.dart';
 import '../../widgets/app_widgets.dart';
 import '../settings/training_tab.dart';
 import 'plan_session_sheet.dart';
+import '../../utils/target_time.dart';
+import '../../models/race_profile.dart';
 
 class PlanWeatherStrip extends ConsumerWidget {
   const PlanWeatherStrip({super.key});
@@ -110,6 +112,32 @@ class PlanWeatherStrip extends ConsumerWidget {
   }
 }
 
+RaceProfile _profileOf(RaceGoal goal) => RaceProfile(
+  sport: goal.primarySport,
+  distanceM: goal.distanceM,
+  elevationM: goal.elevationM,
+  targetSeconds: goal.targetFinishSeconds,
+);
+
+/// " · 4:59/km" or " · 25.0 km/h" for the goal.
+String _goalPace(RaceGoal goal) {
+  final profile = _profileOf(goal);
+  if (profile.isRide) {
+    final speed = profile.goalSpeedKmh;
+    return speed == null ? '' : ' · ${speed.toStringAsFixed(1)} km/h';
+  }
+  final pace = profile.goalPaceSecPerKm;
+  return pace == null ? '' : ' · ${formatPace(pace)}';
+}
+
+/// A note when the goal is clearly faster than the estimate, so the athlete
+/// knows it is a stretch, not a forecast.
+String _ambition(RaceGoal goal, int estimate) {
+  final ahead = _profileOf(goal).aheadOfPrediction(estimate);
+  if (ahead == null || ahead < 0.05) return '';
+  return ' · goal ${(ahead * 100).round()}% faster';
+}
+
 class RaceCountdownCard extends ConsumerWidget {
   const RaceCountdownCard({super.key});
   @override
@@ -169,12 +197,25 @@ class RaceCountdownCard extends ConsumerWidget {
                           color: Colors.white70,
                         ),
                       ),
-                      if (estimate != null)
+                      if (goal.targetFinishSeconds != null)
                         Text(
-                          'Est. ${RacePredictor.formatTime(estimate)}',
+                          'Goal ${formatTargetTime(goal.targetFinishSeconds!)}'
+                          '${_goalPace(goal)}',
                           style: const TextStyle(
                             fontSize: 12,
                             color: Colors.orange,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      if (estimate != null)
+                        Text(
+                          'Est. ${RacePredictor.formatTime(estimate)}'
+                          '${_ambition(goal, estimate)}',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: goal.targetFinishSeconds == null
+                                ? Colors.orange
+                                : Colors.white70,
                           ),
                         ),
                     ],
@@ -237,8 +278,9 @@ class _UpcomingState extends State<UpcomingWorkoutList> {
     final entries = groups.entries
         .take(widget.selectedDay == null ? visibleDays : groups.length)
         .toList();
-    final tomorrow = DateUtils.dateOnly(DateTime.now())
-        .add(const Duration(days: 1));
+    final tomorrow = DateUtils.dateOnly(
+      DateTime.now(),
+    ).add(const Duration(days: 1));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -269,7 +311,7 @@ class _UpcomingState extends State<UpcomingWorkoutList> {
           ),
           for (final s in e.value)
             if (s.session != null)
-              _SessionTile(session: s.session!)
+              _SessionTile(session: s.session!, skipReason: s.skipReason)
             else
               _ScheduledTile(workout: s.workout!),
         ],
@@ -288,13 +330,21 @@ class _UpcomingState extends State<UpcomingWorkoutList> {
 }
 
 class _SessionTile extends StatelessWidget {
-  const _SessionTile({required this.session});
+  const _SessionTile({required this.session, this.skipReason});
   final TrainingSession session;
+
+  /// Why the session was cancelled, shown on its tile.
+  final String? skipReason;
   @override
   Widget build(BuildContext context) {
     final s = session;
-    final color = completedActivityColor(s.sport);
-    final phaseColor = plannedActivityColor(s.phase);
+    final skipped = s.status == 'skipped';
+    // A cancelled session stays in the list, greyed and struck through, so the
+    // plan shows what was dropped and why.
+    final color = skipped ? Colors.white38 : completedActivityColor(s.sport);
+    final phaseColor = skipped
+        ? Colors.orangeAccent
+        : plannedActivityColor(s.phase);
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Material(
@@ -342,7 +392,7 @@ class _SessionTile extends StatelessWidget {
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: Text(
-                              s.phase.toUpperCase(),
+                              skipped ? 'SKIPPED' : s.phase.toUpperCase(),
                               style: TextStyle(
                                 fontSize: 9,
                                 color: phaseColor,
@@ -352,16 +402,22 @@ class _SessionTile extends StatelessWidget {
                           ),
                           Text(
                             s.title,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w700,
+                              color: skipped ? Colors.white54 : null,
+                              decoration: skipped
+                                  ? TextDecoration.lineThrough
+                                  : null,
                             ),
                           ),
                         ],
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        '${s.plannedDurationMin} min · TRIMP ${s.plannedTrimp} · Z${s.primaryZone}',
+                        skipped
+                            ? '${skipReason ?? 'Skipped'} · ${s.plannedDurationMin} min dropped'
+                            : '${s.plannedDurationMin} min · TRIMP ${s.plannedTrimp} · Z${s.primaryZone}',
                         style: const TextStyle(
                           fontSize: 11,
                           color: Colors.white70,

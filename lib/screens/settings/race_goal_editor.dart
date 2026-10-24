@@ -3,9 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/planner_providers.dart';
 import '../../widgets/app_widgets.dart';
 import '../../services/race_goal_service.dart';
+import '../../db/database.dart' show RaceGoal;
+import '../../models/race_profile.dart';
 import '../../utils/decimal.dart';
+import '../../utils/target_time.dart';
 
-Future<void> showRaceGoalEditor(BuildContext context) =>
+/// Opens the race goal sheet: a new goal, or [goal] to change.
+Future<void> showRaceGoalEditor(BuildContext context, {RaceGoal? goal}) =>
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -14,14 +18,17 @@ Future<void> showRaceGoalEditor(BuildContext context) =>
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
       ),
-      builder: (_) => const FractionallySizedBox(
-        heightFactor: .72,
-        child: RaceGoalEditor(),
+      builder: (_) => FractionallySizedBox(
+        heightFactor: .8,
+        child: RaceGoalEditor(goal: goal),
       ),
     );
 
 class RaceGoalEditor extends ConsumerStatefulWidget {
-  const RaceGoalEditor({super.key});
+  const RaceGoalEditor({super.key, this.goal});
+
+  /// The goal to change; null adds a new one.
+  final RaceGoal? goal;
   @override
   ConsumerState<RaceGoalEditor> createState() => _RaceEditorState();
 }
@@ -29,18 +36,65 @@ class RaceGoalEditor extends ConsumerStatefulWidget {
 class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
   final name = TextEditingController(),
       km = TextEditingController(),
-      elevation = TextEditingController();
+      elevation = TextEditingController(),
+      target = TextEditingController();
   final form = GlobalKey<FormState>();
   DateTime? date;
   String sport = 'running', priority = 'a';
   String? dateError;
   bool saving = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final g = widget.goal;
+    if (g == null) return;
+    name.text = g.name;
+    sport = g.primarySport;
+    priority = g.priority;
+    date = g.raceDate;
+    km.text = _km(g.distanceM / 1000);
+    if (g.elevationM != null) elevation.text = _km(g.elevationM!);
+    if (g.targetFinishSeconds != null) {
+      target.text = formatTargetTime(g.targetFinishSeconds!);
+    }
+  }
+
   @override
   void dispose() {
     name.dispose();
     km.dispose();
     elevation.dispose();
+    target.dispose();
     super.dispose();
+  }
+
+  /// What the target time means as a pace or speed, shown above the field.
+  String _paceHint() {
+    final distance = parseDecimal(km.text);
+    final seconds = parseTargetTime(
+      target.text,
+      distanceKm: distance,
+      sport: sport,
+    );
+    if (distance == null || seconds == null) {
+      return 'Optional. Plans and pace guides use it; the climbing above shapes the training too.';
+    }
+    final profile = RaceProfile(
+      sport: sport,
+      distanceM: distance * 1000,
+      elevationM: parseDecimal(elevation.text),
+      targetSeconds: seconds,
+    );
+    if (profile.isRide) {
+      return '${profile.goalSpeedKmh!.toStringAsFixed(1)} km/h on average';
+    }
+    final pace = formatPace(profile.goalPaceSecPerKm!);
+    final flat = profile.flatEquivalentPaceSecPerKm!;
+    return profile.climbPerKm == null ||
+            (profile.goalPaceSecPerKm! - flat).abs() < 3
+        ? '$pace on average'
+        : '$pace on average, ${formatPace(flat)} on the flat';
   }
 
   @override
@@ -112,8 +166,8 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                   MediaQuery.viewInsetsOf(context).bottom + 24,
                 ),
                 children: [
-                  const Text(
-                    'Add Race Goal',
+                  Text(
+                    widget.goal == null ? 'Add Race Goal' : 'Edit Race Goal',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
                   ),
                   label('RACE NAME'),
@@ -239,6 +293,35 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                     ),
                   ),
                   number(elevation, 'e.g. 2400 (optional)', optional: true),
+                  label('TARGET TIME'),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Text(
+                      _paceHint(),
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.white70,
+                      ),
+                    ),
+                  ),
+                  TextFormField(
+                    controller: target,
+                    keyboardType: TextInputType.text,
+                    onChanged: (_) => setState(() {}),
+                    decoration: decoration('e.g. 3:30:00 (optional)'),
+                    style: const TextStyle(fontSize: 14),
+                    validator: (v) {
+                      if (v == null || v.trim().isEmpty) return null;
+                      return parseTargetTime(
+                                v,
+                                distanceKm: parseDecimal(km.text),
+                                sport: sport,
+                              ) ==
+                              null
+                          ? 'Use h:mm or h:mm:ss, a time you could really run'
+                          : null;
+                    },
+                  ),
                   label('RACE DATE'),
                   OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
@@ -260,7 +343,9 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                               context: context,
                               initialDate:
                                   date ?? now.add(const Duration(days: 90)),
-                              firstDate: now,
+                              firstDate: date != null && date!.isBefore(now)
+                                  ? date!
+                                  : now,
                               lastDate: DateTime(
                                 now.year + 10,
                                 now.month,
@@ -338,18 +423,40 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                             }
                             setState(() => saving = true);
                             await runUiAction(context, () async {
-                              await ref
-                                  .read(raceGoalServiceProvider)
-                                  .create(
-                                    name: name.text.trim(),
-                                    primarySport: sport,
-                                    distanceM: distanceKm * 1000,
-                                    elevationM: elevation.text.trim().isEmpty
-                                        ? null
-                                        : parseDecimal(elevation.text),
-                                    raceDate: date!,
-                                    priority: priority,
-                                  );
+                              final service = ref.read(raceGoalServiceProvider);
+                              final seconds = target.text.trim().isEmpty
+                                  ? null
+                                  : parseTargetTime(
+                                      target.text,
+                                      distanceKm: distanceKm,
+                                      sport: sport,
+                                    );
+                              final climb = elevation.text.trim().isEmpty
+                                  ? null
+                                  : parseDecimal(elevation.text);
+                              final existing = widget.goal;
+                              if (existing == null) {
+                                await service.create(
+                                  name: name.text.trim(),
+                                  primarySport: sport,
+                                  distanceM: distanceKm * 1000,
+                                  elevationM: climb,
+                                  targetFinishSeconds: seconds,
+                                  raceDate: date!,
+                                  priority: priority,
+                                );
+                              } else {
+                                await service.update(
+                                  existing.id,
+                                  name: name.text.trim(),
+                                  primarySport: sport,
+                                  distanceM: distanceKm * 1000,
+                                  elevationM: climb,
+                                  targetFinishSeconds: seconds,
+                                  raceDate: date!,
+                                  priority: priority,
+                                );
+                              }
                               ref.invalidate(upcomingRaceGoalsProvider);
                               ref.invalidate(primaryRaceGoalProvider);
                               if (context.mounted) Navigator.pop(context);
@@ -357,7 +464,11 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                             if (mounted) setState(() => saving = false);
                           },
                     child: Text(
-                      saving ? 'Saving…' : 'Add Goal',
+                      saving
+                          ? 'Saving…'
+                          : widget.goal == null
+                          ? 'Add Goal'
+                          : 'Save Goal',
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,

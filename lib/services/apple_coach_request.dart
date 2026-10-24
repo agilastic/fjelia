@@ -150,6 +150,8 @@ class AppleCoachRequest {
       '[Scores:',
       '[TrainingMonitor:',
       '[TodayWorkout:',
+      '[Cancelled:',
+      '[RaceGoal:',
       '[LactateThresholds:',
       '[Daily:Latest:',
       '[Weather:',

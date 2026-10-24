@@ -76,6 +76,15 @@ import 'package:fjelia/widgets/grip_strength_sheet.dart';
 import 'package:fjelia/widgets/metric_detail_sheet.dart';
 import 'package:fjelia/theme/app_theme.dart';
 
+/// Scrolls [target] clear of the bottom edge and taps it. A plain
+/// `ensureVisible` leaves a button at the very edge of a short test screen.
+Future<void> tapLow(WidgetTester tester, Finder target) async {
+  await tester.ensureVisible(target);
+  await tester.drag(find.byType(Scrollable).first, const Offset(0, -150));
+  await tester.pumpAndSettle();
+  await tester.tap(target);
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   late AppDatabase db;
@@ -1096,7 +1105,7 @@ void main() {
             ),
           );
       await render(tester, const PlanScreen(), 'plan-calendar');
-      expect(find.text('○ Planned   ● Completed'), findsOneWidget);
+      expect(find.text('○ Planned   ● Completed   ✕ Skipped'), findsOneWidget);
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox());
       await tester.pump(Duration.zero);
@@ -1761,8 +1770,18 @@ void main() {
       'Travel',
     );
     expect(garmin.removedSchedules, ['schedule-1']);
+    // The sheet says what happened and why.
+    await tester.pump(const Duration(seconds: 2));
+    await tester.pumpAndSettle();
+    await tester.drag(find.byType(Scrollable).first, const Offset(0, 2000));
+    await tester.pumpAndSettle();
+    expect(find.text('SKIPPED · TRAVEL'), findsOneWidget);
     // The skip can be undone.
-    await tester.ensureVisible(find.text('Restore workout'));
+    await tester.scrollUntilVisible(
+      find.text('Restore workout'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
     await tester.drag(find.byType(Scrollable).first, const Offset(0, -200));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Restore workout'));
@@ -1787,8 +1806,7 @@ void main() {
     await tester.enterText(find.byType(TextFormField).at(1), '80.5');
     await tester.tap(find.text('B'));
     await tester.enterText(find.byType(TextFormField).at(2), '2400');
-    await tester.ensureVisible(find.text('Add Goal'));
-    await tester.tap(find.text('Add Goal'));
+    await tapLow(tester, find.text('Add Goal'));
     await tester.pumpAndSettle();
     expect(find.text('Select a race date'), findsOneWidget);
     expect(await db.select(db.raceGoals).get(), isEmpty);
@@ -1797,8 +1815,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('OK'));
     await tester.pumpAndSettle();
-    await tester.ensureVisible(find.text('Add Goal'));
-    await tester.tap(find.text('Add Goal'));
+    await tapLow(tester, find.text('Add Goal'));
     await tester.pumpAndSettle();
     final goal = (await db.select(db.raceGoals).get()).single;
     expect(goal.name, 'Island Gravel');
@@ -1807,6 +1824,80 @@ void main() {
     expect(goal.distanceM, 80500);
     expect(goal.elevationM, 2400);
     expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(Duration.zero);
+    await tester.binding.setSurfaceSize(null);
+  });
+  testWidgets('a race goal saves its target time and shows the pace', (
+    tester,
+  ) async {
+    await render(tester, const RaceGoalEditor(), 'race-goal-target');
+    await tester.enterText(find.byType(TextFormField).at(0), 'Hannover');
+    await tester.enterText(find.byType(TextFormField).at(1), '42,2');
+    await tester.enterText(find.byType(TextFormField).at(2), '100');
+    // A time nobody could run is refused.
+    await tester.enterText(find.byType(TextFormField).at(3), '0:40:00');
+    await tester.ensureVisible(find.text('Select date'));
+    await tester.tap(find.text('Select date'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('OK'));
+    await tester.pumpAndSettle();
+    await tapLow(tester, find.text('Add Goal'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('a time you could really run'), findsOneWidget);
+    expect(await db.select(db.raceGoals).get(), isEmpty);
+    // A real one saves, and the pace is shown while typing.
+    await tester.enterText(find.byType(TextFormField).at(3), '3:30');
+    await tester.pumpAndSettle();
+    expect(find.textContaining('4:59/km on average'), findsOneWidget);
+    await tester.tap(find.text('Add Goal'));
+    await tester.pumpAndSettle();
+    final goal = (await db.select(db.raceGoals).get()).single;
+    expect(goal.targetFinishSeconds, 12600);
+    expect(goal.elevationM, 100);
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(Duration.zero);
+    await tester.binding.setSurfaceSize(null);
+  });
+  testWidgets('an existing goal is edited, its time set and cleared', (
+    tester,
+  ) async {
+    await db
+        .into(db.raceGoals)
+        .insert(
+          RaceGoalsCompanion.insert(
+            id: 'g',
+            athleteId: 'self',
+            name: 'Hannover',
+            primarySport: 'running',
+            distanceM: 42200,
+            raceDate: DateTime.now().add(const Duration(days: 120)),
+            priority: 'a',
+            source: 'manual',
+            createdAt: DateTime.now(),
+          ),
+        );
+    final goal = (await db.select(db.raceGoals).get()).single;
+    await render(tester, RaceGoalEditor(goal: goal), 'race-goal-edit');
+    expect(find.text('Edit Race Goal'), findsOneWidget);
+    expect(find.text('Hannover'), findsOneWidget);
+    await tester.enterText(find.byType(TextFormField).at(2), '2400');
+    await tester.enterText(find.byType(TextFormField).at(3), '3h25');
+    await tapLow(tester, find.text('Save Goal'));
+    await tester.pumpAndSettle();
+    var saved = (await db.select(db.raceGoals).get()).single;
+    expect(saved.targetFinishSeconds, 12300);
+    expect(saved.elevationM, 2400);
+    expect(saved.id, 'g');
+    // The same sheet again: the time is there, and can be taken out.
+    await tester.pumpWidget(const SizedBox());
+    await render(tester, RaceGoalEditor(goal: saved), 'race-goal-edit-2');
+    expect(find.text('3:25:00'), findsOneWidget);
+    await tester.enterText(find.byType(TextFormField).at(3), '');
+    await tapLow(tester, find.text('Save Goal'));
+    await tester.pumpAndSettle();
+    saved = (await db.select(db.raceGoals).get()).single;
+    expect(saved.targetFinishSeconds, isNull);
     await tester.pumpWidget(const SizedBox());
     await tester.pump(Duration.zero);
     await tester.binding.setSurfaceSize(null);
@@ -1826,8 +1917,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('OK'));
     await tester.pumpAndSettle();
-    await tester.ensureVisible(find.text('Add Goal'));
-    await tester.tap(find.text('Add Goal'));
+    await tapLow(tester, find.text('Add Goal'));
     await tester.pumpAndSettle();
     expect(find.text('Distance of 422 km?'), findsOneWidget);
     expect(await db.select(db.raceGoals).get(), isEmpty);

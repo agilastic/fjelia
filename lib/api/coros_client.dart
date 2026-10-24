@@ -5,6 +5,8 @@ import 'package:http/http.dart' as http;
 
 import '../utils/log.dart';
 
+import 'coros_workout.dart';
+
 /// Thrown when a COROS request fails.
 class CorosException implements Exception {
   CorosException(this.message);
@@ -229,6 +231,43 @@ class CorosClient {
   /// A stale token throws [CorosAuthException]; a non-`0000` (non-auth) answer
   /// stops after the rows fetched so far and returns normally; a network
   /// failure propagates.
+  /// Puts [workout] on the Training Hub calendar for [day].
+  ///
+  /// The Training Hub's interface is not published; this follows what its web
+  /// page sends. The day is written compactly (`20261027`) first and, if that
+  /// is refused, with dashes (`2026-10-27`). Throws [CorosException] with
+  /// COROS's own message when both are refused.
+  Future<void> uploadWorkout(CorosWorkout workout, DateTime day) async {
+    final a = _auth ?? (throw CorosException('Not signed in to COROS.'));
+    final base = _base(a.region);
+    final d = day.toLocal();
+    String two(int v) => v.toString().padLeft(2, '0');
+    final formats = [
+      '${d.year}${two(d.month)}${two(d.day)}',
+      '${d.year}-${two(d.month)}-${two(d.day)}',
+    ];
+    CorosException? last;
+    for (final happenDay in formats) {
+      final response = await _http
+          .post(
+            Uri.parse('$base/training/schedule/update'),
+            headers: _headers(),
+            body: jsonEncode(workout.payload(happenDay)),
+          )
+          .timeout(_timeout);
+      final json =
+          jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+      if (_isAuthError(json)) throw CorosAuthException();
+      if (const {'0000', '1000'}.contains(json['result'])) return;
+      last = CorosException(
+        'COROS did not accept the workout (${json['result']}): '
+        '${json['message'] ?? 'no message'}',
+      );
+      log('[Coros] workout upload refused with day $happenDay: ${json['result']}');
+    }
+    throw last!;
+  }
+
   Future<void> activities({
     DateTime? from,
     DateTime? to,

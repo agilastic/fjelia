@@ -29,6 +29,54 @@ void main() {
     });
   });
 
+  group('update', () {
+    late AppDatabase db;
+    setUp(() => db = AppDatabase(NativeDatabase.memory()));
+    tearDown(() => db.close());
+
+    test(
+      'a goal gets a target time and elevation, and can lose them again',
+      () async {
+        final service = RaceGoalService(db);
+        await service.create(
+          name: 'Hannover',
+          primarySport: 'running',
+          distanceM: 42195,
+          raceDate: DateTime(2027, 4, 10),
+          priority: 'a',
+        );
+        final id = (await db.select(db.raceGoals).getSingle()).id;
+        await service.update(
+          id,
+          name: 'Hannover Marathon',
+          primarySport: 'running',
+          distanceM: 42195,
+          raceDate: DateTime(2027, 4, 11),
+          priority: 'a',
+          targetFinishSeconds: 12600,
+          elevationM: 100,
+        );
+        var goal = await db.select(db.raceGoals).getSingle();
+        expect(goal.name, 'Hannover Marathon');
+        expect(goal.targetFinishSeconds, 12600);
+        expect(goal.elevationM, 100);
+        expect(goal.raceDate, DateTime(2027, 4, 11));
+        expect(goal.updatedAt, isNotNull);
+        await service.update(
+          id,
+          name: 'Hannover Marathon',
+          primarySport: 'running',
+          distanceM: 42195,
+          raceDate: DateTime(2027, 4, 11),
+          priority: 'a',
+        );
+        goal = await db.select(db.raceGoals).getSingle();
+        expect(goal.targetFinishSeconds, isNull);
+        expect(goal.elevationM, isNull);
+      },
+    );
+  });
+
   group('repairImplausibleDistances', () {
     late AppDatabase db;
     setUp(() => db = AppDatabase(NativeDatabase.memory()));

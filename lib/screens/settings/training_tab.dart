@@ -14,6 +14,7 @@ import '../../providers/day_data_provider.dart';
 import '../../providers/heat_acclimation_provider.dart';
 import '../../providers/workout_generation_provider.dart';
 import '../../widgets/app_widgets.dart';
+import '../../utils/target_time.dart';
 import 'race_goal_editor.dart';
 
 class TrainingTab extends ConsumerWidget {
@@ -128,9 +129,10 @@ class TrainingTab extends ConsumerWidget {
             Wrap(
               spacing: 5,
               children: [
-                for (final day in p.weekStartsOnMonday
-                    ? const [1, 2, 3, 4, 5, 6, 7]
-                    : const [7, 1, 2, 3, 4, 5, 6])
+                for (final day
+                    in p.weekStartsOnMonday
+                        ? const [1, 2, 3, 4, 5, 6, 7]
+                        : const [7, 1, 2, 3, 4, 5, 6])
                   ActionChip(
                     backgroundColor:
                         (p.restDays.contains(day)
@@ -196,6 +198,41 @@ class TrainingTab extends ConsumerWidget {
                     .read(userProfileProvider.notifier)
                     .save(p.copyWith(maxSessionsPerDay: int.parse(v))),
               ),
+            ),
+            const SectionLabel('Targets in workouts', color: Colors.orange),
+            SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              activeThumbColor: Colors.orange,
+              title: const Text(
+                'Power targets on the bike',
+                style: TextStyle(fontSize: 14),
+              ),
+              subtitle: Text(
+                p.bikePowerTargets
+                    ? 'Cycling workouts show watts from your FTP, with heart rate as a guide.'
+                    : 'Heart rate is the target for running and cycling. Turn this on only if your bike has a power meter.',
+                style: const TextStyle(fontSize: 11, color: muted),
+              ),
+              value: p.bikePowerTargets,
+              onChanged: (v) => ref
+                  .read(userProfileProvider.notifier)
+                  .save(p.copyWith(bikePowerTargets: v)),
+            ),
+            SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              activeThumbColor: Colors.orange,
+              title: const Text(
+                'Send workouts to COROS (experimental)',
+                style: TextStyle(fontSize: 14),
+              ),
+              subtitle: const Text(
+                'Uses the COROS Training Hub\'s unofficial web interface with your COROS login. It is not endorsed by COROS and can stop working. Without it the workout is shared as text.',
+                style: TextStyle(fontSize: 11, color: muted),
+              ),
+              value: p.corosWorkoutPush,
+              onChanged: (v) => ref
+                  .read(userProfileProvider.notifier)
+                  .save(p.copyWith(corosWorkoutPush: v)),
             ),
             const SectionLabel('Hours available / week', color: Colors.orange),
             Text(
@@ -448,8 +485,11 @@ class RaceGoalsCard extends ConsumerWidget {
                           ListTile(
                             contentPadding: EdgeInsets.zero,
                             title: Text(g.name),
+                            onTap: () => showRaceGoalEditor(context, goal: g),
                             subtitle: Text(
-                              '${dayText(g.raceDate)} · ${(g.distanceM / 1000).toStringAsFixed(1)} km',
+                              '${dayText(g.raceDate)} · ${(g.distanceM / 1000).toStringAsFixed(1)} km'
+                              '${g.elevationM == null ? '' : ' · ↑${g.elevationM!.round()} m'}'
+                              '${g.targetFinishSeconds == null ? '' : ' · goal ${formatTargetTime(g.targetFinishSeconds!)}'}',
                             ),
                             leading: PopupMenuButton<String>(
                               initialValue: g.priority,

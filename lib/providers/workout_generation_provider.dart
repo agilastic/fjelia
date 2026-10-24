@@ -49,6 +49,8 @@ class WorkoutGenerationNotifier extends StateNotifier<AsyncValue<int?>> {
             raceDate: goal.raceDate,
             sport: goal.primarySport,
             raceDistanceM: goal.distanceM,
+            raceElevationM: goal.elevationM,
+            targetFinishSeconds: goal.targetFinishSeconds,
             daysPerWeek: profile.trainingDaysPerWeek,
             hoursPerWeek: profile.hoursPerWeek,
             restDays: profile.restDays,

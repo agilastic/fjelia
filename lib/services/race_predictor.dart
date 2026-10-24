@@ -8,7 +8,8 @@ abstract class RacePredictor {
   /// VO2max trend when Garmin has history, otherwise 1 %/week of detraining
   /// (max 30 %).
   static Future<({double distM, String label, int timeSec})?> bestRunAnchor(
-      AppDatabase db) async {
+    AppDatabase db,
+  ) async {
     final runs = (await db.getRunningActivitiesForPrediction())
         .where((a) => (a.distanceMeters ?? 0) <= 10000.0)
         .toList();
@@ -22,18 +23,20 @@ abstract class RacePredictor {
     final dist = best.distanceMeters!;
     final distLabel = '${(dist / 1000).toStringAsFixed(1)} km';
 
-    final wellness = (await db.getWellnessRange(1825))
-        .where((w) => (w.vo2max ?? 0) > 0)
-        .toList();
+    final wellness = (await db.getWellnessRange(
+      1825,
+    )).where((w) => (w.vo2max ?? 0) > 0).toList();
 
     double factor;
     String label;
     if (wellness.length >= 2) {
-      final then = wellness.reduce((a, b) =>
-          a.date.difference(best.startDate).abs() <=
-                  b.date.difference(best.startDate).abs()
-              ? a
-              : b);
+      final then = wellness.reduce(
+        (a, b) =>
+            a.date.difference(best.startDate).abs() <=
+                b.date.difference(best.startDate).abs()
+            ? a
+            : b,
+      );
       final now = wellness.last;
       factor = then.vo2max! / now.vo2max!;
       final pct = ((now.vo2max! / then.vo2max! - 1) * 100).round();
@@ -62,6 +65,16 @@ abstract class RacePredictor {
     return (5000 / metersPerMin * 60).round();
   }
 
+  /// How much longer a course with [elevationGainM] over [distM] runs than a
+  /// flat one: the course counts as that many times its distance.
+  static double hillFactor(double distM, double? elevationGainM) {
+    var grade = 0.0;
+    if (elevationGainM != null && elevationGainM > 0 && distM > 0) {
+      grade = (elevationGainM / distM * 100).clamp(0.0, 30.0);
+    }
+    return 1 + 0.033 * grade + 0.00185 * grade * grade;
+  }
+
   /// Riegel prediction with an uphill penalty for hilly courses.
   static int predict(
     int anchorSec,
@@ -69,13 +82,25 @@ abstract class RacePredictor {
     double targetDistM, {
     double? elevationGainM,
   }) {
-    var grade = 0.0;
-    if (elevationGainM != null && elevationGainM > 0) {
-      grade = (elevationGainM / targetDistM * 100).clamp(0.0, 30.0);
-    }
-    final hillFactor = 1 + 0.033 * grade + 0.00185 * grade * grade;
-    final effective = targetDistM * hillFactor;
+    final effective = targetDistM * hillFactor(targetDistM, elevationGainM);
     return (anchorSec * math.pow(effective / anchorDistM, 1.06)).round();
+  }
+
+  /// What recent running predicts for [goal]; null for other sports or
+  /// without a usable run.
+  static Future<int?> estimateFinish(AppDatabase db, RaceGoal goal) async {
+    if (!{'running', 'trail_running'}.contains(goal.primarySport) ||
+        goal.distanceM <= 0) {
+      return null;
+    }
+    final anchor = await bestRunAnchor(db);
+    if (anchor == null || anchor.distM <= 0) return null;
+    return predict(
+      anchor.timeSec,
+      anchor.distM,
+      goal.distanceM,
+      elevationGainM: goal.elevationM,
+    );
   }
 
   static String formatTime(int seconds) {

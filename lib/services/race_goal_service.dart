@@ -112,6 +112,31 @@ class RaceGoalService {
         );
   }
 
+  /// Changes a goal. A null target time or elevation clears it.
+  Future<void> update(
+    String id, {
+    required String name,
+    required String primarySport,
+    required double distanceM,
+    required DateTime raceDate,
+    required String priority,
+    int? targetFinishSeconds,
+    double? elevationM,
+  }) async {
+    await (_db.update(_db.raceGoals)..where((t) => t.id.equals(id))).write(
+      RaceGoalsCompanion(
+        name: Value(name),
+        primarySport: Value(primarySport),
+        distanceM: Value(distanceM),
+        raceDate: Value(raceDate),
+        priority: Value(priority),
+        targetFinishSeconds: Value(targetFinishSeconds),
+        elevationM: Value(elevationM),
+        updatedAt: Value(DateTime.now()),
+      ),
+    );
+  }
+
   Future<void> updatePriority(String id, String priority) async {
     await (_db.update(_db.raceGoals)..where((t) => t.id.equals(id))).write(
       RaceGoalsCompanion(

@@ -50,6 +50,7 @@ class CoachContextCard {
   factory CoachContextCard.planned(
     TrainingSession s, {
     String Function(int zone)? zoneTarget,
+    String? skipReason,
   }) {
     final status = switch (s.status) {
       'completed' => CoachCardStatus.completed,
@@ -87,6 +88,8 @@ class CoachContextCard {
           'Duration:${s.plannedDurationMin}min',
           'TRIMP:${s.plannedTrimp}',
           'Zone:Z${s.primaryZone}',
+          if (status == CoachCardStatus.skipped && skipReason != null)
+            'SkipReason:${skipReason.replaceAll(RegExp(r'[,:\[\]]'), ' ')}',
           if (structure.isNotEmpty) 'Structure:${structure.join('>')}',
         ],
       ),

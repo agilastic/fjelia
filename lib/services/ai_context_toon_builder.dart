@@ -1,10 +1,17 @@
 import 'dart:convert';
 import 'dart:math' as math;
 
+import 'package:drift/drift.dart' hide isNull, isNotNull;
+
 import '../db/database.dart';
 import '../providers/training_load_provider.dart';
 import 'bio_age_service.dart';
 import 'ai_data_status.dart';
+import 'post_workout_scorer.dart' show noActivityReason;
+import 'race_predictor.dart';
+import 'race_goal_service.dart';
+import '../utils/target_time.dart';
+import '../models/race_profile.dart';
 import 'open_meteo_client.dart';
 
 /// Inputs from the training monitor.
@@ -73,6 +80,7 @@ class AiContextToonBuilder {
     final heat = await _db.getHeatStateForDate(today);
     final readiness = await _db.getTodayReadiness();
     final sessions = await _db.getUpcomingTrainingSessions();
+    final cancelled = await _cancelledSessions(today);
     hrv.sort((a, b) => b.date.compareTo(a.date));
     sleep.sort((a, b) => b.date.compareTo(a.date));
     wellness.sort((a, b) => b.date.compareTo(a.date));
@@ -282,7 +290,19 @@ class AiContextToonBuilder {
     final todaySessions = sessions
         .where((s) => _day(s.sessionDate) == today)
         .toList();
-    if (todayWorkouts.isEmpty && todaySessions.isEmpty) {
+    final cancelledToday = cancelled
+        .where((c) => _day(c.session.sessionDate) == today)
+        .toList();
+    if (todayWorkouts.isEmpty &&
+        todaySessions.isEmpty &&
+        cancelledToday.isNotEmpty) {
+      // Not a plain rest day: a planned session was dropped, and why matters.
+      lines.add(
+        '[TodayWorkout:Status:cancelled,Reason:'
+        '${_clean(cancelledToday.first.reason)},'
+        'By:${cancelledToday.first.by},GarminScheduled:0,PlanSessions:0]',
+      );
+    } else if (todayWorkouts.isEmpty && todaySessions.isEmpty) {
       lines.add(
         '[TodayWorkout:Status:rest_day,GarminScheduled:0,PlanSessions:0]',
       );
@@ -301,6 +321,43 @@ class AiContextToonBuilder {
         lines.add('- [${_session(s)}]');
       }
     }
+    // Sessions dropped in the last two weeks and the next two, with the reason
+    // given. Illness and injury are health facts the coach has to respect.
+    if (cancelled.isNotEmpty) {
+      final reasons = {for (final c in cancelled) _clean(c.reason)}.join('/');
+      lines.add(
+        '[Cancelled:Sessions:${cancelled.length},Window:±14d,Reasons:$reasons]',
+      );
+      for (final c in cancelled) {
+        lines.add(
+          '- [D:${_date(c.session.sessionDate)},Src:plan,'
+          'Sport:${_clean(c.session.sport)},Type:${_clean(c.session.sessionType)},'
+          'Planned:${c.session.plannedDurationMin}m,'
+          'Reason:${_clean(c.reason)},By:${c.by}]',
+        );
+      }
+    }
+    final goal = await RaceGoalService(_db).getPrimaryGoal();
+    if (goal != null) {
+      final profile = RaceProfile(
+        sport: goal.primarySport,
+        distanceM: goal.distanceM,
+        elevationM: goal.elevationM,
+        targetSeconds: goal.targetFinishSeconds,
+      );
+      final estimate = await RacePredictor.estimateFinish(_db, goal);
+      final flat = profile.flatEquivalentPaceSecPerKm;
+      lines.add(
+        '[RaceGoal:Sport:${_clean(goal.primarySport)},'
+        'DistKm:${_num(profile.distanceKm)},ElevM:${_num(goal.elevationM)},'
+        'ClimbMPerKm:${_num(profile.climbPerKm)},Terrain:${profile.terrain.name},'
+        'Date:${_date(goal.raceDate)},'
+        'Target:${goal.targetFinishSeconds == null ? 'none' : formatTargetTime(goal.targetFinishSeconds!)},'
+        'PaceSecKm:${_num(profile.goalPaceSecPerKm)},FlatPaceSecKm:${_num(flat)},'
+        'Estimate:${estimate == null ? 'na' : formatTargetTime(estimate)},'
+        'GoalAheadOfEstimate%:${estimate == null || profile.aheadOfPrediction(estimate) == null ? 'na' : (profile.aheadOfPrediction(estimate)! * 100).round()}]',
+      );
+    }
     lines.add('[GarminScheduled:Upcoming:${workouts.length}]');
     for (final w in workouts) {
       lines.add('- [D:${_date(w.scheduledDate)},${_workout(w)}]');
@@ -317,7 +374,16 @@ class AiContextToonBuilder {
       final prefix = '- [D:${_date(day)},Weekday:${_weekday(day)}';
       final ws = workouts.where((w) => _day(w.scheduledDate) == day);
       final ss = sessions.where((s) => _day(s.sessionDate) == day);
-      if (ws.isEmpty && ss.isEmpty) lines.add('$prefix,Status:rest]');
+      final dropped = cancelled.where(
+        (c) => _day(c.session.sessionDate) == day,
+      );
+      if (ws.isEmpty && ss.isEmpty) {
+        lines.add(
+          dropped.isEmpty
+              ? '$prefix,Status:rest]'
+              : '$prefix,Status:cancelled,Reason:${_clean(dropped.first.reason)}]',
+        );
+      }
       for (final w in ws) {
         lines.add('$prefix,${_workout(w)}]');
       }
@@ -326,6 +392,43 @@ class AiContextToonBuilder {
       }
     }
     return lines.join('\n');
+  }
+
+  /// Planned sessions the athlete or the readiness check dropped, two weeks
+  /// either side of [today], each with its reason. A past session nothing was
+  /// recorded for is not a decision and is left out.
+  Future<List<({TrainingSession session, String reason, String by})>>
+  _cancelledSessions(DateTime today) async {
+    final from = DateTime(today.year, today.month, today.day - 14);
+    final to = DateTime(today.year, today.month, today.day + 15);
+    final skipped =
+        await (_db.select(_db.trainingSessions)
+              ..where(
+                (t) =>
+                    t.athleteId.equals('self') &
+                    t.status.equals('skipped') &
+                    t.sessionDate.isBiggerOrEqualValue(from) &
+                    t.sessionDate.isSmallerThanValue(to),
+              )
+              ..orderBy([(t) => OrderingTerm.asc(t.sessionDate)]))
+            .get();
+    if (skipped.isEmpty) return const [];
+    final actuals = await (_db.select(
+      _db.sessionActuals,
+    )..where((t) => t.sessionId.isIn(skipped.map((s) => s.id)))).get();
+    final reasons = {
+      for (final a in actuals)
+        if (a.skipReason != null) a.sessionId: a.skipReason!,
+    };
+    return [
+      for (final s in skipped)
+        if (reasons[s.id] != null && reasons[s.id] != noActivityReason)
+          (
+            session: s,
+            reason: reasons[s.id]!,
+            by: reasons[s.id]!.contains('readiness') ? 'readiness' : 'athlete',
+          ),
+    ];
   }
 
   static String _workout(ScheduledWorkoutRecord w) =>
