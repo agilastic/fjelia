@@ -142,10 +142,22 @@
     video.muted = true;
     video.defaultMuted = true;
     video.playsInline = true;
-    return { video: video, visible: false };
+    var state = { video: video, visible: false, failed: false };
+    function showFallback() {
+      state.failed = true;
+      video.pause();
+      video.hidden = true;
+      var fallback = video.parentElement.querySelector('.video-fallback');
+      if (fallback) fallback.hidden = false;
+    }
+    state.showFallback = showFallback;
+    video.addEventListener('error', showFallback);
+    var sources = video.querySelectorAll('source');
+    if (sources.length) sources[sources.length - 1].addEventListener('error', showFallback);
+    return state;
   });
   function sync(state) {
-    var allowed = state.visible && !document.hidden && !paused &&
+    var allowed = !state.failed && state.visible && !document.hidden && !paused &&
       !document.body.classList.contains('dialog-open');
     state.video.autoplay = allowed;
     if (!allowed) { state.video.pause(); return; }
@@ -155,7 +167,12 @@
       state.video.load();
     }
     var result = state.video.play();
-    if (result && result.catch) result.catch(function (error) { state.video.dataset.playbackError = error.name; });
+    if (result && result.catch) result.catch(function (error) {
+      state.video.dataset.playbackError = error.name;
+      // A browser may block autoplay. Keep the poster and offer native play.
+      if (error.name === 'NotAllowedError') state.video.controls = true;
+      if (error.name === 'NotSupportedError') state.showFallback();
+    });
   }
   var observer = 'IntersectionObserver' in window ? new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
@@ -165,8 +182,10 @@
     });
   }, { threshold: .15 }) : null;
   states.forEach(function (state) {
+    var bounds = state.video.getBoundingClientRect();
+    state.visible = bounds.bottom > 0 && bounds.top < window.innerHeight;
+    sync(state);
     if (observer) observer.observe(state.video);
-    else { state.visible = true; sync(state); }
   });
   document.addEventListener('fjelia-preview-pause', function (event) {
     paused = event.detail.paused;

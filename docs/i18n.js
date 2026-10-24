@@ -221,7 +221,14 @@ var copy = {
     "main": "Main",
     "footer": "Footer",
     "highlights": "Highlights",
-    "sources": "Supported data sources"
+    "sources": "Supported data sources",
+    "hero_ai_lead": "Turn your training and recovery data into a conversation. Explore your trends, understand each workout and ask your AI coach what comes next.",
+    "hero_ai_caption": "Your workouts. Your trends. Your AI coach.",
+    "demo_lead": "Start with the AI coach above. Then explore three focused walkthroughs: daily health, sleep and training performance.",
+    "demo_0_title": "A coach that sees the workout",
+    "demo_0_desc": "Open a planned session, see its structure and ask whether to adjust it today. Continue with questions specific to that workout.",
+    "demo_1_title": "See the patterns behind the effort",
+    "demo_1_desc": "Explore heart rate during a session, then follow fitness, fatigue and form across your training."
   },
   "de": {
     "t000": "Zum Inhalt springen",
@@ -442,7 +449,14 @@ var copy = {
     "main": "Hauptnavigation",
     "footer": "Fußnavigation",
     "highlights": "Vorteile",
-    "sources": "Unterstützte Datenquellen"
+    "sources": "Unterstützte Datenquellen",
+    "hero_ai_lead": "Sprich mit deinem AI-Coach über Training und Erholung. Entdecke deine Trends, verstehe jede Einheit und besprich deinen nächsten Schritt.",
+    "hero_ai_caption": "Deine Einheiten. Deine Trends. Dein AI-Coach.",
+    "demo_lead": "Erlebe oben den AI-Coach. Entdecke danach drei gezielte Einblicke: tägliche Gesundheit, Schlaf und Trainingsentwicklung.",
+    "demo_0_title": "Ein Coach mit deiner Einheit im Blick",
+    "demo_0_desc": "Öffne eine geplante Einheit, sieh ihren Aufbau und frage, ob du sie heute anpassen solltest. Stelle passende Anschlussfragen.",
+    "demo_1_title": "Erkenne Muster in deinem Training",
+    "demo_1_desc": "Entdecke den Pulsverlauf einer Einheit und verfolge Fitness, Ermüdung und Form über dein Training hinweg."
   },
   "es": {
     "t000": "Saltar al contenido",
@@ -663,7 +677,14 @@ var copy = {
     "main": "Navegación principal",
     "footer": "Navegación del pie",
     "highlights": "Ventajas",
-    "sources": "Fuentes compatibles"
+    "sources": "Fuentes compatibles",
+    "hero_ai_lead": "Habla de tus datos de entrenamiento y recuperación. Explora tus tendencias, comprende cada sesión y pregunta a tu entrenador de IA qué viene después.",
+    "hero_ai_caption": "Tus sesiones. Tus tendencias. Tu entrenador de IA.",
+    "demo_lead": "Descubre arriba el entrenador de IA. Después explora tres recorridos: salud diaria, sueño y rendimiento.",
+    "demo_0_title": "Un entrenador que conoce la sesión",
+    "demo_0_desc": "Abre una sesión planificada, consulta su estructura y pregunta si conviene adaptarla hoy. Continúa con preguntas sobre esa sesión.",
+    "demo_1_title": "Descubre patrones en tu entrenamiento",
+    "demo_1_desc": "Explora la frecuencia cardíaca de una sesión y sigue la condición física, la fatiga y la forma a lo largo del entrenamiento."
   },
   "fr": {
     "t000": "Aller au contenu",
@@ -884,7 +905,14 @@ var copy = {
     "main": "Navigation principale",
     "footer": "Navigation de pied de page",
     "highlights": "Points forts",
-    "sources": "Sources compatibles"
+    "sources": "Sources compatibles",
+    "hero_ai_lead": "Échangez sur vos données d’entraînement et de récupération. Explorez vos tendances, comprenez chaque séance et demandez à votre coach IA quelle est la prochaine étape.",
+    "hero_ai_caption": "Vos séances. Vos tendances. Votre coach IA.",
+    "demo_lead": "Découvrez le coach IA ci-dessus, puis trois visites ciblées : santé quotidienne, sommeil et performance.",
+    "demo_0_title": "Un coach qui connaît la séance",
+    "demo_0_desc": "Ouvrez une séance prévue, découvrez sa structure et demandez s’il faut l’adapter aujourd’hui. Poursuivez avec des questions sur cette séance.",
+    "demo_1_title": "Repérez les tendances de votre entraînement",
+    "demo_1_desc": "Explorez la fréquence cardiaque d’une séance, puis suivez la condition physique, la fatigue et la forme au fil de vos entraînements."
   },
   "it": {
     "t000": "Vai al contenuto",
@@ -1105,7 +1133,14 @@ var copy = {
     "main": "Navigazione principale",
     "footer": "Navigazione a piè di pagina",
     "highlights": "Vantaggi",
-    "sources": "Fonti supportate"
+    "sources": "Fonti supportate",
+    "hero_ai_lead": "Parla dei tuoi dati di allenamento e recupero. Esplora le tendenze, comprendi ogni sessione e chiedi al coach IA quale sarà il prossimo passo.",
+    "hero_ai_caption": "Le tue sessioni. Le tue tendenze. Il tuo coach IA.",
+    "demo_lead": "Scopri il coach IA qui sopra. Poi esplora tre percorsi: salute quotidiana, sonno e prestazioni.",
+    "demo_0_title": "Un coach che conosce la sessione",
+    "demo_0_desc": "Apri una sessione pianificata, guarda la struttura e chiedi se adattarla oggi. Continua con domande specifiche sulla sessione.",
+    "demo_1_title": "Scopri le tendenze del tuo allenamento",
+    "demo_1_desc": "Esplora la frequenza cardiaca di una sessione, poi segui fitness, fatica e forma nel corso degli allenamenti."
   }
 };
 var supported = ['en','de','es','fr','it'];
@@ -1150,9 +1185,9 @@ function apply(lang, remember) {
     link.querySelector('img').alt = description.textContent;
   });
   document.querySelectorAll('.sport img').forEach(function (img) { var label=img.closest('figure').querySelector('figcaption'); if(label) img.alt=label.textContent; });
-  document.querySelectorAll('.app-preview').forEach(function (video) { video.setAttribute('aria-label',video.closest('article').querySelector('h3').textContent); });
+  document.querySelectorAll('.app-preview').forEach(function (video) { var article = video.closest('article'); video.setAttribute('aria-label', article ? article.querySelector('h3').textContent : text('demo_0_title')); });
   document.querySelectorAll('nav[aria-label]').forEach(function (el) { el.setAttribute('aria-label', text(el.closest('footer') ? 'footer' : 'main')); });
-  document.querySelectorAll('.hero-phone img').forEach(function (el) { el.alt = plain(text(el.closest('.phone-plan') ? 't052' : el.closest('.phone-front') ? 't031' : 't039')); });
+  document.querySelectorAll('.hero-phone img').forEach(function (el) { el.alt = plain(text(el.closest('.phone-ai') ? 'demo_0_title' : el.closest('.phone-plan') ? 't052' : el.closest('.phone-front') ? 't031' : 't039')); });
   var close = document.querySelector('.dialog-close');
   if (close) close.setAttribute('aria-label',text('close'));
   var motion = document.querySelector('.gallery-motion');
