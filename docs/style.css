@@ -524,41 +524,19 @@ section[id], [id].privacy-card, [id].sports-compact { scroll-margin-top: 90px; }
 .point-mark { color: var(--accent); font-size: .72rem; font-weight: 700; padding-top: .2rem; }
 .plan-points h3 { font-size: 1rem; }
 .plan-points p { color: var(--muted); font-size: .95rem; margin: .3rem 0 0; }
-.season-example { width: min(100%, 326px); margin: 0 auto; }
-.season-phone { position: relative; display: flex; flex-direction: column; aspect-ratio: 1206 / 2622; border: 1px solid #79cbd48a; border-radius: 36px; padding: 36px 16px 26px; background: linear-gradient(160deg, #13201f, #101213 38%); box-shadow: 0 30px 60px #0005, 0 0 60px #2bd9a80a; }
-.season-phone::before { content: ''; position: absolute; top: 11px; left: 36%; width: 28%; height: 10px; border-radius: 20px; background: #030404; }
-.season-phone::after { content: ''; position: absolute; bottom: 10px; left: 36%; width: 28%; height: 3px; border-radius: 4px; background: #8e969a; }
-.example-topline { display: flex; justify-content: space-between; align-items: center; gap: .7rem; color: #8faaa5; font-size: .6rem; letter-spacing: .03em; }
-.example-topline > span:first-child { color: #8cdbcd; font-weight: 700; letter-spacing: .1em; }
-.season-phone h3 { font-size: 1.22rem; line-height: 1.2; margin: .8rem 0 1rem; }
-.season-races { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; margin-bottom: .8rem; }
-.season-races > span { display: flex; align-items: center; gap: 5px; padding: 8px 5px; border: 1px solid #ffffff15; border-radius: 9px; background: #ffffff05; min-width: 0; }
-.season-races b { font-size: .68rem; font-weight: 800; }
-.season-races span span { font-size: .6rem; line-height: 1.35; color: #d6ddd9; overflow-wrap: anywhere; }
-.goal-a b { color: #ffbe58; }
-.goal-b b { color: #5ecef1; }
-.goal-c b { color: #6ae1b5; }
-.week-list { flex: 1; display: grid; grid-template-rows: repeat(7, minmax(40px, 1fr)); padding: 0; margin: 0; list-style: none; }
-.week-row { display: grid; grid-template-columns: 33px minmax(0, 1fr) 46px; align-items: center; gap: 7px; min-height: 40px; padding: 5px 7px; border-bottom: 1px solid #ffffff0c; border-left: 2px solid transparent; }
-.week-row[data-sport="run"] { border-left-color: #47cde7; }
-.week-row[data-sport="ride"] { border-left-color: #3ed5ac; }
-.week-row[data-sport="rest"] { color: #889798; }
-.week-day { color: #9aa8a6; font-size: .65rem; }
-.week-session { display: grid; font-size: .74rem; line-height: 1.35; }
-.week-session small { color: #79cbbf; font-size: .59rem; }
-.week-session small:empty { display: none; }
-.week-duration { color: #b8c4c1; font-size: .64rem; text-align: right; }
-.week-row.is-skipped [data-week-activity], .week-row.is-skipped .week-duration { text-decoration: line-through; opacity: .45; }
-.week-row.is-skipped { border-left-color: #738181; }
-.week-total { margin: .8rem 0; color: #9ec4bd; text-align: right; font-size: .66rem; }
-.demo-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-.demo-actions[hidden] { display: none !important; }
-.demo-actions button { min-height: 44px; padding: 6px 7px; border: 1px solid #47716c; border-radius: 8px; color: #c7efea; background: #17332f; font-size: .68rem; cursor: pointer; line-height: 1.35; }
-.demo-actions button[aria-pressed="true"] { background: #214e46; border-color: #6fc5b5; }
-.demo-actions button[data-week-action="reset"] { grid-column: 1 / -1; background: transparent; border-color: #ffffff12; color: #a5b1ae; }
-.demo-actions button:disabled { opacity: .35; cursor: default; }
-.week-status { margin: .7rem 0 0; min-height: 2.8em; color: #97aba6; font-size: .65rem; line-height: 1.4; }
-.season-example figcaption { color: var(--muted); font-size: .75rem; line-height: 1.6; margin-top: 1rem; text-align: center; }
+.season-showcase { width: min(100%, 326px); margin: 0 auto; }
+.plan-view-picker { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 1rem; padding: 4px; border: 1px solid var(--border); border-radius: 99px; background: #06132b; }
+.plan-view-picker[hidden], .plan-view[hidden] { display: none !important; }
+.plan-view-picker button { min-height: 44px; padding: 7px 10px; border: 0; border-radius: 99px; background: transparent; color: var(--muted); font-size: .78rem; line-height: 1.4; cursor: pointer; }
+.plan-view-picker button[aria-selected="true"] { color: #9aedee; background: #153a45; }
+.plan-view { margin: 0; }
+.plan-capture-link { position: relative; display: block; width: 100%; aspect-ratio: 1206 / 2622; padding: 5px; overflow: hidden; border: 1px solid #79cbd48a; border-radius: 36px; background: #111; box-shadow: 0 28px 60px #0005, 0 0 50px #2bd9a80a; cursor: zoom-in; }
+.plan-capture-link img { display: block; width: 100%; height: 100%; margin: 0; border-radius: 30px; object-fit: contain; }
+.plan-capture-link:hover { border-color: #9aedee; }
+.plan-view figcaption { min-height: 6rem; margin-top: 1rem; text-align: center; }
+.plan-view figcaption h3 { font-size: .95rem; }
+.plan-view figcaption p { color: var(--muted); font-size: .78rem; line-height: 1.6; margin: .35rem 0 0; }
+.plan-capture-note { color: var(--muted); font-size: .72rem; line-height: 1.5; margin: .4rem 0 0; text-align: center; }
 
 .video-gallery { gap: 2rem; }
 .video-gallery .video-frame { max-width: 252px; margin-inline: auto; }
@@ -646,7 +624,6 @@ section[id], [id].privacy-card, [id].sports-compact { scroll-margin-top: 90px; }
  .season-layout { grid-template-columns: 1fr; gap: 2.2rem; }
  .season-layout h2 { max-width: 19ch; }
  .season-layout .section-lead { max-width: 40rem; }
- .season-example { width: min(100%, 326px); }
  .video-gallery { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: min(78vw, 280px); gap: 1.2rem; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 2px; overscroll-behavior-inline: contain; padding: .4rem 2px 1rem; scrollbar-width: thin; scrollbar-color: #22d3e650 transparent; }
  .video-gallery .video-card, .video-gallery .video-card:last-child { width: auto; grid-column: auto; justify-self: stretch; scroll-snap-align: start; scroll-snap-stop: always; }
  .video-gallery .video-frame { max-width: none; }
@@ -701,7 +678,6 @@ section[id], [id].privacy-card, [id].sports-compact { scroll-margin-top: 90px; }
  .season-layout .section-lead { font-size: 1rem; }
  .plan-points { gap: 1rem; }
  .plan-points p { font-size: .88rem; }
- .season-phone { padding-inline: 13px; }
  .coach-example p:not(.kicker) { font-size: .88rem; }
  .coach-questions li { font-size: .8rem; }
  .sports-compact .fine { font-size: .75rem; }

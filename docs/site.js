@@ -30,7 +30,7 @@
   var image = dialog.querySelector('img');
   var caption = dialog.querySelector('#screenshot-caption');
   var trigger;
-  document.querySelectorAll('.screen-link, .weather-link').forEach(function (link) {
+  document.querySelectorAll('.screen-link, .weather-link, .plan-capture-link').forEach(function (link) {
     link.addEventListener('click', function (event) {
       if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
       event.preventDefault();
@@ -235,65 +235,51 @@
   update();
 })();
 
-/* A clearly labelled example explains moving and skipping without personal data. */
+/* Show the actual Week and Race Goals screens, with accessible image tabs. */
 (function () {
   'use strict';
-  var example = document.querySelector('.season-example');
-  if (!example || !window.FjeliaI18n) return;
-  var actions = example.querySelector('.demo-actions');
-  var moved = false;
-  var skipped = false;
-  var wasReset = false;
-  var base = [
-    { sport: 'rest', minutes: 0 }, { sport: 'run', minutes: 45 },
-    { sport: 'ride', minutes: 60 }, { sport: 'rest', minutes: 0 },
-    { sport: 'run', minutes: 40 }, { sport: 'ride', minutes: 90 },
-    { sport: 'run', minutes: 65 }
-  ];
-  var labels = { run: 't089', ride: 't091', rest: 'week_rest' };
-  function render() {
-    var t = window.FjeliaI18n.t;
-    var language = window.FjeliaI18n.language();
-    var days = new Intl.DateTimeFormat(language, { weekday: 'short', timeZone: 'UTC' });
-    var numbers = new Intl.NumberFormat(language);
-    example.querySelectorAll('.week-row').forEach(function (row, index) {
-      var item = moved && index === 1 ? base[3] : moved && index === 3 ? base[1] : base[index];
-      var isSkipped = skipped && index === 5;
-      row.dataset.sport = item.sport;
-      row.classList.toggle('is-skipped', isSkipped);
-      row.querySelector('[data-weekday]').textContent = days.format(new Date(Date.UTC(2026, 9, 26 + index)));
-      row.querySelector('[data-week-activity]').textContent = t(labels[item.sport]);
-      row.querySelector('[data-week-activity]').dataset.i18n = labels[item.sport];
-      row.querySelector('.week-duration').textContent = item.minutes ? numbers.format(item.minutes) + ' min' : '—';
-      row.querySelector('[data-week-note]').textContent = isSkipped ? t('week_skipped') : moved && index === 1 ? t('week_moved_to') : moved && index === 3 ? t('week_moved') : '';
+  var showcase = document.querySelector('.season-showcase');
+  if (!showcase) return;
+  var picker = showcase.querySelector('.plan-view-picker');
+  var buttons = Array.from(picker.querySelectorAll('[data-plan-view]'));
+  var panels = Array.from(showcase.querySelectorAll('[data-plan-panel]'));
+  function choose(view, focus) {
+    var selected = buttons.find(function (button) { return button.dataset.planView === view; });
+    if (!selected) return;
+    buttons.forEach(function (button) {
+      var active = button === selected;
+      button.setAttribute('aria-selected', String(active));
+      button.tabIndex = active ? 0 : -1;
     });
-    example.querySelector('.week-total').textContent = t('week_total').replace('{minutes}', numbers.format(skipped ? 210 : 300));
-    ['move', 'skip'].forEach(function (action) {
-      var applied = action === 'move' ? moved : skipped;
-      var button = actions.querySelector('[data-week-action="' + action + '"]');
-      button.setAttribute('aria-pressed', String(applied));
-      button.textContent = t(applied ? 'week_undo_' + action : 'week_' + action);
-    });
-    var reset = actions.querySelector('[data-week-action="reset"]');
-    reset.disabled = !moved && !skipped;
-    reset.textContent = t('week_reset');
-    var status = [];
-    if (moved) status.push(t('week_move_done'));
-    if (skipped) status.push(t('week_skip_done'));
-    example.querySelector('.week-status').textContent = status.length ? status.join(' ') : t(wasReset ? 'week_reset_done' : 'week_initial');
+    panels.forEach(function (panel) { panel.hidden = panel.dataset.planPanel !== view; });
+    if (focus) selected.focus();
   }
-  actions.addEventListener('click', function (event) {
-    var button = event.target.closest('[data-week-action]');
-    if (!button) return;
-    wasReset = false;
-    if (button.dataset.weekAction === 'move') moved = !moved;
-    if (button.dataset.weekAction === 'skip') skipped = !skipped;
-    if (button.dataset.weekAction === 'reset') { moved = false; skipped = false; wasReset = true; }
-    render();
+  picker.setAttribute('role', 'tablist');
+  buttons.forEach(function (button) { button.setAttribute('role', 'tab'); });
+  panels.forEach(function (panel) {
+    panel.setAttribute('role', 'tabpanel');
+    panel.setAttribute('aria-labelledby', 'plan-tab-' + panel.dataset.planPanel);
   });
-  document.addEventListener('fjelia-language-change', render);
-  actions.hidden = false;
-  render();
+  picker.addEventListener('click', function (event) {
+    var button = event.target.closest('[data-plan-view]');
+    if (button) choose(button.dataset.planView, false);
+  });
+  picker.addEventListener('keydown', function (event) {
+    var button = event.target.closest('[data-plan-view]');
+    if (!button || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    event.preventDefault();
+    var index = buttons.indexOf(button);
+    index = event.key === 'Home' ? 0 : event.key === 'End' ? buttons.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + buttons.length) % buttons.length;
+    choose(buttons[index].dataset.planView, true);
+  });
+  function fragment() {
+    var panel = panels.find(function (item) { return '#' + item.id === location.hash; });
+    if (panel) choose(panel.dataset.planPanel, false);
+  }
+  choose('week', false);
+  fragment();
+  window.addEventListener('hashchange', fragment);
+  picker.hidden = false;
 })();
 
 /* Mobile walkthroughs remain swipeable and readable without JavaScript. */

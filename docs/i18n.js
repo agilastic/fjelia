@@ -247,22 +247,6 @@ var copy = {
     "plan_time_body": "Your sports, weekly hours and rest days shape the plan.",
     "plan_change": "Change a session when life changes",
     "plan_change_body": "Move a workout or mark it skipped. Your choices stay in the plan.",
-    "plan_example": "Interactive example",
-    "plan_example_note": "Illustrative week. Your actual plan follows your goals, history and availability.",
-    "week_title": "Your week, together",
-    "goal_marathon": "Marathon",
-    "week_rest": "Rest",
-    "week_moved": "Moved",
-    "week_skipped": "Skipped",
-    "week_moved_to": "Run moved to Thursday",
-    "week_total": "{minutes} min planned",
-    "week_move": "Move a run",
-    "week_skip": "Skip a ride",
-    "week_reset": "Reset",
-    "week_move_done": "The Tuesday run is now on Thursday.",
-    "week_skip_done": "The Saturday ride is marked as skipped.",
-    "week_reset_done": "The example week has been reset.",
-    "week_initial": "Try moving a run or skipping a ride.",
     "gallery_label": "Choose an app walkthrough",
     "gallery_hint": "Swipe to explore the other walkthroughs.",
     "coach_title": "Your workout, already in context.",
@@ -289,12 +273,15 @@ var copy = {
     "install_ai_body": "Needs a compatible iPhone, Apple Intelligence enabled and a supported language.",
     "install_ai_note": "Training, health data and charts also work without AI. Optional cloud coaching uses your own API key.",
     "developer_link": "Build and contribute ↗",
-    "week_undo_move": "Undo move",
-    "week_undo_skip": "Undo skip",
     "gallery_day": "Day",
     "gallery_sleep": "Sleep",
-    "gallery_progress": "Progress"
-
+    "gallery_progress": "Progress",
+    "plan_views_label": "Choose a training plan screen",
+    "plan_week_view": "Week view",
+    "plan_goals_view": "Race goals",
+    "plan_week_description": "Your week with running, cycling, strength, rest days and multiple sessions on the same day.",
+    "plan_goals_description": "Your races with priorities, distances, elevation, dates, target times and countdowns.",
+    "plan_capture_note": "Real app screenshots. Select a screen to enlarge."
   },
   "de": {
     "t000": "Zum Inhalt springen",
@@ -541,22 +528,6 @@ var copy = {
     "plan_time_body": "Deine Sportarten, Wochenstunden und Ruhetage bestimmen den Rahmen.",
     "plan_change": "Passe Einheiten an deinen Alltag an",
     "plan_change_body": "Verschiebe eine Einheit oder überspringe sie. Deine Entscheidungen bleiben im Plan erhalten.",
-    "plan_example": "Interaktives Beispiel",
-    "plan_example_note": "Beispielwoche. Dein tatsächlicher Plan richtet sich nach Zielen, Trainingshistorie und Zeit.",
-    "week_title": "Deine Woche im Überblick",
-    "goal_marathon": "Marathon",
-    "week_rest": "Ruhetag",
-    "week_moved": "Verschoben",
-    "week_skipped": "Übersprungen",
-    "week_moved_to": "Lauf auf Donnerstag verschoben",
-    "week_total": "{minutes} min geplant",
-    "week_move": "Lauf verschieben",
-    "week_skip": "Radtour überspringen",
-    "week_reset": "Zurücksetzen",
-    "week_move_done": "Der Lauf vom Dienstag liegt jetzt am Donnerstag.",
-    "week_skip_done": "Die Radtour am Samstag ist als übersprungen markiert.",
-    "week_reset_done": "Die Beispielwoche wurde zurückgesetzt.",
-    "week_initial": "Probiere das Verschieben oder Überspringen aus.",
     "gallery_label": "App-Video auswählen",
     "gallery_hint": "Wische zu den weiteren App-Videos.",
     "coach_title": "Deine Einheit ist schon im Kontext.",
@@ -583,12 +554,15 @@ var copy = {
     "install_ai_body": "Benötigt ein kompatibles iPhone, aktivierte Apple Intelligence und eine unterstützte Sprache.",
     "install_ai_note": "Training, Gesundheitsdaten und Grafiken funktionieren auch ohne AI. Optionales Cloud-Coaching nutzt deinen eigenen API-Schlüssel.",
     "developer_link": "Selbst bauen und mitwirken ↗",
-    "week_undo_move": "Verschieben rückgängig",
-    "week_undo_skip": "Überspringen rückgängig",
     "gallery_day": "Tag",
     "gallery_sleep": "Schlaf",
-    "gallery_progress": "Entwicklung"
-
+    "gallery_progress": "Entwicklung",
+    "plan_views_label": "Trainingsansicht auswählen",
+    "plan_week_view": "Wochenansicht",
+    "plan_goals_view": "Wettkampfziele",
+    "plan_week_description": "Deine Woche mit Laufen, Radfahren, Krafttraining, Ruhetagen und mehreren Einheiten pro Tag.",
+    "plan_goals_description": "Deine Wettkämpfe mit Prioritäten, Distanzen, Höhenmetern, Terminen, Zielzeiten und Countdown.",
+    "plan_capture_note": "Echte App-Screenshots. Tippe auf eine Ansicht, um sie zu vergrößern."
   },
   "es": {
     "t000": "Saltar al contenido",
@@ -835,22 +809,6 @@ var copy = {
     "plan_time_body": "Tus deportes, horas semanales y días de descanso dan forma al plan.",
     "plan_change": "Cambia una sesión cuando lo necesites",
     "plan_change_body": "Mueve una sesión o márcala como omitida. El plan conserva tus decisiones.",
-    "plan_example": "Ejemplo interactivo",
-    "plan_example_note": "Semana ilustrativa. Tu plan real depende de tus objetivos, historial y disponibilidad.",
-    "week_title": "Tu semana, conectada",
-    "goal_marathon": "Maratón",
-    "week_rest": "Descanso",
-    "week_moved": "Movida",
-    "week_skipped": "Omitida",
-    "week_moved_to": "Carrera movida al jueves",
-    "week_total": "{minutes} min planificados",
-    "week_move": "Mover una carrera",
-    "week_skip": "Omitir una salida",
-    "week_reset": "Restablecer",
-    "week_move_done": "La carrera del martes pasa al jueves.",
-    "week_skip_done": "La salida del sábado está marcada como omitida.",
-    "week_reset_done": "La semana de ejemplo se ha restablecido.",
-    "week_initial": "Prueba a mover una carrera u omitir una salida.",
     "gallery_label": "Elegir un vídeo de la app",
     "gallery_hint": "Desliza para ver los otros vídeos.",
     "coach_title": "Tu sesión, ya en contexto.",
@@ -877,12 +835,15 @@ var copy = {
     "install_ai_body": "Requiere un iPhone compatible, Apple Intelligence activado y un idioma admitido.",
     "install_ai_note": "El entrenamiento, los datos de salud y los gráficos también funcionan sin IA. El entrenador en la nube opcional usa tu propia clave API.",
     "developer_link": "Compila y contribuye ↗",
-    "week_undo_move": "Deshacer movimiento",
-    "week_undo_skip": "Restaurar salida",
     "gallery_day": "Día",
     "gallery_sleep": "Sueño",
-    "gallery_progress": "Progreso"
-
+    "gallery_progress": "Progreso",
+    "plan_views_label": "Elegir una vista del plan",
+    "plan_week_view": "Vista semanal",
+    "plan_goals_view": "Objetivos de carrera",
+    "plan_week_description": "Tu semana con carrera, ciclismo, fuerza, descanso y varias sesiones en un mismo día.",
+    "plan_goals_description": "Tus carreras con prioridades, distancias, desnivel, fechas, tiempos objetivo y cuentas atrás.",
+    "plan_capture_note": "Capturas reales de la app. Selecciona una vista para ampliarla."
   },
   "fr": {
     "t000": "Aller au contenu",
@@ -1129,22 +1090,6 @@ var copy = {
     "plan_time_body": "Vos sports, vos heures disponibles et vos jours de repos structurent le plan.",
     "plan_change": "Adaptez les séances à votre quotidien",
     "plan_change_body": "Déplacez une séance ou marquez-la comme ignorée. Le plan conserve vos choix.",
-    "plan_example": "Exemple interactif",
-    "plan_example_note": "Semaine illustrative. Votre plan réel suit vos objectifs, votre historique et vos disponibilités.",
-    "week_title": "Votre semaine, réunie",
-    "goal_marathon": "Marathon",
-    "week_rest": "Repos",
-    "week_moved": "Déplacée",
-    "week_skipped": "Ignorée",
-    "week_moved_to": "Course déplacée au jeudi",
-    "week_total": "{minutes} min prévues",
-    "week_move": "Déplacer une course",
-    "week_skip": "Ignorer une sortie",
-    "week_reset": "Réinitialiser",
-    "week_move_done": "La course du mardi est maintenant prévue jeudi.",
-    "week_skip_done": "La sortie du samedi est marquée comme ignorée.",
-    "week_reset_done": "La semaine d’exemple a été réinitialisée.",
-    "week_initial": "Essayez de déplacer une course ou d’ignorer une sortie.",
     "gallery_label": "Choisir une vidéo de l’app",
     "gallery_hint": "Balayez pour découvrir les autres vidéos.",
     "coach_title": "Votre séance, déjà en contexte.",
@@ -1171,12 +1116,15 @@ var copy = {
     "install_ai_body": "Nécessite un iPhone compatible, Apple Intelligence activé et une langue prise en charge.",
     "install_ai_note": "L’entraînement, les données de santé et les graphiques fonctionnent aussi sans IA. Le coaching cloud facultatif utilise votre clé API.",
     "developer_link": "Compiler et contribuer ↗",
-    "week_undo_move": "Annuler le déplacement",
-    "week_undo_skip": "Rétablir la sortie",
     "gallery_day": "Journée",
     "gallery_sleep": "Sommeil",
-    "gallery_progress": "Progrès"
-
+    "gallery_progress": "Progrès",
+    "plan_views_label": "Choisir une vue du plan",
+    "plan_week_view": "Vue semaine",
+    "plan_goals_view": "Objectifs de course",
+    "plan_week_description": "Votre semaine avec course, vélo, renforcement, repos et plusieurs séances dans une journée.",
+    "plan_goals_description": "Vos courses avec priorités, distances, dénivelé, dates, temps visés et comptes à rebours.",
+    "plan_capture_note": "Captures réelles de l’app. Sélectionnez une vue pour l’agrandir."
   },
   "it": {
     "t000": "Vai al contenuto",
@@ -1423,22 +1371,6 @@ var copy = {
     "plan_time_body": "Sport, ore settimanali e giorni di riposo definiscono il piano.",
     "plan_change": "Adatta le sessioni alla tua vita",
     "plan_change_body": "Sposta una sessione o contrassegnala come saltata. Il piano mantiene le tue scelte.",
-    "plan_example": "Esempio interattivo",
-    "plan_example_note": "Settimana illustrativa. Il piano reale segue obiettivi, storico e disponibilità.",
-    "week_title": "La tua settimana, insieme",
-    "goal_marathon": "Maratona",
-    "week_rest": "Riposo",
-    "week_moved": "Spostata",
-    "week_skipped": "Saltata",
-    "week_moved_to": "Corsa spostata a giovedì",
-    "week_total": "{minutes} min pianificati",
-    "week_move": "Sposta una corsa",
-    "week_skip": "Salta un’uscita",
-    "week_reset": "Ripristina",
-    "week_move_done": "La corsa di martedì è ora prevista giovedì.",
-    "week_skip_done": "L’uscita di sabato è contrassegnata come saltata.",
-    "week_reset_done": "La settimana di esempio è stata ripristinata.",
-    "week_initial": "Prova a spostare una corsa o saltare un’uscita.",
     "gallery_label": "Scegli un video dell’app",
     "gallery_hint": "Scorri per esplorare gli altri video.",
     "coach_title": "La tua sessione, già nel contesto.",
@@ -1465,12 +1397,15 @@ var copy = {
     "install_ai_body": "Richiede un iPhone compatibile, Apple Intelligence attivo e una lingua supportata.",
     "install_ai_note": "Allenamento, dati di salute e grafici funzionano anche senza IA. Il coaching cloud facoltativo usa la tua chiave API.",
     "developer_link": "Compila e contribuisci ↗",
-    "week_undo_move": "Annulla spostamento",
-    "week_undo_skip": "Ripristina uscita",
     "gallery_day": "Giorno",
     "gallery_sleep": "Sonno",
-    "gallery_progress": "Progressi"
-
+    "gallery_progress": "Progressi",
+    "plan_views_label": "Scegli una vista del piano",
+    "plan_week_view": "Vista settimanale",
+    "plan_goals_view": "Obiettivi di gara",
+    "plan_week_description": "La tua settimana con corsa, ciclismo, forza, riposo e più sessioni nello stesso giorno.",
+    "plan_goals_description": "Le tue gare con priorità, distanze, dislivello, date, tempi obiettivo e conti alla rovescia.",
+    "plan_capture_note": "Schermate reali dell’app. Seleziona una vista per ingrandirla."
   }
 };
 var supported = ['en','de','es','fr','it'];
@@ -1506,7 +1441,7 @@ function apply(lang, remember) {
   document.querySelectorAll('.language-picker').forEach(function (el) { el.hidden = false; });
   if (picker) { picker.value = lang; picker.setAttribute('aria-label',text('language')); }
   document.querySelectorAll('.video-index').forEach(function (el,i) { el.textContent = '0' + (i+1) + ' / ' + text('walkthrough'); });
-  document.querySelectorAll('.screen-link,.weather-link').forEach(function (link) {
+  document.querySelectorAll('.screen-link,.weather-link,.plan-capture-link').forEach(function (link) {
     var figure = link.closest('figure');
     var heading = figure.querySelector('h3');
     var description = figure.querySelector('figcaption p');
@@ -1518,6 +1453,7 @@ function apply(lang, remember) {
   document.querySelectorAll('.app-preview').forEach(function (video) { var article = video.closest('article'); video.setAttribute('aria-label', article ? article.querySelector('h3').textContent : text('demo_0_title')); });
   var story = document.querySelector('.hero-story-nav'); if (story) story.setAttribute('aria-label', text('hero_story_label'));
   var walkthroughs = document.querySelector('.walkthrough-nav'); if (walkthroughs) walkthroughs.setAttribute('aria-label', text('gallery_label'));
+  var planViews = document.querySelector('.plan-view-picker'); if (planViews) planViews.setAttribute('aria-label', text('plan_views_label'));
   var qr = document.querySelector('.hero-qr'); if (qr) qr.setAttribute('aria-label', text('qr_title'));
   document.querySelectorAll('nav[aria-label]').forEach(function (el) { el.setAttribute('aria-label', text(el.closest('footer') ? 'footer' : 'main')); });
   document.querySelectorAll('.hero-phone img').forEach(function (el) { el.alt = plain(text(el.closest('.phone-ai') ? 'demo_0_title' : el.closest('.phone-plan') ? 't052' : el.closest('.phone-front') ? 't031' : 't039')); });
