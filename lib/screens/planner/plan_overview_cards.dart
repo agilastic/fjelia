@@ -146,15 +146,15 @@ class RaceCountdownCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final goals = ref.watch(seasonGoalsProvider).valueOrNull ?? const [];
     if (goals.isEmpty) return const SizedBox.shrink();
+    // One goal is shown in full. With several they are one item, a line each,
+    // that unfolds into the full cards.
+    if (goals.length == 1) {
+      return _GoalCard(goal: goals.first, primary: true, showPriority: false);
+    }
     return Column(
       children: [
-        for (final (i, goal) in goals.indexed)
-          _GoalCard(
-            goal: goal,
-            primary: i == 0,
-            showPriority: goals.length > 1,
-          ),
-        if (goals.length > 1) const SeasonSummaryCard(),
+        _GoalsAccordion(goals: goals),
+        const SeasonSummaryCard(),
       ],
     );
   }
@@ -228,6 +228,128 @@ class SeasonSummaryCard extends ConsumerWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// All race goals as one item: a header with a line per goal (name, priority,
+/// date, weeks to go) that unfolds into the full cards and folds back.
+class _GoalsAccordion extends StatefulWidget {
+  const _GoalsAccordion({required this.goals});
+  final List<RaceGoal> goals;
+
+  @override
+  State<_GoalsAccordion> createState() => _GoalsAccordionState();
+}
+
+class _GoalsAccordionState extends State<_GoalsAccordion> {
+  bool open = false;
+
+  static int _weeks(RaceGoal g) =>
+      (g.raceDate.difference(DateUtils.dateOnly(DateTime.now())).inDays / 7)
+          .ceil()
+          .clamp(0, 999);
+
+  @override
+  Widget build(BuildContext context) {
+    final goals = widget.goals;
+    return AnimatedSize(
+      duration: const Duration(milliseconds: 180),
+      curve: Curves.easeOut,
+      alignment: Alignment.topCenter,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 14),
+            child: Material(
+              color: panel,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+                side: BorderSide(color: Colors.orange.withValues(alpha: .6)),
+              ),
+              child: InkWell(
+                key: const Key('goals-header'),
+                borderRadius: BorderRadius.circular(14),
+                onTap: () => setState(() => open = !open),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(14, 12, 10, 12),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Colors.orange.withValues(alpha: .15),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Icon(
+                          Icons.flag_outlined,
+                          size: 22,
+                          color: Colors.orange,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Race goals · ${goals.length}',
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            if (!open)
+                              for (final (i, g) in goals.indexed)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 4),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          '${g.name} · ${g.priority.toUpperCase()}'
+                                          ' · ${dayText(g.raceDate)}',
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.white70,
+                                          ),
+                                        ),
+                                      ),
+                                      Text(
+                                        '${_weeks(g)} wk',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w700,
+                                          color: i == 0
+                                              ? Colors.orange
+                                              : Colors.lightBlue,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                          ],
+                        ),
+                      ),
+                      Icon(
+                        open ? Icons.expand_less : Icons.expand_more,
+                        size: 22,
+                        color: muted,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          if (open)
+            for (final (i, g) in goals.indexed)
+              _GoalCard(goal: g, primary: i == 0, showPriority: true),
+        ],
       ),
     );
   }

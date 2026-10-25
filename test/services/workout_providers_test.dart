@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
@@ -286,6 +288,25 @@ void main() {
       },
     );
 
+    test(
+      'a platform that stops answering is given up on, not waited for',
+      () async {
+        await plan();
+        await service.deliverPlan('self');
+        final hung = _HungProvider(db);
+        final started = DateTime.now();
+        final removed = await service.removeFromPlatforms(
+          titles: const {},
+          providers: [hung, acme],
+          providerTimeout: const Duration(milliseconds: 80),
+        );
+        expect(DateTime.now().difference(started).inSeconds, lessThan(5));
+        expect(removed['hung'], 0);
+        // The one after it still did its part.
+        expect(removed['acme'], greaterThan(0));
+      },
+    );
+
     test('only the platforms asked are touched', () async {
       await plan();
       await service.deliverPlan('self');
@@ -350,4 +371,15 @@ void main() {
       expect(await db.select(db.workoutDeliveries).get(), hasLength(1));
     });
   });
+}
+
+/// A platform whose removal never answers.
+class _HungProvider extends RecordingProvider {
+  _HungProvider(AppDatabase db) : super(db, 'hung', label: 'Hung');
+
+  @override
+  Future<int> removeAll({
+    required Set<String> titles,
+    void Function(int done, int total)? onProgress,
+  }) => Completer<int>().future;
 }

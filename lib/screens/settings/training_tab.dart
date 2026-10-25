@@ -609,6 +609,10 @@ class SettingsSegments extends StatelessWidget {
 
 /// Deletes every planned workout behind a progress dialog.
 Future<void> _deleteAll(BuildContext context, WidgetRef ref) async {
+  // Kept before the dialog opens: the dialog is closed through these, whether
+  // or not the screen that started it is still there when the work is done.
+  final navigator = Navigator.of(context, rootNavigator: true);
+  final messenger = ScaffoldMessenger.of(context);
   final progress = ValueNotifier<(int, int, String)>((0, 0, 'Starting'));
   showDialog<void>(
     context: context,
@@ -649,8 +653,7 @@ Future<void> _deleteAll(BuildContext context, WidgetRef ref) async {
   } catch (e) {
     failure = e;
   }
-  if (!context.mounted) return;
-  Navigator.of(context, rootNavigator: true).pop();
+  if (navigator.mounted) navigator.pop();
   progress.dispose();
   final removed = result?.summary ?? '';
   final message = failure != null
@@ -658,5 +661,5 @@ Future<void> _deleteAll(BuildContext context, WidgetRef ref) async {
       : removed.isNotEmpty
       ? 'All planned workouts deleted. Removed from your platforms: $removed.'
       : 'All planned workouts deleted.';
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+  messenger.showSnackBar(SnackBar(content: Text(message)));
 }

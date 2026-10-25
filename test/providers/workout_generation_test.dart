@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -85,4 +85,65 @@ void main() {
       );
     },
   );
+
+  test('the "workouts generated" message goes away by itself', () async {
+    WorkoutGenerationNotifier.resultShownFor = const Duration(milliseconds: 60);
+    addTearDown(
+      () => WorkoutGenerationNotifier.resultShownFor = const Duration(
+        seconds: 10,
+      ),
+    );
+    await container
+        .read(raceGoalServiceProvider)
+        .create(
+          name: 'Target race',
+          primarySport: 'running',
+          distanceM: 42195,
+          raceDate: DateTime.now().add(const Duration(days: 42)),
+          priority: 'a',
+        );
+    final job = container.read(workoutGenerationProvider.notifier);
+    final count = await job.generate();
+    // Shown at first, for the athlete to read.
+    expect(container.read(workoutGenerationProvider).valueOrNull, count);
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+    expect(container.read(workoutGenerationProvider).valueOrNull, count);
+    // Then gone: no number, no error, nothing loading.
+    await Future<void>.delayed(const Duration(milliseconds: 120));
+    final state = container.read(workoutGenerationProvider);
+    expect(state.valueOrNull, isNull);
+    expect(state.hasError, isFalse);
+    expect(state.isLoading, isFalse);
+    // A second run shows its own count again.
+    final again = await job.generate();
+    expect(container.read(workoutGenerationProvider).valueOrNull, again);
+  });
+
+  test('a new run does not inherit the old message\'s timer', () async {
+    WorkoutGenerationNotifier.resultShownFor = const Duration(milliseconds: 80);
+    addTearDown(
+      () => WorkoutGenerationNotifier.resultShownFor = const Duration(
+        seconds: 10,
+      ),
+    );
+    await container
+        .read(raceGoalServiceProvider)
+        .create(
+          name: 'Target race',
+          primarySport: 'running',
+          distanceM: 42195,
+          raceDate: DateTime.now().add(const Duration(days: 42)),
+          priority: 'a',
+        );
+    final job = container.read(workoutGenerationProvider.notifier);
+    await job.generate();
+    await Future<void>.delayed(const Duration(milliseconds: 60));
+    // Just before the first one would clear, a second run starts.
+    final second = await job.generate();
+    await Future<void>.delayed(const Duration(milliseconds: 40));
+    // The first timer would have fired by now; the second message stays.
+    expect(container.read(workoutGenerationProvider).valueOrNull, second);
+    await Future<void>.delayed(const Duration(milliseconds: 100));
+    expect(container.read(workoutGenerationProvider).valueOrNull, isNull);
+  });
 }

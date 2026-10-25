@@ -9,34 +9,46 @@ import 'suunto_provider.dart';
 import 'user_profile_provider.dart';
 import 'workout_providers_provider.dart';
 
-/// The platforms the athlete has connected, in their order of activity
-/// sources (Settings, Connections). With none connected it is Garmin alone,
-/// where workouts always went.
+/// The platforms the athlete has connected right now, in their order of
+/// activity sources (Settings, Connections). With none connected it is Garmin
+/// alone, where workouts always went. Read once, not watched: for actions that
+/// must not wait on a provider that is being rebuilt.
+Future<List<WorkoutProvider>> connectedProvidersNow(Ref ref) async {
+  final Map<String, List<String>> priority = await ref
+      .read(sourcePriorityProvider.future)
+      .timeout(
+        const Duration(seconds: 5),
+        onTimeout: () => defaultSourcePriorities,
+      );
+  final providers = ref.read(workoutProvidersProvider);
+  final connected = await providers.connected(priority['activity'] ?? const []);
+  if (connected.isNotEmpty) return connected;
+  final garmin = providers.byId('garmin');
+  return garmin == null ? const [] : [garmin];
+}
+
+/// The same, for screens: read again when a connection or the athlete's
+/// settings change.
 final connectedProvidersProvider = FutureProvider<List<WorkoutProvider>>((
   ref,
 ) async {
-  final priority = await ref.watch(sourcePriorityProvider.future);
-  // Read again when a connection or the athlete's settings change.
   ref.watch(authProvider);
   ref.watch(corosConnectedProvider);
   ref.watch(polarConnectedProvider);
   ref.watch(suuntoConnectedProvider);
   ref.watch(userProfileProvider);
-  final providers = ref.watch(workoutProvidersProvider);
-  final connected = await providers.connected(priority['activity'] ?? const []);
-  if (connected.isNotEmpty) return connected;
-  final garmin = providers.byId('garmin');
-  return garmin == null ? const [] : [garmin];
+  ref.watch(sourcePriorityProvider);
+  return connectedProvidersNow(ref);
 });
 
 /// The connected platforms that take a workout straight onto their calendar:
 /// where plans go by themselves, without being asked.
-final pushProvidersProvider = FutureProvider<List<WorkoutProvider>>((
-  ref,
-) async => [
-  for (final p in await ref.watch(connectedProvidersProvider.future))
-    if (await p.mode() == DeliveryMode.push) p,
-]);
+final pushProvidersProvider = FutureProvider<List<WorkoutProvider>>(
+  (ref) async => [
+    for (final p in await ref.watch(connectedProvidersProvider.future))
+      if (await p.mode() == DeliveryMode.push) p,
+  ],
+);
 
 /// How a workout reaches the watch platform.
 enum WorkoutRoute {

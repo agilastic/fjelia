@@ -54,16 +54,39 @@ void main() {
     target: 27000,
   );
 
-  testWidgets('MG-T01: both goals are on the plan screen, with priorities', (
+  testWidgets('several goals are one item with a line each', (tester) async {
+    await tester.pumpWidget(host([marathon, brevet], null));
+    await tester.pumpAndSettle();
+    expect(find.text('Race goals · 2'), findsOneWidget);
+    // Each goal is a line: name, priority, date, weeks to go.
+    expect(find.textContaining('Marathon · A'), findsOneWidget);
+    expect(find.textContaining('Brevet 200 · B'), findsOneWidget);
+    expect(find.textContaining(' wk'), findsNWidgets(2));
+    // The details wait behind it.
+    expect(find.textContaining('7:30:00'), findsNothing);
+    expect(find.textContaining('26.7 km/h'), findsNothing);
+  });
+
+  testWidgets('a tap unfolds every goal into its card, a second folds them', (
     tester,
   ) async {
     await tester.pumpWidget(host([marathon, brevet], null));
     await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('goals-header')));
+    await tester.pumpAndSettle();
+    expect(find.text('Race goals · 2'), findsOneWidget);
+    // The full cards, with priorities, target, pace and climbing.
     expect(find.text('Marathon · A'), findsOneWidget);
     expect(find.text('Brevet 200 · B'), findsOneWidget);
     expect(find.textContaining('7:30:00'), findsOneWidget);
     expect(find.textContaining('26.7 km/h'), findsOneWidget);
     expect(find.textContaining('1500'), findsOneWidget);
+    // The overview lines are not shown twice.
+    expect(find.textContaining(' wk'), findsNothing);
+    await tester.tap(find.byKey(const Key('goals-header')));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('7:30:00'), findsNothing);
+    expect(find.textContaining(' wk'), findsNWidgets(2));
   });
 
   testWidgets('one goal looks as it always did', (tester) async {
@@ -71,6 +94,9 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Marathon'), findsOneWidget);
     expect(find.textContaining('Season'), findsNothing);
+    // No accordion for a single goal: the card is already open.
+    expect(find.byKey(const Key('goals-header')), findsNothing);
+    expect(find.textContaining('Race goals'), findsNothing);
   });
 
   testWidgets('trade-offs and conflicts are told, with what could be done', (

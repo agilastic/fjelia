@@ -80,7 +80,7 @@ final deleteAllWorkoutsProvider =
         final plans = ref.read(trainingPlanServiceProvider);
         await plans.deleteLocalPlans();
         onProgress(1, 1, 'On this phone');
-        final providers = await ref.read(connectedProvidersProvider.future);
+        final providers = await connectedProvidersNow(ref);
         final removed = await plans.removeFromPlatforms(
           titles: titles,
           providers: providers,

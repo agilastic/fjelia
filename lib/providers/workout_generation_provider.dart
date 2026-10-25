@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:drift/drift.dart';
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../services/auto_plan_pause.dart';
@@ -23,8 +26,21 @@ final workoutGenerationProvider =
 class WorkoutGenerationNotifier extends StateNotifier<AsyncValue<int?>> {
   WorkoutGenerationNotifier(this.ref) : super(const AsyncData(null));
   final Ref ref;
+  Timer? _clear;
+
+  /// How long "N workouts generated" stays up.
+  @visibleForTesting
+  static Duration resultShownFor = const Duration(seconds: 10);
+
+  @override
+  void dispose() {
+    _clear?.cancel();
+    super.dispose();
+  }
+
   Future<int?> generate() async {
     if (state.isLoading) return null;
+    _clear?.cancel();
     state = const AsyncLoading();
     try {
       // Asking for a plan is asking for the sync to keep one again.
@@ -76,6 +92,12 @@ class WorkoutGenerationNotifier extends StateNotifier<AsyncValue<int?>> {
               .get();
       ref.invalidate(upcomingSessionsProvider);
       state = AsyncData(sessions.length);
+      // The message is a receipt, not a status: it goes away by itself.
+      _clear = Timer(resultShownFor, () {
+        if (mounted && state.valueOrNull == sessions.length) {
+          state = const AsyncData(null);
+        }
+      });
       return sessions.length;
     } catch (e, st) {
       state = AsyncError(e, st);

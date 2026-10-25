@@ -2670,7 +2670,6 @@ class TrainingPlanService {
   /// Returns how many went.
   Future<int> retryCleanup() => _providers.retryCleanup();
 
-
   /// Ends a plan whose goals are all gone: nothing is left to prepare for.
   /// The planned sessions from today on and their watch entries are removed,
   /// finished and skipped ones stay as the record, and the plan stops being
@@ -2813,14 +2812,15 @@ class TrainingPlanService {
     bool includeMoved = false,
   }) async {
     final today = _day(_now());
-    final sessions = await (_db.select(_db.trainingSessions)..where(
-          (t) =>
-              t.planId.equals(planId) &
-              (t.status.equals('planned') | t.status.equals('adapted')) &
-              t.sessionDate.isBiggerOrEqualValue(today) &
-              (includeMoved ? const Constant(true) : _isPinned(t).not()),
-        ))
-        .get();
+    final sessions =
+        await (_db.select(_db.trainingSessions)..where(
+              (t) =>
+                  t.planId.equals(planId) &
+                  (t.status.equals('planned') | t.status.equals('adapted')) &
+                  t.sessionDate.isBiggerOrEqualValue(today) &
+                  (includeMoved ? const Constant(true) : _isPinned(t).not()),
+            ))
+            .get();
     for (final s in sessions) {
       await _providers.removeEverywhere(s);
     }
@@ -3119,15 +3119,21 @@ class TrainingPlanService {
     required Set<String> titles,
     Iterable<WorkoutProvider>? providers,
     void Function(int done, int total, String label)? onProgress,
+    Duration providerTimeout = const Duration(minutes: 5),
   }) async {
     final targets = providers ?? await _providers.connected();
     final removed = <String, int>{};
     for (final p in targets) {
       try {
-        removed[p.id] = await p.removeAll(
-          titles: titles,
-          onProgress: (done, total) => onProgress?.call(done, total, p.label),
-        );
+        // A platform that stops answering must not hold the others, or the
+        // screen, for ever.
+        removed[p.id] = await p
+            .removeAll(
+              titles: titles,
+              onProgress: (done, total) =>
+                  onProgress?.call(done, total, p.label),
+            )
+            .timeout(providerTimeout);
       } catch (e) {
         log('[Plan] ${p.label} could not be cleared: $e');
         removed[p.id] = 0;
@@ -3136,7 +3142,6 @@ class TrainingPlanService {
     return removed;
   }
 }
-
 
 /// Exposed for the planner UI's step legend ordering.
 int stepTypeIndex(String type) => _stepTypeIndex[type] ?? 2;
