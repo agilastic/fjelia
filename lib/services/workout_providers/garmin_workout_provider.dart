@@ -1,0 +1,284 @@
+import 'package:drift/drift.dart';
+
+import '../../api/garmin_client.dart';
+import '../../db/database.dart';
+import '../../models/prepared_workout.dart';
+import '../../utils/log.dart';
+import '../workout_destination.dart';
+import 'cleanup_queue.dart';
+import 'delivery_ledger.dart';
+import 'workout_provider.dart';
+
+/// Garmin Connect: workouts are created in the library and scheduled on the
+/// calendar. The ids stay on the session (`garmin_workout_id`,
+/// `garmin_alternative_id`), which other screens read; the content that was
+/// sent is on record in the ledger, so a changed session is sent again.
+class GarminWorkoutProvider extends WorkoutProvider {
+  GarminWorkoutProvider(
+    this._db,
+    this._client, {
+    this.connected,
+    DateTime Function()? clock,
+  }) : _ledger = DeliveryLedger(_db, 'garmin', clock: clock),
+       _queue = CleanupQueue(_db, 'garmin', clock: clock);
+
+  final AppDatabase _db;
+  final GarminClient _client;
+  /// Whether Garmin is connected; without it Garmin counts as connected.
+  final Future<bool> Function()? connected;
+  final DeliveryLedger _ledger;
+  final CleanupQueue _queue;
+
+  @override
+  String get id => 'garmin';
+  @override
+  String get label => WorkoutDestination.garmin.label;
+  @override
+  String get sourceKey => WorkoutDestination.garmin.sourceKey;
+
+  @override
+  Future<bool> isConnected() async => await connected?.call() ?? true;
+
+  @override
+  Future<DeliveryMode> mode() async => DeliveryMode.push;
+
+  static String _sportName(String sport) => switch (sport) {
+    'running' || 'trail_running' => 'running',
+    'cycling_road' || 'cycling_gravel' || 'cycling_mtb' => 'cycling',
+    'swimming' => 'swimming',
+    'strength' || 'pilates' || 'yoga' || 'stretching' => 'strength',
+    'indoor_rowing' => 'cardio',
+    _ => 'running',
+  };
+
+  Future<void> _write(String sessionId, TrainingSessionsCompanion values) =>
+      (_db.update(
+        _db.trainingSessions,
+      )..where((t) => t.id.equals(sessionId))).write(values);
+
+  @override
+  Future<bool> hasDelivered(TrainingSession s) async =>
+      s.garminWorkoutId != null || s.garminAlternativeId != null;
+
+  @override
+  Future<void> deliver(
+    TrainingSession s,
+    Future<PreparedWorkout> Function() prepare,
+  ) async {
+    final fingerprint = sessionContentFingerprint(s);
+    final record = await _ledger.get(s.id);
+    // Without a record the content is taken as unchanged: it went up before
+    // records were kept.
+    final unchanged =
+        s.garminWorkoutId != null &&
+        (record?.fingerprint == null || record!.fingerprint == fingerprint);
+    if (unchanged) {
+      if (s.garminAlternativeId != null) {
+        await _client.unscheduleWorkout(s.garminAlternativeId!);
+      }
+      final schedule = await _client.scheduleWorkout(
+        s.garminWorkoutId!,
+        s.sessionDate,
+      );
+      await _write(
+        s.id,
+        TrainingSessionsCompanion(
+          garminAlternativeId: Value(schedule),
+          dateModified: Value(DateTime.now()),
+        ),
+      );
+      await _ledger.put(s.id, fingerprint: fingerprint, name: s.title);
+      return;
+    }
+    if (s.stepsJson == null) {
+      throw StateError('No workout structure is available to push.');
+    }
+    // A calendar entry of an earlier definition (the session changed since)
+    // comes down before the new one goes up, and so does the old definition.
+    if (s.garminAlternativeId != null) {
+      await _client.unscheduleWorkout(s.garminAlternativeId!);
+      await _write(
+        s.id,
+        const TrainingSessionsCompanion(garminAlternativeId: Value(null)),
+      );
+    }
+    final old = s.garminWorkoutId;
+    if (old != null) {
+      try {
+        await _client.deleteWorkout(old);
+      } catch (e) {
+        await _queue.add(old, error: e);
+      }
+      await _write(
+        s.id,
+        const TrainingSessionsCompanion(garminWorkoutId: Value(null)),
+      );
+    }
+    final prepared = await prepare();
+    final workoutId = await _client.createWorkout(
+      s.title,
+      _sportName(s.sport),
+      prepared.steps,
+      description: prepared.description,
+    );
+    // Save the definition before scheduling so a retry cannot create
+    // duplicates.
+    await _write(
+      s.id,
+      TrainingSessionsCompanion(garminWorkoutId: Value(workoutId)),
+    );
+    final scheduleId = await _client.scheduleWorkout(workoutId, s.sessionDate);
+    await _write(
+      s.id,
+      TrainingSessionsCompanion(
+        garminWorkoutId: Value(workoutId),
+        garminAlternativeId: Value(scheduleId),
+        dateModified: Value(DateTime.now()),
+      ),
+    );
+    await _ledger.put(s.id, fingerprint: fingerprint, name: s.title);
+  }
+
+  @override
+  Future<void> remove(TrainingSession s) async {
+    final workoutId = s.garminWorkoutId;
+    final scheduleId = s.garminAlternativeId;
+    if (workoutId == null && scheduleId == null) return;
+    try {
+      if (workoutId != null) {
+        await _client.deleteWorkout(workoutId, scheduleId: scheduleId);
+      } else {
+        await _client.unscheduleWorkout(scheduleId!);
+      }
+      log('[Garmin] removed workout ${workoutId ?? '-'} for session ${s.id}');
+    } catch (e) {
+      log('[Garmin] removal failed for ${workoutId ?? scheduleId}: $e');
+      await _queue.add(
+        workoutId ?? 'schedule:$scheduleId',
+        scheduleId: scheduleId,
+        error: e,
+      );
+    }
+    await _write(
+      s.id,
+      const TrainingSessionsCompanion(
+        garminWorkoutId: Value(null),
+        garminAlternativeId: Value(null),
+      ),
+    );
+    await _ledger.delete(s.id);
+  }
+
+  /// Takes the entry off the calendar and keeps the definition, so a restored
+  /// session is scheduled again without being created twice. A failure is
+  /// logged and leaves the entry id in place for a later attempt.
+  @override
+  Future<void> release(TrainingSession s) async {
+    final id = s.garminAlternativeId;
+    if (id == null) return;
+    try {
+      await _client.unscheduleWorkout(id);
+      await _write(
+        s.id,
+        const TrainingSessionsCompanion(garminAlternativeId: Value(null)),
+      );
+    } catch (e) {
+      log('[Garmin] could not release calendar entry $id: $e');
+    }
+  }
+
+  @override
+  Future<Set<String>> adoptExisting(List<TrainingSession> sessions) async {
+    if (sessions.isEmpty) return const {};
+    var existing = <String, String>{};
+    try {
+      existing = await _client.calendarWorkoutsByTitleDate();
+    } catch (e) {
+      log('[Garmin] could not read the calendar to find duplicates: $e');
+      return const {};
+    }
+    final adopted = <String>{};
+    for (final s in sessions) {
+      final key =
+          '${s.title}|${s.sessionDate.toIso8601String().substring(0, 10)}';
+      final workoutId = existing[key];
+      if (workoutId == null) continue;
+      log('[Garmin] adopting workout $workoutId for "${s.title}"');
+      await _write(
+        s.id,
+        TrainingSessionsCompanion(garminWorkoutId: Value(workoutId)),
+      );
+      await _ledger.put(
+        s.id,
+        fingerprint: sessionContentFingerprint(s),
+        name: s.title,
+      );
+      adopted.add(s.id);
+    }
+    return adopted;
+  }
+
+  @override
+  Future<int> removeAll({
+    required Set<String> titles,
+    void Function(int done, int total)? onProgress,
+  }) async {
+    onProgress?.call(0, 0);
+    var calendar = <({String workoutId, String? scheduleId})>[];
+    var ids = <String>[];
+    try {
+      calendar = [
+        for (final c in await _client.listCalendarWorkouts())
+          (workoutId: c.workoutId, scheduleId: c.scheduleId as String?),
+      ];
+    } catch (e) {
+      log('[Garmin] could not list the calendar: $e');
+    }
+    try {
+      ids = await _client.listWorkoutIds();
+    } catch (e) {
+      log('[Garmin] could not list the library: $e');
+    }
+    final total = calendar.length + ids.length;
+    var done = 0;
+    var removed = 0;
+    onProgress?.call(0, total);
+    for (final c in calendar) {
+      try {
+        await _client.deleteWorkout(c.workoutId, scheduleId: c.scheduleId);
+        removed++;
+      } catch (e) {
+        log('[Garmin] delete failed for ${c.workoutId}: $e');
+        await _queue.add(c.workoutId, scheduleId: c.scheduleId, error: e);
+      }
+      onProgress?.call(++done, total);
+    }
+    for (final id in ids) {
+      try {
+        await _client.deleteWorkout(id);
+        removed++;
+      } catch (e) {
+        log('[Garmin] library delete failed for $id: $e');
+        await _queue.add(id, error: e);
+      }
+      onProgress?.call(++done, total);
+    }
+    await (_db.update(_db.trainingSessions)).write(
+      const TrainingSessionsCompanion(
+        garminWorkoutId: Value(null),
+        garminAlternativeId: Value(null),
+      ),
+    );
+    await _ledger.deleteAll();
+    return removed;
+  }
+
+  @override
+  Future<int> retryCleanup() => _queue.retry((remoteId, scheduleId) async {
+    if (remoteId.startsWith('schedule:')) {
+      await _client.unscheduleWorkout(scheduleId!);
+    } else {
+      await _client.deleteWorkout(remoteId, scheduleId: scheduleId);
+    }
+  });
+}

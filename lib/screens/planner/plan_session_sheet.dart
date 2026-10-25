@@ -14,10 +14,11 @@ import '../../providers/hr_zones_provider.dart';
 import '../../providers/planner_providers.dart';
 import '../../providers/user_profile_provider.dart';
 import '../../providers/workout_destination_provider.dart';
+import '../../providers/workout_providers_provider.dart';
 import '../../providers/workout_push_provider.dart';
 import '../../providers/day_data_provider.dart';
 import '../../services/plan_session_actions.dart';
-import '../../services/workout_destination.dart';
+import '../../services/season/goal_set.dart' show DayLoad;
 import '../../utils/target_time.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/move_workout_card.dart';
@@ -70,6 +71,11 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
     // Ranges are worked out from today's zones and FTP, not from what was
     // stored when the plan was made; both change over time.
     final isRide = sport.contains('cycl') || sport.contains('bik');
+    // The goal this session prepares for, when the plan has more than one.
+    final goals = ref.watch(goalSetProvider).valueOrNull;
+    final goalPriority = goals != null && goals.active.length > 1
+        ? goals.byId(s.goalId ?? '')?.priority.name
+        : null;
     final rideProfile = ref.watch(userProfileProvider).valueOrNull;
     // The ride's own choice wins; otherwise watts indoors or after the last
     // ride chosen on watts. Heart rate stays the guide next to them.
@@ -99,7 +105,10 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
     final profileSettings = ref.watch(userProfileProvider).valueOrNull;
     final restDays = profileSettings?.restDays ?? const <int>[];
     final perDay = profileSettings?.maxSessionsPerDay ?? 1;
-    final raceDay = ref.watch(primaryRaceGoalProvider).valueOrNull?.raceDate;
+    // Every goal decides what a day can take, not only the one shown.
+    final raceDay =
+        goals?.horizonEnd ??
+        ref.watch(primaryRaceGoalProvider).valueOrNull?.raceDate;
     final others = [
       for (final u
           in ref.watch(upcomingSessionsProvider).valueOrNull ??
@@ -128,11 +137,25 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
             sessions: count,
             isRestDay: restDays.contains(d.weekday),
             isFull: count >= perDay,
+            event: goals?.eventBlocking(d)?.name,
+            isEasyOnly: goals?.loadOn(d) == DayLoad.easyOnly,
           );
         }(),
     ];
 
     Future<void> moveTo(DateTime day) async {
+      final event = goals?.eventBlocking(day);
+      if (event != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              '${DateFormat('EEEE d MMMM').format(day)} belongs to '
+              '${event.name}. Pick another day.',
+            ),
+          ),
+        );
+        return;
+      }
       final info = moveDays.where((m) => DateUtils.isSameDay(m.date, day));
       final target = info.isEmpty ? null : info.first;
       final warning = target == null
@@ -148,8 +171,10 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
         return;
       }
       final previous = s.sessionDate;
-      final onWatch =
-          s.garminWorkoutId != null || s.garminAlternativeId != null;
+      final onWatch = (await ref
+              .read(workoutProvidersProvider)
+              .deliveredTo(s))
+          .isNotEmpty;
       await perform(() async {
         await actions.moveToDate(s, day);
       });
@@ -253,6 +278,31 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
             DateFormat('EEEE, d MMMM yyyy').format(s.sessionDate),
             style: const TextStyle(fontSize: 13, color: Colors.white70),
           ),
+          if (s.goalObjective != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 6),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.flag_outlined,
+                    size: 14,
+                    color: Colors.orange,
+                  ),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      goalPriority == null
+                          ? s.goalObjective!
+                          : '${s.goalObjective!} · ${goalPriority.toUpperCase()}',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.orange,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           const SizedBox(height: 20),
           WorkoutStatTiles(
             items: [
@@ -522,12 +572,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
               // One button per connected watch platform.
               final targets =
                   ref.watch(workoutTargetsProvider).valueOrNull ??
-                  const <WorkoutTarget>[
-                    (
-                      destination: WorkoutDestination.garmin,
-                      route: WorkoutRoute.push,
-                    ),
-                  ];
+                  const <WorkoutTarget>[];
               Future<void> share(String? why) async {
                 final workout = await ref
                     .read(trainingPlanServiceProvider)
@@ -551,7 +596,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
               }
 
               Widget button(WorkoutTarget t, {required bool first}) {
-                final destination = t.destination;
+                final provider = t.provider;
                 final pushes = t.route == WorkoutRoute.push;
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -564,7 +609,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                               if (!pushes) return share(null);
                               final result = await ref.read(
                                 pushWorkoutProvider,
-                              )(s.id, destination);
+                              )(s.id, provider);
                               if (!result.sent) {
                                 return share(
                                   '${result.shareReason} Shared as text.',
@@ -574,7 +619,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
-                                      'Workout sent to ${destination.label}',
+                                      'Workout sent to ${provider.label}',
                                     ),
                                   ),
                                 );
@@ -588,64 +633,55 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                         busy
                             ? 'Updating…'
                             : pushes
-                            ? 'Push to ${destination.label}'
-                            : 'Share workout for ${destination.label}',
+                            ? 'Push to ${provider.label}'
+                            : 'Share workout for ${provider.label}',
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
-                    if (!pushes && destination.unavailableNote != null)
+                    if (!pushes)
                       Padding(
                         padding: const EdgeInsets.only(top: 6),
                         child: Text(
-                          destination.unavailableNote!,
+                          provider.shareNote,
                           style: const TextStyle(fontSize: 11, color: muted),
                         ),
                       ),
-                    if (!pushes && destination == WorkoutDestination.coros)
+                    if (!pushes && provider.optIn != null)
                       Padding(
                         padding: const EdgeInsets.only(top: 8),
                         child: OutlinedButton.icon(
                           style: style(mint),
                           icon: const Icon(Icons.science_outlined, size: 20),
                           onPressed: () async {
+                            final optIn = provider.optIn!;
                             if (!await confirmAction(
                               context,
-                              'Send workouts to COROS?',
-                              'COROS has no workout import, so this uses the Training Hub\'s unofficial web interface with your COROS login. It is not endorsed by COROS, can stop working, and a workout should be checked in the Training Hub afterwards. Turn it on?',
+                              optIn.title,
+                              optIn.message,
                             )) {
                               return;
                             }
-                            final profile = ref
-                                .read(userProfileProvider)
-                                .valueOrNull;
-                            if (profile == null || !context.mounted) return;
-                            await runUiAction(
-                              context,
-                              () => ref
-                                  .read(userProfileProvider.notifier)
-                                  .save(
-                                    profile.copyWith(corosWorkoutPush: true),
-                                  ),
-                            );
+                            if (!context.mounted) return;
+                            await runUiAction(context, optIn.enable);
                           },
-                          label: const Text(
-                            'Send to COROS instead (experimental)',
-                            style: TextStyle(
+                          label: Text(
+                            provider.optIn!.buttonLabel,
+                            style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
                       ),
-                    if (pushes && destination != WorkoutDestination.garmin)
-                      const Padding(
-                        padding: EdgeInsets.only(top: 6),
+                    if (pushes && provider.pushNote != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 6),
                         child: Text(
-                          'Experimental: sent through the COROS Training Hub\'s unofficial interface. Check the workout in the Training Hub; a changed workout has to be removed there by hand.',
-                          style: TextStyle(fontSize: 11, color: muted),
+                          provider.pushNote!,
+                          style: const TextStyle(fontSize: 11, color: muted),
                         ),
                       ),
                   ],
@@ -669,9 +705,16 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
             onPressed: !editable || busy
                 ? null
                 : () async {
+                    final onPlatforms = [
+                      for (final p in await ref
+                          .read(workoutProvidersProvider)
+                          .deliveredTo(s))
+                        p.label,
+                    ];
+                    if (!context.mounted) return;
                     final reason = await _pickSkipReason(
                       context,
-                      onGarmin: s.garminAlternativeId != null,
+                      platforms: onPlatforms,
                     );
                     if (reason == null || !mounted) return;
                     await perform(() async {
@@ -709,7 +752,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
 /// Asks why a session is skipped; null when cancelled.
 Future<String?> _pickSkipReason(
   BuildContext context, {
-  required bool onGarmin,
+  required List<String> platforms,
 }) => showDialog<String>(
   context: context,
   builder: (context) => SimpleDialog(
@@ -718,9 +761,10 @@ Future<String?> _pickSkipReason(
       Padding(
         padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
         child: Text(
-          onGarmin
-              ? 'Why? It is also taken off your Garmin calendar. Nothing is added to make it up.'
-              : 'Why? Nothing is added to make it up.',
+          platforms.isEmpty
+              ? 'Why? Nothing is added to make it up.'
+              : 'Why? It is also taken off your ${platforms.join(' and ')} '
+                    'calendar. Nothing is added to make it up.',
           style: const TextStyle(fontSize: 13, color: Colors.white70),
         ),
       ),

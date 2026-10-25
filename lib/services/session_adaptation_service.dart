@@ -163,10 +163,8 @@ class SessionAdaptationService {
           sessionNotes: Value(notes),
           tspAdjusted: const Value(true),
           status: Value(rest ? 'skipped' : 'adapted'),
-          // New content is a new watch workout: the old definition must not
-          // be rescheduled. The calendar entry id stays, so the next push can
-          // take the old entry down first.
-          garminWorkoutId: rest ? const Value.absent() : const Value(null),
+          // New content is new for every watch platform: each one compares
+          // what it holds with the session and sends the new content.
           dateModified: Value(DateTime.now()),
         ),
       );

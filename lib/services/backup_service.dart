@@ -34,6 +34,14 @@ Map<String, dynamic> _decodeBackup(List<int> bytes) {
 /// Oldest backup schema that restores into the current database.
 const _oldestRestorableSchema = 44;
 
+/// Tables added after the oldest restorable schema, with the schema that
+/// added them. A backup older than that has no such table, and none is owed.
+const _tableAddedIn = {
+  'plan_goals': 47,
+  'provider_cleanups': 48,
+  'workout_deliveries': 48,
+};
+
 class BackupService {
   BackupService(this.db);
   final AppDatabase db;
@@ -172,7 +180,10 @@ class BackupService {
     final names = db.allTables.map((t) => t.actualTableName).toSet();
     if (source == null &&
         ((raw as Map).keys.toSet().difference(names).isNotEmpty ||
-            names.difference(raw.keys.cast<String>().toSet()).isNotEmpty)) {
+            names
+                .difference(raw.keys.cast<String>().toSet())
+                .where((n) => (_tableAddedIn[n] ?? 0) <= schema)
+                .isNotEmpty)) {
       throw const FormatException('Backup tables do not match.');
     }
     final settings = Map<String, dynamic>.from(payload['settings'] as Map);
@@ -186,7 +197,7 @@ class BackupService {
                     .customSelect('SELECT COUNT(*) AS n FROM "$name"')
                     .getSingle())
                 .read<int>('n')
-          : ((raw as Map)[name] as List).length;
+          : (((raw as Map)[name] as List?)?.length ?? 0);
     }
     final total = counts.values.fold(0, (a, b) => a + b);
     var completed = 0;

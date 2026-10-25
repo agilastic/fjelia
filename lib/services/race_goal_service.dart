@@ -3,6 +3,8 @@ import 'package:uuid/uuid.dart';
 
 import '../api/garmin_client.dart';
 import '../db/database.dart';
+import 'season/goal_set.dart';
+import 'season/season_goal.dart';
 
 /// Usual race distances in km.
 const _standardRaceKm = [5.0, 10.0, 21.0975, 42.195, 50.0, 100.0];
@@ -40,18 +42,30 @@ class RaceGoalService {
         .get();
   }
 
-  Future<RaceGoal?> getPrimaryGoal() {
-    final now = DateTime.now();
-    return (_db.select(_db.raceGoals)
-          ..where(
-            (t) =>
-                t.priority.equals('a') & t.raceDate.isBiggerOrEqualValue(now),
-          )
-          ..orderBy([
-            (t) => OrderingTerm(expression: t.raceDate, mode: OrderingMode.asc),
-          ])
-          ..limit(1))
-        .getSingleOrNull();
+  /// Every goal the season carries, read once: all priorities, all sports,
+  /// events behind us that still shape the days ahead and events after the
+  /// first A goal. [today] is a local day; an event today counts.
+  Future<GoalSet> resolveGoalSet({
+    String athleteId = 'self',
+    DateTime? today,
+  }) async {
+    final rows = await (_db.select(
+      _db.raceGoals,
+    )..where((t) => t.athleteId.equals(athleteId))).get();
+    return GoalSet([
+      for (final r in rows) SeasonGoal.fromRow(r),
+    ], today: today ?? DateTime.now());
+  }
+
+  /// The goal shown as the plan's own: the most important one still to come
+  /// (A before B before C, then the nearest). Planning uses [resolveGoalSet];
+  /// this is for screens that show one goal.
+  Future<RaceGoal?> getPrimaryGoal() async {
+    final id = (await resolveGoalSet()).display?.id;
+    if (id == null) return null;
+    return (_db.select(
+      _db.raceGoals,
+    )..where((t) => t.id.equals(id))).getSingleOrNull();
   }
 
   /// Fixes a marathon or half marathon saved with ten times its distance
@@ -91,6 +105,8 @@ class RaceGoalService {
     double? elevationM,
     String? garminEventId,
     String source = 'manual',
+    String participation = 'committed',
+    String? ambition,
   }) async {
     await _db
         .into(_db.raceGoals)
@@ -107,12 +123,14 @@ class RaceGoalService {
             elevationM: Value(elevationM),
             source: source,
             garminEventId: Value(garminEventId),
+            participation: Value(participation),
+            ambition: Value(ambition),
             createdAt: DateTime.now(),
           ),
         );
   }
 
-  /// Changes a goal. A null target time or elevation clears it.
+  /// Changes a goal. A null target time, elevation or ambition clears it.
   Future<void> update(
     String id, {
     required String name,
@@ -122,9 +140,13 @@ class RaceGoalService {
     required String priority,
     int? targetFinishSeconds,
     double? elevationM,
+    String participation = 'committed',
+    String? ambition,
   }) async {
     await (_db.update(_db.raceGoals)..where((t) => t.id.equals(id))).write(
       RaceGoalsCompanion(
+        participation: Value(participation),
+        ambition: Value(ambition),
         name: Value(name),
         primarySport: Value(primarySport),
         distanceM: Value(distanceM),

@@ -74,12 +74,19 @@ String appleFactLine(String line) {
           : 'target ${f['Target']}'
                 '${f['PaceSecKm'] == null || f['PaceSecKm'] == 'na' ? '' : ' (${_pace(f['PaceSecKm']!)})'}';
       final ahead = int.tryParse(f['GoalAheadOfEstimate%'] ?? '');
-      return 'Race goal: ${f['DistKm']} km ${f['Sport']?.replaceAll('_', ' ')} '
+      final priority = f['Priority'];
+      return 'Race goal${priority == null || priority == 'A' ? '' : ' (priority $priority)'}: '
+          '${f['DistKm']} km ${f['Sport']?.replaceAll('_', ' ')} '
           'on ${f['Date']}, ${f['Terrain']} course'
           '${f['ElevM'] == null || f['ElevM'] == 'na' ? '' : ' with ${f['ElevM']} m of climbing'}; '
           '$target'
           '${f['Estimate'] == null || f['Estimate'] == 'na' ? '' : ', current estimate ${f['Estimate']}'}'
           '${ahead != null && ahead >= 5 ? '. The goal is $ahead% faster than the estimate: a stretch.' : '.'}';
+    case 'Season':
+      String list(String? v) =>
+          v == null || v == 'none' ? 'none' : v.replaceAll('|', '; ');
+      return 'Season plan: outcome ${f['Outcome']}. Conflicts: ${list(f['Conflicts'])}. '
+          'Trade-offs: ${list(f['Tradeoffs'])}.';
     case 'Cancelled':
       return '${f['Sessions'] ?? 'Some'} planned sessions around today were cancelled '
           '(reasons: ${(f['Reasons'] ?? 'unknown').replaceAll('/', ', ')}). '

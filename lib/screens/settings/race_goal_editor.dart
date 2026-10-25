@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../providers/plan_goal_sync_provider.dart';
 import '../../providers/planner_providers.dart';
 import '../../widgets/app_widgets.dart';
 import '../../services/race_goal_service.dart';
@@ -40,9 +41,10 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
       target = TextEditingController();
   final form = GlobalKey<FormState>();
   DateTime? date;
-  String sport = 'running', priority = 'a';
+  String sport = 'running', priority = 'a', participation = 'committed';
+  String? ambition;
   String? dateError;
-  bool saving = false;
+  bool saving = false, more = false;
 
   @override
   void initState() {
@@ -52,6 +54,9 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
     name.text = g.name;
     sport = g.primarySport;
     priority = g.priority;
+    participation = g.participation;
+    ambition = g.ambition;
+    more = participation != 'committed' || ambition != null;
     date = g.raceDate;
     km.text = _km(g.distanceM / 1000);
     if (g.elevationM != null) elevation.text = _km(g.elevationM!);
@@ -111,6 +116,21 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
           fontWeight: FontWeight.w700,
         ),
       ),
+    );
+    Widget choices(
+      Map<String?, String> options,
+      String? selected,
+      void Function(String?) onChanged,
+    ) => Wrap(
+      spacing: 8,
+      children: [
+        for (final e in options.entries)
+          ChoiceChip(
+            label: Text(e.value),
+            selected: e.key == selected,
+            onSelected: saving ? null : (_) => onChanged(e.key),
+          ),
+      ],
     );
     InputDecoration decoration(String hint) => InputDecoration(
       hintText: hint,
@@ -368,7 +388,55 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                         fontSize: 12,
                       ),
                     ),
-                  const SizedBox(height: 24),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: TextButton.icon(
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        minimumSize: const Size(0, 30),
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        visualDensity: VisualDensity.compact,
+                        foregroundColor: Colors.white70,
+                      ),
+                      icon: Icon(
+                        more ? Icons.expand_less : Icons.expand_more,
+                        size: 18,
+                      ),
+                      label: const Text('More about this event'),
+                      onPressed: () => setState(() => more = !more),
+                    ),
+                  ),
+                  if (more) ...[
+                    label('PARTICIPATION'),
+                    choices(
+                      const {
+                        'committed': 'Committed',
+                        'flexible': 'Flexible',
+                        'cancelled': 'Not going',
+                      },
+                      participation,
+                      (v) => setState(() => participation = v!),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(bottom: 8),
+                      child: Text(
+                        'Flexible: the plan may drop this event if it clashes '
+                        'with a more important one.',
+                        style: TextStyle(fontSize: 12, color: Colors.white70),
+                      ),
+                    ),
+                    label('WHAT I WANT FROM IT'),
+                    choices(
+                      const {
+                        null: 'Not said',
+                        'finish': 'Finish',
+                        'performance': 'A time',
+                      },
+                      ambition,
+                      (v) => setState(() => ambition = v),
+                    ),
+                  ],
+                  SizedBox(height: more ? 24 : 12),
                   FilledButton(
                     style: FilledButton.styleFrom(
                       backgroundColor: accent,
@@ -444,6 +512,8 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                                   targetFinishSeconds: seconds,
                                   raceDate: date!,
                                   priority: priority,
+                                  participation: participation,
+                                  ambition: ambition,
                                 );
                               } else {
                                 await service.update(
@@ -455,10 +525,16 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                                   targetFinishSeconds: seconds,
                                   raceDate: date!,
                                   priority: priority,
+                                  participation: participation,
+                                  ambition: ambition,
                                 );
                               }
                               ref.invalidate(upcomingRaceGoalsProvider);
                               ref.invalidate(primaryRaceGoalProvider);
+                              ref.invalidate(goalSetProvider);
+                              // Marking the last goal "Not going" leaves the
+                              // plan with nothing to prepare for.
+                              await ref.read(retirePlanWithoutGoalsProvider)();
                               if (context.mounted) Navigator.pop(context);
                             });
                             if (mounted) setState(() => saving = false);

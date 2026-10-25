@@ -1,6 +1,21 @@
 // The evidence that may justify rebuilding the rest of a plan. Kept apart so
 // the rules can be tested; the caller supplies completed data only.
 
+import 'season/goal_set.dart';
+
+/// Whether the goals changed since the plan was built, so its future no
+/// longer prepares for what the athlete now has on the calendar. A plan built
+/// before goals were linked has no revision: it counts as changed only when
+/// there is more than one goal, which it never knew about. Called for a plan
+/// that is active.
+bool goalSetChanged({required String? planRevision, required GoalSet goals}) {
+  // The last goal gone is the biggest change there is: the plan has nothing
+  // left to prepare for.
+  if (goals.isEmpty) return true;
+  if (planRevision == null) return goals.active.length > 1;
+  return planRevision != goals.revision;
+}
+
 /// Relative growth of [current] over [previous], in percent, when it exceeds
 /// [threshold] percent, else null. Both are summed zone time (hours times a
 /// hundred) of two completed weeks, not a load model, so the message says so.

@@ -49,7 +49,7 @@ void main() {
   tearDown(() => db.close());
 
   test('plan respects experience, age and recent training history', () async {
-    final service = TrainingPlanService(db, FakeWorkoutGarmin());
+    final service = TrainingPlanService(db, garminProviders(db, FakeWorkoutGarmin()));
     final today = DateTime.now();
     final planId = await service.generatePlan(
       athleteId: 'self',
@@ -119,7 +119,7 @@ void main() {
               runHrZonesJson: Value(jsonEncode([120, 145, 155, 163, 171])),
             ),
           );
-      final service = TrainingPlanService(db, FakeWorkoutGarmin());
+      final service = TrainingPlanService(db, garminProviders(db, FakeWorkoutGarmin()));
       final planId = await service.generatePlan(
         athleteId: 'self',
         raceDate: DateTime.now().add(const Duration(days: 10 * 7)),
@@ -204,7 +204,7 @@ void main() {
               );
         }
       }
-      final service = TrainingPlanService(db, FakeWorkoutGarmin());
+      final service = TrainingPlanService(db, garminProviders(db, FakeWorkoutGarmin()));
       final planId = await service.generatePlan(
         athleteId: 'self',
         raceDate: today.add(const Duration(days: 16 * 7)),

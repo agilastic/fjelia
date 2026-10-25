@@ -117,6 +117,56 @@ void main() {
       expect(await db.select(db.sessionActuals).get(), hasLength(1));
     },
   );
+  test(
+    'a schema 46 backup, without the goal table and goal columns, restores',
+    () async {
+      await db
+          .into(db.raceGoals)
+          .insert(
+            RaceGoalsCompanion.insert(
+              id: 'g',
+              athleteId: 'self',
+              name: 'Marathon',
+              primarySport: 'running',
+              distanceM: 42195,
+              raceDate: DateTime(2027, 4, 10),
+              priority: 'a',
+              source: 'manual',
+              createdAt: DateTime(2026, 10, 25),
+            ),
+          );
+      final file = await BackupService(db).export(directory: dir);
+      final backup =
+          jsonDecode(
+                utf8.decode(
+                  ZipDecoder()
+                          .decodeBytes(await file.readAsBytes())
+                          .findFile('backup.json')!
+                          .content
+                      as List<int>,
+                ),
+              )
+              as Map<String, dynamic>;
+      backup['schema'] = 46;
+      (backup['tables'] as Map).remove('plan_goals');
+      for (final row in backup['tables']['race_goals'] as List) {
+        (row as Map)
+          ..remove('participation')
+          ..remove('ambition');
+      }
+      final bytes = utf8.encode(jsonEncode(backup));
+      final zip = ZipEncoder().encode(
+        Archive()..addFile(ArchiveFile('backup.json', bytes.length, bytes)),
+      );
+      await db.customStatement('DELETE FROM race_goals');
+      await BackupService(db).restore(zip);
+      final goal = (await db.select(db.raceGoals).get()).single;
+      // The old row takes the defaults: committed, ambition not said.
+      expect(goal.participation, 'committed');
+      expect(goal.ambition, isNull);
+      expect(await db.select(db.planGoals).get(), isEmpty);
+    },
+  );
   test('invalid backup fails before removing data', () async {
     await db.upsertHrv(
       HrvRecordsCompanion.insert(date: DateTime(2026, 10, 19)),

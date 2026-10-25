@@ -10,6 +10,7 @@ import 'package:fjelia/services/coros_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:fjelia/providers/workout_destination_provider.dart';
+import 'package:fjelia/providers/workout_providers_provider.dart';
 import 'package:fjelia/screens/planner/plan_session_sheet.dart';
 import 'package:fjelia/services/workout_destination.dart';
 import 'package:flutter/material.dart';
@@ -75,10 +76,16 @@ void main() {
   });
   tearDown(() => db.close());
 
+  /// A target for the platform with [id], built from the app's own wiring.
+  WorkoutTarget target(Ref ref, WorkoutDestination d, WorkoutRoute route) => (
+    provider: ref.watch(workoutProvidersProvider).byId(d.name)!,
+    route: route,
+  );
+
   Future<void> show(
     WidgetTester tester,
     WorkoutDestination destination, {
-    List<WorkoutTarget>? targets,
+    List<(WorkoutDestination, WorkoutRoute)>? targets,
   }) async {
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = const Size(393, 1400);
@@ -89,16 +96,19 @@ void main() {
         overrides: [
           databaseProvider.overrideWithValue(db),
           workoutTargetsProvider.overrideWith(
-            (ref) async =>
-                targets ??
-                [
-                  (
-                    destination: destination,
-                    route: destination == WorkoutDestination.garmin
-                        ? WorkoutRoute.push
-                        : WorkoutRoute.share,
-                  ),
-                ],
+            (ref) async => [
+              for (final (d, route)
+                  in targets ??
+                      [
+                        (
+                          destination,
+                          destination == WorkoutDestination.garmin
+                              ? WorkoutRoute.push
+                              : WorkoutRoute.share,
+                        ),
+                      ])
+                target(ref, d, route),
+            ],
           ),
         ],
         child: MaterialApp(
@@ -188,6 +198,8 @@ void main() {
           'timestampMs': DateTime.now().millisecondsSinceEpoch,
           'email': 'me@example.com',
         }),
+        // The experimental route is on: that is what makes COROS a push.
+        'user_profile_v1': jsonEncode({'corosWorkoutPush': true}),
       });
       tester.view.devicePixelRatio = 1;
       tester.view.physicalSize = const Size(393, 1400);
@@ -199,10 +211,7 @@ void main() {
             databaseProvider.overrideWithValue(db),
             workoutTargetsProvider.overrideWith(
               (ref) async => [
-                (
-                  destination: WorkoutDestination.coros,
-                  route: WorkoutRoute.push,
-                ),
+                target(ref, WorkoutDestination.coros, WorkoutRoute.push),
               ],
             ),
             corosServiceProvider.overrideWithValue(
@@ -304,8 +313,12 @@ void main() {
         });
         final container = ProviderContainer(
           overrides: [
-            connectedDestinationsProvider.overrideWith(
-              (ref) async => connected,
+            databaseProvider.overrideWithValue(db),
+            connectedProvidersProvider.overrideWith(
+              (ref) async => [
+                for (final d in connected)
+                  ref.watch(workoutProvidersProvider).byId(d.name)!,
+              ],
             ),
           ],
         );
@@ -319,10 +332,7 @@ void main() {
         WorkoutDestination.garmin,
         WorkoutDestination.coros,
       ], corosOn: false);
-      expect(t.map((e) => e.destination), [
-        WorkoutDestination.garmin,
-        WorkoutDestination.coros,
-      ]);
+      expect(t.map((e) => e.provider.id), ['garmin', 'coros']);
       expect(t.map((e) => e.route), [WorkoutRoute.push, WorkoutRoute.share]);
       // The COROS switch turns its button into a push.
       t = await targets([
@@ -349,9 +359,9 @@ void main() {
       tester,
       WorkoutDestination.garmin,
       targets: [
-        (destination: WorkoutDestination.garmin, route: WorkoutRoute.push),
-        (destination: WorkoutDestination.coros, route: WorkoutRoute.share),
-        (destination: WorkoutDestination.polar, route: WorkoutRoute.share),
+        (WorkoutDestination.garmin, WorkoutRoute.push),
+        (WorkoutDestination.coros, WorkoutRoute.share),
+        (WorkoutDestination.polar, WorkoutRoute.share),
       ],
     );
     await tester.scrollUntilVisible(

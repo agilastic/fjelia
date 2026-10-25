@@ -11,6 +11,8 @@ class MoveDay {
     this.sessions = 0,
     this.isRestDay = false,
     this.isFull = false,
+    this.event,
+    this.isEasyOnly = false,
   });
 
   final DateTime date;
@@ -21,6 +23,13 @@ class MoveDay {
 
   /// The day already holds as many sessions as the athlete allows.
   final bool isFull;
+
+  /// The event that owns the day (its day, or the rest day before); no
+  /// workout can move there.
+  final String? event;
+
+  /// Days just after an event: easy sessions only.
+  final bool isEasyOnly;
 }
 
 /// Moves a workout to another day: a strip of days to tap, the workout itself
@@ -288,6 +297,8 @@ class _MoveWorkoutCardState extends State<MoveWorkoutCard> {
             runSpacing: 4,
             children: [
               _Key(icon: Icons.nightlight_outlined, text: 'rest day'),
+              _Key(icon: Icons.flag, text: 'event'),
+              _Key(icon: Icons.self_improvement, text: 'easy only'),
               _Key(icon: Icons.circle, text: 'has a session', small: true),
             ],
           ),
@@ -379,6 +390,8 @@ class _DayChip extends StatelessWidget {
           '${DateFormat('EEEE d MMMM').format(day.date)}'
           '${isCurrent ? ', where the workout is' : ''}'
           '${day.isRestDay ? ', rest day' : ''}'
+          '${day.event != null ? ', ${day.event}, not available' : ''}'
+          '${day.isEasyOnly ? ', easy sessions only after an event' : ''}'
           '${day.sessions > 0 ? ', ${day.sessions} sessions planned' : ''}',
       child: GestureDetector(
         onTap: onTap,
@@ -419,9 +432,17 @@ class _DayChip extends StatelessWidget {
               ),
               SizedBox(
                 height: 14,
-                child: day.isRestDay
+                child: day.event != null
+                    ? const Icon(Icons.flag, size: 12, color: Colors.orange)
+                    : day.isRestDay
                     ? Icon(
                         Icons.nightlight_outlined,
+                        size: 12,
+                        color: isCurrent ? Colors.black87 : muted,
+                      )
+                    : day.isEasyOnly && day.sessions == 0
+                    ? Icon(
+                        Icons.self_improvement,
                         size: 12,
                         color: isCurrent ? Colors.black87 : muted,
                       )

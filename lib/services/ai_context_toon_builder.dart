@@ -10,6 +10,7 @@ import 'ai_data_status.dart';
 import 'post_workout_scorer.dart' show noActivityReason;
 import 'race_predictor.dart';
 import 'race_goal_service.dart';
+import 'season/season_report.dart';
 import '../utils/target_time.dart';
 import '../models/race_profile.dart';
 import 'open_meteo_client.dart';
@@ -337,8 +338,17 @@ class AiContextToonBuilder {
         );
       }
     }
-    final goal = await RaceGoalService(_db).getPrimaryGoal();
-    if (goal != null) {
+    final goalSet = await RaceGoalService(_db).resolveGoalSet();
+    final rows = {for (final g in await RaceGoalService(_db).getAll()) g.id: g};
+    // Every goal of the season, the plan's own first, so the coach never
+    // reasons from one race while another is on the calendar.
+    final ordered = [
+      if (goalSet.display != null) goalSet.display!,
+      ...goalSet.active.where((g) => g.id != goalSet.display?.id),
+    ];
+    for (final seasonGoal in ordered) {
+      final goal = rows[seasonGoal.id];
+      if (goal == null) continue;
       final profile = RaceProfile(
         sport: goal.primarySport,
         distanceM: goal.distanceM,
@@ -355,9 +365,14 @@ class AiContextToonBuilder {
         'Target:${goal.targetFinishSeconds == null ? 'none' : formatTargetTime(goal.targetFinishSeconds!)},'
         'PaceSecKm:${_num(profile.goalPaceSecPerKm)},FlatPaceSecKm:${_num(flat)},'
         'Estimate:${estimate == null ? 'na' : formatTargetTime(estimate)},'
-        'GoalAheadOfEstimate%:${estimate == null || profile.aheadOfPrediction(estimate) == null ? 'na' : (profile.aheadOfPrediction(estimate)! * 100).round()}]',
+        'GoalAheadOfEstimate%:${estimate == null || profile.aheadOfPrediction(estimate) == null ? 'na' : (profile.aheadOfPrediction(estimate)! * 100).round()},'
+        'Priority:${goal.priority.toUpperCase()},'
+        'Participation:${seasonGoal.participation.name},'
+        'Ambition:${seasonGoal.ambition?.name ?? 'unknown'}]',
       );
     }
+    final season = await _seasonLine();
+    if (season != null) lines.add(season);
     lines.add('[GarminScheduled:Upcoming:${workouts.length}]');
     for (final w in workouts) {
       lines.add('- [D:${_date(w.scheduledDate)},${_workout(w)}]');
@@ -510,6 +525,37 @@ class AiContextToonBuilder {
       : value == value.roundToDouble()
       ? value.toInt().toString()
       : value.toStringAsFixed(1);
+
+  /// The plan's season in one line: how the goals were combined, what was
+  /// limited and what is open. The coach explains this; it never invents
+  /// its own policy about which race comes first.
+  Future<String?> _seasonLine() async {
+    final plan =
+        await (_db.select(_db.trainingPlans)
+              ..where(
+                (t) => t.athleteId.equals('self') & t.status.equals('active'),
+              )
+              ..limit(1))
+            .getSingleOrNull();
+    final data = SeasonReport.decode(plan?.seasonJson);
+    if (data == null) return null;
+    String joined(Object? list, String Function(Object?) read) =>
+        list is List && list.isNotEmpty ? list.map(read).join('|') : 'none';
+    final goals = data['goals'];
+    String goal(Object? g) => g is Map
+        ? '${_clean('${g['priority']}')}-${_clean('${g['sport']}')}-${_clean('${g['date']}')}'
+        : 'na';
+    // Names stay out of the context, as for the race goal: the gap and the
+    // slack say what the coach needs.
+    String conflict(Object? c) => c is Map
+        ? '${_clean('${c['kind']}')}-gap${c['gapDays'] ?? 'na'}-slack${c['slackDays'] ?? 'na'}'
+        : 'na';
+    return '[Season:Outcome:${_clean(data['outcome'] as String?)},'
+        'Goals:${goals is Map ? goals.values.map(goal).join('|') : 'none'},'
+        'Conflicts:${joined(data['conflicts'], conflict)},'
+        'Tradeoffs:${joined(data['summary'], (c) => _clean(c as String?))}]';
+  }
+
   static String _clean(String? value) {
     if (value == null || value.trim().isEmpty) return 'na';
     return value

@@ -9,11 +9,14 @@ import '../db/database.dart';
 import '../services/athlete_thresholds_service.dart';
 import '../services/post_workout_scorer.dart';
 import '../services/race_goal_service.dart';
+import '../services/season/goal_set.dart';
+import '../services/season/season_report.dart';
 import '../services/training_plan_service.dart';
 import '../services/workout_template_library.dart';
 import 'auth_provider.dart';
 import 'database_provider.dart';
 import 'user_profile_provider.dart';
+import 'workout_providers_provider.dart';
 
 final athleteThresholdsServiceProvider = Provider<AthleteThresholdsService>(
   (ref) => AthleteThresholdsService(ref.watch(databaseProvider)),
@@ -28,9 +31,48 @@ final upcomingRaceGoalsProvider = FutureProvider<List<RaceGoal>>((ref) {
   return ref.watch(raceGoalServiceProvider).getUpcoming();
 });
 
+/// Every goal the season carries; what planning reads.
+final goalSetProvider = FutureProvider<GoalSet>((ref) {
+  ref.watch(syncStatusListenerProvider);
+  return ref.watch(raceGoalServiceProvider).resolveGoalSet();
+});
+
+/// The goal shown as the plan's own; see [goalSetProvider] for all of them.
 final primaryRaceGoalProvider = FutureProvider<RaceGoal?>((ref) {
   ref.watch(syncStatusListenerProvider);
   return ref.watch(raceGoalServiceProvider).getPrimaryGoal();
+});
+
+/// Rows of every goal still to come, the plan's own first.
+final seasonGoalsProvider = FutureProvider<List<RaceGoal>>((ref) async {
+  final set = await ref.watch(goalSetProvider.future);
+  final rows = {
+    for (final g in await ref.watch(raceGoalServiceProvider).getAll()) g.id: g,
+  };
+  final ordered = [
+    if (set.display != null) set.display!,
+    ...set.active.where((g) => g.id != set.display?.id),
+  ];
+  return [
+    for (final g in ordered)
+      if (rows[g.id] != null) rows[g.id]!,
+  ];
+});
+
+/// What the season planner decided for the active plan: outcome, conflicts
+/// and trade-offs. Null before a plan exists.
+final seasonReportProvider = FutureProvider<Map<String, dynamic>?>((ref) async {
+  // Read again whenever the plan is rebuilt.
+  ref.watch(upcomingSessionsProvider);
+  final db = ref.watch(databaseProvider);
+  final plan =
+      await (db.select(db.trainingPlans)
+            ..where(
+              (t) => t.athleteId.equals('self') & t.status.equals('active'),
+            )
+            ..limit(1))
+          .getSingleOrNull();
+  return SeasonReport.decode(plan?.seasonJson);
 });
 
 final workoutTemplateLibraryProvider = Provider<WorkoutTemplateLibrary>(
@@ -43,7 +85,7 @@ final trainingPlanServiceProvider = Provider<TrainingPlanService>((ref) {
   final profile = ref.watch(userProfileProvider).valueOrNull;
   return TrainingPlanService(
     ref.watch(databaseProvider),
-    ref.watch(garminClientProvider),
+    ref.watch(workoutProvidersProvider),
     usesPower: (sport, indoor) =>
         sport.startsWith('cycl') &&
         (profile?.powerOnBike(indoor: indoor) ?? false),
@@ -96,7 +138,7 @@ final raceFinishEstimateProvider = FutureProvider.family<int?, RaceGoal>((
 final planSessionActionsProvider = Provider<PlanSessionActions>(
   (ref) => PlanSessionActions(
     ref.watch(databaseProvider),
-    ref.watch(garminClientProvider),
+    ref.watch(workoutProvidersProvider),
   ),
 );
 final raceGoalImportProvider = Provider<Future<void> Function()>(
@@ -106,6 +148,7 @@ final raceGoalImportProvider = Provider<Future<void> Function()>(
         .syncFromGarmin(ref.read(garminClientProvider));
     ref.invalidate(upcomingRaceGoalsProvider);
     ref.invalidate(primaryRaceGoalProvider);
+    ref.invalidate(goalSetProvider);
   },
 );
 

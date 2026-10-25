@@ -304,8 +304,74 @@ class RaceGoals extends Table {
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime().nullable()();
 
+  /// Whether the athlete means to take part: `committed`, `flexible` or
+  /// `cancelled`. Priority says how much the goal matters; this says whether
+  /// the event is on the calendar.
+  TextColumn get participation =>
+      text().withDefault(const Constant('committed'))();
+
+  /// What the athlete wants from the event: `finish` or `performance`; null
+  /// while unknown. Never inferred from the name or the target time.
+  TextColumn get ambition => text().nullable()();
+
   @override
   Set<Column> get primaryKey => {id};
+}
+
+/// The goals a plan was built for. A plan belongs to every accepted goal, not
+/// only the one `TrainingPlans.raceGoalId` shows.
+class PlanGoals extends Table {
+  TextColumn get planId => text()();
+  TextColumn get goalId => text()();
+
+  /// Priority at the time of planning.
+  TextColumn get priority => text()();
+
+  /// Fingerprint of the planning-relevant fields of the goal when planned.
+  TextColumn get goalRevision => text()();
+
+  /// `active`, or `completed` once the event is behind us.
+  TextColumn get state => text().withDefault(const Constant('active'))();
+
+  @override
+  Set<Column> get primaryKey => {planId, goalId};
+}
+
+/// Entries on a watch platform that could not be removed when a plan changed
+/// or ended, kept so the removal is tried again. The local plan does not wait
+/// for it. One queue for every platform: [providerId] says whose it is, and
+/// [remoteId] is whatever that platform needs to find the entry again.
+class ProviderCleanups extends Table {
+  TextColumn get providerId => text()();
+  TextColumn get remoteId => text()();
+  TextColumn get scheduleId => text().nullable()();
+  DateTimeColumn get createdAt => dateTime()();
+  IntColumn get attempts => integer().withDefault(const Constant(1))();
+  TextColumn get lastError => text().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {providerId, remoteId};
+}
+
+/// What Fjelia has put on each watch platform, per session: the content it
+/// sent (a fingerprint), the day and the name it has there. Every platform
+/// keeps its record here, so a new one needs no table of its own.
+class WorkoutDeliveries extends Table {
+  TextColumn get sessionId => text()();
+  TextColumn get providerId => text()();
+
+  /// Fingerprint of the content that was sent.
+  TextColumn get fingerprint => text().nullable()();
+
+  /// The day it was put on, `yyyyMMdd`.
+  TextColumn get day => text().nullable()();
+
+  /// The name it has on the platform.
+  TextColumn get name => text().nullable()();
+  DateTimeColumn get sentAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {sessionId, providerId};
 }
 
 class TrainingPlans extends Table {
@@ -324,6 +390,13 @@ class TrainingPlans extends Table {
   TextColumn get restDaysJson => text().nullable()();
   TextColumn get strengthDaysJson => text().nullable()();
   RealColumn get hoursPerWeek => real().withDefault(const Constant(8.0))();
+
+  /// Fingerprint of the goal set the plan was built for.
+  TextColumn get goalSetRevision => text().nullable()();
+
+  /// The season: outcome, conflicts, trade-offs and what each week was
+  /// allocated to which goal. JSON, written by the planner.
+  TextColumn get seasonJson => text().nullable()();
 
   @override
   Set<Column> get primaryKey => {id};
@@ -379,6 +452,13 @@ class TrainingSessions extends Table {
 
   /// 'hr' or 'power': the main target of a ride; null until chosen.
   TextColumn get targetMetric => text().nullable()();
+
+  /// The goal the session prepares for, how (`primary`, `support`,
+  /// `maintenance`, `participation`) and why. Null on sessions planned before
+  /// goals were linked; those belong to the plan's goal.
+  TextColumn get goalId => text().nullable()();
+  TextColumn get goalRole => text().nullable()();
+  TextColumn get goalObjective => text().nullable()();
   TextColumn get sessionStackName => text().nullable()();
   TextColumn get multiSportWorkoutId => text().nullable()();
   BoolColumn get isMovedFromDifferentWeek =>
@@ -671,6 +751,9 @@ class WorkoutTemplates extends Table {
     DayScoreRecords,
     GripStrengthRecords,
     SpotHrvMeasurements,
+    PlanGoals,
+    ProviderCleanups,
+    WorkoutDeliveries,
     OcrMeasurements,
     ScheduledWorkoutRecords,
     WeatherSnapshotRecords,
@@ -704,7 +787,7 @@ class AppDatabase extends _$AppDatabase {
       defaultSourcePriorities[group.name]!;
 
   @override
-  int get schemaVersion => 46;
+  int get schemaVersion => 48;
 
   Future<void> saveHeartRateSamples(List<TimedHeartRate> samples) async {
     if (samples.isEmpty) return;
@@ -1530,6 +1613,45 @@ class AppDatabase extends _$AppDatabase {
       );
     },
     onUpgrade: (m, from, to) async {
+      if (from < 48) {
+        await m.createTable(providerCleanups);
+        await m.createTable(workoutDeliveries);
+        // What is on a Garmin calendar today is on record, so a later change
+        // to the session can tell whether it needs sending again.
+        await customStatement(
+          'INSERT OR IGNORE INTO workout_deliveries '
+          '(session_id, provider_id, day, name, sent_at) '
+          'SELECT id, \'garmin\', NULL, title, '
+          'COALESCE(date_modified, session_date) '
+          'FROM training_sessions WHERE garmin_workout_id IS NOT NULL',
+        );
+      }
+      if (from < 47) {
+        for (final (table, column, type) in const [
+          ('race_goals', 'participation', "TEXT NOT NULL DEFAULT 'committed'"),
+          ('race_goals', 'ambition', 'TEXT'),
+          ('training_plans', 'goal_set_revision', 'TEXT'),
+          ('training_plans', 'season_json', 'TEXT'),
+          ('training_sessions', 'goal_id', 'TEXT'),
+          ('training_sessions', 'goal_role', 'TEXT'),
+          ('training_sessions', 'goal_objective', 'TEXT'),
+        ]) {
+          await _addColumnIfMissing(
+            table,
+            column,
+            () => customStatement('ALTER TABLE $table ADD COLUMN $column $type'),
+          );
+        }
+        await m.createTable(planGoals);
+        // A plan built before goals were linked belongs to the one goal it
+        // knew; nothing is invented for goals it ignored.
+        await customStatement(
+          'INSERT OR IGNORE INTO plan_goals '
+          '(plan_id, goal_id, priority, goal_revision, state) '
+          'SELECT p.id, g.id, g.priority, \'legacy\', \'active\' '
+          'FROM training_plans p JOIN race_goals g ON g.id = p.race_goal_id',
+        );
+      }
       if (from < 46) {
         await _addColumnIfMissing(
           'training_sessions',

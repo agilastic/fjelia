@@ -10,6 +10,8 @@ import '../api/coros_client.dart';
 import '../db/database.dart';
 import '../models/heart_rate.dart';
 import '../utils/log.dart';
+import 'workout_providers/cleanup_queue.dart';
+import 'workout_providers/delivery_ledger.dart';
 
 class CorosSyncResult {
   CorosSyncResult();
@@ -145,23 +147,38 @@ class CorosService {
 
   // ── workouts ──────────────────────────────────────────────────────────────
 
-  static const _sentKey = 'coros_workouts_sent_v1';
+  /// Before the shared ledger, what was sent was kept here, as the
+  /// fingerprint per session.
+  static const _legacySentKey = 'coros_workouts_sent_v1';
 
-  /// What was sent per session: the fingerprint, the day and the name it has
-  /// on the calendar. Earlier versions kept the fingerprint alone.
-  Future<Map<String, Map<String, dynamic>>> _sent() async {
-    final raw = await _storage.read(key: _sentKey);
-    if (raw == null) return {};
+  late final DeliveryLedger _ledger = DeliveryLedger(_db, 'coros');
+  late final CleanupQueue _queue = CleanupQueue(_db, 'coros');
+
+  /// Carries what an earlier version kept in secure storage into the ledger,
+  /// once: the fingerprints stay, so nothing is sent a second time.
+  Future<void> _importLegacySent() async {
+    final raw = await _storage.read(key: _legacySentKey);
+    if (raw == null) return;
     try {
-      return (jsonDecode(raw) as Map).map(
-        (k, v) => MapEntry(
-          k as String,
-          v is num ? {'fp': v.toInt()} : Map<String, dynamic>.from(v as Map),
-        ),
-      );
-    } catch (_) {
-      return {};
-    }
+      for (final e in (jsonDecode(raw) as Map).entries) {
+        final v = e.value;
+        final map = v is num ? {'fp': v} : Map<String, dynamic>.from(v as Map);
+        if (await _ledger.get(e.key as String) != null) continue;
+        await _ledger.put(
+          e.key as String,
+          fingerprint: '${map['fp']}',
+          day: map['day'] as String?,
+          name: map['name'] as String?,
+        );
+      }
+    } catch (_) {}
+    await _storage.delete(key: _legacySentKey);
+  }
+
+  /// Whether this session's workout is on the COROS calendar.
+  Future<bool> hasDelivered(String sessionId) async {
+    await _importLegacySent();
+    return await _ledger.get(sessionId) != null;
   }
 
   static String _dayKey(DateTime d) =>
@@ -180,12 +197,12 @@ class CorosService {
       firstId: 1000000 + DateTime.now().millisecondsSinceEpoch % 90000000,
       createdAtSeconds: DateTime.now().millisecondsSinceEpoch ~/ 1000,
     );
-    final sent = await _sent();
-    final earlier = sent[workout.sessionId];
+    await _importLegacySent();
+    final earlier = await _ledger.get(workout.sessionId);
     final day = _dayKey(workout.date);
     if (earlier != null &&
-        earlier['fp'] == built.fingerprint &&
-        earlier['day'] == day) {
+        earlier.fingerprint == '${built.fingerprint}' &&
+        earlier.day == day) {
       throw CorosException('This workout is already on your COROS calendar.');
     }
     var auth = await _loadAuth();
@@ -205,12 +222,12 @@ class CorosService {
       _client.adopt((await _loadAuth())!);
       await send();
     }
-    sent[workout.sessionId] = {
-      'fp': built.fingerprint,
-      'day': day,
-      'name': built.program['name'],
-    };
-    await _storage.write(key: _sentKey, value: jsonEncode(sent));
+    await _ledger.put(
+      workout.sessionId,
+      fingerprint: '${built.fingerprint}',
+      day: day,
+      name: '${built.program['name']}',
+    );
     log(
       '[Coros] workout sent for ${workout.date.toIso8601String().substring(0, 10)}',
     );
@@ -220,25 +237,75 @@ class CorosService {
   /// moved workout does not appear twice. Best effort: an entry that cannot be
   /// found or removed is left, and the new one is sent anyway. Sends made by
   /// earlier versions carry no day and are left alone.
-  Future<void> _removeEarlier(Map<String, dynamic>? earlier) async {
-    final day = earlier?['day'] as String?;
-    final name = earlier?['name'] as String?;
+  Future<void> _removeEarlier(WorkoutDelivery? earlier) async {
+    final day = earlier?.day;
+    final name = earlier?.name;
     if (day == null || name == null || day.length != 8) return;
     try {
-      final d = DateTime(
-        int.parse(day.substring(0, 4)),
-        int.parse(day.substring(4, 6)),
-        int.parse(day.substring(6, 8)),
-      );
-      for (final e in await _client.calendarWorkouts(d, d)) {
-        if (e.name == name) await _client.removeCalendarWorkout(e);
-      }
+      await _removeByDayAndName(day, name);
     } on CorosAuthException {
       rethrow;
     } catch (e) {
       log('[Coros] earlier workout not removed: $e');
     }
   }
+
+  Future<void> _signIn() async {
+    var auth = await _loadAuth();
+    if (auth == null) throw CorosException('COROS is not connected.');
+    if (auth.isExpired && await _relogin()) auth = await _loadAuth();
+    _client.adopt(auth!);
+  }
+
+  /// Takes the entries named [name] off the calendar on [day] (`yyyyMMdd`).
+  Future<void> _removeByDayAndName(String day, String name) async {
+    final d = DateTime(
+      int.parse(day.substring(0, 4)),
+      int.parse(day.substring(4, 6)),
+      int.parse(day.substring(6, 8)),
+    );
+    Future<void> run() async {
+      for (final e in await _client.calendarWorkouts(d, d)) {
+        if (e.name == name) await _client.removeCalendarWorkout(e);
+      }
+    }
+
+    await _signIn();
+    try {
+      await run();
+    } on CorosAuthException {
+      if (!await _relogin()) rethrow;
+      _client.adopt((await _loadAuth())!);
+      await run();
+    }
+  }
+
+  /// Takes one session's workout off the COROS calendar and forgets it. A
+  /// removal that fails is queued for a later retry and does not throw.
+  Future<void> removeDelivered(String sessionId) async {
+    await _importLegacySent();
+    final record = await _ledger.get(sessionId);
+    if (record == null) return;
+    final day = record.day, name = record.name;
+    if (day != null && name != null && day.length == 8) {
+      try {
+        await _removeByDayAndName(day, name);
+      } catch (e) {
+        log('[Coros] removal failed for $name on $day: $e');
+        await _queue.add('$day|$name', error: e);
+      }
+    }
+    await _ledger.delete(sessionId);
+  }
+
+  /// Tries the removals that failed earlier. Returns how many went.
+  Future<int> retryCleanup() => _queue.retry((remoteId, _) async {
+    final at = remoteId.indexOf('|');
+    await _removeByDayAndName(
+      remoteId.substring(0, at),
+      remoteId.substring(at + 1),
+    );
+  });
 
   /// Takes the workouts Fjelia sent off the COROS calendar: entries from
   /// today on, over the next [months] months, whose name is one of [titles].
@@ -249,11 +316,10 @@ class CorosService {
     int months = 6,
     void Function(int done, int total)? onProgress,
   }) async {
-    if ((await _sent()).isEmpty) return 0;
-    var auth = await _loadAuth();
-    if (auth == null) return 0;
-    if (auth.isExpired && await _relogin()) auth = await _loadAuth();
-    _client.adopt(auth!);
+    await _importLegacySent();
+    if ((await _ledger.all()).isEmpty) return 0;
+    if (await _loadAuth() == null) return 0;
+    await _signIn();
     final today = DateTime.now();
     final start = DateTime(today.year, today.month, today.day);
     final found = <CorosCalendarEntry>[];
@@ -273,7 +339,7 @@ class CorosService {
       await _client.removeCalendarWorkout(e);
       onProgress?.call(++done, mine.length);
     }
-    await _storage.delete(key: _sentKey);
+    await _ledger.deleteAll();
     log('[Coros] removed ${mine.length} workouts from the calendar');
     return mine.length;
   }

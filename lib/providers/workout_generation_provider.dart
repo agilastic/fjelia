@@ -29,9 +29,11 @@ class WorkoutGenerationNotifier extends StateNotifier<AsyncValue<int?>> {
     try {
       // Asking for a plan is asking for the sync to keep one again.
       await AutoPlanPause.resume();
-      final goal = await ref.read(primaryRaceGoalProvider.future);
+      // Every goal the season carries, not only the first A.
+      final goals = await ref.read(raceGoalServiceProvider).resolveGoalSet();
+      final goal = goals.display;
       if (goal == null) {
-        throw StateError('Add a future race goal with priority A first.');
+        throw StateError('Add a future race goal first.');
       }
       final profile = await ref.read(userProfileProvider.future);
       final db = ref.read(databaseProvider);
@@ -49,11 +51,12 @@ class WorkoutGenerationNotifier extends StateNotifier<AsyncValue<int?>> {
           .generatePlan(
             athleteId: 'self',
             raceGoalId: goal.id,
-            raceDate: goal.raceDate,
-            sport: goal.primarySport,
+            raceDate: goal.date,
+            sport: goal.sport,
             raceDistanceM: goal.distanceM,
             raceElevationM: goal.elevationM,
-            targetFinishSeconds: goal.targetFinishSeconds,
+            targetFinishSeconds: goal.targetSeconds,
+            goals: goals,
             daysPerWeek: profile.trainingDaysPerWeek,
             hoursPerWeek: profile.hoursPerWeek,
             restDays: profile.restDays,

@@ -165,21 +165,20 @@ Future<void> _autoGeneratePlanIfNeeded(
   if (generated == null) return;
   await _storage.delete(key: _planNeedsHistoryKey);
   ref.invalidate(upcomingSessionsProvider);
-  // Only a watch Fjelia can send to gets the plan automatically; for the
-  // others the athlete shares a workout when they want it.
-  final destination = await ref.read(workoutDestinationProvider.future);
-  if (!destination.canPush) {
-    log(
-      '[Sync] plan generated — ${destination.label} gets workouts on request',
-    );
+  // Only the platforms Fjelia can send to get the plan by themselves; for
+  // the others the athlete shares a workout when they want it.
+  final pushers = await ref.read(pushProvidersProvider.future);
+  if (pushers.isEmpty) {
+    log('[Sync] plan generated — workouts go to a watch on request');
     return;
   }
-  log('[Sync] plan generated — pushing to Garmin');
+  final names = pushers.map((p) => p.label).join(', ');
+  log('[Sync] plan generated — pushing to $names');
   try {
-    await plans.pushPlanToGarmin('self');
-    log('[Sync] pushed plan workouts to Garmin');
+    await plans.deliverPlan('self', to: pushers);
+    log('[Sync] pushed plan workouts to $names');
   } catch (e) {
-    log('[Sync] Garmin push failed: $e');
+    log('[Sync] push failed: $e');
   }
 }
 

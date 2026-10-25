@@ -1824,7 +1824,7 @@ void main() {
     await tester.enterText(find.byType(TextFormField).at(1), '80.5');
     await tester.tap(find.text('B'));
     await tester.enterText(find.byType(TextFormField).at(2), '2400');
-    await tapLow(tester, find.text('Add Goal'));
+    await tapLow(tester, find.text('Add Goal', skipOffstage: false));
     await tester.pumpAndSettle();
     expect(find.text('Select a race date'), findsOneWidget);
     expect(await db.select(db.raceGoals).get(), isEmpty);
@@ -1833,7 +1833,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('OK'));
     await tester.pumpAndSettle();
-    await tapLow(tester, find.text('Add Goal'));
+    await tapLow(tester, find.text('Add Goal', skipOffstage: false));
     await tester.pumpAndSettle();
     final goal = (await db.select(db.raceGoals).get()).single;
     expect(goal.name, 'Island Gravel');
@@ -1860,7 +1860,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('OK'));
     await tester.pumpAndSettle();
-    await tapLow(tester, find.text('Add Goal'));
+    await tapLow(tester, find.text('Add Goal', skipOffstage: false));
     await tester.pumpAndSettle();
     expect(find.textContaining('a time you could really run'), findsOneWidget);
     expect(await db.select(db.raceGoals).get(), isEmpty);
@@ -1868,7 +1868,7 @@ void main() {
     await tester.enterText(find.byType(TextFormField).at(3), '3:30');
     await tester.pumpAndSettle();
     expect(find.textContaining('4:59/km on average'), findsOneWidget);
-    await tester.tap(find.text('Add Goal'));
+    await tester.tap(find.text('Add Goal', skipOffstage: false));
     await tester.pumpAndSettle();
     final goal = (await db.select(db.raceGoals).get()).single;
     expect(goal.targetFinishSeconds, 12600);
@@ -1901,7 +1901,7 @@ void main() {
     expect(find.text('Hannover'), findsOneWidget);
     await tester.enterText(find.byType(TextFormField).at(2), '2400');
     await tester.enterText(find.byType(TextFormField).at(3), '3h25');
-    await tapLow(tester, find.text('Save Goal'));
+    await tapLow(tester, find.text('Save Goal', skipOffstage: false));
     await tester.pumpAndSettle();
     var saved = (await db.select(db.raceGoals).get()).single;
     expect(saved.targetFinishSeconds, 12300);
@@ -1912,10 +1912,60 @@ void main() {
     await render(tester, RaceGoalEditor(goal: saved), 'race-goal-edit-2');
     expect(find.text('3:25:00'), findsOneWidget);
     await tester.enterText(find.byType(TextFormField).at(3), '');
-    await tapLow(tester, find.text('Save Goal'));
+    await tapLow(tester, find.text('Save Goal', skipOffstage: false));
     await tester.pumpAndSettle();
     saved = (await db.select(db.raceGoals).get()).single;
     expect(saved.targetFinishSeconds, isNull);
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(Duration.zero);
+    await tester.binding.setSurfaceSize(null);
+  });
+  testWidgets('whether the athlete goes and what they want is saved', (
+    tester,
+  ) async {
+    await db
+        .into(db.raceGoals)
+        .insert(
+          RaceGoalsCompanion.insert(
+            id: 'g',
+            athleteId: 'self',
+            name: 'Brevet 200',
+            primarySport: 'cycling_road',
+            distanceM: 200000,
+            raceDate: DateTime.now().add(const Duration(days: 120)),
+            priority: 'b',
+            source: 'manual',
+            createdAt: DateTime.now(),
+          ),
+        );
+    final goal = (await db.select(db.raceGoals).get()).single;
+    expect(goal.participation, 'committed');
+    expect(goal.ambition, isNull);
+    await render(tester, RaceGoalEditor(goal: goal), 'race-goal-more');
+    // Closed until asked for: the form stays short.
+    expect(find.text('PARTICIPATION'), findsNothing);
+    await tester.tap(find.text('More about this event'));
+    await tester.pumpAndSettle();
+    await tapLow(tester, find.text('Flexible', skipOffstage: false));
+    await tester.pumpAndSettle();
+    await tapLow(tester, find.text('Finish', skipOffstage: false));
+    await tester.pumpAndSettle();
+    await tapLow(tester, find.text('Save Goal', skipOffstage: false));
+    await tester.pumpAndSettle();
+    var saved = (await db.select(db.raceGoals).get()).single;
+    expect(saved.participation, 'flexible');
+    expect(saved.ambition, 'finish');
+    // Opened again it shows what was chosen, and "Not said" clears it.
+    await tester.pumpWidget(const SizedBox());
+    await render(tester, RaceGoalEditor(goal: saved), 'race-goal-more-2');
+    expect(find.text('PARTICIPATION'), findsOneWidget);
+    await tapLow(tester, find.text('Not said', skipOffstage: false));
+    await tester.pumpAndSettle();
+    await tapLow(tester, find.text('Save Goal', skipOffstage: false));
+    await tester.pumpAndSettle();
+    saved = (await db.select(db.raceGoals).get()).single;
+    expect(saved.participation, 'flexible');
+    expect(saved.ambition, isNull);
     await tester.pumpWidget(const SizedBox());
     await tester.pump(Duration.zero);
     await tester.binding.setSurfaceSize(null);
@@ -1935,7 +1985,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('OK'));
     await tester.pumpAndSettle();
-    await tapLow(tester, find.text('Add Goal'));
+    await tapLow(tester, find.text('Add Goal', skipOffstage: false));
     await tester.pumpAndSettle();
     expect(find.text('Distance of 422 km?'), findsOneWidget);
     expect(await db.select(db.raceGoals).get(), isEmpty);

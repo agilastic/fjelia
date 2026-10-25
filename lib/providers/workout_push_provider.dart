@@ -1,69 +1,67 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../api/coros_workout.dart' show CorosUnsupportedWorkout;
-import '../services/workout_destination.dart';
-import 'workout_destination_provider.dart';
 import '../services/auto_plan_pause.dart';
-import 'coros_provider.dart';
+import '../services/workout_providers/workout_providers.dart';
 import 'database_provider.dart';
 import 'planner_providers.dart';
+import 'workout_destination_provider.dart';
 
 /// What came of sending a workout to the watch platform.
 class WorkoutPushResult {
-  const WorkoutPushResult.sent(this.destination) : shareReason = null;
+  const WorkoutPushResult.sent(this.provider) : shareReason = null;
 
   /// The platform cannot hold this workout: share it as text, for [reason].
-  const WorkoutPushResult.share(this.destination, String this.shareReason);
+  const WorkoutPushResult.share(this.provider, String this.shareReason);
 
-  final WorkoutDestination destination;
+  final WorkoutProvider provider;
   final String? shareReason;
 
   bool get sent => shareReason == null;
 }
 
-/// Sends a planned session to [destination]: Garmin, or COROS when its
-/// experimental route is on. Throws with the platform's own message
-/// when it refuses.
+/// Sends a planned session to [provider]. Throws with the platform's own
+/// message when it refuses; a workout the platform cannot hold comes back as
+/// one to share.
 final pushWorkoutProvider =
     Provider<
       Future<WorkoutPushResult> Function(
         String sessionId,
-        WorkoutDestination destination,
+        WorkoutProvider provider,
       )
     >(
-      (ref) => (sessionId, destination) async {
-        final plans = ref.read(trainingPlanServiceProvider);
-        if (destination == WorkoutDestination.garmin) {
-          await plans.pushToGarmin(sessionId);
-          return WorkoutPushResult.sent(destination);
-        }
-        if (destination != WorkoutDestination.coros) {
-          throw StateError('${destination.label} cannot be pushed to.');
-        }
+      (ref) => (sessionId, provider) async {
         try {
           await ref
-              .read(corosServiceProvider)
-              .pushWorkout(await plans.prepareWorkout(sessionId));
-          return WorkoutPushResult.sent(destination);
-        } on CorosUnsupportedWorkout catch (e) {
-          return WorkoutPushResult.share(destination, e.reason);
+              .read(trainingPlanServiceProvider)
+              .deliver(sessionId, provider);
+          return WorkoutPushResult.sent(provider);
+        } on WorkoutNotSupported catch (e) {
+          return WorkoutPushResult.share(provider, e.reason);
         }
       },
     );
 
 /// What deleting every planned workout did on the connected platforms.
 class DeleteAllResult {
-  const DeleteAllResult({required this.garmin, required this.corosRemoved});
+  const DeleteAllResult({required this.removed, required this.labels});
 
-  final bool garmin;
+  /// Entries taken off each platform, by provider id.
+  final Map<String, int> removed;
 
-  /// Workouts taken off the COROS calendar.
-  final int corosRemoved;
+  /// Provider id to the name the athlete knows it by.
+  final Map<String, String> labels;
+
+  /// Platforms that had something removed, as "COROS 3, Garmin 12".
+  String get summary => [
+    for (final e in removed.entries)
+      if (e.value > 0) '${labels[e.key] ?? e.key} ${e.value}',
+  ].join(', ');
 }
 
-/// Deletes all planned workouts on this phone and on every connected platform
-/// that holds them (Garmin, and COROS where Fjelia sent some), reporting
-/// progress. Polar and Suunto hold nothing Fjelia sent.
+/// Deletes all planned workouts on this phone and on every connected
+/// platform, reporting progress. First the phone, which is quick and tells
+/// the sync not to build a plan again by itself; then each platform removes
+/// what Fjelia put there. Which platforms there are is not known here.
 final deleteAllWorkoutsProvider =
     Provider<
       Future<DeleteAllResult> Function(
@@ -71,35 +69,26 @@ final deleteAllWorkoutsProvider =
       )
     >(
       (ref) => (onProgress) async {
-        final targets = await ref.read(workoutTargetsProvider.future);
-        final garmin = targets.any(
-          (t) => t.destination == WorkoutDestination.garmin,
-        );
         final db = ref.read(databaseProvider);
-        // The names COROS entries are matched by, before the plans go.
+        // The names platforms that can only be searched by name use, taken
+        // before the plans go.
         final titles = {
           for (final s in await db.select(db.trainingSessions).get()) s.title,
         };
-        // First the phone, which is quick, and the sync is told not to build a
-        // plan again by itself. Then every platform that holds workouts.
         onProgress(0, 0, 'Deleting on this phone');
         await AutoPlanPause.pause();
         final plans = ref.read(trainingPlanServiceProvider);
         await plans.deleteLocalPlans();
         onProgress(1, 1, 'On this phone');
-        var coros = 0;
-        try {
-          coros = await ref
-              .read(corosServiceProvider)
-              .removeSentWorkouts(
-                titles,
-                onProgress: (done, total) =>
-                    onProgress(done, total, 'COROS calendar'),
-              );
-        } catch (_) {
-          // COROS being unreachable must not stop the other platforms.
-        }
-        if (garmin) await plans.deleteGarminWorkouts(onProgress: onProgress);
-        return DeleteAllResult(garmin: garmin, corosRemoved: coros);
+        final providers = await ref.read(connectedProvidersProvider.future);
+        final removed = await plans.removeFromPlatforms(
+          titles: titles,
+          providers: providers,
+          onProgress: onProgress,
+        );
+        return DeleteAllResult(
+          removed: removed,
+          labels: {for (final p in providers) p.id: p.label},
+        );
       },
     );

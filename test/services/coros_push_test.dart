@@ -194,4 +194,97 @@ void main() {
     );
     expect(requests, isEmpty);
   });
+
+  group('as a platform among others', () {
+    test(
+      'what was sent is on record in the shared ledger, per session',
+      () async {
+        final coros = service();
+        await coros.pushWorkout(workout());
+        expect(await coros.hasDelivered('s1'), isTrue);
+        expect(await coros.hasDelivered('other'), isFalse);
+        final row = (await db.select(db.workoutDeliveries).get()).single;
+        expect(row.providerId, 'coros');
+        expect(row.sessionId, 's1');
+        expect(row.day, '20261028');
+        expect(row.name, 'Easy run');
+        expect(row.fingerprint, isNotNull);
+      },
+    );
+
+    test(
+      'one session\'s workout is taken off the calendar and forgotten',
+      () async {
+        final coros = service();
+        await coros.pushWorkout(workout());
+        onCalendar = [
+          {'id': '5', 'name': 'Easy run'},
+          {'id': '6', 'name': 'Mine'},
+        ];
+        requests.clear();
+        await coros.removeDelivered('s1');
+        final removals = [
+          for (final r in requests.where((r) => r.url.path.endsWith('/update')))
+            jsonDecode(r.body) as Map<String, dynamic>,
+        ];
+        expect(removals, hasLength(1));
+        expect((removals.single['versionObjects'] as List).single['id'], '5');
+        expect(await coros.hasDelivered('s1'), isFalse);
+        expect(await db.select(db.providerCleanups).get(), isEmpty);
+      },
+    );
+
+    test(
+      'a removal that fails is queued, the record goes, a retry finishes it',
+      () async {
+        final coros = service();
+        await coros.pushWorkout(workout());
+        onCalendar = [
+          {'id': '5', 'name': 'Easy run'},
+        ];
+        answer = jsonEncode({'result': '9999', 'message': 'down'});
+        await coros.removeDelivered('s1');
+        final queued = (await db.select(db.providerCleanups).get()).single;
+        expect(queued.providerId, 'coros');
+        expect(queued.remoteId, '20261028|Easy run');
+        expect(await coros.hasDelivered('s1'), isFalse);
+        // Still down: tried again, still queued.
+        expect(await coros.retryCleanup(), 0);
+        expect((await db.select(db.providerCleanups).get()).single.attempts, 2);
+        // Up again: gone from the calendar and from the queue.
+        answer = jsonEncode({'result': '0000'});
+        requests.clear();
+        expect(await coros.retryCleanup(), 1);
+        expect(await db.select(db.providerCleanups).get(), isEmpty);
+        expect(requests.any((r) => r.url.path.endsWith('/update')), isTrue);
+      },
+    );
+
+    test(
+      'what an earlier version kept in secure storage is carried over',
+      () async {
+        FlutterSecureStorage.setMockInitialValues({
+          'coros_auth_v1': jsonEncode({
+            'accessToken': 'tok',
+            'userId': '42',
+            'region': 'eu',
+            'timestampMs': DateTime.now().millisecondsSinceEpoch,
+            'email': 'me@example.com',
+          }),
+          'coros_workouts_sent_v1': jsonEncode({'s1': 1234}),
+        });
+        final coros = service();
+        expect(await coros.hasDelivered('s1'), isTrue);
+        final row = (await db.select(db.workoutDeliveries).get()).single;
+        expect(row.fingerprint, '1234');
+        // The old key is gone: it is read once.
+        expect(
+          await const FlutterSecureStorage().read(
+            key: 'coros_workouts_sent_v1',
+          ),
+          isNull,
+        );
+      },
+    );
+  });
 }

@@ -66,11 +66,19 @@ void main() {
       await (db.update(db.trainingSessions)..where((t) => t.id.equals(done.id)))
           .write(const TrainingSessionsCompanion(status: Value('completed')));
       final secondCount = await job.generate();
-      expect(secondCount, count);
+      // The finished session stays and stands for its slot: regenerating
+      // does not plan the same work a second time on its day.
+      expect(secondCount, count! - 1);
       expect((await db.select(db.trainingPlans).get()).length, 1);
       final second = await db.select(db.trainingSessions).get();
-      expect(second.length, count! + 1);
+      expect(second.length, count);
       expect(second.singleWhere((s) => s.id == done.id).status, 'completed');
+      expect(
+        second.where((s) => s.sessionDate == done.sessionDate).length,
+        lessThanOrEqualTo(
+          first.where((s) => s.sessionDate == done.sessionDate).length,
+        ),
+      );
       expect(
         (await container.read(upcomingSessionsProvider.future)).length,
         secondCount,

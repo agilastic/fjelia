@@ -138,25 +138,126 @@ String _ambition(RaceGoal goal, int estimate) {
   return ' · goal ${(ahead * 100).round()}% faster';
 }
 
+/// Every goal of the season, the plan's own first, and what the plan makes of
+/// them together.
 class RaceCountdownCard extends ConsumerWidget {
   const RaceCountdownCard({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final goal = ref.watch(primaryRaceGoalProvider).valueOrNull;
-    if (goal == null) return const SizedBox.shrink();
-    final estimate = ref.watch(raceFinishEstimateProvider(goal)).valueOrNull;
-    final weeks =
-        (goal.raceDate.difference(DateUtils.dateOnly(DateTime.now())).inDays /
-                7)
-            .ceil()
-            .clamp(0, 999);
+    final goals = ref.watch(seasonGoalsProvider).valueOrNull ?? const [];
+    if (goals.isEmpty) return const SizedBox.shrink();
+    return Column(
+      children: [
+        for (final (i, goal) in goals.indexed)
+          _GoalCard(
+            goal: goal,
+            primary: i == 0,
+            showPriority: goals.length > 1,
+          ),
+        if (goals.length > 1) const SeasonSummaryCard(),
+      ],
+    );
+  }
+}
+
+/// How the goals fit together: the outcome and, in words, what is limited or
+/// needs a decision. Nothing is shown when the plan is plainly feasible.
+class SeasonSummaryCard extends ConsumerWidget {
+  const SeasonSummaryCard({super.key});
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final report = ref.watch(seasonReportProvider).valueOrNull;
+    if (report == null) return const SizedBox.shrink();
+    final outcome = report['outcome'] as String? ?? 'feasible';
+    final lines = <String>[
+      for (final c in (report['conflicts'] as List? ?? const []))
+        (c as Map)['message'] as String,
+      for (final t in (report['summary'] as List? ?? const [])) t as String,
+    ];
+    if (outcome == 'feasible' && lines.isEmpty) return const SizedBox.shrink();
+    final (label, color) = switch (outcome) {
+      'feasibleWithTradeoffs' => ('Season: with trade-offs', Colors.orange),
+      'requiresDecision' => ('Season: needs your decision', Colors.redAccent),
+      'infeasible' => ('Season: cannot be combined', Colors.redAccent),
+      'insufficientData' => ('Season: provisional', Colors.amber),
+      _ => ('Season', Colors.green),
+    };
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
       child: Material(
         color: panel,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(14),
-          side: BorderSide(color: Colors.orange.withValues(alpha: .6)),
+          side: BorderSide(color: color.withValues(alpha: .6)),
+        ),
+        child: Theme(
+          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+          child: ExpansionTile(
+            leading: Icon(Icons.balance_outlined, color: color),
+            title: Text(
+              label,
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+            ),
+            subtitle: Text(
+              lines.isEmpty ? 'All goals fit.' : lines.first,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontSize: 11, color: Colors.white70),
+            ),
+            childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 14),
+            expandedCrossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (final line in lines)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Text(line, style: const TextStyle(fontSize: 12)),
+                ),
+              for (final c in (report['conflicts'] as List? ?? const []))
+                for (final alt
+                    in ((c as Map)['alternatives'] as List? ?? const []))
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 4),
+                    child: Text(
+                      '→ $alt',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.orange,
+                      ),
+                    ),
+                  ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _GoalCard extends ConsumerWidget {
+  const _GoalCard({
+    required this.goal,
+    required this.primary,
+    required this.showPriority,
+  });
+  final RaceGoal goal;
+  final bool primary;
+  final bool showPriority;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final estimate = ref.watch(raceFinishEstimateProvider(goal)).valueOrNull;
+    final weeks =
+        (goal.raceDate.difference(DateUtils.dateOnly(DateTime.now())).inDays /
+                7)
+            .ceil()
+            .clamp(0, 999);
+    final accent = primary ? Colors.orange : Colors.lightBlue;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 14),
+      child: Material(
+        color: panel,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(14),
+          side: BorderSide(color: accent.withValues(alpha: .6)),
         ),
         child: InkWell(
           borderRadius: BorderRadius.circular(14),
@@ -168,13 +269,15 @@ class RaceCountdownCard extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.orange.withValues(alpha: .15),
+                    color: accent.withValues(alpha: .15),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Icon(
-                    Icons.flag_outlined,
+                  child: Icon(
+                    goal.primarySport.startsWith('cycl')
+                        ? Icons.pedal_bike
+                        : Icons.flag_outlined,
                     size: 24,
-                    color: Colors.orange,
+                    color: accent,
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -183,7 +286,9 @@ class RaceCountdownCard extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        goal.name,
+                        showPriority
+                            ? '${goal.name} · ${goal.priority.toUpperCase()}'
+                            : goal.name,
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
@@ -201,9 +306,9 @@ class RaceCountdownCard extends ConsumerWidget {
                         Text(
                           'Goal ${formatTargetTime(goal.targetFinishSeconds!)}'
                           '${_goalPace(goal)}',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 12,
-                            color: Colors.orange,
+                            color: accent,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -214,7 +319,7 @@ class RaceCountdownCard extends ConsumerWidget {
                           style: TextStyle(
                             fontSize: 12,
                             color: goal.targetFinishSeconds == null
-                                ? Colors.orange
+                                ? accent
                                 : Colors.white70,
                           ),
                         ),
@@ -226,10 +331,10 @@ class RaceCountdownCard extends ConsumerWidget {
                   children: [
                     Text(
                       '$weeks',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 27,
                         fontWeight: FontWeight.w700,
-                        color: Colors.orange,
+                        color: accent,
                       ),
                     ),
                     const Text(

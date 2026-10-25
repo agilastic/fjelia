@@ -20,7 +20,7 @@ void main() {
     required List<String> chosen,
     List<int> strengthDays = const [2, 4],
   }) async {
-    await TrainingPlanService(db, FakeWorkoutGarmin()).generatePlan(
+    await TrainingPlanService(db, garminProviders(db, FakeWorkoutGarmin())).generatePlan(
       athleteId: 'self',
       raceDate: DateTime.now().add(const Duration(days: 12 * 7)),
       sport: sport,

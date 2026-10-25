@@ -26,7 +26,7 @@ void main() {
   setUp(() async {
     db = AppDatabase(NativeDatabase.memory());
     await WorkoutTemplateLibrary(db).seedIfEmpty();
-    service = TrainingPlanService(db, FakeWorkoutGarmin());
+    service = TrainingPlanService(db, garminProviders(db, FakeWorkoutGarmin()));
   });
   tearDown(() => db.close());
 

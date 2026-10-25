@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:drift/drift.dart' hide isNull;
 import 'package:drift/native.dart';
+import 'package:fjelia/api/garmin_client.dart';
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/providers/user_profile_provider.dart';
 import 'package:fjelia/services/plan_session_actions.dart';
@@ -35,8 +36,10 @@ class _ListingGarmin extends FakeWorkoutGarmin {
   @override
   Future<List<String>> listWorkoutIds() async => ['w1', 'w2'];
   @override
-  Future<void> deleteWorkout(String workoutId, {String? scheduleId}) async =>
-      deleted.add(workoutId);
+  Future<void> deleteWorkout(String workoutId, {String? scheduleId}) async {
+    if (failDelete) throw GarminApiException('Test delete failure');
+    deleted.add(workoutId);
+  }
 }
 
 void main() {
@@ -124,7 +127,9 @@ void main() {
   ];
 
   test('a power-based running template becomes heart-rate zones', () async {
-    final s = await generate(TrainingPlanService(db, FakeWorkoutGarmin()));
+    final s = await generate(
+      TrainingPlanService(db, garminProviders(db, FakeWorkoutGarmin())),
+    );
     final steps = flat(jsonDecode(s.stepsJson!) as List);
     // Every step has its zone, worked out from its share of FTP.
     expect(steps.map((e) => e['zoneNumber']), [1, 2, 4, 1, 1]);
@@ -172,7 +177,7 @@ void main() {
           ),
         );
     final without = await generate(
-      TrainingPlanService(db, FakeWorkoutGarmin()),
+      TrainingPlanService(db, garminProviders(db, FakeWorkoutGarmin())),
       sport: 'cycling_road',
     );
     expect(
@@ -185,7 +190,7 @@ void main() {
     final withMeter = await generate(
       TrainingPlanService(
         db,
-        FakeWorkoutGarmin(),
+        garminProviders(db, FakeWorkoutGarmin()),
         usesPower: (sport, indoor) => sport.startsWith('cycl'),
       ),
       sport: 'cycling_road',
@@ -209,7 +214,7 @@ void main() {
     () async {
       final service = TrainingPlanService(
         db,
-        FakeWorkoutGarmin(),
+        garminProviders(db, FakeWorkoutGarmin()),
         usesPower: (sport, indoor) => false,
       );
       await db.delete(db.workoutTemplates).go();
@@ -242,7 +247,10 @@ void main() {
         flat(outdoor.steps).map((e) => e['targetType']['workoutTargetTypeKey']),
         everyElement('heart.rate.zone'),
       );
-      final actions = PlanSessionActions(db, FakeWorkoutGarmin());
+      final actions = PlanSessionActions(
+        db,
+        garminProviders(db, FakeWorkoutGarmin()),
+      );
       await actions.setTargetMetric(s, 'power');
       final indoor = await service.prepareWorkout(s.id);
       final steps = flat(indoor.steps);
@@ -282,24 +290,41 @@ void main() {
     'deleting everything: the phone first, then Garmin with progress',
     () async {
       final garmin = _ListingGarmin();
-      final service = TrainingPlanService(db, garmin);
+      final service = TrainingPlanService(db, garminProviders(db, garmin));
       await generate(service);
       await service.deleteLocalPlans();
       expect(await db.select(db.trainingSessions).get(), isEmpty);
       expect(await db.select(db.trainingPlans).get(), isEmpty);
       expect(garmin.deleted, isEmpty);
       final seen = <(int, int)>[];
-      await service.deleteGarminWorkouts(
+      final removed = await service.removeFromPlatforms(
+        titles: const {},
         onProgress: (done, total, _) => seen.add((done, total)),
       );
       expect(garmin.deleted, ['w1', 'w1', 'w2']);
+      expect(removed, {'garmin': 3});
       expect(seen.last, (3, 3));
     },
   );
 
+  test('delete all: what Garmin refuses is queued and tried again', () async {
+    final garmin = _ListingGarmin();
+    final service = TrainingPlanService(db, garminProviders(db, garmin));
+    garmin.failDelete = true;
+    final removed = await service.removeFromPlatforms(titles: const {});
+    expect(removed['garmin'], 0);
+    final queued = await db.select(db.providerCleanups).get();
+    expect(queued.map((q) => q.remoteId).toSet(), {'w1', 'w2'});
+    expect(queued.every((q) => q.providerId == 'garmin'), isTrue);
+    garmin.failDelete = false;
+    expect(await service.retryCleanup(), 2);
+    expect(await db.select(db.providerCleanups).get(), isEmpty);
+    expect(garmin.deleted, containsAll(['w1', 'w2']));
+  });
+
   test('the workout on the watch carries its targets as comments', () async {
     final garmin = FakeWorkoutGarmin();
-    final service = TrainingPlanService(db, garmin);
+    final service = TrainingPlanService(db, garminProviders(db, garmin));
     final s = await generate(service);
     await service.pushToGarmin(s.id);
     // Floors are floors: zone 2 is 110 to 127, not 92 to 110.
@@ -339,7 +364,7 @@ void main() {
           ),
         );
     final garmin = FakeWorkoutGarmin();
-    final service = TrainingPlanService(db, garmin);
+    final service = TrainingPlanService(db, garminProviders(db, garmin));
     await service.generatePlan(
       athleteId: 'self',
       raceGoalId: 'goal',
@@ -382,7 +407,7 @@ void main() {
   test('a session planned with watts before goes up as heart rate', () async {
     // Steps already resolved to watts (as an earlier plan stored them).
     final garmin = FakeWorkoutGarmin();
-    final service = TrainingPlanService(db, garmin);
+    final service = TrainingPlanService(db, garminProviders(db, garmin));
     final s = await generate(service);
     final old = jsonEncode([
       {

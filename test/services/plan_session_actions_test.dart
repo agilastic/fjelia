@@ -80,7 +80,7 @@ void main() {
   test(
     'day shifts preserve calendar midnight and original date through DST',
     () async {
-      final actions = PlanSessionActions(db, garmin);
+      final actions = PlanSessionActions(db, garminProviders(db, garmin));
       final next = await actions.moveDay(session, 1);
       expect(next.sessionDate, DateTime(2026, 10, 26));
       expect(next.weekNumber, 2);
@@ -97,10 +97,13 @@ void main() {
   test(
     'repeated push reschedules the same Garmin workout after a move',
     () async {
-      final plans = TrainingPlanService(db, garmin);
+      final plans = TrainingPlanService(db, garminProviders(db, garmin));
       await plans.pushToGarmin(session.id);
       session = (await db.select(db.trainingSessions).get()).single;
-      await PlanSessionActions(db, garmin).moveDay(session, 1);
+      await PlanSessionActions(
+        db,
+        garminProviders(db, garmin),
+      ).moveDay(session, 1);
       await plans.pushToGarmin(session.id);
       expect(garmin.creates, 1);
       expect(garmin.dates.last, DateTime(2026, 10, 26));
@@ -113,9 +116,15 @@ void main() {
   test(
     'rest unschedules the calendar entry and records a skipped workout',
     () async {
-      await TrainingPlanService(db, garmin).pushToGarmin(session.id);
+      await TrainingPlanService(
+        db,
+        garminProviders(db, garmin),
+      ).pushToGarmin(session.id);
       session = (await db.select(db.trainingSessions).get()).single;
-      final rest = await PlanSessionActions(db, garmin).markRest(session);
+      final rest = await PlanSessionActions(
+        db,
+        garminProviders(db, garmin),
+      ).markRest(session);
       expect(rest.status, 'skipped');
       expect(rest.garminAlternativeId, isNull);
       expect(garmin.removedSchedules, ['schedule-1']);
@@ -124,7 +133,10 @@ void main() {
         'Marked as rest',
       );
       await expectLater(
-        TrainingPlanService(db, garmin).pushToGarmin(rest.id),
+        TrainingPlanService(
+          db,
+          garminProviders(db, garmin),
+        ).pushToGarmin(rest.id),
         throwsStateError,
       );
     },
@@ -132,12 +144,15 @@ void main() {
   test(
     'a failed Garmin release still records the skip and keeps the entry',
     () async {
-      await TrainingPlanService(db, garmin).pushToGarmin(session.id);
+      await TrainingPlanService(
+        db,
+        garminProviders(db, garmin),
+      ).pushToGarmin(session.id);
       session = (await db.select(db.trainingSessions).get()).single;
       garmin.failUnschedule = true;
       final rest = await PlanSessionActions(
         db,
-        garmin,
+        garminProviders(db, garmin),
       ).markRest(session, reason: 'Illness');
       // The athlete's decision does not wait for the network.
       expect(rest.status, 'skipped');
@@ -148,7 +163,10 @@ void main() {
       );
       // A later attempt releases the entry.
       garmin.failUnschedule = false;
-      await PlanSessionActions(db, garmin).releaseGarminEntry(rest);
+      await PlanSessionActions(
+        db,
+        garminProviders(db, garmin),
+      ).releaseGarminEntry(rest);
       expect(
         (await db.select(db.trainingSessions).get()).single.garminAlternativeId,
         isNull,
@@ -158,7 +176,7 @@ void main() {
   test(
     'an adapted session goes to the watch as new content, not a reschedule',
     () async {
-      final plans = TrainingPlanService(db, garmin);
+      final plans = TrainingPlanService(db, garminProviders(db, garmin));
       await plans.pushToGarmin(session.id);
       expect(garmin.creates, 1);
       session = (await db.select(db.trainingSessions).get()).single;
@@ -168,11 +186,15 @@ void main() {
       );
       final adapted = (await db.select(db.trainingSessions).get()).single;
       expect(adapted.status, 'adapted');
-      expect(adapted.garminWorkoutId, isNull);
+      // The adaptation only changes the session; every platform compares
+      // what it holds with it and sends the new content.
+      expect(adapted.garminWorkoutId, 'workout-1');
       await plans.pushToGarmin(adapted.id);
-      // A second workout was created and the first calendar entry taken down.
+      // A second workout was created, the first calendar entry taken down and
+      // the old definition removed from the library.
       expect(garmin.creates, 2);
       expect(garmin.removedSchedules, ['schedule-1']);
+      expect(garmin.deletedWorkouts, ['workout-1']);
       final after = (await db.select(db.trainingSessions).get()).single;
       expect(after.garminWorkoutId, 'workout-2');
       expect(after.garminAlternativeId, 'schedule-2');
@@ -181,7 +203,7 @@ void main() {
   test(
     'a session moves to any day, keeps its first date and moves back',
     () async {
-      final actions = PlanSessionActions(db, garmin);
+      final actions = PlanSessionActions(db, garminProviders(db, garmin));
       final first = session.sessionDate;
       final far = DateTime(first.year, first.month, first.day + 19, 15, 30);
       final moved = await actions.moveToDate(session, far);
@@ -198,7 +220,7 @@ void main() {
   );
 
   test('restore undoes a skip and its reason', () async {
-    final actions = PlanSessionActions(db, garmin);
+    final actions = PlanSessionActions(db, garminProviders(db, garmin));
     final rest = await actions.markRest(session, reason: 'Fatigue');
     final back = await actions.restore(rest);
     expect(back.status, 'planned');
@@ -208,7 +230,7 @@ void main() {
   });
   test('retry after scheduling failure reuses the created workout', () async {
     garmin.failSchedule = true;
-    final plans = TrainingPlanService(db, garmin);
+    final plans = TrainingPlanService(db, garminProviders(db, garmin));
     await expectLater(plans.pushToGarmin(session.id), throwsException);
     garmin.failSchedule = false;
     await plans.pushToGarmin(session.id);

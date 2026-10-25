@@ -203,6 +203,71 @@ void main() {
       },
     );
 
+    test(
+      'every goal of the season reaches the coach, names stay out',
+      () async {
+        await goal(target: 12600);
+        await db
+            .into(db.raceGoals)
+            .insert(
+              RaceGoalsCompanion.insert(
+                id: 'b',
+                athleteId: 'self',
+                name: 'Secret brevet',
+                primarySport: 'cycling_road',
+                distanceM: 200000,
+                elevationM: const Value(1500),
+                targetFinishSeconds: const Value(27000),
+                raceDate: day(90),
+                priority: 'b',
+                participation: const Value('flexible'),
+                source: 'manual',
+                createdAt: today,
+              ),
+            );
+        final text = await context();
+        final lines = text.split('\n').where((l) => l.startsWith('[RaceGoal:'));
+        expect(lines, hasLength(2));
+        expect(lines.first, contains('Priority:A'));
+        expect(lines.last, contains('Sport:cycling_road,DistKm:200'));
+        expect(lines.last, contains('Priority:B,Participation:flexible'));
+        expect(lines.last, contains('Ambition:unknown'));
+        expect(text, isNot(contains('Secret')));
+      },
+    );
+
+    test('the plan\'s season reaches the coach as figures, not names', () async {
+      await goal(target: 12600);
+      await (db.update(db.trainingPlans)..where((t) => t.id.equals('p'))).write(
+        const TrainingPlansCompanion(
+          seasonJson: Value(
+            '{"outcome":"feasibleWithTradeoffs","goals":{"g":{"name":"Secret race name","priority":"A","sport":"running","date":"2027-04-10"}},'
+            '"conflicts":[{"kind":"tightSpacing","message":"Secret race name is close","gapDays":21,"slackDays":0}],'
+            '"summary":["Long sessions are shortened."]}',
+          ),
+        ),
+      );
+      final text = await context();
+      final line = text.split('\n').firstWhere((l) => l.startsWith('[Season:'));
+      expect(line, contains('Outcome:feasibleWithTradeoffs'));
+      expect(line, contains('Goals:A-running-2027-04-10'));
+      expect(line, contains('tightSpacing-gap21-slack0'));
+      expect(line, contains('Long sessions are shortened'));
+      expect(text, isNot(contains('Secret')));
+    });
+
+    test('Apple reads the season and the priority in words', () {
+      final season = appleFactLine(
+        '[Season:Outcome:feasibleWithTradeoffs,Goals:A-running-2027-04-10|B-cycling_road-2027-03-20,Conflicts:tightSpacing-gap21-slack0,Tradeoffs:none]',
+      );
+      expect(season, contains('outcome feasibleWithTradeoffs'));
+      expect(season, contains('tightSpacing-gap21-slack0'));
+      final b = appleFactLine(
+        '[RaceGoal:Sport:cycling_road,DistKm:200,ElevM:1500,Terrain:flat,Date:2027-03-20,Target:7:30:00,PaceSecKm:135,Estimate:na,GoalAheadOfEstimate%:na,Priority:B]',
+      );
+      expect(b, startsWith('Race goal (priority B):'));
+    });
+
     test('Apple reads it as sentences', () {
       final text = appleFactLine(
         '[RaceGoal:Sport:running,DistKm:42.2,ElevM:100,ClimbMPerKm:2.4,Terrain:flat,Date:2027-04-10,Target:3:30:00,PaceSecKm:299,FlatPaceSecKm:296,Estimate:3:33:12,GoalAheadOfEstimate%:2]',
@@ -225,6 +290,12 @@ void main() {
         coachAnswerStandard,
         contains('A goal clearly faster than the estimate is a stretch'),
       );
+    });
+
+    test('the rules keep the coach from ranking the goals itself', () {
+      expect(coachAnswerStandard, contains('Priority says how they trade off'));
+      expect(coachAnswerStandard, contains('never rank them yourself'));
+      expect(coachAnswerStandard, contains('Season gives the planner'));
     });
   });
 }

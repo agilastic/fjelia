@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
 
@@ -5,7 +6,6 @@ import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:uuid/uuid.dart';
 
-import '../api/garmin_client.dart';
 import '../db/database.dart';
 import 'hr_zone_model.dart';
 import '../models/workout_profile.dart' show formatBlockDuration;
@@ -16,6 +16,13 @@ import 'workout_semantics.dart';
 import '../providers/training_load_provider.dart';
 import '../utils/log.dart';
 import '../utils/week.dart';
+import 'race_goal_service.dart';
+import 'season/goal_set.dart';
+import 'season/season_goal.dart';
+import 'season/season_report.dart';
+import 'season/season_timeline.dart';
+import 'season/week_allocator.dart';
+import 'workout_providers/workout_providers.dart';
 
 /// Every sport the planner can schedule.
 const _supportedSports = {
@@ -81,8 +88,26 @@ class _SessionSlot {
     this.sessionType,
     this.subType,
     this.zone,
-    this.weekday,
-  );
+    this.weekday, {
+    this.goalId,
+    this.goalRole,
+    this.objective,
+    this.targetMin,
+    this.minMin,
+    this.maxMin,
+    this.rank,
+    this.phase,
+    this.maxZone,
+  });
+
+  /// Set when the season allocator made the slot: the goal it prepares for,
+  /// how, why, how long, and the phase its workout is chosen for. Slots of the
+  /// weekly templates carry none of it.
+  final String? goalId, goalRole, objective, phase;
+  final int? targetMin, minMin, maxMin, rank;
+
+  /// The highest zone the finished workout may reach; null for no limit.
+  final int? maxZone;
 
   final String sport;
   final String sessionType;
@@ -105,6 +130,15 @@ class _SessionSlot {
     clearSubType ? null : subType ?? this.subType,
     zone ?? this.zone,
     weekday ?? this.weekday,
+    goalId: goalId,
+    goalRole: goalRole,
+    objective: objective,
+    targetMin: targetMin,
+    minMin: minMin,
+    maxMin: maxMin,
+    rank: rank,
+    phase: phase,
+    maxZone: maxZone,
   );
 }
 
@@ -292,29 +326,9 @@ double _weeklyTssFactor(String phase, String tier) {
   return (phaseF * tierF).clamp(0.5, 1.25);
 }
 
-/// Periodisation: base → build → peak → taper, with every [cycle]th week of
-/// base and build an unloading week.
-String _phase(int week, int totalWeeks, {int cycle = 4}) {
-  if (totalWeeks <= 2) return week == totalWeeks - 1 ? 'taper' : 'base';
-  final taper = totalWeeks >= 8 ? 2 : 1;
-  final peak = math.max(1, (totalWeeks * 0.2).round());
-  final build = math.max(1, (totalWeeks * 0.35).round());
-  final remaining = totalWeeks - week;
-  String phase;
-  if (remaining <= taper) {
-    phase = 'taper';
-  } else if (remaining <= taper + peak) {
-    phase = 'peak';
-  } else if (remaining <= taper + peak + build) {
-    phase = 'build';
-  } else {
-    phase = 'base';
-  }
-  if ((phase == 'base' || phase == 'build') && week % cycle == cycle - 1) {
-    return 'recovery';
-  }
-  return phase;
-}
+/// Periodisation, see [seasonPhase].
+String _phase(int week, int totalWeeks, {int cycle = 4}) =>
+    seasonPhase(week, totalWeeks, cycle: cycle);
 
 String _tierFor(double ctl) => ctl < 35
     ? 'beginner'
@@ -708,15 +722,45 @@ class TrainingPlanService {
   /// exception, so the answer can depend on [indoor].
   TrainingPlanService(
     this._db,
-    this._garmin, {
+    this._providers, {
     bool Function(String sport, bool indoor)? usesPower,
-  }) : _usesPower = usesPower ?? ((_, _) => false);
+    DateTime Function()? clock,
+  }) : _usesPower = usesPower ?? ((_, _) => false),
+       _now = clock ?? DateTime.now;
 
   final AppDatabase _db;
-  final GarminClient _garmin;
+  final WorkoutProviders _providers;
+
+  /// The watch platforms workouts go to.
+  WorkoutProviders get providers => _providers;
   final bool Function(String sport, bool indoor) _usesPower;
 
+  /// The clock; tests set it so a season can be planned on a fixed day.
+  final DateTime Function() _now;
+
+  /// One plan writer at a time. Two builds at once would each delete and
+  /// recreate the same future sessions; the second waits for the first.
+  static Future<void> _writer = Future.value();
+
+  static Future<T> _exclusive<T>(Future<T> Function() body) {
+    final done = Completer<T>();
+    final previous = _writer;
+    _writer = done.future.then<void>((_) {}, onError: (_) {});
+    previous.then((_) async {
+      try {
+        done.complete(await body());
+      } catch (e, st) {
+        done.completeError(e, st);
+      }
+    });
+    return done.future;
+  }
+
   static DateTime _day(DateTime d) => DateTime(d.year, d.month, d.day);
+
+  /// A session the athlete moved to another day.
+  static Expression<bool> _isPinned($TrainingSessionsTable t) =>
+      t.modifiedBy.equals('athlete') & t.sessionDateOriginal.isNotNull();
   static DateTime _addDays(DateTime d, int days) =>
       DateTime(d.year, d.month, d.day + days);
 
@@ -919,6 +963,129 @@ class TrainingPlanService {
     'assessment' => 50,
     _ => 45,
   };
+
+  /// Drops the least important sessions until the rest fits in [limit]
+  /// minutes. Used when time has already been spent that no session stands
+  /// for.
+  static ({List<_SessionSlot> kept, List<_SessionSlot> removed}) _makeRoom(
+    List<_SessionSlot> slots,
+    double limit,
+  ) {
+    final list = [...slots];
+    final removed = <_SessionSlot>[];
+    int total() => list.fold(0, (a, s) => a + (s.targetMin ?? 0));
+    while (list.isNotEmpty && total() > limit) {
+      var worst = 0;
+      for (var i = 1; i < list.length; i++) {
+        final a = list[i], b = list[worst];
+        final byRank = (a.rank ?? 9).compareTo(b.rank ?? 9);
+        if (byRank > 0 ||
+            (byRank == 0 && (a.targetMin ?? 0) < (b.targetMin ?? 0))) {
+          worst = i;
+        }
+      }
+      removed.add(list.removeAt(worst));
+    }
+    return (kept: list, removed: removed);
+  }
+
+  /// The race a run is paced against: the goal the session prepares for when
+  /// that is a running goal, else the most important running goal. A ride
+  /// goal never sets a run's pace.
+  static RaceProfile? _paceProfile(
+    GoalSet goals,
+    _SessionSlot slot,
+    RaceProfile? single,
+    bool multi,
+  ) {
+    if (!multi) return single;
+    bool foot(SeasonGoal g) =>
+        g.sport == 'running' || g.sport == 'trail_running';
+    var goal = slot.goalId == null ? null : goals.byId(slot.goalId!);
+    if (goal == null || !foot(goal)) {
+      final runs = goals.active.where(foot).toList()
+        ..sort((a, b) {
+          final byPriority = a.priority.index.compareTo(b.priority.index);
+          return byPriority != 0 ? byPriority : a.date.compareTo(b.date);
+        });
+      goal = runs.isEmpty ? null : runs.first;
+    }
+    return goal?.profile;
+  }
+
+  /// What the athlete has done in each sport, as the allocator reads it.
+  static Map<String, SportCapacity> _capacitiesOf(_TrainingHistory history) => {
+    for (final e in history.sports.entries)
+      e.key: SportCapacity(
+        sessions: e.value.sessions,
+        longestMin: e.value.longestMin,
+        medianMin: e.value.medianMin,
+        yearLongestMin: e.value.yearLongestMin,
+      ),
+  };
+
+  /// The allocator's session as a slot of the weekly scheduling loop.
+  static _SessionSlot _slotOf(AllocatedSlot a) => _SessionSlot(
+    a.sport,
+    a.sessionType,
+    a.subType,
+    a.zone,
+    a.weekday,
+    goalId: a.goalId,
+    goalRole: a.role,
+    objective: a.objective,
+    targetMin: a.targetMin,
+    minMin: a.minMin,
+    maxMin: a.maxMin,
+    rank: a.rank,
+    phase: a.phase.isEmpty ? null : a.phase,
+    maxZone: a.maxZone,
+  );
+
+  /// Days after an event take easy sessions only, and short ones.
+  static bool _easyEnough(_SessionSlot s) =>
+      s.sport != 'strength' &&
+      s.zone <= 2 &&
+      (s.targetMin ?? 60) <= 60 &&
+      s.sessionType != 'key';
+
+  /// A steady endurance workout of [minutes] in [zone]: a short warm-up, one
+  /// long block and a cool-down. Used where no template is as long as the
+  /// session; the heart-rate or power target is filled in like any other.
+  static String _steadySteps(int minutes, int zone) {
+    Map<String, dynamic> step(String type, int id, int seconds, int z) => {
+      'type': 'ExecutableStepDTO',
+      'stepType': {'stepTypeId': id, 'stepTypeKey': type},
+      'endCondition': {'conditionTypeId': 2, 'conditionTypeKey': 'time'},
+      'endConditionValue': seconds,
+      'targetType': {
+        'workoutTargetTypeId': 4,
+        'workoutTargetTypeKey': 'heart.rate.zone',
+      },
+      'zoneNumber': z,
+    };
+    final warm = minutes >= 45 ? 600 : 300;
+    final cool = minutes >= 45 ? 300 : 0;
+    final main = math.max(300, minutes * 60 - warm - cool);
+    return jsonEncode([
+      step('warmup', 1, warm, 1),
+      step('interval', 3, main, zone),
+      if (cool > 0) step('cooldown', 2, cool, 1),
+    ]);
+  }
+
+  static String _steadyTitle(
+    String sport,
+    int minutes, {
+    String lead = 'Long endurance',
+  }) {
+    final noun = sport.startsWith('cycl')
+        ? 'ride'
+        : sport == 'running' || sport == 'trail_running'
+        ? 'run'
+        : sport.replaceAll('_', ' ');
+    return '$lead $noun ($minutes min)';
+  }
 
   List<_SessionSlot> _recoveryWeekSlots(String sport) {
     final main = switch (sport) {
@@ -1214,14 +1381,90 @@ class TrainingPlanService {
     String? existingPlanId,
     bool weekStartsOnMonday = true,
     PlanAthleteProfile athlete = const PlanAthleteProfile(),
+    GoalSet? goals,
+  }) => _exclusive(
+    () => _generatePlan(
+      athleteId: athleteId,
+      raceGoalId: raceGoalId,
+      raceDate: raceDate,
+      sport: sport,
+      raceDistanceM: raceDistanceM,
+      raceElevationM: raceElevationM,
+      targetFinishSeconds: targetFinishSeconds,
+      daysPerWeek: daysPerWeek,
+      restDays: restDays,
+      strengthDays: strengthDays,
+      hoursPerWeek: hoursPerWeek,
+      maxSessionsPerDay: maxSessionsPerDay,
+      gadSports: gadSports,
+      coachId: coachId,
+      existingPlanId: existingPlanId,
+      weekStartsOnMonday: weekStartsOnMonday,
+      athlete: athlete,
+      goals: goals,
+    ),
+  );
+
+  Future<String> _generatePlan({
+    required String athleteId,
+    String? raceGoalId,
+    required DateTime raceDate,
+    required String sport,
+    double? raceDistanceM,
+    double? raceElevationM,
+    int? targetFinishSeconds,
+    int daysPerWeek = 5,
+    List<int> restDays = const [7],
+    List<int> strengthDays = const [3],
+    double hoursPerWeek = 8.0,
+    int maxSessionsPerDay = 1,
+    List<String> gadSports = const [],
+    String? coachId,
+    String? existingPlanId,
+    bool weekStartsOnMonday = true,
+    PlanAthleteProfile athlete = const PlanAthleteProfile(),
+    GoalSet? goals,
   }) async {
-    final today = _day(DateTime.now());
+    final today = _day(_now());
+    // Every goal the season carries. Callers that know only one goal get a
+    // set of one, which plans exactly as before.
+    final goalSet =
+        goals ??
+        GoalSet.single(
+          SeasonGoal(
+            id: raceGoalId ?? 'race',
+            name: 'Race',
+            sport: sport,
+            date: raceDate,
+            distanceM: raceDistanceM ?? 0,
+            elevationM: raceElevationM,
+            targetSeconds: targetFinishSeconds,
+          ),
+          today: today,
+        );
+    // More than one goal on the calendar, or one just behind us whose
+    // recovery still counts: the season planner takes over from the weekly
+    // template.
+    final multi =
+        SeasonPolicy.multiGoalPlanning &&
+        (goalSet.active.length > 1 || goalSet.recent.isNotEmpty);
+    final display = goalSet.display;
+    if (goals != null && display != null) {
+      // The plan shows its most important goal; the rest are planned too.
+      raceGoalId = display.id;
+      raceDate = display.date;
+      sport = display.sport;
+      raceDistanceM = display.distanceM;
+      raceElevationM = display.elevationM;
+      targetFinishSeconds = display.targetSeconds;
+    }
     final rotation = _gadSportRotation(gadSports.isEmpty ? [sport] : gadSports);
     final mainSport = _supportedSports.contains(sport) ? sport : rotation.first;
-    final allowedSports = allowedPlanSports(
-      mainSport: mainSport,
-      chosen: gadSports,
-    );
+    final allowedSports = {
+      ...allowedPlanSports(mainSport: mainSport, chosen: gadSports),
+      if (multi)
+        for (final g in goalSet.active) ...SeasonTimeline.sportsOf(g).keys,
+    };
     var fitness = await _readFitnessSnapshot(athleteId, mainSport);
     // No measured zones: estimate them from age (and sex).
     if (fitness.hrZones.length < 4 && athlete.estimatedHrZones.isNotEmpty) {
@@ -1234,7 +1477,7 @@ class TrainingPlanService {
             ),
           ))
           .get(),
-      DateTime.now(),
+      _now(),
     );
     // The data decides once there is enough of it; the questionnaire answer
     // is only the fallback for new athletes and thin histories.
@@ -1267,20 +1510,45 @@ class TrainingPlanService {
       );
     }
 
-    final end = raceDate.isAfter(today) ? _day(raceDate) : _addDays(today, 28);
+    final end = multi
+        ? goalSet.horizonEnd!
+        : raceDate.isAfter(today)
+        ? _day(raceDate)
+        : _addDays(today, 28);
+
+    // Only a plan that is still the active one is built on; an ended or
+    // replaced plan stays as it is and a new one is made.
+    String? buildOn;
+    if (existingPlanId != null) {
+      final current = await (_db.select(
+        _db.trainingPlans,
+      )..where((t) => t.id.equals(existingPlanId))).getSingleOrNull();
+      if (current != null && current.status == 'active') buildOn = current.id;
+    }
 
     // The season anchor: where the plan began. Phases and the recovery cycle
     // are counted from it, so a replan carries on in the same block instead of
     // starting over at the day it ran. A different race starts a new season.
     var anchor = today;
-    if (existingPlanId != null) {
+    if (buildOn != null) {
       final existing = await (_db.select(
         _db.trainingPlans,
-      )..where((t) => t.id.equals(existingPlanId))).getSingleOrNull();
-      if (existing != null &&
-          existing.raceGoalId == raceGoalId &&
-          existing.startDate.isBefore(today)) {
-        anchor = _day(existing.startDate);
+      )..where((t) => t.id.equals(buildOn!))).getSingleOrNull();
+      if (existing != null && existing.startDate.isBefore(today)) {
+        // The season is the same while any goal of the old plan is still a
+        // goal; which one is shown does not matter. After the A race the next
+        // goal is shown, and the block carries on.
+        final linked = {
+          for (final l in await (_db.select(
+            _db.planGoals,
+          )..where((t) => t.planId.equals(existing.id))).get())
+            l.goalId,
+          if (existing.raceGoalId != null) existing.raceGoalId!,
+        };
+        final sameSeason =
+            existing.raceGoalId == raceGoalId ||
+            goalSet.all.any((g) => linked.contains(g.id));
+        if (sameSeason) anchor = _day(existing.startDate);
       }
     }
     // Weeks follow the calendar week the athlete chose, counted from the
@@ -1300,16 +1568,28 @@ class TrainingPlanService {
 
     // Plan row.
     String planId;
-    if (existingPlanId != null) {
-      planId = existingPlanId;
-      await _deleteGarminWorkoutsForAthlete(athleteId, planId);
+    // What stays of the old plan: sessions the athlete moved (on their day and
+    // on the watch), finished ones and skipped ones. The week is planned
+    // around them, and nothing is made up for a skipped session.
+    var kept = <TrainingSession>[];
+    if (buildOn != null) {
+      planId = buildOn;
+      await _removeDelivered(athleteId, planId);
       await (_db.delete(_db.trainingSessions)..where(
             (t) =>
                 t.planId.equals(planId) &
                 t.sessionDate.isBiggerOrEqualValue(today) &
-                (t.status.equals('planned') | t.status.equals('adapted')),
+                (t.status.equals('planned') | t.status.equals('adapted')) &
+                _isPinned(t).not(),
           ))
           .go();
+      kept =
+          await (_db.select(_db.trainingSessions)..where(
+                (t) =>
+                    t.planId.equals(planId) &
+                    t.sessionDate.isBiggerOrEqualValue(today),
+              ))
+              .get();
       await (_db.update(
         _db.trainingPlans,
       )..where((t) => t.id.equals(planId))).write(
@@ -1384,12 +1664,140 @@ class TrainingPlanService {
     var sessionNumber = 0;
     var gadIndex = 0;
 
+    // Why sessions were skipped. Illness and injury are health restrictions:
+    // that day takes nothing new, and nothing replaces what was dropped.
+    final skipReasons = <String, String>{};
+    final skippedIds = [
+      for (final k in kept)
+        if (k.status == 'skipped') k.id,
+    ];
+    if (skippedIds.isNotEmpty) {
+      for (final a in await (_db.select(
+        _db.sessionActuals,
+      )..where((t) => t.sessionId.isIn(skippedIds))).get()) {
+        if (a.skipReason != null) skipReasons[a.sessionId] = a.skipReason!;
+      }
+    }
+    bool isHealth(String? reason) =>
+        reason != null &&
+        RegExp(
+          r'illness|injur|pain|sick',
+          caseSensitive: false,
+        ).hasMatch(reason);
+    final healthDays = {
+      for (final k in kept)
+        if (k.status == 'skipped' && isHealth(skipReasons[k.id]))
+          _day(k.sessionDate),
+    };
+    // Training already done today that no session accounts for: it is real
+    // load, so it takes its day and its minutes out of the plan.
+    final doneToday = <({DateTime day, int minutes})>[];
+    {
+      final dayEnd = _addDays(today, 1);
+      final rows =
+          await (_db.select(_db.activityRecords)..where(
+                (t) =>
+                    t.startDate.isBiggerOrEqualValue(today) &
+                    t.startDate.isSmallerThanValue(dayEnd),
+              ))
+              .get();
+      if (rows.isNotEmpty) {
+        final linked = {
+          for (final a
+              in await (_db.select(_db.sessionActuals)..where(
+                    (t) =>
+                        t.activityId.isIn([for (final r in rows) r.activityId]),
+                  ))
+                  .get())
+            a.activityId,
+        };
+        for (final r in rows) {
+          if (linked.contains(r.activityId)) continue;
+          doneToday.add((
+            day: today,
+            minutes: (r.durationSeconds / 60).round(),
+          ));
+        }
+      }
+    }
+
+    // The season: which goal asks what of each week, what the weeks hold and
+    // where the days are taken by an event.
+    final timeline = SeasonTimeline(
+      goals: goalSet,
+      anchorWeek: anchorWeek,
+      mondayFirst: weekStartsOnMonday,
+      cycle: athlete.recoveryCycle,
+    );
+    final capacities = _capacitiesOf(history);
+    final goalSports = {
+      for (final g in goalSet.active) ...SeasonTimeline.sportsOf(g).keys,
+    };
+    // Sports of the same family as a goal sport are not variety: a gravel
+    // ride is the road goal's own sport. Variety needs the sport's own
+    // history, so a sport the athlete never does is never scheduled.
+    String family(String s) => s.startsWith('cycl')
+        ? 'cycling'
+        : s == 'running' || s == 'trail_running'
+        ? 'running'
+        : s;
+    final goalFamilies = {for (final s in goalSports) family(s)};
+    final varietySports = [
+      for (final s in _gadSportRotation(gadSports))
+        if (!goalFamilies.contains(family(s)) && history.sports[s] != null) s,
+    ];
+    final allocations = <WeekAllocation>[];
+    final weekReports = <WeekReport>[];
+    // Days that carried a long session or an event, with its minutes: the day
+    // next to one is no place for a second hard day.
+    final longDates = <DateTime, int>{
+      for (final g in goalSet.relevant)
+        if (g.demand.planningMinutes >= 150)
+          g.date: g.demand.planningMinutes.round(),
+    };
+    final sportFitness = <String, _AthleteFitnessSnapshot>{mainSport: fitness};
+    Future<_AthleteFitnessSnapshot> fitnessFor(String sport) async {
+      if (!multi) return fitness;
+      final key = sport.contains('cycl')
+          ? 'cycling'
+          : sport.contains('swim')
+          ? 'swimming'
+          : 'running';
+      final cached = sportFitness[key];
+      if (cached != null) return cached;
+      var read = await _readFitnessSnapshot(athleteId, sport);
+      // No measured zones for this sport either: the age estimate stands in.
+      if (read.hrZones.length < 4 && athlete.estimatedHrZones.isNotEmpty) {
+        read = read.withHrZones(athlete.estimatedHrZones);
+      }
+      return sportFitness[key] = read;
+    }
+
     for (var g = firstIndex; g < weeks; g++) {
       // g counts from the season anchor, w from this plan run.
       final w = g - firstIndex;
       final weekStart = _addDays(anchorWeek, g * 7);
+      final weekIntents = multi
+          ? timeline.intentsFor(weekStart)
+          : const <GoalWeek>[];
+      var needs = SeasonTimeline.needsOf(weekIntents);
+      if (multi && prependRecovery && w == 0) {
+        needs = [
+          for (final n in needs)
+            SportNeed(
+              sport: n.sport,
+              weight: n.weight,
+              intent: GoalIntent.unload,
+              goal: n.goal,
+              weeksToEvent: n.weeksToEvent,
+              progress: n.progress,
+            ),
+        ];
+      }
       var phase = (prependRecovery && w == 0)
           ? 'recovery'
+          : multi
+          ? (needs.isEmpty ? 'base' : needs.first.intent.phase)
           : _phase(g, weeks, cycle: athlete.recoveryCycle);
       final weeksIntoBlock = g % athlete.recoveryCycle;
       final progression = phase == 'taper' || phase == 'recovery'
@@ -1406,7 +1814,9 @@ class TrainingPlanService {
           athlete: athlete,
         ),
       );
-      if (phase == 'recovery' || phase == 'taper') weeklyBudgetMin *= 0.7;
+      if (!multi && (phase == 'recovery' || phase == 'taper')) {
+        weeklyBudgetMin *= 0.7;
+      }
       final weekTss =
           (baseWeeklyTss *
                   _weeklyTssFactor(phase, fitness.tier) *
@@ -1490,8 +1900,118 @@ class TrainingPlanService {
       slots.sort((a, b) => rank(a).compareTo(rank(b)));
       if (slots.length > maxSessions) slots = slots.sublist(0, maxSessions);
 
+      final weekNotes = <String>[];
+      var weekBudget = 0.0;
+      // What the week really holds, to set against what was allocated: the
+      // report describes the sessions that are stored, not the intention.
+      WeekAllocation? weekAllocation;
+      Map<String, dynamic>? reportAllocation;
+      var weekPartial = false;
+      final actualRows =
+          <({String sport, String type, String? sub, int minutes})>[];
+      void dropped(_SessionSlot slot, String why) {
+        final allocation = weekAllocation;
+        if (allocation == null) return;
+        final what = (slot.objective ?? '${slot.sport} session').toLowerCase();
+        final protectedSession = (slot.rank ?? 9) <= 1;
+        final message = '$what was dropped: $why.';
+        // A part week cannot fail a long session it never had the days for.
+        if (protectedSession && !weekPartial) {
+          allocation.unmet.add(message);
+        } else if ((slot.rank ?? 9) <= 3) {
+          allocation.tradeoffs.add(message);
+        }
+      }
+
+      if (multi) {
+        // The season allocator shares the week between the goals' sports
+        // before any day is chosen; the weekly template is not used.
+        final events = [
+          for (final gw in weekIntents)
+            if (gw.intent == GoalIntent.event)
+              (
+                name: gw.goal.name,
+                minutes: gw.goal.demand.planningMinutes.round(),
+              ),
+        ];
+        final eventMinutes = events.fold<int>(0, (a, e) => a + e.minutes);
+        // Read from every goal's intent, so a goal that shares its sport with
+        // a later one is still recovered from.
+        var budget =
+            weeklyBudgetMin *
+            (prependRecovery && w == 0
+                ? 0.7
+                : WeekAllocator.budgetFactor(weekIntents));
+        budget = math.max(budget * 0.3, budget - eventMinutes);
+        // A week already begun, or ending at the last event, has fewer days
+        // to train in: its time and its sessions shrink with them.
+        var daysLeft = 0;
+        for (var off = 0; off < 7; off++) {
+          final date = _addDays(weekStart, off);
+          if (date.isBefore(today) || date.isAfter(end)) continue;
+          if (restDays.contains(date.weekday)) continue;
+          if (healthDays.contains(date)) continue;
+          if (goalSet.loadOn(date) == DayLoad.blocked) continue;
+          daysLeft++;
+        }
+        final trainingDays = math.max(
+          1,
+          math.min(daysPerWeek, 7 - restDays.length),
+        );
+        if (daysLeft < trainingDays) {
+          budget *= math.max(1, daysLeft) / trainingDays;
+        }
+        final sessionCap = math.max(
+          1,
+          math.min(maxSessions, daysLeft * maxSessionsPerDay),
+        );
+        final allocation = const WeekAllocator().allocate(
+          AllocationInput(
+            needs: needs,
+            budgetMin: budget,
+            sessionCap: sessionCap,
+            strengthDays: strengthDays,
+            recoveringFromEvent: WeekAllocator.isRecoveringFromLongEvent(
+              weekIntents,
+            ),
+            partialWeek: daysLeft < trainingDays,
+            capacities: capacities,
+            weekInRun: w,
+            weekIndex: g,
+            maxKeySessions: easyStart ? 1 : athlete.maxKeySessions,
+            easyStart: easyStart,
+            varietySports: varietySports,
+            footLongCap: (goal) => maxLongRunMinutes(
+              _distanceCategory(goal.distanceM),
+              targetMin: goal.targetSeconds == null
+                  ? null
+                  : (goal.targetSeconds! / 60).round(),
+            ),
+            allowedSports: allowedSports,
+            events: events,
+          ),
+        );
+        allocations.add(allocation);
+        weekAllocation = allocation;
+        weekPartial = daysLeft < trainingDays;
+        weekBudget = budget;
+        slots = [for (final a in allocation.slots) _slotOf(a)]
+          ..sort((a, b) => (a.rank ?? 9).compareTo(b.rank ?? 9));
+        reportAllocation = allocation.toJson();
+        weekReports.add(
+          WeekReport(
+            weekStart: weekStart,
+            phase: phase,
+            intents: {for (final gw in weekIntents) gw.goal.id: gw.intent.name},
+            allocation: reportAllocation,
+            notes: weekNotes,
+          ),
+        );
+      }
+
       // Assign each slot to a day offset in the week.
       final used = <int, int>{};
+      final dayMinutes = <int, int>{};
       final usedSports = <int, Set<String>>{};
       bool isPreRaceRest(DateTime d) => d == _addDays(raceDay, -1);
 
@@ -1499,12 +2019,20 @@ class TrainingPlanService {
         final candidates = <int>[];
         for (var off = 0; off < 7; off++) {
           final date = _addDays(weekStart, off);
-          // The race day belongs to the race, not to an ordinary session.
-          if (!date.isBefore(raceDay)) continue;
+          // An event day belongs to the event, not to an ordinary session.
+          if (multi) {
+            if (date.isAfter(end)) continue;
+            final load = goalSet.loadOn(date);
+            if (load == DayLoad.blocked) continue;
+            if (load == DayLoad.easyOnly && !_easyEnough(s)) continue;
+          } else if (!date.isBefore(raceDay)) {
+            continue;
+          }
           // Days already gone cannot take a session.
           if (date.isBefore(today)) continue;
           if (restDays.contains(date.weekday)) continue;
-          if (isPreRaceRest(date)) continue;
+          if (healthDays.contains(date)) continue;
+          if (!multi && isPreRaceRest(date)) continue;
           final count = used[off] ?? 0;
           if (count >= maxSessionsPerDay) continue;
           if (count > 0 && (usedSports[off]?.contains(s.sport) ?? false)) {
@@ -1514,13 +2042,38 @@ class TrainingPlanService {
         }
         if (candidates.isEmpty) return null;
         if (s.weekday == 0) {
-          candidates.sort((a, b) => (used[a] ?? 0).compareTo(used[b] ?? 0));
+          // The quietest day: fewest sessions, then fewest minutes.
+          candidates.sort((a, b) {
+            final byCount = (used[a] ?? 0).compareTo(used[b] ?? 0);
+            return byCount != 0
+                ? byCount
+                : (dayMinutes[a] ?? 0).compareTo(dayMinutes[b] ?? 0);
+          });
           return candidates.first;
         }
         int dist(int off) {
           final wd = _addDays(weekStart, off).weekday;
           final d = (wd - s.weekday).abs();
-          return math.min(d, 7 - d) * 10 + (used[off] ?? 0);
+          var cost = math.min(d, 7 - d) * 10 + (used[off] ?? 0);
+          // A hard or long day next to a long one, or on top of one, is the
+          // last choice: the legs and the week are not asked twice.
+          final minutes = s.targetMin;
+          if (multi && minutes != null) {
+            final demanding = s.sessionType == 'key' || minutes >= 90;
+            if (demanding) {
+              final day = _addDays(weekStart, off);
+              for (final next in [-1, 1]) {
+                final neighbour = longDates[_addDays(day, next)] ?? 0;
+                if (neighbour >= 150 || (minutes >= 150 && neighbour >= 100)) {
+                  cost += 50;
+                }
+              }
+            }
+            if ((dayMinutes[off] ?? 0) >= 90 && (demanding || minutes >= 60)) {
+              cost += 80;
+            }
+          }
+          return cost;
         }
 
         candidates.sort((a, b) => dist(a).compareTo(dist(b)));
@@ -1530,6 +2083,69 @@ class TrainingPlanService {
       var weekPlannedTrimp = 0;
       var weekPlannedMin = 0;
       var weekSessions = 0;
+
+      // What stays of the old plan takes its place: the day is used, the
+      // time counts, and the slot it stands for is not planned a second time.
+      // A skipped session takes nothing and is not made up for.
+      final weekEndExclusive = _addDays(weekStart, 7);
+      var unmatchedMin = 0;
+      for (final p in kept.where(
+        (p) =>
+            !p.sessionDate.isBefore(weekStart) &&
+            p.sessionDate.isBefore(weekEndExclusive),
+      )) {
+        final i = slots.indexWhere(
+          (s) => s.sport == p.sport && s.sessionType == p.sessionType,
+        );
+        if (i >= 0) {
+          slots.removeAt(i);
+        } else if (p.status != 'skipped') {
+          unmatchedMin += p.actualDurationMin ?? p.plannedDurationMin;
+        }
+        if (p.status == 'skipped') continue;
+        final off = daysBetween(weekStart, p.sessionDate);
+        final minutes = p.actualDurationMin ?? p.plannedDurationMin;
+        used[off] = (used[off] ?? 0) + 1;
+        usedSports.putIfAbsent(off, () => <String>{}).add(p.sport);
+        weekPlannedTrimp += p.plannedTrimp;
+        weekPlannedMin += minutes;
+        weekSessions++;
+        sessionNumber++;
+        dayMinutes[off] = (dayMinutes[off] ?? 0) + minutes;
+        if (multi && minutes >= 100) {
+          longDates[_day(p.sessionDate)] = minutes;
+        }
+        // A moved session that sits on an event, or hard next to one, stays
+        // where the athlete put it, and the report says so.
+        if (multi && (p.status == 'planned' || p.status == 'adapted')) {
+          final load = goalSet.loadOn(p.sessionDate);
+          final easy =
+              p.sessionType == 'recovery' ||
+              (p.plannedDurationMin <= 60 && p.primaryZone <= 2);
+          if (load == DayLoad.blocked) {
+            weekNotes.add('movedOntoEvent');
+          } else if (load == DayLoad.easyOnly && !easy) {
+            weekNotes.add('movedHardNearEvent');
+          }
+        }
+      }
+      for (final d in doneToday) {
+        final off = daysBetween(weekStart, d.day);
+        if (off < 0 || off > 6) continue;
+        used[off] = (used[off] ?? 0) + 1;
+        dayMinutes[off] = (dayMinutes[off] ?? 0) + d.minutes;
+        weekPlannedMin += d.minutes;
+        unmatchedMin += d.minutes;
+      }
+      // Time already spent that no slot stands for comes out of what is
+      // planned: the least important sessions give way.
+      if (multi && unmatchedMin > 0) {
+        final room = _makeRoom(slots, weekBudget - unmatchedMin);
+        slots = room.kept;
+        for (final d in room.removed) {
+          dropped(d, 'time was already spent that week');
+        }
+      }
 
       for (final slot in slots) {
         final off = bestOffset(slot);
@@ -1542,78 +2158,99 @@ class TrainingPlanService {
         }
         final date = _addDays(weekStart, off);
         if (date.isBefore(today)) continue;
-
-        var duration = _ctlScaledDuration(
-          _baseDuration(slot.sessionType),
-          slot.sessionType,
-          fitness.tier,
-          fitness.ctl,
-        );
-        if (phase == 'taper') duration = (duration * 0.7).round();
-        if (phase == 'recovery') duration = (duration * 0.7).round();
-        if (slot.sessionType == 'long' && _footSports.contains(slot.sport)) {
-          duration = math.min(duration, longRunCap);
+        // A long session that could not take its usual day is said, not
+        // hidden: the athlete's rest days and the other sessions decided it.
+        if (multi &&
+            slot.sessionType == 'long' &&
+            (slot.targetMin ?? 0) >= 150 &&
+            slot.weekday != 0) {
+          final apart = (date.weekday - slot.weekday).abs();
+          if (math.min(apart, 7 - apart) >= 2) {
+            weekNotes.add('longAwayFromUsualDay');
+          }
         }
-        if (slot.sessionType == 'long' && phase == 'peak') {
-          duration = (duration * 1.4).round();
-          if (_footSports.contains(slot.sport)) {
+
+        // A slot from the season allocator already has the length its goal
+        // and the athlete's history support; the rules below size the slots
+        // of a weekly template.
+        var duration =
+            slot.targetMin ??
+            _ctlScaledDuration(
+              _baseDuration(slot.sessionType),
+              slot.sessionType,
+              fitness.tier,
+              fitness.ctl,
+            );
+        if (slot.targetMin == null) {
+          if (phase == 'taper') duration = (duration * 0.7).round();
+          if (phase == 'recovery') duration = (duration * 0.7).round();
+          if (slot.sessionType == 'long' && _footSports.contains(slot.sport)) {
             duration = math.min(duration, longRunCap);
           }
-        }
-        final sportHistory = history.forSport(slot.sport);
-        if (sportHistory != null && sportHistory.longestMin >= 20) {
-          if (slot.sessionType == 'long') {
-            // At most ~12% above the longest recent session, growing 5% per
-            // week (8% back towards last year's longest).
-            final growth = sportHistory.hasYearCapacity ? 0.08 : 0.05;
-            var cap = sportHistory.longestMin * (1.12 + growth * w);
-            if (sportHistory.hasYearCapacity) {
-              cap = math.min(
-                cap,
-                math.max(
-                  sportHistory.yearLongestMin,
-                  sportHistory.longestMin * 1.12,
-                ),
-              );
+          if (slot.sessionType == 'long' && phase == 'peak') {
+            duration = (duration * 1.4).round();
+            if (_footSports.contains(slot.sport)) {
+              duration = math.min(duration, longRunCap);
             }
-            duration = math.min(duration, cap.round());
-          } else if (slot.sessionType == 'recovery') {
-            // Easy sessions sized like the athlete's usual sessions.
-            duration = duration
-                .clamp(
-                  (sportHistory.medianMin * 0.6).round(),
-                  math.max(20, sportHistory.medianMin.round()),
-                )
-                .toInt();
+          }
+          final sportHistory = history.forSport(slot.sport);
+          if (sportHistory != null && sportHistory.longestMin >= 20) {
+            if (slot.sessionType == 'long') {
+              // At most ~12% above the longest recent session, growing 5% per
+              // week (8% back towards last year's longest).
+              final growth = sportHistory.hasYearCapacity ? 0.08 : 0.05;
+              var cap = sportHistory.longestMin * (1.12 + growth * w);
+              if (sportHistory.hasYearCapacity) {
+                cap = math.min(
+                  cap,
+                  math.max(
+                    sportHistory.yearLongestMin,
+                    sportHistory.longestMin * 1.12,
+                  ),
+                );
+              }
+              duration = math.min(duration, cap.round());
+            } else if (slot.sessionType == 'recovery') {
+              // Easy sessions sized like the athlete's usual sessions.
+              duration = duration
+                  .clamp(
+                    (sportHistory.medianMin * 0.6).round(),
+                    math.max(20, sportHistory.medianMin.round()),
+                  )
+                  .toInt();
+            }
+          }
+          if (weekPlannedMin + duration > weeklyBudgetMin &&
+              slot.sessionType != 'long') {
+            duration = math.max(20, (weeklyBudgetMin - weekPlannedMin).round());
           }
         }
-        if (weekPlannedMin + duration > weeklyBudgetMin &&
-            slot.sessionType != 'long') {
-          duration = math.max(20, (weeklyBudgetMin - weekPlannedMin).round());
-        }
-        duration = duration.clamp(20, 240);
+        duration = duration.clamp(slot.minMin ?? 20, slot.maxMin ?? 240);
 
         // The workout is chosen first and its steps decide the duration, so
         // what the app shows, what the load estimate counts and what the watch
         // executes are the same. A steady session is fitted to the wanted
         // length; a structured one is chosen close to it and left whole.
+        final slotPhase = slot.phase ?? phase;
+        // Zones and thresholds are the sport's own, not the main sport's.
+        final fit = await fitnessFor(slot.sport);
         var template = _pickTemplateFromCache(
           templates,
           slot.sport,
           slot.sessionType,
           slot.subType,
-          phase,
+          slotPhase,
           duration,
           w + sessionNumber,
         );
         String? stepsJson;
         var scaled = false;
         var semantics = const WorkoutSemantics();
-        void compile(WorkoutTemplate t, int wantedMin) {
+        void compileSteps(String raw, int wantedMin) {
           final resolved = _resolveStepsJson(
-            t.stepsJson,
+            raw,
             ftp,
-            fitness,
+            fit,
             power: _usesPower(slot.sport, false),
           );
           final fitted = fitSteadyWorkout(resolved, wantedMin * 60.0);
@@ -1622,19 +2259,46 @@ class TrainingPlanService {
           semantics = WorkoutSemantics.of(stepsJson, sport: slot.sport);
         }
 
+        void compile(WorkoutTemplate t, int wantedMin) =>
+            compileSteps(t.stepsJson, wantedMin);
+
         if (template != null) compile(template, duration);
+        // No template is as long as a long session the allocator asked for:
+        // a steady one is built, so the plan never shows a length the steps
+        // do not run.
+        var synthetic = false;
+        var steadyLead = 'Long endurance';
+        final steady =
+            slot.sessionType == 'recovery' ||
+            (slot.sessionType == 'long' && slot.subType == 'endurance');
+        // An easy session is asked for in its zone; a recovery template is
+        // zone 1, so an easy endurance session gets a steady workout instead.
+        final wrongZone =
+            slot.sessionType == 'recovery' &&
+            semantics.dominantZone != null &&
+            semantics.dominantZone != slot.zone;
+        if (slot.targetMin != null &&
+            steady &&
+            (template == null ||
+                wrongZone ||
+                (template.estimatedDurationMin - duration).abs() >
+                    duration * (slot.sessionType == 'long' ? 0.3 : 0.25))) {
+          compileSteps(_steadySteps(duration, slot.zone), duration);
+          template = null;
+          synthetic = true;
+        }
         // A hard session that would take the week over its load cap is
         // replaced by a lighter one of the same kind, not clipped on paper.
         if (template != null &&
             slot.sessionType == 'key' &&
-            phase != 'peak' &&
+            slotPhase != 'peak' &&
             weekPlannedTrimp + semantics.legacyLoad > weekTssCap) {
           final lighter = _pickTemplateFromCache(
             templates,
             slot.sport,
             slot.sessionType,
             slot.subType,
-            phase,
+            slotPhase,
             (duration * 0.75).round(),
             w + sessionNumber,
           );
@@ -1652,6 +2316,67 @@ class TrainingPlanService {
             }
           }
         }
+        // An athlete who rarely trains hard gets steady work, not intervals:
+        // the finished steps are held to the zone limit, whatever the
+        // template asked for.
+        final limit = slot.maxZone;
+        if (limit != null &&
+            template != null &&
+            semantics.mainZoneSeconds.entries.any(
+              (e) => e.key > limit && e.value > 0,
+            )) {
+          compileSteps(_steadySteps(duration, limit), duration);
+          template = null;
+          synthetic = true;
+          steadyLead = 'Steady';
+        }
+        // The hours the athlete gave are a limit, not a hope: a workout whose
+        // steps run longer than the week has left is made shorter, or left
+        // out, and the report says which.
+        if (multi && slot.targetMin != null && weekBudget > 0) {
+          final actual = semantics.isEmpty
+              ? duration
+              : semantics.totalMinutes.clamp(1, 600);
+          final room = (weekBudget - weekPlannedMin).floor();
+          if (actual > room) {
+            final minimum = slot.minMin ?? 20;
+            if (slot.sport != 'strength' && room >= minimum) {
+              final zone = math.min(slot.zone, slot.maxZone ?? 4);
+              compileSteps(_steadySteps(room, zone), room);
+              template = null;
+              synthetic = true;
+              steadyLead = slot.sessionType == 'key'
+                  ? (zone >= 4 ? 'Tempo' : 'Steady')
+                  : 'Long endurance';
+              duration = room;
+            } else if (slot.sport == 'strength' && room >= minimum) {
+              // A shorter strength workout, or none.
+              final shorter = _pickTemplateFromCache(
+                templates,
+                slot.sport,
+                slot.sessionType,
+                slot.subType,
+                slotPhase,
+                room,
+                w + sessionNumber,
+              );
+              if (shorter != null) compile(shorter, room);
+              final after = semantics.isEmpty
+                  ? room
+                  : semantics.totalMinutes.clamp(1, 600);
+              if (shorter == null || after > room) {
+                weekNotes.add('noRoom');
+                dropped(slot, 'its workout ran longer than the time left');
+                continue;
+              }
+              template = shorter;
+            } else {
+              weekNotes.add('noRoom');
+              dropped(slot, 'its workout ran longer than the time left');
+              continue;
+            }
+          }
+        }
         var title =
             template?.name ??
             '${slot.sessionType[0].toUpperCase()}${slot.sessionType.substring(1)} '
@@ -1664,22 +2389,30 @@ class TrainingPlanService {
           trimp = semantics.legacyLoad;
           if (scaled) title = retimeTitle(title, duration);
         }
+        if (synthetic) {
+          title = _steadyTitle(
+            slot.sport,
+            duration,
+            lead: slot.sessionType == 'recovery' ? 'Easy' : steadyLead,
+          );
+        }
 
         final zone = semantics.dominantZone ?? slot.zone;
-        final hr = fitness.hrRangeForZone(zone);
+        final hr = fit.hrRangeForZone(zone);
         final hrJson = jsonEncode({
           'low': hr.low,
           'high': hr.high,
           'zone': zone,
-          'lt2': fitness.lt2Bpm,
-          'lt1': fitness.lt1Bpm,
+          'lt2': fit.lt2Bpm,
+          'lt1': fit.lt1Bpm,
         });
 
         String? paceJson;
         // Measured threshold pace first; without one, the goal pace gives an
         // estimate (and says so).
         final measuredPace = thresholds?.thresholdPaceMps;
-        final pace = measuredPace ?? raceProfile?.estimatedThresholdSpeedMps;
+        final paceProfile = _paceProfile(goalSet, slot, raceProfile, multi);
+        final pace = measuredPace ?? paceProfile?.estimatedThresholdSpeedMps;
         if ((slot.sport == 'running' || slot.sport == 'trail_running') &&
             pace != null &&
             pace > 0) {
@@ -1689,8 +2422,8 @@ class TrainingPlanService {
             'high_sec_per_km': (1000 / (pace * z.lo)).round(),
             'zone': zone,
             'basis': measuredPace != null ? 'threshold' : 'goal',
-            if (raceProfile?.flatEquivalentPaceSecPerKm != null)
-              'goal_sec_per_km': raceProfile!.flatEquivalentPaceSecPerKm!
+            if (paceProfile?.flatEquivalentPaceSecPerKm != null)
+              'goal_sec_per_km': paceProfile!.flatEquivalentPaceSecPerKm!
                   .round(),
           });
         }
@@ -1713,8 +2446,16 @@ class TrainingPlanService {
         weekSessions++;
         weekPlannedTrimp += trimp.round();
         weekPlannedMin += duration;
+        actualRows.add((
+          sport: slot.sport,
+          type: slot.sessionType,
+          sub: slot.subType,
+          minutes: duration,
+        ));
         used[off] = (used[off] ?? 0) + 1;
         usedSports.putIfAbsent(off, () => <String>{}).add(slot.sport);
+        dayMinutes[off] = (dayMinutes[off] ?? 0) + duration;
+        if (multi && duration >= 100) longDates[date] = duration;
 
         await _db
             .into(_db.trainingSessions)
@@ -1730,7 +2471,7 @@ class TrainingPlanService {
                 sport: slot.sport,
                 sessionType: slot.sessionType,
                 subType: Value(slot.subType),
-                phase: phase,
+                phase: slotPhase,
                 primaryZone: zone,
                 title: title,
                 sessionNotes: Value(template?.description),
@@ -1743,10 +2484,24 @@ class TrainingPlanService {
                 powerRangesJson: Value(powerJson),
                 plannedDurationMin: duration,
                 plannedTrimp: trimp.round(),
-                sessionLevel: _sessionLevel(slot.sessionType, zone, phase),
+                sessionLevel: _sessionLevel(slot.sessionType, zone, slotPhase),
+                goalId: Value(
+                  slot.goalId ?? (slot.sport == 'strength' ? null : raceGoalId),
+                ),
+                goalRole: Value(
+                  slot.goalRole ??
+                      (slot.sport == 'strength' ? 'support' : 'primary'),
+                ),
+                goalObjective: Value(slot.objective),
                 status: const Value('planned'),
               ),
             );
+      }
+
+      if (multi && weekAllocation != null && reportAllocation != null) {
+        reportAllocation
+          ..clear()
+          ..addAll(weekAllocation.toJsonActual(actualRows));
       }
 
       final weekStartMonday = weekStart.subtract(
@@ -1778,10 +2533,46 @@ class TrainingPlanService {
           );
     }
 
+    // What the season decided, kept with the plan so the screens and the
+    // coach can say why it looks as it does.
+    final report = SeasonReport.build(
+      goals: goalSet,
+      weeks: weekReports,
+      allocations: allocations,
+      capacities: capacities,
+      weeksPrepared: allocations.length,
+    );
+    await (_db.update(
+      _db.trainingPlans,
+    )..where((t) => t.id.equals(planId))).write(
+      TrainingPlansCompanion(
+        goalSetRevision: Value(goalSet.revision),
+        seasonJson: Value(report.encode()),
+      ),
+    );
+    await (_db.delete(
+      _db.planGoals,
+    )..where((t) => t.planId.equals(planId))).go();
+    if (goals != null || raceGoalId != null) {
+      for (final goal in goalSet.active) {
+        await _db
+            .into(_db.planGoals)
+            .insert(
+              PlanGoalsCompanion.insert(
+                planId: planId,
+                goalId: goal.id,
+                priority: goal.priority.name,
+                goalRevision: goal.revision,
+              ),
+              mode: InsertMode.insertOrReplace,
+            );
+      }
+    }
     log(
       '[Plan] generatePlan done — planId=$planId sessions=$sessionNumber '
       'weeks=$weeks days=$daysPerWeek maxPerDay=$maxSessionsPerDay '
-      'GAD rotation=$rotation race=$category sport=$mainSport',
+      'GAD rotation=$rotation race=$category sport=$mainSport '
+      'goals=${goalSet.active.length} outcome=${report.outcome.name}',
     );
     return planId;
   }
@@ -1799,12 +2590,38 @@ class TrainingPlanService {
     List<String> preferredSports = const [],
     bool weekStartsOnMonday = true,
     PlanAthleteProfile athlete = const PlanAthleteProfile(),
+  }) => _exclusive(
+    () => _replan(
+      planId: planId,
+      reason: reason,
+      daysPerWeek: daysPerWeek,
+      restDays: restDays,
+      strengthDays: strengthDays,
+      hoursPerWeek: hoursPerWeek,
+      maxSessionsPerDay: maxSessionsPerDay,
+      preferredSports: preferredSports,
+      weekStartsOnMonday: weekStartsOnMonday,
+      athlete: athlete,
+    ),
+  );
+
+  Future<void> _replan({
+    required String planId,
+    required String reason,
+    int daysPerWeek = 5,
+    List<int> restDays = const [7],
+    List<int> strengthDays = const [3],
+    double hoursPerWeek = 8.0,
+    int maxSessionsPerDay = 1,
+    List<String> preferredSports = const [],
+    bool weekStartsOnMonday = true,
+    PlanAthleteProfile athlete = const PlanAthleteProfile(),
   }) async {
     final plan = await (_db.select(
       _db.trainingPlans,
     )..where((t) => t.id.equals(planId))).getSingleOrNull();
-    if (plan == null) return;
-    final today = _day(DateTime.now());
+    if (plan == null || plan.status != 'active') return;
+    final today = _day(_now());
     log(
       '[Plan] replan: deleting Garmin workouts for athlete='
       '${plan.athleteId} from=$today',
@@ -1820,29 +2637,21 @@ class TrainingPlanService {
       ),
     );
 
-    final goal =
-        await (_db.select(_db.raceGoals)
-              ..where(
-                (t) =>
-                    t.athleteId.equals(plan.athleteId) &
-                    // The same policy as the manual generation: the next goal
-                    // of priority A, not whichever race comes first.
-                    t.priority.equals('a') &
-                    t.raceDate.isBiggerOrEqualValue(today),
-              )
-              ..orderBy([(t) => OrderingTerm.asc(t.raceDate)])
-              ..limit(1))
-            .getSingleOrNull();
+    // The whole season: every goal that is still on, not only the next A.
+    final goalSet = await RaceGoalService(
+      _db,
+    ).resolveGoalSet(athleteId: plan.athleteId, today: today);
+    final goal = goalSet.display;
     final rotation = _gadSportRotation(preferredSports);
 
-    await generatePlan(
+    await _generatePlan(
       athleteId: plan.athleteId,
       raceGoalId: goal?.id ?? plan.raceGoalId,
-      raceDate: goal?.raceDate ?? plan.endDate,
-      sport: goal?.primarySport ?? rotation.first,
+      raceDate: goal?.date ?? plan.endDate,
+      sport: goal?.sport ?? rotation.first,
       raceDistanceM: goal?.distanceM,
       raceElevationM: goal?.elevationM,
-      targetFinishSeconds: goal?.targetFinishSeconds,
+      targetFinishSeconds: goal?.targetSeconds,
       daysPerWeek: daysPerWeek,
       restDays: restDays,
       strengthDays: strengthDays,
@@ -1853,7 +2662,51 @@ class TrainingPlanService {
       existingPlanId: planId,
       weekStartsOnMonday: weekStartsOnMonday,
       athlete: athlete,
+      goals: goalSet.isEmpty ? null : goalSet,
     );
+  }
+
+  /// Tries again, on every platform, the removals that failed earlier.
+  /// Returns how many went.
+  Future<int> retryCleanup() => _providers.retryCleanup();
+
+
+  /// Ends a plan whose goals are all gone: nothing is left to prepare for.
+  /// The planned sessions from today on and their watch entries are removed,
+  /// finished and skipped ones stay as the record, and the plan stops being
+  /// the active one. Returns how many planned sessions were removed.
+  Future<int> endPlan(String planId, {String reason = 'No goals left'}) =>
+      _exclusive(() => _endPlan(planId, reason));
+
+  Future<int> _endPlan(String planId, String reason) async {
+    final plan = await (_db.select(
+      _db.trainingPlans,
+    )..where((t) => t.id.equals(planId))).getSingleOrNull();
+    if (plan == null || plan.status != 'active') return 0;
+    final today = _day(_now());
+    // Ended first: from here nothing builds on it or sends it to the watch.
+    await (_db.update(
+      _db.trainingPlans,
+    )..where((t) => t.id.equals(planId))).write(
+      TrainingPlansCompanion(
+        status: const Value('ended'),
+        replannedReason: Value(reason),
+        lastReplannedAt: Value(DateTime.now()),
+      ),
+    );
+    // A watch entry that cannot be removed now is queued and tried again;
+    // the plan does not wait for the connection.
+    await _removeDelivered(plan.athleteId, planId, includeMoved: true);
+    final removed =
+        await (_db.delete(_db.trainingSessions)..where(
+              (t) =>
+                  t.planId.equals(planId) &
+                  t.sessionDate.isBiggerOrEqualValue(today) &
+                  (t.status.equals('planned') | t.status.equals('adapted')),
+            ))
+            .go();
+    log('[Plan] ended $planId ($reason): $removed planned sessions removed');
+    return removed;
   }
 
   /// Session difficulty 1–9 from type, zone and phase.
@@ -1870,67 +2723,68 @@ class TrainingPlanService {
     return level.clamp(1, 9);
   }
 
-  // ---------------------------------------------------------------------------
-  // Garmin
+  // Watch platforms
   // ---------------------------------------------------------------------------
 
-  static String _garminSportName(String sport) => switch (sport) {
-    'running' || 'trail_running' => 'running',
-    'cycling_road' || 'cycling_gravel' || 'cycling_mtb' => 'cycling',
-    'swimming' => 'swimming',
-    'strength' || 'pilates' || 'yoga' || 'stretching' => 'strength',
-    'indoor_rowing' => 'cardio',
-    _ => 'running',
-  };
-
-  /// Pushes all upcoming sessions that aren't on Garmin yet, adopting
-  /// identical workouts already on the Garmin calendar.
-  Future<void> pushPlanToGarmin(String athleteId) async {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
+  /// Sends every upcoming planned session that is not on a platform yet to
+  /// each platform that takes workouts (all connected push providers, or
+  /// [to]). An identical workout already on a calendar is adopted, not sent
+  /// again. A platform that fails does not stop the others.
+  Future<void> deliverPlan(
+    String athleteId, {
+    Iterable<WorkoutProvider>? to,
+  }) async {
+    final today = _day(_now());
+    // Only the active plan goes to a watch, never an ended or replaced one.
+    final activePlans = [
+      for (final p
+          in await (_db.select(_db.trainingPlans)..where(
+                (t) =>
+                    t.athleteId.equals(athleteId) & t.status.equals('active'),
+              ))
+              .get())
+        p.id,
+    ];
     final sessions =
         await (_db.select(_db.trainingSessions)
               ..where(
                 (t) =>
                     t.athleteId.equals(athleteId) &
+                    t.planId.isIn(activePlans) &
                     t.sessionDate.isBiggerOrEqualValue(today) &
-                    t.garminWorkoutId.isNull() &
                     t.status.equals('planned'),
               )
               ..orderBy([(t) => OrderingTerm.asc(t.sessionDate)]))
             .get();
-
-    var existing = <String, String>{};
-    try {
-      existing = await _garmin.calendarWorkoutsByTitleDate();
-    } catch (e) {
-      log('[Planner] Could not fetch Garmin calendar for dedup: $e');
-    }
-
-    for (final s in sessions) {
-      final key =
-          '${s.title}|${s.sessionDate.toIso8601String().substring(0, 10)}';
-      final adopted = existing[key];
-      if (adopted != null) {
-        log(
-          '[Planner] Adopting existing Garmin workout $adopted for '
-          '"${s.title}" on ${s.sessionDate}',
-        );
-        await (_db.update(_db.trainingSessions)
-              ..where((t) => t.id.equals(s.id)))
-            .write(TrainingSessionsCompanion(garminWorkoutId: Value(adopted)));
-        continue;
-      }
+    final targets = to ?? await _providers.pushTargets();
+    for (final provider in targets) {
+      var open = [
+        for (final s in sessions)
+          if (!await provider.hasDelivered(s)) s,
+      ];
       try {
-        await pushToGarmin(s.id);
+        final adopted = await provider.adoptExisting(open);
+        open = [
+          for (final s in open)
+            if (!adopted.contains(s.id)) s,
+        ];
       } catch (e) {
-        log('[Planner] Garmin push failed for ${s.id}: $e');
+        log('[Planner] ${provider.label} could not check for duplicates: $e');
+      }
+      for (final s in open) {
+        try {
+          await deliver(s.id, provider);
+        } catch (e) {
+          log('[Planner] ${provider.label} push failed for ${s.id}: $e');
+        }
       }
     }
   }
 
-  /// Creates the session's workout on Garmin and schedules it on its date.
-  Future<void> pushToGarmin(String sessionId) async {
+  /// Puts the session's workout on [provider]'s platform, replacing what was
+  /// sent for it before. Throws with the platform's own message when it
+  /// refuses, [WorkoutNotSupported] for a workout it cannot hold.
+  Future<void> deliver(String sessionId, WorkoutProvider provider) async {
     final s = await (_db.select(
       _db.trainingSessions,
     )..where((t) => t.id.equals(sessionId))).getSingleOrNull();
@@ -1938,57 +2792,38 @@ class TrainingPlanService {
     if (!['planned', 'adapted'].contains(s.status)) {
       throw StateError('Only planned workouts can be pushed.');
     }
-    if (s.garminWorkoutId != null) {
-      if (s.garminAlternativeId != null) {
-        await _garmin.unscheduleWorkout(s.garminAlternativeId!);
-      }
-      final schedule = await _garmin.scheduleWorkout(
-        s.garminWorkoutId!,
-        s.sessionDate,
-      );
-      await (_db.update(
-        _db.trainingSessions,
-      )..where((t) => t.id.equals(s.id))).write(
-        TrainingSessionsCompanion(
-          garminAlternativeId: Value(schedule),
-          dateModified: Value(DateTime.now()),
-        ),
-      );
-      return;
+    final owner = await (_db.select(
+      _db.trainingPlans,
+    )..where((t) => t.id.equals(s.planId))).getSingleOrNull();
+    if (owner != null && owner.status != 'active') {
+      throw StateError('This plan has ended, its workouts are not sent.');
     }
-    if (s.stepsJson == null) {
-      throw StateError('No workout structure is available to push.');
+    if (await provider.mode() != DeliveryMode.push) {
+      throw StateError('${provider.label} takes workouts as text.');
     }
-    // A calendar entry of an earlier definition (the session changed since)
-    // comes down before the new one goes up.
-    if (s.garminAlternativeId != null) {
-      await _garmin.unscheduleWorkout(s.garminAlternativeId!);
-      await (_db.update(
-        _db.trainingSessions,
-      )..where((t) => t.id.equals(s.id))).write(
-        const TrainingSessionsCompanion(garminAlternativeId: Value(null)),
-      );
+    await provider.deliver(s, () => _prepareWorkout(s));
+  }
+
+  /// Takes the planned sessions' workouts off every platform that has them:
+  /// the sessions of [planId] from today on, those moved by the athlete only
+  /// when [includeMoved]. A removal that fails is queued by the platform.
+  Future<void> _removeDelivered(
+    String athleteId,
+    String planId, {
+    bool includeMoved = false,
+  }) async {
+    final today = _day(_now());
+    final sessions = await (_db.select(_db.trainingSessions)..where(
+          (t) =>
+              t.planId.equals(planId) &
+              (t.status.equals('planned') | t.status.equals('adapted')) &
+              t.sessionDate.isBiggerOrEqualValue(today) &
+              (includeMoved ? const Constant(true) : _isPinned(t).not()),
+        ))
+        .get();
+    for (final s in sessions) {
+      await _providers.removeEverywhere(s);
     }
-    final prepared = await _prepareWorkout(s);
-    final workoutId = await _garmin.createWorkout(
-      s.title,
-      _garminSportName(s.sport),
-      prepared.steps,
-      description: prepared.description,
-    );
-    // Save the definition before scheduling so a retry cannot create duplicates.
-    await (_db.update(_db.trainingSessions)..where((t) => t.id.equals(s.id)))
-        .write(TrainingSessionsCompanion(garminWorkoutId: Value(workoutId)));
-    final scheduleId = await _garmin.scheduleWorkout(workoutId, s.sessionDate);
-    await (_db.update(
-      _db.trainingSessions,
-    )..where((t) => t.id.equals(s.id))).write(
-      TrainingSessionsCompanion(
-        garminWorkoutId: Value(workoutId),
-        garminAlternativeId: Value(scheduleId),
-        dateModified: Value(DateTime.now()),
-      ),
-    );
   }
 
   /// The session's steps with concrete targets and its description, the same
@@ -2036,11 +2871,14 @@ class TrainingPlanService {
     final plan = await (_db.select(
       _db.trainingPlans,
     )..where((t) => t.id.equals(s.planId))).getSingleOrNull();
-    final goal = plan?.raceGoalId == null
+    // The goal the session prepares for; a session planned before goals were
+    // linked belongs to the plan's own.
+    final goalId = s.goalId ?? plan?.raceGoalId;
+    final goal = goalId == null
         ? null
         : await (_db.select(
             _db.raceGoals,
-          )..where((t) => t.id.equals(plan!.raceGoalId!))).getSingleOrNull();
+          )..where((t) => t.id.equals(goalId))).getSingleOrNull();
     // Threshold heart rate: the latest test, else the sport's stored value,
     // else the lowest bound of zone 5, where the zones are built on it.
     final lastThreshold =
@@ -2092,6 +2930,12 @@ class TrainingPlanService {
   /// session. The pace is a guide; the heart-rate target decides.
   static List<String>? _goalLines(TrainingSession s, RaceGoal? goal) {
     final lines = <String>[];
+    // The A goal is "the race goal"; any other is named, so a brevet ride
+    // never reads like marathon preparation.
+    final isTop = goal?.priority.toLowerCase() == 'a';
+    final label = goal == null || isTop
+        ? 'Race goal'
+        : 'Goal ${goal.priority.toUpperCase()} · ${goal.name}';
     if (goal != null && goal.targetFinishSeconds != null) {
       final profile = RaceProfile(
         sport: goal.primarySport,
@@ -2100,15 +2944,26 @@ class TrainingPlanService {
         targetSeconds: goal.targetFinishSeconds,
       );
       final flat = profile.flatEquivalentPaceSecPerKm;
+      final climb = profile.isRide && goal.elevationM != null
+          ? ', ${goal.elevationM!.round()} m climbing'
+          : '';
       lines.add(
-        'Race goal: ${formatTargetTime(goal.targetFinishSeconds!)} for '
+        '$label: ${formatTargetTime(goal.targetFinishSeconds!)} for '
         '${(goal.distanceM / 1000).toStringAsFixed(1)} km'
         '${profile.isRide
-            ? ' (${profile.goalSpeedKmh!.toStringAsFixed(1)} km/h)'
+            ? ' (${profile.goalSpeedKmh!.toStringAsFixed(1)} km/h)$climb'
             : flat == null
             ? ''
             : ' (${formatPace(profile.goalPaceSecPerKm!)}, ${formatPace(flat)} on the flat)'}.',
       );
+    } else if (goal != null && !isTop) {
+      lines.add(
+        '$label: ${(goal.distanceM / 1000).toStringAsFixed(1)} km'
+        '${goal.elevationM == null ? '' : ', ${goal.elevationM!.round()} m climbing'}.',
+      );
+    }
+    if (s.goalObjective != null) {
+      lines.add('Purpose: ${s.goalObjective}.');
     }
     try {
       final json = s.paceRangesJson;
@@ -2242,37 +3097,6 @@ class TrainingPlanService {
     }
   }
 
-  Future<void> _deleteGarminWorkoutsForAthlete(
-    String athleteId,
-    String planId,
-  ) async {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    final sessions =
-        await (_db.select(_db.trainingSessions)..where(
-              (t) =>
-                  t.planId.equals(planId) &
-                  t.garminWorkoutId.isNotNull() &
-                  (t.status.equals('planned') | t.status.equals('adapted')) &
-                  t.sessionDate.isBiggerOrEqualValue(today),
-            ))
-            .get();
-    for (final s in sessions) {
-      try {
-        await _garmin.deleteWorkout(
-          s.garminWorkoutId!,
-          scheduleId: s.garminAlternativeId,
-        );
-        log(
-          '[Plan] deleted Garmin workout ${s.garminWorkoutId} '
-          'for session ${s.id}',
-        );
-      } catch (e) {
-        log('[Plan] Garmin delete failed for ${s.garminWorkoutId}: $e');
-      }
-    }
-  }
-
   /// Deletes every plan and planned session on this phone. Completed
   /// activities are kept. Fast: nothing leaves the phone.
   Future<void> deleteLocalPlans() async {
@@ -2285,49 +3109,34 @@ class TrainingPlanService {
     log('[Plan] local plans deleted');
   }
 
-  /// Removes every planned workout from Garmin, calendar and library.
-  /// [onProgress] hears each finished one with the number done and the total,
-  /// which is known once the lists are fetched (0 before).
-  Future<void> deleteGarminWorkouts({
+  /// Takes everything Fjelia put on the watch platforms off them ("delete
+  /// all"): each of [providers] (or every connected one) removes what it
+  /// holds, reporting progress as `(done, total, label)`. [titles] names the
+  /// workouts for platforms that can only be searched by name. Returns how
+  /// many entries went per platform id. A platform that fails does not stop
+  /// the others.
+  Future<Map<String, int>> removeFromPlatforms({
+    required Set<String> titles,
+    Iterable<WorkoutProvider>? providers,
     void Function(int done, int total, String label)? onProgress,
   }) async {
-    onProgress?.call(0, 0, 'Reading the Garmin calendar');
-    var calendar = <({String workoutId, String? scheduleId})>[];
-    var ids = <String>[];
-    try {
-      calendar = [
-        for (final c in await _garmin.listCalendarWorkouts())
-          (workoutId: c.workoutId, scheduleId: c.scheduleId as String?),
-      ];
-    } catch (e) {
-      log('[Plan] listCalendarWorkouts failed: $e');
-    }
-    try {
-      ids = await _garmin.listWorkoutIds();
-    } catch (e) {
-      log('[Plan] listWorkoutIds failed: $e');
-    }
-    final total = calendar.length + ids.length;
-    var done = 0;
-    onProgress?.call(0, total, 'Garmin');
-    for (final c in calendar) {
+    final targets = providers ?? await _providers.connected();
+    final removed = <String, int>{};
+    for (final p in targets) {
       try {
-        await _garmin.deleteWorkout(c.workoutId, scheduleId: c.scheduleId);
+        removed[p.id] = await p.removeAll(
+          titles: titles,
+          onProgress: (done, total) => onProgress?.call(done, total, p.label),
+        );
       } catch (e) {
-        log('[Plan] Garmin delete failed for wid=${c.workoutId}: $e');
+        log('[Plan] ${p.label} could not be cleared: $e');
+        removed[p.id] = 0;
       }
-      onProgress?.call(++done, total, 'Garmin calendar');
     }
-    for (final id in ids) {
-      try {
-        await _garmin.deleteWorkout(id);
-      } catch (e) {
-        log('[Plan] Garmin library delete failed for $id: $e');
-      }
-      onProgress?.call(++done, total, 'Garmin library');
-    }
+    return removed;
   }
 }
+
 
 /// Exposed for the planner UI's step legend ordering.
 int stepTypeIndex(String type) => _stepTypeIndex[type] ?? 2;

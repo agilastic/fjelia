@@ -1,13 +1,13 @@
 import 'package:drift/drift.dart';
-import '../api/garmin_client.dart';
 import '../db/database.dart';
-import '../utils/log.dart';
 import '../utils/week.dart';
+import 'workout_providers/workout_providers.dart';
+import 'race_goal_service.dart';
 
 class PlanSessionActions {
-  PlanSessionActions(this.db, this.garmin);
+  PlanSessionActions(this.db, this.providers);
   final AppDatabase db;
-  final GarminClient garmin;
+  final WorkoutProviders providers;
   Future<TrainingSession> moveDay(TrainingSession session, int days) {
     final d = session.sessionDate;
     return moveToDate(session, DateTime(d.year, d.month, d.day + days));
@@ -22,6 +22,14 @@ class PlanSessionActions {
   ) async {
     final d = session.sessionDate;
     final target = DateTime(day.year, day.month, day.day);
+    // An event day, or the rest day before it, belongs to the event: no
+    // session is moved onto it, whichever goal the plan shows.
+    final event = (await RaceGoalService(
+      db,
+    ).resolveGoalSet()).eventBlocking(target);
+    if (event != null) {
+      throw StateError('That day belongs to ${event.name}. Pick another day.');
+    }
     final plan = await (db.select(
       db.trainingPlans,
     )..where((t) => t.id.equals(session.planId))).getSingleOrNull();
@@ -62,7 +70,8 @@ class PlanSessionActions {
 
   /// Sets the main target of a ride, `hr` or `power`. The steps keep their
   /// zones and the other value stays in the step note, so the same session
-  /// turns into either. A session already on the watch is sent again.
+  /// turns into either. The content changed, so a platform that has the
+  /// session sends it again at the next push.
   Future<TrainingSession> setTargetMetric(
     TrainingSession session,
     String metric,
@@ -73,9 +82,6 @@ class PlanSessionActions {
     )..where((t) => t.id.equals(session.id))).write(
       TrainingSessionsCompanion(
         targetMetric: Value(metric),
-        garminWorkoutId: session.garminWorkoutId == null
-            ? const Value.absent()
-            : const Value(null),
         dateModified: Value(DateTime.now()),
         modifiedBy: const Value('athlete'),
       ),
@@ -111,28 +117,18 @@ class PlanSessionActions {
             ),
           );
     });
-    await releaseGarminEntry(session);
+    await releaseDeliveries(session);
     return (db.select(
       db.trainingSessions,
     )..where((t) => t.id.equals(session.id))).getSingle();
   }
 
-  /// Takes the session off the Garmin calendar, if it is on it. A failure is
-  /// logged and leaves the entry id in place for a later attempt.
-  Future<void> releaseGarminEntry(TrainingSession session) async {
-    final id = session.garminAlternativeId;
-    if (id == null) return;
-    try {
-      await garmin.unscheduleWorkout(id);
-      await (db.update(
-        db.trainingSessions,
-      )..where((t) => t.id.equals(session.id))).write(
-        const TrainingSessionsCompanion(garminAlternativeId: Value(null)),
-      );
-    } catch (e) {
-      log('[Planner] could not release Garmin entry $id: $e');
-    }
-  }
+  /// Takes the session off every platform's calendar that has it, best
+  /// effort: a platform that cannot be reached keeps its entry for a later
+  /// attempt. The workout stays on record, so restoring the session puts it
+  /// back without creating it twice.
+  Future<void> releaseDeliveries(TrainingSession session) =>
+      providers.releaseEverywhere(session);
 
   /// Undoes a skip. Only a skip with a recorded reason and no completed
   /// activity is undone; the session becomes planned again.

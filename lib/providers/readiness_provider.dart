@@ -55,6 +55,12 @@ class MorningAdaptationNotifier extends StateNotifier<MorningAdaptationState> {
     if (state.running || _lastRun == today) return;
     state = const MorningAdaptationState(running: true);
     try {
+      // Watch entries that could not be removed earlier are tried again.
+      try {
+        await _ref.read(trainingPlanServiceProvider).retryCleanup();
+      } catch (e) {
+        log('[Readiness] Garmin cleanup error: $e');
+      }
       final readiness = await _ref
           .read(dailyReadinessServiceProvider)
           .compute(today);
@@ -67,7 +73,7 @@ class MorningAdaptationNotifier extends StateNotifier<MorningAdaptationState> {
       final actions = _ref.read(planSessionActionsProvider);
       for (final a in adapted) {
         if (a.session.status == 'skipped') {
-          await actions.releaseGarminEntry(a.session);
+          await actions.releaseDeliveries(a.session);
         }
       }
       if (adapted.any((a) => a.adapted)) {
@@ -119,15 +125,17 @@ class MorningAdaptationNotifier extends StateNotifier<MorningAdaptationState> {
     }
   }
 
-  /// Re-pushes the day's adapted sessions so Garmin shows the new targets.
+  /// Re-pushes the day's adapted sessions so every platform that takes
+  /// workouts shows the new targets.
   Future<void> _pushAdaptedSessions(
     DateTime day,
     List<AdaptationResult> adapted,
   ) async {
     try {
-      // Changed sessions go to the watch by themselves only where Fjelia can
+      // Changed sessions go to a watch by themselves only where Fjelia can
       // send them.
-      if (!(await _ref.read(workoutDestinationProvider.future)).canPush) return;
+      final pushers = await _ref.read(pushProvidersProvider.future);
+      if (pushers.isEmpty) return;
       final db = _ref.read(databaseProvider);
       final sessions =
           await (db.select(db.trainingSessions)
@@ -138,11 +146,13 @@ class MorningAdaptationNotifier extends StateNotifier<MorningAdaptationState> {
               .get();
       final plans = _ref.read(trainingPlanServiceProvider);
       for (final s in sessions) {
-        if (s.status != 'adapted' && s.garminWorkoutId != null) continue;
-        try {
-          await plans.pushToGarmin(s.id);
-        } catch (e) {
-          log('[Readiness] Garmin push failed for ${s.id}: $e');
+        for (final p in pushers) {
+          if (s.status != 'adapted' && await p.hasDelivered(s)) continue;
+          try {
+            await plans.deliver(s.id, p);
+          } catch (e) {
+            log('[Readiness] ${p.label} push failed for ${s.id}: $e');
+          }
         }
       }
     } catch (e) {
@@ -162,9 +172,23 @@ class MorningAdaptationNotifier extends StateNotifier<MorningAdaptationState> {
               ..limit(1))
             .getSingleOrNull();
     if (plan == null) return null;
+    // New or changed goals are not a trend to wait out: the plan is rebuilt
+    // for them at once, whatever the last replan was.
+    final goals = await _ref.read(raceGoalServiceProvider).resolveGoalSet();
+    if (goals.isEmpty) {
+      // Nothing left to prepare for: the plan ends, with no rebuild.
+      await _ref.read(trainingPlanServiceProvider).endPlan(plan.id);
+      return 'No goals left';
+    }
+    final goalsChanged = goalSetChanged(
+      planRevision: plan.goalSetRevision,
+      goals: goals,
+    );
     // Don't replan more than once every 3 days.
     final last = plan.lastReplannedAt;
-    if (last != null && DateTime.now().difference(last).inDays < 3) {
+    if (!goalsChanged &&
+        last != null &&
+        DateTime.now().difference(last).inDays < 3) {
       return null;
     }
 
@@ -190,7 +214,7 @@ class MorningAdaptationNotifier extends StateNotifier<MorningAdaptationState> {
         w.weeklyNtsz5 +
         w.weeklyNtsz6;
 
-    final reasons = <String>[];
+    final reasons = <String>[if (goalsChanged) 'Your goals changed'];
     if (weeks.length == 2) {
       final jump = zoneTimeJump(nts(weeks[0]), nts(weeks[1]));
       if (jump != null) {

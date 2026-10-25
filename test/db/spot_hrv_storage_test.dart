@@ -147,4 +147,79 @@ void main() {
         .get();
     expect(index, hasLength(1));
   });
+
+  test(
+    'v47 upgrade adds goal links and gives old plans their one goal',
+    () async {
+      final folder = await Directory.systemTemp.createTemp('fjelia-goals-');
+      addTearDown(() => folder.delete(recursive: true));
+      final path = File('${folder.path}/db.sqlite');
+      final old = AppDatabase(NativeDatabase(path));
+      await old
+          .into(old.raceGoals)
+          .insert(
+            RaceGoalsCompanion.insert(
+              id: 'goal',
+              athleteId: 'self',
+              name: 'Marathon',
+              primarySport: 'running',
+              distanceM: 42195,
+              raceDate: DateTime(2027, 4, 10),
+              priority: 'a',
+              source: 'manual',
+              createdAt: DateTime(2026, 10, 25),
+            ),
+          );
+      await old
+          .into(old.trainingPlans)
+          .insert(
+            TrainingPlansCompanion.insert(
+              id: 'plan',
+              athleteId: 'self',
+              raceGoalId: const Value('goal'),
+              startDate: DateTime(2026, 10, 25),
+              endDate: DateTime(2027, 4, 10),
+              status: 'active',
+              generatedAt: DateTime(2026, 10, 25),
+            ),
+          );
+      await old.customStatement('DROP TABLE plan_goals');
+      for (final column in const ['participation', 'ambition']) {
+        await old.customStatement('ALTER TABLE race_goals DROP COLUMN $column');
+      }
+      for (final column in const ['goal_set_revision', 'season_json']) {
+        await old.customStatement(
+          'ALTER TABLE training_plans DROP COLUMN $column',
+        );
+      }
+      for (final column in const ['goal_id', 'goal_role', 'goal_objective']) {
+        await old.customStatement(
+          'ALTER TABLE training_sessions DROP COLUMN $column',
+        );
+      }
+      await old.customStatement('PRAGMA user_version = 46');
+      await old.close();
+
+      final db = AppDatabase(NativeDatabase(path));
+      addTearDown(db.close);
+      final goal = (await db.select(db.raceGoals).get()).single;
+      expect(goal.participation, 'committed');
+      expect(goal.ambition, isNull);
+      final plan = (await db.select(db.trainingPlans).get()).single;
+      expect(plan.seasonJson, isNull);
+      final links = await db.select(db.planGoals).get();
+      expect(links.single.planId, 'plan');
+      expect(links.single.goalId, 'goal');
+      expect(links.single.priority, 'a');
+      expect(
+        (await db.customSelect('PRAGMA user_version').getSingle()).read<int>(
+          'user_version',
+        ),
+        db.schemaVersion,
+      );
+      // The shared cleanup queue and delivery record of schema 48 are there.
+      expect(await db.select(db.providerCleanups).get(), isEmpty);
+      expect(await db.select(db.workoutDeliveries).get(), isEmpty);
+    },
+  );
 }

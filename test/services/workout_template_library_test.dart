@@ -115,9 +115,7 @@ void main() {
             );
       }
       await WorkoutTemplateLibrary(db).seedIfEmpty();
-      final service = TrainingPlanService(
-        db,
-        FakeWorkoutGarmin(),
+      final service = TrainingPlanService(db, garminProviders(db, FakeWorkoutGarmin()),
         usesPower: (sport, indoor) => power && sport.startsWith('cycl'),
       );
       final planId = await service.generatePlan(

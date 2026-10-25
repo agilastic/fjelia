@@ -13,6 +13,7 @@ import '../../providers/plan_view_provider.dart';
 import '../../providers/day_data_provider.dart';
 import '../../providers/heat_acclimation_provider.dart';
 import '../../providers/workout_generation_provider.dart';
+import '../../providers/plan_goal_sync_provider.dart';
 import '../../providers/workout_push_provider.dart';
 import '../../widgets/app_widgets.dart';
 import '../../utils/target_time.dart';
@@ -395,13 +396,17 @@ class TrainingTab extends ConsumerWidget {
 Future<void> generateTrainingPlan(BuildContext context, WidgetRef ref) async {
   final goal = await ref.read(primaryRaceGoalProvider.future);
   if (goal == null) {
-    throw StateError('Add a future race goal with priority A first.');
+    throw StateError('Add a future race goal first.');
   }
+  final goals = await ref.read(goalSetProvider.future);
+  final others = goals.active.length - 1;
   if (!context.mounted ||
       !await confirmAction(
         context,
         'Regenerate workouts?',
-        'Replace future workouts and rebuild toward ${goal.name} using your current schedule?',
+        'Replace future workouts and rebuild toward ${goal.name}'
+            '${others > 0 ? ' and your $others other goal${others == 1 ? '' : 's'}' : ''}'
+            ' using your current schedule?',
       )) {
     return;
   }
@@ -474,6 +479,7 @@ class RaceGoalsCard extends ConsumerWidget {
                                     .updatePriority(g.id, v);
                                 ref.invalidate(upcomingRaceGoalsProvider);
                                 ref.invalidate(primaryRaceGoalProvider);
+                                ref.invalidate(goalSetProvider);
                               }),
                               itemBuilder: (_) => [
                                 for (final s in ['a', 'b', 'c'])
@@ -502,6 +508,10 @@ class RaceGoalsCard extends ConsumerWidget {
                                           .delete(g.id);
                                       ref.invalidate(upcomingRaceGoalsProvider);
                                       ref.invalidate(primaryRaceGoalProvider);
+                                      ref.invalidate(goalSetProvider);
+                                      await ref.read(
+                                        retirePlanWithoutGoalsProvider,
+                                      )();
                                     });
                                   }
                                 }
@@ -514,7 +524,7 @@ class RaceGoalsCard extends ConsumerWidget {
         const Padding(
           padding: EdgeInsets.only(top: 14),
           child: Text(
-            'Goals are shared with AI Coach. A-priority drives your training plan.',
+            'Goals are shared with AI Coach. Priority A, B and C decide how the plan weighs your races against each other.',
             style: TextStyle(fontSize: 11, color: muted, height: 1.5),
           ),
         ),
@@ -642,11 +652,11 @@ Future<void> _deleteAll(BuildContext context, WidgetRef ref) async {
   if (!context.mounted) return;
   Navigator.of(context, rootNavigator: true).pop();
   progress.dispose();
-  final removed = result?.corosRemoved ?? 0;
+  final removed = result?.summary ?? '';
   final message = failure != null
       ? 'Deleting failed: $failure'
-      : removed > 0
-      ? 'All planned workouts deleted, $removed removed from COROS.'
+      : removed.isNotEmpty
+      ? 'All planned workouts deleted. Removed from your platforms: $removed.'
       : 'All planned workouts deleted.';
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
 }
