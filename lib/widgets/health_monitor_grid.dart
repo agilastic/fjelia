@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import '../providers/health_monitor_alerts_provider.dart';
 import '../providers/health_monitor_trends_provider.dart';
 
@@ -40,16 +42,25 @@ class HealthMonitorGrid extends ConsumerWidget {
     return SectionCard(
       title: 'Health Monitor',
       child: LayoutBuilder(
-        builder: (context, constraints) => Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            for (final e in values.entries)
-              if (vis[e.key] ?? true)
-                SizedBox(
-                  width: (constraints.maxWidth - 8) / 2,
-                  child: AspectRatio(
-                    aspectRatio: 2.05,
+        builder: (context, constraints) {
+          final textScale = MediaQuery.textScalerOf(context).scale(11) / 11;
+          final columns = constraints.maxWidth < 240 || textScale >= 1.3
+              ? 1
+              : 2;
+          final width = (constraints.maxWidth - 8 * (columns - 1)) / columns;
+          final height = math.max(
+            columns == 2 ? width / 2.05 : 0.0,
+            90.0 * math.max(1.0, textScale),
+          );
+          return Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final e in values.entries)
+                if (vis[e.key] ?? true)
+                  SizedBox(
+                    width: width,
+                    height: height,
                     child: MetricCard(
                       label: e.value.$1.label,
                       highlighted: alerts.contains(e.value.$1),
@@ -90,9 +101,9 @@ class HealthMonitorGrid extends ConsumerWidget {
                       onTap: () => MetricDetailSheet.show(context, e.value.$1),
                     ),
                   ),
-                ),
-          ],
-        ),
+            ],
+          );
+        },
       ),
     );
   }

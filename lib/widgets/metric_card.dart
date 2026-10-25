@@ -41,18 +41,21 @@ class MetricCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(icon, size: 11, color: highlighted ? Colors.black : muted),
+                Icon(icon, size: 13, color: highlighted ? Colors.black : muted),
                 const SizedBox(width: 5),
                 Expanded(
                   child: Text(
-                    label.toUpperCase(),
-                    maxLines: 1,
+                    label,
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      fontSize: 8,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: .6,
-                      color: highlighted ? Colors.black : muted,
+                      fontSize: 11,
+                      height: 1.2,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0,
+                      color: highlighted
+                          ? Colors.black
+                          : const Color(0xFFD9DCE2),
                     ),
                   ),
                 ),
