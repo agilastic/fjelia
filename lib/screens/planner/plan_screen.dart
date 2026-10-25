@@ -48,10 +48,10 @@ class _PlanState extends ConsumerState<PlanScreen> {
       children: [
         const PlanWeatherStrip(),
         const RaceCountdownCard(),
-        const Center(
+        Center(
           child: Text(
-            'ACTIVITY LOG',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+            view == 'Week' ? 'WEEKLY PLAN' : 'ACTIVITY LOG',
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
           ),
         ),
         if (view == 'Month') ...[
@@ -221,11 +221,12 @@ class _PlanState extends ConsumerState<PlanScreen> {
               selectedDay: view == 'List' ? null : selected,
             ),
           ),
-        ActivityHistory(
-          showHeader: false,
-          monthMode: view != 'Week',
-          selectedDayOnly: view == 'Month',
-        ),
+        if (view != 'Week')
+          ActivityHistory(
+            showHeader: false,
+            monthMode: true,
+            selectedDayOnly: view == 'Month',
+          ),
       ],
     );
   }

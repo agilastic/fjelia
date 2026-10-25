@@ -127,7 +127,7 @@ void main() {
       ProviderScope(
         overrides: [
           selectedDateProvider.overrideWith((ref) => DateTime(2026, 10, 27)),
-          planWeekProvider.overrideWith((ref, start) async => week()),
+          planWeekProvider.overrideWith((ref, start) => Stream.value(week())),
         ],
         child: MaterialApp(
           theme: AppTheme.dark(),
@@ -161,6 +161,9 @@ void main() {
     expect(find.text('Travel'), findsOneWidget);
     expect(find.text('SKIPPED'), findsOneWidget);
     expect(find.text('EXTRA'), findsOneWidget);
+    expect(find.text('DONE'), findsNWidgets(2));
+    expect(find.text('PLANNED'), findsNWidgets(3));
+    expect(find.text('Plan 45 min'), findsOneWidget);
     expect(find.text('of 4 h 20 min planned'), findsOneWidget);
     expect(find.text('77 min'), findsOneWidget);
     expect(find.text('26–1 Nov'), findsNothing);
@@ -183,5 +186,47 @@ void main() {
     // Next week moves the selected day by seven days.
     await tester.tap(find.byTooltip('Next week'));
     await tester.pump();
+  });
+
+  testWidgets('completed workout is one entry without repeated equal target', (
+    tester,
+  ) async {
+    final combined = buildPlanWeek(
+      start: monday,
+      sessions: [
+        session(
+          'done',
+          day(6),
+          status: 'completed',
+          title: 'Run With The Wind Modified',
+        ),
+      ],
+      activities: [
+        activity('actual', 'Run With The Wind Modified', day(6), minutes: 60),
+      ],
+    );
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          selectedDateProvider.overrideWith((ref) => day(6)),
+          planWeekProvider.overrideWith((ref, start) => Stream.value(combined)),
+        ],
+        child: MaterialApp(
+          theme: AppTheme.dark(),
+          home: const Scaffold(
+            body: SingleChildScrollView(
+              child: PlanWeekAgenda(mondayFirst: true),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump();
+    expect(find.text('Run With The Wind Modified'), findsOneWidget);
+    expect(find.text('DONE'), findsOneWidget);
+    expect(find.text('EXTRA'), findsNothing);
+    expect(find.text('Plan 60 min'), findsNothing);
+    expect(tester.takeException(), isNull);
   });
 }

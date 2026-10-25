@@ -772,6 +772,14 @@ void main() {
     expect(find.text('ZONE POLARIZATION'), findsOneWidget);
     expect(find.text('ELEVATION'), findsOneWidget);
     expect(find.text('TRAINING MONITOR'), findsOneWidget);
+    // Twelve polarization weeks make the overview taller. Every card must
+    // remain reachable in the same scroll view, including the form card.
+    await tester.scrollUntilVisible(
+      find.text('FORM · ATL / CTL / TSB'),
+      250,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
     expect(find.text('FORM · ATL / CTL / TSB'), findsOneWidget);
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox());
@@ -1074,6 +1082,24 @@ void main() {
       await tester.binding.setSurfaceSize(null);
     },
   );
+  testWidgets('Week plan does not append the activity history list', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({
+      'plan_default_view': 'week',
+      'heat_acclimation_enabled': false,
+    });
+    await render(tester, const PlanScreen(), 'plan-week-only');
+    expect(find.text('WEEKLY PLAN'), findsOneWidget);
+    await tester.drag(find.byType(ListView).first, const Offset(0, -2500));
+    await tester.pumpAndSettle();
+    expect(find.byType(ActivityHistory), findsNothing);
+    expect(find.text('HISTORY'), findsNothing);
+    expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(Duration.zero);
+    await tester.binding.setSurfaceSize(null);
+  });
   testWidgets(
     'Month calendar shows colored planned and completed sport bubbles',
     (tester) async {

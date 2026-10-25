@@ -4,9 +4,11 @@ import 'package:intl/intl.dart';
 
 import '../../providers/day_data_provider.dart';
 import '../../providers/plan_week_provider.dart';
+import '../../providers/upcoming_plan_provider.dart' show PlanCompletionMatch;
 import '../../theme/activity_colors.dart';
 import '../../widgets/app_widgets.dart';
 import '../strain/activity_detail_sheet.dart';
+import '../activities/workout_detail_sheet.dart';
 import 'plan_session_sheet.dart';
 
 const _divider = Color(0x14FFFFFF);
@@ -137,7 +139,9 @@ class _WeekTable extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 3),
                       child: Text(
-                        'of ${_duration(planned)} planned',
+                        planned > 0
+                            ? 'of ${_duration(planned)} planned'
+                            : 'completed · no workouts planned',
                         style: const TextStyle(fontSize: 13, color: muted),
                       ),
                     ),
@@ -297,17 +301,22 @@ class _ItemLine extends StatelessWidget {
     final skipped = state == PlanWeekState.skipped;
     final missed = state == PlanWeekState.missed;
     final done = state == PlanWeekState.done;
-    VoidCallback? onTap;
+    VoidCallback? viewPlan;
     if (item.session != null) {
-      onTap = () =>
+      viewPlan = () =>
           showAppSheet(context, PlanSessionSheet(session: item.session!));
-    } else if (item.activity != null) {
-      onTap = () =>
-          showAppSheet(context, ActivityDetailSheet(activity: item.activity!));
+    } else if (item.workout != null) {
+      viewPlan = () =>
+          showAppSheet(context, WorkoutDetailSheet(workout: item.workout!));
     }
     final phase = item.session?.phase;
     return InkWell(
-      onTap: onTap,
+      onTap: item.activity != null
+          ? () => showAppSheet(
+              context,
+              ActivityDetailSheet(activity: item.activity!),
+            )
+          : viewPlan,
       borderRadius: BorderRadius.circular(10),
       child: _Line(
         icon: activitySportIcon(item.sport),
@@ -316,14 +325,27 @@ class _ItemLine extends StatelessWidget {
             : completedActivityColor(item.sport),
         label: sportLabel(item.sport),
         badge: done
-            ? (item.session == null ? 'EXTRA' : null)
+            ? 'DONE'
             : skipped
             ? 'SKIPPED'
-            : phase?.toUpperCase(),
+            : missed
+            ? 'NOT RECORDED'
+            : 'PLANNED',
+        secondaryBadge: done && !item.hasPlan ? 'EXTRA' : null,
+        badgeTooltip: switch (item.completionMatch) {
+          PlanCompletionMatch.activityLink =>
+            'Recorded activity linked to this workout',
+          PlanCompletionMatch.recordedStart =>
+            'Matched to the recorded workout start',
+          PlanCompletionMatch.workoutName || PlanCompletionMatch.activityName =>
+            'Matched by workout name, sport and date',
+          PlanCompletionMatch.duration => 'Matched by sport, date and duration',
+          null => null,
+        },
         badgeColor: skipped
             ? Colors.orangeAccent
             : done
-            ? muted
+            ? mint
             : plannedActivityColor(phase),
         detail: skipped
             ? (item.skipReason ?? 'Skipped')
@@ -331,6 +353,13 @@ class _ItemLine extends StatelessWidget {
             ? 'Not recorded'
             : item.title,
         trailing: item.minutes == null ? '—' : '${item.minutes} min',
+        target:
+            done &&
+                item.plannedMinutes != null &&
+                item.plannedMinutes != item.minutes
+            ? 'Plan ${item.plannedMinutes} min'
+            : null,
+        onPlanTap: done ? viewPlan : null,
         dim: skipped || missed,
         struck: skipped,
         done: done,
@@ -347,6 +376,10 @@ class _Line extends StatelessWidget {
     required this.trailing,
     this.detail,
     this.badge,
+    this.secondaryBadge,
+    this.badgeTooltip,
+    this.target,
+    this.onPlanTap,
     this.badgeColor = muted,
     this.dim = false,
     this.struck = false,
@@ -355,13 +388,30 @@ class _Line extends StatelessWidget {
   final IconData icon;
   final Color color;
   final String label, trailing;
-  final String? detail, badge;
+  final String? detail, badge, secondaryBadge, badgeTooltip, target;
+  final VoidCallback? onPlanTap;
   final Color badgeColor;
   final bool dim, struck, done;
 
   @override
   Widget build(BuildContext context) {
     final text = dim ? Colors.white38 : Colors.white;
+    Widget statusBadge(String value, Color color) => Container(
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: .15),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Text(
+        value,
+        style: TextStyle(
+          fontSize: 8,
+          color: color,
+          fontWeight: FontWeight.w800,
+          letterSpacing: .4,
+        ),
+      ),
+    );
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
@@ -380,46 +430,30 @@ class _Line extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
+                Wrap(
+                  spacing: 6,
+                  runSpacing: 3,
+                  crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
-                    Flexible(
-                      child: Text(
-                        label,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: text,
-                          fontWeight: FontWeight.w600,
-                          decoration: struck
-                              ? TextDecoration.lineThrough
-                              : null,
-                          decorationColor: Colors.white38,
-                        ),
+                    Text(
+                      label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: text,
+                        fontWeight: FontWeight.w600,
+                        decoration: struck ? TextDecoration.lineThrough : null,
+                        decorationColor: Colors.white38,
                       ),
                     ),
-                    if (badge != null) ...[
-                      const SizedBox(width: 6),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 5,
-                          vertical: 2,
-                        ),
-                        decoration: BoxDecoration(
-                          color: badgeColor.withValues(alpha: .15),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Text(
-                          badge!,
-                          style: TextStyle(
-                            fontSize: 8,
-                            color: badgeColor,
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: .4,
-                          ),
-                        ),
+                    if (badge != null)
+                      Tooltip(
+                        message: badgeTooltip ?? badge!,
+                        child: statusBadge(badge!, badgeColor),
                       ),
-                    ],
+                    if (secondaryBadge != null)
+                      statusBadge(secondaryBadge!, muted),
                   ],
                 ),
                 if (detail != null && detail!.isNotEmpty)
@@ -439,18 +473,45 @@ class _Line extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 10),
-          if (done) ...[
-            const Icon(Icons.check_circle_rounded, size: 16, color: mint),
-            const SizedBox(width: 4),
-          ],
-          Text(
-            trailing,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              color: done ? mint : (dim ? Colors.white38 : Colors.white70),
-              fontFeatures: const [FontFeature.tabularFigures()],
-            ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (done) ...[
+                    const Icon(
+                      Icons.check_circle_rounded,
+                      size: 16,
+                      color: mint,
+                    ),
+                    const SizedBox(width: 4),
+                  ],
+                  Text(
+                    trailing,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: done
+                          ? mint
+                          : (dim ? Colors.white38 : Colors.white70),
+                      fontFeatures: const [FontFeature.tabularFigures()],
+                    ),
+                  ),
+                ],
+              ),
+              if (target != null)
+                TextButton(
+                  onPressed: onPlanTap,
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: const Size(0, 24),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    foregroundColor: muted,
+                  ),
+                  child: Text(target!, style: const TextStyle(fontSize: 10)),
+                ),
+            ],
           ),
         ],
       ),

@@ -158,7 +158,7 @@ void main() {
     });
 
     test(
-      'a skipped entry is left alone; a finished session is done as it is',
+      'a skipped entry is left alone; a finished session joins its activity',
       () async {
         final run = await activity('d1', 'Easy run');
         final rows = markDoneEntries(
@@ -177,7 +177,7 @@ void main() {
         expect(rows[0].done, isFalse);
         expect(rows[0].doneBy, isNull);
         expect(rows[1].done, isTrue);
-        expect(rows[1].doneBy, isNull);
+        expect(rows[1].doneBy?.activityId, 'd1');
       },
     );
   });

@@ -758,7 +758,7 @@ final trainingPlanMetaProvider = FutureProvider<TrainingPlanMeta?>((ref) async {
   }
 });
 
-ScheduledWorkout _scheduledWorkoutFromRecord(ScheduledWorkoutRecord r) {
+ScheduledWorkout scheduledWorkoutFromRecord(ScheduledWorkoutRecord r) {
   var steps = <WorkoutStep>[];
   final json = r.stepsJson;
   if (json != null) {
@@ -793,7 +793,7 @@ final scheduledWorkoutsProvider = FutureProvider<List<ScheduledWorkout>>((
 ) async {
   ref.watch(syncStatusListenerProvider);
   final rows = await ref.read(databaseProvider).getUpcomingWorkouts();
-  return rows.map(_scheduledWorkoutFromRecord).toList();
+  return rows.map(scheduledWorkoutFromRecord).toList();
 });
 
 // ---------------------------------------------------------------------------
