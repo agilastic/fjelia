@@ -60,18 +60,19 @@
   var button = document.querySelector('.gallery-motion');
   if (!cards.length || !button || !Element.prototype.animate) return;
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-  var paused = false;
+  var paused = reduced.matches;
+  var manualMotion = false;
   var states = cards.map(function (card) {
     return { card: card, img: card.querySelector('img'), animation: null, visible: false, held: false };
   });
   function sync(state) {
     if (!state.animation) return;
-    if (paused || reduced.matches || document.hidden || !state.visible || state.held || document.body.classList.contains('dialog-open')) state.animation.pause();
+    if (paused || (reduced.matches && !manualMotion) || document.hidden || !state.visible || state.held || document.body.classList.contains('dialog-open')) state.animation.pause();
     else state.animation.play();
   }
   function measure(state) {
     if (state.animation) { state.animation.cancel(); state.animation = null; }
-    if (reduced.matches || !state.img.complete || !state.img.naturalWidth) return;
+    if ((reduced.matches && !manualMotion) || !state.img.complete || !state.img.naturalWidth) return;
     var css = getComputedStyle(state.card);
     var viewport = state.card.clientHeight - parseFloat(css.paddingTop) - parseFloat(css.paddingBottom);
     var distance = Math.max(0, state.img.offsetHeight - viewport);
@@ -118,16 +119,20 @@
   });
   function preference() {
     button.hidden = false;
+    button.setAttribute('aria-pressed', String(paused));
+    button.textContent = window.FjeliaI18n ? window.FjeliaI18n.t(paused ? 'resume' : 't022') : (paused ? 'Resume previews' : 'Pause previews');
     states.forEach(measure);
+    document.dispatchEvent(new CustomEvent('fjelia-preview-pause', { detail: { paused: paused } }));
   }
   button.addEventListener('click', function () {
     paused = !paused;
+    manualMotion = !paused;
     button.setAttribute('aria-pressed', String(paused));
     button.textContent = window.FjeliaI18n ? window.FjeliaI18n.t(paused ? 'resume' : 't022') : (paused ? 'Resume previews' : 'Pause previews');
     document.dispatchEvent(new CustomEvent('fjelia-preview-pause', { detail: { paused: paused } }));
-    states.forEach(sync);
+    states.forEach(measure);
   });
-  reduced.addEventListener('change', preference);
+  reduced.addEventListener('change', function () { paused = reduced.matches; manualMotion = false; preference(); });
   document.addEventListener('visibilitychange', function () { states.forEach(sync); });
   new MutationObserver(function () { states.forEach(sync); }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
   if (!resize) window.addEventListener('resize', function () { states.forEach(measure); });
@@ -137,18 +142,22 @@
 /* Edited screen recordings autoplay only while visible. */
 (function () {
   'use strict';
-  var paused = false;
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var paused = reduced.matches;
   var states = Array.from(document.querySelectorAll('.app-preview')).map(function (video) {
     video.muted = true;
     video.defaultMuted = true;
     video.playsInline = true;
     var state = { video: video, visible: false, failed: false };
     function showFallback() {
+      // Empty lazy sources may emit errors before they have been assigned a URL.
+      if (!video.dataset.loaded) return;
       state.failed = true;
       video.pause();
       video.hidden = true;
       var fallback = video.parentElement.querySelector('.video-fallback');
       if (fallback) fallback.hidden = false;
+      video.dispatchEvent(new Event('fjelia-preview-fallback'));
     }
     state.showFallback = showFallback;
     video.addEventListener('error', showFallback);
@@ -191,6 +200,37 @@
     paused = event.detail.paused;
     states.forEach(sync);
   });
+  reduced.addEventListener('change', function () { paused = reduced.matches; states.forEach(sync); });
   document.addEventListener('visibilitychange', function () { states.forEach(sync); });
   new MutationObserver(function () { states.forEach(sync); }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+})();
+
+/* The hero is a short real-app story. Chapters seek without overriding pause. */
+(function () {
+  'use strict';
+  var video = document.querySelector('.hero-preview');
+  var nav = document.querySelector('.hero-story-nav');
+  if (!video || !nav) return;
+  var buttons = Array.from(nav.querySelectorAll('[data-preview-time]'));
+  function update() {
+    var time = video.currentTime;
+    buttons.forEach(function (button) {
+      var start = Number(button.dataset.previewTime);
+      var end = Number(button.dataset.previewEnd);
+      var active = time >= start && time < end;
+      if (active) button.setAttribute('aria-current', 'step');
+      else button.removeAttribute('aria-current');
+      button.style.setProperty('--chapter-progress', active ? String(Math.min(1, (time - start) / (end - start))) : '0');
+    });
+  }
+  nav.addEventListener('click', function (event) {
+    var button = event.target.closest('[data-preview-time]');
+    if (!button || video.hidden || video.error) return;
+    video.currentTime = Number(button.dataset.previewTime) + .03;
+    update();
+  });
+  ['timeupdate', 'seeked', 'loadedmetadata'].forEach(function (event) { video.addEventListener(event, update); });
+  video.addEventListener('fjelia-preview-fallback', function () { nav.hidden = true; });
+  nav.hidden = false;
+  update();
 })();
