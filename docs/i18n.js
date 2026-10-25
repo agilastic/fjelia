@@ -273,9 +273,11 @@ var copy = {
     "plan_views_label": "Choose a training plan screen",
     "plan_week_view": "Week view",
     "plan_goals_view": "Race goals",
-    "plan_week_description": "Your week with running, cycling, strength, rest days and multiple sessions on the same day.",
+    "plan_week_description": "Your planned week, with running, cycling, strength, rest days and multiple sessions on the same day.",
     "plan_goals_description": "Your races with priorities, distances, elevation, dates, target times and countdowns.",
-    "plan_capture_note": "Real app screenshots. Select a screen to enlarge."
+    "plan_capture_note": "Real app screenshots. Select a screen to enlarge.",
+    "plan_month_view": "Month view",
+    "plan_month_description": "A month of training, with sport colours and clear planned and completed markers."
   },
   "de": {
     "t000": "Zum Inhalt springen",
@@ -548,9 +550,11 @@ var copy = {
     "plan_views_label": "Trainingsansicht auswählen",
     "plan_week_view": "Wochenansicht",
     "plan_goals_view": "Wettkampfziele",
-    "plan_week_description": "Deine Woche mit Laufen, Radfahren, Krafttraining, Ruhetagen und mehreren Einheiten pro Tag.",
+    "plan_week_description": "Deine geplante Woche mit Laufen, Radfahren, Krafttraining, Ruhetagen und mehreren Einheiten pro Tag.",
     "plan_goals_description": "Deine Wettkämpfe mit Prioritäten, Distanzen, Höhenmetern, Terminen, Zielzeiten und Countdown.",
-    "plan_capture_note": "Echte App-Screenshots. Tippe auf eine Ansicht, um sie zu vergrößern."
+    "plan_capture_note": "Echte App-Screenshots. Tippe auf eine Ansicht, um sie zu vergrößern.",
+    "plan_month_view": "Monatsansicht",
+    "plan_month_description": "Ein Trainingsmonat mit Sportfarben und klaren Markierungen für geplante und absolvierte Einheiten."
   },
   "es": {
     "t000": "Saltar al contenido",
@@ -823,9 +827,11 @@ var copy = {
     "plan_views_label": "Elegir una vista del plan",
     "plan_week_view": "Vista semanal",
     "plan_goals_view": "Objetivos de carrera",
-    "plan_week_description": "Tu semana con carrera, ciclismo, fuerza, descanso y varias sesiones en un mismo día.",
+    "plan_week_description": "Tu semana planificada con carrera, ciclismo, fuerza, descanso y varias sesiones en un mismo día.",
     "plan_goals_description": "Tus carreras con prioridades, distancias, desnivel, fechas, tiempos objetivo y cuentas atrás.",
-    "plan_capture_note": "Capturas reales de la app. Selecciona una vista para ampliarla."
+    "plan_capture_note": "Capturas reales de la app. Selecciona una vista para ampliarla.",
+    "plan_month_view": "Vista mensual",
+    "plan_month_description": "Un mes de entrenamiento con colores por deporte y marcadores de sesiones planificadas y completadas."
   },
   "fr": {
     "t000": "Aller au contenu",
@@ -1098,9 +1104,11 @@ var copy = {
     "plan_views_label": "Choisir une vue du plan",
     "plan_week_view": "Vue semaine",
     "plan_goals_view": "Objectifs de course",
-    "plan_week_description": "Votre semaine avec course, vélo, renforcement, repos et plusieurs séances dans une journée.",
+    "plan_week_description": "Votre semaine prévue avec course, vélo, renforcement, repos et plusieurs séances dans une journée.",
     "plan_goals_description": "Vos courses avec priorités, distances, dénivelé, dates, temps visés et comptes à rebours.",
-    "plan_capture_note": "Captures réelles de l’app. Sélectionnez une vue pour l’agrandir."
+    "plan_capture_note": "Captures réelles de l’app. Sélectionnez une vue pour l’agrandir.",
+    "plan_month_view": "Vue mois",
+    "plan_month_description": "Un mois d’entraînement avec les couleurs des sports et des repères pour les séances prévues et terminées."
   },
   "it": {
     "t000": "Vai al contenuto",
@@ -1373,9 +1381,11 @@ var copy = {
     "plan_views_label": "Scegli una vista del piano",
     "plan_week_view": "Vista settimanale",
     "plan_goals_view": "Obiettivi di gara",
-    "plan_week_description": "La tua settimana con corsa, ciclismo, forza, riposo e più sessioni nello stesso giorno.",
+    "plan_week_description": "La tua settimana pianificata con corsa, ciclismo, forza, riposo e più sessioni nello stesso giorno.",
     "plan_goals_description": "Le tue gare con priorità, distanze, dislivello, date, tempi obiettivo e conti alla rovescia.",
-    "plan_capture_note": "Schermate reali dell’app. Seleziona una vista per ingrandirla."
+    "plan_capture_note": "Schermate reali dell’app. Seleziona una vista per ingrandirla.",
+    "plan_month_view": "Vista mensile",
+    "plan_month_description": "Un mese di allenamento con colori per sport e indicatori delle sessioni pianificate e completate."
   }
 };
 var supported = ['en','de','es','fr','it'];

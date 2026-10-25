@@ -525,9 +525,9 @@ section[id], [id].privacy-card, [id].sports-compact { scroll-margin-top: 90px; }
 .plan-points h3 { font-size: 1rem; }
 .plan-points p { color: var(--muted); font-size: .95rem; margin: .3rem 0 0; }
 .season-showcase { width: min(100%, 326px); margin: 0 auto; }
-.plan-view-picker { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 1rem; padding: 4px; border: 1px solid var(--border); border-radius: 99px; background: #06132b; }
+.plan-view-picker { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; margin-bottom: 1rem; padding: 4px; border: 1px solid var(--border); border-radius: 99px; background: #06132b; }
 .plan-view-picker[hidden], .plan-view[hidden] { display: none !important; }
-.plan-view-picker button { min-height: 44px; padding: 7px 10px; border: 0; border-radius: 99px; background: transparent; color: var(--muted); font-size: .78rem; line-height: 1.4; cursor: pointer; }
+.plan-view-picker button { min-height: 44px; padding: 7px 6px; border: 0; border-radius: 99px; background: transparent; color: var(--muted); font-size: .74rem; line-height: 1.4; hyphens: auto; overflow-wrap: anywhere; cursor: pointer; }
 .plan-view-picker button[aria-selected="true"] { color: #9aedee; background: #153a45; }
 .plan-view { margin: 0; }
 .plan-capture-link { position: relative; display: block; width: 100%; aspect-ratio: 1206 / 2622; padding: 5px; overflow: hidden; border: 1px solid #79cbd48a; border-radius: 36px; background: #111; box-shadow: 0 28px 60px #0005, 0 0 50px #2bd9a80a; cursor: zoom-in; }
