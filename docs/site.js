@@ -53,26 +53,23 @@
   });
 })();
 
-/* Gentle, measured top-to-bottom previews, with accessible motion controls. */
+/* Gentle screenshot previews respect the system motion preference. */
 (function () {
   'use strict';
   var cards = Array.from(document.querySelectorAll('.screen-link'));
-  var button = document.querySelector('.gallery-motion');
-  if (!cards.length || !button || !Element.prototype.animate) return;
+  if (!cards.length || !Element.prototype.animate) return;
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-  var paused = reduced.matches;
-  var manualMotion = false;
   var states = cards.map(function (card) {
     return { card: card, img: card.querySelector('img'), animation: null, visible: false, held: false };
   });
   function sync(state) {
     if (!state.animation) return;
-    if (paused || (reduced.matches && !manualMotion) || document.hidden || !state.visible || state.held || document.body.classList.contains('dialog-open')) state.animation.pause();
+    if (reduced.matches || document.hidden || !state.visible || state.held || document.body.classList.contains('dialog-open')) state.animation.pause();
     else state.animation.play();
   }
   function measure(state) {
     if (state.animation) { state.animation.cancel(); state.animation = null; }
-    if ((reduced.matches && !manualMotion) || !state.img.complete || !state.img.naturalWidth) return;
+    if (reduced.matches || !state.img.complete || !state.img.naturalWidth) return;
     var css = getComputedStyle(state.card);
     var viewport = state.card.clientHeight - parseFloat(css.paddingTop) - parseFloat(css.paddingBottom);
     var distance = Math.max(0, state.img.offsetHeight - viewport);
@@ -117,33 +114,15 @@
     });
     measure(state);
   });
-  function preference() {
-    button.hidden = false;
-    button.setAttribute('aria-pressed', String(paused));
-    button.textContent = window.FjeliaI18n ? window.FjeliaI18n.t(paused ? 'resume' : 't022') : (paused ? 'Resume previews' : 'Pause previews');
-    states.forEach(measure);
-    document.dispatchEvent(new CustomEvent('fjelia-preview-pause', { detail: { paused: paused } }));
-  }
-  button.addEventListener('click', function () {
-    paused = !paused;
-    manualMotion = !paused;
-    button.setAttribute('aria-pressed', String(paused));
-    button.textContent = window.FjeliaI18n ? window.FjeliaI18n.t(paused ? 'resume' : 't022') : (paused ? 'Resume previews' : 'Pause previews');
-    document.dispatchEvent(new CustomEvent('fjelia-preview-pause', { detail: { paused: paused } }));
-    states.forEach(measure);
-  });
-  reduced.addEventListener('change', function () { paused = reduced.matches; manualMotion = false; preference(); });
+  reduced.addEventListener('change', function () { states.forEach(measure); });
   document.addEventListener('visibilitychange', function () { states.forEach(sync); });
   new MutationObserver(function () { states.forEach(sync); }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
   if (!resize) window.addEventListener('resize', function () { states.forEach(measure); });
-  preference();
 })();
 
 /* Edited screen recordings autoplay only while visible. */
 (function () {
   'use strict';
-  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-  var paused = reduced.matches;
   var states = Array.from(document.querySelectorAll('.app-preview')).map(function (video) {
     video.muted = true;
     video.defaultMuted = true;
@@ -166,7 +145,7 @@
     return state;
   });
   function sync(state) {
-    var allowed = !state.failed && state.visible && !document.hidden && !paused &&
+    var allowed = !state.failed && state.visible && !document.hidden &&
       !document.body.classList.contains('dialog-open');
     state.video.autoplay = allowed;
     if (!allowed) { state.video.pause(); return; }
@@ -196,16 +175,12 @@
     sync(state);
     if (observer) observer.observe(state.video);
   });
-  document.addEventListener('fjelia-preview-pause', function (event) {
-    paused = event.detail.paused;
-    states.forEach(sync);
-  });
-  reduced.addEventListener('change', function () { paused = reduced.matches; states.forEach(sync); });
   document.addEventListener('visibilitychange', function () { states.forEach(sync); });
+  window.addEventListener('pageshow', function () { states.forEach(sync); });
   new MutationObserver(function () { states.forEach(sync); }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
 })();
 
-/* The hero is a short real-app story. Chapters seek without overriding pause. */
+/* The hero is a short real-app story with seekable chapters. */
 (function () {
   'use strict';
   var video = document.querySelector('.hero-preview');

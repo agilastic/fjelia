@@ -32,7 +32,7 @@ var copy = {
     "t026": "Explore your sleep stages and follow your sleep patterns over time.",
     "t027": "Track your training",
     "t028": "See your weekly load and follow your fitness and fatigue trends.",
-    "t029": "Edited screen recordings from the app. Videos are silent and loop automatically. You can pause them at any time. Available features depend on your connected devices.",
+    "t029": "Edited screen recordings from the app. Videos play silently and loop automatically while visible. Available features depend on your connected devices.",
     "t030": "Explore six more app screens",
     "t031": "Your day at a glance",
     "t032": "Sleep, energy, training load and your health monitor.",
@@ -264,7 +264,7 @@ var copy = {
     "t026": "Entdecke deine Schlafphasen und verfolge, wie sich dein Schlaf entwickelt.",
     "t027": "Dein Training im Blick",
     "t028": "Behalte deine Wochenbelastung im Blick und verfolge Fitness und Ermüdung.",
-    "t029": "Geschnittene Bildschirmaufnahmen aus der App. Die Videos laufen ohne Ton in einer Schleife. Du kannst sie jederzeit pausieren. Verfügbare Funktionen hängen von deinen verbundenen Geräten ab.",
+    "t029": "Geschnittene Bildschirmaufnahmen aus der App. Sichtbare Videos laufen automatisch und ohne Ton in einer Schleife. Verfügbare Funktionen hängen von deinen verbundenen Geräten ab.",
     "t030": "Sechs weitere App-Ansichten entdecken",
     "t031": "Dein Tag auf einen Blick",
     "t032": "Schlaf, Energie, Trainingsbelastung und dein Gesundheitsmonitor.",
@@ -496,7 +496,7 @@ var copy = {
     "t026": "Explora las fases del sueño y observa cómo cambian tus hábitos con el tiempo.",
     "t027": "Sigue tu entrenamiento",
     "t028": "Consulta la carga semanal y sigue la evolución de tu forma física y tu fatiga.",
-    "t029": "Grabaciones de pantalla editadas de la app. Los vídeos se reproducen sin sonido y en bucle. Puedes pausarlos cuando quieras. Las funciones disponibles dependen de tus dispositivos.",
+    "t029": "Grabaciones de pantalla editadas de la app. Los vídeos visibles se reproducen automáticamente, sin sonido y en bucle. Las funciones disponibles dependen de tus dispositivos.",
     "t030": "Explorar seis pantallas más",
     "t031": "Tu día de un vistazo",
     "t032": "Sueño, energía, carga de entrenamiento e indicadores de salud.",
@@ -728,7 +728,7 @@ var copy = {
     "t026": "Explorez les phases de votre sommeil et suivez leur évolution au fil du temps.",
     "t027": "Suivez votre entraînement",
     "t028": "Consultez votre charge hebdomadaire et suivez votre forme et votre fatigue.",
-    "t029": "Enregistrements d’écran montés à partir de l’app. Les vidéos sont muettes et tournent en boucle. Vous pouvez les mettre en pause à tout moment. Les fonctions disponibles dépendent de vos appareils.",
+    "t029": "Enregistrements d’écran montés à partir de l’app. Les vidéos visibles se lancent automatiquement, sans son et en boucle. Les fonctions disponibles dépendent de vos appareils.",
     "t030": "Découvrir six autres écrans",
     "t031": "Votre journée en un coup d’œil",
     "t032": "Sommeil, énergie, charge d’entraînement et indicateurs de santé.",
@@ -960,7 +960,7 @@ var copy = {
     "t026": "Esplora le fasi del sonno e osserva come cambia nel tempo.",
     "t027": "Segui i tuoi allenamenti",
     "t028": "Consulta il carico settimanale e segui l’andamento della forma fisica e dell’affaticamento.",
-    "t029": "Registrazioni dello schermo montate dall’app. I video sono silenziosi e si ripetono in loop. Puoi metterli in pausa quando vuoi. Le funzioni disponibili dipendono dai dispositivi collegati.",
+    "t029": "Registrazioni dello schermo montate dall’app. I video visibili si avviano automaticamente, senza audio e in loop. Le funzioni disponibili dipendono dai dispositivi collegati.",
     "t030": "Esplora altre sei schermate",
     "t031": "La tua giornata a colpo d’occhio",
     "t032": "Sonno, energia, carico di allenamento e indicatori di salute.",
@@ -1211,8 +1211,6 @@ function apply(lang, remember) {
   document.querySelectorAll('.hero-phone img').forEach(function (el) { el.alt = plain(text(el.closest('.phone-ai') ? 'demo_0_title' : el.closest('.phone-plan') ? 't052' : el.closest('.phone-front') ? 't031' : 't039')); });
   var close = document.querySelector('.dialog-close');
   if (close) close.setAttribute('aria-label',text('close'));
-  var motion = document.querySelector('.gallery-motion');
-  if (motion) motion.textContent = text(motion.getAttribute('aria-pressed') === 'true' ? 'resume' : 't022');
   var badge = document.querySelector('.badges'); if (badge) badge.setAttribute('aria-label',text('highlights'));
   document.querySelectorAll('.chips').forEach(function (el) { el.setAttribute('aria-label',text('sources')); });
   if (originalTitle.indexOf('Privacy') === 0) document.title = text('t155') + ' — Fjelia';
