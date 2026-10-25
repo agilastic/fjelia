@@ -30,12 +30,17 @@ class _FormState extends ConsumerState<TrainingFormCard> {
       selected.month,
       selected.day - days + 1,
     );
-    final points = (ref.watch(trainingFormSeriesProvider).valueOrNull ?? [])
+    final history = ref.watch(trainingFormSeriesProvider);
+    final points = (history.valueOrNull ?? [])
         .where((p) => !p.date.isBefore(start) && p.date.isBefore(end))
         .toList();
     final last = points.lastOrNull;
     final colors = [loadBlue, loadRed, mint];
-    final status = formStatus(last?.tsb);
+    final status = !history.hasValue && history.isLoading
+        ? 'Loading'
+        : !history.hasValue && history.hasError
+        ? 'Unavailable'
+        : formStatus(last?.tsb);
     final statusColor = last == null
         ? muted
         : last.tsb > 5
@@ -145,7 +150,17 @@ class _FormState extends ConsumerState<TrainingFormCard> {
             ],
           ),
           const SizedBox(height: 20),
-          if (points.isEmpty)
+          if (history.isLoading && !history.hasValue)
+            SizedBox(
+              height: widget.fullscreen ? 350 : 150,
+              child: const Center(child: CircularProgressIndicator()),
+            )
+          else if (history.hasError && !history.hasValue)
+            DataError(
+              history.error!,
+              retry: () => ref.invalidate(trainingFormSeriesProvider),
+            )
+          else if (points.isEmpty)
             const EmptyState('No training history')
           else
             SizedBox(
@@ -187,9 +202,13 @@ class _FormState extends ConsumerState<TrainingFormCard> {
                         minIncluded: true,
                         maxIncluded: true,
                         getTitlesWidget: (v, _) => Text(
-                          DateFormat(
-                            'd/M',
-                          ).format(start.add(Duration(days: v.round()))),
+                          DateFormat('d/M').format(
+                            DateTime(
+                              start.year,
+                              start.month,
+                              start.day + v.round(),
+                            ),
+                          ),
                           style: const TextStyle(fontSize: 9, color: muted),
                         ),
                       ),
@@ -207,7 +226,7 @@ class _FormState extends ConsumerState<TrainingFormCard> {
                           color: loadBlue.withValues(alpha: .045),
                         ),
                         dashArray: i == 2 ? [5, 4] : null,
-                        dotData: const FlDotData(show: false),
+                        dotData: FlDotData(show: points.length == 1),
                         spots: [
                           for (final p in points)
                             FlSpot(
@@ -247,6 +266,17 @@ class _FormState extends ConsumerState<TrainingFormCard> {
               LoadLegend('Form (TSB)', mint),
             ],
           ),
+          if (last?.historyStart != null) ...[
+            const SizedBox(height: 8),
+            Tooltip(
+              message:
+                  'Calculated from the first available load record. Days without recorded load count as zero; earlier training is unknown.',
+              child: Text(
+                'History since ${DateFormat.yMMMd().format(last!.historyStart!)}${last.historyDays! < 42 ? ' · building baseline' : ''}',
+                style: loadCaption,
+              ),
+            ),
+          ],
         ],
       ),
     );

@@ -548,20 +548,9 @@ class TrainingLoadMetrics {
 final trainingLoadProvider = FutureProvider<TrainingLoadMetrics>((ref) async {
   ref.watch(syncStatusListenerProvider);
   ref.watch(fullSyncListenerProvider);
-  final db = ref.read(databaseProvider);
-  final scores = await db.getAllScores();
-  final daily = <DateTime, double>{};
-  for (final s in scores) {
-    daily[_day(s.date)] = (s.strainScore ?? 0).clamp(0.0, 2000.0);
-  }
-  // Synced activity history can exist before daily-score caches are populated.
-  final activityDaily = <DateTime, double>{};
-  for (final a in await db.getActivitiesInRange(3650)) {
-    final day = _day(a.startDate);
-    activityDaily[day] = (activityDaily[day] ?? 0) + effectiveLoad(a);
-  }
-  daily.addAll(activityDaily);
-  if (daily.isEmpty) {
+  final history = await _readTrainingLoadHistory(ref.watch(databaseProvider));
+  final latest = history.points.lastOrNull;
+  if (latest == null) {
     return const TrainingLoadMetrics(
       ctl: 0,
       atl: 0,
@@ -570,26 +559,8 @@ final trainingLoadProvider = FutureProvider<TrainingLoadMetrics>((ref) async {
       peak: 0,
     );
   }
-  final days = daily.keys.toList()..sort();
-  final today = _day(DateTime.now());
-  final span = DateTime.utc(today.year, today.month, today.day)
-      .difference(
-        DateTime.utc(days.first.year, days.first.month, days.first.day),
-      )
-      .inDays;
-  var ctl = 0.0, atl = 0.0;
-  for (var i = 0; i <= span; i++) {
-    final load =
-        daily[DateTime(
-          days.first.year,
-          days.first.month,
-          days.first.day + i,
-        )] ??
-        0;
-    ctl += (load - ctl) * (2 / 43);
-    atl += (load - atl) * 0.25;
-  }
-  final sorted = daily.values.where((v) => v > 0).toList()..sort();
+  final ctl = latest.ctl, atl = latest.atl;
+  final sorted = history.daily.values.where((v) => v > 0).toList()..sort();
   final peak = sorted.isEmpty
       ? ctl * 1.1
       : sorted[((sorted.length - 1) * 0.9).round()];
@@ -619,40 +590,133 @@ class FormPoint {
     required this.ctl,
     required this.atl,
     required this.load,
+    this.historyStart,
   });
 
   final DateTime date;
   final double ctl;
   final double atl;
   final double load;
+  final DateTime? historyStart;
+
+  /// Calendar days of available history, including rest days. Null for points
+  /// supplied without initialization metadata (for example, imported series).
+  int? get historyDays => historyStart == null
+      ? null
+      : DateTime.utc(date.year, date.month, date.day)
+                .difference(
+                  DateTime.utc(
+                    historyStart!.year,
+                    historyStart!.month,
+                    historyStart!.day,
+                  ),
+                )
+                .inDays +
+            1;
 
   double get tsb => ctl - atl;
 }
 
-/// CTL/ATL/TSB for the last 90 days.
-final trainingFormSeriesProvider = FutureProvider<List<FormPoint>>((ref) async {
-  ref.watch(syncStatusListenerProvider);
-  final db = ref.read(databaseProvider);
-  final activities = await db.getActivitiesInRange(180);
+/// Initialize from the earliest usable load record, then process every local
+/// calendar day through [through]. The visible chart range never resets the
+/// calculation. Keep the existing smoothing coefficients used by Fjelia.
+List<FormPoint> buildTrainingFormSeries({
+  required Map<DateTime, double> dailyLoads,
+  required DateTime through,
+}) {
+  final end = _day(through);
   final daily = <DateTime, double>{};
-  for (final a in activities) {
-    final d = _day(a.startDate);
-    daily[d] = (daily[d] ?? 0) + effectiveLoad(a);
+  for (final entry in dailyLoads.entries) {
+    final d = _day(entry.key);
+    final load = entry.value;
+    if (d.isAfter(end) || !load.isFinite || load < 0) continue;
+    daily[d] = (daily[d] ?? 0) + load;
   }
-  final today = _day(DateTime.now());
-  final start = today.subtract(const Duration(days: 179));
+  if (daily.isEmpty) return [];
+  final start = (daily.keys.toList()..sort()).first;
+  final span = DateTime.utc(
+    end.year,
+    end.month,
+    end.day,
+  ).difference(DateTime.utc(start.year, start.month, start.day)).inDays;
   var ctl = 0.0, atl = 0.0;
   final points = <FormPoint>[];
-  for (var i = 0; i < 180; i++) {
-    final d = start.add(Duration(days: i));
+  for (var i = 0; i <= span; i++) {
+    final d = DateTime(start.year, start.month, start.day + i);
     final load = daily[d] ?? 0;
     ctl += (load - ctl) * (2 / 43);
     atl += (load - atl) * 0.25;
-    if (i >= 90) {
-      points.add(FormPoint(date: d, ctl: ctl, atl: atl, load: load));
-    }
+    points.add(
+      FormPoint(date: d, ctl: ctl, atl: atl, load: load, historyStart: start),
+    );
   }
   return points;
+}
+
+class _TrainingLoadHistory {
+  const _TrainingLoadHistory(this.daily, this.points);
+  final Map<DateTime, double> daily;
+  final List<FormPoint> points;
+}
+
+/// Shared history for the chart and dashboard. Cache-only daily loads remain
+/// available; actual activities replace the cache for their day.
+Future<_TrainingLoadHistory> _readTrainingLoadHistory(AppDatabase db) async {
+  final today = _day(DateTime.now());
+  final daily = <DateTime, double>{};
+  for (final score in await db.getAllScores()) {
+    // Scores use UTC calendar keys, rather than activity timestamps.
+    final d = _day(score.date.toUtc());
+    final load = score.strainScore;
+    if (d.isAfter(today) || load == null || !load.isFinite || load < 0) {
+      continue;
+    }
+    daily[d] = load.clamp(0.0, 2000.0);
+  }
+  // Read all dates, but only the load inputs: GPS and sample arrays can be large.
+  final t = db.activityRecords;
+  final activities =
+      await (db.selectOnly(t)
+            ..addColumns([
+              t.startDate,
+              t.durationSeconds,
+              t.trainingLoad,
+              t.totalElevation,
+              t.hrZonesJson,
+              t.avgHeartRate,
+            ])
+            ..where(
+              t.startDate.isSmallerThanValue(
+                DateTime(today.year, today.month, today.day + 1),
+              ),
+            ))
+          .get();
+  final activityDaily = <DateTime, double>{};
+  for (final activity in activities) {
+    final d = _day(activity.read(t.startDate)!.toLocal());
+    final load = effectiveLoadFromSummary(
+      durationSeconds: activity.read(t.durationSeconds)!,
+      recordedLoad: activity.read(t.trainingLoad),
+      elevationMeters: activity.read(t.totalElevation),
+      hrZonesJson: activity.read(t.hrZonesJson),
+      averageHeartRate: activity.read(t.avgHeartRate),
+    );
+    if (!load.isFinite || load < 0) continue;
+    activityDaily[d] = (activityDaily[d] ?? 0) + load;
+  }
+  daily.addAll(activityDaily);
+  return _TrainingLoadHistory(
+    daily,
+    buildTrainingFormSeries(dailyLoads: daily, through: today),
+  );
+}
+
+/// CTL/ATL/TSB from the first available load through today. The card independently
+/// selects its display window (60 days by default), preserving all earlier load.
+final trainingFormSeriesProvider = FutureProvider<List<FormPoint>>((ref) async {
+  ref.watch(syncStatusListenerProvider);
+  ref.watch(fullSyncListenerProvider);
+  return (await _readTrainingLoadHistory(ref.watch(databaseProvider))).points;
 });
 
 /// Dashboard training-monitor card.

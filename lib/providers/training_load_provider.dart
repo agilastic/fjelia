@@ -18,15 +18,31 @@ const _zoneWeights = [1.0, 1.1, 1.2, 3.1, 8.0];
 /// Prefer recorded activity load; otherwise use zone-weighted minutes when HR zones are
 /// stored, otherwise Banister TRIMP (rest 55, max 190 bpm); climbing adds
 /// one point per 10 m.
-double effectiveLoad(ActivityRecord a) {
-  final recorded = a.trainingLoad;
+double effectiveLoad(ActivityRecord a) => effectiveLoadFromSummary(
+  durationSeconds: a.durationSeconds,
+  recordedLoad: a.trainingLoad,
+  elevationMeters: a.totalElevation,
+  hrZonesJson: a.hrZonesJson,
+  averageHeartRate: a.avgHeartRate,
+);
+
+/// The same calculation using only the scalar activity summary, so historical
+/// initialization does not need years of GPS tracks and sample arrays.
+double effectiveLoadFromSummary({
+  required int durationSeconds,
+  double? recordedLoad,
+  double? elevationMeters,
+  String? hrZonesJson,
+  double? averageHeartRate,
+}) {
+  final recorded = recordedLoad;
   if (recorded != null && recorded.isFinite && recorded >= 0) return recorded;
-  final minutes = a.durationSeconds / 60;
+  final minutes = durationSeconds / 60;
   if (minutes <= 0) return 0.0;
-  final elevation = a.totalElevation ?? 0.0;
+  final elevation = elevationMeters ?? 0.0;
   final climbBonus = elevation > 0 ? elevation / 10 : 0.0;
 
-  final zonesJson = a.hrZonesJson;
+  final zonesJson = hrZonesJson;
   if (zonesJson != null) {
     final zones = jsonDecode(zonesJson) as Map<String, dynamic>;
     var load = 0.0;
@@ -37,12 +53,12 @@ double effectiveLoad(ActivityRecord a) {
     if (load > 0) return load + climbBonus;
   }
 
-  final avgHr = a.avgHeartRate;
+  final avgHr = averageHeartRate;
   if (avgHr != null && avgHr > 0) {
     final x = ((avgHr - 55) / 135).clamp(0.0, 1.0);
     return minutes * x * math.exp(1.92 * x) + climbBonus;
   }
-  return a.trainingLoad ?? 0.0;
+  return recordedLoad ?? 0.0;
 }
 
 /// ISO-8601 (year, week) of [d].
