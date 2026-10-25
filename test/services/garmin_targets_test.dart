@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:drift/drift.dart' hide isNull;
+import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
 import 'package:fjelia/api/garmin_client.dart';
 import 'package:fjelia/db/database.dart';
@@ -321,6 +321,115 @@ void main() {
     expect(await db.select(db.providerCleanups).get(), isEmpty);
     expect(garmin.deleted, containsAll(['w1', 'w2']));
   });
+
+  test('a short effort in a zone still carries its heart rates', () async {
+    // The Zwift-style "30 seconds at 80 %" step: a zone, but only seconds long.
+    await db.delete(db.workoutTemplates).go();
+    await db
+        .into(db.workoutTemplates)
+        .insert(
+          WorkoutTemplatesCompanion.insert(
+            id: 'short',
+            sport: 'running',
+            sessionType: 'long',
+            subType: const Value('endurance'),
+            targetPhase: 'base,build,peak,taper,recovery',
+            name: 'Hill Racer Training',
+            description: 'Short pickups.',
+            stepsJson: jsonEncode([
+              powerStep('warmup', 600, 0.5),
+              {
+                'type': 'RepeatGroupDTO',
+                'stepType': {'stepTypeKey': 'repeat'},
+                'numberOfIterations': 5,
+                'workoutSteps': [
+                  powerStep('interval', 30, 0.8),
+                  powerStep('recovery', 120, 0.6),
+                ],
+              },
+              powerStep('cooldown', 300, 0.5),
+            ]),
+            parameterizedFor: 'power',
+            estimatedDurationMin: 25,
+            estimatedTss: 20,
+            source: 'zwo_fyi',
+            createdAt: DateTime(2026, 7, 1),
+          ),
+        );
+    final garmin = FakeWorkoutGarmin();
+    final service = TrainingPlanService(db, garminProviders(db, garmin));
+    final s = await generate(service);
+    await service.pushToGarmin(s.id);
+    final pickup = flat(
+      garmin.lastSteps,
+    ).firstWhere((e) => e['endConditionValue'] == 30);
+    // Zone 3 is 128 to 145 bpm in this athlete's zones.
+    expect(pickup['targetType']['workoutTargetTypeKey'], 'heart.rate.zone');
+    expect([pickup['targetValueOne'], pickup['targetValueTwo']], [128, 145]);
+    expect(pickup['zoneNumber'], 3);
+    expect(pickup['description'], 'Z3 · 128–145 bpm');
+    // Every step that names a zone has its heart rates.
+    for (final step in flat(garmin.lastSteps)) {
+      if ((step['zoneNumber'] as int?) == null) continue;
+      expect(step['targetValueOne'], isNotNull, reason: '${step['stepType']}');
+      expect(step['targetValueTwo'], isNotNull);
+    }
+    expect(
+      garmin.lastDescription,
+      contains('0 min 30 sec'.replaceAll('0 min ', '')),
+    );
+  });
+
+  test(
+    'a workout stored without a target for its zone is sent with one',
+    () async {
+      final garmin = FakeWorkoutGarmin();
+      final service = TrainingPlanService(db, garminProviders(db, garmin));
+      final s = await generate(service);
+      // As the planner once stored a short effort: a zone, no target.
+      final steps = (jsonDecode(s.stepsJson!) as List)
+          .cast<Map<String, dynamic>>();
+      steps[1] =
+          {
+              ...steps[1],
+              'zoneNumber': 3,
+              'targetType': {
+                'workoutTargetTypeId': 1,
+                'workoutTargetTypeKey': 'no.target',
+                'displayOrder': 1,
+              },
+            }
+            ..remove('targetValueOne')
+            ..remove('targetValueTwo');
+      await (db.update(
+        db.trainingSessions,
+      )..where((t) => t.id.equals(s.id))).write(
+        TrainingSessionsCompanion(stepsJson: Value(jsonEncode(steps))),
+      );
+      final prepared = await service.prepareWorkout(s.id);
+      final fixed = flat(prepared.steps)[1];
+      expect(fixed['targetType']['workoutTargetTypeKey'], 'heart.rate.zone');
+      expect([fixed['targetValueOne'], fixed['targetValueTwo']], [128, 145]);
+      // A step with no zone at all is left without a target.
+      final open = steps[0]
+        ..['zoneNumber'] = null
+        ..remove('targetValueOne')
+        ..remove('targetValueTwo');
+      open['targetType'] = {
+        'workoutTargetTypeId': 1,
+        'workoutTargetTypeKey': 'no.target',
+        'displayOrder': 1,
+      };
+      steps[0] = open;
+      await (db.update(
+        db.trainingSessions,
+      )..where((t) => t.id.equals(s.id))).write(
+        TrainingSessionsCompanion(stepsJson: Value(jsonEncode(steps))),
+      );
+      final again = flat((await service.prepareWorkout(s.id)).steps);
+      expect(again.first['targetType']['workoutTargetTypeKey'], 'no.target');
+    },
+  );
 
   test('the workout on the watch carries its targets as comments', () async {
     final garmin = FakeWorkoutGarmin();

@@ -1216,6 +1216,9 @@ class TrainingPlanService {
         out.containsKey('ftpFraction') || out.containsKey('ftpLow');
     final fraction = _stepFraction(out, ftp);
     var zone = (out['zoneNumber'] as num?)?.toInt();
+    // Sprints are written as a sixth zone; heart rate has five, and the top one
+    // runs to the maximum, so that is where a sprint reads on the watch.
+    if (zone != null && zone > 5) zone = 5;
     if ((zone == null || zone < 1 || zone > 5) && fraction != null) {
       zone = zoneForFtpFraction(fraction);
     }
@@ -1267,13 +1270,10 @@ class TrainingPlanService {
             : '$guide · $own';
       }
     } else if (isPowerStep && !(power && ftp != null)) {
-      // Heart rate instead, except for very short efforts where a heart-rate
-      // target means nothing.
-      final condition = (out['endCondition'] as Map?)?['conditionTypeKey'];
-      final seconds = condition == 'time' || condition == null
-          ? (out['endConditionValue'] as num?)?.toInt() ?? 0
-          : 999;
-      final useHr = zone != null && zone >= 1 && zone <= 5 && seconds >= 45;
+      // Heart rate instead. A zone is always given with its heart rates, a
+      // short effort included: the athlete reads the range on the watch, and
+      // the data is there for whoever looks at the workout later.
+      final useHr = zone != null && zone >= 1 && zone <= 5;
       out['targetType'] = useHr
           ? {
               'workoutTargetTypeId': 4,
@@ -1287,6 +1287,20 @@ class TrainingPlanService {
             };
       out.remove('targetValueOne');
       out.remove('targetValueTwo');
+    }
+    // A step that names a zone but has no target gets the zone's heart rates:
+    // a zone without its data is only half an instruction. Steps that use
+    // power, or a target of their own (pace, cadence), are left alone.
+    final tail = (out['targetType'] as Map?)?['workoutTargetTypeKey'];
+    if ((tail == null || tail == 'no.target') &&
+        zone != null &&
+        zone >= 1 &&
+        zone <= 5) {
+      out['targetType'] = {
+        'workoutTargetTypeId': 4,
+        'workoutTargetTypeKey': 'heart.rate.zone',
+        'displayOrder': 4,
+      };
     }
     out
       ..remove('ftpFraction')
@@ -2824,6 +2838,26 @@ class TrainingPlanService {
     for (final s in sessions) {
       await _providers.removeEverywhere(s);
     }
+  }
+
+  /// A template's steps as a session of [sport] would get them, for checks
+  /// over every template at once.
+  @visibleForTesting
+  Future<String> resolveTemplateSteps(
+    String stepsJson, {
+    required String sport,
+    bool power = false,
+  }) async {
+    final fitness = await _readFitnessSnapshot('self', sport);
+    final thresholds = await (_db.select(
+      _db.athleteThresholds,
+    )..where((t) => t.athleteId.equals('self'))).getSingleOrNull();
+    return _resolveStepsJson(
+      stepsJson,
+      thresholds?.ftpWatts,
+      fitness,
+      power: power,
+    );
   }
 
   /// The session's steps with concrete targets and its description, the same

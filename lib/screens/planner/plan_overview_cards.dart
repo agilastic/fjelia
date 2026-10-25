@@ -538,9 +538,13 @@ class _UpcomingState extends State<UpcomingWorkoutList> {
           ),
           for (final s in e.value)
             if (s.session != null)
-              _SessionTile(session: s.session!, skipReason: s.skipReason)
+              _SessionTile(
+                session: s.session!,
+                skipReason: s.skipReason,
+                doneBy: s.doneBy,
+              )
             else
-              _ScheduledTile(workout: s.workout!),
+              _ScheduledTile(workout: s.workout!, doneBy: s.doneBy),
         ],
         if (groups.length > entries.length)
           TextButton(
@@ -556,9 +560,45 @@ class _UpcomingState extends State<UpcomingWorkoutList> {
   }
 }
 
+/// "0h59m · 9.4 km" for the activity that did a planned entry.
+String _doneSummary(ActivityRecord a) {
+  final minutes = (a.durationSeconds / 60).round();
+  // The way the history writes it.
+  final time = '${minutes ~/ 60}h${(minutes % 60).toString().padLeft(2, '0')}m';
+  final km = (a.distanceMeters ?? 0) / 1000;
+  return km > 0.05 ? '$time · ${km.toStringAsFixed(1)} km' : time;
+}
+
+/// The mark of a finished entry: a check that settles in, in the app's green.
+class _DoneCheck extends StatelessWidget {
+  const _DoneCheck();
+  @override
+  Widget build(BuildContext context) => TweenAnimationBuilder<double>(
+    key: const Key('done-check'),
+    tween: Tween(begin: 0.4, end: 1),
+    duration: const Duration(milliseconds: 380),
+    curve: Curves.elasticOut,
+    builder: (_, scale, child) =>
+        Transform.scale(scale: scale.clamp(0.0, 1.2), child: child),
+    child: Container(
+      padding: const EdgeInsets.all(2),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(color: mint.withValues(alpha: .35), blurRadius: 10),
+        ],
+      ),
+      child: const Icon(Icons.check_circle, size: 24, color: mint),
+    ),
+  );
+}
+
 class _SessionTile extends StatelessWidget {
-  const _SessionTile({required this.session, this.skipReason});
+  const _SessionTile({required this.session, this.skipReason, this.doneBy});
   final TrainingSession session;
+
+  /// The activity that did this session, when there is one.
+  final ActivityRecord? doneBy;
 
   /// Why the session was cancelled, shown on its tile.
   final String? skipReason;
@@ -566,9 +606,15 @@ class _SessionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = session;
     final skipped = s.status == 'skipped';
+    final done = !skipped && (doneBy != null || s.status == 'completed');
     // A cancelled session stays in the list, greyed and struck through, so the
-    // plan shows what was dropped and why.
-    final color = skipped ? Colors.white38 : completedActivityColor(s.sport);
+    // plan shows what was dropped and why. A finished one is struck through
+    // too, with a check, and says what was really done.
+    final color = skipped
+        ? Colors.white38
+        : done
+        ? mint
+        : completedActivityColor(s.sport);
     final phaseColor = skipped
         ? Colors.orangeAccent
         : plannedActivityColor(s.phase);
@@ -632,10 +678,11 @@ class _SessionTile extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w700,
-                              color: skipped ? Colors.white54 : null,
-                              decoration: skipped
+                              color: skipped || done ? Colors.white54 : null,
+                              decoration: skipped || done
                                   ? TextDecoration.lineThrough
                                   : null,
+                              decorationColor: done ? mint : null,
                             ),
                           ),
                         ],
@@ -644,6 +691,8 @@ class _SessionTile extends StatelessWidget {
                       Text(
                         skipped
                             ? '${skipReason ?? 'Skipped'} · ${s.plannedDurationMin} min dropped'
+                            : done
+                            ? 'Done${doneBy == null ? '' : ' · ${_doneSummary(doneBy!)}'}'
                             : '${s.plannedDurationMin} min · TRIMP ${s.plannedTrimp} · Z${s.primaryZone}',
                         style: const TextStyle(
                           fontSize: 11,
@@ -654,7 +703,10 @@ class _SessionTile extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 6),
-                const Icon(Icons.chevron_right, size: 20, color: muted),
+                if (done)
+                  const _DoneCheck()
+                else
+                  const Icon(Icons.chevron_right, size: 20, color: muted),
               ],
             ),
           ),
@@ -665,11 +717,15 @@ class _SessionTile extends StatelessWidget {
 }
 
 class _ScheduledTile extends StatelessWidget {
-  const _ScheduledTile({required this.workout});
+  const _ScheduledTile({required this.workout, this.doneBy});
   final ScheduledWorkout workout;
+
+  /// The activity that did this workout, when there is one.
+  final ActivityRecord? doneBy;
   @override
   Widget build(BuildContext context) {
-    final color = completedActivityColor(workout.sportType);
+    final done = doneBy != null;
+    final color = done ? mint : completedActivityColor(workout.sportType);
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Material(
@@ -697,13 +753,23 @@ class _ScheduledTile extends StatelessWidget {
           ),
           title: Text(
             workout.name,
-            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+              color: done ? Colors.white54 : null,
+              decoration: done ? TextDecoration.lineThrough : null,
+              decorationColor: done ? mint : null,
+            ),
           ),
           subtitle: Text(
-            'Garmin Workout · ${workoutSummary(workout)}',
+            done
+                ? 'Done · ${_doneSummary(doneBy!)}'
+                : 'Garmin Workout · ${workoutSummary(workout)}',
             style: const TextStyle(fontSize: 11, color: Colors.white70),
           ),
-          trailing: const Icon(Icons.chevron_right, size: 20, color: muted),
+          trailing: done
+              ? const _DoneCheck()
+              : const Icon(Icons.chevron_right, size: 20, color: muted),
           onTap: () =>
               showAppSheet(context, WorkoutDetailSheet(workout: workout)),
         ),

@@ -71,7 +71,8 @@ void main() {
     ]);
     expect(rows[2].depth, 1);
     expect(rows[2].label, 'Interval');
-    expect(rows[2].zone, isNull);
+    // The set is in zone 2, as the name says; the distance steps carry it.
+    expect(rows[2].zone, 2);
     expect(plannedStepLines('{broken'), isEmpty);
     expect(plannedZoneFractions(null, 1), [.70, .20, .05, .03, .02]);
     expect(plannedZoneFractions(null, 3), [.15, .25, .45, .10, .05]);

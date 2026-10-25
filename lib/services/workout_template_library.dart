@@ -24,8 +24,16 @@ class WorkoutTemplateLibrary {
       await _reseed(templates);
       return;
     }
-    final names = templates.map((t) => t.name.value).toSet();
-    if (existing.any((t) => !names.contains(t.name))) await _reseed(templates);
+    // A template whose steps changed is replaced too: what is stored must be
+    // what the library says, not what an earlier version said.
+    final current = {
+      for (final t in templates) '${t.name.value}\u0001${t.stepsJson.value}',
+    };
+    if (existing.any(
+      (t) => !current.contains('${t.name}\u0001${t.stepsJson}'),
+    )) {
+      await _reseed(templates);
+    }
   }
 
   Future<void> reseed() => _reseed(_allTemplates());
@@ -147,6 +155,46 @@ class WorkoutTemplateLibrary {
     'numberOfIterations': iterations,
     'workoutSteps': steps,
   };
+
+  /// Gives every step that names no zone one, with its heart-rate target, so a
+  /// workout written by distance (swimming) still says how hard each part is.
+  /// Warm-up is zone 2, recovery and cool-down zone 1, and the work steps take
+  /// [intervals] in order (the last one repeats). Steps with a zone are left
+  /// as they are.
+  List<Map<String, dynamic>> _zoned(
+    List<Map<String, dynamic>> steps, {
+    required List<int> intervals,
+  }) {
+    var next = 0;
+    Map<String, dynamic> zone(Map<String, dynamic> step) {
+      if (step['workoutSteps'] is List) {
+        return {
+          ...step,
+          'workoutSteps': [
+            for (final inner in (step['workoutSteps'] as List))
+              zone(Map<String, dynamic>.from(inner as Map)),
+          ],
+        };
+      }
+      if (step['zoneNumber'] != null) return step;
+      final type = (step['stepType'] as Map)['stepTypeKey'];
+      final z = switch (type) {
+        'warmup' => 2,
+        'recovery' || 'rest' || 'cooldown' => 1,
+        _ => intervals[next < intervals.length ? next++ : intervals.length - 1],
+      };
+      return {
+        ...step,
+        'zoneNumber': z,
+        'targetType': {
+          'workoutTargetTypeId': 4,
+          'workoutTargetTypeKey': 'heart.rate.zone',
+        },
+      };
+    }
+
+    return [for (final step in steps) zone(step)];
+  }
 
   /// One timed power step as a share of FTP (`lo`…`hi`); with an FTP known the
   /// planner turns it into watts, otherwise it falls back to the zone's heart
@@ -3420,7 +3468,7 @@ class WorkoutTemplateLibrary {
       durationMin: 45,
       tss: 8,
       tags: ['css', 'threshold', 'pool', 'structured'],
-      steps: [
+      steps: _zoned([
         _step('warmup', 600, 2),
         _repeatBlock(10, [
           {
@@ -3450,7 +3498,7 @@ class WorkoutTemplateLibrary {
           },
         ]),
         _step('cooldown', 300, 1),
-      ],
+      ], intervals: [4]),
     ),
     _t(
       sport: 'swimming',
@@ -3466,7 +3514,7 @@ class WorkoutTemplateLibrary {
       durationMin: 45,
       tss: 6,
       tags: ['css', 'threshold', 'pool'],
-      steps: [
+      steps: _zoned([
         _step('warmup', 600, 2),
         _repeatBlock(6, [
           {
@@ -3496,7 +3544,7 @@ class WorkoutTemplateLibrary {
           },
         ]),
         _step('cooldown', 300, 1),
-      ],
+      ], intervals: [4]),
     ),
     _t(
       sport: 'swimming',
@@ -3510,7 +3558,7 @@ class WorkoutTemplateLibrary {
       durationMin: 40,
       tss: 8,
       tags: ['z2', 'aerobic_base', 'distance', 'pool'],
-      steps: [
+      steps: _zoned([
         {
           'type': 'ExecutableStepDTO',
           'stepOrder': 1,
@@ -3566,7 +3614,7 @@ class WorkoutTemplateLibrary {
             'workoutTargetTypeKey': 'no.target',
           },
         },
-      ],
+      ], intervals: [2]),
     ),
     _t(
       sport: 'swimming',
@@ -3582,7 +3630,7 @@ class WorkoutTemplateLibrary {
       durationMin: 45,
       tss: 8,
       tags: ['z2', 'long', 'aerobic_base', 'pool'],
-      steps: [
+      steps: _zoned([
         {
           'type': 'ExecutableStepDTO',
           'stepOrder': 1,
@@ -3638,7 +3686,7 @@ class WorkoutTemplateLibrary {
             'workoutTargetTypeKey': 'no.target',
           },
         },
-      ],
+      ], intervals: [2]),
     ),
     _t(
       sport: 'swimming',
@@ -3653,7 +3701,7 @@ class WorkoutTemplateLibrary {
       durationMin: 65,
       tss: 8,
       tags: ['z2', 'long', 'aerobic_base', 'pool'],
-      steps: [
+      steps: _zoned([
         {
           'type': 'ExecutableStepDTO',
           'stepOrder': 1,
@@ -3709,7 +3757,7 @@ class WorkoutTemplateLibrary {
             'workoutTargetTypeKey': 'no.target',
           },
         },
-      ],
+      ], intervals: [2]),
     ),
     _t(
       sport: 'swimming',
@@ -3724,7 +3772,7 @@ class WorkoutTemplateLibrary {
       durationMin: 35,
       tss: 8,
       tags: ['z2', 'long', 'pool', 'taper'],
-      steps: [
+      steps: _zoned([
         {
           'type': 'ExecutableStepDTO',
           'stepOrder': 1,
@@ -3780,7 +3828,7 @@ class WorkoutTemplateLibrary {
             'workoutTargetTypeKey': 'no.target',
           },
         },
-      ],
+      ], intervals: [2]),
     ),
     _t(
       sport: 'swimming',
@@ -3796,7 +3844,7 @@ class WorkoutTemplateLibrary {
       durationMin: 40,
       tss: 8,
       tags: ['z3', 'tempo', 'pool', 'race_specific'],
-      steps: [
+      steps: _zoned([
         {
           'type': 'ExecutableStepDTO',
           'stepOrder': 1,
@@ -3853,7 +3901,7 @@ class WorkoutTemplateLibrary {
             'workoutTargetTypeKey': 'no.target',
           },
         },
-      ],
+      ], intervals: [3, 2]),
     ),
     _t(
       sport: 'swimming',
@@ -3869,7 +3917,7 @@ class WorkoutTemplateLibrary {
       durationMin: 35,
       tss: 10,
       tags: ['z4', 'strides', 'speed', 'neuromuscular', 'pool'],
-      steps: [
+      steps: _zoned([
         {
           'type': 'ExecutableStepDTO',
           'stepOrder': 1,
@@ -3925,7 +3973,7 @@ class WorkoutTemplateLibrary {
             'workoutTargetTypeKey': 'no.target',
           },
         },
-      ],
+      ], intervals: [4]),
     ),
     _t(
       sport: 'swimming',
@@ -3941,7 +3989,7 @@ class WorkoutTemplateLibrary {
       durationMin: 40,
       tss: 8,
       tags: ['z5', 'intervals', 'vo2max', 'pool'],
-      steps: [
+      steps: _zoned([
         {
           'type': 'ExecutableStepDTO',
           'stepOrder': 1,
@@ -4011,7 +4059,7 @@ class WorkoutTemplateLibrary {
             'workoutTargetTypeKey': 'no.target',
           },
         },
-      ],
+      ], intervals: [2, 5]),
     ),
     _t(
       sport: 'swimming',
@@ -4027,7 +4075,7 @@ class WorkoutTemplateLibrary {
       durationMin: 45,
       tss: 8,
       tags: ['z3', 'z4', 'mixed', 'pool'],
-      steps: [
+      steps: _zoned([
         {
           'type': 'ExecutableStepDTO',
           'stepOrder': 1,
@@ -4124,7 +4172,7 @@ class WorkoutTemplateLibrary {
             'workoutTargetTypeKey': 'no.target',
           },
         },
-      ],
+      ], intervals: [3, 2, 4]),
     ),
     _t(
       sport: 'swimming',
@@ -4140,7 +4188,7 @@ class WorkoutTemplateLibrary {
       durationMin: 30,
       tss: 8,
       tags: ['css', 'assessment', 'threshold_test', 'pool'],
-      steps: [
+      steps: _zoned([
         {
           'type': 'ExecutableStepDTO',
           'stepOrder': 1,
@@ -4208,7 +4256,7 @@ class WorkoutTemplateLibrary {
             'workoutTargetTypeKey': 'no.target',
           },
         },
-      ],
+      ], intervals: [5, 5]),
     ),
     _t(
       sport: 'swimming',
