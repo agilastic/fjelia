@@ -223,14 +223,6 @@
   ['timeupdate', 'seeked', 'loadedmetadata'].forEach(function (event) { video.addEventListener(event, update); });
   video.addEventListener('fjelia-preview-fallback', function () { nav.hidden = true; update(); });
   document.addEventListener('fjelia-language-change', update);
-  document.querySelectorAll('[data-preview-jump]').forEach(function (link) {
-    link.addEventListener('click', function () {
-      if (video.hidden || video.error) return;
-      function seek() { video.currentTime = Number(link.dataset.previewJump) + .3; update(); }
-      if (video.readyState >= 1) seek();
-      else video.addEventListener('loadedmetadata', seek, { once: true });
-    });
-  });
   nav.hidden = false;
   update();
 })();
@@ -243,6 +235,18 @@
   var picker = showcase.querySelector('.plan-view-picker');
   var buttons = Array.from(picker.querySelectorAll('[data-plan-view]'));
   var panels = Array.from(showcase.querySelectorAll('[data-plan-panel]'));
+  var timer = null;
+  var bounds = showcase.getBoundingClientRect();
+  var visible = bounds.bottom > 0 && bounds.top < window.innerHeight;
+  function schedule() {
+    if (timer !== null) { clearTimeout(timer); timer = null; }
+    if (!visible || document.hidden || document.body.classList.contains('dialog-open')) return;
+    timer = setTimeout(function () {
+      timer = null;
+      var index = buttons.findIndex(function (button) { return button.getAttribute('aria-selected') === 'true'; });
+      choose(buttons[(index + 1) % buttons.length].dataset.planView, false);
+    }, 3000);
+  }
   function choose(view, focus) {
     var selected = buttons.find(function (button) { return button.dataset.planView === view; });
     if (!selected) return;
@@ -253,6 +257,7 @@
     });
     panels.forEach(function (panel) { panel.hidden = panel.dataset.planPanel !== view; });
     if (focus) selected.focus();
+    schedule();
   }
   picker.setAttribute('role', 'tablist');
   buttons.forEach(function (button) { button.setAttribute('role', 'tab'); });
@@ -279,6 +284,14 @@
   choose('week', false);
   fragment();
   window.addEventListener('hashchange', fragment);
+  document.addEventListener('visibilitychange', schedule);
+  new MutationObserver(schedule).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      visible = entries[0].isIntersecting && entries[0].intersectionRatio >= .2;
+      schedule();
+    }, { threshold: .2 }).observe(showcase);
+  }
   picker.hidden = false;
 })();
 

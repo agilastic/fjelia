@@ -546,12 +546,6 @@ section[id], [id].privacy-card, [id].sports-compact { scroll-margin-top: 90px; }
 .walkthrough-nav, .gallery-hint { display: none; }
 .walkthrough-nav[hidden] { display: none !important; }
 .video-note { font-size: .75rem; }
-.coach-example { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; padding: 1.8rem; margin-top: 2rem; background: linear-gradient(110deg, #102c35, #0b1833); border: 1px solid #2bd9a82b; border-radius: var(--radius); }
-.coach-example .kicker { font-size: .67rem; margin-bottom: .6rem; }
-.coach-example h3 { font-size: 1.5rem; line-height: 1.2; }
-.coach-example p:not(.kicker) { color: var(--muted); font-size: .94rem; margin: .7rem 0; }
-.coach-questions { display: grid; align-content: center; gap: .7rem; margin: 0; padding: 0; list-style: none; }
-.coach-questions li { padding: .8rem 1rem; border: 1px solid #ffffff13; border-radius: 12px 12px 3px 12px; background: #07172b; color: #c1d4dc; font-size: .86rem; line-height: 1.5; }
 .connections-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
 .connections-layout .section-lead { font-size: 1rem; margin-bottom: 1.5rem; }
 .connections-layout .chips { gap: .5rem; }
@@ -632,9 +626,7 @@ section[id], [id].privacy-card, [id].sports-compact { scroll-margin-top: 90px; }
  .walkthrough-nav button[aria-current="true"] { color: #9aedf0; background: #123743; border-color: #22d3e648; }
  .gallery-hint { display: block; margin: .6rem 0 0; color: var(--muted); font-size: .75rem; }
  .video-note { margin-top: .7rem; }
- .coach-example, .connections-layout { grid-template-columns: 1fr; }
- .coach-example { gap: 1rem; padding: 1.3rem; }
- .coach-example h3 { font-size: 1.4rem; }
+ .connections-layout { grid-template-columns: 1fr; }
  .latest-heading { align-items: start; flex-direction: column; gap: .5rem; }
  .latest-grid { grid-template-columns: 1fr; gap: .6rem; }
  .latest-item { padding: .9rem 1rem; }
@@ -678,8 +670,6 @@ section[id], [id].privacy-card, [id].sports-compact { scroll-margin-top: 90px; }
  .season-layout .section-lead { font-size: 1rem; }
  .plan-points { gap: 1rem; }
  .plan-points p { font-size: .88rem; }
- .coach-example p:not(.kicker) { font-size: .88rem; }
- .coach-questions li { font-size: .8rem; }
  .sports-compact .fine { font-size: .75rem; }
  .weather-gallery { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: min(72vw, 240px); overflow-x: auto; gap: 1rem; padding-bottom: .8rem; scroll-snap-type: x mandatory; }
  .weather-card { scroll-snap-align: start; }
