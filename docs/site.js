@@ -187,6 +187,14 @@
   var nav = document.querySelector('.hero-story-nav');
   if (!video || !nav) return;
   var buttons = Array.from(nav.querySelectorAll('[data-preview-time]'));
+  var caption = document.querySelector('#hero-scene-caption');
+  var scenes = [
+    { start: 0, key: 'scene_goals' },
+    { start: 2.333333, key: 'scene_workout' },
+    { start: 5.083333, key: 'scene_graphs' },
+    { start: 7.666667, key: 'scene_hrv' },
+    { start: 10.833333, key: 'scene_coach' }
+  ];
   function update() {
     var time = video.currentTime;
     buttons.forEach(function (button) {
@@ -197,6 +205,14 @@
       else button.removeAttribute('aria-current');
       button.style.setProperty('--chapter-progress', active ? String(Math.min(1, (time - start) / (end - start))) : '0');
     });
+    if (caption && window.FjeliaI18n) {
+      var scene = scenes[0];
+      scenes.forEach(function (item) { if (time >= item.start) scene = item; });
+      var key = video.hidden ? 'scene_graphs' : scene.key;
+      caption.dataset.i18n = key;
+      var label = window.FjeliaI18n.t(key);
+      if (caption.textContent !== label) caption.textContent = label;
+    }
   }
   nav.addEventListener('click', function (event) {
     var button = event.target.closest('[data-preview-time]');
@@ -205,7 +221,141 @@
     update();
   });
   ['timeupdate', 'seeked', 'loadedmetadata'].forEach(function (event) { video.addEventListener(event, update); });
-  video.addEventListener('fjelia-preview-fallback', function () { nav.hidden = true; });
+  video.addEventListener('fjelia-preview-fallback', function () { nav.hidden = true; update(); });
+  document.addEventListener('fjelia-language-change', update);
+  document.querySelectorAll('[data-preview-jump]').forEach(function (link) {
+    link.addEventListener('click', function () {
+      if (video.hidden || video.error) return;
+      function seek() { video.currentTime = Number(link.dataset.previewJump) + .3; update(); }
+      if (video.readyState >= 1) seek();
+      else video.addEventListener('loadedmetadata', seek, { once: true });
+    });
+  });
   nav.hidden = false;
   update();
+})();
+
+/* A clearly labelled example explains moving and skipping without personal data. */
+(function () {
+  'use strict';
+  var example = document.querySelector('.season-example');
+  if (!example || !window.FjeliaI18n) return;
+  var actions = example.querySelector('.demo-actions');
+  var moved = false;
+  var skipped = false;
+  var wasReset = false;
+  var base = [
+    { sport: 'rest', minutes: 0 }, { sport: 'run', minutes: 45 },
+    { sport: 'ride', minutes: 60 }, { sport: 'rest', minutes: 0 },
+    { sport: 'run', minutes: 40 }, { sport: 'ride', minutes: 90 },
+    { sport: 'run', minutes: 65 }
+  ];
+  var labels = { run: 't089', ride: 't091', rest: 'week_rest' };
+  function render() {
+    var t = window.FjeliaI18n.t;
+    var language = window.FjeliaI18n.language();
+    var days = new Intl.DateTimeFormat(language, { weekday: 'short', timeZone: 'UTC' });
+    var numbers = new Intl.NumberFormat(language);
+    example.querySelectorAll('.week-row').forEach(function (row, index) {
+      var item = moved && index === 1 ? base[3] : moved && index === 3 ? base[1] : base[index];
+      var isSkipped = skipped && index === 5;
+      row.dataset.sport = item.sport;
+      row.classList.toggle('is-skipped', isSkipped);
+      row.querySelector('[data-weekday]').textContent = days.format(new Date(Date.UTC(2026, 9, 26 + index)));
+      row.querySelector('[data-week-activity]').textContent = t(labels[item.sport]);
+      row.querySelector('[data-week-activity]').dataset.i18n = labels[item.sport];
+      row.querySelector('.week-duration').textContent = item.minutes ? numbers.format(item.minutes) + ' min' : '—';
+      row.querySelector('[data-week-note]').textContent = isSkipped ? t('week_skipped') : moved && index === 1 ? t('week_moved_to') : moved && index === 3 ? t('week_moved') : '';
+    });
+    example.querySelector('.week-total').textContent = t('week_total').replace('{minutes}', numbers.format(skipped ? 210 : 300));
+    ['move', 'skip'].forEach(function (action) {
+      var applied = action === 'move' ? moved : skipped;
+      var button = actions.querySelector('[data-week-action="' + action + '"]');
+      button.setAttribute('aria-pressed', String(applied));
+      button.textContent = t(applied ? 'week_undo_' + action : 'week_' + action);
+    });
+    var reset = actions.querySelector('[data-week-action="reset"]');
+    reset.disabled = !moved && !skipped;
+    reset.textContent = t('week_reset');
+    var status = [];
+    if (moved) status.push(t('week_move_done'));
+    if (skipped) status.push(t('week_skip_done'));
+    example.querySelector('.week-status').textContent = status.length ? status.join(' ') : t(wasReset ? 'week_reset_done' : 'week_initial');
+  }
+  actions.addEventListener('click', function (event) {
+    var button = event.target.closest('[data-week-action]');
+    if (!button) return;
+    wasReset = false;
+    if (button.dataset.weekAction === 'move') moved = !moved;
+    if (button.dataset.weekAction === 'skip') skipped = !skipped;
+    if (button.dataset.weekAction === 'reset') { moved = false; skipped = false; wasReset = true; }
+    render();
+  });
+  document.addEventListener('fjelia-language-change', render);
+  actions.hidden = false;
+  render();
+})();
+
+/* Mobile walkthroughs remain swipeable and readable without JavaScript. */
+(function () {
+  'use strict';
+  var gallery = document.querySelector('.video-gallery');
+  var nav = document.querySelector('.walkthrough-nav');
+  if (!gallery || !nav) return;
+  var cards = Array.from(gallery.querySelectorAll('.video-card'));
+  var buttons = Array.from(nav.querySelectorAll('[data-demo-index]'));
+  var frame = null;
+  function update() {
+    frame = null;
+    var bounds = gallery.getBoundingClientRect();
+    var center = bounds.left + bounds.width / 2;
+    var selected = 0;
+    var distance = Infinity;
+    cards.forEach(function (card, index) {
+      var box = card.getBoundingClientRect();
+      var next = Math.abs(box.left + box.width / 2 - center);
+      if (next < distance) { selected = index; distance = next; }
+    });
+    buttons.forEach(function (button, index) {
+      if (index === selected) button.setAttribute('aria-current', 'true');
+      else button.removeAttribute('aria-current');
+    });
+  }
+  function choose(index) {
+    var left = gallery.scrollLeft + cards[index].getBoundingClientRect().left - gallery.getBoundingClientRect().left - 2;
+    gallery.scrollTo({ left: left, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  }
+  nav.addEventListener('click', function (event) {
+    var button = event.target.closest('[data-demo-index]');
+    if (button) choose(Number(button.dataset.demoIndex));
+  });
+  nav.addEventListener('keydown', function (event) {
+    var button = event.target.closest('[data-demo-index]');
+    if (!button || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    event.preventDefault();
+    var index = Number(button.dataset.demoIndex);
+    index = event.key === 'Home' ? 0 : event.key === 'End' ? buttons.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + buttons.length) % buttons.length;
+    buttons[index].focus();
+    choose(index);
+  });
+  gallery.addEventListener('scroll', function () { if (!frame) frame = requestAnimationFrame(update); }, { passive: true });
+  window.addEventListener('resize', update);
+  document.addEventListener('fjelia-language-change', function () { requestAnimationFrame(update); });
+  nav.hidden = false;
+  update();
+})();
+
+/* Links to optional detail sections open their target before scrolling. */
+(function () {
+  'use strict';
+  function reveal() {
+    if (!location.hash) return;
+    var target;
+    try { target = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch (_) { return; }
+    if (!target) return;
+    var details = target.closest('details');
+    if (details) details.open = true;
+  }
+  window.addEventListener('hashchange', reveal);
+  reveal();
 })();
