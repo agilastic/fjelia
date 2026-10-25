@@ -38,11 +38,36 @@ void main() {
   late AppDatabase db;
   late List<http.Request> requests;
   late String answer;
+  // What the calendar lists on the day asked for.
+  late List<Map<String, dynamic>> onCalendar;
 
   CorosService service() => CorosService(
     db,
     client: MockClient((req) async {
       requests.add(req);
+      if (req.url.path == '/training/schedule/query') {
+        return http.Response(
+          jsonEncode({
+            'result': '0000',
+            'data': {
+              'id': 'plan1',
+              'entities': [
+                for (final e in onCalendar)
+                  {
+                    'idInPlan': e['id'],
+                    'planId': 'plan1',
+                    'happenDay': 20261028,
+                  },
+              ],
+              'programs': [
+                for (final e in onCalendar)
+                  {'idInPlan': e['id'], 'name': e['name']},
+              ],
+            },
+          }),
+          200,
+        );
+      }
       return http.Response(answer, 200);
     }),
   );
@@ -50,6 +75,7 @@ void main() {
   setUp(() {
     db = AppDatabase(NativeDatabase.memory());
     requests = [];
+    onCalendar = [];
     answer = jsonEncode({'result': '0000'});
     FlutterSecureStorage.setMockInitialValues({
       'coros_auth_v1': jsonEncode({
@@ -82,7 +108,55 @@ void main() {
     expect(requests, hasLength(1));
     // A longer one is different: it goes up.
     await coros.pushWorkout(workout(seconds: 2400));
-    expect(requests, hasLength(2));
+    // The calendar is looked at first, then the new one goes up.
+    expect(requests.map((r) => r.url.path), [
+      '/training/schedule/update',
+      '/training/schedule/query',
+      '/training/schedule/update',
+    ]);
+  });
+
+  test(
+    'a changed workout replaces the earlier entry, not its neighbours',
+    () async {
+      final coros = service();
+      await coros.pushWorkout(workout());
+      onCalendar = [
+        {'id': '5', 'name': 'Easy run'},
+        {'id': '6', 'name': 'Something I added myself'},
+      ];
+      requests.clear();
+      await coros.pushWorkout(workout(seconds: 2400));
+      final bodies = [
+        for (final r in requests.where((r) => r.url.path.endsWith('/update')))
+          jsonDecode(r.body) as Map<String, dynamic>,
+      ];
+      final removal = bodies.first['versionObjects'] as List;
+      expect(removal.single, {
+        'id': '5',
+        'planProgramId': '5',
+        'planId': 'plan1',
+        'status': 3,
+      });
+      expect(bodies, hasLength(2));
+      expect(bodies.last.containsKey('programs'), isTrue);
+    },
+  );
+
+  test('moving a workout to another day sends it again', () async {
+    final coros = service();
+    await coros.pushWorkout(workout());
+    final moved = PreparedWorkout(
+      sessionId: 's1',
+      title: 'Easy run',
+      date: DateTime(2026, 10, 29),
+      sport: 'running',
+      steps: [step(1800)],
+      description: '',
+      thresholdHr: 165,
+    );
+    await coros.pushWorkout(moved);
+    expect(requests.where((r) => r.url.path.endsWith('/update')), hasLength(2));
   });
 
   test('a refusal is not remembered as sent', () async {

@@ -13,6 +13,7 @@ import '../../providers/plan_view_provider.dart';
 import '../../providers/day_data_provider.dart';
 import '../../providers/heat_acclimation_provider.dart';
 import '../../providers/workout_generation_provider.dart';
+import '../../providers/workout_push_provider.dart';
 import '../../widgets/app_widgets.dart';
 import '../../utils/target_time.dart';
 import 'race_goal_editor.dart';
@@ -204,24 +205,6 @@ class TrainingTab extends ConsumerWidget {
               contentPadding: EdgeInsets.zero,
               activeThumbColor: Colors.orange,
               title: const Text(
-                'Power targets on the bike',
-                style: TextStyle(fontSize: 14),
-              ),
-              subtitle: Text(
-                p.bikePowerTargets
-                    ? 'Cycling workouts show watts from your FTP, with heart rate as a guide.'
-                    : 'Heart rate is the target for running and cycling. Turn this on only if your bike has a power meter.',
-                style: const TextStyle(fontSize: 11, color: muted),
-              ),
-              value: p.bikePowerTargets,
-              onChanged: (v) => ref
-                  .read(userProfileProvider.notifier)
-                  .save(p.copyWith(bikePowerTargets: v)),
-            ),
-            SwitchListTile(
-              contentPadding: EdgeInsets.zero,
-              activeThumbColor: Colors.orange,
-              title: const Text(
                 'Send workouts to COROS (experimental)',
                 style: TextStyle(fontSize: 14),
               ),
@@ -386,17 +369,9 @@ class TrainingTab extends ConsumerWidget {
                     if (await confirmAction(
                       context,
                       'Delete all workouts?',
-                      'This deletes planned workouts locally and from Garmin. Completed activities are kept.',
+                      'This deletes planned workouts on this phone and on your connected watch platform. Completed activities are kept.',
                     )) {
-                      if (context.mounted) {
-                        await runUiAction(context, () async {
-                          await ref
-                              .read(trainingPlanServiceProvider)
-                              .deleteAllPlannedWorkouts();
-                          ref.invalidate(upcomingSessionsProvider);
-                          ref.invalidate(scheduledWorkoutsProvider);
-                        });
-                      }
+                      if (context.mounted) await _deleteAll(context, ref);
                     }
                   },
             label: const Text(
@@ -620,4 +595,58 @@ class SettingsSegments extends StatelessWidget {
         ),
     ],
   );
+}
+
+/// Deletes every planned workout behind a progress dialog.
+Future<void> _deleteAll(BuildContext context, WidgetRef ref) async {
+  final progress = ValueNotifier<(int, int, String)>((0, 0, 'Starting'));
+  showDialog<void>(
+    context: context,
+    barrierDismissible: false,
+    builder: (_) => PopScope(
+      canPop: false,
+      child: AlertDialog(
+        title: const Text('Deleting workouts'),
+        content: ValueListenableBuilder<(int, int, String)>(
+          valueListenable: progress,
+          builder: (_, p, _) => Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              LinearProgressIndicator(
+                value: p.$2 == 0 ? null : p.$1 / p.$2,
+                color: Colors.redAccent,
+              ),
+              const SizedBox(height: 12),
+              Text(
+                p.$2 == 0 ? p.$3 : '${p.$3} · ${p.$1} of ${p.$2}',
+                style: const TextStyle(fontSize: 12, color: muted),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+  DeleteAllResult? result;
+  Object? failure;
+  try {
+    result = await ref.read(deleteAllWorkoutsProvider)(
+      (done, total, label) => progress.value = (done, total, label),
+    );
+    ref.invalidate(upcomingSessionsProvider);
+    ref.invalidate(scheduledWorkoutsProvider);
+  } catch (e) {
+    failure = e;
+  }
+  if (!context.mounted) return;
+  Navigator.of(context, rootNavigator: true).pop();
+  progress.dispose();
+  final removed = result?.corosRemoved ?? 0;
+  final message = failure != null
+      ? 'Deleting failed: $failure'
+      : removed > 0
+      ? 'All planned workouts deleted, $removed removed from COROS.'
+      : 'All planned workouts deleted.';
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
 }

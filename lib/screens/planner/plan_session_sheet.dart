@@ -69,12 +69,16 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
             .bounds;
     // Ranges are worked out from today's zones and FTP, not from what was
     // stored when the plan was made; both change over time.
+    final isRide = sport.contains('cycl') || sport.contains('bik');
+    final rideProfile = ref.watch(userProfileProvider).valueOrNull;
+    // The ride's own choice wins; otherwise watts indoors or after the last
+    // ride chosen on watts. Heart rate stays the guide next to them.
     final powerOn =
-        ref.watch(userProfileProvider).valueOrNull?.bikePowerTargets ?? false;
-    // Watts only where power targets are on; heart rate is the primary guide.
-    final ftp = powerOn && (sport.contains('cycl') || sport.contains('bik'))
-        ? ref.watch(ftpProvider).valueOrNull?.ftpWatts
-        : null;
+        isRide &&
+        (s.targetMetric != null
+            ? s.targetMetric == 'power'
+            : rideProfile?.powerOnBike(indoor: s.indoor) ?? s.indoor);
+    final ftp = powerOn ? ref.watch(ftpProvider).valueOrNull?.ftpWatts : null;
     final steps = plannedStepLines(
       s.stepsJson,
       primaryZone: s.primaryZone,
@@ -258,6 +262,47 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
               ('${s.weekNumber}', 'WEEK'),
             ],
           ),
+          if (isRide) ...[
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: SegmentedButton<String>(
+                showSelectedIcon: false,
+                segments: const [
+                  ButtonSegment(
+                    value: 'hr',
+                    icon: Icon(Icons.favorite, size: 16),
+                    label: Text('Heart rate'),
+                  ),
+                  ButtonSegment(
+                    value: 'power',
+                    icon: Icon(Icons.bolt, size: 16),
+                    label: Text('Watts'),
+                  ),
+                ],
+                selected: {powerOn ? 'power' : 'hr'},
+                onSelectionChanged: !editable || busy
+                    ? null
+                    : (v) => perform(() async {
+                        await actions.setTargetMetric(s, v.first);
+                        await ref
+                            .read(userProfileProvider.notifier)
+                            .save(rideProfile!.copyWith(bikeMetric: v.first));
+                      }),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 6),
+              child: Text(
+                powerOn
+                    ? (ref.watch(ftpProvider).valueOrNull?.ftpWatts == null
+                          ? 'Watts need your FTP: set it under Load, Thresholds.'
+                          : 'Main target in watts from your FTP, heart rate as the guide.')
+                    : 'Main target heart rate, watts are not set on the watch.',
+                style: const TextStyle(fontSize: 11, color: muted),
+              ),
+            ),
+          ],
           if (_paceGuide(s) case final guide?)
             Padding(
               padding: const EdgeInsets.only(top: 12),

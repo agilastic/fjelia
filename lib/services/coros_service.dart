@@ -147,24 +147,33 @@ class CorosService {
 
   static const _sentKey = 'coros_workouts_sent_v1';
 
-  Future<Map<String, int>> _sent() async {
+  /// What was sent per session: the fingerprint, the day and the name it has
+  /// on the calendar. Earlier versions kept the fingerprint alone.
+  Future<Map<String, Map<String, dynamic>>> _sent() async {
     final raw = await _storage.read(key: _sentKey);
     if (raw == null) return {};
     try {
       return (jsonDecode(raw) as Map).map(
-        (k, v) => MapEntry(k as String, (v as num).toInt()),
+        (k, v) => MapEntry(
+          k as String,
+          v is num ? {'fp': v.toInt()} : Map<String, dynamic>.from(v as Map),
+        ),
       );
     } catch (_) {
       return {};
     }
   }
 
+  static String _dayKey(DateTime d) =>
+      '${d.year}${d.month.toString().padLeft(2, '0')}'
+      '${d.day.toString().padLeft(2, '0')}';
+
   /// Puts a planned workout on the COROS calendar through the Training Hub's
-  /// unpublished interface. The same workout is not sent twice; a changed one
-  /// is sent again, and the earlier one has to be removed in the Training Hub
-  /// by hand, because this interface offers no way to take it down here.
-  /// Throws [CorosUnsupportedWorkout] for a sport or step COROS has no form
-  /// for, and [CorosException] when COROS refuses.
+  /// unpublished interface. The same workout on the same day is not sent
+  /// twice. A changed or moved one is sent again, and the earlier entry is
+  /// taken off the calendar first. Throws [CorosUnsupportedWorkout] for a
+  /// sport or step COROS has no form for, and [CorosException] when COROS
+  /// refuses.
   Future<void> pushWorkout(PreparedWorkout workout) async {
     final built = buildCorosWorkout(
       workout,
@@ -172,26 +181,101 @@ class CorosService {
       createdAtSeconds: DateTime.now().millisecondsSinceEpoch ~/ 1000,
     );
     final sent = await _sent();
-    if (sent[workout.sessionId] == built.fingerprint) {
+    final earlier = sent[workout.sessionId];
+    final day = _dayKey(workout.date);
+    if (earlier != null &&
+        earlier['fp'] == built.fingerprint &&
+        earlier['day'] == day) {
       throw CorosException('This workout is already on your COROS calendar.');
     }
     var auth = await _loadAuth();
     if (auth == null) throw CorosException('COROS is not connected.');
     if (auth.isExpired && await _relogin()) auth = await _loadAuth();
     _client.adopt(auth!);
-    try {
+    Future<void> send() async {
+      await _removeEarlier(earlier);
       await _client.uploadWorkout(built, workout.date);
+    }
+
+    try {
+      await send();
     } on CorosAuthException {
       // The token went stale between the check and the call: renew once.
       if (!await _relogin()) rethrow;
       _client.adopt((await _loadAuth())!);
-      await _client.uploadWorkout(built, workout.date);
+      await send();
     }
-    sent[workout.sessionId] = built.fingerprint;
+    sent[workout.sessionId] = {
+      'fp': built.fingerprint,
+      'day': day,
+      'name': built.program['name'],
+    };
     await _storage.write(key: _sentKey, value: jsonEncode(sent));
     log(
       '[Coros] workout sent for ${workout.date.toIso8601String().substring(0, 10)}',
     );
+  }
+
+  /// Takes the earlier send of a session off the calendar, so a changed or
+  /// moved workout does not appear twice. Best effort: an entry that cannot be
+  /// found or removed is left, and the new one is sent anyway. Sends made by
+  /// earlier versions carry no day and are left alone.
+  Future<void> _removeEarlier(Map<String, dynamic>? earlier) async {
+    final day = earlier?['day'] as String?;
+    final name = earlier?['name'] as String?;
+    if (day == null || name == null || day.length != 8) return;
+    try {
+      final d = DateTime(
+        int.parse(day.substring(0, 4)),
+        int.parse(day.substring(4, 6)),
+        int.parse(day.substring(6, 8)),
+      );
+      for (final e in await _client.calendarWorkouts(d, d)) {
+        if (e.name == name) await _client.removeCalendarWorkout(e);
+      }
+    } on CorosAuthException {
+      rethrow;
+    } catch (e) {
+      log('[Coros] earlier workout not removed: $e');
+    }
+  }
+
+  /// Takes the workouts Fjelia sent off the COROS calendar: entries from
+  /// today on, over the next [months] months, whose name is one of [titles].
+  /// Other workouts stay. Returns how many were removed; [onProgress] hears
+  /// each one.
+  Future<int> removeSentWorkouts(
+    Set<String> titles, {
+    int months = 6,
+    void Function(int done, int total)? onProgress,
+  }) async {
+    if ((await _sent()).isEmpty) return 0;
+    var auth = await _loadAuth();
+    if (auth == null) return 0;
+    if (auth.isExpired && await _relogin()) auth = await _loadAuth();
+    _client.adopt(auth!);
+    final today = DateTime.now();
+    final start = DateTime(today.year, today.month, today.day);
+    final found = <CorosCalendarEntry>[];
+    // The calendar answers in ranges; ask a month at a time.
+    for (var m = 0; m < months; m++) {
+      final from = DateTime(
+        start.year,
+        start.month + m,
+        m == 0 ? start.day : 1,
+      );
+      final to = DateTime(start.year, start.month + m + 1, 0);
+      found.addAll(await _client.calendarWorkouts(from, to));
+    }
+    final mine = found.where((e) => titles.contains(e.name)).toList();
+    var done = 0;
+    for (final e in mine) {
+      await _client.removeCalendarWorkout(e);
+      onProgress?.call(++done, mine.length);
+    }
+    await _storage.delete(key: _sentKey);
+    log('[Coros] removed ${mine.length} workouts from the calendar');
+    return mine.length;
   }
 
   // ── sync ──────────────────────────────────────────────────────────────────

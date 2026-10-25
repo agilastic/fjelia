@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../services/auto_plan_pause.dart';
 import '../services/training_plan_service.dart';
 import 'database_provider.dart';
 import 'planner_providers.dart';
@@ -26,6 +27,8 @@ class WorkoutGenerationNotifier extends StateNotifier<AsyncValue<int?>> {
     if (state.isLoading) return null;
     state = const AsyncLoading();
     try {
+      // Asking for a plan is asking for the sync to keep one again.
+      await AutoPlanPause.resume();
       final goal = await ref.read(primaryRaceGoalProvider.future);
       if (goal == null) {
         throw StateError('Add a future race goal with priority A first.');

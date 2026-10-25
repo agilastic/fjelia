@@ -60,6 +60,31 @@ class PlanSessionActions {
     )..where((t) => t.id.equals(session.id))).getSingle();
   }
 
+  /// Sets the main target of a ride, `hr` or `power`. The steps keep their
+  /// zones and the other value stays in the step note, so the same session
+  /// turns into either. A session already on the watch is sent again.
+  Future<TrainingSession> setTargetMetric(
+    TrainingSession session,
+    String metric,
+  ) async {
+    if (session.targetMetric == metric) return session;
+    await (db.update(
+      db.trainingSessions,
+    )..where((t) => t.id.equals(session.id))).write(
+      TrainingSessionsCompanion(
+        targetMetric: Value(metric),
+        garminWorkoutId: session.garminWorkoutId == null
+            ? const Value.absent()
+            : const Value(null),
+        dateModified: Value(DateTime.now()),
+        modifiedBy: const Value('athlete'),
+      ),
+    );
+    return (db.select(
+      db.trainingSessions,
+    )..where((t) => t.id.equals(session.id))).getSingle();
+  }
+
   /// Skips a session. The decision is stored first, so it works without a
   /// connection; the calendar entry is released afterwards, and if that fails
   /// the entry id is kept so it can be cleaned up later.

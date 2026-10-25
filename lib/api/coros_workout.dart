@@ -373,3 +373,57 @@ CorosWorkout buildCorosWorkout(
     versionObject: const {'id': 1, 'status': 1},
   );
 }
+
+/// A workout on the Training Hub calendar.
+class CorosCalendarEntry {
+  const CorosCalendarEntry({
+    required this.idInPlan,
+    required this.planId,
+    required this.day,
+    required this.name,
+  });
+
+  /// The number the plan gave it; the program shares it.
+  final String idInPlan;
+  final String planId;
+  final DateTime day;
+  final String name;
+
+  /// The request that takes it off the calendar (`status` 3).
+  Map<String, dynamic> get removalPayload => {
+    'versionObjects': [
+      {
+        'id': idInPlan,
+        'planProgramId': idInPlan,
+        'planId': planId,
+        'status': 3,
+      },
+    ],
+    'pbVersion': 2,
+  };
+}
+
+/// Reads the calendar answer: each entry names its program by `idInPlan`.
+List<CorosCalendarEntry> parseCorosCalendar(Map<String, dynamic> data) {
+  final names = {
+    for (final p in (data['programs'] as List? ?? const []))
+      if (p is Map) '${p['idInPlan']}': '${p['name'] ?? ''}',
+  };
+  final out = <CorosCalendarEntry>[];
+  for (final e in (data['entities'] as List? ?? const [])) {
+    if (e is! Map) continue;
+    final id = e['idInPlan']?.toString();
+    final plan = (e['planId'] ?? data['id'])?.toString();
+    final day = int.tryParse('${e['happenDay']}');
+    if (id == null || plan == null || day == null) continue;
+    out.add(
+      CorosCalendarEntry(
+        idInPlan: id,
+        planId: plan,
+        day: DateTime(day ~/ 10000, day % 10000 ~/ 100, day % 100),
+        name: names[id] ?? '',
+      ),
+    );
+  }
+  return out;
+}

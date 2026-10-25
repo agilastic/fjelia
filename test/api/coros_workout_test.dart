@@ -54,6 +54,7 @@ final intervals = [
 ];
 
 void main() {
+  corosCalendarTests();
   group('buildCorosWorkout', () {
     test('steps, a repeat group and their order', () {
       final built = buildCorosWorkout(workout(intervals), firstId: 1000);
@@ -308,6 +309,43 @@ void main() {
         client.uploadWorkout(built, DateTime(2026, 10, 28)),
         throwsA(isA<CorosAuthException>()),
       );
+    });
+  });
+}
+
+void corosCalendarTests() {
+  group('COROS calendar', () {
+    test('entries are read with their program names and removed by id', () {
+      final entries = parseCorosCalendar({
+        'id': '478387948455379144',
+        'entities': [
+          {
+            'idInPlan': '6',
+            'planProgramId': '6',
+            'planId': '478387948455379144',
+            'happenDay': 20261028,
+          },
+        ],
+        'programs': [
+          {'idInPlan': '6', 'name': 'Easy Trail Recovery'},
+        ],
+      });
+      expect(entries.single.name, 'Easy Trail Recovery');
+      expect(entries.single.day, DateTime(2026, 10, 28));
+      expect(entries.single.removalPayload, {
+        'versionObjects': [
+          {
+            'id': '6',
+            'planProgramId': '6',
+            'planId': '478387948455379144',
+            'status': 3,
+          },
+        ],
+        'pbVersion': 2,
+      });
+    });
+    test('an empty week gives no entries', () {
+      expect(parseCorosCalendar({'id': '1', 'programs': []}), isEmpty);
     });
   });
 }

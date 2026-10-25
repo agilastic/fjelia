@@ -38,13 +38,15 @@ final workoutTemplateLibraryProvider = Provider<WorkoutTemplateLibrary>(
 );
 
 final trainingPlanServiceProvider = Provider<TrainingPlanService>((ref) {
-  // Power targets only on the bike and only when the athlete has said so.
-  final bikePower =
-      ref.watch(userProfileProvider).valueOrNull?.bikePowerTargets ?? false;
+  // Rides start on the metric chosen last (watts indoors); each ride can be
+  // switched in its sheet.
+  final profile = ref.watch(userProfileProvider).valueOrNull;
   return TrainingPlanService(
     ref.watch(databaseProvider),
     ref.watch(garminClientProvider),
-    usesPower: (sport) => bikePower && sport.startsWith('cycl'),
+    usesPower: (sport, indoor) =>
+        sport.startsWith('cycl') &&
+        (profile?.powerOnBike(indoor: indoor) ?? false),
   );
 });
 

@@ -26,7 +26,7 @@ class UserProfile {
     this.maxSessionsPerDay = 1,
     this.hoursPerWeek = 8,
     this.weekStartsOnMonday = true,
-    this.bikePowerTargets = false,
+    this.bikeMetric = 'hr',
     this.corosWorkoutPush = false,
     this.preferredSports = const ['running'],
     this.experienceLevel = 'beginner',
@@ -64,9 +64,12 @@ class UserProfile {
   final double hoursPerWeek;
   final bool weekStartsOnMonday;
 
-  /// Cycling workouts carry power targets. Off by default: heart rate is the
-  /// target unless the athlete says the bike has a power meter.
-  final bool bikePowerTargets;
+  /// The main target chosen last for a ride, `hr` or `power`. Rides not yet
+  /// chosen for start with it; not shown in the settings.
+  final String bikeMetric;
+
+  /// Whether a cycling workout [indoor] or not starts on power targets.
+  bool powerOnBike({required bool indoor}) => indoor || bikeMetric == 'power';
 
   /// Send planned workouts to COROS through its unofficial Training Hub
   /// interface. Off by default; the athlete turns it on knowingly.
@@ -115,7 +118,7 @@ class UserProfile {
     'maxSessionsPerDay': maxSessionsPerDay,
     'hoursPerWeek': hoursPerWeek,
     'weekStartsOnMonday': weekStartsOnMonday,
-    'bikePowerTargets': bikePowerTargets,
+    'bikeMetric': bikeMetric,
     'corosWorkoutPush': corosWorkoutPush,
     'preferredSports': preferredSports,
     'experienceLevel': experienceLevel,
@@ -152,7 +155,11 @@ class UserProfile {
       maxSessionsPerDay: (json['maxSessionsPerDay'] as num?)?.toInt() ?? 1,
       hoursPerWeek: (json['hoursPerWeek'] as num?)?.toDouble() ?? 8.0,
       weekStartsOnMonday: json['weekStartsOnMonday'] as bool? ?? true,
-      bikePowerTargets: json['bikePowerTargets'] as bool? ?? false,
+      bikeMetric:
+          json['bikeMetric'] as String? ??
+          (json['bikePowerTargets'] == true || json['bikePowerMode'] == 'always'
+              ? 'power'
+              : 'hr'),
       corosWorkoutPush: json['corosWorkoutPush'] as bool? ?? false,
       preferredSports:
           (json['preferredSports'] as List?)?.cast<String>() ??
@@ -187,7 +194,7 @@ class UserProfile {
     int? maxSessionsPerDay,
     double? hoursPerWeek,
     bool? weekStartsOnMonday,
-    bool? bikePowerTargets,
+    String? bikeMetric,
     bool? corosWorkoutPush,
     List<String>? preferredSports,
     String? experienceLevel,
@@ -215,7 +222,7 @@ class UserProfile {
     maxSessionsPerDay: maxSessionsPerDay ?? this.maxSessionsPerDay,
     hoursPerWeek: hoursPerWeek ?? this.hoursPerWeek,
     weekStartsOnMonday: weekStartsOnMonday ?? this.weekStartsOnMonday,
-    bikePowerTargets: bikePowerTargets ?? this.bikePowerTargets,
+    bikeMetric: bikeMetric ?? this.bikeMetric,
     corosWorkoutPush: corosWorkoutPush ?? this.corosWorkoutPush,
     preferredSports: preferredSports ?? this.preferredSports,
     experienceLevel: experienceLevel ?? this.experienceLevel,

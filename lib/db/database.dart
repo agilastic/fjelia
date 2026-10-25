@@ -376,6 +376,9 @@ class TrainingSessions extends Table {
   BoolColumn get historical => boolean().withDefault(const Constant(false))();
   BoolColumn get indoor => boolean().withDefault(const Constant(false))();
   TextColumn get sessionLocation => text().nullable()();
+
+  /// 'hr' or 'power': the main target of a ride; null until chosen.
+  TextColumn get targetMetric => text().nullable()();
   TextColumn get sessionStackName => text().nullable()();
   TextColumn get multiSportWorkoutId => text().nullable()();
   BoolColumn get isMovedFromDifferentWeek =>
@@ -701,7 +704,7 @@ class AppDatabase extends _$AppDatabase {
       defaultSourcePriorities[group.name]!;
 
   @override
-  int get schemaVersion => 45;
+  int get schemaVersion => 46;
 
   Future<void> saveHeartRateSamples(List<TimedHeartRate> samples) async {
     if (samples.isEmpty) return;
@@ -1527,6 +1530,15 @@ class AppDatabase extends _$AppDatabase {
       );
     },
     onUpgrade: (m, from, to) async {
+      if (from < 46) {
+        await _addColumnIfMissing(
+          'training_sessions',
+          'target_metric',
+          () => customStatement(
+            'ALTER TABLE training_sessions ADD COLUMN target_metric TEXT',
+          ),
+        );
+      }
       if (from < 45) {
         await _addColumnIfMissing(
           'session_actuals',

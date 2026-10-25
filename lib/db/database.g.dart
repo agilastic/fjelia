@@ -15792,6 +15792,17 @@ class $TrainingSessionsTable extends TrainingSessions
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _targetMetricMeta = const VerificationMeta(
+    'targetMetric',
+  );
+  @override
+  late final GeneratedColumn<String> targetMetric = GeneratedColumn<String>(
+    'target_metric',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _sessionStackNameMeta = const VerificationMeta(
     'sessionStackName',
   );
@@ -15929,6 +15940,7 @@ class $TrainingSessionsTable extends TrainingSessions
     historical,
     indoor,
     sessionLocation,
+    targetMetric,
     sessionStackName,
     multiSportWorkoutId,
     isMovedFromDifferentWeek,
@@ -16314,6 +16326,15 @@ class $TrainingSessionsTable extends TrainingSessions
         ),
       );
     }
+    if (data.containsKey('target_metric')) {
+      context.handle(
+        _targetMetricMeta,
+        targetMetric.isAcceptableOrUnknown(
+          data['target_metric']!,
+          _targetMetricMeta,
+        ),
+      );
+    }
     if (data.containsKey('session_stack_name')) {
       context.handle(
         _sessionStackNameMeta,
@@ -16564,6 +16585,10 @@ class $TrainingSessionsTable extends TrainingSessions
         DriftSqlType.string,
         data['${effectivePrefix}session_location'],
       ),
+      targetMetric: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}target_metric'],
+      ),
       sessionStackName: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}session_stack_name'],
@@ -16649,6 +16674,9 @@ class TrainingSession extends DataClass implements Insertable<TrainingSession> {
   final bool historical;
   final bool indoor;
   final String? sessionLocation;
+
+  /// 'hr' or 'power': the main target of a ride; null until chosen.
+  final String? targetMetric;
   final String? sessionStackName;
   final String? multiSportWorkoutId;
   final bool isMovedFromDifferentWeek;
@@ -16701,6 +16729,7 @@ class TrainingSession extends DataClass implements Insertable<TrainingSession> {
     required this.historical,
     required this.indoor,
     this.sessionLocation,
+    this.targetMetric,
     this.sessionStackName,
     this.multiSportWorkoutId,
     required this.isMovedFromDifferentWeek,
@@ -16799,6 +16828,9 @@ class TrainingSession extends DataClass implements Insertable<TrainingSession> {
     map['indoor'] = Variable<bool>(indoor);
     if (!nullToAbsent || sessionLocation != null) {
       map['session_location'] = Variable<String>(sessionLocation);
+    }
+    if (!nullToAbsent || targetMetric != null) {
+      map['target_metric'] = Variable<String>(targetMetric);
     }
     if (!nullToAbsent || sessionStackName != null) {
       map['session_stack_name'] = Variable<String>(sessionStackName);
@@ -16916,6 +16948,9 @@ class TrainingSession extends DataClass implements Insertable<TrainingSession> {
       sessionLocation: sessionLocation == null && nullToAbsent
           ? const Value.absent()
           : Value(sessionLocation),
+      targetMetric: targetMetric == null && nullToAbsent
+          ? const Value.absent()
+          : Value(targetMetric),
       sessionStackName: sessionStackName == null && nullToAbsent
           ? const Value.absent()
           : Value(sessionStackName),
@@ -17004,6 +17039,7 @@ class TrainingSession extends DataClass implements Insertable<TrainingSession> {
       historical: serializer.fromJson<bool>(json['historical']),
       indoor: serializer.fromJson<bool>(json['indoor']),
       sessionLocation: serializer.fromJson<String?>(json['sessionLocation']),
+      targetMetric: serializer.fromJson<String?>(json['targetMetric']),
       sessionStackName: serializer.fromJson<String?>(json['sessionStackName']),
       multiSportWorkoutId: serializer.fromJson<String?>(
         json['multiSportWorkoutId'],
@@ -17067,6 +17103,7 @@ class TrainingSession extends DataClass implements Insertable<TrainingSession> {
       'historical': serializer.toJson<bool>(historical),
       'indoor': serializer.toJson<bool>(indoor),
       'sessionLocation': serializer.toJson<String?>(sessionLocation),
+      'targetMetric': serializer.toJson<String?>(targetMetric),
       'sessionStackName': serializer.toJson<String?>(sessionStackName),
       'multiSportWorkoutId': serializer.toJson<String?>(multiSportWorkoutId),
       'isMovedFromDifferentWeek': serializer.toJson<bool>(
@@ -17124,6 +17161,7 @@ class TrainingSession extends DataClass implements Insertable<TrainingSession> {
     bool? historical,
     bool? indoor,
     Value<String?> sessionLocation = const Value.absent(),
+    Value<String?> targetMetric = const Value.absent(),
     Value<String?> sessionStackName = const Value.absent(),
     Value<String?> multiSportWorkoutId = const Value.absent(),
     bool? isMovedFromDifferentWeek,
@@ -17202,6 +17240,7 @@ class TrainingSession extends DataClass implements Insertable<TrainingSession> {
     sessionLocation: sessionLocation.present
         ? sessionLocation.value
         : this.sessionLocation,
+    targetMetric: targetMetric.present ? targetMetric.value : this.targetMetric,
     sessionStackName: sessionStackName.present
         ? sessionStackName.value
         : this.sessionStackName,
@@ -17325,6 +17364,9 @@ class TrainingSession extends DataClass implements Insertable<TrainingSession> {
       sessionLocation: data.sessionLocation.present
           ? data.sessionLocation.value
           : this.sessionLocation,
+      targetMetric: data.targetMetric.present
+          ? data.targetMetric.value
+          : this.targetMetric,
       sessionStackName: data.sessionStackName.present
           ? data.sessionStackName.value
           : this.sessionStackName,
@@ -17398,6 +17440,7 @@ class TrainingSession extends DataClass implements Insertable<TrainingSession> {
           ..write('historical: $historical, ')
           ..write('indoor: $indoor, ')
           ..write('sessionLocation: $sessionLocation, ')
+          ..write('targetMetric: $targetMetric, ')
           ..write('sessionStackName: $sessionStackName, ')
           ..write('multiSportWorkoutId: $multiSportWorkoutId, ')
           ..write('isMovedFromDifferentWeek: $isMovedFromDifferentWeek, ')
@@ -17455,6 +17498,7 @@ class TrainingSession extends DataClass implements Insertable<TrainingSession> {
     historical,
     indoor,
     sessionLocation,
+    targetMetric,
     sessionStackName,
     multiSportWorkoutId,
     isMovedFromDifferentWeek,
@@ -17511,6 +17555,7 @@ class TrainingSession extends DataClass implements Insertable<TrainingSession> {
           other.historical == this.historical &&
           other.indoor == this.indoor &&
           other.sessionLocation == this.sessionLocation &&
+          other.targetMetric == this.targetMetric &&
           other.sessionStackName == this.sessionStackName &&
           other.multiSportWorkoutId == this.multiSportWorkoutId &&
           other.isMovedFromDifferentWeek == this.isMovedFromDifferentWeek &&
@@ -17565,6 +17610,7 @@ class TrainingSessionsCompanion extends UpdateCompanion<TrainingSession> {
   final Value<bool> historical;
   final Value<bool> indoor;
   final Value<String?> sessionLocation;
+  final Value<String?> targetMetric;
   final Value<String?> sessionStackName;
   final Value<String?> multiSportWorkoutId;
   final Value<bool> isMovedFromDifferentWeek;
@@ -17618,6 +17664,7 @@ class TrainingSessionsCompanion extends UpdateCompanion<TrainingSession> {
     this.historical = const Value.absent(),
     this.indoor = const Value.absent(),
     this.sessionLocation = const Value.absent(),
+    this.targetMetric = const Value.absent(),
     this.sessionStackName = const Value.absent(),
     this.multiSportWorkoutId = const Value.absent(),
     this.isMovedFromDifferentWeek = const Value.absent(),
@@ -17672,6 +17719,7 @@ class TrainingSessionsCompanion extends UpdateCompanion<TrainingSession> {
     this.historical = const Value.absent(),
     this.indoor = const Value.absent(),
     this.sessionLocation = const Value.absent(),
+    this.targetMetric = const Value.absent(),
     this.sessionStackName = const Value.absent(),
     this.multiSportWorkoutId = const Value.absent(),
     this.isMovedFromDifferentWeek = const Value.absent(),
@@ -17739,6 +17787,7 @@ class TrainingSessionsCompanion extends UpdateCompanion<TrainingSession> {
     Expression<bool>? historical,
     Expression<bool>? indoor,
     Expression<String>? sessionLocation,
+    Expression<String>? targetMetric,
     Expression<String>? sessionStackName,
     Expression<String>? multiSportWorkoutId,
     Expression<bool>? isMovedFromDifferentWeek,
@@ -17799,6 +17848,7 @@ class TrainingSessionsCompanion extends UpdateCompanion<TrainingSession> {
       if (historical != null) 'historical': historical,
       if (indoor != null) 'indoor': indoor,
       if (sessionLocation != null) 'session_location': sessionLocation,
+      if (targetMetric != null) 'target_metric': targetMetric,
       if (sessionStackName != null) 'session_stack_name': sessionStackName,
       if (multiSportWorkoutId != null)
         'multi_sport_workout_id': multiSportWorkoutId,
@@ -17858,6 +17908,7 @@ class TrainingSessionsCompanion extends UpdateCompanion<TrainingSession> {
     Value<bool>? historical,
     Value<bool>? indoor,
     Value<String?>? sessionLocation,
+    Value<String?>? targetMetric,
     Value<String?>? sessionStackName,
     Value<String?>? multiSportWorkoutId,
     Value<bool>? isMovedFromDifferentWeek,
@@ -17912,6 +17963,7 @@ class TrainingSessionsCompanion extends UpdateCompanion<TrainingSession> {
       historical: historical ?? this.historical,
       indoor: indoor ?? this.indoor,
       sessionLocation: sessionLocation ?? this.sessionLocation,
+      targetMetric: targetMetric ?? this.targetMetric,
       sessionStackName: sessionStackName ?? this.sessionStackName,
       multiSportWorkoutId: multiSportWorkoutId ?? this.multiSportWorkoutId,
       isMovedFromDifferentWeek:
@@ -18063,6 +18115,9 @@ class TrainingSessionsCompanion extends UpdateCompanion<TrainingSession> {
     if (sessionLocation.present) {
       map['session_location'] = Variable<String>(sessionLocation.value);
     }
+    if (targetMetric.present) {
+      map['target_metric'] = Variable<String>(targetMetric.value);
+    }
     if (sessionStackName.present) {
       map['session_stack_name'] = Variable<String>(sessionStackName.value);
     }
@@ -18145,6 +18200,7 @@ class TrainingSessionsCompanion extends UpdateCompanion<TrainingSession> {
           ..write('historical: $historical, ')
           ..write('indoor: $indoor, ')
           ..write('sessionLocation: $sessionLocation, ')
+          ..write('targetMetric: $targetMetric, ')
           ..write('sessionStackName: $sessionStackName, ')
           ..write('multiSportWorkoutId: $multiSportWorkoutId, ')
           ..write('isMovedFromDifferentWeek: $isMovedFromDifferentWeek, ')
@@ -36633,6 +36689,7 @@ typedef $$TrainingSessionsTableCreateCompanionBuilder =
       Value<bool> historical,
       Value<bool> indoor,
       Value<String?> sessionLocation,
+      Value<String?> targetMetric,
       Value<String?> sessionStackName,
       Value<String?> multiSportWorkoutId,
       Value<bool> isMovedFromDifferentWeek,
@@ -36688,6 +36745,7 @@ typedef $$TrainingSessionsTableUpdateCompanionBuilder =
       Value<bool> historical,
       Value<bool> indoor,
       Value<String?> sessionLocation,
+      Value<String?> targetMetric,
       Value<String?> sessionStackName,
       Value<String?> multiSportWorkoutId,
       Value<bool> isMovedFromDifferentWeek,
@@ -36920,6 +36978,11 @@ class $$TrainingSessionsTableFilterComposer
 
   ColumnFilters<String> get sessionLocation => $composableBuilder(
     column: $table.sessionLocation,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get targetMetric => $composableBuilder(
+    column: $table.targetMetric,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -37188,6 +37251,11 @@ class $$TrainingSessionsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get targetMetric => $composableBuilder(
+    column: $table.targetMetric,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get sessionStackName => $composableBuilder(
     column: $table.sessionStackName,
     builder: (column) => ColumnOrderings(column),
@@ -37425,6 +37493,11 @@ class $$TrainingSessionsTableAnnotationComposer
     builder: (column) => column,
   );
 
+  GeneratedColumn<String> get targetMetric => $composableBuilder(
+    column: $table.targetMetric,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<String> get sessionStackName => $composableBuilder(
     column: $table.sessionStackName,
     builder: (column) => column,
@@ -37546,6 +37619,7 @@ class $$TrainingSessionsTableTableManager
                 Value<bool> historical = const Value.absent(),
                 Value<bool> indoor = const Value.absent(),
                 Value<String?> sessionLocation = const Value.absent(),
+                Value<String?> targetMetric = const Value.absent(),
                 Value<String?> sessionStackName = const Value.absent(),
                 Value<String?> multiSportWorkoutId = const Value.absent(),
                 Value<bool> isMovedFromDifferentWeek = const Value.absent(),
@@ -37599,6 +37673,7 @@ class $$TrainingSessionsTableTableManager
                 historical: historical,
                 indoor: indoor,
                 sessionLocation: sessionLocation,
+                targetMetric: targetMetric,
                 sessionStackName: sessionStackName,
                 multiSportWorkoutId: multiSportWorkoutId,
                 isMovedFromDifferentWeek: isMovedFromDifferentWeek,
@@ -37654,6 +37729,7 @@ class $$TrainingSessionsTableTableManager
                 Value<bool> historical = const Value.absent(),
                 Value<bool> indoor = const Value.absent(),
                 Value<String?> sessionLocation = const Value.absent(),
+                Value<String?> targetMetric = const Value.absent(),
                 Value<String?> sessionStackName = const Value.absent(),
                 Value<String?> multiSportWorkoutId = const Value.absent(),
                 Value<bool> isMovedFromDifferentWeek = const Value.absent(),
@@ -37707,6 +37783,7 @@ class $$TrainingSessionsTableTableManager
                 historical: historical,
                 indoor: indoor,
                 sessionLocation: sessionLocation,
+                targetMetric: targetMetric,
                 sessionStackName: sessionStackName,
                 multiSportWorkoutId: multiSportWorkoutId,
                 isMovedFromDifferentWeek: isMovedFromDifferentWeek,

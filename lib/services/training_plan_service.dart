@@ -701,19 +701,20 @@ class _AthleteFitnessSnapshot {
 }
 
 class TrainingPlanService {
-  /// [usesPower] says for which sports workouts carry power targets. By
-  /// default none do: heart rate is the target, because a power meter is not
-  /// something every athlete has on every bike, and running power is not
-  /// available to everyone either.
+  /// [usesPower] says whether a workout of a sport, indoors or not, carries
+  /// power targets. By default none do: heart rate is the target, because a
+  /// power meter is not something every athlete has on every bike, and running
+  /// power is not available to everyone either. A smart trainer is the usual
+  /// exception, so the answer can depend on [indoor].
   TrainingPlanService(
     this._db,
     this._garmin, {
-    bool Function(String sport)? usesPower,
-  }) : _usesPower = usesPower ?? ((_) => false);
+    bool Function(String sport, bool indoor)? usesPower,
+  }) : _usesPower = usesPower ?? ((_, _) => false);
 
   final AppDatabase _db;
   final GarminClient _garmin;
-  final bool Function(String sport) _usesPower;
+  final bool Function(String sport, bool indoor) _usesPower;
 
   static DateTime _day(DateTime d) => DateTime(d.year, d.month, d.day);
   static DateTime _addDays(DateTime d, int days) =>
@@ -1073,6 +1074,31 @@ class TrainingPlanService {
         'workoutTargetTypeKey': 'power.zone',
         'displayOrder': 2,
       };
+    } else if (power &&
+        ftp != null &&
+        !isPowerStep &&
+        zone != null &&
+        zone >= 1 &&
+        zone <= 5) {
+      // Planned as heart rate, ridden on a smart trainer: the zone gives the
+      // watts, and the heart-rate range stays as the guide beside them.
+      final w = _powerZones[zone]!;
+      final hr = fitness.hrRangeForZone(zone);
+      out['targetValueOne'] = (ftp * w.lo).round().toDouble();
+      out['targetValueTwo'] = (ftp * w.hi).round().toDouble();
+      out['targetType'] = {
+        'workoutTargetTypeId': 2,
+        'workoutTargetTypeKey': 'power.zone',
+        'displayOrder': 2,
+      };
+      if (hr.low != null || hr.high != null) {
+        final own = (out['description'] as String?)?.trim();
+        final guide =
+            'HR ${hr.low ?? (hr.high! - 15)}–${hr.high ?? (hr.low! + 15)} bpm';
+        out['description'] = own == null || own.isEmpty
+            ? guide
+            : '$guide · $own';
+      }
     } else if (isPowerStep && !(power && ftp != null)) {
       // Heart rate instead, except for very short efforts where a heart-rate
       // target means nothing.
@@ -1588,7 +1614,7 @@ class TrainingPlanService {
             t.stepsJson,
             ftp,
             fitness,
-            power: _usesPower(slot.sport),
+            power: _usesPower(slot.sport, false),
           );
           final fitted = fitSteadyWorkout(resolved, wantedMin * 60.0);
           stepsJson = fitted.stepsJson;
@@ -1993,7 +2019,9 @@ class TrainingPlanService {
       maxHr: thresholds?.maxHrBpm,
     );
     final ftp = thresholds?.ftpWatts;
-    final power = _usesPower(s.sport);
+    final power = s.targetMetric != null
+        ? s.targetMetric == 'power'
+        : _usesPower(s.sport, s.indoor);
     final steps = _withNotes(
       (jsonDecode(s.stepsJson!) as List)
           .cast<Map<String, dynamic>>()
@@ -2195,7 +2223,7 @@ class TrainingPlanService {
     final text = [
       if (notes != null && notes.isNotEmpty) ...[notes, ''],
       power
-          ? 'TARGETS: heart rate is the guide; power is shown where it is set.'
+          ? 'TARGETS: power where it is set, with heart rate as the guide.'
           : 'TARGETS: heart rate in your zones. No power or pace targets.',
       ...lines,
       'Total ${total.totalMinutes} min${total.isExact ? '' : ' (partly estimated)'}.',
@@ -2245,51 +2273,59 @@ class TrainingPlanService {
     }
   }
 
-  /// Removes every planned workout from Garmin (calendar and library) and
-  /// deletes the local plans.
-  Future<void> deleteAllPlannedWorkouts() async {
-    try {
-      final calendar = await _garmin.listCalendarWorkouts();
-      log(
-        '[Plan] deleteAllPlannedWorkouts: ${calendar.length} '
-        'calendar workouts to delete',
-      );
-      for (final c in calendar) {
-        try {
-          await _garmin.deleteWorkout(c.workoutId, scheduleId: c.scheduleId);
-        } catch (e) {
-          log(
-            '[Plan] Garmin delete failed for wid=${c.workoutId} '
-            'sid=${c.scheduleId}: $e',
-          );
-        }
-      }
-    } catch (e) {
-      log('[Plan] listCalendarWorkouts failed: $e');
-    }
-    try {
-      final ids = await _garmin.listWorkoutIds();
-      log(
-        '[Plan] deleteAllPlannedWorkouts: ${ids.length} '
-        'workout definitions to delete',
-      );
-      for (final id in ids) {
-        try {
-          await _garmin.deleteWorkout(id);
-        } catch (e) {
-          log('[Plan] Garmin library delete failed for $id: $e');
-        }
-      }
-    } catch (e) {
-      log('[Plan] listWorkoutIds failed: $e');
-    }
+  /// Deletes every plan and planned session on this phone. Completed
+  /// activities are kept. Fast: nothing leaves the phone.
+  Future<void> deleteLocalPlans() async {
     await (_db.delete(
       _db.trainingSessions,
     )..where((t) => t.athleteId.equals('self'))).go();
     await (_db.delete(
       _db.trainingPlans,
     )..where((t) => t.athleteId.equals('self'))).go();
-    log('[Plan] deleteAllPlannedWorkouts done for self');
+    log('[Plan] local plans deleted');
+  }
+
+  /// Removes every planned workout from Garmin, calendar and library.
+  /// [onProgress] hears each finished one with the number done and the total,
+  /// which is known once the lists are fetched (0 before).
+  Future<void> deleteGarminWorkouts({
+    void Function(int done, int total, String label)? onProgress,
+  }) async {
+    onProgress?.call(0, 0, 'Reading the Garmin calendar');
+    var calendar = <({String workoutId, String? scheduleId})>[];
+    var ids = <String>[];
+    try {
+      calendar = [
+        for (final c in await _garmin.listCalendarWorkouts())
+          (workoutId: c.workoutId, scheduleId: c.scheduleId as String?),
+      ];
+    } catch (e) {
+      log('[Plan] listCalendarWorkouts failed: $e');
+    }
+    try {
+      ids = await _garmin.listWorkoutIds();
+    } catch (e) {
+      log('[Plan] listWorkoutIds failed: $e');
+    }
+    final total = calendar.length + ids.length;
+    var done = 0;
+    onProgress?.call(0, total, 'Garmin');
+    for (final c in calendar) {
+      try {
+        await _garmin.deleteWorkout(c.workoutId, scheduleId: c.scheduleId);
+      } catch (e) {
+        log('[Plan] Garmin delete failed for wid=${c.workoutId}: $e');
+      }
+      onProgress?.call(++done, total, 'Garmin calendar');
+    }
+    for (final id in ids) {
+      try {
+        await _garmin.deleteWorkout(id);
+      } catch (e) {
+        log('[Plan] Garmin library delete failed for $id: $e');
+      }
+      onProgress?.call(++done, total, 'Garmin library');
+    }
   }
 }
 

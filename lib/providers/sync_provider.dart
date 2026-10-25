@@ -1,3 +1,4 @@
+import '../services/auto_plan_pause.dart';
 import 'weather_radar_provider.dart';
 import 'dart:async';
 import 'dart:math' as math;
@@ -131,6 +132,10 @@ Future<void> _autoGeneratePlanIfNeeded(
   Ref ref, {
   bool afterHistory = false,
 }) async {
+  if (await AutoPlanPause.isPaused) {
+    log('[Sync] auto-plan is off: the athlete deleted all workouts');
+    return;
+  }
   final db = ref.read(databaseProvider);
   final needsHistory = await _storage.read(key: _planNeedsHistoryKey) != null;
   if (!afterHistory && !await _historyDownloaded()) {

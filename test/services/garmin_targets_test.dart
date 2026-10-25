@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:drift/drift.dart' hide isNull;
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
+import 'package:fjelia/providers/user_profile_provider.dart';
+import 'package:fjelia/services/plan_session_actions.dart';
 import 'package:fjelia/services/training_plan_service.dart';
 import 'package:fjelia/services/workout_semantics.dart';
 import 'package:fjelia/services/workout_template_library.dart';
@@ -23,6 +25,19 @@ Map<String, dynamic> powerStep(String type, int seconds, double fraction) => {
   'targetValueOne': fraction - 0.02,
   'targetValueTwo': fraction + 0.02,
 };
+
+class _ListingGarmin extends FakeWorkoutGarmin {
+  final deleted = <String>[];
+  @override
+  Future<List<({String scheduleId, String workoutId})>> listCalendarWorkouts({
+    int monthsAhead = 3,
+  }) async => [(scheduleId: 's1', workoutId: 'w1')];
+  @override
+  Future<List<String>> listWorkoutIds() async => ['w1', 'w2'];
+  @override
+  Future<void> deleteWorkout(String workoutId, {String? scheduleId}) async =>
+      deleted.add(workoutId);
+}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -171,7 +186,7 @@ void main() {
       TrainingPlanService(
         db,
         FakeWorkoutGarmin(),
-        usesPower: (sport) => sport.startsWith('cycl'),
+        usesPower: (sport, indoor) => sport.startsWith('cycl'),
       ),
       sport: 'cycling_road',
     );
@@ -188,6 +203,99 @@ void main() {
     // The zone is set either way.
     expect(steps.map((e) => e['zoneNumber']), [1, 2, 1]);
   });
+
+  test(
+    'a smart-trainer ride gets watts, the same ride outdoors heart rate',
+    () async {
+      final service = TrainingPlanService(
+        db,
+        FakeWorkoutGarmin(),
+        usesPower: (sport, indoor) => false,
+      );
+      await db.delete(db.workoutTemplates).go();
+      await db
+          .into(db.workoutTemplates)
+          .insert(
+            WorkoutTemplatesCompanion.insert(
+              id: 'c',
+              sport: 'cycling_road',
+              sessionType: 'long',
+              subType: const Value('endurance'),
+              targetPhase: 'base,build,peak,taper,recovery',
+              name: 'Hill Racer Training',
+              description: 'x',
+              stepsJson: jsonEncode([
+                powerStep('warmup', 600, 0.5),
+                powerStep('interval', 1800, 0.7),
+                powerStep('cooldown', 300, 0.5),
+              ]),
+              parameterizedFor: 'power',
+              estimatedDurationMin: 45,
+              estimatedTss: 40,
+              source: 'domestique',
+              createdAt: DateTime(2026, 7, 1),
+            ),
+          );
+      final s = await generate(service, sport: 'cycling_road');
+      final outdoor = await service.prepareWorkout(s.id);
+      expect(
+        flat(outdoor.steps).map((e) => e['targetType']['workoutTargetTypeKey']),
+        everyElement('heart.rate.zone'),
+      );
+      final actions = PlanSessionActions(db, FakeWorkoutGarmin());
+      await actions.setTargetMetric(s, 'power');
+      final indoor = await service.prepareWorkout(s.id);
+      final steps = flat(indoor.steps);
+      expect(
+        steps.map((e) => e['targetType']['workoutTargetTypeKey']),
+        everyElement('power.zone'),
+      );
+      expect(steps[1]['description'], contains('bpm'));
+      expect(steps[1]['targetValueOne'], lessThan(steps[1]['targetValueTwo']));
+      final stored = await (db.select(
+        db.trainingSessions,
+      )..where((t) => t.id.equals(s.id))).getSingle();
+      expect((await actions.setTargetMetric(stored, 'hr')).targetMetric, 'hr');
+    },
+  );
+
+  test(
+    'the last chosen bike metric is remembered, indoors starts on watts',
+    () {
+      const p = UserProfile();
+      expect(p.bikeMetric, 'hr');
+      expect(p.powerOnBike(indoor: false), isFalse);
+      expect(p.powerOnBike(indoor: true), isTrue);
+      expect(
+        p.copyWith(bikeMetric: 'power').powerOnBike(indoor: false),
+        isTrue,
+      );
+      expect(
+        UserProfile.fromJson({'bikePowerTargets': true}).bikeMetric,
+        'power',
+      );
+      expect(UserProfile.fromJson({}).bikeMetric, 'hr');
+    },
+  );
+
+  test(
+    'deleting everything: the phone first, then Garmin with progress',
+    () async {
+      final garmin = _ListingGarmin();
+      final service = TrainingPlanService(db, garmin);
+      await generate(service);
+      await service.deleteLocalPlans();
+      expect(await db.select(db.trainingSessions).get(), isEmpty);
+      expect(await db.select(db.trainingPlans).get(), isEmpty);
+      expect(garmin.deleted, isEmpty);
+      final seen = <(int, int)>[];
+      await service.deleteGarminWorkouts(
+        onProgress: (done, total, _) => seen.add((done, total)),
+      );
+      expect(garmin.deleted, ['w1', 'w1', 'w2']);
+      expect(seen.last, (3, 3));
+    },
+  );
 
   test('the workout on the watch carries its targets as comments', () async {
     final garmin = FakeWorkoutGarmin();

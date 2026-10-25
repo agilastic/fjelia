@@ -118,7 +118,7 @@ void main() {
       final service = TrainingPlanService(
         db,
         FakeWorkoutGarmin(),
-        usesPower: (sport) => power && sport.startsWith('cycl'),
+        usesPower: (sport, indoor) => power && sport.startsWith('cycl'),
       );
       final planId = await service.generatePlan(
         athleteId: 'self',

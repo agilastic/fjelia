@@ -223,6 +223,56 @@ class CorosClient {
 
   // ── activities ────────────────────────────────────────────────────────────
 
+  /// The workouts on the Training Hub calendar from [from] to [to], one
+  /// [CorosCalendarEntry] each. Reads what the calendar page itself loads.
+  Future<List<CorosCalendarEntry>> calendarWorkouts(
+    DateTime from,
+    DateTime to,
+  ) async {
+    final a = _auth ?? (throw CorosException('Not signed in to COROS.'));
+    final uri = Uri.parse('${_base(a.region)}/training/schedule/query').replace(
+      queryParameters: {
+        'startDate': _dateStr(from),
+        'endDate': _dateStr(to),
+        'supportRestExercise': '1',
+      },
+    );
+    final response = await _http
+        .get(uri, headers: _headers())
+        .timeout(_timeout);
+    final json =
+        jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+    if (_isAuthError(json)) throw CorosAuthException();
+    if (json['result'] != '0000') {
+      throw CorosException(
+        'COROS did not list the calendar (${json['result']}): '
+        '${json['message'] ?? 'no message'}',
+      );
+    }
+    return parseCorosCalendar(json['data'] as Map<String, dynamic>? ?? {});
+  }
+
+  /// Takes one workout off the Training Hub calendar.
+  Future<void> removeCalendarWorkout(CorosCalendarEntry entry) async {
+    final a = _auth ?? (throw CorosException('Not signed in to COROS.'));
+    final response = await _http
+        .post(
+          Uri.parse('${_base(a.region)}/training/schedule/update'),
+          headers: _headers(),
+          body: jsonEncode(entry.removalPayload),
+        )
+        .timeout(_timeout);
+    final json =
+        jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+    if (_isAuthError(json)) throw CorosAuthException();
+    if (!const {'0000', '1000'}.contains(json['result'])) {
+      throw CorosException(
+        'COROS did not remove the workout (${json['result']}): '
+        '${json['message'] ?? 'no message'}',
+      );
+    }
+  }
+
   /// Activity rows between [from] and [to] (inclusive local days), or the
   /// latest pages when no range is given. Paginates up to [maxPages] of 50 and
   /// invokes [onRow] for each row as it is fetched, so rows are processed
@@ -263,7 +313,9 @@ class CorosClient {
         'COROS did not accept the workout (${json['result']}): '
         '${json['message'] ?? 'no message'}',
       );
-      log('[Coros] workout upload refused with day $happenDay: ${json['result']}');
+      log(
+        '[Coros] workout upload refused with day $happenDay: ${json['result']}',
+      );
     }
     throw last!;
   }
@@ -291,8 +343,7 @@ class CorosClient {
       };
       final response = await _http
           .get(
-            Uri.parse('$base/activity/query')
-                .replace(queryParameters: params),
+            Uri.parse('$base/activity/query').replace(queryParameters: params),
             headers: headers,
           )
           .timeout(_timeout);
@@ -305,8 +356,7 @@ class CorosClient {
       }
       final data = json['data'] as Map<String, dynamic>? ?? const {};
       final rows =
-          (data['dataList'] as List?)?.cast<Map<String, dynamic>>() ??
-          const [];
+          (data['dataList'] as List?)?.cast<Map<String, dynamic>>() ?? const [];
       log(
         '[Coros] activities range=${from == null ? 'latest' : _dateStr(from)}-'
         '${to == null ? '' : _dateStr(to)} page=$page rows=${rows.length} '
@@ -338,9 +388,7 @@ class CorosClient {
           )
           .timeout(_timeout);
       if (response.statusCode != 200) {
-        log(
-          '[Coros] detail HTTP ${response.statusCode} body=${response.body}',
-        );
+        log('[Coros] detail HTTP ${response.statusCode} body=${response.body}');
         return null;
       }
       final json = jsonDecode(response.body) as Map<String, dynamic>;
@@ -389,8 +437,9 @@ class CorosClient {
     final responses = await Future.wait([
       _http
           .get(
-            Uri.parse('$base/analyse/dayDetail/query')
-                .replace(queryParameters: range),
+            Uri.parse(
+              '$base/analyse/dayDetail/query',
+            ).replace(queryParameters: range),
             headers: headers,
           )
           .timeout(_timeout),
@@ -399,8 +448,7 @@ class CorosClient {
           .timeout(_timeout),
       _http
           .get(
-            Uri.parse('$base/analyse/query')
-                .replace(queryParameters: range),
+            Uri.parse('$base/analyse/query').replace(queryParameters: range),
             headers: headers,
           )
           .timeout(_timeout),
