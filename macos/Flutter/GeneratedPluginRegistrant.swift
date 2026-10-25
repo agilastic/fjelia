@@ -11,6 +11,7 @@ import file_picker_darwin
 import file_selector_macos
 import flutter_blue_plus
 import flutter_inappwebview_macos
+import flutter_local_notifications
 import flutter_secure_storage_darwin
 import flutter_web_auth_2
 import foundation_models_framework
@@ -27,6 +28,7 @@ func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   FileSelectorPlugin.register(with: registry.registrar(forPlugin: "FileSelectorPlugin"))
   FlutterBluePlusPlugin.register(with: registry.registrar(forPlugin: "FlutterBluePlusPlugin"))
   InAppWebViewFlutterPlugin.register(with: registry.registrar(forPlugin: "InAppWebViewFlutterPlugin"))
+  FlutterLocalNotificationsPlugin.register(with: registry.registrar(forPlugin: "FlutterLocalNotificationsPlugin"))
   FlutterSecureStorageDarwinPlugin.register(with: registry.registrar(forPlugin: "FlutterSecureStorageDarwinPlugin"))
   FlutterWebAuth2Plugin.register(with: registry.registrar(forPlugin: "FlutterWebAuth2Plugin"))
   SwiftFoundationModelsFrameworkPlugin.register(with: registry.registrar(forPlugin: "SwiftFoundationModelsFrameworkPlugin"))

@@ -6,10 +6,12 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../db/database.dart';
+import '../models/hrv_training_episode.dart';
 import '../models/spot_hrv.dart';
 import '../services/polar_h10_service.dart';
 import '../services/spot_hrv_export.dart';
 import 'database_provider.dart';
+import 'hrv_reminder_provider.dart';
 import 'spot_hrv_provider.dart';
 
 export '../services/polar_h10_service.dart' show H10Device, PolarH10Service;
@@ -66,14 +68,20 @@ class PolarH10Actions {
   Future<void> pair(H10Device device) async {
     await PolarH10Pairing.write(device);
     ref.invalidate(polarH10PairedProvider);
+    await ref.read(hrvReminderActionsProvider).reconcile();
   }
 
   Future<void> unpair() async {
     await PolarH10Pairing.clear();
     ref.invalidate(polarH10PairedProvider);
+    // Without a strap there is nothing to remind about: pending reminders go.
+    await ref.read(hrvReminderActionsProvider).reconcile();
   }
 
-  Future<void> save({
+  /// Saves a usable recording and returns its stable id. Associating it with
+  /// a workout and retiring a reminder follow, but never decide whether the
+  /// save worked.
+  Future<String> save({
     required SpotHrvCapture capture,
     required SpotHrvContext context,
     required SpotHrvPosture posture,
@@ -81,23 +89,30 @@ class PolarH10Actions {
     required Duration elapsed,
     String notes = '',
     int? minutesAfterTraining,
-  }) => saveSpotHrv(
-    ref.read(databaseProvider),
-    capture: capture,
-    context: context,
-    posture: posture,
-    deviceId: device.id,
-    deviceName: device.name,
-    elapsed: elapsed,
-    notes: notes,
-    minutesAfterTraining: minutesAfterTraining,
-  );
+    HrvLaunchContext? launch,
+  }) async {
+    final uid = await saveSpotHrv(
+      ref.read(databaseProvider),
+      capture: capture,
+      context: context,
+      posture: posture,
+      deviceId: device.id,
+      deviceName: device.name,
+      elapsed: elapsed,
+      notes: notes,
+      minutesAfterTraining: minutesAfterTraining,
+      launch: launch,
+    );
+    await ref.read(hrvReminderActionsProvider).reconcile();
+    return uid;
+  }
 
   Future<void> delete(int id) async {
     final db = ref.read(databaseProvider);
     await (db.delete(
       db.spotHrvMeasurements,
     )..where((t) => t.id.equals(id))).go();
+    await ref.read(hrvReminderActionsProvider).reconcile();
   }
 
   /// Writes the RR intervals of [row] to a temporary CSV file and returns its

@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:drift/drift.dart';
-import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:uuid/uuid.dart';
 
 import '../db/database.dart';
@@ -724,7 +723,6 @@ class PostWorkoutScorer {
   /// Whether an activity of [activityType] can be the planned [sport]. A sport
   /// without a family of its own matches only an activity of that name, never
   /// everything.
-  @visibleForTesting
   static bool sportFamilyMatches(String sport, String activityType) {
     final t = activityType.toLowerCase();
     bool any(List<String> keys) => keys.any(t.contains);

@@ -2055,6 +2055,13 @@ class TrainingPlanService {
           candidates.add(off);
         }
         if (candidates.isEmpty) return null;
+        // Strength days are the athlete's own choice in the settings: a
+        // strength session takes its day whenever that day is open at all.
+        if (s.sport == 'strength' && s.weekday != 0) {
+          for (final off in candidates) {
+            if (_addDays(weekStart, off).weekday == s.weekday) return off;
+          }
+        }
         if (s.weekday == 0) {
           // The quietest day: fewest sessions, then fewest minutes.
           candidates.sort((a, b) {
@@ -2161,6 +2168,12 @@ class TrainingPlanService {
         }
       }
 
+      // Strength first: its days are fixed by the athlete, the rest of the
+      // week arranges itself around them.
+      slots = [
+        ...slots.where((s) => s.sport == 'strength'),
+        ...slots.where((s) => s.sport != 'strength'),
+      ];
       for (final slot in slots) {
         final off = bestOffset(slot);
         if (off == null) {

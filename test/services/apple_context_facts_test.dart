@@ -118,7 +118,7 @@ void main() {
 
   test('the HRV around an activity reads as a sentence', () {
     final text = appleFactLine(
-      '[HRV:AroundActivity,PreNight:44ms(2026-10-18),PostNight:38ms(2026-10-19),NightChange:-6ms(-14%),WeeklyAvg:46ms,SpotBefore:60ms(07:10,seated,5min),SpotAfter:45ms(14:15,seated,5min,27min after training),SpotChange:-15ms(-25%),Note:MethodsDiffer]',
+      '[HRV:AroundActivity,PreNight:44ms(2026-10-18),PostNight:38ms(2026-10-19),NightChange:-6ms(-14%),WeeklyAvg:46ms,Note:NightValuesAreWatchMeasuredNotComparableToSpotRMSSD]',
     );
     expect(
       text,
@@ -128,14 +128,8 @@ void main() {
       ),
     );
     expect(text, contains('Weekly average 46 ms.'));
-    expect(
-      text,
-      contains(
-        'Polar H10 spot RMSSD before 60 ms (07:10, seated, 5min), '
-        'after 45 ms (14:15, seated, 5min, 27min after training), change -15 ms (-25%).',
-      ),
-    );
-    expect(text, contains('compare trends, not single values'));
+    expect(text, isNot(contains('Polar H10')));
+    expect(text, contains('never compare their values'));
     expect(
       appleFactLine('[HRV:AroundActivity,Unavailable]'),
       'No HRV was recorded around this activity; its effect on HRV is unknown.',

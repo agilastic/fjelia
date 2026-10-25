@@ -2,6 +2,7 @@ import 'weather_location_tab.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../providers/plan_schedule_provider.dart';
 
 import '../../db/database.dart';
 import '../../models/weekly_hours.dart';
@@ -179,6 +180,18 @@ class TrainingTab extends ConsumerWidget {
                   ),
               ],
             ),
+            if (ref.watch(planScheduleOutdatedProvider).valueOrNull ?? false)
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: FilledButton.tonalIcon(
+                  onPressed: () => runUiAction(
+                    context,
+                    () => ref.read(applyScheduleProvider)(),
+                  ),
+                  icon: const Icon(Icons.event_repeat_rounded, size: 18),
+                  label: const Text('Update plan to this schedule'),
+                ),
+              ),
             const SectionLabel('Sessions per day', color: Colors.orange),
             const Padding(
               padding: EdgeInsets.only(bottom: 12),

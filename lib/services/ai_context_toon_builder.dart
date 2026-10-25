@@ -6,6 +6,8 @@ import 'package:drift/drift.dart' hide isNull, isNotNull;
 import '../db/database.dart';
 import '../providers/training_load_provider.dart';
 import 'bio_age_service.dart';
+import 'hrv/hrv_ai_context_builder.dart';
+import 'hrv/hrv_training_service.dart';
 import 'ai_data_status.dart';
 import 'post_workout_scorer.dart' show noActivityReason;
 import 'race_predictor.dart';
@@ -124,6 +126,13 @@ class AiContextToonBuilder {
         '[HRV:7dTrend:${hrv.take(7).map((r) => '${_date(r.date).substring(5)}:${_num(r.hrvLastNight)}').join(',')}]',
       );
     }
+    // HRV before and after the recent workouts, from the same assessment the
+    // workout card shows. Optional context: a failure here never blocks the
+    // coach.
+    try {
+      final snapshot = await HrvTrainingService(_db, clock: _now).reconcile();
+      lines.addAll(const HrvAiContextBuilder().recentLines(snapshot, now));
+    } catch (_) {}
     if (sleep.isNotEmpty) {
       final r = sleep.first;
       lines.add(

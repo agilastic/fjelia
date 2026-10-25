@@ -8,6 +8,13 @@ import 'providers/auth_provider.dart';
 import 'providers/day_data_provider.dart';
 import 'providers/health_connect_provider.dart';
 import 'providers/hilo_sync_provider.dart';
+import 'providers/hrv_reminder_provider.dart';
+import 'providers/hrv_training_provider.dart';
+import 'services/hrv/hrv_post_reminder_coordinator.dart'
+    show ActionKind, ActionResult;
+import 'screens/strain/activity_detail_sheet.dart';
+import 'widgets/app_widgets.dart' show showAppSheet;
+import 'widgets/polar_h10_hrv_sheet.dart';
 import 'providers/sync_provider.dart';
 import 'screens/home/home_screen.dart';
 import 'screens/startup_splash.dart';
@@ -55,6 +62,7 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
       _listenForPairingRequest();
       _listenForHealthAccessLost();
       _triggerSync();
+      unawaited(_startHrvReminders());
     });
   }
 
@@ -76,10 +84,60 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
     if (ref.read(selectedDateProvider) != today) {
       ref.read(selectedDateProvider.notifier).state = today;
     }
+    // Permission, clock or time zone may have changed; an action may have
+    // been left by the notification while the app was closed.
+    unawaited(_startHrvReminders());
     final sync = ref.read(syncProvider);
     if (sync.status == SyncStatus.syncing) return;
     final last = sync.lastSync;
     if (last == null || now.difference(last).inMinutes >= 15) _triggerSync();
+  }
+
+  /// Settles the post-training HRV reminders, then lets queued notification
+  /// actions in. Reconciling first means an action is judged on current data.
+  Future<void> _startHrvReminders() async {
+    try {
+      final router = ref.read(hrvActionRouterProvider);
+      router.onResult = _onHrvAction;
+      await ref.read(hrvReminderActionsProvider).bootstrap();
+      await router.markReady();
+    } catch (_) {
+      // Reminders are optional; the rest of the app does not depend on them.
+    }
+  }
+
+  /// Waits (briefly) until the home screen is showing, so a sheet from a
+  /// notification does not open over the startup artwork.
+  Future<BuildContext?> _homeContext() async {
+    for (var i = 0; i < 60; i++) {
+      final context = _navigatorKey.currentContext;
+      if (context != null &&
+          ref.read(authProvider).status == LoginStatus.loggedIn) {
+        return context;
+      }
+      await Future<void>.delayed(const Duration(milliseconds: 250));
+    }
+    return null;
+  }
+
+  Future<void> _onHrvAction(ActionResult result) async {
+    final episodeId = result.episodeId;
+    if (episodeId == null) return;
+    final context = await _homeContext();
+    if (context == null || !context.mounted) return;
+    if (result.kind == ActionKind.startMeasurement) {
+      if (ref.read(hrvCaptureActiveProvider)) {
+        // One capture at a time: the running one stays in front.
+        return;
+      }
+      final launch = await ref.read(hrvPostLaunchProvider(episodeId).future);
+      if (!context.mounted) return;
+      await showAppSheet(context, PolarH10HrvSheet(launch: launch));
+      return;
+    }
+    final activity = await ref.read(episodeActivityProvider(episodeId).future);
+    if (activity == null || !context.mounted) return;
+    await showAppSheet(context, ActivityDetailSheet(activity: activity));
   }
 
   void _triggerSync() {

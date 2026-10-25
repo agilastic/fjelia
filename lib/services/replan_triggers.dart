@@ -1,6 +1,8 @@
 // The evidence that may justify rebuilding the rest of a plan. Kept apart so
 // the rules can be tested; the caller supplies completed data only.
 
+import 'dart:convert';
+
 import 'season/goal_set.dart';
 
 /// Whether the goals changed since the plan was built, so its future no
@@ -40,4 +42,28 @@ bool hrvSuppressed(
   return list
       .take(needed)
       .every((v) => v != null && v < baseline * (1 - share));
+}
+
+/// Whether the athlete's rest or strength days differ from the ones the plan
+/// was built with. A plan from before these were stored is not judged.
+bool scheduleChanged({
+  required String? planRestDaysJson,
+  required String? planStrengthDaysJson,
+  required List<int> restDays,
+  required List<int> strengthDays,
+}) {
+  Set<int>? read(String? json) {
+    if (json == null) return null;
+    try {
+      return (jsonDecode(json) as List).cast<int>().toSet();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  bool differs(Set<int>? stored, List<int> now) =>
+      stored != null &&
+      (stored.length != now.toSet().length || !stored.containsAll(now));
+  return differs(read(planRestDaysJson), restDays) ||
+      differs(read(planStrengthDaysJson), strengthDays);
 }

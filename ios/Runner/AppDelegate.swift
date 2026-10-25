@@ -1,6 +1,9 @@
 import Flutter
 import PDFKit
 import UIKit
+import UserNotifications
+// Needed for FlutterLocalNotificationsPlugin.setPluginRegistrantCallback.
+import flutter_local_notifications
 
 @main
 @objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
@@ -8,10 +11,17 @@ import UIKit
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
+    // Local notifications (the post-training HRV reminder) show and report
+    // their actions through this delegate, also while the app is running.
+    UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 
   func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
+    // Lets the action isolate reach the plugins when the app is not in front.
+    FlutterLocalNotificationsPlugin.setPluginRegistrantCallback { (registry) in
+      GeneratedPluginRegistrant.register(with: registry)
+    }
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
     if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "PdfTextChannel") {
       PdfTextChannel.register(messenger: registrar.messenger())

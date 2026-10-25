@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/activity_axis.dart';
 import '../models/garmin_data.dart';
+import '../models/pace_series.dart';
 import '../providers/hr_zones_provider.dart';
 import 'app_widgets.dart';
 
@@ -20,6 +21,15 @@ List<int> _bounds(WidgetRef ref, String type) {
       ? zones.cycling.bounds
       : zones.running.bounds;
 }
+
+/// A readable step for the pace axis, in minutes.
+double _paceStep(double span) => span <= 1.5
+    ? .25
+    : span <= 3
+    ? .5
+    : span <= 6
+    ? 1
+    : 2;
 
 String _pace(double minutes) =>
     '${minutes.floor()}′${((minutes % 1) * 60).round().clamp(0, 59).toString().padLeft(2, '0')}″';
@@ -44,45 +54,91 @@ class ActivityPerformanceChart extends ConsumerWidget {
     final minutes = byTime
         ? sampleMinutes(activity.samples, activity.duration)
         : const <double>[];
-    final series = <(String, Color, List<FlSpot>)>[];
+    // Label, colour, points, and for pace and speed an axis range that
+    // follows the bulk of the values rather than the outliers.
+    final series = <(String, Color, List<FlSpot>, (double, double)?)>[];
+    double? xOf(int i) {
+      final sample = activity.samples[i];
+      if (byTime) return minutes[i];
+      return sample.distanceMeters.isFinite && sample.distanceMeters >= 0
+          ? sample.distanceMeters / 1000
+          : null;
+    }
+
     void add(String label, Color color, double? Function(ActivitySample) read) {
       final points = <FlSpot>[];
       for (var i = 0; i < activity.samples.length; i++) {
-        final sample = activity.samples[i];
-        final value = read(sample);
-        if (value == null || !value.isFinite) continue;
-        if (byTime) {
-          points.add(FlSpot(minutes[i], value));
-        } else if (sample.distanceMeters.isFinite &&
-            sample.distanceMeters >= 0) {
-          points.add(FlSpot(sample.distanceMeters / 1000, value));
-        }
+        final value = read(activity.samples[i]);
+        final x = xOf(i);
+        if (value == null || !value.isFinite || x == null) continue;
+        points.add(FlSpot(x, value));
       }
       points.sort((a, b) => a.x.compareTo(b.x));
-      if (points.isNotEmpty) series.add((label, color, points));
+      if (points.isNotEmpty) series.add((label, color, points, null));
+    }
+
+    // Pace and speed: a stop breaks the line instead of drawing a spike.
+    // Pace is plotted negated so a faster pace sits higher, as on a watch.
+    void addMotion() {
+      final speeds = [for (final s in activity.samples) s.speed];
+      final values = running ? chartPace(speeds) : chartSpeed(speeds);
+      final entries = <(double, double?)>[];
+      for (var i = 0; i < values.length; i++) {
+        final x = xOf(i);
+        if (x == null) continue;
+        final v = values[i];
+        entries.add((x, v == null ? null : (running ? -v : v)));
+      }
+      entries.sort((a, b) => a.$1.compareTo(b.$1));
+      final shown = [
+        for (final e in entries)
+          if (e.$2 != null) e.$2!,
+      ];
+      if (shown.isEmpty) return;
+      final points = <FlSpot>[];
+      for (final e in entries) {
+        if (e.$2 != null) {
+          points.add(FlSpot(e.$1, e.$2!));
+        } else if (points.isNotEmpty && !points.last.isNull()) {
+          points.add(FlSpot.nullSpot);
+        }
+      }
+      while (points.isNotEmpty && points.last.isNull()) {
+        points.removeLast();
+      }
+      series.add((
+        running ? 'PACE (min/km)' : 'SPEED (km/h)',
+        _zoneColors.first,
+        points,
+        robustRange(shown, minSpan: running ? 1 : 5),
+      ));
     }
 
     add('HR (bpm)', Colors.redAccent, (s) => s.heartRate);
-    add(
-      running ? 'PACE (min/km)' : 'SPEED (km/h)',
-      _zoneColors.first,
-      (s) => s.speed == null || s.speed! <= 0
-          ? null
-          : running
-          ? 1000 / s.speed! / 60
-          : s.speed! * 3.6,
-    );
+    addMotion();
     add('ELEVATION (m)', mint, (s) => s.elevation);
     add('POWER (W)', Colors.purpleAccent, (s) => s.power);
     if (series.isEmpty) return const SizedBox.shrink();
     final maxX = math.max(
       .001,
-      series.expand((s) => s.$3).map((p) => p.x).reduce(math.max),
+      series
+          .expand((s) => s.$3)
+          .where((p) => !p.isNull())
+          .map((p) => p.x)
+          .reduce(math.max),
     );
-    Widget chart((String, Color, List<FlSpot>) row, bool last) {
+    Widget chart(
+      (String, Color, List<FlSpot>, (double, double)?) row,
+      bool last,
+    ) {
       final hr = row.$1.startsWith('HR');
-      final minY = row.$3.map((p) => p.y).reduce(math.min) - 2;
-      final maxY = row.$3.map((p) => p.y).reduce(math.max) + 2;
+      final pace = row.$1.startsWith('PACE');
+      final ys = [
+        for (final p in row.$3)
+          if (!p.isNull()) p.y,
+      ];
+      final minY = row.$4?.$1 ?? ys.reduce(math.min) - 2;
+      final maxY = row.$4?.$2 ?? ys.reduce(math.max) + 2;
       final low = hr ? math.min(minY, bounds.first.toDouble() - 2) : minY;
       final high = hr ? math.max(maxY, bounds.last.toDouble() + 2) : maxY;
       final gradient = LinearGradient(
@@ -170,10 +226,12 @@ class ActivityPerformanceChart extends ConsumerWidget {
                     sideTitles: SideTitles(
                       showTitles: true,
                       reservedSize: 35,
+                      // Pace labels on round steps: 5′00″, 5′30″, not 5′12″.
+                      interval: pace ? _paceStep(high - low) : null,
                       minIncluded: false,
                       maxIncluded: false,
                       getTitlesWidget: (v, _) => Text(
-                        row.$1.startsWith('PACE') ? _pace(v) : valueText(v),
+                        pace ? _pace(-v) : valueText(v),
                         style: const TextStyle(
                           fontSize: 9,
                           color: Colors.white70,

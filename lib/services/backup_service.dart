@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 import '../db/database.dart';
 import '../models/backup_restore.dart';
@@ -40,11 +41,38 @@ const _tableAddedIn = {
   'plan_goals': 47,
   'provider_cleanups': 48,
   'workout_deliveries': 48,
+  'hrv_training_episodes': 49,
+  'hrv_episode_aliases': 49,
+  'hrv_episode_measurements': 49,
+  'hrv_episode_feedback': 49,
+  'hrv_reminder_preferences': 49,
+  'hrv_post_reminders': 49,
+  'hrv_notification_operations': 49,
+  'hrv_notification_action_receipts': 49,
+  'hrv_native_cleanups': 49,
 };
 
+/// Data that belongs to this installation and its operating system: pending
+/// request ids, outbox operations, handled actions and the cleanup journal.
+/// Exported as empty tables so the format stays complete, never restored.
+const _installationLocal = {
+  'hrv_post_reminders',
+  'hrv_notification_operations',
+  'hrv_notification_action_receipts',
+  'hrv_native_cleanups',
+};
+
+/// Settings of this installation that a restore never switches on: the
+/// reminder is off after a restore until the athlete turns it on again here.
+const _reminderPreferences = 'hrv_reminder_preferences';
+
 class BackupService {
-  BackupService(this.db);
+  BackupService(this.db, {this.afterRestore});
   final AppDatabase db;
+
+  /// Runs once a restore has committed, for work outside the database such as
+  /// removing stale operating-system notifications.
+  final Future<void> Function()? afterRestore;
   static const _storage = FlutterSecureStorage();
   static bool _include(String key) =>
       key == 'user_profile_v1' ||
@@ -60,9 +88,20 @@ class BackupService {
     await db.transaction(() async {
       for (final table in db.allTables) {
         final name = table.actualTableName;
+        if (_installationLocal.contains(name)) {
+          tables[name] = <Object?>[];
+          continue;
+        }
         tables[name] = (await db.customSelect('SELECT * FROM "$name"').get())
             .map((r) => r.data)
             .toList();
+      }
+      // The epoch and the switch are this installation's, not portable.
+      for (final row in (tables[_reminderPreferences] as List?) ?? const []) {
+        (row as Map<String, Object?>)
+          ..['opted_in'] = 0
+          ..['enabled_since_utc'] = null
+          ..['installation_epoch'] = '';
       }
     });
     final settings = {
@@ -209,10 +248,43 @@ class BackupService {
       BackupRestoreProgress('Restoring records', 0.15, total: total),
     );
     await db.transaction(() async {
-      for (final name in names) {
-        await db.customStatement('DELETE FROM "$name"');
+      // Native ids of requests that may still be pending on this phone. The
+      // tables that know them are about to be replaced, so they are kept in
+      // the cleanup journal until the platform confirmed their removal.
+      final owedIds = <int>{};
+      final epoch =
+          (await db
+                  .customSelect(
+                    'SELECT installation_epoch AS e FROM hrv_reminder_preferences LIMIT 1',
+                  )
+                  .getSingleOrNull())
+              ?.read<String>('e');
+      for (final q in const [
+        'SELECT native_notification_id AS id FROM hrv_post_reminders',
+        'SELECT native_notification_id AS id FROM hrv_notification_operations',
+      ]) {
+        for (final r in await db.customSelect(q).get()) {
+          owedIds.add(r.read<int>('id'));
+        }
       }
       for (final name in names) {
+        if (name == 'hrv_native_cleanups') continue; // the journal stays
+        await db.customStatement('DELETE FROM "$name"');
+      }
+      for (final id in owedIds) {
+        await db.customStatement(
+          'INSERT OR IGNORE INTO hrv_native_cleanups '
+          '(native_notification_id, installation_epoch, created_at_utc) '
+          'VALUES (?, ?, ?)',
+          [
+            id,
+            epoch ?? '',
+            DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000,
+          ],
+        );
+      }
+      for (final name in names) {
+        if (_installationLocal.contains(name)) continue;
         final columns =
             (await db.customSelect('PRAGMA table_info("$name")').get())
                 .map((r) => r.read<String>('name'))
@@ -252,6 +324,14 @@ class BackupService {
           await Future<void>.delayed(Duration.zero);
         }
       }
+      // A restored reminder preference is never switched on, and gets a new
+      // epoch so an old notification cannot act on this data.
+      await db.customStatement(
+        'UPDATE hrv_reminder_preferences SET opted_in = 0, '
+        'enabled_since_utc = NULL, installation_epoch = ?, '
+        'revision = revision + 1',
+        [const Uuid().v4()],
+      );
       // Raw SQL bypasses Drift's automatic table notifications. Publish these
       // updates as part of the transaction so open views see committed data.
       db.markTablesUpdated(db.allTables);
@@ -287,6 +367,13 @@ class BackupService {
       } else if (v is String) {
         await prefs.setString(e.key, v);
       }
+    }
+    // An older backup has no stable ids for its HRV readings yet.
+    await db.ensureHrvIdentity();
+    try {
+      await afterRestore?.call();
+    } catch (e) {
+      log('[Backup] after-restore cleanup failed: $e');
     }
     log(
       '[Backup] restore complete: ${counts['activity_records']} activities, '

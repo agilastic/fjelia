@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fjelia/db/database.dart';
+import 'package:fjelia/models/hrv_training_episode.dart';
 import 'package:fjelia/models/spot_hrv.dart';
+import 'package:fjelia/providers/hrv_reminder_provider.dart';
 import 'package:fjelia/providers/database_provider.dart';
 import 'package:fjelia/services/polar_h10_service.dart';
 import 'package:fjelia/widgets/polar_h10_hrv_sheet.dart';
@@ -101,4 +103,132 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+
+  group('opened from a workout', () {
+    testWidgets(
+      'HRV-T047 the role, position and length follow the pre measurement, '
+      'the delay is computed and one capture is marked as running',
+      (tester) async {
+        tester.view.physicalSize = const Size(390, 1200);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        final db = AppDatabase(NativeDatabase.memory());
+        addTearDown(db.close);
+        final end = DateTime.now().subtract(const Duration(minutes: 29));
+        late ProviderContainer container;
+        final open = ValueNotifier(true);
+        addTearDown(open.dispose);
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [databaseProvider.overrideWithValue(db)],
+            child: MaterialApp(
+              home: Scaffold(
+                body: Builder(
+                  builder: (context) {
+                    container = ProviderScope.containerOf(context);
+                    return ValueListenableBuilder<bool>(
+                      valueListenable: open,
+                      builder: (_, isOpen, _) => isOpen
+                          ? PolarH10HrvSheet(
+                              sensor: _Sensor(),
+                              launch: HrvLaunchContext(
+                                episodeId: 'ep',
+                                posture: 'supine',
+                                durationSeconds: 120,
+                                workoutEnd: end,
+                              ),
+                            )
+                          : const SizedBox.shrink(),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(
+          tester
+              .widget<DropdownButtonFormField<SpotHrvContext>>(
+                find.byType(DropdownButtonFormField<SpotHrvContext>),
+              )
+              .initialValue,
+          SpotHrvContext.afterTraining,
+        );
+        expect(
+          tester
+              .widget<DropdownButtonFormField<SpotHrvPosture>>(
+                find.byType(DropdownButtonFormField<SpotHrvPosture>),
+              )
+              .initialValue,
+          SpotHrvPosture.supine,
+        );
+        expect(
+          tester
+              .widget<DropdownButtonFormField<int>>(
+                find.byType(DropdownButtonFormField<int>),
+              )
+              .initialValue,
+          120,
+        );
+        // The role is fixed, and nothing is typed for the delay.
+        expect(
+          tester
+              .widget<DropdownButtonFormField<SpotHrvContext>>(
+                find.byType(DropdownButtonFormField<SpotHrvContext>),
+              )
+              .onChanged,
+          isNull,
+        );
+        expect(
+          find.text('Minutes since training ended (optional)'),
+          findsNothing,
+        );
+        expect(
+          find.textContaining(
+            'Sampling would start about 30 min after your workout ended',
+          ),
+          findsOneWidget,
+        );
+        expect(container.read(hrvCaptureActiveProvider), isTrue);
+        open.value = false;
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 5));
+        expect(container.read(hrvCaptureActiveProvider), isFalse);
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pump(const Duration(milliseconds: 5));
+      },
+    );
+
+    testWidgets('a plain launch keeps the typed minutes and free choice', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(390, 1200);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      final db = AppDatabase(NativeDatabase.memory());
+      addTearDown(db.close);
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [databaseProvider.overrideWithValue(db)],
+          child: MaterialApp(
+            home: Scaffold(body: PolarH10HrvSheet(sensor: _Sensor())),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(
+        tester
+            .widget<DropdownButtonFormField<SpotHrvContext>>(
+              find.byType(DropdownButtonFormField<SpotHrvContext>),
+            )
+            .onChanged,
+        isNotNull,
+      );
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump(const Duration(milliseconds: 5));
+    });
+  });
 }

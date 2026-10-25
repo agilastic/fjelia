@@ -184,9 +184,21 @@ class MorningAdaptationNotifier extends StateNotifier<MorningAdaptationState> {
       planRevision: plan.goalSetRevision,
       goals: goals,
     );
+    // A different weekly schedule is the athlete's own decision: the plan
+    // follows it at once, like changed goals.
+    final profile0 = _ref.read(userProfileProvider).valueOrNull;
+    final schedule =
+        profile0 != null &&
+        scheduleChanged(
+          planRestDaysJson: plan.restDaysJson,
+          planStrengthDaysJson: plan.strengthDaysJson,
+          restDays: profile0.restDays,
+          strengthDays: profile0.preferredStrengthDays,
+        );
     // Don't replan more than once every 3 days.
     final last = plan.lastReplannedAt;
     if (!goalsChanged &&
+        !schedule &&
         last != null &&
         DateTime.now().difference(last).inDays < 3) {
       return null;
@@ -214,7 +226,10 @@ class MorningAdaptationNotifier extends StateNotifier<MorningAdaptationState> {
         w.weeklyNtsz5 +
         w.weeklyNtsz6;
 
-    final reasons = <String>[if (goalsChanged) 'Your goals changed'];
+    final reasons = <String>[
+      if (goalsChanged) 'Your goals changed',
+      if (schedule) 'Your weekly schedule changed',
+    ];
     if (weeks.length == 2) {
       final jump = zoneTimeJump(nts(weeks[0]), nts(weeks[1]));
       if (jump != null) {

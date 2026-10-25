@@ -5,15 +5,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../models/hrv_training_episode.dart';
 import '../models/spot_hrv.dart';
 import '../db/database.dart';
+import '../providers/hrv_reminder_provider.dart';
 import '../providers/polar_h10_provider.dart';
 import '../providers/spot_hrv_provider.dart';
 import 'app_widgets.dart';
 
 class PolarH10HrvSheet extends ConsumerStatefulWidget {
-  const PolarH10HrvSheet({super.key, this.sensor});
+  const PolarH10HrvSheet({super.key, this.sensor, this.launch});
   final PolarH10Service? sensor;
+
+  /// Set when opened from a workout or a reminder: the role, the protocol of
+  /// the matching pre measurement and the real end of the workout.
+  final HrvLaunchContext? launch;
   @override
   ConsumerState<PolarH10HrvSheet> createState() => _HrvState();
 }
@@ -28,6 +34,12 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
   SpotHrvContext contextType = SpotHrvContext.beforeTraining;
   SpotHrvPosture posture = SpotHrvPosture.seated;
   int duration = 300;
+
+  // What the recording was made under, frozen when it started. Changing a
+  // control afterwards cannot rewrite how a captured recording was done.
+  SpotHrvContext? capturedContext;
+  SpotHrvPosture? capturedPosture;
+  late final ProviderContainer _container;
   bool busy = false,
       connected = false,
       running = false,
@@ -44,6 +56,26 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _container = ProviderScope.containerOf(context, listen: false);
+    final launch = widget.launch;
+    if (launch != null) {
+      contextType = launch.role == HrvRole.post
+          ? SpotHrvContext.afterTraining
+          : SpotHrvContext.beforeTraining;
+      posture = SpotHrvPosture.values.firstWhere(
+        (p) => p.name == launch.posture,
+        orElse: () => SpotHrvPosture.seated,
+      );
+      if (launch.durationSeconds == 120 || launch.durationSeconds == 300) {
+        duration = launch.durationSeconds!;
+      }
+    }
+    // One capture at a time: a notification action must not open a second.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _container.read(hrvCaptureActiveProvider.notifier).state = true;
+      }
+    });
     final actions = ref.read(polarH10ActionsProvider);
     sensor = widget.sensor ?? actions.createSensor();
     unawaited(
@@ -81,6 +113,14 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    final container = _container;
+    Future.microtask(() {
+      try {
+        container.read(hrvCaptureActiveProvider.notifier).state = false;
+      } catch (_) {
+        // The whole app scope was torn down first; nothing is left to clear.
+      }
+    });
     timer?.cancel();
     clock.stop();
     unawaited(subscription?.cancel());
@@ -170,6 +210,8 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
       return;
     }
     setState(() {
+      capturedContext = contextType;
+      capturedPosture = posture;
       capture = SpotHrvCapture(
         startedAt: DateTime.now(),
         durationSeconds: duration,
@@ -196,6 +238,9 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
       if (capture!.complete(elapsed)) {
         timer?.cancel();
         clock.stop();
+        // Wall clock against the monotonic clock: a jump during the recording
+        // keeps the RR timing but not the absolute time.
+        capture!.checkClock(DateTime.now(), clock.elapsed);
         setState(() {
           running = false;
           completed = true;
@@ -229,12 +274,17 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
           .read(polarH10ActionsProvider)
           .save(
             capture: capture!,
-            context: contextType,
-            posture: posture,
+            context: capturedContext ?? contextType,
+            posture: capturedPosture ?? posture,
             device: device!,
             elapsed: elapsed,
             notes: notes.text,
-            minutesAfterTraining: int.tryParse(afterMinutes.text.trim()),
+            // The athlete's own figure, kept apart from the computed delay.
+            // With the real workout end known there is nothing to enter.
+            minutesAfterTraining: widget.launch?.workoutEnd != null
+                ? null
+                : int.tryParse(afterMinutes.text.trim()),
+            launch: _launchFor(capturedContext ?? contextType),
           );
       if (mounted) setState(() => saved = true);
     } catch (e) {
@@ -242,6 +292,29 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
     } finally {
       if (mounted) setState(() => busy = false);
     }
+  }
+
+  /// The launch link only applies to a recording made in the launched role.
+  HrvLaunchContext? _launchFor(SpotHrvContext made) {
+    final launch = widget.launch;
+    if (launch == null) return null;
+    final fits = launch.role == HrvRole.post
+        ? made == SpotHrvContext.afterTraining
+        : made == SpotHrvContext.beforeTraining;
+    return fits ? launch : null;
+  }
+
+  /// Minutes between the real end of the workout and the sampling start,
+  /// shown while measuring. Computed, never typed.
+  String? _delayText() {
+    final end = widget.launch?.workoutEnd;
+    final started = capture?.measurementStartedAt;
+    if (end == null) return null;
+    final at = started ?? DateTime.now().add(const Duration(seconds: 60));
+    final minutes = at.difference(end).inMinutes;
+    return minutes < 0
+        ? null
+        : '${started == null ? 'Sampling would start about' : 'Sampling started'} $minutes min after your workout ended.';
   }
 
   String _time(int seconds) =>
@@ -321,7 +394,7 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
               for (final value in SpotHrvContext.values)
                 DropdownMenuItem(value: value, child: Text(value.label)),
             ],
-            onChanged: locked
+            onChanged: locked || widget.launch != null
                 ? null
                 : (value) => setState(() => contextType = value!),
           ),
@@ -351,7 +424,16 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
                 ? null
                 : (value) => setState(() => duration = value!),
           ),
-          if (contextType == SpotHrvContext.afterTraining)
+          if (contextType == SpotHrvContext.afterTraining &&
+              widget.launch?.workoutEnd != null)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Text(
+                _delayText() ?? 'Timing follows your workout.',
+                style: const TextStyle(color: muted, fontSize: 12),
+              ),
+            )
+          else if (contextType == SpotHrvContext.afterTraining)
             TextField(
               controller: afterMinutes,
               enabled: !locked,
@@ -487,12 +569,14 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
                 'Signal quality is too low to save. Repeat the measurement with good strap contact. At least 95% usable intervals and 90% coverage are required.',
                 style: TextStyle(color: Colors.orangeAccent),
               ),
-            if (saved)
+            if (saved) ...[
               const Text(
                 'Saved to spot HRV history.',
                 style: TextStyle(color: mint),
-              )
-            else
+              ),
+              if (capturedContext == SpotHrvContext.beforeTraining)
+                const _ReminderOffer(),
+            ] else
               FilledButton(
                 onPressed: busy || !capture!.analysis.reliable ? null : _save,
                 child: const Text('Save measurement'),
@@ -601,6 +685,26 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
                 },
               ),
         ],
+      ),
+    );
+  }
+}
+
+/// After a first pre-training reading: an optional, contextual offer to be
+/// reminded after the workout. Permission is asked only if the athlete taps.
+class _ReminderOffer extends ConsumerWidget {
+  const _ReminderOffer();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final status = ref.watch(hrvReminderStatusProvider).valueOrNull;
+    if (status == null || status.enabled) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(top: 8),
+      child: OutlinedButton.icon(
+        onPressed: () => ref.read(hrvReminderActionsProvider).setEnabled(true),
+        icon: const Icon(Icons.notifications_active_outlined),
+        label: const Text('Remind me to measure HRV after training'),
       ),
     );
   }

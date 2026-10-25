@@ -3,17 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../db/database.dart' show SpotHrvMeasurement;
 import '../models/hrv_series.dart';
 import '../models/spot_hrv.dart';
+import '../providers/hrv_training_provider.dart';
 import '../providers/polar_h10_provider.dart';
+import '../screens/strain/activity_detail_sheet.dart';
+import '../services/hrv/hrv_texts.dart';
+import '../services/hrv/hrv_training_service.dart'
+    show HrvSnapshot, hrvMeasurementUid;
+import '../theme/hrv_colors.dart';
 import 'app_widgets.dart';
+import 'hrv_finish_prompt.dart';
 import 'polar_h10_hrv_sheet.dart';
 
 const _colors = {
-  HrvSeries.sleep: Color(0xFF4FC3F7),
-  HrvSeries.before: Color(0xFF00D4A0),
-  HrvSeries.after: Color(0xFFFFA94D),
-  HrvSeries.resting: Color(0xFFB58CFF),
+  HrvSeries.sleep: hrvSleepColor,
+  HrvSeries.before: hrvBeforeColor,
+  HrvSeries.after: hrvAfterColor,
+  HrvSeries.resting: hrvRestingColor,
 };
 
 const _surface = Color(0xFF262626);
@@ -45,13 +53,48 @@ class HrvCombinedCard extends ConsumerStatefulWidget {
 
 class _State extends ConsumerState<HrvCombinedCard> {
   final _hidden = <HrvSeries>{};
-  String _posture = 'all';
+  // Seated is the default protocol; lying readings are another scale and
+  // are not mixed in unless asked for.
+  String _posture = 'seated';
+
+  /// One line about a reading: position, length, quality and, when it belongs
+  /// to a workout, the real delay against it.
+  String _detail(SpotHrvMeasurement r, HrvSnapshot? snapshot) {
+    final parts = [
+      r.posture == 'supine' ? 'Lying' : 'Seated',
+      '${(r.durationSeconds / 60).round()} min',
+      if (r.qualityState == 'legacyUnverified')
+        'older reading, quality not recorded',
+    ];
+    final id = snapshot?.episodeOfMeasurement(hrvMeasurementUid(r));
+    final a = id == null ? null : snapshot!.assessments[id];
+    if (a != null) {
+      if (a.pre?.uid == hrvMeasurementUid(r) && a.preGap != null) {
+        parts.add('ended ${hrvMinutes(a.preGap!)} before the workout');
+      } else if (a.post?.uid == hrvMeasurementUid(r) && a.postDelay != null) {
+        parts.add('${hrvMinutes(a.postDelay!)} after the workout');
+      } else if (a.additionalPosts.any((m) => m.uid == hrvMeasurementUid(r))) {
+        parts.add('extra reading after the workout');
+      }
+    } else if (r.context != 'resting') {
+      parts.add('not assigned to a workout');
+    }
+    return parts.join(' · ');
+  }
+
+  /// A point that belongs to a workout opens that workout's card.
+  Future<void> _open(String episodeId) async {
+    final activity = await ref.read(episodeActivityProvider(episodeId).future);
+    if (activity == null || !mounted) return;
+    await showAppSheet(context, ActivityDetailSheet(activity: activity));
+  }
 
   @override
   Widget build(BuildContext context) {
     final rows = ref
         .watch(spotHrvWindowProvider((start: widget.start, end: widget.end)))
         .valueOrNull;
+    final snapshot = ref.watch(hrvSnapshotProvider).valueOrNull;
     final all = buildHrvSeries(
       sleep: widget.sleepPoints,
       spot: [
@@ -61,6 +104,8 @@ class _State extends ConsumerState<HrvCombinedCard> {
             context: r.context,
             posture: r.posture,
             rmssdMs: r.rmssdMs,
+            detail: _detail(r, snapshot),
+            episodeId: snapshot?.episodeOfMeasurement(hrvMeasurementUid(r)),
           ),
       ],
       posture: _posture == 'all' ? null : _posture,
@@ -69,7 +114,11 @@ class _State extends ConsumerState<HrvCombinedCard> {
       for (final s in all)
         if (!_hidden.contains(s.series) && s.points.isNotEmpty) s,
     ];
-    final delta = afterMinusBefore(all);
+    // The paired summary compares before with after, so it only stands while
+    // both are shown.
+    final showPairs =
+        !_hidden.contains(HrvSeries.before) &&
+        !_hidden.contains(HrvSeries.after);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -94,9 +143,9 @@ class _State extends ConsumerState<HrvCombinedCard> {
               selectedBackgroundColor: const Color(0x3300D4A0),
             ),
             segments: [
-              const ButtonSegment(value: 'all', label: Text('All postures')),
               for (final p in SpotHrvPosture.values)
                 ButtonSegment(value: p.name, label: Text(p.label)),
+              const ButtonSegment(value: 'all', label: Text('Both')),
             ],
             selected: {_posture},
             onSelectionChanged: (v) => setState(() => _posture = v.first),
@@ -115,6 +164,7 @@ class _State extends ConsumerState<HrvCombinedCard> {
               start: widget.start,
               end: widget.end,
               series: visible,
+              onOpen: _open,
               average: _hidden.contains(HrvSeries.sleep)
                   ? null
                   : widget.average,
@@ -136,9 +186,14 @@ class _State extends ConsumerState<HrvCombinedCard> {
               ],
             ),
           ),
-        if (delta != null) ...[
+        const HrvFinishPrompt(),
+        if (showPairs) ...[
           const SizedBox(height: 14),
-          _Insight(delta: delta),
+          _PairSummary(
+            posture: _posture == 'all' ? null : _posture,
+            from: widget.start,
+            to: widget.end,
+          ),
         ],
         const SizedBox(height: 14),
         SizedBox(
@@ -212,10 +267,15 @@ class _Tile extends StatelessWidget {
     final empty = data.count == 0;
     final dim = off || empty;
     final average = data.average;
+    final mixed = !empty && average == null;
     return Semantics(
       button: !empty,
       label:
-          '${data.series.label}, ${empty ? 'no readings' : '${average!.round()} milliseconds, ${data.count} readings'}',
+          '${data.series.label}, ${empty
+              ? 'no readings'
+              : mixed
+              ? '${data.count} readings in different positions, no average'
+              : '${average!.round()} milliseconds, ${data.count} readings'}',
       child: Material(
         color: dim ? _surface : color.withValues(alpha: .12),
         borderRadius: BorderRadius.circular(14),
@@ -265,7 +325,7 @@ class _Tile extends StatelessWidget {
                   textBaseline: TextBaseline.alphabetic,
                   children: [
                     Text(
-                      empty ? '—' : '${average!.round()}',
+                      empty || mixed ? '—' : '${average!.round()}',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w700,
@@ -285,6 +345,8 @@ class _Tile extends StatelessWidget {
                 Text(
                   empty
                       ? 'No readings'
+                      : mixed
+                      ? '${data.count} readings · mixed positions'
                       : data.count == 1
                       ? '1 reading'
                       : '${data.count} readings',
@@ -302,40 +364,57 @@ class _Tile extends StatelessWidget {
   }
 }
 
-/// How the evening reading compares with the morning one.
-class _Insight extends StatelessWidget {
-  const _Insight({required this.delta});
-  final double delta;
+/// The paired change of the workouts in view: one pair per workout, from the
+/// same assessment as the workout card. Never two sets of readings averaged
+/// against each other.
+class _PairSummary extends ConsumerWidget {
+  const _PairSummary({
+    required this.posture,
+    required this.from,
+    required this.to,
+  });
+  final String? posture;
+  final DateTime from, to;
 
   @override
-  Widget build(BuildContext context) {
-    final lower = delta < 0;
-    final color = lower
-        ? _colors[HrvSeries.after]!
-        : _colors[HrvSeries.before]!;
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: .1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withValues(alpha: .35)),
-      ),
-      child: Row(
-        children: [
-          Icon(
-            lower ? Icons.trending_down_rounded : Icons.trending_up_rounded,
-            color: color,
-            size: 20,
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              'After training ${lower ? '−' : '+'}${delta.abs().toStringAsFixed(0)} ms '
-              'vs before training (average of this period).',
-              style: const TextStyle(fontSize: 12, height: 1.35),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final summary = ref
+        .watch(hrvPairSummaryProvider((posture: posture, from: from, to: to)))
+        .valueOrNull;
+    if (summary == null) return const SizedBox.shrink();
+    if (summary.pairs == 0) {
+      return const Text(
+        'No workout in this period has a comparable before and after pair.',
+        style: TextStyle(color: muted, fontSize: 12),
+      );
+    }
+    final color = _colors[HrvSeries.after]!;
+    final text =
+        '${summary.pairs} comparable workout ${summary.pairs == 1 ? 'pair' : 'pairs'} · '
+        'median change ${hrvSigned(summary.medianMs!)} ms '
+        '(${hrvSigned(summary.medianPercent!)} %)';
+    return Semantics(
+      container: true,
+      label: text,
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: .1),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: color.withValues(alpha: .35)),
+        ),
+        child: Row(
+          children: [
+            Icon(Icons.compare_arrows_rounded, color: color, size: 20),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                '$text. Each workout counts once; this describes your pairs, it does not score them.',
+                style: const TextStyle(fontSize: 12, height: 1.35),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -348,9 +427,11 @@ class _Chart extends StatelessWidget {
     required this.series,
     required this.average,
     required this.averageLabel,
+    required this.onOpen,
   });
   final DateTime start, end;
   final List<HrvSeriesData> series;
+  final ValueChanged<String> onOpen;
   final double? average;
   final String averageLabel;
 
@@ -436,6 +517,16 @@ class _Chart extends StatelessWidget {
         ),
         lineTouchData: LineTouchData(
           handleBuiltInTouches: true,
+          touchCallback: (event, response) {
+            if (event is! FlTapUpEvent) return;
+            final spot = response?.lineBarSpots?.firstOrNull;
+            if (spot == null) return;
+            final data = series[spot.barIndex];
+            final id = spot.spotIndex < data.episodeIds.length
+                ? data.episodeIds[spot.spotIndex]
+                : null;
+            if (id != null) onOpen(id);
+          },
           touchTooltipData: LineTouchTooltipData(
             getTooltipColor: (_) => const Color(0xFF2E2E2E),
             tooltipBorderRadius: BorderRadius.circular(10),
@@ -470,6 +561,17 @@ class _Chart extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
+                    if (spot.spotIndex < series[spot.barIndex].details.length &&
+                        series[spot.barIndex].details[spot.spotIndex] != null)
+                      TextSpan(
+                        text:
+                            '\n${series[spot.barIndex].details[spot.spotIndex]}',
+                        style: const TextStyle(
+                          color: Colors.white54,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
                   ],
                 ),
             ],

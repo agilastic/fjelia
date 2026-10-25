@@ -78,7 +78,8 @@ dependencies:
   # package, see pubspec_overrides.yaml (git-ignored) and the README.
   fjelia_service:
     path: packages/fjelia_service
-
+  flutter_local_notifications: ^22.3.3
+  timezone: ^0.11.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

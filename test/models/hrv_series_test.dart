@@ -38,20 +38,55 @@ void main() {
     expect(before.count, 2);
   });
 
-  test('after minus before compares the series averages', () {
+  test('the unpaired period averages no longer exist as a comparison', () {
+    // Averages of two unrelated sets of readings are not a training response.
     final series = buildHrvSeries(
       sleep: const [],
       spot: [spot('beforeTraining', 8, 60), spot('afterTraining', 18, 45)],
     );
-    expect(afterMinusBefore(series), -15);
+    expect(series.firstWhere((s) => s.series == HrvSeries.before).average, 60);
+    expect(series.firstWhere((s) => s.series == HrvSeries.after).average, 45);
   });
 
-  test('no difference without both contexts', () {
+  test('readings in different positions are kept but never averaged', () {
     final series = buildHrvSeries(
       sleep: const [],
-      spot: [spot('beforeTraining', 8, 60)],
+      spot: [
+        spot('resting', 7, 70, posture: 'supine'),
+        spot('resting', 9, 50),
+      ],
     );
-    expect(afterMinusBefore(series), isNull);
+    final resting = series.firstWhere((s) => s.series == HrvSeries.resting);
+    expect(resting.count, 2);
+    expect(resting.mixedPostures, isTrue);
+    expect(resting.average, isNull);
+  });
+
+  test('details and workout links stay with their points when sorted', () {
+    final series = buildHrvSeries(
+      sleep: const [],
+      spot: [
+        SpotHrvPoint(
+          at: day.add(const Duration(hours: 9)),
+          context: 'beforeTraining',
+          posture: 'seated',
+          rmssdMs: 50,
+          detail: 'late',
+          episodeId: 'B',
+        ),
+        SpotHrvPoint(
+          at: day.add(const Duration(hours: 7)),
+          context: 'beforeTraining',
+          posture: 'seated',
+          rmssdMs: 52,
+          detail: 'early',
+          episodeId: 'A',
+        ),
+      ],
+    );
+    final before = series.firstWhere((s) => s.series == HrvSeries.before);
+    expect(before.details, ['early', 'late']);
+    expect(before.episodeIds, ['A', 'B']);
   });
 
   test('a posture filter leaves out other postures', () {

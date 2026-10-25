@@ -167,6 +167,211 @@ void main() {
       expect(await db.select(db.planGoals).get(), isEmpty);
     },
   );
+  group('HRV around workouts', () {
+    Future<void> seedHrv() async {
+      final now = DateTime.utc(2026, 11, 2, 12);
+      await db
+          .into(db.spotHrvMeasurements)
+          .insert(
+            SpotHrvMeasurementsCompanion.insert(
+              startedAt: now,
+              context: 'beforeTraining',
+              posture: 'seated',
+              durationSeconds: 300,
+              settleSeconds: 60,
+              deviceId: 'h10',
+              deviceName: 'Polar H10',
+              rmssdMs: 55,
+              sdnnMs: 60,
+              meanHr: 60,
+              acceptedIntervals: 290,
+              totalIntervals: 295,
+              coverage: .97,
+              rrJson: '[]',
+              measurementUid: const Value('uid-1'),
+              qualityState: const Value('usable'),
+            ),
+          );
+      await db
+          .into(db.hrvTrainingEpisodes)
+          .insert(
+            HrvTrainingEpisodesCompanion.insert(
+              episodeId: 'ep-1',
+              actualStartUtc: now,
+              detectedAtUtc: now,
+              createdAtUtc: now,
+              updatedAtUtc: now,
+            ),
+          );
+      await db
+          .into(db.hrvEpisodeMeasurements)
+          .insert(
+            HrvEpisodeMeasurementsCompanion.insert(
+              episodeId: 'ep-1',
+              measurementUid: 'uid-1',
+              role: 'pre',
+              selection: 'primary',
+              associationMethod: 'userCorrection',
+              policyVersion: 'hrv-v1',
+              createdAtUtc: now,
+            ),
+          );
+      await db
+          .into(db.hrvReminderPreferences)
+          .insert(
+            HrvReminderPreferencesCompanion.insert(
+              installationEpoch: 'old-epoch',
+              optedIn: const Value(true),
+              enabledSinceUtc: Value(now),
+              updatedAtUtc: now,
+            ),
+          );
+      await db
+          .into(db.hrvPostReminders)
+          .insert(
+            HrvPostRemindersCompanion.insert(
+              reminderId: 'r1',
+              episodeId: 'ep-1',
+              preMeasurementUid: 'uid-1',
+              installationEpoch: 'old-epoch',
+              nativeNotificationId: 7000042,
+              originalDueAtUtc: now,
+              nextDueAtUtc: now,
+              expiresAtUtc: now,
+              targetOffsetSeconds: 1800,
+              desiredState: 'scheduled',
+              createdAtUtc: now,
+              updatedAtUtc: now,
+            ),
+          );
+    }
+
+    Map<String, dynamic> readBackup(List<int> bytes) =>
+        jsonDecode(
+              utf8.decode(
+                ZipDecoder().decodeBytes(bytes).findFile('backup.json')!.content
+                    as List<int>,
+              ),
+            )
+            as Map<String, dynamic>;
+
+    test('HRV-T073 facts travel, installation state does not', () async {
+      await seedHrv();
+      final file = await BackupService(db).export(directory: dir);
+      final backup = readBackup(await file.readAsBytes());
+      final tables = backup['tables'] as Map;
+      expect(tables['spot_hrv_measurements'], hasLength(1));
+      expect(tables['hrv_training_episodes'], hasLength(1));
+      expect(tables['hrv_episode_measurements'], hasLength(1));
+      // Native ids, outbox rows and receipts stay home; the keys remain.
+      for (final name in [
+        'hrv_post_reminders',
+        'hrv_notification_operations',
+        'hrv_notification_action_receipts',
+        'hrv_native_cleanups',
+      ]) {
+        expect(tables[name], isEmpty, reason: name);
+      }
+      final prefs = (tables['hrv_reminder_preferences'] as List).single as Map;
+      expect(prefs['opted_in'], 0);
+      expect(prefs['installation_epoch'], '');
+      expect(jsonEncode(backup), isNot(contains('7000042')));
+    });
+
+    test('HRV-T074 a restore keeps the facts, switches the reminder off, '
+        'and journals the old native ids', () async {
+      await seedHrv();
+      final file = await BackupService(db).export(directory: dir);
+      final bytes = await file.readAsBytes();
+      var cleaned = 0;
+      await BackupService(
+        db,
+        afterRestore: () async => cleaned++,
+      ).restore(bytes);
+      expect(cleaned, 1);
+      expect(await db.select(db.hrvPostReminders).get(), isEmpty);
+      final prefs = await db.select(db.hrvReminderPreferences).getSingle();
+      expect(prefs.optedIn, isFalse);
+      expect(prefs.enabledSinceUtc, isNull);
+      expect(prefs.installationEpoch, isNot('old-epoch'));
+      expect(prefs.installationEpoch, isNotEmpty);
+      final links = await db.select(db.hrvEpisodeMeasurements).get();
+      expect(links.single.measurementUid, 'uid-1');
+      // The request that may still be pending on this phone is owed removal.
+      final owed = await db.select(db.hrvNativeCleanups).get();
+      expect(owed.map((c) => c.nativeNotificationId), [7000042]);
+    });
+
+    test(
+      'HRV-T075 the same backup elsewhere keeps the ids, not the switch',
+      () async {
+        await seedHrv();
+        final file = await BackupService(db).export(directory: dir);
+        final bytes = await file.readAsBytes();
+        final other = AppDatabase(NativeDatabase.memory());
+        addTearDown(other.close);
+        await BackupService(other).restore(bytes);
+        final row = await other.select(other.spotHrvMeasurements).getSingle();
+        expect(row.measurementUid, 'uid-1');
+        final prefs = await other
+            .select(other.hrvReminderPreferences)
+            .getSingle();
+        expect(prefs.optedIn, isFalse);
+        expect(await other.select(other.hrvNativeCleanups).get(), isEmpty);
+      },
+    );
+
+    test('HRV-T072 a schema 48 backup restores and gets ids', () async {
+      await seedHrv();
+      final file = await BackupService(db).export(directory: dir);
+      final backup = readBackup(await file.readAsBytes());
+      backup['schema'] = 48;
+      final tables = backup['tables'] as Map;
+      for (final name in [
+        'hrv_training_episodes',
+        'hrv_episode_aliases',
+        'hrv_episode_measurements',
+        'hrv_episode_feedback',
+        'hrv_reminder_preferences',
+        'hrv_post_reminders',
+        'hrv_notification_operations',
+        'hrv_notification_action_receipts',
+        'hrv_native_cleanups',
+      ]) {
+        tables.remove(name);
+      }
+      for (final row in tables['spot_hrv_measurements'] as List) {
+        (row as Map)
+          ..remove('measurement_uid')
+          ..remove('sampling_ended_at')
+          ..remove('capture_started_at')
+          ..remove('timezone_offset_minutes')
+          ..remove('metric_kind')
+          ..remove('protocol_version')
+          ..remove('analysis_version')
+          ..remove('quality_state')
+          ..remove('quality_reasons')
+          ..remove('created_at')
+          ..remove('modified_at')
+          ..remove('revision');
+      }
+      final bytes = utf8.encode(jsonEncode(backup));
+      final zip = ZipEncoder().encode(
+        Archive()..addFile(ArchiveFile('backup.json', bytes.length, bytes)),
+      );
+      await BackupService(db).restore(zip);
+      final row = await db.select(db.spotHrvMeasurements).getSingle();
+      expect(row.rmssdMs, 55);
+      expect(row.measurementUid, matches(RegExp(r'^[0-9a-f-]{36}$')));
+      // The quality of an older reading is never turned into a pass.
+      expect(row.qualityState, 'legacyUnverified');
+      expect(
+        row.samplingEndedAt,
+        row.startedAt.add(const Duration(seconds: 300)),
+      );
+      expect(await db.select(db.hrvPostReminders).get(), isEmpty);
+    });
+  });
   test('invalid backup fails before removing data', () async {
     await db.upsertHrv(
       HrvRecordsCompanion.insert(date: DateTime(2026, 10, 19)),

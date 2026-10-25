@@ -1,5 +1,8 @@
 import '../db/database.dart';
 import '../providers/training_load_provider.dart' show effectiveLoad;
+import 'hrv/hrv_ai_context_builder.dart';
+import 'hrv/hrv_comparison_service.dart';
+import 'hrv/hrv_training_service.dart';
 
 /// Compact TOON context for chatting about one activity: the activity, the
 /// 30 days of training leading up to it and the year's progression (with the
@@ -15,22 +18,32 @@ class ActivityCoachContextBuilder {
     final from = DateTime(activity.startDate.year - 1, 1, 1);
     final days = DateTime.now().difference(from).inDays + 1;
     final all = await _db.getActivitiesInRange(days);
-    return buildFrom(activity, all, hrvLine: await _hrvAround(activity));
+    var nights = await _hrvAround(activity);
+    final pair = await _hrvPair(activity);
+    // "Unavailable" would contradict a pair that exists.
+    if (pair != null && nights == '[HRV:AroundActivity,Unavailable]') {
+      nights = '';
+    }
+    final base = buildFrom(
+      activity,
+      all,
+      hrvLine: nights.isEmpty ? null : nights,
+    );
+    return pair == null ? base : '$base\n$pair';
   }
 
-  /// HRV before and after the activity, when it was recorded: the night
-  /// before and the night after (watch), and Polar H10 spot readings taken
-  /// before the start and after the end.
+  /// The overnight HRV before and after the activity, when it was recorded.
+  /// Watch values come from another method than the chest strap, so they are
+  /// labelled as such and never compared with the spot readings. The night
+  /// after is the first one that starts after the workout ended, which for a
+  /// workout over midnight is a day later than its start date suggests.
   Future<String> _hrvAround(ActivityRecord a) async {
     final end = a.startDate.add(Duration(seconds: a.durationSeconds));
     final day = DateTime(a.startDate.year, a.startDate.month, a.startDate.day);
+    final endDay = DateTime(end.year, end.month, end.day);
     final before = await _db.getHrvForDate(day);
     final after = await _db.getHrvForDate(
-      DateTime(day.year, day.month, day.day + 1),
-    );
-    final spots = await _db.getSpotHrvBetween(
-      a.startDate.subtract(const Duration(hours: 6)),
-      end.add(const Duration(hours: 8)),
+      DateTime(endDay.year, endDay.month, endDay.day + 1),
     );
     return hrvAroundLine(
       start: a.startDate,
@@ -40,8 +53,57 @@ class ActivityCoachContextBuilder {
       weeklyAverage: before?.hrvWeeklyAvg,
       postNight: after?.hrvLastNight,
       postDate: after?.date,
-      spots: spots,
     );
+  }
+
+  /// The pre/post readings of this workout from the shared assessment: the
+  /// same facts the workout card shows. Null when the workout is unknown to
+  /// the HRV feature.
+  Future<String?> _hrvPair(ActivityRecord a) async {
+    final service = HrvTrainingService(_db);
+    final snapshot = await service.reconcile();
+    final episodeId = await service.episodeIdOfActivity(a.activityId);
+    if (episodeId == null) return null;
+    final episode = snapshot.episode(episodeId);
+    final assessment = snapshot.assessments[episodeId];
+    if (episode == null || assessment == null) return null;
+    final cohort = const HrvComparisonService()
+        .cohortFor(AssessedEpisode(episode, assessment), [
+          for (final e in snapshot.episodes)
+            if (snapshot.assessments[e.id] != null)
+              AssessedEpisode(e, snapshot.assessments[e.id]!),
+        ], asOf: episode.start);
+    final feedback = await service.latestFeedback(episodeId);
+    int? rpe = feedback?.rpe;
+    if (rpe == null) {
+      final actual = await (_db.select(
+        _db.sessionActuals,
+      )..where((t) => t.activityId.equals(a.activityId))).getSingleOrNull();
+      rpe = actual?.rpe;
+    }
+    // Readings that belong to no workout are not a pair; say that they exist.
+    final unassigned = snapshot.measurements
+        .where(
+          (m) =>
+              snapshot.episodeOfMeasurement(m.uid) == null &&
+              m.context != 'resting' &&
+              m.startedAt.difference(a.startDate).abs() <
+                  const Duration(hours: 6),
+        )
+        .length;
+    final line = const HrvAiContextBuilder().pairLine(
+      episode,
+      assessment,
+      cohort: cohort,
+      rpe: rpe,
+    );
+    if (!assessment.hasPre && !assessment.hasPost && unassigned == 0) {
+      return null;
+    }
+    return unassigned == 0
+        ? line
+        : '$line\n[HRV:Unassigned,Count:$unassigned,'
+              'Note:ReadingsNearThisWorkoutThatBelongToNoWorkoutNotAPair]';
   }
 
   static String buildFrom(
@@ -288,9 +350,10 @@ class _Totals {
   final int movingSeconds;
 }
 
-/// One TOON line with the HRV around an activity, the changes already worked
-/// out. Overnight HRV and H10 spot readings are measured differently, so the
-/// line states both separately and flags that.
+/// One TOON line with the overnight HRV around an activity, the change
+/// already worked out. The watch measures overnight HRV differently from the
+/// chest strap, so this line carries no spot readings: those come from the
+/// shared pair assessment on their own line.
 String hrvAroundLine({
   required DateTime start,
   required DateTime end,
@@ -299,36 +362,14 @@ String hrvAroundLine({
   double? weeklyAverage,
   double? postNight,
   DateTime? postDate,
-  List<SpotHrvMeasurement> spots = const [],
 }) {
   String date(DateTime d) =>
       '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
-  String time(DateTime d) =>
-      '${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')}';
   String ms(double v) => '${v.round()}ms';
   String change(double from, double to) {
     final d = (to - from).round();
     final pct = from > 0 ? ((to - from) / from * 100).round() : null;
     return '${d >= 0 ? '+' : '-'}${d.abs()}ms${pct == null ? '' : '(${pct >= 0 ? '+' : '-'}${pct.abs()}%)'}';
-  }
-
-  // The reading closest before the start and the first one after the end.
-  SpotHrvMeasurement? before, after;
-  for (final s in spots) {
-    if (s.startedAt.isBefore(start)) {
-      before = s;
-    } else if (after == null &&
-        !s.startedAt.isBefore(end.subtract(const Duration(minutes: 10)))) {
-      after = s;
-    }
-  }
-  String spot(SpotHrvMeasurement s, {bool afterTraining = false}) {
-    final posture = s.posture == 'supine' ? 'lying' : 'seated';
-    final minutes = afterTraining && s.minutesAfterTraining != null
-        ? ',${s.minutesAfterTraining}min after training'
-        : '';
-    return '${ms(s.rmssdMs)}(${time(s.startedAt)},$posture,'
-        '${(s.durationSeconds / 60).round()}min$minutes)';
   }
 
   final parts = <String>[
@@ -339,11 +380,7 @@ String hrvAroundLine({
     if (preNight != null && postNight != null)
       'NightChange:${change(preNight, postNight)}',
     if (weeklyAverage != null) 'WeeklyAvg:${ms(weeklyAverage)}',
-    if (before != null) 'SpotBefore:${spot(before)}',
-    if (after != null) 'SpotAfter:${spot(after, afterTraining: true)}',
-    if (before != null && after != null)
-      'SpotChange:${change(before.rmssdMs, after.rmssdMs)}',
   ];
   if (parts.isEmpty) return '[HRV:AroundActivity,Unavailable]';
-  return '[HRV:AroundActivity,${parts.join(',')},Note:MethodsDiffer]';
+  return '[HRV:AroundActivity,${parts.join(',')},Note:NightValuesAreWatchMeasuredNotComparableToSpotRMSSD]';
 }

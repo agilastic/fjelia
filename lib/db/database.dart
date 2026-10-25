@@ -193,6 +193,228 @@ class SpotHrvMeasurements extends Table {
   TextColumn get rrJson => text()();
   TextColumn get notes => text().nullable()();
   IntColumn get minutesAfterTraining => integer().nullable()();
+
+  /// Stable identity. The integer key stays for compatibility; everything
+  /// that links a reading elsewhere uses this.
+  TextColumn get measurementUid => text().nullable()();
+
+  /// End of the sampling window, the settling phase excluded. For rows from
+  /// before this column it is derived (see [qualityReasons]).
+  DateTimeColumn get samplingEndedAt => dateTime().nullable()();
+  DateTimeColumn get captureStartedAt => dateTime().nullable()();
+  IntColumn get timezoneOffsetMinutes => integer().nullable()();
+  TextColumn get metricKind => text().withDefault(const Constant('rmssd'))();
+  TextColumn get protocolVersion => text().nullable()();
+  TextColumn get analysisVersion => text().nullable()();
+
+  /// `usable`, `invalid` or `legacyUnverified`. A reading from before the
+  /// quality was recorded is never turned into a pass.
+  TextColumn get qualityState =>
+      text().withDefault(const Constant('legacyUnverified'))();
+  TextColumn get qualityReasons => text().nullable()();
+  DateTimeColumn get createdAt => dateTime().nullable()();
+  DateTimeColumn get modifiedAt => dateTime().nullable()();
+
+  /// Bumped when a field the pairing depends on is corrected.
+  IntColumn get revision => integer().withDefault(const Constant(0))();
+}
+
+/// One physical workout as the HRV feature sees it. The identity is its own,
+/// independent of a plan, a planned session and whichever provider copy
+/// survives de-duplication.
+class HrvTrainingEpisodes extends Table {
+  TextColumn get episodeId => text()();
+  TextColumn get athleteId => text().withDefault(const Constant('self'))();
+  TextColumn get primaryActivityId => text().nullable()();
+
+  /// Navigation only. Deleting the session does not delete the episode.
+  IntColumn get plannedSessionId => integer().nullable()();
+  TextColumn get sport => text().withDefault(const Constant('other'))();
+  DateTimeColumn get actualStartUtc => dateTime()();
+  DateTimeColumn get actualEndUtc => dateTime().nullable()();
+
+  /// `providerFinish`, `providerElapsed`, `userReported` or `unknown`.
+  TextColumn get intervalBasis =>
+      text().withDefault(const Constant('unknown'))();
+  TextColumn get intervalSource => text().nullable()();
+  IntColumn get intervalRevision => integer().withDefault(const Constant(0))();
+  BoolColumn get clockUncertain =>
+      boolean().withDefault(const Constant(false))();
+  TextColumn get parentEpisodeId => text().nullable()();
+  DateTimeColumn get detectedAtUtc => dateTime()();
+
+  /// `provisional`, `actualCompleted`, `ambiguous`, `cancelled`, `deleted`.
+  TextColumn get state =>
+      text().withDefault(const Constant('actualCompleted'))();
+  IntColumn get dataRevision => integer().withDefault(const Constant(0))();
+  DateTimeColumn get createdAtUtc => dateTime()();
+  DateTimeColumn get updatedAtUtc => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {episodeId};
+}
+
+/// Provider copies of an episode. Repointed, never dropped, when two copies
+/// of one workout are merged, so an old link still finds the survivor.
+class HrvEpisodeAliases extends Table {
+  TextColumn get athleteId => text().withDefault(const Constant('self'))();
+  TextColumn get source => text()();
+  TextColumn get sourceActivityId => text()();
+  TextColumn get episodeId => text()();
+  TextColumn get state => text().withDefault(const Constant('active'))();
+  DateTimeColumn get createdAtUtc => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {athleteId, source, sourceActivityId};
+}
+
+/// A reading's association with an episode, with its audit trail. A retracted
+/// or replaced link stays as history.
+class HrvEpisodeMeasurements extends Table {
+  IntColumn get linkId => integer().autoIncrement()();
+  TextColumn get episodeId => text()();
+  TextColumn get measurementUid => text()();
+
+  /// `pre` or `post`.
+  TextColumn get role => text()();
+
+  /// `primary` or `additional`.
+  TextColumn get selection => text()();
+
+  /// `automaticTimeline`, `launchContext` or `userCorrection`.
+  TextColumn get associationMethod => text()();
+
+  /// `active` or `retracted`.
+  TextColumn get state => text().withDefault(const Constant('active'))();
+  TextColumn get reason => text().nullable()();
+  TextColumn get policyVersion => text()();
+  IntColumn get evidenceRevision => integer().withDefault(const Constant(0))();
+  DateTimeColumn get createdAtUtc => dateTime()();
+  DateTimeColumn get retractedAtUtc => dateTime().nullable()();
+}
+
+/// What the athlete said about a workout, kept as history.
+class HrvEpisodeFeedback extends Table {
+  TextColumn get feedbackUid => text()();
+  TextColumn get episodeId => text()();
+
+  /// `postTraining` or `followUp`.
+  TextColumn get context => text()();
+  DateTimeColumn get recordedAtUtc => dateTime()();
+  IntColumn get rpe => integer().nullable()();
+  TextColumn get note => text().nullable()();
+  IntColumn get revision => integer().withDefault(const Constant(0))();
+
+  @override
+  Set<Column> get primaryKey => {feedbackUid};
+}
+
+/// Reminder settings of this installation (one row per athlete).
+class HrvReminderPreferences extends Table {
+  TextColumn get athleteId => text().withDefault(const Constant('self'))();
+  BoolColumn get optedIn => boolean().withDefault(const Constant(false))();
+
+  /// Workouts that ended before this never produce a reminder.
+  DateTimeColumn get enabledSinceUtc => dateTime().nullable()();
+  IntColumn get delayMinutes => integer().withDefault(const Constant(30))();
+  BoolColumn get quietEnabled => boolean().withDefault(const Constant(false))();
+  IntColumn get quietStartMinute =>
+      integer().withDefault(const Constant(22 * 60))();
+  IntColumn get quietEndMinute =>
+      integer().withDefault(const Constant(7 * 60))();
+  BoolColumn get postponeInQuiet =>
+      boolean().withDefault(const Constant(false))();
+
+  /// Namespaces native ids and notification payloads. New after a restore.
+  TextColumn get installationEpoch => text()();
+  IntColumn get revision => integer().withDefault(const Constant(0))();
+  DateTimeColumn get updatedAtUtc => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {athleteId};
+}
+
+/// One reminder chain per episode on this installation: the desired state, and
+/// separately what the operating system was last asked to do.
+class HrvPostReminders extends Table {
+  TextColumn get reminderId => text()();
+  TextColumn get episodeId => text().unique()();
+  TextColumn get preMeasurementUid => text()();
+  TextColumn get installationEpoch => text()();
+  IntColumn get nativeNotificationId => integer().unique()();
+  IntColumn get generation => integer().withDefault(const Constant(1))();
+  DateTimeColumn get originalDueAtUtc => dateTime()();
+  DateTimeColumn get nextDueAtUtc => dateTime()();
+  DateTimeColumn get expiresAtUtc => dateTime()();
+  IntColumn get targetOffsetSeconds => integer()();
+  IntColumn get snoozeCount => integer().withDefault(const Constant(0))();
+  TextColumn get desiredState => text()();
+  TextColumn get reason => text().withDefault(const Constant('none'))();
+
+  /// `none`, `schedulePending`, `accepted`, `cancelPending`, `unknown`,
+  /// `failed`. Accepted is not proof that anything was displayed.
+  TextColumn get osState => text().withDefault(const Constant('none'))();
+  TextColumn get scheduleFingerprint => text().withDefault(const Constant(''))();
+  TextColumn get permissionSnapshot => text().nullable()();
+  DateTimeColumn get lastAttemptAt => dateTime().nullable()();
+  TextColumn get lastError => text().nullable()();
+  DateTimeColumn get createdAtUtc => dateTime()();
+  DateTimeColumn get updatedAtUtc => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {reminderId};
+}
+
+/// Durable outbox of operating system calls. The database says what should
+/// be true; this table is how it gets done, retried and made idempotent.
+class HrvNotificationOperations extends Table {
+  TextColumn get operationId => text()();
+  TextColumn get reminderId => text()();
+  IntColumn get generation => integer()();
+
+  /// `schedule` or `cancel`.
+  TextColumn get operation => text()();
+  TextColumn get fingerprint => text().withDefault(const Constant(''))();
+  IntColumn get nativeNotificationId => integer()();
+  DateTimeColumn get dueAtUtc => dateTime().nullable()();
+  DateTimeColumn get expiresAtUtc => dateTime().nullable()();
+
+  /// `pending`, `done` or `superseded`.
+  TextColumn get state => text().withDefault(const Constant('pending'))();
+  IntColumn get attempts => integer().withDefault(const Constant(0))();
+  DateTimeColumn get nextAttemptAtUtc => dateTime().nullable()();
+  DateTimeColumn get claimedUntilUtc => dateTime().nullable()();
+  TextColumn get lastError => text().nullable()();
+  DateTimeColumn get createdAtUtc => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {operationId};
+}
+
+/// Handled notification actions, so a repeated callback is a no-op.
+class HrvNotificationActionReceipts extends Table {
+  TextColumn get installationEpoch => text()();
+  TextColumn get reminderId => text()();
+  IntColumn get generation => integer()();
+  TextColumn get actionKind => text()();
+  DateTimeColumn get handledAtUtc => dateTime()();
+
+  @override
+  Set<Column> get primaryKey =>
+      {installationEpoch, reminderId, generation, actionKind};
+}
+
+/// Native notification ids whose removal is still owed, for example after a
+/// restore or an erase replaced the tables that knew them. Ids only, no
+/// health data.
+class HrvNativeCleanups extends Table {
+  IntColumn get nativeNotificationId => integer()();
+  TextColumn get installationEpoch => text()();
+  DateTimeColumn get createdAtUtc => dateTime()();
+  TextColumn get lastError => text().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {nativeNotificationId};
 }
 
 class GripStrengthRecords extends Table {
@@ -751,6 +973,15 @@ class WorkoutTemplates extends Table {
     DayScoreRecords,
     GripStrengthRecords,
     SpotHrvMeasurements,
+    HrvTrainingEpisodes,
+    HrvEpisodeAliases,
+    HrvEpisodeMeasurements,
+    HrvEpisodeFeedback,
+    HrvReminderPreferences,
+    HrvPostReminders,
+    HrvNotificationOperations,
+    HrvNotificationActionReceipts,
+    HrvNativeCleanups,
     PlanGoals,
     ProviderCleanups,
     WorkoutDeliveries,
@@ -787,7 +1018,7 @@ class AppDatabase extends _$AppDatabase {
       defaultSourcePriorities[group.name]!;
 
   @override
-  int get schemaVersion => 48;
+  int get schemaVersion => 49;
 
   Future<void> saveHeartRateSamples(List<TimedHeartRate> samples) async {
     if (samples.isEmpty) return;
@@ -955,6 +1186,9 @@ class AppDatabase extends _$AppDatabase {
       activityRecords,
     )..orderBy([(t) => OrderingTerm(expression: t.startDate)])).get();
     final toDelete = <String>{};
+    // The copy that stays for each copy that goes, so what points at a copy
+    // (an HRV episode) can follow it.
+    final survivor = <String, ActivityRecord>{};
     for (var i = 0; i < all.length; i++) {
       final a = all[i];
       if (toDelete.contains(a.activityId)) continue;
@@ -969,16 +1203,84 @@ class AppDatabase extends _$AppDatabase {
         if (durDiff > tolerance) continue;
         if (a.source == 'health_connect') {
           toDelete.add(a.activityId);
+          survivor[a.activityId] = b;
           break;
         } else if (b.source == 'health_connect') {
           toDelete.add(b.activityId);
+          survivor[b.activityId] = a;
         }
       }
     }
     if (toDelete.isEmpty) return 0;
-    return (delete(
-      activityRecords,
-    )..where((t) => t.activityId.isIn(toDelete))).go();
+    return transaction(() async {
+      for (final gone in all.where((a) => toDelete.contains(a.activityId))) {
+        final keep = survivor[gone.activityId];
+        if (keep != null) await _followDuplicate(gone, keep);
+      }
+      return (delete(
+        activityRecords,
+      )..where((t) => t.activityId.isIn(toDelete))).go();
+    });
+  }
+
+  /// Moves what an HRV episode knows about a copy that is about to be removed
+  /// to the copy that stays: its alias, the athlete's own links, feedback and
+  /// the reminder. Automatic links are recomputed from the facts afterwards.
+  Future<void> _followDuplicate(ActivityRecord gone, ActivityRecord keep) async {
+    final goneSource = gone.source ?? 'unknown';
+    final keepSource = keep.source ?? 'unknown';
+    final goneAlias = await (select(hrvEpisodeAliases)..where(
+          (t) =>
+              t.source.equals(goneSource) &
+              t.sourceActivityId.equals(gone.activityId),
+        ))
+        .getSingleOrNull();
+    if (goneAlias == null) return;
+    final keepAlias = await (select(hrvEpisodeAliases)..where(
+          (t) =>
+              t.source.equals(keepSource) &
+              t.sourceActivityId.equals(keep.activityId),
+        ))
+        .getSingleOrNull();
+    final from = goneAlias.episodeId;
+    final to = keepAlias?.episodeId ?? from;
+    if (keepAlias == null) {
+      await into(hrvEpisodeAliases).insertOnConflictUpdate(
+        HrvEpisodeAliasesCompanion.insert(
+          source: keepSource,
+          sourceActivityId: keep.activityId,
+          episodeId: to,
+          createdAtUtc: DateTime.now().toUtc(),
+        ),
+      );
+    }
+    if (from != to) {
+      await (update(hrvEpisodeAliases)..where((t) => t.episodeId.equals(from)))
+          .write(HrvEpisodeAliasesCompanion(episodeId: Value(to)));
+      await (update(hrvEpisodeFeedback)..where((t) => t.episodeId.equals(from)))
+          .write(HrvEpisodeFeedbackCompanion(episodeId: Value(to)));
+      final hasReminder = await (select(
+        hrvPostReminders,
+      )..where((t) => t.episodeId.equals(to))).getSingleOrNull();
+      if (hasReminder == null) {
+        await (update(hrvPostReminders)..where((t) => t.episodeId.equals(from)))
+            .write(HrvPostRemindersCompanion(episodeId: Value(to)));
+      }
+      // The athlete's own links follow; the rest is derived again.
+      await (update(hrvEpisodeMeasurements)..where(
+            (t) =>
+                t.episodeId.equals(from) &
+                t.state.equals('active') &
+                t.associationMethod.equals('automaticTimeline').not(),
+          ))
+          .write(HrvEpisodeMeasurementsCompanion(episodeId: Value(to)));
+      await (update(hrvTrainingEpisodes)..where((t) => t.episodeId.equals(from)))
+          .write(const HrvTrainingEpisodesCompanion(state: Value('deleted')));
+    }
+    await (update(hrvTrainingEpisodes)..where((t) => t.episodeId.equals(to)))
+        .write(HrvTrainingEpisodesCompanion(
+          primaryActivityId: Value(keep.activityId),
+        ));
   }
 
   Future<List<ActivityRecord>> getRecentActivities(int days) {
@@ -1611,6 +1913,7 @@ class AppDatabase extends _$AppDatabase {
         'CREATE UNIQUE INDEX IF NOT EXISTS idx_session_actuals_activity '
         'ON session_actuals(activity_id) WHERE activity_id IS NOT NULL',
       );
+      await ensureHrvIdentity();
     },
     onUpgrade: (m, from, to) async {
       if (from < 48) {
@@ -2100,8 +2403,96 @@ class AppDatabase extends _$AppDatabase {
           ),
         );
       }
+      // Last, so a table created by an older step above has its final shape.
+      if (from < 49) await _addHrvEpisodes(m);
     },
   );
+
+  /// Adds the identity and provenance of spot readings and the tables of the
+  /// workout HRV feature. Nothing is invented: a reading from before keeps an
+  /// unverified quality, and no reminder or preference is created.
+  Future<void> _addHrvEpisodes(Migrator m) async {
+    for (final (column, type) in const [
+      ('measurement_uid', 'TEXT'),
+      ('sampling_ended_at', 'INTEGER'),
+      ('capture_started_at', 'INTEGER'),
+      ('timezone_offset_minutes', 'INTEGER'),
+      ('metric_kind', "TEXT NOT NULL DEFAULT 'rmssd'"),
+      ('protocol_version', 'TEXT'),
+      ('analysis_version', 'TEXT'),
+      ('quality_state', "TEXT NOT NULL DEFAULT 'legacyUnverified'"),
+      ('quality_reasons', 'TEXT'),
+      ('created_at', 'INTEGER'),
+      ('modified_at', 'INTEGER'),
+      ('revision', 'INTEGER NOT NULL DEFAULT 0'),
+    ]) {
+      await _addColumnIfMissing(
+        'spot_hrv_measurements',
+        column,
+        () => customStatement(
+          'ALTER TABLE spot_hrv_measurements ADD COLUMN $column $type',
+        ),
+      );
+    }
+    for (final TableInfo table in [
+      hrvTrainingEpisodes,
+      hrvEpisodeAliases,
+      hrvEpisodeMeasurements,
+      hrvEpisodeFeedback,
+      hrvReminderPreferences,
+      hrvPostReminders,
+      hrvNotificationOperations,
+      hrvNotificationActionReceipts,
+      hrvNativeCleanups,
+    ]) {
+      await m.createTable(table);
+    }
+    await ensureHrvIdentity();
+  }
+
+  /// Gives every spot reading a stable id and, where it can be derived, the
+  /// end of its sampling window. Safe to repeat; it only fills what is empty.
+  /// Also run after a restore, because an older backup has neither.
+  Future<void> ensureHrvIdentity() async {
+    await customStatement(
+      "UPDATE spot_hrv_measurements SET measurement_uid = "
+      "lower(hex(randomblob(4)))||'-'||lower(hex(randomblob(2)))||'-4'||"
+      "substr(lower(hex(randomblob(2))),2)||'-'||"
+      "substr('89ab',abs(random())%4+1,1)||"
+      "substr(lower(hex(randomblob(2))),2)||'-'||lower(hex(randomblob(6))) "
+      "WHERE measurement_uid IS NULL OR measurement_uid = ''",
+    );
+    // started_at is seconds since the epoch in drift's default storage.
+    await customStatement(
+      "UPDATE spot_hrv_measurements SET sampling_ended_at = "
+      "started_at + duration_seconds, "
+      "quality_reasons = COALESCE(quality_reasons, 'endDerivedFromDuration') "
+      "WHERE sampling_ended_at IS NULL",
+    );
+    await customStatement(
+      'CREATE UNIQUE INDEX IF NOT EXISTS idx_spot_hrv_uid '
+      'ON spot_hrv_measurements(measurement_uid)',
+    );
+    await _hrvIndexes();
+  }
+
+  Future<void> _hrvIndexes() async {
+    // A reading belongs to at most one workout, and a workout has one primary
+    // pre and one primary post. Retracted links are history and unconstrained.
+    await customStatement(
+      'CREATE UNIQUE INDEX IF NOT EXISTS idx_hrv_link_measurement '
+      "ON hrv_episode_measurements(measurement_uid) WHERE state = 'active'",
+    );
+    await customStatement(
+      'CREATE UNIQUE INDEX IF NOT EXISTS idx_hrv_link_primary '
+      'ON hrv_episode_measurements(episode_id, role) '
+      "WHERE state = 'active' AND selection = 'primary'",
+    );
+    await customStatement(
+      'CREATE INDEX IF NOT EXISTS idx_hrv_ops_pending '
+      'ON hrv_notification_operations(state, next_attempt_at_utc)',
+    );
+  }
 
   Future<void> _addColumnIfMissing(
     String table,

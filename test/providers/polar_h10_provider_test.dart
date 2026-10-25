@@ -1,3 +1,6 @@
+import 'package:drift/native.dart';
+import 'package:fjelia/db/database.dart';
+import 'package:fjelia/providers/database_provider.dart';
 import 'package:fjelia/providers/polar_h10_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -8,7 +11,11 @@ void main() {
 
   test('a paired strap is remembered until it is forgotten', () async {
     FlutterSecureStorage.setMockInitialValues({});
-    final container = ProviderContainer();
+    final db = AppDatabase(NativeDatabase.memory());
+    addTearDown(db.close);
+    final container = ProviderContainer(
+      overrides: [databaseProvider.overrideWithValue(db)],
+    );
     addTearDown(container.dispose);
     final actions = container.read(polarH10ActionsProvider);
 

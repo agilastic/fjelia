@@ -12,6 +12,7 @@ import '../../providers/user_profile_provider.dart';
 import '../../widgets/app_widgets.dart';
 import 'plan_overview_cards.dart';
 import 'plan_calendar_markers.dart';
+import 'plan_week_agenda.dart';
 import '../activities/activities_screen.dart';
 
 class PlanScreen extends ConsumerStatefulWidget {
@@ -183,7 +184,11 @@ class _PlanState extends ConsumerState<PlanScreen> {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        '${entry.sport.replaceAll('_', ' ')}${entry.completed ? '' : entry.skipped ? ' · skipped' : ' · ${entry.phase ?? 'planned'}'}',
+                        '${entry.sport.replaceAll('_', ' ')}${entry.completed
+                            ? ''
+                            : entry.skipped
+                            ? ' · skipped'
+                            : ' · ${entry.phase ?? 'planned'}'}',
                         style: const TextStyle(fontSize: 9, color: muted),
                       ),
                     ],
@@ -196,52 +201,26 @@ class _PlanState extends ConsumerState<PlanScreen> {
             ),
           ),
         if (view == 'Week')
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                for (var i = 0; i < 7; i++)
-                  Builder(
-                    builder: (c) {
-                      final d = selected
-                          .subtract(
-                            Duration(
-                              days: mondayFirst
-                                  ? selected.weekday - 1
-                                  : selected.weekday % 7,
-                            ),
-                          )
-                          .add(Duration(days: i));
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 6),
-                        child: ChoiceChip(
-                          label: Text(
-                            '${const ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][d.weekday - 1]} ${d.day}',
-                          ),
-                          selected: DateUtils.isSameDay(d, selected),
-                          onSelected: (_) =>
-                              ref.read(selectedDateProvider.notifier).state = d,
-                        ),
-                      );
-                    },
-                  ),
-              ],
+          Padding(
+            padding: const EdgeInsets.only(top: 12, bottom: 8),
+            child: PlanWeekAgenda(mondayFirst: mondayFirst),
+          ),
+        // The week table already lists every planned day.
+        if (view != 'Week')
+          upcoming.when(
+            loading: () => const LinearProgressIndicator(),
+            error: (e, _) => DataError(
+              e,
+              retry: () {
+                ref.invalidate(upcomingSessionsProvider);
+                ref.invalidate(scheduledWorkoutsProvider);
+              },
+            ),
+            data: (rows) => UpcomingWorkoutList(
+              entries: rows,
+              selectedDay: view == 'List' ? null : selected,
             ),
           ),
-        upcoming.when(
-          loading: () => const LinearProgressIndicator(),
-          error: (e, _) => DataError(
-            e,
-            retry: () {
-              ref.invalidate(upcomingSessionsProvider);
-              ref.invalidate(scheduledWorkoutsProvider);
-            },
-          ),
-          data: (rows) => UpcomingWorkoutList(
-            entries: rows,
-            selectedDay: view == 'List' ? null : selected,
-          ),
-        ),
         ActivityHistory(
           showHeader: false,
           monthMode: view != 'Week',

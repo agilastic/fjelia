@@ -105,6 +105,15 @@ String appleFactLine(String line) {
       return 'This ${parsed.lead} session against the average of ${f['N'] ?? '?'} '
           'other ${parsed.lead} sessions in the last 30 days (this vs average): $facts.';
     case 'HRV':
+      if (parsed.raw.startsWith('Pair')) return _hrvPairSentence(f);
+      if (parsed.raw.startsWith('RecentPairs')) {
+        return 'HRV around recent workouts (last ${f['Window'] ?? '7d'}): '
+            '${f['WithReadings'] ?? '?'} of ${f['Workouts'] ?? '?'} workouts have readings, '
+            '${f['Shown'] ?? '?'} listed. A workout that is not listed has no reading or was left out; it was not a rest day.';
+      }
+      if (parsed.raw.startsWith('Unassigned')) {
+        return '${f['Count'] ?? 'Some'} HRV readings near this workout belong to no workout, so they are not a before and after pair.';
+      }
       if (!parsed.raw.startsWith('AroundActivity')) return line;
       if (parsed.raw.contains('Unavailable')) {
         return 'No HRV was recorded around this activity; its effect on HRV is unknown.';
@@ -122,16 +131,10 @@ String appleFactLine(String line) {
         field('PostNight', 'night after'),
         field('NightChange', 'change'),
       ]);
-      final spots = join([
-        field('SpotBefore', 'before'),
-        field('SpotAfter', 'after'),
-        field('SpotChange', 'change'),
-      ]);
       return 'HRV around this activity:'
           '${night.isEmpty ? '' : ' overnight (watch) $night.'}'
           '${f['WeeklyAvg'] == null ? '' : ' Weekly average ${pretty(f['WeeklyAvg']!)}.'}'
-          '${spots.isEmpty ? '' : ' Polar H10 spot RMSSD $spots.'}'
-          ' Overnight and spot values are measured differently: compare trends, not single values.';
+          ' Overnight watch values are measured differently from chest-strap spot RMSSD: never compare their values.';
     case 'Similar30d':
       final facts = join([
         part('AvgMin', (v) => 'on average $v min'),
@@ -165,6 +168,62 @@ String appleFactLine(String line) {
     default:
       return line;
   }
+}
+
+/// The HRV pair as sentences. Same figures and the same limits as the cloud
+/// line; nothing is added and nothing is calculated here.
+String _hrvPairSentence(Map<String, String> f) {
+  String reading(String? v) {
+    if (v == null || v == 'none') return 'none recorded';
+    final p = v.split('/');
+    final delay = p.firstWhere((x) => x.startsWith('after'), orElse: () => '');
+    final minutes = delay.isEmpty
+        ? ''
+        : ', ${delay.substring(5).replaceFirst('min', '')} minutes after the workout ended';
+    return '${p[0].replaceFirst('ms', ' ms')} at ${p[1]} (${p[2]}, ${p[3]}$minutes)';
+  }
+
+  const limitText = {
+    'ambiguousActivity':
+        'workouts overlap, so the readings may not belong to this one',
+    'interveningWorkout': 'another workout followed',
+    'unknownActualEnd': 'the actual end of the workout is not known',
+    'clockUncertain': 'the clock was uncertain',
+    'postureMismatch': 'before and after were taken in different positions',
+    'durationMismatch': 'before and after used different recording lengths',
+    'metricMismatch': 'before and after are different HRV measures',
+    'invalidValue': 'a value was not usable',
+    'invalidSignal': 'a signal was too weak',
+    'missingPre': 'no reading before the workout',
+    'missingPost': 'no reading after the workout',
+    'postOutsideTargetBand':
+        'the post reading was outside the usual 25 to 40 minutes',
+    'legacyQualityUnknown': 'an older reading with unrecorded quality',
+  };
+  final limits = f['Limits'] == null || f['Limits'] == 'none'
+      ? ''
+      : ' Limits: ${f['Limits']!.split('|').map((l) => limitText[l] ?? l).join('; ')}.';
+  final change = f['Change'] == null || f['Change'] == 'none'
+      ? ' No valid change is available, so none is given.'
+      : () {
+          final c = f['Change']!.split('/');
+          return ' Change ${c[0].replaceFirst('ms', ' ms')} (${c[1]}).';
+        }();
+  final history = f['History'] == null
+      ? ''
+      : f['History']!.contains('insufficientData')
+      ? ' The athlete has too few comparable workouts for a personal range yet (${f['History']!.split('/').first.replaceFirst('n=', '')} counted).'
+      : ' Similar earlier workouts: ${f['History']!.replaceAll('/', ', ')}.';
+  final unknown = f['Unknown'] == null
+      ? ''
+      : ' Unknown: ${f['Unknown']!.replaceAll('|', ', ')}.';
+  return 'HRV before and after this ${f['Sport'] ?? 'workout'}'
+      '${f['Date'] == null ? '' : ' on ${f['Date']}'} '
+      '(workout ${f['WorkoutStart']} to ${f['WorkoutEnd']}, end from ${f['EndBasis']}; chest-strap RMSSD, association ${f['Assoc']}): '
+      'before ${reading(f['Pre'])}; after ${reading(f['Post'])}.$change'
+      ' ${f['Comparable'] == 'yes' ? 'The two are directly comparable.' : 'The two are NOT directly comparable.'}'
+      '$limits$history${f['Rpe'] == null ? '' : ' RPE ${f['Rpe']}.'}$unknown'
+      ' This is a description, not a score; it does not show full recovery.';
 }
 
 String _dataStatus(_Toon t) {

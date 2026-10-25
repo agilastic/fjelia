@@ -15,6 +15,7 @@ import '../../widgets/app_widgets.dart';
 import '../../widgets/activity_performance_chart.dart';
 import '../../widgets/activity_route_map.dart';
 import '../../widgets/activity_heat_card.dart';
+import '../../widgets/workout_hrv_card.dart';
 import '../planner/plan_overview_cards.dart';
 import '../activities/activities_screen.dart';
 import '../../models/coach_context_card.dart';
@@ -199,6 +200,16 @@ class ActivityDetailSheet extends ConsumerWidget {
           ],
           if (a.samples.isNotEmpty) ActivityPerformanceChart(activity: a),
           if (a.hrZoneSeconds.isNotEmpty) ActivityZoneChart(activity: a),
+          WorkoutHrvCard(
+            activityId: activity.activityId,
+            onExplain: () => openCoachTab(
+              context,
+              prompt:
+                  'Explain my HRV before and after this workout. What is comparable, what is not, and what is still unknown?',
+              activity: activity,
+              card: CoachContextCard.completed(a),
+            ),
+          ),
           if (a.activityFeedbackPhrase != null)
             SectionCard(
               title: 'Feedback',

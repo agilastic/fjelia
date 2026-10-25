@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:math' as math;
 
+import 'package:uuid/uuid.dart';
+
 enum SpotHrvContext {
   beforeTraining('Before training'),
   afterTraining('After training'),
@@ -201,6 +203,23 @@ class SpotHrvCapture {
   final DateTime startedAt;
   final int durationSeconds, settleSeconds;
   final samples = <SpotRrSample>[];
+
+  /// One id per capture. Saving the same capture twice is the same save.
+  final String captureId = const Uuid().v4();
+
+  /// Wall clock minus monotonic time, at the end of the capture. A large
+  /// value means the clock was set during the recording.
+  Duration? clockJump;
+
+  /// Compares the wall clock with the monotonic [elapsed] time.
+  void checkClock(DateTime wallNow, Duration elapsed) {
+    clockJump = wallNow.difference(startedAt) - elapsed;
+  }
+
+  /// More than 5 seconds apart: the absolute time of this recording is not
+  /// trusted, the RR timing within it is.
+  bool get clockUncertain =>
+      clockJump != null && clockJump!.abs() > const Duration(seconds: 5);
   DateTime get measurementStartedAt =>
       startedAt.add(Duration(seconds: settleSeconds));
   bool complete(Duration elapsed) =>

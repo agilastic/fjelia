@@ -14,6 +14,7 @@ import '../../providers/polar_provider.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/scale_pairing_tile.dart';
 import '../../widgets/hilo_cuff_pairing_tile.dart';
+import '../../widgets/hrv_reminder_tile.dart';
 import '../onboarding/connect_aktiia_screen.dart';
 import '../onboarding/connect_garmin_screen.dart';
 import '../onboarding/connect_health_screen.dart';
@@ -114,6 +115,7 @@ class ConnectionsTab extends ConsumerWidget {
             const ConnectPolarH10Screen(fromOnboarding: true),
             disconnect: () => ref.read(polarH10ActionsProvider).unpair(),
           ),
+          const HrvReminderTile(),
           const SectionLabel('Data Source Priority'),
           const Text(
             'When multiple sources provide the same metric, the higher source wins. Drag to reorder.',

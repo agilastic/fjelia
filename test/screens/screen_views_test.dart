@@ -1574,11 +1574,19 @@ void main() {
       'activity-chat-button',
     );
     final button = find.text('Chat AI');
-    await tester.scrollUntilVisible(
-      button,
-      300,
-      scrollable: find.byType(Scrollable).first,
-    );
+    final scroller = find.byType(Scrollable).first;
+    await tester.scrollUntilVisible(button, 300, scrollable: scroller);
+    // The HRV card reads the database before it takes its place in the list
+    // and pushes what follows down, so wait for it and look again.
+    for (var i = 0; i < 30; i++) {
+      if (find.text('HRV AROUND THIS WORKOUT').evaluate().isNotEmpty) break;
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 100)),
+      );
+      await tester.pump();
+    }
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(button, 300, scrollable: scroller);
     await tester.pumpAndSettle();
     // Side by side: same row, chat to the right of delete.
     expect(

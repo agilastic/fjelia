@@ -8567,6 +8567,142 @@ class $SpotHrvMeasurementsTable extends SpotHrvMeasurements
     type: DriftSqlType.int,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _measurementUidMeta = const VerificationMeta(
+    'measurementUid',
+  );
+  @override
+  late final GeneratedColumn<String> measurementUid = GeneratedColumn<String>(
+    'measurement_uid',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _samplingEndedAtMeta = const VerificationMeta(
+    'samplingEndedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> samplingEndedAt =
+      GeneratedColumn<DateTime>(
+        'sampling_ended_at',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _captureStartedAtMeta = const VerificationMeta(
+    'captureStartedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> captureStartedAt =
+      GeneratedColumn<DateTime>(
+        'capture_started_at',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _timezoneOffsetMinutesMeta =
+      const VerificationMeta('timezoneOffsetMinutes');
+  @override
+  late final GeneratedColumn<int> timezoneOffsetMinutes = GeneratedColumn<int>(
+    'timezone_offset_minutes',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _metricKindMeta = const VerificationMeta(
+    'metricKind',
+  );
+  @override
+  late final GeneratedColumn<String> metricKind = GeneratedColumn<String>(
+    'metric_kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('rmssd'),
+  );
+  static const VerificationMeta _protocolVersionMeta = const VerificationMeta(
+    'protocolVersion',
+  );
+  @override
+  late final GeneratedColumn<String> protocolVersion = GeneratedColumn<String>(
+    'protocol_version',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _analysisVersionMeta = const VerificationMeta(
+    'analysisVersion',
+  );
+  @override
+  late final GeneratedColumn<String> analysisVersion = GeneratedColumn<String>(
+    'analysis_version',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _qualityStateMeta = const VerificationMeta(
+    'qualityState',
+  );
+  @override
+  late final GeneratedColumn<String> qualityState = GeneratedColumn<String>(
+    'quality_state',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('legacyUnverified'),
+  );
+  static const VerificationMeta _qualityReasonsMeta = const VerificationMeta(
+    'qualityReasons',
+  );
+  @override
+  late final GeneratedColumn<String> qualityReasons = GeneratedColumn<String>(
+    'quality_reasons',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _modifiedAtMeta = const VerificationMeta(
+    'modifiedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> modifiedAt = GeneratedColumn<DateTime>(
+    'modified_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _revisionMeta = const VerificationMeta(
+    'revision',
+  );
+  @override
+  late final GeneratedColumn<int> revision = GeneratedColumn<int>(
+    'revision',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -8588,6 +8724,18 @@ class $SpotHrvMeasurementsTable extends SpotHrvMeasurements
     rrJson,
     notes,
     minutesAfterTraining,
+    measurementUid,
+    samplingEndedAt,
+    captureStartedAt,
+    timezoneOffsetMinutes,
+    metricKind,
+    protocolVersion,
+    analysisVersion,
+    qualityState,
+    qualityReasons,
+    createdAt,
+    modifiedAt,
+    revision,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -8758,6 +8906,102 @@ class $SpotHrvMeasurementsTable extends SpotHrvMeasurements
         ),
       );
     }
+    if (data.containsKey('measurement_uid')) {
+      context.handle(
+        _measurementUidMeta,
+        measurementUid.isAcceptableOrUnknown(
+          data['measurement_uid']!,
+          _measurementUidMeta,
+        ),
+      );
+    }
+    if (data.containsKey('sampling_ended_at')) {
+      context.handle(
+        _samplingEndedAtMeta,
+        samplingEndedAt.isAcceptableOrUnknown(
+          data['sampling_ended_at']!,
+          _samplingEndedAtMeta,
+        ),
+      );
+    }
+    if (data.containsKey('capture_started_at')) {
+      context.handle(
+        _captureStartedAtMeta,
+        captureStartedAt.isAcceptableOrUnknown(
+          data['capture_started_at']!,
+          _captureStartedAtMeta,
+        ),
+      );
+    }
+    if (data.containsKey('timezone_offset_minutes')) {
+      context.handle(
+        _timezoneOffsetMinutesMeta,
+        timezoneOffsetMinutes.isAcceptableOrUnknown(
+          data['timezone_offset_minutes']!,
+          _timezoneOffsetMinutesMeta,
+        ),
+      );
+    }
+    if (data.containsKey('metric_kind')) {
+      context.handle(
+        _metricKindMeta,
+        metricKind.isAcceptableOrUnknown(data['metric_kind']!, _metricKindMeta),
+      );
+    }
+    if (data.containsKey('protocol_version')) {
+      context.handle(
+        _protocolVersionMeta,
+        protocolVersion.isAcceptableOrUnknown(
+          data['protocol_version']!,
+          _protocolVersionMeta,
+        ),
+      );
+    }
+    if (data.containsKey('analysis_version')) {
+      context.handle(
+        _analysisVersionMeta,
+        analysisVersion.isAcceptableOrUnknown(
+          data['analysis_version']!,
+          _analysisVersionMeta,
+        ),
+      );
+    }
+    if (data.containsKey('quality_state')) {
+      context.handle(
+        _qualityStateMeta,
+        qualityState.isAcceptableOrUnknown(
+          data['quality_state']!,
+          _qualityStateMeta,
+        ),
+      );
+    }
+    if (data.containsKey('quality_reasons')) {
+      context.handle(
+        _qualityReasonsMeta,
+        qualityReasons.isAcceptableOrUnknown(
+          data['quality_reasons']!,
+          _qualityReasonsMeta,
+        ),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    if (data.containsKey('modified_at')) {
+      context.handle(
+        _modifiedAtMeta,
+        modifiedAt.isAcceptableOrUnknown(data['modified_at']!, _modifiedAtMeta),
+      );
+    }
+    if (data.containsKey('revision')) {
+      context.handle(
+        _revisionMeta,
+        revision.isAcceptableOrUnknown(data['revision']!, _revisionMeta),
+      );
+    }
     return context;
   }
 
@@ -8843,6 +9087,54 @@ class $SpotHrvMeasurementsTable extends SpotHrvMeasurements
         DriftSqlType.int,
         data['${effectivePrefix}minutes_after_training'],
       ),
+      measurementUid: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}measurement_uid'],
+      ),
+      samplingEndedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}sampling_ended_at'],
+      ),
+      captureStartedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}capture_started_at'],
+      ),
+      timezoneOffsetMinutes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}timezone_offset_minutes'],
+      ),
+      metricKind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}metric_kind'],
+      )!,
+      protocolVersion: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}protocol_version'],
+      ),
+      analysisVersion: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}analysis_version'],
+      ),
+      qualityState: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}quality_state'],
+      )!,
+      qualityReasons: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}quality_reasons'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      ),
+      modifiedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}modified_at'],
+      ),
+      revision: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}revision'],
+      )!,
     );
   }
 
@@ -8873,6 +9165,29 @@ class SpotHrvMeasurement extends DataClass
   final String rrJson;
   final String? notes;
   final int? minutesAfterTraining;
+
+  /// Stable identity. The integer key stays for compatibility; everything
+  /// that links a reading elsewhere uses this.
+  final String? measurementUid;
+
+  /// End of the sampling window, the settling phase excluded. For rows from
+  /// before this column it is derived (see [qualityReasons]).
+  final DateTime? samplingEndedAt;
+  final DateTime? captureStartedAt;
+  final int? timezoneOffsetMinutes;
+  final String metricKind;
+  final String? protocolVersion;
+  final String? analysisVersion;
+
+  /// `usable`, `invalid` or `legacyUnverified`. A reading from before the
+  /// quality was recorded is never turned into a pass.
+  final String qualityState;
+  final String? qualityReasons;
+  final DateTime? createdAt;
+  final DateTime? modifiedAt;
+
+  /// Bumped when a field the pairing depends on is corrected.
+  final int revision;
   const SpotHrvMeasurement({
     required this.id,
     required this.startedAt,
@@ -8893,6 +9208,18 @@ class SpotHrvMeasurement extends DataClass
     required this.rrJson,
     this.notes,
     this.minutesAfterTraining,
+    this.measurementUid,
+    this.samplingEndedAt,
+    this.captureStartedAt,
+    this.timezoneOffsetMinutes,
+    required this.metricKind,
+    this.protocolVersion,
+    this.analysisVersion,
+    required this.qualityState,
+    this.qualityReasons,
+    this.createdAt,
+    this.modifiedAt,
+    required this.revision,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -8924,6 +9251,36 @@ class SpotHrvMeasurement extends DataClass
     if (!nullToAbsent || minutesAfterTraining != null) {
       map['minutes_after_training'] = Variable<int>(minutesAfterTraining);
     }
+    if (!nullToAbsent || measurementUid != null) {
+      map['measurement_uid'] = Variable<String>(measurementUid);
+    }
+    if (!nullToAbsent || samplingEndedAt != null) {
+      map['sampling_ended_at'] = Variable<DateTime>(samplingEndedAt);
+    }
+    if (!nullToAbsent || captureStartedAt != null) {
+      map['capture_started_at'] = Variable<DateTime>(captureStartedAt);
+    }
+    if (!nullToAbsent || timezoneOffsetMinutes != null) {
+      map['timezone_offset_minutes'] = Variable<int>(timezoneOffsetMinutes);
+    }
+    map['metric_kind'] = Variable<String>(metricKind);
+    if (!nullToAbsent || protocolVersion != null) {
+      map['protocol_version'] = Variable<String>(protocolVersion);
+    }
+    if (!nullToAbsent || analysisVersion != null) {
+      map['analysis_version'] = Variable<String>(analysisVersion);
+    }
+    map['quality_state'] = Variable<String>(qualityState);
+    if (!nullToAbsent || qualityReasons != null) {
+      map['quality_reasons'] = Variable<String>(qualityReasons);
+    }
+    if (!nullToAbsent || createdAt != null) {
+      map['created_at'] = Variable<DateTime>(createdAt);
+    }
+    if (!nullToAbsent || modifiedAt != null) {
+      map['modified_at'] = Variable<DateTime>(modifiedAt);
+    }
+    map['revision'] = Variable<int>(revision);
     return map;
   }
 
@@ -8956,6 +9313,36 @@ class SpotHrvMeasurement extends DataClass
       minutesAfterTraining: minutesAfterTraining == null && nullToAbsent
           ? const Value.absent()
           : Value(minutesAfterTraining),
+      measurementUid: measurementUid == null && nullToAbsent
+          ? const Value.absent()
+          : Value(measurementUid),
+      samplingEndedAt: samplingEndedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(samplingEndedAt),
+      captureStartedAt: captureStartedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(captureStartedAt),
+      timezoneOffsetMinutes: timezoneOffsetMinutes == null && nullToAbsent
+          ? const Value.absent()
+          : Value(timezoneOffsetMinutes),
+      metricKind: Value(metricKind),
+      protocolVersion: protocolVersion == null && nullToAbsent
+          ? const Value.absent()
+          : Value(protocolVersion),
+      analysisVersion: analysisVersion == null && nullToAbsent
+          ? const Value.absent()
+          : Value(analysisVersion),
+      qualityState: Value(qualityState),
+      qualityReasons: qualityReasons == null && nullToAbsent
+          ? const Value.absent()
+          : Value(qualityReasons),
+      createdAt: createdAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdAt),
+      modifiedAt: modifiedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(modifiedAt),
+      revision: Value(revision),
     );
   }
 
@@ -8986,6 +9373,22 @@ class SpotHrvMeasurement extends DataClass
       minutesAfterTraining: serializer.fromJson<int?>(
         json['minutesAfterTraining'],
       ),
+      measurementUid: serializer.fromJson<String?>(json['measurementUid']),
+      samplingEndedAt: serializer.fromJson<DateTime?>(json['samplingEndedAt']),
+      captureStartedAt: serializer.fromJson<DateTime?>(
+        json['captureStartedAt'],
+      ),
+      timezoneOffsetMinutes: serializer.fromJson<int?>(
+        json['timezoneOffsetMinutes'],
+      ),
+      metricKind: serializer.fromJson<String>(json['metricKind']),
+      protocolVersion: serializer.fromJson<String?>(json['protocolVersion']),
+      analysisVersion: serializer.fromJson<String?>(json['analysisVersion']),
+      qualityState: serializer.fromJson<String>(json['qualityState']),
+      qualityReasons: serializer.fromJson<String?>(json['qualityReasons']),
+      createdAt: serializer.fromJson<DateTime?>(json['createdAt']),
+      modifiedAt: serializer.fromJson<DateTime?>(json['modifiedAt']),
+      revision: serializer.fromJson<int>(json['revision']),
     );
   }
   @override
@@ -9011,6 +9414,18 @@ class SpotHrvMeasurement extends DataClass
       'rrJson': serializer.toJson<String>(rrJson),
       'notes': serializer.toJson<String?>(notes),
       'minutesAfterTraining': serializer.toJson<int?>(minutesAfterTraining),
+      'measurementUid': serializer.toJson<String?>(measurementUid),
+      'samplingEndedAt': serializer.toJson<DateTime?>(samplingEndedAt),
+      'captureStartedAt': serializer.toJson<DateTime?>(captureStartedAt),
+      'timezoneOffsetMinutes': serializer.toJson<int?>(timezoneOffsetMinutes),
+      'metricKind': serializer.toJson<String>(metricKind),
+      'protocolVersion': serializer.toJson<String?>(protocolVersion),
+      'analysisVersion': serializer.toJson<String?>(analysisVersion),
+      'qualityState': serializer.toJson<String>(qualityState),
+      'qualityReasons': serializer.toJson<String?>(qualityReasons),
+      'createdAt': serializer.toJson<DateTime?>(createdAt),
+      'modifiedAt': serializer.toJson<DateTime?>(modifiedAt),
+      'revision': serializer.toJson<int>(revision),
     };
   }
 
@@ -9034,6 +9449,18 @@ class SpotHrvMeasurement extends DataClass
     String? rrJson,
     Value<String?> notes = const Value.absent(),
     Value<int?> minutesAfterTraining = const Value.absent(),
+    Value<String?> measurementUid = const Value.absent(),
+    Value<DateTime?> samplingEndedAt = const Value.absent(),
+    Value<DateTime?> captureStartedAt = const Value.absent(),
+    Value<int?> timezoneOffsetMinutes = const Value.absent(),
+    String? metricKind,
+    Value<String?> protocolVersion = const Value.absent(),
+    Value<String?> analysisVersion = const Value.absent(),
+    String? qualityState,
+    Value<String?> qualityReasons = const Value.absent(),
+    Value<DateTime?> createdAt = const Value.absent(),
+    Value<DateTime?> modifiedAt = const Value.absent(),
+    int? revision,
   }) => SpotHrvMeasurement(
     id: id ?? this.id,
     startedAt: startedAt ?? this.startedAt,
@@ -9056,6 +9483,32 @@ class SpotHrvMeasurement extends DataClass
     minutesAfterTraining: minutesAfterTraining.present
         ? minutesAfterTraining.value
         : this.minutesAfterTraining,
+    measurementUid: measurementUid.present
+        ? measurementUid.value
+        : this.measurementUid,
+    samplingEndedAt: samplingEndedAt.present
+        ? samplingEndedAt.value
+        : this.samplingEndedAt,
+    captureStartedAt: captureStartedAt.present
+        ? captureStartedAt.value
+        : this.captureStartedAt,
+    timezoneOffsetMinutes: timezoneOffsetMinutes.present
+        ? timezoneOffsetMinutes.value
+        : this.timezoneOffsetMinutes,
+    metricKind: metricKind ?? this.metricKind,
+    protocolVersion: protocolVersion.present
+        ? protocolVersion.value
+        : this.protocolVersion,
+    analysisVersion: analysisVersion.present
+        ? analysisVersion.value
+        : this.analysisVersion,
+    qualityState: qualityState ?? this.qualityState,
+    qualityReasons: qualityReasons.present
+        ? qualityReasons.value
+        : this.qualityReasons,
+    createdAt: createdAt.present ? createdAt.value : this.createdAt,
+    modifiedAt: modifiedAt.present ? modifiedAt.value : this.modifiedAt,
+    revision: revision ?? this.revision,
   );
   SpotHrvMeasurement copyWithCompanion(SpotHrvMeasurementsCompanion data) {
     return SpotHrvMeasurement(
@@ -9092,6 +9545,38 @@ class SpotHrvMeasurement extends DataClass
       minutesAfterTraining: data.minutesAfterTraining.present
           ? data.minutesAfterTraining.value
           : this.minutesAfterTraining,
+      measurementUid: data.measurementUid.present
+          ? data.measurementUid.value
+          : this.measurementUid,
+      samplingEndedAt: data.samplingEndedAt.present
+          ? data.samplingEndedAt.value
+          : this.samplingEndedAt,
+      captureStartedAt: data.captureStartedAt.present
+          ? data.captureStartedAt.value
+          : this.captureStartedAt,
+      timezoneOffsetMinutes: data.timezoneOffsetMinutes.present
+          ? data.timezoneOffsetMinutes.value
+          : this.timezoneOffsetMinutes,
+      metricKind: data.metricKind.present
+          ? data.metricKind.value
+          : this.metricKind,
+      protocolVersion: data.protocolVersion.present
+          ? data.protocolVersion.value
+          : this.protocolVersion,
+      analysisVersion: data.analysisVersion.present
+          ? data.analysisVersion.value
+          : this.analysisVersion,
+      qualityState: data.qualityState.present
+          ? data.qualityState.value
+          : this.qualityState,
+      qualityReasons: data.qualityReasons.present
+          ? data.qualityReasons.value
+          : this.qualityReasons,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      modifiedAt: data.modifiedAt.present
+          ? data.modifiedAt.value
+          : this.modifiedAt,
+      revision: data.revision.present ? data.revision.value : this.revision,
     );
   }
 
@@ -9116,13 +9601,25 @@ class SpotHrvMeasurement extends DataClass
           ..write('coverage: $coverage, ')
           ..write('rrJson: $rrJson, ')
           ..write('notes: $notes, ')
-          ..write('minutesAfterTraining: $minutesAfterTraining')
+          ..write('minutesAfterTraining: $minutesAfterTraining, ')
+          ..write('measurementUid: $measurementUid, ')
+          ..write('samplingEndedAt: $samplingEndedAt, ')
+          ..write('captureStartedAt: $captureStartedAt, ')
+          ..write('timezoneOffsetMinutes: $timezoneOffsetMinutes, ')
+          ..write('metricKind: $metricKind, ')
+          ..write('protocolVersion: $protocolVersion, ')
+          ..write('analysisVersion: $analysisVersion, ')
+          ..write('qualityState: $qualityState, ')
+          ..write('qualityReasons: $qualityReasons, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('modifiedAt: $modifiedAt, ')
+          ..write('revision: $revision')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
+  int get hashCode => Object.hashAll([
     id,
     startedAt,
     context,
@@ -9142,7 +9639,19 @@ class SpotHrvMeasurement extends DataClass
     rrJson,
     notes,
     minutesAfterTraining,
-  );
+    measurementUid,
+    samplingEndedAt,
+    captureStartedAt,
+    timezoneOffsetMinutes,
+    metricKind,
+    protocolVersion,
+    analysisVersion,
+    qualityState,
+    qualityReasons,
+    createdAt,
+    modifiedAt,
+    revision,
+  ]);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -9165,7 +9674,19 @@ class SpotHrvMeasurement extends DataClass
           other.coverage == this.coverage &&
           other.rrJson == this.rrJson &&
           other.notes == this.notes &&
-          other.minutesAfterTraining == this.minutesAfterTraining);
+          other.minutesAfterTraining == this.minutesAfterTraining &&
+          other.measurementUid == this.measurementUid &&
+          other.samplingEndedAt == this.samplingEndedAt &&
+          other.captureStartedAt == this.captureStartedAt &&
+          other.timezoneOffsetMinutes == this.timezoneOffsetMinutes &&
+          other.metricKind == this.metricKind &&
+          other.protocolVersion == this.protocolVersion &&
+          other.analysisVersion == this.analysisVersion &&
+          other.qualityState == this.qualityState &&
+          other.qualityReasons == this.qualityReasons &&
+          other.createdAt == this.createdAt &&
+          other.modifiedAt == this.modifiedAt &&
+          other.revision == this.revision);
 }
 
 class SpotHrvMeasurementsCompanion extends UpdateCompanion<SpotHrvMeasurement> {
@@ -9188,6 +9709,18 @@ class SpotHrvMeasurementsCompanion extends UpdateCompanion<SpotHrvMeasurement> {
   final Value<String> rrJson;
   final Value<String?> notes;
   final Value<int?> minutesAfterTraining;
+  final Value<String?> measurementUid;
+  final Value<DateTime?> samplingEndedAt;
+  final Value<DateTime?> captureStartedAt;
+  final Value<int?> timezoneOffsetMinutes;
+  final Value<String> metricKind;
+  final Value<String?> protocolVersion;
+  final Value<String?> analysisVersion;
+  final Value<String> qualityState;
+  final Value<String?> qualityReasons;
+  final Value<DateTime?> createdAt;
+  final Value<DateTime?> modifiedAt;
+  final Value<int> revision;
   const SpotHrvMeasurementsCompanion({
     this.id = const Value.absent(),
     this.startedAt = const Value.absent(),
@@ -9208,6 +9741,18 @@ class SpotHrvMeasurementsCompanion extends UpdateCompanion<SpotHrvMeasurement> {
     this.rrJson = const Value.absent(),
     this.notes = const Value.absent(),
     this.minutesAfterTraining = const Value.absent(),
+    this.measurementUid = const Value.absent(),
+    this.samplingEndedAt = const Value.absent(),
+    this.captureStartedAt = const Value.absent(),
+    this.timezoneOffsetMinutes = const Value.absent(),
+    this.metricKind = const Value.absent(),
+    this.protocolVersion = const Value.absent(),
+    this.analysisVersion = const Value.absent(),
+    this.qualityState = const Value.absent(),
+    this.qualityReasons = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.modifiedAt = const Value.absent(),
+    this.revision = const Value.absent(),
   });
   SpotHrvMeasurementsCompanion.insert({
     this.id = const Value.absent(),
@@ -9229,6 +9774,18 @@ class SpotHrvMeasurementsCompanion extends UpdateCompanion<SpotHrvMeasurement> {
     required String rrJson,
     this.notes = const Value.absent(),
     this.minutesAfterTraining = const Value.absent(),
+    this.measurementUid = const Value.absent(),
+    this.samplingEndedAt = const Value.absent(),
+    this.captureStartedAt = const Value.absent(),
+    this.timezoneOffsetMinutes = const Value.absent(),
+    this.metricKind = const Value.absent(),
+    this.protocolVersion = const Value.absent(),
+    this.analysisVersion = const Value.absent(),
+    this.qualityState = const Value.absent(),
+    this.qualityReasons = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.modifiedAt = const Value.absent(),
+    this.revision = const Value.absent(),
   }) : startedAt = Value(startedAt),
        context = Value(context),
        posture = Value(posture),
@@ -9263,6 +9820,18 @@ class SpotHrvMeasurementsCompanion extends UpdateCompanion<SpotHrvMeasurement> {
     Expression<String>? rrJson,
     Expression<String>? notes,
     Expression<int>? minutesAfterTraining,
+    Expression<String>? measurementUid,
+    Expression<DateTime>? samplingEndedAt,
+    Expression<DateTime>? captureStartedAt,
+    Expression<int>? timezoneOffsetMinutes,
+    Expression<String>? metricKind,
+    Expression<String>? protocolVersion,
+    Expression<String>? analysisVersion,
+    Expression<String>? qualityState,
+    Expression<String>? qualityReasons,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? modifiedAt,
+    Expression<int>? revision,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -9285,6 +9854,19 @@ class SpotHrvMeasurementsCompanion extends UpdateCompanion<SpotHrvMeasurement> {
       if (notes != null) 'notes': notes,
       if (minutesAfterTraining != null)
         'minutes_after_training': minutesAfterTraining,
+      if (measurementUid != null) 'measurement_uid': measurementUid,
+      if (samplingEndedAt != null) 'sampling_ended_at': samplingEndedAt,
+      if (captureStartedAt != null) 'capture_started_at': captureStartedAt,
+      if (timezoneOffsetMinutes != null)
+        'timezone_offset_minutes': timezoneOffsetMinutes,
+      if (metricKind != null) 'metric_kind': metricKind,
+      if (protocolVersion != null) 'protocol_version': protocolVersion,
+      if (analysisVersion != null) 'analysis_version': analysisVersion,
+      if (qualityState != null) 'quality_state': qualityState,
+      if (qualityReasons != null) 'quality_reasons': qualityReasons,
+      if (createdAt != null) 'created_at': createdAt,
+      if (modifiedAt != null) 'modified_at': modifiedAt,
+      if (revision != null) 'revision': revision,
     });
   }
 
@@ -9308,6 +9890,18 @@ class SpotHrvMeasurementsCompanion extends UpdateCompanion<SpotHrvMeasurement> {
     Value<String>? rrJson,
     Value<String?>? notes,
     Value<int?>? minutesAfterTraining,
+    Value<String?>? measurementUid,
+    Value<DateTime?>? samplingEndedAt,
+    Value<DateTime?>? captureStartedAt,
+    Value<int?>? timezoneOffsetMinutes,
+    Value<String>? metricKind,
+    Value<String?>? protocolVersion,
+    Value<String?>? analysisVersion,
+    Value<String>? qualityState,
+    Value<String?>? qualityReasons,
+    Value<DateTime?>? createdAt,
+    Value<DateTime?>? modifiedAt,
+    Value<int>? revision,
   }) {
     return SpotHrvMeasurementsCompanion(
       id: id ?? this.id,
@@ -9329,6 +9923,19 @@ class SpotHrvMeasurementsCompanion extends UpdateCompanion<SpotHrvMeasurement> {
       rrJson: rrJson ?? this.rrJson,
       notes: notes ?? this.notes,
       minutesAfterTraining: minutesAfterTraining ?? this.minutesAfterTraining,
+      measurementUid: measurementUid ?? this.measurementUid,
+      samplingEndedAt: samplingEndedAt ?? this.samplingEndedAt,
+      captureStartedAt: captureStartedAt ?? this.captureStartedAt,
+      timezoneOffsetMinutes:
+          timezoneOffsetMinutes ?? this.timezoneOffsetMinutes,
+      metricKind: metricKind ?? this.metricKind,
+      protocolVersion: protocolVersion ?? this.protocolVersion,
+      analysisVersion: analysisVersion ?? this.analysisVersion,
+      qualityState: qualityState ?? this.qualityState,
+      qualityReasons: qualityReasons ?? this.qualityReasons,
+      createdAt: createdAt ?? this.createdAt,
+      modifiedAt: modifiedAt ?? this.modifiedAt,
+      revision: revision ?? this.revision,
     );
   }
 
@@ -9392,6 +9999,44 @@ class SpotHrvMeasurementsCompanion extends UpdateCompanion<SpotHrvMeasurement> {
     if (minutesAfterTraining.present) {
       map['minutes_after_training'] = Variable<int>(minutesAfterTraining.value);
     }
+    if (measurementUid.present) {
+      map['measurement_uid'] = Variable<String>(measurementUid.value);
+    }
+    if (samplingEndedAt.present) {
+      map['sampling_ended_at'] = Variable<DateTime>(samplingEndedAt.value);
+    }
+    if (captureStartedAt.present) {
+      map['capture_started_at'] = Variable<DateTime>(captureStartedAt.value);
+    }
+    if (timezoneOffsetMinutes.present) {
+      map['timezone_offset_minutes'] = Variable<int>(
+        timezoneOffsetMinutes.value,
+      );
+    }
+    if (metricKind.present) {
+      map['metric_kind'] = Variable<String>(metricKind.value);
+    }
+    if (protocolVersion.present) {
+      map['protocol_version'] = Variable<String>(protocolVersion.value);
+    }
+    if (analysisVersion.present) {
+      map['analysis_version'] = Variable<String>(analysisVersion.value);
+    }
+    if (qualityState.present) {
+      map['quality_state'] = Variable<String>(qualityState.value);
+    }
+    if (qualityReasons.present) {
+      map['quality_reasons'] = Variable<String>(qualityReasons.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (modifiedAt.present) {
+      map['modified_at'] = Variable<DateTime>(modifiedAt.value);
+    }
+    if (revision.present) {
+      map['revision'] = Variable<int>(revision.value);
+    }
     return map;
   }
 
@@ -9416,7 +10061,6164 @@ class SpotHrvMeasurementsCompanion extends UpdateCompanion<SpotHrvMeasurement> {
           ..write('coverage: $coverage, ')
           ..write('rrJson: $rrJson, ')
           ..write('notes: $notes, ')
-          ..write('minutesAfterTraining: $minutesAfterTraining')
+          ..write('minutesAfterTraining: $minutesAfterTraining, ')
+          ..write('measurementUid: $measurementUid, ')
+          ..write('samplingEndedAt: $samplingEndedAt, ')
+          ..write('captureStartedAt: $captureStartedAt, ')
+          ..write('timezoneOffsetMinutes: $timezoneOffsetMinutes, ')
+          ..write('metricKind: $metricKind, ')
+          ..write('protocolVersion: $protocolVersion, ')
+          ..write('analysisVersion: $analysisVersion, ')
+          ..write('qualityState: $qualityState, ')
+          ..write('qualityReasons: $qualityReasons, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('modifiedAt: $modifiedAt, ')
+          ..write('revision: $revision')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $HrvTrainingEpisodesTable extends HrvTrainingEpisodes
+    with TableInfo<$HrvTrainingEpisodesTable, HrvTrainingEpisode> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $HrvTrainingEpisodesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _episodeIdMeta = const VerificationMeta(
+    'episodeId',
+  );
+  @override
+  late final GeneratedColumn<String> episodeId = GeneratedColumn<String>(
+    'episode_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _athleteIdMeta = const VerificationMeta(
+    'athleteId',
+  );
+  @override
+  late final GeneratedColumn<String> athleteId = GeneratedColumn<String>(
+    'athlete_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('self'),
+  );
+  static const VerificationMeta _primaryActivityIdMeta = const VerificationMeta(
+    'primaryActivityId',
+  );
+  @override
+  late final GeneratedColumn<String> primaryActivityId =
+      GeneratedColumn<String>(
+        'primary_activity_id',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _plannedSessionIdMeta = const VerificationMeta(
+    'plannedSessionId',
+  );
+  @override
+  late final GeneratedColumn<int> plannedSessionId = GeneratedColumn<int>(
+    'planned_session_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _sportMeta = const VerificationMeta('sport');
+  @override
+  late final GeneratedColumn<String> sport = GeneratedColumn<String>(
+    'sport',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('other'),
+  );
+  static const VerificationMeta _actualStartUtcMeta = const VerificationMeta(
+    'actualStartUtc',
+  );
+  @override
+  late final GeneratedColumn<DateTime> actualStartUtc =
+      GeneratedColumn<DateTime>(
+        'actual_start_utc',
+        aliasedName,
+        false,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: true,
+      );
+  static const VerificationMeta _actualEndUtcMeta = const VerificationMeta(
+    'actualEndUtc',
+  );
+  @override
+  late final GeneratedColumn<DateTime> actualEndUtc = GeneratedColumn<DateTime>(
+    'actual_end_utc',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _intervalBasisMeta = const VerificationMeta(
+    'intervalBasis',
+  );
+  @override
+  late final GeneratedColumn<String> intervalBasis = GeneratedColumn<String>(
+    'interval_basis',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('unknown'),
+  );
+  static const VerificationMeta _intervalSourceMeta = const VerificationMeta(
+    'intervalSource',
+  );
+  @override
+  late final GeneratedColumn<String> intervalSource = GeneratedColumn<String>(
+    'interval_source',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _intervalRevisionMeta = const VerificationMeta(
+    'intervalRevision',
+  );
+  @override
+  late final GeneratedColumn<int> intervalRevision = GeneratedColumn<int>(
+    'interval_revision',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _clockUncertainMeta = const VerificationMeta(
+    'clockUncertain',
+  );
+  @override
+  late final GeneratedColumn<bool> clockUncertain = GeneratedColumn<bool>(
+    'clock_uncertain',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("clock_uncertain" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _parentEpisodeIdMeta = const VerificationMeta(
+    'parentEpisodeId',
+  );
+  @override
+  late final GeneratedColumn<String> parentEpisodeId = GeneratedColumn<String>(
+    'parent_episode_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _detectedAtUtcMeta = const VerificationMeta(
+    'detectedAtUtc',
+  );
+  @override
+  late final GeneratedColumn<DateTime> detectedAtUtc =
+      GeneratedColumn<DateTime>(
+        'detected_at_utc',
+        aliasedName,
+        false,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: true,
+      );
+  static const VerificationMeta _stateMeta = const VerificationMeta('state');
+  @override
+  late final GeneratedColumn<String> state = GeneratedColumn<String>(
+    'state',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('actualCompleted'),
+  );
+  static const VerificationMeta _dataRevisionMeta = const VerificationMeta(
+    'dataRevision',
+  );
+  @override
+  late final GeneratedColumn<int> dataRevision = GeneratedColumn<int>(
+    'data_revision',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _createdAtUtcMeta = const VerificationMeta(
+    'createdAtUtc',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAtUtc = GeneratedColumn<DateTime>(
+    'created_at_utc',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtUtcMeta = const VerificationMeta(
+    'updatedAtUtc',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAtUtc = GeneratedColumn<DateTime>(
+    'updated_at_utc',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    episodeId,
+    athleteId,
+    primaryActivityId,
+    plannedSessionId,
+    sport,
+    actualStartUtc,
+    actualEndUtc,
+    intervalBasis,
+    intervalSource,
+    intervalRevision,
+    clockUncertain,
+    parentEpisodeId,
+    detectedAtUtc,
+    state,
+    dataRevision,
+    createdAtUtc,
+    updatedAtUtc,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'hrv_training_episodes';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<HrvTrainingEpisode> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('episode_id')) {
+      context.handle(
+        _episodeIdMeta,
+        episodeId.isAcceptableOrUnknown(data['episode_id']!, _episodeIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_episodeIdMeta);
+    }
+    if (data.containsKey('athlete_id')) {
+      context.handle(
+        _athleteIdMeta,
+        athleteId.isAcceptableOrUnknown(data['athlete_id']!, _athleteIdMeta),
+      );
+    }
+    if (data.containsKey('primary_activity_id')) {
+      context.handle(
+        _primaryActivityIdMeta,
+        primaryActivityId.isAcceptableOrUnknown(
+          data['primary_activity_id']!,
+          _primaryActivityIdMeta,
+        ),
+      );
+    }
+    if (data.containsKey('planned_session_id')) {
+      context.handle(
+        _plannedSessionIdMeta,
+        plannedSessionId.isAcceptableOrUnknown(
+          data['planned_session_id']!,
+          _plannedSessionIdMeta,
+        ),
+      );
+    }
+    if (data.containsKey('sport')) {
+      context.handle(
+        _sportMeta,
+        sport.isAcceptableOrUnknown(data['sport']!, _sportMeta),
+      );
+    }
+    if (data.containsKey('actual_start_utc')) {
+      context.handle(
+        _actualStartUtcMeta,
+        actualStartUtc.isAcceptableOrUnknown(
+          data['actual_start_utc']!,
+          _actualStartUtcMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_actualStartUtcMeta);
+    }
+    if (data.containsKey('actual_end_utc')) {
+      context.handle(
+        _actualEndUtcMeta,
+        actualEndUtc.isAcceptableOrUnknown(
+          data['actual_end_utc']!,
+          _actualEndUtcMeta,
+        ),
+      );
+    }
+    if (data.containsKey('interval_basis')) {
+      context.handle(
+        _intervalBasisMeta,
+        intervalBasis.isAcceptableOrUnknown(
+          data['interval_basis']!,
+          _intervalBasisMeta,
+        ),
+      );
+    }
+    if (data.containsKey('interval_source')) {
+      context.handle(
+        _intervalSourceMeta,
+        intervalSource.isAcceptableOrUnknown(
+          data['interval_source']!,
+          _intervalSourceMeta,
+        ),
+      );
+    }
+    if (data.containsKey('interval_revision')) {
+      context.handle(
+        _intervalRevisionMeta,
+        intervalRevision.isAcceptableOrUnknown(
+          data['interval_revision']!,
+          _intervalRevisionMeta,
+        ),
+      );
+    }
+    if (data.containsKey('clock_uncertain')) {
+      context.handle(
+        _clockUncertainMeta,
+        clockUncertain.isAcceptableOrUnknown(
+          data['clock_uncertain']!,
+          _clockUncertainMeta,
+        ),
+      );
+    }
+    if (data.containsKey('parent_episode_id')) {
+      context.handle(
+        _parentEpisodeIdMeta,
+        parentEpisodeId.isAcceptableOrUnknown(
+          data['parent_episode_id']!,
+          _parentEpisodeIdMeta,
+        ),
+      );
+    }
+    if (data.containsKey('detected_at_utc')) {
+      context.handle(
+        _detectedAtUtcMeta,
+        detectedAtUtc.isAcceptableOrUnknown(
+          data['detected_at_utc']!,
+          _detectedAtUtcMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_detectedAtUtcMeta);
+    }
+    if (data.containsKey('state')) {
+      context.handle(
+        _stateMeta,
+        state.isAcceptableOrUnknown(data['state']!, _stateMeta),
+      );
+    }
+    if (data.containsKey('data_revision')) {
+      context.handle(
+        _dataRevisionMeta,
+        dataRevision.isAcceptableOrUnknown(
+          data['data_revision']!,
+          _dataRevisionMeta,
+        ),
+      );
+    }
+    if (data.containsKey('created_at_utc')) {
+      context.handle(
+        _createdAtUtcMeta,
+        createdAtUtc.isAcceptableOrUnknown(
+          data['created_at_utc']!,
+          _createdAtUtcMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtUtcMeta);
+    }
+    if (data.containsKey('updated_at_utc')) {
+      context.handle(
+        _updatedAtUtcMeta,
+        updatedAtUtc.isAcceptableOrUnknown(
+          data['updated_at_utc']!,
+          _updatedAtUtcMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtUtcMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {episodeId};
+  @override
+  HrvTrainingEpisode map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return HrvTrainingEpisode(
+      episodeId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}episode_id'],
+      )!,
+      athleteId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}athlete_id'],
+      )!,
+      primaryActivityId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}primary_activity_id'],
+      ),
+      plannedSessionId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}planned_session_id'],
+      ),
+      sport: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}sport'],
+      )!,
+      actualStartUtc: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}actual_start_utc'],
+      )!,
+      actualEndUtc: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}actual_end_utc'],
+      ),
+      intervalBasis: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}interval_basis'],
+      )!,
+      intervalSource: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}interval_source'],
+      ),
+      intervalRevision: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}interval_revision'],
+      )!,
+      clockUncertain: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}clock_uncertain'],
+      )!,
+      parentEpisodeId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}parent_episode_id'],
+      ),
+      detectedAtUtc: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}detected_at_utc'],
+      )!,
+      state: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}state'],
+      )!,
+      dataRevision: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}data_revision'],
+      )!,
+      createdAtUtc: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at_utc'],
+      )!,
+      updatedAtUtc: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at_utc'],
+      )!,
+    );
+  }
+
+  @override
+  $HrvTrainingEpisodesTable createAlias(String alias) {
+    return $HrvTrainingEpisodesTable(attachedDatabase, alias);
+  }
+}
+
+class HrvTrainingEpisode extends DataClass
+    implements Insertable<HrvTrainingEpisode> {
+  final String episodeId;
+  final String athleteId;
+  final String? primaryActivityId;
+
+  /// Navigation only. Deleting the session does not delete the episode.
+  final int? plannedSessionId;
+  final String sport;
+  final DateTime actualStartUtc;
+  final DateTime? actualEndUtc;
+
+  /// `providerFinish`, `providerElapsed`, `userReported` or `unknown`.
+  final String intervalBasis;
+  final String? intervalSource;
+  final int intervalRevision;
+  final bool clockUncertain;
+  final String? parentEpisodeId;
+  final DateTime detectedAtUtc;
+
+  /// `provisional`, `actualCompleted`, `ambiguous`, `cancelled`, `deleted`.
+  final String state;
+  final int dataRevision;
+  final DateTime createdAtUtc;
+  final DateTime updatedAtUtc;
+  const HrvTrainingEpisode({
+    required this.episodeId,
+    required this.athleteId,
+    this.primaryActivityId,
+    this.plannedSessionId,
+    required this.sport,
+    required this.actualStartUtc,
+    this.actualEndUtc,
+    required this.intervalBasis,
+    this.intervalSource,
+    required this.intervalRevision,
+    required this.clockUncertain,
+    this.parentEpisodeId,
+    required this.detectedAtUtc,
+    required this.state,
+    required this.dataRevision,
+    required this.createdAtUtc,
+    required this.updatedAtUtc,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['episode_id'] = Variable<String>(episodeId);
+    map['athlete_id'] = Variable<String>(athleteId);
+    if (!nullToAbsent || primaryActivityId != null) {
+      map['primary_activity_id'] = Variable<String>(primaryActivityId);
+    }
+    if (!nullToAbsent || plannedSessionId != null) {
+      map['planned_session_id'] = Variable<int>(plannedSessionId);
+    }
+    map['sport'] = Variable<String>(sport);
+    map['actual_start_utc'] = Variable<DateTime>(actualStartUtc);
+    if (!nullToAbsent || actualEndUtc != null) {
+      map['actual_end_utc'] = Variable<DateTime>(actualEndUtc);
+    }
+    map['interval_basis'] = Variable<String>(intervalBasis);
+    if (!nullToAbsent || intervalSource != null) {
+      map['interval_source'] = Variable<String>(intervalSource);
+    }
+    map['interval_revision'] = Variable<int>(intervalRevision);
+    map['clock_uncertain'] = Variable<bool>(clockUncertain);
+    if (!nullToAbsent || parentEpisodeId != null) {
+      map['parent_episode_id'] = Variable<String>(parentEpisodeId);
+    }
+    map['detected_at_utc'] = Variable<DateTime>(detectedAtUtc);
+    map['state'] = Variable<String>(state);
+    map['data_revision'] = Variable<int>(dataRevision);
+    map['created_at_utc'] = Variable<DateTime>(createdAtUtc);
+    map['updated_at_utc'] = Variable<DateTime>(updatedAtUtc);
+    return map;
+  }
+
+  HrvTrainingEpisodesCompanion toCompanion(bool nullToAbsent) {
+    return HrvTrainingEpisodesCompanion(
+      episodeId: Value(episodeId),
+      athleteId: Value(athleteId),
+      primaryActivityId: primaryActivityId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(primaryActivityId),
+      plannedSessionId: plannedSessionId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(plannedSessionId),
+      sport: Value(sport),
+      actualStartUtc: Value(actualStartUtc),
+      actualEndUtc: actualEndUtc == null && nullToAbsent
+          ? const Value.absent()
+          : Value(actualEndUtc),
+      intervalBasis: Value(intervalBasis),
+      intervalSource: intervalSource == null && nullToAbsent
+          ? const Value.absent()
+          : Value(intervalSource),
+      intervalRevision: Value(intervalRevision),
+      clockUncertain: Value(clockUncertain),
+      parentEpisodeId: parentEpisodeId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(parentEpisodeId),
+      detectedAtUtc: Value(detectedAtUtc),
+      state: Value(state),
+      dataRevision: Value(dataRevision),
+      createdAtUtc: Value(createdAtUtc),
+      updatedAtUtc: Value(updatedAtUtc),
+    );
+  }
+
+  factory HrvTrainingEpisode.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return HrvTrainingEpisode(
+      episodeId: serializer.fromJson<String>(json['episodeId']),
+      athleteId: serializer.fromJson<String>(json['athleteId']),
+      primaryActivityId: serializer.fromJson<String?>(
+        json['primaryActivityId'],
+      ),
+      plannedSessionId: serializer.fromJson<int?>(json['plannedSessionId']),
+      sport: serializer.fromJson<String>(json['sport']),
+      actualStartUtc: serializer.fromJson<DateTime>(json['actualStartUtc']),
+      actualEndUtc: serializer.fromJson<DateTime?>(json['actualEndUtc']),
+      intervalBasis: serializer.fromJson<String>(json['intervalBasis']),
+      intervalSource: serializer.fromJson<String?>(json['intervalSource']),
+      intervalRevision: serializer.fromJson<int>(json['intervalRevision']),
+      clockUncertain: serializer.fromJson<bool>(json['clockUncertain']),
+      parentEpisodeId: serializer.fromJson<String?>(json['parentEpisodeId']),
+      detectedAtUtc: serializer.fromJson<DateTime>(json['detectedAtUtc']),
+      state: serializer.fromJson<String>(json['state']),
+      dataRevision: serializer.fromJson<int>(json['dataRevision']),
+      createdAtUtc: serializer.fromJson<DateTime>(json['createdAtUtc']),
+      updatedAtUtc: serializer.fromJson<DateTime>(json['updatedAtUtc']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'episodeId': serializer.toJson<String>(episodeId),
+      'athleteId': serializer.toJson<String>(athleteId),
+      'primaryActivityId': serializer.toJson<String?>(primaryActivityId),
+      'plannedSessionId': serializer.toJson<int?>(plannedSessionId),
+      'sport': serializer.toJson<String>(sport),
+      'actualStartUtc': serializer.toJson<DateTime>(actualStartUtc),
+      'actualEndUtc': serializer.toJson<DateTime?>(actualEndUtc),
+      'intervalBasis': serializer.toJson<String>(intervalBasis),
+      'intervalSource': serializer.toJson<String?>(intervalSource),
+      'intervalRevision': serializer.toJson<int>(intervalRevision),
+      'clockUncertain': serializer.toJson<bool>(clockUncertain),
+      'parentEpisodeId': serializer.toJson<String?>(parentEpisodeId),
+      'detectedAtUtc': serializer.toJson<DateTime>(detectedAtUtc),
+      'state': serializer.toJson<String>(state),
+      'dataRevision': serializer.toJson<int>(dataRevision),
+      'createdAtUtc': serializer.toJson<DateTime>(createdAtUtc),
+      'updatedAtUtc': serializer.toJson<DateTime>(updatedAtUtc),
+    };
+  }
+
+  HrvTrainingEpisode copyWith({
+    String? episodeId,
+    String? athleteId,
+    Value<String?> primaryActivityId = const Value.absent(),
+    Value<int?> plannedSessionId = const Value.absent(),
+    String? sport,
+    DateTime? actualStartUtc,
+    Value<DateTime?> actualEndUtc = const Value.absent(),
+    String? intervalBasis,
+    Value<String?> intervalSource = const Value.absent(),
+    int? intervalRevision,
+    bool? clockUncertain,
+    Value<String?> parentEpisodeId = const Value.absent(),
+    DateTime? detectedAtUtc,
+    String? state,
+    int? dataRevision,
+    DateTime? createdAtUtc,
+    DateTime? updatedAtUtc,
+  }) => HrvTrainingEpisode(
+    episodeId: episodeId ?? this.episodeId,
+    athleteId: athleteId ?? this.athleteId,
+    primaryActivityId: primaryActivityId.present
+        ? primaryActivityId.value
+        : this.primaryActivityId,
+    plannedSessionId: plannedSessionId.present
+        ? plannedSessionId.value
+        : this.plannedSessionId,
+    sport: sport ?? this.sport,
+    actualStartUtc: actualStartUtc ?? this.actualStartUtc,
+    actualEndUtc: actualEndUtc.present ? actualEndUtc.value : this.actualEndUtc,
+    intervalBasis: intervalBasis ?? this.intervalBasis,
+    intervalSource: intervalSource.present
+        ? intervalSource.value
+        : this.intervalSource,
+    intervalRevision: intervalRevision ?? this.intervalRevision,
+    clockUncertain: clockUncertain ?? this.clockUncertain,
+    parentEpisodeId: parentEpisodeId.present
+        ? parentEpisodeId.value
+        : this.parentEpisodeId,
+    detectedAtUtc: detectedAtUtc ?? this.detectedAtUtc,
+    state: state ?? this.state,
+    dataRevision: dataRevision ?? this.dataRevision,
+    createdAtUtc: createdAtUtc ?? this.createdAtUtc,
+    updatedAtUtc: updatedAtUtc ?? this.updatedAtUtc,
+  );
+  HrvTrainingEpisode copyWithCompanion(HrvTrainingEpisodesCompanion data) {
+    return HrvTrainingEpisode(
+      episodeId: data.episodeId.present ? data.episodeId.value : this.episodeId,
+      athleteId: data.athleteId.present ? data.athleteId.value : this.athleteId,
+      primaryActivityId: data.primaryActivityId.present
+          ? data.primaryActivityId.value
+          : this.primaryActivityId,
+      plannedSessionId: data.plannedSessionId.present
+          ? data.plannedSessionId.value
+          : this.plannedSessionId,
+      sport: data.sport.present ? data.sport.value : this.sport,
+      actualStartUtc: data.actualStartUtc.present
+          ? data.actualStartUtc.value
+          : this.actualStartUtc,
+      actualEndUtc: data.actualEndUtc.present
+          ? data.actualEndUtc.value
+          : this.actualEndUtc,
+      intervalBasis: data.intervalBasis.present
+          ? data.intervalBasis.value
+          : this.intervalBasis,
+      intervalSource: data.intervalSource.present
+          ? data.intervalSource.value
+          : this.intervalSource,
+      intervalRevision: data.intervalRevision.present
+          ? data.intervalRevision.value
+          : this.intervalRevision,
+      clockUncertain: data.clockUncertain.present
+          ? data.clockUncertain.value
+          : this.clockUncertain,
+      parentEpisodeId: data.parentEpisodeId.present
+          ? data.parentEpisodeId.value
+          : this.parentEpisodeId,
+      detectedAtUtc: data.detectedAtUtc.present
+          ? data.detectedAtUtc.value
+          : this.detectedAtUtc,
+      state: data.state.present ? data.state.value : this.state,
+      dataRevision: data.dataRevision.present
+          ? data.dataRevision.value
+          : this.dataRevision,
+      createdAtUtc: data.createdAtUtc.present
+          ? data.createdAtUtc.value
+          : this.createdAtUtc,
+      updatedAtUtc: data.updatedAtUtc.present
+          ? data.updatedAtUtc.value
+          : this.updatedAtUtc,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HrvTrainingEpisode(')
+          ..write('episodeId: $episodeId, ')
+          ..write('athleteId: $athleteId, ')
+          ..write('primaryActivityId: $primaryActivityId, ')
+          ..write('plannedSessionId: $plannedSessionId, ')
+          ..write('sport: $sport, ')
+          ..write('actualStartUtc: $actualStartUtc, ')
+          ..write('actualEndUtc: $actualEndUtc, ')
+          ..write('intervalBasis: $intervalBasis, ')
+          ..write('intervalSource: $intervalSource, ')
+          ..write('intervalRevision: $intervalRevision, ')
+          ..write('clockUncertain: $clockUncertain, ')
+          ..write('parentEpisodeId: $parentEpisodeId, ')
+          ..write('detectedAtUtc: $detectedAtUtc, ')
+          ..write('state: $state, ')
+          ..write('dataRevision: $dataRevision, ')
+          ..write('createdAtUtc: $createdAtUtc, ')
+          ..write('updatedAtUtc: $updatedAtUtc')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    episodeId,
+    athleteId,
+    primaryActivityId,
+    plannedSessionId,
+    sport,
+    actualStartUtc,
+    actualEndUtc,
+    intervalBasis,
+    intervalSource,
+    intervalRevision,
+    clockUncertain,
+    parentEpisodeId,
+    detectedAtUtc,
+    state,
+    dataRevision,
+    createdAtUtc,
+    updatedAtUtc,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is HrvTrainingEpisode &&
+          other.episodeId == this.episodeId &&
+          other.athleteId == this.athleteId &&
+          other.primaryActivityId == this.primaryActivityId &&
+          other.plannedSessionId == this.plannedSessionId &&
+          other.sport == this.sport &&
+          other.actualStartUtc == this.actualStartUtc &&
+          other.actualEndUtc == this.actualEndUtc &&
+          other.intervalBasis == this.intervalBasis &&
+          other.intervalSource == this.intervalSource &&
+          other.intervalRevision == this.intervalRevision &&
+          other.clockUncertain == this.clockUncertain &&
+          other.parentEpisodeId == this.parentEpisodeId &&
+          other.detectedAtUtc == this.detectedAtUtc &&
+          other.state == this.state &&
+          other.dataRevision == this.dataRevision &&
+          other.createdAtUtc == this.createdAtUtc &&
+          other.updatedAtUtc == this.updatedAtUtc);
+}
+
+class HrvTrainingEpisodesCompanion extends UpdateCompanion<HrvTrainingEpisode> {
+  final Value<String> episodeId;
+  final Value<String> athleteId;
+  final Value<String?> primaryActivityId;
+  final Value<int?> plannedSessionId;
+  final Value<String> sport;
+  final Value<DateTime> actualStartUtc;
+  final Value<DateTime?> actualEndUtc;
+  final Value<String> intervalBasis;
+  final Value<String?> intervalSource;
+  final Value<int> intervalRevision;
+  final Value<bool> clockUncertain;
+  final Value<String?> parentEpisodeId;
+  final Value<DateTime> detectedAtUtc;
+  final Value<String> state;
+  final Value<int> dataRevision;
+  final Value<DateTime> createdAtUtc;
+  final Value<DateTime> updatedAtUtc;
+  final Value<int> rowid;
+  const HrvTrainingEpisodesCompanion({
+    this.episodeId = const Value.absent(),
+    this.athleteId = const Value.absent(),
+    this.primaryActivityId = const Value.absent(),
+    this.plannedSessionId = const Value.absent(),
+    this.sport = const Value.absent(),
+    this.actualStartUtc = const Value.absent(),
+    this.actualEndUtc = const Value.absent(),
+    this.intervalBasis = const Value.absent(),
+    this.intervalSource = const Value.absent(),
+    this.intervalRevision = const Value.absent(),
+    this.clockUncertain = const Value.absent(),
+    this.parentEpisodeId = const Value.absent(),
+    this.detectedAtUtc = const Value.absent(),
+    this.state = const Value.absent(),
+    this.dataRevision = const Value.absent(),
+    this.createdAtUtc = const Value.absent(),
+    this.updatedAtUtc = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  HrvTrainingEpisodesCompanion.insert({
+    required String episodeId,
+    this.athleteId = const Value.absent(),
+    this.primaryActivityId = const Value.absent(),
+    this.plannedSessionId = const Value.absent(),
+    this.sport = const Value.absent(),
+    required DateTime actualStartUtc,
+    this.actualEndUtc = const Value.absent(),
+    this.intervalBasis = const Value.absent(),
+    this.intervalSource = const Value.absent(),
+    this.intervalRevision = const Value.absent(),
+    this.clockUncertain = const Value.absent(),
+    this.parentEpisodeId = const Value.absent(),
+    required DateTime detectedAtUtc,
+    this.state = const Value.absent(),
+    this.dataRevision = const Value.absent(),
+    required DateTime createdAtUtc,
+    required DateTime updatedAtUtc,
+    this.rowid = const Value.absent(),
+  }) : episodeId = Value(episodeId),
+       actualStartUtc = Value(actualStartUtc),
+       detectedAtUtc = Value(detectedAtUtc),
+       createdAtUtc = Value(createdAtUtc),
+       updatedAtUtc = Value(updatedAtUtc);
+  static Insertable<HrvTrainingEpisode> custom({
+    Expression<String>? episodeId,
+    Expression<String>? athleteId,
+    Expression<String>? primaryActivityId,
+    Expression<int>? plannedSessionId,
+    Expression<String>? sport,
+    Expression<DateTime>? actualStartUtc,
+    Expression<DateTime>? actualEndUtc,
+    Expression<String>? intervalBasis,
+    Expression<String>? intervalSource,
+    Expression<int>? intervalRevision,
+    Expression<bool>? clockUncertain,
+    Expression<String>? parentEpisodeId,
+    Expression<DateTime>? detectedAtUtc,
+    Expression<String>? state,
+    Expression<int>? dataRevision,
+    Expression<DateTime>? createdAtUtc,
+    Expression<DateTime>? updatedAtUtc,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (episodeId != null) 'episode_id': episodeId,
+      if (athleteId != null) 'athlete_id': athleteId,
+      if (primaryActivityId != null) 'primary_activity_id': primaryActivityId,
+      if (plannedSessionId != null) 'planned_session_id': plannedSessionId,
+      if (sport != null) 'sport': sport,
+      if (actualStartUtc != null) 'actual_start_utc': actualStartUtc,
+      if (actualEndUtc != null) 'actual_end_utc': actualEndUtc,
+      if (intervalBasis != null) 'interval_basis': intervalBasis,
+      if (intervalSource != null) 'interval_source': intervalSource,
+      if (intervalRevision != null) 'interval_revision': intervalRevision,
+      if (clockUncertain != null) 'clock_uncertain': clockUncertain,
+      if (parentEpisodeId != null) 'parent_episode_id': parentEpisodeId,
+      if (detectedAtUtc != null) 'detected_at_utc': detectedAtUtc,
+      if (state != null) 'state': state,
+      if (dataRevision != null) 'data_revision': dataRevision,
+      if (createdAtUtc != null) 'created_at_utc': createdAtUtc,
+      if (updatedAtUtc != null) 'updated_at_utc': updatedAtUtc,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  HrvTrainingEpisodesCompanion copyWith({
+    Value<String>? episodeId,
+    Value<String>? athleteId,
+    Value<String?>? primaryActivityId,
+    Value<int?>? plannedSessionId,
+    Value<String>? sport,
+    Value<DateTime>? actualStartUtc,
+    Value<DateTime?>? actualEndUtc,
+    Value<String>? intervalBasis,
+    Value<String?>? intervalSource,
+    Value<int>? intervalRevision,
+    Value<bool>? clockUncertain,
+    Value<String?>? parentEpisodeId,
+    Value<DateTime>? detectedAtUtc,
+    Value<String>? state,
+    Value<int>? dataRevision,
+    Value<DateTime>? createdAtUtc,
+    Value<DateTime>? updatedAtUtc,
+    Value<int>? rowid,
+  }) {
+    return HrvTrainingEpisodesCompanion(
+      episodeId: episodeId ?? this.episodeId,
+      athleteId: athleteId ?? this.athleteId,
+      primaryActivityId: primaryActivityId ?? this.primaryActivityId,
+      plannedSessionId: plannedSessionId ?? this.plannedSessionId,
+      sport: sport ?? this.sport,
+      actualStartUtc: actualStartUtc ?? this.actualStartUtc,
+      actualEndUtc: actualEndUtc ?? this.actualEndUtc,
+      intervalBasis: intervalBasis ?? this.intervalBasis,
+      intervalSource: intervalSource ?? this.intervalSource,
+      intervalRevision: intervalRevision ?? this.intervalRevision,
+      clockUncertain: clockUncertain ?? this.clockUncertain,
+      parentEpisodeId: parentEpisodeId ?? this.parentEpisodeId,
+      detectedAtUtc: detectedAtUtc ?? this.detectedAtUtc,
+      state: state ?? this.state,
+      dataRevision: dataRevision ?? this.dataRevision,
+      createdAtUtc: createdAtUtc ?? this.createdAtUtc,
+      updatedAtUtc: updatedAtUtc ?? this.updatedAtUtc,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (episodeId.present) {
+      map['episode_id'] = Variable<String>(episodeId.value);
+    }
+    if (athleteId.present) {
+      map['athlete_id'] = Variable<String>(athleteId.value);
+    }
+    if (primaryActivityId.present) {
+      map['primary_activity_id'] = Variable<String>(primaryActivityId.value);
+    }
+    if (plannedSessionId.present) {
+      map['planned_session_id'] = Variable<int>(plannedSessionId.value);
+    }
+    if (sport.present) {
+      map['sport'] = Variable<String>(sport.value);
+    }
+    if (actualStartUtc.present) {
+      map['actual_start_utc'] = Variable<DateTime>(actualStartUtc.value);
+    }
+    if (actualEndUtc.present) {
+      map['actual_end_utc'] = Variable<DateTime>(actualEndUtc.value);
+    }
+    if (intervalBasis.present) {
+      map['interval_basis'] = Variable<String>(intervalBasis.value);
+    }
+    if (intervalSource.present) {
+      map['interval_source'] = Variable<String>(intervalSource.value);
+    }
+    if (intervalRevision.present) {
+      map['interval_revision'] = Variable<int>(intervalRevision.value);
+    }
+    if (clockUncertain.present) {
+      map['clock_uncertain'] = Variable<bool>(clockUncertain.value);
+    }
+    if (parentEpisodeId.present) {
+      map['parent_episode_id'] = Variable<String>(parentEpisodeId.value);
+    }
+    if (detectedAtUtc.present) {
+      map['detected_at_utc'] = Variable<DateTime>(detectedAtUtc.value);
+    }
+    if (state.present) {
+      map['state'] = Variable<String>(state.value);
+    }
+    if (dataRevision.present) {
+      map['data_revision'] = Variable<int>(dataRevision.value);
+    }
+    if (createdAtUtc.present) {
+      map['created_at_utc'] = Variable<DateTime>(createdAtUtc.value);
+    }
+    if (updatedAtUtc.present) {
+      map['updated_at_utc'] = Variable<DateTime>(updatedAtUtc.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HrvTrainingEpisodesCompanion(')
+          ..write('episodeId: $episodeId, ')
+          ..write('athleteId: $athleteId, ')
+          ..write('primaryActivityId: $primaryActivityId, ')
+          ..write('plannedSessionId: $plannedSessionId, ')
+          ..write('sport: $sport, ')
+          ..write('actualStartUtc: $actualStartUtc, ')
+          ..write('actualEndUtc: $actualEndUtc, ')
+          ..write('intervalBasis: $intervalBasis, ')
+          ..write('intervalSource: $intervalSource, ')
+          ..write('intervalRevision: $intervalRevision, ')
+          ..write('clockUncertain: $clockUncertain, ')
+          ..write('parentEpisodeId: $parentEpisodeId, ')
+          ..write('detectedAtUtc: $detectedAtUtc, ')
+          ..write('state: $state, ')
+          ..write('dataRevision: $dataRevision, ')
+          ..write('createdAtUtc: $createdAtUtc, ')
+          ..write('updatedAtUtc: $updatedAtUtc, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $HrvEpisodeAliasesTable extends HrvEpisodeAliases
+    with TableInfo<$HrvEpisodeAliasesTable, HrvEpisodeAliase> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $HrvEpisodeAliasesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _athleteIdMeta = const VerificationMeta(
+    'athleteId',
+  );
+  @override
+  late final GeneratedColumn<String> athleteId = GeneratedColumn<String>(
+    'athlete_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('self'),
+  );
+  static const VerificationMeta _sourceMeta = const VerificationMeta('source');
+  @override
+  late final GeneratedColumn<String> source = GeneratedColumn<String>(
+    'source',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _sourceActivityIdMeta = const VerificationMeta(
+    'sourceActivityId',
+  );
+  @override
+  late final GeneratedColumn<String> sourceActivityId = GeneratedColumn<String>(
+    'source_activity_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _episodeIdMeta = const VerificationMeta(
+    'episodeId',
+  );
+  @override
+  late final GeneratedColumn<String> episodeId = GeneratedColumn<String>(
+    'episode_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _stateMeta = const VerificationMeta('state');
+  @override
+  late final GeneratedColumn<String> state = GeneratedColumn<String>(
+    'state',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('active'),
+  );
+  static const VerificationMeta _createdAtUtcMeta = const VerificationMeta(
+    'createdAtUtc',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAtUtc = GeneratedColumn<DateTime>(
+    'created_at_utc',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    athleteId,
+    source,
+    sourceActivityId,
+    episodeId,
+    state,
+    createdAtUtc,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'hrv_episode_aliases';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<HrvEpisodeAliase> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('athlete_id')) {
+      context.handle(
+        _athleteIdMeta,
+        athleteId.isAcceptableOrUnknown(data['athlete_id']!, _athleteIdMeta),
+      );
+    }
+    if (data.containsKey('source')) {
+      context.handle(
+        _sourceMeta,
+        source.isAcceptableOrUnknown(data['source']!, _sourceMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sourceMeta);
+    }
+    if (data.containsKey('source_activity_id')) {
+      context.handle(
+        _sourceActivityIdMeta,
+        sourceActivityId.isAcceptableOrUnknown(
+          data['source_activity_id']!,
+          _sourceActivityIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_sourceActivityIdMeta);
+    }
+    if (data.containsKey('episode_id')) {
+      context.handle(
+        _episodeIdMeta,
+        episodeId.isAcceptableOrUnknown(data['episode_id']!, _episodeIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_episodeIdMeta);
+    }
+    if (data.containsKey('state')) {
+      context.handle(
+        _stateMeta,
+        state.isAcceptableOrUnknown(data['state']!, _stateMeta),
+      );
+    }
+    if (data.containsKey('created_at_utc')) {
+      context.handle(
+        _createdAtUtcMeta,
+        createdAtUtc.isAcceptableOrUnknown(
+          data['created_at_utc']!,
+          _createdAtUtcMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtUtcMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {athleteId, source, sourceActivityId};
+  @override
+  HrvEpisodeAliase map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return HrvEpisodeAliase(
+      athleteId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}athlete_id'],
+      )!,
+      source: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source'],
+      )!,
+      sourceActivityId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source_activity_id'],
+      )!,
+      episodeId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}episode_id'],
+      )!,
+      state: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}state'],
+      )!,
+      createdAtUtc: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at_utc'],
+      )!,
+    );
+  }
+
+  @override
+  $HrvEpisodeAliasesTable createAlias(String alias) {
+    return $HrvEpisodeAliasesTable(attachedDatabase, alias);
+  }
+}
+
+class HrvEpisodeAliase extends DataClass
+    implements Insertable<HrvEpisodeAliase> {
+  final String athleteId;
+  final String source;
+  final String sourceActivityId;
+  final String episodeId;
+  final String state;
+  final DateTime createdAtUtc;
+  const HrvEpisodeAliase({
+    required this.athleteId,
+    required this.source,
+    required this.sourceActivityId,
+    required this.episodeId,
+    required this.state,
+    required this.createdAtUtc,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['athlete_id'] = Variable<String>(athleteId);
+    map['source'] = Variable<String>(source);
+    map['source_activity_id'] = Variable<String>(sourceActivityId);
+    map['episode_id'] = Variable<String>(episodeId);
+    map['state'] = Variable<String>(state);
+    map['created_at_utc'] = Variable<DateTime>(createdAtUtc);
+    return map;
+  }
+
+  HrvEpisodeAliasesCompanion toCompanion(bool nullToAbsent) {
+    return HrvEpisodeAliasesCompanion(
+      athleteId: Value(athleteId),
+      source: Value(source),
+      sourceActivityId: Value(sourceActivityId),
+      episodeId: Value(episodeId),
+      state: Value(state),
+      createdAtUtc: Value(createdAtUtc),
+    );
+  }
+
+  factory HrvEpisodeAliase.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return HrvEpisodeAliase(
+      athleteId: serializer.fromJson<String>(json['athleteId']),
+      source: serializer.fromJson<String>(json['source']),
+      sourceActivityId: serializer.fromJson<String>(json['sourceActivityId']),
+      episodeId: serializer.fromJson<String>(json['episodeId']),
+      state: serializer.fromJson<String>(json['state']),
+      createdAtUtc: serializer.fromJson<DateTime>(json['createdAtUtc']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'athleteId': serializer.toJson<String>(athleteId),
+      'source': serializer.toJson<String>(source),
+      'sourceActivityId': serializer.toJson<String>(sourceActivityId),
+      'episodeId': serializer.toJson<String>(episodeId),
+      'state': serializer.toJson<String>(state),
+      'createdAtUtc': serializer.toJson<DateTime>(createdAtUtc),
+    };
+  }
+
+  HrvEpisodeAliase copyWith({
+    String? athleteId,
+    String? source,
+    String? sourceActivityId,
+    String? episodeId,
+    String? state,
+    DateTime? createdAtUtc,
+  }) => HrvEpisodeAliase(
+    athleteId: athleteId ?? this.athleteId,
+    source: source ?? this.source,
+    sourceActivityId: sourceActivityId ?? this.sourceActivityId,
+    episodeId: episodeId ?? this.episodeId,
+    state: state ?? this.state,
+    createdAtUtc: createdAtUtc ?? this.createdAtUtc,
+  );
+  HrvEpisodeAliase copyWithCompanion(HrvEpisodeAliasesCompanion data) {
+    return HrvEpisodeAliase(
+      athleteId: data.athleteId.present ? data.athleteId.value : this.athleteId,
+      source: data.source.present ? data.source.value : this.source,
+      sourceActivityId: data.sourceActivityId.present
+          ? data.sourceActivityId.value
+          : this.sourceActivityId,
+      episodeId: data.episodeId.present ? data.episodeId.value : this.episodeId,
+      state: data.state.present ? data.state.value : this.state,
+      createdAtUtc: data.createdAtUtc.present
+          ? data.createdAtUtc.value
+          : this.createdAtUtc,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HrvEpisodeAliase(')
+          ..write('athleteId: $athleteId, ')
+          ..write('source: $source, ')
+          ..write('sourceActivityId: $sourceActivityId, ')
+          ..write('episodeId: $episodeId, ')
+          ..write('state: $state, ')
+          ..write('createdAtUtc: $createdAtUtc')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    athleteId,
+    source,
+    sourceActivityId,
+    episodeId,
+    state,
+    createdAtUtc,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is HrvEpisodeAliase &&
+          other.athleteId == this.athleteId &&
+          other.source == this.source &&
+          other.sourceActivityId == this.sourceActivityId &&
+          other.episodeId == this.episodeId &&
+          other.state == this.state &&
+          other.createdAtUtc == this.createdAtUtc);
+}
+
+class HrvEpisodeAliasesCompanion extends UpdateCompanion<HrvEpisodeAliase> {
+  final Value<String> athleteId;
+  final Value<String> source;
+  final Value<String> sourceActivityId;
+  final Value<String> episodeId;
+  final Value<String> state;
+  final Value<DateTime> createdAtUtc;
+  final Value<int> rowid;
+  const HrvEpisodeAliasesCompanion({
+    this.athleteId = const Value.absent(),
+    this.source = const Value.absent(),
+    this.sourceActivityId = const Value.absent(),
+    this.episodeId = const Value.absent(),
+    this.state = const Value.absent(),
+    this.createdAtUtc = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  HrvEpisodeAliasesCompanion.insert({
+    this.athleteId = const Value.absent(),
+    required String source,
+    required String sourceActivityId,
+    required String episodeId,
+    this.state = const Value.absent(),
+    required DateTime createdAtUtc,
+    this.rowid = const Value.absent(),
+  }) : source = Value(source),
+       sourceActivityId = Value(sourceActivityId),
+       episodeId = Value(episodeId),
+       createdAtUtc = Value(createdAtUtc);
+  static Insertable<HrvEpisodeAliase> custom({
+    Expression<String>? athleteId,
+    Expression<String>? source,
+    Expression<String>? sourceActivityId,
+    Expression<String>? episodeId,
+    Expression<String>? state,
+    Expression<DateTime>? createdAtUtc,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (athleteId != null) 'athlete_id': athleteId,
+      if (source != null) 'source': source,
+      if (sourceActivityId != null) 'source_activity_id': sourceActivityId,
+      if (episodeId != null) 'episode_id': episodeId,
+      if (state != null) 'state': state,
+      if (createdAtUtc != null) 'created_at_utc': createdAtUtc,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  HrvEpisodeAliasesCompanion copyWith({
+    Value<String>? athleteId,
+    Value<String>? source,
+    Value<String>? sourceActivityId,
+    Value<String>? episodeId,
+    Value<String>? state,
+    Value<DateTime>? createdAtUtc,
+    Value<int>? rowid,
+  }) {
+    return HrvEpisodeAliasesCompanion(
+      athleteId: athleteId ?? this.athleteId,
+      source: source ?? this.source,
+      sourceActivityId: sourceActivityId ?? this.sourceActivityId,
+      episodeId: episodeId ?? this.episodeId,
+      state: state ?? this.state,
+      createdAtUtc: createdAtUtc ?? this.createdAtUtc,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (athleteId.present) {
+      map['athlete_id'] = Variable<String>(athleteId.value);
+    }
+    if (source.present) {
+      map['source'] = Variable<String>(source.value);
+    }
+    if (sourceActivityId.present) {
+      map['source_activity_id'] = Variable<String>(sourceActivityId.value);
+    }
+    if (episodeId.present) {
+      map['episode_id'] = Variable<String>(episodeId.value);
+    }
+    if (state.present) {
+      map['state'] = Variable<String>(state.value);
+    }
+    if (createdAtUtc.present) {
+      map['created_at_utc'] = Variable<DateTime>(createdAtUtc.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HrvEpisodeAliasesCompanion(')
+          ..write('athleteId: $athleteId, ')
+          ..write('source: $source, ')
+          ..write('sourceActivityId: $sourceActivityId, ')
+          ..write('episodeId: $episodeId, ')
+          ..write('state: $state, ')
+          ..write('createdAtUtc: $createdAtUtc, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $HrvEpisodeMeasurementsTable extends HrvEpisodeMeasurements
+    with TableInfo<$HrvEpisodeMeasurementsTable, HrvEpisodeMeasurement> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $HrvEpisodeMeasurementsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _linkIdMeta = const VerificationMeta('linkId');
+  @override
+  late final GeneratedColumn<int> linkId = GeneratedColumn<int>(
+    'link_id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _episodeIdMeta = const VerificationMeta(
+    'episodeId',
+  );
+  @override
+  late final GeneratedColumn<String> episodeId = GeneratedColumn<String>(
+    'episode_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _measurementUidMeta = const VerificationMeta(
+    'measurementUid',
+  );
+  @override
+  late final GeneratedColumn<String> measurementUid = GeneratedColumn<String>(
+    'measurement_uid',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _roleMeta = const VerificationMeta('role');
+  @override
+  late final GeneratedColumn<String> role = GeneratedColumn<String>(
+    'role',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _selectionMeta = const VerificationMeta(
+    'selection',
+  );
+  @override
+  late final GeneratedColumn<String> selection = GeneratedColumn<String>(
+    'selection',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _associationMethodMeta = const VerificationMeta(
+    'associationMethod',
+  );
+  @override
+  late final GeneratedColumn<String> associationMethod =
+      GeneratedColumn<String>(
+        'association_method',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      );
+  static const VerificationMeta _stateMeta = const VerificationMeta('state');
+  @override
+  late final GeneratedColumn<String> state = GeneratedColumn<String>(
+    'state',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('active'),
+  );
+  static const VerificationMeta _reasonMeta = const VerificationMeta('reason');
+  @override
+  late final GeneratedColumn<String> reason = GeneratedColumn<String>(
+    'reason',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _policyVersionMeta = const VerificationMeta(
+    'policyVersion',
+  );
+  @override
+  late final GeneratedColumn<String> policyVersion = GeneratedColumn<String>(
+    'policy_version',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _evidenceRevisionMeta = const VerificationMeta(
+    'evidenceRevision',
+  );
+  @override
+  late final GeneratedColumn<int> evidenceRevision = GeneratedColumn<int>(
+    'evidence_revision',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _createdAtUtcMeta = const VerificationMeta(
+    'createdAtUtc',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAtUtc = GeneratedColumn<DateTime>(
+    'created_at_utc',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _retractedAtUtcMeta = const VerificationMeta(
+    'retractedAtUtc',
+  );
+  @override
+  late final GeneratedColumn<DateTime> retractedAtUtc =
+      GeneratedColumn<DateTime>(
+        'retracted_at_utc',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
+  @override
+  List<GeneratedColumn> get $columns => [
+    linkId,
+    episodeId,
+    measurementUid,
+    role,
+    selection,
+    associationMethod,
+    state,
+    reason,
+    policyVersion,
+    evidenceRevision,
+    createdAtUtc,
+    retractedAtUtc,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'hrv_episode_measurements';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<HrvEpisodeMeasurement> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('link_id')) {
+      context.handle(
+        _linkIdMeta,
+        linkId.isAcceptableOrUnknown(data['link_id']!, _linkIdMeta),
+      );
+    }
+    if (data.containsKey('episode_id')) {
+      context.handle(
+        _episodeIdMeta,
+        episodeId.isAcceptableOrUnknown(data['episode_id']!, _episodeIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_episodeIdMeta);
+    }
+    if (data.containsKey('measurement_uid')) {
+      context.handle(
+        _measurementUidMeta,
+        measurementUid.isAcceptableOrUnknown(
+          data['measurement_uid']!,
+          _measurementUidMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_measurementUidMeta);
+    }
+    if (data.containsKey('role')) {
+      context.handle(
+        _roleMeta,
+        role.isAcceptableOrUnknown(data['role']!, _roleMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_roleMeta);
+    }
+    if (data.containsKey('selection')) {
+      context.handle(
+        _selectionMeta,
+        selection.isAcceptableOrUnknown(data['selection']!, _selectionMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_selectionMeta);
+    }
+    if (data.containsKey('association_method')) {
+      context.handle(
+        _associationMethodMeta,
+        associationMethod.isAcceptableOrUnknown(
+          data['association_method']!,
+          _associationMethodMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_associationMethodMeta);
+    }
+    if (data.containsKey('state')) {
+      context.handle(
+        _stateMeta,
+        state.isAcceptableOrUnknown(data['state']!, _stateMeta),
+      );
+    }
+    if (data.containsKey('reason')) {
+      context.handle(
+        _reasonMeta,
+        reason.isAcceptableOrUnknown(data['reason']!, _reasonMeta),
+      );
+    }
+    if (data.containsKey('policy_version')) {
+      context.handle(
+        _policyVersionMeta,
+        policyVersion.isAcceptableOrUnknown(
+          data['policy_version']!,
+          _policyVersionMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_policyVersionMeta);
+    }
+    if (data.containsKey('evidence_revision')) {
+      context.handle(
+        _evidenceRevisionMeta,
+        evidenceRevision.isAcceptableOrUnknown(
+          data['evidence_revision']!,
+          _evidenceRevisionMeta,
+        ),
+      );
+    }
+    if (data.containsKey('created_at_utc')) {
+      context.handle(
+        _createdAtUtcMeta,
+        createdAtUtc.isAcceptableOrUnknown(
+          data['created_at_utc']!,
+          _createdAtUtcMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtUtcMeta);
+    }
+    if (data.containsKey('retracted_at_utc')) {
+      context.handle(
+        _retractedAtUtcMeta,
+        retractedAtUtc.isAcceptableOrUnknown(
+          data['retracted_at_utc']!,
+          _retractedAtUtcMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {linkId};
+  @override
+  HrvEpisodeMeasurement map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return HrvEpisodeMeasurement(
+      linkId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}link_id'],
+      )!,
+      episodeId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}episode_id'],
+      )!,
+      measurementUid: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}measurement_uid'],
+      )!,
+      role: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}role'],
+      )!,
+      selection: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}selection'],
+      )!,
+      associationMethod: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}association_method'],
+      )!,
+      state: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}state'],
+      )!,
+      reason: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}reason'],
+      ),
+      policyVersion: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}policy_version'],
+      )!,
+      evidenceRevision: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}evidence_revision'],
+      )!,
+      createdAtUtc: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at_utc'],
+      )!,
+      retractedAtUtc: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}retracted_at_utc'],
+      ),
+    );
+  }
+
+  @override
+  $HrvEpisodeMeasurementsTable createAlias(String alias) {
+    return $HrvEpisodeMeasurementsTable(attachedDatabase, alias);
+  }
+}
+
+class HrvEpisodeMeasurement extends DataClass
+    implements Insertable<HrvEpisodeMeasurement> {
+  final int linkId;
+  final String episodeId;
+  final String measurementUid;
+
+  /// `pre` or `post`.
+  final String role;
+
+  /// `primary` or `additional`.
+  final String selection;
+
+  /// `automaticTimeline`, `launchContext` or `userCorrection`.
+  final String associationMethod;
+
+  /// `active` or `retracted`.
+  final String state;
+  final String? reason;
+  final String policyVersion;
+  final int evidenceRevision;
+  final DateTime createdAtUtc;
+  final DateTime? retractedAtUtc;
+  const HrvEpisodeMeasurement({
+    required this.linkId,
+    required this.episodeId,
+    required this.measurementUid,
+    required this.role,
+    required this.selection,
+    required this.associationMethod,
+    required this.state,
+    this.reason,
+    required this.policyVersion,
+    required this.evidenceRevision,
+    required this.createdAtUtc,
+    this.retractedAtUtc,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['link_id'] = Variable<int>(linkId);
+    map['episode_id'] = Variable<String>(episodeId);
+    map['measurement_uid'] = Variable<String>(measurementUid);
+    map['role'] = Variable<String>(role);
+    map['selection'] = Variable<String>(selection);
+    map['association_method'] = Variable<String>(associationMethod);
+    map['state'] = Variable<String>(state);
+    if (!nullToAbsent || reason != null) {
+      map['reason'] = Variable<String>(reason);
+    }
+    map['policy_version'] = Variable<String>(policyVersion);
+    map['evidence_revision'] = Variable<int>(evidenceRevision);
+    map['created_at_utc'] = Variable<DateTime>(createdAtUtc);
+    if (!nullToAbsent || retractedAtUtc != null) {
+      map['retracted_at_utc'] = Variable<DateTime>(retractedAtUtc);
+    }
+    return map;
+  }
+
+  HrvEpisodeMeasurementsCompanion toCompanion(bool nullToAbsent) {
+    return HrvEpisodeMeasurementsCompanion(
+      linkId: Value(linkId),
+      episodeId: Value(episodeId),
+      measurementUid: Value(measurementUid),
+      role: Value(role),
+      selection: Value(selection),
+      associationMethod: Value(associationMethod),
+      state: Value(state),
+      reason: reason == null && nullToAbsent
+          ? const Value.absent()
+          : Value(reason),
+      policyVersion: Value(policyVersion),
+      evidenceRevision: Value(evidenceRevision),
+      createdAtUtc: Value(createdAtUtc),
+      retractedAtUtc: retractedAtUtc == null && nullToAbsent
+          ? const Value.absent()
+          : Value(retractedAtUtc),
+    );
+  }
+
+  factory HrvEpisodeMeasurement.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return HrvEpisodeMeasurement(
+      linkId: serializer.fromJson<int>(json['linkId']),
+      episodeId: serializer.fromJson<String>(json['episodeId']),
+      measurementUid: serializer.fromJson<String>(json['measurementUid']),
+      role: serializer.fromJson<String>(json['role']),
+      selection: serializer.fromJson<String>(json['selection']),
+      associationMethod: serializer.fromJson<String>(json['associationMethod']),
+      state: serializer.fromJson<String>(json['state']),
+      reason: serializer.fromJson<String?>(json['reason']),
+      policyVersion: serializer.fromJson<String>(json['policyVersion']),
+      evidenceRevision: serializer.fromJson<int>(json['evidenceRevision']),
+      createdAtUtc: serializer.fromJson<DateTime>(json['createdAtUtc']),
+      retractedAtUtc: serializer.fromJson<DateTime?>(json['retractedAtUtc']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'linkId': serializer.toJson<int>(linkId),
+      'episodeId': serializer.toJson<String>(episodeId),
+      'measurementUid': serializer.toJson<String>(measurementUid),
+      'role': serializer.toJson<String>(role),
+      'selection': serializer.toJson<String>(selection),
+      'associationMethod': serializer.toJson<String>(associationMethod),
+      'state': serializer.toJson<String>(state),
+      'reason': serializer.toJson<String?>(reason),
+      'policyVersion': serializer.toJson<String>(policyVersion),
+      'evidenceRevision': serializer.toJson<int>(evidenceRevision),
+      'createdAtUtc': serializer.toJson<DateTime>(createdAtUtc),
+      'retractedAtUtc': serializer.toJson<DateTime?>(retractedAtUtc),
+    };
+  }
+
+  HrvEpisodeMeasurement copyWith({
+    int? linkId,
+    String? episodeId,
+    String? measurementUid,
+    String? role,
+    String? selection,
+    String? associationMethod,
+    String? state,
+    Value<String?> reason = const Value.absent(),
+    String? policyVersion,
+    int? evidenceRevision,
+    DateTime? createdAtUtc,
+    Value<DateTime?> retractedAtUtc = const Value.absent(),
+  }) => HrvEpisodeMeasurement(
+    linkId: linkId ?? this.linkId,
+    episodeId: episodeId ?? this.episodeId,
+    measurementUid: measurementUid ?? this.measurementUid,
+    role: role ?? this.role,
+    selection: selection ?? this.selection,
+    associationMethod: associationMethod ?? this.associationMethod,
+    state: state ?? this.state,
+    reason: reason.present ? reason.value : this.reason,
+    policyVersion: policyVersion ?? this.policyVersion,
+    evidenceRevision: evidenceRevision ?? this.evidenceRevision,
+    createdAtUtc: createdAtUtc ?? this.createdAtUtc,
+    retractedAtUtc: retractedAtUtc.present
+        ? retractedAtUtc.value
+        : this.retractedAtUtc,
+  );
+  HrvEpisodeMeasurement copyWithCompanion(
+    HrvEpisodeMeasurementsCompanion data,
+  ) {
+    return HrvEpisodeMeasurement(
+      linkId: data.linkId.present ? data.linkId.value : this.linkId,
+      episodeId: data.episodeId.present ? data.episodeId.value : this.episodeId,
+      measurementUid: data.measurementUid.present
+          ? data.measurementUid.value
+          : this.measurementUid,
+      role: data.role.present ? data.role.value : this.role,
+      selection: data.selection.present ? data.selection.value : this.selection,
+      associationMethod: data.associationMethod.present
+          ? data.associationMethod.value
+          : this.associationMethod,
+      state: data.state.present ? data.state.value : this.state,
+      reason: data.reason.present ? data.reason.value : this.reason,
+      policyVersion: data.policyVersion.present
+          ? data.policyVersion.value
+          : this.policyVersion,
+      evidenceRevision: data.evidenceRevision.present
+          ? data.evidenceRevision.value
+          : this.evidenceRevision,
+      createdAtUtc: data.createdAtUtc.present
+          ? data.createdAtUtc.value
+          : this.createdAtUtc,
+      retractedAtUtc: data.retractedAtUtc.present
+          ? data.retractedAtUtc.value
+          : this.retractedAtUtc,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HrvEpisodeMeasurement(')
+          ..write('linkId: $linkId, ')
+          ..write('episodeId: $episodeId, ')
+          ..write('measurementUid: $measurementUid, ')
+          ..write('role: $role, ')
+          ..write('selection: $selection, ')
+          ..write('associationMethod: $associationMethod, ')
+          ..write('state: $state, ')
+          ..write('reason: $reason, ')
+          ..write('policyVersion: $policyVersion, ')
+          ..write('evidenceRevision: $evidenceRevision, ')
+          ..write('createdAtUtc: $createdAtUtc, ')
+          ..write('retractedAtUtc: $retractedAtUtc')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    linkId,
+    episodeId,
+    measurementUid,
+    role,
+    selection,
+    associationMethod,
+    state,
+    reason,
+    policyVersion,
+    evidenceRevision,
+    createdAtUtc,
+    retractedAtUtc,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is HrvEpisodeMeasurement &&
+          other.linkId == this.linkId &&
+          other.episodeId == this.episodeId &&
+          other.measurementUid == this.measurementUid &&
+          other.role == this.role &&
+          other.selection == this.selection &&
+          other.associationMethod == this.associationMethod &&
+          other.state == this.state &&
+          other.reason == this.reason &&
+          other.policyVersion == this.policyVersion &&
+          other.evidenceRevision == this.evidenceRevision &&
+          other.createdAtUtc == this.createdAtUtc &&
+          other.retractedAtUtc == this.retractedAtUtc);
+}
+
+class HrvEpisodeMeasurementsCompanion
+    extends UpdateCompanion<HrvEpisodeMeasurement> {
+  final Value<int> linkId;
+  final Value<String> episodeId;
+  final Value<String> measurementUid;
+  final Value<String> role;
+  final Value<String> selection;
+  final Value<String> associationMethod;
+  final Value<String> state;
+  final Value<String?> reason;
+  final Value<String> policyVersion;
+  final Value<int> evidenceRevision;
+  final Value<DateTime> createdAtUtc;
+  final Value<DateTime?> retractedAtUtc;
+  const HrvEpisodeMeasurementsCompanion({
+    this.linkId = const Value.absent(),
+    this.episodeId = const Value.absent(),
+    this.measurementUid = const Value.absent(),
+    this.role = const Value.absent(),
+    this.selection = const Value.absent(),
+    this.associationMethod = const Value.absent(),
+    this.state = const Value.absent(),
+    this.reason = const Value.absent(),
+    this.policyVersion = const Value.absent(),
+    this.evidenceRevision = const Value.absent(),
+    this.createdAtUtc = const Value.absent(),
+    this.retractedAtUtc = const Value.absent(),
+  });
+  HrvEpisodeMeasurementsCompanion.insert({
+    this.linkId = const Value.absent(),
+    required String episodeId,
+    required String measurementUid,
+    required String role,
+    required String selection,
+    required String associationMethod,
+    this.state = const Value.absent(),
+    this.reason = const Value.absent(),
+    required String policyVersion,
+    this.evidenceRevision = const Value.absent(),
+    required DateTime createdAtUtc,
+    this.retractedAtUtc = const Value.absent(),
+  }) : episodeId = Value(episodeId),
+       measurementUid = Value(measurementUid),
+       role = Value(role),
+       selection = Value(selection),
+       associationMethod = Value(associationMethod),
+       policyVersion = Value(policyVersion),
+       createdAtUtc = Value(createdAtUtc);
+  static Insertable<HrvEpisodeMeasurement> custom({
+    Expression<int>? linkId,
+    Expression<String>? episodeId,
+    Expression<String>? measurementUid,
+    Expression<String>? role,
+    Expression<String>? selection,
+    Expression<String>? associationMethod,
+    Expression<String>? state,
+    Expression<String>? reason,
+    Expression<String>? policyVersion,
+    Expression<int>? evidenceRevision,
+    Expression<DateTime>? createdAtUtc,
+    Expression<DateTime>? retractedAtUtc,
+  }) {
+    return RawValuesInsertable({
+      if (linkId != null) 'link_id': linkId,
+      if (episodeId != null) 'episode_id': episodeId,
+      if (measurementUid != null) 'measurement_uid': measurementUid,
+      if (role != null) 'role': role,
+      if (selection != null) 'selection': selection,
+      if (associationMethod != null) 'association_method': associationMethod,
+      if (state != null) 'state': state,
+      if (reason != null) 'reason': reason,
+      if (policyVersion != null) 'policy_version': policyVersion,
+      if (evidenceRevision != null) 'evidence_revision': evidenceRevision,
+      if (createdAtUtc != null) 'created_at_utc': createdAtUtc,
+      if (retractedAtUtc != null) 'retracted_at_utc': retractedAtUtc,
+    });
+  }
+
+  HrvEpisodeMeasurementsCompanion copyWith({
+    Value<int>? linkId,
+    Value<String>? episodeId,
+    Value<String>? measurementUid,
+    Value<String>? role,
+    Value<String>? selection,
+    Value<String>? associationMethod,
+    Value<String>? state,
+    Value<String?>? reason,
+    Value<String>? policyVersion,
+    Value<int>? evidenceRevision,
+    Value<DateTime>? createdAtUtc,
+    Value<DateTime?>? retractedAtUtc,
+  }) {
+    return HrvEpisodeMeasurementsCompanion(
+      linkId: linkId ?? this.linkId,
+      episodeId: episodeId ?? this.episodeId,
+      measurementUid: measurementUid ?? this.measurementUid,
+      role: role ?? this.role,
+      selection: selection ?? this.selection,
+      associationMethod: associationMethod ?? this.associationMethod,
+      state: state ?? this.state,
+      reason: reason ?? this.reason,
+      policyVersion: policyVersion ?? this.policyVersion,
+      evidenceRevision: evidenceRevision ?? this.evidenceRevision,
+      createdAtUtc: createdAtUtc ?? this.createdAtUtc,
+      retractedAtUtc: retractedAtUtc ?? this.retractedAtUtc,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (linkId.present) {
+      map['link_id'] = Variable<int>(linkId.value);
+    }
+    if (episodeId.present) {
+      map['episode_id'] = Variable<String>(episodeId.value);
+    }
+    if (measurementUid.present) {
+      map['measurement_uid'] = Variable<String>(measurementUid.value);
+    }
+    if (role.present) {
+      map['role'] = Variable<String>(role.value);
+    }
+    if (selection.present) {
+      map['selection'] = Variable<String>(selection.value);
+    }
+    if (associationMethod.present) {
+      map['association_method'] = Variable<String>(associationMethod.value);
+    }
+    if (state.present) {
+      map['state'] = Variable<String>(state.value);
+    }
+    if (reason.present) {
+      map['reason'] = Variable<String>(reason.value);
+    }
+    if (policyVersion.present) {
+      map['policy_version'] = Variable<String>(policyVersion.value);
+    }
+    if (evidenceRevision.present) {
+      map['evidence_revision'] = Variable<int>(evidenceRevision.value);
+    }
+    if (createdAtUtc.present) {
+      map['created_at_utc'] = Variable<DateTime>(createdAtUtc.value);
+    }
+    if (retractedAtUtc.present) {
+      map['retracted_at_utc'] = Variable<DateTime>(retractedAtUtc.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HrvEpisodeMeasurementsCompanion(')
+          ..write('linkId: $linkId, ')
+          ..write('episodeId: $episodeId, ')
+          ..write('measurementUid: $measurementUid, ')
+          ..write('role: $role, ')
+          ..write('selection: $selection, ')
+          ..write('associationMethod: $associationMethod, ')
+          ..write('state: $state, ')
+          ..write('reason: $reason, ')
+          ..write('policyVersion: $policyVersion, ')
+          ..write('evidenceRevision: $evidenceRevision, ')
+          ..write('createdAtUtc: $createdAtUtc, ')
+          ..write('retractedAtUtc: $retractedAtUtc')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $HrvEpisodeFeedbackTable extends HrvEpisodeFeedback
+    with TableInfo<$HrvEpisodeFeedbackTable, HrvEpisodeFeedbackData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $HrvEpisodeFeedbackTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _feedbackUidMeta = const VerificationMeta(
+    'feedbackUid',
+  );
+  @override
+  late final GeneratedColumn<String> feedbackUid = GeneratedColumn<String>(
+    'feedback_uid',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _episodeIdMeta = const VerificationMeta(
+    'episodeId',
+  );
+  @override
+  late final GeneratedColumn<String> episodeId = GeneratedColumn<String>(
+    'episode_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _contextMeta = const VerificationMeta(
+    'context',
+  );
+  @override
+  late final GeneratedColumn<String> context = GeneratedColumn<String>(
+    'context',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _recordedAtUtcMeta = const VerificationMeta(
+    'recordedAtUtc',
+  );
+  @override
+  late final GeneratedColumn<DateTime> recordedAtUtc =
+      GeneratedColumn<DateTime>(
+        'recorded_at_utc',
+        aliasedName,
+        false,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: true,
+      );
+  static const VerificationMeta _rpeMeta = const VerificationMeta('rpe');
+  @override
+  late final GeneratedColumn<int> rpe = GeneratedColumn<int>(
+    'rpe',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+    'note',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _revisionMeta = const VerificationMeta(
+    'revision',
+  );
+  @override
+  late final GeneratedColumn<int> revision = GeneratedColumn<int>(
+    'revision',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    feedbackUid,
+    episodeId,
+    context,
+    recordedAtUtc,
+    rpe,
+    note,
+    revision,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'hrv_episode_feedback';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<HrvEpisodeFeedbackData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('feedback_uid')) {
+      context.handle(
+        _feedbackUidMeta,
+        feedbackUid.isAcceptableOrUnknown(
+          data['feedback_uid']!,
+          _feedbackUidMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_feedbackUidMeta);
+    }
+    if (data.containsKey('episode_id')) {
+      context.handle(
+        _episodeIdMeta,
+        episodeId.isAcceptableOrUnknown(data['episode_id']!, _episodeIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_episodeIdMeta);
+    }
+    if (data.containsKey('context')) {
+      context.handle(
+        _contextMeta,
+        this.context.isAcceptableOrUnknown(data['context']!, _contextMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_contextMeta);
+    }
+    if (data.containsKey('recorded_at_utc')) {
+      context.handle(
+        _recordedAtUtcMeta,
+        recordedAtUtc.isAcceptableOrUnknown(
+          data['recorded_at_utc']!,
+          _recordedAtUtcMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_recordedAtUtcMeta);
+    }
+    if (data.containsKey('rpe')) {
+      context.handle(
+        _rpeMeta,
+        rpe.isAcceptableOrUnknown(data['rpe']!, _rpeMeta),
+      );
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+        _noteMeta,
+        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
+      );
+    }
+    if (data.containsKey('revision')) {
+      context.handle(
+        _revisionMeta,
+        revision.isAcceptableOrUnknown(data['revision']!, _revisionMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {feedbackUid};
+  @override
+  HrvEpisodeFeedbackData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return HrvEpisodeFeedbackData(
+      feedbackUid: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}feedback_uid'],
+      )!,
+      episodeId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}episode_id'],
+      )!,
+      context: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}context'],
+      )!,
+      recordedAtUtc: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}recorded_at_utc'],
+      )!,
+      rpe: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}rpe'],
+      ),
+      note: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note'],
+      ),
+      revision: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}revision'],
+      )!,
+    );
+  }
+
+  @override
+  $HrvEpisodeFeedbackTable createAlias(String alias) {
+    return $HrvEpisodeFeedbackTable(attachedDatabase, alias);
+  }
+}
+
+class HrvEpisodeFeedbackData extends DataClass
+    implements Insertable<HrvEpisodeFeedbackData> {
+  final String feedbackUid;
+  final String episodeId;
+
+  /// `postTraining` or `followUp`.
+  final String context;
+  final DateTime recordedAtUtc;
+  final int? rpe;
+  final String? note;
+  final int revision;
+  const HrvEpisodeFeedbackData({
+    required this.feedbackUid,
+    required this.episodeId,
+    required this.context,
+    required this.recordedAtUtc,
+    this.rpe,
+    this.note,
+    required this.revision,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['feedback_uid'] = Variable<String>(feedbackUid);
+    map['episode_id'] = Variable<String>(episodeId);
+    map['context'] = Variable<String>(context);
+    map['recorded_at_utc'] = Variable<DateTime>(recordedAtUtc);
+    if (!nullToAbsent || rpe != null) {
+      map['rpe'] = Variable<int>(rpe);
+    }
+    if (!nullToAbsent || note != null) {
+      map['note'] = Variable<String>(note);
+    }
+    map['revision'] = Variable<int>(revision);
+    return map;
+  }
+
+  HrvEpisodeFeedbackCompanion toCompanion(bool nullToAbsent) {
+    return HrvEpisodeFeedbackCompanion(
+      feedbackUid: Value(feedbackUid),
+      episodeId: Value(episodeId),
+      context: Value(context),
+      recordedAtUtc: Value(recordedAtUtc),
+      rpe: rpe == null && nullToAbsent ? const Value.absent() : Value(rpe),
+      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
+      revision: Value(revision),
+    );
+  }
+
+  factory HrvEpisodeFeedbackData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return HrvEpisodeFeedbackData(
+      feedbackUid: serializer.fromJson<String>(json['feedbackUid']),
+      episodeId: serializer.fromJson<String>(json['episodeId']),
+      context: serializer.fromJson<String>(json['context']),
+      recordedAtUtc: serializer.fromJson<DateTime>(json['recordedAtUtc']),
+      rpe: serializer.fromJson<int?>(json['rpe']),
+      note: serializer.fromJson<String?>(json['note']),
+      revision: serializer.fromJson<int>(json['revision']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'feedbackUid': serializer.toJson<String>(feedbackUid),
+      'episodeId': serializer.toJson<String>(episodeId),
+      'context': serializer.toJson<String>(context),
+      'recordedAtUtc': serializer.toJson<DateTime>(recordedAtUtc),
+      'rpe': serializer.toJson<int?>(rpe),
+      'note': serializer.toJson<String?>(note),
+      'revision': serializer.toJson<int>(revision),
+    };
+  }
+
+  HrvEpisodeFeedbackData copyWith({
+    String? feedbackUid,
+    String? episodeId,
+    String? context,
+    DateTime? recordedAtUtc,
+    Value<int?> rpe = const Value.absent(),
+    Value<String?> note = const Value.absent(),
+    int? revision,
+  }) => HrvEpisodeFeedbackData(
+    feedbackUid: feedbackUid ?? this.feedbackUid,
+    episodeId: episodeId ?? this.episodeId,
+    context: context ?? this.context,
+    recordedAtUtc: recordedAtUtc ?? this.recordedAtUtc,
+    rpe: rpe.present ? rpe.value : this.rpe,
+    note: note.present ? note.value : this.note,
+    revision: revision ?? this.revision,
+  );
+  HrvEpisodeFeedbackData copyWithCompanion(HrvEpisodeFeedbackCompanion data) {
+    return HrvEpisodeFeedbackData(
+      feedbackUid: data.feedbackUid.present
+          ? data.feedbackUid.value
+          : this.feedbackUid,
+      episodeId: data.episodeId.present ? data.episodeId.value : this.episodeId,
+      context: data.context.present ? data.context.value : this.context,
+      recordedAtUtc: data.recordedAtUtc.present
+          ? data.recordedAtUtc.value
+          : this.recordedAtUtc,
+      rpe: data.rpe.present ? data.rpe.value : this.rpe,
+      note: data.note.present ? data.note.value : this.note,
+      revision: data.revision.present ? data.revision.value : this.revision,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HrvEpisodeFeedbackData(')
+          ..write('feedbackUid: $feedbackUid, ')
+          ..write('episodeId: $episodeId, ')
+          ..write('context: $context, ')
+          ..write('recordedAtUtc: $recordedAtUtc, ')
+          ..write('rpe: $rpe, ')
+          ..write('note: $note, ')
+          ..write('revision: $revision')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    feedbackUid,
+    episodeId,
+    context,
+    recordedAtUtc,
+    rpe,
+    note,
+    revision,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is HrvEpisodeFeedbackData &&
+          other.feedbackUid == this.feedbackUid &&
+          other.episodeId == this.episodeId &&
+          other.context == this.context &&
+          other.recordedAtUtc == this.recordedAtUtc &&
+          other.rpe == this.rpe &&
+          other.note == this.note &&
+          other.revision == this.revision);
+}
+
+class HrvEpisodeFeedbackCompanion
+    extends UpdateCompanion<HrvEpisodeFeedbackData> {
+  final Value<String> feedbackUid;
+  final Value<String> episodeId;
+  final Value<String> context;
+  final Value<DateTime> recordedAtUtc;
+  final Value<int?> rpe;
+  final Value<String?> note;
+  final Value<int> revision;
+  final Value<int> rowid;
+  const HrvEpisodeFeedbackCompanion({
+    this.feedbackUid = const Value.absent(),
+    this.episodeId = const Value.absent(),
+    this.context = const Value.absent(),
+    this.recordedAtUtc = const Value.absent(),
+    this.rpe = const Value.absent(),
+    this.note = const Value.absent(),
+    this.revision = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  HrvEpisodeFeedbackCompanion.insert({
+    required String feedbackUid,
+    required String episodeId,
+    required String context,
+    required DateTime recordedAtUtc,
+    this.rpe = const Value.absent(),
+    this.note = const Value.absent(),
+    this.revision = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : feedbackUid = Value(feedbackUid),
+       episodeId = Value(episodeId),
+       context = Value(context),
+       recordedAtUtc = Value(recordedAtUtc);
+  static Insertable<HrvEpisodeFeedbackData> custom({
+    Expression<String>? feedbackUid,
+    Expression<String>? episodeId,
+    Expression<String>? context,
+    Expression<DateTime>? recordedAtUtc,
+    Expression<int>? rpe,
+    Expression<String>? note,
+    Expression<int>? revision,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (feedbackUid != null) 'feedback_uid': feedbackUid,
+      if (episodeId != null) 'episode_id': episodeId,
+      if (context != null) 'context': context,
+      if (recordedAtUtc != null) 'recorded_at_utc': recordedAtUtc,
+      if (rpe != null) 'rpe': rpe,
+      if (note != null) 'note': note,
+      if (revision != null) 'revision': revision,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  HrvEpisodeFeedbackCompanion copyWith({
+    Value<String>? feedbackUid,
+    Value<String>? episodeId,
+    Value<String>? context,
+    Value<DateTime>? recordedAtUtc,
+    Value<int?>? rpe,
+    Value<String?>? note,
+    Value<int>? revision,
+    Value<int>? rowid,
+  }) {
+    return HrvEpisodeFeedbackCompanion(
+      feedbackUid: feedbackUid ?? this.feedbackUid,
+      episodeId: episodeId ?? this.episodeId,
+      context: context ?? this.context,
+      recordedAtUtc: recordedAtUtc ?? this.recordedAtUtc,
+      rpe: rpe ?? this.rpe,
+      note: note ?? this.note,
+      revision: revision ?? this.revision,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (feedbackUid.present) {
+      map['feedback_uid'] = Variable<String>(feedbackUid.value);
+    }
+    if (episodeId.present) {
+      map['episode_id'] = Variable<String>(episodeId.value);
+    }
+    if (context.present) {
+      map['context'] = Variable<String>(context.value);
+    }
+    if (recordedAtUtc.present) {
+      map['recorded_at_utc'] = Variable<DateTime>(recordedAtUtc.value);
+    }
+    if (rpe.present) {
+      map['rpe'] = Variable<int>(rpe.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    if (revision.present) {
+      map['revision'] = Variable<int>(revision.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HrvEpisodeFeedbackCompanion(')
+          ..write('feedbackUid: $feedbackUid, ')
+          ..write('episodeId: $episodeId, ')
+          ..write('context: $context, ')
+          ..write('recordedAtUtc: $recordedAtUtc, ')
+          ..write('rpe: $rpe, ')
+          ..write('note: $note, ')
+          ..write('revision: $revision, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $HrvReminderPreferencesTable extends HrvReminderPreferences
+    with TableInfo<$HrvReminderPreferencesTable, HrvReminderPreference> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $HrvReminderPreferencesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _athleteIdMeta = const VerificationMeta(
+    'athleteId',
+  );
+  @override
+  late final GeneratedColumn<String> athleteId = GeneratedColumn<String>(
+    'athlete_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('self'),
+  );
+  static const VerificationMeta _optedInMeta = const VerificationMeta(
+    'optedIn',
+  );
+  @override
+  late final GeneratedColumn<bool> optedIn = GeneratedColumn<bool>(
+    'opted_in',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("opted_in" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _enabledSinceUtcMeta = const VerificationMeta(
+    'enabledSinceUtc',
+  );
+  @override
+  late final GeneratedColumn<DateTime> enabledSinceUtc =
+      GeneratedColumn<DateTime>(
+        'enabled_since_utc',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _delayMinutesMeta = const VerificationMeta(
+    'delayMinutes',
+  );
+  @override
+  late final GeneratedColumn<int> delayMinutes = GeneratedColumn<int>(
+    'delay_minutes',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(30),
+  );
+  static const VerificationMeta _quietEnabledMeta = const VerificationMeta(
+    'quietEnabled',
+  );
+  @override
+  late final GeneratedColumn<bool> quietEnabled = GeneratedColumn<bool>(
+    'quiet_enabled',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("quiet_enabled" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _quietStartMinuteMeta = const VerificationMeta(
+    'quietStartMinute',
+  );
+  @override
+  late final GeneratedColumn<int> quietStartMinute = GeneratedColumn<int>(
+    'quiet_start_minute',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(22 * 60),
+  );
+  static const VerificationMeta _quietEndMinuteMeta = const VerificationMeta(
+    'quietEndMinute',
+  );
+  @override
+  late final GeneratedColumn<int> quietEndMinute = GeneratedColumn<int>(
+    'quiet_end_minute',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(7 * 60),
+  );
+  static const VerificationMeta _postponeInQuietMeta = const VerificationMeta(
+    'postponeInQuiet',
+  );
+  @override
+  late final GeneratedColumn<bool> postponeInQuiet = GeneratedColumn<bool>(
+    'postpone_in_quiet',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("postpone_in_quiet" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _installationEpochMeta = const VerificationMeta(
+    'installationEpoch',
+  );
+  @override
+  late final GeneratedColumn<String> installationEpoch =
+      GeneratedColumn<String>(
+        'installation_epoch',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      );
+  static const VerificationMeta _revisionMeta = const VerificationMeta(
+    'revision',
+  );
+  @override
+  late final GeneratedColumn<int> revision = GeneratedColumn<int>(
+    'revision',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _updatedAtUtcMeta = const VerificationMeta(
+    'updatedAtUtc',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAtUtc = GeneratedColumn<DateTime>(
+    'updated_at_utc',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    athleteId,
+    optedIn,
+    enabledSinceUtc,
+    delayMinutes,
+    quietEnabled,
+    quietStartMinute,
+    quietEndMinute,
+    postponeInQuiet,
+    installationEpoch,
+    revision,
+    updatedAtUtc,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'hrv_reminder_preferences';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<HrvReminderPreference> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('athlete_id')) {
+      context.handle(
+        _athleteIdMeta,
+        athleteId.isAcceptableOrUnknown(data['athlete_id']!, _athleteIdMeta),
+      );
+    }
+    if (data.containsKey('opted_in')) {
+      context.handle(
+        _optedInMeta,
+        optedIn.isAcceptableOrUnknown(data['opted_in']!, _optedInMeta),
+      );
+    }
+    if (data.containsKey('enabled_since_utc')) {
+      context.handle(
+        _enabledSinceUtcMeta,
+        enabledSinceUtc.isAcceptableOrUnknown(
+          data['enabled_since_utc']!,
+          _enabledSinceUtcMeta,
+        ),
+      );
+    }
+    if (data.containsKey('delay_minutes')) {
+      context.handle(
+        _delayMinutesMeta,
+        delayMinutes.isAcceptableOrUnknown(
+          data['delay_minutes']!,
+          _delayMinutesMeta,
+        ),
+      );
+    }
+    if (data.containsKey('quiet_enabled')) {
+      context.handle(
+        _quietEnabledMeta,
+        quietEnabled.isAcceptableOrUnknown(
+          data['quiet_enabled']!,
+          _quietEnabledMeta,
+        ),
+      );
+    }
+    if (data.containsKey('quiet_start_minute')) {
+      context.handle(
+        _quietStartMinuteMeta,
+        quietStartMinute.isAcceptableOrUnknown(
+          data['quiet_start_minute']!,
+          _quietStartMinuteMeta,
+        ),
+      );
+    }
+    if (data.containsKey('quiet_end_minute')) {
+      context.handle(
+        _quietEndMinuteMeta,
+        quietEndMinute.isAcceptableOrUnknown(
+          data['quiet_end_minute']!,
+          _quietEndMinuteMeta,
+        ),
+      );
+    }
+    if (data.containsKey('postpone_in_quiet')) {
+      context.handle(
+        _postponeInQuietMeta,
+        postponeInQuiet.isAcceptableOrUnknown(
+          data['postpone_in_quiet']!,
+          _postponeInQuietMeta,
+        ),
+      );
+    }
+    if (data.containsKey('installation_epoch')) {
+      context.handle(
+        _installationEpochMeta,
+        installationEpoch.isAcceptableOrUnknown(
+          data['installation_epoch']!,
+          _installationEpochMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_installationEpochMeta);
+    }
+    if (data.containsKey('revision')) {
+      context.handle(
+        _revisionMeta,
+        revision.isAcceptableOrUnknown(data['revision']!, _revisionMeta),
+      );
+    }
+    if (data.containsKey('updated_at_utc')) {
+      context.handle(
+        _updatedAtUtcMeta,
+        updatedAtUtc.isAcceptableOrUnknown(
+          data['updated_at_utc']!,
+          _updatedAtUtcMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtUtcMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {athleteId};
+  @override
+  HrvReminderPreference map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return HrvReminderPreference(
+      athleteId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}athlete_id'],
+      )!,
+      optedIn: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}opted_in'],
+      )!,
+      enabledSinceUtc: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}enabled_since_utc'],
+      ),
+      delayMinutes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}delay_minutes'],
+      )!,
+      quietEnabled: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}quiet_enabled'],
+      )!,
+      quietStartMinute: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}quiet_start_minute'],
+      )!,
+      quietEndMinute: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}quiet_end_minute'],
+      )!,
+      postponeInQuiet: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}postpone_in_quiet'],
+      )!,
+      installationEpoch: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}installation_epoch'],
+      )!,
+      revision: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}revision'],
+      )!,
+      updatedAtUtc: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at_utc'],
+      )!,
+    );
+  }
+
+  @override
+  $HrvReminderPreferencesTable createAlias(String alias) {
+    return $HrvReminderPreferencesTable(attachedDatabase, alias);
+  }
+}
+
+class HrvReminderPreference extends DataClass
+    implements Insertable<HrvReminderPreference> {
+  final String athleteId;
+  final bool optedIn;
+
+  /// Workouts that ended before this never produce a reminder.
+  final DateTime? enabledSinceUtc;
+  final int delayMinutes;
+  final bool quietEnabled;
+  final int quietStartMinute;
+  final int quietEndMinute;
+  final bool postponeInQuiet;
+
+  /// Namespaces native ids and notification payloads. New after a restore.
+  final String installationEpoch;
+  final int revision;
+  final DateTime updatedAtUtc;
+  const HrvReminderPreference({
+    required this.athleteId,
+    required this.optedIn,
+    this.enabledSinceUtc,
+    required this.delayMinutes,
+    required this.quietEnabled,
+    required this.quietStartMinute,
+    required this.quietEndMinute,
+    required this.postponeInQuiet,
+    required this.installationEpoch,
+    required this.revision,
+    required this.updatedAtUtc,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['athlete_id'] = Variable<String>(athleteId);
+    map['opted_in'] = Variable<bool>(optedIn);
+    if (!nullToAbsent || enabledSinceUtc != null) {
+      map['enabled_since_utc'] = Variable<DateTime>(enabledSinceUtc);
+    }
+    map['delay_minutes'] = Variable<int>(delayMinutes);
+    map['quiet_enabled'] = Variable<bool>(quietEnabled);
+    map['quiet_start_minute'] = Variable<int>(quietStartMinute);
+    map['quiet_end_minute'] = Variable<int>(quietEndMinute);
+    map['postpone_in_quiet'] = Variable<bool>(postponeInQuiet);
+    map['installation_epoch'] = Variable<String>(installationEpoch);
+    map['revision'] = Variable<int>(revision);
+    map['updated_at_utc'] = Variable<DateTime>(updatedAtUtc);
+    return map;
+  }
+
+  HrvReminderPreferencesCompanion toCompanion(bool nullToAbsent) {
+    return HrvReminderPreferencesCompanion(
+      athleteId: Value(athleteId),
+      optedIn: Value(optedIn),
+      enabledSinceUtc: enabledSinceUtc == null && nullToAbsent
+          ? const Value.absent()
+          : Value(enabledSinceUtc),
+      delayMinutes: Value(delayMinutes),
+      quietEnabled: Value(quietEnabled),
+      quietStartMinute: Value(quietStartMinute),
+      quietEndMinute: Value(quietEndMinute),
+      postponeInQuiet: Value(postponeInQuiet),
+      installationEpoch: Value(installationEpoch),
+      revision: Value(revision),
+      updatedAtUtc: Value(updatedAtUtc),
+    );
+  }
+
+  factory HrvReminderPreference.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return HrvReminderPreference(
+      athleteId: serializer.fromJson<String>(json['athleteId']),
+      optedIn: serializer.fromJson<bool>(json['optedIn']),
+      enabledSinceUtc: serializer.fromJson<DateTime?>(json['enabledSinceUtc']),
+      delayMinutes: serializer.fromJson<int>(json['delayMinutes']),
+      quietEnabled: serializer.fromJson<bool>(json['quietEnabled']),
+      quietStartMinute: serializer.fromJson<int>(json['quietStartMinute']),
+      quietEndMinute: serializer.fromJson<int>(json['quietEndMinute']),
+      postponeInQuiet: serializer.fromJson<bool>(json['postponeInQuiet']),
+      installationEpoch: serializer.fromJson<String>(json['installationEpoch']),
+      revision: serializer.fromJson<int>(json['revision']),
+      updatedAtUtc: serializer.fromJson<DateTime>(json['updatedAtUtc']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'athleteId': serializer.toJson<String>(athleteId),
+      'optedIn': serializer.toJson<bool>(optedIn),
+      'enabledSinceUtc': serializer.toJson<DateTime?>(enabledSinceUtc),
+      'delayMinutes': serializer.toJson<int>(delayMinutes),
+      'quietEnabled': serializer.toJson<bool>(quietEnabled),
+      'quietStartMinute': serializer.toJson<int>(quietStartMinute),
+      'quietEndMinute': serializer.toJson<int>(quietEndMinute),
+      'postponeInQuiet': serializer.toJson<bool>(postponeInQuiet),
+      'installationEpoch': serializer.toJson<String>(installationEpoch),
+      'revision': serializer.toJson<int>(revision),
+      'updatedAtUtc': serializer.toJson<DateTime>(updatedAtUtc),
+    };
+  }
+
+  HrvReminderPreference copyWith({
+    String? athleteId,
+    bool? optedIn,
+    Value<DateTime?> enabledSinceUtc = const Value.absent(),
+    int? delayMinutes,
+    bool? quietEnabled,
+    int? quietStartMinute,
+    int? quietEndMinute,
+    bool? postponeInQuiet,
+    String? installationEpoch,
+    int? revision,
+    DateTime? updatedAtUtc,
+  }) => HrvReminderPreference(
+    athleteId: athleteId ?? this.athleteId,
+    optedIn: optedIn ?? this.optedIn,
+    enabledSinceUtc: enabledSinceUtc.present
+        ? enabledSinceUtc.value
+        : this.enabledSinceUtc,
+    delayMinutes: delayMinutes ?? this.delayMinutes,
+    quietEnabled: quietEnabled ?? this.quietEnabled,
+    quietStartMinute: quietStartMinute ?? this.quietStartMinute,
+    quietEndMinute: quietEndMinute ?? this.quietEndMinute,
+    postponeInQuiet: postponeInQuiet ?? this.postponeInQuiet,
+    installationEpoch: installationEpoch ?? this.installationEpoch,
+    revision: revision ?? this.revision,
+    updatedAtUtc: updatedAtUtc ?? this.updatedAtUtc,
+  );
+  HrvReminderPreference copyWithCompanion(
+    HrvReminderPreferencesCompanion data,
+  ) {
+    return HrvReminderPreference(
+      athleteId: data.athleteId.present ? data.athleteId.value : this.athleteId,
+      optedIn: data.optedIn.present ? data.optedIn.value : this.optedIn,
+      enabledSinceUtc: data.enabledSinceUtc.present
+          ? data.enabledSinceUtc.value
+          : this.enabledSinceUtc,
+      delayMinutes: data.delayMinutes.present
+          ? data.delayMinutes.value
+          : this.delayMinutes,
+      quietEnabled: data.quietEnabled.present
+          ? data.quietEnabled.value
+          : this.quietEnabled,
+      quietStartMinute: data.quietStartMinute.present
+          ? data.quietStartMinute.value
+          : this.quietStartMinute,
+      quietEndMinute: data.quietEndMinute.present
+          ? data.quietEndMinute.value
+          : this.quietEndMinute,
+      postponeInQuiet: data.postponeInQuiet.present
+          ? data.postponeInQuiet.value
+          : this.postponeInQuiet,
+      installationEpoch: data.installationEpoch.present
+          ? data.installationEpoch.value
+          : this.installationEpoch,
+      revision: data.revision.present ? data.revision.value : this.revision,
+      updatedAtUtc: data.updatedAtUtc.present
+          ? data.updatedAtUtc.value
+          : this.updatedAtUtc,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HrvReminderPreference(')
+          ..write('athleteId: $athleteId, ')
+          ..write('optedIn: $optedIn, ')
+          ..write('enabledSinceUtc: $enabledSinceUtc, ')
+          ..write('delayMinutes: $delayMinutes, ')
+          ..write('quietEnabled: $quietEnabled, ')
+          ..write('quietStartMinute: $quietStartMinute, ')
+          ..write('quietEndMinute: $quietEndMinute, ')
+          ..write('postponeInQuiet: $postponeInQuiet, ')
+          ..write('installationEpoch: $installationEpoch, ')
+          ..write('revision: $revision, ')
+          ..write('updatedAtUtc: $updatedAtUtc')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    athleteId,
+    optedIn,
+    enabledSinceUtc,
+    delayMinutes,
+    quietEnabled,
+    quietStartMinute,
+    quietEndMinute,
+    postponeInQuiet,
+    installationEpoch,
+    revision,
+    updatedAtUtc,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is HrvReminderPreference &&
+          other.athleteId == this.athleteId &&
+          other.optedIn == this.optedIn &&
+          other.enabledSinceUtc == this.enabledSinceUtc &&
+          other.delayMinutes == this.delayMinutes &&
+          other.quietEnabled == this.quietEnabled &&
+          other.quietStartMinute == this.quietStartMinute &&
+          other.quietEndMinute == this.quietEndMinute &&
+          other.postponeInQuiet == this.postponeInQuiet &&
+          other.installationEpoch == this.installationEpoch &&
+          other.revision == this.revision &&
+          other.updatedAtUtc == this.updatedAtUtc);
+}
+
+class HrvReminderPreferencesCompanion
+    extends UpdateCompanion<HrvReminderPreference> {
+  final Value<String> athleteId;
+  final Value<bool> optedIn;
+  final Value<DateTime?> enabledSinceUtc;
+  final Value<int> delayMinutes;
+  final Value<bool> quietEnabled;
+  final Value<int> quietStartMinute;
+  final Value<int> quietEndMinute;
+  final Value<bool> postponeInQuiet;
+  final Value<String> installationEpoch;
+  final Value<int> revision;
+  final Value<DateTime> updatedAtUtc;
+  final Value<int> rowid;
+  const HrvReminderPreferencesCompanion({
+    this.athleteId = const Value.absent(),
+    this.optedIn = const Value.absent(),
+    this.enabledSinceUtc = const Value.absent(),
+    this.delayMinutes = const Value.absent(),
+    this.quietEnabled = const Value.absent(),
+    this.quietStartMinute = const Value.absent(),
+    this.quietEndMinute = const Value.absent(),
+    this.postponeInQuiet = const Value.absent(),
+    this.installationEpoch = const Value.absent(),
+    this.revision = const Value.absent(),
+    this.updatedAtUtc = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  HrvReminderPreferencesCompanion.insert({
+    this.athleteId = const Value.absent(),
+    this.optedIn = const Value.absent(),
+    this.enabledSinceUtc = const Value.absent(),
+    this.delayMinutes = const Value.absent(),
+    this.quietEnabled = const Value.absent(),
+    this.quietStartMinute = const Value.absent(),
+    this.quietEndMinute = const Value.absent(),
+    this.postponeInQuiet = const Value.absent(),
+    required String installationEpoch,
+    this.revision = const Value.absent(),
+    required DateTime updatedAtUtc,
+    this.rowid = const Value.absent(),
+  }) : installationEpoch = Value(installationEpoch),
+       updatedAtUtc = Value(updatedAtUtc);
+  static Insertable<HrvReminderPreference> custom({
+    Expression<String>? athleteId,
+    Expression<bool>? optedIn,
+    Expression<DateTime>? enabledSinceUtc,
+    Expression<int>? delayMinutes,
+    Expression<bool>? quietEnabled,
+    Expression<int>? quietStartMinute,
+    Expression<int>? quietEndMinute,
+    Expression<bool>? postponeInQuiet,
+    Expression<String>? installationEpoch,
+    Expression<int>? revision,
+    Expression<DateTime>? updatedAtUtc,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (athleteId != null) 'athlete_id': athleteId,
+      if (optedIn != null) 'opted_in': optedIn,
+      if (enabledSinceUtc != null) 'enabled_since_utc': enabledSinceUtc,
+      if (delayMinutes != null) 'delay_minutes': delayMinutes,
+      if (quietEnabled != null) 'quiet_enabled': quietEnabled,
+      if (quietStartMinute != null) 'quiet_start_minute': quietStartMinute,
+      if (quietEndMinute != null) 'quiet_end_minute': quietEndMinute,
+      if (postponeInQuiet != null) 'postpone_in_quiet': postponeInQuiet,
+      if (installationEpoch != null) 'installation_epoch': installationEpoch,
+      if (revision != null) 'revision': revision,
+      if (updatedAtUtc != null) 'updated_at_utc': updatedAtUtc,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  HrvReminderPreferencesCompanion copyWith({
+    Value<String>? athleteId,
+    Value<bool>? optedIn,
+    Value<DateTime?>? enabledSinceUtc,
+    Value<int>? delayMinutes,
+    Value<bool>? quietEnabled,
+    Value<int>? quietStartMinute,
+    Value<int>? quietEndMinute,
+    Value<bool>? postponeInQuiet,
+    Value<String>? installationEpoch,
+    Value<int>? revision,
+    Value<DateTime>? updatedAtUtc,
+    Value<int>? rowid,
+  }) {
+    return HrvReminderPreferencesCompanion(
+      athleteId: athleteId ?? this.athleteId,
+      optedIn: optedIn ?? this.optedIn,
+      enabledSinceUtc: enabledSinceUtc ?? this.enabledSinceUtc,
+      delayMinutes: delayMinutes ?? this.delayMinutes,
+      quietEnabled: quietEnabled ?? this.quietEnabled,
+      quietStartMinute: quietStartMinute ?? this.quietStartMinute,
+      quietEndMinute: quietEndMinute ?? this.quietEndMinute,
+      postponeInQuiet: postponeInQuiet ?? this.postponeInQuiet,
+      installationEpoch: installationEpoch ?? this.installationEpoch,
+      revision: revision ?? this.revision,
+      updatedAtUtc: updatedAtUtc ?? this.updatedAtUtc,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (athleteId.present) {
+      map['athlete_id'] = Variable<String>(athleteId.value);
+    }
+    if (optedIn.present) {
+      map['opted_in'] = Variable<bool>(optedIn.value);
+    }
+    if (enabledSinceUtc.present) {
+      map['enabled_since_utc'] = Variable<DateTime>(enabledSinceUtc.value);
+    }
+    if (delayMinutes.present) {
+      map['delay_minutes'] = Variable<int>(delayMinutes.value);
+    }
+    if (quietEnabled.present) {
+      map['quiet_enabled'] = Variable<bool>(quietEnabled.value);
+    }
+    if (quietStartMinute.present) {
+      map['quiet_start_minute'] = Variable<int>(quietStartMinute.value);
+    }
+    if (quietEndMinute.present) {
+      map['quiet_end_minute'] = Variable<int>(quietEndMinute.value);
+    }
+    if (postponeInQuiet.present) {
+      map['postpone_in_quiet'] = Variable<bool>(postponeInQuiet.value);
+    }
+    if (installationEpoch.present) {
+      map['installation_epoch'] = Variable<String>(installationEpoch.value);
+    }
+    if (revision.present) {
+      map['revision'] = Variable<int>(revision.value);
+    }
+    if (updatedAtUtc.present) {
+      map['updated_at_utc'] = Variable<DateTime>(updatedAtUtc.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HrvReminderPreferencesCompanion(')
+          ..write('athleteId: $athleteId, ')
+          ..write('optedIn: $optedIn, ')
+          ..write('enabledSinceUtc: $enabledSinceUtc, ')
+          ..write('delayMinutes: $delayMinutes, ')
+          ..write('quietEnabled: $quietEnabled, ')
+          ..write('quietStartMinute: $quietStartMinute, ')
+          ..write('quietEndMinute: $quietEndMinute, ')
+          ..write('postponeInQuiet: $postponeInQuiet, ')
+          ..write('installationEpoch: $installationEpoch, ')
+          ..write('revision: $revision, ')
+          ..write('updatedAtUtc: $updatedAtUtc, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $HrvPostRemindersTable extends HrvPostReminders
+    with TableInfo<$HrvPostRemindersTable, HrvPostReminder> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $HrvPostRemindersTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _reminderIdMeta = const VerificationMeta(
+    'reminderId',
+  );
+  @override
+  late final GeneratedColumn<String> reminderId = GeneratedColumn<String>(
+    'reminder_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _episodeIdMeta = const VerificationMeta(
+    'episodeId',
+  );
+  @override
+  late final GeneratedColumn<String> episodeId = GeneratedColumn<String>(
+    'episode_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
+  );
+  static const VerificationMeta _preMeasurementUidMeta = const VerificationMeta(
+    'preMeasurementUid',
+  );
+  @override
+  late final GeneratedColumn<String> preMeasurementUid =
+      GeneratedColumn<String>(
+        'pre_measurement_uid',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      );
+  static const VerificationMeta _installationEpochMeta = const VerificationMeta(
+    'installationEpoch',
+  );
+  @override
+  late final GeneratedColumn<String> installationEpoch =
+      GeneratedColumn<String>(
+        'installation_epoch',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      );
+  static const VerificationMeta _nativeNotificationIdMeta =
+      const VerificationMeta('nativeNotificationId');
+  @override
+  late final GeneratedColumn<int> nativeNotificationId = GeneratedColumn<int>(
+    'native_notification_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
+  );
+  static const VerificationMeta _generationMeta = const VerificationMeta(
+    'generation',
+  );
+  @override
+  late final GeneratedColumn<int> generation = GeneratedColumn<int>(
+    'generation',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(1),
+  );
+  static const VerificationMeta _originalDueAtUtcMeta = const VerificationMeta(
+    'originalDueAtUtc',
+  );
+  @override
+  late final GeneratedColumn<DateTime> originalDueAtUtc =
+      GeneratedColumn<DateTime>(
+        'original_due_at_utc',
+        aliasedName,
+        false,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: true,
+      );
+  static const VerificationMeta _nextDueAtUtcMeta = const VerificationMeta(
+    'nextDueAtUtc',
+  );
+  @override
+  late final GeneratedColumn<DateTime> nextDueAtUtc = GeneratedColumn<DateTime>(
+    'next_due_at_utc',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _expiresAtUtcMeta = const VerificationMeta(
+    'expiresAtUtc',
+  );
+  @override
+  late final GeneratedColumn<DateTime> expiresAtUtc = GeneratedColumn<DateTime>(
+    'expires_at_utc',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _targetOffsetSecondsMeta =
+      const VerificationMeta('targetOffsetSeconds');
+  @override
+  late final GeneratedColumn<int> targetOffsetSeconds = GeneratedColumn<int>(
+    'target_offset_seconds',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _snoozeCountMeta = const VerificationMeta(
+    'snoozeCount',
+  );
+  @override
+  late final GeneratedColumn<int> snoozeCount = GeneratedColumn<int>(
+    'snooze_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _desiredStateMeta = const VerificationMeta(
+    'desiredState',
+  );
+  @override
+  late final GeneratedColumn<String> desiredState = GeneratedColumn<String>(
+    'desired_state',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _reasonMeta = const VerificationMeta('reason');
+  @override
+  late final GeneratedColumn<String> reason = GeneratedColumn<String>(
+    'reason',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('none'),
+  );
+  static const VerificationMeta _osStateMeta = const VerificationMeta(
+    'osState',
+  );
+  @override
+  late final GeneratedColumn<String> osState = GeneratedColumn<String>(
+    'os_state',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('none'),
+  );
+  static const VerificationMeta _scheduleFingerprintMeta =
+      const VerificationMeta('scheduleFingerprint');
+  @override
+  late final GeneratedColumn<String> scheduleFingerprint =
+      GeneratedColumn<String>(
+        'schedule_fingerprint',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant(''),
+      );
+  static const VerificationMeta _permissionSnapshotMeta =
+      const VerificationMeta('permissionSnapshot');
+  @override
+  late final GeneratedColumn<String> permissionSnapshot =
+      GeneratedColumn<String>(
+        'permission_snapshot',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _lastAttemptAtMeta = const VerificationMeta(
+    'lastAttemptAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> lastAttemptAt =
+      GeneratedColumn<DateTime>(
+        'last_attempt_at',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _lastErrorMeta = const VerificationMeta(
+    'lastError',
+  );
+  @override
+  late final GeneratedColumn<String> lastError = GeneratedColumn<String>(
+    'last_error',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtUtcMeta = const VerificationMeta(
+    'createdAtUtc',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAtUtc = GeneratedColumn<DateTime>(
+    'created_at_utc',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtUtcMeta = const VerificationMeta(
+    'updatedAtUtc',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAtUtc = GeneratedColumn<DateTime>(
+    'updated_at_utc',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    reminderId,
+    episodeId,
+    preMeasurementUid,
+    installationEpoch,
+    nativeNotificationId,
+    generation,
+    originalDueAtUtc,
+    nextDueAtUtc,
+    expiresAtUtc,
+    targetOffsetSeconds,
+    snoozeCount,
+    desiredState,
+    reason,
+    osState,
+    scheduleFingerprint,
+    permissionSnapshot,
+    lastAttemptAt,
+    lastError,
+    createdAtUtc,
+    updatedAtUtc,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'hrv_post_reminders';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<HrvPostReminder> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('reminder_id')) {
+      context.handle(
+        _reminderIdMeta,
+        reminderId.isAcceptableOrUnknown(data['reminder_id']!, _reminderIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_reminderIdMeta);
+    }
+    if (data.containsKey('episode_id')) {
+      context.handle(
+        _episodeIdMeta,
+        episodeId.isAcceptableOrUnknown(data['episode_id']!, _episodeIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_episodeIdMeta);
+    }
+    if (data.containsKey('pre_measurement_uid')) {
+      context.handle(
+        _preMeasurementUidMeta,
+        preMeasurementUid.isAcceptableOrUnknown(
+          data['pre_measurement_uid']!,
+          _preMeasurementUidMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_preMeasurementUidMeta);
+    }
+    if (data.containsKey('installation_epoch')) {
+      context.handle(
+        _installationEpochMeta,
+        installationEpoch.isAcceptableOrUnknown(
+          data['installation_epoch']!,
+          _installationEpochMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_installationEpochMeta);
+    }
+    if (data.containsKey('native_notification_id')) {
+      context.handle(
+        _nativeNotificationIdMeta,
+        nativeNotificationId.isAcceptableOrUnknown(
+          data['native_notification_id']!,
+          _nativeNotificationIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_nativeNotificationIdMeta);
+    }
+    if (data.containsKey('generation')) {
+      context.handle(
+        _generationMeta,
+        generation.isAcceptableOrUnknown(data['generation']!, _generationMeta),
+      );
+    }
+    if (data.containsKey('original_due_at_utc')) {
+      context.handle(
+        _originalDueAtUtcMeta,
+        originalDueAtUtc.isAcceptableOrUnknown(
+          data['original_due_at_utc']!,
+          _originalDueAtUtcMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_originalDueAtUtcMeta);
+    }
+    if (data.containsKey('next_due_at_utc')) {
+      context.handle(
+        _nextDueAtUtcMeta,
+        nextDueAtUtc.isAcceptableOrUnknown(
+          data['next_due_at_utc']!,
+          _nextDueAtUtcMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_nextDueAtUtcMeta);
+    }
+    if (data.containsKey('expires_at_utc')) {
+      context.handle(
+        _expiresAtUtcMeta,
+        expiresAtUtc.isAcceptableOrUnknown(
+          data['expires_at_utc']!,
+          _expiresAtUtcMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_expiresAtUtcMeta);
+    }
+    if (data.containsKey('target_offset_seconds')) {
+      context.handle(
+        _targetOffsetSecondsMeta,
+        targetOffsetSeconds.isAcceptableOrUnknown(
+          data['target_offset_seconds']!,
+          _targetOffsetSecondsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_targetOffsetSecondsMeta);
+    }
+    if (data.containsKey('snooze_count')) {
+      context.handle(
+        _snoozeCountMeta,
+        snoozeCount.isAcceptableOrUnknown(
+          data['snooze_count']!,
+          _snoozeCountMeta,
+        ),
+      );
+    }
+    if (data.containsKey('desired_state')) {
+      context.handle(
+        _desiredStateMeta,
+        desiredState.isAcceptableOrUnknown(
+          data['desired_state']!,
+          _desiredStateMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_desiredStateMeta);
+    }
+    if (data.containsKey('reason')) {
+      context.handle(
+        _reasonMeta,
+        reason.isAcceptableOrUnknown(data['reason']!, _reasonMeta),
+      );
+    }
+    if (data.containsKey('os_state')) {
+      context.handle(
+        _osStateMeta,
+        osState.isAcceptableOrUnknown(data['os_state']!, _osStateMeta),
+      );
+    }
+    if (data.containsKey('schedule_fingerprint')) {
+      context.handle(
+        _scheduleFingerprintMeta,
+        scheduleFingerprint.isAcceptableOrUnknown(
+          data['schedule_fingerprint']!,
+          _scheduleFingerprintMeta,
+        ),
+      );
+    }
+    if (data.containsKey('permission_snapshot')) {
+      context.handle(
+        _permissionSnapshotMeta,
+        permissionSnapshot.isAcceptableOrUnknown(
+          data['permission_snapshot']!,
+          _permissionSnapshotMeta,
+        ),
+      );
+    }
+    if (data.containsKey('last_attempt_at')) {
+      context.handle(
+        _lastAttemptAtMeta,
+        lastAttemptAt.isAcceptableOrUnknown(
+          data['last_attempt_at']!,
+          _lastAttemptAtMeta,
+        ),
+      );
+    }
+    if (data.containsKey('last_error')) {
+      context.handle(
+        _lastErrorMeta,
+        lastError.isAcceptableOrUnknown(data['last_error']!, _lastErrorMeta),
+      );
+    }
+    if (data.containsKey('created_at_utc')) {
+      context.handle(
+        _createdAtUtcMeta,
+        createdAtUtc.isAcceptableOrUnknown(
+          data['created_at_utc']!,
+          _createdAtUtcMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtUtcMeta);
+    }
+    if (data.containsKey('updated_at_utc')) {
+      context.handle(
+        _updatedAtUtcMeta,
+        updatedAtUtc.isAcceptableOrUnknown(
+          data['updated_at_utc']!,
+          _updatedAtUtcMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtUtcMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {reminderId};
+  @override
+  HrvPostReminder map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return HrvPostReminder(
+      reminderId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}reminder_id'],
+      )!,
+      episodeId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}episode_id'],
+      )!,
+      preMeasurementUid: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}pre_measurement_uid'],
+      )!,
+      installationEpoch: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}installation_epoch'],
+      )!,
+      nativeNotificationId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}native_notification_id'],
+      )!,
+      generation: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}generation'],
+      )!,
+      originalDueAtUtc: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}original_due_at_utc'],
+      )!,
+      nextDueAtUtc: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}next_due_at_utc'],
+      )!,
+      expiresAtUtc: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}expires_at_utc'],
+      )!,
+      targetOffsetSeconds: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}target_offset_seconds'],
+      )!,
+      snoozeCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}snooze_count'],
+      )!,
+      desiredState: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}desired_state'],
+      )!,
+      reason: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}reason'],
+      )!,
+      osState: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}os_state'],
+      )!,
+      scheduleFingerprint: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}schedule_fingerprint'],
+      )!,
+      permissionSnapshot: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}permission_snapshot'],
+      ),
+      lastAttemptAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}last_attempt_at'],
+      ),
+      lastError: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}last_error'],
+      ),
+      createdAtUtc: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at_utc'],
+      )!,
+      updatedAtUtc: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at_utc'],
+      )!,
+    );
+  }
+
+  @override
+  $HrvPostRemindersTable createAlias(String alias) {
+    return $HrvPostRemindersTable(attachedDatabase, alias);
+  }
+}
+
+class HrvPostReminder extends DataClass implements Insertable<HrvPostReminder> {
+  final String reminderId;
+  final String episodeId;
+  final String preMeasurementUid;
+  final String installationEpoch;
+  final int nativeNotificationId;
+  final int generation;
+  final DateTime originalDueAtUtc;
+  final DateTime nextDueAtUtc;
+  final DateTime expiresAtUtc;
+  final int targetOffsetSeconds;
+  final int snoozeCount;
+  final String desiredState;
+  final String reason;
+
+  /// `none`, `schedulePending`, `accepted`, `cancelPending`, `unknown`,
+  /// `failed`. Accepted is not proof that anything was displayed.
+  final String osState;
+  final String scheduleFingerprint;
+  final String? permissionSnapshot;
+  final DateTime? lastAttemptAt;
+  final String? lastError;
+  final DateTime createdAtUtc;
+  final DateTime updatedAtUtc;
+  const HrvPostReminder({
+    required this.reminderId,
+    required this.episodeId,
+    required this.preMeasurementUid,
+    required this.installationEpoch,
+    required this.nativeNotificationId,
+    required this.generation,
+    required this.originalDueAtUtc,
+    required this.nextDueAtUtc,
+    required this.expiresAtUtc,
+    required this.targetOffsetSeconds,
+    required this.snoozeCount,
+    required this.desiredState,
+    required this.reason,
+    required this.osState,
+    required this.scheduleFingerprint,
+    this.permissionSnapshot,
+    this.lastAttemptAt,
+    this.lastError,
+    required this.createdAtUtc,
+    required this.updatedAtUtc,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['reminder_id'] = Variable<String>(reminderId);
+    map['episode_id'] = Variable<String>(episodeId);
+    map['pre_measurement_uid'] = Variable<String>(preMeasurementUid);
+    map['installation_epoch'] = Variable<String>(installationEpoch);
+    map['native_notification_id'] = Variable<int>(nativeNotificationId);
+    map['generation'] = Variable<int>(generation);
+    map['original_due_at_utc'] = Variable<DateTime>(originalDueAtUtc);
+    map['next_due_at_utc'] = Variable<DateTime>(nextDueAtUtc);
+    map['expires_at_utc'] = Variable<DateTime>(expiresAtUtc);
+    map['target_offset_seconds'] = Variable<int>(targetOffsetSeconds);
+    map['snooze_count'] = Variable<int>(snoozeCount);
+    map['desired_state'] = Variable<String>(desiredState);
+    map['reason'] = Variable<String>(reason);
+    map['os_state'] = Variable<String>(osState);
+    map['schedule_fingerprint'] = Variable<String>(scheduleFingerprint);
+    if (!nullToAbsent || permissionSnapshot != null) {
+      map['permission_snapshot'] = Variable<String>(permissionSnapshot);
+    }
+    if (!nullToAbsent || lastAttemptAt != null) {
+      map['last_attempt_at'] = Variable<DateTime>(lastAttemptAt);
+    }
+    if (!nullToAbsent || lastError != null) {
+      map['last_error'] = Variable<String>(lastError);
+    }
+    map['created_at_utc'] = Variable<DateTime>(createdAtUtc);
+    map['updated_at_utc'] = Variable<DateTime>(updatedAtUtc);
+    return map;
+  }
+
+  HrvPostRemindersCompanion toCompanion(bool nullToAbsent) {
+    return HrvPostRemindersCompanion(
+      reminderId: Value(reminderId),
+      episodeId: Value(episodeId),
+      preMeasurementUid: Value(preMeasurementUid),
+      installationEpoch: Value(installationEpoch),
+      nativeNotificationId: Value(nativeNotificationId),
+      generation: Value(generation),
+      originalDueAtUtc: Value(originalDueAtUtc),
+      nextDueAtUtc: Value(nextDueAtUtc),
+      expiresAtUtc: Value(expiresAtUtc),
+      targetOffsetSeconds: Value(targetOffsetSeconds),
+      snoozeCount: Value(snoozeCount),
+      desiredState: Value(desiredState),
+      reason: Value(reason),
+      osState: Value(osState),
+      scheduleFingerprint: Value(scheduleFingerprint),
+      permissionSnapshot: permissionSnapshot == null && nullToAbsent
+          ? const Value.absent()
+          : Value(permissionSnapshot),
+      lastAttemptAt: lastAttemptAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastAttemptAt),
+      lastError: lastError == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastError),
+      createdAtUtc: Value(createdAtUtc),
+      updatedAtUtc: Value(updatedAtUtc),
+    );
+  }
+
+  factory HrvPostReminder.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return HrvPostReminder(
+      reminderId: serializer.fromJson<String>(json['reminderId']),
+      episodeId: serializer.fromJson<String>(json['episodeId']),
+      preMeasurementUid: serializer.fromJson<String>(json['preMeasurementUid']),
+      installationEpoch: serializer.fromJson<String>(json['installationEpoch']),
+      nativeNotificationId: serializer.fromJson<int>(
+        json['nativeNotificationId'],
+      ),
+      generation: serializer.fromJson<int>(json['generation']),
+      originalDueAtUtc: serializer.fromJson<DateTime>(json['originalDueAtUtc']),
+      nextDueAtUtc: serializer.fromJson<DateTime>(json['nextDueAtUtc']),
+      expiresAtUtc: serializer.fromJson<DateTime>(json['expiresAtUtc']),
+      targetOffsetSeconds: serializer.fromJson<int>(
+        json['targetOffsetSeconds'],
+      ),
+      snoozeCount: serializer.fromJson<int>(json['snoozeCount']),
+      desiredState: serializer.fromJson<String>(json['desiredState']),
+      reason: serializer.fromJson<String>(json['reason']),
+      osState: serializer.fromJson<String>(json['osState']),
+      scheduleFingerprint: serializer.fromJson<String>(
+        json['scheduleFingerprint'],
+      ),
+      permissionSnapshot: serializer.fromJson<String?>(
+        json['permissionSnapshot'],
+      ),
+      lastAttemptAt: serializer.fromJson<DateTime?>(json['lastAttemptAt']),
+      lastError: serializer.fromJson<String?>(json['lastError']),
+      createdAtUtc: serializer.fromJson<DateTime>(json['createdAtUtc']),
+      updatedAtUtc: serializer.fromJson<DateTime>(json['updatedAtUtc']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'reminderId': serializer.toJson<String>(reminderId),
+      'episodeId': serializer.toJson<String>(episodeId),
+      'preMeasurementUid': serializer.toJson<String>(preMeasurementUid),
+      'installationEpoch': serializer.toJson<String>(installationEpoch),
+      'nativeNotificationId': serializer.toJson<int>(nativeNotificationId),
+      'generation': serializer.toJson<int>(generation),
+      'originalDueAtUtc': serializer.toJson<DateTime>(originalDueAtUtc),
+      'nextDueAtUtc': serializer.toJson<DateTime>(nextDueAtUtc),
+      'expiresAtUtc': serializer.toJson<DateTime>(expiresAtUtc),
+      'targetOffsetSeconds': serializer.toJson<int>(targetOffsetSeconds),
+      'snoozeCount': serializer.toJson<int>(snoozeCount),
+      'desiredState': serializer.toJson<String>(desiredState),
+      'reason': serializer.toJson<String>(reason),
+      'osState': serializer.toJson<String>(osState),
+      'scheduleFingerprint': serializer.toJson<String>(scheduleFingerprint),
+      'permissionSnapshot': serializer.toJson<String?>(permissionSnapshot),
+      'lastAttemptAt': serializer.toJson<DateTime?>(lastAttemptAt),
+      'lastError': serializer.toJson<String?>(lastError),
+      'createdAtUtc': serializer.toJson<DateTime>(createdAtUtc),
+      'updatedAtUtc': serializer.toJson<DateTime>(updatedAtUtc),
+    };
+  }
+
+  HrvPostReminder copyWith({
+    String? reminderId,
+    String? episodeId,
+    String? preMeasurementUid,
+    String? installationEpoch,
+    int? nativeNotificationId,
+    int? generation,
+    DateTime? originalDueAtUtc,
+    DateTime? nextDueAtUtc,
+    DateTime? expiresAtUtc,
+    int? targetOffsetSeconds,
+    int? snoozeCount,
+    String? desiredState,
+    String? reason,
+    String? osState,
+    String? scheduleFingerprint,
+    Value<String?> permissionSnapshot = const Value.absent(),
+    Value<DateTime?> lastAttemptAt = const Value.absent(),
+    Value<String?> lastError = const Value.absent(),
+    DateTime? createdAtUtc,
+    DateTime? updatedAtUtc,
+  }) => HrvPostReminder(
+    reminderId: reminderId ?? this.reminderId,
+    episodeId: episodeId ?? this.episodeId,
+    preMeasurementUid: preMeasurementUid ?? this.preMeasurementUid,
+    installationEpoch: installationEpoch ?? this.installationEpoch,
+    nativeNotificationId: nativeNotificationId ?? this.nativeNotificationId,
+    generation: generation ?? this.generation,
+    originalDueAtUtc: originalDueAtUtc ?? this.originalDueAtUtc,
+    nextDueAtUtc: nextDueAtUtc ?? this.nextDueAtUtc,
+    expiresAtUtc: expiresAtUtc ?? this.expiresAtUtc,
+    targetOffsetSeconds: targetOffsetSeconds ?? this.targetOffsetSeconds,
+    snoozeCount: snoozeCount ?? this.snoozeCount,
+    desiredState: desiredState ?? this.desiredState,
+    reason: reason ?? this.reason,
+    osState: osState ?? this.osState,
+    scheduleFingerprint: scheduleFingerprint ?? this.scheduleFingerprint,
+    permissionSnapshot: permissionSnapshot.present
+        ? permissionSnapshot.value
+        : this.permissionSnapshot,
+    lastAttemptAt: lastAttemptAt.present
+        ? lastAttemptAt.value
+        : this.lastAttemptAt,
+    lastError: lastError.present ? lastError.value : this.lastError,
+    createdAtUtc: createdAtUtc ?? this.createdAtUtc,
+    updatedAtUtc: updatedAtUtc ?? this.updatedAtUtc,
+  );
+  HrvPostReminder copyWithCompanion(HrvPostRemindersCompanion data) {
+    return HrvPostReminder(
+      reminderId: data.reminderId.present
+          ? data.reminderId.value
+          : this.reminderId,
+      episodeId: data.episodeId.present ? data.episodeId.value : this.episodeId,
+      preMeasurementUid: data.preMeasurementUid.present
+          ? data.preMeasurementUid.value
+          : this.preMeasurementUid,
+      installationEpoch: data.installationEpoch.present
+          ? data.installationEpoch.value
+          : this.installationEpoch,
+      nativeNotificationId: data.nativeNotificationId.present
+          ? data.nativeNotificationId.value
+          : this.nativeNotificationId,
+      generation: data.generation.present
+          ? data.generation.value
+          : this.generation,
+      originalDueAtUtc: data.originalDueAtUtc.present
+          ? data.originalDueAtUtc.value
+          : this.originalDueAtUtc,
+      nextDueAtUtc: data.nextDueAtUtc.present
+          ? data.nextDueAtUtc.value
+          : this.nextDueAtUtc,
+      expiresAtUtc: data.expiresAtUtc.present
+          ? data.expiresAtUtc.value
+          : this.expiresAtUtc,
+      targetOffsetSeconds: data.targetOffsetSeconds.present
+          ? data.targetOffsetSeconds.value
+          : this.targetOffsetSeconds,
+      snoozeCount: data.snoozeCount.present
+          ? data.snoozeCount.value
+          : this.snoozeCount,
+      desiredState: data.desiredState.present
+          ? data.desiredState.value
+          : this.desiredState,
+      reason: data.reason.present ? data.reason.value : this.reason,
+      osState: data.osState.present ? data.osState.value : this.osState,
+      scheduleFingerprint: data.scheduleFingerprint.present
+          ? data.scheduleFingerprint.value
+          : this.scheduleFingerprint,
+      permissionSnapshot: data.permissionSnapshot.present
+          ? data.permissionSnapshot.value
+          : this.permissionSnapshot,
+      lastAttemptAt: data.lastAttemptAt.present
+          ? data.lastAttemptAt.value
+          : this.lastAttemptAt,
+      lastError: data.lastError.present ? data.lastError.value : this.lastError,
+      createdAtUtc: data.createdAtUtc.present
+          ? data.createdAtUtc.value
+          : this.createdAtUtc,
+      updatedAtUtc: data.updatedAtUtc.present
+          ? data.updatedAtUtc.value
+          : this.updatedAtUtc,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HrvPostReminder(')
+          ..write('reminderId: $reminderId, ')
+          ..write('episodeId: $episodeId, ')
+          ..write('preMeasurementUid: $preMeasurementUid, ')
+          ..write('installationEpoch: $installationEpoch, ')
+          ..write('nativeNotificationId: $nativeNotificationId, ')
+          ..write('generation: $generation, ')
+          ..write('originalDueAtUtc: $originalDueAtUtc, ')
+          ..write('nextDueAtUtc: $nextDueAtUtc, ')
+          ..write('expiresAtUtc: $expiresAtUtc, ')
+          ..write('targetOffsetSeconds: $targetOffsetSeconds, ')
+          ..write('snoozeCount: $snoozeCount, ')
+          ..write('desiredState: $desiredState, ')
+          ..write('reason: $reason, ')
+          ..write('osState: $osState, ')
+          ..write('scheduleFingerprint: $scheduleFingerprint, ')
+          ..write('permissionSnapshot: $permissionSnapshot, ')
+          ..write('lastAttemptAt: $lastAttemptAt, ')
+          ..write('lastError: $lastError, ')
+          ..write('createdAtUtc: $createdAtUtc, ')
+          ..write('updatedAtUtc: $updatedAtUtc')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    reminderId,
+    episodeId,
+    preMeasurementUid,
+    installationEpoch,
+    nativeNotificationId,
+    generation,
+    originalDueAtUtc,
+    nextDueAtUtc,
+    expiresAtUtc,
+    targetOffsetSeconds,
+    snoozeCount,
+    desiredState,
+    reason,
+    osState,
+    scheduleFingerprint,
+    permissionSnapshot,
+    lastAttemptAt,
+    lastError,
+    createdAtUtc,
+    updatedAtUtc,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is HrvPostReminder &&
+          other.reminderId == this.reminderId &&
+          other.episodeId == this.episodeId &&
+          other.preMeasurementUid == this.preMeasurementUid &&
+          other.installationEpoch == this.installationEpoch &&
+          other.nativeNotificationId == this.nativeNotificationId &&
+          other.generation == this.generation &&
+          other.originalDueAtUtc == this.originalDueAtUtc &&
+          other.nextDueAtUtc == this.nextDueAtUtc &&
+          other.expiresAtUtc == this.expiresAtUtc &&
+          other.targetOffsetSeconds == this.targetOffsetSeconds &&
+          other.snoozeCount == this.snoozeCount &&
+          other.desiredState == this.desiredState &&
+          other.reason == this.reason &&
+          other.osState == this.osState &&
+          other.scheduleFingerprint == this.scheduleFingerprint &&
+          other.permissionSnapshot == this.permissionSnapshot &&
+          other.lastAttemptAt == this.lastAttemptAt &&
+          other.lastError == this.lastError &&
+          other.createdAtUtc == this.createdAtUtc &&
+          other.updatedAtUtc == this.updatedAtUtc);
+}
+
+class HrvPostRemindersCompanion extends UpdateCompanion<HrvPostReminder> {
+  final Value<String> reminderId;
+  final Value<String> episodeId;
+  final Value<String> preMeasurementUid;
+  final Value<String> installationEpoch;
+  final Value<int> nativeNotificationId;
+  final Value<int> generation;
+  final Value<DateTime> originalDueAtUtc;
+  final Value<DateTime> nextDueAtUtc;
+  final Value<DateTime> expiresAtUtc;
+  final Value<int> targetOffsetSeconds;
+  final Value<int> snoozeCount;
+  final Value<String> desiredState;
+  final Value<String> reason;
+  final Value<String> osState;
+  final Value<String> scheduleFingerprint;
+  final Value<String?> permissionSnapshot;
+  final Value<DateTime?> lastAttemptAt;
+  final Value<String?> lastError;
+  final Value<DateTime> createdAtUtc;
+  final Value<DateTime> updatedAtUtc;
+  final Value<int> rowid;
+  const HrvPostRemindersCompanion({
+    this.reminderId = const Value.absent(),
+    this.episodeId = const Value.absent(),
+    this.preMeasurementUid = const Value.absent(),
+    this.installationEpoch = const Value.absent(),
+    this.nativeNotificationId = const Value.absent(),
+    this.generation = const Value.absent(),
+    this.originalDueAtUtc = const Value.absent(),
+    this.nextDueAtUtc = const Value.absent(),
+    this.expiresAtUtc = const Value.absent(),
+    this.targetOffsetSeconds = const Value.absent(),
+    this.snoozeCount = const Value.absent(),
+    this.desiredState = const Value.absent(),
+    this.reason = const Value.absent(),
+    this.osState = const Value.absent(),
+    this.scheduleFingerprint = const Value.absent(),
+    this.permissionSnapshot = const Value.absent(),
+    this.lastAttemptAt = const Value.absent(),
+    this.lastError = const Value.absent(),
+    this.createdAtUtc = const Value.absent(),
+    this.updatedAtUtc = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  HrvPostRemindersCompanion.insert({
+    required String reminderId,
+    required String episodeId,
+    required String preMeasurementUid,
+    required String installationEpoch,
+    required int nativeNotificationId,
+    this.generation = const Value.absent(),
+    required DateTime originalDueAtUtc,
+    required DateTime nextDueAtUtc,
+    required DateTime expiresAtUtc,
+    required int targetOffsetSeconds,
+    this.snoozeCount = const Value.absent(),
+    required String desiredState,
+    this.reason = const Value.absent(),
+    this.osState = const Value.absent(),
+    this.scheduleFingerprint = const Value.absent(),
+    this.permissionSnapshot = const Value.absent(),
+    this.lastAttemptAt = const Value.absent(),
+    this.lastError = const Value.absent(),
+    required DateTime createdAtUtc,
+    required DateTime updatedAtUtc,
+    this.rowid = const Value.absent(),
+  }) : reminderId = Value(reminderId),
+       episodeId = Value(episodeId),
+       preMeasurementUid = Value(preMeasurementUid),
+       installationEpoch = Value(installationEpoch),
+       nativeNotificationId = Value(nativeNotificationId),
+       originalDueAtUtc = Value(originalDueAtUtc),
+       nextDueAtUtc = Value(nextDueAtUtc),
+       expiresAtUtc = Value(expiresAtUtc),
+       targetOffsetSeconds = Value(targetOffsetSeconds),
+       desiredState = Value(desiredState),
+       createdAtUtc = Value(createdAtUtc),
+       updatedAtUtc = Value(updatedAtUtc);
+  static Insertable<HrvPostReminder> custom({
+    Expression<String>? reminderId,
+    Expression<String>? episodeId,
+    Expression<String>? preMeasurementUid,
+    Expression<String>? installationEpoch,
+    Expression<int>? nativeNotificationId,
+    Expression<int>? generation,
+    Expression<DateTime>? originalDueAtUtc,
+    Expression<DateTime>? nextDueAtUtc,
+    Expression<DateTime>? expiresAtUtc,
+    Expression<int>? targetOffsetSeconds,
+    Expression<int>? snoozeCount,
+    Expression<String>? desiredState,
+    Expression<String>? reason,
+    Expression<String>? osState,
+    Expression<String>? scheduleFingerprint,
+    Expression<String>? permissionSnapshot,
+    Expression<DateTime>? lastAttemptAt,
+    Expression<String>? lastError,
+    Expression<DateTime>? createdAtUtc,
+    Expression<DateTime>? updatedAtUtc,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (reminderId != null) 'reminder_id': reminderId,
+      if (episodeId != null) 'episode_id': episodeId,
+      if (preMeasurementUid != null) 'pre_measurement_uid': preMeasurementUid,
+      if (installationEpoch != null) 'installation_epoch': installationEpoch,
+      if (nativeNotificationId != null)
+        'native_notification_id': nativeNotificationId,
+      if (generation != null) 'generation': generation,
+      if (originalDueAtUtc != null) 'original_due_at_utc': originalDueAtUtc,
+      if (nextDueAtUtc != null) 'next_due_at_utc': nextDueAtUtc,
+      if (expiresAtUtc != null) 'expires_at_utc': expiresAtUtc,
+      if (targetOffsetSeconds != null)
+        'target_offset_seconds': targetOffsetSeconds,
+      if (snoozeCount != null) 'snooze_count': snoozeCount,
+      if (desiredState != null) 'desired_state': desiredState,
+      if (reason != null) 'reason': reason,
+      if (osState != null) 'os_state': osState,
+      if (scheduleFingerprint != null)
+        'schedule_fingerprint': scheduleFingerprint,
+      if (permissionSnapshot != null) 'permission_snapshot': permissionSnapshot,
+      if (lastAttemptAt != null) 'last_attempt_at': lastAttemptAt,
+      if (lastError != null) 'last_error': lastError,
+      if (createdAtUtc != null) 'created_at_utc': createdAtUtc,
+      if (updatedAtUtc != null) 'updated_at_utc': updatedAtUtc,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  HrvPostRemindersCompanion copyWith({
+    Value<String>? reminderId,
+    Value<String>? episodeId,
+    Value<String>? preMeasurementUid,
+    Value<String>? installationEpoch,
+    Value<int>? nativeNotificationId,
+    Value<int>? generation,
+    Value<DateTime>? originalDueAtUtc,
+    Value<DateTime>? nextDueAtUtc,
+    Value<DateTime>? expiresAtUtc,
+    Value<int>? targetOffsetSeconds,
+    Value<int>? snoozeCount,
+    Value<String>? desiredState,
+    Value<String>? reason,
+    Value<String>? osState,
+    Value<String>? scheduleFingerprint,
+    Value<String?>? permissionSnapshot,
+    Value<DateTime?>? lastAttemptAt,
+    Value<String?>? lastError,
+    Value<DateTime>? createdAtUtc,
+    Value<DateTime>? updatedAtUtc,
+    Value<int>? rowid,
+  }) {
+    return HrvPostRemindersCompanion(
+      reminderId: reminderId ?? this.reminderId,
+      episodeId: episodeId ?? this.episodeId,
+      preMeasurementUid: preMeasurementUid ?? this.preMeasurementUid,
+      installationEpoch: installationEpoch ?? this.installationEpoch,
+      nativeNotificationId: nativeNotificationId ?? this.nativeNotificationId,
+      generation: generation ?? this.generation,
+      originalDueAtUtc: originalDueAtUtc ?? this.originalDueAtUtc,
+      nextDueAtUtc: nextDueAtUtc ?? this.nextDueAtUtc,
+      expiresAtUtc: expiresAtUtc ?? this.expiresAtUtc,
+      targetOffsetSeconds: targetOffsetSeconds ?? this.targetOffsetSeconds,
+      snoozeCount: snoozeCount ?? this.snoozeCount,
+      desiredState: desiredState ?? this.desiredState,
+      reason: reason ?? this.reason,
+      osState: osState ?? this.osState,
+      scheduleFingerprint: scheduleFingerprint ?? this.scheduleFingerprint,
+      permissionSnapshot: permissionSnapshot ?? this.permissionSnapshot,
+      lastAttemptAt: lastAttemptAt ?? this.lastAttemptAt,
+      lastError: lastError ?? this.lastError,
+      createdAtUtc: createdAtUtc ?? this.createdAtUtc,
+      updatedAtUtc: updatedAtUtc ?? this.updatedAtUtc,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (reminderId.present) {
+      map['reminder_id'] = Variable<String>(reminderId.value);
+    }
+    if (episodeId.present) {
+      map['episode_id'] = Variable<String>(episodeId.value);
+    }
+    if (preMeasurementUid.present) {
+      map['pre_measurement_uid'] = Variable<String>(preMeasurementUid.value);
+    }
+    if (installationEpoch.present) {
+      map['installation_epoch'] = Variable<String>(installationEpoch.value);
+    }
+    if (nativeNotificationId.present) {
+      map['native_notification_id'] = Variable<int>(nativeNotificationId.value);
+    }
+    if (generation.present) {
+      map['generation'] = Variable<int>(generation.value);
+    }
+    if (originalDueAtUtc.present) {
+      map['original_due_at_utc'] = Variable<DateTime>(originalDueAtUtc.value);
+    }
+    if (nextDueAtUtc.present) {
+      map['next_due_at_utc'] = Variable<DateTime>(nextDueAtUtc.value);
+    }
+    if (expiresAtUtc.present) {
+      map['expires_at_utc'] = Variable<DateTime>(expiresAtUtc.value);
+    }
+    if (targetOffsetSeconds.present) {
+      map['target_offset_seconds'] = Variable<int>(targetOffsetSeconds.value);
+    }
+    if (snoozeCount.present) {
+      map['snooze_count'] = Variable<int>(snoozeCount.value);
+    }
+    if (desiredState.present) {
+      map['desired_state'] = Variable<String>(desiredState.value);
+    }
+    if (reason.present) {
+      map['reason'] = Variable<String>(reason.value);
+    }
+    if (osState.present) {
+      map['os_state'] = Variable<String>(osState.value);
+    }
+    if (scheduleFingerprint.present) {
+      map['schedule_fingerprint'] = Variable<String>(scheduleFingerprint.value);
+    }
+    if (permissionSnapshot.present) {
+      map['permission_snapshot'] = Variable<String>(permissionSnapshot.value);
+    }
+    if (lastAttemptAt.present) {
+      map['last_attempt_at'] = Variable<DateTime>(lastAttemptAt.value);
+    }
+    if (lastError.present) {
+      map['last_error'] = Variable<String>(lastError.value);
+    }
+    if (createdAtUtc.present) {
+      map['created_at_utc'] = Variable<DateTime>(createdAtUtc.value);
+    }
+    if (updatedAtUtc.present) {
+      map['updated_at_utc'] = Variable<DateTime>(updatedAtUtc.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HrvPostRemindersCompanion(')
+          ..write('reminderId: $reminderId, ')
+          ..write('episodeId: $episodeId, ')
+          ..write('preMeasurementUid: $preMeasurementUid, ')
+          ..write('installationEpoch: $installationEpoch, ')
+          ..write('nativeNotificationId: $nativeNotificationId, ')
+          ..write('generation: $generation, ')
+          ..write('originalDueAtUtc: $originalDueAtUtc, ')
+          ..write('nextDueAtUtc: $nextDueAtUtc, ')
+          ..write('expiresAtUtc: $expiresAtUtc, ')
+          ..write('targetOffsetSeconds: $targetOffsetSeconds, ')
+          ..write('snoozeCount: $snoozeCount, ')
+          ..write('desiredState: $desiredState, ')
+          ..write('reason: $reason, ')
+          ..write('osState: $osState, ')
+          ..write('scheduleFingerprint: $scheduleFingerprint, ')
+          ..write('permissionSnapshot: $permissionSnapshot, ')
+          ..write('lastAttemptAt: $lastAttemptAt, ')
+          ..write('lastError: $lastError, ')
+          ..write('createdAtUtc: $createdAtUtc, ')
+          ..write('updatedAtUtc: $updatedAtUtc, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $HrvNotificationOperationsTable extends HrvNotificationOperations
+    with TableInfo<$HrvNotificationOperationsTable, HrvNotificationOperation> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $HrvNotificationOperationsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _operationIdMeta = const VerificationMeta(
+    'operationId',
+  );
+  @override
+  late final GeneratedColumn<String> operationId = GeneratedColumn<String>(
+    'operation_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _reminderIdMeta = const VerificationMeta(
+    'reminderId',
+  );
+  @override
+  late final GeneratedColumn<String> reminderId = GeneratedColumn<String>(
+    'reminder_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _generationMeta = const VerificationMeta(
+    'generation',
+  );
+  @override
+  late final GeneratedColumn<int> generation = GeneratedColumn<int>(
+    'generation',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _operationMeta = const VerificationMeta(
+    'operation',
+  );
+  @override
+  late final GeneratedColumn<String> operation = GeneratedColumn<String>(
+    'operation',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _fingerprintMeta = const VerificationMeta(
+    'fingerprint',
+  );
+  @override
+  late final GeneratedColumn<String> fingerprint = GeneratedColumn<String>(
+    'fingerprint',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _nativeNotificationIdMeta =
+      const VerificationMeta('nativeNotificationId');
+  @override
+  late final GeneratedColumn<int> nativeNotificationId = GeneratedColumn<int>(
+    'native_notification_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _dueAtUtcMeta = const VerificationMeta(
+    'dueAtUtc',
+  );
+  @override
+  late final GeneratedColumn<DateTime> dueAtUtc = GeneratedColumn<DateTime>(
+    'due_at_utc',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _expiresAtUtcMeta = const VerificationMeta(
+    'expiresAtUtc',
+  );
+  @override
+  late final GeneratedColumn<DateTime> expiresAtUtc = GeneratedColumn<DateTime>(
+    'expires_at_utc',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _stateMeta = const VerificationMeta('state');
+  @override
+  late final GeneratedColumn<String> state = GeneratedColumn<String>(
+    'state',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('pending'),
+  );
+  static const VerificationMeta _attemptsMeta = const VerificationMeta(
+    'attempts',
+  );
+  @override
+  late final GeneratedColumn<int> attempts = GeneratedColumn<int>(
+    'attempts',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _nextAttemptAtUtcMeta = const VerificationMeta(
+    'nextAttemptAtUtc',
+  );
+  @override
+  late final GeneratedColumn<DateTime> nextAttemptAtUtc =
+      GeneratedColumn<DateTime>(
+        'next_attempt_at_utc',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _claimedUntilUtcMeta = const VerificationMeta(
+    'claimedUntilUtc',
+  );
+  @override
+  late final GeneratedColumn<DateTime> claimedUntilUtc =
+      GeneratedColumn<DateTime>(
+        'claimed_until_utc',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _lastErrorMeta = const VerificationMeta(
+    'lastError',
+  );
+  @override
+  late final GeneratedColumn<String> lastError = GeneratedColumn<String>(
+    'last_error',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtUtcMeta = const VerificationMeta(
+    'createdAtUtc',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAtUtc = GeneratedColumn<DateTime>(
+    'created_at_utc',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    operationId,
+    reminderId,
+    generation,
+    operation,
+    fingerprint,
+    nativeNotificationId,
+    dueAtUtc,
+    expiresAtUtc,
+    state,
+    attempts,
+    nextAttemptAtUtc,
+    claimedUntilUtc,
+    lastError,
+    createdAtUtc,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'hrv_notification_operations';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<HrvNotificationOperation> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('operation_id')) {
+      context.handle(
+        _operationIdMeta,
+        operationId.isAcceptableOrUnknown(
+          data['operation_id']!,
+          _operationIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_operationIdMeta);
+    }
+    if (data.containsKey('reminder_id')) {
+      context.handle(
+        _reminderIdMeta,
+        reminderId.isAcceptableOrUnknown(data['reminder_id']!, _reminderIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_reminderIdMeta);
+    }
+    if (data.containsKey('generation')) {
+      context.handle(
+        _generationMeta,
+        generation.isAcceptableOrUnknown(data['generation']!, _generationMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_generationMeta);
+    }
+    if (data.containsKey('operation')) {
+      context.handle(
+        _operationMeta,
+        operation.isAcceptableOrUnknown(data['operation']!, _operationMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_operationMeta);
+    }
+    if (data.containsKey('fingerprint')) {
+      context.handle(
+        _fingerprintMeta,
+        fingerprint.isAcceptableOrUnknown(
+          data['fingerprint']!,
+          _fingerprintMeta,
+        ),
+      );
+    }
+    if (data.containsKey('native_notification_id')) {
+      context.handle(
+        _nativeNotificationIdMeta,
+        nativeNotificationId.isAcceptableOrUnknown(
+          data['native_notification_id']!,
+          _nativeNotificationIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_nativeNotificationIdMeta);
+    }
+    if (data.containsKey('due_at_utc')) {
+      context.handle(
+        _dueAtUtcMeta,
+        dueAtUtc.isAcceptableOrUnknown(data['due_at_utc']!, _dueAtUtcMeta),
+      );
+    }
+    if (data.containsKey('expires_at_utc')) {
+      context.handle(
+        _expiresAtUtcMeta,
+        expiresAtUtc.isAcceptableOrUnknown(
+          data['expires_at_utc']!,
+          _expiresAtUtcMeta,
+        ),
+      );
+    }
+    if (data.containsKey('state')) {
+      context.handle(
+        _stateMeta,
+        state.isAcceptableOrUnknown(data['state']!, _stateMeta),
+      );
+    }
+    if (data.containsKey('attempts')) {
+      context.handle(
+        _attemptsMeta,
+        attempts.isAcceptableOrUnknown(data['attempts']!, _attemptsMeta),
+      );
+    }
+    if (data.containsKey('next_attempt_at_utc')) {
+      context.handle(
+        _nextAttemptAtUtcMeta,
+        nextAttemptAtUtc.isAcceptableOrUnknown(
+          data['next_attempt_at_utc']!,
+          _nextAttemptAtUtcMeta,
+        ),
+      );
+    }
+    if (data.containsKey('claimed_until_utc')) {
+      context.handle(
+        _claimedUntilUtcMeta,
+        claimedUntilUtc.isAcceptableOrUnknown(
+          data['claimed_until_utc']!,
+          _claimedUntilUtcMeta,
+        ),
+      );
+    }
+    if (data.containsKey('last_error')) {
+      context.handle(
+        _lastErrorMeta,
+        lastError.isAcceptableOrUnknown(data['last_error']!, _lastErrorMeta),
+      );
+    }
+    if (data.containsKey('created_at_utc')) {
+      context.handle(
+        _createdAtUtcMeta,
+        createdAtUtc.isAcceptableOrUnknown(
+          data['created_at_utc']!,
+          _createdAtUtcMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtUtcMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {operationId};
+  @override
+  HrvNotificationOperation map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return HrvNotificationOperation(
+      operationId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}operation_id'],
+      )!,
+      reminderId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}reminder_id'],
+      )!,
+      generation: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}generation'],
+      )!,
+      operation: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}operation'],
+      )!,
+      fingerprint: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}fingerprint'],
+      )!,
+      nativeNotificationId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}native_notification_id'],
+      )!,
+      dueAtUtc: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}due_at_utc'],
+      ),
+      expiresAtUtc: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}expires_at_utc'],
+      ),
+      state: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}state'],
+      )!,
+      attempts: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}attempts'],
+      )!,
+      nextAttemptAtUtc: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}next_attempt_at_utc'],
+      ),
+      claimedUntilUtc: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}claimed_until_utc'],
+      ),
+      lastError: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}last_error'],
+      ),
+      createdAtUtc: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at_utc'],
+      )!,
+    );
+  }
+
+  @override
+  $HrvNotificationOperationsTable createAlias(String alias) {
+    return $HrvNotificationOperationsTable(attachedDatabase, alias);
+  }
+}
+
+class HrvNotificationOperation extends DataClass
+    implements Insertable<HrvNotificationOperation> {
+  final String operationId;
+  final String reminderId;
+  final int generation;
+
+  /// `schedule` or `cancel`.
+  final String operation;
+  final String fingerprint;
+  final int nativeNotificationId;
+  final DateTime? dueAtUtc;
+  final DateTime? expiresAtUtc;
+
+  /// `pending`, `done` or `superseded`.
+  final String state;
+  final int attempts;
+  final DateTime? nextAttemptAtUtc;
+  final DateTime? claimedUntilUtc;
+  final String? lastError;
+  final DateTime createdAtUtc;
+  const HrvNotificationOperation({
+    required this.operationId,
+    required this.reminderId,
+    required this.generation,
+    required this.operation,
+    required this.fingerprint,
+    required this.nativeNotificationId,
+    this.dueAtUtc,
+    this.expiresAtUtc,
+    required this.state,
+    required this.attempts,
+    this.nextAttemptAtUtc,
+    this.claimedUntilUtc,
+    this.lastError,
+    required this.createdAtUtc,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['operation_id'] = Variable<String>(operationId);
+    map['reminder_id'] = Variable<String>(reminderId);
+    map['generation'] = Variable<int>(generation);
+    map['operation'] = Variable<String>(operation);
+    map['fingerprint'] = Variable<String>(fingerprint);
+    map['native_notification_id'] = Variable<int>(nativeNotificationId);
+    if (!nullToAbsent || dueAtUtc != null) {
+      map['due_at_utc'] = Variable<DateTime>(dueAtUtc);
+    }
+    if (!nullToAbsent || expiresAtUtc != null) {
+      map['expires_at_utc'] = Variable<DateTime>(expiresAtUtc);
+    }
+    map['state'] = Variable<String>(state);
+    map['attempts'] = Variable<int>(attempts);
+    if (!nullToAbsent || nextAttemptAtUtc != null) {
+      map['next_attempt_at_utc'] = Variable<DateTime>(nextAttemptAtUtc);
+    }
+    if (!nullToAbsent || claimedUntilUtc != null) {
+      map['claimed_until_utc'] = Variable<DateTime>(claimedUntilUtc);
+    }
+    if (!nullToAbsent || lastError != null) {
+      map['last_error'] = Variable<String>(lastError);
+    }
+    map['created_at_utc'] = Variable<DateTime>(createdAtUtc);
+    return map;
+  }
+
+  HrvNotificationOperationsCompanion toCompanion(bool nullToAbsent) {
+    return HrvNotificationOperationsCompanion(
+      operationId: Value(operationId),
+      reminderId: Value(reminderId),
+      generation: Value(generation),
+      operation: Value(operation),
+      fingerprint: Value(fingerprint),
+      nativeNotificationId: Value(nativeNotificationId),
+      dueAtUtc: dueAtUtc == null && nullToAbsent
+          ? const Value.absent()
+          : Value(dueAtUtc),
+      expiresAtUtc: expiresAtUtc == null && nullToAbsent
+          ? const Value.absent()
+          : Value(expiresAtUtc),
+      state: Value(state),
+      attempts: Value(attempts),
+      nextAttemptAtUtc: nextAttemptAtUtc == null && nullToAbsent
+          ? const Value.absent()
+          : Value(nextAttemptAtUtc),
+      claimedUntilUtc: claimedUntilUtc == null && nullToAbsent
+          ? const Value.absent()
+          : Value(claimedUntilUtc),
+      lastError: lastError == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastError),
+      createdAtUtc: Value(createdAtUtc),
+    );
+  }
+
+  factory HrvNotificationOperation.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return HrvNotificationOperation(
+      operationId: serializer.fromJson<String>(json['operationId']),
+      reminderId: serializer.fromJson<String>(json['reminderId']),
+      generation: serializer.fromJson<int>(json['generation']),
+      operation: serializer.fromJson<String>(json['operation']),
+      fingerprint: serializer.fromJson<String>(json['fingerprint']),
+      nativeNotificationId: serializer.fromJson<int>(
+        json['nativeNotificationId'],
+      ),
+      dueAtUtc: serializer.fromJson<DateTime?>(json['dueAtUtc']),
+      expiresAtUtc: serializer.fromJson<DateTime?>(json['expiresAtUtc']),
+      state: serializer.fromJson<String>(json['state']),
+      attempts: serializer.fromJson<int>(json['attempts']),
+      nextAttemptAtUtc: serializer.fromJson<DateTime?>(
+        json['nextAttemptAtUtc'],
+      ),
+      claimedUntilUtc: serializer.fromJson<DateTime?>(json['claimedUntilUtc']),
+      lastError: serializer.fromJson<String?>(json['lastError']),
+      createdAtUtc: serializer.fromJson<DateTime>(json['createdAtUtc']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'operationId': serializer.toJson<String>(operationId),
+      'reminderId': serializer.toJson<String>(reminderId),
+      'generation': serializer.toJson<int>(generation),
+      'operation': serializer.toJson<String>(operation),
+      'fingerprint': serializer.toJson<String>(fingerprint),
+      'nativeNotificationId': serializer.toJson<int>(nativeNotificationId),
+      'dueAtUtc': serializer.toJson<DateTime?>(dueAtUtc),
+      'expiresAtUtc': serializer.toJson<DateTime?>(expiresAtUtc),
+      'state': serializer.toJson<String>(state),
+      'attempts': serializer.toJson<int>(attempts),
+      'nextAttemptAtUtc': serializer.toJson<DateTime?>(nextAttemptAtUtc),
+      'claimedUntilUtc': serializer.toJson<DateTime?>(claimedUntilUtc),
+      'lastError': serializer.toJson<String?>(lastError),
+      'createdAtUtc': serializer.toJson<DateTime>(createdAtUtc),
+    };
+  }
+
+  HrvNotificationOperation copyWith({
+    String? operationId,
+    String? reminderId,
+    int? generation,
+    String? operation,
+    String? fingerprint,
+    int? nativeNotificationId,
+    Value<DateTime?> dueAtUtc = const Value.absent(),
+    Value<DateTime?> expiresAtUtc = const Value.absent(),
+    String? state,
+    int? attempts,
+    Value<DateTime?> nextAttemptAtUtc = const Value.absent(),
+    Value<DateTime?> claimedUntilUtc = const Value.absent(),
+    Value<String?> lastError = const Value.absent(),
+    DateTime? createdAtUtc,
+  }) => HrvNotificationOperation(
+    operationId: operationId ?? this.operationId,
+    reminderId: reminderId ?? this.reminderId,
+    generation: generation ?? this.generation,
+    operation: operation ?? this.operation,
+    fingerprint: fingerprint ?? this.fingerprint,
+    nativeNotificationId: nativeNotificationId ?? this.nativeNotificationId,
+    dueAtUtc: dueAtUtc.present ? dueAtUtc.value : this.dueAtUtc,
+    expiresAtUtc: expiresAtUtc.present ? expiresAtUtc.value : this.expiresAtUtc,
+    state: state ?? this.state,
+    attempts: attempts ?? this.attempts,
+    nextAttemptAtUtc: nextAttemptAtUtc.present
+        ? nextAttemptAtUtc.value
+        : this.nextAttemptAtUtc,
+    claimedUntilUtc: claimedUntilUtc.present
+        ? claimedUntilUtc.value
+        : this.claimedUntilUtc,
+    lastError: lastError.present ? lastError.value : this.lastError,
+    createdAtUtc: createdAtUtc ?? this.createdAtUtc,
+  );
+  HrvNotificationOperation copyWithCompanion(
+    HrvNotificationOperationsCompanion data,
+  ) {
+    return HrvNotificationOperation(
+      operationId: data.operationId.present
+          ? data.operationId.value
+          : this.operationId,
+      reminderId: data.reminderId.present
+          ? data.reminderId.value
+          : this.reminderId,
+      generation: data.generation.present
+          ? data.generation.value
+          : this.generation,
+      operation: data.operation.present ? data.operation.value : this.operation,
+      fingerprint: data.fingerprint.present
+          ? data.fingerprint.value
+          : this.fingerprint,
+      nativeNotificationId: data.nativeNotificationId.present
+          ? data.nativeNotificationId.value
+          : this.nativeNotificationId,
+      dueAtUtc: data.dueAtUtc.present ? data.dueAtUtc.value : this.dueAtUtc,
+      expiresAtUtc: data.expiresAtUtc.present
+          ? data.expiresAtUtc.value
+          : this.expiresAtUtc,
+      state: data.state.present ? data.state.value : this.state,
+      attempts: data.attempts.present ? data.attempts.value : this.attempts,
+      nextAttemptAtUtc: data.nextAttemptAtUtc.present
+          ? data.nextAttemptAtUtc.value
+          : this.nextAttemptAtUtc,
+      claimedUntilUtc: data.claimedUntilUtc.present
+          ? data.claimedUntilUtc.value
+          : this.claimedUntilUtc,
+      lastError: data.lastError.present ? data.lastError.value : this.lastError,
+      createdAtUtc: data.createdAtUtc.present
+          ? data.createdAtUtc.value
+          : this.createdAtUtc,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HrvNotificationOperation(')
+          ..write('operationId: $operationId, ')
+          ..write('reminderId: $reminderId, ')
+          ..write('generation: $generation, ')
+          ..write('operation: $operation, ')
+          ..write('fingerprint: $fingerprint, ')
+          ..write('nativeNotificationId: $nativeNotificationId, ')
+          ..write('dueAtUtc: $dueAtUtc, ')
+          ..write('expiresAtUtc: $expiresAtUtc, ')
+          ..write('state: $state, ')
+          ..write('attempts: $attempts, ')
+          ..write('nextAttemptAtUtc: $nextAttemptAtUtc, ')
+          ..write('claimedUntilUtc: $claimedUntilUtc, ')
+          ..write('lastError: $lastError, ')
+          ..write('createdAtUtc: $createdAtUtc')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    operationId,
+    reminderId,
+    generation,
+    operation,
+    fingerprint,
+    nativeNotificationId,
+    dueAtUtc,
+    expiresAtUtc,
+    state,
+    attempts,
+    nextAttemptAtUtc,
+    claimedUntilUtc,
+    lastError,
+    createdAtUtc,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is HrvNotificationOperation &&
+          other.operationId == this.operationId &&
+          other.reminderId == this.reminderId &&
+          other.generation == this.generation &&
+          other.operation == this.operation &&
+          other.fingerprint == this.fingerprint &&
+          other.nativeNotificationId == this.nativeNotificationId &&
+          other.dueAtUtc == this.dueAtUtc &&
+          other.expiresAtUtc == this.expiresAtUtc &&
+          other.state == this.state &&
+          other.attempts == this.attempts &&
+          other.nextAttemptAtUtc == this.nextAttemptAtUtc &&
+          other.claimedUntilUtc == this.claimedUntilUtc &&
+          other.lastError == this.lastError &&
+          other.createdAtUtc == this.createdAtUtc);
+}
+
+class HrvNotificationOperationsCompanion
+    extends UpdateCompanion<HrvNotificationOperation> {
+  final Value<String> operationId;
+  final Value<String> reminderId;
+  final Value<int> generation;
+  final Value<String> operation;
+  final Value<String> fingerprint;
+  final Value<int> nativeNotificationId;
+  final Value<DateTime?> dueAtUtc;
+  final Value<DateTime?> expiresAtUtc;
+  final Value<String> state;
+  final Value<int> attempts;
+  final Value<DateTime?> nextAttemptAtUtc;
+  final Value<DateTime?> claimedUntilUtc;
+  final Value<String?> lastError;
+  final Value<DateTime> createdAtUtc;
+  final Value<int> rowid;
+  const HrvNotificationOperationsCompanion({
+    this.operationId = const Value.absent(),
+    this.reminderId = const Value.absent(),
+    this.generation = const Value.absent(),
+    this.operation = const Value.absent(),
+    this.fingerprint = const Value.absent(),
+    this.nativeNotificationId = const Value.absent(),
+    this.dueAtUtc = const Value.absent(),
+    this.expiresAtUtc = const Value.absent(),
+    this.state = const Value.absent(),
+    this.attempts = const Value.absent(),
+    this.nextAttemptAtUtc = const Value.absent(),
+    this.claimedUntilUtc = const Value.absent(),
+    this.lastError = const Value.absent(),
+    this.createdAtUtc = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  HrvNotificationOperationsCompanion.insert({
+    required String operationId,
+    required String reminderId,
+    required int generation,
+    required String operation,
+    this.fingerprint = const Value.absent(),
+    required int nativeNotificationId,
+    this.dueAtUtc = const Value.absent(),
+    this.expiresAtUtc = const Value.absent(),
+    this.state = const Value.absent(),
+    this.attempts = const Value.absent(),
+    this.nextAttemptAtUtc = const Value.absent(),
+    this.claimedUntilUtc = const Value.absent(),
+    this.lastError = const Value.absent(),
+    required DateTime createdAtUtc,
+    this.rowid = const Value.absent(),
+  }) : operationId = Value(operationId),
+       reminderId = Value(reminderId),
+       generation = Value(generation),
+       operation = Value(operation),
+       nativeNotificationId = Value(nativeNotificationId),
+       createdAtUtc = Value(createdAtUtc);
+  static Insertable<HrvNotificationOperation> custom({
+    Expression<String>? operationId,
+    Expression<String>? reminderId,
+    Expression<int>? generation,
+    Expression<String>? operation,
+    Expression<String>? fingerprint,
+    Expression<int>? nativeNotificationId,
+    Expression<DateTime>? dueAtUtc,
+    Expression<DateTime>? expiresAtUtc,
+    Expression<String>? state,
+    Expression<int>? attempts,
+    Expression<DateTime>? nextAttemptAtUtc,
+    Expression<DateTime>? claimedUntilUtc,
+    Expression<String>? lastError,
+    Expression<DateTime>? createdAtUtc,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (operationId != null) 'operation_id': operationId,
+      if (reminderId != null) 'reminder_id': reminderId,
+      if (generation != null) 'generation': generation,
+      if (operation != null) 'operation': operation,
+      if (fingerprint != null) 'fingerprint': fingerprint,
+      if (nativeNotificationId != null)
+        'native_notification_id': nativeNotificationId,
+      if (dueAtUtc != null) 'due_at_utc': dueAtUtc,
+      if (expiresAtUtc != null) 'expires_at_utc': expiresAtUtc,
+      if (state != null) 'state': state,
+      if (attempts != null) 'attempts': attempts,
+      if (nextAttemptAtUtc != null) 'next_attempt_at_utc': nextAttemptAtUtc,
+      if (claimedUntilUtc != null) 'claimed_until_utc': claimedUntilUtc,
+      if (lastError != null) 'last_error': lastError,
+      if (createdAtUtc != null) 'created_at_utc': createdAtUtc,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  HrvNotificationOperationsCompanion copyWith({
+    Value<String>? operationId,
+    Value<String>? reminderId,
+    Value<int>? generation,
+    Value<String>? operation,
+    Value<String>? fingerprint,
+    Value<int>? nativeNotificationId,
+    Value<DateTime?>? dueAtUtc,
+    Value<DateTime?>? expiresAtUtc,
+    Value<String>? state,
+    Value<int>? attempts,
+    Value<DateTime?>? nextAttemptAtUtc,
+    Value<DateTime?>? claimedUntilUtc,
+    Value<String?>? lastError,
+    Value<DateTime>? createdAtUtc,
+    Value<int>? rowid,
+  }) {
+    return HrvNotificationOperationsCompanion(
+      operationId: operationId ?? this.operationId,
+      reminderId: reminderId ?? this.reminderId,
+      generation: generation ?? this.generation,
+      operation: operation ?? this.operation,
+      fingerprint: fingerprint ?? this.fingerprint,
+      nativeNotificationId: nativeNotificationId ?? this.nativeNotificationId,
+      dueAtUtc: dueAtUtc ?? this.dueAtUtc,
+      expiresAtUtc: expiresAtUtc ?? this.expiresAtUtc,
+      state: state ?? this.state,
+      attempts: attempts ?? this.attempts,
+      nextAttemptAtUtc: nextAttemptAtUtc ?? this.nextAttemptAtUtc,
+      claimedUntilUtc: claimedUntilUtc ?? this.claimedUntilUtc,
+      lastError: lastError ?? this.lastError,
+      createdAtUtc: createdAtUtc ?? this.createdAtUtc,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (operationId.present) {
+      map['operation_id'] = Variable<String>(operationId.value);
+    }
+    if (reminderId.present) {
+      map['reminder_id'] = Variable<String>(reminderId.value);
+    }
+    if (generation.present) {
+      map['generation'] = Variable<int>(generation.value);
+    }
+    if (operation.present) {
+      map['operation'] = Variable<String>(operation.value);
+    }
+    if (fingerprint.present) {
+      map['fingerprint'] = Variable<String>(fingerprint.value);
+    }
+    if (nativeNotificationId.present) {
+      map['native_notification_id'] = Variable<int>(nativeNotificationId.value);
+    }
+    if (dueAtUtc.present) {
+      map['due_at_utc'] = Variable<DateTime>(dueAtUtc.value);
+    }
+    if (expiresAtUtc.present) {
+      map['expires_at_utc'] = Variable<DateTime>(expiresAtUtc.value);
+    }
+    if (state.present) {
+      map['state'] = Variable<String>(state.value);
+    }
+    if (attempts.present) {
+      map['attempts'] = Variable<int>(attempts.value);
+    }
+    if (nextAttemptAtUtc.present) {
+      map['next_attempt_at_utc'] = Variable<DateTime>(nextAttemptAtUtc.value);
+    }
+    if (claimedUntilUtc.present) {
+      map['claimed_until_utc'] = Variable<DateTime>(claimedUntilUtc.value);
+    }
+    if (lastError.present) {
+      map['last_error'] = Variable<String>(lastError.value);
+    }
+    if (createdAtUtc.present) {
+      map['created_at_utc'] = Variable<DateTime>(createdAtUtc.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HrvNotificationOperationsCompanion(')
+          ..write('operationId: $operationId, ')
+          ..write('reminderId: $reminderId, ')
+          ..write('generation: $generation, ')
+          ..write('operation: $operation, ')
+          ..write('fingerprint: $fingerprint, ')
+          ..write('nativeNotificationId: $nativeNotificationId, ')
+          ..write('dueAtUtc: $dueAtUtc, ')
+          ..write('expiresAtUtc: $expiresAtUtc, ')
+          ..write('state: $state, ')
+          ..write('attempts: $attempts, ')
+          ..write('nextAttemptAtUtc: $nextAttemptAtUtc, ')
+          ..write('claimedUntilUtc: $claimedUntilUtc, ')
+          ..write('lastError: $lastError, ')
+          ..write('createdAtUtc: $createdAtUtc, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $HrvNotificationActionReceiptsTable extends HrvNotificationActionReceipts
+    with
+        TableInfo<
+          $HrvNotificationActionReceiptsTable,
+          HrvNotificationActionReceipt
+        > {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $HrvNotificationActionReceiptsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _installationEpochMeta = const VerificationMeta(
+    'installationEpoch',
+  );
+  @override
+  late final GeneratedColumn<String> installationEpoch =
+      GeneratedColumn<String>(
+        'installation_epoch',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      );
+  static const VerificationMeta _reminderIdMeta = const VerificationMeta(
+    'reminderId',
+  );
+  @override
+  late final GeneratedColumn<String> reminderId = GeneratedColumn<String>(
+    'reminder_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _generationMeta = const VerificationMeta(
+    'generation',
+  );
+  @override
+  late final GeneratedColumn<int> generation = GeneratedColumn<int>(
+    'generation',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _actionKindMeta = const VerificationMeta(
+    'actionKind',
+  );
+  @override
+  late final GeneratedColumn<String> actionKind = GeneratedColumn<String>(
+    'action_kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _handledAtUtcMeta = const VerificationMeta(
+    'handledAtUtc',
+  );
+  @override
+  late final GeneratedColumn<DateTime> handledAtUtc = GeneratedColumn<DateTime>(
+    'handled_at_utc',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    installationEpoch,
+    reminderId,
+    generation,
+    actionKind,
+    handledAtUtc,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'hrv_notification_action_receipts';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<HrvNotificationActionReceipt> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('installation_epoch')) {
+      context.handle(
+        _installationEpochMeta,
+        installationEpoch.isAcceptableOrUnknown(
+          data['installation_epoch']!,
+          _installationEpochMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_installationEpochMeta);
+    }
+    if (data.containsKey('reminder_id')) {
+      context.handle(
+        _reminderIdMeta,
+        reminderId.isAcceptableOrUnknown(data['reminder_id']!, _reminderIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_reminderIdMeta);
+    }
+    if (data.containsKey('generation')) {
+      context.handle(
+        _generationMeta,
+        generation.isAcceptableOrUnknown(data['generation']!, _generationMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_generationMeta);
+    }
+    if (data.containsKey('action_kind')) {
+      context.handle(
+        _actionKindMeta,
+        actionKind.isAcceptableOrUnknown(data['action_kind']!, _actionKindMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_actionKindMeta);
+    }
+    if (data.containsKey('handled_at_utc')) {
+      context.handle(
+        _handledAtUtcMeta,
+        handledAtUtc.isAcceptableOrUnknown(
+          data['handled_at_utc']!,
+          _handledAtUtcMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_handledAtUtcMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {
+    installationEpoch,
+    reminderId,
+    generation,
+    actionKind,
+  };
+  @override
+  HrvNotificationActionReceipt map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return HrvNotificationActionReceipt(
+      installationEpoch: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}installation_epoch'],
+      )!,
+      reminderId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}reminder_id'],
+      )!,
+      generation: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}generation'],
+      )!,
+      actionKind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}action_kind'],
+      )!,
+      handledAtUtc: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}handled_at_utc'],
+      )!,
+    );
+  }
+
+  @override
+  $HrvNotificationActionReceiptsTable createAlias(String alias) {
+    return $HrvNotificationActionReceiptsTable(attachedDatabase, alias);
+  }
+}
+
+class HrvNotificationActionReceipt extends DataClass
+    implements Insertable<HrvNotificationActionReceipt> {
+  final String installationEpoch;
+  final String reminderId;
+  final int generation;
+  final String actionKind;
+  final DateTime handledAtUtc;
+  const HrvNotificationActionReceipt({
+    required this.installationEpoch,
+    required this.reminderId,
+    required this.generation,
+    required this.actionKind,
+    required this.handledAtUtc,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['installation_epoch'] = Variable<String>(installationEpoch);
+    map['reminder_id'] = Variable<String>(reminderId);
+    map['generation'] = Variable<int>(generation);
+    map['action_kind'] = Variable<String>(actionKind);
+    map['handled_at_utc'] = Variable<DateTime>(handledAtUtc);
+    return map;
+  }
+
+  HrvNotificationActionReceiptsCompanion toCompanion(bool nullToAbsent) {
+    return HrvNotificationActionReceiptsCompanion(
+      installationEpoch: Value(installationEpoch),
+      reminderId: Value(reminderId),
+      generation: Value(generation),
+      actionKind: Value(actionKind),
+      handledAtUtc: Value(handledAtUtc),
+    );
+  }
+
+  factory HrvNotificationActionReceipt.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return HrvNotificationActionReceipt(
+      installationEpoch: serializer.fromJson<String>(json['installationEpoch']),
+      reminderId: serializer.fromJson<String>(json['reminderId']),
+      generation: serializer.fromJson<int>(json['generation']),
+      actionKind: serializer.fromJson<String>(json['actionKind']),
+      handledAtUtc: serializer.fromJson<DateTime>(json['handledAtUtc']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'installationEpoch': serializer.toJson<String>(installationEpoch),
+      'reminderId': serializer.toJson<String>(reminderId),
+      'generation': serializer.toJson<int>(generation),
+      'actionKind': serializer.toJson<String>(actionKind),
+      'handledAtUtc': serializer.toJson<DateTime>(handledAtUtc),
+    };
+  }
+
+  HrvNotificationActionReceipt copyWith({
+    String? installationEpoch,
+    String? reminderId,
+    int? generation,
+    String? actionKind,
+    DateTime? handledAtUtc,
+  }) => HrvNotificationActionReceipt(
+    installationEpoch: installationEpoch ?? this.installationEpoch,
+    reminderId: reminderId ?? this.reminderId,
+    generation: generation ?? this.generation,
+    actionKind: actionKind ?? this.actionKind,
+    handledAtUtc: handledAtUtc ?? this.handledAtUtc,
+  );
+  HrvNotificationActionReceipt copyWithCompanion(
+    HrvNotificationActionReceiptsCompanion data,
+  ) {
+    return HrvNotificationActionReceipt(
+      installationEpoch: data.installationEpoch.present
+          ? data.installationEpoch.value
+          : this.installationEpoch,
+      reminderId: data.reminderId.present
+          ? data.reminderId.value
+          : this.reminderId,
+      generation: data.generation.present
+          ? data.generation.value
+          : this.generation,
+      actionKind: data.actionKind.present
+          ? data.actionKind.value
+          : this.actionKind,
+      handledAtUtc: data.handledAtUtc.present
+          ? data.handledAtUtc.value
+          : this.handledAtUtc,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HrvNotificationActionReceipt(')
+          ..write('installationEpoch: $installationEpoch, ')
+          ..write('reminderId: $reminderId, ')
+          ..write('generation: $generation, ')
+          ..write('actionKind: $actionKind, ')
+          ..write('handledAtUtc: $handledAtUtc')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    installationEpoch,
+    reminderId,
+    generation,
+    actionKind,
+    handledAtUtc,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is HrvNotificationActionReceipt &&
+          other.installationEpoch == this.installationEpoch &&
+          other.reminderId == this.reminderId &&
+          other.generation == this.generation &&
+          other.actionKind == this.actionKind &&
+          other.handledAtUtc == this.handledAtUtc);
+}
+
+class HrvNotificationActionReceiptsCompanion
+    extends UpdateCompanion<HrvNotificationActionReceipt> {
+  final Value<String> installationEpoch;
+  final Value<String> reminderId;
+  final Value<int> generation;
+  final Value<String> actionKind;
+  final Value<DateTime> handledAtUtc;
+  final Value<int> rowid;
+  const HrvNotificationActionReceiptsCompanion({
+    this.installationEpoch = const Value.absent(),
+    this.reminderId = const Value.absent(),
+    this.generation = const Value.absent(),
+    this.actionKind = const Value.absent(),
+    this.handledAtUtc = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  HrvNotificationActionReceiptsCompanion.insert({
+    required String installationEpoch,
+    required String reminderId,
+    required int generation,
+    required String actionKind,
+    required DateTime handledAtUtc,
+    this.rowid = const Value.absent(),
+  }) : installationEpoch = Value(installationEpoch),
+       reminderId = Value(reminderId),
+       generation = Value(generation),
+       actionKind = Value(actionKind),
+       handledAtUtc = Value(handledAtUtc);
+  static Insertable<HrvNotificationActionReceipt> custom({
+    Expression<String>? installationEpoch,
+    Expression<String>? reminderId,
+    Expression<int>? generation,
+    Expression<String>? actionKind,
+    Expression<DateTime>? handledAtUtc,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (installationEpoch != null) 'installation_epoch': installationEpoch,
+      if (reminderId != null) 'reminder_id': reminderId,
+      if (generation != null) 'generation': generation,
+      if (actionKind != null) 'action_kind': actionKind,
+      if (handledAtUtc != null) 'handled_at_utc': handledAtUtc,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  HrvNotificationActionReceiptsCompanion copyWith({
+    Value<String>? installationEpoch,
+    Value<String>? reminderId,
+    Value<int>? generation,
+    Value<String>? actionKind,
+    Value<DateTime>? handledAtUtc,
+    Value<int>? rowid,
+  }) {
+    return HrvNotificationActionReceiptsCompanion(
+      installationEpoch: installationEpoch ?? this.installationEpoch,
+      reminderId: reminderId ?? this.reminderId,
+      generation: generation ?? this.generation,
+      actionKind: actionKind ?? this.actionKind,
+      handledAtUtc: handledAtUtc ?? this.handledAtUtc,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (installationEpoch.present) {
+      map['installation_epoch'] = Variable<String>(installationEpoch.value);
+    }
+    if (reminderId.present) {
+      map['reminder_id'] = Variable<String>(reminderId.value);
+    }
+    if (generation.present) {
+      map['generation'] = Variable<int>(generation.value);
+    }
+    if (actionKind.present) {
+      map['action_kind'] = Variable<String>(actionKind.value);
+    }
+    if (handledAtUtc.present) {
+      map['handled_at_utc'] = Variable<DateTime>(handledAtUtc.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HrvNotificationActionReceiptsCompanion(')
+          ..write('installationEpoch: $installationEpoch, ')
+          ..write('reminderId: $reminderId, ')
+          ..write('generation: $generation, ')
+          ..write('actionKind: $actionKind, ')
+          ..write('handledAtUtc: $handledAtUtc, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $HrvNativeCleanupsTable extends HrvNativeCleanups
+    with TableInfo<$HrvNativeCleanupsTable, HrvNativeCleanup> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $HrvNativeCleanupsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _nativeNotificationIdMeta =
+      const VerificationMeta('nativeNotificationId');
+  @override
+  late final GeneratedColumn<int> nativeNotificationId = GeneratedColumn<int>(
+    'native_notification_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _installationEpochMeta = const VerificationMeta(
+    'installationEpoch',
+  );
+  @override
+  late final GeneratedColumn<String> installationEpoch =
+      GeneratedColumn<String>(
+        'installation_epoch',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      );
+  static const VerificationMeta _createdAtUtcMeta = const VerificationMeta(
+    'createdAtUtc',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAtUtc = GeneratedColumn<DateTime>(
+    'created_at_utc',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _lastErrorMeta = const VerificationMeta(
+    'lastError',
+  );
+  @override
+  late final GeneratedColumn<String> lastError = GeneratedColumn<String>(
+    'last_error',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    nativeNotificationId,
+    installationEpoch,
+    createdAtUtc,
+    lastError,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'hrv_native_cleanups';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<HrvNativeCleanup> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('native_notification_id')) {
+      context.handle(
+        _nativeNotificationIdMeta,
+        nativeNotificationId.isAcceptableOrUnknown(
+          data['native_notification_id']!,
+          _nativeNotificationIdMeta,
+        ),
+      );
+    }
+    if (data.containsKey('installation_epoch')) {
+      context.handle(
+        _installationEpochMeta,
+        installationEpoch.isAcceptableOrUnknown(
+          data['installation_epoch']!,
+          _installationEpochMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_installationEpochMeta);
+    }
+    if (data.containsKey('created_at_utc')) {
+      context.handle(
+        _createdAtUtcMeta,
+        createdAtUtc.isAcceptableOrUnknown(
+          data['created_at_utc']!,
+          _createdAtUtcMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtUtcMeta);
+    }
+    if (data.containsKey('last_error')) {
+      context.handle(
+        _lastErrorMeta,
+        lastError.isAcceptableOrUnknown(data['last_error']!, _lastErrorMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {nativeNotificationId};
+  @override
+  HrvNativeCleanup map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return HrvNativeCleanup(
+      nativeNotificationId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}native_notification_id'],
+      )!,
+      installationEpoch: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}installation_epoch'],
+      )!,
+      createdAtUtc: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at_utc'],
+      )!,
+      lastError: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}last_error'],
+      ),
+    );
+  }
+
+  @override
+  $HrvNativeCleanupsTable createAlias(String alias) {
+    return $HrvNativeCleanupsTable(attachedDatabase, alias);
+  }
+}
+
+class HrvNativeCleanup extends DataClass
+    implements Insertable<HrvNativeCleanup> {
+  final int nativeNotificationId;
+  final String installationEpoch;
+  final DateTime createdAtUtc;
+  final String? lastError;
+  const HrvNativeCleanup({
+    required this.nativeNotificationId,
+    required this.installationEpoch,
+    required this.createdAtUtc,
+    this.lastError,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['native_notification_id'] = Variable<int>(nativeNotificationId);
+    map['installation_epoch'] = Variable<String>(installationEpoch);
+    map['created_at_utc'] = Variable<DateTime>(createdAtUtc);
+    if (!nullToAbsent || lastError != null) {
+      map['last_error'] = Variable<String>(lastError);
+    }
+    return map;
+  }
+
+  HrvNativeCleanupsCompanion toCompanion(bool nullToAbsent) {
+    return HrvNativeCleanupsCompanion(
+      nativeNotificationId: Value(nativeNotificationId),
+      installationEpoch: Value(installationEpoch),
+      createdAtUtc: Value(createdAtUtc),
+      lastError: lastError == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastError),
+    );
+  }
+
+  factory HrvNativeCleanup.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return HrvNativeCleanup(
+      nativeNotificationId: serializer.fromJson<int>(
+        json['nativeNotificationId'],
+      ),
+      installationEpoch: serializer.fromJson<String>(json['installationEpoch']),
+      createdAtUtc: serializer.fromJson<DateTime>(json['createdAtUtc']),
+      lastError: serializer.fromJson<String?>(json['lastError']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'nativeNotificationId': serializer.toJson<int>(nativeNotificationId),
+      'installationEpoch': serializer.toJson<String>(installationEpoch),
+      'createdAtUtc': serializer.toJson<DateTime>(createdAtUtc),
+      'lastError': serializer.toJson<String?>(lastError),
+    };
+  }
+
+  HrvNativeCleanup copyWith({
+    int? nativeNotificationId,
+    String? installationEpoch,
+    DateTime? createdAtUtc,
+    Value<String?> lastError = const Value.absent(),
+  }) => HrvNativeCleanup(
+    nativeNotificationId: nativeNotificationId ?? this.nativeNotificationId,
+    installationEpoch: installationEpoch ?? this.installationEpoch,
+    createdAtUtc: createdAtUtc ?? this.createdAtUtc,
+    lastError: lastError.present ? lastError.value : this.lastError,
+  );
+  HrvNativeCleanup copyWithCompanion(HrvNativeCleanupsCompanion data) {
+    return HrvNativeCleanup(
+      nativeNotificationId: data.nativeNotificationId.present
+          ? data.nativeNotificationId.value
+          : this.nativeNotificationId,
+      installationEpoch: data.installationEpoch.present
+          ? data.installationEpoch.value
+          : this.installationEpoch,
+      createdAtUtc: data.createdAtUtc.present
+          ? data.createdAtUtc.value
+          : this.createdAtUtc,
+      lastError: data.lastError.present ? data.lastError.value : this.lastError,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HrvNativeCleanup(')
+          ..write('nativeNotificationId: $nativeNotificationId, ')
+          ..write('installationEpoch: $installationEpoch, ')
+          ..write('createdAtUtc: $createdAtUtc, ')
+          ..write('lastError: $lastError')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    nativeNotificationId,
+    installationEpoch,
+    createdAtUtc,
+    lastError,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is HrvNativeCleanup &&
+          other.nativeNotificationId == this.nativeNotificationId &&
+          other.installationEpoch == this.installationEpoch &&
+          other.createdAtUtc == this.createdAtUtc &&
+          other.lastError == this.lastError);
+}
+
+class HrvNativeCleanupsCompanion extends UpdateCompanion<HrvNativeCleanup> {
+  final Value<int> nativeNotificationId;
+  final Value<String> installationEpoch;
+  final Value<DateTime> createdAtUtc;
+  final Value<String?> lastError;
+  const HrvNativeCleanupsCompanion({
+    this.nativeNotificationId = const Value.absent(),
+    this.installationEpoch = const Value.absent(),
+    this.createdAtUtc = const Value.absent(),
+    this.lastError = const Value.absent(),
+  });
+  HrvNativeCleanupsCompanion.insert({
+    this.nativeNotificationId = const Value.absent(),
+    required String installationEpoch,
+    required DateTime createdAtUtc,
+    this.lastError = const Value.absent(),
+  }) : installationEpoch = Value(installationEpoch),
+       createdAtUtc = Value(createdAtUtc);
+  static Insertable<HrvNativeCleanup> custom({
+    Expression<int>? nativeNotificationId,
+    Expression<String>? installationEpoch,
+    Expression<DateTime>? createdAtUtc,
+    Expression<String>? lastError,
+  }) {
+    return RawValuesInsertable({
+      if (nativeNotificationId != null)
+        'native_notification_id': nativeNotificationId,
+      if (installationEpoch != null) 'installation_epoch': installationEpoch,
+      if (createdAtUtc != null) 'created_at_utc': createdAtUtc,
+      if (lastError != null) 'last_error': lastError,
+    });
+  }
+
+  HrvNativeCleanupsCompanion copyWith({
+    Value<int>? nativeNotificationId,
+    Value<String>? installationEpoch,
+    Value<DateTime>? createdAtUtc,
+    Value<String?>? lastError,
+  }) {
+    return HrvNativeCleanupsCompanion(
+      nativeNotificationId: nativeNotificationId ?? this.nativeNotificationId,
+      installationEpoch: installationEpoch ?? this.installationEpoch,
+      createdAtUtc: createdAtUtc ?? this.createdAtUtc,
+      lastError: lastError ?? this.lastError,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (nativeNotificationId.present) {
+      map['native_notification_id'] = Variable<int>(nativeNotificationId.value);
+    }
+    if (installationEpoch.present) {
+      map['installation_epoch'] = Variable<String>(installationEpoch.value);
+    }
+    if (createdAtUtc.present) {
+      map['created_at_utc'] = Variable<DateTime>(createdAtUtc.value);
+    }
+    if (lastError.present) {
+      map['last_error'] = Variable<String>(lastError.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HrvNativeCleanupsCompanion(')
+          ..write('nativeNotificationId: $nativeNotificationId, ')
+          ..write('installationEpoch: $installationEpoch, ')
+          ..write('createdAtUtc: $createdAtUtc, ')
+          ..write('lastError: $lastError')
           ..write(')'))
         .toString();
   }
@@ -30763,6 +37565,25 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $GripStrengthRecordsTable(this);
   late final $SpotHrvMeasurementsTable spotHrvMeasurements =
       $SpotHrvMeasurementsTable(this);
+  late final $HrvTrainingEpisodesTable hrvTrainingEpisodes =
+      $HrvTrainingEpisodesTable(this);
+  late final $HrvEpisodeAliasesTable hrvEpisodeAliases =
+      $HrvEpisodeAliasesTable(this);
+  late final $HrvEpisodeMeasurementsTable hrvEpisodeMeasurements =
+      $HrvEpisodeMeasurementsTable(this);
+  late final $HrvEpisodeFeedbackTable hrvEpisodeFeedback =
+      $HrvEpisodeFeedbackTable(this);
+  late final $HrvReminderPreferencesTable hrvReminderPreferences =
+      $HrvReminderPreferencesTable(this);
+  late final $HrvPostRemindersTable hrvPostReminders = $HrvPostRemindersTable(
+    this,
+  );
+  late final $HrvNotificationOperationsTable hrvNotificationOperations =
+      $HrvNotificationOperationsTable(this);
+  late final $HrvNotificationActionReceiptsTable hrvNotificationActionReceipts =
+      $HrvNotificationActionReceiptsTable(this);
+  late final $HrvNativeCleanupsTable hrvNativeCleanups =
+      $HrvNativeCleanupsTable(this);
   late final $PlanGoalsTable planGoals = $PlanGoalsTable(this);
   late final $ProviderCleanupsTable providerCleanups = $ProviderCleanupsTable(
     this,
@@ -30823,6 +37644,15 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     dayScoreRecords,
     gripStrengthRecords,
     spotHrvMeasurements,
+    hrvTrainingEpisodes,
+    hrvEpisodeAliases,
+    hrvEpisodeMeasurements,
+    hrvEpisodeFeedback,
+    hrvReminderPreferences,
+    hrvPostReminders,
+    hrvNotificationOperations,
+    hrvNotificationActionReceipts,
+    hrvNativeCleanups,
     planGoals,
     providerCleanups,
     workoutDeliveries,
@@ -34872,6 +41702,18 @@ typedef $$SpotHrvMeasurementsTableCreateCompanionBuilder =
       required String rrJson,
       Value<String?> notes,
       Value<int?> minutesAfterTraining,
+      Value<String?> measurementUid,
+      Value<DateTime?> samplingEndedAt,
+      Value<DateTime?> captureStartedAt,
+      Value<int?> timezoneOffsetMinutes,
+      Value<String> metricKind,
+      Value<String?> protocolVersion,
+      Value<String?> analysisVersion,
+      Value<String> qualityState,
+      Value<String?> qualityReasons,
+      Value<DateTime?> createdAt,
+      Value<DateTime?> modifiedAt,
+      Value<int> revision,
     });
 typedef $$SpotHrvMeasurementsTableUpdateCompanionBuilder =
     SpotHrvMeasurementsCompanion Function({
@@ -34894,6 +41736,18 @@ typedef $$SpotHrvMeasurementsTableUpdateCompanionBuilder =
       Value<String> rrJson,
       Value<String?> notes,
       Value<int?> minutesAfterTraining,
+      Value<String?> measurementUid,
+      Value<DateTime?> samplingEndedAt,
+      Value<DateTime?> captureStartedAt,
+      Value<int?> timezoneOffsetMinutes,
+      Value<String> metricKind,
+      Value<String?> protocolVersion,
+      Value<String?> analysisVersion,
+      Value<String> qualityState,
+      Value<String?> qualityReasons,
+      Value<DateTime?> createdAt,
+      Value<DateTime?> modifiedAt,
+      Value<int> revision,
     });
 
 class $$SpotHrvMeasurementsTableFilterComposer
@@ -34997,6 +41851,66 @@ class $$SpotHrvMeasurementsTableFilterComposer
 
   ColumnFilters<int> get minutesAfterTraining => $composableBuilder(
     column: $table.minutesAfterTraining,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get measurementUid => $composableBuilder(
+    column: $table.measurementUid,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get samplingEndedAt => $composableBuilder(
+    column: $table.samplingEndedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get captureStartedAt => $composableBuilder(
+    column: $table.captureStartedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get timezoneOffsetMinutes => $composableBuilder(
+    column: $table.timezoneOffsetMinutes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get metricKind => $composableBuilder(
+    column: $table.metricKind,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get protocolVersion => $composableBuilder(
+    column: $table.protocolVersion,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get analysisVersion => $composableBuilder(
+    column: $table.analysisVersion,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get qualityState => $composableBuilder(
+    column: $table.qualityState,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get qualityReasons => $composableBuilder(
+    column: $table.qualityReasons,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get modifiedAt => $composableBuilder(
+    column: $table.modifiedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get revision => $composableBuilder(
+    column: $table.revision,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -35104,6 +42018,66 @@ class $$SpotHrvMeasurementsTableOrderingComposer
     column: $table.minutesAfterTraining,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get measurementUid => $composableBuilder(
+    column: $table.measurementUid,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get samplingEndedAt => $composableBuilder(
+    column: $table.samplingEndedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get captureStartedAt => $composableBuilder(
+    column: $table.captureStartedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get timezoneOffsetMinutes => $composableBuilder(
+    column: $table.timezoneOffsetMinutes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get metricKind => $composableBuilder(
+    column: $table.metricKind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get protocolVersion => $composableBuilder(
+    column: $table.protocolVersion,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get analysisVersion => $composableBuilder(
+    column: $table.analysisVersion,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get qualityState => $composableBuilder(
+    column: $table.qualityState,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get qualityReasons => $composableBuilder(
+    column: $table.qualityReasons,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get modifiedAt => $composableBuilder(
+    column: $table.modifiedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get revision => $composableBuilder(
+    column: $table.revision,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$SpotHrvMeasurementsTableAnnotationComposer
@@ -35185,6 +42159,62 @@ class $$SpotHrvMeasurementsTableAnnotationComposer
     column: $table.minutesAfterTraining,
     builder: (column) => column,
   );
+
+  GeneratedColumn<String> get measurementUid => $composableBuilder(
+    column: $table.measurementUid,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get samplingEndedAt => $composableBuilder(
+    column: $table.samplingEndedAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get captureStartedAt => $composableBuilder(
+    column: $table.captureStartedAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get timezoneOffsetMinutes => $composableBuilder(
+    column: $table.timezoneOffsetMinutes,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get metricKind => $composableBuilder(
+    column: $table.metricKind,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get protocolVersion => $composableBuilder(
+    column: $table.protocolVersion,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get analysisVersion => $composableBuilder(
+    column: $table.analysisVersion,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get qualityState => $composableBuilder(
+    column: $table.qualityState,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get qualityReasons => $composableBuilder(
+    column: $table.qualityReasons,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get modifiedAt => $composableBuilder(
+    column: $table.modifiedAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get revision =>
+      $composableBuilder(column: $table.revision, builder: (column) => column);
 }
 
 class $$SpotHrvMeasurementsTableTableManager
@@ -35249,6 +42279,18 @@ class $$SpotHrvMeasurementsTableTableManager
                 Value<String> rrJson = const Value.absent(),
                 Value<String?> notes = const Value.absent(),
                 Value<int?> minutesAfterTraining = const Value.absent(),
+                Value<String?> measurementUid = const Value.absent(),
+                Value<DateTime?> samplingEndedAt = const Value.absent(),
+                Value<DateTime?> captureStartedAt = const Value.absent(),
+                Value<int?> timezoneOffsetMinutes = const Value.absent(),
+                Value<String> metricKind = const Value.absent(),
+                Value<String?> protocolVersion = const Value.absent(),
+                Value<String?> analysisVersion = const Value.absent(),
+                Value<String> qualityState = const Value.absent(),
+                Value<String?> qualityReasons = const Value.absent(),
+                Value<DateTime?> createdAt = const Value.absent(),
+                Value<DateTime?> modifiedAt = const Value.absent(),
+                Value<int> revision = const Value.absent(),
               }) => SpotHrvMeasurementsCompanion(
                 id: id,
                 startedAt: startedAt,
@@ -35269,6 +42311,18 @@ class $$SpotHrvMeasurementsTableTableManager
                 rrJson: rrJson,
                 notes: notes,
                 minutesAfterTraining: minutesAfterTraining,
+                measurementUid: measurementUid,
+                samplingEndedAt: samplingEndedAt,
+                captureStartedAt: captureStartedAt,
+                timezoneOffsetMinutes: timezoneOffsetMinutes,
+                metricKind: metricKind,
+                protocolVersion: protocolVersion,
+                analysisVersion: analysisVersion,
+                qualityState: qualityState,
+                qualityReasons: qualityReasons,
+                createdAt: createdAt,
+                modifiedAt: modifiedAt,
+                revision: revision,
               ),
           createCompanionCallback:
               ({
@@ -35291,6 +42345,18 @@ class $$SpotHrvMeasurementsTableTableManager
                 required String rrJson,
                 Value<String?> notes = const Value.absent(),
                 Value<int?> minutesAfterTraining = const Value.absent(),
+                Value<String?> measurementUid = const Value.absent(),
+                Value<DateTime?> samplingEndedAt = const Value.absent(),
+                Value<DateTime?> captureStartedAt = const Value.absent(),
+                Value<int?> timezoneOffsetMinutes = const Value.absent(),
+                Value<String> metricKind = const Value.absent(),
+                Value<String?> protocolVersion = const Value.absent(),
+                Value<String?> analysisVersion = const Value.absent(),
+                Value<String> qualityState = const Value.absent(),
+                Value<String?> qualityReasons = const Value.absent(),
+                Value<DateTime?> createdAt = const Value.absent(),
+                Value<DateTime?> modifiedAt = const Value.absent(),
+                Value<int> revision = const Value.absent(),
               }) => SpotHrvMeasurementsCompanion.insert(
                 id: id,
                 startedAt: startedAt,
@@ -35311,6 +42377,18 @@ class $$SpotHrvMeasurementsTableTableManager
                 rrJson: rrJson,
                 notes: notes,
                 minutesAfterTraining: minutesAfterTraining,
+                measurementUid: measurementUid,
+                samplingEndedAt: samplingEndedAt,
+                captureStartedAt: captureStartedAt,
+                timezoneOffsetMinutes: timezoneOffsetMinutes,
+                metricKind: metricKind,
+                protocolVersion: protocolVersion,
+                analysisVersion: analysisVersion,
+                qualityState: qualityState,
+                qualityReasons: qualityReasons,
+                createdAt: createdAt,
+                modifiedAt: modifiedAt,
+                revision: revision,
               ),
           withReferenceMapper: (p0) => p0
               .map(
@@ -35350,6 +42428,3125 @@ typedef $$SpotHrvMeasurementsTableProcessedTableManager =
         >,
       ),
       SpotHrvMeasurement,
+      PrefetchHooks Function()
+    >;
+typedef $$HrvTrainingEpisodesTableCreateCompanionBuilder =
+    HrvTrainingEpisodesCompanion Function({
+      required String episodeId,
+      Value<String> athleteId,
+      Value<String?> primaryActivityId,
+      Value<int?> plannedSessionId,
+      Value<String> sport,
+      required DateTime actualStartUtc,
+      Value<DateTime?> actualEndUtc,
+      Value<String> intervalBasis,
+      Value<String?> intervalSource,
+      Value<int> intervalRevision,
+      Value<bool> clockUncertain,
+      Value<String?> parentEpisodeId,
+      required DateTime detectedAtUtc,
+      Value<String> state,
+      Value<int> dataRevision,
+      required DateTime createdAtUtc,
+      required DateTime updatedAtUtc,
+      Value<int> rowid,
+    });
+typedef $$HrvTrainingEpisodesTableUpdateCompanionBuilder =
+    HrvTrainingEpisodesCompanion Function({
+      Value<String> episodeId,
+      Value<String> athleteId,
+      Value<String?> primaryActivityId,
+      Value<int?> plannedSessionId,
+      Value<String> sport,
+      Value<DateTime> actualStartUtc,
+      Value<DateTime?> actualEndUtc,
+      Value<String> intervalBasis,
+      Value<String?> intervalSource,
+      Value<int> intervalRevision,
+      Value<bool> clockUncertain,
+      Value<String?> parentEpisodeId,
+      Value<DateTime> detectedAtUtc,
+      Value<String> state,
+      Value<int> dataRevision,
+      Value<DateTime> createdAtUtc,
+      Value<DateTime> updatedAtUtc,
+      Value<int> rowid,
+    });
+
+class $$HrvTrainingEpisodesTableFilterComposer
+    extends Composer<_$AppDatabase, $HrvTrainingEpisodesTable> {
+  $$HrvTrainingEpisodesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get episodeId => $composableBuilder(
+    column: $table.episodeId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get athleteId => $composableBuilder(
+    column: $table.athleteId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get primaryActivityId => $composableBuilder(
+    column: $table.primaryActivityId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get plannedSessionId => $composableBuilder(
+    column: $table.plannedSessionId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get sport => $composableBuilder(
+    column: $table.sport,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get actualStartUtc => $composableBuilder(
+    column: $table.actualStartUtc,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get actualEndUtc => $composableBuilder(
+    column: $table.actualEndUtc,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get intervalBasis => $composableBuilder(
+    column: $table.intervalBasis,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get intervalSource => $composableBuilder(
+    column: $table.intervalSource,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get intervalRevision => $composableBuilder(
+    column: $table.intervalRevision,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get clockUncertain => $composableBuilder(
+    column: $table.clockUncertain,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get parentEpisodeId => $composableBuilder(
+    column: $table.parentEpisodeId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get detectedAtUtc => $composableBuilder(
+    column: $table.detectedAtUtc,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get state => $composableBuilder(
+    column: $table.state,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get dataRevision => $composableBuilder(
+    column: $table.dataRevision,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAtUtc => $composableBuilder(
+    column: $table.createdAtUtc,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAtUtc => $composableBuilder(
+    column: $table.updatedAtUtc,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$HrvTrainingEpisodesTableOrderingComposer
+    extends Composer<_$AppDatabase, $HrvTrainingEpisodesTable> {
+  $$HrvTrainingEpisodesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get episodeId => $composableBuilder(
+    column: $table.episodeId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get athleteId => $composableBuilder(
+    column: $table.athleteId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get primaryActivityId => $composableBuilder(
+    column: $table.primaryActivityId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get plannedSessionId => $composableBuilder(
+    column: $table.plannedSessionId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get sport => $composableBuilder(
+    column: $table.sport,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get actualStartUtc => $composableBuilder(
+    column: $table.actualStartUtc,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get actualEndUtc => $composableBuilder(
+    column: $table.actualEndUtc,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get intervalBasis => $composableBuilder(
+    column: $table.intervalBasis,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get intervalSource => $composableBuilder(
+    column: $table.intervalSource,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get intervalRevision => $composableBuilder(
+    column: $table.intervalRevision,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get clockUncertain => $composableBuilder(
+    column: $table.clockUncertain,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get parentEpisodeId => $composableBuilder(
+    column: $table.parentEpisodeId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get detectedAtUtc => $composableBuilder(
+    column: $table.detectedAtUtc,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get state => $composableBuilder(
+    column: $table.state,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get dataRevision => $composableBuilder(
+    column: $table.dataRevision,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAtUtc => $composableBuilder(
+    column: $table.createdAtUtc,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAtUtc => $composableBuilder(
+    column: $table.updatedAtUtc,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$HrvTrainingEpisodesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $HrvTrainingEpisodesTable> {
+  $$HrvTrainingEpisodesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get episodeId =>
+      $composableBuilder(column: $table.episodeId, builder: (column) => column);
+
+  GeneratedColumn<String> get athleteId =>
+      $composableBuilder(column: $table.athleteId, builder: (column) => column);
+
+  GeneratedColumn<String> get primaryActivityId => $composableBuilder(
+    column: $table.primaryActivityId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get plannedSessionId => $composableBuilder(
+    column: $table.plannedSessionId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get sport =>
+      $composableBuilder(column: $table.sport, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get actualStartUtc => $composableBuilder(
+    column: $table.actualStartUtc,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get actualEndUtc => $composableBuilder(
+    column: $table.actualEndUtc,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get intervalBasis => $composableBuilder(
+    column: $table.intervalBasis,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get intervalSource => $composableBuilder(
+    column: $table.intervalSource,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get intervalRevision => $composableBuilder(
+    column: $table.intervalRevision,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get clockUncertain => $composableBuilder(
+    column: $table.clockUncertain,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get parentEpisodeId => $composableBuilder(
+    column: $table.parentEpisodeId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get detectedAtUtc => $composableBuilder(
+    column: $table.detectedAtUtc,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get state =>
+      $composableBuilder(column: $table.state, builder: (column) => column);
+
+  GeneratedColumn<int> get dataRevision => $composableBuilder(
+    column: $table.dataRevision,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get createdAtUtc => $composableBuilder(
+    column: $table.createdAtUtc,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get updatedAtUtc => $composableBuilder(
+    column: $table.updatedAtUtc,
+    builder: (column) => column,
+  );
+}
+
+class $$HrvTrainingEpisodesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $HrvTrainingEpisodesTable,
+          HrvTrainingEpisode,
+          $$HrvTrainingEpisodesTableFilterComposer,
+          $$HrvTrainingEpisodesTableOrderingComposer,
+          $$HrvTrainingEpisodesTableAnnotationComposer,
+          $$HrvTrainingEpisodesTableCreateCompanionBuilder,
+          $$HrvTrainingEpisodesTableUpdateCompanionBuilder,
+          (
+            HrvTrainingEpisode,
+            BaseReferences<
+              _$AppDatabase,
+              $HrvTrainingEpisodesTable,
+              HrvTrainingEpisode
+            >,
+          ),
+          HrvTrainingEpisode,
+          PrefetchHooks Function()
+        > {
+  $$HrvTrainingEpisodesTableTableManager(
+    _$AppDatabase db,
+    $HrvTrainingEpisodesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$HrvTrainingEpisodesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$HrvTrainingEpisodesTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$HrvTrainingEpisodesTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> episodeId = const Value.absent(),
+                Value<String> athleteId = const Value.absent(),
+                Value<String?> primaryActivityId = const Value.absent(),
+                Value<int?> plannedSessionId = const Value.absent(),
+                Value<String> sport = const Value.absent(),
+                Value<DateTime> actualStartUtc = const Value.absent(),
+                Value<DateTime?> actualEndUtc = const Value.absent(),
+                Value<String> intervalBasis = const Value.absent(),
+                Value<String?> intervalSource = const Value.absent(),
+                Value<int> intervalRevision = const Value.absent(),
+                Value<bool> clockUncertain = const Value.absent(),
+                Value<String?> parentEpisodeId = const Value.absent(),
+                Value<DateTime> detectedAtUtc = const Value.absent(),
+                Value<String> state = const Value.absent(),
+                Value<int> dataRevision = const Value.absent(),
+                Value<DateTime> createdAtUtc = const Value.absent(),
+                Value<DateTime> updatedAtUtc = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => HrvTrainingEpisodesCompanion(
+                episodeId: episodeId,
+                athleteId: athleteId,
+                primaryActivityId: primaryActivityId,
+                plannedSessionId: plannedSessionId,
+                sport: sport,
+                actualStartUtc: actualStartUtc,
+                actualEndUtc: actualEndUtc,
+                intervalBasis: intervalBasis,
+                intervalSource: intervalSource,
+                intervalRevision: intervalRevision,
+                clockUncertain: clockUncertain,
+                parentEpisodeId: parentEpisodeId,
+                detectedAtUtc: detectedAtUtc,
+                state: state,
+                dataRevision: dataRevision,
+                createdAtUtc: createdAtUtc,
+                updatedAtUtc: updatedAtUtc,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String episodeId,
+                Value<String> athleteId = const Value.absent(),
+                Value<String?> primaryActivityId = const Value.absent(),
+                Value<int?> plannedSessionId = const Value.absent(),
+                Value<String> sport = const Value.absent(),
+                required DateTime actualStartUtc,
+                Value<DateTime?> actualEndUtc = const Value.absent(),
+                Value<String> intervalBasis = const Value.absent(),
+                Value<String?> intervalSource = const Value.absent(),
+                Value<int> intervalRevision = const Value.absent(),
+                Value<bool> clockUncertain = const Value.absent(),
+                Value<String?> parentEpisodeId = const Value.absent(),
+                required DateTime detectedAtUtc,
+                Value<String> state = const Value.absent(),
+                Value<int> dataRevision = const Value.absent(),
+                required DateTime createdAtUtc,
+                required DateTime updatedAtUtc,
+                Value<int> rowid = const Value.absent(),
+              }) => HrvTrainingEpisodesCompanion.insert(
+                episodeId: episodeId,
+                athleteId: athleteId,
+                primaryActivityId: primaryActivityId,
+                plannedSessionId: plannedSessionId,
+                sport: sport,
+                actualStartUtc: actualStartUtc,
+                actualEndUtc: actualEndUtc,
+                intervalBasis: intervalBasis,
+                intervalSource: intervalSource,
+                intervalRevision: intervalRevision,
+                clockUncertain: clockUncertain,
+                parentEpisodeId: parentEpisodeId,
+                detectedAtUtc: detectedAtUtc,
+                state: state,
+                dataRevision: dataRevision,
+                createdAtUtc: createdAtUtc,
+                updatedAtUtc: updatedAtUtc,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$HrvTrainingEpisodesTable, HrvTrainingEpisode>(
+                    table,
+                  ),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $HrvTrainingEpisodesTable,
+                    HrvTrainingEpisode
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$HrvTrainingEpisodesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $HrvTrainingEpisodesTable,
+      HrvTrainingEpisode,
+      $$HrvTrainingEpisodesTableFilterComposer,
+      $$HrvTrainingEpisodesTableOrderingComposer,
+      $$HrvTrainingEpisodesTableAnnotationComposer,
+      $$HrvTrainingEpisodesTableCreateCompanionBuilder,
+      $$HrvTrainingEpisodesTableUpdateCompanionBuilder,
+      (
+        HrvTrainingEpisode,
+        BaseReferences<
+          _$AppDatabase,
+          $HrvTrainingEpisodesTable,
+          HrvTrainingEpisode
+        >,
+      ),
+      HrvTrainingEpisode,
+      PrefetchHooks Function()
+    >;
+typedef $$HrvEpisodeAliasesTableCreateCompanionBuilder =
+    HrvEpisodeAliasesCompanion Function({
+      Value<String> athleteId,
+      required String source,
+      required String sourceActivityId,
+      required String episodeId,
+      Value<String> state,
+      required DateTime createdAtUtc,
+      Value<int> rowid,
+    });
+typedef $$HrvEpisodeAliasesTableUpdateCompanionBuilder =
+    HrvEpisodeAliasesCompanion Function({
+      Value<String> athleteId,
+      Value<String> source,
+      Value<String> sourceActivityId,
+      Value<String> episodeId,
+      Value<String> state,
+      Value<DateTime> createdAtUtc,
+      Value<int> rowid,
+    });
+
+class $$HrvEpisodeAliasesTableFilterComposer
+    extends Composer<_$AppDatabase, $HrvEpisodeAliasesTable> {
+  $$HrvEpisodeAliasesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get athleteId => $composableBuilder(
+    column: $table.athleteId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get source => $composableBuilder(
+    column: $table.source,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get sourceActivityId => $composableBuilder(
+    column: $table.sourceActivityId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get episodeId => $composableBuilder(
+    column: $table.episodeId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get state => $composableBuilder(
+    column: $table.state,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAtUtc => $composableBuilder(
+    column: $table.createdAtUtc,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$HrvEpisodeAliasesTableOrderingComposer
+    extends Composer<_$AppDatabase, $HrvEpisodeAliasesTable> {
+  $$HrvEpisodeAliasesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get athleteId => $composableBuilder(
+    column: $table.athleteId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get source => $composableBuilder(
+    column: $table.source,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get sourceActivityId => $composableBuilder(
+    column: $table.sourceActivityId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get episodeId => $composableBuilder(
+    column: $table.episodeId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get state => $composableBuilder(
+    column: $table.state,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAtUtc => $composableBuilder(
+    column: $table.createdAtUtc,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$HrvEpisodeAliasesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $HrvEpisodeAliasesTable> {
+  $$HrvEpisodeAliasesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get athleteId =>
+      $composableBuilder(column: $table.athleteId, builder: (column) => column);
+
+  GeneratedColumn<String> get source =>
+      $composableBuilder(column: $table.source, builder: (column) => column);
+
+  GeneratedColumn<String> get sourceActivityId => $composableBuilder(
+    column: $table.sourceActivityId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get episodeId =>
+      $composableBuilder(column: $table.episodeId, builder: (column) => column);
+
+  GeneratedColumn<String> get state =>
+      $composableBuilder(column: $table.state, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAtUtc => $composableBuilder(
+    column: $table.createdAtUtc,
+    builder: (column) => column,
+  );
+}
+
+class $$HrvEpisodeAliasesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $HrvEpisodeAliasesTable,
+          HrvEpisodeAliase,
+          $$HrvEpisodeAliasesTableFilterComposer,
+          $$HrvEpisodeAliasesTableOrderingComposer,
+          $$HrvEpisodeAliasesTableAnnotationComposer,
+          $$HrvEpisodeAliasesTableCreateCompanionBuilder,
+          $$HrvEpisodeAliasesTableUpdateCompanionBuilder,
+          (
+            HrvEpisodeAliase,
+            BaseReferences<
+              _$AppDatabase,
+              $HrvEpisodeAliasesTable,
+              HrvEpisodeAliase
+            >,
+          ),
+          HrvEpisodeAliase,
+          PrefetchHooks Function()
+        > {
+  $$HrvEpisodeAliasesTableTableManager(
+    _$AppDatabase db,
+    $HrvEpisodeAliasesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$HrvEpisodeAliasesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$HrvEpisodeAliasesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$HrvEpisodeAliasesTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> athleteId = const Value.absent(),
+                Value<String> source = const Value.absent(),
+                Value<String> sourceActivityId = const Value.absent(),
+                Value<String> episodeId = const Value.absent(),
+                Value<String> state = const Value.absent(),
+                Value<DateTime> createdAtUtc = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => HrvEpisodeAliasesCompanion(
+                athleteId: athleteId,
+                source: source,
+                sourceActivityId: sourceActivityId,
+                episodeId: episodeId,
+                state: state,
+                createdAtUtc: createdAtUtc,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                Value<String> athleteId = const Value.absent(),
+                required String source,
+                required String sourceActivityId,
+                required String episodeId,
+                Value<String> state = const Value.absent(),
+                required DateTime createdAtUtc,
+                Value<int> rowid = const Value.absent(),
+              }) => HrvEpisodeAliasesCompanion.insert(
+                athleteId: athleteId,
+                source: source,
+                sourceActivityId: sourceActivityId,
+                episodeId: episodeId,
+                state: state,
+                createdAtUtc: createdAtUtc,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$HrvEpisodeAliasesTable, HrvEpisodeAliase>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $HrvEpisodeAliasesTable,
+                    HrvEpisodeAliase
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$HrvEpisodeAliasesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $HrvEpisodeAliasesTable,
+      HrvEpisodeAliase,
+      $$HrvEpisodeAliasesTableFilterComposer,
+      $$HrvEpisodeAliasesTableOrderingComposer,
+      $$HrvEpisodeAliasesTableAnnotationComposer,
+      $$HrvEpisodeAliasesTableCreateCompanionBuilder,
+      $$HrvEpisodeAliasesTableUpdateCompanionBuilder,
+      (
+        HrvEpisodeAliase,
+        BaseReferences<
+          _$AppDatabase,
+          $HrvEpisodeAliasesTable,
+          HrvEpisodeAliase
+        >,
+      ),
+      HrvEpisodeAliase,
+      PrefetchHooks Function()
+    >;
+typedef $$HrvEpisodeMeasurementsTableCreateCompanionBuilder =
+    HrvEpisodeMeasurementsCompanion Function({
+      Value<int> linkId,
+      required String episodeId,
+      required String measurementUid,
+      required String role,
+      required String selection,
+      required String associationMethod,
+      Value<String> state,
+      Value<String?> reason,
+      required String policyVersion,
+      Value<int> evidenceRevision,
+      required DateTime createdAtUtc,
+      Value<DateTime?> retractedAtUtc,
+    });
+typedef $$HrvEpisodeMeasurementsTableUpdateCompanionBuilder =
+    HrvEpisodeMeasurementsCompanion Function({
+      Value<int> linkId,
+      Value<String> episodeId,
+      Value<String> measurementUid,
+      Value<String> role,
+      Value<String> selection,
+      Value<String> associationMethod,
+      Value<String> state,
+      Value<String?> reason,
+      Value<String> policyVersion,
+      Value<int> evidenceRevision,
+      Value<DateTime> createdAtUtc,
+      Value<DateTime?> retractedAtUtc,
+    });
+
+class $$HrvEpisodeMeasurementsTableFilterComposer
+    extends Composer<_$AppDatabase, $HrvEpisodeMeasurementsTable> {
+  $$HrvEpisodeMeasurementsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get linkId => $composableBuilder(
+    column: $table.linkId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get episodeId => $composableBuilder(
+    column: $table.episodeId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get measurementUid => $composableBuilder(
+    column: $table.measurementUid,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get role => $composableBuilder(
+    column: $table.role,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get selection => $composableBuilder(
+    column: $table.selection,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get associationMethod => $composableBuilder(
+    column: $table.associationMethod,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get state => $composableBuilder(
+    column: $table.state,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get reason => $composableBuilder(
+    column: $table.reason,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get policyVersion => $composableBuilder(
+    column: $table.policyVersion,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get evidenceRevision => $composableBuilder(
+    column: $table.evidenceRevision,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAtUtc => $composableBuilder(
+    column: $table.createdAtUtc,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get retractedAtUtc => $composableBuilder(
+    column: $table.retractedAtUtc,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$HrvEpisodeMeasurementsTableOrderingComposer
+    extends Composer<_$AppDatabase, $HrvEpisodeMeasurementsTable> {
+  $$HrvEpisodeMeasurementsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get linkId => $composableBuilder(
+    column: $table.linkId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get episodeId => $composableBuilder(
+    column: $table.episodeId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get measurementUid => $composableBuilder(
+    column: $table.measurementUid,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get role => $composableBuilder(
+    column: $table.role,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get selection => $composableBuilder(
+    column: $table.selection,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get associationMethod => $composableBuilder(
+    column: $table.associationMethod,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get state => $composableBuilder(
+    column: $table.state,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get reason => $composableBuilder(
+    column: $table.reason,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get policyVersion => $composableBuilder(
+    column: $table.policyVersion,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get evidenceRevision => $composableBuilder(
+    column: $table.evidenceRevision,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAtUtc => $composableBuilder(
+    column: $table.createdAtUtc,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get retractedAtUtc => $composableBuilder(
+    column: $table.retractedAtUtc,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$HrvEpisodeMeasurementsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $HrvEpisodeMeasurementsTable> {
+  $$HrvEpisodeMeasurementsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get linkId =>
+      $composableBuilder(column: $table.linkId, builder: (column) => column);
+
+  GeneratedColumn<String> get episodeId =>
+      $composableBuilder(column: $table.episodeId, builder: (column) => column);
+
+  GeneratedColumn<String> get measurementUid => $composableBuilder(
+    column: $table.measurementUid,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get role =>
+      $composableBuilder(column: $table.role, builder: (column) => column);
+
+  GeneratedColumn<String> get selection =>
+      $composableBuilder(column: $table.selection, builder: (column) => column);
+
+  GeneratedColumn<String> get associationMethod => $composableBuilder(
+    column: $table.associationMethod,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get state =>
+      $composableBuilder(column: $table.state, builder: (column) => column);
+
+  GeneratedColumn<String> get reason =>
+      $composableBuilder(column: $table.reason, builder: (column) => column);
+
+  GeneratedColumn<String> get policyVersion => $composableBuilder(
+    column: $table.policyVersion,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get evidenceRevision => $composableBuilder(
+    column: $table.evidenceRevision,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get createdAtUtc => $composableBuilder(
+    column: $table.createdAtUtc,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get retractedAtUtc => $composableBuilder(
+    column: $table.retractedAtUtc,
+    builder: (column) => column,
+  );
+}
+
+class $$HrvEpisodeMeasurementsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $HrvEpisodeMeasurementsTable,
+          HrvEpisodeMeasurement,
+          $$HrvEpisodeMeasurementsTableFilterComposer,
+          $$HrvEpisodeMeasurementsTableOrderingComposer,
+          $$HrvEpisodeMeasurementsTableAnnotationComposer,
+          $$HrvEpisodeMeasurementsTableCreateCompanionBuilder,
+          $$HrvEpisodeMeasurementsTableUpdateCompanionBuilder,
+          (
+            HrvEpisodeMeasurement,
+            BaseReferences<
+              _$AppDatabase,
+              $HrvEpisodeMeasurementsTable,
+              HrvEpisodeMeasurement
+            >,
+          ),
+          HrvEpisodeMeasurement,
+          PrefetchHooks Function()
+        > {
+  $$HrvEpisodeMeasurementsTableTableManager(
+    _$AppDatabase db,
+    $HrvEpisodeMeasurementsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$HrvEpisodeMeasurementsTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$HrvEpisodeMeasurementsTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$HrvEpisodeMeasurementsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> linkId = const Value.absent(),
+                Value<String> episodeId = const Value.absent(),
+                Value<String> measurementUid = const Value.absent(),
+                Value<String> role = const Value.absent(),
+                Value<String> selection = const Value.absent(),
+                Value<String> associationMethod = const Value.absent(),
+                Value<String> state = const Value.absent(),
+                Value<String?> reason = const Value.absent(),
+                Value<String> policyVersion = const Value.absent(),
+                Value<int> evidenceRevision = const Value.absent(),
+                Value<DateTime> createdAtUtc = const Value.absent(),
+                Value<DateTime?> retractedAtUtc = const Value.absent(),
+              }) => HrvEpisodeMeasurementsCompanion(
+                linkId: linkId,
+                episodeId: episodeId,
+                measurementUid: measurementUid,
+                role: role,
+                selection: selection,
+                associationMethod: associationMethod,
+                state: state,
+                reason: reason,
+                policyVersion: policyVersion,
+                evidenceRevision: evidenceRevision,
+                createdAtUtc: createdAtUtc,
+                retractedAtUtc: retractedAtUtc,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> linkId = const Value.absent(),
+                required String episodeId,
+                required String measurementUid,
+                required String role,
+                required String selection,
+                required String associationMethod,
+                Value<String> state = const Value.absent(),
+                Value<String?> reason = const Value.absent(),
+                required String policyVersion,
+                Value<int> evidenceRevision = const Value.absent(),
+                required DateTime createdAtUtc,
+                Value<DateTime?> retractedAtUtc = const Value.absent(),
+              }) => HrvEpisodeMeasurementsCompanion.insert(
+                linkId: linkId,
+                episodeId: episodeId,
+                measurementUid: measurementUid,
+                role: role,
+                selection: selection,
+                associationMethod: associationMethod,
+                state: state,
+                reason: reason,
+                policyVersion: policyVersion,
+                evidenceRevision: evidenceRevision,
+                createdAtUtc: createdAtUtc,
+                retractedAtUtc: retractedAtUtc,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<
+                    $HrvEpisodeMeasurementsTable,
+                    HrvEpisodeMeasurement
+                  >(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $HrvEpisodeMeasurementsTable,
+                    HrvEpisodeMeasurement
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$HrvEpisodeMeasurementsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $HrvEpisodeMeasurementsTable,
+      HrvEpisodeMeasurement,
+      $$HrvEpisodeMeasurementsTableFilterComposer,
+      $$HrvEpisodeMeasurementsTableOrderingComposer,
+      $$HrvEpisodeMeasurementsTableAnnotationComposer,
+      $$HrvEpisodeMeasurementsTableCreateCompanionBuilder,
+      $$HrvEpisodeMeasurementsTableUpdateCompanionBuilder,
+      (
+        HrvEpisodeMeasurement,
+        BaseReferences<
+          _$AppDatabase,
+          $HrvEpisodeMeasurementsTable,
+          HrvEpisodeMeasurement
+        >,
+      ),
+      HrvEpisodeMeasurement,
+      PrefetchHooks Function()
+    >;
+typedef $$HrvEpisodeFeedbackTableCreateCompanionBuilder =
+    HrvEpisodeFeedbackCompanion Function({
+      required String feedbackUid,
+      required String episodeId,
+      required String context,
+      required DateTime recordedAtUtc,
+      Value<int?> rpe,
+      Value<String?> note,
+      Value<int> revision,
+      Value<int> rowid,
+    });
+typedef $$HrvEpisodeFeedbackTableUpdateCompanionBuilder =
+    HrvEpisodeFeedbackCompanion Function({
+      Value<String> feedbackUid,
+      Value<String> episodeId,
+      Value<String> context,
+      Value<DateTime> recordedAtUtc,
+      Value<int?> rpe,
+      Value<String?> note,
+      Value<int> revision,
+      Value<int> rowid,
+    });
+
+class $$HrvEpisodeFeedbackTableFilterComposer
+    extends Composer<_$AppDatabase, $HrvEpisodeFeedbackTable> {
+  $$HrvEpisodeFeedbackTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get feedbackUid => $composableBuilder(
+    column: $table.feedbackUid,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get episodeId => $composableBuilder(
+    column: $table.episodeId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get context => $composableBuilder(
+    column: $table.context,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get recordedAtUtc => $composableBuilder(
+    column: $table.recordedAtUtc,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get rpe => $composableBuilder(
+    column: $table.rpe,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get revision => $composableBuilder(
+    column: $table.revision,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$HrvEpisodeFeedbackTableOrderingComposer
+    extends Composer<_$AppDatabase, $HrvEpisodeFeedbackTable> {
+  $$HrvEpisodeFeedbackTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get feedbackUid => $composableBuilder(
+    column: $table.feedbackUid,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get episodeId => $composableBuilder(
+    column: $table.episodeId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get context => $composableBuilder(
+    column: $table.context,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get recordedAtUtc => $composableBuilder(
+    column: $table.recordedAtUtc,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get rpe => $composableBuilder(
+    column: $table.rpe,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get revision => $composableBuilder(
+    column: $table.revision,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$HrvEpisodeFeedbackTableAnnotationComposer
+    extends Composer<_$AppDatabase, $HrvEpisodeFeedbackTable> {
+  $$HrvEpisodeFeedbackTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get feedbackUid => $composableBuilder(
+    column: $table.feedbackUid,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get episodeId =>
+      $composableBuilder(column: $table.episodeId, builder: (column) => column);
+
+  GeneratedColumn<String> get context =>
+      $composableBuilder(column: $table.context, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get recordedAtUtc => $composableBuilder(
+    column: $table.recordedAtUtc,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get rpe =>
+      $composableBuilder(column: $table.rpe, builder: (column) => column);
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+
+  GeneratedColumn<int> get revision =>
+      $composableBuilder(column: $table.revision, builder: (column) => column);
+}
+
+class $$HrvEpisodeFeedbackTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $HrvEpisodeFeedbackTable,
+          HrvEpisodeFeedbackData,
+          $$HrvEpisodeFeedbackTableFilterComposer,
+          $$HrvEpisodeFeedbackTableOrderingComposer,
+          $$HrvEpisodeFeedbackTableAnnotationComposer,
+          $$HrvEpisodeFeedbackTableCreateCompanionBuilder,
+          $$HrvEpisodeFeedbackTableUpdateCompanionBuilder,
+          (
+            HrvEpisodeFeedbackData,
+            BaseReferences<
+              _$AppDatabase,
+              $HrvEpisodeFeedbackTable,
+              HrvEpisodeFeedbackData
+            >,
+          ),
+          HrvEpisodeFeedbackData,
+          PrefetchHooks Function()
+        > {
+  $$HrvEpisodeFeedbackTableTableManager(
+    _$AppDatabase db,
+    $HrvEpisodeFeedbackTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$HrvEpisodeFeedbackTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$HrvEpisodeFeedbackTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$HrvEpisodeFeedbackTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> feedbackUid = const Value.absent(),
+                Value<String> episodeId = const Value.absent(),
+                Value<String> context = const Value.absent(),
+                Value<DateTime> recordedAtUtc = const Value.absent(),
+                Value<int?> rpe = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                Value<int> revision = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => HrvEpisodeFeedbackCompanion(
+                feedbackUid: feedbackUid,
+                episodeId: episodeId,
+                context: context,
+                recordedAtUtc: recordedAtUtc,
+                rpe: rpe,
+                note: note,
+                revision: revision,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String feedbackUid,
+                required String episodeId,
+                required String context,
+                required DateTime recordedAtUtc,
+                Value<int?> rpe = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                Value<int> revision = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => HrvEpisodeFeedbackCompanion.insert(
+                feedbackUid: feedbackUid,
+                episodeId: episodeId,
+                context: context,
+                recordedAtUtc: recordedAtUtc,
+                rpe: rpe,
+                note: note,
+                revision: revision,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$HrvEpisodeFeedbackTable, HrvEpisodeFeedbackData>(
+                    table,
+                  ),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $HrvEpisodeFeedbackTable,
+                    HrvEpisodeFeedbackData
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$HrvEpisodeFeedbackTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $HrvEpisodeFeedbackTable,
+      HrvEpisodeFeedbackData,
+      $$HrvEpisodeFeedbackTableFilterComposer,
+      $$HrvEpisodeFeedbackTableOrderingComposer,
+      $$HrvEpisodeFeedbackTableAnnotationComposer,
+      $$HrvEpisodeFeedbackTableCreateCompanionBuilder,
+      $$HrvEpisodeFeedbackTableUpdateCompanionBuilder,
+      (
+        HrvEpisodeFeedbackData,
+        BaseReferences<
+          _$AppDatabase,
+          $HrvEpisodeFeedbackTable,
+          HrvEpisodeFeedbackData
+        >,
+      ),
+      HrvEpisodeFeedbackData,
+      PrefetchHooks Function()
+    >;
+typedef $$HrvReminderPreferencesTableCreateCompanionBuilder =
+    HrvReminderPreferencesCompanion Function({
+      Value<String> athleteId,
+      Value<bool> optedIn,
+      Value<DateTime?> enabledSinceUtc,
+      Value<int> delayMinutes,
+      Value<bool> quietEnabled,
+      Value<int> quietStartMinute,
+      Value<int> quietEndMinute,
+      Value<bool> postponeInQuiet,
+      required String installationEpoch,
+      Value<int> revision,
+      required DateTime updatedAtUtc,
+      Value<int> rowid,
+    });
+typedef $$HrvReminderPreferencesTableUpdateCompanionBuilder =
+    HrvReminderPreferencesCompanion Function({
+      Value<String> athleteId,
+      Value<bool> optedIn,
+      Value<DateTime?> enabledSinceUtc,
+      Value<int> delayMinutes,
+      Value<bool> quietEnabled,
+      Value<int> quietStartMinute,
+      Value<int> quietEndMinute,
+      Value<bool> postponeInQuiet,
+      Value<String> installationEpoch,
+      Value<int> revision,
+      Value<DateTime> updatedAtUtc,
+      Value<int> rowid,
+    });
+
+class $$HrvReminderPreferencesTableFilterComposer
+    extends Composer<_$AppDatabase, $HrvReminderPreferencesTable> {
+  $$HrvReminderPreferencesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get athleteId => $composableBuilder(
+    column: $table.athleteId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get optedIn => $composableBuilder(
+    column: $table.optedIn,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get enabledSinceUtc => $composableBuilder(
+    column: $table.enabledSinceUtc,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get delayMinutes => $composableBuilder(
+    column: $table.delayMinutes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get quietEnabled => $composableBuilder(
+    column: $table.quietEnabled,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get quietStartMinute => $composableBuilder(
+    column: $table.quietStartMinute,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get quietEndMinute => $composableBuilder(
+    column: $table.quietEndMinute,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get postponeInQuiet => $composableBuilder(
+    column: $table.postponeInQuiet,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get installationEpoch => $composableBuilder(
+    column: $table.installationEpoch,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get revision => $composableBuilder(
+    column: $table.revision,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAtUtc => $composableBuilder(
+    column: $table.updatedAtUtc,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$HrvReminderPreferencesTableOrderingComposer
+    extends Composer<_$AppDatabase, $HrvReminderPreferencesTable> {
+  $$HrvReminderPreferencesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get athleteId => $composableBuilder(
+    column: $table.athleteId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get optedIn => $composableBuilder(
+    column: $table.optedIn,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get enabledSinceUtc => $composableBuilder(
+    column: $table.enabledSinceUtc,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get delayMinutes => $composableBuilder(
+    column: $table.delayMinutes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get quietEnabled => $composableBuilder(
+    column: $table.quietEnabled,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get quietStartMinute => $composableBuilder(
+    column: $table.quietStartMinute,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get quietEndMinute => $composableBuilder(
+    column: $table.quietEndMinute,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get postponeInQuiet => $composableBuilder(
+    column: $table.postponeInQuiet,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get installationEpoch => $composableBuilder(
+    column: $table.installationEpoch,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get revision => $composableBuilder(
+    column: $table.revision,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAtUtc => $composableBuilder(
+    column: $table.updatedAtUtc,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$HrvReminderPreferencesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $HrvReminderPreferencesTable> {
+  $$HrvReminderPreferencesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get athleteId =>
+      $composableBuilder(column: $table.athleteId, builder: (column) => column);
+
+  GeneratedColumn<bool> get optedIn =>
+      $composableBuilder(column: $table.optedIn, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get enabledSinceUtc => $composableBuilder(
+    column: $table.enabledSinceUtc,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get delayMinutes => $composableBuilder(
+    column: $table.delayMinutes,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get quietEnabled => $composableBuilder(
+    column: $table.quietEnabled,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get quietStartMinute => $composableBuilder(
+    column: $table.quietStartMinute,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get quietEndMinute => $composableBuilder(
+    column: $table.quietEndMinute,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get postponeInQuiet => $composableBuilder(
+    column: $table.postponeInQuiet,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get installationEpoch => $composableBuilder(
+    column: $table.installationEpoch,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get revision =>
+      $composableBuilder(column: $table.revision, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAtUtc => $composableBuilder(
+    column: $table.updatedAtUtc,
+    builder: (column) => column,
+  );
+}
+
+class $$HrvReminderPreferencesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $HrvReminderPreferencesTable,
+          HrvReminderPreference,
+          $$HrvReminderPreferencesTableFilterComposer,
+          $$HrvReminderPreferencesTableOrderingComposer,
+          $$HrvReminderPreferencesTableAnnotationComposer,
+          $$HrvReminderPreferencesTableCreateCompanionBuilder,
+          $$HrvReminderPreferencesTableUpdateCompanionBuilder,
+          (
+            HrvReminderPreference,
+            BaseReferences<
+              _$AppDatabase,
+              $HrvReminderPreferencesTable,
+              HrvReminderPreference
+            >,
+          ),
+          HrvReminderPreference,
+          PrefetchHooks Function()
+        > {
+  $$HrvReminderPreferencesTableTableManager(
+    _$AppDatabase db,
+    $HrvReminderPreferencesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$HrvReminderPreferencesTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$HrvReminderPreferencesTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$HrvReminderPreferencesTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> athleteId = const Value.absent(),
+                Value<bool> optedIn = const Value.absent(),
+                Value<DateTime?> enabledSinceUtc = const Value.absent(),
+                Value<int> delayMinutes = const Value.absent(),
+                Value<bool> quietEnabled = const Value.absent(),
+                Value<int> quietStartMinute = const Value.absent(),
+                Value<int> quietEndMinute = const Value.absent(),
+                Value<bool> postponeInQuiet = const Value.absent(),
+                Value<String> installationEpoch = const Value.absent(),
+                Value<int> revision = const Value.absent(),
+                Value<DateTime> updatedAtUtc = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => HrvReminderPreferencesCompanion(
+                athleteId: athleteId,
+                optedIn: optedIn,
+                enabledSinceUtc: enabledSinceUtc,
+                delayMinutes: delayMinutes,
+                quietEnabled: quietEnabled,
+                quietStartMinute: quietStartMinute,
+                quietEndMinute: quietEndMinute,
+                postponeInQuiet: postponeInQuiet,
+                installationEpoch: installationEpoch,
+                revision: revision,
+                updatedAtUtc: updatedAtUtc,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                Value<String> athleteId = const Value.absent(),
+                Value<bool> optedIn = const Value.absent(),
+                Value<DateTime?> enabledSinceUtc = const Value.absent(),
+                Value<int> delayMinutes = const Value.absent(),
+                Value<bool> quietEnabled = const Value.absent(),
+                Value<int> quietStartMinute = const Value.absent(),
+                Value<int> quietEndMinute = const Value.absent(),
+                Value<bool> postponeInQuiet = const Value.absent(),
+                required String installationEpoch,
+                Value<int> revision = const Value.absent(),
+                required DateTime updatedAtUtc,
+                Value<int> rowid = const Value.absent(),
+              }) => HrvReminderPreferencesCompanion.insert(
+                athleteId: athleteId,
+                optedIn: optedIn,
+                enabledSinceUtc: enabledSinceUtc,
+                delayMinutes: delayMinutes,
+                quietEnabled: quietEnabled,
+                quietStartMinute: quietStartMinute,
+                quietEndMinute: quietEndMinute,
+                postponeInQuiet: postponeInQuiet,
+                installationEpoch: installationEpoch,
+                revision: revision,
+                updatedAtUtc: updatedAtUtc,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<
+                    $HrvReminderPreferencesTable,
+                    HrvReminderPreference
+                  >(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $HrvReminderPreferencesTable,
+                    HrvReminderPreference
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$HrvReminderPreferencesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $HrvReminderPreferencesTable,
+      HrvReminderPreference,
+      $$HrvReminderPreferencesTableFilterComposer,
+      $$HrvReminderPreferencesTableOrderingComposer,
+      $$HrvReminderPreferencesTableAnnotationComposer,
+      $$HrvReminderPreferencesTableCreateCompanionBuilder,
+      $$HrvReminderPreferencesTableUpdateCompanionBuilder,
+      (
+        HrvReminderPreference,
+        BaseReferences<
+          _$AppDatabase,
+          $HrvReminderPreferencesTable,
+          HrvReminderPreference
+        >,
+      ),
+      HrvReminderPreference,
+      PrefetchHooks Function()
+    >;
+typedef $$HrvPostRemindersTableCreateCompanionBuilder =
+    HrvPostRemindersCompanion Function({
+      required String reminderId,
+      required String episodeId,
+      required String preMeasurementUid,
+      required String installationEpoch,
+      required int nativeNotificationId,
+      Value<int> generation,
+      required DateTime originalDueAtUtc,
+      required DateTime nextDueAtUtc,
+      required DateTime expiresAtUtc,
+      required int targetOffsetSeconds,
+      Value<int> snoozeCount,
+      required String desiredState,
+      Value<String> reason,
+      Value<String> osState,
+      Value<String> scheduleFingerprint,
+      Value<String?> permissionSnapshot,
+      Value<DateTime?> lastAttemptAt,
+      Value<String?> lastError,
+      required DateTime createdAtUtc,
+      required DateTime updatedAtUtc,
+      Value<int> rowid,
+    });
+typedef $$HrvPostRemindersTableUpdateCompanionBuilder =
+    HrvPostRemindersCompanion Function({
+      Value<String> reminderId,
+      Value<String> episodeId,
+      Value<String> preMeasurementUid,
+      Value<String> installationEpoch,
+      Value<int> nativeNotificationId,
+      Value<int> generation,
+      Value<DateTime> originalDueAtUtc,
+      Value<DateTime> nextDueAtUtc,
+      Value<DateTime> expiresAtUtc,
+      Value<int> targetOffsetSeconds,
+      Value<int> snoozeCount,
+      Value<String> desiredState,
+      Value<String> reason,
+      Value<String> osState,
+      Value<String> scheduleFingerprint,
+      Value<String?> permissionSnapshot,
+      Value<DateTime?> lastAttemptAt,
+      Value<String?> lastError,
+      Value<DateTime> createdAtUtc,
+      Value<DateTime> updatedAtUtc,
+      Value<int> rowid,
+    });
+
+class $$HrvPostRemindersTableFilterComposer
+    extends Composer<_$AppDatabase, $HrvPostRemindersTable> {
+  $$HrvPostRemindersTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get reminderId => $composableBuilder(
+    column: $table.reminderId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get episodeId => $composableBuilder(
+    column: $table.episodeId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get preMeasurementUid => $composableBuilder(
+    column: $table.preMeasurementUid,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get installationEpoch => $composableBuilder(
+    column: $table.installationEpoch,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get nativeNotificationId => $composableBuilder(
+    column: $table.nativeNotificationId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get generation => $composableBuilder(
+    column: $table.generation,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get originalDueAtUtc => $composableBuilder(
+    column: $table.originalDueAtUtc,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get nextDueAtUtc => $composableBuilder(
+    column: $table.nextDueAtUtc,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get expiresAtUtc => $composableBuilder(
+    column: $table.expiresAtUtc,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get targetOffsetSeconds => $composableBuilder(
+    column: $table.targetOffsetSeconds,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get snoozeCount => $composableBuilder(
+    column: $table.snoozeCount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get desiredState => $composableBuilder(
+    column: $table.desiredState,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get reason => $composableBuilder(
+    column: $table.reason,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get osState => $composableBuilder(
+    column: $table.osState,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get scheduleFingerprint => $composableBuilder(
+    column: $table.scheduleFingerprint,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get permissionSnapshot => $composableBuilder(
+    column: $table.permissionSnapshot,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get lastAttemptAt => $composableBuilder(
+    column: $table.lastAttemptAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get lastError => $composableBuilder(
+    column: $table.lastError,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAtUtc => $composableBuilder(
+    column: $table.createdAtUtc,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAtUtc => $composableBuilder(
+    column: $table.updatedAtUtc,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$HrvPostRemindersTableOrderingComposer
+    extends Composer<_$AppDatabase, $HrvPostRemindersTable> {
+  $$HrvPostRemindersTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get reminderId => $composableBuilder(
+    column: $table.reminderId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get episodeId => $composableBuilder(
+    column: $table.episodeId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get preMeasurementUid => $composableBuilder(
+    column: $table.preMeasurementUid,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get installationEpoch => $composableBuilder(
+    column: $table.installationEpoch,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get nativeNotificationId => $composableBuilder(
+    column: $table.nativeNotificationId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get generation => $composableBuilder(
+    column: $table.generation,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get originalDueAtUtc => $composableBuilder(
+    column: $table.originalDueAtUtc,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get nextDueAtUtc => $composableBuilder(
+    column: $table.nextDueAtUtc,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get expiresAtUtc => $composableBuilder(
+    column: $table.expiresAtUtc,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get targetOffsetSeconds => $composableBuilder(
+    column: $table.targetOffsetSeconds,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get snoozeCount => $composableBuilder(
+    column: $table.snoozeCount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get desiredState => $composableBuilder(
+    column: $table.desiredState,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get reason => $composableBuilder(
+    column: $table.reason,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get osState => $composableBuilder(
+    column: $table.osState,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get scheduleFingerprint => $composableBuilder(
+    column: $table.scheduleFingerprint,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get permissionSnapshot => $composableBuilder(
+    column: $table.permissionSnapshot,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get lastAttemptAt => $composableBuilder(
+    column: $table.lastAttemptAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get lastError => $composableBuilder(
+    column: $table.lastError,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAtUtc => $composableBuilder(
+    column: $table.createdAtUtc,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAtUtc => $composableBuilder(
+    column: $table.updatedAtUtc,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$HrvPostRemindersTableAnnotationComposer
+    extends Composer<_$AppDatabase, $HrvPostRemindersTable> {
+  $$HrvPostRemindersTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get reminderId => $composableBuilder(
+    column: $table.reminderId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get episodeId =>
+      $composableBuilder(column: $table.episodeId, builder: (column) => column);
+
+  GeneratedColumn<String> get preMeasurementUid => $composableBuilder(
+    column: $table.preMeasurementUid,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get installationEpoch => $composableBuilder(
+    column: $table.installationEpoch,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get nativeNotificationId => $composableBuilder(
+    column: $table.nativeNotificationId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get generation => $composableBuilder(
+    column: $table.generation,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get originalDueAtUtc => $composableBuilder(
+    column: $table.originalDueAtUtc,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get nextDueAtUtc => $composableBuilder(
+    column: $table.nextDueAtUtc,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get expiresAtUtc => $composableBuilder(
+    column: $table.expiresAtUtc,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get targetOffsetSeconds => $composableBuilder(
+    column: $table.targetOffsetSeconds,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get snoozeCount => $composableBuilder(
+    column: $table.snoozeCount,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get desiredState => $composableBuilder(
+    column: $table.desiredState,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get reason =>
+      $composableBuilder(column: $table.reason, builder: (column) => column);
+
+  GeneratedColumn<String> get osState =>
+      $composableBuilder(column: $table.osState, builder: (column) => column);
+
+  GeneratedColumn<String> get scheduleFingerprint => $composableBuilder(
+    column: $table.scheduleFingerprint,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get permissionSnapshot => $composableBuilder(
+    column: $table.permissionSnapshot,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get lastAttemptAt => $composableBuilder(
+    column: $table.lastAttemptAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get lastError =>
+      $composableBuilder(column: $table.lastError, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAtUtc => $composableBuilder(
+    column: $table.createdAtUtc,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get updatedAtUtc => $composableBuilder(
+    column: $table.updatedAtUtc,
+    builder: (column) => column,
+  );
+}
+
+class $$HrvPostRemindersTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $HrvPostRemindersTable,
+          HrvPostReminder,
+          $$HrvPostRemindersTableFilterComposer,
+          $$HrvPostRemindersTableOrderingComposer,
+          $$HrvPostRemindersTableAnnotationComposer,
+          $$HrvPostRemindersTableCreateCompanionBuilder,
+          $$HrvPostRemindersTableUpdateCompanionBuilder,
+          (
+            HrvPostReminder,
+            BaseReferences<
+              _$AppDatabase,
+              $HrvPostRemindersTable,
+              HrvPostReminder
+            >,
+          ),
+          HrvPostReminder,
+          PrefetchHooks Function()
+        > {
+  $$HrvPostRemindersTableTableManager(
+    _$AppDatabase db,
+    $HrvPostRemindersTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$HrvPostRemindersTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$HrvPostRemindersTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$HrvPostRemindersTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> reminderId = const Value.absent(),
+                Value<String> episodeId = const Value.absent(),
+                Value<String> preMeasurementUid = const Value.absent(),
+                Value<String> installationEpoch = const Value.absent(),
+                Value<int> nativeNotificationId = const Value.absent(),
+                Value<int> generation = const Value.absent(),
+                Value<DateTime> originalDueAtUtc = const Value.absent(),
+                Value<DateTime> nextDueAtUtc = const Value.absent(),
+                Value<DateTime> expiresAtUtc = const Value.absent(),
+                Value<int> targetOffsetSeconds = const Value.absent(),
+                Value<int> snoozeCount = const Value.absent(),
+                Value<String> desiredState = const Value.absent(),
+                Value<String> reason = const Value.absent(),
+                Value<String> osState = const Value.absent(),
+                Value<String> scheduleFingerprint = const Value.absent(),
+                Value<String?> permissionSnapshot = const Value.absent(),
+                Value<DateTime?> lastAttemptAt = const Value.absent(),
+                Value<String?> lastError = const Value.absent(),
+                Value<DateTime> createdAtUtc = const Value.absent(),
+                Value<DateTime> updatedAtUtc = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => HrvPostRemindersCompanion(
+                reminderId: reminderId,
+                episodeId: episodeId,
+                preMeasurementUid: preMeasurementUid,
+                installationEpoch: installationEpoch,
+                nativeNotificationId: nativeNotificationId,
+                generation: generation,
+                originalDueAtUtc: originalDueAtUtc,
+                nextDueAtUtc: nextDueAtUtc,
+                expiresAtUtc: expiresAtUtc,
+                targetOffsetSeconds: targetOffsetSeconds,
+                snoozeCount: snoozeCount,
+                desiredState: desiredState,
+                reason: reason,
+                osState: osState,
+                scheduleFingerprint: scheduleFingerprint,
+                permissionSnapshot: permissionSnapshot,
+                lastAttemptAt: lastAttemptAt,
+                lastError: lastError,
+                createdAtUtc: createdAtUtc,
+                updatedAtUtc: updatedAtUtc,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String reminderId,
+                required String episodeId,
+                required String preMeasurementUid,
+                required String installationEpoch,
+                required int nativeNotificationId,
+                Value<int> generation = const Value.absent(),
+                required DateTime originalDueAtUtc,
+                required DateTime nextDueAtUtc,
+                required DateTime expiresAtUtc,
+                required int targetOffsetSeconds,
+                Value<int> snoozeCount = const Value.absent(),
+                required String desiredState,
+                Value<String> reason = const Value.absent(),
+                Value<String> osState = const Value.absent(),
+                Value<String> scheduleFingerprint = const Value.absent(),
+                Value<String?> permissionSnapshot = const Value.absent(),
+                Value<DateTime?> lastAttemptAt = const Value.absent(),
+                Value<String?> lastError = const Value.absent(),
+                required DateTime createdAtUtc,
+                required DateTime updatedAtUtc,
+                Value<int> rowid = const Value.absent(),
+              }) => HrvPostRemindersCompanion.insert(
+                reminderId: reminderId,
+                episodeId: episodeId,
+                preMeasurementUid: preMeasurementUid,
+                installationEpoch: installationEpoch,
+                nativeNotificationId: nativeNotificationId,
+                generation: generation,
+                originalDueAtUtc: originalDueAtUtc,
+                nextDueAtUtc: nextDueAtUtc,
+                expiresAtUtc: expiresAtUtc,
+                targetOffsetSeconds: targetOffsetSeconds,
+                snoozeCount: snoozeCount,
+                desiredState: desiredState,
+                reason: reason,
+                osState: osState,
+                scheduleFingerprint: scheduleFingerprint,
+                permissionSnapshot: permissionSnapshot,
+                lastAttemptAt: lastAttemptAt,
+                lastError: lastError,
+                createdAtUtc: createdAtUtc,
+                updatedAtUtc: updatedAtUtc,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$HrvPostRemindersTable, HrvPostReminder>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $HrvPostRemindersTable,
+                    HrvPostReminder
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$HrvPostRemindersTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $HrvPostRemindersTable,
+      HrvPostReminder,
+      $$HrvPostRemindersTableFilterComposer,
+      $$HrvPostRemindersTableOrderingComposer,
+      $$HrvPostRemindersTableAnnotationComposer,
+      $$HrvPostRemindersTableCreateCompanionBuilder,
+      $$HrvPostRemindersTableUpdateCompanionBuilder,
+      (
+        HrvPostReminder,
+        BaseReferences<_$AppDatabase, $HrvPostRemindersTable, HrvPostReminder>,
+      ),
+      HrvPostReminder,
+      PrefetchHooks Function()
+    >;
+typedef $$HrvNotificationOperationsTableCreateCompanionBuilder =
+    HrvNotificationOperationsCompanion Function({
+      required String operationId,
+      required String reminderId,
+      required int generation,
+      required String operation,
+      Value<String> fingerprint,
+      required int nativeNotificationId,
+      Value<DateTime?> dueAtUtc,
+      Value<DateTime?> expiresAtUtc,
+      Value<String> state,
+      Value<int> attempts,
+      Value<DateTime?> nextAttemptAtUtc,
+      Value<DateTime?> claimedUntilUtc,
+      Value<String?> lastError,
+      required DateTime createdAtUtc,
+      Value<int> rowid,
+    });
+typedef $$HrvNotificationOperationsTableUpdateCompanionBuilder =
+    HrvNotificationOperationsCompanion Function({
+      Value<String> operationId,
+      Value<String> reminderId,
+      Value<int> generation,
+      Value<String> operation,
+      Value<String> fingerprint,
+      Value<int> nativeNotificationId,
+      Value<DateTime?> dueAtUtc,
+      Value<DateTime?> expiresAtUtc,
+      Value<String> state,
+      Value<int> attempts,
+      Value<DateTime?> nextAttemptAtUtc,
+      Value<DateTime?> claimedUntilUtc,
+      Value<String?> lastError,
+      Value<DateTime> createdAtUtc,
+      Value<int> rowid,
+    });
+
+class $$HrvNotificationOperationsTableFilterComposer
+    extends Composer<_$AppDatabase, $HrvNotificationOperationsTable> {
+  $$HrvNotificationOperationsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get operationId => $composableBuilder(
+    column: $table.operationId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get reminderId => $composableBuilder(
+    column: $table.reminderId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get generation => $composableBuilder(
+    column: $table.generation,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get operation => $composableBuilder(
+    column: $table.operation,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get fingerprint => $composableBuilder(
+    column: $table.fingerprint,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get nativeNotificationId => $composableBuilder(
+    column: $table.nativeNotificationId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get dueAtUtc => $composableBuilder(
+    column: $table.dueAtUtc,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get expiresAtUtc => $composableBuilder(
+    column: $table.expiresAtUtc,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get state => $composableBuilder(
+    column: $table.state,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get attempts => $composableBuilder(
+    column: $table.attempts,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get nextAttemptAtUtc => $composableBuilder(
+    column: $table.nextAttemptAtUtc,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get claimedUntilUtc => $composableBuilder(
+    column: $table.claimedUntilUtc,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get lastError => $composableBuilder(
+    column: $table.lastError,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAtUtc => $composableBuilder(
+    column: $table.createdAtUtc,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$HrvNotificationOperationsTableOrderingComposer
+    extends Composer<_$AppDatabase, $HrvNotificationOperationsTable> {
+  $$HrvNotificationOperationsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get operationId => $composableBuilder(
+    column: $table.operationId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get reminderId => $composableBuilder(
+    column: $table.reminderId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get generation => $composableBuilder(
+    column: $table.generation,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get operation => $composableBuilder(
+    column: $table.operation,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get fingerprint => $composableBuilder(
+    column: $table.fingerprint,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get nativeNotificationId => $composableBuilder(
+    column: $table.nativeNotificationId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get dueAtUtc => $composableBuilder(
+    column: $table.dueAtUtc,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get expiresAtUtc => $composableBuilder(
+    column: $table.expiresAtUtc,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get state => $composableBuilder(
+    column: $table.state,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get attempts => $composableBuilder(
+    column: $table.attempts,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get nextAttemptAtUtc => $composableBuilder(
+    column: $table.nextAttemptAtUtc,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get claimedUntilUtc => $composableBuilder(
+    column: $table.claimedUntilUtc,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get lastError => $composableBuilder(
+    column: $table.lastError,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAtUtc => $composableBuilder(
+    column: $table.createdAtUtc,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$HrvNotificationOperationsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $HrvNotificationOperationsTable> {
+  $$HrvNotificationOperationsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get operationId => $composableBuilder(
+    column: $table.operationId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get reminderId => $composableBuilder(
+    column: $table.reminderId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get generation => $composableBuilder(
+    column: $table.generation,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get operation =>
+      $composableBuilder(column: $table.operation, builder: (column) => column);
+
+  GeneratedColumn<String> get fingerprint => $composableBuilder(
+    column: $table.fingerprint,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get nativeNotificationId => $composableBuilder(
+    column: $table.nativeNotificationId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get dueAtUtc =>
+      $composableBuilder(column: $table.dueAtUtc, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get expiresAtUtc => $composableBuilder(
+    column: $table.expiresAtUtc,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get state =>
+      $composableBuilder(column: $table.state, builder: (column) => column);
+
+  GeneratedColumn<int> get attempts =>
+      $composableBuilder(column: $table.attempts, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get nextAttemptAtUtc => $composableBuilder(
+    column: $table.nextAttemptAtUtc,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get claimedUntilUtc => $composableBuilder(
+    column: $table.claimedUntilUtc,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get lastError =>
+      $composableBuilder(column: $table.lastError, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAtUtc => $composableBuilder(
+    column: $table.createdAtUtc,
+    builder: (column) => column,
+  );
+}
+
+class $$HrvNotificationOperationsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $HrvNotificationOperationsTable,
+          HrvNotificationOperation,
+          $$HrvNotificationOperationsTableFilterComposer,
+          $$HrvNotificationOperationsTableOrderingComposer,
+          $$HrvNotificationOperationsTableAnnotationComposer,
+          $$HrvNotificationOperationsTableCreateCompanionBuilder,
+          $$HrvNotificationOperationsTableUpdateCompanionBuilder,
+          (
+            HrvNotificationOperation,
+            BaseReferences<
+              _$AppDatabase,
+              $HrvNotificationOperationsTable,
+              HrvNotificationOperation
+            >,
+          ),
+          HrvNotificationOperation,
+          PrefetchHooks Function()
+        > {
+  $$HrvNotificationOperationsTableTableManager(
+    _$AppDatabase db,
+    $HrvNotificationOperationsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$HrvNotificationOperationsTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$HrvNotificationOperationsTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$HrvNotificationOperationsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> operationId = const Value.absent(),
+                Value<String> reminderId = const Value.absent(),
+                Value<int> generation = const Value.absent(),
+                Value<String> operation = const Value.absent(),
+                Value<String> fingerprint = const Value.absent(),
+                Value<int> nativeNotificationId = const Value.absent(),
+                Value<DateTime?> dueAtUtc = const Value.absent(),
+                Value<DateTime?> expiresAtUtc = const Value.absent(),
+                Value<String> state = const Value.absent(),
+                Value<int> attempts = const Value.absent(),
+                Value<DateTime?> nextAttemptAtUtc = const Value.absent(),
+                Value<DateTime?> claimedUntilUtc = const Value.absent(),
+                Value<String?> lastError = const Value.absent(),
+                Value<DateTime> createdAtUtc = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => HrvNotificationOperationsCompanion(
+                operationId: operationId,
+                reminderId: reminderId,
+                generation: generation,
+                operation: operation,
+                fingerprint: fingerprint,
+                nativeNotificationId: nativeNotificationId,
+                dueAtUtc: dueAtUtc,
+                expiresAtUtc: expiresAtUtc,
+                state: state,
+                attempts: attempts,
+                nextAttemptAtUtc: nextAttemptAtUtc,
+                claimedUntilUtc: claimedUntilUtc,
+                lastError: lastError,
+                createdAtUtc: createdAtUtc,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String operationId,
+                required String reminderId,
+                required int generation,
+                required String operation,
+                Value<String> fingerprint = const Value.absent(),
+                required int nativeNotificationId,
+                Value<DateTime?> dueAtUtc = const Value.absent(),
+                Value<DateTime?> expiresAtUtc = const Value.absent(),
+                Value<String> state = const Value.absent(),
+                Value<int> attempts = const Value.absent(),
+                Value<DateTime?> nextAttemptAtUtc = const Value.absent(),
+                Value<DateTime?> claimedUntilUtc = const Value.absent(),
+                Value<String?> lastError = const Value.absent(),
+                required DateTime createdAtUtc,
+                Value<int> rowid = const Value.absent(),
+              }) => HrvNotificationOperationsCompanion.insert(
+                operationId: operationId,
+                reminderId: reminderId,
+                generation: generation,
+                operation: operation,
+                fingerprint: fingerprint,
+                nativeNotificationId: nativeNotificationId,
+                dueAtUtc: dueAtUtc,
+                expiresAtUtc: expiresAtUtc,
+                state: state,
+                attempts: attempts,
+                nextAttemptAtUtc: nextAttemptAtUtc,
+                claimedUntilUtc: claimedUntilUtc,
+                lastError: lastError,
+                createdAtUtc: createdAtUtc,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<
+                    $HrvNotificationOperationsTable,
+                    HrvNotificationOperation
+                  >(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $HrvNotificationOperationsTable,
+                    HrvNotificationOperation
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$HrvNotificationOperationsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $HrvNotificationOperationsTable,
+      HrvNotificationOperation,
+      $$HrvNotificationOperationsTableFilterComposer,
+      $$HrvNotificationOperationsTableOrderingComposer,
+      $$HrvNotificationOperationsTableAnnotationComposer,
+      $$HrvNotificationOperationsTableCreateCompanionBuilder,
+      $$HrvNotificationOperationsTableUpdateCompanionBuilder,
+      (
+        HrvNotificationOperation,
+        BaseReferences<
+          _$AppDatabase,
+          $HrvNotificationOperationsTable,
+          HrvNotificationOperation
+        >,
+      ),
+      HrvNotificationOperation,
+      PrefetchHooks Function()
+    >;
+typedef $$HrvNotificationActionReceiptsTableCreateCompanionBuilder =
+    HrvNotificationActionReceiptsCompanion Function({
+      required String installationEpoch,
+      required String reminderId,
+      required int generation,
+      required String actionKind,
+      required DateTime handledAtUtc,
+      Value<int> rowid,
+    });
+typedef $$HrvNotificationActionReceiptsTableUpdateCompanionBuilder =
+    HrvNotificationActionReceiptsCompanion Function({
+      Value<String> installationEpoch,
+      Value<String> reminderId,
+      Value<int> generation,
+      Value<String> actionKind,
+      Value<DateTime> handledAtUtc,
+      Value<int> rowid,
+    });
+
+class $$HrvNotificationActionReceiptsTableFilterComposer
+    extends Composer<_$AppDatabase, $HrvNotificationActionReceiptsTable> {
+  $$HrvNotificationActionReceiptsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get installationEpoch => $composableBuilder(
+    column: $table.installationEpoch,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get reminderId => $composableBuilder(
+    column: $table.reminderId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get generation => $composableBuilder(
+    column: $table.generation,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get actionKind => $composableBuilder(
+    column: $table.actionKind,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get handledAtUtc => $composableBuilder(
+    column: $table.handledAtUtc,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$HrvNotificationActionReceiptsTableOrderingComposer
+    extends Composer<_$AppDatabase, $HrvNotificationActionReceiptsTable> {
+  $$HrvNotificationActionReceiptsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get installationEpoch => $composableBuilder(
+    column: $table.installationEpoch,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get reminderId => $composableBuilder(
+    column: $table.reminderId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get generation => $composableBuilder(
+    column: $table.generation,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get actionKind => $composableBuilder(
+    column: $table.actionKind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get handledAtUtc => $composableBuilder(
+    column: $table.handledAtUtc,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$HrvNotificationActionReceiptsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $HrvNotificationActionReceiptsTable> {
+  $$HrvNotificationActionReceiptsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get installationEpoch => $composableBuilder(
+    column: $table.installationEpoch,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get reminderId => $composableBuilder(
+    column: $table.reminderId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get generation => $composableBuilder(
+    column: $table.generation,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get actionKind => $composableBuilder(
+    column: $table.actionKind,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get handledAtUtc => $composableBuilder(
+    column: $table.handledAtUtc,
+    builder: (column) => column,
+  );
+}
+
+class $$HrvNotificationActionReceiptsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $HrvNotificationActionReceiptsTable,
+          HrvNotificationActionReceipt,
+          $$HrvNotificationActionReceiptsTableFilterComposer,
+          $$HrvNotificationActionReceiptsTableOrderingComposer,
+          $$HrvNotificationActionReceiptsTableAnnotationComposer,
+          $$HrvNotificationActionReceiptsTableCreateCompanionBuilder,
+          $$HrvNotificationActionReceiptsTableUpdateCompanionBuilder,
+          (
+            HrvNotificationActionReceipt,
+            BaseReferences<
+              _$AppDatabase,
+              $HrvNotificationActionReceiptsTable,
+              HrvNotificationActionReceipt
+            >,
+          ),
+          HrvNotificationActionReceipt,
+          PrefetchHooks Function()
+        > {
+  $$HrvNotificationActionReceiptsTableTableManager(
+    _$AppDatabase db,
+    $HrvNotificationActionReceiptsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$HrvNotificationActionReceiptsTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$HrvNotificationActionReceiptsTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$HrvNotificationActionReceiptsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> installationEpoch = const Value.absent(),
+                Value<String> reminderId = const Value.absent(),
+                Value<int> generation = const Value.absent(),
+                Value<String> actionKind = const Value.absent(),
+                Value<DateTime> handledAtUtc = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => HrvNotificationActionReceiptsCompanion(
+                installationEpoch: installationEpoch,
+                reminderId: reminderId,
+                generation: generation,
+                actionKind: actionKind,
+                handledAtUtc: handledAtUtc,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String installationEpoch,
+                required String reminderId,
+                required int generation,
+                required String actionKind,
+                required DateTime handledAtUtc,
+                Value<int> rowid = const Value.absent(),
+              }) => HrvNotificationActionReceiptsCompanion.insert(
+                installationEpoch: installationEpoch,
+                reminderId: reminderId,
+                generation: generation,
+                actionKind: actionKind,
+                handledAtUtc: handledAtUtc,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<
+                    $HrvNotificationActionReceiptsTable,
+                    HrvNotificationActionReceipt
+                  >(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $HrvNotificationActionReceiptsTable,
+                    HrvNotificationActionReceipt
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$HrvNotificationActionReceiptsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $HrvNotificationActionReceiptsTable,
+      HrvNotificationActionReceipt,
+      $$HrvNotificationActionReceiptsTableFilterComposer,
+      $$HrvNotificationActionReceiptsTableOrderingComposer,
+      $$HrvNotificationActionReceiptsTableAnnotationComposer,
+      $$HrvNotificationActionReceiptsTableCreateCompanionBuilder,
+      $$HrvNotificationActionReceiptsTableUpdateCompanionBuilder,
+      (
+        HrvNotificationActionReceipt,
+        BaseReferences<
+          _$AppDatabase,
+          $HrvNotificationActionReceiptsTable,
+          HrvNotificationActionReceipt
+        >,
+      ),
+      HrvNotificationActionReceipt,
+      PrefetchHooks Function()
+    >;
+typedef $$HrvNativeCleanupsTableCreateCompanionBuilder =
+    HrvNativeCleanupsCompanion Function({
+      Value<int> nativeNotificationId,
+      required String installationEpoch,
+      required DateTime createdAtUtc,
+      Value<String?> lastError,
+    });
+typedef $$HrvNativeCleanupsTableUpdateCompanionBuilder =
+    HrvNativeCleanupsCompanion Function({
+      Value<int> nativeNotificationId,
+      Value<String> installationEpoch,
+      Value<DateTime> createdAtUtc,
+      Value<String?> lastError,
+    });
+
+class $$HrvNativeCleanupsTableFilterComposer
+    extends Composer<_$AppDatabase, $HrvNativeCleanupsTable> {
+  $$HrvNativeCleanupsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get nativeNotificationId => $composableBuilder(
+    column: $table.nativeNotificationId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get installationEpoch => $composableBuilder(
+    column: $table.installationEpoch,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAtUtc => $composableBuilder(
+    column: $table.createdAtUtc,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get lastError => $composableBuilder(
+    column: $table.lastError,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$HrvNativeCleanupsTableOrderingComposer
+    extends Composer<_$AppDatabase, $HrvNativeCleanupsTable> {
+  $$HrvNativeCleanupsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get nativeNotificationId => $composableBuilder(
+    column: $table.nativeNotificationId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get installationEpoch => $composableBuilder(
+    column: $table.installationEpoch,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAtUtc => $composableBuilder(
+    column: $table.createdAtUtc,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get lastError => $composableBuilder(
+    column: $table.lastError,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$HrvNativeCleanupsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $HrvNativeCleanupsTable> {
+  $$HrvNativeCleanupsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get nativeNotificationId => $composableBuilder(
+    column: $table.nativeNotificationId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get installationEpoch => $composableBuilder(
+    column: $table.installationEpoch,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get createdAtUtc => $composableBuilder(
+    column: $table.createdAtUtc,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get lastError =>
+      $composableBuilder(column: $table.lastError, builder: (column) => column);
+}
+
+class $$HrvNativeCleanupsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $HrvNativeCleanupsTable,
+          HrvNativeCleanup,
+          $$HrvNativeCleanupsTableFilterComposer,
+          $$HrvNativeCleanupsTableOrderingComposer,
+          $$HrvNativeCleanupsTableAnnotationComposer,
+          $$HrvNativeCleanupsTableCreateCompanionBuilder,
+          $$HrvNativeCleanupsTableUpdateCompanionBuilder,
+          (
+            HrvNativeCleanup,
+            BaseReferences<
+              _$AppDatabase,
+              $HrvNativeCleanupsTable,
+              HrvNativeCleanup
+            >,
+          ),
+          HrvNativeCleanup,
+          PrefetchHooks Function()
+        > {
+  $$HrvNativeCleanupsTableTableManager(
+    _$AppDatabase db,
+    $HrvNativeCleanupsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$HrvNativeCleanupsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$HrvNativeCleanupsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$HrvNativeCleanupsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> nativeNotificationId = const Value.absent(),
+                Value<String> installationEpoch = const Value.absent(),
+                Value<DateTime> createdAtUtc = const Value.absent(),
+                Value<String?> lastError = const Value.absent(),
+              }) => HrvNativeCleanupsCompanion(
+                nativeNotificationId: nativeNotificationId,
+                installationEpoch: installationEpoch,
+                createdAtUtc: createdAtUtc,
+                lastError: lastError,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> nativeNotificationId = const Value.absent(),
+                required String installationEpoch,
+                required DateTime createdAtUtc,
+                Value<String?> lastError = const Value.absent(),
+              }) => HrvNativeCleanupsCompanion.insert(
+                nativeNotificationId: nativeNotificationId,
+                installationEpoch: installationEpoch,
+                createdAtUtc: createdAtUtc,
+                lastError: lastError,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$HrvNativeCleanupsTable, HrvNativeCleanup>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $HrvNativeCleanupsTable,
+                    HrvNativeCleanup
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$HrvNativeCleanupsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $HrvNativeCleanupsTable,
+      HrvNativeCleanup,
+      $$HrvNativeCleanupsTableFilterComposer,
+      $$HrvNativeCleanupsTableOrderingComposer,
+      $$HrvNativeCleanupsTableAnnotationComposer,
+      $$HrvNativeCleanupsTableCreateCompanionBuilder,
+      $$HrvNativeCleanupsTableUpdateCompanionBuilder,
+      (
+        HrvNativeCleanup,
+        BaseReferences<
+          _$AppDatabase,
+          $HrvNativeCleanupsTable,
+          HrvNativeCleanup
+        >,
+      ),
+      HrvNativeCleanup,
       PrefetchHooks Function()
     >;
 typedef $$PlanGoalsTableCreateCompanionBuilder = PlanGoalsCompanion Function({
@@ -45405,6 +55602,37 @@ class $AppDatabaseManager {
       $$GripStrengthRecordsTableTableManager(_db, _db.gripStrengthRecords);
   $$SpotHrvMeasurementsTableTableManager get spotHrvMeasurements =>
       $$SpotHrvMeasurementsTableTableManager(_db, _db.spotHrvMeasurements);
+  $$HrvTrainingEpisodesTableTableManager get hrvTrainingEpisodes =>
+      $$HrvTrainingEpisodesTableTableManager(_db, _db.hrvTrainingEpisodes);
+  $$HrvEpisodeAliasesTableTableManager get hrvEpisodeAliases =>
+      $$HrvEpisodeAliasesTableTableManager(_db, _db.hrvEpisodeAliases);
+  $$HrvEpisodeMeasurementsTableTableManager get hrvEpisodeMeasurements =>
+      $$HrvEpisodeMeasurementsTableTableManager(
+        _db,
+        _db.hrvEpisodeMeasurements,
+      );
+  $$HrvEpisodeFeedbackTableTableManager get hrvEpisodeFeedback =>
+      $$HrvEpisodeFeedbackTableTableManager(_db, _db.hrvEpisodeFeedback);
+  $$HrvReminderPreferencesTableTableManager get hrvReminderPreferences =>
+      $$HrvReminderPreferencesTableTableManager(
+        _db,
+        _db.hrvReminderPreferences,
+      );
+  $$HrvPostRemindersTableTableManager get hrvPostReminders =>
+      $$HrvPostRemindersTableTableManager(_db, _db.hrvPostReminders);
+  $$HrvNotificationOperationsTableTableManager get hrvNotificationOperations =>
+      $$HrvNotificationOperationsTableTableManager(
+        _db,
+        _db.hrvNotificationOperations,
+      );
+  $$HrvNotificationActionReceiptsTableTableManager
+  get hrvNotificationActionReceipts =>
+      $$HrvNotificationActionReceiptsTableTableManager(
+        _db,
+        _db.hrvNotificationActionReceipts,
+      );
+  $$HrvNativeCleanupsTableTableManager get hrvNativeCleanups =>
+      $$HrvNativeCleanupsTableTableManager(_db, _db.hrvNativeCleanups);
   $$PlanGoalsTableTableManager get planGoals =>
       $$PlanGoalsTableTableManager(_db, _db.planGoals);
   $$ProviderCleanupsTableTableManager get providerCleanups =>
