@@ -59,6 +59,10 @@ abstract class WorkoutProvider {
   /// The route is unofficial and may break without notice.
   bool get experimental => false;
 
+  /// Whether plan generation sends upcoming sessions without a button press.
+  /// Some platforms initially offer delivery only for an explicitly chosen workout.
+  bool get autoDeliver => true;
+
   /// What to tell the athlete when workouts are shared, not sent.
   String get shareNote =>
       'Sending workouts straight to $label needs $label\'s partner access. '

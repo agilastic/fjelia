@@ -104,7 +104,7 @@ class ConnectionActions {
     }
   }
 
-  /// E-mail of the stored Polar Flow login (used for the older-history import).
+  /// E-mail of the Flow login used for older history and planned workouts.
   Future<String?> polarFlowEmail() =>
       ref.read(polarServiceProvider).flowLoginEmail;
 
@@ -112,6 +112,7 @@ class ConnectionActions {
   Future<void> savePolarFlowLogin(String email, String password) async {
     try {
       await ref.read(polarServiceProvider).saveFlowLogin(email, password);
+      ref.invalidate(polarFlowConnectedProvider);
     } on PolarFlowException catch (e) {
       throw ConnectionFailure(e.message);
     } catch (_) {
@@ -121,8 +122,10 @@ class ConnectionActions {
     }
   }
 
-  Future<void> removePolarFlowLogin() =>
-      ref.read(polarServiceProvider).clearFlowLogin();
+  Future<void> removePolarFlowLogin() async {
+    await ref.read(polarServiceProvider).clearFlowLogin();
+    ref.invalidate(polarFlowConnectedProvider);
+  }
 
   Future<void> requestHealthAccess() async {
     if (await ref.read(healthConnectServiceProvider).requestPermissions()) {
@@ -149,6 +152,7 @@ class ConnectionActions {
         ref.invalidate(suuntoEmailProvider);
       case ConnectionType.polar:
         await ref.read(polarServiceProvider).disconnect();
+        ref.invalidate(polarFlowConnectedProvider);
         ref.invalidate(polarConnectedProvider);
         ref.invalidate(polarEmailProvider);
       case ConnectionType.health:

@@ -111,8 +111,7 @@ class _ConnectPolarScreenState extends ConsumerState<ConnectPolarScreen> {
   }
 }
 
-/// Optional Polar Flow login for the one-time import of sessions older than the
-/// 30 days that Polar's official API shares.
+/// Optional Flow login for older history and sending planned workouts.
 class _FlowHistoryLogin extends ConsumerStatefulWidget {
   const _FlowHistoryLogin();
 
@@ -158,8 +157,9 @@ class _FlowHistoryLoginState extends ConsumerState<_FlowHistoryLogin> {
       setState(() {
         _savedEmail = _email.text.trim();
         _failed = false;
-        _message = 'Signed in. Older sessions are imported with the next '
-            'full history sync.';
+        _message =
+            'Signed in. Planned workouts can now be sent to Polar. '
+            'Older sessions are imported with the next full history sync.';
       });
     } on ConnectionFailure catch (e) {
       if (mounted) {
@@ -203,7 +203,7 @@ class _FlowHistoryLoginState extends ConsumerState<_FlowHistoryLogin> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'OLDER HISTORY (OPTIONAL)',
+            'FLOW LOGIN (OPTIONAL)',
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w700,
@@ -213,12 +213,11 @@ class _FlowHistoryLoginState extends ConsumerState<_FlowHistoryLogin> {
           ),
           const SizedBox(height: 8),
           const Text(
-            'Polar only shares the last 30 days with apps. To import older '
-            'sessions once, during the first history import or a full sync, '
-            'enter your Polar Flow login. It stays in this device\'s keychain, '
-            'is sent only to Polar and is used only for that import. This uses '
-            'Polar\'s website, not an official interface, so it can stop '
-            'working at any time.',
+            'Save your Polar Flow login to send planned workouts and import '
+            'sessions older than 30 days. It stays in this device\'s keychain '
+            'and is sent only to Polar. Send a workout from its planner sheet, '
+            'then sync Polar Flow to your watch. Check that your Polar '
+            'heart-rate zones match Fjelia.',
             style: TextStyle(fontSize: 12, height: 1.4, color: muted),
           ),
           const SizedBox(height: 12),

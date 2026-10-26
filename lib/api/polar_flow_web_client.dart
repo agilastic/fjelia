@@ -5,8 +5,9 @@ import 'package:http/http.dart' as http;
 
 /// Thrown for a failed Polar Flow web login or request.
 class PolarFlowException implements Exception {
-  PolarFlowException(this.message);
+  PolarFlowException(this.message, {this.statusCode});
   final String message;
+  final int? statusCode;
   @override
   String toString() => 'PolarFlowException: $message';
 }
@@ -33,7 +34,7 @@ class PolarFlowWorkout {
   final String? sport;
 }
 
-/// Reads the user's own training diary from the Polar Flow website.
+/// Reads the user's diary and manages planned targets on the Polar Flow website.
 ///
 /// The official AccessLink API only returns the last 30 days, so for the
 /// one-time history import this signs in like the browser does (Flow →
@@ -444,6 +445,115 @@ class PolarFlowWebClient {
     throw PolarFlowException('Polar summary for ${w.id} was not JSON.');
   }
 
+  // -------------------------------------------------------------------------
+  // Planned workouts (the same JSON interface as Flow's target editor)
+  // -------------------------------------------------------------------------
+
+  Map<String, String> _targetHeaders({String? date}) => {
+    'Accept': 'application/json, text/plain, */*',
+    'Content-Type': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest',
+    'Origin': _flow,
+    'Referer': '$_flow/target${date == null ? '' : '?date=$date'}',
+    if (_cookie('flow.polar.com', 'XSRF-TOKEN') case final token?)
+      'X-XSRF-TOKEN': Uri.decodeComponent(token),
+  };
+
+  void _requireTargetSession([String? id]) {
+    if (!_signedIn) throw PolarFlowException('Not signed in to Polar Flow.');
+    if (id != null && !RegExp(r'^\d+$').hasMatch(id)) {
+      throw ArgumentError.value(id, 'id', 'Expected a Polar target id');
+    }
+  }
+
+  /// Returns the new target id. A refused or redirected POST is never retried:
+  /// a timeout may have happened after Polar saved the target.
+  Future<String> createTrainingTarget(Map<String, dynamic> target) async {
+    _requireTargetSession();
+    final res = await _send(
+      'POST',
+      Uri.parse('$_flow/api/trainingtarget'),
+      headers: _targetHeaders(date: '${target['datetime']}'.split('T').first),
+      body: jsonEncode(target),
+      followRedirects: false,
+    );
+    var id = res.body.trim();
+    try {
+      final decoded = jsonDecode(id);
+      id = '${decoded is Map ? decoded['id'] ?? '' : decoded}';
+    } on FormatException {
+      // Flow also returns the id as plain text.
+    }
+    if (res.response.statusCode != 201 || !RegExp(r'^\d+$').hasMatch(id)) {
+      throw PolarFlowException('Polar did not confirm a new training target.');
+    }
+    return id;
+  }
+
+  /// Reads the exercise-target id needed when updating an existing target.
+  Future<Map<String, dynamic>?> trainingTarget(String id) async {
+    _requireTargetSession(id);
+    final res = await _send(
+      'GET',
+      Uri.parse('$_flow/api/trainingtarget/$id'),
+      headers: _targetHeaders(),
+      followRedirects: false,
+      allowedErrorStatuses: const {404},
+    );
+    if (res.response.statusCode == 404) return null;
+    if (res.response.statusCode == 200) {
+      try {
+        final decoded = jsonDecode(res.body);
+        if (decoded is Map<String, dynamic> &&
+            decoded['exerciseTargets'] is List) {
+          return decoded;
+        }
+      } on FormatException {
+        // A login page must never count as an existing target.
+      }
+    }
+    throw PolarFlowException(
+      'Polar training target was not available. Sign in to Flow again.',
+    );
+  }
+
+  Future<void> updateTrainingTarget(
+    String id,
+    Map<String, dynamic> target,
+  ) async {
+    _requireTargetSession(id);
+    final res = await _send(
+      'POST',
+      Uri.parse('$_flow/api/trainingtarget/$id'),
+      headers: _targetHeaders(date: '${target['datetime']}'.split('T').first),
+      body: jsonEncode(target),
+      followRedirects: false,
+    );
+    _checkTargetWrite(res);
+  }
+
+  /// Already removed targets are a successful cleanup.
+  Future<void> deleteTrainingTarget(String id) async {
+    _requireTargetSession(id);
+    final res = await _send(
+      'DELETE',
+      Uri.parse('$_flow/training/target/$id'),
+      headers: _targetHeaders(),
+      followRedirects: false,
+      allowedErrorStatuses: const {404},
+    );
+    if (res.response.statusCode != 404) _checkTargetWrite(res);
+  }
+
+  void _checkTargetWrite(_Response res) {
+    if (!const {200, 204}.contains(res.response.statusCode) ||
+        res.body.trimLeft().startsWith('<')) {
+      throw PolarFlowException(
+        'Polar did not confirm the training target change.',
+      );
+    }
+  }
+
   /// Parses the diary JSON. Tolerant: unknown fields are ignored, entries that
   /// are not training sessions are skipped.
   static List<PolarFlowWorkout> parseCalendarEvents(String json) {
@@ -494,7 +604,9 @@ class PolarFlowWebClient {
     String method,
     Uri uri, {
     Map<String, String>? headers,
-    Map<String, String>? body,
+    Object? body,
+    bool followRedirects = true,
+    Set<int> allowedErrorStatuses = const {},
   }) async {
     var currentMethod = method;
     var current = uri;
@@ -525,7 +637,13 @@ class PolarFlowWebClient {
             .map((e) => '${e.key}=${e.value}')
             .join('; ');
       }
-      if (currentBody != null) request.bodyFields = currentBody;
+      if (currentBody is Map<String, String>) {
+        request.bodyFields = currentBody;
+      } else if (currentBody is String) {
+        request.body = currentBody;
+      } else if (currentBody != null) {
+        throw ArgumentError('Unsupported Polar request body.');
+      }
       final streamed = await _client
           .send(request)
           .timeout(const Duration(seconds: 30));
@@ -542,7 +660,10 @@ class PolarFlowWebClient {
       );
       _storeCookies(current.host, res.headers['set-cookie']);
       final location = res.headers['location'];
-      if (res.statusCode >= 300 && res.statusCode < 400 && location != null) {
+      if (followRedirects &&
+          res.statusCode >= 300 &&
+          res.statusCode < 400 &&
+          location != null) {
         final next = current.resolve(location);
         if (next.origin != current.origin) {
           currentHeaders.removeWhere(
@@ -572,13 +693,17 @@ class PolarFlowWebClient {
         current = next;
         continue;
       }
-      if (res.statusCode >= 400) {
+      if (res.statusCode >= 400 &&
+          !allowedErrorStatuses.contains(res.statusCode)) {
         final snippet = res.body.replaceAll(RegExp(r'<[^>]*>|\s+'), ' ').trim();
         trace?.call(
           '  body: ${snippet.length > 240 ? snippet.substring(0, 240) : snippet}'
           ' | set-cookie names: ${_cookieNames(res.headers['set-cookie'])}',
         );
-        throw PolarFlowException('HTTP ${res.statusCode} from ${current.host}');
+        throw PolarFlowException(
+          'HTTP ${res.statusCode} from ${current.host}',
+          statusCode: res.statusCode,
+        );
       }
       return _Response(res, current);
     }

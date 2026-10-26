@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/workout_destination.dart';
 import '../services/workout_providers/coros_workout_provider.dart';
 import '../services/workout_providers/garmin_workout_provider.dart';
+import '../services/workout_providers/polar_workout_provider.dart';
 import '../services/workout_providers/share_only_workout_provider.dart';
 import '../services/workout_providers/workout_providers.dart';
 import 'auth_provider.dart';
@@ -36,10 +37,9 @@ final workoutProvidersProvider = Provider<WorkoutProviders>((ref) {
             .save(profile.copyWith(corosWorkoutPush: true));
       },
     ),
-    ShareOnlyWorkoutProvider(
-      id: 'polar',
-      label: WorkoutDestination.polar.label,
-      sourceKey: WorkoutDestination.polar.sourceKey,
+    PolarWorkoutProvider(
+      ref.watch(databaseProvider),
+      ref.watch(polarServiceProvider),
       connected: () => ref.read(polarConnectedProvider.future),
     ),
     ShareOnlyWorkoutProvider(

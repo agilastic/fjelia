@@ -47,12 +47,12 @@ class WorkoutProviders {
     return [for (final e in indexed) e.$2];
   }
 
-  /// Connected providers that take a workout straight onto their calendar.
+  /// Connected providers that receive upcoming plan workouts automatically.
   Future<List<WorkoutProvider>> pushTargets([
     List<String> priority = const [],
   ]) async => [
     for (final p in await connected(priority))
-      if (await p.mode() == DeliveryMode.push) p,
+      if (p.autoDeliver && await p.mode() == DeliveryMode.push) p,
   ];
 
   /// The providers that have this session's workout on their platform.

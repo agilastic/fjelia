@@ -35,6 +35,7 @@ final connectedProvidersProvider = FutureProvider<List<WorkoutProvider>>((
   ref.watch(authProvider);
   ref.watch(corosConnectedProvider);
   ref.watch(polarConnectedProvider);
+  ref.watch(polarFlowConnectedProvider);
   ref.watch(suuntoConnectedProvider);
   ref.watch(userProfileProvider);
   ref.watch(sourcePriorityProvider);
@@ -46,7 +47,7 @@ final connectedProvidersProvider = FutureProvider<List<WorkoutProvider>>((
 final pushProvidersProvider = FutureProvider<List<WorkoutProvider>>(
   (ref) async => [
     for (final p in await ref.watch(connectedProvidersProvider.future))
-      if (await p.mode() == DeliveryMode.push) p,
+      if (p.autoDeliver && await p.mode() == DeliveryMode.push) p,
   ],
 );
 

@@ -10,6 +10,7 @@ class PreparedWorkout {
     required this.steps,
     required this.description,
     this.thresholdHr,
+    this.indoor = false,
   });
 
   final String sessionId;
@@ -18,6 +19,7 @@ class PreparedWorkout {
 
   /// The planner's sport, such as `running` or `cycling_road`.
   final String sport;
+  final bool indoor;
 
   /// Garmin-style steps: `stepType`, `endCondition`, `endConditionValue`,
   /// `zoneNumber`, `targetType` and `targetValueOne`/`targetValueTwo` in bpm

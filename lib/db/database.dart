@@ -582,6 +582,9 @@ class WorkoutDeliveries extends Table {
   TextColumn get sessionId => text()();
   TextColumn get providerId => text()();
 
+  /// The target created by the platform, for updating or removing our own entry.
+  TextColumn get remoteId => text().nullable()();
+
   /// Fingerprint of the content that was sent.
   TextColumn get fingerprint => text().nullable()();
 
@@ -1018,7 +1021,7 @@ class AppDatabase extends _$AppDatabase {
       defaultSourcePriorities[group.name]!;
 
   @override
-  int get schemaVersion => 49;
+  int get schemaVersion => 50;
 
   Future<void> saveHeartRateSamples(List<TimedHeartRate> samples) async {
     if (samples.isEmpty) return;
@@ -1916,6 +1919,13 @@ class AppDatabase extends _$AppDatabase {
       await ensureHrvIdentity();
     },
     onUpgrade: (m, from, to) async {
+      if (from >= 48 && from < 50) {
+        await _addColumnIfMissing(
+          'workout_deliveries',
+          'remote_id',
+          () => m.addColumn(workoutDeliveries, workoutDeliveries.remoteId),
+        );
+      }
       if (from < 48) {
         await m.createTable(providerCleanups);
         await m.createTable(workoutDeliveries);

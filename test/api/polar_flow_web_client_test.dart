@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -12,7 +14,11 @@ const _events =
     '"sport":"RUNNING"},{"type":"ACTIVITY","listItemId":1,"datetime":"2026-08-19T00:00:00",'
     '"url":"/x/1"}]';
 
-MockClient _server({required bool passwordOk, List<String>? log}) {
+MockClient _server({
+  required bool passwordOk,
+  List<String>? log,
+  Future<http.Response?> Function(http.Request)? targetRequest,
+}) {
   var signedIn = false;
   return MockClient((req) async {
     log?.add('${req.method} ${req.url.host}${req.url.path}');
@@ -76,7 +82,7 @@ MockClient _server({required bool passwordOk, List<String>? log}) {
         302,
         headers: {
           'location': '/',
-          'set-cookie': 'PLAY_SESSION_FLOW=signed; Path=/',
+          'set-cookie': 'PLAY_SESSION_FLOW=signed; Path=/, XSRF-TOKEN=flow%2Btoken; Path=/',
         },
       );
     }
@@ -104,7 +110,8 @@ MockClient _server({required bool passwordOk, List<String>? log}) {
         200,
       );
     }
-    return http.Response('nope', 404);
+    final targetResponse = await targetRequest?.call(req);
+    return targetResponse ?? http.Response('nope', 404);
   });
 }
 
@@ -163,6 +170,155 @@ void main() {
     expect(
       PolarFlowWebClient.parseCalendarEvents('[{"type":"EXERCISE"},5,null]'),
       isEmpty,
+    );
+  });
+
+  test(
+    'creates JSON targets with Flow cookies and records the returned id',
+    () async {
+      final calls = <http.Request>[];
+      final web = PolarFlowWebClient(
+        client: _server(
+          passwordOk: true,
+          targetRequest: (request) async {
+            calls.add(request);
+            expect(request.method, 'POST');
+            expect(request.url.path, '/api/trainingtarget');
+            expect(
+              request.headers['content-type'],
+              contains('application/json'),
+            );
+            expect(
+              request.headers['cookie'],
+              contains('PLAY_SESSION_FLOW=signed'),
+            );
+            expect(request.headers['x-xsrf-token'], 'flow+token');
+            expect(request.headers['x-requested-with'], 'XMLHttpRequest');
+            expect(jsonDecode(request.body)['type'], 'PHASED');
+            return http.Response('123456', 201);
+          },
+        ),
+      );
+      addTearDown(web.close);
+      await web.login('me@example.com', 'secret');
+      expect(
+        await web.createTrainingTarget({
+          'type': 'PHASED',
+          'datetime': '2026-10-28T18:00',
+        }),
+        '123456',
+      );
+      expect(calls, hasLength(1));
+    },
+  );
+
+  test(
+    'reads and updates targets; missing targets are safe to delete',
+    () async {
+      final calls = <String>[];
+      final web = PolarFlowWebClient(
+        client: _server(
+          passwordOk: true,
+          targetRequest: (request) async {
+            calls.add('${request.method} ${request.url.path}');
+            if (request.method == 'GET') {
+              return http.Response(
+                '{"id":123,"exerciseTargets":[{"id":456}]}',
+                200,
+              );
+            }
+            return request.method == 'DELETE'
+                ? http.Response('', 404)
+                : http.Response('', 204);
+          },
+        ),
+      );
+      addTearDown(web.close);
+      await web.login('me@example.com', 'secret');
+      expect((await web.trainingTarget('123'))!['id'], 123);
+      await web.updateTrainingTarget('123', {'datetime': '2026-10-29T18:00'});
+      await web.deleteTrainingTarget('123');
+      expect(calls, [
+        'GET /api/trainingtarget/123',
+        'POST /api/trainingtarget/123',
+        'DELETE /training/target/123',
+      ]);
+    },
+  );
+
+  test(
+    'a missing target returns null and a refusal keeps its HTTP status',
+    () async {
+      final web = PolarFlowWebClient(
+        client: _server(
+          passwordOk: true,
+          targetRequest: (request) async =>
+              http.Response('', request.method == 'GET' ? 404 : 403),
+        ),
+      );
+      addTearDown(web.close);
+      await web.login('me@example.com', 'secret');
+      expect(await web.trainingTarget('123'), isNull);
+      await expectLater(
+        web.createTrainingTarget({}),
+        throwsA(
+          isA<PolarFlowException>().having(
+            (e) => e.statusCode,
+            'statusCode',
+            403,
+          ),
+        ),
+      );
+    },
+  );
+
+  test(
+    'a redirected POST is not followed or counted as a successful write',
+    () async {
+      var posts = 0;
+      final web = PolarFlowWebClient(
+        client: _server(
+          passwordOk: true,
+          targetRequest: (request) async {
+            posts++;
+            return http.Response(
+              '',
+              307,
+              headers: {'location': 'https://auth.polar.com/login'},
+            );
+          },
+        ),
+      );
+      addTearDown(web.close);
+      await web.login('me@example.com', 'secret');
+      await expectLater(
+        web.createTrainingTarget({}),
+        throwsA(isA<PolarFlowException>()),
+      );
+      expect(posts, 1);
+    },
+  );
+
+  test('a login page cannot confirm an update or deletion', () async {
+    final web = PolarFlowWebClient(
+      client: _server(
+        passwordOk: true,
+        targetRequest: (_) async => http.Response('<html>Sign in</html>', 200),
+      ),
+    );
+    addTearDown(web.close);
+    await web.login('me@example.com', 'secret');
+    await expectLater(
+      web.trainingTarget('123'),
+      throwsA(isA<PolarFlowException>()),
+    );
+    await expectLater(
+      web.updateTrainingTarget('123', {}),
+      throwsA(isA<PolarFlowException>()),
+    );
+    await expectLater(
+      web.deleteTrainingTarget('123'),
+      throwsA(isA<PolarFlowException>()),
     );
   });
 }

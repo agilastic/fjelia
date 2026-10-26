@@ -59,6 +59,9 @@ Future<File> schema48() async {
     "(1793003600, 'afterTraining', 'seated', 300, 60, 'h10', 'Polar H10', "
     "41.0, 50, 70, 290, 295, .97, '[]')",
   );
+  await db.customStatement(
+    'ALTER TABLE workout_deliveries DROP COLUMN remote_id',
+  );
   await db.customStatement('PRAGMA user_version = 48');
   await db.close();
   return file;
@@ -98,7 +101,7 @@ void main() {
             .customSelect('PRAGMA user_version')
             .getSingle()
             .then((r) => r.read<int>('user_version')),
-        49,
+        db.schemaVersion,
       );
     },
   );

@@ -2951,6 +2951,7 @@ class TrainingPlanService {
       steps: steps,
       description: _garminDescription(s, steps, power: power, goal: goal),
       thresholdHr: thresholdHr,
+      indoor: s.indoor,
     );
   }
 

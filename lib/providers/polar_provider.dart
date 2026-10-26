@@ -11,6 +11,10 @@ final polarConnectedProvider = FutureProvider<bool>(
   (ref) => ref.read(polarServiceProvider).isConnected,
 );
 
+final polarFlowConnectedProvider = FutureProvider<bool>(
+  (ref) => ref.read(polarServiceProvider).hasFlowLogin,
+);
+
 final polarEmailProvider = FutureProvider<String?>(
   (ref) => ref.read(polarServiceProvider).connectedEmail,
 );

@@ -25,6 +25,7 @@ class DeliveryLedger {
 
   Future<void> put(
     String sessionId, {
+    String? remoteId,
     String? fingerprint,
     String? day,
     String? name,
@@ -34,6 +35,7 @@ class DeliveryLedger {
         WorkoutDeliveriesCompanion.insert(
           sessionId: sessionId,
           providerId: providerId,
+          remoteId: Value(remoteId),
           fingerprint: Value(fingerprint),
           day: Value(day),
           name: Value(name),

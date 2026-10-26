@@ -17048,6 +17048,17 @@ class $WorkoutDeliveriesTable extends WorkoutDeliveries
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _remoteIdMeta = const VerificationMeta(
+    'remoteId',
+  );
+  @override
+  late final GeneratedColumn<String> remoteId = GeneratedColumn<String>(
+    'remote_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _fingerprintMeta = const VerificationMeta(
     'fingerprint',
   );
@@ -17090,6 +17101,7 @@ class $WorkoutDeliveriesTable extends WorkoutDeliveries
   List<GeneratedColumn> get $columns => [
     sessionId,
     providerId,
+    remoteId,
     fingerprint,
     day,
     name,
@@ -17122,6 +17134,12 @@ class $WorkoutDeliveriesTable extends WorkoutDeliveries
       );
     } else if (isInserting) {
       context.missing(_providerIdMeta);
+    }
+    if (data.containsKey('remote_id')) {
+      context.handle(
+        _remoteIdMeta,
+        remoteId.isAcceptableOrUnknown(data['remote_id']!, _remoteIdMeta),
+      );
     }
     if (data.containsKey('fingerprint')) {
       context.handle(
@@ -17169,6 +17187,10 @@ class $WorkoutDeliveriesTable extends WorkoutDeliveries
         DriftSqlType.string,
         data['${effectivePrefix}provider_id'],
       )!,
+      remoteId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}remote_id'],
+      ),
       fingerprint: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}fingerprint'],
@@ -17198,6 +17220,9 @@ class WorkoutDelivery extends DataClass implements Insertable<WorkoutDelivery> {
   final String sessionId;
   final String providerId;
 
+  /// The target created by the platform, for updating or removing our own entry.
+  final String? remoteId;
+
   /// Fingerprint of the content that was sent.
   final String? fingerprint;
 
@@ -17210,6 +17235,7 @@ class WorkoutDelivery extends DataClass implements Insertable<WorkoutDelivery> {
   const WorkoutDelivery({
     required this.sessionId,
     required this.providerId,
+    this.remoteId,
     this.fingerprint,
     this.day,
     this.name,
@@ -17220,6 +17246,9 @@ class WorkoutDelivery extends DataClass implements Insertable<WorkoutDelivery> {
     final map = <String, Expression>{};
     map['session_id'] = Variable<String>(sessionId);
     map['provider_id'] = Variable<String>(providerId);
+    if (!nullToAbsent || remoteId != null) {
+      map['remote_id'] = Variable<String>(remoteId);
+    }
     if (!nullToAbsent || fingerprint != null) {
       map['fingerprint'] = Variable<String>(fingerprint);
     }
@@ -17237,6 +17266,9 @@ class WorkoutDelivery extends DataClass implements Insertable<WorkoutDelivery> {
     return WorkoutDeliveriesCompanion(
       sessionId: Value(sessionId),
       providerId: Value(providerId),
+      remoteId: remoteId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(remoteId),
       fingerprint: fingerprint == null && nullToAbsent
           ? const Value.absent()
           : Value(fingerprint),
@@ -17254,6 +17286,7 @@ class WorkoutDelivery extends DataClass implements Insertable<WorkoutDelivery> {
     return WorkoutDelivery(
       sessionId: serializer.fromJson<String>(json['sessionId']),
       providerId: serializer.fromJson<String>(json['providerId']),
+      remoteId: serializer.fromJson<String?>(json['remoteId']),
       fingerprint: serializer.fromJson<String?>(json['fingerprint']),
       day: serializer.fromJson<String?>(json['day']),
       name: serializer.fromJson<String?>(json['name']),
@@ -17266,6 +17299,7 @@ class WorkoutDelivery extends DataClass implements Insertable<WorkoutDelivery> {
     return <String, dynamic>{
       'sessionId': serializer.toJson<String>(sessionId),
       'providerId': serializer.toJson<String>(providerId),
+      'remoteId': serializer.toJson<String?>(remoteId),
       'fingerprint': serializer.toJson<String?>(fingerprint),
       'day': serializer.toJson<String?>(day),
       'name': serializer.toJson<String?>(name),
@@ -17276,6 +17310,7 @@ class WorkoutDelivery extends DataClass implements Insertable<WorkoutDelivery> {
   WorkoutDelivery copyWith({
     String? sessionId,
     String? providerId,
+    Value<String?> remoteId = const Value.absent(),
     Value<String?> fingerprint = const Value.absent(),
     Value<String?> day = const Value.absent(),
     Value<String?> name = const Value.absent(),
@@ -17283,6 +17318,7 @@ class WorkoutDelivery extends DataClass implements Insertable<WorkoutDelivery> {
   }) => WorkoutDelivery(
     sessionId: sessionId ?? this.sessionId,
     providerId: providerId ?? this.providerId,
+    remoteId: remoteId.present ? remoteId.value : this.remoteId,
     fingerprint: fingerprint.present ? fingerprint.value : this.fingerprint,
     day: day.present ? day.value : this.day,
     name: name.present ? name.value : this.name,
@@ -17294,6 +17330,7 @@ class WorkoutDelivery extends DataClass implements Insertable<WorkoutDelivery> {
       providerId: data.providerId.present
           ? data.providerId.value
           : this.providerId,
+      remoteId: data.remoteId.present ? data.remoteId.value : this.remoteId,
       fingerprint: data.fingerprint.present
           ? data.fingerprint.value
           : this.fingerprint,
@@ -17308,6 +17345,7 @@ class WorkoutDelivery extends DataClass implements Insertable<WorkoutDelivery> {
     return (StringBuffer('WorkoutDelivery(')
           ..write('sessionId: $sessionId, ')
           ..write('providerId: $providerId, ')
+          ..write('remoteId: $remoteId, ')
           ..write('fingerprint: $fingerprint, ')
           ..write('day: $day, ')
           ..write('name: $name, ')
@@ -17317,14 +17355,22 @@ class WorkoutDelivery extends DataClass implements Insertable<WorkoutDelivery> {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(sessionId, providerId, fingerprint, day, name, sentAt);
+  int get hashCode => Object.hash(
+    sessionId,
+    providerId,
+    remoteId,
+    fingerprint,
+    day,
+    name,
+    sentAt,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is WorkoutDelivery &&
           other.sessionId == this.sessionId &&
           other.providerId == this.providerId &&
+          other.remoteId == this.remoteId &&
           other.fingerprint == this.fingerprint &&
           other.day == this.day &&
           other.name == this.name &&
@@ -17334,6 +17380,7 @@ class WorkoutDelivery extends DataClass implements Insertable<WorkoutDelivery> {
 class WorkoutDeliveriesCompanion extends UpdateCompanion<WorkoutDelivery> {
   final Value<String> sessionId;
   final Value<String> providerId;
+  final Value<String?> remoteId;
   final Value<String?> fingerprint;
   final Value<String?> day;
   final Value<String?> name;
@@ -17342,6 +17389,7 @@ class WorkoutDeliveriesCompanion extends UpdateCompanion<WorkoutDelivery> {
   const WorkoutDeliveriesCompanion({
     this.sessionId = const Value.absent(),
     this.providerId = const Value.absent(),
+    this.remoteId = const Value.absent(),
     this.fingerprint = const Value.absent(),
     this.day = const Value.absent(),
     this.name = const Value.absent(),
@@ -17351,6 +17399,7 @@ class WorkoutDeliveriesCompanion extends UpdateCompanion<WorkoutDelivery> {
   WorkoutDeliveriesCompanion.insert({
     required String sessionId,
     required String providerId,
+    this.remoteId = const Value.absent(),
     this.fingerprint = const Value.absent(),
     this.day = const Value.absent(),
     this.name = const Value.absent(),
@@ -17362,6 +17411,7 @@ class WorkoutDeliveriesCompanion extends UpdateCompanion<WorkoutDelivery> {
   static Insertable<WorkoutDelivery> custom({
     Expression<String>? sessionId,
     Expression<String>? providerId,
+    Expression<String>? remoteId,
     Expression<String>? fingerprint,
     Expression<String>? day,
     Expression<String>? name,
@@ -17371,6 +17421,7 @@ class WorkoutDeliveriesCompanion extends UpdateCompanion<WorkoutDelivery> {
     return RawValuesInsertable({
       if (sessionId != null) 'session_id': sessionId,
       if (providerId != null) 'provider_id': providerId,
+      if (remoteId != null) 'remote_id': remoteId,
       if (fingerprint != null) 'fingerprint': fingerprint,
       if (day != null) 'day': day,
       if (name != null) 'name': name,
@@ -17382,6 +17433,7 @@ class WorkoutDeliveriesCompanion extends UpdateCompanion<WorkoutDelivery> {
   WorkoutDeliveriesCompanion copyWith({
     Value<String>? sessionId,
     Value<String>? providerId,
+    Value<String?>? remoteId,
     Value<String?>? fingerprint,
     Value<String?>? day,
     Value<String?>? name,
@@ -17391,6 +17443,7 @@ class WorkoutDeliveriesCompanion extends UpdateCompanion<WorkoutDelivery> {
     return WorkoutDeliveriesCompanion(
       sessionId: sessionId ?? this.sessionId,
       providerId: providerId ?? this.providerId,
+      remoteId: remoteId ?? this.remoteId,
       fingerprint: fingerprint ?? this.fingerprint,
       day: day ?? this.day,
       name: name ?? this.name,
@@ -17407,6 +17460,9 @@ class WorkoutDeliveriesCompanion extends UpdateCompanion<WorkoutDelivery> {
     }
     if (providerId.present) {
       map['provider_id'] = Variable<String>(providerId.value);
+    }
+    if (remoteId.present) {
+      map['remote_id'] = Variable<String>(remoteId.value);
     }
     if (fingerprint.present) {
       map['fingerprint'] = Variable<String>(fingerprint.value);
@@ -17431,6 +17487,7 @@ class WorkoutDeliveriesCompanion extends UpdateCompanion<WorkoutDelivery> {
     return (StringBuffer('WorkoutDeliveriesCompanion(')
           ..write('sessionId: $sessionId, ')
           ..write('providerId: $providerId, ')
+          ..write('remoteId: $remoteId, ')
           ..write('fingerprint: $fingerprint, ')
           ..write('day: $day, ')
           ..write('name: $name, ')
@@ -45994,6 +46051,7 @@ typedef $$WorkoutDeliveriesTableCreateCompanionBuilder =
     WorkoutDeliveriesCompanion Function({
       required String sessionId,
       required String providerId,
+      Value<String?> remoteId,
       Value<String?> fingerprint,
       Value<String?> day,
       Value<String?> name,
@@ -46004,6 +46062,7 @@ typedef $$WorkoutDeliveriesTableUpdateCompanionBuilder =
     WorkoutDeliveriesCompanion Function({
       Value<String> sessionId,
       Value<String> providerId,
+      Value<String?> remoteId,
       Value<String?> fingerprint,
       Value<String?> day,
       Value<String?> name,
@@ -46027,6 +46086,11 @@ class $$WorkoutDeliveriesTableFilterComposer
 
   ColumnFilters<String> get providerId => $composableBuilder(
     column: $table.providerId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get remoteId => $composableBuilder(
+    column: $table.remoteId,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -46070,6 +46134,11 @@ class $$WorkoutDeliveriesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get remoteId => $composableBuilder(
+    column: $table.remoteId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get fingerprint => $composableBuilder(
     column: $table.fingerprint,
     builder: (column) => ColumnOrderings(column),
@@ -46107,6 +46176,9 @@ class $$WorkoutDeliveriesTableAnnotationComposer
     column: $table.providerId,
     builder: (column) => column,
   );
+
+  GeneratedColumn<String> get remoteId =>
+      $composableBuilder(column: $table.remoteId, builder: (column) => column);
 
   GeneratedColumn<String> get fingerprint => $composableBuilder(
     column: $table.fingerprint,
@@ -46165,6 +46237,7 @@ class $$WorkoutDeliveriesTableTableManager
               ({
                 Value<String> sessionId = const Value.absent(),
                 Value<String> providerId = const Value.absent(),
+                Value<String?> remoteId = const Value.absent(),
                 Value<String?> fingerprint = const Value.absent(),
                 Value<String?> day = const Value.absent(),
                 Value<String?> name = const Value.absent(),
@@ -46173,6 +46246,7 @@ class $$WorkoutDeliveriesTableTableManager
               }) => WorkoutDeliveriesCompanion(
                 sessionId: sessionId,
                 providerId: providerId,
+                remoteId: remoteId,
                 fingerprint: fingerprint,
                 day: day,
                 name: name,
@@ -46183,6 +46257,7 @@ class $$WorkoutDeliveriesTableTableManager
               ({
                 required String sessionId,
                 required String providerId,
+                Value<String?> remoteId = const Value.absent(),
                 Value<String?> fingerprint = const Value.absent(),
                 Value<String?> day = const Value.absent(),
                 Value<String?> name = const Value.absent(),
@@ -46191,6 +46266,7 @@ class $$WorkoutDeliveriesTableTableManager
               }) => WorkoutDeliveriesCompanion.insert(
                 sessionId: sessionId,
                 providerId: providerId,
+                remoteId: remoteId,
                 fingerprint: fingerprint,
                 day: day,
                 name: name,

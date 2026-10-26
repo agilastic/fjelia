@@ -50,11 +50,16 @@ class _PolarUser {
 
 /// Polar AccessLink v3: exercises, sleep, nightly recharge and daily activity.
 class PolarService {
-  PolarService(this._db, {http.Client? client})
-    : _http = client ?? http.Client();
+  PolarService(
+    this._db, {
+    http.Client? client,
+    PolarFlowWebClient Function()? flowClientFactory,
+  }) : _http = client ?? http.Client(),
+       _flowClientFactory = flowClientFactory ?? PolarFlowWebClient.new;
 
   final AppDatabase _db;
   final http.Client _http;
+  final PolarFlowWebClient Function() _flowClientFactory;
 
   static const _api = 'https://www.polaraccesslink.com/v3';
   static const _tokenUrl = 'https://polarremote.com/v2/oauth2/token';
@@ -87,15 +92,36 @@ class PolarService {
   Future<String?> get connectedEmail async => (await _loadUser())?.email;
 
   // -------------------------------------------------------------------------
-  // Older history from the Flow website (optional, history import only)
+  // Flow website login: older history and planned workout delivery
   // -------------------------------------------------------------------------
 
-  /// A Polar Flow login is stored for the one-time history import.
+  /// A Polar Flow login is stored for history imports and planned workouts.
   Future<bool> get hasFlowLogin async =>
       await _storage.read(key: _flowEmailKey) != null &&
       await _storage.read(key: _flowPasswordKey) != null;
 
   Future<String?> get flowLoginEmail => _storage.read(key: _flowEmailKey);
+
+  /// Uses the same stored login as the importer, with a separate cookie session
+  /// so delivering a workout cannot interfere with an import in progress.
+  Future<T> withFlowClient<T>(
+    Future<T> Function(PolarFlowWebClient client) action,
+  ) async {
+    final email = await _storage.read(key: _flowEmailKey);
+    final password = await _storage.read(key: _flowPasswordKey);
+    if (email == null || password == null) {
+      throw PolarFlowException(
+        'Save your Polar Flow login in Settings, Connections, Polar to send workouts.',
+      );
+    }
+    final web = _flowClientFactory();
+    try {
+      await web.login(email, password);
+      return await action(web);
+    } finally {
+      web.close();
+    }
+  }
 
   /// Signs in to Polar Flow to check the login, then keeps it in the keychain.
   /// Throws [PolarFlowException] when the sign-in fails.
@@ -439,6 +465,7 @@ class PolarService {
     await Future.wait([
       oauthTokenStore.clear(_source),
       _storage.delete(key: _userKey),
+      clearFlowLogin(),
     ]);
   }
 

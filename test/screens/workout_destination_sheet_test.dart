@@ -169,7 +169,11 @@ void main() {
       );
       expect(find.text('Push to Garmin'), findsNothing);
       expect(
-        find.textContaining('${d.label}\'s partner access'),
+        find.textContaining(
+          d == WorkoutDestination.polar
+              ? 'Save your Polar Flow login'
+              : '${d.label}\'s partner access',
+        ),
         findsOneWidget,
       );
       await tester.drag(find.byType(Scrollable).first, const Offset(0, -150));
@@ -307,9 +311,14 @@ void main() {
       Future<List<WorkoutTarget>> targets(
         List<WorkoutDestination> connected, {
         required bool corosOn,
+        bool polarFlow = false,
       }) async {
         FlutterSecureStorage.setMockInitialValues({
           'user_profile_v1': jsonEncode({'corosWorkoutPush': corosOn}),
+          if (polarFlow) ...{
+            'polar_flow_email': 'me@example.com',
+            'polar_flow_password': 'secret',
+          },
         });
         final container = ProviderContainer(
           overrides: [
@@ -346,6 +355,15 @@ void main() {
         WorkoutDestination.suunto,
       ], corosOn: true);
       expect(t.map((e) => e.route), [WorkoutRoute.share, WorkoutRoute.share]);
+      // A saved Flow login enables explicit Polar push, without enrolling
+      // Polar in automatic delivery of all upcoming plan sessions.
+      t = await targets(
+        [WorkoutDestination.polar],
+        corosOn: false,
+        polarFlow: true,
+      );
+      expect(t.single.route, WorkoutRoute.push);
+      expect(t.single.provider.autoDeliver, isFalse);
       // Order follows the athlete's, a single platform stays single.
       t = await targets([WorkoutDestination.suunto], corosOn: false);
       expect(t, hasLength(1));
