@@ -25,6 +25,7 @@ import '../../widgets/move_workout_card.dart';
 import '../../widgets/workout_profile_bar.dart';
 import '../../widgets/workout_structure_list.dart';
 import '../ai_coach/ai_coach_screen.dart';
+import 'workout_delivery_setup.dart';
 
 class PlanSessionSheet extends ConsumerStatefulWidget {
   const PlanSessionSheet({super.key, required this.session});
@@ -577,8 +578,9 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                 final workout = await ref
                     .read(trainingPlanServiceProvider)
                     .workoutText(s.id);
+                if (!context.mounted || !buttonContext.mounted) return;
                 final box = buttonContext.findRenderObject() as RenderBox?;
-                if (why != null && context.mounted) {
+                if (why != null) {
                   ScaffoldMessenger.of(
                     context,
                   ).showSnackBar(SnackBar(content: Text(why)));
@@ -607,6 +609,13 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                           ? null
                           : () => perform(() async {
                               if (!pushes) return share(null);
+                              if (!await ensureWorkoutDeliveryReady(
+                                context,
+                                provider,
+                              )) {
+                                return;
+                              }
+                              if (!context.mounted) return;
                               final result = await ref.read(
                                 pushWorkoutProvider,
                               )(s.id, provider);

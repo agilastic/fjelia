@@ -3,16 +3,20 @@ import '../../providers/connection_actions_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
 import 'onboarding_widgets.dart';
 
 const _accent = Color(0xFFD0011B);
 
-/// Polar AccessLink OAuth in the system browser (callback scheme `fjelia`).
+/// Polar AccessLink OAuth and the Flow login used for workout uploads.
 class ConnectPolarScreen extends ConsumerStatefulWidget {
-  const ConnectPolarScreen({super.key, this.fromOnboarding = false});
+  const ConnectPolarScreen({
+    super.key,
+    this.fromOnboarding = false,
+    this.forWorkoutUpload = false,
+  });
 
   final bool fromOnboarding;
+  final bool forWorkoutUpload;
 
   @override
   ConsumerState<ConnectPolarScreen> createState() => _ConnectPolarScreenState();
@@ -44,6 +48,20 @@ class _ConnectPolarScreenState extends ConsumerState<ConnectPolarScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.forWorkoutUpload) {
+      return Scaffold(
+        backgroundColor: const Color(0xFF111111),
+        appBar: AppBar(title: const Text('Send workout to Polar')),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(28),
+            child: _FlowHistoryLogin(
+              onSaved: () => Navigator.of(context).pop(true),
+            ),
+          ),
+        ),
+      );
+    }
     return Scaffold(
       backgroundColor: const Color(0xFF111111),
       appBar: AppBar(leading: const BackButton(color: Color(0xFFCCCCCC))),
@@ -113,7 +131,9 @@ class _ConnectPolarScreenState extends ConsumerState<ConnectPolarScreen> {
 
 /// Optional Flow login for older history and sending planned workouts.
 class _FlowHistoryLogin extends ConsumerStatefulWidget {
-  const _FlowHistoryLogin();
+  const _FlowHistoryLogin({this.onSaved});
+
+  final VoidCallback? onSaved;
 
   @override
   ConsumerState<_FlowHistoryLogin> createState() => _FlowHistoryLoginState();
@@ -161,6 +181,7 @@ class _FlowHistoryLoginState extends ConsumerState<_FlowHistoryLogin> {
             'Signed in. Planned workouts can now be sent to Polar. '
             'Older sessions are imported with the next full history sync.';
       });
+      widget.onSaved?.call();
     } on ConnectionFailure catch (e) {
       if (mounted) {
         setState(() {
@@ -202,9 +223,11 @@ class _FlowHistoryLoginState extends ConsumerState<_FlowHistoryLogin> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'FLOW LOGIN (OPTIONAL)',
-            style: TextStyle(
+          Text(
+            widget.onSaved == null
+                ? 'FLOW LOGIN (OPTIONAL)'
+                : 'POLAR FLOW LOGIN',
+            style: const TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w700,
               letterSpacing: 1,
@@ -212,13 +235,17 @@ class _FlowHistoryLoginState extends ConsumerState<_FlowHistoryLogin> {
             ),
           ),
           const SizedBox(height: 8),
-          const Text(
-            'Save your Polar Flow login to send planned workouts and import '
-            'sessions older than 30 days. It stays in this device\'s keychain '
-            'and is sent only to Polar. Send a workout from its planner sheet, '
-            'then sync Polar Flow to your watch. Check that your Polar '
-            'heart-rate zones match Fjelia.',
-            style: TextStyle(fontSize: 12, height: 1.4, color: muted),
+          Text(
+            widget.onSaved == null
+                ? 'Save your Polar Flow login to send planned workouts and import '
+                      'sessions older than 30 days. It stays in this device\'s keychain '
+                      'and is sent only to Polar. Send a workout from its planner sheet, '
+                      'then sync Polar Flow to your watch. Check that your Polar '
+                      'heart-rate zones match Fjelia.'
+                : 'Sign in to send this workout to your Polar Flow calendar. '
+                      'Your login stays in this device\'s keychain and is sent '
+                      'only to Polar. After sending, sync Polar Flow to your watch.',
+            style: const TextStyle(fontSize: 12, height: 1.4, color: muted),
           ),
           const SizedBox(height: 12),
           if (_savedEmail != null) ...[
@@ -254,7 +281,11 @@ class _FlowHistoryLoginState extends ConsumerState<_FlowHistoryLogin> {
                         height: 18,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : const Text('Check and save'),
+                    : Text(
+                        widget.onSaved == null
+                            ? 'Check and save'
+                            : 'Sign in and send workout',
+                      ),
               ),
             ),
           ],

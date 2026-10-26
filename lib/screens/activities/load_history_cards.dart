@@ -97,15 +97,16 @@ class LoadHistoryCards extends ConsumerWidget {
                 ),
               );
             }
-            final recorded = weeks.fold<int>(
+            final zoneWeeks = weeks.reversed.take(5).toList();
+            final recorded = zoneWeeks.fold<int>(
               0,
               (sum, week) => sum + week.activities,
             );
-            final withZones = weeks.fold<int>(
+            final withZones = zoneWeeks.fold<int>(
               0,
               (sum, week) => sum + week.activitiesWithZones,
             );
-            final fromSamples = weeks.fold<int>(
+            final fromSamples = zoneWeeks.fold<int>(
               0,
               (sum, week) => sum + week.activitiesFromSamples,
             );
@@ -129,13 +130,13 @@ class LoadHistoryCards extends ConsumerWidget {
                   const Row(
                     children: [
                       Expanded(
-                        child: Text('12-WEEK HISTORY', style: loadCaption),
+                        child: Text('5-WEEK HISTORY', style: loadCaption),
                       ),
                       Text('EASY %', style: loadCaption),
                     ],
                   ),
                   const SizedBox(height: 6),
-                  for (final week in weeks.reversed)
+                  for (final week in zoneWeeks)
                     _ZoneWeekRow(
                       week: week,
                       selected: week == weeks.last,

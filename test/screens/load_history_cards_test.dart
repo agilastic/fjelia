@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -68,15 +69,19 @@ void main() {
       a('current', DateTime(2026, 10, 25), '{"zone2":90,"zone4":10}'),
       a('last', DateTime(2026, 10, 14), '{"zone2":70,"zone3":10,"zone4":20}'),
       a('missing', DateTime(2026, 10, 7), null),
+      a('older', DateTime(2026, 8, 26), '{"zone2":100}'),
     ]);
     await tester.pumpAndSettle();
-    for (final label in ['W43', 'W42', 'W41', 'W32']) {
+    for (final label in ['W43', 'W42', 'W41', 'W40', 'W39']) {
       expect(find.text(label), findsOneWidget);
     }
+    expect(find.text('5-WEEK HISTORY'), findsOneWidget);
+    expect(find.text('W38'), findsNothing);
+    expect(find.text('W32'), findsNothing);
     expect(find.text('90%'), findsOneWidget);
     expect(find.text('70%'), findsOneWidget);
     expect(find.text('No HR-zone data'), findsOneWidget);
-    expect(find.text('No activities synced'), findsNWidgets(9));
+    expect(find.text('No activities synced'), findsNWidgets(2));
     expect(find.text('2 of 3 activities with HR-zone data'), findsOneWidget);
     expect(tester.takeException(), isNull);
     final output = Platform.environment['FJELIA_UI_PREVIEW_DIR'];

@@ -143,17 +143,19 @@ void main() {
   tearDown(() => db.close());
 
   test(
-    'stored Flow login enables explicit push without automatic plan delivery',
+    'explicit upload checks Flow login without automatic plan delivery',
     () async {
       expect(await provider.isConnected(), isTrue);
       expect(await provider.mode(), DeliveryMode.push);
+      expect(await provider.needsFlowLogin, isFalse);
       final registry = WorkoutProviders([provider]);
       expect(await registry.connected(), [provider]);
       expect(await registry.pushTargets(), isEmpty);
       expect(flow.creates, 0);
       await service.clearFlowLogin();
       expect(await provider.isConnected(), isFalse);
-      expect(await provider.mode(), DeliveryMode.share);
+      expect(await provider.mode(), DeliveryMode.push);
+      expect(await provider.needsFlowLogin, isTrue);
     },
   );
 
@@ -181,7 +183,7 @@ void main() {
   test('disconnecting Polar also disables Flow workout delivery', () async {
     await service.disconnect();
     expect(await service.hasFlowLogin, isFalse);
-    expect(await provider.mode(), DeliveryMode.share);
+    expect(await provider.needsFlowLogin, isTrue);
     expect(await provider.isConnected(), isFalse);
   });
 

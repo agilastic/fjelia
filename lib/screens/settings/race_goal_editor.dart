@@ -1,7 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../providers/plan_goal_sync_provider.dart';
 import '../../providers/planner_providers.dart';
+import '../../providers/week_start_provider.dart';
 import '../../widgets/app_widgets.dart';
 import '../../services/race_goal_service.dart';
 import '../../db/database.dart' show RaceGoal;
@@ -361,6 +364,18 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                             final now = DateUtils.dateOnly(DateTime.now());
                             final chosen = await showDatePicker(
                               context: context,
+                              builder: (context, child) => Consumer(
+                                builder: (context, ref, _) =>
+                                    Localizations.override(
+                                      context: context,
+                                      delegates: [
+                                        _RaceDateLocalizationsDelegate(
+                                          ref.watch(weekStartsOnMondayProvider),
+                                        ),
+                                      ],
+                                      child: child!,
+                                    ),
+                              ),
                               initialDate:
                                   date ?? now.add(const Duration(days: 90)),
                               firstDate: date != null && date!.isBefore(now)
@@ -559,6 +574,34 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
       ),
     );
   }
+}
+
+/// Keep the app's English date labels and parsing, changing only week order.
+class _RaceDateLocalizations extends DefaultMaterialLocalizations {
+  const _RaceDateLocalizations(this.mondayFirst);
+
+  final bool mondayFirst;
+
+  @override
+  int get firstDayOfWeekIndex => mondayFirst ? 1 : 0;
+}
+
+class _RaceDateLocalizationsDelegate
+    extends LocalizationsDelegate<MaterialLocalizations> {
+  const _RaceDateLocalizationsDelegate(this.mondayFirst);
+
+  final bool mondayFirst;
+
+  @override
+  bool isSupported(Locale locale) => locale.languageCode == 'en';
+
+  @override
+  Future<MaterialLocalizations> load(Locale locale) =>
+      SynchronousFuture(_RaceDateLocalizations(mondayFirst));
+
+  @override
+  bool shouldReload(_RaceDateLocalizationsDelegate old) =>
+      old.mondayFirst != mondayFirst;
 }
 
 String _km(double km) => km == km.roundToDouble()

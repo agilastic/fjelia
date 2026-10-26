@@ -9,13 +9,12 @@ class PlanWeatherData {
   PlanWeatherData(this.result, DateTime now) {
     final sorted = result.points.toList()
       ..sort((a, b) => a.time.compareTo(b.time));
+    previewStart = DateTime(now.year, now.month, now.day, now.hour);
+    final previewEnd = previewStart.add(const Duration(hours: 24));
     upcoming = sorted
         .where(
-          (p) => !p.time.isBefore(
-            DateTime(now.year, now.month, now.day, now.hour),
-          ),
+          (p) => !p.time.isBefore(previewStart) && !p.time.isAfter(previewEnd),
         )
-        .take(7)
         .toList();
     current = sorted.isEmpty
         ? null
@@ -27,6 +26,7 @@ class PlanWeatherData {
           );
   }
   final OpenMeteoResult result;
+  late final DateTime previewStart;
   late final List<OpenMeteoPoint> upcoming;
   late final OpenMeteoPoint? current;
   double? get wetBulb => current == null

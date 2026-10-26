@@ -1,12 +1,16 @@
 import 'dart:convert';
 
-import 'package:drift/drift.dart' hide isNull;
+import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
+import 'package:fjelia/api/polar_flow_web_client.dart';
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/providers/coros_provider.dart';
 import 'package:fjelia/providers/database_provider.dart';
+import 'package:fjelia/providers/polar_provider.dart';
 import 'package:fjelia/providers/user_profile_provider.dart';
 import 'package:fjelia/services/coros_service.dart';
+import 'package:fjelia/services/polar_service.dart';
+import 'package:fjelia/widgets/move_workout_card.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:fjelia/providers/workout_destination_provider.dart';
@@ -18,6 +22,53 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+class _PolarFlowState {
+  final targets = <Map<String, dynamic>>[];
+  bool refuseUploads = false;
+}
+
+class _PolarFlow extends PolarFlowWebClient {
+  _PolarFlow(this.state)
+    : super(client: MockClient((_) async => http.Response('', 500)));
+
+  final _PolarFlowState state;
+
+  @override
+  Future<void> login(String email, String password) async {
+    if (email != 'me@example.com' || password != 'secret') {
+      throw PolarFlowException('Incorrect Polar e-mail or password.');
+    }
+  }
+
+  @override
+  Future<String> createTrainingTarget(Map<String, dynamic> target) async {
+    if (state.refuseUploads) throw PolarFlowException('Upload refused.');
+    state.targets.add(target);
+    return '123456';
+  }
+}
+
+class _PolarService extends PolarService {
+  _PolarService(super.db, this.flow)
+    : super(flowClientFactory: () => _PolarFlow(flow));
+
+  final _PolarFlowState flow;
+
+  @override
+  Future<void> saveFlowLogin(
+    String email,
+    String password, {
+    PolarFlowWebClient? client,
+  }) async {
+    final web = _PolarFlow(flow);
+    try {
+      await super.saveFlowLogin(email, password, client: web);
+    } finally {
+      web.close();
+    }
+  }
+}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -86,6 +137,8 @@ void main() {
     WidgetTester tester,
     WorkoutDestination destination, {
     List<(WorkoutDestination, WorkoutRoute)>? targets,
+    bool useConnectedTargets = false,
+    List<Override> overrides = const [],
   }) async {
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = const Size(393, 1400);
@@ -95,21 +148,24 @@ void main() {
       ProviderScope(
         overrides: [
           databaseProvider.overrideWithValue(db),
-          workoutTargetsProvider.overrideWith(
-            (ref) async => [
-              for (final (d, route)
-                  in targets ??
-                      [
-                        (
-                          destination,
-                          destination == WorkoutDestination.garmin
-                              ? WorkoutRoute.push
-                              : WorkoutRoute.share,
-                        ),
-                      ])
-                target(ref, d, route),
-            ],
-          ),
+          if (!useConnectedTargets)
+            workoutTargetsProvider.overrideWith(
+              (ref) async => [
+                for (final (d, route)
+                    in targets ??
+                        [
+                          (
+                            destination,
+                            destination == WorkoutDestination.garmin ||
+                                    destination == WorkoutDestination.polar
+                                ? WorkoutRoute.push
+                                : WorkoutRoute.share,
+                          ),
+                        ])
+                  target(ref, d, route),
+              ],
+            ),
+          ...overrides,
         ],
         child: MaterialApp(
           home: Scaffold(body: PlanSessionSheet(session: session)),
@@ -137,11 +193,7 @@ void main() {
     await close(tester);
   });
 
-  for (final d in [
-    WorkoutDestination.coros,
-    WorkoutDestination.polar,
-    WorkoutDestination.suunto,
-  ]) {
+  for (final d in [WorkoutDestination.coros, WorkoutDestination.suunto]) {
     testWidgets('${d.label}: the workout is shared, and the sheet says why', (
       tester,
     ) async {
@@ -169,11 +221,7 @@ void main() {
       );
       expect(find.text('Push to Garmin'), findsNothing);
       expect(
-        find.textContaining(
-          d == WorkoutDestination.polar
-              ? 'Save your Polar Flow login'
-              : '${d.label}\'s partner access',
-        ),
+        find.textContaining('${d.label}\'s partner access'),
         findsOneWidget,
       );
       await tester.drag(find.byType(Scrollable).first, const Offset(0, -150));
@@ -188,6 +236,167 @@ void main() {
       await close(tester);
     });
   }
+
+  group('Polar upload', () {
+    late _PolarFlowState flow;
+    late List<MethodCall> shared;
+
+    Future<void> showPolar(
+      WidgetTester tester, {
+      bool savedLogin = false,
+    }) async {
+      flow = _PolarFlowState();
+      shared = [];
+      FlutterSecureStorage.setMockInitialValues({
+        if (savedLogin) ...{
+          'polar_flow_email': 'me@example.com',
+          'polar_flow_password': 'secret',
+        },
+      });
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(
+            const MethodChannel('dev.fluttercommunity.plus/share'),
+            (call) async {
+              shared.add(call);
+              return 'dev.fluttercommunity.plus/share/unavailable';
+            },
+          );
+      addTearDown(
+        () => TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(
+              const MethodChannel('dev.fluttercommunity.plus/share'),
+              null,
+            ),
+      );
+      await show(
+        tester,
+        WorkoutDestination.polar,
+        useConnectedTargets: true,
+        overrides: [
+          polarServiceProvider.overrideWithValue(_PolarService(db, flow)),
+          connectedProvidersProvider.overrideWith(
+            (ref) async => [ref.watch(workoutProvidersProvider).byId('polar')!],
+          ),
+        ],
+      );
+      await tester.scrollUntilVisible(
+        find.text('Push to Polar'),
+        200,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.ensureVisible(find.text('Push to Polar'));
+      await tester.pumpAndSettle();
+      expect(find.text('Share workout for Polar'), findsNothing);
+      await tester.tap(find.text('Push to Polar'));
+      await tester.pump(const Duration(seconds: 2));
+      await tester.pumpAndSettle();
+    }
+
+    void expectUploaded() {
+      expect(flow.targets, hasLength(1));
+      final payload = flow.targets.single;
+      expect(payload['name'], 'Long Run');
+      expect(payload['type'], 'PHASED');
+      final exercise = (payload['exerciseTargets'] as List).single as Map;
+      expect(exercise['sportId'], 1);
+      final phase = (exercise['phases'] as List).single as Map;
+      expect(phase['duration'], '01:00:00');
+      expect(phase['intensityType'], 'HEART_RATE_ZONES');
+      expect(phase['lowerZone'], 2);
+      expect(phase['upperZone'], 2);
+      expect(shared, isEmpty);
+      expect(find.text('Workout sent to Polar'), findsOneWidget);
+    }
+
+    testWidgets('a saved Flow login sends the workout through the uploader', (
+      tester,
+    ) async {
+      await showPolar(tester, savedLogin: true);
+      expectUploaded();
+      expect(find.text('POLAR FLOW LOGIN'), findsNothing);
+      final delivery = await db.select(db.workoutDeliveries).getSingle();
+      expect(delivery.providerId, 'polar');
+      expect(delivery.sessionId, session.id);
+      expect(delivery.remoteId, '123456');
+      await close(tester);
+    });
+
+    testWidgets('without a Flow login, sign-in resumes the selected upload', (
+      tester,
+    ) async {
+      await showPolar(tester);
+      expect(find.text('POLAR FLOW LOGIN'), findsOneWidget);
+      expect(find.text('Sign in with Polar Flow'), findsNothing);
+      expect(flow.targets, isEmpty);
+      expect(shared, isEmpty);
+      await tester.enterText(find.byType(TextField).first, 'me@example.com');
+      await tester.enterText(find.byType(TextField).last, 'secret');
+      await tester.tap(find.text('Sign in and send workout'));
+      await tester.pump(const Duration(seconds: 2));
+      await tester.pumpAndSettle();
+      expectUploaded();
+      expect(find.text('POLAR FLOW LOGIN'), findsNothing);
+      await close(tester);
+    });
+
+    testWidgets('cancelling Flow sign-in neither uploads nor shares', (
+      tester,
+    ) async {
+      await showPolar(tester);
+      await tester.pageBack();
+      await tester.pump(const Duration(seconds: 2));
+      await tester.pumpAndSettle();
+      expect(flow.targets, isEmpty);
+      expect(shared, isEmpty);
+      expect(
+        await const FlutterSecureStorage().read(key: 'polar_flow_email'),
+        isNull,
+      );
+      expect(find.text('Workout sent to Polar'), findsNothing);
+      final button = tester.widget<OutlinedButton>(
+        find.widgetWithText(OutlinedButton, 'Push to Polar'),
+      );
+      expect(button.onPressed, isNotNull);
+      await close(tester);
+    });
+
+    testWidgets('a rejected Flow login stays on sign-in without sending', (
+      tester,
+    ) async {
+      await showPolar(tester);
+      await tester.enterText(find.byType(TextField).first, 'me@example.com');
+      await tester.enterText(find.byType(TextField).last, 'wrong');
+      await tester.tap(find.text('Sign in and send workout'));
+      await tester.pump(const Duration(seconds: 2));
+      await tester.pumpAndSettle();
+      expect(find.text('Incorrect Polar e-mail or password.'), findsOneWidget);
+      expect(find.text('POLAR FLOW LOGIN'), findsOneWidget);
+      expect(
+        await const FlutterSecureStorage().read(key: 'polar_flow_email'),
+        isNull,
+      );
+      expect(flow.targets, isEmpty);
+      expect(shared, isEmpty);
+      await close(tester);
+    });
+
+    testWidgets('a refused upload shows the error without sharing text', (
+      tester,
+    ) async {
+      await showPolar(tester);
+      flow.refuseUploads = true;
+      await tester.enterText(find.byType(TextField).first, 'me@example.com');
+      await tester.enterText(find.byType(TextField).last, 'secret');
+      await tester.tap(find.text('Sign in and send workout'));
+      await tester.pump(const Duration(seconds: 2));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Upload refused.'), findsOneWidget);
+      expect(find.text('Workout sent to Polar'), findsNothing);
+      expect(await db.select(db.workoutDeliveries).get(), isEmpty);
+      expect(shared, isEmpty);
+      await close(tester);
+    });
+  });
 
   group('COROS route', () {
     late List<http.Request> sent;
@@ -349,14 +558,14 @@ void main() {
         WorkoutDestination.coros,
       ], corosOn: true);
       expect(t.map((e) => e.route), [WorkoutRoute.push, WorkoutRoute.push]);
-      // The switch is for COROS only.
+      // Polar offers explicit upload even before its Flow login is saved.
       t = await targets([
         WorkoutDestination.polar,
         WorkoutDestination.suunto,
       ], corosOn: true);
-      expect(t.map((e) => e.route), [WorkoutRoute.share, WorkoutRoute.share]);
-      // A saved Flow login enables explicit Polar push, without enrolling
-      // Polar in automatic delivery of all upcoming plan sessions.
+      expect(t.map((e) => e.route), [WorkoutRoute.push, WorkoutRoute.share]);
+      // Saving a Flow login keeps Polar on explicit upload, without enrolling
+      // it in automatic delivery of all upcoming plan sessions.
       t = await targets(
         [WorkoutDestination.polar],
         corosOn: false,
@@ -379,7 +588,7 @@ void main() {
       targets: [
         (WorkoutDestination.garmin, WorkoutRoute.push),
         (WorkoutDestination.coros, WorkoutRoute.share),
-        (WorkoutDestination.polar, WorkoutRoute.share),
+        (WorkoutDestination.polar, WorkoutRoute.push),
       ],
     );
     await tester.scrollUntilVisible(
@@ -389,7 +598,7 @@ void main() {
     );
     expect(find.text('Push to Garmin'), findsOneWidget);
     expect(find.text('Share workout for COROS'), findsOneWidget);
-    expect(find.text('Share workout for Polar'), findsOneWidget);
+    expect(find.text('Push to Polar'), findsOneWidget);
     await close(tester);
   });
 
@@ -445,7 +654,8 @@ void main() {
     // The profile's default rest day is Sunday: find the next one.
     final today = DateUtils.dateOnly(DateTime.now());
     var sunday = today.add(const Duration(days: 1));
-    while (sunday.weekday != DateTime.sunday) {
+    while (sunday.weekday != DateTime.sunday ||
+        DateUtils.isSameDay(sunday, session.sessionDate)) {
       sunday = sunday.add(const Duration(days: 1));
     }
     String label(DateTime d) => RegExp.escape(
@@ -462,6 +672,15 @@ void main() {
     final before =
         (await db.select(db.trainingSessions).getSingle()).sessionDate;
     final chip = find.bySemanticsLabel(RegExp('^${label(sunday)}'));
+    await tester.scrollUntilVisible(
+      chip,
+      200,
+      scrollable: find.descendant(
+        of: find.byType(MoveWorkoutCard),
+        matching: find.byType(Scrollable),
+      ),
+    );
+    await tester.pumpAndSettle();
     await tester.tap(chip);
     await tester.pumpAndSettle();
     expect(find.text('Move anyway?'), findsOneWidget);

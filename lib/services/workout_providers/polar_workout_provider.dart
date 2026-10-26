@@ -37,10 +37,8 @@ class PolarWorkoutProvider extends WorkoutProvider {
   @override
   bool get autoDeliver => false;
 
-  @override
-  String get shareNote =>
-      'Save your Polar Flow login in Settings, Connections, Polar to send '
-      'planned workouts. Until then, share this workout as text.';
+  /// Uploads require the Flow login, even when AccessLink is connected.
+  Future<bool> get needsFlowLogin async => !await _service.hasFlowLogin;
 
   @override
   String get pushNote =>
@@ -53,8 +51,7 @@ class PolarWorkoutProvider extends WorkoutProvider {
       await connected() || await _service.hasFlowLogin;
 
   @override
-  Future<DeliveryMode> mode() async =>
-      await _service.hasFlowLogin ? DeliveryMode.push : DeliveryMode.share;
+  Future<DeliveryMode> mode() async => DeliveryMode.push;
 
   /// Serializes taps and cleanup so two simultaneous sends cannot create two
   /// targets before either has saved its id.

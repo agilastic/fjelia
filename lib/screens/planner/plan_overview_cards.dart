@@ -1,5 +1,6 @@
 import '../../providers/plan_weather_provider.dart';
 import '../../widgets/weather_visuals.dart';
+import '../../widgets/weather_forecast_preview.dart';
 import '../weather/weather_screen.dart';
 import '../../providers/upcoming_plan_provider.dart';
 import '../../models/garmin_data.dart';
@@ -66,44 +67,64 @@ class PlanWeatherStrip extends ConsumerWidget {
               ],
             );
           }
-          return Row(
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Icon(
-                weatherIcon(current.weatherCode),
-                size: 22,
-                color: Colors.lightBlue,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                '${current.temperatureC.round()}°',
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(width: 6),
-              Text(
-                '${current.humidityPct.round()}%',
-                style: const TextStyle(fontSize: 10, color: muted),
-              ),
-              const SizedBox(width: 12),
-              for (final p in data!.upcoming.skip(1))
-                Expanded(
-                  child: Column(
-                    children: [
-                      Text(
-                        '${p.temperatureC.round()}°',
-                        style: const TextStyle(fontSize: 11),
-                      ),
-                      const SizedBox(height: 3),
-                      Text(
-                        DateFormat('HH').format(p.time),
-                        style: const TextStyle(fontSize: 9, color: muted),
-                      ),
-                    ],
+              Row(
+                children: [
+                  Icon(
+                    weatherIcon(current.weatherCode),
+                    size: 18,
+                    color: Colors.lightBlue,
                   ),
-                ),
-              const Icon(Icons.chevron_right, size: 16, color: muted),
+                  const SizedBox(width: 8),
+                  const Expanded(
+                    child: Text(
+                      'WEATHER FORECAST',
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    '${current.temperatureC.round()}°',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    '${current.humidityPct.round()}%',
+                    style: const TextStyle(fontSize: 10, color: muted),
+                  ),
+                  const SizedBox(width: 6),
+                  const Icon(Icons.chevron_right, size: 16, color: muted),
+                ],
+              ),
+              const SizedBox(height: 6),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Next 24 hours',
+                    style: TextStyle(fontSize: 10, color: muted),
+                  ),
+                  Text(
+                    'Temperature °C',
+                    style: TextStyle(
+                      fontSize: 9,
+                      color: Colors.deepOrangeAccent,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              WeatherForecastPreview(
+                points: data!.upcoming,
+                start: data.previewStart,
+              ),
             ],
           );
         },
