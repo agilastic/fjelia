@@ -12,6 +12,8 @@ import '../models/device_hr_zones.dart';
 import 'device_zone_store.dart';
 import 'source_priority_service.dart';
 import 'tcx_parser.dart';
+import 'fit_activity_data.dart';
+import 'polar_exercise_data.dart';
 import '../utils/log.dart';
 import 'oauth_token_store.dart';
 import 'open_meteo_client.dart' show dayKey;
@@ -136,10 +138,11 @@ class PolarService {
       final today = DateTime.now();
       final end = DateTime(today.year, today.month, today.day);
       final begin = end.subtract(Duration(days: days));
-      final existingIds = {
+      final existing = {
         for (final a in await _db.getActivitiesInRange(days + 7))
-          if (a.source == _source) a.activityId,
+          if (a.source == _source) a.activityId: a,
       };
+      final processed = <String>{};
       // One diary request per calendar month keeps the answers small.
       var cursor = DateTime(begin.year, begin.month);
       while (!cursor.isAfter(end)) {
@@ -151,15 +154,41 @@ class PolarService {
         onProgress?.call('Polar Flow: ${from.year}-${from.month}');
         final list = await web.workouts(from, to);
         for (final w in list) {
-          if (existingIds.contains('polar_flow_${w.id}')) continue;
+          final id = 'polar_flow_${w.id}';
+          if (!processed.add(id)) continue;
+          // Old Flow imports stored neither speed nor altitude samples. Refill
+          // those rows once, without requiring the user to delete a workout.
+          if (existing[id]?.metricsJson != null) continue;
           if ((w.durationSeconds ?? 120) < 60) continue; // recording noise
           try {
             final xml = await web.exportTcx(w);
             final session = parseTcx(xml, source: _source);
             if (session == null || session.durationSeconds < 60) continue;
-            if (await _saveFlowSession(w, session)) saved++;
-          } on PolarFlowException catch (e) {
-            log('[Polar] Flow session ${w.id} skipped: $e');
+            FitActivityData? fit;
+            Map<String, dynamic>? summary;
+            try {
+              fit = parseFitActivity(await web.exportFit(w));
+            } catch (error) {
+              log('[Polar] Flow FIT ${w.id} unavailable: ${error.runtimeType}');
+            }
+            try {
+              final response = await web.trainingSummary(w);
+              if ('${response['id']}' == w.id) summary = response;
+            } catch (error) {
+              log(
+                '[Polar] Flow summary ${w.id} unavailable: ${error.runtimeType}',
+              );
+            }
+            if (await _saveFlowSession(
+              w,
+              session,
+              fit: fit,
+              summary: summary,
+            )) {
+              saved++;
+            }
+          } catch (error) {
+            log('[Polar] Flow session ${w.id} skipped: ${error.runtimeType}');
           }
         }
         cursor = next;
@@ -171,9 +200,14 @@ class PolarService {
     return saved;
   }
 
-  Future<bool> _saveFlowSession(PolarFlowWorkout w, TcxSession t) async {
+  Future<bool> _saveFlowSession(
+    PolarFlowWorkout w,
+    TcxSession t, {
+    FitActivityData? fit,
+    Map<String, dynamic>? summary,
+  }) async {
     final id = 'polar_flow_${w.id}';
-    final sameDay = await _db.getActivitiesForDate(t.start);
+    final sameDay = await _db.getActivitiesForDate(t.start.toLocal());
     final priority = await priorityForGroup(SourceGroup.activity);
     final duplicate = sameDay.where(
       (a) =>
@@ -186,23 +220,78 @@ class PolarService {
         !shouldOverwrite(duplicate.first.source, _source, priority)) {
       return false;
     }
-    await _db.saveHeartRateSamples(t.heartRates);
+    // Reject an export for a different recording instead of combining its
+    // totals and samples with this TCX session.
+    if (fit != null &&
+        ((fit.start != null &&
+                fit.start!.difference(t.start).inSeconds.abs() > 120) ||
+            (fit.timerSeconds != null &&
+                (fit.timerSeconds! - t.durationSeconds).abs() >
+                    t.durationSeconds * .05))) {
+      fit = null;
+    }
+    final samples = t.samples.any((sample) => sample['spd'] != null)
+        ? t.samples
+        : fit?.samples.isNotEmpty == true
+        ? fit!.samples
+        : t.samples;
+    await _db.saveHeartRateSamples(
+      t.heartRates.isNotEmpty
+          ? t.heartRates
+          : parseTimedHeartRates(samples, _source),
+    );
     final type = _mapSport(w.sport ?? t.sport);
+    final existing = await _db.getActivityById(id);
+    final sameRecording =
+        existing != null &&
+        existing.startDate.isAtSameMomentAs(t.start) &&
+        existing.durationSeconds == t.durationSeconds;
+    Value<T?> optional<T>(T? value) => value != null
+        ? Value<T?>(value)
+        : sameRecording
+        ? Value<T?>.absent()
+        : Value<T?>(null);
+    final pro = summary?['trainingLoadPro'];
+    final cardioLoad = pro is Map && pro['valid'] != false
+        ? _flowNumber(pro['cardioLoadValue'])
+        : null;
+    final moving = fit?.movingSeconds;
+    final route = t.route.isNotEmpty ? t.route : fit?.route;
     final companion = ActivityRecordsCompanion(
       activityId: Value(id),
       name: Value('Polar $type'),
       type: Value(type),
       startDate: Value(t.start),
       durationSeconds: Value(t.durationSeconds),
-      distanceMeters: Value(t.distanceMeters ?? w.distanceMeters),
-      avgHeartRate: Value(t.avgHeartRate),
-      maxHeartRate: Value(t.maxHeartRate),
-      gpxJson: t.route.isEmpty
-          ? const Value.absent()
-          : Value(jsonEncode(t.route)),
+      distanceMeters: optional(
+        t.distanceMeters ?? fit?.distanceMeters ?? w.distanceMeters,
+      ),
+      avgHeartRate: optional(
+        _flowNumber(summary?['hrAverage']) ?? t.avgHeartRate,
+      ),
+      maxHeartRate: optional(_flowNumber(summary?['hrMax']) ?? t.maxHeartRate),
+      trainingLoad: optional(
+        cardioLoad ?? _flowNumber(summary?['trainingLoad']),
+      ),
+      avgWatts: optional(fit?.avgPower ?? _flowWeightedStat(summary, 'POWER')),
+      avgRunCadence: optional(
+        type == 'running' ? _flowWeightedStat(summary, 'CADENCE') : null,
+      ),
+      totalElevation: optional(
+        fit?.ascentMeters ?? _flowTotal(summary, 'ascent'),
+      ),
+      movingDurationSeconds: optional(
+        moving != null && moving >= 0 && moving <= t.durationSeconds + 1
+            ? moving.round()
+            : null,
+      ),
+      metricsJson: optional(samples.isEmpty ? null : jsonEncode(samples)),
+      gpxJson: optional(
+        route == null || route.isEmpty ? null : jsonEncode(route),
+      ),
       source: const Value(_source),
     );
-    if (await _db.getActivityById(id) != null) {
+    if (existing != null) {
       await (_db.update(
         _db.activityRecords,
       )..where((t) => t.activityId.equals(id))).write(companion);
@@ -210,6 +299,47 @@ class PolarService {
       await _db.into(_db.activityRecords).insert(companion);
     }
     return true;
+  }
+
+  static double? _flowNumber(Object? raw) =>
+      raw is num && raw.isFinite && raw >= 0 ? raw.toDouble() : null;
+
+  static List<Map> _flowExercises(Map<String, dynamic>? summary) {
+    final exercises = summary?['exercises'];
+    return switch (exercises) {
+      Map values => values.values.whereType<Map>().toList(),
+      List values => values.whereType<Map>().toList(),
+      _ => const [],
+    };
+  }
+
+  static double? _flowTotal(Map<String, dynamic>? summary, String field) {
+    final exercises = _flowExercises(summary);
+    if (exercises.isEmpty) return null;
+    var total = 0.0;
+    for (final exercise in exercises) {
+      final value = _flowNumber(exercise[field]);
+      if (value == null) return null;
+      total += value;
+    }
+    return total;
+  }
+
+  static double? _flowWeightedStat(Map<String, dynamic>? summary, String stat) {
+    final exercises = _flowExercises(summary);
+    if (exercises.isEmpty) return null;
+    var weighted = 0.0, seconds = 0.0;
+    for (final exercise in exercises) {
+      final stats = exercise['trainingStatistic'];
+      final values = stats is Map ? stats[stat] : null;
+      final avg = values is Map ? _flowNumber(values['avg']) : null;
+      final duration = exercise['duration'];
+      final time = duration is String ? parsePolarDuration(duration) : 0;
+      if (avg == null || time <= 0) return null;
+      weighted += avg * time;
+      seconds += time;
+    }
+    return seconds > 0 ? weighted / seconds : null;
   }
 
   /// Exchanges the OAuth code and registers the user with AccessLink.
@@ -383,12 +513,14 @@ class PolarService {
 
   /// AccessLink returns lists wrapped under varying keys.
   static List<Map<String, dynamic>> _listFrom(Object? decoded, String key) {
-    if (decoded is List) return decoded.cast<Map<String, dynamic>>();
+    if (decoded is List) {
+      return decoded.whereType<Map<String, dynamic>>().toList();
+    }
     if (decoded is Map) {
       final v =
           decoded[key] ??
           (decoded.values.isNotEmpty ? decoded.values.first : null);
-      if (v is List) return v.cast<Map<String, dynamic>>();
+      if (v is List) return v.whereType<Map<String, dynamic>>().toList();
     }
     return const [];
   }
@@ -396,9 +528,8 @@ class PolarService {
   Future<void> _syncExercises(PolarSyncResult result) async {
     try {
       // samples/zones: HR samples and the user's Polar HR zones per exercise.
-      final uri = Uri.parse(
-        '$_api/exercises',
-      ).replace(queryParameters: {'samples': 'true', 'zones': 'true'});
+      final uri = Uri.parse('$_api/exercises')
+          .replace(queryParameters: {'samples': 'true', 'zones': 'true'});
       log('[Polar] GET $uri');
       final response = await _http
           .get(uri, headers: await _headers())
@@ -425,7 +556,12 @@ class PolarService {
       final items = _listFrom(jsonDecode(body), 'exercises');
       log('[Polar] /exercises parsed: ${items.length} items');
       for (final e in items) {
-        if (await _saveExercise(e)) result.exercises++;
+        try {
+          if (await _saveExercise(e)) result.exercises++;
+        } catch (error) {
+          result.error ??= 'Some Polar exercises could not be imported.';
+          log('[Polar] exercise ${e['id']} skipped: ${error.runtimeType}');
+        }
       }
     } catch (e) {
       result.error = '/exercises: $e';
@@ -433,21 +569,17 @@ class PolarService {
   }
 
   Future<bool> _saveExercise(Map<String, dynamic> e) async {
-    final id = 'polar_${e['id']}';
-    final start = DateTime.tryParse(
-      (e['start_time'] ?? e['start-time'] ?? '') as String,
-    );
-    if (start == null) return false;
-    final duration = _parseDuration(e['duration'] as String? ?? '');
-    final sport = (e['sport'] ?? 'GENERIC') as String;
-    final distance = (e['distance'] as num?)?.toDouble();
-    final hr = (e['heart_rate'] ?? e['heart-rate']) as Map<String, dynamic>?;
-    final avgHr = (hr?['average'] as num?)?.toDouble();
-    final maxHr = (hr?['maximum'] as num?)?.toDouble();
+    final exerciseId = '${e['id'] ?? ''}';
+    final summary = PolarExerciseData.parse(e);
+    if (exerciseId.isEmpty || summary == null) return false;
+    final id = 'polar_$exerciseId';
+    final start = summary.start;
+    final duration = summary.durationSeconds;
+    final sport = '${e['detailed_sport_info'] ?? e['sport'] ?? 'GENERIC'}';
 
     final existing = await _db.getActivityById(id);
     // Skip if the same workout from a higher-priority source is stored.
-    final sameDay = await _db.getActivitiesForDate(start);
+    final sameDay = await _db.getActivitiesForDate(start.toLocal());
     final priority = await priorityForGroup(SourceGroup.activity);
     final duplicate = sameDay.where(
       (a) =>
@@ -460,12 +592,44 @@ class PolarService {
       return false;
     }
 
+    final fit = await _fetchExerciseFit(exerciseId);
+    final sameRecording =
+        existing != null &&
+        existing.startDate.isAtSameMomentAs(start) &&
+        existing.durationSeconds == duration;
+    Object? previousSamples;
+    if (sameRecording && existing.metricsJson != null) {
+      try {
+        previousSamples = jsonDecode(existing.metricsJson!);
+      } on FormatException {
+        // Fresh valid samples can repair an old unreadable column.
+      }
+    }
+    final data =
+        PolarExerciseData.parse(
+          e,
+          fit: fit,
+          previousSamples: previousSamples,
+        ) ??
+        summary;
+    final heartRates = parseTimedHeartRates(data.samples, _source);
     await _db.saveHeartRateSamples(
-      parseTimedHeartRates(e['samples'] ?? e['heart_rate_samples'], _source),
+      heartRates.isNotEmpty
+          ? heartRates
+          : parseTimedHeartRates(
+              e['samples'] ?? e['heart_rate_samples'],
+              _source,
+            ),
     );
-    final gpx = e['has_route'] == true
-        ? await _fetchGpxJson('${e['id']}')
-        : null;
+    String? gpx;
+    if (fit != null && fit.route.isNotEmpty) {
+      gpx = jsonEncode(fit.route);
+    } else if ((e['has_route'] ?? e['has-route']) == true &&
+        (!sameRecording ||
+            existing.gpxJson == null ||
+            existing.gpxJson!.trim().isEmpty)) {
+      gpx = await _fetchGpxJson(exerciseId);
+    }
     final zones = parseHeartRateZones(
       e['heart_rate_zones'] ?? e['heart-rate-zones'],
     );
@@ -481,19 +645,35 @@ class PolarService {
         ),
       ], merge: true);
     }
+    // Missing enrichment can be kept for an unchanged recording. A trimmed or
+    // moved recording must not inherit the old duration's moving time/metrics.
+    Value<T?> optional<T>(T? value) => value != null
+        ? Value<T?>(value)
+        : sameRecording
+        ? Value<T?>.absent()
+        : Value<T?>(null);
     final companion = ActivityRecordsCompanion(
       activityId: Value(id),
       name: Value('Polar ${_mapSport(sport)}'),
       type: Value(_mapSport(sport)),
-      startDate: Value(start),
-      durationSeconds: Value(duration),
-      distanceMeters: Value(distance),
-      avgHeartRate: Value(avgHr),
-      maxHeartRate: Value(maxHr),
-      hrZonesJson: zones == null || zones.percent.isEmpty
-          ? const Value.absent()
-          : Value(jsonEncode(zones.percent)),
-      gpxJson: Value(gpx),
+      startDate: Value(data.start),
+      durationSeconds: Value(data.durationSeconds),
+      distanceMeters: optional(data.distanceMeters),
+      avgHeartRate: optional(data.avgHeartRate),
+      maxHeartRate: optional(data.maxHeartRate),
+      trainingLoad: optional(data.trainingLoad),
+      avgWatts: optional(data.avgPower),
+      totalElevation: optional(data.ascentMeters),
+      movingDurationSeconds: optional(data.movingSeconds),
+      metricsJson: optional(
+        data.samples.isEmpty ? null : jsonEncode(data.samples),
+      ),
+      hrZonesJson: optional(
+        zones == null || zones.percent.isEmpty
+            ? null
+            : jsonEncode(zones.percent),
+      ),
+      gpxJson: optional(gpx),
       source: const Value(_source),
     );
     if (existing != null) {
@@ -520,6 +700,29 @@ class PolarService {
     if (s.contains('ROWING')) return 'rowing';
     if (s.contains('SKI')) return 'skiing';
     return 'other';
+  }
+
+  Future<FitActivityData?> _fetchExerciseFit(String exerciseId) async {
+    try {
+      final uri = Uri.parse(
+        '$_api/exercises/${Uri.encodeComponent(exerciseId)}/fit',
+      );
+      final headers = Map<String, String>.of(await _headers())
+        ..['Accept'] = '*/*';
+      final response = await _http.get(uri, headers: headers).timeout(_timeout);
+      if (response.statusCode != 200) {
+        log('[Polar] FIT $exerciseId unavailable: HTTP ${response.statusCode}');
+        return null;
+      }
+      final data = parseFitActivity(response.bodyBytes);
+      if (data == null) log('[Polar] FIT $exerciseId could not be decoded');
+      return data;
+    } catch (e) {
+      log(
+        '[Polar] FIT enrichment unavailable for $exerciseId: ${e.runtimeType}',
+      );
+      return null;
+    }
   }
 
   Future<String?> _fetchGpxJson(String exerciseId) async {
@@ -581,16 +784,7 @@ class PolarService {
     );
   }
 
-  static int _parseDuration(String iso) {
-    final m = RegExp(
-      r'PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+(?:\.\d+)?)S)?',
-    ).firstMatch(iso);
-    if (m == null) return 0;
-    final h = int.tryParse(m.group(1) ?? '0') ?? 0;
-    final min = int.tryParse(m.group(2) ?? '0') ?? 0;
-    final s = double.tryParse(m.group(3) ?? '0') ?? 0.0;
-    return h * 3600 + min * 60 + s.round();
-  }
+  static int _parseDuration(String iso) => parsePolarDuration(iso);
 
   Future<void> _syncSleep(
     PolarSyncResult result,
@@ -671,9 +865,8 @@ class PolarService {
     if (hrSamples is Map && start != null) {
       final timed = <TimedHeartRate>[];
       for (final e in hrSamples.entries) {
-        final clock = RegExp(
-          r'^(\d{2}):(\d{2})(?::(\d{2}))?$',
-        ).firstMatch('${e.key}');
+        final clock = RegExp(r'^(\d{2}):(\d{2})(?::(\d{2}))?$')
+            .firstMatch('${e.key}');
         var timestamp = heartRateTimestamp(e.key);
         if (timestamp == null && clock != null) {
           timestamp = DateTime(
@@ -817,9 +1010,8 @@ class PolarService {
     DateTime to,
   ) async {
     try {
-      final uri = Uri.parse(
-        '$_api/users/activities',
-      ).replace(queryParameters: {'from': dayKey(from), 'to': dayKey(to)});
+      final uri = Uri.parse('$_api/users/activities')
+          .replace(queryParameters: {'from': dayKey(from), 'to': dayKey(to)});
       log('[Polar] GET $uri');
       final response = await _http
           .get(uri, headers: await _headers())

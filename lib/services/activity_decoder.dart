@@ -36,21 +36,24 @@ GarminActivity decodeActivityRecord(ActivityRecord r) {
             .toList();
 
   final samplesJson = decodeStoredJson(r.metricsJson, what: 'samples of $id');
+  var lastDistance = 0.0;
   final samples = samplesJson is! List
       ? <ActivitySample>[]
-      : samplesJson
-            .cast<Map<String, dynamic>>()
-            .map(
-              (s) => ActivitySample(
-                distanceMeters: (s['d'] as num).toDouble(),
-                timestamp: heartRateTimestamp(s['t']),
-                heartRate: (s['hr'] as num?)?.toDouble(),
-                speed: (s['spd'] as num?)?.toDouble(),
-                elevation: (s['ele'] as num?)?.toDouble(),
-                power: (s['w'] as num?)?.toDouble(),
-              ),
-            )
-            .toList();
+      : samplesJson.cast<Map<String, dynamic>>().map((s) {
+          final distance = s['d'];
+          if (distance is num && distance.isFinite && distance >= 0) {
+            lastDistance = distance.toDouble();
+          }
+          return ActivitySample(
+            distanceMeters: lastDistance,
+            timestamp: heartRateTimestamp(s['t']),
+            heartRate: (s['hr'] as num?)?.toDouble(),
+            speed: (s['spd'] as num?)?.toDouble(),
+            elevation: (s['ele'] as num?)?.toDouble(),
+            power: (s['w'] as num?)?.toDouble(),
+            cadence: (s['cad'] as num?)?.toDouble(),
+          );
+        }).toList();
 
   final zonesJson = decodeStoredJson(r.hrZonesJson, what: 'HR zones of $id');
   final hrZones = zonesJson is! Map
@@ -95,32 +98,40 @@ GarminActivity decodeActivityRecord(ActivityRecord r) {
     vo2max: r.vo2maxActivity,
     movingDuration: r.movingDurationSeconds != null
         ? Duration(seconds: r.movingDurationSeconds!)
-        : _movingDurationFromSamples(samples),
+        : _movingDurationFromSamples(samples, r.durationSeconds),
   );
 }
 
-/// Moving time from distance/speed samples. Time per step is Δd / speed
-/// (capped at 60 s); a hysteresis of 3 samples below 0.3 m/s / at or above
-/// 0.5 m/s switches between stopped and moving.
-Duration? _movingDurationFromSamples(List<ActivitySample> samples) {
-  if (samples.length < 2) return null;
-  var prevDist = samples.first.distanceMeters;
-  var moving = true;
+/// Estimated moving time from observed speed intervals. A few samples cannot
+/// represent a whole workout: require at least 90% recording-time coverage.
+/// Untimed legacy summaries use distance/speed only with equivalent coverage.
+Duration? _movingDurationFromSamples(
+  List<ActivitySample> samples,
+  int durationSeconds,
+) {
+  final speeds = samples
+      .where((s) => s.speed != null && s.speed!.isFinite && s.speed! >= 0)
+      .toList();
+  if (speeds.length < 2 || durationSeconds <= 0) return null;
+  final timed = speeds.every((s) => s.timestamp != null);
+  if (!timed && speeds.any((s) => s.timestamp != null)) return null;
+  var moving = speeds.first.speed! >= 0.5;
   var slowCount = 0;
   var fastCount = 0;
-  var total = 0.0;
+  var total = 0.0, coverage = 0.0;
 
-  for (var i = 1; i < samples.length; i++) {
-    final s = samples[i];
-    final delta = s.distanceMeters - prevDist;
-    prevDist = s.distanceMeters;
-    final speed = s.speed;
-    if (speed == null) continue;
-
-    var dt = 0.0;
-    if (speed > 0.05 && delta > 0) {
-      dt = (delta / speed).clamp(0.0, 60.0);
-    }
+  for (var i = 1; i < speeds.length; i++) {
+    final s = speeds[i], previous = speeds[i - 1];
+    final speed = s.speed!;
+    final delta = s.distanceMeters - previous.distanceMeters;
+    final dt = timed
+        ? s.timestamp!.difference(previous.timestamp!).inMilliseconds / 1000
+        : speed > 0.05 && delta > 0
+        ? delta / speed
+        : 0.0;
+    if (dt < 0) return null;
+    if (!dt.isFinite || dt <= 0 || dt > 60) continue;
+    coverage += dt;
 
     if (moving) {
       if (speed < 0.3) {
@@ -145,8 +156,8 @@ Duration? _movingDurationFromSamples(List<ActivitySample> samples) {
     }
     if (moving) total += dt;
   }
-  if (total <= 0) return null;
-  return Duration(seconds: total.round());
+  if (coverage < durationSeconds * .9) return null;
+  return Duration(seconds: total.round().clamp(0, durationSeconds));
 }
 
 double? _avgFromSamples(List<ActivitySample> samples) {

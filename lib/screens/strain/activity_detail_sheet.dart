@@ -27,7 +27,7 @@ class ActivityDetailSheet extends ConsumerWidget {
   String duration(Duration? d) => d == null
       ? '—'
       : d.inHours > 0
-      ? '${d.inHours}h ${d.inMinutes % 60}m'
+      ? '${d.inHours}h ${d.inMinutes % 60}m${d.inSeconds % 60 == 0 ? '' : ' ${d.inSeconds % 60}s'}'
       : '${d.inMinutes}m ${d.inSeconds % 60}s';
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -37,14 +37,17 @@ class ActivityDetailSheet extends ConsumerWidget {
     final pace = km > 0 ? a.duration.inSeconds / km : null;
     final cells = <(String, String)>[
       ('Duration', duration(a.duration)),
-      ('Active', duration(a.movingDuration)),
+      (
+        'Active',
+        '${a.movingDuration != null && activity.movingDurationSeconds == null ? '~' : ''}${duration(a.movingDuration)}',
+      ),
       ('Distance', '${valueText(a.distanceMeters == null ? null : km, 2)} km'),
       (
         running ? 'Avg pace' : 'Avg speed',
         running
             ? pace == null
                   ? '—'
-                  : '${pace ~/ 60}:${(pace % 60).floor().toString().padLeft(2, '0')} /km'
+                  : '${pace.round() ~/ 60}:${(pace.round() % 60).toString().padLeft(2, '0')} /km'
             : '${valueText(a.duration.inSeconds > 0 && km > 0 ? km * 3600 / a.duration.inSeconds : null, 1)} km/h',
       ),
       ('Avg HR', '${valueText(a.avgHeartRate)} bpm'),

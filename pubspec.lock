@@ -417,6 +417,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.3+6"
+  fit_sdk:
+    dependency: "direct main"
+    description:
+      name: fit_sdk
+      sha256: "3f286ad4d946ffbc2d6e4b5188ad69b012fb0757360c5152cf99e871a40b5184"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.0"
   fixnum:
     dependency: transitive
     description:
@@ -1632,7 +1640,7 @@ packages:
     source: hosted
     version: "1.1.0"
   xml:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: xml
       sha256: "67f0aff7be013d107995e9b75bf4e7f2c3ef2dfdb2c8e68024bba0a7fd5756a4"

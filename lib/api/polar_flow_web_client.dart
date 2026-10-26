@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
 
@@ -78,11 +79,12 @@ class PolarFlowWebClient {
   Future<void> login(String email, String password) async {
     _jar.clear();
     _signedIn = false;
+    _userId = null;
 
     final page = await _get(Uri.parse('$_flow/login'));
-    final csrf = RegExp(
-      r'name="csrfToken"\s+value="([^"]+)"',
-    ).firstMatch(page.body)?.group(1);
+    final csrf = RegExp(r'name="csrfToken"\s+value="([^"]+)"')
+        .firstMatch(page.body)
+        ?.group(1);
     if (csrf == null) {
       throw PolarFlowException('Polar Flow login page not recognised.');
     }
@@ -95,9 +97,8 @@ class PolarFlowWebClient {
     // Flow hands over to the Polar account service; this lands on its login
     // page and sets the XSRF cookie.
     final sso = await _get(
-      Uri.parse(
-        '$_flow/flowSso/login',
-      ).replace(queryParameters: {'csrfToken': csrf, 'returnUrl': '/'}),
+      Uri.parse('$_flow/flowSso/login')
+          .replace(queryParameters: {'csrfToken': csrf, 'returnUrl': '/'}),
     );
     final loginUri = sso.finalUri;
     if (loginUri.host != 'auth.polar.com') {
@@ -301,8 +302,11 @@ class PolarFlowWebClient {
           '${raw['id'] ?? raw['trainingSessionId'] ?? raw['training-session-id'] ?? ''}';
       if (id.isEmpty) continue;
       final start = _parseTimestamp(
-        raw['start_time'] ?? raw['start-time'] ?? raw['startTime'] ??
-            raw['start'] ?? raw['datetime'],
+        raw['start_time'] ??
+            raw['start-time'] ??
+            raw['startTime'] ??
+            raw['start'] ??
+            raw['datetime'],
       );
       if (start == null) continue;
       out.add(
@@ -324,7 +328,13 @@ class PolarFlowWebClient {
   /// The sport of a v2 session: `sport` / `sport_id` (or its camelCase and
   /// `type` spellings) as a string; numeric ids are stringified.
   static String? _v2Sport(Map raw) {
-    for (final k in const ['sport', 'sport_name', 'sportName', 'sport_id', 'type']) {
+    for (final k in const [
+      'sport',
+      'sport_name',
+      'sportName',
+      'sport_id',
+      'type',
+    ]) {
       final v = raw[k];
       if (v is String && v.isNotEmpty) return v;
       if (v is num) return v.toString();
@@ -349,7 +359,9 @@ class PolarFlowWebClient {
     if (v is num) {
       // epoch milliseconds or seconds
       if (v > 1e12) return DateTime.fromMillisecondsSinceEpoch(v.toInt());
-      if (v > 1e9) return DateTime.fromMillisecondsSinceEpoch((v * 1000).round());
+      if (v > 1e9) {
+        return DateTime.fromMillisecondsSinceEpoch((v * 1000).round());
+      }
       return null;
     }
     if (v is String) return DateTime.tryParse(v);
@@ -390,11 +402,46 @@ class PolarFlowWebClient {
   /// The session as TCX (heart rate, laps and, if recorded, the route).
   Future<String> exportTcx(PolarFlowWorkout w) async {
     if (!_signedIn) throw PolarFlowException('Not signed in to Polar Flow.');
-    final res = await _get(Uri.parse('$_flow${w.url}/export/tcx/false'));
+    final res = await _get(
+      Uri.parse('$_flow/api/export/training/tcx/${Uri.encodeComponent(w.id)}')
+          .replace(queryParameters: {'compress': 'false'}),
+    );
     if (!res.body.contains('<TrainingCenterDatabase')) {
       throw PolarFlowException('Polar export for ${w.id} was not TCX.');
     }
     return res.body;
+  }
+
+  /// The same FIT export offered by Flow's analysis page. Keep the bytes:
+  /// converting this response to text corrupts the optional activity data.
+  Future<Uint8List> exportFit(PolarFlowWorkout w) async {
+    if (!_signedIn) throw PolarFlowException('Not signed in to Polar Flow.');
+    final res = await _get(
+      Uri.parse('$_flow/api/export/training/fit/${Uri.encodeComponent(w.id)}'),
+      headers: {'Accept': '*/*'},
+    );
+    return res.bytes;
+  }
+
+  /// Source totals such as Cardio Load, which TCX does not contain.
+  Future<Map<String, dynamic>> trainingSummary(PolarFlowWorkout w) async {
+    if (!_signedIn) throw PolarFlowException('Not signed in to Polar Flow.');
+    final res = await _get(
+      Uri.parse(
+        '$_flow/api/training/analysis/${Uri.encodeComponent(w.id)}/summary',
+      ),
+      headers: {
+        'Accept': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+      },
+    );
+    try {
+      final json = jsonDecode(res.body);
+      if (json is Map<String, dynamic>) return json;
+    } on FormatException {
+      // A login page or changed endpoint is not an activity summary.
+    }
+    throw PolarFlowException('Polar summary for ${w.id} was not JSON.');
   }
 
   /// Parses the diary JSON. Tolerant: unknown fields are ignored, entries that
@@ -452,6 +499,7 @@ class PolarFlowWebClient {
     var currentMethod = method;
     var current = uri;
     var currentBody = body;
+    final currentHeaders = Map<String, String>.of(headers ?? const {});
     for (var hop = 0; hop < 12; hop++) {
       final request = http.Request(currentMethod, current)
         ..followRedirects = false
@@ -460,11 +508,11 @@ class PolarFlowWebClient {
           'Accept':
               'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
           'Accept-Language': 'en-US,en;q=0.9',
-          ...?headers,
+          ...currentHeaders,
         });
       // Like a browser: a redirect keeps the original referrer, reduced to the
       // origin when it crosses to another site.
-      final referer = headers?['Referer'];
+      final referer = currentHeaders['Referer'];
       if (referer != null) {
         final ref = Uri.parse(referer);
         request.headers['Referer'] = ref.origin == current.origin
@@ -495,12 +543,33 @@ class PolarFlowWebClient {
       _storeCookies(current.host, res.headers['set-cookie']);
       final location = res.headers['location'];
       if (res.statusCode >= 300 && res.statusCode < 400 && location != null) {
-        current = current.resolve(location);
+        final next = current.resolve(location);
+        if (next.origin != current.origin) {
+          currentHeaders.removeWhere(
+            (name, _) => const {
+              'authorization',
+              'proxy-authorization',
+              'x-xsrf-token',
+              'origin',
+            }.contains(name.toLowerCase()),
+          );
+        }
         // 301/302/303 turn a POST into a GET.
         if (res.statusCode != 307 && res.statusCode != 308) {
           currentMethod = 'GET';
           currentBody = null;
+          // A navigation after submitting the login form carries no form
+          // headers. Flow rejects the SSO callback when these survive.
+          currentHeaders.removeWhere(
+            (name, _) => const {
+              'content-type',
+              'content-length',
+              'origin',
+              'x-xsrf-token',
+            }.contains(name.toLowerCase()),
+          );
         }
+        current = next;
         continue;
       }
       if (res.statusCode >= 400) {
@@ -511,7 +580,7 @@ class PolarFlowWebClient {
         );
         throw PolarFlowException('HTTP ${res.statusCode} from ${current.host}');
       }
-      return _Response(res.body, current);
+      return _Response(res, current);
     }
     throw PolarFlowException('Too many redirects from ${uri.host}.');
   }
@@ -545,7 +614,9 @@ class PolarFlowWebClient {
 }
 
 class _Response {
-  _Response(this.body, this.finalUri);
-  final String body;
+  _Response(this.response, this.finalUri);
+  final http.Response response;
   final Uri finalUri;
+  String get body => response.body;
+  Uint8List get bytes => response.bodyBytes;
 }

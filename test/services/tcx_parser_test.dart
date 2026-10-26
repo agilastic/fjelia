@@ -61,4 +61,50 @@ void main() {
     expect(parseTcx('<foo/>'), isNull);
     expect(parseTcx('<Activity Sport="Other"><Lap></Lap></Activity>'), isNull);
   });
+
+  test('reads prefixed trackpoints with attributes and TPX measurements', () {
+    final session = parseTcx('''
+<tcx:TrainingCenterDatabase xmlns:tcx="urn:tcx" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns3="urn:extensions">
+<tcx:Activity Sport="Running"><tcx:Id>2026-08-19T06:30:00Z</tcx:Id>
+<tcx:Lap StartTime="2026-08-19T06:30:00Z"><tcx:TotalTimeSeconds>10</tcx:TotalTimeSeconds>
+<tcx:Track>
+<tcx:Trackpoint xsi:type="tcx:Trackpoint_t"><tcx:Time>2026-08-19T06:30:00Z</tcx:Time>
+<tcx:AltitudeMeters>-12</tcx:AltitudeMeters><tcx:DistanceMeters>0</tcx:DistanceMeters>
+<tcx:HeartRateBpm><tcx:Value>120</tcx:Value></tcx:HeartRateBpm>
+<tcx:Cadence>0</tcx:Cadence><tcx:Extensions><ns3:TPX><ns3:Speed>0</ns3:Speed><ns3:Watts>0</ns3:Watts><ns3:RunCadence>79</ns3:RunCadence></ns3:TPX></tcx:Extensions>
+</tcx:Trackpoint>
+<tcx:Trackpoint xsi:type="tcx:Trackpoint_t"><tcx:Time>2026-08-19T06:30:10Z</tcx:Time>
+<tcx:HeartRateBpm><tcx:Value>140</tcx:Value></tcx:HeartRateBpm>
+<tcx:Extensions><ns3:TPX><ns3:Speed>2.5</ns3:Speed><ns3:Watts>250</ns3:Watts></ns3:TPX></tcx:Extensions>
+</tcx:Trackpoint></tcx:Track></tcx:Lap></tcx:Activity>
+</tcx:TrainingCenterDatabase>''')!;
+    expect(session.heartRates, hasLength(2));
+    expect(session.samples.first, containsPair('ele', -12));
+    expect(session.samples.first, containsPair('d', 0));
+    expect(session.samples.first, containsPair('spd', 0));
+    expect(session.samples.first, containsPair('w', 0));
+    expect(session.samples.first, containsPair('cad', 79));
+    expect(session.samples.last, containsPair('spd', 2.5));
+    expect(session.samples.last, containsPair('w', 250));
+    expect(session.samples.last.containsKey('d'), isFalse);
+  });
+
+  test('merges repeated lap boundaries without doubling HR samples', () {
+    final xml = _tcx.replaceFirst(
+      '<TotalTimeSeconds>600.0</TotalTimeSeconds>',
+      '''<TotalTimeSeconds>600.0</TotalTimeSeconds><Track><Trackpoint>
+<Time>2026-08-19T06:30:05.000Z</Time><AltitudeMeters>30</AltitudeMeters>
+</Trackpoint></Track>''',
+    );
+    final session = parseTcx(xml)!;
+    expect(session.heartRates, hasLength(2));
+    expect(session.samples.last['hr'], 130);
+    expect(session.samples.last['ele'], 30);
+  });
+
+  test('malformed XML and non-finite readings do not enter activity data', () {
+    expect(parseTcx('<Activity><broken>'), isNull);
+    final session = parseTcx(_tcx.replaceFirst('5000.0', 'NaN'))!;
+    expect(session.distanceMeters, 1500);
+  });
 }

@@ -63,6 +63,13 @@ MockClient _server({required bool passwordOk, List<String>? log}) {
       );
     }
     if (u.host == 'flow.polar.com' && u.path == '/flowSso/redirect') {
+      // Flow rejects this callback if the POST's form/security headers leak
+      // into the redirected navigation.
+      if (req.headers.containsKey('Origin') ||
+          req.headers.containsKey('Content-Type') ||
+          req.headers.containsKey('X-XSRF-TOKEN')) {
+        return http.Response('', 403);
+      }
       signedIn = true;
       return http.Response(
         '',
@@ -81,9 +88,19 @@ MockClient _server({required bool passwordOk, List<String>? log}) {
           ? http.Response(_events, 200)
           : http.Response('<html>login</html>', 200);
     }
-    if (u.path == '/training/analysis/777/export/tcx/false') {
+    if (u.path == '/api/export/training/tcx/777') {
+      expect(u.queryParameters['compress'], 'false');
       return http.Response(
         '<TrainingCenterDatabase></TrainingCenterDatabase>',
+        200,
+      );
+    }
+    if (u.path == '/api/export/training/fit/777') {
+      return http.Response.bytes([0, 128, 255, 42], 200);
+    }
+    if (u.path == '/api/training/analysis/777/summary') {
+      return http.Response(
+        '{"id":777,"trainingLoadPro":{"cardioLoadValue":84}}',
         200,
       );
     }
@@ -111,6 +128,10 @@ void main() {
         await web.exportTcx(list.single),
         contains('TrainingCenterDatabase'),
       );
+      expect(await web.exportFit(list.single), [0, 128, 255, 42]);
+      expect((await web.trainingSummary(list.single))['trainingLoadPro'], {
+        'cardioLoadValue': 84,
+      });
       expect(log.first, 'GET flow.polar.com/login');
     },
   );
