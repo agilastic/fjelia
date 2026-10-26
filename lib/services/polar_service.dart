@@ -158,7 +158,11 @@ class PolarService {
           if (!processed.add(id)) continue;
           // Old Flow imports stored neither speed nor altitude samples. Refill
           // those rows once, without requiring the user to delete a workout.
-          if (existing[id]?.metricsJson != null) continue;
+          final stored = existing[id];
+          if (stored?.metricsJson != null &&
+              _mapSport(stored!.type) != 'other') {
+            continue;
+          }
           if ((w.durationSeconds ?? 120) < 60) continue; // recording noise
           try {
             final xml = await web.exportTcx(w);
@@ -230,6 +234,30 @@ class PolarService {
                     t.durationSeconds * .05))) {
       fit = null;
     }
+    final existing = await _db.getActivityById(id);
+    final type = _activityType([w.sport, t.sport, fit?.sport, existing?.type]);
+    // A previously imported workout may already have all its metrics but an
+    // unresolved sport. Correct only its type and generated name in that case.
+    if (existing?.metricsJson != null && _mapSport(existing!.type) == 'other') {
+      if (type == 'other') return false;
+      await (_db.update(
+        _db.activityRecords,
+      )..where((row) => row.activityId.equals(id))).write(
+        ActivityRecordsCompanion(
+          type: Value(type),
+          name:
+              const {
+                'workout',
+                'other',
+                'polar other',
+                'polar generic',
+              }.contains(existing.name.trim().toLowerCase())
+              ? Value('Polar $type')
+              : const Value.absent(),
+        ),
+      );
+      return true;
+    }
     final samples = t.samples.any((sample) => sample['spd'] != null)
         ? t.samples
         : fit?.samples.isNotEmpty == true
@@ -240,8 +268,6 @@ class PolarService {
           ? t.heartRates
           : parseTimedHeartRates(samples, _source),
     );
-    final type = _mapSport(w.sport ?? t.sport);
-    final existing = await _db.getActivityById(id);
     final sameRecording =
         existing != null &&
         existing.startDate.isAtSameMomentAs(t.start) &&
@@ -575,7 +601,6 @@ class PolarService {
     final id = 'polar_$exerciseId';
     final start = summary.start;
     final duration = summary.durationSeconds;
-    final sport = '${e['detailed_sport_info'] ?? e['sport'] ?? 'GENERIC'}';
 
     final existing = await _db.getActivityById(id);
     // Skip if the same workout from a higher-priority source is stored.
@@ -593,6 +618,13 @@ class PolarService {
     }
 
     final fit = await _fetchExerciseFit(exerciseId);
+    final sport = _activityType([
+      e['detailed_sport_info'],
+      e['detailed-sport-info'],
+      e['sport'],
+      fit?.sport,
+      existing?.type,
+    ]);
     final sameRecording =
         existing != null &&
         existing.startDate.isAtSameMomentAs(start) &&
@@ -684,6 +716,17 @@ class PolarService {
       await _db.into(_db.activityRecords).insert(companion);
     }
     return true;
+  }
+
+  /// Calendar entries may omit the sport or supply a numeric id/generic
+  /// label. Try the export and existing type before settling for "other".
+  static String _activityType(Iterable<Object?> candidates) {
+    for (final candidate in candidates) {
+      if (candidate is! String) continue;
+      final type = _mapSport(candidate);
+      if (type != 'other') return type;
+    }
+    return 'other';
   }
 
   static String _mapSport(String sport) {

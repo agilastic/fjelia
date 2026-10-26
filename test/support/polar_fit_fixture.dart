@@ -6,6 +6,7 @@ Uint8List polarFitFixture({
   double? movingSeconds = 3600,
   int? ascent = 20,
   bool records = true,
+  int? sport,
 }) {
   List<int> little(int value, int size) => [
     for (var i = 0; i < size; i++) (value >> (8 * i)) & 255,
@@ -34,6 +35,7 @@ Uint8List polarFitFixture({
       631065600;
   message(0, 18, [
     (2, 0x86, start),
+    if (sport != null) (5, 0x02, sport),
     (7, 0x86, 3700000),
     (8, 0x86, 3645000),
     (9, 0x86, 953000),

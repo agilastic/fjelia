@@ -6,6 +6,7 @@ import 'package:fit_sdk/fit_sdk.dart';
 /// Timer time, elapsed time and moving time are deliberately kept separate.
 class FitActivityData {
   const FitActivityData({
+    this.sport,
     this.start,
     this.timerSeconds,
     this.movingSeconds,
@@ -17,6 +18,7 @@ class FitActivityData {
   });
 
   final DateTime? start;
+  final String? sport;
   final double? timerSeconds, movingSeconds, distanceMeters, ascentMeters;
   final double? avgPower;
   final List<Map<String, num>> samples;
@@ -100,7 +102,20 @@ FitActivityData? parseFitActivity(Uint8List bytes) {
     final starts =
         sessions.map((s) => s.getStartTime()).whereType<DateTime>().toList()
           ..sort();
+    final sports = sessions.map((s) => s.getSport()).whereType<int>().toSet();
     return FitActivityData(
+      sport: sports.length == 1
+          ? switch (sports.single) {
+              Sport.running => 'running',
+              Sport.cycling || Sport.eBiking => 'cycling',
+              Sport.swimming => 'swimming',
+              Sport.walking => 'walking',
+              Sport.hiking => 'hiking',
+              Sport.rowing => 'rowing',
+              Sport.crossCountrySkiing || Sport.alpineSkiing => 'skiing',
+              _ => null,
+            }
+          : null,
       start: starts.firstOrNull?.toUtc(),
       timerSeconds: total((s) => s.getTotalTimerTime()),
       movingSeconds: total((s) => s.getTotalMovingTime()),

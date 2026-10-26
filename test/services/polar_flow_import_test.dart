@@ -32,6 +32,7 @@ const _events =
 
 MockClient _flow({
   String tcx = _tcx,
+  String events = _events,
   Uint8List? fit,
   Map<String, dynamic>? summary,
   List<String>? exports,
@@ -73,7 +74,7 @@ MockClient _flow({
     return http.Response(
       u.queryParameters['start']!.endsWith('.08.2026') ||
               u.queryParameters['start']!.startsWith('01.08')
-          ? _events
+          ? events
           : '[]',
       200,
     );
@@ -100,6 +101,109 @@ void main() {
     db = AppDatabase(NativeDatabase.memory());
   });
   tearDown(() => db.close());
+
+  for (final sport in [null, '', 'OTHER', 1]) {
+    test('TCX supplies Running when the diary sport is $sport', () async {
+      final events = jsonEncode([
+        {
+          'type': 'EXERCISE',
+          'listItemId': 777,
+          'datetime': '2026-08-19T06:30:00',
+          'duration': 3725000,
+          'url': '/training/analysis/777',
+          'sport': sport,
+        },
+      ]);
+      final service = PolarService(db);
+      await service.saveFlowLogin(
+        'fixture@example.test',
+        'fixture',
+        client: PolarFlowWebClient(client: _flow()),
+      );
+      await service.importFlowHistory(
+        days: 3000,
+        client: PolarFlowWebClient(client: _flow(events: events)),
+      );
+      final row = (await db.select(db.activityRecords).get()).single;
+      expect(row.type, 'running');
+      expect(row.name, 'Polar running');
+    });
+  }
+
+  test(
+    'an existing unknown type is corrected without replacing its metrics',
+    () async {
+      final service = PolarService(db);
+      await service.saveFlowLogin(
+        'fixture@example.test',
+        'fixture',
+        client: PolarFlowWebClient(client: _flow()),
+      );
+      await db
+          .into(db.activityRecords)
+          .insert(
+            ActivityRecordsCompanion.insert(
+              activityId: 'polar_flow_777',
+              name: 'Workout',
+              type: 'other',
+              startDate: DateTime.utc(2026, 8, 19, 6, 30),
+              durationSeconds: 3725,
+              source: const Value('polar'),
+              metricsJson: const Value('[{"hr":150}]'),
+              gpxJson: const Value('[{"lat":52.1,"lng":9.7}]'),
+              totalElevation: const Value(25),
+              movingDurationSeconds: const Value(3100),
+              plannedWorkoutName: const Value('My run'),
+            ),
+          );
+      await service.importFlowHistory(
+        days: 3000,
+        client: PolarFlowWebClient(
+          client: _flow(tcx: _tcx.replaceAll('06:30:00.000Z', '06:30:00.363Z')),
+        ),
+      );
+      final row = (await db.select(db.activityRecords).get()).single;
+      expect(row.activityId, 'polar_flow_777');
+      expect(row.type, 'running');
+      expect(row.name, 'Polar running');
+      expect(row.metricsJson, '[{"hr":150}]');
+      expect(row.gpxJson, '[{"lat":52.1,"lng":9.7}]');
+      expect(row.totalElevation, 25);
+      expect(row.movingDurationSeconds, 3100);
+      expect(row.plannedWorkoutName, 'My run');
+    },
+  );
+
+  test('FIT supplies the sport when TCX and diary only report Other', () async {
+    final service = PolarService(db);
+    await service.saveFlowLogin(
+      'fixture@example.test',
+      'fixture',
+      client: PolarFlowWebClient(client: _flow()),
+    );
+    final tcx = _tcx
+        .replaceFirst('Running', 'Other')
+        .replaceAll('2026-08-19T06:30:', '2026-10-25T14:28:')
+        .replaceFirst('3725', '3645');
+    await service.importFlowHistory(
+      days: 3000,
+      client: PolarFlowWebClient(
+        client: _flow(
+          tcx: tcx,
+          events: _events.replaceFirst('RUNNING', 'OTHER'),
+          fit: polarFitFixture(sport: 1),
+        ),
+      ),
+    );
+    final row = (await db.select(db.activityRecords).get()).single;
+    expect(row.type, 'running');
+    expect(jsonDecode(row.gpxJson!), hasLength(3));
+    final samples = jsonDecode(row.metricsJson!) as List;
+    expect(samples.first['hr'], 120);
+    expect(samples.first['spd'], 2.5);
+    expect(samples.first['ele'], 50);
+    expect(row.totalElevation, 20);
+  });
 
   test('imports sessions older than the API window once', () async {
     final service = PolarService(db);

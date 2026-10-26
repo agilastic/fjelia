@@ -39,6 +39,7 @@ void main() {
     bool fitAvailable = true,
     bool corrupt = false,
     bool moving = true,
+    int? fitSport,
     Map<String, dynamic>? json,
     List<Map<String, dynamic>>? exercises,
   }) => PolarService(
@@ -53,7 +54,10 @@ void main() {
       }
       if (request.url.path.endsWith('/fit')) {
         if (!fitAvailable) return http.Response('', 404);
-        final bytes = polarFitFixture(movingSeconds: moving ? 3600 : null);
+        final bytes = polarFitFixture(
+          movingSeconds: moving ? 3600 : null,
+          sport: fitSport,
+        );
         if (corrupt) bytes.last ^= 1;
         return http.Response.bytes(bytes, 200);
       }
@@ -81,6 +85,35 @@ void main() {
       ActivityDetailSheet(activity: row).duration(decoded.duration),
       '1h 0m 45s',
     );
+  });
+
+  test('hyphenated detailed sport supplies the activity type', () async {
+    final json = polarExerciseFixture()
+      ..['sport'] = 'OTHER'
+      ..['detailed-sport-info'] = 'RUNNING';
+    await service(json: json, fitAvailable: false).sync();
+    expect((await db.select(db.activityRecords).get()).single.type, 'running');
+  });
+
+  test('an empty detailed sport does not hide the main sport', () async {
+    final json = polarExerciseFixture()..['detailed_sport_info'] = '';
+    await service(json: json, fitAvailable: false).sync();
+    expect((await db.select(db.activityRecords).get()).single.type, 'running');
+  });
+
+  test('FIT supplies the activity type when the summary is generic', () async {
+    final json = polarExerciseFixture()..['sport'] = 'OTHER';
+    await service(json: json, fitSport: 1).sync();
+    expect((await db.select(db.activityRecords).get()).single.type, 'running');
+  });
+
+  test('a generic re-sync keeps the known activity type', () async {
+    await service().sync();
+    final json = polarExerciseFixture()..['sport'] = 'OTHER';
+    await service(json: json, fitAvailable: false).sync();
+    final row = (await db.select(db.activityRecords).get()).single;
+    expect(row.type, 'running');
+    expect(row.name, 'Polar running');
   });
 
   test(
