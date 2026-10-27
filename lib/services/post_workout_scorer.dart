@@ -5,6 +5,7 @@ import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 
 import '../db/database.dart';
+import '../models/strength_workout.dart';
 import '../providers/training_load_provider.dart';
 import '../utils/log.dart';
 import 'athlete_thresholds_service.dart';
@@ -28,6 +29,10 @@ class PostWorkoutScorer {
     ActivityRecord activity, {
     Set<String> alreadyScored = const {},
   }) async {
+    // A gym-mode workout still in progress completes nothing yet.
+    if (activity.source == 'fjelia_live' && activity.durationSeconds == 0) {
+      return false;
+    }
     if (await _isLinked(activity.activityId)) return false;
     final session = await _matchSession(
       activity.startDate,
@@ -45,6 +50,10 @@ class PostWorkoutScorer {
 
   Future<bool> score(ActivityRecord activity) async {
     // An activity completes one session, however often it syncs.
+    // A gym-mode workout still in progress completes nothing yet.
+    if (activity.source == 'fjelia_live' && activity.durationSeconds == 0) {
+      return false;
+    }
     if (await _isLinked(activity.activityId)) return false;
     final session = await _matchSession(
       activity.startDate,
@@ -73,12 +82,12 @@ class PostWorkoutScorer {
 
     final actualMin = durationSec / 60;
     final planned = _plannedZoneDistribution(session.plannedZonesJson);
-    final executionScore = _executionScore3Axis(
-      session,
-      actualMin,
-      zoneSec,
-      planned,
-    );
+    // A lift is not executed in heart-rate zones; its sets are logged
+    // separately. The completion link, duration and load stay.
+    final strength = isStrengthSport(session.sport);
+    final executionScore = strength
+        ? null
+        : _executionScore3Axis(session, actualMin, zoneSec, planned);
     final scoredVsAdapted = session.status == 'adapted';
     final durationRatio = session.plannedDurationMin > 0
         ? actualMin / session.plannedDurationMin
@@ -88,7 +97,9 @@ class PostWorkoutScorer {
         ? load / session.plannedTrimp
         : null;
     final pi = _polarizationIndex(zoneSec);
-    final verdict = _executionVerdict(durationRatio, zoneSec, planned);
+    final verdict = strength
+        ? null
+        : _executionVerdict(durationRatio, zoneSec, planned);
 
     await _db
         .into(_db.sessionActuals)

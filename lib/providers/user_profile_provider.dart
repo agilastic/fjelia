@@ -27,6 +27,7 @@ class UserProfile {
     this.hoursPerWeek = 8,
     this.weekStartsOnMonday = true,
     this.bikeMetric = 'hr',
+    this.massUnit = 'kg',
     this.preferredSports = const ['running'],
     this.experienceLevel = 'beginner',
     this.waistCm,
@@ -69,6 +70,9 @@ class UserProfile {
 
   /// Whether a cycling workout [indoor] or not starts on power targets.
   bool powerOnBike({required bool indoor}) => indoor || bikeMetric == 'power';
+
+  /// Unit for strength loads, `kg` or `lb`. Loads are stored in kg.
+  final String massUnit;
 
   final List<String> preferredSports;
 
@@ -115,6 +119,7 @@ class UserProfile {
     'hoursPerWeek': hoursPerWeek,
     'weekStartsOnMonday': weekStartsOnMonday,
     'bikeMetric': bikeMetric,
+    'massUnit': massUnit,
     'preferredSports': preferredSports,
     'experienceLevel': experienceLevel,
     'waistCm': waistCm,
@@ -155,6 +160,7 @@ class UserProfile {
           (json['bikePowerTargets'] == true || json['bikePowerMode'] == 'always'
               ? 'power'
               : 'hr'),
+      massUnit: json['massUnit'] == 'lb' ? 'lb' : 'kg',
       preferredSports:
           (json['preferredSports'] as List?)?.cast<String>() ??
           const ['running'],
@@ -189,6 +195,7 @@ class UserProfile {
     double? hoursPerWeek,
     bool? weekStartsOnMonday,
     String? bikeMetric,
+    String? massUnit,
     List<String>? preferredSports,
     String? experienceLevel,
     double? waistCm,
@@ -216,6 +223,7 @@ class UserProfile {
     hoursPerWeek: hoursPerWeek ?? this.hoursPerWeek,
     weekStartsOnMonday: weekStartsOnMonday ?? this.weekStartsOnMonday,
     bikeMetric: bikeMetric ?? this.bikeMetric,
+    massUnit: massUnit ?? this.massUnit,
     preferredSports: preferredSports ?? this.preferredSports,
     experienceLevel: experienceLevel ?? this.experienceLevel,
     waistCm: waistCm ?? this.waistCm,

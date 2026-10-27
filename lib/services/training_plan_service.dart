@@ -10,6 +10,10 @@ import '../db/database.dart';
 import 'hr_zone_model.dart';
 import '../models/workout_profile.dart' show formatBlockDuration;
 import '../models/prepared_workout.dart';
+import '../models/strength_workout.dart';
+import 'strength/garmin_strength.dart';
+import 'strength/strength_plan_edits.dart';
+import 'strength/strength_repository.dart';
 import '../models/race_profile.dart';
 import '../utils/target_time.dart';
 import 'workout_semantics.dart';
@@ -2827,6 +2831,12 @@ class TrainingPlanService {
     if (await provider.mode() != DeliveryMode.push) {
       throw StateError('${provider.label} takes workouts as text.');
     }
+    // A lift is never sent as a timed heart-rate outline in its place.
+    if (isStrengthSport(s.sport) && !provider.supportsStrength) {
+      throw WorkoutNotSupported(
+        '${provider.label} does not take strength exercises from Fjelia.',
+      );
+    }
     await provider.deliver(s, () => _prepareWorkout(s));
   }
 
@@ -2877,6 +2887,7 @@ class TrainingPlanService {
   /// for every watch: heart-rate zones from the athlete's settings first,
   /// power only where it is switched on, notes on every step.
   Future<PreparedWorkout> _prepareWorkout(TrainingSession s) async {
+    if (isStrengthSport(s.sport)) return _prepareStrength(s);
     if (s.stepsJson == null) {
       throw StateError('No workout structure is available.');
     }
@@ -2955,6 +2966,41 @@ class TrainingPlanService {
     );
   }
 
+  /// A strength session as exercise steps, from its saved or verified
+  /// bundled plan. Without exercises there is nothing honest to send.
+  Future<PreparedWorkout> _prepareStrength(TrainingSession s) async {
+    final found = await StrengthRepository(_db).sessionPlan(s);
+    if (found == null || found.plan.isEmpty) {
+      throw const WorkoutNotSupported(
+        'Add exercises to this workout to send it; it is shared as text.',
+      );
+    }
+    final plan = found.plan;
+    final text = [
+      if (plan.notes != null) plan.notes!,
+      strengthPlanText(plan, MassUnit.kg),
+    ].join('\n\n');
+    return PreparedWorkout(
+      sessionId: s.id,
+      title: s.title,
+      date: s.sessionDate,
+      sport: s.sport,
+      steps: garminStrengthPayload(plan).steps,
+      description: text.length <= 1500 ? text : '${text.substring(0, 1497)}...',
+    );
+  }
+
+  /// What a strength upload leaves out (rep ranges, effort, tempo…); empty
+  /// for other sessions.
+  Future<List<String>> strengthUploadOmissions(String sessionId) async {
+    final s = await (_db.select(
+      _db.trainingSessions,
+    )..where((t) => t.id.equals(sessionId))).getSingleOrNull();
+    if (s == null || !isStrengthSport(s.sport)) return const [];
+    final found = await StrengthRepository(_db).sessionPlan(s);
+    return found == null ? const [] : garminStrengthPayload(found.plan).omitted;
+  }
+
   /// The session ready for a watch platform: steps with targets, notes and
   /// the threshold heart rate.
   Future<PreparedWorkout> prepareWorkout(String sessionId) async {
@@ -2970,8 +3016,23 @@ class TrainingPlanService {
   Future<({String title, DateTime date, String text})> workoutText(
     String sessionId,
   ) async {
-    final w = await prepareWorkout(sessionId);
-    return (title: w.title, date: w.date, text: w.description);
+    try {
+      final w = await prepareWorkout(sessionId);
+      return (title: w.title, date: w.date, text: w.description);
+    } on WorkoutNotSupported {
+      // A strength session without exercises: its notes are what there is.
+      final s = (await (_db.select(
+        _db.trainingSessions,
+      )..where((t) => t.id.equals(sessionId))).getSingle());
+      return (
+        title: s.title,
+        date: s.sessionDate,
+        text: [
+          s.sessionNotes,
+          s.mainSet,
+        ].whereType<String>().where((t) => t.isNotEmpty).join('\n\n'),
+      );
+    }
   }
 
   /// Lines about the race goal and, for a run, the pace that goes with this

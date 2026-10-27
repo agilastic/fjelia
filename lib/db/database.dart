@@ -983,6 +983,148 @@ class NutritionReminderRecords extends Table {
   Set<Column> get primaryKey => {activityId};
 }
 
+/// Custom exercises. Built-in ones live in code; an id is never reused.
+@DataClassName('StrengthVariantRow')
+class StrengthExerciseVariants extends Table {
+  TextColumn get id => text()();
+  TextColumn get name => text()();
+  TextColumn get equipment => text()();
+  TextColumn get conventionJson => text()();
+  BoolColumn get timed => boolean().withDefault(const Constant(false))();
+  BoolColumn get archived => boolean().withDefault(const Constant(false))();
+  DateTimeColumn get createdAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+/// Load increments remembered per exercise, equipment and convention.
+@DataClassName('StrengthIncrementRow')
+class StrengthEquipmentIncrements extends Table {
+  TextColumn get contextKey => text()();
+  RealColumn get incrementKg => real()();
+  TextColumn get unit => text()();
+  DateTimeColumn get updatedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {contextKey};
+}
+
+/// Immutable planned strength documents. Owner kinds: `session` (an app
+/// planned session id), `scheduled` (a provider's scheduled occurrence) and
+/// `template`.
+@DataClassName('StrengthPlanRevisionRow')
+class StrengthPlanRevisions extends Table {
+  TextColumn get revisionId => text()();
+  TextColumn get ownerKind => text()();
+  TextColumn get ownerKey => text()();
+  IntColumn get revision => integer()();
+  IntColumn get schemaVersion => integer()();
+  TextColumn get planJson => text()();
+  DateTimeColumn get createdAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {revisionId};
+  @override
+  List<Set<Column>> get uniqueKeys => [
+    {ownerKind, ownerKey, revision},
+  ];
+}
+
+/// The current revision of each owner's plan.
+@DataClassName('StrengthPlanHeadRow')
+class StrengthPlanHeads extends Table {
+  TextColumn get ownerKind => text()();
+  TextColumn get ownerKey => text()();
+  TextColumn get revisionId => text()();
+  IntColumn get revision => integer()();
+  DateTimeColumn get updatedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {ownerKind, ownerKey};
+}
+
+/// One strength log per recorded activity, with its frozen plan baseline.
+@DataClassName('StrengthLogRow')
+class StrengthActivityLogs extends Table {
+  TextColumn get activityId => text()();
+  IntColumn get revision => integer()();
+  TextColumn get status => text()();
+  BoolColumn get incompleteAcknowledged =>
+      boolean().withDefault(const Constant(false))();
+  TextColumn get baselineJson => text().nullable()();
+  TextColumn get notes => text().nullable()();
+  DateTimeColumn get activityStart => dateTime()();
+  DateTimeColumn get updatedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {activityId};
+}
+
+@DataClassName('StrengthExerciseRow')
+class StrengthPerformedExercises extends Table {
+  TextColumn get id => text()();
+  TextColumn get activityId => text()();
+  IntColumn get position => integer()();
+  TextColumn get variantId => text()();
+  TextColumn get contextKey => text()();
+  TextColumn get name => text()();
+  TextColumn get equipment => text()();
+  TextColumn get conventionJson => text()();
+  TextColumn get plannedExerciseId => text().nullable()();
+  TextColumn get notes => text().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+/// Actual set values; null is unknown, never zero.
+@DataClassName('StrengthSetRow')
+class StrengthPerformedSets extends Table {
+  TextColumn get id => text()();
+  TextColumn get exerciseId => text()();
+  TextColumn get activityId => text()();
+  IntColumn get position => integer()();
+  TextColumn get plannedSetId => text().nullable()();
+  TextColumn get kind => text()();
+  TextColumn get status => text()();
+  IntColumn get reps => integer().nullable()();
+  IntColumn get durationSeconds => integer().nullable()();
+  RealColumn get loadKg => real().nullable()();
+  TextColumn get loadUnit => text().nullable()();
+  TextColumn get resistance => text().nullable()();
+  IntColumn get restSeconds => integer().nullable()();
+  TextColumn get restOrigin => text().nullable()();
+  TextColumn get effortScale => text().nullable()();
+  RealColumn get effortValue => real().nullable()();
+  TextColumn get notes => text().nullable()();
+  TextColumn get originsJson => text().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+/// The athlete's decision on a load proposal. The fingerprint names the
+/// rule version and the exact log revisions it rested on; the proposal
+/// itself is recalculated from facts and never stored.
+@DataClassName('StrengthProposalDecisionRow')
+class StrengthProposalDecisions extends Table {
+  TextColumn get fingerprint => text()();
+  TextColumn get ownerKind => text()();
+  TextColumn get ownerKey => text()();
+  TextColumn get exerciseId => text()();
+  IntColumn get ruleVersion => integer()();
+  RealColumn get fromKg => real()();
+  RealColumn get toKg => real()();
+
+  /// `accepted` or `dismissed`.
+  TextColumn get decision => text()();
+  DateTimeColumn get decidedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {fingerprint};
+}
+
 @DriftDatabase(
   tables: [
     BpMeasurements,
@@ -996,6 +1138,14 @@ class NutritionReminderRecords extends Table {
     ActivityRecords,
     NutritionRecords,
     NutritionReminderRecords,
+    StrengthExerciseVariants,
+    StrengthEquipmentIncrements,
+    StrengthPlanRevisions,
+    StrengthPlanHeads,
+    StrengthActivityLogs,
+    StrengthPerformedExercises,
+    StrengthPerformedSets,
+    StrengthProposalDecisions,
     DayScoreRecords,
     GripStrengthRecords,
     SpotHrvMeasurements,
@@ -1044,7 +1194,7 @@ class AppDatabase extends _$AppDatabase {
       defaultSourcePriorities[group.name]!;
 
   @override
-  int get schemaVersion => 51;
+  int get schemaVersion => 53;
 
   Future<void> saveHeartRateSamples(List<TimedHeartRate> samples) async {
     if (samples.isEmpty) return;
@@ -1431,9 +1581,24 @@ class AppDatabase extends _$AppDatabase {
         .get();
   }
 
-  Future<int> deleteActivityById(String activityId) {
+  /// Deletes the activity and the strength results it owns; a plan it was
+  /// compared with stays.
+  Future<int> deleteActivityById(String activityId) => transaction(() async {
+    await deleteStrengthLog(activityId);
     return (delete(
       activityRecords,
+    )..where((t) => t.activityId.equals(activityId))).go();
+  });
+
+  Future<void> deleteStrengthLog(String activityId) async {
+    await (delete(
+      strengthPerformedSets,
+    )..where((t) => t.activityId.equals(activityId))).go();
+    await (delete(
+      strengthPerformedExercises,
+    )..where((t) => t.activityId.equals(activityId))).go();
+    await (delete(
+      strengthActivityLogs,
     )..where((t) => t.activityId.equals(activityId))).go();
   }
 
@@ -1939,9 +2104,29 @@ class AppDatabase extends _$AppDatabase {
         'CREATE UNIQUE INDEX IF NOT EXISTS idx_session_actuals_activity '
         'ON session_actuals(activity_id) WHERE activity_id IS NOT NULL',
       );
+      // Strength history is read per activity and per exercise context.
+      for (final index in const [
+        'idx_strength_exercises_activity ON strength_performed_exercises(activity_id, position)',
+        'idx_strength_exercises_context ON strength_performed_exercises(context_key)',
+        'idx_strength_sets_exercise ON strength_performed_sets(exercise_id, position)',
+        'idx_strength_sets_activity ON strength_performed_sets(activity_id)',
+        'idx_strength_logs_start ON strength_activity_logs(activity_start)',
+      ]) {
+        await customStatement('CREATE INDEX IF NOT EXISTS $index');
+      }
       await ensureHrvIdentity();
     },
     onUpgrade: (m, from, to) async {
+      if (from < 53) await m.createTable(strengthProposalDecisions);
+      if (from < 52) {
+        await m.createTable(strengthExerciseVariants);
+        await m.createTable(strengthEquipmentIncrements);
+        await m.createTable(strengthPlanRevisions);
+        await m.createTable(strengthPlanHeads);
+        await m.createTable(strengthActivityLogs);
+        await m.createTable(strengthPerformedExercises);
+        await m.createTable(strengthPerformedSets);
+      }
       if (from < 51) {
         await m.createTable(nutritionRecords);
         await m.createTable(nutritionReminderRecords);

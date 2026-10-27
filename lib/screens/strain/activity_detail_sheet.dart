@@ -10,6 +10,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../db/database.dart';
+import '../../models/strength_workout.dart';
 import '../../services/activity_decoder.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/activity_performance_chart.dart';
@@ -18,6 +19,7 @@ import '../../widgets/activity_heat_card.dart';
 import '../../widgets/workout_hrv_card.dart';
 import '../../widgets/nutrition_widgets.dart';
 import '../planner/plan_overview_cards.dart';
+import '../strength/strength_sections.dart';
 import '../activities/activities_screen.dart';
 import '../../models/coach_context_card.dart';
 import '../ai_coach/ai_coach_screen.dart';
@@ -33,36 +35,53 @@ class ActivityDetailSheet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final a = decodeActivityRecord(activity);
+    // Strength is chosen before any endurance metric is built: no distance,
+    // pace, elevation or route for a lifting session.
+    final strength = isStrengthSport(a.type);
     final running = a.type.toLowerCase().contains('run');
     final km = (a.distanceMeters ?? 0) / 1000;
     final pace = km > 0 ? a.duration.inSeconds / km : null;
     final cells = <(String, String)>[
-      ('Duration', duration(a.duration)),
-      (
-        'Active',
-        '${a.movingDuration != null && activity.movingDurationSeconds == null ? '~' : ''}${duration(a.movingDuration)}',
-      ),
-      ('Distance', '${valueText(a.distanceMeters == null ? null : km, 2)} km'),
-      (
-        running ? 'Avg pace' : 'Avg speed',
-        running
-            ? pace == null
-                  ? '—'
-                  : '${pace.round() ~/ 60}:${(pace.round() % 60).toString().padLeft(2, '0')} /km'
-            : '${valueText(a.duration.inSeconds > 0 && km > 0 ? km * 3600 / a.duration.inSeconds : null, 1)} km/h',
-      ),
-      ('Avg HR', '${valueText(a.avgHeartRate)} bpm'),
-      ('Max HR', '${valueText(a.maxHeartRate)} bpm'),
-      ('Training load', valueText(activityLoad(activity), 1)),
-      if (a.avgPower != null) ('Avg power', '${valueText(a.avgPower)} W'),
-      ('Elevation', '${valueText(a.elevationGain)} m'),
-      if (a.samples.any((s) => s.elevation != null))
+      if (strength) ...[
+        ('Duration', duration(a.duration)),
+        if (a.avgHeartRate != null)
+          ('Avg HR', '${valueText(a.avgHeartRate)} bpm'),
+        if (a.maxHeartRate != null)
+          ('Max HR', '${valueText(a.maxHeartRate)} bpm'),
+        ('Training load', valueText(activityLoad(activity), 1)),
+      ] else ...[
+        ('Duration', duration(a.duration)),
         (
-          'Altitude',
-          '${valueText(a.samples.map((s) => s.elevation).whereType<double>().reduce((a, b) => a < b ? a : b))}–${valueText(a.samples.map((s) => s.elevation).whereType<double>().reduce((a, b) => a > b ? a : b))} m',
+          'Active',
+          '${a.movingDuration != null && activity.movingDurationSeconds == null ? '~' : ''}${duration(a.movingDuration)}',
         ),
+        (
+          'Distance',
+          '${valueText(a.distanceMeters == null ? null : km, 2)} km',
+        ),
+        (
+          running ? 'Avg pace' : 'Avg speed',
+          running
+              ? pace == null
+                    ? '—'
+                    : '${pace.round() ~/ 60}:${(pace.round() % 60).toString().padLeft(2, '0')} /km'
+              : '${valueText(a.duration.inSeconds > 0 && km > 0 ? km * 3600 / a.duration.inSeconds : null, 1)} km/h',
+        ),
+        ('Avg HR', '${valueText(a.avgHeartRate)} bpm'),
+        ('Max HR', '${valueText(a.maxHeartRate)} bpm'),
+        ('Training load', valueText(activityLoad(activity), 1)),
+        if (a.avgPower != null) ('Avg power', '${valueText(a.avgPower)} W'),
+        ('Elevation', '${valueText(a.elevationGain)} m'),
+        if (a.samples.any((s) => s.elevation != null))
+          (
+            'Altitude',
+            '${valueText(a.samples.map((s) => s.elevation).whereType<double>().reduce((a, b) => a < b ? a : b))}–${valueText(a.samples.map((s) => s.elevation).whereType<double>().reduce((a, b) => a > b ? a : b))} m',
+          ),
+      ],
     ];
-    final route = [for (final p in a.route) geo.LatLng(p.lat, p.lng)];
+    final route = strength
+        ? const <geo.LatLng>[]
+        : [for (final p in a.route) geo.LatLng(p.lat, p.lng)];
     return SheetPage(
       title: a.name,
       showHeader: false,
@@ -167,6 +186,7 @@ class ActivityDetailSheet extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 16),
+          if (strength) CompletedStrengthSection(activity: activity),
           ActivityNutritionCard(activity: activity),
           ActivityHeatCard(activityId: a.id),
           if (route.isNotEmpty) ...[
@@ -203,7 +223,8 @@ class ActivityDetailSheet extends ConsumerWidget {
               },
             ),
           ],
-          if (a.samples.isNotEmpty) ActivityPerformanceChart(activity: a),
+          if (a.samples.isNotEmpty && !strength)
+            ActivityPerformanceChart(activity: a),
           if (a.hrZoneSeconds.isNotEmpty) ActivityZoneChart(activity: a),
           WorkoutHrvCard(
             activityId: activity.activityId,

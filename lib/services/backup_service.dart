@@ -38,6 +38,14 @@ const _oldestRestorableSchema = 44;
 /// Tables added after the oldest restorable schema, with the schema that
 /// added them. A backup older than that has no such table, and none is owed.
 const _tableAddedIn = {
+  'strength_proposal_decisions': 53,
+  'strength_exercise_variants': 52,
+  'strength_equipment_increments': 52,
+  'strength_plan_revisions': 52,
+  'strength_plan_heads': 52,
+  'strength_activity_logs': 52,
+  'strength_performed_exercises': 52,
+  'strength_performed_sets': 52,
   'nutrition_records': 51,
   'nutrition_reminder_records': 51,
   'plan_goals': 47,

@@ -238,6 +238,7 @@ class HistoryChart extends StatelessWidget {
     required this.points,
     this.secondary = const [],
     this.color = mint,
+    this.secondaryColor = Colors.orange,
     this.bars = false,
     this.height = 200,
     this.referenceLine,
@@ -245,7 +246,7 @@ class HistoryChart extends StatelessWidget {
     this.maxY,
   });
   final List<ChartPoint> points, secondary;
-  final Color color;
+  final Color color, secondaryColor;
   final bool bars;
   final double height;
   final double? referenceLine, minY, maxY;
@@ -411,7 +412,7 @@ class HistoryChart extends StatelessWidget {
                     .where((p) => p.value.isFinite)
                     .map((p) => FlSpot(x(p), p.value))
                     .toList(),
-                color: Colors.orange,
+                color: secondaryColor,
                 barWidth: 2,
                 dotData: const FlDotData(show: false),
               ),

@@ -5,6 +5,7 @@ import '../services/backup_service.dart';
 import 'database_provider.dart';
 import 'hrv_reminder_provider.dart';
 import 'nutrition_provider.dart';
+import 'strength_provider.dart';
 
 final activityExportProvider = Provider<ActivityExportService>(
   (ref) => ActivityExportService(ref.watch(databaseProvider)),
@@ -23,6 +24,7 @@ final backupServiceProvider = Provider<BackupService>(
       ref.invalidate(nutritionPlanProvider);
       ref.invalidate(nutritionSavedPlanProvider);
       ref.invalidate(nutritionLinkedPlanProvider);
+      invalidateStrength(ref.invalidate);
       await ref.read(nutritionReminderProvider).reconcile();
     },
   ),

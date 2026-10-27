@@ -523,19 +523,25 @@ void main() {
             .write(const TrainingSessionsCompanion(sport: Value('strength')));
         session = await db.select(db.trainingSessions).getSingle();
         await showCoros(tester);
+        // Strength is never pushed as a timed outline: COROS gets the list.
+        final button = find.text('Share exercise list for COROS');
         await tester.scrollUntilVisible(
-          find.text('Push to COROS'),
+          button,
           200,
           scrollable: find.byType(Scrollable).first,
         );
         await tester.drag(find.byType(Scrollable).first, const Offset(0, -150));
         await tester.pumpAndSettle();
-        await tester.tap(find.text('Push to COROS'));
+        expect(find.text('Push to COROS'), findsNothing);
+        expect(
+          find.textContaining('COROS does not take strength exercises'),
+          findsOneWidget,
+        );
+        await tester.tap(button);
         await tester.pump(const Duration(seconds: 2));
         await tester.pumpAndSettle();
         expect(sent, isEmpty);
         expect(shared, isNotEmpty);
-        expect(find.textContaining('not strength'), findsOneWidget);
         await close(tester);
       },
     );

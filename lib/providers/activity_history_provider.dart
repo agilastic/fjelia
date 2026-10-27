@@ -5,6 +5,7 @@ import '../db/database.dart';
 import 'database_provider.dart';
 import 'hrv_reminder_provider.dart';
 import 'nutrition_provider.dart';
+import 'strength_provider.dart';
 import 'day_data_provider.dart';
 import 'training_load_provider.dart';
 
@@ -59,6 +60,7 @@ final deleteActivityProvider = Provider<Future<void> Function(String)>(
     ref.invalidate(trainingLoadProvider);
     ref.invalidate(trainingMonitorProvider);
     ref.invalidate(trainingFormSeriesProvider);
+    invalidateStrength(ref.invalidate);
     // The workout is gone; its HRV readings stay, its reminder does not.
     await ref.read(hrvReminderActionsProvider).reconcile();
     await ref.read(nutritionReminderProvider).reconcile();

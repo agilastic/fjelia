@@ -890,6 +890,22 @@ class GarminClient {
     return gain;
   }
 
+  /// The exercise sets the watch recorded for a strength activity, as
+  /// Garmin returns them; null when there are none or the request fails.
+  /// Nothing else of the response is kept.
+  Future<Object?> getExerciseSets(String activityId) async {
+    try {
+      final response = await _getWithRetry(
+        '/activity-service/activity/$activityId/exerciseSets',
+      );
+      if (response.statusCode != 200 || response.body.isEmpty) return null;
+      return jsonDecode(response.body);
+    } catch (e) {
+      log('[Garmin] getExerciseSets ERROR: $e');
+      return null;
+    }
+  }
+
   Future<Map<String, double>?> _fetchHrZones(String activityId) async {
     try {
       final response = await _getWithRetry(
@@ -1217,10 +1233,12 @@ class GarminClient {
     List<Map<String, dynamic>> steps, {
     String? description,
   }) async {
-    final estimatedSecs = steps.fold<num>(
-      0,
-      (sum, s) => sum + ((s['endConditionValue'] as num?) ?? 0),
-    );
+    // Repetitions and lap-button steps have no time of their own.
+    final estimatedSecs = steps.fold<num>(0, (sum, s) {
+      final key = (s['endCondition'] as Map?)?['conditionTypeKey'];
+      if (key == 'reps' || key == 'lap.button') return sum;
+      return sum + ((s['endConditionValue'] as num?) ?? 0);
+    });
     final sportType = _garminSportType(sport);
     final body = jsonEncode({
       'workoutName': name,

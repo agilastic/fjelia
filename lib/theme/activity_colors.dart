@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 const _mint = Color(0xFF00D4A0);
 
+/// Strength identity colour.
+const strengthColor = Color(0xFFBD91FF);
+
 enum ActivityKind {
   running,
   cycling,
@@ -37,7 +40,7 @@ Color completedActivityColor(String sport) => switch (activityKind(sport)) {
   ActivityKind.running => _mint,
   ActivityKind.cycling => Colors.lightBlue,
   ActivityKind.swimming => const Color(0xFF64D8FF),
-  ActivityKind.strength => const Color(0xFFBD91FF),
+  ActivityKind.strength => strengthColor,
   ActivityKind.rowing => const Color(0xFFFFAA42),
   ActivityKind.hiking => const Color(0xFFA6D76D),
   ActivityKind.walking => const Color(0xFFFFC857),

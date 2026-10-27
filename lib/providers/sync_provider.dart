@@ -26,6 +26,7 @@ import 'hr_zone_sync_provider.dart';
 import 'hr_zones_provider.dart';
 import 'hrv_reminder_provider.dart';
 import 'nutrition_provider.dart';
+import 'strength_provider.dart';
 import 'planner_providers.dart';
 import 'polar_provider.dart';
 import 'readiness_provider.dart';
@@ -433,6 +434,16 @@ class SyncNotifier extends StateNotifier<SyncState> {
 
   /// Scores the last week's completed workouts against planned sessions.
   Future<void> _scoreRecentWorkouts() async {
+    // A gym-mode workout the watch recorded too becomes one session first,
+    // so the imported copy is not scored as a second one.
+    try {
+      final merged = await _ref
+          .read(strengthRepositoryProvider)
+          .reconcileLiveSessions();
+      if (merged > 0) log('[Sync] gym-mode workouts merged: $merged');
+    } catch (e) {
+      log('[Sync] gym-mode merge error: $e');
+    }
     try {
       final scorer = _ref.read(postWorkoutScorerProvider);
       final db = _ref.read(databaseProvider);
@@ -549,6 +560,8 @@ class SyncNotifier extends StateNotifier<SyncState> {
         log('[Nutrition] reminder reconciliation: $e');
       }),
     );
+    // Imported exercise sets may have arrived with the activities.
+    invalidateStrength(_ref.invalidate);
     if (result.garmin > 0 || result.activities > 0 || result.bp > 0) {
       _ref.invalidate(aiBriefingProvider);
       log('[Sync] new data — briefing invalidated');

@@ -56,8 +56,9 @@ class DeliveryLedger {
 }
 
 /// The content of a session as a platform sees it: what changes it changes
-/// what was sent. A short stable hash, not for security.
-String sessionContentFingerprint(TrainingSession s) {
+/// what was sent. [extra] is content kept elsewhere, such as the revision of
+/// a strength plan. A short stable hash, not for security.
+String sessionContentFingerprint(TrainingSession s, {String extra = ''}) {
   var h = 0x811c9dc5;
   for (final unit in [
     s.title,
@@ -65,6 +66,7 @@ String sessionContentFingerprint(TrainingSession s) {
     s.stepsJson ?? '',
     s.targetMetric ?? '',
     s.sport,
+    if (extra.isNotEmpty) extra,
   ].join('\u0001').codeUnits) {
     h ^= unit;
     h = (h * 0x01000193) & 0xffffffff;

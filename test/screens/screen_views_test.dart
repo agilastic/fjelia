@@ -541,6 +541,7 @@ void main() {
             weekNumber: sport == 'cycling_gravel' ? 3 : 2,
             sport: sport,
             sessionType: template.sessionType,
+            subType: Value(template.subType),
             phase: 'base',
             primaryZone: zone,
             title: name,
@@ -1602,6 +1603,48 @@ void main() {
       await tester.binding.setSurfaceSize(null);
     },
   );
+  testWidgets(
+    'strength activity shows strength content, no endurance panels (STR-A02)',
+    (tester) async {
+      await db
+          .into(db.activityRecords)
+          .insert(
+            ActivityRecordsCompanion.insert(
+              activityId: 'gym-1',
+              name: 'Evening lift',
+              type: 'strength_training',
+              startDate: DateTime(2026, 10, 27, 18),
+              durationSeconds: 3300,
+              avgHeartRate: const Value(112),
+              distanceMeters: const Value(0),
+            ),
+          );
+      final row = await (db.select(
+        db.activityRecords,
+      )..where((t) => t.activityId.equals('gym-1'))).getSingle();
+      await render(
+        tester,
+        ActivityDetailSheet(activity: row),
+        'activity-strength',
+      );
+      await tester.pumpAndSettle();
+      for (final label in ['DISTANCE', 'AVG PACE', 'AVG SPEED', 'ELEVATION']) {
+        expect(find.text(label), findsNothing, reason: label);
+      }
+      expect(find.text('AVG HR'), findsOneWidget);
+      expect(
+        find.text(
+          'Exercise details were not provided by this activity source.',
+        ),
+        findsOneWidget,
+      );
+      expect(find.text('PERFORMANCE / DISTANCE'), findsNothing);
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox());
+      await tester.pump(Duration.zero);
+      await tester.binding.setSurfaceSize(null);
+    },
+  );
   testWidgets('activity AI button opens an editable activity-specific draft', (
     tester,
   ) async {
@@ -1697,7 +1740,6 @@ void main() {
   for (final variant in [
     ('planned-swim', 'Aerobic Base Swim 4×500m Z2', 'swimming', 1, 40, 36),
     ('planned-run', 'Easy Recovery Run', 'running', 2, 40, 43),
-    ('planned-strength', 'Full Body Strength — Base', 'strength', 3, 77, 50),
     ('planned-gravel', 'Gravel Easy Spin', 'cycling_gravel', 1, 60, 60),
   ]) {
     testWidgets('${variant.$1} renders planned workout structure and targets', (
@@ -1728,6 +1770,38 @@ void main() {
       await tester.binding.setSurfaceSize(null);
     });
   }
+  testWidgets('planned strength shows exercises, not zones (STR-A01)', (
+    tester,
+  ) async {
+    final session = await plannedSession(
+      'Full Body Strength — Base',
+      'strength',
+      3,
+      55,
+      50,
+    );
+    await render(
+      tester,
+      PlanSessionSheet(session: session),
+      'planned-strength',
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('STRENGTH SUMMARY'), findsOneWidget);
+    expect(find.text('PRIMARY ZONE'), findsNothing);
+    expect(find.text('WORKOUT STRUCTURE'), findsNothing);
+    expect(find.text('TARGETS'), findsNothing);
+    await tester.scrollUntilVisible(
+      find.text('BACK SQUAT'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    expect(find.textContaining('3 sets · 8–10 reps · Rest 2:00'), findsWidgets);
+    await capture(tester, 'planned-strength');
+    expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(Duration.zero);
+    await tester.binding.setSurfaceSize(null);
+  });
   testWidgets('planned controls shift dates, push once and mark rest', (
     tester,
   ) async {

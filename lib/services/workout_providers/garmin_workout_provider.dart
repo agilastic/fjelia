@@ -3,6 +3,8 @@ import 'package:drift/drift.dart';
 import '../../api/garmin_client.dart';
 import '../../db/database.dart';
 import '../../models/prepared_workout.dart';
+import '../../models/strength_workout.dart';
+import '../strength/garmin_strength.dart';
 import '../../utils/log.dart';
 import '../workout_destination.dart';
 import 'cleanup_queue.dart';
@@ -18,6 +20,7 @@ class GarminWorkoutProvider extends WorkoutProvider {
     this._db,
     this._client, {
     this.connected,
+    this.strengthRevision,
     DateTime Function()? clock,
   }) : _ledger = DeliveryLedger(_db, 'garmin', clock: clock),
        _queue = CleanupQueue(_db, 'garmin', clock: clock);
@@ -26,6 +29,10 @@ class GarminWorkoutProvider extends WorkoutProvider {
   final GarminClient _client;
   /// Whether Garmin is connected; without it Garmin counts as connected.
   final Future<bool> Function()? connected;
+
+  /// The revision of a strength session's exercise plan, part of what was
+  /// sent: editing exercises sends the workout again.
+  final Future<String?> Function(TrainingSession s)? strengthRevision;
   final DeliveryLedger _ledger;
   final CleanupQueue _queue;
 
@@ -41,6 +48,17 @@ class GarminWorkoutProvider extends WorkoutProvider {
 
   @override
   Future<DeliveryMode> mode() async => DeliveryMode.push;
+
+  @override
+  bool get supportsStrength => true;
+
+  Future<String> _fingerprint(TrainingSession s) async =>
+      sessionContentFingerprint(
+        s,
+        extra: isStrengthSport(s.sport)
+            ? 'strength:${await strengthRevision?.call(s) ?? ''}'
+            : '',
+      );
 
   static String _sportName(String sport) => switch (sport) {
     'running' || 'trail_running' => 'running',
@@ -65,7 +83,7 @@ class GarminWorkoutProvider extends WorkoutProvider {
     TrainingSession s,
     Future<PreparedWorkout> Function() prepare,
   ) async {
-    final fingerprint = sessionContentFingerprint(s);
+    final fingerprint = await _fingerprint(s);
     final record = await _ledger.get(s.id);
     // Without a record the content is taken as unchanged: it went up before
     // records were kept.
@@ -90,7 +108,7 @@ class GarminWorkoutProvider extends WorkoutProvider {
       await _ledger.put(s.id, fingerprint: fingerprint, name: s.title);
       return;
     }
-    if (s.stepsJson == null) {
+    if (s.stepsJson == null && !isStrengthSport(s.sport)) {
       throw StateError('No workout structure is available to push.');
     }
     // A calendar entry of an earlier definition (the session changed since)
@@ -115,12 +133,29 @@ class GarminWorkoutProvider extends WorkoutProvider {
       );
     }
     final prepared = await prepare();
-    final workoutId = await _client.createWorkout(
-      s.title,
-      _sportName(s.sport),
-      prepared.steps,
-      description: prepared.description,
-    );
+    String workoutId;
+    try {
+      workoutId = await _client.createWorkout(
+        s.title,
+        _sportName(s.sport),
+        prepared.steps,
+        description: prepared.description,
+      );
+    } on GarminApiException catch (e) {
+      // An exercise name Garmin does not accept: send the sets without
+      // names; each step still names its exercise in its description.
+      if (!hasGarminExerciseNames(prepared.steps) ||
+          !e.toString().contains(' 400')) {
+        rethrow;
+      }
+      log('[Garmin] strength names refused, sending without: $e');
+      workoutId = await _client.createWorkout(
+        s.title,
+        _sportName(s.sport),
+        withoutGarminExerciseNames(prepared.steps),
+        description: prepared.description,
+      );
+    }
     // Save the definition before scheduling so a retry cannot create
     // duplicates.
     await _write(
@@ -208,11 +243,7 @@ class GarminWorkoutProvider extends WorkoutProvider {
         s.id,
         TrainingSessionsCompanion(garminWorkoutId: Value(workoutId)),
       );
-      await _ledger.put(
-        s.id,
-        fingerprint: sessionContentFingerprint(s),
-        name: s.title,
-      );
+      await _ledger.put(s.id, fingerprint: await _fingerprint(s), name: s.title);
       adopted.add(s.id);
     }
     return adopted;

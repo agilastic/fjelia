@@ -8,6 +8,7 @@ import 'package:share_plus/share_plus.dart';
 import '../../db/database.dart';
 import '../../models/coach_context_card.dart';
 import '../../models/planned_workout_presentation.dart';
+import '../../models/strength_workout.dart';
 import '../../models/workout_profile.dart';
 import '../../providers/ftp_provider.dart';
 import '../../providers/hr_zones_provider.dart';
@@ -27,6 +28,9 @@ import '../../widgets/workout_structure_list.dart';
 import '../../widgets/nutrition_widgets.dart';
 import '../../models/workout_nutrition.dart';
 import '../ai_coach/ai_coach_screen.dart';
+import '../strength/strength_sections.dart';
+import '../../services/strength/strength_repository.dart';
+import '../../services/strength/strength_templates.dart';
 import 'workout_delivery_setup.dart';
 
 class PlanSessionSheet extends ConsumerStatefulWidget {
@@ -195,6 +199,8 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
         !totals.anyEstimated &&
         (planned - totals.total).abs() >= 120;
     final editable = ['planned', 'adapted'].contains(s.status);
+    // Lifting has exercises and sets, not zones or a time-in-zone split.
+    final strength = isStrengthSport(s.sport);
     const blue = Color(0xFF4FC3F7);
     const colors = [
       blue,
@@ -308,8 +314,10 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
           WorkoutStatTiles(
             items: [
               ('${s.plannedDurationMin} min', 'DURATION'),
-              ('${s.plannedTrimp}', 'TRIMP'),
-              ('Z${s.primaryZone}', 'PRIMARY ZONE'),
+              if (!strength) ...[
+                ('${s.plannedTrimp}', 'TRIMP'),
+                ('Z${s.primaryZone}', 'PRIMARY ZONE'),
+              ],
               ('${s.weekNumber}', 'WEEK'),
             ],
           ),
@@ -387,123 +395,145 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
               ),
             ),
           ],
-          heading('WORKOUT STRUCTURE'),
-          if (profile.isNotEmpty) ...[
-            WorkoutProfileBar(blocks: profile),
-            if (stepsDiffer)
-              Padding(
-                padding: const EdgeInsets.only(top: 4),
+          if (strength)
+            PlannedStrengthSection(
+              owner: StrengthPlanOwner.session(s.id),
+              sessionDate: s.sessionDate,
+              editable: editable,
+              // Taper, recovery and protected days keep their load.
+              // Gym mode may have completed the session.
+              onLiveFinished: () => perform(() async {}),
+              progressionBlockedReason: s.phase == 'taper'
+                  ? 'Taper phase'
+                  : s.sessionType == 'recovery'
+                  ? 'Recovery session'
+                  : goals?.loadOn(s.sessionDate) == DayLoad.easyOnly
+                  ? 'Close to your event'
+                  : null,
+              fallback: bundledStrengthPlanFor(
+                subType: s.subType,
+                sessionNotes: s.sessionNotes,
+              ),
+            ),
+          if (!strength) ...[
+            heading('WORKOUT STRUCTURE'),
+            if (profile.isNotEmpty) ...[
+              WorkoutProfileBar(blocks: profile),
+              if (stepsDiffer)
+                Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Text(
+                    'The steps add up to ${formatBlockDuration(totals.total)}; the plan counts ${s.plannedDurationMin} min.',
+                    style: const TextStyle(fontSize: 11, color: muted),
+                  ),
+                ),
+              const SizedBox(height: 14),
+            ],
+            if (steps.isEmpty)
+              Text(
+                [s.warmUp, s.coolDown]
+                        .whereType<String>()
+                        .where((s) => s.isNotEmpty)
+                        .join('\n')
+                        .isEmpty
+                    ? 'No workout structure available.'
+                    : [s.warmUp, s.coolDown]
+                          .whereType<String>()
+                          .where((s) => s.isNotEmpty)
+                          .join('\n'),
+                style: const TextStyle(fontSize: 13, color: Colors.white70),
+              ),
+            WorkoutStructureList(steps: steps),
+            heading('TARGETS'),
+            if (fromSteps == null)
+              const Padding(
+                padding: EdgeInsets.only(bottom: 8),
                 child: Text(
-                  'The steps add up to ${formatBlockDuration(totals.total)}; the plan counts ${s.plannedDurationMin} min.',
-                  style: const TextStyle(fontSize: 11, color: muted),
+                  'Typical split for this kind of session; no steps to calculate it from.',
+                  style: TextStyle(fontSize: 11, color: muted),
                 ),
               ),
-            const SizedBox(height: 14),
-          ],
-          if (steps.isEmpty)
-            Text(
-              [s.warmUp, s.coolDown]
-                      .whereType<String>()
-                      .where((s) => s.isNotEmpty)
-                      .join('\n')
-                      .isEmpty
-                  ? 'No workout structure available.'
-                  : [
-                      s.warmUp,
-                      s.coolDown,
-                    ].whereType<String>().where((s) => s.isNotEmpty).join('\n'),
-              style: const TextStyle(fontSize: 13, color: Colors.white70),
-            ),
-          WorkoutStructureList(steps: steps),
-          heading('TARGETS'),
-          if (fromSteps == null)
-            const Padding(
-              padding: EdgeInsets.only(bottom: 8),
-              child: Text(
-                'Typical split for this kind of session; no steps to calculate it from.',
-                style: TextStyle(fontSize: 11, color: muted),
-              ),
-            ),
-          SectionCard(
-            color: const Color(0xFF282828),
-            child: Column(
-              children: [
-                for (var i = 0; i < 5; i++)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 24,
-                          child: Text(
-                            'Z${i + 1}',
-                            style: const TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white70,
+            SectionCard(
+              color: const Color(0xFF282828),
+              child: Column(
+                children: [
+                  for (var i = 0; i < 5; i++)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 24,
+                            child: Text(
+                              'Z${i + 1}',
+                              style: const TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white70,
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          width: 84,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                const [
-                                  'Recovery',
-                                  'Aerobic',
-                                  'Tempo',
-                                  'Threshold',
-                                  'VO2max',
-                                ][i],
-                                style: const TextStyle(
-                                  fontSize: 10,
-                                  color: muted,
-                                ),
-                              ),
-                              for (final part in zoneTargetText(
-                                i + 1,
-                                hrFloors: zoneBounds,
-                                ftp: ftp,
-                              ).split(' · ').skip(1))
+                          SizedBox(
+                            width: 84,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
                                 Text(
-                                  part,
+                                  const [
+                                    'Recovery',
+                                    'Aerobic',
+                                    'Tempo',
+                                    'Threshold',
+                                    'VO2max',
+                                  ][i],
                                   style: const TextStyle(
-                                    fontSize: 9,
-                                    color: Colors.white38,
+                                    fontSize: 10,
+                                    color: muted,
                                   ),
                                 ),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: LinearProgressIndicator(
-                            value: fractions[i],
-                            color: colors[i],
-                            backgroundColor: Colors.white10,
-                            borderRadius: BorderRadius.circular(5),
-                            minHeight: 6,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        SizedBox(
-                          width: 30,
-                          child: Text(
-                            '${(fractions[i] * 100).round()}%',
-                            textAlign: TextAlign.right,
-                            style: const TextStyle(
-                              fontSize: 10,
-                              color: Colors.white70,
+                                for (final part in zoneTargetText(
+                                  i + 1,
+                                  hrFloors: zoneBounds,
+                                  ftp: ftp,
+                                ).split(' · ').skip(1))
+                                  Text(
+                                    part,
+                                    style: const TextStyle(
+                                      fontSize: 9,
+                                      color: Colors.white38,
+                                    ),
+                                  ),
+                              ],
                             ),
                           ),
-                        ),
-                      ],
+                          Expanded(
+                            child: LinearProgressIndicator(
+                              value: fractions[i],
+                              color: colors[i],
+                              backgroundColor: Colors.white10,
+                              borderRadius: BorderRadius.circular(5),
+                              minHeight: 6,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          SizedBox(
+                            width: 30,
+                            child: Text(
+                              '${(fractions[i] * 100).round()}%',
+                              textAlign: TextAlign.right,
+                              style: const TextStyle(
+                                fontSize: 10,
+                                color: Colors.white70,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-              ],
+                ],
+              ),
             ),
-          ),
+          ],
           if (s.adaptationTrigger?.isNotEmpty ?? false) ...[
             heading('ADAPTATION'),
             Text(
@@ -611,13 +641,18 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
 
               Widget button(WorkoutTarget t, {required bool first}) {
                 final provider = t.provider;
-                final pushes = t.route == WorkoutRoute.push;
+                // A platform that cannot hold exercises gets the list.
+                final strengthShare = strength && !provider.supportsStrength;
+                final pushes = t.route == WorkoutRoute.push && !strengthShare;
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     OutlinedButton.icon(
                       style: style(blue, filled: first),
-                      onPressed: !editable || busy || s.stepsJson == null
+                      onPressed:
+                          !editable ||
+                              busy ||
+                              (s.stepsJson == null && !strength)
                           ? null
                           : () => perform(() async {
                               if (!pushes) return share(null);
@@ -636,11 +671,19 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                                   '${result.shareReason} Shared as text.',
                                 );
                               }
+                              final omitted = strength
+                                  ? await ref
+                                        .read(trainingPlanServiceProvider)
+                                        .strengthUploadOmissions(s.id)
+                                  : const <String>[];
                               if (context.mounted) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
-                                      'Workout sent to ${provider.label}',
+                                      omitted.isEmpty
+                                          ? 'Workout sent to ${provider.label}'
+                                          : 'Sent to ${provider.label}. Kept in '
+                                                'Fjelia only: ${omitted.join(', ')}.',
                                     ),
                                   ),
                                 );
@@ -655,6 +698,8 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                             ? 'Updating…'
                             : pushes
                             ? 'Push to ${provider.label}'
+                            : strengthShare
+                            ? 'Share exercise list for ${provider.label}'
                             : 'Share workout for ${provider.label}',
                         style: const TextStyle(
                           fontSize: 15,
@@ -666,11 +711,13 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                       Padding(
                         padding: const EdgeInsets.only(top: 6),
                         child: Text(
-                          provider.shareNote,
+                          strengthShare
+                              ? '${provider.label} does not take strength exercises from Fjelia. Share the list and enter it in the ${provider.label} app.'
+                              : provider.shareNote,
                           style: const TextStyle(fontSize: 11, color: muted),
                         ),
                       ),
-                    if (!pushes && provider.optIn != null)
+                    if (!pushes && !strengthShare && provider.optIn != null)
                       Padding(
                         padding: const EdgeInsets.only(top: 8),
                         child: OutlinedButton.icon(
@@ -695,6 +742,14 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                               fontWeight: FontWeight.w600,
                             ),
                           ),
+                        ),
+                      ),
+                    if (pushes && strength)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 6),
+                        child: Text(
+                          '${provider.label} gets each exercise with its sets, reps and loads. Rep ranges, effort and tempo stay in Fjelia.',
+                          style: const TextStyle(fontSize: 11, color: muted),
                         ),
                       ),
                     if (pushes && provider.pushNote != null)

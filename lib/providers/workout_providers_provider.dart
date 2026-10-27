@@ -1,3 +1,6 @@
+import '../services/strength/strength_repository.dart';
+import 'strength_provider.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../services/workout_destination.dart';
@@ -23,6 +26,14 @@ final workoutProvidersProvider = Provider<WorkoutProviders>((ref) {
       ref.watch(databaseProvider),
       ref.watch(garminClientProvider),
       connected: () async => ref.read(authProvider).garminConnected,
+      strengthRevision: (s) async {
+        try {
+          return (await ref.read(strengthRepositoryProvider).sessionPlan(s))
+              ?.revision;
+        } on StrengthUnreadableException {
+          return 'unreadable';
+        }
+      },
     ),
     CorosWorkoutProvider(
       ref.watch(corosServiceProvider),

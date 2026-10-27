@@ -126,6 +126,26 @@ void main() {
       expect(await status('d20'), 'completed');
       expect(await status('d21'), 'planned');
     });
+
+    test(
+      'a strength session is linked but not scored on HR zones (STR-A31)',
+      () async {
+        await plan('lift', DateTime(2026, 10, 22), 'strength');
+        final gym = await activity(
+          'g',
+          DateTime(2026, 10, 22, 18),
+          'strength_training',
+        );
+        expect(await scorer.score(gym), isTrue);
+        expect(await status('lift'), 'completed');
+        final actual = await (db.select(
+          db.sessionActuals,
+        )..where((t) => t.sessionId.equals('lift'))).getSingle();
+        expect(actual.activityId, 'g');
+        expect(actual.executionScore, isNull);
+        expect(actual.executionVerdict, isNull);
+      },
+    );
   });
 
   group('activity identity', () {

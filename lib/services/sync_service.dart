@@ -9,6 +9,7 @@ import '../api/garmin_client.dart';
 import '../api/renpho_client.dart';
 import '../db/database.dart' hide DailyBpSummary;
 import '../models/garmin_data.dart';
+import '../models/strength_workout.dart';
 import '../models/renpho_data.dart';
 import '../models/scores.dart';
 import '../utils/log.dart';
@@ -16,6 +17,8 @@ import 'activity_decoder.dart';
 import 'energie_calculator.dart';
 import 'heat_acclimation_service.dart';
 import 'score_calculator.dart';
+import 'strength/garmin_strength.dart';
+import 'strength/strength_repository.dart';
 
 const _zoneKeys = ['zone1', 'zone2', 'zone3', 'zone4', 'zone5'];
 const _zoneWeights = [1.0, 1.1, 1.2, 3.1, 8.0];
@@ -728,6 +731,7 @@ class SyncService {
             );
         result.activities++;
       }
+      await _importStrengthSets(activities);
     } on GarminAuthException catch (e) {
       result.garminAuthError = true;
       result.errors.add('Garmin auth error: ${_clip(e)}');
@@ -735,6 +739,42 @@ class SyncService {
       result.errors.add('Activity sync error: ${_clip(e)}');
     }
     return gpsPatched;
+  }
+
+  /// Exercise sets the watch recorded for recent strength activities. An
+  /// activity the athlete logged by hand is left alone; an imported log
+  /// takes Garmin's corrections for a week, keeping the athlete's own edits.
+  /// A repeat sync saves nothing new. Never fails the sync.
+  Future<void> _importStrengthSets(List<GarminActivity> activities) async {
+    final repo = StrengthRepository(_db);
+    final now = DateTime.now();
+    for (final a in activities) {
+      if (!isStrengthSport(a.type)) continue;
+      final age = now.difference(a.startTime);
+      if (age > const Duration(days: 30)) continue;
+      try {
+        final existing = await repo.loadLog(a.id);
+        final imported =
+            existing?.exercises.any((e) => e.id.startsWith('garmin:')) ?? false;
+        if (existing != null &&
+            !existing.isEmpty &&
+            (!imported || age > const Duration(days: 7))) {
+          continue;
+        }
+        final sets = parseGarminExerciseSets(
+          a.id,
+          await _garmin.getExerciseSets(a.id),
+        );
+        final merged = mergeGarminImport(existing, a.id, sets);
+        if (merged == null) continue;
+        await repo.saveLog(merged);
+        log('[Garmin] strength sets imported for ${a.id}: ${sets.length} exercises');
+      } on StrengthUnreadableException {
+        continue;
+      } catch (e) {
+        log('[Garmin] strength sets for ${a.id} not imported: $e');
+      }
+    }
   }
 
   static double? _avgPower(List<ActivitySample> samples) {

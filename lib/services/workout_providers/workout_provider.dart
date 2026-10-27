@@ -77,6 +77,11 @@ abstract class WorkoutProvider {
   /// A note under the push button, for a platform whose route needs one.
   String? get pushNote => null;
 
+  /// Whether the platform takes strength workouts as exercises, sets, reps
+  /// and loads. Without it a strength session is not uploaded as a timed
+  /// outline; it is shared as an exercise list.
+  bool get supportsStrength => false;
+
   /// The athlete has this platform connected.
   Future<bool> isConnected();
 

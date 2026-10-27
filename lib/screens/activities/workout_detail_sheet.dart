@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../../models/coach_context_card.dart';
 import '../../models/garmin_data.dart';
+import '../../models/strength_workout.dart';
+import '../../services/strength/strength_repository.dart';
 import '../../models/workout_profile.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/workout_profile_bar.dart';
@@ -11,6 +13,7 @@ import '../../widgets/workout_structure_list.dart';
 import '../../widgets/nutrition_widgets.dart';
 import '../../models/workout_nutrition.dart';
 import '../ai_coach/ai_coach_screen.dart';
+import '../strength/strength_sections.dart';
 import 'weekly_load_card.dart' show sportName;
 
 class WorkoutDetailSheet extends StatelessWidget {
@@ -38,6 +41,7 @@ class WorkoutDetailSheet extends StatelessWidget {
         workout.estimatedDuration?.inSeconds.toDouble() ??
         workoutStepsSeconds(workout.steps);
     final distance = workout.estimatedDistanceMeters;
+    final strength = isStrengthSport(workout.sportType);
     return SheetPage(
       title: workout.name,
       child: ListView(
@@ -70,8 +74,16 @@ class WorkoutDetailSheet extends StatelessWidget {
               ),
             ),
           ],
+          if (strength)
+            PlannedStrengthSection(
+              owner: StrengthPlanOwner.scheduled('garmin', workout.scheduleId),
+              sessionDate: workout.scheduledDate,
+              ownershipNote:
+                  'Edits are kept in Fjelia as a local copy for this date. '
+                  'The workout on Garmin is not changed.',
+            ),
           if (lines.isNotEmpty) ...[
-            _heading('WORKOUT STRUCTURE'),
+            _heading(strength ? 'AS SENT BY GARMIN' : 'WORKOUT STRUCTURE'),
             if (blocks.isNotEmpty) ...[
               WorkoutProfileBar(blocks: blocks),
               const SizedBox(height: 14),

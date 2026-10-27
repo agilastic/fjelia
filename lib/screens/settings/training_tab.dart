@@ -217,6 +217,25 @@ class TrainingTab extends ConsumerWidget {
               ),
             ),
             const NutritionPreferencesTile(),
+            const SectionLabel('Strength load unit', color: Colors.orange),
+            const Padding(
+              padding: EdgeInsets.only(bottom: 12),
+              child: Text(
+                'Weights themselves are set in each workout and remembered from your history.',
+                style: TextStyle(color: Colors.white70, fontSize: 12),
+              ),
+            ),
+            SettingsSegments(
+              values: const {'kg': 'Kilograms (kg)', 'lb': 'Pounds (lb)'},
+              selected: p.massUnit,
+              color: Colors.orange,
+              onSelect: (v) => runUiAction(
+                context,
+                () => ref
+                    .read(userProfileProvider.notifier)
+                    .save(p.copyWith(massUnit: v)),
+              ),
+            ),
             const SectionLabel('Hours available / week', color: Colors.orange),
             Text(
               '${valueText(p.hoursPerWeek)} h / week',
