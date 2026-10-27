@@ -102,6 +102,19 @@ List<(T, int)> numberedSets<T>(List<T> sets) {
   ];
 }
 
+/// The name an athlete knows an activity source by; null when unknown.
+String? strengthSourceLabel(String? source) => switch (source) {
+  null || '' => null,
+  'fjelia_live' => 'Gym mode',
+  'garmin_api' => 'Garmin',
+  'polar' => 'Polar',
+  'coros' => 'COROS',
+  'suunto' => 'Suunto',
+  'health_connect' => 'Health',
+  'manual' => 'Manual',
+  _ => null,
+};
+
 String _setLabel(StrengthSetKind kind, int index) =>
     kind == StrengthSetKind.warmup ? 'W' : '$index';
 
@@ -626,7 +639,7 @@ class StrengthHistoryHint extends StatelessWidget {
         : null;
     final text = 'Last time: ${[?loads, reps].join(' · ')}';
     final when =
-        '${DateFormat('d MMM').format(entry.date)}${entry.source == null ? '' : ' · ${entry.source}'}${entry.stale ? ' · older than ${strengthHistoryStaleAfter.inDays ~/ 7} weeks' : ''}';
+        '${DateFormat('d MMM').format(entry.date)}${strengthSourceLabel(entry.source) == null ? '' : ' · ${strengthSourceLabel(entry.source)}'}${entry.stale ? ' · older than ${strengthHistoryStaleAfter.inDays ~/ 7} weeks' : ''}';
     return Container(
       padding: const EdgeInsets.fromLTRB(10, 6, 4, 6),
       decoration: BoxDecoration(
@@ -858,7 +871,7 @@ Future<void> showStrengthSupportingSets(
           for (final s in evaluation.supporting) ...[
             const SizedBox(height: 14),
             Text(
-              '${DateFormat('EEE d MMM').format(s.date)}${s.source == null ? '' : ' · ${s.source}'}',
+              '${DateFormat('EEE d MMM').format(s.date)}${strengthSourceLabel(s.source) == null ? '' : ' · ${strengthSourceLabel(s.source)}'}',
               style: const TextStyle(fontWeight: FontWeight.w700),
             ),
             for (final (r, n) in numberedSets(s.sets))

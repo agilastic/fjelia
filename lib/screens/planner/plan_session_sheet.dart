@@ -395,6 +395,15 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
               ),
             ),
           ],
+          if (strength &&
+              editable &&
+              isLegacyStrengthSession(s.subType, s.phase))
+            StrengthProgrammeUpdateCard(
+              // The session was replaced; its sheet shows what no longer is.
+              onUpdated: () {
+                if (context.mounted) Navigator.of(context).pop();
+              },
+            ),
           if (strength)
             PlannedStrengthSection(
               owner: StrengthPlanOwner.session(s.id),

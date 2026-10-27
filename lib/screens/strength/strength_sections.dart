@@ -4,6 +4,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../db/database.dart' show ActivityRecord;
 import '../../models/strength_workout.dart';
+import '../../providers/plan_schedule_provider.dart';
 import '../../providers/strength_provider.dart';
 import '../../services/strength/strength_estimates.dart';
 import '../../services/strength/strength_plan_edits.dart';
@@ -852,4 +853,55 @@ class CompletedStrengthSection extends ConsumerWidget {
       ],
     );
   }
+}
+
+/// Asks, then rebuilds the plan's future so strength sessions follow the
+/// race goals on every strength day. Returns whether it ran.
+Future<bool> confirmStrengthUpdate(BuildContext context, WidgetRef ref) async {
+  if (!await confirmAction(
+    context,
+    'Update strength sessions?',
+    'Upcoming sessions are planned again from today: strength follows your '
+        'race goals on every strength day, with sessions that vary. Completed '
+        'and skipped workouts stay; exercises you changed in an upcoming '
+        'strength session are replaced.',
+  )) {
+    return false;
+  }
+  if (!context.mounted) return false;
+  var done = false;
+  await runUiAction(context, () async {
+    await ref.read(updateStrengthProgrammeProvider)();
+    done = true;
+  });
+  return done;
+}
+
+/// Shown on a planned session that still uses an earlier strength template.
+class StrengthProgrammeUpdateCard extends ConsumerWidget {
+  const StrengthProgrammeUpdateCard({super.key, this.onUpdated});
+  final VoidCallback? onUpdated;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) => SectionCard(
+    color: strengthColor.withValues(alpha: .08),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const Text(
+          'This session uses an earlier strength template. Updated plans '
+          'vary strength by phase and race goal and use every strength day.',
+          style: TextStyle(fontSize: 13, color: Colors.white70, height: 1.4),
+        ),
+        const SizedBox(height: 10),
+        OutlinedButton.icon(
+          style: _outlined(),
+          onPressed: () async {
+            if (await confirmStrengthUpdate(context, ref)) onUpdated?.call();
+          },
+          icon: const Icon(Icons.fitness_center, size: 18),
+          label: const Text('Update strength sessions'),
+        ),
+      ],
+    ),
+  );
 }

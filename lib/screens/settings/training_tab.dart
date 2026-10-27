@@ -21,6 +21,7 @@ import '../../widgets/app_widgets.dart';
 import '../../widgets/nutrition_widgets.dart';
 import '../../utils/target_time.dart';
 import 'race_goal_editor.dart';
+import '../strength/strength_sections.dart';
 
 class TrainingTab extends ConsumerWidget {
   const TrainingTab({super.key});
@@ -192,6 +193,16 @@ class TrainingTab extends ConsumerWidget {
                   ),
                   icon: const Icon(Icons.event_repeat_rounded, size: 18),
                   label: const Text('Update plan to this schedule'),
+                ),
+              ),
+            if (ref.watch(strengthProgrammeOutdatedProvider).valueOrNull ??
+                false)
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: FilledButton.tonalIcon(
+                  onPressed: () => confirmStrengthUpdate(context, ref),
+                  icon: const Icon(Icons.fitness_center, size: 18),
+                  label: const Text('Update strength sessions'),
                 ),
               ),
             const SectionLabel('Sessions per day', color: Colors.orange),

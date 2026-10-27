@@ -457,3 +457,10 @@ BundledStrengthTemplate _programmeTemplate(
     },
   );
 }
+
+/// A planned session from before the goal-driven programme: the original
+/// templates outside recovery weeks (where core and stability still belong).
+bool isLegacyStrengthSession(String? subType, String phase) =>
+    subType == 'strengthFull' ||
+    subType == 'strengthLower' ||
+    (subType == 'strengthCore' && phase != 'recovery');
