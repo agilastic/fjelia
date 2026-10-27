@@ -5,23 +5,12 @@ import '../coros_service.dart';
 import '../workout_destination.dart';
 import 'workout_provider.dart';
 
-/// COROS Training Hub, by the unofficial web interface its own page uses. It
-/// is a push route only while the athlete has switched it on knowingly
-/// (Settings, Training); otherwise COROS gets the workout as text.
+/// Connected COROS accounts receive workouts through the Training Hub.
 class CorosWorkoutProvider extends WorkoutProvider {
-  CorosWorkoutProvider(
-    this._service, {
-    required this.connected,
-    required this.pushEnabled,
-    required this.enablePush,
-  });
+  CorosWorkoutProvider(this._service, {required this.connected});
 
   final CorosService _service;
-  /// Whether COROS is connected, whether the experimental push route is on,
-  /// and how to turn it on.
   final Future<bool> Function() connected;
-  final Future<bool> Function() pushEnabled;
-  final Future<void> Function() enablePush;
 
   @override
   String get id => 'coros';
@@ -33,34 +22,15 @@ class CorosWorkoutProvider extends WorkoutProvider {
   bool get experimental => true;
 
   @override
-  String get shareNote =>
-      '${super.shareNote} Or turn on the experimental COROS route in '
-      'Settings, Training.';
-
-  @override
-  OptIn? get optIn => OptIn(
-    title: 'Send workouts to COROS?',
-    message:
-        'COROS has no workout import, so this uses the Training Hub\'s '
-        'unofficial web interface with your COROS login. It is not endorsed '
-        'by COROS, can stop working, and a workout should be checked in the '
-        'Training Hub afterwards. Turn it on?',
-    buttonLabel: 'Send to COROS instead (experimental)',
-    enable: enablePush,
-  );
-
-  @override
   String get pushNote =>
-      'Experimental: sent through the COROS Training Hub\'s unofficial '
-      'interface. Check the workout in the Training Hub; a changed or moved '
-      'workout replaces the earlier one there.';
+      'Sync COROS to your watch after sending. A changed or moved workout '
+      'replaces the earlier one in the Training Hub.';
 
   @override
   Future<bool> isConnected() => connected();
 
   @override
-  Future<DeliveryMode> mode() async =>
-      await pushEnabled() ? DeliveryMode.push : DeliveryMode.share;
+  Future<DeliveryMode> mode() async => DeliveryMode.push;
 
   @override
   Future<void> deliver(

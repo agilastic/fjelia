@@ -75,7 +75,10 @@ class HrvInboxEntry {
 @pragma('vm:entry-point')
 void hrvNotificationBackgroundHandler(fln.NotificationResponse response) {
   final payload = HrvNotificationPayload.decode(response.payload);
-  if (payload == null) return;
+  if (payload == null &&
+      NutritionNotificationPayload.decode(response.payload) == null) {
+    return;
+  }
   unawaited(
     HrvActionInbox.append(
       HrvInboxEntry(
@@ -121,6 +124,18 @@ class FlutterLocalNotificationGateway implements LocalNotificationGateway {
           requestBadgePermission: false,
           requestSoundPermission: false,
           notificationCategories: [
+            fln.DarwinNotificationCategory(
+              'nutrition_post',
+              actions: [
+                fln.DarwinNotificationAction.plain(
+                  'log',
+                  'Log intake',
+                  options: {fln.DarwinNotificationActionOption.foreground},
+                ),
+                fln.DarwinNotificationAction.plain('snooze', 'In 30 minutes'),
+                fln.DarwinNotificationAction.plain('skip', 'Dismiss'),
+              ],
+            ),
             fln.DarwinNotificationCategory(
               _category,
               actions: [
@@ -205,6 +220,7 @@ class FlutterLocalNotificationGateway implements LocalNotificationGateway {
   Future<void> schedule(ScheduledNotification n) async {
     await init();
     final labels = n.actionLabels;
+    final nutrition = n.feature == NotificationFeature.nutrition;
     await _plugin.zonedSchedule(
       id: n.id,
       title: n.title,
@@ -217,16 +233,22 @@ class FlutterLocalNotificationGateway implements LocalNotificationGateway {
       androidScheduleMode: fln.AndroidScheduleMode.inexactAllowWhileIdle,
       notificationDetails: fln.NotificationDetails(
         android: fln.AndroidNotificationDetails(
-          _channelId,
-          labels['channel'] ?? 'HRV reminders',
-          channelDescription: 'Post-training HRV measurement reminder',
+          nutrition ? 'nutrition_post_reminder' : _channelId,
+          nutrition
+              ? 'Workout nutrition'
+              : labels['channel'] ?? 'HRV reminders',
+          channelDescription: nutrition
+              ? 'Post-workout food and fluid log reminder'
+              : 'Post-training HRV measurement reminder',
           importance: fln.Importance.defaultImportance,
           priority: fln.Priority.defaultPriority,
           category: fln.AndroidNotificationCategory.reminder,
           actions: [
             fln.AndroidNotificationAction(
-              'measure',
-              labels['measure'] ?? 'Measure now',
+              nutrition ? 'log' : 'measure',
+              nutrition
+                  ? labels['log'] ?? 'Log intake'
+                  : labels['measure'] ?? 'Measure now',
               showsUserInterface: true,
             ),
             fln.AndroidNotificationAction(
@@ -239,9 +261,9 @@ class FlutterLocalNotificationGateway implements LocalNotificationGateway {
             ),
           ],
         ),
-        iOS: const fln.DarwinNotificationDetails(
-          categoryIdentifier: _category,
-          threadIdentifier: 'hrv_post',
+        iOS: fln.DarwinNotificationDetails(
+          categoryIdentifier: nutrition ? 'nutrition_post' : _category,
+          threadIdentifier: nutrition ? 'nutrition_post' : 'hrv_post',
           presentBadge: false,
         ),
       ),

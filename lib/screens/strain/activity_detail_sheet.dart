@@ -16,6 +16,7 @@ import '../../widgets/activity_performance_chart.dart';
 import '../../widgets/activity_route_map.dart';
 import '../../widgets/activity_heat_card.dart';
 import '../../widgets/workout_hrv_card.dart';
+import '../../widgets/nutrition_widgets.dart';
 import '../planner/plan_overview_cards.dart';
 import '../activities/activities_screen.dart';
 import '../../models/coach_context_card.dart';
@@ -166,6 +167,7 @@ class ActivityDetailSheet extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 16),
+          ActivityNutritionCard(activity: activity),
           ActivityHeatCard(activityId: a.id),
           if (route.isNotEmpty) ...[
             const Padding(
@@ -207,8 +209,7 @@ class ActivityDetailSheet extends ConsumerWidget {
             activityId: activity.activityId,
             onExplain: () => openCoachTab(
               context,
-              prompt:
-                  'Explain my HRV before and after this workout. What is comparable, what is not, and what is still unknown?',
+              prompt: 'Explain my HRV before and after this workout. What is comparable, what is not, and what is still unknown?',
               activity: activity,
               card: CoachContextCard.completed(a),
             ),
@@ -264,8 +265,7 @@ class ActivityDetailSheet extends ConsumerWidget {
                   label: const Text('Chat AI'),
                   onPressed: () => openCoachTab(
                     context,
-                    prompt:
-                        'How did this session go, and what does it mean for my next days?',
+                    prompt: 'How did this session go, and what does it mean for my next days?',
                     activity: activity,
                     card: CoachContextCard.completed(a),
                   ),

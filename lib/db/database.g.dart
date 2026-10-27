@@ -7465,6 +7465,696 @@ class ActivityRecordsCompanion extends UpdateCompanion<ActivityRecord> {
   }
 }
 
+class $NutritionRecordsTable extends NutritionRecords
+    with TableInfo<$NutritionRecordsTable, NutritionRecord> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $NutritionRecordsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _recordKeyMeta = const VerificationMeta(
+    'recordKey',
+  );
+  @override
+  late final GeneratedColumn<String> recordKey = GeneratedColumn<String>(
+    'record_key',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _kindMeta = const VerificationMeta('kind');
+  @override
+  late final GeneratedColumn<String> kind = GeneratedColumn<String>(
+    'kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _dataJsonMeta = const VerificationMeta(
+    'dataJson',
+  );
+  @override
+  late final GeneratedColumn<String> dataJson = GeneratedColumn<String>(
+    'data_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [recordKey, kind, dataJson, updatedAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'nutrition_records';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<NutritionRecord> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('record_key')) {
+      context.handle(
+        _recordKeyMeta,
+        recordKey.isAcceptableOrUnknown(data['record_key']!, _recordKeyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_recordKeyMeta);
+    }
+    if (data.containsKey('kind')) {
+      context.handle(
+        _kindMeta,
+        kind.isAcceptableOrUnknown(data['kind']!, _kindMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_kindMeta);
+    }
+    if (data.containsKey('data_json')) {
+      context.handle(
+        _dataJsonMeta,
+        dataJson.isAcceptableOrUnknown(data['data_json']!, _dataJsonMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_dataJsonMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {recordKey};
+  @override
+  NutritionRecord map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return NutritionRecord(
+      recordKey: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}record_key'],
+      )!,
+      kind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}kind'],
+      )!,
+      dataJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}data_json'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+    );
+  }
+
+  @override
+  $NutritionRecordsTable createAlias(String alias) {
+    return $NutritionRecordsTable(attachedDatabase, alias);
+  }
+}
+
+class NutritionRecord extends DataClass implements Insertable<NutritionRecord> {
+  final String recordKey;
+  final String kind;
+  final String dataJson;
+  final DateTime updatedAt;
+  const NutritionRecord({
+    required this.recordKey,
+    required this.kind,
+    required this.dataJson,
+    required this.updatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['record_key'] = Variable<String>(recordKey);
+    map['kind'] = Variable<String>(kind);
+    map['data_json'] = Variable<String>(dataJson);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    return map;
+  }
+
+  NutritionRecordsCompanion toCompanion(bool nullToAbsent) {
+    return NutritionRecordsCompanion(
+      recordKey: Value(recordKey),
+      kind: Value(kind),
+      dataJson: Value(dataJson),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory NutritionRecord.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return NutritionRecord(
+      recordKey: serializer.fromJson<String>(json['recordKey']),
+      kind: serializer.fromJson<String>(json['kind']),
+      dataJson: serializer.fromJson<String>(json['dataJson']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'recordKey': serializer.toJson<String>(recordKey),
+      'kind': serializer.toJson<String>(kind),
+      'dataJson': serializer.toJson<String>(dataJson),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+    };
+  }
+
+  NutritionRecord copyWith({
+    String? recordKey,
+    String? kind,
+    String? dataJson,
+    DateTime? updatedAt,
+  }) => NutritionRecord(
+    recordKey: recordKey ?? this.recordKey,
+    kind: kind ?? this.kind,
+    dataJson: dataJson ?? this.dataJson,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+  NutritionRecord copyWithCompanion(NutritionRecordsCompanion data) {
+    return NutritionRecord(
+      recordKey: data.recordKey.present ? data.recordKey.value : this.recordKey,
+      kind: data.kind.present ? data.kind.value : this.kind,
+      dataJson: data.dataJson.present ? data.dataJson.value : this.dataJson,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('NutritionRecord(')
+          ..write('recordKey: $recordKey, ')
+          ..write('kind: $kind, ')
+          ..write('dataJson: $dataJson, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(recordKey, kind, dataJson, updatedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is NutritionRecord &&
+          other.recordKey == this.recordKey &&
+          other.kind == this.kind &&
+          other.dataJson == this.dataJson &&
+          other.updatedAt == this.updatedAt);
+}
+
+class NutritionRecordsCompanion extends UpdateCompanion<NutritionRecord> {
+  final Value<String> recordKey;
+  final Value<String> kind;
+  final Value<String> dataJson;
+  final Value<DateTime> updatedAt;
+  final Value<int> rowid;
+  const NutritionRecordsCompanion({
+    this.recordKey = const Value.absent(),
+    this.kind = const Value.absent(),
+    this.dataJson = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  NutritionRecordsCompanion.insert({
+    required String recordKey,
+    required String kind,
+    required String dataJson,
+    required DateTime updatedAt,
+    this.rowid = const Value.absent(),
+  }) : recordKey = Value(recordKey),
+       kind = Value(kind),
+       dataJson = Value(dataJson),
+       updatedAt = Value(updatedAt);
+  static Insertable<NutritionRecord> custom({
+    Expression<String>? recordKey,
+    Expression<String>? kind,
+    Expression<String>? dataJson,
+    Expression<DateTime>? updatedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (recordKey != null) 'record_key': recordKey,
+      if (kind != null) 'kind': kind,
+      if (dataJson != null) 'data_json': dataJson,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  NutritionRecordsCompanion copyWith({
+    Value<String>? recordKey,
+    Value<String>? kind,
+    Value<String>? dataJson,
+    Value<DateTime>? updatedAt,
+    Value<int>? rowid,
+  }) {
+    return NutritionRecordsCompanion(
+      recordKey: recordKey ?? this.recordKey,
+      kind: kind ?? this.kind,
+      dataJson: dataJson ?? this.dataJson,
+      updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (recordKey.present) {
+      map['record_key'] = Variable<String>(recordKey.value);
+    }
+    if (kind.present) {
+      map['kind'] = Variable<String>(kind.value);
+    }
+    if (dataJson.present) {
+      map['data_json'] = Variable<String>(dataJson.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('NutritionRecordsCompanion(')
+          ..write('recordKey: $recordKey, ')
+          ..write('kind: $kind, ')
+          ..write('dataJson: $dataJson, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $NutritionReminderRecordsTable extends NutritionReminderRecords
+    with TableInfo<$NutritionReminderRecordsTable, NutritionReminderRecord> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $NutritionReminderRecordsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _activityIdMeta = const VerificationMeta(
+    'activityId',
+  );
+  @override
+  late final GeneratedColumn<String> activityId = GeneratedColumn<String>(
+    'activity_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _tokenMeta = const VerificationMeta('token');
+  @override
+  late final GeneratedColumn<String> token = GeneratedColumn<String>(
+    'token',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _notificationIdMeta = const VerificationMeta(
+    'notificationId',
+  );
+  @override
+  late final GeneratedColumn<int> notificationId = GeneratedColumn<int>(
+    'notification_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
+  );
+  static const VerificationMeta _dueAtMeta = const VerificationMeta('dueAt');
+  @override
+  late final GeneratedColumn<DateTime> dueAt = GeneratedColumn<DateTime>(
+    'due_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _stateMeta = const VerificationMeta('state');
+  @override
+  late final GeneratedColumn<String> state = GeneratedColumn<String>(
+    'state',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    activityId,
+    token,
+    notificationId,
+    dueAt,
+    state,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'nutrition_reminder_records';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<NutritionReminderRecord> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('activity_id')) {
+      context.handle(
+        _activityIdMeta,
+        activityId.isAcceptableOrUnknown(data['activity_id']!, _activityIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_activityIdMeta);
+    }
+    if (data.containsKey('token')) {
+      context.handle(
+        _tokenMeta,
+        token.isAcceptableOrUnknown(data['token']!, _tokenMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_tokenMeta);
+    }
+    if (data.containsKey('notification_id')) {
+      context.handle(
+        _notificationIdMeta,
+        notificationId.isAcceptableOrUnknown(
+          data['notification_id']!,
+          _notificationIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_notificationIdMeta);
+    }
+    if (data.containsKey('due_at')) {
+      context.handle(
+        _dueAtMeta,
+        dueAt.isAcceptableOrUnknown(data['due_at']!, _dueAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_dueAtMeta);
+    }
+    if (data.containsKey('state')) {
+      context.handle(
+        _stateMeta,
+        state.isAcceptableOrUnknown(data['state']!, _stateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_stateMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {activityId};
+  @override
+  NutritionReminderRecord map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return NutritionReminderRecord(
+      activityId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}activity_id'],
+      )!,
+      token: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}token'],
+      )!,
+      notificationId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}notification_id'],
+      )!,
+      dueAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}due_at'],
+      )!,
+      state: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}state'],
+      )!,
+    );
+  }
+
+  @override
+  $NutritionReminderRecordsTable createAlias(String alias) {
+    return $NutritionReminderRecordsTable(attachedDatabase, alias);
+  }
+}
+
+class NutritionReminderRecord extends DataClass
+    implements Insertable<NutritionReminderRecord> {
+  final String activityId;
+  final String token;
+  final int notificationId;
+  final DateTime dueAt;
+  final String state;
+  const NutritionReminderRecord({
+    required this.activityId,
+    required this.token,
+    required this.notificationId,
+    required this.dueAt,
+    required this.state,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['activity_id'] = Variable<String>(activityId);
+    map['token'] = Variable<String>(token);
+    map['notification_id'] = Variable<int>(notificationId);
+    map['due_at'] = Variable<DateTime>(dueAt);
+    map['state'] = Variable<String>(state);
+    return map;
+  }
+
+  NutritionReminderRecordsCompanion toCompanion(bool nullToAbsent) {
+    return NutritionReminderRecordsCompanion(
+      activityId: Value(activityId),
+      token: Value(token),
+      notificationId: Value(notificationId),
+      dueAt: Value(dueAt),
+      state: Value(state),
+    );
+  }
+
+  factory NutritionReminderRecord.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return NutritionReminderRecord(
+      activityId: serializer.fromJson<String>(json['activityId']),
+      token: serializer.fromJson<String>(json['token']),
+      notificationId: serializer.fromJson<int>(json['notificationId']),
+      dueAt: serializer.fromJson<DateTime>(json['dueAt']),
+      state: serializer.fromJson<String>(json['state']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'activityId': serializer.toJson<String>(activityId),
+      'token': serializer.toJson<String>(token),
+      'notificationId': serializer.toJson<int>(notificationId),
+      'dueAt': serializer.toJson<DateTime>(dueAt),
+      'state': serializer.toJson<String>(state),
+    };
+  }
+
+  NutritionReminderRecord copyWith({
+    String? activityId,
+    String? token,
+    int? notificationId,
+    DateTime? dueAt,
+    String? state,
+  }) => NutritionReminderRecord(
+    activityId: activityId ?? this.activityId,
+    token: token ?? this.token,
+    notificationId: notificationId ?? this.notificationId,
+    dueAt: dueAt ?? this.dueAt,
+    state: state ?? this.state,
+  );
+  NutritionReminderRecord copyWithCompanion(
+    NutritionReminderRecordsCompanion data,
+  ) {
+    return NutritionReminderRecord(
+      activityId: data.activityId.present
+          ? data.activityId.value
+          : this.activityId,
+      token: data.token.present ? data.token.value : this.token,
+      notificationId: data.notificationId.present
+          ? data.notificationId.value
+          : this.notificationId,
+      dueAt: data.dueAt.present ? data.dueAt.value : this.dueAt,
+      state: data.state.present ? data.state.value : this.state,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('NutritionReminderRecord(')
+          ..write('activityId: $activityId, ')
+          ..write('token: $token, ')
+          ..write('notificationId: $notificationId, ')
+          ..write('dueAt: $dueAt, ')
+          ..write('state: $state')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(activityId, token, notificationId, dueAt, state);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is NutritionReminderRecord &&
+          other.activityId == this.activityId &&
+          other.token == this.token &&
+          other.notificationId == this.notificationId &&
+          other.dueAt == this.dueAt &&
+          other.state == this.state);
+}
+
+class NutritionReminderRecordsCompanion
+    extends UpdateCompanion<NutritionReminderRecord> {
+  final Value<String> activityId;
+  final Value<String> token;
+  final Value<int> notificationId;
+  final Value<DateTime> dueAt;
+  final Value<String> state;
+  final Value<int> rowid;
+  const NutritionReminderRecordsCompanion({
+    this.activityId = const Value.absent(),
+    this.token = const Value.absent(),
+    this.notificationId = const Value.absent(),
+    this.dueAt = const Value.absent(),
+    this.state = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  NutritionReminderRecordsCompanion.insert({
+    required String activityId,
+    required String token,
+    required int notificationId,
+    required DateTime dueAt,
+    required String state,
+    this.rowid = const Value.absent(),
+  }) : activityId = Value(activityId),
+       token = Value(token),
+       notificationId = Value(notificationId),
+       dueAt = Value(dueAt),
+       state = Value(state);
+  static Insertable<NutritionReminderRecord> custom({
+    Expression<String>? activityId,
+    Expression<String>? token,
+    Expression<int>? notificationId,
+    Expression<DateTime>? dueAt,
+    Expression<String>? state,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (activityId != null) 'activity_id': activityId,
+      if (token != null) 'token': token,
+      if (notificationId != null) 'notification_id': notificationId,
+      if (dueAt != null) 'due_at': dueAt,
+      if (state != null) 'state': state,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  NutritionReminderRecordsCompanion copyWith({
+    Value<String>? activityId,
+    Value<String>? token,
+    Value<int>? notificationId,
+    Value<DateTime>? dueAt,
+    Value<String>? state,
+    Value<int>? rowid,
+  }) {
+    return NutritionReminderRecordsCompanion(
+      activityId: activityId ?? this.activityId,
+      token: token ?? this.token,
+      notificationId: notificationId ?? this.notificationId,
+      dueAt: dueAt ?? this.dueAt,
+      state: state ?? this.state,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (activityId.present) {
+      map['activity_id'] = Variable<String>(activityId.value);
+    }
+    if (token.present) {
+      map['token'] = Variable<String>(token.value);
+    }
+    if (notificationId.present) {
+      map['notification_id'] = Variable<int>(notificationId.value);
+    }
+    if (dueAt.present) {
+      map['due_at'] = Variable<DateTime>(dueAt.value);
+    }
+    if (state.present) {
+      map['state'] = Variable<String>(state.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('NutritionReminderRecordsCompanion(')
+          ..write('activityId: $activityId, ')
+          ..write('token: $token, ')
+          ..write('notificationId: $notificationId, ')
+          ..write('dueAt: $dueAt, ')
+          ..write('state: $state, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $DayScoreRecordsTable extends DayScoreRecords
     with TableInfo<$DayScoreRecordsTable, DayScoreRecord> {
   @override
@@ -37615,6 +38305,11 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $ActivityRecordsTable activityRecords = $ActivityRecordsTable(
     this,
   );
+  late final $NutritionRecordsTable nutritionRecords = $NutritionRecordsTable(
+    this,
+  );
+  late final $NutritionReminderRecordsTable nutritionReminderRecords =
+      $NutritionReminderRecordsTable(this);
   late final $DayScoreRecordsTable dayScoreRecords = $DayScoreRecordsTable(
     this,
   );
@@ -37698,6 +38393,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     wellnessRecords,
     renphoRecords,
     activityRecords,
+    nutritionRecords,
+    nutritionReminderRecords,
     dayScoreRecords,
     gripStrengthRecords,
     spotHrvMeasurements,
@@ -41235,6 +41932,437 @@ typedef $$ActivityRecordsTableProcessedTableManager =
         BaseReferences<_$AppDatabase, $ActivityRecordsTable, ActivityRecord>,
       ),
       ActivityRecord,
+      PrefetchHooks Function()
+    >;
+typedef $$NutritionRecordsTableCreateCompanionBuilder =
+    NutritionRecordsCompanion Function({
+      required String recordKey,
+      required String kind,
+      required String dataJson,
+      required DateTime updatedAt,
+      Value<int> rowid,
+    });
+typedef $$NutritionRecordsTableUpdateCompanionBuilder =
+    NutritionRecordsCompanion Function({
+      Value<String> recordKey,
+      Value<String> kind,
+      Value<String> dataJson,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
+
+class $$NutritionRecordsTableFilterComposer
+    extends Composer<_$AppDatabase, $NutritionRecordsTable> {
+  $$NutritionRecordsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get recordKey => $composableBuilder(
+    column: $table.recordKey,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get dataJson => $composableBuilder(
+    column: $table.dataJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$NutritionRecordsTableOrderingComposer
+    extends Composer<_$AppDatabase, $NutritionRecordsTable> {
+  $$NutritionRecordsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get recordKey => $composableBuilder(
+    column: $table.recordKey,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get dataJson => $composableBuilder(
+    column: $table.dataJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$NutritionRecordsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $NutritionRecordsTable> {
+  $$NutritionRecordsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get recordKey =>
+      $composableBuilder(column: $table.recordKey, builder: (column) => column);
+
+  GeneratedColumn<String> get kind =>
+      $composableBuilder(column: $table.kind, builder: (column) => column);
+
+  GeneratedColumn<String> get dataJson =>
+      $composableBuilder(column: $table.dataJson, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+}
+
+class $$NutritionRecordsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $NutritionRecordsTable,
+          NutritionRecord,
+          $$NutritionRecordsTableFilterComposer,
+          $$NutritionRecordsTableOrderingComposer,
+          $$NutritionRecordsTableAnnotationComposer,
+          $$NutritionRecordsTableCreateCompanionBuilder,
+          $$NutritionRecordsTableUpdateCompanionBuilder,
+          (
+            NutritionRecord,
+            BaseReferences<
+              _$AppDatabase,
+              $NutritionRecordsTable,
+              NutritionRecord
+            >,
+          ),
+          NutritionRecord,
+          PrefetchHooks Function()
+        > {
+  $$NutritionRecordsTableTableManager(
+    _$AppDatabase db,
+    $NutritionRecordsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$NutritionRecordsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$NutritionRecordsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$NutritionRecordsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> recordKey = const Value.absent(),
+                Value<String> kind = const Value.absent(),
+                Value<String> dataJson = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => NutritionRecordsCompanion(
+                recordKey: recordKey,
+                kind: kind,
+                dataJson: dataJson,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String recordKey,
+                required String kind,
+                required String dataJson,
+                required DateTime updatedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => NutritionRecordsCompanion.insert(
+                recordKey: recordKey,
+                kind: kind,
+                dataJson: dataJson,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$NutritionRecordsTable, NutritionRecord>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $NutritionRecordsTable,
+                    NutritionRecord
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$NutritionRecordsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $NutritionRecordsTable,
+      NutritionRecord,
+      $$NutritionRecordsTableFilterComposer,
+      $$NutritionRecordsTableOrderingComposer,
+      $$NutritionRecordsTableAnnotationComposer,
+      $$NutritionRecordsTableCreateCompanionBuilder,
+      $$NutritionRecordsTableUpdateCompanionBuilder,
+      (
+        NutritionRecord,
+        BaseReferences<_$AppDatabase, $NutritionRecordsTable, NutritionRecord>,
+      ),
+      NutritionRecord,
+      PrefetchHooks Function()
+    >;
+typedef $$NutritionReminderRecordsTableCreateCompanionBuilder =
+    NutritionReminderRecordsCompanion Function({
+      required String activityId,
+      required String token,
+      required int notificationId,
+      required DateTime dueAt,
+      required String state,
+      Value<int> rowid,
+    });
+typedef $$NutritionReminderRecordsTableUpdateCompanionBuilder =
+    NutritionReminderRecordsCompanion Function({
+      Value<String> activityId,
+      Value<String> token,
+      Value<int> notificationId,
+      Value<DateTime> dueAt,
+      Value<String> state,
+      Value<int> rowid,
+    });
+
+class $$NutritionReminderRecordsTableFilterComposer
+    extends Composer<_$AppDatabase, $NutritionReminderRecordsTable> {
+  $$NutritionReminderRecordsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get activityId => $composableBuilder(
+    column: $table.activityId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get token => $composableBuilder(
+    column: $table.token,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get notificationId => $composableBuilder(
+    column: $table.notificationId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get dueAt => $composableBuilder(
+    column: $table.dueAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get state => $composableBuilder(
+    column: $table.state,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$NutritionReminderRecordsTableOrderingComposer
+    extends Composer<_$AppDatabase, $NutritionReminderRecordsTable> {
+  $$NutritionReminderRecordsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get activityId => $composableBuilder(
+    column: $table.activityId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get token => $composableBuilder(
+    column: $table.token,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get notificationId => $composableBuilder(
+    column: $table.notificationId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get dueAt => $composableBuilder(
+    column: $table.dueAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get state => $composableBuilder(
+    column: $table.state,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$NutritionReminderRecordsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $NutritionReminderRecordsTable> {
+  $$NutritionReminderRecordsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get activityId => $composableBuilder(
+    column: $table.activityId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get token =>
+      $composableBuilder(column: $table.token, builder: (column) => column);
+
+  GeneratedColumn<int> get notificationId => $composableBuilder(
+    column: $table.notificationId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get dueAt =>
+      $composableBuilder(column: $table.dueAt, builder: (column) => column);
+
+  GeneratedColumn<String> get state =>
+      $composableBuilder(column: $table.state, builder: (column) => column);
+}
+
+class $$NutritionReminderRecordsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $NutritionReminderRecordsTable,
+          NutritionReminderRecord,
+          $$NutritionReminderRecordsTableFilterComposer,
+          $$NutritionReminderRecordsTableOrderingComposer,
+          $$NutritionReminderRecordsTableAnnotationComposer,
+          $$NutritionReminderRecordsTableCreateCompanionBuilder,
+          $$NutritionReminderRecordsTableUpdateCompanionBuilder,
+          (
+            NutritionReminderRecord,
+            BaseReferences<
+              _$AppDatabase,
+              $NutritionReminderRecordsTable,
+              NutritionReminderRecord
+            >,
+          ),
+          NutritionReminderRecord,
+          PrefetchHooks Function()
+        > {
+  $$NutritionReminderRecordsTableTableManager(
+    _$AppDatabase db,
+    $NutritionReminderRecordsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$NutritionReminderRecordsTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$NutritionReminderRecordsTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$NutritionReminderRecordsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> activityId = const Value.absent(),
+                Value<String> token = const Value.absent(),
+                Value<int> notificationId = const Value.absent(),
+                Value<DateTime> dueAt = const Value.absent(),
+                Value<String> state = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => NutritionReminderRecordsCompanion(
+                activityId: activityId,
+                token: token,
+                notificationId: notificationId,
+                dueAt: dueAt,
+                state: state,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String activityId,
+                required String token,
+                required int notificationId,
+                required DateTime dueAt,
+                required String state,
+                Value<int> rowid = const Value.absent(),
+              }) => NutritionReminderRecordsCompanion.insert(
+                activityId: activityId,
+                token: token,
+                notificationId: notificationId,
+                dueAt: dueAt,
+                state: state,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<
+                    $NutritionReminderRecordsTable,
+                    NutritionReminderRecord
+                  >(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $NutritionReminderRecordsTable,
+                    NutritionReminderRecord
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$NutritionReminderRecordsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $NutritionReminderRecordsTable,
+      NutritionReminderRecord,
+      $$NutritionReminderRecordsTableFilterComposer,
+      $$NutritionReminderRecordsTableOrderingComposer,
+      $$NutritionReminderRecordsTableAnnotationComposer,
+      $$NutritionReminderRecordsTableCreateCompanionBuilder,
+      $$NutritionReminderRecordsTableUpdateCompanionBuilder,
+      (
+        NutritionReminderRecord,
+        BaseReferences<
+          _$AppDatabase,
+          $NutritionReminderRecordsTable,
+          NutritionReminderRecord
+        >,
+      ),
+      NutritionReminderRecord,
       PrefetchHooks Function()
     >;
 typedef $$DayScoreRecordsTableCreateCompanionBuilder =
@@ -55672,6 +56800,13 @@ class $AppDatabaseManager {
       $$RenphoRecordsTableTableManager(_db, _db.renphoRecords);
   $$ActivityRecordsTableTableManager get activityRecords =>
       $$ActivityRecordsTableTableManager(_db, _db.activityRecords);
+  $$NutritionRecordsTableTableManager get nutritionRecords =>
+      $$NutritionRecordsTableTableManager(_db, _db.nutritionRecords);
+  $$NutritionReminderRecordsTableTableManager get nutritionReminderRecords =>
+      $$NutritionReminderRecordsTableTableManager(
+        _db,
+        _db.nutritionReminderRecords,
+      );
   $$DayScoreRecordsTableTableManager get dayScoreRecords =>
       $$DayScoreRecordsTableTableManager(_db, _db.dayScoreRecords);
   $$GripStrengthRecordsTableTableManager get gripStrengthRecords =>

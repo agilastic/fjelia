@@ -11,7 +11,6 @@ import 'coros_provider.dart';
 import 'database_provider.dart';
 import 'polar_provider.dart';
 import 'suunto_provider.dart';
-import 'user_profile_provider.dart';
 
 /// Every watch platform workouts can go to, and the one place that lists
 /// them. A new platform is one more entry here: its connection, how it takes
@@ -28,14 +27,6 @@ final workoutProvidersProvider = Provider<WorkoutProviders>((ref) {
     CorosWorkoutProvider(
       ref.watch(corosServiceProvider),
       connected: () => ref.read(corosConnectedProvider.future),
-      pushEnabled: () async =>
-          (await ref.read(userProfileProvider.future)).corosWorkoutPush,
-      enablePush: () async {
-        final profile = await ref.read(userProfileProvider.future);
-        await ref
-            .read(userProfileProvider.notifier)
-            .save(profile.copyWith(corosWorkoutPush: true));
-      },
     ),
     PolarWorkoutProvider(
       ref.watch(databaseProvider),

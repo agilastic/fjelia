@@ -24,6 +24,8 @@ import '../../widgets/app_widgets.dart';
 import '../../widgets/move_workout_card.dart';
 import '../../widgets/workout_profile_bar.dart';
 import '../../widgets/workout_structure_list.dart';
+import '../../widgets/nutrition_widgets.dart';
+import '../../models/workout_nutrition.dart';
 import '../ai_coach/ai_coach_screen.dart';
 import 'workout_delivery_setup.dart';
 
@@ -172,9 +174,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
         return;
       }
       final previous = s.sessionDate;
-      final onWatch = (await ref
-              .read(workoutProvidersProvider)
-              .deliveredTo(s))
+      final onWatch = (await ref.read(workoutProvidersProvider).deliveredTo(s))
           .isNotEmpty;
       await perform(() async {
         await actions.moveToDate(s, day);
@@ -512,6 +512,19 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
             ),
           ],
           const SizedBox(height: 12),
+          PlannedNutritionCard(
+            editable: editable,
+            workout: NutritionWorkout(
+              key: 'plan:${s.id}',
+              title: s.title,
+              sport: s.sport,
+              date: s.sessionDate,
+              minutes: s.plannedDurationMin.toDouble(),
+              zone: s.primaryZone,
+              indoor: s.indoor,
+            ),
+          ),
+          const SizedBox(height: 12),
           MoveWorkoutCard(
             title: s.title,
             current: s.sessionDate,
@@ -581,9 +594,8 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                 if (!context.mounted || !buttonContext.mounted) return;
                 final box = buttonContext.findRenderObject() as RenderBox?;
                 if (why != null) {
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text(why)));
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(why)));
                 }
                 await SharePlus.instance.share(
                   ShareParams(
@@ -715,9 +727,10 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                 ? null
                 : () async {
                     final onPlatforms = [
-                      for (final p in await ref
-                          .read(workoutProvidersProvider)
-                          .deliveredTo(s))
+                      for (final p
+                          in await ref
+                              .read(workoutProvidersProvider)
+                              .deliveredTo(s))
                         p.label,
                     ];
                     if (!context.mounted) return;

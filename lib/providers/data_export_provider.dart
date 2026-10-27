@@ -4,6 +4,7 @@ import '../services/activity_export_service.dart';
 import '../services/backup_service.dart';
 import 'database_provider.dart';
 import 'hrv_reminder_provider.dart';
+import 'nutrition_provider.dart';
 
 final activityExportProvider = Provider<ActivityExportService>(
   (ref) => ActivityExportService(ref.watch(databaseProvider)),
@@ -17,6 +18,12 @@ final backupServiceProvider = Provider<BackupService>(
       final coordinator = ref.read(hrvReminderCoordinatorProvider);
       await coordinator.runCleanups();
       await coordinator.reconcile(historical: true);
+      ref.invalidate(nutritionPreferencesProvider);
+      ref.invalidate(nutritionLogProvider);
+      ref.invalidate(nutritionPlanProvider);
+      ref.invalidate(nutritionSavedPlanProvider);
+      ref.invalidate(nutritionLinkedPlanProvider);
+      await ref.read(nutritionReminderProvider).reconcile();
     },
   ),
 );

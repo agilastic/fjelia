@@ -38,6 +38,8 @@ const _oldestRestorableSchema = 44;
 /// Tables added after the oldest restorable schema, with the schema that
 /// added them. A backup older than that has no such table, and none is owed.
 const _tableAddedIn = {
+  'nutrition_records': 51,
+  'nutrition_reminder_records': 51,
   'plan_goals': 47,
   'provider_cleanups': 48,
   'workout_deliveries': 48,
@@ -56,6 +58,7 @@ const _tableAddedIn = {
 /// request ids, outbox operations, handled actions and the cleanup journal.
 /// Exported as empty tables so the format stays complete, never restored.
 const _installationLocal = {
+  'nutrition_reminder_records',
   'hrv_post_reminders',
   'hrv_notification_operations',
   'hrv_notification_action_receipts',

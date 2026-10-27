@@ -2,6 +2,7 @@ import 'weather_location_tab.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../providers/plan_schedule_provider.dart';
 
 import '../../db/database.dart';
@@ -17,6 +18,7 @@ import '../../providers/workout_generation_provider.dart';
 import '../../providers/plan_goal_sync_provider.dart';
 import '../../providers/workout_push_provider.dart';
 import '../../widgets/app_widgets.dart';
+import '../../widgets/nutrition_widgets.dart';
 import '../../utils/target_time.dart';
 import 'race_goal_editor.dart';
 
@@ -214,23 +216,7 @@ class TrainingTab extends ConsumerWidget {
                     .save(p.copyWith(maxSessionsPerDay: int.parse(v))),
               ),
             ),
-            const SectionLabel('Targets in workouts', color: Colors.orange),
-            SwitchListTile(
-              contentPadding: EdgeInsets.zero,
-              activeThumbColor: Colors.orange,
-              title: const Text(
-                'Send workouts to COROS (experimental)',
-                style: TextStyle(fontSize: 14),
-              ),
-              subtitle: const Text(
-                'Uses the COROS Training Hub\'s unofficial web interface with your COROS login. It is not endorsed by COROS and can stop working. Without it the workout is shared as text.',
-                style: TextStyle(fontSize: 11, color: muted),
-              ),
-              value: p.corosWorkoutPush,
-              onChanged: (v) => ref
-                  .read(userProfileProvider.notifier)
-                  .save(p.copyWith(corosWorkoutPush: v)),
-            ),
+            const NutritionPreferencesTile(),
             const SectionLabel('Hours available / week', color: Colors.orange),
             Text(
               '${valueText(p.hoursPerWeek)} h / week',

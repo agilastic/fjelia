@@ -24,6 +24,7 @@ class HrvNotificationActionRouter {
   /// What to do with a validated action. Set by the app shell, which owns
   /// the navigator.
   Future<void> Function(ActionResult result)? onResult;
+  Future<void> Function(NotificationResponse response)? onOtherResponse;
 
   final _queue = <(NotificationResponse, DateTime?)>[];
   StreamSubscription<NotificationResponse>? _sub;
@@ -66,6 +67,10 @@ class HrvNotificationActionRouter {
   }
 
   Future<void> _process(NotificationResponse r, DateTime? at) async {
+    if (NutritionNotificationPayload.decode(r.payload) != null) {
+      await onOtherResponse?.call(r);
+      return;
+    }
     final result = await coordinator.handle(r, at: at);
     if (result.kind == ActionKind.ignored ||
         result.kind == ActionKind.duplicate) {

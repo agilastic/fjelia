@@ -962,6 +962,27 @@ class WorkoutTemplates extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+class NutritionRecords extends Table {
+  TextColumn get recordKey => text()();
+  TextColumn get kind => text()();
+  TextColumn get dataJson => text()();
+  DateTimeColumn get updatedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {recordKey};
+}
+
+class NutritionReminderRecords extends Table {
+  TextColumn get activityId => text()();
+  TextColumn get token => text()();
+  IntColumn get notificationId => integer().unique()();
+  DateTimeColumn get dueAt => dateTime()();
+  TextColumn get state => text()();
+
+  @override
+  Set<Column> get primaryKey => {activityId};
+}
+
 @DriftDatabase(
   tables: [
     BpMeasurements,
@@ -973,6 +994,8 @@ class WorkoutTemplates extends Table {
     WellnessRecords,
     RenphoRecords,
     ActivityRecords,
+    NutritionRecords,
+    NutritionReminderRecords,
     DayScoreRecords,
     GripStrengthRecords,
     SpotHrvMeasurements,
@@ -1021,7 +1044,7 @@ class AppDatabase extends _$AppDatabase {
       defaultSourcePriorities[group.name]!;
 
   @override
-  int get schemaVersion => 50;
+  int get schemaVersion => 51;
 
   Future<void> saveHeartRateSamples(List<TimedHeartRate> samples) async {
     if (samples.isEmpty) return;
@@ -1919,6 +1942,10 @@ class AppDatabase extends _$AppDatabase {
       await ensureHrvIdentity();
     },
     onUpgrade: (m, from, to) async {
+      if (from < 51) {
+        await m.createTable(nutritionRecords);
+        await m.createTable(nutritionReminderRecords);
+      }
       if (from >= 48 && from < 50) {
         await _addColumnIfMissing(
           'workout_deliveries',

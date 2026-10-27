@@ -1,5 +1,6 @@
 import '../services/auto_plan_pause.dart';
 import 'weather_radar_provider.dart';
+
 import 'dart:async';
 import 'dart:math' as math;
 import 'dart:io';
@@ -24,6 +25,7 @@ import 'hilo_sync_provider.dart';
 import 'hr_zone_sync_provider.dart';
 import 'hr_zones_provider.dart';
 import 'hrv_reminder_provider.dart';
+import 'nutrition_provider.dart';
 import 'planner_providers.dart';
 import 'polar_provider.dart';
 import 'readiness_provider.dart';
@@ -542,6 +544,11 @@ class SyncNotifier extends StateNotifier<SyncState> {
     // Imported or corrected workouts can change which HRV readings belong to
     // them, also when no planned session matches. Never blocks the sync.
     unawaited(_ref.read(hrvReminderActionsProvider).reconcile());
+    unawaited(
+      _ref.read(nutritionReminderProvider).reconcile().catchError((Object e) {
+        log('[Nutrition] reminder reconciliation: $e');
+      }),
+    );
     if (result.garmin > 0 || result.activities > 0 || result.bp > 0) {
       _ref.invalidate(aiBriefingProvider);
       log('[Sync] new data — briefing invalidated');

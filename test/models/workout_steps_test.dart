@@ -7,6 +7,9 @@ import 'package:fjelia/widgets/workout_profile_bar.dart';
 import 'package:fjelia/widgets/workout_structure_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fjelia/providers/nutrition_provider.dart';
+import 'package:fjelia/models/workout_nutrition.dart' as nutrition;
 
 WorkoutStep step(
   String intensity,
@@ -147,19 +150,34 @@ void main() {
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
       await tester.pumpWidget(
-        MaterialApp(
-          home: WorkoutDetailSheet(
-            workout: ScheduledWorkout(
-              workoutId: '1',
-              scheduleId: '1',
-              name: 'Run With The Wind',
-              sportType: 'running',
-              scheduledDate: DateTime(2026, 10, 24),
-              steps: steps,
+        ProviderScope(
+          overrides: [
+            nutritionPlanProvider.overrideWith(
+              (ref, workout) async => nutrition.planNutrition(
+                workout,
+                const nutrition.NutritionPreferences(),
+                const nutrition.NutritionConditions(),
+              ),
+            ),
+            nutritionConditionsProvider.overrideWith(
+              (ref, workout) async => const nutrition.NutritionConditions(),
+            ),
+          ],
+          child: MaterialApp(
+            home: WorkoutDetailSheet(
+              workout: ScheduledWorkout(
+                workoutId: '1',
+                scheduleId: '1',
+                name: 'Run With The Wind',
+                sportType: 'running',
+                scheduledDate: DateTime(2026, 10, 24),
+                steps: steps,
+              ),
             ),
           ),
         ),
       );
+      await tester.pumpAndSettle();
       expect(find.text('DURATION'), findsOneWidget);
       expect(find.text('WORKOUT STRUCTURE'), findsOneWidget);
       expect(find.byType(WorkoutProfileBar), findsOneWidget);

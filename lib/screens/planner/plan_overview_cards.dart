@@ -1,6 +1,5 @@
 import '../../providers/plan_weather_provider.dart';
 import '../../widgets/weather_visuals.dart';
-import '../../widgets/weather_forecast_preview.dart';
 import '../weather/weather_screen.dart';
 import '../../providers/upcoming_plan_provider.dart';
 import '../../models/garmin_data.dart';
@@ -29,106 +28,134 @@ class PlanWeatherStrip extends ConsumerWidget {
     if (!ref.watch(weatherLocationEnabledProvider)) {
       return const SizedBox.shrink();
     }
-    final state = ref.watch(planWeatherProvider);
     return SectionCard(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       onTap: () => showAppSheet(context, const WeatherScreen()),
-      child: state.when(
-        loading: () => const SizedBox(
-          height: 34,
-          child: Center(child: LinearProgressIndicator()),
-        ),
-        error: (e, st) => const Row(
-          children: [
-            Icon(Icons.cloud_off_outlined, color: muted),
-            SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                'Weather unavailable · Tap to retry',
-                style: TextStyle(color: muted, fontSize: 12),
-              ),
+      child: ref
+          .watch(planWeatherProvider)
+          .when(
+            loading: () => const SizedBox(
+              height: 28,
+              child: Center(child: LinearProgressIndicator()),
             ),
-          ],
-        ),
-        data: (data) {
-          final current = data?.current;
-          if (current == null) {
-            return const Row(
-              children: [
-                Icon(Icons.location_on_outlined, color: muted),
-                SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    'Weather · Set your location',
-                    style: TextStyle(color: muted, fontSize: 12),
-                  ),
-                ),
-                Icon(Icons.chevron_right, color: muted),
-              ],
-            );
-          }
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                children: [
-                  Icon(
-                    weatherIcon(current.weatherCode),
-                    size: 18,
-                    color: Colors.lightBlue,
-                  ),
-                  const SizedBox(width: 8),
-                  const Expanded(
-                    child: Text(
-                      'WEATHER FORECAST',
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w700,
+            error: (_, _) => const Text(
+              'Weather unavailable · Tap to retry',
+              style: TextStyle(color: muted),
+            ),
+            data: (data) {
+              if (data?.current == null) {
+                return const Text(
+                  'Weather · Set your location',
+                  style: TextStyle(color: muted),
+                );
+              }
+              final days = data!.sevenDays(DateTime.now());
+              String amount(double? n) => n == null
+                  ? '—'
+                  : n < 10 && n != n.roundToDouble()
+                  ? n.toStringAsFixed(1)
+                  : n.round().toString();
+              const small = TextStyle(fontSize: 9, color: muted);
+              Widget cell(String text, {Color? color, bool bold = false}) =>
+                  SizedBox(
+                    height: 15,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        text,
+                        style: TextStyle(
+                          fontSize: 9,
+                          color: color ?? Colors.white70,
+                          fontWeight: bold
+                              ? FontWeight.w700
+                              : FontWeight.normal,
+                        ),
                       ),
                     ),
-                  ),
-                  Text(
-                    '${current.temperatureC.round()}°',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                  Text(
-                    '${current.humidityPct.round()}%',
-                    style: const TextStyle(fontSize: 10, color: muted),
-                  ),
-                  const SizedBox(width: 6),
-                  const Icon(Icons.chevron_right, size: 16, color: muted),
-                ],
-              ),
-              const SizedBox(height: 6),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  );
+              return Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    'Next 24 hours',
-                    style: TextStyle(fontSize: 10, color: muted),
+                  Row(
+                    children: [
+                      Icon(
+                        weatherIcon(data.current!.weatherCode),
+                        size: 15,
+                        color: Colors.lightBlue,
+                      ),
+                      const SizedBox(width: 6),
+                      const Expanded(
+                        child: Text(
+                          '7-DAY FORECAST',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        '${data.current!.temperatureC.round()}°',
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const Icon(Icons.chevron_right, size: 16, color: muted),
+                    ],
                   ),
-                  Text(
-                    'Temperature °C',
-                    style: TextStyle(
-                      fontSize: 9,
-                      color: Colors.deepOrangeAccent,
-                    ),
+                  const SizedBox(height: 5),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        width: 42,
+                        child: Column(
+                          children: [
+                            SizedBox(height: 15),
+                            SizedBox(
+                              height: 15,
+                              child: Text('min/max', style: small),
+                            ),
+                            SizedBox(
+                              height: 15,
+                              child: Text('rain mm', style: small),
+                            ),
+                            SizedBox(
+                              height: 15,
+                              child: Text('UV max', style: small),
+                            ),
+                            SizedBox(
+                              height: 15,
+                              child: Text('km/h', style: small),
+                            ),
+                          ],
+                        ),
+                      ),
+                      for (final day in days)
+                        Expanded(
+                          child: Column(
+                            children: [
+                              cell(
+                                DateFormat('EEE').format(day.date),
+                                bold: true,
+                              ),
+                              cell(
+                                day.minC == null
+                                    ? '—'
+                                    : '${day.minC!.round()}/${day.maxC!.round()}°',
+                              ),
+                              cell(amount(day.rainMm), color: Colors.lightBlue),
+                              cell(amount(day.uv), color: Colors.amber),
+                              cell(amount(day.windKmh)),
+                            ],
+                          ),
+                        ),
+                    ],
                   ),
                 ],
-              ),
-              const SizedBox(height: 10),
-              WeatherForecastPreview(
-                points: data!.upcoming,
-                start: data.previewStart,
-              ),
-            ],
-          );
-        },
-      ),
+              );
+            },
+          ),
     );
   }
 }
@@ -526,9 +553,8 @@ class _UpcomingState extends State<UpcomingWorkoutList> {
     final entries = groups.entries
         .take(widget.selectedDay == null ? visibleDays : groups.length)
         .toList();
-    final tomorrow = DateUtils.dateOnly(
-      DateTime.now(),
-    ).add(const Duration(days: 1));
+    final tomorrow = DateUtils.dateOnly(DateTime.now())
+        .add(const Duration(days: 1));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

@@ -11,6 +11,40 @@ enum NotificationPermission {
   bool get allowed => this == granted || this == provisional;
 }
 
+enum NotificationFeature { hrv, nutrition }
+
+class NutritionNotificationPayload {
+  const NutritionNotificationPayload(this.activityId, this.token);
+  final String activityId, token;
+  String encode() => jsonEncode({
+    'v': 1,
+    'feature': 'nutrition',
+    'activity': activityId,
+    'token': token,
+  });
+  static NutritionNotificationPayload? decode(String? raw) {
+    if (raw == null || raw.length > 600) return null;
+    try {
+      final j = jsonDecode(raw);
+      if (j is! Map ||
+          j['v'] != 1 ||
+          j['feature'] != 'nutrition' ||
+          j['activity'] is! String ||
+          j['token'] is! String ||
+          (j['activity'] as String).isEmpty ||
+          (j['token'] as String).isEmpty) {
+        return null;
+      }
+      return NutritionNotificationPayload(
+        j['activity'] as String,
+        j['token'] as String,
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+}
+
 /// What a platform can do. Application logic reads these instead of assuming
 /// that two methods with the same name behave the same on iOS and Android.
 class NotificationCapabilities {
@@ -32,11 +66,13 @@ class ScheduledNotification {
     required this.title,
     required this.body,
     this.actionLabels = const {},
+    this.feature = NotificationFeature.hrv,
   });
   final int id;
   final DateTime at;
   final String payload;
   final String title, body;
+  final NotificationFeature feature;
 
   /// Labels for `measure`, `snooze` and `skip`.
   final Map<String, String> actionLabels;

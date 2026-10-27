@@ -9,13 +9,6 @@ class PlanWeatherData {
   PlanWeatherData(this.result, DateTime now) {
     final sorted = result.points.toList()
       ..sort((a, b) => a.time.compareTo(b.time));
-    previewStart = DateTime(now.year, now.month, now.day, now.hour);
-    final previewEnd = previewStart.add(const Duration(hours: 24));
-    upcoming = sorted
-        .where(
-          (p) => !p.time.isBefore(previewStart) && !p.time.isAfter(previewEnd),
-        )
-        .toList();
     current = sorted.isEmpty
         ? null
         : sorted.reduce(
@@ -26,9 +19,14 @@ class PlanWeatherData {
           );
   }
   final OpenMeteoResult result;
-  late final DateTime previewStart;
-  late final List<OpenMeteoPoint> upcoming;
   late final OpenMeteoPoint? current;
+  List<PlanWeatherDay> sevenDays(DateTime from) => [
+    for (var i = 0; i < 7; i++)
+      PlanWeatherDay(
+        DateTime(from.year, from.month, from.day + i),
+        pointsFor(DateTime(from.year, from.month, from.day + i), false),
+      ),
+  ];
   double? get wetBulb => current == null
       ? null
       : OpenMeteoClient.wetBulbC(current!.temperatureC, current!.humidityPct);
@@ -53,6 +51,30 @@ class PlanWeatherData {
         .toList()
       ..sort((a, b) => a.time.compareTo(b.time));
   }
+}
+
+class PlanWeatherDay {
+  PlanWeatherDay(this.date, List<OpenMeteoPoint> points) {
+    if (points.isEmpty) return;
+    final temperatures = points
+        .map((p) => p.temperatureC)
+        .where((v) => v.isFinite)
+        .toList();
+    if (temperatures.isNotEmpty) {
+      minC = temperatures.reduce((a, b) => a < b ? a : b);
+      maxC = temperatures.reduce((a, b) => a > b ? a : b);
+    }
+    rainMm = points.fold<double>(0, (sum, p) => sum + p.precipitationMm);
+    windKmh = points.map((p) => p.windSpeedKmh).reduce((a, b) => a > b ? a : b);
+    final values = points
+        .map((p) => p.uvIndex)
+        .whereType<num>()
+        .map((v) => v.toDouble())
+        .toList();
+    uv = values.isEmpty ? null : values.reduce((a, b) => a > b ? a : b);
+  }
+  final DateTime date;
+  double? minC, maxC, rainMm, windKmh, uv;
 }
 
 final planWeatherProvider = Provider<AsyncValue<PlanWeatherData?>>(

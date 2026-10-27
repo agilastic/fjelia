@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:fjelia/providers/health_monitor_alerts_provider.dart';
 import 'package:fjelia/widgets/app_widgets.dart' show HistoryChart, SectionCard;
 import 'package:fjelia/widgets/health_monitor_grid.dart';
@@ -23,6 +24,8 @@ import 'package:fjelia/db/database.dart';
 import 'package:fjelia/providers/database_provider.dart';
 import 'package:fjelia/providers/day_data_provider.dart';
 import 'package:fjelia/providers/heat_acclimation_provider.dart';
+import 'package:fjelia/providers/nutrition_provider.dart';
+import 'package:fjelia/models/workout_nutrition.dart';
 import 'package:fjelia/models/heat_acclimation.dart';
 import 'package:fjelia/services/location_service.dart';
 import 'package:fjelia/services/lt2_tt_service.dart';
@@ -261,9 +264,8 @@ void main() {
         final image = await boundary.toImage(pixelRatio: 2);
         final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
         await Directory(output).create(recursive: true);
-        await File(
-          '$output/$name.png',
-        ).writeAsBytes(bytes!.buffer.asUint8List());
+        await File('$output/$name.png')
+            .writeAsBytes(bytes!.buffer.asUint8List());
         image.dispose();
       });
       await tester.pumpAndSettle();
@@ -424,6 +426,16 @@ void main() {
       ProviderScope(
         overrides: [
           databaseProvider.overrideWithValue(db),
+          nutritionConditionsProvider.overrideWith(
+            (ref, workout) async => const NutritionConditions(),
+          ),
+          nutritionPlanProvider.overrideWith(
+            (ref, workout) async => planNutrition(
+              workout,
+              const NutritionPreferences(),
+              const NutritionConditions(),
+            ),
+          ),
           if (!referenceLoad)
             heatPreferredLocationProvider.overrideWith((ref) async => null),
           if (referenceLoad) ...[
@@ -1719,12 +1731,26 @@ void main() {
   testWidgets('planned controls shift dates, push once and mark rest', (
     tester,
   ) async {
-    final session = await plannedSession(
+    var session = await plannedSession(
       'Easy Recovery Run',
       'running',
       2,
       40,
       43,
+    );
+    var original = DateUtils.dateOnly(DateTime.now())
+        .add(const Duration(days: 1));
+    while (original.weekday != DateTime.tuesday) {
+      original = DateTime(original.year, original.month, original.day + 1);
+    }
+    final next = DateTime(original.year, original.month, original.day + 1);
+    final previous = DateTime(original.year, original.month, original.day - 1);
+    session = session.copyWith(sessionDate: original);
+    await (db.update(db.trainingSessions)
+          ..where((t) => t.id.equals(session.id)))
+        .write(TrainingSessionsCompanion(sessionDate: Value(original)));
+    Finder day(DateTime date) => find.bySemanticsLabel(
+      RegExp('^${RegExp.escape(DateFormat('EEEE d MMMM').format(date))}'),
     );
     final garmin = FakeWorkoutGarmin();
     await render(
@@ -1740,37 +1766,48 @@ void main() {
     );
     await tester.pumpAndSettle();
     // Tap the next day on the strip: the workout moves, with an undo.
-    await tester.tap(find.bySemanticsLabel(RegExp('^Wednesday 28 October')));
+    await tester.ensureVisible(day(next));
+    await tester.pumpAndSettle();
+    await tester.tap(day(next));
     await tester.pump(const Duration(seconds: 2));
     await tester.pumpAndSettle();
     expect(
       (await db.select(db.trainingSessions).get()).single.sessionDate,
-      DateTime(2026, 10, 28),
+      next,
     );
     // No snackbar: the way back is a line on the card.
     expect(find.byType(SnackBar), findsNothing);
-    expect(find.text('Moved from Tuesday 27 October'), findsOneWidget);
+    expect(
+      find.text('Moved from ${DateFormat('EEEE d MMMM').format(original)}'),
+      findsOneWidget,
+    );
+    await tester.ensureVisible(find.text('Undo'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Undo'));
     await tester.pump(const Duration(seconds: 2));
     await tester.pumpAndSettle();
     expect(
       (await db.select(db.trainingSessions).get()).single.sessionDate,
-      DateTime(2026, 10, 27),
+      original,
     );
     // And back to the day before by tapping it.
-    await tester.tap(find.bySemanticsLabel(RegExp('^Monday 26 October')));
+    await tester.ensureVisible(day(previous));
+    await tester.pumpAndSettle();
+    await tester.tap(day(previous));
     await tester.pump(const Duration(seconds: 2));
     await tester.pumpAndSettle();
     expect(
       (await db.select(db.trainingSessions).get()).single.sessionDate,
-      DateTime(2026, 10, 26),
+      previous,
     );
-    await tester.tap(find.bySemanticsLabel(RegExp('^Tuesday 27 October')));
+    await tester.ensureVisible(day(original));
+    await tester.pumpAndSettle();
+    await tester.tap(day(original));
     await tester.pump(const Duration(seconds: 2));
     await tester.pumpAndSettle();
     expect(
       (await db.select(db.trainingSessions).get()).single.sessionDate,
-      DateTime(2026, 10, 27),
+      original,
     );
     // The undo snackbar goes away by itself before the next action.
     await tester.pump(const Duration(seconds: 6));
@@ -1784,7 +1821,7 @@ void main() {
     await tapLow(tester, find.text('Push to Garmin'));
     await tester.pumpAndSettle();
     expect(garmin.creates, 1);
-    expect(garmin.dates.single, DateTime(2026, 10, 27));
+    expect(garmin.dates.single, original);
     await tester.pump(const Duration(seconds: 5));
     await tester.pumpAndSettle();
     await tester.scrollUntilVisible(
@@ -2168,12 +2205,10 @@ void main() {
 
 class AuditTiles extends TileProvider {
   @override
-  ImageProvider getImage(
-    TileCoordinates coordinates,
-    TileLayer options,
-  ) => MemoryImage(
-    base64Decode(
-      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGPYcunOfwAIAgNiJBgw5wAAAABJRU5ErkJggg==',
-    ),
-  );
+  ImageProvider getImage(TileCoordinates coordinates, TileLayer options) =>
+      MemoryImage(
+        base64Decode(
+          'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGPYcunOfwAIAgNiJBgw5wAAAABJRU5ErkJggg==',
+        ),
+      );
 }

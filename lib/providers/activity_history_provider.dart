@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../db/database.dart';
 import 'database_provider.dart';
 import 'hrv_reminder_provider.dart';
+import 'nutrition_provider.dart';
 import 'day_data_provider.dart';
 import 'training_load_provider.dart';
 
@@ -23,6 +24,9 @@ final deleteActivityProvider = Provider<Future<void> Function(String)>(
         db.activityRecords,
       )..where((t) => t.activityId.equals(id))).getSingleOrNull();
       await db.deleteActivityById(id);
+      await (db.delete(
+        db.nutritionRecords,
+      )..where((t) => t.recordKey.equals('intake:$id'))).go();
       if (activity == null) return;
       final local = activity.startDate.toLocal();
       final day = DateTime(local.year, local.month, local.day);
@@ -57,5 +61,6 @@ final deleteActivityProvider = Provider<Future<void> Function(String)>(
     ref.invalidate(trainingFormSeriesProvider);
     // The workout is gone; its HRV readings stay, its reminder does not.
     await ref.read(hrvReminderActionsProvider).reconcile();
+    await ref.read(nutritionReminderProvider).reconcile();
   },
 );

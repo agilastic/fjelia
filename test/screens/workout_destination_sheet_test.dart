@@ -18,6 +18,7 @@ import 'package:fjelia/providers/workout_destination_provider.dart';
 import 'package:fjelia/providers/workout_providers_provider.dart';
 import 'package:fjelia/screens/planner/plan_session_sheet.dart';
 import 'package:fjelia/services/workout_destination.dart';
+import 'package:fjelia/services/workout_providers/workout_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -158,6 +159,7 @@ void main() {
                           (
                             destination,
                             destination == WorkoutDestination.garmin ||
+                                    destination == WorkoutDestination.coros ||
                                     destination == WorkoutDestination.polar
                                 ? WorkoutRoute.push
                                 : WorkoutRoute.share,
@@ -194,7 +196,7 @@ void main() {
     await close(tester);
   });
 
-  for (final d in [WorkoutDestination.coros, WorkoutDestination.suunto]) {
+  for (final d in [WorkoutDestination.suunto]) {
     testWidgets('${d.label}: the workout is shared, and the sheet says why', (
       tester,
     ) async {
@@ -436,8 +438,8 @@ void main() {
           'timestampMs': DateTime.now().millisecondsSinceEpoch,
           'email': 'me@example.com',
         }),
-        // The experimental route is on: that is what makes COROS a push.
-        'user_profile_v1': jsonEncode({'corosWorkoutPush': true}),
+        // Even a legacy false flag must not disable connected COROS uploads.
+        'user_profile_v1': jsonEncode({'corosWorkoutPush': false}),
       });
       tester.view.devicePixelRatio = 1;
       tester.view.physicalSize = const Size(393, 1400);
@@ -480,7 +482,7 @@ void main() {
         200,
         scrollable: find.byType(Scrollable).first,
       );
-      expect(find.textContaining('unofficial interface'), findsOneWidget);
+      expect(find.textContaining('Sync COROS to your watch'), findsOneWidget);
       expect(find.text('Share workout for COROS'), findsNothing);
       await tester.drag(find.byType(Scrollable).first, const Offset(0, -150));
       await tester.pumpAndSettle();
@@ -576,8 +578,8 @@ void main() {
         WorkoutDestination.coros,
       ], corosOn: false);
       expect(t.map((e) => e.provider.id), ['garmin', 'coros']);
-      expect(t.map((e) => e.route), [WorkoutRoute.push, WorkoutRoute.share]);
-      // The COROS switch turns its button into a push.
+      expect(t.map((e) => e.route), [WorkoutRoute.push, WorkoutRoute.push]);
+      // Legacy true and false settings both use COROS upload.
       t = await targets([
         WorkoutDestination.garmin,
         WorkoutDestination.coros,
@@ -612,7 +614,7 @@ void main() {
       WorkoutDestination.garmin,
       targets: [
         (WorkoutDestination.garmin, WorkoutRoute.push),
-        (WorkoutDestination.coros, WorkoutRoute.share),
+        (WorkoutDestination.coros, WorkoutRoute.push),
         (WorkoutDestination.polar, WorkoutRoute.push),
       ],
     );
@@ -622,55 +624,28 @@ void main() {
       scrollable: find.byType(Scrollable).first,
     );
     expect(find.text('Push to Garmin'), findsOneWidget);
-    expect(find.text('Share workout for COROS'), findsOneWidget);
+    expect(find.text('Push to COROS'), findsOneWidget);
     expect(find.text('Push to Polar'), findsOneWidget);
     await close(tester);
   });
 
-  testWidgets(
-    'COROS shared as text can be switched to the push, after a warning',
-    (tester) async {
-      FlutterSecureStorage.setMockInitialValues({
-        'user_profile_v1': jsonEncode({'corosWorkoutPush': false}),
-      });
-      await show(tester, WorkoutDestination.coros);
-      final container = ProviderScope.containerOf(
-        tester.element(find.byType(PlanSessionSheet)),
-      );
-      await container.read(userProfileProvider.future);
-      await tester.scrollUntilVisible(
-        find.text('Send to COROS instead (experimental)'),
-        200,
-        scrollable: find.byType(Scrollable).first,
-      );
-      await tester.drag(find.byType(Scrollable).first, const Offset(0, -150));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Send to COROS instead (experimental)'));
-      await tester.pumpAndSettle();
-      expect(
-        find.textContaining('COROS has no workout import'),
-        findsOneWidget,
-      );
-      // Cancelled: nothing changes.
-      await tester.tap(find.text('Cancel'));
-      await tester.pumpAndSettle();
-      expect(
-        (await container.read(userProfileProvider.future)).corosWorkoutPush,
-        isFalse,
-      );
-      await tester.tap(find.text('Send to COROS instead (experimental)'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Continue'));
-      await tester.pump(const Duration(seconds: 1));
-      await tester.pumpAndSettle();
-      expect(
-        (await container.read(userProfileProvider.future)).corosWorkoutPush,
-        isTrue,
-      );
-      // Garmin has no such button.
-      await close(tester);
-    },
-  );
+  testWidgets('connected COROS always offers upload without an opt-in', (
+    tester,
+  ) async {
+    FlutterSecureStorage.setMockInitialValues({
+      'user_profile_v1': jsonEncode({'corosWorkoutPush': false}),
+    });
+    await show(tester, WorkoutDestination.coros);
+    final container = ProviderScope.containerOf(
+      tester.element(find.byType(PlanSessionSheet)),
+    );
+    final provider = container.read(workoutProvidersProvider).byId('coros')!;
+    expect(await provider.mode(), DeliveryMode.push);
+    expect(provider.optIn, isNull);
+    expect(find.text('Share workout for COROS'), findsNothing);
+    expect(find.text('Send to COROS instead (experimental)'), findsNothing);
+    await close(tester);
+  });
 
   testWidgets('moving onto a rest day asks first, and can be undone', (
     tester,
@@ -726,6 +701,8 @@ void main() {
       sunday,
     );
     expect(find.text('Undo'), findsOneWidget);
+    await tester.ensureVisible(find.text('Undo'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Undo'));
     await tester.pump(const Duration(seconds: 2));
     await tester.pumpAndSettle();
@@ -775,6 +752,8 @@ void main() {
     await tester.pump(const Duration(seconds: 10));
     await tester.pumpAndSettle();
     expect(find.text('Undo'), findsOneWidget);
+    await tester.ensureVisible(find.text('Undo'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Undo'));
     await tester.pump(const Duration(seconds: 2));
     await tester.pumpAndSettle();

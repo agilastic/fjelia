@@ -10,6 +10,10 @@ import 'providers/health_connect_provider.dart';
 import 'providers/hilo_sync_provider.dart';
 import 'providers/hrv_reminder_provider.dart';
 import 'providers/hrv_training_provider.dart';
+import 'providers/nutrition_provider.dart';
+import 'widgets/nutrition_widgets.dart';
+import 'services/notifications/local_notification_gateway.dart'
+    as notifications;
 import 'services/hrv/hrv_post_reminder_coordinator.dart'
     show ActionKind, ActionResult;
 import 'screens/strain/activity_detail_sheet.dart';
@@ -20,7 +24,9 @@ import 'screens/home/home_screen.dart';
 import 'screens/startup_splash.dart';
 import 'screens/onboarding/welcome_screen.dart';
 import 'services/debug_log.dart';
+
 import 'package:fjelia_service_api/fjelia_service_api.dart';
+
 import 'theme/app_theme.dart';
 import 'widgets/health_access_lost_dialog.dart';
 import 'widgets/hilo_device_picker.dart';
@@ -53,6 +59,7 @@ class FjeliaApp extends ConsumerStatefulWidget {
 class _FjeliaAppState extends ConsumerState<FjeliaApp>
     with WidgetsBindingObserver {
   final _navigatorKey = GlobalKey<NavigatorState>();
+  bool _nutritionOpen = false;
 
   @override
   void initState() {
@@ -99,7 +106,17 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
     try {
       final router = ref.read(hrvActionRouterProvider);
       router.onResult = _onHrvAction;
-      await ref.read(hrvReminderActionsProvider).bootstrap();
+      router.onOtherResponse = _onNutritionAction;
+      await Future.wait([
+        ref
+            .read(hrvReminderActionsProvider)
+            .bootstrap()
+            .catchError((Object _) {}),
+        ref
+            .read(nutritionReminderProvider)
+            .reconcile()
+            .catchError((Object _) {}),
+      ]);
       await router.markReady();
     } catch (_) {
       // Reminders are optional; the rest of the app does not depend on them.
@@ -138,6 +155,24 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
     final activity = await ref.read(episodeActivityProvider(episodeId).future);
     if (activity == null || !context.mounted) return;
     await showAppSheet(context, ActivityDetailSheet(activity: activity));
+  }
+
+  Future<void> _onNutritionAction(
+    notifications.NotificationResponse response,
+  ) async {
+    if (_nutritionOpen) return;
+    final id = await ref.read(nutritionReminderProvider).handle(response);
+    if (id == null || !mounted) return;
+    _nutritionOpen = true;
+    try {
+      final context = await _homeContext();
+      if (context == null || !context.mounted) return;
+      final activity = await ref.read(nutritionServiceProvider).activity(id);
+      if (activity == null || !context.mounted) return;
+      await showAppSheet(context, NutritionIntakeSheet(activity: activity));
+    } finally {
+      _nutritionOpen = false;
+    }
   }
 
   void _triggerSync() {

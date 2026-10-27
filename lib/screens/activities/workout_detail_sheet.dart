@@ -8,6 +8,8 @@ import '../../models/workout_profile.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/workout_profile_bar.dart';
 import '../../widgets/workout_structure_list.dart';
+import '../../widgets/nutrition_widgets.dart';
+import '../../models/workout_nutrition.dart';
 import '../ai_coach/ai_coach_screen.dart';
 import 'weekly_load_card.dart' show sportName;
 
@@ -76,34 +78,49 @@ class WorkoutDetailSheet extends StatelessWidget {
             ],
             WorkoutStructureList(steps: lines),
           ],
-        if (workout.userNote != null)
-          SectionCard(title: 'Your note', child: Text(workout.userNote!)),
+          if (seconds != null && seconds > 0)
+            PlannedNutritionCard(
+              workout: NutritionWorkout(
+                key:
+                    'garmin:${workout.workoutId}:${workout.scheduledDate.toIso8601String().split('T').first}',
+                title: workout.name,
+                sport: workout.sportType,
+                date: workout.scheduledDate,
+                minutes: seconds / 60,
+                indoor: workout.sportType.contains('indoor'),
+              ),
+            ),
+          if (workout.userNote != null)
+            SectionCard(title: 'Your note', child: Text(workout.userNote!)),
           const SizedBox(height: 16),
           OutlinedButton.icon(
-          style: OutlinedButton.styleFrom(
-            foregroundColor: mint,
-            side: const BorderSide(color: mint),
-            minimumSize: const Size(double.infinity, 44),
-          ),
-          icon: const Icon(Icons.chat_bubble_outline, size: 18),
-          label: const Text('Ask AI Coach'),
-          onPressed: () => openCoachTab(
-            context,
-            prompt: 'How do I execute this workout?',
-            card: CoachContextCard.scheduled(
-              sport: workout.sportType,
-              title: workout.name,
-              date: workout.scheduledDate,
-              summary: workoutSummary(workout),
-              structure: [
-                for (final step in workout.steps)
-                  ..._stepLines(step, 0).map((l) => l.trim().replaceFirst('- ', '')),
-              ],
+            style: OutlinedButton.styleFrom(
+              foregroundColor: mint,
+              side: const BorderSide(color: mint),
+              minimumSize: const Size(double.infinity, 44),
+            ),
+            icon: const Icon(Icons.chat_bubble_outline, size: 18),
+            label: const Text('Ask AI Coach'),
+            onPressed: () => openCoachTab(
+              context,
+              prompt: 'How do I execute this workout?',
+              card: CoachContextCard.scheduled(
+                sport: workout.sportType,
+                title: workout.name,
+                date: workout.scheduledDate,
+                summary: workoutSummary(workout),
+                structure: [
+                  for (final step in workout.steps)
+                    ..._stepLines(
+                      step,
+                      0,
+                    ).map((l) => l.trim().replaceFirst('- ', '')),
+                ],
+              ),
             ),
           ),
-        ),
-      ],
-    ),
+        ],
+      ),
     );
   }
 }

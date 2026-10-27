@@ -1,5 +1,3 @@
-import 'package:fl_chart/fl_chart.dart';
-import 'package:fjelia/widgets/weather_forecast_preview.dart';
 import 'package:fjelia/widgets/weather_visuals.dart';
 import 'package:fjelia/models/weather_comparison.dart';
 import 'package:flutter/material.dart';
@@ -63,12 +61,7 @@ void main() {
     final now = DateTime.now();
     final data = PlanWeatherData(result, now);
     expect(data.current, isNotNull);
-    expect(data.upcoming.length, 25);
-    expect(data.upcoming.first.time, data.previewStart);
-    expect(
-      data.upcoming.last.time,
-      data.previewStart.add(const Duration(hours: 24)),
-    );
+    expect(data.sevenDays(now), hasLength(7));
     expect(data.pointsFor(now, false).length, 24);
     expect(
       data.pointsFor(now, true).length,
@@ -88,38 +81,33 @@ void main() {
     );
     expect(data.wetBulb, lessThan(data.current!.temperatureC));
   });
-  test('the 24-hour Plan preview continues through midnight', () {
-    final now = DateTime(2026, 10, 26, 20, 30);
-    final data = PlanWeatherData(fixture(at: now), now);
-    expect(data.previewStart, DateTime(2026, 10, 26, 20));
-    expect(data.upcoming.length, 25);
-    expect(data.upcoming.first.time, DateTime(2026, 10, 26, 20));
-    expect(data.upcoming.last.time, DateTime(2026, 10, 27, 20));
-  });
-  testWidgets('a partial preview keeps missing hours on the 24-hour scale', (
-    tester,
-  ) async {
-    final samples = fixture().points;
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: WeatherForecastPreview(
-            start: samples.first.time,
-            points: [samples[12], samples[0], samples[6]],
-          ),
-        ),
-      ),
-    );
-    await tester.pumpAndSettle();
-    final chart = tester.widget<LineChart>(find.byType(LineChart)).data;
-    expect(chart.minX, 0);
-    expect(chart.maxX, 24);
-    expect(chart.lineBarsData.single.spots.map((point) => point.x), [0, 6, 12]);
-    for (final label in ['6h', '12h', '18h', '24h']) {
-      expect(find.text(label), findsOneWidget);
-    }
-    expect(tester.takeException(), isNull);
-  });
+  test(
+    'seven-day summary uses calendar days and keeps missing weather unknown',
+    () {
+      final now = DateTime(2026, 10, 26, 20, 30);
+      final full = fixture(at: now);
+      final source = OpenMeteoResult(
+        points: full.points.take(3).toList(),
+        sunrise: {},
+        sunset: {},
+        fetchedAt: now,
+        rawJson: '{}',
+        source: 'Test',
+      );
+      final days = PlanWeatherData(source, now).sevenDays(now);
+      expect(days, hasLength(7));
+      expect(days.first.date, DateTime(2026, 10, 26));
+      expect(days.last.date, DateTime(2026, 11, 1));
+      expect(days.first.minC, 17);
+      expect(days.first.maxC, 19);
+      expect(days.first.rainMm, 2);
+      expect(days.first.windKmh, 17);
+      expect(days.first.uv, 2);
+      expect(days[1].minC, isNull);
+      expect(days[1].rainMm, isNull);
+      expect(days[1].uv, isNull);
+    },
+  );
   test(
     'current-hour highlight is limited to today and excludes overview ranges',
     () {
@@ -331,11 +319,12 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      expect(find.text('89%'), findsOneWidget);
-      expect(find.text('WEATHER FORECAST'), findsOneWidget);
-      expect(find.text('Next 24 hours'), findsOneWidget);
-      expect(find.byType(WeatherForecastPreview), findsOneWidget);
-      for (final label in ['6h', '12h', '18h', '24h']) {
+      expect(
+        tester.getSize(find.byType(PlanWeatherStrip)).height,
+        lessThan(140),
+      );
+      expect(find.text('7-DAY FORECAST'), findsOneWidget);
+      for (final label in ['min/max', 'rain mm', 'UV max', 'km/h']) {
         expect(find.text(label), findsOneWidget);
       }
       await tester.tap(find.byType(PlanWeatherStrip));
