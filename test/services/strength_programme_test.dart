@@ -171,4 +171,99 @@ void main() {
     );
     expect(await strength(planId), isEmpty);
   });
+
+  group('device review: replan without the new templates in the database', () {
+    test(
+      'the planner adds them and every session matches its template',
+      () async {
+        await (db.delete(
+          db.workoutTemplates,
+        )..where((t) => t.subType.like('str-%'))).go();
+        final planId = await service.generatePlan(
+          athleteId: 'self',
+          raceDate: clock.add(const Duration(days: 7 * 24)),
+          sport: 'trail_running',
+          raceDistanceM: 80000,
+          raceElevationM: 4000,
+          daysPerWeek: 6,
+          restDays: const [1],
+          strengthDays: const [2, 4],
+          hoursPerWeek: 10,
+          gadSports: const ['trail_running', 'cycling_road'],
+        );
+        final sessions = await strength(planId);
+        expect(sessions, isNotEmpty);
+        for (final s in sessions) {
+          final t = [
+            ...bundledStrengthTemplates,
+            ...strengthProgrammeTemplates,
+          ].singleWhere((t) => t.legacyDescription == s.sessionNotes);
+          expect(s.subType, t.id, reason: '${s.title} stored as ${s.subType}');
+          expect(
+            isLegacyStrengthSession(
+              s.subType,
+              s.phase,
+              sessionNotes: s.sessionNotes,
+            ),
+            isFalse,
+          );
+        }
+        expect(
+          sessions.where((s) => s.title.startsWith('Trail Strength')),
+          isNotEmpty,
+        );
+        expect(sessions.where((s) => s.title.startsWith('Full Body')), isEmpty);
+      },
+    );
+
+    test('sessions from the broken replan count as outdated', () {
+      final fullBody = bundledStrengthTemplates.first.legacyDescription;
+      // A programme type with Full Body content.
+      expect(
+        isLegacyStrengthSession(
+          'str-trail-base-a',
+          'base',
+          sessionNotes: fullBody,
+        ),
+        isTrue,
+      );
+      // Core & Stability in a recovery week is current.
+      expect(
+        isLegacyStrengthSession(
+          'strengthCore',
+          'recovery',
+          sessionNotes: bundledStrengthTemplates.last.legacyDescription,
+        ),
+        isFalse,
+      );
+    });
+
+    test(
+      'an old slot type with another template still opens its exercises',
+      () {
+        final lower = bundledStrengthTemplates[1];
+        final plan = bundledStrengthPlanFor(
+          subType: 'strengthFull',
+          sessionNotes: lower.legacyDescription,
+        );
+        expect(plan?.title, 'Lower Body Power — Build');
+        expect(
+          isLegacyStrengthSession(
+            'strengthFull',
+            'build',
+            sessionNotes: lower.legacyDescription,
+          ),
+          isTrue,
+        );
+        // A non-strength type never matches.
+        expect(
+          bundledStrengthPlanFor(
+            subType: 'tempo',
+            sessionNotes: lower.legacyDescription,
+          ),
+          isNull,
+        );
+      },
+    );
+  });
 }

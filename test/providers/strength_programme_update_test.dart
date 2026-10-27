@@ -43,7 +43,17 @@ void main() {
     expect(isLegacyStrengthSession('strengthLower', 'build'), isTrue);
     expect(isLegacyStrengthSession('strengthCore', 'base'), isTrue);
     expect(isLegacyStrengthSession('strengthCore', 'recovery'), isFalse);
-    expect(isLegacyStrengthSession('str-trail-base-a', 'base'), isFalse);
+    final current = strengthProgrammeTemplates.firstWhere(
+      (t) => t.id == 'str-trail-base-a',
+    );
+    expect(
+      isLegacyStrengthSession(
+        'str-trail-base-a',
+        'base',
+        sessionNotes: current.legacyDescription,
+      ),
+      isFalse,
+    );
   });
 
   test('an old plan is flagged and the update replans strength', () async {
@@ -80,7 +90,14 @@ void main() {
         await (db.update(
           db.trainingSessions,
         )..where((t) => t.id.equals(s.id))).write(
-          const TrainingSessionsCompanion(subType: Value('strengthFull')),
+          // As an earlier version stored it: type, title and notes.
+          TrainingSessionsCompanion(
+            subType: const Value('strengthFull'),
+            title: const Value('Full Body Strength — Base'),
+            sessionNotes: Value(
+              bundledStrengthTemplates.first.legacyDescription,
+            ),
+          ),
         );
       }
     }

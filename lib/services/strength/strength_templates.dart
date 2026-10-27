@@ -178,17 +178,30 @@ final bundledStrengthTemplates = [
 
 /// The structured plan for a session the planner made from a bundled
 /// template, or null when the session cannot be proven to come from one.
+///
+/// The description the planner copied from the template proves which one it
+/// was; each is unique. The stored type only has to be a strength template:
+/// earlier planners stored the slot's type while falling back to another
+/// template (a "full body" slot built from "Lower Body Power").
 StrengthWorkoutPlan? bundledStrengthPlanFor({
   required String? subType,
   required String? sessionNotes,
 }) {
-  for (final t in [
-    ...bundledStrengthTemplates,
-    ...strengthProgrammeTemplates,
-  ]) {
-    if (t.id == subType && t.legacyDescription == sessionNotes?.trim()) {
-      return t.build();
-    }
+  if (!_strengthTemplateIds.contains(subType)) return null;
+  return _templateByDescription(sessionNotes)?.build();
+}
+
+final _allStrengthTemplates = [
+  ...bundledStrengthTemplates,
+  ...strengthProgrammeTemplates,
+];
+
+final _strengthTemplateIds = {for (final t in _allStrengthTemplates) t.id};
+
+BundledStrengthTemplate? _templateByDescription(String? notes) {
+  final text = notes?.trim();
+  for (final t in _allStrengthTemplates) {
+    if (t.legacyDescription == text) return t;
   }
   return null;
 }
@@ -458,9 +471,20 @@ BundledStrengthTemplate _programmeTemplate(
   );
 }
 
-/// A planned session from before the goal-driven programme: the original
-/// templates outside recovery weeks (where core and stability still belong).
-bool isLegacyStrengthSession(String? subType, String phase) =>
-    subType == 'strengthFull' ||
-    subType == 'strengthLower' ||
-    (subType == 'strengthCore' && phase != 'recovery');
+/// A planned session from before the goal-driven programme: one built from
+/// the original templates outside recovery weeks (where core and stability
+/// still belong), or one given a programme type whose template was missing
+/// when it was planned, so another template stood in.
+bool isLegacyStrengthSession(
+  String? subType,
+  String phase, {
+  String? sessionNotes,
+}) {
+  if (subType == null || !subType.startsWith('str-')) {
+    final built = _templateByDescription(sessionNotes)?.id ?? subType;
+    return built == 'strengthFull' ||
+        built == 'strengthLower' ||
+        (built == 'strengthCore' && phase != 'recovery');
+  }
+  return _templateByDescription(sessionNotes)?.id != subType;
+}

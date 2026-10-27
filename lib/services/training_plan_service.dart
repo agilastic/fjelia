@@ -13,6 +13,7 @@ import '../models/prepared_workout.dart';
 import '../models/strength_workout.dart';
 import 'strength/garmin_strength.dart';
 import 'strength/strength_templates.dart';
+import 'workout_template_library.dart';
 import 'strength/strength_plan_edits.dart';
 import 'strength/strength_repository.dart';
 import '../models/race_profile.dart';
@@ -1657,6 +1658,9 @@ class TrainingPlanService {
           );
     }
 
+    // Every plan and replan works from the current library: templates added
+    // by an app update are there even when no historic sync ran since.
+    await WorkoutTemplateLibrary(_db).seedIfEmpty();
     final templates = await _db.select(_db.workoutTemplates).get();
     final category = _distanceCategory(raceDistanceM);
     final raceProfile = raceDistanceM != null && raceDistanceM > 0
@@ -2526,7 +2530,13 @@ class TrainingPlanService {
                 weekNumber: g + 1,
                 sport: slot.sport,
                 sessionType: slot.sessionType,
-                subType: Value(slot.subType),
+                // A strength session names the template it was made from, so
+                // its type, title and exercises always agree.
+                subType: Value(
+                  slot.sport == 'strength'
+                      ? template?.subType ?? slot.subType
+                      : slot.subType,
+                ),
                 phase: slotPhase,
                 primaryZone: zone,
                 title: title,

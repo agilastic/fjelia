@@ -58,7 +58,13 @@ final strengthProgrammeOutdatedProvider = FutureProvider.autoDispose<bool>((
                 t.sessionDate.isBiggerOrEqualValue(today),
           ))
           .get();
-  return sessions.any((s) => isLegacyStrengthSession(s.subType, s.phase));
+  return sessions.any(
+    (s) => isLegacyStrengthSession(
+      s.subType,
+      s.phase,
+      sessionNotes: s.sessionNotes,
+    ),
+  );
 });
 
 /// Rebuilds the future of the active plan with the strength programme.
