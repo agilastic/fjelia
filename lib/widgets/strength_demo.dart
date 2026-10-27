@@ -846,6 +846,214 @@ final Map<String, _Demo> _demos = {
       ),
     ],
   ),
+  'step_up': _Demo(
+    cue: 'Whole foot on the box. Drive up through the front leg, step down slowly.',
+    prop: _Prop.dumbbells,
+    scene: const _Scene(bench: Rect.fromLTRB(.04, -.22, .36, -.17)),
+    elbow: 1,
+    view: const Rect.fromLTRB(-.6, -1.2, .6, .05),
+    keys: const [
+      _Key(
+        _Pose(
+          hip: Offset(-.09, -.44),
+          torso: -86,
+          foot: Offset(.13, -.22),
+          farFoot: Offset(-.12, 0),
+          hand: Offset(.01, .32),
+          from: _From.shoulder,
+        ),
+        hold: .35,
+        move: 1.0,
+      ),
+      _Key(
+        _Pose(
+          hip: Offset(.1, -.68),
+          torso: -88,
+          foot: Offset(.13, -.22),
+          farFoot: Offset(.03, -.34),
+          hand: Offset(.01, .32),
+          from: _From.shoulder,
+        ),
+        hold: .4,
+        move: 1.1,
+      ),
+    ],
+  ),
+  'single_leg_rdl': _Demo(
+    cue: 'Stand on one leg. Hinge forward as the free leg reaches back, back flat.',
+    prop: _Prop.dumbbell,
+    elbow: 1,
+    keys: const [
+      _Key(
+        _Pose(
+          hip: _standHip,
+          torso: -88,
+          foot: _stand,
+          farFoot: Offset(-.02, -.02),
+          hand: Offset(.01, .32),
+          from: _From.shoulder,
+        ),
+        hold: .35,
+        move: 1.3,
+      ),
+      _Key(
+        _Pose(
+          hip: Offset(-.06, -.45),
+          torso: -12,
+          foot: _stand,
+          farFoot: Offset(-.5, -.4),
+          hand: Offset(.01, .32),
+          from: _From.shoulder,
+        ),
+        hold: .35,
+        move: 1.1,
+      ),
+    ],
+  ),
+  'step_down': _Demo(
+    cue:
+        'Stand on the box. Lower the free heel to the floor over four seconds.',
+    prop: _Prop.dumbbells,
+    scene: const _Scene(bench: Rect.fromLTRB(-.16, -.22, .14, -.17)),
+    elbow: 1,
+    view: const Rect.fromLTRB(-.65, -1.25, .65, .05),
+    keys: const [
+      _Key(
+        _Pose(
+          hip: Offset(-.02, -.68),
+          torso: -88,
+          foot: Offset(.0, -.22),
+          farFoot: Offset(.12, -.3),
+          hand: Offset(.01, .32),
+          from: _From.shoulder,
+        ),
+        hold: .35,
+        move: 2.4,
+      ),
+      _Key(
+        _Pose(
+          hip: Offset(-.08, -.5),
+          torso: -76,
+          foot: Offset(.0, -.22),
+          farFoot: Offset(.3, -.01),
+          hand: Offset(.01, .32),
+          from: _From.shoulder,
+        ),
+        hold: .15,
+        move: .8,
+      ),
+    ],
+  ),
+  'leg_curl': _Demo(
+    cue: 'Seated, pad above the heels. Curl the heels under the seat, return slowly.',
+    scene: const _Scene(seat: Rect.fromLTRB(-.36, -.24, .1, -.19)),
+    knee: -1,
+    elbow: 1,
+    keys: const [
+      _Key(
+        _Pose(
+          hip: Offset(-.12, -.28),
+          torso: -96,
+          foot: Offset(.15, -.04),
+          hand: Offset(-.02, -.26),
+        ),
+        hold: .3,
+        move: .9,
+      ),
+      _Key(
+        _Pose(
+          hip: Offset(-.12, -.28),
+          torso: -96,
+          foot: Offset(-.02, -.08),
+          hand: Offset(-.02, -.26),
+        ),
+        hold: .35,
+        move: 1.2,
+      ),
+    ],
+  ),
+  'lat_pulldown': _Demo(
+    cue: 'Seated, chest up. Pull the bar to the upper chest, let it rise under control.',
+    scene: const _Scene(
+      seat: Rect.fromLTRB(-.34, -.24, .06, -.19),
+      bandAnchor: Offset(-.04, -1.05),
+    ),
+    knee: -1,
+    elbow: 1,
+    view: const Rect.fromLTRB(-.6, -1.12, .6, .04),
+    keys: const [
+      _Key(
+        _Pose(
+          hip: Offset(-.12, -.27),
+          torso: -98,
+          foot: Offset(.18, 0),
+          hand: Offset(-.06, -.92),
+        ),
+        hold: .3,
+        move: .9,
+      ),
+      _Key(
+        _Pose(
+          hip: Offset(-.12, -.27),
+          torso: -104,
+          foot: Offset(.18, 0),
+          hand: Offset(.02, -.58),
+        ),
+        hold: .35,
+        move: 1.1,
+      ),
+    ],
+  ),
+  'jump_squat': _Demo(
+    cue: 'Quarter squat, then jump as high as you can. Land softly and reset.',
+    elbow: 1,
+    keys: const [
+      _Key(
+        _Pose(
+          hip: _standHip,
+          torso: -88,
+          foot: _stand,
+          hand: Offset(.02, .32),
+          from: _From.shoulder,
+        ),
+        hold: .4,
+        move: .6,
+      ),
+      _Key(
+        _Pose(
+          hip: Offset(-.13, -.32),
+          torso: -58,
+          foot: _stand,
+          hand: Offset(-.12, .26),
+          from: _From.shoulder,
+        ),
+        hold: .05,
+        move: .25,
+      ),
+      _Key(
+        _Pose(
+          hip: Offset(.0, -.6),
+          torso: -90,
+          foot: Offset(.04, -.11),
+          hand: Offset(.18, -.22),
+          from: _From.shoulder,
+        ),
+        hold: .05,
+        move: .35,
+      ),
+      _Key(
+        _Pose(
+          hip: Offset(-.1, -.38),
+          torso: -66,
+          foot: _stand,
+          hand: Offset(.14, .2),
+          from: _From.shoulder,
+        ),
+        hold: .25,
+        move: .6,
+      ),
+    ],
+  ),
   'pallof_press': _Demo(
     cue: 'Side-on to the band. Press the hands straight out and resist the turn.',
     scene: const _Scene(bandAnchor: Offset(-.58, -.66)),

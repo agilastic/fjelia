@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 
 import '../db/database.dart';
 import '../utils/log.dart';
+import 'strength/strength_templates.dart';
 
 /// Built-in Garmin-format workout templates for every supported sport.
 /// Rows are tagged `fjelia_builtin` and replaced wholesale when the set changes.
@@ -55,6 +56,7 @@ class WorkoutTemplateLibrary {
     ..._cyclingExtraTemplates(),
     ..._swimmingTemplates(),
     ..._strengthTemplates(),
+    ..._programmeStrengthTemplates(),
     ..._yogaTemplates(),
     ..._rowingTemplates(),
     ..._hikingTemplates(),
@@ -4341,6 +4343,35 @@ class WorkoutTemplateLibrary {
         _step('cooldown', 180, 1),
       ],
     ),
+  ];
+
+  /// The goal-driven strength programme: one row per focus, phase and A/B
+  /// session, from the same definitions as their structured plans.
+  List<WorkoutTemplatesCompanion> _programmeStrengthTemplates() => [
+    for (final t in strengthProgrammeTemplates)
+      _t(
+        sport: 'strength',
+        sessionType: 'key',
+        subType: t.id,
+        targetPhase: t.phase!,
+        name: t.name!,
+        description: t.legacyDescription,
+        coachingCues: t.cues!,
+        parameterizedFor: 'rpe',
+        durationMin: t.minutes!,
+        tss: switch (t.phase) {
+          'build' => 9,
+          'base' => 8,
+          'peak' => 6,
+          _ => 4,
+        },
+        tags: ['strength', t.focus!.name, t.phase!],
+        steps: [
+          _step('warmup', 600, 1),
+          _step('interval', (t.minutes! - 15) * 60, 3),
+          _step('cooldown', 300, 1),
+        ],
+      ),
   ];
 
   List<WorkoutTemplatesCompanion> _yogaTemplates() => [

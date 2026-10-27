@@ -42,7 +42,8 @@ void main() {
       await WorkoutTemplateLibrary(db).reseed();
       final rows = await db.select(db.workoutTemplates).get();
       expect(rows.length, greaterThan(190));
-      expect(rows.length, 200);
+      // 200 sport templates and the 32 goal-driven strength templates.
+      expect(rows.length, 232);
       // Names are unique within a sport (some sports share names).
       expect(
         rows.map((r) => '${r.sport}|${r.name}').toSet().length,
@@ -129,12 +130,19 @@ void main() {
       final sessions = await (db.select(
         db.trainingSessions,
       )..where((t) => t.planId.equals(planId) & t.stepsJson.isNotNull())).get();
+      // Repeats can nest (over-unders): every executable step counts.
+      Iterable<Map<String, dynamic>> flat(List steps) sync* {
+        for (final st in steps.cast<Map>()) {
+          if (st['type'] == 'RepeatGroupDTO') {
+            yield* flat(st['workoutSteps'] as List);
+          } else {
+            yield st.cast<String, dynamic>();
+          }
+        }
+      }
+
       return [
-        for (final s in sessions)
-          for (final st in jsonDecode(s.stepsJson!) as List)
-            ...(st['type'] == 'RepeatGroupDTO'
-                ? (st['workoutSteps'] as List).cast<Map<String, dynamic>>()
-                : [(st as Map).cast<String, dynamic>()]),
+        for (final s in sessions) ...flat(jsonDecode(s.stepsJson!) as List),
       ];
     }
 

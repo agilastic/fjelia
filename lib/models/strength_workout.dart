@@ -389,6 +389,52 @@ const builtInStrengthVariants = [
     equipment: 'Barbell',
   ),
   StrengthExerciseVariant(
+    id: 'step_up',
+    name: 'Step-up',
+    equipment: 'Dumbbells',
+    convention: StrengthConvention(
+      basis: StrengthLoadBasis.perImplement,
+      implements: 2,
+      side: StrengthSide.unilateral,
+    ),
+  ),
+  StrengthExerciseVariant(
+    id: 'single_leg_rdl',
+    name: 'Single-leg Romanian deadlift',
+    equipment: 'Dumbbell',
+    convention: StrengthConvention(
+      basis: StrengthLoadBasis.single,
+      side: StrengthSide.unilateral,
+    ),
+  ),
+  StrengthExerciseVariant(
+    id: 'step_down',
+    name: 'Eccentric step-down',
+    equipment: 'Dumbbells',
+    convention: StrengthConvention(
+      basis: StrengthLoadBasis.perImplement,
+      implements: 2,
+      side: StrengthSide.unilateral,
+    ),
+    instructions: 'Lower the free heel to the floor over four seconds.',
+  ),
+  StrengthExerciseVariant(
+    id: 'leg_curl',
+    name: 'Leg curl',
+    equipment: 'Machine',
+  ),
+  StrengthExerciseVariant(
+    id: 'lat_pulldown',
+    name: 'Lat pulldown',
+    equipment: 'Cable machine',
+  ),
+  StrengthExerciseVariant(
+    id: 'jump_squat',
+    name: 'Jump squat',
+    equipment: 'Bodyweight',
+    convention: _bodyweight,
+  ),
+  StrengthExerciseVariant(
     id: 'plank',
     name: 'Plank',
     equipment: 'Bodyweight',

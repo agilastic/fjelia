@@ -54,6 +54,9 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
   String? restFor;
   bool restBuzzed = false;
   bool saving = false;
+
+  /// Looking back at sets after every set was recorded.
+  bool reviewing = false;
   String? error;
   Timer? ticker;
 
@@ -114,6 +117,7 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
   }
 
   void _go(int i) => setState(() {
+    reviewing = true;
     index = i.clamp(0, order.length - 1);
     error = null;
     _load();
@@ -185,7 +189,17 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
     final open = order.indexWhere(
       (s) => s.set.status == StrengthSetStatus.unrecorded,
     );
-    if (open >= 0) _go(open);
+    if (open >= 0) {
+      _go(open);
+      setState(() => reviewing = false);
+    } else {
+      // Every set is recorded: the screen offers to finish.
+      setState(() {
+        reviewing = false;
+        restFrom = null;
+        restFor = null;
+      });
+    }
   }
 
   Future<void> _startSet() async {
@@ -352,6 +366,8 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
     final done = log.sets
         .where((x) => x.status != StrengthSetStatus.unrecorded)
         .length;
+    final allDone = done == order.length;
+    final showSet = !allDone || reviewing;
     void enterLoad() => _enter(
       'Load (${unit.name})',
       kg == null ? null : formatStrengthLoad(kg!, unit).split(' ').first,
@@ -366,6 +382,11 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
       child: SheetPage(
         title: 'Gym mode',
         actions: [
+          IconButton(
+            tooltip: 'Finish workout',
+            onPressed: saving ? null : _finish,
+            icon: const Icon(Icons.flag_outlined),
+          ),
           PopupMenuButton<String>(
             tooltip: 'Workout actions',
             onSelected: (v) => v == 'discard' ? _discard() : null,
@@ -413,208 +434,272 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
                   style: const TextStyle(color: Colors.redAccent),
                 ),
               ),
-            const SizedBox(height: 14),
-            Text(
-              'EXERCISE $exerciseNo · SET $setNo OF ${setsOfExercise.length}'
-              '${s.set.kind == StrengthSetKind.working ? '' : ' · ${s.set.kind.label.toUpperCase()}'}',
-              style: const TextStyle(
-                color: strengthColor,
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-                letterSpacing: .8,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Semantics(
-              header: true,
-              child: Text(
-                s.exercise.name,
-                style: const TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ),
-            Text(
-              [
-                if (s.exercise.equipment.isNotEmpty) s.exercise.equipment,
-                c.text,
-              ].join(' · '),
-              style: const TextStyle(color: muted, fontSize: 12),
-            ),
-            if (StrengthExerciseDemo.has(s.exercise.variantId))
-              Padding(
-                padding: const EdgeInsets.only(top: 12),
-                child: StrengthExerciseDemo(
-                  key: ValueKey(s.exercise.variantId),
-                  variantId: s.exercise.variantId,
-                  name: s.exercise.name,
-                  height: 170,
-                ),
-              ),
-            if (s.target != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: Text(
-                  'Planned ${strengthTargetText(s.target!, c, unit)}'
-                  '${s.target!.effort == null ? '' : ' · ${s.target!.effort!.text}'}',
-                  style: const TextStyle(fontSize: 15, color: Colors.white70),
-                ),
-              ),
-            if (s.set.status != StrengthSetStatus.unrecorded)
-              Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: Row(
-                  children: [
-                    StrengthStatusChip(s.set.status),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        strengthResultText(s.set, c, unit),
-                        style: const TextStyle(color: Colors.white70),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            const SizedBox(height: 22),
-            if (resting) ...[
+            if (allDone && !reviewing) ...[
+              const SizedBox(height: 28),
               Semantics(
                 liveRegion: true,
-                label:
-                    'Rest ${_clock(rest)}'
-                    '${restTarget == null ? '' : ' of ${formatStrengthSeconds(restTarget)} planned'}',
                 child: Column(
                   children: [
+                    const Icon(Icons.check_circle, color: mint, size: 48),
+                    const SizedBox(height: 8),
                     const Text(
-                      'REST',
+                      'All sets recorded',
                       style: TextStyle(
-                        fontSize: 11,
-                        color: muted,
-                        letterSpacing: 1,
-                      ),
-                    ),
-                    Text(
-                      _clock(rest),
-                      style: TextStyle(
-                        fontSize: 56,
+                        fontSize: 22,
                         fontWeight: FontWeight.w800,
-                        fontFeatures: _tabular,
-                        color:
-                            restTarget != null && rest.inSeconds >= restTarget
-                            ? mint
-                            : null,
                       ),
                     ),
-                    if (restTarget != null)
-                      Text(
-                        'Planned ${formatStrengthSeconds(restTarget)}',
-                        style: const TextStyle(color: muted),
-                      ),
+                    const SizedBox(height: 4),
+                    Text(
+                      [
+                        '${log.sets.where((x) => x.status == StrengthSetStatus.completed).length} done',
+                        for (final st in const [
+                          StrengthSetStatus.partial,
+                          StrengthSetStatus.failed,
+                          StrengthSetStatus.skipped,
+                        ])
+                          if (log.sets.any((x) => x.status == st))
+                            '${log.sets.where((x) => x.status == st).length} ${st.label.toLowerCase()}',
+                      ].join(' · '),
+                      style: const TextStyle(color: Colors.white70),
+                    ),
                   ],
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
               FilledButton.icon(
                 style: FilledButton.styleFrom(
                   backgroundColor: strengthColor,
                   foregroundColor: Colors.black,
                   minimumSize: const Size(0, 56),
                 ),
-                onPressed: saving ? null : _startSet,
-                icon: const Icon(Icons.play_arrow),
-                label: const Text('Start set', style: TextStyle(fontSize: 17)),
+                onPressed: saving ? null : _finish,
+                icon: const Icon(Icons.flag),
+                label: const Text(
+                  'Finish workout',
+                  style: TextStyle(fontSize: 17),
+                ),
               ),
               TextButton(
                 style: TextButton.styleFrom(minimumSize: const Size(0, 48)),
-                onPressed: () => setState(() {
-                  restFrom = null;
-                  restFor = null;
-                }),
-                child: const Text("Don't time this rest"),
+                onPressed: () => setState(() => reviewing = true),
+                child: const Text('Review sets'),
               ),
-              const SizedBox(height: 12),
             ],
-            if (timed)
-              _stepper(
-                label: 'Seconds',
-                value: seconds == null ? '—' : formatStrengthSeconds(seconds!),
-                onMinus: (seconds ?? 0) <= 0
-                    ? null
-                    : () => setState(
-                        () => seconds = (seconds! - 5).clamp(0, 36000),
-                      ),
-                onPlus: () => setState(() => seconds = (seconds ?? 0) + 5),
-                onTap: () => _enter('Seconds', seconds?.toString(), (v) {
-                  seconds = int.tryParse(v.trim());
-                }),
-              )
-            else
-              _stepper(
-                label: c.side == StrengthSide.unilateral
-                    ? 'Reps per side'
-                    : 'Reps',
-                value: reps?.toString() ?? '—',
-                onMinus: (reps ?? 0) <= 0
-                    ? null
-                    : () => setState(() => reps = reps! - 1),
-                onPlus: () => setState(
-                  () =>
-                      reps = reps == null ? (s.target?.repMin ?? 1) : reps! + 1,
-                ),
-                onTap: () => _enter('Reps', reps?.toString(), (v) {
-                  reps = int.tryParse(v.trim());
-                }),
-              ),
-            if (c.loadKind.hasKg) ...[
+            if (showSet) ...[
               const SizedBox(height: 14),
-              _stepper(
-                label: c.loadKind == StrengthLoadKind.assisted
-                    ? 'Assistance (${unit.name})'
-                    : 'Load (${unit.name})',
-                value: kg == null
-                    ? '—'
-                    : formatStrengthLoad(kg!, unit).split(' ').first,
-                onMinus: kg == null || kg! - stepKg < -1e-9
-                    ? null
-                    : () => setState(() => kg = kg! - stepKg),
-                // No load yet: "+" asks for it rather than inventing one.
-                onPlus: kg == null
-                    ? enterLoad
-                    : () => setState(() => kg = kg! + stepKg),
-                onTap: enterLoad,
+              Text(
+                'EXERCISE $exerciseNo · SET $setNo OF ${setsOfExercise.length}'
+                '${s.set.kind == StrengthSetKind.working ? '' : ' · ${s.set.kind.label.toUpperCase()}'}',
+                style: const TextStyle(
+                  color: strengthColor,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: .8,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Semantics(
+                header: true,
+                child: Text(
+                  s.exercise.name,
+                  style: const TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+              Text(
+                [
+                  if (s.exercise.equipment.isNotEmpty) s.exercise.equipment,
+                  c.text,
+                ].join(' · '),
+                style: const TextStyle(color: muted, fontSize: 12),
+              ),
+              if (StrengthExerciseDemo.has(s.exercise.variantId))
+                Padding(
+                  padding: const EdgeInsets.only(top: 12),
+                  child: StrengthExerciseDemo(
+                    key: ValueKey(s.exercise.variantId),
+                    variantId: s.exercise.variantId,
+                    name: s.exercise.name,
+                    height: 170,
+                  ),
+                ),
+              if (s.target != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Text(
+                    'Planned ${strengthTargetText(s.target!, c, unit)}'
+                    '${s.target!.effort == null ? '' : ' · ${s.target!.effort!.text}'}',
+                    style: const TextStyle(fontSize: 15, color: Colors.white70),
+                  ),
+                ),
+              if (s.set.status != StrengthSetStatus.unrecorded)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Row(
+                    children: [
+                      StrengthStatusChip(s.set.status),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          strengthResultText(s.set, c, unit),
+                          style: const TextStyle(color: Colors.white70),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              const SizedBox(height: 22),
+              if (resting) ...[
+                Semantics(
+                  liveRegion: true,
+                  label:
+                      'Rest ${_clock(rest)}'
+                      '${restTarget == null ? '' : ' of ${formatStrengthSeconds(restTarget)} planned'}',
+                  child: Column(
+                    children: [
+                      const Text(
+                        'REST',
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: muted,
+                          letterSpacing: 1,
+                        ),
+                      ),
+                      Text(
+                        _clock(rest),
+                        style: TextStyle(
+                          fontSize: 56,
+                          fontWeight: FontWeight.w800,
+                          fontFeatures: _tabular,
+                          color:
+                              restTarget != null && rest.inSeconds >= restTarget
+                              ? mint
+                              : null,
+                        ),
+                      ),
+                      if (restTarget != null)
+                        Text(
+                          'Planned ${formatStrengthSeconds(restTarget)}',
+                          style: const TextStyle(color: muted),
+                        ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                FilledButton.icon(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: strengthColor,
+                    foregroundColor: Colors.black,
+                    minimumSize: const Size(0, 56),
+                  ),
+                  onPressed: saving ? null : _startSet,
+                  icon: const Icon(Icons.play_arrow),
+                  label: const Text(
+                    'Start set',
+                    style: TextStyle(fontSize: 17),
+                  ),
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(minimumSize: const Size(0, 48)),
+                  onPressed: () => setState(() {
+                    restFrom = null;
+                    restFor = null;
+                  }),
+                  child: const Text("Don't time this rest"),
+                ),
+                const SizedBox(height: 12),
+              ],
+              if (timed)
+                _stepper(
+                  label: 'Seconds',
+                  value: seconds == null
+                      ? '—'
+                      : formatStrengthSeconds(seconds!),
+                  onMinus: (seconds ?? 0) <= 0
+                      ? null
+                      : () => setState(
+                          () => seconds = (seconds! - 5).clamp(0, 36000),
+                        ),
+                  onPlus: () => setState(() => seconds = (seconds ?? 0) + 5),
+                  onTap: () => _enter('Seconds', seconds?.toString(), (v) {
+                    seconds = int.tryParse(v.trim());
+                  }),
+                )
+              else
+                _stepper(
+                  label: c.side == StrengthSide.unilateral
+                      ? 'Reps per side'
+                      : 'Reps',
+                  value: reps?.toString() ?? '—',
+                  onMinus: (reps ?? 0) <= 0
+                      ? null
+                      : () => setState(() => reps = reps! - 1),
+                  onPlus: () => setState(
+                    () => reps = reps == null
+                        ? (s.target?.repMin ?? 1)
+                        : reps! + 1,
+                  ),
+                  onTap: () => _enter('Reps', reps?.toString(), (v) {
+                    reps = int.tryParse(v.trim());
+                  }),
+                ),
+              if (c.loadKind.hasKg) ...[
+                const SizedBox(height: 14),
+                _stepper(
+                  label: c.loadKind == StrengthLoadKind.assisted
+                      ? 'Assistance (${unit.name})'
+                      : 'Load (${unit.name})',
+                  value: kg == null
+                      ? '—'
+                      : formatStrengthLoad(kg!, unit).split(' ').first,
+                  onMinus: kg == null || kg! - stepKg < -1e-9
+                      ? null
+                      : () => setState(() => kg = kg! - stepKg),
+                  // No load yet: "+" asks for it rather than inventing one.
+                  onPlus: kg == null
+                      ? enterLoad
+                      : () => setState(() => kg = kg! + stepKg),
+                  onTap: enterLoad,
+                ),
+              ],
+              const SizedBox(height: 22),
+              if (!resting)
+                FilledButton.icon(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: strengthColor,
+                    foregroundColor: Colors.black,
+                    minimumSize: const Size(0, 56),
+                  ),
+                  onPressed: saving
+                      ? null
+                      : () => _record(StrengthSetStatus.completed),
+                  icon: const Icon(Icons.check),
+                  label: const Text('Done', style: TextStyle(fontSize: 17)),
+                ),
+              Wrap(
+                alignment: WrapAlignment.center,
+                children: [
+                  for (final st in const [
+                    StrengthSetStatus.partial,
+                    StrengthSetStatus.failed,
+                    StrengthSetStatus.skipped,
+                  ])
+                    TextButton.icon(
+                      style: TextButton.styleFrom(
+                        minimumSize: const Size(0, 48),
+                      ),
+                      onPressed: saving ? null : () => _record(st),
+                      icon: Icon(strengthStatusStyle(st).$1, size: 18),
+                      label: Text(
+                        st == StrengthSetStatus.skipped ? 'Skip' : st.label,
+                      ),
+                    ),
+                ],
               ),
             ],
-            const SizedBox(height: 22),
-            if (!resting)
-              FilledButton.icon(
-                style: FilledButton.styleFrom(
-                  backgroundColor: strengthColor,
-                  foregroundColor: Colors.black,
-                  minimumSize: const Size(0, 56),
-                ),
-                onPressed: saving
-                    ? null
-                    : () => _record(StrengthSetStatus.completed),
-                icon: const Icon(Icons.check),
-                label: const Text('Done', style: TextStyle(fontSize: 17)),
-              ),
-            Wrap(
-              alignment: WrapAlignment.center,
-              children: [
-                for (final st in const [
-                  StrengthSetStatus.partial,
-                  StrengthSetStatus.failed,
-                  StrengthSetStatus.skipped,
-                ])
-                  TextButton.icon(
-                    style: TextButton.styleFrom(minimumSize: const Size(0, 48)),
-                    onPressed: saving ? null : () => _record(st),
-                    icon: Icon(strengthStatusStyle(st).$1, size: 18),
-                    label: Text(st.label),
-                  ),
-              ],
-            ),
             const Divider(height: 28),
             Row(
               children: [
@@ -668,12 +753,14 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 8),
-            OutlinedButton(
-              style: OutlinedButton.styleFrom(minimumSize: const Size(0, 48)),
-              onPressed: saving ? null : _finish,
-              child: const Text('Finish workout'),
-            ),
+            if (showSet) ...[
+              const SizedBox(height: 8),
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(minimumSize: const Size(0, 48)),
+                onPressed: saving ? null : _finish,
+                child: const Text('Finish workout'),
+              ),
+            ],
             const Padding(
               padding: EdgeInsets.only(top: 8),
               child: Text(

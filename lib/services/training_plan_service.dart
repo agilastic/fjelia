@@ -12,6 +12,7 @@ import '../models/workout_profile.dart' show formatBlockDuration;
 import '../models/prepared_workout.dart';
 import '../models/strength_workout.dart';
 import 'strength/garmin_strength.dart';
+import 'strength/strength_templates.dart';
 import 'strength/strength_plan_edits.dart';
 import 'strength/strength_repository.dart';
 import '../models/race_profile.dart';
@@ -1902,11 +1903,35 @@ class TrainingPlanService {
         );
         if (i >= 0) slots[i] = slots[i].copyWith(subType: 'hills', zone: 4);
       }
-      // Strength slots go on the athlete's strength days.
-      final strength = slots.where((s) => s.sport == 'strength').toList();
+      // Strength goes on every strength day the athlete chose, aimed at the
+      // race: base and build use each day, peak at most two, taper one
+      // short session, race weeks none, recovery weeks core and stability.
+      // Sessions A and B alternate from day to day and week to week.
+      final strengthWeek =
+          strengthDays.isNotEmpty &&
+          (phase == 'recovery' || slots.any((s) => s.sport == 'strength'));
       slots.removeWhere((s) => s.sport == 'strength');
-      for (var i = 0; i < strength.length && i < strengthDays.length; i++) {
-        slots.add(strength[i].copyWith(weekday: strengthDays[i]));
+      if (strengthWeek) {
+        final count = switch (phase) {
+          'base' || 'build' => math.min(strengthDays.length, 3),
+          'peak' => math.min(strengthDays.length, 2),
+          'taper' || 'recovery' => 1,
+          _ => 0,
+        };
+        final focus = strengthFocusFor(
+          mainSport,
+          hilly: terrain == Terrain.hilly || terrain == Terrain.mountainous,
+        );
+        for (var i = 0; i < count; i++) {
+          slots.add(
+            _strengthFull.copyWith(
+              subType: phase == 'recovery'
+                  ? 'strengthCore'
+                  : strengthProgrammeId(focus, phase, g + i),
+              weekday: strengthDays[i],
+            ),
+          );
+        }
       }
       final maxSessions = math.max(1, daysPerWeek * maxSessionsPerDay);
       // Keep long and key sessions first when trimming.
