@@ -554,6 +554,16 @@ section[id], [id].privacy-card, [id].sports-compact { scroll-margin-top: 90px; }
 .privacy-card > p { font-size: .92rem; color: var(--muted); }
 .privacy-facts { display: flex; flex-wrap: wrap; gap: .4rem .8rem; list-style: none; margin: 1rem 0; padding: 0; font-size: .78rem; color: #87dec8; }
 .connection-note { font-size: .75rem; margin: 1.5rem 0 0; }
+.sync-details { margin-top: 1.4rem; border-top: 1px solid var(--border); }
+.sync-details > summary { min-height: 48px; padding: .85rem 0; color: var(--text); font-weight: 650; cursor: pointer; }
+.sync-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .9rem; list-style: none; padding: 0; margin: .5rem 0 0; }
+.sync-list li { min-width: 0; padding: 1.1rem; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); }
+.sync-list h3 { font-size: .95rem; }
+.sync-list p { margin: .35rem 0 0; color: var(--muted); font-size: .84rem; line-height: 1.6; }
+.sync-details > .fine { margin-top: .8rem; font-size: .78rem; }
+.metrics-details { max-width: 48rem; margin-top: 1.4rem; border-top: 1px solid var(--border); }
+.metrics-details > summary { min-height: 48px; padding: .85rem 0; color: var(--text); font-weight: 650; cursor: pointer; }
+.metrics-details > p { margin: .55rem 0; color: var(--muted); font-size: .88rem; }
 .training-extras { padding-block: 2.5rem; }
 .sports-compact h3 { font-size: 1.1rem; }
 .sport-chips { display: flex; flex-wrap: wrap; gap: .45rem .6rem; list-style: none; padding: 0; margin: 1rem 0; }
@@ -619,6 +629,7 @@ section[id], [id].privacy-card, [id].sports-compact { scroll-margin-top: 90px; }
  .gallery-hint { display: block; margin: .6rem 0 0; color: var(--muted); font-size: .75rem; }
  .video-note { margin-top: .7rem; }
  .connections-layout { grid-template-columns: 1fr; }
+ .sync-list { grid-template-columns: 1fr; }
  .latest-heading { align-items: start; flex-direction: column; gap: .5rem; }
  .latest-grid { grid-template-columns: 1fr; gap: .6rem; }
  .latest-item { padding: .9rem 1rem; }
