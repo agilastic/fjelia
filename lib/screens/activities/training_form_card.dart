@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 import '../../providers/day_data_provider.dart';
@@ -12,9 +15,13 @@ class TrainingFormCard extends ConsumerStatefulWidget {
     super.key,
     this.fullscreen = false,
     this.initialDays = 60,
+    this.onDaysChanged,
+    this.onClose,
   });
   final int initialDays;
   final bool fullscreen;
+  final ValueChanged<int>? onDaysChanged;
+  final VoidCallback? onClose;
   @override
   ConsumerState<TrainingFormCard> createState() => _FormState();
 }
@@ -48,6 +55,12 @@ class _FormState extends ConsumerState<TrainingFormCard> {
         : last.tsb < -10
         ? loadRed
         : loadOrange;
+    final screen = MediaQuery.sizeOf(context);
+    final chartHeight = widget.fullscreen
+        ? screen.width > screen.height
+              ? screen.height * .55
+              : screen.height * .42
+        : 150.0;
     return LoadCard(
       color: loadInset,
       child: Column(
@@ -66,29 +79,18 @@ class _FormState extends ConsumerState<TrainingFormCard> {
                   ),
                 ),
               ),
-              for (final n in [60, 30, 14])
-                InkWell(
-                  onTap: () => setState(() => days = n),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 7,
-                      vertical: 5,
-                    ),
-                    decoration: BoxDecoration(
-                      color: days == n ? loadBlue.withValues(alpha: .2) : null,
-                      borderRadius: BorderRadius.circular(7),
-                    ),
-                    child: Text(
-                      '${n}d',
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: days == n ? loadBlue : muted,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+              if (widget.fullscreen)
+                IconButton(
+                  tooltip: 'Close training form fullscreen',
+                  constraints: const BoxConstraints.tightFor(
+                    width: 36,
+                    height: 36,
                   ),
-                ),
-              if (!widget.fullscreen)
+                  padding: EdgeInsets.zero,
+                  icon: const Icon(Icons.close, size: 20, color: muted),
+                  onPressed: widget.onClose ?? () => Navigator.pop(context),
+                )
+              else
                 IconButton(
                   tooltip: 'Expand training form',
                   constraints: const BoxConstraints.tightFor(
@@ -97,22 +99,53 @@ class _FormState extends ConsumerState<TrainingFormCard> {
                   ),
                   padding: EdgeInsets.zero,
                   icon: const Icon(Icons.fullscreen, size: 18, color: muted),
-                  onPressed: () => showLoadSheet(
-                    context,
-                    LoadSheet(
-                      title: 'FORM · ATL / CTL / TSB',
-                      close: true,
-                      child: SingleChildScrollView(
-                        child: TrainingFormCard(
-                          fullscreen: true,
-                          initialDays: days,
-                        ),
+                  onPressed: () => Navigator.of(context).push<void>(
+                    MaterialPageRoute<void>(
+                      fullscreenDialog: true,
+                      builder: (_) => _TrainingFormFullscreenPage(
+                        initialDays: days,
+                        onDaysChanged: (value) {
+                          if (mounted) setState(() => days = value);
+                        },
                       ),
                     ),
-                    height: .8,
                   ),
                 ),
             ],
+          ),
+          const SizedBox(height: 5),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                for (final n in [14, 30, 60, 90, 180, 365])
+                  Padding(
+                    padding: const EdgeInsets.only(right: 5),
+                    child: ChoiceChip(
+                      label: Text(_trainingRangeLabel(n)),
+                      selected: days == n,
+                      onSelected: (_) {
+                        setState(() => days = n);
+                        widget.onDaysChanged?.call(n);
+                      },
+                      visualDensity: VisualDensity.compact,
+                      materialTapTargetSize: MaterialTapTargetSize.padded,
+                      selectedColor: loadBlue.withValues(alpha: .2),
+                      backgroundColor: loadInset,
+                      labelStyle: TextStyle(
+                        fontSize: 11,
+                        color: days == n ? loadBlue : muted,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      side: BorderSide(
+                        color: days == n
+                            ? loadBlue.withValues(alpha: .45)
+                            : Colors.white12,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ),
           const SizedBox(height: 10),
           Row(
@@ -152,7 +185,7 @@ class _FormState extends ConsumerState<TrainingFormCard> {
           const SizedBox(height: 20),
           if (history.isLoading && !history.hasValue)
             SizedBox(
-              height: widget.fullscreen ? 350 : 150,
+              height: chartHeight,
               child: const Center(child: CircularProgressIndicator()),
             )
           else if (history.hasError && !history.hasValue)
@@ -164,7 +197,7 @@ class _FormState extends ConsumerState<TrainingFormCard> {
             const EmptyState('No training history')
           else
             SizedBox(
-              height: widget.fullscreen ? 350 : 150,
+              height: chartHeight,
               child: LineChart(
                 LineChartData(
                   borderData: FlBorderData(show: false),
@@ -269,8 +302,7 @@ class _FormState extends ConsumerState<TrainingFormCard> {
           if (last?.historyStart != null) ...[
             const SizedBox(height: 8),
             Tooltip(
-              message:
-                  'Calculated from the first available load record. Days without recorded load count as zero; earlier training is unknown.',
+              message: 'Calculated from the first available load record. Days without recorded load count as zero; earlier training is unknown.',
               child: Text(
                 'History since ${DateFormat.yMMMd().format(last!.historyStart!)}${last.historyDays! < 42 ? ' · building baseline' : ''}',
                 style: loadCaption,
@@ -281,6 +313,68 @@ class _FormState extends ConsumerState<TrainingFormCard> {
       ),
     );
   }
+}
+
+String _trainingRangeLabel(int days) => switch (days) {
+  90 => '3mo',
+  180 => '6mo',
+  365 => '1y',
+  _ => '${days}d',
+};
+
+class _TrainingFormFullscreenPage extends StatefulWidget {
+  const _TrainingFormFullscreenPage({
+    required this.initialDays,
+    required this.onDaysChanged,
+  });
+
+  final int initialDays;
+  final ValueChanged<int> onDaysChanged;
+
+  @override
+  State<_TrainingFormFullscreenPage> createState() =>
+      _TrainingFormFullscreenPageState();
+}
+
+class _TrainingFormFullscreenPageState
+    extends State<_TrainingFormFullscreenPage> {
+  static const _portrait = [
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ];
+  static const _chartOrientations = [
+    ..._portrait,
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    unawaited(SystemChrome.setPreferredOrientations(_chartOrientations));
+  }
+
+  @override
+  void dispose() {
+    unawaited(SystemChrome.setPreferredOrientations(_portrait));
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    backgroundColor: loadSurface,
+    body: SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(10, 8, 10, 16),
+        child: TrainingFormCard(
+          fullscreen: true,
+          initialDays: widget.initialDays,
+          onDaysChanged: widget.onDaysChanged,
+          onClose: () => Navigator.of(context).pop(),
+        ),
+      ),
+    ),
+  );
 }
 
 // Form status label thresholds.

@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:drift/drift.dart';
+import 'package:fjelia_service_api/fjelia_service_api.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../api/garmin_client.dart';
 import '../db/database.dart' hide DailyBpSummary;
-import 'package:fjelia_service_api/fjelia_service_api.dart';
 import '../models/garmin_data.dart';
 import '../models/scores.dart';
 import '../services/activity_decoder.dart';
@@ -626,10 +626,18 @@ List<FormPoint> buildTrainingFormSeries({
 }) {
   final end = _day(through);
   final daily = <DateTime, double>{};
+  // Ignore Unix-epoch placeholder dates while retaining all real imported
+  // history. A sentinel row otherwise makes the chart claim to start in 1970.
+  final earliestUsableDate = DateTime(1970, 1, 2);
   for (final entry in dailyLoads.entries) {
     final d = _day(entry.key);
     final load = entry.value;
-    if (d.isAfter(end) || !load.isFinite || load < 0) continue;
+    if (d.isBefore(earliestUsableDate) ||
+        d.isAfter(end) ||
+        !load.isFinite ||
+        load < 0) {
+      continue;
+    }
     daily[d] = (daily[d] ?? 0) + load;
   }
   if (daily.isEmpty) return [];

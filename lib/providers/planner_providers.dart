@@ -96,8 +96,9 @@ final postWorkoutScorerProvider = Provider<PostWorkoutScorer>(
   (ref) => PostWorkoutScorer(ref.watch(databaseProvider)),
 );
 
-/// Planned, adapted or cancelled sessions for the next 60 days. A cancelled
-/// session stays in the list, marked, so the plan shows what was dropped.
+/// Future planned, adapted or cancelled sessions in active plans. The plan
+/// list uses the same full horizon as the month calendar; a cancelled session
+/// stays in the list, marked, so the plan shows what was dropped.
 final upcomingSessionsProvider = FutureProvider<List<TrainingSession>>((
   ref,
 ) async {
@@ -110,13 +111,11 @@ final upcomingSessionsProvider = FutureProvider<List<TrainingSession>>((
           .get();
   final now = DateTime.now();
   final today = DateTime(now.year, now.month, now.day);
-  final until = DateTime(today.year, today.month, today.day + 60);
   return (db.select(db.trainingSessions)
         ..where(
           (t) =>
               t.planId.isIn(active.map((p) => p.id)) &
               t.sessionDate.isBiggerOrEqualValue(today) &
-              t.sessionDate.isSmallerOrEqualValue(until) &
               (t.status.equals('planned') |
                   t.status.equals('adapted') |
                   t.status.equals('skipped')),
