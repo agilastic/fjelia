@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
 import 'package:fjelia/api/polar_flow_web_client.dart';
 import 'package:fjelia/db/database.dart';
@@ -78,11 +79,12 @@ class _Flow extends PolarFlowWebClient {
 }
 
 PreparedWorkout _workout({
+  String sessionId = 's1',
   int seconds = 1800,
   DateTime? date,
   String sport = 'running',
 }) => PreparedWorkout(
-  sessionId: 's1',
+  sessionId: sessionId,
   title: 'Easy run',
   date: date ?? DateTime(2026, 10, 28),
   sport: sport,
@@ -169,6 +171,7 @@ void main() {
       expect(row.providerId, 'polar');
       expect(row.day, '20261028');
       expect(row.name, 'Easy run');
+      expect(flow.targets['1']!['datetime'], '2026-10-28T16:00');
       final restarted = PolarWorkoutProvider(
         db,
         service,
@@ -195,6 +198,102 @@ void main() {
     expect(flow.creates, 1);
   });
 
+  group('daily upload times', () {
+    Future<TrainingSession> add({
+      String id = 's2',
+      int number = 2,
+      DateTime? date,
+      String status = 'planned',
+      String planId = 'plan',
+      String athleteId = 'self',
+    }) async {
+      final other = session.copyWith(
+        id: id,
+        sessionNumber: number,
+        sessionDate: date ?? session.sessionDate,
+        status: status,
+        planId: planId,
+        athleteId: athleteId,
+      );
+      await db.into(db.trainingSessions).insert(other);
+      return other;
+    }
+
+    test(
+      'two workouts get 09:00 and 18:00 even when sent in reverse order',
+      () async {
+        final second = await add();
+        await provider.deliver(
+          second,
+          () async => _workout(sessionId: second.id),
+        );
+        await provider.deliver(session, () async => _workout());
+        expect(flow.targets['1']!['datetime'], '2026-10-28T18:00');
+        expect(flow.targets['2']!['datetime'], '2026-10-28T09:00');
+        expect(flow.creates, 2);
+      },
+    );
+
+    test(
+      'skipped sessions, other dates, plans and athletes do not shift 16:00',
+      () async {
+        await add(id: 'skipped', status: 'skipped');
+        await add(id: 'previous', date: DateTime(2026, 10, 27, 23, 59));
+        await add(id: 'tomorrow', date: DateTime(2026, 10, 29));
+        await add(id: 'other-plan', planId: 'old-plan');
+        await add(id: 'other-athlete', athleteId: 'other');
+        await provider.deliver(session, () async => _workout());
+        expect(flow.targets['1']!['datetime'], '2026-10-28T16:00');
+        expect(flow.creates, 1);
+      },
+    );
+
+    test(
+      'a completed first workout keeps the second workout at 18:00',
+      () async {
+        final second = await add();
+        await (db.update(db.trainingSessions)
+              ..where((t) => t.id.equals(session.id)))
+            .write(const TrainingSessionsCompanion(status: Value('completed')));
+        await provider.deliver(
+          second,
+          () async => _workout(sessionId: second.id),
+        );
+        expect(flow.targets['1']!['datetime'], '2026-10-28T18:00');
+      },
+    );
+
+    test('an adapted workout later on the same calendar day counts', () async {
+      await add(status: 'adapted', date: DateTime(2026, 10, 28, 23, 59));
+      await provider.deliver(session, () async => _workout());
+      expect(flow.targets['1']!['datetime'], '2026-10-28T09:00');
+    });
+
+    test(
+      're-sending updates the existing target when the daily schedule changes',
+      () async {
+        await provider.deliver(session, () async => _workout());
+        expect(flow.targets['1']!['datetime'], '2026-10-28T16:00');
+        final second = await add();
+        await provider.deliver(session, () async => _workout());
+        expect(flow.targets['1']!['datetime'], '2026-10-28T09:00');
+        await (db.update(
+          db.trainingSessions,
+        )..where((t) => t.id.equals(second.id))).write(
+          TrainingSessionsCompanion(sessionDate: Value(DateTime(2026, 10, 29))),
+        );
+        await provider.deliver(session, () async => _workout());
+        expect(flow.targets['1']!['datetime'], '2026-10-28T16:00');
+        expect(flow.creates, 1);
+        expect(flow.updated, ['1', '1']);
+        expect(
+          (await db.select(db.workoutDeliveries).getSingle()).remoteId,
+          '1',
+        );
+      },
+    );
+  });
+
   test(
     'changed and moved workouts update the original target and exercise id',
     () async {
@@ -206,7 +305,7 @@ void main() {
       );
       expect(flow.creates, 1);
       expect(flow.updated, ['1', '1']);
-      expect(flow.targets['1']!['datetime'], '2026-10-29T18:00');
+      expect(flow.targets['1']!['datetime'], '2026-10-29T16:00');
       final exercise = (flow.targets['1']!['exerciseTargets'] as List).single;
       expect(exercise['id'], 101);
       expect((exercise['phases'] as List).single['duration'], '00:40:00');

@@ -9,7 +9,10 @@ class PolarUnsupportedWorkout implements Exception {
 
 /// The phased target accepted by Polar Flow's workout editor.
 /// HR zones refer to the athlete's Polar sport profile; no profile is changed.
-Map<String, dynamic> buildPolarWorkout(PreparedWorkout workout) {
+Map<String, dynamic> buildPolarWorkout(
+  PreparedWorkout workout, {
+  int defaultStartHour = 16,
+}) {
   final sportId = switch (workout.sport) {
     'running' || 'trail_running' => workout.indoor ? 17 : 1,
     'cycling' || 'cycling_road' || 'cycling_gravel' || 'cycling_mtb' => 2,
@@ -135,9 +138,11 @@ Map<String, dynamic> buildPolarWorkout(PreparedWorkout workout) {
 
   final date = workout.date;
   String two(int n) => n.toString().padLeft(2, '0');
-  // Plans store a day rather than a start time. Keep it in local time and use
-  // 18:00 for these day-only sessions, preserving an explicitly supplied time.
-  final hour = date.hour == 0 && date.minute == 0 ? 18 : date.hour;
+  // Day-only sessions use the slot chosen from the day's planned workouts.
+  // Keep an explicitly supplied start time in local time.
+  final hour = date.hour == 0 && date.minute == 0
+      ? defaultStartHour
+      : date.hour;
   return {
     'type': 'PHASED',
     'name': _limit(

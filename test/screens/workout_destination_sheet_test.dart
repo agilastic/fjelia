@@ -13,6 +13,7 @@ import 'package:fjelia/services/polar_service.dart';
 import 'package:fjelia/widgets/move_workout_card.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:intl/intl.dart';
 import 'package:fjelia/providers/workout_destination_provider.dart';
 import 'package:fjelia/providers/workout_providers_provider.dart';
 import 'package:fjelia/screens/planner/plan_session_sheet.dart';
@@ -292,11 +293,16 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    void expectUploaded() {
+    void expectUploaded({int hour = 16}) {
       expect(flow.targets, hasLength(1));
       final payload = flow.targets.single;
       expect(payload['name'], 'Long Run');
       expect(payload['type'], 'PHASED');
+      expect(
+        payload['datetime'],
+        '${session.sessionDate.toIso8601String().split('T').first}'
+        'T${hour.toString().padLeft(2, '0')}:00',
+      );
       final exercise = (payload['exerciseTargets'] as List).single as Map;
       expect(exercise['sportId'], 1);
       final phase = (exercise['phases'] as List).single as Map;
@@ -308,18 +314,37 @@ void main() {
       expect(find.text('Workout sent to Polar'), findsOneWidget);
     }
 
-    testWidgets('a saved Flow login sends the workout through the uploader', (
-      tester,
-    ) async {
-      await showPolar(tester, savedLogin: true);
-      expectUploaded();
-      expect(find.text('POLAR FLOW LOGIN'), findsNothing);
-      final delivery = await db.select(db.workoutDeliveries).getSingle();
-      expect(delivery.providerId, 'polar');
-      expect(delivery.sessionId, session.id);
-      expect(delivery.remoteId, '123456');
-      await close(tester);
-    });
+    testWidgets(
+      'the saved Connections Flow login sends the workout through the uploader',
+      (tester) async {
+        await showPolar(tester, savedLogin: true);
+        expectUploaded();
+        expect(find.text('POLAR FLOW LOGIN'), findsNothing);
+        final delivery = await db.select(db.workoutDeliveries).getSingle();
+        expect(delivery.providerId, 'polar');
+        expect(delivery.sessionId, session.id);
+        expect(delivery.remoteId, '123456');
+        await close(tester);
+      },
+    );
+
+    for (final second in [false, true]) {
+      testWidgets(
+        'workout details upload the ${second ? 'second at 18:00' : 'first at 09:00'} '
+        'using saved Connections credentials',
+        (tester) async {
+          final later = session.copyWith(id: 's2', sessionNumber: 2);
+          await db.into(db.trainingSessions).insert(later);
+          if (second) session = later;
+          await showPolar(tester, savedLogin: true);
+          expectUploaded(hour: second ? 18 : 9);
+          expect(find.text('POLAR FLOW LOGIN'), findsNothing);
+          final delivery = await db.select(db.workoutDeliveries).getSingle();
+          expect(delivery.sessionId, session.id);
+          await close(tester);
+        },
+      );
+    }
 
     testWidgets('without a Flow login, sign-in resumes the selected upload', (
       tester,
@@ -720,15 +745,6 @@ void main() {
     while (day.weekday == DateTime.sunday) {
       day = day.add(const Duration(days: 1));
     }
-    const names = [
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-      'Sunday',
-    ];
     await tester.scrollUntilVisible(
       find.text('MOVE THIS WORKOUT'),
       200,
@@ -737,9 +753,19 @@ void main() {
     await tester.drag(find.byType(Scrollable).first, const Offset(0, -150));
     await tester.pumpAndSettle();
     expect(find.text('Undo'), findsNothing);
-    await tester.tap(
-      find.bySemanticsLabel(RegExp('^${names[day.weekday - 1]} ${day.day} ')),
+    final chip = find.bySemanticsLabel(
+      RegExp('^${RegExp.escape(DateFormat('EEEE d MMMM').format(day))}'),
     );
+    await tester.scrollUntilVisible(
+      chip,
+      200,
+      scrollable: find.descendant(
+        of: find.byType(MoveWorkoutCard),
+        matching: find.byType(Scrollable),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(chip);
     await tester.pump(const Duration(seconds: 2));
     await tester.pumpAndSettle();
     expect(find.byType(SnackBar), findsNothing);

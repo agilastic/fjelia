@@ -35,7 +35,7 @@ void main() {
 
   test('uses local scheduling, a running profile, HR zones and bpm labels', () {
     final target = buildPolarWorkout(polarTestWorkout());
-    expect(target['datetime'], '2026-10-28T18:00');
+    expect(target['datetime'], '2026-10-28T16:00');
     expect(target['type'], 'PHASED');
     expect(exercise(target)['sportId'], 1);
     final phase = (exercise(target)['phases'] as List).single;
@@ -58,6 +58,28 @@ void main() {
       17,
     );
   });
+
+  test(
+    'day-only dates use the chosen slot without changing explicit times',
+    () {
+      for (final hour in [9, 18]) {
+        expect(
+          buildPolarWorkout(
+            polarTestWorkout(),
+            defaultStartHour: hour,
+          )['datetime'],
+          '2026-10-28T${hour.toString().padLeft(2, '0')}:00',
+        );
+      }
+      expect(
+        buildPolarWorkout(
+          polarTestWorkout(date: DateTime(2026, 10, 28, 7, 15)),
+          defaultStartHour: 18,
+        )['datetime'],
+        '2026-10-28T07:15',
+      );
+    },
+  );
 
   test('preserves distance in metres and repeated phase structure', () {
     final distance = {

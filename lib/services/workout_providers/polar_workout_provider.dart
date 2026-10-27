@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
+import 'package:drift/drift.dart';
 
 import '../../api/polar_flow_web_client.dart';
 import '../../api/polar_workout.dart';
@@ -17,9 +18,11 @@ import 'workout_provider.dart';
 /// Only targets whose ids Fjelia recorded are updated or removed.
 class PolarWorkoutProvider extends WorkoutProvider {
   PolarWorkoutProvider(AppDatabase db, this._service, {required this.connected})
-    : _ledger = DeliveryLedger(db, 'polar'),
+    : _db = db,
+      _ledger = DeliveryLedger(db, 'polar'),
       _queue = CleanupQueue(db, 'polar');
 
+  final AppDatabase _db;
   final PolarService _service;
   final Future<bool> Function() connected;
   final DeliveryLedger _ledger;
@@ -43,8 +46,8 @@ class PolarWorkoutProvider extends WorkoutProvider {
   @override
   String get pushNote =>
       'Uses your Polar sport profile’s heart-rate zones; check they match '
-      'Fjelia. Workouts without a start time use 18:00. Sync Polar Flow to '
-      'your watch after sending.';
+      'Fjelia. One workout: 16:00. Two workouts: 09:00 and 18:00. '
+      'Sync Polar Flow to your watch after sending.';
 
   @override
   Future<bool> isConnected() async =>
@@ -52,6 +55,32 @@ class PolarWorkoutProvider extends WorkoutProvider {
 
   @override
   Future<DeliveryMode> mode() async => DeliveryMode.push;
+
+  /// Use the planned order, regardless of which workout is uploaded first.
+  Future<int> _startHour(TrainingSession session, DateTime date) async {
+    final start = DateTime(date.year, date.month, date.day);
+    final end = DateTime(date.year, date.month, date.day + 1);
+    final others =
+        await (_db.select(_db.trainingSessions)..where(
+              (t) =>
+                  t.planId.equals(session.planId) &
+                  t.athleteId.equals(session.athleteId) &
+                  t.id.equals(session.id).not() &
+                  t.sessionDate.isBiggerOrEqualValue(start) &
+                  t.sessionDate.isSmallerThanValue(end) &
+                  t.status.isIn(['planned', 'adapted', 'completed']) &
+                  t.plannedDurationMin.isBiggerThanValue(0),
+            ))
+            .get();
+    if (others.isEmpty) return 16;
+    final earlier = others.any(
+      (other) =>
+          other.sessionNumber < session.sessionNumber ||
+          (other.sessionNumber == session.sessionNumber &&
+              other.id.compareTo(session.id) < 0),
+    );
+    return earlier ? 18 : 9;
+  }
 
   /// Serializes taps and cleanup so two simultaneous sends cannot create two
   /// targets before either has saved its id.
@@ -68,7 +97,11 @@ class PolarWorkoutProvider extends WorkoutProvider {
   ) => _serial(() async {
     final Map<String, dynamic> payload;
     try {
-      payload = buildPolarWorkout(await prepare());
+      final workout = await prepare();
+      payload = buildPolarWorkout(
+        workout,
+        defaultStartHour: await _startHour(session, workout.date),
+      );
     } on PolarUnsupportedWorkout catch (error) {
       throw WorkoutNotSupported(error.reason);
     }
