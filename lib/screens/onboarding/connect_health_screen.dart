@@ -1,3 +1,4 @@
+import '../../l10n/l10n_ext.dart';
 import '../../providers/connection_actions_provider.dart';
 
 import 'package:flutter/material.dart';
@@ -42,7 +43,7 @@ class _ConnectHealthScreenState extends ConsumerState<ConnectHealthScreen> {
       if (!mounted) return;
       _next();
     } catch (e) {
-      setState(() => _error = 'Error: $e');
+      setState(() => _error = context.l10n.errorE(e));
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -58,8 +59,8 @@ class _ConnectHealthScreenState extends ConsumerState<ConnectHealthScreen> {
         actions: [
           TextButton(
             onPressed: _next,
-            child: const Text(
-              'Skip',
+            child: Text(
+              context.l10n.skip,
               style: TextStyle(color: Color(0xFFCCCCCC), fontSize: 14),
             ),
           ),
@@ -71,10 +72,10 @@ class _ConnectHealthScreenState extends ConsumerState<ConnectHealthScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const OnboardingDeviceHeader(
+              OnboardingDeviceHeader(
                 icon: Icons.favorite_rounded,
                 color: _accent,
-                title: 'Apple Health',
+                title: context.l10n.appleHealth,
                 subtitle:
                     'Connect Apple Health to automatically sync sleep, '
                     'heart rate, HRV, steps, and SpO2.',
@@ -82,10 +83,7 @@ class _ConnectHealthScreenState extends ConsumerState<ConnectHealthScreen> {
               const SizedBox(height: 28),
               const _DataPointsBox(),
               const SizedBox(height: 20),
-              const OnboardingInfoBox(
-                'Fjelia only reads your health data — it never writes to Apple '
-                'Health or shares your data with third parties.',
-              ),
+              OnboardingInfoBox(context.l10n.appleHealthDataAccess),
               if (_error != null) ...[
                 const SizedBox(height: 16),
                 OnboardingErrorBanner(_error!),
@@ -112,8 +110,8 @@ class _ConnectHealthScreenState extends ConsumerState<ConnectHealthScreen> {
                             strokeWidth: 2.5,
                           ),
                         )
-                      : const Text(
-                          'Connect Apple Health',
+                      : Text(
+                          context.l10n.connectAppleHealth,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
@@ -156,8 +154,8 @@ class _DataPointsBox extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'DATA SYNCED',
+          Text(
+            context.l10n.dataSynced,
             style: TextStyle(
               color: Color(0xFFCCCCCC),
               fontSize: 11,

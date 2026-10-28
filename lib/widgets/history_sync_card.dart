@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -47,14 +49,16 @@ class HistorySyncCard extends ConsumerWidget {
                 child: Text(
                   s.done
                       ? (s.failed
-                            ? 'History import incomplete'
-                            : 'Your training history is ready')
-                      : 'Importing your training history',
+                            ? context.l10n.historyImportIncomplete
+                            : context.l10n.yourTrainingHistoryIsReady)
+                      : context.l10n.importingYourTrainingHistory,
                   style: const TextStyle(fontWeight: FontWeight.w700),
                 ),
               ),
               IconButton(
-                tooltip: s.running ? 'Stop import' : 'Dismiss',
+                tooltip: s.running
+                    ? context.l10n.stopImport
+                    : context.l10n.dismiss,
                 visualDensity: VisualDensity.compact,
                 icon: const Icon(Icons.close, size: 18),
                 onPressed: s.running ? notifier.cancel : notifier.dismiss,
@@ -96,13 +100,10 @@ class HistorySyncCard extends ConsumerWidget {
               ),
             ),
           if (s.running)
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(top: 8, right: 8),
               child: Text(
-                'You can keep using Fjelia, but keep it open: iOS pauses the '
-                'import when the app is in the background and it continues '
-                'the next time you open Fjelia. Your plan is calibrated when '
-                'the import finishes.',
+                context.l10n.youCanKeepUsingFjelia,
                 style: TextStyle(fontSize: 11, color: muted),
               ),
             ),

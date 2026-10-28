@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -42,15 +44,15 @@ class _HrvReminderTileState extends ConsumerState<HrvReminderTile> {
               size: 20,
             ),
           ),
-          title: const Text(
-            'Remind me to measure HRV after training',
+          title: Text(
+            context.l10n.remindMeToMeasureHrv,
             style: TextStyle(fontWeight: FontWeight.w600),
           ),
           subtitle: Text(
             style: const TextStyle(color: muted, fontSize: 12, height: 1.35),
             !status.sensorReady
-                ? 'Pair a Polar H10 first.'
-                : 'Around 30 minutes after training, when the workout is available in time.',
+                ? context.l10n.pairAPolarH10First
+                : context.l10n.around30MinutesAfterTraining,
           ),
           value: status.enabled,
           onChanged: status.sensorReady || status.enabled
@@ -58,21 +60,17 @@ class _HrvReminderTileState extends ConsumerState<HrvReminderTile> {
                   final permission = await actions.setEnabled(on);
                   if (on && !permission.allowed) {
                     messenger.showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          'Notifications are off. You can still measure from your workout.',
-                        ),
-                      ),
+                      SnackBar(content: Text(tr.notificationsAreOffYouCan)),
                     );
                   }
                 }
               : null,
         ),
         if (status.blocked)
-          const Padding(
+          Padding(
             padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
             child: Text(
-              'Notifications are off. You can still measure from your workout.',
+              context.l10n.notificationsAreOffYouCan,
               style: TextStyle(color: hrvNoticeColor, fontSize: 12),
             ),
           ),
@@ -80,12 +78,12 @@ class _HrvReminderTileState extends ConsumerState<HrvReminderTile> {
           SwitchListTile(
             // Lines up with the text of the main switch above.
             secondary: const SizedBox(width: 40),
-            title: const Text(
-              'No reminders from 22:00 to 07:00',
+            title: Text(
+              context.l10n.noRemindersFrom2200,
               style: TextStyle(fontSize: 14),
             ),
-            subtitle: const Text(
-              'A reminder that would fall in this time is skipped, not moved to the morning.',
+            subtitle: Text(
+              context.l10n.aReminderThatWouldFall,
               style: TextStyle(color: muted, fontSize: 12, height: 1.35),
             ),
             value: status.prefs.quietEnabled,
@@ -105,8 +103,8 @@ class _HrvReminderTileState extends ConsumerState<HrvReminderTile> {
                 onPressed: () => setState(() => diagnostics = !diagnostics),
                 child: Text(
                   diagnostics
-                      ? 'Hide reminder diagnostics'
-                      : 'Reminder diagnostics',
+                      ? context.l10n.hideReminderDiagnostics
+                      : context.l10n.reminderDiagnostics,
                 ),
               ),
             ),
@@ -116,7 +114,7 @@ class _HrvReminderTileState extends ConsumerState<HrvReminderTile> {
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
             child: Text(
               ref.watch(hrvDiagnosticsProvider).valueOrNull?.lines.join('\n') ??
-                  'Loading…',
+                  context.l10n.loading,
               style: const TextStyle(
                 fontFamily: 'monospace',
                 fontSize: 11,
@@ -126,10 +124,10 @@ class _HrvReminderTileState extends ConsumerState<HrvReminderTile> {
           ),
         if (status.enabled &&
             status.permission == NotificationPermission.provisional)
-          const Padding(
+          Padding(
             padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
             child: Text(
-              'Reminders arrive quietly in the notification list.',
+              context.l10n.remindersArriveQuietlyInThe,
               style: TextStyle(color: muted, fontSize: 12),
             ),
           ),

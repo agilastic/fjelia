@@ -1,0 +1,3110 @@
+{
+  "@@locale": "en",
+  "language": "Language",
+  "languageSystem": "System default",
+  "settings": "Settings",
+  "profile": "Profile",
+  "training": "Training",
+  "weatherLocation": "Weather & Location",
+  "display": "Display",
+  "connections": "Connections",
+  "aiAndMore": "AI & More",
+  "system": "System",
+  "runSetupAgain": "Run setup again",
+  "runSetupAgainSubtitle": "Accounts, race goal and training plan",
+  "back": "Back",
+  "close": "Close",
+  "dataExport": "Data Export",
+  "dataExportSubtitle": "CSV export, backup & restore",
+  "developer": "Developer",
+  "developerSubtitle": "Debug mode, diagnostics",
+  "debug": "Debug",
+  "debugMode": "Debug mode",
+  "debugModeSubtitle": "Shows the DEBUG tab",
+  "support": "Support",
+  "reportBug": "Report a bug",
+  "aiCoach": "AI Coach",
+  "enableAiCoach": "Enable AI Coach",
+  "onDeviceAiOrCloud": "On-device AI or cloud provider",
+  "provider": "Provider",
+  "model": "Model",
+  "chatAndAiBriefingsUse": "Chat and AI briefings use Apple Intelligence on this device. No API key required. If the model is unavailable, briefings show a non-AI summary.",
+  "briefing": "Briefing",
+  "useAppleIntelligenceForBriefings": "Use Apple Intelligence for briefings",
+  "useOnDeviceAiFor": "Use on-device AI for briefings while keeping the selected provider for chat.",
+  "healthDataSharing": "Health data sharing",
+  "askOncePerChatSession": "Ask once per chat session",
+  "otherwiseAskBeforeEveryCloud": "Otherwise ask before every cloud message",
+  "reportABug": "Report a Bug",
+  "weatherData": "Weather data",
+  "openSourceLibraries": "Open source libraries",
+  "license": "License",
+  "licenses": "Licenses",
+  "apiKey": "API key",
+  "saveApiKey": "Save API key",
+  "feedbackBugReport": "Feedback & bug report",
+  "reportSentThankYou": "Report sent. Thank you!",
+  "weReadEveryMessageIf": "We read every message. If you left your email, you may get a reply.",
+  "done": "Done",
+  "shareAnIdeaSuggestAn": "Share an idea, suggest an improvement, or tell us what happened and what you expected.",
+  "whatHappenedAndWhatDid": "What happened, and what did you expect?",
+  "pleaseLeaveOutPasswordsApi": "Please leave out passwords, API keys and personal health readings.",
+  "includeDiagnostics": "Include diagnostics",
+  "optionalLogsMayContainAccount": "Optional. Logs may contain account or health details. Review them below before sending.",
+  "diagnosticsPreview": "DIAGNOSTICS PREVIEW",
+  "sendingSharesYourEmailSubject": "Sending shares your email, subject, message and any selected diagnostics with Fjelia support at cloud.ebeling-hoppe.de.",
+  "copyReport": "Copy report",
+  "shareReport": "Share report",
+  "appleHealth": "Apple Health",
+  "connectedServices": "Connected Services",
+  "hiloBloodPressureBle": "Hilo Blood Pressure BLE",
+  "writeHeartDataToApple": "Write Heart data to Apple Health",
+  "writeWeightDataToApple": "Write Weight data to Apple Health",
+  "renphoScaleBle": "Renpho Scale (BLE)",
+  "polarH10HrvStrapBle": "Polar H10 (HRV strap, BLE)",
+  "dataSourcePriority": "Data Source Priority",
+  "whenMultipleSourcesProvideThe": "When multiple sources provide the same metric, the higher source wins. Drag to reorder.",
+  "resetToDefault": "Reset to default",
+  "disconnect": "Disconnect",
+  "healthPage": "Health Page",
+  "loadPage": "Load Page",
+  "healthMonitor": "Health Monitor",
+  "hrZones": "HR Zones",
+  "t30MinTtAvailableSync": "30-min TT available — sync HR zones",
+  "lt2Lt2BpmAt": "LT2 {lt2} bpm · {at}",
+  "@lt2Lt2BpmAt": {
+    "placeholders": {
+      "lt2": {
+        "type": "Object"
+      },
+      "at": {
+        "type": "Object"
+      }
+    }
+  },
+  "syncLabel": "SYNC",
+  "autoadjust": "AUTOADJUST",
+  "zoneI": "Zone {i}",
+  "@zoneI": {
+    "placeholders": {
+      "i": {
+        "type": "Object"
+      }
+    }
+  },
+  "hrZones2": "HR ZONES",
+  "ageRound": "age {round}",
+  "@ageRound": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "basics": "Basics",
+  "updateWaistMonthlyUsedFor": "ⓘ Update waist monthly — used for visceral fat estimate.",
+  "alcohol": "Alcohol",
+  "t1Drink033L": "1 drink ≈ 0.33 L beer / 0.2 L wine / 4 cl spirits",
+  "clinicalLabsOptional": "Clinical labs (optional)",
+  "glycemic": "Glycemic",
+  "optimalForLongevity48": "Optimal for longevity: 4.8–5.4% · Prediabetes: 5.7–6.4%",
+  "lipids": "Lipids",
+  "apobReplacesLdlWhenBoth": "ApoB replaces LDL when both are entered.",
+  "inflammationKidney": "Inflammation & Kidney",
+  "changesAreSavedAutomatically": "Changes are saved automatically",
+  "optionalTotalClimbingForThis": "Optional total climbing for this race.",
+  "moreAboutThisEvent": "More about this event",
+  "distanceOfDistancekmKm": "Distance of {distanceKm} km?",
+  "@distanceOfDistancekmKm": {
+    "placeholders": {
+      "distanceKm": {
+        "type": "Object"
+      }
+    }
+  },
+  "keepDistancekmKm": "Keep {distanceKm} km",
+  "@keepDistancekmKm": {
+    "placeholders": {
+      "distanceKm": {
+        "type": "Object"
+      }
+    }
+  },
+  "useLikelyKm": "Use {likely} km",
+  "@useLikelyKm": {
+    "placeholders": {
+      "likely": {
+        "type": "Object"
+      }
+    }
+  },
+  "thisBackupContainsNoCalendar": "This backup contains no calendar activities.",
+  "activities": "Activities",
+  "exportActivitiesCsv": "Export activities CSV",
+  "backupRestore": "Backup & restore",
+  "backup": "Backup",
+  "restoreFromBackup": "Restore from backup",
+  "backupRestoredRestartTheApp": "Backup restored. Restart the app to reload all settings.",
+  "raceGoals": "Race Goals",
+  "yourActivities": "Your Activities",
+  "usedByAiCoachAnd": "Used by AI Coach and training plan. Plan sports marked with ✦.",
+  "calendarWeekStart": "Calendar week start",
+  "planDefaultView": "Plan Default View",
+  "weeklySchedule": "Weekly Schedule",
+  "trainingdaysperweekTrainingDaysTapTo": "{trainingDaysPerWeek, plural, one{{trainingDaysPerWeek} training day} other{{trainingDaysPerWeek} training days}} · tap to cycle Training / Rest / Strength",
+  "@trainingdaysperweekTrainingDaysTapTo": {
+    "placeholders": {
+      "trainingDaysPerWeek": {
+        "type": "int"
+      }
+    }
+  },
+  "updatePlanToThisSchedule": "Update plan to this schedule",
+  "updateStrengthSessions": "Update strength sessions",
+  "sessionsPerDay": "Sessions per day",
+  "canYouFitTwoWorkouts": "Can you fit two workouts in one day?",
+  "strengthLoadUnit": "Strength load unit",
+  "weightsThemselvesAreSetIn": "Weights themselves are set in each workout and remembered from your history.",
+  "hoursAvailableWeek": "Hours available / week",
+  "hoursperweekHWeek": "{hoursPerWeek} h / week",
+  "@hoursperweekHWeek": {
+    "placeholders": {
+      "hoursPerWeek": {
+        "type": "Object"
+      }
+    }
+  },
+  "hoursperweekH": "{hoursPerWeek} h",
+  "@hoursperweekH": {
+    "placeholders": {
+      "hoursPerWeek": {
+        "type": "Object"
+      }
+    }
+  },
+  "heatAcclimation": "Heat Acclimation",
+  "showHeatAcclimation": "Show Heat Acclimation",
+  "weatherEvaluatedAgainstAConfigurable": "Weather evaluated against a configurable location.",
+  "trainingPlan": "Training Plan",
+  "regenerateReplacesFutureSessionsAnd": "Regenerate replaces future sessions and rebuilds from today using current settings.",
+  "valueUpcomingWorkoutsGenerated": "{value, plural, one{{value} upcoming workout generated} other{{value} upcoming workouts generated}}",
+  "@valueUpcomingWorkoutsGenerated": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "generationFailedCheckYourRace": "Generation failed. Check your race goal and try again.",
+  "deleteAllWorkouts": "Delete All Workouts",
+  "changesAreSavedAutomatically2": "✓ Changes are saved automatically",
+  "countUpcomingWorkoutsGenerated": "{count, plural, one{{count} upcoming workout generated} other{{count} upcoming workouts generated}}",
+  "@countUpcomingWorkoutsGenerated": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importRaceGoalsFromGarmin": "Import race goals from Garmin",
+  "addRaceGoal": "Add race goal",
+  "priorityTouppercase": "Priority {toUpperCase}",
+  "@priorityTouppercase": {
+    "placeholders": {
+      "toUpperCase": {
+        "type": "Object"
+      }
+    }
+  },
+  "goalsAreSharedWithAi": "Goals are shared with AI Coach. Priority A, B and C decide how the plan weighs your races against each other.",
+  "deletingWorkouts": "Deleting workouts",
+  "cityOrTown": "City or town",
+  "eGHannoverOrPalma": "e.g. Hannover or Palma",
+  "noCitiesFoundTryA": "No cities found. Try a nearby town.",
+  "chooseTheLocationForThe": "Choose the location for the Plan forecast, radar and heat acclimation. Weather works even when heat acclimation is off.",
+  "none": "None",
+  "disableLocalWeatherAndLocation": "Disable local weather and location requests",
+  "currentLocation": "Current location",
+  "followYourDeviceLocation": "Follow your device location",
+  "fixedLocation": "Fixed location",
+  "chooseACityOrEnter": "Choose a city or enter coordinates",
+  "chooseCity": "Choose city",
+  "coordinates": "Coordinates",
+  "latitude": "Latitude",
+  "longitude": "Longitude",
+  "saveLocation": "Save location",
+  "refreshCurrentLocation": "Refresh current location",
+  "citySearchOpenMeteoGeonames": "City search: Open-Meteo / GeoNames",
+  "cityNamesOpenstreetmap": "City names: © OpenStreetMap",
+  "energy": "ENERGY",
+  "currentEnergy": "CURRENT ENERGY",
+  "dailyTimeline": "DAILY TIMELINE",
+  "valueValue2": "{value} → {value2}",
+  "@valueValue2": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      },
+      "value2": {
+        "type": "Object"
+      }
+    }
+  },
+  "energy2": "Energy",
+  "noData": "No data",
+  "bloodPressureInsights": "BLOOD PRESSURE INSIGHTS",
+  "sys": " Sys",
+  "diaMmhg": " Dia · mmHg",
+  "previousBloodPressurePeriod": "Previous blood-pressure period",
+  "nextBloodPressurePeriod": "Next blood-pressure period",
+  "nightDipping": "Night Dipping",
+  "noMeasurementsInThisPeriod": "No measurements in this period",
+  "fullscreenBloodPressureChart": "Fullscreen blood-pressure chart",
+  "barsMinMaxLineDots": "Bars: min–max · line/dots: average · tap or drag to inspect",
+  "noMeasurements": "No measurements",
+  "round": "{round}",
+  "@round": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "sysSys2Mmhg": "{sys}–{sys2} mmHg",
+  "@sysSys2Mmhg": {
+    "placeholders": {
+      "sys": {
+        "type": "Object"
+      },
+      "sys2": {
+        "type": "Object"
+      }
+    }
+  },
+  "lengthReadingsAverageMinMax": "{length, plural, one{{length} reading} other{{length} readings}} · average / min–max",
+  "@lengthReadingsAverageMinMax": {
+    "placeholders": {
+      "length": {
+        "type": "int"
+      }
+    }
+  },
+  "bloodPressureTouppercaseMmhg": "BLOOD PRESSURE · {toUpperCase} · mmHg",
+  "@bloodPressureTouppercaseMmhg": {
+    "placeholders": {
+      "toUpperCase": {
+        "type": "Object"
+      }
+    }
+  },
+  "closeFullscreenBloodPressureChart": "Close fullscreen blood-pressure chart",
+  "chooseScale": "Choose scale",
+  "noScalesFoundStepOn": "No scales found. Step on your scale and try again.",
+  "nameRssiDbm": "{name} · {rssi} dBm",
+  "@nameRssiDbm": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      },
+      "rssi": {
+        "type": "Object"
+      }
+    }
+  },
+  "renphoSaved": "RENPHO saved:",
+  "renphoScaleBle2": "RENPHO Scale (BLE)",
+  "changeMeasurementType": "Change measurement type",
+  "addMeasurement": "Add Measurement",
+  "whatAreYouMeasuring": "What are you measuring?",
+  "chooseAnotherMeasurement": "Choose another measurement",
+  "saveMeasurement": "Save measurement",
+  "skip": "Skip",
+  "connectHiloService": "Connect Hilo Service",
+  "connectHilo": "Connect Hilo",
+  "connectCoros": "Connect Coros",
+  "europe": "Europe",
+  "unitedStates": "United States",
+  "asia": "Asia",
+  "bluetoothBloodPressure": "Bluetooth · blood pressure",
+  "cloudCuffData": "Cloud · cuff data",
+  "apiSync": "API sync",
+  "bluetoothHrvStrap": "Bluetooth · HRV strap",
+  "accesslinkApi": "AccessLink API",
+  "systemHealthData": "System health data",
+  "cloudScaleHistory": "Cloud · scale history",
+  "bluetoothWeightBody": "Bluetooth · weight & body",
+  "connectYourDevices": "Connect your devices",
+  "continueLabel": "Continue",
+  "connectGarmin": "Connect Garmin",
+  "connectAppleHealth": "Connect Apple Health",
+  "dataSynced": "DATA SYNCED",
+  "pairHiloPod": "Pair Hilo Pod",
+  "chooseStrap": "Choose strap",
+  "namePaired": "{name} paired.",
+  "@namePaired": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "pairPolarH10": "Pair Polar H10",
+  "forget": "Forget",
+  "sendWorkoutToPolar": "Send workout to Polar",
+  "connectPolar": "Connect Polar",
+  "signInWithPolarFlow": "Sign in with Polar Flow",
+  "syncsSleepStagesHrvResting": "Syncs sleep stages · HRV · resting HR · workouts · steps",
+  "savedForV": "Saved for {v}",
+  "@savedForV": {
+    "placeholders": {
+      "v": {
+        "type": "Object"
+      }
+    }
+  },
+  "remove": "Remove",
+  "polarEMail": "Polar e-mail",
+  "polarPassword": "Polar password",
+  "pairRenphoScale": "Pair RENPHO Scale",
+  "connectRenpho": "Connect Renpho",
+  "connectSuunto": "Connect Suunto",
+  "smsSentToTrim": "SMS sent to {trim}",
+  "@smsSentToTrim": {
+    "placeholders": {
+      "trim": {
+        "type": "Object"
+      }
+    }
+  },
+  "resendSms": "Resend SMS",
+  "retryLoadingPreferences": "Retry loading preferences",
+  "weeklyTrainingTimeTostringasfixedH": "WEEKLY TRAINING TIME · {toStringAsFixed} h",
+  "@weeklyTrainingTimeTostringasfixedH": {
+    "placeholders": {
+      "toStringAsFixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "tapADayToCycle": "Tap a day to cycle Training / Rest / Strength.",
+  "doubleDayOk": "Double day ok",
+  "birthYearOptional": "Birth year (optional)",
+  "addAnother": "Add another",
+  "knowYourBodyTrainSmarter": "Know your body.\nTrain smarter.",
+  "allYourHealthDevicesOne": "All your health devices. One intelligent view.",
+  "areYouReadyToTrain": "Are you ready to train today?",
+  "hrvRecoveryScoreRestingHr": "HRV · Recovery Score · Resting HR",
+  "didYouActuallyRecoverLast": "Did you actually recover last night?",
+  "sleepStagesDeepSleepSpo": "Sleep Stages · Deep Sleep · SpO₂",
+  "isYourBloodPressureUnder": "Is your blood pressure under control?",
+  "continuousBpNightDippingTrends": "Continuous BP · Night Dipping · Trends",
+  "howHardDidYouPush": "How hard did you push this week?",
+  "trainingLoadTrimpStrainScore": "Training Load · TRIMP · Strain Score",
+  "isYourBodyCompositionImproving": "Is your body composition improving?",
+  "weightBodyFatMuscleMass": "Weight · Body Fat · Muscle Mass",
+  "getStarted": "Get Started",
+  "yourDataStaysOnYour": "Your data stays on your device. Always private.",
+  "bodyScale": "Body Scale",
+  "bodyComposition": "Body Composition",
+  "sleep": "SLEEP",
+  "sleepPerformance": "SLEEP PERFORMANCE",
+  "sleepHistory": "Sleep history",
+  "labelValue": "{label}: {value}",
+  "@labelValue": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      },
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "lessLabel": "Less {label}",
+  "@lessLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "moreLabel": "More {label}",
+  "@moreLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "gymMode": "Gym mode",
+  "finishWorkout": "Finish workout",
+  "workoutActions": "Workout actions",
+  "discardWorkout": "Discard workout",
+  "allSetsRecorded": "All sets recorded",
+  "reviewSets": "Review sets",
+  "rest": "REST",
+  "plannedResttarget": "Planned {restTarget}",
+  "@plannedResttarget": {
+    "placeholders": {
+      "restTarget": {
+        "type": "Object"
+      }
+    }
+  },
+  "startSet": "Start set",
+  "seconds": "Seconds",
+  "previousSet": "Previous set",
+  "allSets": "All sets",
+  "nextSet": "Next set",
+  "everySetIsSavedAs": "Every set is saved as you go. Close this screen any time and resume from the planned workout.",
+  "cancel": "Cancel",
+  "apply": "Apply",
+  "effortScale": "Effort scale",
+  "setType": "Set type",
+  "reps": "Reps",
+  "range": "Range",
+  "time": "Time",
+  "t45Or100": "45 or 1:00",
+  "blankWhenNotSet": "Blank when not set",
+  "redBand": "Red band",
+  "t90Or130": "90 or 1:30",
+  "blankWhenUnknown": "Blank when unknown",
+  "usePlannedLoad": "Use planned load",
+  "blankWhenNotMeasured": "Blank when not measured",
+  "exercise": "Exercise",
+  "changingTheLoadConventionStarts": "Changing the load convention starts a separate history for this exercise.",
+  "barbellMachine": "Barbell, machine…",
+  "load": "Load",
+  "loadRefersTo": "Load refers to",
+  "t2ForAPair": "2 for a pair",
+  "repetitions": "Repetitions",
+  "availablePlatesOrDumbbells": "Available plates or dumbbells",
+  "rememberForThisEquipment": "Remember for this equipment",
+  "findOrNameAnExercise": "Find or name an exercise",
+  "createTrim": "Create “{trim}”",
+  "@createTrim": {
+    "placeholders": {
+      "trim": {
+        "type": "Object"
+      }
+    }
+  },
+  "customExercise": "Custom exercise",
+  "smallestLoadStep": "Smallest load step",
+  "whatRemoved": "{what} removed",
+  "@whatRemoved": {
+    "placeholders": {
+      "what": {
+        "type": "Object"
+      }
+    }
+  },
+  "undo": "Undo",
+  "retry": "Retry",
+  "performance": "Performance",
+  "addExercise": "Add exercise",
+  "finishLog": "Finish log",
+  "keepAsDraft": "Keep as draft",
+  "actionsForName": "Actions for {name}",
+  "@actionsForName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "editExercise": "Edit exercise",
+  "moveUp": "Move up",
+  "moveDown": "Move down",
+  "addSet": "Add set",
+  "removeLastSet": "Remove last set",
+  "saveAsTemplate": "Save as template",
+  "savedTitleAsATemplate": "Saved “{title}” as a template. This workout is unchanged until you save it.",
+  "@savedTitleAsATemplate": {
+    "placeholders": {
+      "title": {
+        "type": "Object"
+      }
+    }
+  },
+  "nameSetN": "{name} · Set {n}",
+  "@nameSetN": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      },
+      "n": {
+        "type": "Object"
+      }
+    }
+  },
+  "nameAllWorkingSets": "{name} · All working sets",
+  "@nameAllWorkingSets": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "labelRest": "{label} rest",
+  "@labelRest": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "secondsOrMSs": "Seconds or m:ss",
+  "applyToAllSets": "Apply to all sets",
+  "duplicate": "Duplicate",
+  "supersetWithNext": "Superset with next",
+  "circuitWithNext": "Circuit with next",
+  "actionsForSetN": "Actions for set {n}",
+  "@actionsForSetN": {
+    "placeholders": {
+      "n": {
+        "type": "Object"
+      }
+    }
+  },
+  "editSet": "Edit set",
+  "duplicateSet": "Duplicate set",
+  "removeSet": "Remove set",
+  "labelActions": "{label} actions",
+  "@labelActions": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "editRests": "Edit rests",
+  "ungroup": "Ungroup",
+  "editExercises": "Edit exercises",
+  "unsavedChanges": "Unsaved changes",
+  "couldNotSaveError": "Could not save: {error}",
+  "@couldNotSaveError": {
+    "placeholders": {
+      "error": {
+        "type": "Object"
+      }
+    }
+  },
+  "history": "History",
+  "exercises": "Exercises",
+  "noExercisesArePlannedFor": "No exercises are planned for this workout yet. The notes above describe it.",
+  "addExercises": "Add exercises",
+  "fromTheBuiltInTemplate": "From the built-in template. Loads are yours to set; history appears once you log a workout.",
+  "shareExerciseList": "Share exercise list",
+  "noSavedStrengthTemplatesYet": "No saved strength templates yet. Save one from a planned workout first.",
+  "compareWith": "Compare with",
+  "estimated1rmUnit": "Estimated 1RM {unit}",
+  "@estimated1rmUnit": {
+    "placeholders": {
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "plannedNotRecorded": "Planned, not recorded",
+  "notes": "Notes",
+  "editPerformance": "Edit performance",
+  "compareWithASavedWorkout": "Compare with a saved workout",
+  "sessions": "Sessions",
+  "radarUnavailableRetry": "Radar unavailable · Retry",
+  "radar": "Radar",
+  "weatherDataByRainviewer": "Weather data by RainViewer",
+  "openstreetmapContributors": "© OpenStreetMap contributors",
+  "weather": "Weather",
+  "weatherUnavailableRetry": "Weather unavailable · Retry",
+  "chooseAFixedLocationIn": "Choose a fixed location in Weather & Location settings, or allow location access for local weather.",
+  "locationSettings": "Location settings",
+  "retryLocation": "Retry location",
+  "round2": "{round}°",
+  "@round2": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "roundRhRound2Hpa": "{round}% RH · {round2} hPa",
+  "@roundRhRound2Hpa": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      },
+      "round2": {
+        "type": "Object"
+      }
+    }
+  },
+  "wetBulbTostringasfixedC": "Wet-bulb {toStringAsFixed}°C",
+  "@wetBulbTostringasfixedC": {
+    "placeholders": {
+      "toStringAsFixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "previousForecastDay": "Previous forecast day",
+  "nextForecastDay": "Next forecast day",
+  "daysDayForecast": "{days}-Day Forecast",
+  "@daysDayForecast": {
+    "placeholders": {
+      "days": {
+        "type": "Object"
+      }
+    }
+  },
+  "thisProviderCurrentlySuppliesDays": "This provider currently supplies {days} of {days2} forecast days.",
+  "@thisProviderCurrentlySuppliesDays": {
+    "placeholders": {
+      "days": {
+        "type": "Object"
+      },
+      "days2": {
+        "type": "Object"
+      }
+    }
+  },
+  "now": "Now",
+  "sunriseSunset": "Sunrise / Sunset",
+  "keyKey2": "☀ {key}   ☾ {key2}",
+  "@keyKey2": {
+    "placeholders": {
+      "key": {
+        "type": "Object"
+      },
+      "key2": {
+        "type": "Object"
+      }
+    }
+  },
+  "use": "Use",
+  "exerciseDetailsWereNotProvided": "Exercise details were not provided by this activity source.",
+  "logFromPlan": "Log from plan",
+  "addExerciseDetails": "Add exercise details",
+  "loadSuggestion": "Load suggestion",
+  "applyToThisWorkout": "Apply to this workout",
+  "keepCurrentLoad": "Keep current load",
+  "setLoadStep": "Set load step",
+  "viewSupportingSets": "View supporting sets",
+  "supportingSets": "Supporting sets",
+  "noRecordedSessionsYet": "No recorded sessions yet.",
+  "nameDemonstrationCue": "{name} demonstration. {cue}",
+  "@nameDemonstrationCue": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      },
+      "cue": {
+        "type": "Object"
+      }
+    }
+  },
+  "noScalesFoundStepOn2": "No scales found. Step on the scale and try again.",
+  "scalePaired": "Scale paired",
+  "ok": "OK",
+  "pairedReadyToMeasure": "✓ Paired — ready to measure",
+  "chooseHiloCuff": "Choose Hilo cuff",
+  "noCuffFoundWakeYour": "No cuff found. Wake your cuff and try scanning again.",
+  "hiloCuffAktiiaC": "Hilo cuff (AKTIIA C…)",
+  "onDemandBloodPressureVia": "On-demand blood pressure via BLE",
+  "selectHiloPodWristband": "Select Hilo Pod (Wristband)",
+  "rescan": "Rescan",
+  "noDevicesFoundTapTo": "No devices found. Tap ↻ to scan again.",
+  "polarH10SpotHrv": "Polar H10 · Spot HRV",
+  "aSeparateHrvReadingBefore": "A separate HRV reading before or after training. These measurements do not replace Garmin overnight HRV or change your readiness score.",
+  "wearTheStrapWithMoist": "Wear the strap with moist electrodes. Keep still and breathe normally. Use the same posture and recording length for comparisons. After training, note how long you rested first.",
+  "measurement": "Measurement",
+  "posture": "Posture",
+  "recordingLengthPlus1Min": "Recording length · plus 1 min settling",
+  "t2Minutes": "2 minutes",
+  "t5Minutes": "5 minutes",
+  "minutesSinceTrainingEndedOptional": "Minutes since training ended (optional)",
+  "sessionOrNotesOptional": "Session or notes (optional)",
+  "connectName": "Connect {name}",
+  "@connectName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "findPolarH10": "Find Polar H10",
+  "signalRssiDbm": "Signal {rssi} dBm",
+  "@signalRssiDbm": {
+    "placeholders": {
+      "rssi": {
+        "type": "Object"
+      }
+    }
+  },
+  "connectedName": "Connected: {name}",
+  "@connectedName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "waitingForHeartRateAnd": "Waiting for heart rate and RR intervals. Check the strap contact.",
+  "startMeasurement": "Start measurement",
+  "cancelMeasurement": "Cancel measurement",
+  "spotHrvRmssd": "Spot HRV · RMSSD",
+  "acceptedLengthUsableIntervalsTostringasfixed": "{accepted}/{length} usable intervals · {toStringAsFixed}% coverage",
+  "@acceptedLengthUsableIntervalsTostringasfixed": {
+    "placeholders": {
+      "accepted": {
+        "type": "Object"
+      },
+      "length": {
+        "type": "Object"
+      },
+      "toStringAsFixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "lnrmssdLnrmssdRawRmssdRawrmssdms": "lnRMSSD: {lnRmssd} · Raw RMSSD: {rawRmssdMs} ms",
+  "@lnrmssdLnrmssdRawRmssdRawrmssdms": {
+    "placeholders": {
+      "lnRmssd": {
+        "type": "Object"
+      },
+      "rawRmssdMs": {
+        "type": "Object"
+      }
+    }
+  },
+  "signalQualityIsTooLow": "Signal quality is too low to save. Repeat the measurement with good strap contact. At least 95% usable intervals and 90% coverage are required.",
+  "savedToSpotHrvHistory": "Saved to spot HRV history.",
+  "newMeasurement": "New measurement",
+  "signalScreeningExcludesPoorContact": "Signal screening excludes poor contact, RR outside 250–2500 ms and intervals more than 25% from the local median. Gaps are not bridged. This is not a medical test or a standalone readiness score.",
+  "historyLabelLabel2DurationMin": "History · {label} · {label2} · {duration} min",
+  "@historyLabelLabel2DurationMin": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      },
+      "label2": {
+        "type": "Object"
+      },
+      "duration": {
+        "type": "Object"
+      }
+    }
+  },
+  "onlyReadingsWithTheSame": "Only readings with the same context, posture and duration are shown together.",
+  "noMatchingMeasurementsYet": "No matching measurements yet.",
+  "tostringasfixedMsRmssdTostringasfixed2Bpm": "{toStringAsFixed} ms RMSSD · {toStringAsFixed2} bpm",
+  "@tostringasfixedMsRmssdTostringasfixed2Bpm": {
+    "placeholders": {
+      "toStringAsFixed": {
+        "type": "Object"
+      },
+      "toStringAsFixed2": {
+        "type": "Object"
+      }
+    }
+  },
+  "exportRrIntervalsCsv": "Export RR intervals (CSV)",
+  "deleteMeasurement": "Delete measurement",
+  "remindMeToMeasureHrv": "Remind me to measure HRV after training",
+  "appleHealthIsNoLonger": "Apple Health is no longer available",
+  "later": "Later",
+  "reconnect": "Reconnect",
+  "gripStrength": "Grip Strength",
+  "leftKg": "Left (kg)",
+  "rightKg": "Right (kg)",
+  "lLeftkgRRightkgKg": "L {leftKg} · R {rightKg} kg",
+  "@lLeftkgRRightkgKg": {
+    "placeholders": {
+      "leftKg": {
+        "type": "Object"
+      },
+      "rightKg": {
+        "type": "Object"
+      }
+    }
+  },
+  "notificationsAreOffYouCan": "Notifications are off. You can still measure from your workout.",
+  "noRemindersFrom2200": "No reminders from 22:00 to 07:00",
+  "aReminderThatWouldFall": "A reminder that would fall in this time is skipped, not moved to the morning.",
+  "remindersArriveQuietlyInThe": "Reminders arrive quietly in the notification list.",
+  "noForecastForThisDay": "No forecast for this day",
+  "fullscreen": "Fullscreen",
+  "source": "● {source}",
+  "@source": {
+    "placeholders": {
+      "source": {
+        "type": "Object"
+      }
+    }
+  },
+  "shadedAreaProviderSpread": "Shaded area: provider spread",
+  "temperatureC": "● Temperature °C",
+  "rainMm": "▥ Rain mm",
+  "uvIndex": "— UV index",
+  "closeFullscreenWeatherChart": "Close fullscreen weather chart",
+  "sleepStages": "SLEEP STAGES",
+  "noStageTimelineForThis": "No stage timeline for this night.",
+  "round3": "{round}%",
+  "@round3": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "examplesOnlyCheckAndEnter": "Examples only: check and enter your product label values per serving. Leave unknown nutrients blank; enter 0 only when known.",
+  "nutritionStrategy": "Nutrition strategy",
+  "noPreWorkoutNutritionStrategy": "No pre-workout nutrition strategy was saved.",
+  "carbsGCarbsHFluid": "{carbs} g carbs/h · {fluid} ml/h · {sodium} mg sodium/h",
+  "@carbsGCarbsHFluid": {
+    "placeholders": {
+      "carbs": {
+        "type": "Object"
+      },
+      "fluid": {
+        "type": "Object"
+      },
+      "sodium": {
+        "type": "Object"
+      }
+    }
+  },
+  "forecastUpdatedReviewOrRecalculate": "Forecast updated — review or recalculate the saved strategy.",
+  "strategySavedSavedat": "Strategy saved {savedAt}",
+  "@strategySavedSavedat": {
+    "placeholders": {
+      "savedAt": {
+        "type": "Object"
+      }
+    }
+  },
+  "duringTotalTotalcarbsGCarbs": "During total: {totalCarbs} g carbs · {totalFluid} ml · {totalSodium} mg sodium",
+  "@duringTotalTotalcarbsGCarbs": {
+    "placeholders": {
+      "totalCarbs": {
+        "type": "Object"
+      },
+      "totalFluid": {
+        "type": "Object"
+      },
+      "totalSodium": {
+        "type": "Object"
+      }
+    }
+  },
+  "every20MinAboutCarbs": "Every 20 min: about {carbs} g carbs and {fluid} ml.",
+  "@every20MinAboutCarbs": {
+    "placeholders": {
+      "carbs": {
+        "type": "Object"
+      },
+      "fluid": {
+        "type": "Object"
+      }
+    }
+  },
+  "packQuantitiesIncludeFullContainers": "Pack quantities include full containers; they are not a requirement to consume everything.",
+  "workoutChangedReviewOrRecalculate": "Workout changed — review or recalculate this saved strategy.",
+  "conditionsAndFeedingPlan": "Conditions and feeding plan",
+  "editStrategy": "Edit strategy",
+  "recalculate": "Recalculate",
+  "actualNutrition": "Actual nutrition",
+  "someProductValuesAreUnknown": "Some product values are unknown; totals are incomplete.",
+  "logFoodAndFluids": "Log food and fluids",
+  "recordWhatYouActuallyHad": "Record what you actually had. Planned intake is not copied into this log.",
+  "elapsedMinutesIncludingStopsOptional": "Elapsed minutes including stops (optional)",
+  "recordedDurationActivityMin": "Recorded duration: {activity} min",
+  "@recordedDurationActivityMin": {
+    "placeholders": {
+      "activity": {
+        "type": "Object"
+      }
+    }
+  },
+  "compareWithSavedStrategy": "Compare with saved strategy",
+  "useMatchedSessionIfAvailable": "Use matched session if available",
+  "noPlanComparison": "No plan comparison",
+  "titleDate": "{title} · {date}",
+  "@titleDate": {
+    "placeholders": {
+      "title": {
+        "type": "Object"
+      },
+      "date": {
+        "type": "Object"
+      }
+    }
+  },
+  "linkedStrategyUnavailable": "Linked strategy unavailable",
+  "quantityName": "{quantity} × {name}",
+  "@quantityName": {
+    "placeholders": {
+      "quantity": {
+        "type": "Object"
+      },
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "removeIntake": "Remove intake",
+  "addFoodOrDrink": "Add food or drink",
+  "iHadNoIntake": "I had no intake",
+  "giGutComfort": "GI / gut comfort",
+  "whatWorkedSymptomsAccessProblems": "What worked / symptoms / access problems",
+  "saveDraft": "Save draft",
+  "skipLoggingThisActivity": "Skip logging this activity",
+  "nutritionAndFluids": "Nutrition and fluids",
+  "productsToleranceAndMeasuredSweat": "Products, tolerance and measured sweat losses",
+  "postWorkoutIntakeReminder": "Post-workout intake reminder",
+  "onceAfterARecentEndurance": "Once after a recent endurance workout; quiet hours 22:00–08:00.",
+  "enableWorkoutNotifications": "Enable workout notifications",
+  "addHiloBpReport": "Add Hilo BP report",
+  "readingPdfReportsIsOnly": "Reading PDF reports is only available on iOS and macOS.",
+  "chooseAnotherReport": "Choose another report",
+  "biologicalAge": "Biological Age",
+  "voMaxVo2maxMlKg": "VO₂max {vo2max} ml/kg/min · {vo2Class}",
+  "@voMaxVo2maxMlKg": {
+    "placeholders": {
+      "vo2max": {
+        "type": "Object"
+      },
+      "vo2Class": {
+        "type": "Object"
+      }
+    }
+  },
+  "factorContributions": "Factor contributions",
+  "estimatedRangeRoundRound2Years": "Estimated range {round}–{round2} years. A model estimate, not a medical diagnosis.",
+  "@estimatedRangeRoundRound2Years": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      },
+      "round2": {
+        "type": "Object"
+      }
+    }
+  },
+  "noEnergyMeasurementsForThis": "No energy measurements for this day",
+  "scanningStepOnTheScale": "Scanning… step on the scale when ready.",
+  "waistWaistCmUpdateMonthly": "Waist: {waist} cm — update monthly in Profile",
+  "@waistWaistCmUpdateMonthly": {
+    "placeholders": {
+      "waist": {
+        "type": "Object"
+      }
+    }
+  },
+  "measuring": "Measuring…",
+  "tryAgain": "Try again",
+  "systolic": "Systolic",
+  "diastolic": "Diastolic",
+  "heartRate": "Heart Rate",
+  "weight": "Weight",
+  "bodyFat": "Body Fat",
+  "duration": "Duration",
+  "deep": "Deep",
+  "spo": "SpO₂",
+  "activityName": "Activity name",
+  "sport": "Sport",
+  "distance": "Distance",
+  "saved": "Saved",
+  "connectionFailedCheckYourInternet": "Connection failed. Check your internet connection.",
+  "email": "Email",
+  "password": "Password",
+  "passwordTooShort": "Password too short",
+  "loginFailedCheckYourEmail": "Login failed. Check your email and password.",
+  "connectionFailedCheckYourCredentials": "Connection failed. Check your credentials and internet connection.",
+  "region": "Region",
+  "hiloPod": "Hilo pod",
+  "hiloAccount": "Hilo account",
+  "garmin": "Garmin",
+  "coros": "Coros",
+  "suunto": "Suunto",
+  "polarH10": "Polar H10",
+  "polar": "Polar",
+  "renphoAccount": "Renpho account",
+  "garminConnectEmail": "Garmin Connect Email",
+  "verifyMfaCode": "Verify MFA Code",
+  "verificationCode": "Verification Code",
+  "errorE": "Error: {e}",
+  "@errorE": {
+    "placeholders": {
+      "e": {
+        "type": "Object"
+      }
+    }
+  },
+  "noHiloPodFoundMake": "No Hilo pod found. Make sure it is charged and nearby.",
+  "scanFailedE": "Scan failed: {e}",
+  "@scanFailedE": {
+    "placeholders": {
+      "e": {
+        "type": "Object"
+      }
+    }
+  },
+  "hiloPod2": "Hilo Pod",
+  "scanForPod": "Scan for pod",
+  "scanForPolarH10": "Scan for Polar H10",
+  "couldNotReachPolarCheck": "Could not reach Polar. Check your connection.",
+  "signInAndSendWorkout": "Sign in and send workout",
+  "scanForScale": "Scan for scale",
+  "passwordRequired": "Password required",
+  "enterYourPhoneNumberWith": "Enter your phone number (with country code, e.g. +49…) and Suunto email.",
+  "enterThePinFromThe": "Enter the PIN from the SMS.",
+  "incorrectPinPleaseTryAgain": "Incorrect PIN. Please try again.",
+  "phoneNumber": "Phone Number",
+  "suuntoAccountEmail": "Suunto Account Email",
+  "enterPinFromSms": "Enter PIN from SMS",
+  "verifyConnect": "Verify & Connect",
+  "sendSmsCode": "Send SMS Code",
+  "couldNotSavePreferencesE": "Could not save preferences: {e}",
+  "@couldNotSavePreferencesE": {
+    "placeholders": {
+      "e": {
+        "type": "Object"
+      }
+    }
+  },
+  "mon": "Mon",
+  "tue": "Tue",
+  "wed": "Wed",
+  "thu": "Thu",
+  "fri": "Fri",
+  "sat": "Sat",
+  "sun": "Sun",
+  "male": "Male",
+  "female": "Female",
+  "other": "Other",
+  "running": "Running",
+  "trailRunning": "Trail running",
+  "cycling": "Cycling",
+  "swimming": "Swimming",
+  "triathlon": "Triathlon",
+  "hiking": "Hiking",
+  "rowing": "Rowing",
+  "buildMyPlan": "Build My Plan",
+  "keepAConsistentBedtimeAnd": "Keep a consistent bedtime and wake time to support your sleep routine.",
+  "thisWorkoutHasNoSets": "This workout has no sets.",
+  "loadName": "Load ({name})",
+  "@loadName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "setLabel": "Set",
+  "lowestReps": "Lowest reps",
+  "highestReps": "Highest reps",
+  "repsPerSide": "Reps per side",
+  "fromReps": "From reps",
+  "toReps": "To reps",
+  "addedLoad": "Added load",
+  "assistance": "Assistance",
+  "tempoOptional": "Tempo (optional)",
+  "notesOptional": "Notes (optional)",
+  "enterTheRepetitionsDone": "Enter the repetitions done.",
+  "plannedUnit": "Planned {unit}",
+  "@plannedUnit": {
+    "placeholders": {
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "repsDone": "Reps done",
+  "resistance": "Resistance",
+  "implementsLabel": "Implements",
+  "name": "Name",
+  "instructionsOptional": "Instructions (optional)",
+  "remember": "Remember",
+  "notSavedYet": "Not saved yet",
+  "saving": "Saving…",
+  "couldNotSave": "Could not save",
+  "plannedValuesAreHintsNot": "Planned values are hints, not results. Tap a set to record it.",
+  "completedAsPlanned": "Completed as planned",
+  "save": "Save",
+  "nameTheTemplate": "Name the template.",
+  "setN": "Set {n}",
+  "@setN": {
+    "placeholders": {
+      "n": {
+        "type": "Object"
+      }
+    }
+  },
+  "changesApplyToThisWorkout": "Changes apply to this workout only. Completed workouts and other sessions stay as they are.",
+  "saveForThisWorkout": "Save for this workout",
+  "knownForKnownOfOf": "Known for {known} of {of} loaded sets",
+  "@knownForKnownOfOf": {
+    "placeholders": {
+      "known": {
+        "type": "Object"
+      },
+      "of": {
+        "type": "Object"
+      }
+    }
+  },
+  "sessionEstimate": "Session estimate",
+  "calculatedRange": "Calculated range",
+  "timedWork": "Timed work",
+  "strengthTraining": "Strength training",
+  "theExercisesCouldNotBe": "The exercises could not be loaded.",
+  "resumeWorkout": "Resume workout",
+  "strengthWorkout": "Strength workout",
+  "untitledTemplate": "Untitled template",
+  "theRecordedExercisesCouldNot": "The recorded exercises could not be loaded.",
+  "exercisesPerformed": "Exercises performed",
+  "comparedWithThePlanAs": "Compared with the plan as it was when logging started.",
+  "topWorkingLoadName": "Top working load ({name})",
+  "@topWorkingLoadName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "estimated1rmMiddleOfRange": "Estimated 1RM, middle of range",
+  "noLoggedSessionsYet": "No logged sessions yet.",
+  "noRadarFramesAvailable": "No radar frames available",
+  "playRadar": "Play radar",
+  "pauseRadar": "Pause radar",
+  "high": "High",
+  "clear": "Clear",
+  "bodyweight": "Bodyweight",
+  "resistance2": "Resistance —",
+  "assistUnit": "Assist {unit}",
+  "@assistUnit": {
+    "placeholders": {
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "reps2": "Reps —",
+  "notRecorded": "Not recorded",
+  "skipped": "Skipped",
+  "health": "Health",
+  "manual": "Manual",
+  "expandName": "Expand {name}",
+  "@expandName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "open": "Open",
+  "noScalePaired": "No scale paired",
+  "paired": "Paired",
+  "change": "Change",
+  "noCuffPaired": "No cuff paired",
+  "noPolarH10FoundWear": "No Polar H10 found. Wear the strap, wet its electrodes and check that another app is not using both Bluetooth connections.",
+  "enterMinutesSinceTrainingEnded": "Enter minutes since training ended, from 0 to 1440.",
+  "timingFollowsYourWorkout": "Timing follows your workout.",
+  "recordingStayStill": "Recording · stay still",
+  "meanHrBpm": "Mean HR · bpm",
+  "pairAPolarH10First": "Pair a Polar H10 first.",
+  "around30MinutesAfterTraining": "Around 30 minutes after training, when the workout is available in time.",
+  "reminderDiagnostics": "Reminder diagnostics",
+  "forecast": "Forecast",
+  "enterAName": "Enter a name",
+  "enterAValidAmount": "Enter a valid amount",
+  "enterAPositiveAmount": "Enter a positive amount",
+  "maximum120GH": "Maximum 120 g/h",
+  "carbohydrateTargetGH": "Carbohydrate target g/h",
+  "fluidTargetMlH": "Fluid target ml/h",
+  "sodiumTargetMgHNot": "Sodium target mg/h (not salt)",
+  "surfaceFeedingAccess": "Surface / feeding access",
+  "expectedAscentM": "Expected ascent m",
+  "expectedAltitudeM": "Expected altitude m",
+  "humidity": "Humidity %",
+  "windKmH": "Wind km/h",
+  "dayForecast": "Day forecast",
+  "enteredConditions": "Entered conditions",
+  "productFoodName": "Product / food name",
+  "servingsQuantity": "Servings / quantity",
+  "when": "When",
+  "carbohydrateGServing": "Carbohydrate g / serving",
+  "fluidMlServing": "Fluid ml / serving",
+  "caffeineMgServing": "Caffeine mg / serving",
+  "proteinGServing": "Protein g / serving",
+  "gel": "Gel",
+  "water": "Water",
+  "sportsDrink": "Sports drink",
+  "bar": "Bar",
+  "finishIntakeLog": "Finish intake log",
+  "allowNotificationsInSystemSettings": "Allow notifications in system settings",
+  "importing": "Importing…",
+  "importNewreadings": "Import {newReadings}",
+  "@importNewreadings": {
+    "placeholders": {
+      "newReadings": {
+        "type": "Object"
+      }
+    }
+  },
+  "reading": "Reading…",
+  "chooseReportPdf": "Choose report (PDF)",
+  "yourTrainingHistoryIsReady": "Your training history is ready",
+  "importingYourTrainingHistory": "Importing your training history",
+  "stopImport": "Stop import",
+  "dismiss": "Dismiss",
+  "openai": "OpenAI",
+  "appleIntelligence": "Apple Intelligence",
+  "nonAiBriefing": "Non-AI Briefing",
+  "noBriefing": "No Briefing",
+  "ruleBasedSummaryFromYour": "Rule-based summary from your health data — no API calls",
+  "hideTheBriefingCard": "Hide the briefing card",
+  "flutter": "Flutter",
+  "stateManagement": "State management",
+  "bluetoothLe": "Bluetooth LE",
+  "interactiveMaps": "Interactive maps",
+  "chartsGraphs": "Charts & graphs",
+  "secureCredentialStorage": "Secure credential storage",
+  "markdownRendering": "Markdown rendering",
+  "appleOnDeviceAi": "Apple on-device AI",
+  "cryptography": "Cryptography",
+  "appleHealthHealthConnect": "Apple Health & Health Connect",
+  "runtimePermissions": "Runtime permissions",
+  "shareExport": "Share & export",
+  "openUrls": "Open URLs",
+  "internationalisation": "Internationalisation",
+  "utilities": "Utilities",
+  "icons": "Icons",
+  "fjelia": "Fjelia",
+  "fjeliaFeedback": "Fjelia feedback",
+  "couldNotSendTheReport": "Could not send the report. Your text is still here. Please try again.",
+  "yourEmail": "Your email",
+  "enterAValidEmailAddress": "Enter a valid email address.",
+  "subject": "Subject",
+  "sending": "Sending…",
+  "sendReport": "Send report",
+  "sleepRecovery": "Sleep & Recovery",
+  "activitiesTraining": "Activities & Training",
+  "bodyWellness": "Body & Wellness",
+  "hilo": "Hilo",
+  "hiloBle": "Hilo BLE",
+  "garminApi": "Garmin (API)",
+  "renphoScale": "Renpho Scale",
+  "connected": "Connected",
+  "notConnected": "Not connected",
+  "manage": "Manage",
+  "connect": "Connect",
+  "habits": "Habits",
+  "smokingAlcohol": "Smoking, alcohol",
+  "clinicalLab": "Clinical Lab",
+  "hba1cLipidsKidney": "HbA1c, lipids, kidney",
+  "sex": "Sex",
+  "smoking": "Smoking",
+  "never": "Never",
+  "former": "Former",
+  "current": "Current",
+  "hba1c": "HbA1c",
+  "diabetes": "Diabetes",
+  "prediabetes": "Prediabetes",
+  "type1": "Type 1",
+  "type2": "Type 2",
+  "apob": "ApoB",
+  "optionalPlansAndPaceGuides": "Optional. Plans and pace guides use it; the climbing above shapes the training too.",
+  "addRaceGoal2": "Add Race Goal",
+  "editRaceGoal": "Edit Race Goal",
+  "trailRunning2": "Trail Running",
+  "roadCycling": "Road Cycling",
+  "gravel": "Gravel",
+  "indoorRowing": "Indoor Rowing",
+  "selectDate": "Select date",
+  "committed": "Committed",
+  "flexible": "Flexible",
+  "notGoing": "Not going",
+  "notSaid": "Not said",
+  "finish": "Finish",
+  "saveGoal": "Save Goal",
+  "exportAllRecordedWorkoutsAs": "Export all recorded workouts as a spreadsheet.",
+  "backupsIncludeYourHealthData": "Backups include your health data, training plans and profile settings. Login credentials are excluded. Restoring replaces local data.",
+  "trail": "Trail",
+  "inlineSkating": "Inline Skating",
+  "nordicClassic": "Nordic Classic",
+  "skateSkiing": "Skate Skiing",
+  "strength": "Strength",
+  "walking": "Walking",
+  "yoga": "Yoga",
+  "skiing": "Skiing",
+  "climbing": "Climbing",
+  "monday": "Monday",
+  "sunday": "Sunday",
+  "month": "Month",
+  "week": "Week",
+  "list": "List",
+  "train": "Train",
+  "restDay": "Rest",
+  "kilogramsKg": "Kilograms (kg)",
+  "poundsLb": "Pounds (lb)",
+  "regenerateWorkouts": "Regenerate Workouts",
+  "starting": "Starting",
+  "allPlannedWorkoutsDeleted": "All planned workouts deleted.",
+  "searching": "Searching…",
+  "searchCity": "Search city",
+  "fixedLocationSavedWeatherWill": "Fixed location saved. Weather will refresh.",
+  "locationDisabledThePlanWeather": "Location disabled. The Plan weather card is hidden.",
+  "locationSetToName": "Location set to {name}",
+  "@locationSetToName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "notEnoughDaytimeAndNighttime": "Not enough daytime and nighttime readings",
+  "onlyTheWeightWasReceived": "Only the weight was received. For body fat, muscle and the other values stand barefoot on the metal electrodes and stay on until the scale finishes.",
+  "addYourWaistInProfile": "Add your waist in Profile for visceral fat.",
+  "manualActivity": "Manual Activity",
+  "theseCredentialsAreStoredEncrypted": "These credentials are stored encrypted on your device (iOS Keychain / Android Keystore). They are never sent to any server other than Hilo.",
+  "corosCredentialsAreStoredEncrypted": "Coros credentials are stored encrypted on your device. Fjelia reads data directly from the Coros cloud API. This uses the same API as the Coros Training Hub web app.",
+  "connectAnyCombinationYouCan": "Connect any combination — you can always add more later in Settings.",
+  "garminCredentialsAreStoredEncrypted": "Garmin credentials are stored encrypted on your device. Fjelia uses the unofficial Garmin Connect API – the same approach used by many community apps.",
+  "enterTheVerificationCode": "Enter the verification code",
+  "appleHealthDataAccess": "Fjelia reads your health data from Apple Health. With your permission, it can also write synced data to Apple Health. Manage access in your device settings.",
+  "scanAgain": "Scan again",
+  "wearTheHiloBandDuring": "Wear the Hilo band during sleep for continuous blood pressure recording. Data syncs automatically each morning when the app opens.",
+  "noPolarH10FoundWear2": "No Polar H10 found. Wear the strap with moist electrodes and make sure no other app (or watch) is connected to it, then scan again.",
+  "wearTheStrapWithMoist2": "Wear the strap with moist electrodes before scanning. Measure later with + → Polar H10 HRV measurement; results appear next to your overnight HRV.",
+  "signedInPlannedWorkoutsCan": "Signed in. Planned workouts can now be sent to Polar. Older sessions are imported with the next full history sync.",
+  "saveYourPolarFlowLogin": "Save your Polar Flow login to send planned workouts and import sessions older than 30 days. It stays in this device's keychain and is sent only to Polar. Send a workout from its planner sheet, then sync Polar Flow to your watch. Check that your Polar heart-rate zones match Fjelia.",
+  "signInToSendThis": "Sign in to send this workout to your Polar Flow calendar. Your login stays in this device's keychain and is sent only to Polar. After sending, sync Polar Flow to your watch.",
+  "checkAndSave": "Check and save",
+  "noScaleFoundStepOn": "No scale found. Step on the scale so it wakes up, then scan again.",
+  "stepOnTheScaleBefore": "Step on the scale before scanning so it wakes up. Later, use + → RENPHO Scale to take a measurement.",
+  "renphoCredentialsAreStoredEncrypted": "Renpho credentials are stored encrypted on your device. Fjelia talks directly to the Renpho cloud API.",
+  "couldNotSendSmsCheck": "Could not send SMS. Check your phone number and internet connection.",
+  "theEmailIsUsedFor": "The email is used for secure request signing and is not sent to Suunto servers.",
+  "suuntoUsesSmsVerificationSame": "Suunto uses SMS verification (same as the Suunto app). A one-time PIN will be sent to your phone. Your credentials are stored encrypted on-device only.",
+  "tellUsAboutYourRace": "Tell us about your race and schedule. Fjelia builds your plan now and works out your level from your past activities (Garmin, Suunto, Polar, COROS, Apple Health) once they are downloaded.",
+  "noAccountConnectedSoFjelia": "No account connected, so Fjelia has no history to learn from. Connect Garmin, Suunto, Polar, COROS or Apple Health and your real training decides instead.",
+  "yourPastActivitiesAreStill": "Your past activities are still being imported. You can build your plan now — it is refined automatically when the import finishes.",
+  "buildingYourPlan": "Building your plan…",
+  "saveContinue": "Save & Continue",
+  "addYourMainPriorityA": "Add your main (priority A) race. The plan is periodised towards it: base, build, peak and taper. Without a race goal no plan is generated yet.",
+  "noMeasurementsYet": "No measurements yet",
+  "date": "Date",
+  "deepSleepIsBelowOptimal": "Deep sleep is below optimal ({round}%). Avoid alcohol and heavy meals 3h before bed.",
+  "@deepSleepIsBelowOptimal": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "finishWithSetsOpen": "Finish with sets open?",
+  "completeThePlannedWorkout": "Complete the planned workout?",
+  "marksThePlannedSessionAs": "Marks the planned session as done with this workout.",
+  "discardThisWorkout": "Discard this workout?",
+  "removesTheWorkoutAndEvery": "Removes the workout and every set recorded in it.",
+  "assistanceName": "Assistance ({name})",
+  "@assistanceName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "enterSecondsOrMSs": "Enter seconds or m:ss.",
+  "enterTheLoadAsA": "Enter the load as a number.",
+  "loadCannotBeNegative": "Load cannot be negative.",
+  "enterTheEffortValue": "Enter the effort value.",
+  "nameTheExercise": "Name the exercise.",
+  "atLeastOneImplement": "At least one implement.",
+  "anIncrementMustBePositive": "An increment must be positive.",
+  "enterAPositiveStep": "Enter a positive step.",
+  "repsInReserve": "Reps in reserve",
+  "loadPerImplement": "Load per implement",
+  "restAfterThisSet": "Rest after this set",
+  "enterHowLongTheSet": "Enter how long the set lasted.",
+  "repsDonePerSide": "Reps done per side",
+  "plannedRepminRepmax": "Planned {repMin}–{repMax}",
+  "@plannedRepminRepmax": {
+    "placeholders": {
+      "repMin": {
+        "type": "Object"
+      },
+      "repMax": {
+        "type": "Object"
+      }
+    }
+  },
+  "restTakenBeforeTheNext": "Rest taken before the next set",
+  "equipment": "Equipment",
+  "implementsUsedTogether": "Implements used together",
+  "smallestLoadStepOptional": "Smallest load step (optional)",
+  "theSmallestChangeYourPlates": "The smallest change your plates, dumbbells or machine allow, remembered for this equipment.",
+  "loadStep": "Load step",
+  "finishWithIncompleteData": "Finish with incomplete data?",
+  "leaveWithoutSaving": "Leave without saving?",
+  "theLastChangeCouldNot": "The last change could not be saved.",
+  "comparedWithAPlanChosen": "Compared with a plan chosen after the workout. Planned values are hints, not results.",
+  "lastSet": "Last set",
+  "templateName": "Template name",
+  "betweenExercises": "Between exercises",
+  "betweenRounds": "Between rounds",
+  "discardChanges": "Discard changes?",
+  "yourEditsToThisWorkout": "Your edits to this workout are not saved.",
+  "estimatedDuration": "Estimated duration",
+  "workingSets": "Working sets",
+  "estimatedExternalVolume": "Estimated external volume",
+  "loadRaisedFromUnitTo": "Load raised from {unit} to {unit2} after your review (rule v{ruleVersion}).",
+  "@loadRaisedFromUnitTo": {
+    "placeholders": {
+      "unit": {
+        "type": "Object"
+      },
+      "unit2": {
+        "type": "Object"
+      },
+      "ruleVersion": {
+        "type": "Object"
+      }
+    }
+  },
+  "thePlannedWorkoutHasNo": "The planned workout has no exercises to log from.",
+  "completedSets": "Completed sets",
+  "knownExternalVolume": "Known external volume",
+  "updateStrengthSessions2": "Update strength sessions?",
+  "upcomingSessionsArePlannedAgain": "Upcoming sessions are planned again from today: strength follows your race goals on every strength day, with sessions that vary. Completed and skipped workouts stay; exercises you changed in an upcoming strength session are replaced.",
+  "thisSessionUsesAnEarlier": "This session uses an earlier strength template. Updated plans vary strength by phase and race goal and use every strength day.",
+  "estimated1rmUsesEpleyAnd": "Estimated 1RM uses Epley and Brzycki on completed working sets of 1–10 reps with a known load, shown as the range between them. It is an estimate, not a tested maximum.",
+  "localWeather": "Local weather",
+  "today": "Today",
+  "low": "Low",
+  "moderate": "Moderate",
+  "overcast": "Overcast",
+  "partlyCloudy": "Partly cloudy",
+  "collapseName": "Collapse {name}",
+  "@collapseName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "variableLoads": "Variable loads",
+  "ruleVstrengthprogressionruleversionTheLastStrengthprogressionminsessions": "Rule v{strengthProgressionRuleVersion}: the last {strengthProgressionMinSessions} comparable sessions, every set done at the top of its repetition target with effort recorded and not harder than intended. {reason}",
+  "@ruleVstrengthprogressionruleversionTheLastStrengthprogressionminsessions": {
+    "placeholders": {
+      "strengthProgressionRuleVersion": {
+        "type": "Object"
+      },
+      "strengthProgressionMinSessions": {
+        "type": "Object"
+      },
+      "reason": {
+        "type": "Object"
+      }
+    }
+  },
+  "stepOnYourScaleBefore": "Step on your scale before scanning",
+  "scanning": "Scanning…",
+  "pair": "Pair",
+  "selectYourAktiiaPWristband": "Select your AKTIIA P… wristband. Place it on the charger to wake it up if not visible.",
+  "measurementInterruptedWhileTheApp": "Measurement interrupted while the app was in the background. Please repeat it.",
+  "noRecentRrDataWith": "No recent RR data with good contact. Check the strap and repeat the measurement.",
+  "settlingStayStill": "Settling · stay still",
+  "deleteSpotHrvMeasurement": "Delete spot HRV measurement?",
+  "thisRemovesTheRecordingAnd": "This removes the recording and its raw RR intervals.",
+  "appleHealthStoppedAnsweringSo": "Apple Health stopped answering, so Fjelia disconnected it and no longer reads or writes Health data.\n\nAllow Fjelia again under Settings → Health → Data Access & Devices → Fjelia, then reconnect Apple Health.",
+  "thisRemovesTheSelectedGrip": "This removes the selected grip reading.",
+  "hideReminderDiagnostics": "Hide reminder diagnostics",
+  "loading": "Loading…",
+  "touchTheChartForDetails": "Touch the chart for details",
+  "indoor": "Indoor",
+  "road": "Road",
+  "technical": "Technical",
+  "snow": "Snow",
+  "pool": "Pool",
+  "openWater": "Open water",
+  "ambientTemperatureC": "Ambient temperature °C",
+  "carryAboutGelsGelsGelcarbs": "Carry about {gels} gels ({gelCarbs} g carbs each) + {bottles} × {bottleMl} ml bottles. {drinkCarbs} g carbohydrate comes from the drink mix.",
+  "@carryAboutGelsGelsGelcarbs": {
+    "placeholders": {
+      "gels": {
+        "type": "Object"
+      },
+      "gelCarbs": {
+        "type": "Object"
+      },
+      "bottles": {
+        "type": "Object"
+      },
+      "bottleMl": {
+        "type": "Object"
+      },
+      "drinkCarbs": {
+        "type": "Object"
+      }
+    }
+  },
+  "intakeNotRecorded": "Intake not recorded",
+  "loggingDeclinedIntakeUnknown": "Logging declined — intake unknown",
+  "confirmedNoIntake": "Confirmed: no intake",
+  "draft": "Draft · ",
+  "actualIntakePerServing": "Actual intake · per serving",
+  "minuteIntoWorkoutDuringOnly": "Minute into workout (during only, optional)",
+  "sodiumMgServingNotSalt": "Sodium mg / serving (not salt)",
+  "comfortable": "Comfortable",
+  "mildSymptoms": "Mild symptoms",
+  "moderateSymptoms": "Moderate symptoms",
+  "severeSymptoms": "Severe symptoms",
+  "personalNutritionSettings": "Personal nutrition settings",
+  "practisedCarbohydrateToleranceGH": "Practised carbohydrate tolerance g/h (up to 120)",
+  "workoutNotificationsEnabled": "Workout notifications enabled",
+  "exportTheMonthlyReportAs": "Export the monthly report as PDF in the Hilo app, then choose it here. Only the readings are imported; name, e-mail and body data in the report are ignored.",
+  "nothingNewAllReadingsWere": "Nothing new: all readings were already stored.",
+  "historyImportIncomplete": "History import incomplete",
+  "youCanKeepUsingFjelia": "You can keep using Fjelia, but keep it open: iOS pauses the import when the app is in the background and it continues the next time you open Fjelia. Your plan is calibrated when the import finishes.",
+  "addYourBirthYearIn": "Add your birth year in Settings → Profile to see your estimate.",
+  "fitnessAge": "Fitness Age",
+  "estLifespan": "Est. Lifespan",
+  "delta": "Delta",
+  "couldNotOpenKey": "Could not open {key}",
+  "@couldNotOpenKey": {
+    "placeholders": {
+      "key": {
+        "type": "Object"
+      }
+    }
+  },
+  "appleIntelligenceIsNotAvailable": "Apple Intelligence is not available on this device (it needs a supported iPhone or Mac with iOS/macOS 26 or later and Apple Intelligence switched on in Settings). Choose another provider and add your own API key to use the coach.",
+  "personalisedMorningLunchAfternoonEvening": "Personalised morning/lunch/afternoon/evening summary",
+  "enterASubject": "Enter a subject.",
+  "message": "Message",
+  "enterAMessageOfAt": "Enter a message of at least 10 characters.",
+  "garminConnect": "Garmin Connect",
+  "hiloBloodPressure": "Hilo (Blood Pressure)",
+  "renphoBodyScale": "Renpho (Body Scale)",
+  "hiloPodCuff": "Hilo pod / cuff",
+  "disconnectLabel": "Disconnect {label}?",
+  "@disconnectLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "yourSavedMeasurementsWillRemain": "Your saved measurements will remain on this device.",
+  "notEnoughRecentHeartRate": "Not enough recent heart-rate data to adjust zones.",
+  "aerobicBase": "Aerobic Base",
+  "tempo": "Tempo",
+  "lactateThreshold": "Lactate Threshold",
+  "birthYearHeightWaist": "Birth year, height, waist",
+  "enterAValidValue": "Enter a valid value",
+  "birthYear": "Birth year",
+  "height": "Height",
+  "waist": "Waist",
+  "yearsSinceQuit": "Years since quit",
+  "cigarettesPerDay": "Cigarettes per day",
+  "standardDrinksPerMonth": "Standard drinks per month",
+  "enterAValidNumber": "Enter a valid number",
+  "enterARaceName": "Enter a race name",
+  "useHMmOrH": "Use h:mm or h:mm:ss, a time you could really run",
+  "flexibleThePlanMayDrop": "Flexible: the plan may drop this event if it clashes with a more important one.",
+  "selectARaceDate": "Select a race date",
+  "thatIsTenTimesOr": "That is ten times (or a tenth of) the usual {likely} km. Use {likely} km instead?",
+  "@thatIsTenTimesOr": {
+    "placeholders": {
+      "likely": {
+        "type": "Object"
+      }
+    }
+  },
+  "addGoal": "Add Goal",
+  "restoreFailed": "Restore failed",
+  "replaceLocalData": "Replace local data?",
+  "restoringThisBackupReplacesAll": "Restoring this backup replaces all local health and training records. Existing login credentials are kept.",
+  "openingBackupZip": "Opening backup ZIP",
+  "addAFutureRaceGoal": "Add a future race goal first.",
+  "deleteAllWorkouts2": "Delete all workouts?",
+  "thisDeletesPlannedWorkoutsOn": "This deletes planned workouts on this phone and on your connected watch platform. Completed activities are kept.",
+  "regenerateWorkouts2": "Regenerate workouts?",
+  "noRaceGoalsYetAdd": "No race goals yet. Add one or sync from Garmin.",
+  "deleteRaceGoal": "Delete race goal?",
+  "deletingFailedFailure": "Deleting failed: {failure}",
+  "@deletingFailedFailure": {
+    "placeholders": {
+      "failure": {
+        "type": "Object"
+      }
+    }
+  },
+  "allPlannedWorkoutsDeletedRemoved": "All planned workouts deleted. Removed from your platforms: {removed}.",
+  "@allPlannedWorkoutsDeletedRemoved": {
+    "placeholders": {
+      "removed": {
+        "type": "Object"
+      }
+    }
+  },
+  "usingCurrentLocationTostringasfixedTostringasfixed2": "Using current location: {toStringAsFixed}, {toStringAsFixed2}",
+  "@usingCurrentLocationTostringasfixedTostringasfixed2": {
+    "placeholders": {
+      "toStringAsFixed": {
+        "type": "Object"
+      },
+      "toStringAsFixed2": {
+        "type": "Object"
+      }
+    }
+  },
+  "typeSleep": "Sleep",
+  "typeBloodPressure": "Blood Pressure",
+  "addHiloBpReportPdf": "Add Hilo BP report (PDF)",
+  "hiloCuffBle": "Hilo Cuff (BLE)",
+  "typeSpo2": "SpO₂ / Pulse Oximeter",
+  "typeWeightScale": "Weight Scale",
+  "polarH10HrvMeasurement": "Polar H10 HRV measurement",
+  "samplingWouldStartMinutes": "Sampling would start about {minutes} min after your workout ended.",
+  "@samplingWouldStartMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "Object"
+      }
+    }
+  },
+  "samplingStartedMinutes": "Sampling started {minutes} min after your workout ended.",
+  "@samplingStartedMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "Object"
+      }
+    }
+  },
+  "unknown": "Unknown",
+  "before": "Before",
+  "during": "During",
+  "after": "After",
+  "enumWarmUp": "Warm-up",
+  "enumWorking": "Working",
+  "enumBackOff": "Back-off",
+  "enumTechnique": "Technique",
+  "enumExternalLoad": "External load",
+  "enumBandResistance": "Band / resistance",
+  "enumTotalLoad": "Total load",
+  "enumPerImplement": "Per implement",
+  "enumOneImplement": "One implement",
+  "enumBothSides": "Both sides",
+  "enumAlternatingTotalReps": "Alternating, total reps",
+  "enumPartial": "Partial",
+  "enumFailed": "Failed",
+  "enumStraightSets": "Straight sets",
+  "enumSuperset": "Superset",
+  "enumCircuit": "Circuit",
+  "enumRir": "RIR",
+  "enumRpe110": "RPE 1–10",
+  "enumBeforeTraining": "Before training",
+  "enumAfterTraining": "After training",
+  "enumResting": "Resting",
+  "enumSeated": "Seated",
+  "enumLyingDown": "Lying down",
+  "duringRoutineGelsAreNot": "During: routine gels are not needed for this short/easy session. Drink to thirst.",
+  "duringSpreadCarbohydrateAndDrinks": "During: spread carbohydrate and drinks over small, regular feeds. Count drink carbohydrate in the same total as gels and food.",
+  "fluidIsAnEditableStarting": "Fluid is an editable starting estimate, not a quota. Use thirst, practised intake and measured sweat losses; do not force extra water.",
+  "afterHaveCarbohydrateAndA": "After: have carbohydrate and a protein-containing meal. Prioritise refuelling and rehydration when another session is soon.",
+  "swimmingPlaceALabelledBottle": "Swimming: place a labelled bottle on the pool deck and use set breaks for sips or feeds. Pool conditions may differ from outdoor weather.",
+  "runningCarryAccessibleGelsFlasks": "Running: carry accessible gels/flasks or plan aid-station feeds; practise the same products and timing before racing.",
+  "servingSizesAndToleranceMust": "Serving sizes and tolerance must be positive.",
+  "enterFiniteNonNegativeMeasurements": "Enter finite, non-negative measurements.",
+  "targetsMustBeFiniteAnd": "Targets must be finite and non-negative.",
+  "conditionsMustBeFiniteOr": "Conditions must be finite or unknown.",
+  "humidityMustBeBetween0": "Humidity must be between 0 and 100%.",
+  "noIntakeCannotIncludeFood": "“No intake” cannot include food or drinks.",
+  "addAnItemOrConfirm": "Add an item or confirm that you had no intake.",
+  "eachIntakeNeedsAProduct": "Each intake needs a product and a valid timing.",
+  "quantityMustBePositive": "Quantity must be positive.",
+  "thisActivityNoLongerExists": "This activity no longer exists.",
+  "practisedCarbohydrateToleranceMustNot": "Practised carbohydrate tolerance must not exceed 120 g/h.",
+  "measuredSweatRateMustBe": "Measured sweat rate must be positive or left unknown.",
+  "increasePractisedToleranceInNutrition": "Increase practised tolerance in Nutrition settings before choosing a higher target.",
+  "fluidTargetExceedsYourMeasured": "Fluid target exceeds your measured sweat rate. Review the measurement or target.",
+  "elapsedWorkoutTimeMustBe": "Elapsed workout time must be positive or left blank.",
+  "intakeAmountsMustBeFinite": "Intake amounts must be finite and non-negative.",
+  "selectedStrategyUnavailableChooseAnother": "Selected strategy unavailable. Choose another strategy or no comparison.",
+  "recordYourWorkoutNutrition": "Record your workout nutrition",
+  "addTheFoodAndFluids": "Add the food and fluids you actually consumed in your activity history.",
+  "logIntake": "Log intake",
+  "in30Minutes": "In 30 minutes",
+  "loadSuggestionsCoverStraightSets": "Load suggestions cover straight sets with repetitions only.",
+  "needsStrengthprogressionminsessionsRecordedSessionsOf": "Needs {strengthProgressionMinSessions} recorded sessions of this exercise.",
+  "@needsStrengthprogressionminsessionsRecordedSessionsOf": {
+    "placeholders": {
+      "strengthProgressionMinSessions": {
+        "type": "Object"
+      }
+    }
+  },
+  "recentHistoryIsTooOld": "Recent history is too old for a suggestion.",
+  "theLastSessionDidNot": "The last session did not use one known load.",
+  "theLoadChangedBetweenThe": "The load changed between the recent sessions.",
+  "notEverySetReachedThe": "Not every set reached the top of its repetition target.",
+  "recordEffortRirOrRpe": "Record effort (RIR or RPE) on the last set to get suggestions.",
+  "recentSetsWereHarderThan": "Recent sets were harder than intended.",
+  "thisWorkoutAlreadyHasIts": "This workout already has its own load; it stays as set.",
+  "yourRecentSetsMetThe": "Your recent sets met the progression rule. Set the smallest load step for this equipment to review a load.",
+  "thisWorkoutNoLongerExists": "This workout no longer exists.",
+  "thisStrengthPlanCannotBe": "This strength plan cannot be read ({message}).",
+  "@thisStrengthPlanCannotBe": {
+    "placeholders": {
+      "message": {
+        "type": "Object"
+      }
+    }
+  },
+  "thisStrengthPlanCannotBe2": "This strength plan cannot be read.",
+  "addAtLeastOneExercise": "Add at least one exercise.",
+  "thisWorkoutWasChangedElsewhere": "This workout was changed elsewhere. Your edits are kept; reload to see the newer version.",
+  "thePlanThisWorkoutIs": "The plan this workout is compared with cannot be read.",
+  "thisLogWasChangedElsewhere": "This log was changed elsewhere. Your entries are kept; reload to see the newer version.",
+  "thisZipIsNotA": "This ZIP is not a supported Fjelia backup.",
+  "theBackupDatabaseIsDamaged": "The backup database is damaged.",
+  "invalidBackupData": "Invalid backup data.",
+  "backupTablesDoNotMatch": "Backup tables do not match.",
+  "invalidBackupColumns": "Invalid backup columns.",
+  "migratingOriginalAppBackup": "Migrating original app backup",
+  "theOriginalBackupIsMissing": "The original backup is missing required tables.",
+  "backupFormatOrDatabaseVersion": "Backup format or database version does not match.",
+  "restoringRecords": "Restoring records",
+  "restoringSettings": "Restoring settings",
+  "restoreComplete": "Restore complete",
+  "effortMustBeANumber": "Effort must be a number.",
+  "theDurationEstimateMustBe": "The duration estimate must be positive.",
+  "restCannotBeNegative": "Rest cannot be negative.",
+  "enterTheRepetitionsDoneThe": "Enter the repetitions done; the plan has a range.",
+  "enterTheLoadThePlan": "Enter the load; the plan has none.",
+  "enterTheResistanceThePlan": "Enter the resistance; the plan has none.",
+  "poorSensorContact": "Poor sensor contact",
+  "moreThan25FromLocal": "More than 25% from local median",
+  "workoutNutrition": "Workout nutrition",
+  "postWorkoutFoodAndFluid": "Post-workout food and fluid log reminder",
+  "postTrainingHrvMeasurementReminder": "Post-training HRV measurement reminder",
+  "rirRunsFrom0To": "RIR runs from 0 to 10+.",
+  "rpeRunsFrom1To": "RPE runs from 1 to 10.",
+  "repetitionsCannotBeNegative": "Repetitions cannot be negative.",
+  "timedWorkMustBeLonger": "Timed work must be longer than zero seconds.",
+  "chooseRepetitionsOrTimedWork": "Choose repetitions or timed work, not both.",
+  "loadMustBeAFinite": "Load must be a finite, non-negative number.",
+  "durationCannotBeNegative": "Duration cannot be negative.",
+  "hrTimeline": "HR Timeline",
+  "dayTrainingLoad": "Day Training Load",
+  "weekdayComparison": "Weekday Comparison",
+  "weeklyTrainingLoad": "Weekly Training Load",
+  "zonePolarization": "Zone Polarization",
+  "elevationOverview": "Elevation Overview",
+  "trainingMonitor": "Training Monitor",
+  "formAtlCtlTsb": "ATL / CTL / TSB Form",
+  "trainingPlanProgress": "Training Plan Progress",
+  "rhrSleep": "RHR Sleep",
+  "hrvSleep": "HRV Sleep",
+  "spo2Sleep": "SpO₂ Sleep",
+  "respRate": "Resp Rate",
+  "stress": "Stress",
+  "skinTemp": "Skin Temp",
+  "steps": "Steps",
+  "tonightsSleep": "Tonight's Sleep",
+  "activityLog": "Activity Log",
+  "activityLog2": "Activity log",
+  "history2": "HISTORY",
+  "durationsecondshDurationseconds2mDistancemetersKmAvgheartrate": "{durationSeconds}h {durationSeconds2}m · {distanceMeters} km · {avgHeartRate} bpm · ↑{totalElevation} m",
+  "@durationsecondshDurationseconds2mDistancemetersKmAvgheartrate": {
+    "placeholders": {
+      "durationSeconds": {
+        "type": "Object"
+      },
+      "durationSeconds2": {
+        "type": "Object"
+      },
+      "distanceMeters": {
+        "type": "Object"
+      },
+      "avgHeartRate": {
+        "type": "Object"
+      },
+      "totalElevation": {
+        "type": "Object"
+      }
+    }
+  },
+  "heatAcclimation2": "HEAT ACCLIMATION",
+  "score": "{score}%",
+  "@score": {
+    "placeholders": {
+      "score": {
+        "type": "Object"
+      }
+    }
+  },
+  "elevation": "ELEVATION",
+  "t12WeekHistory": "12-WEEK HISTORY",
+  "zonePolarization2": "ZONE POLARIZATION",
+  "t5WeekHistory": "5-WEEK HISTORY",
+  "easy": "EASY %",
+  "withzonesOfRecordedActivitiesWith": "{withZones} of {recorded} activities with HR-zone data",
+  "@withzonesOfRecordedActivitiesWith": {
+    "placeholders": {
+      "withZones": {
+        "type": "Object"
+      },
+      "recorded": {
+        "type": "Object"
+      }
+    }
+  },
+  "fromsamplesReconstructedFromRecordedHr": "{fromSamples} reconstructed from recorded HR samples",
+  "@fromsamplesReconstructedFromRecordedHr": {
+    "placeholders": {
+      "fromSamples": {
+        "type": "Object"
+      }
+    }
+  },
+  "easyZ12ModerateZ3": "Easy: Z1–2 · Moderate: Z3 · Hard: Z4–5",
+  "activitiesWithoutHrZoneData": "Activities without HR-zone data are excluded from percentages.",
+  "avgAverageUnit": "AVG  {average} {unit}",
+  "@avgAverageUnit": {
+    "placeholders": {
+      "average": {
+        "type": "Object"
+      },
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "weekdayComparison2": "WEEKDAY COMPARISON",
+  "trainingPlanProgress2": "TRAINING PLAN PROGRESS",
+  "weekCurrentweekDurationinweeks": "Week {currentWeek} / {durationInWeeks}",
+  "@weekCurrentweekDurationinweeks": {
+    "placeholders": {
+      "currentWeek": {
+        "type": "Object"
+      },
+      "durationInWeeks": {
+        "type": "Object"
+      }
+    }
+  },
+  "t30MinTimeTrialLt2": "30-MIN TIME TRIAL — LT2",
+  "run30MinutesAtThe": "Run 30 minutes at the hardest effort you can sustain — controlled, not sprinting. Build into the effort; do not start too fast. The average pace and HR of the final 20 minutes are your LT2.",
+  "recordAsANormalOutdoor": "Record as a normal outdoor run. Start your watch, note the time, run 30 min at race effort.",
+  "t50MinTotalFlatCourse": "~50 min total · flat course · not after hard training",
+  "doNotStartTooFast": "Do not start too fast. Aim for even splits.",
+  "theAppAveragesHrAnd": "The app averages HR and pace over the final 20 minutes of the TT, after the warm-up and first 10 minutes. Select the recorded activity in Calculate.",
+  "lt2Pace": "LT2 PACE",
+  "activityRunningEnoughTimeFor": "Activity (running, enough time for warm-up + 30 min, with HR)",
+  "selectTheTtActivity": "Select the TT activity",
+  "nameStartdate": "{name} · {startDate}",
+  "@nameStartdate": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      },
+      "startDate": {
+        "type": "Object"
+      }
+    }
+  },
+  "warmUpBeforeTt": "Warm-up before TT",
+  "roundMin": "{round} min",
+  "@roundMin": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "clearResults": "Clear results",
+  "heartRate2": "HEART RATE",
+  "paceSecKmLowerIs": "PACE (sec/km — lower is faster)",
+  "thresholdsFitnessTests": "Thresholds & Fitness Tests",
+  "lt1": "LT1",
+  "lt2": "LT2",
+  "voPace": "VO₂ Pace",
+  "ftp": "FTP",
+  "setFtpManually": "Set FTP manually",
+  "calculateFromAnActivity": "Calculate from an activity",
+  "setFtp": "Set FTP",
+  "ftpWatts": "FTP (watts)",
+  "ftpCyclingThresholdPower": "FTP — CYCLING THRESHOLD POWER",
+  "ftpHistory": "FTP HISTORY",
+  "updateFromActivity": "UPDATE FROM ACTIVITY",
+  "tapAnActivityFtpBest": "Tap an activity — FTP = best 20-min power × 0.95",
+  "ridew": "{ride}W",
+  "@ridew": {
+    "placeholders": {
+      "ride": {
+        "type": "Object"
+      }
+    }
+  },
+  "ftpRoundw": "→ FTP {round}W",
+  "@ftpRoundw": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "noRidesWith20Minutes": "No rides with 20 minutes of continuous power samples.",
+  "enterFtpManually": "Enter FTP manually",
+  "selectTheTestActivity": "Select the test activity",
+  "formAtlCtlTsb2": "FORM · ATL / CTL / TSB",
+  "closeTrainingFormFullscreen": "Close training form fullscreen",
+  "expandTrainingForm": "Expand training form",
+  "calculatedFromTheFirstAvailable": "Calculated from the first available load record. Days without recorded load count as zero; earlier training is unknown.",
+  "trainingMonitor2": "TRAINING MONITOR",
+  "pfitzingerZones": "PFITZINGER ZONES",
+  "cyclingPowerZones": "CYCLING POWER ZONES",
+  "znumber": "Z{number}",
+  "@znumber": {
+    "placeholders": {
+      "number": {
+        "type": "Object"
+      }
+    }
+  },
+  "paceHrDescription": "{pace} · {hr}\n{description}",
+  "@paceHrDescription": {
+    "placeholders": {
+      "pace": {
+        "type": "Object"
+      },
+      "hr": {
+        "type": "Object"
+      },
+      "description": {
+        "type": "Object"
+      }
+    }
+  },
+  "weeklyTrainingLoad2": "WEEKLY TRAINING LOAD",
+  "prevWeek": "PREV WEEK",
+  "bySport": "BY SPORT",
+  "noActivitiesThisWeek": "No activities this week",
+  "garminWorkoutScheduleddate": "Garmin Workout · {scheduledDate}",
+  "@garminWorkoutScheduleddate": {
+    "placeholders": {
+      "scheduledDate": {
+        "type": "Object"
+      }
+    }
+  },
+  "yourNote": "Your note",
+  "askAiCoach": "Ask AI Coach",
+  "aiSettings": "AI settings",
+  "askYourCoach": "Ask your coach…",
+  "sendMessage": "Send message",
+  "sendFeedbackOrReportA": "Send feedback or report a bug",
+  "addMeasurement2": "Add measurement",
+  "syncLabel2": "Sync",
+  "syncToday": "Sync Today",
+  "fullSync1Year": "Full Sync · 1 year",
+  "fullSyncComplete": "Full Sync · Complete",
+  "syncingYourData": "Syncing your data…",
+  "lLeftkgRRightkgKg2": "L {leftKg}  R {rightKg} kg",
+  "@lLeftkgRRightkgKg2": {
+    "placeholders": {
+      "leftKg": {
+        "type": "Object"
+      },
+      "rightKg": {
+        "type": "Object"
+      }
+    }
+  },
+  "weightKgFatBodyfatMuscle": "{weight} kg · Fat {bodyFat}% · Muscle {muscleMass} kg",
+  "@weightKgFatBodyfatMuscle": {
+    "placeholders": {
+      "weight": {
+        "type": "Object"
+      },
+      "bodyFat": {
+        "type": "Object"
+      },
+      "muscleMass": {
+        "type": "Object"
+      }
+    }
+  },
+  "titleSportTolowercase": "{title}, {sport}, {toLowerCase}",
+  "@titleSportTolowercase": {
+    "placeholders": {
+      "title": {
+        "type": "Object"
+      },
+      "sport": {
+        "type": "Object"
+      },
+      "toLowerCase": {
+        "type": "Object"
+      }
+    }
+  },
+  "weatherUnavailableTapToRetry": "Weather unavailable · Tap to retry",
+  "weatherSetYourLocation": "Weather · Set your location",
+  "t7DayForecast": "7-DAY FORECAST",
+  "minMax": "min/max",
+  "rainMm2": "rain mm",
+  "uvMax": "UV max",
+  "kmH": "km/h",
+  "alt": "→ {alt}",
+  "@alt": {
+    "placeholders": {
+      "alt": {
+        "type": "Object"
+      }
+    }
+  },
+  "raceGoalsLength": "Race goals · {length}",
+  "@raceGoalsLength": {
+    "placeholders": {
+      "length": {
+        "type": "Object"
+      }
+    }
+  },
+  "gWk": "{g} wk",
+  "@gWk": {
+    "placeholders": {
+      "g": {
+        "type": "Object"
+      }
+    }
+  },
+  "weeks": "{weeks}",
+  "@weeks": {
+    "placeholders": {
+      "weeks": {
+        "type": "Object"
+      }
+    }
+  },
+  "weeks2": "weeks",
+  "upcoming": "UPCOMING",
+  "lengthMoreDays": "+ {length} more days",
+  "@lengthMoreDays": {
+    "placeholders": {
+      "length": {
+        "type": "Object"
+      }
+    }
+  },
+  "yearMonth": "{year} / {month}",
+  "@yearMonth": {
+    "placeholders": {
+      "year": {
+        "type": "Object"
+      },
+      "month": {
+        "type": "Object"
+      }
+    }
+  },
+  "day": "{day}",
+  "@day": {
+    "placeholders": {
+      "day": {
+        "type": "Object"
+      }
+    }
+  },
+  "plannedCompletedSkipped": "○ Planned   ● Completed   ✕ Skipped",
+  "heartRate3": "Heart rate",
+  "watts": "Watts",
+  "theStepsAddUpTo": "The steps add up to {total}; the plan counts {plannedDurationMin} min.",
+  "@theStepsAddUpTo": {
+    "placeholders": {
+      "total": {
+        "type": "Object"
+      },
+      "plannedDurationMin": {
+        "type": "Object"
+      }
+    }
+  },
+  "typicalSplitForThisKind": "Typical split for this kind of session; no steps to calculate it from.",
+  "labelGetsEachExerciseWith": "{label} gets each exercise with its sets, reps and loads. Rep ranges, effort and tempo stay in Fjelia.",
+  "@labelGetsEachExerciseWith": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "markAsRest": "Mark as Rest",
+  "restoreWorkout": "Restore workout",
+  "skipThisWorkout": "Skip this workout?",
+  "previousWeek": "Previous week",
+  "backToThisWeek": "Back to this week",
+  "thisWeek": "This week",
+  "nextWeek": "Next week",
+  "today2": "TODAY",
+  "route": "ROUTE",
+  "feedback": "Feedback",
+  "plannedWorkout": "Planned Workout",
+  "delete": "Delete",
+  "chatAi": "Chat AI",
+  "trainingLoad": "Training Load",
+  "dayTrainingLoad2": "DAY TRAINING LOAD",
+  "trimp": " TRIMP",
+  "scorebeforeScoreafter": "{scoreBefore} → {scoreAfter}",
+  "@scorebeforeScoreafter": {
+    "placeholders": {
+      "scoreBefore": {
+        "type": "Object"
+      },
+      "scoreAfter": {
+        "type": "Object"
+      }
+    }
+  },
+  "temperatureOverTime": "TEMPERATURE OVER TIME",
+  "roundh": "{round}h",
+  "@roundh": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "timeInHrZones": "Time in HR zones",
+  "route2": "Route",
+  "start": "Start",
+  "gpx": "GPX",
+  "touppercasesubstringBriefing": "{toUpperCase}{substring} Briefing",
+  "@touppercasesubstringBriefing": {
+    "placeholders": {
+      "toUpperCase": {
+        "type": "Object"
+      },
+      "substring": {
+        "type": "Object"
+      }
+    }
+  },
+  "chatWithAiAboutThis": "Chat with AI about this briefing",
+  "whyThisRecommendation": "Why this recommendation?",
+  "titleDateLabel": "{title}, {date}, {label}",
+  "@titleDateLabel": {
+    "placeholders": {
+      "title": {
+        "type": "Object"
+      },
+      "date": {
+        "type": "Object"
+      },
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "previousDay": "Previous day",
+  "nextDay": "Next day",
+  "updating": "Updating",
+  "resting": "RESTING",
+  "noTimedReadings": "No timed readings",
+  "avg": "AVG",
+  "peak": "PEAK",
+  "tolocalRoundmin": "{toLocal} · {round}min",
+  "@tolocalRoundmin": {
+    "placeholders": {
+      "toLocal": {
+        "type": "Object"
+      },
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "avgheartrateBpmAvg": "{avgHeartRate} bpm avg",
+  "@avgheartrateBpmAvg": {
+    "placeholders": {
+      "avgHeartRate": {
+        "type": "Object"
+      }
+    }
+  },
+  "timeWeightedAverageOverRecorded": "Time-weighted average over recorded periods. Gaps without readings are excluded.",
+  "previousHeartRatePeriod": "Previous heart-rate period",
+  "nextHeartRatePeriod": "Next heart-rate period",
+  "avgHr": "Avg HR",
+  "restingHr": "Resting HR",
+  "both": "Both",
+  "averagelabelFixedMs": "{averageLabel} {fixed} ms",
+  "@averagelabelFixedMs": {
+    "placeholders": {
+      "averageLabel": {
+        "type": "Object"
+      },
+      "fixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "measureWithPolarH10": "Measure with Polar H10",
+  "ms": "ms",
+  "noWorkoutInThisPeriod": "No workout in this period has a comparable before and after pair.",
+  "textEachWorkoutCountsOnce": "{text}. Each workout counts once; this describes your pairs, it does not score them.",
+  "@textEachWorkoutCountsOnce": {
+    "placeholders": {
+      "text": {
+        "type": "Object"
+      }
+    }
+  },
+  "workoutFinished": "Workout finished?",
+  "yourWorkoutIsNotIn": "Your workout is not in Fjelia yet. If it ended, say when, and the reminder can follow its real end. Otherwise it appears once your watch syncs.",
+  "workoutFinished2": "Workout finished",
+  "theWorkoutMustStartAfter": "The workout must start after the measurement and end after it started, not in the future.",
+  "daysDAvg": "{days} D AVG",
+  "@daysDAvg": {
+    "placeholders": {
+      "days": {
+        "type": "Object"
+      }
+    }
+  },
+  "averageUnit": "{average} {unit}",
+  "@averageUnit": {
+    "placeholders": {
+      "average": {
+        "type": "Object"
+      },
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "baselineUnit": "{baseline} {unit}",
+  "@baselineUnit": {
+    "placeholders": {
+      "baseline": {
+        "type": "Object"
+      },
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "previousPeriod": "Previous period",
+  "nextPeriod": "Next period",
+  "overnightHrvReflectsRecoveryCompare": "Overnight HRV reflects recovery. Compare your readings with your own baseline over time.",
+  "moveThisWorkout": "MOVE THIS WORKOUT",
+  "pickDate": "Pick date",
+  "movedFromMovedfrom": "Moved from {movedFrom}",
+  "@movedFromMovedfrom": {
+    "placeholders": {
+      "movedFrom": {
+        "type": "Object"
+      }
+    }
+  },
+  "hrvAroundThisWorkout": "HRV around this workout",
+  "measureAfterTraining": "Measure after training",
+  "measureAgain": "Measure again",
+  "explainWithAi": "Explain with AI",
+  "beforeEndedPregapAheadOf": "Before ended {preGap} ahead of the start.",
+  "@beforeEndedPregapAheadOf": {
+    "placeholders": {
+      "preGap": {
+        "type": "Object"
+      }
+    }
+  },
+  "lengthFurtherMeasurementSAfter": "{length} further measurement(s) after this workout are kept as extra observations.",
+  "@lengthFurtherMeasurementSAfter": {
+    "placeholders": {
+      "length": {
+        "type": "Object"
+      }
+    }
+  },
+  "noHrvMeasurementRecordedAround": "No HRV measurement recorded around this workout.",
+  "measureHrv": "Measure HRV",
+  "deltamsMs": "{deltaMs} ms",
+  "@deltamsMs": {
+    "placeholders": {
+      "deltaMs": {
+        "type": "Object"
+      }
+    }
+  },
+  "deltapercent": "{deltaPercent} %",
+  "@deltapercent": {
+    "placeholders": {
+      "deltaPercent": {
+        "type": "Object"
+      }
+    }
+  },
+  "aDescriptionOfThisPair": "A description of this pair, not a score for the workout.",
+  "notEnoughComparableWorkoutsYet": "Not enough comparable workouts yet, {eligible} of {need}.",
+  "@notEnoughComparableWorkoutsYet": {
+    "placeholders": {
+      "eligible": {
+        "type": "Object"
+      },
+      "need": {
+        "type": "Object"
+      }
+    }
+  },
+  "notEnoughComparableWorkoutsYet2": "Not enough comparable workouts yet ({eligible} of {need}).",
+  "@notEnoughComparableWorkoutsYet2": {
+    "placeholders": {
+      "eligible": {
+        "type": "Object"
+      },
+      "need": {
+        "type": "Object"
+      }
+    }
+  },
+  "yourEligibleSimilarWorkoutsTolocal": "Your {eligible} similar workouts · {toLocal}–{toLocal2}",
+  "@yourEligibleSimilarWorkoutsTolocal": {
+    "placeholders": {
+      "eligible": {
+        "type": "Object"
+      },
+      "toLocal": {
+        "type": "Object"
+      },
+      "toLocal2": {
+        "type": "Object"
+      }
+    }
+  },
+  "middleHalfQ1msToQ3ms": "Middle half {q1Ms} to {q3Ms} ms · median {medianMs} ms · this workout {delta} ms",
+  "@middleHalfQ1msToQ3ms": {
+    "placeholders": {
+      "q1Ms": {
+        "type": "Object"
+      },
+      "q3Ms": {
+        "type": "Object"
+      },
+      "medianMs": {
+        "type": "Object"
+      },
+      "delta": {
+        "type": "Object"
+      }
+    }
+  },
+  "rpeI": "RPE {i}",
+  "@rpeI": {
+    "placeholders": {
+      "i": {
+        "type": "Object"
+      }
+    }
+  },
+  "easy2": "easy",
+  "allOut": "all out",
+  "workoutProfileDescription": "Workout profile: {description}",
+  "@workoutProfileDescription": {
+    "placeholders": {
+      "description": {
+        "type": "Object"
+      }
+    }
+  },
+  "noActivitiesInThisPeriod": "No activities in this period",
+  "enableHeatAcclimationInTraining": "Enable heat acclimation in Training settings.",
+  "noElevationThisWeek": "No elevation this week",
+  "noActivitiesSynced": "No activities synced",
+  "noHrZoneData": "No HR-zone data",
+  "easyJogGetHrElevated": "Easy jog — get HR elevated, legs loose",
+  "fastestSustainablePaceLikeA": "Fastest sustainable pace — like a 30-min race",
+  "walkCardiacRecovery": "Walk — cardiac recovery",
+  "selectTheTtActivityFirst": "Select the TT activity first.",
+  "calculating": "Calculating…",
+  "calculateLt2": "Calculate LT2",
+  "enterFtpBetween30And": "Enter FTP between 30 and 1000 W.",
+  "aerobicThreshold": "Aerobic Threshold",
+  "functionalThresholdPower": "Functional Threshold Power",
+  "estimated": "Estimated",
+  "afterWarmingUpRunFive": "After warming up, run five minutes at your fastest sustainable effort. Record the run with speed or distance data.",
+  "recordAtLeast40Minutes": "Record at least 40 minutes of steady running at a constant effort. The test compares heart rate in each half to estimate aerobic drift.",
+  "theFastestFiveMinuteWindow": "The fastest five-minute window provides your VO2max pace.",
+  "noResultYet": "No result yet",
+  "calculateVo2maxPace": "Calculate VO2max pace",
+  "calculateLt1": "Calculate LT1",
+  "loading2": "Loading",
+  "unavailable": "Unavailable",
+  "noTrainingHistory": "No training history",
+  "fitnessCtl": "Fitness (CTL)",
+  "fatigueAtl": "Fatigue (ATL)",
+  "formTsb": "Form (TSB)",
+  "noHistory": "No history",
+  "fresh": "Fresh",
+  "optimal": "Optimal",
+  "neutral": "Neutral",
+  "tired": "Tired",
+  "veryFatigued": "Very Fatigued",
+  "garminRunningVo2max": "Garmin running VO2max",
+  "garminCyclingVo2max": "Garmin cycling VO2max",
+  "aerobicThreshold2": "Aerobic threshold",
+  "driftDriftAt": "Drift {drift}% · {at}",
+  "@driftDriftAt": {
+    "placeholders": {
+      "drift": {
+        "type": "Object"
+      },
+      "at": {
+        "type": "Object"
+      }
+    }
+  },
+  "activityHours": "Activity hours",
+  "activityKm": "Activity km",
+  "tap5MinuteMaxTest": "Tap · 5-minute max test",
+  "setFtpToCalculatePower": "Set FTP to calculate power zones",
+  "cyclingPowerZones2": "Cycling power zones",
+  "pfitzingerZones2": "Pfitzinger zones",
+  "completeAnLt2TestTo": "Complete an LT2 test to calculate running zones.",
+  "setFtpToCalculatePower2": "Set FTP to calculate power zones.",
+  "endurance": "Endurance",
+  "threshold": "Threshold",
+  "anaerobic": "Anaerobic",
+  "whatExplainsThisRise": "What explains this rise?",
+  "whatExplainsThisDrop": "What explains this drop",
+  "whatExplainsThisRise2": "What explains this rise",
+  "editsAreKeptInFjelia": "Edits are kept in Fjelia as a local copy for this date. The workout on Garmin is not changed.",
+  "howDoIExecuteThis": "How do I execute this workout?",
+  "shareHealthContextWithName": "Share health context with {name}?",
+  "@shareHealthContextWithName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "yourMessageAndAHealth": "Your message and a health/training summary will be sent to this cloud AI provider. Names and GPS are excluded from the generated summary.",
+  "couldNotGetAReply": "Could not get a reply. Check your AI settings and try again.",
+  "askAboutYourRecoveryTraining": "Ask about your recovery, training, or today’s plan.",
+  "noSyncYet": "No sync yet",
+  "lastSyncLastContext": "Last sync: {last} {context}",
+  "@lastSyncLastContext": {
+    "placeholders": {
+      "last": {
+        "type": "Object"
+      },
+      "context": {
+        "type": "Object"
+      }
+    }
+  },
+  "seasonWithTradeOffs": "Season: with trade-offs",
+  "seasonNeedsYourDecision": "Season: needs your decision",
+  "seasonCannotBeCombined": "Season: cannot be combined",
+  "seasonProvisional": "Season: provisional",
+  "season": "Season",
+  "allGoalsFit": "All goals fit.",
+  "goalTargetfinishsecondsgoal": "Goal {targetFinishSeconds}{goal}",
+  "@goalTargetfinishsecondsgoal": {
+    "placeholders": {
+      "targetFinishSeconds": {
+        "type": "Object"
+      },
+      "goal": {
+        "type": "Object"
+      }
+    }
+  },
+  "estEstimateestimate2": "Est. {estimate}{estimate2}",
+  "@estEstimateestimate2": {
+    "placeholders": {
+      "estimate": {
+        "type": "Object"
+      },
+      "estimate2": {
+        "type": "Object"
+      }
+    }
+  },
+  "doneDoneby": "Done · {doneBy}",
+  "@doneDoneby": {
+    "placeholders": {
+      "doneBy": {
+        "type": "Object"
+      }
+    }
+  },
+  "garminWorkoutWorkout": "Garmin Workout · {workout}",
+  "@garminWorkoutWorkout": {
+    "placeholders": {
+      "workout": {
+        "type": "Object"
+      }
+    }
+  },
+  "moveAnyway": "Move anyway?",
+  "wattsNeedYourFtpSet": "Watts need your FTP: set it under Load, Thresholds.",
+  "mainTargetInWattsFrom": "Main target in watts from your FTP, heart rate as the guide.",
+  "mainTargetHeartRateWatts": "Main target heart rate, watts are not set on the watch.",
+  "taperPhase": "Taper phase",
+  "recoverySession": "Recovery session",
+  "closeToYourEvent": "Close to your event",
+  "noWorkoutStructureAvailable": "No workout structure available.",
+  "aerobic": "Aerobic",
+  "pushAgainToUpdateYour": "Push again to update your watch calendar.",
+  "workoutSentToLabel": "Workout sent to {label}",
+  "@workoutSentToLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "updating2": "Updating…",
+  "pushToLabel": "Push to {label}",
+  "@pushToLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "shareExerciseListForLabel": "Share exercise list for {label}",
+  "@shareExerciseListForLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "shareWorkoutForLabel": "Share workout for {label}",
+  "@shareWorkoutForLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "whyNothingIsAddedTo": "Why? Nothing is added to make it up.",
+  "workout": "Workout",
+  "recordedActivityLinkedToThis": "Recorded activity linked to this workout",
+  "matchedToTheRecordedWorkout": "Matched to the recorded workout start",
+  "matchedByWorkoutNameSport": "Matched by workout name, sport and date",
+  "matchedBySportDateAnd": "Matched by sport, date and duration",
+  "planPlannedminutesMin": "Plan {plannedMinutes} min",
+  "@planPlannedminutesMin": {
+    "placeholders": {
+      "plannedMinutes": {
+        "type": "Object"
+      }
+    }
+  },
+  "maxHr": "Max HR",
+  "trainingLoad2": "Training load",
+  "active": "Active",
+  "avgPace": "Avg pace",
+  "avgSpeed": "Avg speed",
+  "avgPower": "Avg power",
+  "elevation2": "Elevation",
+  "altitude": "Altitude",
+  "explainMyHrvBeforeAnd": "Explain my HRV before and after this workout. What is comparable, what is not, and what is still unknown?",
+  "deleteActivity": "Delete activity?",
+  "removeThisActivityFromThe": "Remove this activity from the local history? A later provider sync may import it again.",
+  "howDidThisSessionGo": "How did this session go, and what does it mean for my next days?",
+  "currentFixedFixed2": "Current {fixed}, {fixed2}",
+  "@currentFixedFixed2": {
+    "placeholders": {
+      "fixed": {
+        "type": "Object"
+      },
+      "fixed2": {
+        "type": "Object"
+      }
+    }
+  },
+  "setUpInTrainingSettings": "Set up in Training settings",
+  "couldNotLoadHeatData": "Could not load heat data — tap for details",
+  "loadingHeatHistory": "Loading heat history…",
+  "noHeatDataYet": "No heat data yet",
+  "optimalLowHigh": "Optimal {low}–{high}",
+  "@optimalLowHigh": {
+    "placeholders": {
+      "low": {
+        "type": "Object"
+      },
+      "high": {
+        "type": "Object"
+      }
+    }
+  },
+  "optimalLowHighTrimp": "Optimal: {low}–{high} TRIMP",
+  "@optimalLowHighTrimp": {
+    "placeholders": {
+      "low": {
+        "type": "Object"
+      },
+      "high": {
+        "type": "Object"
+      }
+    }
+  },
+  "targetUnavailableSyncTrainingHistory": "Target unavailable — sync training history",
+  "workoutQualifiedForHeatAccumulation": "Workout qualified for heat accumulation.",
+  "workoutDidNotAddHeat": "Workout did not add heat accumulation.",
+  "performanceTime": "Performance / Time",
+  "performanceDistance": "Performance / Distance",
+  "noRecordedRoute": "No recorded route",
+  "zoomIn": "Zoom in",
+  "zoomOut": "Zoom out",
+  "fitRoute": "Fit route",
+  "fullscreenMap": "Fullscreen map",
+  "openstreetmapContributors2": "OpenStreetMap contributors",
+  "appleIntelligenceIsUnavailableShowing": "Apple Intelligence is unavailable. Showing a non-AI summary.",
+  "generateAiBriefing": "Generate AI briefing?",
+  "retryAiBriefing": "Retry AI briefing",
+  "generateBriefing": "Generate briefing",
+  "discussThisBriefingWithMe": "Discuss this briefing with me and suggest the next best action.\n\n{text}",
+  "@discussThisBriefingWithMe": {
+    "placeholders": {
+      "text": {
+        "type": "Object"
+      }
+    }
+  },
+  "whyThisRecommendationWhichOf": "Why this recommendation? Which of my figures and which gaps in the data led to it, and what would change it?\n\n{text}",
+  "@whyThisRecommendationWhichOf": {
+    "placeholders": {
+      "text": {
+        "type": "Object"
+      }
+    }
+  },
+  "avg2": "Avg",
+  "peak2": "Peak",
+  "notEnoughContinuousReadingsFor": "Not enough continuous readings for an average.",
+  "recordedCoverageInhourshInminutesminTime": "Recorded coverage: {inHours}h {inMinutes}min · Time-weighted average",
+  "@recordedCoverageInhourshInminutesminTime": {
+    "placeholders": {
+      "inHours": {
+        "type": "Object"
+      },
+      "inMinutes": {
+        "type": "Object"
+      }
+    }
+  },
+  "lying": "Lying",
+  "noHrvReadingsInThis": "No HRV readings in this period",
+  "overnightHrvComesFromYour": "Overnight HRV comes from your watch, spot readings from the Polar H10 (RMSSD). The methods differ: compare trends, not single values.",
+  "noReadings": "No readings",
+  "whenDidTheWorkoutStart": "When did the workout start?",
+  "whenDidItEnd": "When did it end?",
+  "last3Months": "Last 3 months",
+  "lastYear": "Last year",
+  "lastDaysDays": "Last {days} days",
+  "@lastDaysDays": {
+    "placeholders": {
+      "days": {
+        "type": "Object"
+      }
+    }
+  },
+  "nowOnCurrentTapA": "Now on {current}. Tap a day, or drag the workout onto one. The steps stay as they are.",
+  "@nowOnCurrentTapA": {
+    "placeholders": {
+      "current": {
+        "type": "Object"
+      }
+    }
+  },
+  "monthView": "Month view",
+  "syncing": "Syncing",
+  "trendUnavailable": "Trend unavailable",
+  "stable": "Stable",
+  "increasing": "Increasing",
+  "decreasing": "Decreasing",
+  "unclear": "Unclear",
+  "notComparable": "Not comparable",
+  "waitingForAfter": "Waiting for after",
+  "afterOnly": "After only",
+  "waitingForTheActualWorkout": "Waiting for the actual workout end.",
+  "reminderAroundTolocal": "Reminder around {toLocal}",
+  "@reminderAroundTolocal": {
+    "placeholders": {
+      "toLocal": {
+        "type": "Object"
+      }
+    }
+  },
+  "reminderIsDueMeasureWhen": "Reminder is due. Measure when you are ready.",
+  "thisReminderIsNoLonger": "This reminder is no longer current. Open the workout to view your measurements.",
+  "beforeFixedMilliseconds": "Before {fixed} milliseconds. ",
+  "@beforeFixedMilliseconds": {
+    "placeholders": {
+      "fixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "afterFixedMilliseconds": "After {fixed} milliseconds",
+  "@afterFixedMilliseconds": {
+    "placeholders": {
+      "fixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "changeDeltamsMillisecondsDeltapercentPercent": "Change {deltaMs} milliseconds, {deltaPercent} percent.",
+  "@changeDeltamsMillisecondsDeltapercentPercent": {
+    "placeholders": {
+      "deltaMs": {
+        "type": "Object"
+      },
+      "deltaPercent": {
+        "type": "Object"
+      }
+    }
+  },
+  "noPreTrainingMeasurementRecorded": "No pre-training measurement recorded.",
+  "notMeasuredYet": "Not measured yet",
+  "leftOutOfTheComparison": "Left out of the comparison: {excludedTotal} workouts ({c}).",
+  "@leftOutOfTheComparison": {
+    "placeholders": {
+      "excludedTotal": {
+        "type": "Object"
+      },
+      "c": {
+        "type": "Object"
+      }
+    }
+  },
+  "notFromThisWorkout": "Not from this workout",
+  "useAsBefore": "Use as before",
+  "useAsAfter": "Use as after",
+  "beforeNotMeasured": "Before · not measured",
+  "beforeTolocal": "Before · {toLocal}",
+  "@beforeTolocal": {
+    "placeholders": {
+      "toLocal": {
+        "type": "Object"
+      }
+    }
+  },
+  "workoutWorkouttext": "Workout · {workoutText}",
+  "@workoutWorkouttext": {
+    "placeholders": {
+      "workoutText": {
+        "type": "Object"
+      }
+    }
+  },
+  "afterNotMeasuredYet": "After · not measured yet",
+  "afterTolocal": "After · {toLocal}",
+  "@afterTolocal": {
+    "placeholders": {
+      "toLocal": {
+        "type": "Object"
+      }
+    }
+  },
+  "yourSimilarWorkoutsEligibleTolocal": "Your similar workouts ({eligible}, {toLocal}–{toLocal2}): median {medianMs} ms, middle half {q1Ms} to {q3Ms} ms.",
+  "@yourSimilarWorkoutsEligibleTolocal": {
+    "placeholders": {
+      "eligible": {
+        "type": "Object"
+      },
+      "toLocal": {
+        "type": "Object"
+      },
+      "toLocal2": {
+        "type": "Object"
+      },
+      "medianMs": {
+        "type": "Object"
+      },
+      "q1Ms": {
+        "type": "Object"
+      },
+      "q3Ms": {
+        "type": "Object"
+      }
+    }
+  },
+  "howHardDidItFeel": "How hard did it feel? (RPE)",
+  "loadMetric": "Load",
+  "clearAction": "Clear",
+  "routeFinish": "Finish",
+  "month2": "MONTH",
+  "week2": "WEEK",
+  "quarter": "QUARTER",
+  "year": "YEAR",
+  "easy3": "EASY",
+  "mod": "MOD",
+  "hard": "HARD",
+  "protocol": "PROTOCOL",
+  "calculate": "CALCULATE",
+  "warmUp": "WARM-UP",
+  "coolDown": "COOL-DOWN",
+  "ftpCycling": "FTP cycling",
+  "ftpFtpwattsWWattsperkgW": "FTP {ftpWatts} W · {wattsPerKg} W/kg",
+  "@ftpFtpwattsWWattsperkgW": {
+    "placeholders": {
+      "ftpWatts": {
+        "type": "Object"
+      },
+      "wattsPerKg": {
+        "type": "Object"
+      }
+    }
+  },
+  "thisWeekSoFar": "THIS WEEK · SO FAR",
+  "duration2": "DURATION",
+  "distance2": "DISTANCE",
+  "sport2": "SPORT",
+  "repeatSets": "REPEAT SETS",
+  "aboutThisWorkout": "ABOUT THIS WORKOUT",
+  "workoutStructure": "WORKOUT STRUCTURE",
+  "health2": "HEALTH",
+  "high2": "HIGH",
+  "elevated": "ELEVATED",
+  "normal": "NORMAL",
+  "tomorrow": "TOMORROW",
+  "skipped2": "SKIPPED",
+  "weeklyPlan": "WEEKLY PLAN",
+  "activityLog3": "ACTIVITY LOG",
+  "skippedTouppercase": "SKIPPED · {toUpperCase}",
+  "@skippedTouppercase": {
+    "placeholders": {
+      "toUpperCase": {
+        "type": "Object"
+      }
+    }
+  },
+  "primaryZone": "PRIMARY ZONE",
+  "coachingCues": "COACHING CUES",
+  "targets": "TARGETS",
+  "adaptation": "ADAPTATION",
+  "done2": "DONE",
+  "notRecorded2": "NOT RECORDED",
+  "planned": "PLANNED",
+  "extra": "EXTRA",
+  "optimal2": "OPTIMAL",
+  "qualified": "QUALIFIED",
+  "temp": "TEMP",
+  "humidity2": "HUMIDITY",
+  "pressure": "PRESSURE",
+  "wetBulb": "WET BULB",
+  "paceMinKm": "PACE (min/km)",
+  "speedKmH": "SPEED (km/h)",
+  "elevationM": "ELEVATION (m)",
+  "powerW": "POWER (W)",
+  "performanceTime2": "PERFORMANCE / TIME",
+  "performanceDistance2": "PERFORMANCE / DISTANCE",
+  "load2": "LOAD",
+  "day2": "DAY",
+  "allTime": "ALL-TIME",
+  "hrvAroundThisWorkout2": "HRV around this workout. ",
+  "lowReserve": "LOW RESERVE",
+  "goodReserve": "GOOD RESERVE",
+  "latestReadingAtTolocal": "Latest reading at {toLocal}",
+  "@latestReadingAtTolocal": {
+    "placeholders": {
+      "toLocal": {
+        "type": "Object"
+      }
+    }
+  },
+  "weeklyAvg": "WEEKLY AVG",
+  "monthlyAvg": "MONTHLY AVG",
+  "systolic2": "SYSTOLIC",
+  "diastolic2": "DIASTOLIC",
+  "hourlyVariation": "HOURLY VARIATION",
+  "dailyVariation": "DAILY VARIATION",
+  "sys2": "SYS",
+  "dia": "DIA",
+  "bluetoothDevices": "BLUETOOTH DEVICES",
+  "accountsServices": "ACCOUNTS & SERVICES",
+  "flowLoginOptional": "FLOW LOGIN (OPTIONAL)",
+  "polarFlowLogin": "POLAR FLOW LOGIN",
+  "raceGoal": "RACE GOAL",
+  "experienceLevel": "EXPERIENCE LEVEL",
+  "weeklySchedule2": "WEEKLY SCHEDULE",
+  "sessionsPerDay2": "SESSIONS PER DAY",
+  "aboutYou": "ABOUT YOU",
+  "yourActivities2": "YOUR ACTIVITIES",
+  "latestReadingAtTimestamp": "Latest reading at {timestamp}",
+  "@latestReadingAtTimestamp": {
+    "placeholders": {
+      "timestamp": {
+        "type": "Object"
+      }
+    }
+  },
+  "poorSleep": "POOR SLEEP",
+  "fairSleep": "FAIR SLEEP",
+  "goodSleep": "GOOD SLEEP",
+  "hoursOfSleep": "HOURS OF SLEEP",
+  "sleepNeeded": "SLEEP NEEDED",
+  "deepSleep": "DEEP SLEEP",
+  "exercises2": "EXERCISES",
+  "strengthSummary": "STRENGTH SUMMARY",
+  "strengthDraft": "STRENGTH · DRAFT",
+  "strengthFinishedWithGaps": "STRENGTH · FINISHED WITH GAPS",
+  "strength2": "STRENGTH",
+  "wind": "WIND",
+  "sun2": "SUN",
+  "cloud": "CLOUD",
+  "dataSourceUpdatedFetchedat": "Data: {source} · Updated {fetchedAt}",
+  "@dataSourceUpdatedFetchedat": {
+    "placeholders": {
+      "source": {
+        "type": "Object"
+      },
+      "fetchedAt": {
+        "type": "Object"
+      }
+    }
+  },
+  "coros2": "COROS",
+  "rmssdMs": "RMSSD · ms",
+  "sdnnMs": "SDNN · ms",
+  "now2": "NOW",
+  "awake": "AWAKE",
+  "light": "LIGHT",
+  "deep2": "DEEP",
+  "sqliteOrm": "SQLite ORM",
+  "httpClients": "HTTP clients",
+  "gpsLocation": "GPS location",
+  "hdlCholesterol": "HDL Cholesterol",
+  "ldlCholesterol": "LDL Cholesterol",
+  "raceName": "RACE NAME",
+  "mtb": "MTB",
+  "distanceKm": "DISTANCE (km)",
+  "priority": "PRIORITY",
+  "elevationGainM": "ELEVATION GAIN (m)",
+  "targetTime": "TARGET TIME",
+  "raceDate": "RACE DATE",
+  "participation": "PARTICIPATION",
+  "whatIWantFromIt": "WHAT I WANT FROM IT",
+  "periodTimeline": "{period} TIMELINE",
+  "@periodTimeline": {
+    "placeholders": {
+      "period": {
+        "type": "Object"
+      }
+    }
+  },
+  "tabPlan": "PLAN",
+  "tabLoad": "LOAD",
+  "tabCoach": "COACH",
+  "hrDriftTestLt1": "HR DRIFT TEST — LT1",
+  "asSentByGarmin": "AS SENT BY GARMIN",
+  "noData2": "NO DATA",
+  "noTarget": "NO TARGET",
+  "noHeatLoad": "NO HEAT LOAD",
+  "hrBpm": "HR (bpm)",
+  "aiBriefingUnavailableShowingA": "AI briefing unavailable. Showing a non-AI summary.",
+  "uvIndex2": "UV INDEX",
+  "aiBriefing": "AI Briefing",
+  "uiFrameworkByGoogle": "UI framework by Google",
+  "unableToLoadData": "Unable to load data",
+  "briefingSummary": "Recovery {recovery} / 100. Sleep {sleep} / 100. Today’s training load is {load} TRIMP.",
+  "@briefingSummary": {
+    "placeholders": {
+      "recovery": {
+        "type": "Object"
+      },
+      "sleep": {
+        "type": "Object"
+      },
+      "load": {
+        "type": "Object"
+      }
+    }
+  },
+  "morningBriefing": "Morning briefing",
+  "lunchBriefing": "Lunch briefing",
+  "afternoonBriefing": "Afternoon briefing",
+  "eveningBriefing": "Evening briefing",
+  "appleUnusableAnswer": "Apple Intelligence could not produce a usable answer: it repeated itself or your data. Try rephrasing the question, or choose another AI provider in the settings.",
+  "appleCouldNotAnswer": "Apple Intelligence could not answer. Please try again.",
+  "appleNotAvailableOnDevice": "Apple Intelligence is not available on this device.",
+  "appleLanguageRejected": "Apple Intelligence rejected the request’s language. Try a short question in English. Also check the language settings for iPhone and Siri.",
+  "appleRequestTooLarge": "Apple Intelligence could not fit this request. Try a shorter question.",
+  "messageTooLongForApple": "This message is too long for Apple Intelligence. Shorten it and send again.",
+  "vo2maxRunning": "VO₂max running",
+  "vo2maxCycling": "VO₂max cycling",
+  "vo2maxPaceLabel": "VO₂max pace",
+  "lt1Threshold": "LT1 threshold",
+  "lt2Threshold": "LT2 threshold",
+  "hoursPreviousWeek": "{value} h previous week",
+  "@hoursPreviousWeek": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "kmPreviousWeek": "{value} km previous week",
+  "@kmPreviousWeek": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "thirtyMinuteTimeTrial": "30-minute time trial",
+  "thirtyMinTtDate": "30-min TT · {date}",
+  "@thirtyMinTtDate": {
+    "placeholders": {
+      "date": {
+        "type": "Object"
+      }
+    }
+  },
+  "yesterday2": "YESTERDAY",
+  "briefHeadGreen": "You are well recovered.",
+  "briefHeadYellow": "You are carrying some strain.",
+  "briefHeadRed": "You are clearly under strain.",
+  "briefMain": "Main reasons: {reasons}.",
+  "@briefMain": {
+    "placeholders": {
+      "reasons": {
+        "type": "Object"
+      }
+    }
+  },
+  "briefAllClear": "None of your values shows a warning sign.",
+  "briefAdviceGreen": "Train as planned.",
+  "briefAdviceYellow": "Keep your plan but add no extra intensity.",
+  "briefAdviceRed": "Recovery comes first: take an easy day or rest.",
+  "briefReasonHrvLow": "low sleep HRV",
+  "briefReasonHrvHigh": "high sleep HRV",
+  "briefReasonRhrUp": "raised resting heart rate",
+  "briefReasonRhrDown": "low resting heart rate",
+  "briefReasonSleepShort": "too little sleep",
+  "briefReasonSleepGood": "sleep need met",
+  "briefReasonEnergyLow": "low energy",
+  "briefReasonEnergyHigh": "good energy",
+  "briefReasonStressHigh": "high stress",
+  "briefReasonRespHigh": "raised breathing rate",
+  "briefReasonSpo2Low": "low blood oxygen",
+  "briefReasonSkinTempOff": "unusual skin temperature",
+  "briefReasonFormTired": "accumulated training fatigue",
+  "briefReasonFormVeryTired": "very high training fatigue",
+  "briefReasonFormFresh": "fresh and rested",
+  "briefTrainingHrvUp": "Your HRV rose after training, a good sign.",
+  "briefTrainingHrvDown": "Your HRV fell after training, a less good sign."
+}

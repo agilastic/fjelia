@@ -1,0 +1,6 @@
+"NSBluetoothAlwaysUsageDescription" = "Fjelia používa Bluetooth na pripojenie k vašim zdravotným zariadeniam (Hilo, Aktiia, Garmin).";
+"NSBluetoothPeripheralUsageDescription" = "Fjelia používa Bluetooth na pripojenie k vašim zdravotným zariadeniam.";
+"NSHealthShareUsageDescription" = "Fjelia číta vaše zdravotné údaje (spánok, tepovú frekvenciu, HRV, kroky, SpO2) z Apple Zdravie, aby vám poskytla prispôsobené tréningové poznatky.";
+"NSHealthUpdateUsageDescription" = "Fjelia zapisuje vaše synchronizované údaje o HRV, tepovej frekvencii, spánku, krokoch a tréningoch do Apple Zdravie, aby ste o ne neprišli pri zmene aplikácie.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Fjelia používa vašu polohu iba počas otvorenej aplikácie na vyhodnotenie rizika horúčav pri plánovaných tréningoch.";
+"NSLocationWhenInUseUsageDescription" = "Fjelia používa vašu aktuálnu polohu na vyhodnotenie rizika horúčav pri plánovaných tréningoch.";

@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -41,9 +43,9 @@ class _CityPickerState extends ConsumerState<WeatherCityPicker> {
     children: [
       TextField(
         controller: query,
-        decoration: const InputDecoration(
-          labelText: 'City or town',
-          hintText: 'e.g. Hannover or Palma',
+        decoration: InputDecoration(
+          labelText: context.l10n.cityOrTown,
+          hintText: context.l10n.eGHannoverOrPalma,
         ),
         textInputAction: TextInputAction.search,
         onSubmitted: (_) => runUiAction(context, search),
@@ -52,13 +54,13 @@ class _CityPickerState extends ConsumerState<WeatherCityPicker> {
       FilledButton.icon(
         onPressed: busy ? null : () => runUiAction(context, search),
         icon: const Icon(Icons.search, size: 18),
-        label: Text(busy ? 'Searching…' : 'Search city'),
+        label: Text(busy ? context.l10n.searching : context.l10n.searchCity),
       ),
       if (results != null && results!.isEmpty)
-        const Padding(
+        Padding(
           padding: EdgeInsets.symmetric(vertical: 10),
           child: Text(
-            'No cities found. Try a nearby town.',
+            context.l10n.noCitiesFoundTryA,
             style: TextStyle(color: muted, fontSize: 12),
           ),
         ),

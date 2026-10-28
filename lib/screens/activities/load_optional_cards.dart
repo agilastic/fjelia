@@ -1,4 +1,6 @@
+import '../../l10n/l10n_ext.dart';
 import '../../providers/activity_history_provider.dart';
+
 import 'dart:math' as math;
 
 import 'package:fl_chart/fl_chart.dart';
@@ -47,20 +49,25 @@ class _WeekdayLoadState extends ConsumerState<WeekdayLoadCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('WEEKDAY COMPARISON', style: loadLabel),
-          const SizedBox(height: 12),
+          Text(context.l10n.weekdayComparison2, style: loadLabel),
+          SizedBox(height: 12),
           LoadRange(
-            labels: const ['Load', 'Time', 'Distance'],
+            labels: ['Load', context.l10n.time, context.l10n.distance],
+            display: {
+              'Load': context.l10n.loadMetric,
+              'Time': context.l10n.time,
+              'Distance': context.l10n.distance,
+            },
             selected: metric,
             segmented: true,
             onChanged: (v) => setState(() => metric = v),
           ),
           const SizedBox(height: 12),
-          const Wrap(
+          Wrap(
             spacing: 16,
             children: [
-              LoadLegend('Previous week', muted),
-              LoadLegend('This week', mint),
+              LoadLegend(context.l10n.previousWeek, muted),
+              LoadLegend(context.l10n.thisWeek, mint),
             ],
           ),
           const SizedBox(height: 12),
@@ -85,10 +92,9 @@ class _WeekdayLoadState extends ConsumerState<WeekdayLoadCard> {
                     sideTitles: SideTitles(
                       showTitles: true,
                       getTitlesWidget: (v, _) => Text(
-                        weekdayInitials(mondayFirst: mondayFirst)[v.toInt().clamp(
-                          0,
-                          6,
-                        )],
+                        weekdayInitials(mondayFirst: mondayFirst)[v
+                            .toInt()
+                            .clamp(0, 6)],
                         style: loadCaption,
                       ),
                     ),
@@ -135,7 +141,7 @@ class TrainingPlanProgressCard extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('TRAINING PLAN PROGRESS', style: loadLabel),
+                    Text(context.l10n.trainingPlanProgress2, style: loadLabel),
                     const SizedBox(height: 10),
                     Text(
                       plan.planName,
@@ -143,7 +149,10 @@ class TrainingPlanProgressCard extends ConsumerWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Week ${plan.currentWeek} / ${plan.durationInWeeks}',
+                      context.l10n.weekCurrentweekDurationinweeks(
+                        plan.currentWeek,
+                        plan.durationInWeeks,
+                      ),
                       style: loadCaption,
                     ),
                     const SizedBox(height: 10),

@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -28,9 +30,9 @@ class HrTimelinePlot extends StatelessWidget {
   Widget build(BuildContext context) => SizedBox(
     height: height ?? (compact ? 110 : 235),
     child: points.isEmpty && secondary.isEmpty
-        ? const Center(
+        ? Center(
             child: Text(
-              'No measurements in this period',
+              context.l10n.noMeasurementsInThisPeriod,
               style: TextStyle(color: muted),
             ),
           )
@@ -141,12 +143,12 @@ class _HrPainter extends CustomPainter {
         }
       } else {
         text(
-          DateFormat('d.M').format(start),
+          DateFormat.Md().format(start),
           Offset(plot.left - 6, plot.bottom + 12),
           muted,
         );
         text(
-          DateFormat('d.M').format(date),
+          DateFormat.Md().format(date),
           Offset(plot.right - 20, plot.bottom + 12),
           muted,
         );

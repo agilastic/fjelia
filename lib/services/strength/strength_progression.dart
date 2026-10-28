@@ -1,3 +1,4 @@
+import '../../l10n/l10n_ext.dart';
 import '../../models/strength_workout.dart';
 import 'strength_repository.dart';
 
@@ -113,21 +114,23 @@ StrengthProgressionEvaluation evaluateStrengthProgression({
       !c.loadKind.countsVolume ||
       working.isEmpty ||
       working.any((s) => s.timed || s.repBounds == null)) {
-    return _none('Load suggestions cover straight sets with repetitions only.');
+    return _none(tr.loadSuggestionsCoverStraightSets);
   }
   final sessions = recent.take(strengthProgressionMinSessions).toList();
   if (sessions.length < strengthProgressionMinSessions) {
     return _none(
-      'Needs $strengthProgressionMinSessions recorded sessions of this exercise.',
+      tr.needsStrengthprogressionminsessionsRecordedSessionsOf(
+        strengthProgressionMinSessions,
+      ),
       sessions,
     );
   }
   if (sessions.any((s) => s.stale)) {
-    return _none('Recent history is too old for a suggestion.', sessions);
+    return _none(tr.recentHistoryIsTooOld, sessions);
   }
   final load = sessions.first.commonLoad;
   if (load == null) {
-    return _none('The last session did not use one known load.', sessions);
+    return _none(tr.theLastSessionDidNot, sessions);
   }
   final targetEffort = working.last.effort;
   for (final s in sessions) {
@@ -145,37 +148,28 @@ StrengthProgressionEvaluation evaluateStrengthProgression({
     }
     final l = s.commonLoad;
     if (l == null || (l.kg - load.kg).abs() > 1e-6) {
-      return _none('The load changed between the recent sessions.', sessions);
+      return _none(tr.theLoadChangedBetweenThe, sessions);
     }
     for (var i = 0; i < working.length; i++) {
       final reps = s.sets[i].reps;
       if (reps == null || reps < working[i].repBounds!.$2) {
-        return _none(
-          'Not every set reached the top of its repetition target.',
-          sessions,
-        );
+        return _none(tr.notEverySetReachedThe, sessions);
       }
     }
     final last = s.sets[working.length - 1].effort;
     if (last == null) {
-      return _none(
-        'Record effort (RIR or RPE) on the last set to get suggestions.',
-        sessions,
-      );
+      return _none(tr.recordEffortRirOrRpe, sessions);
     }
     if (s.sets.any(
       (r) => r.effort != null && !_effortWithin(r.effort!, targetEffort),
     )) {
-      return _none('Recent sets were harder than intended.', sessions);
+      return _none(tr.recentSetsWereHarderThan, sessions);
     }
   }
   final planned = working.map((s) => s.load?.kg).toSet();
   if (planned.length > 1 ||
       (planned.single != null && (planned.single! - load.kg).abs() > 1e-6)) {
-    return _none(
-      'This workout already has its own load; it stays as set.',
-      sessions,
-    );
+    return _none(tr.thisWorkoutAlreadyHasIts, sessions);
   }
   if (blockedReason != null) {
     return StrengthProgressionEvaluation(
@@ -188,8 +182,7 @@ StrengthProgressionEvaluation evaluateStrengthProgression({
   if (increment == null || increment.kg <= 0) {
     return StrengthProgressionEvaluation(
       StrengthProgressionOutcome.needsIncrement,
-      'Your recent sets met the progression rule. Set the smallest load '
-      'step for this equipment to review a load.',
+      tr.yourRecentSetsMetThe,
       currentLoad: load,
       supporting: sessions,
     );

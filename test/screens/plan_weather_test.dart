@@ -1,3 +1,4 @@
+import 'package:fjelia/l10n/app_localizations.dart';
 import 'package:fjelia/widgets/weather_visuals.dart';
 import 'package:fjelia/models/weather_comparison.dart';
 import 'package:flutter/material.dart';
@@ -229,6 +230,8 @@ void main() {
       );
       await tester.pumpWidget(
         MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: Scaffold(
             body: SingleChildScrollView(
               child: WeatherForecastChart(
@@ -311,7 +314,9 @@ void main() {
             heatHourlyWeatherProvider.overrideWith((ref) async => fixture()),
             heatPreferredLocationProvider.overrideWith((ref) async => null),
           ],
-          child: const MaterialApp(
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             home: Scaffold(
               body: SingleChildScrollView(child: PlanWeatherStrip()),
             ),

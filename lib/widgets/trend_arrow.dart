@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -15,12 +17,12 @@ class TrendArrow extends StatelessWidget {
         : -1;
     return Semantics(
       label: delta == null
-          ? 'Trend unavailable'
+          ? context.l10n.trendUnavailable
           : direction == 0
-          ? 'Stable'
+          ? context.l10n.stable
           : direction > 0
-          ? 'Increasing'
-          : 'Decreasing',
+          ? context.l10n.increasing
+          : context.l10n.decreasing,
       child: SizedBox(
         width: 18,
         height: 18,

@@ -1,3 +1,4 @@
+import '../../l10n/l10n_ext.dart';
 import '../../providers/connection_actions_provider.dart';
 
 import 'package:flutter/material.dart';
@@ -60,14 +61,14 @@ class _ConnectCorosScreenState extends ConsumerState<ConnectCorosScreen> {
           );
       if (!mounted) return;
       if (!ok) {
-        setState(() => _error = 'Login failed. Check your email and password.');
+        setState(() => _error = context.l10n.loginFailedCheckYourEmail);
         return;
       }
 
       _next();
     } catch (_) {
       setState(
-        () => _error = 'Connection failed. Check your credentials and internet connection.',
+        () => _error = context.l10n.connectionFailedCheckYourCredentials,
       );
     } finally {
       if (mounted) setState(() => _loading = false);
@@ -84,8 +85,8 @@ class _ConnectCorosScreenState extends ConsumerState<ConnectCorosScreen> {
         actions: [
           TextButton(
             onPressed: _next,
-            child: const Text(
-              'Skip',
+            child: Text(
+              context.l10n.skip,
               style: TextStyle(color: Color(0xFFCCCCCC)),
             ),
           ),
@@ -100,16 +101,16 @@ class _ConnectCorosScreenState extends ConsumerState<ConnectCorosScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 8),
-                const OnboardingDeviceHeader(
+                OnboardingDeviceHeader(
                   icon: Icons.watch_rounded,
                   color: _accent,
-                  title: 'Connect Coros',
+                  title: context.l10n.connectCoros,
                   subtitle:
                       'Sign in with your Coros account to sync nightly '
                       'HRV, resting HR, VO₂max and sleep stages.',
                 ),
                 const SizedBox(height: 36),
-                const OnboardingInputLabel('Email'),
+                OnboardingInputLabel(context.l10n.email),
                 const SizedBox(height: 8),
                 TextFormField(
                   controller: _email,
@@ -126,7 +127,7 @@ class _ConnectCorosScreenState extends ConsumerState<ConnectCorosScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                const OnboardingInputLabel('Password'),
+                OnboardingInputLabel(context.l10n.password),
                 const SizedBox(height: 8),
                 TextFormField(
                   controller: _password,
@@ -153,36 +154,40 @@ class _ConnectCorosScreenState extends ConsumerState<ConnectCorosScreen> {
                       ),
                 ),
                 const SizedBox(height: 16),
-                const OnboardingInputLabel('Region'),
+                OnboardingInputLabel(context.l10n.region),
                 const SizedBox(height: 8),
                 DropdownButtonFormField<String>(
                   initialValue: _region,
                   dropdownColor: const Color(0xFF1E1E1E),
-                  style: const TextStyle(color: Colors.white, fontSize: 15),
+                  style: TextStyle(color: Colors.white, fontSize: 15),
                   decoration: onboardingInputDecoration('', accent: _accent)
                       .copyWith(
-                        prefixIcon: const Icon(
-                          Icons.public_outlined,
-                          color: _accent,
-                        ),
+                        prefixIcon: Icon(Icons.public_outlined, color: _accent),
                       ),
-                  items: const [
-                    DropdownMenuItem(value: 'eu', child: Text('Europe')),
-                    DropdownMenuItem(value: 'us', child: Text('United States')),
-                    DropdownMenuItem(value: 'asia', child: Text('Asia')),
+                  items: [
+                    DropdownMenuItem(
+                      value: 'eu',
+                      child: Text(context.l10n.europe),
+                    ),
+                    DropdownMenuItem(
+                      value: 'us',
+                      child: Text(context.l10n.unitedStates),
+                    ),
+                    DropdownMenuItem(
+                      value: 'asia',
+                      child: Text(context.l10n.asia),
+                    ),
                   ],
                   onChanged: (v) => setState(() => _region = v ?? 'eu'),
                 ),
                 const SizedBox(height: 24),
                 if (_error != null) OnboardingErrorBanner(_error!),
-                const OnboardingInfoBox(
-                  'Coros credentials are stored encrypted on your device. '
-                  'Fjelia reads data directly from the Coros cloud API. This '
-                  'uses the same API as the Coros Training Hub web app.',
+                OnboardingInfoBox(
+                  context.l10n.corosCredentialsAreStoredEncrypted,
                 ),
                 const SizedBox(height: 32),
                 _PrimaryButton(
-                  label: 'Connect Coros',
+                  label: context.l10n.connectCoros,
                   color: _accent,
                   loading: _loading,
                   onPressed: _login,

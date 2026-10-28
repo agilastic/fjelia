@@ -1,3 +1,4 @@
+import '../../l10n/l10n_ext.dart';
 import '../../providers/activity_history_provider.dart';
 
 import 'dart:io';
@@ -43,38 +44,39 @@ class ActivityDetailSheet extends ConsumerWidget {
     final pace = km > 0 ? a.duration.inSeconds / km : null;
     final cells = <(String, String)>[
       if (strength) ...[
-        ('Duration', duration(a.duration)),
+        (context.l10n.duration, duration(a.duration)),
         if (a.avgHeartRate != null)
-          ('Avg HR', '${valueText(a.avgHeartRate)} bpm'),
+          (context.l10n.avgHr, '${valueText(a.avgHeartRate)} bpm'),
         if (a.maxHeartRate != null)
-          ('Max HR', '${valueText(a.maxHeartRate)} bpm'),
-        ('Training load', valueText(activityLoad(activity), 1)),
+          (context.l10n.maxHr, '${valueText(a.maxHeartRate)} bpm'),
+        (context.l10n.trainingLoad2, valueText(activityLoad(activity), 1)),
       ] else ...[
-        ('Duration', duration(a.duration)),
+        (context.l10n.duration, duration(a.duration)),
         (
-          'Active',
+          context.l10n.active,
           '${a.movingDuration != null && activity.movingDurationSeconds == null ? '~' : ''}${duration(a.movingDuration)}',
         ),
         (
-          'Distance',
+          context.l10n.distance,
           '${valueText(a.distanceMeters == null ? null : km, 2)} km',
         ),
         (
-          running ? 'Avg pace' : 'Avg speed',
+          running ? context.l10n.avgPace : context.l10n.avgSpeed,
           running
               ? pace == null
                     ? '—'
                     : '${pace.round() ~/ 60}:${(pace.round() % 60).toString().padLeft(2, '0')} /km'
               : '${valueText(a.duration.inSeconds > 0 && km > 0 ? km * 3600 / a.duration.inSeconds : null, 1)} km/h',
         ),
-        ('Avg HR', '${valueText(a.avgHeartRate)} bpm'),
-        ('Max HR', '${valueText(a.maxHeartRate)} bpm'),
-        ('Training load', valueText(activityLoad(activity), 1)),
-        if (a.avgPower != null) ('Avg power', '${valueText(a.avgPower)} W'),
-        ('Elevation', '${valueText(a.elevationGain)} m'),
+        (context.l10n.avgHr, '${valueText(a.avgHeartRate)} bpm'),
+        (context.l10n.maxHr, '${valueText(a.maxHeartRate)} bpm'),
+        (context.l10n.trainingLoad2, valueText(activityLoad(activity), 1)),
+        if (a.avgPower != null)
+          (context.l10n.avgPower, '${valueText(a.avgPower)} W'),
+        (context.l10n.elevation2, '${valueText(a.elevationGain)} m'),
         if (a.samples.any((s) => s.elevation != null))
           (
-            'Altitude',
+            context.l10n.altitude,
             '${valueText(a.samples.map((s) => s.elevation).whereType<double>().reduce((a, b) => a < b ? a : b))}–${valueText(a.samples.map((s) => s.elevation).whereType<double>().reduce((a, b) => a > b ? a : b))} m',
           ),
       ],
@@ -117,7 +119,7 @@ class ActivityDetailSheet extends ConsumerWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '${a.type.replaceAll('_', ' ')} · ${DateFormat('d MMM · HH:mm').format(a.startTime)}',
+                      '${a.type.replaceAll('_', ' ')} · ${DateFormat.MMMd().add_Hm().format(a.startTime)}',
                       style: const TextStyle(
                         fontSize: 12,
                         color: Colors.white70,
@@ -127,7 +129,7 @@ class ActivityDetailSheet extends ConsumerWidget {
                 ),
               ),
               IconButton(
-                tooltip: 'Close',
+                tooltip: context.l10n.close,
                 onPressed: () => Navigator.pop(context),
                 icon: const Icon(Icons.close, color: Colors.white70, size: 24),
               ),
@@ -152,25 +154,9 @@ class ActivityDetailSheet extends ConsumerWidget {
                   child: Row(
                     children: [
                       Icon(
-                        switch (c.$1) {
-                          'Duration' => Icons.timer_outlined,
-                          'Active' => Icons.directions_run,
-                          'Distance' => Icons.straighten,
-                          'Avg HR' => Icons.favorite_border,
-                          'Max HR' => Icons.favorite,
-                          'Training load' || 'Avg power' => Icons.bolt,
-                          'Elevation' => Icons.terrain,
-                          'Altitude' => Icons.height,
-                          _ => Icons.speed,
-                        },
+                        _cellIcon(context, c.$1),
                         size: 18,
-                        color: c.$1.contains('HR')
-                            ? Colors.redAccent
-                            : c.$1 == 'Elevation' || c.$1 == 'Altitude'
-                            ? mint
-                            : c.$1 == 'Training load'
-                            ? const Color(0xFF4FC3F7)
-                            : Colors.white70,
+                        color: _cellColor(context, c.$1),
                       ),
                       const SizedBox(width: 9),
                       Expanded(
@@ -190,10 +176,10 @@ class ActivityDetailSheet extends ConsumerWidget {
           ActivityNutritionCard(activity: activity),
           ActivityHeatCard(activityId: a.id),
           if (route.isNotEmpty) ...[
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(top: 12, bottom: 12),
               child: Text(
-                'ROUTE',
+                context.l10n.route,
                 style: TextStyle(
                   color: Colors.white70,
                   fontSize: 11,
@@ -230,19 +216,19 @@ class ActivityDetailSheet extends ConsumerWidget {
             activityId: activity.activityId,
             onExplain: () => openCoachTab(
               context,
-              prompt: 'Explain my HRV before and after this workout. What is comparable, what is not, and what is still unknown?',
+              prompt: context.l10n.explainMyHrvBeforeAnd,
               activity: activity,
               card: CoachContextCard.completed(a),
             ),
           ),
           if (a.activityFeedbackPhrase != null)
             SectionCard(
-              title: 'Feedback',
+              title: context.l10n.feedback,
               child: Text(a.activityFeedbackPhrase!),
             ),
           if (a.plannedWorkoutName != null)
             SectionCard(
-              title: 'Planned Workout',
+              title: context.l10n.plannedWorkout,
               child: Text(a.plannedWorkoutName!),
             ),
           Row(
@@ -257,12 +243,12 @@ class ActivityDetailSheet extends ConsumerWidget {
                     minimumSize: const Size(0, 44),
                   ),
                   icon: const Icon(Icons.delete_outline, size: 16),
-                  label: const Text('Delete'),
+                  label: Text(context.l10n.delete),
                   onPressed: () async {
                     if (!await confirmAction(
                       context,
-                      'Delete activity?',
-                      'Remove this activity from the local history? A later provider sync may import it again.',
+                      context.l10n.deleteActivity,
+                      context.l10n.removeThisActivityFromThe,
                     )) {
                       return;
                     }
@@ -283,10 +269,10 @@ class ActivityDetailSheet extends ConsumerWidget {
                     minimumSize: const Size(0, 44),
                   ),
                   icon: const Icon(Icons.chat_bubble_outline, size: 18),
-                  label: const Text('Chat AI'),
+                  label: Text(context.l10n.chatAi),
                   onPressed: () => openCoachTab(
                     context,
-                    prompt: 'How did this session go, and what does it mean for my next days?',
+                    prompt: context.l10n.howDidThisSessionGo,
                     activity: activity,
                     card: CoachContextCard.completed(a),
                   ),
@@ -298,4 +284,27 @@ class ActivityDetailSheet extends ConsumerWidget {
       ),
     );
   }
+}
+
+// The cell labels are translated, so the icons and colours are matched
+// against the translated text rather than English literals.
+IconData _cellIcon(BuildContext context, String label) {
+  final l = context.l10n;
+  if (label == l.duration) return Icons.timer_outlined;
+  if (label == l.active) return Icons.directions_run;
+  if (label == l.distance) return Icons.straighten;
+  if (label == l.avgHr) return Icons.favorite_border;
+  if (label == l.maxHr) return Icons.favorite;
+  if (label == l.trainingLoad2 || label == l.avgPower) return Icons.bolt;
+  if (label == l.elevation2) return Icons.terrain;
+  if (label == l.altitude) return Icons.height;
+  return Icons.speed;
+}
+
+Color _cellColor(BuildContext context, String label) {
+  final l = context.l10n;
+  if (label == l.avgHr || label == l.maxHr) return Colors.redAccent;
+  if (label == l.elevation2 || label == l.altitude) return mint;
+  if (label == l.trainingLoad2) return const Color(0xFF4FC3F7);
+  return Colors.white70;
 }

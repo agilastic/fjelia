@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 import 'dart:async';
 
 import 'package:drift/drift.dart';
@@ -40,7 +42,7 @@ class NutritionReminderService {
     final sport = a.type.toLowerCase();
     return a.durationSeconds >= 45 * 60 &&
         !end.isAfter(at) &&
-        at.difference(end) < const Duration(hours: 24) &&
+        at.difference(end) < Duration(hours: 24) &&
         [
           'run',
           'trail',
@@ -66,12 +68,12 @@ class NutritionReminderService {
       at: r.dueAt,
       feature: NotificationFeature.nutrition,
       payload: NutritionNotificationPayload(r.activityId, r.token).encode(),
-      title: 'Record your workout nutrition',
-      body: 'Add the food and fluids you actually consumed in your activity history.',
-      actionLabels: const {
-        'log': 'Log intake',
-        'snooze': 'In 30 minutes',
-        'skip': 'Dismiss',
+      title: tr.recordYourWorkoutNutrition,
+      body: tr.addTheFoodAndFluids,
+      actionLabels: {
+        'log': tr.logIntake,
+        'snooze': tr.in30Minutes,
+        'skip': tr.dismiss,
       },
     ),
   );

@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 
 import '../models/workout_profile.dart';
@@ -52,7 +54,7 @@ class _State extends State<WorkoutProfileBar> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Semantics(
-          label: 'Workout profile: $description',
+          label: context.l10n.workoutProfileDescription(description),
           child: SizedBox(
             height: widget.height,
             child: Row(

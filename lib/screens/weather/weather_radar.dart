@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -41,11 +43,11 @@ class _RadarState extends ConsumerState<WeatherRadar> {
           error: (e, st) => TextButton.icon(
             onPressed: () => ref.invalidate(weatherRadarProvider),
             icon: const Icon(Icons.refresh),
-            label: const Text('Radar unavailable · Retry'),
+            label: Text(context.l10n.radarUnavailableRetry),
           ),
           data: (frames) {
             if (frames.isEmpty) {
-              return const EmptyState('No radar frames available');
+              return EmptyState(context.l10n.noRadarFramesAvailable);
             }
             final selected = (index ?? frames.length - 1).clamp(
               0,
@@ -109,8 +111,8 @@ class _RadarState extends ConsumerState<WeatherRadar> {
                           child: FilledButton.icon(
                             onPressed: () => showAppSheet(
                               context,
-                              const SheetPage(
-                                title: 'Radar',
+                              SheetPage(
+                                title: context.l10n.radar,
                                 child: SingleChildScrollView(
                                   child: Padding(
                                     padding: EdgeInsets.all(16),
@@ -120,7 +122,7 @@ class _RadarState extends ConsumerState<WeatherRadar> {
                               ),
                             ),
                             icon: const Icon(Icons.fullscreen),
-                            label: const Text('Radar'),
+                            label: Text(context.l10n.radar),
                           ),
                         ),
                     ],
@@ -129,7 +131,9 @@ class _RadarState extends ConsumerState<WeatherRadar> {
                 Row(
                   children: [
                     IconButton(
-                      tooltip: timer == null ? 'Play radar' : 'Pause radar',
+                      tooltip: timer == null
+                          ? context.l10n.playRadar
+                          : context.l10n.pauseRadar,
                       onPressed: () {
                         if (timer != null) {
                           timer!.cancel();
@@ -155,7 +159,7 @@ class _RadarState extends ConsumerState<WeatherRadar> {
                       ),
                     ),
                     Text(
-                      DateFormat('HH:mm').format(frames[selected].time),
+                      DateFormat.Hm().format(frames[selected].time),
                       style: const TextStyle(fontSize: 11, color: muted),
                     ),
                     Expanded(
@@ -176,8 +180,8 @@ class _RadarState extends ConsumerState<WeatherRadar> {
                     TextButton(
                       onPressed: () =>
                           launchUrl(Uri.parse('https://www.rainviewer.com')),
-                      child: const Text(
-                        'Weather data by RainViewer',
+                      child: Text(
+                        context.l10n.weatherDataByRainviewer,
                         style: TextStyle(fontSize: 9),
                       ),
                     ),
@@ -185,8 +189,8 @@ class _RadarState extends ConsumerState<WeatherRadar> {
                       onPressed: () => launchUrl(
                         Uri.parse('https://www.openstreetmap.org/copyright'),
                       ),
-                      child: const Text(
-                        '© OpenStreetMap contributors',
+                      child: Text(
+                        context.l10n.openstreetmapContributors,
                         style: TextStyle(fontSize: 9),
                       ),
                     ),

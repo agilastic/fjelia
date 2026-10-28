@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -49,11 +51,7 @@ class _ConnectRenphoBleScreenState
       if (!mounted) return;
       setState(() => _scanning = false);
       if (found.isEmpty) {
-        setState(
-          () => _error =
-              'No scale found. Step on the scale so it wakes up, then scan '
-              'again.',
-        );
+        setState(() => _error = context.l10n.noScaleFoundStepOn);
         return;
       }
       final chosen = found.length == 1
@@ -61,12 +59,12 @@ class _ConnectRenphoBleScreenState
           : await showDialog<NearbyDevice>(
               context: context,
               builder: (c) => SimpleDialog(
-                title: const Text('Choose scale'),
+                title: Text(context.l10n.chooseScale),
                 children: [
                   for (final d in found)
                     SimpleDialogOption(
                       onPressed: () => Navigator.pop(c, d),
-                      child: Text('${d.name} · ${d.rssi} dBm'),
+                      child: Text(context.l10n.nameRssiDbm(d.name, d.rssi)),
                     ),
                 ],
               ),
@@ -76,14 +74,14 @@ class _ConnectRenphoBleScreenState
       await _loadPaired();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${chosen.name} paired.')),
+          SnackBar(content: Text(context.l10n.namePaired(chosen.name))),
         );
       }
     } catch (e) {
       if (mounted) {
         setState(() {
           _scanning = false;
-          _error = 'Scan failed: $e';
+          _error = context.l10n.scanFailedE(e);
         });
       }
     }
@@ -102,10 +100,10 @@ class _ConnectRenphoBleScreenState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 8),
-              const OnboardingDeviceHeader(
+              OnboardingDeviceHeader(
                 icon: Icons.monitor_weight_rounded,
                 color: _accent,
-                title: 'Pair RENPHO Scale',
+                title: context.l10n.pairRenphoScale,
                 subtitle:
                     'Connect your RENPHO smart scale over Bluetooth to '
                     'measure weight and body composition straight from the '
@@ -178,16 +176,13 @@ class _ConnectRenphoBleScreenState
                     _scanning
                         ? 'Scanning…'
                         : paired
-                        ? 'Scan again'
-                        : 'Scan for scale',
+                        ? context.l10n.scanAgain
+                        : context.l10n.scanForScale,
                   ),
                 ),
               ),
               const SizedBox(height: 24),
-              const OnboardingInfoBox(
-                'Step on the scale before scanning so it wakes up. Later, use '
-                '+ → RENPHO Scale to take a measurement.',
-              ),
+              OnboardingInfoBox(context.l10n.stepOnTheScaleBefore),
               if (paired) ...[
                 const SizedBox(height: 32),
                 SizedBox(
@@ -206,10 +201,10 @@ class _ConnectRenphoBleScreenState
                       ),
                     ),
                     onPressed: () => Navigator.of(context).pop(),
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Continue'),
+                        Text(context.l10n.continueLabel),
                         SizedBox(width: 8),
                         Icon(Icons.arrow_forward_rounded, size: 20),
                       ],

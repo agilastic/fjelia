@@ -1,0 +1,3110 @@
+{
+  "@@locale": "da",
+  "language": "Sprog",
+  "languageSystem": "Systemstandard",
+  "settings": "Indstillinger",
+  "profile": "Profil",
+  "training": "Træning",
+  "weatherLocation": "Vejr og placering",
+  "display": "Visning",
+  "connections": "Forbindelser",
+  "aiAndMore": "AI og mere",
+  "system": "System",
+  "runSetupAgain": "Kør opsætningen igen",
+  "runSetupAgainSubtitle": "Konti, løbsmål og træningsplan",
+  "back": "Tilbage",
+  "close": "Luk",
+  "dataExport": "Dataeksport",
+  "dataExportSubtitle": "CSV-eksport, sikkerhedskopi og gendannelse",
+  "developer": "Udvikler",
+  "developerSubtitle": "Fejlfindingstilstand, diagnostik",
+  "debug": "Fejlfinding",
+  "debugMode": "Fejlfindingstilstand",
+  "debugModeSubtitle": "Viser fanen DEBUG",
+  "support": "Support",
+  "reportBug": "Rapportér en fejl",
+  "aiCoach": "AI-træner",
+  "enableAiCoach": "Aktivér AI-træneren",
+  "onDeviceAiOrCloud": "AI på enheden eller cloududbyder",
+  "provider": "Udbyder",
+  "model": "Model",
+  "chatAndAiBriefingsUse": "Chat og AI-briefinger bruger Apple Intelligence på denne enhed. Ingen API-nøgle nødvendig. Hvis modellen ikke er tilgængelig, viser briefingerne et resumé uden AI.",
+  "briefing": "Briefing",
+  "useAppleIntelligenceForBriefings": "Brug Apple Intelligence til briefinger",
+  "useOnDeviceAiFor": "Brug AI på enheden til briefinger, og behold den valgte udbyder til chat.",
+  "healthDataSharing": "Deling af sundhedsdata",
+  "askOncePerChatSession": "Spørg én gang pr. chatsession",
+  "otherwiseAskBeforeEveryCloud": "Ellers spørg før hver cloudbesked",
+  "reportABug": "Rapportér en fejl",
+  "weatherData": "Vejrdata",
+  "openSourceLibraries": "Open source-biblioteker",
+  "license": "Licens",
+  "licenses": "Licenser",
+  "apiKey": "API-nøgle",
+  "saveApiKey": "Gem API-nøgle",
+  "feedbackBugReport": "Feedback og fejlrapport",
+  "reportSentThankYou": "Rapport sendt. Tak!",
+  "weReadEveryMessageIf": "Vi læser alle beskeder. Hvis du har angivet din e-mail, kan du få et svar.",
+  "done": "Færdig",
+  "shareAnIdeaSuggestAn": "Del en idé, foreslå en forbedring, eller fortæl, hvad der skete, og hvad du forventede.",
+  "whatHappenedAndWhatDid": "Hvad skete der, og hvad forventede du?",
+  "pleaseLeaveOutPasswordsApi": "Udelad adgangskoder, API-nøgler og personlige sundhedsmålinger.",
+  "includeDiagnostics": "Inkludér diagnostik",
+  "optionalLogsMayContainAccount": "Valgfrit. Logfiler kan indeholde konto- eller sundhedsoplysninger. Gennemgå dem nedenfor, før du sender.",
+  "diagnosticsPreview": "FORHÅNDSVISNING AF DIAGNOSTIK",
+  "sendingSharesYourEmailSubject": "Ved afsendelse deles din e-mail, emne, besked og valgt diagnostik med Fjelia-support på cloud.ebeling-hoppe.de.",
+  "copyReport": "Kopiér rapport",
+  "shareReport": "Del rapport",
+  "appleHealth": "Apple Sundhed",
+  "connectedServices": "Tilsluttede tjenester",
+  "hiloBloodPressureBle": "Hilo blodtryk (BLE)",
+  "writeHeartDataToApple": "Skriv hjertedata til Apple Sundhed",
+  "writeWeightDataToApple": "Skriv vægtdata til Apple Sundhed",
+  "renphoScaleBle": "Renpho-vægt (BLE)",
+  "polarH10HrvStrapBle": "Polar H10 (HRV-bælte, BLE)",
+  "dataSourcePriority": "Prioritet for datakilder",
+  "whenMultipleSourcesProvideThe": "Når flere kilder leverer samme måling, vinder den højeste kilde. Træk for at ændre rækkefølgen.",
+  "resetToDefault": "Nulstil til standard",
+  "disconnect": "Afbryd forbindelsen",
+  "healthPage": "Sundhedsside",
+  "loadPage": "Belastningsside",
+  "healthMonitor": "Sundhedsmonitor",
+  "hrZones": "Pulszoner",
+  "t30MinTtAvailableSync": "30-min TT tilgængelig – synkronisér pulszoner",
+  "lt2Lt2BpmAt": "LT2 {lt2} bpm · {at}",
+  "@lt2Lt2BpmAt": {
+    "placeholders": {
+      "lt2": {
+        "type": "Object"
+      },
+      "at": {
+        "type": "Object"
+      }
+    }
+  },
+  "syncLabel": "SYNK",
+  "autoadjust": "AUTOJUSTÉR",
+  "zoneI": "Zone {i}",
+  "@zoneI": {
+    "placeholders": {
+      "i": {
+        "type": "Object"
+      }
+    }
+  },
+  "hrZones2": "PULSZONER",
+  "ageRound": "alder {round}",
+  "@ageRound": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "basics": "Grundoplysninger",
+  "updateWaistMonthlyUsedFor": "ⓘ Opdatér taljemålet månedligt – bruges til at estimere visceralt fedt.",
+  "alcohol": "Alkohol",
+  "t1Drink033L": "1 drink ≈ 0,33 l øl / 0,2 l vin / 4 cl spiritus",
+  "clinicalLabsOptional": "Laboratorieværdier (valgfrit)",
+  "glycemic": "Blodsukker",
+  "optimalForLongevity48": "Optimalt for lang levetid: 4,8–5,4 % · Prædiabetes: 5,7–6,4 %",
+  "lipids": "Lipider",
+  "apobReplacesLdlWhenBoth": "ApoB erstatter LDL, når begge er indtastet.",
+  "inflammationKidney": "Inflammation og nyrer",
+  "changesAreSavedAutomatically": "Ændringer gemmes automatisk",
+  "optionalTotalClimbingForThis": "Valgfri samlet stigning for dette løb.",
+  "moreAboutThisEvent": "Mere om dette arrangement",
+  "distanceOfDistancekmKm": "Distance på {distanceKm} km?",
+  "@distanceOfDistancekmKm": {
+    "placeholders": {
+      "distanceKm": {
+        "type": "Object"
+      }
+    }
+  },
+  "keepDistancekmKm": "Behold {distanceKm} km",
+  "@keepDistancekmKm": {
+    "placeholders": {
+      "distanceKm": {
+        "type": "Object"
+      }
+    }
+  },
+  "useLikelyKm": "Brug {likely} km",
+  "@useLikelyKm": {
+    "placeholders": {
+      "likely": {
+        "type": "Object"
+      }
+    }
+  },
+  "thisBackupContainsNoCalendar": "Denne sikkerhedskopi indeholder ingen kalenderaktiviteter.",
+  "activities": "Aktiviteter",
+  "exportActivitiesCsv": "Eksportér aktiviteter som CSV",
+  "backupRestore": "Sikkerhedskopi og gendannelse",
+  "backup": "Sikkerhedskopi",
+  "restoreFromBackup": "Gendan fra sikkerhedskopi",
+  "backupRestoredRestartTheApp": "Sikkerhedskopi gendannet. Genstart appen for at indlæse alle indstillinger.",
+  "raceGoals": "Løbsmål",
+  "yourActivities": "Dine aktiviteter",
+  "usedByAiCoachAnd": "Bruges af AI-træneren og træningsplanen. Sportsgrene i planen er markeret med ✦.",
+  "calendarWeekStart": "Ugestart i kalenderen",
+  "planDefaultView": "Standardvisning for planen",
+  "weeklySchedule": "Ugeplan",
+  "trainingdaysperweekTrainingDaysTapTo": "{trainingDaysPerWeek, plural, one{{trainingDaysPerWeek} træningsdag} other{{trainingDaysPerWeek} træningsdage}} · tryk for at skifte mellem Træning / Hvile / Styrke",
+  "@trainingdaysperweekTrainingDaysTapTo": {
+    "placeholders": {
+      "trainingDaysPerWeek": {
+        "type": "int"
+      }
+    }
+  },
+  "updatePlanToThisSchedule": "Opdatér planen til denne ugeplan",
+  "updateStrengthSessions": "Opdatér styrkesessionerne",
+  "sessionsPerDay": "Sessioner pr. dag",
+  "canYouFitTwoWorkouts": "Kan du nå to træninger på én dag?",
+  "strengthLoadUnit": "Enhed for styrkebelastning",
+  "weightsThemselvesAreSetIn": "Selve vægtene indstilles i hver træning og huskes fra din historik.",
+  "hoursAvailableWeek": "Tilgængelige timer / uge",
+  "hoursperweekHWeek": "{hoursPerWeek} t / uge",
+  "@hoursperweekHWeek": {
+    "placeholders": {
+      "hoursPerWeek": {
+        "type": "Object"
+      }
+    }
+  },
+  "hoursperweekH": "{hoursPerWeek} t",
+  "@hoursperweekH": {
+    "placeholders": {
+      "hoursPerWeek": {
+        "type": "Object"
+      }
+    }
+  },
+  "heatAcclimation": "Varmetilvænning",
+  "showHeatAcclimation": "Vis varmetilvænning",
+  "weatherEvaluatedAgainstAConfigurable": "Vejret vurderes for et valgfrit sted.",
+  "trainingPlan": "Træningsplan",
+  "regenerateReplacesFutureSessionsAnd": "Gendan erstatter fremtidige sessioner og genopbygger planen fra i dag med de aktuelle indstillinger.",
+  "valueUpcomingWorkoutsGenerated": "{value, plural, one{{value} kommende træning oprettet} other{{value} kommende træninger oprettet}}",
+  "@valueUpcomingWorkoutsGenerated": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "generationFailedCheckYourRace": "Oprettelsen mislykkedes. Tjek dit løbsmål, og prøv igen.",
+  "deleteAllWorkouts": "Slet alle træninger",
+  "changesAreSavedAutomatically2": "✓ Ændringer gemmes automatisk",
+  "countUpcomingWorkoutsGenerated": "{count, plural, one{{count} kommende træning oprettet} other{{count} kommende træninger oprettet}}",
+  "@countUpcomingWorkoutsGenerated": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importRaceGoalsFromGarmin": "Importér løbsmål fra Garmin",
+  "addRaceGoal": "Tilføj løbsmål",
+  "priorityTouppercase": "Prioritet {toUpperCase}",
+  "@priorityTouppercase": {
+    "placeholders": {
+      "toUpperCase": {
+        "type": "Object"
+      }
+    }
+  },
+  "goalsAreSharedWithAi": "Mål deles med AI-træneren. Prioritet A, B og C afgør, hvordan planen vægter dine løb mod hinanden.",
+  "deletingWorkouts": "Sletter træninger",
+  "cityOrTown": "By eller stad",
+  "eGHannoverOrPalma": "fx Hannover eller Palma",
+  "noCitiesFoundTryA": "Ingen byer fundet. Prøv en by i nærheden.",
+  "chooseTheLocationForThe": "Vælg stedet til planens vejrudsigt, radar og varmetilvænning. Vejret virker også, når varmetilvænning er slået fra.",
+  "none": "Ingen",
+  "disableLocalWeatherAndLocation": "Deaktivér lokalt vejr og positionsforespørgsler",
+  "currentLocation": "Nuværende placering",
+  "followYourDeviceLocation": "Følg enhedens placering",
+  "fixedLocation": "Fast placering",
+  "chooseACityOrEnter": "Vælg en by, eller indtast koordinater",
+  "chooseCity": "Vælg by",
+  "coordinates": "Koordinater",
+  "latitude": "Breddegrad",
+  "longitude": "Længdegrad",
+  "saveLocation": "Gem placering",
+  "refreshCurrentLocation": "Opdatér nuværende placering",
+  "citySearchOpenMeteoGeonames": "Bysøgning: Open-Meteo / GeoNames",
+  "cityNamesOpenstreetmap": "Bynavne: © OpenStreetMap",
+  "energy": "ENERGI",
+  "currentEnergy": "NUVÆRENDE ENERGI",
+  "dailyTimeline": "DAGSFORLØB",
+  "valueValue2": "{value} → {value2}",
+  "@valueValue2": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      },
+      "value2": {
+        "type": "Object"
+      }
+    }
+  },
+  "energy2": "Energi",
+  "noData": "Ingen data",
+  "bloodPressureInsights": "BLODTRYKSANALYSE",
+  "sys": " Sys",
+  "diaMmhg": " Dia · mmHg",
+  "previousBloodPressurePeriod": "Forrige blodtryksperiode",
+  "nextBloodPressurePeriod": "Næste blodtryksperiode",
+  "nightDipping": "Natligt fald",
+  "noMeasurementsInThisPeriod": "Ingen målinger i denne periode",
+  "fullscreenBloodPressureChart": "Blodtryksdiagram i fuld skærm",
+  "barsMinMaxLineDots": "Søjler: min–maks · linje/prikker: gennemsnit · tryk eller træk for at se nærmere",
+  "noMeasurements": "Ingen målinger",
+  "round": "{round}",
+  "@round": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "sysSys2Mmhg": "{sys}–{sys2} mmHg",
+  "@sysSys2Mmhg": {
+    "placeholders": {
+      "sys": {
+        "type": "Object"
+      },
+      "sys2": {
+        "type": "Object"
+      }
+    }
+  },
+  "lengthReadingsAverageMinMax": "{length, plural, one{{length} måling} other{{length} målinger}} · gennemsnit / min–maks",
+  "@lengthReadingsAverageMinMax": {
+    "placeholders": {
+      "length": {
+        "type": "int"
+      }
+    }
+  },
+  "bloodPressureTouppercaseMmhg": "BLODTRYK · {toUpperCase} · mmHg",
+  "@bloodPressureTouppercaseMmhg": {
+    "placeholders": {
+      "toUpperCase": {
+        "type": "Object"
+      }
+    }
+  },
+  "closeFullscreenBloodPressureChart": "Luk blodtryksdiagrammet i fuld skærm",
+  "chooseScale": "Vælg vægt",
+  "noScalesFoundStepOn": "Ingen vægte fundet. Stil dig på vægten, og prøv igen.",
+  "nameRssiDbm": "{name} · {rssi} dBm",
+  "@nameRssiDbm": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      },
+      "rssi": {
+        "type": "Object"
+      }
+    }
+  },
+  "renphoSaved": "RENPHO gemt:",
+  "renphoScaleBle2": "RENPHO-vægt (BLE)",
+  "changeMeasurementType": "Skift målingstype",
+  "addMeasurement": "Tilføj måling",
+  "whatAreYouMeasuring": "Hvad måler du?",
+  "chooseAnotherMeasurement": "Vælg en anden måling",
+  "saveMeasurement": "Gem måling",
+  "skip": "Spring over",
+  "connectHiloService": "Tilslut Hilo-tjenesten",
+  "connectHilo": "Tilslut Hilo",
+  "connectCoros": "Tilslut Coros",
+  "europe": "Europa",
+  "unitedStates": "USA",
+  "asia": "Asien",
+  "bluetoothBloodPressure": "Bluetooth · blodtryk",
+  "cloudCuffData": "Cloud · manchetdata",
+  "apiSync": "API-synkronisering",
+  "bluetoothHrvStrap": "Bluetooth · HRV-bælte",
+  "accesslinkApi": "AccessLink API",
+  "systemHealthData": "Systemets sundhedsdata",
+  "cloudScaleHistory": "Cloud · vægthistorik",
+  "bluetoothWeightBody": "Bluetooth · vægt og krop",
+  "connectYourDevices": "Tilslut dine enheder",
+  "continueLabel": "Fortsæt",
+  "connectGarmin": "Tilslut Garmin",
+  "connectAppleHealth": "Tilslut Apple Sundhed",
+  "dataSynced": "DATA SYNKRONISERET",
+  "pairHiloPod": "Par Hilo Pod",
+  "chooseStrap": "Vælg bælte",
+  "namePaired": "{name} er parret.",
+  "@namePaired": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "pairPolarH10": "Par Polar H10",
+  "forget": "Glem",
+  "sendWorkoutToPolar": "Send træning til Polar",
+  "connectPolar": "Tilslut Polar",
+  "signInWithPolarFlow": "Log ind med Polar Flow",
+  "syncsSleepStagesHrvResting": "Synkroniserer søvnfaser · HRV · hvilepuls · træninger · skridt",
+  "savedForV": "Gemt for {v}",
+  "@savedForV": {
+    "placeholders": {
+      "v": {
+        "type": "Object"
+      }
+    }
+  },
+  "remove": "Fjern",
+  "polarEMail": "Polar-e-mail",
+  "polarPassword": "Polar-adgangskode",
+  "pairRenphoScale": "Par RENPHO-vægt",
+  "connectRenpho": "Tilslut Renpho",
+  "connectSuunto": "Tilslut Suunto",
+  "smsSentToTrim": "SMS sendt til {trim}",
+  "@smsSentToTrim": {
+    "placeholders": {
+      "trim": {
+        "type": "Object"
+      }
+    }
+  },
+  "resendSms": "Send SMS igen",
+  "retryLoadingPreferences": "Prøv at indlæse indstillingerne igen",
+  "weeklyTrainingTimeTostringasfixedH": "UGENTLIG TRÆNINGSTID · {toStringAsFixed} t",
+  "@weeklyTrainingTimeTostringasfixedH": {
+    "placeholders": {
+      "toStringAsFixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "tapADayToCycle": "Tryk på en dag for at skifte mellem Træning / Hvile / Styrke.",
+  "doubleDayOk": "Dobbeltdag ok",
+  "birthYearOptional": "Fødselsår (valgfrit)",
+  "addAnother": "Tilføj en til",
+  "knowYourBodyTrainSmarter": "Kend din krop.\nTræn smartere.",
+  "allYourHealthDevicesOne": "Alle dine sundhedsenheder. Ét intelligent overblik.",
+  "areYouReadyToTrain": "Er du klar til at træne i dag?",
+  "hrvRecoveryScoreRestingHr": "HRV · Restitutionsscore · Hvilepuls",
+  "didYouActuallyRecoverLast": "Fik du virkelig restitueret i nat?",
+  "sleepStagesDeepSleepSpo": "Søvnfaser · Dyb søvn · SpO₂",
+  "isYourBloodPressureUnder": "Er dit blodtryk under kontrol?",
+  "continuousBpNightDippingTrends": "Kontinuerligt blodtryk · Natligt fald · Tendenser",
+  "howHardDidYouPush": "Hvor hårdt pressede du dig i denne uge?",
+  "trainingLoadTrimpStrainScore": "Træningsbelastning · TRIMP · Strain-score",
+  "isYourBodyCompositionImproving": "Forbedres din kropssammensætning?",
+  "weightBodyFatMuscleMass": "Vægt · Kropsfedt · Muskelmasse",
+  "getStarted": "Kom i gang",
+  "yourDataStaysOnYour": "Dine data bliver på din enhed. Altid private.",
+  "bodyScale": "Kropsvægt",
+  "bodyComposition": "Kropssammensætning",
+  "sleep": "SØVN",
+  "sleepPerformance": "SØVNPRÆSTATION",
+  "sleepHistory": "Søvnhistorik",
+  "labelValue": "{label}: {value}",
+  "@labelValue": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      },
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "lessLabel": "Mindre {label}",
+  "@lessLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "moreLabel": "Mere {label}",
+  "@moreLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "gymMode": "Fitnessmodus",
+  "finishWorkout": "Afslut træning",
+  "workoutActions": "Træningshandlinger",
+  "discardWorkout": "Kassér træning",
+  "allSetsRecorded": "Alle sæt registreret",
+  "reviewSets": "Gennemse sæt",
+  "rest": "HVILE",
+  "plannedResttarget": "Planlagt {restTarget}",
+  "@plannedResttarget": {
+    "placeholders": {
+      "restTarget": {
+        "type": "Object"
+      }
+    }
+  },
+  "startSet": "Start sæt",
+  "seconds": "Sekunder",
+  "previousSet": "Forrige sæt",
+  "allSets": "Alle sæt",
+  "nextSet": "Næste sæt",
+  "everySetIsSavedAs": "Hvert sæt gemmes undervejs. Luk skærmen når som helst, og fortsæt fra den planlagte træning.",
+  "cancel": "Annuller",
+  "apply": "Anvend",
+  "effortScale": "Anstrengelsesskala",
+  "setType": "Sættype",
+  "reps": "Gentagelser",
+  "range": "Interval",
+  "time": "Tid",
+  "t45Or100": "45 eller 1:00",
+  "blankWhenNotSet": "Tomt, hvis ikke angivet",
+  "redBand": "Rødt bånd",
+  "t90Or130": "90 eller 1:30",
+  "blankWhenUnknown": "Tomt, hvis ukendt",
+  "usePlannedLoad": "Brug planlagt belastning",
+  "blankWhenNotMeasured": "Tomt, hvis ikke målt",
+  "exercise": "Øvelse",
+  "changingTheLoadConventionStarts": "Hvis du ændrer belastningskonventionen, startes en separat historik for denne øvelse.",
+  "barbellMachine": "Stang, maskine …",
+  "load": "Belastning",
+  "loadRefersTo": "Belastning refererer til",
+  "t2ForAPair": "2 for et par",
+  "repetitions": "Gentagelser",
+  "availablePlatesOrDumbbells": "Tilgængelige skiver eller håndvægte",
+  "rememberForThisEquipment": "Husk til dette udstyr",
+  "findOrNameAnExercise": "Find eller navngiv en øvelse",
+  "createTrim": "Opret “{trim}”",
+  "@createTrim": {
+    "placeholders": {
+      "trim": {
+        "type": "Object"
+      }
+    }
+  },
+  "customExercise": "Egen øvelse",
+  "smallestLoadStep": "Mindste belastningstrin",
+  "whatRemoved": "{what} fjernet",
+  "@whatRemoved": {
+    "placeholders": {
+      "what": {
+        "type": "Object"
+      }
+    }
+  },
+  "undo": "Fortryd",
+  "retry": "Prøv igen",
+  "performance": "Præstation",
+  "addExercise": "Tilføj øvelse",
+  "finishLog": "Afslut log",
+  "keepAsDraft": "Behold som kladde",
+  "actionsForName": "Handlinger for {name}",
+  "@actionsForName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "editExercise": "Redigér øvelse",
+  "moveUp": "Flyt op",
+  "moveDown": "Flyt ned",
+  "addSet": "Tilføj sæt",
+  "removeLastSet": "Fjern sidste sæt",
+  "saveAsTemplate": "Gem som skabelon",
+  "savedTitleAsATemplate": "“{title}” gemt som skabelon. Denne træning er uændret, indtil du gemmer den.",
+  "@savedTitleAsATemplate": {
+    "placeholders": {
+      "title": {
+        "type": "Object"
+      }
+    }
+  },
+  "nameSetN": "{name} · Sæt {n}",
+  "@nameSetN": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      },
+      "n": {
+        "type": "Object"
+      }
+    }
+  },
+  "nameAllWorkingSets": "{name} · Alle arbejdssæt",
+  "@nameAllWorkingSets": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "labelRest": "{label} hvile",
+  "@labelRest": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "secondsOrMSs": "Sekunder eller m:ss",
+  "applyToAllSets": "Anvend på alle sæt",
+  "duplicate": "Duplikér",
+  "supersetWithNext": "Superset med næste",
+  "circuitWithNext": "Cirkel med næste",
+  "actionsForSetN": "Handlinger for sæt {n}",
+  "@actionsForSetN": {
+    "placeholders": {
+      "n": {
+        "type": "Object"
+      }
+    }
+  },
+  "editSet": "Redigér sæt",
+  "duplicateSet": "Duplikér sæt",
+  "removeSet": "Fjern sæt",
+  "labelActions": "{label}-handlinger",
+  "@labelActions": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "editRests": "Redigér pauser",
+  "ungroup": "Opdel gruppering",
+  "editExercises": "Redigér øvelser",
+  "unsavedChanges": "Ikke-gemte ændringer",
+  "couldNotSaveError": "Kunne ikke gemme: {error}",
+  "@couldNotSaveError": {
+    "placeholders": {
+      "error": {
+        "type": "Object"
+      }
+    }
+  },
+  "history": "Historik",
+  "exercises": "Øvelser",
+  "noExercisesArePlannedFor": "Der er endnu ikke planlagt øvelser til denne træning. Noterne ovenfor beskriver den.",
+  "addExercises": "Tilføj øvelser",
+  "fromTheBuiltInTemplate": "Fra den indbyggede skabelon. Belastningerne indstiller du selv; historik vises, når du har logget en træning.",
+  "shareExerciseList": "Del øvelsesliste",
+  "noSavedStrengthTemplatesYet": "Ingen gemte styrkeskabeloner endnu. Gem først en fra en planlagt træning.",
+  "compareWith": "Sammenlign med",
+  "estimated1rmUnit": "Estimeret 1RM {unit}",
+  "@estimated1rmUnit": {
+    "placeholders": {
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "plannedNotRecorded": "Planlagt, ikke registreret",
+  "notes": "Noter",
+  "editPerformance": "Redigér præstation",
+  "compareWithASavedWorkout": "Sammenlign med en gemt træning",
+  "sessions": "Sessioner",
+  "radarUnavailableRetry": "Radar utilgængelig · Prøv igen",
+  "radar": "Radar",
+  "weatherDataByRainviewer": "Vejrdata fra RainViewer",
+  "openstreetmapContributors": "© OpenStreetMap-bidragydere",
+  "weather": "Vejr",
+  "weatherUnavailableRetry": "Vejr utilgængeligt · Prøv igen",
+  "chooseAFixedLocationIn": "Vælg en fast placering i indstillingerne for Vejr og placering, eller tillad adgang til placering for lokalt vejr.",
+  "locationSettings": "Placeringsindstillinger",
+  "retryLocation": "Prøv placering igen",
+  "round2": "{round}°",
+  "@round2": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "roundRhRound2Hpa": "{round}% RH · {round2} hPa",
+  "@roundRhRound2Hpa": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      },
+      "round2": {
+        "type": "Object"
+      }
+    }
+  },
+  "wetBulbTostringasfixedC": "Våd temp. {toStringAsFixed}°C",
+  "@wetBulbTostringasfixedC": {
+    "placeholders": {
+      "toStringAsFixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "previousForecastDay": "Forrige prognosedag",
+  "nextForecastDay": "Næste prognosedag",
+  "daysDayForecast": "{days}-dages prognose",
+  "@daysDayForecast": {
+    "placeholders": {
+      "days": {
+        "type": "Object"
+      }
+    }
+  },
+  "thisProviderCurrentlySuppliesDays": "Denne udbyder leverer i øjeblikket {days} af {days2} prognosedage.",
+  "@thisProviderCurrentlySuppliesDays": {
+    "placeholders": {
+      "days": {
+        "type": "Object"
+      },
+      "days2": {
+        "type": "Object"
+      }
+    }
+  },
+  "now": "Nu",
+  "sunriseSunset": "Solopgang / solnedgang",
+  "keyKey2": "☀ {key}   ☾ {key2}",
+  "@keyKey2": {
+    "placeholders": {
+      "key": {
+        "type": "Object"
+      },
+      "key2": {
+        "type": "Object"
+      }
+    }
+  },
+  "use": "Brug",
+  "exerciseDetailsWereNotProvided": "Øvelsesdetaljer blev ikke leveret af denne aktivitetskilde.",
+  "logFromPlan": "Log fra plan",
+  "addExerciseDetails": "Tilføj øvelsesdetaljer",
+  "loadSuggestion": "Belastningsforslag",
+  "applyToThisWorkout": "Anvend på denne træning",
+  "keepCurrentLoad": "Behold nuværende belastning",
+  "setLoadStep": "Angiv belastningstrin",
+  "viewSupportingSets": "Se understøttende sæt",
+  "supportingSets": "Understøttende sæt",
+  "noRecordedSessionsYet": "Ingen registrerede sessioner endnu.",
+  "nameDemonstrationCue": "Demonstration af {name}. {cue}",
+  "@nameDemonstrationCue": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      },
+      "cue": {
+        "type": "Object"
+      }
+    }
+  },
+  "noScalesFoundStepOn2": "Ingen vægte fundet. Stil dig på vægten, og prøv igen.",
+  "scalePaired": "Vægt parret",
+  "ok": "OK",
+  "pairedReadyToMeasure": "✓ Parret – klar til at måle",
+  "chooseHiloCuff": "Vælg Hilo-manchet",
+  "noCuffFoundWakeYour": "Ingen manchet fundet. Væk din manchet, og søg igen.",
+  "hiloCuffAktiiaC": "Hilo-manchet (AKTIIA C…)",
+  "onDemandBloodPressureVia": "Blodtryk efter behov via BLE",
+  "selectHiloPodWristband": "Vælg Hilo Pod (armbånd)",
+  "rescan": "Søg igen",
+  "noDevicesFoundTapTo": "Ingen enheder fundet. Tryk på ↻ for at søge igen.",
+  "polarH10SpotHrv": "Polar H10 · Spot-HRV",
+  "aSeparateHrvReadingBefore": "En separat HRV-måling før eller efter træning. Disse målinger erstatter ikke Garmins HRV om natten og ændrer ikke din parathedsscore.",
+  "wearTheStrapWithMoist": "Tag båndet på med fugtede elektroder. Hold dig stille, og træk vejret normalt. Brug samme kropsposition og optagelseslængde til sammenligninger. Efter træning: noter, hvor længe du hvilede først.",
+  "measurement": "Måling",
+  "posture": "Kropsposition",
+  "recordingLengthPlus1Min": "Optagelseslængde · plus 1 min hvile før optagelse",
+  "t2Minutes": "2 minutter",
+  "t5Minutes": "5 minutter",
+  "minutesSinceTrainingEndedOptional": "Minutter siden træningen sluttede (valgfrit)",
+  "sessionOrNotesOptional": "Session eller noter (valgfrit)",
+  "connectName": "Tilslut {name}",
+  "@connectName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "findPolarH10": "Find Polar H10",
+  "signalRssiDbm": "Signal {rssi} dBm",
+  "@signalRssiDbm": {
+    "placeholders": {
+      "rssi": {
+        "type": "Object"
+      }
+    }
+  },
+  "connectedName": "Forbundet: {name}",
+  "@connectedName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "waitingForHeartRateAnd": "Venter på puls og RR-intervaller. Tjek bæltets kontakt.",
+  "startMeasurement": "Start måling",
+  "cancelMeasurement": "Annuller måling",
+  "spotHrvRmssd": "Spot-HRV · RMSSD",
+  "acceptedLengthUsableIntervalsTostringasfixed": "{accepted}/{length} brugbare intervaller · {toStringAsFixed} % dækning",
+  "@acceptedLengthUsableIntervalsTostringasfixed": {
+    "placeholders": {
+      "accepted": {
+        "type": "Object"
+      },
+      "length": {
+        "type": "Object"
+      },
+      "toStringAsFixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "lnrmssdLnrmssdRawRmssdRawrmssdms": "lnRMSSD: {lnRmssd} · Rå RMSSD: {rawRmssdMs} ms",
+  "@lnrmssdLnrmssdRawRmssdRawrmssdms": {
+    "placeholders": {
+      "lnRmssd": {
+        "type": "Object"
+      },
+      "rawRmssdMs": {
+        "type": "Object"
+      }
+    }
+  },
+  "signalQualityIsTooLow": "Signalkvaliteten er for lav til at gemme. Gentag målingen med god kontakt til bæltet. Mindst 95 % brugbare intervaller og 90 % dækning kræves.",
+  "savedToSpotHrvHistory": "Gemt i Spot-HRV-historikken.",
+  "newMeasurement": "Ny måling",
+  "signalScreeningExcludesPoorContact": "Signalfiltreringen udelukker dårlig kontakt, RR uden for 250–2500 ms og intervaller mere end 25 % fra den lokale median. Huller udfyldes ikke. Dette er ikke en medicinsk test og ingen selvstændig parathedsscore.",
+  "historyLabelLabel2DurationMin": "Historik · {label} · {label2} · {duration} min",
+  "@historyLabelLabel2DurationMin": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      },
+      "label2": {
+        "type": "Object"
+      },
+      "duration": {
+        "type": "Object"
+      }
+    }
+  },
+  "onlyReadingsWithTheSame": "Kun målinger med samme kontekst, kropsposition og varighed vises sammen.",
+  "noMatchingMeasurementsYet": "Ingen tilsvarende målinger endnu.",
+  "tostringasfixedMsRmssdTostringasfixed2Bpm": "{toStringAsFixed} ms RMSSD · {toStringAsFixed2} bpm",
+  "@tostringasfixedMsRmssdTostringasfixed2Bpm": {
+    "placeholders": {
+      "toStringAsFixed": {
+        "type": "Object"
+      },
+      "toStringAsFixed2": {
+        "type": "Object"
+      }
+    }
+  },
+  "exportRrIntervalsCsv": "Eksportér RR-intervaller (CSV)",
+  "deleteMeasurement": "Slet måling",
+  "remindMeToMeasureHrv": "Påmind mig om at måle HRV efter træning",
+  "appleHealthIsNoLonger": "Apple Sundhed er ikke længere tilgængelig",
+  "later": "Senere",
+  "reconnect": "Tilslut igen",
+  "gripStrength": "Grebstyrke",
+  "leftKg": "Venstre (kg)",
+  "rightKg": "Højre (kg)",
+  "lLeftkgRRightkgKg": "V {leftKg} · H {rightKg} kg",
+  "@lLeftkgRRightkgKg": {
+    "placeholders": {
+      "leftKg": {
+        "type": "Object"
+      },
+      "rightKg": {
+        "type": "Object"
+      }
+    }
+  },
+  "notificationsAreOffYouCan": "Notifikationer er slået fra. Du kan stadig måle fra din træning.",
+  "noRemindersFrom2200": "Ingen påmindelser fra 22:00 til 07:00",
+  "aReminderThatWouldFall": "En påmindelse, der ville falde i dette tidsrum, springes over og flyttes ikke til morgenen.",
+  "remindersArriveQuietlyInThe": "Påmindelser kommer lydløst i notifikationslisten.",
+  "noForecastForThisDay": "Ingen prognose for denne dag",
+  "fullscreen": "Fuld skærm",
+  "source": "● {source}",
+  "@source": {
+    "placeholders": {
+      "source": {
+        "type": "Object"
+      }
+    }
+  },
+  "shadedAreaProviderSpread": "Skraveret område: spredning mellem udbydere",
+  "temperatureC": "● Temperatur °C",
+  "rainMm": "▥ Regn mm",
+  "uvIndex": "— UV-indeks",
+  "closeFullscreenWeatherChart": "Luk vejrdiagrammet i fuld skærm",
+  "sleepStages": "SØVNFASER",
+  "noStageTimelineForThis": "Ingen faseoversigt for denne nat.",
+  "round3": "{round}%",
+  "@round3": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "examplesOnlyCheckAndEnter": "Kun eksempler: tjek og indtast værdierne fra produktetiketten pr. portion. Lad ukendte næringsstoffer stå tomme; indtast kun 0, hvis værdien er kendt.",
+  "nutritionStrategy": "Ernæringsstrategi",
+  "noPreWorkoutNutritionStrategy": "Der blev ikke gemt nogen ernæringsstrategi før træningen.",
+  "carbsGCarbsHFluid": "{carbs} g kulhydrater/t · {fluid} ml/t · {sodium} mg natrium/t",
+  "@carbsGCarbsHFluid": {
+    "placeholders": {
+      "carbs": {
+        "type": "Object"
+      },
+      "fluid": {
+        "type": "Object"
+      },
+      "sodium": {
+        "type": "Object"
+      }
+    }
+  },
+  "forecastUpdatedReviewOrRecalculate": "Prognosen er opdateret – gennemgå eller genberegn den gemte strategi.",
+  "strategySavedSavedat": "Strategi gemt {savedAt}",
+  "@strategySavedSavedat": {
+    "placeholders": {
+      "savedAt": {
+        "type": "Object"
+      }
+    }
+  },
+  "duringTotalTotalcarbsGCarbs": "I alt under: {totalCarbs} g kulhydrater · {totalFluid} ml · {totalSodium} mg natrium",
+  "@duringTotalTotalcarbsGCarbs": {
+    "placeholders": {
+      "totalCarbs": {
+        "type": "Object"
+      },
+      "totalFluid": {
+        "type": "Object"
+      },
+      "totalSodium": {
+        "type": "Object"
+      }
+    }
+  },
+  "every20MinAboutCarbs": "Hvert 20. minut: ca. {carbs} g kulhydrater og {fluid} ml.",
+  "@every20MinAboutCarbs": {
+    "placeholders": {
+      "carbs": {
+        "type": "Object"
+      },
+      "fluid": {
+        "type": "Object"
+      }
+    }
+  },
+  "packQuantitiesIncludeFullContainers": "Pakkemængderne omfatter hele beholdere; du behøver ikke indtage det hele.",
+  "workoutChangedReviewOrRecalculate": "Træningen er ændret – gennemgå eller genberegn den gemte strategi.",
+  "conditionsAndFeedingPlan": "Forhold og ernæringsplan",
+  "editStrategy": "Redigér strategi",
+  "recalculate": "Genberegn",
+  "actualNutrition": "Faktisk ernæring",
+  "someProductValuesAreUnknown": "Nogle produktværdier er ukendte; totalerne er ufuldstændige.",
+  "logFoodAndFluids": "Log mad og væske",
+  "recordWhatYouActuallyHad": "Registrer, hvad du faktisk indtog. Planlagt indtag kopieres ikke til denne log.",
+  "elapsedMinutesIncludingStopsOptional": "Forløbne minutter inkl. stop (valgfrit)",
+  "recordedDurationActivityMin": "Registreret varighed: {activity} min",
+  "@recordedDurationActivityMin": {
+    "placeholders": {
+      "activity": {
+        "type": "Object"
+      }
+    }
+  },
+  "compareWithSavedStrategy": "Sammenlign med gemt strategi",
+  "useMatchedSessionIfAvailable": "Brug den matchende session, hvis den findes",
+  "noPlanComparison": "Ingen sammenligning med planen",
+  "titleDate": "{title} · {date}",
+  "@titleDate": {
+    "placeholders": {
+      "title": {
+        "type": "Object"
+      },
+      "date": {
+        "type": "Object"
+      }
+    }
+  },
+  "linkedStrategyUnavailable": "Tilknyttet strategi er utilgængelig",
+  "quantityName": "{quantity} × {name}",
+  "@quantityName": {
+    "placeholders": {
+      "quantity": {
+        "type": "Object"
+      },
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "removeIntake": "Fjern indtag",
+  "addFoodOrDrink": "Tilføj mad eller drikke",
+  "iHadNoIntake": "Jeg indtog ingenting",
+  "giGutComfort": "Mavekomfort",
+  "whatWorkedSymptomsAccessProblems": "Hvad virkede / symptomer / adgangsproblemer",
+  "saveDraft": "Gem kladde",
+  "skipLoggingThisActivity": "Spring logning af denne aktivitet over",
+  "nutritionAndFluids": "Ernæring og væske",
+  "productsToleranceAndMeasuredSweat": "Produkter, tolerance og målte sveddtab",
+  "postWorkoutIntakeReminder": "Påmindelse om indtag efter træning",
+  "onceAfterARecentEndurance": "Én gang efter en nylig udholdenhedstræning; stille timer 22:00–08:00.",
+  "enableWorkoutNotifications": "Aktivér træningsnotifikationer",
+  "addHiloBpReport": "Tilføj Hilo-blodtryksrapport",
+  "readingPdfReportsIsOnly": "Læsning af PDF-rapporter er kun tilgængelig på iOS og macOS.",
+  "chooseAnotherReport": "Vælg en anden rapport",
+  "biologicalAge": "Biologisk alder",
+  "voMaxVo2maxMlKg": "VO₂max {vo2max} ml/kg/min · {vo2Class}",
+  "@voMaxVo2maxMlKg": {
+    "placeholders": {
+      "vo2max": {
+        "type": "Object"
+      },
+      "vo2Class": {
+        "type": "Object"
+      }
+    }
+  },
+  "factorContributions": "Faktorernes bidrag",
+  "estimatedRangeRoundRound2Years": "Anslået interval {round}–{round2} år. Et modelestimat, ikke en medicinsk diagnose.",
+  "@estimatedRangeRoundRound2Years": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      },
+      "round2": {
+        "type": "Object"
+      }
+    }
+  },
+  "noEnergyMeasurementsForThis": "Ingen energimålinger for denne dag",
+  "scanningStepOnTheScale": "Søger … stil dig på vægten, når du er klar.",
+  "waistWaistCmUpdateMonthly": "Talje: {waist} cm – opdatér månedligt i Profil",
+  "@waistWaistCmUpdateMonthly": {
+    "placeholders": {
+      "waist": {
+        "type": "Object"
+      }
+    }
+  },
+  "measuring": "Måler …",
+  "tryAgain": "Prøv igen",
+  "systolic": "Systolisk",
+  "diastolic": "Diastolisk",
+  "heartRate": "Puls",
+  "weight": "Vægt",
+  "bodyFat": "Kropsfedt",
+  "duration": "Varighed",
+  "deep": "Dyb",
+  "spo": "SpO₂",
+  "activityName": "Aktivitetsnavn",
+  "sport": "Sportsgren",
+  "distance": "Distance",
+  "saved": "Gemt",
+  "connectionFailedCheckYourInternet": "Forbindelsen mislykkedes. Tjek din internetforbindelse.",
+  "email": "E-mail",
+  "password": "Adgangskode",
+  "passwordTooShort": "Adgangskoden er for kort",
+  "loginFailedCheckYourEmail": "Login mislykkedes. Tjek din e-mail og adgangskode.",
+  "connectionFailedCheckYourCredentials": "Forbindelsen mislykkedes. Tjek dine loginoplysninger og internetforbindelsen.",
+  "region": "Region",
+  "hiloPod": "Hilo Pod",
+  "hiloAccount": "Hilo-konto",
+  "garmin": "Garmin",
+  "coros": "Coros",
+  "suunto": "Suunto",
+  "polarH10": "Polar H10",
+  "polar": "Polar",
+  "renphoAccount": "Renpho-konto",
+  "garminConnectEmail": "Garmin Connect-e-mail",
+  "verifyMfaCode": "Bekræft MFA-kode",
+  "verificationCode": "Bekræftelseskode",
+  "errorE": "Fejl: {e}",
+  "@errorE": {
+    "placeholders": {
+      "e": {
+        "type": "Object"
+      }
+    }
+  },
+  "noHiloPodFoundMake": "Ingen Hilo Pod fundet. Sørg for, at den er opladet og i nærheden.",
+  "scanFailedE": "Søgningen mislykkedes: {e}",
+  "@scanFailedE": {
+    "placeholders": {
+      "e": {
+        "type": "Object"
+      }
+    }
+  },
+  "hiloPod2": "Hilo Pod",
+  "scanForPod": "Søg efter pod",
+  "scanForPolarH10": "Søg efter Polar H10",
+  "couldNotReachPolarCheck": "Kunne ikke nå Polar. Tjek din forbindelse.",
+  "signInAndSendWorkout": "Log ind og send træning",
+  "scanForScale": "Søg efter vægt",
+  "passwordRequired": "Adgangskode påkrævet",
+  "enterYourPhoneNumberWith": "Indtast dit telefonnummer (med landekode, fx +45 …) og din Suunto-e-mail.",
+  "enterThePinFromThe": "Indtast PIN-koden fra SMS'en.",
+  "incorrectPinPleaseTryAgain": "Forkert PIN-kode. Prøv igen.",
+  "phoneNumber": "Telefonnummer",
+  "suuntoAccountEmail": "E-mail til Suunto-konto",
+  "enterPinFromSms": "Indtast PIN fra SMS",
+  "verifyConnect": "Bekræft og tilslut",
+  "sendSmsCode": "Send SMS-kode",
+  "couldNotSavePreferencesE": "Kunne ikke gemme indstillingerne: {e}",
+  "@couldNotSavePreferencesE": {
+    "placeholders": {
+      "e": {
+        "type": "Object"
+      }
+    }
+  },
+  "mon": "Man",
+  "tue": "Tir",
+  "wed": "Ons",
+  "thu": "Tor",
+  "fri": "Fre",
+  "sat": "Lør",
+  "sun": "Søn",
+  "male": "Mand",
+  "female": "Kvinde",
+  "other": "Andet",
+  "running": "Løb",
+  "trailRunning": "Trailløb",
+  "cycling": "Cykling",
+  "swimming": "Svømning",
+  "triathlon": "Triatlon",
+  "hiking": "Vandring",
+  "rowing": "Roning",
+  "buildMyPlan": "Opret min plan",
+  "keepAConsistentBedtimeAnd": "Hold faste sengetider og opstandstider for at støtte din søvnrutine.",
+  "thisWorkoutHasNoSets": "Denne træning har ingen sæt.",
+  "loadName": "Belastning ({name})",
+  "@loadName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "setLabel": "Sæt",
+  "lowestReps": "Laveste gentagelser",
+  "highestReps": "Højeste gentagelser",
+  "repsPerSide": "Gentagelser pr. side",
+  "fromReps": "Fra (gent.)",
+  "toReps": "Til (gent.)",
+  "addedLoad": "Tillægsbelastning",
+  "assistance": "Assistance",
+  "tempoOptional": "Tempo (valgfrit)",
+  "notesOptional": "Noter (valgfrit)",
+  "enterTheRepetitionsDone": "Indtast de udførte gentagelser.",
+  "plannedUnit": "Planlagt {unit}",
+  "@plannedUnit": {
+    "placeholders": {
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "repsDone": "Udførte gentagelser",
+  "resistance": "Modstand",
+  "implementsLabel": "Redskaber",
+  "name": "Navn",
+  "instructionsOptional": "Instruktioner (valgfrit)",
+  "remember": "Husk",
+  "notSavedYet": "Endnu ikke gemt",
+  "saving": "Gemmer …",
+  "couldNotSave": "Kunne ikke gemme",
+  "plannedValuesAreHintsNot": "Planlagte værdier er vejledende, ikke resultater. Tryk på et sæt for at registrere det.",
+  "completedAsPlanned": "Gennemført som planlagt",
+  "save": "Gem",
+  "nameTheTemplate": "Giv skabelonen et navn.",
+  "setN": "Sæt {n}",
+  "@setN": {
+    "placeholders": {
+      "n": {
+        "type": "Object"
+      }
+    }
+  },
+  "changesApplyToThisWorkout": "Ændringerne gælder kun denne træning. Gennemførte træninger og andre sessioner forbliver uændrede.",
+  "saveForThisWorkout": "Gem til denne træning",
+  "knownForKnownOfOf": "Kendt for {known} af {of} sæt med belastning",
+  "@knownForKnownOfOf": {
+    "placeholders": {
+      "known": {
+        "type": "Object"
+      },
+      "of": {
+        "type": "Object"
+      }
+    }
+  },
+  "sessionEstimate": "Sessionsestimat",
+  "calculatedRange": "Beregnet interval",
+  "timedWork": "Tidsbaseret arbejde",
+  "strengthTraining": "Styrketræning",
+  "theExercisesCouldNotBe": "Øvelserne kunne ikke indlæses.",
+  "resumeWorkout": "Genoptag træning",
+  "strengthWorkout": "Styrketræning",
+  "untitledTemplate": "Unavngiven skabelon",
+  "theRecordedExercisesCouldNot": "De registrerede øvelser kunne ikke indlæses.",
+  "exercisesPerformed": "Udførte øvelser",
+  "comparedWithThePlanAs": "Sammenlignet med planen, som den var, da loggingen startede.",
+  "topWorkingLoadName": "Højeste arbejdsbelastning ({name})",
+  "@topWorkingLoadName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "estimated1rmMiddleOfRange": "Estimeret 1RM, midt i intervallet",
+  "noLoggedSessionsYet": "Ingen loggede sessioner endnu.",
+  "noRadarFramesAvailable": "Ingen radarbilleder tilgængelige",
+  "playRadar": "Afspil radar",
+  "pauseRadar": "Sæt radar på pause",
+  "high": "Høj",
+  "clear": "Klart",
+  "bodyweight": "Kropsvægt",
+  "resistance2": "Modstand —",
+  "assistUnit": "Assistance {unit}",
+  "@assistUnit": {
+    "placeholders": {
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "reps2": "Gent. —",
+  "notRecorded": "Ikke registreret",
+  "skipped": "Sprunget over",
+  "health": "Sundhed",
+  "manual": "Manuel",
+  "expandName": "Udvid {name}",
+  "@expandName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "open": "Åbn",
+  "noScalePaired": "Ingen vægt parret",
+  "paired": "Parret",
+  "change": "Skift",
+  "noCuffPaired": "Ingen manchet parret",
+  "noPolarH10FoundWear": "Ingen Polar H10 fundet. Tag båndet på, fugt elektroderne, og tjek at ingen anden app bruger begge Bluetooth-forbindelser.",
+  "enterMinutesSinceTrainingEnded": "Indtast minutter siden træningen sluttede, fra 0 til 1440.",
+  "timingFollowsYourWorkout": "Timingen følger din træning.",
+  "recordingStayStill": "Optagelse · hold dig stille",
+  "meanHrBpm": "Gns. puls · bpm",
+  "pairAPolarH10First": "Par først en Polar H10.",
+  "around30MinutesAfterTraining": "Omkring 30 minutter efter træning, når træningen er tilgængelig i tide.",
+  "reminderDiagnostics": "Påmindelsesdiagnostik",
+  "forecast": "Prognose",
+  "enterAName": "Indtast et navn",
+  "enterAValidAmount": "Indtast en gyldig mængde",
+  "enterAPositiveAmount": "Indtast en positiv mængde",
+  "maximum120GH": "Maksimalt 120 g/t",
+  "carbohydrateTargetGH": "Kulhydratmål g/t",
+  "fluidTargetMlH": "Væskemål ml/t",
+  "sodiumTargetMgHNot": "Natriummål mg/t (ikke salt)",
+  "surfaceFeedingAccess": "Underlag / adgang til forplejning",
+  "expectedAscentM": "Forventet stigning m",
+  "expectedAltitudeM": "Forventet højde m",
+  "humidity": "Luftfugtighed %",
+  "windKmH": "Vind km/t",
+  "dayForecast": "Dagsprognose",
+  "enteredConditions": "Indtastede forhold",
+  "productFoodName": "Produkt- / madnavn",
+  "servingsQuantity": "Portioner / mængde",
+  "when": "Hvornår",
+  "carbohydrateGServing": "Kulhydrater g / portion",
+  "fluidMlServing": "Væske ml / portion",
+  "caffeineMgServing": "Koffein mg / portion",
+  "proteinGServing": "Protein g / portion",
+  "gel": "Gel",
+  "water": "Vand",
+  "sportsDrink": "Sportsdrik",
+  "bar": "Bar",
+  "finishIntakeLog": "Afslut indtagslog",
+  "allowNotificationsInSystemSettings": "Tillad notifikationer i systemindstillingerne",
+  "importing": "Importerer …",
+  "importNewreadings": "Importér {newReadings}",
+  "@importNewreadings": {
+    "placeholders": {
+      "newReadings": {
+        "type": "Object"
+      }
+    }
+  },
+  "reading": "Læser …",
+  "chooseReportPdf": "Vælg rapport (PDF)",
+  "yourTrainingHistoryIsReady": "Din træningshistorik er klar",
+  "importingYourTrainingHistory": "Din træningshistorik importeres",
+  "stopImport": "Stop importen",
+  "dismiss": "Afvis",
+  "openai": "OpenAI",
+  "appleIntelligence": "Apple Intelligence",
+  "nonAiBriefing": "Briefing uden AI",
+  "noBriefing": "Ingen briefing",
+  "ruleBasedSummaryFromYour": "Regelbaseret resumé af dine sundhedsdata – ingen API-kald",
+  "hideTheBriefingCard": "Skjul briefingkortet",
+  "flutter": "Flutter",
+  "stateManagement": "Tilstandshåndtering",
+  "bluetoothLe": "Bluetooth LE",
+  "interactiveMaps": "Interaktive kort",
+  "chartsGraphs": "Diagrammer og grafer",
+  "secureCredentialStorage": "Sikker lagring af loginoplysninger",
+  "markdownRendering": "Markdown-visning",
+  "appleOnDeviceAi": "Apples AI på enheden",
+  "cryptography": "Kryptografi",
+  "appleHealthHealthConnect": "Apple Sundhed og Health Connect",
+  "runtimePermissions": "Kørselstidstilladelser",
+  "shareExport": "Deling og eksport",
+  "openUrls": "Åbn URL'er",
+  "internationalisation": "Internationalisering",
+  "utilities": "Hjælpeprogrammer",
+  "icons": "Ikoner",
+  "fjelia": "Fjelia",
+  "fjeliaFeedback": "Fjelia-feedback",
+  "couldNotSendTheReport": "Rapporten kunne ikke sendes. Din tekst er stadig her. Prøv igen.",
+  "yourEmail": "Din e-mail",
+  "enterAValidEmailAddress": "Indtast en gyldig e-mailadresse.",
+  "subject": "Emne",
+  "sending": "Sender …",
+  "sendReport": "Send rapport",
+  "sleepRecovery": "Søvn og restitution",
+  "activitiesTraining": "Aktiviteter og træning",
+  "bodyWellness": "Krop og velvære",
+  "hilo": "Hilo",
+  "hiloBle": "Hilo BLE",
+  "garminApi": "Garmin (API)",
+  "renphoScale": "Renpho-vægt",
+  "connected": "Forbundet",
+  "notConnected": "Ikke forbundet",
+  "manage": "Administrer",
+  "connect": "Tilslut",
+  "habits": "Vaner",
+  "smokingAlcohol": "Rygning, alkohol",
+  "clinicalLab": "Laboratorieværdier",
+  "hba1cLipidsKidney": "HbA1c, lipider, nyrer",
+  "sex": "Køn",
+  "smoking": "Rygning",
+  "never": "Aldrig",
+  "former": "Tidligere",
+  "current": "Nuværende",
+  "hba1c": "HbA1c",
+  "diabetes": "Diabetes",
+  "prediabetes": "Prædiabetes",
+  "type1": "Type 1",
+  "type2": "Type 2",
+  "apob": "ApoB",
+  "optionalPlansAndPaceGuides": "Valgfrit. Planer og tempovejledning bruger det; stigningen ovenfor former også træningen.",
+  "addRaceGoal2": "Tilføj løbsmål",
+  "editRaceGoal": "Redigér løbsmål",
+  "trailRunning2": "Trailløb",
+  "roadCycling": "Landevejscykling",
+  "gravel": "Gravel",
+  "indoorRowing": "Indendørs roning",
+  "selectDate": "Vælg dato",
+  "committed": "Forpligtet",
+  "flexible": "Fleksibel",
+  "notGoing": "Deltager ikke",
+  "notSaid": "Ikke oplyst",
+  "finish": "Sluttid",
+  "saveGoal": "Gem mål",
+  "exportAllRecordedWorkoutsAs": "Eksportér alle registrerede træninger som regneark.",
+  "backupsIncludeYourHealthData": "Sikkerhedskopier omfatter dine sundhedsdata, træningsplaner og profilindstillinger. Loginoplysninger er udeladt. Gendannelse erstatter lokale data.",
+  "trail": "Trail",
+  "inlineSkating": "Inlineskating",
+  "nordicClassic": "Klassisk langrend",
+  "skateSkiing": "Skating (langrend)",
+  "strength": "Styrke",
+  "walking": "Gang",
+  "yoga": "Yoga",
+  "skiing": "Skiløb",
+  "climbing": "Klatring",
+  "monday": "Mandag",
+  "sunday": "Søndag",
+  "month": "Måned",
+  "week": "Uge",
+  "list": "Liste",
+  "train": "Træning",
+  "restDay": "Hvile",
+  "kilogramsKg": "Kilogram (kg)",
+  "poundsLb": "Pund (lb)",
+  "regenerateWorkouts": "Genopret træninger",
+  "starting": "Starter",
+  "allPlannedWorkoutsDeleted": "Alle planlagte træninger er slettet.",
+  "searching": "Søger …",
+  "searchCity": "Søg efter by",
+  "fixedLocationSavedWeatherWill": "Fast placering gemt. Vejret opdateres.",
+  "locationDisabledThePlanWeather": "Placering deaktiveret. Vejrkortet i planen er skjult.",
+  "locationSetToName": "Placering sat til {name}",
+  "@locationSetToName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "notEnoughDaytimeAndNighttime": "Ikke nok dag- og natmålinger",
+  "onlyTheWeightWasReceived": "Kun vægten blev modtaget. For kropsfedt, muskler og de øvrige værdier skal du stå barfodet på metalelektroderne, til vægten er færdig.",
+  "addYourWaistInProfile": "Tilføj taljemål i Profil for visceralt fedt.",
+  "manualActivity": "Manuel aktivitet",
+  "theseCredentialsAreStoredEncrypted": "Disse loginoplysninger gemmes krypteret på din enhed (iOS-nøglering / Android Keystore). De sendes aldrig til andre servere end Hilo.",
+  "corosCredentialsAreStoredEncrypted": "Coros-loginoplysninger gemmes krypteret på din enhed. Fjelia læser data direkte fra Coros' cloud-API, det samme som webappen Coros Training Hub bruger.",
+  "connectAnyCombinationYouCan": "Tilslut en vilkårlig kombination – du kan altid tilføje flere senere i Indstillinger.",
+  "garminCredentialsAreStoredEncrypted": "Garmin-loginoplysninger gemmes krypteret på din enhed. Fjelia bruger den uofficielle Garmin Connect-API – samme tilgang som mange community-apps.",
+  "enterTheVerificationCode": "Indtast bekræftelseskoden",
+  "appleHealthDataAccess": "Fjelia læser dine sundhedsdata fra Apple Sundhed. Med din tilladelse kan den også skrive synkroniserede data til Apple Sundhed. Administrer adgangen i enhedens indstillinger.",
+  "scanAgain": "Søg igen",
+  "wearTheHiloBandDuring": "Bær Hilo-båndet under søvn for kontinuerlig blodtryksmåling. Data synkroniseres automatisk hver morgen, når appen åbnes.",
+  "noPolarH10FoundWear2": "Ingen Polar H10 fundet. Tag båndet på med fugtige elektroder, og sørg for, at ingen anden app (eller ur) er forbundet til det; søg derefter igen.",
+  "wearTheStrapWithMoist2": "Tag båndet på med fugtige elektroder før søgningen. Mål senere med + → Polar H10 HRV-måling; resultaterne vises ved siden af din natlige HRV.",
+  "signedInPlannedWorkoutsCan": "Logget ind. Planlagte træninger kan nu sendes til Polar. Ældre sessioner importeres ved næste fulde historiksynkronisering.",
+  "saveYourPolarFlowLogin": "Gem dit Polar Flow-login for at sende planlagte træninger og importere sessioner ældre end 30 dage. Det bliver i nøgleringen på denne enhed og sendes kun til Polar. Send en træning fra planlæggerarket, og synkronisér derefter Polar Flow til dit ur. Tjek, at dine pulszoner i Polar passer med Fjelia.",
+  "signInToSendThis": "Log ind for at sende denne træning til din Polar Flow-kalender. Dit login bliver i nøgleringen på denne enhed og sendes kun til Polar. Efter afsendelse synkroniserer du Polar Flow til dit ur.",
+  "checkAndSave": "Tjek og gem",
+  "noScaleFoundStepOn": "Ingen vægt fundet. Stil dig på vægten, så den vågner, og søg igen.",
+  "stepOnTheScaleBefore": "Stil dig på vægten før søgningen, så den vågner. Senere bruger du + → RENPHO-vægt til at måle.",
+  "renphoCredentialsAreStoredEncrypted": "Renpho-loginoplysninger gemmes krypteret på din enhed. Fjelia taler direkte med Renphos cloud-API.",
+  "couldNotSendSmsCheck": "SMS kunne ikke sendes. Tjek dit telefonnummer og din internetforbindelse.",
+  "theEmailIsUsedFor": "E-mailen bruges til sikker signering af forespørgsler og sendes ikke til Suunto-servere.",
+  "suuntoUsesSmsVerificationSame": "Suunto bruger SMS-verifikation (ligesom Suunto-appen). En engangs-PIN sendes til din telefon. Dine loginoplysninger gemmes kun krypteret på enheden.",
+  "tellUsAboutYourRace": "Fortæl os om dit løb og din tidsplan. Fjelia opbygger din plan nu og finder dit niveau ud fra dine tidligere aktiviteter (Garmin, Suunto, Polar, COROS, Apple Sundhed), når de er hentet.",
+  "noAccountConnectedSoFjelia": "Ingen konto er forbundet, så Fjelia har ingen historik at lære af. Tilslut Garmin, Suunto, Polar, COROS eller Apple Sundhed, så afgør din faktiske træning.",
+  "yourPastActivitiesAreStill": "Dine tidligere aktiviteter importeres stadig. Du kan opbygge din plan nu – den finjusteres automatisk, når importen er færdig.",
+  "buildingYourPlan": "Opbygger din plan …",
+  "saveContinue": "Gem og fortsæt",
+  "addYourMainPriorityA": "Tilføj dit hovedløb (prioritet A). Planen periodiseres frem mod det: grundlag, opbygning, top og nedtrapning. Uden løbsmål oprettes der endnu ingen plan.",
+  "noMeasurementsYet": "Ingen målinger endnu",
+  "date": "Dato",
+  "deepSleepIsBelowOptimal": "Dyb søvn er under det optimale ({round} %). Undgå alkohol og tunge måltider 3 timer før sengetid.",
+  "@deepSleepIsBelowOptimal": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "finishWithSetsOpen": "Afslutte med åbne sæt?",
+  "completeThePlannedWorkout": "Fuldføre den planlagte træning?",
+  "marksThePlannedSessionAs": "Markerer den planlagte session som gennemført med denne træning.",
+  "discardThisWorkout": "Kassere denne træning?",
+  "removesTheWorkoutAndEvery": "Fjerner træningen og alle sæt, der er registreret i den.",
+  "assistanceName": "Assistance ({name})",
+  "@assistanceName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "enterSecondsOrMSs": "Indtast sekunder eller m:ss.",
+  "enterTheLoadAsA": "Indtast belastningen som et tal.",
+  "loadCannotBeNegative": "Belastningen kan ikke være negativ.",
+  "enterTheEffortValue": "Indtast anstrengelsesværdien.",
+  "nameTheExercise": "Giv øvelsen et navn.",
+  "atLeastOneImplement": "Mindst ét redskab.",
+  "anIncrementMustBePositive": "Et trin skal være positivt.",
+  "enterAPositiveStep": "Indtast et positivt trin.",
+  "repsInReserve": "Gentagelser i reserve",
+  "loadPerImplement": "Belastning pr. redskab",
+  "restAfterThisSet": "Pause efter dette sæt",
+  "enterHowLongTheSet": "Indtast, hvor længe sættet varede.",
+  "repsDonePerSide": "Udførte gentagelser pr. side",
+  "plannedRepminRepmax": "Planlagt {repMin}–{repMax}",
+  "@plannedRepminRepmax": {
+    "placeholders": {
+      "repMin": {
+        "type": "Object"
+      },
+      "repMax": {
+        "type": "Object"
+      }
+    }
+  },
+  "restTakenBeforeTheNext": "Hvile holdt før næste sæt",
+  "equipment": "Udstyr",
+  "implementsUsedTogether": "Redskaber brugt sammen",
+  "smallestLoadStepOptional": "Mindste belastningstrin (valgfrit)",
+  "theSmallestChangeYourPlates": "Den mindste ændring, dine skiver, håndvægte eller maskine tillader, husket til dette udstyr.",
+  "loadStep": "Belastningstrin",
+  "finishWithIncompleteData": "Afslutte med ufuldstændige data?",
+  "leaveWithoutSaving": "Forlade uden at gemme?",
+  "theLastChangeCouldNot": "Den seneste ændring kunne ikke gemmes.",
+  "comparedWithAPlanChosen": "Sammenlignet med en plan valgt efter træningen. Planlagte værdier er vejledende, ikke resultater.",
+  "lastSet": "Sidste sæt",
+  "templateName": "Skabelonnavn",
+  "betweenExercises": "Mellem øvelser",
+  "betweenRounds": "Mellem runder",
+  "discardChanges": "Kassere ændringer?",
+  "yourEditsToThisWorkout": "Dine ændringer af denne træning er ikke gemt.",
+  "estimatedDuration": "Estimeret varighed",
+  "workingSets": "Arbejdssæt",
+  "estimatedExternalVolume": "Estimeret eksternt volumen",
+  "loadRaisedFromUnitTo": "Belastning øget fra {unit} til {unit2} efter din gennemgang (regel v{ruleVersion}).",
+  "@loadRaisedFromUnitTo": {
+    "placeholders": {
+      "unit": {
+        "type": "Object"
+      },
+      "unit2": {
+        "type": "Object"
+      },
+      "ruleVersion": {
+        "type": "Object"
+      }
+    }
+  },
+  "thePlannedWorkoutHasNo": "Den planlagte træning har ingen øvelser at logge fra.",
+  "completedSets": "Gennemførte sæt",
+  "knownExternalVolume": "Kendt eksternt volumen",
+  "updateStrengthSessions2": "Opdatere styrkesessionerne?",
+  "upcomingSessionsArePlannedAgain": "Kommende sessioner planlægges igen fra i dag: styrke følger dine løbsmål hver styrkedag med varierede sessioner. Gennemførte og oversprungne træninger bevares; øvelser, du har ændret i en kommende styrkesession, erstattes.",
+  "thisSessionUsesAnEarlier": "Denne session bruger en tidligere styrkeskabelon. Opdaterede planer varierer styrke efter fase og løbsmål og bruger hver styrkedag.",
+  "estimated1rmUsesEpleyAnd": "Estimeret 1RM bruger Epley og Brzycki på gennemførte arbejdssæt med 1–10 gentagelser og kendt belastning, vist som intervallet imellem. Det er et estimat, ikke et testet maksimum.",
+  "localWeather": "Lokalt vejr",
+  "today": "I dag",
+  "low": "Lav",
+  "moderate": "Moderat",
+  "overcast": "Overskyet",
+  "partlyCloudy": "Delvist skyet",
+  "collapseName": "Skjul {name}",
+  "@collapseName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "variableLoads": "Variable belastninger",
+  "ruleVstrengthprogressionruleversionTheLastStrengthprogressionminsessions": "Regel v{strengthProgressionRuleVersion}: de seneste {strengthProgressionMinSessions} sammenlignelige sessioner, hvert sæt i toppen af gentagelsesmålet, med registreret anstrengelse og ikke hårdere end tilsigtet. {reason}",
+  "@ruleVstrengthprogressionruleversionTheLastStrengthprogressionminsessions": {
+    "placeholders": {
+      "strengthProgressionRuleVersion": {
+        "type": "Object"
+      },
+      "strengthProgressionMinSessions": {
+        "type": "Object"
+      },
+      "reason": {
+        "type": "Object"
+      }
+    }
+  },
+  "stepOnYourScaleBefore": "Stil dig på vægten før søgningen",
+  "scanning": "Søger …",
+  "pair": "Par",
+  "selectYourAktiiaPWristband": "Vælg dit AKTIIA P…-armbånd. Læg det på opladeren for at vække det, hvis det ikke vises.",
+  "measurementInterruptedWhileTheApp": "Målingen blev afbrudt, mens appen var i baggrunden. Gentag den.",
+  "noRecentRrDataWith": "Ingen nylige RR-data med god kontakt. Tjek båndet, og gentag målingen.",
+  "settlingStayStill": "Falder til ro · hold dig i ro",
+  "deleteSpotHrvMeasurement": "Slette Spot-HRV-målingen?",
+  "thisRemovesTheRecordingAnd": "Dette fjerner optagelsen og dens rå RR-intervaller.",
+  "appleHealthStoppedAnsweringSo": "Apple Sundhed holdt op med at svare, så Fjelia afbrød forbindelsen og læser eller skriver ikke længere sundhedsdata.\n\nTillad Fjelia igen under Indstillinger → Sundhed → Dataadgang og enheder → Fjelia, og tilslut derefter Apple Sundhed igen.",
+  "thisRemovesTheSelectedGrip": "Dette fjerner den valgte grebstyrkemåling.",
+  "hideReminderDiagnostics": "Skjul påmindelsesdiagnostik",
+  "loading": "Indlæser …",
+  "touchTheChartForDetails": "Tryk på diagrammet for detaljer",
+  "indoor": "Indendørs",
+  "road": "Vej",
+  "technical": "Teknisk",
+  "snow": "Sne",
+  "pool": "Pool",
+  "openWater": "Åbent vand",
+  "ambientTemperatureC": "Omgivelsestemperatur °C",
+  "carryAboutGelsGelsGelcarbs": "Medbring omkring {gels} geler ({gelCarbs} g kulhydrater hver) + {bottles} × {bottleMl} ml flasker. {drinkCarbs} g kulhydrater kommer fra drikkepulveret.",
+  "@carryAboutGelsGelsGelcarbs": {
+    "placeholders": {
+      "gels": {
+        "type": "Object"
+      },
+      "gelCarbs": {
+        "type": "Object"
+      },
+      "bottles": {
+        "type": "Object"
+      },
+      "bottleMl": {
+        "type": "Object"
+      },
+      "drinkCarbs": {
+        "type": "Object"
+      }
+    }
+  },
+  "intakeNotRecorded": "Indtag ikke registreret",
+  "loggingDeclinedIntakeUnknown": "Logning afvist – indtag ukendt",
+  "confirmedNoIntake": "Bekræftet: intet indtag",
+  "draft": "Kladde · ",
+  "actualIntakePerServing": "Faktisk indtag · pr. portion",
+  "minuteIntoWorkoutDuringOnly": "Minut i træningen (kun under, valgfrit)",
+  "sodiumMgServingNotSalt": "Natrium mg / portion (ikke salt)",
+  "comfortable": "Behageligt",
+  "mildSymptoms": "Milde symptomer",
+  "moderateSymptoms": "Moderate symptomer",
+  "severeSymptoms": "Alvorlige symptomer",
+  "personalNutritionSettings": "Personlige ernæringsindstillinger",
+  "practisedCarbohydrateToleranceGH": "Trænet kulhydrattolerance g/t (op til 120)",
+  "workoutNotificationsEnabled": "Træningsnotifikationer er slået til",
+  "exportTheMonthlyReportAs": "Eksportér månedsrapporten som PDF i Hilo-appen, og vælg den her. Kun målingerne importeres; navn, e-mail og kropsdata i rapporten ignoreres.",
+  "nothingNewAllReadingsWere": "Intet nyt: alle målinger var allerede gemt.",
+  "historyImportIncomplete": "Historikimport ufuldstændig",
+  "youCanKeepUsingFjelia": "Du kan fortsætte med at bruge Fjelia, men hold den åben: iOS sætter importen på pause, når appen er i baggrunden, og den fortsætter næste gang, du åbner Fjelia. Din plan kalibreres, når importen er færdig.",
+  "addYourBirthYearIn": "Tilføj dit fødselsår under Indstillinger → Profil for at se dit estimat.",
+  "fitnessAge": "Konditionsalder",
+  "estLifespan": "Est. levetid",
+  "delta": "Forskel",
+  "couldNotOpenKey": "Kunne ikke åbne {key}",
+  "@couldNotOpenKey": {
+    "placeholders": {
+      "key": {
+        "type": "Object"
+      }
+    }
+  },
+  "appleIntelligenceIsNotAvailable": "Apple Intelligence er ikke tilgængelig på denne enhed (kræver en understøttet iPhone eller Mac med iOS/macOS 26 eller nyere og Apple Intelligence slået til i Indstillinger). Vælg en anden udbyder, og tilføj din egen API-nøgle for at bruge træneren.",
+  "personalisedMorningLunchAfternoonEvening": "Personligt resumé for morgen/frokost/eftermiddag/aften",
+  "enterASubject": "Indtast et emne.",
+  "message": "Besked",
+  "enterAMessageOfAt": "Indtast en besked på mindst 10 tegn.",
+  "garminConnect": "Garmin Connect",
+  "hiloBloodPressure": "Hilo (blodtryk)",
+  "renphoBodyScale": "Renpho (kropsvægt)",
+  "hiloPodCuff": "Hilo Pod / manchet",
+  "disconnectLabel": "Afbryde forbindelsen til {label}?",
+  "@disconnectLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "yourSavedMeasurementsWillRemain": "Dine gemte målinger forbliver på denne enhed.",
+  "notEnoughRecentHeartRate": "Ikke nok nylige pulsdata til at justere zonerne.",
+  "aerobicBase": "Aerob base",
+  "tempo": "Tempo",
+  "lactateThreshold": "Laktattærskel",
+  "birthYearHeightWaist": "Fødselsår, højde, talje",
+  "enterAValidValue": "Indtast en gyldig værdi",
+  "birthYear": "Fødselsår",
+  "height": "Højde",
+  "waist": "Talje",
+  "yearsSinceQuit": "År siden du stoppede",
+  "cigarettesPerDay": "Cigaretter pr. dag",
+  "standardDrinksPerMonth": "Standarddrinks pr. måned",
+  "enterAValidNumber": "Indtast et gyldigt tal",
+  "enterARaceName": "Indtast et løbsnavn",
+  "useHMmOrH": "Brug t:mm eller t:mm:ss, en tid du virkelig kunne løbe",
+  "flexibleThePlanMayDrop": "Fleksibel: Planen kan droppe dette arrangement, hvis det kolliderer med et vigtigere.",
+  "selectARaceDate": "Vælg en løbsdato",
+  "thatIsTenTimesOr": "Det er ti gange (eller en tiendedel af) de sædvanlige {likely} km. Brug {likely} km i stedet?",
+  "@thatIsTenTimesOr": {
+    "placeholders": {
+      "likely": {
+        "type": "Object"
+      }
+    }
+  },
+  "addGoal": "Tilføj mål",
+  "restoreFailed": "Gendannelse mislykkedes",
+  "replaceLocalData": "Erstatte lokale data?",
+  "restoringThisBackupReplacesAll": "Gendannelse af denne sikkerhedskopi erstatter alle lokale sundheds- og træningsdata. Eksisterende loginoplysninger bevares.",
+  "openingBackupZip": "Åbner sikkerhedskopi-ZIP",
+  "addAFutureRaceGoal": "Tilføj først et fremtidigt løbsmål.",
+  "deleteAllWorkouts2": "Slette alle træninger?",
+  "thisDeletesPlannedWorkoutsOn": "Dette sletter planlagte træninger på denne telefon og på din tilsluttede urplatform. Gennemførte aktiviteter bevares.",
+  "regenerateWorkouts2": "Genoprette træninger?",
+  "noRaceGoalsYetAdd": "Ingen løbsmål endnu. Tilføj et eller synkronisér fra Garmin.",
+  "deleteRaceGoal": "Slette løbsmålet?",
+  "deletingFailedFailure": "Sletning mislykkedes: {failure}",
+  "@deletingFailedFailure": {
+    "placeholders": {
+      "failure": {
+        "type": "Object"
+      }
+    }
+  },
+  "allPlannedWorkoutsDeletedRemoved": "Alle planlagte træninger er slettet. Fjernet fra dine platforme: {removed}.",
+  "@allPlannedWorkoutsDeletedRemoved": {
+    "placeholders": {
+      "removed": {
+        "type": "Object"
+      }
+    }
+  },
+  "usingCurrentLocationTostringasfixedTostringasfixed2": "Bruger nuværende placering: {toStringAsFixed}, {toStringAsFixed2}",
+  "@usingCurrentLocationTostringasfixedTostringasfixed2": {
+    "placeholders": {
+      "toStringAsFixed": {
+        "type": "Object"
+      },
+      "toStringAsFixed2": {
+        "type": "Object"
+      }
+    }
+  },
+  "typeSleep": "Søvn",
+  "typeBloodPressure": "Blodtryk",
+  "addHiloBpReportPdf": "Tilføj Hilo-blodtryksrapport (PDF)",
+  "hiloCuffBle": "Hilo-manchet (BLE)",
+  "typeSpo2": "SpO₂ / pulsoximeter",
+  "typeWeightScale": "Personvægt",
+  "polarH10HrvMeasurement": "Polar H10 HRV-måling",
+  "samplingWouldStartMinutes": "Målingen ville starte omkring {minutes} min efter, at træningen sluttede.",
+  "@samplingWouldStartMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "Object"
+      }
+    }
+  },
+  "samplingStartedMinutes": "Målingen startede {minutes} min efter, at træningen sluttede.",
+  "@samplingStartedMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "Object"
+      }
+    }
+  },
+  "unknown": "Ukendt",
+  "before": "Før",
+  "during": "Under",
+  "after": "Efter",
+  "enumWarmUp": "Opvarmning",
+  "enumWorking": "Arbejdssæt",
+  "enumBackOff": "Back-off",
+  "enumTechnique": "Teknik",
+  "enumExternalLoad": "Ekstern belastning",
+  "enumBandResistance": "Bånd / modstand",
+  "enumTotalLoad": "Samlet belastning",
+  "enumPerImplement": "Pr. redskab",
+  "enumOneImplement": "Ét redskab",
+  "enumBothSides": "Begge sider",
+  "enumAlternatingTotalReps": "Vekslende, gentagelser i alt",
+  "enumPartial": "Delvist",
+  "enumFailed": "Mislykket",
+  "enumStraightSets": "Almindelige sæt",
+  "enumSuperset": "Superset",
+  "enumCircuit": "Cirkel",
+  "enumRir": "RIR",
+  "enumRpe110": "RPE 1–10",
+  "enumBeforeTraining": "Før træning",
+  "enumAfterTraining": "Efter træning",
+  "enumResting": "I hvile",
+  "enumSeated": "Siddende",
+  "enumLyingDown": "Liggende",
+  "duringRoutineGelsAreNot": "Under: Almindelige geler er ikke nødvendige til denne korte/lette session. Drik efter tørst.",
+  "duringSpreadCarbohydrateAndDrinks": "Under: Fordel kulhydrater og drikke over små, regelmæssige indtag. Tæl drikkens kulhydrater med i samme total som geler og mad.",
+  "fluidIsAnEditableStarting": "Væske er et redigerbart startestimat, ikke en kvote. Brug tørst, indøvet indtag og målte sveddtab; tving ikke ekstra vand i dig.",
+  "afterHaveCarbohydrateAndA": "Efter: spis kulhydrater og et måltid med protein. Prioritér genopfyldning og rehydrering, når der snart er en ny session.",
+  "swimmingPlaceALabelledBottle": "Svømning: sæt en mærket flaske ved bassinkanten, og brug pauserne mellem sæt til slurke eller forplejning. Forholdene i bassinet kan afvige fra vejret udenfor.",
+  "runningCarryAccessibleGelsFlasks": "Løb: tag lettilgængelige geler/flasker med, eller planlæg forplejning ved poster; øv de samme produkter og timing før løbet.",
+  "servingSizesAndToleranceMust": "Portionsstørrelser og tolerance skal være positive.",
+  "enterFiniteNonNegativeMeasurements": "Indtast endelige, ikke-negative målinger.",
+  "targetsMustBeFiniteAnd": "Mål skal være endelige og ikke-negative.",
+  "conditionsMustBeFiniteOr": "Forhold skal være endelige eller ukendte.",
+  "humidityMustBeBetween0": "Luftfugtigheden skal være mellem 0 og 100 %.",
+  "noIntakeCannotIncludeFood": "“Intet indtag” kan ikke indeholde mad eller drikke.",
+  "addAnItemOrConfirm": "Tilføj en post, eller bekræft, at du ikke indtog noget.",
+  "eachIntakeNeedsAProduct": "Hvert indtag kræver et produkt og et gyldigt tidspunkt.",
+  "quantityMustBePositive": "Mængden skal være positiv.",
+  "thisActivityNoLongerExists": "Denne aktivitet findes ikke længere.",
+  "practisedCarbohydrateToleranceMustNot": "Trænet kulhydrattolerance må ikke overstige 120 g/t.",
+  "measuredSweatRateMustBe": "Målt svedrate skal være positiv eller stå ukendt.",
+  "increasePractisedToleranceInNutrition": "Øg trænet tolerance i ernæringsindstillingerne, før du vælger et højere mål.",
+  "fluidTargetExceedsYourMeasured": "Væskemålet overstiger din målte svedrate. Gennemgå målingen eller målet.",
+  "elapsedWorkoutTimeMustBe": "Forløbet træningstid skal være positiv eller stå tom.",
+  "intakeAmountsMustBeFinite": "Indtagsmængder skal være endelige og ikke-negative.",
+  "selectedStrategyUnavailableChooseAnother": "Den valgte strategi er ikke tilgængelig. Vælg en anden strategi eller ingen sammenligning.",
+  "recordYourWorkoutNutrition": "Registrer din træningsernæring",
+  "addTheFoodAndFluids": "Tilføj den mad og væske, du faktisk indtog, i din aktivitetshistorik.",
+  "logIntake": "Log indtag",
+  "in30Minutes": "Om 30 minutter",
+  "loadSuggestionsCoverStraightSets": "Belastningsforslag dækker kun almindelige sæt med gentagelser.",
+  "needsStrengthprogressionminsessionsRecordedSessionsOf": "Kræver {strengthProgressionMinSessions} registrerede sessioner med denne øvelse.",
+  "@needsStrengthprogressionminsessionsRecordedSessionsOf": {
+    "placeholders": {
+      "strengthProgressionMinSessions": {
+        "type": "Object"
+      }
+    }
+  },
+  "recentHistoryIsTooOld": "Den seneste historik er for gammel til et forslag.",
+  "theLastSessionDidNot": "Den seneste session brugte ikke én kendt belastning.",
+  "theLoadChangedBetweenThe": "Belastningen ændrede sig mellem de seneste sessioner.",
+  "notEverySetReachedThe": "Ikke alle sæt nåede toppen af gentagelsesmålet.",
+  "recordEffortRirOrRpe": "Registrér anstrengelse (RIR eller RPE) på sidste sæt for at få forslag.",
+  "recentSetsWereHarderThan": "De seneste sæt var hårdere end tilsigtet.",
+  "thisWorkoutAlreadyHasIts": "Denne træning har allerede sin egen belastning; den forbliver som indstillet.",
+  "yourRecentSetsMetThe": "Dine seneste sæt opfyldte progressionsreglen. Angiv det mindste belastningstrin for dette udstyr for at gennemgå en belastning.",
+  "thisWorkoutNoLongerExists": "Denne træning findes ikke længere.",
+  "thisStrengthPlanCannotBe": "Denne styrkeplan kan ikke læses ({message}).",
+  "@thisStrengthPlanCannotBe": {
+    "placeholders": {
+      "message": {
+        "type": "Object"
+      }
+    }
+  },
+  "thisStrengthPlanCannotBe2": "Denne styrkeplan kan ikke læses.",
+  "addAtLeastOneExercise": "Tilføj mindst én øvelse.",
+  "thisWorkoutWasChangedElsewhere": "Denne træning blev ændret et andet sted. Dine ændringer bevares; genindlæs for at se den nyere version.",
+  "thePlanThisWorkoutIs": "Den plan, som denne træning sammenlignes med, kan ikke læses.",
+  "thisLogWasChangedElsewhere": "Denne log blev ændret et andet sted. Dine poster bevares; genindlæs for at se den nyere version.",
+  "thisZipIsNotA": "Denne ZIP er ikke en understøttet Fjelia-sikkerhedskopi.",
+  "theBackupDatabaseIsDamaged": "Sikkerhedskopiens database er beskadiget.",
+  "invalidBackupData": "Ugyldige sikkerhedskopidata.",
+  "backupTablesDoNotMatch": "Sikkerhedskopiens tabeller passer ikke.",
+  "invalidBackupColumns": "Ugyldige kolonner i sikkerhedskopien.",
+  "migratingOriginalAppBackup": "Migrerer sikkerhedskopi fra den oprindelige app",
+  "theOriginalBackupIsMissing": "Den oprindelige sikkerhedskopi mangler nødvendige tabeller.",
+  "backupFormatOrDatabaseVersion": "Sikkerhedskopiens format eller databaseversion passer ikke.",
+  "restoringRecords": "Gendanner poster",
+  "restoringSettings": "Gendanner indstillinger",
+  "restoreComplete": "Gendannelse fuldført",
+  "effortMustBeANumber": "Anstrengelse skal være et tal.",
+  "theDurationEstimateMustBe": "Varighedsestimatet skal være positivt.",
+  "restCannotBeNegative": "Hvilen kan ikke være negativ.",
+  "enterTheRepetitionsDoneThe": "Indtast de udførte gentagelser; planen har et interval.",
+  "enterTheLoadThePlan": "Indtast belastningen; planen har ingen.",
+  "enterTheResistanceThePlan": "Indtast modstanden; planen har ingen.",
+  "poorSensorContact": "Dårlig sensorkontakt",
+  "moreThan25FromLocal": "Mere end 25 % fra den lokale median",
+  "workoutNutrition": "Træningsernæring",
+  "postWorkoutFoodAndFluid": "Påmindelse om mad- og væskelog efter træning",
+  "postTrainingHrvMeasurementReminder": "Påmindelse om HRV-måling efter træning",
+  "rirRunsFrom0To": "RIR går fra 0 til 10+.",
+  "rpeRunsFrom1To": "RPE går fra 1 til 10.",
+  "repetitionsCannotBeNegative": "Gentagelser kan ikke være negative.",
+  "timedWorkMustBeLonger": "Tidsbaseret arbejde skal vare længere end nul sekunder.",
+  "chooseRepetitionsOrTimedWork": "Vælg gentagelser eller tidsbaseret arbejde, ikke begge.",
+  "loadMustBeAFinite": "Belastningen skal være et endeligt, ikke-negativt tal.",
+  "durationCannotBeNegative": "Varigheden kan ikke være negativ.",
+  "hrTimeline": "Pulsforløb",
+  "dayTrainingLoad": "Daglig træningsbelastning",
+  "weekdayComparison": "Ugedagssammenligning",
+  "weeklyTrainingLoad": "Ugentlig træningsbelastning",
+  "zonePolarization": "Zonepolarisering",
+  "elevationOverview": "Højdeoversigt",
+  "trainingMonitor": "Træningsmonitor",
+  "formAtlCtlTsb": "ATL / CTL / TSB-form",
+  "trainingPlanProgress": "Fremdrift i træningsplanen",
+  "rhrSleep": "Hvilepuls under søvn",
+  "hrvSleep": "HRV under søvn",
+  "spo2Sleep": "SpO₂ under søvn",
+  "respRate": "Respirationsfrekvens",
+  "stress": "Stress",
+  "skinTemp": "Hudtemperatur",
+  "steps": "Skridt",
+  "tonightsSleep": "Nattens søvn",
+  "activityLog": "Aktivitetslog",
+  "activityLog2": "Aktivitetslog",
+  "history2": "HISTORIK",
+  "durationsecondshDurationseconds2mDistancemetersKmAvgheartrate": "{durationSeconds}h {durationSeconds2}m · {distanceMeters} km · {avgHeartRate} bpm · ↑{totalElevation} m",
+  "@durationsecondshDurationseconds2mDistancemetersKmAvgheartrate": {
+    "placeholders": {
+      "durationSeconds": {
+        "type": "Object"
+      },
+      "durationSeconds2": {
+        "type": "Object"
+      },
+      "distanceMeters": {
+        "type": "Object"
+      },
+      "avgHeartRate": {
+        "type": "Object"
+      },
+      "totalElevation": {
+        "type": "Object"
+      }
+    }
+  },
+  "heatAcclimation2": "VARMETILVÆNNING",
+  "score": "{score}%",
+  "@score": {
+    "placeholders": {
+      "score": {
+        "type": "Object"
+      }
+    }
+  },
+  "elevation": "HØJDEMETER",
+  "t12WeekHistory": "12-UGERS HISTORIK",
+  "zonePolarization2": "ZONEPOLARISERING",
+  "t5WeekHistory": "5-UGERS HISTORIK",
+  "easy": "LET %",
+  "withzonesOfRecordedActivitiesWith": "{withZones} af {recorded} aktiviteter med pulszonedata",
+  "@withzonesOfRecordedActivitiesWith": {
+    "placeholders": {
+      "withZones": {
+        "type": "Object"
+      },
+      "recorded": {
+        "type": "Object"
+      }
+    }
+  },
+  "fromsamplesReconstructedFromRecordedHr": "{fromSamples} rekonstrueret fra registrerede pulsmålinger",
+  "@fromsamplesReconstructedFromRecordedHr": {
+    "placeholders": {
+      "fromSamples": {
+        "type": "Object"
+      }
+    }
+  },
+  "easyZ12ModerateZ3": "Let: Z1–2 · Moderat: Z3 · Hård: Z4–5",
+  "activitiesWithoutHrZoneData": "Aktiviteter uden pulszonedata udelades fra procenterne.",
+  "avgAverageUnit": "GNS {average} {unit}",
+  "@avgAverageUnit": {
+    "placeholders": {
+      "average": {
+        "type": "Object"
+      },
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "weekdayComparison2": "UGEDAGSSAMMENLIGNING",
+  "trainingPlanProgress2": "FREMDRIFT I TRÆNINGSPLANEN",
+  "weekCurrentweekDurationinweeks": "Uge {currentWeek} / {durationInWeeks}",
+  "@weekCurrentweekDurationinweeks": {
+    "placeholders": {
+      "currentWeek": {
+        "type": "Object"
+      },
+      "durationInWeeks": {
+        "type": "Object"
+      }
+    }
+  },
+  "t30MinTimeTrialLt2": "30-MIN TIDSKØRSEL – LT2",
+  "run30MinutesAtThe": "Løb 30 minutter med den hårdeste indsats, du kan holde – kontrolleret, ikke sprint. Byg op i indsatsen; start ikke for hurtigt. Gennemsnitstempo og puls de sidste 20 minutter er din LT2.",
+  "recordAsANormalOutdoor": "Registrér det som en almindelig udendørs løbetur. Start dit ur, notér tiden, og løb 30 min med løbsindsats.",
+  "t50MinTotalFlatCourse": "~50 min i alt · flad rute · ikke efter hård træning",
+  "doNotStartTooFast": "Start ikke for hurtigt. Sigt efter jævne mellemtider.",
+  "theAppAveragesHrAnd": "Appen beregner gennemsnittet af puls og tempo over testens sidste 20 minutter, efter opvarmningen og de første 10 minutter. Vælg den registrerede aktivitet under Beregn.",
+  "lt2Pace": "LT2-TEMPO",
+  "activityRunningEnoughTimeFor": "Aktivitet (løb, nok tid til opvarmning + 30 min, med puls)",
+  "selectTheTtActivity": "Vælg TT-aktiviteten",
+  "nameStartdate": "{name} · {startDate}",
+  "@nameStartdate": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      },
+      "startDate": {
+        "type": "Object"
+      }
+    }
+  },
+  "warmUpBeforeTt": "Opvarmning før testen",
+  "roundMin": "{round} min",
+  "@roundMin": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "clearResults": "Ryd resultater",
+  "heartRate2": "PULS",
+  "paceSecKmLowerIs": "Tempo (sek/km – lavere er hurtigere)",
+  "thresholdsFitnessTests": "Tærskler og konditionstests",
+  "lt1": "LT1",
+  "lt2": "LT2",
+  "voPace": "VO₂-tempo",
+  "ftp": "FTP",
+  "setFtpManually": "Angiv FTP manuelt",
+  "calculateFromAnActivity": "Beregn ud fra en aktivitet",
+  "setFtp": "Angiv FTP",
+  "ftpWatts": "FTP (watt)",
+  "ftpCyclingThresholdPower": "FTP – TÆRSKELEFFEKT I CYKLING",
+  "ftpHistory": "FTP-HISTORIK",
+  "updateFromActivity": "OPDATÉR FRA AKTIVITET",
+  "tapAnActivityFtpBest": "Tryk på en aktivitet – FTP = bedste 20-min-effekt × 0,95",
+  "ridew": "{ride}W",
+  "@ridew": {
+    "placeholders": {
+      "ride": {
+        "type": "Object"
+      }
+    }
+  },
+  "ftpRoundw": "→ FTP {round}W",
+  "@ftpRoundw": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "noRidesWith20Minutes": "Ingen ture med 20 minutters sammenhængende effektdata.",
+  "enterFtpManually": "Indtast FTP manuelt",
+  "selectTheTestActivity": "Vælg testaktiviteten",
+  "formAtlCtlTsb2": "FORM · ATL / CTL / TSB",
+  "closeTrainingFormFullscreen": "Luk træningsformen i fuld skærm",
+  "expandTrainingForm": "Udvid træningsformen",
+  "calculatedFromTheFirstAvailable": "Beregnet fra den første tilgængelige belastningsregistrering. Dage uden registreret belastning tæller som nul; tidligere træning er ukendt.",
+  "trainingMonitor2": "TRÆNINGSMONITOR",
+  "pfitzingerZones": "PFITZINGER-ZONER",
+  "cyclingPowerZones": "EFFEKTZONER I CYKLING",
+  "znumber": "Z{number}",
+  "@znumber": {
+    "placeholders": {
+      "number": {
+        "type": "Object"
+      }
+    }
+  },
+  "paceHrDescription": "{pace} · {hr}\n{description}",
+  "@paceHrDescription": {
+    "placeholders": {
+      "pace": {
+        "type": "Object"
+      },
+      "hr": {
+        "type": "Object"
+      },
+      "description": {
+        "type": "Object"
+      }
+    }
+  },
+  "weeklyTrainingLoad2": "UGENTLIG TRÆNINGSBELASTNING",
+  "prevWeek": "FORRIGE UGE",
+  "bySport": "EFTER SPORTSGREN",
+  "noActivitiesThisWeek": "Ingen aktiviteter denne uge",
+  "garminWorkoutScheduleddate": "Garmin-træning · {scheduledDate}",
+  "@garminWorkoutScheduleddate": {
+    "placeholders": {
+      "scheduledDate": {
+        "type": "Object"
+      }
+    }
+  },
+  "yourNote": "Din note",
+  "askAiCoach": "Spørg AI-træneren",
+  "aiSettings": "AI-indstillinger",
+  "askYourCoach": "Spørg din træner …",
+  "sendMessage": "Send besked",
+  "sendFeedbackOrReportA": "Send feedback eller rapportér en fejl",
+  "addMeasurement2": "Tilføj måling",
+  "syncLabel2": "Synkroniser",
+  "syncToday": "Synkroniser i dag",
+  "fullSync1Year": "Fuld synkronisering · 1 år",
+  "fullSyncComplete": "Fuld synkronisering · Fuldført",
+  "syncingYourData": "Synkroniserer dine data …",
+  "lLeftkgRRightkgKg2": "V {leftKg}  H {rightKg} kg",
+  "@lLeftkgRRightkgKg2": {
+    "placeholders": {
+      "leftKg": {
+        "type": "Object"
+      },
+      "rightKg": {
+        "type": "Object"
+      }
+    }
+  },
+  "weightKgFatBodyfatMuscle": "{weight} kg · Fedt {bodyFat} % · Muskler {muscleMass} kg",
+  "@weightKgFatBodyfatMuscle": {
+    "placeholders": {
+      "weight": {
+        "type": "Object"
+      },
+      "bodyFat": {
+        "type": "Object"
+      },
+      "muscleMass": {
+        "type": "Object"
+      }
+    }
+  },
+  "titleSportTolowercase": "{title}, {sport}, {toLowerCase}",
+  "@titleSportTolowercase": {
+    "placeholders": {
+      "title": {
+        "type": "Object"
+      },
+      "sport": {
+        "type": "Object"
+      },
+      "toLowerCase": {
+        "type": "Object"
+      }
+    }
+  },
+  "weatherUnavailableTapToRetry": "Vejr utilgængeligt · Tryk for at prøve igen",
+  "weatherSetYourLocation": "Vejr · Angiv din placering",
+  "t7DayForecast": "7-DAGES PROGNOSE",
+  "minMax": "min/maks",
+  "rainMm2": "regn mm",
+  "uvMax": "UV maks",
+  "kmH": "km/t",
+  "alt": "→ {alt}",
+  "@alt": {
+    "placeholders": {
+      "alt": {
+        "type": "Object"
+      }
+    }
+  },
+  "raceGoalsLength": "Løbsmål · {length}",
+  "@raceGoalsLength": {
+    "placeholders": {
+      "length": {
+        "type": "Object"
+      }
+    }
+  },
+  "gWk": "{g} uger",
+  "@gWk": {
+    "placeholders": {
+      "g": {
+        "type": "Object"
+      }
+    }
+  },
+  "weeks": "{weeks}",
+  "@weeks": {
+    "placeholders": {
+      "weeks": {
+        "type": "Object"
+      }
+    }
+  },
+  "weeks2": "uger",
+  "upcoming": "KOMMENDE",
+  "lengthMoreDays": "+ {length} dage mere",
+  "@lengthMoreDays": {
+    "placeholders": {
+      "length": {
+        "type": "Object"
+      }
+    }
+  },
+  "yearMonth": "{year} / {month}",
+  "@yearMonth": {
+    "placeholders": {
+      "year": {
+        "type": "Object"
+      },
+      "month": {
+        "type": "Object"
+      }
+    }
+  },
+  "day": "{day}",
+  "@day": {
+    "placeholders": {
+      "day": {
+        "type": "Object"
+      }
+    }
+  },
+  "plannedCompletedSkipped": "○ Planlagt   ● Gennemført   ✕ Sprunget over",
+  "heartRate3": "Puls",
+  "watts": "Watt",
+  "theStepsAddUpTo": "Trinene summerer til {total}; planen tæller {plannedDurationMin} min.",
+  "@theStepsAddUpTo": {
+    "placeholders": {
+      "total": {
+        "type": "Object"
+      },
+      "plannedDurationMin": {
+        "type": "Object"
+      }
+    }
+  },
+  "typicalSplitForThisKind": "Typisk fordeling for denne type session; ingen trin at beregne den ud fra.",
+  "labelGetsEachExerciseWith": "{label} får hver øvelse med sæt, gentagelser og belastning. Gentagelsesintervaller, anstrengelse og tempo bliver i Fjelia.",
+  "@labelGetsEachExerciseWith": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "markAsRest": "Markér som hvile",
+  "restoreWorkout": "Gendan træning",
+  "skipThisWorkout": "Springe denne træning over?",
+  "previousWeek": "Forrige uge",
+  "backToThisWeek": "Tilbage til denne uge",
+  "thisWeek": "Denne uge",
+  "nextWeek": "Næste uge",
+  "today2": "I DAG",
+  "route": "RUTE",
+  "feedback": "Feedback",
+  "plannedWorkout": "Planlagt træning",
+  "delete": "Slet",
+  "chatAi": "AI-chat",
+  "trainingLoad": "Træningsbelastning",
+  "dayTrainingLoad2": "DAGLIG TRÆNINGSBELASTNING",
+  "trimp": " TRIMP",
+  "scorebeforeScoreafter": "{scoreBefore} → {scoreAfter}",
+  "@scorebeforeScoreafter": {
+    "placeholders": {
+      "scoreBefore": {
+        "type": "Object"
+      },
+      "scoreAfter": {
+        "type": "Object"
+      }
+    }
+  },
+  "temperatureOverTime": "TEMPERATUR OVER TID",
+  "roundh": "{round}h",
+  "@roundh": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "timeInHrZones": "Tid i pulszoner",
+  "route2": "Rute",
+  "start": "Start",
+  "gpx": "GPX",
+  "touppercasesubstringBriefing": "{toUpperCase}{substring}-briefing",
+  "@touppercasesubstringBriefing": {
+    "placeholders": {
+      "toUpperCase": {
+        "type": "Object"
+      },
+      "substring": {
+        "type": "Object"
+      }
+    }
+  },
+  "chatWithAiAboutThis": "Chat med AI om denne briefing",
+  "whyThisRecommendation": "Hvorfor denne anbefaling?",
+  "titleDateLabel": "{title}, {date}, {label}",
+  "@titleDateLabel": {
+    "placeholders": {
+      "title": {
+        "type": "Object"
+      },
+      "date": {
+        "type": "Object"
+      },
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "previousDay": "Forrige dag",
+  "nextDay": "Næste dag",
+  "updating": "Opdaterer",
+  "resting": "I HVILE",
+  "noTimedReadings": "Ingen tidsstemplede målinger",
+  "avg": "GNS",
+  "peak": "TOP",
+  "tolocalRoundmin": "{toLocal} · {round}min",
+  "@tolocalRoundmin": {
+    "placeholders": {
+      "toLocal": {
+        "type": "Object"
+      },
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "avgheartrateBpmAvg": "{avgHeartRate} bpm gns.",
+  "@avgheartrateBpmAvg": {
+    "placeholders": {
+      "avgHeartRate": {
+        "type": "Object"
+      }
+    }
+  },
+  "timeWeightedAverageOverRecorded": "Tidsvægtet gennemsnit over registrerede perioder. Huller uden målinger er udeladt.",
+  "previousHeartRatePeriod": "Forrige pulsperiode",
+  "nextHeartRatePeriod": "Næste pulsperiode",
+  "avgHr": "Gns. puls",
+  "restingHr": "Hvilepuls",
+  "both": "Begge",
+  "averagelabelFixedMs": "{averageLabel} {fixed} ms",
+  "@averagelabelFixedMs": {
+    "placeholders": {
+      "averageLabel": {
+        "type": "Object"
+      },
+      "fixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "measureWithPolarH10": "Mål med Polar H10",
+  "ms": "ms",
+  "noWorkoutInThisPeriod": "Ingen træning i denne periode har et sammenligneligt før/efter-par.",
+  "textEachWorkoutCountsOnce": "{text}. Hver træning tæller én gang; dette beskriver dine par, det scorer dem ikke.",
+  "@textEachWorkoutCountsOnce": {
+    "placeholders": {
+      "text": {
+        "type": "Object"
+      }
+    }
+  },
+  "workoutFinished": "Træning færdig?",
+  "yourWorkoutIsNotIn": "Din træning er ikke i Fjelia endnu. Hvis den er slut, så sig hvornår, så kan påmindelsen følge dens faktiske slutning. Ellers vises den, når dit ur synkroniserer.",
+  "workoutFinished2": "Træning færdig",
+  "theWorkoutMustStartAfter": "Træningen skal starte efter målingen og slutte efter sin start, ikke i fremtiden.",
+  "daysDAvg": "{days} D gns.",
+  "@daysDAvg": {
+    "placeholders": {
+      "days": {
+        "type": "Object"
+      }
+    }
+  },
+  "averageUnit": "{average} {unit}",
+  "@averageUnit": {
+    "placeholders": {
+      "average": {
+        "type": "Object"
+      },
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "baselineUnit": "{baseline} {unit}",
+  "@baselineUnit": {
+    "placeholders": {
+      "baseline": {
+        "type": "Object"
+      },
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "previousPeriod": "Forrige periode",
+  "nextPeriod": "Næste periode",
+  "overnightHrvReflectsRecoveryCompare": "HRV om natten afspejler restitution. Sammenlign dine målinger med din egen baseline over tid.",
+  "moveThisWorkout": "FLYT DENNE TRÆNING",
+  "pickDate": "Vælg dato",
+  "movedFromMovedfrom": "Flyttet fra {movedFrom}",
+  "@movedFromMovedfrom": {
+    "placeholders": {
+      "movedFrom": {
+        "type": "Object"
+      }
+    }
+  },
+  "hrvAroundThisWorkout": "HRV omkring denne træning",
+  "measureAfterTraining": "Mål efter træning",
+  "measureAgain": "Mål igen",
+  "explainWithAi": "Forklar med AI",
+  "beforeEndedPregapAheadOf": "Før sluttede {preGap} før start.",
+  "@beforeEndedPregapAheadOf": {
+    "placeholders": {
+      "preGap": {
+        "type": "Object"
+      }
+    }
+  },
+  "lengthFurtherMeasurementSAfter": "{length} yderligere måling(er) efter denne træning bevares som ekstra observationer.",
+  "@lengthFurtherMeasurementSAfter": {
+    "placeholders": {
+      "length": {
+        "type": "Object"
+      }
+    }
+  },
+  "noHrvMeasurementRecordedAround": "Ingen HRV-måling registreret omkring denne træning.",
+  "measureHrv": "Mål HRV",
+  "deltamsMs": "{deltaMs} ms",
+  "@deltamsMs": {
+    "placeholders": {
+      "deltaMs": {
+        "type": "Object"
+      }
+    }
+  },
+  "deltapercent": "{deltaPercent} %",
+  "@deltapercent": {
+    "placeholders": {
+      "deltaPercent": {
+        "type": "Object"
+      }
+    }
+  },
+  "aDescriptionOfThisPair": "En beskrivelse af dette par, ikke en score for træningen.",
+  "notEnoughComparableWorkoutsYet": "Endnu ikke nok sammenlignelige træninger, {eligible} af {need}.",
+  "@notEnoughComparableWorkoutsYet": {
+    "placeholders": {
+      "eligible": {
+        "type": "Object"
+      },
+      "need": {
+        "type": "Object"
+      }
+    }
+  },
+  "notEnoughComparableWorkoutsYet2": "Endnu ikke nok sammenlignelige træninger ({eligible} af {need}).",
+  "@notEnoughComparableWorkoutsYet2": {
+    "placeholders": {
+      "eligible": {
+        "type": "Object"
+      },
+      "need": {
+        "type": "Object"
+      }
+    }
+  },
+  "yourEligibleSimilarWorkoutsTolocal": "Dine {eligible} lignende træninger · {toLocal}–{toLocal2}",
+  "@yourEligibleSimilarWorkoutsTolocal": {
+    "placeholders": {
+      "eligible": {
+        "type": "Object"
+      },
+      "toLocal": {
+        "type": "Object"
+      },
+      "toLocal2": {
+        "type": "Object"
+      }
+    }
+  },
+  "middleHalfQ1msToQ3ms": "Midterste halvdel {q1Ms} til {q3Ms} ms · median {medianMs} ms · denne træning {delta} ms",
+  "@middleHalfQ1msToQ3ms": {
+    "placeholders": {
+      "q1Ms": {
+        "type": "Object"
+      },
+      "q3Ms": {
+        "type": "Object"
+      },
+      "medianMs": {
+        "type": "Object"
+      },
+      "delta": {
+        "type": "Object"
+      }
+    }
+  },
+  "rpeI": "RPE {i}",
+  "@rpeI": {
+    "placeholders": {
+      "i": {
+        "type": "Object"
+      }
+    }
+  },
+  "easy2": "let",
+  "allOut": "Alt hvad du har",
+  "workoutProfileDescription": "Træningsprofil: {description}",
+  "@workoutProfileDescription": {
+    "placeholders": {
+      "description": {
+        "type": "Object"
+      }
+    }
+  },
+  "noActivitiesInThisPeriod": "Ingen aktiviteter i denne periode",
+  "enableHeatAcclimationInTraining": "Slå varmetilvænning til i træningsindstillingerne.",
+  "noElevationThisWeek": "Ingen højdemeter denne uge",
+  "noActivitiesSynced": "Ingen aktiviteter synkroniseret",
+  "noHrZoneData": "Ingen pulszonedata",
+  "easyJogGetHrElevated": "Let løbetur – få pulsen op, løse ben",
+  "fastestSustainablePaceLikeA": "Hurtigste holdbare tempo – som et 30-min-løb",
+  "walkCardiacRecovery": "Gang – hjerterestitution",
+  "selectTheTtActivityFirst": "Vælg først TT-aktiviteten.",
+  "calculating": "Beregner …",
+  "calculateLt2": "Beregn LT2",
+  "enterFtpBetween30And": "Indtast en FTP mellem 30 og 1000 W.",
+  "aerobicThreshold": "Aerob tærskel",
+  "functionalThresholdPower": "Funktionel tærskeleffekt",
+  "estimated": "Estimeret",
+  "afterWarmingUpRunFive": "Løb efter opvarmningen fem minutter med din hurtigste holdbare indsats. Registrér løbet med fart- eller distancedata.",
+  "recordAtLeast40Minutes": "Registrér mindst 40 minutters jævnt løb med konstant indsats. Testen sammenligner pulsen i hver halvdel for at estimere aerob drift.",
+  "theFastestFiveMinuteWindow": "Det hurtigste fem-minutters vindue giver dit VO2max-tempo.",
+  "noResultYet": "Intet resultat endnu",
+  "calculateVo2maxPace": "Beregn VO2max-tempo",
+  "calculateLt1": "Beregn LT1",
+  "loading2": "Indlæser",
+  "unavailable": "Utilgængelig",
+  "noTrainingHistory": "Ingen træningshistorik",
+  "fitnessCtl": "Fitness (CTL)",
+  "fatigueAtl": "Træthed (ATL)",
+  "formTsb": "Dagsform (TSB)",
+  "noHistory": "Ingen historik",
+  "fresh": "Frisk",
+  "optimal": "Optimal",
+  "neutral": "Neutral",
+  "tired": "Træt",
+  "veryFatigued": "Meget træt",
+  "garminRunningVo2max": "Garmin VO2max løb",
+  "garminCyclingVo2max": "Garmin VO2max cykling",
+  "aerobicThreshold2": "Aerob tærskel",
+  "driftDriftAt": "Drift {drift} % · {at}",
+  "@driftDriftAt": {
+    "placeholders": {
+      "drift": {
+        "type": "Object"
+      },
+      "at": {
+        "type": "Object"
+      }
+    }
+  },
+  "activityHours": "Aktivitetstimer",
+  "activityKm": "Aktivitets-km",
+  "tap5MinuteMaxTest": "Tryk · 5-min maksimaltest",
+  "setFtpToCalculatePower": "Angiv FTP for at beregne effektzoner",
+  "cyclingPowerZones2": "Effektzoner i cykling",
+  "pfitzingerZones2": "Pfitzinger-zoner",
+  "completeAnLt2TestTo": "Gennemfør en LT2-test for at beregne løbezoner.",
+  "setFtpToCalculatePower2": "Angiv FTP for at beregne effektzoner.",
+  "endurance": "Udholdenhed",
+  "threshold": "Tærskel",
+  "anaerobic": "Anaerob",
+  "whatExplainsThisRise": "Hvad forklarer denne stigning?",
+  "whatExplainsThisDrop": "Hvad forklarer dette fald",
+  "whatExplainsThisRise2": "Hvad forklarer denne stigning",
+  "editsAreKeptInFjelia": "Ændringer gemmes i Fjelia som en lokal kopi for denne dato. Træningen hos Garmin ændres ikke.",
+  "howDoIExecuteThis": "Hvordan gennemfører jeg denne træning?",
+  "shareHealthContextWithName": "Dele sundhedskontekst med {name}?",
+  "@shareHealthContextWithName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "yourMessageAndAHealth": "Din besked og et sundheds-/træningsresumé sendes til denne cloud-AI-udbyder. Navne og GPS udelades fra det genererede resumé.",
+  "couldNotGetAReply": "Kunne ikke få et svar. Tjek dine AI-indstillinger, og prøv igen.",
+  "askAboutYourRecoveryTraining": "Spørg om din restitution, træning eller dagens plan.",
+  "noSyncYet": "Endnu ikke synkroniseret",
+  "lastSyncLastContext": "Seneste synkronisering: {last} {context}",
+  "@lastSyncLastContext": {
+    "placeholders": {
+      "last": {
+        "type": "Object"
+      },
+      "context": {
+        "type": "Object"
+      }
+    }
+  },
+  "seasonWithTradeOffs": "Sæson: med kompromisser",
+  "seasonNeedsYourDecision": "Sæson: kræver din beslutning",
+  "seasonCannotBeCombined": "Sæson: kan ikke kombineres",
+  "seasonProvisional": "Sæson: foreløbig",
+  "season": "Sæson",
+  "allGoalsFit": "Alle mål passer.",
+  "goalTargetfinishsecondsgoal": "Mål {targetFinishSeconds}{goal}",
+  "@goalTargetfinishsecondsgoal": {
+    "placeholders": {
+      "targetFinishSeconds": {
+        "type": "Object"
+      },
+      "goal": {
+        "type": "Object"
+      }
+    }
+  },
+  "estEstimateestimate2": "Est. {estimate}{estimate2}",
+  "@estEstimateestimate2": {
+    "placeholders": {
+      "estimate": {
+        "type": "Object"
+      },
+      "estimate2": {
+        "type": "Object"
+      }
+    }
+  },
+  "doneDoneby": "Færdig · {doneBy}",
+  "@doneDoneby": {
+    "placeholders": {
+      "doneBy": {
+        "type": "Object"
+      }
+    }
+  },
+  "garminWorkoutWorkout": "Garmin-træning · {workout}",
+  "@garminWorkoutWorkout": {
+    "placeholders": {
+      "workout": {
+        "type": "Object"
+      }
+    }
+  },
+  "moveAnyway": "Flytte alligevel?",
+  "wattsNeedYourFtpSet": "Watt kræver din FTP: angiv den under Belastning, Tærskler.",
+  "mainTargetInWattsFrom": "Hovedmål i watt ud fra din FTP, puls som rettesnor.",
+  "mainTargetHeartRateWatts": "Hovedmål puls; watt er ikke angivet på uret.",
+  "taperPhase": "Nedtrapningsfase",
+  "recoverySession": "Restitutionssession",
+  "closeToYourEvent": "Tæt på dit arrangement",
+  "noWorkoutStructureAvailable": "Ingen træningsstruktur tilgængelig.",
+  "aerobic": "Aerob",
+  "pushAgainToUpdateYour": "Send igen for at opdatere dit urs kalender.",
+  "workoutSentToLabel": "Træning sendt til {label}",
+  "@workoutSentToLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "updating2": "Opdaterer …",
+  "pushToLabel": "Send til {label}",
+  "@pushToLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "shareExerciseListForLabel": "Del øvelsesliste til {label}",
+  "@shareExerciseListForLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "shareWorkoutForLabel": "Del træning til {label}",
+  "@shareWorkoutForLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "whyNothingIsAddedTo": "Hvorfor? Der tilføjes intet for at udfylde det.",
+  "workout": "Træning",
+  "recordedActivityLinkedToThis": "Registreret aktivitet knyttet til denne træning",
+  "matchedToTheRecordedWorkout": "Matchet med starten på den registrerede træning",
+  "matchedByWorkoutNameSport": "Matchet efter træningsnavn, sportsgren og dato",
+  "matchedBySportDateAnd": "Matchet efter sportsgren, dato og varighed",
+  "planPlannedminutesMin": "Plan {plannedMinutes} min",
+  "@planPlannedminutesMin": {
+    "placeholders": {
+      "plannedMinutes": {
+        "type": "Object"
+      }
+    }
+  },
+  "maxHr": "Maks. puls",
+  "trainingLoad2": "Træningsbelastning",
+  "active": "Aktiv",
+  "avgPace": "Gns. tempo",
+  "avgSpeed": "Gns. fart",
+  "avgPower": "Gns. effekt",
+  "elevation2": "Højdemeter",
+  "altitude": "Højde",
+  "explainMyHrvBeforeAnd": "Forklar min HRV før og efter denne træning. Hvad er sammenligneligt, hvad er ikke, og hvad er stadig ukendt?",
+  "deleteActivity": "Slette aktiviteten?",
+  "removeThisActivityFromThe": "Fjerne denne aktivitet fra den lokale historik? En senere synkronisering fra udbyderen kan importere den igen.",
+  "howDidThisSessionGo": "Hvordan gik denne session, og hvad betyder den for mine næste dage?",
+  "currentFixedFixed2": "Nuværende {fixed}, {fixed2}",
+  "@currentFixedFixed2": {
+    "placeholders": {
+      "fixed": {
+        "type": "Object"
+      },
+      "fixed2": {
+        "type": "Object"
+      }
+    }
+  },
+  "setUpInTrainingSettings": "Opsæt i træningsindstillingerne",
+  "couldNotLoadHeatData": "Kunne ikke indlæse varmedata – tryk for detaljer",
+  "loadingHeatHistory": "Indlæser varmehistorik …",
+  "noHeatDataYet": "Ingen varmedata endnu",
+  "optimalLowHigh": "Optimalt {low}–{high}",
+  "@optimalLowHigh": {
+    "placeholders": {
+      "low": {
+        "type": "Object"
+      },
+      "high": {
+        "type": "Object"
+      }
+    }
+  },
+  "optimalLowHighTrimp": "Optimalt: {low}–{high} TRIMP",
+  "@optimalLowHighTrimp": {
+    "placeholders": {
+      "low": {
+        "type": "Object"
+      },
+      "high": {
+        "type": "Object"
+      }
+    }
+  },
+  "targetUnavailableSyncTrainingHistory": "Mål utilgængeligt – synkroniser træningshistorikken",
+  "workoutQualifiedForHeatAccumulation": "Træningen tællede med i varmeakkumuleringen.",
+  "workoutDidNotAddHeat": "Træningen tilføjede ikke varmeakkumulering.",
+  "performanceTime": "Præstation / Tid",
+  "performanceDistance": "Præstation / Distance",
+  "noRecordedRoute": "Ingen registreret rute",
+  "zoomIn": "Zoom ind",
+  "zoomOut": "Zoom ud",
+  "fitRoute": "Tilpas rute",
+  "fullscreenMap": "Kort i fuld skærm",
+  "openstreetmapContributors2": "OpenStreetMap-bidragydere",
+  "appleIntelligenceIsUnavailableShowing": "Apple Intelligence er ikke tilgængelig. Viser et resumé uden AI.",
+  "generateAiBriefing": "Generere AI-briefing?",
+  "retryAiBriefing": "Prøv AI-briefing igen",
+  "generateBriefing": "Generer briefing",
+  "discussThisBriefingWithMe": "Diskutér denne briefing med mig, og foreslå den bedste næste handling.\n\n{text}",
+  "@discussThisBriefingWithMe": {
+    "placeholders": {
+      "text": {
+        "type": "Object"
+      }
+    }
+  },
+  "whyThisRecommendationWhichOf": "Hvorfor denne anbefaling? Hvilke af mine tal og hvilke huller i data førte til den, og hvad ville ændre den?\n\n{text}",
+  "@whyThisRecommendationWhichOf": {
+    "placeholders": {
+      "text": {
+        "type": "Object"
+      }
+    }
+  },
+  "avg2": "Gns.",
+  "peak2": "Top",
+  "notEnoughContinuousReadingsFor": "Ikke nok sammenhængende målinger til et gennemsnit.",
+  "recordedCoverageInhourshInminutesminTime": "Registreret dækning: {inHours} t {inMinutes} min · tidsvægtet gennemsnit",
+  "@recordedCoverageInhourshInminutesminTime": {
+    "placeholders": {
+      "inHours": {
+        "type": "Object"
+      },
+      "inMinutes": {
+        "type": "Object"
+      }
+    }
+  },
+  "lying": "Liggende",
+  "noHrvReadingsInThis": "Ingen HRV-målinger i denne periode",
+  "overnightHrvComesFromYour": "HRV om natten kommer fra dit ur, spotmålinger fra Polar H10 (RMSSD). Metoderne er forskellige: sammenlign tendenser, ikke enkeltværdier.",
+  "noReadings": "Ingen målinger",
+  "whenDidTheWorkoutStart": "Hvornår startede træningen?",
+  "whenDidItEnd": "Hvornår sluttede den?",
+  "last3Months": "Seneste 3 måneder",
+  "lastYear": "Seneste år",
+  "lastDaysDays": "Seneste {days} dage",
+  "@lastDaysDays": {
+    "placeholders": {
+      "days": {
+        "type": "Object"
+      }
+    }
+  },
+  "nowOnCurrentTapA": "Nu på {current}. Tryk på en dag, eller træk træningen hen på en. Trinene forbliver som de er.",
+  "@nowOnCurrentTapA": {
+    "placeholders": {
+      "current": {
+        "type": "Object"
+      }
+    }
+  },
+  "monthView": "Månedsvisning",
+  "syncing": "Synkroniserer",
+  "trendUnavailable": "Tendens utilgængelig",
+  "stable": "Stabil",
+  "increasing": "Stigende",
+  "decreasing": "Faldende",
+  "unclear": "Uklar",
+  "notComparable": "Ikke sammenlignelig",
+  "waitingForAfter": "Venter på efter",
+  "afterOnly": "Kun efter",
+  "waitingForTheActualWorkout": "Venter på træningens faktiske slutning.",
+  "reminderAroundTolocal": "Påmindelse omkring {toLocal}",
+  "@reminderAroundTolocal": {
+    "placeholders": {
+      "toLocal": {
+        "type": "Object"
+      }
+    }
+  },
+  "reminderIsDueMeasureWhen": "Påmindelsen er klar. Mål, når du er klar.",
+  "thisReminderIsNoLonger": "Denne påmindelse er ikke længere aktuel. Åbn træningen for at se dine målinger.",
+  "beforeFixedMilliseconds": "Før {fixed} millisekunder. ",
+  "@beforeFixedMilliseconds": {
+    "placeholders": {
+      "fixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "afterFixedMilliseconds": "Efter {fixed} millisekunder",
+  "@afterFixedMilliseconds": {
+    "placeholders": {
+      "fixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "changeDeltamsMillisecondsDeltapercentPercent": "Ændring {deltaMs} millisekunder, {deltaPercent} procent.",
+  "@changeDeltamsMillisecondsDeltapercentPercent": {
+    "placeholders": {
+      "deltaMs": {
+        "type": "Object"
+      },
+      "deltaPercent": {
+        "type": "Object"
+      }
+    }
+  },
+  "noPreTrainingMeasurementRecorded": "Ingen måling før træning registreret.",
+  "notMeasuredYet": "Endnu ikke målt",
+  "leftOutOfTheComparison": "Udeladt fra sammenligningen: {excludedTotal} træninger ({c}).",
+  "@leftOutOfTheComparison": {
+    "placeholders": {
+      "excludedTotal": {
+        "type": "Object"
+      },
+      "c": {
+        "type": "Object"
+      }
+    }
+  },
+  "notFromThisWorkout": "Ikke fra denne træning",
+  "useAsBefore": "Brug som før",
+  "useAsAfter": "Brug som efter",
+  "beforeNotMeasured": "Før · ikke målt",
+  "beforeTolocal": "Før · {toLocal}",
+  "@beforeTolocal": {
+    "placeholders": {
+      "toLocal": {
+        "type": "Object"
+      }
+    }
+  },
+  "workoutWorkouttext": "Træning · {workoutText}",
+  "@workoutWorkouttext": {
+    "placeholders": {
+      "workoutText": {
+        "type": "Object"
+      }
+    }
+  },
+  "afterNotMeasuredYet": "Efter · endnu ikke målt",
+  "afterTolocal": "Efter · {toLocal}",
+  "@afterTolocal": {
+    "placeholders": {
+      "toLocal": {
+        "type": "Object"
+      }
+    }
+  },
+  "yourSimilarWorkoutsEligibleTolocal": "Dine lignende træninger ({eligible}, {toLocal}–{toLocal2}): median {medianMs} ms, midterste halvdel {q1Ms} til {q3Ms} ms.",
+  "@yourSimilarWorkoutsEligibleTolocal": {
+    "placeholders": {
+      "eligible": {
+        "type": "Object"
+      },
+      "toLocal": {
+        "type": "Object"
+      },
+      "toLocal2": {
+        "type": "Object"
+      },
+      "medianMs": {
+        "type": "Object"
+      },
+      "q1Ms": {
+        "type": "Object"
+      },
+      "q3Ms": {
+        "type": "Object"
+      }
+    }
+  },
+  "howHardDidItFeel": "Hvor hårdt føltes det? (RPE)",
+  "loadMetric": "Belastning",
+  "clearAction": "Ryd",
+  "routeFinish": "Mål",
+  "month2": "MÅNED",
+  "week2": "UGE",
+  "quarter": "KVARTAL",
+  "year": "ÅR",
+  "easy3": "LET",
+  "mod": "MOD.",
+  "hard": "HÅRD",
+  "protocol": "PROTOKOL",
+  "calculate": "BEREGN",
+  "warmUp": "OPVARMNING",
+  "coolDown": "NEDKØLING",
+  "ftpCycling": "FTP cykling",
+  "ftpFtpwattsWWattsperkgW": "FTP {ftpWatts} W · {wattsPerKg} W/kg",
+  "@ftpFtpwattsWWattsperkgW": {
+    "placeholders": {
+      "ftpWatts": {
+        "type": "Object"
+      },
+      "wattsPerKg": {
+        "type": "Object"
+      }
+    }
+  },
+  "thisWeekSoFar": "DENNE UGE · INDTIL NU",
+  "duration2": "VARIGHED",
+  "distance2": "DISTANCE",
+  "sport2": "SPORTSGREN",
+  "repeatSets": "GENTAGELSESSÆT",
+  "aboutThisWorkout": "OM DENNE TRÆNING",
+  "workoutStructure": "TRÆNINGSSTRUKTUR",
+  "health2": "SUNDHED",
+  "high2": "HØJ",
+  "elevated": "FORHØJET",
+  "normal": "NORMAL",
+  "tomorrow": "I MORGEN",
+  "skipped2": "SPRUNGET OVER",
+  "weeklyPlan": "UGEPLAN",
+  "activityLog3": "AKTIVITETSLOG",
+  "skippedTouppercase": "SPRUNGET OVER · {toUpperCase}",
+  "@skippedTouppercase": {
+    "placeholders": {
+      "toUpperCase": {
+        "type": "Object"
+      }
+    }
+  },
+  "primaryZone": "HOVEDZONE",
+  "coachingCues": "TRÆNERTIPS",
+  "targets": "MÅL",
+  "adaptation": "TILPASNING",
+  "done2": "FÆRDIG",
+  "notRecorded2": "IKKE REGISTRERET",
+  "planned": "PLANLAGT",
+  "extra": "EKSTRA",
+  "optimal2": "OPTIMAL",
+  "qualified": "KVALIFICERET",
+  "temp": "TEMP.",
+  "humidity2": "LUFTFUGTIGHED",
+  "pressure": "LUFTTRYK",
+  "wetBulb": "VÅD TEMP.",
+  "paceMinKm": "Tempo (min/km)",
+  "speedKmH": "Fart (km/t)",
+  "elevationM": "Højde (m)",
+  "powerW": "EFFEKT (W)",
+  "performanceTime2": "PRÆSTATION / TID",
+  "performanceDistance2": "PRÆSTATION / DISTANCE",
+  "load2": "BELASTNING",
+  "day2": "DAG",
+  "allTime": "SAMLET",
+  "hrvAroundThisWorkout2": "HRV omkring denne træning. ",
+  "lowReserve": "LAV RESERVE",
+  "goodReserve": "GOD RESERVE",
+  "latestReadingAtTolocal": "Seneste måling kl. {toLocal}",
+  "@latestReadingAtTolocal": {
+    "placeholders": {
+      "toLocal": {
+        "type": "Object"
+      }
+    }
+  },
+  "weeklyAvg": "UGEGENNEMSNIT",
+  "monthlyAvg": "MÅNEDSGENNEMSNIT",
+  "systolic2": "SYSTOLISK",
+  "diastolic2": "DIASTOLISK",
+  "hourlyVariation": "TIMEVARIATION",
+  "dailyVariation": "DØGNVARIATION",
+  "sys2": "SYS",
+  "dia": "DIA",
+  "bluetoothDevices": "BLUETOOTH-ENHEDER",
+  "accountsServices": "KONTI OG TJENESTER",
+  "flowLoginOptional": "FLOW-LOGIN (VALGFRIT)",
+  "polarFlowLogin": "POLAR FLOW-LOGIN",
+  "raceGoal": "LØBSMÅL",
+  "experienceLevel": "ERFARINGSNIVEAU",
+  "weeklySchedule2": "UGEPLAN",
+  "sessionsPerDay2": "SESSIONER PR. DAG",
+  "aboutYou": "OM DIG",
+  "yourActivities2": "DINE AKTIVITETER",
+  "latestReadingAtTimestamp": "Seneste måling kl. {timestamp}",
+  "@latestReadingAtTimestamp": {
+    "placeholders": {
+      "timestamp": {
+        "type": "Object"
+      }
+    }
+  },
+  "poorSleep": "DÅRLIG SØVN",
+  "fairSleep": "MIDDEL SØVN",
+  "goodSleep": "GOD SØVN",
+  "hoursOfSleep": "TIMERS SØVN",
+  "sleepNeeded": "NØDVENDIG SØVN",
+  "deepSleep": "DYB SØVN",
+  "exercises2": "ØVELSER",
+  "strengthSummary": "STYRKERESUMÉ",
+  "strengthDraft": "STYRKE · KLADDE",
+  "strengthFinishedWithGaps": "STYRKE · AFSLUTTET MED HULLER",
+  "strength2": "STYRKE",
+  "wind": "VIND",
+  "sun2": "SOL",
+  "cloud": "SKYER",
+  "dataSourceUpdatedFetchedat": "Data: {source} · Opdateret {fetchedAt}",
+  "@dataSourceUpdatedFetchedat": {
+    "placeholders": {
+      "source": {
+        "type": "Object"
+      },
+      "fetchedAt": {
+        "type": "Object"
+      }
+    }
+  },
+  "coros2": "COROS",
+  "rmssdMs": "RMSSD · ms",
+  "sdnnMs": "SDNN · ms",
+  "now2": "NU",
+  "awake": "VÅGEN",
+  "light": "LET",
+  "deep2": "DYB",
+  "sqliteOrm": "SQLite ORM",
+  "httpClients": "HTTP-klienter",
+  "gpsLocation": "GPS-placering",
+  "hdlCholesterol": "HDL-kolesterol",
+  "ldlCholesterol": "LDL-kolesterol",
+  "raceName": "LØBSNAVN",
+  "mtb": "MTB",
+  "distanceKm": "Distance (km)",
+  "priority": "PRIORITET",
+  "elevationGainM": "Stigning (m)",
+  "targetTime": "MÅLTID",
+  "raceDate": "LØBSDATO",
+  "participation": "DELTAGELSE",
+  "whatIWantFromIt": "HVAD JEG VIL HAVE UD AF DET",
+  "periodTimeline": "{period} · FORLØB",
+  "@periodTimeline": {
+    "placeholders": {
+      "period": {
+        "type": "Object"
+      }
+    }
+  },
+  "tabPlan": "PLAN",
+  "tabLoad": "BELASTNING",
+  "tabCoach": "TRÆNER",
+  "hrDriftTestLt1": "PULSDRIFTTEST – LT1",
+  "asSentByGarmin": "SOM SENDT AF GARMIN",
+  "noData2": "INGEN DATA",
+  "noTarget": "INTET MÅL",
+  "noHeatLoad": "INGEN VARMEBELASTNING",
+  "hrBpm": "Puls (bpm)",
+  "aiBriefingUnavailableShowingA": "AI-briefing er ikke tilgængelig. Viser et resumé uden AI.",
+  "uvIndex2": "UV-INDEKS",
+  "aiBriefing": "AI-briefing",
+  "uiFrameworkByGoogle": "UI-framework fra Google",
+  "unableToLoadData": "Kunne ikke indlæse data",
+  "briefingSummary": "Restitution {recovery} / 100. Søvn {sleep} / 100. Dagens træningsbelastning er {load} TRIMP.",
+  "@briefingSummary": {
+    "placeholders": {
+      "recovery": {
+        "type": "Object"
+      },
+      "sleep": {
+        "type": "Object"
+      },
+      "load": {
+        "type": "Object"
+      }
+    }
+  },
+  "morningBriefing": "Morgenbriefing",
+  "lunchBriefing": "Frokostbriefing",
+  "afternoonBriefing": "Eftermiddagsbriefing",
+  "eveningBriefing": "Aftenbriefing",
+  "appleUnusableAnswer": "Apple Intelligence kunne ikke give et brugbart svar: den gentog sig selv eller dine data. Omformulér spørgsmålet, eller vælg en anden AI-udbyder i indstillingerne.",
+  "appleCouldNotAnswer": "Apple Intelligence kunne ikke svare. Prøv igen.",
+  "appleNotAvailableOnDevice": "Apple Intelligence er ikke tilgængelig på denne enhed.",
+  "appleLanguageRejected": "Apple Intelligence afviste forespørgslens sprog. Prøv et kort spørgsmål på engelsk. Tjek også sprogindstillingerne for iPhone og Siri.",
+  "appleRequestTooLarge": "Apple Intelligence kunne ikke rumme denne forespørgsel. Prøv et kortere spørgsmål.",
+  "messageTooLongForApple": "Denne besked er for lang til Apple Intelligence. Forkort den, og send igen.",
+  "vo2maxRunning": "VO₂max løb",
+  "vo2maxCycling": "VO₂max cykling",
+  "vo2maxPaceLabel": "VO₂max-tempo",
+  "lt1Threshold": "LT1-tærskel",
+  "lt2Threshold": "LT2-tærskel",
+  "hoursPreviousWeek": "{value} t sidste uge",
+  "@hoursPreviousWeek": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "kmPreviousWeek": "{value} km sidste uge",
+  "@kmPreviousWeek": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "thirtyMinuteTimeTrial": "30-minutters tidskørsel",
+  "thirtyMinTtDate": "30-min TT · {date}",
+  "@thirtyMinTtDate": {
+    "placeholders": {
+      "date": {
+        "type": "Object"
+      }
+    }
+  },
+  "yesterday2": "I GÅR",
+  "briefHeadGreen": "Du er godt restitueret.",
+  "briefHeadYellow": "Du er lidt belastet.",
+  "briefHeadRed": "Du er tydeligt belastet.",
+  "briefMain": "Hovedårsager: {reasons}.",
+  "@briefMain": {
+    "placeholders": {
+      "reasons": {
+        "type": "Object"
+      }
+    }
+  },
+  "briefAllClear": "Ingen af dine værdier viser et advarselssignal.",
+  "briefAdviceGreen": "Træn som planlagt.",
+  "briefAdviceYellow": "Behold din plan, men tilføj ingen ekstra intensitet.",
+  "briefAdviceRed": "Restitution først: tag en let dag eller hvil.",
+  "briefReasonHrvLow": "lav søvn-HRV",
+  "briefReasonHrvHigh": "høj søvn-HRV",
+  "briefReasonRhrUp": "forhøjet hvilepuls",
+  "briefReasonRhrDown": "lav hvilepuls",
+  "briefReasonSleepShort": "for lidt søvn",
+  "briefReasonSleepGood": "søvnbehovet er dækket",
+  "briefReasonEnergyLow": "lidt energi",
+  "briefReasonEnergyHigh": "god energi",
+  "briefReasonStressHigh": "højt stressniveau",
+  "briefReasonRespHigh": "forhøjet respirationsfrekvens",
+  "briefReasonSpo2Low": "lavt ilt i blodet",
+  "briefReasonSkinTempOff": "usædvanlig hudtemperatur",
+  "briefReasonFormTired": "ophobet træningstræthed",
+  "briefReasonFormVeryTired": "meget høj træningstræthed",
+  "briefReasonFormFresh": "frisk og udhvilet",
+  "briefTrainingHrvUp": "Din HRV steg efter træningen, et godt tegn.",
+  "briefTrainingHrvDown": "Din HRV faldt efter træningen, et mindre godt tegn."
+}

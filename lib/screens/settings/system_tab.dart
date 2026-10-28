@@ -1,3 +1,4 @@
+import '../../l10n/l10n_ext.dart';
 import '../../providers/data_export_provider.dart';
 import '../../models/backup_restore.dart';
 
@@ -10,72 +11,83 @@ import '../../providers/user_profile_provider.dart';
 import '../../providers/day_data_provider.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/settings_widgets.dart';
+import '../../l10n/app_localizations.dart';
 import 'bug_report_sheet.dart';
 
 class SystemTab extends StatelessWidget {
   const SystemTab({super.key});
   @override
-  Widget build(BuildContext context) => SettingsPage(
-    title: 'System',
-    child: ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        SettingsGroup(
-          dividerIndent: 58,
-          children: [
-            ListTile(
-              leading: const SettingsIcon(Icons.archive_outlined, Colors.blue),
-              title: const Text('Data Export'),
-              subtitle: const Text('CSV export, backup & restore'),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () => showAppSheet(context, const DataExportPage()),
-            ),
-            ListTile(
-              leading: const SettingsIcon(
-                Icons.bug_report_outlined,
-                Colors.orange,
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return SettingsPage(
+      title: l10n.system,
+      child: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          SettingsGroup(
+            dividerIndent: 58,
+            children: [
+              ListTile(
+                leading: const SettingsIcon(
+                  Icons.archive_outlined,
+                  Colors.blue,
+                ),
+                title: Text(l10n.dataExport),
+                subtitle: Text(l10n.dataExportSubtitle),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => showAppSheet(context, const DataExportPage()),
               ),
-              title: const Text('Developer'),
-              subtitle: const Text('Debug mode, diagnostics'),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () => showAppSheet(context, const DeveloperPage()),
-            ),
-          ],
-        ),
-      ],
-    ),
-  );
+              ListTile(
+                leading: const SettingsIcon(
+                  Icons.bug_report_outlined,
+                  Colors.orange,
+                ),
+                title: Text(l10n.developer),
+                subtitle: Text(l10n.developerSubtitle),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => showAppSheet(context, const DeveloperPage()),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class DeveloperPage extends ConsumerWidget {
   const DeveloperPage({super.key});
   @override
-  Widget build(BuildContext context, WidgetRef ref) => SettingsPage(
-    title: 'Developer',
-    child: ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        const SectionLabel('Debug'),
-        SwitchListTile(
-          title: const Text('Debug mode'),
-          subtitle: const Text('Shows the DEBUG tab'),
-          value: ref.watch(userProfileProvider).valueOrNull?.debugMode ?? false,
-          onChanged: (v) => runUiAction(context, () async {
-            final p = await ref.read(userProfileProvider.future);
-            await ref
-                .read(userProfileProvider.notifier)
-                .save(p.copyWith(debugMode: v));
-          }),
-        ),
-        const SectionLabel('Support'),
-        ListTile(
-          title: const Text('Report a bug'),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () => showAppSheet(context, const BugReportSheet()),
-        ),
-      ],
-    ),
-  );
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    return SettingsPage(
+      title: l10n.developer,
+      child: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          SectionLabel(l10n.debug),
+          SwitchListTile(
+            title: Text(l10n.debugMode),
+            subtitle: Text(l10n.debugModeSubtitle),
+            value:
+                ref.watch(userProfileProvider).valueOrNull?.debugMode ?? false,
+            onChanged: (v) => runUiAction(context, () async {
+              final p = await ref.read(userProfileProvider.future);
+              await ref
+                  .read(userProfileProvider.notifier)
+                  .save(p.copyWith(debugMode: v));
+            }),
+          ),
+          SectionLabel(l10n.support),
+          ListTile(
+            title: Text(l10n.reportBug),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => showAppSheet(context, const BugReportSheet()),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class DataExportPage extends ConsumerStatefulWidget {
@@ -109,7 +121,7 @@ class _ExportState extends ConsumerState<DataExportPage> {
 
   @override
   Widget build(BuildContext context) => SettingsPage(
-    title: 'Data Export',
+    title: AppLocalizations.of(context).dataExport,
     child: ListView(
       padding: const EdgeInsets.all(16),
       children: [
@@ -121,7 +133,7 @@ class _ExportState extends ConsumerState<DataExportPage> {
               children: [
                 Text(
                   restoreError != null
-                      ? 'Restore failed'
+                      ? context.l10n.restoreFailed
                       : restoreProgress!.stage,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
@@ -150,18 +162,18 @@ class _ExportState extends ConsumerState<DataExportPage> {
                   if (restoreResult!.activities == 0 &&
                       restoreResult!.plannedSessions == 0 &&
                       restoreResult!.scheduledWorkouts == 0)
-                    const Text('This backup contains no calendar activities.'),
+                    Text(context.l10n.thisBackupContainsNoCalendar),
                 ],
               ],
             ),
           ),
         SettingsGroup(
-          title: 'Activities',
-          footer: 'Export all recorded workouts as a spreadsheet.',
+          title: context.l10n.activities,
+          footer: context.l10n.exportAllRecordedWorkoutsAs,
           children: [
             ListTile(
               enabled: !busy,
-              title: const Text('Export activities CSV'),
+              title: Text(context.l10n.exportActivitiesCsv),
               leading: const SettingsIcon(Icons.ios_share, mint),
               trailing: const Icon(Icons.chevron_right, size: 20),
               onTap: () => run(() async {
@@ -174,13 +186,13 @@ class _ExportState extends ConsumerState<DataExportPage> {
           ],
         ),
         SettingsGroup(
-          title: 'Backup & restore',
+          title: context.l10n.backupRestore,
           dividerIndent: 58,
-          footer: 'Backups include your health data, training plans and profile settings. Login credentials are excluded. Restoring replaces local data.',
+          footer: context.l10n.backupsIncludeYourHealthData,
           children: [
             ListTile(
               enabled: !busy,
-              title: const Text('Backup'),
+              title: Text(context.l10n.backup),
               leading: const SettingsIcon(Icons.backup_outlined, Colors.blue),
               trailing: const Icon(Icons.chevron_right, size: 20),
               onTap: () => run(() async {
@@ -190,8 +202,8 @@ class _ExportState extends ConsumerState<DataExportPage> {
             ),
             ListTile(
               enabled: !busy,
-              title: const Text(
-                'Restore from backup',
+              title: Text(
+                context.l10n.restoreFromBackup,
                 style: TextStyle(color: Colors.red),
               ),
               leading: const SettingsIcon(Icons.restore, Colors.orange),
@@ -206,14 +218,14 @@ class _ExportState extends ConsumerState<DataExportPage> {
                 if (!context.mounted ||
                     !await confirmAction(
                       context,
-                      'Replace local data?',
-                      'Restoring this backup replaces all local health and training records. Existing login credentials are kept.',
+                      context.l10n.replaceLocalData,
+                      context.l10n.restoringThisBackupReplacesAll,
                     )) {
                   return;
                 }
                 setState(() {
-                  restoreProgress = const BackupRestoreProgress(
-                    'Opening backup ZIP',
+                  restoreProgress = BackupRestoreProgress(
+                    context.l10n.openingBackupZip,
                     0,
                   );
                   restoreResult = null;
@@ -239,10 +251,8 @@ class _ExportState extends ConsumerState<DataExportPage> {
                 ref.invalidate(userProfileProvider);
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        'Backup restored. Restart the app to reload all settings.',
-                      ),
+                    SnackBar(
+                      content: Text(context.l10n.backupRestoredRestartTheApp),
                     ),
                   );
                 }

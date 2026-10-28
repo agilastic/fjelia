@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'dart:math' as math;
 
 import 'package:fl_chart/fl_chart.dart';
@@ -100,8 +102,12 @@ class LoadRange extends StatelessWidget {
     required this.onChanged,
     this.color = mint,
     this.segmented = false,
+    this.display = const {},
   });
   final List<String> labels;
+
+  /// What the user reads for a label; the label itself stays the identifier.
+  final Map<String, String> display;
   final String selected;
   final ValueChanged<String> onChanged;
   final Color color;
@@ -133,7 +139,7 @@ class LoadRange extends StatelessWidget {
                   vertical: segmented ? 6 : 8,
                 ),
                 child: Text(
-                  label,
+                  display[label] ?? label,
                   style: TextStyle(
                     fontSize: segmented ? 10 : 12,
                     fontWeight: FontWeight.w600,
@@ -221,7 +227,7 @@ class LoadSheet extends StatelessWidget {
               ),
               if (close)
                 IconButton(
-                  tooltip: 'Close',
+                  tooltip: context.l10n.close,
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints.tightFor(
                     width: 28,
@@ -243,7 +249,7 @@ class LoadSheet extends StatelessWidget {
   );
 }
 
-String loadDate(DateTime date) => DateFormat('dd.MM.yyyy').format(date);
+String loadDate(DateTime date) => DateFormat.yMd().format(date);
 
 /// Calendar-week number of the week starting on [date].
 int loadWeekNumber(DateTime date, {bool mondayFirst = true}) =>
@@ -293,7 +299,7 @@ class LoadWeekBars extends StatelessWidget {
                     Expanded(
                       child: Tooltip(
                         message:
-                            '${DateFormat('d MMM').format(dates[i])}: ${valueText(values[i], 1)}'
+                            '${DateFormat.MMMd().format(dates[i])}: ${valueText(values[i], 1)}'
                             '${inProgressLast && i == values.length - 1 ? ' (so far)' : ''}',
                         child: LayoutBuilder(
                           builder: (context, box) => ClipRRect(
@@ -408,8 +414,11 @@ class LoadTrendChart extends StatelessWidget {
     if (clean.isEmpty) {
       return SizedBox(
         height: height,
-        child: const Center(
-          child: Text('No measurements in this period', style: loadCaption),
+        child: Center(
+          child: Text(
+            context.l10n.noMeasurementsInThisPeriod,
+            style: loadCaption,
+          ),
         ),
       );
     }
@@ -464,7 +473,7 @@ class LoadTrendChart extends StatelessWidget {
             return Padding(
               padding: const EdgeInsets.only(top: 5),
               child: Text(
-                DateFormat(heat ? 'M/d' : 'd/M').format(date),
+                DateFormat.Md().format(date),
                 style: const TextStyle(fontSize: 7, color: Color(0xFF777777)),
               ),
             );
@@ -553,3 +562,17 @@ class LoadTrendChart extends StatelessWidget {
     );
   }
 }
+
+/// Training-monitor metric ids are English identifiers; this is what the
+/// user reads for each.
+String loadMetricLabel(BuildContext context, String id) => switch (id) {
+  'VO₂max running' => context.l10n.vo2maxRunning,
+  'VO₂max cycling' => context.l10n.vo2maxCycling,
+  'VO₂max pace' => context.l10n.vo2maxPaceLabel,
+  'LT1 threshold' => context.l10n.lt1Threshold,
+  'LT2 threshold' => context.l10n.lt2Threshold,
+  'Activity hours' => context.l10n.activityHours,
+  'Activity km' => context.l10n.activityKm,
+  'FTP cycling' => context.l10n.ftpCycling,
+  _ => id,
+};

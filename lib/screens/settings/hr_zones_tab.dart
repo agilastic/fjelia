@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,7 +18,7 @@ class HrZonesTab extends ConsumerWidget {
     final tt = ref.watch(lt2TtProvider).valueOrNull;
     final maxHr = ref.watch(userProfileProvider).valueOrNull?.maxHrEstimate;
     return SheetPage(
-      title: 'HR Zones',
+      title: context.l10n.hrZones,
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -31,12 +33,12 @@ class HrZonesTab extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          '30-min TT available — sync HR zones',
+                        Text(
+                          context.l10n.t30MinTtAvailableSync,
                           style: TextStyle(color: Colors.orange, fontSize: 11),
                         ),
                         Text(
-                          'LT2 ${tt.lt2} bpm · ${dayText(tt.at)}',
+                          context.l10n.lt2Lt2BpmAt(tt.lt2, dayText(tt.at)),
                           style: const TextStyle(color: muted, fontSize: 9),
                         ),
                       ],
@@ -49,8 +51,8 @@ class HrZonesTab extends ConsumerWidget {
                       final lt1 = ref.read(lt1Provider);
                       if (lt1 != null) await n.applyLt1Ceiling(lt1.bpm);
                     }),
-                    child: const Text(
-                      'SYNC',
+                    child: Text(
+                      context.l10n.syncLabel,
                       style: TextStyle(color: Colors.orange, fontSize: 10),
                     ),
                   ),
@@ -59,7 +61,7 @@ class HrZonesTab extends ConsumerWidget {
             ),
           for (final bike in [false, true]) ...[
             SectionLabel(
-              bike ? 'Cycling' : 'Running',
+              bike ? context.l10n.cycling : context.l10n.running,
               color: bike ? Colors.blue : Colors.red,
             ),
             Align(
@@ -73,9 +75,7 @@ class HrZonesTab extends ConsumerWidget {
                       ? suggestion?.cyclingMaxHr
                       : suggestion?.runningMaxHr;
                   if (max == null) {
-                    throw StateError(
-                      'Not enough recent heart-rate data to adjust zones.',
-                    );
+                    throw StateError(tr.notEnoughRecentHeartRate);
                   }
                   if (bike) {
                     await ref
@@ -87,7 +87,7 @@ class HrZonesTab extends ConsumerWidget {
                         .saveRunning(HrZones.fromMaxHr(max));
                   }
                 }),
-                child: const Text('AUTOADJUST'),
+                child: Text(context.l10n.autoadjust),
               ),
             ),
             for (var i = 0; i < 5; i++)
@@ -105,15 +105,15 @@ class HrZonesTab extends ConsumerWidget {
                         Colors.red,
                       ][i],
                     ),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Zone ${i + 1}',
+                            context.l10n.zoneI(i + 1),
                             style: TextStyle(
-                              color: const [
+                              color: [
                                 Colors.blue,
                                 mint,
                                 Colors.yellow,
@@ -123,11 +123,11 @@ class HrZonesTab extends ConsumerWidget {
                             ),
                           ),
                           Text(
-                            const [
+                            [
                               'Recovery / Easy',
-                              'Aerobic Base',
-                              'Tempo',
-                              'Lactate Threshold',
+                              context.l10n.aerobicBase,
+                              context.l10n.tempo,
+                              context.l10n.lactateThreshold,
                               'VO₂max',
                             ][i],
                             style: const TextStyle(fontSize: 10, color: muted),
@@ -199,8 +199,8 @@ class HrZonesPreview extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'HR ZONES',
+        Text(
+          context.l10n.hrZones2,
           style: TextStyle(color: muted, fontSize: 9, letterSpacing: 1),
         ),
         const SizedBox(height: 10),

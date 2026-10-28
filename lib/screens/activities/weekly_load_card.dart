@@ -1,4 +1,6 @@
+import '../../l10n/l10n_ext.dart';
 import '../../providers/activity_history_provider.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -74,9 +76,9 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
                 child: const Icon(Icons.bolt, color: loadOrange, size: 20),
               ),
               const SizedBox(width: 10),
-              const Expanded(
+              Expanded(
                 child: Text(
-                  'WEEKLY TRAINING LOAD',
+                  context.l10n.weeklyTrainingLoad2,
                   style: TextStyle(
                     fontSize: 11,
                     color: Colors.white,
@@ -107,7 +109,9 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      progress.inProgress ? 'THIS WEEK · SO FAR' : 'WEEK',
+                      progress.inProgress
+                          ? context.l10n.thisWeekSoFar
+                          : context.l10n.week2,
                       style: loadCaption,
                     ),
                     const SizedBox(height: 8),
@@ -135,7 +139,7 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  const Text('PREV WEEK', style: loadCaption),
+                  Text(context.l10n.prevWeek, style: loadCaption),
                   const SizedBox(height: 4),
                   Text(
                     valueText(previous),
@@ -183,7 +187,7 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
               ],
             ),
           const Divider(height: 30, color: Colors.white10),
-          const Text('BY SPORT', style: loadLabel),
+          Text(context.l10n.bySport, style: loadLabel),
           const SizedBox(height: 5),
           for (final e in sports.entries)
             Padding(
@@ -208,7 +212,7 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
                   ),
                   if (e.value[1] > 0)
                     Padding(
-                      padding: const EdgeInsets.only(left: 6),
+                      padding: EdgeInsets.only(left: 6),
                       child: LoadBadge(
                         '${((e.value[0] - e.value[1]) / e.value[1] * 100).round()}%',
                         color: loadBlue,
@@ -219,11 +223,14 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
               ),
             ),
           if (sports.isEmpty)
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(vertical: 8),
-              child: Text('No activities this week', style: loadCaption),
+              child: Text(
+                context.l10n.noActivitiesThisWeek,
+                style: loadCaption,
+              ),
             ),
-          const Divider(height: 28, color: Colors.white10),
+          Divider(height: 28, color: Colors.white10),
           LayoutBuilder(
             builder: (context, constraints) => Wrap(
               alignment: WrapAlignment.spaceBetween,
@@ -231,9 +238,14 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
               spacing: 12,
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
-                const Text('12-WEEK HISTORY', style: loadLabel),
+                Text(context.l10n.t12WeekHistory, style: loadLabel),
                 LoadRange(
-                  labels: const ['Load', 'Time', 'Distance'],
+                  labels: ['Load', context.l10n.time, context.l10n.distance],
+                  display: {
+                    'Load': context.l10n.loadMetric,
+                    'Time': context.l10n.time,
+                    'Distance': context.l10n.distance,
+                  },
                   selected: metric,
                   segmented: true,
                   onChanged: (m) => setState(() => metric = m),
@@ -273,7 +285,7 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
                 label: Text(
                   change != null && change < 0
                       ? 'What explains this drop?'
-                      : 'What explains this rise?',
+                      : context.l10n.whatExplainsThisRise,
                 ),
                 onPressed: () => openCoachTab(
                   context,
@@ -282,7 +294,7 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
                       '${progress.inProgress ? ' so far' : ''}, last week it was '
                       '${valueText(previous)}'
                       '${change == null ? '' : ' (${change.round()}% against the same point of last week)'}. '
-                      '${change != null && change < 0 ? 'What explains this drop' : 'What explains this rise'}, '
+                      '${change != null && change < 0 ? context.l10n.whatExplainsThisDrop : context.l10n.whatExplainsThisRise2}, '
                       'and which sessions drove it?',
                 ),
               ),

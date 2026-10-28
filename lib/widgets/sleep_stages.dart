@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 
@@ -7,11 +9,11 @@ import 'app_widgets.dart';
 /// Stage rows, top to bottom.
 const sleepStageOrder = ['awake', 'rem', 'light', 'deep'];
 
-const _stageLabels = {
-  'awake': 'AWAKE',
+Map<String, String> get _stageLabels => {
+  'awake': tr.awake,
   'rem': 'REM',
-  'light': 'LIGHT',
-  'deep': 'DEEP',
+  'light': tr.light,
+  'deep': tr.deep2,
 };
 
 /// Bar colors: white awake, then teal getting darker with depth.
@@ -39,8 +41,7 @@ String _duration(Duration d) {
   return h > 0 ? '${h}h ${m.toString().padLeft(2, '0')}m' : '${m}m';
 }
 
-String _clock(DateTime t) =>
-    DateFormat('h:mm a').format(t.toLocal()).toLowerCase();
+String _clock(DateTime t) => DateFormat.jm().format(t.toLocal()).toLowerCase();
 
 /// Sleep stages of one night: a timeline chart (when the night has stage
 /// data) and the time and share spent in each stage.
@@ -62,8 +63,8 @@ class SleepStagesSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'SLEEP STAGES',
+        Text(
+          context.l10n.sleepStages,
           style: TextStyle(fontSize: 11, color: muted, letterSpacing: 1.2),
         ),
         const SizedBox(height: 14),
@@ -74,10 +75,10 @@ class SleepStagesSection extends StatelessWidget {
             end: sleep.sleepEnd,
           )
         else
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(bottom: 14),
             child: Text(
-              'No stage timeline for this night.',
+              context.l10n.noStageTimelineForThis,
               style: TextStyle(fontSize: 12, color: muted),
             ),
           ),
@@ -148,7 +149,9 @@ class SleepStageBreakdown extends StatelessWidget {
                 SizedBox(
                   width: 52,
                   child: Text(
-                    '${(durations[stage]!.inSeconds / total * 100).round()}%',
+                    context.l10n.round3(
+                      (durations[stage]!.inSeconds / total * 100).round(),
+                    ),
                     textAlign: TextAlign.right,
                     style: const TextStyle(fontSize: 12, color: muted),
                   ),
@@ -264,7 +267,7 @@ class _SleepStagesChartState extends State<SleepStagesChart> {
           padding: const EdgeInsets.only(top: 6, bottom: 14),
           child: Text(
             selected == null
-                ? 'Touch the chart for details'
+                ? context.l10n.touchTheChartForDetails
                 : '${_stageLabels[selected.phase]} · ${_clock(selected.start)}'
                       ' – ${_clock(selected.end)} · '
                       '${_duration(selected.end.difference(selected.start))}',
@@ -331,7 +334,7 @@ class _SleepStagesPainter extends CustomPainter {
         final x = tick.difference(from).inMilliseconds / span * size.width;
         final label = TextPainter(
           text: TextSpan(
-            text: DateFormat('h a').format(tick).toLowerCase(),
+            text: DateFormat.j().format(tick).toLowerCase(),
             style: style,
           ),
           textDirection: TextDirection.ltr,

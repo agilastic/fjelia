@@ -1,3 +1,6 @@
+import '../l10n/l10n_ext.dart';
+import '../l10n/formats.dart';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -61,7 +64,7 @@ class _State extends ConsumerState<HrvCombinedCard> {
   /// to a workout, the real delay against it.
   String _detail(SpotHrvMeasurement r, HrvSnapshot? snapshot) {
     final parts = [
-      r.posture == 'supine' ? 'Lying' : 'Seated',
+      r.posture == 'supine' ? context.l10n.lying : context.l10n.enumSeated,
       '${(r.durationSeconds / 60).round()} min',
       if (r.qualityState == 'legacyUnverified')
         'older reading, quality not recorded',
@@ -145,7 +148,7 @@ class _State extends ConsumerState<HrvCombinedCard> {
             segments: [
               for (final p in SpotHrvPosture.values)
                 ButtonSegment(value: p.name, label: Text(p.label)),
-              const ButtonSegment(value: 'all', label: Text('Both')),
+              ButtonSegment(value: 'all', label: Text(context.l10n.both)),
             ],
             selected: {_posture},
             onSelectionChanged: (v) => setState(() => _posture = v.first),
@@ -153,9 +156,9 @@ class _State extends ConsumerState<HrvCombinedCard> {
         ),
         const SizedBox(height: 16),
         if (visible.isEmpty)
-          const SizedBox(
+          SizedBox(
             height: 180,
-            child: EmptyState('No HRV readings in this period'),
+            child: EmptyState(context.l10n.noHrvReadingsInThis),
           )
         else
           SizedBox(
@@ -180,7 +183,10 @@ class _State extends ConsumerState<HrvCombinedCard> {
                 Container(width: 16, height: 1.5, color: Colors.white38),
                 const SizedBox(width: 6),
                 Text(
-                  '${widget.averageLabel} ${widget.average!.toStringAsFixed(0)} ms',
+                  context.l10n.averagelabelFixedMs(
+                    widget.averageLabel,
+                    widget.average!.fixed(0),
+                  ),
                   style: const TextStyle(fontSize: 10, color: muted),
                 ),
               ],
@@ -206,13 +212,12 @@ class _State extends ConsumerState<HrvCombinedCard> {
             ),
             onPressed: () => showAppSheet(context, const PolarH10HrvSheet()),
             icon: const Icon(Icons.monitor_heart_outlined, size: 18),
-            label: const Text('Measure with Polar H10'),
+            label: Text(context.l10n.measureWithPolarH10),
           ),
         ),
         const SizedBox(height: 10),
-        const Text(
-          'Overnight HRV comes from your watch, spot readings from the Polar '
-          'H10 (RMSSD). The methods differ: compare trends, not single values.',
+        Text(
+          context.l10n.overnightHrvComesFromYour,
           style: TextStyle(color: muted, fontSize: 11, height: 1.4),
         ),
       ],
@@ -334,7 +339,7 @@ class _Tile extends StatelessWidget {
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      'ms',
+                      context.l10n.ms,
                       style: TextStyle(
                         fontSize: 11,
                         color: dim ? const Color(0x66FFFFFF) : muted,
@@ -344,7 +349,7 @@ class _Tile extends StatelessWidget {
                 ),
                 Text(
                   empty
-                      ? 'No readings'
+                      ? context.l10n.noReadings
                       : mixed
                       ? '${data.count} readings · mixed positions'
                       : data.count == 1
@@ -383,8 +388,8 @@ class _PairSummary extends ConsumerWidget {
         .valueOrNull;
     if (summary == null) return const SizedBox.shrink();
     if (summary.pairs == 0) {
-      return const Text(
-        'No workout in this period has a comparable before and after pair.',
+      return Text(
+        context.l10n.noWorkoutInThisPeriod,
         style: TextStyle(color: muted, fontSize: 12),
       );
     }
@@ -409,7 +414,7 @@ class _PairSummary extends ConsumerWidget {
             const SizedBox(width: 10),
             Expanded(
               child: Text(
-                '$text. Each workout counts once; this describes your pairs, it does not score them.',
+                context.l10n.textEachWorkoutCountsOnce(text),
                 style: const TextStyle(fontSize: 12, height: 1.35),
               ),
             ),
@@ -489,7 +494,7 @@ class _Chart extends StatelessWidget {
               minIncluded: false,
               maxIncluded: false,
               getTitlesWidget: (v, _) => Text(
-                v.toStringAsFixed(0),
+                v.fixed(0),
                 style: const TextStyle(fontSize: 10, color: muted),
               ),
             ),
@@ -504,7 +509,7 @@ class _Chart extends StatelessWidget {
                 child: Text(
                   // The right edge is the end of the last day, so it carries
                   // that day's date and not the next one.
-                  DateFormat('d MMM').format(
+                  DateFormat.MMMd().format(
                     v >= span - .001
                         ? end.subtract(const Duration(days: 1))
                         : start.add(Duration(minutes: (v * 1440).round())),
@@ -545,7 +550,7 @@ class _Chart extends StatelessWidget {
                   ),
                   children: [
                     TextSpan(
-                      text: '${spot.y.toStringAsFixed(0)} ms',
+                      text: '${spot.y.fixed(0)} ms',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 14,
@@ -554,7 +559,7 @@ class _Chart extends StatelessWidget {
                     ),
                     TextSpan(
                       text:
-                          '\n${DateFormat('d MMM · HH:mm').format(series[spot.barIndex].points[spot.spotIndex].at)}',
+                          '\n${DateFormat.MMMd().add_Hm().format(series[spot.barIndex].points[spot.spotIndex].at)}',
                       style: const TextStyle(
                         color: Colors.white54,
                         fontSize: 10,

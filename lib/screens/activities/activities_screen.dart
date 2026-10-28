@@ -1,3 +1,4 @@
+import '../../l10n/l10n_ext.dart';
 import '../../theme/activity_colors.dart'
     show completedActivityColor, activitySportIcon;
 import '../../providers/activity_history_provider.dart';
@@ -16,8 +17,8 @@ import '../../providers/week_start_provider.dart';
 class ActivitiesScreen extends ConsumerWidget {
   const ActivitiesScreen({super.key});
   @override
-  Widget build(BuildContext context, WidgetRef ref) => const SheetPage(
-    title: 'Activity Log',
+  Widget build(BuildContext context, WidgetRef ref) => SheetPage(
+    title: context.l10n.activityLog,
     child: SingleChildScrollView(
       padding: EdgeInsets.all(16),
       child: ActivityHistory(),
@@ -60,10 +61,10 @@ class _HistoryState extends ConsumerState<ActivityHistory> {
         if (widget.showHeader)
           Row(
             children: [
-              const Expanded(child: SectionLabel('Activity log')),
+              Expanded(child: SectionLabel(context.l10n.activityLog2)),
               TextButton(
                 onPressed: () => setState(() => month = !month),
-                child: Text(month ? 'MONTH' : 'WEEK'),
+                child: Text(month ? context.l10n.month2 : context.l10n.week2),
               ),
             ],
           ),
@@ -87,10 +88,10 @@ class _HistoryState extends ConsumerState<ActivityHistory> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.only(top: 12, bottom: 8),
                       child: Text(
-                        'HISTORY',
+                        context.l10n.history2,
                         style: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.w800,
@@ -99,7 +100,7 @@ class _HistoryState extends ConsumerState<ActivityHistory> {
                       ),
                     ),
                     if (filtered.isEmpty)
-                      const EmptyState('No activities in this period'),
+                      EmptyState(context.l10n.noActivitiesInThisPeriod),
                     for (var i = 0; i < filtered.length; i++) ...[
                       if (i == 0 ||
                           !DateUtils.isSameDay(
@@ -109,7 +110,7 @@ class _HistoryState extends ConsumerState<ActivityHistory> {
                         Padding(
                           padding: const EdgeInsets.only(top: 12, bottom: 6),
                           child: Text(
-                            dayText(filtered[i].startDate).toUpperCase(),
+                            dayHeading(context, filtered[i].startDate),
                             style: const TextStyle(fontSize: 9, color: muted),
                           ),
                         ),
@@ -154,7 +155,17 @@ class _ActivityHistoryTile extends StatelessWidget {
             style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
           ),
           subtitle: Text(
-            '${a.durationSeconds ~/ 3600}h ${a.durationSeconds ~/ 60 % 60}m · ${valueText(a.distanceMeters == null ? null : a.distanceMeters! / 1000, 1)} km · ${valueText(a.avgHeartRate)} bpm · ↑${valueText(a.totalElevation)} m',
+            context.l10n
+                .durationsecondshDurationseconds2mDistancemetersKmAvgheartrate(
+                  a.durationSeconds ~/ 3600,
+                  a.durationSeconds ~/ 60 % 60,
+                  valueText(
+                    a.distanceMeters == null ? null : a.distanceMeters! / 1000,
+                    1,
+                  ),
+                  valueText(a.avgHeartRate),
+                  valueText(a.totalElevation),
+                ),
             style: const TextStyle(fontSize: 9, color: muted),
           ),
           trailing: Icon(Icons.check_circle_outline, size: 15, color: color),

@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'dart:convert';
 
 import 'package:drift/drift.dart';
@@ -136,11 +138,9 @@ class StrengthRepository {
     try {
       return StrengthWorkoutPlan.fromJson(jsonDecode(json) as Map);
     } on FormatException catch (e) {
-      throw StrengthUnreadableException(
-        'This strength plan cannot be read (${e.message}).',
-      );
+      throw StrengthUnreadableException(tr.thisStrengthPlanCannotBe(e.message));
     } on TypeError {
-      throw StrengthUnreadableException('This strength plan cannot be read.');
+      throw StrengthUnreadableException(tr.thisStrengthPlanCannotBe2);
     }
   }
 
@@ -152,7 +152,7 @@ class StrengthRepository {
     required int expectedRevision,
   }) async {
     final errors = plan.validate();
-    if (plan.isEmpty) errors.add('Add at least one exercise.');
+    if (plan.isEmpty) errors.add(tr.addAtLeastOneExercise);
     if (errors.isNotEmpty) throw StrengthValidationException(errors.first);
     return db.transaction(() async {
       final head =
@@ -164,10 +164,7 @@ class StrengthRepository {
               .getSingleOrNull();
       final current = head?.revision ?? 0;
       if (current != expectedRevision) {
-        throw StrengthConflictException(
-          'This workout was changed elsewhere. Your edits are kept; reload '
-          'to see the newer version.',
-        );
+        throw StrengthConflictException(tr.thisWorkoutWasChangedElsewhere);
       }
       final now = DateTime.now();
       final id = newStrengthId('rev');
@@ -247,9 +244,7 @@ class StrengthRepository {
           jsonDecode(row.baselineJson!) as Map,
         );
       } on Object {
-        throw StrengthUnreadableException(
-          'The plan this workout is compared with cannot be read.',
-        );
+        throw StrengthUnreadableException(tr.thePlanThisWorkoutIs);
       }
     }
     return StrengthActivityLog(
@@ -318,17 +313,14 @@ class StrengthRepository {
     return db.transaction(() async {
       final activity = await db.getActivityById(log.activityId);
       if (activity == null) {
-        throw StateError('This activity no longer exists.');
+        throw StateError(tr.thisActivityNoLongerExists);
       }
       final row = await (db.select(
         db.strengthActivityLogs,
       )..where((t) => t.activityId.equals(log.activityId))).getSingleOrNull();
       final current = row?.revision ?? 0;
       if (current != log.revision) {
-        throw StrengthConflictException(
-          'This log was changed elsewhere. Your entries are kept; reload to '
-          'see the newer version.',
-        );
+        throw StrengthConflictException(tr.thisLogWasChangedElsewhere);
       }
       final next = current + 1;
       await (db.delete(
@@ -551,7 +543,7 @@ class StrengthRepository {
     DateTime? now,
   }) => db.transaction(() async {
     final a = await db.getActivityById(activityId);
-    if (a == null) throw StateError('This workout no longer exists.');
+    if (a == null) throw StateError(tr.thisWorkoutNoLongerExists);
     final end = now ?? DateTime.now();
     final seconds = end.difference(a.startDate).inSeconds;
     await (db.update(
@@ -925,7 +917,7 @@ class StrengthRepository {
 
   Future<void> rememberIncrement(String contextKey, StrengthLoad step) async {
     if (!step.kg.isFinite || step.kg <= 0) {
-      throw StrengthValidationException('An increment must be positive.');
+      throw StrengthValidationException(tr.anIncrementMustBePositive);
     }
     await db
         .into(db.strengthEquipmentIncrements)
@@ -963,7 +955,7 @@ class StrengthRepository {
     bool timed = false,
   }) async {
     if (name.trim().isEmpty) {
-      throw StrengthValidationException('Name the exercise.');
+      throw StrengthValidationException(tr.nameTheExercise);
     }
     final v = StrengthExerciseVariant(
       id: newStrengthId('custom'),

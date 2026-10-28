@@ -1,3 +1,4 @@
+import '../../l10n/l10n_ext.dart';
 import '../../providers/connection_actions_provider.dart';
 
 import 'package:flutter/material.dart';
@@ -62,9 +63,7 @@ class _ConnectAktiiaScreenState extends ConsumerState<ConnectAktiiaScreen> {
     } on ConnectionFailure catch (e) {
       setState(() => _error = e.message);
     } catch (_) {
-      setState(
-        () => _error = 'Connection failed. Check your internet connection.',
-      );
+      setState(() => _error = context.l10n.connectionFailedCheckYourInternet);
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -80,8 +79,8 @@ class _ConnectAktiiaScreenState extends ConsumerState<ConnectAktiiaScreen> {
         actions: [
           TextButton(
             onPressed: _next,
-            child: const Text(
-              'Skip',
+            child: Text(
+              context.l10n.skip,
               style: TextStyle(color: Color(0xFFCCCCCC)),
             ),
           ),
@@ -96,16 +95,16 @@ class _ConnectAktiiaScreenState extends ConsumerState<ConnectAktiiaScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 8),
-                const OnboardingDeviceHeader(
+                OnboardingDeviceHeader(
                   icon: Icons.monitor_heart_outlined,
                   color: _accent,
-                  title: 'Connect Hilo Service',
+                  title: context.l10n.connectHiloService,
                   subtitle:
                       'Sign in with your Hilo account to import '
                       'continuous blood pressure data.',
                 ),
                 const SizedBox(height: 36),
-                const OnboardingInputLabel('Email'),
+                OnboardingInputLabel(context.l10n.email),
                 const SizedBox(height: 8),
                 TextFormField(
                   controller: _email,
@@ -122,7 +121,7 @@ class _ConnectAktiiaScreenState extends ConsumerState<ConnectAktiiaScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                const OnboardingInputLabel('Password'),
+                OnboardingInputLabel(context.l10n.password),
                 const SizedBox(height: 8),
                 TextFormField(
                   controller: _password,
@@ -147,15 +146,14 @@ class _ConnectAktiiaScreenState extends ConsumerState<ConnectAktiiaScreen> {
                           onPressed: () => setState(() => _obscure = !_obscure),
                         ),
                       ),
-                  validator: (v) =>
-                      v == null || v.length < 4 ? 'Password too short' : null,
+                  validator: (v) => v == null || v.length < 4
+                      ? context.l10n.passwordTooShort
+                      : null,
                 ),
                 const SizedBox(height: 24),
                 if (_error != null) OnboardingErrorBanner(_error!),
-                const OnboardingInfoBox(
-                  'These credentials are stored encrypted on your device '
-                  '(iOS Keychain / Android Keystore). They are never sent to '
-                  'any server other than Hilo.',
+                OnboardingInfoBox(
+                  context.l10n.theseCredentialsAreStoredEncrypted,
                 ),
                 const SizedBox(height: 32),
                 SizedBox(
@@ -184,7 +182,7 @@ class _ConnectAktiiaScreenState extends ConsumerState<ConnectAktiiaScreen> {
                               strokeWidth: 2.5,
                             ),
                           )
-                        : const Text('Connect Hilo'),
+                        : Text(context.l10n.connectHilo),
                   ),
                 ),
               ],

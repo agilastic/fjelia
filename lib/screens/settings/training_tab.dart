@@ -1,3 +1,5 @@
+import '../../l10n/formats.dart';
+import '../../l10n/l10n_ext.dart';
 import 'weather_location_tab.dart';
 
 import 'package:flutter/material.dart';
@@ -31,18 +33,18 @@ class TrainingTab extends ConsumerWidget {
     final heat = ref.watch(heatAcclimationSettingsProvider).valueOrNull;
     final generation = ref.watch(workoutGenerationProvider);
     return SheetPage(
-      title: 'Training',
+      title: context.l10n.training,
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          const SectionLabel('Race Goals', color: Colors.orange),
+          SectionLabel(context.l10n.raceGoals, color: Colors.orange),
           const RaceGoalsCard(),
-          const SectionLabel('Your Activities', color: Colors.orange),
+          SectionLabel(context.l10n.yourActivities, color: Colors.orange),
           if (p != null) ...[
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(bottom: 10),
               child: Text(
-                'Used by AI Coach and training plan. Plan sports marked with ✦.',
+                context.l10n.usedByAiCoachAnd,
                 style: TextStyle(fontSize: 12, color: Colors.white70),
               ),
             ),
@@ -50,24 +52,24 @@ class TrainingTab extends ConsumerWidget {
               spacing: 6,
               children: [
                 for (final e in {
-                  'running': 'Running',
-                  'trail_running': 'Trail',
-                  'cycling_road': 'Cycling',
-                  'cycling_gravel': 'Gravel',
-                  'cycling_mtb': 'MTB',
-                  'swimming': 'Swimming',
-                  'triathlon': 'Triathlon',
-                  'indoor_rowing': 'Rowing',
-                  'hiking': 'Hiking',
-                  'inline_skating': 'Inline Skating',
-                  'nordic_skiing': 'Nordic Classic',
-                  'skate_skiing': 'Skate Skiing',
-                  'strength': 'Strength',
-                  'walking': 'Walking',
-                  'yoga': 'Yoga',
-                  'skiing': 'Skiing',
-                  'climbing': 'Climbing',
-                  'other': 'Other',
+                  'running': context.l10n.running,
+                  'trail_running': context.l10n.trail,
+                  'cycling_road': context.l10n.cycling,
+                  'cycling_gravel': context.l10n.gravel,
+                  'cycling_mtb': context.l10n.mtb,
+                  'swimming': context.l10n.swimming,
+                  'triathlon': context.l10n.triathlon,
+                  'indoor_rowing': context.l10n.rowing,
+                  'hiking': context.l10n.hiking,
+                  'inline_skating': context.l10n.inlineSkating,
+                  'nordic_skiing': context.l10n.nordicClassic,
+                  'skate_skiing': context.l10n.skateSkiing,
+                  'strength': context.l10n.strength,
+                  'walking': context.l10n.walking,
+                  'yoga': context.l10n.yoga,
+                  'skiing': context.l10n.skiing,
+                  'climbing': context.l10n.climbing,
+                  'other': context.l10n.other,
                 }.entries)
                   FilterChip(
                     label: Text(
@@ -107,9 +109,12 @@ class TrainingTab extends ConsumerWidget {
                   ),
               ],
             ),
-            const SectionLabel('Calendar week start', color: Colors.orange),
+            SectionLabel(context.l10n.calendarWeekStart, color: Colors.orange),
             SettingsSegments(
-              values: const {'monday': 'Monday', 'sunday': 'Sunday'},
+              values: {
+                'monday': context.l10n.monday,
+                'sunday': context.l10n.sunday,
+              },
               selected: p.weekStartsOnMonday ? 'monday' : 'sunday',
               onSelect: (v) => runUiAction(
                 context,
@@ -118,27 +123,33 @@ class TrainingTab extends ConsumerWidget {
                     .save(p.copyWith(weekStartsOnMonday: v == 'monday')),
               ),
             ),
-            const SectionLabel('Plan Default View', color: Colors.orange),
+            SectionLabel(context.l10n.planDefaultView, color: Colors.orange),
             SettingsSegments(
-              values: const {'month': 'Month', 'week': 'Week', 'list': 'List'},
+              values: {
+                'month': context.l10n.month,
+                'week': context.l10n.week,
+                'list': context.l10n.list,
+              },
               selected: ref.watch(planViewProvider).valueOrNull ?? 'list',
               onSelect: (v) => runUiAction(
                 context,
                 () => ref.read(planViewProvider.notifier).setView(v),
               ),
             ),
-            const SectionLabel('Weekly Schedule', color: Colors.orange),
+            SectionLabel(context.l10n.weeklySchedule, color: Colors.orange),
             Text(
-              '${p.trainingDaysPerWeek} training days · tap to cycle Rest / Strength',
-              style: const TextStyle(color: muted, fontSize: 10),
+              context.l10n.trainingdaysperweekTrainingDaysTapTo(
+                p.trainingDaysPerWeek,
+              ),
+              style: TextStyle(color: muted, fontSize: 10),
             ),
             Wrap(
               spacing: 5,
               children: [
                 for (final day
                     in p.weekStartsOnMonday
-                        ? const [1, 2, 3, 4, 5, 6, 7]
-                        : const [7, 1, 2, 3, 4, 5, 6])
+                        ? [1, 2, 3, 4, 5, 6, 7]
+                        : [7, 1, 2, 3, 4, 5, 6])
                   ActionChip(
                     backgroundColor:
                         (p.restDays.contains(day)
@@ -155,11 +166,11 @@ class TrainingTab extends ConsumerWidget {
                           : mint,
                     ),
                     label: Text(
-                      '${const ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][day - 1]} ${p.restDays.contains(day)
-                          ? 'Rest'
+                      '${[context.l10n.mon, context.l10n.tue, context.l10n.wed, context.l10n.thu, context.l10n.fri, context.l10n.sat, context.l10n.sun][day - 1]} ${p.restDays.contains(day)
+                          ? context.l10n.restDay
                           : p.preferredStrengthDays.contains(day)
-                          ? 'Strength'
-                          : 'Train'}',
+                          ? context.l10n.strength
+                          : context.l10n.train}',
                       style: const TextStyle(fontSize: 10),
                     ),
                     onPressed: () => runUiAction(context, () async {
@@ -192,7 +203,7 @@ class TrainingTab extends ConsumerWidget {
                     () => ref.read(applyScheduleProvider)(),
                   ),
                   icon: const Icon(Icons.event_repeat_rounded, size: 18),
-                  label: const Text('Update plan to this schedule'),
+                  label: Text(context.l10n.updatePlanToThisSchedule),
                 ),
               ),
             if (ref.watch(strengthProgrammeOutdatedProvider).valueOrNull ??
@@ -202,14 +213,14 @@ class TrainingTab extends ConsumerWidget {
                 child: FilledButton.tonalIcon(
                   onPressed: () => confirmStrengthUpdate(context, ref),
                   icon: const Icon(Icons.fitness_center, size: 18),
-                  label: const Text('Update strength sessions'),
+                  label: Text(context.l10n.updateStrengthSessions),
                 ),
               ),
-            const SectionLabel('Sessions per day', color: Colors.orange),
-            const Padding(
+            SectionLabel(context.l10n.sessionsPerDay, color: Colors.orange),
+            Padding(
               padding: EdgeInsets.only(bottom: 12),
               child: Text(
-                'Can you fit two workouts in one day?',
+                context.l10n.canYouFitTwoWorkouts,
                 style: TextStyle(color: Colors.white70, fontSize: 12),
               ),
             ),
@@ -227,17 +238,20 @@ class TrainingTab extends ConsumerWidget {
                     .save(p.copyWith(maxSessionsPerDay: int.parse(v))),
               ),
             ),
-            const NutritionPreferencesTile(),
-            const SectionLabel('Strength load unit', color: Colors.orange),
-            const Padding(
+            NutritionPreferencesTile(),
+            SectionLabel(context.l10n.strengthLoadUnit, color: Colors.orange),
+            Padding(
               padding: EdgeInsets.only(bottom: 12),
               child: Text(
-                'Weights themselves are set in each workout and remembered from your history.',
+                context.l10n.weightsThemselvesAreSetIn,
                 style: TextStyle(color: Colors.white70, fontSize: 12),
               ),
             ),
             SettingsSegments(
-              values: const {'kg': 'Kilograms (kg)', 'lb': 'Pounds (lb)'},
+              values: {
+                'kg': context.l10n.kilogramsKg,
+                'lb': context.l10n.poundsLb,
+              },
               selected: p.massUnit,
               color: Colors.orange,
               onSelect: (v) => runUiAction(
@@ -247,9 +261,9 @@ class TrainingTab extends ConsumerWidget {
                     .save(p.copyWith(massUnit: v)),
               ),
             ),
-            const SectionLabel('Hours available / week', color: Colors.orange),
+            SectionLabel(context.l10n.hoursAvailableWeek, color: Colors.orange),
             Text(
-              '${valueText(p.hoursPerWeek)} h / week',
+              context.l10n.hoursperweekHWeek(valueText(p.hoursPerWeek)),
               style: const TextStyle(fontSize: 12, color: Colors.white70),
             ),
             Slider(
@@ -258,7 +272,7 @@ class TrainingTab extends ConsumerWidget {
               max: 25,
               divisions: 22,
               activeColor: Colors.orange,
-              label: '${valueText(p.hoursPerWeek)} h',
+              label: context.l10n.hoursperweekH(valueText(p.hoursPerWeek)),
               onChanged: (v) => ref
                   .read(userProfileProvider.notifier)
                   .save(p.copyWith(hoursPerWeek: v)),
@@ -299,7 +313,7 @@ class TrainingTab extends ConsumerWidget {
               },
             ),
           ],
-          const SectionLabel('Heat Acclimation', color: Colors.orange),
+          SectionLabel(context.l10n.heatAcclimation, color: Colors.orange),
           SectionCard(
             color: const Color(0xFF282828),
             child: Column(
@@ -307,12 +321,12 @@ class TrainingTab extends ConsumerWidget {
                 SwitchListTile(
                   contentPadding: EdgeInsets.zero,
                   secondary: const Icon(Icons.thermostat, color: Colors.orange),
-                  title: const Text(
-                    'Show Heat Acclimation',
+                  title: Text(
+                    context.l10n.showHeatAcclimation,
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
                   ),
-                  subtitle: const Text(
-                    'Weather evaluated against a configurable location.',
+                  subtitle: Text(
+                    context.l10n.weatherEvaluatedAgainstAConfigurable,
                     style: TextStyle(fontSize: 12, color: Colors.white70),
                   ),
                   activeThumbColor: Colors.orange,
@@ -327,7 +341,7 @@ class TrainingTab extends ConsumerWidget {
                 ),
                 ListTile(
                   leading: const Icon(Icons.location_on_outlined),
-                  title: const Text('Weather & Location'),
+                  title: Text(context.l10n.weatherLocation),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () =>
                       showAppSheet(context, const WeatherLocationTab()),
@@ -335,11 +349,11 @@ class TrainingTab extends ConsumerWidget {
               ],
             ),
           ),
-          const SectionLabel('Training Plan', color: Colors.orange),
-          const Padding(
+          SectionLabel(context.l10n.trainingPlan, color: Colors.orange),
+          Padding(
             padding: EdgeInsets.only(bottom: 14),
             child: Text(
-              'Regenerate replaces future sessions and rebuilds from today using current settings.',
+              context.l10n.regenerateReplacesFutureSessionsAnd,
               style: TextStyle(
                 fontSize: 12,
                 height: 1.5,
@@ -369,20 +383,22 @@ class TrainingTab extends ConsumerWidget {
             label: Text(
               generation.isLoading
                   ? 'Generating workouts…'
-                  : 'Regenerate Workouts',
+                  : context.l10n.regenerateWorkouts,
             ),
           ),
           if (generation.valueOrNull != null)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Text(
-                '${generation.value} upcoming workouts generated',
+                context.l10n.valueUpcomingWorkoutsGenerated(
+                  generation.value ?? 0,
+                ),
                 style: const TextStyle(color: mint, fontSize: 12),
               ),
             ),
           if (generation.hasError)
-            const Text(
-              'Generation failed. Check your race goal and try again.',
+            Text(
+              context.l10n.generationFailedCheckYourRace,
               style: TextStyle(color: Colors.redAccent, fontSize: 12),
             ),
           const SizedBox(height: 12),
@@ -398,21 +414,21 @@ class TrainingTab extends ConsumerWidget {
                 : () async {
                     if (await confirmAction(
                       context,
-                      'Delete all workouts?',
-                      'This deletes planned workouts on this phone and on your connected watch platform. Completed activities are kept.',
+                      context.l10n.deleteAllWorkouts2,
+                      context.l10n.thisDeletesPlannedWorkoutsOn,
                     )) {
                       if (context.mounted) await _deleteAll(context, ref);
                     }
                   },
-            label: const Text(
-              'Delete All Workouts',
+            label: Text(
+              context.l10n.deleteAllWorkouts,
               style: TextStyle(color: Colors.red),
             ),
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.symmetric(vertical: 18),
             child: Text(
-              '✓ Changes are saved automatically',
+              context.l10n.changesAreSavedAutomatically2,
               style: TextStyle(fontSize: 11, color: muted),
             ),
           ),
@@ -425,24 +441,26 @@ class TrainingTab extends ConsumerWidget {
 Future<void> generateTrainingPlan(BuildContext context, WidgetRef ref) async {
   final goal = await ref.read(primaryRaceGoalProvider.future);
   if (goal == null) {
-    throw StateError('Add a future race goal first.');
+    throw StateError(tr.addAFutureRaceGoal);
   }
   final goals = await ref.read(goalSetProvider.future);
   final others = goals.active.length - 1;
   if (!context.mounted ||
       !await confirmAction(
         context,
-        'Regenerate workouts?',
+        context.l10n.regenerateWorkouts2,
         'Replace future workouts and rebuild toward ${goal.name}'
-            '${others > 0 ? ' and your $others other goal${others == 1 ? '' : 's'}' : ''}'
-            ' using your current schedule?',
+        '${others > 0 ? ' and your $others other goal${others == 1 ? '' : 's'}' : ''}'
+        ' using your current schedule?',
       )) {
     return;
   }
   final count = await ref.read(workoutGenerationProvider.notifier).generate();
   if (context.mounted && count != null) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('$count upcoming workouts generated')),
+      SnackBar(
+        content: Text(context.l10n.countUpcomingWorkoutsGenerated(count)),
+      ),
     );
   }
 }
@@ -458,21 +476,21 @@ class RaceGoalsCard extends ConsumerWidget {
           children: [
             const Icon(Icons.flag_outlined, color: Colors.orange, size: 20),
             const SizedBox(width: 10),
-            const Expanded(
+            Expanded(
               child: Text(
-                'Race Goals',
+                context.l10n.raceGoals,
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
               ),
             ),
             IconButton(
-              tooltip: 'Import race goals from Garmin',
+              tooltip: context.l10n.importRaceGoalsFromGarmin,
               icon: const Icon(Icons.sync, size: 18, color: Colors.lightBlue),
               onPressed: () => runUiAction(context, () async {
                 await ref.read(raceGoalImportProvider)();
               }),
             ),
             IconButton(
-              tooltip: 'Add race goal',
+              tooltip: context.l10n.addRaceGoal,
               icon: const Icon(Icons.add, size: 18, color: mint),
               onPressed: () => showRaceGoalEditor(context),
             ),
@@ -485,9 +503,7 @@ class RaceGoalsCard extends ConsumerWidget {
               loading: () => const LinearProgressIndicator(),
               error: (e, _) => DataError(e),
               data: (goals) => goals.isEmpty
-                  ? const EmptyState(
-                      'No race goals yet. Add one or sync from Garmin.',
-                    )
+                  ? EmptyState(context.l10n.noRaceGoalsYetAdd)
                   : Column(
                       children: [
                         for (final g in goals)
@@ -496,7 +512,7 @@ class RaceGoalsCard extends ConsumerWidget {
                             title: Text(g.name),
                             onTap: () => showRaceGoalEditor(context, goal: g),
                             subtitle: Text(
-                              '${dayText(g.raceDate)} · ${(g.distanceM / 1000).toStringAsFixed(1)} km'
+                              '${dayText(g.raceDate)} · ${(g.distanceM / 1000).fixed(1)} km'
                               '${g.elevationM == null ? '' : ' · ↑${g.elevationM!.round()} m'}'
                               '${g.targetFinishSeconds == null ? '' : ' · goal ${formatTargetTime(g.targetFinishSeconds!)}'}',
                             ),
@@ -514,7 +530,11 @@ class RaceGoalsCard extends ConsumerWidget {
                                 for (final s in ['a', 'b', 'c'])
                                   PopupMenuItem(
                                     value: s,
-                                    child: Text('Priority ${s.toUpperCase()}'),
+                                    child: Text(
+                                      context.l10n.priorityTouppercase(
+                                        s.toUpperCase(),
+                                      ),
+                                    ),
                                   ),
                               ],
                               child: Text(
@@ -527,7 +547,7 @@ class RaceGoalsCard extends ConsumerWidget {
                               onPressed: () async {
                                 if (await confirmAction(
                                   context,
-                                  'Delete race goal?',
+                                  context.l10n.deleteRaceGoal,
                                   g.name,
                                 )) {
                                   if (context.mounted) {
@@ -550,10 +570,10 @@ class RaceGoalsCard extends ConsumerWidget {
                       ],
                     ),
             ),
-        const Padding(
+        Padding(
           padding: EdgeInsets.only(top: 14),
           child: Text(
-            'Goals are shared with AI Coach. Priority A, B and C decide how the plan weighs your races against each other.',
+            context.l10n.goalsAreSharedWithAi,
             style: TextStyle(fontSize: 11, color: muted, height: 1.5),
           ),
         ),
@@ -642,14 +662,18 @@ Future<void> _deleteAll(BuildContext context, WidgetRef ref) async {
   // or not the screen that started it is still there when the work is done.
   final navigator = Navigator.of(context, rootNavigator: true);
   final messenger = ScaffoldMessenger.of(context);
-  final progress = ValueNotifier<(int, int, String)>((0, 0, 'Starting'));
+  final progress = ValueNotifier<(int, int, String)>((
+    0,
+    0,
+    context.l10n.starting,
+  ));
   showDialog<void>(
     context: context,
     barrierDismissible: false,
     builder: (_) => PopScope(
       canPop: false,
       child: AlertDialog(
-        title: const Text('Deleting workouts'),
+        title: Text(context.l10n.deletingWorkouts),
         content: ValueListenableBuilder<(int, int, String)>(
           valueListenable: progress,
           builder: (_, p, _) => Column(
@@ -686,9 +710,9 @@ Future<void> _deleteAll(BuildContext context, WidgetRef ref) async {
   progress.dispose();
   final removed = result?.summary ?? '';
   final message = failure != null
-      ? 'Deleting failed: $failure'
+      ? tr.deletingFailedFailure(failure)
       : removed.isNotEmpty
-      ? 'All planned workouts deleted. Removed from your platforms: $removed.'
-      : 'All planned workouts deleted.';
+      ? tr.allPlannedWorkoutsDeletedRemoved(removed)
+      : tr.allPlannedWorkoutsDeleted;
   messenger.showSnackBar(SnackBar(content: Text(message)));
 }

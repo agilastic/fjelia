@@ -1,0 +1,3110 @@
+{
+  "@@locale": "ca",
+  "language": "Idioma",
+  "languageSystem": "Predeterminat del sistema",
+  "settings": "Configuració",
+  "profile": "Perfil",
+  "training": "Entrenament",
+  "weatherLocation": "Temps i ubicació",
+  "display": "Pantalla",
+  "connections": "Connexions",
+  "aiAndMore": "IA i més",
+  "system": "Sistema",
+  "runSetupAgain": "Torna a executar la configuració",
+  "runSetupAgainSubtitle": "Comptes, objectiu de cursa i pla d'entrenament",
+  "back": "Enrere",
+  "close": "Tanca",
+  "dataExport": "Exportació de dades",
+  "dataExportSubtitle": "Exportació CSV, còpia de seguretat i restauració",
+  "developer": "Desenvolupador",
+  "developerSubtitle": "Mode de depuració, diagnòstic",
+  "debug": "Depuració",
+  "debugMode": "Mode de depuració",
+  "debugModeSubtitle": "Mostra la pestanya DEBUG",
+  "support": "Assistència",
+  "reportBug": "Informa d'un error",
+  "aiCoach": "Entrenador IA",
+  "enableAiCoach": "Activa l'entrenador IA",
+  "onDeviceAiOrCloud": "IA al dispositiu o proveïdor al núvol",
+  "provider": "Proveïdor",
+  "model": "Model",
+  "chatAndAiBriefingsUse": "El xat i els resums amb IA fan servir Apple Intelligence en aquest dispositiu. No cal cap clau API. Si el model no està disponible, els resums mostren un text sense IA.",
+  "briefing": "Resum",
+  "useAppleIntelligenceForBriefings": "Fes servir Apple Intelligence per als resums",
+  "useOnDeviceAiFor": "Fes servir la IA del dispositiu per als resums i mantén el proveïdor triat per al xat.",
+  "healthDataSharing": "Compartició de dades de salut",
+  "askOncePerChatSession": "Pregunta una vegada per sessió de xat",
+  "otherwiseAskBeforeEveryCloud": "Si no, pregunta abans de cada missatge al núvol",
+  "reportABug": "Informa d'un error",
+  "weatherData": "Dades meteorològiques",
+  "openSourceLibraries": "Biblioteques de codi obert",
+  "license": "Llicència",
+  "licenses": "Llicències",
+  "apiKey": "Clau API",
+  "saveApiKey": "Desa la clau API",
+  "feedbackBugReport": "Comentaris i informe d'errors",
+  "reportSentThankYou": "Informe enviat. Gràcies!",
+  "weReadEveryMessageIf": "Llegim tots els missatges. Si has deixat el teu correu, és possible que rebis una resposta.",
+  "done": "Fet",
+  "shareAnIdeaSuggestAn": "Comparteix una idea, suggereix una millora o explica'ns què ha passat i què esperaves.",
+  "whatHappenedAndWhatDid": "Què ha passat i què esperaves?",
+  "pleaseLeaveOutPasswordsApi": "Si us plau, no incloguis contrasenyes, claus API ni dades de salut personals.",
+  "includeDiagnostics": "Inclou diagnòstics",
+  "optionalLogsMayContainAccount": "Opcional. Els registres poden contenir dades del compte o de salut. Revisa'ls a sota abans d'enviar.",
+  "diagnosticsPreview": "VISTA PRÈVIA DELS DIAGNÒSTICS",
+  "sendingSharesYourEmailSubject": "En enviar es comparteixen el teu correu, l'assumpte, el missatge i els diagnòstics seleccionats amb l'assistència de Fjelia a cloud.ebeling-hoppe.de.",
+  "copyReport": "Copia l'informe",
+  "shareReport": "Comparteix l'informe",
+  "appleHealth": "Apple Salut",
+  "connectedServices": "Serveis connectats",
+  "hiloBloodPressureBle": "Hilo pressió arterial (BLE)",
+  "writeHeartDataToApple": "Escriu les dades cardíaques a Apple Salut",
+  "writeWeightDataToApple": "Escriu les dades de pes a Apple Salut",
+  "renphoScaleBle": "Bàscula Renpho (BLE)",
+  "polarH10HrvStrapBle": "Polar H10 (cinta VFC, BLE)",
+  "dataSourcePriority": "Prioritat de les fonts de dades",
+  "whenMultipleSourcesProvideThe": "Quan diverses fonts aporten la mateixa mètrica, guanya la que és més amunt. Arrossega per reordenar.",
+  "resetToDefault": "Restableix els valors predeterminats",
+  "disconnect": "Desconnecta",
+  "healthPage": "Pàgina de salut",
+  "loadPage": "Pàgina de càrrega",
+  "healthMonitor": "Monitor de salut",
+  "hrZones": "Zones de FC",
+  "t30MinTtAvailableSync": "TT de 30 min disponible: sincronitza les zones de FC",
+  "lt2Lt2BpmAt": "LT2 {lt2} bpm · {at}",
+  "@lt2Lt2BpmAt": {
+    "placeholders": {
+      "lt2": {
+        "type": "Object"
+      },
+      "at": {
+        "type": "Object"
+      }
+    }
+  },
+  "syncLabel": "SINCRO",
+  "autoadjust": "AJUST AUTOMÀTIC",
+  "zoneI": "Zona {i}",
+  "@zoneI": {
+    "placeholders": {
+      "i": {
+        "type": "Object"
+      }
+    }
+  },
+  "hrZones2": "ZONES DE FC",
+  "ageRound": "edat {round}",
+  "@ageRound": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "basics": "Dades bàsiques",
+  "updateWaistMonthlyUsedFor": "ⓘ Actualitza la cintura cada mes: serveix per estimar el greix visceral.",
+  "alcohol": "Alcohol",
+  "t1Drink033L": "1 beguda ≈ 0,33 l de cervesa / 0,2 l de vi / 4 cl de licor",
+  "clinicalLabsOptional": "Anàlisis clíniques (opcional)",
+  "glycemic": "Glucèmia",
+  "optimalForLongevity48": "Òptim per a la longevitat: 4,8–5,4 % · Prediabetis: 5,7–6,4 %",
+  "lipids": "Lípids",
+  "apobReplacesLdlWhenBoth": "L'ApoB substitueix l'LDL quan s'introdueixen tots dos.",
+  "inflammationKidney": "Inflamació i ronyó",
+  "changesAreSavedAutomatically": "Els canvis es desen automàticament",
+  "optionalTotalClimbingForThis": "Desnivell total opcional per a aquesta cursa.",
+  "moreAboutThisEvent": "Més informació sobre aquest esdeveniment",
+  "distanceOfDistancekmKm": "Distància de {distanceKm} km?",
+  "@distanceOfDistancekmKm": {
+    "placeholders": {
+      "distanceKm": {
+        "type": "Object"
+      }
+    }
+  },
+  "keepDistancekmKm": "Mantén {distanceKm} km",
+  "@keepDistancekmKm": {
+    "placeholders": {
+      "distanceKm": {
+        "type": "Object"
+      }
+    }
+  },
+  "useLikelyKm": "Fes servir {likely} km",
+  "@useLikelyKm": {
+    "placeholders": {
+      "likely": {
+        "type": "Object"
+      }
+    }
+  },
+  "thisBackupContainsNoCalendar": "Aquesta còpia de seguretat no conté activitats del calendari.",
+  "activities": "Activitats",
+  "exportActivitiesCsv": "Exporta les activitats a CSV",
+  "backupRestore": "Còpia de seguretat i restauració",
+  "backup": "Còpia de seguretat",
+  "restoreFromBackup": "Restaura des d'una còpia de seguretat",
+  "backupRestoredRestartTheApp": "Còpia restaurada. Reinicia l'aplicació per tornar a carregar tots els ajustos.",
+  "raceGoals": "Objectius de cursa",
+  "yourActivities": "Les teves activitats",
+  "usedByAiCoachAnd": "L'utilitzen l'entrenador IA i el pla d'entrenament. Els esports del pla es marquen amb ✦.",
+  "calendarWeekStart": "Inici de setmana del calendari",
+  "planDefaultView": "Vista predeterminada del pla",
+  "weeklySchedule": "Horari setmanal",
+  "trainingdaysperweekTrainingDaysTapTo": "{trainingDaysPerWeek, plural, one{{trainingDaysPerWeek} dia d'entrenament} other{{trainingDaysPerWeek} dies d'entrenament}} · toca per alternar Entrenament / Descans / Força",
+  "@trainingdaysperweekTrainingDaysTapTo": {
+    "placeholders": {
+      "trainingDaysPerWeek": {
+        "type": "int"
+      }
+    }
+  },
+  "updatePlanToThisSchedule": "Actualitza el pla a aquest horari",
+  "updateStrengthSessions": "Actualitza les sessions de força",
+  "sessionsPerDay": "Sessions per dia",
+  "canYouFitTwoWorkouts": "Pots fer dos entrenaments en un dia?",
+  "strengthLoadUnit": "Unitat de càrrega de força",
+  "weightsThemselvesAreSetIn": "Els pesos es fixen en cada entrenament i es recorden a partir del teu historial.",
+  "hoursAvailableWeek": "Hores disponibles / setmana",
+  "hoursperweekHWeek": "{hoursPerWeek} h / setmana",
+  "@hoursperweekHWeek": {
+    "placeholders": {
+      "hoursPerWeek": {
+        "type": "Object"
+      }
+    }
+  },
+  "hoursperweekH": "{hoursPerWeek} h",
+  "@hoursperweekH": {
+    "placeholders": {
+      "hoursPerWeek": {
+        "type": "Object"
+      }
+    }
+  },
+  "heatAcclimation": "Aclimatació a la calor",
+  "showHeatAcclimation": "Mostra l'aclimatació a la calor",
+  "weatherEvaluatedAgainstAConfigurable": "El temps s'avalua per a una ubicació configurable.",
+  "trainingPlan": "Pla d'entrenament",
+  "regenerateReplacesFutureSessionsAnd": "Regenera substitueix les sessions futures i reconstrueix el pla des d'avui amb els ajustos actuals.",
+  "valueUpcomingWorkoutsGenerated": "{value, plural, one{{value} entrenament proper generat} other{{value} entrenaments propers generats}}",
+  "@valueUpcomingWorkoutsGenerated": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "generationFailedCheckYourRace": "No s'ha pogut generar. Revisa el teu objectiu de cursa i torna-ho a provar.",
+  "deleteAllWorkouts": "Elimina tots els entrenaments",
+  "changesAreSavedAutomatically2": "✓ Els canvis es desen automàticament",
+  "countUpcomingWorkoutsGenerated": "{count, plural, one{{count} entrenament proper generat} other{{count} entrenaments propers generats}}",
+  "@countUpcomingWorkoutsGenerated": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importRaceGoalsFromGarmin": "Importa objectius de cursa des de Garmin",
+  "addRaceGoal": "Afegeix un objectiu de cursa",
+  "priorityTouppercase": "Prioritat {toUpperCase}",
+  "@priorityTouppercase": {
+    "placeholders": {
+      "toUpperCase": {
+        "type": "Object"
+      }
+    }
+  },
+  "goalsAreSharedWithAi": "Els objectius es comparteixen amb l'entrenador IA. La prioritat A, B o C decideix com pondera el pla les teves curses.",
+  "deletingWorkouts": "S'estan eliminant els entrenaments",
+  "cityOrTown": "Ciutat o poble",
+  "eGHannoverOrPalma": "p. ex. Hannover o Palma",
+  "noCitiesFoundTryA": "No s'han trobat ciutats. Prova amb un poble proper.",
+  "chooseTheLocationForThe": "Tria la ubicació per a la previsió del pla, el radar i l'aclimatació a la calor. El temps funciona encara que l'aclimatació estigui desactivada.",
+  "none": "Cap",
+  "disableLocalWeatherAndLocation": "Desactiva el temps local i les sol·licituds d'ubicació",
+  "currentLocation": "Ubicació actual",
+  "followYourDeviceLocation": "Segueix la ubicació del dispositiu",
+  "fixedLocation": "Ubicació fixa",
+  "chooseACityOrEnter": "Tria una ciutat o introdueix coordenades",
+  "chooseCity": "Tria una ciutat",
+  "coordinates": "Coordenades",
+  "latitude": "Latitud",
+  "longitude": "Longitud",
+  "saveLocation": "Desa la ubicació",
+  "refreshCurrentLocation": "Actualitza la ubicació actual",
+  "citySearchOpenMeteoGeonames": "Cerca de ciutats: Open-Meteo / GeoNames",
+  "cityNamesOpenstreetmap": "Noms de ciutats: © OpenStreetMap",
+  "energy": "ENERGIA",
+  "currentEnergy": "ENERGIA ACTUAL",
+  "dailyTimeline": "LÍNIA DE TEMPS DIÀRIA",
+  "valueValue2": "{value} → {value2}",
+  "@valueValue2": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      },
+      "value2": {
+        "type": "Object"
+      }
+    }
+  },
+  "energy2": "Energia",
+  "noData": "Sense dades",
+  "bloodPressureInsights": "ANÀLISI DE PRESSIÓ ARTERIAL",
+  "sys": " Sis",
+  "diaMmhg": " Dia · mmHg",
+  "previousBloodPressurePeriod": "Període de pressió arterial anterior",
+  "nextBloodPressurePeriod": "Període de pressió arterial següent",
+  "nightDipping": "Descens nocturn",
+  "noMeasurementsInThisPeriod": "Sense mesuraments en aquest període",
+  "fullscreenBloodPressureChart": "Gràfic de pressió arterial a pantalla completa",
+  "barsMinMaxLineDots": "Barres: mín–màx · línia/punts: mitjana · toca o arrossega per inspeccionar",
+  "noMeasurements": "Sense mesuraments",
+  "round": "{round}",
+  "@round": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "sysSys2Mmhg": "{sys}–{sys2} mmHg",
+  "@sysSys2Mmhg": {
+    "placeholders": {
+      "sys": {
+        "type": "Object"
+      },
+      "sys2": {
+        "type": "Object"
+      }
+    }
+  },
+  "lengthReadingsAverageMinMax": "{length, plural, one{{length} mesurament} other{{length} mesuraments}} · mitjana / mín–màx",
+  "@lengthReadingsAverageMinMax": {
+    "placeholders": {
+      "length": {
+        "type": "int"
+      }
+    }
+  },
+  "bloodPressureTouppercaseMmhg": "PRESSIÓ ARTERIAL · {toUpperCase} · mmHg",
+  "@bloodPressureTouppercaseMmhg": {
+    "placeholders": {
+      "toUpperCase": {
+        "type": "Object"
+      }
+    }
+  },
+  "closeFullscreenBloodPressureChart": "Tanca el gràfic de pressió arterial a pantalla completa",
+  "chooseScale": "Tria una bàscula",
+  "noScalesFoundStepOn": "No s'ha trobat cap bàscula. Puja a la bàscula i torna-ho a provar.",
+  "nameRssiDbm": "{name} · {rssi} dBm",
+  "@nameRssiDbm": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      },
+      "rssi": {
+        "type": "Object"
+      }
+    }
+  },
+  "renphoSaved": "RENPHO desada:",
+  "renphoScaleBle2": "Bàscula RENPHO (BLE)",
+  "changeMeasurementType": "Canvia el tipus de mesurament",
+  "addMeasurement": "Afegeix un mesurament",
+  "whatAreYouMeasuring": "Què estàs mesurant?",
+  "chooseAnotherMeasurement": "Tria un altre mesurament",
+  "saveMeasurement": "Desa el mesurament",
+  "skip": "Omet",
+  "connectHiloService": "Connecta el servei Hilo",
+  "connectHilo": "Connecta Hilo",
+  "connectCoros": "Connecta Coros",
+  "europe": "Europa",
+  "unitedStates": "Estats Units",
+  "asia": "Àsia",
+  "bluetoothBloodPressure": "Bluetooth · pressió arterial",
+  "cloudCuffData": "Núvol · dades del braçalet",
+  "apiSync": "Sincronització per API",
+  "bluetoothHrvStrap": "Bluetooth · cinta VFC",
+  "accesslinkApi": "AccessLink API",
+  "systemHealthData": "Dades de salut del sistema",
+  "cloudScaleHistory": "Núvol · historial de la bàscula",
+  "bluetoothWeightBody": "Bluetooth · pes i cos",
+  "connectYourDevices": "Connecta els teus dispositius",
+  "continueLabel": "Continua",
+  "connectGarmin": "Connecta Garmin",
+  "connectAppleHealth": "Connecta Apple Salut",
+  "dataSynced": "DADES SINCRONITZADES",
+  "pairHiloPod": "Vincula Hilo Pod",
+  "chooseStrap": "Tria la cinta",
+  "namePaired": "{name} vinculat.",
+  "@namePaired": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "pairPolarH10": "Vincula Polar H10",
+  "forget": "Oblida",
+  "sendWorkoutToPolar": "Envia l'entrenament a Polar",
+  "connectPolar": "Connecta Polar",
+  "signInWithPolarFlow": "Inicia la sessió amb Polar Flow",
+  "syncsSleepStagesHrvResting": "Sincronitza fases de la son · VFC · FC en repòs · entrenaments · passes",
+  "savedForV": "Desat per a {v}",
+  "@savedForV": {
+    "placeholders": {
+      "v": {
+        "type": "Object"
+      }
+    }
+  },
+  "remove": "Elimina",
+  "polarEMail": "Correu de Polar",
+  "polarPassword": "Contrasenya de Polar",
+  "pairRenphoScale": "Vincula la bàscula RENPHO",
+  "connectRenpho": "Connecta Renpho",
+  "connectSuunto": "Connecta Suunto",
+  "smsSentToTrim": "SMS enviat a {trim}",
+  "@smsSentToTrim": {
+    "placeholders": {
+      "trim": {
+        "type": "Object"
+      }
+    }
+  },
+  "resendSms": "Torna a enviar l'SMS",
+  "retryLoadingPreferences": "Torna a provar de carregar les preferències",
+  "weeklyTrainingTimeTostringasfixedH": "TEMPS D'ENTRENAMENT SETMANAL · {toStringAsFixed} h",
+  "@weeklyTrainingTimeTostringasfixedH": {
+    "placeholders": {
+      "toStringAsFixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "tapADayToCycle": "Toca un dia per alternar Entrenament / Descans / Força.",
+  "doubleDayOk": "Dia doble ok",
+  "birthYearOptional": "Any de naixement (opcional)",
+  "addAnother": "Afegeix-ne un altre",
+  "knowYourBodyTrainSmarter": "Coneix el teu cos.\nEntrena millor.",
+  "allYourHealthDevicesOne": "Tots els teus dispositius de salut. Una sola vista intel·ligent.",
+  "areYouReadyToTrain": "Estàs a punt per entrenar avui?",
+  "hrvRecoveryScoreRestingHr": "VFC · Puntuació de recuperació · FC en repòs",
+  "didYouActuallyRecoverLast": "T'has recuperat de debò aquesta nit?",
+  "sleepStagesDeepSleepSpo": "Fases de la son · Son profund · SpO₂",
+  "isYourBloodPressureUnder": "La teva pressió arterial està sota control?",
+  "continuousBpNightDippingTrends": "Pressió contínua · Descens nocturn · Tendències",
+  "howHardDidYouPush": "Quant t'has exigit aquesta setmana?",
+  "trainingLoadTrimpStrainScore": "Càrrega d'entrenament · TRIMP · Puntuació d'esforç",
+  "isYourBodyCompositionImproving": "Millora la teva composició corporal?",
+  "weightBodyFatMuscleMass": "Pes · Greix corporal · Massa muscular",
+  "getStarted": "Comença",
+  "yourDataStaysOnYour": "Les teves dades es queden al teu dispositiu. Sempre privades.",
+  "bodyScale": "Bàscula corporal",
+  "bodyComposition": "Composició corporal",
+  "sleep": "SON",
+  "sleepPerformance": "RENDIMENT DE LA SON",
+  "sleepHistory": "Historial de la son",
+  "labelValue": "{label}: {value}",
+  "@labelValue": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      },
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "lessLabel": "Menys {label}",
+  "@lessLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "moreLabel": "Més {label}",
+  "@moreLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "gymMode": "Mode gimnàs",
+  "finishWorkout": "Acaba l'entrenament",
+  "workoutActions": "Accions de l'entrenament",
+  "discardWorkout": "Descarta l'entrenament",
+  "allSetsRecorded": "Totes les sèries registrades",
+  "reviewSets": "Revisa les sèries",
+  "rest": "DESCANS",
+  "plannedResttarget": "Previst {restTarget}",
+  "@plannedResttarget": {
+    "placeholders": {
+      "restTarget": {
+        "type": "Object"
+      }
+    }
+  },
+  "startSet": "Comença la sèrie",
+  "seconds": "Segons",
+  "previousSet": "Sèrie anterior",
+  "allSets": "Totes les sèries",
+  "nextSet": "Sèrie següent",
+  "everySetIsSavedAs": "Cada sèrie es desa sobre la marxa. Pots tancar aquesta pantalla quan vulguis i reprendre des de l'entrenament planificat.",
+  "cancel": "Cancel·la",
+  "apply": "Aplica",
+  "effortScale": "Escala d'esforç",
+  "setType": "Tipus de sèrie",
+  "reps": "Repeticions",
+  "range": "Interval",
+  "time": "Temps",
+  "t45Or100": "45 o 1:00",
+  "blankWhenNotSet": "En blanc si no es defineix",
+  "redBand": "Banda vermella",
+  "t90Or130": "90 o 1:30",
+  "blankWhenUnknown": "En blanc si és desconegut",
+  "usePlannedLoad": "Fes servir la càrrega planificada",
+  "blankWhenNotMeasured": "En blanc si no es mesura",
+  "exercise": "Exercici",
+  "changingTheLoadConventionStarts": "Canviar la convenció de càrrega inicia un historial separat per a aquest exercici.",
+  "barbellMachine": "Barra, màquina…",
+  "load": "Càrrega",
+  "loadRefersTo": "La càrrega fa referència a",
+  "t2ForAPair": "2 per a un parell",
+  "repetitions": "Repeticions",
+  "availablePlatesOrDumbbells": "Discos o manuelles disponibles",
+  "rememberForThisEquipment": "Recorda per a aquest equipament",
+  "findOrNameAnExercise": "Cerca o anomena un exercici",
+  "createTrim": "Crea «{trim}»",
+  "@createTrim": {
+    "placeholders": {
+      "trim": {
+        "type": "Object"
+      }
+    }
+  },
+  "customExercise": "Exercici personalitzat",
+  "smallestLoadStep": "Increment de càrrega mínim",
+  "whatRemoved": "{what} eliminat",
+  "@whatRemoved": {
+    "placeholders": {
+      "what": {
+        "type": "Object"
+      }
+    }
+  },
+  "undo": "Desfés",
+  "retry": "Torna-ho a provar",
+  "performance": "Rendiment",
+  "addExercise": "Afegeix un exercici",
+  "finishLog": "Acaba el registre",
+  "keepAsDraft": "Mantén com a esborrany",
+  "actionsForName": "Accions per a {name}",
+  "@actionsForName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "editExercise": "Edita l'exercici",
+  "moveUp": "Puja",
+  "moveDown": "Baixa",
+  "addSet": "Afegeix una sèrie",
+  "removeLastSet": "Elimina l'última sèrie",
+  "saveAsTemplate": "Desa com a plantilla",
+  "savedTitleAsATemplate": "«{title}» desat com a plantilla. Aquest entrenament no canvia fins que el desis.",
+  "@savedTitleAsATemplate": {
+    "placeholders": {
+      "title": {
+        "type": "Object"
+      }
+    }
+  },
+  "nameSetN": "{name} · Sèrie {n}",
+  "@nameSetN": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      },
+      "n": {
+        "type": "Object"
+      }
+    }
+  },
+  "nameAllWorkingSets": "{name} · Totes les sèries de treball",
+  "@nameAllWorkingSets": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "labelRest": "Descans {label}",
+  "@labelRest": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "secondsOrMSs": "Segons o m:ss",
+  "applyToAllSets": "Aplica a totes les sèries",
+  "duplicate": "Duplica",
+  "supersetWithNext": "Superserie amb la següent",
+  "circuitWithNext": "Circuit amb la següent",
+  "actionsForSetN": "Accions per a la sèrie {n}",
+  "@actionsForSetN": {
+    "placeholders": {
+      "n": {
+        "type": "Object"
+      }
+    }
+  },
+  "editSet": "Edita la sèrie",
+  "duplicateSet": "Duplica la sèrie",
+  "removeSet": "Elimina la sèrie",
+  "labelActions": "Accions de {label}",
+  "@labelActions": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "editRests": "Edita els descansos",
+  "ungroup": "Desagrupa",
+  "editExercises": "Edita els exercicis",
+  "unsavedChanges": "Canvis sense desar",
+  "couldNotSaveError": "No s'ha pogut desar: {error}",
+  "@couldNotSaveError": {
+    "placeholders": {
+      "error": {
+        "type": "Object"
+      }
+    }
+  },
+  "history": "Historial",
+  "exercises": "Exercicis",
+  "noExercisesArePlannedFor": "Encara no hi ha exercicis planificats per a aquest entrenament. Les notes de dalt el descriuen.",
+  "addExercises": "Afegeix exercicis",
+  "fromTheBuiltInTemplate": "De la plantilla integrada. Les càrregues les fixes tu; l'historial apareix quan registris un entrenament.",
+  "shareExerciseList": "Comparteix la llista d'exercicis",
+  "noSavedStrengthTemplatesYet": "Encara no hi ha plantilles de força desades. Desa'n una des d'un entrenament planificat.",
+  "compareWith": "Compara amb",
+  "estimated1rmUnit": "1RM estimat {unit}",
+  "@estimated1rmUnit": {
+    "placeholders": {
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "plannedNotRecorded": "Planificat, no registrat",
+  "notes": "Notes",
+  "editPerformance": "Edita el rendiment",
+  "compareWithASavedWorkout": "Compara amb un entrenament desat",
+  "sessions": "Sessions",
+  "radarUnavailableRetry": "Radar no disponible · Torna-ho a provar",
+  "radar": "Radar",
+  "weatherDataByRainviewer": "Dades meteorològiques de RainViewer",
+  "openstreetmapContributors": "© col·laboradors d'OpenStreetMap",
+  "weather": "Temps",
+  "weatherUnavailableRetry": "Temps no disponible · Torna-ho a provar",
+  "chooseAFixedLocationIn": "Tria una ubicació fixa a la configuració de Temps i ubicació, o permet l'accés a la ubicació per al temps local.",
+  "locationSettings": "Configuració d'ubicació",
+  "retryLocation": "Torna a provar la ubicació",
+  "round2": "{round}°",
+  "@round2": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "roundRhRound2Hpa": "{round}% RH · {round2} hPa",
+  "@roundRhRound2Hpa": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      },
+      "round2": {
+        "type": "Object"
+      }
+    }
+  },
+  "wetBulbTostringasfixedC": "Bulb humit {toStringAsFixed}°C",
+  "@wetBulbTostringasfixedC": {
+    "placeholders": {
+      "toStringAsFixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "previousForecastDay": "Dia de previsió anterior",
+  "nextForecastDay": "Dia de previsió següent",
+  "daysDayForecast": "Previsió a {days} dies",
+  "@daysDayForecast": {
+    "placeholders": {
+      "days": {
+        "type": "Object"
+      }
+    }
+  },
+  "thisProviderCurrentlySuppliesDays": "Aquest proveïdor ofereix actualment {days} de {days2} dies de previsió.",
+  "@thisProviderCurrentlySuppliesDays": {
+    "placeholders": {
+      "days": {
+        "type": "Object"
+      },
+      "days2": {
+        "type": "Object"
+      }
+    }
+  },
+  "now": "Ara",
+  "sunriseSunset": "Sortida / posta de sol",
+  "keyKey2": "☀ {key}   ☾ {key2}",
+  "@keyKey2": {
+    "placeholders": {
+      "key": {
+        "type": "Object"
+      },
+      "key2": {
+        "type": "Object"
+      }
+    }
+  },
+  "use": "Fes servir",
+  "exerciseDetailsWereNotProvided": "Aquesta font d'activitat no ha proporcionat detalls dels exercicis.",
+  "logFromPlan": "Registra des del pla",
+  "addExerciseDetails": "Afegeix detalls dels exercicis",
+  "loadSuggestion": "Suggeriment de càrrega",
+  "applyToThisWorkout": "Aplica a aquest entrenament",
+  "keepCurrentLoad": "Mantén la càrrega actual",
+  "setLoadStep": "Defineix l'increment de càrrega",
+  "viewSupportingSets": "Mostra les sèries de suport",
+  "supportingSets": "Sèries de suport",
+  "noRecordedSessionsYet": "Encara no hi ha sessions registrades.",
+  "nameDemonstrationCue": "Demostració de {name}. {cue}",
+  "@nameDemonstrationCue": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      },
+      "cue": {
+        "type": "Object"
+      }
+    }
+  },
+  "noScalesFoundStepOn2": "No s'ha trobat cap bàscula. Puja a la bàscula i torna-ho a provar.",
+  "scalePaired": "Bàscula vinculada",
+  "ok": "OK",
+  "pairedReadyToMeasure": "✓ Vinculat: a punt per mesurar",
+  "chooseHiloCuff": "Tria el braçalet Hilo",
+  "noCuffFoundWakeYour": "No s'ha trobat cap braçalet. Desperta el braçalet i torna a cercar.",
+  "hiloCuffAktiiaC": "Braçalet Hilo (AKTIIA C…)",
+  "onDemandBloodPressureVia": "Pressió arterial sota demanda per BLE",
+  "selectHiloPodWristband": "Selecciona Hilo Pod (polsera)",
+  "rescan": "Torna a cercar",
+  "noDevicesFoundTapTo": "No s'han trobat dispositius. Toca ↻ per tornar a cercar.",
+  "polarH10SpotHrv": "Polar H10 · VFC puntual",
+  "aSeparateHrvReadingBefore": "Una mesura de VFC a part abans o després d'entrenar. Aquestes mesures no substitueixen la VFC nocturna de Garmin ni canvien la teva puntuació de preparació.",
+  "wearTheStrapWithMoist": "Posa't la cinta amb els elèctrodes humitejats. Queda't quiet i respira amb normalitat. Fes servir la mateixa postura i durada per comparar. Després d'entrenar, anota quant has descansat abans.",
+  "measurement": "Mesurament",
+  "posture": "Postura",
+  "recordingLengthPlus1Min": "Durada de l'enregistrament · més 1 min d'estabilització",
+  "t2Minutes": "2 minuts",
+  "t5Minutes": "5 minuts",
+  "minutesSinceTrainingEndedOptional": "Minuts des que va acabar l'entrenament (opcional)",
+  "sessionOrNotesOptional": "Sessió o notes (opcional)",
+  "connectName": "Connecta {name}",
+  "@connectName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "findPolarH10": "Cerca Polar H10",
+  "signalRssiDbm": "Senyal {rssi} dBm",
+  "@signalRssiDbm": {
+    "placeholders": {
+      "rssi": {
+        "type": "Object"
+      }
+    }
+  },
+  "connectedName": "Connectat: {name}",
+  "@connectedName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "waitingForHeartRateAnd": "Esperant freqüència cardíaca i intervals RR. Comprova el contacte de la cinta.",
+  "startMeasurement": "Inicia el mesurament",
+  "cancelMeasurement": "Cancel·la el mesurament",
+  "spotHrvRmssd": "VFC puntual · RMSSD",
+  "acceptedLengthUsableIntervalsTostringasfixed": "{accepted}/{length} intervals utilitzables · {toStringAsFixed} % de cobertura",
+  "@acceptedLengthUsableIntervalsTostringasfixed": {
+    "placeholders": {
+      "accepted": {
+        "type": "Object"
+      },
+      "length": {
+        "type": "Object"
+      },
+      "toStringAsFixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "lnrmssdLnrmssdRawRmssdRawrmssdms": "lnRMSSD: {lnRmssd} · RMSSD en brut: {rawRmssdMs} ms",
+  "@lnrmssdLnrmssdRawRmssdRawrmssdms": {
+    "placeholders": {
+      "lnRmssd": {
+        "type": "Object"
+      },
+      "rawRmssdMs": {
+        "type": "Object"
+      }
+    }
+  },
+  "signalQualityIsTooLow": "La qualitat del senyal és massa baixa per desar. Repeteix el mesurament amb bon contacte de la cinta. Cal almenys un 95 % d'intervals utilitzables i un 90 % de cobertura.",
+  "savedToSpotHrvHistory": "Desat a l'historial de VFC puntual.",
+  "newMeasurement": "Nou mesurament",
+  "signalScreeningExcludesPoorContact": "El filtratge del senyal exclou mal contacte, RR fora de 250–2500 ms i intervals a més del 25 % de la mediana local. Els buits no s'omplen. No és una prova mèdica ni una puntuació de preparació independent.",
+  "historyLabelLabel2DurationMin": "Historial · {label} · {label2} · {duration} min",
+  "@historyLabelLabel2DurationMin": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      },
+      "label2": {
+        "type": "Object"
+      },
+      "duration": {
+        "type": "Object"
+      }
+    }
+  },
+  "onlyReadingsWithTheSame": "Només es mostren juntes els mesuraments amb el mateix context, postura i durada.",
+  "noMatchingMeasurementsYet": "Encara no hi ha mesuraments coincidents.",
+  "tostringasfixedMsRmssdTostringasfixed2Bpm": "{toStringAsFixed} ms RMSSD · {toStringAsFixed2} bpm",
+  "@tostringasfixedMsRmssdTostringasfixed2Bpm": {
+    "placeholders": {
+      "toStringAsFixed": {
+        "type": "Object"
+      },
+      "toStringAsFixed2": {
+        "type": "Object"
+      }
+    }
+  },
+  "exportRrIntervalsCsv": "Exporta els intervals RR (CSV)",
+  "deleteMeasurement": "Elimina el mesurament",
+  "remindMeToMeasureHrv": "Recorda'm mesurar la VFC després d'entrenar",
+  "appleHealthIsNoLonger": "Apple Salut ja no està disponible",
+  "later": "Més tard",
+  "reconnect": "Torna a connectar",
+  "gripStrength": "Força de prensió",
+  "leftKg": "Esquerra (kg)",
+  "rightKg": "Dreta (kg)",
+  "lLeftkgRRightkgKg": "E {leftKg} · D {rightKg} kg",
+  "@lLeftkgRRightkgKg": {
+    "placeholders": {
+      "leftKg": {
+        "type": "Object"
+      },
+      "rightKg": {
+        "type": "Object"
+      }
+    }
+  },
+  "notificationsAreOffYouCan": "Les notificacions estan desactivades. Encara pots mesurar des del teu entrenament.",
+  "noRemindersFrom2200": "Sense recordatoris de 22:00 a 07:00",
+  "aReminderThatWouldFall": "Un recordatori que caigués en aquest horari s'omet, no es passa al matí.",
+  "remindersArriveQuietlyInThe": "Els recordatoris arriben en silenci a la llista de notificacions.",
+  "noForecastForThisDay": "Sense previsió per a aquest dia",
+  "fullscreen": "Pantalla completa",
+  "source": "● {source}",
+  "@source": {
+    "placeholders": {
+      "source": {
+        "type": "Object"
+      }
+    }
+  },
+  "shadedAreaProviderSpread": "Àrea ombrejada: dispersió entre proveïdors",
+  "temperatureC": "● Temperatura °C",
+  "rainMm": "▥ Pluja mm",
+  "uvIndex": "— Índex UV",
+  "closeFullscreenWeatherChart": "Tanca el gràfic del temps a pantalla completa",
+  "sleepStages": "FASES DE LA SON",
+  "noStageTimelineForThis": "Sense línia de temps de fases per a aquesta nit.",
+  "round3": "{round}%",
+  "@round3": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "examplesOnlyCheckAndEnter": "Només exemples: comprova i introdueix els valors de l'etiqueta del producte per ració. Deixa en blanc els nutrients desconeguts; introdueix 0 només si el valor és conegut.",
+  "nutritionStrategy": "Estratègia de nutrició",
+  "noPreWorkoutNutritionStrategy": "No s'ha desat cap estratègia de nutrició prèvia a l'entrenament.",
+  "carbsGCarbsHFluid": "{carbs} g de carbohidrats/h · {fluid} ml/h · {sodium} mg de sodi/h",
+  "@carbsGCarbsHFluid": {
+    "placeholders": {
+      "carbs": {
+        "type": "Object"
+      },
+      "fluid": {
+        "type": "Object"
+      },
+      "sodium": {
+        "type": "Object"
+      }
+    }
+  },
+  "forecastUpdatedReviewOrRecalculate": "Previsió actualitzada: revisa o recalcula l'estratègia desada.",
+  "strategySavedSavedat": "Estratègia desada {savedAt}",
+  "@strategySavedSavedat": {
+    "placeholders": {
+      "savedAt": {
+        "type": "Object"
+      }
+    }
+  },
+  "duringTotalTotalcarbsGCarbs": "Total durant: {totalCarbs} g de carbohidrats · {totalFluid} ml · {totalSodium} mg de sodi",
+  "@duringTotalTotalcarbsGCarbs": {
+    "placeholders": {
+      "totalCarbs": {
+        "type": "Object"
+      },
+      "totalFluid": {
+        "type": "Object"
+      },
+      "totalSodium": {
+        "type": "Object"
+      }
+    }
+  },
+  "every20MinAboutCarbs": "Cada 20 min: uns {carbs} g de carbohidrats i {fluid} ml.",
+  "@every20MinAboutCarbs": {
+    "placeholders": {
+      "carbs": {
+        "type": "Object"
+      },
+      "fluid": {
+        "type": "Object"
+      }
+    }
+  },
+  "packQuantitiesIncludeFullContainers": "Les quantitats a portar inclouen envasos complets; no cal consumir-ho tot.",
+  "workoutChangedReviewOrRecalculate": "Entrenament modificat: revisa o recalcula l'estratègia desada.",
+  "conditionsAndFeedingPlan": "Condicions i pla d'alimentació",
+  "editStrategy": "Edita l'estratègia",
+  "recalculate": "Recalcula",
+  "actualNutrition": "Nutrició real",
+  "someProductValuesAreUnknown": "Alguns valors de productes es desconeixen; els totals són incomplets.",
+  "logFoodAndFluids": "Registra menjar i líquids",
+  "recordWhatYouActuallyHad": "Anota el que has pres realment. La ingesta planificada no es copia en aquest registre.",
+  "elapsedMinutesIncludingStopsOptional": "Minuts transcorreguts, incloses les parades (opcional)",
+  "recordedDurationActivityMin": "Durada registrada: {activity} min",
+  "@recordedDurationActivityMin": {
+    "placeholders": {
+      "activity": {
+        "type": "Object"
+      }
+    }
+  },
+  "compareWithSavedStrategy": "Compara amb l'estratègia desada",
+  "useMatchedSessionIfAvailable": "Fes servir la sessió coincident si està disponible",
+  "noPlanComparison": "Sense comparació amb el pla",
+  "titleDate": "{title} · {date}",
+  "@titleDate": {
+    "placeholders": {
+      "title": {
+        "type": "Object"
+      },
+      "date": {
+        "type": "Object"
+      }
+    }
+  },
+  "linkedStrategyUnavailable": "Estratègia vinculada no disponible",
+  "quantityName": "{quantity} × {name}",
+  "@quantityName": {
+    "placeholders": {
+      "quantity": {
+        "type": "Object"
+      },
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "removeIntake": "Elimina la ingesta",
+  "addFoodOrDrink": "Afegeix menjar o beguda",
+  "iHadNoIntake": "No he près res",
+  "giGutComfort": "Comoditat digestiva",
+  "whatWorkedSymptomsAccessProblems": "Què ha funcionat / símptomes / problemes d'accés",
+  "saveDraft": "Desa l'esborrany",
+  "skipLoggingThisActivity": "Omet el registre d'aquesta activitat",
+  "nutritionAndFluids": "Nutrició i hidratació",
+  "productsToleranceAndMeasuredSweat": "Productes, tolerància i pèrdues de suor mesurades",
+  "postWorkoutIntakeReminder": "Recordatori d'ingesta després de l'entrenament",
+  "onceAfterARecentEndurance": "Una vegada després d'un entrenament de resistència recent; hores de silenci 22:00–08:00.",
+  "enableWorkoutNotifications": "Activa les notificacions d'entrenament",
+  "addHiloBpReport": "Afegeix un informe de pressió Hilo",
+  "readingPdfReportsIsOnly": "La lectura d'informes PDF només està disponible a iOS i macOS.",
+  "chooseAnotherReport": "Tria un altre informe",
+  "biologicalAge": "Edat biològica",
+  "voMaxVo2maxMlKg": "VO₂max {vo2max} ml/kg/min · {vo2Class}",
+  "@voMaxVo2maxMlKg": {
+    "placeholders": {
+      "vo2max": {
+        "type": "Object"
+      },
+      "vo2Class": {
+        "type": "Object"
+      }
+    }
+  },
+  "factorContributions": "Contribució dels factors",
+  "estimatedRangeRoundRound2Years": "Interval estimat: {round}–{round2} anys. Una estimació del model, no un diagnòstic mèdic.",
+  "@estimatedRangeRoundRound2Years": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      },
+      "round2": {
+        "type": "Object"
+      }
+    }
+  },
+  "noEnergyMeasurementsForThis": "Sense mesuraments d'energia per a aquest dia",
+  "scanningStepOnTheScale": "Cercant… puja a la bàscula quan estiguis a punt.",
+  "waistWaistCmUpdateMonthly": "Cintura: {waist} cm – actualitza cada mes a Perfil",
+  "@waistWaistCmUpdateMonthly": {
+    "placeholders": {
+      "waist": {
+        "type": "Object"
+      }
+    }
+  },
+  "measuring": "Mesurant…",
+  "tryAgain": "Torna-ho a provar",
+  "systolic": "Sistòlica",
+  "diastolic": "Diastòlica",
+  "heartRate": "Freqüència cardíaca",
+  "weight": "Pes",
+  "bodyFat": "Greix corporal",
+  "duration": "Durada",
+  "deep": "Profund",
+  "spo": "SpO₂",
+  "activityName": "Nom de l'activitat",
+  "sport": "Esport",
+  "distance": "Distància",
+  "saved": "Desat",
+  "connectionFailedCheckYourInternet": "Error de connexió. Revisa la teva connexió a internet.",
+  "email": "Correu electrònic",
+  "password": "Contrasenya",
+  "passwordTooShort": "Contrasenya massa curta",
+  "loginFailedCheckYourEmail": "Error en iniciar la sessió. Revisa el teu correu i la contrasenya.",
+  "connectionFailedCheckYourCredentials": "Error de connexió. Revisa les teves credencials i la connexió a internet.",
+  "region": "Regió",
+  "hiloPod": "Hilo Pod",
+  "hiloAccount": "Compte de Hilo",
+  "garmin": "Garmin",
+  "coros": "Coros",
+  "suunto": "Suunto",
+  "polarH10": "Polar H10",
+  "polar": "Polar",
+  "renphoAccount": "Compte de Renpho",
+  "garminConnectEmail": "Correu de Garmin Connect",
+  "verifyMfaCode": "Verifica el codi MFA",
+  "verificationCode": "Codi de verificació",
+  "errorE": "Error: {e}",
+  "@errorE": {
+    "placeholders": {
+      "e": {
+        "type": "Object"
+      }
+    }
+  },
+  "noHiloPodFoundMake": "No s'ha trobat cap Hilo Pod. Assegura't que estigui carregat i a prop.",
+  "scanFailedE": "Error en la cerca: {e}",
+  "@scanFailedE": {
+    "placeholders": {
+      "e": {
+        "type": "Object"
+      }
+    }
+  },
+  "hiloPod2": "Hilo Pod",
+  "scanForPod": "Cerca el pod",
+  "scanForPolarH10": "Cerca Polar H10",
+  "couldNotReachPolarCheck": "No s'ha pogut connectar amb Polar. Revisa la connexió.",
+  "signInAndSendWorkout": "Inicia la sessió i envia l'entrenament",
+  "scanForScale": "Cerca la bàscula",
+  "passwordRequired": "Contrasenya obligatòria",
+  "enterYourPhoneNumberWith": "Introdueix el teu número de telèfon (amb prefix del país, p. ex. +34…) i el correu de Suunto.",
+  "enterThePinFromThe": "Introdueix el PIN de l'SMS.",
+  "incorrectPinPleaseTryAgain": "PIN incorrecte. Torna-ho a provar.",
+  "phoneNumber": "Número de telèfon",
+  "suuntoAccountEmail": "Correu del compte de Suunto",
+  "enterPinFromSms": "Introdueix el PIN de l'SMS",
+  "verifyConnect": "Verifica i connecta",
+  "sendSmsCode": "Envia el codi per SMS",
+  "couldNotSavePreferencesE": "No s'han pogut desar les preferències: {e}",
+  "@couldNotSavePreferencesE": {
+    "placeholders": {
+      "e": {
+        "type": "Object"
+      }
+    }
+  },
+  "mon": "Dl",
+  "tue": "Dt",
+  "wed": "Dc",
+  "thu": "Dj",
+  "fri": "Dv",
+  "sat": "Ds",
+  "sun": "Dg",
+  "male": "Home",
+  "female": "Dona",
+  "other": "Altre",
+  "running": "Cursa",
+  "trailRunning": "Trail running",
+  "cycling": "Ciclisme",
+  "swimming": "Natació",
+  "triathlon": "Triatló",
+  "hiking": "Excursionisme",
+  "rowing": "Rem",
+  "buildMyPlan": "Crea el meu pla",
+  "keepAConsistentBedtimeAnd": "Mantén horaris constants per anar a dormir i llevar-te per donar suport a la teva rutina de son.",
+  "thisWorkoutHasNoSets": "Aquest entrenament no té sèries.",
+  "loadName": "Càrrega ({name})",
+  "@loadName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "setLabel": "Sèrie",
+  "lowestReps": "Repeticions mínimes",
+  "highestReps": "Repeticions màximes",
+  "repsPerSide": "Repeticions per costat",
+  "fromReps": "Des de (rep.)",
+  "toReps": "Fins a (rep.)",
+  "addedLoad": "Càrrega afegida",
+  "assistance": "Assistència",
+  "tempoOptional": "Ritme (opcional)",
+  "notesOptional": "Notes (opcional)",
+  "enterTheRepetitionsDone": "Introdueix les repeticions fetes.",
+  "plannedUnit": "Previst {unit}",
+  "@plannedUnit": {
+    "placeholders": {
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "repsDone": "Repeticions fetes",
+  "resistance": "Resistència",
+  "implementsLabel": "Implements",
+  "name": "Nom",
+  "instructionsOptional": "Instruccions (opcional)",
+  "remember": "Recorda",
+  "notSavedYet": "Encara sense desar",
+  "saving": "Desant…",
+  "couldNotSave": "No s'ha pogut desar",
+  "plannedValuesAreHintsNot": "Els valors planificats són orientatius, no resultats. Toca una sèrie per registrar-la.",
+  "completedAsPlanned": "Completat tal com estava planificat",
+  "save": "Desa",
+  "nameTheTemplate": "Posa nom a la plantilla.",
+  "setN": "Sèrie {n}",
+  "@setN": {
+    "placeholders": {
+      "n": {
+        "type": "Object"
+      }
+    }
+  },
+  "changesApplyToThisWorkout": "Els canvis s'apliquen només a aquest entrenament. Els entrenaments completats i les altres sessions no canvien.",
+  "saveForThisWorkout": "Desa per a aquest entrenament",
+  "knownForKnownOfOf": "Conegut en {known} de {of} sèries amb càrrega",
+  "@knownForKnownOfOf": {
+    "placeholders": {
+      "known": {
+        "type": "Object"
+      },
+      "of": {
+        "type": "Object"
+      }
+    }
+  },
+  "sessionEstimate": "Estimació de la sessió",
+  "calculatedRange": "Interval calculat",
+  "timedWork": "Treball cronometrat",
+  "strengthTraining": "Entrenament de força",
+  "theExercisesCouldNotBe": "No s'han pogut carregar els exercicis.",
+  "resumeWorkout": "Reprèn l'entrenament",
+  "strengthWorkout": "Entrenament de força",
+  "untitledTemplate": "Plantilla sense títol",
+  "theRecordedExercisesCouldNot": "No s'han pogut carregar els exercicis registrats.",
+  "exercisesPerformed": "Exercicis fets",
+  "comparedWithThePlanAs": "Comparat amb el pla tal com estava en començar el registre.",
+  "topWorkingLoadName": "Càrrega de treball màxima ({name})",
+  "@topWorkingLoadName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "estimated1rmMiddleOfRange": "1RM estimat, mig de l'interval",
+  "noLoggedSessionsYet": "Encara no hi ha sessions registrades.",
+  "noRadarFramesAvailable": "No hi ha imatges de radar disponibles",
+  "playRadar": "Reprodueix el radar",
+  "pauseRadar": "Posa el radar en pausa",
+  "high": "Alt",
+  "clear": "Serè",
+  "bodyweight": "Pes corporal",
+  "resistance2": "Resistència —",
+  "assistUnit": "Assistència {unit}",
+  "@assistUnit": {
+    "placeholders": {
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "reps2": "Rep. —",
+  "notRecorded": "No registrat",
+  "skipped": "Omès",
+  "health": "Salut",
+  "manual": "Manual",
+  "expandName": "Amplia {name}",
+  "@expandName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "open": "Obre",
+  "noScalePaired": "Cap bàscula vinculada",
+  "paired": "Vinculat",
+  "change": "Canvia",
+  "noCuffPaired": "Cap braçalet vinculat",
+  "noPolarH10FoundWear": "No s'ha trobat cap Polar H10. Posa't la cinta, humiteja els elèctrodes i comprova que cap altra aplicació no estigui fent servir les dues connexions Bluetooth.",
+  "enterMinutesSinceTrainingEnded": "Introdueix els minuts des que va acabar l'entrenament, de 0 a 1440.",
+  "timingFollowsYourWorkout": "El moment segueix el teu entrenament.",
+  "recordingStayStill": "Gravant · queda't quiet",
+  "meanHrBpm": "FC mitjana · bpm",
+  "pairAPolarH10First": "Vincula primer un Polar H10.",
+  "around30MinutesAfterTraining": "Uns 30 minuts després d'entrenar, quan l'entrenament està disponible a temps.",
+  "reminderDiagnostics": "Diagnòstic dels recordatoris",
+  "forecast": "Previsió",
+  "enterAName": "Introdueix un nom",
+  "enterAValidAmount": "Introdueix una quantitat vàlida",
+  "enterAPositiveAmount": "Introdueix una quantitat positiva",
+  "maximum120GH": "Màxim 120 g/h",
+  "carbohydrateTargetGH": "Objectiu de carbohidrats g/h",
+  "fluidTargetMlH": "Objectiu de líquids ml/h",
+  "sodiumTargetMgHNot": "Objectiu de sodi mg/h (no sal)",
+  "surfaceFeedingAccess": "Superfície / accés a l'avituallament",
+  "expectedAscentM": "Desnivell previst m",
+  "expectedAltitudeM": "Altitud prevista m",
+  "humidity": "Humitat %",
+  "windKmH": "Vent km/h",
+  "dayForecast": "Previsió del dia",
+  "enteredConditions": "Condicions introduïdes",
+  "productFoodName": "Nom del producte / aliment",
+  "servingsQuantity": "Racions / quantitat",
+  "when": "Quan",
+  "carbohydrateGServing": "Carbohidrats g / ració",
+  "fluidMlServing": "Líquid ml / ració",
+  "caffeineMgServing": "Cafeïna mg / ració",
+  "proteinGServing": "Proteïnes g / ració",
+  "gel": "Gel",
+  "water": "Aigua",
+  "sportsDrink": "Beguda esportiva",
+  "bar": "Barreta",
+  "finishIntakeLog": "Acaba el registre d'ingesta",
+  "allowNotificationsInSystemSettings": "Permet les notificacions als ajustos del sistema",
+  "importing": "Important…",
+  "importNewreadings": "Importa {newReadings}",
+  "@importNewreadings": {
+    "placeholders": {
+      "newReadings": {
+        "type": "Object"
+      }
+    }
+  },
+  "reading": "Llegint…",
+  "chooseReportPdf": "Tria un informe (PDF)",
+  "yourTrainingHistoryIsReady": "El teu historial d'entrenament està a punt",
+  "importingYourTrainingHistory": "S'està important el teu historial d'entrenament",
+  "stopImport": "Atura la importació",
+  "dismiss": "Descarta",
+  "openai": "OpenAI",
+  "appleIntelligence": "Apple Intelligence",
+  "nonAiBriefing": "Resum sense IA",
+  "noBriefing": "Sense resum",
+  "ruleBasedSummaryFromYour": "Resum basat en regles amb les teves dades de salut, sense crides a l'API",
+  "hideTheBriefingCard": "Amaga la targeta de resum",
+  "flutter": "Flutter",
+  "stateManagement": "Gestió d'estat",
+  "bluetoothLe": "Bluetooth LE",
+  "interactiveMaps": "Mapes interactius",
+  "chartsGraphs": "Gràfics i diagrames",
+  "secureCredentialStorage": "Emmagatzematge segur de credencials",
+  "markdownRendering": "Renderització de Markdown",
+  "appleOnDeviceAi": "IA d'Apple al dispositiu",
+  "cryptography": "Criptografia",
+  "appleHealthHealthConnect": "Apple Salut i Health Connect",
+  "runtimePermissions": "Permisos en temps d'execució",
+  "shareExport": "Comparteix i exporta",
+  "openUrls": "Obre URL",
+  "internationalisation": "Internacionalització",
+  "utilities": "Utilitats",
+  "icons": "Icones",
+  "fjelia": "Fjelia",
+  "fjeliaFeedback": "Comentaris sobre Fjelia",
+  "couldNotSendTheReport": "No s'ha pogut enviar l'informe. El teu text continua aquí. Torna-ho a provar.",
+  "yourEmail": "El teu correu electrònic",
+  "enterAValidEmailAddress": "Introdueix una adreça de correu vàlida.",
+  "subject": "Assumpte",
+  "sending": "Enviant…",
+  "sendReport": "Envia l'informe",
+  "sleepRecovery": "Son i recuperació",
+  "activitiesTraining": "Activitats i entrenament",
+  "bodyWellness": "Cos i benestar",
+  "hilo": "Hilo",
+  "hiloBle": "Hilo BLE",
+  "garminApi": "Garmin (API)",
+  "renphoScale": "Bàscula Renpho",
+  "connected": "Connectat",
+  "notConnected": "No connectat",
+  "manage": "Gestiona",
+  "connect": "Connecta",
+  "habits": "Hàbits",
+  "smokingAlcohol": "Tabac, alcohol",
+  "clinicalLab": "Anàlisis clíniques",
+  "hba1cLipidsKidney": "HbA1c, lípids, ronyó",
+  "sex": "Sexe",
+  "smoking": "Tabaquisme",
+  "never": "Mai",
+  "former": "Anterior",
+  "current": "Actual",
+  "hba1c": "HbA1c",
+  "diabetes": "Diabetis",
+  "prediabetes": "Prediabetis",
+  "type1": "Tipus 1",
+  "type2": "Tipus 2",
+  "apob": "ApoB",
+  "optionalPlansAndPaceGuides": "Opcional. Els plans i les guies de ritme ho fan servir; el desnivell de dalt també influeix en l'entrenament.",
+  "addRaceGoal2": "Afegeix un objectiu de cursa",
+  "editRaceGoal": "Edita l'objectiu de cursa",
+  "trailRunning2": "Trail running",
+  "roadCycling": "Ciclisme de carretera",
+  "gravel": "Gravel",
+  "indoorRowing": "Rem indoor",
+  "selectDate": "Selecciona la data",
+  "committed": "Confirmat",
+  "flexible": "Flexible",
+  "notGoing": "No hi aniré",
+  "notSaid": "No indicat",
+  "finish": "Temps final",
+  "saveGoal": "Desa l'objectiu",
+  "exportAllRecordedWorkoutsAs": "Exporta tots els entrenaments registrats com a full de càlcul.",
+  "backupsIncludeYourHealthData": "Les còpies de seguretat inclouen les teves dades de salut, plans d'entrenament i ajustos del perfil. Les credencials d'accés s'exclouen. Restaurar substitueix les dades locals.",
+  "trail": "Trail",
+  "inlineSkating": "Patinatge en línia",
+  "nordicClassic": "Esquí nòrdic clàssic",
+  "skateSkiing": "Esquí d'skating",
+  "strength": "Força",
+  "walking": "Caminar",
+  "yoga": "Ioga",
+  "skiing": "Esquí",
+  "climbing": "Escalada",
+  "monday": "Dilluns",
+  "sunday": "Diumenge",
+  "month": "Mes",
+  "week": "Setmana",
+  "list": "Llista",
+  "train": "Entrenar",
+  "restDay": "Descans",
+  "kilogramsKg": "Quilograms (kg)",
+  "poundsLb": "Lliures (lb)",
+  "regenerateWorkouts": "Regenera els entrenaments",
+  "starting": "Iniciant",
+  "allPlannedWorkoutsDeleted": "S'han eliminat tots els entrenaments planificats.",
+  "searching": "Cercant…",
+  "searchCity": "Cerca una ciutat",
+  "fixedLocationSavedWeatherWill": "Ubicació fixa desada. El temps s'actualitzarà.",
+  "locationDisabledThePlanWeather": "Ubicació desactivada. La targeta del temps del pla està amagada.",
+  "locationSetToName": "Ubicació establerta a {name}",
+  "@locationSetToName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "notEnoughDaytimeAndNighttime": "No hi ha prou mesuraments diürns i nocturns",
+  "onlyTheWeightWasReceived": "Només s'ha rebut el pes. Per al greix corporal, el múscul i la resta de valors, queda't descalç sobre els elèctrodes metàl·lics fins que la bàscula acabi.",
+  "addYourWaistInProfile": "Afegeix la cintura a Perfil per al greix visceral.",
+  "manualActivity": "Activitat manual",
+  "theseCredentialsAreStoredEncrypted": "Aquestes credencials es desen xifrades al teu dispositiu (clauer d'iOS / Android Keystore). Mai s'envien a cap servidor que no sigui Hilo.",
+  "corosCredentialsAreStoredEncrypted": "Les credencials de Coros es desen xifrades al teu dispositiu. Fjelia llegeix les dades directament de l'API al núvol de Coros, la mateixa que fa servir l'aplicació web Coros Training Hub.",
+  "connectAnyCombinationYouCan": "Connecta qualsevol combinació: sempre podràs afegir-ne més després a Configuració.",
+  "garminCredentialsAreStoredEncrypted": "Les credencials de Garmin es desen xifrades al teu dispositiu. Fjelia fa servir l'API no oficial de Garmin Connect, el mateix enfocament que moltes aplicacions de la comunitat.",
+  "enterTheVerificationCode": "Introdueix el codi de verificació",
+  "appleHealthDataAccess": "Fjelia llegeix les teves dades de salut d'Apple Salut. Amb el teu permís, també hi pot escriure dades sincronitzades. Gestiona l'accés als ajustos del dispositiu.",
+  "scanAgain": "Torna a cercar",
+  "wearTheHiloBandDuring": "Porta la polsera Hilo durant la son per a un registre continu de la pressió arterial. Les dades se sincronitzen automàticament cada matí en obrir l'aplicació.",
+  "noPolarH10FoundWear2": "No s'ha trobat cap Polar H10. Posa't la cinta amb els elèctrodes humits i assegura't que cap altra aplicació (o rellotge) hi estigui connectada; després torna a cercar.",
+  "wearTheStrapWithMoist2": "Posa't la cinta amb els elèctrodes humits abans de cercar. Mesura després amb + → Mesurament de VFC amb Polar H10; els resultats apareixen al costat de la teva VFC nocturna.",
+  "signedInPlannedWorkoutsCan": "Sessió iniciada. Ara es poden enviar entrenaments planificats a Polar. Les sessions anteriors s'importen amb la propera sincronització completa de l'historial.",
+  "saveYourPolarFlowLogin": "Desa el teu inici de sessió de Polar Flow per enviar entrenaments planificats i importar sessions de més de 30 dies. Es queda al clauer d'aquest dispositiu i només s'envia a Polar. Envia un entrenament des del full del planificador i després sincronitza Polar Flow amb el teu rellotge. Comprova que les teves zones de freqüència cardíaca de Polar coincideixin amb les de Fjelia.",
+  "signInToSendThis": "Inicia la sessió per enviar aquest entrenament al teu calendari de Polar Flow. El teu inici de sessió es queda al clauer d'aquest dispositiu i només s'envia a Polar. Després d'enviar-lo, sincronitza Polar Flow amb el teu rellotge.",
+  "checkAndSave": "Comprova i desa",
+  "noScaleFoundStepOn": "No s'ha trobat cap bàscula. Puja a la bàscula perquè es desperti i torna a cercar.",
+  "stepOnTheScaleBefore": "Puja a la bàscula abans de cercar perquè es desperti. Després fes servir + → Bàscula RENPHO per mesurar.",
+  "renphoCredentialsAreStoredEncrypted": "Les credencials de Renpho es desen xifrades al teu dispositiu. Fjelia es comunica directament amb l'API al núvol de Renpho.",
+  "couldNotSendSmsCheck": "No s'ha pogut enviar l'SMS. Revisa el teu número de telèfon i la connexió a internet.",
+  "theEmailIsUsedFor": "El correu s'utilitza per signar les sol·licituds de manera segura i no s'envia als servidors de Suunto.",
+  "suuntoUsesSmsVerificationSame": "Suunto fa servir verificació per SMS (igual que l'aplicació de Suunto). S'enviarà un PIN d'un sol ús al teu telèfon. Les teves credencials es desen xifrades només al dispositiu.",
+  "tellUsAboutYourRace": "Explica'ns la teva cursa i el teu horari. Fjelia crea ara el teu pla i dedueix el teu nivell de les teves activitats passades (Garmin, Suunto, Polar, COROS, Apple Salut) quan es descarreguin.",
+  "noAccountConnectedSoFjelia": "No hi ha cap compte connectat, així que Fjelia no té historial d'on aprendre. Connecta Garmin, Suunto, Polar, COROS o Apple Salut i decidirà el teu entrenament real.",
+  "yourPastActivitiesAreStill": "Les teves activitats passades encara s'estan important. Pots crear el teu pla ara: es refinarà automàticament quan acabi la importació.",
+  "buildingYourPlan": "Creant el teu pla…",
+  "saveContinue": "Desa i continua",
+  "addYourMainPriorityA": "Afegeix la teva cursa principal (prioritat A). El pla es periodifica cap a ella: base, desenvolupament, pic i afinament. Sense objectiu de cursa encara no es genera cap pla.",
+  "noMeasurementsYet": "Encara no hi ha mesuraments",
+  "date": "Data",
+  "deepSleepIsBelowOptimal": "La son profund està per sota de l'òptim ({round} %). Evita l'alcohol i els àpats abundants 3 h abans d'anar a dormir.",
+  "@deepSleepIsBelowOptimal": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "finishWithSetsOpen": "Acabar amb sèries obertes?",
+  "completeThePlannedWorkout": "Completar l'entrenament planificat?",
+  "marksThePlannedSessionAs": "Marca la sessió planificada com a feta amb aquest entrenament.",
+  "discardThisWorkout": "Descartar aquest entrenament?",
+  "removesTheWorkoutAndEvery": "Elimina l'entrenament i cada sèrie registrada.",
+  "assistanceName": "Assistència ({name})",
+  "@assistanceName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "enterSecondsOrMSs": "Introdueix segons o m:ss.",
+  "enterTheLoadAsA": "Introdueix la càrrega com a número.",
+  "loadCannotBeNegative": "La càrrega no pot ser negativa.",
+  "enterTheEffortValue": "Introdueix el valor d'esforç.",
+  "nameTheExercise": "Posa nom a l'exercici.",
+  "atLeastOneImplement": "Almenys un implement.",
+  "anIncrementMustBePositive": "Un increment ha de ser positiu.",
+  "enterAPositiveStep": "Introdueix un increment positiu.",
+  "repsInReserve": "Repeticions en reserva",
+  "loadPerImplement": "Càrrega per implement",
+  "restAfterThisSet": "Descans després d'aquesta sèrie",
+  "enterHowLongTheSet": "Introdueix quant va durar la sèrie.",
+  "repsDonePerSide": "Repeticions fetes per costat",
+  "plannedRepminRepmax": "Previst {repMin}–{repMax}",
+  "@plannedRepminRepmax": {
+    "placeholders": {
+      "repMin": {
+        "type": "Object"
+      },
+      "repMax": {
+        "type": "Object"
+      }
+    }
+  },
+  "restTakenBeforeTheNext": "Descans pres abans de la sèrie següent",
+  "equipment": "Equipament",
+  "implementsUsedTogether": "Implements utilitzats junts",
+  "smallestLoadStepOptional": "Increment de càrrega mínim (opcional)",
+  "theSmallestChangeYourPlates": "El canvi més petit que permeten els teus discos, manuelles o màquina, recordat per a aquest equipament.",
+  "loadStep": "Increment de càrrega",
+  "finishWithIncompleteData": "Acabar amb dades incompletes?",
+  "leaveWithoutSaving": "Sortir sense desar?",
+  "theLastChangeCouldNot": "No s'ha pogut desar l'últim canvi.",
+  "comparedWithAPlanChosen": "Comparat amb un pla triat després de l'entrenament. Els valors planificats són orientatius, no resultats.",
+  "lastSet": "Última sèrie",
+  "templateName": "Nom de la plantilla",
+  "betweenExercises": "Entre exercicis",
+  "betweenRounds": "Entre rondes",
+  "discardChanges": "Descartar els canvis?",
+  "yourEditsToThisWorkout": "Els teus canvis en aquest entrenament no estan desats.",
+  "estimatedDuration": "Durada estimada",
+  "workingSets": "Sèries de treball",
+  "estimatedExternalVolume": "Volum extern estimat",
+  "loadRaisedFromUnitTo": "Càrrega augmentada de {unit} a {unit2} després de la teva revisió (regla v{ruleVersion}).",
+  "@loadRaisedFromUnitTo": {
+    "placeholders": {
+      "unit": {
+        "type": "Object"
+      },
+      "unit2": {
+        "type": "Object"
+      },
+      "ruleVersion": {
+        "type": "Object"
+      }
+    }
+  },
+  "thePlannedWorkoutHasNo": "L'entrenament planificat no té exercicis per registrar.",
+  "completedSets": "Sèries completades",
+  "knownExternalVolume": "Volum extern conegut",
+  "updateStrengthSessions2": "Actualitzar les sessions de força?",
+  "upcomingSessionsArePlannedAgain": "Les properes sessions es planifiquen de nou des d'avui: la força segueix els teus objectius de cursa cada dia de força, amb sessions variades. Els entrenaments completats i omesos es mantenen; els exercicis que has canviat en una propera sessió de força se substitueixen.",
+  "thisSessionUsesAnEarlier": "Aquesta sessió fa servir una plantilla de força anterior. Els plans actualitzats varien la força segons la fase i l'objectiu de cursa i fan servir cada dia de força.",
+  "estimated1rmUsesEpleyAnd": "L'1RM estimat fa servir Epley i Brzycki en sèries de treball completades d'1–10 repeticions amb càrrega coneguda i es mostra com l'interval entre tots dos. És una estimació, no un màxim comprovat.",
+  "localWeather": "Temps local",
+  "today": "Avui",
+  "low": "Baix",
+  "moderate": "Moderat",
+  "overcast": "Ennuvolat",
+  "partlyCloudy": "Parcialment ennuvolat",
+  "collapseName": "Replega {name}",
+  "@collapseName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "variableLoads": "Càrregues variables",
+  "ruleVstrengthprogressionruleversionTheLastStrengthprogressionminsessions": "Regla v{strengthProgressionRuleVersion}: les últimes {strengthProgressionMinSessions} sessions comparables, cada sèrie al màxim del seu objectiu de repeticions, amb esforç registrat i no més dur del previst. {reason}",
+  "@ruleVstrengthprogressionruleversionTheLastStrengthprogressionminsessions": {
+    "placeholders": {
+      "strengthProgressionRuleVersion": {
+        "type": "Object"
+      },
+      "strengthProgressionMinSessions": {
+        "type": "Object"
+      },
+      "reason": {
+        "type": "Object"
+      }
+    }
+  },
+  "stepOnYourScaleBefore": "Puja a la bàscula abans de cercar",
+  "scanning": "Cercant…",
+  "pair": "Vincula",
+  "selectYourAktiiaPWristband": "Selecciona la teva polsera AKTIIA P…. Posa-la al carregador per despertar-la si no apareix.",
+  "measurementInterruptedWhileTheApp": "Mesurament interromput mentre l'aplicació era en segon pla. Repeteix-lo.",
+  "noRecentRrDataWith": "Sense dades RR recents amb bon contacte. Revisa la cinta i repeteix el mesurament.",
+  "settlingStayStill": "Estabilitzant · queda't quiet",
+  "deleteSpotHrvMeasurement": "Eliminar el mesurament de VFC puntual?",
+  "thisRemovesTheRecordingAnd": "Això elimina l'enregistrament i els seus intervals RR en brut.",
+  "appleHealthStoppedAnsweringSo": "Apple Salut ha deixat de respondre, així que Fjelia l'ha desconnectat i ja no llegeix ni escriu dades de salut.\n\nPermet de nou Fjelia a Configuració → Salut → Accés a dades i dispositius → Fjelia i torna a connectar Apple Salut.",
+  "thisRemovesTheSelectedGrip": "Això elimina el mesurament de força de prensió seleccionat.",
+  "hideReminderDiagnostics": "Amaga el diagnòstic dels recordatoris",
+  "loading": "Carregant…",
+  "touchTheChartForDetails": "Toca el gràfic per veure els detalls",
+  "indoor": "Interior",
+  "road": "Carretera",
+  "technical": "Tècnic",
+  "snow": "Neu",
+  "pool": "Piscina",
+  "openWater": "Aigües obertes",
+  "ambientTemperatureC": "Temperatura ambient °C",
+  "carryAboutGelsGelsGelcarbs": "Porta uns {gels} gels ({gelCarbs} g de carbohidrats cadascun) + {bottles} × ampolles de {bottleMl} ml. {drinkCarbs} g de carbohidrats provenen de la pols de beguda.",
+  "@carryAboutGelsGelsGelcarbs": {
+    "placeholders": {
+      "gels": {
+        "type": "Object"
+      },
+      "gelCarbs": {
+        "type": "Object"
+      },
+      "bottles": {
+        "type": "Object"
+      },
+      "bottleMl": {
+        "type": "Object"
+      },
+      "drinkCarbs": {
+        "type": "Object"
+      }
+    }
+  },
+  "intakeNotRecorded": "Ingesta no registrada",
+  "loggingDeclinedIntakeUnknown": "Registre rebutjat: ingesta desconeguda",
+  "confirmedNoIntake": "Confirmat: sense ingesta",
+  "draft": "Esborrany · ",
+  "actualIntakePerServing": "Ingesta real · per ració",
+  "minuteIntoWorkoutDuringOnly": "Minut de l'entrenament (només durant, opcional)",
+  "sodiumMgServingNotSalt": "Sodi mg / ració (no sal)",
+  "comfortable": "Còmode",
+  "mildSymptoms": "Símptomes lleus",
+  "moderateSymptoms": "Símptomes moderats",
+  "severeSymptoms": "Símptomes greus",
+  "personalNutritionSettings": "Configuració personal de nutrició",
+  "practisedCarbohydrateToleranceGH": "Tolerància als carbohidrats entrenada g/h (fins a 120)",
+  "workoutNotificationsEnabled": "Notificacions d'entrenament activades",
+  "exportTheMonthlyReportAs": "Exporta l'informe mensual com a PDF a l'aplicació de Hilo i tria'l aquí. Només s'importen els mesuraments; el nom, el correu i les dades corporals de l'informe s'ignoren.",
+  "nothingNewAllReadingsWere": "Res de nou: tots els mesuraments ja estaven desats.",
+  "historyImportIncomplete": "Importació de l'historial incompleta",
+  "youCanKeepUsingFjelia": "Pots continuar fent servir Fjelia, però mantén-la oberta: iOS posa en pausa la importació quan l'aplicació és en segon pla i continua la propera vegada que l'obris. El teu pla es calibra en acabar la importació.",
+  "addYourBirthYearIn": "Afegeix el teu any de naixement a Configuració → Perfil per veure la teva estimació.",
+  "fitnessAge": "Edat de forma",
+  "estLifespan": "Esperança de vida est.",
+  "delta": "Diferència",
+  "couldNotOpenKey": "No s'ha pogut obrir {key}",
+  "@couldNotOpenKey": {
+    "placeholders": {
+      "key": {
+        "type": "Object"
+      }
+    }
+  },
+  "appleIntelligenceIsNotAvailable": "Apple Intelligence no està disponible en aquest dispositiu (cal un iPhone o Mac compatible amb iOS/macOS 26 o posterior i Apple Intelligence activat a Configuració). Tria un altre proveïdor i afegeix la teva pròpia clau API per fer servir l'entrenador.",
+  "personalisedMorningLunchAfternoonEvening": "Resum personalitzat de matí, migdia, tarda i vespre",
+  "enterASubject": "Introdueix un assumpte.",
+  "message": "Missatge",
+  "enterAMessageOfAt": "Introdueix un missatge d'almenys 10 caràcters.",
+  "garminConnect": "Garmin Connect",
+  "hiloBloodPressure": "Hilo (pressió arterial)",
+  "renphoBodyScale": "Renpho (bàscula corporal)",
+  "hiloPodCuff": "Hilo Pod / braçalet",
+  "disconnectLabel": "Desconnectar {label}?",
+  "@disconnectLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "yourSavedMeasurementsWillRemain": "Els teus mesuraments desats romandran en aquest dispositiu.",
+  "notEnoughRecentHeartRate": "No hi ha prou dades recents de freqüència cardíaca per ajustar les zones.",
+  "aerobicBase": "Base aeròbica",
+  "tempo": "Tempo",
+  "lactateThreshold": "Llindar de lactat",
+  "birthYearHeightWaist": "Any de naixement, alçada, cintura",
+  "enterAValidValue": "Introdueix un valor vàlid",
+  "birthYear": "Any de naixement",
+  "height": "Alçada",
+  "waist": "Cintura",
+  "yearsSinceQuit": "Anys des que ho vas deixar",
+  "cigarettesPerDay": "Cigarretes al dia",
+  "standardDrinksPerMonth": "Begudes estàndard al mes",
+  "enterAValidNumber": "Introdueix un número vàlid",
+  "enterARaceName": "Introdueix el nom de la cursa",
+  "useHMmOrH": "Fes servir h:mm o h:mm:ss, un temps que realment podries córrer",
+  "flexibleThePlanMayDrop": "Flexible: el pla pot descartar aquest esdeveniment si xoca amb un de més important.",
+  "selectARaceDate": "Selecciona una data de cursa",
+  "thatIsTenTimesOr": "És deu vegades (o una desena part de) els {likely} km habituals. Fer servir {likely} km en el seu lloc?",
+  "@thatIsTenTimesOr": {
+    "placeholders": {
+      "likely": {
+        "type": "Object"
+      }
+    }
+  },
+  "addGoal": "Afegeix l'objectiu",
+  "restoreFailed": "Error en restaurar",
+  "replaceLocalData": "Substituir les dades locals?",
+  "restoringThisBackupReplacesAll": "Restaurar aquesta còpia de seguretat substitueix tots els registres locals de salut i entrenament. Es conserven les credencials d'accés existents.",
+  "openingBackupZip": "S'està obrint el ZIP de la còpia de seguretat",
+  "addAFutureRaceGoal": "Afegeix primer un objectiu de cursa futur.",
+  "deleteAllWorkouts2": "Eliminar tots els entrenaments?",
+  "thisDeletesPlannedWorkoutsOn": "Això elimina els entrenaments planificats en aquest telèfon i a la plataforma del teu rellotge connectat. Les activitats completades es conserven.",
+  "regenerateWorkouts2": "Regenerar els entrenaments?",
+  "noRaceGoalsYetAdd": "Encara no hi ha objectius de cursa. Afegeix-ne un o sincronitza des de Garmin.",
+  "deleteRaceGoal": "Eliminar l'objectiu de cursa?",
+  "deletingFailedFailure": "Error en eliminar: {failure}",
+  "@deletingFailedFailure": {
+    "placeholders": {
+      "failure": {
+        "type": "Object"
+      }
+    }
+  },
+  "allPlannedWorkoutsDeletedRemoved": "S'han eliminat tots els entrenaments planificats. Eliminats de les teves plataformes: {removed}.",
+  "@allPlannedWorkoutsDeletedRemoved": {
+    "placeholders": {
+      "removed": {
+        "type": "Object"
+      }
+    }
+  },
+  "usingCurrentLocationTostringasfixedTostringasfixed2": "Fent servir la ubicació actual: {toStringAsFixed}, {toStringAsFixed2}",
+  "@usingCurrentLocationTostringasfixedTostringasfixed2": {
+    "placeholders": {
+      "toStringAsFixed": {
+        "type": "Object"
+      },
+      "toStringAsFixed2": {
+        "type": "Object"
+      }
+    }
+  },
+  "typeSleep": "Son",
+  "typeBloodPressure": "Pressió arterial",
+  "addHiloBpReportPdf": "Afegeix un informe de pressió Hilo (PDF)",
+  "hiloCuffBle": "Braçalet Hilo (BLE)",
+  "typeSpo2": "SpO₂ / pulsioxímetre",
+  "typeWeightScale": "Bàscula de pes",
+  "polarH10HrvMeasurement": "Mesurament de VFC amb Polar H10",
+  "samplingWouldStartMinutes": "El mostreig començaria uns {minutes} min després d'acabar l'entrenament.",
+  "@samplingWouldStartMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "Object"
+      }
+    }
+  },
+  "samplingStartedMinutes": "El mostreig va començar {minutes} min després d'acabar l'entrenament.",
+  "@samplingStartedMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "Object"
+      }
+    }
+  },
+  "unknown": "Desconegut",
+  "before": "Abans",
+  "during": "Durant",
+  "after": "Després",
+  "enumWarmUp": "Escalfament",
+  "enumWorking": "De treball",
+  "enumBackOff": "Back-off",
+  "enumTechnique": "Tècnica",
+  "enumExternalLoad": "Càrrega externa",
+  "enumBandResistance": "Banda / resistència",
+  "enumTotalLoad": "Càrrega total",
+  "enumPerImplement": "Per implement",
+  "enumOneImplement": "Un implement",
+  "enumBothSides": "Els dos costats",
+  "enumAlternatingTotalReps": "Alternat, repeticions totals",
+  "enumPartial": "Parcial",
+  "enumFailed": "Fallida",
+  "enumStraightSets": "Sèries convencionals",
+  "enumSuperset": "Superserie",
+  "enumCircuit": "Circuit",
+  "enumRir": "RIR",
+  "enumRpe110": "RPE 1–10",
+  "enumBeforeTraining": "Abans de l'entrenament",
+  "enumAfterTraining": "Després de l'entrenament",
+  "enumResting": "En repòs",
+  "enumSeated": "Assegut",
+  "enumLyingDown": "Estirat",
+  "duringRoutineGelsAreNot": "Durant: no calen gels de rutina en aquesta sessió curta/fàcil. Beu segons la set.",
+  "duringSpreadCarbohydrateAndDrinks": "Durant: reparteix els carbohidrats i les begudes en preses petites i regulars. Compta els carbohidrats de la beguda en el mateix total que gels i menjar.",
+  "fluidIsAnEditableStarting": "Els líquids són una estimació inicial editable, no una quota. Guia't per la set, la ingesta habitual i les pèrdues de suor mesurades; no forcis més aigua.",
+  "afterHaveCarbohydrateAndA": "Després: pren carbohidrats i un àpat amb proteïnes. Prioritza la recuperació i la rehidratació si hi ha una altra sessió aviat.",
+  "swimmingPlaceALabelledBottle": "Natació: deixa una ampolla etiquetada a la vora de la piscina i aprofita les pauses entre sèries per beure o alimentar-te. Les condicions de la piscina poden diferir del temps exterior.",
+  "runningCarryAccessibleGelsFlasks": "Cursa: porta gels/flasks accessibles o planifica l'avituallament als punts; practica els mateixos productes i temps abans de competir.",
+  "servingSizesAndToleranceMust": "Les mides de ració i la tolerància han de ser positives.",
+  "enterFiniteNonNegativeMeasurements": "Introdueix mesuraments finits i no negatius.",
+  "targetsMustBeFiniteAnd": "Els objectius han de ser finits i no negatius.",
+  "conditionsMustBeFiniteOr": "Les condicions han de ser finites o desconegudes.",
+  "humidityMustBeBetween0": "La humitat ha d'estar entre 0 i 100 %.",
+  "noIntakeCannotIncludeFood": "«Sense ingesta» no pot incloure menjar ni begudes.",
+  "addAnItemOrConfirm": "Afegeix un element o confirma que no has près res.",
+  "eachIntakeNeedsAProduct": "Cada ingesta necessita un producte i un moment vàlid.",
+  "quantityMustBePositive": "La quantitat ha de ser positiva.",
+  "thisActivityNoLongerExists": "Aquesta activitat ja no existeix.",
+  "practisedCarbohydrateToleranceMustNot": "La tolerància als carbohidrats entrenada no ha de superar 120 g/h.",
+  "measuredSweatRateMustBe": "La taxa de sudoració mesurada ha de ser positiva o deixar-se desconeguda.",
+  "increasePractisedToleranceInNutrition": "Augmenta la tolerància entrenada a la configuració de nutrició abans de triar un objectiu més alt.",
+  "fluidTargetExceedsYourMeasured": "L'objectiu de líquids supera la teva taxa de sudoració mesurada. Revisa el mesurament o l'objectiu.",
+  "elapsedWorkoutTimeMustBe": "El temps d'entrenament transcorregut ha de ser positiu o deixar-se en blanc.",
+  "intakeAmountsMustBeFinite": "Les quantitats d'ingesta han de ser finites i no negatives.",
+  "selectedStrategyUnavailableChooseAnother": "L'estratègia seleccionada no està disponible. Tria una altra estratègia o cap comparació.",
+  "recordYourWorkoutNutrition": "Registra la teva nutrició de l'entrenament",
+  "addTheFoodAndFluids": "Afegeix el menjar i els líquids que has près realment a l'historial de l'activitat.",
+  "logIntake": "Registra la ingesta",
+  "in30Minutes": "D'aquí a 30 minuts",
+  "loadSuggestionsCoverStraightSets": "Els suggeriments de càrrega només s'apliquen a sèries convencionals amb repeticions.",
+  "needsStrengthprogressionminsessionsRecordedSessionsOf": "Cal {strengthProgressionMinSessions} sessions registrades d'aquest exercici.",
+  "@needsStrengthprogressionminsessionsRecordedSessionsOf": {
+    "placeholders": {
+      "strengthProgressionMinSessions": {
+        "type": "Object"
+      }
+    }
+  },
+  "recentHistoryIsTooOld": "L'historial recent és massa antic per a un suggeriment.",
+  "theLastSessionDidNot": "L'última sessió no va fer servir una única càrrega coneguda.",
+  "theLoadChangedBetweenThe": "La càrrega ha canviat entre les sessions recents.",
+  "notEverySetReachedThe": "No totes les sèries han arribat al màxim del seu objectiu de repeticions.",
+  "recordEffortRirOrRpe": "Registra l'esforç (RIR o RPE) a l'última sèrie per obtenir suggeriments.",
+  "recentSetsWereHarderThan": "Les sèries recents van ser més dures del previst.",
+  "thisWorkoutAlreadyHasIts": "Aquest entrenament ja té la seva pròpia càrrega; es manté com està.",
+  "yourRecentSetsMetThe": "Les teves sèries recents han complert la regla de progressió. Defineix el mínim increment de càrrega d'aquest equipament per revisar una càrrega.",
+  "thisWorkoutNoLongerExists": "Aquest entrenament ja no existeix.",
+  "thisStrengthPlanCannotBe": "Aquest pla de força no es pot llegir ({message}).",
+  "@thisStrengthPlanCannotBe": {
+    "placeholders": {
+      "message": {
+        "type": "Object"
+      }
+    }
+  },
+  "thisStrengthPlanCannotBe2": "Aquest pla de força no es pot llegir.",
+  "addAtLeastOneExercise": "Afegeix almenys un exercici.",
+  "thisWorkoutWasChangedElsewhere": "Aquest entrenament s'ha canviat en un altre lloc. Els teus canvis es conserven; recarrega per veure la versió més recent.",
+  "thePlanThisWorkoutIs": "El pla amb el qual es compara aquest entrenament no es pot llegir.",
+  "thisLogWasChangedElsewhere": "Aquest registre s'ha canviat en un altre lloc. Les teves entrades es conserven; recarrega per veure la versió més recent.",
+  "thisZipIsNotA": "Aquest ZIP no és una còpia de seguretat de Fjelia compatible.",
+  "theBackupDatabaseIsDamaged": "La base de dades de la còpia de seguretat està malmesa.",
+  "invalidBackupData": "Dades de còpia de seguretat no vàlides.",
+  "backupTablesDoNotMatch": "Les taules de la còpia de seguretat no coincideixen.",
+  "invalidBackupColumns": "Columnes de còpia de seguretat no vàlides.",
+  "migratingOriginalAppBackup": "S'està migrant la còpia de seguretat de l'aplicació original",
+  "theOriginalBackupIsMissing": "Falten taules necessàries a la còpia de seguretat original.",
+  "backupFormatOrDatabaseVersion": "El format de la còpia de seguretat o la versió de la base de dades no coincideix.",
+  "restoringRecords": "Restaurant registres",
+  "restoringSettings": "Restaurant ajustos",
+  "restoreComplete": "Restauració completada",
+  "effortMustBeANumber": "L'esforç ha de ser un número.",
+  "theDurationEstimateMustBe": "L'estimació de durada ha de ser positiva.",
+  "restCannotBeNegative": "El descans no pot ser negatiu.",
+  "enterTheRepetitionsDoneThe": "Introdueix les repeticions fetes; el pla té un interval.",
+  "enterTheLoadThePlan": "Introdueix la càrrega; el pla no en té cap.",
+  "enterTheResistanceThePlan": "Introdueix la resistència; el pla no en té cap.",
+  "poorSensorContact": "Mal contacte del sensor",
+  "moreThan25FromLocal": "A més del 25 % de la mediana local",
+  "workoutNutrition": "Nutrició de l'entrenament",
+  "postWorkoutFoodAndFluid": "Recordatori del registre de menjar i líquids després de l'entrenament",
+  "postTrainingHrvMeasurementReminder": "Recordatori de mesurament de VFC després de l'entrenament",
+  "rirRunsFrom0To": "RIR va de 0 a 10+.",
+  "rpeRunsFrom1To": "RPE va d'1 a 10.",
+  "repetitionsCannotBeNegative": "Les repeticions no poden ser negatives.",
+  "timedWorkMustBeLonger": "El treball cronometrat ha de durar més de zero segons.",
+  "chooseRepetitionsOrTimedWork": "Tria repeticions o treball cronometrat, no tots dos.",
+  "loadMustBeAFinite": "La càrrega ha de ser un nombre finit i no negatiu.",
+  "durationCannotBeNegative": "La durada no pot ser negativa.",
+  "hrTimeline": "Línia de temps de FC",
+  "dayTrainingLoad": "Càrrega d'entrenament diària",
+  "weekdayComparison": "Comparació per dia de la setmana",
+  "weeklyTrainingLoad": "Càrrega d'entrenament setmanal",
+  "zonePolarization": "Polarització de zones",
+  "elevationOverview": "Resum de desnivell",
+  "trainingMonitor": "Monitor d'entrenament",
+  "formAtlCtlTsb": "Forma ATL / CTL / TSB",
+  "trainingPlanProgress": "Progrés del pla d'entrenament",
+  "rhrSleep": "FC en repòs (son)",
+  "hrvSleep": "VFC (son)",
+  "spo2Sleep": "SpO₂ (son)",
+  "respRate": "Freqüència respiratòria",
+  "stress": "Estrès",
+  "skinTemp": "Temperatura de la pell",
+  "steps": "Passes",
+  "tonightsSleep": "Son d'aquesta nit",
+  "activityLog": "Registre d'activitat",
+  "activityLog2": "Registre d'activitat",
+  "history2": "HISTORIAL",
+  "durationsecondshDurationseconds2mDistancemetersKmAvgheartrate": "{durationSeconds}h {durationSeconds2}m · {distanceMeters} km · {avgHeartRate} bpm · ↑{totalElevation} m",
+  "@durationsecondshDurationseconds2mDistancemetersKmAvgheartrate": {
+    "placeholders": {
+      "durationSeconds": {
+        "type": "Object"
+      },
+      "durationSeconds2": {
+        "type": "Object"
+      },
+      "distanceMeters": {
+        "type": "Object"
+      },
+      "avgHeartRate": {
+        "type": "Object"
+      },
+      "totalElevation": {
+        "type": "Object"
+      }
+    }
+  },
+  "heatAcclimation2": "ACLIMATACIÓ A LA CALOR",
+  "score": "{score}%",
+  "@score": {
+    "placeholders": {
+      "score": {
+        "type": "Object"
+      }
+    }
+  },
+  "elevation": "DESNIVELL",
+  "t12WeekHistory": "HISTORIAL DE 12 SETMANES",
+  "zonePolarization2": "POLARITZACIÓ DE ZONES",
+  "t5WeekHistory": "HISTORIAL DE 5 SETMANES",
+  "easy": "FÀCIL %",
+  "withzonesOfRecordedActivitiesWith": "{withZones} de {recorded} activitats amb dades de zones de FC",
+  "@withzonesOfRecordedActivitiesWith": {
+    "placeholders": {
+      "withZones": {
+        "type": "Object"
+      },
+      "recorded": {
+        "type": "Object"
+      }
+    }
+  },
+  "fromsamplesReconstructedFromRecordedHr": "{fromSamples} reconstruïdes a partir de les mostres de FC registrades",
+  "@fromsamplesReconstructedFromRecordedHr": {
+    "placeholders": {
+      "fromSamples": {
+        "type": "Object"
+      }
+    }
+  },
+  "easyZ12ModerateZ3": "Fàcil: Z1–2 · Moderat: Z3 · Dur: Z4–5",
+  "activitiesWithoutHrZoneData": "Les activitats sense dades de zones de FC s'exclouen dels percentatges.",
+  "avgAverageUnit": "MIT {average} {unit}",
+  "@avgAverageUnit": {
+    "placeholders": {
+      "average": {
+        "type": "Object"
+      },
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "weekdayComparison2": "COMPARACIÓ PER DIA DE LA SETMANA",
+  "trainingPlanProgress2": "PROGRÉS DEL PLA D'ENTRENAMENT",
+  "weekCurrentweekDurationinweeks": "Setmana {currentWeek} / {durationInWeeks}",
+  "@weekCurrentweekDurationinweeks": {
+    "placeholders": {
+      "currentWeek": {
+        "type": "Object"
+      },
+      "durationInWeeks": {
+        "type": "Object"
+      }
+    }
+  },
+  "t30MinTimeTrialLt2": "CONTRARELLOTGE DE 30 MIN – LT2",
+  "run30MinutesAtThe": "Corre 30 minuts al màxim esforç que puguis mantenir: controlat, sense esprintar. Entra progressivament en l'esforç; no surtis massa ràpid. El ritme i la FC mitjans dels últims 20 minuts són la teva LT2.",
+  "recordAsANormalOutdoor": "Registra-ho com una cursa normal a l'aire lliure. Inicia el rellotge, anota l'hora i corre 30 min a ritme de competició.",
+  "t50MinTotalFlatCourse": "~50 min en total · recorregut pla · no després d'un entrenament dur",
+  "doNotStartTooFast": "No surtis massa ràpid. Busca parcials regulars.",
+  "theAppAveragesHrAnd": "L'aplicació fa la mitjana de la FC i el ritme dels últims 20 minuts de la prova, després de l'escalfament i els primers 10 minuts. Selecciona l'activitat registrada a Calcula.",
+  "lt2Pace": "RITME LT2",
+  "activityRunningEnoughTimeFor": "Activitat (cursa, temps suficient per a escalfament + 30 min, amb FC)",
+  "selectTheTtActivity": "Selecciona l'activitat de la prova",
+  "nameStartdate": "{name} · {startDate}",
+  "@nameStartdate": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      },
+      "startDate": {
+        "type": "Object"
+      }
+    }
+  },
+  "warmUpBeforeTt": "Escalfament abans de la prova",
+  "roundMin": "{round} min",
+  "@roundMin": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "clearResults": "Esborra els resultats",
+  "heartRate2": "FREQÜÈNCIA CARDÍACA",
+  "paceSecKmLowerIs": "Ritme (s/km – més baix és més ràpid)",
+  "thresholdsFitnessTests": "Llindars i proves de forma",
+  "lt1": "LT1",
+  "lt2": "LT2",
+  "voPace": "Ritme VO₂",
+  "ftp": "FTP",
+  "setFtpManually": "Defineix la FTP manualment",
+  "calculateFromAnActivity": "Calcula a partir d'una activitat",
+  "setFtp": "Defineix la FTP",
+  "ftpWatts": "FTP (watts)",
+  "ftpCyclingThresholdPower": "FTP – POTÈNCIA LLINDAR EN CICLISME",
+  "ftpHistory": "HISTORIAL DE FTP",
+  "updateFromActivity": "ACTUALITZA DES D'UNA ACTIVITAT",
+  "tapAnActivityFtpBest": "Toca una activitat – FTP = millor potència de 20 min × 0,95",
+  "ridew": "{ride}W",
+  "@ridew": {
+    "placeholders": {
+      "ride": {
+        "type": "Object"
+      }
+    }
+  },
+  "ftpRoundw": "→ FTP {round}W",
+  "@ftpRoundw": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "noRidesWith20Minutes": "Cap sortida amb 20 minuts de mostres de potència contínues.",
+  "enterFtpManually": "Introdueix la FTP manualment",
+  "selectTheTestActivity": "Selecciona l'activitat de la prova",
+  "formAtlCtlTsb2": "FORMA · ATL / CTL / TSB",
+  "closeTrainingFormFullscreen": "Tanca la forma d'entrenament a pantalla completa",
+  "expandTrainingForm": "Amplia la forma d'entrenament",
+  "calculatedFromTheFirstAvailable": "Calculat des del primer registre de càrrega disponible. Els dies sense càrrega registrada compten com a zero; l'entrenament anterior es desconeix.",
+  "trainingMonitor2": "MONITOR D'ENTRENAMENT",
+  "pfitzingerZones": "ZONES DE PFITZINGER",
+  "cyclingPowerZones": "ZONES DE POTÈNCIA EN CICLISME",
+  "znumber": "Z{number}",
+  "@znumber": {
+    "placeholders": {
+      "number": {
+        "type": "Object"
+      }
+    }
+  },
+  "paceHrDescription": "{pace} · {hr}\n{description}",
+  "@paceHrDescription": {
+    "placeholders": {
+      "pace": {
+        "type": "Object"
+      },
+      "hr": {
+        "type": "Object"
+      },
+      "description": {
+        "type": "Object"
+      }
+    }
+  },
+  "weeklyTrainingLoad2": "CÀRREGA D'ENTRENAMENT SETMANAL",
+  "prevWeek": "SETM. ANT.",
+  "bySport": "PER ESPORT",
+  "noActivitiesThisWeek": "Cap activitat aquesta setmana",
+  "garminWorkoutScheduleddate": "Entrenament Garmin · {scheduledDate}",
+  "@garminWorkoutScheduleddate": {
+    "placeholders": {
+      "scheduledDate": {
+        "type": "Object"
+      }
+    }
+  },
+  "yourNote": "La teva nota",
+  "askAiCoach": "Pregunta a l'entrenador IA",
+  "aiSettings": "Configuració d'IA",
+  "askYourCoach": "Pregunta al teu entrenador…",
+  "sendMessage": "Envia el missatge",
+  "sendFeedbackOrReportA": "Envia comentaris o informa d'un error",
+  "addMeasurement2": "Afegeix un mesurament",
+  "syncLabel2": "Sincronitza",
+  "syncToday": "Sincronitza avui",
+  "fullSync1Year": "Sincronització completa · 1 any",
+  "fullSyncComplete": "Sincronització completa · Completada",
+  "syncingYourData": "Sincronitzant les teves dades…",
+  "lLeftkgRRightkgKg2": "E {leftKg}  D {rightKg} kg",
+  "@lLeftkgRRightkgKg2": {
+    "placeholders": {
+      "leftKg": {
+        "type": "Object"
+      },
+      "rightKg": {
+        "type": "Object"
+      }
+    }
+  },
+  "weightKgFatBodyfatMuscle": "{weight} kg · Greix {bodyFat} % · Múscul {muscleMass} kg",
+  "@weightKgFatBodyfatMuscle": {
+    "placeholders": {
+      "weight": {
+        "type": "Object"
+      },
+      "bodyFat": {
+        "type": "Object"
+      },
+      "muscleMass": {
+        "type": "Object"
+      }
+    }
+  },
+  "titleSportTolowercase": "{title}, {sport}, {toLowerCase}",
+  "@titleSportTolowercase": {
+    "placeholders": {
+      "title": {
+        "type": "Object"
+      },
+      "sport": {
+        "type": "Object"
+      },
+      "toLowerCase": {
+        "type": "Object"
+      }
+    }
+  },
+  "weatherUnavailableTapToRetry": "Temps no disponible · Toca per tornar-ho a provar",
+  "weatherSetYourLocation": "Temps · Defineix la teva ubicació",
+  "t7DayForecast": "PREVISIÓ A 7 DIES",
+  "minMax": "mín/màx",
+  "rainMm2": "pluja mm",
+  "uvMax": "UV màx.",
+  "kmH": "km/h",
+  "alt": "→ {alt}",
+  "@alt": {
+    "placeholders": {
+      "alt": {
+        "type": "Object"
+      }
+    }
+  },
+  "raceGoalsLength": "Objectius de cursa · {length}",
+  "@raceGoalsLength": {
+    "placeholders": {
+      "length": {
+        "type": "Object"
+      }
+    }
+  },
+  "gWk": "{g} setm.",
+  "@gWk": {
+    "placeholders": {
+      "g": {
+        "type": "Object"
+      }
+    }
+  },
+  "weeks": "{weeks}",
+  "@weeks": {
+    "placeholders": {
+      "weeks": {
+        "type": "Object"
+      }
+    }
+  },
+  "weeks2": "setmanes",
+  "upcoming": "PROPERS",
+  "lengthMoreDays": "+ {length} dies més",
+  "@lengthMoreDays": {
+    "placeholders": {
+      "length": {
+        "type": "Object"
+      }
+    }
+  },
+  "yearMonth": "{year} / {month}",
+  "@yearMonth": {
+    "placeholders": {
+      "year": {
+        "type": "Object"
+      },
+      "month": {
+        "type": "Object"
+      }
+    }
+  },
+  "day": "{day}",
+  "@day": {
+    "placeholders": {
+      "day": {
+        "type": "Object"
+      }
+    }
+  },
+  "plannedCompletedSkipped": "○ Planificat   ● Completat   ✕ Omès",
+  "heartRate3": "Freqüència cardíaca",
+  "watts": "Watts",
+  "theStepsAddUpTo": "Els passos sumen {total}; el pla compta {plannedDurationMin} min.",
+  "@theStepsAddUpTo": {
+    "placeholders": {
+      "total": {
+        "type": "Object"
+      },
+      "plannedDurationMin": {
+        "type": "Object"
+      }
+    }
+  },
+  "typicalSplitForThisKind": "Repartiment típic per a aquest tipus de sessió; no hi ha passos per calcular-lo.",
+  "labelGetsEachExerciseWith": "{label} rep cada exercici amb les seves sèries, repeticions i càrregues. Els rangs de repeticions, l'esforç i el tempo es queden a Fjelia.",
+  "@labelGetsEachExerciseWith": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "markAsRest": "Marca com a descans",
+  "restoreWorkout": "Restaura l'entrenament",
+  "skipThisWorkout": "Ometre aquest entrenament?",
+  "previousWeek": "Setmana anterior",
+  "backToThisWeek": "Torna a aquesta setmana",
+  "thisWeek": "Aquesta setmana",
+  "nextWeek": "Setmana següent",
+  "today2": "AVUI",
+  "route": "RUTA",
+  "feedback": "Comentaris",
+  "plannedWorkout": "Entrenament planificat",
+  "delete": "Elimina",
+  "chatAi": "Xat amb IA",
+  "trainingLoad": "Càrrega d'entrenament",
+  "dayTrainingLoad2": "CÀRREGA D'ENTRENAMENT DIÀRIA",
+  "trimp": " TRIMP",
+  "scorebeforeScoreafter": "{scoreBefore} → {scoreAfter}",
+  "@scorebeforeScoreafter": {
+    "placeholders": {
+      "scoreBefore": {
+        "type": "Object"
+      },
+      "scoreAfter": {
+        "type": "Object"
+      }
+    }
+  },
+  "temperatureOverTime": "TEMPERATURA AL LLARG DEL TEMPS",
+  "roundh": "{round}h",
+  "@roundh": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "timeInHrZones": "Temps en zones de FC",
+  "route2": "Ruta",
+  "start": "Sortida",
+  "gpx": "GPX",
+  "touppercasesubstringBriefing": "Resum de {toUpperCase}{substring}",
+  "@touppercasesubstringBriefing": {
+    "placeholders": {
+      "toUpperCase": {
+        "type": "Object"
+      },
+      "substring": {
+        "type": "Object"
+      }
+    }
+  },
+  "chatWithAiAboutThis": "Xateja amb la IA sobre aquest resum",
+  "whyThisRecommendation": "Per què aquesta recomanació?",
+  "titleDateLabel": "{title}, {date}, {label}",
+  "@titleDateLabel": {
+    "placeholders": {
+      "title": {
+        "type": "Object"
+      },
+      "date": {
+        "type": "Object"
+      },
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "previousDay": "Dia anterior",
+  "nextDay": "Dia següent",
+  "updating": "Actualitzant",
+  "resting": "EN REPÒS",
+  "noTimedReadings": "Sense lectures amb hora",
+  "avg": "MIT",
+  "peak": "PIC",
+  "tolocalRoundmin": "{toLocal} · {round}min",
+  "@tolocalRoundmin": {
+    "placeholders": {
+      "toLocal": {
+        "type": "Object"
+      },
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "avgheartrateBpmAvg": "{avgHeartRate} bpm mitj.",
+  "@avgheartrateBpmAvg": {
+    "placeholders": {
+      "avgHeartRate": {
+        "type": "Object"
+      }
+    }
+  },
+  "timeWeightedAverageOverRecorded": "Mitjana ponderada pel temps dels períodes registrats. Els buits sense lectures s'exclouen.",
+  "previousHeartRatePeriod": "Període de freqüència cardíaca anterior",
+  "nextHeartRatePeriod": "Període de freqüència cardíaca següent",
+  "avgHr": "FC mitj.",
+  "restingHr": "FC en repòs",
+  "both": "Tots dos",
+  "averagelabelFixedMs": "{averageLabel} {fixed} ms",
+  "@averagelabelFixedMs": {
+    "placeholders": {
+      "averageLabel": {
+        "type": "Object"
+      },
+      "fixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "measureWithPolarH10": "Mesura amb Polar H10",
+  "ms": "ms",
+  "noWorkoutInThisPeriod": "Cap entrenament d'aquest període té un parell abans/després comparable.",
+  "textEachWorkoutCountsOnce": "{text}. Cada entrenament compta una vegada; això descriu els teus parells, no els puntua.",
+  "@textEachWorkoutCountsOnce": {
+    "placeholders": {
+      "text": {
+        "type": "Object"
+      }
+    }
+  },
+  "workoutFinished": "Entrenament acabat?",
+  "yourWorkoutIsNotIn": "El teu entrenament encara no és a Fjelia. Si ha acabat, indica quan i el recordatori podrà seguir el final real. Si no, apareixerà quan el rellotge se sincronitzi.",
+  "workoutFinished2": "Entrenament acabat",
+  "theWorkoutMustStartAfter": "L'entrenament ha de començar després del mesurament i acabar després del seu inici, no en el futur.",
+  "daysDAvg": "{days} D mitj.",
+  "@daysDAvg": {
+    "placeholders": {
+      "days": {
+        "type": "Object"
+      }
+    }
+  },
+  "averageUnit": "{average} {unit}",
+  "@averageUnit": {
+    "placeholders": {
+      "average": {
+        "type": "Object"
+      },
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "baselineUnit": "{baseline} {unit}",
+  "@baselineUnit": {
+    "placeholders": {
+      "baseline": {
+        "type": "Object"
+      },
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "previousPeriod": "Període anterior",
+  "nextPeriod": "Període següent",
+  "overnightHrvReflectsRecoveryCompare": "La VFC nocturna reflecteix la recuperació. Compara les teves lectures amb la teva línia de base al llarg del temps.",
+  "moveThisWorkout": "MOU AQUEST ENTRENAMENT",
+  "pickDate": "Tria una data",
+  "movedFromMovedfrom": "Mogut des de {movedFrom}",
+  "@movedFromMovedfrom": {
+    "placeholders": {
+      "movedFrom": {
+        "type": "Object"
+      }
+    }
+  },
+  "hrvAroundThisWorkout": "VFC al voltant d'aquest entrenament",
+  "measureAfterTraining": "Mesura després de l'entrenament",
+  "measureAgain": "Mesura de nou",
+  "explainWithAi": "Explica amb IA",
+  "beforeEndedPregapAheadOf": "Abans va acabar {preGap} abans de l'inici.",
+  "@beforeEndedPregapAheadOf": {
+    "placeholders": {
+      "preGap": {
+        "type": "Object"
+      }
+    }
+  },
+  "lengthFurtherMeasurementSAfter": "{length} mesurament(s) addicional(s) després d'aquest entrenament es conserven com a observacions extra.",
+  "@lengthFurtherMeasurementSAfter": {
+    "placeholders": {
+      "length": {
+        "type": "Object"
+      }
+    }
+  },
+  "noHrvMeasurementRecordedAround": "Cap mesurament de VFC registrat al voltant d'aquest entrenament.",
+  "measureHrv": "Mesura la VFC",
+  "deltamsMs": "{deltaMs} ms",
+  "@deltamsMs": {
+    "placeholders": {
+      "deltaMs": {
+        "type": "Object"
+      }
+    }
+  },
+  "deltapercent": "{deltaPercent} %",
+  "@deltapercent": {
+    "placeholders": {
+      "deltaPercent": {
+        "type": "Object"
+      }
+    }
+  },
+  "aDescriptionOfThisPair": "Una descripció d'aquest parell, no una puntuació de l'entrenament.",
+  "notEnoughComparableWorkoutsYet": "Encara no hi ha prou entrenaments comparables, {eligible} de {need}.",
+  "@notEnoughComparableWorkoutsYet": {
+    "placeholders": {
+      "eligible": {
+        "type": "Object"
+      },
+      "need": {
+        "type": "Object"
+      }
+    }
+  },
+  "notEnoughComparableWorkoutsYet2": "Encara no hi ha prou entrenaments comparables ({eligible} de {need}).",
+  "@notEnoughComparableWorkoutsYet2": {
+    "placeholders": {
+      "eligible": {
+        "type": "Object"
+      },
+      "need": {
+        "type": "Object"
+      }
+    }
+  },
+  "yourEligibleSimilarWorkoutsTolocal": "Els teus {eligible} entrenaments similars · {toLocal}–{toLocal2}",
+  "@yourEligibleSimilarWorkoutsTolocal": {
+    "placeholders": {
+      "eligible": {
+        "type": "Object"
+      },
+      "toLocal": {
+        "type": "Object"
+      },
+      "toLocal2": {
+        "type": "Object"
+      }
+    }
+  },
+  "middleHalfQ1msToQ3ms": "Meitat central de {q1Ms} a {q3Ms} ms · mediana {medianMs} ms · aquest entrenament {delta} ms",
+  "@middleHalfQ1msToQ3ms": {
+    "placeholders": {
+      "q1Ms": {
+        "type": "Object"
+      },
+      "q3Ms": {
+        "type": "Object"
+      },
+      "medianMs": {
+        "type": "Object"
+      },
+      "delta": {
+        "type": "Object"
+      }
+    }
+  },
+  "rpeI": "RPE {i}",
+  "@rpeI": {
+    "placeholders": {
+      "i": {
+        "type": "Object"
+      }
+    }
+  },
+  "easy2": "fàcil",
+  "allOut": "A tot gas",
+  "workoutProfileDescription": "Perfil de l'entrenament: {description}",
+  "@workoutProfileDescription": {
+    "placeholders": {
+      "description": {
+        "type": "Object"
+      }
+    }
+  },
+  "noActivitiesInThisPeriod": "Cap activitat en aquest període",
+  "enableHeatAcclimationInTraining": "Activa l'aclimatació a la calor a la configuració d'entrenament.",
+  "noElevationThisWeek": "Sense desnivell aquesta setmana",
+  "noActivitiesSynced": "Cap activitat sincronitzada",
+  "noHrZoneData": "Sense dades de zones de FC",
+  "easyJogGetHrElevated": "Trot suau: puja la FC, cames soltes",
+  "fastestSustainablePaceLikeA": "Ritme sostenible més ràpid: com una cursa de 30 min",
+  "walkCardiacRecovery": "Caminar: recuperació cardíaca",
+  "selectTheTtActivityFirst": "Selecciona primer l'activitat de la prova.",
+  "calculating": "Calculant…",
+  "calculateLt2": "Calcula la LT2",
+  "enterFtpBetween30And": "Introdueix una FTP entre 30 i 1000 W.",
+  "aerobicThreshold": "Llindar aeròbic",
+  "functionalThresholdPower": "Potència llindar funcional",
+  "estimated": "Estimat",
+  "afterWarmingUpRunFive": "Després d'escalfar, corre cinc minuts al teu màxim esforç sostenible. Registra la cursa amb dades de velocitat o distància.",
+  "recordAtLeast40Minutes": "Registra almenys 40 minuts de cursa constant a esforç constant. La prova compara la freqüència cardíaca en cada meitat per estimar la deriva aeròbica.",
+  "theFastestFiveMinuteWindow": "La finestra de cinc minuts més ràpida dona el teu ritme de VO2max.",
+  "noResultYet": "Encara sense resultat",
+  "calculateVo2maxPace": "Calcula el ritme de VO2max",
+  "calculateLt1": "Calcula la LT1",
+  "loading2": "Carregant",
+  "unavailable": "No disponible",
+  "noTrainingHistory": "Sense historial d'entrenament",
+  "fitnessCtl": "Forma física (CTL)",
+  "fatigueAtl": "Fatiga (ATL)",
+  "formTsb": "Frescor (TSB)",
+  "noHistory": "Sense historial",
+  "fresh": "Fresc",
+  "optimal": "Òptim",
+  "neutral": "Neutre",
+  "tired": "Cansat",
+  "veryFatigued": "Molt fatigat",
+  "garminRunningVo2max": "VO2max cursa Garmin",
+  "garminCyclingVo2max": "VO2max ciclisme Garmin",
+  "aerobicThreshold2": "Llindar aeròbic",
+  "driftDriftAt": "Deriva {drift} % · {at}",
+  "@driftDriftAt": {
+    "placeholders": {
+      "drift": {
+        "type": "Object"
+      },
+      "at": {
+        "type": "Object"
+      }
+    }
+  },
+  "activityHours": "Hores d'activitat",
+  "activityKm": "Km d'activitat",
+  "tap5MinuteMaxTest": "Toca · prova màxima de 5 min",
+  "setFtpToCalculatePower": "Defineix la FTP per calcular les zones de potència",
+  "cyclingPowerZones2": "Zones de potència en ciclisme",
+  "pfitzingerZones2": "Zones de Pfitzinger",
+  "completeAnLt2TestTo": "Completa una prova de LT2 per calcular les zones de cursa.",
+  "setFtpToCalculatePower2": "Defineix la FTP per calcular les zones de potència.",
+  "endurance": "Resistència",
+  "threshold": "Llindar",
+  "anaerobic": "Anaeròbic",
+  "whatExplainsThisRise": "Què explica aquest augment?",
+  "whatExplainsThisDrop": "Què explica aquesta baixada",
+  "whatExplainsThisRise2": "Què explica aquest augment",
+  "editsAreKeptInFjelia": "Els canvis es guarden a Fjelia com a còpia local per a aquesta data. L'entrenament a Garmin no canvia.",
+  "howDoIExecuteThis": "Com executo aquest entrenament?",
+  "shareHealthContextWithName": "Compartir el context de salut amb {name}?",
+  "@shareHealthContextWithName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "yourMessageAndAHealth": "El teu missatge i un resum de salut/entrenament s'enviaran a aquest proveïdor d'IA al núvol. Els noms i el GPS s'exclouen del resum generat.",
+  "couldNotGetAReply": "No s'ha pogut obtenir una resposta. Revisa la configuració d'IA i torna-ho a provar.",
+  "askAboutYourRecoveryTraining": "Pregunta sobre la teva recuperació, el teu entrenament o el pla d'avui.",
+  "noSyncYet": "Encara sense sincronitzar",
+  "lastSyncLastContext": "Última sincronització: {last} {context}",
+  "@lastSyncLastContext": {
+    "placeholders": {
+      "last": {
+        "type": "Object"
+      },
+      "context": {
+        "type": "Object"
+      }
+    }
+  },
+  "seasonWithTradeOffs": "Temporada: amb concessions",
+  "seasonNeedsYourDecision": "Temporada: necessita la teva decisió",
+  "seasonCannotBeCombined": "Temporada: no es pot combinar",
+  "seasonProvisional": "Temporada: provisional",
+  "season": "Temporada",
+  "allGoalsFit": "Tots els objectius encaixen.",
+  "goalTargetfinishsecondsgoal": "Objectiu {targetFinishSeconds}{goal}",
+  "@goalTargetfinishsecondsgoal": {
+    "placeholders": {
+      "targetFinishSeconds": {
+        "type": "Object"
+      },
+      "goal": {
+        "type": "Object"
+      }
+    }
+  },
+  "estEstimateestimate2": "Est. {estimate}{estimate2}",
+  "@estEstimateestimate2": {
+    "placeholders": {
+      "estimate": {
+        "type": "Object"
+      },
+      "estimate2": {
+        "type": "Object"
+      }
+    }
+  },
+  "doneDoneby": "Fet · {doneBy}",
+  "@doneDoneby": {
+    "placeholders": {
+      "doneBy": {
+        "type": "Object"
+      }
+    }
+  },
+  "garminWorkoutWorkout": "Entrenament Garmin · {workout}",
+  "@garminWorkoutWorkout": {
+    "placeholders": {
+      "workout": {
+        "type": "Object"
+      }
+    }
+  },
+  "moveAnyway": "Moure igualment?",
+  "wattsNeedYourFtpSet": "Els watts necessiten la teva FTP: defineix-la a Càrrega, Llindars.",
+  "mainTargetInWattsFrom": "Objectiu principal en watts segons la teva FTP, la freqüència cardíaca com a guia.",
+  "mainTargetHeartRateWatts": "Objectiu principal: freqüència cardíaca; els watts no estan definits al rellotge.",
+  "taperPhase": "Fase d'afinament",
+  "recoverySession": "Sessió de recuperació",
+  "closeToYourEvent": "A prop del teu esdeveniment",
+  "noWorkoutStructureAvailable": "No hi ha estructura d'entrenament disponible.",
+  "aerobic": "Aeròbic",
+  "pushAgainToUpdateYour": "Envia de nou per actualitzar el calendari del rellotge.",
+  "workoutSentToLabel": "Entrenament enviat a {label}",
+  "@workoutSentToLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "updating2": "Actualitzant…",
+  "pushToLabel": "Envia a {label}",
+  "@pushToLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "shareExerciseListForLabel": "Comparteix la llista d'exercicis per a {label}",
+  "@shareExerciseListForLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "shareWorkoutForLabel": "Comparteix l'entrenament per a {label}",
+  "@shareWorkoutForLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "whyNothingIsAddedTo": "Per què? No s'afegeix res per completar-ho.",
+  "workout": "Entrenament",
+  "recordedActivityLinkedToThis": "Activitat registrada vinculada a aquest entrenament",
+  "matchedToTheRecordedWorkout": "Emparellat amb l'inici de l'entrenament registrat",
+  "matchedByWorkoutNameSport": "Emparellat per nom d'entrenament, esport i data",
+  "matchedBySportDateAnd": "Emparellat per esport, data i durada",
+  "planPlannedminutesMin": "Pla {plannedMinutes} min",
+  "@planPlannedminutesMin": {
+    "placeholders": {
+      "plannedMinutes": {
+        "type": "Object"
+      }
+    }
+  },
+  "maxHr": "FC màx.",
+  "trainingLoad2": "Càrrega d'entrenament",
+  "active": "Actiu",
+  "avgPace": "Ritme mitjà",
+  "avgSpeed": "Velocitat mitjana",
+  "avgPower": "Potència mitjana",
+  "elevation2": "Desnivell",
+  "altitude": "Altitud",
+  "explainMyHrvBeforeAnd": "Explica la meva VFC abans i després d'aquest entrenament. Què és comparable, què no i què continua sent desconegut?",
+  "deleteActivity": "Eliminar l'activitat?",
+  "removeThisActivityFromThe": "Treure aquesta activitat de l'historial local? Una sincronització posterior del proveïdor pot tornar-la a importar.",
+  "howDidThisSessionGo": "Com ha anat aquesta sessió i què significa per als meus propers dies?",
+  "currentFixedFixed2": "Actual {fixed}, {fixed2}",
+  "@currentFixedFixed2": {
+    "placeholders": {
+      "fixed": {
+        "type": "Object"
+      },
+      "fixed2": {
+        "type": "Object"
+      }
+    }
+  },
+  "setUpInTrainingSettings": "Configura-ho a la configuració d'entrenament",
+  "couldNotLoadHeatData": "No s'han pogut carregar les dades de calor – toca per veure els detalls",
+  "loadingHeatHistory": "Carregant historial de calor…",
+  "noHeatDataYet": "Encara sense dades de calor",
+  "optimalLowHigh": "Òptim {low}–{high}",
+  "@optimalLowHigh": {
+    "placeholders": {
+      "low": {
+        "type": "Object"
+      },
+      "high": {
+        "type": "Object"
+      }
+    }
+  },
+  "optimalLowHighTrimp": "Òptim: {low}–{high} TRIMP",
+  "@optimalLowHighTrimp": {
+    "placeholders": {
+      "low": {
+        "type": "Object"
+      },
+      "high": {
+        "type": "Object"
+      }
+    }
+  },
+  "targetUnavailableSyncTrainingHistory": "Objectiu no disponible: sincronitza l'historial d'entrenament",
+  "workoutQualifiedForHeatAccumulation": "L'entrenament ha comptat per a l'acumulació de calor.",
+  "workoutDidNotAddHeat": "L'entrenament no ha afegit acumulació de calor.",
+  "performanceTime": "Rendiment / Temps",
+  "performanceDistance": "Rendiment / Distància",
+  "noRecordedRoute": "Cap ruta registrada",
+  "zoomIn": "Amplia",
+  "zoomOut": "Redueix",
+  "fitRoute": "Ajusta la ruta",
+  "fullscreenMap": "Mapa a pantalla completa",
+  "openstreetmapContributors2": "col·laboradors d'OpenStreetMap",
+  "appleIntelligenceIsUnavailableShowing": "Apple Intelligence no està disponible. Es mostra un resum sense IA.",
+  "generateAiBriefing": "Generar el resum amb IA?",
+  "retryAiBriefing": "Torna a provar el resum amb IA",
+  "generateBriefing": "Genera el resum",
+  "discussThisBriefingWithMe": "Comenta aquest resum amb mi i suggereix la millor propera acció.\n\n{text}",
+  "@discussThisBriefingWithMe": {
+    "placeholders": {
+      "text": {
+        "type": "Object"
+      }
+    }
+  },
+  "whyThisRecommendationWhichOf": "Per què aquesta recomanació? Quines xifres meves i quines llacunes en les dades hi han portat, i què la canviaria?\n\n{text}",
+  "@whyThisRecommendationWhichOf": {
+    "placeholders": {
+      "text": {
+        "type": "Object"
+      }
+    }
+  },
+  "avg2": "Mitj.",
+  "peak2": "Pic",
+  "notEnoughContinuousReadingsFor": "No hi ha prou lectures contínues per a una mitjana.",
+  "recordedCoverageInhourshInminutesminTime": "Cobertura registrada: {inHours} h {inMinutes} min · mitjana ponderada pel temps",
+  "@recordedCoverageInhourshInminutesminTime": {
+    "placeholders": {
+      "inHours": {
+        "type": "Object"
+      },
+      "inMinutes": {
+        "type": "Object"
+      }
+    }
+  },
+  "lying": "Estirat",
+  "noHrvReadingsInThis": "Sense lectures de VFC en aquest període",
+  "overnightHrvComesFromYour": "La VFC nocturna ve del teu rellotge i les lectures puntuals del Polar H10 (RMSSD). Els mètodes difereixen: compara tendències, no valors aïllats.",
+  "noReadings": "Sense lectures",
+  "whenDidTheWorkoutStart": "Quan ha començat l'entrenament?",
+  "whenDidItEnd": "Quan ha acabat?",
+  "last3Months": "Últims 3 mesos",
+  "lastYear": "Últim any",
+  "lastDaysDays": "Últims {days} dies",
+  "@lastDaysDays": {
+    "placeholders": {
+      "days": {
+        "type": "Object"
+      }
+    }
+  },
+  "nowOnCurrentTapA": "Ara el {current}. Toca un dia o arrossega l'entrenament a un. Els passos es mantenen.",
+  "@nowOnCurrentTapA": {
+    "placeholders": {
+      "current": {
+        "type": "Object"
+      }
+    }
+  },
+  "monthView": "Vista mensual",
+  "syncing": "Sincronitzant",
+  "trendUnavailable": "Tendència no disponible",
+  "stable": "Estable",
+  "increasing": "En augment",
+  "decreasing": "En descens",
+  "unclear": "Poc clar",
+  "notComparable": "No comparable",
+  "waitingForAfter": "Esperant el després",
+  "afterOnly": "Només després",
+  "waitingForTheActualWorkout": "Esperant el final real de l'entrenament.",
+  "reminderAroundTolocal": "Recordatori cap a les {toLocal}",
+  "@reminderAroundTolocal": {
+    "placeholders": {
+      "toLocal": {
+        "type": "Object"
+      }
+    }
+  },
+  "reminderIsDueMeasureWhen": "El recordatori ha arribat. Mesura quan estiguis a punt.",
+  "thisReminderIsNoLonger": "Aquest recordatori ja no és vigent. Obre l'entrenament per veure els teus mesuraments.",
+  "beforeFixedMilliseconds": "Abans {fixed} mil·lisegons. ",
+  "@beforeFixedMilliseconds": {
+    "placeholders": {
+      "fixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "afterFixedMilliseconds": "Després {fixed} mil·lisegons",
+  "@afterFixedMilliseconds": {
+    "placeholders": {
+      "fixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "changeDeltamsMillisecondsDeltapercentPercent": "Canvi de {deltaMs} mil·lisegons, {deltaPercent} per cent.",
+  "@changeDeltamsMillisecondsDeltapercentPercent": {
+    "placeholders": {
+      "deltaMs": {
+        "type": "Object"
+      },
+      "deltaPercent": {
+        "type": "Object"
+      }
+    }
+  },
+  "noPreTrainingMeasurementRecorded": "Cap mesurament previ a l'entrenament registrat.",
+  "notMeasuredYet": "Encara sense mesurar",
+  "leftOutOfTheComparison": "Exclosos de la comparació: {excludedTotal} entrenaments ({c}).",
+  "@leftOutOfTheComparison": {
+    "placeholders": {
+      "excludedTotal": {
+        "type": "Object"
+      },
+      "c": {
+        "type": "Object"
+      }
+    }
+  },
+  "notFromThisWorkout": "No d'aquest entrenament",
+  "useAsBefore": "Fes servir com a abans",
+  "useAsAfter": "Fes servir com a després",
+  "beforeNotMeasured": "Abans · sense mesurar",
+  "beforeTolocal": "Abans · {toLocal}",
+  "@beforeTolocal": {
+    "placeholders": {
+      "toLocal": {
+        "type": "Object"
+      }
+    }
+  },
+  "workoutWorkouttext": "Entrenament · {workoutText}",
+  "@workoutWorkouttext": {
+    "placeholders": {
+      "workoutText": {
+        "type": "Object"
+      }
+    }
+  },
+  "afterNotMeasuredYet": "Després · encara sense mesurar",
+  "afterTolocal": "Després · {toLocal}",
+  "@afterTolocal": {
+    "placeholders": {
+      "toLocal": {
+        "type": "Object"
+      }
+    }
+  },
+  "yourSimilarWorkoutsEligibleTolocal": "Els teus entrenaments similars ({eligible}, {toLocal}–{toLocal2}): mediana {medianMs} ms, meitat central de {q1Ms} a {q3Ms} ms.",
+  "@yourSimilarWorkoutsEligibleTolocal": {
+    "placeholders": {
+      "eligible": {
+        "type": "Object"
+      },
+      "toLocal": {
+        "type": "Object"
+      },
+      "toLocal2": {
+        "type": "Object"
+      },
+      "medianMs": {
+        "type": "Object"
+      },
+      "q1Ms": {
+        "type": "Object"
+      },
+      "q3Ms": {
+        "type": "Object"
+      }
+    }
+  },
+  "howHardDidItFeel": "Com de dur ha estat? (RPE)",
+  "loadMetric": "Càrrega",
+  "clearAction": "Esborra",
+  "routeFinish": "Meta",
+  "month2": "MES",
+  "week2": "SETMANA",
+  "quarter": "TRIMESTRE",
+  "year": "ANY",
+  "easy3": "FÀCIL",
+  "mod": "MOD.",
+  "hard": "DUR",
+  "protocol": "PROTOCOL",
+  "calculate": "CALCULA",
+  "warmUp": "ESCALFAMENT",
+  "coolDown": "TORNADA A LA CALMA",
+  "ftpCycling": "FTP ciclisme",
+  "ftpFtpwattsWWattsperkgW": "FTP {ftpWatts} W · {wattsPerKg} W/kg",
+  "@ftpFtpwattsWWattsperkgW": {
+    "placeholders": {
+      "ftpWatts": {
+        "type": "Object"
+      },
+      "wattsPerKg": {
+        "type": "Object"
+      }
+    }
+  },
+  "thisWeekSoFar": "AQUESTA SETMANA · FINS ARA",
+  "duration2": "DURADA",
+  "distance2": "DISTÀNCIA",
+  "sport2": "ESPORT",
+  "repeatSets": "SÈRIES REPETIDES",
+  "aboutThisWorkout": "SOBRE AQUEST ENTRENAMENT",
+  "workoutStructure": "ESTRUCTURA DE L'ENTRENAMENT",
+  "health2": "SALUT",
+  "high2": "ALT",
+  "elevated": "ELEVAT",
+  "normal": "NORMAL",
+  "tomorrow": "DEMÀ",
+  "skipped2": "OMÈS",
+  "weeklyPlan": "PLA SETMANAL",
+  "activityLog3": "REGISTRE D'ACTIVITAT",
+  "skippedTouppercase": "OMÈS · {toUpperCase}",
+  "@skippedTouppercase": {
+    "placeholders": {
+      "toUpperCase": {
+        "type": "Object"
+      }
+    }
+  },
+  "primaryZone": "ZONA PRINCIPAL",
+  "coachingCues": "CONSELLS DE L'ENTRENADOR",
+  "targets": "OBJECTIUS",
+  "adaptation": "ADAPTACIÓ",
+  "done2": "FET",
+  "notRecorded2": "NO REGISTRAT",
+  "planned": "PLANIFICAT",
+  "extra": "EXTRA",
+  "optimal2": "ÒPTIM",
+  "qualified": "QUALIFICAT",
+  "temp": "TEMP.",
+  "humidity2": "HUMITAT",
+  "pressure": "PRESSIÓ",
+  "wetBulb": "BULB HUMIT",
+  "paceMinKm": "Ritme (min/km)",
+  "speedKmH": "Velocitat (km/h)",
+  "elevationM": "Desnivell (m)",
+  "powerW": "POTÈNCIA (W)",
+  "performanceTime2": "RENDIMENT / TEMPS",
+  "performanceDistance2": "RENDIMENT / DISTÀNCIA",
+  "load2": "CÀRREGA",
+  "day2": "DIA",
+  "allTime": "TOT EL TEMPS",
+  "hrvAroundThisWorkout2": "VFC al voltant d'aquest entrenament. ",
+  "lowReserve": "RESERVA BAIXA",
+  "goodReserve": "BONA RESERVA",
+  "latestReadingAtTolocal": "Última lectura a les {toLocal}",
+  "@latestReadingAtTolocal": {
+    "placeholders": {
+      "toLocal": {
+        "type": "Object"
+      }
+    }
+  },
+  "weeklyAvg": "MITJANA SETMANAL",
+  "monthlyAvg": "MITJANA MENSUAL",
+  "systolic2": "SISTÒLICA",
+  "diastolic2": "DIASTÒLICA",
+  "hourlyVariation": "VARIACIÓ HORÀRIA",
+  "dailyVariation": "VARIACIÓ DIÀRIA",
+  "sys2": "SIS",
+  "dia": "DIA",
+  "bluetoothDevices": "DISPOSITIUS BLUETOOTH",
+  "accountsServices": "COMPTES I SERVEIS",
+  "flowLoginOptional": "INICI DE SESSIÓ DE FLOW (OPCIONAL)",
+  "polarFlowLogin": "INICI DE SESSIÓ DE POLAR FLOW",
+  "raceGoal": "OBJECTIU DE CURSA",
+  "experienceLevel": "NIVELL D'EXPERIÈNCIA",
+  "weeklySchedule2": "HORARI SETMANAL",
+  "sessionsPerDay2": "SESSIONS PER DIA",
+  "aboutYou": "SOBRE TU",
+  "yourActivities2": "LES TEVES ACTIVITATS",
+  "latestReadingAtTimestamp": "Última lectura a les {timestamp}",
+  "@latestReadingAtTimestamp": {
+    "placeholders": {
+      "timestamp": {
+        "type": "Object"
+      }
+    }
+  },
+  "poorSleep": "SON DEFICIENT",
+  "fairSleep": "SON REGULAR",
+  "goodSleep": "BON SON",
+  "hoursOfSleep": "HORES DE SON",
+  "sleepNeeded": "SON NECESSARI",
+  "deepSleep": "SON PROFUND",
+  "exercises2": "EXERCICIS",
+  "strengthSummary": "RESUM DE FORÇA",
+  "strengthDraft": "FORÇA · ESBORRANY",
+  "strengthFinishedWithGaps": "FORÇA · ACABAT AMB BUITS",
+  "strength2": "FORÇA",
+  "wind": "VENT",
+  "sun2": "SOL",
+  "cloud": "NÚVOLS",
+  "dataSourceUpdatedFetchedat": "Dades: {source} · Actualitzat {fetchedAt}",
+  "@dataSourceUpdatedFetchedat": {
+    "placeholders": {
+      "source": {
+        "type": "Object"
+      },
+      "fetchedAt": {
+        "type": "Object"
+      }
+    }
+  },
+  "coros2": "COROS",
+  "rmssdMs": "RMSSD · ms",
+  "sdnnMs": "SDNN · ms",
+  "now2": "ARA",
+  "awake": "DESPERT",
+  "light": "LLEUGER",
+  "deep2": "PROFUND",
+  "sqliteOrm": "SQLite ORM",
+  "httpClients": "Clients HTTP",
+  "gpsLocation": "Ubicació GPS",
+  "hdlCholesterol": "Colesterol HDL",
+  "ldlCholesterol": "Colesterol LDL",
+  "raceName": "NOM DE LA CURSA",
+  "mtb": "BTT",
+  "distanceKm": "Distància (km)",
+  "priority": "PRIORITAT",
+  "elevationGainM": "Desnivell positiu (m)",
+  "targetTime": "TEMPS OBJECTIU",
+  "raceDate": "DATA DE LA CURSA",
+  "participation": "PARTICIPACIÓ",
+  "whatIWantFromIt": "EL QUE EN VULL OBTENIR",
+  "periodTimeline": "{period} · EVOLUCIÓ",
+  "@periodTimeline": {
+    "placeholders": {
+      "period": {
+        "type": "Object"
+      }
+    }
+  },
+  "tabPlan": "PLA",
+  "tabLoad": "CÀRREGA",
+  "tabCoach": "ENTRENADOR",
+  "hrDriftTestLt1": "PROVA DE DERIVA DE FC – LT1",
+  "asSentByGarmin": "TAL COM L'HA ENVIAT GARMIN",
+  "noData2": "SENSE DADES",
+  "noTarget": "SENSE OBJECTIU",
+  "noHeatLoad": "SENSE CÀRREGA DE CALOR",
+  "hrBpm": "FC (ppm)",
+  "aiBriefingUnavailableShowingA": "Resum amb IA no disponible. Es mostra un resum sense IA.",
+  "uvIndex2": "ÍNDEX UV",
+  "aiBriefing": "Resum amb IA",
+  "uiFrameworkByGoogle": "Framework d'interfície de Google",
+  "unableToLoadData": "No s'han pogut carregar les dades",
+  "briefingSummary": "Recuperació {recovery} / 100. Son {sleep} / 100. La càrrega d'entrenament d'avui és de {load} TRIMP.",
+  "@briefingSummary": {
+    "placeholders": {
+      "recovery": {
+        "type": "Object"
+      },
+      "sleep": {
+        "type": "Object"
+      },
+      "load": {
+        "type": "Object"
+      }
+    }
+  },
+  "morningBriefing": "Resum del matí",
+  "lunchBriefing": "Resum del migdia",
+  "afternoonBriefing": "Resum de la tarda",
+  "eveningBriefing": "Resum del vespre",
+  "appleUnusableAnswer": "Apple Intelligence no ha pogut donar una resposta utilitzable: s'ha repetit o ha repetit les teves dades. Reformula la pregunta o tria un altre proveïdor d'IA a la configuració.",
+  "appleCouldNotAnswer": "Apple Intelligence no ha pogut respondre. Torna-ho a provar.",
+  "appleNotAvailableOnDevice": "Apple Intelligence no està disponible en aquest dispositiu.",
+  "appleLanguageRejected": "Apple Intelligence ha rebutjat l'idioma de la sol·licitud. Prova amb una pregunta curta en anglès. Revisa també la configuració d'idioma de l'iPhone i de Siri.",
+  "appleRequestTooLarge": "Apple Intelligence no ha pogut processar aquesta sol·licitud. Prova amb una pregunta més curta.",
+  "messageTooLongForApple": "Aquest missatge és massa llarg per a Apple Intelligence. Escurça'l i torna a enviar-lo.",
+  "vo2maxRunning": "VO₂max cursa",
+  "vo2maxCycling": "VO₂max ciclisme",
+  "vo2maxPaceLabel": "Ritme VO₂max",
+  "lt1Threshold": "Llindar LT1",
+  "lt2Threshold": "Llindar LT2",
+  "hoursPreviousWeek": "{value} h la setmana anterior",
+  "@hoursPreviousWeek": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "kmPreviousWeek": "{value} km la setmana anterior",
+  "@kmPreviousWeek": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "thirtyMinuteTimeTrial": "Contrarellotge de 30 minuts",
+  "thirtyMinTtDate": "TT 30 min · {date}",
+  "@thirtyMinTtDate": {
+    "placeholders": {
+      "date": {
+        "type": "Object"
+      }
+    }
+  },
+  "yesterday2": "AHIR",
+  "briefHeadGreen": "Estàs ben recuperat.",
+  "briefHeadYellow": "Portes una mica de càrrega.",
+  "briefHeadRed": "Estàs clarament sobrecarregat.",
+  "briefMain": "Motius principals: {reasons}.",
+  "@briefMain": {
+    "placeholders": {
+      "reasons": {
+        "type": "Object"
+      }
+    }
+  },
+  "briefAllClear": "Cap dels teus valors mostra senyals d'alerta.",
+  "briefAdviceGreen": "Entrena com estava previst.",
+  "briefAdviceYellow": "Mantén el teu pla però sense afegir intensitat.",
+  "briefAdviceRed": "Primer la recuperació: dia suau o descans.",
+  "briefReasonHrvLow": "VFC de la son baixa",
+  "briefReasonHrvHigh": "VFC de la son alta",
+  "briefReasonRhrUp": "FC en repòs elevada",
+  "briefReasonRhrDown": "FC en repòs baixa",
+  "briefReasonSleepShort": "poc son",
+  "briefReasonSleepGood": "necessitat de son coberta",
+  "briefReasonEnergyLow": "poca energia",
+  "briefReasonEnergyHigh": "bona energia",
+  "briefReasonStressHigh": "estrès alt",
+  "briefReasonRespHigh": "freqüència respiratòria elevada",
+  "briefReasonSpo2Low": "oxigen en sang baix",
+  "briefReasonSkinTempOff": "temperatura de la pell inusual",
+  "briefReasonFormTired": "fatiga d'entrenament acumulada",
+  "briefReasonFormVeryTired": "fatiga d'entrenament molt alta",
+  "briefReasonFormFresh": "fresc i descansat",
+  "briefTrainingHrvUp": "La teva VFC ha pujat després de l'entrenament, bon senyal.",
+  "briefTrainingHrvDown": "La teva VFC ha baixat després de l'entrenament, senyal menys bo."
+}

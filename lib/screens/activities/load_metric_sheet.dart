@@ -1,4 +1,6 @@
+import '../../l10n/l10n_ext.dart';
 import '../../providers/activity_history_provider.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -61,7 +63,10 @@ class _LoadMetricState extends ConsumerState<LoadMetricSheet> {
         : measured.fold<double>(0, (v, p) => v + p.value) / measured.length;
     final unit = activity ? (distance ? 'km' : 'h') : 'ml/kg/min';
     return LoadSheet(
-      title: widget.metric.toUpperCase().replaceAll('₂', '2'),
+      title: loadMetricLabel(
+        context,
+        widget.metric,
+      ).toUpperCase().replaceAll('₂', '2'),
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
         children: [
@@ -81,7 +86,7 @@ class _LoadMetricState extends ConsumerState<LoadMetricSheet> {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
-                'AVG  ${valueText(average, 1)} $unit',
+                context.l10n.avgAverageUnit(valueText(average, 1), unit),
                 style: const TextStyle(
                   fontSize: 12,
                   color: Colors.white,

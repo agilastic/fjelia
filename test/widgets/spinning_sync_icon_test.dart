@@ -1,3 +1,5 @@
+import 'package:fjelia/l10n/app_localizations.dart';
+
 import 'dart:math' as math;
 
 import 'package:fjelia/widgets/spinning_sync_icon.dart';
@@ -129,6 +131,8 @@ void main() {
 
     Widget app({required bool spinning, bool reduceMotion = false}) =>
         MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: MediaQuery(
             data: MediaQueryData(disableAnimations: reduceMotion),
             child: Scaffold(

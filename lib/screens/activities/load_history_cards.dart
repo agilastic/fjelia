@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -26,7 +28,9 @@ class LoadHistoryCards extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  polarization ? 'ZONE POLARIZATION' : 'ELEVATION',
+                  polarization
+                      ? context.l10n.zonePolarization2
+                      : context.l10n.elevation,
                   style: loadLabel,
                 ),
                 const SizedBox(height: 16),
@@ -73,10 +77,10 @@ class LoadHistoryCards extends ConsumerWidget {
                           ),
                         ),
                         const SizedBox(width: 10),
-                        const Expanded(
-                          child: Text('ELEVATION', style: loadLabel),
+                        Expanded(
+                          child: Text(context.l10n.elevation, style: loadLabel),
                         ),
-                        const Text('12-WEEK HISTORY', style: loadCaption),
+                        Text(context.l10n.t12WeekHistory, style: loadCaption),
                       ],
                     ),
                     const SizedBox(height: 12),
@@ -88,7 +92,7 @@ class LoadHistoryCards extends ConsumerWidget {
                     const Divider(height: 30, color: Colors.white10),
                     Text(
                       elevation == 0
-                          ? 'No elevation this week'
+                          ? context.l10n.noElevationThisWeek
                           : '${valueText(elevation)} m this week',
                       style: const TextStyle(fontSize: 13, color: muted),
                     ),
@@ -115,24 +119,27 @@ class LoadHistoryCards extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('ZONE POLARIZATION', style: loadLabel),
+                  Text(context.l10n.zonePolarization2, style: loadLabel),
                   const SizedBox(height: 10),
-                  const Wrap(
+                  Wrap(
                     spacing: 12,
                     runSpacing: 6,
                     children: [
-                      LoadLegend('EASY', loadBlue),
-                      LoadLegend('MOD', Color(0xFFFFCC00)),
-                      LoadLegend('HARD', loadRed),
+                      LoadLegend(context.l10n.easy3, loadBlue),
+                      LoadLegend(context.l10n.mod, Color(0xFFFFCC00)),
+                      LoadLegend(context.l10n.hard, loadRed),
                     ],
                   ),
                   const SizedBox(height: 14),
-                  const Row(
+                  Row(
                     children: [
                       Expanded(
-                        child: Text('5-WEEK HISTORY', style: loadCaption),
+                        child: Text(
+                          context.l10n.t5WeekHistory,
+                          style: loadCaption,
+                        ),
                       ),
-                      Text('EASY %', style: loadCaption),
+                      Text(context.l10n.easy, style: loadCaption),
                     ],
                   ),
                   const SizedBox(height: 6),
@@ -144,25 +151,27 @@ class LoadHistoryCards extends ConsumerWidget {
                     ),
                   const SizedBox(height: 12),
                   Text(
-                    '$withZones of $recorded activities with HR-zone data',
+                    context.l10n.withzonesOfRecordedActivitiesWith(
+                      withZones,
+                      recorded,
+                    ),
                     style: loadCaption,
                   ),
                   if (fromSamples > 0) ...[
                     const SizedBox(height: 5),
                     Text(
-                      '$fromSamples reconstructed from recorded HR samples',
+                      context.l10n.fromsamplesReconstructedFromRecordedHr(
+                        fromSamples,
+                      ),
                       style: loadCaption,
                     ),
                   ],
                   const SizedBox(height: 5),
-                  const Text(
-                    'Easy: Z1–2 · Moderate: Z3 · Hard: Z4–5',
-                    style: loadCaption,
-                  ),
+                  Text(context.l10n.easyZ12ModerateZ3, style: loadCaption),
                   if (withZones < recorded) ...[
                     const SizedBox(height: 5),
-                    const Text(
-                      'Activities without HR-zone data are excluded from percentages.',
+                    Text(
+                      context.l10n.activitiesWithoutHrZoneData,
                       style: loadCaption,
                     ),
                   ],
@@ -191,8 +200,8 @@ class _ZoneWeekRow extends StatelessWidget {
     final coverage =
         '${week.activitiesWithZones} of ${week.activities} activities with HR-zone data';
     final status = week.activities == 0
-        ? 'No activities synced'
-        : 'No HR-zone data';
+        ? context.l10n.noActivitiesSynced
+        : context.l10n.noHrZoneData;
     final recordedTime = week.classifiedMinutes < 1
         ? '${(week.classifiedMinutes * 60).round()} sec'
         : '${week.classifiedMinutes.round()} min';
@@ -232,7 +241,7 @@ class _ZoneWeekRow extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      DateFormat('d MMM').format(week.start),
+                      DateFormat.MMMd().format(week.start),
                       style: const TextStyle(fontSize: 8, color: muted),
                     ),
                   ],

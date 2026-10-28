@@ -1,3 +1,4 @@
+import 'package:fjelia/l10n/app_localizations.dart';
 import 'package:fjelia/models/garmin_data.dart';
 import 'package:fjelia/widgets/sleep_stages.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,8 @@ SleepData night({bool withPhases = true}) {
 }
 
 Widget host(Widget child) => MaterialApp(
+  localizationsDelegates: AppLocalizations.localizationsDelegates,
+  supportedLocales: AppLocalizations.supportedLocales,
   home: Scaffold(
     body: SingleChildScrollView(
       child: Padding(padding: const EdgeInsets.all(20), child: child),
@@ -54,7 +57,7 @@ void main() {
     final box = tester.getRect(chart);
     await tester.tapAt(Offset(box.left + box.width * (90 / 480), box.top + 20));
     await tester.pump();
-    expect(find.textContaining('DEEP · 11:30 pm'), findsOneWidget);
+    expect(find.textContaining('DEEP · 23:30'), findsOneWidget);
   });
 
   testWidgets('without phases only the breakdown is shown', (tester) async {

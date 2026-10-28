@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -23,7 +25,7 @@ Map<String, dynamic> _decodeBackup(List<int> bytes) {
   final sqlite = archive.findFile('alzora_db.sqlite');
   final settings = archive.findFile('fjelia_settings.json');
   if (sqlite == null || settings == null) {
-    throw const FormatException('This ZIP is not a supported Fjelia backup.');
+    throw FormatException(tr.thisZipIsNotA);
   }
   return {
     'sqlite': sqlite.content as List<int>,
@@ -151,7 +153,7 @@ class BackupService {
     List<int> bytes, {
     void Function(BackupRestoreProgress)? onProgress,
   }) async {
-    onProgress?.call(const BackupRestoreProgress('Opening backup ZIP', 0.02));
+    onProgress?.call(BackupRestoreProgress(tr.openingBackupZip, 0.02));
     final decoded = await compute(_decodeBackup, bytes);
     AppDatabase? source;
     Directory? temporary;
@@ -159,7 +161,7 @@ class BackupService {
       Map<String, dynamic> payload;
       if (decoded.containsKey('sqlite')) {
         onProgress?.call(
-          const BackupRestoreProgress('Migrating original app backup', 0.08),
+          BackupRestoreProgress(tr.migratingOriginalAppBackup, 0.08),
         );
         temporary = await Directory.systemTemp.createTemp('fjelia-restore-');
         final file = File('${temporary.path}/original.sqlite');
@@ -169,7 +171,7 @@ class BackupService {
         // replace the live database file while its connection is open.
         final check = await source.customSelect('PRAGMA integrity_check').get();
         if (check.length != 1 || check.single.data.values.single != 'ok') {
-          throw const FormatException('The backup database is damaged.');
+          throw FormatException(tr.theBackupDatabaseIsDamaged);
         }
         final actual =
             (await source
@@ -181,9 +183,7 @@ class BackupService {
                 .toSet();
         final expected = db.allTables.map((t) => t.actualTableName).toSet();
         if (!actual.containsAll(expected)) {
-          throw const FormatException(
-            'The original backup is missing required tables.',
-          );
+          throw FormatException(tr.theOriginalBackupIsMissing);
         }
         payload = {
           'format': 'fjelia-backup',
@@ -219,13 +219,11 @@ class BackupService {
         schema is! int ||
         schema < _oldestRestorableSchema ||
         schema > db.schemaVersion) {
-      throw const FormatException(
-        'Backup format or database version does not match.',
-      );
+      throw FormatException(tr.backupFormatOrDatabaseVersion);
     }
     final raw = payload['tables'];
     if (source == null && raw is! Map) {
-      throw const FormatException('Invalid backup data.');
+      throw FormatException(tr.invalidBackupData);
     }
     final names = db.allTables.map((t) => t.actualTableName).toSet();
     if (source == null &&
@@ -234,7 +232,7 @@ class BackupService {
                 .difference(raw.keys.cast<String>().toSet())
                 .where((n) => (_tableAddedIn[n] ?? 0) <= schema)
                 .isNotEmpty)) {
-      throw const FormatException('Backup tables do not match.');
+      throw FormatException(tr.backupTablesDoNotMatch);
     }
     final settings = Map<String, dynamic>.from(payload['settings'] as Map);
     final preferences = Map<String, dynamic>.from(
@@ -256,7 +254,7 @@ class BackupService {
       '${counts['training_sessions']} planned sessions, $total records',
     );
     onProgress?.call(
-      BackupRestoreProgress('Restoring records', 0.15, total: total),
+      BackupRestoreProgress(tr.restoringRecords, 0.15, total: total),
     );
     await db.transaction(() async {
       // Native ids of requests that may still be pending on this phone. The
@@ -314,7 +312,7 @@ class BackupService {
             final values = Map<String, dynamic>.from(row as Map);
             if (values.isEmpty ||
                 values.keys.any((k) => !columns.contains(k))) {
-              throw const FormatException('Invalid backup columns.');
+              throw FormatException(tr.invalidBackupColumns);
             }
             final cols = values.keys.map((k) => '"$k"').join(',');
             await db.customStatement(
@@ -349,7 +347,7 @@ class BackupService {
     });
     onProgress?.call(
       BackupRestoreProgress(
-        'Restoring settings',
+        tr.restoringSettings,
         0.93,
         completed: completed,
         total: total,
@@ -392,7 +390,7 @@ class BackupService {
     );
     onProgress?.call(
       BackupRestoreProgress(
-        'Restore complete',
+        tr.restoreComplete,
         1,
         completed: completed,
         total: total,

@@ -1,3 +1,4 @@
+import '../../l10n/l10n_ext.dart';
 import '../../providers/connection_actions_provider.dart';
 
 import 'package:flutter/material.dart';
@@ -72,9 +73,7 @@ class _ConnectGarminScreenState extends ConsumerState<ConnectGarminScreen> {
       setState(() => _error = e.message);
     } catch (e, st) {
       debugPrint('[Garmin] sign-in failed: ${e.runtimeType}: $e\n$st');
-      setState(
-        () => _error = 'Connection failed. Check your internet connection.',
-      );
+      setState(() => _error = context.l10n.connectionFailedCheckYourInternet);
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -90,8 +89,8 @@ class _ConnectGarminScreenState extends ConsumerState<ConnectGarminScreen> {
         actions: [
           TextButton(
             onPressed: _next,
-            child: const Text(
-              'Skip',
+            child: Text(
+              context.l10n.skip,
               style: TextStyle(color: Color(0xFFCCCCCC)),
             ),
           ),
@@ -106,10 +105,10 @@ class _ConnectGarminScreenState extends ConsumerState<ConnectGarminScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 8),
-                const OnboardingDeviceHeader(
+                OnboardingDeviceHeader(
                   icon: Icons.watch_outlined,
                   color: _accent,
-                  title: 'Connect Garmin',
+                  title: context.l10n.connectGarmin,
                   subtitle:
                       'Sign in with your Garmin Connect account to '
                       'import HRV, sleep, and activity data.',
@@ -118,7 +117,7 @@ class _ConnectGarminScreenState extends ConsumerState<ConnectGarminScreen> {
                 if (_mfaRequired)
                   _MfaSection(controller: _code)
                 else ...[
-                  const OnboardingInputLabel('Garmin Connect Email'),
+                  OnboardingInputLabel(context.l10n.garminConnectEmail),
                   const SizedBox(height: 8),
                   TextFormField(
                     controller: _email,
@@ -135,7 +134,7 @@ class _ConnectGarminScreenState extends ConsumerState<ConnectGarminScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  const OnboardingInputLabel('Password'),
+                  OnboardingInputLabel(context.l10n.password),
                   const SizedBox(height: 8),
                   TextFormField(
                     controller: _password,
@@ -165,10 +164,8 @@ class _ConnectGarminScreenState extends ConsumerState<ConnectGarminScreen> {
                 ],
                 const SizedBox(height: 24),
                 if (_error != null) OnboardingErrorBanner(_error!),
-                const OnboardingInfoBox(
-                  'Garmin credentials are stored encrypted on your device. '
-                  'Fjelia uses the unofficial Garmin Connect API – the same '
-                  'approach used by many community apps.',
+                OnboardingInfoBox(
+                  context.l10n.garminCredentialsAreStoredEncrypted,
                 ),
                 const SizedBox(height: 32),
                 SizedBox(
@@ -198,7 +195,9 @@ class _ConnectGarminScreenState extends ConsumerState<ConnectGarminScreen> {
                             ),
                           )
                         : Text(
-                            _mfaRequired ? 'Verify MFA Code' : 'Connect Garmin',
+                            _mfaRequired
+                                ? context.l10n.verifyMfaCode
+                                : context.l10n.connectGarmin,
                           ),
                   ),
                 ),
@@ -248,7 +247,7 @@ class _MfaSection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 24),
-        const OnboardingInputLabel('Verification Code'),
+        OnboardingInputLabel(context.l10n.verificationCode),
         const SizedBox(height: 8),
         TextFormField(
           controller: controller,
@@ -281,7 +280,7 @@ class _MfaSection extends StatelessWidget {
             focusedBorder: border(_accent, 1.5),
           ),
           validator: (v) => v == null || v.trim().isEmpty
-              ? 'Enter the verification code'
+              ? context.l10n.enterTheVerificationCode
               : null,
         ),
       ],

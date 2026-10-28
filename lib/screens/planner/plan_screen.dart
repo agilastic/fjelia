@@ -1,3 +1,4 @@
+import '../../l10n/l10n_ext.dart';
 import '../../providers/upcoming_plan_provider.dart';
 import '../../models/calendar_activity.dart';
 import '../../providers/activity_calendar_provider.dart';
@@ -50,7 +51,9 @@ class _PlanState extends ConsumerState<PlanScreen> {
         const RaceCountdownCard(),
         Center(
           child: Text(
-            view == 'Week' ? 'WEEKLY PLAN' : 'ACTIVITY LOG',
+            view == 'Week'
+                ? context.l10n.weeklyPlan
+                : context.l10n.activityLog3,
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
           ),
         ),
@@ -65,7 +68,7 @@ class _PlanState extends ConsumerState<PlanScreen> {
               ),
               Expanded(
                 child: Text(
-                  '${month.year} / ${month.month}',
+                  context.l10n.yearMonth(month.year, month.month),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -135,7 +138,7 @@ class _PlanState extends ConsumerState<PlanScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                '$day',
+                                context.l10n.day(day),
                                 style: TextStyle(
                                   color: DateUtils.isSameDay(d, DateTime.now())
                                       ? Colors.amber
@@ -193,8 +196,8 @@ class _PlanState extends ConsumerState<PlanScreen> {
                       ),
                     ],
                   ),
-                const Text(
-                  '○ Planned   ● Completed   ✕ Skipped',
+                Text(
+                  context.l10n.plannedCompletedSkipped,
                   style: TextStyle(fontSize: 9, color: muted),
                 ),
               ],

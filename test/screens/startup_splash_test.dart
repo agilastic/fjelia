@@ -1,3 +1,4 @@
+import 'package:fjelia/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fjelia/screens/startup_splash.dart';
@@ -34,7 +35,11 @@ void main() {
   testWidgets('decoded artwork stays visible for two seconds', (tester) async {
     var elapsed = false;
     await tester.pumpWidget(
-      MaterialApp(home: StartupSplash(onMinimumElapsed: () => elapsed = true)),
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: StartupSplash(onMinimumElapsed: () => elapsed = true),
+      ),
     );
     final context = tester.element(find.byType(StartupSplash));
     await tester.runAsync(

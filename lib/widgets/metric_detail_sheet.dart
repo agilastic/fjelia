@@ -1,3 +1,4 @@
+import '../l10n/l10n_ext.dart';
 import '../models/health_metric.dart';
 import '../providers/metric_history_provider.dart';
 export '../models/health_metric.dart';
@@ -75,11 +76,14 @@ class _MetricDetailState extends ConsumerState<MetricDetailSheet> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        '$days D AVG',
+                        context.l10n.daysDAvg(days),
                         style: const TextStyle(color: muted, fontSize: 9),
                       ),
                       Text(
-                        '${valueText(window.average, 1)} ${widget.metric.unit}',
+                        context.l10n.averageUnit(
+                          valueText(window.average, 1),
+                          widget.metric.unit,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       Text(
@@ -87,11 +91,14 @@ class _MetricDetailState extends ConsumerState<MetricDetailSheet> {
                             ? '7D BASELINE'
                             : widget.metric == HealthMetric.rhr
                             ? '30D AVG'
-                            : 'ALL-TIME',
+                            : context.l10n.allTime,
                         style: const TextStyle(color: muted, fontSize: 9),
                       ),
                       Text(
-                        '${valueText(window.baseline, 1)} ${widget.metric.unit}',
+                        context.l10n.baselineUnit(
+                          valueText(window.baseline, 1),
+                          widget.metric.unit,
+                        ),
                       ),
                     ],
                   ),
@@ -136,7 +143,7 @@ class _MetricDetailState extends ConsumerState<MetricDetailSheet> {
               Row(
                 children: [
                   IconButton(
-                    tooltip: 'Previous period',
+                    tooltip: context.l10n.previousPeriod,
                     onPressed: () => setState(() => offset += days),
                     icon: const Icon(Icons.chevron_left),
                   ),
@@ -144,16 +151,16 @@ class _MetricDetailState extends ConsumerState<MetricDetailSheet> {
                     child: Text(
                       offset == 0
                           ? days == 90
-                                ? 'Last 3 months'
+                                ? context.l10n.last3Months
                                 : days == 365
-                                ? 'Last year'
-                                : 'Last $days days'
+                                ? context.l10n.lastYear
+                                : context.l10n.lastDaysDays(days)
                           : '${dayText(start)} – ${dayText(DateTime(end.year, end.month, end.day - 1))}',
                       style: const TextStyle(color: muted, fontSize: 11),
                     ),
                   ),
                   IconButton(
-                    tooltip: 'Next period',
+                    tooltip: context.l10n.nextPeriod,
                     onPressed: offset == 0
                         ? null
                         : () => setState(
@@ -190,10 +197,10 @@ class _MetricDetailState extends ConsumerState<MetricDetailSheet> {
                   ),
               ],
               if (widget.metric == HealthMetric.hrv)
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(top: 14),
                   child: Text(
-                    'Overnight HRV reflects recovery. Compare your readings with your own baseline over time.',
+                    context.l10n.overnightHrvReflectsRecoveryCompare,
                     style: TextStyle(fontSize: 11, color: muted, height: 1.4),
                   ),
                 ),

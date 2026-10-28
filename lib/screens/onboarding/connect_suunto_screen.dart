@@ -1,3 +1,4 @@
+import '../../l10n/l10n_ext.dart';
 import '../../providers/connection_actions_provider.dart';
 
 import 'package:flutter/material.dart';
@@ -50,9 +51,7 @@ class _ConnectSuuntoScreenState extends ConsumerState<ConnectSuuntoScreen> {
     final phone = _phone.text.trim();
     final email = _email.text.trim();
     if (phone.isEmpty || !email.contains('@')) {
-      setState(
-        () => _error = 'Enter your phone number (with country code, e.g. +49…) and Suunto email.',
-      );
+      setState(() => _error = context.l10n.enterYourPhoneNumberWith);
       return;
     }
     setState(() {
@@ -65,13 +64,11 @@ class _ConnectSuuntoScreenState extends ConsumerState<ConnectSuuntoScreen> {
       setState(() {
         _smsSent = ok;
         if (!ok) {
-          _error =
-              'Could not send SMS. Check your phone number and internet '
-              'connection.';
+          _error = context.l10n.couldNotSendSmsCheck;
         }
       });
     } catch (e) {
-      setState(() => _error = 'Error: $e');
+      setState(() => _error = context.l10n.errorE(e));
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -80,7 +77,7 @@ class _ConnectSuuntoScreenState extends ConsumerState<ConnectSuuntoScreen> {
   Future<void> _verify() async {
     final pin = _pin.text.trim();
     if (pin.isEmpty) {
-      setState(() => _error = 'Enter the PIN from the SMS.');
+      setState(() => _error = context.l10n.enterThePinFromThe);
       return;
     }
     setState(() {
@@ -93,13 +90,13 @@ class _ConnectSuuntoScreenState extends ConsumerState<ConnectSuuntoScreen> {
           .verifySms(_phone.text.trim(), pin, email: _email.text.trim());
       if (!mounted) return;
       if (!ok) {
-        setState(() => _error = 'Incorrect PIN. Please try again.');
+        setState(() => _error = context.l10n.incorrectPinPleaseTryAgain);
         return;
       }
 
       _next();
     } catch (e) {
-      setState(() => _error = 'Error: $e');
+      setState(() => _error = context.l10n.errorE(e));
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -115,8 +112,8 @@ class _ConnectSuuntoScreenState extends ConsumerState<ConnectSuuntoScreen> {
         actions: [
           TextButton(
             onPressed: _next,
-            child: const Text(
-              'Skip',
+            child: Text(
+              context.l10n.skip,
               style: TextStyle(color: Color(0xFFCCCCCC)),
             ),
           ),
@@ -129,17 +126,17 @@ class _ConnectSuuntoScreenState extends ConsumerState<ConnectSuuntoScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 8),
-              const OnboardingDeviceHeader(
+              OnboardingDeviceHeader(
                 icon: Icons.watch_rounded,
                 color: _accent,
-                title: 'Connect Suunto',
+                title: context.l10n.connectSuunto,
                 subtitle:
                     'Sign in with your Suunto account to sync sleep, '
                     'recovery, HRV and activity data.',
               ),
               const SizedBox(height: 36),
               if (!_smsSent) ...[
-                const OnboardingInputLabel('Phone Number'),
+                OnboardingInputLabel(context.l10n.phoneNumber),
                 const SizedBox(height: 8),
                 TextField(
                   controller: _phone,
@@ -155,7 +152,7 @@ class _ConnectSuuntoScreenState extends ConsumerState<ConnectSuuntoScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                const OnboardingInputLabel('Suunto Account Email'),
+                OnboardingInputLabel(context.l10n.suuntoAccountEmail),
                 const SizedBox(height: 8),
                 TextField(
                   controller: _email,
@@ -172,21 +169,20 @@ class _ConnectSuuntoScreenState extends ConsumerState<ConnectSuuntoScreen> {
                   ),
                 ),
                 const SizedBox(height: 6),
-                const Text(
-                  'The email is used for secure request signing and is not '
-                  'sent to Suunto servers.',
+                Text(
+                  context.l10n.theEmailIsUsedFor,
                   style: TextStyle(color: Color(0xFF888888), fontSize: 11),
                 ),
               ] else ...[
                 Text(
-                  'SMS sent to ${_phone.text.trim()}',
+                  context.l10n.smsSentToTrim(_phone.text.trim()),
                   style: const TextStyle(
                     color: Color(0xFFCCCCCC),
                     fontSize: 13,
                   ),
                 ),
                 const SizedBox(height: 16),
-                const OnboardingInputLabel('Enter PIN from SMS'),
+                OnboardingInputLabel(context.l10n.enterPinFromSms),
                 const SizedBox(height: 8),
                 TextField(
                   controller: _pin,
@@ -210,8 +206,8 @@ class _ConnectSuuntoScreenState extends ConsumerState<ConnectSuuntoScreen> {
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: _loading ? null : _sendSms,
-                    child: const Text(
-                      'Resend SMS',
+                    child: Text(
+                      context.l10n.resendSms,
                       style: TextStyle(color: _accent),
                     ),
                   ),
@@ -219,11 +215,7 @@ class _ConnectSuuntoScreenState extends ConsumerState<ConnectSuuntoScreen> {
               ],
               const SizedBox(height: 24),
               if (_error != null) OnboardingErrorBanner(_error!),
-              const OnboardingInfoBox(
-                'Suunto uses SMS verification (same as the Suunto app). A '
-                'one-time PIN will be sent to your phone. Your credentials are '
-                'stored encrypted on-device only.',
-              ),
+              OnboardingInfoBox(context.l10n.suuntoUsesSmsVerificationSame),
               const SizedBox(height: 32),
               SizedBox(
                 width: double.infinity,
@@ -251,7 +243,11 @@ class _ConnectSuuntoScreenState extends ConsumerState<ConnectSuuntoScreen> {
                             strokeWidth: 2.5,
                           ),
                         )
-                      : Text(_smsSent ? 'Verify & Connect' : 'Send SMS Code'),
+                      : Text(
+                          _smsSent
+                              ? context.l10n.verifyConnect
+                              : context.l10n.sendSmsCode,
+                        ),
                 ),
               ),
             ],

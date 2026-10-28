@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -99,9 +101,15 @@ class StrengthTrendSheet extends ConsumerWidget {
                   spacing: 16,
                   runSpacing: 6,
                   children: [
-                    _legend(_topLoadColor, 'Top working load (${unit.name})'),
+                    _legend(
+                      _topLoadColor,
+                      context.l10n.topWorkingLoadName(unit.name),
+                    ),
                     if (oneRm.isNotEmpty)
-                      _legend(_oneRmColor, 'Estimated 1RM, middle of range'),
+                      _legend(
+                        _oneRmColor,
+                        context.l10n.estimated1rmMiddleOfRange,
+                      ),
                   ],
                 ),
                 const SizedBox(height: 10),
@@ -116,21 +124,19 @@ class StrengthTrendSheet extends ConsumerWidget {
                 ),
               ],
               const SizedBox(height: 8),
-              const Text(
-                'Estimated 1RM uses Epley and Brzycki on completed working '
-                'sets of 1–10 reps with a known load, shown as the range '
-                'between them. It is an estimate, not a tested maximum.',
+              Text(
+                context.l10n.estimated1rmUsesEpleyAnd,
                 style: TextStyle(fontSize: 11, color: muted),
               ),
               const SizedBox(height: 16),
-              const SectionLabel('Sessions'),
-              if (points.isEmpty) const EmptyState('No logged sessions yet.'),
+              SectionLabel(context.l10n.sessions),
+              if (points.isEmpty) EmptyState(context.l10n.noLoggedSessionsYet),
               for (final p in points.reversed)
                 Semantics(
                   container: true,
                   child: ListTile(
                     contentPadding: EdgeInsets.zero,
-                    title: Text(DateFormat('EEE d MMM yyyy').format(p.date)),
+                    title: Text(DateFormat.yMMMEd().format(p.date)),
                     subtitle: Text(
                       [
                         '${p.completedSets} completed ${p.completedSets == 1 ? 'set' : 'sets'}',

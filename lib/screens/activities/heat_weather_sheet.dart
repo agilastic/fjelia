@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -18,7 +20,7 @@ class _HeatWeatherState extends ConsumerState<HeatWeatherSheet> {
     final state = ref.watch(heatTodayStateProvider);
     final history = ref.watch(heatHistoryProvider(days));
     return LoadSheet(
-      title: 'HEAT ACCLIMATION',
+      title: context.l10n.heatAcclimation2,
       close: true,
       largeTitle: true,
       child: ListView(
@@ -28,27 +30,31 @@ class _HeatWeatherState extends ConsumerState<HeatWeatherSheet> {
             loading: () => const LinearProgressIndicator(),
             error: (e, _) => DataError(e),
             data: (h) => h == null
-                ? const EmptyState(
-                    'Enable heat acclimation in Training settings.',
-                  )
+                ? EmptyState(context.l10n.enableHeatAcclimationInTraining)
                 : Row(
                     children: [
                       Text(
-                        '${valueText(h.score)}%',
+                        context.l10n.score(valueText(h.score)),
                         style: const TextStyle(
                           fontSize: 42,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(width: 16),
+                      SizedBox(width: 16),
                       LoadBadge(h.status.name.toUpperCase(), color: loadOrange),
                     ],
                   ),
           ),
-          const SizedBox(height: 18),
+          SizedBox(height: 18),
           LoadRange(
             labels: const ['WEEK', 'MONTH', 'QUARTER', 'YEAR'],
-            selected: {
+            display: {
+              'WEEK': context.l10n.week2,
+              'MONTH': context.l10n.month2,
+              'QUARTER': context.l10n.quarter,
+              'YEAR': context.l10n.year,
+            },
+            selected: const {
               7: 'WEEK',
               30: 'MONTH',
               90: 'QUARTER',
@@ -56,7 +62,7 @@ class _HeatWeatherState extends ConsumerState<HeatWeatherSheet> {
             }[days]!,
             color: loadOrange,
             onChanged: (v) => setState(
-              () => days = {
+              () => days = const {
                 'WEEK': 7,
                 'MONTH': 30,
                 'QUARTER': 90,
@@ -66,7 +72,14 @@ class _HeatWeatherState extends ConsumerState<HeatWeatherSheet> {
           ),
           const SizedBox(height: 16),
           Text(
-            '${{7: 'WEEK', 30: 'MONTH', 90: 'QUARTER', 365: 'YEAR'}[days]} TIMELINE',
+            context.l10n.periodTimeline(
+              {
+                7: context.l10n.week2,
+                30: context.l10n.month2,
+                90: context.l10n.quarter,
+                365: context.l10n.year,
+              }[days]!,
+            ),
             style: loadLabel,
           ),
           const SizedBox(height: 12),

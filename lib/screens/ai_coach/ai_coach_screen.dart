@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -80,8 +82,8 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
         if (!mounted ||
             !await confirmAction(
               context,
-              'Share health context with ${settings.provider.name}?',
-              'Your message and a health/training summary will be sent to this cloud AI provider. Names and GPS are excluded from the generated summary.',
+              context.l10n.shareHealthContextWithName(settings.provider.name),
+              context.l10n.yourMessageAndAHealth,
             )) {
           return;
         }
@@ -128,7 +130,7 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
         setState(
           () => error = e is AiCoachException
               ? e.message
-              : 'Could not get a reply. Check your AI settings and try again.',
+              : context.l10n.couldNotGetAReply,
         );
       }
     } finally {
@@ -176,14 +178,14 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: Text(
-                  'AI Coach',
+                  context.l10n.aiCoach,
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
               IconButton(
-                tooltip: 'AI settings',
+                tooltip: context.l10n.aiSettings,
                 onPressed: () => showAppSheet(context, const AiSettingsTab()),
                 icon: const Icon(Icons.tune),
               ),
@@ -221,9 +223,7 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
                         ],
                       ),
                     ] else
-                      const EmptyState(
-                        'Ask about your recovery, training, or today’s plan.',
-                      ),
+                      EmptyState(context.l10n.askAboutYourRecoveryTraining),
                   ],
                 )
               : ListView.builder(
@@ -285,11 +285,11 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
                                   onPressed: sending
                                       ? null
                                       : () => send(retry: true),
-                                  child: const Text('Retry'),
+                                  child: Text(context.l10n.retry),
                                 ),
                                 TextButton(
                                   onPressed: () => setState(() => error = null),
-                                  child: const Text('Dismiss'),
+                                  child: Text(context.l10n.dismiss),
                                 ),
                               ],
                             ),
@@ -325,14 +325,14 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
                   controller: input,
                   minLines: 1,
                   maxLines: 4,
-                  decoration: const InputDecoration(
-                    hintText: 'Ask your coach…',
+                  decoration: InputDecoration(
+                    hintText: context.l10n.askYourCoach,
                   ),
                   onSubmitted: (_) => send(),
                 ),
               ),
               IconButton(
-                tooltip: 'Send message',
+                tooltip: context.l10n.sendMessage,
                 onPressed: sending ? null : send,
                 icon: const Icon(Icons.arrow_upward, color: mint),
               ),

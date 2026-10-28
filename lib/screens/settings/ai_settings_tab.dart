@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -11,7 +13,7 @@ class AiSettingsTab extends ConsumerWidget {
   const AiSettingsTab({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) => SheetPage(
-    title: 'AI & More',
+    title: context.l10n.aiAndMore,
     child: ref
         .watch(aiCoachSettingsProvider)
         .when(
@@ -22,13 +24,13 @@ class AiSettingsTab extends ConsumerWidget {
             return ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                const SectionLabel('AI Coach'),
+                SectionLabel(context.l10n.aiCoach),
                 SectionCard(
                   child: SwitchListTile(
                     contentPadding: EdgeInsets.zero,
-                    title: const Text('Enable AI Coach'),
-                    subtitle: const Text(
-                      'On-device AI or cloud provider',
+                    title: Text(context.l10n.enableAiCoach),
+                    subtitle: Text(
+                      context.l10n.onDeviceAiOrCloud,
                       style: TextStyle(fontSize: 11, color: muted),
                     ),
                     value: s.enabled,
@@ -36,7 +38,7 @@ class AiSettingsTab extends ConsumerWidget {
                         runUiAction(context, () => n.setEnabled(v)),
                   ),
                 ),
-                const SectionLabel('Provider'),
+                SectionLabel(context.l10n.provider),
                 Wrap(
                   spacing: 8,
                   children: [
@@ -48,8 +50,9 @@ class AiSettingsTab extends ConsumerWidget {
                     ])
                       ChoiceChip(
                         label: Text(switch (p) {
-                          AiProvider.openai => 'OpenAI',
-                          AiProvider.appleIntelligence => 'Apple Intelligence',
+                          AiProvider.openai => context.l10n.openai,
+                          AiProvider.appleIntelligence =>
+                            context.l10n.appleIntelligence,
                           _ => p.name[0].toUpperCase() + p.name.substring(1),
                         }),
                         selected: s.provider == p,
@@ -64,7 +67,7 @@ class AiSettingsTab extends ConsumerWidget {
                     initialValue: s.provider.models.contains(s.model)
                         ? s.model
                         : s.provider.defaultModel,
-                    decoration: const InputDecoration(labelText: 'Model'),
+                    decoration: InputDecoration(labelText: context.l10n.model),
                     items: [
                       for (final m in s.provider.models)
                         DropdownMenuItem(value: m, child: Text(m)),
@@ -81,38 +84,34 @@ class AiSettingsTab extends ConsumerWidget {
                 ],
                 if (s.provider == AiProvider.appleIntelligence &&
                     !s.onDeviceAvailable)
-                  const SectionCard(
+                  SectionCard(
                     child: Text(
-                      'Apple Intelligence is not available on this device '
-                      '(it needs a supported iPhone or Mac with iOS/macOS 26 '
-                      'or later and Apple Intelligence switched on in '
-                      'Settings). Choose another provider and add your own '
-                      'API key to use the coach.',
+                      context.l10n.appleIntelligenceIsNotAvailable,
                       style: TextStyle(fontSize: 11, color: Colors.amber),
                     ),
                   ),
                 if (s.provider == AiProvider.appleIntelligence)
-                  const SectionCard(
+                  SectionCard(
                     child: Text(
-                      'Chat and AI briefings use Apple Intelligence on this device. No API key required. If the model is unavailable, briefings show a non-AI summary.',
+                      context.l10n.chatAndAiBriefingsUse,
                       style: TextStyle(color: mint, fontSize: 12),
                     ),
                   ),
-                const SectionLabel('Briefing'),
+                SectionLabel(context.l10n.briefing),
                 for (final mode in BriefingMode.values)
                   ListTile(
                     title: Text(switch (mode) {
-                      BriefingMode.ai => 'AI Briefing',
-                      BriefingMode.static_ => 'Non-AI Briefing',
-                      BriefingMode.none => 'No Briefing',
+                      BriefingMode.ai => context.l10n.aiBriefing,
+                      BriefingMode.static_ => context.l10n.nonAiBriefing,
+                      BriefingMode.none => context.l10n.noBriefing,
                     }),
                     subtitle: Text(switch (mode) {
                       BriefingMode.ai =>
-                        'Personalised morning/lunch/afternoon/evening summary',
+                        context.l10n.personalisedMorningLunchAfternoonEvening,
                       BriefingMode.static_ =>
-                        'Rule-based summary from your health data — no API calls',
-                      BriefingMode.none => 'Hide the briefing card',
-                    }, style: const TextStyle(color: muted, fontSize: 10)),
+                        context.l10n.ruleBasedSummaryFromYour,
+                      BriefingMode.none => context.l10n.hideTheBriefingCard,
+                    }, style: TextStyle(color: muted, fontSize: 10)),
                     leading: Icon(
                       s.briefingMode == mode
                           ? Icons.radio_button_checked
@@ -124,22 +123,18 @@ class AiSettingsTab extends ConsumerWidget {
                   ),
                 if (s.provider != AiProvider.appleIntelligence)
                   SwitchListTile(
-                    title: const Text('Use Apple Intelligence for briefings'),
-                    subtitle: const Text(
-                      'Use on-device AI for briefings while keeping the selected provider for chat.',
-                    ),
+                    title: Text(context.l10n.useAppleIntelligenceForBriefings),
+                    subtitle: Text(context.l10n.useOnDeviceAiFor),
                     value: s.appleIntelligenceForBriefing,
                     onChanged: (v) => runUiAction(
                       context,
                       () => n.setAppleIntelligenceForBriefing(v),
                     ),
                   ),
-                const SectionLabel('Health data sharing'),
+                SectionLabel(context.l10n.healthDataSharing),
                 SwitchListTile(
-                  title: const Text('Ask once per chat session'),
-                  subtitle: const Text(
-                    'Otherwise ask before every cloud message',
-                  ),
+                  title: Text(context.l10n.askOncePerChatSession),
+                  subtitle: Text(context.l10n.otherwiseAskBeforeEveryCloud),
                   value: s.consentMode == AiConsentMode.session,
                   onChanged: (v) => runUiAction(
                     context,
@@ -149,11 +144,10 @@ class AiSettingsTab extends ConsumerWidget {
                   ),
                 ),
                 OutlinedButton(
-                  onPressed: () =>
-                      showAppSheet(context, const BugReportSheet()),
-                  child: const Text('Report a Bug'),
+                  onPressed: () => showAppSheet(context, BugReportSheet()),
+                  child: Text(context.l10n.reportABug),
                 ),
-                const SectionLabel('Weather data'),
+                SectionLabel(context.l10n.weatherData),
                 for (final e in {
                   'Open-Meteo': 'https://open-meteo.com',
                   'Pirate Weather': 'https://pirateweather.net',
@@ -165,34 +159,37 @@ class AiSettingsTab extends ConsumerWidget {
                   ListTile(
                     dense: true,
                     title: Text(e.key),
-                    trailing: const Icon(Icons.open_in_new, size: 14),
+                    trailing: Icon(Icons.open_in_new, size: 14),
                     onTap: () => runUiAction(context, () async {
                       if (!await launchUrl(Uri.parse(e.value))) {
-                        throw StateError('Could not open ${e.key}');
+                        throw StateError(tr.couldNotOpenKey(e.key));
                       }
                     }),
                   ),
-                const SectionLabel('Open source libraries'),
-                for (final library in const [
-                  ('Flutter', 'UI framework by Google'),
-                  ('flutter_riverpod', 'State management'),
-                  ('drift', 'SQLite ORM'),
-                  ('flutter_blue_plus', 'Bluetooth LE'),
-                  ('flutter_map', 'Interactive maps'),
-                  ('fl_chart', 'Charts & graphs'),
-                  ('flutter_secure_storage', 'Secure credential storage'),
-                  ('flutter_markdown', 'Markdown rendering'),
-                  ('foundation_models_framework', 'Apple on-device AI'),
-                  ('http', 'HTTP clients'),
-                  ('encrypt / pointycastle', 'Cryptography'),
-                  ('health', 'Apple Health & Health Connect'),
-                  ('permission_handler', 'Runtime permissions'),
-                  ('location', 'GPS location'),
-                  ('share_plus', 'Share & export'),
-                  ('url_launcher', 'Open URLs'),
-                  ('intl', 'Internationalisation'),
-                  ('uuid / latlong2', 'Utilities'),
-                  ('font_awesome_flutter', 'Icons'),
+                SectionLabel(context.l10n.openSourceLibraries),
+                for (final library in [
+                  (context.l10n.flutter, context.l10n.uiFrameworkByGoogle),
+                  ('flutter_riverpod', context.l10n.stateManagement),
+                  ('drift', context.l10n.sqliteOrm),
+                  ('flutter_blue_plus', context.l10n.bluetoothLe),
+                  ('flutter_map', context.l10n.interactiveMaps),
+                  ('fl_chart', context.l10n.chartsGraphs),
+                  (
+                    'flutter_secure_storage',
+                    context.l10n.secureCredentialStorage,
+                  ),
+                  ('flutter_markdown', context.l10n.markdownRendering),
+                  ('foundation_models_framework', context.l10n.appleOnDeviceAi),
+                  ('http', context.l10n.httpClients),
+                  ('encrypt / pointycastle', context.l10n.cryptography),
+                  ('health', context.l10n.appleHealthHealthConnect),
+                  ('permission_handler', context.l10n.runtimePermissions),
+                  ('location', context.l10n.gpsLocation),
+                  ('share_plus', context.l10n.shareExport),
+                  ('url_launcher', context.l10n.openUrls),
+                  ('intl', context.l10n.internationalisation),
+                  ('uuid / latlong2', context.l10n.utilities),
+                  ('font_awesome_flutter', context.l10n.icons),
                 ])
                   ListTile(
                     dense: true,
@@ -214,24 +211,24 @@ class AiSettingsTab extends ConsumerWidget {
                         color: Colors.lightBlue.withValues(alpha: .1),
                         borderRadius: BorderRadius.circular(4),
                       ),
-                      child: const Text(
-                        'License',
+                      child: Text(
+                        context.l10n.license,
                         style: TextStyle(fontSize: 9, color: Colors.lightBlue),
                       ),
                     ),
                     onTap: () => showLicensePage(
                       context: context,
-                      applicationName: 'Fjelia',
+                      applicationName: context.l10n.fjelia,
                       applicationLegalese:
                           '© 2026 Alex Ebeling-Hoppe\nFree software under the '
                           'GNU General Public License, version 3 or later.',
                     ),
                   ),
                 ListTile(
-                  title: const Text('Licenses'),
+                  title: Text(context.l10n.licenses),
                   onTap: () => showLicensePage(
                     context: context,
-                    applicationName: 'Fjelia',
+                    applicationName: context.l10n.fjelia,
                     applicationLegalese:
                         '© 2026 Alex Ebeling-Hoppe\nFree software under the '
                         'GNU General Public License, version 3 or later.',
@@ -267,13 +264,13 @@ class _ApiKeyState extends State<_ApiKeyField> {
         child: TextField(
           controller: c,
           obscureText: true,
-          decoration: const InputDecoration(labelText: 'API key'),
+          decoration: InputDecoration(labelText: context.l10n.apiKey),
           autocorrect: false,
           enableSuggestions: false,
         ),
       ),
       IconButton(
-        tooltip: 'Save API key',
+        tooltip: context.l10n.saveApiKey,
         onPressed: saving
             ? null
             : () async {

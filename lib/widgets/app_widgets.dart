@@ -1,7 +1,11 @@
+import '../l10n/formats.dart';
 import '../models/chart_point.dart';
 export '../models/chart_point.dart';
 
 import 'package:flutter/material.dart';
+
+import '../l10n/l10n_ext.dart';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 
@@ -9,8 +13,22 @@ const mint = Color(0xFF00D4A0);
 const panel = Color(0xFF202020);
 const muted = Color(0xFF999999);
 String valueText(num? v, [int digits = 0]) =>
-    v == null || !v.isFinite ? '—' : v.toStringAsFixed(digits);
-String dayText(DateTime d) => DateFormat('d MMM yyyy').format(d);
+    v == null || !v.isFinite ? '—' : v.fixed(digits);
+String dayText(DateTime d) => DateFormat.yMMMd().format(d);
+
+/// A day heading for lists: TODAY, YESTERDAY and TOMORROW by name, any other
+/// day by its date.
+String dayHeading(BuildContext context, DateTime d) {
+  final today = DateUtils.dateOnly(DateTime.now());
+  final day = DateUtils.dateOnly(d);
+  final offset = day.difference(today).inDays;
+  return switch (offset) {
+    0 => context.l10n.today2,
+    -1 => context.l10n.yesterday2,
+    1 => context.l10n.tomorrow,
+    _ => dayText(d).toUpperCase(),
+  };
+}
 
 Future<T?> showAppSheet<T>(BuildContext context, Widget child) =>
     showModalBottomSheet<T>(
@@ -63,7 +81,7 @@ class SheetPage extends StatelessWidget {
               children: [
                 if (showBack)
                   IconButton(
-                    tooltip: 'Back',
+                    tooltip: context.l10n.back,
                     onPressed: () => Navigator.pop(context),
                     icon: const Icon(Icons.chevron_left, size: 20),
                   ),
@@ -79,7 +97,7 @@ class SheetPage extends StatelessWidget {
                 ),
                 ...actions,
                 IconButton(
-                  tooltip: 'Close',
+                  tooltip: context.l10n.close,
                   onPressed: () => Navigator.pop(context),
                   icon: const Icon(Icons.close, size: 18),
                 ),
@@ -195,9 +213,9 @@ class DataError extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Column(
     children: [
-      const EmptyState('Unable to load data'),
+      EmptyState(context.l10n.unableToLoadData),
       if (retry != null)
-        TextButton(onPressed: retry, child: const Text('Retry')),
+        TextButton(onPressed: retry, child: Text(context.l10n.retry)),
     ],
   );
 }
@@ -272,8 +290,9 @@ class HistoryChart extends StatelessWidget {
     Widget label(double v, TitleMeta meta) => Padding(
       padding: const EdgeInsets.only(top: 7),
       child: Text(
-        DateFormat(span < 2 ? 'HH:mm' : 'd MMM')
-            .format(origin.add(Duration(seconds: (v * 86400).round()))),
+        (span < 2 ? DateFormat.Hm() : DateFormat.MMMd()).format(
+          origin.add(Duration(seconds: (v * 86400).round())),
+        ),
         style: const TextStyle(fontSize: 8, color: muted),
       ),
     );
@@ -351,7 +370,7 @@ class HistoryChart extends StatelessWidget {
                   final i = v.toInt();
                   return i >= 0 && i < clean.length
                       ? Text(
-                          DateFormat('d').format(clean[i].at),
+                          DateFormat.d().format(clean[i].at),
                           style: const TextStyle(fontSize: 8, color: muted),
                         )
                       : const SizedBox();
@@ -450,11 +469,11 @@ Future<bool> confirmAction(
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(c, false),
-            child: const Text('Cancel'),
+            child: Text(context.l10n.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.pop(c, true),
-            child: const Text('Continue'),
+            child: Text(context.l10n.continueLabel),
           ),
         ],
       ),

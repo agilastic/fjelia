@@ -1,6 +1,9 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+
 import '../../providers/day_data_provider.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/metric_detail_sheet.dart';
@@ -15,7 +18,7 @@ class SleepScreen extends ConsumerWidget {
     final day = ref.watch(selectedDateProvider);
     final scores = ref.watch(dayScoresProvider(day));
     return SheetPage(
-      title: 'SLEEP',
+      title: context.l10n.sleep,
       showBack: false,
       titleSize: 13,
       backgroundColor: panel,
@@ -33,12 +36,12 @@ class SleepScreen extends ConsumerWidget {
                   ? scores.valueOrNull?.sleep?.need
                   : Duration(seconds: sleep!.sleepNeedSeconds!);
               final status = score == null
-                  ? 'NO DATA'
+                  ? context.l10n.noData2
                   : score < 50
-                  ? 'POOR SLEEP'
+                  ? context.l10n.poorSleep
                   : score < 80
-                  ? 'FAIR SLEEP'
-                  : 'GOOD SLEEP';
+                  ? context.l10n.fairSleep
+                  : context.l10n.goodSleep;
               Widget duration(String label, String value, Color color) =>
                   Expanded(
                     child: Column(
@@ -112,12 +115,14 @@ class SleepScreen extends ConsumerWidget {
                 ],
               );
               String time(DateTime? t) =>
-                  t == null ? '—' : DateFormat('H:mm').format(t.toLocal());
+                  t == null ? '—' : DateFormat.Hm().format(t.toLocal());
               final tip = sleep == null
                   ? null
                   : sleep.deepPercent < 15
-                  ? 'Deep sleep is below optimal (${sleep.deepPercent.round()}%). Avoid alcohol and heavy meals 3h before bed.'
-                  : 'Keep a consistent bedtime and wake time to support your sleep routine.';
+                  ? context.l10n.deepSleepIsBelowOptimal(
+                      sleep.deepPercent.round(),
+                    )
+                  : context.l10n.keepAConsistentBedtimeAnd;
               return LayoutBuilder(
                 builder: (context, constraints) => SingleChildScrollView(
                   child: ConstrainedBox(
@@ -128,8 +133,8 @@ class SleepScreen extends ConsumerWidget {
                       padding: const EdgeInsets.fromLTRB(20, 42, 20, 20),
                       child: Column(
                         children: [
-                          const Text(
-                            'SLEEP PERFORMANCE',
+                          Text(
+                            context.l10n.sleepPerformance,
                             style: TextStyle(
                               fontSize: 11,
                               color: muted,
@@ -157,13 +162,13 @@ class SleepScreen extends ConsumerWidget {
                           Row(
                             children: [
                               duration(
-                                'HOURS OF SLEEP',
+                                context.l10n.hoursOfSleep,
                                 sleep == null ? '—' : hours(sleep.totalSleep),
                                 Colors.white70,
                               ),
                               const SizedBox(width: 12),
                               duration(
-                                'SLEEP NEEDED',
+                                context.l10n.sleepNeeded,
                                 need == null ? '—' : hours(need),
                                 mint,
                               ),
@@ -183,7 +188,7 @@ class SleepScreen extends ConsumerWidget {
                             shrinkWrap: true,
                             children: [
                               metric(
-                                'DEEP SLEEP',
+                                context.l10n.deepSleep,
                                 sleep == null
                                     ? '—'
                                     : '${sleep.deepPercent.round()}%',
@@ -249,7 +254,7 @@ class SleepScreen extends ConsumerWidget {
                               context,
                               HealthMetric.sleep,
                             ),
-                            child: const Text('Sleep history'),
+                            child: Text(context.l10n.sleepHistory),
                           ),
                         ],
                       ),

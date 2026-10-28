@@ -1,7 +1,12 @@
+import '../l10n/l10n_ext.dart';
+import '../l10n/formats.dart';
+
 import 'dart:math' as math;
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../models/activity_axis.dart';
 import '../models/garmin_data.dart';
 import '../models/pace_series.dart';
@@ -107,17 +112,17 @@ class ActivityPerformanceChart extends ConsumerWidget {
         points.removeLast();
       }
       series.add((
-        running ? 'PACE (min/km)' : 'SPEED (km/h)',
+        running ? context.l10n.paceMinKm : context.l10n.speedKmH,
         _zoneColors.first,
         points,
         robustRange(shown, minSpan: running ? 1 : 5),
       ));
     }
 
-    add('HR (bpm)', Colors.redAccent, (s) => s.heartRate);
+    add(context.l10n.hrBpm, Colors.redAccent, (s) => s.heartRate);
     addMotion();
-    add('ELEVATION (m)', mint, (s) => s.elevation);
-    add('POWER (W)', Colors.purpleAccent, (s) => s.power);
+    add(context.l10n.elevationM, mint, (s) => s.elevation);
+    add(context.l10n.powerW, Colors.purpleAccent, (s) => s.power);
     if (series.isEmpty) return const SizedBox.shrink();
     final maxX = math.max(
       .001,
@@ -249,7 +254,7 @@ class ActivityPerformanceChart extends ConsumerWidget {
                       getTitlesWidget: (v, _) => Text(
                         byTime
                             ? formatAxisMinutes(v, maxX)
-                            : '${v.toStringAsFixed(v == 0 ? 0 : 1)} km',
+                            : '${v.fixed(v == 0 ? 0 : 1)} km',
                         style: const TextStyle(
                           fontSize: 9,
                           color: Colors.white70,
@@ -286,7 +291,9 @@ class ActivityPerformanceChart extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 12),
           child: Text(
-            byTime ? 'PERFORMANCE / TIME' : 'PERFORMANCE / DISTANCE',
+            byTime
+                ? context.l10n.performanceTime2
+                : context.l10n.performanceDistance2,
             style: const TextStyle(
               fontSize: 11,
               color: Colors.white70,
@@ -309,13 +316,13 @@ class ActivityPerformanceChart extends ConsumerWidget {
                       textStyle: const TextStyle(fontSize: 10),
                     ),
                     icon: const Icon(Icons.fullscreen, size: 16),
-                    label: const Text('Fullscreen'),
+                    label: Text(context.l10n.fullscreen),
                     onPressed: () => showAppSheet(
                       context,
                       SheetPage(
                         title: byTime
-                            ? 'Performance / Time'
-                            : 'Performance / Distance',
+                            ? context.l10n.performanceTime
+                            : context.l10n.performanceDistance,
                         backgroundColor: panel,
                         child: ListView(
                           padding: const EdgeInsets.all(12),
@@ -360,7 +367,7 @@ class ActivityZoneChart extends ConsumerWidget {
     }
 
     return SectionCard(
-      title: 'Time in HR zones',
+      title: context.l10n.timeInHrZones,
       color: const Color(0xFF282828),
       child: Column(
         children: [
@@ -392,7 +399,7 @@ class ActivityZoneChart extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Zone ${i + 1}',
+                          context.l10n.zoneI(i + 1),
                           style: TextStyle(
                             fontSize: 13,
                             color: _zoneColors[i],
@@ -434,7 +441,7 @@ class ActivityZoneChart extends ConsumerWidget {
                           ),
                         ),
                         Text(
-                          '${values[i].round()}%',
+                          context.l10n.round3(values[i].round()),
                           style: const TextStyle(fontSize: 9, color: muted),
                         ),
                       ],

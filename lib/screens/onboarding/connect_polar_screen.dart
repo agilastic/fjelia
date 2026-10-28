@@ -1,3 +1,4 @@
+import '../../l10n/l10n_ext.dart';
 import '../../providers/connection_actions_provider.dart';
 
 import 'package:flutter/material.dart';
@@ -38,9 +39,7 @@ class _ConnectPolarScreenState extends ConsumerState<ConnectPolarScreen> {
     } on ConnectionFailure catch (e) {
       if (mounted) setState(() => _error = e.message);
     } catch (_) {
-      setState(
-        () => _error = 'Connection failed. Check your internet connection.',
-      );
+      setState(() => _error = context.l10n.connectionFailedCheckYourInternet);
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -51,7 +50,7 @@ class _ConnectPolarScreenState extends ConsumerState<ConnectPolarScreen> {
     if (widget.forWorkoutUpload) {
       return Scaffold(
         backgroundColor: const Color(0xFF111111),
-        appBar: AppBar(title: const Text('Send workout to Polar')),
+        appBar: AppBar(title: Text(context.l10n.sendWorkoutToPolar)),
         body: SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(28),
@@ -72,10 +71,10 @@ class _ConnectPolarScreenState extends ConsumerState<ConnectPolarScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 8),
-              const OnboardingDeviceHeader(
+              OnboardingDeviceHeader(
                 icon: Icons.watch_rounded,
                 color: _accent,
-                title: 'Connect Polar',
+                title: context.l10n.connectPolar,
                 subtitle:
                     'Sign in with your Polar Flow account to sync sleep '
                     'stages, nightly HRV, resting HR and workout data.',
@@ -108,13 +107,13 @@ class _ConnectPolarScreenState extends ConsumerState<ConnectPolarScreen> {
                             strokeWidth: 2.5,
                           ),
                         )
-                      : const Text('Sign in with Polar Flow'),
+                      : Text(context.l10n.signInWithPolarFlow),
                 ),
               ),
               const SizedBox(height: 16),
-              const Center(
+              Center(
                 child: Text(
-                  'Syncs sleep stages · HRV · resting HR · workouts · steps',
+                  context.l10n.syncsSleepStagesHrvResting,
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Color(0xFF888888), fontSize: 11),
                 ),
@@ -177,9 +176,7 @@ class _FlowHistoryLoginState extends ConsumerState<_FlowHistoryLogin> {
       setState(() {
         _savedEmail = _email.text.trim();
         _failed = false;
-        _message =
-            'Signed in. Planned workouts can now be sent to Polar. '
-            'Older sessions are imported with the next full history sync.';
+        _message = context.l10n.signedInPlannedWorkoutsCan;
       });
       widget.onSaved?.call();
     } on ConnectionFailure catch (e) {
@@ -193,7 +190,7 @@ class _FlowHistoryLoginState extends ConsumerState<_FlowHistoryLogin> {
       if (mounted) {
         setState(() {
           _failed = true;
-          _message = 'Could not reach Polar. Check your connection.';
+          _message = context.l10n.couldNotReachPolarCheck;
         });
       }
     } finally {
@@ -225,8 +222,8 @@ class _FlowHistoryLoginState extends ConsumerState<_FlowHistoryLogin> {
         children: [
           Text(
             widget.onSaved == null
-                ? 'FLOW LOGIN (OPTIONAL)'
-                : 'POLAR FLOW LOGIN',
+                ? context.l10n.flowLoginOptional
+                : context.l10n.polarFlowLogin,
             style: const TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w700,
@@ -237,14 +234,8 @@ class _FlowHistoryLoginState extends ConsumerState<_FlowHistoryLogin> {
           const SizedBox(height: 8),
           Text(
             widget.onSaved == null
-                ? 'Save your Polar Flow login to send planned workouts and import '
-                      'sessions older than 30 days. It stays in this device\'s keychain '
-                      'and is sent only to Polar. Send a workout from its planner sheet, '
-                      'then sync Polar Flow to your watch. Check that your Polar '
-                      'heart-rate zones match Fjelia.'
-                : 'Sign in to send this workout to your Polar Flow calendar. '
-                      'Your login stays in this device\'s keychain and is sent '
-                      'only to Polar. After sending, sync Polar Flow to your watch.',
+                ? context.l10n.saveYourPolarFlowLogin
+                : context.l10n.signInToSendThis,
             style: const TextStyle(fontSize: 12, height: 1.4, color: muted),
           ),
           const SizedBox(height: 12),
@@ -253,8 +244,13 @@ class _FlowHistoryLoginState extends ConsumerState<_FlowHistoryLogin> {
               children: [
                 const Icon(Icons.check_circle, size: 18, color: Colors.green),
                 const SizedBox(width: 8),
-                Expanded(child: Text('Saved for $_savedEmail')),
-                TextButton(onPressed: _remove, child: const Text('Remove')),
+                Expanded(
+                  child: Text(context.l10n.savedForV(_savedEmail ?? "")),
+                ),
+                TextButton(
+                  onPressed: _remove,
+                  child: Text(context.l10n.remove),
+                ),
               ],
             ),
           ] else ...[
@@ -262,13 +258,15 @@ class _FlowHistoryLoginState extends ConsumerState<_FlowHistoryLogin> {
               controller: _email,
               keyboardType: TextInputType.emailAddress,
               autofillHints: const [AutofillHints.username],
-              decoration: const InputDecoration(labelText: 'Polar e-mail'),
+              decoration: InputDecoration(labelText: context.l10n.polarEMail),
             ),
             TextField(
               controller: _password,
               obscureText: true,
               autofillHints: const [AutofillHints.password],
-              decoration: const InputDecoration(labelText: 'Polar password'),
+              decoration: InputDecoration(
+                labelText: context.l10n.polarPassword,
+              ),
             ),
             const SizedBox(height: 12),
             Align(
@@ -283,8 +281,8 @@ class _FlowHistoryLoginState extends ConsumerState<_FlowHistoryLogin> {
                       )
                     : Text(
                         widget.onSaved == null
-                            ? 'Check and save'
-                            : 'Sign in and send workout',
+                            ? context.l10n.checkAndSave
+                            : context.l10n.signInAndSendWorkout,
                       ),
               ),
             ),

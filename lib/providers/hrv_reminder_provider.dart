@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:ui' as ui;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -13,6 +12,7 @@ import '../services/polar_h10_service.dart';
 import '../db/database.dart' show HrvPostReminder;
 import 'database_provider.dart';
 import 'hrv_training_provider.dart';
+import 'locale_provider.dart';
 
 /// The platform gateway. Tests override it with a fake.
 final localNotificationGatewayProvider = Provider<LocalNotificationGateway>((
@@ -21,7 +21,7 @@ final localNotificationGatewayProvider = Provider<LocalNotificationGateway>((
   if (!(Platform.isIOS || Platform.isAndroid)) {
     return NoopNotificationGateway();
   }
-  final language = ui.PlatformDispatcher.instance.locale.languageCode;
+  final language = ref.read(appLocaleProvider).languageCode;
   return FlutterLocalNotificationGateway(language: language);
 });
 
@@ -45,7 +45,7 @@ final hrvReminderCoordinatorProvider = Provider<HrvPostReminderCoordinator>((
     gateway: ref.watch(localNotificationGatewayProvider),
     sensorReady: ref.watch(hrvSensorReadyProvider),
     training: ref.watch(hrvTrainingServiceProvider),
-    language: ui.PlatformDispatcher.instance.locale.languageCode,
+    language: ref.read(appLocaleProvider).languageCode,
   );
 });
 

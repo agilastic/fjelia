@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'dart:async';
 
 import 'package:fl_chart/fl_chart.dart';
@@ -44,9 +46,9 @@ class _FormState extends ConsumerState<TrainingFormCard> {
     final last = points.lastOrNull;
     final colors = [loadBlue, loadRed, mint];
     final status = !history.hasValue && history.isLoading
-        ? 'Loading'
+        ? context.l10n.loading2
         : !history.hasValue && history.hasError
-        ? 'Unavailable'
+        ? context.l10n.unavailable
         : formStatus(last?.tsb);
     final statusColor = last == null
         ? muted
@@ -68,9 +70,9 @@ class _FormState extends ConsumerState<TrainingFormCard> {
         children: [
           Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: Text(
-                  'FORM · ATL / CTL / TSB',
+                  context.l10n.formAtlCtlTsb2,
                   style: TextStyle(
                     fontSize: 10,
                     color: Color(0xFFBBBBBB),
@@ -81,7 +83,7 @@ class _FormState extends ConsumerState<TrainingFormCard> {
               ),
               if (widget.fullscreen)
                 IconButton(
-                  tooltip: 'Close training form fullscreen',
+                  tooltip: context.l10n.closeTrainingFormFullscreen,
                   constraints: const BoxConstraints.tightFor(
                     width: 36,
                     height: 36,
@@ -92,7 +94,7 @@ class _FormState extends ConsumerState<TrainingFormCard> {
                 )
               else
                 IconButton(
-                  tooltip: 'Expand training form',
+                  tooltip: context.l10n.expandTrainingForm,
                   constraints: const BoxConstraints.tightFor(
                     width: 24,
                     height: 30,
@@ -194,7 +196,7 @@ class _FormState extends ConsumerState<TrainingFormCard> {
               retry: () => ref.invalidate(trainingFormSeriesProvider),
             )
           else if (points.isEmpty)
-            const EmptyState('No training history')
+            EmptyState(context.l10n.noTrainingHistory)
           else
             SizedBox(
               height: chartHeight,
@@ -235,7 +237,7 @@ class _FormState extends ConsumerState<TrainingFormCard> {
                         minIncluded: true,
                         maxIncluded: true,
                         getTitlesWidget: (v, _) => Text(
-                          DateFormat('d/M').format(
+                          DateFormat.Md().format(
                             DateTime(
                               start.year,
                               start.month,
@@ -290,19 +292,19 @@ class _FormState extends ConsumerState<TrainingFormCard> {
               ),
             ),
           const SizedBox(height: 10),
-          const Wrap(
+          Wrap(
             spacing: 10,
             runSpacing: 5,
             children: [
-              LoadLegend('Fitness (CTL)', loadBlue),
-              LoadLegend('Fatigue (ATL)', loadRed),
-              LoadLegend('Form (TSB)', mint),
+              LoadLegend(context.l10n.fitnessCtl, loadBlue),
+              LoadLegend(context.l10n.fatigueAtl, loadRed),
+              LoadLegend(context.l10n.formTsb, mint),
             ],
           ),
           if (last?.historyStart != null) ...[
             const SizedBox(height: 8),
             Tooltip(
-              message: 'Calculated from the first available load record. Days without recorded load count as zero; earlier training is unknown.',
+              message: context.l10n.calculatedFromTheFirstAvailable,
               child: Text(
                 'History since ${DateFormat.yMMMd().format(last!.historyStart!)}${last.historyDays! < 42 ? ' · building baseline' : ''}',
                 style: loadCaption,
@@ -379,13 +381,13 @@ class _TrainingFormFullscreenPageState
 
 // Form status label thresholds.
 String formStatus(double? tsb) => tsb == null
-    ? 'No history'
+    ? tr.noHistory
     : tsb > 15
-    ? 'Fresh'
+    ? tr.fresh
     : tsb > 5
-    ? 'Optimal'
+    ? tr.optimal
     : tsb > -10
-    ? 'Neutral'
+    ? tr.neutral
     : tsb > -20
-    ? 'Tired'
-    : 'Very Fatigued';
+    ? tr.tired
+    : tr.veryFatigued;

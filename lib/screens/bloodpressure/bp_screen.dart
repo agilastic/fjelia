@@ -1,4 +1,7 @@
+import '../../l10n/formats.dart';
+import '../../l10n/l10n_ext.dart';
 import '../../providers/blood_pressure_insights_provider.dart';
+
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -45,18 +48,20 @@ class _BpState extends ConsumerState<BpScreen> {
             start.day + (period == BpPeriod.week ? 7 : 1),
           );
     final today = DateUtils.dateOnly(DateTime.now());
-    final state=ref.watch(bloodPressureInsightsProvider((start:start,end:end,period:period)));
-    final bp=state.valueOrNull?.summary;
-    final buckets=state.valueOrNull?.buckets??<BpVariationBucket>[];
+    final state = ref.watch(
+      bloodPressureInsightsProvider((start: start, end: end, period: period)),
+    );
+    final bp = state.valueOrNull?.summary;
+    final buckets = state.valueOrNull?.buckets ?? <BpVariationBucket>[];
     final periodLabel = period == BpPeriod.month
-        ? DateFormat('MMMM yyyy').format(start)
+        ? DateFormat.yMMMM().format(start)
         : period == BpPeriod.week
-        ? '${DateFormat('d MMM').format(start)} – ${DateFormat('d MMM').format(DateTime(end.year, end.month, end.day - 1))}'
+        ? '${DateFormat.MMMd().format(start)} – ${DateFormat.MMMd().format(DateTime(end.year, end.month, end.day - 1))}'
         : DateUtils.isSameDay(d, today)
-        ? 'Today'
+        ? context.l10n.today
         : dayText(d);
     return SheetPage(
-      title: 'BLOOD PRESSURE INSIGHTS',
+      title: context.l10n.bloodPressureInsights,
       showBack: false,
       titleSize: 12,
       backgroundColor: panel,
@@ -77,9 +82,9 @@ class _BpState extends ConsumerState<BpScreen> {
                   children: [
                     Text(
                       period == BpPeriod.week
-                          ? 'WEEKLY AVG'
+                          ? context.l10n.weeklyAvg
                           : period == BpPeriod.month
-                          ? 'MONTHLY AVG'
+                          ? context.l10n.monthlyAvg
                           : DateUtils.isSameDay(d, today)
                           ? "TODAY’S READING"
                           : dayText(d),
@@ -101,12 +106,12 @@ class _BpState extends ConsumerState<BpScreen> {
                     ),
                     Text(
                       bp == null
-                          ? 'No measurements'
+                          ? context.l10n.noMeasurements
                           : bp.avgSystolic >= 140
-                          ? 'HIGH'
+                          ? context.l10n.high2
                           : bp.avgSystolic >= 120
-                          ? 'ELEVATED'
-                          : 'NORMAL',
+                          ? context.l10n.elevated
+                          : context.l10n.normal,
                       style: const TextStyle(fontSize: 10, color: mint),
                     ),
                     const SizedBox(height: 18),
@@ -119,11 +124,11 @@ class _BpState extends ConsumerState<BpScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               StatPair(
-                'SYSTOLIC',
+                context.l10n.systolic2,
                 bp == null ? '—' : '${bp.minSystolic}–${bp.maxSystolic}',
               ),
               StatPair(
-                'DIASTOLIC',
+                context.l10n.diastolic2,
                 bp == null ? '—' : '${bp.minDiastolic}–${bp.maxDiastolic}',
               ),
             ],
@@ -155,15 +160,18 @@ class _BpState extends ConsumerState<BpScreen> {
                   ],
                 ),
                 const SizedBox(height: 8),
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Icon(Icons.horizontal_rule, color: mint, size: 18),
-                    Text(' Sys', style: TextStyle(fontSize: 11, color: muted)),
+                    Text(
+                      context.l10n.sys,
+                      style: TextStyle(fontSize: 11, color: muted),
+                    ),
                     SizedBox(width: 12),
                     Icon(Icons.horizontal_rule, color: Colors.orange, size: 18),
                     Text(
-                      ' Dia · mmHg',
+                      context.l10n.diaMmhg,
                       style: TextStyle(fontSize: 11, color: muted),
                     ),
                   ],
@@ -171,7 +179,7 @@ class _BpState extends ConsumerState<BpScreen> {
                 Row(
                   children: [
                     IconButton(
-                      tooltip: 'Previous blood-pressure period',
+                      tooltip: context.l10n.previousBloodPressurePeriod,
                       onPressed: () => setState(() => offset++),
                       icon: const Icon(Icons.chevron_left),
                     ),
@@ -182,7 +190,7 @@ class _BpState extends ConsumerState<BpScreen> {
                       ),
                     ),
                     IconButton(
-                      tooltip: 'Next blood-pressure period',
+                      tooltip: context.l10n.nextBloodPressurePeriod,
                       onPressed: offset == 0
                           ? null
                           : () => setState(() => offset--),
@@ -200,11 +208,11 @@ class _BpState extends ConsumerState<BpScreen> {
             ),
           ),
           SectionCard(
-            title: 'Night Dipping',
+            title: context.l10n.nightDipping,
             child: Text(
               bp?.nightDippingPercent == null
-                  ? 'Not enough daytime and nighttime readings'
-                  : '${bp!.nightDippingPercent!.toStringAsFixed(1)}% nocturnal BP reduction',
+                  ? context.l10n.notEnoughDaytimeAndNighttime
+                  : '${bp!.nightDippingPercent!.fixed(1)}% nocturnal BP reduction',
               style: const TextStyle(color: mint),
             ),
           ),

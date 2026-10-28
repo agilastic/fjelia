@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
@@ -33,7 +35,7 @@ String _volumeText(PartialTotal v, MassUnit unit) {
 }
 
 String? _volumeCaption(PartialTotal v) =>
-    v.complete ? null : 'Known for ${v.known} of ${v.of} loaded sets';
+    v.complete ? null : tr.knownForKnownOfOf(v.known, v.of);
 
 Widget _heading(String title) => Padding(
   padding: const EdgeInsets.only(top: 22, bottom: 10),
@@ -82,7 +84,7 @@ Widget _historyButton(
       ),
     ),
     icon: const Icon(Icons.show_chart, size: 18),
-    label: Text('History', semanticsLabel: 'History of $name'),
+    label: Text(context.l10n.history, semanticsLabel: 'History of $name'),
   ),
 );
 
@@ -91,29 +93,29 @@ List<StrengthTile> plannedStrengthTiles(StrengthPlanSummary s, MassUnit unit) {
   return [
     if (d != null)
       StrengthTile(
-        'Estimated duration',
+        tr.estimatedDuration,
         d.minSeconds == d.maxSeconds || (d.maxSeconds - d.minSeconds) < 120
             ? _minutes(d.maxSeconds)
             : '${(d.minSeconds / 60).round()}–${_minutes(d.maxSeconds)}',
-        caption: d.explicit ? 'Session estimate' : 'Calculated range',
+        caption: d.explicit ? tr.sessionEstimate : tr.calculatedRange,
       ),
-    StrengthTile('Exercises', '${s.exercises}'),
+    StrengthTile(tr.exercises, '${s.exercises}'),
     StrengthTile(
-      'Working sets',
+      tr.workingSets,
       '${s.workingSets}',
       caption: s.warmupSets > 0 ? '+ ${s.warmupSets} warm-up' : null,
     ),
     if (s.volume.known > 0)
       StrengthTile(
-        'Estimated external volume',
+        tr.estimatedExternalVolume,
         _volumeText(s.volume, unit),
         caption: _volumeCaption(s.volume),
       )
     else if (s.holdSeconds > 0)
-      StrengthTile('Timed work', formatStrengthSeconds(s.holdSeconds))
+      StrengthTile(tr.timedWork, formatStrengthSeconds(s.holdSeconds))
     else if (s.repsMax > 0)
       StrengthTile(
-        'Repetitions',
+        tr.repetitions,
         s.repsMin == s.repsMax ? '${s.repsMax}' : '${s.repsMin}–${s.repsMax}',
       ),
   ];
@@ -163,7 +165,7 @@ class PlannedStrengthSection extends ConsumerWidget {
           stored ?? await repo.savePlan(owner, plan, expectedRevision: 0);
       live = await repo.startLiveSession(
         stored: saved,
-        title: plan.title ?? 'Strength training',
+        title: plan.title ?? tr.strengthTraining,
       );
     }
     final started = await repo.activityStart(live.activityId) ?? DateTime.now();
@@ -201,11 +203,11 @@ class PlannedStrengthSection extends ConsumerWidget {
     if (async.hasError) {
       final e = async.error;
       return SectionCard(
-        title: 'Exercises',
+        title: context.l10n.exercises,
         child: Text(
           e is StrengthUnreadableException
               ? '${e.message} The workout details above are unaffected.'
-              : 'The exercises could not be loaded.',
+              : context.l10n.theExercisesCouldNotBe,
           style: const TextStyle(color: Colors.white70, fontSize: 13),
         ),
       );
@@ -223,13 +225,13 @@ class PlannedStrengthSection extends ConsumerWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _heading('EXERCISES'),
+          _heading(context.l10n.exercises2),
           SectionCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Text(
-                  'No exercises are planned for this workout yet. The notes above describe it.',
+                Text(
+                  context.l10n.noExercisesArePlannedFor,
                   style: TextStyle(color: Colors.white70, fontSize: 13),
                 ),
                 if (editable) ...[
@@ -239,7 +241,7 @@ class PlannedStrengthSection extends ConsumerWidget {
                     onPressed: () =>
                         _edit(context, const StrengthWorkoutPlan(), revision),
                     icon: const Icon(Icons.add),
-                    label: const Text('Add exercises'),
+                    label: Text(context.l10n.addExercises),
                   ),
                 ],
               ],
@@ -284,13 +286,13 @@ class PlannedStrengthSection extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _heading('STRENGTH SUMMARY'),
+        _heading(context.l10n.strengthSummary),
         StrengthSummaryGrid(tiles: plannedStrengthTiles(summary, unit)),
         if (stored == null && plan.template != null)
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(top: 8),
             child: Text(
-              'From the built-in template. Loads are yours to set; history appears once you log a workout.',
+              context.l10n.fromTheBuiltInTemplate,
               style: TextStyle(fontSize: 11, color: muted),
             ),
           ),
@@ -302,7 +304,7 @@ class PlannedStrengthSection extends ConsumerWidget {
               style: const TextStyle(fontSize: 13, color: Colors.white70),
             ),
           ),
-        _heading('EXERCISES'),
+        _heading(context.l10n.exercises2),
         ...cards,
         if (editable) ...[
           FilledButton.icon(
@@ -317,7 +319,7 @@ class PlannedStrengthSection extends ConsumerWidget {
             label: Text(
               ref.watch(strengthLiveSessionProvider(owner)).valueOrNull == null
                   ? 'Start workout'
-                  : 'Resume workout',
+                  : context.l10n.resumeWorkout,
             ),
           ),
           const SizedBox(height: 8),
@@ -327,7 +329,7 @@ class PlannedStrengthSection extends ConsumerWidget {
             style: _outlined(),
             onPressed: () => _edit(context, plan, revision),
             icon: const Icon(Icons.edit_outlined, size: 18),
-            label: const Text('Edit exercises'),
+            label: Text(context.l10n.editExercises),
           ),
         const SizedBox(height: 8),
         Builder(
@@ -339,7 +341,7 @@ class PlannedStrengthSection extends ConsumerWidget {
                 ShareParams(
                   subject: plan.title,
                   text:
-                      '${plan.title ?? 'Strength workout'}\n\n'
+                      '${plan.title ?? context.l10n.strengthWorkout}\n\n'
                       '${strengthPlanText(plan, unit)}',
                   sharePositionOrigin: box == null
                       ? null
@@ -348,7 +350,7 @@ class PlannedStrengthSection extends ConsumerWidget {
               );
             },
             icon: const Icon(Icons.ios_share, size: 18),
-            label: const Text('Share exercise list'),
+            label: Text(context.l10n.shareExerciseList),
           ),
         ),
       ],
@@ -427,9 +429,11 @@ class _PlannedExerciseCard extends ConsumerWidget {
     final note = accepted == null
         ? null
         : Text(
-            'Load raised from ${formatStrengthLoad(accepted.fromKg, unit)} to '
-            '${formatStrengthLoad(accepted.toKg, unit)} after your review '
-            '(rule v${accepted.ruleVersion}).',
+            context.l10n.loadRaisedFromUnitTo(
+              formatStrengthLoad(accepted.fromKg, unit),
+              formatStrengthLoad(accepted.toKg, unit),
+              accepted.ruleVersion,
+            ),
             style: const TextStyle(fontSize: 11, color: muted),
           );
     if (eval == null ||
@@ -603,23 +607,19 @@ class CompletedStrengthSection extends ConsumerWidget {
     if (!context.mounted) return;
     if (templates.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'No saved strength templates yet. Save one from a planned workout first.',
-          ),
-        ),
+        SnackBar(content: Text(context.l10n.noSavedStrengthTemplatesYet)),
       );
       return;
     }
     final picked = await showDialog<StoredStrengthPlan>(
       context: context,
       builder: (c) => SimpleDialog(
-        title: const Text('Compare with'),
+        title: Text(context.l10n.compareWith),
         children: [
           for (final t in templates)
             SimpleDialogOption(
               onPressed: () => Navigator.pop(c, t),
-              child: Text(t.plan.title ?? 'Untitled template'),
+              child: Text(t.plan.title ?? context.l10n.untitledTemplate),
             ),
         ],
       ),
@@ -652,11 +652,11 @@ class CompletedStrengthSection extends ConsumerWidget {
     if (async.hasError) {
       final e = async.error;
       return SectionCard(
-        title: 'Exercises',
+        title: context.l10n.exercises,
         child: Text(
           e is StrengthUnreadableException
               ? '${e.message} The activity itself is unaffected.'
-              : 'The recorded exercises could not be loaded.',
+              : context.l10n.theRecordedExercisesCouldNot,
           style: const TextStyle(color: Colors.white70, fontSize: 13),
         ),
       );
@@ -680,9 +680,7 @@ class CompletedStrengthSection extends ConsumerWidget {
                     .sessionBaseline(linked);
                 if (!context.mounted) return;
                 if (baseline == null) {
-                  throw StateError(
-                    'The planned workout has no exercises to log from.',
-                  );
+                  throw StateError(context.l10n.thePlannedWorkoutHasNo);
                 }
                 await _open(
                   context,
@@ -723,22 +721,25 @@ class CompletedStrengthSection extends ConsumerWidget {
       children: [
         _heading(
           log.status == StrengthLogStatus.draft
-              ? 'STRENGTH · DRAFT'
+              ? context.l10n.strengthDraft
               : log.incompleteAcknowledged
-              ? 'STRENGTH · FINISHED WITH GAPS'
-              : 'STRENGTH',
+              ? context.l10n.strengthFinishedWithGaps
+              : context.l10n.strength2,
         ),
         StrengthSummaryGrid(
           tiles: [
-            StrengthTile('Exercises performed', '${s.exercises ?? '—'}'),
             StrengthTile(
-              'Completed sets',
+              context.l10n.exercisesPerformed,
+              '${s.exercises ?? '—'}',
+            ),
+            StrengthTile(
+              context.l10n.completedSets,
               '${s.completedSets}',
               caption: other.isEmpty ? null : other.join(' · '),
             ),
             if (s.volume.known > 0)
               StrengthTile(
-                'Known external volume',
+                context.l10n.knownExternalVolume,
                 _volumeText(s.volume, unit),
                 caption: _volumeCaption(s.volume),
               ),
@@ -758,11 +759,11 @@ class CompletedStrengthSection extends ConsumerWidget {
             child: Text(
               log.baseline!.retrospective
                   ? 'Compared with “${log.baseline!.plan.title ?? 'a saved workout'}”, chosen after the workout.'
-                  : 'Compared with the plan as it was when logging started.',
+                  : context.l10n.comparedWithThePlanAs,
               style: const TextStyle(fontSize: 11, color: muted),
             ),
           ),
-        _heading('EXERCISES'),
+        _heading(context.l10n.exercises2),
         for (var i = 0; i < log.exercises.length; i++)
           () {
             final e = log.exercises[i];
@@ -808,7 +809,7 @@ class CompletedStrengthSection extends ConsumerWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 6),
                     child: Text(
-                      'Estimated 1RM ${oneRmText(oneRm, unit)}',
+                      context.l10n.estimated1rmUnit(oneRmText(oneRm, unit)),
                       style: const TextStyle(
                         fontSize: 12,
                         color: Colors.white70,
@@ -829,25 +830,25 @@ class CompletedStrengthSection extends ConsumerWidget {
           }(),
         if (missing.isNotEmpty)
           SectionCard(
-            title: 'Planned, not recorded',
+            title: context.l10n.plannedNotRecorded,
             child: Text(
               missing.map((m) => m.planned!.name).join(', '),
               style: const TextStyle(fontSize: 13, color: Colors.white70),
             ),
           ),
         if (log.notes != null)
-          SectionCard(title: 'Notes', child: Text(log.notes!)),
+          SectionCard(title: context.l10n.notes, child: Text(log.notes!)),
         OutlinedButton.icon(
           style: _outlined(),
           onPressed: () => _open(context, log),
           icon: const Icon(Icons.edit_outlined, size: 18),
-          label: const Text('Edit performance'),
+          label: Text(context.l10n.editPerformance),
         ),
         if (log.baseline == null)
           TextButton(
             style: TextButton.styleFrom(minimumSize: const Size(0, 48)),
             onPressed: () => _compare(context, ref, log),
-            child: const Text('Compare with a saved workout'),
+            child: Text(context.l10n.compareWithASavedWorkout),
           ),
         const SizedBox(height: 12),
       ],
@@ -860,11 +861,8 @@ class CompletedStrengthSection extends ConsumerWidget {
 Future<bool> confirmStrengthUpdate(BuildContext context, WidgetRef ref) async {
   if (!await confirmAction(
     context,
-    'Update strength sessions?',
-    'Upcoming sessions are planned again from today: strength follows your '
-        'race goals on every strength day, with sessions that vary. Completed '
-        'and skipped workouts stay; exercises you changed in an upcoming '
-        'strength session are replaced.',
+    context.l10n.updateStrengthSessions2,
+    context.l10n.upcomingSessionsArePlannedAgain,
   )) {
     return false;
   }
@@ -887,9 +885,8 @@ class StrengthProgrammeUpdateCard extends ConsumerWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Text(
-          'This session uses an earlier strength template. Updated plans '
-          'vary strength by phase and race goal and use every strength day.',
+        Text(
+          context.l10n.thisSessionUsesAnEarlier,
           style: TextStyle(fontSize: 13, color: Colors.white70, height: 1.4),
         ),
         const SizedBox(height: 10),
@@ -899,7 +896,7 @@ class StrengthProgrammeUpdateCard extends ConsumerWidget {
             if (await confirmStrengthUpdate(context, ref)) onUpdated?.call();
           },
           icon: const Icon(Icons.fitness_center, size: 18),
-          label: const Text('Update strength sessions'),
+          label: Text(context.l10n.updateStrengthSessions),
         ),
       ],
     ),

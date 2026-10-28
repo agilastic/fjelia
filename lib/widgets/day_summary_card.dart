@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -23,7 +25,7 @@ class DaySummaryCard extends ConsumerWidget {
         children: [
           Expanded(
             child: _Gauge(
-              'SLEEP',
+              context.l10n.sleep,
               s?.sleep?.score,
               100,
               () => showAppSheet(context, const SleepScreen()),
@@ -31,7 +33,7 @@ class DaySummaryCard extends ConsumerWidget {
           ),
           Expanded(
             child: _Gauge(
-              'ENERGY',
+              context.l10n.energy,
               h?.computedEnergie,
               100,
               () => showAppSheet(context, const BatteryScreen()),
@@ -39,13 +41,14 @@ class DaySummaryCard extends ConsumerWidget {
           ),
           Expanded(
             child: _Gauge(
-              'LOAD',
+              context.l10n.load2,
               s?.strain.score,
               trainingLoadScale(
                 s?.strain.score,
                 ref.watch(trainingLoadProvider).valueOrNull?.optimalHigh,
               ),
               openLoad,
+              isLoad: true,
             ),
           ),
         ],
@@ -55,11 +58,20 @@ class DaySummaryCard extends ConsumerWidget {
 }
 
 class _Gauge extends StatelessWidget {
-  const _Gauge(this.label, this.value, this.max, this.tap);
+  const _Gauge(
+    this.label,
+    this.value,
+    this.max,
+    this.tap, {
+    this.isLoad = false,
+  });
   final String label;
   final num? value;
   final double max;
   final VoidCallback tap;
+
+  /// The training-load gauge shows TRIMP, not a percentage.
+  final bool isLoad;
   @override
   Widget build(BuildContext context) => InkWell(
     onTap: tap,
@@ -75,35 +87,44 @@ class _Gauge extends StatelessWidget {
                 size: const Size(100, 65),
                 painter: _GaugePaint(
                   value == null ? 0 : (value! / max).clamp(0, 1).toDouble(),
-                  label == 'LOAD' ? const Color(0xFF8C9EFF) : Colors.orange,
+                  isLoad ? const Color(0xFF8C9EFF) : Colors.orange,
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: value == null
-                            ? '—'
-                            : label == 'LOAD'
-                            ? valueText(value)
-                            : '${valueText(value)}%',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 19,
-                        ),
+                padding: const EdgeInsets.only(bottom: 3),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      value == null
+                          ? '—'
+                          : isLoad
+                          ? valueText(value)
+                          : '${valueText(value)}%',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 19,
                       ),
-                      if (label == 'LOAD')
-                        const TextSpan(
-                          text: ' TRIMP',
-                          style: TextStyle(
-                            fontSize: 9,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                    ],
-                  ),
+                    ),
+                    // The unit sits centred below the number; the other
+                    // gauges keep the same height so the numbers line up.
+                    SizedBox(
+                      height: 11,
+                      child: isLoad
+                          ? const Text(
+                              'TRIMP',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 9,
+                                fontWeight: FontWeight.w500,
+                                color: muted,
+                                letterSpacing: .6,
+                              ),
+                            )
+                          : null,
+                    ),
+                  ],
                 ),
               ),
             ],

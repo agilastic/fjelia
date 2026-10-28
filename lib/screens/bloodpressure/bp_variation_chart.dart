@@ -1,3 +1,4 @@
+import '../../l10n/l10n_ext.dart';
 import '../../services/blood_pressure_chart_data.dart';
 export '../../services/blood_pressure_chart_data.dart'
     show BpBucketMark, BpPeriod, BpVariationBucket, bpVariationBuckets;
@@ -114,9 +115,9 @@ class _BpVariationChartState extends State<BpVariationChart> {
   Widget build(BuildContext context) {
     final empty = widget.buckets.every((b) => b.readings.isEmpty);
     final graph = empty
-        ? const Center(
+        ? Center(
             child: Text(
-              'No measurements in this period',
+              context.l10n.noMeasurementsInThisPeriod,
               style: TextStyle(color: muted),
             ),
           )
@@ -133,8 +134,8 @@ class _BpVariationChartState extends State<BpVariationChart> {
               Expanded(
                 child: Text(
                   widget.period == BpPeriod.day
-                      ? 'HOURLY VARIATION'
-                      : 'DAILY VARIATION',
+                      ? context.l10n.hourlyVariation
+                      : context.l10n.dailyVariation,
                   style: const TextStyle(
                     color: muted,
                     fontSize: 10,
@@ -144,7 +145,7 @@ class _BpVariationChartState extends State<BpVariationChart> {
               ),
               if (!widget.fullscreen)
                 IconButton(
-                  tooltip: 'Fullscreen blood-pressure chart',
+                  tooltip: context.l10n.fullscreenBloodPressureChart,
                   icon: const Icon(
                     Icons.fullscreen_rounded,
                     size: 21,
@@ -169,8 +170,8 @@ class _BpVariationChartState extends State<BpVariationChart> {
           else
             SizedBox(height: 310, child: graph),
           const SizedBox(height: 8),
-          const Text(
-            'Bars: min–max · line/dots: average · tap or drag to inspect',
+          Text(
+            context.l10n.barsMinMaxLineDots,
             style: TextStyle(fontSize: 10, color: muted),
           ),
           if (widget.buckets.any((b) => b.mark != BpBucketMark.none))
@@ -217,9 +218,10 @@ class _BpInfoBox extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          DateFormat(
-            period == BpPeriod.day ? 'd MMM · HH:00' : 'EEE, d MMM yyyy',
-          ).format(bucket.date),
+          (period == BpPeriod.day
+                  ? DateFormat.MMMd().add_Hm()
+                  : DateFormat.yMMMEd())
+              .format(bucket.date),
           style: const TextStyle(
             fontSize: 12,
             color: Colors.white,
@@ -228,8 +230,8 @@ class _BpInfoBox extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         if (bucket.readings.isEmpty)
-          const Text(
-            'No measurements',
+          Text(
+            context.l10n.noMeasurements,
             style: TextStyle(color: muted, fontSize: 11),
           )
         else ...[
@@ -239,7 +241,7 @@ class _BpInfoBox extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    sys ? 'SYS' : 'DIA',
+                    sys ? context.l10n.sys2 : context.l10n.dia,
                     style: TextStyle(
                       color: sys ? mint : Colors.orange,
                       fontSize: 10,
@@ -247,7 +249,7 @@ class _BpInfoBox extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    '${bucket.average(sys).round()}',
+                    context.l10n.round(bucket.average(sys).round()),
                     style: TextStyle(
                       color: sys ? mint : Colors.orange,
                       fontSize: 18,
@@ -257,7 +259,10 @@ class _BpInfoBox extends StatelessWidget {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      '${bucket.minimum(sys)}–${bucket.maximum(sys)} mmHg',
+                      context.l10n.sysSys2Mmhg(
+                        bucket.minimum(sys),
+                        bucket.maximum(sys),
+                      ),
                       textAlign: TextAlign.right,
                       style: const TextStyle(
                         color: Colors.white70,
@@ -270,7 +275,7 @@ class _BpInfoBox extends StatelessWidget {
             ),
           const SizedBox(height: 4),
           Text(
-            '${bucket.readings.length} readings · average / min–max',
+            context.l10n.lengthReadingsAverageMinMax(bucket.readings.length),
             style: const TextStyle(color: muted, fontSize: 9),
           ),
         ],
@@ -302,7 +307,9 @@ class BpChartFullscreen extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        'BLOOD PRESSURE · ${period.name.toUpperCase()} · mmHg',
+                        context.l10n.bloodPressureTouppercaseMmhg(
+                          period.name.toUpperCase(),
+                        ),
                         style: const TextStyle(
                           fontSize: 12,
                           color: Colors.white70,
@@ -311,7 +318,7 @@ class BpChartFullscreen extends StatelessWidget {
                       ),
                     ),
                     IconButton(
-                      tooltip: 'Close fullscreen blood-pressure chart',
+                      tooltip: context.l10n.closeFullscreenBloodPressureChart,
                       icon: const Icon(Icons.close),
                       onPressed: () => Navigator.of(context).pop(),
                     ),
@@ -482,7 +489,7 @@ class _VariationPainter extends CustomPainter {
         final label = period == BpPeriod.day
             ? '${b.date.hour}h'
             : period == BpPeriod.week
-            ? DateFormat('EE').format(b.date)
+            ? DateFormat.E().format(b.date)
             : '${b.date.day}';
         text(label, Offset(x - 6, plot.bottom + 9), muted);
       }

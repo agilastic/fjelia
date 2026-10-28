@@ -1,3 +1,4 @@
+import '../../l10n/l10n_ext.dart';
 import '../../theme/activity_colors.dart';
 import '../../models/calendar_activity.dart';
 
@@ -27,17 +28,19 @@ class CalendarActivityBubbles extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 1.5),
               child: Semantics(
-                label:
-                    '${activity.title}, ${activity.sport}, ${activity.statusLabel.toLowerCase()}',
+                label: context.l10n.titleSportTolowercase(
+                  activity.title,
+                  activity.sport,
+                  activity.statusLabel.toLowerCase(),
+                ),
                 // A cancelled session is a small cross in its sport's colour,
                 // not a dot: it is still in the plan, but it will not happen.
                 child: activity.skipped
                     ? Icon(
                         Icons.close,
                         size: 9,
-                        color: calendarActivityColor(
-                          activity,
-                        ).withValues(alpha: .6),
+                        color: calendarActivityColor(activity)
+                            .withValues(alpha: .6),
                       )
                     : Container(
                         width: 6,

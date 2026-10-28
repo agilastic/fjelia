@@ -1,0 +1,3110 @@
+{
+  "@@locale": "sk",
+  "language": "Jazyk",
+  "languageSystem": "Predvolené systémom",
+  "settings": "Nastavenia",
+  "profile": "Profil",
+  "training": "Tréning",
+  "weatherLocation": "Počasie a poloha",
+  "display": "Zobrazenie",
+  "connections": "Pripojenia",
+  "aiAndMore": "AI a ďalšie",
+  "system": "Systém",
+  "runSetupAgain": "Spustiť nastavenie znova",
+  "runSetupAgainSubtitle": "Účty, cieľ pretekov a tréningový plán",
+  "back": "Späť",
+  "close": "Zavrieť",
+  "dataExport": "Export údajov",
+  "dataExportSubtitle": "Export CSV, zálohovanie a obnova",
+  "developer": "Vývojár",
+  "developerSubtitle": "Režim ladenia, diagnostika",
+  "debug": "Ladenie",
+  "debugMode": "Režim ladenia",
+  "debugModeSubtitle": "Zobrazí kartu DEBUG",
+  "support": "Podpora",
+  "reportBug": "Nahlásiť chybu",
+  "aiCoach": "AI tréner",
+  "enableAiCoach": "Zapnúť AI trénera",
+  "onDeviceAiOrCloud": "AI v zariadení alebo cloudový poskytovateľ",
+  "provider": "Poskytovateľ",
+  "model": "Model",
+  "chatAndAiBriefingsUse": "Chat a AI prehľady používajú Apple Intelligence v tomto zariadení. Nie je potrebný kľúč API. Ak model nie je k dispozícii, prehľady zobrazia súhrn bez AI.",
+  "briefing": "Prehľad",
+  "useAppleIntelligenceForBriefings": "Použiť Apple Intelligence pre prehľady",
+  "useOnDeviceAiFor": "Použiť AI v zariadení pre prehľady a ponechať vybraného poskytovateľa pre chat.",
+  "healthDataSharing": "Zdieľanie zdravotných údajov",
+  "askOncePerChatSession": "Opýtať sa raz za reláciu chatu",
+  "otherwiseAskBeforeEveryCloud": "Inak sa opýtať pred každou cloudovou správou",
+  "reportABug": "Nahlásiť chybu",
+  "weatherData": "Údaje o počasí",
+  "openSourceLibraries": "Knižnice s otvoreným kódom",
+  "license": "Licencia",
+  "licenses": "Licencie",
+  "apiKey": "Kľúč API",
+  "saveApiKey": "Uložiť kľúč API",
+  "feedbackBugReport": "Spätná väzba a hlásenie chyby",
+  "reportSentThankYou": "Hlásenie odoslané. Ďakujeme!",
+  "weReadEveryMessageIf": "Čítame každú správu. Ak ste uviedli e-mail, môžete dostať odpoveď.",
+  "done": "Hotovo",
+  "shareAnIdeaSuggestAn": "Podeľte sa o nápad, navrhnite zlepšenie alebo nám napíšte, čo sa stalo a čo ste očakávali.",
+  "whatHappenedAndWhatDid": "Čo sa stalo a čo ste očakávali?",
+  "pleaseLeaveOutPasswordsApi": "Neuvádzajte heslá, kľúče API ani osobné zdravotné údaje.",
+  "includeDiagnostics": "Pripojiť diagnostiku",
+  "optionalLogsMayContainAccount": "Voliteľné. Záznamy môžu obsahovať údaje o účte alebo zdraví. Pred odoslaním ich skontrolujte nižšie.",
+  "diagnosticsPreview": "NÁHĽAD DIAGNOSTIKY",
+  "sendingSharesYourEmailSubject": "Odoslaním sa zdieľa váš e-mail, predmet, správa a vybraná diagnostika s podporou Fjelia na cloud.ebeling-hoppe.de.",
+  "copyReport": "Kopírovať hlásenie",
+  "shareReport": "Zdieľať hlásenie",
+  "appleHealth": "Apple Zdravie",
+  "connectedServices": "Pripojené služby",
+  "hiloBloodPressureBle": "Hilo krvný tlak (BLE)",
+  "writeHeartDataToApple": "Zapisovať údaje o srdci do Apple Zdravie",
+  "writeWeightDataToApple": "Zapisovať údaje o hmotnosti do Apple Zdravie",
+  "renphoScaleBle": "Váha Renpho (BLE)",
+  "polarH10HrvStrapBle": "Polar H10 (hrudný pás HRV, BLE)",
+  "dataSourcePriority": "Priorita zdrojov údajov",
+  "whenMultipleSourcesProvideThe": "Ak viac zdrojov poskytuje rovnakú metriku, vyhrá vyššie postavený. Poradie zmeníte presunutím.",
+  "resetToDefault": "Obnoviť predvolené",
+  "disconnect": "Odpojiť",
+  "healthPage": "Stránka Zdravie",
+  "loadPage": "Stránka Záťaž",
+  "healthMonitor": "Monitor zdravia",
+  "hrZones": "Zóny TF",
+  "t30MinTtAvailableSync": "K dispozícii je 30-min TT – synchronizovať zóny TF",
+  "lt2Lt2BpmAt": "LT2 {lt2} bpm · {at}",
+  "@lt2Lt2BpmAt": {
+    "placeholders": {
+      "lt2": {
+        "type": "Object"
+      },
+      "at": {
+        "type": "Object"
+      }
+    }
+  },
+  "syncLabel": "SYNCH",
+  "autoadjust": "AUTOMATICKÉ PRISPÔSOBENIE",
+  "zoneI": "Zóna {i}",
+  "@zoneI": {
+    "placeholders": {
+      "i": {
+        "type": "Object"
+      }
+    }
+  },
+  "hrZones2": "ZÓNY TF",
+  "ageRound": "vek {round}",
+  "@ageRound": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "basics": "Základné údaje",
+  "updateWaistMonthlyUsedFor": "ⓘ Aktualizujte obvod pásu mesačne – používa sa na odhad viscerálneho tuku.",
+  "alcohol": "Alkohol",
+  "t1Drink033L": "1 nápoj ≈ 0,33 l piva / 0,2 l vína / 4 cl liehoviny",
+  "clinicalLabsOptional": "Laboratórne hodnoty (voliteľné)",
+  "glycemic": "Glykémia",
+  "optimalForLongevity48": "Optimum pre dlhovekosť: 4,8–5,4 % · Prediabetes: 5,7–6,4 %",
+  "lipids": "Lipidy",
+  "apobReplacesLdlWhenBoth": "ApoB nahrádza LDL, keď sú zadané oba.",
+  "inflammationKidney": "Zápal a obličky",
+  "changesAreSavedAutomatically": "Zmeny sa ukladajú automaticky",
+  "optionalTotalClimbingForThis": "Voliteľné celkové prevýšenie pre tieto preteky.",
+  "moreAboutThisEvent": "Viac o tomto podujatí",
+  "distanceOfDistancekmKm": "Vzdialenosť {distanceKm} km?",
+  "@distanceOfDistancekmKm": {
+    "placeholders": {
+      "distanceKm": {
+        "type": "Object"
+      }
+    }
+  },
+  "keepDistancekmKm": "Ponechať {distanceKm} km",
+  "@keepDistancekmKm": {
+    "placeholders": {
+      "distanceKm": {
+        "type": "Object"
+      }
+    }
+  },
+  "useLikelyKm": "Použiť {likely} km",
+  "@useLikelyKm": {
+    "placeholders": {
+      "likely": {
+        "type": "Object"
+      }
+    }
+  },
+  "thisBackupContainsNoCalendar": "Táto záloha neobsahuje žiadne aktivity z kalendára.",
+  "activities": "Aktivity",
+  "exportActivitiesCsv": "Exportovať aktivity do CSV",
+  "backupRestore": "Zálohovanie a obnova",
+  "backup": "Záloha",
+  "restoreFromBackup": "Obnoviť zo zálohy",
+  "backupRestoredRestartTheApp": "Záloha bola obnovená. Reštartujte aplikáciu, aby sa načítali všetky nastavenia.",
+  "raceGoals": "Ciele pretekov",
+  "yourActivities": "Vaše aktivity",
+  "usedByAiCoachAnd": "Používa ho AI tréner a tréningový plán. Športy v pláne sú označené ✦.",
+  "calendarWeekStart": "Začiatok týždňa v kalendári",
+  "planDefaultView": "Predvolené zobrazenie plánu",
+  "weeklySchedule": "Týždenný rozvrh",
+  "trainingdaysperweekTrainingDaysTapTo": "{trainingDaysPerWeek, plural, one{{trainingDaysPerWeek} tréningový deň} few{{trainingDaysPerWeek} tréningové dni} other{{trainingDaysPerWeek} tréningových dní}} · ťuknutím prepnete Tréning / Odpočinok / Sila",
+  "@trainingdaysperweekTrainingDaysTapTo": {
+    "placeholders": {
+      "trainingDaysPerWeek": {
+        "type": "int"
+      }
+    }
+  },
+  "updatePlanToThisSchedule": "Aktualizovať plán podľa tohto rozvrhu",
+  "updateStrengthSessions": "Aktualizovať silové tréningy",
+  "sessionsPerDay": "Tréningy za deň",
+  "canYouFitTwoWorkouts": "Zvládnete dva tréningy v jeden deň?",
+  "strengthLoadUnit": "Jednotka silovej záťaže",
+  "weightsThemselvesAreSetIn": "Samotné váhy nastavujete v každom tréningu a pamätajú sa z vašej histórie.",
+  "hoursAvailableWeek": "Dostupné hodiny / týždeň",
+  "hoursperweekHWeek": "{hoursPerWeek} h / týždeň",
+  "@hoursperweekHWeek": {
+    "placeholders": {
+      "hoursPerWeek": {
+        "type": "Object"
+      }
+    }
+  },
+  "hoursperweekH": "{hoursPerWeek} h",
+  "@hoursperweekH": {
+    "placeholders": {
+      "hoursPerWeek": {
+        "type": "Object"
+      }
+    }
+  },
+  "heatAcclimation": "Aklimatizácia na teplo",
+  "showHeatAcclimation": "Zobraziť aklimatizáciu na teplo",
+  "weatherEvaluatedAgainstAConfigurable": "Počasie sa vyhodnocuje pre nastaviteľné miesto.",
+  "trainingPlan": "Tréningový plán",
+  "regenerateReplacesFutureSessionsAnd": "Opätovné vytvorenie nahradí budúce tréningy a prebuduje plán od dnes s aktuálnymi nastaveniami.",
+  "valueUpcomingWorkoutsGenerated": "{value, plural, one{Vytvorený {value} nadchádzajúci tréning} few{Vytvorené {value} nadchádzajúce tréningy} other{Vytvorených {value} nadchádzajúcich tréningov}}",
+  "@valueUpcomingWorkoutsGenerated": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "generationFailedCheckYourRace": "Vytvorenie zlyhalo. Skontrolujte cieľ pretekov a skúste to znova.",
+  "deleteAllWorkouts": "Odstrániť všetky tréningy",
+  "changesAreSavedAutomatically2": "✓ Zmeny sa ukladajú automaticky",
+  "countUpcomingWorkoutsGenerated": "{count, plural, one{Vytvorený {count} nadchádzajúci tréning} few{Vytvorené {count} nadchádzajúce tréningy} other{Vytvorených {count} nadchádzajúcich tréningov}}",
+  "@countUpcomingWorkoutsGenerated": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importRaceGoalsFromGarmin": "Importovať ciele pretekov z Garminu",
+  "addRaceGoal": "Pridať cieľ pretekov",
+  "priorityTouppercase": "Priorita {toUpperCase}",
+  "@priorityTouppercase": {
+    "placeholders": {
+      "toUpperCase": {
+        "type": "Object"
+      }
+    }
+  },
+  "goalsAreSharedWithAi": "Ciele sa zdieľajú s AI trénerom. Priorita A, B alebo C určuje, ako plán váži vaše preteky voči sebe.",
+  "deletingWorkouts": "Odstraňovanie tréningov",
+  "cityOrTown": "Mesto alebo obec",
+  "eGHannoverOrPalma": "napr. Hannover alebo Palma",
+  "noCitiesFoundTryA": "Nenašli sa žiadne mestá. Skúste blízku obec.",
+  "chooseTheLocationForThe": "Vyberte miesto pre predpoveď plánu, radar a aklimatizáciu na teplo. Počasie funguje aj pri vypnutej aklimatizácii.",
+  "none": "Žiadna",
+  "disableLocalWeatherAndLocation": "Vypnúť miestne počasie a požiadavky na polohu",
+  "currentLocation": "Aktuálna poloha",
+  "followYourDeviceLocation": "Sledovať polohu zariadenia",
+  "fixedLocation": "Pevná poloha",
+  "chooseACityOrEnter": "Vyberte mesto alebo zadajte súradnice",
+  "chooseCity": "Vybrať mesto",
+  "coordinates": "Súradnice",
+  "latitude": "Zemepisná šírka",
+  "longitude": "Zemepisná dĺžka",
+  "saveLocation": "Uložiť polohu",
+  "refreshCurrentLocation": "Obnoviť aktuálnu polohu",
+  "citySearchOpenMeteoGeonames": "Vyhľadávanie miest: Open-Meteo / GeoNames",
+  "cityNamesOpenstreetmap": "Názvy miest: © OpenStreetMap",
+  "energy": "ENERGIA",
+  "currentEnergy": "AKTUÁLNA ENERGIA",
+  "dailyTimeline": "DENNÝ PRIEBEH",
+  "valueValue2": "{value} → {value2}",
+  "@valueValue2": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      },
+      "value2": {
+        "type": "Object"
+      }
+    }
+  },
+  "energy2": "Energia",
+  "noData": "Žiadne údaje",
+  "bloodPressureInsights": "PREHĽAD KRVNÉHO TLAKU",
+  "sys": " Sys",
+  "diaMmhg": " Dia · mmHg",
+  "previousBloodPressurePeriod": "Predchádzajúce obdobie krvného tlaku",
+  "nextBloodPressurePeriod": "Nasledujúce obdobie krvného tlaku",
+  "nightDipping": "Nočný pokles",
+  "noMeasurementsInThisPeriod": "V tomto období nie sú žiadne merania",
+  "fullscreenBloodPressureChart": "Graf krvného tlaku na celú obrazovku",
+  "barsMinMaxLineDots": "Stĺpce: min–max · čiara/body: priemer · ťuknutím alebo ťahaním si zobrazíte detail",
+  "noMeasurements": "Žiadne merania",
+  "round": "{round}",
+  "@round": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "sysSys2Mmhg": "{sys}–{sys2} mmHg",
+  "@sysSys2Mmhg": {
+    "placeholders": {
+      "sys": {
+        "type": "Object"
+      },
+      "sys2": {
+        "type": "Object"
+      }
+    }
+  },
+  "lengthReadingsAverageMinMax": "{length, plural, one{{length} meranie} few{{length} merania} other{{length} meraní}} · priemer / min–max",
+  "@lengthReadingsAverageMinMax": {
+    "placeholders": {
+      "length": {
+        "type": "int"
+      }
+    }
+  },
+  "bloodPressureTouppercaseMmhg": "KRVNÝ TLAK · {toUpperCase} · mmHg",
+  "@bloodPressureTouppercaseMmhg": {
+    "placeholders": {
+      "toUpperCase": {
+        "type": "Object"
+      }
+    }
+  },
+  "closeFullscreenBloodPressureChart": "Zavrieť graf krvného tlaku na celú obrazovku",
+  "chooseScale": "Vybrať váhu",
+  "noScalesFoundStepOn": "Nenašli sa žiadne váhy. Postavte sa na váhu a skúste to znova.",
+  "nameRssiDbm": "{name} · {rssi} dBm",
+  "@nameRssiDbm": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      },
+      "rssi": {
+        "type": "Object"
+      }
+    }
+  },
+  "renphoSaved": "RENPHO uložená:",
+  "renphoScaleBle2": "Váha RENPHO (BLE)",
+  "changeMeasurementType": "Zmeniť typ merania",
+  "addMeasurement": "Pridať meranie",
+  "whatAreYouMeasuring": "Čo meriate?",
+  "chooseAnotherMeasurement": "Vybrať iné meranie",
+  "saveMeasurement": "Uložiť meranie",
+  "skip": "Preskočiť",
+  "connectHiloService": "Pripojiť službu Hilo",
+  "connectHilo": "Pripojiť Hilo",
+  "connectCoros": "Pripojiť Coros",
+  "europe": "Európa",
+  "unitedStates": "USA",
+  "asia": "Ázia",
+  "bluetoothBloodPressure": "Bluetooth · krvný tlak",
+  "cloudCuffData": "Cloud · údaje z manžety",
+  "apiSync": "Synchronizácia cez API",
+  "bluetoothHrvStrap": "Bluetooth · hrudný pás HRV",
+  "accesslinkApi": "AccessLink API",
+  "systemHealthData": "Systémové zdravotné údaje",
+  "cloudScaleHistory": "Cloud · história váhy",
+  "bluetoothWeightBody": "Bluetooth · hmotnosť a telo",
+  "connectYourDevices": "Pripojte svoje zariadenia",
+  "continueLabel": "Pokračovať",
+  "connectGarmin": "Pripojiť Garmin",
+  "connectAppleHealth": "Pripojiť Apple Zdravie",
+  "dataSynced": "ÚDAJE SYNCHRONIZOVANÉ",
+  "pairHiloPod": "Spárovať Hilo Pod",
+  "chooseStrap": "Vybrať pás",
+  "namePaired": "{name} je spárovaný.",
+  "@namePaired": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "pairPolarH10": "Spárovať Polar H10",
+  "forget": "Zabudnúť",
+  "sendWorkoutToPolar": "Odoslať tréning do Polaru",
+  "connectPolar": "Pripojiť Polar",
+  "signInWithPolarFlow": "Prihlásiť sa cez Polar Flow",
+  "syncsSleepStagesHrvResting": "Synchronizuje fázy spánku · HRV · pokojovú TF · tréningy · kroky",
+  "savedForV": "Uložené pre {v}",
+  "@savedForV": {
+    "placeholders": {
+      "v": {
+        "type": "Object"
+      }
+    }
+  },
+  "remove": "Odstrániť",
+  "polarEMail": "E-mail Polar",
+  "polarPassword": "Heslo Polar",
+  "pairRenphoScale": "Spárovať váhu RENPHO",
+  "connectRenpho": "Pripojiť Renpho",
+  "connectSuunto": "Pripojiť Suunto",
+  "smsSentToTrim": "SMS odoslaná na {trim}",
+  "@smsSentToTrim": {
+    "placeholders": {
+      "trim": {
+        "type": "Object"
+      }
+    }
+  },
+  "resendSms": "Odoslať SMS znova",
+  "retryLoadingPreferences": "Skúsiť znova načítať predvoľby",
+  "weeklyTrainingTimeTostringasfixedH": "TÝŽDENNÝ ČAS TRÉNINGU · {toStringAsFixed} h",
+  "@weeklyTrainingTimeTostringasfixedH": {
+    "placeholders": {
+      "toStringAsFixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "tapADayToCycle": "Ťuknutím na deň prepnete Tréning / Odpočinok / Sila.",
+  "doubleDayOk": "Dvojitý deň ok",
+  "birthYearOptional": "Rok narodenia (voliteľné)",
+  "addAnother": "Pridať ďalší",
+  "knowYourBodyTrainSmarter": "Poznajte svoje telo.\nTrénujte múdrejšie.",
+  "allYourHealthDevicesOne": "Všetky vaše zdravotné zariadenia. Jeden inteligentný prehľad.",
+  "areYouReadyToTrain": "Ste dnes pripravení trénovať?",
+  "hrvRecoveryScoreRestingHr": "HRV · Skóre regenerácie · Pokojová TF",
+  "didYouActuallyRecoverLast": "Naozaj ste sa v noci zregenerovali?",
+  "sleepStagesDeepSleepSpo": "Fázy spánku · Hlboký spánok · SpO₂",
+  "isYourBloodPressureUnder": "Je váš krvný tlak pod kontrolou?",
+  "continuousBpNightDippingTrends": "Nepretržitý krvný tlak · Nočný pokles · Trendy",
+  "howHardDidYouPush": "Ako tvrdo ste tento týždeň trénovali?",
+  "trainingLoadTrimpStrainScore": "Tréningová záťaž · TRIMP · Skóre záťaže",
+  "isYourBodyCompositionImproving": "Zlepšuje sa vaše zloženie tela?",
+  "weightBodyFatMuscleMass": "Hmotnosť · Telesný tuk · Svalová hmota",
+  "getStarted": "Začať",
+  "yourDataStaysOnYour": "Vaše údaje zostávajú vo vašom zariadení. Vždy súkromné.",
+  "bodyScale": "Osobná váha",
+  "bodyComposition": "Zloženie tela",
+  "sleep": "SPÁNOK",
+  "sleepPerformance": "VÝKON SPÁNKU",
+  "sleepHistory": "História spánku",
+  "labelValue": "{label}: {value}",
+  "@labelValue": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      },
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "lessLabel": "Menej {label}",
+  "@lessLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "moreLabel": "Viac {label}",
+  "@moreLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "gymMode": "Režim posilňovne",
+  "finishWorkout": "Ukončiť tréning",
+  "workoutActions": "Akcie tréningu",
+  "discardWorkout": "Zahodiť tréning",
+  "allSetsRecorded": "Všetky série zaznamenané",
+  "reviewSets": "Skontrolovať série",
+  "rest": "ODPOČINOK",
+  "plannedResttarget": "Plánované {restTarget}",
+  "@plannedResttarget": {
+    "placeholders": {
+      "restTarget": {
+        "type": "Object"
+      }
+    }
+  },
+  "startSet": "Začať sériu",
+  "seconds": "Sekundy",
+  "previousSet": "Predchádzajúca séria",
+  "allSets": "Všetky série",
+  "nextSet": "Ďalšia séria",
+  "everySetIsSavedAs": "Každá séria sa ukladá priebežne. Túto obrazovku môžete kedykoľvek zavrieť a pokračovať z plánovaného tréningu.",
+  "cancel": "Zrušiť",
+  "apply": "Použiť",
+  "effortScale": "Stupnica námahy",
+  "setType": "Typ série",
+  "reps": "Opakovania",
+  "range": "Rozsah",
+  "time": "Čas",
+  "t45Or100": "45 alebo 1:00",
+  "blankWhenNotSet": "Prázdne, ak nie je nastavené",
+  "redBand": "Červená guma",
+  "t90Or130": "90 alebo 1:30",
+  "blankWhenUnknown": "Prázdne, ak nie je známe",
+  "usePlannedLoad": "Použiť plánovanú záťaž",
+  "blankWhenNotMeasured": "Prázdne, ak nie je merané",
+  "exercise": "Cvik",
+  "changingTheLoadConventionStarts": "Zmena konvencie záťaže začne pre tento cvik samostatnú históriu.",
+  "barbellMachine": "Činka, stroj…",
+  "load": "Záťaž",
+  "loadRefersTo": "Záťaž sa vzťahuje na",
+  "t2ForAPair": "2 pre pár",
+  "repetitions": "Opakovania",
+  "availablePlatesOrDumbbells": "Dostupné kotúče alebo jednoručky",
+  "rememberForThisEquipment": "Zapamätať pre toto vybavenie",
+  "findOrNameAnExercise": "Nájsť alebo pomenovať cvik",
+  "createTrim": "Vytvoriť „{trim}“",
+  "@createTrim": {
+    "placeholders": {
+      "trim": {
+        "type": "Object"
+      }
+    }
+  },
+  "customExercise": "Vlastný cvik",
+  "smallestLoadStep": "Najmenší krok záťaže",
+  "whatRemoved": "{what} odstránené",
+  "@whatRemoved": {
+    "placeholders": {
+      "what": {
+        "type": "Object"
+      }
+    }
+  },
+  "undo": "Vrátiť späť",
+  "retry": "Skúsiť znova",
+  "performance": "Výkon",
+  "addExercise": "Pridať cvik",
+  "finishLog": "Dokončiť záznam",
+  "keepAsDraft": "Ponechať ako koncept",
+  "actionsForName": "Akcie pre {name}",
+  "@actionsForName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "editExercise": "Upraviť cvik",
+  "moveUp": "Posunúť hore",
+  "moveDown": "Posunúť dole",
+  "addSet": "Pridať sériu",
+  "removeLastSet": "Odstrániť poslednú sériu",
+  "saveAsTemplate": "Uložiť ako šablónu",
+  "savedTitleAsATemplate": "„{title}“ uložené ako šablóna. Tento tréning zostane nezmenený, kým ho neuložíte.",
+  "@savedTitleAsATemplate": {
+    "placeholders": {
+      "title": {
+        "type": "Object"
+      }
+    }
+  },
+  "nameSetN": "{name} · Séria {n}",
+  "@nameSetN": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      },
+      "n": {
+        "type": "Object"
+      }
+    }
+  },
+  "nameAllWorkingSets": "{name} · Všetky pracovné série",
+  "@nameAllWorkingSets": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "labelRest": "Odpočinok {label}",
+  "@labelRest": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "secondsOrMSs": "Sekundy alebo m:ss",
+  "applyToAllSets": "Použiť na všetky série",
+  "duplicate": "Duplikovať",
+  "supersetWithNext": "Superséria s ďalším",
+  "circuitWithNext": "Okruh s ďalším",
+  "actionsForSetN": "Akcie pre sériu {n}",
+  "@actionsForSetN": {
+    "placeholders": {
+      "n": {
+        "type": "Object"
+      }
+    }
+  },
+  "editSet": "Upraviť sériu",
+  "duplicateSet": "Duplikovať sériu",
+  "removeSet": "Odstrániť sériu",
+  "labelActions": "Akcie {label}",
+  "@labelActions": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "editRests": "Upraviť pauzy",
+  "ungroup": "Zrušiť zoskupenie",
+  "editExercises": "Upraviť cviky",
+  "unsavedChanges": "Neuložené zmeny",
+  "couldNotSaveError": "Nepodarilo sa uložiť: {error}",
+  "@couldNotSaveError": {
+    "placeholders": {
+      "error": {
+        "type": "Object"
+      }
+    }
+  },
+  "history": "História",
+  "exercises": "Cviky",
+  "noExercisesArePlannedFor": "Pre tento tréning zatiaľ nie sú naplánované žiadne cviky. Opisujú ho poznámky vyššie.",
+  "addExercises": "Pridať cviky",
+  "fromTheBuiltInTemplate": "Z vstavanej šablóny. Záťaž si nastavujete sami; história sa zobrazí po zaznamenaní tréningu.",
+  "shareExerciseList": "Zdieľať zoznam cvikov",
+  "noSavedStrengthTemplatesYet": "Zatiaľ žiadne uložené silové šablóny. Najprv jednu uložte z plánovaného tréningu.",
+  "compareWith": "Porovnať s",
+  "estimated1rmUnit": "Odhadované 1RM {unit}",
+  "@estimated1rmUnit": {
+    "placeholders": {
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "plannedNotRecorded": "Naplánované, nezaznamenané",
+  "notes": "Poznámky",
+  "editPerformance": "Upraviť výkon",
+  "compareWithASavedWorkout": "Porovnať s uloženým tréningom",
+  "sessions": "Tréningy",
+  "radarUnavailableRetry": "Radar nedostupný · Skúsiť znova",
+  "radar": "Radar",
+  "weatherDataByRainviewer": "Údaje o počasí od RainViewer",
+  "openstreetmapContributors": "© prispievatelia OpenStreetMap",
+  "weather": "Počasie",
+  "weatherUnavailableRetry": "Počasie nedostupné · Skúsiť znova",
+  "chooseAFixedLocationIn": "Vyberte pevnú polohu v nastaveniach Počasie a poloha alebo povoľte prístup k polohe pre miestne počasie.",
+  "locationSettings": "Nastavenia polohy",
+  "retryLocation": "Skúsiť polohu znova",
+  "round2": "{round}°",
+  "@round2": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "roundRhRound2Hpa": "{round}% RH · {round2} hPa",
+  "@roundRhRound2Hpa": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      },
+      "round2": {
+        "type": "Object"
+      }
+    }
+  },
+  "wetBulbTostringasfixedC": "Mokrý teplomer {toStringAsFixed}°C",
+  "@wetBulbTostringasfixedC": {
+    "placeholders": {
+      "toStringAsFixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "previousForecastDay": "Predchádzajúci deň predpovede",
+  "nextForecastDay": "Nasledujúci deň predpovede",
+  "daysDayForecast": "{days}-dňová predpoveď",
+  "@daysDayForecast": {
+    "placeholders": {
+      "days": {
+        "type": "Object"
+      }
+    }
+  },
+  "thisProviderCurrentlySuppliesDays": "Tento poskytovateľ momentálne dodáva {days} z {days2} dní predpovede.",
+  "@thisProviderCurrentlySuppliesDays": {
+    "placeholders": {
+      "days": {
+        "type": "Object"
+      },
+      "days2": {
+        "type": "Object"
+      }
+    }
+  },
+  "now": "Teraz",
+  "sunriseSunset": "Východ / západ slnka",
+  "keyKey2": "☀ {key}   ☾ {key2}",
+  "@keyKey2": {
+    "placeholders": {
+      "key": {
+        "type": "Object"
+      },
+      "key2": {
+        "type": "Object"
+      }
+    }
+  },
+  "use": "Použiť",
+  "exerciseDetailsWereNotProvided": "Zdroj tejto aktivity neposkytol podrobnosti o cvikoch.",
+  "logFromPlan": "Zaznamenať z plánu",
+  "addExerciseDetails": "Pridať podrobnosti o cvikoch",
+  "loadSuggestion": "Návrh záťaže",
+  "applyToThisWorkout": "Použiť na tento tréning",
+  "keepCurrentLoad": "Ponechať aktuálnu záťaž",
+  "setLoadStep": "Nastaviť krok záťaže",
+  "viewSupportingSets": "Zobraziť podporné série",
+  "supportingSets": "Podporné série",
+  "noRecordedSessionsYet": "Zatiaľ žiadne zaznamenané tréningy.",
+  "nameDemonstrationCue": "Ukážka cviku {name}. {cue}",
+  "@nameDemonstrationCue": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      },
+      "cue": {
+        "type": "Object"
+      }
+    }
+  },
+  "noScalesFoundStepOn2": "Nenašli sa žiadne váhy. Postavte sa na váhu a skúste to znova.",
+  "scalePaired": "Váha spárovaná",
+  "ok": "OK",
+  "pairedReadyToMeasure": "✓ Spárované – pripravené na meranie",
+  "chooseHiloCuff": "Vybrať manžetu Hilo",
+  "noCuffFoundWakeYour": "Nenašla sa žiadna manžeta. Zobuďte manžetu a skúste hľadať znova.",
+  "hiloCuffAktiiaC": "Manžeta Hilo (AKTIIA C…)",
+  "onDemandBloodPressureVia": "Krvný tlak na požiadanie cez BLE",
+  "selectHiloPodWristband": "Vybrať Hilo Pod (náramok)",
+  "rescan": "Hľadať znova",
+  "noDevicesFoundTapTo": "Nenašli sa žiadne zariadenia. Ťuknutím na ↻ vyhľadáte znova.",
+  "polarH10SpotHrv": "Polar H10 · Bodové HRV",
+  "aSeparateHrvReadingBefore": "Samostatné meranie HRV pred tréningom alebo po ňom. Tieto merania nenahrádzajú nočné HRV z Garminu ani nemenia vaše skóre pripravenosti.",
+  "wearTheStrapWithMoist": "Pás noste s navlhčenými elektródami. Zostaňte v pokoji a dýchajte normálne. Na porovnávanie používajte rovnakú polohu a dĺžku záznamu. Po tréningu si poznačte, ako dlho ste najprv odpočívali.",
+  "measurement": "Meranie",
+  "posture": "Poloha",
+  "recordingLengthPlus1Min": "Dĺžka záznamu · plus 1 min ustálenia",
+  "t2Minutes": "2 minúty",
+  "t5Minutes": "5 minút",
+  "minutesSinceTrainingEndedOptional": "Minúty od skončenia tréningu (voliteľné)",
+  "sessionOrNotesOptional": "Tréning alebo poznámky (voliteľné)",
+  "connectName": "Pripojiť {name}",
+  "@connectName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "findPolarH10": "Nájsť Polar H10",
+  "signalRssiDbm": "Signál {rssi} dBm",
+  "@signalRssiDbm": {
+    "placeholders": {
+      "rssi": {
+        "type": "Object"
+      }
+    }
+  },
+  "connectedName": "Pripojené: {name}",
+  "@connectedName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "waitingForHeartRateAnd": "Čaká sa na tepovú frekvenciu a intervaly RR. Skontrolujte kontakt pásu.",
+  "startMeasurement": "Spustiť meranie",
+  "cancelMeasurement": "Zrušiť meranie",
+  "spotHrvRmssd": "Bodové HRV · RMSSD",
+  "acceptedLengthUsableIntervalsTostringasfixed": "{accepted}/{length} použiteľných intervalov · {toStringAsFixed} % pokrytie",
+  "@acceptedLengthUsableIntervalsTostringasfixed": {
+    "placeholders": {
+      "accepted": {
+        "type": "Object"
+      },
+      "length": {
+        "type": "Object"
+      },
+      "toStringAsFixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "lnrmssdLnrmssdRawRmssdRawrmssdms": "lnRMSSD: {lnRmssd} · Surové RMSSD: {rawRmssdMs} ms",
+  "@lnrmssdLnrmssdRawRmssdRawrmssdms": {
+    "placeholders": {
+      "lnRmssd": {
+        "type": "Object"
+      },
+      "rawRmssdMs": {
+        "type": "Object"
+      }
+    }
+  },
+  "signalQualityIsTooLow": "Kvalita signálu je príliš nízka na uloženie. Zopakujte meranie s dobrým kontaktom pásu. Vyžaduje sa aspoň 95 % použiteľných intervalov a 90 % pokrytie.",
+  "savedToSpotHrvHistory": "Uložené do histórie bodového HRV.",
+  "newMeasurement": "Nové meranie",
+  "signalScreeningExcludesPoorContact": "Filtrovanie signálu vylučuje slabý kontakt, RR mimo 250–2500 ms a intervaly s odchýlkou viac než 25 % od lokálneho mediánu. Medzery sa nedopĺňajú. Nejde o lekársky test ani samostatné skóre pripravenosti.",
+  "historyLabelLabel2DurationMin": "História · {label} · {label2} · {duration} min",
+  "@historyLabelLabel2DurationMin": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      },
+      "label2": {
+        "type": "Object"
+      },
+      "duration": {
+        "type": "Object"
+      }
+    }
+  },
+  "onlyReadingsWithTheSame": "Spolu sa zobrazujú iba merania s rovnakým kontextom, polohou a dĺžkou.",
+  "noMatchingMeasurementsYet": "Zatiaľ žiadne zodpovedajúce merania.",
+  "tostringasfixedMsRmssdTostringasfixed2Bpm": "{toStringAsFixed} ms RMSSD · {toStringAsFixed2} bpm",
+  "@tostringasfixedMsRmssdTostringasfixed2Bpm": {
+    "placeholders": {
+      "toStringAsFixed": {
+        "type": "Object"
+      },
+      "toStringAsFixed2": {
+        "type": "Object"
+      }
+    }
+  },
+  "exportRrIntervalsCsv": "Exportovať intervaly RR (CSV)",
+  "deleteMeasurement": "Odstrániť meranie",
+  "remindMeToMeasureHrv": "Pripomenúť mi meranie HRV po tréningu",
+  "appleHealthIsNoLonger": "Apple Zdravie už nie je dostupné",
+  "later": "Neskôr",
+  "reconnect": "Pripojiť znova",
+  "gripStrength": "Sila stisku",
+  "leftKg": "Ľavá (kg)",
+  "rightKg": "Pravá (kg)",
+  "lLeftkgRRightkgKg": "Ľ {leftKg} · P {rightKg} kg",
+  "@lLeftkgRRightkgKg": {
+    "placeholders": {
+      "leftKg": {
+        "type": "Object"
+      },
+      "rightKg": {
+        "type": "Object"
+      }
+    }
+  },
+  "notificationsAreOffYouCan": "Upozornenia sú vypnuté. Stále môžete merať z tréningu.",
+  "noRemindersFrom2200": "Žiadne pripomienky od 22:00 do 07:00",
+  "aReminderThatWouldFall": "Pripomienka, ktorá by pripadla na toto obdobie, sa preskočí a neposunie na ráno.",
+  "remindersArriveQuietlyInThe": "Pripomienky prichádzajú ticho do zoznamu upozornení.",
+  "noForecastForThisDay": "Žiadna predpoveď pre tento deň",
+  "fullscreen": "Celá obrazovka",
+  "source": "● {source}",
+  "@source": {
+    "placeholders": {
+      "source": {
+        "type": "Object"
+      }
+    }
+  },
+  "shadedAreaProviderSpread": "Tieňovaná oblasť: rozptyl medzi poskytovateľmi",
+  "temperatureC": "● Teplota °C",
+  "rainMm": "▥ Dážď mm",
+  "uvIndex": "— UV index",
+  "closeFullscreenWeatherChart": "Zavrieť graf počasia na celú obrazovku",
+  "sleepStages": "FÁZY SPÁNKU",
+  "noStageTimelineForThis": "Pre túto noc nie je k dispozícii časová os fáz.",
+  "round3": "{round}%",
+  "@round3": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "examplesOnlyCheckAndEnter": "Iba príklady: skontrolujte a zadajte hodnoty z etikety produktu na porciu. Neznáme živiny nechajte prázdne; 0 zadajte, iba ak je hodnota známa.",
+  "nutritionStrategy": "Výživová stratégia",
+  "noPreWorkoutNutritionStrategy": "Nebola uložená žiadna výživová stratégia pred tréningom.",
+  "carbsGCarbsHFluid": "{carbs} g sacharidov/h · {fluid} ml/h · {sodium} mg sodíka/h",
+  "@carbsGCarbsHFluid": {
+    "placeholders": {
+      "carbs": {
+        "type": "Object"
+      },
+      "fluid": {
+        "type": "Object"
+      },
+      "sodium": {
+        "type": "Object"
+      }
+    }
+  },
+  "forecastUpdatedReviewOrRecalculate": "Predpoveď bola aktualizovaná – skontrolujte alebo prepočítajte uloženú stratégiu.",
+  "strategySavedSavedat": "Stratégia uložená {savedAt}",
+  "@strategySavedSavedat": {
+    "placeholders": {
+      "savedAt": {
+        "type": "Object"
+      }
+    }
+  },
+  "duringTotalTotalcarbsGCarbs": "Spolu počas: {totalCarbs} g sacharidov · {totalFluid} ml · {totalSodium} mg sodíka",
+  "@duringTotalTotalcarbsGCarbs": {
+    "placeholders": {
+      "totalCarbs": {
+        "type": "Object"
+      },
+      "totalFluid": {
+        "type": "Object"
+      },
+      "totalSodium": {
+        "type": "Object"
+      }
+    }
+  },
+  "every20MinAboutCarbs": "Každých 20 min: približne {carbs} g sacharidov a {fluid} ml.",
+  "@every20MinAboutCarbs": {
+    "placeholders": {
+      "carbs": {
+        "type": "Object"
+      },
+      "fluid": {
+        "type": "Object"
+      }
+    }
+  },
+  "packQuantitiesIncludeFullContainers": "Množstvá na zbalenie zahŕňajú celé obaly; nie je nutné všetko skonzumovať.",
+  "workoutChangedReviewOrRecalculate": "Tréning sa zmenil – skontrolujte alebo prepočítajte uloženú stratégiu.",
+  "conditionsAndFeedingPlan": "Podmienky a plán príjmu stravy",
+  "editStrategy": "Upraviť stratégiu",
+  "recalculate": "Prepočítať",
+  "actualNutrition": "Skutočná výživa",
+  "someProductValuesAreUnknown": "Niektoré hodnoty produktov nie sú známe; súčty sú neúplné.",
+  "logFoodAndFluids": "Zaznamenať jedlo a tekutiny",
+  "recordWhatYouActuallyHad": "Zapíšte, čo ste skutočne skonzumovali. Plánovaný príjem sa do tohto záznamu nekopíruje.",
+  "elapsedMinutesIncludingStopsOptional": "Uplynuté minúty vrátane zastavení (voliteľné)",
+  "recordedDurationActivityMin": "Zaznamenané trvanie: {activity} min",
+  "@recordedDurationActivityMin": {
+    "placeholders": {
+      "activity": {
+        "type": "Object"
+      }
+    }
+  },
+  "compareWithSavedStrategy": "Porovnať s uloženou stratégiou",
+  "useMatchedSessionIfAvailable": "Použiť zodpovedajúci tréning, ak je k dispozícii",
+  "noPlanComparison": "Bez porovnania s plánom",
+  "titleDate": "{title} · {date}",
+  "@titleDate": {
+    "placeholders": {
+      "title": {
+        "type": "Object"
+      },
+      "date": {
+        "type": "Object"
+      }
+    }
+  },
+  "linkedStrategyUnavailable": "Prepojená stratégia nie je k dispozícii",
+  "quantityName": "{quantity} × {name}",
+  "@quantityName": {
+    "placeholders": {
+      "quantity": {
+        "type": "Object"
+      },
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "removeIntake": "Odstrániť príjem",
+  "addFoodOrDrink": "Pridať jedlo alebo nápoj",
+  "iHadNoIntake": "Nič som neskonzumoval",
+  "giGutComfort": "Tráviaci komfort",
+  "whatWorkedSymptomsAccessProblems": "Čo fungovalo / príznaky / problémy s prístupom",
+  "saveDraft": "Uložiť koncept",
+  "skipLoggingThisActivity": "Preskočiť zaznamenávanie tejto aktivity",
+  "nutritionAndFluids": "Výživa a tekutiny",
+  "productsToleranceAndMeasuredSweat": "Produkty, tolerancia a namerané straty potu",
+  "postWorkoutIntakeReminder": "Pripomienka príjmu po tréningu",
+  "onceAfterARecentEndurance": "Raz po nedávnom vytrvalostnom tréningu; tiché hodiny 22:00–08:00.",
+  "enableWorkoutNotifications": "Zapnúť upozornenia na tréning",
+  "addHiloBpReport": "Pridať správu o tlaku Hilo",
+  "readingPdfReportsIsOnly": "Čítanie správ vo formáte PDF je dostupné iba v iOS a macOS.",
+  "chooseAnotherReport": "Vybrať inú správu",
+  "biologicalAge": "Biologický vek",
+  "voMaxVo2maxMlKg": "VO₂max {vo2max} ml/kg/min · {vo2Class}",
+  "@voMaxVo2maxMlKg": {
+    "placeholders": {
+      "vo2max": {
+        "type": "Object"
+      },
+      "vo2Class": {
+        "type": "Object"
+      }
+    }
+  },
+  "factorContributions": "Príspevky faktorov",
+  "estimatedRangeRoundRound2Years": "Odhadovaný rozsah {round}–{round2} rokov. Ide o odhad modelu, nie lekársku diagnózu.",
+  "@estimatedRangeRoundRound2Years": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      },
+      "round2": {
+        "type": "Object"
+      }
+    }
+  },
+  "noEnergyMeasurementsForThis": "Pre tento deň nie sú žiadne merania energie",
+  "scanningStepOnTheScale": "Vyhľadávam… keď budete pripravení, postavte sa na váhu.",
+  "waistWaistCmUpdateMonthly": "Pás: {waist} cm – aktualizujte mesačne v Profile",
+  "@waistWaistCmUpdateMonthly": {
+    "placeholders": {
+      "waist": {
+        "type": "Object"
+      }
+    }
+  },
+  "measuring": "Meriam…",
+  "tryAgain": "Skúsiť znova",
+  "systolic": "Systolický",
+  "diastolic": "Diastolický",
+  "heartRate": "Tepová frekvencia",
+  "weight": "Hmotnosť",
+  "bodyFat": "Telesný tuk",
+  "duration": "Trvanie",
+  "deep": "Hlboký",
+  "spo": "SpO₂",
+  "activityName": "Názov aktivity",
+  "sport": "Šport",
+  "distance": "Vzdialenosť",
+  "saved": "Uložené",
+  "connectionFailedCheckYourInternet": "Pripojenie zlyhalo. Skontrolujte internetové pripojenie.",
+  "email": "E-mail",
+  "password": "Heslo",
+  "passwordTooShort": "Heslo je príliš krátke",
+  "loginFailedCheckYourEmail": "Prihlásenie zlyhalo. Skontrolujte e-mail a heslo.",
+  "connectionFailedCheckYourCredentials": "Pripojenie zlyhalo. Skontrolujte prihlasovacie údaje a internetové pripojenie.",
+  "region": "Región",
+  "hiloPod": "Hilo Pod",
+  "hiloAccount": "Účet Hilo",
+  "garmin": "Garmin",
+  "coros": "Coros",
+  "suunto": "Suunto",
+  "polarH10": "Polar H10",
+  "polar": "Polar",
+  "renphoAccount": "Účet Renpho",
+  "garminConnectEmail": "E-mail Garmin Connect",
+  "verifyMfaCode": "Overiť kód MFA",
+  "verificationCode": "Overovací kód",
+  "errorE": "Chyba: {e}",
+  "@errorE": {
+    "placeholders": {
+      "e": {
+        "type": "Object"
+      }
+    }
+  },
+  "noHiloPodFoundMake": "Nenašiel sa žiadny Hilo Pod. Uistite sa, že je nabitý a nablízku.",
+  "scanFailedE": "Vyhľadávanie zlyhalo: {e}",
+  "@scanFailedE": {
+    "placeholders": {
+      "e": {
+        "type": "Object"
+      }
+    }
+  },
+  "hiloPod2": "Hilo Pod",
+  "scanForPod": "Vyhľadať pod",
+  "scanForPolarH10": "Vyhľadať Polar H10",
+  "couldNotReachPolarCheck": "Polar sa nepodarilo kontaktovať. Skontrolujte pripojenie.",
+  "signInAndSendWorkout": "Prihlásiť sa a odoslať tréning",
+  "scanForScale": "Vyhľadať váhu",
+  "passwordRequired": "Heslo je povinné",
+  "enterYourPhoneNumberWith": "Zadajte telefónne číslo (s predvoľbou krajiny, napr. +421…) a e-mail Suunto.",
+  "enterThePinFromThe": "Zadajte PIN z SMS.",
+  "incorrectPinPleaseTryAgain": "Nesprávny PIN. Skúste to znova.",
+  "phoneNumber": "Telefónne číslo",
+  "suuntoAccountEmail": "E-mail účtu Suunto",
+  "enterPinFromSms": "Zadať PIN z SMS",
+  "verifyConnect": "Overiť a pripojiť",
+  "sendSmsCode": "Odoslať SMS kód",
+  "couldNotSavePreferencesE": "Predvoľby sa nepodarilo uložiť: {e}",
+  "@couldNotSavePreferencesE": {
+    "placeholders": {
+      "e": {
+        "type": "Object"
+      }
+    }
+  },
+  "mon": "Po",
+  "tue": "Ut",
+  "wed": "St",
+  "thu": "Št",
+  "fri": "Pi",
+  "sat": "So",
+  "sun": "Ne",
+  "male": "Muž",
+  "female": "Žena",
+  "other": "Iné",
+  "running": "Beh",
+  "trailRunning": "Trailový beh",
+  "cycling": "Cyklistika",
+  "swimming": "Plávanie",
+  "triathlon": "Triatlon",
+  "hiking": "Turistika",
+  "rowing": "Veslovanie",
+  "buildMyPlan": "Vytvoriť môj plán",
+  "keepAConsistentBedtimeAnd": "Dodržiavajte pravidelný čas ukladania a vstávania, aby ste podporili spánkovú rutinu.",
+  "thisWorkoutHasNoSets": "Tento tréning nemá žiadne série.",
+  "loadName": "Záťaž ({name})",
+  "@loadName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "setLabel": "Séria",
+  "lowestReps": "Najnižší počet opakovaní",
+  "highestReps": "Najvyšší počet opakovaní",
+  "repsPerSide": "Opakovania na stranu",
+  "fromReps": "Od (opak.)",
+  "toReps": "Do (opak.)",
+  "addedLoad": "Pridaná záťaž",
+  "assistance": "Asistencia",
+  "tempoOptional": "Tempo (voliteľné)",
+  "notesOptional": "Poznámky (voliteľné)",
+  "enterTheRepetitionsDone": "Zadajte vykonané opakovania.",
+  "plannedUnit": "Plánované {unit}",
+  "@plannedUnit": {
+    "placeholders": {
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "repsDone": "Vykonané opakovania",
+  "resistance": "Odpor",
+  "implementsLabel": "Náradie",
+  "name": "Názov",
+  "instructionsOptional": "Pokyny (voliteľné)",
+  "remember": "Zapamätať",
+  "notSavedYet": "Zatiaľ neuložené",
+  "saving": "Ukladám…",
+  "couldNotSave": "Nepodarilo sa uložiť",
+  "plannedValuesAreHintsNot": "Plánované hodnoty sú len orientačné, nie výsledky. Ťuknutím na sériu ju zaznamenáte.",
+  "completedAsPlanned": "Dokončené podľa plánu",
+  "save": "Uložiť",
+  "nameTheTemplate": "Pomenujte šablónu.",
+  "setN": "Séria {n}",
+  "@setN": {
+    "placeholders": {
+      "n": {
+        "type": "Object"
+      }
+    }
+  },
+  "changesApplyToThisWorkout": "Zmeny sa vzťahujú iba na tento tréning. Dokončené tréningy a ostatné tréningy zostanú nezmenené.",
+  "saveForThisWorkout": "Uložiť pre tento tréning",
+  "knownForKnownOfOf": "Známe pre {known} z {of} sérií so záťažou",
+  "@knownForKnownOfOf": {
+    "placeholders": {
+      "known": {
+        "type": "Object"
+      },
+      "of": {
+        "type": "Object"
+      }
+    }
+  },
+  "sessionEstimate": "Odhad tréningu",
+  "calculatedRange": "Vypočítaný rozsah",
+  "timedWork": "Časovaná práca",
+  "strengthTraining": "Silový tréning",
+  "theExercisesCouldNotBe": "Cviky sa nepodarilo načítať.",
+  "resumeWorkout": "Pokračovať v tréningu",
+  "strengthWorkout": "Silový tréning",
+  "untitledTemplate": "Šablóna bez názvu",
+  "theRecordedExercisesCouldNot": "Zaznamenané cviky sa nepodarilo načítať.",
+  "exercisesPerformed": "Vykonané cviky",
+  "comparedWithThePlanAs": "Porovnané s plánom v stave, v akom bol na začiatku zaznamenávania.",
+  "topWorkingLoadName": "Najvyššia pracovná záťaž ({name})",
+  "@topWorkingLoadName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "estimated1rmMiddleOfRange": "Odhadované 1RM, stred rozsahu",
+  "noLoggedSessionsYet": "Zatiaľ žiadne zaznamenané tréningy.",
+  "noRadarFramesAvailable": "Nie sú k dispozícii žiadne radarové snímky",
+  "playRadar": "Prehrať radar",
+  "pauseRadar": "Pozastaviť radar",
+  "high": "Vysoký",
+  "clear": "Jasno",
+  "bodyweight": "Vlastná hmotnosť",
+  "resistance2": "Odpor —",
+  "assistUnit": "Asistencia {unit}",
+  "@assistUnit": {
+    "placeholders": {
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "reps2": "Opak. —",
+  "notRecorded": "Nezaznamenané",
+  "skipped": "Preskočené",
+  "health": "Zdravie",
+  "manual": "Ručne",
+  "expandName": "Rozbaliť {name}",
+  "@expandName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "open": "Otvoriť",
+  "noScalePaired": "Žiadna spárovaná váha",
+  "paired": "Spárované",
+  "change": "Zmeniť",
+  "noCuffPaired": "Žiadna spárovaná manžeta",
+  "noPolarH10FoundWear": "Nenašiel sa žiadny Polar H10. Nasaďte si pás, navlhčite elektródy a skontrolujte, či obe pripojenia Bluetooth nepoužíva iná aplikácia.",
+  "enterMinutesSinceTrainingEnded": "Zadajte minúty od skončenia tréningu, od 0 do 1440.",
+  "timingFollowsYourWorkout": "Načasovanie sa riadi vaším tréningom.",
+  "recordingStayStill": "Záznam · zostaňte v pokoji",
+  "meanHrBpm": "Priemerná TF · bpm",
+  "pairAPolarH10First": "Najprv spárujte Polar H10.",
+  "around30MinutesAfterTraining": "Približne 30 minút po tréningu, keď je tréning včas k dispozícii.",
+  "reminderDiagnostics": "Diagnostika pripomienok",
+  "forecast": "Predpoveď",
+  "enterAName": "Zadajte názov",
+  "enterAValidAmount": "Zadajte platné množstvo",
+  "enterAPositiveAmount": "Zadajte kladné množstvo",
+  "maximum120GH": "Maximum 120 g/h",
+  "carbohydrateTargetGH": "Cieľ sacharidov g/h",
+  "fluidTargetMlH": "Cieľ tekutín ml/h",
+  "sodiumTargetMgHNot": "Cieľ sodíka mg/h (nie soli)",
+  "surfaceFeedingAccess": "Povrch / prístup k občerstveniu",
+  "expectedAscentM": "Očakávané prevýšenie m",
+  "expectedAltitudeM": "Očakávaná nadmorská výška m",
+  "humidity": "Vlhkosť %",
+  "windKmH": "Vietor km/h",
+  "dayForecast": "Predpoveď na deň",
+  "enteredConditions": "Zadané podmienky",
+  "productFoodName": "Názov produktu / potraviny",
+  "servingsQuantity": "Porcie / množstvo",
+  "when": "Kedy",
+  "carbohydrateGServing": "Sacharidy g / porcia",
+  "fluidMlServing": "Tekutiny ml / porcia",
+  "caffeineMgServing": "Kofeín mg / porcia",
+  "proteinGServing": "Bielkoviny g / porcia",
+  "gel": "Gél",
+  "water": "Voda",
+  "sportsDrink": "Športový nápoj",
+  "bar": "Tyčinka",
+  "finishIntakeLog": "Dokončiť záznam príjmu",
+  "allowNotificationsInSystemSettings": "Povoľte upozornenia v nastaveniach systému",
+  "importing": "Importujem…",
+  "importNewreadings": "Importovať {newReadings}",
+  "@importNewreadings": {
+    "placeholders": {
+      "newReadings": {
+        "type": "Object"
+      }
+    }
+  },
+  "reading": "Čítam…",
+  "chooseReportPdf": "Vybrať správu (PDF)",
+  "yourTrainingHistoryIsReady": "Vaša tréningová história je pripravená",
+  "importingYourTrainingHistory": "Importuje sa vaša tréningová história",
+  "stopImport": "Zastaviť import",
+  "dismiss": "Zavrieť",
+  "openai": "OpenAI",
+  "appleIntelligence": "Apple Intelligence",
+  "nonAiBriefing": "Prehľad bez AI",
+  "noBriefing": "Žiadny prehľad",
+  "ruleBasedSummaryFromYour": "Súhrn založený na pravidlách z vašich zdravotných údajov – bez volaní API",
+  "hideTheBriefingCard": "Skryť kartu prehľadu",
+  "flutter": "Flutter",
+  "stateManagement": "Správa stavu",
+  "bluetoothLe": "Bluetooth LE",
+  "interactiveMaps": "Interaktívne mapy",
+  "chartsGraphs": "Grafy a diagramy",
+  "secureCredentialStorage": "Bezpečné ukladanie prihlasovacích údajov",
+  "markdownRendering": "Vykresľovanie Markdown",
+  "appleOnDeviceAi": "AI od Apple v zariadení",
+  "cryptography": "Kryptografia",
+  "appleHealthHealthConnect": "Apple Zdravie a Health Connect",
+  "runtimePermissions": "Povolenia za behu",
+  "shareExport": "Zdieľanie a export",
+  "openUrls": "Otváranie URL",
+  "internationalisation": "Internacionalizácia",
+  "utilities": "Pomocné nástroje",
+  "icons": "Ikony",
+  "fjelia": "Fjelia",
+  "fjeliaFeedback": "Spätná väzba k Fjelia",
+  "couldNotSendTheReport": "Hlásenie sa nepodarilo odoslať. Váš text tu stále je. Skúste to znova.",
+  "yourEmail": "Váš e-mail",
+  "enterAValidEmailAddress": "Zadajte platnú e-mailovú adresu.",
+  "subject": "Predmet",
+  "sending": "Odosielam…",
+  "sendReport": "Odoslať hlásenie",
+  "sleepRecovery": "Spánok a regenerácia",
+  "activitiesTraining": "Aktivity a tréning",
+  "bodyWellness": "Telo a pohoda",
+  "hilo": "Hilo",
+  "hiloBle": "Hilo BLE",
+  "garminApi": "Garmin (API)",
+  "renphoScale": "Váha Renpho",
+  "connected": "Pripojené",
+  "notConnected": "Nepripojené",
+  "manage": "Spravovať",
+  "connect": "Pripojiť",
+  "habits": "Návyky",
+  "smokingAlcohol": "Fajčenie, alkohol",
+  "clinicalLab": "Laboratórne hodnoty",
+  "hba1cLipidsKidney": "HbA1c, lipidy, obličky",
+  "sex": "Pohlavie",
+  "smoking": "Fajčenie",
+  "never": "Nikdy",
+  "former": "Bývalý",
+  "current": "Súčasný",
+  "hba1c": "HbA1c",
+  "diabetes": "Cukrovka",
+  "prediabetes": "Prediabetes",
+  "type1": "Typ 1",
+  "type2": "Typ 2",
+  "apob": "ApoB",
+  "optionalPlansAndPaceGuides": "Voliteľné. Využívajú ho plány a tempové odporúčania; tréning ovplyvňuje aj prevýšenie vyššie.",
+  "addRaceGoal2": "Pridať cieľ pretekov",
+  "editRaceGoal": "Upraviť cieľ pretekov",
+  "trailRunning2": "Trailový beh",
+  "roadCycling": "Cestná cyklistika",
+  "gravel": "Gravel",
+  "indoorRowing": "Veslovanie v interiéri",
+  "selectDate": "Vybrať dátum",
+  "committed": "Potvrdené",
+  "flexible": "Flexibilné",
+  "notGoing": "Nezúčastním sa",
+  "notSaid": "Neuvedené",
+  "finish": "Cieľový čas",
+  "saveGoal": "Uložiť cieľ",
+  "exportAllRecordedWorkoutsAs": "Exportovať všetky zaznamenané tréningy ako tabuľku.",
+  "backupsIncludeYourHealthData": "Zálohy obsahujú vaše zdravotné údaje, tréningové plány a nastavenia profilu. Prihlasovacie údaje sú vylúčené. Obnova nahradí lokálne údaje.",
+  "trail": "Trail",
+  "inlineSkating": "Kolieskovanie",
+  "nordicClassic": "Klasické bežecké lyžovanie",
+  "skateSkiing": "Korčuľovanie na lyžiach",
+  "strength": "Sila",
+  "walking": "Chôdza",
+  "yoga": "Joga",
+  "skiing": "Lyžovanie",
+  "climbing": "Lezenie",
+  "monday": "Pondelok",
+  "sunday": "Nedeľa",
+  "month": "Mesiac",
+  "week": "Týždeň",
+  "list": "Zoznam",
+  "train": "Tréning",
+  "restDay": "Odpočinok",
+  "kilogramsKg": "Kilogramy (kg)",
+  "poundsLb": "Libry (lb)",
+  "regenerateWorkouts": "Znovu vytvoriť tréningy",
+  "starting": "Spúšťa sa",
+  "allPlannedWorkoutsDeleted": "Všetky plánované tréningy boli odstránené.",
+  "searching": "Hľadám…",
+  "searchCity": "Hľadať mesto",
+  "fixedLocationSavedWeatherWill": "Pevná poloha bola uložená. Počasie sa obnoví.",
+  "locationDisabledThePlanWeather": "Poloha je vypnutá. Karta počasia v pláne je skrytá.",
+  "locationSetToName": "Poloha nastavená na {name}",
+  "@locationSetToName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "notEnoughDaytimeAndNighttime": "Nedostatok denných a nočných meraní",
+  "onlyTheWeightWasReceived": "Prijatá bola iba hmotnosť. Pre telesný tuk, svaly a ďalšie hodnoty stojte naboso na kovových elektródach, kým váha neskončí.",
+  "addYourWaistInProfile": "Pridajte obvod pásu v Profile pre viscerálny tuk.",
+  "manualActivity": "Manuálna aktivita",
+  "theseCredentialsAreStoredEncrypted": "Tieto prihlasovacie údaje sú uložené zašifrované vo vašom zariadení (kľúčenka iOS / Android Keystore). Nikdy sa neposielajú na iný server ako Hilo.",
+  "corosCredentialsAreStoredEncrypted": "Prihlasovacie údaje Coros sú uložené zašifrované vo vašom zariadení. Fjelia číta údaje priamo z cloudového API Coros, rovnakého ako webová aplikácia Coros Training Hub.",
+  "connectAnyCombinationYouCan": "Pripojte ľubovoľnú kombináciu – ďalšie môžete kedykoľvek pridať neskôr v Nastaveniach.",
+  "garminCredentialsAreStoredEncrypted": "Prihlasovacie údaje Garmin sú uložené zašifrované vo vašom zariadení. Fjelia používa neoficiálne API Garmin Connect – rovnaký prístup ako mnohé komunitné aplikácie.",
+  "enterTheVerificationCode": "Zadajte overovací kód",
+  "appleHealthDataAccess": "Fjelia číta vaše zdravotné údaje z Apple Zdravie. S vaším povolením môže do Apple Zdravie aj zapisovať synchronizované údaje. Prístup spravujete v nastaveniach zariadenia.",
+  "scanAgain": "Hľadať znova",
+  "wearTheHiloBandDuring": "Noste Hilo pás počas spánku pre nepretržité zaznamenávanie krvného tlaku. Údaje sa synchronizujú automaticky každé ráno pri otvorení aplikácie.",
+  "noPolarH10FoundWear2": "Nenašiel sa žiadny Polar H10. Nasaďte si pás s navlhčenými elektródami a uistite sa, že k nemu nie je pripojená iná aplikácia (ani hodinky); potom hľadajte znova.",
+  "wearTheStrapWithMoist2": "Pred hľadaním si nasaďte pás s navlhčenými elektródami. Neskôr merajte cez + → Meranie HRV Polar H10; výsledky sa zobrazia vedľa nočného HRV.",
+  "signedInPlannedWorkoutsCan": "Prihlásenie úspešné. Plánované tréningy sa teraz dajú odoslať do Polaru. Staršie tréningy sa importujú pri ďalšej úplnej synchronizácii histórie.",
+  "saveYourPolarFlowLogin": "Uložte prihlásenie do Polar Flow, aby ste mohli odosielať plánované tréningy a importovať tréningy staršie ako 30 dní. Zostáva v kľúčenke tohto zariadenia a posiela sa iba do Polaru. Odošlite tréning z listu plánovača a potom synchronizujte Polar Flow s hodinkami. Skontrolujte, či sa zóny tepovej frekvencie v Polare zhodujú s Fjeliou.",
+  "signInToSendThis": "Prihláste sa, aby ste mohli odoslať tento tréning do kalendára Polar Flow. Prihlásenie zostáva v kľúčenke tohto zariadenia a posiela sa iba do Polaru. Po odoslaní synchronizujte Polar Flow s hodinkami.",
+  "checkAndSave": "Skontrolovať a uložiť",
+  "noScaleFoundStepOn": "Nenašla sa žiadna váha. Postavte sa na váhu, aby sa prebudila, a hľadajte znova.",
+  "stepOnTheScaleBefore": "Pred hľadaním sa postavte na váhu, aby sa prebudila. Neskôr merajte cez + → Váha RENPHO.",
+  "renphoCredentialsAreStoredEncrypted": "Prihlasovacie údaje Renpho sú uložené zašifrované vo vašom zariadení. Fjelia komunikuje priamo s cloudovým API Renpho.",
+  "couldNotSendSmsCheck": "SMS sa nepodarilo odoslať. Skontrolujte telefónne číslo a internetové pripojenie.",
+  "theEmailIsUsedFor": "E-mail sa používa na bezpečné podpisovanie požiadaviek a neposiela sa na servery Suunto.",
+  "suuntoUsesSmsVerificationSame": "Suunto používa overenie cez SMS (rovnako ako aplikácia Suunto). Na váš telefón sa pošle jednorazový PIN. Prihlasovacie údaje sú uložené zašifrované iba v zariadení.",
+  "tellUsAboutYourRace": "Povedzte nám o svojich pretekoch a rozvrhu. Fjelia vytvorí plán hneď a vašu úroveň zistí z minulých aktivít (Garmin, Suunto, Polar, COROS, Apple Zdravie), keď sa stiahnu.",
+  "noAccountConnectedSoFjelia": "Nie je pripojený žiadny účet, takže Fjelia nemá históriu, z ktorej by sa učila. Pripojte Garmin, Suunto, Polar, COROS alebo Apple Zdravie a rozhodne váš skutočný tréning.",
+  "yourPastActivitiesAreStill": "Vaše minulé aktivity sa ešte importujú. Plán môžete vytvoriť hneď – po dokončení importu sa automaticky spresní.",
+  "buildingYourPlan": "Vytváram váš plán…",
+  "saveContinue": "Uložiť a pokračovať",
+  "addYourMainPriorityA": "Pridajte svoje hlavné preteky (priorita A). Plán sa periodizuje smerom k nim: základ, budovanie, vrchol a zníženie záťaže. Bez cieľa pretekov sa zatiaľ plán nevytvorí.",
+  "noMeasurementsYet": "Zatiaľ žiadne merania",
+  "date": "Dátum",
+  "deepSleepIsBelowOptimal": "Hlboký spánok je pod optimom ({round} %). Vyhnite sa alkoholu a ťažkým jedlám 3 h pred spaním.",
+  "@deepSleepIsBelowOptimal": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "finishWithSetsOpen": "Ukončiť s otvorenými sériami?",
+  "completeThePlannedWorkout": "Dokončiť plánovaný tréning?",
+  "marksThePlannedSessionAs": "Označí plánovaný tréning ako dokončený týmto tréningom.",
+  "discardThisWorkout": "Zahodiť tento tréning?",
+  "removesTheWorkoutAndEvery": "Odstráni tréning a každú v ňom zaznamenanú sériu.",
+  "assistanceName": "Asistencia ({name})",
+  "@assistanceName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "enterSecondsOrMSs": "Zadajte sekundy alebo m:ss.",
+  "enterTheLoadAsA": "Zadajte záťaž ako číslo.",
+  "loadCannotBeNegative": "Záťaž nemôže byť záporná.",
+  "enterTheEffortValue": "Zadajte hodnotu námahy.",
+  "nameTheExercise": "Pomenujte cvik.",
+  "atLeastOneImplement": "Aspoň jedno náradie.",
+  "anIncrementMustBePositive": "Prírastok musí byť kladný.",
+  "enterAPositiveStep": "Zadajte kladný krok.",
+  "repsInReserve": "Opakovania v rezerve",
+  "loadPerImplement": "Záťaž na náradie",
+  "restAfterThisSet": "Pauza po tejto sérii",
+  "enterHowLongTheSet": "Zadajte, ako dlho séria trvala.",
+  "repsDonePerSide": "Vykonané opakovania na stranu",
+  "plannedRepminRepmax": "Plánované {repMin}–{repMax}",
+  "@plannedRepminRepmax": {
+    "placeholders": {
+      "repMin": {
+        "type": "Object"
+      },
+      "repMax": {
+        "type": "Object"
+      }
+    }
+  },
+  "restTakenBeforeTheNext": "Odpočinok pred ďalšou sériou",
+  "equipment": "Vybavenie",
+  "implementsUsedTogether": "Náradie používané spolu",
+  "smallestLoadStepOptional": "Najmenší krok záťaže (voliteľné)",
+  "theSmallestChangeYourPlates": "Najmenšia zmena, ktorú umožňujú vaše kotúče, jednoručky alebo stroj; zapamätá sa pre toto vybavenie.",
+  "loadStep": "Krok záťaže",
+  "finishWithIncompleteData": "Ukončiť s neúplnými údajmi?",
+  "leaveWithoutSaving": "Odísť bez uloženia?",
+  "theLastChangeCouldNot": "Poslednú zmenu sa nepodarilo uložiť.",
+  "comparedWithAPlanChosen": "Porovnané s plánom zvoleným po tréningu. Plánované hodnoty sú orientačné, nie výsledky.",
+  "lastSet": "Posledná séria",
+  "templateName": "Názov šablóny",
+  "betweenExercises": "Medzi cvikmi",
+  "betweenRounds": "Medzi kolami",
+  "discardChanges": "Zahodiť zmeny?",
+  "yourEditsToThisWorkout": "Vaše úpravy tohto tréningu nie sú uložené.",
+  "estimatedDuration": "Odhadované trvanie",
+  "workingSets": "Pracovné série",
+  "estimatedExternalVolume": "Odhadovaný vonkajší objem",
+  "loadRaisedFromUnitTo": "Záťaž zvýšená z {unit} na {unit2} po vašej kontrole (pravidlo v{ruleVersion}).",
+  "@loadRaisedFromUnitTo": {
+    "placeholders": {
+      "unit": {
+        "type": "Object"
+      },
+      "unit2": {
+        "type": "Object"
+      },
+      "ruleVersion": {
+        "type": "Object"
+      }
+    }
+  },
+  "thePlannedWorkoutHasNo": "Plánovaný tréning nemá žiadne cviky na zaznamenanie.",
+  "completedSets": "Dokončené série",
+  "knownExternalVolume": "Známy vonkajší objem",
+  "updateStrengthSessions2": "Aktualizovať silové tréningy?",
+  "upcomingSessionsArePlannedAgain": "Nadchádzajúce tréningy sa naplánujú odznova od dnes: sila sleduje vaše ciele pretekov v každý silový deň s rôznorodými tréningmi. Dokončené a preskočené tréningy zostanú; cviky, ktoré ste zmenili v nadchádzajúcom silovom tréningu, sa nahradia.",
+  "thisSessionUsesAnEarlier": "Tento tréning používa staršiu silovú šablónu. Aktualizované plány menia silu podľa fázy a cieľa pretekov a využívajú každý silový deň.",
+  "estimated1rmUsesEpleyAnd": "Odhadované 1RM používa Epleyho a Brzyckého vzorec na dokončené pracovné série s 1–10 opakovaniami a známou záťažou a zobrazuje sa ako rozsah medzi nimi. Je to odhad, nie testované maximum.",
+  "localWeather": "Miestne počasie",
+  "today": "Dnes",
+  "low": "Nízky",
+  "moderate": "Mierny",
+  "overcast": "Zamračené",
+  "partlyCloudy": "Polooblačno",
+  "collapseName": "Zbaliť {name}",
+  "@collapseName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "variableLoads": "Premenlivé záťaže",
+  "ruleVstrengthprogressionruleversionTheLastStrengthprogressionminsessions": "Pravidlo v{strengthProgressionRuleVersion}: posledné {strengthProgressionMinSessions} porovnateľné tréningy, každá séria na hornej hranici cieľa opakovaní, so zaznamenanou námahou a nie ťažšie, než bolo zamýšľané. {reason}",
+  "@ruleVstrengthprogressionruleversionTheLastStrengthprogressionminsessions": {
+    "placeholders": {
+      "strengthProgressionRuleVersion": {
+        "type": "Object"
+      },
+      "strengthProgressionMinSessions": {
+        "type": "Object"
+      },
+      "reason": {
+        "type": "Object"
+      }
+    }
+  },
+  "stepOnYourScaleBefore": "Pred hľadaním sa postavte na váhu",
+  "scanning": "Vyhľadávam…",
+  "pair": "Spárovať",
+  "selectYourAktiiaPWristband": "Vyberte svoj náramok AKTIIA P…. Ak nie je viditeľný, položte ho na nabíjačku, aby sa prebudil.",
+  "measurementInterruptedWhileTheApp": "Meranie bolo prerušené, keď bola aplikácia na pozadí. Zopakujte ho.",
+  "noRecentRrDataWith": "Žiadne nedávne údaje RR s dobrým kontaktom. Skontrolujte pás a zopakujte meranie.",
+  "settlingStayStill": "Ustaľovanie · zostaňte v pokoji",
+  "deleteSpotHrvMeasurement": "Odstrániť bodové meranie HRV?",
+  "thisRemovesTheRecordingAnd": "Tým sa odstráni záznam a jeho surové intervaly RR.",
+  "appleHealthStoppedAnsweringSo": "Apple Zdravie prestalo odpovedať, preto ho Fjelia odpojila a už nečíta ani nezapisuje zdravotné údaje.\n\nZnova povoľte Fjelia v Nastavenia → Zdravie → Prístup k údajom a zariadenia → Fjelia a potom znova pripojte Apple Zdravie.",
+  "thisRemovesTheSelectedGrip": "Tým sa odstráni vybrané meranie sily stisku.",
+  "hideReminderDiagnostics": "Skryť diagnostiku pripomienok",
+  "loading": "Načítava sa…",
+  "touchTheChartForDetails": "Ťuknutím na graf zobrazíte podrobnosti",
+  "indoor": "Interiér",
+  "road": "Cesta",
+  "technical": "Technický",
+  "snow": "Sneh",
+  "pool": "Bazén",
+  "openWater": "Otvorená voda",
+  "ambientTemperatureC": "Okolitá teplota °C",
+  "carryAboutGelsGelsGelcarbs": "Vezmite približne {gels} gélov ({gelCarbs} g sacharidov každý) + {bottles} × fľaše po {bottleMl} ml. {drinkCarbs} g sacharidov pochádza z nápojového prášku.",
+  "@carryAboutGelsGelsGelcarbs": {
+    "placeholders": {
+      "gels": {
+        "type": "Object"
+      },
+      "gelCarbs": {
+        "type": "Object"
+      },
+      "bottles": {
+        "type": "Object"
+      },
+      "bottleMl": {
+        "type": "Object"
+      },
+      "drinkCarbs": {
+        "type": "Object"
+      }
+    }
+  },
+  "intakeNotRecorded": "Príjem nezaznamenaný",
+  "loggingDeclinedIntakeUnknown": "Zaznamenávanie odmietnuté – príjem neznámy",
+  "confirmedNoIntake": "Potvrdené: žiadny príjem",
+  "draft": "Koncept · ",
+  "actualIntakePerServing": "Skutočný príjem · na porciu",
+  "minuteIntoWorkoutDuringOnly": "Minúta tréningu (iba počas, voliteľné)",
+  "sodiumMgServingNotSalt": "Sodík mg / porcia (nie soľ)",
+  "comfortable": "Komfortné",
+  "mildSymptoms": "Mierne príznaky",
+  "moderateSymptoms": "Stredné príznaky",
+  "severeSymptoms": "Závažné príznaky",
+  "personalNutritionSettings": "Osobné nastavenia výživy",
+  "practisedCarbohydrateToleranceGH": "Natrénovaná tolerancia sacharidov g/h (do 120)",
+  "workoutNotificationsEnabled": "Upozornenia na tréning sú zapnuté",
+  "exportTheMonthlyReportAs": "Exportujte mesačnú správu ako PDF v aplikácii Hilo a vyberte ju tu. Importujú sa iba merania; meno, e-mail a telesné údaje v správe sa ignorujú.",
+  "nothingNewAllReadingsWere": "Nič nové: všetky merania už boli uložené.",
+  "historyImportIncomplete": "Import histórie je neúplný",
+  "youCanKeepUsingFjelia": "Fjeliu môžete ďalej používať, ale nechajte ju otvorenú: iOS pozastaví import, keď je aplikácia na pozadí, a pokračuje pri ďalšom otvorení. Váš plán sa kalibruje po dokončení importu.",
+  "addYourBirthYearIn": "Pridajte rok narodenia v Nastavenia → Profil, aby ste videli svoj odhad.",
+  "fitnessAge": "Vek kondície",
+  "estLifespan": "Odh. dĺžka života",
+  "delta": "Rozdiel",
+  "couldNotOpenKey": "Nepodarilo sa otvoriť {key}",
+  "@couldNotOpenKey": {
+    "placeholders": {
+      "key": {
+        "type": "Object"
+      }
+    }
+  },
+  "appleIntelligenceIsNotAvailable": "Apple Intelligence nie je v tomto zariadení k dispozícii (vyžaduje podporovaný iPhone alebo Mac s iOS/macOS 26 alebo novším a zapnutým Apple Intelligence v Nastaveniach). Vyberte iného poskytovateľa a pridajte vlastný kľúč API, aby ste mohli používať trénera.",
+  "personalisedMorningLunchAfternoonEvening": "Personalizovaný prehľad na ráno/obed/popoludnie/večer",
+  "enterASubject": "Zadajte predmet.",
+  "message": "Správa",
+  "enterAMessageOfAt": "Zadajte správu s aspoň 10 znakmi.",
+  "garminConnect": "Garmin Connect",
+  "hiloBloodPressure": "Hilo (krvný tlak)",
+  "renphoBodyScale": "Renpho (osobná váha)",
+  "hiloPodCuff": "Hilo Pod / manžeta",
+  "disconnectLabel": "Odpojiť {label}?",
+  "@disconnectLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "yourSavedMeasurementsWillRemain": "Vaše uložené merania zostanú v tomto zariadení.",
+  "notEnoughRecentHeartRate": "Nedostatok nedávnych údajov o tepovej frekvencii na úpravu zón.",
+  "aerobicBase": "Aeróbna základňa",
+  "tempo": "Tempo",
+  "lactateThreshold": "Laktátový prah",
+  "birthYearHeightWaist": "Rok narodenia, výška, pás",
+  "enterAValidValue": "Zadajte platnú hodnotu",
+  "birthYear": "Rok narodenia",
+  "height": "Výška",
+  "waist": "Pás",
+  "yearsSinceQuit": "Roky od skončenia",
+  "cigarettesPerDay": "Cigarety za deň",
+  "standardDrinksPerMonth": "Štandardné nápoje za mesiac",
+  "enterAValidNumber": "Zadajte platné číslo",
+  "enterARaceName": "Zadajte názov pretekov",
+  "useHMmOrH": "Použite h:mm alebo h:mm:ss, čas, ktorý by ste naozaj vedeli zabehnúť",
+  "flexibleThePlanMayDrop": "Flexibilné: plán môže toto podujatie vynechať, ak koliduje s dôležitejším.",
+  "selectARaceDate": "Vyberte dátum pretekov",
+  "thatIsTenTimesOr": "Je to desaťnásobok (alebo desatina) obvyklých {likely} km. Použiť namiesto toho {likely} km?",
+  "@thatIsTenTimesOr": {
+    "placeholders": {
+      "likely": {
+        "type": "Object"
+      }
+    }
+  },
+  "addGoal": "Pridať cieľ",
+  "restoreFailed": "Obnova zlyhala",
+  "replaceLocalData": "Nahradiť lokálne údaje?",
+  "restoringThisBackupReplacesAll": "Obnovením tejto zálohy sa nahradia všetky lokálne zdravotné a tréningové záznamy. Existujúce prihlasovacie údaje zostanú zachované.",
+  "openingBackupZip": "Otvára sa ZIP so zálohou",
+  "addAFutureRaceGoal": "Najprv pridajte budúci cieľ pretekov.",
+  "deleteAllWorkouts2": "Odstrániť všetky tréningy?",
+  "thisDeletesPlannedWorkoutsOn": "Tým sa odstránia plánované tréningy v tomto telefóne a na pripojenej platforme hodiniek. Dokončené aktivity zostanú.",
+  "regenerateWorkouts2": "Znovu vytvoriť tréningy?",
+  "noRaceGoalsYetAdd": "Zatiaľ žiadne ciele pretekov. Pridajte jeden alebo synchronizujte z Garminu.",
+  "deleteRaceGoal": "Odstrániť cieľ pretekov?",
+  "deletingFailedFailure": "Odstránenie zlyhalo: {failure}",
+  "@deletingFailedFailure": {
+    "placeholders": {
+      "failure": {
+        "type": "Object"
+      }
+    }
+  },
+  "allPlannedWorkoutsDeletedRemoved": "Všetky plánované tréningy boli odstránené. Odstránené z vašich platforiem: {removed}.",
+  "@allPlannedWorkoutsDeletedRemoved": {
+    "placeholders": {
+      "removed": {
+        "type": "Object"
+      }
+    }
+  },
+  "usingCurrentLocationTostringasfixedTostringasfixed2": "Používa sa aktuálna poloha: {toStringAsFixed}, {toStringAsFixed2}",
+  "@usingCurrentLocationTostringasfixedTostringasfixed2": {
+    "placeholders": {
+      "toStringAsFixed": {
+        "type": "Object"
+      },
+      "toStringAsFixed2": {
+        "type": "Object"
+      }
+    }
+  },
+  "typeSleep": "Spánok",
+  "typeBloodPressure": "Krvný tlak",
+  "addHiloBpReportPdf": "Pridať správu o tlaku Hilo (PDF)",
+  "hiloCuffBle": "Manžeta Hilo (BLE)",
+  "typeSpo2": "SpO₂ / pulzný oxymeter",
+  "typeWeightScale": "Osobná váha",
+  "polarH10HrvMeasurement": "Meranie HRV Polar H10",
+  "samplingWouldStartMinutes": "Meranie by sa začalo približne {minutes} min po skončení tréningu.",
+  "@samplingWouldStartMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "Object"
+      }
+    }
+  },
+  "samplingStartedMinutes": "Meranie sa začalo {minutes} min po skončení tréningu.",
+  "@samplingStartedMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "Object"
+      }
+    }
+  },
+  "unknown": "Neznáme",
+  "before": "Pred",
+  "during": "Počas",
+  "after": "Po",
+  "enumWarmUp": "Rozcvičenie",
+  "enumWorking": "Pracovná",
+  "enumBackOff": "Back-off",
+  "enumTechnique": "Technika",
+  "enumExternalLoad": "Vonkajšia záťaž",
+  "enumBandResistance": "Guma / odpor",
+  "enumTotalLoad": "Celková záťaž",
+  "enumPerImplement": "Na náradie",
+  "enumOneImplement": "Jedno náradie",
+  "enumBothSides": "Obe strany",
+  "enumAlternatingTotalReps": "Striedavo, celkový počet opakovaní",
+  "enumPartial": "Čiastočne",
+  "enumFailed": "Nepodarilo sa",
+  "enumStraightSets": "Klasické série",
+  "enumSuperset": "Superséria",
+  "enumCircuit": "Okruh",
+  "enumRir": "RIR",
+  "enumRpe110": "RPE 1–10",
+  "enumBeforeTraining": "Pred tréningom",
+  "enumAfterTraining": "Po tréningu",
+  "enumResting": "V pokoji",
+  "enumSeated": "Sediačky",
+  "enumLyingDown": "Ležiačky",
+  "duringRoutineGelsAreNot": "Počas: pravidelné géle nie sú pri tomto krátkom/ľahkom tréningu potrebné. Pite podľa smädu.",
+  "duringSpreadCarbohydrateAndDrinks": "Počas: rozložte sacharidy a nápoje do malých, pravidelných dávok. Sacharidy z nápoja počítajte do rovnakého súčtu ako géle a jedlo.",
+  "fluidIsAnEditableStarting": "Tekutiny sú upraviteľný východiskový odhad, nie kvóta. Riaďte sa smädom, zvyknutým príjmom a nameranými stratami potu; nenúťte sa piť viac vody.",
+  "afterHaveCarbohydrateAndA": "Po: dajte si sacharidy a jedlo s bielkovinami. Uprednostnite doplnenie energie a tekutín, ak sa blíži ďalší tréning.",
+  "swimmingPlaceALabelledBottle": "Plávanie: položte označenú fľašu na okraj bazéna a využite prestávky medzi sériami na dúšky alebo občerstvenie. Podmienky v bazéne sa môžu líšiť od vonkajšieho počasia.",
+  "runningCarryAccessibleGelsFlasks": "Beh: noste so sebou ľahko dostupné géle/fľaše alebo plánujte občerstvenie na stanovištiach; pred pretekmi si vyskúšajte rovnaké produkty a načasovanie.",
+  "servingSizesAndToleranceMust": "Veľkosti porcií a tolerancia musia byť kladné.",
+  "enterFiniteNonNegativeMeasurements": "Zadajte konečné, nezáporné merania.",
+  "targetsMustBeFiniteAnd": "Ciele musia byť konečné a nezáporné.",
+  "conditionsMustBeFiniteOr": "Podmienky musia byť konečné alebo neznáme.",
+  "humidityMustBeBetween0": "Vlhkosť musí byť medzi 0 a 100 %.",
+  "noIntakeCannotIncludeFood": "„Žiadny príjem“ nemôže zahŕňať jedlo ani nápoje.",
+  "addAnItemOrConfirm": "Pridajte položku alebo potvrďte, že ste nič neskonzumovali.",
+  "eachIntakeNeedsAProduct": "Každý príjem vyžaduje produkt a platné načasovanie.",
+  "quantityMustBePositive": "Množstvo musí byť kladné.",
+  "thisActivityNoLongerExists": "Táto aktivita už neexistuje.",
+  "practisedCarbohydrateToleranceMustNot": "Natrénovaná tolerancia sacharidov nesmie presiahnuť 120 g/h.",
+  "measuredSweatRateMustBe": "Nameraná rýchlosť potenia musí byť kladná alebo ponechaná neznáma.",
+  "increasePractisedToleranceInNutrition": "Pred výberom vyššieho cieľa zvýšte natrénovanú toleranciu v nastaveniach výživy.",
+  "fluidTargetExceedsYourMeasured": "Cieľ tekutín presahuje vašu nameranú rýchlosť potenia. Skontrolujte meranie alebo cieľ.",
+  "elapsedWorkoutTimeMustBe": "Uplynutý čas tréningu musí byť kladný alebo prázdny.",
+  "intakeAmountsMustBeFinite": "Množstvá príjmu musia byť konečné a nezáporné.",
+  "selectedStrategyUnavailableChooseAnother": "Vybraná stratégia nie je k dispozícii. Vyberte inú stratégiu alebo žiadne porovnanie.",
+  "recordYourWorkoutNutrition": "Zaznamenajte výživu z tréningu",
+  "addTheFoodAndFluids": "Pridajte jedlo a tekutiny, ktoré ste skutočne skonzumovali, do histórie aktivity.",
+  "logIntake": "Zaznamenať príjem",
+  "in30Minutes": "Za 30 minút",
+  "loadSuggestionsCoverStraightSets": "Návrhy záťaže pokrývajú iba klasické série s opakovaniami.",
+  "needsStrengthprogressionminsessionsRecordedSessionsOf": "Vyžaduje {strengthProgressionMinSessions} zaznamenané tréningy tohto cviku.",
+  "@needsStrengthprogressionminsessionsRecordedSessionsOf": {
+    "placeholders": {
+      "strengthProgressionMinSessions": {
+        "type": "Object"
+      }
+    }
+  },
+  "recentHistoryIsTooOld": "Nedávna história je príliš stará na návrh.",
+  "theLastSessionDidNot": "Posledný tréning nepoužil jednu známu záťaž.",
+  "theLoadChangedBetweenThe": "Záťaž sa medzi nedávnymi tréningmi zmenila.",
+  "notEverySetReachedThe": "Nie každá séria dosiahla horný limit cieľa opakovaní.",
+  "recordEffortRirOrRpe": "Zaznamenajte námahu (RIR alebo RPE) v poslednej sérii, aby ste dostali návrhy.",
+  "recentSetsWereHarderThan": "Nedávne série boli ťažšie, než sa zamýšľalo.",
+  "thisWorkoutAlreadyHasIts": "Tento tréning už má vlastnú záťaž; zostáva podľa nastavenia.",
+  "yourRecentSetsMetThe": "Vaše nedávne série splnili pravidlo progresie. Nastavte najmenší krok záťaže pre toto vybavenie a skontrolujte záťaž.",
+  "thisWorkoutNoLongerExists": "Tento tréning už neexistuje.",
+  "thisStrengthPlanCannotBe": "Tento silový plán sa nedá prečítať ({message}).",
+  "@thisStrengthPlanCannotBe": {
+    "placeholders": {
+      "message": {
+        "type": "Object"
+      }
+    }
+  },
+  "thisStrengthPlanCannotBe2": "Tento silový plán sa nedá prečítať.",
+  "addAtLeastOneExercise": "Pridajte aspoň jeden cvik.",
+  "thisWorkoutWasChangedElsewhere": "Tento tréning bol zmenený inde. Vaše úpravy sú zachované; načítajte znova, aby ste videli novšiu verziu.",
+  "thePlanThisWorkoutIs": "Plán, s ktorým sa tento tréning porovnáva, sa nedá prečítať.",
+  "thisLogWasChangedElsewhere": "Tento záznam bol zmenený inde. Vaše záznamy sú zachované; načítajte znova, aby ste videli novšiu verziu.",
+  "thisZipIsNotA": "Tento ZIP nie je podporovaná záloha Fjelia.",
+  "theBackupDatabaseIsDamaged": "Databáza zálohy je poškodená.",
+  "invalidBackupData": "Neplatné údaje zálohy.",
+  "backupTablesDoNotMatch": "Tabuľky zálohy sa nezhodujú.",
+  "invalidBackupColumns": "Neplatné stĺpce zálohy.",
+  "migratingOriginalAppBackup": "Migruje sa záloha pôvodnej aplikácie",
+  "theOriginalBackupIsMissing": "V pôvodnej zálohe chýbajú požadované tabuľky.",
+  "backupFormatOrDatabaseVersion": "Formát zálohy alebo verzia databázy sa nezhoduje.",
+  "restoringRecords": "Obnovujú sa záznamy",
+  "restoringSettings": "Obnovujú sa nastavenia",
+  "restoreComplete": "Obnova dokončená",
+  "effortMustBeANumber": "Námaha musí byť číslo.",
+  "theDurationEstimateMustBe": "Odhad trvania musí byť kladný.",
+  "restCannotBeNegative": "Odpočinok nemôže byť záporný.",
+  "enterTheRepetitionsDoneThe": "Zadajte vykonané opakovania; plán má rozsah.",
+  "enterTheLoadThePlan": "Zadajte záťaž; plán žiadnu nemá.",
+  "enterTheResistanceThePlan": "Zadajte odpor; plán žiadny nemá.",
+  "poorSensorContact": "Slabý kontakt senzora",
+  "moreThan25FromLocal": "Viac ako 25 % od lokálneho mediánu",
+  "workoutNutrition": "Výživa pri tréningu",
+  "postWorkoutFoodAndFluid": "Pripomienka záznamu jedla a tekutín po tréningu",
+  "postTrainingHrvMeasurementReminder": "Pripomienka merania HRV po tréningu",
+  "rirRunsFrom0To": "RIR sa pohybuje od 0 do 10+.",
+  "rpeRunsFrom1To": "RPE sa pohybuje od 1 do 10.",
+  "repetitionsCannotBeNegative": "Opakovania nemôžu byť záporné.",
+  "timedWorkMustBeLonger": "Časovaná práca musí trvať dlhšie ako nula sekúnd.",
+  "chooseRepetitionsOrTimedWork": "Vyberte opakovania alebo časovanú prácu, nie oboje.",
+  "loadMustBeAFinite": "Záťaž musí byť konečné, nezáporné číslo.",
+  "durationCannotBeNegative": "Trvanie nemôže byť záporné.",
+  "hrTimeline": "Priebeh TF",
+  "dayTrainingLoad": "Denná tréningová záťaž",
+  "weekdayComparison": "Porovnanie dní v týždni",
+  "weeklyTrainingLoad": "Týždenná tréningová záťaž",
+  "zonePolarization": "Polarizácia zón",
+  "elevationOverview": "Prehľad prevýšenia",
+  "trainingMonitor": "Tréningový monitor",
+  "formAtlCtlTsb": "Forma ATL / CTL / TSB",
+  "trainingPlanProgress": "Postup tréningového plánu",
+  "rhrSleep": "Pokojová TF v spánku",
+  "hrvSleep": "HRV v spánku",
+  "spo2Sleep": "SpO₂ v spánku",
+  "respRate": "Dychová frekvencia",
+  "stress": "Stres",
+  "skinTemp": "Teplota pokožky",
+  "steps": "Kroky",
+  "tonightsSleep": "Dnešný spánok",
+  "activityLog": "Záznam aktivít",
+  "activityLog2": "Záznam aktivít",
+  "history2": "HISTÓRIA",
+  "durationsecondshDurationseconds2mDistancemetersKmAvgheartrate": "{durationSeconds}h {durationSeconds2}m · {distanceMeters} km · {avgHeartRate} bpm · ↑{totalElevation} m",
+  "@durationsecondshDurationseconds2mDistancemetersKmAvgheartrate": {
+    "placeholders": {
+      "durationSeconds": {
+        "type": "Object"
+      },
+      "durationSeconds2": {
+        "type": "Object"
+      },
+      "distanceMeters": {
+        "type": "Object"
+      },
+      "avgHeartRate": {
+        "type": "Object"
+      },
+      "totalElevation": {
+        "type": "Object"
+      }
+    }
+  },
+  "heatAcclimation2": "AKLIMATIZÁCIA NA TEPLO",
+  "score": "{score}%",
+  "@score": {
+    "placeholders": {
+      "score": {
+        "type": "Object"
+      }
+    }
+  },
+  "elevation": "PREVÝŠENIE",
+  "t12WeekHistory": "12-TÝŽDŇOVÁ HISTÓRIA",
+  "zonePolarization2": "POLARIZÁCIA ZÓN",
+  "t5WeekHistory": "5-TÝŽDŇOVÁ HISTÓRIA",
+  "easy": "ĽAHKÉ %",
+  "withzonesOfRecordedActivitiesWith": "{withZones} z {recorded} aktivít s údajmi o zónach TF",
+  "@withzonesOfRecordedActivitiesWith": {
+    "placeholders": {
+      "withZones": {
+        "type": "Object"
+      },
+      "recorded": {
+        "type": "Object"
+      }
+    }
+  },
+  "fromsamplesReconstructedFromRecordedHr": "{fromSamples} zrekonštruovaných zo zaznamenaných vzoriek TF",
+  "@fromsamplesReconstructedFromRecordedHr": {
+    "placeholders": {
+      "fromSamples": {
+        "type": "Object"
+      }
+    }
+  },
+  "easyZ12ModerateZ3": "Ľahké: Z1–2 · Mierne: Z3 · Ťažké: Z4–5",
+  "activitiesWithoutHrZoneData": "Aktivity bez údajov o zónach TF sú z percent vylúčené.",
+  "avgAverageUnit": "PRIEM {average} {unit}",
+  "@avgAverageUnit": {
+    "placeholders": {
+      "average": {
+        "type": "Object"
+      },
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "weekdayComparison2": "POROVNANIE DNÍ V TÝŽDNI",
+  "trainingPlanProgress2": "POSTUP TRÉNINGOVÉHO PLÁNU",
+  "weekCurrentweekDurationinweeks": "Týždeň {currentWeek} / {durationInWeeks}",
+  "@weekCurrentweekDurationinweeks": {
+    "placeholders": {
+      "currentWeek": {
+        "type": "Object"
+      },
+      "durationInWeeks": {
+        "type": "Object"
+      }
+    }
+  },
+  "t30MinTimeTrialLt2": "30-MINÚTOVÝ ČASOVKA – LT2",
+  "run30MinutesAtThe": "Bežte 30 minút na najvyššej udržateľnej námahe – kontrolovane, nie šprintom. Do námahy sa nabiehajte; nezačínajte príliš rýchlo. Priemerné tempo a TF posledných 20 minút sú vaše LT2.",
+  "recordAsANormalOutdoor": "Zaznamenajte ako bežný beh vonku. Spustite hodinky, poznačte si čas a bežte 30 min v pretekárskom úsilí.",
+  "t50MinTotalFlatCourse": "~50 min celkom · rovinatá trať · nie po ťažkom tréningu",
+  "doNotStartTooFast": "Nezačínajte príliš rýchlo. Snažte sa o rovnomerné medzičasy.",
+  "theAppAveragesHrAnd": "Aplikácia spriemeruje TF a tempo za posledných 20 minút testu, po rozcvičke a prvých 10 minútach. Zaznamenanú aktivitu vyberte v časti Vypočítať.",
+  "lt2Pace": "TEMPO LT2",
+  "activityRunningEnoughTimeFor": "Aktivita (beh, dosť času na rozcvičku + 30 min, s TF)",
+  "selectTheTtActivity": "Vyberte aktivitu testu",
+  "nameStartdate": "{name} · {startDate}",
+  "@nameStartdate": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      },
+      "startDate": {
+        "type": "Object"
+      }
+    }
+  },
+  "warmUpBeforeTt": "Rozcvička pred testom",
+  "roundMin": "{round} min",
+  "@roundMin": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "clearResults": "Vymazať výsledky",
+  "heartRate2": "TEPOVÁ FREKVENCIA",
+  "paceSecKmLowerIs": "Tempo (s/km – nižšie je rýchlejšie)",
+  "thresholdsFitnessTests": "Prahy a testy kondície",
+  "lt1": "LT1",
+  "lt2": "LT2",
+  "voPace": "Tempo VO₂",
+  "ftp": "FTP",
+  "setFtpManually": "Nastaviť FTP ručne",
+  "calculateFromAnActivity": "Vypočítať z aktivity",
+  "setFtp": "Nastaviť FTP",
+  "ftpWatts": "FTP (watty)",
+  "ftpCyclingThresholdPower": "FTP – PRAHOVÝ VÝKON V CYKLISTIKE",
+  "ftpHistory": "HISTÓRIA FTP",
+  "updateFromActivity": "AKTUALIZOVAŤ Z AKTIVITY",
+  "tapAnActivityFtpBest": "Ťuknite na aktivitu – FTP = najlepší 20-min výkon × 0,95",
+  "ridew": "{ride}W",
+  "@ridew": {
+    "placeholders": {
+      "ride": {
+        "type": "Object"
+      }
+    }
+  },
+  "ftpRoundw": "→ FTP {round}W",
+  "@ftpRoundw": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "noRidesWith20Minutes": "Žiadne jazdy s 20 minútami nepretržitých údajov o výkone.",
+  "enterFtpManually": "Zadať FTP ručne",
+  "selectTheTestActivity": "Vyberte aktivitu testu",
+  "formAtlCtlTsb2": "FORMA · ATL / CTL / TSB",
+  "closeTrainingFormFullscreen": "Zavrieť formu tréningu na celú obrazovku",
+  "expandTrainingForm": "Rozbaliť formu tréningu",
+  "calculatedFromTheFirstAvailable": "Vypočítané od prvého dostupného záznamu záťaže. Dni bez zaznamenanej záťaže sa počítajú ako nula; skorší tréning nie je známy.",
+  "trainingMonitor2": "TRÉNINGOVÝ MONITOR",
+  "pfitzingerZones": "ZÓNY PODĽA PFITZINGERA",
+  "cyclingPowerZones": "VÝKONNOSTNÉ ZÓNY V CYKLISTIKE",
+  "znumber": "Z{number}",
+  "@znumber": {
+    "placeholders": {
+      "number": {
+        "type": "Object"
+      }
+    }
+  },
+  "paceHrDescription": "{pace} · {hr}\n{description}",
+  "@paceHrDescription": {
+    "placeholders": {
+      "pace": {
+        "type": "Object"
+      },
+      "hr": {
+        "type": "Object"
+      },
+      "description": {
+        "type": "Object"
+      }
+    }
+  },
+  "weeklyTrainingLoad2": "TÝŽDENNÁ TRÉNINGOVÁ ZÁŤAŽ",
+  "prevWeek": "MIN. TÝŽDEŇ",
+  "bySport": "PODĽA ŠPORTU",
+  "noActivitiesThisWeek": "Tento týždeň žiadne aktivity",
+  "garminWorkoutScheduleddate": "Tréning Garmin · {scheduledDate}",
+  "@garminWorkoutScheduleddate": {
+    "placeholders": {
+      "scheduledDate": {
+        "type": "Object"
+      }
+    }
+  },
+  "yourNote": "Vaša poznámka",
+  "askAiCoach": "Opýtať sa AI trénera",
+  "aiSettings": "Nastavenia AI",
+  "askYourCoach": "Opýtajte sa trénera…",
+  "sendMessage": "Odoslať správu",
+  "sendFeedbackOrReportA": "Odoslať spätnú väzbu alebo nahlásiť chybu",
+  "addMeasurement2": "Pridať meranie",
+  "syncLabel2": "Synchronizovať",
+  "syncToday": "Synchronizovať dnes",
+  "fullSync1Year": "Úplná synchronizácia · 1 rok",
+  "fullSyncComplete": "Úplná synchronizácia · Dokončená",
+  "syncingYourData": "Synchronizujú sa vaše údaje…",
+  "lLeftkgRRightkgKg2": "Ľ {leftKg}  P {rightKg} kg",
+  "@lLeftkgRRightkgKg2": {
+    "placeholders": {
+      "leftKg": {
+        "type": "Object"
+      },
+      "rightKg": {
+        "type": "Object"
+      }
+    }
+  },
+  "weightKgFatBodyfatMuscle": "{weight} kg · Tuk {bodyFat} % · Svaly {muscleMass} kg",
+  "@weightKgFatBodyfatMuscle": {
+    "placeholders": {
+      "weight": {
+        "type": "Object"
+      },
+      "bodyFat": {
+        "type": "Object"
+      },
+      "muscleMass": {
+        "type": "Object"
+      }
+    }
+  },
+  "titleSportTolowercase": "{title}, {sport}, {toLowerCase}",
+  "@titleSportTolowercase": {
+    "placeholders": {
+      "title": {
+        "type": "Object"
+      },
+      "sport": {
+        "type": "Object"
+      },
+      "toLowerCase": {
+        "type": "Object"
+      }
+    }
+  },
+  "weatherUnavailableTapToRetry": "Počasie nedostupné · Ťuknutím skúsite znova",
+  "weatherSetYourLocation": "Počasie · Nastavte svoju polohu",
+  "t7DayForecast": "7-DŇOVÁ PREDPOVEĎ",
+  "minMax": "min/max",
+  "rainMm2": "dážď mm",
+  "uvMax": "UV max",
+  "kmH": "km/h",
+  "alt": "→ {alt}",
+  "@alt": {
+    "placeholders": {
+      "alt": {
+        "type": "Object"
+      }
+    }
+  },
+  "raceGoalsLength": "Ciele pretekov · {length}",
+  "@raceGoalsLength": {
+    "placeholders": {
+      "length": {
+        "type": "Object"
+      }
+    }
+  },
+  "gWk": "{g} týž.",
+  "@gWk": {
+    "placeholders": {
+      "g": {
+        "type": "Object"
+      }
+    }
+  },
+  "weeks": "{weeks}",
+  "@weeks": {
+    "placeholders": {
+      "weeks": {
+        "type": "Object"
+      }
+    }
+  },
+  "weeks2": "týždne",
+  "upcoming": "NADCHÁDZAJÚCE",
+  "lengthMoreDays": "+ ďalších {length} dní",
+  "@lengthMoreDays": {
+    "placeholders": {
+      "length": {
+        "type": "Object"
+      }
+    }
+  },
+  "yearMonth": "{year} / {month}",
+  "@yearMonth": {
+    "placeholders": {
+      "year": {
+        "type": "Object"
+      },
+      "month": {
+        "type": "Object"
+      }
+    }
+  },
+  "day": "{day}",
+  "@day": {
+    "placeholders": {
+      "day": {
+        "type": "Object"
+      }
+    }
+  },
+  "plannedCompletedSkipped": "○ Plánované   ● Dokončené   ✕ Preskočené",
+  "heartRate3": "Tepová frekvencia",
+  "watts": "Watty",
+  "theStepsAddUpTo": "Kroky dávajú dokopy {total}; plán počíta {plannedDurationMin} min.",
+  "@theStepsAddUpTo": {
+    "placeholders": {
+      "total": {
+        "type": "Object"
+      },
+      "plannedDurationMin": {
+        "type": "Object"
+      }
+    }
+  },
+  "typicalSplitForThisKind": "Typické rozdelenie pre tento druh tréningu; nie sú kroky, z ktorých by sa dalo vypočítať.",
+  "labelGetsEachExerciseWith": "{label} dostane každý cvik so sériami, opakovaniami a záťažou. Rozsahy opakovaní, námaha a tempo zostávajú vo Fjelii.",
+  "@labelGetsEachExerciseWith": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "markAsRest": "Označiť ako odpočinok",
+  "restoreWorkout": "Obnoviť tréning",
+  "skipThisWorkout": "Preskočiť tento tréning?",
+  "previousWeek": "Predchádzajúci týždeň",
+  "backToThisWeek": "Späť na tento týždeň",
+  "thisWeek": "Tento týždeň",
+  "nextWeek": "Nasledujúci týždeň",
+  "today2": "DNES",
+  "route": "TRASA",
+  "feedback": "Spätná väzba",
+  "plannedWorkout": "Plánovaný tréning",
+  "delete": "Odstrániť",
+  "chatAi": "AI chat",
+  "trainingLoad": "Tréningová záťaž",
+  "dayTrainingLoad2": "DENNÁ TRÉNINGOVÁ ZÁŤAŽ",
+  "trimp": " TRIMP",
+  "scorebeforeScoreafter": "{scoreBefore} → {scoreAfter}",
+  "@scorebeforeScoreafter": {
+    "placeholders": {
+      "scoreBefore": {
+        "type": "Object"
+      },
+      "scoreAfter": {
+        "type": "Object"
+      }
+    }
+  },
+  "temperatureOverTime": "TEPLOTA V ČASE",
+  "roundh": "{round}h",
+  "@roundh": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "timeInHrZones": "Čas v zónach TF",
+  "route2": "Trasa",
+  "start": "Štart",
+  "gpx": "GPX",
+  "touppercasesubstringBriefing": "Prehľad: {toUpperCase}{substring}",
+  "@touppercasesubstringBriefing": {
+    "placeholders": {
+      "toUpperCase": {
+        "type": "Object"
+      },
+      "substring": {
+        "type": "Object"
+      }
+    }
+  },
+  "chatWithAiAboutThis": "Chatovať s AI o tomto prehľade",
+  "whyThisRecommendation": "Prečo toto odporúčanie?",
+  "titleDateLabel": "{title}, {date}, {label}",
+  "@titleDateLabel": {
+    "placeholders": {
+      "title": {
+        "type": "Object"
+      },
+      "date": {
+        "type": "Object"
+      },
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "previousDay": "Predchádzajúci deň",
+  "nextDay": "Nasledujúci deň",
+  "updating": "Aktualizuje sa",
+  "resting": "V POKOJI",
+  "noTimedReadings": "Žiadne časované merania",
+  "avg": "PRIEM",
+  "peak": "VRCHOL",
+  "tolocalRoundmin": "{toLocal} · {round}min",
+  "@tolocalRoundmin": {
+    "placeholders": {
+      "toLocal": {
+        "type": "Object"
+      },
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "avgheartrateBpmAvg": "{avgHeartRate} bpm priem.",
+  "@avgheartrateBpmAvg": {
+    "placeholders": {
+      "avgHeartRate": {
+        "type": "Object"
+      }
+    }
+  },
+  "timeWeightedAverageOverRecorded": "Časovo vážený priemer za zaznamenané obdobia. Medzery bez meraní sú vylúčené.",
+  "previousHeartRatePeriod": "Predchádzajúce obdobie tepovej frekvencie",
+  "nextHeartRatePeriod": "Nasledujúce obdobie tepovej frekvencie",
+  "avgHr": "Priem. TF",
+  "restingHr": "Pokojová TF",
+  "both": "Obe",
+  "averagelabelFixedMs": "{averageLabel} {fixed} ms",
+  "@averagelabelFixedMs": {
+    "placeholders": {
+      "averageLabel": {
+        "type": "Object"
+      },
+      "fixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "measureWithPolarH10": "Merať s Polar H10",
+  "ms": "ms",
+  "noWorkoutInThisPeriod": "Žiadny tréning v tomto období nemá porovnateľný pár pred/po.",
+  "textEachWorkoutCountsOnce": "{text}. Každý tréning sa počíta raz; opisuje to vaše páry, nehodnotí ich.",
+  "@textEachWorkoutCountsOnce": {
+    "placeholders": {
+      "text": {
+        "type": "Object"
+      }
+    }
+  },
+  "workoutFinished": "Tréning skončil?",
+  "yourWorkoutIsNotIn": "Váš tréning ešte nie je vo Fjelii. Ak skončil, uveďte kedy a pripomienka sa môže riadiť skutočným koncom. Inak sa zobrazí po synchronizácii hodiniek.",
+  "workoutFinished2": "Tréning skončil",
+  "theWorkoutMustStartAfter": "Tréning musí začať po meraní a skončiť po svojom začiatku, nie v budúcnosti.",
+  "daysDAvg": "{days} D priem.",
+  "@daysDAvg": {
+    "placeholders": {
+      "days": {
+        "type": "Object"
+      }
+    }
+  },
+  "averageUnit": "{average} {unit}",
+  "@averageUnit": {
+    "placeholders": {
+      "average": {
+        "type": "Object"
+      },
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "baselineUnit": "{baseline} {unit}",
+  "@baselineUnit": {
+    "placeholders": {
+      "baseline": {
+        "type": "Object"
+      },
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "previousPeriod": "Predchádzajúce obdobie",
+  "nextPeriod": "Nasledujúce obdobie",
+  "overnightHrvReflectsRecoveryCompare": "Nočné HRV odráža regeneráciu. Porovnávajte svoje hodnoty s vlastnou základnou v čase.",
+  "moveThisWorkout": "PRESUNÚŤ TENTO TRÉNING",
+  "pickDate": "Vybrať dátum",
+  "movedFromMovedfrom": "Presunuté z {movedFrom}",
+  "@movedFromMovedfrom": {
+    "placeholders": {
+      "movedFrom": {
+        "type": "Object"
+      }
+    }
+  },
+  "hrvAroundThisWorkout": "HRV okolo tohto tréningu",
+  "measureAfterTraining": "Merať po tréningu",
+  "measureAgain": "Merať znova",
+  "explainWithAi": "Vysvetliť pomocou AI",
+  "beforeEndedPregapAheadOf": "Pred skončilo {preGap} pred začiatkom.",
+  "@beforeEndedPregapAheadOf": {
+    "placeholders": {
+      "preGap": {
+        "type": "Object"
+      }
+    }
+  },
+  "lengthFurtherMeasurementSAfter": "{length} ďalších meraní po tomto tréningu sa ponecháva ako dodatočné pozorovania.",
+  "@lengthFurtherMeasurementSAfter": {
+    "placeholders": {
+      "length": {
+        "type": "Object"
+      }
+    }
+  },
+  "noHrvMeasurementRecordedAround": "Okolo tohto tréningu nebolo zaznamenané žiadne meranie HRV.",
+  "measureHrv": "Merať HRV",
+  "deltamsMs": "{deltaMs} ms",
+  "@deltamsMs": {
+    "placeholders": {
+      "deltaMs": {
+        "type": "Object"
+      }
+    }
+  },
+  "deltapercent": "{deltaPercent} %",
+  "@deltapercent": {
+    "placeholders": {
+      "deltaPercent": {
+        "type": "Object"
+      }
+    }
+  },
+  "aDescriptionOfThisPair": "Opis tohto páru, nie skóre tréningu.",
+  "notEnoughComparableWorkoutsYet": "Zatiaľ nedostatok porovnateľných tréningov, {eligible} z {need}.",
+  "@notEnoughComparableWorkoutsYet": {
+    "placeholders": {
+      "eligible": {
+        "type": "Object"
+      },
+      "need": {
+        "type": "Object"
+      }
+    }
+  },
+  "notEnoughComparableWorkoutsYet2": "Zatiaľ nedostatok porovnateľných tréningov ({eligible} z {need}).",
+  "@notEnoughComparableWorkoutsYet2": {
+    "placeholders": {
+      "eligible": {
+        "type": "Object"
+      },
+      "need": {
+        "type": "Object"
+      }
+    }
+  },
+  "yourEligibleSimilarWorkoutsTolocal": "Vaše {eligible} podobné tréningy · {toLocal}–{toLocal2}",
+  "@yourEligibleSimilarWorkoutsTolocal": {
+    "placeholders": {
+      "eligible": {
+        "type": "Object"
+      },
+      "toLocal": {
+        "type": "Object"
+      },
+      "toLocal2": {
+        "type": "Object"
+      }
+    }
+  },
+  "middleHalfQ1msToQ3ms": "Stredná polovica {q1Ms} až {q3Ms} ms · medián {medianMs} ms · tento tréning {delta} ms",
+  "@middleHalfQ1msToQ3ms": {
+    "placeholders": {
+      "q1Ms": {
+        "type": "Object"
+      },
+      "q3Ms": {
+        "type": "Object"
+      },
+      "medianMs": {
+        "type": "Object"
+      },
+      "delta": {
+        "type": "Object"
+      }
+    }
+  },
+  "rpeI": "RPE {i}",
+  "@rpeI": {
+    "placeholders": {
+      "i": {
+        "type": "Object"
+      }
+    }
+  },
+  "easy2": "ľahké",
+  "allOut": "Naplno",
+  "workoutProfileDescription": "Profil tréningu: {description}",
+  "@workoutProfileDescription": {
+    "placeholders": {
+      "description": {
+        "type": "Object"
+      }
+    }
+  },
+  "noActivitiesInThisPeriod": "V tomto období žiadne aktivity",
+  "enableHeatAcclimationInTraining": "Zapnite aklimatizáciu na teplo v nastaveniach tréningu.",
+  "noElevationThisWeek": "Tento týždeň žiadne prevýšenie",
+  "noActivitiesSynced": "Žiadne synchronizované aktivity",
+  "noHrZoneData": "Žiadne údaje o zónach TF",
+  "easyJogGetHrElevated": "Ľahký klus – zvýšte TF, uvoľnené nohy",
+  "fastestSustainablePaceLikeA": "Najrýchlejšie udržateľné tempo – ako 30-minútové preteky",
+  "walkCardiacRecovery": "Chôdza – srdcová regenerácia",
+  "selectTheTtActivityFirst": "Najprv vyberte aktivitu testu.",
+  "calculating": "Počíta sa…",
+  "calculateLt2": "Vypočítať LT2",
+  "enterFtpBetween30And": "Zadajte FTP medzi 30 a 1000 W.",
+  "aerobicThreshold": "Aeróbny prah",
+  "functionalThresholdPower": "Funkčný prahový výkon",
+  "estimated": "Odhadované",
+  "afterWarmingUpRunFive": "Po rozcvičke bežte päť minút na najrýchlejšej udržateľnej námahe. Zaznamenajte beh s údajmi o rýchlosti alebo vzdialenosti.",
+  "recordAtLeast40Minutes": "Zaznamenajte aspoň 40 minút rovnomerného behu pri stálej námahe. Test porovnáva tepovú frekvenciu v každej polovici na odhad aeróbneho driftu.",
+  "theFastestFiveMinuteWindow": "Najrýchlejšie päťminútové okno poskytuje vaše tempo VO2max.",
+  "noResultYet": "Zatiaľ žiadny výsledok",
+  "calculateVo2maxPace": "Vypočítať tempo VO2max",
+  "calculateLt1": "Vypočítať LT1",
+  "loading2": "Načítava sa",
+  "unavailable": "Nedostupné",
+  "noTrainingHistory": "Žiadna tréningová história",
+  "fitnessCtl": "Kondícia (CTL)",
+  "fatigueAtl": "Únava (ATL)",
+  "formTsb": "Forma (TSB)",
+  "noHistory": "Žiadna história",
+  "fresh": "Svieži",
+  "optimal": "Optimálne",
+  "neutral": "Neutrálne",
+  "tired": "Unavený",
+  "veryFatigued": "Veľmi unavený",
+  "garminRunningVo2max": "Garmin VO2max beh",
+  "garminCyclingVo2max": "Garmin VO2max cyklistika",
+  "aerobicThreshold2": "Aeróbny prah",
+  "driftDriftAt": "Drift {drift} % · {at}",
+  "@driftDriftAt": {
+    "placeholders": {
+      "drift": {
+        "type": "Object"
+      },
+      "at": {
+        "type": "Object"
+      }
+    }
+  },
+  "activityHours": "Hodiny aktivity",
+  "activityKm": "Km aktivity",
+  "tap5MinuteMaxTest": "Ťuknite · 5-min maximálny test",
+  "setFtpToCalculatePower": "Nastavte FTP na výpočet výkonnostných zón",
+  "cyclingPowerZones2": "Výkonnostné zóny v cyklistike",
+  "pfitzingerZones2": "Zóny podľa Pfitzingera",
+  "completeAnLt2TestTo": "Dokončite test LT2 na výpočet bežeckých zón.",
+  "setFtpToCalculatePower2": "Nastavte FTP na výpočet výkonnostných zón.",
+  "endurance": "Vytrvalosť",
+  "threshold": "Prah",
+  "anaerobic": "Anaeróbne",
+  "whatExplainsThisRise": "Čo vysvetľuje tento nárast?",
+  "whatExplainsThisDrop": "Čo vysvetľuje tento pokles",
+  "whatExplainsThisRise2": "Čo vysvetľuje tento nárast",
+  "editsAreKeptInFjelia": "Úpravy sa uchovávajú vo Fjelii ako lokálna kópia pre tento dátum. Tréning v Garmine sa nemení.",
+  "howDoIExecuteThis": "Ako tento tréning vykonám?",
+  "shareHealthContextWithName": "Zdieľať zdravotný kontext s {name}?",
+  "@shareHealthContextWithName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "yourMessageAndAHealth": "Vaša správa a súhrn zdravia/tréningu sa odošlú tomuto cloudovému poskytovateľovi AI. Mená a GPS sú z vytvoreného súhrnu vylúčené.",
+  "couldNotGetAReply": "Nepodarilo sa získať odpoveď. Skontrolujte nastavenia AI a skúste to znova.",
+  "askAboutYourRecoveryTraining": "Opýtajte sa na regeneráciu, tréning alebo dnešný plán.",
+  "noSyncYet": "Zatiaľ nesynchronizované",
+  "lastSyncLastContext": "Posledná synchronizácia: {last} {context}",
+  "@lastSyncLastContext": {
+    "placeholders": {
+      "last": {
+        "type": "Object"
+      },
+      "context": {
+        "type": "Object"
+      }
+    }
+  },
+  "seasonWithTradeOffs": "Sezóna: s kompromismi",
+  "seasonNeedsYourDecision": "Sezóna: potrebuje vaše rozhodnutie",
+  "seasonCannotBeCombined": "Sezóna: nedá sa skombinovať",
+  "seasonProvisional": "Sezóna: predbežná",
+  "season": "Sezóna",
+  "allGoalsFit": "Všetky ciele sa zmestia.",
+  "goalTargetfinishsecondsgoal": "Cieľ {targetFinishSeconds}{goal}",
+  "@goalTargetfinishsecondsgoal": {
+    "placeholders": {
+      "targetFinishSeconds": {
+        "type": "Object"
+      },
+      "goal": {
+        "type": "Object"
+      }
+    }
+  },
+  "estEstimateestimate2": "Odh. {estimate}{estimate2}",
+  "@estEstimateestimate2": {
+    "placeholders": {
+      "estimate": {
+        "type": "Object"
+      },
+      "estimate2": {
+        "type": "Object"
+      }
+    }
+  },
+  "doneDoneby": "Hotovo · {doneBy}",
+  "@doneDoneby": {
+    "placeholders": {
+      "doneBy": {
+        "type": "Object"
+      }
+    }
+  },
+  "garminWorkoutWorkout": "Tréning Garmin · {workout}",
+  "@garminWorkoutWorkout": {
+    "placeholders": {
+      "workout": {
+        "type": "Object"
+      }
+    }
+  },
+  "moveAnyway": "Presunúť aj tak?",
+  "wattsNeedYourFtpSet": "Watty vyžadujú vaše FTP: nastavte ho v Záťaž, Prahy.",
+  "mainTargetInWattsFrom": "Hlavný cieľ vo wattoch z vašej FTP, tepová frekvencia ako vodidlo.",
+  "mainTargetHeartRateWatts": "Hlavný cieľ: tepová frekvencia; watty nie sú na hodinkách nastavené.",
+  "taperPhase": "Fáza znižovania záťaže",
+  "recoverySession": "Regeneračný tréning",
+  "closeToYourEvent": "Blízko vášho podujatia",
+  "noWorkoutStructureAvailable": "Štruktúra tréningu nie je k dispozícii.",
+  "aerobic": "Aeróbne",
+  "pushAgainToUpdateYour": "Odošlite znova, aby sa aktualizoval kalendár hodiniek.",
+  "workoutSentToLabel": "Tréning odoslaný do {label}",
+  "@workoutSentToLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "updating2": "Aktualizuje sa…",
+  "pushToLabel": "Odoslať do {label}",
+  "@pushToLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "shareExerciseListForLabel": "Zdieľať zoznam cvikov pre {label}",
+  "@shareExerciseListForLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "shareWorkoutForLabel": "Zdieľať tréning pre {label}",
+  "@shareWorkoutForLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "whyNothingIsAddedTo": "Prečo? Nič sa nepridáva, aby sa to doplnilo.",
+  "workout": "Tréning",
+  "recordedActivityLinkedToThis": "Zaznamenaná aktivita prepojená s týmto tréningom",
+  "matchedToTheRecordedWorkout": "Priradené k začiatku zaznamenaného tréningu",
+  "matchedByWorkoutNameSport": "Priradené podľa názvu tréningu, športu a dátumu",
+  "matchedBySportDateAnd": "Priradené podľa športu, dátumu a trvania",
+  "planPlannedminutesMin": "Plán {plannedMinutes} min",
+  "@planPlannedminutesMin": {
+    "placeholders": {
+      "plannedMinutes": {
+        "type": "Object"
+      }
+    }
+  },
+  "maxHr": "Max. TF",
+  "trainingLoad2": "Tréningová záťaž",
+  "active": "Aktívne",
+  "avgPace": "Priem. tempo",
+  "avgSpeed": "Priem. rýchlosť",
+  "avgPower": "Priem. výkon",
+  "elevation2": "Prevýšenie",
+  "altitude": "Nadmorská výška",
+  "explainMyHrvBeforeAnd": "Vysvetli moje HRV pred týmto tréningom a po ňom. Čo je porovnateľné, čo nie a čo je stále neznáme?",
+  "deleteActivity": "Odstrániť aktivitu?",
+  "removeThisActivityFromThe": "Odstrániť túto aktivitu z lokálnej histórie? Neskoršia synchronizácia poskytovateľa ju môže znova importovať.",
+  "howDidThisSessionGo": "Ako tento tréning dopadol a čo znamená pre moje najbližšie dni?",
+  "currentFixedFixed2": "Aktuálne {fixed}, {fixed2}",
+  "@currentFixedFixed2": {
+    "placeholders": {
+      "fixed": {
+        "type": "Object"
+      },
+      "fixed2": {
+        "type": "Object"
+      }
+    }
+  },
+  "setUpInTrainingSettings": "Nastavte v nastaveniach tréningu",
+  "couldNotLoadHeatData": "Údaje o teple sa nepodarilo načítať – ťuknutím zobrazíte podrobnosti",
+  "loadingHeatHistory": "Načítava sa história tepla…",
+  "noHeatDataYet": "Zatiaľ žiadne údaje o teple",
+  "optimalLowHigh": "Optimum {low}–{high}",
+  "@optimalLowHigh": {
+    "placeholders": {
+      "low": {
+        "type": "Object"
+      },
+      "high": {
+        "type": "Object"
+      }
+    }
+  },
+  "optimalLowHighTrimp": "Optimum: {low}–{high} TRIMP",
+  "@optimalLowHighTrimp": {
+    "placeholders": {
+      "low": {
+        "type": "Object"
+      },
+      "high": {
+        "type": "Object"
+      }
+    }
+  },
+  "targetUnavailableSyncTrainingHistory": "Cieľ nie je k dispozícii – synchronizujte tréningovú históriu",
+  "workoutQualifiedForHeatAccumulation": "Tréning sa započítal do akumulácie tepla.",
+  "workoutDidNotAddHeat": "Tréning nepridal akumuláciu tepla.",
+  "performanceTime": "Výkon / Čas",
+  "performanceDistance": "Výkon / Vzdialenosť",
+  "noRecordedRoute": "Žiadna zaznamenaná trasa",
+  "zoomIn": "Priblížiť",
+  "zoomOut": "Oddialiť",
+  "fitRoute": "Prispôsobiť trasu",
+  "fullscreenMap": "Mapa na celú obrazovku",
+  "openstreetmapContributors2": "prispievatelia OpenStreetMap",
+  "appleIntelligenceIsUnavailableShowing": "Apple Intelligence nie je k dispozícii. Zobrazuje sa súhrn bez AI.",
+  "generateAiBriefing": "Vytvoriť AI prehľad?",
+  "retryAiBriefing": "Skúsiť AI prehľad znova",
+  "generateBriefing": "Vytvoriť prehľad",
+  "discussThisBriefingWithMe": "Prediskutuj so mnou tento prehľad a navrhni ďalší najlepší krok.\n\n{text}",
+  "@discussThisBriefingWithMe": {
+    "placeholders": {
+      "text": {
+        "type": "Object"
+      }
+    }
+  },
+  "whyThisRecommendationWhichOf": "Prečo toto odporúčanie? Ktoré moje čísla a ktoré medzery v údajoch k nemu viedli a čo by ho zmenilo?\n\n{text}",
+  "@whyThisRecommendationWhichOf": {
+    "placeholders": {
+      "text": {
+        "type": "Object"
+      }
+    }
+  },
+  "avg2": "Priem.",
+  "peak2": "Vrchol",
+  "notEnoughContinuousReadingsFor": "Nedostatok nepretržitých meraní na priemer.",
+  "recordedCoverageInhourshInminutesminTime": "Zaznamenané pokrytie: {inHours} h {inMinutes} min · časovo vážený priemer",
+  "@recordedCoverageInhourshInminutesminTime": {
+    "placeholders": {
+      "inHours": {
+        "type": "Object"
+      },
+      "inMinutes": {
+        "type": "Object"
+      }
+    }
+  },
+  "lying": "Ležiačky",
+  "noHrvReadingsInThis": "V tomto období žiadne merania HRV",
+  "overnightHrvComesFromYour": "Nočné HRV pochádza z vašich hodiniek, bodové merania z Polar H10 (RMSSD). Metódy sa líšia: porovnávajte trendy, nie jednotlivé hodnoty.",
+  "noReadings": "Žiadne merania",
+  "whenDidTheWorkoutStart": "Kedy tréning začal?",
+  "whenDidItEnd": "Kedy skončil?",
+  "last3Months": "Posledné 3 mesiace",
+  "lastYear": "Posledný rok",
+  "lastDaysDays": "Posledných {days} dní",
+  "@lastDaysDays": {
+    "placeholders": {
+      "days": {
+        "type": "Object"
+      }
+    }
+  },
+  "nowOnCurrentTapA": "Teraz na {current}. Ťuknite na deň alebo naň potiahnite tréning. Kroky zostanú nezmenené.",
+  "@nowOnCurrentTapA": {
+    "placeholders": {
+      "current": {
+        "type": "Object"
+      }
+    }
+  },
+  "monthView": "Mesačné zobrazenie",
+  "syncing": "Synchronizuje sa",
+  "trendUnavailable": "Trend nie je k dispozícii",
+  "stable": "Stabilný",
+  "increasing": "Rastúci",
+  "decreasing": "Klesajúci",
+  "unclear": "Nejasný",
+  "notComparable": "Neporovnateľné",
+  "waitingForAfter": "Čaká sa na meranie po",
+  "afterOnly": "Iba po",
+  "waitingForTheActualWorkout": "Čaká sa na skutočný koniec tréningu.",
+  "reminderAroundTolocal": "Pripomienka okolo {toLocal}",
+  "@reminderAroundTolocal": {
+    "placeholders": {
+      "toLocal": {
+        "type": "Object"
+      }
+    }
+  },
+  "reminderIsDueMeasureWhen": "Pripomienka je aktuálna. Merajte, keď budete pripravení.",
+  "thisReminderIsNoLonger": "Táto pripomienka už nie je aktuálna. Otvorte tréning a zobrazte svoje merania.",
+  "beforeFixedMilliseconds": "Pred {fixed} milisekúnd. ",
+  "@beforeFixedMilliseconds": {
+    "placeholders": {
+      "fixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "afterFixedMilliseconds": "Po {fixed} milisekúnd",
+  "@afterFixedMilliseconds": {
+    "placeholders": {
+      "fixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "changeDeltamsMillisecondsDeltapercentPercent": "Zmena {deltaMs} milisekúnd, {deltaPercent} percent.",
+  "@changeDeltamsMillisecondsDeltapercentPercent": {
+    "placeholders": {
+      "deltaMs": {
+        "type": "Object"
+      },
+      "deltaPercent": {
+        "type": "Object"
+      }
+    }
+  },
+  "noPreTrainingMeasurementRecorded": "Nezaznamenané žiadne meranie pred tréningom.",
+  "notMeasuredYet": "Zatiaľ nezmerané",
+  "leftOutOfTheComparison": "Vylúčené z porovnania: {excludedTotal} tréningov ({c}).",
+  "@leftOutOfTheComparison": {
+    "placeholders": {
+      "excludedTotal": {
+        "type": "Object"
+      },
+      "c": {
+        "type": "Object"
+      }
+    }
+  },
+  "notFromThisWorkout": "Nie z tohto tréningu",
+  "useAsBefore": "Použiť ako pred",
+  "useAsAfter": "Použiť ako po",
+  "beforeNotMeasured": "Pred · nezmerané",
+  "beforeTolocal": "Pred · {toLocal}",
+  "@beforeTolocal": {
+    "placeholders": {
+      "toLocal": {
+        "type": "Object"
+      }
+    }
+  },
+  "workoutWorkouttext": "Tréning · {workoutText}",
+  "@workoutWorkouttext": {
+    "placeholders": {
+      "workoutText": {
+        "type": "Object"
+      }
+    }
+  },
+  "afterNotMeasuredYet": "Po · zatiaľ nezmerané",
+  "afterTolocal": "Po · {toLocal}",
+  "@afterTolocal": {
+    "placeholders": {
+      "toLocal": {
+        "type": "Object"
+      }
+    }
+  },
+  "yourSimilarWorkoutsEligibleTolocal": "Vaše podobné tréningy ({eligible}, {toLocal}–{toLocal2}): medián {medianMs} ms, stredná polovica {q1Ms} až {q3Ms} ms.",
+  "@yourSimilarWorkoutsEligibleTolocal": {
+    "placeholders": {
+      "eligible": {
+        "type": "Object"
+      },
+      "toLocal": {
+        "type": "Object"
+      },
+      "toLocal2": {
+        "type": "Object"
+      },
+      "medianMs": {
+        "type": "Object"
+      },
+      "q1Ms": {
+        "type": "Object"
+      },
+      "q3Ms": {
+        "type": "Object"
+      }
+    }
+  },
+  "howHardDidItFeel": "Aké ťažké to bolo? (RPE)",
+  "loadMetric": "Záťaž",
+  "clearAction": "Vymazať",
+  "routeFinish": "Cieľ",
+  "month2": "MESIAC",
+  "week2": "TÝŽDEŇ",
+  "quarter": "ŠTVRŤROK",
+  "year": "ROK",
+  "easy3": "ĽAHKÉ",
+  "mod": "MIERNE",
+  "hard": "ŤAŽKÉ",
+  "protocol": "PROTOKOL",
+  "calculate": "VYPOČÍTAŤ",
+  "warmUp": "ROZCVIČKA",
+  "coolDown": "SCHLADENIE",
+  "ftpCycling": "FTP cyklistika",
+  "ftpFtpwattsWWattsperkgW": "FTP {ftpWatts} W · {wattsPerKg} W/kg",
+  "@ftpFtpwattsWWattsperkgW": {
+    "placeholders": {
+      "ftpWatts": {
+        "type": "Object"
+      },
+      "wattsPerKg": {
+        "type": "Object"
+      }
+    }
+  },
+  "thisWeekSoFar": "TENTO TÝŽDEŇ · DOTERAZ",
+  "duration2": "TRVANIE",
+  "distance2": "VZDIALENOSŤ",
+  "sport2": "ŠPORT",
+  "repeatSets": "OPAKOVANÉ SÉRIE",
+  "aboutThisWorkout": "O TOMTO TRÉNINGU",
+  "workoutStructure": "ŠTRUKTÚRA TRÉNINGU",
+  "health2": "ZDRAVIE",
+  "high2": "VYSOKÝ",
+  "elevated": "ZVÝŠENÝ",
+  "normal": "NORMÁLNY",
+  "tomorrow": "ZAJTRA",
+  "skipped2": "PRESKOČENÉ",
+  "weeklyPlan": "TÝŽDENNÝ PLÁN",
+  "activityLog3": "ZÁZNAM AKTIVÍT",
+  "skippedTouppercase": "PRESKOČENÉ · {toUpperCase}",
+  "@skippedTouppercase": {
+    "placeholders": {
+      "toUpperCase": {
+        "type": "Object"
+      }
+    }
+  },
+  "primaryZone": "HLAVNÁ ZÓNA",
+  "coachingCues": "TRÉNERSKÉ POKYNY",
+  "targets": "CIELE",
+  "adaptation": "ADAPTÁCIA",
+  "done2": "HOTOVO",
+  "notRecorded2": "NEZAZNAMENANÉ",
+  "planned": "PLÁNOVANÉ",
+  "extra": "NAVYŠE",
+  "optimal2": "OPTIMÁLNE",
+  "qualified": "KVALIFIKOVANÉ",
+  "temp": "TEPLOTA",
+  "humidity2": "VLHKOSŤ",
+  "pressure": "TLAK",
+  "wetBulb": "MOKRÝ TEPLOMER",
+  "paceMinKm": "Tempo (min/km)",
+  "speedKmH": "Rýchlosť (km/h)",
+  "elevationM": "Prevýšenie (m)",
+  "powerW": "VÝKON (W)",
+  "performanceTime2": "VÝKON / ČAS",
+  "performanceDistance2": "VÝKON / VZDIALENOSŤ",
+  "load2": "ZÁŤAŽ",
+  "day2": "DEŇ",
+  "allTime": "CELKOVO",
+  "hrvAroundThisWorkout2": "HRV okolo tohto tréningu. ",
+  "lowReserve": "NÍZKA REZERVA",
+  "goodReserve": "DOBRÁ REZERVA",
+  "latestReadingAtTolocal": "Posledné meranie o {toLocal}",
+  "@latestReadingAtTolocal": {
+    "placeholders": {
+      "toLocal": {
+        "type": "Object"
+      }
+    }
+  },
+  "weeklyAvg": "TÝŽDENNÝ PRIEMER",
+  "monthlyAvg": "MESAČNÝ PRIEMER",
+  "systolic2": "SYSTOLICKÝ",
+  "diastolic2": "DIASTOLICKÝ",
+  "hourlyVariation": "HODINOVÉ KOLÍSANIE",
+  "dailyVariation": "DENNÉ KOLÍSANIE",
+  "sys2": "SYS",
+  "dia": "DIA",
+  "bluetoothDevices": "ZARIADENIA BLUETOOTH",
+  "accountsServices": "ÚČTY A SLUŽBY",
+  "flowLoginOptional": "PRIHLÁSENIE DO FLOW (VOLITEĽNÉ)",
+  "polarFlowLogin": "PRIHLÁSENIE DO POLAR FLOW",
+  "raceGoal": "CIEĽ PRETEKOV",
+  "experienceLevel": "ÚROVEŇ SKÚSENOSTÍ",
+  "weeklySchedule2": "TÝŽDENNÝ ROZVRH",
+  "sessionsPerDay2": "TRÉNINGY ZA DEŇ",
+  "aboutYou": "O VÁS",
+  "yourActivities2": "VAŠE AKTIVITY",
+  "latestReadingAtTimestamp": "Posledné meranie o {timestamp}",
+  "@latestReadingAtTimestamp": {
+    "placeholders": {
+      "timestamp": {
+        "type": "Object"
+      }
+    }
+  },
+  "poorSleep": "SLABÝ SPÁNOK",
+  "fairSleep": "PRIEMERNÝ SPÁNOK",
+  "goodSleep": "DOBRÝ SPÁNOK",
+  "hoursOfSleep": "HODINY SPÁNKU",
+  "sleepNeeded": "POTREBNÝ SPÁNOK",
+  "deepSleep": "HLBOKÝ SPÁNOK",
+  "exercises2": "CVIKY",
+  "strengthSummary": "SÚHRN SILY",
+  "strengthDraft": "SILA · KONCEPT",
+  "strengthFinishedWithGaps": "SILA · DOKONČENÉ S MEDZERAMI",
+  "strength2": "SILA",
+  "wind": "VIETOR",
+  "sun2": "SLNKO",
+  "cloud": "OBLAKY",
+  "dataSourceUpdatedFetchedat": "Údaje: {source} · Aktualizované {fetchedAt}",
+  "@dataSourceUpdatedFetchedat": {
+    "placeholders": {
+      "source": {
+        "type": "Object"
+      },
+      "fetchedAt": {
+        "type": "Object"
+      }
+    }
+  },
+  "coros2": "COROS",
+  "rmssdMs": "RMSSD · ms",
+  "sdnnMs": "SDNN · ms",
+  "now2": "TERAZ",
+  "awake": "BDELÝ",
+  "light": "ĽAHKÝ",
+  "deep2": "HLBOKÝ",
+  "sqliteOrm": "SQLite ORM",
+  "httpClients": "Klienti HTTP",
+  "gpsLocation": "Poloha GPS",
+  "hdlCholesterol": "HDL cholesterol",
+  "ldlCholesterol": "LDL cholesterol",
+  "raceName": "NÁZOV PRETEKOV",
+  "mtb": "MTB",
+  "distanceKm": "Vzdialenosť (km)",
+  "priority": "PRIORITA",
+  "elevationGainM": "Prevýšenie (m)",
+  "targetTime": "CIEĽOVÝ ČAS",
+  "raceDate": "DÁTUM PRETEKOV",
+  "participation": "ÚČASŤ",
+  "whatIWantFromIt": "ČO OD TOHO CHCEM",
+  "periodTimeline": "{period} · PRIEBEH",
+  "@periodTimeline": {
+    "placeholders": {
+      "period": {
+        "type": "Object"
+      }
+    }
+  },
+  "tabPlan": "PLÁN",
+  "tabLoad": "ZÁŤAŽ",
+  "tabCoach": "TRÉNER",
+  "hrDriftTestLt1": "TEST DRIFTU TF – LT1",
+  "asSentByGarmin": "TAK, AKO HO POSLAL GARMIN",
+  "noData2": "ŽIADNE ÚDAJE",
+  "noTarget": "ŽIADNY CIEĽ",
+  "noHeatLoad": "ŽIADNA TEPELNÁ ZÁŤAŽ",
+  "hrBpm": "TF (bpm)",
+  "aiBriefingUnavailableShowingA": "AI prehľad nie je k dispozícii. Zobrazuje sa súhrn bez AI.",
+  "uvIndex2": "UV INDEX",
+  "aiBriefing": "AI prehľad",
+  "uiFrameworkByGoogle": "UI framework od Googlu",
+  "unableToLoadData": "Údaje sa nepodarilo načítať",
+  "briefingSummary": "Regenerácia {recovery} / 100. Spánok {sleep} / 100. Dnešná tréningová záťaž je {load} TRIMP.",
+  "@briefingSummary": {
+    "placeholders": {
+      "recovery": {
+        "type": "Object"
+      },
+      "sleep": {
+        "type": "Object"
+      },
+      "load": {
+        "type": "Object"
+      }
+    }
+  },
+  "morningBriefing": "Ranný prehľad",
+  "lunchBriefing": "Obedný prehľad",
+  "afternoonBriefing": "Popoludňajší prehľad",
+  "eveningBriefing": "Večerný prehľad",
+  "appleUnusableAnswer": "Apple Intelligence nedokázala vytvoriť použiteľnú odpoveď: opakovala sa alebo opakovala vaše údaje. Preformulujte otázku alebo vyberte v nastaveniach iného poskytovateľa AI.",
+  "appleCouldNotAnswer": "Apple Intelligence nemohla odpovedať. Skúste to znova.",
+  "appleNotAvailableOnDevice": "Apple Intelligence nie je v tomto zariadení k dispozícii.",
+  "appleLanguageRejected": "Apple Intelligence odmietla jazyk požiadavky. Skúste krátku otázku v angličtine. Skontrolujte aj jazykové nastavenia iPhonu a Siri.",
+  "appleRequestTooLarge": "Apple Intelligence nedokázala spracovať túto požiadavku. Skúste kratšiu otázku.",
+  "messageTooLongForApple": "Táto správa je pre Apple Intelligence príliš dlhá. Skráťte ju a odošlite znova.",
+  "vo2maxRunning": "VO₂max beh",
+  "vo2maxCycling": "VO₂max cyklistika",
+  "vo2maxPaceLabel": "Tempo VO₂max",
+  "lt1Threshold": "Prah LT1",
+  "lt2Threshold": "Prah LT2",
+  "hoursPreviousWeek": "{value} h minulý týždeň",
+  "@hoursPreviousWeek": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "kmPreviousWeek": "{value} km minulý týždeň",
+  "@kmPreviousWeek": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "thirtyMinuteTimeTrial": "30-minútová časovka",
+  "thirtyMinTtDate": "30-min TT · {date}",
+  "@thirtyMinTtDate": {
+    "placeholders": {
+      "date": {
+        "type": "Object"
+      }
+    }
+  },
+  "yesterday2": "VČERA",
+  "briefHeadGreen": "Ste dobre zregenerovaní.",
+  "briefHeadYellow": "Máte určitú záťaž.",
+  "briefHeadRed": "Ste výrazne zaťažení.",
+  "briefMain": "Hlavné dôvody: {reasons}.",
+  "@briefMain": {
+    "placeholders": {
+      "reasons": {
+        "type": "Object"
+      }
+    }
+  },
+  "briefAllClear": "Žiadna z vašich hodnôt nevykazuje varovný signál.",
+  "briefAdviceGreen": "Trénujte podľa plánu.",
+  "briefAdviceYellow": "Držte sa plánu, ale nepridávajte intenzitu.",
+  "briefAdviceRed": "Najprv regenerácia: ľahký deň alebo odpočinok.",
+  "briefReasonHrvLow": "nízke HRV v spánku",
+  "briefReasonHrvHigh": "vysoké HRV v spánku",
+  "briefReasonRhrUp": "zvýšená pokojová TF",
+  "briefReasonRhrDown": "nízka pokojová TF",
+  "briefReasonSleepShort": "málo spánku",
+  "briefReasonSleepGood": "potreba spánku splnená",
+  "briefReasonEnergyLow": "málo energie",
+  "briefReasonEnergyHigh": "dobrá energia",
+  "briefReasonStressHigh": "vysoký stres",
+  "briefReasonRespHigh": "zvýšená dychová frekvencia",
+  "briefReasonSpo2Low": "nízky kyslík v krvi",
+  "briefReasonSkinTempOff": "nezvyčajná teplota pokožky",
+  "briefReasonFormTired": "nahromadená tréningová únava",
+  "briefReasonFormVeryTired": "veľmi vysoká tréningová únava",
+  "briefReasonFormFresh": "svieži a oddýchnutí",
+  "briefTrainingHrvUp": "Vaše HRV po tréningu vzrástlo, čo je dobré znamenie.",
+  "briefTrainingHrvDown": "Vaše HRV po tréningu kleslo, čo je menej dobré znamenie."
+}

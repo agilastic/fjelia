@@ -1,5 +1,8 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../providers/day_data_provider.dart';
 import '../../widgets/app_widgets.dart';
 
@@ -9,7 +12,7 @@ class TrainingMetricsSheet extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final d = ref.watch(selectedDateProvider);
     return SheetPage(
-      title: 'Training Monitor',
+      title: context.l10n.trainingMonitor,
       child: ref
           .watch(trainingMonitorProvider(d))
           .when(

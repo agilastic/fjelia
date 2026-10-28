@@ -1,3 +1,6 @@
+import '../../l10n/formats.dart';
+import '../../l10n/l10n_ext.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -86,7 +89,7 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
       sport: sport,
     );
     if (distance == null || seconds == null) {
-      return 'Optional. Plans and pace guides use it; the climbing above shapes the training too.';
+      return context.l10n.optionalPlansAndPaceGuides;
     }
     final profile = RaceProfile(
       sport: sport,
@@ -95,7 +98,7 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
       targetSeconds: seconds,
     );
     if (profile.isRide) {
-      return '${profile.goalSpeedKmh!.toStringAsFixed(1)} km/h on average';
+      return '${profile.goalSpeedKmh!.fixed(1)} km/h on average';
     }
     final pace = formatPace(profile.goalPaceSecPerKm!);
     final flat = profile.flatEquivalentPaceSecPerKm!;
@@ -154,14 +157,14 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
       bool optional = false,
     }) => TextFormField(
       controller: controller,
-      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      keyboardType: TextInputType.numberWithOptions(decimal: true),
       decoration: decoration(hint),
-      style: const TextStyle(fontSize: 14),
+      style: TextStyle(fontSize: 14),
       validator: (value) {
         if (optional && (value == null || value.trim().isEmpty)) return null;
         final v = parseDecimal(value);
         return v == null || !v.isFinite || (optional ? v < 0 : v <= 0)
-            ? 'Enter a valid number'
+            ? context.l10n.enterAValidNumber
             : null;
       },
     );
@@ -169,7 +172,7 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
       color: panel,
       child: Column(
         children: [
-          const SizedBox(height: 14),
+          SizedBox(height: 14),
           Container(
             width: 36,
             height: 4,
@@ -190,32 +193,34 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                 ),
                 children: [
                   Text(
-                    widget.goal == null ? 'Add Race Goal' : 'Edit Race Goal',
+                    widget.goal == null
+                        ? context.l10n.addRaceGoal2
+                        : context.l10n.editRaceGoal,
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
                   ),
-                  label('RACE NAME'),
+                  label(context.l10n.raceName),
                   TextFormField(
                     controller: name,
                     decoration: decoration('e.g. UTMB 2027'),
-                    style: const TextStyle(fontSize: 14),
+                    style: TextStyle(fontSize: 14),
                     validator: (v) => v == null || v.trim().isEmpty
-                        ? 'Enter a race name'
+                        ? context.l10n.enterARaceName
                         : null,
                   ),
-                  label('SPORT'),
+                  label(context.l10n.sport2),
                   Wrap(
                     spacing: 6,
                     runSpacing: 6,
                     children: [
-                      for (final e in const {
-                        'running': 'Running',
-                        'trail_running': 'Trail Running',
-                        'cycling_road': 'Road Cycling',
-                        'cycling_gravel': 'Gravel',
-                        'cycling_mtb': 'MTB',
-                        'swimming': 'Swimming',
-                        'triathlon': 'Triathlon',
-                        'indoor_rowing': 'Indoor Rowing',
+                      for (final e in {
+                        'running': context.l10n.running,
+                        'trail_running': context.l10n.trailRunning2,
+                        'cycling_road': context.l10n.roadCycling,
+                        'cycling_gravel': context.l10n.gravel,
+                        'cycling_mtb': context.l10n.mtb,
+                        'swimming': context.l10n.swimming,
+                        'triathlon': context.l10n.triathlon,
+                        'indoor_rowing': context.l10n.indoorRowing,
                       }.entries)
                         ChoiceChip(
                           label: Text(e.value),
@@ -252,7 +257,7 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            label('DISTANCE (km)'),
+                            label(context.l10n.distanceKm),
                             number(km, 'e.g. 42.2'),
                           ],
                         ),
@@ -262,7 +267,7 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            label('PRIORITY'),
+                            label(context.l10n.priority),
                             Row(
                               children: [
                                 for (final p in ['a', 'b', 'c'])
@@ -307,16 +312,16 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                       ),
                     ],
                   ),
-                  label('ELEVATION GAIN (m)'),
-                  const Padding(
+                  label(context.l10n.elevationGainM),
+                  Padding(
                     padding: EdgeInsets.only(bottom: 8),
                     child: Text(
-                      'Optional total climbing for this race.',
+                      context.l10n.optionalTotalClimbingForThis,
                       style: TextStyle(fontSize: 12, color: Colors.white70),
                     ),
                   ),
                   number(elevation, 'e.g. 2400 (optional)', optional: true),
-                  label('TARGET TIME'),
+                  label(context.l10n.targetTime),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8),
                     child: Text(
@@ -341,11 +346,11 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                                 sport: sport,
                               ) ==
                               null
-                          ? 'Use h:mm or h:mm:ss, a time you could really run'
+                          ? context.l10n.useHMmOrH
                           : null;
                     },
                   ),
-                  label('RACE DATE'),
+                  label(context.l10n.raceDate),
                   OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
                       alignment: Alignment.centerLeft,
@@ -357,7 +362,9 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                       ),
                     ),
                     icon: const Icon(Icons.calendar_month_outlined, size: 20),
-                    label: Text(date == null ? 'Select date' : dayText(date!)),
+                    label: Text(
+                      date == null ? context.l10n.selectDate : dayText(date!),
+                    ),
                     onPressed: saving
                         ? null
                         : () async {
@@ -398,17 +405,14 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                   if (dateError != null)
                     Text(
                       dateError!,
-                      style: const TextStyle(
-                        color: Colors.redAccent,
-                        fontSize: 12,
-                      ),
+                      style: TextStyle(color: Colors.redAccent, fontSize: 12),
                     ),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: TextButton.icon(
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,
-                        minimumSize: const Size(0, 30),
+                        minimumSize: Size(0, 30),
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         visualDensity: VisualDensity.compact,
                         foregroundColor: Colors.white70,
@@ -417,34 +421,33 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                         more ? Icons.expand_less : Icons.expand_more,
                         size: 18,
                       ),
-                      label: const Text('More about this event'),
+                      label: Text(context.l10n.moreAboutThisEvent),
                       onPressed: () => setState(() => more = !more),
                     ),
                   ),
                   if (more) ...[
-                    label('PARTICIPATION'),
+                    label(context.l10n.participation),
                     choices(
-                      const {
-                        'committed': 'Committed',
-                        'flexible': 'Flexible',
-                        'cancelled': 'Not going',
+                      {
+                        'committed': context.l10n.committed,
+                        'flexible': context.l10n.flexible,
+                        'cancelled': context.l10n.notGoing,
                       },
                       participation,
                       (v) => setState(() => participation = v!),
                     ),
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.only(bottom: 8),
                       child: Text(
-                        'Flexible: the plan may drop this event if it clashes '
-                        'with a more important one.',
+                        context.l10n.flexibleThePlanMayDrop,
                         style: TextStyle(fontSize: 12, color: Colors.white70),
                       ),
                     ),
-                    label('WHAT I WANT FROM IT'),
+                    label(context.l10n.whatIWantFromIt),
                     choices(
-                      const {
-                        null: 'Not said',
-                        'finish': 'Finish',
+                      {
+                        null: context.l10n.notSaid,
+                        'finish': context.l10n.finish,
                         'performance': 'A time',
                       },
                       ambition,
@@ -467,7 +470,7 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                             final valid = form.currentState!.validate();
                             setState(
                               () => dateError = date == null
-                                  ? 'Select a race date'
+                                  ? context.l10n.selectARaceDate
                                   : null,
                             );
                             if (!valid || date == null) {
@@ -481,22 +484,29 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                                 context: context,
                                 builder: (context) => AlertDialog(
                                   title: Text(
-                                    'Distance of ${_km(distanceKm)} km?',
+                                    context.l10n.distanceOfDistancekmKm(
+                                      _km(distanceKm),
+                                    ),
                                   ),
                                   content: Text(
-                                    'That is ten times (or a tenth of) the usual ${_km(likely)} km. '
-                                    'Use ${_km(likely)} km instead?',
+                                    context.l10n.thatIsTenTimesOr(_km(likely)),
                                   ),
                                   actions: [
                                     TextButton(
                                       onPressed: () =>
                                           Navigator.pop(context, false),
-                                      child: Text('Keep ${_km(distanceKm)} km'),
+                                      child: Text(
+                                        context.l10n.keepDistancekmKm(
+                                          _km(distanceKm),
+                                        ),
+                                      ),
                                     ),
                                     TextButton(
                                       onPressed: () =>
                                           Navigator.pop(context, true),
-                                      child: Text('Use ${_km(likely)} km'),
+                                      child: Text(
+                                        context.l10n.useLikelyKm(_km(likely)),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -556,10 +566,10 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                           },
                     child: Text(
                       saving
-                          ? 'Saving…'
+                          ? context.l10n.saving
                           : widget.goal == null
-                          ? 'Add Goal'
-                          : 'Save Goal',
+                          ? context.l10n.addGoal
+                          : context.l10n.saveGoal,
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
@@ -606,4 +616,4 @@ class _RaceDateLocalizationsDelegate
 
 String _km(double km) => km == km.roundToDouble()
     ? km.round().toString()
-    : km.toStringAsFixed(km < 100 ? 1 : 0);
+    : km.fixed(km < 100 ? 1 : 0);

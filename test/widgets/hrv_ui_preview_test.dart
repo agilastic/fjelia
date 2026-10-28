@@ -1,3 +1,5 @@
+import 'package:fjelia/l10n/app_localizations.dart';
+
 import 'dart:io';
 import 'dart:ui' as ui;
 
@@ -70,12 +72,13 @@ void main() {
           hrvSensorReadyProvider.overrideWithValue(() async => true),
         ],
         child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           debugShowCheckedModeBanner: false,
           theme: AppTheme.dark(),
           builder: (context, app) => MediaQuery(
-            data: MediaQuery.of(
-              context,
-            ).copyWith(textScaler: TextScaler.linear(textScale)),
+            data: MediaQuery.of(context)
+                .copyWith(textScaler: TextScaler.linear(textScale)),
             child: app!,
           ),
           home: Scaffold(
@@ -105,9 +108,8 @@ void main() {
         final image = await boundary.toImage(pixelRatio: 2);
         final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
         await Directory(output).create(recursive: true);
-        await File(
-          '$output/$name.png',
-        ).writeAsBytes(bytes!.buffer.asUint8List());
+        await File('$output/$name.png')
+            .writeAsBytes(bytes!.buffer.asUint8List());
         image.dispose();
       });
     }

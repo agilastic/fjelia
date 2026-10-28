@@ -1,3 +1,4 @@
+import 'package:fjelia/l10n/app_localizations.dart';
 import 'package:fjelia/screens/settings/bug_report_sheet.dart';
 import 'package:fjelia/services/bug_report_service.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,8 @@ Future<void> show(WidgetTester tester) async {
   addTearDown(tester.view.resetDevicePixelRatio);
   await tester.pumpWidget(
     MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(body: BugReportSheet(service: _Reports())),
     ),
   );

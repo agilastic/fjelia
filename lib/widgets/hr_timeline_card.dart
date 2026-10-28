@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -54,8 +56,8 @@ class HrTimelineCard extends ConsumerWidget {
                           size: 14,
                         ),
                         const SizedBox(width: 7),
-                        const Text(
-                          'HEART RATE',
+                        Text(
+                          context.l10n.heartRate2,
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w700,
@@ -64,8 +66,8 @@ class HrTimelineCard extends ConsumerWidget {
                         ),
                         const Spacer(),
                         if (data.isLoading)
-                          const Text(
-                            'Updating',
+                          Text(
+                            context.l10n.updating,
                             style: TextStyle(fontSize: 9, color: muted),
                           ),
                         const Icon(Icons.chevron_right, color: muted, size: 15),
@@ -81,8 +83,8 @@ class HrTimelineCard extends ConsumerWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Text(
-                                  'RESTING',
+                                Text(
+                                  context.l10n.resting,
                                   style: TextStyle(
                                     fontSize: 8,
                                     color: muted,
@@ -117,9 +119,9 @@ class HrTimelineCard extends ConsumerWidget {
                           const SizedBox(width: 10),
                           Expanded(
                             child: points.isEmpty
-                                ? const Center(
+                                ? Center(
                                     child: Text(
-                                      'No timed readings',
+                                      context.l10n.noTimedReadings,
                                       style: TextStyle(
                                         fontSize: 10,
                                         color: muted,
@@ -145,8 +147,8 @@ class HrTimelineCard extends ConsumerWidget {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    const Text(
-                                      'AVG',
+                                    Text(
+                                      context.l10n.avg,
                                       style: TextStyle(
                                         fontSize: 8,
                                         color: muted,
@@ -167,8 +169,8 @@ class HrTimelineCard extends ConsumerWidget {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    const Text(
-                                      'PEAK',
+                                    Text(
+                                      context.l10n.peak,
                                       style: TextStyle(
                                         fontSize: 8,
                                         color: muted,
@@ -203,11 +205,11 @@ class HrTimelineCard extends ConsumerWidget {
       children: [
         if (data.isLoading) const LinearProgressIndicator(),
         if (points.isEmpty)
-          const SizedBox(
+          SizedBox(
             height: 80,
             child: Center(
               child: Text(
-                'No measurements in this period',
+                context.l10n.noMeasurementsInThisPeriod,
                 style: TextStyle(color: muted),
               ),
             ),
@@ -222,7 +224,7 @@ class HrTimelineCard extends ConsumerWidget {
           ),
         if (expanded) ...[
           if (activities.isNotEmpty) ...[
-            const SectionLabel('Activities'),
+            SectionLabel(context.l10n.activities),
             for (final a in activities)
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),
@@ -238,12 +240,17 @@ class HrTimelineCard extends ConsumerWidget {
                       child: Text(a.name, style: const TextStyle(fontSize: 11)),
                     ),
                     Text(
-                      '${DateFormat('HH:mm').format(a.startDate.toLocal())} · ${(a.durationSeconds / 60).round()}min',
+                      context.l10n.tolocalRoundmin(
+                        DateFormat.Hm().format(a.startDate.toLocal()),
+                        (a.durationSeconds / 60).round(),
+                      ),
                       style: const TextStyle(color: muted, fontSize: 10),
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      '${valueText(a.avgHeartRate)} bpm avg',
+                      context.l10n.avgheartrateBpmAvg(
+                        valueText(a.avgHeartRate),
+                      ),
                       style: const TextStyle(
                         color: Colors.lightBlue,
                         fontSize: 10,
@@ -262,15 +269,19 @@ class HrTimelineCard extends ConsumerWidget {
             ),
             child: Row(
               children: [
-                Expanded(child: _HrStat('Resting', resting, mint)),
+                Expanded(
+                  child: _HrStat(context.l10n.enumResting, resting, mint),
+                ),
                 Expanded(
                   child: Tooltip(
-                    message: 'Time-weighted average over recorded periods. Gaps without readings are excluded.',
-                    child: _HrStat('Avg', avg, Colors.white),
+                    message: context.l10n.timeWeightedAverageOverRecorded,
+                    child: _HrStat(context.l10n.avg2, avg, Colors.white),
                   ),
                 ),
                 if (activities.isNotEmpty)
-                  Expanded(child: _HrStat('Peak', peak, Colors.redAccent)),
+                  Expanded(
+                    child: _HrStat(context.l10n.peak2, peak, Colors.redAccent),
+                  ),
               ],
             ),
           ),
@@ -279,8 +290,11 @@ class HrTimelineCard extends ConsumerWidget {
               padding: const EdgeInsets.only(top: 10),
               child: Text(
                 summary.coveredDuration.inMinutes == 0
-                    ? 'Not enough continuous readings for an average.'
-                    : 'Recorded coverage: ${summary.coveredDuration.inHours}h ${summary.coveredDuration.inMinutes % 60}min · Time-weighted average',
+                    ? context.l10n.notEnoughContinuousReadingsFor
+                    : context.l10n.recordedCoverageInhourshInminutesminTime(
+                        summary.coveredDuration.inHours,
+                        summary.coveredDuration.inMinutes % 60,
+                      ),
                 style: const TextStyle(fontSize: 10, color: muted),
               ),
             ),
@@ -313,13 +327,17 @@ class _HrTimelineState extends ConsumerState<HrTimelineScreen> {
       hrRestingHistoryProvider((start: start, end: end)),
     );
     return SheetPage(
-      title: 'HEART RATE',
+      title: context.l10n.heartRate2,
       titleSize: 12,
       actions: [
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            for (final e in {1: 'DAY', 7: 'WEEK', 30: 'MONTH'}.entries)
+            for (final e in {
+              1: context.l10n.day2,
+              7: context.l10n.week2,
+              30: context.l10n.month2,
+            }.entries)
               Padding(
                 padding: const EdgeInsets.only(left: 4),
                 child: InkWell(
@@ -365,7 +383,7 @@ class _HrTimelineState extends ConsumerState<HrTimelineScreen> {
           Row(
             children: [
               IconButton(
-                tooltip: 'Previous heart-rate period',
+                tooltip: context.l10n.previousHeartRatePeriod,
                 onPressed: () => setState(() => offset++),
                 icon: const Icon(Icons.chevron_left),
               ),
@@ -373,17 +391,17 @@ class _HrTimelineState extends ConsumerState<HrTimelineScreen> {
                 child: Text(
                   days == 1
                       ? DateUtils.isSameDay(date, DateTime.now())
-                            ? 'Today'
-                            : DateFormat('dd.MM.yyyy').format(date)
+                            ? context.l10n.today
+                            : DateFormat.yMd().format(date)
                       : days == 30
-                      ? DateFormat('MMM yyyy').format(date)
-                      : '${DateFormat('dd.MM').format(start)} – ${DateFormat('dd.MM').format(date)}',
+                      ? DateFormat.yMMM().format(date)
+                      : '${DateFormat.Md().format(start)} – ${DateFormat.Md().format(date)}',
                   textAlign: TextAlign.center,
                   style: const TextStyle(fontSize: 11, color: muted),
                 ),
               ),
               IconButton(
-                tooltip: 'Next heart-rate period',
+                tooltip: context.l10n.nextHeartRatePeriod,
                 onPressed: offset == 0 ? null : () => setState(() => offset--),
                 icon: const Icon(Icons.chevron_right),
               ),
@@ -413,19 +431,19 @@ class _HrTimelineState extends ConsumerState<HrTimelineScreen> {
                       days: days,
                     ),
                     const SizedBox(height: 16),
-                    const Row(
+                    Row(
                       children: [
                         Icon(Icons.circle, color: Colors.redAccent, size: 9),
                         SizedBox(width: 6),
                         Text(
-                          'Avg HR',
+                          context.l10n.avgHr,
                           style: TextStyle(color: muted, fontSize: 11),
                         ),
                         SizedBox(width: 20),
                         Icon(Icons.circle, color: Colors.lightBlue, size: 9),
                         SizedBox(width: 6),
                         Text(
-                          'Resting HR',
+                          context.l10n.restingHr,
                           style: TextStyle(color: muted, fontSize: 11),
                         ),
                       ],

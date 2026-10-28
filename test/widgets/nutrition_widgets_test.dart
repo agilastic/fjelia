@@ -1,3 +1,4 @@
+import 'package:fjelia/l10n/app_localizations.dart';
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/models/workout_nutrition.dart';
@@ -59,6 +60,8 @@ void main() {
           ),
         ],
         child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: Scaffold(body: SingleChildScrollView(child: child)),
         ),
       ),

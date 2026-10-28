@@ -1,3 +1,4 @@
+import 'package:fjelia/l10n/app_localizations.dart';
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/models/strength_workout.dart';
@@ -49,6 +50,8 @@ void main() {
         ProviderScope(
           overrides: [databaseProvider.overrideWithValue(db)],
           child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             theme: ThemeData.dark(),
             home: Builder(
               builder: (context) => Scaffold(
@@ -150,6 +153,8 @@ void main() {
         ProviderScope(
           overrides: [databaseProvider.overrideWithValue(db)],
           child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             theme: ThemeData.dark(),
             home: Scaffold(
               body: StrengthFocusScreen(

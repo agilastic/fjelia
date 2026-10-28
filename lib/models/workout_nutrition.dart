@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 import 'dart:math' as math;
 
 import 'package:equatable/equatable.dart';
@@ -205,10 +207,10 @@ NutritionStrategy planNutrition(
   final notes = <String>[
     'Before: start fuelled and hydrated. Choose a familiar carbohydrate-rich meal; allow time to digest.',
     carbTarget == 0
-        ? 'During: routine gels are not needed for this short/easy session. Drink to thirst.'
-        : 'During: spread carbohydrate and drinks over small, regular feeds. Count drink carbohydrate in the same total as gels and food.',
-    'Fluid is an editable starting estimate, not a quota. Use thirst, practised intake and measured sweat losses; do not force extra water.',
-    'After: have carbohydrate and a protein-containing meal. Prioritise refuelling and rehydration when another session is soon.',
+        ? tr.duringRoutineGelsAreNot
+        : tr.duringSpreadCarbohydrateAndDrinks,
+    tr.fluidIsAnEditableStarting,
+    tr.afterHaveCarbohydrateAndA,
     if (carbTarget > 60) 'Use a practised glucose/fructose combination. Build gut tolerance in training before race day.',
     if (prefs.sweatMl == null) 'Sweat rate is unknown; personalise with a measured session. Weather alone cannot determine sweat or sodium losses.',
     if (!workout.indoor && !pool && c.temperature == null) 'Weather for this workout is unavailable. Review fluids when conditions are known.',
@@ -223,7 +225,7 @@ NutritionStrategy planNutrition(
     notes.add(
       sport.contains('open') || c.surface == 'Open water'
           ? 'Open water: arrange supported feeds and safe stops; plan the longest gap between feeds. Air forecasts do not measure water temperature; personalise fluids using your swimming experience. Do not attempt to eat while swimming.'
-          : 'Swimming: place a labelled bottle on the pool deck and use set breaks for sips or feeds. Pool conditions may differ from outdoor weather.',
+          : tr.swimmingPlaceALabelledBottle,
     );
   } else if (sport.contains('ski') || sport.contains('nordic')) {
     notes.add(
@@ -241,7 +243,7 @@ NutritionStrategy planNutrition(
     notes.add(
       sport.contains('trail')
           ? 'Trail: map aid stations, carry supplies for the longest unsupported segment and keep one practised backup feed accessible.'
-          : 'Running: carry accessible gels/flasks or plan aid-station feeds; practise the same products and timing before racing.',
+          : tr.runningCarryAccessibleGelsFlasks,
     );
   }
   return NutritionStrategy(

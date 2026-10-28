@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -1323,7 +1325,7 @@ class _StrengthExerciseDemoState extends State<StrengthExerciseDemo>
         .fold(0.0, (t, k) => t + k.hold + k.move);
     return Semantics(
       image: true,
-      label: '${widget.name} demonstration. ${demo.cue}',
+      label: context.l10n.nameDemonstrationCue(widget.name, demo.cue),
       excludeSemantics: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

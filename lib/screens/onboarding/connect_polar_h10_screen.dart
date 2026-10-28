@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -31,12 +33,7 @@ class _State extends ConsumerState<ConnectPolarH10Screen> {
       if (!mounted) return;
       setState(() => _scanning = false);
       if (found.isEmpty) {
-        setState(
-          () => _error =
-              'No Polar H10 found. Wear the strap with moist electrodes and '
-              'make sure no other app (or watch) is connected to it, then '
-              'scan again.',
-        );
+        setState(() => _error = context.l10n.noPolarH10FoundWear2);
         return;
       }
       final chosen = found.length == 1
@@ -44,12 +41,12 @@ class _State extends ConsumerState<ConnectPolarH10Screen> {
           : await showDialog<H10Device>(
               context: context,
               builder: (c) => SimpleDialog(
-                title: const Text('Choose strap'),
+                title: Text(context.l10n.chooseStrap),
                 children: [
                   for (final d in found)
                     SimpleDialogOption(
                       onPressed: () => Navigator.pop(c, d),
-                      child: Text('${d.name} · ${d.rssi} dBm'),
+                      child: Text(context.l10n.nameRssiDbm(d.name, d.rssi)),
                     ),
                 ],
               ),
@@ -57,15 +54,15 @@ class _State extends ConsumerState<ConnectPolarH10Screen> {
       if (chosen == null) return;
       await actions.pair(chosen);
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('${chosen.name} paired.')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(context.l10n.namePaired(chosen.name))),
+        );
       }
     } catch (e) {
       if (mounted) {
         setState(() {
           _scanning = false;
-          _error = 'Scan failed: $e';
+          _error = context.l10n.scanFailedE(e);
         });
       }
     }
@@ -88,10 +85,10 @@ class _State extends ConsumerState<ConnectPolarH10Screen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 8),
-              const OnboardingDeviceHeader(
+              OnboardingDeviceHeader(
                 icon: Icons.monitor_heart_outlined,
                 color: _accent,
-                title: 'Pair Polar H10',
+                title: context.l10n.pairPolarH10,
                 subtitle:
                     'Use your Polar H10 chest strap for spot HRV readings '
                     'before and after training, next to your overnight HRV.',
@@ -125,8 +122,8 @@ class _State extends ConsumerState<ConnectPolarH10Screen> {
                       ),
                       TextButton(
                         onPressed: _forget,
-                        child: const Text(
-                          'Forget',
+                        child: Text(
+                          context.l10n.forget,
                           style: TextStyle(color: Colors.redAccent),
                         ),
                       ),
@@ -170,17 +167,13 @@ class _State extends ConsumerState<ConnectPolarH10Screen> {
                     _scanning
                         ? 'Scanning…'
                         : paired != null
-                        ? 'Scan again'
-                        : 'Scan for Polar H10',
+                        ? context.l10n.scanAgain
+                        : context.l10n.scanForPolarH10,
                   ),
                 ),
               ),
               const SizedBox(height: 24),
-              const OnboardingInfoBox(
-                'Wear the strap with moist electrodes before scanning. '
-                'Measure later with + → Polar H10 HRV measurement; results '
-                'appear next to your overnight HRV.',
-              ),
+              OnboardingInfoBox(context.l10n.wearTheStrapWithMoist2),
               if (paired != null) ...[
                 const SizedBox(height: 32),
                 SizedBox(
@@ -199,10 +192,10 @@ class _State extends ConsumerState<ConnectPolarH10Screen> {
                       ),
                     ),
                     onPressed: () => Navigator.of(context).pop(),
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Continue'),
+                        Text(context.l10n.continueLabel),
                         SizedBox(width: 8),
                         Icon(Icons.arrow_forward_rounded, size: 20),
                       ],

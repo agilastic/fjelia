@@ -1,3 +1,5 @@
+import 'package:fjelia/l10n/app_localizations.dart';
+
 import 'dart:async';
 import 'dart:io';
 import 'dart:ui' as ui;
@@ -49,6 +51,8 @@ void main() {
           loadActivitiesProvider.overrideWith((ref) => ready.future),
         ],
         child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           theme: AppTheme.dark(),
           home: Scaffold(
             body: SingleChildScrollView(
@@ -92,9 +96,8 @@ void main() {
         final image = await boundary.toImage(pixelRatio: 2);
         final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
         await Directory(output).create(recursive: true);
-        await File(
-          '$output/polarization.png',
-        ).writeAsBytes(bytes!.buffer.asUint8List());
+        await File('$output/polarization.png')
+            .writeAsBytes(bytes!.buffer.asUint8List());
         image.dispose();
       });
     }

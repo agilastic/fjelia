@@ -1,3 +1,5 @@
+import 'package:fjelia/l10n/app_localizations.dart';
+
 import 'dart:io';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
@@ -74,6 +76,8 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           theme: AppTheme.dark(),
           home: Scaffold(
             backgroundColor: const Color(0xFF202020),
@@ -124,9 +128,8 @@ void main() {
         final image = await boundary.toImage(pixelRatio: 2);
         final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
         await Directory(output).create(recursive: true);
-        await File(
-          '$output/pace-chart.png',
-        ).writeAsBytes(bytes!.buffer.asUint8List());
+        await File('$output/pace-chart.png')
+            .writeAsBytes(bytes!.buffer.asUint8List());
         image.dispose();
       });
     }
@@ -146,6 +149,8 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: Scaffold(
             body: SingleChildScrollView(
               child: ActivityPerformanceChart(activity: ride),

@@ -1,3 +1,4 @@
+import 'package:fjelia/l10n/app_localizations.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
@@ -60,6 +61,8 @@ void main() {
       ProviderScope(
         overrides: [databaseProvider.overrideWithValue(db)],
         child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           theme: ThemeData.dark(),
           builder: (context, child) => MediaQuery(
             data: MediaQuery.of(context)
@@ -739,7 +742,9 @@ void main() {
       addTearDown(tester.view.resetDevicePixelRatio);
       final semantics = tester.ensureSemantics();
       await tester.pumpWidget(
-        const MaterialApp(
+        MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: MediaQuery(
             data: MediaQueryData(disableAnimations: true),
             child: Scaffold(
@@ -758,7 +763,9 @@ void main() {
         findsOneWidget,
       );
       await tester.pumpWidget(
-        const MaterialApp(
+        MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: StrengthExerciseDemo(variantId: 'custom-x', name: 'Mine'),
         ),
       );

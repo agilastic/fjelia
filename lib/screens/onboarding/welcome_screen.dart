@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 
 import 'connect_devices_screen.dart';
@@ -57,7 +59,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                           Align(
                             alignment: Alignment.centerRight,
                             child: IconButton(
-                              tooltip: 'Close',
+                              tooltip: context.l10n.close,
                               icon: const Icon(Icons.close),
                               onPressed: () => Navigator.of(context).pop(),
                             ),
@@ -80,8 +82,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                           ),
                         ),
                         const SizedBox(height: 28),
-                        const Text(
-                          'Know your body.\nTrain smarter.',
+                        Text(
+                          context.l10n.knowYourBodyTrainSmarter,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 38,
@@ -91,8 +93,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                           ),
                         ),
                         const SizedBox(height: 14),
-                        const Text(
-                          'All your health devices. One intelligent view.',
+                        Text(
+                          context.l10n.allYourHealthDevicesOne,
                           style: TextStyle(
                             color: Color(0xFFCCCCCC),
                             fontSize: 16,
@@ -100,39 +102,39 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                           ),
                         ),
                         const SizedBox(height: 44),
-                        const _FeatureCard(
+                        _FeatureCard(
                           icon: Icons.favorite_rounded,
                           color: Color(0xFF00D4A0),
-                          title: 'Are you ready to train today?',
-                          subtitle: 'HRV · Recovery Score · Resting HR',
+                          title: context.l10n.areYouReadyToTrain,
+                          subtitle: context.l10n.hrvRecoveryScoreRestingHr,
                         ),
                         const SizedBox(height: 12),
-                        const _FeatureCard(
+                        _FeatureCard(
                           icon: Icons.bedtime_rounded,
                           color: Color(0xFF4FC3F7),
-                          title: 'Did you actually recover last night?',
-                          subtitle: 'Sleep Stages · Deep Sleep · SpO₂',
+                          title: context.l10n.didYouActuallyRecoverLast,
+                          subtitle: context.l10n.sleepStagesDeepSleepSpo,
                         ),
                         const SizedBox(height: 12),
-                        const _FeatureCard(
+                        _FeatureCard(
                           icon: Icons.monitor_heart_rounded,
                           color: Color(0xFFFF8C00),
-                          title: 'Is your blood pressure under control?',
-                          subtitle: 'Continuous BP · Night Dipping · Trends',
+                          title: context.l10n.isYourBloodPressureUnder,
+                          subtitle: context.l10n.continuousBpNightDippingTrends,
                         ),
                         const SizedBox(height: 12),
-                        const _FeatureCard(
+                        _FeatureCard(
                           icon: Icons.bolt_rounded,
                           color: Color(0xFFFFCC00),
-                          title: 'How hard did you push this week?',
-                          subtitle: 'Training Load · TRIMP · Strain Score',
+                          title: context.l10n.howHardDidYouPush,
+                          subtitle: context.l10n.trainingLoadTrimpStrainScore,
                         ),
                         const SizedBox(height: 12),
-                        const _FeatureCard(
+                        _FeatureCard(
                           icon: Icons.monitor_weight_rounded,
                           color: Color(0xFF00D4A0),
-                          title: 'Is your body composition improving?',
-                          subtitle: 'Weight · Body Fat · Muscle Mass',
+                          title: context.l10n.isYourBodyCompositionImproving,
+                          subtitle: context.l10n.weightBodyFatMuscleMass,
                         ),
                         const SizedBox(height: 40),
                       ],
@@ -164,10 +166,10 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                               builder: (_) => const ConnectDevicesScreen(),
                             ),
                           ),
-                          child: const Row(
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('Get Started'),
+                              Text(context.l10n.getStarted),
                               SizedBox(width: 8),
                               Icon(Icons.arrow_forward_rounded, size: 20),
                             ],
@@ -175,8 +177,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                         ),
                       ),
                       const SizedBox(height: 14),
-                      const Text(
-                        'Your data stays on your device. Always private.',
+                      Text(
+                        context.l10n.yourDataStaysOnYour,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Color(0xFF888888),

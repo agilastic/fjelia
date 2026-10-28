@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -25,9 +27,9 @@ import 'training_plan_onboarding_screen.dart';
 class ConnectDevicesScreen extends ConsumerWidget {
   const ConnectDevicesScreen({super.key});
 
-  void _push(BuildContext context, Widget screen) => Navigator.of(
-    context,
-  ).push(MaterialPageRoute<void>(builder: (_) => screen));
+  void _push(BuildContext context, Widget screen) =>
+      Navigator.of(context)
+          .push(MaterialPageRoute<void>(builder: (_) => screen));
 
   ({List<_DeviceTile> ble, List<_DeviceTile> api}) _tiles(
     BuildContext context, {
@@ -44,8 +46,8 @@ class ConnectDevicesScreen extends ConsumerWidget {
       _DeviceTile(
         icon: Icons.bluetooth_rounded,
         color: const Color(0xFF00C4B4),
-        name: 'Hilo pod',
-        subtitle: 'Bluetooth · blood pressure',
+        name: context.l10n.hiloPod,
+        subtitle: context.l10n.bluetoothBloodPressure,
         connected: hiloBle,
         onTap: () =>
             _push(context, const ConnectHiloBleScreen(fromOnboarding: true)),
@@ -53,8 +55,8 @@ class ConnectDevicesScreen extends ConsumerWidget {
       _DeviceTile(
         icon: Icons.favorite_rounded,
         color: const Color(0xFFFF4444),
-        name: 'Hilo account',
-        subtitle: 'Cloud · cuff data',
+        name: context.l10n.hiloAccount,
+        subtitle: context.l10n.cloudCuffData,
         connected: auth.aktiiaConnected,
         onTap: () =>
             _push(context, const ConnectAktiiaScreen(fromOnboarding: true)),
@@ -62,8 +64,8 @@ class ConnectDevicesScreen extends ConsumerWidget {
       _DeviceTile(
         icon: Icons.watch_rounded,
         color: const Color(0xFF1A73E8),
-        name: 'Garmin',
-        subtitle: 'API sync',
+        name: context.l10n.garmin,
+        subtitle: context.l10n.apiSync,
         connected: auth.garminConnected,
         onTap: () =>
             _push(context, const ConnectGarminScreen(fromOnboarding: true)),
@@ -71,8 +73,8 @@ class ConnectDevicesScreen extends ConsumerWidget {
       _DeviceTile(
         icon: Icons.watch_rounded,
         color: const Color(0xFF00C8FF),
-        name: 'Coros',
-        subtitle: 'API sync',
+        name: context.l10n.coros,
+        subtitle: context.l10n.apiSync,
         connected: coros,
         onTap: () =>
             _push(context, const ConnectCorosScreen(fromOnboarding: true)),
@@ -80,8 +82,8 @@ class ConnectDevicesScreen extends ConsumerWidget {
       _DeviceTile(
         icon: Icons.watch_rounded,
         color: const Color(0xFFE84C22),
-        name: 'Suunto',
-        subtitle: 'API sync',
+        name: context.l10n.suunto,
+        subtitle: context.l10n.apiSync,
         connected: suunto,
         onTap: () =>
             _push(context, const ConnectSuuntoScreen(fromOnboarding: true)),
@@ -89,8 +91,8 @@ class ConnectDevicesScreen extends ConsumerWidget {
       _DeviceTile(
         icon: Icons.monitor_heart_outlined,
         color: const Color(0xFFFF5A5F),
-        name: 'Polar H10',
-        subtitle: 'Bluetooth · HRV strap',
+        name: context.l10n.polarH10,
+        subtitle: context.l10n.bluetoothHrvStrap,
         connected: polarH10,
         onTap: () =>
             _push(context, const ConnectPolarH10Screen(fromOnboarding: true)),
@@ -98,8 +100,8 @@ class ConnectDevicesScreen extends ConsumerWidget {
       _DeviceTile(
         icon: Icons.watch_rounded,
         color: const Color(0xFFD0011B),
-        name: 'Polar',
-        subtitle: 'AccessLink API',
+        name: context.l10n.polar,
+        subtitle: context.l10n.accesslinkApi,
         connected: polar,
         onTap: () =>
             _push(context, const ConnectPolarScreen(fromOnboarding: true)),
@@ -107,8 +109,8 @@ class ConnectDevicesScreen extends ConsumerWidget {
       _DeviceTile(
         icon: Icons.favorite_border_rounded,
         color: const Color(0xFFFF4444),
-        name: 'Apple Health',
-        subtitle: 'System health data',
+        name: context.l10n.appleHealth,
+        subtitle: context.l10n.systemHealthData,
         connected: health,
         onTap: () =>
             _push(context, const ConnectHealthScreen(fromOnboarding: true)),
@@ -116,8 +118,8 @@ class ConnectDevicesScreen extends ConsumerWidget {
       _DeviceTile(
         icon: Icons.monitor_weight_rounded,
         color: const Color(0xFF9C27B0),
-        name: 'Renpho account',
-        subtitle: 'Cloud · scale history',
+        name: context.l10n.renphoAccount,
+        subtitle: context.l10n.cloudScaleHistory,
         connected: auth.renphoConnected,
         onTap: () =>
             _push(context, const ConnectRenphoScreen(fromOnboarding: true)),
@@ -126,7 +128,7 @@ class ConnectDevicesScreen extends ConsumerWidget {
         icon: Icons.monitor_weight_rounded,
         color: const Color(0xFF9C27B0),
         name: 'RENPHO scale',
-        subtitle: 'Bluetooth · weight & body',
+        subtitle: context.l10n.bluetoothWeightBody,
         connected: renphoBle,
         onTap: () =>
             _push(context, const ConnectRenphoBleScreen(fromOnboarding: true)),
@@ -194,10 +196,10 @@ class ConnectDevicesScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 32),
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 24),
               child: Text(
-                'Connect your devices',
+                context.l10n.connectYourDevices,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 28,
@@ -207,11 +209,10 @@ class ConnectDevicesScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 6),
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 24),
               child: Text(
-                'Connect any combination — you can always add more later '
-                'in Settings.',
+                context.l10n.connectAnyCombinationYouCan,
                 style: TextStyle(
                   color: Color(0xFFCCCCCC),
                   fontSize: 14,
@@ -224,9 +225,9 @@ class ConnectDevicesScreen extends ConsumerWidget {
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 children: [
-                  _section('BLUETOOTH DEVICES', tiles.ble),
+                  _section(context.l10n.bluetoothDevices, tiles.ble),
                   const SizedBox(height: 20),
-                  _section('ACCOUNTS & SERVICES', tiles.api),
+                  _section(context.l10n.accountsServices, tiles.api),
                   const SizedBox(height: 12),
                 ],
               ),
@@ -253,10 +254,10 @@ class ConnectDevicesScreen extends ConsumerWidget {
                       builder: (_) => const TrainingPlanOnboardingScreen(),
                     ),
                   ),
-                  child: const Row(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Continue'),
+                      Text(context.l10n.continueLabel),
                       SizedBox(width: 8),
                       Icon(Icons.arrow_forward_rounded, size: 20),
                     ],

@@ -1,4 +1,6 @@
+import '../../l10n/l10n_ext.dart';
 import '../../providers/activity_history_provider.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -35,11 +37,11 @@ class _Lt2TestState extends ConsumerState<Lt2TestSheet> {
     return DefaultTabController(
       length: 3,
       child: LoadSheet(
-        title: '30-MIN TIME TRIAL — LT2',
+        title: context.l10n.t30MinTimeTrialLt2,
         centerTitle: true,
         child: Column(
           children: [
-            const TabBar(
+            TabBar(
               labelColor: loadBlue,
               indicatorColor: loadBlue,
               dividerColor: Colors.white10,
@@ -54,9 +56,9 @@ class _Lt2TestState extends ConsumerState<Lt2TestSheet> {
                 letterSpacing: 1,
               ),
               tabs: [
-                Tab(text: 'PROTOCOL'),
-                Tab(text: 'CALCULATE'),
-                Tab(text: 'HISTORY'),
+                Tab(text: context.l10n.protocol),
+                Tab(text: context.l10n.calculate),
+                Tab(text: context.l10n.history2),
               ],
             ),
             Expanded(
@@ -65,9 +67,7 @@ class _Lt2TestState extends ConsumerState<Lt2TestSheet> {
                   ListView(
                     padding: const EdgeInsets.all(20),
                     children: [
-                      const Text(
-                        'Run 30 minutes at the hardest effort you can sustain — controlled, not sprinting. Build into the effort; do not start too fast. The average pace and HR of the final 20 minutes are your LT2.',
-                      ),
+                      Text(context.l10n.run30MinutesAtThe),
                       const SizedBox(height: 18),
                       Container(
                         padding: const EdgeInsets.all(12),
@@ -75,14 +75,14 @@ class _Lt2TestState extends ConsumerState<Lt2TestSheet> {
                           color: loadInset,
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: const Row(
+                        child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Icon(Icons.watch_outlined, size: 18, color: muted),
                             SizedBox(width: 8),
                             Expanded(
                               child: Text(
-                                'Record as a normal outdoor run. Start your watch, note the time, run 30 min at race effort.',
+                                context.l10n.recordAsANormalOutdoor,
                                 style: TextStyle(
                                   color: Color(0xFFBBBBBB),
                                   fontSize: 13,
@@ -93,27 +93,27 @@ class _Lt2TestState extends ConsumerState<Lt2TestSheet> {
                         ),
                       ),
                       const SizedBox(height: 18),
-                      const Text(
-                        '~50 min total · flat course · not after hard training',
+                      Text(
+                        context.l10n.t50MinTotalFlatCourse,
                         style: TextStyle(color: muted, fontSize: 11),
                       ),
                       const SizedBox(height: 20),
                       for (final step in [
                         (
-                          'WARM-UP',
-                          'Easy jog — get HR elevated, legs loose',
+                          context.l10n.warmUp,
+                          context.l10n.easyJogGetHrElevated,
                           '15 min',
                           mint,
                         ),
                         (
                           '30-MIN TT',
-                          'Fastest sustainable pace — like a 30-min race',
+                          context.l10n.fastestSustainablePaceLikeA,
                           '30 min',
                           loadOrange,
                         ),
                         (
-                          'COOL-DOWN',
-                          'Walk — cardiac recovery',
+                          context.l10n.coolDown,
+                          context.l10n.walkCardiacRecovery,
                           '5 min',
                           muted,
                         ),
@@ -185,10 +185,10 @@ class _Lt2TestState extends ConsumerState<Lt2TestSheet> {
                                         ),
                                       ),
                                       if (step.$1 == '30-MIN TT')
-                                        const Padding(
+                                        Padding(
                                           padding: EdgeInsets.only(top: 5),
                                           child: Text(
-                                            'Do not start too fast. Aim for even splits.',
+                                            context.l10n.doNotStartTooFast,
                                             style: TextStyle(
                                               fontSize: 10,
                                               color: muted,
@@ -204,8 +204,8 @@ class _Lt2TestState extends ConsumerState<Lt2TestSheet> {
                           ),
                         ),
                       const Divider(height: 30, color: Colors.white10),
-                      const Text(
-                        'The app averages HR and pace over the final 20 minutes of the TT, after the warm-up and first 10 minutes. Select the recorded activity in Calculate.',
+                      Text(
+                        context.l10n.theAppAveragesHrAnd,
                         style: TextStyle(color: muted, fontSize: 12),
                       ),
                     ],
@@ -230,7 +230,7 @@ class _Lt2TestState extends ConsumerState<Lt2TestSheet> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text('LT2 PACE', style: loadCaption),
+                                Text(context.l10n.lt2Pace, style: loadCaption),
                                 Text(
                                   result?.pace ?? '—',
                                   style: const TextStyle(
@@ -245,22 +245,25 @@ class _Lt2TestState extends ConsumerState<Lt2TestSheet> {
                         ],
                       ),
                       const Divider(height: 32, color: Colors.white10),
-                      const Text('Recalculate'),
+                      Text(context.l10n.recalculate),
                       const SizedBox(height: 8),
-                      const Text(
-                        'Activity (running, enough time for warm-up + 30 min, with HR)',
+                      Text(
+                        context.l10n.activityRunningEnoughTimeFor,
                         style: TextStyle(color: muted, fontSize: 11),
                       ),
                       DropdownButton<String>(
                         isExpanded: true,
                         value: selected?.activityId,
-                        hint: const Text('Select the TT activity'),
+                        hint: Text(context.l10n.selectTheTtActivity),
                         items: [
                           for (final a in candidates)
                             DropdownMenuItem(
                               value: a.activityId,
                               child: Text(
-                                '${a.name} · ${dayText(a.startDate)}',
+                                context.l10n.nameStartdate(
+                                  a.name,
+                                  dayText(a.startDate),
+                                ),
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
@@ -273,8 +276,8 @@ class _Lt2TestState extends ConsumerState<Lt2TestSheet> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text('Warm-up before TT'),
-                          Text('${warmup.round()} min'),
+                          Text(context.l10n.warmUpBeforeTt),
+                          Text(context.l10n.roundMin(warmup.round())),
                         ],
                       ),
                       Slider(
@@ -300,7 +303,7 @@ class _Lt2TestState extends ConsumerState<Lt2TestSheet> {
                                   await runUiAction(
                                     context,
                                     () async => throw StateError(
-                                      'Select the TT activity first.',
+                                      context.l10n.selectTheTtActivityFirst,
                                     ),
                                   );
                                   return;
@@ -320,7 +323,11 @@ class _Lt2TestState extends ConsumerState<Lt2TestSheet> {
                                   if (mounted) setState(() => busy = false);
                                 }
                               },
-                        child: Text(busy ? 'Calculating…' : 'Calculate LT2'),
+                        child: Text(
+                          busy
+                              ? context.l10n.calculating
+                              : context.l10n.calculateLt2,
+                        ),
                       ),
                       TextButton(
                         onPressed: busy || result == null
@@ -329,8 +336,8 @@ class _Lt2TestState extends ConsumerState<Lt2TestSheet> {
                                 context,
                                 () => ref.read(lt2TtProvider.notifier).clear(),
                               ),
-                        child: const Text(
-                          'Clear results',
+                        child: Text(
+                          context.l10n.clearResults,
                           style: TextStyle(color: muted, letterSpacing: 1),
                         ),
                       ),
@@ -339,7 +346,7 @@ class _Lt2TestState extends ConsumerState<Lt2TestSheet> {
                   ListView(
                     padding: const EdgeInsets.all(20),
                     children: [
-                      const Text('HEART RATE', style: loadLabel),
+                      Text(context.l10n.heartRate2, style: loadLabel),
                       const SizedBox(height: 16),
                       LoadTrendChart(
                         points: [
@@ -353,10 +360,7 @@ class _Lt2TestState extends ConsumerState<Lt2TestSheet> {
                       const SizedBox(height: 12),
                       const LoadLegend('LT2', loadOrange),
                       const SizedBox(height: 24),
-                      const Text(
-                        'PACE (sec/km — lower is faster)',
-                        style: loadLabel,
-                      ),
+                      Text(context.l10n.paceSecKmLowerIs, style: loadLabel),
                       const SizedBox(height: 16),
                       LoadTrendChart(
                         pace: true,

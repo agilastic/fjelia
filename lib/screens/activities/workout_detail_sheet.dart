@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+import '../../l10n/formats.dart';
 import '../../models/workout_presentation.dart';
 
 import 'package:flutter/material.dart';
@@ -48,23 +50,28 @@ class WorkoutDetailSheet extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         children: [
           Text(
-            'Garmin Workout · ${dayText(workout.scheduledDate)}',
+            context.l10n.garminWorkoutScheduleddate(
+              dayText(workout.scheduledDate),
+            ),
             style: const TextStyle(fontSize: 13, color: Colors.white70),
           ),
           const SizedBox(height: 16),
           WorkoutStatTiles(
             items: [
               if (seconds != null && seconds > 0)
-                (workoutDurationLabel(seconds), 'DURATION'),
+                (workoutDurationLabel(seconds), context.l10n.duration2),
               if (distance != null && distance > 0)
-                ('${(distance / 1000).toStringAsFixed(1)} km', 'DISTANCE'),
-              (sportName(workout.sportType), 'SPORT'),
+                ('${(distance / 1000).fixed(1)} km', context.l10n.distance2),
+              (sportName(workout.sportType), context.l10n.sport2),
               if (lines.any((l) => l.repeat))
-                ('${lines.where((l) => l.repeat).length}', 'REPEAT SETS'),
+                (
+                  '${lines.where((l) => l.repeat).length}',
+                  context.l10n.repeatSets,
+                ),
             ],
           ),
           if (workout.description?.isNotEmpty ?? false) ...[
-            _heading('ABOUT THIS WORKOUT'),
+            _heading(context.l10n.aboutThisWorkout),
             Text(
               workout.description!,
               style: const TextStyle(
@@ -78,12 +85,14 @@ class WorkoutDetailSheet extends StatelessWidget {
             PlannedStrengthSection(
               owner: StrengthPlanOwner.scheduled('garmin', workout.scheduleId),
               sessionDate: workout.scheduledDate,
-              ownershipNote:
-                  'Edits are kept in Fjelia as a local copy for this date. '
-                  'The workout on Garmin is not changed.',
+              ownershipNote: context.l10n.editsAreKeptInFjelia,
             ),
           if (lines.isNotEmpty) ...[
-            _heading(strength ? 'AS SENT BY GARMIN' : 'WORKOUT STRUCTURE'),
+            _heading(
+              strength
+                  ? context.l10n.asSentByGarmin
+                  : context.l10n.workoutStructure,
+            ),
             if (blocks.isNotEmpty) ...[
               WorkoutProfileBar(blocks: blocks),
               const SizedBox(height: 14),
@@ -103,7 +112,10 @@ class WorkoutDetailSheet extends StatelessWidget {
               ),
             ),
           if (workout.userNote != null)
-            SectionCard(title: 'Your note', child: Text(workout.userNote!)),
+            SectionCard(
+              title: context.l10n.yourNote,
+              child: Text(workout.userNote!),
+            ),
           const SizedBox(height: 16),
           OutlinedButton.icon(
             style: OutlinedButton.styleFrom(
@@ -112,10 +124,10 @@ class WorkoutDetailSheet extends StatelessWidget {
               minimumSize: const Size(double.infinity, 44),
             ),
             icon: const Icon(Icons.chat_bubble_outline, size: 18),
-            label: const Text('Ask AI Coach'),
+            label: Text(context.l10n.askAiCoach),
             onPressed: () => openCoachTab(
               context,
-              prompt: 'How do I execute this workout?',
+              prompt: context.l10n.howDoIExecuteThis,
               card: CoachContextCard.scheduled(
                 sport: workout.sportType,
                 title: workout.name,

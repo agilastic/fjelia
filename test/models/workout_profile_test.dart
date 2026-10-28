@@ -1,3 +1,5 @@
+import 'package:fjelia/l10n/app_localizations.dart';
+
 import 'dart:convert';
 
 import 'package:fjelia/models/workout_profile.dart';
@@ -140,6 +142,8 @@ void main() {
     Future<void> pump(WidgetTester tester, List<WorkoutBlock> b) =>
         tester.pumpWidget(
           MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             home: Scaffold(
               body: Padding(
                 padding: const EdgeInsets.all(16),

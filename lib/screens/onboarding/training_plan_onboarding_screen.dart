@@ -1,3 +1,6 @@
+import '../../l10n/formats.dart';
+import '../../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -71,7 +74,7 @@ class _TrainingPlanOnboardingScreenState
     } catch (e) {
       if (mounted) {
         setState(() {
-          _error = 'Could not save preferences: $e';
+          _error = context.l10n.couldNotSavePreferencesE(e);
         });
       }
     } finally {
@@ -89,11 +92,11 @@ class _TrainingPlanOnboardingScreenState
     final hasHistory = ref.watch(hasHistorySourceProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Training Plan'),
+        title: Text(context.l10n.trainingPlan),
         actions: [
           TextButton(
             onPressed: _saving ? null : () => _finish(save: false),
-            child: const Text('Skip'),
+            child: Text(context.l10n.skip),
           ),
         ],
       ),
@@ -102,7 +105,7 @@ class _TrainingPlanOnboardingScreenState
         error: (_, _) => Center(
           child: TextButton(
             onPressed: () => ref.invalidate(userProfileProvider),
-            child: const Text('Retry loading preferences'),
+            child: Text(context.l10n.retryLoadingPreferences),
           ),
         ),
         data: (saved) {
@@ -113,32 +116,30 @@ class _TrainingPlanOnboardingScreenState
           return ListView(
             padding: const EdgeInsets.all(24),
             children: [
-              const Text(
-                'Tell us about your race and schedule. Fjelia builds your plan now and '
-                'works out your level from your past activities (Garmin, Suunto, '
-                'Polar, COROS, Apple Health) once they are downloaded.',
-              ),
+              Text(context.l10n.tellUsAboutYourRace),
               const SizedBox(height: 24),
               if (_error != null) OnboardingErrorBanner(_error!),
               const HistorySyncCard(),
-              const OnboardingInputLabel('RACE GOAL'),
+              OnboardingInputLabel(context.l10n.raceGoal),
               _RaceGoalStep(enabled: !_saving),
               const SizedBox(height: 24),
               if (!hasHistory) ...[
-                const OnboardingInputLabel('EXPERIENCE LEVEL'),
-                const Padding(
+                OnboardingInputLabel(context.l10n.experienceLevel),
+                Padding(
                   padding: EdgeInsets.only(bottom: 8),
                   child: Text(
-                    'No account connected, so Fjelia has no history to learn '
-                    'from. Connect Garmin, Suunto, Polar, COROS or Apple '
-                    'Health and your real training decides instead.',
+                    context.l10n.noAccountConnectedSoFjelia,
                     style: TextStyle(fontSize: 12, height: 1.4),
                   ),
                 ),
                 Wrap(
                   spacing: 8,
                   children: [
-                    for (final level in ['beginner', 'intermediate', 'advanced'])
+                    for (final level in [
+                      'beginner',
+                      'intermediate',
+                      'advanced',
+                    ])
                       ChoiceChip(
                         label: Text(level),
                         selected: p.experienceLevel == level,
@@ -148,10 +149,12 @@ class _TrainingPlanOnboardingScreenState
                       ),
                   ],
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: 24),
               ],
               Text(
-                'WEEKLY TRAINING TIME · ${p.hoursPerWeek.toStringAsFixed(1)} h',
+                context.l10n.weeklyTrainingTimeTostringasfixedH(
+                  p.hoursPerWeek.fixed(1),
+                ),
               ),
               Slider(
                 value: p.hoursPerWeek.clamp(2, 20),
@@ -162,23 +165,24 @@ class _TrainingPlanOnboardingScreenState
                     ? null
                     : (v) => update(p.copyWith(hoursPerWeek: v)),
               ),
-              const SizedBox(height: 16),
-              const OnboardingInputLabel('WEEKLY SCHEDULE'),
-              const Text('Tap a day to cycle Training / Rest / Strength.'),
+              SizedBox(height: 16),
+              OnboardingInputLabel(context.l10n.weeklySchedule2),
+              Text(context.l10n.tapADayToCycle),
               Wrap(
                 spacing: 6,
                 children: [
-                  for (final day in p.weekStartsOnMonday
-                    ? const [1, 2, 3, 4, 5, 6, 7]
-                    : const [7, 1, 2, 3, 4, 5, 6])
+                  for (final day
+                      in p.weekStartsOnMonday
+                          ? [1, 2, 3, 4, 5, 6, 7]
+                          : [7, 1, 2, 3, 4, 5, 6])
                     ActionChip(
                       label: Text(
-                        '${const ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][day - 1]} '
+                        '${[context.l10n.mon, context.l10n.tue, context.l10n.wed, context.l10n.thu, context.l10n.fri, context.l10n.sat, context.l10n.sun][day - 1]} '
                         '${p.restDays.contains(day)
                             ? 'Rest'
                             : p.preferredStrengthDays.contains(day)
                             ? 'Strength'
-                            : 'Training'}',
+                            : context.l10n.training}',
                       ),
                       onPressed: _saving
                           ? null
@@ -204,24 +208,24 @@ class _TrainingPlanOnboardingScreenState
                 ],
               ),
               const SizedBox(height: 24),
-              const OnboardingInputLabel('SESSIONS PER DAY'),
+              OnboardingInputLabel(context.l10n.sessionsPerDay2),
               SwitchListTile(
                 contentPadding: EdgeInsets.zero,
-                title: const Text('Double day ok'),
+                title: Text(context.l10n.doubleDayOk),
                 value: p.maxSessionsPerDay == 2,
                 onChanged: _saving
                     ? null
                     : (v) => update(p.copyWith(maxSessionsPerDay: v ? 2 : 1)),
               ),
               const SizedBox(height: 16),
-              const OnboardingInputLabel('ABOUT YOU'),
+              OnboardingInputLabel(context.l10n.aboutYou),
               Wrap(
                 spacing: 8,
                 children: [
                   for (final option in {
-                    'm': 'Male',
-                    'f': 'Female',
-                    'x': 'Other',
+                    'm': context.l10n.male,
+                    'f': context.l10n.female,
+                    'x': context.l10n.other,
                   }.entries)
                     ChoiceChip(
                       label: Text(option.value),
@@ -234,8 +238,8 @@ class _TrainingPlanOnboardingScreenState
               ),
               TextFormField(
                 initialValue: p.birthYear?.toString(),
-                decoration: const InputDecoration(
-                  labelText: 'Birth year (optional)',
+                decoration: InputDecoration(
+                  labelText: context.l10n.birthYearOptional,
                 ),
                 keyboardType: TextInputType.number,
                 enabled: !_saving,
@@ -249,18 +253,18 @@ class _TrainingPlanOnboardingScreenState
                 },
               ),
               const SizedBox(height: 24),
-              const OnboardingInputLabel('YOUR ACTIVITIES'),
+              OnboardingInputLabel(context.l10n.yourActivities2),
               Wrap(
                 spacing: 8,
                 children: [
                   for (final sport in {
-                    'running': 'Running',
-                    'trail_running': 'Trail running',
-                    'cycling_road': 'Cycling',
-                    'swimming': 'Swimming',
-                    'triathlon': 'Triathlon',
-                    'hiking': 'Hiking',
-                    'indoor_rowing': 'Rowing',
+                    'running': context.l10n.running,
+                    'trail_running': context.l10n.trailRunning,
+                    'cycling_road': context.l10n.cycling,
+                    'swimming': context.l10n.swimming,
+                    'triathlon': context.l10n.triathlon,
+                    'hiking': context.l10n.hiking,
+                    'indoor_rowing': context.l10n.rowing,
                   }.entries)
                     FilterChip(
                       label: Text(sport.value),
@@ -283,12 +287,10 @@ class _TrainingPlanOnboardingScreenState
               ),
               const SizedBox(height: 32),
               if (ref.watch(historicSyncProvider).running)
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(bottom: 12),
                   child: Text(
-                    'Your past activities are still being imported. You can '
-                    'build your plan now — it is refined automatically when '
-                    'the import finishes.',
+                    context.l10n.yourPastActivitiesAreStill,
                     style: TextStyle(fontSize: 12, height: 1.4),
                   ),
                 ),
@@ -296,10 +298,10 @@ class _TrainingPlanOnboardingScreenState
                 onPressed: _saving ? null : () => _finish(),
                 child: Text(
                   _saving
-                      ? 'Building your plan…'
+                      ? context.l10n.buildingYourPlan
                       : ref.watch(primaryRaceGoalProvider).valueOrNull == null
-                      ? 'Save & Continue'
-                      : 'Build My Plan',
+                      ? context.l10n.saveContinue
+                      : context.l10n.buildMyPlan,
                 ),
               ),
             ],
@@ -322,16 +324,12 @@ class _RaceGoalStep extends ConsumerWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Add your main (priority A) race. The plan is periodised towards '
-            'it: base, build, peak and taper. Without a race goal no plan is '
-            'generated yet.',
-          ),
+          Text(context.l10n.addYourMainPriorityA),
           const SizedBox(height: 8),
           OutlinedButton.icon(
             onPressed: enabled ? () => showRaceGoalEditor(context) : null,
             icon: const Icon(Icons.flag_outlined),
-            label: const Text('Add race goal'),
+            label: Text(context.l10n.addRaceGoal),
           ),
         ],
       );
@@ -342,13 +340,13 @@ class _RaceGoalStep extends ConsumerWidget {
       leading: const Icon(Icons.flag),
       title: Text(goal.name),
       subtitle: Text(
-        '${DateFormat('d MMM yyyy').format(goal.raceDate)} · '
+        '${DateFormat.yMMMd().format(goal.raceDate)} · '
         '${goal.primarySport.replaceAll('_', ' ')} · '
-        '${km.toStringAsFixed(km < 10 ? 1 : 0)} km',
+        '${km.fixed(km < 10 ? 1 : 0)} km',
       ),
       trailing: TextButton(
         onPressed: enabled ? () => showRaceGoalEditor(context) : null,
-        child: const Text('Add another'),
+        child: Text(context.l10n.addAnother),
       ),
     );
   }

@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 
 import 'app_widgets.dart';
@@ -20,8 +22,8 @@ class WeatherRangeSwitcher extends StatelessWidget {
     ),
     child: Row(
       children: [
-        for (final item in const [
-          (1, 'DAY', Icons.today_outlined),
+        for (final item in [
+          (1, context.l10n.day2, Icons.today_outlined),
           (7, 'WEEK', Icons.view_week_outlined),
           (14, '14 DAYS', Icons.date_range_outlined),
         ])

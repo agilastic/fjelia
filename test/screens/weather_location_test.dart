@@ -1,3 +1,5 @@
+import 'package:fjelia/l10n/app_localizations.dart';
+
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
@@ -26,13 +28,21 @@ class _Location extends LocationService {
 }
 
 void main() {
-  setUp(() => SharedPreferences.setMockInitialValues({'heat_acclimation_enabled': false}));
+  setUp(
+    () => SharedPreferences.setMockInitialValues({
+      'heat_acclimation_enabled': false,
+    }),
+  );
   testWidgets(
     'Weather & Location is accessible in Settings and saves fixed coordinates',
     (tester) async {
       await tester.pumpWidget(
         const ProviderScope(
-          child: MaterialApp(home: Scaffold(body: SettingsSheet())),
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Scaffold(body: SettingsSheet()),
+          ),
         ),
       );
       await tester.tap(find.text('Weather & Location'));
@@ -117,7 +127,11 @@ void main() {
           weatherGeocodingServiceProvider.overrideWithValue(service),
           heatPreferredLocationProvider.overrideWith((ref) async => null),
         ],
-        child: const MaterialApp(home: Scaffold(body: WeatherLocationTab())),
+        child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Scaffold(body: WeatherLocationTab()),
+        ),
       ),
     );
     await tester.pumpAndSettle();

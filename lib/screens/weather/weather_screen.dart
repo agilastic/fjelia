@@ -1,3 +1,5 @@
+import '../../l10n/formats.dart';
+import '../../l10n/l10n_ext.dart';
 import '../../providers/weather_location_provider.dart';
 import '../../widgets/weather_range_switcher.dart';
 
@@ -23,7 +25,7 @@ class _WeatherState extends ConsumerState<WeatherScreen> {
   DateTime day = DateUtils.dateOnly(DateTime.now());
   @override
   Widget build(BuildContext context) => SheetPage(
-    title: 'Weather',
+    title: context.l10n.weather,
     child: ref
         .watch(planWeatherProvider)
         .when(
@@ -32,7 +34,7 @@ class _WeatherState extends ConsumerState<WeatherScreen> {
             child: TextButton.icon(
               onPressed: () => ref.invalidate(heatHourlyWeatherProvider),
               icon: const Icon(Icons.refresh),
-              label: const Text('Weather unavailable · Retry'),
+              label: Text(context.l10n.weatherUnavailableRetry),
             ),
           ),
           data: (data) {
@@ -42,24 +44,24 @@ class _WeatherState extends ConsumerState<WeatherScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.all(20),
                       child: Text(
-                        'Choose a fixed location in Weather & Location settings, or allow location access for local weather.',
+                        context.l10n.chooseAFixedLocationIn,
                         textAlign: TextAlign.center,
                       ),
                     ),
                     TextButton(
                       onPressed: () =>
                           showAppSheet(context, const WeatherLocationTab()),
-                      child: const Text('Location settings'),
+                      child: Text(context.l10n.locationSettings),
                     ),
                     TextButton(
                       onPressed: () {
                         ref.invalidate(heatPreferredLocationProvider);
                         ref.invalidate(heatHourlyWeatherProvider);
                       },
-                      child: const Text('Retry location'),
+                      child: Text(context.l10n.retryLocation),
                     ),
                   ],
                 ),
@@ -94,12 +96,12 @@ class _WeatherState extends ConsumerState<WeatherScreen> {
                       Expanded(
                         child: Text(
                           ref.watch(weatherPlaceNameProvider).valueOrNull ??
-                              'Local weather',
+                              context.l10n.localWeather,
                           style: const TextStyle(fontSize: 12, color: muted),
                         ),
                       ),
                       IconButton(
-                        tooltip: 'Weather & Location',
+                        tooltip: context.l10n.weatherLocation,
                         onPressed: () =>
                             showAppSheet(context, const WeatherLocationTab()),
                         icon: const Icon(Icons.tune, size: 18, color: muted),
@@ -132,7 +134,7 @@ class _WeatherState extends ConsumerState<WeatherScreen> {
               ),
             );
             String time(DateTime? value) =>
-                value == null ? '—' : DateFormat('HH:mm').format(value);
+                value == null ? '—' : DateFormat.Hm().format(value);
             return RefreshIndicator(
               onRefresh: () async {
                 ref.invalidate(heatHourlyWeatherProvider);
@@ -146,7 +148,7 @@ class _WeatherState extends ConsumerState<WeatherScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${current.temperatureC.round()}°',
+                        context.l10n.round2(current.temperatureC.round()),
                         style: const TextStyle(
                           fontSize: 52,
                           fontWeight: FontWeight.bold,
@@ -158,14 +160,19 @@ class _WeatherState extends ConsumerState<WeatherScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '${current.humidityPct.round()}% RH · ${current.pressureHpa.round()} hPa',
+                              context.l10n.roundRhRound2Hpa(
+                                current.humidityPct.round(),
+                                current.pressureHpa.round(),
+                              ),
                               style: const TextStyle(
                                 color: muted,
                                 fontSize: 12,
                               ),
                             ),
                             Text(
-                              'Wet-bulb ${data.wetBulb!.toStringAsFixed(1)}°C',
+                              context.l10n.wetBulbTostringasfixedC(
+                                data.wetBulb!.fixed(1),
+                              ),
                               style: const TextStyle(
                                 color: muted,
                                 fontSize: 12,
@@ -208,7 +215,7 @@ class _WeatherState extends ConsumerState<WeatherScreen> {
                     children: [
                       if (days == 1) ...[
                         IconButton(
-                          tooltip: 'Previous forecast day',
+                          tooltip: context.l10n.previousForecastDay,
                           onPressed: day.isAfter(DateUtils.dateOnly(now))
                               ? () => setState(
                                   () => day = DateTime(
@@ -223,14 +230,14 @@ class _WeatherState extends ConsumerState<WeatherScreen> {
                         Expanded(
                           child: Text(
                             DateUtils.isSameDay(day, now)
-                                ? 'Today'
-                                : DateFormat('EEE d MMM').format(day),
+                                ? context.l10n.today
+                                : DateFormat.MMMEd().format(day),
                             textAlign: TextAlign.center,
                             style: const TextStyle(fontSize: 12),
                           ),
                         ),
                         IconButton(
-                          tooltip: 'Next forecast day',
+                          tooltip: context.l10n.nextForecastDay,
                           onPressed:
                               day.isBefore(
                                 DateUtils.dateOnly(now)
@@ -249,7 +256,7 @@ class _WeatherState extends ConsumerState<WeatherScreen> {
                       ] else
                         Expanded(
                           child: Text(
-                            '$days-Day Forecast',
+                            context.l10n.daysDayForecast(days),
                             textAlign: TextAlign.right,
                             style: const TextStyle(fontSize: 12),
                           ),
@@ -268,56 +275,59 @@ class _WeatherState extends ConsumerState<WeatherScreen> {
                     Padding(
                       padding: const EdgeInsets.only(top: 10),
                       child: Text(
-                        'This provider currently supplies ${data.availableDays(day, days)} of $days forecast days.',
+                        context.l10n.thisProviderCurrentlySuppliesDays(
+                          data.availableDays(day, days),
+                          days,
+                        ),
                         style: const TextStyle(fontSize: 10, color: muted),
                       ),
                     ),
-                  const SectionLabel('Now'),
+                  SectionLabel(context.l10n.now),
                   Wrap(
                     spacing: 12,
                     runSpacing: 12,
                     children: [
                       metric(
-                        'WIND',
+                        context.l10n.wind,
                         Icons.air,
-                        '${current.windSpeedKmh.toStringAsFixed(1)} km/h',
-                        '${current.windDirection.round()}° · ${(current.windSpeedKmh / 1.852).toStringAsFixed(1)} kn',
+                        '${current.windSpeedKmh.fixed(1)} km/h',
+                        '${current.windDirection.round()}° · ${(current.windSpeedKmh / 1.852).fixed(1)} kn',
                       ),
                       metric(
-                        'UV INDEX',
+                        context.l10n.uvIndex2,
                         Icons.wb_sunny_outlined,
                         '${current.uvIndex ?? '—'}',
                         current.uvIndex == null
                             ? 'Unavailable'
                             : current.uvIndex! < 3
-                            ? 'Low'
+                            ? context.l10n.low
                             : current.uvIndex! < 6
-                            ? 'Moderate'
-                            : 'High',
+                            ? context.l10n.moderate
+                            : context.l10n.high,
                       ),
                       metric(
-                        'SUN',
+                        context.l10n.sun2,
                         Icons.wb_twilight,
                         '${time(data.result.sunrise[todayKey])} ↑',
                         '${time(data.result.sunset[todayKey])} ↓',
                       ),
                       metric(
-                        'CLOUD',
+                        context.l10n.cloud,
                         Icons.cloud_outlined,
                         '${current.cloudCover ?? '—'}%',
                         current.cloudCover == null
                             ? 'Unavailable'
                             : current.cloudCover! >= 80
-                            ? 'Overcast'
+                            ? context.l10n.overcast
                             : current.cloudCover! > 20
-                            ? 'Partly cloudy'
-                            : 'Clear',
+                            ? context.l10n.partlyCloudy
+                            : context.l10n.clear,
                       ),
                     ],
                   ),
                   const SizedBox(height: 16),
                   const WeatherRadar(),
-                  const SectionLabel('Sunrise / Sunset'),
+                  SectionLabel(context.l10n.sunriseSunset),
                   for (final key
                       in data.result.sunrise.keys
                           .where((key) => key.compareTo(todayKey) >= 0)
@@ -329,13 +339,17 @@ class _WeatherState extends ConsumerState<WeatherScreen> {
                         children: [
                           Text(
                             key == todayKey
-                                ? 'Today'
-                                : DateFormat('EEE d MMM')
-                                      .format(DateTime.parse(key)),
+                                ? context.l10n.today
+                                : DateFormat.MMMEd().format(
+                                    DateTime.parse(key),
+                                  ),
                             style: const TextStyle(fontSize: 12),
                           ),
                           Text(
-                            '☀ ${time(data.result.sunrise[key])}   ☾ ${time(data.result.sunset[key])}',
+                            context.l10n.keyKey2(
+                              time(data.result.sunrise[key]),
+                              time(data.result.sunset[key]),
+                            ),
                             style: const TextStyle(color: muted, fontSize: 12),
                           ),
                         ],
@@ -343,7 +357,10 @@ class _WeatherState extends ConsumerState<WeatherScreen> {
                     ),
                   const SizedBox(height: 12),
                   Text(
-                    'Data: ${data.result.source} · Updated ${DateFormat('HH:mm').format(data.result.fetchedAt)}',
+                    context.l10n.dataSourceUpdatedFetchedat(
+                      data.result.source,
+                      DateFormat.Hm().format(data.result.fetchedAt),
+                    ),
                     style: const TextStyle(fontSize: 10, color: muted),
                   ),
                 ],

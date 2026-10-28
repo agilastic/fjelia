@@ -5,6 +5,15 @@
 /// lines that matter most for a chat about a session become short sentences
 /// with the same figures; every other line stays as it is.
 String appleFactLine(String line) {
+  if (line.startsWith('[Context:')) {
+    // "[Context:V4][Today:2026-10-28,Weekday:Wed,TimeNow:20:58]..."
+    final m = RegExp(r'Today:([\d-]+),Weekday:(\w+),TimeNow:([\d:]+)')
+        .firstMatch(line);
+    return m == null
+        ? line
+        : 'Today is ${m[2]} ${m[1]}; the time now is ${m[3]}. '
+              'This is the real current date: a record from another date is not today.';
+  }
   final parsed = _Toon.parse(line);
   if (parsed == null) return line;
   final f = parsed.fields;
@@ -93,6 +102,8 @@ String appleFactLine(String line) {
           'Illness or injury means rest, never a replacement workout.';
     case 'DataStatus':
       return _dataStatus(parsed);
+    case 'Analysis':
+      return f['Text'] ?? line;
     case 'Compare':
       String unit(String v, String u) =>
           v.replaceFirstMapped(RegExp(r'^(\S+ vs \S+)'), (m) => '${m[1]} $u');
@@ -207,7 +218,10 @@ String _hrvPairSentence(Map<String, String> f) {
       ? ' No valid change is available, so none is given.'
       : () {
           final c = f['Change']!.split('/');
-          return ' Change ${c[0].replaceFirst('ms', ' ms')} (${c[1]}).';
+          final fell =
+              c[0].trim().startsWith('-') || c[0].trim().startsWith('−');
+          return ' Change ${c[0].replaceFirst('ms', ' ms')} (${c[1]}).'
+              ' HRV ${fell ? 'fell, the less favourable direction' : 'rose, the favourable direction (better recovery, not strain)'}.';
         }();
   final history = f['History'] == null
       ? ''

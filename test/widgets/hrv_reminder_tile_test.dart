@@ -1,3 +1,4 @@
+import 'package:fjelia/l10n/app_localizations.dart';
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/providers/database_provider.dart';
@@ -38,7 +39,11 @@ void main() {
           localNotificationGatewayProvider.overrideWithValue(gateway),
           hrvSensorReadyProvider.overrideWithValue(() async => sensor),
         ],
-        child: const MaterialApp(home: Scaffold(body: HrvReminderTile())),
+        child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Scaffold(body: HrvReminderTile()),
+        ),
       ),
     );
     await load(tester);

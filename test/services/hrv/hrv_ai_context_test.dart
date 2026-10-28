@@ -46,6 +46,44 @@ void main() {
     expect(lines.join('\n'), isNot(contains('History:')));
   });
 
+  Future<List<String>> trainingHrv() async => (await builder.build(
+    null,
+    '',
+    null,
+  )).split('\n').where((l) => l.startsWith('[Analysis:TrainingHRV')).toList();
+
+  test('a rise in training HRV is favourable and is not sleep HRV', () async {
+    await addActivity(db, 'up', 700, 60);
+    await addReading(db, 680, before, rmssd: 34);
+    await addReading(db, 791, after, rmssd: 41);
+    final lines = await trainingHrv();
+    expect(lines, hasLength(1));
+    expect(lines.first, contains('Verdict:better'));
+    expect(lines.first, contains('ROSE'));
+    expect(lines.first, contains('(favourable)'));
+    expect(lines.first, contains('NOT sleep HRV'));
+  });
+
+  test('a fall in training HRV is the less favourable direction', () async {
+    await addActivity(db, 'down', 700, 60);
+    await addReading(db, 680, before, rmssd: 34);
+    await addReading(db, 791, after, rmssd: 28);
+    final line = (await trainingHrv()).single;
+    expect(line, contains('Verdict:worse'));
+    expect(line, contains('FELL'));
+    expect(line, contains('(less favourable)'));
+    // The Apple model reads the sentence, not the compact line.
+    expect(appleFactLine(line), startsWith('Training HRV (chest strap)'));
+  });
+
+  test('a missing reading gives no change and no verdict', () async {
+    await addActivity(db, 'half', 700, 60);
+    await addReading(db, 680, before, rmssd: 34);
+    final line = (await trainingHrv()).single;
+    expect(line, contains('Verdict:none'));
+    expect(line, contains('no change is given'));
+  });
+
   test('HRV-T065 an older workout is outside the window', () async {
     await addActivity(db, 'old', -60 * 24 * 10, 60);
     await addReading(db, -60 * 24 * 10 - 20, before);

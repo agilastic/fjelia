@@ -1,3 +1,4 @@
+import 'package:fjelia/l10n/app_localizations.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -63,7 +64,9 @@ void main() {
             userProfileProvider.overrideWith(_Profile.new),
             aiCoachClientProvider.overrideWithValue(client),
           ],
-          child: const MaterialApp(
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             home: Scaffold(
               body: Padding(
                 padding: EdgeInsets.only(bottom: 350),

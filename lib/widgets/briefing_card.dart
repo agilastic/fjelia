@@ -1,4 +1,9 @@
+import '../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
+
+import '../services/briefing_text.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/ai_coach_provider.dart';
@@ -37,19 +42,22 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
     );
     final fallback =
         settings.briefingMode == BriefingMode.ai && briefing.hasError;
-    final text = settings.briefingMode == BriefingMode.static_ || fallback
+    final raw = settings.briefingMode == BriefingMode.static_ || fallback
         ? summary
         : briefing.valueOrNull;
-    final name = period.name;
+    // Never markdown or line breaks, also for a briefing saved earlier.
+    final text = raw == null ? null : flattenBriefing(raw);
     return Padding(
       padding: const EdgeInsets.only(top: 8, bottom: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            '${name[0].toUpperCase()}${name.substring(1)} Briefing',
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-          ),
+          Text(switch (period) {
+            AiBriefingPeriod.morning => context.l10n.morningBriefing,
+            AiBriefingPeriod.lunch => context.l10n.lunchBriefing,
+            AiBriefingPeriod.afternoon => context.l10n.afternoonBriefing,
+            AiBriefingPeriod.evening => context.l10n.eveningBriefing,
+          }, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
           const SizedBox(height: 10),
           if (text != null)
             Text(
@@ -62,8 +70,8 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
           if (briefing.hasError)
             Text(
               settings.usesOnDeviceBriefing
-                  ? 'Apple Intelligence is unavailable. Showing a non-AI summary.'
-                  : 'AI briefing unavailable. Showing a non-AI summary.',
+                  ? context.l10n.appleIntelligenceIsUnavailableShowing
+                  : context.l10n.aiBriefingUnavailableShowingA,
               style: TextStyle(fontSize: 12, color: muted),
             ),
           if (settings.briefingMode == BriefingMode.ai &&
@@ -74,7 +82,7 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
                 if (!settings.usesOnDeviceBriefing) {
                   if (!await confirmAction(
                     context,
-                    'Generate AI briefing?',
+                    context.l10n.generateAiBriefing,
                     'A summary of your health and training data will be sent to ${settings.provider.name}.',
                   )) {
                     return;
@@ -85,7 +93,11 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
                     .read(aiBriefingProvider(period).notifier)
                     .load(settings, raceGoals: profile.raceGoals ?? '');
               }),
-              child: Text(fallback ? 'Retry AI briefing' : 'Generate briefing'),
+              child: Text(
+                fallback
+                    ? context.l10n.retryAiBriefing
+                    : context.l10n.generateBriefing,
+              ),
             ),
           if (text != null &&
               settings.briefingMode == BriefingMode.ai &&
@@ -113,10 +125,11 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
                   minimumSize: const Size(double.infinity, 44),
                 ),
                 icon: const Icon(Icons.chat_bubble_outline, size: 18),
-                label: const Text('Chat with AI about this briefing'),
+                label: Text(context.l10n.chatWithAiAboutThis),
                 onPressed: () {
-                  ref.read(pendingCoachPromptProvider.notifier).state =
-                      'Discuss this briefing with me and suggest the next best action.\n\n$text';
+                  ref.read(pendingCoachPromptProvider.notifier).state = context
+                      .l10n
+                      .discussThisBriefingWithMe(text);
                   widget.openCoach();
                 },
               ),
@@ -128,10 +141,11 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
             TextButton.icon(
               style: TextButton.styleFrom(foregroundColor: mint),
               icon: const Icon(Icons.help_outline, size: 18),
-              label: const Text('Why this recommendation?'),
+              label: Text(context.l10n.whyThisRecommendation),
               onPressed: () {
-                ref.read(pendingCoachPromptProvider.notifier).state =
-                    'Why this recommendation? Which of my figures and which gaps in the data led to it, and what would change it?\n\n$text';
+                ref.read(pendingCoachPromptProvider.notifier).state = context
+                    .l10n
+                    .whyThisRecommendationWhichOf(text);
                 widget.openCoach();
               },
             ),

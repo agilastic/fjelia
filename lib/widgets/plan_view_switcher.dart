@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -20,8 +22,8 @@ class PlanViewSwitcher extends ConsumerWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          for (final item in const [
-            ('month', 'Month view', Icons.calendar_month_rounded),
+          for (final item in [
+            ('month', context.l10n.monthView, Icons.calendar_month_rounded),
             ('week', 'Week view', Icons.view_week_rounded),
             ('list', 'List view', Icons.format_list_bulleted_rounded),
           ])

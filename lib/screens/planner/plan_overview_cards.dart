@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+import '../../l10n/formats.dart';
 import '../../providers/plan_weather_provider.dart';
 import '../../widgets/weather_visuals.dart';
 import '../weather/weather_screen.dart';
@@ -38,14 +40,14 @@ class PlanWeatherStrip extends ConsumerWidget {
               height: 28,
               child: Center(child: LinearProgressIndicator()),
             ),
-            error: (_, _) => const Text(
-              'Weather unavailable · Tap to retry',
+            error: (_, _) => Text(
+              context.l10n.weatherUnavailableTapToRetry,
               style: TextStyle(color: muted),
             ),
             data: (data) {
               if (data?.current == null) {
-                return const Text(
-                  'Weather · Set your location',
+                return Text(
+                  context.l10n.weatherSetYourLocation,
                   style: TextStyle(color: muted),
                 );
               }
@@ -53,7 +55,7 @@ class PlanWeatherStrip extends ConsumerWidget {
               String amount(double? n) => n == null
                   ? '—'
                   : n < 10 && n != n.roundToDouble()
-                  ? n.toStringAsFixed(1)
+                  ? n.fixed(1)
                   : n.round().toString();
               const small = TextStyle(fontSize: 9, color: muted);
               Widget cell(String text, {Color? color, bool bold = false}) =>
@@ -84,9 +86,9 @@ class PlanWeatherStrip extends ConsumerWidget {
                         color: Colors.lightBlue,
                       ),
                       const SizedBox(width: 6),
-                      const Expanded(
+                      Expanded(
                         child: Text(
-                          '7-DAY FORECAST',
+                          context.l10n.t7DayForecast,
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w700,
@@ -94,7 +96,7 @@ class PlanWeatherStrip extends ConsumerWidget {
                         ),
                       ),
                       Text(
-                        '${data.current!.temperatureC.round()}°',
+                        context.l10n.round2(data.current!.temperatureC.round()),
                         style: const TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
@@ -107,26 +109,26 @@ class PlanWeatherStrip extends ConsumerWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(
+                      SizedBox(
                         width: 42,
                         child: Column(
                           children: [
                             SizedBox(height: 15),
                             SizedBox(
                               height: 15,
-                              child: Text('min/max', style: small),
+                              child: Text(context.l10n.minMax, style: small),
                             ),
                             SizedBox(
                               height: 15,
-                              child: Text('rain mm', style: small),
+                              child: Text(context.l10n.rainMm2, style: small),
                             ),
                             SizedBox(
                               height: 15,
-                              child: Text('UV max', style: small),
+                              child: Text(context.l10n.uvMax, style: small),
                             ),
                             SizedBox(
                               height: 15,
-                              child: Text('km/h', style: small),
+                              child: Text(context.l10n.kmH, style: small),
                             ),
                           ],
                         ),
@@ -135,10 +137,7 @@ class PlanWeatherStrip extends ConsumerWidget {
                         Expanded(
                           child: Column(
                             children: [
-                              cell(
-                                DateFormat('EEE').format(day.date),
-                                bold: true,
-                              ),
+                              cell(DateFormat.E().format(day.date), bold: true),
                               cell(
                                 day.minC == null
                                     ? '—'
@@ -172,7 +171,7 @@ String _goalPace(RaceGoal goal) {
   final profile = _profileOf(goal);
   if (profile.isRide) {
     final speed = profile.goalSpeedKmh;
-    return speed == null ? '' : ' · ${speed.toStringAsFixed(1)} km/h';
+    return speed == null ? '' : ' · ${speed.fixed(1)} km/h';
   }
   final pace = profile.goalPaceSecPerKm;
   return pace == null ? '' : ' · ${formatPace(pace)}';
@@ -224,11 +223,17 @@ class SeasonSummaryCard extends ConsumerWidget {
     ];
     if (outcome == 'feasible' && lines.isEmpty) return const SizedBox.shrink();
     final (label, color) = switch (outcome) {
-      'feasibleWithTradeoffs' => ('Season: with trade-offs', Colors.orange),
-      'requiresDecision' => ('Season: needs your decision', Colors.redAccent),
-      'infeasible' => ('Season: cannot be combined', Colors.redAccent),
-      'insufficientData' => ('Season: provisional', Colors.amber),
-      _ => ('Season', Colors.green),
+      'feasibleWithTradeoffs' => (
+        context.l10n.seasonWithTradeOffs,
+        Colors.orange,
+      ),
+      'requiresDecision' => (
+        context.l10n.seasonNeedsYourDecision,
+        Colors.redAccent,
+      ),
+      'infeasible' => (context.l10n.seasonCannotBeCombined, Colors.redAccent),
+      'insufficientData' => (context.l10n.seasonProvisional, Colors.amber),
+      _ => (context.l10n.season, Colors.green),
     };
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
@@ -247,7 +252,7 @@ class SeasonSummaryCard extends ConsumerWidget {
               style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
             ),
             subtitle: Text(
-              lines.isEmpty ? 'All goals fit.' : lines.first,
+              lines.isEmpty ? context.l10n.allGoalsFit : lines.first,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(fontSize: 11, color: Colors.white70),
@@ -266,7 +271,7 @@ class SeasonSummaryCard extends ConsumerWidget {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 4),
                     child: Text(
-                      '→ $alt',
+                      context.l10n.alt(alt),
                       style: const TextStyle(
                         fontSize: 12,
                         color: Colors.orange,
@@ -343,7 +348,7 @@ class _GoalsAccordionState extends State<_GoalsAccordion> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Race goals · ${goals.length}',
+                              context.l10n.raceGoalsLength(goals.length),
                               style: const TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w700,
@@ -368,7 +373,7 @@ class _GoalsAccordionState extends State<_GoalsAccordion> {
                                         ),
                                       ),
                                       Text(
-                                        '${_weeks(g)} wk',
+                                        context.l10n.gWk(_weeks(g)),
                                         style: TextStyle(
                                           fontSize: 12,
                                           fontWeight: FontWeight.w700,
@@ -474,8 +479,10 @@ class _GoalCard extends ConsumerWidget {
                       ),
                       if (goal.targetFinishSeconds != null)
                         Text(
-                          'Goal ${formatTargetTime(goal.targetFinishSeconds!)}'
-                          '${_goalPace(goal)}',
+                          context.l10n.goalTargetfinishsecondsgoal(
+                            formatTargetTime(goal.targetFinishSeconds!),
+                            _goalPace(goal),
+                          ),
                           style: TextStyle(
                             fontSize: 12,
                             color: accent,
@@ -484,8 +491,10 @@ class _GoalCard extends ConsumerWidget {
                         ),
                       if (estimate != null)
                         Text(
-                          'Est. ${RacePredictor.formatTime(estimate)}'
-                          '${_ambition(goal, estimate)}',
+                          context.l10n.estEstimateestimate2(
+                            RacePredictor.formatTime(estimate),
+                            _ambition(goal, estimate),
+                          ),
                           style: TextStyle(
                             fontSize: 12,
                             color: goal.targetFinishSeconds == null
@@ -500,15 +509,15 @@ class _GoalCard extends ConsumerWidget {
                 Column(
                   children: [
                     Text(
-                      '$weeks',
+                      context.l10n.weeks(weeks),
                       style: TextStyle(
                         fontSize: 27,
                         fontWeight: FontWeight.w700,
                         color: accent,
                       ),
                     ),
-                    const Text(
-                      'weeks',
+                    Text(
+                      context.l10n.weeks2,
                       style: TextStyle(fontSize: 11, color: muted),
                     ),
                   ],
@@ -553,15 +562,15 @@ class _UpcomingState extends State<UpcomingWorkoutList> {
     final entries = groups.entries
         .take(widget.selectedDay == null ? visibleDays : groups.length)
         .toList();
-    final tomorrow = DateUtils.dateOnly(DateTime.now())
-        .add(const Duration(days: 1));
+    final today = DateUtils.dateOnly(DateTime.now());
+    final tomorrow = today.add(const Duration(days: 1));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
+        Padding(
           padding: EdgeInsets.only(top: 8, bottom: 10),
           child: Text(
-            'UPCOMING',
+            context.l10n.upcoming,
             style: TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w800,
@@ -573,9 +582,11 @@ class _UpcomingState extends State<UpcomingWorkoutList> {
           Padding(
             padding: const EdgeInsets.only(top: 12, bottom: 6),
             child: Text(
-              e.key == tomorrow
-                  ? 'TOMORROW'
-                  : DateFormat('EEEE, d MMMM').format(e.key).toUpperCase(),
+              e.key == today
+                  ? context.l10n.today2
+                  : e.key == tomorrow
+                  ? context.l10n.tomorrow
+                  : DateFormat.MMMMEEEEd().format(e.key).toUpperCase(),
               style: const TextStyle(
                 fontSize: 10,
                 color: muted,
@@ -600,7 +611,9 @@ class _UpcomingState extends State<UpcomingWorkoutList> {
               padding: EdgeInsets.zero,
             ),
             onPressed: () => setState(() => visibleDays += 5),
-            child: Text('+ ${groups.length - entries.length} more days'),
+            child: Text(
+              context.l10n.lengthMoreDays(groups.length - entries.length),
+            ),
           ),
       ],
     );
@@ -613,7 +626,7 @@ String _doneSummary(ActivityRecord a) {
   // The way the history writes it.
   final time = '${minutes ~/ 60}h${(minutes % 60).toString().padLeft(2, '0')}m';
   final km = (a.distanceMeters ?? 0) / 1000;
-  return km > 0.05 ? '$time · ${km.toStringAsFixed(1)} km' : time;
+  return km > 0.05 ? '$time · ${km.fixed(1)} km' : time;
 }
 
 /// The mark of a finished entry: a check that settles in, in the app's green.
@@ -712,7 +725,9 @@ class _SessionTile extends StatelessWidget {
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: Text(
-                              skipped ? 'SKIPPED' : s.phase.toUpperCase(),
+                              skipped
+                                  ? context.l10n.skipped2
+                                  : s.phase.toUpperCase(),
                               style: TextStyle(
                                 fontSize: 9,
                                 color: phaseColor,
@@ -810,8 +825,8 @@ class _ScheduledTile extends StatelessWidget {
           ),
           subtitle: Text(
             done
-                ? 'Done · ${_doneSummary(doneBy!)}'
-                : 'Garmin Workout · ${workoutSummary(workout)}',
+                ? context.l10n.doneDoneby(_doneSummary(doneBy!))
+                : context.l10n.garminWorkoutWorkout(workoutSummary(workout)),
             style: const TextStyle(fontSize: 11, color: Colors.white70),
           ),
           trailing: done

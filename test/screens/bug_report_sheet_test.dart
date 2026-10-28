@@ -1,3 +1,4 @@
+import 'package:fjelia/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fjelia/screens/settings/bug_report_sheet.dart';
@@ -49,6 +50,8 @@ void main() {
     final reports = _Reports();
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(body: BugReportSheet(service: reports)),
       ),
     );
@@ -73,6 +76,8 @@ void main() {
       final reports = _Reports()..fail = true;
       await tester.pumpWidget(
         MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: Scaffold(body: BugReportSheet(service: reports)),
         ),
       );

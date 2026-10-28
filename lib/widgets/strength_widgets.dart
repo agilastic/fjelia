@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -25,13 +27,13 @@ String strengthLoadText(
 }) {
   switch (c.loadKind) {
     case StrengthLoadKind.bodyweight:
-      return 'Bodyweight';
+      return tr.bodyweight;
     case StrengthLoadKind.band:
-      return resistance ?? 'Resistance —';
+      return resistance ?? tr.resistance2;
     case StrengthLoadKind.assisted:
       return load == null
           ? 'Assist —'
-          : 'Assist ${formatStrengthLoad(load.kg, unit)}';
+          : tr.assistUnit(formatStrengthLoad(load.kg, unit));
     case StrengthLoadKind.added:
       return load == null
           ? '+— ${unit.name}'
@@ -55,7 +57,7 @@ String strengthTargetText(
       ? '${_repsText(t.reps!, c)} reps'
       : t.isRange
       ? '${t.repMin}–${t.repMax}${c.side == StrengthSide.unilateral ? '/side' : ''} reps'
-      : 'Reps —';
+      : tr.reps2;
   // No load set yet: the target is the work; a history hint may follow.
   if (c.loadKind == StrengthLoadKind.bodyweight ||
       (c.loadKind.hasKg && t.load == null) ||
@@ -72,8 +74,8 @@ String strengthResultText(
   StrengthConvention c,
   MassUnit unit,
 ) {
-  if (r.status == StrengthSetStatus.unrecorded) return 'Not recorded';
-  if (r.status == StrengthSetStatus.skipped) return 'Skipped';
+  if (r.status == StrengthSetStatus.unrecorded) return tr.notRecorded;
+  if (r.status == StrengthSetStatus.skipped) return tr.skipped;
   final work = r.durationSeconds != null
       ? formatStrengthSeconds(r.durationSeconds!)
       : r.reps != null
@@ -105,13 +107,13 @@ List<(T, int)> numberedSets<T>(List<T> sets) {
 /// The name an athlete knows an activity source by; null when unknown.
 String? strengthSourceLabel(String? source) => switch (source) {
   null || '' => null,
-  'fjelia_live' => 'Gym mode',
-  'garmin_api' => 'Garmin',
-  'polar' => 'Polar',
-  'coros' => 'COROS',
-  'suunto' => 'Suunto',
-  'health_connect' => 'Health',
-  'manual' => 'Manual',
+  'fjelia_live' => tr.gymMode,
+  'garmin_api' => tr.garmin,
+  'polar' => tr.polar,
+  'coros' => tr.coros2,
+  'suunto' => tr.suunto,
+  'health_connect' => tr.health,
+  'manual' => tr.manual,
   _ => null,
 };
 
@@ -292,8 +294,8 @@ class _StrengthExerciseCardState extends State<StrengthExerciseCard> {
                   if (widget.rows.isNotEmpty)
                     IconButton(
                       tooltip: open
-                          ? 'Collapse ${widget.name}'
-                          : 'Expand ${widget.name}',
+                          ? context.l10n.collapseName(widget.name)
+                          : context.l10n.expandName(widget.name),
                       onPressed: () => setState(() => open = !open),
                       icon: AnimatedRotation(
                         turns: open ? .5 : 0,
@@ -464,7 +466,9 @@ class StrengthResultRow extends StatelessWidget {
     final value = strengthResultText(r, convention, unit);
     final planned = target == null
         ? null
-        : 'Planned ${strengthTargetText(target!, convention, unit)}';
+        : context.l10n.plannedUnit(
+            strengthTargetText(target!, convention, unit),
+          );
     final extra = [
       if (r.kind != StrengthSetKind.working) r.kind.label,
       ?planned,
@@ -551,7 +555,9 @@ class StrengthStatusChip extends StatelessWidget {
         Icon(icon, size: 16, color: color),
         const SizedBox(width: 4),
         Text(
-          status == StrengthSetStatus.unrecorded ? 'Open' : status.label,
+          status == StrengthSetStatus.unrecorded
+              ? context.l10n.open
+              : status.label,
           style: TextStyle(fontSize: 11, color: color),
         ),
       ],
@@ -635,11 +641,11 @@ class StrengthHistoryHint extends StatelessWidget {
     final loads = load != null
         ? strengthLoadText(convention, unit, load: load)
         : entry.sets.any((s) => s.load != null)
-        ? 'Variable loads'
+        ? context.l10n.variableLoads
         : null;
     final text = 'Last time: ${[?loads, reps].join(' · ')}';
     final when =
-        '${DateFormat('d MMM').format(entry.date)}${strengthSourceLabel(entry.source) == null ? '' : ' · ${strengthSourceLabel(entry.source)}'}${entry.stale ? ' · older than ${strengthHistoryStaleAfter.inDays ~/ 7} weeks' : ''}';
+        '${DateFormat.MMMd().format(entry.date)}${strengthSourceLabel(entry.source) == null ? '' : ' · ${strengthSourceLabel(entry.source)}'}${entry.stale ? ' · older than ${strengthHistoryStaleAfter.inDays ~/ 7} weeks' : ''}';
     return Container(
       padding: const EdgeInsets.fromLTRB(10, 6, 4, 6),
       decoration: BoxDecoration(
@@ -675,7 +681,7 @@ class StrengthHistoryHint extends StatelessWidget {
                 foregroundColor: strengthColor,
                 minimumSize: const Size(48, 48),
               ),
-              child: Text('Use', semanticsLabel: 'Use $text'),
+              child: Text(context.l10n.use, semanticsLabel: 'Use $text'),
             ),
         ],
       ),
@@ -694,12 +700,12 @@ class StrengthMissingDataCard extends StatelessWidget {
   final VoidCallback? onAdd, onLogFromPlan, onCompare;
   @override
   Widget build(BuildContext context) => SectionCard(
-    title: 'Exercises',
+    title: context.l10n.exercises,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Text(
-          'Exercise details were not provided by this activity source.',
+        Text(
+          context.l10n.exerciseDetailsWereNotProvided,
           style: TextStyle(fontSize: 13, color: Colors.white70, height: 1.4),
         ),
         const SizedBox(height: 12),
@@ -710,7 +716,7 @@ class StrengthMissingDataCard extends StatelessWidget {
               style: FilledButton.styleFrom(minimumSize: const Size(0, 48)),
               onPressed: onLogFromPlan,
               icon: const Icon(Icons.playlist_add_check, size: 18),
-              label: const Text('Log from plan'),
+              label: Text(context.l10n.logFromPlan),
             ),
           ),
         if (onAdd != null)
@@ -722,13 +728,13 @@ class StrengthMissingDataCard extends StatelessWidget {
             ),
             onPressed: onAdd,
             icon: const Icon(Icons.add, size: 18),
-            label: const Text('Add exercise details'),
+            label: Text(context.l10n.addExerciseDetails),
           ),
         if (onCompare != null)
           TextButton(
             style: TextButton.styleFrom(minimumSize: const Size(0, 48)),
             onPressed: onCompare,
-            child: const Text('Compare with a saved workout'),
+            child: Text(context.l10n.compareWithASavedWorkout),
           ),
       ],
     ),
@@ -768,7 +774,7 @@ class StrengthProgressionCard extends StatelessWidget {
     );
     return Semantics(
       container: true,
-      label: 'Load suggestion',
+      label: context.l10n.loadSuggestion,
       child: Container(
         padding: const EdgeInsets.fromLTRB(12, 10, 6, 4),
         decoration: BoxDecoration(
@@ -818,24 +824,24 @@ class StrengthProgressionCard extends StatelessWidget {
                   TextButton(
                     style: button,
                     onPressed: onApply,
-                    child: const Text('Apply to this workout'),
+                    child: Text(context.l10n.applyToThisWorkout),
                   ),
                 if (onKeep != null)
                   TextButton(
                     style: button,
                     onPressed: onKeep,
-                    child: const Text('Keep current load'),
+                    child: Text(context.l10n.keepCurrentLoad),
                   ),
                 if (onSetIncrement != null)
                   TextButton(
                     style: button,
                     onPressed: onSetIncrement,
-                    child: const Text('Set load step'),
+                    child: Text(context.l10n.setLoadStep),
                   ),
                 TextButton(
                   style: button,
                   onPressed: onViewSupporting,
-                  child: const Text('View supporting sets'),
+                  child: Text(context.l10n.viewSupportingSets),
                 ),
               ],
             ),
@@ -855,23 +861,25 @@ Future<void> showStrengthSupportingSets(
 }) => showDialog<void>(
   context: context,
   builder: (c) => AlertDialog(
-    title: const Text('Supporting sets'),
+    title: Text(context.l10n.supportingSets),
     content: SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'Rule v$strengthProgressionRuleVersion: the last '
-            '$strengthProgressionMinSessions comparable sessions, every set '
-            'done at the top of its repetition target with effort recorded '
-            'and not harder than intended. ${evaluation.reason}',
+            context.l10n
+                .ruleVstrengthprogressionruleversionTheLastStrengthprogressionminsessions(
+                  strengthProgressionRuleVersion,
+                  strengthProgressionMinSessions,
+                  evaluation.reason,
+                ),
             style: const TextStyle(fontSize: 12, color: muted),
           ),
           for (final s in evaluation.supporting) ...[
             const SizedBox(height: 14),
             Text(
-              '${DateFormat('EEE d MMM').format(s.date)}${strengthSourceLabel(s.source) == null ? '' : ' · ${strengthSourceLabel(s.source)}'}',
+              '${DateFormat.MMMEd().format(s.date)}${strengthSourceLabel(s.source) == null ? '' : ' · ${strengthSourceLabel(s.source)}'}',
               style: const TextStyle(fontWeight: FontWeight.w700),
             ),
             for (final (r, n) in numberedSets(s.sets))
@@ -883,15 +891,18 @@ Future<void> showStrengthSupportingSets(
               ),
           ],
           if (evaluation.supporting.isEmpty)
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(top: 12),
-              child: Text('No recorded sessions yet.'),
+              child: Text(context.l10n.noRecordedSessionsYet),
             ),
         ],
       ),
     ),
     actions: [
-      TextButton(onPressed: () => Navigator.pop(c), child: const Text('Close')),
+      TextButton(
+        onPressed: () => Navigator.pop(c),
+        child: Text(context.l10n.close),
+      ),
     ],
   ),
 );

@@ -1,3 +1,5 @@
+import 'package:fjelia/l10n/app_localizations.dart';
+
 import 'dart:async';
 import 'dart:io';
 import 'dart:ui' as ui;
@@ -52,6 +54,8 @@ void main() {
         child: RepaintBoundary(
           key: boundary,
           child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             theme: AppTheme.dark(),
             home: const Scaffold(
               body: SingleChildScrollView(child: TrainingFormCard()),
@@ -93,7 +97,7 @@ void main() {
     );
     expect(data.lineBarsData.first.spots.last.y, history.last.ctl);
     expect(data.lineBarsData[1].spots.last.y, history.last.atl);
-    expect(find.text('5/11'), findsOneWidget);
+    expect(find.text('05/11'), findsOneWidget);
     expect(find.textContaining('History since'), findsOneWidget);
     expect(find.textContaining('building baseline'), findsNothing);
     expect(tester.takeException(), isNull);

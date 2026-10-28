@@ -1,23 +1,30 @@
+import '../l10n/l10n_ext.dart';
+
 import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:uuid/uuid.dart';
 
 enum SpotHrvContext {
-  beforeTraining('Before training'),
-  afterTraining('After training'),
-  resting('Resting');
+  beforeTraining,
+  afterTraining,
+  resting;
 
-  const SpotHrvContext(this.label);
-  final String label;
+  String get label => switch (this) {
+    SpotHrvContext.beforeTraining => tr.enumBeforeTraining,
+    SpotHrvContext.afterTraining => tr.enumAfterTraining,
+    SpotHrvContext.resting => tr.enumResting,
+  };
 }
 
 enum SpotHrvPosture {
-  seated('Seated'),
-  supine('Lying down');
+  seated,
+  supine;
 
-  const SpotHrvPosture(this.label);
-  final String label;
+  String get label => switch (this) {
+    SpotHrvPosture.seated => tr.enumSeated,
+    SpotHrvPosture.supine => tr.enumLyingDown,
+  };
 }
 
 /// Bluetooth SIG Heart Rate Measurement (0x2A37), not the Polar ECG service.
@@ -28,12 +35,12 @@ class H10HeartRatePacket {
   final bool? contact;
 
   factory H10HeartRatePacket.decode(List<int> bytes) {
-    if (bytes.isEmpty) throw const FormatException('Empty heart rate packet');
+    if (bytes.isEmpty) throw FormatException('Empty heart rate packet');
     final flags = bytes[0];
     var offset = 1;
     int read16() {
       if (offset + 2 > bytes.length) {
-        throw const FormatException('Truncated heart rate packet');
+        throw FormatException('Truncated heart rate packet');
       }
       final value = bytes[offset] | (bytes[offset + 1] << 8);
       offset += 2;
@@ -45,7 +52,7 @@ class H10HeartRatePacket {
       bpm = read16();
     } else {
       if (offset >= bytes.length) {
-        throw const FormatException('Missing heart rate');
+        throw FormatException('Missing heart rate');
       }
       bpm = bytes[offset++];
     }
@@ -110,7 +117,7 @@ class SpotHrvAnalysis {
         continue;
       }
       if (sample.contact == false) {
-        reasons.add('Poor sensor contact');
+        reasons.add(tr.poorSensorContact);
         continue;
       }
       final neighbours = <double>[
@@ -129,7 +136,7 @@ class SpotHrvAnalysis {
                 2;
       reasons.add(
         neighbours.length >= 5 && (sample.rrMs - median).abs() > median * .25
-            ? 'More than 25% from local median'
+            ? tr.moreThan25FromLocal
             : null,
       );
     }

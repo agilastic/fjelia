@@ -1,4 +1,6 @@
+import '../../l10n/l10n_ext.dart';
 import '../../providers/activity_history_provider.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,41 +23,44 @@ class ThresholdSheets extends ConsumerWidget {
         vo2 = ref.watch(vo2MaxProvider).valueOrNull,
         ftp = ref.watch(ftpProvider).valueOrNull;
     return SheetPage(
-      title: 'Thresholds & Fitness Tests',
+      title: context.l10n.thresholdsFitnessTests,
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           SectionCard(
-            title: 'LT1',
-            child: StatPair('Aerobic Threshold', '${lt1?.bpm ?? '—'} bpm'),
+            title: context.l10n.lt1,
+            child: StatPair(
+              context.l10n.aerobicThreshold,
+              '${lt1?.bpm ?? '—'} bpm',
+            ),
           ),
           SectionCard(
-            title: 'LT2',
+            title: context.l10n.lt2,
             child: StatPair(
-              'Lactate Threshold',
+              context.l10n.lactateThreshold,
               '${lt2?.lt2 ?? '—'} bpm · ${lt2?.pace ?? '—'}',
             ),
           ),
           SectionCard(
-            title: 'VO₂ Pace',
+            title: context.l10n.voPace,
             child: StatPair('5-minute max', vo2?.pace ?? '—'),
           ),
           SectionCard(
-            title: 'FTP',
+            title: context.l10n.ftp,
             child: Column(
               children: [
                 StatPair(
-                  'Functional Threshold Power',
+                  context.l10n.functionalThresholdPower,
                   '${ftp?.ftpWatts ?? '—'} W',
                 ),
                 TextButton(
                   onPressed: () => showAppSheet(context, const _FtpEditor()),
-                  child: const Text('Set FTP manually'),
+                  child: Text(context.l10n.setFtpManually),
                 ),
               ],
             ),
           ),
-          const SectionLabel('Calculate from an activity'),
+          SectionLabel(context.l10n.calculateFromAnActivity),
           ref
               .watch(loadActivitiesProvider)
               .when(
@@ -116,27 +121,27 @@ class _FtpEditorState extends ConsumerState<_FtpEditor> {
 
   @override
   Widget build(BuildContext context) => SheetPage(
-    title: 'Set FTP',
+    title: context.l10n.setFtp,
     child: Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
         children: [
           TextField(
             controller: c,
-            decoration: const InputDecoration(labelText: 'FTP (watts)'),
+            decoration: InputDecoration(labelText: context.l10n.ftpWatts),
             keyboardType: TextInputType.number,
           ),
           FilledButton(
             onPressed: () => runUiAction(context, () async {
               final watts = int.tryParse(c.text);
               if (watts == null || watts < 30 || watts > 1000) {
-                throw StateError('Enter FTP between 30 and 1000 W.');
+                throw StateError(tr.enterFtpBetween30And);
               }
               await ref.read(ftpProvider.notifier).saveManual(watts);
               ref.invalidate(thresholdHistoryProvider);
               if (context.mounted) Navigator.pop(context);
             }),
-            child: const Text('Save'),
+            child: Text(context.l10n.save),
           ),
         ],
       ),
@@ -158,7 +163,7 @@ class FtpDetailSheet extends ConsumerWidget {
           (activity, best20MinutePower(activity.metricsJson)),
     ];
     return LoadSheet(
-      title: 'FTP — CYCLING THRESHOLD POWER',
+      title: context.l10n.ftpCyclingThresholdPower,
       centerTitle: true,
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
@@ -208,8 +213,8 @@ class FtpDetailSheet extends ConsumerWidget {
                           await ref.read(ftpProvider.notifier).clear();
                           ref.invalidate(thresholdHistoryProvider);
                         }),
-                  child: const Text(
-                    'Clear',
+                  child: Text(
+                    context.l10n.clearAction,
                     style: TextStyle(color: loadRed, fontSize: 12),
                   ),
                 ),
@@ -220,12 +225,12 @@ class FtpDetailSheet extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.only(top: 6),
               child: Text(
-                '${ftp.source == 'manual' ? 'Manual' : 'Estimated'} · ${loadDate(ftp.updatedAt)}',
+                '${ftp.source == 'manual' ? context.l10n.manual : context.l10n.estimated} · ${loadDate(ftp.updatedAt)}',
                 style: loadCaption,
               ),
             ),
           const SizedBox(height: 16),
-          const Text('FTP HISTORY', style: loadLabel),
+          Text(context.l10n.ftpHistory, style: loadLabel),
           const SizedBox(height: 12),
           LoadTrendChart(
             points: [
@@ -239,10 +244,10 @@ class FtpDetailSheet extends ConsumerWidget {
             unit: 'W',
           ),
           const SizedBox(height: 16),
-          const Text('UPDATE FROM ACTIVITY', style: loadLabel),
+          Text(context.l10n.updateFromActivity, style: loadLabel),
           const SizedBox(height: 5),
-          const Text(
-            'Tap an activity — FTP = best 20-min power × 0.95',
+          Text(
+            context.l10n.tapAnActivityFtpBest,
             style: TextStyle(fontSize: 11, color: Color(0xFFBBBBBB)),
           ),
           const SizedBox(height: 10),
@@ -300,7 +305,7 @@ class FtpDetailSheet extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              '${valueText(ride.$2)}W',
+                              context.l10n.ridew(valueText(ride.$2)),
                               style: const TextStyle(
                                 fontSize: 12,
                                 color: Colors.white,
@@ -308,7 +313,7 @@ class FtpDetailSheet extends ConsumerWidget {
                               ),
                             ),
                             Text(
-                              '→ FTP ${(ride.$2! * .95).round()}W',
+                              context.l10n.ftpRoundw((ride.$2! * .95).round()),
                               style: const TextStyle(
                                 fontSize: 11,
                                 color: loadBlue,
@@ -323,10 +328,10 @@ class FtpDetailSheet extends ConsumerWidget {
               ),
             ),
           if (!rides.any((r) => r.$2 != null))
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(vertical: 16),
               child: Text(
-                'No rides with 20 minutes of continuous power samples.',
+                context.l10n.noRidesWith20Minutes,
                 style: loadCaption,
               ),
             ),
@@ -334,8 +339,8 @@ class FtpDetailSheet extends ConsumerWidget {
             child: TextButton(
               onPressed: () =>
                   showLoadSheet(context, const _FtpEditor(), height: .45),
-              child: const Text(
-                'Enter FTP manually',
+              child: Text(
+                context.l10n.enterFtpManually,
                 style: TextStyle(
                   color: Color(0xFFBBBBBB),
                   fontSize: 12,
@@ -381,18 +386,18 @@ class _ThresholdTestState extends ConsumerState<ThresholdTestSheet> {
       child: LoadSheet(
         title: widget.vo2
             ? '5-MIN MAX TEST — VO2MAX PACE'
-            : 'HR DRIFT TEST — LT1',
+            : context.l10n.hrDriftTestLt1,
         centerTitle: true,
         child: Column(
           children: [
-            const TabBar(
+            TabBar(
               labelColor: loadBlue,
               indicatorColor: loadBlue,
               labelStyle: TextStyle(fontSize: 12),
               tabs: [
-                Tab(text: 'PROTOCOL'),
-                Tab(text: 'CALCULATE'),
-                Tab(text: 'HISTORY'),
+                Tab(text: context.l10n.protocol),
+                Tab(text: context.l10n.calculate),
+                Tab(text: context.l10n.history2),
               ],
             ),
             Expanded(
@@ -403,15 +408,13 @@ class _ThresholdTestState extends ConsumerState<ThresholdTestSheet> {
                     children: [
                       Text(
                         widget.vo2
-                            ? 'After warming up, run five minutes at your fastest sustainable effort. Record the run with speed or distance data.'
-                            : 'Record at least 40 minutes of steady running at a constant effort. The test compares heart rate in each half to estimate aerobic drift.',
+                            ? context.l10n.afterWarmingUpRunFive
+                            : context.l10n.recordAtLeast40Minutes,
                         style: const TextStyle(color: Color(0xFFBBBBBB)),
                       ),
                       const SizedBox(height: 20),
                       Text(
-                        widget.vo2
-                            ? 'The fastest five-minute window provides your VO2max pace.'
-                            : 'A low drift indicates that this steady effort is at or below your aerobic threshold.',
+                        widget.vo2 ? context.l10n.theFastestFiveMinuteWindow : 'A low drift indicates that this steady effort is at or below your aerobic threshold.',
                         style: loadCaption,
                       ),
                     ],
@@ -423,7 +426,7 @@ class _ThresholdTestState extends ConsumerState<ThresholdTestSheet> {
                         widget.vo2
                             ? vo2?.pace ?? 'No result yet'
                             : drift == null
-                            ? 'No result yet'
+                            ? context.l10n.noResultYet
                             : '${drift.lt1} bpm · Drift ${valueText(drift.drift, 1)}%',
                         style: const TextStyle(
                           color: Colors.white,
@@ -435,7 +438,7 @@ class _ThresholdTestState extends ConsumerState<ThresholdTestSheet> {
                       DropdownButton<String>(
                         isExpanded: true,
                         value: selected?.activityId,
-                        hint: const Text('Select the test activity'),
+                        hint: Text(context.l10n.selectTheTestActivity),
                         items: [
                           for (final a in rows)
                             DropdownMenuItem(
@@ -473,10 +476,10 @@ class _ThresholdTestState extends ConsumerState<ThresholdTestSheet> {
                               },
                         child: Text(
                           busy
-                              ? 'Calculating…'
+                              ? context.l10n.calculating
                               : widget.vo2
-                              ? 'Calculate VO2max pace'
-                              : 'Calculate LT1',
+                              ? context.l10n.calculateVo2maxPace
+                              : context.l10n.calculateLt1,
                         ),
                       ),
                       TextButton(
@@ -490,7 +493,7 @@ class _ThresholdTestState extends ConsumerState<ThresholdTestSheet> {
                                           .read(lt1DriftProvider.notifier)
                                           .clear(),
                               ),
-                        child: const Text('Clear results'),
+                        child: Text(context.l10n.clearResults),
                       ),
                     ],
                   ),

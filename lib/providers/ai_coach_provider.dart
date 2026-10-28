@@ -1,6 +1,9 @@
-import 'day_data_provider.dart' show dayScoresProvider;
+import 'day_data_provider.dart' show dayScoresProvider, trainingMonitorProvider;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../l10n/l10n_ext.dart';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:foundation_models_framework/foundation_models_framework.dart';
 
@@ -13,6 +16,7 @@ import '../services/ai_context_toon_builder.dart';
 import '../services/bio_age_service.dart';
 import '../utils/log.dart';
 import 'database_provider.dart';
+import 'sync_provider.dart' show waitForSyncToSettle;
 
 const _storage = FlutterSecureStorage();
 
@@ -37,9 +41,9 @@ final aiCoachSettingsProvider =
 /// the year's progression.
 final activityCoachContextProvider = FutureProvider.autoDispose
     .family<String, ActivityRecord>(
-      (ref, activity) => ActivityCoachContextBuilder(
-        ref.read(databaseProvider),
-      ).build(activity),
+      (ref, activity) =>
+          ActivityCoachContextBuilder(ref.read(databaseProvider))
+              .build(activity),
     );
 
 /// A request to open the coach tab about one session: the draft question,
@@ -92,7 +96,11 @@ final aiBriefingProvider =
 final briefingSummaryProvider = Provider.family<String, DateTime>((ref, date) {
   final scores = ref.watch(dayScoresProvider(date)).valueOrNull;
   String score(num? value) => value == null ? '—' : value.round().toString();
-  return 'Recovery ${score(scores?.recovery?.score)} / 100. Sleep ${score(scores?.sleep?.score)} / 100. Today’s training load is ${score(scores?.strain.score)} TRIMP.';
+  return tr.briefingSummary(
+    score(scores?.recovery?.score),
+    score(scores?.sleep?.score),
+    score(scores?.strain.score),
+  );
 });
 
 String _briefingKey(AiBriefingPeriod period) {
@@ -100,7 +108,9 @@ String _briefingKey(AiBriefingPeriod period) {
   final day =
       '${now.year}-${now.month.toString().padLeft(2, '0')}-'
       '${now.day.toString().padLeft(2, '0')}';
-  return 'ai_briefing_${period.name}_$day';
+  // The language is part of the key: a briefing is written in one language.
+  // Bump the version when the prompts change so stale briefings regenerate.
+  return 'ai_briefing_${period.name}_${day}_${activeLocale.languageCode}_v4';
 }
 
 /// Today's briefing for one period, cached in secure storage per day.
@@ -123,6 +133,35 @@ class AiBriefingNotifier extends StateNotifier<AsyncValue<String?>> {
     }
   }
 
+  /// The training monitor as of today, for callers that did not pass one.
+  Future<AiContextTrainingMonitor?> _currentMonitor() async {
+    try {
+      final now = DateTime.now();
+      final m = await _ref
+          .read(
+            trainingMonitorProvider(DateTime(now.year, now.month, now.day))
+                .future,
+          )
+          .timeout(const Duration(seconds: 5));
+      return AiContextTrainingMonitor(
+        ctl: m.ctl,
+        atl: m.atl,
+        tsb: m.tsb,
+        dailyLoad: m.dayLoad,
+        optMin: m.optimalLow,
+        optMax: m.optimalHigh,
+        curWeekH: m.weekHours,
+        prevWeekH: m.previousWeekHours,
+        curWeekKm: m.weekKm,
+        prevWeekKm: m.previousWeekKm,
+        vo2maxRun: m.vo2max,
+        vo2maxCycle: m.vo2maxCycling,
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+
   Future<void> _persist(String text) =>
       _storage.write(key: _briefingKey(period), value: text);
 
@@ -141,6 +180,11 @@ class AiBriefingNotifier extends StateNotifier<AsyncValue<String?>> {
     }
     state = const AsyncLoading();
     try {
+      // Never in the middle of a sync: wait until it is really finished, then
+      // read the data, so the briefing is written from complete records.
+      await waitForSyncToSettle(_ref, stillWanted: () => mounted);
+      if (!mounted) return;
+      monitor ??= await _currentMonitor();
       final toon = await _ref
           .read(aiContextToonBuilderProvider)
           .build(

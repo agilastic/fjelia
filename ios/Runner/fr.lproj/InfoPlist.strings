@@ -1,0 +1,6 @@
+"NSBluetoothAlwaysUsageDescription" = "Fjelia utilise le Bluetooth pour se connecter à tes appareils de santé (Hilo, Aktiia, Garmin).";
+"NSBluetoothPeripheralUsageDescription" = "Fjelia utilise le Bluetooth pour se connecter à tes appareils de santé.";
+"NSHealthShareUsageDescription" = "Fjelia lit tes données de santé (sommeil, fréquence cardiaque, VFC, pas, SpO2) dans Apple Santé pour te proposer des analyses d'entraînement personnalisées.";
+"NSHealthUpdateUsageDescription" = "Fjelia écrit dans Apple Santé tes données synchronisées de VFC, fréquence cardiaque, sommeil, pas et séances afin que tu ne les perdes pas si tu changes d'app.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Fjelia n'utilise ta position que lorsque l'app est ouverte, pour évaluer le risque de chaleur des séances prévues.";
+"NSLocationWhenInUseUsageDescription" = "Fjelia utilise ta position actuelle pour évaluer le risque de chaleur des séances prévues.";

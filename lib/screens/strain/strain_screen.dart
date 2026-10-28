@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+import '../../l10n/formats.dart';
 import '../../providers/activity_history_provider.dart';
 
 import 'package:flutter/material.dart';
@@ -50,28 +52,21 @@ class StrainScreen extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: InkWell(
               onTap: () => heatEnabled || heat != null
-                  ? showLoadSheet(
-                      context,
-                      const HeatWeatherSheet(),
-                      height: .82,
-                    )
-                  : showAppSheet(context, const TrainingTab()),
+                  ? showLoadSheet(context, HeatWeatherSheet(), height: .82)
+                  : showAppSheet(context, TrainingTab()),
               child: Row(
                 children: [
                   Text(
                     heat == null ? '—' : '${valueText(heat.score)}%',
-                    style: const TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(width: 14),
+                  SizedBox(width: 14),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'HEAT ACCLIMATION',
+                        Text(
+                          context.l10n.heatAcclimation2,
                           style: TextStyle(
                             fontSize: 11,
                             color: muted,
@@ -79,23 +74,26 @@ class StrainScreen extends ConsumerWidget {
                             letterSpacing: 1,
                           ),
                         ),
-                        const SizedBox(height: 5),
+                        SizedBox(height: 5),
                         Text(
                           location != null
-                              ? 'Current ${location.latitude.toStringAsFixed(4)}, ${location.longitude.toStringAsFixed(4)}'
+                              ? context.l10n.currentFixedFixed2(
+                                  location.latitude.fixed(4),
+                                  location.longitude.fixed(4),
+                                )
                               : !heatEnabled
-                              ? 'Set up in Training settings'
+                              ? context.l10n.setUpInTrainingSettings
                               : heatState.hasError
-                              ? 'Could not load heat data — tap for details'
+                              ? context.l10n.couldNotLoadHeatData
                               : heatState.isLoading
-                              ? 'Loading heat history…'
-                              : 'No heat data yet',
-                          style: const TextStyle(fontSize: 11, color: muted),
+                              ? context.l10n.loadingHeatHistory
+                              : context.l10n.noHeatDataYet,
+                          style: TextStyle(fontSize: 11, color: muted),
                         ),
                       ],
                     ),
                   ),
-                  const Icon(Icons.chevron_right, color: muted, size: 20),
+                  Icon(Icons.chevron_right, color: muted, size: 20),
                 ],
               ),
             ),
@@ -107,7 +105,7 @@ class StrainScreen extends ConsumerWidget {
             high: monitor?.optimalHigh,
           ),
         if ((vis['day_load'] ?? true) && (vis['weekly_load'] ?? true))
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
         if (vis['weekday_load'] ?? true) const WeekdayLoadCard(),
         if (vis['weekly_load'] ?? true) const WeeklyLoadCard(),
         if (vis['zone_polarization'] ?? true)
@@ -121,7 +119,7 @@ class StrainScreen extends ConsumerWidget {
     );
     return embedded
         ? content
-        : SheetPage(title: 'Training Load', child: content);
+        : SheetPage(title: context.l10n.trainingLoad, child: content);
   }
 }
 
@@ -140,12 +138,12 @@ class DayTrainingLoadCard extends StatelessWidget {
         high! >= 1;
     final scale = trainingLoadScale(value, hasTarget ? high : null);
     final status = !hasTarget
-        ? 'NO TARGET'
+        ? context.l10n.noTarget
         : value < low!
-        ? 'REST'
+        ? context.l10n.rest
         : value > high!
-        ? 'HIGH'
-        : 'OPTIMAL';
+        ? context.l10n.high2
+        : context.l10n.optimal2;
     final tint = status == 'OPTIMAL'
         ? mint
         : status == 'HIGH'
@@ -157,9 +155,9 @@ class DayTrainingLoadCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: Text(
-                  'DAY TRAINING LOAD',
+                  context.l10n.dayTrainingLoad2,
                   style: TextStyle(
                     fontSize: 11,
                     color: muted,
@@ -200,16 +198,18 @@ class DayTrainingLoadCard extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(bottom: 4),
                 child: Text(
-                  ' TRIMP',
+                  context.l10n.trimp,
                   style: TextStyle(color: muted, fontSize: 13),
                 ),
               ),
               const Spacer(),
               if (hasTarget)
-                LoadBadge('Optimal ${valueText(low)}–${valueText(high)}'),
+                LoadBadge(
+                  context.l10n.optimalLowHigh(valueText(low), valueText(high)),
+                ),
             ],
           ),
           const SizedBox(height: 12),
@@ -254,8 +254,11 @@ class DayTrainingLoadCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   hasTarget
-                      ? 'Optimal: ${valueText(low)}–${valueText(high)} TRIMP'
-                      : 'Target unavailable — sync training history',
+                      ? context.l10n.optimalLowHighTrimp(
+                          valueText(low),
+                          valueText(high),
+                        )
+                      : context.l10n.targetUnavailableSyncTrainingHistory,
                   style: const TextStyle(fontSize: 10, color: muted),
                 ),
               ),

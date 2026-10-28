@@ -1,3 +1,4 @@
+import 'package:fjelia/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:fjelia/providers/health_monitor_alerts_provider.dart';
 import 'package:fjelia/widgets/app_widgets.dart' show HistoryChart, SectionCard;
@@ -485,6 +486,8 @@ void main() {
         child: RepaintBoundary(
           key: previewKey,
           child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             debugShowCheckedModeBanner: false,
             theme: AppTheme.dark(),
             home: Scaffold(body: SafeArea(child: view)),

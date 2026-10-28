@@ -1,3 +1,5 @@
+import '../l10n/formats.dart';
+import '../l10n/l10n_ext.dart';
 import '../models/weather_comparison.dart';
 
 import 'dart:math' as math;
@@ -58,11 +60,11 @@ class _WeatherChartState extends State<WeatherForecastChart> {
   @override
   Widget build(BuildContext context) {
     if (widget.points.isEmpty) {
-      return const SizedBox(
+      return SizedBox(
         height: 180,
         child: Center(
           child: Text(
-            'No forecast for this day',
+            context.l10n.noForecastForThisDay,
             style: TextStyle(color: muted),
           ),
         ),
@@ -70,7 +72,7 @@ class _WeatherChartState extends State<WeatherForecastChart> {
     }
     final comparison = WeatherComparison(
       widget.points,
-      widget.primarySource ?? 'Forecast',
+      widget.primarySource ?? context.l10n.forecast,
       widget.comparison,
     );
     final currentHour = currentWeatherHourIndex(
@@ -123,7 +125,10 @@ class _WeatherChartState extends State<WeatherForecastChart> {
                 ),
               ),
               icon: const Icon(Icons.fullscreen, size: 19),
-              label: const Text('Fullscreen', style: TextStyle(fontSize: 11)),
+              label: Text(
+                context.l10n.fullscreen,
+                style: TextStyle(fontSize: 11),
+              ),
             ),
           ),
         if (widget.fullscreen) Expanded(child: plot) else plot,
@@ -131,7 +136,7 @@ class _WeatherChartState extends State<WeatherForecastChart> {
           Padding(
             padding: const EdgeInsets.all(8),
             child: Text(
-              '${DateFormat('EEE HH:mm').format(widget.points[selected!].time)} · ${widget.points[selected!].temperatureC.toStringAsFixed(1)}°C · ${widget.points[selected!].precipitationMm.toStringAsFixed(1)} mm · UV ${widget.points[selected!].uvIndex ?? '—'}',
+              '${DateFormat.E().add_Hm().format(widget.points[selected!].time)} · ${widget.points[selected!].temperatureC.fixed(1)}°C · ${widget.points[selected!].precipitationMm.fixed(1)} mm · UV ${widget.points[selected!].uvIndex ?? '—'}',
               style: const TextStyle(fontSize: 11, color: Colors.white70),
             ),
           ),
@@ -150,7 +155,7 @@ class _WeatherChartState extends State<WeatherForecastChart> {
                     children: [
                       for (final item in comparison.series.indexed)
                         Text(
-                          '● ${item.$2.source}',
+                          context.l10n.source(item.$2.source),
                           style: TextStyle(
                             fontSize: 10,
                             color: weatherProviderColor(
@@ -159,29 +164,29 @@ class _WeatherChartState extends State<WeatherForecastChart> {
                             ),
                           ),
                         ),
-                      const Text(
-                        'Shaded area: provider spread',
+                      Text(
+                        context.l10n.shadedAreaProviderSpread,
                         style: TextStyle(fontSize: 9, color: muted),
                       ),
                     ],
                   ),
                 ),
-              const Wrap(
+              Wrap(
                 spacing: 14,
                 children: [
                   Text(
-                    '● Temperature °C',
+                    context.l10n.temperatureC,
                     style: TextStyle(
                       color: Colors.deepOrangeAccent,
                       fontSize: 10,
                     ),
                   ),
                   Text(
-                    '▥ Rain mm',
+                    context.l10n.rainMm,
                     style: TextStyle(color: Colors.lightBlue, fontSize: 10),
                   ),
                   Text(
-                    '— UV index',
+                    context.l10n.uvIndex,
                     style: TextStyle(color: Colors.amber, fontSize: 10),
                   ),
                 ],
@@ -264,7 +269,7 @@ class _WeatherPainter extends CustomPainter {
           ..strokeWidth = 1,
       );
       label(
-        'NOW',
+        tr.now2,
         Offset(
           (px - 9).clamp(plot.left, plot.right - 20).toDouble(),
           plot.top - 12,
@@ -281,7 +286,7 @@ class _WeatherPainter extends CustomPainter {
       );
       label('${value.round()}°', Offset(0, y(value) - 5), muted);
       label(
-        (rainMax * i / 4).toStringAsFixed(1),
+        (rainMax * i / 4).fixed(1),
         Offset(plot.right + 3, plot.bottom - i / 4 * plot.height - 5),
         Colors.lightBlue,
       );
@@ -355,7 +360,7 @@ class _WeatherPainter extends CustomPainter {
       final stride = math.max(1, (points.length / 6).ceil());
       if (i % stride == 0) {
         label(
-          DateFormat(week ? 'd MMM' : 'HH').format(p.time),
+          (week ? DateFormat.MMMd() : DateFormat.H()).format(p.time),
           Offset(px - 10, plot.bottom + 8),
           muted,
         );
@@ -427,7 +432,7 @@ class WeatherChartFullscreen extends StatelessWidget {
                       ),
                     ),
                     IconButton(
-                      tooltip: 'Close fullscreen weather chart',
+                      tooltip: context.l10n.closeFullscreenWeatherChart,
                       onPressed: () => Navigator.of(context).pop(),
                       icon: const Icon(Icons.close),
                     ),

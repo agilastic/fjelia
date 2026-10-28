@@ -1,3 +1,6 @@
+import '../l10n/l10n_ext.dart';
+import '../l10n/formats.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -46,7 +49,7 @@ class _Body extends ConsumerStatefulWidget {
 
 class _BodyState extends ConsumerState<_Body> {
   bool details = false;
-  static final _time = DateFormat('HH:mm');
+  static final _time = DateFormat.Hm();
 
   WorkoutHrvView get v => widget.view;
   HrvPairAssessment get a => v.assessment;
@@ -68,30 +71,36 @@ class _BodyState extends ConsumerState<_Body> {
   /// One short word for the state of the pair, shown as a chip.
   (String, Color, IconData) _status() {
     if (a.association == Association.ambiguous) {
-      return ('Unclear', hrvNoticeColor, Icons.help_outline_rounded);
+      return (context.l10n.unclear, hrvNoticeColor, Icons.help_outline_rounded);
     }
-    if (a.comparable) return ('Paired', mint, Icons.link_rounded);
+    if (a.comparable) return (context.l10n.paired, mint, Icons.link_rounded);
     if (a.hasPair) {
-      return ('Not comparable', hrvNoticeColor, Icons.link_off_rounded);
+      return (
+        context.l10n.notComparable,
+        hrvNoticeColor,
+        Icons.link_off_rounded,
+      );
     }
-    if (a.hasPre) return ('Waiting for after', muted, Icons.schedule_rounded);
-    if (a.hasPost) return ('After only', muted, Icons.remove_rounded);
-    return ('No readings', muted, Icons.remove_rounded);
+    if (a.hasPre)
+      return (context.l10n.waitingForAfter, muted, Icons.schedule_rounded);
+    if (a.hasPost) return (context.l10n.afterOnly, muted, Icons.remove_rounded);
+    return (context.l10n.noReadings, muted, Icons.remove_rounded);
   }
 
   String? _reminderLine() {
     final r = v.reminder;
     if (r == null || a.hasPost) return null;
     return switch (ReminderState.parse(r.desiredState)) {
-      ReminderState.waitingForWorkout => 'Waiting for the actual workout end.',
-      ReminderState.scheduled || ReminderState.snoozed =>
-        'Reminder around ${_time.format(r.nextDueAtUtc.toLocal())}',
-      ReminderState.awaitingAction =>
-        'Reminder is due. Measure when you are ready.',
+      ReminderState.waitingForWorkout =>
+        context.l10n.waitingForTheActualWorkout,
+      ReminderState.scheduled ||
+      ReminderState.snoozed => context.l10n.reminderAroundTolocal(
+        _time.format(r.nextDueAtUtc.toLocal()),
+      ),
+      ReminderState.awaitingAction => context.l10n.reminderIsDueMeasureWhen,
       ReminderState.suppressed when r.reason == 'permissionBlocked' =>
-        'Notifications are off. You can still measure from your workout.',
-      ReminderState.expired =>
-        'This reminder is no longer current. Open the workout to view your measurements.',
+        context.l10n.notificationsAreOffYouCan,
+      ReminderState.expired => context.l10n.thisReminderIsNoLonger,
       _ => null,
     };
   }
@@ -102,12 +111,12 @@ class _BodyState extends ConsumerState<_Body> {
   };
 
   String _semantics() {
-    final b = StringBuffer('HRV around this workout. ');
+    final b = StringBuffer(context.l10n.hrvAroundThisWorkout2);
     if (a.pre != null) {
-      b.write('Before ${a.pre!.rmssdMs.toStringAsFixed(1)} milliseconds. ');
+      b.write(context.l10n.beforeFixedMilliseconds(a.pre!.rmssdMs.fixed(1)));
     }
     if (a.post != null) {
-      b.write('After ${a.post!.rmssdMs.toStringAsFixed(1)} milliseconds');
+      b.write(context.l10n.afterFixedMilliseconds(a.post!.rmssdMs.fixed(1)));
       if (a.postDelay != null) {
         b.write(', ${a.postDelay!.inMinutes} minutes after the workout ended');
       }
@@ -115,8 +124,10 @@ class _BodyState extends ConsumerState<_Body> {
     }
     if (a.comparable) {
       b.write(
-        'Change ${hrvSigned(a.deltaMs!)} milliseconds, '
-        '${hrvSigned(a.deltaPercent!)} percent.',
+        context.l10n.changeDeltamsMillisecondsDeltapercentPercent(
+          hrvSigned(a.deltaMs!),
+          hrvSigned(a.deltaPercent!),
+        ),
       );
     }
     return b.toString();
@@ -137,7 +148,7 @@ class _BodyState extends ConsumerState<_Body> {
       container: true,
       label: _semantics(),
       child: SectionCard(
-        title: 'HRV around this workout',
+        title: context.l10n.hrvAroundThisWorkout,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -167,18 +178,18 @@ class _BodyState extends ConsumerState<_Body> {
                 child: LayoutBuilder(
                   builder: (context, box) {
                     final before = _ReadingTile(
-                      label: 'Before',
+                      label: context.l10n.before,
                       color: hrvBeforeColor,
                       reading: a.pre,
-                      missing: 'No pre-training measurement recorded.',
+                      missing: context.l10n.noPreTrainingMeasurementRecorded,
                       mismatch: _mismatch(),
                     );
                     final after = _ReadingTile(
-                      label: 'After',
+                      label: context.l10n.after,
                       color: hrvAfterColor,
                       reading: a.post,
                       delay: a.postDelay,
-                      missing: 'Not measured yet',
+                      missing: context.l10n.notMeasuredYet,
                       mismatch: _mismatch(),
                     );
                     // Side by side normally; one above the other on a narrow
@@ -239,19 +250,19 @@ class _BodyState extends ConsumerState<_Body> {
                   FilledButton.tonalIcon(
                     onPressed: _measure,
                     icon: const Icon(Icons.favorite_rounded, size: 18),
-                    label: const Text('Measure after training'),
+                    label: Text(context.l10n.measureAfterTraining),
                   ),
                 if (a.hasPost)
                   OutlinedButton.icon(
                     onPressed: _measure,
                     icon: const Icon(Icons.add_rounded, size: 18),
-                    label: const Text('Measure again'),
+                    label: Text(context.l10n.measureAgain),
                   ),
                 if (widget.onExplain != null && a.hasPair)
                   OutlinedButton.icon(
                     onPressed: widget.onExplain,
                     icon: const Icon(Icons.auto_awesome_rounded, size: 18),
-                    label: const Text('Explain with AI'),
+                    label: Text(context.l10n.explainWithAi),
                   ),
                 if (!noReadings || a.association == Association.ambiguous)
                   TextButton.icon(
@@ -320,32 +331,38 @@ class _BodyState extends ConsumerState<_Body> {
           ),
           if (a.preGap != null)
             Text(
-              'Before ended ${hrvMinutes(a.preGap!)} ahead of the start.',
+              context.l10n.beforeEndedPregapAheadOf(hrvMinutes(a.preGap!)),
               style: small(),
             ),
           if (c.excludedTotal > 0)
             Text(
-              'Left out of the comparison: ${c.excludedTotal} workouts '
-              '(${_exclusions(c)}).',
+              context.l10n.leftOutOfTheComparison(
+                c.excludedTotal,
+                _exclusions(c),
+              ),
               style: small(),
             ),
           if (a.additionalPosts.isNotEmpty)
             Text(
-              '${a.additionalPosts.length} further measurement(s) after this workout are kept as extra observations.',
+              context.l10n.lengthFurtherMeasurementSAfter(
+                a.additionalPosts.length,
+              ),
               style: small(),
             ),
           for (final m in linked)
             _DetailRow(
               text:
-                  '${m.isPre ? 'Before' : 'After'} · ${_time.format(m.startedAt.toLocal())}',
-              action: 'Not from this workout',
+                  '${m.isPre ? context.l10n.before : context.l10n.after} · ${_time.format(m.startedAt.toLocal())}',
+              action: context.l10n.notFromThisWorkout,
               onTap: () => ref.read(hrvTrainingActionsProvider).unlink(m.uid),
             ),
           for (final m in loose)
             _DetailRow(
               text:
-                  '${m.isPre ? 'Before' : 'After'}-reading ${_time.format(m.startedAt.toLocal())}, not assigned',
-              action: m.isPre ? 'Use as before' : 'Use as after',
+                  '${m.isPre ? context.l10n.before : context.l10n.after}-reading ${_time.format(m.startedAt.toLocal())}, not assigned',
+              action: m.isPre
+                  ? context.l10n.useAsBefore
+                  : context.l10n.useAsAfter,
               onTap: () => ref
                   .read(hrvTrainingActionsProvider)
                   .correct(
@@ -433,15 +450,15 @@ class _EmptyState extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'No HRV measurement recorded around this workout.',
+            Text(
+              context.l10n.noHrvMeasurementRecordedAround,
               style: TextStyle(color: muted, fontSize: 13, height: 1.35),
             ),
             const SizedBox(height: 6),
             FilledButton.tonalIcon(
               onPressed: onMeasure,
               icon: const Icon(Icons.favorite_rounded, size: 18),
-              label: const Text('Measure HRV'),
+              label: Text(context.l10n.measureHrv),
             ),
           ],
         ),
@@ -470,14 +487,14 @@ class _Timeline extends StatelessWidget {
   final DateTime? start, end;
   final bool userReported;
 
-  static final _time = DateFormat('HH:mm');
+  static final _time = DateFormat.Hm();
 
   @override
   Widget build(BuildContext context) {
     final sportColor = completedActivityColor(sport);
     String gap(Duration? d) => d == null ? '' : hrvMinutes(d);
     final workoutText = start == null
-        ? 'Workout'
+        ? context.l10n.workout
         : end == null
         ? '${_time.format(start!.toLocal())}–?'
         : '${_time.format(start!.toLocal())}–${_time.format(end!.toLocal())}'
@@ -512,22 +529,26 @@ class _Timeline extends StatelessWidget {
           row(
             dot(hrvBeforeColor, pre != null),
             pre == null
-                ? 'Before · not measured'
-                : 'Before · ${_time.format(pre!.startedAt.toLocal())}',
+                ? context.l10n.beforeNotMeasured
+                : context.l10n.beforeTolocal(
+                    _time.format(pre!.startedAt.toLocal()),
+                  ),
             color: Colors.white,
           ),
           if (preGap != null) row(stem, gap(preGap)),
           row(
             Icon(activitySportIcon(sport), size: 18, color: sportColor),
-            'Workout · $workoutText',
+            context.l10n.workoutWorkouttext(workoutText),
             color: Colors.white,
           ),
           if (postDelay != null) row(stem, gap(postDelay)),
           row(
             dot(hrvAfterColor, post != null),
             post == null
-                ? 'After · not measured yet'
-                : 'After · ${_time.format(post!.startedAt.toLocal())}',
+                ? context.l10n.afterNotMeasuredYet
+                : context.l10n.afterTolocal(
+                    _time.format(post!.startedAt.toLocal()),
+                  ),
             color: Colors.white,
           ),
         ],
@@ -748,7 +769,7 @@ class _ReadingTile extends StatelessWidget {
                     fit: BoxFit.scaleDown,
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      m.rmssdMs.toStringAsFixed(1),
+                      m.rmssdMs.fixed(1),
                       style: const TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.w800,
@@ -758,7 +779,10 @@ class _ReadingTile extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 3),
-                const Text('ms', style: TextStyle(fontSize: 12, color: muted)),
+                Text(
+                  context.l10n.ms,
+                  style: TextStyle(fontSize: 12, color: muted),
+                ),
               ],
             ),
             const SizedBox(height: 4),
@@ -768,7 +792,9 @@ class _ReadingTile extends StatelessWidget {
                   if (delay != null)
                     TextSpan(text: '+${hrvMinutes(delay!)} after · '),
                   TextSpan(
-                    text: m.posture == 'supine' ? 'Lying' : 'Seated',
+                    text: m.posture == 'supine'
+                        ? context.l10n.lying
+                        : context.l10n.enumSeated,
                     style: mismatch.contains('posture') ? _flagged : null,
                   ),
                   const TextSpan(text: ' · '),
@@ -831,7 +857,7 @@ class _ChangePill extends StatelessWidget {
                   spacing: 10,
                   children: [
                     Text(
-                      '${hrvSigned(a.deltaMs!)} ms',
+                      context.l10n.deltamsMs(hrvSigned(a.deltaMs!)),
                       style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
@@ -840,14 +866,14 @@ class _ChangePill extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 2),
                       child: Text(
-                        '${hrvSigned(a.deltaPercent!)} %',
+                        context.l10n.deltapercent(hrvSigned(a.deltaPercent!)),
                         style: const TextStyle(fontSize: 15, color: muted),
                       ),
                     ),
                   ],
                 ),
-                const Text(
-                  'A description of this pair, not a score for the workout.',
+                Text(
+                  context.l10n.aDescriptionOfThisPair,
                   style: TextStyle(fontSize: 11, color: muted),
                 ),
               ],
@@ -870,15 +896,15 @@ class _History extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final c = cohort;
     final need = ref.watch(hrvCohortMinimumProvider);
-    final day = DateFormat('d MMM');
+    final day = DateFormat.MMMd();
     if (!c.sufficient) {
       return Semantics(
-        label: 'Not enough comparable workouts yet, ${c.eligible} of $need.',
+        label: context.l10n.notEnoughComparableWorkoutsYet(c.eligible, need),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Not enough comparable workouts yet (${c.eligible} of $need).',
+              context.l10n.notEnoughComparableWorkoutsYet2(c.eligible, need),
               style: const TextStyle(fontSize: 12, color: muted),
             ),
             const SizedBox(height: 6),
@@ -903,9 +929,14 @@ class _History extends ConsumerWidget {
         ),
       );
     }
-    final text =
-        'Your similar workouts (${c.eligible}, ${day.format(c.first!.toLocal())}–${day.format(c.last!.toLocal())}): '
-        'median ${hrvSigned(c.medianMs!)} ms, middle half ${hrvSigned(c.q1Ms!)} to ${hrvSigned(c.q3Ms!)} ms.';
+    final text = context.l10n.yourSimilarWorkoutsEligibleTolocal(
+      c.eligible,
+      day.format(c.first!.toLocal()),
+      day.format(c.last!.toLocal()),
+      hrvSigned(c.medianMs!),
+      hrvSigned(c.q1Ms!),
+      hrvSigned(c.q3Ms!),
+    );
     return Semantics(
       label: text,
       child: ExcludeSemantics(
@@ -913,7 +944,11 @@ class _History extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Your ${c.eligible} similar workouts · ${day.format(c.first!.toLocal())}–${day.format(c.last!.toLocal())}',
+              context.l10n.yourEligibleSimilarWorkoutsTolocal(
+                c.eligible,
+                day.format(c.first!.toLocal()),
+                day.format(c.last!.toLocal()),
+              ),
               style: const TextStyle(fontSize: 12, color: muted),
             ),
             const SizedBox(height: 8),
@@ -931,7 +966,12 @@ class _History extends ConsumerWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              'Middle half ${hrvSigned(c.q1Ms!)} to ${hrvSigned(c.q3Ms!)} ms · median ${hrvSigned(c.medianMs!)} ms · this workout ${hrvSigned(delta)} ms',
+              context.l10n.middleHalfQ1msToQ3ms(
+                hrvSigned(c.q1Ms!),
+                hrvSigned(c.q3Ms!),
+                hrvSigned(c.medianMs!),
+                hrvSigned(delta),
+              ),
               style: const TextStyle(fontSize: 11, color: muted, height: 1.3),
             ),
           ],
@@ -1074,7 +1114,7 @@ class _Rpe extends StatelessWidget {
       children: [
         Text(
           f.rpe == null
-              ? 'How hard did it feel? (RPE)'
+              ? context.l10n.howHardDidItFeel
               : 'RPE ${f.rpe}${f.fromSession ? ' · from your plan session' : ''}',
           style: const TextStyle(color: muted, fontSize: 12),
         ),
@@ -1088,7 +1128,7 @@ class _Rpe extends StatelessWidget {
                   child: Semantics(
                     button: true,
                     selected: f.rpe == i,
-                    label: 'RPE $i',
+                    label: context.l10n.rpeI(i),
                     child: ExcludeSemantics(
                       child: InkWell(
                         borderRadius: BorderRadius.circular(10),
@@ -1124,11 +1164,17 @@ class _Rpe extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 4),
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('easy', style: TextStyle(fontSize: 10, color: muted)),
-            Text('all out', style: TextStyle(fontSize: 10, color: muted)),
+            Text(
+              context.l10n.easy2,
+              style: TextStyle(fontSize: 10, color: muted),
+            ),
+            Text(
+              context.l10n.allOut,
+              style: TextStyle(fontSize: 10, color: muted),
+            ),
           ],
         ),
       ],

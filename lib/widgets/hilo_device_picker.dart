@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -88,9 +90,9 @@ class _HiloDevicePickerState extends ConsumerState<HiloDevicePicker> {
             const SizedBox(height: 16),
             Row(
               children: [
-                const Expanded(
+                Expanded(
                   child: Text(
-                    'Select Hilo Pod (Wristband)',
+                    context.l10n.selectHiloPodWristband,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -109,25 +111,24 @@ class _HiloDevicePickerState extends ConsumerState<HiloDevicePicker> {
                   )
                 else
                   IconButton(
-                    tooltip: 'Rescan',
+                    tooltip: context.l10n.rescan,
                     icon: const Icon(Icons.refresh, color: Color(0xFFCCCCCC)),
                     onPressed: _rescan,
                   ),
               ],
             ),
             const SizedBox(height: 4),
-            const Text(
-              'Select your AKTIIA P… wristband. Place it on the charger to '
-              'wake it up if not visible.',
+            Text(
+              context.l10n.selectYourAktiiaPWristband,
               style: TextStyle(color: Color(0xFFCCCCCC), fontSize: 13),
             ),
             const SizedBox(height: 12),
             if (_devices.isEmpty)
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(vertical: 24),
                 child: Center(
                   child: Text(
-                    'No devices found. Tap ↻ to scan again.',
+                    context.l10n.noDevicesFoundTapTo,
                     style: TextStyle(color: Color(0xFF888888), fontSize: 14),
                   ),
                 ),

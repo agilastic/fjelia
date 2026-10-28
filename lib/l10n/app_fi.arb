@@ -1,0 +1,3110 @@
+{
+  "@@locale": "fi",
+  "language": "Kieli",
+  "languageSystem": "Järjestelmän oletus",
+  "settings": "Asetukset",
+  "profile": "Profiili",
+  "training": "Harjoittelu",
+  "weatherLocation": "Sää ja sijainti",
+  "display": "Näyttö",
+  "connections": "Yhteydet",
+  "aiAndMore": "Tekoäly ja muuta",
+  "system": "Järjestelmä",
+  "runSetupAgain": "Suorita asennus uudelleen",
+  "runSetupAgainSubtitle": "Tilit, kisatavoite ja harjoitussuunnitelma",
+  "back": "Takaisin",
+  "close": "Sulje",
+  "dataExport": "Tietojen vienti",
+  "dataExportSubtitle": "CSV-vienti, varmuuskopio ja palautus",
+  "developer": "Kehittäjä",
+  "developerSubtitle": "Virheenkorjaustila, diagnostiikka",
+  "debug": "Virheenkorjaus",
+  "debugMode": "Virheenkorjaustila",
+  "debugModeSubtitle": "Näyttää DEBUG-välilehden",
+  "support": "Tuki",
+  "reportBug": "Ilmoita virheestä",
+  "aiCoach": "Tekoälyvalmentaja",
+  "enableAiCoach": "Ota tekoälyvalmentaja käyttöön",
+  "onDeviceAiOrCloud": "Laitteen tekoäly tai pilvipalvelu",
+  "provider": "Palveluntarjoaja",
+  "model": "Malli",
+  "chatAndAiBriefingsUse": "Chat ja tekoälykatsaukset käyttävät tämän laitteen Apple Intelligencea. API-avainta ei tarvita. Jos malli ei ole käytettävissä, katsaukset näyttävät yhteenvedon ilman tekoälyä.",
+  "briefing": "Katsaus",
+  "useAppleIntelligenceForBriefings": "Käytä Apple Intelligencea katsauksiin",
+  "useOnDeviceAiFor": "Käytä laitteen tekoälyä katsauksiin ja pidä valittu palveluntarjoaja chatissa.",
+  "healthDataSharing": "Terveystietojen jakaminen",
+  "askOncePerChatSession": "Kysy kerran chat-istuntoa kohden",
+  "otherwiseAskBeforeEveryCloud": "Muuten kysy ennen jokaista pilviviestiä",
+  "reportABug": "Ilmoita virheestä",
+  "weatherData": "Säätiedot",
+  "openSourceLibraries": "Avoimen lähdekoodin kirjastot",
+  "license": "Lisenssi",
+  "licenses": "Lisenssit",
+  "apiKey": "API-avain",
+  "saveApiKey": "Tallenna API-avain",
+  "feedbackBugReport": "Palaute ja virheraportti",
+  "reportSentThankYou": "Raportti lähetetty. Kiitos!",
+  "weReadEveryMessageIf": "Luemme kaikki viestit. Jos jätit sähköpostiosoitteesi, saatat saada vastauksen.",
+  "done": "Valmis",
+  "shareAnIdeaSuggestAn": "Jaa idea, ehdota parannusta tai kerro, mitä tapahtui ja mitä odotit.",
+  "whatHappenedAndWhatDid": "Mitä tapahtui ja mitä odotit?",
+  "pleaseLeaveOutPasswordsApi": "Älä kirjoita salasanoja, API-avaimia tai henkilökohtaisia terveysarvoja.",
+  "includeDiagnostics": "Sisällytä diagnostiikka",
+  "optionalLogsMayContainAccount": "Valinnainen. Lokit voivat sisältää tili- tai terveystietoja. Tarkista ne alta ennen lähettämistä.",
+  "diagnosticsPreview": "DIAGNOSTIIKAN ESIKATSELU",
+  "sendingSharesYourEmailSubject": "Lähettäminen jakaa sähköpostiosoitteesi, aiheen, viestin ja valitun diagnostiikan Fjelian tuen kanssa osoitteessa cloud.ebeling-hoppe.de.",
+  "copyReport": "Kopioi raportti",
+  "shareReport": "Jaa raportti",
+  "appleHealth": "Apple Terveys",
+  "connectedServices": "Yhdistetyt palvelut",
+  "hiloBloodPressureBle": "Hilo verenpaine (BLE)",
+  "writeHeartDataToApple": "Kirjoita sydäntiedot Apple Terveyteen",
+  "writeWeightDataToApple": "Kirjoita painotiedot Apple Terveyteen",
+  "renphoScaleBle": "Renpho-vaaka (BLE)",
+  "polarH10HrvStrapBle": "Polar H10 (HRV-rintakehähihna, BLE)",
+  "dataSourcePriority": "Tietolähteiden prioriteetti",
+  "whenMultipleSourcesProvideThe": "Kun useampi lähde antaa saman mittarin, ylempi lähde voittaa. Järjestä vetämällä.",
+  "resetToDefault": "Palauta oletukset",
+  "disconnect": "Katkaise yhteys",
+  "healthPage": "Terveys-sivu",
+  "loadPage": "Kuormitus-sivu",
+  "healthMonitor": "Terveysseuranta",
+  "hrZones": "Sykealueet",
+  "t30MinTtAvailableSync": "30 min TT saatavilla – synkronoi sykealueet",
+  "lt2Lt2BpmAt": "LT2 {lt2} bpm · {at}",
+  "@lt2Lt2BpmAt": {
+    "placeholders": {
+      "lt2": {
+        "type": "Object"
+      },
+      "at": {
+        "type": "Object"
+      }
+    }
+  },
+  "syncLabel": "SYNKRONOI",
+  "autoadjust": "AUTOMAATTINEN SÄÄTÖ",
+  "zoneI": "Alue {i}",
+  "@zoneI": {
+    "placeholders": {
+      "i": {
+        "type": "Object"
+      }
+    }
+  },
+  "hrZones2": "SYKEALUEET",
+  "ageRound": "ikä {round}",
+  "@ageRound": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "basics": "Perustiedot",
+  "updateWaistMonthlyUsedFor": "ⓘ Päivitä vyötärönympärys kuukausittain – käytetään viskeraalirasvan arviointiin.",
+  "alcohol": "Alkoholi",
+  "t1Drink033L": "1 annos ≈ 0,33 l olutta / 0,2 l viiniä / 4 cl väkevää",
+  "clinicalLabsOptional": "Laboratorioarvot (valinnainen)",
+  "glycemic": "Verensokeri",
+  "optimalForLongevity48": "Optimaalinen pitkäikäisyydelle: 4,8–5,4 % · Esidiabetes: 5,7–6,4 %",
+  "lipids": "Rasva-arvot",
+  "apobReplacesLdlWhenBoth": "ApoB korvaa LDL:n, kun molemmat on syötetty.",
+  "inflammationKidney": "Tulehdus ja munuaiset",
+  "changesAreSavedAutomatically": "Muutokset tallennetaan automaattisesti",
+  "optionalTotalClimbingForThis": "Valinnainen kokonaisnousu tälle kilpailulle.",
+  "moreAboutThisEvent": "Lisätietoja tästä tapahtumasta",
+  "distanceOfDistancekmKm": "Matka {distanceKm} km?",
+  "@distanceOfDistancekmKm": {
+    "placeholders": {
+      "distanceKm": {
+        "type": "Object"
+      }
+    }
+  },
+  "keepDistancekmKm": "Säilytä {distanceKm} km",
+  "@keepDistancekmKm": {
+    "placeholders": {
+      "distanceKm": {
+        "type": "Object"
+      }
+    }
+  },
+  "useLikelyKm": "Käytä {likely} km",
+  "@useLikelyKm": {
+    "placeholders": {
+      "likely": {
+        "type": "Object"
+      }
+    }
+  },
+  "thisBackupContainsNoCalendar": "Tämä varmuuskopio ei sisällä kalenteriaktiviteetteja.",
+  "activities": "Aktiviteetit",
+  "exportActivitiesCsv": "Vie aktiviteetit CSV-tiedostoon",
+  "backupRestore": "Varmuuskopio ja palautus",
+  "backup": "Varmuuskopio",
+  "restoreFromBackup": "Palauta varmuuskopiosta",
+  "backupRestoredRestartTheApp": "Varmuuskopio palautettu. Käynnistä sovellus uudelleen ladataksesi kaikki asetukset.",
+  "raceGoals": "Kisatavoitteet",
+  "yourActivities": "Aktiviteettisi",
+  "usedByAiCoachAnd": "Tekoälyvalmentaja ja harjoitussuunnitelma käyttävät tätä. Suunnitelman lajit on merkitty ✦:lla.",
+  "calendarWeekStart": "Kalenterin viikon alku",
+  "planDefaultView": "Suunnitelman oletusnäkymä",
+  "weeklySchedule": "Viikkoaikataulu",
+  "trainingdaysperweekTrainingDaysTapTo": "{trainingDaysPerWeek, plural, one{{trainingDaysPerWeek} harjoituspäivä} other{{trainingDaysPerWeek} harjoituspäivää}} · napauta vaihtaaksesi Harjoitus / Lepo / Voima",
+  "@trainingdaysperweekTrainingDaysTapTo": {
+    "placeholders": {
+      "trainingDaysPerWeek": {
+        "type": "int"
+      }
+    }
+  },
+  "updatePlanToThisSchedule": "Päivitä suunnitelma tähän aikatauluun",
+  "updateStrengthSessions": "Päivitä voimaharjoitukset",
+  "sessionsPerDay": "Harjoituksia päivässä",
+  "canYouFitTwoWorkouts": "Voitko tehdä kaksi harjoitusta samana päivänä?",
+  "strengthLoadUnit": "Voimaharjoittelun kuorman yksikkö",
+  "weightsThemselvesAreSetIn": "Painot asetetaan jokaisessa harjoituksessa ja ne muistetaan historiastasi.",
+  "hoursAvailableWeek": "Käytettävissä olevat tunnit / viikko",
+  "hoursperweekHWeek": "{hoursPerWeek} h / viikko",
+  "@hoursperweekHWeek": {
+    "placeholders": {
+      "hoursPerWeek": {
+        "type": "Object"
+      }
+    }
+  },
+  "hoursperweekH": "{hoursPerWeek} h",
+  "@hoursperweekH": {
+    "placeholders": {
+      "hoursPerWeek": {
+        "type": "Object"
+      }
+    }
+  },
+  "heatAcclimation": "Lämpöön sopeutuminen",
+  "showHeatAcclimation": "Näytä lämpöön sopeutuminen",
+  "weatherEvaluatedAgainstAConfigurable": "Sää arvioidaan valittavalle sijainnille.",
+  "trainingPlan": "Harjoitussuunnitelma",
+  "regenerateReplacesFutureSessionsAnd": "Uudelleenluonti korvaa tulevat harjoitukset ja rakentaa suunnitelman tästä päivästä alkaen nykyisillä asetuksilla.",
+  "valueUpcomingWorkoutsGenerated": "{value, plural, one{{value} tuleva harjoitus luotu} other{{value} tulevaa harjoitusta luotu}}",
+  "@valueUpcomingWorkoutsGenerated": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "generationFailedCheckYourRace": "Luonti epäonnistui. Tarkista kisatavoitteesi ja yritä uudelleen.",
+  "deleteAllWorkouts": "Poista kaikki harjoitukset",
+  "changesAreSavedAutomatically2": "✓ Muutokset tallennetaan automaattisesti",
+  "countUpcomingWorkoutsGenerated": "{count, plural, one{{count} tuleva harjoitus luotu} other{{count} tulevaa harjoitusta luotu}}",
+  "@countUpcomingWorkoutsGenerated": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importRaceGoalsFromGarmin": "Tuo kisatavoitteet Garminista",
+  "addRaceGoal": "Lisää kisatavoite",
+  "priorityTouppercase": "Prioriteetti {toUpperCase}",
+  "@priorityTouppercase": {
+    "placeholders": {
+      "toUpperCase": {
+        "type": "Object"
+      }
+    }
+  },
+  "goalsAreSharedWithAi": "Tavoitteet jaetaan tekoälyvalmentajalle. Prioriteetti A, B tai C ratkaisee, miten suunnitelma painottaa kilpailujasi.",
+  "deletingWorkouts": "Poistetaan harjoituksia",
+  "cityOrTown": "Kaupunki tai kunta",
+  "eGHannoverOrPalma": "esim. Hannover tai Palma",
+  "noCitiesFoundTryA": "Kaupunkeja ei löytynyt. Kokeile lähistön kuntaa.",
+  "chooseTheLocationForThe": "Valitse sijainti suunnitelman sääennusteelle, tutkalle ja lämpöön sopeutumiselle. Sää toimii myös, kun lämpöön sopeutuminen on pois päältä.",
+  "none": "Ei mitään",
+  "disableLocalWeatherAndLocation": "Poista paikallinen sää ja sijaintipyynnöt käytöstä",
+  "currentLocation": "Nykyinen sijainti",
+  "followYourDeviceLocation": "Seuraa laitteen sijaintia",
+  "fixedLocation": "Kiinteä sijainti",
+  "chooseACityOrEnter": "Valitse kaupunki tai syötä koordinaatit",
+  "chooseCity": "Valitse kaupunki",
+  "coordinates": "Koordinaatit",
+  "latitude": "Leveysaste",
+  "longitude": "Pituusaste",
+  "saveLocation": "Tallenna sijainti",
+  "refreshCurrentLocation": "Päivitä nykyinen sijainti",
+  "citySearchOpenMeteoGeonames": "Kaupunkihaku: Open-Meteo / GeoNames",
+  "cityNamesOpenstreetmap": "Kaupunkien nimet: © OpenStreetMap",
+  "energy": "ENERGIA",
+  "currentEnergy": "NYKYINEN ENERGIA",
+  "dailyTimeline": "PÄIVÄN KULKU",
+  "valueValue2": "{value} → {value2}",
+  "@valueValue2": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      },
+      "value2": {
+        "type": "Object"
+      }
+    }
+  },
+  "energy2": "Energia",
+  "noData": "Ei tietoja",
+  "bloodPressureInsights": "VERENPAINEEN ANALYYSI",
+  "sys": " Sys",
+  "diaMmhg": " Dia · mmHg",
+  "previousBloodPressurePeriod": "Edellinen verenpainejakso",
+  "nextBloodPressurePeriod": "Seuraava verenpainejakso",
+  "nightDipping": "Yöllinen lasku",
+  "noMeasurementsInThisPeriod": "Ei mittauksia tällä jaksolla",
+  "fullscreenBloodPressureChart": "Verenpainekaavio koko näytölle",
+  "barsMinMaxLineDots": "Palkit: pienin–suurin · viiva/pisteet: keskiarvo · napauta tai vedä tarkastellaksesi",
+  "noMeasurements": "Ei mittauksia",
+  "round": "{round}",
+  "@round": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "sysSys2Mmhg": "{sys}–{sys2} mmHg",
+  "@sysSys2Mmhg": {
+    "placeholders": {
+      "sys": {
+        "type": "Object"
+      },
+      "sys2": {
+        "type": "Object"
+      }
+    }
+  },
+  "lengthReadingsAverageMinMax": "{length, plural, one{{length} mittaus} other{{length} mittausta}} · keskiarvo / pienin–suurin",
+  "@lengthReadingsAverageMinMax": {
+    "placeholders": {
+      "length": {
+        "type": "int"
+      }
+    }
+  },
+  "bloodPressureTouppercaseMmhg": "VERENPAINE · {toUpperCase} · mmHg",
+  "@bloodPressureTouppercaseMmhg": {
+    "placeholders": {
+      "toUpperCase": {
+        "type": "Object"
+      }
+    }
+  },
+  "closeFullscreenBloodPressureChart": "Sulje koko näytön verenpainekaavio",
+  "chooseScale": "Valitse vaaka",
+  "noScalesFoundStepOn": "Vaakoja ei löytynyt. Astu vaa'alle ja yritä uudelleen.",
+  "nameRssiDbm": "{name} · {rssi} dBm",
+  "@nameRssiDbm": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      },
+      "rssi": {
+        "type": "Object"
+      }
+    }
+  },
+  "renphoSaved": "RENPHO tallennettu:",
+  "renphoScaleBle2": "RENPHO-vaaka (BLE)",
+  "changeMeasurementType": "Vaihda mittaustyyppiä",
+  "addMeasurement": "Lisää mittaus",
+  "whatAreYouMeasuring": "Mitä mittaat?",
+  "chooseAnotherMeasurement": "Valitse toinen mittaus",
+  "saveMeasurement": "Tallenna mittaus",
+  "skip": "Ohita",
+  "connectHiloService": "Yhdistä Hilo-palvelu",
+  "connectHilo": "Yhdistä Hilo",
+  "connectCoros": "Yhdistä Coros",
+  "europe": "Eurooppa",
+  "unitedStates": "Yhdysvallat",
+  "asia": "Aasia",
+  "bluetoothBloodPressure": "Bluetooth · verenpaine",
+  "cloudCuffData": "Pilvi · mansettitiedot",
+  "apiSync": "API-synkronointi",
+  "bluetoothHrvStrap": "Bluetooth · HRV-rintahihna",
+  "accesslinkApi": "AccessLink API",
+  "systemHealthData": "Järjestelmän terveystiedot",
+  "cloudScaleHistory": "Pilvi · vaa'an historia",
+  "bluetoothWeightBody": "Bluetooth · paino ja keho",
+  "connectYourDevices": "Yhdistä laitteesi",
+  "continueLabel": "Jatka",
+  "connectGarmin": "Yhdistä Garmin",
+  "connectAppleHealth": "Yhdistä Apple Terveys",
+  "dataSynced": "TIEDOT SYNKRONOITU",
+  "pairHiloPod": "Yhdistä Hilo Pod",
+  "chooseStrap": "Valitse hihna",
+  "namePaired": "{name} yhdistetty.",
+  "@namePaired": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "pairPolarH10": "Yhdistä Polar H10",
+  "forget": "Unohda",
+  "sendWorkoutToPolar": "Lähetä harjoitus Polariin",
+  "connectPolar": "Yhdistä Polar",
+  "signInWithPolarFlow": "Kirjaudu Polar Flow'lla",
+  "syncsSleepStagesHrvResting": "Synkronoi unen vaiheet · HRV · leposyke · harjoitukset · askeleet",
+  "savedForV": "Tallennettu käyttäjälle {v}",
+  "@savedForV": {
+    "placeholders": {
+      "v": {
+        "type": "Object"
+      }
+    }
+  },
+  "remove": "Poista",
+  "polarEMail": "Polar-sähköposti",
+  "polarPassword": "Polar-salasana",
+  "pairRenphoScale": "Yhdistä RENPHO-vaaka",
+  "connectRenpho": "Yhdistä Renpho",
+  "connectSuunto": "Yhdistä Suunto",
+  "smsSentToTrim": "Tekstiviesti lähetetty numeroon {trim}",
+  "@smsSentToTrim": {
+    "placeholders": {
+      "trim": {
+        "type": "Object"
+      }
+    }
+  },
+  "resendSms": "Lähetä tekstiviesti uudelleen",
+  "retryLoadingPreferences": "Yritä ladata asetukset uudelleen",
+  "weeklyTrainingTimeTostringasfixedH": "VIIKOITTAINEN HARJOITTELUAIKA · {toStringAsFixed} h",
+  "@weeklyTrainingTimeTostringasfixedH": {
+    "placeholders": {
+      "toStringAsFixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "tapADayToCycle": "Napauta päivää vaihtaaksesi Harjoitus / Lepo / Voima.",
+  "doubleDayOk": "Tuplapäivä ok",
+  "birthYearOptional": "Syntymävuosi (valinnainen)",
+  "addAnother": "Lisää toinen",
+  "knowYourBodyTrainSmarter": "Tunne kehosi.\nHarjoittele viisaammin.",
+  "allYourHealthDevicesOne": "Kaikki terveyslaitteesi. Yksi älykäs näkymä.",
+  "areYouReadyToTrain": "Oletko valmis harjoittelemaan tänään?",
+  "hrvRecoveryScoreRestingHr": "HRV · Palautumispisteet · Leposyke",
+  "didYouActuallyRecoverLast": "Palautuitko todella viime yönä?",
+  "sleepStagesDeepSleepSpo": "Unen vaiheet · Syvä uni · SpO₂",
+  "isYourBloodPressureUnder": "Onko verenpaineesi hallinnassa?",
+  "continuousBpNightDippingTrends": "Jatkuva verenpaine · Yöllinen lasku · Trendit",
+  "howHardDidYouPush": "Kuinka kovaa treenasit tällä viikolla?",
+  "trainingLoadTrimpStrainScore": "Harjoituskuormitus · TRIMP · Rasituspisteet",
+  "isYourBodyCompositionImproving": "Paraneeko kehonkoostumuksesi?",
+  "weightBodyFatMuscleMass": "Paino · Kehon rasva · Lihasmassa",
+  "getStarted": "Aloita",
+  "yourDataStaysOnYour": "Tietosi pysyvät laitteellasi. Aina yksityisinä.",
+  "bodyScale": "Henkilövaaka",
+  "bodyComposition": "Kehonkoostumus",
+  "sleep": "UNI",
+  "sleepPerformance": "UNEN SUORITUS",
+  "sleepHistory": "Univerlauf",
+  "labelValue": "{label}: {value}",
+  "@labelValue": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      },
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "lessLabel": "Vähemmän {label}",
+  "@lessLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "moreLabel": "Enemmän {label}",
+  "@moreLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "gymMode": "Salitila",
+  "finishWorkout": "Lopeta harjoitus",
+  "workoutActions": "Harjoituksen toiminnot",
+  "discardWorkout": "Hylkää harjoitus",
+  "allSetsRecorded": "Kaikki sarjat tallennettu",
+  "reviewSets": "Tarkista sarjat",
+  "rest": "LEPO",
+  "plannedResttarget": "Suunniteltu {restTarget}",
+  "@plannedResttarget": {
+    "placeholders": {
+      "restTarget": {
+        "type": "Object"
+      }
+    }
+  },
+  "startSet": "Aloita sarja",
+  "seconds": "Sekuntia",
+  "previousSet": "Edellinen sarja",
+  "allSets": "Kaikki sarjat",
+  "nextSet": "Seuraava sarja",
+  "everySetIsSavedAs": "Jokainen sarja tallennetaan heti. Voit sulkea tämän näkymän milloin tahansa ja jatkaa suunnitellusta harjoituksesta.",
+  "cancel": "Peruuta",
+  "apply": "Käytä",
+  "effortScale": "Rasitusasteikko",
+  "setType": "Sarjan tyyppi",
+  "reps": "Toistot",
+  "range": "Vaihteluväli",
+  "time": "Aika",
+  "t45Or100": "45 tai 1:00",
+  "blankWhenNotSet": "Tyhjä, jos ei asetettu",
+  "redBand": "Punainen kuminauha",
+  "t90Or130": "90 tai 1:30",
+  "blankWhenUnknown": "Tyhjä, jos tuntematon",
+  "usePlannedLoad": "Käytä suunniteltua kuormaa",
+  "blankWhenNotMeasured": "Tyhjä, jos ei mitattu",
+  "exercise": "Liike",
+  "changingTheLoadConventionStarts": "Kuormakäytännön muuttaminen aloittaa tälle liikkeelle erillisen historian.",
+  "barbellMachine": "Tanko, laite…",
+  "load": "Kuorma",
+  "loadRefersTo": "Kuorma tarkoittaa",
+  "t2ForAPair": "2 parille",
+  "repetitions": "Toistot",
+  "availablePlatesOrDumbbells": "Käytettävissä olevat levyt tai käsipainot",
+  "rememberForThisEquipment": "Muista tälle välineelle",
+  "findOrNameAnExercise": "Etsi tai nimeä liike",
+  "createTrim": "Luo ”{trim}”",
+  "@createTrim": {
+    "placeholders": {
+      "trim": {
+        "type": "Object"
+      }
+    }
+  },
+  "customExercise": "Oma liike",
+  "smallestLoadStep": "Pienin kuormanlisäys",
+  "whatRemoved": "{what} poistettu",
+  "@whatRemoved": {
+    "placeholders": {
+      "what": {
+        "type": "Object"
+      }
+    }
+  },
+  "undo": "Kumoa",
+  "retry": "Yritä uudelleen",
+  "performance": "Suoritus",
+  "addExercise": "Lisää liike",
+  "finishLog": "Viimeistele loki",
+  "keepAsDraft": "Säilytä luonnoksena",
+  "actionsForName": "Toiminnot: {name}",
+  "@actionsForName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "editExercise": "Muokkaa liikettä",
+  "moveUp": "Siirrä ylös",
+  "moveDown": "Siirrä alas",
+  "addSet": "Lisää sarja",
+  "removeLastSet": "Poista viimeinen sarja",
+  "saveAsTemplate": "Tallenna mallina",
+  "savedTitleAsATemplate": "”{title}” tallennettu mallina. Tämä harjoitus pysyy ennallaan, kunnes tallennat sen.",
+  "@savedTitleAsATemplate": {
+    "placeholders": {
+      "title": {
+        "type": "Object"
+      }
+    }
+  },
+  "nameSetN": "{name} · Sarja {n}",
+  "@nameSetN": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      },
+      "n": {
+        "type": "Object"
+      }
+    }
+  },
+  "nameAllWorkingSets": "{name} · Kaikki työsarjat",
+  "@nameAllWorkingSets": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "labelRest": "{label} lepo",
+  "@labelRest": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "secondsOrMSs": "Sekunteja tai m:ss",
+  "applyToAllSets": "Käytä kaikkiin sarjoihin",
+  "duplicate": "Kopioi",
+  "supersetWithNext": "Superseriaksi seuraavan kanssa",
+  "circuitWithNext": "Kierroksi seuraavan kanssa",
+  "actionsForSetN": "Toiminnot: sarja {n}",
+  "@actionsForSetN": {
+    "placeholders": {
+      "n": {
+        "type": "Object"
+      }
+    }
+  },
+  "editSet": "Muokkaa sarjaa",
+  "duplicateSet": "Kopioi sarja",
+  "removeSet": "Poista sarja",
+  "labelActions": "{label}: toiminnot",
+  "@labelActions": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "editRests": "Muokkaa lepoja",
+  "ungroup": "Pura ryhmä",
+  "editExercises": "Muokkaa liikkeitä",
+  "unsavedChanges": "Tallentamattomat muutokset",
+  "couldNotSaveError": "Tallennus epäonnistui: {error}",
+  "@couldNotSaveError": {
+    "placeholders": {
+      "error": {
+        "type": "Object"
+      }
+    }
+  },
+  "history": "Historia",
+  "exercises": "Liikkeet",
+  "noExercisesArePlannedFor": "Tälle harjoitukselle ei ole vielä suunniteltu liikkeitä. Yllä olevat muistiinpanot kuvaavat sen.",
+  "addExercises": "Lisää liikkeitä",
+  "fromTheBuiltInTemplate": "Sisäänrakennetusta mallista. Kuormat asetat itse; historia näkyy, kun olet kirjannut harjoituksen.",
+  "shareExerciseList": "Jaa liikelista",
+  "noSavedStrengthTemplatesYet": "Ei vielä tallennettuja voimamalleja. Tallenna ensin yksi suunnitellusta harjoituksesta.",
+  "compareWith": "Vertaa kohteeseen",
+  "estimated1rmUnit": "Arvioitu 1RM {unit}",
+  "@estimated1rmUnit": {
+    "placeholders": {
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "plannedNotRecorded": "Suunniteltu, ei kirjattu",
+  "notes": "Muistiinpanot",
+  "editPerformance": "Muokkaa suoritusta",
+  "compareWithASavedWorkout": "Vertaa tallennettuun harjoitukseen",
+  "sessions": "Harjoitukset",
+  "radarUnavailableRetry": "Tutka ei käytettävissä · Yritä uudelleen",
+  "radar": "Tutka",
+  "weatherDataByRainviewer": "Säätiedot: RainViewer",
+  "openstreetmapContributors": "© OpenStreetMapin tekijät",
+  "weather": "Sää",
+  "weatherUnavailableRetry": "Sää ei käytettävissä · Yritä uudelleen",
+  "chooseAFixedLocationIn": "Valitse kiinteä sijainti Sää ja sijainti -asetuksista tai salli sijainnin käyttö paikallista säätä varten.",
+  "locationSettings": "Sijaintiasetukset",
+  "retryLocation": "Yritä sijaintia uudelleen",
+  "round2": "{round}°",
+  "@round2": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "roundRhRound2Hpa": "{round}% RH · {round2} hPa",
+  "@roundRhRound2Hpa": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      },
+      "round2": {
+        "type": "Object"
+      }
+    }
+  },
+  "wetBulbTostringasfixedC": "Märkälämpötila {toStringAsFixed}°C",
+  "@wetBulbTostringasfixedC": {
+    "placeholders": {
+      "toStringAsFixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "previousForecastDay": "Edellinen ennustepäivä",
+  "nextForecastDay": "Seuraava ennustepäivä",
+  "daysDayForecast": "{days} päivän ennuste",
+  "@daysDayForecast": {
+    "placeholders": {
+      "days": {
+        "type": "Object"
+      }
+    }
+  },
+  "thisProviderCurrentlySuppliesDays": "Tämä palveluntarjoaja tarjoaa tällä hetkellä {days}/{days2} ennustepäivää.",
+  "@thisProviderCurrentlySuppliesDays": {
+    "placeholders": {
+      "days": {
+        "type": "Object"
+      },
+      "days2": {
+        "type": "Object"
+      }
+    }
+  },
+  "now": "Nyt",
+  "sunriseSunset": "Auringonnousu / -lasku",
+  "keyKey2": "☀ {key}   ☾ {key2}",
+  "@keyKey2": {
+    "placeholders": {
+      "key": {
+        "type": "Object"
+      },
+      "key2": {
+        "type": "Object"
+      }
+    }
+  },
+  "use": "Käytä",
+  "exerciseDetailsWereNotProvided": "Tämä aktiviteettilähde ei antanut liikkeiden tietoja.",
+  "logFromPlan": "Kirjaa suunnitelmasta",
+  "addExerciseDetails": "Lisää liikkeiden tiedot",
+  "loadSuggestion": "Kuormaehdotus",
+  "applyToThisWorkout": "Käytä tähän harjoitukseen",
+  "keepCurrentLoad": "Säilytä nykyinen kuorma",
+  "setLoadStep": "Aseta kuormanlisäys",
+  "viewSupportingSets": "Näytä tukevat sarjat",
+  "supportingSets": "Tukevat sarjat",
+  "noRecordedSessionsYet": "Ei vielä kirjattuja harjoituksia.",
+  "nameDemonstrationCue": "{name}: esittely. {cue}",
+  "@nameDemonstrationCue": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      },
+      "cue": {
+        "type": "Object"
+      }
+    }
+  },
+  "noScalesFoundStepOn2": "Vaakoja ei löytynyt. Astu vaa'alle ja yritä uudelleen.",
+  "scalePaired": "Vaaka yhdistetty",
+  "ok": "OK",
+  "pairedReadyToMeasure": "✓ Yhdistetty – valmis mittaamaan",
+  "chooseHiloCuff": "Valitse Hilo-mansetti",
+  "noCuffFoundWakeYour": "Mansettia ei löytynyt. Herätä mansetti ja hae uudelleen.",
+  "hiloCuffAktiiaC": "Hilo-mansetti (AKTIIA C…)",
+  "onDemandBloodPressureVia": "Verenpaine tarvittaessa BLE:n kautta",
+  "selectHiloPodWristband": "Valitse Hilo Pod (rannekoru)",
+  "rescan": "Hae uudelleen",
+  "noDevicesFoundTapTo": "Laitteita ei löytynyt. Napauta ↻ hakeaksesi uudelleen.",
+  "polarH10SpotHrv": "Polar H10 · Hetki-HRV",
+  "aSeparateHrvReadingBefore": "Erillinen HRV-mittaus ennen harjoitusta tai sen jälkeen. Nämä mittaukset eivät korvaa Garminin yöllistä HRV:tä eivätkä muuta valmiuspisteitäsi.",
+  "wearTheStrapWithMoist": "Pidä hihna kosteilla elektrodeilla. Pysy paikallasi ja hengitä normaalisti. Käytä vertailuun samaa asentoa ja tallennuksen pituutta. Merkitse harjoituksen jälkeen, kuinka kauan lepäsit ensin.",
+  "measurement": "Mittaus",
+  "posture": "Asento",
+  "recordingLengthPlus1Min": "Tallennuksen pituus · plus 1 min tasaantuminen",
+  "t2Minutes": "2 minuuttia",
+  "t5Minutes": "5 minuuttia",
+  "minutesSinceTrainingEndedOptional": "Minuutteja harjoituksen päättymisestä (valinnainen)",
+  "sessionOrNotesOptional": "Harjoitus tai muistiinpanot (valinnainen)",
+  "connectName": "Yhdistä {name}",
+  "@connectName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "findPolarH10": "Etsi Polar H10",
+  "signalRssiDbm": "Signaali {rssi} dBm",
+  "@signalRssiDbm": {
+    "placeholders": {
+      "rssi": {
+        "type": "Object"
+      }
+    }
+  },
+  "connectedName": "Yhdistetty: {name}",
+  "@connectedName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "waitingForHeartRateAnd": "Odotetaan sykettä ja RR-välejä. Tarkista hihnan kontakti.",
+  "startMeasurement": "Aloita mittaus",
+  "cancelMeasurement": "Peruuta mittaus",
+  "spotHrvRmssd": "Hetki-HRV · RMSSD",
+  "acceptedLengthUsableIntervalsTostringasfixed": "{accepted}/{length} käyttökelpoista väliä · {toStringAsFixed} % kattavuus",
+  "@acceptedLengthUsableIntervalsTostringasfixed": {
+    "placeholders": {
+      "accepted": {
+        "type": "Object"
+      },
+      "length": {
+        "type": "Object"
+      },
+      "toStringAsFixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "lnrmssdLnrmssdRawRmssdRawrmssdms": "lnRMSSD: {lnRmssd} · Raaka RMSSD: {rawRmssdMs} ms",
+  "@lnrmssdLnrmssdRawRmssdRawrmssdms": {
+    "placeholders": {
+      "lnRmssd": {
+        "type": "Object"
+      },
+      "rawRmssdMs": {
+        "type": "Object"
+      }
+    }
+  },
+  "signalQualityIsTooLow": "Signaalin laatu on liian heikko tallennettavaksi. Toista mittaus hyvällä hihnakontaktilla. Vaaditaan vähintään 95 % käyttökelpoisia välejä ja 90 % kattavuus.",
+  "savedToSpotHrvHistory": "Tallennettu Hetki-HRV-historiaan.",
+  "newMeasurement": "Uusi mittaus",
+  "signalScreeningExcludesPoorContact": "Signaalin seulonta poissulkee huonon kontaktin, 250–2500 ms:n ulkopuoliset RR-arvot ja yli 25 % paikallisesta mediaanista poikkeavat välit. Aukkoja ei täytetä. Tämä ei ole lääketieteellinen testi eikä itsenäinen valmiuspistemäärä.",
+  "historyLabelLabel2DurationMin": "Historia · {label} · {label2} · {duration} min",
+  "@historyLabelLabel2DurationMin": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      },
+      "label2": {
+        "type": "Object"
+      },
+      "duration": {
+        "type": "Object"
+      }
+    }
+  },
+  "onlyReadingsWithTheSame": "Vain samassa tilanteessa, asennossa ja kestolla tehdyt mittaukset näytetään yhdessä.",
+  "noMatchingMeasurementsYet": "Ei vielä vastaavia mittauksia.",
+  "tostringasfixedMsRmssdTostringasfixed2Bpm": "{toStringAsFixed} ms RMSSD · {toStringAsFixed2} bpm",
+  "@tostringasfixedMsRmssdTostringasfixed2Bpm": {
+    "placeholders": {
+      "toStringAsFixed": {
+        "type": "Object"
+      },
+      "toStringAsFixed2": {
+        "type": "Object"
+      }
+    }
+  },
+  "exportRrIntervalsCsv": "Vie RR-välit (CSV)",
+  "deleteMeasurement": "Poista mittaus",
+  "remindMeToMeasureHrv": "Muistuta minua mittaamaan HRV harjoituksen jälkeen",
+  "appleHealthIsNoLonger": "Apple Terveys ei ole enää käytettävissä",
+  "later": "Myöhemmin",
+  "reconnect": "Yhdistä uudelleen",
+  "gripStrength": "Puristusvoima",
+  "leftKg": "Vasen (kg)",
+  "rightKg": "Oikea (kg)",
+  "lLeftkgRRightkgKg": "V {leftKg} · O {rightKg} kg",
+  "@lLeftkgRRightkgKg": {
+    "placeholders": {
+      "leftKg": {
+        "type": "Object"
+      },
+      "rightKg": {
+        "type": "Object"
+      }
+    }
+  },
+  "notificationsAreOffYouCan": "Ilmoitukset ovat pois päältä. Voit silti mitata harjoituksestasi.",
+  "noRemindersFrom2200": "Ei muistutuksia klo 22:00–07:00",
+  "aReminderThatWouldFall": "Tähän aikaan osuva muistutus ohitetaan, ei siirretä aamuun.",
+  "remindersArriveQuietlyInThe": "Muistutukset saapuvat hiljaa ilmoituslistaan.",
+  "noForecastForThisDay": "Ei ennustetta tälle päivälle",
+  "fullscreen": "Koko näyttö",
+  "source": "● {source}",
+  "@source": {
+    "placeholders": {
+      "source": {
+        "type": "Object"
+      }
+    }
+  },
+  "shadedAreaProviderSpread": "Varjostettu alue: palveluntarjoajien hajonta",
+  "temperatureC": "● Lämpötila °C",
+  "rainMm": "▥ Sade mm",
+  "uvIndex": "— UV-indeksi",
+  "closeFullscreenWeatherChart": "Sulje koko näytön säädiagrammi",
+  "sleepStages": "UNEN VAIHEET",
+  "noStageTimelineForThis": "Tältä yöltä ei ole vaihekaaviota.",
+  "round3": "{round}%",
+  "@round3": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "examplesOnlyCheckAndEnter": "Vain esimerkkejä: tarkista ja syötä tuotteen pakkauksen arvot annosta kohden. Jätä tuntemattomat ravintoaineet tyhjiksi; syötä 0 vain, jos arvo tiedetään.",
+  "nutritionStrategy": "Ravitsemusstrategia",
+  "noPreWorkoutNutritionStrategy": "Harjoitusta edeltävää ravitsemusstrategiaa ei ole tallennettu.",
+  "carbsGCarbsHFluid": "{carbs} g hiilihydraatteja/h · {fluid} ml/h · {sodium} mg natriumia/h",
+  "@carbsGCarbsHFluid": {
+    "placeholders": {
+      "carbs": {
+        "type": "Object"
+      },
+      "fluid": {
+        "type": "Object"
+      },
+      "sodium": {
+        "type": "Object"
+      }
+    }
+  },
+  "forecastUpdatedReviewOrRecalculate": "Ennuste päivittyi – tarkista tai laske tallennettu strategia uudelleen.",
+  "strategySavedSavedat": "Strategia tallennettu {savedAt}",
+  "@strategySavedSavedat": {
+    "placeholders": {
+      "savedAt": {
+        "type": "Object"
+      }
+    }
+  },
+  "duringTotalTotalcarbsGCarbs": "Yhteensä aikana: {totalCarbs} g hiilihydraatteja · {totalFluid} ml · {totalSodium} mg natriumia",
+  "@duringTotalTotalcarbsGCarbs": {
+    "placeholders": {
+      "totalCarbs": {
+        "type": "Object"
+      },
+      "totalFluid": {
+        "type": "Object"
+      },
+      "totalSodium": {
+        "type": "Object"
+      }
+    }
+  },
+  "every20MinAboutCarbs": "Joka 20. minuutti: noin {carbs} g hiilihydraatteja ja {fluid} ml.",
+  "@every20MinAboutCarbs": {
+    "placeholders": {
+      "carbs": {
+        "type": "Object"
+      },
+      "fluid": {
+        "type": "Object"
+      }
+    }
+  },
+  "packQuantitiesIncludeFullContainers": "Pakkausmäärät sisältävät kokonaisia pakkauksia; kaikkea ei tarvitse nauttia.",
+  "workoutChangedReviewOrRecalculate": "Harjoitus muuttui – tarkista tai laske tallennettu strategia uudelleen.",
+  "conditionsAndFeedingPlan": "Olosuhteet ja ravitsemussuunnitelma",
+  "editStrategy": "Muokkaa strategiaa",
+  "recalculate": "Laske uudelleen",
+  "actualNutrition": "Todellinen ravinto",
+  "someProductValuesAreUnknown": "Joidenkin tuotteiden arvot ovat tuntemattomia; summat ovat vajaat.",
+  "logFoodAndFluids": "Kirjaa ruoka ja nesteet",
+  "recordWhatYouActuallyHad": "Kirjaa, mitä todella nautit. Suunniteltua saantia ei kopioida tähän lokiin.",
+  "elapsedMinutesIncludingStopsOptional": "Kulunut aika minuutteina taukoineen (valinnainen)",
+  "recordedDurationActivityMin": "Tallennettu kesto: {activity} min",
+  "@recordedDurationActivityMin": {
+    "placeholders": {
+      "activity": {
+        "type": "Object"
+      }
+    }
+  },
+  "compareWithSavedStrategy": "Vertaa tallennettuun strategiaan",
+  "useMatchedSessionIfAvailable": "Käytä vastaavaa harjoitusta, jos saatavilla",
+  "noPlanComparison": "Ei vertailua suunnitelmaan",
+  "titleDate": "{title} · {date}",
+  "@titleDate": {
+    "placeholders": {
+      "title": {
+        "type": "Object"
+      },
+      "date": {
+        "type": "Object"
+      }
+    }
+  },
+  "linkedStrategyUnavailable": "Linkitetty strategia ei ole käytettävissä",
+  "quantityName": "{quantity} × {name}",
+  "@quantityName": {
+    "placeholders": {
+      "quantity": {
+        "type": "Object"
+      },
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "removeIntake": "Poista nautittu",
+  "addFoodOrDrink": "Lisää ruoka tai juoma",
+  "iHadNoIntake": "En nauttinut mitään",
+  "giGutComfort": "Vatsan mukavuus",
+  "whatWorkedSymptomsAccessProblems": "Mikä toimi / oireet / saatavuusongelmat",
+  "saveDraft": "Tallenna luonnos",
+  "skipLoggingThisActivity": "Ohita tämän aktiviteetin kirjaus",
+  "nutritionAndFluids": "Ravinto ja nesteet",
+  "productsToleranceAndMeasuredSweat": "Tuotteet, siedettävyys ja mitatut hikihäviöt",
+  "postWorkoutIntakeReminder": "Muistutus nauttimisesta harjoituksen jälkeen",
+  "onceAfterARecentEndurance": "Kerran äskettäisen kestävyysharjoituksen jälkeen; hiljaiset tunnit 22:00–08:00.",
+  "enableWorkoutNotifications": "Ota harjoitusilmoitukset käyttöön",
+  "addHiloBpReport": "Lisää Hilo-verenpaineraportti",
+  "readingPdfReportsIsOnly": "PDF-raporttien lukeminen on mahdollista vain iOS:llä ja macOS:llä.",
+  "chooseAnotherReport": "Valitse toinen raportti",
+  "biologicalAge": "Biologinen ikä",
+  "voMaxVo2maxMlKg": "VO₂max {vo2max} ml/kg/min · {vo2Class}",
+  "@voMaxVo2maxMlKg": {
+    "placeholders": {
+      "vo2max": {
+        "type": "Object"
+      },
+      "vo2Class": {
+        "type": "Object"
+      }
+    }
+  },
+  "factorContributions": "Tekijöiden vaikutus",
+  "estimatedRangeRoundRound2Years": "Arvioitu vaihteluväli {round}–{round2} vuotta. Mallin arvio, ei lääketieteellinen diagnoosi.",
+  "@estimatedRangeRoundRound2Years": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      },
+      "round2": {
+        "type": "Object"
+      }
+    }
+  },
+  "noEnergyMeasurementsForThis": "Ei energiamittauksia tälle päivälle",
+  "scanningStepOnTheScale": "Haetaan… astu vaa'alle, kun olet valmis.",
+  "waistWaistCmUpdateMonthly": "Vyötärö: {waist} cm – päivitä kuukausittain Profiilissa",
+  "@waistWaistCmUpdateMonthly": {
+    "placeholders": {
+      "waist": {
+        "type": "Object"
+      }
+    }
+  },
+  "measuring": "Mitataan…",
+  "tryAgain": "Yritä uudelleen",
+  "systolic": "Systolinen",
+  "diastolic": "Diastolinen",
+  "heartRate": "Syke",
+  "weight": "Paino",
+  "bodyFat": "Kehon rasva",
+  "duration": "Kesto",
+  "deep": "Syvä",
+  "spo": "SpO₂",
+  "activityName": "Aktiviteetin nimi",
+  "sport": "Laji",
+  "distance": "Matka",
+  "saved": "Tallennettu",
+  "connectionFailedCheckYourInternet": "Yhteys epäonnistui. Tarkista internetyhteytesi.",
+  "email": "Sähköposti",
+  "password": "Salasana",
+  "passwordTooShort": "Salasana on liian lyhyt",
+  "loginFailedCheckYourEmail": "Kirjautuminen epäonnistui. Tarkista sähköposti ja salasana.",
+  "connectionFailedCheckYourCredentials": "Yhteys epäonnistui. Tarkista tunnuksesi ja internetyhteytesi.",
+  "region": "Alue",
+  "hiloPod": "Hilo Pod",
+  "hiloAccount": "Hilo-tili",
+  "garmin": "Garmin",
+  "coros": "Coros",
+  "suunto": "Suunto",
+  "polarH10": "Polar H10",
+  "polar": "Polar",
+  "renphoAccount": "Renpho-tili",
+  "garminConnectEmail": "Garmin Connect -sähköposti",
+  "verifyMfaCode": "Vahvista MFA-koodi",
+  "verificationCode": "Vahvistuskoodi",
+  "errorE": "Virhe: {e}",
+  "@errorE": {
+    "placeholders": {
+      "e": {
+        "type": "Object"
+      }
+    }
+  },
+  "noHiloPodFoundMake": "Hilo Podia ei löytynyt. Varmista, että se on ladattu ja lähellä.",
+  "scanFailedE": "Haku epäonnistui: {e}",
+  "@scanFailedE": {
+    "placeholders": {
+      "e": {
+        "type": "Object"
+      }
+    }
+  },
+  "hiloPod2": "Hilo Pod",
+  "scanForPod": "Etsi pod",
+  "scanForPolarH10": "Etsi Polar H10",
+  "couldNotReachPolarCheck": "Polariin ei saatu yhteyttä. Tarkista yhteytesi.",
+  "signInAndSendWorkout": "Kirjaudu ja lähetä harjoitus",
+  "scanForScale": "Etsi vaaka",
+  "passwordRequired": "Salasana vaaditaan",
+  "enterYourPhoneNumberWith": "Syötä puhelinnumerosi (maatunnuksineen, esim. +358…) ja Suunto-sähköpostisi.",
+  "enterThePinFromThe": "Syötä tekstiviestin PIN-koodi.",
+  "incorrectPinPleaseTryAgain": "Väärä PIN-koodi. Yritä uudelleen.",
+  "phoneNumber": "Puhelinnumero",
+  "suuntoAccountEmail": "Suunto-tilin sähköposti",
+  "enterPinFromSms": "Syötä PIN tekstiviestistä",
+  "verifyConnect": "Vahvista ja yhdistä",
+  "sendSmsCode": "Lähetä tekstiviestikoodi",
+  "couldNotSavePreferencesE": "Asetusten tallennus epäonnistui: {e}",
+  "@couldNotSavePreferencesE": {
+    "placeholders": {
+      "e": {
+        "type": "Object"
+      }
+    }
+  },
+  "mon": "Ma",
+  "tue": "Ti",
+  "wed": "Ke",
+  "thu": "To",
+  "fri": "Pe",
+  "sat": "La",
+  "sun": "Su",
+  "male": "Mies",
+  "female": "Nainen",
+  "other": "Muu",
+  "running": "Juoksu",
+  "trailRunning": "Polkujuoksu",
+  "cycling": "Pyöräily",
+  "swimming": "Uinti",
+  "triathlon": "Triathlon",
+  "hiking": "Vaellus",
+  "rowing": "Soutu",
+  "buildMyPlan": "Luo suunnitelmani",
+  "keepAConsistentBedtimeAnd": "Pidä säännölliset nukkumaanmeno- ja heräämisajat tukeaksesi unirytmiäsi.",
+  "thisWorkoutHasNoSets": "Tässä harjoituksessa ei ole sarjoja.",
+  "loadName": "Kuorma ({name})",
+  "@loadName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "setLabel": "Sarja",
+  "lowestReps": "Vähiten toistoja",
+  "highestReps": "Eniten toistoja",
+  "repsPerSide": "Toistoja per puoli",
+  "fromReps": "Alkaen (toistot)",
+  "toReps": "Asti (toistot)",
+  "addedLoad": "Lisäkuorma",
+  "assistance": "Avustus",
+  "tempoOptional": "Tempo (valinnainen)",
+  "notesOptional": "Muistiinpanot (valinnainen)",
+  "enterTheRepetitionsDone": "Syötä tehdyt toistot.",
+  "plannedUnit": "Suunniteltu {unit}",
+  "@plannedUnit": {
+    "placeholders": {
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "repsDone": "Tehdyt toistot",
+  "resistance": "Vastus",
+  "implementsLabel": "Välineet",
+  "name": "Nimi",
+  "instructionsOptional": "Ohjeet (valinnainen)",
+  "remember": "Muista",
+  "notSavedYet": "Ei vielä tallennettu",
+  "saving": "Tallennetaan…",
+  "couldNotSave": "Tallennus epäonnistui",
+  "plannedValuesAreHintsNot": "Suunnitellut arvot ovat vihjeitä, eivät tuloksia. Napauta sarjaa kirjataksesi sen.",
+  "completedAsPlanned": "Suoritettu suunnitellusti",
+  "save": "Tallenna",
+  "nameTheTemplate": "Anna mallille nimi.",
+  "setN": "Sarja {n}",
+  "@setN": {
+    "placeholders": {
+      "n": {
+        "type": "Object"
+      }
+    }
+  },
+  "changesApplyToThisWorkout": "Muutokset koskevat vain tätä harjoitusta. Suoritetut ja muut harjoitukset pysyvät ennallaan.",
+  "saveForThisWorkout": "Tallenna tälle harjoitukselle",
+  "knownForKnownOfOf": "Tiedossa {known}/{of} kuormitetusta sarjasta",
+  "@knownForKnownOfOf": {
+    "placeholders": {
+      "known": {
+        "type": "Object"
+      },
+      "of": {
+        "type": "Object"
+      }
+    }
+  },
+  "sessionEstimate": "Harjoituksen arvio",
+  "calculatedRange": "Laskettu vaihteluväli",
+  "timedWork": "Aikaan perustuva työ",
+  "strengthTraining": "Voimaharjoittelu",
+  "theExercisesCouldNotBe": "Liikkeitä ei voitu ladata.",
+  "resumeWorkout": "Jatka harjoitusta",
+  "strengthWorkout": "Voimaharjoitus",
+  "untitledTemplate": "Nimeämätön malli",
+  "theRecordedExercisesCouldNot": "Kirjattuja liikkeitä ei voitu ladata.",
+  "exercisesPerformed": "Tehdyt liikkeet",
+  "comparedWithThePlanAs": "Verrattu suunnitelmaan sellaisena kuin se oli kirjauksen alkaessa.",
+  "topWorkingLoadName": "Suurin työkuorma ({name})",
+  "@topWorkingLoadName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "estimated1rmMiddleOfRange": "Arvioitu 1RM, vaihteluvälin keskikohta",
+  "noLoggedSessionsYet": "Ei vielä kirjattuja harjoituksia.",
+  "noRadarFramesAvailable": "Tutkakuvia ei ole saatavilla",
+  "playRadar": "Toista tutka",
+  "pauseRadar": "Keskeytä tutka",
+  "high": "Korkea",
+  "clear": "Selkeää",
+  "bodyweight": "Kehonpaino",
+  "resistance2": "Vastus —",
+  "assistUnit": "Avustus {unit}",
+  "@assistUnit": {
+    "placeholders": {
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "reps2": "Toistot —",
+  "notRecorded": "Ei kirjattu",
+  "skipped": "Ohitettu",
+  "health": "Terveys",
+  "manual": "Manuaalinen",
+  "expandName": "Laajenna {name}",
+  "@expandName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "open": "Avaa",
+  "noScalePaired": "Ei yhdistettyä vaakaa",
+  "paired": "Yhdistetty",
+  "change": "Vaihda",
+  "noCuffPaired": "Ei yhdistettyä mansettia",
+  "noPolarH10FoundWear": "Polar H10:tä ei löytynyt. Pue hihna, kostuta elektrodit ja tarkista, ettei toinen sovellus käytä molempia Bluetooth-yhteyksiä.",
+  "enterMinutesSinceTrainingEnded": "Syötä harjoituksen päättymisestä kuluneet minuutit, 0–1440.",
+  "timingFollowsYourWorkout": "Ajoitus seuraa harjoitustasi.",
+  "recordingStayStill": "Tallennus · pysy paikallasi",
+  "meanHrBpm": "Keskisyke · bpm",
+  "pairAPolarH10First": "Yhdistä ensin Polar H10.",
+  "around30MinutesAfterTraining": "Noin 30 minuuttia harjoituksen jälkeen, kun harjoitus on ajoissa saatavilla.",
+  "reminderDiagnostics": "Muistutusten diagnostiikka",
+  "forecast": "Ennuste",
+  "enterAName": "Anna nimi",
+  "enterAValidAmount": "Anna kelvollinen määrä",
+  "enterAPositiveAmount": "Anna positiivinen määrä",
+  "maximum120GH": "Enintään 120 g/h",
+  "carbohydrateTargetGH": "Hiilihydraattitavoite g/h",
+  "fluidTargetMlH": "Nestetavoite ml/h",
+  "sodiumTargetMgHNot": "Natriumtavoite mg/h (ei suola)",
+  "surfaceFeedingAccess": "Alusta / ravinnon saatavuus",
+  "expectedAscentM": "Odotettu nousu m",
+  "expectedAltitudeM": "Odotettu korkeus m",
+  "humidity": "Ilmankosteus %",
+  "windKmH": "Tuuli km/h",
+  "dayForecast": "Päivän ennuste",
+  "enteredConditions": "Syötetyt olosuhteet",
+  "productFoodName": "Tuotteen / ruoan nimi",
+  "servingsQuantity": "Annokset / määrä",
+  "when": "Milloin",
+  "carbohydrateGServing": "Hiilihydraatit g / annos",
+  "fluidMlServing": "Neste ml / annos",
+  "caffeineMgServing": "Kofeiini mg / annos",
+  "proteinGServing": "Proteiini g / annos",
+  "gel": "Geeli",
+  "water": "Vesi",
+  "sportsDrink": "Urheilujuoma",
+  "bar": "Patukka",
+  "finishIntakeLog": "Viimeistele nauttimisloki",
+  "allowNotificationsInSystemSettings": "Salli ilmoitukset järjestelmäasetuksissa",
+  "importing": "Tuodaan…",
+  "importNewreadings": "Tuo {newReadings}",
+  "@importNewreadings": {
+    "placeholders": {
+      "newReadings": {
+        "type": "Object"
+      }
+    }
+  },
+  "reading": "Luetaan…",
+  "chooseReportPdf": "Valitse raportti (PDF)",
+  "yourTrainingHistoryIsReady": "Harjoitushistoriasi on valmis",
+  "importingYourTrainingHistory": "Harjoitushistoriaasi tuodaan",
+  "stopImport": "Pysäytä tuonti",
+  "dismiss": "Hylkää",
+  "openai": "OpenAI",
+  "appleIntelligence": "Apple Intelligence",
+  "nonAiBriefing": "Katsaus ilman tekoälyä",
+  "noBriefing": "Ei katsausta",
+  "ruleBasedSummaryFromYour": "Sääntöpohjainen yhteenveto terveystiedoistasi – ei API-kutsuja",
+  "hideTheBriefingCard": "Piilota katsauskortti",
+  "flutter": "Flutter",
+  "stateManagement": "Tilanhallinta",
+  "bluetoothLe": "Bluetooth LE",
+  "interactiveMaps": "Interaktiiviset kartat",
+  "chartsGraphs": "Kaaviot ja graafit",
+  "secureCredentialStorage": "Tunnusten turvallinen tallennus",
+  "markdownRendering": "Markdown-esitys",
+  "appleOnDeviceAi": "Applen laitteen tekoäly",
+  "cryptography": "Kryptografia",
+  "appleHealthHealthConnect": "Apple Terveys ja Health Connect",
+  "runtimePermissions": "Suoritusaikaiset käyttöoikeudet",
+  "shareExport": "Jakaminen ja vienti",
+  "openUrls": "Avaa URL-osoitteita",
+  "internationalisation": "Kansainvälistäminen",
+  "utilities": "Apuohjelmat",
+  "icons": "Kuvakkeet",
+  "fjelia": "Fjelia",
+  "fjeliaFeedback": "Fjelia-palaute",
+  "couldNotSendTheReport": "Raportin lähettäminen epäonnistui. Tekstisi on edelleen tallessa. Yritä uudelleen.",
+  "yourEmail": "Sähköpostisi",
+  "enterAValidEmailAddress": "Anna kelvollinen sähköpostiosoite.",
+  "subject": "Aihe",
+  "sending": "Lähetetään…",
+  "sendReport": "Lähetä raportti",
+  "sleepRecovery": "Uni ja palautuminen",
+  "activitiesTraining": "Aktiviteetit ja harjoittelu",
+  "bodyWellness": "Keho ja hyvinvointi",
+  "hilo": "Hilo",
+  "hiloBle": "Hilo BLE",
+  "garminApi": "Garmin (API)",
+  "renphoScale": "Renpho-vaaka",
+  "connected": "Yhdistetty",
+  "notConnected": "Ei yhdistetty",
+  "manage": "Hallitse",
+  "connect": "Yhdistä",
+  "habits": "Tottumukset",
+  "smokingAlcohol": "Tupakointi, alkoholi",
+  "clinicalLab": "Laboratorioarvot",
+  "hba1cLipidsKidney": "HbA1c, rasva-arvot, munuaiset",
+  "sex": "Sukupuoli",
+  "smoking": "Tupakointi",
+  "never": "Ei koskaan",
+  "former": "Entinen",
+  "current": "Nykyinen",
+  "hba1c": "HbA1c",
+  "diabetes": "Diabetes",
+  "prediabetes": "Esidiabetes",
+  "type1": "Tyyppi 1",
+  "type2": "Tyyppi 2",
+  "apob": "ApoB",
+  "optionalPlansAndPaceGuides": "Valinnainen. Suunnitelmat ja vauhtiohjeet käyttävät sitä; myös yllä oleva nousu muokkaa harjoittelua.",
+  "addRaceGoal2": "Lisää kisatavoite",
+  "editRaceGoal": "Muokkaa kisatavoitetta",
+  "trailRunning2": "Polkujuoksu",
+  "roadCycling": "Maantiepyöräily",
+  "gravel": "Gravel",
+  "indoorRowing": "Sisärudo",
+  "selectDate": "Valitse päivämäärä",
+  "committed": "Sitoutunut",
+  "flexible": "Joustava",
+  "notGoing": "Ei osallistu",
+  "notSaid": "Ei kerrottu",
+  "finish": "Maaliaika",
+  "saveGoal": "Tallenna tavoite",
+  "exportAllRecordedWorkoutsAs": "Vie kaikki kirjatut harjoitukset taulukkona.",
+  "backupsIncludeYourHealthData": "Varmuuskopiot sisältävät terveystietosi, harjoitussuunnitelmat ja profiiliasetukset. Kirjautumistunnukset eivät sisälly. Palautus korvaa paikalliset tiedot.",
+  "trail": "Polku",
+  "inlineSkating": "Rullaluistelu",
+  "nordicClassic": "Perinteinen hiihto",
+  "skateSkiing": "Luistelihiihto",
+  "strength": "Voima",
+  "walking": "Kävely",
+  "yoga": "Jooga",
+  "skiing": "Hiihto",
+  "climbing": "Kiipeily",
+  "monday": "Maanantai",
+  "sunday": "Sunnuntai",
+  "month": "Kuukausi",
+  "week": "Viikko",
+  "list": "Lista",
+  "train": "Harjoitus",
+  "restDay": "Lepo",
+  "kilogramsKg": "Kilogrammat (kg)",
+  "poundsLb": "Paunat (lb)",
+  "regenerateWorkouts": "Luo harjoitukset uudelleen",
+  "starting": "Käynnistetään",
+  "allPlannedWorkoutsDeleted": "Kaikki suunnitellut harjoitukset poistettu.",
+  "searching": "Haetaan…",
+  "searchCity": "Hae kaupunkia",
+  "fixedLocationSavedWeatherWill": "Kiinteä sijainti tallennettu. Sää päivittyy.",
+  "locationDisabledThePlanWeather": "Sijainti poistettu käytöstä. Suunnitelman säänäkymä on piilotettu.",
+  "locationSetToName": "Sijainniksi asetettu {name}",
+  "@locationSetToName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "notEnoughDaytimeAndNighttime": "Päivä- ja yömittauksia ei ole tarpeeksi",
+  "onlyTheWeightWasReceived": "Vain paino vastaanotettiin. Rasvaa, lihaksia ja muita arvoja varten seiso paljain jaloin metallielektrodeilla, kunnes vaaka on valmis.",
+  "addYourWaistInProfile": "Lisää vyötärönympärys Profiiliin viskeraalirasvaa varten.",
+  "manualActivity": "Manuaalinen aktiviteetti",
+  "theseCredentialsAreStoredEncrypted": "Nämä tunnukset tallennetaan salattuina laitteellesi (iOS-avainnippu / Android Keystore). Niitä ei koskaan lähetetä muulle palvelimelle kuin Hilolle.",
+  "corosCredentialsAreStoredEncrypted": "Coros-tunnukset tallennetaan salattuina laitteellesi. Fjelia lukee tiedot suoraan Coroksen pilvirajapinnasta, jota myös Coros Training Hub -verkkosovellus käyttää.",
+  "connectAnyCombinationYouCan": "Yhdistä mikä tahansa yhdistelmä – voit aina lisätä lisää myöhemmin Asetuksissa.",
+  "garminCredentialsAreStoredEncrypted": "Garmin-tunnukset tallennetaan salattuina laitteellesi. Fjelia käyttää epävirallista Garmin Connect -rajapintaa, kuten monet yhteisön sovellukset.",
+  "enterTheVerificationCode": "Syötä vahvistuskoodi",
+  "appleHealthDataAccess": "Fjelia lukee terveystietosi Apple Terveydestä. Luvallasi se voi myös kirjoittaa synkronoituja tietoja Apple Terveyteen. Hallitse käyttöoikeuksia laitteesi asetuksissa.",
+  "scanAgain": "Hae uudelleen",
+  "wearTheHiloBandDuring": "Pidä Hilo-rannekettä unen aikana jatkuvaa verenpaineen mittausta varten. Tiedot synkronoidaan automaattisesti joka aamu, kun avaat sovelluksen.",
+  "noPolarH10FoundWear2": "Polar H10:tä ei löytynyt. Pue hihna kosteilla elektrodeilla ja varmista, ettei siihen ole yhdistetty toista sovellusta (tai kelloa); hae sitten uudelleen.",
+  "wearTheStrapWithMoist2": "Pue hihna kosteilla elektrodeilla ennen hakua. Mittaa myöhemmin kohdasta + → Polar H10 HRV-mittaus; tulokset näkyvät yöllisen HRV:si vieressä.",
+  "signedInPlannedWorkoutsCan": "Kirjauduttu. Suunnitellut harjoitukset voi nyt lähettää Polariin. Vanhemmat harjoitukset tuodaan seuraavassa täydessä historian synkronoinnissa.",
+  "saveYourPolarFlowLogin": "Tallenna Polar Flow -kirjautumisesi, jotta voit lähettää suunniteltuja harjoituksia ja tuoda yli 30 päivää vanhoja harjoituksia. Se pysyy tämän laitteen avainnipussa ja lähetetään vain Polarille. Lähetä harjoitus suunnittelijan näkymästä ja synkronoi sitten Polar Flow kellollesi. Tarkista, että Polarin sykealueet vastaavat Fjeliaa.",
+  "signInToSendThis": "Kirjaudu sisään lähettääksesi tämän harjoituksen Polar Flow -kalenteriisi. Kirjautumisesi pysyy tämän laitteen avainnipussa ja lähetetään vain Polarille. Synkronoi lähetyksen jälkeen Polar Flow kellollesi.",
+  "checkAndSave": "Tarkista ja tallenna",
+  "noScaleFoundStepOn": "Vaakaa ei löytynyt. Astu vaa'alle, jotta se herää, ja hae uudelleen.",
+  "stepOnTheScaleBefore": "Astu vaa'alle ennen hakua, jotta se herää. Myöhemmin mittaa kohdasta + → RENPHO-vaaka.",
+  "renphoCredentialsAreStoredEncrypted": "Renpho-tunnukset tallennetaan salattuina laitteellesi. Fjelia keskustelee suoraan Renphon pilvirajapinnan kanssa.",
+  "couldNotSendSmsCheck": "Tekstiviestin lähetys epäonnistui. Tarkista puhelinnumerosi ja internetyhteytesi.",
+  "theEmailIsUsedFor": "Sähköpostia käytetään pyyntöjen turvalliseen allekirjoitukseen, eikä sitä lähetetä Suunnon palvelimille.",
+  "suuntoUsesSmsVerificationSame": "Suunto käyttää tekstiviestivahvistusta (kuten Suunto-sovellus). Puhelimeesi lähetetään kertakäyttöinen PIN-koodi. Tunnuksesi tallennetaan salattuina vain laitteelle.",
+  "tellUsAboutYourRace": "Kerro kilpailustasi ja aikataulustasi. Fjelia rakentaa suunnitelmasi nyt ja päättelee tasosi aiemmista aktiviteeteistasi (Garmin, Suunto, Polar, COROS, Apple Terveys), kun ne on ladattu.",
+  "noAccountConnectedSoFjelia": "Tiliä ei ole yhdistetty, joten Fjelialla ei ole historiaa, josta oppia. Yhdistä Garmin, Suunto, Polar, COROS tai Apple Terveys, niin todellinen harjoittelusi ratkaisee.",
+  "yourPastActivitiesAreStill": "Aiempia aktiviteettejasi tuodaan vielä. Voit rakentaa suunnitelman nyt – se tarkentuu automaattisesti, kun tuonti on valmis.",
+  "buildingYourPlan": "Rakennetaan suunnitelmaasi…",
+  "saveContinue": "Tallenna ja jatka",
+  "addYourMainPriorityA": "Lisää päätapahtumasi (prioriteetti A). Suunnitelma jaksotetaan sitä kohti: peruskunto, kehitys, huippu ja kevennys. Ilman kisatavoitetta suunnitelmaa ei vielä luoda.",
+  "noMeasurementsYet": "Ei vielä mittauksia",
+  "date": "Päivämäärä",
+  "deepSleepIsBelowOptimal": "Syvä uni on alle optimin ({round} %). Vältä alkoholia ja raskaita aterioita 3 tuntia ennen nukkumaanmenoa.",
+  "@deepSleepIsBelowOptimal": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "finishWithSetsOpen": "Lopetetaanko avoimin sarjoin?",
+  "completeThePlannedWorkout": "Merkitäänkö suunniteltu harjoitus tehdyksi?",
+  "marksThePlannedSessionAs": "Merkitsee suunnitellun harjoituksen tehdyksi tällä harjoituksella.",
+  "discardThisWorkout": "Hylätäänkö tämä harjoitus?",
+  "removesTheWorkoutAndEvery": "Poistaa harjoituksen ja kaikki siihen kirjatut sarjat.",
+  "assistanceName": "Avustus ({name})",
+  "@assistanceName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "enterSecondsOrMSs": "Syötä sekunteja tai m:ss.",
+  "enterTheLoadAsA": "Syötä kuorma numerona.",
+  "loadCannotBeNegative": "Kuorma ei voi olla negatiivinen.",
+  "enterTheEffortValue": "Syötä rasitusarvo.",
+  "nameTheExercise": "Anna liikkeelle nimi.",
+  "atLeastOneImplement": "Vähintään yksi väline.",
+  "anIncrementMustBePositive": "Lisäyksen on oltava positiivinen.",
+  "enterAPositiveStep": "Syötä positiivinen askel.",
+  "repsInReserve": "Toistot varalla",
+  "loadPerImplement": "Kuorma per väline",
+  "restAfterThisSet": "Lepo tämän sarjan jälkeen",
+  "enterHowLongTheSet": "Syötä sarjan kesto.",
+  "repsDonePerSide": "Tehdyt toistot per puoli",
+  "plannedRepminRepmax": "Suunniteltu {repMin}–{repMax}",
+  "@plannedRepminRepmax": {
+    "placeholders": {
+      "repMin": {
+        "type": "Object"
+      },
+      "repMax": {
+        "type": "Object"
+      }
+    }
+  },
+  "restTakenBeforeTheNext": "Lepo ennen seuraavaa sarjaa",
+  "equipment": "Välineet",
+  "implementsUsedTogether": "Yhdessä käytetyt välineet",
+  "smallestLoadStepOptional": "Pienin kuormanlisäys (valinnainen)",
+  "theSmallestChangeYourPlates": "Pienin muutos, jonka levysi, käsipainosi tai laitteesi sallivat; muistetaan tälle välineelle.",
+  "loadStep": "Kuormanlisäys",
+  "finishWithIncompleteData": "Lopetetaanko keskeneräisin tiedoin?",
+  "leaveWithoutSaving": "Poistutaanko tallentamatta?",
+  "theLastChangeCouldNot": "Viimeisintä muutosta ei voitu tallentaa.",
+  "comparedWithAPlanChosen": "Verrattu harjoituksen jälkeen valittuun suunnitelmaan. Suunnitellut arvot ovat vihjeitä, eivät tuloksia.",
+  "lastSet": "Viimeinen sarja",
+  "templateName": "Mallin nimi",
+  "betweenExercises": "Liikkeiden välillä",
+  "betweenRounds": "Kierrosten välillä",
+  "discardChanges": "Hylätäänkö muutokset?",
+  "yourEditsToThisWorkout": "Tämän harjoituksen muutoksia ei ole tallennettu.",
+  "estimatedDuration": "Arvioitu kesto",
+  "workingSets": "Työsarjat",
+  "estimatedExternalVolume": "Arvioitu ulkoinen volyymi",
+  "loadRaisedFromUnitTo": "Kuormaa nostettu arvosta {unit} arvoon {unit2} tarkistuksesi jälkeen (sääntö v{ruleVersion}).",
+  "@loadRaisedFromUnitTo": {
+    "placeholders": {
+      "unit": {
+        "type": "Object"
+      },
+      "unit2": {
+        "type": "Object"
+      },
+      "ruleVersion": {
+        "type": "Object"
+      }
+    }
+  },
+  "thePlannedWorkoutHasNo": "Suunnitellussa harjoituksessa ei ole kirjattavia liikkeitä.",
+  "completedSets": "Suoritetut sarjat",
+  "knownExternalVolume": "Tunnettu ulkoinen volyymi",
+  "updateStrengthSessions2": "Päivitetäänkö voimaharjoitukset?",
+  "upcomingSessionsArePlannedAgain": "Tulevat harjoitukset suunnitellaan uudelleen tästä päivästä alkaen: voimaharjoittelu seuraa kisatavoitteitasi jokaisena voimapäivänä vaihtelevin harjoituksin. Suoritetut ja ohitetut harjoitukset säilyvät; tulevassa voimaharjoituksessa muuttamasi liikkeet korvataan.",
+  "thisSessionUsesAnEarlier": "Tämä harjoitus käyttää aiempaa voimamallia. Päivitetyt suunnitelmat vaihtelevat voimaharjoittelua vaiheen ja kisatavoitteen mukaan ja käyttävät jokaisen voimapäivän.",
+  "estimated1rmUsesEpleyAnd": "Arvioitu 1RM käyttää Epleyn ja Brzyckin kaavoja suoritetuille 1–10 toiston työsarjoille, joiden kuorma tunnetaan, ja näytetään niiden välisenä vaihteluvälinä. Se on arvio, ei testattu maksimi.",
+  "localWeather": "Paikallinen sää",
+  "today": "Tänään",
+  "low": "Matala",
+  "moderate": "Kohtalainen",
+  "overcast": "Pilvistä",
+  "partlyCloudy": "Puolipilvistä",
+  "collapseName": "Tiivistä {name}",
+  "@collapseName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "variableLoads": "Vaihtelevat kuormat",
+  "ruleVstrengthprogressionruleversionTheLastStrengthprogressionminsessions": "Sääntö v{strengthProgressionRuleVersion}: viimeiset {strengthProgressionMinSessions} vertailukelpoista harjoitusta, jokainen sarja toistotavoitteen yläpäässä, rasitus kirjattuna eikä aiottua raskaampi. {reason}",
+  "@ruleVstrengthprogressionruleversionTheLastStrengthprogressionminsessions": {
+    "placeholders": {
+      "strengthProgressionRuleVersion": {
+        "type": "Object"
+      },
+      "strengthProgressionMinSessions": {
+        "type": "Object"
+      },
+      "reason": {
+        "type": "Object"
+      }
+    }
+  },
+  "stepOnYourScaleBefore": "Astu vaa'alle ennen hakua",
+  "scanning": "Haetaan…",
+  "pair": "Yhdistä",
+  "selectYourAktiiaPWristband": "Valitse AKTIIA P… -rannekkeesi. Aseta se laturiin herättääksesi sen, jos se ei näy.",
+  "measurementInterruptedWhileTheApp": "Mittaus keskeytyi, kun sovellus oli taustalla. Toista se.",
+  "noRecentRrDataWith": "Ei tuoreita RR-tietoja hyvällä kontaktilla. Tarkista hihna ja toista mittaus.",
+  "settlingStayStill": "Tasaantuminen · pysy paikallasi",
+  "deleteSpotHrvMeasurement": "Poistetaanko Hetki-HRV-mittaus?",
+  "thisRemovesTheRecordingAnd": "Tämä poistaa tallenteen ja sen raa'at RR-välit.",
+  "appleHealthStoppedAnsweringSo": "Apple Terveys lakkasi vastaamasta, joten Fjelia katkaisi yhteyden eikä enää lue tai kirjoita terveystietoja.\n\nSalli Fjelia uudelleen kohdassa Asetukset → Terveys → Tietojen käyttö ja laitteet → Fjelia ja yhdistä sitten Apple Terveys uudelleen.",
+  "thisRemovesTheSelectedGrip": "Tämä poistaa valitun puristusvoimamittauksen.",
+  "hideReminderDiagnostics": "Piilota muistutusten diagnostiikka",
+  "loading": "Ladataan…",
+  "touchTheChartForDetails": "Napauta kaaviota nähdäksesi lisätiedot",
+  "indoor": "Sisällä",
+  "road": "Maantie",
+  "technical": "Tekninen",
+  "snow": "Lumi",
+  "pool": "Uima-allas",
+  "openWater": "Avovesi",
+  "ambientTemperatureC": "Ympäristön lämpötila °C",
+  "carryAboutGelsGelsGelcarbs": "Ota mukaan noin {gels} geeliä ({gelCarbs} g hiilihydraatteja kukin) + {bottles} × {bottleMl} ml pulloa. {drinkCarbs} g hiilihydraatteja tulee juomajauheesta.",
+  "@carryAboutGelsGelsGelcarbs": {
+    "placeholders": {
+      "gels": {
+        "type": "Object"
+      },
+      "gelCarbs": {
+        "type": "Object"
+      },
+      "bottles": {
+        "type": "Object"
+      },
+      "bottleMl": {
+        "type": "Object"
+      },
+      "drinkCarbs": {
+        "type": "Object"
+      }
+    }
+  },
+  "intakeNotRecorded": "Nauttimista ei kirjattu",
+  "loggingDeclinedIntakeUnknown": "Kirjaus hylätty – nauttiminen tuntematon",
+  "confirmedNoIntake": "Vahvistettu: ei nauttimista",
+  "draft": "Luonnos · ",
+  "actualIntakePerServing": "Todellinen nauttiminen · annosta kohden",
+  "minuteIntoWorkoutDuringOnly": "Harjoituksen minuutti (vain aikana, valinnainen)",
+  "sodiumMgServingNotSalt": "Natrium mg / annos (ei suola)",
+  "comfortable": "Mukava",
+  "mildSymptoms": "Lieviä oireita",
+  "moderateSymptoms": "Kohtalaisia oireita",
+  "severeSymptoms": "Vaikeita oireita",
+  "personalNutritionSettings": "Henkilökohtaiset ravitsemusasetukset",
+  "practisedCarbohydrateToleranceGH": "Harjoiteltu hiilihydraattien sieto g/h (enintään 120)",
+  "workoutNotificationsEnabled": "Harjoitusilmoitukset käytössä",
+  "exportTheMonthlyReportAs": "Vie kuukausiraportti PDF-tiedostona Hilo-sovelluksessa ja valitse se tästä. Vain mittaukset tuodaan; raportin nimi, sähköposti ja kehotiedot ohitetaan.",
+  "nothingNewAllReadingsWere": "Ei uutta: kaikki mittaukset oli jo tallennettu.",
+  "historyImportIncomplete": "Historian tuonti on kesken",
+  "youCanKeepUsingFjelia": "Voit jatkaa Fjelian käyttöä, mutta pidä se auki: iOS keskeyttää tuonnin, kun sovellus on taustalla, ja se jatkuu seuraavalla avauskerralla. Suunnitelmasi kalibroidaan, kun tuonti on valmis.",
+  "addYourBirthYearIn": "Lisää syntymävuotesi kohdassa Asetukset → Profiili nähdäksesi arviosi.",
+  "fitnessAge": "Kuntoikä",
+  "estLifespan": "Arv. elinikä",
+  "delta": "Ero",
+  "couldNotOpenKey": "Kohdetta {key} ei voitu avata",
+  "@couldNotOpenKey": {
+    "placeholders": {
+      "key": {
+        "type": "Object"
+      }
+    }
+  },
+  "appleIntelligenceIsNotAvailable": "Apple Intelligence ei ole käytettävissä tällä laitteella (vaatii tuetun iPhonen tai Macin, jossa on iOS/macOS 26 tai uudempi ja Apple Intelligence on otettu käyttöön Asetuksissa). Valitse toinen palveluntarjoaja ja lisää oma API-avaimesi käyttääksesi valmentajaa.",
+  "personalisedMorningLunchAfternoonEvening": "Personoitu yhteenveto aamulle/lounaalle/iltapäivälle/illalle",
+  "enterASubject": "Anna aihe.",
+  "message": "Viesti",
+  "enterAMessageOfAt": "Kirjoita viesti, jossa on vähintään 10 merkkiä.",
+  "garminConnect": "Garmin Connect",
+  "hiloBloodPressure": "Hilo (verenpaine)",
+  "renphoBodyScale": "Renpho (henkilövaaka)",
+  "hiloPodCuff": "Hilo Pod / mansetti",
+  "disconnectLabel": "Katkaistaanko yhteys: {label}?",
+  "@disconnectLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "yourSavedMeasurementsWillRemain": "Tallennetut mittauksesi säilyvät tällä laitteella.",
+  "notEnoughRecentHeartRate": "Tuoreita sykemittauksia ei ole tarpeeksi alueiden säätämiseen.",
+  "aerobicBase": "Aerobinen perusta",
+  "tempo": "Tempo",
+  "lactateThreshold": "Laktaattikynnys",
+  "birthYearHeightWaist": "Syntymävuosi, pituus, vyötärö",
+  "enterAValidValue": "Anna kelvollinen arvo",
+  "birthYear": "Syntymävuosi",
+  "height": "Pituus",
+  "waist": "Vyötärö",
+  "yearsSinceQuit": "Vuotta lopettamisesta",
+  "cigarettesPerDay": "Savukkeita päivässä",
+  "standardDrinksPerMonth": "Annosta kuukaudessa",
+  "enterAValidNumber": "Anna kelvollinen luku",
+  "enterARaceName": "Anna kilpailun nimi",
+  "useHMmOrH": "Käytä muotoa h:mm tai h:mm:ss, aikaa jonka voisit oikeasti juosta",
+  "flexibleThePlanMayDrop": "Joustava: suunnitelma voi pudottaa tämän tapahtuman, jos se on ristiriidassa tärkeämmän kanssa.",
+  "selectARaceDate": "Valitse kilpailupäivä",
+  "thatIsTenTimesOr": "Tämä on kymmenkertainen (tai kymmenesosa) tavanomaisesta {likely} km:stä. Käytetäänkö sen sijaan {likely} km?",
+  "@thatIsTenTimesOr": {
+    "placeholders": {
+      "likely": {
+        "type": "Object"
+      }
+    }
+  },
+  "addGoal": "Lisää tavoite",
+  "restoreFailed": "Palautus epäonnistui",
+  "replaceLocalData": "Korvataanko paikalliset tiedot?",
+  "restoringThisBackupReplacesAll": "Tämän varmuuskopion palauttaminen korvaa kaikki paikalliset terveys- ja harjoitustiedot. Olemassa olevat kirjautumistunnukset säilyvät.",
+  "openingBackupZip": "Avataan varmuuskopion ZIP-tiedostoa",
+  "addAFutureRaceGoal": "Lisää ensin tuleva kisatavoite.",
+  "deleteAllWorkouts2": "Poistetaanko kaikki harjoitukset?",
+  "thisDeletesPlannedWorkoutsOn": "Tämä poistaa suunnitellut harjoitukset tästä puhelimesta ja yhdistetystä kelloalustasta. Suoritetut aktiviteetit säilyvät.",
+  "regenerateWorkouts2": "Luodaanko harjoitukset uudelleen?",
+  "noRaceGoalsYetAdd": "Ei vielä kisatavoitteita. Lisää yksi tai synkronoi Garminista.",
+  "deleteRaceGoal": "Poistetaanko kisatavoite?",
+  "deletingFailedFailure": "Poisto epäonnistui: {failure}",
+  "@deletingFailedFailure": {
+    "placeholders": {
+      "failure": {
+        "type": "Object"
+      }
+    }
+  },
+  "allPlannedWorkoutsDeletedRemoved": "Kaikki suunnitellut harjoitukset poistettu. Poistettu alustoiltasi: {removed}.",
+  "@allPlannedWorkoutsDeletedRemoved": {
+    "placeholders": {
+      "removed": {
+        "type": "Object"
+      }
+    }
+  },
+  "usingCurrentLocationTostringasfixedTostringasfixed2": "Käytetään nykyistä sijaintia: {toStringAsFixed}, {toStringAsFixed2}",
+  "@usingCurrentLocationTostringasfixedTostringasfixed2": {
+    "placeholders": {
+      "toStringAsFixed": {
+        "type": "Object"
+      },
+      "toStringAsFixed2": {
+        "type": "Object"
+      }
+    }
+  },
+  "typeSleep": "Uni",
+  "typeBloodPressure": "Verenpaine",
+  "addHiloBpReportPdf": "Lisää Hilo-verenpaineraportti (PDF)",
+  "hiloCuffBle": "Hilo-mansetti (BLE)",
+  "typeSpo2": "SpO₂ / pulssioksimetri",
+  "typeWeightScale": "Henkilövaaka",
+  "polarH10HrvMeasurement": "Polar H10 HRV-mittaus",
+  "samplingWouldStartMinutes": "Näytteenotto alkaisi noin {minutes} min harjoituksen päättymisen jälkeen.",
+  "@samplingWouldStartMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "Object"
+      }
+    }
+  },
+  "samplingStartedMinutes": "Näytteenotto alkoi {minutes} min harjoituksen päättymisen jälkeen.",
+  "@samplingStartedMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "Object"
+      }
+    }
+  },
+  "unknown": "Tuntematon",
+  "before": "Ennen",
+  "during": "Aikana",
+  "after": "Jälkeen",
+  "enumWarmUp": "Alkulämmittely",
+  "enumWorking": "Työsarja",
+  "enumBackOff": "Back-off",
+  "enumTechnique": "Tekniikka",
+  "enumExternalLoad": "Ulkoinen kuorma",
+  "enumBandResistance": "Kuminauha / vastus",
+  "enumTotalLoad": "Kokonaiskuorma",
+  "enumPerImplement": "Per väline",
+  "enumOneImplement": "Yksi väline",
+  "enumBothSides": "Molemmat puolet",
+  "enumAlternatingTotalReps": "Vuorotellen, toistot yhteensä",
+  "enumPartial": "Osittain",
+  "enumFailed": "Epäonnistui",
+  "enumStraightSets": "Tavalliset sarjat",
+  "enumSuperset": "Superseria",
+  "enumCircuit": "Kierto",
+  "enumRir": "RIR",
+  "enumRpe110": "RPE 1–10",
+  "enumBeforeTraining": "Ennen harjoitusta",
+  "enumAfterTraining": "Harjoituksen jälkeen",
+  "enumResting": "Levossa",
+  "enumSeated": "Istuen",
+  "enumLyingDown": "Makuulla",
+  "duringRoutineGelsAreNot": "Aikana: säännölliset geelit eivät ole tarpeen tässä lyhyessä/kevyessä harjoituksessa. Juo janon mukaan.",
+  "duringSpreadCarbohydrateAndDrinks": "Aikana: jaa hiilihydraatit ja juomat pieniin, säännöllisiin annoksiin. Laske juoman hiilihydraatit samaan summaan kuin geelit ja ruoka.",
+  "fluidIsAnEditableStarting": "Neste on muokattava lähtöarvio, ei kiintiö. Käytä apuna janoa, harjoiteltua nauttimista ja mitattuja hikihäviöitä; älä pakota juomaan ylimääräistä vettä.",
+  "afterHaveCarbohydrateAndA": "Jälkeen: nauti hiilihydraatteja ja proteiinipitoinen ateria. Priorisoi täydennys ja nesteytys, jos seuraava harjoitus on pian.",
+  "swimmingPlaceALabelledBottle": "Uinti: aseta merkitty pullo altaan reunalle ja käytä sarjattaukoja kulauksiin tai ravintoon. Allasolosuhteet voivat poiketa ulkosäästä.",
+  "runningCarryAccessibleGelsFlasks": "Juoksu: pidä geelit/pullot helposti saatavilla tai suunnittele ravinto huoltopisteille; harjoittele samat tuotteet ja ajoitus ennen kilpailua.",
+  "servingSizesAndToleranceMust": "Annoskokojen ja siedon on oltava positiivisia.",
+  "enterFiniteNonNegativeMeasurements": "Syötä äärellisiä, ei-negatiivisia mittauksia.",
+  "targetsMustBeFiniteAnd": "Tavoitteiden on oltava äärellisiä ja ei-negatiivisia.",
+  "conditionsMustBeFiniteOr": "Olosuhteiden on oltava äärellisiä tai tuntemattomia.",
+  "humidityMustBeBetween0": "Ilmankosteuden on oltava 0–100 %.",
+  "noIntakeCannotIncludeFood": "”Ei nauttimista” ei voi sisältää ruokaa tai juomia.",
+  "addAnItemOrConfirm": "Lisää kohde tai vahvista, ettet nauttinut mitään.",
+  "eachIntakeNeedsAProduct": "Jokaiseen nauttimiseen tarvitaan tuote ja kelvollinen ajankohta.",
+  "quantityMustBePositive": "Määrän on oltava positiivinen.",
+  "thisActivityNoLongerExists": "Tätä aktiviteettia ei enää ole.",
+  "practisedCarbohydrateToleranceMustNot": "Harjoitellun hiilihydraattisiedon ei tule ylittää 120 g/h.",
+  "measuredSweatRateMustBe": "Mitatun hikoilun on oltava positiivinen tai jätettävä tuntemattomaksi.",
+  "increasePractisedToleranceInNutrition": "Nosta harjoiteltua siettoa ravitsemusasetuksissa ennen korkeamman tavoitteen valitsemista.",
+  "fluidTargetExceedsYourMeasured": "Nestetavoite ylittää mitatun hikoilunopeutesi. Tarkista mittaus tai tavoite.",
+  "elapsedWorkoutTimeMustBe": "Kuluneen harjoitusajan on oltava positiivinen tai jätettävä tyhjäksi.",
+  "intakeAmountsMustBeFinite": "Nautittujen määrien on oltava äärellisiä ja ei-negatiivisia.",
+  "selectedStrategyUnavailableChooseAnother": "Valittu strategia ei ole käytettävissä. Valitse toinen strategia tai ei vertailua.",
+  "recordYourWorkoutNutrition": "Kirjaa harjoituksen ravinto",
+  "addTheFoodAndFluids": "Lisää aktiviteettihistoriaan ruoka ja nesteet, jotka todella nautit.",
+  "logIntake": "Kirjaa nauttiminen",
+  "in30Minutes": "30 minuutin päästä",
+  "loadSuggestionsCoverStraightSets": "Kuormaehdotukset kattavat vain tavalliset toistopohjaiset sarjat.",
+  "needsStrengthprogressionminsessionsRecordedSessionsOf": "Vaatii {strengthProgressionMinSessions} kirjattua harjoitusta tästä liikkeestä.",
+  "@needsStrengthprogressionminsessionsRecordedSessionsOf": {
+    "placeholders": {
+      "strengthProgressionMinSessions": {
+        "type": "Object"
+      }
+    }
+  },
+  "recentHistoryIsTooOld": "Viimeaikainen historia on liian vanhaa ehdotukselle.",
+  "theLastSessionDidNot": "Viimeisessä harjoituksessa ei käytetty yhtä tunnettua kuormaa.",
+  "theLoadChangedBetweenThe": "Kuorma muuttui viimeaikaisten harjoitusten välillä.",
+  "notEverySetReachedThe": "Kaikki sarjat eivät yltäneet toistotavoitteensa ylärajalle.",
+  "recordEffortRirOrRpe": "Kirjaa rasitus (RIR tai RPE) viimeiselle sarjalle saadaksesi ehdotuksia.",
+  "recentSetsWereHarderThan": "Viimeaikaiset sarjat olivat aiottua raskaampia.",
+  "thisWorkoutAlreadyHasIts": "Tällä harjoituksella on jo oma kuormansa; se pysyy asetettuna.",
+  "yourRecentSetsMetThe": "Viimeaikaiset sarjasi täyttivät progressiosäännön. Aseta tämän välineen pienin kuormanlisäys tarkistaaksesi kuorman.",
+  "thisWorkoutNoLongerExists": "Tätä harjoitusta ei enää ole.",
+  "thisStrengthPlanCannotBe": "Tätä voimasuunnitelmaa ei voi lukea ({message}).",
+  "@thisStrengthPlanCannotBe": {
+    "placeholders": {
+      "message": {
+        "type": "Object"
+      }
+    }
+  },
+  "thisStrengthPlanCannotBe2": "Tätä voimasuunnitelmaa ei voi lukea.",
+  "addAtLeastOneExercise": "Lisää vähintään yksi liike.",
+  "thisWorkoutWasChangedElsewhere": "Tätä harjoitusta muutettiin muualla. Muutoksesi säilyvät; lataa uudelleen nähdäksesi uudemman version.",
+  "thePlanThisWorkoutIs": "Suunnitelmaa, johon tätä harjoitusta verrataan, ei voi lukea.",
+  "thisLogWasChangedElsewhere": "Tätä lokia muutettiin muualla. Merkintäsi säilyvät; lataa uudelleen nähdäksesi uudemman version.",
+  "thisZipIsNotA": "Tämä ZIP ei ole tuettu Fjelia-varmuuskopio.",
+  "theBackupDatabaseIsDamaged": "Varmuuskopion tietokanta on vioittunut.",
+  "invalidBackupData": "Virheelliset varmuuskopiotiedot.",
+  "backupTablesDoNotMatch": "Varmuuskopion taulut eivät täsmää.",
+  "invalidBackupColumns": "Virheelliset varmuuskopion sarakkeet.",
+  "migratingOriginalAppBackup": "Siirretään alkuperäisen sovelluksen varmuuskopiota",
+  "theOriginalBackupIsMissing": "Alkuperäisestä varmuuskopiosta puuttuu tarvittavia tauluja.",
+  "backupFormatOrDatabaseVersion": "Varmuuskopion muoto tai tietokantaversio ei täsmää.",
+  "restoringRecords": "Palautetaan tietueita",
+  "restoringSettings": "Palautetaan asetuksia",
+  "restoreComplete": "Palautus valmis",
+  "effortMustBeANumber": "Rasituksen on oltava luku.",
+  "theDurationEstimateMustBe": "Keston arvion on oltava positiivinen.",
+  "restCannotBeNegative": "Lepo ei voi olla negatiivinen.",
+  "enterTheRepetitionsDoneThe": "Syötä tehdyt toistot; suunnitelmassa on vaihteluväli.",
+  "enterTheLoadThePlan": "Syötä kuorma; suunnitelmassa ei ole sitä.",
+  "enterTheResistanceThePlan": "Syötä vastus; suunnitelmassa ei ole sitä.",
+  "poorSensorContact": "Huono anturin kontakti",
+  "moreThan25FromLocal": "Yli 25 % paikallisesta mediaanista",
+  "workoutNutrition": "Harjoitusravinto",
+  "postWorkoutFoodAndFluid": "Muistutus ruoka- ja nestelokista harjoituksen jälkeen",
+  "postTrainingHrvMeasurementReminder": "Muistutus HRV-mittauksesta harjoituksen jälkeen",
+  "rirRunsFrom0To": "RIR on väliltä 0–10+.",
+  "rpeRunsFrom1To": "RPE on väliltä 1–10.",
+  "repetitionsCannotBeNegative": "Toistot eivät voi olla negatiivisia.",
+  "timedWorkMustBeLonger": "Aikaan perustuvan työn on kestettävä yli nolla sekuntia.",
+  "chooseRepetitionsOrTimedWork": "Valitse toistot tai aikaan perustuva työ, ei molempia.",
+  "loadMustBeAFinite": "Kuorman on oltava äärellinen, ei-negatiivinen luku.",
+  "durationCannotBeNegative": "Keston ei voi olla negatiivinen.",
+  "hrTimeline": "Sykeaikajana",
+  "dayTrainingLoad": "Päivän harjoituskuormitus",
+  "weekdayComparison": "Viikonpäivien vertailu",
+  "weeklyTrainingLoad": "Viikoittainen harjoituskuormitus",
+  "zonePolarization": "Alueiden polarisaatio",
+  "elevationOverview": "Korkeusyleiskatsaus",
+  "trainingMonitor": "Harjoitusseuranta",
+  "formAtlCtlTsb": "ATL / CTL / TSB -kunto",
+  "trainingPlanProgress": "Harjoitussuunnitelman eteneminen",
+  "rhrSleep": "Leposyke unessa",
+  "hrvSleep": "HRV unessa",
+  "spo2Sleep": "SpO₂ unessa",
+  "respRate": "Hengitystiheys",
+  "stress": "Stressi",
+  "skinTemp": "Ihon lämpötila",
+  "steps": "Askeleet",
+  "tonightsSleep": "Tämän yön uni",
+  "activityLog": "Aktiviteettiloki",
+  "activityLog2": "Aktiviteettiloki",
+  "history2": "HISTORIA",
+  "durationsecondshDurationseconds2mDistancemetersKmAvgheartrate": "{durationSeconds}h {durationSeconds2}m · {distanceMeters} km · {avgHeartRate} bpm · ↑{totalElevation} m",
+  "@durationsecondshDurationseconds2mDistancemetersKmAvgheartrate": {
+    "placeholders": {
+      "durationSeconds": {
+        "type": "Object"
+      },
+      "durationSeconds2": {
+        "type": "Object"
+      },
+      "distanceMeters": {
+        "type": "Object"
+      },
+      "avgHeartRate": {
+        "type": "Object"
+      },
+      "totalElevation": {
+        "type": "Object"
+      }
+    }
+  },
+  "heatAcclimation2": "LÄMPÖÖN SOPEUTUMINEN",
+  "score": "{score}%",
+  "@score": {
+    "placeholders": {
+      "score": {
+        "type": "Object"
+      }
+    }
+  },
+  "elevation": "NOUSU",
+  "t12WeekHistory": "12 VIIKON HISTORIA",
+  "zonePolarization2": "ALUEIDEN POLARISAATIO",
+  "t5WeekHistory": "5 VIIKON HISTORIA",
+  "easy": "KEVYT %",
+  "withzonesOfRecordedActivitiesWith": "{withZones}/{recorded} aktiviteetilla on sykealuetiedot",
+  "@withzonesOfRecordedActivitiesWith": {
+    "placeholders": {
+      "withZones": {
+        "type": "Object"
+      },
+      "recorded": {
+        "type": "Object"
+      }
+    }
+  },
+  "fromsamplesReconstructedFromRecordedHr": "{fromSamples} rekonstruoitu tallennetuista sykenäytteistä",
+  "@fromsamplesReconstructedFromRecordedHr": {
+    "placeholders": {
+      "fromSamples": {
+        "type": "Object"
+      }
+    }
+  },
+  "easyZ12ModerateZ3": "Kevyt: Z1–2 · Kohtalainen: Z3 · Raskas: Z4–5",
+  "activitiesWithoutHrZoneData": "Aktiviteetit ilman sykealuetietoja jätetään prosenttiosuuksien ulkopuolelle.",
+  "avgAverageUnit": "KESK {average} {unit}",
+  "@avgAverageUnit": {
+    "placeholders": {
+      "average": {
+        "type": "Object"
+      },
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "weekdayComparison2": "VIIKONPÄIVIEN VERTAILU",
+  "trainingPlanProgress2": "HARJOITUSSUUNNITELMAN ETENEMINEN",
+  "weekCurrentweekDurationinweeks": "Viikko {currentWeek} / {durationInWeeks}",
+  "@weekCurrentweekDurationinweeks": {
+    "placeholders": {
+      "currentWeek": {
+        "type": "Object"
+      },
+      "durationInWeeks": {
+        "type": "Object"
+      }
+    }
+  },
+  "t30MinTimeTrialLt2": "30 MINUUTIN AIKA-AJO – LT2",
+  "run30MinutesAtThe": "Juokse 30 minuuttia kovimmalla kestämälläsi teholla – hallitusti, ei sprinttinä. Nosta teho vähitellen; älä aloita liian kovaa. Viimeisten 20 minuutin keskivauhti ja -syke ovat LT2:si.",
+  "recordAsANormalOutdoor": "Tallenna tavallisena ulkojuoksuna. Käynnistä kello, merkitse aika ja juokse 30 min kisavauhtia.",
+  "t50MinTotalFlatCourse": "~50 min yhteensä · tasainen reitti · ei kovan harjoituksen jälkeen",
+  "doNotStartTooFast": "Älä aloita liian kovaa. Tähtää tasaisiin väliaikoihin.",
+  "theAppAveragesHrAnd": "Sovellus laskee syken ja vauhdin keskiarvon testin viimeiseltä 20 minuutilta lämmittelyn ja ensimmäisten 10 minuutin jälkeen. Valitse tallennettu aktiviteetti kohdassa Laske.",
+  "lt2Pace": "LT2-VAUHTI",
+  "activityRunningEnoughTimeFor": "Aktiviteetti (juoksu, riittävästi aikaa lämmittelyyn + 30 min, sykkeen kanssa)",
+  "selectTheTtActivity": "Valitse testiaktiviteetti",
+  "nameStartdate": "{name} · {startDate}",
+  "@nameStartdate": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      },
+      "startDate": {
+        "type": "Object"
+      }
+    }
+  },
+  "warmUpBeforeTt": "Lämmittely ennen testiä",
+  "roundMin": "{round} min",
+  "@roundMin": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "clearResults": "Tyhjennä tulokset",
+  "heartRate2": "SYKE",
+  "paceSecKmLowerIs": "Vauhti (s/km – pienempi on nopeampi)",
+  "thresholdsFitnessTests": "Kynnykset ja kuntotestit",
+  "lt1": "LT1",
+  "lt2": "LT2",
+  "voPace": "VO₂-vauhti",
+  "ftp": "FTP",
+  "setFtpManually": "Aseta FTP käsin",
+  "calculateFromAnActivity": "Laske aktiviteetista",
+  "setFtp": "Aseta FTP",
+  "ftpWatts": "FTP (wattia)",
+  "ftpCyclingThresholdPower": "FTP – PYÖRÄILYN KYNNYSTEHO",
+  "ftpHistory": "FTP-HISTORIA",
+  "updateFromActivity": "PÄIVITÄ AKTIVITEETISTA",
+  "tapAnActivityFtpBest": "Napauta aktiviteettia – FTP = paras 20 min teho × 0,95",
+  "ridew": "{ride}W",
+  "@ridew": {
+    "placeholders": {
+      "ride": {
+        "type": "Object"
+      }
+    }
+  },
+  "ftpRoundw": "→ FTP {round}W",
+  "@ftpRoundw": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "noRidesWith20Minutes": "Ei ajoja, joissa on 20 minuuttia yhtäjaksoisia tehonäytteitä.",
+  "enterFtpManually": "Syötä FTP käsin",
+  "selectTheTestActivity": "Valitse testiaktiviteetti",
+  "formAtlCtlTsb2": "KUNTO · ATL / CTL / TSB",
+  "closeTrainingFormFullscreen": "Sulje harjoituskunto koko näytöltä",
+  "expandTrainingForm": "Laajenna harjoituskunto",
+  "calculatedFromTheFirstAvailable": "Laskettu ensimmäisestä saatavilla olevasta kuormitustiedosta. Päivät ilman kirjattua kuormitusta lasketaan nollaksi; aiempi harjoittelu on tuntematonta.",
+  "trainingMonitor2": "HARJOITUSSEURANTA",
+  "pfitzingerZones": "PFITZINGER-ALUEET",
+  "cyclingPowerZones": "PYÖRÄILYN TEHOALUEET",
+  "znumber": "Z{number}",
+  "@znumber": {
+    "placeholders": {
+      "number": {
+        "type": "Object"
+      }
+    }
+  },
+  "paceHrDescription": "{pace} · {hr}\n{description}",
+  "@paceHrDescription": {
+    "placeholders": {
+      "pace": {
+        "type": "Object"
+      },
+      "hr": {
+        "type": "Object"
+      },
+      "description": {
+        "type": "Object"
+      }
+    }
+  },
+  "weeklyTrainingLoad2": "VIIKOITTAINEN HARJOITUSKUORMITUS",
+  "prevWeek": "EDELL. VK",
+  "bySport": "LAJEITTAIN",
+  "noActivitiesThisWeek": "Ei aktiviteetteja tällä viikolla",
+  "garminWorkoutScheduleddate": "Garmin-harjoitus · {scheduledDate}",
+  "@garminWorkoutScheduleddate": {
+    "placeholders": {
+      "scheduledDate": {
+        "type": "Object"
+      }
+    }
+  },
+  "yourNote": "Muistiinpanosi",
+  "askAiCoach": "Kysy tekoälyvalmentajalta",
+  "aiSettings": "Tekoälyasetukset",
+  "askYourCoach": "Kysy valmentajaltasi…",
+  "sendMessage": "Lähetä viesti",
+  "sendFeedbackOrReportA": "Lähetä palautetta tai ilmoita virheestä",
+  "addMeasurement2": "Lisää mittaus",
+  "syncLabel2": "Synkronoi",
+  "syncToday": "Synkronoi tänään",
+  "fullSync1Year": "Täysi synkronointi · 1 vuosi",
+  "fullSyncComplete": "Täysi synkronointi · Valmis",
+  "syncingYourData": "Synkronoidaan tietojasi…",
+  "lLeftkgRRightkgKg2": "V {leftKg}  O {rightKg} kg",
+  "@lLeftkgRRightkgKg2": {
+    "placeholders": {
+      "leftKg": {
+        "type": "Object"
+      },
+      "rightKg": {
+        "type": "Object"
+      }
+    }
+  },
+  "weightKgFatBodyfatMuscle": "{weight} kg · Rasva {bodyFat} % · Lihakset {muscleMass} kg",
+  "@weightKgFatBodyfatMuscle": {
+    "placeholders": {
+      "weight": {
+        "type": "Object"
+      },
+      "bodyFat": {
+        "type": "Object"
+      },
+      "muscleMass": {
+        "type": "Object"
+      }
+    }
+  },
+  "titleSportTolowercase": "{title}, {sport}, {toLowerCase}",
+  "@titleSportTolowercase": {
+    "placeholders": {
+      "title": {
+        "type": "Object"
+      },
+      "sport": {
+        "type": "Object"
+      },
+      "toLowerCase": {
+        "type": "Object"
+      }
+    }
+  },
+  "weatherUnavailableTapToRetry": "Sää ei käytettävissä · Yritä uudelleen napauttamalla",
+  "weatherSetYourLocation": "Sää · Aseta sijaintisi",
+  "t7DayForecast": "7 PÄIVÄN ENNUSTE",
+  "minMax": "pienin/suurin",
+  "rainMm2": "sade mm",
+  "uvMax": "UV enint.",
+  "kmH": "km/h",
+  "alt": "→ {alt}",
+  "@alt": {
+    "placeholders": {
+      "alt": {
+        "type": "Object"
+      }
+    }
+  },
+  "raceGoalsLength": "Kisatavoitteet · {length}",
+  "@raceGoalsLength": {
+    "placeholders": {
+      "length": {
+        "type": "Object"
+      }
+    }
+  },
+  "gWk": "{g} vk",
+  "@gWk": {
+    "placeholders": {
+      "g": {
+        "type": "Object"
+      }
+    }
+  },
+  "weeks": "{weeks}",
+  "@weeks": {
+    "placeholders": {
+      "weeks": {
+        "type": "Object"
+      }
+    }
+  },
+  "weeks2": "viikkoa",
+  "upcoming": "TULEVAT",
+  "lengthMoreDays": "+ {length} päivää lisää",
+  "@lengthMoreDays": {
+    "placeholders": {
+      "length": {
+        "type": "Object"
+      }
+    }
+  },
+  "yearMonth": "{year} / {month}",
+  "@yearMonth": {
+    "placeholders": {
+      "year": {
+        "type": "Object"
+      },
+      "month": {
+        "type": "Object"
+      }
+    }
+  },
+  "day": "{day}",
+  "@day": {
+    "placeholders": {
+      "day": {
+        "type": "Object"
+      }
+    }
+  },
+  "plannedCompletedSkipped": "○ Suunniteltu   ● Suoritettu   ✕ Ohitettu",
+  "heartRate3": "Syke",
+  "watts": "Wattia",
+  "theStepsAddUpTo": "Vaiheet summautuvat {total}; suunnitelma laskee {plannedDurationMin} min.",
+  "@theStepsAddUpTo": {
+    "placeholders": {
+      "total": {
+        "type": "Object"
+      },
+      "plannedDurationMin": {
+        "type": "Object"
+      }
+    }
+  },
+  "typicalSplitForThisKind": "Tyypillinen jakauma tämäntyyppiselle harjoitukselle; ei vaiheita, joista se laskettaisiin.",
+  "labelGetsEachExerciseWith": "{label} saa jokaisen liikkeen sarjoineen, toistoineen ja kuormineen. Toistovälit, rasitus ja tempo jäävät Fjeliaan.",
+  "@labelGetsEachExerciseWith": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "markAsRest": "Merkitse lepopäiväksi",
+  "restoreWorkout": "Palauta harjoitus",
+  "skipThisWorkout": "Ohitetaanko tämä harjoitus?",
+  "previousWeek": "Edellinen viikko",
+  "backToThisWeek": "Takaisin tähän viikkoon",
+  "thisWeek": "Tämä viikko",
+  "nextWeek": "Seuraava viikko",
+  "today2": "TÄNÄÄN",
+  "route": "REITTI",
+  "feedback": "Palaute",
+  "plannedWorkout": "Suunniteltu harjoitus",
+  "delete": "Poista",
+  "chatAi": "Tekoälychat",
+  "trainingLoad": "Harjoituskuormitus",
+  "dayTrainingLoad2": "PÄIVÄN HARJOITUSKUORMITUS",
+  "trimp": " TRIMP",
+  "scorebeforeScoreafter": "{scoreBefore} → {scoreAfter}",
+  "@scorebeforeScoreafter": {
+    "placeholders": {
+      "scoreBefore": {
+        "type": "Object"
+      },
+      "scoreAfter": {
+        "type": "Object"
+      }
+    }
+  },
+  "temperatureOverTime": "LÄMPÖTILA AJAN YLI",
+  "roundh": "{round}h",
+  "@roundh": {
+    "placeholders": {
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "timeInHrZones": "Aika sykealueilla",
+  "route2": "Reitti",
+  "start": "Lähtö",
+  "gpx": "GPX",
+  "touppercasesubstringBriefing": "{toUpperCase}{substring}-katsaus",
+  "@touppercasesubstringBriefing": {
+    "placeholders": {
+      "toUpperCase": {
+        "type": "Object"
+      },
+      "substring": {
+        "type": "Object"
+      }
+    }
+  },
+  "chatWithAiAboutThis": "Keskustele tekoälyn kanssa tästä katsauksesta",
+  "whyThisRecommendation": "Miksi tämä suositus?",
+  "titleDateLabel": "{title}, {date}, {label}",
+  "@titleDateLabel": {
+    "placeholders": {
+      "title": {
+        "type": "Object"
+      },
+      "date": {
+        "type": "Object"
+      },
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "previousDay": "Edellinen päivä",
+  "nextDay": "Seuraava päivä",
+  "updating": "Päivitetään",
+  "resting": "LEVOSSA",
+  "noTimedReadings": "Ei ajoitettuja mittauksia",
+  "avg": "KESK",
+  "peak": "HUIPPU",
+  "tolocalRoundmin": "{toLocal} · {round}min",
+  "@tolocalRoundmin": {
+    "placeholders": {
+      "toLocal": {
+        "type": "Object"
+      },
+      "round": {
+        "type": "Object"
+      }
+    }
+  },
+  "avgheartrateBpmAvg": "{avgHeartRate} bpm keskim.",
+  "@avgheartrateBpmAvg": {
+    "placeholders": {
+      "avgHeartRate": {
+        "type": "Object"
+      }
+    }
+  },
+  "timeWeightedAverageOverRecorded": "Aikapainotettu keskiarvo tallennetuilta jaksoilta. Aukot ilman mittauksia jätetään pois.",
+  "previousHeartRatePeriod": "Edellinen sykejakso",
+  "nextHeartRatePeriod": "Seuraava sykejakso",
+  "avgHr": "Keskisyke",
+  "restingHr": "Leposyke",
+  "both": "Molemmat",
+  "averagelabelFixedMs": "{averageLabel} {fixed} ms",
+  "@averagelabelFixedMs": {
+    "placeholders": {
+      "averageLabel": {
+        "type": "Object"
+      },
+      "fixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "measureWithPolarH10": "Mittaa Polar H10:llä",
+  "ms": "ms",
+  "noWorkoutInThisPeriod": "Yhdelläkään jakson harjoituksella ei ole vertailukelpoista ennen/jälkeen-paria.",
+  "textEachWorkoutCountsOnce": "{text}. Jokainen harjoitus lasketaan kerran; tämä kuvaa parejasi, ei pisteytä niitä.",
+  "@textEachWorkoutCountsOnce": {
+    "placeholders": {
+      "text": {
+        "type": "Object"
+      }
+    }
+  },
+  "workoutFinished": "Harjoitus päättynyt?",
+  "yourWorkoutIsNotIn": "Harjoitustasi ei ole vielä Fjeliassa. Jos se on päättynyt, kerro milloin, niin muistutus voi seurata todellista loppua. Muuten se ilmestyy kellon synkronoinnin jälkeen.",
+  "workoutFinished2": "Harjoitus päättynyt",
+  "theWorkoutMustStartAfter": "Harjoituksen on alettava mittauksen jälkeen ja päätyttävä alkamisensa jälkeen, ei tulevaisuudessa.",
+  "daysDAvg": "{days} pv keskim.",
+  "@daysDAvg": {
+    "placeholders": {
+      "days": {
+        "type": "Object"
+      }
+    }
+  },
+  "averageUnit": "{average} {unit}",
+  "@averageUnit": {
+    "placeholders": {
+      "average": {
+        "type": "Object"
+      },
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "baselineUnit": "{baseline} {unit}",
+  "@baselineUnit": {
+    "placeholders": {
+      "baseline": {
+        "type": "Object"
+      },
+      "unit": {
+        "type": "Object"
+      }
+    }
+  },
+  "previousPeriod": "Edellinen jakso",
+  "nextPeriod": "Seuraava jakso",
+  "overnightHrvReflectsRecoveryCompare": "Yöllinen HRV kuvastaa palautumista. Vertaa lukemiasi omaan perustasoosi ajan mittaan.",
+  "moveThisWorkout": "SIIRRÄ TÄMÄ HARJOITUS",
+  "pickDate": "Valitse päivä",
+  "movedFromMovedfrom": "Siirretty päivästä {movedFrom}",
+  "@movedFromMovedfrom": {
+    "placeholders": {
+      "movedFrom": {
+        "type": "Object"
+      }
+    }
+  },
+  "hrvAroundThisWorkout": "HRV tämän harjoituksen ympärillä",
+  "measureAfterTraining": "Mittaa harjoituksen jälkeen",
+  "measureAgain": "Mittaa uudelleen",
+  "explainWithAi": "Selitä tekoälyllä",
+  "beforeEndedPregapAheadOf": "Ennen päättyi {preGap} ennen alkua.",
+  "@beforeEndedPregapAheadOf": {
+    "placeholders": {
+      "preGap": {
+        "type": "Object"
+      }
+    }
+  },
+  "lengthFurtherMeasurementSAfter": "{length} lisämittausta tämän harjoituksen jälkeen säilytetään lisähavaintoina.",
+  "@lengthFurtherMeasurementSAfter": {
+    "placeholders": {
+      "length": {
+        "type": "Object"
+      }
+    }
+  },
+  "noHrvMeasurementRecordedAround": "Tämän harjoituksen ympärillä ei ole kirjattu HRV-mittausta.",
+  "measureHrv": "Mittaa HRV",
+  "deltamsMs": "{deltaMs} ms",
+  "@deltamsMs": {
+    "placeholders": {
+      "deltaMs": {
+        "type": "Object"
+      }
+    }
+  },
+  "deltapercent": "{deltaPercent} %",
+  "@deltapercent": {
+    "placeholders": {
+      "deltaPercent": {
+        "type": "Object"
+      }
+    }
+  },
+  "aDescriptionOfThisPair": "Tämän parin kuvaus, ei harjoituksen pisteytys.",
+  "notEnoughComparableWorkoutsYet": "Vertailukelpoisia harjoituksia ei ole vielä tarpeeksi, {eligible}/{need}.",
+  "@notEnoughComparableWorkoutsYet": {
+    "placeholders": {
+      "eligible": {
+        "type": "Object"
+      },
+      "need": {
+        "type": "Object"
+      }
+    }
+  },
+  "notEnoughComparableWorkoutsYet2": "Vertailukelpoisia harjoituksia ei ole vielä tarpeeksi ({eligible}/{need}).",
+  "@notEnoughComparableWorkoutsYet2": {
+    "placeholders": {
+      "eligible": {
+        "type": "Object"
+      },
+      "need": {
+        "type": "Object"
+      }
+    }
+  },
+  "yourEligibleSimilarWorkoutsTolocal": "Samankaltaiset {eligible} harjoitustasi · {toLocal}–{toLocal2}",
+  "@yourEligibleSimilarWorkoutsTolocal": {
+    "placeholders": {
+      "eligible": {
+        "type": "Object"
+      },
+      "toLocal": {
+        "type": "Object"
+      },
+      "toLocal2": {
+        "type": "Object"
+      }
+    }
+  },
+  "middleHalfQ1msToQ3ms": "Keskimmäinen puolisko {q1Ms}–{q3Ms} ms · mediaani {medianMs} ms · tämä harjoitus {delta} ms",
+  "@middleHalfQ1msToQ3ms": {
+    "placeholders": {
+      "q1Ms": {
+        "type": "Object"
+      },
+      "q3Ms": {
+        "type": "Object"
+      },
+      "medianMs": {
+        "type": "Object"
+      },
+      "delta": {
+        "type": "Object"
+      }
+    }
+  },
+  "rpeI": "RPE {i}",
+  "@rpeI": {
+    "placeholders": {
+      "i": {
+        "type": "Object"
+      }
+    }
+  },
+  "easy2": "kevyt",
+  "allOut": "Täysillä",
+  "workoutProfileDescription": "Harjoitusprofiili: {description}",
+  "@workoutProfileDescription": {
+    "placeholders": {
+      "description": {
+        "type": "Object"
+      }
+    }
+  },
+  "noActivitiesInThisPeriod": "Ei aktiviteetteja tällä jaksolla",
+  "enableHeatAcclimationInTraining": "Ota lämpöön sopeutuminen käyttöön harjoitusasetuksissa.",
+  "noElevationThisWeek": "Ei nousua tällä viikolla",
+  "noActivitiesSynced": "Ei synkronoituja aktiviteetteja",
+  "noHrZoneData": "Ei sykealuetietoja",
+  "easyJogGetHrElevated": "Kevyt hölkkä – nosta sykettä, jalat rennoiksi",
+  "fastestSustainablePaceLikeA": "Nopein ylläpidettävä vauhti – kuin 30 minuutin kisa",
+  "walkCardiacRecovery": "Kävely – sydämen palautuminen",
+  "selectTheTtActivityFirst": "Valitse ensin testiaktiviteetti.",
+  "calculating": "Lasketaan…",
+  "calculateLt2": "Laske LT2",
+  "enterFtpBetween30And": "Syötä FTP väliltä 30–1000 W.",
+  "aerobicThreshold": "Aerobinen kynnys",
+  "functionalThresholdPower": "Toiminnallinen kynnysteho",
+  "estimated": "Arvioitu",
+  "afterWarmingUpRunFive": "Juokse lämmittelyn jälkeen viisi minuuttia nopeimmalla ylläpidettävällä teholla. Tallenna juoksu nopeus- tai matkatiedoilla.",
+  "recordAtLeast40Minutes": "Tallenna vähintään 40 minuuttia tasaista juoksua vakioteholla. Testi vertaa sykettä kummassakin puoliskossa aerobisen ajautuman arvioimiseksi.",
+  "theFastestFiveMinuteWindow": "Nopein viiden minuutin jakso antaa VO2max-vauhtisi.",
+  "noResultYet": "Ei vielä tulosta",
+  "calculateVo2maxPace": "Laske VO2max-vauhti",
+  "calculateLt1": "Laske LT1",
+  "loading2": "Ladataan",
+  "unavailable": "Ei käytettävissä",
+  "noTrainingHistory": "Ei harjoitushistoriaa",
+  "fitnessCtl": "Kunto (CTL)",
+  "fatigueAtl": "Väsymys (ATL)",
+  "formTsb": "Päiväkunto (TSB)",
+  "noHistory": "Ei historiaa",
+  "fresh": "Virkeä",
+  "optimal": "Optimaalinen",
+  "neutral": "Neutraali",
+  "tired": "Väsynyt",
+  "veryFatigued": "Erittäin väsynyt",
+  "garminRunningVo2max": "Garmin-juoksun VO2max",
+  "garminCyclingVo2max": "Garmin-pyöräilyn VO2max",
+  "aerobicThreshold2": "Aerobinen kynnys",
+  "driftDriftAt": "Ajautuma {drift} % · {at}",
+  "@driftDriftAt": {
+    "placeholders": {
+      "drift": {
+        "type": "Object"
+      },
+      "at": {
+        "type": "Object"
+      }
+    }
+  },
+  "activityHours": "Aktiviteettitunnit",
+  "activityKm": "Aktiviteettikilometrit",
+  "tap5MinuteMaxTest": "Napauta · 5 min maksimitesti",
+  "setFtpToCalculatePower": "Aseta FTP laskeaksesi tehoalueet",
+  "cyclingPowerZones2": "Pyöräilyn tehoalueet",
+  "pfitzingerZones2": "Pfitzinger-alueet",
+  "completeAnLt2TestTo": "Tee LT2-testi laskeaksesi juoksualueet.",
+  "setFtpToCalculatePower2": "Aseta FTP laskeaksesi tehoalueet.",
+  "endurance": "Kestävyys",
+  "threshold": "Kynnys",
+  "anaerobic": "Anaerobinen",
+  "whatExplainsThisRise": "Mikä selittää tämän nousun?",
+  "whatExplainsThisDrop": "Mikä selittää tämän laskun",
+  "whatExplainsThisRise2": "Mikä selittää tämän nousun",
+  "editsAreKeptInFjelia": "Muutokset säilyvät Fjeliassa paikallisena kopiona tälle päivälle. Garminin harjoitusta ei muuteta.",
+  "howDoIExecuteThis": "Miten suoritan tämän harjoituksen?",
+  "shareHealthContextWithName": "Jaetaanko terveyskonteksti palvelun {name} kanssa?",
+  "@shareHealthContextWithName": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "yourMessageAndAHealth": "Viestisi ja terveys-/harjoitusyhteenveto lähetetään tälle pilvipohjaiselle tekoälypalvelulle. Nimet ja GPS jätetään luodusta yhteenvedosta pois.",
+  "couldNotGetAReply": "Vastausta ei saatu. Tarkista tekoälyasetuksesi ja yritä uudelleen.",
+  "askAboutYourRecoveryTraining": "Kysy palautumisestasi, harjoittelustasi tai tämän päivän suunnitelmasta.",
+  "noSyncYet": "Ei vielä synkronoitu",
+  "lastSyncLastContext": "Viimeisin synkronointi: {last} {context}",
+  "@lastSyncLastContext": {
+    "placeholders": {
+      "last": {
+        "type": "Object"
+      },
+      "context": {
+        "type": "Object"
+      }
+    }
+  },
+  "seasonWithTradeOffs": "Kausi: kompromisseineen",
+  "seasonNeedsYourDecision": "Kausi: tarvitsee päätöksesi",
+  "seasonCannotBeCombined": "Kausi: ei yhdistettävissä",
+  "seasonProvisional": "Kausi: alustava",
+  "season": "Kausi",
+  "allGoalsFit": "Kaikki tavoitteet mahtuvat mukaan.",
+  "goalTargetfinishsecondsgoal": "Tavoite {targetFinishSeconds}{goal}",
+  "@goalTargetfinishsecondsgoal": {
+    "placeholders": {
+      "targetFinishSeconds": {
+        "type": "Object"
+      },
+      "goal": {
+        "type": "Object"
+      }
+    }
+  },
+  "estEstimateestimate2": "Arv. {estimate}{estimate2}",
+  "@estEstimateestimate2": {
+    "placeholders": {
+      "estimate": {
+        "type": "Object"
+      },
+      "estimate2": {
+        "type": "Object"
+      }
+    }
+  },
+  "doneDoneby": "Tehty · {doneBy}",
+  "@doneDoneby": {
+    "placeholders": {
+      "doneBy": {
+        "type": "Object"
+      }
+    }
+  },
+  "garminWorkoutWorkout": "Garmin-harjoitus · {workout}",
+  "@garminWorkoutWorkout": {
+    "placeholders": {
+      "workout": {
+        "type": "Object"
+      }
+    }
+  },
+  "moveAnyway": "Siirretäänkö silti?",
+  "wattsNeedYourFtpSet": "Wattit tarvitsevat FTP:si: aseta se kohdassa Kuormitus, Kynnykset.",
+  "mainTargetInWattsFrom": "Päätavoite watteina FTP:stäsi, syke ohjeena.",
+  "mainTargetHeartRateWatts": "Päätavoite syke; wattia ei ole asetettu kellossa.",
+  "taperPhase": "Kevennysvaihe",
+  "recoverySession": "Palauttava harjoitus",
+  "closeToYourEvent": "Lähellä tapahtumaasi",
+  "noWorkoutStructureAvailable": "Harjoitusrakennetta ei ole saatavilla.",
+  "aerobic": "Aerobinen",
+  "pushAgainToUpdateYour": "Lähetä uudelleen päivittääksesi kellosi kalenterin.",
+  "workoutSentToLabel": "Harjoitus lähetetty palveluun {label}",
+  "@workoutSentToLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "updating2": "Päivitetään…",
+  "pushToLabel": "Lähetä palveluun {label}",
+  "@pushToLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "shareExerciseListForLabel": "Jaa liikelista palvelulle {label}",
+  "@shareExerciseListForLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "shareWorkoutForLabel": "Jaa harjoitus palvelulle {label}",
+  "@shareWorkoutForLabel": {
+    "placeholders": {
+      "label": {
+        "type": "Object"
+      }
+    }
+  },
+  "whyNothingIsAddedTo": "Miksi? Mitään ei lisätä täydennykseksi.",
+  "workout": "Harjoitus",
+  "recordedActivityLinkedToThis": "Tallennettu aktiviteetti linkitetty tähän harjoitukseen",
+  "matchedToTheRecordedWorkout": "Yhdistetty tallennetun harjoituksen alkuun",
+  "matchedByWorkoutNameSport": "Yhdistetty harjoituksen nimen, lajin ja päivämäärän perusteella",
+  "matchedBySportDateAnd": "Yhdistetty lajin, päivämäärän ja keston perusteella",
+  "planPlannedminutesMin": "Suunnitelma {plannedMinutes} min",
+  "@planPlannedminutesMin": {
+    "placeholders": {
+      "plannedMinutes": {
+        "type": "Object"
+      }
+    }
+  },
+  "maxHr": "Maksimisyke",
+  "trainingLoad2": "Harjoituskuormitus",
+  "active": "Aktiivinen",
+  "avgPace": "Keskivauhti",
+  "avgSpeed": "Keskinopeus",
+  "avgPower": "Keskiteho",
+  "elevation2": "Nousu",
+  "altitude": "Korkeus",
+  "explainMyHrvBeforeAnd": "Selitä HRV:ni ennen tätä harjoitusta ja sen jälkeen. Mikä on vertailukelpoista, mikä ei ja mikä on vielä tuntematonta?",
+  "deleteActivity": "Poistetaanko aktiviteetti?",
+  "removeThisActivityFromThe": "Poistetaanko tämä aktiviteetti paikallisesta historiasta? Myöhempi palveluntarjoajan synkronointi voi tuoda sen uudelleen.",
+  "howDidThisSessionGo": "Miten tämä harjoitus meni ja mitä se tarkoittaa seuraaville päivilleni?",
+  "currentFixedFixed2": "Nykyinen {fixed}, {fixed2}",
+  "@currentFixedFixed2": {
+    "placeholders": {
+      "fixed": {
+        "type": "Object"
+      },
+      "fixed2": {
+        "type": "Object"
+      }
+    }
+  },
+  "setUpInTrainingSettings": "Määritä harjoitusasetuksissa",
+  "couldNotLoadHeatData": "Lämpötietoja ei voitu ladata – napauta nähdäksesi lisätiedot",
+  "loadingHeatHistory": "Ladataan lämpöhistoriaa…",
+  "noHeatDataYet": "Ei vielä lämpötietoja",
+  "optimalLowHigh": "Optimaalinen {low}–{high}",
+  "@optimalLowHigh": {
+    "placeholders": {
+      "low": {
+        "type": "Object"
+      },
+      "high": {
+        "type": "Object"
+      }
+    }
+  },
+  "optimalLowHighTrimp": "Optimaalinen: {low}–{high} TRIMP",
+  "@optimalLowHighTrimp": {
+    "placeholders": {
+      "low": {
+        "type": "Object"
+      },
+      "high": {
+        "type": "Object"
+      }
+    }
+  },
+  "targetUnavailableSyncTrainingHistory": "Tavoite ei käytettävissä – synkronoi harjoitushistoria",
+  "workoutQualifiedForHeatAccumulation": "Harjoitus kelpasi lämpökertymään.",
+  "workoutDidNotAddHeat": "Harjoitus ei lisännyt lämpökertymää.",
+  "performanceTime": "Suoritus / Aika",
+  "performanceDistance": "Suoritus / Matka",
+  "noRecordedRoute": "Ei tallennettua reittiä",
+  "zoomIn": "Lähennä",
+  "zoomOut": "Loitonna",
+  "fitRoute": "Sovita reitti",
+  "fullscreenMap": "Kartta koko näytölle",
+  "openstreetmapContributors2": "OpenStreetMapin tekijät",
+  "appleIntelligenceIsUnavailableShowing": "Apple Intelligence ei ole käytettävissä. Näytetään yhteenveto ilman tekoälyä.",
+  "generateAiBriefing": "Luodaanko tekoälykatsaus?",
+  "retryAiBriefing": "Yritä tekoälykatsausta uudelleen",
+  "generateBriefing": "Luo katsaus",
+  "discussThisBriefingWithMe": "Keskustele tästä katsauksesta kanssani ja ehdota paras seuraava toimenpide.\n\n{text}",
+  "@discussThisBriefingWithMe": {
+    "placeholders": {
+      "text": {
+        "type": "Object"
+      }
+    }
+  },
+  "whyThisRecommendationWhichOf": "Miksi tämä suositus? Mitkä lukuni ja tietoaukot johtivat siihen, ja mikä muuttaisi sen?\n\n{text}",
+  "@whyThisRecommendationWhichOf": {
+    "placeholders": {
+      "text": {
+        "type": "Object"
+      }
+    }
+  },
+  "avg2": "Keskim.",
+  "peak2": "Huippu",
+  "notEnoughContinuousReadingsFor": "Ei tarpeeksi yhtäjaksoisia mittauksia keskiarvoon.",
+  "recordedCoverageInhourshInminutesminTime": "Tallennettu kattavuus: {inHours} h {inMinutes} min · aikapainotettu keskiarvo",
+  "@recordedCoverageInhourshInminutesminTime": {
+    "placeholders": {
+      "inHours": {
+        "type": "Object"
+      },
+      "inMinutes": {
+        "type": "Object"
+      }
+    }
+  },
+  "lying": "Makuulla",
+  "noHrvReadingsInThis": "Ei HRV-mittauksia tällä jaksolla",
+  "overnightHrvComesFromYour": "Yöllinen HRV tulee kellostasi, hetkimittaukset Polar H10:stä (RMSSD). Menetelmät eroavat: vertaa trendejä, ei yksittäisiä arvoja.",
+  "noReadings": "Ei mittauksia",
+  "whenDidTheWorkoutStart": "Milloin harjoitus alkoi?",
+  "whenDidItEnd": "Milloin se päättyi?",
+  "last3Months": "Viimeiset 3 kuukautta",
+  "lastYear": "Viime vuosi",
+  "lastDaysDays": "Viimeiset {days} päivää",
+  "@lastDaysDays": {
+    "placeholders": {
+      "days": {
+        "type": "Object"
+      }
+    }
+  },
+  "nowOnCurrentTapA": "Nyt {current}. Napauta päivää tai vedä harjoitus sille. Vaiheet pysyvät ennallaan.",
+  "@nowOnCurrentTapA": {
+    "placeholders": {
+      "current": {
+        "type": "Object"
+      }
+    }
+  },
+  "monthView": "Kuukausinäkymä",
+  "syncing": "Synkronoidaan",
+  "trendUnavailable": "Trendi ei käytettävissä",
+  "stable": "Vakaa",
+  "increasing": "Nouseva",
+  "decreasing": "Laskeva",
+  "unclear": "Epäselvä",
+  "notComparable": "Ei vertailukelpoinen",
+  "waitingForAfter": "Odotetaan jälkeen-mittausta",
+  "afterOnly": "Vain jälkeen",
+  "waitingForTheActualWorkout": "Odotetaan harjoituksen todellista päättymistä.",
+  "reminderAroundTolocal": "Muistutus noin {toLocal}",
+  "@reminderAroundTolocal": {
+    "placeholders": {
+      "toLocal": {
+        "type": "Object"
+      }
+    }
+  },
+  "reminderIsDueMeasureWhen": "Muistutus on erääntynyt. Mittaa, kun olet valmis.",
+  "thisReminderIsNoLonger": "Tämä muistutus ei ole enää ajankohtainen. Avaa harjoitus nähdäksesi mittauksesi.",
+  "beforeFixedMilliseconds": "Ennen {fixed} millisekuntia. ",
+  "@beforeFixedMilliseconds": {
+    "placeholders": {
+      "fixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "afterFixedMilliseconds": "Jälkeen {fixed} millisekuntia",
+  "@afterFixedMilliseconds": {
+    "placeholders": {
+      "fixed": {
+        "type": "Object"
+      }
+    }
+  },
+  "changeDeltamsMillisecondsDeltapercentPercent": "Muutos {deltaMs} millisekuntia, {deltaPercent} prosenttia.",
+  "@changeDeltamsMillisecondsDeltapercentPercent": {
+    "placeholders": {
+      "deltaMs": {
+        "type": "Object"
+      },
+      "deltaPercent": {
+        "type": "Object"
+      }
+    }
+  },
+  "noPreTrainingMeasurementRecorded": "Harjoitusta edeltävää mittausta ei ole kirjattu.",
+  "notMeasuredYet": "Ei vielä mitattu",
+  "leftOutOfTheComparison": "Jätetty vertailun ulkopuolelle: {excludedTotal} harjoitusta ({c}).",
+  "@leftOutOfTheComparison": {
+    "placeholders": {
+      "excludedTotal": {
+        "type": "Object"
+      },
+      "c": {
+        "type": "Object"
+      }
+    }
+  },
+  "notFromThisWorkout": "Ei tästä harjoituksesta",
+  "useAsBefore": "Käytä ennen-arvona",
+  "useAsAfter": "Käytä jälkeen-arvona",
+  "beforeNotMeasured": "Ennen · ei mitattu",
+  "beforeTolocal": "Ennen · {toLocal}",
+  "@beforeTolocal": {
+    "placeholders": {
+      "toLocal": {
+        "type": "Object"
+      }
+    }
+  },
+  "workoutWorkouttext": "Harjoitus · {workoutText}",
+  "@workoutWorkouttext": {
+    "placeholders": {
+      "workoutText": {
+        "type": "Object"
+      }
+    }
+  },
+  "afterNotMeasuredYet": "Jälkeen · ei vielä mitattu",
+  "afterTolocal": "Jälkeen · {toLocal}",
+  "@afterTolocal": {
+    "placeholders": {
+      "toLocal": {
+        "type": "Object"
+      }
+    }
+  },
+  "yourSimilarWorkoutsEligibleTolocal": "Samankaltaiset harjoituksesi ({eligible}, {toLocal}–{toLocal2}): mediaani {medianMs} ms, keskimmäinen puolisko {q1Ms}–{q3Ms} ms.",
+  "@yourSimilarWorkoutsEligibleTolocal": {
+    "placeholders": {
+      "eligible": {
+        "type": "Object"
+      },
+      "toLocal": {
+        "type": "Object"
+      },
+      "toLocal2": {
+        "type": "Object"
+      },
+      "medianMs": {
+        "type": "Object"
+      },
+      "q1Ms": {
+        "type": "Object"
+      },
+      "q3Ms": {
+        "type": "Object"
+      }
+    }
+  },
+  "howHardDidItFeel": "Kuinka raskasta se tuntui? (RPE)",
+  "loadMetric": "Kuormitus",
+  "clearAction": "Tyhjennä",
+  "routeFinish": "Maali",
+  "month2": "KUUKAUSI",
+  "week2": "VIIKKO",
+  "quarter": "NELJÄNNES",
+  "year": "VUOSI",
+  "easy3": "KEVYT",
+  "mod": "KOHTAL.",
+  "hard": "RASKAS",
+  "protocol": "OHJEET",
+  "calculate": "LASKE",
+  "warmUp": "LÄMMITTELY",
+  "coolDown": "LOPPUVERRYTTELY",
+  "ftpCycling": "FTP pyöräily",
+  "ftpFtpwattsWWattsperkgW": "FTP {ftpWatts} W · {wattsPerKg} W/kg",
+  "@ftpFtpwattsWWattsperkgW": {
+    "placeholders": {
+      "ftpWatts": {
+        "type": "Object"
+      },
+      "wattsPerKg": {
+        "type": "Object"
+      }
+    }
+  },
+  "thisWeekSoFar": "TÄMÄ VIIKKO · TÄHÄN MENNESSÄ",
+  "duration2": "KESTO",
+  "distance2": "MATKA",
+  "sport2": "LAJI",
+  "repeatSets": "TOISTOSARJAT",
+  "aboutThisWorkout": "TIETOJA TÄSTÄ HARJOITUKSESTA",
+  "workoutStructure": "HARJOITUKSEN RAKENNE",
+  "health2": "TERVEYS",
+  "high2": "KORKEA",
+  "elevated": "KOHOLLA",
+  "normal": "NORMAALI",
+  "tomorrow": "HUOMENNA",
+  "skipped2": "OHITETTU",
+  "weeklyPlan": "VIIKKOSUUNNITELMA",
+  "activityLog3": "AKTIVITEETTILOKI",
+  "skippedTouppercase": "OHITETTU · {toUpperCase}",
+  "@skippedTouppercase": {
+    "placeholders": {
+      "toUpperCase": {
+        "type": "Object"
+      }
+    }
+  },
+  "primaryZone": "PÄÄALUE",
+  "coachingCues": "VALMENNUSVINKIT",
+  "targets": "TAVOITTEET",
+  "adaptation": "MUKAUTUMINEN",
+  "done2": "TEHTY",
+  "notRecorded2": "EI KIRJATTU",
+  "planned": "SUUNNITELTU",
+  "extra": "YLIMÄÄRÄINEN",
+  "optimal2": "OPTIMAALINEN",
+  "qualified": "KELPOINEN",
+  "temp": "LÄMPÖ",
+  "humidity2": "ILMANKOSTEUS",
+  "pressure": "ILMANPAINE",
+  "wetBulb": "MÄRKÄLÄMPÖTILA",
+  "paceMinKm": "Vauhti (min/km)",
+  "speedKmH": "Nopeus (km/h)",
+  "elevationM": "Nousu (m)",
+  "powerW": "TEHO (W)",
+  "performanceTime2": "SUORITUS / AIKA",
+  "performanceDistance2": "SUORITUS / MATKA",
+  "load2": "KUORMITUS",
+  "day2": "PÄIVÄ",
+  "allTime": "KOKO AIKA",
+  "hrvAroundThisWorkout2": "HRV tämän harjoituksen ympärillä. ",
+  "lowReserve": "MATALA VARANTO",
+  "goodReserve": "HYVÄ VARANTO",
+  "latestReadingAtTolocal": "Viimeisin mittaus klo {toLocal}",
+  "@latestReadingAtTolocal": {
+    "placeholders": {
+      "toLocal": {
+        "type": "Object"
+      }
+    }
+  },
+  "weeklyAvg": "VIIKKOKESKIARVO",
+  "monthlyAvg": "KUUKAUSIKESKIARVO",
+  "systolic2": "SYSTOLINEN",
+  "diastolic2": "DIASTOLINEN",
+  "hourlyVariation": "TUNTIVAIHTELU",
+  "dailyVariation": "PÄIVÄVAIHTELU",
+  "sys2": "SYS",
+  "dia": "DIA",
+  "bluetoothDevices": "BLUETOOTH-LAITTEET",
+  "accountsServices": "TILIT JA PALVELUT",
+  "flowLoginOptional": "FLOW-KIRJAUTUMINEN (VALINNAINEN)",
+  "polarFlowLogin": "POLAR FLOW -KIRJAUTUMINEN",
+  "raceGoal": "KISATAVOITE",
+  "experienceLevel": "KOKEMUSTASO",
+  "weeklySchedule2": "VIIKKOAIKATAULU",
+  "sessionsPerDay2": "HARJOITUKSIA PÄIVÄSSÄ",
+  "aboutYou": "TIETOJA SINUSTA",
+  "yourActivities2": "AKTIVITEETTISI",
+  "latestReadingAtTimestamp": "Viimeisin mittaus klo {timestamp}",
+  "@latestReadingAtTimestamp": {
+    "placeholders": {
+      "timestamp": {
+        "type": "Object"
+      }
+    }
+  },
+  "poorSleep": "HUONO UNI",
+  "fairSleep": "KOHTALAINEN UNI",
+  "goodSleep": "HYVÄ UNI",
+  "hoursOfSleep": "UNITUNTIA",
+  "sleepNeeded": "TARVITTAVA UNI",
+  "deepSleep": "SYVÄ UNI",
+  "exercises2": "LIIKKEET",
+  "strengthSummary": "VOIMAYHTEENVETO",
+  "strengthDraft": "VOIMA · LUONNOS",
+  "strengthFinishedWithGaps": "VOIMA · PÄÄTETTY AUKKOINEEN",
+  "strength2": "VOIMA",
+  "wind": "TUULI",
+  "sun2": "AURINKO",
+  "cloud": "PILVET",
+  "dataSourceUpdatedFetchedat": "Tiedot: {source} · Päivitetty {fetchedAt}",
+  "@dataSourceUpdatedFetchedat": {
+    "placeholders": {
+      "source": {
+        "type": "Object"
+      },
+      "fetchedAt": {
+        "type": "Object"
+      }
+    }
+  },
+  "coros2": "COROS",
+  "rmssdMs": "RMSSD · ms",
+  "sdnnMs": "SDNN · ms",
+  "now2": "NYT",
+  "awake": "HEREILLÄ",
+  "light": "KEVYT",
+  "deep2": "SYVÄ",
+  "sqliteOrm": "SQLite ORM",
+  "httpClients": "HTTP-asiakkaat",
+  "gpsLocation": "GPS-sijainti",
+  "hdlCholesterol": "HDL-kolesteroli",
+  "ldlCholesterol": "LDL-kolesteroli",
+  "raceName": "KILPAILUN NIMI",
+  "mtb": "MTB",
+  "distanceKm": "Matka (km)",
+  "priority": "PRIORITEETTI",
+  "elevationGainM": "Nousu (m)",
+  "targetTime": "TAVOITEAIKA",
+  "raceDate": "KILPAILUPÄIVÄ",
+  "participation": "OSALLISTUMINEN",
+  "whatIWantFromIt": "MITÄ HALUAN SIITÄ",
+  "periodTimeline": "{period} · AIKAJANA",
+  "@periodTimeline": {
+    "placeholders": {
+      "period": {
+        "type": "Object"
+      }
+    }
+  },
+  "tabPlan": "OHJELMA",
+  "tabLoad": "KUORMA",
+  "tabCoach": "VALMENTAJA",
+  "hrDriftTestLt1": "SYKKEEN AJAUTUMISTESTI – LT1",
+  "asSentByGarmin": "GARMININ LÄHETTÄMÄNÄ",
+  "noData2": "EI TIETOJA",
+  "noTarget": "EI TAVOITETTA",
+  "noHeatLoad": "EI LÄMPÖKUORMAA",
+  "hrBpm": "Syke (bpm)",
+  "aiBriefingUnavailableShowingA": "Tekoälykatsaus ei ole käytettävissä. Näytetään yhteenveto ilman tekoälyä.",
+  "uvIndex2": "UV-INDEKSI",
+  "aiBriefing": "Tekoälykatsaus",
+  "uiFrameworkByGoogle": "Googlen käyttöliittymäkehys",
+  "unableToLoadData": "Tietoja ei voitu ladata",
+  "briefingSummary": "Palautuminen {recovery} / 100. Uni {sleep} / 100. Tämän päivän harjoituskuormitus on {load} TRIMP.",
+  "@briefingSummary": {
+    "placeholders": {
+      "recovery": {
+        "type": "Object"
+      },
+      "sleep": {
+        "type": "Object"
+      },
+      "load": {
+        "type": "Object"
+      }
+    }
+  },
+  "morningBriefing": "Aamukatsaus",
+  "lunchBriefing": "Lounaskatsaus",
+  "afternoonBriefing": "Iltapäiväkatsaus",
+  "eveningBriefing": "Iltakatsaus",
+  "appleUnusableAnswer": "Apple Intelligence ei pystynyt tuottamaan käyttökelpoista vastausta: se toisti itseään tai tietojasi. Muotoile kysymys uudelleen tai valitse asetuksista toinen tekoälypalvelu.",
+  "appleCouldNotAnswer": "Apple Intelligence ei pystynyt vastaamaan. Yritä uudelleen.",
+  "appleNotAvailableOnDevice": "Apple Intelligence ei ole käytettävissä tällä laitteella.",
+  "appleLanguageRejected": "Apple Intelligence hylkäsi pyynnön kielen. Kokeile lyhyttä kysymystä englanniksi. Tarkista myös iPhonen ja Sirin kieliasetukset.",
+  "appleRequestTooLarge": "Apple Intelligence ei pystynyt käsittelemään pyyntöä. Kokeile lyhyempää kysymystä.",
+  "messageTooLongForApple": "Tämä viesti on liian pitkä Apple Intelligencelle. Lyhennä sitä ja lähetä uudelleen.",
+  "vo2maxRunning": "VO₂max juoksu",
+  "vo2maxCycling": "VO₂max pyöräily",
+  "vo2maxPaceLabel": "VO₂max-vauhti",
+  "lt1Threshold": "LT1-kynnys",
+  "lt2Threshold": "LT2-kynnys",
+  "hoursPreviousWeek": "{value} h edellisellä viikolla",
+  "@hoursPreviousWeek": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "kmPreviousWeek": "{value} km edellisellä viikolla",
+  "@kmPreviousWeek": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "thirtyMinuteTimeTrial": "30 minuutin aika-ajo",
+  "thirtyMinTtDate": "30 min TT · {date}",
+  "@thirtyMinTtDate": {
+    "placeholders": {
+      "date": {
+        "type": "Object"
+      }
+    }
+  },
+  "yesterday2": "EILEN",
+  "briefHeadGreen": "Olet hyvin palautunut.",
+  "briefHeadYellow": "Kuormitus on hieman koholla.",
+  "briefHeadRed": "Olet selvästi kuormittunut.",
+  "briefMain": "Pääsyyt: {reasons}.",
+  "@briefMain": {
+    "placeholders": {
+      "reasons": {
+        "type": "Object"
+      }
+    }
+  },
+  "briefAllClear": "Mikään arvoistasi ei näytä varoitusmerkkiä.",
+  "briefAdviceGreen": "Harjoittele suunnitelman mukaan.",
+  "briefAdviceYellow": "Pidä suunnitelma, mutta älä lisää tehoa.",
+  "briefAdviceRed": "Palautuminen ensin: kevyt päivä tai lepo.",
+  "briefReasonHrvLow": "matala unen HRV",
+  "briefReasonHrvHigh": "korkea unen HRV",
+  "briefReasonRhrUp": "koholla oleva leposyke",
+  "briefReasonRhrDown": "matala leposyke",
+  "briefReasonSleepShort": "liian vähän unta",
+  "briefReasonSleepGood": "unentarve täyttyi",
+  "briefReasonEnergyLow": "vähän energiaa",
+  "briefReasonEnergyHigh": "hyvä energia",
+  "briefReasonStressHigh": "korkea stressi",
+  "briefReasonRespHigh": "kohonnut hengitystiheys",
+  "briefReasonSpo2Low": "matala veren happi",
+  "briefReasonSkinTempOff": "epätavallinen ihon lämpötila",
+  "briefReasonFormTired": "kertynyt harjoitusväsymys",
+  "briefReasonFormVeryTired": "erittäin suuri harjoitusväsymys",
+  "briefReasonFormFresh": "virkeä ja levännyt",
+  "briefTrainingHrvUp": "HRV:si nousi harjoituksen jälkeen, hyvä merkki.",
+  "briefTrainingHrvDown": "HRV:si laski harjoituksen jälkeen, ei niin hyvä merkki."
+}

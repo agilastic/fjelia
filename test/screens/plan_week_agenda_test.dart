@@ -1,3 +1,5 @@
+import 'package:fjelia/l10n/app_localizations.dart';
+
 import 'dart:io';
 import 'dart:ui' as ui;
 
@@ -130,6 +132,8 @@ void main() {
           planWeekProvider.overrideWith((ref, start) => Stream.value(week())),
         ],
         child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           theme: AppTheme.dark(),
           home: Scaffold(
             backgroundColor: const Color(0xFF111111),
@@ -176,9 +180,8 @@ void main() {
         final image = await boundary.toImage(pixelRatio: 2);
         final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
         await Directory(output).create(recursive: true);
-        await File(
-          '$output/week.png',
-        ).writeAsBytes(bytes!.buffer.asUint8List());
+        await File('$output/week.png')
+            .writeAsBytes(bytes!.buffer.asUint8List());
         image.dispose();
       });
     }
@@ -212,6 +215,8 @@ void main() {
           planWeekProvider.overrideWith((ref, start) => Stream.value(combined)),
         ],
         child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           theme: AppTheme.dark(),
           home: const Scaffold(
             body: SingleChildScrollView(

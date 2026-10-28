@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -56,8 +58,11 @@ class _PlanEditorState extends ConsumerState<StrengthPlanEditor> {
       ..hideCurrentSnackBar()
       ..showSnackBar(
         SnackBar(
-          content: Text('$what removed'),
-          action: SnackBarAction(label: 'Undo', onPressed: () => edit(before)),
+          content: Text(context.l10n.whatRemoved(what)),
+          action: SnackBarAction(
+            label: context.l10n.undo,
+            onPressed: () => edit(before),
+          ),
         ),
       );
   }
@@ -82,16 +87,17 @@ class _PlanEditorState extends ConsumerState<StrengthPlanEditor> {
   Future<void> saveAsTemplate() async {
     final values = await showStrengthFieldsDialog(
       context,
-      title: 'Save as template',
-      confirm: 'Save',
+      title: context.l10n.saveAsTemplate,
+      confirm: context.l10n.save,
       fields: [
         strengthDialogField(
-          'Template name',
+          context.l10n.templateName,
           initial: plan.title ?? '',
           number: false,
         ),
       ],
-      validate: (v) => v.single.trim().isEmpty ? 'Name the template.' : null,
+      validate: (v) =>
+          v.single.trim().isEmpty ? context.l10n.nameTheTemplate : null,
     );
     final title = values?.single.trim();
     if (title == null || title.isEmpty || !mounted) return;
@@ -104,11 +110,7 @@ class _PlanEditorState extends ConsumerState<StrengthPlanEditor> {
       ref.invalidate(strengthTemplatesProvider);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Saved “$title” as a template. This workout is unchanged until you save it.',
-            ),
-          ),
+          SnackBar(content: Text(context.l10n.savedTitleAsATemplate(title))),
         );
       }
     });
@@ -179,7 +181,7 @@ class _PlanEditorState extends ConsumerState<StrengthPlanEditor> {
       target: s,
       convention: e.convention,
       unit: unit,
-      title: '${e.name} · Set $n',
+      title: context.l10n.nameSetN(e.name, n),
     );
     if (next != null) edit(plan.updateSet(e.id, next));
   }
@@ -194,7 +196,7 @@ class _PlanEditorState extends ConsumerState<StrengthPlanEditor> {
       target: base.copyWith(id: 'all'),
       convention: e.convention,
       unit: unit,
-      title: '${e.name} · All working sets',
+      title: context.l10n.nameAllWorkingSets(e.name),
     );
     if (next != null) edit(plan.applyToWorkingSets(e.id, next));
   }
@@ -213,19 +215,19 @@ class _PlanEditorState extends ConsumerState<StrengthPlanEditor> {
 
     final values = await showStrengthFieldsDialog(
       context,
-      title: '${b.kind.label} rest',
-      confirm: 'Done',
+      title: context.l10n.labelRest(b.kind.label),
+      confirm: context.l10n.done,
       fields: [
         strengthDialogField(
-          'Between exercises',
+          context.l10n.betweenExercises,
           initial: b.restBetweenExercisesSeconds?.toString() ?? '',
-          hint: 'Seconds or m:ss',
+          hint: context.l10n.secondsOrMSs,
           number: false,
         ),
         strengthDialogField(
-          'Between rounds',
+          context.l10n.betweenRounds,
           initial: b.restBetweenRoundsSeconds?.toString() ?? '',
-          hint: 'Seconds or m:ss',
+          hint: context.l10n.secondsOrMSs,
           number: false,
         ),
       ],
@@ -247,8 +249,8 @@ class _PlanEditorState extends ConsumerState<StrengthPlanEditor> {
 
   Widget exerciseMenu(StrengthPlannedExercise e, StrengthBlock b, bool last) =>
       PopupMenuButton<String>(
-        tooltip: 'Actions for ${e.name}',
-        icon: const Icon(Icons.more_horiz, color: muted),
+        tooltip: context.l10n.actionsForName(e.name),
+        icon: Icon(Icons.more_horiz, color: muted),
         onSelected: (v) {
           switch (v) {
             case 'edit':
@@ -272,31 +274,31 @@ class _PlanEditorState extends ConsumerState<StrengthPlanEditor> {
           }
         },
         itemBuilder: (_) => [
-          const PopupMenuItem(value: 'edit', child: Text('Edit exercise')),
-          const PopupMenuItem(value: 'all', child: Text('Apply to all sets')),
-          const PopupMenuItem(value: 'dup', child: Text('Duplicate')),
+          PopupMenuItem(value: 'edit', child: Text(context.l10n.editExercise)),
+          PopupMenuItem(value: 'all', child: Text(context.l10n.applyToAllSets)),
+          PopupMenuItem(value: 'dup', child: Text(context.l10n.duplicate)),
           if (plan.canMove(e.id, -1))
-            const PopupMenuItem(value: 'up', child: Text('Move up')),
+            PopupMenuItem(value: 'up', child: Text(context.l10n.moveUp)),
           if (plan.canMove(e.id, 1))
-            const PopupMenuItem(value: 'down', child: Text('Move down')),
+            PopupMenuItem(value: 'down', child: Text(context.l10n.moveDown)),
           if (!last && (!b.grouped || b.exercises.last.id == e.id)) ...[
-            const PopupMenuItem(
+            PopupMenuItem(
               value: 'superset',
-              child: Text('Superset with next'),
+              child: Text(context.l10n.supersetWithNext),
             ),
-            const PopupMenuItem(
+            PopupMenuItem(
               value: 'circuit',
-              child: Text('Circuit with next'),
+              child: Text(context.l10n.circuitWithNext),
             ),
           ],
-          const PopupMenuItem(value: 'remove', child: Text('Remove')),
+          PopupMenuItem(value: 'remove', child: Text(context.l10n.remove)),
         ],
       );
 
   Widget setMenu(StrengthPlannedExercise e, StrengthSetTarget s, int n) =>
       PopupMenuButton<String>(
-        tooltip: 'Actions for set $n',
-        icon: const Icon(Icons.more_vert, size: 18, color: muted),
+        tooltip: context.l10n.actionsForSetN(n),
+        icon: Icon(Icons.more_vert, size: 18, color: muted),
         onSelected: (v) {
           switch (v) {
             case 'edit':
@@ -304,13 +306,13 @@ class _PlanEditorState extends ConsumerState<StrengthPlanEditor> {
             case 'dup':
               edit(plan.duplicateSet(e.id, s.id));
             case 'remove':
-              remove(plan.removeSet(e.id, s.id), 'Set $n');
+              remove(plan.removeSet(e.id, s.id), context.l10n.setN(n));
           }
         },
-        itemBuilder: (_) => const [
-          PopupMenuItem(value: 'edit', child: Text('Edit set')),
-          PopupMenuItem(value: 'dup', child: Text('Duplicate set')),
-          PopupMenuItem(value: 'remove', child: Text('Remove set')),
+        itemBuilder: (_) => [
+          PopupMenuItem(value: 'edit', child: Text(context.l10n.editSet)),
+          PopupMenuItem(value: 'dup', child: Text(context.l10n.duplicateSet)),
+          PopupMenuItem(value: 'remove', child: Text(context.l10n.removeSet)),
         ],
       );
 
@@ -328,13 +330,19 @@ class _PlanEditorState extends ConsumerState<StrengthPlanEditor> {
           StrengthGroupHeader(
             block: b,
             menu: PopupMenuButton<String>(
-              tooltip: '${b.kind.label} actions',
-              icon: const Icon(Icons.more_horiz, color: muted),
+              tooltip: context.l10n.labelActions(b.kind.label),
+              icon: Icon(Icons.more_horiz, color: muted),
               onSelected: (v) =>
                   v == 'rest' ? editGroupRests(b) : edit(plan.ungroup(b.id)),
-              itemBuilder: (_) => const [
-                PopupMenuItem(value: 'rest', child: Text('Edit rests')),
-                PopupMenuItem(value: 'ungroup', child: Text('Ungroup')),
+              itemBuilder: (_) => [
+                PopupMenuItem(
+                  value: 'rest',
+                  child: Text(context.l10n.editRests),
+                ),
+                PopupMenuItem(
+                  value: 'ungroup',
+                  child: Text(context.l10n.ungroup),
+                ),
               ],
             ),
           ),
@@ -375,7 +383,7 @@ class _PlanEditorState extends ConsumerState<StrengthPlanEditor> {
                   ),
                   onPressed: () => edit(plan.addSet(e.id)),
                   icon: const Icon(Icons.add, size: 18),
-                  label: const Text('Add set'),
+                  label: Text(context.l10n.addSet),
                 ),
               ),
             ],
@@ -389,8 +397,8 @@ class _PlanEditorState extends ConsumerState<StrengthPlanEditor> {
         if (didPop) return;
         if (await confirmAction(
               context,
-              'Discard changes?',
-              'Your edits to this workout are not saved.',
+              context.l10n.discardChanges,
+              context.l10n.yourEditsToThisWorkout,
             ) &&
             context.mounted) {
           dirty = false;
@@ -398,25 +406,25 @@ class _PlanEditorState extends ConsumerState<StrengthPlanEditor> {
         }
       },
       child: SheetPage(
-        title: 'Edit exercises',
+        title: context.l10n.editExercises,
         actions: [
           TextButton(
             onPressed: saving || !dirty ? null : save,
-            child: Text(saving ? 'Saving…' : 'Save'),
+            child: Text(saving ? context.l10n.saving : context.l10n.save),
           ),
         ],
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 4, 16, 32),
           children: [
             Text(
-              widget.ownershipNote ?? 'Changes apply to this workout only. Completed workouts and other sessions stay as they are.',
+              widget.ownershipNote ?? context.l10n.changesApplyToThisWorkout,
               style: const TextStyle(fontSize: 12, color: muted),
             ),
             if (dirty)
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(top: 6),
                 child: Text(
-                  'Unsaved changes',
+                  context.l10n.unsavedChanges,
                   style: TextStyle(fontSize: 12, color: Color(0xFFFFC857)),
                 ),
               ),
@@ -438,7 +446,7 @@ class _PlanEditorState extends ConsumerState<StrengthPlanEditor> {
               ),
               onPressed: addExercise,
               icon: const Icon(Icons.add),
-              label: const Text('Add exercise'),
+              label: Text(context.l10n.addExercise),
             ),
             if (error != null)
               Padding(
@@ -446,7 +454,7 @@ class _PlanEditorState extends ConsumerState<StrengthPlanEditor> {
                 child: Semantics(
                   liveRegion: true,
                   child: Text(
-                    'Could not save: $error',
+                    context.l10n.couldNotSaveError(error ?? ""),
                     style: const TextStyle(color: Colors.redAccent),
                   ),
                 ),
@@ -459,13 +467,15 @@ class _PlanEditorState extends ConsumerState<StrengthPlanEditor> {
                 minimumSize: const Size(0, 48),
               ),
               onPressed: saving || plan.isEmpty ? null : save,
-              child: Text(saving ? 'Saving…' : 'Save for this workout'),
+              child: Text(
+                saving ? context.l10n.saving : context.l10n.saveForThisWorkout,
+              ),
             ),
             const SizedBox(height: 8),
             OutlinedButton(
               style: OutlinedButton.styleFrom(minimumSize: const Size(0, 48)),
               onPressed: saving || plan.isEmpty ? null : saveAsTemplate,
-              child: const Text('Save as template'),
+              child: Text(context.l10n.saveAsTemplate),
             ),
           ],
         ),

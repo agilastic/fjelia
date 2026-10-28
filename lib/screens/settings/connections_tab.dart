@@ -1,3 +1,4 @@
+import '../../l10n/l10n_ext.dart';
 import '../../providers/connection_actions_provider.dart';
 
 import 'package:flutter/material.dart';
@@ -31,51 +32,51 @@ class ConnectionsTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final auth = ref.watch(authProvider);
     return SheetPage(
-      title: 'Connections',
+      title: context.l10n.connections,
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          const SectionLabel('Apple Health'),
+          SectionLabel(context.l10n.appleHealth),
           _Connection(
-            'Apple Health',
+            context.l10n.appleHealth,
             ref.watch(healthConnectPermissionProvider).valueOrNull ?? false,
             const ConnectHealthScreen(fromOnboarding: true),
           ),
-          const SectionLabel('Connected Services'),
+          SectionLabel(context.l10n.connectedServices),
           for (final e in <(ConnectionType, String, bool, Widget)>[
             (
               ConnectionType.garmin,
-              'Garmin Connect',
+              context.l10n.garminConnect,
               auth.garminConnected,
               const ConnectGarminScreen(fromOnboarding: true),
             ),
             (
               ConnectionType.bloodPressure,
-              'Hilo (Blood Pressure)',
+              context.l10n.hiloBloodPressure,
               auth.aktiiaConnected,
               const ConnectAktiiaScreen(fromOnboarding: true),
             ),
             (
               ConnectionType.bodyScale,
-              'Renpho (Body Scale)',
+              context.l10n.renphoBodyScale,
               auth.renphoConnected,
               const ConnectRenphoScreen(fromOnboarding: true),
             ),
             (
               ConnectionType.coros,
-              'Coros',
+              context.l10n.coros,
               ref.watch(corosConnectedProvider).valueOrNull ?? false,
               const ConnectCorosScreen(fromOnboarding: true),
             ),
             (
               ConnectionType.suunto,
-              'Suunto',
+              context.l10n.suunto,
               ref.watch(suuntoConnectedProvider).valueOrNull ?? false,
               const ConnectSuuntoScreen(fromOnboarding: true),
             ),
             (
               ConnectionType.polar,
-              'Polar',
+              context.l10n.polar,
               ref.watch(polarConnectedProvider).valueOrNull ?? false,
               const ConnectPolarScreen(fromOnboarding: true),
             ),
@@ -87,56 +88,57 @@ class ConnectionsTab extends ConsumerWidget {
               disconnect: () =>
                   ref.read(connectionActionsProvider).disconnect(e.$1),
             ),
-          const SectionLabel('Hilo Blood Pressure BLE'),
+          SectionLabel(context.l10n.hiloBloodPressureBle),
           _Connection(
-            'Hilo pod / cuff',
+            context.l10n.hiloPodCuff,
             ref.watch(hiloBleConnectedProvider).valueOrNull ?? false,
             const ConnectHiloBleScreen(fromOnboarding: true),
           ),
           SwitchListTile(
-            title: const Text('Write Heart data to Apple Health'),
+            title: Text(context.l10n.writeHeartDataToApple),
             value: ref.watch(hiloWriteHealthProvider),
             onChanged: (_) =>
                 ref.read(hiloWriteHealthProvider.notifier).toggle(),
           ),
           SwitchListTile(
-            title: const Text('Write Weight data to Apple Health'),
+            title: Text(context.l10n.writeWeightDataToApple),
             value: ref.watch(renphoWriteHealthProvider),
             onChanged: (_) =>
                 ref.read(renphoWriteHealthProvider.notifier).toggle(),
           ),
           const HiloCuffPairingTile(),
-          const SectionLabel('Renpho Scale (BLE)'),
+          SectionLabel(context.l10n.renphoScaleBle),
           const ScalePairingTile(),
-          const SectionLabel('Polar H10 (HRV strap, BLE)'),
+          SectionLabel(context.l10n.polarH10HrvStrapBle),
           _Connection(
-            ref.watch(polarH10PairedProvider).valueOrNull?.name ?? 'Polar H10',
+            ref.watch(polarH10PairedProvider).valueOrNull?.name ??
+                context.l10n.polarH10,
             ref.watch(polarH10PairedProvider).valueOrNull != null,
             const ConnectPolarH10Screen(fromOnboarding: true),
             disconnect: () => ref.read(polarH10ActionsProvider).unpair(),
           ),
-          const HrvReminderTile(),
-          const SectionLabel('Data Source Priority'),
-          const Text(
-            'When multiple sources provide the same metric, the higher source wins. Drag to reorder.',
+          HrvReminderTile(),
+          SectionLabel(context.l10n.dataSourcePriority),
+          Text(
+            context.l10n.whenMultipleSourcesProvideThe,
             style: TextStyle(color: muted, fontSize: 11),
           ),
           ref
               .watch(sourcePriorityProvider)
               .when(
-                loading: () => const LinearProgressIndicator(),
+                loading: () => LinearProgressIndicator(),
                 error: (e, _) => DataError(e),
                 data: (groups) => Column(
                   children: [
                     for (final group in SourceGroup.values) ...[
                       SectionLabel(switch (group) {
-                        SourceGroup.sleep => 'Sleep & Recovery',
-                        SourceGroup.activity => 'Activities & Training',
-                        SourceGroup.body => 'Body & Wellness',
+                        SourceGroup.sleep => context.l10n.sleepRecovery,
+                        SourceGroup.activity => context.l10n.activitiesTraining,
+                        SourceGroup.body => context.l10n.bodyWellness,
                       }),
                       ReorderableListView.builder(
                         shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
+                        physics: NeverScrollableScrollPhysics(),
                         itemCount: groups[group.name]!.length,
                         onReorderItem: (a, b) => runUiAction(
                           context,
@@ -148,17 +150,18 @@ class ConnectionsTab extends ConsumerWidget {
                           final source = groups[group.name]![i];
                           return Card(
                             key: ValueKey('${group.name}-$source'),
-                            margin: const EdgeInsets.only(bottom: 6),
+                            margin: EdgeInsets.only(bottom: 6),
                             child: ListTile(
                               dense: true,
                               leading: Text('${i + 1}'),
                               title: Text(
-                                const {
-                                      'health_connect': 'Apple Health',
-                                      'aktiia': 'Hilo',
-                                      'hilo_ble': 'Hilo BLE',
-                                      'garmin_api': 'Garmin (API)',
-                                      'renpho': 'Renpho Scale',
+                                {
+                                      'health_connect':
+                                          context.l10n.appleHealth,
+                                      'aktiia': context.l10n.hilo,
+                                      'hilo_ble': context.l10n.hiloBle,
+                                      'garmin_api': context.l10n.garminApi,
+                                      'renpho': context.l10n.renphoScale,
                                     }[source] ??
                                     source,
                               ),
@@ -179,7 +182,7 @@ class ConnectionsTab extends ConsumerWidget {
               context,
               () => ref.read(sourcePriorityProvider.notifier).reset(),
             ),
-            child: const Text('Reset to default'),
+            child: Text(context.l10n.resetToDefault),
           ),
         ],
       ),
@@ -201,7 +204,7 @@ class _Connection extends StatelessWidget {
       leading: Icon(Icons.link, color: connected ? mint : muted),
       title: Text(label),
       subtitle: Text(
-        connected ? 'Connected' : 'Not connected',
+        connected ? context.l10n.connected : context.l10n.notConnected,
         style: const TextStyle(color: muted, fontSize: 10),
       ),
       trailing: connected && disconnect != null
@@ -209,20 +212,20 @@ class _Connection extends StatelessWidget {
               onPressed: () async {
                 if (await confirmAction(
                       context,
-                      'Disconnect $label?',
-                      'Your saved measurements will remain on this device.',
+                      context.l10n.disconnectLabel(label),
+                      context.l10n.yourSavedMeasurementsWillRemain,
                     ) &&
                     context.mounted) {
                   await runUiAction(context, disconnect!);
                 }
               },
-              child: const Text(
-                'Disconnect',
+              child: Text(
+                context.l10n.disconnect,
                 style: TextStyle(color: Colors.redAccent, fontSize: 10),
               ),
             )
           : Text(
-              connected ? 'Manage' : 'Connect',
+              connected ? context.l10n.manage : context.l10n.connect,
               style: const TextStyle(color: mint, fontSize: 11),
             ),
       onTap: () => Navigator.push(

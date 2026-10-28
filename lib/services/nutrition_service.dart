@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 import 'dart:convert';
 
 import '../db/database.dart';
@@ -56,13 +58,11 @@ class NutritionService {
   Future<void> savePreferences(NutritionPreferences p) async {
     for (final value in [p.trainedCarbs, p.gelCarbs, p.bottleMl]) {
       if (!value.isFinite || value <= 0) {
-        throw ArgumentError('Serving sizes and tolerance must be positive.');
+        throw ArgumentError(tr.servingSizesAndToleranceMust);
       }
     }
     if (p.trainedCarbs > 120) {
-      throw ArgumentError(
-        'Practised carbohydrate tolerance must not exceed 120 g/h.',
-      );
+      throw ArgumentError(tr.practisedCarbohydrateToleranceMustNot);
     }
     for (final value in [
       p.drinkCarbs,
@@ -70,13 +70,11 @@ class NutritionService {
       p.sweatSodium,
     ].whereType<double>()) {
       if (!value.isFinite || value < 0) {
-        throw ArgumentError('Enter finite, non-negative measurements.');
+        throw ArgumentError(tr.enterFiniteNonNegativeMeasurements);
       }
     }
     if (p.sweatMl == 0) {
-      throw ArgumentError(
-        'Measured sweat rate must be positive or left unknown.',
-      );
+      throw ArgumentError(tr.measuredSweatRateMustBe);
     }
     await write('nutrition:preferences', 'preferences', p.toJson());
   }
@@ -94,19 +92,15 @@ class NutritionService {
       plan.workout.minutes,
     ]) {
       if (!value.isFinite || value < 0) {
-        throw ArgumentError('Targets must be finite and non-negative.');
+        throw ArgumentError(tr.targetsMustBeFiniteAnd);
       }
     }
     if (plan.carbs > plan.preferences.trainedCarbs || plan.carbs > 120) {
-      throw ArgumentError(
-        'Increase practised tolerance in Nutrition settings before choosing a higher target.',
-      );
+      throw ArgumentError(tr.increasePractisedToleranceInNutrition);
     }
     if (plan.preferences.sweatMl != null &&
         plan.fluid > plan.preferences.sweatMl!) {
-      throw ArgumentError(
-        'Fluid target exceeds your measured sweat rate. Review the measurement or target.',
-      );
+      throw ArgumentError(tr.fluidTargetExceedsYourMeasured);
     }
     for (final value in [
       plan.conditions.temperature,
@@ -117,12 +111,12 @@ class NutritionService {
       plan.conditions.altitude,
     ].whereType<double>()) {
       if (!value.isFinite) {
-        throw ArgumentError('Conditions must be finite or unknown.');
+        throw ArgumentError(tr.conditionsMustBeFiniteOr);
       }
     }
     final humidity = plan.conditions.humidity;
     if (humidity != null && (humidity < 0 || humidity > 100)) {
-      throw ArgumentError('Humidity must be between 0 and 100%.');
+      throw ArgumentError(tr.humidityMustBeBetween0);
     }
     await write(plan.workout.key, 'plan', plan.toJson());
   }
@@ -158,18 +152,16 @@ class NutritionService {
   Future<void> saveLog(String activityId, NutritionLog log) async {
     if (log.elapsedMinutes != null &&
         (!log.elapsedMinutes!.isFinite || log.elapsedMinutes! <= 0)) {
-      throw ArgumentError(
-        'Elapsed workout time must be positive or left blank.',
-      );
+      throw ArgumentError(tr.elapsedWorkoutTimeMustBe);
     }
     if (!['draft', 'complete', 'declined'].contains(log.status)) {
       throw ArgumentError('Unknown log state.');
     }
     if (log.noIntake && log.entries.isNotEmpty) {
-      throw ArgumentError('No intake cannot include food or drinks.');
+      throw ArgumentError(tr.noIntakeCannotIncludeFood);
     }
     if (log.status == 'complete' && log.entries.isEmpty && !log.noIntake) {
-      throw ArgumentError('Add an item or confirm that you had no intake.');
+      throw ArgumentError(tr.addAnItemOrConfirm);
     }
     for (final entry in log.entries) {
       if (entry.unknown.any(
@@ -180,7 +172,7 @@ class NutritionService {
       }
       if (entry.name.trim().isEmpty ||
           !['before', 'during', 'after'].contains(entry.phase)) {
-        throw ArgumentError('Each intake needs a product and a valid timing.');
+        throw ArgumentError(tr.eachIntakeNeedsAProduct);
       }
       for (final value in [
         entry.quantity,
@@ -192,26 +184,22 @@ class NutritionService {
         entry.minute,
       ].whereType<double>()) {
         if (!value.isFinite || value < 0) {
-          throw ArgumentError(
-            'Intake amounts must be finite and non-negative.',
-          );
+          throw ArgumentError(tr.intakeAmountsMustBeFinite);
         }
       }
       if (entry.quantity <= 0) {
-        throw ArgumentError('Quantity must be positive.');
+        throw ArgumentError(tr.quantityMustBePositive);
       }
     }
     final activity = await (db.select(
       db.activityRecords,
     )..where((t) => t.activityId.equals(activityId))).getSingleOrNull();
-    if (activity == null) throw StateError('This activity no longer exists.');
+    if (activity == null) throw StateError(tr.thisActivityNoLongerExists);
     final explicit = log.planKey;
     if (explicit != null &&
         explicit.isNotEmpty &&
         await savedPlan(explicit) == null) {
-      throw ArgumentError(
-        'Selected strategy unavailable. Choose another strategy or no comparison.',
-      );
+      throw ArgumentError(tr.selectedStrategyUnavailableChooseAnother);
     }
     final matched = explicit == null ? await _matchedPlan(activityId) : null;
     await write('intake:$activityId', 'intake', {

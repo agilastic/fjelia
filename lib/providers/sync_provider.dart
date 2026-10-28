@@ -190,6 +190,48 @@ Future<void> _autoGeneratePlanIfNeeded(
 // Daily sync
 // ---------------------------------------------------------------------------
 
+/// Waits until nothing is busy: [busy] must stay false for a full [settle]
+/// period and still be false when that period ends, because a sync can be
+/// about to start. Gives up after [timeout] and lets the caller carry on.
+Future<void> waitUntilIdle(
+  bool Function() busy, {
+  bool Function()? stillWanted,
+  Duration settle = const Duration(seconds: 1),
+  Duration poll = const Duration(milliseconds: 500),
+  Duration timeout = const Duration(minutes: 5),
+}) async {
+  final deadline = DateTime.now().add(timeout);
+  while (DateTime.now().isBefore(deadline)) {
+    if (stillWanted != null && !stillWanted()) return;
+    if (busy()) {
+      await Future<void>.delayed(poll);
+      continue;
+    }
+    await Future<void>.delayed(settle);
+    if (stillWanted != null && !stillWanted()) return;
+    if (!busy()) return;
+  }
+}
+
+/// Waits until no sync is running, so work that reads the synced data (the AI
+/// briefing) starts on complete data.
+Future<void> waitForSyncToSettle(
+  Ref ref, {
+  bool Function()? stillWanted,
+  Duration timeout = const Duration(minutes: 5),
+}) => waitUntilIdle(
+  () {
+    try {
+      return ref.read(syncProvider).status == SyncStatus.syncing ||
+          ref.read(historicSyncProvider).running;
+    } catch (_) {
+      return false;
+    }
+  },
+  stillWanted: stillWanted,
+  timeout: timeout,
+);
+
 enum SyncStatus { idle, syncing, done, error }
 
 class SyncState {
@@ -565,7 +607,8 @@ class SyncNotifier extends StateNotifier<SyncState> {
     if (result.garmin > 0 || result.activities > 0 || result.bp > 0) {
       _ref.invalidate(aiBriefingProvider);
       log('[Sync] new data — briefing invalidated');
-      _prewarmBriefing();
+      // After the sync is really finished, never in the middle of it.
+      unawaited(_prewarmBriefingAfterSync());
     }
     final errors = result.errors.join('\n');
     state = state.copyWith(
@@ -580,6 +623,11 @@ class SyncNotifier extends StateNotifier<SyncState> {
       aktiiaAuthError: result.aktiiaAuthError,
       renphoAuthError: result.renphoAuthError,
     );
+  }
+
+  Future<void> _prewarmBriefingAfterSync() async {
+    await waitForSyncToSettle(_ref, stillWanted: () => mounted);
+    if (mounted) _prewarmBriefing();
   }
 
   /// Builds the current period's AI briefing in the background.

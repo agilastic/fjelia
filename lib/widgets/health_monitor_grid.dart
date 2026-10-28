@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 import 'dart:math' as math;
 
 import '../providers/health_monitor_alerts_provider.dart';
@@ -40,7 +42,7 @@ class HealthMonitorGrid extends ConsumerWidget {
       ),
     };
     return SectionCard(
-      title: 'Health Monitor',
+      title: context.l10n.healthMonitor,
       child: LayoutBuilder(
         builder: (context, constraints) {
           final textScale = MediaQuery.textScalerOf(context).scale(11) / 11;

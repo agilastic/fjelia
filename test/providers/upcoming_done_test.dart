@@ -1,3 +1,4 @@
+import 'package:fjelia/l10n/app_localizations.dart';
 import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
@@ -186,6 +187,8 @@ void main() {
     Future<void> show(WidgetTester tester, List<UpcomingPlanEntry> entries) =>
         tester.pumpWidget(
           MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             home: Scaffold(
               body: SingleChildScrollView(
                 child: UpcomingWorkoutList(entries: entries),

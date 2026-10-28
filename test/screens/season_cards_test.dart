@@ -1,3 +1,4 @@
+import 'package:fjelia/l10n/app_localizations.dart';
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/providers/planner_providers.dart';
 import 'package:fjelia/screens/planner/plan_overview_cards.dart';
@@ -36,7 +37,9 @@ Widget host(List<RaceGoal> goals, Map<String, dynamic>? report) =>
         seasonReportProvider.overrideWith((ref) async => report),
         raceFinishEstimateProvider.overrideWith((ref, goal) async => null),
       ],
-      child: const MaterialApp(
+      child: MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(body: SingleChildScrollView(child: RaceCountdownCard())),
       ),
     );

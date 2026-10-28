@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -66,19 +68,17 @@ class _State extends ConsumerState<HiloReportImportSheet> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SectionLabel('Add Hilo BP report'),
+            SectionLabel(context.l10n.addHiloBpReport),
             const SizedBox(height: 8),
-            const Text(
-              'Export the monthly report as PDF in the Hilo app, then choose '
-              'it here. Only the readings are imported; name, e-mail and '
-              'body data in the report are ignored.',
+            Text(
+              context.l10n.exportTheMonthlyReportAs,
               style: TextStyle(color: muted, fontSize: 12),
             ),
             if (!supported)
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(top: 12),
                 child: Text(
-                  'Reading PDF reports is only available on iOS and macOS.',
+                  context.l10n.readingPdfReportsIsOnly,
                   style: TextStyle(color: Colors.red),
                 ),
               ),
@@ -91,14 +91,14 @@ class _State extends ConsumerState<HiloReportImportSheet> {
             if (r != null) ...[
               Text(
                 r.added == 0
-                    ? 'Nothing new: all readings were already stored.'
+                    ? context.l10n.nothingNewAllReadingsWere
                     : '${r.added} readings added'
                           '${r.exported > 0 ? ', ${r.exported} written to Apple Health' : ''}.',
               ),
               const SizedBox(height: 12),
               FilledButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Done'),
+                child: Text(context.l10n.done),
               ),
             ] else if (p != null) ...[
               Text(
@@ -113,17 +113,23 @@ class _State extends ConsumerState<HiloReportImportSheet> {
               const SizedBox(height: 12),
               FilledButton(
                 onPressed: busy || p.newReadings == 0 ? null : () => save(p),
-                child: Text(busy ? 'Importing…' : 'Import ${p.newReadings}'),
+                child: Text(
+                  busy
+                      ? context.l10n.importing
+                      : context.l10n.importNewreadings(p.newReadings),
+                ),
               ),
               TextButton(
                 onPressed: busy ? null : pick,
-                child: const Text('Choose another report'),
+                child: Text(context.l10n.chooseAnotherReport),
               ),
             ] else
               FilledButton.icon(
                 onPressed: busy || !supported ? null : pick,
                 icon: const Icon(Icons.picture_as_pdf_outlined),
-                label: Text(busy ? 'Reading…' : 'Choose report (PDF)'),
+                label: Text(
+                  busy ? context.l10n.reading : context.l10n.chooseReportPdf,
+                ),
               ),
           ],
         ),

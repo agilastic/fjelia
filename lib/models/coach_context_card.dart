@@ -175,6 +175,9 @@ class CoachContextCard {
     required String sport,
     required List<String> extra,
   }) =>
-      '[Session:Status:$status,Date:${DateFormat('yyyy-MM-dd EEE').format(date)},'
+      '[Session:Status:$status,Date:${DateFormat('yyyy-MM-dd').format(date)} ${_weekdays[date.weekday - 1]},'
       'Sport:${sport.replaceAll('_', ' ')},${extra.join(',')}]';
 }
+
+/// English on purpose: the coach context is not shown in the app language.
+const _weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];

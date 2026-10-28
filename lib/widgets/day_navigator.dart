@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -16,7 +18,7 @@ class DayNavigator extends ConsumerWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         IconButton(
-          tooltip: 'Previous day',
+          tooltip: context.l10n.previousDay,
           style: IconButton.styleFrom(
             backgroundColor: const Color(0xFF333333),
             minimumSize: const Size(32, 32),
@@ -43,8 +45,8 @@ class DayNavigator extends ConsumerWidget {
           },
           child: Text(
             d.year == n.year && d.month == n.month && d.day == n.day
-                ? 'TODAY'
-                : DateFormat('d MMM').format(d).toUpperCase(),
+                ? context.l10n.today2
+                : DateFormat.MMMd().format(d).toUpperCase(),
             style: const TextStyle(
               fontSize: 12,
               letterSpacing: 1.2,
@@ -54,7 +56,7 @@ class DayNavigator extends ConsumerWidget {
           ),
         ),
         IconButton(
-          tooltip: 'Next day',
+          tooltip: context.l10n.nextDay,
           style: IconButton.styleFrom(
             backgroundColor: const Color(0xFF282828),
             disabledBackgroundColor: const Color(0xFF282828),

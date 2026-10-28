@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 
 import '../screens/onboarding/connect_health_screen.dart';
@@ -9,17 +11,12 @@ class HealthAccessLostDialog {
   static Future<void> show(BuildContext context) => showDialog<void>(
     context: context,
     builder: (dialog) => AlertDialog(
-      title: const Text('Apple Health is no longer available'),
-      content: const Text(
-        'Apple Health stopped answering, so Fjelia disconnected it and no '
-        'longer reads or writes Health data.\n\n'
-        'Allow Fjelia again under Settings → Health → Data Access & Devices '
-        '→ Fjelia, then reconnect Apple Health.',
-      ),
+      title: Text(context.l10n.appleHealthIsNoLonger),
+      content: Text(context.l10n.appleHealthStoppedAnsweringSo),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(dialog),
-          child: const Text('Later'),
+          child: Text(context.l10n.later),
         ),
         FilledButton(
           onPressed: () {
@@ -30,7 +27,7 @@ class HealthAccessLostDialog {
               ),
             );
           },
-          child: const Text('Reconnect'),
+          child: Text(context.l10n.reconnect),
         ),
       ],
     ),

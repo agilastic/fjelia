@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -17,7 +19,7 @@ class BatteryScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final d = ref.watch(selectedDateProvider);
     return SheetPage(
-      title: 'ENERGY',
+      title: context.l10n.energy,
       showBack: false,
       titleSize: 13,
       backgroundColor: panel,
@@ -30,9 +32,9 @@ class BatteryScreen extends ConsumerWidget {
             data: (r) => ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                const Center(
+                Center(
                   child: Text(
-                    'CURRENT ENERGY',
+                    context.l10n.currentEnergy,
                     style: TextStyle(
                       fontSize: 10,
                       letterSpacing: 1.4,
@@ -72,10 +74,10 @@ class BatteryScreen extends ConsumerWidget {
                 Center(
                   child: Text(
                     r == null || r.samples.isEmpty
-                        ? 'NO DATA'
+                        ? context.l10n.noData2
                         : r.samples.last.value < 50
-                        ? 'LOW RESERVE'
-                        : 'GOOD RESERVE',
+                        ? context.l10n.lowReserve
+                        : context.l10n.goodReserve,
                     style: const TextStyle(
                       color: Colors.amber,
                       fontSize: 12,
@@ -89,7 +91,11 @@ class BatteryScreen extends ConsumerWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(10),
                       child: Text(
-                        'Latest reading at ${DateFormat('HH:mm').format(r.samples.last.timestamp.toLocal())}',
+                        context.l10n.latestReadingAtTolocal(
+                          DateFormat.Hm().format(
+                            r.samples.last.timestamp.toLocal(),
+                          ),
+                        ),
                         style: const TextStyle(color: muted, fontSize: 10),
                       ),
                     ),
@@ -142,9 +148,9 @@ class BatteryScreen extends ConsumerWidget {
                 const Divider(height: 20, color: Colors.white10),
                 Row(
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: Text(
-                        'DAILY TIMELINE',
+                        context.l10n.dailyTimeline,
                         style: TextStyle(
                           fontSize: 10,
                           color: muted,
@@ -154,7 +160,10 @@ class BatteryScreen extends ConsumerWidget {
                     ),
                     if (r != null && r.samples.isNotEmpty)
                       Text(
-                        '${r.samples.first.value} → ${r.samples.last.value}',
+                        context.l10n.valueValue2(
+                          r.samples.first.value,
+                          r.samples.last.value,
+                        ),
                         style: const TextStyle(fontSize: 10, color: muted),
                       ),
                   ],
@@ -162,20 +171,20 @@ class BatteryScreen extends ConsumerWidget {
                 const SizedBox(height: 12),
                 EnergyTimeline(report: r),
                 const SizedBox(height: 12),
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.circle, color: Colors.lightBlue, size: 8),
                     SizedBox(width: 5),
                     Text(
-                      'Energy',
+                      context.l10n.energy2,
                       style: TextStyle(fontSize: 10, color: muted),
                     ),
                     SizedBox(width: 20),
                     Icon(Icons.circle, color: Colors.white12, size: 8),
                     SizedBox(width: 5),
                     Text(
-                      'No data',
+                      context.l10n.noData,
                       style: TextStyle(fontSize: 10, color: muted),
                     ),
                   ],
@@ -223,9 +232,11 @@ class EnergyTimeline extends StatelessWidget {
   Widget build(BuildContext context) {
     final r = report;
     if (r == null || r.samples.isEmpty) {
-      return const SizedBox(
+      return SizedBox(
         height: 180,
-        child: Center(child: EmptyState('No energy measurements for this day')),
+        child: Center(
+          child: EmptyState(context.l10n.noEnergyMeasurementsForThis),
+        ),
       );
     }
     final samples = r.samples.where((s) {

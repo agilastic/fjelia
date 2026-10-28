@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 import 'dart:async';
 import 'dart:math' as math;
 
@@ -228,7 +230,7 @@ class SpinningSyncIconState extends State<SpinningSyncIcon>
 
   @override
   Widget build(BuildContext context) => Semantics(
-    label: widget.spinning ? 'Syncing' : 'Sync',
+    label: widget.spinning ? context.l10n.syncing : context.l10n.syncLabel2,
     child: Transform(
       alignment: Alignment.center,
       transform: _motion.pose(),

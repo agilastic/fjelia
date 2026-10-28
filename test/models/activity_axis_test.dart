@@ -1,3 +1,4 @@
+import 'package:fjelia/l10n/app_localizations.dart';
 import 'package:fjelia/models/activity_axis.dart';
 import 'package:fjelia/models/garmin_data.dart';
 import 'package:fjelia/providers/hr_zones_provider.dart';
@@ -102,6 +103,8 @@ void main() {
         ProviderScope(
           overrides: [hrZonesProvider.overrideWith((ref) => HrZonesNotifier())],
           child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             home: Scaffold(
               body: SingleChildScrollView(
                 child: ActivityPerformanceChart(activity: a),

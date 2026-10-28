@@ -1,0 +1,6 @@
+"NSBluetoothAlwaysUsageDescription" = "Fjelia bruker Bluetooth for å koble til helseenhetene dine (Hilo, Aktiia, Garmin).";
+"NSBluetoothPeripheralUsageDescription" = "Fjelia bruker Bluetooth for å koble til helseenhetene dine.";
+"NSHealthShareUsageDescription" = "Fjelia leser helsedataene dine (søvn, puls, HRV, skritt, SpO2) fra Apple Helse for å gi deg personlig tilpassede treningsinnsikter.";
+"NSHealthUpdateUsageDescription" = "Fjelia skriver de synkroniserte dataene dine for HRV, puls, søvn, skritt og økter til Apple Helse, slik at du ikke mister dem hvis du bytter app.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Fjelia bruker posisjonen din bare mens appen er åpen, for å vurdere varmerisiko for planlagte økter.";
+"NSLocationWhenInUseUsageDescription" = "Fjelia bruker din nåværende posisjon for å vurdere varmerisiko for planlagte økter.";

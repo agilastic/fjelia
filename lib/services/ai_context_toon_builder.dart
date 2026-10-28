@@ -9,6 +9,7 @@ import 'bio_age_service.dart';
 import 'hrv/hrv_ai_context_builder.dart';
 import 'hrv/hrv_training_service.dart';
 import 'ai_data_status.dart';
+import 'ai_metric_analysis.dart';
 import 'post_workout_scorer.dart' show noActivityReason;
 import 'race_predictor.dart';
 import 'race_goal_service.dart';
@@ -126,12 +127,17 @@ class AiContextToonBuilder {
         '[HRV:7dTrend:${hrv.take(7).map((r) => '${_date(r.date).substring(5)}:${_num(r.hrvLastNight)}').join(',')}]',
       );
     }
+    var trainingHrvAnalysis = const <String>[];
     // HRV before and after the recent workouts, from the same assessment the
     // workout card shows. Optional context: a failure here never blocks the
     // coach.
     try {
       final snapshot = await HrvTrainingService(_db, clock: _now).reconcile();
       lines.addAll(const HrvAiContextBuilder().recentLines(snapshot, now));
+      trainingHrvAnalysis = const HrvAiContextBuilder().analysisLines(
+        snapshot,
+        now,
+      );
     } catch (_) {}
     if (sleep.isNotEmpty) {
       final r = sleep.first;
@@ -256,6 +262,46 @@ class AiContextToonBuilder {
         'VO2maxRun:${_num(monitor.vo2maxRun)},VO2maxCycle:${_num(monitor.vo2maxCycle)}]',
       );
     }
+    // The comparison with the athlete's own averages is worked out here, so
+    // no model has to decide what "higher" or "lower" means for each metric.
+    String sportId(String? raw) =>
+        _clean(raw).replaceAll(RegExp(r'\s+'), '_').toLowerCase();
+    List<String> plannedOn(DateTime day) => [
+      for (final w in workouts)
+        if (_day(w.scheduledDate) == day)
+          '${sportId(w.sportType)}/${((w.estimatedDurationSeconds ?? 0) / 60).round()}',
+      for (final x in sessions)
+        if (_day(x.sessionDate) == day)
+          '${sportId(x.sport)}/${x.plannedDurationMin}',
+    ];
+    final doneToday = [
+      for (final a in activities)
+        if (_day(a.startDate) == today)
+          '${sportId(a.type)}/${(a.durationSeconds / 60).round()}',
+    ];
+    final trainingVerdict = trainingHrvAnalysis.isEmpty
+        ? null
+        : RegExp(r'Verdict:(better|worse)')
+              .firstMatch(trainingHrvAnalysis.first)?[1];
+    lines.addAll(
+      MetricAnalysis(today).lines(
+        done: doneToday,
+        plannedToday: doneToday.isEmpty ? plannedOn(today) : const [],
+        tomorrow: plannedOn(DateTime(today.year, today.month, today.day + 1)),
+        trainingHrv: trainingVerdict == null
+            ? null
+            : trainingVerdict == 'better'
+            ? 'up'
+            : 'down',
+        hrv: hrv,
+        sleep: sleep,
+        wellness: wellness,
+        tsb: monitor?.tsb,
+        atl: monitor?.atl,
+        ctl: monitor?.ctl,
+      ),
+    );
+    lines.addAll(trainingHrvAnalysis);
     if (heat != null) {
       lines.add(
         '[HeatAcclimation:Today:Score:${_num(heat.score)},'

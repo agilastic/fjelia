@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -30,38 +32,41 @@ class TrainingMonitorCard extends ConsumerWidget {
       (
         'VO₂max running',
         '${valueText(m?.vo2max, 1)} ml/kg/min',
-        'Garmin running VO2max',
+        context.l10n.garminRunningVo2max,
       ),
       (
         'VO₂max cycling',
         '${valueText(m?.vo2maxCycling, 1)} ml/kg/min',
-        'Garmin cycling VO2max',
+        context.l10n.garminCyclingVo2max,
       ),
       (
         'LT1 threshold',
         '${lt1?.bpm ?? '—'} bpm  ${drift?.lt1Pace ?? ''}',
         drift == null
-            ? 'Aerobic threshold'
-            : 'Drift ${valueText(drift.drift, 1)}% · ${loadDate(drift.at)}',
+            ? context.l10n.aerobicThreshold2
+            : context.l10n.driftDriftAt(
+                valueText(drift.drift, 1),
+                loadDate(drift.at),
+              ),
       ),
       (
         'Activity hours',
         '${valueText(m?.weekHours, 1)} h',
-        '${valueText(m?.previousWeekHours, 1)} h previous week',
+        context.l10n.hoursPreviousWeek(valueText(m?.previousWeekHours, 1)),
       ),
       (
         'LT2 threshold',
         '${lt2?.lt2 ?? '—'} bpm  ${lt2?.pace ?? ''}',
         lt2 == null
-            ? '30-minute time trial'
-            : '30-min TT · ${loadDate(lt2.at)}',
+            ? context.l10n.thirtyMinuteTimeTrial
+            : context.l10n.thirtyMinTtDate(loadDate(lt2.at)),
       ),
       (
         'Activity km',
         '${valueText(m?.weekKm, 1)} km',
-        '${valueText(m?.previousWeekKm, 1)} km previous week',
+        context.l10n.kmPreviousWeek(valueText(m?.previousWeekKm, 1)),
       ),
-      ('VO₂max pace', vo2?.pace ?? '—', 'Tap · 5-minute max test'),
+      ('VO₂max pace', vo2?.pace ?? '—', context.l10n.tap5MinuteMaxTest),
       (
         'FTP cycling',
         '${ftp?.ftpWatts ?? '—'} W',
@@ -72,7 +77,7 @@ class TrainingMonitorCard extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('TRAINING MONITOR', style: loadLabel),
+          Text(context.l10n.trainingMonitor2, style: loadLabel),
           const SizedBox(height: 10),
           GridView.count(
             crossAxisCount: 2,
@@ -135,7 +140,10 @@ class TrainingMonitorCard extends ConsumerWidget {
                               const SizedBox(width: 5),
                               Expanded(
                                 child: Text(
-                                  c.$1.toUpperCase().replaceAll('₂', '2'),
+                                  loadMetricLabel(
+                                    context,
+                                    c.$1,
+                                  ).toUpperCase().replaceAll('₂', '2'),
                                   maxLines: 1,
                                   style: const TextStyle(
                                     fontSize: 10,
@@ -211,7 +219,7 @@ class TrainingMonitorCard extends ConsumerWidget {
           ),
           const SizedBox(height: 12),
           _ZoneStrip(
-            title: 'PFITZINGER ZONES',
+            title: context.l10n.pfitzingerZones,
             running: true,
             subtitle: 'LT2 ${lt2?.lt2 ?? '—'} bpm · ${lt2?.pace ?? '—'}',
             onTap: () =>
@@ -219,10 +227,13 @@ class TrainingMonitorCard extends ConsumerWidget {
           ),
           const SizedBox(height: 8),
           _ZoneStrip(
-            title: 'CYCLING POWER ZONES',
+            title: context.l10n.cyclingPowerZones,
             subtitle: ftp == null
-                ? 'Set FTP to calculate power zones'
-                : 'FTP ${ftp.ftpWatts} W · ${valueText(ftp.wattsPerKg, 2)} W/kg',
+                ? context.l10n.setFtpToCalculatePower
+                : context.l10n.ftpFtpwattsWWattsperkgW(
+                    ftp.ftpWatts,
+                    valueText(ftp.wattsPerKg, 2),
+                  ),
             onTap: () => showLoadSheet(
               context,
               const LoadZonesSheet(power: true),
@@ -349,26 +360,30 @@ class LoadZonesSheet extends ConsumerWidget {
           );
     return LoadSheet(
       close: true,
-      title: power ? 'Cycling power zones' : 'Pfitzinger zones',
+      title: power
+          ? context.l10n.cyclingPowerZones2
+          : context.l10n.pfitzingerZones2,
       child: ListView(
         padding: const EdgeInsets.all(20),
         children: [
           if (!power && lt2 == null)
-            const EmptyState(
-              'Complete an LT2 test to calculate running zones.',
-            ),
+            EmptyState(context.l10n.completeAnLt2TestTo),
           if (power && ftp == null)
-            const EmptyState('Set FTP to calculate power zones.'),
+            EmptyState(context.l10n.setFtpToCalculatePower2),
           if (!power)
             for (final zone in zones)
               ListTile(
                 leading: Text(
-                  'Z${zone.number}',
+                  context.l10n.znumber(zone.number),
                   style: TextStyle(color: _zoneColors[zone.number - 1]),
                 ),
                 title: Text(zone.name),
                 subtitle: Text(
-                  '${zone.pace} · ${zone.hr}\n${zone.description}',
+                  context.l10n.paceHrDescription(
+                    zone.pace,
+                    zone.hr,
+                    zone.description,
+                  ),
                 ),
               ),
           if (power && ftp != null)
@@ -381,11 +396,11 @@ class LoadZonesSheet extends ConsumerWidget {
                 title: Text(
                   [
                     'Active recovery',
-                    'Endurance',
-                    'Tempo',
-                    'Threshold',
+                    context.l10n.endurance,
+                    context.l10n.tempo,
+                    context.l10n.threshold,
                     'VO₂max',
-                    'Anaerobic',
+                    context.l10n.anaerobic,
                   ][i],
                 ),
                 subtitle: Text(

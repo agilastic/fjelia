@@ -1,3 +1,4 @@
+import 'package:fjelia/l10n/app_localizations.dart';
 import 'package:fjelia/models/week_progress.dart';
 import 'package:fjelia/screens/activities/load_visuals.dart';
 import 'package:flutter/material.dart';
@@ -120,6 +121,8 @@ void main() {
 
   testWidgets('the running week is marked in the bar chart', (tester) async {
     Widget chart({required bool running}) => MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(
         body: LoadWeekBars(
           dates: [for (var i = 0; i < 4; i++) DateTime(2026, 10, 5 + 7 * i)],

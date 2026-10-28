@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -34,8 +36,11 @@ class CoachContextCardView extends StatelessWidget {
     final color = _statusColor(card.status);
     return Semantics(
       container: true,
-      label:
-          '${card.title}, ${DateFormat('d MMMM').format(card.date)}, ${card.status.label}',
+      label: context.l10n.titleDateLabel(
+        card.title,
+        DateFormat.MMMMd().format(card.date),
+        card.status.label,
+      ),
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
@@ -76,7 +81,7 @@ class CoachContextCardView extends StatelessWidget {
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       Text(
-                        DateFormat('EEE, d MMM yyyy').format(card.date),
+                        DateFormat.yMMMEd().format(card.date),
                         style: const TextStyle(color: muted, fontSize: 12),
                       ),
                       Container(

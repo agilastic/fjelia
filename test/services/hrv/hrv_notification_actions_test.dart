@@ -66,7 +66,10 @@ void main() {
     });
 
     test('the wording is generic and promises no exact time', () {
-      for (final t in [HrvReminderTexts.english, HrvReminderTexts.german]) {
+      for (final code in [
+        'en', 'de', 'fr', 'it', 'es', 'ca', 'nb', 'sk', 'fi', 'da', //
+      ]) {
+        final t = HrvReminderTexts.forLanguage(code);
         expect(t.body, isNot(contains('30')));
         expect(t.title, isNot(contains('30')));
       }
@@ -75,7 +78,7 @@ void main() {
         contains('Nachmessung'),
       );
       expect(
-        HrvReminderTexts.forLanguage('fr').title,
+        HrvReminderTexts.forLanguage('sw').title,
         contains('post-training'),
       );
     });
@@ -235,24 +238,21 @@ void main() {
       expect(results.map((r) => r.kind), [ActionKind.skipped]);
     });
 
-    test(
-      'HRV-D12 a snooze taken in the background counts from when it was taken',
-      () async {
-        final snooze = await due('snooze');
-        final results = <ActionResult>[];
-        final taken = atMin(150);
-        final router = build(
-          results,
-          inbox: [HrvInboxEntry('snooze', snooze.payload, taken.toUtc())],
-        );
-        addTearDown(router.dispose);
-        await router.markReady();
-        expect(results.single.kind, ActionKind.snoozed);
-        final row = await db.select(db.hrvPostReminders).getSingle();
-        // Ten minutes from the tap, not from the later moment the app was opened.
-        expect(row.nextDueAtUtc.toUtc(), atMin(160));
-      },
-    );
+    test('HRV-D12 a snooze taken in the background counts from when it was taken', () async {
+      final snooze = await due('snooze');
+      final results = <ActionResult>[];
+      final taken = atMin(150);
+      final router = build(
+        results,
+        inbox: [HrvInboxEntry('snooze', snooze.payload, taken.toUtc())],
+      );
+      addTearDown(router.dispose);
+      await router.markReady();
+      expect(results.single.kind, ActionKind.snoozed);
+      final row = await db.select(db.hrvPostReminders).getSingle();
+      // Ten minutes from the tap, not from the later moment the app was opened.
+      expect(row.nextDueAtUtc.toUtc(), atMin(160));
+    });
 
     test('unknown or stale responses never reach the screen', () async {
       await due('measure');

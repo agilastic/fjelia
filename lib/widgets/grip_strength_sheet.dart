@@ -1,5 +1,8 @@
+import '../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../providers/grip_strength_provider.dart';
 import 'app_widgets.dart';
 import '../utils/decimal.dart';
@@ -22,7 +25,7 @@ class _GripState extends ConsumerState<GripStrengthSheet> {
 
   @override
   Widget build(BuildContext context) => SheetPage(
-    title: 'Grip Strength',
+    title: context.l10n.gripStrength,
     child: ListView(
       padding: EdgeInsets.fromLTRB(
         16,
@@ -39,7 +42,7 @@ class _GripState extends ConsumerState<GripStrengthSheet> {
                 keyboardType: const TextInputType.numberWithOptions(
                   decimal: true,
                 ),
-                decoration: const InputDecoration(labelText: 'Left (kg)'),
+                decoration: InputDecoration(labelText: context.l10n.leftKg),
               ),
             ),
             const SizedBox(width: 12),
@@ -49,7 +52,7 @@ class _GripState extends ConsumerState<GripStrengthSheet> {
                 keyboardType: const TextInputType.numberWithOptions(
                   decimal: true,
                 ),
-                decoration: const InputDecoration(labelText: 'Right (kg)'),
+                decoration: InputDecoration(labelText: context.l10n.rightKg),
               ),
             ),
           ],
@@ -74,7 +77,7 @@ class _GripState extends ConsumerState<GripStrengthSheet> {
                   );
                   if (mounted) setState(() => saving = false);
                 },
-          child: const Text('Save measurement'),
+          child: Text(context.l10n.saveMeasurement),
         ),
         ref
             .watch(gripStrengthProvider)
@@ -98,17 +101,20 @@ class _GripState extends ConsumerState<GripStrengthSheet> {
                   for (final r in rows.reversed)
                     ListTile(
                       title: Text(
-                        'L ${valueText(r.leftKg, 1)} · R ${valueText(r.rightKg, 1)} kg',
+                        context.l10n.lLeftkgRRightkgKg(
+                          valueText(r.leftKg, 1),
+                          valueText(r.rightKg, 1),
+                        ),
                       ),
                       subtitle: Text(dayText(r.measuredAt)),
                       trailing: IconButton(
-                        tooltip: 'Delete measurement',
+                        tooltip: context.l10n.deleteMeasurement,
                         icon: const Icon(Icons.delete_outline),
                         onPressed: () async {
                           if (await confirmAction(
                             context,
                             'Delete measurement?',
-                            'This removes the selected grip reading.',
+                            context.l10n.thisRemovesTheSelectedGrip,
                           )) {
                             if (context.mounted) {
                               await runUiAction(

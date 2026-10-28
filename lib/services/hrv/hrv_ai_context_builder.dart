@@ -156,4 +156,74 @@ class HrvAiContextBuilder {
         ),
     ];
   }
+
+  /// One plain verdict per recent workout with chest-strap readings, for the
+  /// daily briefing: before and after, which way HRV moved and whether that
+  /// is the favourable direction. It is a different measurement from the
+  /// overnight watch HRV and says so. Nothing is calculated here: the change
+  /// comes from the assessment.
+  List<String> analysisLines(
+    HrvSnapshot snapshot,
+    DateTime now, {
+    int limit = 2,
+  }) {
+    final since = now.subtract(const Duration(days: 7));
+    final recent = [
+      for (final e in snapshot.episodes)
+        if (e.end != null &&
+            !e.start.isBefore(since) &&
+            !e.start.isAfter(now) &&
+            snapshot.assessments[e.id] != null &&
+            (snapshot.assessments[e.id]!.hasPre ||
+                snapshot.assessments[e.id]!.hasPost))
+          e,
+    ]..sort((a, b) => b.start.compareTo(a.start));
+    final today = DateTime(now.year, now.month, now.day);
+    final lines = <String>[];
+    for (final e in recent.take(limit)) {
+      final a = snapshot.assessments[e.id]!;
+      final local = e.start.toLocal();
+      final ago = today
+          .difference(DateTime(local.year, local.month, local.day))
+          .inDays;
+      final when = ago == 0 ? 'today' : '$ago days ago';
+      final pre = a.pre?.rmssdMs, post = a.post?.rmssdMs;
+      final have = [
+        if (pre != null) 'before ${_num(pre, 0)} ms',
+        if (post != null) 'after ${_num(post, 0)} ms',
+      ].join(' and ');
+      final sport = e.sport.replaceAll('_', ' ');
+      final String verdict, text;
+      if (a.comparable && a.deltaMs != null && a.deltaPercent != null) {
+        final rose = a.deltaMs! > 0;
+        final flat = a.deltaPercent!.abs() < 3;
+        verdict = flat
+            ? 'steady'
+            : rose
+            ? 'better'
+            : 'worse';
+        text =
+            'Training HRV (chest strap) around the $sport $when: $have; '
+            '${flat
+                ? 'about the same'
+                : rose
+                ? 'ROSE ${_num(a.deltaPercent!.abs(), 0)}% (favourable)'
+                : 'FELL ${_num(a.deltaPercent!.abs(), 0)}% (less favourable)'}. '
+            'This is NOT sleep HRV: never compare the two values.';
+      } else {
+        verdict = 'none';
+        text =
+            'Training HRV (chest strap) around the $sport $when: $have; '
+            'not comparable (${_limits(a).replaceAll('|', ' ')}) so no change is given. '
+            'This is NOT sleep HRV: never compare the two values.';
+      }
+      lines.add(
+        '[Analysis:TrainingHRV,Date:${_date(e.start)},DaysAgo:$ago,Sport:${e.sport},'
+        'Pre:${pre == null ? 'none' : '${_num(pre, 0)}ms'},'
+        'Post:${post == null ? 'none' : '${_num(post, 0)}ms'},'
+        'Verdict:$verdict,Text:$text]',
+      );
+    }
+    return lines;
+  }
 }

@@ -1,3 +1,5 @@
+import '../../l10n/formats.dart';
+import '../../l10n/l10n_ext.dart';
 import '../../providers/manual_measurement_provider.dart';
 
 import 'package:flutter/material.dart';
@@ -24,7 +26,7 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
   String? error;
   // RENPHO scale flow: shown instead of the type list while active.
   bool scaleActive = false;
-  String scaleStatus = 'Scanning… step on the scale when ready.';
+  String scaleStatus = tr.scanningStepOnTheScale;
   ScaleSummary? scaleSaved;
   final fields = <String, TextEditingController>{};
   TextEditingController field(String key) =>
@@ -76,7 +78,7 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
       saving = true;
       error = null;
       scaleSaved = null;
-      scaleStatus = 'Scanning… step on the scale when ready.';
+      scaleStatus = context.l10n.scanningStepOnTheScale;
     });
     try {
       final actions = ref.read(deviceActionsProvider);
@@ -87,19 +89,17 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
         final chosen = await showDialog<NearbyDevice>(
           context: context,
           builder: (c) => SimpleDialog(
-            title: const Text('Choose scale'),
+            title: Text(context.l10n.chooseScale),
             children: [
               if (found.isEmpty)
-                const Padding(
+                Padding(
                   padding: EdgeInsets.all(16),
-                  child: Text(
-                    'No scales found. Step on your scale and try again.',
-                  ),
+                  child: Text(context.l10n.noScalesFoundStepOn),
                 ),
               for (final s in found)
                 SimpleDialogOption(
                   onPressed: () => Navigator.pop(c, s),
-                  child: Text('${s.name} · ${s.rssi} dBm'),
+                  child: Text(context.l10n.nameRssiDbm(s.name, s.rssi)),
                 ),
             ],
           ),
@@ -136,8 +136,8 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
         children: [
           const Icon(Icons.check_circle_outline, size: 84, color: mint),
           const SizedBox(height: 28),
-          const Text(
-            'RENPHO saved:',
+          Text(
+            context.l10n.renphoSaved,
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
           ),
@@ -149,10 +149,8 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
           ),
           if (saved.weightKg != null && !saved.hasBodyComposition) ...[
             const SizedBox(height: 16),
-            const Text(
-              'Only the weight was received. For body fat, muscle and the '
-              'other values stand barefoot on the metal electrodes and stay '
-              'on until the scale finishes.',
+            Text(
+              context.l10n.onlyTheWeightWasReceived,
               textAlign: TextAlign.center,
               style: TextStyle(color: muted, fontSize: 13),
             ),
@@ -160,7 +158,7 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
           const SizedBox(height: 40),
           FilledButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Done'),
+            child: Text(context.l10n.done),
           ),
         ],
       );
@@ -181,8 +179,8 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
               child: const Icon(Icons.bluetooth_searching, color: mint),
             ),
             const SizedBox(width: 14),
-            const Text(
-              'RENPHO Scale (BLE)',
+            Text(
+              context.l10n.renphoScaleBle2,
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
           ],
@@ -219,8 +217,10 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
                   Expanded(
                     child: Text(
                       waist == null
-                          ? 'Add your waist in Profile for visceral fat.'
-                          : 'Waist: ${waist.toStringAsFixed(waist % 1 == 0 ? 0 : 1)} cm — update monthly in Profile',
+                          ? context.l10n.addYourWaistInProfile
+                          : context.l10n.waistWaistCmUpdateMonthly(
+                              waist.fixed(waist % 1 == 0 ? 0 : 1),
+                            ),
                       style: const TextStyle(color: muted, fontSize: 13),
                     ),
                   ),
@@ -239,7 +239,7 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
         const SizedBox(height: 22),
         FilledButton(
           onPressed: saving ? null : scale,
-          child: Text(saving ? 'Measuring…' : 'Try again'),
+          child: Text(saving ? context.l10n.measuring : context.l10n.tryAgain),
         ),
         const SizedBox(height: 8),
         TextButton.icon(
@@ -250,7 +250,7 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
                   error = null;
                 }),
           icon: const Icon(Icons.arrow_back, size: 18),
-          label: const Text('Change measurement type'),
+          label: Text(context.l10n.changeMeasurementType),
         ),
       ],
     );
@@ -260,29 +260,42 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
   Widget build(BuildContext context) {
     final definitions = <String, List<(String, String)>>{
       'Blood Pressure': [
-        ('Systolic', 'mmHg'),
-        ('Diastolic', 'mmHg'),
-        ('Heart Rate', 'bpm'),
+        (context.l10n.systolic, 'mmHg'),
+        (context.l10n.diastolic, 'mmHg'),
+        (context.l10n.heartRate, 'bpm'),
       ],
-      'Weight Scale': [('Weight', 'kg'), ('Body Fat', '%'), ('BMI', '')],
-      'Sleep': [('Duration', 'h'), ('Deep', 'h'), ('REM', 'h')],
-      'SpO₂ / Pulse Oximeter': [('SpO₂', '%'), ('Heart Rate', 'bpm')],
+      'Weight Scale': [
+        (context.l10n.weight, 'kg'),
+        (context.l10n.bodyFat, '%'),
+        ('BMI', ''),
+      ],
+      'Sleep': [
+        (context.l10n.duration, 'h'),
+        (context.l10n.deep, 'h'),
+        ('REM', 'h'),
+      ],
+      'SpO₂ / Pulse Oximeter': [
+        (context.l10n.spo, '%'),
+        (context.l10n.heartRate, 'bpm'),
+      ],
       'Manual Activity': [
-        ('Activity name', ''),
-        ('Sport', ''),
-        ('Duration', 'min'),
-        ('Distance', 'km'),
-        ('Heart Rate', 'bpm'),
+        (context.l10n.activityName, ''),
+        (context.l10n.sport, ''),
+        (context.l10n.duration, 'min'),
+        (context.l10n.distance, 'km'),
+        (context.l10n.heartRate, 'bpm'),
       ],
     };
     if (scaleActive) {
       return SheetPage(
-        title: scaleSaved != null ? 'Saved' : 'RENPHO Scale (BLE)',
+        title: scaleSaved != null
+            ? context.l10n.saved
+            : context.l10n.renphoScaleBle2,
         child: _scaleView(context),
       );
     }
     return SheetPage(
-      title: 'Add Measurement',
+      title: context.l10n.addMeasurement,
       child: ListView(
         padding: EdgeInsets.fromLTRB(
           16,
@@ -298,13 +311,13 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
               child: Text(error!, style: const TextStyle(color: Colors.red)),
             ),
           if (type == null) ...[
-            const Text(
-              'What are you measuring?',
+            Text(
+              context.l10n.whatAreYouMeasuring,
               style: TextStyle(color: muted, fontSize: 12),
             ),
             const SizedBox(height: 12),
             for (final e in <(String, IconData)>[
-              ('Manual Activity', Icons.directions_run),
+              (context.l10n.manualActivity, Icons.directions_run),
               ('Sleep', Icons.bedtime_outlined),
               ('Blood Pressure', Icons.monitor_heart_outlined),
               ('Add Hilo BP report (PDF)', Icons.picture_as_pdf_outlined),
@@ -320,7 +333,7 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
                   enabled: !saving,
                   dense: true,
                   leading: Icon(e.$2, color: mint),
-                  title: Text(e.$1),
+                  title: Text(_typeLabel(context, e.$1)),
                   onTap: () {
                     if (e.$1 == 'Polar H10 HRV measurement') {
                       showAppSheet(context, const PolarH10HrvSheet());
@@ -341,9 +354,9 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
           ] else ...[
             TextButton(
               onPressed: saving ? null : () => setState(() => type = null),
-              child: const Text('Choose another measurement'),
+              child: Text(context.l10n.chooseAnotherMeasurement),
             ),
-            SectionLabel(type!),
+            SectionLabel(_typeLabel(context, type!)),
             ListTile(
               title: Text(dayText(at)),
               trailing: const Icon(Icons.calendar_today),
@@ -372,7 +385,9 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
                 padding: const EdgeInsets.only(bottom: 14),
                 child: TextField(
                   controller: field(e.$1),
-                  keyboardType: e.$1 == 'Sport' || e.$1 == 'Activity name'
+                  keyboardType:
+                      e.$1 == context.l10n.sport ||
+                          e.$1 == context.l10n.activityName
                       ? TextInputType.text
                       : const TextInputType.numberWithOptions(decimal: true),
                   decoration: InputDecoration(
@@ -383,7 +398,7 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
               ),
             FilledButton(
               onPressed: saving ? null : save,
-              child: const Text('Save measurement'),
+              child: Text(context.l10n.saveMeasurement),
             ),
           ],
         ],
@@ -391,3 +406,18 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
     );
   }
 }
+
+/// The type names are identifiers; this is what the user reads.
+String _typeLabel(BuildContext context, String type) => switch (type) {
+  'Manual Activity' => context.l10n.manualActivity,
+  'Sleep' => context.l10n.typeSleep,
+  'Blood Pressure' => context.l10n.typeBloodPressure,
+  'Add Hilo BP report (PDF)' => context.l10n.addHiloBpReportPdf,
+  'Hilo Cuff (BLE)' => context.l10n.hiloCuffBle,
+  'RENPHO Scale (BLE)' => context.l10n.renphoScaleBle2,
+  'SpO₂ / Pulse Oximeter' => context.l10n.typeSpo2,
+  'Weight Scale' => context.l10n.typeWeightScale,
+  'Grip Strength' => context.l10n.gripStrength,
+  'Polar H10 HRV measurement' => context.l10n.polarH10HrvMeasurement,
+  _ => type,
+};

@@ -1,6 +1,9 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
+
 import '../../services/bug_report_service.dart';
 import '../../services/debug_log.dart';
 import '../../widgets/app_widgets.dart';
@@ -15,7 +18,7 @@ class BugReportSheet extends StatefulWidget {
 class _BugReportState extends State<BugReportSheet> {
   final _form = GlobalKey<FormState>();
   final email = TextEditingController();
-  final subject = TextEditingController(text: 'Fjelia feedback');
+  final subject = TextEditingController(text: tr.fjeliaFeedback);
   final notes = TextEditingController();
   bool _diagnostics = false;
   bool _sending = false;
@@ -61,7 +64,7 @@ class _BugReportState extends State<BugReportSheet> {
         setState(
           () => _error = error is BugReportException
               ? error.message
-              : 'Could not send the report. Your text is still here. Please try again.',
+              : context.l10n.couldNotSendTheReport,
         );
       }
     } finally {
@@ -124,7 +127,7 @@ class _BugReportState extends State<BugReportSheet> {
 
   @override
   Widget build(BuildContext context) => SheetPage(
-    title: 'Feedback & bug report',
+    title: context.l10n.feedbackBugReport,
     child: _sent
         ? Padding(
             padding: const EdgeInsets.all(32),
@@ -133,13 +136,13 @@ class _BugReportState extends State<BugReportSheet> {
               children: [
                 const Icon(Icons.check_circle_outline, color: mint, size: 64),
                 const SizedBox(height: 18),
-                const Text(
-                  'Report sent. Thank you!',
+                Text(
+                  context.l10n.reportSentThankYou,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  'We read every message. If you left your email, you may get a reply.',
+                Text(
+                  context.l10n.weReadEveryMessageIf,
                   textAlign: TextAlign.center,
                   style: TextStyle(color: muted, fontSize: 13, height: 1.4),
                 ),
@@ -149,7 +152,7 @@ class _BugReportState extends State<BugReportSheet> {
                   child: FilledButton(
                     style: _primaryButton,
                     onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Done'),
+                    child: Text(context.l10n.done),
                   ),
                 ),
               ],
@@ -171,8 +174,8 @@ class _BugReportState extends State<BugReportSheet> {
                   MediaQuery.viewInsetsOf(context).bottom + 24,
                 ),
                 children: [
-                  const Text(
-                    'Share an idea, suggest an improvement, or tell us what happened and what you expected.',
+                  Text(
+                    context.l10n.shareAnIdeaSuggestAn,
                     style: TextStyle(fontSize: 13, color: muted, height: 1.45),
                   ),
                   const SizedBox(height: 18),
@@ -186,13 +189,12 @@ class _BugReportState extends State<BugReportSheet> {
                     maxLength: 254,
                     buildCounter: _counter,
                     onTapOutside: (_) => _dismissKeyboard(),
-                    decoration: _decoration('Your email'),
+                    decoration: _decoration(context.l10n.yourEmail),
                     validator: (value) =>
-                        RegExp(
-                          r'^[^\s@]+@[^\s@]+\.[^\s@]+$',
-                        ).hasMatch((value ?? '').trim())
+                        RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$')
+                            .hasMatch((value ?? '').trim())
                         ? null
-                        : 'Enter a valid email address.',
+                        : context.l10n.enterAValidEmailAddress,
                   ),
                   const SizedBox(height: 12),
                   TextFormField(
@@ -202,9 +204,9 @@ class _BugReportState extends State<BugReportSheet> {
                     maxLength: 200,
                     buildCounter: _counter,
                     onTapOutside: (_) => _dismissKeyboard(),
-                    decoration: _decoration('Subject'),
+                    decoration: _decoration(context.l10n.subject),
                     validator: (value) => (value ?? '').trim().isEmpty
-                        ? 'Enter a subject.'
+                        ? context.l10n.enterASubject
                         : null,
                   ),
                   const SizedBox(height: 12),
@@ -219,16 +221,16 @@ class _BugReportState extends State<BugReportSheet> {
                     buildCounter: _counter,
                     onTapOutside: (_) => _dismissKeyboard(),
                     decoration: _decoration(
-                      'Message',
-                      hint: 'What happened, and what did you expect?',
+                      context.l10n.message,
+                      hint: context.l10n.whatHappenedAndWhatDid,
                     ).copyWith(alignLabelWithHint: true),
                     validator: (value) => (value ?? '').trim().length < 10
-                        ? 'Enter a message of at least 10 characters.'
+                        ? context.l10n.enterAMessageOfAt
                         : null,
                   ),
                   const SizedBox(height: 4),
-                  const Text(
-                    'Please leave out passwords, API keys and personal health readings.',
+                  Text(
+                    context.l10n.pleaseLeaveOutPasswordsApi,
                     style: TextStyle(fontSize: 11, color: muted),
                   ),
                   const SizedBox(height: 18),
@@ -247,17 +249,17 @@ class _BugReportState extends State<BugReportSheet> {
                           SwitchListTile(
                             contentPadding: EdgeInsets.zero,
                             activeThumbColor: mint,
-                            title: const Text(
-                              'Include diagnostics',
+                            title: Text(
+                              context.l10n.includeDiagnostics,
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            subtitle: const Padding(
+                            subtitle: Padding(
                               padding: EdgeInsets.only(top: 2),
                               child: Text(
-                                'Optional. Logs may contain account or health details. Review them below before sending.',
+                                context.l10n.optionalLogsMayContainAccount,
                                 style: TextStyle(
                                   fontSize: 12,
                                   color: muted,
@@ -275,8 +277,8 @@ class _BugReportState extends State<BugReportSheet> {
                           ),
                           if (_diagnostics) ...[
                             const Divider(height: 16, color: Color(0x14FFFFFF)),
-                            const Text(
-                              'DIAGNOSTICS PREVIEW',
+                            Text(
+                              context.l10n.diagnosticsPreview,
                               style: TextStyle(
                                 fontSize: 10,
                                 color: muted,
@@ -305,7 +307,7 @@ class _BugReportState extends State<BugReportSheet> {
                     ),
                   ),
                   const SizedBox(height: 14),
-                  const Row(
+                  Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
@@ -315,7 +317,7 @@ class _BugReportState extends State<BugReportSheet> {
                       SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          'Sending shares your email, subject, message and any selected diagnostics with Fjelia support at cloud.ebeling-hoppe.de.',
+                          context.l10n.sendingSharesYourEmailSubject,
                           style: TextStyle(
                             fontSize: 12,
                             color: muted,
@@ -368,7 +370,9 @@ class _BugReportState extends State<BugReportSheet> {
                             ),
                           )
                         : const Icon(Icons.send_outlined, size: 18),
-                    label: Text(_sending ? 'Sending…' : 'Send report'),
+                    label: Text(
+                      _sending ? context.l10n.sending : context.l10n.sendReport,
+                    ),
                   ),
                   const SizedBox(height: 10),
                   Row(
@@ -384,7 +388,7 @@ class _BugReportState extends State<BugReportSheet> {
                                   );
                                 }),
                           icon: const Icon(Icons.copy_rounded, size: 16),
-                          label: const Text('Copy report'),
+                          label: Text(context.l10n.copyReport),
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -407,7 +411,7 @@ class _BugReportState extends State<BugReportSheet> {
                                   );
                                 }),
                           icon: const Icon(Icons.ios_share, size: 16),
-                          label: const Text('Share report'),
+                          label: Text(context.l10n.shareReport),
                         ),
                       ),
                     ],

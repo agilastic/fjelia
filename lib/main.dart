@@ -1,10 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'l10n/app_localizations.dart';
+import 'l10n/l10n_ext.dart';
 import 'providers/auth_provider.dart';
+import 'providers/locale_provider.dart';
 import 'providers/day_data_provider.dart';
 import 'providers/health_connect_provider.dart';
 import 'providers/hilo_sync_provider.dart';
@@ -34,6 +39,7 @@ import 'widgets/hilo_device_picker.dart';
 void main() {
   DebugLog.install(() async {
     WidgetsFlutterBinding.ensureInitialized();
+    await initializeDateFormatting();
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -104,6 +110,8 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
   /// actions in. Reconciling first means an action is judged on current data.
   Future<void> _startHrvReminders() async {
     try {
+      // The reminder wording follows the saved language, so load it first.
+      await ref.read(languageProvider.future);
       final router = ref.read(hrvActionRouterProvider);
       router.onResult = _onHrvAction;
       router.onOtherResponse = _onNutritionAction;
@@ -207,6 +215,8 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
 
   @override
   Widget build(BuildContext context) {
+    final locale = ref.watch(appLocaleProvider);
+    setActiveLocale(locale);
     return MaterialApp(
       title: 'Fjelia',
       navigatorKey: _navigatorKey,
@@ -214,6 +224,14 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
       theme: AppTheme.dark(),
       darkTheme: AppTheme.dark(),
       themeMode: ThemeMode.system,
+      locale: locale,
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       themeAnimationDuration: const Duration(milliseconds: 200),
       themeAnimationCurve: Curves.linear,
       home: const _AppRouter(),

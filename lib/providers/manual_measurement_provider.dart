@@ -6,6 +6,7 @@ import '../db/database.dart';
 import 'database_provider.dart';
 import 'day_data_provider.dart';
 import 'body_measurements_provider.dart';
+import '../l10n/l10n_ext.dart';
 import '../utils/decimal.dart';
 
 final manualMeasurementActionsProvider = Provider<ManualMeasurementActions>(
@@ -25,9 +26,9 @@ class ManualMeasurementActions {
     final db = ref.read(databaseProvider);
     switch (type) {
       case 'Blood Pressure':
-        final sys = read('Systolic'),
-            dia = read('Diastolic'),
-            hr = read('Heart Rate');
+        final sys = read(tr.systolic),
+            dia = read(tr.diastolic),
+            hr = read(tr.heartRate);
         if (sys == null ||
             dia == null ||
             hr == null ||
@@ -52,7 +53,7 @@ class ManualMeasurementActions {
         ]);
         break;
       case 'Weight Scale':
-        final weight = read('Weight');
+        final weight = read(tr.weight);
         if (weight == null || weight < 1 || weight > 500) {
           throw StateError('Enter weight in kg.');
         }
@@ -60,7 +61,7 @@ class ManualMeasurementActions {
           RenphoRecordsCompanion.insert(
             measuredAt: at,
             weight: Value(weight),
-            bodyFat: Value(read('Body Fat')),
+            bodyFat: Value(read(tr.bodyFat)),
             bmi: Value(read('BMI')),
             rawJson: '{}',
           ),
@@ -68,7 +69,9 @@ class ManualMeasurementActions {
         ref.invalidate(bodyMeasurementsProvider);
         break;
       case 'Sleep':
-        final hours = read('Duration'), deep = read('Deep'), rem = read('REM');
+        final hours = read(tr.duration),
+            deep = read(tr.deep),
+            rem = read('REM');
         if (hours == null ||
             hours <= 0 ||
             hours > 24 ||
@@ -92,7 +95,7 @@ class ManualMeasurementActions {
         );
         break;
       case 'SpO₂ / Pulse Oximeter':
-        final spo2 = read('SpO₂'), hr = read('Heart Rate');
+        final spo2 = read(tr.spo), hr = read(tr.heartRate);
         if (spo2 == null || spo2 < 50 || spo2 > 100) {
           throw StateError('Enter SpO₂ between 50 and 100%.');
         }
@@ -106,7 +109,7 @@ class ManualMeasurementActions {
         );
         break;
       case 'Manual Activity':
-        final minutes = read('Duration'), km = read('Distance');
+        final minutes = read(tr.duration), km = read(tr.distance);
         if (minutes == null || minutes <= 0 || (km ?? 0) < 0) {
           throw StateError('Enter a valid duration.');
         }
@@ -115,16 +118,16 @@ class ManualMeasurementActions {
             .insert(
               ActivityRecordsCompanion.insert(
                 activityId: const Uuid().v4(),
-                name: text('Activity name').trim().isEmpty
+                name: text(tr.activityName).trim().isEmpty
                     ? 'Manual activity'
-                    : text('Activity name').trim(),
-                type: text('Sport').trim().isEmpty
+                    : text(tr.activityName).trim(),
+                type: text(tr.sport).trim().isEmpty
                     ? 'running'
-                    : text('Sport').trim(),
+                    : text(tr.sport).trim(),
                 startDate: at,
                 durationSeconds: (minutes * 60).round(),
                 distanceMeters: Value(km == null ? null : km * 1000),
-                avgHeartRate: Value(read('Heart Rate')),
+                avgHeartRate: Value(read(tr.heartRate)),
                 source: const Value('manual'),
               ),
             );

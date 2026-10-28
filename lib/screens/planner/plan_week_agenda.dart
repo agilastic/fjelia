@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -30,8 +32,8 @@ class PlanWeekAgenda extends ConsumerWidget {
     final now = DateTime.now();
     final thisWeek = weekStartFor(now, mondayFirst: mondayFirst) == start;
     final range = start.month == end.month
-        ? '${start.day}–${DateFormat('d MMM').format(end)}'
-        : '${DateFormat('d MMM').format(start)} – ${DateFormat('d MMM').format(end)}';
+        ? '${start.day}–${DateFormat.MMMd().format(end)}'
+        : '${DateFormat.MMMd().format(start)} – ${DateFormat.MMMd().format(end)}';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -39,7 +41,7 @@ class PlanWeekAgenda extends ConsumerWidget {
         Row(
           children: [
             IconButton(
-              tooltip: 'Previous week',
+              tooltip: context.l10n.previousWeek,
               onPressed: () => shift(-7),
               icon: const Icon(Icons.chevron_left_rounded),
             ),
@@ -59,19 +61,19 @@ class PlanWeekAgenda extends ConsumerWidget {
                       onTap: () =>
                           ref.read(selectedDateProvider.notifier).state =
                               DateTime(now.year, now.month, now.day),
-                      child: const Padding(
+                      child: Padding(
                         padding: EdgeInsets.only(top: 2),
                         child: Text(
-                          'Back to this week',
+                          context.l10n.backToThisWeek,
                           style: TextStyle(fontSize: 11, color: mint),
                         ),
                       ),
                     )
                   else
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.only(top: 2),
                       child: Text(
-                        'This week',
+                        context.l10n.thisWeek,
                         style: TextStyle(fontSize: 11, color: muted),
                       ),
                     ),
@@ -79,7 +81,7 @@ class PlanWeekAgenda extends ConsumerWidget {
               ),
             ),
             IconButton(
-              tooltip: 'Next week',
+              tooltip: context.l10n.nextWeek,
               onPressed: () => shift(7),
               icon: const Icon(Icons.chevron_right_rounded),
             ),
@@ -187,17 +189,17 @@ String _duration(int minutes) => minutes < 120
     : '${minutes ~/ 60} h${minutes % 60 == 0 ? '' : ' ${minutes % 60} min'}';
 
 String sportLabel(String sport) => switch (activityKind(sport)) {
-  ActivityKind.running => 'Running',
-  ActivityKind.cycling => 'Cycling',
-  ActivityKind.swimming => 'Swimming',
-  ActivityKind.strength => 'Strength',
-  ActivityKind.rowing => 'Rowing',
-  ActivityKind.hiking => 'Hiking',
-  ActivityKind.walking => 'Walking',
-  ActivityKind.yoga => 'Yoga',
+  ActivityKind.running => tr.running,
+  ActivityKind.cycling => tr.cycling,
+  ActivityKind.swimming => tr.swimming,
+  ActivityKind.strength => tr.strength,
+  ActivityKind.rowing => tr.rowing,
+  ActivityKind.hiking => tr.hiking,
+  ActivityKind.walking => tr.walking,
+  ActivityKind.yoga => tr.yoga,
   ActivityKind.other =>
     sport.isEmpty
-        ? 'Workout'
+        ? tr.workout
         : '${sport[0].toUpperCase()}${sport.substring(1).replaceAll('_', ' ')}',
 };
 
@@ -234,7 +236,7 @@ class _DayRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  DateFormat('EEE').format(day.date),
+                  DateFormat.E().format(day.date),
                   style: TextStyle(
                     fontSize: 13,
                     color: today ? mint : muted,
@@ -252,8 +254,8 @@ class _DayRow extends StatelessWidget {
                       color: mint.withValues(alpha: .18),
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    child: const Text(
-                      'TODAY',
+                    child: Text(
+                      context.l10n.today2,
                       style: TextStyle(
                         fontSize: 8,
                         color: mint,
@@ -264,7 +266,7 @@ class _DayRow extends StatelessWidget {
                   )
                 else
                   Text(
-                    '${day.date.day}',
+                    context.l10n.day(day.date.day),
                     style: const TextStyle(fontSize: 11, color: Colors.white38),
                   ),
               ],
@@ -272,10 +274,10 @@ class _DayRow extends StatelessWidget {
           ),
           Expanded(
             child: day.rest
-                ? const _Line(
+                ? _Line(
                     icon: Icons.bedtime_outlined,
                     color: Colors.white38,
-                    label: 'Rest',
+                    label: context.l10n.restDay,
                     trailing: '—',
                     dim: true,
                   )
@@ -325,21 +327,21 @@ class _ItemLine extends StatelessWidget {
             : completedActivityColor(item.sport),
         label: sportLabel(item.sport),
         badge: done
-            ? 'DONE'
+            ? context.l10n.done2
             : skipped
-            ? 'SKIPPED'
+            ? context.l10n.skipped2
             : missed
-            ? 'NOT RECORDED'
-            : 'PLANNED',
-        secondaryBadge: done && !item.hasPlan ? 'EXTRA' : null,
+            ? context.l10n.notRecorded2
+            : context.l10n.planned,
+        secondaryBadge: done && !item.hasPlan ? context.l10n.extra : null,
         badgeTooltip: switch (item.completionMatch) {
           PlanCompletionMatch.activityLink =>
-            'Recorded activity linked to this workout',
+            context.l10n.recordedActivityLinkedToThis,
           PlanCompletionMatch.recordedStart =>
-            'Matched to the recorded workout start',
+            context.l10n.matchedToTheRecordedWorkout,
           PlanCompletionMatch.workoutName || PlanCompletionMatch.activityName =>
-            'Matched by workout name, sport and date',
-          PlanCompletionMatch.duration => 'Matched by sport, date and duration',
+            context.l10n.matchedByWorkoutNameSport,
+          PlanCompletionMatch.duration => context.l10n.matchedBySportDateAnd,
           null => null,
         },
         badgeColor: skipped
@@ -350,14 +352,14 @@ class _ItemLine extends StatelessWidget {
         detail: skipped
             ? (item.skipReason ?? 'Skipped')
             : missed
-            ? 'Not recorded'
+            ? context.l10n.notRecorded
             : item.title,
         trailing: item.minutes == null ? '—' : '${item.minutes} min',
         target:
             done &&
                 item.plannedMinutes != null &&
                 item.plannedMinutes != item.minutes
-            ? 'Plan ${item.plannedMinutes} min'
+            ? context.l10n.planPlannedminutesMin(item.plannedMinutes ?? 0)
             : null,
         onPlanTap: done ? viewPlan : null,
         dim: skipped || missed,

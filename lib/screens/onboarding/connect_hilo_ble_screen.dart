@@ -1,3 +1,4 @@
+import '../../l10n/l10n_ext.dart';
 import '../../providers/device_actions_provider.dart';
 
 import 'package:flutter/material.dart';
@@ -58,10 +59,7 @@ class _ConnectHiloBleScreenState extends ConsumerState<ConnectHiloBleScreen> {
       if (!mounted) return;
       setState(() => _scanning = false);
       if (found.isEmpty) {
-        setState(
-          () =>
-              _error = 'No Hilo pod found. Make sure it is charged and nearby.',
-        );
+        setState(() => _error = context.l10n.noHiloPodFoundMake);
         return;
       }
       await HiloDevicePicker.show(context, devices: found);
@@ -70,7 +68,7 @@ class _ConnectHiloBleScreenState extends ConsumerState<ConnectHiloBleScreen> {
       if (mounted) {
         setState(() {
           _scanning = false;
-          _error = 'Scan failed: $e';
+          _error = context.l10n.scanFailedE(e);
         });
       }
     }
@@ -89,10 +87,10 @@ class _ConnectHiloBleScreenState extends ConsumerState<ConnectHiloBleScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 8),
-              const OnboardingDeviceHeader(
+              OnboardingDeviceHeader(
                 icon: Icons.monitor_heart_outlined,
                 color: _accent,
-                title: 'Pair Hilo Pod',
+                title: context.l10n.pairHiloPod,
                 subtitle:
                     'Connect your Hilo / Aktiia wristband via Bluetooth '
                     'to sync raw blood pressure data directly from the pod.',
@@ -100,7 +98,7 @@ class _ConnectHiloBleScreenState extends ConsumerState<ConnectHiloBleScreen> {
               const SizedBox(height: 36),
               if (paired) ...[
                 _PairedBanner(
-                  name: _pairedName ?? 'Hilo Pod',
+                  name: _pairedName ?? context.l10n.hiloPod2,
                   mac: _pairedMac!,
                 ),
                 const SizedBox(height: 24),
@@ -140,17 +138,13 @@ class _ConnectHiloBleScreenState extends ConsumerState<ConnectHiloBleScreen> {
                     _scanning
                         ? 'Scanning…'
                         : paired
-                        ? 'Scan again'
-                        : 'Scan for pod',
+                        ? context.l10n.scanAgain
+                        : context.l10n.scanForPod,
                   ),
                 ),
               ),
               const SizedBox(height: 24),
-              const OnboardingInfoBox(
-                'Wear the Hilo band during sleep for continuous blood pressure '
-                'recording. Data syncs automatically each morning when the app '
-                'opens.',
-              ),
+              OnboardingInfoBox(context.l10n.wearTheHiloBandDuring),
               if (paired) ...[
                 const SizedBox(height: 32),
                 SizedBox(
@@ -169,10 +163,10 @@ class _ConnectHiloBleScreenState extends ConsumerState<ConnectHiloBleScreen> {
                       ),
                     ),
                     onPressed: _next,
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Continue'),
+                        Text(context.l10n.continueLabel),
                         SizedBox(width: 8),
                         Icon(Icons.arrow_forward_rounded, size: 20),
                       ],

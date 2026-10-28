@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -33,19 +35,17 @@ class _ScalePairingState extends ConsumerState<ScalePairingTile> {
       final selected = await showDialog<NearbyDevice>(
         context: context,
         builder: (c) => SimpleDialog(
-          title: const Text('Choose scale'),
+          title: Text(context.l10n.chooseScale),
           children: [
             if (found.isEmpty)
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(16),
-                child: Text(
-                  'No scales found. Step on the scale and try again.',
-                ),
+                child: Text(context.l10n.noScalesFoundStepOn2),
               ),
             for (final s in found)
               SimpleDialogOption(
                 onPressed: () => Navigator.pop(c, s),
-                child: Text('${s.name} · ${s.rssi} dBm'),
+                child: Text(context.l10n.nameRssiDbm(s.name, s.rssi)),
               ),
           ],
         ),
@@ -62,7 +62,7 @@ class _ScalePairingState extends ConsumerState<ScalePairingTile> {
             context: context,
             builder: (c) => AlertDialog(
               icon: const Icon(Icons.check_circle, color: mint, size: 40),
-              title: const Text('Scale paired'),
+              title: Text(context.l10n.scalePaired),
               content: Text(
                 '${selected.name} is paired.\n\nTo measure, tap + → RENPHO '
                 'Scale, step on the scale barefoot and stay on until the '
@@ -71,7 +71,7 @@ class _ScalePairingState extends ConsumerState<ScalePairingTile> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(c),
-                  child: const Text('OK'),
+                  child: Text(context.l10n.ok),
                 ),
               ],
             ),
@@ -84,32 +84,32 @@ class _ScalePairingState extends ConsumerState<ScalePairingTile> {
 
   @override
   Widget build(BuildContext context) => SectionCard(
-    title: 'RENPHO Scale (BLE)',
+    title: context.l10n.renphoScaleBle2,
     child: FutureBuilder<String?>(
       future: name,
       builder: (c, s) => ListTile(
         contentPadding: EdgeInsets.zero,
         leading: const Icon(Icons.monitor_weight, color: mint),
-        title: Text(s.data ?? 'No scale paired'),
+        title: Text(s.data ?? context.l10n.noScalePaired),
         subtitle: justPaired != null
-            ? const Text(
-                '✓ Paired — ready to measure',
+            ? Text(
+                context.l10n.pairedReadyToMeasure,
                 style: TextStyle(fontSize: 11, color: mint),
               )
             : Text(
                 s.data == null
-                    ? 'Step on your scale before scanning'
-                    : 'Paired',
+                    ? context.l10n.stepOnYourScaleBefore
+                    : context.l10n.paired,
                 style: const TextStyle(fontSize: 10, color: muted),
               ),
         trailing: TextButton(
           onPressed: scanning ? null : pair,
           child: Text(
             scanning
-                ? 'Scanning…'
+                ? context.l10n.scanning
                 : s.data == null
-                ? 'Pair'
-                : 'Change',
+                ? context.l10n.pair
+                : context.l10n.change,
           ),
         ),
       ),

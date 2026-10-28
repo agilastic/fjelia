@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 
 import '../../models/strength_workout.dart';
@@ -17,7 +19,7 @@ int? parseStrengthSeconds(String text) {
   final m = RegExp(r'^(\d+):([0-5]?\d)$').firstMatch(t);
   if (m != null) return int.parse(m[1]!) * 60 + int.parse(m[2]!);
   final s = int.tryParse(t);
-  if (s == null) throw const FormatException('Enter seconds or m:ss.');
+  if (s == null) throw FormatException(tr.enterSecondsOrMSs);
   return s;
 }
 
@@ -50,9 +52,9 @@ StrengthLoad? _load(String text, MassUnit unit, StrengthLoad? previous) {
   if (previous != null && t == _loadField(previous, unit)) return previous;
   final v = parseDecimal(t);
   if (v == null || !v.isFinite) {
-    throw const FormatException('Enter the load as a number.');
+    throw FormatException(tr.enterTheLoadAsA);
   }
-  if (v < 0) throw const FormatException('Load cannot be negative.');
+  if (v < 0) throw FormatException(tr.loadCannotBeNegative);
   return StrengthLoad.entered(v, unit);
 }
 
@@ -114,7 +116,7 @@ class _FormSheet extends StatelessWidget {
                     minimumSize: const Size(0, 48),
                   ),
                   onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancel'),
+                  child: Text(context.l10n.cancel),
                 ),
               ),
               const SizedBox(width: 10),
@@ -126,7 +128,7 @@ class _FormSheet extends StatelessWidget {
                     minimumSize: const Size(0, 48),
                   ),
                   onPressed: onSave,
-                  child: const Text('Apply'),
+                  child: Text(context.l10n.apply),
                 ),
               ),
             ],
@@ -185,46 +187,49 @@ class _EffortFields {
   StrengthEffort? read() {
     if (scale == null) return null;
     final v = parseDecimal(value.text);
-    if (v == null) throw const FormatException('Enter the effort value.');
+    if (v == null) throw FormatException(tr.enterTheEffortValue);
     return StrengthEffort(scale!, v);
   }
 
-  Widget build(void Function(void Function()) setState) => Padding(
-    padding: const EdgeInsets.only(top: 12),
-    child: Row(
-      children: [
-        Expanded(
-          child: DropdownButtonFormField<StrengthEffortScale?>(
-            initialValue: scale,
-            isExpanded: true,
-            decoration: const InputDecoration(labelText: 'Effort scale'),
-            items: [
-              const DropdownMenuItem(value: null, child: Text('None')),
-              for (final s in StrengthEffortScale.values)
-                DropdownMenuItem(value: s, child: Text(s.label)),
-            ],
-            onChanged: (v) => setState(() => scale = v),
-          ),
-        ),
-        if (scale != null) ...[
-          const SizedBox(width: 10),
-          Expanded(
-            child: TextField(
-              controller: value,
-              keyboardType: const TextInputType.numberWithOptions(
-                decimal: true,
-              ),
-              decoration: InputDecoration(
-                labelText: scale == StrengthEffortScale.rir
-                    ? 'Reps in reserve'
-                    : 'RPE',
+  Widget build(BuildContext context, void Function(void Function()) setState) =>
+      Padding(
+        padding: const EdgeInsets.only(top: 12),
+        child: Row(
+          children: [
+            Expanded(
+              child: DropdownButtonFormField<StrengthEffortScale?>(
+                initialValue: scale,
+                isExpanded: true,
+                decoration: InputDecoration(
+                  labelText: context.l10n.effortScale,
+                ),
+                items: [
+                  DropdownMenuItem(value: null, child: Text(context.l10n.none)),
+                  for (final s in StrengthEffortScale.values)
+                    DropdownMenuItem(value: s, child: Text(s.label)),
+                ],
+                onChanged: (v) => setState(() => scale = v),
               ),
             ),
-          ),
-        ],
-      ],
-    ),
-  );
+            if (scale != null) ...[
+              const SizedBox(width: 10),
+              Expanded(
+                child: TextField(
+                  controller: value,
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  decoration: InputDecoration(
+                    labelText: scale == StrengthEffortScale.rir
+                        ? context.l10n.repsInReserve
+                        : 'RPE',
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      );
 }
 
 /// Edits one planned set. Switching between repetitions, a range and time
@@ -234,8 +239,11 @@ Future<StrengthSetTarget?> showSetTargetForm(
   required StrengthSetTarget target,
   required StrengthConvention convention,
   required MassUnit unit,
-  String title = 'Set',
-}) => _sheet(context, _SetTargetForm(target, convention, unit, title));
+  String? title,
+}) => _sheet(
+  context,
+  _SetTargetForm(target, convention, unit, title ?? tr.setLabel),
+);
 
 class _SetTargetForm extends StatefulWidget {
   const _SetTargetForm(this.target, this.convention, this.unit, this.title);
@@ -296,9 +304,15 @@ class _SetTargetFormState extends State<_SetTargetForm> {
       final next = StrengthSetTarget(
         id: t.id,
         kind: kind,
-        reps: mode == _Mode.reps ? _int(reps.text, 'Repetitions') : null,
-        repMin: mode == _Mode.range ? _int(min.text, 'Lowest reps') : null,
-        repMax: mode == _Mode.range ? _int(max.text, 'Highest reps') : null,
+        reps: mode == _Mode.reps
+            ? _int(reps.text, context.l10n.repetitions)
+            : null,
+        repMin: mode == _Mode.range
+            ? _int(min.text, context.l10n.lowestReps)
+            : null,
+        repMax: mode == _Mode.range
+            ? _int(max.text, context.l10n.highestReps)
+            : null,
         durationSeconds: mode == _Mode.time
             ? parseStrengthSeconds(seconds.text)
             : null,
@@ -336,10 +350,10 @@ class _SetTargetFormState extends State<_SetTargetForm> {
       onSave: save,
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 12),
+          padding: EdgeInsets.only(top: 12),
           child: DropdownButtonFormField<StrengthSetKind>(
             initialValue: kind,
-            decoration: const InputDecoration(labelText: 'Set type'),
+            decoration: InputDecoration(labelText: context.l10n.setType),
             items: [
               for (final k in StrengthSetKind.values)
                 DropdownMenuItem(value: k, child: Text(k.label)),
@@ -348,13 +362,16 @@ class _SetTargetFormState extends State<_SetTargetForm> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 14),
+          padding: EdgeInsets.only(top: 14),
           child: SegmentedButton<_Mode>(
             showSelectedIcon: false,
-            segments: const [
-              ButtonSegment(value: _Mode.reps, label: Text('Reps')),
-              ButtonSegment(value: _Mode.range, label: Text('Range')),
-              ButtonSegment(value: _Mode.time, label: Text('Time')),
+            segments: [
+              ButtonSegment(value: _Mode.reps, label: Text(context.l10n.reps)),
+              ButtonSegment(
+                value: _Mode.range,
+                label: Text(context.l10n.range),
+              ),
+              ButtonSegment(value: _Mode.time, label: Text(context.l10n.time)),
             ],
             selected: {mode},
             onSelectionChanged: (v) => setState(() => mode = v.first),
@@ -363,38 +380,60 @@ class _SetTargetFormState extends State<_SetTargetForm> {
         if (mode == _Mode.reps)
           _field(
             reps,
-            c.side == StrengthSide.unilateral ? 'Reps per side' : 'Reps',
+            c.side == StrengthSide.unilateral
+                ? context.l10n.repsPerSide
+                : context.l10n.reps,
           ),
         if (mode == _Mode.range)
           Row(
             children: [
-              Expanded(child: _field(min, 'From reps')),
+              Expanded(child: _field(min, context.l10n.fromReps)),
               const SizedBox(width: 10),
-              Expanded(child: _field(max, 'To reps')),
+              Expanded(child: _field(max, context.l10n.toReps)),
             ],
           ),
         if (mode == _Mode.time)
-          _field(seconds, 'Duration', hint: '45 or 1:00', number: false),
+          _field(
+            seconds,
+            context.l10n.duration,
+            hint: context.l10n.t45Or100,
+            number: false,
+          ),
         if (c.loadKind.hasKg)
           _field(
             load,
             switch (c.loadKind) {
-              StrengthLoadKind.added => 'Added load',
-              StrengthLoadKind.assisted => 'Assistance',
+              StrengthLoadKind.added => context.l10n.addedLoad,
+              StrengthLoadKind.assisted => context.l10n.assistance,
               _ when c.basis == StrengthLoadBasis.perImplement =>
-                'Load per implement',
-              _ => 'Load',
+                context.l10n.loadPerImplement,
+              _ => context.l10n.load,
             },
             suffix: widget.unit.name,
-            hint: 'Blank when not set',
+            hint: context.l10n.blankWhenNotSet,
             decimal: true,
           ),
         if (c.loadKind == StrengthLoadKind.band)
-          _field(resistance, 'Resistance', hint: 'Red band', number: false),
-        _field(rest, 'Rest after this set', hint: '90 or 1:30', number: false),
-        effort.build(setState),
-        _field(tempo, 'Tempo (optional)', hint: '3-0-1-0', number: false),
-        _field(notes, 'Notes (optional)', number: false),
+          _field(
+            resistance,
+            context.l10n.resistance,
+            hint: context.l10n.redBand,
+            number: false,
+          ),
+        _field(
+          rest,
+          context.l10n.restAfterThisSet,
+          hint: context.l10n.t90Or130,
+          number: false,
+        ),
+        effort.build(context, setState),
+        _field(
+          tempo,
+          context.l10n.tempoOptional,
+          hint: '3-0-1-0',
+          number: false,
+        ),
+        _field(notes, context.l10n.notesOptional, number: false),
       ],
     );
   }
@@ -409,10 +448,10 @@ Future<StrengthSetResult?> showSetResultForm(
   required MassUnit unit,
   StrengthSetTarget? target,
   bool timed = false,
-  String title = 'Set',
+  String? title,
 }) => _sheet(
   context,
-  _SetResultForm(result, target, convention, unit, timed, title),
+  _SetResultForm(result, target, convention, unit, timed, title ?? tr.setLabel),
 );
 
 class _SetResultForm extends StatefulWidget {
@@ -476,7 +515,9 @@ class _SetResultFormState extends State<_SetResultForm> {
     final c = widget.convention;
     final skipped = status == StrengthSetStatus.skipped;
     try {
-      final newReps = skipped || timed ? null : _int(reps.text, 'Repetitions');
+      final newReps = skipped || timed
+          ? null
+          : _int(reps.text, context.l10n.repetitions);
       final newSeconds = skipped || !timed
           ? null
           : parseStrengthSeconds(seconds.text);
@@ -520,8 +561,8 @@ class _SetResultFormState extends State<_SetResultForm> {
           next.durationSeconds == null) {
         setState(
           () => error = timed
-              ? 'Enter how long the set lasted.'
-              : 'Enter the repetitions done.',
+              ? context.l10n.enterHowLongTheSet
+              : context.l10n.enterTheRepetitionsDone,
         );
         return;
       }
@@ -545,7 +586,9 @@ class _SetResultFormState extends State<_SetResultForm> {
       title: widget.title,
       subtitle: target == null
           ? c.text
-          : 'Planned ${strengthTargetText(target, c, widget.unit)}',
+          : context.l10n.plannedUnit(
+              strengthTargetText(target, c, widget.unit),
+            ),
       error: error,
       onSave: save,
       children: [
@@ -575,7 +618,7 @@ class _SetResultFormState extends State<_SetResultForm> {
           padding: const EdgeInsets.only(top: 12),
           child: DropdownButtonFormField<StrengthSetKind>(
             initialValue: kind,
-            decoration: const InputDecoration(labelText: 'Set type'),
+            decoration: InputDecoration(labelText: context.l10n.setType),
             items: [
               for (final k in StrengthSetKind.values)
                 DropdownMenuItem(value: k, child: Text(k.label)),
@@ -585,35 +628,45 @@ class _SetResultFormState extends State<_SetResultForm> {
         ),
         if (!skipped) ...[
           Padding(
-            padding: const EdgeInsets.only(top: 14),
+            padding: EdgeInsets.only(top: 14),
             child: SegmentedButton<bool>(
               showSelectedIcon: false,
-              segments: const [
-                ButtonSegment(value: false, label: Text('Reps')),
-                ButtonSegment(value: true, label: Text('Time')),
+              segments: [
+                ButtonSegment(value: false, label: Text(context.l10n.reps)),
+                ButtonSegment(value: true, label: Text(context.l10n.time)),
               ],
               selected: {timed},
               onSelectionChanged: (v) => setState(() => timed = v.first),
             ),
           ),
           if (timed)
-            _field(seconds, 'Duration', hint: '45 or 1:00', number: false)
+            _field(
+              seconds,
+              context.l10n.duration,
+              hint: context.l10n.t45Or100,
+              number: false,
+            )
           else
             _field(
               reps,
               c.side == StrengthSide.unilateral
-                  ? 'Reps done per side'
-                  : 'Reps done',
+                  ? context.l10n.repsDonePerSide
+                  : context.l10n.repsDone,
               hint: target?.isRange == true
-                  ? 'Planned ${target!.repMin}–${target.repMax}'
+                  ? context.l10n.plannedRepminRepmax(
+                      target!.repMin ?? 0,
+                      target.repMax ?? 0,
+                    )
                   : null,
             ),
           if (c.loadKind.hasKg) ...[
             _field(
               load,
-              c.loadKind == StrengthLoadKind.assisted ? 'Assistance' : 'Load',
+              c.loadKind == StrengthLoadKind.assisted
+                  ? context.l10n.assistance
+                  : context.l10n.load,
               suffix: widget.unit.name,
-              hint: 'Blank when unknown',
+              hint: context.l10n.blankWhenUnknown,
               decimal: true,
             ),
             if (target?.load != null)
@@ -624,21 +677,21 @@ class _SetResultFormState extends State<_SetResultForm> {
                   onPressed: () => setState(
                     () => load.text = _loadField(target!.load, widget.unit),
                   ),
-                  child: const Text('Use planned load'),
+                  child: Text(context.l10n.usePlannedLoad),
                 ),
               ),
           ],
           if (c.loadKind == StrengthLoadKind.band)
-            _field(resistance, 'Resistance', number: false),
-          effort.build(setState),
+            _field(resistance, context.l10n.resistance, number: false),
+          effort.build(context, setState),
         ],
         _field(
           rest,
-          'Rest taken before the next set',
-          hint: 'Blank when not measured',
+          context.l10n.restTakenBeforeTheNext,
+          hint: context.l10n.blankWhenNotMeasured,
           number: false,
         ),
-        _field(notes, 'Notes (optional)', number: false),
+        _field(notes, context.l10n.notesOptional, number: false),
       ],
     );
   }
@@ -712,15 +765,15 @@ class _ExerciseFormState extends State<_ExerciseForm> {
   void save() {
     try {
       if (name.text.trim().isEmpty) {
-        throw const FormatException('Name the exercise.');
+        throw FormatException(tr.nameTheExercise);
       }
       final n = basis == StrengthLoadBasis.perImplement
-          ? _int(implements.text, 'Implements') ?? 0
+          ? _int(implements.text, context.l10n.implementsLabel) ?? 0
           : 1;
-      if (n < 1) throw const FormatException('At least one implement.');
+      if (n < 1) throw FormatException(tr.atLeastOneImplement);
       final step = _load(increment.text, widget.unit, widget.increment);
       if (step != null && step.kg <= 0) {
-        throw const FormatException('An increment must be positive.');
+        throw FormatException(tr.anIncrementMustBePositive);
       }
       Navigator.pop<StrengthExerciseDetails>(context, (
         name: name.text.trim(),
@@ -742,19 +795,24 @@ class _ExerciseFormState extends State<_ExerciseForm> {
 
   @override
   Widget build(BuildContext context) => _FormSheet(
-    title: 'Exercise',
-    subtitle: 'Changing the load convention starts a separate history for this exercise.',
+    title: context.l10n.exercise,
+    subtitle: context.l10n.changingTheLoadConventionStarts,
     error: error,
     onSave: save,
     children: [
-      _field(name, 'Name', number: false),
-      _field(equipment, 'Equipment', hint: 'Barbell, machine…', number: false),
+      _field(name, context.l10n.name, number: false),
+      _field(
+        equipment,
+        context.l10n.equipment,
+        hint: context.l10n.barbellMachine,
+        number: false,
+      ),
       Padding(
         padding: const EdgeInsets.only(top: 12),
         child: DropdownButtonFormField<StrengthLoadKind>(
           initialValue: kind,
           isExpanded: true,
-          decoration: const InputDecoration(labelText: 'Load'),
+          decoration: InputDecoration(labelText: context.l10n.load),
           items: [
             for (final k in StrengthLoadKind.values)
               DropdownMenuItem(value: k, child: Text(k.label)),
@@ -768,7 +826,7 @@ class _ExerciseFormState extends State<_ExerciseForm> {
           child: DropdownButtonFormField<StrengthLoadBasis>(
             initialValue: basis,
             isExpanded: true,
-            decoration: const InputDecoration(labelText: 'Load refers to'),
+            decoration: InputDecoration(labelText: context.l10n.loadRefersTo),
             items: [
               for (final b in StrengthLoadBasis.values)
                 DropdownMenuItem(value: b, child: Text(b.label)),
@@ -777,13 +835,17 @@ class _ExerciseFormState extends State<_ExerciseForm> {
           ),
         ),
       if (kind.hasKg && basis == StrengthLoadBasis.perImplement)
-        _field(implements, 'Implements used together', hint: '2 for a pair'),
+        _field(
+          implements,
+          context.l10n.implementsUsedTogether,
+          hint: context.l10n.t2ForAPair,
+        ),
       Padding(
         padding: const EdgeInsets.only(top: 12),
         child: DropdownButtonFormField<StrengthSide>(
           initialValue: side,
           isExpanded: true,
-          decoration: const InputDecoration(labelText: 'Repetitions'),
+          decoration: InputDecoration(labelText: context.l10n.repetitions),
           items: [
             for (final s in StrengthSide.values)
               DropdownMenuItem(value: s, child: Text(s.label)),
@@ -794,19 +856,19 @@ class _ExerciseFormState extends State<_ExerciseForm> {
       if (kind.hasKg) ...[
         _field(
           increment,
-          'Smallest load step (optional)',
+          context.l10n.smallestLoadStepOptional,
           suffix: widget.unit.name,
-          hint: 'Available plates or dumbbells',
+          hint: context.l10n.availablePlatesOrDumbbells,
           decimal: true,
         ),
         CheckboxListTile(
           contentPadding: EdgeInsets.zero,
           value: remember,
           onChanged: (v) => setState(() => remember = v ?? false),
-          title: const Text('Remember for this equipment'),
+          title: Text(context.l10n.rememberForThisEquipment),
         ),
       ],
-      _field(notes, 'Instructions (optional)', number: false),
+      _field(notes, context.l10n.instructionsOptional, number: false),
     ],
   );
 }
@@ -864,8 +926,8 @@ class _ExercisePickerState extends State<_ExercisePicker> {
               child: TextField(
                 controller: search,
                 autofocus: true,
-                decoration: const InputDecoration(
-                  labelText: 'Find or name an exercise',
+                decoration: InputDecoration(
+                  labelText: context.l10n.findOrNameAnExercise,
                   prefixIcon: Icon(Icons.search),
                 ),
                 onChanged: (_) => setState(() {}),
@@ -881,8 +943,8 @@ class _ExercisePickerState extends State<_ExercisePicker> {
                       !all.any((v) => v.name.toLowerCase() == q))
                     ListTile(
                       leading: const Icon(Icons.add, color: strengthColor),
-                      title: Text('Create “${search.text.trim()}”'),
-                      subtitle: const Text('Custom exercise'),
+                      title: Text(context.l10n.createTrim(search.text.trim())),
+                      subtitle: Text(context.l10n.customExercise),
                       onTap: () => Navigator.pop(context, (
                         variant: null,
                         customName: search.text.trim(),
@@ -1041,7 +1103,7 @@ class _FieldsDialogState extends State<_FieldsDialog> {
     actions: [
       TextButton(
         onPressed: () => Navigator.pop(context),
-        child: const Text('Cancel'),
+        child: Text(context.l10n.cancel),
       ),
       TextButton(onPressed: submit, child: Text(widget.confirm)),
     ],
@@ -1057,21 +1119,19 @@ Future<StrengthLoad?> showIncrementForm(
   StrengthLoad? read(String text) {
     final step = _load(text, unit, current);
     if (step == null || step.kg <= 0) {
-      throw const FormatException('Enter a positive step.');
+      throw FormatException(tr.enterAPositiveStep);
     }
     return step;
   }
 
   final values = await showStrengthFieldsDialog(
     context,
-    title: 'Smallest load step',
-    message:
-        'The smallest change your plates, dumbbells or machine allow, '
-        'remembered for this equipment.',
-    confirm: 'Remember',
+    title: context.l10n.smallestLoadStep,
+    message: context.l10n.theSmallestChangeYourPlates,
+    confirm: context.l10n.remember,
     fields: [
       strengthDialogField(
-        'Load step',
+        context.l10n.loadStep,
         initial: _loadField(current, unit),
         suffix: unit.name,
       ),

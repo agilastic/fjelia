@@ -1,4 +1,7 @@
+import 'package:fjelia/l10n/app_localizations.dart';
+
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -7,14 +10,12 @@ import 'package:fjelia/widgets/activity_route_map.dart';
 
 class _TestTiles extends TileProvider {
   @override
-  ImageProvider getImage(
-    TileCoordinates coordinates,
-    TileLayer options,
-  ) => MemoryImage(
-    base64Decode(
-      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGPYcunOfwAIAgNiJBgw5wAAAABJRU5ErkJggg==',
-    ),
-  );
+  ImageProvider getImage(TileCoordinates coordinates, TileLayer options) =>
+      MemoryImage(
+        base64Decode(
+          'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGPYcunOfwAIAgNiJBgw5wAAAABJRU5ErkJggg==',
+        ),
+      );
 }
 
 void main() {
@@ -25,6 +26,8 @@ void main() {
     var exports = 0;
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: SafeArea(
             child: ActivityRouteMap(
@@ -94,6 +97,8 @@ void main() {
   ) async {
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: ActivityRouteMap(
             route: const [],

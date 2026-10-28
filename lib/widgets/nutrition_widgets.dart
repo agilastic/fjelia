@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -77,11 +79,9 @@ class _NutritionFieldsState extends State<_NutritionFields> {
             style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700),
           ),
           if (widget.presets.isNotEmpty) ...[
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(vertical: 10),
-              child: Text(
-                'Examples only: check and enter your product label values per serving. Leave unknown nutrients blank; enter 0 only when known.',
-              ),
+              child: Text(context.l10n.examplesOnlyCheckAndEnter),
             ),
             Wrap(
               spacing: 6,
@@ -113,17 +113,17 @@ class _NutritionFieldsState extends State<_NutritionFields> {
                                     'Unknown',
                                     'Indoor',
                                     'Road',
-                                    'Trail',
-                                    'Technical',
-                                    'Snow',
-                                    'Pool',
-                                    'Open water',
+                                    context.l10n.trail,
+                                    context.l10n.technical,
+                                    context.l10n.snow,
+                                    context.l10n.pool,
+                                    context.l10n.openWater,
                                   ]
                                 : ['before', 'during', 'after'])
                           DropdownMenuItem(
                             value: value,
                             child: Text(
-                              value,
+                              _choiceLabel(context, value),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -151,14 +151,16 @@ class _NutritionFieldsState extends State<_NutritionFields> {
                           return null;
                         }
                         if (e.key == 'name') {
-                          return text!.trim().isEmpty ? 'Enter a name' : null;
+                          return text!.trim().isEmpty
+                              ? context.l10n.enterAName
+                              : null;
                         }
                         final n = parseDecimal(text);
                         if (n == null ||
                             !n.isFinite ||
                             (!['temperature', 'altitude'].contains(e.key) &&
                                 n < 0)) {
-                          return 'Enter a valid amount';
+                          return context.l10n.enterAValidAmount;
                         }
                         if ([
                               'quantity',
@@ -167,10 +169,10 @@ class _NutritionFieldsState extends State<_NutritionFields> {
                               'trainedCarbs',
                             ].contains(e.key) &&
                             n <= 0) {
-                          return 'Enter a positive amount';
+                          return context.l10n.enterAPositiveAmount;
                         }
                         if (e.key == 'trainedCarbs' && n > 120) {
-                          return 'Maximum 120 g/h';
+                          return context.l10n.maximum120GH;
                         }
                         return null;
                       },
@@ -185,7 +187,7 @@ class _NutritionFieldsState extends State<_NutritionFields> {
                 });
               }
             },
-            child: const Text('Apply'),
+            child: Text(context.l10n.apply),
           ),
         ],
       ),
@@ -209,20 +211,23 @@ class PlannedNutritionCard extends ConsumerWidget {
     final c = plan.conditions;
     final values = await _fields(
       context,
-      'Nutrition strategy',
+      context.l10n.nutritionStrategy,
       {
-        'carbs': ('Carbohydrate target g/h', '${plan.carbs}'),
-        'fluid': ('Fluid target ml/h', '${plan.fluid}'),
-        'sodium': ('Sodium target mg/h (not salt)', '${plan.sodium}'),
-        'surface': ('Surface / feeding access', c.surface),
-        'ascent': ('Expected ascent m', c.ascent?.toString() ?? ''),
-        'altitude': ('Expected altitude m', c.altitude?.toString() ?? ''),
+        'carbs': (context.l10n.carbohydrateTargetGH, '${plan.carbs}'),
+        'fluid': (context.l10n.fluidTargetMlH, '${plan.fluid}'),
+        'sodium': (context.l10n.sodiumTargetMgHNot, '${plan.sodium}'),
+        'surface': (context.l10n.surfaceFeedingAccess, c.surface),
+        'ascent': (context.l10n.expectedAscentM, c.ascent?.toString() ?? ''),
+        'altitude': (
+          context.l10n.expectedAltitudeM,
+          c.altitude?.toString() ?? '',
+        ),
         'temperature': (
-          'Ambient temperature °C',
+          context.l10n.ambientTemperatureC,
           c.temperature?.toString() ?? '',
         ),
-        'humidity': ('Humidity %', c.humidity?.toString() ?? ''),
-        'wind': ('Wind km/h', c.wind?.toString() ?? ''),
+        'humidity': (context.l10n.humidity, c.humidity?.toString() ?? ''),
+        'wind': (context.l10n.windKmH, c.wind?.toString() ?? ''),
       },
       optional: {'ascent', 'altitude', 'temperature', 'humidity', 'wind'},
     );
@@ -263,7 +268,7 @@ class PlannedNutritionCard extends ConsumerWidget {
         ? ref.watch(nutritionPlanProvider(workout))
         : ref.watch(nutritionSavedPlanProvider(workout.key));
     return SectionCard(
-      title: 'Nutrition strategy',
+      title: context.l10n.nutritionStrategy,
       child: state.when(
         loading: () => const LinearProgressIndicator(),
         error: (e, _) => DataError(
@@ -277,12 +282,16 @@ class PlannedNutritionCard extends ConsumerWidget {
           },
         ),
         data: (plan) => plan == null
-            ? const Text('No pre-workout nutrition strategy was saved.')
+            ? Text(context.l10n.noPreWorkoutNutritionStrategy)
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${_v(plan.carbs)} g carbs/h · ${_v(plan.fluid)} ml/h · ${_v(plan.sodium)} mg sodium/h',
+                    context.l10n.carbsGCarbsHFluid(
+                      _v(plan.carbs),
+                      _v(plan.fluid),
+                      _v(plan.sodium),
+                    ),
                     style: const TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
@@ -292,48 +301,59 @@ class PlannedNutritionCard extends ConsumerWidget {
                       (conditions!.temperature != plan.conditions.temperature ||
                           conditions.humidity != plan.conditions.humidity ||
                           conditions.wind != plan.conditions.wind))
-                    const Text(
-                      'Forecast updated — review or recalculate the saved strategy.',
+                    Text(
+                      context.l10n.forecastUpdatedReviewOrRecalculate,
                       style: TextStyle(fontSize: 11, color: Colors.orange),
                     ),
                   Text(
-                    'Strategy saved ${dayText(plan.savedAt)}',
+                    context.l10n.strategySavedSavedat(dayText(plan.savedAt)),
                     style: const TextStyle(fontSize: 10, color: muted),
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'During total: ${_v(plan.totalCarbs)} g carbs · ${_v(plan.totalFluid)} ml · ${_v(plan.totalSodium)} mg sodium',
+                    context.l10n.duringTotalTotalcarbsGCarbs(
+                      _v(plan.totalCarbs),
+                      _v(plan.totalFluid),
+                      _v(plan.totalSodium),
+                    ),
                     style: const TextStyle(fontSize: 11, color: muted),
                   ),
                   if (plan.carbs > 0)
                     Text(
-                      'Every 20 min: about ${_v(plan.carbs / 3)} g carbs and ${_v(plan.fluid / 3)} ml.',
+                      context.l10n.every20MinAboutCarbs(
+                        _v(plan.carbs / 3),
+                        _v(plan.fluid / 3),
+                      ),
                       style: const TextStyle(fontSize: 11, color: muted),
                     ),
                   const SizedBox(height: 8),
                   Text(
-                    'Carry about ${plan.gels} gels (${_v(plan.preferences.gelCarbs)} g carbs each) + '
-                    '${plan.bottles} × ${_v(plan.preferences.bottleMl)} ml bottles. '
-                    '${_v(plan.drinkCarbs)} g carbohydrate comes from the drink mix.',
+                    context.l10n.carryAboutGelsGelsGelcarbs(
+                      plan.gels,
+                      _v(plan.preferences.gelCarbs),
+                      plan.bottles,
+                      _v(plan.preferences.bottleMl),
+                      _v(plan.drinkCarbs),
+                    ),
                   ),
-                  const Text(
-                    'Pack quantities include full containers; they are not a requirement to consume everything.',
+                  Text(
+                    context.l10n.packQuantitiesIncludeFullContainers,
                     style: TextStyle(fontSize: 10, color: muted),
                   ),
                   if (plan.workout != workout)
-                    const Text(
-                      'Workout changed — review or recalculate this saved strategy.',
+                    Text(
+                      context.l10n.workoutChangedReviewOrRecalculate,
                       style: TextStyle(color: Colors.orange),
                     ),
                   ExpansionTile(
                     tilePadding: EdgeInsets.zero,
-                    title: const Text(
-                      'Conditions and feeding plan',
+                    title: Text(
+                      context.l10n.conditionsAndFeedingPlan,
                       style: TextStyle(fontSize: 12),
                     ),
                     children: [
                       Text(
-                        '${plan.conditions.forecast ? 'Day forecast' : 'Entered conditions'}: '
+                        '${plan.conditions.forecast ? context.l10n.dayForecast : context.l10n.enteredConditions}: '
                         '${_v(plan.conditions.temperature)} °C · ${_v(plan.conditions.humidity)}% humidity · '
                         '${_v(plan.conditions.wind)} km/h wind. '
                         '${plan.conditions.surface} · ascent ${_v(plan.conditions.ascent)} m · altitude ${_v(plan.conditions.altitude)} m.',
@@ -355,7 +375,7 @@ class PlannedNutritionCard extends ConsumerWidget {
                       children: [
                         TextButton(
                           onPressed: () => _edit(context, ref, plan),
-                          child: const Text('Edit strategy'),
+                          child: Text(context.l10n.editStrategy),
                         ),
                         TextButton(
                           onPressed: () => runUiAction(context, () async {
@@ -372,7 +392,7 @@ class PlannedNutritionCard extends ConsumerWidget {
                                 );
                             ref.invalidate(nutritionPlanProvider(workout));
                           }),
-                          child: const Text('Recalculate'),
+                          child: Text(context.l10n.recalculate),
                         ),
                       ],
                     ),
@@ -409,24 +429,24 @@ class ActivityNutritionCard extends ConsumerWidget {
     }
 
     return SectionCard(
-      title: 'Actual nutrition',
+      title: context.l10n.actualNutrition,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             log == null || (log.entries.isEmpty && !log.finished)
-                ? 'Intake not recorded'
+                ? context.l10n.intakeNotRecorded
                 : log.status == 'declined'
-                ? 'Logging declined — intake unknown'
+                ? context.l10n.loggingDeclinedIntakeUnknown
                 : log.noIntake
-                ? 'Confirmed: no intake'
-                : '${log.status == 'draft' ? 'Draft · ' : ''}During: '
+                ? context.l10n.confirmedNoIntake
+                : '${log.status == 'draft' ? context.l10n.draft : ''}During: '
                       '${total('carbs', (e) => e.carbs, 'g carbs')} · ${total('fluid', (e) => e.fluid, 'ml')} · '
                       '${total('sodium', (e) => e.sodium, 'mg sodium')}',
           ),
           if (log != null && log.entries.any((e) => e.unknown.isNotEmpty))
-            const Text(
-              'Some product values are unknown; totals are incomplete.',
+            Text(
+              context.l10n.someProductValuesAreUnknown,
               style: TextStyle(fontSize: 11, color: muted),
             ),
           if (log != null && log.entries.isNotEmpty)
@@ -452,7 +472,7 @@ class ActivityNutritionCard extends ConsumerWidget {
             onPressed: () =>
                 showAppSheet(context, NutritionIntakeSheet(activity: activity)),
             icon: const Icon(Icons.restaurant_outlined, size: 18),
-            label: const Text('Log food and fluids'),
+            label: Text(context.l10n.logFoodAndFluids),
           ),
         ],
       ),
@@ -532,31 +552,40 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
         old == null || old.unknown.contains(key) ? '' : '$amount';
     final values = await _fields(
       context,
-      'Actual intake · per serving',
+      context.l10n.actualIntakePerServing,
       {
-        'name': ('Product / food name', old?.name ?? ''),
-        'quantity': ('Servings / quantity', '${old?.quantity ?? 1}'),
-        'phase': ('When', old?.phase ?? 'during'),
+        'name': (context.l10n.productFoodName, old?.name ?? ''),
+        'quantity': (context.l10n.servingsQuantity, '${old?.quantity ?? 1}'),
+        'phase': (context.l10n.when, old?.phase ?? 'during'),
         'minute': (
-          'Minute into workout (during only, optional)',
+          context.l10n.minuteIntoWorkoutDuringOnly,
           old?.minute?.toString() ?? '',
         ),
-        'carbs': ('Carbohydrate g / serving', value('carbs', old?.carbs)),
-        'fluid': ('Fluid ml / serving', value('fluid', old?.fluid)),
+        'carbs': (
+          context.l10n.carbohydrateGServing,
+          value('carbs', old?.carbs),
+        ),
+        'fluid': (context.l10n.fluidMlServing, value('fluid', old?.fluid)),
         'sodium': (
-          'Sodium mg / serving (not salt)',
+          context.l10n.sodiumMgServingNotSalt,
           value('sodium', old?.sodium),
         ),
-        'caffeine': ('Caffeine mg / serving', value('caffeine', old?.caffeine)),
-        'protein': ('Protein g / serving', value('protein', old?.protein)),
+        'caffeine': (
+          context.l10n.caffeineMgServing,
+          value('caffeine', old?.caffeine),
+        ),
+        'protein': (
+          context.l10n.proteinGServing,
+          value('protein', old?.protein),
+        ),
       },
       optional: {'minute', ..._nutrients},
       presets: {
         for (final p in [
-          ('Gel', '25', '0', '0'),
-          ('Water', '0', '500', '0'),
-          ('Sports drink', '30', '500', '250'),
-          ('Bar', '30', '0', '0'),
+          (context.l10n.gel, '25', '0', '0'),
+          (context.l10n.water, '0', '500', '0'),
+          (context.l10n.sportsDrink, '30', '500', '250'),
+          (context.l10n.bar, '30', '0', '0'),
         ])
           p.$1: {
             'name': '${p.$1} (edit label values)',
@@ -625,7 +654,7 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
 
   @override
   Widget build(BuildContext context) => SheetPage(
-    title: 'Actual nutrition',
+    title: context.l10n.actualNutrition,
     child: loadError != null
         ? DataError(loadError!, retry: _load)
         : !loaded
@@ -637,44 +666,46 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
                 widget.activity.name,
                 style: const TextStyle(fontWeight: FontWeight.w700),
               ),
-              const Text(
-                'Record what you actually had. Planned intake is not copied into this log.',
-              ),
+              Text(context.l10n.recordWhatYouActuallyHad),
               TextField(
                 controller: elapsed,
                 keyboardType: const TextInputType.numberWithOptions(
                   decimal: true,
                 ),
                 decoration: InputDecoration(
-                  labelText: 'Elapsed minutes including stops (optional)',
-                  hintText:
-                      'Recorded duration: ${_v(nutritionElapsedSeconds(widget.activity) / 60)} min',
+                  labelText: context.l10n.elapsedMinutesIncludingStopsOptional,
+                  hintText: context.l10n.recordedDurationActivityMin(
+                    _v(nutritionElapsedSeconds(widget.activity) / 60),
+                  ),
                 ),
               ),
               if (plans.isNotEmpty || planKey?.isNotEmpty == true)
                 DropdownButtonFormField<String>(
                   isExpanded: true,
                   initialValue: planKey,
-                  decoration: const InputDecoration(
-                    labelText: 'Compare with saved strategy',
+                  decoration: InputDecoration(
+                    labelText: context.l10n.compareWithSavedStrategy,
                   ),
                   items: [
-                    const DropdownMenuItem<String>(
+                    DropdownMenuItem<String>(
                       value: null,
                       child: Text(
-                        'Use matched session if available',
+                        context.l10n.useMatchedSessionIfAvailable,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    const DropdownMenuItem(
+                    DropdownMenuItem(
                       value: '',
-                      child: Text('No plan comparison'),
+                      child: Text(context.l10n.noPlanComparison),
                     ),
                     for (final p in plans)
                       DropdownMenuItem(
                         value: p.workout.key,
                         child: Text(
-                          '${p.workout.title} · ${dayText(p.workout.date)}',
+                          context.l10n.titleDate(
+                            p.workout.title,
+                            dayText(p.workout.date),
+                          ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -683,7 +714,7 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
                         !plans.any((p) => p.workout.key == planKey))
                       DropdownMenuItem(
                         value: planKey,
-                        child: const Text('Linked strategy unavailable'),
+                        child: Text(context.l10n.linkedStrategyUnavailable),
                       ),
                   ],
                   onChanged: (key) => planKey = key,
@@ -691,13 +722,15 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
               for (final e in entries.indexed)
                 ListTile(
                   contentPadding: EdgeInsets.zero,
-                  title: Text('${e.$2.quantity} × ${e.$2.name}'),
+                  title: Text(
+                    context.l10n.quantityName(e.$2.quantity, e.$2.name),
+                  ),
                   subtitle: Text(
                     '${e.$2.phase}${e.$2.minute == null ? '' : ' · minute ${_v(e.$2.minute)}'}',
                   ),
                   onTap: busy ? null : () => _entry(e.$1),
                   trailing: IconButton(
-                    tooltip: 'Remove intake',
+                    tooltip: context.l10n.removeIntake,
                     onPressed: busy
                         ? null
                         : () => setState(() => entries.removeAt(e.$1)),
@@ -707,11 +740,11 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
               OutlinedButton.icon(
                 onPressed: busy ? null : () => _entry(),
                 icon: const Icon(Icons.add),
-                label: const Text('Add food or drink'),
+                label: Text(context.l10n.addFoodOrDrink),
               ),
               CheckboxListTile(
                 contentPadding: EdgeInsets.zero,
-                title: const Text('I had no intake'),
+                title: Text(context.l10n.iHadNoIntake),
                 value: noIntake,
                 onChanged: busy || entries.isNotEmpty
                     ? null
@@ -720,8 +753,8 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
               DropdownButtonFormField<String>(
                 isExpanded: true,
                 initialValue: gut,
-                decoration: const InputDecoration(
-                  labelText: 'GI / gut comfort',
+                decoration: InputDecoration(
+                  labelText: context.l10n.giGutComfort,
                 ),
                 items: [
                   for (final value in [
@@ -731,29 +764,34 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
                     'Moderate symptoms',
                     'Severe symptoms',
                   ])
-                    DropdownMenuItem(value: value, child: Text(value)),
+                    DropdownMenuItem(
+                      value: value,
+                      child: Text(_choiceLabel(context, value)),
+                    ),
                 ],
                 onChanged: (value) => gut = value!,
               ),
               TextField(
                 controller: note,
                 maxLines: 3,
-                decoration: const InputDecoration(
-                  labelText: 'What worked / symptoms / access problems',
+                decoration: InputDecoration(
+                  labelText: context.l10n.whatWorkedSymptomsAccessProblems,
                 ),
               ),
               const SizedBox(height: 16),
               FilledButton(
                 onPressed: busy ? null : () => _save('complete'),
-                child: Text(busy ? 'Saving…' : 'Finish intake log'),
+                child: Text(
+                  busy ? context.l10n.saving : context.l10n.finishIntakeLog,
+                ),
               ),
               TextButton(
                 onPressed: busy ? null : () => _save('draft'),
-                child: const Text('Save draft'),
+                child: Text(context.l10n.saveDraft),
               ),
               TextButton(
                 onPressed: busy ? null : () => _save('declined'),
-                child: const Text('Skip logging this activity'),
+                child: Text(context.l10n.skipLoggingThisActivity),
               ),
             ],
           ),
@@ -770,15 +808,15 @@ class NutritionPreferencesTile extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SectionLabel('Nutrition and fluids', color: Colors.orange),
+        SectionLabel(context.l10n.nutritionAndFluids, color: Colors.orange),
         TextButton(
           onPressed: () async {
             final values = await _fields(
               context,
-              'Personal nutrition settings',
+              context.l10n.personalNutritionSettings,
               {
                 'trainedCarbs': (
-                  'Practised carbohydrate tolerance g/h (up to 120)',
+                  context.l10n.practisedCarbohydrateToleranceGH,
                   '${prefs.trainedCarbs}',
                 ),
                 'gelCarbs': (
@@ -819,14 +857,12 @@ class NutritionPreferencesTile extends ConsumerWidget {
               ref.invalidate(nutritionPreferencesProvider);
             });
           },
-          child: const Text('Products, tolerance and measured sweat losses'),
+          child: Text(context.l10n.productsToleranceAndMeasuredSweat),
         ),
         SwitchListTile(
           contentPadding: EdgeInsets.zero,
-          title: const Text('Post-workout intake reminder'),
-          subtitle: const Text(
-            'Once after a recent endurance workout; quiet hours 22:00–08:00.',
-          ),
+          title: Text(context.l10n.postWorkoutIntakeReminder),
+          subtitle: Text(context.l10n.onceAfterARecentEndurance),
           value: prefs.reminders,
           onChanged: (on) => runUiAction(context, () async {
             await ref
@@ -858,16 +894,37 @@ class NutritionPreferencesTile extends ConsumerWidget {
                   SnackBar(
                     content: Text(
                       permission.allowed
-                          ? 'Workout notifications enabled'
-                          : 'Allow notifications in system settings',
+                          ? context.l10n.workoutNotificationsEnabled
+                          : context.l10n.allowNotificationsInSystemSettings,
                     ),
                   ),
                 );
               }
             }),
-            child: const Text('Enable workout notifications'),
+            child: Text(context.l10n.enableWorkoutNotifications),
           ),
       ],
     );
   }
 }
+
+/// Dropdown values are stored as given; this is what the user reads.
+String _choiceLabel(BuildContext context, String value) => switch (value) {
+  'Unknown' => context.l10n.unknown,
+  'Indoor' => context.l10n.indoor,
+  'Road' => context.l10n.road,
+  'Trail' => context.l10n.trail,
+  'Technical' => context.l10n.technical,
+  'Snow' => context.l10n.snow,
+  'Pool' => context.l10n.pool,
+  'Open water' => context.l10n.openWater,
+  'Not recorded' => context.l10n.notRecorded,
+  'Comfortable' => context.l10n.comfortable,
+  'Mild symptoms' => context.l10n.mildSymptoms,
+  'Moderate symptoms' => context.l10n.moderateSymptoms,
+  'Severe symptoms' => context.l10n.severeSymptoms,
+  'before' => context.l10n.before,
+  'during' => context.l10n.during,
+  'after' => context.l10n.after,
+  _ => value,
+};

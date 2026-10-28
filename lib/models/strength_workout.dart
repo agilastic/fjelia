@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 import 'dart:math' as math;
 
 /// Strength workouts: exercises and their individual sets, kept apart from
@@ -49,13 +51,17 @@ bool isStrengthSport(String? sport) =>
     sport != null && strengthSportAliases.contains(_sportKey(sport));
 
 enum StrengthSetKind {
-  warmup('Warm-up'),
-  working('Working'),
-  backoff('Back-off'),
-  technique('Technique');
+  warmup,
+  working,
+  backoff,
+  technique;
 
-  const StrengthSetKind(this.label);
-  final String label;
+  String get label => switch (this) {
+    StrengthSetKind.warmup => tr.enumWarmUp,
+    StrengthSetKind.working => tr.enumWorking,
+    StrengthSetKind.backoff => tr.enumBackOff,
+    StrengthSetKind.technique => tr.enumTechnique,
+  };
   static StrengthSetKind parse(Object? v) =>
       values.firstWhere((k) => k.name == v, orElse: () => working);
 }
@@ -63,22 +69,27 @@ enum StrengthSetKind {
 /// How the load of an exercise is meant.
 enum StrengthLoadKind {
   /// A barbell, dumbbell, machine stack: external load in kg.
-  external('External load'),
+  external,
 
   /// No load; repetitions or time only.
-  bodyweight('Bodyweight'),
+  bodyweight,
 
   /// External load added to bodyweight (a weighted pull-up).
-  added('Added load'),
+  added,
 
   /// Assistance, a positive magnitude that makes the movement easier.
-  assisted('Assistance'),
+  assisted,
 
   /// Bands and uncalibrated resistance: a description, never kg.
-  band('Band / resistance');
+  band;
 
-  const StrengthLoadKind(this.label);
-  final String label;
+  String get label => switch (this) {
+    StrengthLoadKind.external => tr.enumExternalLoad,
+    StrengthLoadKind.bodyweight => tr.bodyweight,
+    StrengthLoadKind.added => tr.addedLoad,
+    StrengthLoadKind.assisted => tr.assistance,
+    StrengthLoadKind.band => tr.enumBandResistance,
+  };
   static StrengthLoadKind parse(Object? v) =>
       values.firstWhere((k) => k.name == v, orElse: () => external);
 
@@ -89,36 +100,47 @@ enum StrengthLoadKind {
 
 /// What one load number refers to.
 enum StrengthLoadBasis {
-  total('Total load'),
-  perImplement('Per implement'),
-  single('One implement');
+  total,
+  perImplement,
+  single;
 
-  const StrengthLoadBasis(this.label);
-  final String label;
+  String get label => switch (this) {
+    StrengthLoadBasis.total => tr.enumTotalLoad,
+    StrengthLoadBasis.perImplement => tr.enumPerImplement,
+    StrengthLoadBasis.single => tr.enumOneImplement,
+  };
   static StrengthLoadBasis parse(Object? v) =>
       values.firstWhere((k) => k.name == v, orElse: () => total);
 }
 
 enum StrengthSide {
-  bilateral('Both sides'),
-  unilateral('Reps per side'),
-  alternating('Alternating, total reps');
+  bilateral,
+  unilateral,
+  alternating;
 
-  const StrengthSide(this.label);
-  final String label;
+  String get label => switch (this) {
+    StrengthSide.bilateral => tr.enumBothSides,
+    StrengthSide.unilateral => tr.repsPerSide,
+    StrengthSide.alternating => tr.enumAlternatingTotalReps,
+  };
   static StrengthSide parse(Object? v) =>
       values.firstWhere((k) => k.name == v, orElse: () => bilateral);
 }
 
 enum StrengthSetStatus {
-  unrecorded('Not recorded'),
-  completed('Done'),
-  partial('Partial'),
-  failed('Failed'),
-  skipped('Skipped');
+  unrecorded,
+  completed,
+  partial,
+  failed,
+  skipped;
 
-  const StrengthSetStatus(this.label);
-  final String label;
+  String get label => switch (this) {
+    StrengthSetStatus.unrecorded => tr.notRecorded,
+    StrengthSetStatus.completed => tr.done,
+    StrengthSetStatus.partial => tr.enumPartial,
+    StrengthSetStatus.failed => tr.enumFailed,
+    StrengthSetStatus.skipped => tr.skipped,
+  };
   static StrengthSetStatus parse(Object? v) =>
       values.firstWhere((k) => k.name == v, orElse: () => unrecorded);
 
@@ -127,22 +149,27 @@ enum StrengthSetStatus {
 }
 
 enum StrengthBlockKind {
-  straight('Straight sets'),
-  superset('Superset'),
-  circuit('Circuit');
+  straight,
+  superset,
+  circuit;
 
-  const StrengthBlockKind(this.label);
-  final String label;
+  String get label => switch (this) {
+    StrengthBlockKind.straight => tr.enumStraightSets,
+    StrengthBlockKind.superset => tr.enumSuperset,
+    StrengthBlockKind.circuit => tr.enumCircuit,
+  };
   static StrengthBlockKind parse(Object? v) =>
       values.firstWhere((k) => k.name == v, orElse: () => straight);
 }
 
 enum StrengthEffortScale {
-  rir('RIR'),
-  rpe('RPE 1–10');
+  rir,
+  rpe;
 
-  const StrengthEffortScale(this.label);
-  final String label;
+  String get label => switch (this) {
+    StrengthEffortScale.rir => tr.enumRir,
+    StrengthEffortScale.rpe => tr.enumRpe110,
+  };
   static StrengthEffortScale? parse(Object? v) =>
       values.where((k) => k.name == v).firstOrNull;
 }
@@ -155,11 +182,9 @@ class StrengthEffort {
   final double value;
 
   String? get error => switch (scale) {
-    _ when !value.isFinite => 'Effort must be a number.',
-    StrengthEffortScale.rir when value < 0 || value > 10 =>
-      'RIR runs from 0 to 10+.',
-    StrengthEffortScale.rpe when value < 1 || value > 10 =>
-      'RPE runs from 1 to 10.',
+    _ when !value.isFinite => tr.effortMustBeANumber,
+    StrengthEffortScale.rir when value < 0 || value > 10 => tr.rirRunsFrom0To,
+    StrengthEffortScale.rpe when value < 1 || value > 10 => tr.rpeRunsFrom1To,
     _ => null,
   };
 
@@ -604,9 +629,8 @@ class StrengthSetTarget {
   );
 
   List<String> validate(StrengthConvention c) => [
-    if (reps != null && reps! < 0) 'Repetitions cannot be negative.',
-    if ((repMin ?? 0) < 0 || (repMax ?? 0) < 0)
-      'Repetitions cannot be negative.',
+    if (reps != null && reps! < 0) tr.repetitionsCannotBeNegative,
+    if ((repMin ?? 0) < 0 || (repMax ?? 0) < 0) tr.repetitionsCannotBeNegative,
     if ((repMin == null) != (repMax == null))
       'A rep range needs a lowest and a highest value.',
     if (repMin != null && repMax != null && repMin! > repMax!)
@@ -614,17 +638,17 @@ class StrengthSetTarget {
     if (reps != null && repMin != null)
       'Use either exact repetitions or a range.',
     if (durationSeconds != null && durationSeconds! <= 0)
-      'Timed work must be longer than zero seconds.',
+      tr.timedWorkMustBeLonger,
     if (durationSeconds != null && (reps != null || repMin != null))
-      'Choose repetitions or timed work, not both.',
+      tr.chooseRepetitionsOrTimedWork,
     if (kind != StrengthSetKind.warmup &&
         durationSeconds == null &&
         reps == null &&
         repMin == null)
       'A working set needs repetitions, a range or a duration.',
-    if (restSeconds != null && restSeconds! < 0) 'Rest cannot be negative.',
+    if (restSeconds != null && restSeconds! < 0) tr.restCannotBeNegative,
     if (load != null && (!load!.kg.isFinite || load!.kg < 0))
-      'Load must be a finite, non-negative number.',
+      tr.loadMustBeAFinite,
     if (load != null && !c.loadKind.hasKg)
       '${c.loadKind.label} has no kg load.',
     if (tempo != null && !validTempo(tempo!))
@@ -874,7 +898,7 @@ class StrengthWorkoutPlan {
     }
 
     if (estimatedMinutes != null && estimatedMinutes! <= 0) {
-      errors.add('The duration estimate must be positive.');
+      errors.add(tr.theDurationEstimateMustBe);
     }
     for (final b in blocks) {
       unique(b.id);
@@ -886,7 +910,7 @@ class StrengthWorkoutPlan {
         b.restBetweenExercisesSeconds,
         b.restBetweenRoundsSeconds,
       ]) {
-        if (r != null && r < 0) errors.add('Rest cannot be negative.');
+        if (r != null && r < 0) errors.add(tr.restCannotBeNegative);
       }
       for (final e in b.exercises) {
         unique(e.id);
@@ -1021,14 +1045,14 @@ class StrengthSetResult {
   );
 
   List<String> validate(StrengthConvention c) => [
-    if (reps != null && reps! < 0) 'Repetitions cannot be negative.',
+    if (reps != null && reps! < 0) tr.repetitionsCannotBeNegative,
     if (durationSeconds != null && durationSeconds! < 0)
-      'Duration cannot be negative.',
-    if (restSeconds != null && restSeconds! < 0) 'Rest cannot be negative.',
+      tr.durationCannotBeNegative,
+    if (restSeconds != null && restSeconds! < 0) tr.restCannotBeNegative,
     if (restSeconds != null && restOrigin == null)
       'Recorded rest needs its source.',
     if (load != null && (!load!.kg.isFinite || load!.kg < 0))
-      'Load must be a finite, non-negative number.',
+      tr.loadMustBeAFinite,
     if (load != null && !c.loadKind.hasKg)
       '${c.loadKind.label} has no kg load.',
     ?effort?.error,
@@ -1258,16 +1282,16 @@ String? completeAsPlannedBlocker(
   StrengthConvention c,
 ) {
   if (target.isRange) {
-    return 'Enter the repetitions done; the plan has a range.';
+    return tr.enterTheRepetitionsDoneThe;
   }
   if (target.reps == null && target.durationSeconds == null) {
     return 'The plan has no repetitions for this set.';
   }
   if (c.loadKind.hasKg && target.load == null) {
-    return 'Enter the load; the plan has none.';
+    return tr.enterTheLoadThePlan;
   }
   if (c.loadKind == StrengthLoadKind.band && target.resistance == null) {
-    return 'Enter the resistance; the plan has none.';
+    return tr.enterTheResistanceThePlan;
   }
   return null;
 }

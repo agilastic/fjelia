@@ -1,3 +1,5 @@
+import 'package:fjelia/l10n/app_localizations.dart';
+
 import 'dart:convert';
 
 import 'package:drift/drift.dart' hide isNull, isNotNull;
@@ -171,6 +173,8 @@ void main() {
           ...overrides,
         ],
         child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: Scaffold(body: PlanSessionSheet(session: session)),
         ),
       ),
@@ -465,6 +469,8 @@ void main() {
             ),
           ],
           child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             home: Scaffold(body: PlanSessionSheet(session: session)),
           ),
         ),

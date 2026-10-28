@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -153,9 +155,9 @@ class _MoveWorkoutCardState extends State<MoveWorkoutCard> {
             children: [
               const Icon(Icons.swap_horiz_rounded, size: 20, color: mint),
               const SizedBox(width: 8),
-              const Expanded(
+              Expanded(
                 child: Text(
-                  'MOVE THIS WORKOUT',
+                  context.l10n.moveThisWorkout,
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
@@ -173,8 +175,8 @@ class _MoveWorkoutCardState extends State<MoveWorkoutCard> {
                   ),
                   onPressed: widget.enabled ? widget.onPickDate : null,
                   icon: const Icon(Icons.calendar_month_outlined, size: 16),
-                  label: const Text(
-                    'Pick date',
+                  label: Text(
+                    context.l10n.pickDate,
                     style: TextStyle(fontSize: 12),
                   ),
                 ),
@@ -182,8 +184,9 @@ class _MoveWorkoutCardState extends State<MoveWorkoutCard> {
           ),
           const SizedBox(height: 4),
           Text(
-            'Now on ${DateFormat('EEEE, d MMMM').format(widget.current)}. '
-            'Tap a day, or drag the workout onto one. The steps stay as they are.',
+            context.l10n.nowOnCurrentTapA(
+              DateFormat.MMMMEEEEd().format(widget.current),
+            ),
             style: const TextStyle(
               fontSize: 12,
               color: Colors.white70,
@@ -212,7 +215,9 @@ class _MoveWorkoutCardState extends State<MoveWorkoutCard> {
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          'Moved from ${DateFormat('EEEE d MMMM').format(widget.movedFrom!)}',
+                          context.l10n.movedFromMovedfrom(
+                            DateFormat.MMMMEEEEd().format(widget.movedFrom!),
+                          ),
                           style: const TextStyle(fontSize: 12),
                         ),
                       ),
@@ -222,7 +227,7 @@ class _MoveWorkoutCardState extends State<MoveWorkoutCard> {
                           visualDensity: VisualDensity.compact,
                         ),
                         onPressed: widget.enabled ? widget.onUndo : null,
-                        child: const Text('Undo'),
+                        child: Text(context.l10n.undo),
                       ),
                     ],
                   ),
@@ -387,7 +392,7 @@ class _DayChip extends StatelessWidget {
       button: true,
       selected: isCurrent,
       label:
-          '${DateFormat('EEEE d MMMM').format(day.date)}'
+          '${DateFormat.MMMMEEEEd().format(day.date)}'
           '${isCurrent ? ', where the workout is' : ''}'
           '${day.isRestDay ? ', rest day' : ''}'
           '${day.event != null ? ', ${day.event}, not available' : ''}'
@@ -414,7 +419,7 @@ class _DayChip extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                DateFormat('E').format(day.date).toUpperCase(),
+                DateFormat.E().format(day.date).toUpperCase(),
                 style: TextStyle(
                   fontSize: 10,
                   letterSpacing: .6,
@@ -423,7 +428,7 @@ class _DayChip extends StatelessWidget {
                 ),
               ),
               Text(
-                '${day.date.day}',
+                context.l10n.day(day.date.day),
                 style: TextStyle(
                   fontSize: 19,
                   fontWeight: FontWeight.w800,

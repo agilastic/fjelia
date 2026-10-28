@@ -1,3 +1,4 @@
+import 'package:fjelia/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -55,6 +56,8 @@ void main() {
             ),
           ],
           child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             home: Scaffold(body: BriefingCard(openCoach: () {})),
           ),
         ),
@@ -77,7 +80,11 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [aiCoachSettingsProvider.overrideWith(_Settings.new)],
-          child: const MaterialApp(home: Scaffold(body: AiSettingsTab())),
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Scaffold(body: AiSettingsTab()),
+          ),
         ),
       );
       await tester.pumpAndSettle();
@@ -102,6 +109,8 @@ void main() {
           builder: (context, ref, _) {
             container = ProviderScope.containerOf(context);
             return MaterialApp(
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
               home: Scaffold(body: BriefingCard(openCoach: () => opened++)),
             );
           },

@@ -1,3 +1,5 @@
+import 'package:fjelia/l10n/app_localizations.dart';
+
 import 'dart:async';
 
 import 'package:drift/native.dart';
@@ -50,6 +52,8 @@ void main() {
         ProviderScope(
           overrides: [databaseProvider.overrideWithValue(db)],
           child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             home: Scaffold(body: PolarH10HrvSheet(sensor: sensor)),
           ),
         ),
@@ -123,6 +127,8 @@ void main() {
           ProviderScope(
             overrides: [databaseProvider.overrideWithValue(db)],
             child: MaterialApp(
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
               home: Scaffold(
                 body: Builder(
                   builder: (context) {
@@ -214,6 +220,8 @@ void main() {
         ProviderScope(
           overrides: [databaseProvider.overrideWithValue(db)],
           child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             home: Scaffold(body: PolarH10HrvSheet(sensor: _Sensor())),
           ),
         ),

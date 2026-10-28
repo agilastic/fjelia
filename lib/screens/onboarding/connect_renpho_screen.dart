@@ -1,3 +1,4 @@
+import '../../l10n/l10n_ext.dart';
 import '../../providers/connection_actions_provider.dart';
 
 import 'package:flutter/material.dart';
@@ -48,7 +49,7 @@ class _ConnectRenphoScreenState extends ConsumerState<ConnectRenphoScreen> {
       if (mounted) _next();
     } catch (_) {
       setState(
-        () => _error = 'Connection failed. Check your credentials and internet connection.',
+        () => _error = context.l10n.connectionFailedCheckYourCredentials,
       );
     } finally {
       if (mounted) setState(() => _loading = false);
@@ -65,8 +66,8 @@ class _ConnectRenphoScreenState extends ConsumerState<ConnectRenphoScreen> {
         actions: [
           TextButton(
             onPressed: _next,
-            child: const Text(
-              'Skip',
+            child: Text(
+              context.l10n.skip,
               style: TextStyle(color: Color(0xFFCCCCCC)),
             ),
           ),
@@ -81,16 +82,16 @@ class _ConnectRenphoScreenState extends ConsumerState<ConnectRenphoScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 8),
-                const OnboardingDeviceHeader(
+                OnboardingDeviceHeader(
                   icon: Icons.monitor_weight_rounded,
                   color: _accent,
-                  title: 'Connect Renpho',
+                  title: context.l10n.connectRenpho,
                   subtitle:
                       'Sign in with your Renpho account to import body '
                       'weight and composition data.',
                 ),
                 const SizedBox(height: 36),
-                const OnboardingInputLabel('Email'),
+                OnboardingInputLabel(context.l10n.email),
                 const SizedBox(height: 8),
                 TextFormField(
                   controller: _email,
@@ -110,7 +111,7 @@ class _ConnectRenphoScreenState extends ConsumerState<ConnectRenphoScreen> {
                       : null,
                 ),
                 const SizedBox(height: 16),
-                const OnboardingInputLabel('Password'),
+                OnboardingInputLabel(context.l10n.password),
                 const SizedBox(height: 8),
                 TextFormField(
                   controller: _password,
@@ -135,14 +136,14 @@ class _ConnectRenphoScreenState extends ConsumerState<ConnectRenphoScreen> {
                           onPressed: () => setState(() => _obscure = !_obscure),
                         ),
                       ),
-                  validator: (v) =>
-                      v == null || v.isEmpty ? 'Password required' : null,
+                  validator: (v) => v == null || v.isEmpty
+                      ? context.l10n.passwordRequired
+                      : null,
                 ),
                 const SizedBox(height: 24),
                 if (_error != null) OnboardingErrorBanner(_error!),
-                const OnboardingInfoBox(
-                  'Renpho credentials are stored encrypted on your device. '
-                  'Fjelia talks directly to the Renpho cloud API.',
+                OnboardingInfoBox(
+                  context.l10n.renphoCredentialsAreStoredEncrypted,
                 ),
                 const SizedBox(height: 32),
                 SizedBox(
@@ -171,7 +172,7 @@ class _ConnectRenphoScreenState extends ConsumerState<ConnectRenphoScreen> {
                               strokeWidth: 2.5,
                             ),
                           )
-                        : const Text('Connect Renpho'),
+                        : Text(context.l10n.connectRenpho),
                   ),
                 ),
               ],

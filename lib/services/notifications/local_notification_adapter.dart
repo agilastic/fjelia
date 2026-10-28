@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -129,11 +131,11 @@ class FlutterLocalNotificationGateway implements LocalNotificationGateway {
               actions: [
                 fln.DarwinNotificationAction.plain(
                   'log',
-                  'Log intake',
+                  tr.logIntake,
                   options: {fln.DarwinNotificationActionOption.foreground},
                 ),
-                fln.DarwinNotificationAction.plain('snooze', 'In 30 minutes'),
-                fln.DarwinNotificationAction.plain('skip', 'Dismiss'),
+                fln.DarwinNotificationAction.plain('snooze', tr.in30Minutes),
+                fln.DarwinNotificationAction.plain('skip', tr.dismiss),
               ],
             ),
             fln.DarwinNotificationCategory(
@@ -235,11 +237,11 @@ class FlutterLocalNotificationGateway implements LocalNotificationGateway {
         android: fln.AndroidNotificationDetails(
           nutrition ? 'nutrition_post_reminder' : _channelId,
           nutrition
-              ? 'Workout nutrition'
+              ? tr.workoutNutrition
               : labels['channel'] ?? 'HRV reminders',
           channelDescription: nutrition
-              ? 'Post-workout food and fluid log reminder'
-              : 'Post-training HRV measurement reminder',
+              ? tr.postWorkoutFoodAndFluid
+              : tr.postTrainingHrvMeasurementReminder,
           importance: fln.Importance.defaultImportance,
           priority: fln.Priority.defaultPriority,
           category: fln.AndroidNotificationCategory.reminder,

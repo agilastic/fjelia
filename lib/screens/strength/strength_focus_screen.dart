@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -234,9 +236,9 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
     if (open > 0) {
       if (!await confirmAction(
         context,
-        'Finish with sets open?',
+        context.l10n.finishWithSetsOpen,
         '$open ${open == 1 ? 'set is' : 'sets are'} not recorded. They stay '
-            'unrecorded; finishing does not mark them as done.',
+        'unrecorded; finishing does not mark them as done.',
       )) {
         return;
       }
@@ -247,8 +249,8 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
     if (widget.sessionId != null) {
       complete = await confirmAction(
         context,
-        'Complete the planned workout?',
-        'Marks the planned session as done with this workout.',
+        context.l10n.completeThePlannedWorkout,
+        context.l10n.marksThePlannedSessionAs,
       );
     }
     if (!await _save(next)) return;
@@ -267,8 +269,8 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
   Future<void> _discard() async {
     if (!await confirmAction(
       context,
-      'Discard this workout?',
-      'Removes the workout and every set recorded in it.',
+      context.l10n.discardThisWorkout,
+      context.l10n.removesTheWorkoutAndEvery,
     )) {
       return;
     }
@@ -287,7 +289,7 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
     required VoidCallback onTap,
   }) => Semantics(
     container: true,
-    label: '$label: $value',
+    label: context.l10n.labelValue(label, value),
     child: Column(
       children: [
         Text(
@@ -298,7 +300,7 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             IconButton.filledTonal(
-              tooltip: 'Less $label',
+              tooltip: context.l10n.lessLabel(label),
               iconSize: 28,
               onPressed: onMinus,
               icon: const Icon(Icons.remove),
@@ -324,7 +326,7 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
               ),
             ),
             IconButton.filledTonal(
-              tooltip: 'More $label',
+              tooltip: context.l10n.moreLabel(label),
               iconSize: 28,
               onPressed: onPlus,
               icon: const Icon(Icons.add),
@@ -340,8 +342,8 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
     final unit = ref.watch(massUnitProvider);
     if (order.isEmpty) {
       return SheetPage(
-        title: 'Gym mode',
-        child: const EmptyState('This workout has no sets.'),
+        title: context.l10n.gymMode,
+        child: EmptyState(context.l10n.thisWorkoutHasNoSets),
       );
     }
     final s = step, c = s.exercise.convention;
@@ -369,7 +371,7 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
     final allDone = done == order.length;
     final showSet = !allDone || reviewing;
     void enterLoad() => _enter(
-      'Load (${unit.name})',
+      context.l10n.loadName(unit.name),
       kg == null ? null : formatStrengthLoad(kg!, unit).split(' ').first,
       (v) {
         final x = parseDecimal(v);
@@ -380,18 +382,21 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
     return PopScope(
       canPop: !saving,
       child: SheetPage(
-        title: 'Gym mode',
+        title: context.l10n.gymMode,
         actions: [
           IconButton(
-            tooltip: 'Finish workout',
+            tooltip: context.l10n.finishWorkout,
             onPressed: saving ? null : _finish,
             icon: const Icon(Icons.flag_outlined),
           ),
           PopupMenuButton<String>(
-            tooltip: 'Workout actions',
+            tooltip: context.l10n.workoutActions,
             onSelected: (v) => v == 'discard' ? _discard() : null,
-            itemBuilder: (_) => const [
-              PopupMenuItem(value: 'discard', child: Text('Discard workout')),
+            itemBuilder: (_) => [
+              PopupMenuItem(
+                value: 'discard',
+                child: Text(context.l10n.discardWorkout),
+              ),
             ],
           ),
         ],
@@ -412,9 +417,9 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
                     liveRegion: true,
                     child: Text(
                       saving
-                          ? 'Saving…'
+                          ? context.l10n.saving
                           : error != null
-                          ? 'Could not save'
+                          ? context.l10n.couldNotSave
                           : '$done of ${order.length} sets recorded',
                       textAlign: TextAlign.end,
                       style: TextStyle(
@@ -442,8 +447,8 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
                   children: [
                     const Icon(Icons.check_circle, color: mint, size: 48),
                     const SizedBox(height: 8),
-                    const Text(
-                      'All sets recorded',
+                    Text(
+                      context.l10n.allSetsRecorded,
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
@@ -475,15 +480,15 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
                 ),
                 onPressed: saving ? null : _finish,
                 icon: const Icon(Icons.flag),
-                label: const Text(
-                  'Finish workout',
+                label: Text(
+                  context.l10n.finishWorkout,
                   style: TextStyle(fontSize: 17),
                 ),
               ),
               TextButton(
                 style: TextButton.styleFrom(minimumSize: const Size(0, 48)),
                 onPressed: () => setState(() => reviewing = true),
-                child: const Text('Review sets'),
+                child: Text(context.l10n.reviewSets),
               ),
             ],
             if (showSet) ...[
@@ -560,8 +565,8 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
                       '${restTarget == null ? '' : ' of ${formatStrengthSeconds(restTarget)} planned'}',
                   child: Column(
                     children: [
-                      const Text(
-                        'REST',
+                      Text(
+                        context.l10n.rest,
                         style: TextStyle(
                           fontSize: 11,
                           color: muted,
@@ -582,7 +587,9 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
                       ),
                       if (restTarget != null)
                         Text(
-                          'Planned ${formatStrengthSeconds(restTarget)}',
+                          context.l10n.plannedResttarget(
+                            formatStrengthSeconds(restTarget),
+                          ),
                           style: const TextStyle(color: muted),
                         ),
                     ],
@@ -597,8 +604,8 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
                   ),
                   onPressed: saving ? null : _startSet,
                   icon: const Icon(Icons.play_arrow),
-                  label: const Text(
-                    'Start set',
+                  label: Text(
+                    context.l10n.startSet,
                     style: TextStyle(fontSize: 17),
                   ),
                 ),
@@ -614,7 +621,7 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
               ],
               if (timed)
                 _stepper(
-                  label: 'Seconds',
+                  label: context.l10n.seconds,
                   value: seconds == null
                       ? '—'
                       : formatStrengthSeconds(seconds!),
@@ -624,15 +631,16 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
                           () => seconds = (seconds! - 5).clamp(0, 36000),
                         ),
                   onPlus: () => setState(() => seconds = (seconds ?? 0) + 5),
-                  onTap: () => _enter('Seconds', seconds?.toString(), (v) {
-                    seconds = int.tryParse(v.trim());
-                  }),
+                  onTap: () =>
+                      _enter(context.l10n.seconds, seconds?.toString(), (v) {
+                        seconds = int.tryParse(v.trim());
+                      }),
                 )
               else
                 _stepper(
                   label: c.side == StrengthSide.unilateral
-                      ? 'Reps per side'
-                      : 'Reps',
+                      ? context.l10n.repsPerSide
+                      : context.l10n.reps,
                   value: reps?.toString() ?? '—',
                   onMinus: (reps ?? 0) <= 0
                       ? null
@@ -642,7 +650,7 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
                         ? (s.target?.repMin ?? 1)
                         : reps! + 1,
                   ),
-                  onTap: () => _enter('Reps', reps?.toString(), (v) {
+                  onTap: () => _enter(context.l10n.reps, reps?.toString(), (v) {
                     reps = int.tryParse(v.trim());
                   }),
                 ),
@@ -650,8 +658,8 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
                 const SizedBox(height: 14),
                 _stepper(
                   label: c.loadKind == StrengthLoadKind.assisted
-                      ? 'Assistance (${unit.name})'
-                      : 'Load (${unit.name})',
+                      ? context.l10n.assistanceName(unit.name)
+                      : context.l10n.loadName(unit.name),
                   value: kg == null
                       ? '—'
                       : formatStrengthLoad(kg!, unit).split(' ').first,
@@ -677,7 +685,10 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
                       ? null
                       : () => _record(StrengthSetStatus.completed),
                   icon: const Icon(Icons.check),
-                  label: const Text('Done', style: TextStyle(fontSize: 17)),
+                  label: Text(
+                    context.l10n.done,
+                    style: TextStyle(fontSize: 17),
+                  ),
                 ),
               Wrap(
                 alignment: WrapAlignment.center,
@@ -694,7 +705,9 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
                       onPressed: saving ? null : () => _record(st),
                       icon: Icon(strengthStatusStyle(st).$1, size: 18),
                       label: Text(
-                        st == StrengthSetStatus.skipped ? 'Skip' : st.label,
+                        st == StrengthSetStatus.skipped
+                            ? context.l10n.skip
+                            : st.label,
                       ),
                     ),
                 ],
@@ -704,7 +717,7 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
             Row(
               children: [
                 IconButton(
-                  tooltip: 'Previous set',
+                  tooltip: context.l10n.previousSet,
                   onPressed: index == 0 ? null : () => _go(index - 1),
                   icon: const Icon(Icons.chevron_left),
                 ),
@@ -727,7 +740,13 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
                                   order[j].set.status ==
                                               StrengthSetStatus.unrecorded &&
                                           order[j].target != null
-                                      ? 'Planned ${strengthTargetText(order[j].target!, order[j].exercise.convention, unit)}'
+                                      ? context.l10n.plannedUnit(
+                                          strengthTargetText(
+                                            order[j].target!,
+                                            order[j].exercise.convention,
+                                            unit,
+                                          ),
+                                        )
                                       : strengthResultText(
                                           order[j].set,
                                           order[j].exercise.convention,
@@ -741,11 +760,11 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
                       );
                       if (i != null) _go(i);
                     },
-                    child: const Text('All sets'),
+                    child: Text(context.l10n.allSets),
                   ),
                 ),
                 IconButton(
-                  tooltip: 'Next set',
+                  tooltip: context.l10n.nextSet,
                   onPressed: index >= order.length - 1
                       ? null
                       : () => _go(index + 1),
@@ -758,13 +777,13 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
               OutlinedButton(
                 style: OutlinedButton.styleFrom(minimumSize: const Size(0, 48)),
                 onPressed: saving ? null : _finish,
-                child: const Text('Finish workout'),
+                child: Text(context.l10n.finishWorkout),
               ),
             ],
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(top: 8),
               child: Text(
-                'Every set is saved as you go. Close this screen any time and resume from the planned workout.',
+                context.l10n.everySetIsSavedAs,
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 11, color: muted),
               ),

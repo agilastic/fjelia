@@ -1,3 +1,5 @@
+import 'package:fjelia/l10n/app_localizations.dart';
+
 import 'dart:convert';
 
 import 'package:fjelia/db/database.dart';
@@ -49,6 +51,8 @@ void main() {
           await tester.pumpWidget(
             ProviderScope(
               child: MaterialApp(
+                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                supportedLocales: AppLocalizations.supportedLocales,
                 home: Scaffold(
                   body: RaceGoalEditor(goal: editing ? goal : null),
                 ),

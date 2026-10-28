@@ -188,9 +188,76 @@ class HrvReminderTexts {
     'In 10 Minuten',
     'Erinnerung auslassen',
   );
+  static const french = HrvReminderTexts._(
+    'C\'est l\'heure de ta mesure de VFC après l\'entraînement',
+    'Repose-toi un instant, puis mesure dans la même position qu\'avant l\'entraînement.',
+    'Mesurer maintenant',
+    'Dans 10 minutes',
+    'Ignorer ce rappel',
+  );
+  static const italian = HrvReminderTexts._(
+    'È ora della misurazione HRV post-allenamento',
+    'Riposa un attimo, poi misura nella stessa posizione di prima dell\'allenamento.',
+    'Misura ora',
+    'Tra 10 minuti',
+    'Salta questo promemoria',
+  );
+  static const spanish = HrvReminderTexts._(
+    'Es hora de tu medición de VFC tras el entrenamiento',
+    'Descansa un momento y mide en la misma posición que antes de entrenar.',
+    'Medir ahora',
+    'En 10 minutos',
+    'Omitir este recordatorio',
+  );
+  static const catalan = HrvReminderTexts._(
+    'És l\'hora de la mesura de VFC després de l\'entrenament',
+    'Descansa un moment i mesura en la mateixa posició que abans d\'entrenar.',
+    'Mesura ara',
+    'D\'aquí a 10 minuts',
+    'Omet aquest recordatori',
+  );
+  static const norwegian = HrvReminderTexts._(
+    'På tide med HRV-målingen etter treningen',
+    'Hvil et øyeblikk, og mål i samme kroppsposisjon som før treningen.',
+    'Mål nå',
+    'Om 10 minutter',
+    'Hopp over denne påminnelsen',
+  );
+  static const slovak = HrvReminderTexts._(
+    'Čas na meranie HRV po tréningu',
+    'Chvíľu si oddýchni a potom meraj v rovnakej polohe ako pred tréningom.',
+    'Merať teraz',
+    'Za 10 minút',
+    'Preskočiť túto pripomienku',
+  );
+  static const finnish = HrvReminderTexts._(
+    'Aika tehdä harjoituksen jälkeinen HRV-mittaus',
+    'Rauhoitu hetkeksi ja mittaa samassa asennossa kuin ennen harjoitusta.',
+    'Mittaa nyt',
+    '10 minuutin päästä',
+    'Ohita tämä muistutus',
+  );
+  static const danish = HrvReminderTexts._(
+    'Tid til din HRV-måling efter træning',
+    'Hvil et øjeblik, og mål i samme kropsposition som før træningen.',
+    'Mål nu',
+    'Om 10 minutter',
+    'Spring denne påmindelse over',
+  );
 
   static HrvReminderTexts forLanguage(String code) =>
-      code.toLowerCase().startsWith('de') ? german : english;
+      switch (code.toLowerCase().split(RegExp('[-_]')).first) {
+        'de' => german,
+        'fr' => french,
+        'it' => italian,
+        'es' => spanish,
+        'ca' => catalan,
+        'nb' || 'no' || 'nn' => norwegian,
+        'sk' => slovak,
+        'fi' => finnish,
+        'da' => danish,
+        _ => english,
+      };
 
   Map<String, String> get actionLabels => {
     'measure': measure,

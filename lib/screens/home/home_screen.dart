@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -65,7 +67,7 @@ class _HomeState extends ConsumerState<HomeScreen> {
           child: Row(
             children: [
               IconButton(
-                tooltip: 'Settings',
+                tooltip: context.l10n.settings,
                 icon: const Icon(Icons.menu, size: 20, color: muted),
                 onPressed: () => SettingsSheet.show(context),
               ),
@@ -78,23 +80,21 @@ class _HomeState extends ConsumerState<HomeScreen> {
                 ),
               ),
               IconButton(
-                tooltip: 'Send feedback or report a bug',
+                tooltip: context.l10n.sendFeedbackOrReportA,
                 icon: const Icon(
                   Icons.feedback_outlined,
                   size: 20,
                   color: muted,
                 ),
-                onPressed: () =>
-                    showAppSheet(context, const BugReportSheet()),
+                onPressed: () => showAppSheet(context, const BugReportSheet()),
               ),
               IconButton(
-                tooltip: 'Add measurement',
-                icon: const Icon(Icons.add, size: 20, color: muted),
-                onPressed: () =>
-                    showAppSheet(context, const ManualEntrySheet()),
+                tooltip: context.l10n.addMeasurement2,
+                icon: Icon(Icons.add, size: 20, color: muted),
+                onPressed: () => showAppSheet(context, ManualEntrySheet()),
               ),
               PopupMenuButton<String>(
-                tooltip: 'Sync',
+                tooltip: context.l10n.syncLabel2,
                 icon: SpinningSyncIcon(
                   spinning:
                       sync.status == SyncStatus.syncing ||
@@ -113,15 +113,18 @@ class _HomeState extends ConsumerState<HomeScreen> {
                         );
                   }
                 }),
-                itemBuilder: (_) => const [
-                  PopupMenuItem(value: 'today', child: Text('Sync Today')),
+                itemBuilder: (_) => [
+                  PopupMenuItem(
+                    value: 'today',
+                    child: Text(context.l10n.syncToday),
+                  ),
                   PopupMenuItem(
                     value: 'year',
-                    child: Text('Full Sync · 1 year'),
+                    child: Text(context.l10n.fullSync1Year),
                   ),
                   PopupMenuItem(
                     value: 'all',
-                    child: Text('Full Sync · Complete'),
+                    child: Text(context.l10n.fullSyncComplete),
                   ),
                 ],
               ),
@@ -133,12 +136,12 @@ class _HomeState extends ConsumerState<HomeScreen> {
         children: [
           if (sync.status == SyncStatus.syncing) ...[
             LinearProgressIndicator(value: sync.progress / 100),
-            const Padding(
+            Padding(
               padding: EdgeInsets.fromLTRB(16, 4, 16, 0),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'Syncing your data…',
+                  context.l10n.syncingYourData,
                   style: TextStyle(fontSize: 11, color: muted),
                 ),
               ),
@@ -221,10 +224,10 @@ class _HomeState extends ConsumerState<HomeScreen> {
               child: Row(
                 children: [
                   for (final e in <(String, IconData)>[
-                    ('HEALTH', Icons.favorite_border),
-                    ('PLAN', Icons.calendar_month_outlined),
-                    ('LOAD', Icons.bar_chart),
-                    ('COACH', Icons.smart_toy_outlined),
+                    (context.l10n.health2, Icons.favorite_border),
+                    (context.l10n.tabPlan, Icons.calendar_month_outlined),
+                    (context.l10n.tabLoad, Icons.bar_chart),
+                    (context.l10n.tabCoach, Icons.smart_toy_outlined),
                     if (debug) ('DEBUG', Icons.bug_report_outlined),
                   ].indexed)
                     Expanded(
@@ -308,7 +311,7 @@ class _HealthPage extends ConsumerWidget {
         BriefingCard(openCoach: openCoach),
         if (vis['health_monitor'] ?? true) const HealthMonitorGrid(),
         SectionCard(
-          title: 'Blood Pressure',
+          title: context.l10n.typeBloodPressure,
           onTap: () => showAppSheet(context, const BpScreen()),
           child: Row(
             children: [
@@ -341,12 +344,12 @@ class _HealthPage extends ConsumerWidget {
                   children: [
                     Text(
                       bp == null
-                          ? 'NO DATA'
+                          ? context.l10n.noData2
                           : bp.avgSystolic >= 140
-                          ? 'HIGH'
+                          ? context.l10n.high2
                           : bp.avgSystolic >= 120
-                          ? 'ELEVATED'
-                          : 'NORMAL',
+                          ? context.l10n.elevated
+                          : context.l10n.normal,
                       style: TextStyle(
                         color: bp != null && bp.avgSystolic >= 140
                             ? Colors.redAccent
@@ -377,10 +380,13 @@ class _HealthPage extends ConsumerWidget {
         if (vis['hr_timeline'] ?? true) const HrTimelineCard(),
         if (vis['grip_strength'] ?? true)
           SectionCard(
-            title: 'Grip Strength',
+            title: context.l10n.gripStrength,
             onTap: () => showAppSheet(context, const GripStrengthSheet()),
             child: Text(
-              'L ${valueText(grip?.leftKg, 1)}  R ${valueText(grip?.rightKg, 1)} kg',
+              context.l10n.lLeftkgRRightkgKg2(
+                valueText(grip?.leftKg, 1),
+                valueText(grip?.rightKg, 1),
+              ),
               style: const TextStyle(
                 color: Colors.lightBlue,
                 fontSize: 18,
@@ -390,10 +396,14 @@ class _HealthPage extends ConsumerWidget {
           ),
         if (vis['body_composition'] ?? true)
           SectionCard(
-            title: 'Body Composition',
+            title: context.l10n.bodyComposition,
             onTap: () => showAppSheet(context, const RenphoScreen()),
             child: Text(
-              '${valueText(body?.weight, 1)} kg · Fat ${valueText(body?.bodyFat, 1)}% · Muscle ${valueText(body?.muscleMass, 1)} kg',
+              context.l10n.weightKgFatBodyfatMuscle(
+                valueText(body?.weight, 1),
+                valueText(body?.bodyFat, 1),
+                valueText(body?.muscleMass, 1),
+              ),
               style: const TextStyle(color: muted, fontSize: 11),
             ),
           ),
@@ -402,8 +412,11 @@ class _HealthPage extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(vertical: 12),
           child: Text(
             last == null
-                ? 'No sync yet'
-                : 'Last sync: ${dayText(last)} ${TimeOfDay.fromDateTime(last).format(context)}',
+                ? context.l10n.noSyncYet
+                : context.l10n.lastSyncLastContext(
+                    dayText(last),
+                    TimeOfDay.fromDateTime(last).format(context),
+                  ),
             style: const TextStyle(fontSize: 10, color: muted),
           ),
         ),

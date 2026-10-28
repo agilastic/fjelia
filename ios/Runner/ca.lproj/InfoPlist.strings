@@ -1,0 +1,6 @@
+"NSBluetoothAlwaysUsageDescription" = "Fjelia fa servir el Bluetooth per connectar-se als teus dispositius de salut (Hilo, Aktiia, Garmin).";
+"NSBluetoothPeripheralUsageDescription" = "Fjelia fa servir el Bluetooth per connectar-se als teus dispositius de salut.";
+"NSHealthShareUsageDescription" = "Fjelia llegeix les teves dades de salut (son, freqüència cardíaca, VFC, passes, SpO2) d'Apple Salut per oferir-te anàlisis d'entrenament personalitzades.";
+"NSHealthUpdateUsageDescription" = "Fjelia escriu a Apple Salut les teves dades sincronitzades de VFC, freqüència cardíaca, son, passes i entrenaments perquè no les perdis si canvies d'aplicació.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Fjelia només fa servir la teva ubicació mentre l'aplicació és oberta, per avaluar el risc de calor dels entrenaments planificats.";
+"NSLocationWhenInUseUsageDescription" = "Fjelia fa servir la teva ubicació actual per avaluar el risc de calor dels entrenaments planificats.";

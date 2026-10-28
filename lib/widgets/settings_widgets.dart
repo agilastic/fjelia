@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
 import 'app_widgets.dart';
 
 /// Shared presentation for settings sheets, separate from dashboard cards.
@@ -29,7 +30,10 @@ class SettingsPage extends StatelessWidget {
             child: Row(
               children: [
                 if (showBack)
-                  _NavigationButton(icon: Icons.chevron_left, label: 'Back')
+                  _NavigationButton(
+                    icon: Icons.chevron_left,
+                    label: AppLocalizations.of(context).back,
+                  )
                 else
                   const SizedBox(width: 40),
                 Expanded(
@@ -43,7 +47,10 @@ class SettingsPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                const _NavigationButton(icon: Icons.close, label: 'Close'),
+                _NavigationButton(
+                  icon: Icons.close,
+                  label: AppLocalizations.of(context).close,
+                ),
               ],
             ),
           ),

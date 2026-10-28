@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -156,7 +158,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              '${DateFormat('EEEE d MMMM').format(day)} belongs to '
+              '${DateFormat.MMMMEEEEd().format(day)} belongs to '
               '${event.name}. Pick another day.',
             ),
           ),
@@ -168,13 +170,13 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
       final warning = target == null
           ? null
           : target.isRestDay
-          ? '${DateFormat('EEEE').format(day)} is a rest day in your plan.'
+          ? '${DateFormat.EEEE().format(day)} is a rest day in your plan.'
           : target.isFull
-          ? '${DateFormat('EEEE d MMMM').format(day)} already has '
+          ? '${DateFormat.MMMMEEEEd().format(day)} already has '
                 '${target.sessions} ${target.sessions == 1 ? 'session' : 'sessions'}.'
           : null;
       if (warning != null &&
-          !await confirmAction(context, 'Move anyway?', warning)) {
+          !await confirmAction(context, context.l10n.moveAnyway, warning)) {
         return;
       }
       final previous = s.sessionDate;
@@ -269,8 +271,10 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
               badge(
                 s.status == 'skipped'
                     ? (skipReason == null
-                          ? 'SKIPPED'
-                          : 'SKIPPED · ${skipReason.toUpperCase()}')
+                          ? context.l10n.skipped2
+                          : context.l10n.skippedTouppercase(
+                              skipReason.toUpperCase(),
+                            ))
                     : s.status.toUpperCase(),
               ),
             ],
@@ -282,7 +286,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
           ),
           const SizedBox(height: 6),
           Text(
-            DateFormat('EEEE, d MMMM yyyy').format(s.sessionDate),
+            DateFormat.yMMMMEEEEd().format(s.sessionDate),
             style: const TextStyle(fontSize: 13, color: Colors.white70),
           ),
           if (s.goalObjective != null)
@@ -313,30 +317,30 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
           const SizedBox(height: 20),
           WorkoutStatTiles(
             items: [
-              ('${s.plannedDurationMin} min', 'DURATION'),
+              ('${s.plannedDurationMin} min', context.l10n.duration2),
               if (!strength) ...[
                 ('${s.plannedTrimp}', 'TRIMP'),
-                ('Z${s.primaryZone}', 'PRIMARY ZONE'),
+                ('Z${s.primaryZone}', context.l10n.primaryZone),
               ],
-              ('${s.weekNumber}', 'WEEK'),
+              ('${s.weekNumber}', context.l10n.week2),
             ],
           ),
           if (isRide) ...[
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             SizedBox(
               width: double.infinity,
               child: SegmentedButton<String>(
                 showSelectedIcon: false,
-                segments: const [
+                segments: [
                   ButtonSegment(
                     value: 'hr',
                     icon: Icon(Icons.favorite, size: 16),
-                    label: Text('Heart rate'),
+                    label: Text(context.l10n.heartRate3),
                   ),
                   ButtonSegment(
                     value: 'power',
                     icon: Icon(Icons.bolt, size: 16),
-                    label: Text('Watts'),
+                    label: Text(context.l10n.watts),
                   ),
                 ],
                 selected: {powerOn ? 'power' : 'hr'},
@@ -355,9 +359,9 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
               child: Text(
                 powerOn
                     ? (ref.watch(ftpProvider).valueOrNull?.ftpWatts == null
-                          ? 'Watts need your FTP: set it under Load, Thresholds.'
-                          : 'Main target in watts from your FTP, heart rate as the guide.')
-                    : 'Main target heart rate, watts are not set on the watch.',
+                          ? context.l10n.wattsNeedYourFtpSet
+                          : context.l10n.mainTargetInWattsFrom)
+                    : context.l10n.mainTargetHeartRateWatts,
                 style: const TextStyle(fontSize: 11, color: muted),
               ),
             ),
@@ -371,7 +375,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
               ),
             ),
           if (s.sessionNotes?.isNotEmpty ?? false) ...[
-            heading('ABOUT THIS WORKOUT'),
+            heading(context.l10n.aboutThisWorkout),
             Text(
               s.sessionNotes!,
               style: const TextStyle(
@@ -382,7 +386,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
             ),
           ],
           if (s.mainSet?.isNotEmpty ?? false) ...[
-            heading('COACHING CUES'),
+            heading(context.l10n.coachingCues),
             SectionCard(
               color: const Color(0xFF282828),
               child: Text(
@@ -417,11 +421,11 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
               // Gym mode may have completed the session.
               onLiveFinished: () => perform(() async {}),
               progressionBlockedReason: s.phase == 'taper'
-                  ? 'Taper phase'
+                  ? context.l10n.taperPhase
                   : s.sessionType == 'recovery'
-                  ? 'Recovery session'
+                  ? context.l10n.recoverySession
                   : goals?.loadOn(s.sessionDate) == DayLoad.easyOnly
-                  ? 'Close to your event'
+                  ? context.l10n.closeToYourEvent
                   : null,
               fallback: bundledStrengthPlanFor(
                 subType: s.subType,
@@ -429,14 +433,17 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
               ),
             ),
           if (!strength) ...[
-            heading('WORKOUT STRUCTURE'),
+            heading(context.l10n.workoutStructure),
             if (profile.isNotEmpty) ...[
               WorkoutProfileBar(blocks: profile),
               if (stepsDiffer)
                 Padding(
                   padding: const EdgeInsets.only(top: 4),
                   child: Text(
-                    'The steps add up to ${formatBlockDuration(totals.total)}; the plan counts ${s.plannedDurationMin} min.',
+                    context.l10n.theStepsAddUpTo(
+                      formatBlockDuration(totals.total),
+                      s.plannedDurationMin,
+                    ),
                     style: const TextStyle(fontSize: 11, color: muted),
                   ),
                 ),
@@ -449,7 +456,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                         .where((s) => s.isNotEmpty)
                         .join('\n')
                         .isEmpty
-                    ? 'No workout structure available.'
+                    ? context.l10n.noWorkoutStructureAvailable
                     : [s.warmUp, s.coolDown]
                           .whereType<String>()
                           .where((s) => s.isNotEmpty)
@@ -457,12 +464,12 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                 style: const TextStyle(fontSize: 13, color: Colors.white70),
               ),
             WorkoutStructureList(steps: steps),
-            heading('TARGETS'),
+            heading(context.l10n.targets),
             if (fromSteps == null)
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(bottom: 8),
                 child: Text(
-                  'Typical split for this kind of session; no steps to calculate it from.',
+                  context.l10n.typicalSplitForThisKind,
                   style: TextStyle(fontSize: 11, color: muted),
                 ),
               ),
@@ -472,14 +479,14 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                 children: [
                   for (var i = 0; i < 5; i++)
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      padding: EdgeInsets.symmetric(vertical: 5),
                       child: Row(
                         children: [
                           SizedBox(
                             width: 24,
                             child: Text(
                               'Z${i + 1}',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white70,
@@ -492,11 +499,11 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  const [
+                                  [
                                     'Recovery',
-                                    'Aerobic',
-                                    'Tempo',
-                                    'Threshold',
+                                    context.l10n.aerobic,
+                                    context.l10n.tempo,
+                                    context.l10n.threshold,
                                     'VO2max',
                                   ][i],
                                   style: const TextStyle(
@@ -532,7 +539,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                           SizedBox(
                             width: 30,
                             child: Text(
-                              '${(fractions[i] * 100).round()}%',
+                              context.l10n.round3((fractions[i] * 100).round()),
                               textAlign: TextAlign.right,
                               style: const TextStyle(
                                 fontSize: 10,
@@ -548,7 +555,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
             ),
           ],
           if (s.adaptationTrigger?.isNotEmpty ?? false) ...[
-            heading('ADAPTATION'),
+            heading(context.l10n.adaptation),
             Text(
               s.adaptationTrigger!,
               style: const TextStyle(fontSize: 12, color: Colors.white70),
@@ -579,9 +586,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                     !DateUtils.isSameDay(movedFrom, s.sessionDate)
                 ? movedFrom
                 : null,
-            note: movedOnWatch
-                ? 'Push again to update your watch calendar.'
-                : null,
+            note: movedOnWatch ? context.l10n.pushAgainToUpdateYour : null,
             onUndo: () => perform(() async {
               final back = movedFrom;
               if (back == null) return;
@@ -609,7 +614,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
             style: style(mint, filled: true),
             onPressed: () => openCoachTab(
               context,
-              prompt: 'How do I execute this workout?',
+              prompt: context.l10n.howDoIExecuteThis,
               card: CoachContextCard.planned(
                 s,
                 skipReason: skipReason,
@@ -618,8 +623,8 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
               ),
             ),
             icon: const Icon(Icons.chat_bubble_outline, size: 20),
-            label: const Text(
-              'Ask AI Coach',
+            label: Text(
+              context.l10n.askAiCoach,
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
             ),
           ),
@@ -694,7 +699,9 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                                   SnackBar(
                                     content: Text(
                                       omitted.isEmpty
-                                          ? 'Workout sent to ${provider.label}'
+                                          ? context.l10n.workoutSentToLabel(
+                                              provider.label,
+                                            )
                                           : 'Sent to ${provider.label}. Kept in '
                                                 'Fjelia only: ${omitted.join(', ')}.',
                                     ),
@@ -708,12 +715,14 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                       ),
                       label: Text(
                         busy
-                            ? 'Updating…'
+                            ? context.l10n.updating2
                             : pushes
-                            ? 'Push to ${provider.label}'
+                            ? context.l10n.pushToLabel(provider.label)
                             : strengthShare
-                            ? 'Share exercise list for ${provider.label}'
-                            : 'Share workout for ${provider.label}',
+                            ? context.l10n.shareExerciseListForLabel(
+                                provider.label,
+                              )
+                            : context.l10n.shareWorkoutForLabel(provider.label),
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
@@ -761,7 +770,9 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                       Padding(
                         padding: const EdgeInsets.only(top: 6),
                         child: Text(
-                          '${provider.label} gets each exercise with its sets, reps and loads. Rep ranges, effort and tempo stay in Fjelia.',
+                          context.l10n.labelGetsEachExerciseWith(
+                            provider.label,
+                          ),
                           style: const TextStyle(fontSize: 11, color: muted),
                         ),
                       ),
@@ -812,8 +823,8 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                     });
                   },
             icon: const Icon(Icons.bed_outlined, size: 20),
-            label: const Text(
-              'Mark as Rest',
+            label: Text(
+              context.l10n.markAsRest,
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
             ),
           ),
@@ -827,8 +838,8 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                       await actions.restore(s);
                     }),
               icon: const Icon(Icons.undo, size: 20),
-              label: const Text(
-                'Restore workout',
+              label: Text(
+                context.l10n.restoreWorkout,
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
               ),
             ),
@@ -846,13 +857,13 @@ Future<String?> _pickSkipReason(
 }) => showDialog<String>(
   context: context,
   builder: (context) => SimpleDialog(
-    title: const Text('Skip this workout?'),
+    title: Text(context.l10n.skipThisWorkout),
     children: [
       Padding(
         padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
         child: Text(
           platforms.isEmpty
-              ? 'Why? Nothing is added to make it up.'
+              ? context.l10n.whyNothingIsAddedTo
               : 'Why? It is also taken off your ${platforms.join(' and ')} '
                     'calendar. Nothing is added to make it up.',
           style: const TextStyle(fontSize: 13, color: Colors.white70),
@@ -865,7 +876,10 @@ Future<String?> _pickSkipReason(
         ),
       SimpleDialogOption(
         onPressed: () => Navigator.pop(context),
-        child: const Text('Cancel', style: TextStyle(color: Colors.white54)),
+        child: Text(
+          context.l10n.cancel,
+          style: TextStyle(color: Colors.white54),
+        ),
       ),
     ],
   ),

@@ -1,7 +1,10 @@
+import '../l10n/l10n_ext.dart';
 import '../providers/activity_heat_provider.dart';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'app_widgets.dart';
 
 class ActivityHeatCard extends ConsumerWidget {
@@ -62,9 +65,9 @@ class ActivityHeatCard extends ConsumerWidget {
                 color: Colors.orange,
               ),
               const SizedBox(width: 6),
-              const Expanded(
+              Expanded(
                 child: Text(
-                  'HEAT ACCLIMATION',
+                  context.l10n.heatAcclimation2,
                   style: TextStyle(
                     fontSize: 10,
                     letterSpacing: 1,
@@ -79,7 +82,9 @@ class ActivityHeatCard extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: Text(
-                  h.qualifies ? 'QUALIFIED' : 'NO HEAT LOAD',
+                  h.qualifies
+                      ? context.l10n.qualified
+                      : context.l10n.noHeatLoad,
                   style: TextStyle(
                     color: color,
                     fontSize: 9,
@@ -95,7 +100,10 @@ class ActivityHeatCard extends ConsumerWidget {
             crossAxisAlignment: WrapCrossAlignment.end,
             children: [
               Text(
-                '${valueText(h.scoreBefore)} → ${valueText(h.scoreAfter)}',
+                context.l10n.scorebeforeScoreafter(
+                  valueText(h.scoreBefore),
+                  valueText(h.scoreAfter),
+                ),
                 style: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.w700,
@@ -114,8 +122,8 @@ class ActivityHeatCard extends ConsumerWidget {
           const SizedBox(height: 12),
           Text(
             h.qualifies
-                ? 'Workout qualified for heat accumulation.'
-                : 'Workout did not add heat accumulation.',
+                ? context.l10n.workoutQualifiedForHeatAccumulation
+                : context.l10n.workoutDidNotAddHeat,
             style: const TextStyle(fontSize: 12, color: Colors.white70),
           ),
           const SizedBox(height: 14),
@@ -127,16 +135,16 @@ class ActivityHeatCard extends ConsumerWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             children: [
-              cell('TEMP', temperature),
-              cell('HUMIDITY', '${valueText(h.humidityPct)}%'),
-              cell('PRESSURE', '${valueText(h.pressureHpa)} hPa'),
-              cell('WET BULB', '${valueText(h.wetBulbC, 1)} °C'),
+              cell(context.l10n.temp, temperature),
+              cell(context.l10n.humidity2, '${valueText(h.humidityPct)}%'),
+              cell(context.l10n.pressure, '${valueText(h.pressureHpa)} hPa'),
+              cell(context.l10n.wetBulb, '${valueText(h.wetBulbC, 1)} °C'),
             ],
           ),
           if (samples.length > 1) ...[
             const SizedBox(height: 26),
-            const Text(
-              'TEMPERATURE OVER TIME',
+            Text(
+              context.l10n.temperatureOverTime,
               style: TextStyle(
                 fontSize: 10,
                 letterSpacing: 1,
@@ -162,7 +170,7 @@ class ActivityHeatCard extends ConsumerWidget {
                         showTitles: true,
                         reservedSize: 28,
                         getTitlesWidget: (v, _) => Text(
-                          '${v.round()}°',
+                          context.l10n.round2(v.round()),
                           style: const TextStyle(fontSize: 9, color: muted),
                         ),
                       ),
@@ -173,7 +181,7 @@ class ActivityHeatCard extends ConsumerWidget {
                         reservedSize: 20,
                         interval: 1,
                         getTitlesWidget: (v, _) => Text(
-                          '${v.round()}h',
+                          context.l10n.roundh(v.round()),
                           style: const TextStyle(fontSize: 9, color: muted),
                         ),
                       ),

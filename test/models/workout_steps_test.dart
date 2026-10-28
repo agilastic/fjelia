@@ -1,3 +1,4 @@
+import 'package:fjelia/l10n/app_localizations.dart';
 import 'package:fjelia/models/garmin_data.dart';
 import 'package:fjelia/models/planned_workout_presentation.dart';
 import 'package:fjelia/models/workout_presentation.dart';
@@ -164,6 +165,8 @@ void main() {
             ),
           ],
           child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             home: WorkoutDetailSheet(
               workout: ScheduledWorkout(
                 workoutId: '1',

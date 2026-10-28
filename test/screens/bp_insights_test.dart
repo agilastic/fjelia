@@ -1,3 +1,4 @@
+import 'package:fjelia/l10n/app_localizations.dart';
 import 'package:fjelia/services/blood_pressure_chart_data.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
@@ -106,7 +107,11 @@ void main() {
     await tester.pumpWidget(
       UncontrolledProviderScope(
         container: container,
-        child: const MaterialApp(home: Scaffold(body: BpScreen())),
+        child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Scaffold(body: BpScreen()),
+        ),
       ),
     );
     await tester.pumpAndSettle();

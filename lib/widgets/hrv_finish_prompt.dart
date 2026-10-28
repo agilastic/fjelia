@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -20,7 +22,7 @@ class HrvFinishPrompt extends ConsumerWidget {
       return const SizedBox.shrink();
     }
     return SectionCard(
-      title: 'Workout finished?',
+      title: context.l10n.workoutFinished,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -42,15 +44,15 @@ class HrvFinishPrompt extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Your workout is not in Fjelia yet. If it ended, say when, and the reminder can follow its real end. Otherwise it appears once your watch syncs.',
+                Text(
+                  context.l10n.yourWorkoutIsNotIn,
                   style: TextStyle(color: muted, fontSize: 12, height: 1.35),
                 ),
                 const SizedBox(height: 8),
                 FilledButton.tonalIcon(
                   onPressed: () => _report(context, ref, pending.endedAt),
                   icon: const Icon(Icons.flag_rounded, size: 18),
-                  label: const Text('Workout finished'),
+                  label: Text(context.l10n.workoutFinished2),
                 ),
               ],
             ),
@@ -73,13 +75,13 @@ class HrvFinishPrompt extends ConsumerWidget {
     final start = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(startGuess),
-      helpText: 'When did the workout start?',
+      helpText: context.l10n.whenDidTheWorkoutStart,
     );
     if (start == null || !context.mounted) return;
     final end = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(now),
-      helpText: 'When did it end?',
+      helpText: context.l10n.whenDidItEnd,
     );
     if (end == null) return;
     // A time later than now belongs to yesterday: a workout over midnight.
@@ -95,11 +97,7 @@ class HrvFinishPrompt extends ConsumerWidget {
         to.isAfter(now.add(const Duration(minutes: 2))) ||
         from.isBefore(preEnd)) {
       messenger.showSnackBar(
-        const SnackBar(
-          content: Text(
-            'The workout must start after the measurement and end after it started, not in the future.',
-          ),
-        ),
+        SnackBar(content: Text(context.l10n.theWorkoutMustStartAfter)),
       );
       return;
     }

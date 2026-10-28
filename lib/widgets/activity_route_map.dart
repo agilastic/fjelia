@@ -1,6 +1,9 @@
+import '../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+
 import 'app_widgets.dart';
 
 class ActivityRouteMap extends StatefulWidget {
@@ -45,7 +48,7 @@ class _RouteMapState extends State<ActivityRouteMap> {
   @override
   Widget build(BuildContext context) {
     final route = points;
-    if (route.isEmpty) return const EmptyState('No recorded route');
+    if (route.isEmpty) return EmptyState(context.l10n.noRecordedRoute);
     Widget button(String label, IconData icon, VoidCallback action) => Padding(
       padding: const EdgeInsets.only(bottom: 4),
       child: Material(
@@ -118,7 +121,7 @@ class _RouteMapState extends State<ActivityRouteMap> {
             child: Column(
               children: [
                 button(
-                  'Zoom in',
+                  context.l10n.zoomIn,
                   Icons.add,
                   () => controller.move(
                     controller.camera.center,
@@ -126,14 +129,14 @@ class _RouteMapState extends State<ActivityRouteMap> {
                   ),
                 ),
                 button(
-                  'Zoom out',
+                  context.l10n.zoomOut,
                   Icons.remove,
                   () => controller.move(
                     controller.camera.center,
                     (controller.camera.zoom - 1).clamp(2, 19),
                   ),
                 ),
-                button('Fit route', Icons.fit_screen, () {
+                button(context.l10n.fitRoute, Icons.fit_screen, () {
                   controller.rotate(0);
                   if (route.length > 1) {
                     controller.fitCamera(fit);
@@ -143,12 +146,12 @@ class _RouteMapState extends State<ActivityRouteMap> {
                 }),
                 if (!widget.fullscreen)
                   button(
-                    'Fullscreen map',
+                    context.l10n.fullscreenMap,
                     Icons.fullscreen,
                     () => showAppSheet(
                       context,
                       SheetPage(
-                        title: 'Route',
+                        title: context.l10n.route2,
                         showBack: false,
                         backgroundColor: panel,
                         child: Padding(
@@ -166,8 +169,10 @@ class _RouteMapState extends State<ActivityRouteMap> {
               ],
             ),
           ),
-          const RichAttributionWidget(
-            attributions: [TextSourceAttribution('OpenStreetMap contributors')],
+          RichAttributionWidget(
+            attributions: [
+              TextSourceAttribution(context.l10n.openstreetmapContributors2),
+            ],
           ),
         ],
       ),
@@ -183,16 +188,16 @@ class _RouteMapState extends State<ActivityRouteMap> {
           children: [
             const Icon(Icons.circle, size: 10, color: mint),
             const SizedBox(width: 5),
-            const Text(
-              'Start',
+            Text(
+              context.l10n.start,
               style: TextStyle(fontSize: 11, color: Colors.white70),
             ),
             const SizedBox(width: 12),
             const Icon(Icons.circle, size: 10, color: Colors.redAccent),
             const SizedBox(width: 5),
-            const Expanded(
+            Expanded(
               child: Text(
-                'Finish',
+                context.l10n.routeFinish,
                 style: TextStyle(fontSize: 11, color: Colors.white70),
               ),
             ),
@@ -203,7 +208,7 @@ class _RouteMapState extends State<ActivityRouteMap> {
                   backgroundColor: Colors.white.withValues(alpha: .04),
                 ),
                 icon: const Icon(Icons.download, size: 15),
-                label: const Text('GPX'),
+                label: Text(context.l10n.gpx),
                 onPressed: () => runUiAction(
                   buttonContext,
                   () => widget.exportGpx(buttonContext),

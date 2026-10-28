@@ -1,3 +1,4 @@
+import 'package:fjelia/l10n/app_localizations.dart';
 import 'package:fjelia/providers/heat_acclimation_provider.dart';
 
 import 'dart:convert';
@@ -45,7 +46,11 @@ void main() {
           // No network import in widget tests.
           historyImportStarterProvider.overrideWithValue(() async {}),
         ],
-        child: MaterialApp(home: screen),
+        child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: screen,
+        ),
       ),
     );
     await tester.pumpAndSettle();
@@ -244,7 +249,11 @@ void main() {
           historyImportStarterProvider.overrideWithValue(() async {}),
           hasHistorySourceProvider.overrideWithValue(true),
         ],
-        child: const MaterialApp(home: TrainingPlanOnboardingScreen()),
+        child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: TrainingPlanOnboardingScreen(),
+        ),
       ),
     );
     await tester.pumpAndSettle();

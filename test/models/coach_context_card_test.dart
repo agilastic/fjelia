@@ -1,3 +1,5 @@
+import 'package:fjelia/l10n/app_localizations.dart';
+
 import 'dart:convert';
 
 import 'package:drift/drift.dart' hide isNull;
@@ -126,9 +128,9 @@ void main() {
       expect(skipped.status.label, 'Rest');
       expect(skipped.questions.first, 'Why is this a rest day?');
       expect(
-        CoachContextCard.planned(
-          await session(db, status: 'adapted'),
-        ).status.label,
+        CoachContextCard.planned(await session(db, status: 'adapted'))
+            .status
+            .label,
         'Adapted',
       );
     });
@@ -225,6 +227,8 @@ void main() {
               aiCoachClientProvider.overrideWithValue(client),
             ],
             child: MaterialApp(
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
               home: Scaffold(
                 body: AiCoachScreen(
                   activity: record,

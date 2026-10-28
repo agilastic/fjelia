@@ -1,3 +1,6 @@
+import '../../l10n/formats.dart';
+import '../../l10n/l10n_ext.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 
 import 'weather_city_picker.dart';
@@ -14,7 +17,7 @@ class WeatherLocationTab extends ConsumerWidget {
   const WeatherLocationTab({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) => SheetPage(
-    title: 'Weather & Location',
+    title: context.l10n.weatherLocation,
     child: ref
         .watch(heatAcclimationSettingsProvider)
         .when(
@@ -58,14 +61,17 @@ class _LocationFormState extends ConsumerState<_LocationForm> {
         if (!mounted) return;
         setState(() {
           mode = HeatLocationMode.current;
-          message =
-              'Using current location: ${location.latitude.toStringAsFixed(4)}, ${location.longitude.toStringAsFixed(4)}';
+          message = context.l10n
+              .usingCurrentLocationTostringasfixedTostringasfixed2(
+                location.latitude.fixed(4),
+                location.longitude.fixed(4),
+              );
         });
       } else {
         await actions.saveFixed(latitude.text, longitude.text);
         if (!mounted) return;
         FocusScope.of(context).unfocus();
-        setState(() => message = 'Fixed location saved. Weather will refresh.');
+        setState(() => message = context.l10n.fixedLocationSavedWeatherWill);
       }
     } finally {
       if (mounted) setState(() => busy = false);
@@ -76,8 +82,8 @@ class _LocationFormState extends ConsumerState<_LocationForm> {
   Widget build(BuildContext context) => ListView(
     padding: const EdgeInsets.all(16),
     children: [
-      const Text(
-        'Choose the location for the Plan forecast, radar and heat acclimation. Weather works even when heat acclimation is off.',
+      Text(
+        context.l10n.chooseTheLocationForThe,
         style: TextStyle(color: muted, fontSize: 13, height: 1.5),
       ),
       const SizedBox(height: 16),
@@ -112,9 +118,9 @@ class _LocationFormState extends ConsumerState<_LocationForm> {
                     : Icons.radio_button_off,
                 color: mint,
               ),
-              title: const Text('None'),
-              subtitle: const Text(
-                'Disable local weather and location requests',
+              title: Text(context.l10n.none),
+              subtitle: Text(
+                context.l10n.disableLocalWeatherAndLocation,
                 style: TextStyle(color: muted, fontSize: 12),
               ),
               onTap: busy
@@ -128,7 +134,8 @@ class _LocationFormState extends ConsumerState<_LocationForm> {
                         if (mounted) {
                           setState(() {
                             mode = HeatLocationMode.none;
-                            message = 'Location disabled. The Plan weather card is hidden.';
+                            message =
+                                context.l10n.locationDisabledThePlanWeather;
                           });
                         }
                       } finally {
@@ -143,9 +150,9 @@ class _LocationFormState extends ConsumerState<_LocationForm> {
                     : Icons.radio_button_off,
                 color: mint,
               ),
-              title: const Text('Current location'),
-              subtitle: const Text(
-                'Follow your device location',
+              title: Text(context.l10n.currentLocation),
+              subtitle: Text(
+                context.l10n.followYourDeviceLocation,
                 style: TextStyle(color: muted, fontSize: 12),
               ),
               onTap: busy ? null : () => runUiAction(context, () => save(true)),
@@ -157,9 +164,9 @@ class _LocationFormState extends ConsumerState<_LocationForm> {
                     : Icons.radio_button_off,
                 color: mint,
               ),
-              title: const Text('Fixed location'),
-              subtitle: const Text(
-                'Choose a city or enter coordinates',
+              title: Text(context.l10n.fixedLocation),
+              subtitle: Text(
+                context.l10n.chooseACityOrEnter,
                 style: TextStyle(color: muted, fontSize: 12),
               ),
               onTap: busy
@@ -174,7 +181,7 @@ class _LocationFormState extends ConsumerState<_LocationForm> {
       ),
       if (mode == HeatLocationMode.fixed)
         SectionCard(
-          title: 'Choose city',
+          title: context.l10n.chooseCity,
           child: WeatherCityPicker(
             onSelected: (place) async {
               await ref.read(weatherLocationActionsProvider).useCity(place);
@@ -182,20 +189,20 @@ class _LocationFormState extends ConsumerState<_LocationForm> {
               setState(() {
                 latitude.text = '${place.latitude}';
                 longitude.text = '${place.longitude}';
-                message = 'Location set to ${place.name}';
+                message = context.l10n.locationSetToName(place.name);
               });
             },
           ),
         ),
       if (mode == HeatLocationMode.fixed)
         SectionCard(
-          title: 'Coordinates',
+          title: context.l10n.coordinates,
           child: Column(
             children: [
               TextField(
                 controller: latitude,
-                decoration: const InputDecoration(
-                  labelText: 'Latitude',
+                decoration: InputDecoration(
+                  labelText: context.l10n.latitude,
                   hintText: 'e.g. 39.8021',
                 ),
                 keyboardType: const TextInputType.numberWithOptions(
@@ -206,8 +213,8 @@ class _LocationFormState extends ConsumerState<_LocationForm> {
               const SizedBox(height: 12),
               TextField(
                 controller: longitude,
-                decoration: const InputDecoration(
-                  labelText: 'Longitude',
+                decoration: InputDecoration(
+                  labelText: context.l10n.longitude,
                   hintText: 'e.g. 3.1191',
                 ),
                 keyboardType: const TextInputType.numberWithOptions(
@@ -221,7 +228,7 @@ class _LocationFormState extends ConsumerState<_LocationForm> {
                     ? null
                     : () => runUiAction(context, () => save(false)),
                 icon: const Icon(Icons.save_outlined),
-                label: const Text('Save location'),
+                label: Text(context.l10n.saveLocation),
               ),
             ],
           ),
@@ -230,7 +237,7 @@ class _LocationFormState extends ConsumerState<_LocationForm> {
         OutlinedButton.icon(
           onPressed: busy ? null : () => runUiAction(context, () => save(true)),
           icon: const Icon(Icons.my_location),
-          label: const Text('Refresh current location'),
+          label: Text(context.l10n.refreshCurrentLocation),
         ),
       Wrap(
         children: [
@@ -238,16 +245,16 @@ class _LocationFormState extends ConsumerState<_LocationForm> {
             onPressed: () => launchUrl(
               Uri.parse('https://open-meteo.com/en/docs/geocoding-api'),
             ),
-            child: const Text(
-              'City search: Open-Meteo / GeoNames',
+            child: Text(
+              context.l10n.citySearchOpenMeteoGeonames,
               style: TextStyle(fontSize: 9, color: muted),
             ),
           ),
           TextButton(
             onPressed: () =>
                 launchUrl(Uri.parse('https://www.openstreetmap.org/copyright')),
-            child: const Text(
-              'City names: © OpenStreetMap',
+            child: Text(
+              context.l10n.cityNamesOpenstreetmap,
               style: TextStyle(fontSize: 9, color: muted),
             ),
           ),

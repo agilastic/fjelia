@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -13,19 +15,19 @@ class BioAgeCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final result = ref.watch(bioAgeProvider);
     return result.when(
-      loading: () => const SectionCard(
-        title: 'Biological Age',
+      loading: () => SectionCard(
+        title: context.l10n.biologicalAge,
         child: LinearProgressIndicator(),
       ),
       error: (e, _) => DataError(e),
       data: (r) => SectionCard(
-        title: 'Biological Age',
+        title: context.l10n.biologicalAge,
         onTap: expanded
             ? null
             : () => showAppSheet(
                 context,
                 SheetPage(
-                  title: 'Biological Age',
+                  title: context.l10n.biologicalAge,
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.all(16),
                     child: BioAgeCard(expanded: true),
@@ -33,9 +35,7 @@ class BioAgeCard extends ConsumerWidget {
                 ),
               ),
         child: r == null
-            ? const EmptyState(
-                'Add your birth year in Settings → Profile to see your estimate.',
-              )
+            ? EmptyState(context.l10n.addYourBirthYearIn)
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -44,16 +44,16 @@ class BioAgeCard extends ConsumerWidget {
                     runSpacing: 12,
                     children: [
                       StatPair(
-                        'Fitness Age',
+                        context.l10n.fitnessAge,
                         '${valueText(r.fitnessAge)} y',
                         color: mint,
                       ),
                       StatPair(
-                        'Est. Lifespan',
+                        context.l10n.estLifespan,
                         '${valueText(r.lifeExpectancy)} y',
                       ),
                       StatPair(
-                        'Delta',
+                        context.l10n.delta,
                         '${r.deltaYears <= 0 ? '+' : ''}${valueText(-r.deltaYears, 1)} y',
                         color: mint,
                       ),
@@ -61,11 +61,14 @@ class BioAgeCard extends ConsumerWidget {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'VO₂max ${valueText(r.vo2max, 1)} ml/kg/min · ${r.vo2Class}',
+                    context.l10n.voMaxVo2maxMlKg(
+                      valueText(r.vo2max, 1),
+                      r.vo2Class,
+                    ),
                     style: const TextStyle(fontSize: 11, color: muted),
                   ),
                   if (expanded) ...[
-                    const SectionLabel('Factor contributions'),
+                    SectionLabel(context.l10n.factorContributions),
                     for (final e in r.contributions.entries)
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5),
@@ -101,7 +104,10 @@ class BioAgeCard extends ConsumerWidget {
                       ),
                     const SizedBox(height: 12),
                     Text(
-                      'Estimated range ${math.min(r.rangeLow, r.rangeHigh).round()}–${math.max(r.rangeLow, r.rangeHigh).round()} years. A model estimate, not a medical diagnosis.',
+                      context.l10n.estimatedRangeRoundRound2Years(
+                        math.min(r.rangeLow, r.rangeHigh).round(),
+                        math.max(r.rangeLow, r.rangeHigh).round(),
+                      ),
                       style: const TextStyle(color: muted, fontSize: 10),
                     ),
                   ],

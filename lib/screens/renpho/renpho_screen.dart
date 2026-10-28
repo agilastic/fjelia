@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -11,7 +13,7 @@ class RenphoScreen extends ConsumerWidget {
   const RenphoScreen({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) => SheetPage(
-    title: 'Body Scale',
+    title: context.l10n.bodyScale,
     showHeader: false,
     backgroundColor: panel,
     child: ref
@@ -23,7 +25,7 @@ class RenphoScreen extends ConsumerWidget {
             padding: const EdgeInsets.all(16),
             children: [
               SectionCard(
-                title: 'Body Scale',
+                title: context.l10n.bodyScale,
                 onTap: () =>
                     MetricDetailSheet.show(context, HealthMetric.weight),
                 child: Column(
@@ -49,8 +51,10 @@ class RenphoScreen extends ConsumerWidget {
                     const SizedBox(height: 8),
                     Text(
                       r == null
-                          ? 'No measurements yet'
-                          : 'Latest reading at ${DateFormat('dd/MM/yyyy HH:mm').format(r.timestamp)}',
+                          ? context.l10n.noMeasurementsYet
+                          : context.l10n.latestReadingAtTimestamp(
+                              DateFormat.yMd().add_Hm().format(r.timestamp),
+                            ),
                       style: const TextStyle(color: muted, fontSize: 11),
                     ),
                     const Divider(),
@@ -59,12 +63,15 @@ class RenphoScreen extends ConsumerWidget {
                       runSpacing: 12,
                       children: [
                         StatPair('BMI', valueText(r?.bmi, 1)),
-                        StatPair('Body Fat', '${valueText(r?.bodyFat, 1)}%'),
                         StatPair(
-                          'Date',
+                          context.l10n.bodyFat,
+                          '${valueText(r?.bodyFat, 1)}%',
+                        ),
+                        StatPair(
+                          context.l10n.date,
                           r == null
                               ? '—'
-                              : DateFormat('dd/MM/yyyy').format(r.timestamp),
+                              : DateFormat.yMd().format(r.timestamp),
                         ),
                       ],
                     ),
@@ -72,7 +79,7 @@ class RenphoScreen extends ConsumerWidget {
                 ),
               ),
               SectionCard(
-                title: 'Body Composition',
+                title: context.l10n.bodyComposition,
                 child: GridView.count(
                   crossAxisCount: 2,
                   childAspectRatio: 1.7,

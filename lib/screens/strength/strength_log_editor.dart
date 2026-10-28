@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -189,9 +191,9 @@ class _LogEditorState extends ConsumerState<StrengthLogEditor> {
       ..hideCurrentSnackBar()
       ..showSnackBar(
         SnackBar(
-          content: Text('$what removed'),
+          content: Text(context.l10n.whatRemoved(what)),
           action: SnackBarAction(
-            label: 'Undo',
+            label: context.l10n.undo,
             onPressed: () => persist(before.copyWith(revision: log.revision)),
           ),
         ),
@@ -204,9 +206,9 @@ class _LogEditorState extends ConsumerState<StrengthLogEditor> {
     if (open > 0) {
       final ok = await confirmAction(
         context,
-        'Finish with incomplete data?',
+        context.l10n.finishWithIncompleteData,
         '$open ${open == 1 ? 'set is' : 'sets are'} not recorded. '
-            'They stay unrecorded; finishing does not mark them as done.',
+        'They stay unrecorded; finishing does not mark them as done.',
       );
       if (!ok) return;
       next = next.copyWith(incompleteAcknowledged: true);
@@ -216,10 +218,13 @@ class _LogEditorState extends ConsumerState<StrengthLogEditor> {
 
   Widget statusLine() {
     final (text, color) = switch (state) {
-      _SaveState.idle => (log.revision == 0 ? 'Not saved yet' : 'Saved', muted),
-      _SaveState.saving => ('Saving…', muted),
-      _SaveState.saved => ('Saved', mint),
-      _SaveState.failed => ('Could not save', Colors.redAccent),
+      _SaveState.idle => (
+        log.revision == 0 ? context.l10n.notSavedYet : context.l10n.saved,
+        muted,
+      ),
+      _SaveState.saving => (context.l10n.saving, muted),
+      _SaveState.saved => (context.l10n.saved, mint),
+      _SaveState.failed => (context.l10n.couldNotSave, Colors.redAccent),
     };
     return Semantics(
       liveRegion: true,
@@ -240,7 +245,7 @@ class _LogEditorState extends ConsumerState<StrengthLogEditor> {
             TextButton(
               style: TextButton.styleFrom(minimumSize: const Size(48, 48)),
               onPressed: () => persist(log),
-              child: const Text('Retry'),
+              child: Text(context.l10n.retry),
             ),
         ],
       ),
@@ -258,8 +263,8 @@ class _LogEditorState extends ConsumerState<StrengthLogEditor> {
         if (didPop) return;
         if (await confirmAction(
               context,
-              'Leave without saving?',
-              'The last change could not be saved.',
+              context.l10n.leaveWithoutSaving,
+              context.l10n.theLastChangeCouldNot,
             ) &&
             context.mounted) {
           pending = false;
@@ -267,7 +272,7 @@ class _LogEditorState extends ConsumerState<StrengthLogEditor> {
         }
       },
       child: SheetPage(
-        title: 'Performance',
+        title: context.l10n.performance,
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 4, 16, 32),
           children: [
@@ -282,8 +287,8 @@ class _LogEditorState extends ConsumerState<StrengthLogEditor> {
                 padding: const EdgeInsets.only(top: 6),
                 child: Text(
                   baseline.retrospective
-                      ? 'Compared with a plan chosen after the workout. Planned values are hints, not results.'
-                      : 'Planned values are hints, not results. Tap a set to record it.',
+                      ? context.l10n.comparedWithAPlanChosen
+                      : context.l10n.plannedValuesAreHintsNot,
                   style: const TextStyle(fontSize: 12, color: muted),
                 ),
               ),
@@ -298,7 +303,7 @@ class _LogEditorState extends ConsumerState<StrengthLogEditor> {
               ),
               onPressed: addExercise,
               icon: const Icon(Icons.add),
-              label: const Text('Add exercise'),
+              label: Text(context.l10n.addExercise),
             ),
             const SizedBox(height: 20),
             FilledButton(
@@ -310,13 +315,13 @@ class _LogEditorState extends ConsumerState<StrengthLogEditor> {
               onPressed: state == _SaveState.saving || log.isEmpty
                   ? null
                   : finish,
-              child: const Text('Finish log'),
+              child: Text(context.l10n.finishLog),
             ),
             const SizedBox(height: 8),
             OutlinedButton(
               style: OutlinedButton.styleFrom(minimumSize: const Size(0, 48)),
               onPressed: pending ? null : () => Navigator.pop(context, true),
-              child: const Text('Keep as draft'),
+              child: Text(context.l10n.keepAsDraft),
             ),
           ],
         ),
@@ -339,7 +344,7 @@ class _LogEditorState extends ConsumerState<StrengthLogEditor> {
     ].join(' · '),
     initiallyExpanded: true,
     menu: PopupMenuButton<String>(
-      tooltip: 'Actions for ${e.name}',
+      tooltip: context.l10n.actionsForName(e.name),
       icon: const Icon(Icons.more_horiz, color: muted),
       onSelected: (v) {
         switch (v) {
@@ -359,11 +364,11 @@ class _LogEditorState extends ConsumerState<StrengthLogEditor> {
         }
       },
       itemBuilder: (_) => [
-        const PopupMenuItem(value: 'edit', child: Text('Edit exercise')),
-        if (i > 0) const PopupMenuItem(value: 'up', child: Text('Move up')),
+        PopupMenuItem(value: 'edit', child: Text(context.l10n.editExercise)),
+        if (i > 0) PopupMenuItem(value: 'up', child: Text(context.l10n.moveUp)),
         if (i < log.exercises.length - 1)
-          const PopupMenuItem(value: 'down', child: Text('Move down')),
-        const PopupMenuItem(value: 'remove', child: Text('Remove')),
+          PopupMenuItem(value: 'down', child: Text(context.l10n.moveDown)),
+        PopupMenuItem(value: 'remove', child: Text(context.l10n.remove)),
       ],
     ),
     rows: [
@@ -402,7 +407,7 @@ class _LogEditorState extends ConsumerState<StrengthLogEditor> {
               ),
             ),
             icon: const Icon(Icons.add, size: 18),
-            label: const Text('Add set'),
+            label: Text(context.l10n.addSet),
           ),
           if (e.sets.isNotEmpty)
             TextButton(
@@ -412,9 +417,9 @@ class _LogEditorState extends ConsumerState<StrengthLogEditor> {
                   e.id,
                   (e) => e.copyWith(sets: [...e.sets]..removeLast()),
                 ),
-                'Last set',
+                context.l10n.lastSet,
               ),
-              child: const Text('Remove last set'),
+              child: Text(context.l10n.removeLastSet),
             ),
         ],
       ),
@@ -431,7 +436,7 @@ class _LogEditorState extends ConsumerState<StrengthLogEditor> {
     if (t == null || s.status != StrengthSetStatus.unrecorded) return null;
     final blocker = completeAsPlannedBlocker(t, e.convention);
     return IconButton(
-      tooltip: blocker ?? 'Completed as planned',
+      tooltip: blocker ?? context.l10n.completedAsPlanned,
       onPressed: blocker == null
           ? () => doneAsPlanned(e, s, t)
           : () => editSet(e, s, n),

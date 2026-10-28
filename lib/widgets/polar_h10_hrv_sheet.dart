@@ -1,3 +1,6 @@
+import '../l10n/formats.dart';
+import '../l10n/l10n_ext.dart';
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -103,9 +106,7 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.hidden) {
       if (running) {
-        _fail(
-          'Measurement interrupted while the app was in the background. Please repeat it.',
-        );
+        _fail(context.l10n.measurementInterruptedWhileTheApp);
       }
     }
   }
@@ -156,8 +157,7 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
       setState(() {
         devices = found;
         if (found.isEmpty) {
-          error =
-              'No Polar H10 found. Wear the strap, wet its electrodes and check that another app is not using both Bluetooth connections.';
+          error = context.l10n.noPolarH10FoundWear;
         }
       });
     } catch (e) {
@@ -204,9 +204,7 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
         (int.tryParse(minutes) == null ||
             int.parse(minutes) < 0 ||
             int.parse(minutes) > 1440)) {
-      setState(
-        () => error = 'Enter minutes since training ended, from 0 to 1440.',
-      );
+      setState(() => error = context.l10n.enterMinutesSinceTrainingEnded);
       return;
     }
     setState(() {
@@ -229,9 +227,7 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
       if (!mounted || !running) return;
       if (goodRrAt == null ||
           DateTime.now().difference(goodRrAt!) > const Duration(seconds: 8)) {
-        _fail(
-          'No recent RR data with good contact. Check the strap and repeat the measurement.',
-        );
+        _fail(context.l10n.noRecentRrDataWith);
         return;
       }
       setState(() => elapsed = clock.elapsed);
@@ -314,7 +310,9 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
     final minutes = at.difference(end).inMinutes;
     return minutes < 0
         ? null
-        : '${started == null ? 'Sampling would start about' : 'Sampling started'} $minutes min after your workout ended.';
+        : started == null
+        ? context.l10n.samplingWouldStartMinutes(minutes)
+        : context.l10n.samplingStartedMinutes(minutes);
   }
 
   String _time(int seconds) =>
@@ -369,7 +367,7 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
         (lastPacket?.rrMs.isNotEmpty ?? false);
     final locked = running || completed || busy;
     return SheetPage(
-      title: 'Polar H10 · Spot HRV',
+      title: context.l10n.polarH10SpotHrv,
       child: ListView(
         padding: EdgeInsets.fromLTRB(
           16,
@@ -378,18 +376,16 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
           MediaQuery.viewInsetsOf(context).bottom + 24,
         ),
         children: [
-          const Text(
-            'A separate HRV reading before or after training. These measurements do not replace Garmin overnight HRV or change your readiness score.',
-          ),
+          Text(context.l10n.aSeparateHrvReadingBefore),
           const SizedBox(height: 12),
-          const Text(
-            'Wear the strap with moist electrodes. Keep still and breathe normally. Use the same posture and recording length for comparisons. After training, note how long you rested first.',
+          Text(
+            context.l10n.wearTheStrapWithMoist,
             style: TextStyle(color: muted, fontSize: 12),
           ),
           const SizedBox(height: 16),
           DropdownButtonFormField<SpotHrvContext>(
             initialValue: contextType,
-            decoration: const InputDecoration(labelText: 'Measurement'),
+            decoration: InputDecoration(labelText: context.l10n.measurement),
             items: [
               for (final value in SpotHrvContext.values)
                 DropdownMenuItem(value: value, child: Text(value.label)),
@@ -401,7 +397,7 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
           const SizedBox(height: 12),
           DropdownButtonFormField<SpotHrvPosture>(
             initialValue: posture,
-            decoration: const InputDecoration(labelText: 'Posture'),
+            decoration: InputDecoration(labelText: context.l10n.posture),
             items: [
               for (final value in SpotHrvPosture.values)
                 DropdownMenuItem(value: value, child: Text(value.label)),
@@ -410,15 +406,15 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
                 ? null
                 : (value) => setState(() => posture = value!),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           DropdownButtonFormField<int>(
             initialValue: duration,
-            decoration: const InputDecoration(
-              labelText: 'Recording length · plus 1 min settling',
+            decoration: InputDecoration(
+              labelText: context.l10n.recordingLengthPlus1Min,
             ),
-            items: const [
-              DropdownMenuItem(value: 120, child: Text('2 minutes')),
-              DropdownMenuItem(value: 300, child: Text('5 minutes')),
+            items: [
+              DropdownMenuItem(value: 120, child: Text(context.l10n.t2Minutes)),
+              DropdownMenuItem(value: 300, child: Text(context.l10n.t5Minutes)),
             ],
             onChanged: locked
                 ? null
@@ -429,7 +425,7 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Text(
-                _delayText() ?? 'Timing follows your workout.',
+                _delayText() ?? context.l10n.timingFollowsYourWorkout,
                 style: const TextStyle(color: muted, fontSize: 12),
               ),
             )
@@ -438,16 +434,16 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
               controller: afterMinutes,
               enabled: !locked,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Minutes since training ended (optional)',
+              decoration: InputDecoration(
+                labelText: context.l10n.minutesSinceTrainingEndedOptional,
               ),
             ),
           TextField(
             controller: notes,
             enabled: !locked,
             maxLength: 500,
-            decoration: const InputDecoration(
-              labelText: 'Session or notes (optional)',
+            decoration: InputDecoration(
+              labelText: context.l10n.sessionOrNotesOptional,
             ),
           ),
           if (error != null)
@@ -464,19 +460,19 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
               FilledButton.icon(
                 onPressed: busy ? null : () => _connect(paired),
                 icon: const Icon(Icons.bluetooth_connected),
-                label: Text('Connect ${paired.name}'),
+                label: Text(context.l10n.connectName(paired.name)),
               ),
               const SizedBox(height: 8),
             ],
             FilledButton.icon(
               onPressed: busy ? null : _scan,
               icon: const Icon(Icons.bluetooth_searching),
-              label: const Text('Find Polar H10'),
+              label: Text(context.l10n.findPolarH10),
             ),
             for (final found in devices)
               ListTile(
                 title: Text(found.name),
-                subtitle: Text('Signal ${found.rssi} dBm'),
+                subtitle: Text(context.l10n.signalRssiDbm(found.rssi)),
                 trailing: const Icon(Icons.chevron_right),
                 enabled: !busy,
                 onTap: () => _connect(found),
@@ -484,17 +480,17 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
           ],
           if (connected && !running) ...[
             Text(
-              'Connected: ${device!.name}',
+              context.l10n.connectedName(device!.name),
               style: const TextStyle(color: mint),
             ),
             if (!ready)
-              const Text(
-                'Waiting for heart rate and RR intervals. Check the strap contact.',
+              Text(
+                context.l10n.waitingForHeartRateAnd,
                 style: TextStyle(color: muted),
               ),
             FilledButton(
               onPressed: ready ? _start : null,
-              child: const Text('Start measurement'),
+              child: Text(context.l10n.startMeasurement),
             ),
           ],
           if (connected || running)
@@ -508,8 +504,8 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
                 children: [
                   Text(
                     settling
-                        ? 'Settling · stay still'
-                        : 'Recording · stay still',
+                        ? context.l10n.settlingStayStill
+                        : context.l10n.recordingStayStill,
                     style: const TextStyle(color: mint),
                   ),
                   Text(
@@ -526,27 +522,34 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
                   ),
                   TextButton(
                     onPressed: _cancel,
-                    child: const Text('Cancel measurement'),
+                    child: Text(context.l10n.cancelMeasurement),
                   ),
                 ],
               ),
             ),
           if (result?.rmssdMs != null) ...[
-            const SectionLabel('Spot HRV · RMSSD'),
+            SectionLabel(context.l10n.spotHrvRmssd),
             Row(
               children: [
-                metric('RMSSD · ms', result!.rmssdMs!.toStringAsFixed(1)),
-                metric('SDNN · ms', valueText(result.sdnnMs, 1)),
-                metric('Mean HR · bpm', valueText(result.meanHr, 1)),
+                metric(context.l10n.rmssdMs, result!.rmssdMs!.fixed(1)),
+                metric(context.l10n.sdnnMs, valueText(result.sdnnMs, 1)),
+                metric(context.l10n.meanHrBpm, valueText(result.meanHr, 1)),
               ],
             ),
             const SizedBox(height: 12),
             Text(
-              '${result.accepted}/${result.samples.length} usable intervals · ${(result.coverage * 100).toStringAsFixed(0)}% coverage',
+              context.l10n.acceptedLengthUsableIntervalsTostringasfixed(
+                result.accepted,
+                result.samples.length,
+                (result.coverage * 100).fixed(0),
+              ),
               style: const TextStyle(color: muted, fontSize: 12),
             ),
             Text(
-              'lnRMSSD: ${valueText(result.lnRmssd, 2)} · Raw RMSSD: ${valueText(result.rawRmssdMs, 1)} ms',
+              context.l10n.lnrmssdLnrmssdRawRmssdRawrmssdms(
+                valueText(result.lnRmssd, 2),
+                valueText(result.rawRmssdMs, 1),
+              ),
               style: const TextStyle(color: muted, fontSize: 12),
             ),
             const SizedBox(height: 8),
@@ -565,13 +568,13 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
           ],
           if (completed) ...[
             if (!capture!.analysis.reliable)
-              const Text(
-                'Signal quality is too low to save. Repeat the measurement with good strap contact. At least 95% usable intervals and 90% coverage are required.',
+              Text(
+                context.l10n.signalQualityIsTooLow,
                 style: TextStyle(color: Colors.orangeAccent),
               ),
             if (saved) ...[
-              const Text(
-                'Saved to spot HRV history.',
+              Text(
+                context.l10n.savedToSpotHrvHistory,
                 style: TextStyle(color: mint),
               ),
               if (capturedContext == SpotHrvContext.beforeTraining)
@@ -579,7 +582,7 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
             ] else
               FilledButton(
                 onPressed: busy || !capture!.analysis.reliable ? null : _save,
-                child: const Text('Save measurement'),
+                child: Text(context.l10n.saveMeasurement),
               ),
             TextButton(
               onPressed: busy
@@ -591,27 +594,31 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
                       lastPacket = null;
                       saved = false;
                     }),
-              child: const Text('New measurement'),
+              child: Text(context.l10n.newMeasurement),
             ),
           ],
-          const Padding(
+          Padding(
             padding: EdgeInsets.symmetric(vertical: 12),
             child: Text(
-              'Signal screening excludes poor contact, RR outside 250–2500 ms and intervals more than 25% from the local median. Gaps are not bridged. This is not a medical test or a standalone readiness score.',
+              context.l10n.signalScreeningExcludesPoorContact,
               style: TextStyle(color: muted, fontSize: 11),
             ),
           ),
           SectionLabel(
-            'History · ${contextType.label} · ${posture.label} · ${duration ~/ 60} min',
+            context.l10n.historyLabelLabel2DurationMin(
+              contextType.label,
+              posture.label,
+              duration ~/ 60,
+            ),
           ),
-          const Text(
-            'Only readings with the same context, posture and duration are shown together.',
+          Text(
+            context.l10n.onlyReadingsWithTheSame,
             style: TextStyle(fontSize: 11, color: muted),
           ),
           ref
               .watch(spotHrvProvider)
               .when(
-                loading: () => const Center(child: CircularProgressIndicator()),
+                loading: () => Center(child: CircularProgressIndicator()),
                 error: (e, _) => DataError(e),
                 data: (rows) {
                   final matching = rows
@@ -623,10 +630,10 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
                       )
                       .toList();
                   if (matching.isEmpty) {
-                    return const Padding(
+                    return Padding(
                       padding: EdgeInsets.all(16),
                       child: Text(
-                        'No matching measurements yet.',
+                        context.l10n.noMatchingMeasurementsYet,
                         style: TextStyle(color: muted),
                       ),
                     );
@@ -643,10 +650,14 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
                       for (final row in matching)
                         ListTile(
                           title: Text(
-                            '${row.rmssdMs.toStringAsFixed(1)} ms RMSSD · ${row.meanHr.toStringAsFixed(0)} bpm',
+                            context.l10n
+                                .tostringasfixedMsRmssdTostringasfixed2Bpm(
+                                  row.rmssdMs.fixed(1),
+                                  row.meanHr.fixed(0),
+                                ),
                           ),
                           subtitle: Text(
-                            '${DateFormat('d MMM, HH:mm').format(row.startedAt)}${row.minutesAfterTraining == null ? '' : ' · ${row.minutesAfterTraining} min after training'}${row.notes == null ? '' : '\n${row.notes}'}',
+                            '${DateFormat.MMMd().add_Hm().format(row.startedAt)}${row.minutesAfterTraining == null ? '' : ' · ${row.minutesAfterTraining} min after training'}${row.notes == null ? '' : '\n${row.notes}'}',
                           ),
                           trailing: PopupMenuButton<String>(
                             onSelected: (action) async {
@@ -656,8 +667,8 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
                               }
                               if (await confirmAction(
                                     context,
-                                    'Delete spot HRV measurement?',
-                                    'This removes the recording and its raw RR intervals.',
+                                    context.l10n.deleteSpotHrvMeasurement,
+                                    context.l10n.thisRemovesTheRecordingAnd,
                                   ) &&
                                   context.mounted) {
                                 await runUiAction(
@@ -668,14 +679,14 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
                                 );
                               }
                             },
-                            itemBuilder: (_) => const [
+                            itemBuilder: (_) => [
                               PopupMenuItem(
                                 value: 'csv',
-                                child: Text('Export RR intervals (CSV)'),
+                                child: Text(context.l10n.exportRrIntervalsCsv),
                               ),
                               PopupMenuItem(
                                 value: 'delete',
-                                child: Text('Delete measurement'),
+                                child: Text(context.l10n.deleteMeasurement),
                               ),
                             ],
                           ),
@@ -704,7 +715,7 @@ class _ReminderOffer extends ConsumerWidget {
       child: OutlinedButton.icon(
         onPressed: () => ref.read(hrvReminderActionsProvider).setEnabled(true),
         icon: const Icon(Icons.notifications_active_outlined),
-        label: const Text('Remind me to measure HRV after training'),
+        label: Text(context.l10n.remindMeToMeasureHrv),
       ),
     );
   }

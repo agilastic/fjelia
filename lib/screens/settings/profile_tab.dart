@@ -1,3 +1,5 @@
+import '../../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -9,7 +11,7 @@ class ProfileTab extends ConsumerWidget {
   const ProfileTab({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) => SheetPage(
-    title: 'Profile',
+    title: context.l10n.profile,
     child: ListView(
       padding: const EdgeInsets.all(16),
       children: [
@@ -18,14 +20,14 @@ class ProfileTab extends ConsumerWidget {
             children: [
               for (final e in [
                 (
-                  'Basics',
+                  context.l10n.basics,
                   ref.watch(userProfileProvider).valueOrNull?.birthYear == null
-                      ? 'Birth year, height, waist'
+                      ? context.l10n.birthYearHeightWaist
                       : '${ref.watch(userProfileProvider).valueOrNull!.birthYear} · age ${ref.watch(userProfileProvider).valueOrNull!.age?.round()}',
                   0,
                 ),
-                ('Habits', 'Smoking, alcohol', 1),
-                ('Clinical Lab', 'HbA1c, lipids, kidney', 2),
+                (context.l10n.habits, context.l10n.smokingAlcohol, 1),
+                (context.l10n.clinicalLab, context.l10n.hba1cLipidsKidney, 2),
               ])
                 ListTile(
                   title: Text(e.$1),
@@ -70,7 +72,11 @@ class ProfileEditor extends ConsumerWidget {
   final int section;
   @override
   Widget build(BuildContext context, WidgetRef ref) => SheetPage(
-    title: ['Basics', 'Habits', 'Clinical Lab'][section],
+    title: [
+      context.l10n.basics,
+      context.l10n.habits,
+      context.l10n.clinicalLab,
+    ][section],
     child: ref
         .watch(userProfileProvider)
         .when(
@@ -118,7 +124,7 @@ class ProfileEditor extends ConsumerWidget {
                       return n == null ||
                               (min != null && n < min) ||
                               (max != null && n > max)
-                          ? 'Enter a valid value'
+                          ? context.l10n.enterAValidValue
                           : null;
                     },
                     onChanged: (s) {
@@ -136,7 +142,7 @@ class ProfileEditor extends ConsumerWidget {
                     Padding(
                       padding: const EdgeInsets.only(top: 3),
                       child: Text(
-                        'age ${p.age?.round()}',
+                        context.l10n.ageRound(p.age?.round() ?? ""),
                         style: const TextStyle(
                           fontSize: 10,
                           color: Colors.white,
@@ -213,13 +219,13 @@ class ProfileEditor extends ConsumerWidget {
               ),
               children: [
                 if (section == 0) ...[
-                  const SectionLabel('Basics'),
+                  SectionLabel(context.l10n.basics),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
                         child: number(
-                          'Birth year',
+                          context.l10n.birthYear,
                           'birthYear',
                           integer: true,
                           min: 1900,
@@ -229,7 +235,7 @@ class ProfileEditor extends ConsumerWidget {
                       const SizedBox(width: 8),
                       Expanded(
                         child: number(
-                          'Height',
+                          context.l10n.height,
                           'heightCm',
                           unit: 'cm',
                           min: 50,
@@ -239,7 +245,7 @@ class ProfileEditor extends ConsumerWidget {
                       const SizedBox(width: 8),
                       Expanded(
                         child: number(
-                          'Waist',
+                          context.l10n.waist,
                           'waistCm',
                           unit: 'cm',
                           min: 20,
@@ -248,30 +254,30 @@ class ProfileEditor extends ConsumerWidget {
                       ),
                     ],
                   ),
-                  const Text(
-                    'ⓘ Update waist monthly — used for visceral fat estimate.',
+                  Text(
+                    context.l10n.updateWaistMonthlyUsedFor,
                     style: TextStyle(fontSize: 9, color: muted),
                   ),
-                  const SectionLabel('HR Zones'),
+                  SectionLabel(context.l10n.hrZones),
                   SectionCard(
                     onTap: () => showAppSheet(context, const HrZonesTab()),
                     child: const HrZonesPreview(),
                   ),
-                  options('Sex', 'sex', {
-                    'm': 'Male',
-                    'f': 'Female',
-                    if (p.sex == 'x') 'x': 'Other',
+                  options(context.l10n.sex, 'sex', {
+                    'm': context.l10n.male,
+                    'f': context.l10n.female,
+                    if (p.sex == 'x') 'x': context.l10n.other,
                   }),
                 ],
                 if (section == 1) ...[
-                  options('Smoking', 'smokingStatus', {
-                    'never': 'Never',
-                    'former': 'Former',
-                    'current': 'Current',
+                  options(context.l10n.smoking, 'smokingStatus', {
+                    'never': context.l10n.never,
+                    'former': context.l10n.former,
+                    'current': context.l10n.current,
                   }),
                   if (p.smokingStatus == 'former')
                     number(
-                      'Years since quit',
+                      context.l10n.yearsSinceQuit,
                       'yearsSinceQuit',
                       unit: 'y',
                       integer: true,
@@ -280,49 +286,60 @@ class ProfileEditor extends ConsumerWidget {
                     ),
                   if (p.smokingStatus == 'current')
                     number(
-                      'Cigarettes per day',
+                      context.l10n.cigarettesPerDay,
                       'cigarettesPerDay',
                       integer: true,
                       min: 0,
                       max: 100,
                     ),
-                  const SectionLabel('Alcohol'),
+                  SectionLabel(context.l10n.alcohol),
                   number(
-                    'Standard drinks per month',
+                    context.l10n.standardDrinksPerMonth,
                     'alcoholDrinksPerMonth',
                     integer: true,
                     min: 0,
                   ),
-                  const Text(
-                    '1 drink ≈ 0.33 L beer / 0.2 L wine / 4 cl spirits',
+                  Text(
+                    context.l10n.t1Drink033L,
                     style: TextStyle(fontSize: 10, color: muted),
                   ),
                 ],
                 if (section == 2) ...[
-                  const SectionLabel('Clinical labs (optional)'),
-                  const SectionLabel('Glycemic'),
-                  number('HbA1c', 'hba1cPercent', unit: '%', min: 2, max: 20),
-                  const Text(
-                    'Optimal for longevity: 4.8–5.4% · Prediabetes: 5.7–6.4%',
+                  SectionLabel(context.l10n.clinicalLabsOptional),
+                  SectionLabel(context.l10n.glycemic),
+                  number(
+                    context.l10n.hba1c,
+                    'hba1cPercent',
+                    unit: '%',
+                    min: 2,
+                    max: 20,
+                  ),
+                  Text(
+                    context.l10n.optimalForLongevity48,
                     style: TextStyle(fontSize: 9, color: muted),
                   ),
-                  options('Diabetes', 'diabetesType', {
-                    'none': 'None',
-                    'prediabetes': 'Prediabetes',
-                    'type1': 'Type 1',
-                    'type2': 'Type 2',
+                  options(context.l10n.diabetes, 'diabetesType', {
+                    'none': context.l10n.none,
+                    'prediabetes': context.l10n.prediabetes,
+                    'type1': context.l10n.type1,
+                    'type2': context.l10n.type2,
                   }),
-                  const SectionLabel('Lipids'),
+                  SectionLabel(context.l10n.lipids),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
-                        child: number('ApoB', 'apoB', unit: 'mg/dL', min: 0),
+                        child: number(
+                          context.l10n.apob,
+                          'apoB',
+                          unit: 'mg/dL',
+                          min: 0,
+                        ),
                       ),
                       const SizedBox(width: 8),
                       Expanded(
                         child: number(
-                          'HDL Cholesterol',
+                          context.l10n.hdlCholesterol,
                           'hdlCholesterol',
                           unit: 'mg/dL',
                           min: 0,
@@ -331,16 +348,16 @@ class ProfileEditor extends ConsumerWidget {
                     ],
                   ),
                   number(
-                    'LDL Cholesterol',
+                    context.l10n.ldlCholesterol,
                     'ldlCholesterol',
                     unit: 'mg/dL',
                     min: 0,
                   ),
-                  const Text(
-                    'ApoB replaces LDL when both are entered.',
+                  Text(
+                    context.l10n.apobReplacesLdlWhenBoth,
                     style: TextStyle(fontSize: 9, color: muted),
                   ),
-                  const SectionLabel('Inflammation & Kidney'),
+                  SectionLabel(context.l10n.inflammationKidney),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -353,8 +370,8 @@ class ProfileEditor extends ConsumerWidget {
                   ),
                 ],
                 const SizedBox(height: 12),
-                const Text(
-                  'Changes are saved automatically',
+                Text(
+                  context.l10n.changesAreSavedAutomatically,
                   style: TextStyle(color: muted, fontSize: 10),
                 ),
               ],
