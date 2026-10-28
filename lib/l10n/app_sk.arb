@@ -964,7 +964,6 @@
   "productsToleranceAndMeasuredSweat": "Produkty, tolerancia a namerané straty potu",
   "postWorkoutIntakeReminder": "Pripomienka príjmu po tréningu",
   "onceAfterARecentEndurance": "Raz po nedávnom vytrvalostnom tréningu; tiché hodiny 22:00–08:00.",
-  "enableWorkoutNotifications": "Zapnúť upozornenia na tréning",
   "addHiloBpReport": "Pridať správu o tlaku Hilo",
   "readingPdfReportsIsOnly": "Čítanie správ vo formáte PDF je dostupné iba v iOS a macOS.",
   "chooseAnotherReport": "Vybrať inú správu",
@@ -1244,7 +1243,6 @@
   "sportsDrink": "Športový nápoj",
   "bar": "Tyčinka",
   "finishIntakeLog": "Dokončiť záznam príjmu",
-  "allowNotificationsInSystemSettings": "Povoľte upozornenia v nastaveniach systému",
   "importing": "Importujem…",
   "importNewreadings": "Importovať {newReadings}",
   "@importNewreadings": {
@@ -1565,7 +1563,6 @@
   "severeSymptoms": "Závažné príznaky",
   "personalNutritionSettings": "Osobné nastavenia výživy",
   "practisedCarbohydrateToleranceGH": "Natrénovaná tolerancia sacharidov g/h (do 120)",
-  "workoutNotificationsEnabled": "Upozornenia na tréning sú zapnuté",
   "exportTheMonthlyReportAs": "Exportujte mesačnú správu ako PDF v aplikácii Hilo a vyberte ju tu. Importujú sa iba merania; meno, e-mail a telesné údaje v správe sa ignorujú.",
   "nothingNewAllReadingsWere": "Nič nové: všetky merania už boli uložené.",
   "historyImportIncomplete": "Import histórie je neúplný",
@@ -3106,5 +3103,70 @@
   "briefReasonFormVeryTired": "veľmi vysoká tréningová únava",
   "briefReasonFormFresh": "svieži a oddýchnutí",
   "briefTrainingHrvUp": "Vaše HRV po tréningu vzrástlo, čo je dobré znamenie.",
-  "briefTrainingHrvDown": "Vaše HRV po tréningu kleslo, čo je menej dobré znamenie."
+  "briefTrainingHrvDown": "Vaše HRV po tréningu kleslo, čo je menej dobré znamenie.",
+  "reminderNeedsNotifications": "Pripomienka potrebuje upozornenia. Povoľte ich pre Fjelia v nastaveniach systému a znova ju zapnite.",
+  "whatDidYouHave": "Čo ste skonzumovali?",
+  "intakeSomething": "Niečo som skonzumoval",
+  "intakeNothing": "Nič",
+  "totalIntake": "Celkový príjem",
+  "carbsLabel": "Sacharidy",
+  "fluidLabel": "Tekutiny",
+  "sodiumLabel": "Sodík",
+  "caffeineLabel": "Kofeín",
+  "detailsOptional": "Podrobnosti (voliteľné)",
+  "atMinute": "minúta {minute}",
+  "@atMinute": {
+    "placeholders": {
+      "minute": {
+        "type": "Object"
+      }
+    }
+  },
+  "nothingAddedYet": "Zatiaľ nič nepridané. Pridajte, čo ste jedli alebo pili, alebo vyberte „Nič“.",
+  "followFocusWeek": "Na čo sa mám tento týždeň zamerať?",
+  "followRecoveryTrend": "Ako sa vyvíja moja regenerácia?",
+  "followLoadTooHigh": "Je moja tréningová záťaž príliš vysoká?",
+  "followImproveSleep": "Čo by zlepšilo môj spánok?",
+  "followIntervalsFeel": "Aké by sa mali cítiť intervaly?",
+  "followTiredToday": "Čo ak sa dnes cítim unavený?",
+  "followEatBefore": "Čo by som mal pred tým jesť?",
+  "followAdjustToday": "Mám to dnes upraviť?",
+  "followNextDays": "Čo to znamená pre moje najbližšie dni?",
+  "followCompareSimilar": "Ako to vychádza v porovnaní s podobnými tréningmi?",
+  "followRecover": "Čo mám robiť, aby som sa zregeneroval?",
+  "followIntensityRight": "Bola intenzita správna?",
+  "statusPlanned": "Plánované",
+  "statusAdapted": "Upravené",
+  "statusCompleted": "Dokončené",
+  "statusRest": "Odpočinok",
+  "loadValue": "Záťaž {value}",
+  "@loadValue": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "actIntensityEasy": "Bol to ľahký aeróbny tréning.",
+  "actIntensityModerate": "Bol to stredne náročný tréning.",
+  "actIntensityHard": "Bol to náročný tréning.",
+  "actIntensityUnknown": "Tréning je zaznamenaný.",
+  "actLenLonger": "Bola dlhšia než vaše podobné tréningy.",
+  "actLenShorter": "Bola kratšia než vaše podobné tréningy.",
+  "actLoadHigher": "Záťaž bola vyššia než zvyčajne.",
+  "actLoadLower": "Záťaž bola nižšia než zvyčajne.",
+  "actLoadSame": "Záťaž bola približne obvyklá.",
+  "actHrLower": "Vaša TF bola nižšia než zvyčajne, bolo to ľahšie.",
+  "actHrHigher": "Vaša TF bola vyššia než zvyčajne, bolo to ťažšie.",
+  "actAdviceUnknown": "Nasledujúce dni plánujte podľa toho, ako sa cítite.",
+  "briefOutlookRest": "Približne po {days} ľahkých dňoch bude vaša forma späť v optimálnom rozsahu.",
+  "@briefOutlookRest": {
+    "placeholders": {
+      "days": {
+        "type": "Object"
+      }
+    }
+  },
+  "briefOutlookLongRest": "Vaša forma potrebuje na zotavenie viac než pár ľahkých dní.",
+  "briefOutlookPlanTired": "Ak budete dodržiavať plán, vaša forma zostane nízka aj v najbližších dňoch."
 }

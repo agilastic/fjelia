@@ -10,6 +10,8 @@ import 'hrv/hrv_ai_context_builder.dart';
 import 'hrv/hrv_training_service.dart';
 import 'ai_data_status.dart';
 import 'ai_metric_analysis.dart';
+import 'form_forecast.dart';
+import '../providers/day_data_provider.dart' show readTrainingFormSeries;
 import 'post_workout_scorer.dart' show noActivityReason;
 import 'race_predictor.dart';
 import 'race_goal_service.dart';
@@ -283,8 +285,20 @@ class AiContextToonBuilder {
         ? null
         : RegExp(r'Verdict:(better|worse)')
               .firstMatch(trainingHrvAnalysis.first)?[1];
+    // The load chart as background: form, trend and what rest or the plan do
+    // to it. A failure here never blocks the coach.
+    FormForecast? forecast;
+    try {
+      forecast = FormForecast.compute(
+        await readTrainingFormSeries(_db),
+        planned: _plannedLoadByDay(sessions),
+        raceInDays: planInfo?.daysToRace,
+      );
+    } catch (_) {}
+    if (forecast != null) lines.add(forecast.toLine());
     lines.addAll(
       MetricAnalysis(today).lines(
+        outlook: forecast?.outlook,
         done: doneToday,
         plannedToday: doneToday.isEmpty ? plannedOn(today) : const [],
         tomorrow: plannedOn(DateTime(today.year, today.month, today.day + 1)),
@@ -617,6 +631,16 @@ class AiContextToonBuilder {
         .replaceAll(RegExp(r'[\[\]\n\r,:]'), ' ')
         .replaceAll(RegExp(r'\s+'), ' ')
         .trim();
+  }
+
+  /// The planned TRIMP of every upcoming day (several sessions add up).
+  static Map<DateTime, double> _plannedLoadByDay(List<TrainingSession> all) {
+    final out = <DateTime, double>{};
+    for (final x in all) {
+      final d = _day(x.sessionDate);
+      out[d] = (out[d] ?? 0) + x.plannedTrimp.toDouble();
+    }
+    return out;
   }
 
   static DateTime _day(DateTime date) {

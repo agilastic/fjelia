@@ -1654,9 +1654,6 @@ class AppLocalizationsSk extends AppLocalizations {
       'Raz po nedávnom vytrvalostnom tréningu; tiché hodiny 22:00–08:00.';
 
   @override
-  String get enableWorkoutNotifications => 'Zapnúť upozornenia na tréning';
-
-  @override
   String get addHiloBpReport => 'Pridať správu o tlaku Hilo';
 
   @override
@@ -2237,10 +2234,6 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get finishIntakeLog => 'Dokončiť záznam príjmu';
-
-  @override
-  String get allowNotificationsInSystemSettings =>
-      'Povoľte upozornenia v nastaveniach systému';
 
   @override
   String get importing => 'Importujem…';
@@ -3014,9 +3007,6 @@ class AppLocalizationsSk extends AppLocalizations {
   @override
   String get practisedCarbohydrateToleranceGH =>
       'Natrénovaná tolerancia sacharidov g/h (do 120)';
-
-  @override
-  String get workoutNotificationsEnabled => 'Upozornenia na tréning sú zapnuté';
 
   @override
   String get exportTheMonthlyReportAs =>
@@ -5489,4 +5479,148 @@ class AppLocalizationsSk extends AppLocalizations {
   @override
   String get briefTrainingHrvDown =>
       'Vaše HRV po tréningu kleslo, čo je menej dobré znamenie.';
+
+  @override
+  String get reminderNeedsNotifications =>
+      'Pripomienka potrebuje upozornenia. Povoľte ich pre Fjelia v nastaveniach systému a znova ju zapnite.';
+
+  @override
+  String get whatDidYouHave => 'Čo ste skonzumovali?';
+
+  @override
+  String get intakeSomething => 'Niečo som skonzumoval';
+
+  @override
+  String get intakeNothing => 'Nič';
+
+  @override
+  String get totalIntake => 'Celkový príjem';
+
+  @override
+  String get carbsLabel => 'Sacharidy';
+
+  @override
+  String get fluidLabel => 'Tekutiny';
+
+  @override
+  String get sodiumLabel => 'Sodík';
+
+  @override
+  String get caffeineLabel => 'Kofeín';
+
+  @override
+  String get detailsOptional => 'Podrobnosti (voliteľné)';
+
+  @override
+  String atMinute(Object minute) {
+    return 'minúta $minute';
+  }
+
+  @override
+  String get nothingAddedYet =>
+      'Zatiaľ nič nepridané. Pridajte, čo ste jedli alebo pili, alebo vyberte „Nič“.';
+
+  @override
+  String get followFocusWeek => 'Na čo sa mám tento týždeň zamerať?';
+
+  @override
+  String get followRecoveryTrend => 'Ako sa vyvíja moja regenerácia?';
+
+  @override
+  String get followLoadTooHigh => 'Je moja tréningová záťaž príliš vysoká?';
+
+  @override
+  String get followImproveSleep => 'Čo by zlepšilo môj spánok?';
+
+  @override
+  String get followIntervalsFeel => 'Aké by sa mali cítiť intervaly?';
+
+  @override
+  String get followTiredToday => 'Čo ak sa dnes cítim unavený?';
+
+  @override
+  String get followEatBefore => 'Čo by som mal pred tým jesť?';
+
+  @override
+  String get followAdjustToday => 'Mám to dnes upraviť?';
+
+  @override
+  String get followNextDays => 'Čo to znamená pre moje najbližšie dni?';
+
+  @override
+  String get followCompareSimilar =>
+      'Ako to vychádza v porovnaní s podobnými tréningmi?';
+
+  @override
+  String get followRecover => 'Čo mám robiť, aby som sa zregeneroval?';
+
+  @override
+  String get followIntensityRight => 'Bola intenzita správna?';
+
+  @override
+  String get statusPlanned => 'Plánované';
+
+  @override
+  String get statusAdapted => 'Upravené';
+
+  @override
+  String get statusCompleted => 'Dokončené';
+
+  @override
+  String get statusRest => 'Odpočinok';
+
+  @override
+  String loadValue(Object value) {
+    return 'Záťaž $value';
+  }
+
+  @override
+  String get actIntensityEasy => 'Bol to ľahký aeróbny tréning.';
+
+  @override
+  String get actIntensityModerate => 'Bol to stredne náročný tréning.';
+
+  @override
+  String get actIntensityHard => 'Bol to náročný tréning.';
+
+  @override
+  String get actIntensityUnknown => 'Tréning je zaznamenaný.';
+
+  @override
+  String get actLenLonger => 'Bola dlhšia než vaše podobné tréningy.';
+
+  @override
+  String get actLenShorter => 'Bola kratšia než vaše podobné tréningy.';
+
+  @override
+  String get actLoadHigher => 'Záťaž bola vyššia než zvyčajne.';
+
+  @override
+  String get actLoadLower => 'Záťaž bola nižšia než zvyčajne.';
+
+  @override
+  String get actLoadSame => 'Záťaž bola približne obvyklá.';
+
+  @override
+  String get actHrLower => 'Vaša TF bola nižšia než zvyčajne, bolo to ľahšie.';
+
+  @override
+  String get actHrHigher => 'Vaša TF bola vyššia než zvyčajne, bolo to ťažšie.';
+
+  @override
+  String get actAdviceUnknown =>
+      'Nasledujúce dni plánujte podľa toho, ako sa cítite.';
+
+  @override
+  String briefOutlookRest(Object days) {
+    return 'Približne po $days ľahkých dňoch bude vaša forma späť v optimálnom rozsahu.';
+  }
+
+  @override
+  String get briefOutlookLongRest =>
+      'Vaša forma potrebuje na zotavenie viac než pár ľahkých dní.';
+
+  @override
+  String get briefOutlookPlanTired =>
+      'Ak budete dodržiavať plán, vaša forma zostane nízka aj v najbližších dňoch.';
 }

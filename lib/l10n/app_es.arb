@@ -964,7 +964,6 @@
   "productsToleranceAndMeasuredSweat": "Productos, tolerancia y pérdidas de sudor medidas",
   "postWorkoutIntakeReminder": "Recordatorio de ingesta tras el entrenamiento",
   "onceAfterARecentEndurance": "Una vez tras un entrenamiento de resistencia reciente; horas de silencio 22:00–08:00.",
-  "enableWorkoutNotifications": "Activar notificaciones de entrenamiento",
   "addHiloBpReport": "Añadir informe de presión Hilo",
   "readingPdfReportsIsOnly": "La lectura de informes PDF solo está disponible en iOS y macOS.",
   "chooseAnotherReport": "Elegir otro informe",
@@ -1244,7 +1243,6 @@
   "sportsDrink": "Bebida deportiva",
   "bar": "Barrita",
   "finishIntakeLog": "Finalizar registro de ingesta",
-  "allowNotificationsInSystemSettings": "Permitir notificaciones en los ajustes del sistema",
   "importing": "Importando…",
   "importNewreadings": "Importar {newReadings}",
   "@importNewreadings": {
@@ -1565,7 +1563,6 @@
   "severeSymptoms": "Síntomas graves",
   "personalNutritionSettings": "Ajustes personales de nutrición",
   "practisedCarbohydrateToleranceGH": "Tolerancia a carbohidratos entrenada g/h (hasta 120)",
-  "workoutNotificationsEnabled": "Notificaciones de entrenamiento activadas",
   "exportTheMonthlyReportAs": "Exporta el informe mensual como PDF en la app de Hilo y elígelo aquí. Solo se importan las mediciones; el nombre, el correo y los datos corporales del informe se ignoran.",
   "nothingNewAllReadingsWere": "Nada nuevo: todas las mediciones ya estaban guardadas.",
   "historyImportIncomplete": "Importación del historial incompleta",
@@ -3106,5 +3103,70 @@
   "briefReasonFormVeryTired": "fatiga de entrenamiento muy alta",
   "briefReasonFormFresh": "fresco y descansado",
   "briefTrainingHrvUp": "Tu VFC subió tras el entrenamiento, buena señal.",
-  "briefTrainingHrvDown": "Tu VFC bajó tras el entrenamiento, señal menos buena."
+  "briefTrainingHrvDown": "Tu VFC bajó tras el entrenamiento, señal menos buena.",
+  "reminderNeedsNotifications": "El recordatorio necesita notificaciones. Permítelas para Fjelia en los ajustes del sistema y vuelve a activarlo.",
+  "whatDidYouHave": "¿Qué tomaste?",
+  "intakeSomething": "Tomé algo",
+  "intakeNothing": "Nada",
+  "totalIntake": "Ingesta total",
+  "carbsLabel": "Carbohidratos",
+  "fluidLabel": "Líquido",
+  "sodiumLabel": "Sodio",
+  "caffeineLabel": "Cafeína",
+  "detailsOptional": "Detalles (opcional)",
+  "atMinute": "minuto {minute}",
+  "@atMinute": {
+    "placeholders": {
+      "minute": {
+        "type": "Object"
+      }
+    }
+  },
+  "nothingAddedYet": "Aún no has añadido nada. Añade lo que comiste o bebiste, o elige «Nada».",
+  "followFocusWeek": "¿En qué debería centrarme esta semana?",
+  "followRecoveryTrend": "¿Cómo evoluciona mi recuperación?",
+  "followLoadTooHigh": "¿Mi carga de entrenamiento es demasiado alta?",
+  "followImproveSleep": "¿Qué mejoraría mi sueño?",
+  "followIntervalsFeel": "¿Cómo deberían sentirse los intervalos?",
+  "followTiredToday": "¿Y si hoy me siento cansado?",
+  "followEatBefore": "¿Qué debería comer antes?",
+  "followAdjustToday": "¿Debería ajustarlo hoy?",
+  "followNextDays": "¿Qué significa para mis próximos días?",
+  "followCompareSimilar": "¿Cómo se compara con sesiones similares?",
+  "followRecover": "¿Qué debería hacer para recuperarme?",
+  "followIntensityRight": "¿Fue correcta la intensidad?",
+  "statusPlanned": "Planificado",
+  "statusAdapted": "Adaptado",
+  "statusCompleted": "Completado",
+  "statusRest": "Descanso",
+  "loadValue": "Carga {value}",
+  "@loadValue": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "actIntensityEasy": "Fue una sesión aeróbica suave.",
+  "actIntensityModerate": "Fue una sesión moderada.",
+  "actIntensityHard": "Fue una sesión intensa.",
+  "actIntensityUnknown": "La sesión está registrada.",
+  "actLenLonger": "Fue más larga que tus sesiones similares.",
+  "actLenShorter": "Fue más corta que tus sesiones similares.",
+  "actLoadHigher": "La carga fue mayor de lo habitual.",
+  "actLoadLower": "La carga fue menor de lo habitual.",
+  "actLoadSame": "La carga fue aproximadamente la habitual.",
+  "actHrLower": "Tu FC fue más baja de lo habitual, se sintió más fácil.",
+  "actHrHigher": "Tu FC fue más alta de lo habitual, se sintió más duro.",
+  "actAdviceUnknown": "Planifica tus próximos días según cómo te sientas.",
+  "briefOutlookRest": "Con unos {days} días suaves tu forma vuelve al rango óptimo.",
+  "@briefOutlookRest": {
+    "placeholders": {
+      "days": {
+        "type": "Object"
+      }
+    }
+  },
+  "briefOutlookLongRest": "Tu forma necesita más que unos pocos días suaves para recuperarse.",
+  "briefOutlookPlanTired": "Si sigues el plan, tu forma seguirá baja los próximos días."
 }

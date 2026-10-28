@@ -47,8 +47,12 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       final p = widget.initialPrompt ?? ref.read(pendingCoachPromptProvider);
+      // A chat about a training or an activity starts with an empty field:
+      // its context is loaded already and the card offers the questions.
+      final aboutSession =
+          widget.contextCard != null || widget.activity != null;
       if (p != null) {
-        input.text = p;
+        if (!aboutSession) input.text = p;
         if (widget.initialPrompt == null) {
           ref.read(pendingCoachPromptProvider.notifier).state = null;
         }

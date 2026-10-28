@@ -1732,7 +1732,8 @@ void main() {
       findsOneWidget,
     );
     final input = tester.widget<TextField>(find.byType(TextField).last);
-    expect(input.controller!.text, 'How did this session go?');
+    // No draft: the card offers the questions.
+    expect(input.controller!.text, isEmpty);
     // The request is consumed: opening the tab again later does not repeat it.
     expect(container.read(coachRequestProvider), isNull);
     expect(tester.takeException(), isNull);

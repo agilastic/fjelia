@@ -10,6 +10,8 @@ import '../services/open_meteo_client.dart';
 import 'database_provider.dart';
 import 'heat_acclimation_provider.dart';
 import 'hrv_reminder_provider.dart';
+import '../services/notifications/local_notification_gateway.dart'
+    show NotificationPermission;
 
 final nutritionServiceProvider = Provider(
   (ref) => NutritionService(ref.watch(databaseProvider)),
@@ -119,3 +121,18 @@ final nutritionConditionsProvider = FutureProvider.autoDispose
         return const NutritionConditions();
       }
     });
+
+/// Whether the system lets the app show notifications. While the reminder is
+/// on and the system has not been asked yet, this asks, so an enabled reminder
+/// always has its permission checked. Read again when it is switched on.
+final nutritionNotificationsAllowedProvider = FutureProvider.autoDispose<bool>((
+  ref,
+) async {
+  final gateway = ref.read(localNotificationGatewayProvider);
+  var permission = await gateway.permission();
+  if (permission == NotificationPermission.notDetermined) {
+    final prefs = await ref.read(nutritionPreferencesProvider.future);
+    if (prefs.reminders) permission = await gateway.requestPermission();
+  }
+  return permission.allowed;
+});

@@ -601,9 +601,8 @@ class _TrainingHistory {
     final sixWeeks = (now.difference(earliest).inDays / 7).ceil().clamp(1, 6);
     var peak = 0.0;
     for (var w = 0; w + 3 <= 52; w++) {
-      final sum = [
-        for (var i = w; i < w + 4; i++) weekMinutes[i] ?? 0,
-      ].fold<double>(0, (a, b) => a + b);
+      final sum = [for (var i = w; i < w + 4; i++) weekMinutes[i] ?? 0]
+          .fold<double>(0, (a, b) => a + b);
       peak = math.max(peak, sum / 4);
     }
     return _TrainingHistory(
@@ -663,6 +662,7 @@ class _AthleteFitnessSnapshot {
     this.hrvRatio = 1.0,
     this.sleepScore,
     this.weeklyTss = 0,
+    this.easyRunZ2 = false,
   });
 
   final double ctl;
@@ -685,6 +685,18 @@ class _AthleteFitnessSnapshot {
   final int? sleepScore;
   final double weeklyTss;
 
+  /// Running at zone-1 heart rate is close to walking and few runners can do
+  /// it. For runs, an "easy" zone 1 is therefore planned as the lower half of
+  /// zone 2, which is where an easy run really sits.
+  final bool easyRunZ2;
+
+  /// The lower half of zone 2: where a recovery or easy run is run.
+  ({int? low, int? high}) easyRunRange() {
+    final z2 = hrRangeForZone(2);
+    if (z2.low == null || z2.high == null) return z2;
+    return (low: z2.low, high: z2.low! + ((z2.high! - z2.low!) / 2).round());
+  }
+
   bool get isFatigued => tsb < -20;
 
   _AthleteFitnessSnapshot withHrZones(List<int> zones) =>
@@ -701,6 +713,7 @@ class _AthleteFitnessSnapshot {
         hrvRatio: hrvRatio,
         sleepScore: sleepScore,
         weeklyTss: weeklyTss,
+        easyRunZ2: easyRunZ2,
       );
 
   ({int? low, int? high}) hrRangeForZone(int zone) {
@@ -918,6 +931,7 @@ class TrainingPlanService {
       hrvRatio: hrvRatio,
       sleepScore: readiness?.sleepScore,
       weeklyTss: weeklyTss,
+      easyRunZ2: sport == 'running' || sport == 'trail_running',
     );
     log(
       '[Plan] fitness snapshot: CTL=${ctl.toStringAsFixed(1)} '
@@ -1228,6 +1242,18 @@ class TrainingPlanService {
     if ((zone == null || zone < 1 || zone > 5) && fraction != null) {
       zone = zoneForFtpFraction(fraction);
     }
+    // Zone 1 for a runner is the lower half of zone 2 (see easyRunZ2). A
+    // warm-up, cool-down or rest step stays as planned: walking or jogging
+    // there is what those steps are for.
+    final stepKey = (out['stepType'] as Map?)?['stepTypeKey'];
+    final easyRun =
+        fitness.easyRunZ2 &&
+        zone == 1 &&
+        stepKey != 'warmup' &&
+        stepKey != 'cooldown' &&
+        stepKey != 'recovery' &&
+        stepKey != 'rest';
+    if (easyRun) zone = 2;
     if (zone != null && zone >= 1 && zone <= 5) out['zoneNumber'] = zone;
 
     final key = (out['targetType'] as Map?)?['workoutTargetTypeKey'];
@@ -1317,7 +1343,7 @@ class TrainingPlanService {
     if (target?['workoutTargetTypeKey'] == 'heart.rate.zone') {
       final z = (out['zoneNumber'] as num?)?.toInt();
       if (z != null) {
-        final r = fitness.hrRangeForZone(z);
+        final r = easyRun ? fitness.easyRunRange() : fitness.hrRangeForZone(z);
         if (r.low != null || r.high != null) {
           out['targetValueOne'] = (r.low ?? (r.high! - 15)).toDouble();
           out['targetValueTwo'] = (r.high ?? (r.low! + 15)).toDouble();
@@ -2457,8 +2483,11 @@ class TrainingPlanService {
           );
         }
 
-        final zone = semantics.dominantZone ?? slot.zone;
-        final hr = fit.hrRangeForZone(zone);
+        var zone = semantics.dominantZone ?? slot.zone;
+        // An easy run is run in the lower half of zone 2, not in zone 1.
+        final easyRun = fit.easyRunZ2 && zone == 1;
+        if (easyRun) zone = 2;
+        final hr = easyRun ? fit.easyRunRange() : fit.hrRangeForZone(zone);
         final hrJson = jsonEncode({
           'low': hr.low,
           'high': hr.high,
@@ -2704,9 +2733,8 @@ class TrainingPlanService {
     );
 
     // The whole season: every goal that is still on, not only the next A.
-    final goalSet = await RaceGoalService(
-      _db,
-    ).resolveGoalSet(athleteId: plan.athleteId, today: today);
+    final goalSet = await RaceGoalService(_db)
+        .resolveGoalSet(athleteId: plan.athleteId, today: today);
     final goal = goalSet.display;
     final rotation = _gadSportRotation(preferredSports);
 
@@ -2945,6 +2973,7 @@ class TrainingPlanService {
       hrZones: floors.length >= 5 ? zoneUpperBounds(floors) : floors,
       hrFloors: floors.length >= 5 ? floors : const [],
       maxHr: thresholds?.maxHrBpm,
+      easyRunZ2: s.sport == 'running' || s.sport == 'trail_running',
     );
     final ftp = thresholds?.ftpWatts;
     final power = s.targetMetric != null

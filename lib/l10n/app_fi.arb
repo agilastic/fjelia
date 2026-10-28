@@ -964,7 +964,6 @@
   "productsToleranceAndMeasuredSweat": "Tuotteet, siedettävyys ja mitatut hikihäviöt",
   "postWorkoutIntakeReminder": "Muistutus nauttimisesta harjoituksen jälkeen",
   "onceAfterARecentEndurance": "Kerran äskettäisen kestävyysharjoituksen jälkeen; hiljaiset tunnit 22:00–08:00.",
-  "enableWorkoutNotifications": "Ota harjoitusilmoitukset käyttöön",
   "addHiloBpReport": "Lisää Hilo-verenpaineraportti",
   "readingPdfReportsIsOnly": "PDF-raporttien lukeminen on mahdollista vain iOS:llä ja macOS:llä.",
   "chooseAnotherReport": "Valitse toinen raportti",
@@ -1244,7 +1243,6 @@
   "sportsDrink": "Urheilujuoma",
   "bar": "Patukka",
   "finishIntakeLog": "Viimeistele nauttimisloki",
-  "allowNotificationsInSystemSettings": "Salli ilmoitukset järjestelmäasetuksissa",
   "importing": "Tuodaan…",
   "importNewreadings": "Tuo {newReadings}",
   "@importNewreadings": {
@@ -1565,7 +1563,6 @@
   "severeSymptoms": "Vaikeita oireita",
   "personalNutritionSettings": "Henkilökohtaiset ravitsemusasetukset",
   "practisedCarbohydrateToleranceGH": "Harjoiteltu hiilihydraattien sieto g/h (enintään 120)",
-  "workoutNotificationsEnabled": "Harjoitusilmoitukset käytössä",
   "exportTheMonthlyReportAs": "Vie kuukausiraportti PDF-tiedostona Hilo-sovelluksessa ja valitse se tästä. Vain mittaukset tuodaan; raportin nimi, sähköposti ja kehotiedot ohitetaan.",
   "nothingNewAllReadingsWere": "Ei uutta: kaikki mittaukset oli jo tallennettu.",
   "historyImportIncomplete": "Historian tuonti on kesken",
@@ -3106,5 +3103,70 @@
   "briefReasonFormVeryTired": "erittäin suuri harjoitusväsymys",
   "briefReasonFormFresh": "virkeä ja levännyt",
   "briefTrainingHrvUp": "HRV:si nousi harjoituksen jälkeen, hyvä merkki.",
-  "briefTrainingHrvDown": "HRV:si laski harjoituksen jälkeen, ei niin hyvä merkki."
+  "briefTrainingHrvDown": "HRV:si laski harjoituksen jälkeen, ei niin hyvä merkki.",
+  "reminderNeedsNotifications": "Muistutus tarvitsee ilmoitukset. Salli ne Fjelialle järjestelmäasetuksissa ja ota muistutus sitten uudelleen käyttöön.",
+  "whatDidYouHave": "Mitä nautit?",
+  "intakeSomething": "Nautin jotain",
+  "intakeNothing": "Ei mitään",
+  "totalIntake": "Nautittu yhteensä",
+  "carbsLabel": "Hiilihydraatit",
+  "fluidLabel": "Neste",
+  "sodiumLabel": "Natrium",
+  "caffeineLabel": "Kofeiini",
+  "detailsOptional": "Lisätiedot (valinnainen)",
+  "atMinute": "minuutti {minute}",
+  "@atMinute": {
+    "placeholders": {
+      "minute": {
+        "type": "Object"
+      }
+    }
+  },
+  "nothingAddedYet": "Ei vielä mitään lisätty. Lisää, mitä söit tai join, tai valitse ”Ei mitään”.",
+  "followFocusWeek": "Mihin minun pitäisi keskittyä tällä viikolla?",
+  "followRecoveryTrend": "Miten palautumiseni kehittyy?",
+  "followLoadTooHigh": "Onko harjoituskuormitukseni liian korkea?",
+  "followImproveSleep": "Mikä parantaisi untani?",
+  "followIntervalsFeel": "Miltä intervallien pitäisi tuntua?",
+  "followTiredToday": "Entä jos tunnen itseni väsyneeksi tänään?",
+  "followEatBefore": "Mitä minun pitäisi syödä sitä ennen?",
+  "followAdjustToday": "Pitäisikö minun muokata sitä tänään?",
+  "followNextDays": "Mitä se tarkoittaa seuraaville päivilleni?",
+  "followCompareSimilar": "Miten se vertautuu samankaltaisiin harjoituksiin?",
+  "followRecover": "Mitä minun pitäisi tehdä palautuakseni?",
+  "followIntensityRight": "Oliko teho oikea?",
+  "statusPlanned": "Suunniteltu",
+  "statusAdapted": "Mukautettu",
+  "statusCompleted": "Suoritettu",
+  "statusRest": "Lepo",
+  "loadValue": "Kuormitus {value}",
+  "@loadValue": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "actIntensityEasy": "Se oli kevyt aerobinen harjoitus.",
+  "actIntensityModerate": "Se oli kohtalainen harjoitus.",
+  "actIntensityHard": "Se oli rankka harjoitus.",
+  "actIntensityUnknown": "Harjoitus on tallennettu.",
+  "actLenLonger": "Se oli pidempi kuin samankaltaiset harjoituksesi.",
+  "actLenShorter": "Se oli lyhyempi kuin samankaltaiset harjoituksesi.",
+  "actLoadHigher": "Kuormitus oli tavallista suurempi.",
+  "actLoadLower": "Kuormitus oli tavallista pienempi.",
+  "actLoadSame": "Kuormitus oli suunnilleen tavallinen.",
+  "actHrLower": "Sykkeesi oli tavallista matalampi, se tuntui kevyemmältä.",
+  "actHrHigher": "Sykkeesi oli tavallista korkeampi, se tuntui raskaammalta.",
+  "actAdviceUnknown": "Suunnittele seuraavat päivät sen mukaan, miltä tuntuu.",
+  "briefOutlookRest": "Noin {days} kevyen päivän jälkeen kuntosi on taas optimaalisella alueella.",
+  "@briefOutlookRest": {
+    "placeholders": {
+      "days": {
+        "type": "Object"
+      }
+    }
+  },
+  "briefOutlookLongRest": "Kuntosi tarvitsee palautuakseen enemmän kuin muutaman kevyen päivän.",
+  "briefOutlookPlanTired": "Jos noudatat suunnitelmaa, kuntosi pysyy matalana tulevina päivinä."
 }

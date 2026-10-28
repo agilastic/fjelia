@@ -964,7 +964,6 @@
   "productsToleranceAndMeasuredSweat": "Productes, tolerància i pèrdues de suor mesurades",
   "postWorkoutIntakeReminder": "Recordatori d'ingesta després de l'entrenament",
   "onceAfterARecentEndurance": "Una vegada després d'un entrenament de resistència recent; hores de silenci 22:00–08:00.",
-  "enableWorkoutNotifications": "Activa les notificacions d'entrenament",
   "addHiloBpReport": "Afegeix un informe de pressió Hilo",
   "readingPdfReportsIsOnly": "La lectura d'informes PDF només està disponible a iOS i macOS.",
   "chooseAnotherReport": "Tria un altre informe",
@@ -1244,7 +1243,6 @@
   "sportsDrink": "Beguda esportiva",
   "bar": "Barreta",
   "finishIntakeLog": "Acaba el registre d'ingesta",
-  "allowNotificationsInSystemSettings": "Permet les notificacions als ajustos del sistema",
   "importing": "Important…",
   "importNewreadings": "Importa {newReadings}",
   "@importNewreadings": {
@@ -1565,7 +1563,6 @@
   "severeSymptoms": "Símptomes greus",
   "personalNutritionSettings": "Configuració personal de nutrició",
   "practisedCarbohydrateToleranceGH": "Tolerància als carbohidrats entrenada g/h (fins a 120)",
-  "workoutNotificationsEnabled": "Notificacions d'entrenament activades",
   "exportTheMonthlyReportAs": "Exporta l'informe mensual com a PDF a l'aplicació de Hilo i tria'l aquí. Només s'importen els mesuraments; el nom, el correu i les dades corporals de l'informe s'ignoren.",
   "nothingNewAllReadingsWere": "Res de nou: tots els mesuraments ja estaven desats.",
   "historyImportIncomplete": "Importació de l'historial incompleta",
@@ -3106,5 +3103,70 @@
   "briefReasonFormVeryTired": "fatiga d'entrenament molt alta",
   "briefReasonFormFresh": "fresc i descansat",
   "briefTrainingHrvUp": "La teva VFC ha pujat després de l'entrenament, bon senyal.",
-  "briefTrainingHrvDown": "La teva VFC ha baixat després de l'entrenament, senyal menys bo."
+  "briefTrainingHrvDown": "La teva VFC ha baixat després de l'entrenament, senyal menys bo.",
+  "reminderNeedsNotifications": "El recordatori necessita notificacions. Permet-les per a Fjelia a la configuració del sistema i torna a activar-lo.",
+  "whatDidYouHave": "Què has près?",
+  "intakeSomething": "He près alguna cosa",
+  "intakeNothing": "Res",
+  "totalIntake": "Ingesta total",
+  "carbsLabel": "Carbohidrats",
+  "fluidLabel": "Líquid",
+  "sodiumLabel": "Sodi",
+  "caffeineLabel": "Cafeïna",
+  "detailsOptional": "Detalls (opcional)",
+  "atMinute": "minut {minute}",
+  "@atMinute": {
+    "placeholders": {
+      "minute": {
+        "type": "Object"
+      }
+    }
+  },
+  "nothingAddedYet": "Encara no has afegit res. Afegeix el que has menjat o begut, o tria «Res».",
+  "followFocusWeek": "En què m'hauria de centrar aquesta setmana?",
+  "followRecoveryTrend": "Com evoluciona la meva recuperació?",
+  "followLoadTooHigh": "La meva càrrega d'entrenament és massa alta?",
+  "followImproveSleep": "Què milloraria el meu son?",
+  "followIntervalsFeel": "Com haurien de sentir-se els intervals?",
+  "followTiredToday": "I si avui em sento cansat?",
+  "followEatBefore": "Què hauria de menjar abans?",
+  "followAdjustToday": "L'hauria d'ajustar avui?",
+  "followNextDays": "Què significa per als meus propers dies?",
+  "followCompareSimilar": "Com es compara amb sessions similars?",
+  "followRecover": "Què hauria de fer per recuperar-me?",
+  "followIntensityRight": "Era correcta la intensitat?",
+  "statusPlanned": "Planificat",
+  "statusAdapted": "Adaptat",
+  "statusCompleted": "Completat",
+  "statusRest": "Descans",
+  "loadValue": "Càrrega {value}",
+  "@loadValue": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "actIntensityEasy": "Ha estat una sessió aeròbica suau.",
+  "actIntensityModerate": "Ha estat una sessió moderada.",
+  "actIntensityHard": "Ha estat una sessió intensa.",
+  "actIntensityUnknown": "La sessió està registrada.",
+  "actLenLonger": "Ha estat més llarga que les teves sessions similars.",
+  "actLenShorter": "Ha estat més curta que les teves sessions similars.",
+  "actLoadHigher": "La càrrega ha estat més alta del normal.",
+  "actLoadLower": "La càrrega ha estat més baixa del normal.",
+  "actLoadSame": "La càrrega ha estat més o menys l'habitual.",
+  "actHrLower": "La teva FC va ser més baixa del normal, es va sentir més fàcil.",
+  "actHrHigher": "La teva FC va ser més alta del normal, es va sentir més dur.",
+  "actAdviceUnknown": "Planifica els propers dies segons com et sentis.",
+  "briefOutlookRest": "Amb uns {days} dies suaus la teva forma torna al rang òptim.",
+  "@briefOutlookRest": {
+    "placeholders": {
+      "days": {
+        "type": "Object"
+      }
+    }
+  },
+  "briefOutlookLongRest": "La teva forma necessita més que uns quants dies suaus per recuperar-se.",
+  "briefOutlookPlanTired": "Si segueixes el pla, la teva forma continuarà baixa els propers dies."
 }

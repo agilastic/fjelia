@@ -1635,9 +1635,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Once after a recent endurance workout; quiet hours 22:00–08:00.';
 
   @override
-  String get enableWorkoutNotifications => 'Enable workout notifications';
-
-  @override
   String get addHiloBpReport => 'Add Hilo BP report';
 
   @override
@@ -2216,10 +2213,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get finishIntakeLog => 'Finish intake log';
-
-  @override
-  String get allowNotificationsInSystemSettings =>
-      'Allow notifications in system settings';
 
   @override
   String get importing => 'Importing…';
@@ -2988,9 +2981,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get practisedCarbohydrateToleranceGH =>
       'Practised carbohydrate tolerance g/h (up to 120)';
-
-  @override
-  String get workoutNotificationsEnabled => 'Workout notifications enabled';
 
   @override
   String get exportTheMonthlyReportAs =>
@@ -5454,4 +5444,149 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get briefTrainingHrvDown =>
       'Your HRV fell after training, a less good sign.';
+
+  @override
+  String get reminderNeedsNotifications =>
+      'The reminder needs notifications. Allow them for Fjelia in the system settings, then switch it on again.';
+
+  @override
+  String get whatDidYouHave => 'What did you have?';
+
+  @override
+  String get intakeSomething => 'I had something';
+
+  @override
+  String get intakeNothing => 'Nothing';
+
+  @override
+  String get totalIntake => 'Total intake';
+
+  @override
+  String get carbsLabel => 'Carbs';
+
+  @override
+  String get fluidLabel => 'Fluid';
+
+  @override
+  String get sodiumLabel => 'Sodium';
+
+  @override
+  String get caffeineLabel => 'Caffeine';
+
+  @override
+  String get detailsOptional => 'Details (optional)';
+
+  @override
+  String atMinute(Object minute) {
+    return 'minute $minute';
+  }
+
+  @override
+  String get nothingAddedYet =>
+      'Nothing added yet. Add what you ate or drank, or choose “Nothing”.';
+
+  @override
+  String get followFocusWeek => 'What should I focus on this week?';
+
+  @override
+  String get followRecoveryTrend => 'How is my recovery trending?';
+
+  @override
+  String get followLoadTooHigh => 'Is my training load too high?';
+
+  @override
+  String get followImproveSleep => 'What would improve my sleep?';
+
+  @override
+  String get followIntervalsFeel => 'How should the intervals feel?';
+
+  @override
+  String get followTiredToday => 'What if I feel tired today?';
+
+  @override
+  String get followEatBefore => 'What should I eat before it?';
+
+  @override
+  String get followAdjustToday => 'Should I adjust it today?';
+
+  @override
+  String get followNextDays => 'What does it mean for my next days?';
+
+  @override
+  String get followCompareSimilar =>
+      'How does it compare with similar sessions?';
+
+  @override
+  String get followRecover => 'What should I do to recover?';
+
+  @override
+  String get followIntensityRight => 'Was the intensity right?';
+
+  @override
+  String get statusPlanned => 'Planned';
+
+  @override
+  String get statusAdapted => 'Adapted';
+
+  @override
+  String get statusCompleted => 'Completed';
+
+  @override
+  String get statusRest => 'Rest';
+
+  @override
+  String loadValue(Object value) {
+    return '$value load';
+  }
+
+  @override
+  String get actIntensityEasy => 'That was an easy aerobic session.';
+
+  @override
+  String get actIntensityModerate => 'That was a moderate session.';
+
+  @override
+  String get actIntensityHard => 'That was a hard session.';
+
+  @override
+  String get actIntensityUnknown => 'That session is logged.';
+
+  @override
+  String get actLenLonger => 'It was longer than your similar sessions.';
+
+  @override
+  String get actLenShorter => 'It was shorter than your similar sessions.';
+
+  @override
+  String get actLoadHigher => 'The load was higher than usual.';
+
+  @override
+  String get actLoadLower => 'The load was lower than usual.';
+
+  @override
+  String get actLoadSame => 'The load was about the same as usual.';
+
+  @override
+  String get actHrLower =>
+      'Your heart rate was lower than usual, so it felt easier.';
+
+  @override
+  String get actHrHigher =>
+      'Your heart rate was higher than usual, so it felt harder.';
+
+  @override
+  String get actAdviceUnknown => 'Plan your next days by how you feel.';
+
+  @override
+  String briefOutlookRest(Object days) {
+    return 'With about $days easy days your form is back in the optimal range.';
+  }
+
+  @override
+  String get briefOutlookLongRest =>
+      'Your form needs more than a few easy days to recover.';
+
+  @override
+  String get briefOutlookPlanTired =>
+      'Following the plan keeps your form low for the next days.';
 }

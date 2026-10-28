@@ -964,7 +964,6 @@
   "productsToleranceAndMeasuredSweat": "Produkter, tolerance og målte sveddtab",
   "postWorkoutIntakeReminder": "Påmindelse om indtag efter træning",
   "onceAfterARecentEndurance": "Én gang efter en nylig udholdenhedstræning; stille timer 22:00–08:00.",
-  "enableWorkoutNotifications": "Aktivér træningsnotifikationer",
   "addHiloBpReport": "Tilføj Hilo-blodtryksrapport",
   "readingPdfReportsIsOnly": "Læsning af PDF-rapporter er kun tilgængelig på iOS og macOS.",
   "chooseAnotherReport": "Vælg en anden rapport",
@@ -1244,7 +1243,6 @@
   "sportsDrink": "Sportsdrik",
   "bar": "Bar",
   "finishIntakeLog": "Afslut indtagslog",
-  "allowNotificationsInSystemSettings": "Tillad notifikationer i systemindstillingerne",
   "importing": "Importerer …",
   "importNewreadings": "Importér {newReadings}",
   "@importNewreadings": {
@@ -1565,7 +1563,6 @@
   "severeSymptoms": "Alvorlige symptomer",
   "personalNutritionSettings": "Personlige ernæringsindstillinger",
   "practisedCarbohydrateToleranceGH": "Trænet kulhydrattolerance g/t (op til 120)",
-  "workoutNotificationsEnabled": "Træningsnotifikationer er slået til",
   "exportTheMonthlyReportAs": "Eksportér månedsrapporten som PDF i Hilo-appen, og vælg den her. Kun målingerne importeres; navn, e-mail og kropsdata i rapporten ignoreres.",
   "nothingNewAllReadingsWere": "Intet nyt: alle målinger var allerede gemt.",
   "historyImportIncomplete": "Historikimport ufuldstændig",
@@ -3106,5 +3103,70 @@
   "briefReasonFormVeryTired": "meget høj træningstræthed",
   "briefReasonFormFresh": "frisk og udhvilet",
   "briefTrainingHrvUp": "Din HRV steg efter træningen, et godt tegn.",
-  "briefTrainingHrvDown": "Din HRV faldt efter træningen, et mindre godt tegn."
+  "briefTrainingHrvDown": "Din HRV faldt efter træningen, et mindre godt tegn.",
+  "reminderNeedsNotifications": "Påmindelsen kræver notifikationer. Tillad dem for Fjelia i systemindstillingerne, og slå den til igen.",
+  "whatDidYouHave": "Hvad indtog du?",
+  "intakeSomething": "Jeg indtog noget",
+  "intakeNothing": "Intet",
+  "totalIntake": "Samlet indtag",
+  "carbsLabel": "Kulhydrater",
+  "fluidLabel": "Væske",
+  "sodiumLabel": "Natrium",
+  "caffeineLabel": "Koffein",
+  "detailsOptional": "Detaljer (valgfrit)",
+  "atMinute": "minut {minute}",
+  "@atMinute": {
+    "placeholders": {
+      "minute": {
+        "type": "Object"
+      }
+    }
+  },
+  "nothingAddedYet": "Intet tilføjet endnu. Tilføj, hvad du spiste eller drak, eller vælg “Intet”.",
+  "followFocusWeek": "Hvad skal jeg fokusere på i denne uge?",
+  "followRecoveryTrend": "Hvordan udvikler min restitution sig?",
+  "followLoadTooHigh": "Er min træningsbelastning for høj?",
+  "followImproveSleep": "Hvad ville forbedre min søvn?",
+  "followIntervalsFeel": "Hvordan skal intervallerne føles?",
+  "followTiredToday": "Hvad hvis jeg er træt i dag?",
+  "followEatBefore": "Hvad skal jeg spise før?",
+  "followAdjustToday": "Skal jeg justere den i dag?",
+  "followNextDays": "Hvad betyder det for mine næste dage?",
+  "followCompareSimilar": "Hvordan er det i forhold til lignende sessioner?",
+  "followRecover": "Hvad skal jeg gøre for at restituere?",
+  "followIntensityRight": "Var intensiteten rigtig?",
+  "statusPlanned": "Planlagt",
+  "statusAdapted": "Tilpasset",
+  "statusCompleted": "Gennemført",
+  "statusRest": "Hvile",
+  "loadValue": "Belastning {value}",
+  "@loadValue": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "actIntensityEasy": "Det var en let aerob session.",
+  "actIntensityModerate": "Det var en moderat session.",
+  "actIntensityHard": "Det var en hård session.",
+  "actIntensityUnknown": "Sessionen er registreret.",
+  "actLenLonger": "Den var længere end dine lignende sessioner.",
+  "actLenShorter": "Den var kortere end dine lignende sessioner.",
+  "actLoadHigher": "Belastningen var højere end normalt.",
+  "actLoadLower": "Belastningen var lavere end normalt.",
+  "actLoadSame": "Belastningen var omtrent som normalt.",
+  "actHrLower": "Din puls var lavere end normalt, det føltes lettere.",
+  "actHrHigher": "Din puls var højere end normalt, det føltes hårdere.",
+  "actAdviceUnknown": "Planlæg dine næste dage efter, hvordan du har det.",
+  "briefOutlookRest": "Med omkring {days} rolige dage er din form tilbage i det optimale område.",
+  "@briefOutlookRest": {
+    "placeholders": {
+      "days": {
+        "type": "Object"
+      }
+    }
+  },
+  "briefOutlookLongRest": "Din form har brug for mere end nogle få rolige dage for at komme sig.",
+  "briefOutlookPlanTired": "Hvis du følger planen, forbliver din form lav de næste dage."
 }

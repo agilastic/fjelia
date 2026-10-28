@@ -1638,9 +1638,6 @@ class AppLocalizationsDa extends AppLocalizations {
       'Én gang efter en nylig udholdenhedstræning; stille timer 22:00–08:00.';
 
   @override
-  String get enableWorkoutNotifications => 'Aktivér træningsnotifikationer';
-
-  @override
   String get addHiloBpReport => 'Tilføj Hilo-blodtryksrapport';
 
   @override
@@ -2219,10 +2216,6 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get finishIntakeLog => 'Afslut indtagslog';
-
-  @override
-  String get allowNotificationsInSystemSettings =>
-      'Tillad notifikationer i systemindstillingerne';
 
   @override
   String get importing => 'Importerer …';
@@ -2990,10 +2983,6 @@ class AppLocalizationsDa extends AppLocalizations {
   @override
   String get practisedCarbohydrateToleranceGH =>
       'Trænet kulhydrattolerance g/t (op til 120)';
-
-  @override
-  String get workoutNotificationsEnabled =>
-      'Træningsnotifikationer er slået til';
 
   @override
   String get exportTheMonthlyReportAs =>
@@ -5473,4 +5462,150 @@ class AppLocalizationsDa extends AppLocalizations {
   @override
   String get briefTrainingHrvDown =>
       'Din HRV faldt efter træningen, et mindre godt tegn.';
+
+  @override
+  String get reminderNeedsNotifications =>
+      'Påmindelsen kræver notifikationer. Tillad dem for Fjelia i systemindstillingerne, og slå den til igen.';
+
+  @override
+  String get whatDidYouHave => 'Hvad indtog du?';
+
+  @override
+  String get intakeSomething => 'Jeg indtog noget';
+
+  @override
+  String get intakeNothing => 'Intet';
+
+  @override
+  String get totalIntake => 'Samlet indtag';
+
+  @override
+  String get carbsLabel => 'Kulhydrater';
+
+  @override
+  String get fluidLabel => 'Væske';
+
+  @override
+  String get sodiumLabel => 'Natrium';
+
+  @override
+  String get caffeineLabel => 'Koffein';
+
+  @override
+  String get detailsOptional => 'Detaljer (valgfrit)';
+
+  @override
+  String atMinute(Object minute) {
+    return 'minut $minute';
+  }
+
+  @override
+  String get nothingAddedYet =>
+      'Intet tilføjet endnu. Tilføj, hvad du spiste eller drak, eller vælg “Intet”.';
+
+  @override
+  String get followFocusWeek => 'Hvad skal jeg fokusere på i denne uge?';
+
+  @override
+  String get followRecoveryTrend => 'Hvordan udvikler min restitution sig?';
+
+  @override
+  String get followLoadTooHigh => 'Er min træningsbelastning for høj?';
+
+  @override
+  String get followImproveSleep => 'Hvad ville forbedre min søvn?';
+
+  @override
+  String get followIntervalsFeel => 'Hvordan skal intervallerne føles?';
+
+  @override
+  String get followTiredToday => 'Hvad hvis jeg er træt i dag?';
+
+  @override
+  String get followEatBefore => 'Hvad skal jeg spise før?';
+
+  @override
+  String get followAdjustToday => 'Skal jeg justere den i dag?';
+
+  @override
+  String get followNextDays => 'Hvad betyder det for mine næste dage?';
+
+  @override
+  String get followCompareSimilar =>
+      'Hvordan er det i forhold til lignende sessioner?';
+
+  @override
+  String get followRecover => 'Hvad skal jeg gøre for at restituere?';
+
+  @override
+  String get followIntensityRight => 'Var intensiteten rigtig?';
+
+  @override
+  String get statusPlanned => 'Planlagt';
+
+  @override
+  String get statusAdapted => 'Tilpasset';
+
+  @override
+  String get statusCompleted => 'Gennemført';
+
+  @override
+  String get statusRest => 'Hvile';
+
+  @override
+  String loadValue(Object value) {
+    return 'Belastning $value';
+  }
+
+  @override
+  String get actIntensityEasy => 'Det var en let aerob session.';
+
+  @override
+  String get actIntensityModerate => 'Det var en moderat session.';
+
+  @override
+  String get actIntensityHard => 'Det var en hård session.';
+
+  @override
+  String get actIntensityUnknown => 'Sessionen er registreret.';
+
+  @override
+  String get actLenLonger => 'Den var længere end dine lignende sessioner.';
+
+  @override
+  String get actLenShorter => 'Den var kortere end dine lignende sessioner.';
+
+  @override
+  String get actLoadHigher => 'Belastningen var højere end normalt.';
+
+  @override
+  String get actLoadLower => 'Belastningen var lavere end normalt.';
+
+  @override
+  String get actLoadSame => 'Belastningen var omtrent som normalt.';
+
+  @override
+  String get actHrLower =>
+      'Din puls var lavere end normalt, det føltes lettere.';
+
+  @override
+  String get actHrHigher =>
+      'Din puls var højere end normalt, det føltes hårdere.';
+
+  @override
+  String get actAdviceUnknown =>
+      'Planlæg dine næste dage efter, hvordan du har det.';
+
+  @override
+  String briefOutlookRest(Object days) {
+    return 'Med omkring $days rolige dage er din form tilbage i det optimale område.';
+  }
+
+  @override
+  String get briefOutlookLongRest =>
+      'Din form har brug for mere end nogle få rolige dage for at komme sig.';
+
+  @override
+  String get briefOutlookPlanTired =>
+      'Hvis du følger planen, forbliver din form lav de næste dage.';
 }

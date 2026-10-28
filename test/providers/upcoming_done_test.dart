@@ -124,6 +124,44 @@ void main() {
       },
     );
 
+    test('a recording that completed the plan session also completes the '
+        'Garmin workout with the same name', () async {
+      final run = await activity(
+        'a9',
+        'Hemmingen - Trail Long Run with Vert',
+        minutes: 83,
+        km: 12.4,
+      );
+      final rows = markDoneEntries(
+        [
+          UpcomingPlanEntry(
+            date: today,
+            workout: garminWorkout(today, 'Trail Long Run with Vert', 88 * 60),
+          ),
+        ],
+        [run],
+        // The recording is already linked to another (completed) session.
+        linkedActivity: {'plan-session': 'a9'},
+      );
+      expect(rows.single.done, isTrue);
+      expect(rows.single.doneBy!.activityId, 'a9');
+    });
+
+    test('a different name is not done by a linked recording', () async {
+      final run = await activity('a10', 'Morning run', minutes: 83);
+      final rows = markDoneEntries(
+        [
+          UpcomingPlanEntry(
+            date: today,
+            workout: garminWorkout(today, 'Trail Long Run with Vert', 88 * 60),
+          ),
+        ],
+        [run],
+        linkedActivity: {'plan-session': 'a10'},
+      );
+      expect(rows.single.done, isFalse);
+    });
+
     test('another day, another sport, or no activity: not done', () async {
       final yesterday = await activity(
         'b1',

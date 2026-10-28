@@ -26,6 +26,7 @@ class MetricAnalysis {
     List<String> plannedToday = const [],
     List<String> tomorrow = const [],
     String? trainingHrv,
+    String? outlook,
   }) {
     final out = <String>[];
     // Findings for the Brief: id, severity (red, yellow, good) and a fixed
@@ -302,6 +303,7 @@ class MetricAnalysis {
       today: plannedToday,
       tomorrow: tomorrow,
       trainingHrv: trainingHrv,
+      outlook: outlook,
     );
     out.insert(0, brief.toLine());
     out.insert(

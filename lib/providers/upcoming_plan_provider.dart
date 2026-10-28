@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart' hide isNull, isNotNull;
+import 'package:flutter/material.dart' show DateUtils;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../db/database.dart';
@@ -270,6 +271,32 @@ List<UpcomingPlanEntry> markDoneEntries(
       changed = true;
     }
     if (!changed) break;
+  }
+  // A pushed Garmin workout and the plan session it was made from are one
+  // training: when the recording already completed the session, the workout
+  // that carries its name is done by the same recording. Only a clear name
+  // match counts, and the recording is not "used up" by it.
+  for (var i = 0; i < entries.length; i++) {
+    final e = entries[i];
+    if (done.containsKey(i) || e.workout == null || e.session != null) continue;
+    final entryName = _plain(e.title);
+    if (entryName.length < 4) continue;
+    final same = [
+      for (final a in activities)
+        if (_sameSport(e.sport, a.type) &&
+            DateUtils.isSameDay(a.startDate.toLocal(), e.date) &&
+            (_plain(a.plannedWorkoutName ?? '') == entryName ||
+                _plain(a.name).contains(entryName) ||
+                (_plain(a.name).length >= 4 &&
+                    entryName.contains(_plain(a.name)))))
+          a,
+    ];
+    if (same.length == 1) {
+      done[i] = same.single;
+      matches[i] = _plain(same.single.plannedWorkoutName ?? '') == entryName
+          ? PlanCompletionMatch.workoutName
+          : PlanCompletionMatch.activityName;
+    }
   }
   return [
     for (var i = 0; i < entries.length; i++)

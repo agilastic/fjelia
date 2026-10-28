@@ -964,7 +964,6 @@
   "productsToleranceAndMeasuredSweat": "Produits, tolérance et pertes de sueur mesurées",
   "postWorkoutIntakeReminder": "Rappel d'apport après l'entraînement",
   "onceAfterARecentEndurance": "Une fois après une séance d'endurance récente ; heures calmes 22:00–08:00.",
-  "enableWorkoutNotifications": "Activer les notifications de séance",
   "addHiloBpReport": "Ajouter un rapport de tension Hilo",
   "readingPdfReportsIsOnly": "La lecture des rapports PDF n'est disponible que sur iOS et macOS.",
   "chooseAnotherReport": "Choisir un autre rapport",
@@ -1244,7 +1243,6 @@
   "sportsDrink": "Boisson sportive",
   "bar": "Barre",
   "finishIntakeLog": "Terminer le journal d'apport",
-  "allowNotificationsInSystemSettings": "Autoriser les notifications dans les réglages système",
   "importing": "Importation…",
   "importNewreadings": "Importer {newReadings}",
   "@importNewreadings": {
@@ -1565,7 +1563,6 @@
   "severeSymptoms": "Symptômes sévères",
   "personalNutritionSettings": "Réglages nutritionnels personnels",
   "practisedCarbohydrateToleranceGH": "Tolérance aux glucides entraînée g/h (jusqu'à 120)",
-  "workoutNotificationsEnabled": "Notifications de séance activées",
   "exportTheMonthlyReportAs": "Exporte le rapport mensuel en PDF dans l'app Hilo, puis choisis-le ici. Seules les mesures sont importées ; le nom, l'e-mail et les données corporelles du rapport sont ignorés.",
   "nothingNewAllReadingsWere": "Rien de nouveau : toutes les mesures étaient déjà enregistrées.",
   "historyImportIncomplete": "Importation de l'historique incomplète",
@@ -3106,5 +3103,70 @@
   "briefReasonFormVeryTired": "fatigue d'entraînement très élevée",
   "briefReasonFormFresh": "frais et reposé",
   "briefTrainingHrvUp": "Ta VFC a augmenté après l'entraînement, bon signe.",
-  "briefTrainingHrvDown": "Ta VFC a baissé après l'entraînement, signe moins favorable."
+  "briefTrainingHrvDown": "Ta VFC a baissé après l'entraînement, signe moins favorable.",
+  "reminderNeedsNotifications": "Le rappel a besoin des notifications. Autorise-les pour Fjelia dans les réglages système, puis réactive-le.",
+  "whatDidYouHave": "Qu'as-tu consommé ?",
+  "intakeSomething": "J'ai consommé quelque chose",
+  "intakeNothing": "Rien",
+  "totalIntake": "Apport total",
+  "carbsLabel": "Glucides",
+  "fluidLabel": "Liquide",
+  "sodiumLabel": "Sodium",
+  "caffeineLabel": "Caféine",
+  "detailsOptional": "Détails (facultatif)",
+  "atMinute": "minute {minute}",
+  "@atMinute": {
+    "placeholders": {
+      "minute": {
+        "type": "Object"
+      }
+    }
+  },
+  "nothingAddedYet": "Rien d'ajouté pour l'instant. Ajoute ce que tu as mangé ou bu, ou choisis « Rien ».",
+  "followFocusWeek": "Sur quoi me concentrer cette semaine ?",
+  "followRecoveryTrend": "Comment évolue ma récupération ?",
+  "followLoadTooHigh": "Ma charge d'entraînement est-elle trop élevée ?",
+  "followImproveSleep": "Qu'est-ce qui améliorerait mon sommeil ?",
+  "followIntervalsFeel": "Quelle sensation doivent donner les intervalles ?",
+  "followTiredToday": "Et si je me sens fatigué aujourd'hui ?",
+  "followEatBefore": "Que dois-je manger avant ?",
+  "followAdjustToday": "Dois-je l'adapter aujourd'hui ?",
+  "followNextDays": "Qu'est-ce que cela signifie pour mes prochains jours ?",
+  "followCompareSimilar": "Comment cela se compare-t-il à des séances similaires ?",
+  "followRecover": "Que dois-je faire pour récupérer ?",
+  "followIntensityRight": "L'intensité était-elle la bonne ?",
+  "statusPlanned": "Prévu",
+  "statusAdapted": "Adapté",
+  "statusCompleted": "Terminé",
+  "statusRest": "Repos",
+  "loadValue": "Charge {value}",
+  "@loadValue": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "actIntensityEasy": "C'était une séance aérobie facile.",
+  "actIntensityModerate": "C'était une séance modérée.",
+  "actIntensityHard": "C'était une séance intense.",
+  "actIntensityUnknown": "La séance est enregistrée.",
+  "actLenLonger": "Elle était plus longue que tes séances similaires.",
+  "actLenShorter": "Elle était plus courte que tes séances similaires.",
+  "actLoadHigher": "La charge était plus élevée que d'habitude.",
+  "actLoadLower": "La charge était plus faible que d'habitude.",
+  "actLoadSame": "La charge était à peu près habituelle.",
+  "actHrLower": "Ta FC était plus basse que d'habitude, c'était plus facile.",
+  "actHrHigher": "Ta FC était plus haute que d'habitude, c'était plus dur.",
+  "actAdviceUnknown": "Organise tes prochains jours selon ton ressenti.",
+  "briefOutlookRest": "Avec environ {days} jours faciles, ta forme revient dans la plage optimale.",
+  "@briefOutlookRest": {
+    "placeholders": {
+      "days": {
+        "type": "Object"
+      }
+    }
+  },
+  "briefOutlookLongRest": "Ta forme a besoin de plus de quelques jours faciles pour récupérer.",
+  "briefOutlookPlanTired": "Si tu suis le plan, ta forme reste basse les prochains jours."
 }

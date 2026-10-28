@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fjelia/db/database.dart';
+import 'package:fjelia/models/coach_context_card.dart';
 import 'package:fjelia/providers/ai_coach_provider.dart';
 import 'package:fjelia/providers/database_provider.dart';
 import 'package:fjelia/providers/user_profile_provider.dart';
@@ -96,6 +97,47 @@ void main() {
       expect(client.calls, 2);
       expect(find.text('Your activity review is ready.'), findsOneWidget);
       expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox());
+      await db.close();
+    },
+  );
+
+  testWidgets(
+    'a chat about a training starts with an empty field and offers questions',
+    (tester) async {
+      FlutterSecureStorage.setMockInitialValues({});
+      final db = AppDatabase(NativeDatabase.memory());
+      final card = CoachContextCard.scheduled(
+        sport: 'running',
+        title: 'Easy run',
+        date: DateTime(2026, 10, 29),
+        summary: '45 min',
+        structure: const [],
+      );
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            databaseProvider.overrideWithValue(db),
+            aiCoachSettingsProvider.overrideWith(_Settings.new),
+            userProfileProvider.overrideWith(_Profile.new),
+            aiCoachClientProvider.overrideWithValue(_Client()),
+          ],
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Scaffold(
+              body: AiCoachScreen(
+                initialPrompt: 'How do I execute this?',
+                contextCard: card,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final field = tester.widget<TextField>(find.byType(TextField));
+      expect(field.controller!.text, isEmpty);
+      expect(find.text(card.questions.first), findsWidgets);
       await tester.pumpWidget(const SizedBox());
       await db.close();
     },

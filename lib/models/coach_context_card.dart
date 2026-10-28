@@ -1,17 +1,24 @@
 import 'package:intl/intl.dart';
 
+import '../l10n/l10n_ext.dart';
+
 import '../db/database.dart';
 import 'garmin_data.dart';
 import 'planned_workout_presentation.dart';
 
 enum CoachCardStatus {
-  planned('Planned'),
-  adapted('Adapted'),
-  completed('Completed'),
-  skipped('Rest');
+  planned,
+  adapted,
+  completed,
+  skipped;
 
-  const CoachCardStatus(this.label);
-  final String label;
+  /// What the card says, in the app language.
+  String get label => switch (this) {
+    planned => tr.statusPlanned,
+    adapted => tr.statusAdapted,
+    completed => tr.statusCompleted,
+    skipped => tr.statusRest,
+  };
 }
 
 /// The session a coach chat is about: shown as a card at the top of the chat
@@ -139,7 +146,7 @@ class CoachContextCard {
       '${a.duration.inMinutes} min',
       if ((a.distanceMeters ?? 0) >= 100)
         '${(a.distanceMeters! / 1000).toStringAsFixed(1)} km',
-      if (a.trainingLoad != null) '${a.trainingLoad!.round()} load',
+      if (a.trainingLoad != null) tr.loadValue(a.trainingLoad!.round()),
     ],
     contextLine: _sessionLine(
       status: 'completed',

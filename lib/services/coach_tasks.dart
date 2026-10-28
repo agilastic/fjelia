@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 /// What a coach chat is about. It decides the shape of the answer and which
 /// follow-up questions are offered.
 enum CoachTask { general, explainWorkout, evaluateActivity }
@@ -44,24 +46,26 @@ String coachTaskTemplateShort(CoachTask task) => switch (task) {
     'This is about a finished session: give a verdict, the key figures, what they suggest, and one next step. ',
 };
 
-const _followUps = {
+/// The follow-up questions in the app language. They are also what is sent as
+/// the question, so the coach is asked in the language the person reads.
+Map<CoachTask, List<String>> _followUps() => {
   CoachTask.general: [
-    'What should I focus on this week?',
-    'How is my recovery trending?',
-    'Is my training load too high?',
-    'What would improve my sleep?',
+    tr.followFocusWeek,
+    tr.followRecoveryTrend,
+    tr.followLoadTooHigh,
+    tr.followImproveSleep,
   ],
   CoachTask.explainWorkout: [
-    'How should the intervals feel?',
-    'What if I feel tired today?',
-    'What should I eat before it?',
-    'Should I adjust it today?',
+    tr.followIntervalsFeel,
+    tr.followTiredToday,
+    tr.followEatBefore,
+    tr.followAdjustToday,
   ],
   CoachTask.evaluateActivity: [
-    'What does it mean for my next days?',
-    'How does it compare with similar sessions?',
-    'What should I do to recover?',
-    'Was the intensity right?',
+    tr.followNextDays,
+    tr.followCompareSimilar,
+    tr.followRecover,
+    tr.followIntensityRight,
   ],
 };
 
@@ -76,7 +80,7 @@ List<String> followUpQuestions(
   String norm(String s) => s.toLowerCase().trim();
   final done = asked.map(norm).toSet();
   return [
-    for (final q in _followUps[task]!)
+    for (final q in _followUps()[task]!)
       if (!done.contains(norm(q))) q,
   ].take(max).toList();
 }

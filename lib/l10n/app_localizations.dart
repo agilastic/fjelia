@@ -2919,12 +2919,6 @@ abstract class AppLocalizations {
   /// **'Once after a recent endurance workout; quiet hours 22:00–08:00.'**
   String get onceAfterARecentEndurance;
 
-  /// No description provided for @enableWorkoutNotifications.
-  ///
-  /// In en, this message translates to:
-  /// **'Enable workout notifications'**
-  String get enableWorkoutNotifications;
-
   /// No description provided for @addHiloBpReport.
   ///
   /// In en, this message translates to:
@@ -3998,12 +3992,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Finish intake log'**
   String get finishIntakeLog;
-
-  /// No description provided for @allowNotificationsInSystemSettings.
-  ///
-  /// In en, this message translates to:
-  /// **'Allow notifications in system settings'**
-  String get allowNotificationsInSystemSettings;
 
   /// No description provided for @importing.
   ///
@@ -5395,12 +5383,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Practised carbohydrate tolerance g/h (up to 120)'**
   String get practisedCarbohydrateToleranceGH;
-
-  /// No description provided for @workoutNotificationsEnabled.
-  ///
-  /// In en, this message translates to:
-  /// **'Workout notifications enabled'**
-  String get workoutNotificationsEnabled;
 
   /// No description provided for @exportTheMonthlyReportAs.
   ///
@@ -9677,6 +9659,270 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your HRV fell after training, a less good sign.'**
   String get briefTrainingHrvDown;
+
+  /// No description provided for @reminderNeedsNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'The reminder needs notifications. Allow them for Fjelia in the system settings, then switch it on again.'**
+  String get reminderNeedsNotifications;
+
+  /// No description provided for @whatDidYouHave.
+  ///
+  /// In en, this message translates to:
+  /// **'What did you have?'**
+  String get whatDidYouHave;
+
+  /// No description provided for @intakeSomething.
+  ///
+  /// In en, this message translates to:
+  /// **'I had something'**
+  String get intakeSomething;
+
+  /// No description provided for @intakeNothing.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing'**
+  String get intakeNothing;
+
+  /// No description provided for @totalIntake.
+  ///
+  /// In en, this message translates to:
+  /// **'Total intake'**
+  String get totalIntake;
+
+  /// No description provided for @carbsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Carbs'**
+  String get carbsLabel;
+
+  /// No description provided for @fluidLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fluid'**
+  String get fluidLabel;
+
+  /// No description provided for @sodiumLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sodium'**
+  String get sodiumLabel;
+
+  /// No description provided for @caffeineLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Caffeine'**
+  String get caffeineLabel;
+
+  /// No description provided for @detailsOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Details (optional)'**
+  String get detailsOptional;
+
+  /// No description provided for @atMinute.
+  ///
+  /// In en, this message translates to:
+  /// **'minute {minute}'**
+  String atMinute(Object minute);
+
+  /// No description provided for @nothingAddedYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing added yet. Add what you ate or drank, or choose “Nothing”.'**
+  String get nothingAddedYet;
+
+  /// No description provided for @followFocusWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'What should I focus on this week?'**
+  String get followFocusWeek;
+
+  /// No description provided for @followRecoveryTrend.
+  ///
+  /// In en, this message translates to:
+  /// **'How is my recovery trending?'**
+  String get followRecoveryTrend;
+
+  /// No description provided for @followLoadTooHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'Is my training load too high?'**
+  String get followLoadTooHigh;
+
+  /// No description provided for @followImproveSleep.
+  ///
+  /// In en, this message translates to:
+  /// **'What would improve my sleep?'**
+  String get followImproveSleep;
+
+  /// No description provided for @followIntervalsFeel.
+  ///
+  /// In en, this message translates to:
+  /// **'How should the intervals feel?'**
+  String get followIntervalsFeel;
+
+  /// No description provided for @followTiredToday.
+  ///
+  /// In en, this message translates to:
+  /// **'What if I feel tired today?'**
+  String get followTiredToday;
+
+  /// No description provided for @followEatBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'What should I eat before it?'**
+  String get followEatBefore;
+
+  /// No description provided for @followAdjustToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Should I adjust it today?'**
+  String get followAdjustToday;
+
+  /// No description provided for @followNextDays.
+  ///
+  /// In en, this message translates to:
+  /// **'What does it mean for my next days?'**
+  String get followNextDays;
+
+  /// No description provided for @followCompareSimilar.
+  ///
+  /// In en, this message translates to:
+  /// **'How does it compare with similar sessions?'**
+  String get followCompareSimilar;
+
+  /// No description provided for @followRecover.
+  ///
+  /// In en, this message translates to:
+  /// **'What should I do to recover?'**
+  String get followRecover;
+
+  /// No description provided for @followIntensityRight.
+  ///
+  /// In en, this message translates to:
+  /// **'Was the intensity right?'**
+  String get followIntensityRight;
+
+  /// No description provided for @statusPlanned.
+  ///
+  /// In en, this message translates to:
+  /// **'Planned'**
+  String get statusPlanned;
+
+  /// No description provided for @statusAdapted.
+  ///
+  /// In en, this message translates to:
+  /// **'Adapted'**
+  String get statusAdapted;
+
+  /// No description provided for @statusCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get statusCompleted;
+
+  /// No description provided for @statusRest.
+  ///
+  /// In en, this message translates to:
+  /// **'Rest'**
+  String get statusRest;
+
+  /// No description provided for @loadValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} load'**
+  String loadValue(Object value);
+
+  /// No description provided for @actIntensityEasy.
+  ///
+  /// In en, this message translates to:
+  /// **'That was an easy aerobic session.'**
+  String get actIntensityEasy;
+
+  /// No description provided for @actIntensityModerate.
+  ///
+  /// In en, this message translates to:
+  /// **'That was a moderate session.'**
+  String get actIntensityModerate;
+
+  /// No description provided for @actIntensityHard.
+  ///
+  /// In en, this message translates to:
+  /// **'That was a hard session.'**
+  String get actIntensityHard;
+
+  /// No description provided for @actIntensityUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'That session is logged.'**
+  String get actIntensityUnknown;
+
+  /// No description provided for @actLenLonger.
+  ///
+  /// In en, this message translates to:
+  /// **'It was longer than your similar sessions.'**
+  String get actLenLonger;
+
+  /// No description provided for @actLenShorter.
+  ///
+  /// In en, this message translates to:
+  /// **'It was shorter than your similar sessions.'**
+  String get actLenShorter;
+
+  /// No description provided for @actLoadHigher.
+  ///
+  /// In en, this message translates to:
+  /// **'The load was higher than usual.'**
+  String get actLoadHigher;
+
+  /// No description provided for @actLoadLower.
+  ///
+  /// In en, this message translates to:
+  /// **'The load was lower than usual.'**
+  String get actLoadLower;
+
+  /// No description provided for @actLoadSame.
+  ///
+  /// In en, this message translates to:
+  /// **'The load was about the same as usual.'**
+  String get actLoadSame;
+
+  /// No description provided for @actHrLower.
+  ///
+  /// In en, this message translates to:
+  /// **'Your heart rate was lower than usual, so it felt easier.'**
+  String get actHrLower;
+
+  /// No description provided for @actHrHigher.
+  ///
+  /// In en, this message translates to:
+  /// **'Your heart rate was higher than usual, so it felt harder.'**
+  String get actHrHigher;
+
+  /// No description provided for @actAdviceUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan your next days by how you feel.'**
+  String get actAdviceUnknown;
+
+  /// No description provided for @briefOutlookRest.
+  ///
+  /// In en, this message translates to:
+  /// **'With about {days} easy days your form is back in the optimal range.'**
+  String briefOutlookRest(Object days);
+
+  /// No description provided for @briefOutlookLongRest.
+  ///
+  /// In en, this message translates to:
+  /// **'Your form needs more than a few easy days to recover.'**
+  String get briefOutlookLongRest;
+
+  /// No description provided for @briefOutlookPlanTired.
+  ///
+  /// In en, this message translates to:
+  /// **'Following the plan keeps your form low for the next days.'**
+  String get briefOutlookPlanTired;
 }
 
 class _AppLocalizationsDelegate

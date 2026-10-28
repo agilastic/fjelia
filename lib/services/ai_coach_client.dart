@@ -442,7 +442,9 @@ class AiCoachClient {
     var strict = false;
     var bare = false;
     var echoed = false;
-    for (var attempt = 0; attempt < 4; attempt++) {
+    var languageRetried = false;
+    var forceLanguage = false;
+    for (var attempt = 0; attempt < 5; attempt++) {
       final request = AppleCoachRequest.build(
         messages,
         toonContext,
@@ -451,6 +453,7 @@ class AiCoachClient {
         locale: locale,
         strict: strict,
         includeContext: !bare,
+        forceLanguage: forceLanguage,
       );
       log(
         '[AiCoach] Apple input=${request.inputBytes} bytes, '
@@ -487,6 +490,16 @@ class AiCoachClient {
             continue;
           }
           throw AiCoachException(tr.appleUnusableAnswer);
+        }
+        // Answered in English although the app is not: once more, firmly. (A
+        // briefing is checked later and replaced by the app's own text.)
+        if (!isBriefing &&
+            !languageRetried &&
+            looksWrongLanguage(text, activeLocale.languageCode)) {
+          log('[AiCoach] Apple answered in the wrong language, asking again');
+          languageRetried = true;
+          forceLanguage = true;
+          continue;
         }
         log(
           '[AiCoach] Apple ✓ attempt=${attempt + 1} strict=$strict bare=$bare',

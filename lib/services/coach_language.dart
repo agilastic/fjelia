@@ -55,5 +55,5 @@ String coachTodayLine([DateTime? now]) {
   ];
   final date =
       '${t.year.toString().padLeft(4, '0')}-${t.month.toString().padLeft(2, '0')}-${t.day.toString().padLeft(2, '0')}';
-  return 'Today is ${days[t.weekday - 1]} $date (the phone clock). ';
+  return 'Today is ${days[t.weekday - 1]} $date. ';
 }

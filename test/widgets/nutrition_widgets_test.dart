@@ -114,7 +114,7 @@ void main() {
       await tap(tester, 'Finish intake log');
       expect((await NutritionService(db).log('a')).finished, isFalse);
       expect(find.textContaining('Add an item or confirm'), findsOneWidget);
-      await tap(tester, 'I had no intake');
+      await tap(tester, 'Nothing');
       await tap(tester, 'Finish intake log');
       expect((await NutritionService(db).log('a')).noIntake, isTrue);
       expect(find.text('Confirmed: no intake'), findsOneWidget);

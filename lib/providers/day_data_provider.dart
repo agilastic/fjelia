@@ -719,6 +719,11 @@ Future<_TrainingLoadHistory> _readTrainingLoadHistory(AppDatabase db) async {
   );
 }
 
+/// The daily CTL/ATL/TSB history through today, for code outside the
+/// providers (the coach context).
+Future<List<FormPoint>> readTrainingFormSeries(AppDatabase db) async =>
+    (await _readTrainingLoadHistory(db)).points;
+
 /// CTL/ATL/TSB from the first available load through today. The card independently
 /// selects its display window (60 days by default), preserving all earlier load.
 final trainingFormSeriesProvider = FutureProvider<List<FormPoint>>((ref) async {

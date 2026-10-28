@@ -1650,9 +1650,6 @@ class AppLocalizationsFi extends AppLocalizations {
       'Kerran äskettäisen kestävyysharjoituksen jälkeen; hiljaiset tunnit 22:00–08:00.';
 
   @override
-  String get enableWorkoutNotifications => 'Ota harjoitusilmoitukset käyttöön';
-
-  @override
   String get addHiloBpReport => 'Lisää Hilo-verenpaineraportti';
 
   @override
@@ -2232,10 +2229,6 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get finishIntakeLog => 'Viimeistele nauttimisloki';
-
-  @override
-  String get allowNotificationsInSystemSettings =>
-      'Salli ilmoitukset järjestelmäasetuksissa';
 
   @override
   String get importing => 'Tuodaan…';
@@ -3010,9 +3003,6 @@ class AppLocalizationsFi extends AppLocalizations {
   @override
   String get practisedCarbohydrateToleranceGH =>
       'Harjoiteltu hiilihydraattien sieto g/h (enintään 120)';
-
-  @override
-  String get workoutNotificationsEnabled => 'Harjoitusilmoitukset käytössä';
 
   @override
   String get exportTheMonthlyReportAs =>
@@ -5490,4 +5480,152 @@ class AppLocalizationsFi extends AppLocalizations {
   @override
   String get briefTrainingHrvDown =>
       'HRV:si laski harjoituksen jälkeen, ei niin hyvä merkki.';
+
+  @override
+  String get reminderNeedsNotifications =>
+      'Muistutus tarvitsee ilmoitukset. Salli ne Fjelialle järjestelmäasetuksissa ja ota muistutus sitten uudelleen käyttöön.';
+
+  @override
+  String get whatDidYouHave => 'Mitä nautit?';
+
+  @override
+  String get intakeSomething => 'Nautin jotain';
+
+  @override
+  String get intakeNothing => 'Ei mitään';
+
+  @override
+  String get totalIntake => 'Nautittu yhteensä';
+
+  @override
+  String get carbsLabel => 'Hiilihydraatit';
+
+  @override
+  String get fluidLabel => 'Neste';
+
+  @override
+  String get sodiumLabel => 'Natrium';
+
+  @override
+  String get caffeineLabel => 'Kofeiini';
+
+  @override
+  String get detailsOptional => 'Lisätiedot (valinnainen)';
+
+  @override
+  String atMinute(Object minute) {
+    return 'minuutti $minute';
+  }
+
+  @override
+  String get nothingAddedYet =>
+      'Ei vielä mitään lisätty. Lisää, mitä söit tai join, tai valitse ”Ei mitään”.';
+
+  @override
+  String get followFocusWeek => 'Mihin minun pitäisi keskittyä tällä viikolla?';
+
+  @override
+  String get followRecoveryTrend => 'Miten palautumiseni kehittyy?';
+
+  @override
+  String get followLoadTooHigh => 'Onko harjoituskuormitukseni liian korkea?';
+
+  @override
+  String get followImproveSleep => 'Mikä parantaisi untani?';
+
+  @override
+  String get followIntervalsFeel => 'Miltä intervallien pitäisi tuntua?';
+
+  @override
+  String get followTiredToday => 'Entä jos tunnen itseni väsyneeksi tänään?';
+
+  @override
+  String get followEatBefore => 'Mitä minun pitäisi syödä sitä ennen?';
+
+  @override
+  String get followAdjustToday => 'Pitäisikö minun muokata sitä tänään?';
+
+  @override
+  String get followNextDays => 'Mitä se tarkoittaa seuraaville päivilleni?';
+
+  @override
+  String get followCompareSimilar =>
+      'Miten se vertautuu samankaltaisiin harjoituksiin?';
+
+  @override
+  String get followRecover => 'Mitä minun pitäisi tehdä palautuakseni?';
+
+  @override
+  String get followIntensityRight => 'Oliko teho oikea?';
+
+  @override
+  String get statusPlanned => 'Suunniteltu';
+
+  @override
+  String get statusAdapted => 'Mukautettu';
+
+  @override
+  String get statusCompleted => 'Suoritettu';
+
+  @override
+  String get statusRest => 'Lepo';
+
+  @override
+  String loadValue(Object value) {
+    return 'Kuormitus $value';
+  }
+
+  @override
+  String get actIntensityEasy => 'Se oli kevyt aerobinen harjoitus.';
+
+  @override
+  String get actIntensityModerate => 'Se oli kohtalainen harjoitus.';
+
+  @override
+  String get actIntensityHard => 'Se oli rankka harjoitus.';
+
+  @override
+  String get actIntensityUnknown => 'Harjoitus on tallennettu.';
+
+  @override
+  String get actLenLonger =>
+      'Se oli pidempi kuin samankaltaiset harjoituksesi.';
+
+  @override
+  String get actLenShorter =>
+      'Se oli lyhyempi kuin samankaltaiset harjoituksesi.';
+
+  @override
+  String get actLoadHigher => 'Kuormitus oli tavallista suurempi.';
+
+  @override
+  String get actLoadLower => 'Kuormitus oli tavallista pienempi.';
+
+  @override
+  String get actLoadSame => 'Kuormitus oli suunnilleen tavallinen.';
+
+  @override
+  String get actHrLower =>
+      'Sykkeesi oli tavallista matalampi, se tuntui kevyemmältä.';
+
+  @override
+  String get actHrHigher =>
+      'Sykkeesi oli tavallista korkeampi, se tuntui raskaammalta.';
+
+  @override
+  String get actAdviceUnknown =>
+      'Suunnittele seuraavat päivät sen mukaan, miltä tuntuu.';
+
+  @override
+  String briefOutlookRest(Object days) {
+    return 'Noin $days kevyen päivän jälkeen kuntosi on taas optimaalisella alueella.';
+  }
+
+  @override
+  String get briefOutlookLongRest =>
+      'Kuntosi tarvitsee palautuakseen enemmän kuin muutaman kevyen päivän.';
+
+  @override
+  String get briefOutlookPlanTired =>
+      'Jos noudatat suunnitelmaa, kuntosi pysyy matalana tulevina päivinä.';
 }

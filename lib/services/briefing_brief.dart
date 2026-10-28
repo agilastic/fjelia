@@ -16,6 +16,7 @@ class BriefingBrief {
     this.today = const [],
     this.tomorrow = const [],
     this.trainingHrv,
+    this.outlook,
   });
 
   /// green, yellow or red.
@@ -28,12 +29,16 @@ class BriefingBrief {
   /// `up` or `down`: the chest-strap reading before and after a workout.
   final String? trainingHrv;
 
+  /// What the load forecast says happens next (see [FormForecast.outlook]).
+  final String? outlook;
+
   static String _list(List<String> v) => v.isEmpty ? 'none' : v.join('|');
 
   String toLine() =>
       '[Brief:Readiness:$readiness,Findings:${_list(findings)},'
       'Good:${_list(good)},Done:${_list(done)},Today:${_list(today)},'
-      'Tomorrow:${_list(tomorrow)},TrainingHrv:${trainingHrv ?? 'none'}]';
+      'Tomorrow:${_list(tomorrow)},TrainingHrv:${trainingHrv ?? 'none'},'
+      'Outlook:${outlook ?? 'none'}]';
 
   static BriefingBrief? parse(String toon) {
     final m = RegExp(r'\[Brief:([^\]]*)\]').firstMatch(toon);
@@ -48,6 +53,7 @@ class BriefingBrief {
     final readiness = f['Readiness'];
     if (readiness == null) return null;
     final hrv = f['TrainingHrv'];
+    final out = f['Outlook'];
     return BriefingBrief(
       readiness: readiness,
       findings: list(f['Findings']),
@@ -56,8 +62,36 @@ class BriefingBrief {
       today: list(f['Today']),
       tomorrow: list(f['Tomorrow']),
       trainingHrv: hrv == null || hrv == 'none' ? null : hrv,
+      outlook: out == null || out == 'none' ? null : out,
     );
   }
+
+  /// The load forecast's outlook in English, for a model.
+  static String outlookEnglish(String id) {
+    if (id.startsWith('restFixes:')) {
+      return 'about ${id.substring(10)} easy days bring form back to the optimal range';
+    }
+    return switch (id) {
+      'needsLongRest' => 'form needs more than a few easy days to recover',
+      'planKeepsTired' => 'the plan keeps form low for the next days',
+      _ => id,
+    };
+  }
+
+  /// The outlook as a sentence in the app language.
+  static String? outlookText(AppLocalizations l, String? id) {
+    if (id == null) return null;
+    if (id.startsWith('restFixes:'))
+      return l.briefOutlookRest(id.substring(10));
+    return switch (id) {
+      'needsLongRest' => l.briefOutlookLongRest,
+      'planKeepsTired' => l.briefOutlookPlanTired,
+      _ => null,
+    };
+  }
+
+  /// A finding in English words, for a model.
+  static String englishFinding(String id) => _english[id] ?? id;
 
   static const _english = {
     'hrvLow': 'low sleep HRV',
@@ -97,6 +131,7 @@ class BriefingBrief {
       if (tomorrow.isNotEmpty) 'Planned tomorrow: ${plan(tomorrow)}',
       if (trainingHrv != null)
         'HRV before and after the workout ${trainingHrv == 'up' ? 'rose (favourable)' : 'fell (less favourable)'}',
+      if (outlook != null) 'Outlook: ${outlookEnglish(outlook!)}',
     ];
     return '${parts.join('. ')}.';
   }
@@ -145,7 +180,8 @@ class BriefingBrief {
     final training = trainingHrv == null
         ? ''
         : ' ${trainingHrv == 'up' ? l.briefTrainingHrvUp : l.briefTrainingHrvDown}';
-    return '$head $why$training $advice';
+    final outlookSentence = outlookText(l, outlook);
+    return '$head $why$training${outlookSentence == null ? '' : ' $outlookSentence'} $advice';
   }
 }
 
@@ -173,24 +209,22 @@ bool briefingIsUsable(String text, {required String languageCode}) {
   if (echoes.any(lower.contains)) return false;
   // Many figures means it is listing values the person already sees.
   if (RegExp(r'\d+[.,]?\d*').allMatches(t).length > 4) return false;
-  if (languageCode != 'en') {
-    const english = {
-      'the',
-      'and',
-      'is',
-      'your',
-      'today',
-      'was',
-      'are',
-      'with',
-      'from',
-      'you', //
-    };
-    final hits = words
-        .map((w) => w.toLowerCase().replaceAll(RegExp(r'[^a-z]'), ''))
-        .where(english.contains)
-        .length;
-    if (hits >= 3) return false;
-  }
+  if (looksWrongLanguage(t, languageCode)) return false;
   return true;
+}
+
+/// Whether [text] reads as English although the app is not English: a small
+/// model tends to slip back into the language of the data it was given.
+bool looksWrongLanguage(String text, String languageCode) {
+  if (languageCode == 'en') return false;
+  const english = {
+    'the', 'and', 'is', 'your', 'today', 'was', 'are', 'with', 'from', 'you', //
+    'which', 'this', 'that', 'should', 'athlete', 'suggests', 'of', 'to',
+  };
+  final hits = text
+      .split(RegExp(r'\s+'))
+      .map((w) => w.toLowerCase().replaceAll(RegExp(r'[^a-z]'), ''))
+      .where(english.contains)
+      .length;
+  return hits >= 3;
 }

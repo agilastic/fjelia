@@ -1663,10 +1663,6 @@ class AppLocalizationsFr extends AppLocalizations {
       'Une fois après une séance d\'endurance récente ; heures calmes 22:00–08:00.';
 
   @override
-  String get enableWorkoutNotifications =>
-      'Activer les notifications de séance';
-
-  @override
   String get addHiloBpReport => 'Ajouter un rapport de tension Hilo';
 
   @override
@@ -2246,10 +2242,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get finishIntakeLog => 'Terminer le journal d\'apport';
-
-  @override
-  String get allowNotificationsInSystemSettings =>
-      'Autoriser les notifications dans les réglages système';
 
   @override
   String get importing => 'Importation…';
@@ -3026,9 +3018,6 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get practisedCarbohydrateToleranceGH =>
       'Tolérance aux glucides entraînée g/h (jusqu\'à 120)';
-
-  @override
-  String get workoutNotificationsEnabled => 'Notifications de séance activées';
 
   @override
   String get exportTheMonthlyReportAs =>
@@ -5523,4 +5512,155 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get briefTrainingHrvDown =>
       'Ta VFC a baissé après l\'entraînement, signe moins favorable.';
+
+  @override
+  String get reminderNeedsNotifications =>
+      'Le rappel a besoin des notifications. Autorise-les pour Fjelia dans les réglages système, puis réactive-le.';
+
+  @override
+  String get whatDidYouHave => 'Qu\'as-tu consommé ?';
+
+  @override
+  String get intakeSomething => 'J\'ai consommé quelque chose';
+
+  @override
+  String get intakeNothing => 'Rien';
+
+  @override
+  String get totalIntake => 'Apport total';
+
+  @override
+  String get carbsLabel => 'Glucides';
+
+  @override
+  String get fluidLabel => 'Liquide';
+
+  @override
+  String get sodiumLabel => 'Sodium';
+
+  @override
+  String get caffeineLabel => 'Caféine';
+
+  @override
+  String get detailsOptional => 'Détails (facultatif)';
+
+  @override
+  String atMinute(Object minute) {
+    return 'minute $minute';
+  }
+
+  @override
+  String get nothingAddedYet =>
+      'Rien d\'ajouté pour l\'instant. Ajoute ce que tu as mangé ou bu, ou choisis « Rien ».';
+
+  @override
+  String get followFocusWeek => 'Sur quoi me concentrer cette semaine ?';
+
+  @override
+  String get followRecoveryTrend => 'Comment évolue ma récupération ?';
+
+  @override
+  String get followLoadTooHigh =>
+      'Ma charge d\'entraînement est-elle trop élevée ?';
+
+  @override
+  String get followImproveSleep => 'Qu\'est-ce qui améliorerait mon sommeil ?';
+
+  @override
+  String get followIntervalsFeel =>
+      'Quelle sensation doivent donner les intervalles ?';
+
+  @override
+  String get followTiredToday => 'Et si je me sens fatigué aujourd\'hui ?';
+
+  @override
+  String get followEatBefore => 'Que dois-je manger avant ?';
+
+  @override
+  String get followAdjustToday => 'Dois-je l\'adapter aujourd\'hui ?';
+
+  @override
+  String get followNextDays =>
+      'Qu\'est-ce que cela signifie pour mes prochains jours ?';
+
+  @override
+  String get followCompareSimilar =>
+      'Comment cela se compare-t-il à des séances similaires ?';
+
+  @override
+  String get followRecover => 'Que dois-je faire pour récupérer ?';
+
+  @override
+  String get followIntensityRight => 'L\'intensité était-elle la bonne ?';
+
+  @override
+  String get statusPlanned => 'Prévu';
+
+  @override
+  String get statusAdapted => 'Adapté';
+
+  @override
+  String get statusCompleted => 'Terminé';
+
+  @override
+  String get statusRest => 'Repos';
+
+  @override
+  String loadValue(Object value) {
+    return 'Charge $value';
+  }
+
+  @override
+  String get actIntensityEasy => 'C\'était une séance aérobie facile.';
+
+  @override
+  String get actIntensityModerate => 'C\'était une séance modérée.';
+
+  @override
+  String get actIntensityHard => 'C\'était une séance intense.';
+
+  @override
+  String get actIntensityUnknown => 'La séance est enregistrée.';
+
+  @override
+  String get actLenLonger =>
+      'Elle était plus longue que tes séances similaires.';
+
+  @override
+  String get actLenShorter =>
+      'Elle était plus courte que tes séances similaires.';
+
+  @override
+  String get actLoadHigher => 'La charge était plus élevée que d\'habitude.';
+
+  @override
+  String get actLoadLower => 'La charge était plus faible que d\'habitude.';
+
+  @override
+  String get actLoadSame => 'La charge était à peu près habituelle.';
+
+  @override
+  String get actHrLower =>
+      'Ta FC était plus basse que d\'habitude, c\'était plus facile.';
+
+  @override
+  String get actHrHigher =>
+      'Ta FC était plus haute que d\'habitude, c\'était plus dur.';
+
+  @override
+  String get actAdviceUnknown =>
+      'Organise tes prochains jours selon ton ressenti.';
+
+  @override
+  String briefOutlookRest(Object days) {
+    return 'Avec environ $days jours faciles, ta forme revient dans la plage optimale.';
+  }
+
+  @override
+  String get briefOutlookLongRest =>
+      'Ta forme a besoin de plus de quelques jours faciles pour récupérer.';
+
+  @override
+  String get briefOutlookPlanTired =>
+      'Si tu suis le plan, ta forme reste basse les prochains jours.';
 }

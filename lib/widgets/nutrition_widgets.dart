@@ -1,6 +1,7 @@
 import '../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart' show DateFormat;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../db/database.dart';
@@ -8,6 +9,7 @@ import '../models/workout_nutrition.dart';
 import '../providers/nutrition_provider.dart';
 import '../providers/hrv_reminder_provider.dart';
 import '../services/nutrition_service.dart';
+import '../theme/activity_colors.dart';
 import '../utils/decimal.dart';
 import 'app_widgets.dart';
 
@@ -652,6 +654,537 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
     if (mounted) setState(() => busy = false);
   }
 
+  // ── Design ─────────────────────────────────────────────────────────────
+  static const _blue = Color(0xFF6EC1F0);
+
+  /// What one entry adds up to: the values are per serving.
+  ({double carbs, double fluid, double sodium, double caffeine}) get _totals {
+    var carbs = 0.0, fluid = 0.0, sodium = 0.0, caffeine = 0.0;
+    for (final e in entries) {
+      carbs += e.carbs * e.quantity;
+      fluid += e.fluid * e.quantity;
+      sodium += e.sodium * e.quantity;
+      caffeine += e.caffeine * e.quantity;
+    }
+    return (carbs: carbs, fluid: fluid, sodium: sodium, caffeine: caffeine);
+  }
+
+  IconData _iconFor(NutritionEntry e) {
+    final n = e.name.toLowerCase();
+    if (n.contains('gel')) return Icons.bolt_rounded;
+    if (n.contains('bar') || n.contains('riegel')) {
+      return Icons.bakery_dining_rounded;
+    }
+    if (e.carbs == 0 && e.fluid > 0) return Icons.water_drop_rounded;
+    if (e.fluid > 0) return Icons.sports_bar_rounded;
+    return Icons.restaurant_rounded;
+  }
+
+  Widget _card({required Widget child, EdgeInsets? padding, Color? color}) =>
+      Container(
+        width: double.infinity,
+        padding: padding ?? const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: color ?? const Color(0xFF1E1E1E),
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: Colors.white10),
+        ),
+        child: child,
+      );
+
+  Widget _heading(String text) => Padding(
+    padding: const EdgeInsets.only(top: 22, bottom: 10),
+    child: Text(
+      text.toUpperCase(),
+      style: const TextStyle(
+        fontSize: 11,
+        letterSpacing: 1.2,
+        fontWeight: FontWeight.w700,
+        color: muted,
+      ),
+    ),
+  );
+
+  Widget _header(BuildContext context) {
+    final a = widget.activity;
+    final color = completedActivityColor(a.type);
+    final start = a.startDate.toLocal();
+    final minutes = (a.durationSeconds / 60).round();
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        gradient: LinearGradient(
+          colors: [color.withValues(alpha: .28), const Color(0xFF1A1A1A)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        border: Border.all(color: color.withValues(alpha: .35)),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 52,
+            height: 52,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: color.withValues(alpha: .22),
+            ),
+            child: Icon(activitySportIcon(a.type), color: color, size: 26),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  a.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  '${dayHeading(context, start)} · ${DateFormat.Hm().format(start)} · $minutes min',
+                  style: const TextStyle(fontSize: 12, color: Colors.white70),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  context.l10n.recordWhatYouActuallyHad,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    height: 1.35,
+                    color: muted,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _choice(BuildContext context) => SegmentedButton<bool>(
+    showSelectedIcon: false,
+    style: SegmentedButton.styleFrom(
+      selectedBackgroundColor: _blue.withValues(alpha: .22),
+      selectedForegroundColor: _blue,
+      side: const BorderSide(color: Colors.white12),
+    ),
+    segments: [
+      ButtonSegment(
+        value: false,
+        icon: const Icon(Icons.restaurant_rounded, size: 18),
+        label: Text(context.l10n.intakeSomething),
+      ),
+      ButtonSegment(
+        value: true,
+        enabled: entries.isEmpty,
+        icon: const Icon(Icons.block_rounded, size: 18),
+        label: Text(context.l10n.intakeNothing),
+      ),
+    ],
+    selected: {noIntake},
+    onSelectionChanged: busy ? null : (v) => setState(() => noIntake = v.first),
+  );
+
+  Widget _entryCard(BuildContext context, int index, NutritionEntry e) {
+    final facts = <(String, String)>[
+      if (e.carbs > 0)
+        ('${_v(e.carbs * e.quantity)} g', context.l10n.carbsLabel),
+      if (e.fluid > 0)
+        ('${_v(e.fluid * e.quantity)} ml', context.l10n.fluidLabel),
+      if (e.sodium > 0)
+        ('${_v(e.sodium * e.quantity)} mg', context.l10n.sodiumLabel),
+      if (e.caffeine > 0)
+        ('${_v(e.caffeine * e.quantity)} mg', context.l10n.caffeineLabel),
+    ];
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Material(
+        color: const Color(0xFF1E1E1E),
+        borderRadius: BorderRadius.circular(16),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: busy ? null : () => _entry(index),
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(14, 12, 6, 12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Colors.white10),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 42,
+                  height: 42,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: _blue.withValues(alpha: .16),
+                  ),
+                  child: Icon(_iconFor(e), color: _blue, size: 22),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        context.l10n.quantityName(
+                          e.quantity == e.quantity.roundToDouble()
+                              ? e.quantity.round().toString()
+                              : e.quantity.toString(),
+                          e.name.replaceAll(' (edit label values)', ''),
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontWeight: FontWeight.w700),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        '${_choiceLabel(context, e.phase)}'
+                        '${e.minute == null ? '' : ' · ${context.l10n.atMinute(_v(e.minute))}'}',
+                        style: const TextStyle(fontSize: 12, color: muted),
+                      ),
+                      if (facts.isNotEmpty) ...[
+                        const SizedBox(height: 8),
+                        Wrap(
+                          spacing: 6,
+                          runSpacing: 6,
+                          children: [
+                            for (final f in facts)
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 9,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.white.withValues(alpha: .07),
+                                ),
+                                child: Text(
+                                  '${f.$1} ${f.$2.toLowerCase()}',
+                                  style: const TextStyle(fontSize: 11),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                IconButton(
+                  tooltip: context.l10n.removeIntake,
+                  onPressed: busy
+                      ? null
+                      : () => setState(() => entries.removeAt(index)),
+                  icon: const Icon(Icons.close_rounded, color: muted),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _totalsCard(BuildContext context) {
+    final t = _totals;
+    final seconds = elapsed.text.trim().isEmpty
+        ? nutritionElapsedSeconds(widget.activity)
+        : (parseDecimal(elapsed.text) ?? 0) * 60;
+    final hours = seconds > 0 ? seconds / 3600 : null;
+    String perHour(double v, String unit) =>
+        hours == null || v == 0 ? '' : '${_v(v / hours)} $unit/h';
+    final unknown = entries.any((e) => e.unknown.isNotEmpty);
+    Widget tile(
+      IconData icon,
+      String value,
+      String unit,
+      String label,
+      String rate,
+      Color color,
+    ) => Expanded(
+      child: Column(
+        children: [
+          Icon(icon, color: color, size: 20),
+          const SizedBox(height: 6),
+          Text(
+            value,
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+          ),
+          Text(unit, style: const TextStyle(fontSize: 11, color: muted)),
+          const SizedBox(height: 2),
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 10,
+              letterSpacing: .6,
+              color: muted,
+            ),
+          ),
+          SizedBox(
+            height: 14,
+            child: Text(
+              rate,
+              style: TextStyle(
+                fontSize: 10,
+                color: color.withValues(alpha: .9),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+    return _card(
+      child: Column(
+        children: [
+          Row(
+            children: [
+              tile(
+                Icons.bolt_rounded,
+                _v(t.carbs),
+                'g',
+                context.l10n.carbsLabel,
+                perHour(t.carbs, 'g'),
+                const Color(0xFFFFB74D),
+              ),
+              tile(
+                Icons.water_drop_rounded,
+                _v(t.fluid),
+                'ml',
+                context.l10n.fluidLabel,
+                perHour(t.fluid, 'ml'),
+                _blue,
+              ),
+              tile(
+                Icons.grain_rounded,
+                _v(t.sodium),
+                'mg',
+                context.l10n.sodiumLabel,
+                perHour(t.sodium, 'mg'),
+                const Color(0xFFB39DDB),
+              ),
+              tile(
+                Icons.coffee_rounded,
+                _v(t.caffeine),
+                'mg',
+                context.l10n.caffeineLabel,
+                '',
+                const Color(0xFFA1887F),
+              ),
+            ],
+          ),
+          if (unknown)
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.info_outline_rounded,
+                    size: 15,
+                    color: muted,
+                  ),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      context.l10n.someProductValuesAreUnknown,
+                      style: const TextStyle(fontSize: 11, color: muted),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _gutPicker(BuildContext context) {
+    const options = [
+      (
+        'Comfortable',
+        Icons.sentiment_very_satisfied_rounded,
+        Color(0xFF66BB6A),
+      ),
+      ('Mild symptoms', Icons.sentiment_neutral_rounded, Color(0xFFFFCA28)),
+      (
+        'Moderate symptoms',
+        Icons.sentiment_dissatisfied_rounded,
+        Color(0xFFFF9800),
+      ),
+      (
+        'Severe symptoms',
+        Icons.sentiment_very_dissatisfied_rounded,
+        Color(0xFFEF5350),
+      ),
+    ];
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: [
+        for (final o in options)
+          ChoiceChip(
+            showCheckmark: false,
+            avatar: Icon(o.$2, size: 20, color: gut == o.$1 ? o.$3 : muted),
+            label: Text(_choiceLabel(context, o.$1)),
+            selected: gut == o.$1,
+            selectedColor: o.$3.withValues(alpha: .2),
+            side: BorderSide(color: gut == o.$1 ? o.$3 : Colors.white12),
+            onSelected: busy
+                // Tapping the chosen one again clears it.
+                ? null
+                : (on) => setState(() => gut = on ? o.$1 : 'Not recorded'),
+          ),
+      ],
+    );
+  }
+
+  Widget _details(BuildContext context) => _card(
+    padding: EdgeInsets.zero,
+    child: Material(
+      type: MaterialType.transparency,
+      child: Theme(
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+        child: ExpansionTile(
+          initiallyExpanded:
+              elapsed.text.trim().isNotEmpty || planKey?.isNotEmpty == true,
+          tilePadding: const EdgeInsets.symmetric(horizontal: 16),
+          childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+          leading: const Icon(Icons.tune_rounded, color: muted),
+          title: Text(
+            context.l10n.detailsOptional,
+            style: const TextStyle(fontWeight: FontWeight.w600),
+          ),
+          children: [
+            TextField(
+              controller: elapsed,
+              onChanged: (_) => setState(() {}),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              decoration: InputDecoration(
+                labelText: context.l10n.elapsedMinutesIncludingStopsOptional,
+                hintText: context.l10n.recordedDurationActivityMin(
+                  _v(nutritionElapsedSeconds(widget.activity) / 60),
+                ),
+              ),
+            ),
+            if (plans.isNotEmpty || planKey?.isNotEmpty == true) ...[
+              const SizedBox(height: 14),
+              DropdownButtonFormField<String>(
+                isExpanded: true,
+                initialValue: planKey,
+                decoration: InputDecoration(
+                  labelText: context.l10n.compareWithSavedStrategy,
+                ),
+                items: [
+                  DropdownMenuItem<String>(
+                    value: null,
+                    child: Text(
+                      context.l10n.useMatchedSessionIfAvailable,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  DropdownMenuItem(
+                    value: '',
+                    child: Text(context.l10n.noPlanComparison),
+                  ),
+                  for (final p in plans)
+                    DropdownMenuItem(
+                      value: p.workout.key,
+                      child: Text(
+                        context.l10n.titleDate(
+                          p.workout.title,
+                          dayText(p.workout.date),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  if (planKey?.isNotEmpty == true &&
+                      !plans.any((p) => p.workout.key == planKey))
+                    DropdownMenuItem(
+                      value: planKey,
+                      child: Text(context.l10n.linkedStrategyUnavailable),
+                    ),
+                ],
+                onChanged: (key) => planKey = key,
+              ),
+            ],
+          ],
+        ),
+      ),
+    ),
+  );
+
+  Widget _actions(BuildContext context) => Container(
+    padding: EdgeInsets.fromLTRB(
+      20,
+      12,
+      20,
+      12 + MediaQuery.of(context).padding.bottom,
+    ),
+    decoration: const BoxDecoration(
+      color: Color(0xFF151515),
+      border: Border(top: BorderSide(color: Colors.white10)),
+    ),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          width: double.infinity,
+          child: FilledButton.icon(
+            style: FilledButton.styleFrom(
+              backgroundColor: _blue,
+              foregroundColor: Colors.black,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
+            onPressed: busy ? null : () => _save('complete'),
+            icon: busy
+                ? const SizedBox(
+                    width: 18,
+                    height: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Icon(Icons.check_rounded),
+            label: Text(
+              busy ? context.l10n.saving : context.l10n.finishIntakeLog,
+            ),
+          ),
+        ),
+        const SizedBox(height: 4),
+        Row(
+          children: [
+            Expanded(
+              child: TextButton(
+                onPressed: busy ? null : () => _save('draft'),
+                child: Text(context.l10n.saveDraft),
+              ),
+            ),
+            Expanded(
+              child: TextButton(
+                style: TextButton.styleFrom(foregroundColor: muted),
+                onPressed: busy ? null : () => _save('declined'),
+                child: Text(
+                  context.l10n.skipLoggingThisActivity,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    ),
+  );
+
   @override
   Widget build(BuildContext context) => SheetPage(
     title: context.l10n.actualNutrition,
@@ -659,140 +1192,87 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
         ? DataError(loadError!, retry: _load)
         : !loaded
         ? const Center(child: CircularProgressIndicator())
-        : ListView(
-            padding: const EdgeInsets.all(20),
+        : Column(
             children: [
-              Text(
-                widget.activity.name,
-                style: const TextStyle(fontWeight: FontWeight.w700),
-              ),
-              Text(context.l10n.recordWhatYouActuallyHad),
-              TextField(
-                controller: elapsed,
-                keyboardType: const TextInputType.numberWithOptions(
-                  decimal: true,
-                ),
-                decoration: InputDecoration(
-                  labelText: context.l10n.elapsedMinutesIncludingStopsOptional,
-                  hintText: context.l10n.recordedDurationActivityMin(
-                    _v(nutritionElapsedSeconds(widget.activity) / 60),
-                  ),
-                ),
-              ),
-              if (plans.isNotEmpty || planKey?.isNotEmpty == true)
-                DropdownButtonFormField<String>(
-                  isExpanded: true,
-                  initialValue: planKey,
-                  decoration: InputDecoration(
-                    labelText: context.l10n.compareWithSavedStrategy,
-                  ),
-                  items: [
-                    DropdownMenuItem<String>(
-                      value: null,
-                      child: Text(
-                        context.l10n.useMatchedSessionIfAvailable,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    DropdownMenuItem(
-                      value: '',
-                      child: Text(context.l10n.noPlanComparison),
-                    ),
-                    for (final p in plans)
-                      DropdownMenuItem(
-                        value: p.workout.key,
-                        child: Text(
-                          context.l10n.titleDate(
-                            p.workout.title,
-                            dayText(p.workout.date),
+              Expanded(
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+                  children: [
+                    _header(context),
+                    _heading(context.l10n.whatDidYouHave),
+                    _choice(context),
+                    if (!noIntake) ...[
+                      const SizedBox(height: 14),
+                      if (entries.isEmpty)
+                        _card(
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.local_dining_rounded,
+                                color: muted,
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Text(
+                                  context.l10n.nothingAddedYet,
+                                  style: const TextStyle(
+                                    color: muted,
+                                    height: 1.35,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                        ),
+                      for (final e in entries.indexed)
+                        _entryCard(context, e.$1, e.$2),
+                      const SizedBox(height: 4),
+                      SizedBox(
+                        width: double.infinity,
+                        child: OutlinedButton.icon(
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: _blue,
+                            side: BorderSide(
+                              color: _blue.withValues(alpha: .6),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          onPressed: busy ? null : () => _entry(),
+                          icon: const Icon(Icons.add_rounded),
+                          label: Text(context.l10n.addFoodOrDrink),
                         ),
                       ),
-                    if (planKey?.isNotEmpty == true &&
-                        !plans.any((p) => p.workout.key == planKey))
-                      DropdownMenuItem(
-                        value: planKey,
-                        child: Text(context.l10n.linkedStrategyUnavailable),
+                      if (entries.isNotEmpty) ...[
+                        _heading(context.l10n.totalIntake),
+                        _totalsCard(context),
+                      ],
+                    ],
+                    _heading(context.l10n.giGutComfort),
+                    _gutPicker(context),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: note,
+                      maxLines: 3,
+                      decoration: InputDecoration(
+                        labelText:
+                            context.l10n.whatWorkedSymptomsAccessProblems,
+                        filled: true,
+                        fillColor: const Color(0xFF1E1E1E),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide.none,
+                        ),
                       ),
-                  ],
-                  onChanged: (key) => planKey = key,
-                ),
-              for (final e in entries.indexed)
-                ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(
-                    context.l10n.quantityName(e.$2.quantity, e.$2.name),
-                  ),
-                  subtitle: Text(
-                    '${e.$2.phase}${e.$2.minute == null ? '' : ' · minute ${_v(e.$2.minute)}'}',
-                  ),
-                  onTap: busy ? null : () => _entry(e.$1),
-                  trailing: IconButton(
-                    tooltip: context.l10n.removeIntake,
-                    onPressed: busy
-                        ? null
-                        : () => setState(() => entries.removeAt(e.$1)),
-                    icon: const Icon(Icons.close),
-                  ),
-                ),
-              OutlinedButton.icon(
-                onPressed: busy ? null : () => _entry(),
-                icon: const Icon(Icons.add),
-                label: Text(context.l10n.addFoodOrDrink),
-              ),
-              CheckboxListTile(
-                contentPadding: EdgeInsets.zero,
-                title: Text(context.l10n.iHadNoIntake),
-                value: noIntake,
-                onChanged: busy || entries.isNotEmpty
-                    ? null
-                    : (value) => setState(() => noIntake = value!),
-              ),
-              DropdownButtonFormField<String>(
-                isExpanded: true,
-                initialValue: gut,
-                decoration: InputDecoration(
-                  labelText: context.l10n.giGutComfort,
-                ),
-                items: [
-                  for (final value in [
-                    'Not recorded',
-                    'Comfortable',
-                    'Mild symptoms',
-                    'Moderate symptoms',
-                    'Severe symptoms',
-                  ])
-                    DropdownMenuItem(
-                      value: value,
-                      child: Text(_choiceLabel(context, value)),
                     ),
-                ],
-                onChanged: (value) => gut = value!,
-              ),
-              TextField(
-                controller: note,
-                maxLines: 3,
-                decoration: InputDecoration(
-                  labelText: context.l10n.whatWorkedSymptomsAccessProblems,
+                    const SizedBox(height: 12),
+                    _details(context),
+                  ],
                 ),
               ),
-              const SizedBox(height: 16),
-              FilledButton(
-                onPressed: busy ? null : () => _save('complete'),
-                child: Text(
-                  busy ? context.l10n.saving : context.l10n.finishIntakeLog,
-                ),
-              ),
-              TextButton(
-                onPressed: busy ? null : () => _save('draft'),
-                child: Text(context.l10n.saveDraft),
-              ),
-              TextButton(
-                onPressed: busy ? null : () => _save('declined'),
-                child: Text(context.l10n.skipLoggingThisActivity),
-              ),
+              _actions(context),
             ],
           ),
   );
@@ -863,8 +1343,29 @@ class NutritionPreferencesTile extends ConsumerWidget {
           contentPadding: EdgeInsets.zero,
           title: Text(context.l10n.postWorkoutIntakeReminder),
           subtitle: Text(context.l10n.onceAfterARecentEndurance),
-          value: prefs.reminders,
+          // Off when the system blocks notifications, even if it was saved on.
+          value:
+              prefs.reminders &&
+              (ref.watch(nutritionNotificationsAllowedProvider).valueOrNull ??
+                  true),
           onChanged: (on) => runUiAction(context, () async {
+            final gateway = ref.read(localNotificationGatewayProvider);
+            if (on) {
+              // Check and ask now; the system asks only once, a refusal
+              // keeps the reminder off.
+              final permission = await gateway.requestPermission();
+              ref.invalidate(nutritionNotificationsAllowedProvider);
+              if (!permission.allowed) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(context.l10n.reminderNeedsNotifications),
+                    ),
+                  );
+                }
+                return;
+              }
+            }
             await ref
                 .read(nutritionServiceProvider)
                 .savePreferences(
@@ -874,35 +1375,9 @@ class NutritionPreferencesTile extends ConsumerWidget {
                   }),
                 );
             ref.invalidate(nutritionPreferencesProvider);
-            if (on) {
-              await ref
-                  .read(localNotificationGatewayProvider)
-                  .requestPermission();
-            }
             await ref.read(nutritionReminderProvider).reconcile();
           }),
         ),
-        if (prefs.reminders)
-          TextButton(
-            onPressed: () => runUiAction(context, () async {
-              final permission = await ref
-                  .read(localNotificationGatewayProvider)
-                  .requestPermission();
-              await ref.read(nutritionReminderProvider).reconcile();
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      permission.allowed
-                          ? context.l10n.workoutNotificationsEnabled
-                          : context.l10n.allowNotificationsInSystemSettings,
-                    ),
-                  ),
-                );
-              }
-            }),
-            child: Text(context.l10n.enableWorkoutNotifications),
-          ),
       ],
     );
   }

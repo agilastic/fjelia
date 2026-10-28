@@ -964,7 +964,6 @@
   "productsToleranceAndMeasuredSweat": "Products, tolerance and measured sweat losses",
   "postWorkoutIntakeReminder": "Post-workout intake reminder",
   "onceAfterARecentEndurance": "Once after a recent endurance workout; quiet hours 22:00–08:00.",
-  "enableWorkoutNotifications": "Enable workout notifications",
   "addHiloBpReport": "Add Hilo BP report",
   "readingPdfReportsIsOnly": "Reading PDF reports is only available on iOS and macOS.",
   "chooseAnotherReport": "Choose another report",
@@ -1244,7 +1243,6 @@
   "sportsDrink": "Sports drink",
   "bar": "Bar",
   "finishIntakeLog": "Finish intake log",
-  "allowNotificationsInSystemSettings": "Allow notifications in system settings",
   "importing": "Importing…",
   "importNewreadings": "Import {newReadings}",
   "@importNewreadings": {
@@ -1565,7 +1563,6 @@
   "severeSymptoms": "Severe symptoms",
   "personalNutritionSettings": "Personal nutrition settings",
   "practisedCarbohydrateToleranceGH": "Practised carbohydrate tolerance g/h (up to 120)",
-  "workoutNotificationsEnabled": "Workout notifications enabled",
   "exportTheMonthlyReportAs": "Export the monthly report as PDF in the Hilo app, then choose it here. Only the readings are imported; name, e-mail and body data in the report are ignored.",
   "nothingNewAllReadingsWere": "Nothing new: all readings were already stored.",
   "historyImportIncomplete": "History import incomplete",
@@ -3106,5 +3103,70 @@
   "briefReasonFormVeryTired": "very high training fatigue",
   "briefReasonFormFresh": "fresh and rested",
   "briefTrainingHrvUp": "Your HRV rose after training, a good sign.",
-  "briefTrainingHrvDown": "Your HRV fell after training, a less good sign."
+  "briefTrainingHrvDown": "Your HRV fell after training, a less good sign.",
+  "reminderNeedsNotifications": "The reminder needs notifications. Allow them for Fjelia in the system settings, then switch it on again.",
+  "whatDidYouHave": "What did you have?",
+  "intakeSomething": "I had something",
+  "intakeNothing": "Nothing",
+  "totalIntake": "Total intake",
+  "carbsLabel": "Carbs",
+  "fluidLabel": "Fluid",
+  "sodiumLabel": "Sodium",
+  "caffeineLabel": "Caffeine",
+  "detailsOptional": "Details (optional)",
+  "atMinute": "minute {minute}",
+  "@atMinute": {
+    "placeholders": {
+      "minute": {
+        "type": "Object"
+      }
+    }
+  },
+  "nothingAddedYet": "Nothing added yet. Add what you ate or drank, or choose “Nothing”.",
+  "followFocusWeek": "What should I focus on this week?",
+  "followRecoveryTrend": "How is my recovery trending?",
+  "followLoadTooHigh": "Is my training load too high?",
+  "followImproveSleep": "What would improve my sleep?",
+  "followIntervalsFeel": "How should the intervals feel?",
+  "followTiredToday": "What if I feel tired today?",
+  "followEatBefore": "What should I eat before it?",
+  "followAdjustToday": "Should I adjust it today?",
+  "followNextDays": "What does it mean for my next days?",
+  "followCompareSimilar": "How does it compare with similar sessions?",
+  "followRecover": "What should I do to recover?",
+  "followIntensityRight": "Was the intensity right?",
+  "statusPlanned": "Planned",
+  "statusAdapted": "Adapted",
+  "statusCompleted": "Completed",
+  "statusRest": "Rest",
+  "loadValue": "{value} load",
+  "@loadValue": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "actIntensityEasy": "That was an easy aerobic session.",
+  "actIntensityModerate": "That was a moderate session.",
+  "actIntensityHard": "That was a hard session.",
+  "actIntensityUnknown": "That session is logged.",
+  "actLenLonger": "It was longer than your similar sessions.",
+  "actLenShorter": "It was shorter than your similar sessions.",
+  "actLoadHigher": "The load was higher than usual.",
+  "actLoadLower": "The load was lower than usual.",
+  "actLoadSame": "The load was about the same as usual.",
+  "actHrLower": "Your heart rate was lower than usual, so it felt easier.",
+  "actHrHigher": "Your heart rate was higher than usual, so it felt harder.",
+  "actAdviceUnknown": "Plan your next days by how you feel.",
+  "briefOutlookRest": "With about {days} easy days your form is back in the optimal range.",
+  "@briefOutlookRest": {
+    "placeholders": {
+      "days": {
+        "type": "Object"
+      }
+    }
+  },
+  "briefOutlookLongRest": "Your form needs more than a few easy days to recover.",
+  "briefOutlookPlanTired": "Following the plan keeps your form low for the next days."
 }
