@@ -92,8 +92,11 @@ void main() {
   test('a workout is sent once, a changed one again', () async {
     final coros = service();
     await coros.pushWorkout(workout());
-    expect(requests, hasLength(1));
-    expect(requests.single.url.path, '/training/schedule/update');
+    // The day is checked for copies left by earlier sends, then it goes up.
+    expect(requests.map((r) => r.url.path), [
+      '/training/schedule/query',
+      '/training/schedule/update',
+    ]);
     // The same workout again is not a second entry on the calendar.
     await expectLater(
       coros.pushWorkout(workout()),
@@ -105,11 +108,12 @@ void main() {
         ),
       ),
     );
-    expect(requests, hasLength(1));
+    expect(requests, hasLength(2));
     // A longer one is different: it goes up.
     await coros.pushWorkout(workout(seconds: 2400));
     // The calendar is looked at first, then the new one goes up.
     expect(requests.map((r) => r.url.path), [
+      '/training/schedule/query',
       '/training/schedule/update',
       '/training/schedule/query',
       '/training/schedule/update',
@@ -143,6 +147,22 @@ void main() {
     },
   );
 
+  test('a copy Fjelia no longer knows of comes off before sending', () async {
+    final coros = service();
+    onCalendar = [
+      {'id': '7', 'name': 'Easy run'},
+      {'id': '8', 'name': 'Something I added myself'},
+    ];
+    await coros.pushWorkout(workout());
+    final bodies = [
+      for (final r in requests.where((r) => r.url.path.endsWith('/update')))
+        jsonDecode(r.body) as Map<String, dynamic>,
+    ];
+    expect(bodies, hasLength(2));
+    expect((bodies.first['versionObjects'] as List).single['id'], '7');
+    expect(bodies.last.containsKey('programs'), isTrue);
+  });
+
   test('moving a workout to another day sends it again', () async {
     final coros = service();
     await coros.pushWorkout(workout());
@@ -168,8 +188,8 @@ void main() {
     );
     answer = jsonEncode({'result': '0000'});
     await coros.pushWorkout(workout());
-    // Two refused formats, then the accepted one.
-    expect(requests, hasLength(3));
+    // Two refused formats, then the accepted one, each after a look at the day.
+    expect(requests.where((r) => r.url.path.endsWith('/update')), hasLength(3));
   });
 
   test('a sport COROS has no form for sends nothing', () async {

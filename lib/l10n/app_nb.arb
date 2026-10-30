@@ -1,5 +1,10 @@
 {
   "@@locale": "nb",
+  "freeAi": "Free AI",
+  "freeAiUsageTracking": "For at Free AI skal fortsette å fungere pålitelig for alle, sender vi en tilfeldig installasjons-ID. Den hjelper oss med å oppdage uvanlig bruk og blokkere forespørsler som misbruker tjenesten. ID-en inneholder verken navnet ditt eller kontoopplysninger.",
+  "freeAiDescription": "Gratis KI-chat og oppsummeringer via {host}. Ingen egen konto eller API-nøkkel er nødvendig. Etter din bekreftelse sendes meldinger og en oppsummering av helse og trening til tjenesten.",
+  "freeAiUnavailable": "Free AI er ikke tilgjengelig i denne versjonen. Velg en annen leverandør.",
+  "shareBriefingContextWithName": "En oppsummering av helse- og treningsdataene dine sendes til {name}.",
   "language": "Språk",
   "languageSystem": "Systemstandard",
   "settings": "Innstillinger",
@@ -403,7 +408,7 @@
   "isYourBodyCompositionImproving": "Bedres kroppssammensetningen din?",
   "weightBodyFatMuscleMass": "Vekt · Kroppsfett · Muskelmasse",
   "getStarted": "Kom i gang",
-  "yourDataStaysOnYour": "Dataene dine blir på enheten din. Alltid private.",
+  "yourDataStaysOnYour": "Dine data. Du velger hva du deler.",
   "bodyScale": "Kroppsvekt",
   "bodyComposition": "Kroppssammensetning",
   "sleep": "SØVN",
@@ -1579,7 +1584,7 @@
       }
     }
   },
-  "appleIntelligenceIsNotAvailable": "Apple Intelligence er ikke tilgjengelig på denne enheten (krever en støttet iPhone eller Mac med iOS/macOS 26 eller nyere og Apple Intelligence slått på i Innstillinger). Velg en annen leverandør og legg til din egen API-nøkkel for å bruke treneren.",
+  "appleIntelligenceIsNotAvailable": "Apple Intelligence er ikke tilgjengelig på denne enheten. Bruk Free AI eller velg en annen leverandør.",
   "personalisedMorningLunchAfternoonEvening": "Personlig oppsummering for morgen/lunsj/ettermiddag/kveld",
   "enterASubject": "Skriv inn et emne.",
   "message": "Melding",
@@ -3168,5 +3173,75 @@
     }
   },
   "briefOutlookLongRest": "Formen din trenger mer enn noen få rolige dager for å komme seg.",
-  "briefOutlookPlanTired": "Hvis du følger planen, holder formen din seg lav de neste dagene."
+  "briefOutlookPlanTired": "Hvis du følger planen, holder formen din seg lav de neste dagene.",
+  "localQwen": "Qwen3.5 · lokal",
+  "localModelDescription": "Valgfri Qwen3.5, 4-bits MLX. Last ned én gang, og bruk chat og oppsummeringer på denne enheten uten API-nøkkel. Helsedataene dine blir på denne enheten.",
+  "localModelSizeMb": "{megabytes} MB nedlasting · ekstra minne er nødvendig under bruk.",
+  "localModelDownload": "Last ned modell",
+  "localModelResumeDownload": "Fortsett nedlasting",
+  "localModelDownloading": "{downloaded} / {total} MB",
+  "localModelInstalled": "Lastet ned · tilgjengelig uten nett",
+  "localModelRemove": "Slett modell",
+  "localModelUnsupported": "Denne MLX-modellen krever en iPhone med iOS 17 eller nyere og en A14-brikke eller nyere. Eldre enheter støttes ikke.",
+  "localModelMemoryUnsupported": "Denne enheten har ikke nok minne til å kjøre den lokale modellen.",
+  "localModelDownloadFailed": "Nedlastingen mislyktes. Prøv igjen; fullstendige filer beholdes.",
+  "localModelDownloadFirst": "Last først ned Qwen under Innstillinger → KI og mer.",
+  "localModelContextTooLong": "Denne samtalen er for lang for den lokale modellen. Start en ny chat eller forkort spørsmålet.",
+  "localModelBusy": "Den lokale modellen svarer på en annen forespørsel. Prøv igjen om litt.",
+  "localModelInterrupted": "Lokal generering ble avbrutt. Hold Fjelia åpen og prøv igjen.",
+  "localModelCouldNotAnswer": "Den lokale modellen kunne ikke svare. Sjekk modellen under Innstillinger → KI og mer, og prøv igjen.",
+  "localModelBriefingUnavailable": "Lokal KI-oppsummering er utilgjengelig. Viser appens oppsummering.",
+  "localModelInfo": "Modelldetaljer og lisens",
+  "localModelRamGb": "Krever minst {gigabytes} GB arbeidsminne.",
+  "localModelIPhone18": "4B er tilgjengelig på iPhone 18 og nyere.",
+  "briefPlannedTodayCount": "{count, plural, =1{Det er planlagt 1 treningsøkt i dag.} other{Det er planlagt {count} treningsøkter i dag.}}",
+  "coachDataFallback": "Modellens svar motsier dataene. Her er Fjelias oppsummering:",
+  "coachSevenDayAverage": "7-dagers gjennomsnitt",
+  "coachSleepNeedAndShortfall": "Søvnbehov: {need} t; underskudd: {shortfall} t.",
+  "coachCurrentForm": "Nåværende form (TSB): {value} poeng.",
+  "@coachSleepNeedAndShortfall": {
+    "placeholders": {
+      "need": {
+        "type": "String"
+      },
+      "shortfall": {
+        "type": "String"
+      }
+    }
+  },
+  "@coachCurrentForm": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "aiOnboardingStep": "Trinn 2 av 3",
+  "aiOnboardingTitle": "Din coach.\nPå din måte.",
+  "aiOnboardingSubtitle": "Gjør helsedataene dine til nyttige råd for trening og restitusjon.",
+  "aiOnboardingChoose": "VELG DIN KI-COACH",
+  "aiOnboardingFreeDetail": "Gratis · Ingen KI-konto nødvendig",
+  "aiOnboardingFreeBody": "KI i skyen for trening og restitusjon.",
+  "aiOnboardingRecommended": "Anbefalt",
+  "aiOnboardingOnDevice": "På enheten din",
+  "aiOnboardingLocalBody": "KI-forespørslene dine blir på denne enheten.",
+  "aiOnboardingUnavailable": "Ikke tilgjengelig nå",
+  "aiOnboardingMore": "Flere KI-modeller",
+  "aiOnboardingMoreBody": "Lokal Qwen eller din egen skyleverandør",
+  "aiOnboardingConsent": "Forespørsler til skyen krever din bekreftelse.",
+  "aiOnboardingError": "KI-valget ditt kunne ikke lagres eller lastes inn. Prøv igjen.",
+  "aiOnboardingWithout": "Fortsett uten KI",
+  "aiOnboardingConfigure": "Konfigurer modell",
+  "aiOnboardingContinue": "Fortsett med {provider}",
+  "aiOnboardingChangeLater": "Du kan endre dette når som helst i innstillingene.",
+  "creditsAndLicenses": "Lisenser og takk",
+  "bioAgeActivity": "Aktivitet",
+  "bioAgeActivityBasis": "Aktivitetsdata · siste 7 dager",
+  "bioAgeActivityReported": "{minutes} rapporterte moderate minutter",
+  "bioAgeActivitySteps": "≈ {minutes} gangminutter beregnet fra skritt",
+  "bioAgeActivityCoverage": "Data for {days} av 7 dager",
+  "bioAgeActivityEstimateNotice": "Antakelse: 100 skritt ≈ 1 gangminutt. Daglige skrittall viser verken tempo eller intensitet. Rapporterte minutter prioriteres hver dag; skrittene samme dag telles ikke i tillegg.",
+  "bioAgeActivityIncomplete": "Aktivitetsdata mangler. Aktivitetens bidrag i år beregnes først når alle 7 dager har data.",
+  "bioAgeActivityEstimatedLabel": "Aktiviteten inkluderer anslått gangtid.",
+  "bioAgeActivityUnknownLabel": "Aktivitetsdata er ufullstendige"
 }

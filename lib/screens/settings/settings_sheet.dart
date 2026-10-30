@@ -14,6 +14,7 @@ import 'connections_tab.dart';
 import 'ai_settings_tab.dart';
 import 'system_tab.dart';
 import 'language_page.dart';
+import 'credits_page.dart';
 import '../onboarding/welcome_screen.dart';
 
 class SettingsSheet extends ConsumerWidget {
@@ -110,6 +111,13 @@ class SettingsSheet extends ConsumerWidget {
                     ),
                   );
                 },
+              ),
+              _row(
+                context,
+                l10n.creditsAndLicenses,
+                Icons.favorite_border,
+                Colors.pinkAccent,
+                const CreditsPage(),
               ),
             ],
           ),

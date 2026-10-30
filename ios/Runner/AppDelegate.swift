@@ -23,6 +23,9 @@ import flutter_local_notifications
       GeneratedPluginRegistrant.register(with: registry)
     }
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
+    if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "LocalModelChannel") {
+      LocalModelChannel.register(messenger: registrar.messenger())
+    }
     if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "PdfTextChannel") {
       PdfTextChannel.register(messenger: registrar.messenger())
     }

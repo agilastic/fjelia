@@ -1,5 +1,10 @@
 {
   "@@locale": "sk",
+  "freeAi": "Free AI",
+  "freeAiUsageTracking": "Aby bola služba Free AI spoľahlivo dostupná pre všetkých, odosielame náhodný identifikátor inštalácie. Pomáha nám rozpoznať neobvyklé používanie a blokovať požiadavky zneužívajúce službu. Identifikátor neobsahuje vaše meno ani údaje o účte.",
+  "freeAiDescription": "Bezplatný AI chat a súhrny cez {host}. Nepotrebujete vlastný účet ani API kľúč. Po vašom potvrdení sa správy a súhrn zdravotných a tréningových údajov odošlú tejto službe.",
+  "freeAiUnavailable": "Free AI nie je v tejto verzii dostupná. Vyberte iného poskytovateľa.",
+  "shareBriefingContextWithName": "Súhrn vašich zdravotných a tréningových údajov sa odošle poskytovateľovi {name}.",
   "language": "Jazyk",
   "languageSystem": "Predvolené systémom",
   "settings": "Nastavenia",
@@ -403,7 +408,7 @@
   "isYourBodyCompositionImproving": "Zlepšuje sa vaše zloženie tela?",
   "weightBodyFatMuscleMass": "Hmotnosť · Telesný tuk · Svalová hmota",
   "getStarted": "Začať",
-  "yourDataStaysOnYour": "Vaše údaje zostávajú vo vašom zariadení. Vždy súkromné.",
+  "yourDataStaysOnYour": "Tvoje údaje. Ty rozhoduješ, čo zdieľaš.",
   "bodyScale": "Osobná váha",
   "bodyComposition": "Zloženie tela",
   "sleep": "SPÁNOK",
@@ -1579,7 +1584,7 @@
       }
     }
   },
-  "appleIntelligenceIsNotAvailable": "Apple Intelligence nie je v tomto zariadení k dispozícii (vyžaduje podporovaný iPhone alebo Mac s iOS/macOS 26 alebo novším a zapnutým Apple Intelligence v Nastaveniach). Vyberte iného poskytovateľa a pridajte vlastný kľúč API, aby ste mohli používať trénera.",
+  "appleIntelligenceIsNotAvailable": "Apple Intelligence nie je na tomto zariadení dostupná. Použite Free AI alebo vyberte iného poskytovateľa.",
   "personalisedMorningLunchAfternoonEvening": "Personalizovaný prehľad na ráno/obed/popoludnie/večer",
   "enterASubject": "Zadajte predmet.",
   "message": "Správa",
@@ -3168,5 +3173,75 @@
     }
   },
   "briefOutlookLongRest": "Vaša forma potrebuje na zotavenie viac než pár ľahkých dní.",
-  "briefOutlookPlanTired": "Ak budete dodržiavať plán, vaša forma zostane nízka aj v najbližších dňoch."
+  "briefOutlookPlanTired": "Ak budete dodržiavať plán, vaša forma zostane nízka aj v najbližších dňoch.",
+  "localQwen": "Qwen3.5 · lokálne",
+  "localModelDescription": "Voliteľný Qwen3.5, 4-bitový MLX. Stiahnite ho raz a používajte chat a súhrny v tomto zariadení bez kľúča API. Vaše zdravotné údaje zostávajú v tomto zariadení.",
+  "localModelSizeMb": "Stiahnutie {megabytes} MB · počas používania je potrebná ďalšia pamäť.",
+  "localModelDownload": "Stiahnuť model",
+  "localModelResumeDownload": "Pokračovať v sťahovaní",
+  "localModelDownloading": "{downloaded} / {total} MB",
+  "localModelInstalled": "Stiahnuté · dostupné offline",
+  "localModelRemove": "Odstrániť model",
+  "localModelUnsupported": "Tento model MLX vyžaduje iPhone s iOS 17 alebo novším a čipom A14 alebo novším. Staršie zariadenia nie sú podporované.",
+  "localModelMemoryUnsupported": "Toto zariadenie nemá dostatok pamäte na spustenie lokálneho modelu.",
+  "localModelDownloadFailed": "Sťahovanie zlyhalo. Skúste to znova; úplné súbory sa zachovajú.",
+  "localModelDownloadFirst": "Najprv stiahnite Qwen v Nastavenia → AI a ďalšie.",
+  "localModelContextTooLong": "Táto konverzácia je pre lokálny model príliš dlhá. Začnite nový chat alebo skráťte otázku.",
+  "localModelBusy": "Lokálny model odpovedá na inú požiadavku. Skúste to znova o chvíľu.",
+  "localModelInterrupted": "Lokálne generovanie bolo prerušené. Nechajte Fjelia otvorenú a skúste to znova.",
+  "localModelCouldNotAnswer": "Lokálny model nedokázal odpovedať. Skontrolujte model v Nastavenia → AI a ďalšie a skúste to znova.",
+  "localModelBriefingUnavailable": "Lokálny súhrn AI nie je dostupný. Zobrazuje sa súhrn aplikácie.",
+  "localModelInfo": "Podrobnosti modelu a licencia",
+  "localModelRamGb": "Vyžaduje aspoň {gigabytes} GB operačnej pamäte.",
+  "localModelIPhone18": "Model 4B je dostupný na iPhone 18 a novšom.",
+  "briefPlannedTodayCount": "{count, plural, =1{Na dnes je naplánovaný 1 tréning.} few{Na dnes sú naplánované {count} tréningy.} other{Na dnes je naplánovaných {count} tréningov.}}",
+  "coachDataFallback": "Odpoveď modelu je v rozpore s údajmi. Tu je súhrn od Fjelie:",
+  "coachSevenDayAverage": "7-dňový priemer",
+  "coachSleepNeedAndShortfall": "Potreba spánku: {need} h; deficit: {shortfall} h.",
+  "coachCurrentForm": "Aktuálna forma (TSB): {value} bodov.",
+  "@coachSleepNeedAndShortfall": {
+    "placeholders": {
+      "need": {
+        "type": "String"
+      },
+      "shortfall": {
+        "type": "String"
+      }
+    }
+  },
+  "@coachCurrentForm": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "aiOnboardingStep": "Krok 2 z 3",
+  "aiOnboardingTitle": "Tvoj tréner.\nTvoja cesta.",
+  "aiOnboardingSubtitle": "Premeň svoje zdravotné údaje na tipy pre lepší tréning a regeneráciu.",
+  "aiOnboardingChoose": "VYBER SI AI TRÉNERA",
+  "aiOnboardingFreeDetail": "Zadarmo · Bez účtu AI",
+  "aiOnboardingFreeBody": "Cloudová AI pre tréning a regeneráciu.",
+  "aiOnboardingRecommended": "Odporúčané",
+  "aiOnboardingOnDevice": "Na tvojom zariadení",
+  "aiOnboardingLocalBody": "Tvoje AI požiadavky zostávajú v tomto zariadení.",
+  "aiOnboardingUnavailable": "Momentálne nedostupné",
+  "aiOnboardingMore": "Ďalšie AI modely",
+  "aiOnboardingMoreBody": "Lokálny Qwen alebo vlastný cloudový poskytovateľ",
+  "aiOnboardingConsent": "Cloudové požiadavky až po tvojom potvrdení.",
+  "aiOnboardingError": "Výber AI sa nepodarilo uložiť alebo načítať. Skús to znova.",
+  "aiOnboardingWithout": "Pokračovať bez AI",
+  "aiOnboardingConfigure": "Nastaviť model",
+  "aiOnboardingContinue": "Pokračovať s {provider}",
+  "aiOnboardingChangeLater": "Voľbu môžeš kedykoľvek zmeniť v nastaveniach.",
+  "creditsAndLicenses": "Licencie a poďakovania",
+  "bioAgeActivity": "Pohyb",
+  "bioAgeActivityBasis": "Údaje o pohybe · posledných 7 dní",
+  "bioAgeActivityReported": "{minutes} zaznamenaných minút strednej intenzity",
+  "bioAgeActivitySteps": "≈ {minutes} minút chôdze odhadnutých z krokov",
+  "bioAgeActivityCoverage": "Údaje za {days} zo 7 dní",
+  "bioAgeActivityEstimateNotice": "Predpoklad: 100 krokov ≈ 1 minúta chôdze. Denný počet krokov neukazuje tempo ani intenzitu. Zaznamenané minúty majú každý deň prednosť; kroky z toho istého dňa sa už nepripočítavajú.",
+  "bioAgeActivityIncomplete": "Chýbajú údaje o pohybe. Príspevok pohybu v rokoch sa vypočíta až vtedy, keď sú dostupné údaje za všetkých 7 dní.",
+  "bioAgeActivityEstimatedLabel": "Pohyb zahŕňa odhadovaný čas chôdze.",
+  "bioAgeActivityUnknownLabel": "Údaje o pohybe sú neúplné"
 }

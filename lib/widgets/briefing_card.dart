@@ -3,6 +3,7 @@ import '../l10n/l10n_ext.dart';
 import 'package:flutter/material.dart';
 
 import '../services/briefing_text.dart';
+import '../config/free_ai.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -69,7 +70,9 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
           if (briefing.isLoading) const LinearProgressIndicator(),
           if (briefing.hasError)
             Text(
-              settings.usesOnDeviceBriefing
+              settings.provider == AiProvider.localQwen
+                  ? context.l10n.localModelBriefingUnavailable
+                  : settings.usesOnDeviceBriefing
                   ? context.l10n.appleIntelligenceIsUnavailableShowing
                   : context.l10n.aiBriefingUnavailableShowingA,
               style: TextStyle(fontSize: 12, color: muted),
@@ -80,10 +83,17 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
             TextButton(
               onPressed: () => runUiAction(context, () async {
                 if (!settings.usesOnDeviceBriefing) {
+                  final message = context.l10n.shareBriefingContextWithName(
+                    settings.provider == AiProvider.freeAi
+                        ? '${context.l10n.freeAi} ($freeAiHost)'
+                        : settings.provider.name,
+                  );
                   if (!await confirmAction(
                     context,
                     context.l10n.generateAiBriefing,
-                    'A summary of your health and training data will be sent to ${settings.provider.name}.',
+                    settings.provider == AiProvider.freeAi
+                        ? '$message\n\n${context.l10n.freeAiUsageTracking}'
+                        : message,
                   )) {
                     return;
                   }
@@ -91,7 +101,11 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
                 final profile = await ref.read(userProfileProvider.future);
                 await ref
                     .read(aiBriefingProvider(period).notifier)
-                    .load(settings, raceGoals: profile.raceGoals ?? '');
+                    .load(
+                      settings,
+                      raceGoals: profile.raceGoals ?? '',
+                      cloudConsent: !settings.usesOnDeviceBriefing,
+                    );
               }),
               child: Text(
                 fallback

@@ -1,5 +1,7 @@
 import 'dart:math' as math;
 
+import 'bio_age_activity.dart';
+
 /// Inputs for the biological-age estimate. Everything but sex and age is
 /// optional; missing factors simply don't contribute.
 class BioAgePerson {
@@ -14,6 +16,7 @@ class BioAgePerson {
     this.restingHr,
     this.systolic,
     this.weeklyActivityMinutes,
+    this.activity,
     this.smoking = 'never',
     this.cigarettesPerDay,
     this.yearsSinceQuit,
@@ -38,6 +41,7 @@ class BioAgePerson {
   final double? restingHr;
   final double? systolic;
   final double? weeklyActivityMinutes;
+  final BioAgeActivity? activity;
 
   /// `never`, `former` or `current`.
   final String smoking;
@@ -68,6 +72,7 @@ class BioAgeResult {
     required this.rangeLow,
     required this.rangeHigh,
     required this.contributions,
+    required this.activity,
   });
 
   final double bioAge;
@@ -83,6 +88,7 @@ class BioAgeResult {
 
   /// Years added (+) or removed (−) per factor.
   final Map<String, double> contributions;
+  final BioAgeActivity activity;
 }
 
 /// Mortality doubles roughly every 8 years of age (Gompertz law).
@@ -351,6 +357,13 @@ double _ln(double x) => math.log(x);
 /// overlap) divided by the Gompertz slope gives the equivalent age shift.
 BioAgeResult estimateBioAge(BioAgePerson p) {
   final vo2 = estimateVo2max(p);
+  final activity =
+      p.activity ??
+      BioAgeActivity.fromWeekly(
+        minutes: p.weeklyActivityMinutes,
+        dailySteps: p.dailySteps,
+      );
+  final activityMinutes = activity.minutesForScore;
   final lnHr = <String, double>{
     'vo2max': _lnHrVo2max(vo2, p),
     if (p.gripKg != null) 'grip': _lnHrGrip(p.gripKg!, p.isMale),
@@ -359,8 +372,7 @@ BioAgeResult estimateBioAge(BioAgePerson p) {
       'blood_pressure': math.max(p.systolic! - 120, 0.0) / 10 * _ln(1.07),
     if (p.visceralFat != null)
       'visceral_fat': math.max(p.visceralFat! - 12, 0.0) * _ln(1.04),
-    if (p.dailySteps != null || p.weeklyActivityMinutes != null)
-      'activity': _lnHrActivity(p),
+    if (activityMinutes != null) 'activity': _lnHrActivity(activityMinutes),
     'smoking': _lnHrSmoking(p),
     if (p.alcoholGramsPerWeek != null)
       'alcohol': _lnHrAlcohol(p.alcoholGramsPerWeek!),
@@ -391,6 +403,7 @@ BioAgeResult estimateBioAge(BioAgePerson p) {
     vo2max: r1(vo2),
     vo2Class: vo2Class,
     fitnessAge: r1(fitnessAge),
+    activity: activity,
     rangeLow: r1(bioAge - 4),
     rangeHigh: r1(bioAge + 4),
     contributions: lnHr.map(
@@ -495,12 +508,9 @@ double _lnHrGrip(double grip, bool male) {
   return -steps * _ln(1.1);
 }
 
-/// Sedentary (< 3000 steps) carries a 25 % excess risk; above that, more
-/// weekly activity is protective with diminishing returns.
-double _lnHrActivity(BioAgePerson p) {
-  final steps = p.dailySteps;
-  if (steps != null && math.min(steps, 3000.0) < 3000) return _ln(1.25);
-  final minutes = p.weeklyActivityMinutes ?? 150;
+/// The existing activity curve applied to a complete week's input. Reported
+/// moderate minutes take priority over step-derived walking estimates per day.
+double _lnHrActivity(double minutes) {
   return -0.15 * _ln(math.max(minutes / 600, 0.1));
 }
 

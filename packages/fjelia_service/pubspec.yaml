@@ -1,7 +1,7 @@
 name: fjelia_service
 description: >
   Stub of the optional Fjelia service package. Builds that use this stub have
-  no Aktiia / Hilo support; every call reports that the feature is unavailable.
+  no Aktiia / Hilo support or shared Free AI access.
 publish_to: 'none'
 version: 0.1.0
 

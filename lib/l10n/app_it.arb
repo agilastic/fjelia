@@ -1,5 +1,10 @@
 {
   "@@locale": "it",
+  "freeAi": "Free AI",
+  "freeAiUsageTracking": "Per mantenere Free AI affidabile e disponibile per tutti, inviamo un identificativo casuale dell'installazione. Ci aiuta a riconoscere utilizzi insoliti e a bloccare richieste abusive. L'identificativo non contiene il tuo nome né dati del tuo account.",
+  "freeAiDescription": "IA gratuita nel cloud per chat e riepiloghi tramite {host}. Non servono un account o una chiave API personali. Dopo la tua conferma, i messaggi e un riepilogo di salute e allenamento vengono inviati al servizio.",
+  "freeAiUnavailable": "Free AI non è disponibile in questa versione. Scegli un altro fornitore.",
+  "shareBriefingContextWithName": "Un riepilogo dei tuoi dati di salute e allenamento sarà inviato a {name}.",
   "language": "Lingua",
   "languageSystem": "Predefinita di sistema",
   "settings": "Impostazioni",
@@ -403,7 +408,7 @@
   "isYourBodyCompositionImproving": "La tua composizione corporea sta migliorando?",
   "weightBodyFatMuscleMass": "Peso · Grasso corporeo · Massa muscolare",
   "getStarted": "Inizia",
-  "yourDataStaysOnYour": "I tuoi dati restano sul tuo dispositivo. Sempre privati.",
+  "yourDataStaysOnYour": "I tuoi dati. Scegli tu cosa condividere.",
   "bodyScale": "Bilancia pesapersone",
   "bodyComposition": "Composizione corporea",
   "sleep": "SONNO",
@@ -1579,7 +1584,7 @@
       }
     }
   },
-  "appleIntelligenceIsNotAvailable": "Apple Intelligence non è disponibile su questo dispositivo (servono un iPhone o un Mac supportato con iOS/macOS 26 o successivo e Apple Intelligence attivo in Impostazioni). Scegli un altro provider e aggiungi la tua chiave API per usare il coach.",
+  "appleIntelligenceIsNotAvailable": "Apple Intelligence non è disponibile su questo dispositivo. Usa Free AI o scegli un altro fornitore.",
   "personalisedMorningLunchAfternoonEvening": "Riepilogo personalizzato di mattina/pranzo/pomeriggio/sera",
   "enterASubject": "Inserisci un oggetto.",
   "message": "Messaggio",
@@ -3168,5 +3173,75 @@
     }
   },
   "briefOutlookLongRest": "La tua forma ha bisogno di più di qualche giorno leggero per recuperare.",
-  "briefOutlookPlanTired": "Seguendo il piano la tua forma resta bassa nei prossimi giorni."
+  "briefOutlookPlanTired": "Seguendo il piano la tua forma resta bassa nei prossimi giorni.",
+  "localQwen": "Qwen3.5 · locale",
+  "localModelDescription": "Qwen3.5 facoltativo, MLX a 4 bit. Scaricalo una volta, poi usa chat e riepiloghi su questo dispositivo senza chiave API. I tuoi dati sanitari restano su questo dispositivo.",
+  "localModelSizeMb": "Download di {megabytes} MB · durante l'uso serve memoria aggiuntiva.",
+  "localModelDownload": "Scarica modello",
+  "localModelResumeDownload": "Riprendi download",
+  "localModelDownloading": "{downloaded} / {total} MB",
+  "localModelInstalled": "Scaricato · disponibile offline",
+  "localModelRemove": "Elimina modello",
+  "localModelUnsupported": "Questo modello MLX richiede un iPhone con iOS 17 o successivo e un chip A14 o più recente. I dispositivi precedenti non sono supportati.",
+  "localModelMemoryUnsupported": "Questo dispositivo non ha memoria sufficiente per eseguire il modello locale.",
+  "localModelDownloadFailed": "Download non riuscito. Riprova; i file completi vengono conservati.",
+  "localModelDownloadFirst": "Scarica prima Qwen in Impostazioni → IA e altro.",
+  "localModelContextTooLong": "Questa conversazione è troppo lunga per il modello locale. Inizia una nuova chat o accorcia la domanda.",
+  "localModelBusy": "Il modello locale sta rispondendo a un'altra richiesta. Riprova tra poco.",
+  "localModelInterrupted": "La generazione locale è stata interrotta. Tieni Fjelia aperta e riprova.",
+  "localModelCouldNotAnswer": "Il modello locale non ha potuto rispondere. Controlla il modello in Impostazioni → IA e altro e riprova.",
+  "localModelBriefingUnavailable": "Riepilogo IA locale non disponibile. Viene mostrato il riepilogo dell'app.",
+  "localModelInfo": "Dettagli del modello e licenza",
+  "localModelRamGb": "Richiede almeno {gigabytes} GB di RAM.",
+  "localModelIPhone18": "Il modello 4B è disponibile su iPhone 18 e successivi.",
+  "briefPlannedTodayCount": "{count, plural, =1{Per oggi è previsto 1 allenamento.} other{Per oggi sono previsti {count} allenamenti.}}",
+  "coachDataFallback": "La risposta del modello contraddice i dati. Ecco il riepilogo di Fjelia:",
+  "coachSevenDayAverage": "media di 7 giorni",
+  "coachSleepNeedAndShortfall": "Fabbisogno di sonno: {need} h; deficit: {shortfall} h.",
+  "coachCurrentForm": "Forma attuale (TSB): {value} punti.",
+  "@coachSleepNeedAndShortfall": {
+    "placeholders": {
+      "need": {
+        "type": "String"
+      },
+      "shortfall": {
+        "type": "String"
+      }
+    }
+  },
+  "@coachCurrentForm": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "aiOnboardingStep": "Passaggio 2 di 3",
+  "aiOnboardingTitle": "Il tuo coach.\nA modo tuo.",
+  "aiOnboardingSubtitle": "Trasforma i tuoi dati sulla salute in consigli per allenarti e recuperare meglio.",
+  "aiOnboardingChoose": "SCEGLI IL TUO COACH IA",
+  "aiOnboardingFreeDetail": "Gratis · Nessun account IA richiesto",
+  "aiOnboardingFreeBody": "IA nel cloud per allenamento e recupero.",
+  "aiOnboardingRecommended": "Consigliato",
+  "aiOnboardingOnDevice": "Sul tuo dispositivo",
+  "aiOnboardingLocalBody": "Le tue richieste IA restano su questo dispositivo.",
+  "aiOnboardingUnavailable": "Al momento non disponibile",
+  "aiOnboardingMore": "Altri modelli IA",
+  "aiOnboardingMoreBody": "Qwen locale o il tuo provider cloud",
+  "aiOnboardingConsent": "Richieste cloud solo dopo la tua conferma.",
+  "aiOnboardingError": "Impossibile salvare o caricare la scelta dell’IA. Riprova.",
+  "aiOnboardingWithout": "Continua senza IA",
+  "aiOnboardingConfigure": "Configura il modello",
+  "aiOnboardingContinue": "Continua con {provider}",
+  "aiOnboardingChangeLater": "Puoi cambiare scelta in qualsiasi momento nelle impostazioni.",
+  "creditsAndLicenses": "Licenze e ringraziamenti",
+  "bioAgeActivity": "Attività",
+  "bioAgeActivityBasis": "Dati di attività · ultimi 7 giorni",
+  "bioAgeActivityReported": "{minutes} minuti moderati riportati",
+  "bioAgeActivitySteps": "≈ {minutes} minuti di cammino stimati dai passi",
+  "bioAgeActivityCoverage": "Dati per {days} giorni su 7",
+  "bioAgeActivityEstimateNotice": "Ipotesi: 100 passi ≈ 1 minuto di cammino. Il totale giornaliero dei passi non indica ritmo o intensità. I minuti riportati hanno la precedenza ogni giorno; i passi dello stesso giorno non vengono conteggiati di nuovo.",
+  "bioAgeActivityIncomplete": "Mancano dati di attività. Il contributo dell’attività in anni viene calcolato solo quando sono disponibili dati per tutti i 7 giorni.",
+  "bioAgeActivityEstimatedLabel": "L’attività include un tempo di cammino stimato.",
+  "bioAgeActivityUnknownLabel": "Dati di attività incompleti"
 }

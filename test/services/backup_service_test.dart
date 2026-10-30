@@ -11,6 +11,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/services/backup_service.dart';
+import 'package:fjelia/config/free_ai.dart';
+import 'package:fjelia/services/ai_coach_settings.dart';
 import 'package:fjelia/services/renpho_ble_scale_service.dart';
 import 'package:fjelia/models/calendar_activity.dart';
 import 'package:fjelia/providers/activity_calendar_provider.dart';
@@ -95,17 +97,49 @@ void main() {
       expect(await other.select(other.nutritionReminderRecords).get(), isEmpty);
     },
   );
-  test('a schema 50 JSON backup can omit the new nutrition tables', () async {
-    final file = await BackupService(db).export(directory: dir);
-    final backup = jsonDecode(
-      utf8.decode(
+  test(
+    'Free AI identity is neither exported nor replaced by a backup',
+    () async {
+      const store = AiCoachSettingsStore();
+      final sourceId = await store.readFreeAiInstallationId();
+      final file = await BackupService(db).export(directory: dir);
+      final backupText = utf8.decode(
         ZipDecoder()
                 .decodeBytes(await file.readAsBytes())
                 .findFile('backup.json')!
                 .content
             as List<int>,
-      ),
-    ) as Map<String, dynamic>;
+      );
+      expect(backupText, isNot(contains(sourceId)));
+      expect(backupText, isNot(contains(freeAiInstallationIdStorageKey)));
+
+      FlutterSecureStorage.setMockInitialValues({});
+      final destinationId = await store.readFreeAiInstallationId();
+      expect(destinationId, isNot(sourceId));
+      final backup = jsonDecode(backupText) as Map<String, dynamic>;
+      (backup['settings'] as Map)[freeAiInstallationIdStorageKey] = sourceId;
+      final content = utf8.encode(jsonEncode(backup));
+      final bytes = ZipEncoder().encode(
+        Archive()..addFile(ArchiveFile('backup.json', content.length, content)),
+      );
+      await BackupService(db).restore(bytes);
+      expect(await store.readFreeAiInstallationId(), destinationId);
+    },
+  );
+
+  test('a schema 50 JSON backup can omit the new nutrition tables', () async {
+    final file = await BackupService(db).export(directory: dir);
+    final backup =
+        jsonDecode(
+              utf8.decode(
+                ZipDecoder()
+                        .decodeBytes(await file.readAsBytes())
+                        .findFile('backup.json')!
+                        .content
+                    as List<int>,
+              ),
+            )
+            as Map<String, dynamic>;
     backup['schema'] = 50;
     final tables = backup['tables'] as Map;
     tables.remove('nutrition_records');
@@ -129,15 +163,17 @@ void main() {
             ),
           );
       final file = await BackupService(db).export(directory: dir);
-      final original = jsonDecode(
-        utf8.decode(
-          ZipDecoder()
-                  .decodeBytes(await file.readAsBytes())
-                  .findFile('backup.json')!
-                  .content
-              as List<int>,
-        ),
-      ) as Map<String, dynamic>;
+      final original =
+          jsonDecode(
+                utf8.decode(
+                  ZipDecoder()
+                          .decodeBytes(await file.readAsBytes())
+                          .findFile('backup.json')!
+                          .content
+                      as List<int>,
+                ),
+              )
+              as Map<String, dynamic>;
 
       List<int> zipOf(int schema, {bool dropNewColumn = false}) {
         final copy = jsonDecode(jsonEncode(original)) as Map<String, dynamic>;
@@ -191,15 +227,17 @@ void main() {
             ),
           );
       final file = await BackupService(db).export(directory: dir);
-      final backup = jsonDecode(
-        utf8.decode(
-          ZipDecoder()
-                  .decodeBytes(await file.readAsBytes())
-                  .findFile('backup.json')!
-                  .content
-              as List<int>,
-        ),
-      ) as Map<String, dynamic>;
+      final backup =
+          jsonDecode(
+                utf8.decode(
+                  ZipDecoder()
+                          .decodeBytes(await file.readAsBytes())
+                          .findFile('backup.json')!
+                          .content
+                      as List<int>,
+                ),
+              )
+              as Map<String, dynamic>;
       backup['schema'] = 46;
       (backup['tables'] as Map).remove('plan_goals');
       for (final row in backup['tables']['race_goals'] as List) {
@@ -299,12 +337,14 @@ void main() {
           );
     }
 
-    Map<String, dynamic> readBackup(List<int> bytes) => jsonDecode(
-      utf8.decode(
-        ZipDecoder().decodeBytes(bytes).findFile('backup.json')!.content
-            as List<int>,
-      ),
-    ) as Map<String, dynamic>;
+    Map<String, dynamic> readBackup(List<int> bytes) =>
+        jsonDecode(
+              utf8.decode(
+                ZipDecoder().decodeBytes(bytes).findFile('backup.json')!.content
+                    as List<int>,
+              ),
+            )
+            as Map<String, dynamic>;
 
     test('HRV-T073 facts travel, installation state does not', () async {
       await seedHrv();
@@ -477,8 +517,9 @@ void main() {
           ),
       );
       final progress = <BackupRestoreProgress>[];
-      final result = await BackupService(db)
-          .restore(zip, onProgress: progress.add);
+      final result = await BackupService(
+        db,
+      ).restore(zip, onProgress: progress.add);
       expect(result.activities, 1);
       expect(
         (await db.select(db.activityRecords).get()).single.name,
@@ -504,8 +545,9 @@ void main() {
     test(
       'import provided original app backup including PLAN records',
       () async {
-        final result = await BackupService(db)
-            .restore(await File(fixture).readAsBytes());
+        final result = await BackupService(
+          db,
+        ).restore(await File(fixture).readAsBytes());
         expect(result.activities, 1372);
         expect(result.plannedSessions, 194);
         expect(result.scheduledWorkouts, 2);

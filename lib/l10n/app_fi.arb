@@ -1,5 +1,10 @@
 {
   "@@locale": "fi",
+  "freeAi": "Free AI",
+  "freeAiUsageTracking": "Jotta Free AI pysyy luotettavasti kaikkien saatavilla, lähetämme satunnaisen asennustunnisteen. Se auttaa tunnistamaan poikkeavaa käyttöä ja estämään väärinkäyttöön liittyviä pyyntöjä. Tunniste ei sisällä nimeäsi eikä käyttäjätilisi tietoja.",
+  "freeAiDescription": "Maksuton tekoälychat ja yhteenvedot {host}-palvelun kautta. Erillistä tiliä tai API-avainta ei tarvita. Vahvistuksesi jälkeen viestit sekä terveys- ja harjoitteluyhteenveto lähetetään palveluun.",
+  "freeAiUnavailable": "Free AI ei ole käytettävissä tässä versiossa. Valitse toinen palveluntarjoaja.",
+  "shareBriefingContextWithName": "Yhteenveto terveys- ja harjoittelutiedoistasi lähetetään palveluun {name}.",
   "language": "Kieli",
   "languageSystem": "Järjestelmän oletus",
   "settings": "Asetukset",
@@ -403,7 +408,7 @@
   "isYourBodyCompositionImproving": "Paraneeko kehonkoostumuksesi?",
   "weightBodyFatMuscleMass": "Paino · Kehon rasva · Lihasmassa",
   "getStarted": "Aloita",
-  "yourDataStaysOnYour": "Tietosi pysyvät laitteellasi. Aina yksityisinä.",
+  "yourDataStaysOnYour": "Sinun tietosi. Sinä päätät, mitä jaat.",
   "bodyScale": "Henkilövaaka",
   "bodyComposition": "Kehonkoostumus",
   "sleep": "UNI",
@@ -1579,7 +1584,7 @@
       }
     }
   },
-  "appleIntelligenceIsNotAvailable": "Apple Intelligence ei ole käytettävissä tällä laitteella (vaatii tuetun iPhonen tai Macin, jossa on iOS/macOS 26 tai uudempi ja Apple Intelligence on otettu käyttöön Asetuksissa). Valitse toinen palveluntarjoaja ja lisää oma API-avaimesi käyttääksesi valmentajaa.",
+  "appleIntelligenceIsNotAvailable": "Apple Intelligence ei ole käytettävissä tällä laitteella. Käytä Free AI -palvelua tai valitse toinen palveluntarjoaja.",
   "personalisedMorningLunchAfternoonEvening": "Personoitu yhteenveto aamulle/lounaalle/iltapäivälle/illalle",
   "enterASubject": "Anna aihe.",
   "message": "Viesti",
@@ -3168,5 +3173,75 @@
     }
   },
   "briefOutlookLongRest": "Kuntosi tarvitsee palautuakseen enemmän kuin muutaman kevyen päivän.",
-  "briefOutlookPlanTired": "Jos noudatat suunnitelmaa, kuntosi pysyy matalana tulevina päivinä."
+  "briefOutlookPlanTired": "Jos noudatat suunnitelmaa, kuntosi pysyy matalana tulevina päivinä.",
+  "localQwen": "Qwen3.5 · paikallinen",
+  "localModelDescription": "Valinnainen Qwen3.5, 4-bittinen MLX. Lataa kerran ja käytä sitten keskustelua ja yhteenvetoja tällä laitteella ilman API-avainta. Terveystietosi pysyvät tällä laitteella.",
+  "localModelSizeMb": "{megabytes} Mt:n lataus · käytön aikana tarvitaan lisämuistia.",
+  "localModelDownload": "Lataa malli",
+  "localModelResumeDownload": "Jatka latausta",
+  "localModelDownloading": "{downloaded} / {total} Mt",
+  "localModelInstalled": "Ladattu · käytettävissä ilman verkkoyhteyttä",
+  "localModelRemove": "Poista malli",
+  "localModelUnsupported": "Tämä MLX-malli vaatii iPhonen, jossa on iOS 17 tai uudempi ja A14-siru tai uudempi. Vanhempia laitteita ei tueta.",
+  "localModelMemoryUnsupported": "Tässä laitteessa ei ole tarpeeksi muistia paikallisen mallin suorittamiseen.",
+  "localModelDownloadFailed": "Lataus epäonnistui. Yritä uudelleen; valmiit tiedostot säilytetään.",
+  "localModelDownloadFirst": "Lataa ensin Qwen kohdasta Asetukset → Tekoäly ja muuta.",
+  "localModelContextTooLong": "Tämä keskustelu on liian pitkä paikalliselle mallille. Aloita uusi keskustelu tai lyhennä kysymystä.",
+  "localModelBusy": "Paikallinen malli vastaa toiseen pyyntöön. Yritä hetken kuluttua uudelleen.",
+  "localModelInterrupted": "Paikallinen generointi keskeytyi. Pidä Fjelia auki ja yritä uudelleen.",
+  "localModelCouldNotAnswer": "Paikallinen malli ei pystynyt vastaamaan. Tarkista malli kohdasta Asetukset → Tekoäly ja muuta ja yritä uudelleen.",
+  "localModelBriefingUnavailable": "Paikallinen tekoäly-yhteenveto ei ole käytettävissä. Näytetään sovelluksen yhteenveto.",
+  "localModelInfo": "Mallin tiedot ja lisenssi",
+  "localModelRamGb": "Vaatii vähintään {gigabytes} Gt keskusmuistia.",
+  "localModelIPhone18": "4B on saatavilla iPhone 18:ssa ja uudemmissa malleissa.",
+  "briefPlannedTodayCount": "{count, plural, =1{Tänään on suunniteltu 1 harjoitus.} other{Tänään on suunniteltu {count} harjoitusta.}}",
+  "coachDataFallback": "Mallin vastaus on ristiriidassa tietojen kanssa. Tässä on Fjelian yhteenveto:",
+  "coachSevenDayAverage": "7 päivän keskiarvo",
+  "coachSleepNeedAndShortfall": "Unentarve: {need} h; univaje: {shortfall} h.",
+  "coachCurrentForm": "Nykyinen vire (TSB): {value} pistettä.",
+  "@coachSleepNeedAndShortfall": {
+    "placeholders": {
+      "need": {
+        "type": "String"
+      },
+      "shortfall": {
+        "type": "String"
+      }
+    }
+  },
+  "@coachCurrentForm": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "aiOnboardingStep": "Vaihe 2/3",
+  "aiOnboardingTitle": "Valmentajasi.\nSinun tavallasi.",
+  "aiOnboardingSubtitle": "Muuta terveystietosi vinkeiksi parempaan harjoitteluun ja palautumiseen.",
+  "aiOnboardingChoose": "VALITSE TEKOÄLYVALMENTAJASI",
+  "aiOnboardingFreeDetail": "Maksuton · Ei tekoälytiliä",
+  "aiOnboardingFreeBody": "Pilvitekoäly harjoitteluun ja palautumiseen.",
+  "aiOnboardingRecommended": "Suositeltu",
+  "aiOnboardingOnDevice": "Omalla laitteellasi",
+  "aiOnboardingLocalBody": "Tekoälypyyntösi pysyvät tällä laitteella.",
+  "aiOnboardingUnavailable": "Ei tällä hetkellä saatavilla",
+  "aiOnboardingMore": "Muut tekoälymallit",
+  "aiOnboardingMoreBody": "Paikallinen Qwen tai oma pilvipalvelusi",
+  "aiOnboardingConsent": "Pilvipyynnöt vasta vahvistuksesi jälkeen.",
+  "aiOnboardingError": "Tekoälyvalintaa ei voitu tallentaa tai ladata. Yritä uudelleen.",
+  "aiOnboardingWithout": "Jatka ilman tekoälyä",
+  "aiOnboardingConfigure": "Määritä malli",
+  "aiOnboardingContinue": "Jatka: {provider}",
+  "aiOnboardingChangeLater": "Voit muuttaa valintaa milloin tahansa asetuksissa.",
+  "creditsAndLicenses": "Lisenssit ja kiitokset",
+  "bioAgeActivity": "Liikunta",
+  "bioAgeActivityBasis": "Liikuntatiedot · viimeiset 7 päivää",
+  "bioAgeActivityReported": "{minutes} kirjattua kohtuukuormitteista minuuttia",
+  "bioAgeActivitySteps": "≈ {minutes} askelista arvioitua kävelyminuuttia",
+  "bioAgeActivityCoverage": "Tiedot {days} päivältä seitsemästä",
+  "bioAgeActivityEstimateNotice": "Oletus: 100 askelta ≈ 1 kävelyminuutti. Päivittäinen askelmäärä ei kerro vauhtia tai kuormittavuutta. Kirjatut minuutit ovat etusijalla joka päivä; saman päivän askelia ei lasketa lisäksi.",
+  "bioAgeActivityIncomplete": "Liikuntatietoja puuttuu. Liikunnan vaikutus vuosina lasketaan vasta, kun kaikilta 7 päivältä on tietoja.",
+  "bioAgeActivityEstimatedLabel": "Liikunta sisältää arvioitua kävelyaikaa.",
+  "bioAgeActivityUnknownLabel": "Liikuntatiedot ovat puutteelliset"
 }

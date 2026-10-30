@@ -114,6 +114,36 @@ abstract class AppLocalizations {
     Locale('sk'),
   ];
 
+  /// No description provided for @freeAi.
+  ///
+  /// In en, this message translates to:
+  /// **'Free AI'**
+  String get freeAi;
+
+  /// No description provided for @freeAiUsageTracking.
+  ///
+  /// In en, this message translates to:
+  /// **'To keep Free AI reliably available for everyone, we send a random installation ID. It helps us identify unusual usage and block abusive requests. The ID contains neither your name nor account details.'**
+  String get freeAiUsageTracking;
+
+  /// No description provided for @freeAiDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Free AI provides free cloud chat and briefings through {host}. No separate account or API key is needed. Messages and a health/training summary are sent to this service after your confirmation.'**
+  String freeAiDescription(String host);
+
+  /// No description provided for @freeAiUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Free AI is not available in this build. Choose another provider.'**
+  String get freeAiUnavailable;
+
+  /// No description provided for @shareBriefingContextWithName.
+  ///
+  /// In en, this message translates to:
+  /// **'A summary of your health and training data will be sent to {name}.'**
+  String shareBriefingContextWithName(String name);
+
   /// No description provided for @language.
   ///
   /// In en, this message translates to:
@@ -1539,7 +1569,7 @@ abstract class AppLocalizations {
   /// No description provided for @yourDataStaysOnYour.
   ///
   /// In en, this message translates to:
-  /// **'Your data stays on your device. Always private.'**
+  /// **'Your data. You choose what to share.'**
   String get yourDataStaysOnYour;
 
   /// No description provided for @bodyScale.
@@ -5441,7 +5471,7 @@ abstract class AppLocalizations {
   /// No description provided for @appleIntelligenceIsNotAvailable.
   ///
   /// In en, this message translates to:
-  /// **'Apple Intelligence is not available on this device (it needs a supported iPhone or Mac with iOS/macOS 26 or later and Apple Intelligence switched on in Settings). Choose another provider and add your own API key to use the coach.'**
+  /// **'Apple Intelligence is not available on this device. Use Free AI or choose another provider.'**
   String get appleIntelligenceIsNotAvailable;
 
   /// No description provided for @personalisedMorningLunchAfternoonEvening.
@@ -9923,6 +9953,324 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Following the plan keeps your form low for the next days.'**
   String get briefOutlookPlanTired;
+
+  /// No description provided for @localQwen.
+  ///
+  /// In en, this message translates to:
+  /// **'Qwen3.5 · local'**
+  String get localQwen;
+
+  /// No description provided for @localModelDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional Qwen3.5, 4-bit MLX. Download once, then use chat and briefings on this device without an API key. Your health data stays on this device.'**
+  String get localModelDescription;
+
+  /// No description provided for @localModelSizeMb.
+  ///
+  /// In en, this message translates to:
+  /// **'{megabytes} MB download · additional memory is needed while running.'**
+  String localModelSizeMb(Object megabytes);
+
+  /// No description provided for @localModelDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Download model'**
+  String get localModelDownload;
+
+  /// No description provided for @localModelResumeDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume download'**
+  String get localModelResumeDownload;
+
+  /// No description provided for @localModelDownloading.
+  ///
+  /// In en, this message translates to:
+  /// **'{downloaded} / {total} MB'**
+  String localModelDownloading(Object downloaded, Object total);
+
+  /// No description provided for @localModelInstalled.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloaded · available offline'**
+  String get localModelInstalled;
+
+  /// No description provided for @localModelRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete model'**
+  String get localModelRemove;
+
+  /// No description provided for @localModelUnsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'This MLX model needs an iPhone with iOS 17 or later and an A14 or newer chip. Older devices are not supported.'**
+  String get localModelUnsupported;
+
+  /// No description provided for @localModelMemoryUnsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'This device does not have enough memory to run the local model.'**
+  String get localModelMemoryUnsupported;
+
+  /// No description provided for @localModelDownloadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Download failed. Try again; completed files are kept.'**
+  String get localModelDownloadFailed;
+
+  /// No description provided for @localModelDownloadFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Download Qwen in Settings → AI & More first.'**
+  String get localModelDownloadFirst;
+
+  /// No description provided for @localModelContextTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'This conversation is too long for the local model. Start a new chat or shorten your question.'**
+  String get localModelContextTooLong;
+
+  /// No description provided for @localModelBusy.
+  ///
+  /// In en, this message translates to:
+  /// **'The local model is answering another request. Try again shortly.'**
+  String get localModelBusy;
+
+  /// No description provided for @localModelInterrupted.
+  ///
+  /// In en, this message translates to:
+  /// **'Local generation was interrupted. Keep Fjelia open and try again.'**
+  String get localModelInterrupted;
+
+  /// No description provided for @localModelCouldNotAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'The local model could not answer. Check the model in Settings → AI & More and try again.'**
+  String get localModelCouldNotAnswer;
+
+  /// No description provided for @localModelBriefingUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Local AI briefing unavailable. Showing the app\'s summary.'**
+  String get localModelBriefingUnavailable;
+
+  /// No description provided for @localModelInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Model details & licence'**
+  String get localModelInfo;
+
+  /// No description provided for @localModelRamGb.
+  ///
+  /// In en, this message translates to:
+  /// **'Requires at least {gigabytes} GB of device memory.'**
+  String localModelRamGb(int gigabytes);
+
+  /// No description provided for @localModelIPhone18.
+  ///
+  /// In en, this message translates to:
+  /// **'4B is available on iPhone 18 and later.'**
+  String get localModelIPhone18;
+
+  /// Number of remaining planned training sessions today; completed sessions are excluded.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{There is 1 training session planned for today.} other{There are {count} training sessions planned for today.}}'**
+  String briefPlannedTodayCount(int count);
+
+  /// No description provided for @coachDataFallback.
+  ///
+  /// In en, this message translates to:
+  /// **'The model\'s answer conflicts with the data. Here is Fjelia\'s summary:'**
+  String get coachDataFallback;
+
+  /// No description provided for @coachSevenDayAverage.
+  ///
+  /// In en, this message translates to:
+  /// **'7-day average'**
+  String get coachSevenDayAverage;
+
+  /// No description provided for @coachSleepNeedAndShortfall.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep need: {need} h; shortfall: {shortfall} h.'**
+  String coachSleepNeedAndShortfall(String need, String shortfall);
+
+  /// No description provided for @coachCurrentForm.
+  ///
+  /// In en, this message translates to:
+  /// **'Current form (TSB): {value} points.'**
+  String coachCurrentForm(String value);
+
+  /// No description provided for @aiOnboardingStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Step 2 of 3'**
+  String get aiOnboardingStep;
+
+  /// No description provided for @aiOnboardingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your coach.\nYour way.'**
+  String get aiOnboardingTitle;
+
+  /// No description provided for @aiOnboardingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn your health data into insights for better training and recovery.'**
+  String get aiOnboardingSubtitle;
+
+  /// No description provided for @aiOnboardingChoose.
+  ///
+  /// In en, this message translates to:
+  /// **'CHOOSE YOUR AI COACH'**
+  String get aiOnboardingChoose;
+
+  /// No description provided for @aiOnboardingFreeDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Free · No AI account needed'**
+  String get aiOnboardingFreeDetail;
+
+  /// No description provided for @aiOnboardingFreeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud AI for training and recovery.'**
+  String get aiOnboardingFreeBody;
+
+  /// No description provided for @aiOnboardingRecommended.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended'**
+  String get aiOnboardingRecommended;
+
+  /// No description provided for @aiOnboardingOnDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'On your device'**
+  String get aiOnboardingOnDevice;
+
+  /// No description provided for @aiOnboardingLocalBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your AI requests stay on this device.'**
+  String get aiOnboardingLocalBody;
+
+  /// No description provided for @aiOnboardingUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Currently unavailable'**
+  String get aiOnboardingUnavailable;
+
+  /// No description provided for @aiOnboardingMore.
+  ///
+  /// In en, this message translates to:
+  /// **'More AI models'**
+  String get aiOnboardingMore;
+
+  /// No description provided for @aiOnboardingMoreBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Local Qwen or your own cloud provider'**
+  String get aiOnboardingMoreBody;
+
+  /// No description provided for @aiOnboardingConsent.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud requests only after your confirmation.'**
+  String get aiOnboardingConsent;
+
+  /// No description provided for @aiOnboardingError.
+  ///
+  /// In en, this message translates to:
+  /// **'Your AI choice could not be saved or loaded. Please try again.'**
+  String get aiOnboardingError;
+
+  /// No description provided for @aiOnboardingWithout.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue without AI'**
+  String get aiOnboardingWithout;
+
+  /// No description provided for @aiOnboardingConfigure.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up model'**
+  String get aiOnboardingConfigure;
+
+  /// No description provided for @aiOnboardingContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with {provider}'**
+  String aiOnboardingContinue(String provider);
+
+  /// No description provided for @aiOnboardingChangeLater.
+  ///
+  /// In en, this message translates to:
+  /// **'You can change this anytime in Settings.'**
+  String get aiOnboardingChangeLater;
+
+  /// No description provided for @creditsAndLicenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Credits & licenses'**
+  String get creditsAndLicenses;
+
+  /// No description provided for @bioAgeActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity'**
+  String get bioAgeActivity;
+
+  /// No description provided for @bioAgeActivityBasis.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity data · last 7 days'**
+  String get bioAgeActivityBasis;
+
+  /// No description provided for @bioAgeActivityReported.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} reported moderate minutes'**
+  String bioAgeActivityReported(String minutes);
+
+  /// No description provided for @bioAgeActivitySteps.
+  ///
+  /// In en, this message translates to:
+  /// **'≈ {minutes} walking minutes estimated from steps'**
+  String bioAgeActivitySteps(String minutes);
+
+  /// No description provided for @bioAgeActivityCoverage.
+  ///
+  /// In en, this message translates to:
+  /// **'Data for {days} of 7 days'**
+  String bioAgeActivityCoverage(int days);
+
+  /// No description provided for @bioAgeActivityEstimateNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Assumption: 100 steps ≈ 1 walking minute. Daily step totals do not reveal pace or intensity. Reported minutes take priority each day; that day’s steps are not counted again.'**
+  String get bioAgeActivityEstimateNotice;
+
+  /// No description provided for @bioAgeActivityIncomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity data is missing. An activity contribution in years is calculated only when all 7 days have data.'**
+  String get bioAgeActivityIncomplete;
+
+  /// No description provided for @bioAgeActivityEstimatedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity includes estimated walking time.'**
+  String get bioAgeActivityEstimatedLabel;
+
+  /// No description provided for @bioAgeActivityUnknownLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity data is incomplete'**
+  String get bioAgeActivityUnknownLabel;
 }
 
 class _AppLocalizationsDelegate

@@ -2,12 +2,15 @@ import '../../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../providers/ai_coach_provider.dart';
+import '../../config/free_ai.dart';
+import '../../providers/local_model_provider.dart';
 import '../../services/ai_coach_settings.dart';
+import '../../services/local_model_catalog.dart';
 import '../../widgets/app_widgets.dart';
 import 'bug_report_sheet.dart';
+import 'local_model_panel.dart';
 
 class AiSettingsTab extends ConsumerWidget {
   const AiSettingsTab({super.key});
@@ -21,6 +24,13 @@ class AiSettingsTab extends ConsumerWidget {
           error: (e, _) => DataError(e),
           data: (s) {
             final n = ref.read(aiCoachSettingsProvider.notifier);
+            final supports4b =
+                s.provider == AiProvider.localQwen &&
+                ref.watch(
+                  localModelProvider(
+                    localQwen4bModelId,
+                  ).select((status) => status.valueOrNull?.supported ?? false),
+                );
             return ListView(
               padding: const EdgeInsets.all(16),
               children: [
@@ -43,16 +53,18 @@ class AiSettingsTab extends ConsumerWidget {
                   spacing: 8,
                   children: [
                     for (final p in [
+                      AiProvider.freeAi,
                       AiProvider.appleIntelligence,
-                      ...AiProvider.values.where(
-                        (p) => p != AiProvider.appleIntelligence,
-                      ),
+                      AiProvider.localQwen,
+                      ...AiProvider.values.where((p) => p.requiresUserApiKey),
                     ])
                       ChoiceChip(
                         label: Text(switch (p) {
                           AiProvider.openai => context.l10n.openai,
                           AiProvider.appleIntelligence =>
                             context.l10n.appleIntelligence,
+                          AiProvider.localQwen => context.l10n.localQwen,
+                          AiProvider.freeAi => context.l10n.freeAi,
                           _ => p.name[0].toUpperCase() + p.name.substring(1),
                         }),
                         selected: s.provider == p,
@@ -61,9 +73,22 @@ class AiSettingsTab extends ConsumerWidget {
                       ),
                   ],
                 ),
-                if (s.provider != AiProvider.appleIntelligence) ...[
+                if (s.provider == AiProvider.freeAi)
+                  SectionCard(
+                    child: Text(
+                      s.hasApiKey
+                          ? '${context.l10n.freeAiDescription(freeAiHost)} ${context.l10n.freeAiUsageTracking}'
+                          : context.l10n.freeAiUnavailable,
+                      style: TextStyle(
+                        color: s.hasApiKey ? mint : Colors.amber,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                if (s.provider.requiresUserApiKey) ...[
                   const SizedBox(height: 12),
                   DropdownButtonFormField<String>(
+                    isExpanded: true,
                     initialValue: s.provider.models.contains(s.model)
                         ? s.model
                         : s.provider.defaultModel,
@@ -97,6 +122,39 @@ class AiSettingsTab extends ConsumerWidget {
                       style: TextStyle(color: mint, fontSize: 12),
                     ),
                   ),
+                if (s.provider == AiProvider.localQwen) ...[
+                  const SizedBox(height: 12),
+                  DropdownButtonFormField<String>(
+                    isExpanded: true,
+                    key: ValueKey(s.model),
+                    initialValue: s.model,
+                    decoration: InputDecoration(labelText: context.l10n.model),
+                    items: [
+                      for (final model in localQwenModels)
+                        DropdownMenuItem(
+                          value: model.id,
+                          enabled: !model.requiresIPhone18 || supports4b,
+                          child: Text(
+                            '${model.label} · 4-bit${model.requiresIPhone18 ? ' · iPhone 18+' : ''}',
+                            style: TextStyle(
+                              color: model.requiresIPhone18 && !supports4b
+                                  ? muted
+                                  : null,
+                            ),
+                          ),
+                        ),
+                    ],
+                    onChanged: (value) {
+                      if (value != null) {
+                        runUiAction(context, () => n.setModel(value));
+                      }
+                    },
+                  ),
+                  LocalModelPanel(
+                    key: ValueKey('local_${s.model}'),
+                    modelId: s.model,
+                  ),
+                ],
                 SectionLabel(context.l10n.briefing),
                 for (final mode in BriefingMode.values)
                   ListTile(
@@ -121,7 +179,7 @@ class AiSettingsTab extends ConsumerWidget {
                     onTap: () =>
                         runUiAction(context, () => n.setBriefingMode(mode)),
                   ),
-                if (s.provider != AiProvider.appleIntelligence)
+                if (s.provider.requiresUserApiKey)
                   SwitchListTile(
                     title: Text(context.l10n.useAppleIntelligenceForBriefings),
                     subtitle: Text(context.l10n.useOnDeviceAiFor),
@@ -131,108 +189,23 @@ class AiSettingsTab extends ConsumerWidget {
                       () => n.setAppleIntelligenceForBriefing(v),
                     ),
                   ),
-                SectionLabel(context.l10n.healthDataSharing),
-                SwitchListTile(
-                  title: Text(context.l10n.askOncePerChatSession),
-                  subtitle: Text(context.l10n.otherwiseAskBeforeEveryCloud),
-                  value: s.consentMode == AiConsentMode.session,
-                  onChanged: (v) => runUiAction(
-                    context,
-                    () => n.setConsentMode(
-                      v ? AiConsentMode.session : AiConsentMode.everyMessage,
+                if (!s.provider.isLocal) ...[
+                  SectionLabel(context.l10n.healthDataSharing),
+                  SwitchListTile(
+                    title: Text(context.l10n.askOncePerChatSession),
+                    subtitle: Text(context.l10n.otherwiseAskBeforeEveryCloud),
+                    value: s.consentMode == AiConsentMode.session,
+                    onChanged: (v) => runUiAction(
+                      context,
+                      () => n.setConsentMode(
+                        v ? AiConsentMode.session : AiConsentMode.everyMessage,
+                      ),
                     ),
                   ),
-                ),
+                ],
                 OutlinedButton(
                   onPressed: () => showAppSheet(context, BugReportSheet()),
                   child: Text(context.l10n.reportABug),
-                ),
-                SectionLabel(context.l10n.weatherData),
-                for (final e in {
-                  'Open-Meteo': 'https://open-meteo.com',
-                  'Pirate Weather': 'https://pirateweather.net',
-                  'Bright Sky (DWD)': 'https://brightsky.dev',
-                  'WeatherAPI.com': 'https://www.weatherapi.com',
-                  'OpenStreetMap': 'https://www.openstreetmap.org',
-                  'RainViewer': 'https://www.rainviewer.com',
-                }.entries)
-                  ListTile(
-                    dense: true,
-                    title: Text(e.key),
-                    trailing: Icon(Icons.open_in_new, size: 14),
-                    onTap: () => runUiAction(context, () async {
-                      if (!await launchUrl(Uri.parse(e.value))) {
-                        throw StateError(tr.couldNotOpenKey(e.key));
-                      }
-                    }),
-                  ),
-                SectionLabel(context.l10n.openSourceLibraries),
-                for (final library in [
-                  (context.l10n.flutter, context.l10n.uiFrameworkByGoogle),
-                  ('flutter_riverpod', context.l10n.stateManagement),
-                  ('drift', context.l10n.sqliteOrm),
-                  ('flutter_blue_plus', context.l10n.bluetoothLe),
-                  ('flutter_map', context.l10n.interactiveMaps),
-                  ('fl_chart', context.l10n.chartsGraphs),
-                  (
-                    'flutter_secure_storage',
-                    context.l10n.secureCredentialStorage,
-                  ),
-                  ('flutter_markdown', context.l10n.markdownRendering),
-                  ('foundation_models_framework', context.l10n.appleOnDeviceAi),
-                  ('http', context.l10n.httpClients),
-                  ('encrypt / pointycastle', context.l10n.cryptography),
-                  ('health', context.l10n.appleHealthHealthConnect),
-                  ('permission_handler', context.l10n.runtimePermissions),
-                  ('location', context.l10n.gpsLocation),
-                  ('share_plus', context.l10n.shareExport),
-                  ('url_launcher', context.l10n.openUrls),
-                  ('intl', context.l10n.internationalisation),
-                  ('uuid / latlong2', context.l10n.utilities),
-                  ('font_awesome_flutter', context.l10n.icons),
-                ])
-                  ListTile(
-                    dense: true,
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(
-                      library.$1,
-                      style: const TextStyle(fontSize: 12),
-                    ),
-                    subtitle: Text(
-                      library.$2,
-                      style: const TextStyle(fontSize: 10, color: muted),
-                    ),
-                    trailing: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 6,
-                        vertical: 3,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.lightBlue.withValues(alpha: .1),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        context.l10n.license,
-                        style: TextStyle(fontSize: 9, color: Colors.lightBlue),
-                      ),
-                    ),
-                    onTap: () => showLicensePage(
-                      context: context,
-                      applicationName: context.l10n.fjelia,
-                      applicationLegalese:
-                          '© 2026 Alex Ebeling-Hoppe\nFree software under the '
-                          'GNU General Public License, version 3 or later.',
-                    ),
-                  ),
-                ListTile(
-                  title: Text(context.l10n.licenses),
-                  onTap: () => showLicensePage(
-                    context: context,
-                    applicationName: context.l10n.fjelia,
-                    applicationLegalese:
-                        '© 2026 Alex Ebeling-Hoppe\nFree software under the '
-                        'GNU General Public License, version 3 or later.',
-                  ),
                 ),
               ],
             );

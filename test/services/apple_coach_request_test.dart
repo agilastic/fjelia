@@ -5,41 +5,71 @@ import 'package:fjelia/models/chat_message.dart';
 import 'package:fjelia/services/apple_coach_request.dart';
 
 void main() {
-  test('language rejection is distinguished from context size and unknown failures', () {
-    expect(
-      appleCoachFailureMessage(
-        Exception('unsupportedLanguageOrLocale: Unsupported language.'),
-      ),
-      contains('rejected the request’s language'),
-    );
-    expect(
-      appleCoachFailureMessage(Exception('exceededContextWindowSize')),
-      contains('shorter question'),
-    );
-    expect(
-      appleCoachFailureMessage(Exception('native failure')),
-      isNot(contains('native failure')),
-    );
+  test('all goals are reserved even when optional context fills the budget', () {
+    final goals = [
+      '[RaceGoal:Sport:running,DistKm:42.2,Date:2027-08-08,Target:4:00:00,Priority:A]',
+      '[RaceGoal:Sport:cycling_road,DistKm:200,Date:2027-03-20,Target:none,Priority:B]',
+      '[RaceGoal:Sport:running,DistKm:21.1,Date:2027-10-10,Target:none,Priority:C]',
+    ];
+    for (final budget in [2200, 3000, 18000]) {
+      final request = AppleCoachRequest.build(
+        [const ChatMessage(text: 'What are my goals?', isUser: true)],
+        [
+          for (var i = 0; i < 100; i++)
+            '[Activity:2026-10-28,Sport:running,Min:45,AvgHR:138,Load:50]',
+          ...goals,
+        ].join('\n'),
+        budget: budget,
+      );
+      expect(request.inputBytes, lessThanOrEqualTo(budget));
+      expect(request.prompt, contains('3 listed goals'));
+      for (final date in ['2027-08-08', '2027-03-20', '2027-10-10']) {
+        expect(request.prompt, contains(date));
+      }
+    }
   });
-  test('budgets instructions, history and context together; keeps latest question', () {
-    final history = List.generate(
-      80,
-      (i) => ChatMessage(
-        text: 'Old turn $i ${'training ' * 100}',
-        isUser: i.isEven,
-      ),
-    );
-    const question =
-        'Review this activity: running, 45 minutes, average HR 138.';
-    final request = AppleCoachRequest.build(
-      [...history, const ChatMessage(text: question, isUser: true)],
-      '${'[Activities:old:${'run ' * 500}]\n' * 100}[HRV:Latest:Night:42ms,RHR:47bpm]\n[Sleep:Latest:Dur:8h]',
-    );
-    expect(request.inputBytes, lessThanOrEqualTo(3000));
-    expect(request.prompt, contains(question));
-    expect(request.prompt, contains('Night:42ms'));
-    expect(request.prompt, isNot(contains('Old turn 0 ')));
-  });
+
+  test(
+    'language rejection is distinguished from context size and unknown failures',
+    () {
+      expect(
+        appleCoachFailureMessage(
+          Exception('unsupportedLanguageOrLocale: Unsupported language.'),
+        ),
+        contains('rejected the request’s language'),
+      );
+      expect(
+        appleCoachFailureMessage(Exception('exceededContextWindowSize')),
+        contains('shorter question'),
+      );
+      expect(
+        appleCoachFailureMessage(Exception('native failure')),
+        isNot(contains('native failure')),
+      );
+    },
+  );
+  test(
+    'budgets instructions, history and context together; keeps latest question',
+    () {
+      final history = List.generate(
+        80,
+        (i) => ChatMessage(
+          text: 'Old turn $i ${'training ' * 100}',
+          isUser: i.isEven,
+        ),
+      );
+      const question =
+          'Review this activity: running, 45 minutes, average HR 138.';
+      final request = AppleCoachRequest.build(
+        [...history, const ChatMessage(text: question, isUser: true)],
+        '${'[Activities:old:${'run ' * 500}]\n' * 100}[HRV:Latest:Night:42ms,RHR:47bpm]\n[Sleep:Latest:Dur:8h]',
+      );
+      expect(request.inputBytes, lessThanOrEqualTo(3000));
+      expect(request.prompt, contains(question));
+      expect(request.prompt, contains('Night:42ms'));
+      expect(request.prompt, isNot(contains('Old turn 0 ')));
+    },
+  );
   test('UTF8 budget handles multibyte characters without splitting values', () {
     final request = AppleCoachRequest.build([
       const ChatMessage(text: 'Wie war mein Lauf? 🏃', isUser: true),
@@ -66,17 +96,21 @@ void main() {
       expect(request.instructions, isNot(contains('long rules')));
     },
   );
-  test('oversized user message gets a readable error rather than silent truncation', () {
-    expect(
-      () => AppleCoachRequest.build([
-        ChatMessage(text: 'x' * 2000, isUser: true),
-      ], ''),
-      throwsA(isA<AiCoachException>()),
-    );
-  });
+  test(
+    'oversized user message gets a readable error rather than silent truncation',
+    () {
+      expect(
+        () => AppleCoachRequest.build([
+          ChatMessage(text: 'x' * 2000, isUser: true),
+        ], ''),
+        throwsA(isA<AiCoachException>()),
+      );
+    },
+  );
 
   test('adds a locale hint and strict mode keeps only core ASCII lines', () {
-    const context = '[Date:2026-10-20]\n'
+    const context =
+        '[Date:2026-10-20]\n'
         '[HRV:Latest:52ms]\n'
         '[Weather:Leichter Regen, 12°C]\n'
         '[Notes:Morgenlauf am Fluss]';

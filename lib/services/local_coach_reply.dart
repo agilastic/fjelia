@@ -1,0 +1,285 @@
+import 'package:intl/intl.dart';
+
+import '../l10n/app_localizations.dart';
+import 'briefing_brief.dart';
+
+/// Checks concrete mistakes seen in small on-device models. This is not a
+/// general verifier of sports or medical advice.
+String? localCoachReplyIssue(String reply, String context, String question) {
+  const number = r'[-+−]?\d+(?:[.,]\d+)?';
+  const glucose =
+      r'blutzucker|blood\s*(?:sugar|glucose)|glucos\w*|glukos\w*|'
+      r'glyc[eé]m\w*|glyk[eé]m\w*|glic[eé]m\w*|blodsukker\w*|verensoker\w*|'
+      r'krvn[yý]\s*cuk\w*';
+  final glucoseValue = RegExp(
+    '(?:$glucose)[^\\d\\n.;!?]{0,35}($number)',
+    caseSensitive: false,
+  );
+  final supportedGlucose = glucoseValue
+      .allMatches('$context\n$question')
+      .map((match) => _number(match[1]))
+      .toSet();
+  for (final claim in glucoseValue.allMatches(reply)) {
+    if (!supportedGlucose.contains(_number(claim[1]))) {
+      return 'unsupported_glucose_value';
+    }
+  }
+
+  final stress = _fieldsFor(context, '[Analysis:Stress,');
+  final latest = _number(stress['Latest']);
+  final average = _number(stress['Avg7d']);
+  if (latest != null && average != null && latest != average) {
+    const higher =
+        r'higher|above|h[oö]her|[uü]ber|sup[eé]rieur|superior|h[oø]yere|h[oø]jere|vy[šs][šs]|korkeam';
+    const lower =
+        r'lower|below|niedriger|unter|inf[eé]rieur|inferior|lavere|under|ni[žz][šs]|matalam|alemp';
+    const baseline =
+        r'average|baseline|durchschnitt|mittel|moyenne|media|mitjana|gjennomsnitt|gennemsnit|priemer|keskiarvo';
+    final wrongDirection = RegExp(
+      '(?:${latest < average ? higher : lower})[^.!?\\n]{0,45}(?:$baseline)',
+      caseSensitive: false,
+    );
+    for (final sentence in reply.split(RegExp(r'(?<=[.!?])\s+'))) {
+      if (!RegExp(r'stress|stres', caseSensitive: false).hasMatch(sentence)) {
+        continue;
+      }
+      final values = RegExp(
+        number,
+      ).allMatches(sentence).map((m) => _number(m[0])).toList();
+      // Negated comparisons need language understanding; leave them alone.
+      final negated = RegExp(
+        r'\b(nicht|not|pas|non|no|ikke|nie|ei)\b',
+        caseSensitive: false,
+      ).hasMatch(sentence);
+      if (!negated &&
+          values.contains(latest) &&
+          values.contains(average) &&
+          wrongDirection.hasMatch(sentence)) {
+        return 'reversed_stress_comparison';
+      }
+    }
+  }
+
+  final sleep = _fieldsFor(context, '[Analysis:SleepVsNeed,');
+  final rawSleep = _fieldsFor(context, '[Sleep:Latest:');
+  final slept = _number(sleep['Slept'] ?? rawSleep['Dur']);
+  final need = _number(sleep['Need'] ?? rawSleep['Need']);
+  final shortfall = slept == null || need == null || need <= 0
+      ? null
+      : (need > slept ? need - slept : 0.0);
+  const deficit =
+      r'schlafmangel|schlafdefizit|sleep\s*(?:debt|deficit|shortfall)|d[eé]ficit\s*(?:de\s*)?(?:sommeil|sonno|sue[nñ]o|son)|s[oø]vnunderskudd|s[oø]vnunderskud|sp[aá]nkov[yý]\s*deficit|univaje';
+  const hours =
+      r'(?:h\b|hours?\b|stunden?\b|heures?\b|ore\b|horas?\b|timer?\b|hodin\w*|tunt\w*)';
+  final deficitPatterns = [
+    RegExp(
+      '($number)\\s*[-–]?\\s*$hours\\s*[-–]?\\s*(?:$deficit)',
+      caseSensitive: false,
+    ),
+    RegExp(
+      '(?:$deficit)[^\\d,;.!?\\n]{0,25}($number)\\s*$hours',
+      caseSensitive: false,
+    ),
+  ];
+  for (final pattern in deficitPatterns) {
+    for (final match in pattern.allMatches(reply)) {
+      final claimed = _number(match[1]);
+      if (claimed != null &&
+          (shortfall == null || (claimed - shortfall).abs() > .2)) {
+        return 'incorrect_sleep_shortfall';
+      }
+    }
+  }
+
+  final weeklyForm = RegExp(
+    '(?:TSB|form)[^.!?\\n]{0,18}($number)\\s*(?:points?\\s*)?(?:a|per|pro|par|por|za|/)[ -]?(?:week|woche|semaine|settimana|semana|uge|uke|t[yý][žz]de[nň]|viikko)',
+    caseSensitive: false,
+  );
+  if (weeklyForm.hasMatch(reply)) return 'form_used_as_weekly_change';
+  if (!RegExp(
+    r'Phase:(taper|recovery|deload|reduction)',
+    caseSensitive: false,
+  ).hasMatch(context)) {
+    for (final sentence in reply.split(RegExp(r'(?<=[.!?])\s+'))) {
+      if (RegExp(
+            r'blutdruck|blood pressure',
+            caseSensitive: false,
+          ).hasMatch(sentence) &&
+          RegExp(
+            r'reduktionsphase|entlastungsphase|taper|deload',
+            caseSensitive: false,
+          ).hasMatch(sentence) &&
+          RegExp(
+            r'zeigt|aktuelle|befind|shows|current|you are',
+            caseSensitive: false,
+          ).hasMatch(sentence) &&
+          !RegExp(
+            r'\b(kein\w*|nicht|no|not|should|could|sollte\w*|k[oö]nnte\w*)\b',
+            caseSensitive: false,
+          ).hasMatch(sentence)) {
+        return 'blood_pressure_used_as_training_phase';
+      }
+    }
+  }
+  return null;
+}
+
+/// Localised data summary used instead of a demonstrably contradictory reply.
+/// Values and comparisons are formatted by the app, not generated by a model.
+String localCoachDataSummary(
+  String context,
+  AppLocalizations l,
+  String locale,
+) {
+  final format = NumberFormat('0.#', locale);
+  String value(String raw) {
+    final n = _number(raw);
+    if (n == null) return raw;
+    final unit = raw.replaceFirst(RegExp(r'^[-+−]?\d+(?:[.,]\d+)?'), '').trim();
+    return '${format.format(n)}${unit.isEmpty ? '' : ' $unit'}';
+  }
+
+  final lines = <String>[l.coachDataFallback];
+  final metrics = {
+    'SleepHRV': l.hrvSleep,
+    'RHR': l.restingHr,
+    'Stress': l.stress,
+    'Energy': l.currentEnergy,
+    'SleepDuration': l.sleep,
+  };
+  final recovery = _fieldsFor(context, '[HRV:Latest:');
+  final rawSleep = _fieldsFor(context, '[Sleep:Latest:');
+  final rawMetricKeys = {
+    'SleepHRV': 'Night',
+    'RHR': 'RHR',
+    'Stress': 'Stress',
+    'Energy': 'Energy',
+    'SleepDuration': 'Dur',
+  };
+  for (final entry in metrics.entries) {
+    final f = _fieldsFor(context, '[Analysis:${entry.key},');
+    final raw = entry.key == 'SleepDuration' ? rawSleep : recovery;
+    final current = f['Latest'] ?? raw[rawMetricKeys[entry.key]];
+    if (current == null || _number(current) == null) continue;
+    final average = f['Avg7d'];
+    final a = _number(current), b = _number(average);
+    final comparison = a == null || b == null
+        ? ''
+        : a < b
+        ? ' < '
+        : a > b
+        ? ' > '
+        : ' = ';
+    lines.add(
+      '- ${entry.value}: ${value(current)}'
+      '${average == null ? '' : '$comparison${value(average)} (${l.coachSevenDayAverage})'}'
+      '${f['Date'] == null ? '' : ' · ${f['Date']}'}.',
+    );
+  }
+  final sleep = _fieldsFor(context, '[Analysis:SleepVsNeed,');
+  final slept = _number(sleep['Slept'] ?? rawSleep['Dur']);
+  final need = _number(sleep['Need'] ?? rawSleep['Need']);
+  if (slept != null && need != null && need > 0) {
+    lines.add(
+      '- ${l.coachSleepNeedAndShortfall(format.format(need), format.format(need > slept ? need - slept : 0))}',
+    );
+  }
+  final form = _fieldsFor(context, '[Analysis:Form,');
+  if (form['TSB'] != null) {
+    lines.add('- ${l.coachCurrentForm(value(form['TSB']!))}');
+  }
+  final bp = _fieldsFor(context, '[BP:Latest:');
+  if (bp['Sys'] != null && bp['Dia'] != null) {
+    lines.add('- ${l.typeBloodPressure}: ${bp['Sys']}/${bp['Dia']} mmHg.');
+  }
+  final planned = BriefingBrief.parse(context)?.plannedTodaySentence(l);
+  if (planned != null) lines.add(planned);
+  final calendar = localCoachCalendarSummary(context, l, locale);
+  if (calendar.isNotEmpty) lines.add('\n$calendar');
+  return lines.join('\n');
+}
+
+/// The app supplies the complete list when a local answer about goals omits
+/// entries. Goal dates do not depend on the model remembering the whole list.
+String completeLocalCoachCalendar(
+  String reply,
+  String context,
+  String question,
+  AppLocalizations l,
+  String locale,
+) {
+  final aboutGoals = RegExp(
+    r'\b(?:goal|ziel|wettk[aä]mpf|rennen|objecti|objeti|obietti|m[aå]l|ciel|cieľ|tavoit)',
+    caseSensitive: false,
+  ).hasMatch(question);
+  if (!aboutGoals) return reply;
+  final dates = context
+      .split('\n')
+      .where((line) => line.startsWith('[RaceGoal:'))
+      .map((line) => _fields(line)['Date'])
+      .whereType<String>()
+      .toSet();
+  if (dates.isEmpty || dates.every(reply.contains)) return reply;
+  return '$reply\n\n${localCoachCalendarSummary(context, l, locale)}';
+}
+
+String localCoachCalendarSummary(
+  String context,
+  AppLocalizations l,
+  String locale,
+) {
+  final format = NumberFormat('0.#', locale);
+  final goals = context
+      .split('\n')
+      .where((line) => line.startsWith('[RaceGoal:'))
+      .toList();
+  final lines = <String>[];
+  if (goals.isNotEmpty) {
+    lines.add(l.raceGoalsLength(goals.length));
+    for (final line in goals) {
+      final f = _fields(line);
+      final sport = switch (f['Sport']) {
+        'running' || 'trail_running' => l.running,
+        'cycling_road' || 'cycling_mtb' || 'cycling_gravel' => l.cycling,
+        'swimming' => l.swimming,
+        _ => f['Sport']?.replaceAll('_', ' ') ?? '',
+      };
+      final distance = _number(f['DistKm']);
+      lines.add(
+        '- ${f['Priority'] ?? '?'} · ${f['Date']} · $sport${distance == null ? '' : ' ${format.format(distance)} km'}'
+        '${f['Target'] == null || f['Target'] == 'none' ? '' : ' · ${f['Target']}'}.',
+      );
+    }
+  }
+  return lines.join('\n');
+}
+
+Map<String, String> _fieldsFor(String context, String prefix) => _fields(
+  context
+      .split('\n')
+      .firstWhere((line) => line.startsWith(prefix), orElse: () => ''),
+);
+
+Map<String, String> _fields(String line) {
+  final start = line.indexOf(':');
+  if (start < 0) return const {};
+  return {
+    for (final part
+        in line
+            .substring(start + 1)
+            .replaceFirst(RegExp(r'\]$'), '')
+            .split(','))
+      if (part.contains(':'))
+        part.substring(0, part.indexOf(':')): part.substring(
+          part.indexOf(':') + 1,
+        ),
+  };
+}
+
+double? _number(String? raw) {
+  if (raw == null) return null;
+  final match = RegExp(r'^[-+−]?\d+(?:[.,]\d+)?').firstMatch(raw.trim());
+  return match == null
+      ? null
+      : double.tryParse(match[0]!.replaceAll(',', '.').replaceAll('−', '-'));
+}

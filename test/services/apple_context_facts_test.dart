@@ -2,6 +2,51 @@ import 'package:fjelia/services/apple_context_facts.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  test('sleep duration and shortfall keep their different meanings', () {
+    final text = appleFactLine(
+      '[Sleep:Latest:2026-10-29,Dur:7h,Need:8h,Score:70]',
+    );
+    expect(text, contains('slept 7h (duration; not missing sleep)'));
+    expect(text, contains('Shortfall relative to that need: 1.0 h'));
+    expect(
+      appleFactLine('[Sleep:Latest:2026-10-29,Dur:7h,Need:na]'),
+      contains('Sleep shortfall is unknown'),
+    );
+  });
+
+  test('blood pressure is separate from the training phase', () {
+    expect(
+      appleFactLine('[BP:Latest:2026-10-29,Sys:139,Dia:77,HR:55]'),
+      'Blood pressure on 2026-10-29: 139/77 mmHg. '
+      'Blood pressure does not identify a training phase.',
+    );
+  });
+
+  test('the complete race calendar survives as one compact block', () {
+    final text = appleRaceCalendarFacts(const [
+      '[RaceGoal:Sport:running,DistKm:42.2,Date:2027-08-08,Target:4:00:00,Priority:A]',
+      '[RaceGoal:Sport:cycling_road,DistKm:200,Date:2027-03-20,Target:none,Priority:B]',
+      '[RaceGoal:Sport:running,DistKm:21.1,Date:2027-10-10,Target:1:50:00,Priority:C]',
+    ])!;
+    expect(text, contains('3 listed goals'));
+    expect(text, contains('2027-08-08 | A | running 42.2 km | target 4:00:00'));
+    expect(text, contains('2027-03-20 | B | cycling road 200 km'));
+    expect(text, contains('2027-10-10 | C | running 21.1 km'));
+    expect(text, contains('primary goal is not the only goal'));
+  });
+
+  test(
+    'two planned sessions are not described as alternatives or Garmin duplicates',
+    () {
+      final text = appleFactLine(
+        '[TodayWorkout:Status:planned,Source:plan,SessionCount:2,GarminScheduled:2,PlanSessions:2]',
+      );
+      expect(text, contains('Today has 2 scheduled training sessions.'));
+      expect(text, contains('not alternatives'));
+      expect(text, contains('Garmin entries may be copies'));
+    },
+  );
+
   test('an activity becomes a sentence with the same figures', () {
     expect(
       appleFactLine(
@@ -134,13 +179,15 @@ void main() {
       appleFactLine('[HRV:AroundActivity,Unavailable]'),
       'No HRV was recorded around this activity; its effect on HRV is unknown.',
     );
-    // The daily HRV lines are left alone.
     const daily = '[HRV:Latest:2026-10-24,Night:40ms]';
-    expect(appleFactLine(daily), daily);
+    expect(
+      appleFactLine(daily),
+      'Recovery measurements on 2026-10-24: overnight watch HRV 40ms.',
+    );
   });
 
   test('other lines and plain text stay as they are', () {
-    const hrv = '[HRV:Latest:2026-10-24,Night:40ms]';
+    const hrv = '[HRV:7dTrend:10-24:40,10-23:42]';
     expect(appleFactLine(hrv), hrv);
     expect(appleFactLine('plain text'), 'plain text');
     expect(appleFactLine('[broken'), '[broken');

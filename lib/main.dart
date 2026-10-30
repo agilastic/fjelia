@@ -29,6 +29,7 @@ import 'screens/home/home_screen.dart';
 import 'screens/startup_splash.dart';
 import 'screens/onboarding/welcome_screen.dart';
 import 'services/debug_log.dart';
+import 'services/local_model_licenses.dart';
 
 import 'package:fjelia_service_api/fjelia_service_api.dart';
 
@@ -39,6 +40,7 @@ import 'widgets/hilo_device_picker.dart';
 void main() {
   DebugLog.install(() async {
     WidgetsFlutterBinding.ensureInitialized();
+    registerLocalModelLicenses();
     await initializeDateFormatting();
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(

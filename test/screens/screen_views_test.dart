@@ -69,6 +69,7 @@ import 'package:fjelia/screens/settings/training_tab.dart';
 import 'package:fjelia/screens/settings/race_goal_editor.dart';
 import 'package:fjelia/screens/settings/connections_tab.dart';
 import 'package:fjelia/screens/settings/ai_settings_tab.dart';
+import 'package:fjelia/screens/settings/credits_page.dart';
 import 'package:fjelia/screens/settings/system_tab.dart';
 import 'package:fjelia/screens/settings/bug_report_sheet.dart';
 import 'package:fjelia/screens/sleep/sleep_screen.dart';
@@ -1399,14 +1400,27 @@ void main() {
     await capture(tester, 'connections-priority');
     await tester.pumpWidget(const SizedBox());
     await tester.pump(Duration.zero);
-    await render(tester, const AiSettingsTab(), 'ai-settings');
+    await render(tester, const SettingsSheet(), 'settings');
     await tester.scrollUntilVisible(
-      find.text('Licenses'),
+      find.text('Credits & licenses'),
       300,
       scrollable: find.byType(Scrollable).first,
     );
+    await tester.tap(find.text('Credits & licenses'));
     await tester.pumpAndSettle();
-    await capture(tester, 'ai-attributions');
+    expect(find.byType(CreditsPage), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.text('Licenses'),
+      300,
+      scrollable: find
+          .descendant(
+            of: find.byType(CreditsPage),
+            matching: find.byType(Scrollable),
+          )
+          .first,
+    );
+    await tester.pumpAndSettle();
+    await capture(tester, 'credits-and-licenses');
     await tester.tap(find.text('Licenses'));
     await tester.pumpAndSettle();
     expect(find.byType(LicensePage), findsOneWidget);

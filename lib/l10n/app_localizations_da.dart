@@ -10,6 +10,27 @@ class AppLocalizationsDa extends AppLocalizations {
   AppLocalizationsDa([String locale = 'da']) : super(locale);
 
   @override
+  String get freeAi => 'Free AI';
+
+  @override
+  String get freeAiUsageTracking =>
+      'Så Free AI fortsat fungerer pålideligt for alle, sender vi et tilfældigt installations-id. Det hjælper os med at opdage usædvanlig brug og blokere anmodninger, der misbruger tjenesten. Id\'et indeholder hverken dit navn eller kontooplysninger.';
+
+  @override
+  String freeAiDescription(String host) {
+    return 'Gratis AI-chat og opsummeringer via $host. Ingen separat konto eller API-nøgle er nødvendig. Efter din bekræftelse sendes beskeder og en opsummering af helbred og træning til tjenesten.';
+  }
+
+  @override
+  String get freeAiUnavailable =>
+      'Free AI er ikke tilgængelig i denne version. Vælg en anden udbyder.';
+
+  @override
+  String shareBriefingContextWithName(String name) {
+    return 'En opsummering af dine helbreds- og træningsdata sendes til $name.';
+  }
+
+  @override
   String get language => 'Sprog';
 
   @override
@@ -823,8 +844,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get getStarted => 'Kom i gang';
 
   @override
-  String get yourDataStaysOnYour =>
-      'Dine data bliver på din enhed. Altid private.';
+  String get yourDataStaysOnYour => 'Dine data. Du vælger, hvad du deler.';
 
   @override
   String get bodyScale => 'Kropsvægt';
@@ -3019,7 +3039,7 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get appleIntelligenceIsNotAvailable =>
-      'Apple Intelligence er ikke tilgængelig på denne enhed (kræver en understøttet iPhone eller Mac med iOS/macOS 26 eller nyere og Apple Intelligence slået til i Indstillinger). Vælg en anden udbyder, og tilføj din egen API-nøgle for at bruge træneren.';
+      'Apple Intelligence er ikke tilgængelig på denne enhed. Brug Free AI, eller vælg en anden udbyder.';
 
   @override
   String get personalisedMorningLunchAfternoonEvening =>
@@ -5608,4 +5628,208 @@ class AppLocalizationsDa extends AppLocalizations {
   @override
   String get briefOutlookPlanTired =>
       'Hvis du følger planen, forbliver din form lav de næste dage.';
+
+  @override
+  String get localQwen => 'Qwen3.5 · lokal';
+
+  @override
+  String get localModelDescription =>
+      'Valgfri Qwen3.5, 4-bit MLX. Download én gang, og brug chat og opsummeringer på denne enhed uden API-nøgle. Dine sundhedsdata bliver på denne enhed.';
+
+  @override
+  String localModelSizeMb(Object megabytes) {
+    return '$megabytes MB download · der kræves ekstra hukommelse under brug.';
+  }
+
+  @override
+  String get localModelDownload => 'Download model';
+
+  @override
+  String get localModelResumeDownload => 'Fortsæt download';
+
+  @override
+  String localModelDownloading(Object downloaded, Object total) {
+    return '$downloaded / $total MB';
+  }
+
+  @override
+  String get localModelInstalled => 'Downloadet · tilgængelig offline';
+
+  @override
+  String get localModelRemove => 'Slet model';
+
+  @override
+  String get localModelUnsupported =>
+      'Denne MLX-model kræver en iPhone med iOS 17 eller nyere og en A14-chip eller nyere. Ældre enheder understøttes ikke.';
+
+  @override
+  String get localModelMemoryUnsupported =>
+      'Denne enhed har ikke nok hukommelse til at køre den lokale model.';
+
+  @override
+  String get localModelDownloadFailed =>
+      'Download mislykkedes. Prøv igen; komplette filer bevares.';
+
+  @override
+  String get localModelDownloadFirst =>
+      'Download først Qwen under Indstillinger → AI og mere.';
+
+  @override
+  String get localModelContextTooLong =>
+      'Denne samtale er for lang til den lokale model. Start en ny chat, eller forkort spørgsmålet.';
+
+  @override
+  String get localModelBusy =>
+      'Den lokale model besvarer en anden forespørgsel. Prøv igen om lidt.';
+
+  @override
+  String get localModelInterrupted =>
+      'Lokal generering blev afbrudt. Hold Fjelia åben, og prøv igen.';
+
+  @override
+  String get localModelCouldNotAnswer =>
+      'Den lokale model kunne ikke svare. Tjek modellen under Indstillinger → AI og mere, og prøv igen.';
+
+  @override
+  String get localModelBriefingUnavailable =>
+      'Lokal AI-opsummering er utilgængelig. Viser appens opsummering.';
+
+  @override
+  String get localModelInfo => 'Modeldetaljer og licens';
+
+  @override
+  String localModelRamGb(int gigabytes) {
+    return 'Kræver mindst $gigabytes GB arbejdshukommelse.';
+  }
+
+  @override
+  String get localModelIPhone18 => '4B er tilgængelig på iPhone 18 og nyere.';
+
+  @override
+  String briefPlannedTodayCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Der er planlagt $count træningspas i dag.',
+      one: 'Der er planlagt 1 træningspas i dag.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get coachDataFallback =>
+      'Modellens svar modsiger dataene. Her er Fjelias opsummering:';
+
+  @override
+  String get coachSevenDayAverage => '7-dages gennemsnit';
+
+  @override
+  String coachSleepNeedAndShortfall(String need, String shortfall) {
+    return 'Søvnbehov: $need t; underskud: $shortfall t.';
+  }
+
+  @override
+  String coachCurrentForm(String value) {
+    return 'Aktuel form (TSB): $value point.';
+  }
+
+  @override
+  String get aiOnboardingStep => 'Trin 2 af 3';
+
+  @override
+  String get aiOnboardingTitle => 'Din coach.\nPå din måde.';
+
+  @override
+  String get aiOnboardingSubtitle =>
+      'Gør dine sundhedsdata til råd om bedre træning og restitution.';
+
+  @override
+  String get aiOnboardingChoose => 'VÆLG DIN AI-COACH';
+
+  @override
+  String get aiOnboardingFreeDetail => 'Gratis · Ingen AI-konto nødvendig';
+
+  @override
+  String get aiOnboardingFreeBody => 'AI i skyen til træning og restitution.';
+
+  @override
+  String get aiOnboardingRecommended => 'Anbefalet';
+
+  @override
+  String get aiOnboardingOnDevice => 'På din enhed';
+
+  @override
+  String get aiOnboardingLocalBody =>
+      'Dine AI-forespørgsler bliver på denne enhed.';
+
+  @override
+  String get aiOnboardingUnavailable => 'Ikke tilgængelig lige nu';
+
+  @override
+  String get aiOnboardingMore => 'Flere AI-modeller';
+
+  @override
+  String get aiOnboardingMoreBody => 'Lokal Qwen eller din egen cloududbyder';
+
+  @override
+  String get aiOnboardingConsent =>
+      'Cloudforespørgsler kræver din bekræftelse.';
+
+  @override
+  String get aiOnboardingError =>
+      'Dit AI-valg kunne ikke gemmes eller indlæses. Prøv igen.';
+
+  @override
+  String get aiOnboardingWithout => 'Fortsæt uden AI';
+
+  @override
+  String get aiOnboardingConfigure => 'Konfigurer model';
+
+  @override
+  String aiOnboardingContinue(String provider) {
+    return 'Fortsæt med $provider';
+  }
+
+  @override
+  String get aiOnboardingChangeLater =>
+      'Du kan altid ændre dette i indstillingerne.';
+
+  @override
+  String get creditsAndLicenses => 'Licenser og tak';
+
+  @override
+  String get bioAgeActivity => 'Aktivitet';
+
+  @override
+  String get bioAgeActivityBasis => 'Aktivitetsdata · seneste 7 dage';
+
+  @override
+  String bioAgeActivityReported(String minutes) {
+    return '$minutes registrerede moderate minutter';
+  }
+
+  @override
+  String bioAgeActivitySteps(String minutes) {
+    return '≈ $minutes gangminutter anslået ud fra skridt';
+  }
+
+  @override
+  String bioAgeActivityCoverage(int days) {
+    return 'Data for $days af 7 dage';
+  }
+
+  @override
+  String get bioAgeActivityEstimateNotice =>
+      'Antagelse: 100 skridt ≈ 1 gangminut. Daglige skridttal viser hverken tempo eller intensitet. Registrerede minutter har forrang hver dag; skridtene fra samme dag tælles ikke med igen.';
+
+  @override
+  String get bioAgeActivityIncomplete =>
+      'Der mangler aktivitetsdata. Aktivitetens bidrag i år beregnes først, når alle 7 dage har data.';
+
+  @override
+  String get bioAgeActivityEstimatedLabel =>
+      'Aktiviteten indeholder anslået gangtid.';
+
+  @override
+  String get bioAgeActivityUnknownLabel => 'Aktivitetsdata er ufuldstændige';
 }

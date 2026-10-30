@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 import '../../db/database.dart';
+import '../../config/free_ai.dart';
 import '../../models/coach_context_card.dart';
 import '../../providers/ai_coach_provider.dart';
 import '../../providers/user_profile_provider.dart';
@@ -78,7 +79,7 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
       return;
     }
     AiConsentToken? consent;
-    if (settings.provider != AiProvider.appleIntelligence) {
+    if (!settings.provider.isLocal) {
       final session =
           settings.consentMode == AiConsentMode.session &&
           ref.read(aiCoachSessionConsentProvider);
@@ -86,8 +87,14 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
         if (!mounted ||
             !await confirmAction(
               context,
-              context.l10n.shareHealthContextWithName(settings.provider.name),
-              context.l10n.yourMessageAndAHealth,
+              context.l10n.shareHealthContextWithName(
+                settings.provider == AiProvider.freeAi
+                    ? '${context.l10n.freeAi} ($freeAiHost)'
+                    : settings.provider.name,
+              ),
+              settings.provider == AiProvider.freeAi
+                  ? '${context.l10n.yourMessageAndAHealth}\n\n${context.l10n.freeAiUsageTracking}'
+                  : context.l10n.yourMessageAndAHealth,
             )) {
           return;
         }

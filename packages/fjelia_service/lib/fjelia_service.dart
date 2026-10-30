@@ -1,4 +1,4 @@
-/// Stub of the optional service package (no Aktiia / Hilo support).
+/// Stub of the optional service package (no Aktiia / Hilo / Free AI access).
 library;
 
 import 'dart:async';
@@ -7,6 +7,10 @@ import 'package:fjelia_service_api/fjelia_service_api.dart';
 
 /// Whether this build contains the real service implementation.
 const hasServicePackage = false;
+
+/// Public builds contain no shared Free AI credential.
+/// Official builds obtain their build-time value from the private package.
+const freeAiApiKey = '';
 
 AktiiaClient createAktiiaClient() => _UnavailableAktiiaClient();
 

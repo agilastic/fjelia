@@ -21,7 +21,7 @@ import 'connect_polar_screen.dart';
 import 'connect_renpho_ble_screen.dart';
 import 'connect_renpho_screen.dart';
 import 'connect_suunto_screen.dart';
-import 'training_plan_onboarding_screen.dart';
+import 'ai_coach_onboarding_screen.dart';
 
 /// Onboarding grid of every supported source.
 class ConnectDevicesScreen extends ConsumerWidget {
@@ -249,9 +249,9 @@ class ConnectDevicesScreen extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
-                  onPressed: () => Navigator.of(context).pushReplacement(
+                  onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute<void>(
-                      builder: (_) => const TrainingPlanOnboardingScreen(),
+                      builder: (_) => const AiCoachOnboardingScreen(),
                     ),
                   ),
                   child: Row(

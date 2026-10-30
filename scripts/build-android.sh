@@ -6,6 +6,7 @@ set -euo pipefail
 # Build-time credentials (see secrets.example.json); absent = services unavailable.
 DEFINES=()
 [ -f "$(dirname "$0")/../secrets.json" ] && DEFINES+=(--dart-define-from-file=secrets.json)
+[ -f "$(dirname "$0")/../../fjelia-service/secrets.json" ] && DEFINES+=(--dart-define-from-file=../fjelia-service/secrets.json)
 cd "$(dirname "$0")/.."
 
 usage() {

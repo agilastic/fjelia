@@ -8,6 +8,7 @@ cd "$(dirname "$0")/.."
 [ -f scripts/local.env ] && . scripts/local.env
 DEFINES=()
 [ -f secrets.json ] && DEFINES+=(--dart-define-from-file=secrets.json)
+[ -f ../fjelia-service/secrets.json ] && DEFINES+=(--dart-define-from-file=../fjelia-service/secrets.json)
 
 usage() {
   cat <<'EOF'
@@ -41,6 +42,8 @@ while [ "$#" -gt 0 ]; do
 done
 command -v flutter >/dev/null
 command -v xcodebuild >/dev/null
+bash scripts/ensure-metal-toolchain.sh
+python3 scripts/trust-mlx-plugin.py
 
 options="$(mktemp -t fjelia-export.XXXXXX)"
 trap 'rm -f "$options"' EXIT

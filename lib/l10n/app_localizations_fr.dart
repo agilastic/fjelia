@@ -10,6 +10,27 @@ class AppLocalizationsFr extends AppLocalizations {
   AppLocalizationsFr([String locale = 'fr']) : super(locale);
 
   @override
+  String get freeAi => 'Free AI';
+
+  @override
+  String get freeAiUsageTracking =>
+      'Pour que Free AI reste fiable et accessible à tous, nous envoyons un identifiant d\'installation aléatoire. Il nous aide à repérer une utilisation inhabituelle et à bloquer les requêtes abusives. Cet identifiant ne contient ni votre nom ni les informations de votre compte.';
+
+  @override
+  String freeAiDescription(String host) {
+    return 'IA gratuite dans le cloud pour le chat et les résumés via $host. Aucun compte ni clé API personnels nécessaires. Après votre confirmation, les messages et un résumé de santé et d\'entraînement sont envoyés à ce service.';
+  }
+
+  @override
+  String get freeAiUnavailable =>
+      'Free AI n\'est pas disponible dans cette version. Choisissez un autre fournisseur.';
+
+  @override
+  String shareBriefingContextWithName(String name) {
+    return 'Un résumé de vos données de santé et d\'entraînement sera envoyé à $name.';
+  }
+
+  @override
   String get language => 'Langue';
 
   @override
@@ -844,7 +865,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get yourDataStaysOnYour =>
-      'Tes données restent sur ton appareil. Toujours privées.';
+      'Vos données. Vous choisissez ce que vous partagez.';
 
   @override
   String get bodyScale => 'Pèse-personne';
@@ -3055,7 +3076,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get appleIntelligenceIsNotAvailable =>
-      'Apple Intelligence n\'est pas disponible sur cet appareil (il faut un iPhone ou un Mac compatible avec iOS/macOS 26 ou plus récent et Apple Intelligence activé dans les Réglages). Choisis un autre fournisseur et ajoute ta propre clé API pour utiliser le coach.';
+      'Apple Intelligence n\'est pas disponible sur cet appareil. Utilisez Free AI ou choisissez un autre fournisseur.';
 
   @override
   String get personalisedMorningLunchAfternoonEvening =>
@@ -5663,4 +5684,211 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get briefOutlookPlanTired =>
       'Si tu suis le plan, ta forme reste basse les prochains jours.';
+
+  @override
+  String get localQwen => 'Qwen3.5 · local';
+
+  @override
+  String get localModelDescription =>
+      'Qwen3.5 en option, MLX 4 bits. Télécharge-le une fois, puis utilise le chat et les briefings sur cet appareil sans clé API. Tes données de santé restent sur cet appareil.';
+
+  @override
+  String localModelSizeMb(Object megabytes) {
+    return 'Téléchargement de $megabytes Mo · de la mémoire supplémentaire est nécessaire pendant l\'utilisation.';
+  }
+
+  @override
+  String get localModelDownload => 'Télécharger le modèle';
+
+  @override
+  String get localModelResumeDownload => 'Reprendre le téléchargement';
+
+  @override
+  String localModelDownloading(Object downloaded, Object total) {
+    return '$downloaded / $total Mo';
+  }
+
+  @override
+  String get localModelInstalled => 'Téléchargé · disponible hors ligne';
+
+  @override
+  String get localModelRemove => 'Supprimer le modèle';
+
+  @override
+  String get localModelUnsupported =>
+      'Ce modèle MLX nécessite un iPhone avec iOS 17 ou ultérieur et une puce A14 ou plus récente. Les appareils plus anciens ne sont pas pris en charge.';
+
+  @override
+  String get localModelMemoryUnsupported =>
+      'Cet appareil n\'a pas assez de mémoire pour exécuter le modèle local.';
+
+  @override
+  String get localModelDownloadFailed =>
+      'Échec du téléchargement. Réessaie ; les fichiers complets sont conservés.';
+
+  @override
+  String get localModelDownloadFirst =>
+      'Télécharge d\'abord Qwen dans Réglages → IA et plus.';
+
+  @override
+  String get localModelContextTooLong =>
+      'Cette conversation est trop longue pour le modèle local. Commence un nouveau chat ou raccourcis ta question.';
+
+  @override
+  String get localModelBusy =>
+      'Le modèle local répond à une autre demande. Réessaie dans un instant.';
+
+  @override
+  String get localModelInterrupted =>
+      'La génération locale a été interrompue. Garde Fjelia ouverte et réessaie.';
+
+  @override
+  String get localModelCouldNotAnswer =>
+      'Le modèle local n\'a pas pu répondre. Vérifie le modèle dans Réglages → IA et plus, puis réessaie.';
+
+  @override
+  String get localModelBriefingUnavailable =>
+      'Briefing IA local indisponible. Affichage du résumé de l\'app.';
+
+  @override
+  String get localModelInfo => 'Détails du modèle et licence';
+
+  @override
+  String localModelRamGb(int gigabytes) {
+    return 'Nécessite au moins $gigabytes Go de mémoire vive.';
+  }
+
+  @override
+  String get localModelIPhone18 =>
+      'Le modèle 4B est disponible sur iPhone 18 et les modèles ultérieurs.';
+
+  @override
+  String briefPlannedTodayCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Aujourd’hui, $count séances sont prévues.',
+      one: 'Aujourd’hui, 1 séance est prévue.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get coachDataFallback =>
+      'La réponse du modèle contredit les données. Voici le résumé de Fjelia :';
+
+  @override
+  String get coachSevenDayAverage => 'moyenne sur 7 jours';
+
+  @override
+  String coachSleepNeedAndShortfall(String need, String shortfall) {
+    return 'Besoin de sommeil : $need h ; déficit : $shortfall h.';
+  }
+
+  @override
+  String coachCurrentForm(String value) {
+    return 'Forme actuelle (TSB) : $value points.';
+  }
+
+  @override
+  String get aiOnboardingStep => 'Étape 2 sur 3';
+
+  @override
+  String get aiOnboardingTitle => 'Votre coach.\nÀ votre façon.';
+
+  @override
+  String get aiOnboardingSubtitle =>
+      'Transformez vos données de santé en conseils pour mieux vous entraîner et récupérer.';
+
+  @override
+  String get aiOnboardingChoose => 'CHOISISSEZ VOTRE COACH IA';
+
+  @override
+  String get aiOnboardingFreeDetail => 'Gratuit · Sans compte IA';
+
+  @override
+  String get aiOnboardingFreeBody =>
+      'Une IA dans le cloud pour l’entraînement et la récupération.';
+
+  @override
+  String get aiOnboardingRecommended => 'Recommandé';
+
+  @override
+  String get aiOnboardingOnDevice => 'Sur votre appareil';
+
+  @override
+  String get aiOnboardingLocalBody =>
+      'Vos requêtes IA restent sur cet appareil.';
+
+  @override
+  String get aiOnboardingUnavailable => 'Indisponible pour le moment';
+
+  @override
+  String get aiOnboardingMore => 'Autres modèles IA';
+
+  @override
+  String get aiOnboardingMoreBody =>
+      'Qwen en local ou votre propre fournisseur cloud';
+
+  @override
+  String get aiOnboardingConsent =>
+      'Requêtes cloud uniquement après votre accord.';
+
+  @override
+  String get aiOnboardingError =>
+      'Votre choix d’IA n’a pas pu être enregistré ou chargé. Veuillez réessayer.';
+
+  @override
+  String get aiOnboardingWithout => 'Continuer sans IA';
+
+  @override
+  String get aiOnboardingConfigure => 'Configurer le modèle';
+
+  @override
+  String aiOnboardingContinue(String provider) {
+    return 'Continuer avec $provider';
+  }
+
+  @override
+  String get aiOnboardingChangeLater =>
+      'Modifiable à tout moment dans les réglages.';
+
+  @override
+  String get creditsAndLicenses => 'Licences et remerciements';
+
+  @override
+  String get bioAgeActivity => 'Activité';
+
+  @override
+  String get bioAgeActivityBasis => 'Données d’activité · 7 derniers jours';
+
+  @override
+  String bioAgeActivityReported(String minutes) {
+    return '$minutes minutes modérées rapportées';
+  }
+
+  @override
+  String bioAgeActivitySteps(String minutes) {
+    return '≈ $minutes minutes de marche estimées à partir des pas';
+  }
+
+  @override
+  String bioAgeActivityCoverage(int days) {
+    return 'Données pour $days jours sur 7';
+  }
+
+  @override
+  String get bioAgeActivityEstimateNotice =>
+      'Hypothèse : 100 pas ≈ 1 minute de marche. Le total quotidien des pas ne révèle ni l’allure ni l’intensité. Les minutes rapportées sont prioritaires chaque jour ; les pas du même jour ne sont pas comptés en plus.';
+
+  @override
+  String get bioAgeActivityIncomplete =>
+      'Des données d’activité manquent. La contribution de l’activité en années est calculée uniquement lorsque les 7 jours disposent de données.';
+
+  @override
+  String get bioAgeActivityEstimatedLabel =>
+      'L’activité inclut une durée de marche estimée.';
+
+  @override
+  String get bioAgeActivityUnknownLabel => 'Données d’activité incomplètes';
 }

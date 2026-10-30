@@ -1,6 +1,11 @@
 import 'dart:io' show Platform;
 
+import 'package:fjelia_service/fjelia_service.dart' as service;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:uuid/uuid.dart';
+
+import '../config/free_ai.dart';
+import 'local_model_catalog.dart';
 
 enum AiProvider {
   mistral,
@@ -9,6 +14,8 @@ enum AiProvider {
   gemini,
   deepseek,
   appleIntelligence,
+  localQwen,
+  freeAi,
 }
 
 enum AiConsentMode { everyMessage, session }
@@ -17,6 +24,11 @@ enum AiConsentMode { everyMessage, session }
 enum BriefingMode { ai, static_, none }
 
 extension AiProviderLabel on AiProvider {
+  bool get isLocal =>
+      this == AiProvider.appleIntelligence || this == AiProvider.localQwen;
+
+  bool get requiresUserApiKey => !isLocal && this != AiProvider.freeAi;
+
   List<String> get models => switch (this) {
     AiProvider.mistral => const [
       'mistral-small-latest',
@@ -45,6 +57,8 @@ extension AiProviderLabel on AiProvider {
     ],
     AiProvider.deepseek => const ['deepseek-chat', 'deepseek-reasoner'],
     AiProvider.appleIntelligence => const ['on-device'],
+    AiProvider.localQwen => const [localQwenModelId, localQwen4bModelId],
+    AiProvider.freeAi => const ['default'],
   };
 
   String get defaultModel => switch (this) {
@@ -54,14 +68,16 @@ extension AiProviderLabel on AiProvider {
     AiProvider.gemini => 'gemini-2.0-flash',
     AiProvider.deepseek => 'deepseek-chat',
     AiProvider.appleIntelligence => 'on-device',
+    AiProvider.localQwen => localQwenModelId,
+    AiProvider.freeAi => 'default',
   };
 }
 
-/// Apple Intelligence runs on-device (iOS/macOS 26+), so it is the default
-/// where it exists; elsewhere the user brings a key for a cloud provider.
+/// Apple devices prefer Apple Intelligence; its runtime availability is checked
+/// by the settings notifier. Other platforms start with Free AI.
 AiProvider get defaultAiProvider => Platform.isIOS || Platform.isMacOS
     ? AiProvider.appleIntelligence
-    : AiProvider.mistral;
+    : AiProvider.freeAi;
 
 class AiCoachSettings {
   const AiCoachSettings({
@@ -73,6 +89,8 @@ class AiCoachSettings {
     this.briefingMode = BriefingMode.ai,
     this.appleIntelligenceForBriefing = false,
     this.onDeviceAvailable = true,
+    this.localModelAvailable = false,
+    this.localModelInstalled = false,
   });
 
   final AiProvider provider;
@@ -87,19 +105,29 @@ class AiCoachSettings {
   /// Intelligence switched on, language). Only relevant for Apple
   /// Intelligence.
   final bool onDeviceAvailable;
+  final bool localModelAvailable, localModelInstalled;
 
   bool get ready =>
       enabled &&
       model.trim().isNotEmpty &&
-      (provider == AiProvider.appleIntelligence
-          ? onDeviceAvailable
-          : hasApiKey);
+      switch (provider) {
+        AiProvider.appleIntelligence => onDeviceAvailable,
+        AiProvider.localQwen =>
+          provider.models.contains(model) &&
+              localModelAvailable &&
+              localModelInstalled,
+        _ => hasApiKey,
+      };
 
   bool get usesOnDeviceBriefing =>
-      provider == AiProvider.appleIntelligence || appleIntelligenceForBriefing;
+      provider.isLocal ||
+      (provider.requiresUserApiKey && appleIntelligenceForBriefing);
 
   bool get readyForBriefing =>
-      briefingMode == BriefingMode.ai && (usesOnDeviceBriefing || ready);
+      briefingMode == BriefingMode.ai &&
+      (provider == AiProvider.localQwen
+          ? ready
+          : (usesOnDeviceBriefing || ready));
 
   AiCoachSettings copyWith({
     bool? appleIntelligenceForBriefing,
@@ -110,6 +138,8 @@ class AiCoachSettings {
     String? model,
     AiProvider? provider,
     bool? onDeviceAvailable,
+    bool? localModelAvailable,
+    bool? localModelInstalled,
   }) {
     return AiCoachSettings(
       provider: provider ?? this.provider,
@@ -121,14 +151,33 @@ class AiCoachSettings {
       appleIntelligenceForBriefing:
           appleIntelligenceForBriefing ?? this.appleIntelligenceForBriefing,
       onDeviceAvailable: onDeviceAvailable ?? this.onDeviceAvailable,
+      localModelAvailable: localModelAvailable ?? this.localModelAvailable,
+      localModelInstalled: localModelInstalled ?? this.localModelInstalled,
     );
   }
 }
 
 class AiCoachSettingsStore {
-  const AiCoachSettingsStore();
+  const AiCoachSettingsStore({this.freeAiApiKey = service.freeAiApiKey});
+
+  final String freeAiApiKey;
 
   static const _storage = FlutterSecureStorage();
+  static const _installationStorage = FlutterSecureStorage(
+    iOptions: IOSOptions(
+      accessibility: KeychainAccessibility.first_unlock_this_device,
+      synchronizable: false,
+    ),
+    mOptions: MacOsOptions(
+      accessibility: KeychainAccessibility.first_unlock_this_device,
+      synchronizable: false,
+    ),
+  );
+  static const _uuid = Uuid();
+  static final _installationIdPattern = RegExp(
+    r'^fjelia-install-[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
+  );
+  static Future<String>? _installationIdLoading;
 
   static String _apiKeyKey(AiProvider p) => 'ai_coach_api_key_${p.name}';
 
@@ -137,6 +186,15 @@ class AiCoachSettingsStore {
 
   static BriefingMode _briefingModeFromName(String? name) => BriefingMode.values
       .firstWhere((m) => m.name == name, orElse: () => BriefingMode.ai);
+
+  /// Distinguishes a previous choice from the platform's initial default.
+  Future<AiProvider?> readSavedProvider() async {
+    final name = await _storage.read(key: 'ai_coach_provider');
+    for (final provider in AiProvider.values) {
+      if (provider.name == name) return provider;
+    }
+    return null;
+  }
 
   /// Mistral without a key used to run on a shared demo key. That is gone:
   /// once, move such installs to the default provider.
@@ -160,17 +218,24 @@ class AiCoachSettingsStore {
       await _storage.read(key: 'ai_coach_provider'),
     );
     final model = await _storage.read(key: 'ai_coach_model');
-    final key = (await _storage.read(key: _apiKeyKey(provider)))?.trim();
+    final key = await readApiKey(provider);
     final hasKey = key != null && key.isNotEmpty;
     final enabled = await _storage.read(key: 'ai_coach_enabled') != 'false';
-    final consent =
-        await _storage.read(key: 'ai_coach_consent_mode') == 'session'
+    final savedConsent = await _storage.read(key: 'ai_coach_consent_mode');
+    // New preferences ask once per session; retain an explicit per-message
+    // choice (and the conservative handling of unrecognised saved values).
+    final consent = savedConsent == null || savedConsent == 'session'
         ? AiConsentMode.session
         : AiConsentMode.everyMessage;
     final trimmed = model?.trim();
     return AiCoachSettings(
       provider: provider,
-      model: trimmed == null || trimmed.isEmpty
+      model:
+          trimmed == null ||
+              trimmed.isEmpty ||
+              ((provider == AiProvider.localQwen ||
+                      provider == AiProvider.freeAi) &&
+                  !provider.models.contains(trimmed))
           ? provider.defaultModel
           : trimmed,
       hasApiKey: hasKey || provider == AiProvider.appleIntelligence,
@@ -185,8 +250,30 @@ class AiCoachSettingsStore {
   }
 
   Future<String?> readApiKey(AiProvider provider) async {
-    final key = (await _storage.read(key: _apiKeyKey(provider)))?.trim();
+    final key = provider == AiProvider.freeAi
+        ? freeAiApiKey.trim()
+        : (await _storage.read(key: _apiKeyKey(provider)))?.trim();
     return key == null || key.isEmpty ? null : key;
+  }
+
+  /// A random, device-local identity for Free AI usage attribution. It contains
+  /// no account or hardware identifiers and is excluded from Fjelia backups.
+  Future<String> readFreeAiInstallationId() =>
+      _installationIdLoading ??= _loadFreeAiInstallationId().whenComplete(() {
+        _installationIdLoading = null;
+      });
+
+  Future<String> _loadFreeAiInstallationId() async {
+    final saved = await _installationStorage.read(
+      key: freeAiInstallationIdStorageKey,
+    );
+    if (saved != null && _installationIdPattern.hasMatch(saved)) return saved;
+    final id = 'fjelia-install-${_uuid.v4()}';
+    await _installationStorage.write(
+      key: freeAiInstallationIdStorageKey,
+      value: id,
+    );
+    return id;
   }
 
   Future<void> saveApiKey(AiProvider provider, String key) async {

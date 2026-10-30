@@ -268,14 +268,25 @@ class AiContextToonBuilder {
     // no model has to decide what "higher" or "lower" means for each metric.
     String sportId(String? raw) =>
         _clean(raw).replaceAll(RegExp(r'\s+'), '_').toLowerCase();
-    List<String> plannedOn(DateTime day) => [
-      for (final w in workouts)
-        if (_day(w.scheduledDate) == day)
-          '${sportId(w.sportType)}/${((w.estimatedDurationSeconds ?? 0) / 60).round()}',
-      for (final x in sessions)
-        if (_day(x.sessionDate) == day)
-          '${sportId(x.sport)}/${x.plannedDurationMin}',
-    ];
+    List<String> plannedOn(DateTime day) {
+      final ownPlan = sessions
+          .where((s) => _day(s.sessionDate) == day)
+          .toList();
+      // Fjelia's pending sessions are the primary schedule. Garmin can carry
+      // exported copies; counting both would duplicate the same workout.
+      if (ownPlan.isNotEmpty) {
+        return [
+          for (final s in ownPlan)
+            '${sportId(s.sport)}/${s.plannedDurationMin}',
+        ];
+      }
+      return [
+        for (final w in workouts)
+          if (_day(w.scheduledDate) == day)
+            '${sportId(w.sportType)}/${((w.estimatedDurationSeconds ?? 0) / 60).round()}',
+      ];
+    }
+
     final doneToday = [
       for (final a in activities)
         if (_day(a.startDate) == today)
@@ -283,8 +294,9 @@ class AiContextToonBuilder {
     ];
     final trainingVerdict = trainingHrvAnalysis.isEmpty
         ? null
-        : RegExp(r'Verdict:(better|worse)')
-              .firstMatch(trainingHrvAnalysis.first)?[1];
+        : RegExp(
+            r'Verdict:(better|worse)',
+          ).firstMatch(trainingHrvAnalysis.first)?[1];
     // The load chart as background: form, trend and what rest or the plan do
     // to it. A failure here never blocks the coach.
     FormForecast? forecast;
@@ -300,7 +312,9 @@ class AiContextToonBuilder {
       MetricAnalysis(today).lines(
         outlook: forecast?.outlook,
         done: doneToday,
-        plannedToday: doneToday.isEmpty ? plannedOn(today) : const [],
+        // One recorded activity does not complete every session of the day.
+        // The query already excludes completed and skipped plan sessions.
+        plannedToday: plannedOn(today),
         tomorrow: plannedOn(DateTime(today.year, today.month, today.day + 1)),
         trainingHrv: trainingVerdict == null
             ? null
@@ -310,9 +324,9 @@ class AiContextToonBuilder {
         hrv: hrv,
         sleep: sleep,
         wellness: wellness,
-        tsb: monitor?.tsb,
-        atl: monitor?.atl,
-        ctl: monitor?.ctl,
+        tsb: monitor?.tsb ?? forecast?.tsb,
+        atl: monitor?.atl ?? forecast?.atl,
+        ctl: monitor?.ctl ?? forecast?.ctl,
       ),
     );
     lines.addAll(trainingHrvAnalysis);
@@ -378,9 +392,10 @@ class AiContextToonBuilder {
       );
     } else {
       lines.add(
-        '[TodayWorkout:Status:options_available,GarminScheduled:'
+        '[TodayWorkout:Status:planned,Source:${todaySessions.isNotEmpty ? 'plan' : 'garmin'},'
+        'SessionCount:${todaySessions.isNotEmpty ? todaySessions.length : todayWorkouts.length},GarminScheduled:'
         '${todayWorkouts.length},PlanSessions:${todaySessions.length},'
-        'Note:AI_recommends_best_based_on_readiness]',
+        'Note:Scheduled_sessions_not_alternatives_Garmin_may_mirror_plan]',
       );
       for (final w in todayWorkouts) {
         lines.add(
@@ -407,7 +422,7 @@ class AiContextToonBuilder {
         );
       }
     }
-    final goalSet = await RaceGoalService(_db).resolveGoalSet();
+    final goalSet = await RaceGoalService(_db).resolveGoalSet(today: today);
     final rows = {for (final g in await RaceGoalService(_db).getAll()) g.id: g};
     // Every goal of the season, the plan's own first, so the coach never
     // reasons from one race while another is on the calendar.

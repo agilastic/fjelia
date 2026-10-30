@@ -1,5 +1,10 @@
 {
   "@@locale": "ca",
+  "freeAi": "Free AI",
+  "freeAiUsageTracking": "Perquè Free AI continuï disponible de manera fiable per a tothom, enviem un identificador aleatori de la instal·lació. Ens ajuda a detectar usos inusuals i a bloquejar sol·licituds abusives. L'identificador no conté el teu nom ni dades del teu compte.",
+  "freeAiDescription": "IA gratuïta al núvol per al xat i els resums a través de {host}. No cal cap compte ni clau API propis. Amb la teva confirmació, els missatges i un resum de salut i entrenament s'envien a aquest servei.",
+  "freeAiUnavailable": "Free AI no està disponible en aquesta versió. Tria un altre proveïdor.",
+  "shareBriefingContextWithName": "S'enviarà un resum de les teves dades de salut i entrenament a {name}.",
   "language": "Idioma",
   "languageSystem": "Predeterminat del sistema",
   "settings": "Configuració",
@@ -403,7 +408,7 @@
   "isYourBodyCompositionImproving": "Millora la teva composició corporal?",
   "weightBodyFatMuscleMass": "Pes · Greix corporal · Massa muscular",
   "getStarted": "Comença",
-  "yourDataStaysOnYour": "Les teves dades es queden al teu dispositiu. Sempre privades.",
+  "yourDataStaysOnYour": "Les teves dades. Tu tries què comparteixes.",
   "bodyScale": "Bàscula corporal",
   "bodyComposition": "Composició corporal",
   "sleep": "SON",
@@ -1579,7 +1584,7 @@
       }
     }
   },
-  "appleIntelligenceIsNotAvailable": "Apple Intelligence no està disponible en aquest dispositiu (cal un iPhone o Mac compatible amb iOS/macOS 26 o posterior i Apple Intelligence activat a Configuració). Tria un altre proveïdor i afegeix la teva pròpia clau API per fer servir l'entrenador.",
+  "appleIntelligenceIsNotAvailable": "Apple Intelligence no està disponible en aquest dispositiu. Fes servir Free AI o tria un altre proveïdor.",
   "personalisedMorningLunchAfternoonEvening": "Resum personalitzat de matí, migdia, tarda i vespre",
   "enterASubject": "Introdueix un assumpte.",
   "message": "Missatge",
@@ -3168,5 +3173,75 @@
     }
   },
   "briefOutlookLongRest": "La teva forma necessita més que uns quants dies suaus per recuperar-se.",
-  "briefOutlookPlanTired": "Si segueixes el pla, la teva forma continuarà baixa els propers dies."
+  "briefOutlookPlanTired": "Si segueixes el pla, la teva forma continuarà baixa els propers dies.",
+  "localQwen": "Qwen3.5 · local",
+  "localModelDescription": "Qwen3.5 opcional, MLX de 4 bits. Descarrega'l una vegada i utilitza el xat i els resums en aquest dispositiu sense clau API. Les teves dades de salut es queden en aquest dispositiu.",
+  "localModelSizeMb": "Descàrrega de {megabytes} MB · cal memòria addicional durant l'ús.",
+  "localModelDownload": "Descarrega el model",
+  "localModelResumeDownload": "Reprèn la descàrrega",
+  "localModelDownloading": "{downloaded} / {total} MB",
+  "localModelInstalled": "Descarregat · disponible sense connexió",
+  "localModelRemove": "Elimina el model",
+  "localModelUnsupported": "Aquest model MLX requereix un iPhone amb iOS 17 o posterior i un xip A14 o més recent. Els dispositius anteriors no són compatibles.",
+  "localModelMemoryUnsupported": "Aquest dispositiu no té prou memòria per executar el model local.",
+  "localModelDownloadFailed": "La descàrrega ha fallat. Torna-ho a provar; es conserven els fitxers complets.",
+  "localModelDownloadFirst": "Descarrega primer Qwen a Configuració → IA i més.",
+  "localModelContextTooLong": "Aquesta conversa és massa llarga per al model local. Inicia un xat nou o escurça la pregunta.",
+  "localModelBusy": "El model local està responent a una altra petició. Torna-ho a provar en un moment.",
+  "localModelInterrupted": "La generació local s'ha interromput. Mantén Fjelia oberta i torna-ho a provar.",
+  "localModelCouldNotAnswer": "El model local no ha pogut respondre. Revisa el model a Configuració → IA i més i torna-ho a provar.",
+  "localModelBriefingUnavailable": "El resum d'IA local no està disponible. Es mostra el resum de l'app.",
+  "localModelInfo": "Detalls del model i llicència",
+  "localModelRamGb": "Requereix com a mínim {gigabytes} GB de RAM.",
+  "localModelIPhone18": "El model 4B està disponible en iPhone 18 i posteriors.",
+  "briefPlannedTodayCount": "{count, plural, =1{Avui hi ha 1 sessió d’entrenament planificada.} other{Avui hi ha {count} sessions d’entrenament planificades.}}",
+  "coachDataFallback": "La resposta del model contradiu les dades. Aquest és el resum de Fjelia:",
+  "coachSevenDayAverage": "mitjana de 7 dies",
+  "coachSleepNeedAndShortfall": "Son necessari: {need} h; dèficit: {shortfall} h.",
+  "coachCurrentForm": "Forma actual (TSB): {value} punts.",
+  "@coachSleepNeedAndShortfall": {
+    "placeholders": {
+      "need": {
+        "type": "String"
+      },
+      "shortfall": {
+        "type": "String"
+      }
+    }
+  },
+  "@coachCurrentForm": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "aiOnboardingStep": "Pas 2 de 3",
+  "aiOnboardingTitle": "El teu coach.\nA la teva manera.",
+  "aiOnboardingSubtitle": "Converteix les teves dades de salut en consells per entrenar i recuperar-te millor.",
+  "aiOnboardingChoose": "TRIA EL TEU COACH D’IA",
+  "aiOnboardingFreeDetail": "Gratuït · Sense compte d’IA",
+  "aiOnboardingFreeBody": "IA al núvol per a l’entrenament i la recuperació.",
+  "aiOnboardingRecommended": "Recomanat",
+  "aiOnboardingOnDevice": "Al teu dispositiu",
+  "aiOnboardingLocalBody": "Les teves peticions d’IA es queden en aquest dispositiu.",
+  "aiOnboardingUnavailable": "Ara no disponible",
+  "aiOnboardingMore": "Més models d’IA",
+  "aiOnboardingMoreBody": "Qwen local o el teu propi proveïdor al núvol",
+  "aiOnboardingConsent": "Consultes al núvol només amb la teva confirmació.",
+  "aiOnboardingError": "No s’ha pogut desar o carregar la teva tria d’IA. Torna-ho a provar.",
+  "aiOnboardingWithout": "Continua sense IA",
+  "aiOnboardingConfigure": "Configura el model",
+  "aiOnboardingContinue": "Continua amb {provider}",
+  "aiOnboardingChangeLater": "Pots canviar-ho quan vulguis a la configuració.",
+  "creditsAndLicenses": "Llicències i agraïments",
+  "bioAgeActivity": "Activitat",
+  "bioAgeActivityBasis": "Dades d’activitat · darrers 7 dies",
+  "bioAgeActivityReported": "{minutes} minuts moderats registrats",
+  "bioAgeActivitySteps": "≈ {minutes} minuts de marxa estimats a partir dels passos",
+  "bioAgeActivityCoverage": "Dades de {days} de 7 dies",
+  "bioAgeActivityEstimateNotice": "Supòsit: 100 passos ≈ 1 minut de marxa. El total diari de passos no revela el ritme ni la intensitat. Els minuts registrats tenen prioritat cada dia; els passos d’aquell dia no es tornen a comptar.",
+  "bioAgeActivityIncomplete": "Falten dades d’activitat. La contribució de l’activitat en anys només es calcula quan hi ha dades dels 7 dies.",
+  "bioAgeActivityEstimatedLabel": "L’activitat inclou temps de marxa estimat.",
+  "bioAgeActivityUnknownLabel": "Dades d’activitat incompletes"
 }

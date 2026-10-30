@@ -46,6 +46,9 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
   late TrainingSession session = widget.session;
   bool busy = false;
 
+  /// The platform a workout is being sent to: only its button says so.
+  String? pushingTo;
+
   /// Where the workout was before it was moved in this sheet, for the undo.
   DateTime? movedFrom;
   bool movedOnWatch = false;
@@ -672,49 +675,53 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                               busy ||
                               (s.stepsJson == null && !strength)
                           ? null
-                          : () => perform(() async {
-                              if (!pushes) return share(null);
-                              if (!await ensureWorkoutDeliveryReady(
-                                context,
-                                provider,
-                              )) {
-                                return;
-                              }
-                              if (!context.mounted) return;
-                              final result = await ref.read(
-                                pushWorkoutProvider,
-                              )(s.id, provider);
-                              if (!result.sent) {
-                                return share(
-                                  '${result.shareReason} Shared as text.',
-                                );
-                              }
-                              final omitted = strength
-                                  ? await ref
-                                        .read(trainingPlanServiceProvider)
-                                        .strengthUploadOmissions(s.id)
-                                  : const <String>[];
-                              if (context.mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      omitted.isEmpty
-                                          ? context.l10n.workoutSentToLabel(
-                                              provider.label,
-                                            )
-                                          : 'Sent to ${provider.label}. Kept in '
-                                                'Fjelia only: ${omitted.join(', ')}.',
+                          : () async {
+                              setState(() => pushingTo = provider.id);
+                              await perform(() async {
+                                if (!pushes) return share(null);
+                                if (!await ensureWorkoutDeliveryReady(
+                                  context,
+                                  provider,
+                                )) {
+                                  return;
+                                }
+                                if (!context.mounted) return;
+                                final result = await ref.read(
+                                  pushWorkoutProvider,
+                                )(s.id, provider);
+                                if (!result.sent) {
+                                  return share(
+                                    '${result.shareReason} Shared as text.',
+                                  );
+                                }
+                                final omitted = strength
+                                    ? await ref
+                                          .read(trainingPlanServiceProvider)
+                                          .strengthUploadOmissions(s.id)
+                                    : const <String>[];
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        omitted.isEmpty
+                                            ? context.l10n.workoutSentToLabel(
+                                                provider.label,
+                                              )
+                                            : 'Sent to ${provider.label}. Kept in '
+                                                  'Fjelia only: ${omitted.join(', ')}.',
+                                      ),
                                     ),
-                                  ),
-                                );
-                              }
-                            }),
+                                  );
+                                }
+                              });
+                              if (mounted) setState(() => pushingTo = null);
+                            },
                       icon: Icon(
                         pushes ? Icons.watch_outlined : Icons.ios_share,
                         size: 20,
                       ),
                       label: Text(
-                        busy
+                        busy && pushingTo == provider.id
                             ? context.l10n.updating2
                             : pushes
                             ? context.l10n.pushToLabel(provider.label)

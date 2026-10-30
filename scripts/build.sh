@@ -10,6 +10,7 @@ cd "$(dirname "$0")/.."
 FLUTTER="flutter"
 DEFINES=()
 [ -f secrets.json ] && DEFINES+=(--dart-define-from-file=secrets.json)
+[ -f ../fjelia-service/secrets.json ] && DEFINES+=(--dart-define-from-file=../fjelia-service/secrets.json)
 
 missing=0
 need() { command -v "$1" >/dev/null 2>&1 || { echo "✗ missing: $1 — $2"; missing=1; }; }
@@ -66,6 +67,8 @@ case "${1:-}" in
     else
       open -a Simulator || echo "Simulator UI unavailable; continuing with the booted device."
     fi
+    bash scripts/ensure-metal-toolchain.sh
+    python3 scripts/trust-mlx-plugin.py
     prepare
     udid=$(xcrun simctl list devices booted | grep -m1 -F "$name" | grep -oE '[0-9A-F-]{36}')
     # Use the VM service directly: macOS may block dds_aot.dart.snapshot.

@@ -49,10 +49,33 @@ class FakeWorkoutGarmin extends GarminClient {
     deletedWorkouts.add(workoutId);
   }
 
+  /// Further calendar entries, for copies of one workout.
+  List<GarminCalendarWorkout> calendar = [];
+
+  List<GarminCalendarWorkout> get _entries => [
+    for (final e in existingCalendar.entries)
+      (
+        title: e.key.split('|').first,
+        date: e.key.split('|').last,
+        workoutId: e.value,
+        scheduleId: 'existing-${e.value}',
+      ),
+    ...calendar,
+  ];
+
   @override
-  Future<Map<String, String>> calendarWorkoutsByTitleDate({
-    int monthsAhead = 3,
-  }) async => existingCalendar;
+  Future<List<GarminCalendarWorkout>> calendarWorkoutEntries({
+    int monthsAhead = 2,
+  }) async => _entries;
+
+  @override
+  Future<List<GarminCalendarWorkout>> calendarWorkoutsOn(DateTime date) async {
+    final day = date.toIso8601String().substring(0, 10);
+    return [
+      for (final e in _entries)
+        if (e.date == day && !removedSchedules.contains(e.scheduleId)) e,
+    ];
+  }
 
   @override
   Future<List<({String scheduleId, String workoutId})>> listCalendarWorkouts({

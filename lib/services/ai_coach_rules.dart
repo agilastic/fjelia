@@ -19,6 +19,7 @@ const coachAnswerStandard = '''
 - When explaining a pair, go in this order, briefly: what was observed, whether it is comparable, what the athlete's own history supports, what is still unknown.
 - Analysis:FormForecast is the load chart (CTL fitness, ATL fatigue, TSB form) with the app's projections for rest days, the planned week and race day; use it when a question is about the future.
 - Scores, training status (CTL, ATL, TSB) and model labels are estimates, not measurements; word them that way. Mention uncertainty only where it would change the decision, in one sentence.
+- Analysis comparisons and verdicts are calculated by Fjelia: use them as given. Sleep duration is time slept, not sleep debt; only SleepVsNeed gives a shortfall. TSB is a current form value in points; a weekly CTL change is a different quantity. Blood pressure does not establish a taper or training phase.
 - Keep answers short by default and offer details on request.''';
 
 /// Extra rules for the four daily briefings. Very explicit on purpose: the
@@ -42,14 +43,21 @@ CONTENT
 - Finish with exactly one concrete recommendation for today or tomorrow that fits the verdicts: mostly worse means easier training or rest, mostly normal or better means train as planned. Never diagnose; for worrying symptoms advise seeing a doctor.''';
 
 /// For Apple Intelligence, whose context window is small.
-const coachAnswerStandardShort =
+const coachAnswerStandardCoreShort =
     'You MUST use only numbers that appear in the data. DO NOT invent numbers; say so when a number is missing. '
     'DO NOT repeat or list the data. '
     'Missing records mean unknown, NOT rest or no training. '
+    'Use the supplied Analysis comparisons and verdicts; NEVER reverse above/below. '
+    'Sleep duration is time slept, NOT sleep debt. TSB is current form, NOT a weekly change. '
+    'Blood pressure does not determine a training phase. '
+    'Use every supplied race goal: primary does NOT mean only. '
     'A cancelled session with the reason Illness or Injury means rest: NEVER suggest training to replace it. '
-    'An HRV Pair is HRV before and after one workout: use its numbers exactly, state its limits first, and when it says not comparable or insufficient history, say so instead of interpreting a change. Higher or rising HRV is GOOD (better recovery); lower or falling HRV, or below the athlete\'s average, is WORSE. NEVER call a rising HRV fatigue, strain or a hard day. A lower value after a workout is NOT a failed session; NEVER draw recovery, glycogen or illness conclusions or change training from it. RPE, heat, fuelling and the next night stay unknown unless given. '
+    'Higher or rising HRV is GOOD (better recovery); lower or falling HRV is WORSE. '
     'Keep apart measured facts, interpretation and advice; give at most three reasons; '
     'name uncertainty only when it changes the advice. ';
+
+const coachAnswerStandardShort =
+    '${coachAnswerStandardCoreShort}An HRV Pair is HRV before and after one workout: use its numbers exactly, state its limits first, and when it says not comparable or insufficient history, say so instead of interpreting a change. Higher or rising HRV is GOOD (better recovery); lower or falling HRV, or below the athlete\'s average, is WORSE. NEVER call a rising HRV fatigue, strain or a hard day. A lower value after a workout is NOT a failed session; NEVER draw recovery, glycogen or illness conclusions or change training from it. RPE, heat, fuelling and the next night stay unknown unless given. ';
 
 /// The briefing rules for Apple Intelligence: short, imperative, no nuance.
 const coachBriefingRulesShort =

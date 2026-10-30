@@ -101,6 +101,10 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   generate: true
+  # Use Xcode's debugger for physical iPhones. The direct LLDB launcher can
+  # miss Dart's JIT breakpoint with iOS 26.x / Xcode 27 (flutter/flutter#190307).
+  config:
+    enable-lldb-debugging: false
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
@@ -109,6 +113,7 @@ flutter:
 
   assets:
     - assets/splash/
+    - assets/licenses/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

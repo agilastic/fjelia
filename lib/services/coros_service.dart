@@ -209,8 +209,13 @@ class CorosService {
     if (auth == null) throw CorosException('COROS is not connected.');
     if (auth.isExpired && await _relogin()) auth = await _loadAuth();
     _client.adopt(auth!);
+    final name = '${built.program['name']}';
     Future<void> send() async {
       await _removeEarlier(earlier);
+      // The earlier send on the same day is gone already.
+      if (earlier?.day != day || earlier?.name != name) {
+        await _removeCopies(workout.sessionId, day, name);
+      }
       await _client.uploadWorkout(built, workout.date);
     }
 
@@ -226,7 +231,7 @@ class CorosService {
       workout.sessionId,
       fingerprint: '${built.fingerprint}',
       day: day,
-      name: '${built.program['name']}',
+      name: name,
     );
     log(
       '[Coros] workout sent for ${workout.date.toIso8601String().substring(0, 10)}',
@@ -247,6 +252,25 @@ class CorosService {
       rethrow;
     } catch (e) {
       log('[Coros] earlier workout not removed: $e');
+    }
+  }
+
+  /// Takes copies of this workout off its new day before it is sent: entries
+  /// with the same name left by an earlier send Fjelia no longer knows of.
+  /// An entry another session sent is left alone. Best effort.
+  Future<void> _removeCopies(String sessionId, String day, String name) async {
+    final others = await _ledger.all();
+    if (others.any(
+      (r) => r.sessionId != sessionId && r.day == day && r.name == name,
+    )) {
+      return;
+    }
+    try {
+      await _removeByDayAndName(day, name);
+    } on CorosAuthException {
+      rethrow;
+    } catch (e) {
+      log('[Coros] copies not removed: $e');
     }
   }
 

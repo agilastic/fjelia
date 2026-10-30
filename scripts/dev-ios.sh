@@ -7,6 +7,7 @@ umask 077
 # Build-time credentials (see secrets.example.json); absent = services unavailable.
 DEFINES=()
 [ -f "$(dirname "$0")/../secrets.json" ] && DEFINES+=(--dart-define-from-file=secrets.json)
+[ -f "$(dirname "$0")/../../fjelia-service/secrets.json" ] && DEFINES+=(--dart-define-from-file=../fjelia-service/secrets.json)
 
 usage() {
   cat <<'EOF'
@@ -51,6 +52,8 @@ else
   : > "$log_file"
 fi
 cd "$(dirname "$0")/.."
+bash scripts/ensure-metal-toolchain.sh
+python3 scripts/trust-mlx-plugin.py
 # flutter run cannot pass xcodebuild settings, so hand the signing team to Xcode
 # through a git-ignored xcconfig that Debug/Release/Profile include.
 if [ -n "${FJELIA_TEAM_ID:-}" ]; then

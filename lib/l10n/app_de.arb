@@ -1,5 +1,10 @@
 {
   "@@locale": "de",
+  "freeAi": "Free AI",
+  "freeAiUsageTracking": "Damit Free AI für alle zuverlässig verfügbar bleibt, senden wir eine zufällige Installations-ID mit. Sie hilft uns, auffällige Nutzung zu erkennen und missbräuchliche Anfragen zu blockieren. Die ID enthält weder deinen Namen noch Kontodaten.",
+  "freeAiDescription": "Kostenlose KI für Chat und Briefings über {host}. Kein eigenes Konto oder API-Schlüssel nötig. Nach deiner Freigabe werden Nachrichten sowie eine Gesundheits- und Trainingszusammenfassung an den Dienst gesendet.",
+  "freeAiUnavailable": "Free AI ist in diesem Build nicht verfügbar. Wähle einen anderen Anbieter.",
+  "shareBriefingContextWithName": "Eine Zusammenfassung deiner Gesundheits- und Trainingsdaten wird an {name} gesendet.",
   "language": "Sprache",
   "languageSystem": "Systemstandard",
   "settings": "Einstellungen",
@@ -403,7 +408,7 @@
   "isYourBodyCompositionImproving": "Verbessert sich deine Körperzusammensetzung?",
   "weightBodyFatMuscleMass": "Gewicht · Körperfett · Muskelmasse",
   "getStarted": "Los geht's",
-  "yourDataStaysOnYour": "Deine Daten bleiben auf deinem Gerät. Immer privat.",
+  "yourDataStaysOnYour": "Deine Daten. Du entscheidest, was du teilst.",
   "bodyScale": "Körperwaage",
   "bodyComposition": "Körperzusammensetzung",
   "sleep": "SCHLAF",
@@ -1579,7 +1584,7 @@
       }
     }
   },
-  "appleIntelligenceIsNotAvailable": "Apple Intelligence ist auf diesem Gerät nicht verfügbar (benötigt ein unterstütztes iPhone oder Mac mit iOS/macOS 26 oder neuer und in den Einstellungen aktiviertes Apple Intelligence). Wähle einen anderen Anbieter und hinterlege deinen eigenen API-Schlüssel, um den Coach zu nutzen.",
+  "appleIntelligenceIsNotAvailable": "Apple Intelligence ist auf diesem Gerät nicht verfügbar. Nutze Free AI oder wähle einen anderen Anbieter.",
   "personalisedMorningLunchAfternoonEvening": "Personalisierte Zusammenfassung für Morgen/Mittag/Nachmittag/Abend",
   "enterASubject": "Gib einen Betreff ein.",
   "message": "Nachricht",
@@ -2873,7 +2878,7 @@
   "repeatSets": "WIEDERHOLUNGSSÄTZE",
   "aboutThisWorkout": "ÜBER DIESES TRAINING",
   "workoutStructure": "TRAININGSSTRUKTUR",
-  "health2": "GESUNDHEIT",
+  "health2": "STATUS",
   "high2": "HOCH",
   "elevated": "ERHÖHT",
   "normal": "NORMAL",
@@ -3168,5 +3173,75 @@
     }
   },
   "briefOutlookLongRest": "Deine Form braucht mehr als ein paar lockere Tage, um sich zu erholen.",
-  "briefOutlookPlanTired": "Wenn du dem Plan folgst, bleibt deine Form die nächsten Tage niedrig."
+  "briefOutlookPlanTired": "Wenn du dem Plan folgst, bleibt deine Form die nächsten Tage niedrig.",
+  "localQwen": "Qwen3.5 · lokal",
+  "localModelDescription": "Optionales Qwen3.5, 4-Bit-MLX. Einmal herunterladen, danach Chat und Briefings ohne API-Schlüssel auf diesem Gerät nutzen. Deine Gesundheitsdaten bleiben auf diesem Gerät.",
+  "localModelSizeMb": "{megabytes} MB Download · während der Nutzung wird zusätzlicher Arbeitsspeicher benötigt.",
+  "localModelDownload": "Modell herunterladen",
+  "localModelResumeDownload": "Download fortsetzen",
+  "localModelDownloading": "{downloaded} / {total} MB",
+  "localModelInstalled": "Heruntergeladen · offline verfügbar",
+  "localModelRemove": "Modell löschen",
+  "localModelUnsupported": "Dieses MLX-Modell benötigt ein iPhone mit iOS 17 oder neuer und einem A14-Chip oder neuer. Ältere Geräte werden nicht unterstützt.",
+  "localModelMemoryUnsupported": "Dieses Gerät hat nicht genug Arbeitsspeicher für das lokale Modell.",
+  "localModelDownloadFailed": "Download fehlgeschlagen. Versuche es erneut; vollständige Dateien bleiben erhalten.",
+  "localModelDownloadFirst": "Lade Qwen zuerst unter Einstellungen → KI & mehr herunter.",
+  "localModelContextTooLong": "Dieses Gespräch ist zu lang für das lokale Modell. Starte einen neuen Chat oder kürze deine Frage.",
+  "localModelBusy": "Das lokale Modell beantwortet gerade eine andere Anfrage. Versuche es gleich erneut.",
+  "localModelInterrupted": "Die lokale Antwort wurde unterbrochen. Lass Fjelia geöffnet und versuche es erneut.",
+  "localModelCouldNotAnswer": "Das lokale Modell konnte nicht antworten. Prüfe das Modell unter Einstellungen → KI & mehr und versuche es erneut.",
+  "localModelBriefingUnavailable": "Lokales KI-Briefing nicht verfügbar. Die Zusammenfassung der App wird angezeigt.",
+  "localModelInfo": "Modelldetails & Lizenz",
+  "localModelRamGb": "Benötigt mindestens {gigabytes} GB Arbeitsspeicher.",
+  "localModelIPhone18": "4B ist auf iPhone 18 und neuer verfügbar.",
+  "briefPlannedTodayCount": "{count, plural, =1{Für heute ist 1 Einheit geplant.} other{Für heute sind {count} Einheiten geplant.}}",
+  "coachDataFallback": "Die Modellantwort widerspricht den Daten. Hier ist Fjelias Zusammenfassung:",
+  "coachSevenDayAverage": "7-Tage-Schnitt",
+  "coachSleepNeedAndShortfall": "Schlafbedarf: {need} h; fehlend: {shortfall} h.",
+  "coachCurrentForm": "Aktuelle Form (TSB): {value} Punkte.",
+  "@coachSleepNeedAndShortfall": {
+    "placeholders": {
+      "need": {
+        "type": "String"
+      },
+      "shortfall": {
+        "type": "String"
+      }
+    }
+  },
+  "@coachCurrentForm": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "aiOnboardingStep": "Schritt 2 von 3",
+  "aiOnboardingTitle": "Dein Coach.\nDein Weg.",
+  "aiOnboardingSubtitle": "Mach mehr aus deinen Gesundheitsdaten – mit Impulsen für Training und Erholung.",
+  "aiOnboardingChoose": "WÄHLE DEINEN KI-COACH",
+  "aiOnboardingFreeDetail": "Kostenlos · Kein KI-Konto nötig",
+  "aiOnboardingFreeBody": "Cloud-KI für Training und Erholung.",
+  "aiOnboardingRecommended": "Empfohlen",
+  "aiOnboardingOnDevice": "Auf deinem Gerät",
+  "aiOnboardingLocalBody": "Deine KI-Anfragen bleiben auf diesem Gerät.",
+  "aiOnboardingUnavailable": "Derzeit nicht verfügbar",
+  "aiOnboardingMore": "Weitere KI-Modelle",
+  "aiOnboardingMoreBody": "Lokales Qwen oder dein eigener Cloud-Anbieter",
+  "aiOnboardingConsent": "Cloud-Anfragen erst nach deiner Freigabe.",
+  "aiOnboardingError": "Die KI-Auswahl konnte nicht gespeichert oder geladen werden. Bitte versuche es erneut.",
+  "aiOnboardingWithout": "Ohne KI fortfahren",
+  "aiOnboardingConfigure": "Modell einrichten",
+  "aiOnboardingContinue": "Mit {provider} weiter",
+  "aiOnboardingChangeLater": "Jederzeit in den Einstellungen änderbar.",
+  "creditsAndLicenses": "Lizenzen & Danksagungen",
+  "bioAgeActivity": "Bewegung",
+  "bioAgeActivityBasis": "Bewegungsdaten · letzte 7 Tage",
+  "bioAgeActivityReported": "{minutes} gemeldete moderate Minuten",
+  "bioAgeActivitySteps": "≈ {minutes} Gehminuten aus Schritten geschätzt",
+  "bioAgeActivityCoverage": "Daten für {days} von 7 Tagen",
+  "bioAgeActivityEstimateNotice": "Annahme: 100 Schritte ≈ 1 Gehminute. Aus Tages-Schrittsummen lassen sich Tempo und Intensität nicht erkennen. Gemeldete Minuten haben pro Tag Vorrang; die Schritte dieses Tages werden nicht zusätzlich gezählt.",
+  "bioAgeActivityIncomplete": "Für die Bewertung fehlen Bewegungsdaten. Ein Aktivitätsbeitrag in Jahren wird erst mit Daten für alle 7 Tage berechnet.",
+  "bioAgeActivityEstimatedLabel": "Aktivität enthält geschätzte Gehzeit.",
+  "bioAgeActivityUnknownLabel": "Bewegungsdaten unvollständig"
 }

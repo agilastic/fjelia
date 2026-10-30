@@ -10,6 +10,27 @@ class AppLocalizationsFi extends AppLocalizations {
   AppLocalizationsFi([String locale = 'fi']) : super(locale);
 
   @override
+  String get freeAi => 'Free AI';
+
+  @override
+  String get freeAiUsageTracking =>
+      'Jotta Free AI pysyy luotettavasti kaikkien saatavilla, lähetämme satunnaisen asennustunnisteen. Se auttaa tunnistamaan poikkeavaa käyttöä ja estämään väärinkäyttöön liittyviä pyyntöjä. Tunniste ei sisällä nimeäsi eikä käyttäjätilisi tietoja.';
+
+  @override
+  String freeAiDescription(String host) {
+    return 'Maksuton tekoälychat ja yhteenvedot $host-palvelun kautta. Erillistä tiliä tai API-avainta ei tarvita. Vahvistuksesi jälkeen viestit sekä terveys- ja harjoitteluyhteenveto lähetetään palveluun.';
+  }
+
+  @override
+  String get freeAiUnavailable =>
+      'Free AI ei ole käytettävissä tässä versiossa. Valitse toinen palveluntarjoaja.';
+
+  @override
+  String shareBriefingContextWithName(String name) {
+    return 'Yhteenveto terveys- ja harjoittelutiedoistasi lähetetään palveluun $name.';
+  }
+
+  @override
   String get language => 'Kieli';
 
   @override
@@ -831,8 +852,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get getStarted => 'Aloita';
 
   @override
-  String get yourDataStaysOnYour =>
-      'Tietosi pysyvät laitteellasi. Aina yksityisinä.';
+  String get yourDataStaysOnYour => 'Sinun tietosi. Sinä päätät, mitä jaat.';
 
   @override
   String get bodyScale => 'Henkilövaaka';
@@ -3039,7 +3059,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get appleIntelligenceIsNotAvailable =>
-      'Apple Intelligence ei ole käytettävissä tällä laitteella (vaatii tuetun iPhonen tai Macin, jossa on iOS/macOS 26 tai uudempi ja Apple Intelligence on otettu käyttöön Asetuksissa). Valitse toinen palveluntarjoaja ja lisää oma API-avaimesi käyttääksesi valmentajaa.';
+      'Apple Intelligence ei ole käytettävissä tällä laitteella. Käytä Free AI -palvelua tai valitse toinen palveluntarjoaja.';
 
   @override
   String get personalisedMorningLunchAfternoonEvening =>
@@ -5628,4 +5648,210 @@ class AppLocalizationsFi extends AppLocalizations {
   @override
   String get briefOutlookPlanTired =>
       'Jos noudatat suunnitelmaa, kuntosi pysyy matalana tulevina päivinä.';
+
+  @override
+  String get localQwen => 'Qwen3.5 · paikallinen';
+
+  @override
+  String get localModelDescription =>
+      'Valinnainen Qwen3.5, 4-bittinen MLX. Lataa kerran ja käytä sitten keskustelua ja yhteenvetoja tällä laitteella ilman API-avainta. Terveystietosi pysyvät tällä laitteella.';
+
+  @override
+  String localModelSizeMb(Object megabytes) {
+    return '$megabytes Mt:n lataus · käytön aikana tarvitaan lisämuistia.';
+  }
+
+  @override
+  String get localModelDownload => 'Lataa malli';
+
+  @override
+  String get localModelResumeDownload => 'Jatka latausta';
+
+  @override
+  String localModelDownloading(Object downloaded, Object total) {
+    return '$downloaded / $total Mt';
+  }
+
+  @override
+  String get localModelInstalled =>
+      'Ladattu · käytettävissä ilman verkkoyhteyttä';
+
+  @override
+  String get localModelRemove => 'Poista malli';
+
+  @override
+  String get localModelUnsupported =>
+      'Tämä MLX-malli vaatii iPhonen, jossa on iOS 17 tai uudempi ja A14-siru tai uudempi. Vanhempia laitteita ei tueta.';
+
+  @override
+  String get localModelMemoryUnsupported =>
+      'Tässä laitteessa ei ole tarpeeksi muistia paikallisen mallin suorittamiseen.';
+
+  @override
+  String get localModelDownloadFailed =>
+      'Lataus epäonnistui. Yritä uudelleen; valmiit tiedostot säilytetään.';
+
+  @override
+  String get localModelDownloadFirst =>
+      'Lataa ensin Qwen kohdasta Asetukset → Tekoäly ja muuta.';
+
+  @override
+  String get localModelContextTooLong =>
+      'Tämä keskustelu on liian pitkä paikalliselle mallille. Aloita uusi keskustelu tai lyhennä kysymystä.';
+
+  @override
+  String get localModelBusy =>
+      'Paikallinen malli vastaa toiseen pyyntöön. Yritä hetken kuluttua uudelleen.';
+
+  @override
+  String get localModelInterrupted =>
+      'Paikallinen generointi keskeytyi. Pidä Fjelia auki ja yritä uudelleen.';
+
+  @override
+  String get localModelCouldNotAnswer =>
+      'Paikallinen malli ei pystynyt vastaamaan. Tarkista malli kohdasta Asetukset → Tekoäly ja muuta ja yritä uudelleen.';
+
+  @override
+  String get localModelBriefingUnavailable =>
+      'Paikallinen tekoäly-yhteenveto ei ole käytettävissä. Näytetään sovelluksen yhteenveto.';
+
+  @override
+  String get localModelInfo => 'Mallin tiedot ja lisenssi';
+
+  @override
+  String localModelRamGb(int gigabytes) {
+    return 'Vaatii vähintään $gigabytes Gt keskusmuistia.';
+  }
+
+  @override
+  String get localModelIPhone18 =>
+      '4B on saatavilla iPhone 18:ssa ja uudemmissa malleissa.';
+
+  @override
+  String briefPlannedTodayCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Tänään on suunniteltu $count harjoitusta.',
+      one: 'Tänään on suunniteltu 1 harjoitus.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get coachDataFallback =>
+      'Mallin vastaus on ristiriidassa tietojen kanssa. Tässä on Fjelian yhteenveto:';
+
+  @override
+  String get coachSevenDayAverage => '7 päivän keskiarvo';
+
+  @override
+  String coachSleepNeedAndShortfall(String need, String shortfall) {
+    return 'Unentarve: $need h; univaje: $shortfall h.';
+  }
+
+  @override
+  String coachCurrentForm(String value) {
+    return 'Nykyinen vire (TSB): $value pistettä.';
+  }
+
+  @override
+  String get aiOnboardingStep => 'Vaihe 2/3';
+
+  @override
+  String get aiOnboardingTitle => 'Valmentajasi.\nSinun tavallasi.';
+
+  @override
+  String get aiOnboardingSubtitle =>
+      'Muuta terveystietosi vinkeiksi parempaan harjoitteluun ja palautumiseen.';
+
+  @override
+  String get aiOnboardingChoose => 'VALITSE TEKOÄLYVALMENTAJASI';
+
+  @override
+  String get aiOnboardingFreeDetail => 'Maksuton · Ei tekoälytiliä';
+
+  @override
+  String get aiOnboardingFreeBody =>
+      'Pilvitekoäly harjoitteluun ja palautumiseen.';
+
+  @override
+  String get aiOnboardingRecommended => 'Suositeltu';
+
+  @override
+  String get aiOnboardingOnDevice => 'Omalla laitteellasi';
+
+  @override
+  String get aiOnboardingLocalBody =>
+      'Tekoälypyyntösi pysyvät tällä laitteella.';
+
+  @override
+  String get aiOnboardingUnavailable => 'Ei tällä hetkellä saatavilla';
+
+  @override
+  String get aiOnboardingMore => 'Muut tekoälymallit';
+
+  @override
+  String get aiOnboardingMoreBody => 'Paikallinen Qwen tai oma pilvipalvelusi';
+
+  @override
+  String get aiOnboardingConsent => 'Pilvipyynnöt vasta vahvistuksesi jälkeen.';
+
+  @override
+  String get aiOnboardingError =>
+      'Tekoälyvalintaa ei voitu tallentaa tai ladata. Yritä uudelleen.';
+
+  @override
+  String get aiOnboardingWithout => 'Jatka ilman tekoälyä';
+
+  @override
+  String get aiOnboardingConfigure => 'Määritä malli';
+
+  @override
+  String aiOnboardingContinue(String provider) {
+    return 'Jatka: $provider';
+  }
+
+  @override
+  String get aiOnboardingChangeLater =>
+      'Voit muuttaa valintaa milloin tahansa asetuksissa.';
+
+  @override
+  String get creditsAndLicenses => 'Lisenssit ja kiitokset';
+
+  @override
+  String get bioAgeActivity => 'Liikunta';
+
+  @override
+  String get bioAgeActivityBasis => 'Liikuntatiedot · viimeiset 7 päivää';
+
+  @override
+  String bioAgeActivityReported(String minutes) {
+    return '$minutes kirjattua kohtuukuormitteista minuuttia';
+  }
+
+  @override
+  String bioAgeActivitySteps(String minutes) {
+    return '≈ $minutes askelista arvioitua kävelyminuuttia';
+  }
+
+  @override
+  String bioAgeActivityCoverage(int days) {
+    return 'Tiedot $days päivältä seitsemästä';
+  }
+
+  @override
+  String get bioAgeActivityEstimateNotice =>
+      'Oletus: 100 askelta ≈ 1 kävelyminuutti. Päivittäinen askelmäärä ei kerro vauhtia tai kuormittavuutta. Kirjatut minuutit ovat etusijalla joka päivä; saman päivän askelia ei lasketa lisäksi.';
+
+  @override
+  String get bioAgeActivityIncomplete =>
+      'Liikuntatietoja puuttuu. Liikunnan vaikutus vuosina lasketaan vasta, kun kaikilta 7 päivältä on tietoja.';
+
+  @override
+  String get bioAgeActivityEstimatedLabel =>
+      'Liikunta sisältää arvioitua kävelyaikaa.';
+
+  @override
+  String get bioAgeActivityUnknownLabel => 'Liikuntatiedot ovat puutteelliset';
 }

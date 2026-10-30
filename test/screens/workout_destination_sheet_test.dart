@@ -462,7 +462,8 @@ void main() {
               CorosService(
                 db,
                 client: MockClient((req) async {
-                  sent.add(req);
+                  // Only what is sent; the look at the day is not counted.
+                  if (req.method == 'POST') sent.add(req);
                   return http.Response(jsonEncode({'result': '0000'}), 200);
                 }),
               ),

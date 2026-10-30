@@ -1,5 +1,24 @@
 {
   "@@locale": "en",
+  "freeAi": "Free AI",
+  "freeAiUsageTracking": "To keep Free AI reliably available for everyone, we send a random installation ID. It helps us identify unusual usage and block abusive requests. The ID contains neither your name nor account details.",
+  "freeAiDescription": "Free AI provides free cloud chat and briefings through {host}. No separate account or API key is needed. Messages and a health/training summary are sent to this service after your confirmation.",
+  "@freeAiDescription": {
+    "placeholders": {
+      "host": {
+        "type": "String"
+      }
+    }
+  },
+  "freeAiUnavailable": "Free AI is not available in this build. Choose another provider.",
+  "shareBriefingContextWithName": "A summary of your health and training data will be sent to {name}.",
+  "@shareBriefingContextWithName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "language": "Language",
   "languageSystem": "System default",
   "settings": "Settings",
@@ -403,7 +422,7 @@
   "isYourBodyCompositionImproving": "Is your body composition improving?",
   "weightBodyFatMuscleMass": "Weight · Body Fat · Muscle Mass",
   "getStarted": "Get Started",
-  "yourDataStaysOnYour": "Your data stays on your device. Always private.",
+  "yourDataStaysOnYour": "Your data. You choose what to share.",
   "bodyScale": "Body Scale",
   "bodyComposition": "Body Composition",
   "sleep": "SLEEP",
@@ -1579,7 +1598,7 @@
       }
     }
   },
-  "appleIntelligenceIsNotAvailable": "Apple Intelligence is not available on this device (it needs a supported iPhone or Mac with iOS/macOS 26 or later and Apple Intelligence switched on in Settings). Choose another provider and add your own API key to use the coach.",
+  "appleIntelligenceIsNotAvailable": "Apple Intelligence is not available on this device. Use Free AI or choose another provider.",
   "personalisedMorningLunchAfternoonEvening": "Personalised morning/lunch/afternoon/evening summary",
   "enterASubject": "Enter a subject.",
   "message": "Message",
@@ -3168,5 +3187,135 @@
     }
   },
   "briefOutlookLongRest": "Your form needs more than a few easy days to recover.",
-  "briefOutlookPlanTired": "Following the plan keeps your form low for the next days."
+  "briefOutlookPlanTired": "Following the plan keeps your form low for the next days.",
+  "localQwen": "Qwen3.5 · local",
+  "localModelDescription": "Optional Qwen3.5, 4-bit MLX. Download once, then use chat and briefings on this device without an API key. Your health data stays on this device.",
+  "localModelSizeMb": "{megabytes} MB download · additional memory is needed while running.",
+  "localModelDownload": "Download model",
+  "localModelResumeDownload": "Resume download",
+  "localModelDownloading": "{downloaded} / {total} MB",
+  "localModelInstalled": "Downloaded · available offline",
+  "localModelRemove": "Delete model",
+  "localModelUnsupported": "This MLX model needs an iPhone with iOS 17 or later and an A14 or newer chip. Older devices are not supported.",
+  "localModelMemoryUnsupported": "This device does not have enough memory to run the local model.",
+  "localModelDownloadFailed": "Download failed. Try again; completed files are kept.",
+  "localModelDownloadFirst": "Download Qwen in Settings → AI & More first.",
+  "localModelContextTooLong": "This conversation is too long for the local model. Start a new chat or shorten your question.",
+  "localModelBusy": "The local model is answering another request. Try again shortly.",
+  "localModelInterrupted": "Local generation was interrupted. Keep Fjelia open and try again.",
+  "localModelCouldNotAnswer": "The local model could not answer. Check the model in Settings → AI & More and try again.",
+  "localModelBriefingUnavailable": "Local AI briefing unavailable. Showing the app's summary.",
+  "localModelInfo": "Model details & licence",
+  "@localModelSizeMb": {
+    "placeholders": {
+      "megabytes": {
+        "type": "Object"
+      }
+    }
+  },
+  "@localModelDownloading": {
+    "placeholders": {
+      "downloaded": {
+        "type": "Object"
+      },
+      "total": {
+        "type": "Object"
+      }
+    }
+  },
+  "localModelRamGb": "Requires at least {gigabytes} GB of device memory.",
+  "@localModelRamGb": {
+    "placeholders": {
+      "gigabytes": {
+        "type": "int"
+      }
+    }
+  },
+  "localModelIPhone18": "4B is available on iPhone 18 and later.",
+  "briefPlannedTodayCount": "{count, plural, =1{There is 1 training session planned for today.} other{There are {count} training sessions planned for today.}}",
+  "@briefPlannedTodayCount": {
+    "description": "Number of remaining planned training sessions today; completed sessions are excluded.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "coachDataFallback": "The model's answer conflicts with the data. Here is Fjelia's summary:",
+  "coachSevenDayAverage": "7-day average",
+  "coachSleepNeedAndShortfall": "Sleep need: {need} h; shortfall: {shortfall} h.",
+  "coachCurrentForm": "Current form (TSB): {value} points.",
+  "@coachSleepNeedAndShortfall": {
+    "placeholders": {
+      "need": {
+        "type": "String"
+      },
+      "shortfall": {
+        "type": "String"
+      }
+    }
+  },
+  "@coachCurrentForm": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "aiOnboardingStep": "Step 2 of 3",
+  "aiOnboardingTitle": "Your coach.\nYour way.",
+  "aiOnboardingSubtitle": "Turn your health data into insights for better training and recovery.",
+  "aiOnboardingChoose": "CHOOSE YOUR AI COACH",
+  "aiOnboardingFreeDetail": "Free · No AI account needed",
+  "aiOnboardingFreeBody": "Cloud AI for training and recovery.",
+  "aiOnboardingRecommended": "Recommended",
+  "aiOnboardingOnDevice": "On your device",
+  "aiOnboardingLocalBody": "Your AI requests stay on this device.",
+  "aiOnboardingUnavailable": "Currently unavailable",
+  "aiOnboardingMore": "More AI models",
+  "aiOnboardingMoreBody": "Local Qwen or your own cloud provider",
+  "aiOnboardingConsent": "Cloud requests only after your confirmation.",
+  "aiOnboardingError": "Your AI choice could not be saved or loaded. Please try again.",
+  "aiOnboardingWithout": "Continue without AI",
+  "aiOnboardingConfigure": "Set up model",
+  "aiOnboardingContinue": "Continue with {provider}",
+  "aiOnboardingChangeLater": "You can change this anytime in Settings.",
+  "@aiOnboardingContinue": {
+    "placeholders": {
+      "provider": {
+        "type": "String"
+      }
+    }
+  },
+  "creditsAndLicenses": "Credits & licenses",
+  "bioAgeActivity": "Activity",
+  "bioAgeActivityBasis": "Activity data · last 7 days",
+  "bioAgeActivityReported": "{minutes} reported moderate minutes",
+  "bioAgeActivitySteps": "≈ {minutes} walking minutes estimated from steps",
+  "bioAgeActivityCoverage": "Data for {days} of 7 days",
+  "bioAgeActivityEstimateNotice": "Assumption: 100 steps ≈ 1 walking minute. Daily step totals do not reveal pace or intensity. Reported minutes take priority each day; that day’s steps are not counted again.",
+  "bioAgeActivityIncomplete": "Activity data is missing. An activity contribution in years is calculated only when all 7 days have data.",
+  "bioAgeActivityEstimatedLabel": "Activity includes estimated walking time.",
+  "bioAgeActivityUnknownLabel": "Activity data is incomplete",
+  "@bioAgeActivityReported": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "@bioAgeActivitySteps": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "@bioAgeActivityCoverage": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  }
 }

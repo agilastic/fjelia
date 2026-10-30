@@ -3,7 +3,8 @@
 Fjelia is a personal training and health app for endurance athletes, written in
 Flutter. It combines data from your watch, scale and health sources in one place
 and turns it into recovery, sleep, load and training-plan guidance — with an AI
-coach that runs **on your device** by default.
+coach that prefers **on-device Apple Intelligence** and offers Free AI when
+it is unavailable.
 
 > Fjelia is a hobby project. It is **not a medical device** and gives no medical
 > advice. See [Disclaimer](#disclaimer).
@@ -20,30 +21,42 @@ Website: <https://agilastic.github.io/fjelia/> (source in [`docs/`](docs/); serv
   own history (volume, long sessions, intensity) and adapted to daily readiness;
   workouts can be pushed to Garmin.
 - **AI coach** — chat and daily briefings. Default: Apple Intelligence
-  (on-device, iOS/macOS 26+). Optional: OpenAI, Anthropic, Gemini, Mistral or
-  DeepSeek with your own API key.
+  when available, otherwise Free AI without a personal API key. Free AI is
+  also selectable on supported Apple devices. Optional: [local Qwen3.5 2B or 4B](docs/local-model.md)
+  on compatible iPhones (1749 / 3061 MB download), or OpenAI, Anthropic, Gemini,
+  Mistral or DeepSeek with your own API key.
+  The local 4B option is available on iPhone 18 and newer.
 - **Heat acclimation** with weather data, home-screen widgets, backup and export.
 - **Data sources** — Garmin Connect, Polar, Suunto, COROS, Apple Health, Renpho
   scales (Bluetooth), Aktiia and Hilo blood-pressure devices.
 
 ## Privacy
 
-Health data is stored locally on the device (SQLite) and credentials in the
-system keychain. Nothing is sent to a Fjelia server — there is none. Data goes
-only to the services you connect (for example Garmin Connect) and, if you
-choose a cloud AI provider, to that provider with your explicit consent before
-each message or session. Apple Intelligence runs on the device.
+Health data is stored locally on the device (SQLite) and personal credentials
+in the system keychain. Data is shared with the services you connect (for
+example Garmin Connect). Cloud AI, including Free AI through
+`ai.fjelia.com`, receives your messages and a health/training summary
+after your explicit confirmation. Chat asks before each message or session;
+Free AI briefings are generated on request after confirmation. Apple Intelligence
+and downloaded Qwen models run on the device.
+Free AI also sends a random installation ID for usage and spend attribution.
+It contains no account or hardware identifiers and is excluded from Fjelia
+backup export and restore. Apple platforms keep it in non-synchronizing,
+device-only Keychain storage.
 
 ## Requirements
 
 - Flutter (stable channel), Xcode for iOS/macOS builds.
-- iOS is the primary target; macOS builds too. Apple Intelligence needs a
-  supported device with iOS/macOS 26 or later.
+- iOS 17 or later is the primary target; macOS builds too. Apple Intelligence
+  needs a supported device with iOS/macOS 26 or later. Local Qwen uses MLX on
+  compatible iPhones with A14 or newer; see [device requirements](docs/local-model.md#device-requirements).
 
 ## Build and run
 
 ```bash
 flutter pub get
+bash scripts/ensure-metal-toolchain.sh            # before iOS builds
+python3 scripts/trust-mlx-plugin.py              # once per Mac, before iOS builds
 flutter run --dart-define-from-file=secrets.json   # see "Build-time credentials"
 flutter test
 ```
@@ -68,8 +81,22 @@ flutter run --dart-define-from-file=secrets.json
 | `PIRATE_WEATHER_KEY`, `WEATHER_API_KEY` | optional extra weather providers |
 
 A service whose credentials are missing is simply unavailable in that build;
-everything else works. Users of a built app always sign in with their **own**
-accounts — the credentials above only identify the app.
+everything else works. Personal integrations use the user's **own** account.
+The build scripts pass the app's `secrets.json` to Flutter. Free AI access is
+provided by the private service package and needs no user account or API key.
+
+Apple Intelligence remains the default when it is available on the device.
+Otherwise the coach selects **Free AI**, which is also the first provider in
+**Settings → AI & More**. Existing Qwen and cloud provider selections are kept.
+Free AI uses the `default` model served by the endpoint; chat and briefings use
+the existing cloud data-sharing confirmation before sending health context.
+Temporary gateway and connection failures are retried automatically, with up
+to three attempts and pauses of one and two seconds.
+Chat and all four briefings send the same persisted installation ID as the
+top-level `user` field, including on retries. Request logs include this ID so
+it can be matched to LiteLLM's end-user records. It is usage attribution, not
+proof of a genuine installation; shared-key budgets and rate limits remain
+the server-side protection.
 
 ## Optional service package
 
@@ -86,6 +113,13 @@ dependency_overrides:
 ```
 
 Without it everything else works as described above.
+
+Free AI credentials belong to the private `fjelia-service` package. Its
+`secrets.json` stays ignored there and is compiled into official builds. The
+helper scripts also load `../fjelia-service/secrets.json` when present. For a
+manual build, pass that file with an additional `--dart-define-from-file`.
+The public stub always supplies an empty Free AI credential; the shared key
+does not belong in this repository, its example configuration, or user settings.
 
 ## Disclaimer
 

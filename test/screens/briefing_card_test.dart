@@ -36,6 +36,7 @@ class _ReadyBriefing extends AiBriefingNotifier {
     Object? bioAge,
     Object? planInfo,
     bool force = false,
+    bool cloudConsent = false,
   }) async {}
 }
 

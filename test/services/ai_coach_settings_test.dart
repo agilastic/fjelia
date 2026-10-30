@@ -1,4 +1,5 @@
 import 'package:fjelia/services/ai_coach_settings.dart';
+import 'package:fjelia/services/local_model_catalog.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -14,6 +15,7 @@ void main() {
       expect(defaultAiProvider, AiProvider.appleIntelligence); // iOS/macOS
       expect(s.model, 'on-device');
       expect(s.ready, isTrue);
+      expect(s.consentMode, AiConsentMode.session);
     },
   );
 
@@ -52,4 +54,27 @@ void main() {
     expect(s.provider, AiProvider.appleIntelligence);
     expect(s.ready, isFalse);
   });
+
+  test('a saved per-message consent choice survives reload', () async {
+    FlutterSecureStorage.setMockInitialValues({});
+    await store.saveConsentMode(AiConsentMode.everyMessage);
+    expect((await store.load()).consentMode, AiConsentMode.everyMessage);
+    await store.saveConsentMode(AiConsentMode.session);
+    expect((await store.load()).consentMode, AiConsentMode.session);
+  });
+
+  test(
+    'saved 4B selection survives reload and unknown local models use 2B',
+    () async {
+      FlutterSecureStorage.setMockInitialValues({
+        'ai_coach_provider': 'localQwen',
+        'ai_coach_model': localQwen4bModelId,
+      });
+      expect((await store.load()).model, localQwen4bModelId);
+      await store.saveModel('unknown-local-model');
+      expect((await store.load()).model, localQwenModelId);
+      await store.saveModel(localQwenModelId);
+      expect((await store.load()).model, localQwenModelId);
+    },
+  );
 }

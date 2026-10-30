@@ -7,8 +7,9 @@
 String appleFactLine(String line) {
   if (line.startsWith('[Context:')) {
     // "[Context:V4][Today:2026-10-28,Weekday:Wed,TimeNow:20:58]..."
-    final m = RegExp(r'Today:([\d-]+),Weekday:(\w+),TimeNow:([\d:]+)')
-        .firstMatch(line);
+    final m = RegExp(
+      r'Today:([\d-]+),Weekday:(\w+),TimeNow:([\d:]+)',
+    ).firstMatch(line);
     return m == null
         ? line
         : 'Today is ${m[2]} ${m[1]}; the time now is ${m[3]}. '
@@ -68,12 +69,27 @@ String appleFactLine(String line) {
       final facts = join([
         part('CTL', (v) => 'fitness (CTL) $v'),
         part('ATL', (v) => 'fatigue (ATL) $v'),
-        part('TSB', (v) => 'form (TSB) $v'),
+        part('TSB', (v) => 'current form (TSB) $v points; not a weekly change'),
         part('CurWeekH', (v) => 'this week $v h'),
         part('PrevWeekH', (v) => 'last week $v h'),
       ]);
       return 'Training monitor, estimated by a model and not measured: $facts.';
+    case 'BP':
+      return 'Blood pressure on ${f['Latest']}: ${f['Sys']}/${f['Dia']} mmHg. '
+          'Blood pressure does not identify a training phase.';
     case 'TodayWorkout':
+      if (f['Status'] == 'rest_day') {
+        return 'No workout is scheduled for today. This does not erase training already completed today.';
+      }
+      if (f['Status'] == 'planned' || f['Status'] == 'options_available') {
+        final plan = int.tryParse(f['PlanSessions'] ?? '') ?? 0;
+        final garmin = int.tryParse(f['GarminScheduled'] ?? '') ?? 0;
+        final count =
+            int.tryParse(f['SessionCount'] ?? '') ?? (plan > 0 ? plan : garmin);
+        return 'Today has $count scheduled training ${count == 1 ? 'session' : 'sessions'}. '
+            'These are scheduled sessions, not alternatives. '
+            'Fjelia plan sessions are primary; Garmin entries may be copies of them.';
+      }
       if (f['Status'] != 'cancelled') return line;
       return 'Today\'s planned workout was cancelled (${f['Reason'] ?? 'no reason given'}). '
           'This is not a plain rest day; illness or injury means NO training today.';
@@ -116,6 +132,9 @@ String appleFactLine(String line) {
       return 'This ${parsed.lead} session against the average of ${f['N'] ?? '?'} '
           'other ${parsed.lead} sessions in the last 30 days (this vs average): $facts.';
     case 'HRV':
+      if (RegExp(r'^\d{4}-\d{2}-\d{2}$').hasMatch(f['Latest'] ?? '')) {
+        return 'Recovery measurements on ${f['Latest']}: ${join([part('Night', (v) => 'overnight watch HRV $v'), part('Weekly7d', (v) => 'watch HRV weekly average $v'), part('RHR', (v) => 'resting heart rate $v'), part('Stress', (v) => 'stress score $v (lower is better)'), part('Energy', (v) => 'energy score $v (higher is better)'), part('SpO2', (v) => 'SpO2 $v')])}.';
+      }
       if (parsed.raw.startsWith('Pair')) return _hrvPairSentence(f);
       if (parsed.raw.startsWith('RecentPairs')) {
         return 'HRV around recent workouts (last ${f['Window'] ?? '7d'}): '
@@ -146,6 +165,16 @@ String appleFactLine(String line) {
           '${night.isEmpty ? '' : ' overnight (watch) $night.'}'
           '${f['WeeklyAvg'] == null ? '' : ' Weekly average ${pretty(f['WeeklyAvg']!)}.'}'
           ' Overnight watch values are measured differently from chest-strap spot RMSSD: never compare their values.';
+    case 'Sleep':
+      if (f['Latest'] == null) return line;
+      final slept = double.tryParse((f['Dur'] ?? '').replaceFirst('h', ''));
+      final need = double.tryParse((f['Need'] ?? '').replaceFirst('h', ''));
+      final shortfall = slept == null || need == null
+          ? 'Sleep shortfall is unknown.'
+          : 'Shortfall relative to that need: ${(need > slept ? need - slept : 0).toStringAsFixed(1)} h.';
+      return 'Sleep on ${f['Latest']}: slept ${f['Dur'] ?? 'unknown'} '
+          '(duration; not missing sleep); need ${f['Need'] ?? 'unknown'}. '
+          '$shortfall';
     case 'Similar30d':
       final facts = join([
         part('AvgMin', (v) => 'on average $v min'),
@@ -179,6 +208,29 @@ String appleFactLine(String line) {
     default:
       return line;
   }
+}
+
+/// Keep the calendar together when fitting the local model's context. Detailed
+/// goal lines can otherwise be dropped one by one, leaving just the primary.
+String? appleRaceCalendarFacts(Iterable<String> lines) {
+  final goals = <_Toon>[];
+  for (final line in lines) {
+    final parsed = _Toon.parse(line);
+    if (parsed?.tag == 'RaceGoal') goals.add(parsed!);
+  }
+  if (goals.isEmpty) return null;
+  final entries = goals
+      .map((goal) {
+        final f = goal.fields;
+        final target = f['Target'];
+        return '${f['Date']} | ${f['Priority'] ?? '?'} | '
+            '${f['Sport']?.replaceAll('_', ' ')} ${f['DistKm']} km'
+            '${target == null || target == 'none' ? '' : ' | target $target'}';
+      })
+      .join('\n');
+  return 'Race calendar: ${goals.length} listed goals (date | priority | sport/distance | target). '
+      'A is higher priority than B then C. The primary goal is not the only goal. '
+      'Do not infer a taper or training phase from a race date.\n$entries';
 }
 
 /// The HRV pair as sentences. Same figures and the same limits as the cloud

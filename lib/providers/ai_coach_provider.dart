@@ -7,6 +7,7 @@ import '../l10n/l10n_ext.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:foundation_models_framework/foundation_models_framework.dart';
 
+import '../config/free_ai.dart';
 import '../db/database.dart';
 import '../models/coach_context_card.dart';
 import '../services/activity_coach_context.dart';
@@ -14,8 +15,10 @@ import '../services/ai_coach_client.dart';
 import '../services/ai_coach_settings.dart';
 import '../services/ai_context_toon_builder.dart';
 import '../services/bio_age_service.dart';
+import '../services/race_goal_service.dart';
 import '../utils/log.dart';
 import 'database_provider.dart';
+import 'local_model_provider.dart';
 import 'sync_provider.dart' show waitForSyncToSettle;
 
 const _storage = FlutterSecureStorage();
@@ -24,8 +27,23 @@ final aiCoachSettingsStoreProvider = Provider<AiCoachSettingsStore>(
   (ref) => const AiCoachSettingsStore(),
 );
 
+final appleIntelligenceAvailabilityProvider = Provider<Future<bool> Function()>(
+  (ref) => () async {
+    final availability = await FoundationModelsFramework.instance
+        .checkAvailability();
+    log(
+      '[AiCoach] Apple Intelligence available=${availability.isAvailable} '
+      'reason=${availability.reasonCode} os=${availability.osVersion}',
+    );
+    return availability.isAvailable;
+  },
+);
+
 final aiCoachClientProvider = Provider<AiCoachClient>(
-  (ref) => AiCoachClient(store: ref.watch(aiCoachSettingsStoreProvider)),
+  (ref) => AiCoachClient(
+    store: ref.watch(aiCoachSettingsStoreProvider),
+    localModelFor: (modelId) => ref.read(localModelServiceProvider(modelId)),
+  ),
 );
 
 final aiContextToonBuilderProvider = Provider<AiContextToonBuilder>(
@@ -41,9 +59,9 @@ final aiCoachSettingsProvider =
 /// the year's progression.
 final activityCoachContextProvider = FutureProvider.autoDispose
     .family<String, ActivityRecord>(
-      (ref, activity) =>
-          ActivityCoachContextBuilder(ref.read(databaseProvider))
-              .build(activity),
+      (ref, activity) => ActivityCoachContextBuilder(
+        ref.read(databaseProvider),
+      ).build(activity),
     );
 
 /// A request to open the coach tab about one session: the draft question,
@@ -110,7 +128,7 @@ String _briefingKey(AiBriefingPeriod period) {
       '${now.day.toString().padLeft(2, '0')}';
   // The language is part of the key: a briefing is written in one language.
   // Bump the version when the prompts change so stale briefings regenerate.
-  return 'ai_briefing_${period.name}_${day}_${activeLocale.languageCode}_v4';
+  return 'ai_briefing_${period.name}_${day}_${activeLocale.languageCode}_v5';
 }
 
 /// Today's briefing for one period, cached in secure storage per day.
@@ -139,8 +157,9 @@ class AiBriefingNotifier extends StateNotifier<AsyncValue<String?>> {
       final now = DateTime.now();
       final m = await _ref
           .read(
-            trainingMonitorProvider(DateTime(now.year, now.month, now.day))
-                .future,
+            trainingMonitorProvider(
+              DateTime(now.year, now.month, now.day),
+            ).future,
           )
           .timeout(const Duration(seconds: 5));
       return AiContextTrainingMonitor(
@@ -166,6 +185,7 @@ class AiBriefingNotifier extends StateNotifier<AsyncValue<String?>> {
       _storage.write(key: _briefingKey(period), value: text);
 
   /// Generates the briefing unless one exists for today (or [force]).
+  /// Cloud-only briefings require confirmation from the initiating UI action.
   Future<void> load(
     AiCoachSettings settings, {
     AiContextTrainingMonitor? monitor,
@@ -174,7 +194,9 @@ class AiBriefingNotifier extends StateNotifier<AsyncValue<String?>> {
     BioAgeResult? bioAge,
     AiContextPlanInfo? planInfo,
     bool force = false,
+    bool cloudConsent = false,
   }) async {
+    if (!settings.usesOnDeviceBriefing && !cloudConsent) return;
     if (!mounted || state.isLoading || (!force && state.valueOrNull != null)) {
       return;
     }
@@ -204,7 +226,12 @@ class AiBriefingNotifier extends StateNotifier<AsyncValue<String?>> {
         ),
         AiBriefingPeriod.evening => client.sendEveningBriefing(settings, toon),
       };
-      final text = await future.timeout(const Duration(seconds: 30));
+      final timeout = switch (settings.provider) {
+        AiProvider.freeAi => freeAiGenerationTimeout,
+        AiProvider.localQwen => const Duration(seconds: 120),
+        _ => const Duration(seconds: 30),
+      };
+      final text = await future.timeout(timeout);
       if (!mounted) return;
       state = AsyncData(text);
       await _persist(text);
@@ -216,10 +243,16 @@ class AiBriefingNotifier extends StateNotifier<AsyncValue<String?>> {
 }
 
 class _ToonCache {
-  const _ToonCache(this.toon, this.builtAt);
+  const _ToonCache(
+    this.toon,
+    this.builtAt,
+    this.goalRevision,
+    this.profileGoals,
+  );
 
   final String toon;
   final DateTime builtAt;
+  final String goalRevision, profileGoals;
 
   bool get isStale =>
       DateTime.now().difference(builtAt) > const Duration(hours: 1);
@@ -241,7 +274,16 @@ class ToonCacheNotifier extends StateNotifier<_ToonCache?> {
     AiContextPlanInfo? planInfo,
   }) async {
     final cached = state;
-    if (cached != null && !cached.isStale) return cached.toon;
+    // Goals can change between two chat messages, without a device sync.
+    final goals = await RaceGoalService(
+      _ref.read(databaseProvider),
+    ).resolveGoalSet();
+    if (cached != null &&
+        !cached.isStale &&
+        cached.goalRevision == goals.revision &&
+        cached.profileGoals == raceGoals) {
+      return cached.toon;
+    }
     final toon = await _ref
         .read(aiContextToonBuilderProvider)
         .build(
@@ -251,7 +293,7 @@ class ToonCacheNotifier extends StateNotifier<_ToonCache?> {
           bioAge: bioAge,
           planInfo: planInfo,
         );
-    state = _ToonCache(toon, DateTime.now());
+    state = _ToonCache(toon, DateTime.now(), goals.revision, raceGoals);
     return toon;
   }
 }
@@ -259,28 +301,41 @@ class ToonCacheNotifier extends StateNotifier<_ToonCache?> {
 class AiCoachSettingsNotifier extends AsyncNotifier<AiCoachSettings> {
   AiCoachSettingsStore get _store => ref.read(aiCoachSettingsStoreProvider);
 
-  /// Apple Intelligence is the default; whether it can run on this device is
-  /// checked here, so the coach can send the user to the provider settings
-  /// when it cannot.
+  /// Prefer Apple Intelligence where available, otherwise offer Free AI.
+  /// Resolve this at runtime so enabling Apple Intelligence restores the local
+  /// default without replacing an explicitly selected Qwen or cloud provider.
   @override
   Future<AiCoachSettings> build() async {
     final settings = await _store.load();
-    if (settings.provider != AiProvider.appleIntelligence) return settings;
-    try {
-      final availability = await FoundationModelsFramework.instance
-          .checkAvailability();
-      log(
-        '[AiCoach] Apple Intelligence available=${availability.isAvailable} '
-        'reason=${availability.reasonCode} os=${availability.osVersion}',
+    if (settings.provider == AiProvider.localQwen) {
+      final local = await ref.watch(
+        localModelProvider(settings.model).selectAsync(
+          (status) =>
+              (status.supported, status.installed && !status.downloading),
+        ),
       );
       return settings.copyWith(
-        model: 'on-device',
-        onDeviceAvailable: availability.isAvailable,
+        localModelAvailable: local.$1,
+        localModelInstalled: local.$2,
       );
+    }
+    if (settings.provider != AiProvider.appleIntelligence) return settings;
+    var available = false;
+    try {
+      available = await ref.watch(appleIntelligenceAvailabilityProvider)();
     } catch (e) {
       log('[AiCoach] Apple Intelligence availability check failed: $e');
-      return settings.copyWith(onDeviceAvailable: false);
     }
+    if (available) {
+      return settings.copyWith(model: 'on-device', onDeviceAvailable: true);
+    }
+    return settings.copyWith(
+      provider: AiProvider.freeAi,
+      model: AiProvider.freeAi.defaultModel,
+      hasApiKey: await _store.readApiKey(AiProvider.freeAi) != null,
+      onDeviceAvailable: false,
+      appleIntelligenceForBriefing: false,
+    );
   }
 
   AiCoachSettings get _current => state.valueOrNull ?? const AiCoachSettings();
@@ -291,18 +346,36 @@ class AiCoachSettingsNotifier extends AsyncNotifier<AiCoachSettings> {
   }
 
   Future<void> setProvider(AiProvider provider) async {
+    if (_current.provider == AiProvider.localQwen &&
+        provider != AiProvider.localQwen) {
+      await ref.read(localModelServiceProvider(_current.model)).unload();
+    }
+    if (_current.provider != provider) {
+      ref.read(aiCoachSessionConsentProvider.notifier).state = false;
+    }
     await _store.saveProvider(provider);
     state = AsyncData(await build());
   }
 
   Future<void> setApiKey(String key) async {
     await _store.saveApiKey(_current.provider, key);
-    state = AsyncData(await _store.load());
+    state = AsyncData(await build());
   }
 
   Future<void> setModel(String model) async {
-    await _store.saveModel(model);
-    state = AsyncData(_current.copyWith(model: model.trim()));
+    final selected = model.trim();
+    if (_current.provider == AiProvider.localQwen) {
+      if (!_current.provider.models.contains(selected)) {
+        throw ArgumentError.value(selected, 'model');
+      }
+      await ref.read(localModelServiceProvider(_current.model)).unload();
+      await _store.saveModel(selected);
+      // Read readiness from the selected installation; 2B does not activate 4B.
+      state = AsyncData(await build());
+    } else {
+      await _store.saveModel(selected);
+      state = AsyncData(_current.copyWith(model: selected));
+    }
   }
 
   Future<void> setConsentMode(AiConsentMode mode) async {

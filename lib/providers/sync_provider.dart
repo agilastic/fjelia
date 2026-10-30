@@ -630,10 +630,14 @@ class SyncNotifier extends StateNotifier<SyncState> {
     if (mounted) _prewarmBriefing();
   }
 
-  /// Builds the current period's AI briefing in the background.
+  /// Builds local briefings in the background; cloud briefings need a UI action.
   void _prewarmBriefing() {
     final settings = _ref.read(aiCoachSettingsProvider).valueOrNull;
-    if (settings == null || !settings.readyForBriefing) return;
+    if (settings == null ||
+        !settings.readyForBriefing ||
+        !settings.usesOnDeviceBriefing) {
+      return;
+    }
     final hour = DateTime.now().hour;
     final period = hour < 11
         ? AiBriefingPeriod.morning

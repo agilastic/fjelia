@@ -10,6 +10,27 @@ class AppLocalizationsSk extends AppLocalizations {
   AppLocalizationsSk([String locale = 'sk']) : super(locale);
 
   @override
+  String get freeAi => 'Free AI';
+
+  @override
+  String get freeAiUsageTracking =>
+      'Aby bola služba Free AI spoľahlivo dostupná pre všetkých, odosielame náhodný identifikátor inštalácie. Pomáha nám rozpoznať neobvyklé používanie a blokovať požiadavky zneužívajúce službu. Identifikátor neobsahuje vaše meno ani údaje o účte.';
+
+  @override
+  String freeAiDescription(String host) {
+    return 'Bezplatný AI chat a súhrny cez $host. Nepotrebujete vlastný účet ani API kľúč. Po vašom potvrdení sa správy a súhrn zdravotných a tréningových údajov odošlú tejto službe.';
+  }
+
+  @override
+  String get freeAiUnavailable =>
+      'Free AI nie je v tejto verzii dostupná. Vyberte iného poskytovateľa.';
+
+  @override
+  String shareBriefingContextWithName(String name) {
+    return 'Súhrn vašich zdravotných a tréningových údajov sa odošle poskytovateľovi $name.';
+  }
+
+  @override
   String get language => 'Jazyk';
 
   @override
@@ -838,8 +859,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get getStarted => 'Začať';
 
   @override
-  String get yourDataStaysOnYour =>
-      'Vaše údaje zostávajú vo vašom zariadení. Vždy súkromné.';
+  String get yourDataStaysOnYour => 'Tvoje údaje. Ty rozhoduješ, čo zdieľaš.';
 
   @override
   String get bodyScale => 'Osobná váha';
@@ -3043,7 +3063,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get appleIntelligenceIsNotAvailable =>
-      'Apple Intelligence nie je v tomto zariadení k dispozícii (vyžaduje podporovaný iPhone alebo Mac s iOS/macOS 26 alebo novším a zapnutým Apple Intelligence v Nastaveniach). Vyberte iného poskytovateľa a pridajte vlastný kľúč API, aby ste mohli používať trénera.';
+      'Apple Intelligence nie je na tomto zariadení dostupná. Použite Free AI alebo vyberte iného poskytovateľa.';
 
   @override
   String get personalisedMorningLunchAfternoonEvening =>
@@ -5623,4 +5643,211 @@ class AppLocalizationsSk extends AppLocalizations {
   @override
   String get briefOutlookPlanTired =>
       'Ak budete dodržiavať plán, vaša forma zostane nízka aj v najbližších dňoch.';
+
+  @override
+  String get localQwen => 'Qwen3.5 · lokálne';
+
+  @override
+  String get localModelDescription =>
+      'Voliteľný Qwen3.5, 4-bitový MLX. Stiahnite ho raz a používajte chat a súhrny v tomto zariadení bez kľúča API. Vaše zdravotné údaje zostávajú v tomto zariadení.';
+
+  @override
+  String localModelSizeMb(Object megabytes) {
+    return 'Stiahnutie $megabytes MB · počas používania je potrebná ďalšia pamäť.';
+  }
+
+  @override
+  String get localModelDownload => 'Stiahnuť model';
+
+  @override
+  String get localModelResumeDownload => 'Pokračovať v sťahovaní';
+
+  @override
+  String localModelDownloading(Object downloaded, Object total) {
+    return '$downloaded / $total MB';
+  }
+
+  @override
+  String get localModelInstalled => 'Stiahnuté · dostupné offline';
+
+  @override
+  String get localModelRemove => 'Odstrániť model';
+
+  @override
+  String get localModelUnsupported =>
+      'Tento model MLX vyžaduje iPhone s iOS 17 alebo novším a čipom A14 alebo novším. Staršie zariadenia nie sú podporované.';
+
+  @override
+  String get localModelMemoryUnsupported =>
+      'Toto zariadenie nemá dostatok pamäte na spustenie lokálneho modelu.';
+
+  @override
+  String get localModelDownloadFailed =>
+      'Sťahovanie zlyhalo. Skúste to znova; úplné súbory sa zachovajú.';
+
+  @override
+  String get localModelDownloadFirst =>
+      'Najprv stiahnite Qwen v Nastavenia → AI a ďalšie.';
+
+  @override
+  String get localModelContextTooLong =>
+      'Táto konverzácia je pre lokálny model príliš dlhá. Začnite nový chat alebo skráťte otázku.';
+
+  @override
+  String get localModelBusy =>
+      'Lokálny model odpovedá na inú požiadavku. Skúste to znova o chvíľu.';
+
+  @override
+  String get localModelInterrupted =>
+      'Lokálne generovanie bolo prerušené. Nechajte Fjelia otvorenú a skúste to znova.';
+
+  @override
+  String get localModelCouldNotAnswer =>
+      'Lokálny model nedokázal odpovedať. Skontrolujte model v Nastavenia → AI a ďalšie a skúste to znova.';
+
+  @override
+  String get localModelBriefingUnavailable =>
+      'Lokálny súhrn AI nie je dostupný. Zobrazuje sa súhrn aplikácie.';
+
+  @override
+  String get localModelInfo => 'Podrobnosti modelu a licencia';
+
+  @override
+  String localModelRamGb(int gigabytes) {
+    return 'Vyžaduje aspoň $gigabytes GB operačnej pamäte.';
+  }
+
+  @override
+  String get localModelIPhone18 =>
+      'Model 4B je dostupný na iPhone 18 a novšom.';
+
+  @override
+  String briefPlannedTodayCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Na dnes je naplánovaných $count tréningov.',
+      few: 'Na dnes sú naplánované $count tréningy.',
+      one: 'Na dnes je naplánovaný 1 tréning.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get coachDataFallback =>
+      'Odpoveď modelu je v rozpore s údajmi. Tu je súhrn od Fjelie:';
+
+  @override
+  String get coachSevenDayAverage => '7-dňový priemer';
+
+  @override
+  String coachSleepNeedAndShortfall(String need, String shortfall) {
+    return 'Potreba spánku: $need h; deficit: $shortfall h.';
+  }
+
+  @override
+  String coachCurrentForm(String value) {
+    return 'Aktuálna forma (TSB): $value bodov.';
+  }
+
+  @override
+  String get aiOnboardingStep => 'Krok 2 z 3';
+
+  @override
+  String get aiOnboardingTitle => 'Tvoj tréner.\nTvoja cesta.';
+
+  @override
+  String get aiOnboardingSubtitle =>
+      'Premeň svoje zdravotné údaje na tipy pre lepší tréning a regeneráciu.';
+
+  @override
+  String get aiOnboardingChoose => 'VYBER SI AI TRÉNERA';
+
+  @override
+  String get aiOnboardingFreeDetail => 'Zadarmo · Bez účtu AI';
+
+  @override
+  String get aiOnboardingFreeBody => 'Cloudová AI pre tréning a regeneráciu.';
+
+  @override
+  String get aiOnboardingRecommended => 'Odporúčané';
+
+  @override
+  String get aiOnboardingOnDevice => 'Na tvojom zariadení';
+
+  @override
+  String get aiOnboardingLocalBody =>
+      'Tvoje AI požiadavky zostávajú v tomto zariadení.';
+
+  @override
+  String get aiOnboardingUnavailable => 'Momentálne nedostupné';
+
+  @override
+  String get aiOnboardingMore => 'Ďalšie AI modely';
+
+  @override
+  String get aiOnboardingMoreBody =>
+      'Lokálny Qwen alebo vlastný cloudový poskytovateľ';
+
+  @override
+  String get aiOnboardingConsent =>
+      'Cloudové požiadavky až po tvojom potvrdení.';
+
+  @override
+  String get aiOnboardingError =>
+      'Výber AI sa nepodarilo uložiť alebo načítať. Skús to znova.';
+
+  @override
+  String get aiOnboardingWithout => 'Pokračovať bez AI';
+
+  @override
+  String get aiOnboardingConfigure => 'Nastaviť model';
+
+  @override
+  String aiOnboardingContinue(String provider) {
+    return 'Pokračovať s $provider';
+  }
+
+  @override
+  String get aiOnboardingChangeLater =>
+      'Voľbu môžeš kedykoľvek zmeniť v nastaveniach.';
+
+  @override
+  String get creditsAndLicenses => 'Licencie a poďakovania';
+
+  @override
+  String get bioAgeActivity => 'Pohyb';
+
+  @override
+  String get bioAgeActivityBasis => 'Údaje o pohybe · posledných 7 dní';
+
+  @override
+  String bioAgeActivityReported(String minutes) {
+    return '$minutes zaznamenaných minút strednej intenzity';
+  }
+
+  @override
+  String bioAgeActivitySteps(String minutes) {
+    return '≈ $minutes minút chôdze odhadnutých z krokov';
+  }
+
+  @override
+  String bioAgeActivityCoverage(int days) {
+    return 'Údaje za $days zo 7 dní';
+  }
+
+  @override
+  String get bioAgeActivityEstimateNotice =>
+      'Predpoklad: 100 krokov ≈ 1 minúta chôdze. Denný počet krokov neukazuje tempo ani intenzitu. Zaznamenané minúty majú každý deň prednosť; kroky z toho istého dňa sa už nepripočítavajú.';
+
+  @override
+  String get bioAgeActivityIncomplete =>
+      'Chýbajú údaje o pohybe. Príspevok pohybu v rokoch sa vypočíta až vtedy, keď sú dostupné údaje za všetkých 7 dní.';
+
+  @override
+  String get bioAgeActivityEstimatedLabel =>
+      'Pohyb zahŕňa odhadovaný čas chôdze.';
+
+  @override
+  String get bioAgeActivityUnknownLabel => 'Údaje o pohybe sú neúplné';
 }

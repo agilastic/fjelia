@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../services/bio_age_service.dart';
+import '../services/bio_age_activity.dart';
 import 'database_provider.dart';
 import 'day_data_provider.dart';
 import 'user_profile_provider.dart';
@@ -45,18 +46,16 @@ final bioAgeProvider = FutureProvider<BioAgeResult?>((ref) async {
         ].reduce((a, b) => a > b ? a : b);
 
   final wellness = await db.getWellnessRange(30);
-  final steps = wellness
-      .where((w) => w.steps != null)
-      .map((w) => w.steps!.toDouble())
-      .toList();
-  final dailySteps = steps.isEmpty
-      ? null
-      : steps.reduce((a, b) => a + b) / steps.length;
-  final weekAgo = DateTime.now().subtract(const Duration(days: 7));
-  final lastWeek = wellness.where((w) => w.date.isAfter(weekAgo));
-  final intensity = lastWeek
-      .where((w) => w.intensityMinutes != null)
-      .fold<double>(0, (sum, w) => sum + w.intensityMinutes!);
+  final activity = BioAgeActivity.fromDays(
+    wellness.map(
+      (day) => BioAgeActivityDay(
+        date: day.date,
+        reportedMinutes: day.intensityMinutes,
+        steps: day.steps,
+      ),
+    ),
+    today: DateTime.now(),
+  );
   double? vo2max;
   for (final w in wellness.reversed) {
     if (w.vo2max != null) {
@@ -79,10 +78,14 @@ final bioAgeProvider = FutureProvider<BioAgeResult?>((ref) async {
       gripKg: gripKg == null || gripKg <= 0 ? null : gripKg,
       bmi: bmi,
       visceralFat: latestScale?.visceralFat,
-      dailySteps: dailySteps,
+      activity: activity,
       restingHr: rhr,
       systolic: systolic,
-      weeklyActivityMinutes: lastWeek.isEmpty ? null : intensity,
+      // Walking-time estimates inform the activity factor, not a second,
+      // exercise-derived VO2max estimate.
+      weeklyActivityMinutes: activity.reportedDays == 0
+          ? null
+          : activity.reportedMinutes,
       smoking: profile.smokingStatus,
       cigarettesPerDay: profile.cigarettesPerDay?.toDouble(),
       yearsSinceQuit: profile.yearsSinceQuit?.toDouble(),

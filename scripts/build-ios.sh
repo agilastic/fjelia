@@ -6,6 +6,7 @@ set -euo pipefail
 # Build-time credentials (see secrets.example.json); absent = services unavailable.
 DEFINES=()
 [ -f "$(dirname "$0")/../secrets.json" ] && DEFINES+=(--dart-define-from-file=secrets.json)
+[ -f "$(dirname "$0")/../../fjelia-service/secrets.json" ] && DEFINES+=(--dart-define-from-file=../fjelia-service/secrets.json)
 cd "$(dirname "$0")/.."
 
 usage() {
@@ -41,6 +42,8 @@ if [ "$install" -eq 1 ] && { [ -z "$device" ] || [ "$unsigned" -eq 1 ]; }; then
 fi
 command -v flutter >/dev/null
 command -v xcodebuild >/dev/null
+bash scripts/ensure-metal-toolchain.sh
+python3 scripts/trust-mlx-plugin.py
 flutter pub get
 flutter pub run build_runner build
 flutter build ios --release --no-pub --no-codesign ${DEFINES[@]+"${DEFINES[@]}"}

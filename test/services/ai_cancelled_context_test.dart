@@ -152,10 +152,11 @@ void main() {
       ),
       contains('reasons: Travel, Illness'),
     );
-    // Other TodayWorkout lines stay as they are.
+    // An empty remaining schedule does not erase completed training.
     const rest =
         '[TodayWorkout:Status:rest_day,GarminScheduled:0,PlanSessions:0]';
-    expect(appleFactLine(rest), rest);
+    expect(appleFactLine(rest), contains('No workout is scheduled for today'));
+    expect(appleFactLine(rest), contains('training already completed today'));
   });
 
   group('race goal', () {

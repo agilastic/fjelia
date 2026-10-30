@@ -26,9 +26,9 @@ HrvRecord _row(int daysAgo, {double? hrv, int? rhr, double? stress}) =>
       source: null,
     );
 
-List<String> _lines(List<HrvRecord> hrv) =>
-    MetricAnalysis(DateTime(2026, 10, 28, 21))
-        .lines(hrv: hrv, sleep: const [], wellness: const []);
+List<String> _lines(List<HrvRecord> hrv) => MetricAnalysis(
+  DateTime(2026, 10, 28, 21),
+).lines(hrv: hrv, sleep: const [], wellness: const []);
 
 String _line(List<String> lines, String name) =>
     lines.firstWhere((l) => l.startsWith('[Analysis:$name,'));
@@ -157,31 +157,34 @@ void main() {
     expect(prompt, isNot(contains('7-day average')));
     expect(prompt, isNot(contains('+3.3')));
     expect(prompt, isNot(contains('Night:40ms')));
-    expect(prompt, contains('rest_day'));
+    expect(prompt, contains('No workout is scheduled for today'));
     expect(request.instructions, contains('at most 45 words'));
     expect(request.instructions, contains('DO NOT list or repeat'));
   });
 
-  test('a full briefing request fits the budget on the first try and on retry', () {
-    for (final budget in [4600, 3600]) {
-      final request = AppleCoachRequest.build(
-        [
-          const ChatMessage(
-            text: 'Give me my evening briefing. Write it in German.',
-            isUser: true,
-          ),
-        ],
-        '[Context:V4][Today:2026-10-28,Weekday:Wed,TimeNow:21:15][Range:60d]\n'
-        '${briefLines(trainingHrv: 'down').join('\n')}\n'
-        '${'[Activities:today:${'run ' * 80}]\n' * 6}[TodayWorkout:Status:rest_day]',
-        briefingInstructions:
-            'You are Fjelia AI Coach. Generate a short evening briefing.',
-        budget: budget,
-      );
-      expect(request.inputBytes, lessThanOrEqualTo(budget));
-      expect(request.prompt, contains('Readiness RED'));
-    }
-  });
+  test(
+    'a full briefing request fits the budget on the first try and on retry',
+    () {
+      for (final budget in [4600, 3600]) {
+        final request = AppleCoachRequest.build(
+          [
+            const ChatMessage(
+              text: 'Give me my evening briefing. Write it in German.',
+              isUser: true,
+            ),
+          ],
+          '[Context:V4][Today:2026-10-28,Weekday:Wed,TimeNow:21:15][Range:60d]\n'
+          '${briefLines(trainingHrv: 'down').join('\n')}\n'
+          '${'[Activities:today:${'run ' * 80}]\n' * 6}[TodayWorkout:Status:rest_day]',
+          briefingInstructions:
+              'You are Fjelia AI Coach. Generate a short evening briefing.',
+          budget: budget,
+        );
+        expect(request.inputBytes, lessThanOrEqualTo(budget));
+        expect(request.prompt, contains('Readiness RED'));
+      }
+    },
+  );
 
   group('briefing guard', () {
     test('short, in the right language and not a copy is usable', () {

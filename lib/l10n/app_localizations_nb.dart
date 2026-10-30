@@ -10,6 +10,27 @@ class AppLocalizationsNb extends AppLocalizations {
   AppLocalizationsNb([String locale = 'nb']) : super(locale);
 
   @override
+  String get freeAi => 'Free AI';
+
+  @override
+  String get freeAiUsageTracking =>
+      'For at Free AI skal fortsette å fungere pålitelig for alle, sender vi en tilfeldig installasjons-ID. Den hjelper oss med å oppdage uvanlig bruk og blokkere forespørsler som misbruker tjenesten. ID-en inneholder verken navnet ditt eller kontoopplysninger.';
+
+  @override
+  String freeAiDescription(String host) {
+    return 'Gratis KI-chat og oppsummeringer via $host. Ingen egen konto eller API-nøkkel er nødvendig. Etter din bekreftelse sendes meldinger og en oppsummering av helse og trening til tjenesten.';
+  }
+
+  @override
+  String get freeAiUnavailable =>
+      'Free AI er ikke tilgjengelig i denne versjonen. Velg en annen leverandør.';
+
+  @override
+  String shareBriefingContextWithName(String name) {
+    return 'En oppsummering av helse- og treningsdataene dine sendes til $name.';
+  }
+
+  @override
   String get language => 'Språk';
 
   @override
@@ -824,8 +845,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get getStarted => 'Kom i gang';
 
   @override
-  String get yourDataStaysOnYour =>
-      'Dataene dine blir på enheten din. Alltid private.';
+  String get yourDataStaysOnYour => 'Dine data. Du velger hva du deler.';
 
   @override
   String get bodyScale => 'Kroppsvekt';
@@ -3020,7 +3040,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get appleIntelligenceIsNotAvailable =>
-      'Apple Intelligence er ikke tilgjengelig på denne enheten (krever en støttet iPhone eller Mac med iOS/macOS 26 eller nyere og Apple Intelligence slått på i Innstillinger). Velg en annen leverandør og legg til din egen API-nøkkel for å bruke treneren.';
+      'Apple Intelligence er ikke tilgjengelig på denne enheten. Bruk Free AI eller velg en annen leverandør.';
 
   @override
   String get personalisedMorningLunchAfternoonEvening =>
@@ -5608,4 +5628,208 @@ class AppLocalizationsNb extends AppLocalizations {
   @override
   String get briefOutlookPlanTired =>
       'Hvis du følger planen, holder formen din seg lav de neste dagene.';
+
+  @override
+  String get localQwen => 'Qwen3.5 · lokal';
+
+  @override
+  String get localModelDescription =>
+      'Valgfri Qwen3.5, 4-bits MLX. Last ned én gang, og bruk chat og oppsummeringer på denne enheten uten API-nøkkel. Helsedataene dine blir på denne enheten.';
+
+  @override
+  String localModelSizeMb(Object megabytes) {
+    return '$megabytes MB nedlasting · ekstra minne er nødvendig under bruk.';
+  }
+
+  @override
+  String get localModelDownload => 'Last ned modell';
+
+  @override
+  String get localModelResumeDownload => 'Fortsett nedlasting';
+
+  @override
+  String localModelDownloading(Object downloaded, Object total) {
+    return '$downloaded / $total MB';
+  }
+
+  @override
+  String get localModelInstalled => 'Lastet ned · tilgjengelig uten nett';
+
+  @override
+  String get localModelRemove => 'Slett modell';
+
+  @override
+  String get localModelUnsupported =>
+      'Denne MLX-modellen krever en iPhone med iOS 17 eller nyere og en A14-brikke eller nyere. Eldre enheter støttes ikke.';
+
+  @override
+  String get localModelMemoryUnsupported =>
+      'Denne enheten har ikke nok minne til å kjøre den lokale modellen.';
+
+  @override
+  String get localModelDownloadFailed =>
+      'Nedlastingen mislyktes. Prøv igjen; fullstendige filer beholdes.';
+
+  @override
+  String get localModelDownloadFirst =>
+      'Last først ned Qwen under Innstillinger → KI og mer.';
+
+  @override
+  String get localModelContextTooLong =>
+      'Denne samtalen er for lang for den lokale modellen. Start en ny chat eller forkort spørsmålet.';
+
+  @override
+  String get localModelBusy =>
+      'Den lokale modellen svarer på en annen forespørsel. Prøv igjen om litt.';
+
+  @override
+  String get localModelInterrupted =>
+      'Lokal generering ble avbrutt. Hold Fjelia åpen og prøv igjen.';
+
+  @override
+  String get localModelCouldNotAnswer =>
+      'Den lokale modellen kunne ikke svare. Sjekk modellen under Innstillinger → KI og mer, og prøv igjen.';
+
+  @override
+  String get localModelBriefingUnavailable =>
+      'Lokal KI-oppsummering er utilgjengelig. Viser appens oppsummering.';
+
+  @override
+  String get localModelInfo => 'Modelldetaljer og lisens';
+
+  @override
+  String localModelRamGb(int gigabytes) {
+    return 'Krever minst $gigabytes GB arbeidsminne.';
+  }
+
+  @override
+  String get localModelIPhone18 => '4B er tilgjengelig på iPhone 18 og nyere.';
+
+  @override
+  String briefPlannedTodayCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Det er planlagt $count treningsøkter i dag.',
+      one: 'Det er planlagt 1 treningsøkt i dag.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get coachDataFallback =>
+      'Modellens svar motsier dataene. Her er Fjelias oppsummering:';
+
+  @override
+  String get coachSevenDayAverage => '7-dagers gjennomsnitt';
+
+  @override
+  String coachSleepNeedAndShortfall(String need, String shortfall) {
+    return 'Søvnbehov: $need t; underskudd: $shortfall t.';
+  }
+
+  @override
+  String coachCurrentForm(String value) {
+    return 'Nåværende form (TSB): $value poeng.';
+  }
+
+  @override
+  String get aiOnboardingStep => 'Trinn 2 av 3';
+
+  @override
+  String get aiOnboardingTitle => 'Din coach.\nPå din måte.';
+
+  @override
+  String get aiOnboardingSubtitle =>
+      'Gjør helsedataene dine til nyttige råd for trening og restitusjon.';
+
+  @override
+  String get aiOnboardingChoose => 'VELG DIN KI-COACH';
+
+  @override
+  String get aiOnboardingFreeDetail => 'Gratis · Ingen KI-konto nødvendig';
+
+  @override
+  String get aiOnboardingFreeBody => 'KI i skyen for trening og restitusjon.';
+
+  @override
+  String get aiOnboardingRecommended => 'Anbefalt';
+
+  @override
+  String get aiOnboardingOnDevice => 'På enheten din';
+
+  @override
+  String get aiOnboardingLocalBody =>
+      'KI-forespørslene dine blir på denne enheten.';
+
+  @override
+  String get aiOnboardingUnavailable => 'Ikke tilgjengelig nå';
+
+  @override
+  String get aiOnboardingMore => 'Flere KI-modeller';
+
+  @override
+  String get aiOnboardingMoreBody => 'Lokal Qwen eller din egen skyleverandør';
+
+  @override
+  String get aiOnboardingConsent =>
+      'Forespørsler til skyen krever din bekreftelse.';
+
+  @override
+  String get aiOnboardingError =>
+      'KI-valget ditt kunne ikke lagres eller lastes inn. Prøv igjen.';
+
+  @override
+  String get aiOnboardingWithout => 'Fortsett uten KI';
+
+  @override
+  String get aiOnboardingConfigure => 'Konfigurer modell';
+
+  @override
+  String aiOnboardingContinue(String provider) {
+    return 'Fortsett med $provider';
+  }
+
+  @override
+  String get aiOnboardingChangeLater =>
+      'Du kan endre dette når som helst i innstillingene.';
+
+  @override
+  String get creditsAndLicenses => 'Lisenser og takk';
+
+  @override
+  String get bioAgeActivity => 'Aktivitet';
+
+  @override
+  String get bioAgeActivityBasis => 'Aktivitetsdata · siste 7 dager';
+
+  @override
+  String bioAgeActivityReported(String minutes) {
+    return '$minutes rapporterte moderate minutter';
+  }
+
+  @override
+  String bioAgeActivitySteps(String minutes) {
+    return '≈ $minutes gangminutter beregnet fra skritt';
+  }
+
+  @override
+  String bioAgeActivityCoverage(int days) {
+    return 'Data for $days av 7 dager';
+  }
+
+  @override
+  String get bioAgeActivityEstimateNotice =>
+      'Antakelse: 100 skritt ≈ 1 gangminutt. Daglige skrittall viser verken tempo eller intensitet. Rapporterte minutter prioriteres hver dag; skrittene samme dag telles ikke i tillegg.';
+
+  @override
+  String get bioAgeActivityIncomplete =>
+      'Aktivitetsdata mangler. Aktivitetens bidrag i år beregnes først når alle 7 dager har data.';
+
+  @override
+  String get bioAgeActivityEstimatedLabel =>
+      'Aktiviteten inkluderer anslått gangtid.';
+
+  @override
+  String get bioAgeActivityUnknownLabel => 'Aktivitetsdata er ufullstendige';
 }

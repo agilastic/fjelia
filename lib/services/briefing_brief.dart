@@ -123,17 +123,38 @@ class BriefingBrief {
         .join(' and ');
     final parts = <String>[
       'Readiness ${readiness.toUpperCase()}',
+      'Advice: ${switch (readiness) {
+        'red' => 'prioritise recovery and avoid intense training',
+        'yellow' => 'keep the scheduled plan without extra intensity',
+        _ => 'train as planned',
+      }}',
       if (findings.isNotEmpty)
         'Main findings, most important first: ${names(findings)}',
       if (good.isNotEmpty) 'Good: ${names(good)}',
       if (done.isNotEmpty) 'Done today: ${plan(done)}',
-      if (today.isNotEmpty) 'Still planned today: ${plan(today)}',
+      if (today.isNotEmpty)
+        'Still planned today: ${today.length} scheduled ${today.length == 1 ? 'session' : 'sessions'}, ${plan(today)}',
+      if (today.isEmpty) 'No further scheduled sessions today',
       if (tomorrow.isNotEmpty) 'Planned tomorrow: ${plan(tomorrow)}',
       if (trainingHrv != null)
         'HRV before and after the workout ${trainingHrv == 'up' ? 'rose (favourable)' : 'fell (less favourable)'}',
       if (outlook != null) 'Outlook: ${outlookEnglish(outlook!)}',
     ];
     return '${parts.join('. ')}.';
+  }
+
+  String? plannedTodaySentence(AppLocalizations l) =>
+      today.isEmpty ? null : l.briefPlannedTodayCount(today.length);
+
+  /// The plan is a database fact, even when recovery advice suggests reducing
+  /// it. A small model must not turn several sessions into one optional idea.
+  String scheduleInstruction(AppLocalizations l) {
+    final sentence = plannedTodaySentence(l);
+    return sentence == null
+        ? ''
+        : 'Today has ${today.length} scheduled ${today.length == 1 ? 'session' : 'sessions'}, not alternatives. '
+              'Include this exact sentence as one of your sentences: "$sentence" '
+              'The schedule exists even if you recommend reducing it or resting. ';
   }
 
   String _reason(AppLocalizations l, String id) => switch (id) {
@@ -181,7 +202,9 @@ class BriefingBrief {
         ? ''
         : ' ${trainingHrv == 'up' ? l.briefTrainingHrvUp : l.briefTrainingHrvDown}';
     final outlookSentence = outlookText(l, outlook);
-    return '$head $why$training${outlookSentence == null ? '' : ' $outlookSentence'} $advice';
+    final schedule = plannedTodaySentence(l);
+    return '$head $why$training${outlookSentence == null ? '' : ' $outlookSentence'}'
+        '${schedule == null ? '' : ' $schedule'} $advice';
   }
 }
 

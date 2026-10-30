@@ -1397,33 +1397,49 @@ class GarminClient {
         const [];
   }
 
-  /// `"title|yyyy-MM-dd"` → workout id for workouts already on the calendar,
-  /// used to avoid pushing duplicates.
-  Future<Map<String, String>> calendarWorkoutsByTitleDate({
+  /// The workouts on the Garmin calendar from this month on: title, day,
+  /// workout id and the id of the calendar entry. One workout can sit on the
+  /// calendar more than once.
+  Future<List<GarminCalendarWorkout>> calendarWorkoutEntries({
     int monthsAhead = 2,
   }) async {
     final now = DateTime.now();
-    final result = <String, String>{};
-    for (var i = 0; i < monthsAhead; i++) {
-      final m = DateTime(now.year, now.month + i);
-      try {
-        final items = await _calendarItems(m.year, m.month - 1);
-        for (final item in items) {
-          final type = item['itemType'] as String? ?? '';
-          if (!type.contains('orkout')) continue;
-          final title = item['title'] as String? ?? '';
-          final date = item['date'] as String? ?? '';
-          if (date.length < 10) continue;
-          final id = (item['workoutId'] ?? item['id'])?.toString() ?? '';
-          if (id.isEmpty) continue;
-          result['$title|${date.substring(0, 10)}'] = id;
-        }
-      } catch (e) {
-        log('[Garmin] calendarWorkoutsByTitleDate month $m error: $e');
+    return [
+      for (var i = 0; i < monthsAhead; i++)
+        ...await _calendarWorkoutsOfMonth(DateTime(now.year, now.month + i)),
+    ];
+  }
+
+  /// The workouts on the Garmin calendar on [date].
+  Future<List<GarminCalendarWorkout>> calendarWorkoutsOn(DateTime date) async {
+    final day = _dateStr(date);
+    return [
+      for (final e in await _calendarWorkoutsOfMonth(date))
+        if (e.date == day) e,
+    ];
+  }
+
+  Future<List<GarminCalendarWorkout>> _calendarWorkoutsOfMonth(
+    DateTime month,
+  ) async {
+    final out = <GarminCalendarWorkout>[];
+    for (final item in await _calendarItems(month.year, month.month - 1)) {
+      final type = item['itemType'] as String? ?? '';
+      if (!type.contains('orkout')) continue;
+      final date = item['date'] as String? ?? '';
+      final workoutId = item['workoutId']?.toString() ?? '';
+      final scheduleId = item['id']?.toString() ?? '';
+      if (date.length < 10 || workoutId.isEmpty || scheduleId.isEmpty) {
+        continue;
       }
+      out.add((
+        title: item['title'] as String? ?? '',
+        date: date.substring(0, 10),
+        workoutId: workoutId,
+        scheduleId: scheduleId,
+      ));
     }
-    log('[Garmin] calendarWorkoutsByTitleDate: ${result.length} items');
-    return result;
+    return out;
   }
 
   Future<List<({String scheduleId, String workoutId})>> listCalendarWorkouts({
@@ -1926,3 +1942,12 @@ class GarminClient {
     return steps;
   }
 }
+
+/// A workout on the Garmin calendar: [scheduleId] is the calendar entry,
+/// [workoutId] the definition in the library, [date] `yyyy-MM-dd`.
+typedef GarminCalendarWorkout = ({
+  String title,
+  String date,
+  String workoutId,
+  String scheduleId,
+});
