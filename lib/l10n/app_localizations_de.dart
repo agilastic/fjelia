@@ -3428,6 +3428,19 @@ class AppLocalizationsDe extends AppLocalizations {
   String get logIntake => 'Aufnahme erfassen';
 
   @override
+  String nutritionReminderTitle(String name) {
+    return 'Neue Aktivität: $name';
+  }
+
+  @override
+  String get nutritionReminderBody =>
+      'Trag ein, was du gegessen und getrunken hast.';
+
+  @override
+  String get nutritionReminderHrvHint =>
+      'Deine HRV nach dem Training ist noch nicht gemessen.';
+
+  @override
   String get in30Minutes => 'In 30 Minuten';
 
   @override
@@ -5867,4 +5880,152 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get bioAgeActivityUnknownLabel => 'Bewegungsdaten unvollständig';
+
+  @override
+  String get mixTitle => 'Getränk mischen';
+
+  @override
+  String get mixMyBottle => 'Meine Flasche mischen';
+
+  @override
+  String get mixRecipes => 'Rezepte';
+
+  @override
+  String get mixIngredients => 'Zutaten';
+
+  @override
+  String get mixAddIngredient => 'Zutat hinzufügen';
+
+  @override
+  String get mixBottle => 'Flasche';
+
+  @override
+  String get mixFilledWithWater => 'mit Wasser aufgefüllt';
+
+  @override
+  String mixPerBottle(String ml) {
+    return 'pro $ml-ml-Flasche';
+  }
+
+  @override
+  String get mixStrength => 'Konzentration';
+
+  @override
+  String get mixRatio => 'Glukose : Fruktose';
+
+  @override
+  String get mixGlucose => 'Glukose';
+
+  @override
+  String get mixFructose => 'Fruktose';
+
+  @override
+  String get mixGlucoseOnly => 'Nur Glukose';
+
+  @override
+  String get mixGentle => 'Magenfreundlich – bis 8 %.';
+
+  @override
+  String get mixStrong => 'Konzentriert – nur mit trainiertem Magen.';
+
+  @override
+  String get mixTooStrong => 'Sehr konzentriert – mehr Wasser dazu.';
+
+  @override
+  String get mixNoFructoseHint =>
+      'Nur Glukose: Ab etwa 60 g Kohlenhydrate pro Stunde Fruktose (Zucker) dazunehmen – etwa 2:1 wird besser aufgenommen.';
+
+  @override
+  String get mixFructoseHeavyHint =>
+      'Mehr Fruktose als Glukose kann auf den Magen schlagen – Maltodextrin oder Traubenzucker dazu.';
+
+  @override
+  String get mixSpoonNote =>
+      'Löffel sind unterschiedlich groß. Wieg deinen Löffel einmal ab oder nimm Gramm für genaue Werte.';
+
+  @override
+  String get mixTooMuchLiquid =>
+      'Saft und Cola allein sind schon mehr, als in die Flasche passt – Flasche größer stellen.';
+
+  @override
+  String get mixAddToIntake => 'Zur Aufnahme hinzufügen';
+
+  @override
+  String get mixUseAsBottle => 'Als meine Flasche nutzen';
+
+  @override
+  String get mixDefaultName => 'Getränkemix';
+
+  @override
+  String get mixEmpty => 'Wähl ein Rezept oder füg eine Zutat hinzu.';
+
+  @override
+  String get mixRemove => 'Entfernen';
+
+  @override
+  String mixRowGrams(String grams) {
+    return '≈ $grams g';
+  }
+
+  @override
+  String mixBottleSaved(String carbs, String ml) {
+    return 'Als deine Flasche gespeichert: $carbs g Kohlenhydrate pro $ml ml.';
+  }
+
+  @override
+  String get mixMaltodextrin => 'Maltodextrin';
+
+  @override
+  String get mixSugar => 'Zucker';
+
+  @override
+  String get mixDextrose => 'Traubenzucker';
+
+  @override
+  String get mixHoney => 'Honig';
+
+  @override
+  String get mixSalt => 'Salz';
+
+  @override
+  String get mixOrangeJuice => 'Orangensaft';
+
+  @override
+  String get mixAppleJuice => 'Apfelsaft';
+
+  @override
+  String get mixCola => 'Cola';
+
+  @override
+  String get unitTspLevel => 'gestr. TL';
+
+  @override
+  String get unitTspHeaped => 'gehäufter TL';
+
+  @override
+  String get unitTbspLevel => 'gestr. EL';
+
+  @override
+  String get unitTbspHeaped => 'gehäufter EL';
+
+  @override
+  String get unitPinch => 'Prise';
+
+  @override
+  String get unitTsp => 'TL';
+
+  @override
+  String get unitTbsp => 'EL';
+
+  @override
+  String get mixRecipeMaltoSugar => 'Malto + Zucker 2:1';
+
+  @override
+  String get mixRecipeJuice => 'Saftschorle';
+
+  @override
+  String get mixRecipeJuicePlus => 'Saftschorle + Malto';
+
+  @override
+  String get mixRecipeCola => 'Cola-Schorle';
 }

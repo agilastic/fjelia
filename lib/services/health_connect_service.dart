@@ -372,6 +372,25 @@ class HealthConnectService {
     return result;
   }
 
+  /// Imports only the workouts of the last [lookback]. Used when Apple Health
+  /// wakes the app for a new workout, where there is time for little else.
+  Future<int> syncRecentWorkouts({
+    Duration lookback = const Duration(days: 2),
+  }) async {
+    await _configure();
+    _healthStalled = false;
+    final result = HealthConnectSyncResult();
+    final now = DateTime.now();
+    final raw = await _query(
+      types: [HealthDataType.WORKOUT],
+      startTime: now.subtract(lookback),
+      endTime: now,
+    );
+    await _processWorkouts(_health.removeDuplicates(raw), result);
+    log('[HealthConnect] recent workouts — activities=${result.activities}');
+    return result.activities;
+  }
+
   static String _clip(Object e) {
     final s = e.toString();
     return s.length > 60 ? s.substring(0, 60) : s;

@@ -46,6 +46,8 @@ class BioAgeCard extends ConsumerWidget {
                     children: [
                       StatPair(
                         context.l10n.fitnessAge,
+                        // Fitter than the youngest norm: no exact age.
+                        '${r.fitnessAge <= 20 ? '≤ ' : ''}'
                         '${valueText(r.fitnessAge)} y',
                         color: mint,
                       ),

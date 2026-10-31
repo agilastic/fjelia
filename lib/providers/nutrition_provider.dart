@@ -6,10 +6,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/workout_nutrition.dart';
 import '../services/nutrition_service.dart';
 import '../services/nutrition_reminder_service.dart';
+import '../services/hrv/post_hrv_missing.dart';
 import '../services/open_meteo_client.dart';
 import 'database_provider.dart';
 import 'heat_acclimation_provider.dart';
 import 'hrv_reminder_provider.dart';
+import 'hrv_training_provider.dart';
 import '../services/notifications/local_notification_gateway.dart'
     show NotificationPermission;
 
@@ -20,6 +22,11 @@ final nutritionReminderProvider = Provider(
   (ref) => NutritionReminderService(
     ref.watch(nutritionServiceProvider),
     ref.watch(localNotificationGatewayProvider),
+    postHrvMissing: (ids) => postHrvMissing(
+      ref.read(databaseProvider),
+      ref.read(hrvTrainingServiceProvider),
+      ids,
+    ),
   ),
 );
 final nutritionPreferencesProvider = FutureProvider<NutritionPreferences>(

@@ -12,6 +12,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../services/ai_context_toon_builder.dart';
 import '../services/health_connect_service.dart' show HealthAccess;
 import '../services/sync_service.dart';
+import '../services/workout_background.dart';
 import '../services/widget_data_service.dart';
 import '../utils/log.dart';
 import 'ai_coach_provider.dart';
@@ -409,6 +410,8 @@ class SyncNotifier extends StateNotifier<SyncState> {
           _ref.read(healthAccessLostProvider.notifier).state = true;
           return;
         }
+        // Lets Apple Health wake the app for a new workout from now on.
+        unawaited(setHealthBackgroundDelivery(true));
         log('[Sync] Health Connect sync starting');
         await hc.sync(7, sleepPriority);
         log('[Sync] Health Connect sync done');
@@ -423,6 +426,14 @@ class SyncNotifier extends StateNotifier<SyncState> {
 
     await Future.wait([polar(), suunto(), coros(), health()]);
     state = state.copyWith(progress: 70);
+    // A workout Apple Health delivered in the background comes again from its
+    // own platform now; the platform's copy stays, the reminder follows it.
+    try {
+      final removed = await _ref.read(databaseProvider).deduplicateActivities();
+      if (removed > 0) log('[Sync] merged $removed Apple Health copies');
+    } catch (e) {
+      log('[Sync] activity dedup error: $e');
+    }
 
     final hilo = activeHiloBleService;
     if (hilo != null && await hilo.getPairedMac() != null) {

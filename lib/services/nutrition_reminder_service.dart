@@ -12,12 +12,21 @@ import 'notifications/local_notification_gateway.dart';
 const nutritionNotificationBase = 7100000;
 const nutritionNotificationLimit = 7200000;
 
+/// Of the given activities, those with a pre-workout or resting HRV reading
+/// but no post-workout one yet.
+typedef PostHrvMissing = Future<Set<String>> Function(List<String> activityIds);
+
 class NutritionReminderService {
-  NutritionReminderService(this.store, this.gateway, {DateTime Function()? now})
-    : now = now ?? DateTime.now;
+  NutritionReminderService(
+    this.store,
+    this.gateway, {
+    DateTime Function()? now,
+    this.postHrvMissing,
+  }) : now = now ?? DateTime.now;
   final NutritionService store;
   final LocalNotificationGateway gateway;
   final DateTime Function() now;
+  final PostHrvMissing? postHrvMissing;
   Future<void> _pending = Future.value();
   AppDatabase get db => store.db;
   Future<T> _serial<T>(Future<T> Function() action) {
@@ -62,21 +71,53 @@ class NutritionReminderService {
     await gateway.cancel(r.notificationId);
   }
 
-  Future<void> _schedule(NutritionReminderRecord r) => gateway.schedule(
-    ScheduledNotification(
-      id: r.notificationId,
-      at: r.dueAt,
-      feature: NotificationFeature.nutrition,
-      payload: NutritionNotificationPayload(r.activityId, r.token).encode(),
-      title: tr.recordYourWorkoutNutrition,
-      body: tr.addTheFoodAndFluids,
-      actionLabels: {
-        'log': tr.logIntake,
-        'snooze': tr.in30Minutes,
-        'skip': tr.dismiss,
-      },
-    ),
+  /// The HRV hint is optional: a failing lookup never blocks the reminder.
+  Future<Set<String>> _hrvMissing(List<String> ids) async {
+    final lookup = postHrvMissing;
+    if (lookup == null || ids.isEmpty) return const {};
+    try {
+      return await lookup(ids);
+    } catch (_) {
+      return const {};
+    }
+  }
+
+  ScheduledNotification _notification(
+    NutritionReminderRecord r,
+    ActivityRecord activity,
+    bool hrvMissing,
+  ) => ScheduledNotification(
+    id: r.notificationId,
+    at: r.dueAt,
+    feature: NotificationFeature.nutrition,
+    payload: NutritionNotificationPayload(r.activityId, r.token).encode(),
+    title: tr.nutritionReminderTitle(activity.name),
+    body: hrvMissing
+        ? '${tr.nutritionReminderBody}\n${tr.nutritionReminderHrvHint}'
+        : tr.nutritionReminderBody,
+    actionLabels: {
+      'log': tr.logIntake,
+      'snooze': tr.in30Minutes,
+      'skip': tr.dismiss,
+    },
   );
+
+  static String _textOf(ScheduledNotification n) => '${n.title}\n${n.body}';
+
+  Future<void> _schedule(
+    NutritionReminderRecord r,
+    ActivityRecord activity,
+    bool hrvMissing,
+  ) async {
+    final n = _notification(r, activity, hrvMissing);
+    await gateway.schedule(n);
+    await (db.update(
+      db.nutritionReminderRecords,
+    )..where((t) => t.activityId.equals(r.activityId))).write(
+      NutritionReminderRecordsCompanion(scheduledText: Value(_textOf(n))),
+    );
+  }
+
   Future<void> reconcile() => _serial(() async {
     final at = now();
     final prefs = await store.preferences();
@@ -97,6 +138,8 @@ class NutritionReminderService {
         await gateway.cancel(id);
       }
     }
+    // Pending reminders whose text may need refreshing, and new ones.
+    final due = <(NutritionReminderRecord, ActivityRecord, bool)>[];
     for (final row in rows) {
       final activity = await (db.select(
         db.activityRecords,
@@ -123,13 +166,33 @@ class NutritionReminderService {
               ? 'disabled'
               : 'expired',
         );
-      } else if (row.dueAt.isAfter(at) &&
-          gateway.capabilities.pendingQuery &&
-          !native.contains(row.notificationId)) {
-        await _schedule(row);
+      } else if (row.dueAt.isAfter(at)) {
+        final lost =
+            gateway.capabilities.pendingQuery &&
+            !native.contains(row.notificationId);
+        due.add((row, activity, lost));
       }
     }
-    if (!prefs.reminders || !permission.allowed) return;
+    if (prefs.reminders && permission.allowed) {
+      await _addNew(at, rows, due);
+    }
+    final missing = await _hrvMissing([
+      for (final (_, a, _) in due) a.activityId,
+    ]);
+    for (final (row, activity, lost) in due) {
+      final hint = missing.contains(activity.activityId);
+      final text = _textOf(_notification(row, activity, hint));
+      if (lost || row.scheduledText != text) {
+        await _schedule(row, activity, hint);
+      }
+    }
+  });
+
+  Future<void> _addNew(
+    DateTime at,
+    List<NutritionReminderRecord> rows,
+    List<(NutritionReminderRecord, ActivityRecord, bool)> out,
+  ) async {
     final activities =
         await (db.select(db.activityRecords)..where(
               (t) => t.startDate.isBiggerOrEqualValue(
@@ -169,9 +232,9 @@ class NutritionReminderService {
         state: 'scheduled',
       );
       await db.into(db.nutritionReminderRecords).insertOnConflictUpdate(row);
-      await _schedule(row);
+      out.add((row, a, true));
     }
-  });
+  }
 
   /// Returns the exact activity to open, after validating current local state.
   Future<String?> handle(NotificationResponse response) => _serial(() async {
@@ -211,7 +274,8 @@ class NutritionReminderService {
           state: 'snoozed$count',
         );
         await db.into(db.nutritionReminderRecords).insertOnConflictUpdate(next);
-        await _schedule(next);
+        final missing = await _hrvMissing([activity.activityId]);
+        await _schedule(next, activity, missing.contains(activity.activityId));
       }
       return null;
     }

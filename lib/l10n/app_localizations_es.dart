@@ -3432,6 +3432,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String get logIntake => 'Registrar ingesta';
 
   @override
+  String nutritionReminderTitle(String name) {
+    return 'Nueva actividad: $name';
+  }
+
+  @override
+  String get nutritionReminderBody => 'Añade lo que has comido y bebido.';
+
+  @override
+  String get nutritionReminderHrvHint =>
+      'Aún no has medido tu VFC tras el entrenamiento.';
+
+  @override
   String get in30Minutes => 'En 30 minutos';
 
   @override
@@ -5875,4 +5887,152 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get bioAgeActivityUnknownLabel => 'Datos de actividad incompletos';
+
+  @override
+  String get mixTitle => 'Preparar una bebida';
+
+  @override
+  String get mixMyBottle => 'Preparar mi bidón';
+
+  @override
+  String get mixRecipes => 'Recetas';
+
+  @override
+  String get mixIngredients => 'Ingredientes';
+
+  @override
+  String get mixAddIngredient => 'Añadir ingrediente';
+
+  @override
+  String get mixBottle => 'Bidón';
+
+  @override
+  String get mixFilledWithWater => 'rellenado con agua';
+
+  @override
+  String mixPerBottle(String ml) {
+    return 'por bidón de $ml ml';
+  }
+
+  @override
+  String get mixStrength => 'Concentración';
+
+  @override
+  String get mixRatio => 'Glucosa : fructosa';
+
+  @override
+  String get mixGlucose => 'Glucosa';
+
+  @override
+  String get mixFructose => 'Fructosa';
+
+  @override
+  String get mixGlucoseOnly => 'Solo glucosa';
+
+  @override
+  String get mixGentle => 'Suave para el estómago – hasta el 8 %.';
+
+  @override
+  String get mixStrong => 'Concentrada – solo con un intestino entrenado.';
+
+  @override
+  String get mixTooStrong => 'Muy concentrada – añade agua.';
+
+  @override
+  String get mixNoFructoseHint =>
+      'Solo glucosa: por encima de unos 60 g de carbohidratos por hora, añade fructosa (azúcar) – en torno a 2:1 se absorbe mejor.';
+
+  @override
+  String get mixFructoseHeavyHint =>
+      'Más fructosa que glucosa puede sentar mal al estómago – añade maltodextrina o dextrosa.';
+
+  @override
+  String get mixSpoonNote =>
+      'Las cucharas varían. Pesa tu cuchara una vez o usa gramos para valores exactos.';
+
+  @override
+  String get mixTooMuchLiquid =>
+      'El zumo y la cola ya superan lo que cabe en el bidón – aumenta el tamaño del bidón.';
+
+  @override
+  String get mixAddToIntake => 'Añadir a la ingesta';
+
+  @override
+  String get mixUseAsBottle => 'Usar como mi bidón';
+
+  @override
+  String get mixDefaultName => 'Mezcla de bebida';
+
+  @override
+  String get mixEmpty => 'Elige una receta o añade un ingrediente.';
+
+  @override
+  String get mixRemove => 'Quitar';
+
+  @override
+  String mixRowGrams(String grams) {
+    return '≈ $grams g';
+  }
+
+  @override
+  String mixBottleSaved(String carbs, String ml) {
+    return 'Guardado como tu bidón: $carbs g de carbohidratos por $ml ml.';
+  }
+
+  @override
+  String get mixMaltodextrin => 'Maltodextrina';
+
+  @override
+  String get mixSugar => 'Azúcar';
+
+  @override
+  String get mixDextrose => 'Dextrosa';
+
+  @override
+  String get mixHoney => 'Miel';
+
+  @override
+  String get mixSalt => 'Sal';
+
+  @override
+  String get mixOrangeJuice => 'Zumo de naranja';
+
+  @override
+  String get mixAppleJuice => 'Zumo de manzana';
+
+  @override
+  String get mixCola => 'Cola';
+
+  @override
+  String get unitTspLevel => 'cucharadita rasa';
+
+  @override
+  String get unitTspHeaped => 'cucharadita colmada';
+
+  @override
+  String get unitTbspLevel => 'cucharada rasa';
+
+  @override
+  String get unitTbspHeaped => 'cucharada colmada';
+
+  @override
+  String get unitPinch => 'pizca';
+
+  @override
+  String get unitTsp => 'cucharadita';
+
+  @override
+  String get unitTbsp => 'cucharada';
+
+  @override
+  String get mixRecipeMaltoSugar => 'Malto + azúcar 2:1';
+
+  @override
+  String get mixRecipeJuice => 'Zumo con agua';
+
+  @override
+  String get mixRecipeJuicePlus => 'Zumo con agua + malto';
+
+  @override
+  String get mixRecipeCola => 'Cola con agua';
 }

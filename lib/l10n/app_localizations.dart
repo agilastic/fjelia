@@ -6101,6 +6101,24 @@ abstract class AppLocalizations {
   /// **'Log intake'**
   String get logIntake;
 
+  /// No description provided for @nutritionReminderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New activity: {name}'**
+  String nutritionReminderTitle(String name);
+
+  /// No description provided for @nutritionReminderBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Add what you ate and drank.'**
+  String get nutritionReminderBody;
+
+  /// No description provided for @nutritionReminderHrvHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Your post-workout HRV hasn\'t been measured yet.'**
+  String get nutritionReminderHrvHint;
+
   /// No description provided for @in30Minutes.
   ///
   /// In en, this message translates to:
@@ -10271,6 +10289,282 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Activity data is incomplete'**
   String get bioAgeActivityUnknownLabel;
+
+  /// No description provided for @mixTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mix a drink'**
+  String get mixTitle;
+
+  /// No description provided for @mixMyBottle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mix my bottle'**
+  String get mixMyBottle;
+
+  /// No description provided for @mixRecipes.
+  ///
+  /// In en, this message translates to:
+  /// **'Recipes'**
+  String get mixRecipes;
+
+  /// No description provided for @mixIngredients.
+  ///
+  /// In en, this message translates to:
+  /// **'Ingredients'**
+  String get mixIngredients;
+
+  /// No description provided for @mixAddIngredient.
+  ///
+  /// In en, this message translates to:
+  /// **'Add ingredient'**
+  String get mixAddIngredient;
+
+  /// No description provided for @mixBottle.
+  ///
+  /// In en, this message translates to:
+  /// **'Bottle'**
+  String get mixBottle;
+
+  /// No description provided for @mixFilledWithWater.
+  ///
+  /// In en, this message translates to:
+  /// **'topped up with water'**
+  String get mixFilledWithWater;
+
+  /// No description provided for @mixPerBottle.
+  ///
+  /// In en, this message translates to:
+  /// **'per {ml} ml bottle'**
+  String mixPerBottle(String ml);
+
+  /// No description provided for @mixStrength.
+  ///
+  /// In en, this message translates to:
+  /// **'Strength'**
+  String get mixStrength;
+
+  /// No description provided for @mixRatio.
+  ///
+  /// In en, this message translates to:
+  /// **'Glucose : fructose'**
+  String get mixRatio;
+
+  /// No description provided for @mixGlucose.
+  ///
+  /// In en, this message translates to:
+  /// **'Glucose'**
+  String get mixGlucose;
+
+  /// No description provided for @mixFructose.
+  ///
+  /// In en, this message translates to:
+  /// **'Fructose'**
+  String get mixFructose;
+
+  /// No description provided for @mixGlucoseOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Glucose only'**
+  String get mixGlucoseOnly;
+
+  /// No description provided for @mixGentle.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy on the stomach – up to 8 %.'**
+  String get mixGentle;
+
+  /// No description provided for @mixStrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Concentrated – only with a trained gut.'**
+  String get mixStrong;
+
+  /// No description provided for @mixTooStrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Very concentrated – add water.'**
+  String get mixTooStrong;
+
+  /// No description provided for @mixNoFructoseHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Glucose only: above about 60 g carbohydrate per hour, add fructose (sugar) – around 2:1 is absorbed better.'**
+  String get mixNoFructoseHint;
+
+  /// No description provided for @mixFructoseHeavyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'More fructose than glucose can upset the stomach – add maltodextrin or dextrose.'**
+  String get mixFructoseHeavyHint;
+
+  /// No description provided for @mixSpoonNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Spoon sizes vary. Weigh your spoon once, or use grams for exact values.'**
+  String get mixSpoonNote;
+
+  /// No description provided for @mixTooMuchLiquid.
+  ///
+  /// In en, this message translates to:
+  /// **'Juice and cola alone are more than the bottle holds – make the bottle bigger.'**
+  String get mixTooMuchLiquid;
+
+  /// No description provided for @mixAddToIntake.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to intake'**
+  String get mixAddToIntake;
+
+  /// No description provided for @mixUseAsBottle.
+  ///
+  /// In en, this message translates to:
+  /// **'Use as my bottle'**
+  String get mixUseAsBottle;
+
+  /// No description provided for @mixDefaultName.
+  ///
+  /// In en, this message translates to:
+  /// **'Drink mix'**
+  String get mixDefaultName;
+
+  /// No description provided for @mixEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a recipe or add an ingredient.'**
+  String get mixEmpty;
+
+  /// No description provided for @mixRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get mixRemove;
+
+  /// No description provided for @mixRowGrams.
+  ///
+  /// In en, this message translates to:
+  /// **'≈ {grams} g'**
+  String mixRowGrams(String grams);
+
+  /// No description provided for @mixBottleSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved as your bottle: {carbs} g carbohydrate per {ml} ml.'**
+  String mixBottleSaved(String carbs, String ml);
+
+  /// No description provided for @mixMaltodextrin.
+  ///
+  /// In en, this message translates to:
+  /// **'Maltodextrin'**
+  String get mixMaltodextrin;
+
+  /// No description provided for @mixSugar.
+  ///
+  /// In en, this message translates to:
+  /// **'Sugar'**
+  String get mixSugar;
+
+  /// No description provided for @mixDextrose.
+  ///
+  /// In en, this message translates to:
+  /// **'Dextrose'**
+  String get mixDextrose;
+
+  /// No description provided for @mixHoney.
+  ///
+  /// In en, this message translates to:
+  /// **'Honey'**
+  String get mixHoney;
+
+  /// No description provided for @mixSalt.
+  ///
+  /// In en, this message translates to:
+  /// **'Salt'**
+  String get mixSalt;
+
+  /// No description provided for @mixOrangeJuice.
+  ///
+  /// In en, this message translates to:
+  /// **'Orange juice'**
+  String get mixOrangeJuice;
+
+  /// No description provided for @mixAppleJuice.
+  ///
+  /// In en, this message translates to:
+  /// **'Apple juice'**
+  String get mixAppleJuice;
+
+  /// No description provided for @mixCola.
+  ///
+  /// In en, this message translates to:
+  /// **'Cola'**
+  String get mixCola;
+
+  /// No description provided for @unitTspLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'level tsp'**
+  String get unitTspLevel;
+
+  /// No description provided for @unitTspHeaped.
+  ///
+  /// In en, this message translates to:
+  /// **'heaped tsp'**
+  String get unitTspHeaped;
+
+  /// No description provided for @unitTbspLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'level tbsp'**
+  String get unitTbspLevel;
+
+  /// No description provided for @unitTbspHeaped.
+  ///
+  /// In en, this message translates to:
+  /// **'heaped tbsp'**
+  String get unitTbspHeaped;
+
+  /// No description provided for @unitPinch.
+  ///
+  /// In en, this message translates to:
+  /// **'pinch'**
+  String get unitPinch;
+
+  /// No description provided for @unitTsp.
+  ///
+  /// In en, this message translates to:
+  /// **'tsp'**
+  String get unitTsp;
+
+  /// No description provided for @unitTbsp.
+  ///
+  /// In en, this message translates to:
+  /// **'tbsp'**
+  String get unitTbsp;
+
+  /// No description provided for @mixRecipeMaltoSugar.
+  ///
+  /// In en, this message translates to:
+  /// **'Malto + sugar 2:1'**
+  String get mixRecipeMaltoSugar;
+
+  /// No description provided for @mixRecipeJuice.
+  ///
+  /// In en, this message translates to:
+  /// **'Juice spritzer'**
+  String get mixRecipeJuice;
+
+  /// No description provided for @mixRecipeJuicePlus.
+  ///
+  /// In en, this message translates to:
+  /// **'Juice spritzer + malto'**
+  String get mixRecipeJuicePlus;
+
+  /// No description provided for @mixRecipeCola.
+  ///
+  /// In en, this message translates to:
+  /// **'Cola spritzer'**
+  String get mixRecipeCola;
 }
 
 class _AppLocalizationsDelegate

@@ -342,10 +342,13 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
                   onSubmitted: (_) => send(),
                 ),
               ),
-              IconButton(
-                tooltip: context.l10n.sendMessage,
-                onPressed: sending ? null : send,
-                icon: const Icon(Icons.arrow_upward, color: mint),
+              // Sending keeps the keyboard open for the next message.
+              TextFieldTapRegion(
+                child: IconButton(
+                  tooltip: context.l10n.sendMessage,
+                  onPressed: sending ? null : send,
+                  icon: const Icon(Icons.arrow_upward, color: mint),
+                ),
               ),
             ],
           ),

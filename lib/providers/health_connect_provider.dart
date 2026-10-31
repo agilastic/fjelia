@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../services/health_connect_service.dart';
+import '../services/workout_background.dart';
 import 'database_provider.dart';
 
 /// Raised when Apple Health stopped answering and was disconnected, so the app
@@ -48,6 +49,14 @@ class BoolToggleNotifier extends StateNotifier<bool> {
   }
 }
 
+/// Apple Health is connected and was not found unreachable. Readable
+/// without providers, for the background workout check.
+Future<bool> appleHealthConnected() async {
+  final prefs = await SharedPreferences.getInstance();
+  return (prefs.getBool(_HealthPermNotifier._key) ?? false) &&
+      !(prefs.getBool(_HealthPermNotifier._revokedKey) ?? false);
+}
+
 class _HealthPermNotifier extends StateNotifier<AsyncValue<bool>> {
   // ignore: avoid_unused_constructor_parameters
   _HealthPermNotifier(Ref ref) : super(const AsyncLoading()) {
@@ -78,6 +87,7 @@ class _HealthPermNotifier extends StateNotifier<AsyncValue<bool>> {
   }
 
   Future<void> markRevoked() async {
+    await setHealthBackgroundDelivery(false);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_key, false);
     await prefs.setBool(_revokedKey, true);

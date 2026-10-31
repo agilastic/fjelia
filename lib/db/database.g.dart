@@ -7834,6 +7834,17 @@ class $NutritionReminderRecordsTable extends NutritionReminderRecords
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _scheduledTextMeta = const VerificationMeta(
+    'scheduledText',
+  );
+  @override
+  late final GeneratedColumn<String> scheduledText = GeneratedColumn<String>(
+    'scheduled_text',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     activityId,
@@ -7841,6 +7852,7 @@ class $NutritionReminderRecordsTable extends NutritionReminderRecords
     notificationId,
     dueAt,
     state,
+    scheduledText,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -7897,6 +7909,15 @@ class $NutritionReminderRecordsTable extends NutritionReminderRecords
     } else if (isInserting) {
       context.missing(_stateMeta);
     }
+    if (data.containsKey('scheduled_text')) {
+      context.handle(
+        _scheduledTextMeta,
+        scheduledText.isAcceptableOrUnknown(
+          data['scheduled_text']!,
+          _scheduledTextMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -7929,6 +7950,10 @@ class $NutritionReminderRecordsTable extends NutritionReminderRecords
         DriftSqlType.string,
         data['${effectivePrefix}state'],
       )!,
+      scheduledText: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}scheduled_text'],
+      ),
     );
   }
 
@@ -7945,12 +7970,17 @@ class NutritionReminderRecord extends DataClass
   final int notificationId;
   final DateTime dueAt;
   final String state;
+
+  /// Title and body the pending notification was scheduled with, so a
+  /// changed name or HRV hint replaces it.
+  final String? scheduledText;
   const NutritionReminderRecord({
     required this.activityId,
     required this.token,
     required this.notificationId,
     required this.dueAt,
     required this.state,
+    this.scheduledText,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -7960,6 +7990,9 @@ class NutritionReminderRecord extends DataClass
     map['notification_id'] = Variable<int>(notificationId);
     map['due_at'] = Variable<DateTime>(dueAt);
     map['state'] = Variable<String>(state);
+    if (!nullToAbsent || scheduledText != null) {
+      map['scheduled_text'] = Variable<String>(scheduledText);
+    }
     return map;
   }
 
@@ -7970,6 +8003,9 @@ class NutritionReminderRecord extends DataClass
       notificationId: Value(notificationId),
       dueAt: Value(dueAt),
       state: Value(state),
+      scheduledText: scheduledText == null && nullToAbsent
+          ? const Value.absent()
+          : Value(scheduledText),
     );
   }
 
@@ -7984,6 +8020,7 @@ class NutritionReminderRecord extends DataClass
       notificationId: serializer.fromJson<int>(json['notificationId']),
       dueAt: serializer.fromJson<DateTime>(json['dueAt']),
       state: serializer.fromJson<String>(json['state']),
+      scheduledText: serializer.fromJson<String?>(json['scheduledText']),
     );
   }
   @override
@@ -7995,6 +8032,7 @@ class NutritionReminderRecord extends DataClass
       'notificationId': serializer.toJson<int>(notificationId),
       'dueAt': serializer.toJson<DateTime>(dueAt),
       'state': serializer.toJson<String>(state),
+      'scheduledText': serializer.toJson<String?>(scheduledText),
     };
   }
 
@@ -8004,12 +8042,16 @@ class NutritionReminderRecord extends DataClass
     int? notificationId,
     DateTime? dueAt,
     String? state,
+    Value<String?> scheduledText = const Value.absent(),
   }) => NutritionReminderRecord(
     activityId: activityId ?? this.activityId,
     token: token ?? this.token,
     notificationId: notificationId ?? this.notificationId,
     dueAt: dueAt ?? this.dueAt,
     state: state ?? this.state,
+    scheduledText: scheduledText.present
+        ? scheduledText.value
+        : this.scheduledText,
   );
   NutritionReminderRecord copyWithCompanion(
     NutritionReminderRecordsCompanion data,
@@ -8024,6 +8066,9 @@ class NutritionReminderRecord extends DataClass
           : this.notificationId,
       dueAt: data.dueAt.present ? data.dueAt.value : this.dueAt,
       state: data.state.present ? data.state.value : this.state,
+      scheduledText: data.scheduledText.present
+          ? data.scheduledText.value
+          : this.scheduledText,
     );
   }
 
@@ -8034,14 +8079,21 @@ class NutritionReminderRecord extends DataClass
           ..write('token: $token, ')
           ..write('notificationId: $notificationId, ')
           ..write('dueAt: $dueAt, ')
-          ..write('state: $state')
+          ..write('state: $state, ')
+          ..write('scheduledText: $scheduledText')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(activityId, token, notificationId, dueAt, state);
+  int get hashCode => Object.hash(
+    activityId,
+    token,
+    notificationId,
+    dueAt,
+    state,
+    scheduledText,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -8050,7 +8102,8 @@ class NutritionReminderRecord extends DataClass
           other.token == this.token &&
           other.notificationId == this.notificationId &&
           other.dueAt == this.dueAt &&
-          other.state == this.state);
+          other.state == this.state &&
+          other.scheduledText == this.scheduledText);
 }
 
 class NutritionReminderRecordsCompanion
@@ -8060,6 +8113,7 @@ class NutritionReminderRecordsCompanion
   final Value<int> notificationId;
   final Value<DateTime> dueAt;
   final Value<String> state;
+  final Value<String?> scheduledText;
   final Value<int> rowid;
   const NutritionReminderRecordsCompanion({
     this.activityId = const Value.absent(),
@@ -8067,6 +8121,7 @@ class NutritionReminderRecordsCompanion
     this.notificationId = const Value.absent(),
     this.dueAt = const Value.absent(),
     this.state = const Value.absent(),
+    this.scheduledText = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   NutritionReminderRecordsCompanion.insert({
@@ -8075,6 +8130,7 @@ class NutritionReminderRecordsCompanion
     required int notificationId,
     required DateTime dueAt,
     required String state,
+    this.scheduledText = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : activityId = Value(activityId),
        token = Value(token),
@@ -8087,6 +8143,7 @@ class NutritionReminderRecordsCompanion
     Expression<int>? notificationId,
     Expression<DateTime>? dueAt,
     Expression<String>? state,
+    Expression<String>? scheduledText,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -8095,6 +8152,7 @@ class NutritionReminderRecordsCompanion
       if (notificationId != null) 'notification_id': notificationId,
       if (dueAt != null) 'due_at': dueAt,
       if (state != null) 'state': state,
+      if (scheduledText != null) 'scheduled_text': scheduledText,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -8105,6 +8163,7 @@ class NutritionReminderRecordsCompanion
     Value<int>? notificationId,
     Value<DateTime>? dueAt,
     Value<String>? state,
+    Value<String?>? scheduledText,
     Value<int>? rowid,
   }) {
     return NutritionReminderRecordsCompanion(
@@ -8113,6 +8172,7 @@ class NutritionReminderRecordsCompanion
       notificationId: notificationId ?? this.notificationId,
       dueAt: dueAt ?? this.dueAt,
       state: state ?? this.state,
+      scheduledText: scheduledText ?? this.scheduledText,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -8135,6 +8195,9 @@ class NutritionReminderRecordsCompanion
     if (state.present) {
       map['state'] = Variable<String>(state.value);
     }
+    if (scheduledText.present) {
+      map['scheduled_text'] = Variable<String>(scheduledText.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -8149,6 +8212,7 @@ class NutritionReminderRecordsCompanion
           ..write('notificationId: $notificationId, ')
           ..write('dueAt: $dueAt, ')
           ..write('state: $state, ')
+          ..write('scheduledText: $scheduledText, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -46605,6 +46669,7 @@ typedef $$NutritionReminderRecordsTableCreateCompanionBuilder =
       required int notificationId,
       required DateTime dueAt,
       required String state,
+      Value<String?> scheduledText,
       Value<int> rowid,
     });
 typedef $$NutritionReminderRecordsTableUpdateCompanionBuilder =
@@ -46614,6 +46679,7 @@ typedef $$NutritionReminderRecordsTableUpdateCompanionBuilder =
       Value<int> notificationId,
       Value<DateTime> dueAt,
       Value<String> state,
+      Value<String?> scheduledText,
       Value<int> rowid,
     });
 
@@ -46648,6 +46714,11 @@ class $$NutritionReminderRecordsTableFilterComposer
 
   ColumnFilters<String> get state => $composableBuilder(
     column: $table.state,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get scheduledText => $composableBuilder(
+    column: $table.scheduledText,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -46685,6 +46756,11 @@ class $$NutritionReminderRecordsTableOrderingComposer
     column: $table.state,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get scheduledText => $composableBuilder(
+    column: $table.scheduledText,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$NutritionReminderRecordsTableAnnotationComposer
@@ -46714,6 +46790,11 @@ class $$NutritionReminderRecordsTableAnnotationComposer
 
   GeneratedColumn<String> get state =>
       $composableBuilder(column: $table.state, builder: (column) => column);
+
+  GeneratedColumn<String> get scheduledText => $composableBuilder(
+    column: $table.scheduledText,
+    builder: (column) => column,
+  );
 }
 
 class $$NutritionReminderRecordsTableTableManager
@@ -46767,6 +46848,7 @@ class $$NutritionReminderRecordsTableTableManager
                 Value<int> notificationId = const Value.absent(),
                 Value<DateTime> dueAt = const Value.absent(),
                 Value<String> state = const Value.absent(),
+                Value<String?> scheduledText = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => NutritionReminderRecordsCompanion(
                 activityId: activityId,
@@ -46774,6 +46856,7 @@ class $$NutritionReminderRecordsTableTableManager
                 notificationId: notificationId,
                 dueAt: dueAt,
                 state: state,
+                scheduledText: scheduledText,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -46783,6 +46866,7 @@ class $$NutritionReminderRecordsTableTableManager
                 required int notificationId,
                 required DateTime dueAt,
                 required String state,
+                Value<String?> scheduledText = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => NutritionReminderRecordsCompanion.insert(
                 activityId: activityId,
@@ -46790,6 +46874,7 @@ class $$NutritionReminderRecordsTableTableManager
                 notificationId: notificationId,
                 dueAt: dueAt,
                 state: state,
+                scheduledText: scheduledText,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

@@ -12,8 +12,13 @@ import '../services/nutrition_service.dart';
 import '../theme/activity_colors.dart';
 import '../utils/decimal.dart';
 import 'app_widgets.dart';
+import 'drink_mix_sheet.dart';
 
 String _v(double? value) => value == null ? '—' : value.round().toString();
+
+/// A value as typed into a field, without a needless `.0`.
+String _field(double value) =>
+    value == value.roundToDouble() ? '${value.round()}' : '$value';
 const _nutrients = ['carbs', 'fluid', 'sodium', 'caffeine', 'protein'];
 
 Future<Map<String, String>?> _fields(
@@ -85,19 +90,26 @@ class _NutritionFieldsState extends State<_NutritionFields> {
               padding: EdgeInsets.symmetric(vertical: 10),
               child: Text(context.l10n.examplesOnlyCheckAndEnter),
             ),
-            Wrap(
-              spacing: 6,
-              children: [
-                for (final p in widget.presets.entries)
-                  ActionChip(
-                    label: Text(p.key),
-                    onPressed: () => setState(() {
-                      for (final e in p.value.entries) {
-                        controllers[e.key]?.text = e.value;
-                      }
-                    }),
-                  ),
-              ],
+            // One swipeable row, so many examples never push the fields
+            // down.
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  for (final p in widget.presets.entries)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 6),
+                      child: ActionChip(
+                        label: Text(p.key),
+                        onPressed: () => setState(() {
+                          for (final e in p.value.entries) {
+                            controllers[e.key]?.text = e.value;
+                          }
+                        }),
+                      ),
+                    ),
+                ],
+              ),
             ),
           ],
           for (final e in widget.fields.entries)
@@ -548,15 +560,25 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
     super.dispose();
   }
 
-  Future<void> _entry([int? index]) async {
+  Future<void> _entry([
+    int? index,
+    Map<String, String> prefill = const {},
+  ]) async {
     final old = index == null ? null : entries[index];
+    final gelCarbs =
+        ref.read(nutritionPreferencesProvider).valueOrNull?.gelCarbs ??
+        const NutritionPreferences().gelCarbs;
     String value(String key, double? amount) =>
-        old == null || old.unknown.contains(key) ? '' : '$amount';
+        prefill[key] ??
+        (old == null || old.unknown.contains(key) ? '' : '$amount');
     final values = await _fields(
       context,
       context.l10n.actualIntakePerServing,
       {
-        'name': (context.l10n.productFoodName, old?.name ?? ''),
+        'name': (
+          context.l10n.productFoodName,
+          prefill['name'] ?? old?.name ?? '',
+        ),
         'quantity': (context.l10n.servingsQuantity, '${old?.quantity ?? 1}'),
         'phase': (context.l10n.when, old?.phase ?? 'during'),
         'minute': (
@@ -584,7 +606,7 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
       optional: {'minute', ..._nutrients},
       presets: {
         for (final p in [
-          (context.l10n.gel, '25', '0', '0'),
+          (context.l10n.gel, _field(gelCarbs), '0', '0'),
           (context.l10n.water, '0', '500', '0'),
           (context.l10n.sportsDrink, '30', '500', '250'),
           (context.l10n.bar, '30', '0', '0'),
@@ -595,6 +617,15 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
             'fluid': p.$3,
             'sodium': p.$4,
             'caffeine': '0',
+            'protein': '0',
+          },
+        for (final gel in commonGels)
+          gel.name: {
+            'name': gel.name,
+            'carbs': _field(gel.carbs),
+            'fluid': '0',
+            'sodium': gel.sodium == null ? '' : _field(gel.sodium!),
+            'caffeine': '',
             'protein': '0',
           },
       },
@@ -624,6 +655,28 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
         entries[index] = entry;
       }
       noIntake = false;
+    });
+  }
+
+  /// A home-made drink: the mixer works out the label values, the usual
+  /// entry dialog then asks when it was drunk.
+  Future<void> _mixDrink() async {
+    final prefs = ref.read(nutritionPreferencesProvider).valueOrNull;
+    final result = await showDrinkMixSheet(
+      context,
+      purpose: DrinkMixPurpose.intake,
+      bottleMl: prefs?.bottleMl ?? const NutritionPreferences().bottleMl,
+    );
+    if (result == null || !mounted) return;
+    final mix = result.mix;
+    String tenth(double v) => _field((v * 10).round() / 10);
+    await _entry(null, {
+      'name': result.name,
+      'carbs': tenth(mix.carbs),
+      'fluid': _field(mix.bottleMl),
+      'sodium': tenth(mix.sodium),
+      'caffeine': tenth(mix.caffeine),
+      'protein': '0',
     });
   }
 
@@ -1245,6 +1298,19 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
                           label: Text(context.l10n.addFoodOrDrink),
                         ),
                       ),
+                      const SizedBox(height: 8),
+                      SizedBox(
+                        width: double.infinity,
+                        child: TextButton.icon(
+                          style: TextButton.styleFrom(
+                            foregroundColor: _blue,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                          ),
+                          onPressed: busy ? null : _mixDrink,
+                          icon: const Icon(Icons.blender_outlined),
+                          label: Text(context.l10n.mixTitle),
+                        ),
+                      ),
                       if (entries.isNotEmpty) ...[
                         _heading(context.l10n.totalIntake),
                         _totalsCard(context),
@@ -1318,6 +1384,12 @@ class NutritionPreferencesTile extends ConsumerWidget {
                 ),
               },
               optional: {'sweatMl', 'sweatSodium'},
+              presets: {
+                for (final gel in commonGels)
+                  '${gel.name} · ${_field(gel.carbs)} g': {
+                    'gelCarbs': _field(gel.carbs),
+                  },
+              },
             );
             if (values == null || !context.mounted) return;
             await runUiAction(context, () async {
@@ -1338,6 +1410,47 @@ class NutritionPreferencesTile extends ConsumerWidget {
             });
           },
           child: Text(context.l10n.productsToleranceAndMeasuredSweat),
+        ),
+        TextButton.icon(
+          onPressed: () async {
+            final result = await showDrinkMixSheet(
+              context,
+              purpose: DrinkMixPurpose.bottle,
+              bottleMl: prefs.bottleMl,
+            );
+            if (result == null || !context.mounted) return;
+            final mix = result.mix;
+            final carbs = (mix.carbs * 10).round() / 10;
+            await runUiAction(context, () async {
+              await ref
+                  .read(nutritionServiceProvider)
+                  .savePreferences(
+                    NutritionPreferences(
+                      trainedCarbs: prefs.trainedCarbs,
+                      gelCarbs: prefs.gelCarbs,
+                      bottleMl: mix.bottleMl,
+                      drinkCarbs: carbs,
+                      sweatMl: prefs.sweatMl,
+                      sweatSodium: prefs.sweatSodium,
+                      reminders: prefs.reminders,
+                    ),
+                  );
+              ref.invalidate(nutritionPreferencesProvider);
+            });
+            if (!context.mounted) return;
+            ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+              SnackBar(
+                content: Text(
+                  context.l10n.mixBottleSaved(
+                    _field(carbs),
+                    _field(mix.bottleMl),
+                  ),
+                ),
+              ),
+            );
+          },
+          icon: const Icon(Icons.blender_outlined, size: 18),
+          label: Text(context.l10n.mixMyBottle),
         ),
         SwitchListTile(
           contentPadding: EdgeInsets.zero,

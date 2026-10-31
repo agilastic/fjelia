@@ -12,6 +12,7 @@ import '../services/polar_h10_service.dart';
 import '../services/spot_hrv_export.dart';
 import 'database_provider.dart';
 import 'hrv_reminder_provider.dart';
+import 'nutrition_provider.dart';
 import 'spot_hrv_provider.dart';
 
 export '../services/polar_h10_service.dart' show H10Device, PolarH10Service;
@@ -104,6 +105,8 @@ class PolarH10Actions {
       launch: launch,
     );
     await ref.read(hrvReminderActionsProvider).reconcile();
+    // The nutrition reminder mentions a missing post-workout reading.
+    await _refreshNutritionReminder();
     return uid;
   }
 
@@ -113,6 +116,15 @@ class PolarH10Actions {
       db.spotHrvMeasurements,
     )..where((t) => t.id.equals(id))).go();
     await ref.read(hrvReminderActionsProvider).reconcile();
+    await _refreshNutritionReminder();
+  }
+
+  Future<void> _refreshNutritionReminder() async {
+    try {
+      await ref.read(nutritionReminderProvider).reconcile();
+    } catch (_) {
+      // Reminders are optional; saving the reading must not fail.
+    }
   }
 
   /// Writes the RR intervals of [row] to a temporary CSV file and returns its

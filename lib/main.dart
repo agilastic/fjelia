@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui' show DartPluginRegistrant;
 
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -20,7 +21,7 @@ import 'widgets/nutrition_widgets.dart';
 import 'services/notifications/local_notification_gateway.dart'
     as notifications;
 import 'services/hrv/hrv_post_reminder_coordinator.dart'
-    show ActionKind, ActionResult;
+    show ActionKind, ActionResult, HrvPostReminderCoordinator;
 import 'screens/strain/activity_detail_sheet.dart';
 import 'widgets/app_widgets.dart' show showAppSheet;
 import 'widgets/polar_h10_hrv_sheet.dart';
@@ -29,13 +30,23 @@ import 'screens/home/home_screen.dart';
 import 'screens/startup_splash.dart';
 import 'screens/onboarding/welcome_screen.dart';
 import 'services/debug_log.dart';
+import 'services/health_connect_service.dart';
+import 'services/hrv/hrv_training_service.dart';
+import 'services/hrv/post_hrv_missing.dart';
 import 'services/local_model_licenses.dart';
+import 'services/notifications/local_notification_adapter.dart';
+import 'services/nutrition_reminder_service.dart';
+import 'services/nutrition_service.dart';
+import 'services/workout_background.dart';
+import 'providers/database_provider.dart';
+import 'utils/log.dart';
 
 import 'package:fjelia_service_api/fjelia_service_api.dart';
 
 import 'theme/app_theme.dart';
 import 'widgets/health_access_lost_dialog.dart';
 import 'widgets/hilo_device_picker.dart';
+import 'widgets/keyboard_dismiss.dart';
 
 void main() {
   DebugLog.install(() async {
@@ -57,6 +68,49 @@ void main() {
   });
 }
 
+/// Started by iOS in a headless engine when Apple Health reports a new
+/// workout while the app is not running: imports it and schedules the
+/// reminders, then tells the native side it is done.
+@pragma('vm:entry-point')
+Future<void> healthBackgroundMain() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  DartPluginRegistrant.ensureInitialized();
+  try {
+    final strings = await currentLocalizations();
+    final language = strings.localeName;
+    setActiveLocale(Locale(language));
+    final db = openAppDatabase();
+    try {
+      final gateway = FlutterLocalNotificationGateway(language: language);
+      final training = HrvTrainingService(db);
+      await checkNewWorkouts(
+        healthConnected: appleHealthConnected,
+        health: HealthConnectService(db),
+        reconcileHrv: () => HrvPostReminderCoordinator(
+          db: db,
+          gateway: gateway,
+          sensorReady: hrvStrapRemembered,
+          training: training,
+          language: language,
+        ).reconcile(),
+        nutrition: NutritionReminderService(
+          NutritionService(db),
+          gateway,
+          postHrvMissing: (ids) => postHrvMissing(db, training, ids),
+        ),
+      ).timeout(healthBackgroundBudget);
+    } finally {
+      await db.close();
+    }
+  } catch (e) {
+    log('[HealthBackground] check failed: $e');
+  } finally {
+    try {
+      await healthBackgroundChannel.invokeMethod<void>('done');
+    } catch (_) {}
+  }
+}
+
 class FjeliaApp extends ConsumerStatefulWidget {
   const FjeliaApp({super.key});
 
@@ -76,6 +130,7 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _listenForPairingRequest();
       _listenForHealthAccessLost();
+      _listenForHealthWorkouts();
       _triggerSync();
       unawaited(_startHrvReminders());
     });
@@ -204,6 +259,29 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
     });
   }
 
+  /// Apple Health reported a new workout while the app is alive, in front or
+  /// suspended: import it and schedule the reminders here.
+  void _listenForHealthWorkouts() {
+    healthBackgroundChannel.setMethodCallHandler((call) async {
+      if (call.method != 'workoutsChanged') return null;
+      try {
+        final added = await checkNewWorkouts(
+          healthConnected: appleHealthConnected,
+          health: ref.read(healthConnectServiceProvider),
+          reconcileHrv: () => ref.read(hrvReminderActionsProvider).reconcile(),
+          nutrition: ref.read(nutritionReminderProvider),
+        ).timeout(healthBackgroundBudget);
+        if (added > 0 && mounted) {
+          ref.read(hrvActivitiesChangedProvider.notifier).state++;
+          unawaited(ref.read(activityListProvider.notifier).refresh());
+        }
+      } catch (e) {
+        log('[HealthBackground] check failed: $e');
+      }
+      return null;
+    });
+  }
+
   /// Shows a message once when Apple Health stopped answering and was
   /// disconnected.
   void _listenForHealthAccessLost() {
@@ -236,6 +314,8 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
       ],
       themeAnimationDuration: const Duration(milliseconds: 200),
       themeAnimationCurve: Curves.linear,
+      builder: (context, child) =>
+          DismissKeyboardOnTapOutside(child: child ?? const SizedBox()),
       home: const _AppRouter(),
     );
   }

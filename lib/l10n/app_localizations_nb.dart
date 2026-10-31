@@ -3403,6 +3403,18 @@ class AppLocalizationsNb extends AppLocalizations {
   String get logIntake => 'Logg inntak';
 
   @override
+  String nutritionReminderTitle(String name) {
+    return 'Ny aktivitet: $name';
+  }
+
+  @override
+  String get nutritionReminderBody => 'Legg inn hva du har spist og drukket.';
+
+  @override
+  String get nutritionReminderHrvHint =>
+      'HRV-en etter treningen er ikke målt ennå.';
+
+  @override
   String get in30Minutes => 'Om 30 minutter';
 
   @override
@@ -5832,4 +5844,152 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get bioAgeActivityUnknownLabel => 'Aktivitetsdata er ufullstendige';
+
+  @override
+  String get mixTitle => 'Bland en drikke';
+
+  @override
+  String get mixMyBottle => 'Bland flasken min';
+
+  @override
+  String get mixRecipes => 'Oppskrifter';
+
+  @override
+  String get mixIngredients => 'Ingredienser';
+
+  @override
+  String get mixAddIngredient => 'Legg til ingrediens';
+
+  @override
+  String get mixBottle => 'Flaske';
+
+  @override
+  String get mixFilledWithWater => 'fylt opp med vann';
+
+  @override
+  String mixPerBottle(String ml) {
+    return 'per $ml ml flaske';
+  }
+
+  @override
+  String get mixStrength => 'Konsentrasjon';
+
+  @override
+  String get mixRatio => 'Glukose : fruktose';
+
+  @override
+  String get mixGlucose => 'Glukose';
+
+  @override
+  String get mixFructose => 'Fruktose';
+
+  @override
+  String get mixGlucoseOnly => 'Bare glukose';
+
+  @override
+  String get mixGentle => 'Skånsom for magen – opptil 8 %.';
+
+  @override
+  String get mixStrong => 'Konsentrert – bare med trent mage.';
+
+  @override
+  String get mixTooStrong => 'Svært konsentrert – tilsett vann.';
+
+  @override
+  String get mixNoFructoseHint =>
+      'Bare glukose: over omtrent 60 g karbohydrat i timen bør du tilsette fruktose (sukker) – omtrent 2:1 tas bedre opp.';
+
+  @override
+  String get mixFructoseHeavyHint =>
+      'Mer fruktose enn glukose kan gi mageproblemer – tilsett maltodekstrin eller druesukker.';
+
+  @override
+  String get mixSpoonNote =>
+      'Skjeer er ulike. Vei skjeen din én gang, eller bruk gram for nøyaktige verdier.';
+
+  @override
+  String get mixTooMuchLiquid =>
+      'Juice og cola alene er mer enn flasken rommer – gjør flasken større.';
+
+  @override
+  String get mixAddToIntake => 'Legg til inntak';
+
+  @override
+  String get mixUseAsBottle => 'Bruk som flasken min';
+
+  @override
+  String get mixDefaultName => 'Drikkeblanding';
+
+  @override
+  String get mixEmpty => 'Velg en oppskrift eller legg til en ingrediens.';
+
+  @override
+  String get mixRemove => 'Fjern';
+
+  @override
+  String mixRowGrams(String grams) {
+    return '≈ $grams g';
+  }
+
+  @override
+  String mixBottleSaved(String carbs, String ml) {
+    return 'Lagret som flasken din: $carbs g karbohydrat per $ml ml.';
+  }
+
+  @override
+  String get mixMaltodextrin => 'Maltodekstrin';
+
+  @override
+  String get mixSugar => 'Sukker';
+
+  @override
+  String get mixDextrose => 'Druesukker';
+
+  @override
+  String get mixHoney => 'Honning';
+
+  @override
+  String get mixSalt => 'Salt';
+
+  @override
+  String get mixOrangeJuice => 'Appelsinjuice';
+
+  @override
+  String get mixAppleJuice => 'Eplejuice';
+
+  @override
+  String get mixCola => 'Cola';
+
+  @override
+  String get unitTspLevel => 'struket ts';
+
+  @override
+  String get unitTspHeaped => 'toppet ts';
+
+  @override
+  String get unitTbspLevel => 'struket ss';
+
+  @override
+  String get unitTbspHeaped => 'toppet ss';
+
+  @override
+  String get unitPinch => 'klype';
+
+  @override
+  String get unitTsp => 'ts';
+
+  @override
+  String get unitTbsp => 'ss';
+
+  @override
+  String get mixRecipeMaltoSugar => 'Malto + sukker 2:1';
+
+  @override
+  String get mixRecipeJuice => 'Juice med vann';
+
+  @override
+  String get mixRecipeJuicePlus => 'Juice med vann + malto';
+
+  @override
+  String get mixRecipeCola => 'Cola med vann';
 }

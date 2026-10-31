@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/models/workout_nutrition.dart';
@@ -226,6 +227,87 @@ void main() {
       );
       await Future<void>.delayed(const Duration(milliseconds: 20));
       expect(opened, ['a', 'b']);
+    },
+  );
+  test('the banner names the activity; text without HRV hint', () async {
+    await add('a');
+    await reminders.reconcile();
+    final n = gateway.scheduled.single;
+    expect(n.title, 'New activity: Ride');
+    expect(n.body, 'Add what you ate and drank.');
+  });
+  test(
+    'a missing post-workout HRV is mentioned, and dropped once measured',
+    () async {
+      var owed = {'a'};
+      reminders = NutritionReminderService(
+        store,
+        gateway,
+        now: () => now,
+        postHrvMissing: (ids) async => owed.intersection(ids.toSet()),
+      );
+      await add('a');
+      await reminders.reconcile();
+      expect(
+        gateway.pending.values.single.body,
+        contains("post-workout HRV hasn't been measured"),
+      );
+      await reminders.reconcile();
+      expect(gateway.scheduled, hasLength(1));
+      owed = {};
+      await reminders.reconcile();
+      expect(gateway.scheduled, hasLength(2));
+      expect(gateway.pending, hasLength(1));
+      expect(gateway.pending.values.single.body, 'Add what you ate and drank.');
+    },
+  );
+  test('a failing HRV lookup never blocks the reminder', () async {
+    reminders = NutritionReminderService(
+      store,
+      gateway,
+      now: () => now,
+      postHrvMissing: (_) async => throw StateError('locked'),
+    );
+    await add('a');
+    await reminders.reconcile();
+    expect(gateway.pending, hasLength(1));
+  });
+  test(
+    'a background Health copy merged into the platform copy is reminded once',
+    () async {
+      final start = now.subtract(const Duration(minutes: 70));
+      await db
+          .into(db.activityRecords)
+          .insert(
+            ActivityRecordsCompanion.insert(
+              activityId: 'hc_1',
+              name: 'Run',
+              type: 'running',
+              startDate: start,
+              durationSeconds: 3600,
+              source: const Value('health_connect'),
+            ),
+          );
+      await reminders.reconcile();
+      final id = gateway.pending.keys.single;
+      await db
+          .into(db.activityRecords)
+          .insert(
+            ActivityRecordsCompanion.insert(
+              activityId: 'g1',
+              name: 'Isar Morning Run',
+              type: 'running',
+              startDate: start.add(const Duration(seconds: 20)),
+              durationSeconds: 3610,
+              source: const Value('garmin_api'),
+            ),
+          );
+      expect(await db.deduplicateActivities(), 1);
+      await reminders.reconcile();
+      expect(gateway.pending.keys, [id]);
+      final n = gateway.pending[id]!;
+      expect(n.title, 'New activity: Isar Morning Run');
+      expect(NutritionNotificationPayload.decode(n.payload)!.activityId, 'g1');
     },
   );
 }

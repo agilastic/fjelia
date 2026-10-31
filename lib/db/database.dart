@@ -979,6 +979,10 @@ class NutritionReminderRecords extends Table {
   DateTimeColumn get dueAt => dateTime()();
   TextColumn get state => text()();
 
+  /// Title and body the pending notification was scheduled with, so a
+  /// changed name or HRV hint replaces it.
+  TextColumn get scheduledText => text().nullable()();
+
   @override
   Set<Column> get primaryKey => {activityId};
 }
@@ -1194,7 +1198,7 @@ class AppDatabase extends _$AppDatabase {
       defaultSourcePriorities[group.name]!;
 
   @override
-  int get schemaVersion => 53;
+  int get schemaVersion => 54;
 
   Future<void> saveHeartRateSamples(List<TimedHeartRate> samples) async {
     if (samples.isEmpty) return;
@@ -1403,6 +1407,7 @@ class AppDatabase extends _$AppDatabase {
   /// to the copy that stays: its alias, the athlete's own links, feedback and
   /// the reminder. Automatic links are recomputed from the facts afterwards.
   Future<void> _followDuplicate(ActivityRecord gone, ActivityRecord keep) async {
+    await _followNutrition(gone.activityId, keep.activityId);
     final goneSource = gone.source ?? 'unknown';
     final keepSource = keep.source ?? 'unknown';
     final goneAlias = await (select(hrvEpisodeAliases)..where(
@@ -1457,6 +1462,27 @@ class AppDatabase extends _$AppDatabase {
         .write(HrvTrainingEpisodesCompanion(
           primaryActivityId: Value(keep.activityId),
         ));
+  }
+
+  /// The intake log and the reminder follow the copy that stays, so a
+  /// workout imported twice is not reminded about twice.
+  Future<void> _followNutrition(String gone, String keep) async {
+    final keepLog = await (select(
+      nutritionRecords,
+    )..where((t) => t.recordKey.equals('intake:$keep'))).getSingleOrNull();
+    if (keepLog == null) {
+      await (update(nutritionRecords)
+            ..where((t) => t.recordKey.equals('intake:$gone')))
+          .write(NutritionRecordsCompanion(recordKey: Value('intake:$keep')));
+    }
+    final keepReminder = await (select(
+      nutritionReminderRecords,
+    )..where((t) => t.activityId.equals(keep))).getSingleOrNull();
+    if (keepReminder == null) {
+      await (update(nutritionReminderRecords)
+            ..where((t) => t.activityId.equals(gone)))
+          .write(NutritionReminderRecordsCompanion(activityId: Value(keep)));
+    }
   }
 
   Future<List<ActivityRecord>> getRecentActivities(int days) {
@@ -2117,6 +2143,16 @@ class AppDatabase extends _$AppDatabase {
       await ensureHrvIdentity();
     },
     onUpgrade: (m, from, to) async {
+      if (from >= 51 && from < 54) {
+        await _addColumnIfMissing(
+          'nutrition_reminder_records',
+          'scheduled_text',
+          () => m.addColumn(
+            nutritionReminderRecords,
+            nutritionReminderRecords.scheduledText,
+          ),
+        );
+      }
       if (from < 53) await m.createTable(strengthProposalDecisions);
       if (from < 52) {
         await m.createTable(strengthExerciseVariants);

@@ -634,13 +634,27 @@ class CorosService {
     return type != null ? _corosSportTypeName(type) : 'coros';
   }
 
-  String _corosSportTypeName(int type) => switch (type) {
-    100 || 101 || 102 || 103 => 'running',
-    200 || 201 || 202 || 203 || 204 => 'cycling',
-    300 || 301 => 'swimming',
-    400 || 401 || 402 => 'strength',
-    _ => 'coros_$type',
-  };
+  /// Maps a COROS `sportType` integer to the canonical discipline the rest of
+  /// the app matches on. COROS does not officially document these codes, so
+  /// this is a best-effort mapping of the known families (1xx running, 2xx
+  /// cycling, 3xx swimming, 4xx strength). The multi-sport codes (107-109 and
+  /// the 5-digit 10xxx for triathlon/duathlon/run-bike) are not a single
+  /// discipline, so they map to `triathlon`. Anything unrecognised becomes a
+  /// `coros_` name the downstream substring checks won't mistake for a run or
+  /// a ride.
+  String _corosSportTypeName(int type) {
+    // 5-digit multi-sport codes (e.g. 10000 Iron Triathlon, 10101 Duathlon).
+    if (type >= 10000) return 'triathlon';
+    return switch (type) {
+      100 || 101 || 102 || 103 || 104 || 105 || 106 => 'running',
+      107 || 108 || 109 => 'triathlon',
+      200 || 201 || 202 || 203 || 204 || 205 => 'cycling',
+      300 || 301 => 'swimming',
+      400 || 401 || 402 => 'strength',
+      _ => 'coros_$type',
+    };
+  }
+
 
   int? _parseActivityDuration(Map<String, dynamic> row) {
     for (final key in const [

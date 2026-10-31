@@ -114,6 +114,27 @@ const _medianVo2Female = {
   75: 18.5,
 };
 
+/// Mean directly measured VO2max of healthy adults per decade, placed at the
+/// middle of each decade (HUNT3 Fitness Study, Loe et al. 2013). The fitness
+/// age scale of NTNU's calculator; the medians above stay with the mortality
+/// studies they come from.
+const _fitnessVo2Male = {
+  25: 54.4,
+  35: 49.1,
+  45: 47.2,
+  55: 42.6,
+  65: 39.2,
+  75: 35.3,
+};
+const _fitnessVo2Female = {
+  25: 43.0,
+  35: 40.0,
+  45: 38.4,
+  55: 34.4,
+  65: 31.1,
+  75: 28.3,
+};
+
 /// VO2max class thresholds per age band (Below Avg … Elite).
 const _vo2ClassMale = {
   (20, 29): [31, 37, 42, 47, 53, 61],
@@ -430,13 +451,16 @@ double estimateVo2max(BioAgePerson p) {
 double computeFitnessAge(double vo2max, bool male) =>
     fitnessAgeFromNorms(vo2max, male);
 
-/// Age at which [vo2max] is the population median (20–95).
+/// Age at which [vo2max] is the norm (20–95). Outside the table the mean
+/// decline per year carries on; the first decade alone is too flat for that
+/// and put every fit athlete at 20.
 double fitnessAgeFromNorms(double vo2max, bool male) {
-  final table = male ? _medianVo2Male : _medianVo2Female;
+  final table = male ? _fitnessVo2Male : _fitnessVo2Female;
   final ages = table.keys.toList()..sort();
+  final perYear =
+      (table[ages.first]! - table[ages.last]!) / (ages.last - ages.first);
   if (vo2max >= table[ages.first]!) {
-    final slope = (table[ages.first]! - table[ages[1]]!) / 10;
-    return (ages.first - (vo2max - table[ages.first]!) / slope).clamp(
+    return (ages.first - (vo2max - table[ages.first]!) / perYear).clamp(
       20.0,
       95.0,
     );
@@ -448,8 +472,7 @@ double fitnessAgeFromNorms(double vo2max, bool male) {
     }
   }
   final last = ages.last;
-  final slope = (table[ages[ages.length - 2]]! - table[last]!) / 10;
-  return (last + (table[last]! - vo2max) / slope).clamp(20.0, 95.0);
+  return (last + (table[last]! - vo2max) / perYear).clamp(20.0, 95.0);
 }
 
 (String, int) classifyVo2max(double vo2max, double age, bool male) {

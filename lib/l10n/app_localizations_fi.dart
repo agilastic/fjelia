@@ -3421,6 +3421,18 @@ class AppLocalizationsFi extends AppLocalizations {
   String get logIntake => 'Kirjaa nauttiminen';
 
   @override
+  String nutritionReminderTitle(String name) {
+    return 'Uusi aktiviteetti: $name';
+  }
+
+  @override
+  String get nutritionReminderBody => 'Lisää, mitä söit ja joit.';
+
+  @override
+  String get nutritionReminderHrvHint =>
+      'Harjoituksen jälkeistä HRV:tä ei ole vielä mitattu.';
+
+  @override
   String get in30Minutes => '30 minuutin päästä';
 
   @override
@@ -5854,4 +5866,152 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get bioAgeActivityUnknownLabel => 'Liikuntatiedot ovat puutteelliset';
+
+  @override
+  String get mixTitle => 'Sekoita juoma';
+
+  @override
+  String get mixMyBottle => 'Sekoita pulloni';
+
+  @override
+  String get mixRecipes => 'Reseptit';
+
+  @override
+  String get mixIngredients => 'Ainekset';
+
+  @override
+  String get mixAddIngredient => 'Lisää aines';
+
+  @override
+  String get mixBottle => 'Pullo';
+
+  @override
+  String get mixFilledWithWater => 'täytetty vedellä';
+
+  @override
+  String mixPerBottle(String ml) {
+    return '$ml ml:n pulloa kohden';
+  }
+
+  @override
+  String get mixStrength => 'Vahvuus';
+
+  @override
+  String get mixRatio => 'Glukoosi : fruktoosi';
+
+  @override
+  String get mixGlucose => 'Glukoosi';
+
+  @override
+  String get mixFructose => 'Fruktoosi';
+
+  @override
+  String get mixGlucoseOnly => 'Vain glukoosia';
+
+  @override
+  String get mixGentle => 'Hellävarainen vatsalle – enintään 8 %.';
+
+  @override
+  String get mixStrong => 'Väkevä – vain harjoitetulle vatsalle.';
+
+  @override
+  String get mixTooStrong => 'Hyvin väkevä – lisää vettä.';
+
+  @override
+  String get mixNoFructoseHint =>
+      'Vain glukoosia: yli noin 60 g hiilihydraattia tunnissa lisää fruktoosia (sokeria) – noin 2:1 imeytyy paremmin.';
+
+  @override
+  String get mixFructoseHeavyHint =>
+      'Enemmän fruktoosia kuin glukoosia voi ärsyttää vatsaa – lisää maltodekstriiniä tai rypälesokeria.';
+
+  @override
+  String get mixSpoonNote =>
+      'Lusikat vaihtelevat. Punnitse lusikkasi kerran tai käytä grammoja tarkkoihin arvoihin.';
+
+  @override
+  String get mixTooMuchLiquid =>
+      'Mehu ja kola yksinään ylittävät jo pullon koon – suurenna pulloa.';
+
+  @override
+  String get mixAddToIntake => 'Lisää nautittuihin';
+
+  @override
+  String get mixUseAsBottle => 'Käytä pullonani';
+
+  @override
+  String get mixDefaultName => 'Juomasekoitus';
+
+  @override
+  String get mixEmpty => 'Valitse resepti tai lisää aines.';
+
+  @override
+  String get mixRemove => 'Poista';
+
+  @override
+  String mixRowGrams(String grams) {
+    return '≈ $grams g';
+  }
+
+  @override
+  String mixBottleSaved(String carbs, String ml) {
+    return 'Tallennettu pulloksesi: $carbs g hiilihydraattia / $ml ml.';
+  }
+
+  @override
+  String get mixMaltodextrin => 'Maltodekstriini';
+
+  @override
+  String get mixSugar => 'Sokeri';
+
+  @override
+  String get mixDextrose => 'Rypälesokeri';
+
+  @override
+  String get mixHoney => 'Hunaja';
+
+  @override
+  String get mixSalt => 'Suola';
+
+  @override
+  String get mixOrangeJuice => 'Appelsiinimehu';
+
+  @override
+  String get mixAppleJuice => 'Omenamehu';
+
+  @override
+  String get mixCola => 'Kola';
+
+  @override
+  String get unitTspLevel => 'tasainen tl';
+
+  @override
+  String get unitTspHeaped => 'kukkurainen tl';
+
+  @override
+  String get unitTbspLevel => 'tasainen rkl';
+
+  @override
+  String get unitTbspHeaped => 'kukkurainen rkl';
+
+  @override
+  String get unitPinch => 'hyppysellinen';
+
+  @override
+  String get unitTsp => 'tl';
+
+  @override
+  String get unitTbsp => 'rkl';
+
+  @override
+  String get mixRecipeMaltoSugar => 'Malto + sokeri 2:1';
+
+  @override
+  String get mixRecipeJuice => 'Laimennettu mehu';
+
+  @override
+  String get mixRecipeJuicePlus => 'Laimennettu mehu + malto';
+
+  @override
+  String get mixRecipeCola => 'Laimennettu kola';
 }

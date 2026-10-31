@@ -28,14 +28,16 @@ final localNotificationGatewayProvider = Provider<LocalNotificationGateway>((
 /// True while a strap is remembered, which is all the reminder needs. A
 /// current connection is not asked for.
 final hrvSensorReadyProvider = Provider<Future<bool> Function()>(
-  (ref) => () async {
-    try {
-      return await PolarH10Pairing.read() != null;
-    } catch (_) {
-      return false;
-    }
-  },
+  (ref) => hrvStrapRemembered,
 );
+
+Future<bool> hrvStrapRemembered() async {
+  try {
+    return await PolarH10Pairing.read() != null;
+  } catch (_) {
+    return false;
+  }
+}
 
 final hrvReminderCoordinatorProvider = Provider<HrvPostReminderCoordinator>((
   ref,

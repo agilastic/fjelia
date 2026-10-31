@@ -44,6 +44,25 @@ class NutritionWorkout extends Equatable {
   );
 }
 
+/// A gel from a maker's label, as a starting point the athlete checks.
+/// Sodium is null where it was not confirmed; flavours with caffeine exist,
+/// so caffeine is left to the label.
+class GelProduct {
+  const GelProduct(this.name, this.carbs, {this.sodium});
+  final String name;
+  final double carbs;
+  final double? sodium;
+}
+
+/// Common gels, per sachet (labels checked 2026-10-31).
+const commonGels = [
+  GelProduct('Maurten Gel 100', 25, sodium: 20),
+  GelProduct('PowerBar PowerGel', 26, sodium: 205),
+  GelProduct('PowerBar PowerGel Hydro', 26, sodium: 205),
+  GelProduct('SiS Beta Fuel', 40),
+  GelProduct('Maurten Gel 160', 40, sodium: 30),
+];
+
 class NutritionPreferences {
   const NutritionPreferences({
     this.trainedCarbs = 60,

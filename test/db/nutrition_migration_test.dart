@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/services/nutrition_service.dart';
@@ -40,4 +41,36 @@ void main() {
       expect((await NutritionService(after).log('existing')).finished, isFalse);
     },
   );
+  test('schema 53 gains the scheduled reminder text', () async {
+    final dir = await Directory.systemTemp.createTemp(
+      'fjelia-nutrition-migration-',
+    );
+    addTearDown(() => dir.delete(recursive: true));
+    final file = File('${dir.path}/db.sqlite');
+    final before = AppDatabase(NativeDatabase(file));
+    await before.customStatement(
+      'ALTER TABLE nutrition_reminder_records DROP COLUMN scheduled_text',
+    );
+    await before.customStatement('PRAGMA user_version = 53');
+    await before.close();
+    final after = AppDatabase(NativeDatabase(file));
+    addTearDown(after.close);
+    await after
+        .into(after.nutritionReminderRecords)
+        .insert(
+          NutritionReminderRecordsCompanion.insert(
+            activityId: 'a',
+            token: 't',
+            notificationId: 7100000,
+            dueAt: DateTime(2026, 10, 31),
+            state: 'scheduled',
+            scheduledText: const Value('x'),
+          ),
+        );
+    expect(
+      (await after.select(after.nutritionReminderRecords).getSingle())
+          .scheduledText,
+      'x',
+    );
+  });
 }

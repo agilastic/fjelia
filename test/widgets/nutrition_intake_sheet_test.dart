@@ -116,4 +116,64 @@ void main() {
     expect(find.textContaining('Nothing added yet'), findsNothing);
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('a gel preset fills the label values; unknown stays blank', (
+    tester,
+  ) async {
+    await show(tester, await activity());
+    await tester.tap(find.text('Add food or drink'));
+    await settle(tester);
+    await tester.ensureVisible(find.text('PowerBar PowerGel Hydro'));
+    await tester.pump();
+    await tester.tap(find.text('PowerBar PowerGel Hydro'));
+    await tester.pump();
+    String field(String label) => tester
+        .widget<TextFormField>(
+          find.ancestor(
+            of: find.text(label),
+            matching: find.byType(TextFormField),
+          ),
+        )
+        .controller!
+        .text;
+    expect(field('Product / food name'), 'PowerBar PowerGel Hydro');
+    expect(field('Carbohydrate g / serving'), '26');
+    expect(field('Sodium mg / serving (not salt)'), '205');
+    expect(field('Caffeine mg / serving'), '');
+    await tester.ensureVisible(find.text('SiS Beta Fuel'));
+    await tester.pump();
+    await tester.tap(find.text('SiS Beta Fuel'));
+    await tester.pump();
+    expect(field('Carbohydrate g / serving'), '40');
+    expect(field('Sodium mg / serving (not salt)'), '');
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('a mixed drink opens the entry with its values filled in', (
+    tester,
+  ) async {
+    await show(tester, await activity());
+    await tester.tap(find.text('Mix a drink'));
+    await settle(tester);
+    // Let the sheet finish sliding in.
+    await tester.pump(const Duration(seconds: 1));
+    await tester.tap(find.text('Add to intake'));
+    await settle(tester);
+    await tester.pump(const Duration(seconds: 1));
+    String field(String label) => tester
+        .widget<TextFormField>(
+          find.ancestor(
+            of: find.text(label),
+            matching: find.byType(TextFormField),
+          ),
+        )
+        .controller!
+        .text;
+    expect(field('Product / food name'), 'Malto + sugar 2:1');
+    expect(field('Carbohydrate g / serving'), '39.2');
+    expect(field('Fluid ml / serving'), '500');
+    expect(field('Sodium mg / serving (not salt)'), '196.5');
+    expect(field('Caffeine mg / serving'), '0');
+    expect(tester.takeException(), isNull);
+  });
 }

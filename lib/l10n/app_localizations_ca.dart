@@ -3435,6 +3435,18 @@ class AppLocalizationsCa extends AppLocalizations {
   String get logIntake => 'Registra la ingesta';
 
   @override
+  String nutritionReminderTitle(String name) {
+    return 'Nova activitat: $name';
+  }
+
+  @override
+  String get nutritionReminderBody => 'Afegeix el que has menjat i begut.';
+
+  @override
+  String get nutritionReminderHrvHint =>
+      'Encara no has mesurat la VFC després de l\'entrenament.';
+
+  @override
   String get in30Minutes => 'D\'aquí a 30 minuts';
 
   @override
@@ -5877,4 +5889,152 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get bioAgeActivityUnknownLabel => 'Dades d’activitat incompletes';
+
+  @override
+  String get mixTitle => 'Preparar una beguda';
+
+  @override
+  String get mixMyBottle => 'Preparar el meu bidó';
+
+  @override
+  String get mixRecipes => 'Receptes';
+
+  @override
+  String get mixIngredients => 'Ingredients';
+
+  @override
+  String get mixAddIngredient => 'Afegeix un ingredient';
+
+  @override
+  String get mixBottle => 'Bidó';
+
+  @override
+  String get mixFilledWithWater => 'omplert amb aigua';
+
+  @override
+  String mixPerBottle(String ml) {
+    return 'per bidó de $ml ml';
+  }
+
+  @override
+  String get mixStrength => 'Concentració';
+
+  @override
+  String get mixRatio => 'Glucosa : fructosa';
+
+  @override
+  String get mixGlucose => 'Glucosa';
+
+  @override
+  String get mixFructose => 'Fructosa';
+
+  @override
+  String get mixGlucoseOnly => 'Només glucosa';
+
+  @override
+  String get mixGentle => 'Suau per a l\'estómac – fins al 8 %.';
+
+  @override
+  String get mixStrong => 'Concentrada – només amb un intestí entrenat.';
+
+  @override
+  String get mixTooStrong => 'Molt concentrada – afegeix aigua.';
+
+  @override
+  String get mixNoFructoseHint =>
+      'Només glucosa: per sobre d\'uns 60 g de carbohidrats per hora, afegeix fructosa (sucre) – al voltant de 2:1 s\'absorbeix millor.';
+
+  @override
+  String get mixFructoseHeavyHint =>
+      'Més fructosa que glucosa pot fer mal a l\'estómac – afegeix maltodextrina o dextrosa.';
+
+  @override
+  String get mixSpoonNote =>
+      'Les culleres varien. Pesa la teva cullera una vegada o fes servir grams per a valors exactes.';
+
+  @override
+  String get mixTooMuchLiquid =>
+      'El suc i la cola ja superen el que hi cap al bidó – fes el bidó més gran.';
+
+  @override
+  String get mixAddToIntake => 'Afegeix a la ingesta';
+
+  @override
+  String get mixUseAsBottle => 'Fes-lo servir com el meu bidó';
+
+  @override
+  String get mixDefaultName => 'Barreja de beguda';
+
+  @override
+  String get mixEmpty => 'Tria una recepta o afegeix un ingredient.';
+
+  @override
+  String get mixRemove => 'Treu';
+
+  @override
+  String mixRowGrams(String grams) {
+    return '≈ $grams g';
+  }
+
+  @override
+  String mixBottleSaved(String carbs, String ml) {
+    return 'Desat com el teu bidó: $carbs g de carbohidrats per $ml ml.';
+  }
+
+  @override
+  String get mixMaltodextrin => 'Maltodextrina';
+
+  @override
+  String get mixSugar => 'Sucre';
+
+  @override
+  String get mixDextrose => 'Dextrosa';
+
+  @override
+  String get mixHoney => 'Mel';
+
+  @override
+  String get mixSalt => 'Sal';
+
+  @override
+  String get mixOrangeJuice => 'Suc de taronja';
+
+  @override
+  String get mixAppleJuice => 'Suc de poma';
+
+  @override
+  String get mixCola => 'Cola';
+
+  @override
+  String get unitTspLevel => 'culleradeta rasa';
+
+  @override
+  String get unitTspHeaped => 'culleradeta colmada';
+
+  @override
+  String get unitTbspLevel => 'cullerada rasa';
+
+  @override
+  String get unitTbspHeaped => 'cullerada colmada';
+
+  @override
+  String get unitPinch => 'pessic';
+
+  @override
+  String get unitTsp => 'culleradeta';
+
+  @override
+  String get unitTbsp => 'cullerada';
+
+  @override
+  String get mixRecipeMaltoSugar => 'Malto + sucre 2:1';
+
+  @override
+  String get mixRecipeJuice => 'Suc amb aigua';
+
+  @override
+  String get mixRecipeJuicePlus => 'Suc amb aigua + malto';
+
+  @override
+  String get mixRecipeCola => 'Cola amb aigua';
 }

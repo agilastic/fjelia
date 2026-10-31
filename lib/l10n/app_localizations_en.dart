@@ -3397,6 +3397,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logIntake => 'Log intake';
 
   @override
+  String nutritionReminderTitle(String name) {
+    return 'New activity: $name';
+  }
+
+  @override
+  String get nutritionReminderBody => 'Add what you ate and drank.';
+
+  @override
+  String get nutritionReminderHrvHint =>
+      'Your post-workout HRV hasn\'t been measured yet.';
+
+  @override
   String get in30Minutes => 'In 30 minutes';
 
   @override
@@ -5812,4 +5824,152 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bioAgeActivityUnknownLabel => 'Activity data is incomplete';
+
+  @override
+  String get mixTitle => 'Mix a drink';
+
+  @override
+  String get mixMyBottle => 'Mix my bottle';
+
+  @override
+  String get mixRecipes => 'Recipes';
+
+  @override
+  String get mixIngredients => 'Ingredients';
+
+  @override
+  String get mixAddIngredient => 'Add ingredient';
+
+  @override
+  String get mixBottle => 'Bottle';
+
+  @override
+  String get mixFilledWithWater => 'topped up with water';
+
+  @override
+  String mixPerBottle(String ml) {
+    return 'per $ml ml bottle';
+  }
+
+  @override
+  String get mixStrength => 'Strength';
+
+  @override
+  String get mixRatio => 'Glucose : fructose';
+
+  @override
+  String get mixGlucose => 'Glucose';
+
+  @override
+  String get mixFructose => 'Fructose';
+
+  @override
+  String get mixGlucoseOnly => 'Glucose only';
+
+  @override
+  String get mixGentle => 'Easy on the stomach – up to 8 %.';
+
+  @override
+  String get mixStrong => 'Concentrated – only with a trained gut.';
+
+  @override
+  String get mixTooStrong => 'Very concentrated – add water.';
+
+  @override
+  String get mixNoFructoseHint =>
+      'Glucose only: above about 60 g carbohydrate per hour, add fructose (sugar) – around 2:1 is absorbed better.';
+
+  @override
+  String get mixFructoseHeavyHint =>
+      'More fructose than glucose can upset the stomach – add maltodextrin or dextrose.';
+
+  @override
+  String get mixSpoonNote =>
+      'Spoon sizes vary. Weigh your spoon once, or use grams for exact values.';
+
+  @override
+  String get mixTooMuchLiquid =>
+      'Juice and cola alone are more than the bottle holds – make the bottle bigger.';
+
+  @override
+  String get mixAddToIntake => 'Add to intake';
+
+  @override
+  String get mixUseAsBottle => 'Use as my bottle';
+
+  @override
+  String get mixDefaultName => 'Drink mix';
+
+  @override
+  String get mixEmpty => 'Pick a recipe or add an ingredient.';
+
+  @override
+  String get mixRemove => 'Remove';
+
+  @override
+  String mixRowGrams(String grams) {
+    return '≈ $grams g';
+  }
+
+  @override
+  String mixBottleSaved(String carbs, String ml) {
+    return 'Saved as your bottle: $carbs g carbohydrate per $ml ml.';
+  }
+
+  @override
+  String get mixMaltodextrin => 'Maltodextrin';
+
+  @override
+  String get mixSugar => 'Sugar';
+
+  @override
+  String get mixDextrose => 'Dextrose';
+
+  @override
+  String get mixHoney => 'Honey';
+
+  @override
+  String get mixSalt => 'Salt';
+
+  @override
+  String get mixOrangeJuice => 'Orange juice';
+
+  @override
+  String get mixAppleJuice => 'Apple juice';
+
+  @override
+  String get mixCola => 'Cola';
+
+  @override
+  String get unitTspLevel => 'level tsp';
+
+  @override
+  String get unitTspHeaped => 'heaped tsp';
+
+  @override
+  String get unitTbspLevel => 'level tbsp';
+
+  @override
+  String get unitTbspHeaped => 'heaped tbsp';
+
+  @override
+  String get unitPinch => 'pinch';
+
+  @override
+  String get unitTsp => 'tsp';
+
+  @override
+  String get unitTbsp => 'tbsp';
+
+  @override
+  String get mixRecipeMaltoSugar => 'Malto + sugar 2:1';
+
+  @override
+  String get mixRecipeJuice => 'Juice spritzer';
+
+  @override
+  String get mixRecipeJuicePlus => 'Juice spritzer + malto';
+
+  @override
+  String get mixRecipeCola => 'Cola spritzer';
 }

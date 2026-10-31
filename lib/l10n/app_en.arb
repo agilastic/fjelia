@@ -1755,6 +1755,16 @@
   "recordYourWorkoutNutrition": "Record your workout nutrition",
   "addTheFoodAndFluids": "Add the food and fluids you actually consumed in your activity history.",
   "logIntake": "Log intake",
+  "nutritionReminderTitle": "New activity: {name}",
+  "@nutritionReminderTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "nutritionReminderBody": "Add what you ate and drank.",
+  "nutritionReminderHrvHint": "Your post-workout HRV hasn't been measured yet.",
   "in30Minutes": "In 30 minutes",
   "loadSuggestionsCoverStraightSets": "Load suggestions cover straight sets with repetitions only.",
   "needsStrengthprogressionminsessionsRecordedSessionsOf": "Needs {strengthProgressionMinSessions} recorded sessions of this exercise.",
@@ -3317,5 +3327,54 @@
         "type": "int"
       }
     }
-  }
+  },
+  "mixTitle": "Mix a drink",
+  "mixMyBottle": "Mix my bottle",
+  "mixRecipes": "Recipes",
+  "mixIngredients": "Ingredients",
+  "mixAddIngredient": "Add ingredient",
+  "mixBottle": "Bottle",
+  "mixFilledWithWater": "topped up with water",
+  "mixPerBottle": "per {ml} ml bottle",
+  "@mixPerBottle": {"placeholders": {"ml": {"type": "String"}}},
+  "mixStrength": "Strength",
+  "mixRatio": "Glucose : fructose",
+  "mixGlucose": "Glucose",
+  "mixFructose": "Fructose",
+  "mixGlucoseOnly": "Glucose only",
+  "mixGentle": "Easy on the stomach – up to 8 %.",
+  "mixStrong": "Concentrated – only with a trained gut.",
+  "mixTooStrong": "Very concentrated – add water.",
+  "mixNoFructoseHint": "Glucose only: above about 60 g carbohydrate per hour, add fructose (sugar) – around 2:1 is absorbed better.",
+  "mixFructoseHeavyHint": "More fructose than glucose can upset the stomach – add maltodextrin or dextrose.",
+  "mixSpoonNote": "Spoon sizes vary. Weigh your spoon once, or use grams for exact values.",
+  "mixTooMuchLiquid": "Juice and cola alone are more than the bottle holds – make the bottle bigger.",
+  "mixAddToIntake": "Add to intake",
+  "mixUseAsBottle": "Use as my bottle",
+  "mixDefaultName": "Drink mix",
+  "mixEmpty": "Pick a recipe or add an ingredient.",
+  "mixRemove": "Remove",
+  "mixRowGrams": "≈ {grams} g",
+  "@mixRowGrams": {"placeholders": {"grams": {"type": "String"}}},
+  "mixBottleSaved": "Saved as your bottle: {carbs} g carbohydrate per {ml} ml.",
+  "@mixBottleSaved": {"placeholders": {"carbs": {"type": "String"}, "ml": {"type": "String"}}},
+  "mixMaltodextrin": "Maltodextrin",
+  "mixSugar": "Sugar",
+  "mixDextrose": "Dextrose",
+  "mixHoney": "Honey",
+  "mixSalt": "Salt",
+  "mixOrangeJuice": "Orange juice",
+  "mixAppleJuice": "Apple juice",
+  "mixCola": "Cola",
+  "unitTspLevel": "level tsp",
+  "unitTspHeaped": "heaped tsp",
+  "unitTbspLevel": "level tbsp",
+  "unitTbspHeaped": "heaped tbsp",
+  "unitPinch": "pinch",
+  "unitTsp": "tsp",
+  "unitTbsp": "tbsp",
+  "mixRecipeMaltoSugar": "Malto + sugar 2:1",
+  "mixRecipeJuice": "Juice spritzer",
+  "mixRecipeJuicePlus": "Juice spritzer + malto",
+  "mixRecipeCola": "Cola spritzer"
 }

@@ -3423,6 +3423,17 @@ class AppLocalizationsSk extends AppLocalizations {
   String get logIntake => 'Zaznamenať príjem';
 
   @override
+  String nutritionReminderTitle(String name) {
+    return 'Nová aktivita: $name';
+  }
+
+  @override
+  String get nutritionReminderBody => 'Zapíšte, čo ste jedli a pili.';
+
+  @override
+  String get nutritionReminderHrvHint => 'HRV po tréningu ešte nie je zmerané.';
+
+  @override
   String get in30Minutes => 'Za 30 minút';
 
   @override
@@ -5850,4 +5861,152 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get bioAgeActivityUnknownLabel => 'Údaje o pohybe sú neúplné';
+
+  @override
+  String get mixTitle => 'Namiešať nápoj';
+
+  @override
+  String get mixMyBottle => 'Namiešať moju fľašu';
+
+  @override
+  String get mixRecipes => 'Recepty';
+
+  @override
+  String get mixIngredients => 'Prísady';
+
+  @override
+  String get mixAddIngredient => 'Pridať prísadu';
+
+  @override
+  String get mixBottle => 'Fľaša';
+
+  @override
+  String get mixFilledWithWater => 'doplnená vodou';
+
+  @override
+  String mixPerBottle(String ml) {
+    return 'na $ml ml fľašu';
+  }
+
+  @override
+  String get mixStrength => 'Koncentrácia';
+
+  @override
+  String get mixRatio => 'Glukóza : fruktóza';
+
+  @override
+  String get mixGlucose => 'Glukóza';
+
+  @override
+  String get mixFructose => 'Fruktóza';
+
+  @override
+  String get mixGlucoseOnly => 'Iba glukóza';
+
+  @override
+  String get mixGentle => 'Šetrné k žalúdku – do 8 %.';
+
+  @override
+  String get mixStrong => 'Koncentrované – iba s trénovaným žalúdkom.';
+
+  @override
+  String get mixTooStrong => 'Veľmi koncentrované – pridajte vodu.';
+
+  @override
+  String get mixNoFructoseHint =>
+      'Iba glukóza: nad približne 60 g sacharidov za hodinu pridajte fruktózu (cukor) – pomer okolo 2:1 sa vstrebáva lepšie.';
+
+  @override
+  String get mixFructoseHeavyHint =>
+      'Viac fruktózy ako glukózy môže zaťažiť žalúdok – pridajte maltodextrín alebo hroznový cukor.';
+
+  @override
+  String get mixSpoonNote =>
+      'Lyžice sa líšia. Raz si lyžicu odvážte alebo použite gramy pre presné hodnoty.';
+
+  @override
+  String get mixTooMuchLiquid =>
+      'Džús a kola samotné sú už viac, ako sa zmestí do fľaše – zväčšite fľašu.';
+
+  @override
+  String get mixAddToIntake => 'Pridať k príjmu';
+
+  @override
+  String get mixUseAsBottle => 'Použiť ako moju fľašu';
+
+  @override
+  String get mixDefaultName => 'Nápojová zmes';
+
+  @override
+  String get mixEmpty => 'Vyberte recept alebo pridajte prísadu.';
+
+  @override
+  String get mixRemove => 'Odstrániť';
+
+  @override
+  String mixRowGrams(String grams) {
+    return '≈ $grams g';
+  }
+
+  @override
+  String mixBottleSaved(String carbs, String ml) {
+    return 'Uložené ako vaša fľaša: $carbs g sacharidov na $ml ml.';
+  }
+
+  @override
+  String get mixMaltodextrin => 'Maltodextrín';
+
+  @override
+  String get mixSugar => 'Cukor';
+
+  @override
+  String get mixDextrose => 'Hroznový cukor';
+
+  @override
+  String get mixHoney => 'Med';
+
+  @override
+  String get mixSalt => 'Soľ';
+
+  @override
+  String get mixOrangeJuice => 'Pomarančový džús';
+
+  @override
+  String get mixAppleJuice => 'Jablkový džús';
+
+  @override
+  String get mixCola => 'Kola';
+
+  @override
+  String get unitTspLevel => 'zarovnaná ČL';
+
+  @override
+  String get unitTspHeaped => 'vrchovatá ČL';
+
+  @override
+  String get unitTbspLevel => 'zarovnaná PL';
+
+  @override
+  String get unitTbspHeaped => 'vrchovatá PL';
+
+  @override
+  String get unitPinch => 'štipka';
+
+  @override
+  String get unitTsp => 'ČL';
+
+  @override
+  String get unitTbsp => 'PL';
+
+  @override
+  String get mixRecipeMaltoSugar => 'Malto + cukor 2:1';
+
+  @override
+  String get mixRecipeJuice => 'Riedený džús';
+
+  @override
+  String get mixRecipeJuicePlus => 'Riedený džús + malto';
+
+  @override
+  String get mixRecipeCola => 'Riedená kola';
 }

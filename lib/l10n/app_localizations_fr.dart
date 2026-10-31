@@ -3442,6 +3442,18 @@ class AppLocalizationsFr extends AppLocalizations {
   String get logIntake => 'Enregistrer l\'apport';
 
   @override
+  String nutritionReminderTitle(String name) {
+    return 'Nouvelle activité : $name';
+  }
+
+  @override
+  String get nutritionReminderBody => 'Ajoute ce que tu as mangé et bu.';
+
+  @override
+  String get nutritionReminderHrvHint =>
+      'Ta VFC après l\'entraînement n\'est pas encore mesurée.';
+
+  @override
   String get in30Minutes => 'Dans 30 minutes';
 
   @override
@@ -5891,4 +5903,152 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get bioAgeActivityUnknownLabel => 'Données d’activité incomplètes';
+
+  @override
+  String get mixTitle => 'Préparer une boisson';
+
+  @override
+  String get mixMyBottle => 'Préparer mon bidon';
+
+  @override
+  String get mixRecipes => 'Recettes';
+
+  @override
+  String get mixIngredients => 'Ingrédients';
+
+  @override
+  String get mixAddIngredient => 'Ajouter un ingrédient';
+
+  @override
+  String get mixBottle => 'Bidon';
+
+  @override
+  String get mixFilledWithWater => 'complété avec de l\'eau';
+
+  @override
+  String mixPerBottle(String ml) {
+    return 'par bidon de $ml ml';
+  }
+
+  @override
+  String get mixStrength => 'Concentration';
+
+  @override
+  String get mixRatio => 'Glucose : fructose';
+
+  @override
+  String get mixGlucose => 'Glucose';
+
+  @override
+  String get mixFructose => 'Fructose';
+
+  @override
+  String get mixGlucoseOnly => 'Glucose seul';
+
+  @override
+  String get mixGentle => 'Facile à digérer – jusqu\'à 8 %.';
+
+  @override
+  String get mixStrong => 'Concentré – seulement avec un intestin entraîné.';
+
+  @override
+  String get mixTooStrong => 'Très concentré – ajoute de l\'eau.';
+
+  @override
+  String get mixNoFructoseHint =>
+      'Glucose seul : au-delà d\'environ 60 g de glucides par heure, ajoute du fructose (sucre) – environ 2:1 est mieux absorbé.';
+
+  @override
+  String get mixFructoseHeavyHint =>
+      'Plus de fructose que de glucose peut gêner l\'estomac – ajoute de la maltodextrine ou du dextrose.';
+
+  @override
+  String get mixSpoonNote =>
+      'Les cuillères varient. Pèse ta cuillère une fois, ou utilise les grammes pour des valeurs exactes.';
+
+  @override
+  String get mixTooMuchLiquid =>
+      'Le jus et le cola seuls dépassent déjà le bidon – augmente la taille du bidon.';
+
+  @override
+  String get mixAddToIntake => 'Ajouter à l\'apport';
+
+  @override
+  String get mixUseAsBottle => 'Utiliser comme mon bidon';
+
+  @override
+  String get mixDefaultName => 'Mélange de boisson';
+
+  @override
+  String get mixEmpty => 'Choisis une recette ou ajoute un ingrédient.';
+
+  @override
+  String get mixRemove => 'Retirer';
+
+  @override
+  String mixRowGrams(String grams) {
+    return '≈ $grams g';
+  }
+
+  @override
+  String mixBottleSaved(String carbs, String ml) {
+    return 'Enregistré comme ton bidon : $carbs g de glucides pour $ml ml.';
+  }
+
+  @override
+  String get mixMaltodextrin => 'Maltodextrine';
+
+  @override
+  String get mixSugar => 'Sucre';
+
+  @override
+  String get mixDextrose => 'Dextrose';
+
+  @override
+  String get mixHoney => 'Miel';
+
+  @override
+  String get mixSalt => 'Sel';
+
+  @override
+  String get mixOrangeJuice => 'Jus d\'orange';
+
+  @override
+  String get mixAppleJuice => 'Jus de pomme';
+
+  @override
+  String get mixCola => 'Cola';
+
+  @override
+  String get unitTspLevel => 'c. à c. rase';
+
+  @override
+  String get unitTspHeaped => 'c. à c. bombée';
+
+  @override
+  String get unitTbspLevel => 'c. à s. rase';
+
+  @override
+  String get unitTbspHeaped => 'c. à s. bombée';
+
+  @override
+  String get unitPinch => 'pincée';
+
+  @override
+  String get unitTsp => 'c. à c.';
+
+  @override
+  String get unitTbsp => 'c. à s.';
+
+  @override
+  String get mixRecipeMaltoSugar => 'Malto + sucre 2:1';
+
+  @override
+  String get mixRecipeJuice => 'Jus allongé d\'eau';
+
+  @override
+  String get mixRecipeJuicePlus => 'Jus allongé + malto';
+
+  @override
+  String get mixRecipeCola => 'Cola allongé d\'eau';
 }

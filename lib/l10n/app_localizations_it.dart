@@ -3431,6 +3431,18 @@ class AppLocalizationsIt extends AppLocalizations {
   String get logIntake => 'Registra assunzione';
 
   @override
+  String nutritionReminderTitle(String name) {
+    return 'Nuova attività: $name';
+  }
+
+  @override
+  String get nutritionReminderBody => 'Aggiungi cosa hai mangiato e bevuto.';
+
+  @override
+  String get nutritionReminderHrvHint =>
+      'La tua HRV post-allenamento non è ancora stata misurata.';
+
+  @override
   String get in30Minutes => 'Tra 30 minuti';
 
   @override
@@ -5869,4 +5881,152 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get bioAgeActivityUnknownLabel => 'Dati di attività incompleti';
+
+  @override
+  String get mixTitle => 'Prepara una bevanda';
+
+  @override
+  String get mixMyBottle => 'Prepara la mia borraccia';
+
+  @override
+  String get mixRecipes => 'Ricette';
+
+  @override
+  String get mixIngredients => 'Ingredienti';
+
+  @override
+  String get mixAddIngredient => 'Aggiungi ingrediente';
+
+  @override
+  String get mixBottle => 'Borraccia';
+
+  @override
+  String get mixFilledWithWater => 'riempita con acqua';
+
+  @override
+  String mixPerBottle(String ml) {
+    return 'per borraccia da $ml ml';
+  }
+
+  @override
+  String get mixStrength => 'Concentrazione';
+
+  @override
+  String get mixRatio => 'Glucosio : fruttosio';
+
+  @override
+  String get mixGlucose => 'Glucosio';
+
+  @override
+  String get mixFructose => 'Fruttosio';
+
+  @override
+  String get mixGlucoseOnly => 'Solo glucosio';
+
+  @override
+  String get mixGentle => 'Leggera per lo stomaco – fino all\'8 %.';
+
+  @override
+  String get mixStrong => 'Concentrata – solo con un intestino allenato.';
+
+  @override
+  String get mixTooStrong => 'Molto concentrata – aggiungi acqua.';
+
+  @override
+  String get mixNoFructoseHint =>
+      'Solo glucosio: oltre circa 60 g di carboidrati all\'ora aggiungi fruttosio (zucchero) – circa 2:1 viene assorbito meglio.';
+
+  @override
+  String get mixFructoseHeavyHint =>
+      'Più fruttosio che glucosio può disturbare lo stomaco – aggiungi maltodestrina o destrosio.';
+
+  @override
+  String get mixSpoonNote =>
+      'I cucchiai sono diversi. Pesa il tuo cucchiaio una volta o usa i grammi per valori esatti.';
+
+  @override
+  String get mixTooMuchLiquid =>
+      'Succo e cola da soli superano già la borraccia – aumenta la dimensione della borraccia.';
+
+  @override
+  String get mixAddToIntake => 'Aggiungi all\'assunzione';
+
+  @override
+  String get mixUseAsBottle => 'Usa come mia borraccia';
+
+  @override
+  String get mixDefaultName => 'Mix di bevanda';
+
+  @override
+  String get mixEmpty => 'Scegli una ricetta o aggiungi un ingrediente.';
+
+  @override
+  String get mixRemove => 'Rimuovi';
+
+  @override
+  String mixRowGrams(String grams) {
+    return '≈ $grams g';
+  }
+
+  @override
+  String mixBottleSaved(String carbs, String ml) {
+    return 'Salvata come tua borraccia: $carbs g di carboidrati per $ml ml.';
+  }
+
+  @override
+  String get mixMaltodextrin => 'Maltodestrina';
+
+  @override
+  String get mixSugar => 'Zucchero';
+
+  @override
+  String get mixDextrose => 'Destrosio';
+
+  @override
+  String get mixHoney => 'Miele';
+
+  @override
+  String get mixSalt => 'Sale';
+
+  @override
+  String get mixOrangeJuice => 'Succo d\'arancia';
+
+  @override
+  String get mixAppleJuice => 'Succo di mela';
+
+  @override
+  String get mixCola => 'Cola';
+
+  @override
+  String get unitTspLevel => 'cucchiaino raso';
+
+  @override
+  String get unitTspHeaped => 'cucchiaino colmo';
+
+  @override
+  String get unitTbspLevel => 'cucchiaio raso';
+
+  @override
+  String get unitTbspHeaped => 'cucchiaio colmo';
+
+  @override
+  String get unitPinch => 'pizzico';
+
+  @override
+  String get unitTsp => 'cucchiaino';
+
+  @override
+  String get unitTbsp => 'cucchiaio';
+
+  @override
+  String get mixRecipeMaltoSugar => 'Malto + zucchero 2:1';
+
+  @override
+  String get mixRecipeJuice => 'Succo diluito';
+
+  @override
+  String get mixRecipeJuicePlus => 'Succo diluito + malto';
+
+  @override
+  String get mixRecipeCola => 'Cola diluita';
 }
