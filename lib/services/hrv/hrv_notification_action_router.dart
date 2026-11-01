@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import '../notifications/local_notification_adapter.dart';
+import '../missed_workout_reminder_service.dart' show MissedWorkoutPayload;
 import '../notifications/local_notification_gateway.dart';
 import 'hrv_post_reminder_coordinator.dart';
 
@@ -67,7 +68,8 @@ class HrvNotificationActionRouter {
   }
 
   Future<void> _process(NotificationResponse r, DateTime? at) async {
-    if (NutritionNotificationPayload.decode(r.payload) != null) {
+    if (NutritionNotificationPayload.decode(r.payload) != null ||
+        MissedWorkoutPayload.decode(r.payload) != null) {
       await onOtherResponse?.call(r);
       return;
     }

@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest_all.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
 
+import '../missed_workout_reminder_service.dart' show MissedWorkoutPayload;
 import 'local_notification_gateway.dart';
 
 const _channelId = 'hrv_post_reminder';
@@ -78,7 +79,8 @@ class HrvInboxEntry {
 void hrvNotificationBackgroundHandler(fln.NotificationResponse response) {
   final payload = HrvNotificationPayload.decode(response.payload);
   if (payload == null &&
-      NutritionNotificationPayload.decode(response.payload) == null) {
+      NutritionNotificationPayload.decode(response.payload) == null &&
+      MissedWorkoutPayload.decode(response.payload) == null) {
     return;
   }
   unawaited(
@@ -126,6 +128,22 @@ class FlutterLocalNotificationGateway implements LocalNotificationGateway {
           requestBadgePermission: false,
           requestSoundPermission: false,
           notificationCategories: [
+            fln.DarwinNotificationCategory(
+              'missed_workout',
+              actions: [
+                fln.DarwinNotificationAction.plain('today', tr.stillToday),
+                fln.DarwinNotificationAction.plain(
+                  'move',
+                  tr.moveWorkoutAction,
+                  options: {fln.DarwinNotificationActionOption.foreground},
+                ),
+                fln.DarwinNotificationAction.plain(
+                  'skip',
+                  tr.skip,
+                  options: {fln.DarwinNotificationActionOption.foreground},
+                ),
+              ],
+            ),
             fln.DarwinNotificationCategory(
               'nutrition_post',
               actions: [
@@ -222,6 +240,9 @@ class FlutterLocalNotificationGateway implements LocalNotificationGateway {
   Future<void> schedule(ScheduledNotification n) async {
     await init();
     final labels = n.actionLabels;
+    if (n.feature == NotificationFeature.missedWorkout) {
+      return _scheduleMissedWorkout(n);
+    }
     final nutrition = n.feature == NotificationFeature.nutrition;
     await _plugin.zonedSchedule(
       id: n.id,
@@ -266,6 +287,49 @@ class FlutterLocalNotificationGateway implements LocalNotificationGateway {
         iOS: fln.DarwinNotificationDetails(
           categoryIdentifier: nutrition ? 'nutrition_post' : _category,
           threadIdentifier: nutrition ? 'nutrition_post' : 'hrv_post',
+          presentBadge: false,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _scheduleMissedWorkout(ScheduledNotification n) async {
+    final labels = n.actionLabels;
+    await _plugin.zonedSchedule(
+      id: n.id,
+      title: n.title,
+      body: n.body,
+      payload: n.payload,
+      scheduledDate: tz.TZDateTime.from(n.at.toUtc(), tz.UTC),
+      androidScheduleMode: fln.AndroidScheduleMode.inexactAllowWhileIdle,
+      notificationDetails: fln.NotificationDetails(
+        android: fln.AndroidNotificationDetails(
+          'missed_workout_reminder',
+          tr.missedWorkoutChannel,
+          channelDescription: tr.missedWorkoutChannelDescription,
+          importance: fln.Importance.defaultImportance,
+          priority: fln.Priority.defaultPriority,
+          category: fln.AndroidNotificationCategory.reminder,
+          actions: [
+            fln.AndroidNotificationAction(
+              'today',
+              labels['today'] ?? 'Still today',
+            ),
+            fln.AndroidNotificationAction(
+              'move',
+              labels['move'] ?? 'Move…',
+              showsUserInterface: true,
+            ),
+            fln.AndroidNotificationAction(
+              'skip',
+              labels['skip'] ?? 'Skip',
+              showsUserInterface: true,
+            ),
+          ],
+        ),
+        iOS: const fln.DarwinNotificationDetails(
+          categoryIdentifier: 'missed_workout',
+          threadIdentifier: 'missed_workout',
           presentBadge: false,
         ),
       ),

@@ -1503,10 +1503,6 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get shadedAreaProviderSpread =>
-      'Varjostettu alue: palveluntarjoajien hajonta';
-
-  @override
   String get temperatureC => '● Lämpötila °C';
 
   @override
@@ -2171,6 +2167,11 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get forecast => 'Ennuste';
+
+  @override
+  String forecastRange(int count) {
+    return 'Varjostettu: $count ennusteen vaihteluväli';
+  }
 
   @override
   String get enterAName => 'Anna nimi';
@@ -5321,7 +5322,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get tabLoad => 'KUORMA';
 
   @override
-  String get tabCoach => 'VALMENTAJA';
+  String get tabCoach => 'COACH';
 
   @override
   String get hrDriftTestLt1 => 'SYKKEEN AJAUTUMISTESTI – LT1';
@@ -6014,4 +6015,192 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get mixRecipeCola => 'Laimennettu kola';
+
+  @override
+  String get missedWorkoutTitle => 'Vielä tämän päivän suunnitelmassa';
+
+  @override
+  String missedWorkoutBody(String workouts) {
+    return '$workouts. Vielä tänään, siirretäänkö vai ohitetaanko?';
+  }
+
+  @override
+  String get stillToday => 'Vielä tänään';
+
+  @override
+  String get moveWorkoutAction => 'Siirrä…';
+
+  @override
+  String get missedWorkoutChannel => 'Väliin jääneet harjoitukset';
+
+  @override
+  String get missedWorkoutChannelDescription =>
+      'Iltamuistutus suunnitelluista harjoituksista, jotka ovat vielä tekemättä';
+
+  @override
+  String get missedWorkoutReminder =>
+      'Muistutus väliin jääneestä harjoituksesta';
+
+  @override
+  String get missedWorkoutReminderSubtitle =>
+      'Illalla, jos suunniteltu harjoitus on vielä tekemättä';
+
+  @override
+  String get moveWithinDays => 'Siirrä enintään';
+
+  @override
+  String daysN(int count) {
+    return '$count päivää';
+  }
+
+  @override
+  String get notificationsAreOff =>
+      'Fjelian ilmoitukset ovat pois päältä. Salli ne saadaksesi tämän muistutuksen.';
+
+  @override
+  String get allowNotifications => 'Salli ilmoitukset';
+
+  @override
+  String get openWorkoutToday => 'Vielä tekemättä tänään';
+
+  @override
+  String get checkingForWorkout => 'Etsitään harjoitustasi…';
+
+  @override
+  String get alreadyDone => 'Jo tehty ✓';
+
+  @override
+  String get alreadyDoneBody =>
+      'Harjoituksesi on tallennettu. Tänään ei ole enää mitään tehtävää.';
+
+  @override
+  String get dropIt => 'Jätä väliin';
+
+  @override
+  String askCoachSends(String provider) {
+    return 'Lähettää harjoitusyhteenvetosi palveluun $provider.';
+  }
+
+  @override
+  String get coachThinking => 'Valmentaja miettii…';
+
+  @override
+  String get coachCouldNotAnswer =>
+      'Valmentaja ei voinut vastata. Yllä oleva ehdotus on yhä voimassa.';
+
+  @override
+  String get whySkip => 'Miksi ohitat?';
+
+  @override
+  String get skipReasonIllness => 'Sairaus';
+
+  @override
+  String get skipReasonInjury => 'Vamma tai kipu';
+
+  @override
+  String get skipReasonFatigue => 'Väsymys';
+
+  @override
+  String get skipReasonNoTime => 'Ei aikaa';
+
+  @override
+  String get skipReasonTravel => 'Matka';
+
+  @override
+  String get skipReasonConditions => 'Olosuhteet';
+
+  @override
+  String get skipReasonMyChoice => 'Oma valinta';
+
+  @override
+  String get onbReminderTitle => 'Pysy suunnitelmassa';
+
+  @override
+  String get onbReminderSubtitle =>
+      'Jos suunniteltu harjoitus on illalla vielä tekemättä, Fjelia muistuttaa kerran, jotta voit vielä tehdä sen, siirtää sen tai ohittaa sen.';
+
+  @override
+  String get onbExampleWorkout => 'Kevyt lenkki (45 min)';
+
+  @override
+  String get onbReminderToggle => 'Iltamuistutus';
+
+  @override
+  String get onbReminderTime => 'Muistuta klo';
+
+  @override
+  String get onbReminderFootnote =>
+      'Voit muuttaa tätä milloin tahansa kohdassa Asetukset → Harjoittelu.';
+
+  @override
+  String get nowLabel => 'nyt';
+
+  @override
+  String get coachSuggests => 'Valmentaja ehdottaa';
+
+  @override
+  String get suggestionLabel => 'Ehdotus';
+
+  @override
+  String get askCoachShort => 'Kysy valmentajalta';
+
+  @override
+  String get otherDay => 'Toinen päivä';
+
+  @override
+  String get skipEllipsis => 'Ohita…';
+
+  @override
+  String get pickADay => 'Napauta päivää yllä';
+
+  @override
+  String get dayDoesNotFit => 'Se päivä ei sovi suunnitelmaan.';
+
+  @override
+  String get planUpdated => 'Suunnitelma päivitetty';
+
+  @override
+  String get missedTodayTag => 'jäi tänään väliin';
+
+  @override
+  String summaryMove(String day) {
+    return 'Siirrä se päivälle $day.';
+  }
+
+  @override
+  String summaryMoveIndoor(String day) {
+    return 'Siirrä se päivälle $day sisätiloihin – sadetta on luvassa.';
+  }
+
+  @override
+  String get summaryDropEasy =>
+      'Jätä väliin – kevyttä harjoitusta ei kannata korvata.';
+
+  @override
+  String summaryDropNoDay(int days) {
+    return 'Jätä väliin – seuraavien $days päivän aikana mikään päivä ei sovi.';
+  }
+
+  @override
+  String get tagIndoor => 'sisällä';
+
+  @override
+  String get tagEasier => 'kevyempi';
+
+  @override
+  String get tagRecovery => 'palautus';
+
+  @override
+  String summaryMoveEasier(String day) {
+    return 'Siirrä se päivälle $day hieman kevyempänä – vieressä on kova päivä.';
+  }
+
+  @override
+  String get briefRestDayToday => 'Tänään on suunniteltu lepopäivä.';
+
+  @override
+  String get restDayPlannedNote => 'Palautuminen kuuluu suunnitelmaasi.';
+
+  @override
+  String get restDayTitle => 'Lepopäivä';
 }

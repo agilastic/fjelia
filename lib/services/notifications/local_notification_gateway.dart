@@ -11,7 +11,7 @@ enum NotificationPermission {
   bool get allowed => this == granted || this == provisional;
 }
 
-enum NotificationFeature { hrv, nutrition }
+enum NotificationFeature { hrv, nutrition, missedWorkout }
 
 class NutritionNotificationPayload {
   const NutritionNotificationPayload(this.activityId, this.token);
@@ -74,7 +74,8 @@ class ScheduledNotification {
   final String title, body;
   final NotificationFeature feature;
 
-  /// Labels for `measure`, `snooze` and `skip`.
+  /// Labels for `measure`, `snooze` and `skip` (HRV), `log`, `snooze` and
+  /// `skip` (nutrition) or `today`, `move` and `skip` (missed workout).
   final Map<String, String> actionLabels;
 }
 

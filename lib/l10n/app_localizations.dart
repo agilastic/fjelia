@@ -2681,12 +2681,6 @@ abstract class AppLocalizations {
   /// **'● {source}'**
   String source(Object source);
 
-  /// No description provided for @shadedAreaProviderSpread.
-  ///
-  /// In en, this message translates to:
-  /// **'Shaded area: provider spread'**
-  String get shadedAreaProviderSpread;
-
   /// No description provided for @temperatureC.
   ///
   /// In en, this message translates to:
@@ -3866,6 +3860,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Forecast'**
   String get forecast;
+
+  /// Weather chart legend: the shaded band spans the lowest to highest of all forecasts.
+  ///
+  /// In en, this message translates to:
+  /// **'Shaded: range of {count} forecasts'**
+  String forecastRange(int count);
 
   /// No description provided for @enterAName.
   ///
@@ -10565,6 +10565,336 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cola spritzer'**
   String get mixRecipeCola;
+
+  /// No description provided for @missedWorkoutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Still on your plan today'**
+  String get missedWorkoutTitle;
+
+  /// No description provided for @missedWorkoutBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{workouts}. Still today, move it or skip it?'**
+  String missedWorkoutBody(String workouts);
+
+  /// No description provided for @stillToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Still today'**
+  String get stillToday;
+
+  /// No description provided for @moveWorkoutAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Move…'**
+  String get moveWorkoutAction;
+
+  /// No description provided for @missedWorkoutChannel.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed workouts'**
+  String get missedWorkoutChannel;
+
+  /// No description provided for @missedWorkoutChannelDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Evening reminder of planned workouts still open that day'**
+  String get missedWorkoutChannelDescription;
+
+  /// No description provided for @missedWorkoutReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed workout reminder'**
+  String get missedWorkoutReminder;
+
+  /// No description provided for @missedWorkoutReminderSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'In the evening, if a planned workout is still open'**
+  String get missedWorkoutReminderSubtitle;
+
+  /// No description provided for @moveWithinDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Move within'**
+  String get moveWithinDays;
+
+  /// No description provided for @daysN.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} days'**
+  String daysN(int count);
+
+  /// No description provided for @notificationsAreOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications are off for Fjelia. Allow them to get this reminder.'**
+  String get notificationsAreOff;
+
+  /// No description provided for @allowNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow notifications'**
+  String get allowNotifications;
+
+  /// No description provided for @openWorkoutToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Still open today'**
+  String get openWorkoutToday;
+
+  /// No description provided for @checkingForWorkout.
+  ///
+  /// In en, this message translates to:
+  /// **'Looking for your workout…'**
+  String get checkingForWorkout;
+
+  /// No description provided for @alreadyDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Already done ✓'**
+  String get alreadyDone;
+
+  /// No description provided for @alreadyDoneBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your workout was recorded. Nothing left to do today.'**
+  String get alreadyDoneBody;
+
+  /// No description provided for @dropIt.
+  ///
+  /// In en, this message translates to:
+  /// **'Drop it'**
+  String get dropIt;
+
+  /// No description provided for @askCoachSends.
+  ///
+  /// In en, this message translates to:
+  /// **'Sends your training summary to {provider}.'**
+  String askCoachSends(String provider);
+
+  /// No description provided for @coachThinking.
+  ///
+  /// In en, this message translates to:
+  /// **'The coach is thinking…'**
+  String get coachThinking;
+
+  /// No description provided for @coachCouldNotAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'The coach could not answer. The suggestion above still holds.'**
+  String get coachCouldNotAnswer;
+
+  /// No description provided for @whySkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Why skip it?'**
+  String get whySkip;
+
+  /// No description provided for @skipReasonIllness.
+  ///
+  /// In en, this message translates to:
+  /// **'Illness'**
+  String get skipReasonIllness;
+
+  /// No description provided for @skipReasonInjury.
+  ///
+  /// In en, this message translates to:
+  /// **'Injury or pain'**
+  String get skipReasonInjury;
+
+  /// No description provided for @skipReasonFatigue.
+  ///
+  /// In en, this message translates to:
+  /// **'Fatigue'**
+  String get skipReasonFatigue;
+
+  /// No description provided for @skipReasonNoTime.
+  ///
+  /// In en, this message translates to:
+  /// **'No time'**
+  String get skipReasonNoTime;
+
+  /// No description provided for @skipReasonTravel.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel'**
+  String get skipReasonTravel;
+
+  /// No description provided for @skipReasonConditions.
+  ///
+  /// In en, this message translates to:
+  /// **'Conditions'**
+  String get skipReasonConditions;
+
+  /// No description provided for @skipReasonMyChoice.
+  ///
+  /// In en, this message translates to:
+  /// **'My choice'**
+  String get skipReasonMyChoice;
+
+  /// No description provided for @onbReminderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay on track'**
+  String get onbReminderTitle;
+
+  /// No description provided for @onbReminderSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'If a planned workout is still open in the evening, Fjelia reminds you once, so you can still do it, move it or skip it.'**
+  String get onbReminderSubtitle;
+
+  /// No description provided for @onbExampleWorkout.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy run (45 min)'**
+  String get onbExampleWorkout;
+
+  /// No description provided for @onbReminderToggle.
+  ///
+  /// In en, this message translates to:
+  /// **'Evening reminder'**
+  String get onbReminderToggle;
+
+  /// No description provided for @onbReminderTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Remind me at'**
+  String get onbReminderTime;
+
+  /// No description provided for @onbReminderFootnote.
+  ///
+  /// In en, this message translates to:
+  /// **'You can change this any time in Settings → Training.'**
+  String get onbReminderFootnote;
+
+  /// No description provided for @nowLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'now'**
+  String get nowLabel;
+
+  /// No description provided for @coachSuggests.
+  ///
+  /// In en, this message translates to:
+  /// **'Coach suggests'**
+  String get coachSuggests;
+
+  /// No description provided for @suggestionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggestion'**
+  String get suggestionLabel;
+
+  /// No description provided for @askCoachShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask coach'**
+  String get askCoachShort;
+
+  /// No description provided for @otherDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Other day'**
+  String get otherDay;
+
+  /// No description provided for @skipEllipsis.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip…'**
+  String get skipEllipsis;
+
+  /// No description provided for @pickADay.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap a day above'**
+  String get pickADay;
+
+  /// No description provided for @dayDoesNotFit.
+  ///
+  /// In en, this message translates to:
+  /// **'That day doesn’t fit the plan.'**
+  String get dayDoesNotFit;
+
+  /// No description provided for @planUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan updated'**
+  String get planUpdated;
+
+  /// No description provided for @missedTodayTag.
+  ///
+  /// In en, this message translates to:
+  /// **'missed today'**
+  String get missedTodayTag;
+
+  /// No description provided for @summaryMove.
+  ///
+  /// In en, this message translates to:
+  /// **'Move it to {day}.'**
+  String summaryMove(String day);
+
+  /// No description provided for @summaryMoveIndoor.
+  ///
+  /// In en, this message translates to:
+  /// **'Move it to {day}, indoors – rain is forecast.'**
+  String summaryMoveIndoor(String day);
+
+  /// No description provided for @summaryDropEasy.
+  ///
+  /// In en, this message translates to:
+  /// **'Drop it – an easy session isn’t worth making up.'**
+  String get summaryDropEasy;
+
+  /// No description provided for @summaryDropNoDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Drop it – no day fits in the next {days} days.'**
+  String summaryDropNoDay(int days);
+
+  /// No description provided for @tagIndoor.
+  ///
+  /// In en, this message translates to:
+  /// **'indoor'**
+  String get tagIndoor;
+
+  /// No description provided for @tagEasier.
+  ///
+  /// In en, this message translates to:
+  /// **'easier'**
+  String get tagEasier;
+
+  /// No description provided for @tagRecovery.
+  ///
+  /// In en, this message translates to:
+  /// **'recovery'**
+  String get tagRecovery;
+
+  /// No description provided for @summaryMoveEasier.
+  ///
+  /// In en, this message translates to:
+  /// **'Move it to {day}, a bit easier – it sits next to a hard day.'**
+  String summaryMoveEasier(String day);
+
+  /// No description provided for @briefRestDayToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today is a planned rest day.'**
+  String get briefRestDayToday;
+
+  /// No description provided for @restDayPlannedNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery is part of your plan.'**
+  String get restDayPlannedNote;
+
+  /// No description provided for @restDayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Rest day'**
+  String get restDayTitle;
 }
 
 class _AppLocalizationsDelegate

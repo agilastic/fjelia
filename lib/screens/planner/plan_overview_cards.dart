@@ -538,9 +538,14 @@ class UpcomingWorkoutList extends StatefulWidget {
     super.key,
     required this.entries,
     this.selectedDay,
+    this.restToday = false,
   });
   final List<UpcomingPlanEntry> entries;
   final DateTime? selectedDay;
+
+  /// Today is a planned rest day: it gets its own item, so the list does not
+  /// start with tomorrow as if today were forgotten.
+  final bool restToday;
   @override
   State<UpcomingWorkoutList> createState() => _UpcomingState();
 }
@@ -558,11 +563,16 @@ class _UpcomingState extends State<UpcomingWorkoutList> {
       }
       groups.putIfAbsent(DateUtils.dateOnly(s.date), () => []).add(s);
     }
-    if (groups.isEmpty) return const SizedBox.shrink();
+    final today = DateUtils.dateOnly(DateTime.now());
+    final showRest =
+        widget.restToday &&
+        !groups.containsKey(today) &&
+        (widget.selectedDay == null ||
+            DateUtils.isSameDay(widget.selectedDay, today));
+    if (groups.isEmpty && !showRest) return const SizedBox.shrink();
     final entries = groups.entries
         .take(widget.selectedDay == null ? visibleDays : groups.length)
         .toList();
-    final today = DateUtils.dateOnly(DateTime.now());
     final tomorrow = today.add(const Duration(days: 1));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -578,6 +588,20 @@ class _UpcomingState extends State<UpcomingWorkoutList> {
             ),
           ),
         ),
+        if (showRest) ...[
+          Padding(
+            padding: const EdgeInsets.only(top: 12, bottom: 6),
+            child: Text(
+              context.l10n.today2,
+              style: const TextStyle(
+                fontSize: 10,
+                color: muted,
+                letterSpacing: .7,
+              ),
+            ),
+          ),
+          const _RestTile(),
+        ],
         for (final e in entries) ...[
           Padding(
             padding: const EdgeInsets.only(top: 12, bottom: 6),
@@ -616,6 +640,59 @@ class _UpcomingState extends State<UpcomingWorkoutList> {
             ),
           ),
       ],
+    );
+  }
+}
+
+/// Today's planned rest day, shaped like a session so it reads as part of
+/// the plan.
+class _RestTile extends StatelessWidget {
+  const _RestTile();
+
+  @override
+  Widget build(BuildContext context) {
+    const color = Color(0xFF9FA8DA);
+    return Container(
+      key: const Key('rest-day-today'),
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: panel,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: color.withValues(alpha: .35), width: 1.5),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: .12),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Icon(Icons.bedtime_outlined, color: color, size: 20),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  context.l10n.restDayTitle,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  context.l10n.restDayPlannedNote,
+                  style: const TextStyle(fontSize: 12, color: muted),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

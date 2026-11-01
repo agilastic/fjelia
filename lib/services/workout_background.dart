@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 
 import '../utils/log.dart';
 import 'health_connect_service.dart';
+import 'missed_workout_reminder_service.dart';
 import 'nutrition_reminder_service.dart';
 
 /// Talks to `HealthWorkoutObserver` in the iOS app delegate. Apple Health
@@ -34,6 +35,7 @@ Future<int> checkNewWorkouts({
   required HealthConnectService health,
   required Future<void> Function() reconcileHrv,
   required NutritionReminderService nutrition,
+  MissedWorkoutReminderService? missedWorkout,
 }) async {
   if (!await healthConnected()) {
     log('[HealthBackground] Apple Health not connected — skipped');
@@ -52,6 +54,12 @@ Future<int> checkNewWorkouts({
     log('[HealthBackground] HRV reminder: $e');
   }
   await nutrition.reconcile();
+  // The workout of a planned day takes that evening's reminder back.
+  try {
+    await missedWorkout?.reconcile();
+  } catch (e) {
+    log('[HealthBackground] missed-workout reminder: $e');
+  }
   log('[HealthBackground] done — added=$added');
   return added;
 }

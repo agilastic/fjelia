@@ -1505,10 +1505,6 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
-  String get shadedAreaProviderSpread =>
-      'Tieňovaná oblasť: rozptyl medzi poskytovateľmi';
-
-  @override
   String get temperatureC => '● Teplota °C';
 
   @override
@@ -2176,6 +2172,11 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get forecast => 'Predpoveď';
+
+  @override
+  String forecastRange(int count) {
+    return 'Tieňované: rozpätie z $count predpovedí';
+  }
 
   @override
   String get enterAName => 'Zadajte názov';
@@ -6009,4 +6010,191 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get mixRecipeCola => 'Riedená kola';
+
+  @override
+  String get missedWorkoutTitle => 'Dnes ešte v pláne';
+
+  @override
+  String missedWorkoutBody(String workouts) {
+    return '$workouts. Ešte dnes, presunúť alebo vynechať?';
+  }
+
+  @override
+  String get stillToday => 'Ešte dnes';
+
+  @override
+  String get moveWorkoutAction => 'Presunúť…';
+
+  @override
+  String get missedWorkoutChannel => 'Zmeškané tréningy';
+
+  @override
+  String get missedWorkoutChannelDescription =>
+      'Večerná pripomienka plánovaných tréningov, ktoré sú ešte otvorené';
+
+  @override
+  String get missedWorkoutReminder => 'Pripomienka zmeškaného tréningu';
+
+  @override
+  String get missedWorkoutReminderSubtitle =>
+      'Večer, ak je plánovaný tréning ešte otvorený';
+
+  @override
+  String get moveWithinDays => 'Presunúť do';
+
+  @override
+  String daysN(int count) {
+    return '$count dní';
+  }
+
+  @override
+  String get notificationsAreOff =>
+      'Upozornenia sú pre Fjelia vypnuté. Povoľ ich, aby si dostal túto pripomienku.';
+
+  @override
+  String get allowNotifications => 'Povoliť upozornenia';
+
+  @override
+  String get openWorkoutToday => 'Dnes ešte otvorené';
+
+  @override
+  String get checkingForWorkout => 'Hľadám tvoj tréning…';
+
+  @override
+  String get alreadyDone => 'Už hotové ✓';
+
+  @override
+  String get alreadyDoneBody =>
+      'Tvoj tréning bol zaznamenaný. Dnes už nič neostáva.';
+
+  @override
+  String get dropIt => 'Vynechať';
+
+  @override
+  String askCoachSends(String provider) {
+    return 'Odošle prehľad tvojho tréningu do $provider.';
+  }
+
+  @override
+  String get coachThinking => 'Tréner premýšľa…';
+
+  @override
+  String get coachCouldNotAnswer =>
+      'Tréner nemohol odpovedať. Návrh vyššie stále platí.';
+
+  @override
+  String get whySkip => 'Prečo vynechať?';
+
+  @override
+  String get skipReasonIllness => 'Choroba';
+
+  @override
+  String get skipReasonInjury => 'Zranenie alebo bolesť';
+
+  @override
+  String get skipReasonFatigue => 'Únava';
+
+  @override
+  String get skipReasonNoTime => 'Nemám čas';
+
+  @override
+  String get skipReasonTravel => 'Cestovanie';
+
+  @override
+  String get skipReasonConditions => 'Podmienky';
+
+  @override
+  String get skipReasonMyChoice => 'Moje rozhodnutie';
+
+  @override
+  String get onbReminderTitle => 'Drž sa plánu';
+
+  @override
+  String get onbReminderSubtitle =>
+      'Ak je večer plánovaný tréning ešte otvorený, Fjelia ti to raz pripomenie, aby si ho ešte stihol, presunul alebo vynechal.';
+
+  @override
+  String get onbExampleWorkout => 'Ľahký beh (45 min)';
+
+  @override
+  String get onbReminderToggle => 'Večerná pripomienka';
+
+  @override
+  String get onbReminderTime => 'Pripomenúť o';
+
+  @override
+  String get onbReminderFootnote =>
+      'Môžeš to kedykoľvek zmeniť v Nastavenia → Tréning.';
+
+  @override
+  String get nowLabel => 'teraz';
+
+  @override
+  String get coachSuggests => 'Tréner navrhuje';
+
+  @override
+  String get suggestionLabel => 'Návrh';
+
+  @override
+  String get askCoachShort => 'Opýtať sa trénera';
+
+  @override
+  String get otherDay => 'Iný deň';
+
+  @override
+  String get skipEllipsis => 'Vynechať…';
+
+  @override
+  String get pickADay => 'Ťukni na deň vyššie';
+
+  @override
+  String get dayDoesNotFit => 'Ten deň sa do plánu nehodí.';
+
+  @override
+  String get planUpdated => 'Plán aktualizovaný';
+
+  @override
+  String get missedTodayTag => 'dnes zmeškané';
+
+  @override
+  String summaryMove(String day) {
+    return 'Presuň ho na $day.';
+  }
+
+  @override
+  String summaryMoveIndoor(String day) {
+    return 'Presuň ho na $day, dnu – predpovedajú dážď.';
+  }
+
+  @override
+  String get summaryDropEasy =>
+      'Vynechaj ho – ľahký tréning nemá zmysel nahrádzať.';
+
+  @override
+  String summaryDropNoDay(int days) {
+    return 'Vynechaj ho – v najbližších $days dňoch sa nehodí žiadny deň.';
+  }
+
+  @override
+  String get tagIndoor => 'dnu';
+
+  @override
+  String get tagEasier => 'ľahšie';
+
+  @override
+  String get tagRecovery => 'regenerácia';
+
+  @override
+  String summaryMoveEasier(String day) {
+    return 'Presuň ho na $day, o niečo ľahšie – je vedľa náročného dňa.';
+  }
+
+  @override
+  String get briefRestDayToday => 'Dnes je plánovaný deň voľna.';
+
+  @override
+  String get restDayPlannedNote => 'Regenerácia je súčasťou tvojho plánu.';
+
+  @override
+  String get restDayTitle => 'Deň voľna';
 }

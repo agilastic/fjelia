@@ -158,7 +158,8 @@ void main() {
       expect(find.text(d), findsOneWidget);
     }
     expect(find.text('Rest'), findsOneWidget);
-    expect(find.text('Running'), findsNWidgets(3));
+    // Tuesday shows the struck-through plan above the run that was done.
+    expect(find.text('Running'), findsNWidgets(4));
     expect(find.text('Cycling'), findsNWidgets(2));
     expect(find.text('Swimming'), findsOneWidget);
     expect(find.text('47 min'), findsOneWidget);
@@ -167,7 +168,7 @@ void main() {
     expect(find.text('EXTRA'), findsOneWidget);
     expect(find.text('DONE'), findsNWidgets(2));
     expect(find.text('PLANNED'), findsNWidgets(3));
-    expect(find.text('Plan 45 min'), findsOneWidget);
+    expect(find.text('45 min'), findsOneWidget);
     expect(find.text('of 4 h 20 min planned'), findsOneWidget);
     expect(find.text('77 min'), findsOneWidget);
     expect(find.text('26–1 Nov'), findsNothing);
@@ -191,7 +192,7 @@ void main() {
     await tester.pump();
   });
 
-  testWidgets('completed workout is one entry without repeated equal target', (
+  testWidgets('completed workout shows the struck plan above the activity', (
     tester,
   ) async {
     final combined = buildPlanWeek(
@@ -228,7 +229,7 @@ void main() {
     );
     await tester.pump();
     await tester.pump();
-    expect(find.text('Run With The Wind Modified'), findsOneWidget);
+    expect(find.text('Run With The Wind Modified'), findsNWidgets(2));
     expect(find.text('DONE'), findsOneWidget);
     expect(find.text('EXTRA'), findsNothing);
     expect(find.text('Plan 60 min'), findsNothing);

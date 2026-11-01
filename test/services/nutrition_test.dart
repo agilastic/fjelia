@@ -61,6 +61,44 @@ void main() {
       expect(plan.sodium, closeTo(432, .01));
     },
   );
+  test('a cool easy run needs much less fluid than a warm hard one', () {
+    // 90 minutes in zone 1 at 10 °C: about a third of a litre, one bottle.
+    final easy = planNutrition(
+      workout(minutes: 90, zone: 1),
+      const NutritionPreferences(),
+      const NutritionConditions(temperature: 10),
+    );
+    expect(easy.fluid, 240);
+    expect(easy.totalFluid, 360);
+    expect(easy.bottles, 1);
+    expect(easy.gels, 3);
+    final cold = planNutrition(
+      workout(minutes: 90, zone: 3),
+      const NutritionPreferences(),
+      const NutritionConditions(temperature: 4),
+    );
+    expect(cold.fluid, 250);
+    final warmHard = planNutrition(
+      workout(minutes: 90, zone: 4),
+      const NutritionPreferences(),
+      const NutritionConditions(temperature: 22),
+    );
+    expect(warmHard.fluid, 580);
+    // In heat an easy pace keeps the full amount.
+    final hotEasy = planNutrition(
+      workout(minutes: 90, zone: 1),
+      const NutritionPreferences(),
+      const NutritionConditions(temperature: 30, humidity: 80),
+    );
+    expect(hotEasy.fluid, 700);
+    // A measured sweat rate still decides when there is one.
+    final measured = planNutrition(
+      workout(minutes: 90, zone: 1),
+      const NutritionPreferences(sweatMl: 900),
+      const NutritionConditions(temperature: 10),
+    );
+    expect(measured.fluid, 720);
+  });
   test(
     'warm conditions change fluids, not an invented carbohydrate multiplier',
     () {

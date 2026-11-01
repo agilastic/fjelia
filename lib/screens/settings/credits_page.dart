@@ -18,9 +18,10 @@ class CreditsPage extends StatelessWidget {
         children: [
           SectionLabel(l10n.weatherData),
           for (final entry in {
-            'Open-Meteo': 'https://open-meteo.com',
+            'Open-Meteo (CC BY 4.0)': 'https://open-meteo.com',
             'Pirate Weather': 'https://pirateweather.net',
-            'Bright Sky (DWD)': 'https://brightsky.dev',
+            'Bright Sky · Deutscher Wetterdienst (DWD)':
+                'https://brightsky.dev',
             'WeatherAPI.com': 'https://www.weatherapi.com',
             'OpenStreetMap': 'https://www.openstreetmap.org',
             'RainViewer': 'https://www.rainviewer.com',

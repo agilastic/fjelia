@@ -1,5 +1,7 @@
 import '../services/plan_session_actions.dart';
-import 'day_data_provider.dart' show syncStatusListenerProvider;
+import 'day_data_provider.dart'
+    show syncStatusListenerProvider, scheduledWorkoutsProvider;
+import '../services/plan_day.dart';
 import '../services/race_predictor.dart';
 
 import 'package:drift/drift.dart';
@@ -176,4 +178,12 @@ final plannedSessionProvider = FutureProvider.family<TrainingSession?, String>((
           .select(ref.watch(databaseProvider).trainingSessions)
         ..where((t) => t.id.equals(id)))
       .getSingleOrNull();
+});
+
+/// Whether today is a planned rest day: the plan covers it and schedules
+/// nothing. Refreshes with the plan.
+final plannedRestTodayProvider = FutureProvider<bool>((ref) async {
+  ref.watch(upcomingSessionsProvider);
+  ref.watch(scheduledWorkoutsProvider);
+  return isPlannedRestDay(ref.watch(databaseProvider), DateTime.now());
 });

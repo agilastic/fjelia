@@ -157,7 +157,7 @@ void main() {
     expect(prompt, isNot(contains('7-day average')));
     expect(prompt, isNot(contains('+3.3')));
     expect(prompt, isNot(contains('Night:40ms')));
-    expect(prompt, contains('No workout is scheduled for today'));
+    expect(prompt, contains('planned rest day'));
     expect(request.instructions, contains('at most 45 words'));
     expect(request.instructions, contains('DO NOT list or repeat'));
   });

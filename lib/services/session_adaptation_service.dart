@@ -211,6 +211,115 @@ class SessionAdaptationService {
     );
   }
 
+  /// A change outside the morning check, e.g. when a missed workout is
+  /// fitted into the next days. `easier` lowers every zone by one,
+  /// `recovery` turns the session into the easy 30-minute one, `keep` leaves
+  /// the zones. [durationMin] shortens the steps to that length; a session is
+  /// never made longer or harder here.
+  Future<TrainingSession> adjust(
+    TrainingSession session, {
+    int? durationMin,
+    String intensity = 'keep',
+    String trigger = 'rebalance',
+  }) async {
+    if (!const {'planned', 'adapted'}.contains(session.status)) return session;
+    final recovery = intensity == 'recovery';
+    final shift = intensity == 'easier' ? -1 : 0;
+    final target = math.min(
+      durationMin ?? session.plannedDurationMin,
+      session.plannedDurationMin,
+    );
+    var title = session.title;
+    String? steps;
+    int duration;
+    int? trimp;
+    if (recovery) {
+      steps = _recoveryStepsJson();
+      duration = math.min(30, session.plannedDurationMin);
+      title = 'Easy Recovery ${_sportLabel(session.sport)}';
+    } else if (session.stepsJson == null) {
+      duration = target;
+    } else {
+      final shifted = shift == 0
+          ? session.stepsJson!
+          : _shiftZonesInSteps(session.stepsJson!, shift);
+      final base = WorkoutSemantics.of(shifted, sport: session.sport);
+      steps = shifted;
+      if (!base.isEmpty && target * 60 < base.totalSeconds - 30) {
+        final fitted = fitSteadyWorkout(shifted, target * 60.0);
+        if (fitted.scaled) {
+          steps = fitted.stepsJson;
+        } else {
+          // Intervals: drop repetitions until it fits, at most a few.
+          for (var i = 0; i < 6; i++) {
+            final now = WorkoutSemantics.of(steps!, sport: session.sport);
+            if (now.totalSeconds <= target * 60 + 30) break;
+            final fewer = _dropOneRepeat(steps);
+            if (fewer == steps) break;
+            steps = fewer;
+          }
+        }
+      }
+      final result = WorkoutSemantics.of(steps!, sport: session.sport);
+      duration = result.isEmpty ? target : result.totalMinutes;
+      trimp = result.isEmpty ? null : result.legacyLoad.round();
+      if (duration != session.plannedDurationMin) {
+        title = retimeTitle(session.title, duration);
+      }
+    }
+    final level = recovery
+        ? 1
+        : shift < 0
+        ? _dropIntensity(session.sessionLevel)
+        : session.sessionLevel;
+    final zone = recovery ? 1 : (session.primaryZone + shift).clamp(1, 5);
+    await _db.transaction(() async {
+      await (_db.update(
+        _db.trainingSessions,
+      )..where((t) => t.id.equals(session.id))).write(
+        TrainingSessionsCompanion(
+          sessionLevel: Value(level),
+          originalSessionLevel: Value(
+            session.originalSessionLevel ?? session.sessionLevel,
+          ),
+          plannedDurationMin: Value(duration),
+          plannedTrimp: trimp == null ? const Value.absent() : Value(trimp),
+          primaryZone: Value(zone),
+          title: Value(title),
+          stepsJson: Value(steps ?? session.stepsJson),
+          adaptationTrigger: Value(trigger),
+          tspAdjusted: const Value(true),
+          status: const Value('adapted'),
+          dateModified: Value(DateTime.now()),
+          modifiedBy: const Value('athlete'),
+        ),
+      );
+      await _db
+          .into(_db.sessionAdaptations)
+          .insert(
+            SessionAdaptationsCompanion.insert(
+              id: const Uuid().v4(),
+              originalSessionId: session.id,
+              adaptedSessionId: session.id,
+              adaptedAt: DateTime.now(),
+              readinessLevel: trigger,
+              flagCount: 0,
+              flagsFiredJson: '{}',
+              originalSessionLevel: session.sessionLevel,
+              adaptedSessionLevel: level,
+              originalDurationMin: session.plannedDurationMin,
+              adaptedDurationMin: duration,
+              zoneShiftJson: Value(
+                '{"from": ${session.primaryZone}, "to": $zone, "shift": $shift}',
+              ),
+            ),
+          );
+    });
+    return (_db.select(
+      _db.trainingSessions,
+    )..where((t) => t.id.equals(session.id))).getSingle();
+  }
+
   /// Drops one repetition of the first repeat group of three or more.
   String _dropOneRepeat(String stepsJson) {
     final decoded = jsonDecode(stepsJson);

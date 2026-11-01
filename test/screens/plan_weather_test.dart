@@ -301,6 +301,61 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+  testWidgets('other forecasts appear as one range, not as named lines', (
+    tester,
+  ) async {
+    final points = fixture().points.take(24).toList();
+    final warmer = OpenMeteoResult(
+      points: [
+        for (final p in points)
+          OpenMeteoPoint(
+            time: p.time,
+            temperatureC: p.temperatureC + 1.5,
+            humidityPct: p.humidityPct,
+            pressureHpa: p.pressureHpa,
+            precipitationMm: p.precipitationMm,
+            windSpeedKmh: p.windSpeedKmh,
+            windDirection: p.windDirection,
+          ),
+      ],
+      sunrise: {},
+      sunset: {},
+      fetchedAt: DateTime.now(),
+      rawJson: '{}',
+      source: 'Pirate Weather',
+    );
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: SingleChildScrollView(
+            child: WeatherForecastChart(
+              points: points,
+              week: false,
+              primarySource: 'Open-Meteo',
+              comparison: [warmer],
+            ),
+          ),
+        ),
+      ),
+    );
+    expect(find.text('Shaded: range of 2 forecasts'), findsOneWidget);
+    expect(find.textContaining('Pirate Weather'), findsNothing);
+    expect(find.textContaining('Open-Meteo'), findsNothing);
+    final plot = find
+        .descendant(
+          of: find.byType(WeatherForecastChart),
+          matching: find.byType(CustomPaint),
+        )
+        .last;
+    await tester.tapAt(tester.getCenter(plot));
+    await tester.pump();
+    expect(
+      find.textContaining(RegExp(r'°C \(\d+\.\d–\d+\.\d°C\) ·')),
+      findsOneWidget,
+    );
+  });
   testWidgets(
     'Plan weather remains visible without heat acclimation and opens forecast',
     (tester) async {

@@ -1511,10 +1511,6 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
-  String get shadedAreaProviderSpread =>
-      'Àrea ombrejada: dispersió entre proveïdors';
-
-  @override
   String get temperatureC => '● Temperatura °C';
 
   @override
@@ -2181,6 +2177,11 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get forecast => 'Previsió';
+
+  @override
+  String forecastRange(int count) {
+    return 'Àrea ombrejada: rang de $count previsions';
+  }
 
   @override
   String get enterAName => 'Introdueix un nom';
@@ -5342,7 +5343,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get tabLoad => 'CÀRREGA';
 
   @override
-  String get tabCoach => 'ENTRENADOR';
+  String get tabCoach => 'COACH';
 
   @override
   String get hrDriftTestLt1 => 'PROVA DE DERIVA DE FC – LT1';
@@ -6037,4 +6038,191 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get mixRecipeCola => 'Cola amb aigua';
+
+  @override
+  String get missedWorkoutTitle => 'Encara al pla d’avui';
+
+  @override
+  String missedWorkoutBody(String workouts) {
+    return '$workouts. Encara avui, moure’l o ometre’l?';
+  }
+
+  @override
+  String get stillToday => 'Encara avui';
+
+  @override
+  String get moveWorkoutAction => 'Moure…';
+
+  @override
+  String get missedWorkoutChannel => 'Entrenaments perduts';
+
+  @override
+  String get missedWorkoutChannelDescription =>
+      'Recordatori al vespre dels entrenaments previstos encara pendents';
+
+  @override
+  String get missedWorkoutReminder => 'Recordatori d’entrenament pendent';
+
+  @override
+  String get missedWorkoutReminderSubtitle =>
+      'Al vespre, si un entrenament previst encara està pendent';
+
+  @override
+  String get moveWithinDays => 'Moure dins de';
+
+  @override
+  String daysN(int count) {
+    return '$count dies';
+  }
+
+  @override
+  String get notificationsAreOff =>
+      'Les notificacions de Fjelia estan desactivades. Permet-les per rebre aquest recordatori.';
+
+  @override
+  String get allowNotifications => 'Permet les notificacions';
+
+  @override
+  String get openWorkoutToday => 'Pendent avui';
+
+  @override
+  String get checkingForWorkout => 'Cercant el teu entrenament…';
+
+  @override
+  String get alreadyDone => 'Ja fet ✓';
+
+  @override
+  String get alreadyDoneBody =>
+      'El teu entrenament s’ha registrat. Avui no queda res pendent.';
+
+  @override
+  String get dropIt => 'Ometre’l';
+
+  @override
+  String askCoachSends(String provider) {
+    return 'Envia el teu resum d’entrenament a $provider.';
+  }
+
+  @override
+  String get coachThinking => 'El coach està pensant…';
+
+  @override
+  String get coachCouldNotAnswer =>
+      'El coach no ha pogut respondre. El suggeriment de dalt continua sent vàlid.';
+
+  @override
+  String get whySkip => 'Per què ometre’l?';
+
+  @override
+  String get skipReasonIllness => 'Malaltia';
+
+  @override
+  String get skipReasonInjury => 'Lesió o dolor';
+
+  @override
+  String get skipReasonFatigue => 'Cansament';
+
+  @override
+  String get skipReasonNoTime => 'Sense temps';
+
+  @override
+  String get skipReasonTravel => 'Viatge';
+
+  @override
+  String get skipReasonConditions => 'Condicions';
+
+  @override
+  String get skipReasonMyChoice => 'Decisió meva';
+
+  @override
+  String get onbReminderTitle => 'Mantén el rumb';
+
+  @override
+  String get onbReminderSubtitle =>
+      'Si al vespre un entrenament previst encara està pendent, Fjelia t’ho recorda una vegada, perquè encara el facis, el moguis o l’ometis.';
+
+  @override
+  String get onbExampleWorkout => 'Rodatge suau (45 min)';
+
+  @override
+  String get onbReminderToggle => 'Recordatori al vespre';
+
+  @override
+  String get onbReminderTime => 'Recorda-m’ho a les';
+
+  @override
+  String get onbReminderFootnote =>
+      'Ho pots canviar quan vulguis a Configuració → Entrenament.';
+
+  @override
+  String get nowLabel => 'ara';
+
+  @override
+  String get coachSuggests => 'El coach proposa';
+
+  @override
+  String get suggestionLabel => 'Suggeriment';
+
+  @override
+  String get askCoachShort => 'Pregunta al coach';
+
+  @override
+  String get otherDay => 'Un altre dia';
+
+  @override
+  String get skipEllipsis => 'Ometre…';
+
+  @override
+  String get pickADay => 'Toca un dia a dalt';
+
+  @override
+  String get dayDoesNotFit => 'Aquest dia no encaixa al pla.';
+
+  @override
+  String get planUpdated => 'Pla actualitzat';
+
+  @override
+  String get missedTodayTag => 'perdut avui';
+
+  @override
+  String summaryMove(String day) {
+    return 'Mou-lo al $day.';
+  }
+
+  @override
+  String summaryMoveIndoor(String day) {
+    return 'Mou-lo al $day, a cobert: es preveu pluja.';
+  }
+
+  @override
+  String get summaryDropEasy =>
+      'Omet-lo: no val la pena recuperar una sessió suau.';
+
+  @override
+  String summaryDropNoDay(int days) {
+    return 'Omet-lo: cap dia encaixa en els propers $days dies.';
+  }
+
+  @override
+  String get tagIndoor => 'a cobert';
+
+  @override
+  String get tagEasier => 'més suau';
+
+  @override
+  String get tagRecovery => 'recuperació';
+
+  @override
+  String summaryMoveEasier(String day) {
+    return 'Mou-lo al $day, una mica més suau: és al costat d’un dia dur.';
+  }
+
+  @override
+  String get briefRestDayToday => 'Avui és un dia de descans previst.';
+
+  @override
+  String get restDayPlannedNote => 'La recuperació forma part del teu pla.';
+
+  @override
+  String get restDayTitle => 'Dia de descans';
 }

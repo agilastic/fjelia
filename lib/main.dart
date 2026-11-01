@@ -16,7 +16,11 @@ import 'providers/health_connect_provider.dart';
 import 'providers/hilo_sync_provider.dart';
 import 'providers/hrv_reminder_provider.dart';
 import 'providers/hrv_training_provider.dart';
+import 'providers/missed_workout_provider.dart';
 import 'providers/nutrition_provider.dart';
+import 'providers/planner_providers.dart' show upcomingSessionsProvider;
+import 'screens/planner/missed_workout_sheet.dart';
+import 'services/missed_workout_reminder_service.dart';
 import 'widgets/nutrition_widgets.dart';
 import 'services/notifications/local_notification_gateway.dart'
     as notifications;
@@ -98,6 +102,7 @@ Future<void> healthBackgroundMain() async {
           gateway,
           postHrvMissing: (ids) => postHrvMissing(db, training, ids),
         ),
+        missedWorkout: MissedWorkoutReminderService(db, gateway),
       ).timeout(healthBackgroundBudget);
     } finally {
       await db.close();
@@ -131,6 +136,7 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
       _listenForPairingRequest();
       _listenForHealthAccessLost();
       _listenForHealthWorkouts();
+      _listenForPlanChanges();
       _triggerSync();
       unawaited(_startHrvReminders());
     });
@@ -171,7 +177,10 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
       await ref.read(languageProvider.future);
       final router = ref.read(hrvActionRouterProvider);
       router.onResult = _onHrvAction;
-      router.onOtherResponse = _onNutritionAction;
+      router.onOtherResponse = (r) =>
+          MissedWorkoutPayload.decode(r.payload) != null
+          ? _onMissedWorkoutAction(r)
+          : _onNutritionAction(r);
       await Future.wait([
         ref
             .read(hrvReminderActionsProvider)
@@ -179,6 +188,10 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
             .catchError((Object _) {}),
         ref
             .read(nutritionReminderProvider)
+            .reconcile()
+            .catchError((Object _) {}),
+        ref
+            .read(missedWorkoutReminderProvider)
             .reconcile()
             .catchError((Object _) {}),
       ]);
@@ -240,6 +253,38 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
     }
   }
 
+  Future<void> _onMissedWorkoutAction(
+    notifications.NotificationResponse response,
+  ) async {
+    final action = await ref
+        .read(missedWorkoutReminderProvider)
+        .handle(response);
+    if (action == null || !mounted) return;
+    final context = await _homeContext();
+    if (context == null || !context.mounted) return;
+    await showAppSheet(
+      context,
+      MissedWorkoutSheet(day: action.day, intent: action.kind),
+    );
+  }
+
+  /// A moved, skipped or newly planned session changes which evenings need
+  /// a reminder.
+  void _listenForPlanChanges() {
+    void reconcile() => unawaited(
+      ref
+          .read(missedWorkoutReminderProvider)
+          .reconcile()
+          .catchError((Object _) {}),
+    );
+    ref.listenManual(upcomingSessionsProvider, (prev, next) {
+      if (next.hasValue) reconcile();
+    });
+    ref.listenManual(scheduledWorkoutsProvider, (prev, next) {
+      if (next.hasValue) reconcile();
+    });
+  }
+
   void _triggerSync() {
     ref.read(syncServiceProvider).migrateStrainToTrimp();
     ref.read(syncProvider.notifier).sync();
@@ -270,6 +315,7 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
           health: ref.read(healthConnectServiceProvider),
           reconcileHrv: () => ref.read(hrvReminderActionsProvider).reconcile(),
           nutrition: ref.read(nutritionReminderProvider),
+          missedWorkout: ref.read(missedWorkoutReminderProvider),
         ).timeout(healthBackgroundBudget);
         if (added > 0 && mounted) {
           ref.read(hrvActivitiesChangedProvider.notifier).state++;

@@ -357,8 +357,18 @@ class _WeatherState extends ConsumerState<WeatherScreen> {
                     ),
                   const SizedBox(height: 12),
                   Text(
+                    // Every forecast in the chart's range is named, not
+                    // only the main one (CC BY / DWD attribution).
                     context.l10n.dataSourceUpdatedFetchedat(
-                      data.result.source,
+                      {
+                        data.result.source,
+                        for (final other
+                            in ref
+                                    .watch(weatherComparisonProvider)
+                                    .valueOrNull ??
+                                const [])
+                          if (other.points.isNotEmpty) other.source,
+                      }.join(', '),
                       DateFormat.Hm().format(data.result.fetchedAt),
                     ),
                     style: const TextStyle(fontSize: 10, color: muted),

@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 
 import '../models/heart_rate.dart';
+import '../theme/activity_colors.dart' show activityKind;
 import '../services/source_priority_service.dart'
     show SourceGroup, defaultSourcePriorities, shouldOverwrite;
 
@@ -1358,9 +1359,8 @@ class AppDatabase extends _$AppDatabase {
 
   // ── Activities ───────────────────────────────────────────────────────────
 
-  /// Removes duplicate workouts imported from several sources. Two activities
-  /// are the same when they start within 60 s of each other and their
-  /// durations differ by at most 2 %. The Health Connect copy is dropped.
+  /// Removes duplicate workouts imported from several sources, as decided by
+  /// [isSameWorkout]. The Health Connect copy is dropped.
   Future<int> deduplicateActivities() async {
     final all = await (select(
       activityRecords,
@@ -1376,11 +1376,17 @@ class AppDatabase extends _$AppDatabase {
         final b = all[j];
         if (toDelete.contains(b.activityId)) continue;
         final gap = b.startDate.difference(a.startDate).inSeconds;
-        if (gap > 120) break;
-        if (gap.abs() > 60) continue;
-        final durDiff = (a.durationSeconds - b.durationSeconds).abs();
-        final tolerance = (a.durationSeconds * 0.02).ceil();
-        if (durDiff > tolerance) continue;
+        if (gap > sameWorkoutMaxStartGap.inSeconds) break;
+        if (!isSameWorkout(
+          a.startDate,
+          a.durationSeconds,
+          a.type,
+          b.startDate,
+          b.durationSeconds,
+          b.type,
+        )) {
+          continue;
+        }
         if (a.source == 'health_connect') {
           toDelete.add(a.activityId);
           survivor[a.activityId] = b;
@@ -1839,14 +1845,18 @@ class AppDatabase extends _$AppDatabase {
 
   /// Stores the measurements that are not stored yet and returns how many
   /// were added.
+  ///
+  /// Check and insert run in one transaction: several syncs at once (a history
+  /// import requests many days in parallel) each saw a reading as new and
+  /// stored it again, which once left thousands of copies of one day.
   Future<int> insertBpMeasurements(
     List<BpMeasurementsCompanion> measurements,
-  ) async {
+  ) => transaction(() async {
     final fresh = await newBpMeasurements(measurements);
     if (fresh.isEmpty) return 0;
     await batch((b) => b.insertAll(bpMeasurements, fresh));
     return fresh.length;
-  }
+  });
 
   // ── Renpho ───────────────────────────────────────────────────────────────
 
@@ -2764,4 +2774,39 @@ class AppDatabase extends _$AppDatabase {
     final rows = await customSelect('PRAGMA table_info($table)').get();
     return rows.any((r) => r.read<String>('name') == column);
   }
+}
+
+/// How far apart two copies of one workout may start.
+const sameWorkoutMaxStartGap = Duration(minutes: 5);
+
+/// Whether two recordings from different sources are the same workout.
+///
+/// Either they line up almost exactly (start within 60 s, duration within
+/// 2 %), or they are the same sport, start within [sameWorkoutMaxStartGap]
+/// and the shorter one lies almost entirely inside the longer one. The second
+/// case covers a platform reporting timer time while Apple Health reports
+/// start to end including pauses, e.g. a 3 h 47 min Garmin ride that Health
+/// holds as 4 h 08 min.
+bool isSameWorkout(
+  DateTime startA,
+  int secondsA,
+  String typeA,
+  DateTime startB,
+  int secondsB,
+  String typeB,
+) {
+  final gap = startA.difference(startB).inSeconds.abs();
+  if (gap <= 60 && (secondsA - secondsB).abs() <= (secondsA * 0.02).ceil()) {
+    return true;
+  }
+  if (gap > sameWorkoutMaxStartGap.inSeconds) return false;
+  if (activityKind(typeA) != activityKind(typeB)) return false;
+  final shorter = secondsA < secondsB ? secondsA : secondsB;
+  final longer = secondsA < secondsB ? secondsB : secondsA;
+  if (shorter <= 0 || shorter < longer * 0.75) return false;
+  final endA = startA.add(Duration(seconds: secondsA));
+  final endB = startB.add(Duration(seconds: secondsB));
+  final from = startA.isAfter(startB) ? startA : startB;
+  final to = endA.isBefore(endB) ? endA : endB;
+  return to.difference(from).inSeconds >= shorter * 0.8;
 }

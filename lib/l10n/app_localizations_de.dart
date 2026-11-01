@@ -1506,10 +1506,6 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get shadedAreaProviderSpread =>
-      'Schattierter Bereich: Streuung der Anbieter';
-
-  @override
   String get temperatureC => '● Temperatur °C';
 
   @override
@@ -2179,6 +2175,11 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get forecast => 'Vorhersage';
+
+  @override
+  String forecastRange(int count) {
+    return 'Schattiert: Spanne aus $count Vorhersagen';
+  }
 
   @override
   String get enterAName => 'Gib einen Namen ein';
@@ -5334,7 +5335,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get tabPlan => 'PLAN';
 
   @override
-  String get tabLoad => 'BELASTUNG';
+  String get tabLoad => 'LOAD';
 
   @override
   String get tabCoach => 'COACH';
@@ -6028,4 +6029,191 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get mixRecipeCola => 'Cola-Schorle';
+
+  @override
+  String get missedWorkoutTitle => 'Heute noch geplant';
+
+  @override
+  String missedWorkoutBody(String workouts) {
+    return '$workouts. Noch heute, verschieben oder auslassen?';
+  }
+
+  @override
+  String get stillToday => 'Noch heute';
+
+  @override
+  String get moveWorkoutAction => 'Verschieben…';
+
+  @override
+  String get missedWorkoutChannel => 'Verpasste Trainings';
+
+  @override
+  String get missedWorkoutChannelDescription =>
+      'Abendliche Erinnerung an geplante Trainings, die noch offen sind';
+
+  @override
+  String get missedWorkoutReminder => 'Erinnerung an offenes Training';
+
+  @override
+  String get missedWorkoutReminderSubtitle =>
+      'Am Abend, wenn ein geplantes Training noch offen ist';
+
+  @override
+  String get moveWithinDays => 'Verschieben innerhalb';
+
+  @override
+  String daysN(int count) {
+    return '$count Tage';
+  }
+
+  @override
+  String get notificationsAreOff =>
+      'Mitteilungen sind für Fjelia aus. Erlaube sie, um diese Erinnerung zu bekommen.';
+
+  @override
+  String get allowNotifications => 'Mitteilungen erlauben';
+
+  @override
+  String get openWorkoutToday => 'Heute noch offen';
+
+  @override
+  String get checkingForWorkout => 'Suche nach deinem Training…';
+
+  @override
+  String get alreadyDone => 'Schon erledigt ✓';
+
+  @override
+  String get alreadyDoneBody =>
+      'Dein Training wurde erfasst. Heute ist nichts mehr offen.';
+
+  @override
+  String get dropIt => 'Auslassen';
+
+  @override
+  String askCoachSends(String provider) {
+    return 'Sendet deine Trainingsübersicht an $provider.';
+  }
+
+  @override
+  String get coachThinking => 'Der Coach überlegt…';
+
+  @override
+  String get coachCouldNotAnswer =>
+      'Der Coach konnte nicht antworten. Der Vorschlag oben gilt weiter.';
+
+  @override
+  String get whySkip => 'Warum auslassen?';
+
+  @override
+  String get skipReasonIllness => 'Krankheit';
+
+  @override
+  String get skipReasonInjury => 'Verletzung oder Schmerzen';
+
+  @override
+  String get skipReasonFatigue => 'Müdigkeit';
+
+  @override
+  String get skipReasonNoTime => 'Keine Zeit';
+
+  @override
+  String get skipReasonTravel => 'Reise';
+
+  @override
+  String get skipReasonConditions => 'Bedingungen';
+
+  @override
+  String get skipReasonMyChoice => 'Meine Entscheidung';
+
+  @override
+  String get onbReminderTitle => 'Dranbleiben';
+
+  @override
+  String get onbReminderSubtitle =>
+      'Ist am Abend ein geplantes Training noch offen, erinnert dich Fjelia einmal, damit du es noch machen, verschieben oder auslassen kannst.';
+
+  @override
+  String get onbExampleWorkout => 'Lockerer Lauf (45 min)';
+
+  @override
+  String get onbReminderToggle => 'Erinnerung am Abend';
+
+  @override
+  String get onbReminderTime => 'Erinnere mich um';
+
+  @override
+  String get onbReminderFootnote =>
+      'Du kannst das jederzeit unter Einstellungen → Training ändern.';
+
+  @override
+  String get nowLabel => 'jetzt';
+
+  @override
+  String get coachSuggests => 'Coach schlägt vor';
+
+  @override
+  String get suggestionLabel => 'Vorschlag';
+
+  @override
+  String get askCoachShort => 'Coach fragen';
+
+  @override
+  String get otherDay => 'Anderer Tag';
+
+  @override
+  String get skipEllipsis => 'Auslassen…';
+
+  @override
+  String get pickADay => 'Tippe oben auf einen Tag';
+
+  @override
+  String get dayDoesNotFit => 'Dieser Tag passt nicht in den Plan.';
+
+  @override
+  String get planUpdated => 'Plan aktualisiert';
+
+  @override
+  String get missedTodayTag => 'heute verpasst';
+
+  @override
+  String summaryMove(String day) {
+    return 'Verschiebe es auf $day.';
+  }
+
+  @override
+  String summaryMoveIndoor(String day) {
+    return 'Verschiebe es auf $day, drinnen – Regen ist angesagt.';
+  }
+
+  @override
+  String get summaryDropEasy =>
+      'Lass es aus – eine lockere Einheit lohnt das Nachholen nicht.';
+
+  @override
+  String summaryDropNoDay(int days) {
+    return 'Lass es aus – in den nächsten $days Tagen passt kein Tag.';
+  }
+
+  @override
+  String get tagIndoor => 'drinnen';
+
+  @override
+  String get tagEasier => 'leichter';
+
+  @override
+  String get tagRecovery => 'Erholung';
+
+  @override
+  String summaryMoveEasier(String day) {
+    return 'Verschiebe es auf $day, etwas leichter – daneben liegt ein harter Tag.';
+  }
+
+  @override
+  String get briefRestDayToday => 'Heute ist ein geplanter Ruhetag.';
+
+  @override
+  String get restDayPlannedNote => 'Erholung gehört zu deinem Plan.';
+
+  @override
+  String get restDayTitle => 'Ruhetag';
 }

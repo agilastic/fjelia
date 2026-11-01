@@ -312,7 +312,7 @@ class _ItemLine extends StatelessWidget {
           showAppSheet(context, WorkoutDetailSheet(workout: item.workout!));
     }
     final phase = item.session?.phase;
-    return InkWell(
+    final line = InkWell(
       onTap: item.activity != null
           ? () => showAppSheet(
               context,
@@ -355,17 +355,32 @@ class _ItemLine extends StatelessWidget {
             ? context.l10n.notRecorded
             : item.title,
         trailing: item.minutes == null ? '—' : '${item.minutes} min',
-        target:
-            done &&
-                item.plannedMinutes != null &&
-                item.plannedMinutes != item.minutes
-            ? context.l10n.planPlannedminutesMin(item.plannedMinutes ?? 0)
-            : null,
-        onPlanTap: done ? viewPlan : null,
         dim: skipped || missed,
         struck: skipped,
         done: done,
       ),
+    );
+    if (!done || !item.hasPlan) return line;
+    // Done as planned: the plan stays visible, struck through, above what
+    // was really done.
+    final planned = item.plannedMinutes;
+    return Column(
+      children: [
+        InkWell(
+          onTap: viewPlan,
+          borderRadius: BorderRadius.circular(10),
+          child: _Line(
+            icon: activitySportIcon(item.plannedSport),
+            color: Colors.white38,
+            label: sportLabel(item.plannedSport),
+            detail: item.plannedTitle,
+            trailing: planned == null ? '—' : '$planned min',
+            dim: true,
+            struck: true,
+          ),
+        ),
+        line,
+      ],
     );
   }
 }
@@ -380,8 +395,6 @@ class _Line extends StatelessWidget {
     this.badge,
     this.secondaryBadge,
     this.badgeTooltip,
-    this.target,
-    this.onPlanTap,
     this.badgeColor = muted,
     this.dim = false,
     this.struck = false,
@@ -390,8 +403,7 @@ class _Line extends StatelessWidget {
   final IconData icon;
   final Color color;
   final String label, trailing;
-  final String? detail, badge, secondaryBadge, badgeTooltip, target;
-  final VoidCallback? onPlanTap;
+  final String? detail, badge, secondaryBadge, badgeTooltip;
   final Color badgeColor;
   final bool dim, struck, done;
 
@@ -465,9 +477,11 @@ class _Line extends StatelessWidget {
                       detail!,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 11,
                         color: Colors.white54,
+                        decoration: struck ? TextDecoration.lineThrough : null,
+                        decorationColor: Colors.white38,
                       ),
                     ),
                   ),
@@ -502,17 +516,6 @@ class _Line extends StatelessWidget {
                   ),
                 ],
               ),
-              if (target != null)
-                TextButton(
-                  onPressed: onPlanTap,
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    minimumSize: const Size(0, 24),
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    foregroundColor: muted,
-                  ),
-                  child: Text(target!, style: const TextStyle(fontSize: 10)),
-                ),
             ],
           ),
         ],

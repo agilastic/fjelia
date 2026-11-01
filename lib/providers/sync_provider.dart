@@ -26,6 +26,8 @@ import 'hilo_sync_provider.dart';
 import 'hr_zone_sync_provider.dart';
 import 'hr_zones_provider.dart';
 import 'hrv_reminder_provider.dart';
+import 'missed_workout_provider.dart';
+import '../services/vitals_retention.dart';
 import 'nutrition_provider.dart';
 import 'strength_provider.dart';
 import 'planner_providers.dart';
@@ -611,6 +613,24 @@ class SyncNotifier extends StateNotifier<SyncState> {
     unawaited(
       _ref.read(nutritionReminderProvider).reconcile().catchError((Object e) {
         log('[Nutrition] reminder reconciliation: $e');
+      }),
+    );
+    // Heart rate and blood pressure older than two days keep one value per
+    // 15 minutes. Never blocks the sync.
+    unawaited(
+      VitalsRetentionService(
+        _ref.read(databaseProvider),
+      ).run().catchError((Object e) {
+        log('[Retention] $e');
+        return (bpRemoved: 0, hrRemoved: 0);
+      }),
+    );
+    // A workout that arrived with the sync takes tonight's reminder back.
+    unawaited(
+      _ref.read(missedWorkoutReminderProvider).reconcile().catchError((
+        Object e,
+      ) {
+        log('[MissedWorkout] reminder reconciliation: $e');
       }),
     );
     // Imported exercise sets may have arrived with the activities.

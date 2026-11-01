@@ -222,6 +222,8 @@ class _PlanState extends ConsumerState<PlanScreen> {
             data: (rows) => UpcomingWorkoutList(
               entries: rows,
               selectedDay: view == 'List' ? null : selected,
+              restToday:
+                  ref.watch(plannedRestTodayProvider).valueOrNull ?? false,
             ),
           ),
         if (view != 'Week')
@@ -229,6 +231,7 @@ class _PlanState extends ConsumerState<PlanScreen> {
             showHeader: false,
             monthMode: true,
             selectedDayOnly: view == 'Month',
+            rollingDays: view == 'List' ? 42 : null,
           ),
       ],
     );

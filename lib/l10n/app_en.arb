@@ -862,7 +862,6 @@
       }
     }
   },
-  "shadedAreaProviderSpread": "Shaded area: provider spread",
   "temperatureC": "● Temperature °C",
   "rainMm": "▥ Rain mm",
   "uvIndex": "— UV index",
@@ -1236,6 +1235,15 @@
   "around30MinutesAfterTraining": "Around 30 minutes after training, when the workout is available in time.",
   "reminderDiagnostics": "Reminder diagnostics",
   "forecast": "Forecast",
+  "forecastRange": "Shaded: range of {count} forecasts",
+  "@forecastRange": {
+    "description": "Weather chart legend: the shaded band spans the lowest to highest of all forecasts.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "enterAName": "Enter a name",
   "enterAValidAmount": "Enter a valid amount",
   "enterAPositiveAmount": "Enter a positive amount",
@@ -3376,5 +3384,109 @@
   "mixRecipeMaltoSugar": "Malto + sugar 2:1",
   "mixRecipeJuice": "Juice spritzer",
   "mixRecipeJuicePlus": "Juice spritzer + malto",
-  "mixRecipeCola": "Cola spritzer"
+  "mixRecipeCola": "Cola spritzer",
+  "missedWorkoutTitle": "Still on your plan today",
+  "missedWorkoutBody": "{workouts}. Still today, move it or skip it?",
+  "@missedWorkoutBody": {
+    "placeholders": {
+      "workouts": {
+        "type": "String"
+      }
+    }
+  },
+  "stillToday": "Still today",
+  "moveWorkoutAction": "Move…",
+  "missedWorkoutChannel": "Missed workouts",
+  "missedWorkoutChannelDescription": "Evening reminder of planned workouts still open that day",
+  "missedWorkoutReminder": "Missed workout reminder",
+  "missedWorkoutReminderSubtitle": "In the evening, if a planned workout is still open",
+  "moveWithinDays": "Move within",
+  "daysN": "{count} days",
+  "@daysN": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notificationsAreOff": "Notifications are off for Fjelia. Allow them to get this reminder.",
+  "allowNotifications": "Allow notifications",
+  "openWorkoutToday": "Still open today",
+  "checkingForWorkout": "Looking for your workout…",
+  "alreadyDone": "Already done ✓",
+  "alreadyDoneBody": "Your workout was recorded. Nothing left to do today.",
+  "dropIt": "Drop it",
+  "askCoachSends": "Sends your training summary to {provider}.",
+  "@askCoachSends": {
+    "placeholders": {
+      "provider": {
+        "type": "String"
+      }
+    }
+  },
+  "coachThinking": "The coach is thinking…",
+  "coachCouldNotAnswer": "The coach could not answer. The suggestion above still holds.",
+  "whySkip": "Why skip it?",
+  "skipReasonIllness": "Illness",
+  "skipReasonInjury": "Injury or pain",
+  "skipReasonFatigue": "Fatigue",
+  "skipReasonNoTime": "No time",
+  "skipReasonTravel": "Travel",
+  "skipReasonConditions": "Conditions",
+  "skipReasonMyChoice": "My choice",
+  "onbReminderTitle": "Stay on track",
+  "onbReminderSubtitle": "If a planned workout is still open in the evening, Fjelia reminds you once, so you can still do it, move it or skip it.",
+  "onbExampleWorkout": "Easy run (45 min)",
+  "onbReminderToggle": "Evening reminder",
+  "onbReminderTime": "Remind me at",
+  "onbReminderFootnote": "You can change this any time in Settings → Training.",
+  "nowLabel": "now",
+  "coachSuggests": "Coach suggests",
+  "suggestionLabel": "Suggestion",
+  "askCoachShort": "Ask coach",
+  "otherDay": "Other day",
+  "skipEllipsis": "Skip…",
+  "pickADay": "Tap a day above",
+  "dayDoesNotFit": "That day doesn’t fit the plan.",
+  "planUpdated": "Plan updated",
+  "missedTodayTag": "missed today",
+  "summaryMove": "Move it to {day}.",
+  "@summaryMove": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "summaryMoveIndoor": "Move it to {day}, indoors – rain is forecast.",
+  "@summaryMoveIndoor": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "summaryDropEasy": "Drop it – an easy session isn’t worth making up.",
+  "summaryDropNoDay": "Drop it – no day fits in the next {days} days.",
+  "@summaryDropNoDay": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "tagIndoor": "indoor",
+  "tagEasier": "easier",
+  "tagRecovery": "recovery",
+  "summaryMoveEasier": "Move it to {day}, a bit easier – it sits next to a hard day.",
+  "@summaryMoveEasier": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "briefRestDayToday": "Today is a planned rest day.",
+  "restDayPlannedNote": "Recovery is part of your plan.",
+  "restDayTitle": "Rest day"
 }

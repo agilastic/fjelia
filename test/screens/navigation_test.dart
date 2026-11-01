@@ -17,6 +17,7 @@ import 'package:fjelia/screens/activities/activities_screen.dart';
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/providers/database_provider.dart';
 import 'package:fjelia/providers/sync_provider.dart';
+import 'package:fjelia/screens/onboarding/missed_workout_onboarding_screen.dart';
 import 'package:fjelia/screens/onboarding/connect_devices_screen.dart';
 import 'package:fjelia/screens/onboarding/welcome_screen.dart';
 import 'package:fjelia/screens/settings/settings_sheet.dart';
@@ -53,6 +54,13 @@ void main() {
         ),
       ),
     );
+    await tester.pumpAndSettle();
+  }
+
+  /// The evening-reminder step comes last; it is on by default.
+  Future<void> continueFromReminderStep(WidgetTester tester) async {
+    expect(find.byType(MissedWorkoutOnboardingScreen), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('onboarding-missed-continue')));
     await tester.pumpAndSettle();
   }
 
@@ -206,6 +214,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(finish);
     await tester.pumpAndSettle();
+    await continueFromReminderStep(tester);
     expect(find.byType(HomeScreen), findsOneWidget);
     final raw = await const FlutterSecureStorage().read(key: 'user_profile_v1');
     final saved = UserProfile.fromJson(
@@ -223,6 +232,7 @@ void main() {
     await show(tester, const TrainingPlanOnboardingScreen());
     await tester.tap(find.text('Skip'));
     await tester.pumpAndSettle();
+    await continueFromReminderStep(tester);
     expect(find.byType(HomeScreen), findsOneWidget);
     expect(
       await const FlutterSecureStorage().read(key: 'user_profile_v1'),

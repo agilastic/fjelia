@@ -136,7 +136,7 @@ class _WeatherChartState extends State<WeatherForecastChart> {
           Padding(
             padding: const EdgeInsets.all(8),
             child: Text(
-              '${DateFormat.E().add_Hm().format(widget.points[selected!].time)} · ${widget.points[selected!].temperatureC.fixed(1)}°C · ${widget.points[selected!].precipitationMm.fixed(1)} mm · UV ${widget.points[selected!].uvIndex ?? '—'}',
+              '${DateFormat.E().add_Hm().format(widget.points[selected!].time)} · ${widget.points[selected!].temperatureC.fixed(1)}°C${_rangeText(comparison, widget.points[selected!].time)} · ${widget.points[selected!].precipitationMm.fixed(1)} mm · UV ${widget.points[selected!].uvIndex ?? '—'}',
               style: const TextStyle(fontSize: 11, color: Colors.white70),
             ),
           ),
@@ -149,26 +149,9 @@ class _WeatherChartState extends State<WeatherForecastChart> {
               if (comparison.series.length > 1)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8),
-                  child: Wrap(
-                    spacing: 12,
-                    runSpacing: 5,
-                    children: [
-                      for (final item in comparison.series.indexed)
-                        Text(
-                          context.l10n.source(item.$2.source),
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: weatherProviderColor(
-                              item.$2.source,
-                              comparison.series.first.source,
-                            ),
-                          ),
-                        ),
-                      Text(
-                        context.l10n.shadedAreaProviderSpread,
-                        style: TextStyle(fontSize: 9, color: muted),
-                      ),
-                    ],
+                  child: Text(
+                    context.l10n.forecastRange(comparison.series.length),
+                    style: TextStyle(fontSize: 9, color: _rangeLegend),
                   ),
                 ),
               Wrap(
@@ -199,12 +182,22 @@ class _WeatherChartState extends State<WeatherForecastChart> {
   }
 }
 
-Color weatherProviderColor(String source, String primary) {
-  if (source == primary) return Colors.deepOrangeAccent;
-  if (source.contains('Pirate')) return Colors.purpleAccent;
-  if (source.contains('WeatherAPI')) return Colors.lightBlueAccent;
-  return Colors.tealAccent;
+/// The range of all forecasts in the hour of [time], e.g. ` (12.8–15.1°C)`,
+/// or nothing when only one forecast covers that hour or they all agree.
+String _rangeText(WeatherComparison comparison, DateTime time) {
+  final hour = time.millisecondsSinceEpoch ~/ 3600000;
+  for (final s in comparison.spread) {
+    if (s.time.millisecondsSinceEpoch ~/ 3600000 != hour) continue;
+    final low = s.low.fixed(1), high = s.high.fixed(1);
+    return low == high ? '' : ' ($low–$high°C)';
+  }
+  return '';
 }
+
+/// The band between the lowest and highest of all forecasts, in the colour of
+/// the main temperature line it surrounds.
+final _rangeBand = Colors.deepOrangeAccent.withValues(alpha: .16);
+final _rangeLegend = Colors.deepOrangeAccent.withValues(alpha: .75);
 
 class _WeatherPainter extends CustomPainter {
   _WeatherPainter(
@@ -313,27 +306,8 @@ class _WeatherPainter extends CustomPainter {
           ..lineTo(timeX(b.time), y(b.high))
           ..lineTo(timeX(b.time), y(b.low))
           ..close(),
-        Paint()..color = Colors.white.withValues(alpha: .09),
+        Paint()..color = _rangeBand,
       );
-    }
-    for (var provider = 1; provider < comparison.series.length; provider++) {
-      final samples = comparison.series[provider].points;
-      for (var i = 1; i < samples.length; i++) {
-        if (samples[i].time.difference(samples[i - 1].time) >
-            const Duration(hours: 3)) {
-          continue;
-        }
-        canvas.drawLine(
-          Offset(timeX(samples[i - 1].time), y(samples[i - 1].temperatureC)),
-          Offset(timeX(samples[i].time), y(samples[i].temperatureC)),
-          Paint()
-            ..color = weatherProviderColor(
-              comparison.series[provider].source,
-              comparison.series.first.source,
-            ).withValues(alpha: .8)
-            ..strokeWidth = 1.6,
-        );
-      }
     }
     final temp = Path(), uv = Path();
     for (var i = 0; i < points.length; i++) {

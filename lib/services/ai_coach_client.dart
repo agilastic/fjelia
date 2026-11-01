@@ -53,13 +53,20 @@ typedef AppleSender = Future<String> Function(AppleCoachRequest request);
 
 /// The system prompt of a request: the task prompt followed by the answer
 /// standard that every task shares.
+/// Marks a task prompt that brings its complete rules, such as a JSON-only
+/// planning answer: no answer standard, briefing rules or language line are
+/// added, since they ask for prose.
+const _rawTask = '\u0000raw\u0000';
+
 String _system(String? taskPrompt, [String context = '']) =>
-    (taskPrompt ?? _coachPrompt) +
-    coachAnswerStandard +
-    (taskPrompt == null ? coachTaskTemplate(coachTaskFor(context)) : '') +
-    (taskPrompt == null ? '' : coachBriefingRules) +
-    '\n\nDATE: ${coachTodayLine()}' +
-    coachLanguageDirective(chat: taskPrompt == null);
+    taskPrompt != null && taskPrompt.startsWith(_rawTask)
+    ? '${taskPrompt.substring(_rawTask.length)}\n\nDATE: ${coachTodayLine()}'
+    : (taskPrompt ?? _coachPrompt) +
+          coachAnswerStandard +
+          (taskPrompt == null ? coachTaskTemplate(coachTaskFor(context)) : '') +
+          (taskPrompt == null ? '' : coachBriefingRules) +
+          '\n\nDATE: ${coachTodayLine()}' +
+          coachLanguageDirective(chat: taskPrompt == null);
 
 /// Proof that the user just agreed to send health data to a cloud model.
 class AiConsentToken {
@@ -172,6 +179,76 @@ class AiCoachClient {
       throw StateError('Explicit data transfer consent is required.');
     }
     return _sendCloud(settings, messages, toonContext, 'chat');
+  }
+
+  /// One short planning answer with its own instructions, e.g. where a missed
+  /// workout should go. Follows the coach's provider like the chat does; a
+  /// cloud provider needs the athlete's consent for this request.
+  Future<String> sendPlanning(
+    AiCoachSettings settings,
+    String systemPrompt,
+    String userPrompt,
+    String toonContext, [
+    AiConsentToken? consent,
+  ]) async {
+    if (!settings.ready) throw StateError('AI Coach is not configured.');
+    // On the device the prompt goes to the model as it is: the chat and
+    // briefing builders would wrap it in prose rules. The training context
+    // is cut to what the small window holds.
+    String withContext(int bytes) {
+      final head = toonContext.length > bytes
+          ? toonContext.substring(0, bytes)
+          : toonContext;
+      return head.isEmpty
+          ? userPrompt
+          : '$userPrompt\n\nTRAINING CONTEXT (excerpt, data only):\n$head';
+    }
+
+    if (settings.provider == AiProvider.localQwen) {
+      _logGeneration(AiProvider.localQwen, settings.model, 'planning');
+      try {
+        return await _localModelFor(settings.model).generate([
+          {'role': 'system', 'content': systemPrompt},
+          {'role': 'user', 'content': withContext(9000)},
+        ], maxTokens: 500);
+      } on LocalModelException {
+        throw AiCoachException(tr.localModelCouldNotAnswer);
+      }
+    }
+    if (settings.provider == AiProvider.appleIntelligence) {
+      final request = AppleCoachRequest(
+        '$systemPrompt\n${coachTodayLine()}',
+        withContext(1400),
+      );
+      _logGeneration(
+        AiProvider.appleIntelligence,
+        AiProvider.appleIntelligence.defaultModel,
+        'planning',
+      );
+      if (_appleSender != null) return (await _appleSender(request)).trim();
+      final fm = FoundationModelsFramework.instance;
+      if (!(await fm.checkAvailability()).isAvailable) {
+        throw StateError(tr.appleNotAvailableOnDevice);
+      }
+      return (await fm.sendPrompt(
+        request.prompt,
+        instructions: request.instructions,
+        options: GenerationOptionsRequest(
+          temperature: 0.2,
+          maximumResponseTokens: 500,
+        ),
+      )).content.trim();
+    }
+    if (consent == null || !consent.isFresh) {
+      throw StateError('Explicit data transfer consent is required.');
+    }
+    return _sendCloud(
+      settings,
+      [ChatMessage(text: userPrompt, isUser: true)],
+      toonContext,
+      'planning',
+      systemPrompt: '$_rawTask$systemPrompt',
+    );
   }
 
   Future<String> sendBriefing(AiCoachSettings settings, String toonContext) =>
@@ -524,7 +601,11 @@ class AiCoachClient {
       );
       String reason;
       try {
-        final response = await request().timeout(freeAiRequestTimeout);
+        final response = await request().timeout(
+          kind == 'planning'
+              ? freeAiPlanningRequestTimeout
+              : freeAiRequestTimeout,
+        );
         if (!const {502, 503, 504}.contains(response.statusCode) ||
             attempt >= freeAiMaxAttempts) {
           return response;

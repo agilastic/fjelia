@@ -1,4 +1,5 @@
 import '../../l10n/formats.dart';
+import 'missed_workout_onboarding_screen.dart';
 import '../../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
@@ -12,7 +13,6 @@ import '../../providers/sync_provider.dart';
 import '../../providers/user_profile_provider.dart';
 import '../../utils/log.dart';
 import '../../widgets/history_sync_card.dart';
-import '../home/home_screen.dart';
 import '../settings/race_goal_editor.dart';
 import 'onboarding_widgets.dart';
 
@@ -67,8 +67,11 @@ class _TrainingPlanOnboardingScreenState
       }
       await ref.read(authProvider.notifier).skipGarmin();
       if (!mounted) return;
+      // The evening reminder is the last step, after the plan exists.
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute<void>(builder: (_) => const HomeScreen()),
+        MaterialPageRoute<void>(
+          builder: (_) => const MissedWorkoutOnboardingScreen(),
+        ),
         (_) => false,
       );
     } catch (e) {

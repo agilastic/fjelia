@@ -142,7 +142,11 @@ class AppleCoachRequest {
         (briefingInstructions == null
             ? 'Answer the latest question in 3 to 5 sentences, with the data as evidence.${coachLanguageName() == 'British English' && budget >= 3000 ? appleChatExample : ''}'
             : 'Give a ${period ?? 'daily'} briefing in 2 or 3 short plain sentences: what the findings mean and the next action. '
-                  '${dailyBrief?.today.isNotEmpty == true ? 'All of today\'s scheduled sessions remain planned; a completed activity does not cancel them. ' : 'TodayWorkout rest_day means no further workout is scheduled today. '}'
+                  '${dailyBrief?.today.isNotEmpty == true
+                      ? 'All of today\'s scheduled sessions remain planned; a completed activity does not cancel them. '
+                      : dailyBrief?.restDay == true
+                      ? 'Today is a planned rest day in the training plan (TodayWorkout rest_day): say so and do not invent a workout. '
+                      : 'TodayWorkout rest_day means a planned rest day; done means today\'s training is finished; none means nothing is scheduled. '}'
                   'Never confuse future plans with today. ');
     final scheduleInstruction = dailyBrief?.scheduleInstruction(tr) ?? '';
     final latest = messages.isEmpty ? '' : messages.last.text;

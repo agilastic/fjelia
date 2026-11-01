@@ -16,16 +16,16 @@ void main() {
   });
   tearDown(() => db.close());
 
-  test('empty database produces calendar and rest day context', () async {
+  test('empty database produces calendar and today context', () async {
     final result = await builder.build(null, '', null);
     expect(result, startsWith('[Context:V4]'));
     expect(result, contains('[Range:60d,Grip:90d]'));
+    // No plan: nothing is scheduled, but it is not a planned rest day.
     expect(
       result,
-      contains(
-        '[TodayWorkout:Status:rest_day,GarminScheduled:0,PlanSessions:0]',
-      ),
+      contains('[TodayWorkout:Status:none,Note:no_session_scheduled,'),
     );
+    expect(result, isNot(contains('Status:rest_day')));
     expect(RegExp('Status:rest]').allMatches(result), hasLength(14));
     expect(result, isNot(contains('NaN')));
   });

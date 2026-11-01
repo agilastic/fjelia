@@ -17,6 +17,7 @@ class BriefingBrief {
     this.tomorrow = const [],
     this.trainingHrv,
     this.outlook,
+    this.restDay = false,
   });
 
   /// green, yellow or red.
@@ -32,13 +33,16 @@ class BriefingBrief {
   /// What the load forecast says happens next (see [FormForecast.outlook]).
   final String? outlook;
 
+  /// Today is a planned rest day: the plan covers it and schedules nothing.
+  final bool restDay;
+
   static String _list(List<String> v) => v.isEmpty ? 'none' : v.join('|');
 
   String toLine() =>
       '[Brief:Readiness:$readiness,Findings:${_list(findings)},'
       'Good:${_list(good)},Done:${_list(done)},Today:${_list(today)},'
       'Tomorrow:${_list(tomorrow)},TrainingHrv:${trainingHrv ?? 'none'},'
-      'Outlook:${outlook ?? 'none'}]';
+      'Outlook:${outlook ?? 'none'}${restDay ? ',Rest:planned' : ''}]';
 
   static BriefingBrief? parse(String toon) {
     final m = RegExp(r'\[Brief:([^\]]*)\]').firstMatch(toon);
@@ -63,6 +67,7 @@ class BriefingBrief {
       tomorrow: list(f['Tomorrow']),
       trainingHrv: hrv == null || hrv == 'none' ? null : hrv,
       outlook: out == null || out == 'none' ? null : out,
+      restDay: f['Rest'] == 'planned',
     );
   }
 
@@ -134,7 +139,10 @@ class BriefingBrief {
       if (done.isNotEmpty) 'Done today: ${plan(done)}',
       if (today.isNotEmpty)
         'Still planned today: ${today.length} scheduled ${today.length == 1 ? 'session' : 'sessions'}, ${plan(today)}',
-      if (today.isEmpty) 'No further scheduled sessions today',
+      if (today.isEmpty && restDay)
+        'Today is a planned rest day in the training plan'
+      else if (today.isEmpty)
+        'No further scheduled sessions today',
       if (tomorrow.isNotEmpty) 'Planned tomorrow: ${plan(tomorrow)}',
       if (trainingHrv != null)
         'HRV before and after the workout ${trainingHrv == 'up' ? 'rose (favourable)' : 'fell (less favourable)'}',
@@ -143,13 +151,21 @@ class BriefingBrief {
     return '${parts.join('. ')}.';
   }
 
-  String? plannedTodaySentence(AppLocalizations l) =>
-      today.isEmpty ? null : l.briefPlannedTodayCount(today.length);
+  String? plannedTodaySentence(AppLocalizations l) => today.isNotEmpty
+      ? l.briefPlannedTodayCount(today.length)
+      : restDay
+      ? l.briefRestDayToday
+      : null;
 
   /// The plan is a database fact, even when recovery advice suggests reducing
   /// it. A small model must not turn several sessions into one optional idea.
   String scheduleInstruction(AppLocalizations l) {
     final sentence = plannedTodaySentence(l);
+    if (sentence != null && today.isEmpty) {
+      return 'Today is a planned rest day in the training plan. '
+          'Include this exact sentence as one of your sentences: "$sentence" '
+          'Do not suggest a workout for today. ';
+    }
     return sentence == null
         ? ''
         : 'Today has ${today.length} scheduled ${today.length == 1 ? 'session' : 'sessions'}, not alternatives. '

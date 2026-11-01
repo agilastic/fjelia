@@ -7,6 +7,7 @@ import 'package:health/health.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../db/database.dart';
+import 'vitals_retention.dart' show bpForExport;
 import '../models/heart_rate.dart';
 import '../utils/log.dart';
 
@@ -695,7 +696,8 @@ class HealthConnectService {
     for (final p in unique.values) {
       log(
         '[HC:workouts] point type=${p.type} valueType=${p.value.runtimeType} '
-        'from=${p.dateFrom} to=${p.dateTo}',
+        'from=${p.dateFrom} to=${p.dateTo} '
+        'source="${p.sourceName}" (${p.sourceId})',
       );
       final value = p.value;
       if (value is! WorkoutHealthValue) {
@@ -720,11 +722,17 @@ class HealthConnectService {
 
       if (existing == null) {
         final sameDay = await db.getActivitiesForDate(p.dateFrom);
-        final dupes = sameDay.where((a) {
-          final startDiff = a.startDate.difference(p.dateFrom).inSeconds.abs();
-          final durDiff = (a.durationSeconds - duration).abs();
-          return startDiff <= 60 && durDiff <= (duration * 0.02).ceil();
-        });
+        final type = _workoutTypeToString(value.workoutActivityType);
+        final dupes = sameDay.where(
+          (a) => isSameWorkout(
+            a.startDate,
+            a.durationSeconds,
+            a.type,
+            p.dateFrom,
+            duration,
+            type,
+          ),
+        );
         if (dupes.isNotEmpty) {
           log(
             '[HC:workouts] skipped $activityId — duplicate of '
@@ -1097,7 +1105,11 @@ class HealthConnectService {
         await saveWm('hc_wb_sleep_ms', mark);
 
         // Blood pressure
-        final bp = await exportBloodPressure(await db.getRecentBp(7));
+        // One reading per 15 minutes, the same choice the stored data keeps
+        // after two days: a stream of hundreds a day would flood Health.
+        final bp = await exportBloodPressure(
+          bpForExport(await db.getRecentBp(7)),
+        );
         result.bp += bp.written;
         result.errors.addAll(bp.errors);
       }

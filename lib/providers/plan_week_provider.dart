@@ -24,8 +24,15 @@ class PlanWeekItem {
     this.skipReason,
     this.workout,
     this.completionMatch,
-  });
+    String? plannedSport,
+    String? plannedTitle,
+  }) : plannedSport = plannedSport ?? sport,
+       plannedTitle = plannedTitle ?? title;
   final String sport, title;
+
+  /// What the plan said, kept apart from [sport] and [title] which turn into
+  /// the real activity once done.
+  final String plannedSport, plannedTitle;
 
   /// Why a session was cancelled, when the athlete said.
   final String? skipReason;
@@ -130,6 +137,8 @@ PlanWeek buildPlanWeek({
         PlanWeekItem(
           sport: actual?.type ?? e.sport,
           title: actual?.name ?? e.title,
+          plannedSport: e.sport,
+          plannedTitle: e.title,
           state: state,
           minutes: actual != null
               ? (actual.durationSeconds / 60).round()
@@ -173,7 +182,6 @@ final planWeekProvider = StreamProvider.family<PlanWeek, DateTime>((
   ref.watch(upcomingSessionsProvider);
   ref.watch(scheduledWorkoutsProvider);
   final db = ref.watch(databaseProvider);
-  final end = DateTime(start.year, start.month, start.day + 7);
   return db
       .customSelect(
         'SELECT 1',
@@ -186,86 +194,93 @@ final planWeekProvider = StreamProvider.family<PlanWeek, DateTime>((
         },
       )
       .watch()
-      .asyncMap((_) async {
-        final plans =
-            await (db.select(db.trainingPlans)..where(
-                  (t) => t.status.equals('active') & t.athleteId.equals('self'),
-                ))
-                .get();
-        final sessions =
-            await (db.select(db.trainingSessions)
-                  ..where(
-                    (t) =>
-                        t.athleteId.equals('self') &
-                        (t.planId.isIn(plans.map((p) => p.id)) |
-                            t.status.equals('completed')) &
-                        t.sessionDate.isBiggerOrEqualValue(start) &
-                        t.sessionDate.isSmallerThanValue(end),
-                  )
-                  ..orderBy([(t) => OrderingTerm.asc(t.sessionDate)]))
-                .get();
-        final activities =
-            await (db.select(db.activityRecords)
-                  ..where(
-                    (t) =>
-                        t.startDate.isBiggerOrEqualValue(start) &
-                        t.startDate.isSmallerThanValue(end),
-                  )
-                  ..orderBy([(t) => OrderingTerm.asc(t.startDate)]))
-                .get();
-        final actuals =
-            await (db.select(db.sessionActuals)..where(
-                  (t) =>
-                      t.sessionId.isIn(sessions.map((s) => s.id)) |
-                      t.activityId.isIn(activities.map((a) => a.activityId)) |
-                      (t.startedAt.isBiggerOrEqualValue(start) &
-                          t.startedAt.isSmallerThanValue(end)),
-                ))
-                .get();
-        final linkedIds = actuals
-            .map((a) => a.activityId)
-            .whereType<String>()
-            .toSet();
-        final loadedIds = activities.map((a) => a.activityId).toSet();
-        if (linkedIds.difference(loadedIds).isNotEmpty) {
-          activities.addAll(
-            await (db.select(db.activityRecords)..where(
-                  (t) => t.activityId.isIn(linkedIds.difference(loadedIds)),
-                ))
-                .get(),
-          );
-        }
-        final scheduled =
-            await (db.select(db.scheduledWorkoutRecords)..where(
-                  (t) =>
-                      t.scheduledDate.isBiggerOrEqualValue(start) &
-                      t.scheduledDate.isSmallerThanValue(end),
-                ))
-                .get();
-        return buildPlanWeek(
-          start: start,
-          sessions: sessions,
-          activities: activities,
-          skipReasons: {
-            for (final a in actuals)
-              if (a.skipReason != null) a.sessionId: a.skipReason!,
-          },
-          linkedActivity: {
-            for (final a in actuals)
-              if (a.activityId != null) a.sessionId: a.activityId!,
-          },
-          completionStarts: {
-            for (final a in actuals)
-              if (a.startedAt != null) a.sessionId: a.startedAt!,
-          },
-          // Watch workouts that are not part of the plan.
-          scheduled: [
-            for (final row in scheduled)
-              UpcomingPlanEntry(
-                date: row.scheduledDate,
-                workout: scheduledWorkoutFromRecord(row),
-              ),
-          ],
-        );
-      });
+      .asyncMap((_) => loadPlanWeek(db, start));
 });
+
+/// The week starting on [start] read straight from the database, the same
+/// way the Plan's week view sees it. Also used where no provider is at hand,
+/// e.g. the missed-workout reminder in a background wake-up.
+Future<PlanWeek> loadPlanWeek(AppDatabase db, DateTime start) async {
+  final end = DateTime(start.year, start.month, start.day + 7);
+  final plans =
+      await (db.select(db.trainingPlans)..where(
+            (t) => t.status.equals('active') & t.athleteId.equals('self'),
+          ))
+          .get();
+  final sessions =
+      await (db.select(db.trainingSessions)
+            ..where(
+              (t) =>
+                  t.athleteId.equals('self') &
+                  (t.planId.isIn(plans.map((p) => p.id)) |
+                      t.status.equals('completed')) &
+                  t.sessionDate.isBiggerOrEqualValue(start) &
+                  t.sessionDate.isSmallerThanValue(end),
+            )
+            ..orderBy([(t) => OrderingTerm.asc(t.sessionDate)]))
+          .get();
+  final activities =
+      await (db.select(db.activityRecords)
+            ..where(
+              (t) =>
+                  t.startDate.isBiggerOrEqualValue(start) &
+                  t.startDate.isSmallerThanValue(end),
+            )
+            ..orderBy([(t) => OrderingTerm.asc(t.startDate)]))
+          .get();
+  final actuals =
+      await (db.select(db.sessionActuals)..where(
+            (t) =>
+                t.sessionId.isIn(sessions.map((s) => s.id)) |
+                t.activityId.isIn(activities.map((a) => a.activityId)) |
+                (t.startedAt.isBiggerOrEqualValue(start) &
+                    t.startedAt.isSmallerThanValue(end)),
+          ))
+          .get();
+  final linkedIds = actuals
+      .map((a) => a.activityId)
+      .whereType<String>()
+      .toSet();
+  final loadedIds = activities.map((a) => a.activityId).toSet();
+  if (linkedIds.difference(loadedIds).isNotEmpty) {
+    activities.addAll(
+      await (db.select(db.activityRecords)..where(
+            (t) => t.activityId.isIn(linkedIds.difference(loadedIds)),
+          ))
+          .get(),
+    );
+  }
+  final scheduled =
+      await (db.select(db.scheduledWorkoutRecords)..where(
+            (t) =>
+                t.scheduledDate.isBiggerOrEqualValue(start) &
+                t.scheduledDate.isSmallerThanValue(end),
+          ))
+          .get();
+  return buildPlanWeek(
+    start: start,
+    sessions: sessions,
+    activities: activities,
+    skipReasons: {
+      for (final a in actuals)
+        if (a.skipReason != null) a.sessionId: a.skipReason!,
+    },
+    linkedActivity: {
+      for (final a in actuals)
+        if (a.activityId != null) a.sessionId: a.activityId!,
+    },
+    completionStarts: {
+      for (final a in actuals)
+        if (a.startedAt != null) a.sessionId: a.startedAt!,
+    },
+    // Watch workouts that are not part of the plan.
+    scheduled: [
+      for (final row in scheduled)
+        UpcomingPlanEntry(
+          date: row.scheduledDate,
+          workout: scheduledWorkoutFromRecord(row),
+        ),
+    ],
+  );
+}
+

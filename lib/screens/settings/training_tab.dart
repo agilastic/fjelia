@@ -22,6 +22,7 @@ import '../../providers/workout_push_provider.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/nutrition_widgets.dart';
 import '../../utils/target_time.dart';
+import 'missed_workout_settings_card.dart';
 import 'race_goal_editor.dart';
 import '../strength/strength_sections.dart';
 
@@ -313,6 +314,11 @@ class TrainingTab extends ConsumerWidget {
               },
             ),
           ],
+          SectionLabel(
+            context.l10n.missedWorkoutReminder,
+            color: Colors.orange,
+          ),
+          const MissedWorkoutSettingsCard(),
           SectionLabel(context.l10n.heatAcclimation, color: Colors.orange),
           SectionCard(
             color: const Color(0xFF282828),

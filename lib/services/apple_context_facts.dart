@@ -79,7 +79,14 @@ String appleFactLine(String line) {
           'Blood pressure does not identify a training phase.';
     case 'TodayWorkout':
       if (f['Status'] == 'rest_day') {
-        return 'No workout is scheduled for today. This does not erase training already completed today.';
+        return 'Today is a planned rest day in the training plan: no workout is scheduled. '
+            'This does not erase training already completed today.';
+      }
+      if (f['Status'] == 'done') {
+        return 'Today\'s planned training is already done.';
+      }
+      if (f['Status'] == 'none') {
+        return 'No workout is scheduled for today.';
       }
       if (f['Status'] == 'planned' || f['Status'] == 'options_available') {
         final plan = int.tryParse(f['PlanSessions'] ?? '') ?? 0;

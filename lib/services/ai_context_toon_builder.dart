@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:drift/drift.dart' hide isNull, isNotNull;
 
 import '../db/database.dart';
+import 'plan_day.dart';
 import '../providers/training_load_provider.dart';
 import 'bio_age_service.dart';
 import 'hrv/hrv_ai_context_builder.dart';
@@ -87,6 +88,10 @@ class AiContextToonBuilder {
     final readiness = await _db.getTodayReadiness();
     final sessions = await _db.getUpcomingTrainingSessions();
     final cancelled = await _cancelledSessions(today);
+    // Every plan session of today, also completed ones: a finished session
+    // must not read as a rest day.
+    final todayAll = await sessionsOn(_db, today);
+    final restToday = await isPlannedRestDay(_db, today);
     hrv.sort((a, b) => b.date.compareTo(a.date));
     sleep.sort((a, b) => b.date.compareTo(a.date));
     wellness.sort((a, b) => b.date.compareTo(a.date));
@@ -316,6 +321,7 @@ class AiContextToonBuilder {
         // The query already excludes completed and skipped plan sessions.
         plannedToday: plannedOn(today),
         tomorrow: plannedOn(DateTime(today.year, today.month, today.day + 1)),
+        restDay: restToday,
         trainingHrv: trainingVerdict == null
             ? null
             : trainingVerdict == 'better'
@@ -387,8 +393,22 @@ class AiContextToonBuilder {
         'By:${cancelledToday.first.by},GarminScheduled:0,PlanSessions:0]',
       );
     } else if (todayWorkouts.isEmpty && todaySessions.isEmpty) {
+      final completed = todayAll.where((s) => s.status == 'completed');
+      final doneActivities = activities.where(
+        (a) => _day(a.startDate) == today,
+      );
       lines.add(
-        '[TodayWorkout:Status:rest_day,GarminScheduled:0,PlanSessions:0]',
+        completed.isNotEmpty
+            // The plan's training for today is finished, not a rest day.
+            ? '[TodayWorkout:Status:done,PlanSessionsDone:${completed.length},'
+                  'GarminScheduled:0,PlanSessions:0]'
+            : restToday
+            ? '[TodayWorkout:Status:rest_day,Planned:yes,'
+                  'Note:planned_rest_day_in_the_training_plan,'
+                  'GarminScheduled:0,PlanSessions:0]'
+            : '[TodayWorkout:Status:none,'
+                  'Note:${doneActivities.isEmpty ? 'no_session_scheduled' : 'no_session_scheduled_activity_recorded'},'
+                  'GarminScheduled:0,PlanSessions:0]',
       );
     } else {
       lines.add(

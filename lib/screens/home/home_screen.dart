@@ -257,6 +257,9 @@ class _HomeState extends ConsumerState<HomeScreen> {
                                 const SizedBox(height: 12),
                               Text(
                                 e.$2.$1,
+                                maxLines: 1,
+                                softWrap: false,
+                                overflow: TextOverflow.fade,
                                 style: TextStyle(
                                   color: current == e.$1 || e.$2.$1 == 'DEBUG'
                                       ? mint

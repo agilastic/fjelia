@@ -155,7 +155,8 @@ void main() {
     // An empty remaining schedule does not erase completed training.
     const rest =
         '[TodayWorkout:Status:rest_day,GarminScheduled:0,PlanSessions:0]';
-    expect(appleFactLine(rest), contains('No workout is scheduled for today'));
+    expect(appleFactLine(rest), contains('planned rest day'));
+    expect(appleFactLine(rest), contains('no workout is scheduled'));
     expect(appleFactLine(rest), contains('training already completed today'));
   });
 

@@ -1508,10 +1508,6 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get shadedAreaProviderSpread =>
-      'Área sombreada: dispersión entre proveedores';
-
-  @override
   String get temperatureC => '● Temperatura °C';
 
   @override
@@ -2178,6 +2174,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get forecast => 'Previsión';
+
+  @override
+  String forecastRange(int count) {
+    return 'Área sombreada: rango de $count previsiones';
+  }
 
   @override
   String get enterAName => 'Introduce un nombre';
@@ -5342,7 +5343,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get tabLoad => 'CARGA';
 
   @override
-  String get tabCoach => 'ENTRENADOR';
+  String get tabCoach => 'COACH';
 
   @override
   String get hrDriftTestLt1 => 'PRUEBA DE DERIVA DE FC – LT1';
@@ -6035,4 +6036,191 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get mixRecipeCola => 'Cola con agua';
+
+  @override
+  String get missedWorkoutTitle => 'Aún en tu plan de hoy';
+
+  @override
+  String missedWorkoutBody(String workouts) {
+    return '$workouts. ¿Aún hoy, moverlo u omitirlo?';
+  }
+
+  @override
+  String get stillToday => 'Aún hoy';
+
+  @override
+  String get moveWorkoutAction => 'Mover…';
+
+  @override
+  String get missedWorkoutChannel => 'Entrenamientos perdidos';
+
+  @override
+  String get missedWorkoutChannelDescription =>
+      'Recordatorio nocturno de entrenamientos planificados aún pendientes';
+
+  @override
+  String get missedWorkoutReminder => 'Recordatorio de entrenamiento pendiente';
+
+  @override
+  String get missedWorkoutReminderSubtitle =>
+      'Por la noche, si un entrenamiento planificado sigue pendiente';
+
+  @override
+  String get moveWithinDays => 'Mover dentro de';
+
+  @override
+  String daysN(int count) {
+    return '$count días';
+  }
+
+  @override
+  String get notificationsAreOff =>
+      'Las notificaciones de Fjelia están desactivadas. Permítelas para recibir este recordatorio.';
+
+  @override
+  String get allowNotifications => 'Permitir notificaciones';
+
+  @override
+  String get openWorkoutToday => 'Pendiente hoy';
+
+  @override
+  String get checkingForWorkout => 'Buscando tu entrenamiento…';
+
+  @override
+  String get alreadyDone => 'Ya hecho ✓';
+
+  @override
+  String get alreadyDoneBody =>
+      'Tu entrenamiento se ha registrado. No queda nada pendiente hoy.';
+
+  @override
+  String get dropIt => 'Omitirlo';
+
+  @override
+  String askCoachSends(String provider) {
+    return 'Envía tu resumen de entrenamiento a $provider.';
+  }
+
+  @override
+  String get coachThinking => 'El coach está pensando…';
+
+  @override
+  String get coachCouldNotAnswer =>
+      'El coach no pudo responder. La sugerencia de arriba sigue siendo válida.';
+
+  @override
+  String get whySkip => '¿Por qué omitirlo?';
+
+  @override
+  String get skipReasonIllness => 'Enfermedad';
+
+  @override
+  String get skipReasonInjury => 'Lesión o dolor';
+
+  @override
+  String get skipReasonFatigue => 'Cansancio';
+
+  @override
+  String get skipReasonNoTime => 'Sin tiempo';
+
+  @override
+  String get skipReasonTravel => 'Viaje';
+
+  @override
+  String get skipReasonConditions => 'Condiciones';
+
+  @override
+  String get skipReasonMyChoice => 'Decisión mía';
+
+  @override
+  String get onbReminderTitle => 'Mantén el rumbo';
+
+  @override
+  String get onbReminderSubtitle =>
+      'Si por la noche un entrenamiento planificado sigue pendiente, Fjelia te lo recuerda una vez para que aún lo hagas, lo muevas o lo omitas.';
+
+  @override
+  String get onbExampleWorkout => 'Rodaje suave (45 min)';
+
+  @override
+  String get onbReminderToggle => 'Recordatorio nocturno';
+
+  @override
+  String get onbReminderTime => 'Recordármelo a las';
+
+  @override
+  String get onbReminderFootnote =>
+      'Puedes cambiarlo cuando quieras en Ajustes → Entrenamiento.';
+
+  @override
+  String get nowLabel => 'ahora';
+
+  @override
+  String get coachSuggests => 'El coach propone';
+
+  @override
+  String get suggestionLabel => 'Sugerencia';
+
+  @override
+  String get askCoachShort => 'Preguntar al coach';
+
+  @override
+  String get otherDay => 'Otro día';
+
+  @override
+  String get skipEllipsis => 'Omitir…';
+
+  @override
+  String get pickADay => 'Toca un día arriba';
+
+  @override
+  String get dayDoesNotFit => 'Ese día no encaja en el plan.';
+
+  @override
+  String get planUpdated => 'Plan actualizado';
+
+  @override
+  String get missedTodayTag => 'perdido hoy';
+
+  @override
+  String summaryMove(String day) {
+    return 'Muévelo al $day.';
+  }
+
+  @override
+  String summaryMoveIndoor(String day) {
+    return 'Muévelo al $day, bajo techo: se prevé lluvia.';
+  }
+
+  @override
+  String get summaryDropEasy =>
+      'Omítelo: no merece la pena recuperar una sesión suave.';
+
+  @override
+  String summaryDropNoDay(int days) {
+    return 'Omítelo: ningún día encaja en los próximos $days días.';
+  }
+
+  @override
+  String get tagIndoor => 'bajo techo';
+
+  @override
+  String get tagEasier => 'más suave';
+
+  @override
+  String get tagRecovery => 'recuperación';
+
+  @override
+  String summaryMoveEasier(String day) {
+    return 'Muévelo al $day, algo más suave: está junto a un día duro.';
+  }
+
+  @override
+  String get briefRestDayToday => 'Hoy es un día de descanso planificado.';
+
+  @override
+  String get restDayPlannedNote => 'La recuperación forma parte de tu plan.';
+
+  @override
+  String get restDayTitle => 'Día de descanso';
 }

@@ -1492,10 +1492,6 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
-  String get shadedAreaProviderSpread =>
-      'Skravert område: spredning mellom leverandører';
-
-  @override
   String get temperatureC => '● Temperatur °C';
 
   @override
@@ -2158,6 +2154,11 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get forecast => 'Værvarsel';
+
+  @override
+  String forecastRange(int count) {
+    return 'Skravert: spenn fra $count prognoser';
+  }
 
   @override
   String get enterAName => 'Skriv inn et navn';
@@ -5298,7 +5299,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get tabPlan => 'PLAN';
 
   @override
-  String get tabLoad => 'BELASTNING';
+  String get tabLoad => 'LOAD';
 
   @override
   String get tabCoach => 'TRENER';
@@ -5992,4 +5993,191 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get mixRecipeCola => 'Cola med vann';
+
+  @override
+  String get missedWorkoutTitle => 'Fortsatt på planen i dag';
+
+  @override
+  String missedWorkoutBody(String workouts) {
+    return '$workouts. Fortsatt i dag, flytte eller hoppe over?';
+  }
+
+  @override
+  String get stillToday => 'Fortsatt i dag';
+
+  @override
+  String get moveWorkoutAction => 'Flytt…';
+
+  @override
+  String get missedWorkoutChannel => 'Glemte økter';
+
+  @override
+  String get missedWorkoutChannelDescription =>
+      'Kveldspåminnelse om planlagte økter som fortsatt er åpne';
+
+  @override
+  String get missedWorkoutReminder => 'Påminnelse om glemt økt';
+
+  @override
+  String get missedWorkoutReminderSubtitle =>
+      'Om kvelden, hvis en planlagt økt fortsatt er åpen';
+
+  @override
+  String get moveWithinDays => 'Flytt innen';
+
+  @override
+  String daysN(int count) {
+    return '$count dager';
+  }
+
+  @override
+  String get notificationsAreOff =>
+      'Varsler er av for Fjelia. Tillat dem for å få denne påminnelsen.';
+
+  @override
+  String get allowNotifications => 'Tillat varsler';
+
+  @override
+  String get openWorkoutToday => 'Fortsatt åpent i dag';
+
+  @override
+  String get checkingForWorkout => 'Ser etter økten din…';
+
+  @override
+  String get alreadyDone => 'Allerede gjort ✓';
+
+  @override
+  String get alreadyDoneBody =>
+      'Økten din er registrert. Ingenting igjen i dag.';
+
+  @override
+  String get dropIt => 'Dropp den';
+
+  @override
+  String askCoachSends(String provider) {
+    return 'Sender treningsoversikten din til $provider.';
+  }
+
+  @override
+  String get coachThinking => 'Treneren tenker…';
+
+  @override
+  String get coachCouldNotAnswer =>
+      'Treneren kunne ikke svare. Forslaget over gjelder fortsatt.';
+
+  @override
+  String get whySkip => 'Hvorfor hoppe over?';
+
+  @override
+  String get skipReasonIllness => 'Sykdom';
+
+  @override
+  String get skipReasonInjury => 'Skade eller smerte';
+
+  @override
+  String get skipReasonFatigue => 'Slitenhet';
+
+  @override
+  String get skipReasonNoTime => 'Ikke tid';
+
+  @override
+  String get skipReasonTravel => 'Reise';
+
+  @override
+  String get skipReasonConditions => 'Forhold';
+
+  @override
+  String get skipReasonMyChoice => 'Mitt valg';
+
+  @override
+  String get onbReminderTitle => 'Hold kursen';
+
+  @override
+  String get onbReminderSubtitle =>
+      'Er en planlagt økt fortsatt åpen om kvelden, minner Fjelia deg på det én gang, så du fortsatt kan ta den, flytte den eller hoppe over.';
+
+  @override
+  String get onbExampleWorkout => 'Rolig løpetur (45 min)';
+
+  @override
+  String get onbReminderToggle => 'Påminnelse om kvelden';
+
+  @override
+  String get onbReminderTime => 'Minn meg på kl.';
+
+  @override
+  String get onbReminderFootnote =>
+      'Du kan endre dette når som helst under Innstillinger → Trening.';
+
+  @override
+  String get nowLabel => 'nå';
+
+  @override
+  String get coachSuggests => 'Treneren foreslår';
+
+  @override
+  String get suggestionLabel => 'Forslag';
+
+  @override
+  String get askCoachShort => 'Spør treneren';
+
+  @override
+  String get otherDay => 'Annen dag';
+
+  @override
+  String get skipEllipsis => 'Hopp over…';
+
+  @override
+  String get pickADay => 'Trykk på en dag over';
+
+  @override
+  String get dayDoesNotFit => 'Den dagen passer ikke i planen.';
+
+  @override
+  String get planUpdated => 'Planen er oppdatert';
+
+  @override
+  String get missedTodayTag => 'glemt i dag';
+
+  @override
+  String summaryMove(String day) {
+    return 'Flytt den til $day.';
+  }
+
+  @override
+  String summaryMoveIndoor(String day) {
+    return 'Flytt den til $day, innendørs – det er meldt regn.';
+  }
+
+  @override
+  String get summaryDropEasy =>
+      'Dropp den – en rolig økt er ikke verdt å ta igjen.';
+
+  @override
+  String summaryDropNoDay(int days) {
+    return 'Dropp den – ingen dag passer de neste $days dagene.';
+  }
+
+  @override
+  String get tagIndoor => 'inne';
+
+  @override
+  String get tagEasier => 'lettere';
+
+  @override
+  String get tagRecovery => 'restitusjon';
+
+  @override
+  String summaryMoveEasier(String day) {
+    return 'Flytt den til $day, litt lettere – den ligger ved siden av en hard dag.';
+  }
+
+  @override
+  String get briefRestDayToday => 'I dag er en planlagt hviledag.';
+
+  @override
+  String get restDayPlannedNote => 'Restitusjon er en del av planen din.';
+
+  @override
+  String get restDayTitle => 'Hviledag';
 }

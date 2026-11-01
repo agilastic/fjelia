@@ -53,18 +53,21 @@ void main() {
     db = AppDatabase(NativeDatabase.memory());
     health = _Health();
     service = HealthConnectService(db, health: health);
+    // Five minutes into a 15-minute window, so the readings below fall into
+    // the windows the tests expect whatever the clock says.
+    const window = 15 * 60 * 1000;
+    final twoHoursAgo = DateTime.now()
+        .subtract(const Duration(hours: 2))
+        .millisecondsSinceEpoch;
     first = DateTime.fromMillisecondsSinceEpoch(
-      DateTime.now()
-              .subtract(const Duration(hours: 2))
-              .millisecondsSinceEpoch ~/
-          1000 *
-          1000,
+      twoHoursAgo ~/ window * window + 5 * 60 * 1000,
     );
     await db.insertBpMeasurements(
       List.generate(
         3,
+        // One reading per 15-minute window: Health gets one per window.
         (i) => BpMeasurementsCompanion.insert(
-          measuredAt: first.add(Duration(minutes: i)),
+          measuredAt: first.add(Duration(minutes: 20 * i)),
           systolic: 120,
           diastolic: 80,
           heartRate: 60,
@@ -95,6 +98,23 @@ void main() {
       },
     );
   }
+
+  test('a stream of readings goes to Health as one per 15 minutes', () async {
+    health.allowed = true;
+    // Two more readings inside the first reading's window.
+    await db.insertBpMeasurements([
+      for (final m in [1, 2])
+        BpMeasurementsCompanion.insert(
+          measuredAt: first.add(Duration(minutes: m)),
+          systolic: 121,
+          diastolic: 81,
+          heartRate: 60,
+        ),
+    ]);
+    final result = await service.writeBack(true, false);
+    expect(result.bp, 3);
+    expect(health.writes, 3);
+  });
 
   test(
     'failed write stops the batch and retries from last successful sample',

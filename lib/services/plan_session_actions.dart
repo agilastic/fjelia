@@ -68,6 +68,28 @@ class PlanSessionActions {
     )..where((t) => t.id.equals(session.id))).getSingle();
   }
 
+  /// Turns an outdoor session into its indoor form (treadmill, trainer) or
+  /// back. The steps stay; the content changed, so a platform that has the
+  /// session sends it again at the next push.
+  Future<TrainingSession> setIndoor(
+    TrainingSession session,
+    bool indoor,
+  ) async {
+    if (session.indoor == indoor) return session;
+    await (db.update(
+      db.trainingSessions,
+    )..where((t) => t.id.equals(session.id))).write(
+      TrainingSessionsCompanion(
+        indoor: Value(indoor),
+        dateModified: Value(DateTime.now()),
+        modifiedBy: const Value('athlete'),
+      ),
+    );
+    return (db.select(
+      db.trainingSessions,
+    )..where((t) => t.id.equals(session.id))).getSingle();
+  }
+
   /// Sets the main target of a ride, `hr` or `power`. The steps keep their
   /// zones and the other value stays in the step note, so the same session
   /// turns into either. The content changed, so a platform that has the

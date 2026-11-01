@@ -32,10 +32,16 @@ class ActivityHistory extends ConsumerStatefulWidget {
     this.showHeader = true,
     this.monthMode,
     this.selectedDayOnly = false,
+    this.rollingDays,
   });
   final bool showHeader;
   final bool selectedDayOnly;
   final bool? monthMode;
+
+  /// Shows the last [rollingDays] days up to and including the selected day
+  /// instead of a calendar month or week, so the list never empties out on
+  /// the 1st of a month.
+  final int? rollingDays;
   @override
   ConsumerState<ActivityHistory> createState() => _HistoryState();
 }
@@ -46,13 +52,18 @@ class _HistoryState extends ConsumerState<ActivityHistory> {
   Widget build(BuildContext context) {
     final selected = ref.watch(selectedDateProvider);
     final monthFilter = widget.monthMode ?? month;
-    final start = monthFilter
+    final rolling = widget.rollingDays;
+    final start = rolling != null
+        ? DateTime(selected.year, selected.month, selected.day - rolling + 1)
+        : monthFilter
         ? DateTime(selected.year, selected.month)
         : weekStartOf(
             selected,
             mondayFirst: ref.watch(weekStartsOnMondayProvider),
           );
-    final end = monthFilter
+    final end = rolling != null
+        ? DateTime(selected.year, selected.month, selected.day + 1)
+        : monthFilter
         ? DateTime(selected.year, selected.month + 1)
         : start.add(const Duration(days: 7));
     return Column(

@@ -215,13 +215,39 @@ NutritionStrategy planNutrition(
       !pool &&
       ((c.temperature ?? 0) >= 25 ||
           ((c.temperature ?? 0) >= 20 && (c.humidity ?? 0) >= 75));
+  // Without a measured sweat rate: how much a runner or rider typically needs
+  // at this temperature and effort. An easy 90 minutes at 10 °C needs about a
+  // third of a litre, not two bottles; drinking to thirst covers the rest.
+  double typicalFluid() {
+    if (swimming || pool) return 500;
+    final t = c.temperature;
+    final base = hot
+        ? 700.0
+        : workout.indoor
+        ? 500.0
+        : t == null
+        ? 400.0
+        : t < 10
+        ? 250.0
+        : t < 15
+        ? 300.0
+        : t < 20
+        ? 400.0
+        : 500.0;
+    // In heat even an easy pace sweats a lot: no reduction for effort there.
+    final zone = workout.zone;
+    final effort = zone == null || hot
+        ? 1.0
+        : zone <= 2
+        ? .8
+        : zone >= 4
+        ? 1.15
+        : 1.0;
+    return (base * effort / 10).round() * 10.0;
+  }
+
   final fluidTarget =
-      fluid ??
-      (prefs.sweatMl != null
-          ? prefs.sweatMl! * .8
-          : hot
-          ? 700.0
-          : 500.0);
+      fluid ?? (prefs.sweatMl != null ? prefs.sweatMl! * .8 : typicalFluid());
   final carbTarget = carbs ?? (low + high) / 2;
   final notes = <String>[
     'Before: start fuelled and hydrated. Choose a familiar carbohydrate-rich meal; allow time to digest.',
