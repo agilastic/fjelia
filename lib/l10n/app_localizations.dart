@@ -11609,6 +11609,408 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'From your profile, not dated'**
   String get waistFromProfile;
+
+  /// No description provided for @phaseBase.
+  ///
+  /// In en, this message translates to:
+  /// **'BASE'**
+  String get phaseBase;
+
+  /// No description provided for @phaseBuild.
+  ///
+  /// In en, this message translates to:
+  /// **'BUILD'**
+  String get phaseBuild;
+
+  /// No description provided for @phasePeak.
+  ///
+  /// In en, this message translates to:
+  /// **'PEAK'**
+  String get phasePeak;
+
+  /// No description provided for @phaseTaper.
+  ///
+  /// In en, this message translates to:
+  /// **'TAPER'**
+  String get phaseTaper;
+
+  /// No description provided for @phaseRecovery.
+  ///
+  /// In en, this message translates to:
+  /// **'RECOVERY'**
+  String get phaseRecovery;
+
+  /// No description provided for @phaseRace.
+  ///
+  /// In en, this message translates to:
+  /// **'RACE'**
+  String get phaseRace;
+
+  /// No description provided for @sessionTypeKey.
+  ///
+  /// In en, this message translates to:
+  /// **'KEY'**
+  String get sessionTypeKey;
+
+  /// No description provided for @sessionTypeLong.
+  ///
+  /// In en, this message translates to:
+  /// **'LONG'**
+  String get sessionTypeLong;
+
+  /// No description provided for @sessionTypeRecovery.
+  ///
+  /// In en, this message translates to:
+  /// **'RECOVERY'**
+  String get sessionTypeRecovery;
+
+  /// No description provided for @sessionTypeAssessment.
+  ///
+  /// In en, this message translates to:
+  /// **'TEST'**
+  String get sessionTypeAssessment;
+
+  /// No description provided for @sessionTypeEndurance.
+  ///
+  /// In en, this message translates to:
+  /// **'ENDURANCE'**
+  String get sessionTypeEndurance;
+
+  /// No description provided for @sessionTypeStrength.
+  ///
+  /// In en, this message translates to:
+  /// **'STRENGTH'**
+  String get sessionTypeStrength;
+
+  /// No description provided for @sessionTypeYoga.
+  ///
+  /// In en, this message translates to:
+  /// **'YOGA'**
+  String get sessionTypeYoga;
+
+  /// No description provided for @sessionStatusCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'COMPLETED'**
+  String get sessionStatusCompleted;
+
+  /// No description provided for @sessionStatusAdapted.
+  ///
+  /// In en, this message translates to:
+  /// **'ADAPTED'**
+  String get sessionStatusAdapted;
+
+  /// No description provided for @stepWarmUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Warm-up'**
+  String get stepWarmUp;
+
+  /// No description provided for @stepCoolDown.
+  ///
+  /// In en, this message translates to:
+  /// **'Cool-down'**
+  String get stepCoolDown;
+
+  /// No description provided for @stepRecovery.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery'**
+  String get stepRecovery;
+
+  /// No description provided for @stepRest.
+  ///
+  /// In en, this message translates to:
+  /// **'Rest'**
+  String get stepRest;
+
+  /// No description provided for @stepInterval.
+  ///
+  /// In en, this message translates to:
+  /// **'Interval'**
+  String get stepInterval;
+
+  /// No description provided for @stepWorkout.
+  ///
+  /// In en, this message translates to:
+  /// **'Workout'**
+  String get stepWorkout;
+
+  /// No description provided for @stepRepeat.
+  ///
+  /// In en, this message translates to:
+  /// **'{n}× repeat'**
+  String stepRepeat(int n);
+
+  /// No description provided for @stepOpenEnded.
+  ///
+  /// In en, this message translates to:
+  /// **'Open-ended'**
+  String get stepOpenEnded;
+
+  /// No description provided for @stepSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} sec'**
+  String stepSeconds(int n);
+
+  /// No description provided for @objectiveOptionalVariety.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional variety you chose in the settings'**
+  String get objectiveOptionalVariety;
+
+  /// No description provided for @objectiveStrengthSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Strength to support your training'**
+  String get objectiveStrengthSupport;
+
+  /// No description provided for @objectiveIntervals.
+  ///
+  /// In en, this message translates to:
+  /// **'Intervals for {goal}'**
+  String objectiveIntervals(String goal);
+
+  /// No description provided for @objectiveSteady.
+  ///
+  /// In en, this message translates to:
+  /// **'Steady quality {sport} for {goal}'**
+  String objectiveSteady(String sport, String goal);
+
+  /// No description provided for @objectiveEasyRecovery.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy {sport}: recovery around {goal}'**
+  String objectiveEasyRecovery(String sport, String goal);
+
+  /// No description provided for @objectiveEasyEndurance.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy endurance {sport} for {goal}'**
+  String objectiveEasyEndurance(String sport, String goal);
+
+  /// No description provided for @objectiveLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Long {sport} for {goal}'**
+  String objectiveLong(String sport, String goal);
+
+  /// No description provided for @unmetWeekMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'The week holds {minutes} min, too little for a long {sport} for {goal}.'**
+  String unmetWeekMinutes(int minutes, String sport, String goal);
+
+  /// No description provided for @unmetWeekHours.
+  ///
+  /// In en, this message translates to:
+  /// **'The week holds {hours} h, too little for {what}.'**
+  String unmetWeekHours(String hours, String what);
+
+  /// No description provided for @unmetTrainingDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough training days for {what}.'**
+  String unmetTrainingDays(String what);
+
+  /// No description provided for @altMoveOneEvent.
+  ///
+  /// In en, this message translates to:
+  /// **'Move one of the events'**
+  String get altMoveOneEvent;
+
+  /// No description provided for @altMarkOneCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark one as cancelled'**
+  String get altMarkOneCancelled;
+
+  /// No description provided for @altMakePriorityB.
+  ///
+  /// In en, this message translates to:
+  /// **'Make {goal} priority B'**
+  String altMakePriorityB(String goal);
+
+  /// No description provided for @altSkipGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip {goal}'**
+  String altSkipGoal(String goal);
+
+  /// No description provided for @altTreatAsTraining.
+  ///
+  /// In en, this message translates to:
+  /// **'Treat {goal} as a training event'**
+  String altTreatAsTraining(String goal);
+
+  /// No description provided for @altControlledEffort.
+  ///
+  /// In en, this message translates to:
+  /// **'Ride {goal} as a controlled effort'**
+  String altControlledEffort(String goal);
+
+  /// No description provided for @conflictSameDay.
+  ///
+  /// In en, this message translates to:
+  /// **'{a} and {b} are on the same day. Only one can be raced.'**
+  String conflictSameDay(String a, String b);
+
+  /// No description provided for @conflictBothPriorityA.
+  ///
+  /// In en, this message translates to:
+  /// **'{a} and {b} are both priority A, {gap} days apart. Recovery after the first and sharpening for the second need {more} more days than that.'**
+  String conflictBothPriorityA(String a, String b, int gap, int more);
+
+  /// No description provided for @conflictFlexibleOverlap.
+  ///
+  /// In en, this message translates to:
+  /// **'{a} and {b} are {gap} days apart and overlap by {overlap} days. {skip} is marked flexible: dropping it would free the weeks before the other event.'**
+  String conflictFlexibleOverlap(
+    String a,
+    String b,
+    int gap,
+    int overlap,
+    String skip,
+  );
+
+  /// No description provided for @conflictRecoveryOverlap.
+  ///
+  /// In en, this message translates to:
+  /// **'{a} and {b} are {gap} days apart: recovery after the first overlaps sharpening for the second by {overlap} days. The lower priority preparation is limited to protect the other.'**
+  String conflictRecoveryOverlap(String a, String b, int gap, int overlap);
+
+  /// No description provided for @conflictTightSpacing.
+  ///
+  /// In en, this message translates to:
+  /// **'{a} and {b} are {gap} days apart. Recovery and sharpening fit with {spare} days to spare, so any setback leaves no room.'**
+  String conflictTightSpacing(String a, String b, int gap, int spare);
+
+  /// No description provided for @seasonShortened.
+  ///
+  /// In en, this message translates to:
+  /// **'In {n} of {of} weeks the weekly time cannot hold the full long sessions of every goal, so they are shortened together.'**
+  String seasonShortened(int n, int of);
+
+  /// No description provided for @seasonAlternating.
+  ///
+  /// In en, this message translates to:
+  /// **'In {n} weeks the week cannot hold every long session; the sports take turns.'**
+  String seasonAlternating(int n);
+
+  /// No description provided for @seasonLongAway.
+  ///
+  /// In en, this message translates to:
+  /// **'In {n} weeks a long session of over two and a half hours sits away from its usual day, because of your rest days and the other sessions.'**
+  String seasonLongAway(int n);
+
+  /// No description provided for @seasonMovedOntoEvent.
+  ///
+  /// In en, this message translates to:
+  /// **'{n, plural, =1{1 session you moved sits on an event day or the rest day before it. The plan keeps it where you put it.} other{{n} sessions you moved sit on an event day or the rest day before it. The plan keeps them where you put them.}}'**
+  String seasonMovedOntoEvent(int n);
+
+  /// No description provided for @seasonNoRoom.
+  ///
+  /// In en, this message translates to:
+  /// **'{n, plural, =1{1 session was left out because the workouts chosen for it ran longer than the time left in the week.} other{{n} sessions were left out because the workouts chosen for them ran longer than the time left in the week.}}'**
+  String seasonNoRoom(int n);
+
+  /// No description provided for @seasonMovedHardNearEvent.
+  ///
+  /// In en, this message translates to:
+  /// **'{n, plural, =1{1 hard session you moved sits in the easy days after an event. The plan keeps it where you put it.} other{{n} hard sessions you moved sit in the easy days after an event. The plan keeps them where you put them.}}'**
+  String seasonMovedHardNearEvent(int n);
+
+  /// No description provided for @seasonEventWeeks.
+  ///
+  /// In en, this message translates to:
+  /// **'Event weeks count the event as training, so the rest of the week is lighter.'**
+  String get seasonEventWeeks;
+
+  /// No description provided for @seasonUnmet.
+  ///
+  /// In en, this message translates to:
+  /// **'In {n} weeks the training days do not hold every protected session: {detail}'**
+  String seasonUnmet(int n, String detail);
+
+  /// No description provided for @seasonNoHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'There is no recent {sport} in your history, so the plan for the {priority} goal is provisional.'**
+  String seasonNoHistory(String sport, String priority);
+
+  /// No description provided for @zoneRecovery.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery'**
+  String get zoneRecovery;
+
+  /// No description provided for @workoutSentKeptInFjelia.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent to {provider}. Kept in Fjelia only: {items}.'**
+  String workoutSentKeptInFjelia(String provider, String items);
+
+  /// No description provided for @paceGuideRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Pace guide {low} to {high}'**
+  String paceGuideRange(String low, String high);
+
+  /// No description provided for @paceGuideFromGoal.
+  ///
+  /// In en, this message translates to:
+  /// **', estimated from your goal'**
+  String get paceGuideFromGoal;
+
+  /// No description provided for @paceGuideGoalFlat.
+  ///
+  /// In en, this message translates to:
+  /// **' · goal pace on the flat {pace}'**
+  String paceGuideGoalFlat(String pace);
+
+  /// No description provided for @paceGuideHeartRateDecides.
+  ///
+  /// In en, this message translates to:
+  /// **'Heart rate decides.'**
+  String get paceGuideHeartRateDecides;
+
+  /// No description provided for @moveKeyRestDay.
+  ///
+  /// In en, this message translates to:
+  /// **'rest day'**
+  String get moveKeyRestDay;
+
+  /// No description provided for @moveKeyEvent.
+  ///
+  /// In en, this message translates to:
+  /// **'event'**
+  String get moveKeyEvent;
+
+  /// No description provided for @moveKeyEasyOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'easy only'**
+  String get moveKeyEasyOnly;
+
+  /// No description provided for @moveKeyHasSession.
+  ///
+  /// In en, this message translates to:
+  /// **'has a session'**
+  String get moveKeyHasSession;
+
+  /// No description provided for @calendarCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get calendarCompleted;
+
+  /// No description provided for @calendarPlanned.
+  ///
+  /// In en, this message translates to:
+  /// **'Planned'**
+  String get calendarPlanned;
 }
 
 class _AppLocalizationsDelegate

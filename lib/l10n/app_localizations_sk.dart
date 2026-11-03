@@ -6628,4 +6628,297 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get waistFromProfile => 'Z vášho profilu, bez dátumu';
+
+  @override
+  String get phaseBase => 'ZÁKLAD';
+
+  @override
+  String get phaseBuild => 'ROZVOJ';
+
+  @override
+  String get phasePeak => 'VRCHOL';
+
+  @override
+  String get phaseTaper => 'LADENIE';
+
+  @override
+  String get phaseRecovery => 'REGENERÁCIA';
+
+  @override
+  String get phaseRace => 'PRETEKY';
+
+  @override
+  String get sessionTypeKey => 'KĽÚČOVÝ';
+
+  @override
+  String get sessionTypeLong => 'DLHÝ';
+
+  @override
+  String get sessionTypeRecovery => 'REGENERÁCIA';
+
+  @override
+  String get sessionTypeAssessment => 'TEST';
+
+  @override
+  String get sessionTypeEndurance => 'VYTRVALOSŤ';
+
+  @override
+  String get sessionTypeStrength => 'SILA';
+
+  @override
+  String get sessionTypeYoga => 'JOGA';
+
+  @override
+  String get sessionStatusCompleted => 'DOKONČENÉ';
+
+  @override
+  String get sessionStatusAdapted => 'UPRAVENÉ';
+
+  @override
+  String get stepWarmUp => 'Rozcvička';
+
+  @override
+  String get stepCoolDown => 'Vyklusanie';
+
+  @override
+  String get stepRecovery => 'Oddych';
+
+  @override
+  String get stepRest => 'Odpočinok';
+
+  @override
+  String get stepInterval => 'Interval';
+
+  @override
+  String get stepWorkout => 'Tréning';
+
+  @override
+  String stepRepeat(int n) {
+    return '$n× opakovať';
+  }
+
+  @override
+  String get stepOpenEnded => 'Bez konca';
+
+  @override
+  String stepSeconds(int n) {
+    return '$n s';
+  }
+
+  @override
+  String get objectiveOptionalVariety =>
+      'Voliteľná pestrosť zvolená v nastaveniach';
+
+  @override
+  String get objectiveStrengthSupport => 'Sila na podporu vášho tréningu';
+
+  @override
+  String objectiveIntervals(String goal) {
+    return 'Intervaly pre $goal';
+  }
+
+  @override
+  String objectiveSteady(String sport, String goal) {
+    return '$sport: rovnomerný kvalitný tréning pre $goal';
+  }
+
+  @override
+  String objectiveEasyRecovery(String sport, String goal) {
+    return 'Ľahký tréning ($sport): regenerácia okolo $goal';
+  }
+
+  @override
+  String objectiveEasyEndurance(String sport, String goal) {
+    return '$sport: ľahká vytrvalosť pre $goal';
+  }
+
+  @override
+  String objectiveLong(String sport, String goal) {
+    return '$sport: dlhý tréning pre $goal';
+  }
+
+  @override
+  String unmetWeekMinutes(int minutes, String sport, String goal) {
+    return 'Týždeň má $minutes min, príliš málo na dlhý tréning ($sport) pre $goal.';
+  }
+
+  @override
+  String unmetWeekHours(String hours, String what) {
+    return 'Týždeň má $hours h, príliš málo na: $what.';
+  }
+
+  @override
+  String unmetTrainingDays(String what) {
+    return 'Nedostatok tréningových dní na: $what.';
+  }
+
+  @override
+  String get altMoveOneEvent => 'Presunúť jedno z podujatí';
+
+  @override
+  String get altMarkOneCancelled => 'Označiť jedno ako zrušené';
+
+  @override
+  String altMakePriorityB(String goal) {
+    return 'Nastaviť $goal na prioritu B';
+  }
+
+  @override
+  String altSkipGoal(String goal) {
+    return 'Vynechať $goal';
+  }
+
+  @override
+  String altTreatAsTraining(String goal) {
+    return 'Brať $goal ako tréningové preteky';
+  }
+
+  @override
+  String altControlledEffort(String goal) {
+    return 'Absolvovať $goal kontrolovane';
+  }
+
+  @override
+  String conflictSameDay(String a, String b) {
+    return '$a a $b sú v ten istý deň. Absolvovať sa dá len jedno.';
+  }
+
+  @override
+  String conflictBothPriorityA(String a, String b, int gap, int more) {
+    return '$a a $b majú obe prioritu A a delí ich $gap dní. Regenerácia po prvom a ladenie na druhé potrebujú o $more dní viac.';
+  }
+
+  @override
+  String conflictFlexibleOverlap(
+    String a,
+    String b,
+    int gap,
+    int overlap,
+    String skip,
+  ) {
+    return '$a a $b delí $gap dní a prekrývajú sa o $overlap dní. $skip je označené ako flexibilné: jeho vynechanie by uvoľnilo týždne pred druhým podujatím.';
+  }
+
+  @override
+  String conflictRecoveryOverlap(String a, String b, int gap, int overlap) {
+    return '$a a $b delí $gap dní: regenerácia po prvom sa prekrýva s ladením na druhé o $overlap dní. Príprava s nižšou prioritou sa obmedzí, aby chránila tú druhú.';
+  }
+
+  @override
+  String conflictTightSpacing(String a, String b, int gap, int spare) {
+    return '$a a $b delí $gap dní. Regenerácia a ladenie sa zmestia s rezervou $spare dní, takže akýkoľvek výpadok nenechá priestor.';
+  }
+
+  @override
+  String seasonShortened(int n, int of) {
+    return 'V $n z $of týždňov týždenný čas nestačí na všetky dlhé tréningy každého cieľa, preto sa skracujú spoločne.';
+  }
+
+  @override
+  String seasonAlternating(int n) {
+    return 'V $n týždňoch sa nezmestia všetky dlhé tréningy; športy sa striedajú.';
+  }
+
+  @override
+  String seasonLongAway(int n) {
+    return 'V $n týždňoch je dlhý tréning nad dve a pol hodiny mimo svojho obvyklého dňa kvôli vašim dňom voľna a ostatným tréningom.';
+  }
+
+  @override
+  String seasonMovedOntoEvent(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other:
+          '$n tréningov, ktoré ste presunuli, je v deň podujatia alebo v deň voľna pred ním. Plán ich nechá tam, kam ste ich dali.',
+      few:
+          '$n tréningy, ktoré ste presunuli, sú v deň podujatia alebo v deň voľna pred ním. Plán ich nechá tam, kam ste ich dali.',
+      one: '1 tréning, ktorý ste presunuli, je v deň podujatia alebo v deň voľna pred ním. Plán ho nechá tam, kam ste ho dali.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String seasonNoRoom(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other:
+          '$n tréningov bolo vynechaných, pretože zvolené tréningy boli dlhšie ako zostávajúci čas v týždni.',
+      few:
+          '$n tréningy boli vynechané, pretože zvolené tréningy boli dlhšie ako zostávajúci čas v týždni.',
+      one: '1 tréning bol vynechaný, pretože zvolený tréning bol dlhší ako zostávajúci čas v týždni.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String seasonMovedHardNearEvent(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other:
+          '$n náročných tréningov, ktoré ste presunuli, je v ľahkých dňoch po podujatí. Plán ich nechá tam, kam ste ich dali.',
+      few:
+          '$n náročné tréningy, ktoré ste presunuli, sú v ľahkých dňoch po podujatí. Plán ich nechá tam, kam ste ich dali.',
+      one: '1 náročný tréning, ktorý ste presunuli, je v ľahkých dňoch po podujatí. Plán ho nechá tam, kam ste ho dali.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get seasonEventWeeks =>
+      'V týždňoch podujatí sa podujatie počíta ako tréning, takže zvyšok týždňa je ľahší.';
+
+  @override
+  String seasonUnmet(int n, String detail) {
+    return 'V $n týždňoch sa do tréningových dní nezmestia všetky chránené tréningy: $detail';
+  }
+
+  @override
+  String seasonNoHistory(String sport, String priority) {
+    return 'Vo vašej histórii nie je žiadny nedávny tréning ($sport), preto je plán pre cieľ $priority predbežný.';
+  }
+
+  @override
+  String get zoneRecovery => 'Regenerácia';
+
+  @override
+  String workoutSentKeptInFjelia(String provider, String items) {
+    return 'Odoslané do $provider. Len vo Fjelii: $items.';
+  }
+
+  @override
+  String paceGuideRange(String low, String high) {
+    return 'Orientačné tempo $low až $high';
+  }
+
+  @override
+  String get paceGuideFromGoal => ', odhadnuté z vášho cieľa';
+
+  @override
+  String paceGuideGoalFlat(String pace) {
+    return ' · cieľové tempo na rovine $pace';
+  }
+
+  @override
+  String get paceGuideHeartRateDecides => 'Rozhoduje tepová frekvencia.';
+
+  @override
+  String get moveKeyRestDay => 'deň voľna';
+
+  @override
+  String get moveKeyEvent => 'podujatie';
+
+  @override
+  String get moveKeyEasyOnly => 'len ľahko';
+
+  @override
+  String get moveKeyHasSession => 'má tréning';
+
+  @override
+  String get calendarCompleted => 'Dokončené';
+
+  @override
+  String get calendarPlanned => 'Naplánované';
 }

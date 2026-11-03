@@ -1,3 +1,4 @@
+import '../../l10n/plan_text.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../l10n/formats.dart';
 import '../../providers/plan_weather_provider.dart';
@@ -247,11 +248,7 @@ class SeasonSummaryCard extends ConsumerWidget {
     final report = ref.watch(seasonReportProvider).valueOrNull;
     if (report == null) return const SizedBox.shrink();
     final outcome = report['outcome'] as String? ?? 'feasible';
-    final lines = <String>[
-      for (final c in (report['conflicts'] as List? ?? const []))
-        (c as Map)['message'] as String,
-      for (final t in (report['summary'] as List? ?? const [])) t as String,
-    ];
+    final lines = seasonReportLines(context.l10n, report);
     if (outcome == 'feasible' && lines.isEmpty) return const SizedBox.shrink();
     final (label, color) = switch (outcome) {
       'feasibleWithTradeoffs' => (
@@ -296,19 +293,14 @@ class SeasonSummaryCard extends ConsumerWidget {
                   padding: const EdgeInsets.only(bottom: 8),
                   child: Text(line, style: const TextStyle(fontSize: 12)),
                 ),
-              for (final c in (report['conflicts'] as List? ?? const []))
-                for (final alt
-                    in ((c as Map)['alternatives'] as List? ?? const []))
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 4),
-                    child: Text(
-                      context.l10n.alt(alt),
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.orange,
-                      ),
-                    ),
+              for (final alt in seasonAlternatives(context.l10n, report))
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: Text(
+                    context.l10n.alt(alt),
+                    style: const TextStyle(fontSize: 12, color: Colors.orange),
                   ),
+                ),
             ],
           ),
         ),
@@ -864,7 +856,7 @@ class _SessionTile extends StatelessWidget {
                             child: Text(
                               skipped
                                   ? context.l10n.skipped2
-                                  : s.phase.toUpperCase(),
+                                  : planPhaseLabel(context.l10n, s.phase),
                               style: TextStyle(
                                 fontSize: 9,
                                 color: phaseColor,

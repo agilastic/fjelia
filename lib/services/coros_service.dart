@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:math' as math;
 
+import 'package:archive/archive.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -10,6 +12,10 @@ import '../api/coros_client.dart';
 import '../db/database.dart';
 import 'device_threshold_store.dart';
 import '../models/heart_rate.dart';
+import '../theme/activity_colors.dart' show activityKind;
+import 'activity_file_import_service.dart'
+    show ActivityFile, decodeActivityFile;
+import 'dfa_alpha1_service.dart';
 import '../utils/log.dart';
 import 'workout_providers/cleanup_queue.dart';
 import 'workout_providers/delivery_ledger.dart';
@@ -605,25 +611,63 @@ class CorosService {
         : null;
     final merged = {...row, ...?detail};
 
+    // The summary list has no maximum heart rate, no moving time and no
+    // curves: those come from the original FIT file, once per activity.
+    final fit = existing == null || !_coversRecording(existing)
+        ? await _fitOf(labelId, sportType, duration)
+        : null;
+    final samples = fit?.samples ?? const <Map<String, num>>[];
+    final moving = fit?.movingSeconds;
+    final fitHr = [
+      for (final s in samples)
+        if ((s['hr'] ?? 0) > 0) s['hr']!.toDouble(),
+    ];
+    Value<T?> fromFit<T>(T? value) =>
+        fit == null ? const Value.absent() : Value<T?>(value);
+
     final name = (row['name'] as String?)?.trim();
+    final rowType = _activityType(row);
+    final fitType = fit?.type ?? 'other';
+    // The watch file names the sport for sure, e.g. a hike COROS lists as a
+    // run; a more specific name of the same kind stays.
+    final type =
+        fitType != 'other' && activityKind(fitType) != activityKind(rowType)
+        ? fitType
+        : rowType;
     await _db.saveHeartRateSamples(
       parseTimedHeartRates(
-        merged['samples'] ?? merged['heartRateSamples'],
+        merged['samples'] ?? merged['heartRateSamples'] ?? samples,
         _source,
       ),
     );
     final companion = ActivityRecordsCompanion(
       activityId: Value(id),
       name: Value(name == null || name.isEmpty ? 'COROS Activity' : name),
-      type: Value(_activityType(row)),
+      type: Value(type),
       startDate: Value(start),
       durationSeconds: Value(duration),
-      distanceMeters: Value(_toDouble(row['distance'] ?? row['total'])),
-      avgHeartRate: Value(_nonZeroDouble(row['avgHr'])),
-      maxHeartRate: Value(_nonZeroDouble(row['maxHr'])),
+      distanceMeters: Value(
+        _toDouble(row['distance'] ?? row['total']) ?? fit?.distanceMeters,
+      ),
+      avgHeartRate: Value(_nonZeroDouble(row['avgHr']) ?? fit?.avgHeartRate),
+      maxHeartRate: _keep(
+        _nonZeroDouble(row['maxHr'] ?? row['maxHeartRate']) ??
+            fit?.maxHeartRate ??
+            (fitHr.isEmpty ? null : fitHr.reduce(math.max)),
+        existing?.maxHeartRate,
+      ),
+      movingDurationSeconds: fromFit(
+        moving != null && moving >= 0 && moving <= duration + 1
+            ? moving.round()
+            : null,
+      ),
+      metricsJson: fromFit(samples.isEmpty ? null : jsonEncode(samples)),
+      gpxJson: fromFit(
+        fit == null || fit.route.isEmpty ? null : jsonEncode(fit.route),
+      ),
       trainingLoad: Value(_corosTrainingLoad(merged, duration)),
       avgWatts: Value(_nonZeroDouble(row['avgPower'] ?? row['np'])),
-      totalElevation: Value(_nonZeroDouble(row['ascent'])),
+      totalElevation: Value(_nonZeroDouble(row['ascent']) ?? fit?.ascentMeters),
       avgRunCadence: Value(_nonZeroDouble(row['avgCadence'])),
       aerobicTrainingEffect: Value(_toDouble(merged['aerobicTE'])),
       anaerobicTrainingEffect: Value(_toDouble(merged['anaerobicTE'])),
@@ -639,7 +683,90 @@ class CorosService {
     } else {
       await _db.into(_db.activityRecords).insert(companion);
     }
+    if (fit != null) {
+      try {
+        if (fit.rrIntervals.isNotEmpty) {
+          await DfaAlpha1Service(_db).save(
+            id,
+            start: fit.start,
+            rrIntervals: fit.rrIntervals,
+            samples: fit.samples,
+          );
+        }
+      } catch (e) {
+        log('[Coros] DFA alpha1 for $id failed: ${e.runtimeType}');
+      }
+    }
     return _ActivitySaveResult.ok;
+  }
+
+  /// Whether the stored curves span most of the recording. Files read
+  /// before the compressed-timestamp fix held only their first records:
+  /// those are downloaded again.
+  static bool _coversRecording(ActivityRecord a) {
+    final json = a.metricsJson;
+    if (json == null) return false;
+    try {
+      final times = [
+        for (final s in jsonDecode(json) as List)
+          if (s is Map && s['t'] is num) (s['t'] as num).toDouble(),
+      ];
+      if (times.length < 2) return false;
+      final span = (times.reduce(math.max) - times.reduce(math.min)) / 1000;
+      return span >= a.durationSeconds * .5;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// COROS sometimes sends the export as a ZIP holding the FIT file (one
+  /// per leg for multisport): the largest one is the recording.
+  static Uint8List _unzipped(Uint8List bytes) {
+    if (bytes.length < 4 || bytes[0] != 0x50 || bytes[1] != 0x4B) return bytes;
+    final files = [
+      for (final f in ZipDecoder().decodeBytes(bytes).files)
+        if (f.isFile && f.name.toLowerCase().endsWith('.fit')) f,
+    ]..sort((a, b) => b.size.compareTo(a.size));
+    return files.isEmpty ? bytes : Uint8List.fromList(files.first.content);
+  }
+
+  /// A value from this sync, or what an earlier one stored.
+  static Value<double?> _keep(double? fresh, double? stored) =>
+      Value(fresh ?? stored);
+
+  /// The activity's recording, from its FIT export or, when that cannot be
+  /// read, its TCX export; the content decides the format. Null when neither
+  /// works. Very short recordings are not worth the download.
+  Future<ActivityFile?> _fitOf(
+    String labelId,
+    int? sportType,
+    int durationSeconds,
+  ) async {
+    if (durationSeconds < 60) return null;
+    for (final type in const [
+      CorosClient.fitFileType,
+      CorosClient.tcxFileType,
+    ]) {
+      final bytes = await _client.activityFile(
+        labelId,
+        sportType,
+        fileType: type,
+      );
+      if (bytes == null) continue;
+      try {
+        final file = decodeActivityFile(_unzipped(bytes));
+        if (file == null) continue;
+        log(
+          '[Coros] ${file.format} $labelId: ${file.samples.length} samples, '
+          'moving=${file.movingSeconds}, maxHr=${file.maxHeartRate}, '
+          'rr=${file.rrIntervals.length}',
+        );
+        return file;
+      } catch (e) {
+        log('[Coros] file $type of $labelId unreadable: ${e.runtimeType}');
+      }
+    }
+    return null;
   }
 
   /// COROS' own load when present, else minutes × aerobic TE factor.

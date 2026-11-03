@@ -6648,4 +6648,292 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get waistFromProfile => 'Aus deinem Profil, ohne Datum';
+
+  @override
+  String get phaseBase => 'GRUNDLAGE';
+
+  @override
+  String get phaseBuild => 'AUFBAU';
+
+  @override
+  String get phasePeak => 'SPITZE';
+
+  @override
+  String get phaseTaper => 'TAPERING';
+
+  @override
+  String get phaseRecovery => 'ERHOLUNG';
+
+  @override
+  String get phaseRace => 'WETTKAMPF';
+
+  @override
+  String get sessionTypeKey => 'SCHLÜSSEL';
+
+  @override
+  String get sessionTypeLong => 'LANG';
+
+  @override
+  String get sessionTypeRecovery => 'REGENERATION';
+
+  @override
+  String get sessionTypeAssessment => 'TEST';
+
+  @override
+  String get sessionTypeEndurance => 'AUSDAUER';
+
+  @override
+  String get sessionTypeStrength => 'KRAFT';
+
+  @override
+  String get sessionTypeYoga => 'YOGA';
+
+  @override
+  String get sessionStatusCompleted => 'ERLEDIGT';
+
+  @override
+  String get sessionStatusAdapted => 'ANGEPASST';
+
+  @override
+  String get stepWarmUp => 'Aufwärmen';
+
+  @override
+  String get stepCoolDown => 'Auslaufen';
+
+  @override
+  String get stepRecovery => 'Erholung';
+
+  @override
+  String get stepRest => 'Pause';
+
+  @override
+  String get stepInterval => 'Intervall';
+
+  @override
+  String get stepWorkout => 'Training';
+
+  @override
+  String stepRepeat(int n) {
+    return '$n× wiederholen';
+  }
+
+  @override
+  String get stepOpenEnded => 'Ohne Ende';
+
+  @override
+  String stepSeconds(int n) {
+    return '$n Sek.';
+  }
+
+  @override
+  String get objectiveOptionalVariety =>
+      'Optionale Abwechslung aus deinen Einstellungen';
+
+  @override
+  String get objectiveStrengthSupport =>
+      'Kraft zur Unterstützung deines Trainings';
+
+  @override
+  String objectiveIntervals(String goal) {
+    return 'Intervalle für $goal';
+  }
+
+  @override
+  String objectiveSteady(String sport, String goal) {
+    return '$sport: gleichmäßige Qualitätseinheit für $goal';
+  }
+
+  @override
+  String objectiveEasyRecovery(String sport, String goal) {
+    return '$sport locker: Erholung rund um $goal';
+  }
+
+  @override
+  String objectiveEasyEndurance(String sport, String goal) {
+    return '$sport: lockere Ausdauer für $goal';
+  }
+
+  @override
+  String objectiveLong(String sport, String goal) {
+    return '$sport: lange Einheit für $goal';
+  }
+
+  @override
+  String unmetWeekMinutes(int minutes, String sport, String goal) {
+    return 'Die Woche hat $minutes Min., zu wenig für eine lange Einheit ($sport) für $goal.';
+  }
+
+  @override
+  String unmetWeekHours(String hours, String what) {
+    return 'Die Woche hat $hours Std., zu wenig für: $what.';
+  }
+
+  @override
+  String unmetTrainingDays(String what) {
+    return 'Nicht genug Trainingstage für: $what.';
+  }
+
+  @override
+  String get altMoveOneEvent => 'Eines der Events verschieben';
+
+  @override
+  String get altMarkOneCancelled => 'Eines als abgesagt markieren';
+
+  @override
+  String altMakePriorityB(String goal) {
+    return '$goal auf Priorität B setzen';
+  }
+
+  @override
+  String altSkipGoal(String goal) {
+    return '$goal auslassen';
+  }
+
+  @override
+  String altTreatAsTraining(String goal) {
+    return '$goal als Trainingswettkampf nehmen';
+  }
+
+  @override
+  String altControlledEffort(String goal) {
+    return '$goal kontrolliert absolvieren';
+  }
+
+  @override
+  String conflictSameDay(String a, String b) {
+    return '$a und $b sind am selben Tag. Nur eines davon kann gelaufen bzw. gefahren werden.';
+  }
+
+  @override
+  String conflictBothPriorityA(String a, String b, int gap, int more) {
+    return '$a und $b haben beide Priorität A und liegen $gap Tage auseinander. Erholung nach dem ersten und Zuspitzung auf das zweite brauchen $more Tage mehr.';
+  }
+
+  @override
+  String conflictFlexibleOverlap(
+    String a,
+    String b,
+    int gap,
+    int overlap,
+    String skip,
+  ) {
+    return '$a und $b liegen $gap Tage auseinander und überschneiden sich um $overlap Tage. $skip ist als flexibel markiert: Ohne es wären die Wochen vor dem anderen Event frei.';
+  }
+
+  @override
+  String conflictRecoveryOverlap(String a, String b, int gap, int overlap) {
+    return '$a und $b liegen $gap Tage auseinander: Die Erholung nach dem ersten überschneidet sich $overlap Tage mit der Zuspitzung auf das zweite. Die Vorbereitung mit niedrigerer Priorität wird begrenzt, um die andere zu schützen.';
+  }
+
+  @override
+  String conflictTightSpacing(String a, String b, int gap, int spare) {
+    return '$a und $b liegen $gap Tage auseinander. Erholung und Zuspitzung passen mit $spare Tagen Puffer – ein Rückschlag lässt keinen Spielraum.';
+  }
+
+  @override
+  String seasonShortened(int n, int of) {
+    return 'In $n von $of Wochen reicht die Wochenzeit nicht für die vollen langen Einheiten aller Ziele, daher werden sie gemeinsam gekürzt.';
+  }
+
+  @override
+  String seasonAlternating(int n) {
+    return 'In $n Wochen passt nicht jede lange Einheit in die Woche; die Sportarten wechseln sich ab.';
+  }
+
+  @override
+  String seasonLongAway(int n) {
+    return 'In $n Wochen liegt eine lange Einheit von über zweieinhalb Stunden nicht an ihrem üblichen Tag – wegen deiner Ruhetage und der anderen Einheiten.';
+  }
+
+  @override
+  String seasonMovedOntoEvent(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other:
+          '$n von dir verschobene Einheiten liegen auf einem Eventtag oder dem Ruhetag davor. Der Plan lässt sie, wo du sie hingelegt hast.',
+      one: '1 von dir verschobene Einheit liegt auf einem Eventtag oder dem Ruhetag davor. Der Plan lässt sie, wo du sie hingelegt hast.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String seasonNoRoom(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other:
+          '$n Einheiten fielen weg, weil die gewählten Trainings länger dauerten als die restliche Zeit der Woche.',
+      one: '1 Einheit fiel weg, weil das gewählte Training länger dauerte als die restliche Zeit der Woche.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String seasonMovedHardNearEvent(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other:
+          '$n von dir verschobene harte Einheiten liegen in den lockeren Tagen nach einem Event. Der Plan lässt sie, wo du sie hingelegt hast.',
+      one: '1 von dir verschobene harte Einheit liegt in den lockeren Tagen nach einem Event. Der Plan lässt sie, wo du sie hingelegt hast.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get seasonEventWeeks =>
+      'In Eventwochen zählt das Event als Training, daher ist der Rest der Woche leichter.';
+
+  @override
+  String seasonUnmet(int n, String detail) {
+    return 'In $n Wochen passen nicht alle geschützten Einheiten in die Trainingstage: $detail';
+  }
+
+  @override
+  String seasonNoHistory(String sport, String priority) {
+    return 'In deinem Verlauf gibt es kein aktuelles Training ($sport), daher ist der Plan für das $priority-Ziel vorläufig.';
+  }
+
+  @override
+  String get zoneRecovery => 'Regeneration';
+
+  @override
+  String workoutSentKeptInFjelia(String provider, String items) {
+    return 'An $provider gesendet. Nur in Fjelia: $items.';
+  }
+
+  @override
+  String paceGuideRange(String low, String high) {
+    return 'Pace-Orientierung $low bis $high';
+  }
+
+  @override
+  String get paceGuideFromGoal => ', geschätzt aus deinem Ziel';
+
+  @override
+  String paceGuideGoalFlat(String pace) {
+    return ' · Zieltempo in der Ebene $pace';
+  }
+
+  @override
+  String get paceGuideHeartRateDecides => 'Die Herzfrequenz entscheidet.';
+
+  @override
+  String get moveKeyRestDay => 'Ruhetag';
+
+  @override
+  String get moveKeyEvent => 'Event';
+
+  @override
+  String get moveKeyEasyOnly => 'nur locker';
+
+  @override
+  String get moveKeyHasSession => 'hat eine Einheit';
+
+  @override
+  String get calendarCompleted => 'Erledigt';
+
+  @override
+  String get calendarPlanned => 'Geplant';
 }

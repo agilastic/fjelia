@@ -1,3 +1,4 @@
+import '../../l10n/plan_text.dart';
 import '../../l10n/l10n_ext.dart';
 
 import 'dart:convert';
@@ -268,7 +269,8 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: badge(
-                    '${s.phase.toUpperCase()} · ${s.sessionType.toUpperCase()}',
+                    '${planPhaseLabel(context.l10n, s.phase)} · '
+                    '${sessionTypeLabel(context.l10n, s.sessionType)}',
                   ),
                 ),
               ),
@@ -280,7 +282,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                           : context.l10n.skippedTouppercase(
                               skipReason.toUpperCase(),
                             ))
-                    : s.status.toUpperCase(),
+                    : sessionStatusLabel(context.l10n, s.status),
               ),
             ],
           ),
@@ -308,8 +310,8 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                   Expanded(
                     child: Text(
                       goalPriority == null
-                          ? s.goalObjective!
-                          : '${s.goalObjective!} · ${goalPriority.toUpperCase()}',
+                          ? planObjectiveLabel(context.l10n, s.goalObjective!)
+                          : '${planObjectiveLabel(context.l10n, s.goalObjective!)} · ${goalPriority.toUpperCase()}',
                       style: const TextStyle(
                         fontSize: 12,
                         color: Colors.orange,
@@ -505,7 +507,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                               children: [
                                 Text(
                                   [
-                                    'Recovery',
+                                    context.l10n.zoneRecovery,
                                     context.l10n.aerobic,
                                     context.l10n.tempo,
                                     context.l10n.threshold,
@@ -711,8 +713,11 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                                             ? context.l10n.workoutSentToLabel(
                                                 provider.label,
                                               )
-                                            : 'Sent to ${provider.label}. Kept in '
-                                                  'Fjelia only: ${omitted.join(', ')}.',
+                                            : context.l10n
+                                                  .workoutSentKeptInFjelia(
+                                                    provider.label,
+                                                    omitted.join(', '),
+                                                  ),
                                       ),
                                     ),
                                   );
@@ -906,10 +911,10 @@ String? _paceGuide(TrainingSession s) {
     final low = pace['low_sec_per_km'], high = pace['high_sec_per_km'];
     if (low is! num || high is! num) return null;
     final goal = pace['goal_sec_per_km'];
-    return 'Pace guide ${formatPace(low.toDouble())} to ${formatPace(high.toDouble())}'
-        '${pace['basis'] == 'goal' ? ', estimated from your goal' : ''}'
-        '${goal is num ? ' · goal pace on the flat ${formatPace(goal.toDouble())}' : ''}. '
-        'Heart rate decides.';
+    return '${tr.paceGuideRange(formatPace(low.toDouble()), formatPace(high.toDouble()))}'
+        '${pace['basis'] == 'goal' ? tr.paceGuideFromGoal : ''}'
+        '${goal is num ? tr.paceGuideGoalFlat(formatPace(goal.toDouble())) : ''}. '
+        '${tr.paceGuideHeartRateDecides}';
   } catch (_) {
     return null;
   }

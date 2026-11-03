@@ -6608,4 +6608,292 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get waistFromProfile => 'Fra din profil, uden dato';
+
+  @override
+  String get phaseBase => 'GRUNDLAG';
+
+  @override
+  String get phaseBuild => 'OPBYGNING';
+
+  @override
+  String get phasePeak => 'TOP';
+
+  @override
+  String get phaseTaper => 'NEDTRAPNING';
+
+  @override
+  String get phaseRecovery => 'RESTITUTION';
+
+  @override
+  String get phaseRace => 'LØB';
+
+  @override
+  String get sessionTypeKey => 'NØGLE';
+
+  @override
+  String get sessionTypeLong => 'LANG';
+
+  @override
+  String get sessionTypeRecovery => 'RESTITUTION';
+
+  @override
+  String get sessionTypeAssessment => 'TEST';
+
+  @override
+  String get sessionTypeEndurance => 'UDHOLDENHED';
+
+  @override
+  String get sessionTypeStrength => 'STYRKE';
+
+  @override
+  String get sessionTypeYoga => 'YOGA';
+
+  @override
+  String get sessionStatusCompleted => 'GENNEMFØRT';
+
+  @override
+  String get sessionStatusAdapted => 'TILPASSET';
+
+  @override
+  String get stepWarmUp => 'Opvarmning';
+
+  @override
+  String get stepCoolDown => 'Nedkøling';
+
+  @override
+  String get stepRecovery => 'Pause';
+
+  @override
+  String get stepRest => 'Hvil';
+
+  @override
+  String get stepInterval => 'Interval';
+
+  @override
+  String get stepWorkout => 'Træning';
+
+  @override
+  String stepRepeat(int n) {
+    return '$n× gentag';
+  }
+
+  @override
+  String get stepOpenEnded => 'Uden slut';
+
+  @override
+  String stepSeconds(int n) {
+    return '$n sek.';
+  }
+
+  @override
+  String get objectiveOptionalVariety =>
+      'Valgfri variation, du valgte i indstillingerne';
+
+  @override
+  String get objectiveStrengthSupport =>
+      'Styrke til at understøtte din træning';
+
+  @override
+  String objectiveIntervals(String goal) {
+    return 'Intervaller til $goal';
+  }
+
+  @override
+  String objectiveSteady(String sport, String goal) {
+    return '$sport: jævn kvalitetstræning til $goal';
+  }
+
+  @override
+  String objectiveEasyRecovery(String sport, String goal) {
+    return 'Rolig $sport: restitution omkring $goal';
+  }
+
+  @override
+  String objectiveEasyEndurance(String sport, String goal) {
+    return '$sport: rolig udholdenhed til $goal';
+  }
+
+  @override
+  String objectiveLong(String sport, String goal) {
+    return '$sport: langtur til $goal';
+  }
+
+  @override
+  String unmetWeekMinutes(int minutes, String sport, String goal) {
+    return 'Ugen har $minutes min, for lidt til en langtur ($sport) til $goal.';
+  }
+
+  @override
+  String unmetWeekHours(String hours, String what) {
+    return 'Ugen har $hours t, for lidt til: $what.';
+  }
+
+  @override
+  String unmetTrainingDays(String what) {
+    return 'Ikke nok træningsdage til: $what.';
+  }
+
+  @override
+  String get altMoveOneEvent => 'Flyt et af arrangementerne';
+
+  @override
+  String get altMarkOneCancelled => 'Markér et som aflyst';
+
+  @override
+  String altMakePriorityB(String goal) {
+    return 'Giv $goal prioritet B';
+  }
+
+  @override
+  String altSkipGoal(String goal) {
+    return 'Spring $goal over';
+  }
+
+  @override
+  String altTreatAsTraining(String goal) {
+    return 'Brug $goal som træningsløb';
+  }
+
+  @override
+  String altControlledEffort(String goal) {
+    return 'Gennemfør $goal med kontrolleret indsats';
+  }
+
+  @override
+  String conflictSameDay(String a, String b) {
+    return '$a og $b er samme dag. Kun ét kan gennemføres.';
+  }
+
+  @override
+  String conflictBothPriorityA(String a, String b, int gap, int more) {
+    return '$a og $b har begge prioritet A, med $gap dage imellem. Restitution efter det første og tilspidsning til det andet kræver $more dage mere.';
+  }
+
+  @override
+  String conflictFlexibleOverlap(
+    String a,
+    String b,
+    int gap,
+    int overlap,
+    String skip,
+  ) {
+    return '$a og $b har $gap dage imellem og overlapper med $overlap dage. $skip er markeret som fleksibel: at droppe det frigør ugerne før det andet arrangement.';
+  }
+
+  @override
+  String conflictRecoveryOverlap(String a, String b, int gap, int overlap) {
+    return '$a og $b har $gap dage imellem: restitutionen efter det første overlapper tilspidsningen til det andet med $overlap dage. Forberedelsen med lavest prioritet begrænses for at beskytte den anden.';
+  }
+
+  @override
+  String conflictTightSpacing(String a, String b, int gap, int spare) {
+    return '$a og $b har $gap dage imellem. Restitution og tilspidsning passer med $spare dage til overs, så et tilbageslag giver ikke plads.';
+  }
+
+  @override
+  String seasonShortened(int n, int of) {
+    return 'I $n af $of uger rummer ugens tid ikke alle de lange ture for hvert mål, så de forkortes sammen.';
+  }
+
+  @override
+  String seasonAlternating(int n) {
+    return 'I $n uger kan ugen ikke rumme alle lange ture; sportsgrenene skiftes.';
+  }
+
+  @override
+  String seasonLongAway(int n) {
+    return 'I $n uger ligger en langtur på over to en halv time på en anden dag end normalt på grund af dine hviledage og de andre træninger.';
+  }
+
+  @override
+  String seasonMovedOntoEvent(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other:
+          '$n træninger, du flyttede, ligger på en arrangementsdag eller hviledagen før. Planen lader dem ligge, hvor du satte dem.',
+      one: '1 træning, du flyttede, ligger på en arrangementsdag eller hviledagen før. Planen lader den ligge, hvor du satte den.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String seasonNoRoom(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other:
+          '$n træninger blev udeladt, fordi de valgte træninger var længere end den tid, der var tilbage i ugen.',
+      one: '1 træning blev udeladt, fordi den valgte træning var længere end den tid, der var tilbage i ugen.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String seasonMovedHardNearEvent(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other:
+          '$n hårde træninger, du flyttede, ligger i de rolige dage efter et arrangement. Planen lader dem ligge, hvor du satte dem.',
+      one: '1 hård træning, du flyttede, ligger i de rolige dage efter et arrangement. Planen lader den ligge, hvor du satte den.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get seasonEventWeeks =>
+      'I arrangementsuger tæller arrangementet som træning, så resten af ugen er lettere.';
+
+  @override
+  String seasonUnmet(int n, String detail) {
+    return 'I $n uger rummer træningsdagene ikke alle beskyttede træninger: $detail';
+  }
+
+  @override
+  String seasonNoHistory(String sport, String priority) {
+    return 'Din historik har ingen nylig træning ($sport), så planen for $priority-målet er foreløbig.';
+  }
+
+  @override
+  String get zoneRecovery => 'Restitution';
+
+  @override
+  String workoutSentKeptInFjelia(String provider, String items) {
+    return 'Sendt til $provider. Kun i Fjelia: $items.';
+  }
+
+  @override
+  String paceGuideRange(String low, String high) {
+    return 'Tempoguide $low til $high';
+  }
+
+  @override
+  String get paceGuideFromGoal => ', beregnet ud fra dit mål';
+
+  @override
+  String paceGuideGoalFlat(String pace) {
+    return ' · måltempo på fladt terræn $pace';
+  }
+
+  @override
+  String get paceGuideHeartRateDecides => 'Pulsen bestemmer.';
+
+  @override
+  String get moveKeyRestDay => 'hviledag';
+
+  @override
+  String get moveKeyEvent => 'arrangement';
+
+  @override
+  String get moveKeyEasyOnly => 'kun rolig';
+
+  @override
+  String get moveKeyHasSession => 'har en træning';
+
+  @override
+  String get calendarCompleted => 'Gennemført';
+
+  @override
+  String get calendarPlanned => 'Planlagt';
 }

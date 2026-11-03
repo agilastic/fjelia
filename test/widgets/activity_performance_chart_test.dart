@@ -135,6 +135,39 @@ void main() {
     }
   });
 
+  testWidgets('in German the pace axis still reads as pace', (tester) async {
+    tester.view.physicalSize = const Size(393, 1100);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(
+      ProviderScope(
+        child: MaterialApp(
+          locale: const Locale('de'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          theme: AppTheme.dark(),
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: ActivityPerformanceChart(
+                activity: run(),
+                fullscreen: true,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.text('Tempo (min/km)'), findsOneWidget);
+    // 5′30″ style labels, never the negated plot values.
+    expect(find.textContaining('′'), findsWidgets);
+    expect(find.textContaining(RegExp(r'^-\d')), findsNothing);
+    // The HR row draws its zone colours, as in English.
+    final hr = tester.widgetList<LineChart>(find.byType(LineChart)).first.data;
+    expect(hr.lineBarsData.single.gradient, isNotNull);
+  });
+
   testWidgets('a ride shows speed without the stops at zero', (tester) async {
     final r = run();
     final ride = GarminActivity(

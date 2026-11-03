@@ -48,6 +48,7 @@ class SeasonReport {
     required this.weeks,
     required this.confidence,
     required this.summary,
+    this.summaryCodes = const [],
     required this.goals,
   });
 
@@ -61,6 +62,10 @@ class SeasonReport {
 
   /// Plain sentences about the trade-offs of the whole season.
   final List<String> summary;
+
+  /// The same sentences as a code and its numbers, so the app can say them
+  /// in the athlete's language; [summary] stays English for the coach.
+  final List<Map<String, Object>> summaryCodes;
 
   /// Id to name, priority, sport and date of every goal planned.
   final Map<String, Map<String, String>> goals;
@@ -78,6 +83,7 @@ class SeasonReport {
     'conflicts': [for (final c in conflicts) c.toJson()],
     'confidence': confidence,
     'summary': summary,
+    if (summaryCodes.isNotEmpty) 'summaryCodes': summaryCodes,
     'weeks': [for (final w in weeks) w.toJson()],
   };
 
@@ -104,33 +110,44 @@ class SeasonReport {
   }) {
     var outcome = goals.outcome;
     final summary = <String>[];
+    final codes = <Map<String, Object>>[];
+    void say(String text, String code, [Map<String, Object> args = const {}]) {
+      summary.add(text);
+      codes.add({'code': code, ...args});
+    }
 
     // Trade-offs of the weeks, told once for the season.
     final shortened = allocations.where(
       (a) => a.tradeoffs.any((t) => t.contains('shortened')),
     );
     if (shortened.isNotEmpty) {
-      summary.add(
+      say(
         'In ${shortened.length} of ${allocations.length} weeks the weekly '
-        'time cannot hold the full long sessions of every goal, so they are '
-        'shortened together.',
+            'time cannot hold the full long sessions of every goal, so they are '
+            'shortened together.',
+        'shortened',
+        {'n': shortened.length, 'of': allocations.length},
       );
     }
     final alternating = allocations.where(
       (a) => a.tradeoffs.any((t) => t.contains('turn')),
     );
     if (alternating.isNotEmpty) {
-      summary.add(
+      say(
         'In ${alternating.length} weeks the week cannot hold every long '
-        'session; the sports take turns.',
+            'session; the sports take turns.',
+        'alternating',
+        {'n': alternating.length},
       );
     }
     final away = weeks.where((w) => w.notes.contains('longAwayFromUsualDay'));
     if (away.isNotEmpty) {
-      summary.add(
+      say(
         'In ${away.length} weeks a long session of over two and a half '
-        'hours sits away from its usual day, because of your rest days and '
-        'the other sessions.',
+            'hours sits away from its usual day, because of your rest days and '
+            'the other sessions.',
+        'longAway',
+        {'n': away.length},
       );
     }
     // Sessions the athlete moved are kept; where they clash with an event,
@@ -141,44 +158,53 @@ class SeasonReport {
     );
     final onto = noted('movedOntoEvent');
     if (onto > 0) {
-      summary.add(
+      say(
         '$onto ${onto == 1 ? 'session' : 'sessions'} you moved '
-        '${onto == 1 ? 'sits' : 'sit'} on an event day or the rest day before '
-        'it. The plan keeps ${onto == 1 ? 'it' : 'them'} where you put '
-        '${onto == 1 ? 'it' : 'them'}.',
+            '${onto == 1 ? 'sits' : 'sit'} on an event day or the rest day before '
+            'it. The plan keeps ${onto == 1 ? 'it' : 'them'} where you put '
+            '${onto == 1 ? 'it' : 'them'}.',
+        'movedOntoEvent',
+        {'n': onto},
       );
     }
     final dropped = noted('noRoom');
     if (dropped > 0) {
-      summary.add(
+      say(
         '$dropped ${dropped == 1 ? 'session was' : 'sessions were'} left out '
-        'because the workouts chosen for them ran longer than the time left '
-        'in the week.',
+            'because the workouts chosen for them ran longer than the time left '
+            'in the week.',
+        'noRoom',
+        {'n': dropped},
       );
     }
     final hard = noted('movedHardNearEvent');
     if (hard > 0) {
-      summary.add(
+      say(
         '$hard hard ${hard == 1 ? 'session' : 'sessions'} you moved '
-        '${hard == 1 ? 'sits' : 'sit'} in the easy days after an event. The '
-        'plan keeps ${hard == 1 ? 'it' : 'them'} where you put '
-        '${hard == 1 ? 'it' : 'them'}.',
+            '${hard == 1 ? 'sits' : 'sit'} in the easy days after an event. The '
+            'plan keeps ${hard == 1 ? 'it' : 'them'} where you put '
+            '${hard == 1 ? 'it' : 'them'}.',
+        'movedHardNearEvent',
+        {'n': hard},
       );
     }
     final events = allocations.where(
       (a) => a.tradeoffs.any((t) => t.contains('count as training')),
     );
     if (events.isNotEmpty) {
-      summary.add(
+      say(
         'Event weeks count the event as training, so the rest of the week '
-        'is lighter.',
+            'is lighter.',
+        'eventWeeks',
       );
     }
     final unmet = allocations.where((a) => a.unmet.isNotEmpty).toList();
     if (unmet.isNotEmpty) {
-      summary.add(
+      say(
         'In ${unmet.length} weeks the training days do not hold every '
-        'protected session: ${unmet.first.unmet.first}',
+            'protected session: ${unmet.first.unmet.first}',
+        'unmet',
+        {'n': unmet.length, 'detail': unmet.first.unmet.first},
       );
       outcome = outcome.worse(
         unmet.length * 2 >
@@ -200,10 +226,12 @@ class SeasonReport {
       confidence[g.sport] = level;
       if (level == 'none' && g.priority != GoalPriority.c) {
         outcome = outcome.worse(FeasibilityOutcome.insufficientData);
-        summary.add(
+        say(
           'There is no recent ${g.sport.replaceAll('_', ' ')} in your '
-          'history, so the plan for the ${g.priority.name.toUpperCase()} goal '
-          'is provisional.',
+              'history, so the plan for the ${g.priority.name.toUpperCase()} goal '
+              'is provisional.',
+          'noHistory',
+          {'sport': g.sport, 'priority': g.priority.name.toUpperCase()},
         );
       }
     }
@@ -214,6 +242,7 @@ class SeasonReport {
       weeks: weeks,
       confidence: confidence,
       summary: summary,
+      summaryCodes: codes,
       goals: {
         for (final g in goals.active)
           g.id: {

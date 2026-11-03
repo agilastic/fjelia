@@ -297,14 +297,24 @@ class _MoveWorkoutCardState extends State<MoveWorkoutCard> {
             ),
           ),
           const SizedBox(height: 8),
-          const Wrap(
+          Wrap(
             spacing: 14,
             runSpacing: 4,
             children: [
-              _Key(icon: Icons.nightlight_outlined, text: 'rest day'),
-              _Key(icon: Icons.flag, text: 'event'),
-              _Key(icon: Icons.self_improvement, text: 'easy only'),
-              _Key(icon: Icons.circle, text: 'has a session', small: true),
+              _Key(
+                icon: Icons.nightlight_outlined,
+                text: context.l10n.moveKeyRestDay,
+              ),
+              _Key(icon: Icons.flag, text: context.l10n.moveKeyEvent),
+              _Key(
+                icon: Icons.self_improvement,
+                text: context.l10n.moveKeyEasyOnly,
+              ),
+              _Key(
+                icon: Icons.circle,
+                text: context.l10n.moveKeyHasSession,
+                small: true,
+              ),
             ],
           ),
         ],

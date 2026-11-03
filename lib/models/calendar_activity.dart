@@ -1,3 +1,5 @@
+import '../l10n/l10n_ext.dart';
+
 class CalendarActivity {
   const CalendarActivity({
     required this.date,
@@ -21,8 +23,8 @@ class CalendarActivity {
 
   /// Short status for tooltips and screen readers.
   String get statusLabel => skipped
-      ? (skipReason == null ? 'Skipped' : 'Skipped · $skipReason')
+      ? (skipReason == null ? tr.skipped : '${tr.skipped} · $skipReason')
       : completed
-      ? 'Completed'
-      : 'Planned';
+      ? tr.calendarCompleted
+      : tr.calendarPlanned;
 }

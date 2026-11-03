@@ -136,8 +136,10 @@ class ActivityPerformanceChart extends ConsumerWidget {
       (String, Color, List<FlSpot>, (double, double)?) row,
       bool last,
     ) {
-      final hr = row.$1.startsWith('HR');
-      final pace = row.$1.startsWith('PACE');
+      // By the label this row was added with, in the app's language: an
+      // English prefix test missed both rows in every other language.
+      final hr = row.$1 == context.l10n.hrBpm;
+      final pace = running && row.$1 == context.l10n.paceMinKm;
       final ys = [
         for (final p in row.$3)
           if (!p.isNull()) p.y,

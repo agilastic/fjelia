@@ -1,3 +1,6 @@
+import '../l10n/plan_text.dart';
+import '../l10n/l10n_ext.dart';
+
 import 'package:flutter/material.dart';
 
 import '../models/planned_workout_presentation.dart';
@@ -46,7 +49,7 @@ class WorkoutStructureList extends StatelessWidget {
                         TextSpan(
                           children: [
                             TextSpan(
-                              text: step.amount,
+                              text: stepAmountLabel(context.l10n, step.amount),
                               style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
@@ -54,7 +57,8 @@ class WorkoutStructureList extends StatelessWidget {
                             ),
                             if (step.label.isNotEmpty)
                               TextSpan(
-                                text: '  ${step.label}',
+                                text:
+                                    '  ${stepRoleLabel(context.l10n, step.label)}',
                                 style: const TextStyle(color: Colors.white70),
                               ),
                             if (step.zone != null && step.target == null)

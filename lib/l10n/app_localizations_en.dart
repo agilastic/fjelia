@@ -6588,4 +6588,291 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get waistFromProfile => 'From your profile, not dated';
+
+  @override
+  String get phaseBase => 'BASE';
+
+  @override
+  String get phaseBuild => 'BUILD';
+
+  @override
+  String get phasePeak => 'PEAK';
+
+  @override
+  String get phaseTaper => 'TAPER';
+
+  @override
+  String get phaseRecovery => 'RECOVERY';
+
+  @override
+  String get phaseRace => 'RACE';
+
+  @override
+  String get sessionTypeKey => 'KEY';
+
+  @override
+  String get sessionTypeLong => 'LONG';
+
+  @override
+  String get sessionTypeRecovery => 'RECOVERY';
+
+  @override
+  String get sessionTypeAssessment => 'TEST';
+
+  @override
+  String get sessionTypeEndurance => 'ENDURANCE';
+
+  @override
+  String get sessionTypeStrength => 'STRENGTH';
+
+  @override
+  String get sessionTypeYoga => 'YOGA';
+
+  @override
+  String get sessionStatusCompleted => 'COMPLETED';
+
+  @override
+  String get sessionStatusAdapted => 'ADAPTED';
+
+  @override
+  String get stepWarmUp => 'Warm-up';
+
+  @override
+  String get stepCoolDown => 'Cool-down';
+
+  @override
+  String get stepRecovery => 'Recovery';
+
+  @override
+  String get stepRest => 'Rest';
+
+  @override
+  String get stepInterval => 'Interval';
+
+  @override
+  String get stepWorkout => 'Workout';
+
+  @override
+  String stepRepeat(int n) {
+    return '$n× repeat';
+  }
+
+  @override
+  String get stepOpenEnded => 'Open-ended';
+
+  @override
+  String stepSeconds(int n) {
+    return '$n sec';
+  }
+
+  @override
+  String get objectiveOptionalVariety =>
+      'Optional variety you chose in the settings';
+
+  @override
+  String get objectiveStrengthSupport => 'Strength to support your training';
+
+  @override
+  String objectiveIntervals(String goal) {
+    return 'Intervals for $goal';
+  }
+
+  @override
+  String objectiveSteady(String sport, String goal) {
+    return 'Steady quality $sport for $goal';
+  }
+
+  @override
+  String objectiveEasyRecovery(String sport, String goal) {
+    return 'Easy $sport: recovery around $goal';
+  }
+
+  @override
+  String objectiveEasyEndurance(String sport, String goal) {
+    return 'Easy endurance $sport for $goal';
+  }
+
+  @override
+  String objectiveLong(String sport, String goal) {
+    return 'Long $sport for $goal';
+  }
+
+  @override
+  String unmetWeekMinutes(int minutes, String sport, String goal) {
+    return 'The week holds $minutes min, too little for a long $sport for $goal.';
+  }
+
+  @override
+  String unmetWeekHours(String hours, String what) {
+    return 'The week holds $hours h, too little for $what.';
+  }
+
+  @override
+  String unmetTrainingDays(String what) {
+    return 'Not enough training days for $what.';
+  }
+
+  @override
+  String get altMoveOneEvent => 'Move one of the events';
+
+  @override
+  String get altMarkOneCancelled => 'Mark one as cancelled';
+
+  @override
+  String altMakePriorityB(String goal) {
+    return 'Make $goal priority B';
+  }
+
+  @override
+  String altSkipGoal(String goal) {
+    return 'Skip $goal';
+  }
+
+  @override
+  String altTreatAsTraining(String goal) {
+    return 'Treat $goal as a training event';
+  }
+
+  @override
+  String altControlledEffort(String goal) {
+    return 'Ride $goal as a controlled effort';
+  }
+
+  @override
+  String conflictSameDay(String a, String b) {
+    return '$a and $b are on the same day. Only one can be raced.';
+  }
+
+  @override
+  String conflictBothPriorityA(String a, String b, int gap, int more) {
+    return '$a and $b are both priority A, $gap days apart. Recovery after the first and sharpening for the second need $more more days than that.';
+  }
+
+  @override
+  String conflictFlexibleOverlap(
+    String a,
+    String b,
+    int gap,
+    int overlap,
+    String skip,
+  ) {
+    return '$a and $b are $gap days apart and overlap by $overlap days. $skip is marked flexible: dropping it would free the weeks before the other event.';
+  }
+
+  @override
+  String conflictRecoveryOverlap(String a, String b, int gap, int overlap) {
+    return '$a and $b are $gap days apart: recovery after the first overlaps sharpening for the second by $overlap days. The lower priority preparation is limited to protect the other.';
+  }
+
+  @override
+  String conflictTightSpacing(String a, String b, int gap, int spare) {
+    return '$a and $b are $gap days apart. Recovery and sharpening fit with $spare days to spare, so any setback leaves no room.';
+  }
+
+  @override
+  String seasonShortened(int n, int of) {
+    return 'In $n of $of weeks the weekly time cannot hold the full long sessions of every goal, so they are shortened together.';
+  }
+
+  @override
+  String seasonAlternating(int n) {
+    return 'In $n weeks the week cannot hold every long session; the sports take turns.';
+  }
+
+  @override
+  String seasonLongAway(int n) {
+    return 'In $n weeks a long session of over two and a half hours sits away from its usual day, because of your rest days and the other sessions.';
+  }
+
+  @override
+  String seasonMovedOntoEvent(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other:
+          '$n sessions you moved sit on an event day or the rest day before it. The plan keeps them where you put them.',
+      one: '1 session you moved sits on an event day or the rest day before it. The plan keeps it where you put it.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String seasonNoRoom(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other:
+          '$n sessions were left out because the workouts chosen for them ran longer than the time left in the week.',
+      one: '1 session was left out because the workouts chosen for it ran longer than the time left in the week.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String seasonMovedHardNearEvent(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other:
+          '$n hard sessions you moved sit in the easy days after an event. The plan keeps them where you put them.',
+      one: '1 hard session you moved sits in the easy days after an event. The plan keeps it where you put it.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get seasonEventWeeks =>
+      'Event weeks count the event as training, so the rest of the week is lighter.';
+
+  @override
+  String seasonUnmet(int n, String detail) {
+    return 'In $n weeks the training days do not hold every protected session: $detail';
+  }
+
+  @override
+  String seasonNoHistory(String sport, String priority) {
+    return 'There is no recent $sport in your history, so the plan for the $priority goal is provisional.';
+  }
+
+  @override
+  String get zoneRecovery => 'Recovery';
+
+  @override
+  String workoutSentKeptInFjelia(String provider, String items) {
+    return 'Sent to $provider. Kept in Fjelia only: $items.';
+  }
+
+  @override
+  String paceGuideRange(String low, String high) {
+    return 'Pace guide $low to $high';
+  }
+
+  @override
+  String get paceGuideFromGoal => ', estimated from your goal';
+
+  @override
+  String paceGuideGoalFlat(String pace) {
+    return ' · goal pace on the flat $pace';
+  }
+
+  @override
+  String get paceGuideHeartRateDecides => 'Heart rate decides.';
+
+  @override
+  String get moveKeyRestDay => 'rest day';
+
+  @override
+  String get moveKeyEvent => 'event';
+
+  @override
+  String get moveKeyEasyOnly => 'easy only';
+
+  @override
+  String get moveKeyHasSession => 'has a session';
+
+  @override
+  String get calendarCompleted => 'Completed';
+
+  @override
+  String get calendarPlanned => 'Planned';
 }

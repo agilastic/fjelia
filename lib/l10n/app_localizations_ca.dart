@@ -6654,4 +6654,292 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get waistFromProfile => 'Del teu perfil, sense data';
+
+  @override
+  String get phaseBase => 'BASE';
+
+  @override
+  String get phaseBuild => 'DESENVOLUPAMENT';
+
+  @override
+  String get phasePeak => 'PIC';
+
+  @override
+  String get phaseTaper => 'AFINAMENT';
+
+  @override
+  String get phaseRecovery => 'RECUPERACIÓ';
+
+  @override
+  String get phaseRace => 'CURSA';
+
+  @override
+  String get sessionTypeKey => 'CLAU';
+
+  @override
+  String get sessionTypeLong => 'LLARG';
+
+  @override
+  String get sessionTypeRecovery => 'RECUPERACIÓ';
+
+  @override
+  String get sessionTypeAssessment => 'TEST';
+
+  @override
+  String get sessionTypeEndurance => 'RESISTÈNCIA';
+
+  @override
+  String get sessionTypeStrength => 'FORÇA';
+
+  @override
+  String get sessionTypeYoga => 'IOGA';
+
+  @override
+  String get sessionStatusCompleted => 'COMPLETAT';
+
+  @override
+  String get sessionStatusAdapted => 'ADAPTAT';
+
+  @override
+  String get stepWarmUp => 'Escalfament';
+
+  @override
+  String get stepCoolDown => 'Tornada a la calma';
+
+  @override
+  String get stepRecovery => 'Recuperació';
+
+  @override
+  String get stepRest => 'Descans';
+
+  @override
+  String get stepInterval => 'Interval';
+
+  @override
+  String get stepWorkout => 'Entrenament';
+
+  @override
+  String stepRepeat(int n) {
+    return '$n× repetir';
+  }
+
+  @override
+  String get stepOpenEnded => 'Sense final';
+
+  @override
+  String stepSeconds(int n) {
+    return '$n s';
+  }
+
+  @override
+  String get objectiveOptionalVariety =>
+      'Varietat opcional triada a la configuració';
+
+  @override
+  String get objectiveStrengthSupport =>
+      'Força per donar suport al teu entrenament';
+
+  @override
+  String objectiveIntervals(String goal) {
+    return 'Intervals per a $goal';
+  }
+
+  @override
+  String objectiveSteady(String sport, String goal) {
+    return '$sport: sessió de qualitat constant per a $goal';
+  }
+
+  @override
+  String objectiveEasyRecovery(String sport, String goal) {
+    return '$sport suau: recuperació al voltant de $goal';
+  }
+
+  @override
+  String objectiveEasyEndurance(String sport, String goal) {
+    return '$sport: resistència suau per a $goal';
+  }
+
+  @override
+  String objectiveLong(String sport, String goal) {
+    return '$sport: sessió llarga per a $goal';
+  }
+
+  @override
+  String unmetWeekMinutes(int minutes, String sport, String goal) {
+    return 'La setmana té $minutes min, massa poc per a una sessió llarga ($sport) per a $goal.';
+  }
+
+  @override
+  String unmetWeekHours(String hours, String what) {
+    return 'La setmana té $hours h, massa poc per a: $what.';
+  }
+
+  @override
+  String unmetTrainingDays(String what) {
+    return 'No hi ha prou dies d’entrenament per a: $what.';
+  }
+
+  @override
+  String get altMoveOneEvent => 'Moure un dels esdeveniments';
+
+  @override
+  String get altMarkOneCancelled => 'Marcar-ne un com a cancel·lat';
+
+  @override
+  String altMakePriorityB(String goal) {
+    return 'Posar $goal amb prioritat B';
+  }
+
+  @override
+  String altSkipGoal(String goal) {
+    return 'Saltar $goal';
+  }
+
+  @override
+  String altTreatAsTraining(String goal) {
+    return 'Fer $goal com a cursa d’entrenament';
+  }
+
+  @override
+  String altControlledEffort(String goal) {
+    return 'Fer $goal amb un esforç controlat';
+  }
+
+  @override
+  String conflictSameDay(String a, String b) {
+    return '$a i $b són el mateix dia. Només se’n pot córrer una.';
+  }
+
+  @override
+  String conflictBothPriorityA(String a, String b, int gap, int more) {
+    return '$a i $b tenen tots dos prioritat A i estan a $gap dies. La recuperació després del primer i la posada a punt per al segon necessiten $more dies més.';
+  }
+
+  @override
+  String conflictFlexibleOverlap(
+    String a,
+    String b,
+    int gap,
+    int overlap,
+    String skip,
+  ) {
+    return '$a i $b estan a $gap dies i se solapen $overlap dies. $skip està marcat com a flexible: descartar-lo alliberaria les setmanes abans de l’altre esdeveniment.';
+  }
+
+  @override
+  String conflictRecoveryOverlap(String a, String b, int gap, int overlap) {
+    return '$a i $b estan a $gap dies: la recuperació després del primer se solapa $overlap dies amb la posada a punt per al segon. La preparació de menor prioritat es limita per protegir l’altra.';
+  }
+
+  @override
+  String conflictTightSpacing(String a, String b, int gap, int spare) {
+    return '$a i $b estan a $gap dies. Recuperació i posada a punt hi caben amb $spare dies de marge: qualsevol contratemps no deixa espai.';
+  }
+
+  @override
+  String seasonShortened(int n, int of) {
+    return 'En $n de $of setmanes el temps setmanal no arriba per a totes les sessions llargues de cada objectiu, així que s’escurcen juntes.';
+  }
+
+  @override
+  String seasonAlternating(int n) {
+    return 'En $n setmanes no hi caben totes les sessions llargues; els esports s’alternen.';
+  }
+
+  @override
+  String seasonLongAway(int n) {
+    return 'En $n setmanes una sessió llarga de més de dues hores i mitja no és al seu dia habitual, pels teus dies de descans i les altres sessions.';
+  }
+
+  @override
+  String seasonMovedOntoEvent(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other:
+          '$n sessions que has mogut cauen en un dia d’esdeveniment o en el descans previ. El pla les deixa on les vas posar.',
+      one: '1 sessió que has mogut cau en un dia d’esdeveniment o en el descans previ. El pla la deixa on la vas posar.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String seasonNoRoom(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other:
+          'S’han tret $n sessions perquè els entrenaments triats duraven més que el temps que quedava a la setmana.',
+      one: 'S’ha tret 1 sessió perquè l’entrenament triat durava més que el temps que quedava a la setmana.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String seasonMovedHardNearEvent(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other:
+          '$n sessions dures que has mogut cauen en els dies suaus després d’un esdeveniment. El pla les deixa on les vas posar.',
+      one: '1 sessió dura que has mogut cau en els dies suaus després d’un esdeveniment. El pla la deixa on la vas posar.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get seasonEventWeeks =>
+      'A les setmanes d’esdeveniment, l’esdeveniment compta com a entrenament, així que la resta de la setmana és més lleugera.';
+
+  @override
+  String seasonUnmet(int n, String detail) {
+    return 'En $n setmanes els dies d’entrenament no contenen totes les sessions protegides: $detail';
+  }
+
+  @override
+  String seasonNoHistory(String sport, String priority) {
+    return 'No hi ha entrenament recent ($sport) al teu historial, així que el pla per a l’objectiu $priority és provisional.';
+  }
+
+  @override
+  String get zoneRecovery => 'Recuperació';
+
+  @override
+  String workoutSentKeptInFjelia(String provider, String items) {
+    return 'Enviat a $provider. Només a Fjelia: $items.';
+  }
+
+  @override
+  String paceGuideRange(String low, String high) {
+    return 'Guia de ritme de $low a $high';
+  }
+
+  @override
+  String get paceGuideFromGoal => ', estimat a partir del teu objectiu';
+
+  @override
+  String paceGuideGoalFlat(String pace) {
+    return ' · ritme objectiu en pla $pace';
+  }
+
+  @override
+  String get paceGuideHeartRateDecides => 'Decideix la freqüència cardíaca.';
+
+  @override
+  String get moveKeyRestDay => 'dia de descans';
+
+  @override
+  String get moveKeyEvent => 'esdeveniment';
+
+  @override
+  String get moveKeyEasyOnly => 'només suau';
+
+  @override
+  String get moveKeyHasSession => 'té sessió';
+
+  @override
+  String get calendarCompleted => 'Completat';
+
+  @override
+  String get calendarPlanned => 'Planificat';
 }

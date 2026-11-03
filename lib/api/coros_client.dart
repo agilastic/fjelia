@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
@@ -525,6 +526,54 @@ class CorosClient {
             ?.cast<Map<String, dynamic>>() ??
         const [];
     return days;
+  }
+
+  // ── original file export ──────────────────────────────────────────────────
+
+  /// COROS export formats: FIT (4) carries everything, TCX (3) at least
+  /// the per-second heart rate and speed.
+  static const fitFileType = '4', tcxFileType = '3';
+
+  /// One activity exported as [fileType], with the per-second records the
+  /// summary list leaves out (heart rate, speed, moving time, RR). Null on
+  /// any failure: the activity is then kept with its summary only.
+  Future<Uint8List?> activityFile(
+    String labelId,
+    int? sportType, {
+    String fileType = fitFileType,
+  }) async {
+    final a = _auth;
+    if (a == null) return null;
+    try {
+      final uri = Uri.parse('${_base(a.region)}/activity/detail/download')
+          .replace(
+            queryParameters: {
+              'labelId': labelId,
+              'sportType': '$sportType',
+              'fileType': fileType,
+              'accessToken': a.accessToken,
+            },
+          );
+      final response = await _http
+          .post(uri, headers: _headers())
+          .timeout(_timeout);
+      final json = jsonDecode(response.body) as Map<String, dynamic>;
+      if (json['result'] != '0000') {
+        log('[Coros] file $fileType URL error: ${json['message']}');
+        return null;
+      }
+      final url = (json['data'] as Map?)?['fileUrl'] as String?;
+      if (url == null) return null;
+      final file = await _http.get(Uri.parse(url)).timeout(_timeout);
+      if (file.statusCode != 200) {
+        log('[Coros] file $fileType fetch HTTP ${file.statusCode}');
+        return null;
+      }
+      return file.bodyBytes;
+    } catch (e) {
+      log('[Coros] file $fileType download error for $labelId: $e');
+      return null;
+    }
   }
 
   // ── GPX track export ──────────────────────────────────────────────────────

@@ -2,6 +2,8 @@ import 'dart:typed_data';
 
 import 'package:fit_sdk/fit_sdk.dart';
 
+import 'fit_decode.dart';
+
 /// Source-reported totals and timed records from an activity FIT export.
 /// Timer time, elapsed time and moving time are deliberately kept separate.
 class FitActivityData {
@@ -48,7 +50,7 @@ FitActivityData? parseFitActivity(Uint8List bytes) {
   final samples = <Map<String, num>>[];
   final route = <Map<String, double>>[];
   final rr = <double>[];
-  final decoder = Decode();
+  final decoder = FitDecode();
   decoder.onMesg = (message) {
     if (message.num == MesgNum.hrv) {
       // Up to five intervals per message, in seconds; 0xFFFF marks none.
