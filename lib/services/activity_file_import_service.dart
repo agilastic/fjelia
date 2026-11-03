@@ -291,6 +291,11 @@ class ActivityFileImportService {
     if (file == null || !preview.canImport) return false;
     final metrics = file.samples.isEmpty ? null : jsonEncode(file.samples);
     final type = file.type;
+    // Importing a file the athlete deleted before is a choice to have it
+    // back: the deletion is forgotten, or the insert below would be ignored.
+    await (_db.delete(
+      _db.deletedActivities,
+    )..where((t) => t.activityId.equals(file.activityId))).go();
     final cyclingLike = activityKind(type) == ActivityKind.cycling;
     final zones = type == 'swimming'
         ? null

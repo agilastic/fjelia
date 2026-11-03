@@ -110,6 +110,15 @@ void main() {
     },
   );
 
+  test('a deleted activity is neither downloaded nor stored again', () async {
+    await service().sync(days: 7);
+    await db.deleteActivityByUser('coros:L1');
+    requests.clear();
+    await service().sync(days: 7);
+    expect(downloads(), 0);
+    expect(await db.select(db.activityRecords).get(), isEmpty);
+  });
+
   test('a FIT file inside a ZIP is unpacked', () async {
     zipped = true;
     await service().sync(days: 7);

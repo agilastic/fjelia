@@ -1,3 +1,4 @@
+import '../../widgets/strava_import_sheet.dart';
 import '../../l10n/formats.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../providers/manual_measurement_provider.dart';
@@ -328,6 +329,7 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
               ('Weight Scale', Icons.monitor_weight_outlined),
               ('Grip Strength', Icons.back_hand_outlined),
               ('Waist Circumference', Icons.straighten),
+              ('Import', Icons.download_outlined),
               ('Polar H10 HRV measurement', Icons.monitor_heart_outlined),
             ])
               SectionCard(
@@ -345,6 +347,8 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
                       showAppSheet(context, const GripStrengthSheet());
                     } else if (e.$1 == 'Waist Circumference') {
                       showAppSheet(context, const WaistSheet());
+                    } else if (e.$1 == 'Import') {
+                      showAppSheet(context, const ImportSheet());
                     } else if (e.$1 == 'Hilo Cuff (BLE)') {
                       cuff();
                     } else if (e.$1 == 'RENPHO Scale (BLE)') {
@@ -423,6 +427,7 @@ String _typeLabel(BuildContext context, String type) => switch (type) {
   'Weight Scale' => context.l10n.typeWeightScale,
   'Grip Strength' => context.l10n.gripStrength,
   'Waist Circumference' => context.l10n.waistCircumference,
+  'Import' => context.l10n.importTitle,
   'Polar H10 HRV measurement' => context.l10n.polarH10HrvMeasurement,
   _ => type,
 };

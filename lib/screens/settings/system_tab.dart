@@ -1,3 +1,6 @@
+import '../../widgets/strava_import_sheet.dart';
+import '../../providers/activity_history_provider.dart';
+import '../../widgets/recently_deleted_sheet.dart';
 import '../../l10n/formats.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../providers/data_export_provider.dart';
@@ -192,6 +195,37 @@ class _ExportState extends ConsumerState<DataExportPage> {
               trailing: const Icon(Icons.chevron_right, size: 20),
               onTap: () =>
                   showAppSheet(context, const ActivityFileImportSheet()),
+            ),
+            ListTile(
+              enabled: !busy,
+              title: Text(context.l10n.stravaArchive),
+              leading: const SettingsIcon(
+                Icons.inventory_2_outlined,
+                Color(0xFFFF7A3D),
+              ),
+              trailing: const Icon(Icons.chevron_right, size: 20),
+              onTap: () => showAppSheet(context, const StravaImportSheet()),
+            ),
+            ListTile(
+              enabled: !busy,
+              title: Text(context.l10n.recentlyDeleted),
+              leading: const SettingsIcon(
+                Icons.delete_outline,
+                Colors.redAccent,
+              ),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if ((ref.watch(deletedActivitiesProvider).valueOrNull ?? [])
+                      .isNotEmpty)
+                    Text(
+                      '${ref.watch(deletedActivitiesProvider).value!.length}',
+                      style: const TextStyle(color: muted),
+                    ),
+                  const Icon(Icons.chevron_right, size: 20),
+                ],
+              ),
+              onTap: () => showAppSheet(context, const RecentlyDeletedSheet()),
             ),
           ],
         ),

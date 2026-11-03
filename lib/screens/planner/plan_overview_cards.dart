@@ -881,10 +881,13 @@ class _SessionTile extends StatelessWidget {
                       const SizedBox(height: 5),
                       Text(
                         skipped
-                            ? '${skipReason ?? 'Skipped'} · ${s.plannedDurationMin} min dropped'
+                            ? context.l10n.sessionDropped(
+                                skipReason ?? context.l10n.skipped,
+                                planDuration(s.plannedDurationMin),
+                              )
                             : done
                             ? 'Done${doneBy == null ? '' : ' · ${_doneSummary(doneBy!)}'}'
-                            : '${s.plannedDurationMin} min · TRIMP ${s.plannedTrimp} · Z${s.primaryZone}',
+                            : '${planDuration(s.plannedDurationMin)} · TRIMP ${s.plannedTrimp} · Z${s.primaryZone}',
                         style: const TextStyle(
                           fontSize: 11,
                           color: Colors.white70,

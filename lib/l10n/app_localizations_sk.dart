@@ -4688,7 +4688,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get removeThisActivityFromThe =>
-      'Odstrániť túto aktivitu z lokálnej histórie? Neskoršia synchronizácia poskytovateľa ju môže znova importovať.';
+      'Odstrániť túto aktivitu? Zostane odstránená aj po ďalšej synchronizácii zariadení. Obnoviť ju môžete v Nastaveniach v časti Nedávno odstránené.';
 
   @override
   String get howDidThisSessionGo =>
@@ -6921,4 +6921,217 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get calendarPlanned => 'Naplánované';
+
+  @override
+  String get recentlyDeleted => 'Nedávno odstránené';
+
+  @override
+  String get recentlyDeletedExplain =>
+      'Odstránené aktivity zostanú odstránené aj pri ďalšej synchronizácii zariadení. Obnovte aktivitu, ak ju chcete späť; jej zdroj potom znova pošle trasu a krivky, ak ich ešte má.';
+
+  @override
+  String get noDeletedActivities => 'Žiadne odstránené aktivity.';
+
+  @override
+  String activityDeleted(String name) {
+    return '$name odstránená';
+  }
+
+  @override
+  String activityRestored(String name) {
+    return '$name obnovená';
+  }
+
+  @override
+  String activityRestoredSummaryOnly(String name) {
+    return '$name obnovená so súhrnnými hodnotami; jej zdroj už neposiela trasu ani krivky.';
+  }
+
+  @override
+  String deletedOn(String date) {
+    return 'odstránená $date';
+  }
+
+  @override
+  String get restore => 'Obnoviť';
+
+  @override
+  String get coachWhyThisToday => 'Prečo tento tréning dnes?';
+
+  @override
+  String get coachHowDidItGo => 'Ako prebehol tento tréning?';
+
+  @override
+  String get coachWhyRestDay => 'Prečo je to deň voľna?';
+
+  @override
+  String get coachWhatInstead => 'Čo mám robiť namiesto toho?';
+
+  @override
+  String get newChat => 'Nový chat';
+
+  @override
+  String weekOfPlanned(String duration) {
+    return 'z $duration plánovaných';
+  }
+
+  @override
+  String get weekDoneNothingPlanned => 'hotovo · žiadne plánované tréningy';
+
+  @override
+  String sessionDropped(String reason, String duration) {
+    return '$reason · $duration vynechaných';
+  }
+
+  @override
+  String get importTitle => 'Import';
+
+  @override
+  String get stravaArchive => 'Archív Strava';
+
+  @override
+  String get stravaArchiveZip => 'Archív Strava (ZIP)';
+
+  @override
+  String get stravaArchiveSubtitle =>
+      'Celá vaša história zo Stravy s trasami a fotkami';
+
+  @override
+  String get stravaIntro =>
+      'Prineste si celú históriu zo Stravy do Fjelie: aktivity s trasou, tepom a výkonom aj s fotkami.';
+
+  @override
+  String get stravaHowTo =>
+      'Na strava.com: Nastavenia → Môj účet → Stiahnuť alebo odstrániť účet → Požiadať o archív. Strava vám pošle e-mailom ZIP; vyberte ho tu tak, ako je, bez rozbaľovania.';
+
+  @override
+  String get stravaChooseZip => 'Vybrať ZIP';
+
+  @override
+  String get stravaReading => 'Číta sa archív…';
+
+  @override
+  String get stravaNotArchive =>
+      'Tento ZIP nie je archív účtu Strava: chýba activities.csv.';
+
+  @override
+  String stravaFound(int count) {
+    return 'Nájdených aktivít: $count';
+  }
+
+  @override
+  String stravaWithFiles(int count) {
+    return 'S záznamom (trasa a krivky): $count';
+  }
+
+  @override
+  String stravaPhotos(int photos, int videos) {
+    return 'Fotky: $photos, videá: $videos';
+  }
+
+  @override
+  String stravaAlready(int count) {
+    return 'Duplikáty: $count, už vo Fjelii alebo dvakrát v Strave: pridajú sa len chýbajúce fotky';
+  }
+
+  @override
+  String stravaDeletedSkip(int count) {
+    return 'Skôr odstránené, preskočené: $count';
+  }
+
+  @override
+  String stravaNew(int count) {
+    return 'Nové: $count';
+  }
+
+  @override
+  String stravaStorage(int mb) {
+    return 'približne $mb MB na fotky a videá';
+  }
+
+  @override
+  String get stravaPrivacy =>
+      'Všetko sa číta v tomto zariadení. Nič sa nenahráva a prihlásenie do Stravy netreba.';
+
+  @override
+  String stravaImportButton(int count) {
+    return 'Importovať aktivity: $count';
+  }
+
+  @override
+  String get stravaImporting => 'Importuje sa archív Strava';
+
+  @override
+  String stravaProgressActivities(String done, String total) {
+    return 'Aktivity: $done / $total';
+  }
+
+  @override
+  String stravaImportedCount(int count) {
+    return 'Importované aktivity: $count';
+  }
+
+  @override
+  String stravaProgressPhotos(int count) {
+    return 'Fotky: $count importovaných';
+  }
+
+  @override
+  String stravaProgressDuplicates(int count) {
+    return 'Duplikáty: $count preskočených';
+  }
+
+  @override
+  String stravaProgressDeleted(int count) {
+    return 'Skôr odstránené: $count preskočených';
+  }
+
+  @override
+  String stravaProgressErrors(int count) {
+    return 'Chyby: $count';
+  }
+
+  @override
+  String get stravaKeepOpen =>
+      'Medzitým môžete aplikáciu používať. Nechajte Fjeliu otvorenú, kým sa import neskončí.';
+
+  @override
+  String get stravaComplete => 'Import zo Stravy dokončený';
+
+  @override
+  String get stravaPartial => 'Import zo Stravy neúplný';
+
+  @override
+  String get stravaCancelled => 'Import zo Stravy zrušený';
+
+  @override
+  String get stravaShowErrors => 'Zobraziť chyby';
+
+  @override
+  String get stravaAgainHint =>
+      'Opätovný import toho istého archívu doplní len to, čo ešte chýba.';
+
+  @override
+  String get renameActivity => 'Premenovať aktivitu';
+
+  @override
+  String get activityTitleLabel => 'Názov';
+
+  @override
+  String get activityTitleKept =>
+      'Váš názov zostane aj pri ďalšej synchronizácii. Zmení sa len vo Fjelii, nie na platforme, odkiaľ aktivita pochádza.';
+
+  @override
+  String originalTitle(String name) {
+    return 'Pôvodný: $name';
+  }
+
+  @override
+  String get useOriginalTitle => 'Použiť pôvodný názov';
+
+  @override
+  String get loadOlderActivities => 'Načítať staršie aktivity';
+
+  @override
+  String get noOlderActivities => 'Žiadne staršie aktivity';
 }

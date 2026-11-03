@@ -13909,6 +13909,911 @@ class WaistMeasurementsCompanion extends UpdateCompanion<WaistMeasurement> {
   }
 }
 
+class $DeletedActivitiesTable extends DeletedActivities
+    with TableInfo<$DeletedActivitiesTable, DeletedActivity> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $DeletedActivitiesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _activityIdMeta = const VerificationMeta(
+    'activityId',
+  );
+  @override
+  late final GeneratedColumn<String> activityId = GeneratedColumn<String>(
+    'activity_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _sourceMeta = const VerificationMeta('source');
+  @override
+  late final GeneratedColumn<String> source = GeneratedColumn<String>(
+    'source',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+    'type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _startDateMeta = const VerificationMeta(
+    'startDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> startDate = GeneratedColumn<DateTime>(
+    'start_date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _durationSecondsMeta = const VerificationMeta(
+    'durationSeconds',
+  );
+  @override
+  late final GeneratedColumn<int> durationSeconds = GeneratedColumn<int>(
+    'duration_seconds',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _distanceMetersMeta = const VerificationMeta(
+    'distanceMeters',
+  );
+  @override
+  late final GeneratedColumn<double> distanceMeters = GeneratedColumn<double>(
+    'distance_meters',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _deletedAtMeta = const VerificationMeta(
+    'deletedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> deletedAt = GeneratedColumn<DateTime>(
+    'deleted_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _summaryJsonMeta = const VerificationMeta(
+    'summaryJson',
+  );
+  @override
+  late final GeneratedColumn<String> summaryJson = GeneratedColumn<String>(
+    'summary_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    activityId,
+    source,
+    name,
+    type,
+    startDate,
+    durationSeconds,
+    distanceMeters,
+    deletedAt,
+    summaryJson,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'deleted_activities';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<DeletedActivity> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('activity_id')) {
+      context.handle(
+        _activityIdMeta,
+        activityId.isAcceptableOrUnknown(data['activity_id']!, _activityIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_activityIdMeta);
+    }
+    if (data.containsKey('source')) {
+      context.handle(
+        _sourceMeta,
+        source.isAcceptableOrUnknown(data['source']!, _sourceMeta),
+      );
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+        _typeMeta,
+        type.isAcceptableOrUnknown(data['type']!, _typeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('start_date')) {
+      context.handle(
+        _startDateMeta,
+        startDate.isAcceptableOrUnknown(data['start_date']!, _startDateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_startDateMeta);
+    }
+    if (data.containsKey('duration_seconds')) {
+      context.handle(
+        _durationSecondsMeta,
+        durationSeconds.isAcceptableOrUnknown(
+          data['duration_seconds']!,
+          _durationSecondsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_durationSecondsMeta);
+    }
+    if (data.containsKey('distance_meters')) {
+      context.handle(
+        _distanceMetersMeta,
+        distanceMeters.isAcceptableOrUnknown(
+          data['distance_meters']!,
+          _distanceMetersMeta,
+        ),
+      );
+    }
+    if (data.containsKey('deleted_at')) {
+      context.handle(
+        _deletedAtMeta,
+        deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_deletedAtMeta);
+    }
+    if (data.containsKey('summary_json')) {
+      context.handle(
+        _summaryJsonMeta,
+        summaryJson.isAcceptableOrUnknown(
+          data['summary_json']!,
+          _summaryJsonMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_summaryJsonMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {activityId};
+  @override
+  DeletedActivity map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return DeletedActivity(
+      activityId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}activity_id'],
+      )!,
+      source: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source'],
+      ),
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      type: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}type'],
+      )!,
+      startDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}start_date'],
+      )!,
+      durationSeconds: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}duration_seconds'],
+      )!,
+      distanceMeters: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}distance_meters'],
+      ),
+      deletedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}deleted_at'],
+      )!,
+      summaryJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}summary_json'],
+      )!,
+    );
+  }
+
+  @override
+  $DeletedActivitiesTable createAlias(String alias) {
+    return $DeletedActivitiesTable(attachedDatabase, alias);
+  }
+}
+
+class DeletedActivity extends DataClass implements Insertable<DeletedActivity> {
+  final String activityId;
+  final String? source;
+  final String name;
+  final String type;
+  final DateTime startDate;
+  final int durationSeconds;
+  final double? distanceMeters;
+  final DateTime deletedAt;
+  final String summaryJson;
+  const DeletedActivity({
+    required this.activityId,
+    this.source,
+    required this.name,
+    required this.type,
+    required this.startDate,
+    required this.durationSeconds,
+    this.distanceMeters,
+    required this.deletedAt,
+    required this.summaryJson,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['activity_id'] = Variable<String>(activityId);
+    if (!nullToAbsent || source != null) {
+      map['source'] = Variable<String>(source);
+    }
+    map['name'] = Variable<String>(name);
+    map['type'] = Variable<String>(type);
+    map['start_date'] = Variable<DateTime>(startDate);
+    map['duration_seconds'] = Variable<int>(durationSeconds);
+    if (!nullToAbsent || distanceMeters != null) {
+      map['distance_meters'] = Variable<double>(distanceMeters);
+    }
+    map['deleted_at'] = Variable<DateTime>(deletedAt);
+    map['summary_json'] = Variable<String>(summaryJson);
+    return map;
+  }
+
+  DeletedActivitiesCompanion toCompanion(bool nullToAbsent) {
+    return DeletedActivitiesCompanion(
+      activityId: Value(activityId),
+      source: source == null && nullToAbsent
+          ? const Value.absent()
+          : Value(source),
+      name: Value(name),
+      type: Value(type),
+      startDate: Value(startDate),
+      durationSeconds: Value(durationSeconds),
+      distanceMeters: distanceMeters == null && nullToAbsent
+          ? const Value.absent()
+          : Value(distanceMeters),
+      deletedAt: Value(deletedAt),
+      summaryJson: Value(summaryJson),
+    );
+  }
+
+  factory DeletedActivity.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return DeletedActivity(
+      activityId: serializer.fromJson<String>(json['activityId']),
+      source: serializer.fromJson<String?>(json['source']),
+      name: serializer.fromJson<String>(json['name']),
+      type: serializer.fromJson<String>(json['type']),
+      startDate: serializer.fromJson<DateTime>(json['startDate']),
+      durationSeconds: serializer.fromJson<int>(json['durationSeconds']),
+      distanceMeters: serializer.fromJson<double?>(json['distanceMeters']),
+      deletedAt: serializer.fromJson<DateTime>(json['deletedAt']),
+      summaryJson: serializer.fromJson<String>(json['summaryJson']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'activityId': serializer.toJson<String>(activityId),
+      'source': serializer.toJson<String?>(source),
+      'name': serializer.toJson<String>(name),
+      'type': serializer.toJson<String>(type),
+      'startDate': serializer.toJson<DateTime>(startDate),
+      'durationSeconds': serializer.toJson<int>(durationSeconds),
+      'distanceMeters': serializer.toJson<double?>(distanceMeters),
+      'deletedAt': serializer.toJson<DateTime>(deletedAt),
+      'summaryJson': serializer.toJson<String>(summaryJson),
+    };
+  }
+
+  DeletedActivity copyWith({
+    String? activityId,
+    Value<String?> source = const Value.absent(),
+    String? name,
+    String? type,
+    DateTime? startDate,
+    int? durationSeconds,
+    Value<double?> distanceMeters = const Value.absent(),
+    DateTime? deletedAt,
+    String? summaryJson,
+  }) => DeletedActivity(
+    activityId: activityId ?? this.activityId,
+    source: source.present ? source.value : this.source,
+    name: name ?? this.name,
+    type: type ?? this.type,
+    startDate: startDate ?? this.startDate,
+    durationSeconds: durationSeconds ?? this.durationSeconds,
+    distanceMeters: distanceMeters.present
+        ? distanceMeters.value
+        : this.distanceMeters,
+    deletedAt: deletedAt ?? this.deletedAt,
+    summaryJson: summaryJson ?? this.summaryJson,
+  );
+  DeletedActivity copyWithCompanion(DeletedActivitiesCompanion data) {
+    return DeletedActivity(
+      activityId: data.activityId.present
+          ? data.activityId.value
+          : this.activityId,
+      source: data.source.present ? data.source.value : this.source,
+      name: data.name.present ? data.name.value : this.name,
+      type: data.type.present ? data.type.value : this.type,
+      startDate: data.startDate.present ? data.startDate.value : this.startDate,
+      durationSeconds: data.durationSeconds.present
+          ? data.durationSeconds.value
+          : this.durationSeconds,
+      distanceMeters: data.distanceMeters.present
+          ? data.distanceMeters.value
+          : this.distanceMeters,
+      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
+      summaryJson: data.summaryJson.present
+          ? data.summaryJson.value
+          : this.summaryJson,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DeletedActivity(')
+          ..write('activityId: $activityId, ')
+          ..write('source: $source, ')
+          ..write('name: $name, ')
+          ..write('type: $type, ')
+          ..write('startDate: $startDate, ')
+          ..write('durationSeconds: $durationSeconds, ')
+          ..write('distanceMeters: $distanceMeters, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('summaryJson: $summaryJson')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    activityId,
+    source,
+    name,
+    type,
+    startDate,
+    durationSeconds,
+    distanceMeters,
+    deletedAt,
+    summaryJson,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is DeletedActivity &&
+          other.activityId == this.activityId &&
+          other.source == this.source &&
+          other.name == this.name &&
+          other.type == this.type &&
+          other.startDate == this.startDate &&
+          other.durationSeconds == this.durationSeconds &&
+          other.distanceMeters == this.distanceMeters &&
+          other.deletedAt == this.deletedAt &&
+          other.summaryJson == this.summaryJson);
+}
+
+class DeletedActivitiesCompanion extends UpdateCompanion<DeletedActivity> {
+  final Value<String> activityId;
+  final Value<String?> source;
+  final Value<String> name;
+  final Value<String> type;
+  final Value<DateTime> startDate;
+  final Value<int> durationSeconds;
+  final Value<double?> distanceMeters;
+  final Value<DateTime> deletedAt;
+  final Value<String> summaryJson;
+  final Value<int> rowid;
+  const DeletedActivitiesCompanion({
+    this.activityId = const Value.absent(),
+    this.source = const Value.absent(),
+    this.name = const Value.absent(),
+    this.type = const Value.absent(),
+    this.startDate = const Value.absent(),
+    this.durationSeconds = const Value.absent(),
+    this.distanceMeters = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+    this.summaryJson = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  DeletedActivitiesCompanion.insert({
+    required String activityId,
+    this.source = const Value.absent(),
+    required String name,
+    required String type,
+    required DateTime startDate,
+    required int durationSeconds,
+    this.distanceMeters = const Value.absent(),
+    required DateTime deletedAt,
+    required String summaryJson,
+    this.rowid = const Value.absent(),
+  }) : activityId = Value(activityId),
+       name = Value(name),
+       type = Value(type),
+       startDate = Value(startDate),
+       durationSeconds = Value(durationSeconds),
+       deletedAt = Value(deletedAt),
+       summaryJson = Value(summaryJson);
+  static Insertable<DeletedActivity> custom({
+    Expression<String>? activityId,
+    Expression<String>? source,
+    Expression<String>? name,
+    Expression<String>? type,
+    Expression<DateTime>? startDate,
+    Expression<int>? durationSeconds,
+    Expression<double>? distanceMeters,
+    Expression<DateTime>? deletedAt,
+    Expression<String>? summaryJson,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (activityId != null) 'activity_id': activityId,
+      if (source != null) 'source': source,
+      if (name != null) 'name': name,
+      if (type != null) 'type': type,
+      if (startDate != null) 'start_date': startDate,
+      if (durationSeconds != null) 'duration_seconds': durationSeconds,
+      if (distanceMeters != null) 'distance_meters': distanceMeters,
+      if (deletedAt != null) 'deleted_at': deletedAt,
+      if (summaryJson != null) 'summary_json': summaryJson,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  DeletedActivitiesCompanion copyWith({
+    Value<String>? activityId,
+    Value<String?>? source,
+    Value<String>? name,
+    Value<String>? type,
+    Value<DateTime>? startDate,
+    Value<int>? durationSeconds,
+    Value<double?>? distanceMeters,
+    Value<DateTime>? deletedAt,
+    Value<String>? summaryJson,
+    Value<int>? rowid,
+  }) {
+    return DeletedActivitiesCompanion(
+      activityId: activityId ?? this.activityId,
+      source: source ?? this.source,
+      name: name ?? this.name,
+      type: type ?? this.type,
+      startDate: startDate ?? this.startDate,
+      durationSeconds: durationSeconds ?? this.durationSeconds,
+      distanceMeters: distanceMeters ?? this.distanceMeters,
+      deletedAt: deletedAt ?? this.deletedAt,
+      summaryJson: summaryJson ?? this.summaryJson,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (activityId.present) {
+      map['activity_id'] = Variable<String>(activityId.value);
+    }
+    if (source.present) {
+      map['source'] = Variable<String>(source.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (startDate.present) {
+      map['start_date'] = Variable<DateTime>(startDate.value);
+    }
+    if (durationSeconds.present) {
+      map['duration_seconds'] = Variable<int>(durationSeconds.value);
+    }
+    if (distanceMeters.present) {
+      map['distance_meters'] = Variable<double>(distanceMeters.value);
+    }
+    if (deletedAt.present) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt.value);
+    }
+    if (summaryJson.present) {
+      map['summary_json'] = Variable<String>(summaryJson.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DeletedActivitiesCompanion(')
+          ..write('activityId: $activityId, ')
+          ..write('source: $source, ')
+          ..write('name: $name, ')
+          ..write('type: $type, ')
+          ..write('startDate: $startDate, ')
+          ..write('durationSeconds: $durationSeconds, ')
+          ..write('distanceMeters: $distanceMeters, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('summaryJson: $summaryJson, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ActivityTitlesTable extends ActivityTitles
+    with TableInfo<$ActivityTitlesTable, ActivityTitle> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ActivityTitlesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _activityIdMeta = const VerificationMeta(
+    'activityId',
+  );
+  @override
+  late final GeneratedColumn<String> activityId = GeneratedColumn<String>(
+    'activity_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _originalNameMeta = const VerificationMeta(
+    'originalName',
+  );
+  @override
+  late final GeneratedColumn<String> originalName = GeneratedColumn<String>(
+    'original_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _editedAtMeta = const VerificationMeta(
+    'editedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> editedAt = GeneratedColumn<DateTime>(
+    'edited_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    activityId,
+    title,
+    originalName,
+    editedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'activity_titles';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ActivityTitle> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('activity_id')) {
+      context.handle(
+        _activityIdMeta,
+        activityId.isAcceptableOrUnknown(data['activity_id']!, _activityIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_activityIdMeta);
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('original_name')) {
+      context.handle(
+        _originalNameMeta,
+        originalName.isAcceptableOrUnknown(
+          data['original_name']!,
+          _originalNameMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_originalNameMeta);
+    }
+    if (data.containsKey('edited_at')) {
+      context.handle(
+        _editedAtMeta,
+        editedAt.isAcceptableOrUnknown(data['edited_at']!, _editedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_editedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {activityId};
+  @override
+  ActivityTitle map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ActivityTitle(
+      activityId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}activity_id'],
+      )!,
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      )!,
+      originalName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}original_name'],
+      )!,
+      editedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}edited_at'],
+      )!,
+    );
+  }
+
+  @override
+  $ActivityTitlesTable createAlias(String alias) {
+    return $ActivityTitlesTable(attachedDatabase, alias);
+  }
+}
+
+class ActivityTitle extends DataClass implements Insertable<ActivityTitle> {
+  final String activityId;
+  final String title;
+  final String originalName;
+  final DateTime editedAt;
+  const ActivityTitle({
+    required this.activityId,
+    required this.title,
+    required this.originalName,
+    required this.editedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['activity_id'] = Variable<String>(activityId);
+    map['title'] = Variable<String>(title);
+    map['original_name'] = Variable<String>(originalName);
+    map['edited_at'] = Variable<DateTime>(editedAt);
+    return map;
+  }
+
+  ActivityTitlesCompanion toCompanion(bool nullToAbsent) {
+    return ActivityTitlesCompanion(
+      activityId: Value(activityId),
+      title: Value(title),
+      originalName: Value(originalName),
+      editedAt: Value(editedAt),
+    );
+  }
+
+  factory ActivityTitle.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ActivityTitle(
+      activityId: serializer.fromJson<String>(json['activityId']),
+      title: serializer.fromJson<String>(json['title']),
+      originalName: serializer.fromJson<String>(json['originalName']),
+      editedAt: serializer.fromJson<DateTime>(json['editedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'activityId': serializer.toJson<String>(activityId),
+      'title': serializer.toJson<String>(title),
+      'originalName': serializer.toJson<String>(originalName),
+      'editedAt': serializer.toJson<DateTime>(editedAt),
+    };
+  }
+
+  ActivityTitle copyWith({
+    String? activityId,
+    String? title,
+    String? originalName,
+    DateTime? editedAt,
+  }) => ActivityTitle(
+    activityId: activityId ?? this.activityId,
+    title: title ?? this.title,
+    originalName: originalName ?? this.originalName,
+    editedAt: editedAt ?? this.editedAt,
+  );
+  ActivityTitle copyWithCompanion(ActivityTitlesCompanion data) {
+    return ActivityTitle(
+      activityId: data.activityId.present
+          ? data.activityId.value
+          : this.activityId,
+      title: data.title.present ? data.title.value : this.title,
+      originalName: data.originalName.present
+          ? data.originalName.value
+          : this.originalName,
+      editedAt: data.editedAt.present ? data.editedAt.value : this.editedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ActivityTitle(')
+          ..write('activityId: $activityId, ')
+          ..write('title: $title, ')
+          ..write('originalName: $originalName, ')
+          ..write('editedAt: $editedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(activityId, title, originalName, editedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ActivityTitle &&
+          other.activityId == this.activityId &&
+          other.title == this.title &&
+          other.originalName == this.originalName &&
+          other.editedAt == this.editedAt);
+}
+
+class ActivityTitlesCompanion extends UpdateCompanion<ActivityTitle> {
+  final Value<String> activityId;
+  final Value<String> title;
+  final Value<String> originalName;
+  final Value<DateTime> editedAt;
+  final Value<int> rowid;
+  const ActivityTitlesCompanion({
+    this.activityId = const Value.absent(),
+    this.title = const Value.absent(),
+    this.originalName = const Value.absent(),
+    this.editedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ActivityTitlesCompanion.insert({
+    required String activityId,
+    required String title,
+    required String originalName,
+    required DateTime editedAt,
+    this.rowid = const Value.absent(),
+  }) : activityId = Value(activityId),
+       title = Value(title),
+       originalName = Value(originalName),
+       editedAt = Value(editedAt);
+  static Insertable<ActivityTitle> custom({
+    Expression<String>? activityId,
+    Expression<String>? title,
+    Expression<String>? originalName,
+    Expression<DateTime>? editedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (activityId != null) 'activity_id': activityId,
+      if (title != null) 'title': title,
+      if (originalName != null) 'original_name': originalName,
+      if (editedAt != null) 'edited_at': editedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ActivityTitlesCompanion copyWith({
+    Value<String>? activityId,
+    Value<String>? title,
+    Value<String>? originalName,
+    Value<DateTime>? editedAt,
+    Value<int>? rowid,
+  }) {
+    return ActivityTitlesCompanion(
+      activityId: activityId ?? this.activityId,
+      title: title ?? this.title,
+      originalName: originalName ?? this.originalName,
+      editedAt: editedAt ?? this.editedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (activityId.present) {
+      map['activity_id'] = Variable<String>(activityId.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (originalName.present) {
+      map['original_name'] = Variable<String>(originalName.value);
+    }
+    if (editedAt.present) {
+      map['edited_at'] = Variable<DateTime>(editedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ActivityTitlesCompanion(')
+          ..write('activityId: $activityId, ')
+          ..write('title: $title, ')
+          ..write('originalName: $originalName, ')
+          ..write('editedAt: $editedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $SpotHrvMeasurementsTable extends SpotHrvMeasurements
     with TableInfo<$SpotHrvMeasurementsTable, SpotHrvMeasurement> {
   @override
@@ -44016,6 +44921,17 @@ class $MediaItemsTable extends MediaItems
     type: DriftSqlType.dateTime,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _sourceRefMeta = const VerificationMeta(
+    'sourceRef',
+  );
+  @override
+  late final GeneratedColumn<String> sourceRef = GeneratedColumn<String>(
+    'source_ref',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -44035,6 +44951,7 @@ class $MediaItemsTable extends MediaItems
     longitude,
     position,
     createdAt,
+    sourceRef,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -44161,6 +45078,12 @@ class $MediaItemsTable extends MediaItems
     } else if (isInserting) {
       context.missing(_createdAtMeta);
     }
+    if (data.containsKey('source_ref')) {
+      context.handle(
+        _sourceRefMeta,
+        sourceRef.isAcceptableOrUnknown(data['source_ref']!, _sourceRefMeta),
+      );
+    }
     return context;
   }
 
@@ -44238,6 +45161,10 @@ class $MediaItemsTable extends MediaItems
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
       )!,
+      sourceRef: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source_ref'],
+      ),
     );
   }
 
@@ -44274,6 +45201,10 @@ class MediaItem extends DataClass implements Insertable<MediaItem> {
   final double? longitude;
   final int position;
   final DateTime createdAt;
+
+  /// Where an imported file came from, e.g. `strava:media/….jpg`, so a
+  /// repeated import does not add it twice. Null for the athlete's own.
+  final String? sourceRef;
   const MediaItem({
     required this.id,
     required this.ownerKind,
@@ -44292,6 +45223,7 @@ class MediaItem extends DataClass implements Insertable<MediaItem> {
     this.longitude,
     required this.position,
     required this.createdAt,
+    this.sourceRef,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -44331,6 +45263,9 @@ class MediaItem extends DataClass implements Insertable<MediaItem> {
     }
     map['position'] = Variable<int>(position);
     map['created_at'] = Variable<DateTime>(createdAt);
+    if (!nullToAbsent || sourceRef != null) {
+      map['source_ref'] = Variable<String>(sourceRef);
+    }
     return map;
   }
 
@@ -44371,6 +45306,9 @@ class MediaItem extends DataClass implements Insertable<MediaItem> {
           : Value(longitude),
       position: Value(position),
       createdAt: Value(createdAt),
+      sourceRef: sourceRef == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sourceRef),
     );
   }
 
@@ -44397,6 +45335,7 @@ class MediaItem extends DataClass implements Insertable<MediaItem> {
       longitude: serializer.fromJson<double?>(json['longitude']),
       position: serializer.fromJson<int>(json['position']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      sourceRef: serializer.fromJson<String?>(json['sourceRef']),
     );
   }
   @override
@@ -44420,6 +45359,7 @@ class MediaItem extends DataClass implements Insertable<MediaItem> {
       'longitude': serializer.toJson<double?>(longitude),
       'position': serializer.toJson<int>(position),
       'createdAt': serializer.toJson<DateTime>(createdAt),
+      'sourceRef': serializer.toJson<String?>(sourceRef),
     };
   }
 
@@ -44441,6 +45381,7 @@ class MediaItem extends DataClass implements Insertable<MediaItem> {
     Value<double?> longitude = const Value.absent(),
     int? position,
     DateTime? createdAt,
+    Value<String?> sourceRef = const Value.absent(),
   }) => MediaItem(
     id: id ?? this.id,
     ownerKind: ownerKind ?? this.ownerKind,
@@ -44459,6 +45400,7 @@ class MediaItem extends DataClass implements Insertable<MediaItem> {
     longitude: longitude.present ? longitude.value : this.longitude,
     position: position ?? this.position,
     createdAt: createdAt ?? this.createdAt,
+    sourceRef: sourceRef.present ? sourceRef.value : this.sourceRef,
   );
   MediaItem copyWithCompanion(MediaItemsCompanion data) {
     return MediaItem(
@@ -44483,6 +45425,7 @@ class MediaItem extends DataClass implements Insertable<MediaItem> {
       longitude: data.longitude.present ? data.longitude.value : this.longitude,
       position: data.position.present ? data.position.value : this.position,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      sourceRef: data.sourceRef.present ? data.sourceRef.value : this.sourceRef,
     );
   }
 
@@ -44505,7 +45448,8 @@ class MediaItem extends DataClass implements Insertable<MediaItem> {
           ..write('latitude: $latitude, ')
           ..write('longitude: $longitude, ')
           ..write('position: $position, ')
-          ..write('createdAt: $createdAt')
+          ..write('createdAt: $createdAt, ')
+          ..write('sourceRef: $sourceRef')
           ..write(')'))
         .toString();
   }
@@ -44529,6 +45473,7 @@ class MediaItem extends DataClass implements Insertable<MediaItem> {
     longitude,
     position,
     createdAt,
+    sourceRef,
   );
   @override
   bool operator ==(Object other) =>
@@ -44550,7 +45495,8 @@ class MediaItem extends DataClass implements Insertable<MediaItem> {
           other.latitude == this.latitude &&
           other.longitude == this.longitude &&
           other.position == this.position &&
-          other.createdAt == this.createdAt);
+          other.createdAt == this.createdAt &&
+          other.sourceRef == this.sourceRef);
 }
 
 class MediaItemsCompanion extends UpdateCompanion<MediaItem> {
@@ -44571,6 +45517,7 @@ class MediaItemsCompanion extends UpdateCompanion<MediaItem> {
   final Value<double?> longitude;
   final Value<int> position;
   final Value<DateTime> createdAt;
+  final Value<String?> sourceRef;
   final Value<int> rowid;
   const MediaItemsCompanion({
     this.id = const Value.absent(),
@@ -44590,6 +45537,7 @@ class MediaItemsCompanion extends UpdateCompanion<MediaItem> {
     this.longitude = const Value.absent(),
     this.position = const Value.absent(),
     this.createdAt = const Value.absent(),
+    this.sourceRef = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   MediaItemsCompanion.insert({
@@ -44610,6 +45558,7 @@ class MediaItemsCompanion extends UpdateCompanion<MediaItem> {
     this.longitude = const Value.absent(),
     required int position,
     required DateTime createdAt,
+    this.sourceRef = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        ownerKind = Value(ownerKind),
@@ -44636,6 +45585,7 @@ class MediaItemsCompanion extends UpdateCompanion<MediaItem> {
     Expression<double>? longitude,
     Expression<int>? position,
     Expression<DateTime>? createdAt,
+    Expression<String>? sourceRef,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -44656,6 +45606,7 @@ class MediaItemsCompanion extends UpdateCompanion<MediaItem> {
       if (longitude != null) 'longitude': longitude,
       if (position != null) 'position': position,
       if (createdAt != null) 'created_at': createdAt,
+      if (sourceRef != null) 'source_ref': sourceRef,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -44678,6 +45629,7 @@ class MediaItemsCompanion extends UpdateCompanion<MediaItem> {
     Value<double?>? longitude,
     Value<int>? position,
     Value<DateTime>? createdAt,
+    Value<String?>? sourceRef,
     Value<int>? rowid,
   }) {
     return MediaItemsCompanion(
@@ -44698,6 +45650,7 @@ class MediaItemsCompanion extends UpdateCompanion<MediaItem> {
       longitude: longitude ?? this.longitude,
       position: position ?? this.position,
       createdAt: createdAt ?? this.createdAt,
+      sourceRef: sourceRef ?? this.sourceRef,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -44756,6 +45709,9 @@ class MediaItemsCompanion extends UpdateCompanion<MediaItem> {
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
+    if (sourceRef.present) {
+      map['source_ref'] = Variable<String>(sourceRef.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -44782,6 +45738,7 @@ class MediaItemsCompanion extends UpdateCompanion<MediaItem> {
           ..write('longitude: $longitude, ')
           ..write('position: $position, ')
           ..write('createdAt: $createdAt, ')
+          ..write('sourceRef: $sourceRef, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -44837,6 +45794,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $GripStrengthRecordsTable(this);
   late final $WaistMeasurementsTable waistMeasurements =
       $WaistMeasurementsTable(this);
+  late final $DeletedActivitiesTable deletedActivities =
+      $DeletedActivitiesTable(this);
+  late final $ActivityTitlesTable activityTitles = $ActivityTitlesTable(this);
   late final $SpotHrvMeasurementsTable spotHrvMeasurements =
       $SpotHrvMeasurementsTable(this);
   late final $HrvTrainingEpisodesTable hrvTrainingEpisodes =
@@ -44932,6 +45892,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     dayScoreRecords,
     gripStrengthRecords,
     waistMeasurements,
+    deletedActivities,
+    activityTitles,
     spotHrvMeasurements,
     hrvTrainingEpisodes,
     hrvEpisodeAliases,
@@ -52062,6 +53024,504 @@ typedef $$WaistMeasurementsTableProcessedTableManager =
         >,
       ),
       WaistMeasurement,
+      PrefetchHooks Function()
+    >;
+typedef $$DeletedActivitiesTableCreateCompanionBuilder =
+    DeletedActivitiesCompanion Function({
+      required String activityId,
+      Value<String?> source,
+      required String name,
+      required String type,
+      required DateTime startDate,
+      required int durationSeconds,
+      Value<double?> distanceMeters,
+      required DateTime deletedAt,
+      required String summaryJson,
+      Value<int> rowid,
+    });
+typedef $$DeletedActivitiesTableUpdateCompanionBuilder =
+    DeletedActivitiesCompanion Function({
+      Value<String> activityId,
+      Value<String?> source,
+      Value<String> name,
+      Value<String> type,
+      Value<DateTime> startDate,
+      Value<int> durationSeconds,
+      Value<double?> distanceMeters,
+      Value<DateTime> deletedAt,
+      Value<String> summaryJson,
+      Value<int> rowid,
+    });
+
+class $$DeletedActivitiesTableFilterComposer
+    extends Composer<_$AppDatabase, $DeletedActivitiesTable> {
+  $$DeletedActivitiesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get activityId => $composableBuilder(
+    column: $table.activityId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get source => $composableBuilder(
+    column: $table.source,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get startDate => $composableBuilder(
+    column: $table.startDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get durationSeconds => $composableBuilder(
+    column: $table.durationSeconds,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get distanceMeters => $composableBuilder(
+    column: $table.distanceMeters,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get summaryJson => $composableBuilder(
+    column: $table.summaryJson,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$DeletedActivitiesTableOrderingComposer
+    extends Composer<_$AppDatabase, $DeletedActivitiesTable> {
+  $$DeletedActivitiesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get activityId => $composableBuilder(
+    column: $table.activityId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get source => $composableBuilder(
+    column: $table.source,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get startDate => $composableBuilder(
+    column: $table.startDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get durationSeconds => $composableBuilder(
+    column: $table.durationSeconds,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get distanceMeters => $composableBuilder(
+    column: $table.distanceMeters,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get summaryJson => $composableBuilder(
+    column: $table.summaryJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$DeletedActivitiesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $DeletedActivitiesTable> {
+  $$DeletedActivitiesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get activityId => $composableBuilder(
+    column: $table.activityId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get source =>
+      $composableBuilder(column: $table.source, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get startDate =>
+      $composableBuilder(column: $table.startDate, builder: (column) => column);
+
+  GeneratedColumn<int> get durationSeconds => $composableBuilder(
+    column: $table.durationSeconds,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get distanceMeters => $composableBuilder(
+    column: $table.distanceMeters,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get deletedAt =>
+      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
+
+  GeneratedColumn<String> get summaryJson => $composableBuilder(
+    column: $table.summaryJson,
+    builder: (column) => column,
+  );
+}
+
+class $$DeletedActivitiesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $DeletedActivitiesTable,
+          DeletedActivity,
+          $$DeletedActivitiesTableFilterComposer,
+          $$DeletedActivitiesTableOrderingComposer,
+          $$DeletedActivitiesTableAnnotationComposer,
+          $$DeletedActivitiesTableCreateCompanionBuilder,
+          $$DeletedActivitiesTableUpdateCompanionBuilder,
+          (
+            DeletedActivity,
+            BaseReferences<
+              _$AppDatabase,
+              $DeletedActivitiesTable,
+              DeletedActivity
+            >,
+          ),
+          DeletedActivity,
+          PrefetchHooks Function()
+        > {
+  $$DeletedActivitiesTableTableManager(
+    _$AppDatabase db,
+    $DeletedActivitiesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$DeletedActivitiesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$DeletedActivitiesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$DeletedActivitiesTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> activityId = const Value.absent(),
+                Value<String?> source = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String> type = const Value.absent(),
+                Value<DateTime> startDate = const Value.absent(),
+                Value<int> durationSeconds = const Value.absent(),
+                Value<double?> distanceMeters = const Value.absent(),
+                Value<DateTime> deletedAt = const Value.absent(),
+                Value<String> summaryJson = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => DeletedActivitiesCompanion(
+                activityId: activityId,
+                source: source,
+                name: name,
+                type: type,
+                startDate: startDate,
+                durationSeconds: durationSeconds,
+                distanceMeters: distanceMeters,
+                deletedAt: deletedAt,
+                summaryJson: summaryJson,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String activityId,
+                Value<String?> source = const Value.absent(),
+                required String name,
+                required String type,
+                required DateTime startDate,
+                required int durationSeconds,
+                Value<double?> distanceMeters = const Value.absent(),
+                required DateTime deletedAt,
+                required String summaryJson,
+                Value<int> rowid = const Value.absent(),
+              }) => DeletedActivitiesCompanion.insert(
+                activityId: activityId,
+                source: source,
+                name: name,
+                type: type,
+                startDate: startDate,
+                durationSeconds: durationSeconds,
+                distanceMeters: distanceMeters,
+                deletedAt: deletedAt,
+                summaryJson: summaryJson,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$DeletedActivitiesTable, DeletedActivity>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $DeletedActivitiesTable,
+                    DeletedActivity
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$DeletedActivitiesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $DeletedActivitiesTable,
+      DeletedActivity,
+      $$DeletedActivitiesTableFilterComposer,
+      $$DeletedActivitiesTableOrderingComposer,
+      $$DeletedActivitiesTableAnnotationComposer,
+      $$DeletedActivitiesTableCreateCompanionBuilder,
+      $$DeletedActivitiesTableUpdateCompanionBuilder,
+      (
+        DeletedActivity,
+        BaseReferences<_$AppDatabase, $DeletedActivitiesTable, DeletedActivity>,
+      ),
+      DeletedActivity,
+      PrefetchHooks Function()
+    >;
+typedef $$ActivityTitlesTableCreateCompanionBuilder =
+    ActivityTitlesCompanion Function({
+      required String activityId,
+      required String title,
+      required String originalName,
+      required DateTime editedAt,
+      Value<int> rowid,
+    });
+typedef $$ActivityTitlesTableUpdateCompanionBuilder =
+    ActivityTitlesCompanion Function({
+      Value<String> activityId,
+      Value<String> title,
+      Value<String> originalName,
+      Value<DateTime> editedAt,
+      Value<int> rowid,
+    });
+
+class $$ActivityTitlesTableFilterComposer
+    extends Composer<_$AppDatabase, $ActivityTitlesTable> {
+  $$ActivityTitlesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get activityId => $composableBuilder(
+    column: $table.activityId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get originalName => $composableBuilder(
+    column: $table.originalName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get editedAt => $composableBuilder(
+    column: $table.editedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$ActivityTitlesTableOrderingComposer
+    extends Composer<_$AppDatabase, $ActivityTitlesTable> {
+  $$ActivityTitlesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get activityId => $composableBuilder(
+    column: $table.activityId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get originalName => $composableBuilder(
+    column: $table.originalName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get editedAt => $composableBuilder(
+    column: $table.editedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$ActivityTitlesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ActivityTitlesTable> {
+  $$ActivityTitlesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get activityId => $composableBuilder(
+    column: $table.activityId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get originalName => $composableBuilder(
+    column: $table.originalName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get editedAt =>
+      $composableBuilder(column: $table.editedAt, builder: (column) => column);
+}
+
+class $$ActivityTitlesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ActivityTitlesTable,
+          ActivityTitle,
+          $$ActivityTitlesTableFilterComposer,
+          $$ActivityTitlesTableOrderingComposer,
+          $$ActivityTitlesTableAnnotationComposer,
+          $$ActivityTitlesTableCreateCompanionBuilder,
+          $$ActivityTitlesTableUpdateCompanionBuilder,
+          (
+            ActivityTitle,
+            BaseReferences<_$AppDatabase, $ActivityTitlesTable, ActivityTitle>,
+          ),
+          ActivityTitle,
+          PrefetchHooks Function()
+        > {
+  $$ActivityTitlesTableTableManager(
+    _$AppDatabase db,
+    $ActivityTitlesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ActivityTitlesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ActivityTitlesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ActivityTitlesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> activityId = const Value.absent(),
+                Value<String> title = const Value.absent(),
+                Value<String> originalName = const Value.absent(),
+                Value<DateTime> editedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ActivityTitlesCompanion(
+                activityId: activityId,
+                title: title,
+                originalName: originalName,
+                editedAt: editedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String activityId,
+                required String title,
+                required String originalName,
+                required DateTime editedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => ActivityTitlesCompanion.insert(
+                activityId: activityId,
+                title: title,
+                originalName: originalName,
+                editedAt: editedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$ActivityTitlesTable, ActivityTitle>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $ActivityTitlesTable,
+                    ActivityTitle
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$ActivityTitlesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ActivityTitlesTable,
+      ActivityTitle,
+      $$ActivityTitlesTableFilterComposer,
+      $$ActivityTitlesTableOrderingComposer,
+      $$ActivityTitlesTableAnnotationComposer,
+      $$ActivityTitlesTableCreateCompanionBuilder,
+      $$ActivityTitlesTableUpdateCompanionBuilder,
+      (
+        ActivityTitle,
+        BaseReferences<_$AppDatabase, $ActivityTitlesTable, ActivityTitle>,
+      ),
+      ActivityTitle,
       PrefetchHooks Function()
     >;
 typedef $$SpotHrvMeasurementsTableCreateCompanionBuilder =
@@ -66337,6 +67797,7 @@ typedef $$MediaItemsTableCreateCompanionBuilder = MediaItemsCompanion Function({
   Value<double?> longitude,
   required int position,
   required DateTime createdAt,
+  Value<String?> sourceRef,
   Value<int> rowid,
 });
 typedef $$MediaItemsTableUpdateCompanionBuilder = MediaItemsCompanion Function({
@@ -66357,6 +67818,7 @@ typedef $$MediaItemsTableUpdateCompanionBuilder = MediaItemsCompanion Function({
   Value<double?> longitude,
   Value<int> position,
   Value<DateTime> createdAt,
+  Value<String?> sourceRef,
   Value<int> rowid,
 });
 
@@ -66451,6 +67913,11 @@ class $$MediaItemsTableFilterComposer
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
     column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get sourceRef => $composableBuilder(
+    column: $table.sourceRef,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -66548,6 +68015,11 @@ class $$MediaItemsTableOrderingComposer
     column: $table.createdAt,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get sourceRef => $composableBuilder(
+    column: $table.sourceRef,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$MediaItemsTableAnnotationComposer
@@ -66613,6 +68085,9 @@ class $$MediaItemsTableAnnotationComposer
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<String> get sourceRef =>
+      $composableBuilder(column: $table.sourceRef, builder: (column) => column);
 }
 
 class $$MediaItemsTableTableManager
@@ -66663,6 +68138,7 @@ class $$MediaItemsTableTableManager
                 Value<double?> longitude = const Value.absent(),
                 Value<int> position = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
+                Value<String?> sourceRef = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => MediaItemsCompanion(
                 id: id,
@@ -66682,6 +68158,7 @@ class $$MediaItemsTableTableManager
                 longitude: longitude,
                 position: position,
                 createdAt: createdAt,
+                sourceRef: sourceRef,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -66703,6 +68180,7 @@ class $$MediaItemsTableTableManager
                 Value<double?> longitude = const Value.absent(),
                 required int position,
                 required DateTime createdAt,
+                Value<String?> sourceRef = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => MediaItemsCompanion.insert(
                 id: id,
@@ -66722,6 +68200,7 @@ class $$MediaItemsTableTableManager
                 longitude: longitude,
                 position: position,
                 createdAt: createdAt,
+                sourceRef: sourceRef,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -66820,6 +68299,10 @@ class $AppDatabaseManager {
       $$GripStrengthRecordsTableTableManager(_db, _db.gripStrengthRecords);
   $$WaistMeasurementsTableTableManager get waistMeasurements =>
       $$WaistMeasurementsTableTableManager(_db, _db.waistMeasurements);
+  $$DeletedActivitiesTableTableManager get deletedActivities =>
+      $$DeletedActivitiesTableTableManager(_db, _db.deletedActivities);
+  $$ActivityTitlesTableTableManager get activityTitles =>
+      $$ActivityTitlesTableTableManager(_db, _db.activityTitles);
   $$SpotHrvMeasurementsTableTableManager get spotHrvMeasurements =>
       $$SpotHrvMeasurementsTableTableManager(_db, _db.spotHrvMeasurements);
   $$HrvTrainingEpisodesTableTableManager get hrvTrainingEpisodes =>

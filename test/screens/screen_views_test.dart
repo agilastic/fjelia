@@ -1590,6 +1590,46 @@ void main() {
     await tester.pump(Duration.zero);
     await tester.binding.setSurfaceSize(null);
   });
+  testWidgets('an activity is renamed from its title and keeps the name', (
+    tester,
+  ) async {
+    final row = (await db.select(db.activityRecords).get()).single;
+    final original = row.name;
+    await render(tester, ActivityDetailSheet(activity: row), 'activity-rename');
+    await tester.tap(find.byTooltip('Rename activity'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), '  Ostereier-Lauf ');
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    expect((await db.getActivityById(row.activityId))!.name, 'Ostereier-Lauf');
+    expect(find.text('Ostereier-Lauf'), findsOneWidget);
+    // A sync writing the provider's name again: the title stays.
+    await db
+        .into(db.activityRecords)
+        .insert(
+          row.toCompanion(true).copyWith(id: const Value.absent()),
+          mode: InsertMode.insertOrReplace,
+        );
+    expect((await db.getActivityById(row.activityId))!.name, 'Ostereier-Lauf');
+    // A blank title cannot be saved; the original is one tap away.
+    await tester.tap(find.byTooltip('Rename activity'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), '   ');
+    await tester.pump();
+    expect(
+      tester
+          .widget<FilledButton>(find.widgetWithText(FilledButton, 'Save'))
+          .onPressed,
+      isNull,
+    );
+    expect(find.text('Original: $original'), findsOneWidget);
+    await tester.tap(find.text('Use original title'));
+    await tester.pumpAndSettle();
+    expect((await db.getActivityById(row.activityId))!.name, original);
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(Duration.zero);
+    await tester.binding.setSurfaceSize(null);
+  });
   testWidgets(
     'activity details render charts, fullscreen and confirm or cancel deletion',
     (tester) async {
@@ -2292,7 +2332,8 @@ void main() {
       await tester.ensureVisible(find.text('Delete All Workouts'));
       await tester.pumpAndSettle();
       await capture(tester, 'training-generation');
-      expect(find.text('Weather & Location'), findsOneWidget);
+      // Weather & Location has its own entry one level up in Settings.
+      expect(find.text('Weather & Location'), findsNothing);
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox());
       await tester.pump(Duration.zero);

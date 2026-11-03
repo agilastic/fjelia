@@ -175,6 +175,13 @@ class SuuntoService {
     }
   }
 
+  /// Workouts from [since] on again, e.g. after one was restored.
+  Future<void> refetchWorkoutsSince(DateTime since) async {
+    final auth = await _loadAuth();
+    if (auth == null || auth.isExpired) return;
+    await _syncWorkouts(auth, SuuntoSyncResult(), since);
+  }
+
   Future<SuuntoSyncResult> sync({int days = 30}) async {
     final result = SuuntoSyncResult();
     final auth = await _loadAuth();
@@ -273,6 +280,7 @@ class SuuntoService {
     final key = w['workoutKey'] ?? w['key'] ?? w['id'];
     if (key == null) return false;
     final id = 'suunto_$key';
+    if ((await _db.deletedActivityIds()).contains(id)) return false;
     final duration = (_toDouble(w['totalTime']) ?? 0).round();
     if (duration <= 0) return false;
     final hr = w['hrdata'] is Map ? w['hrdata'] as Map : const {};

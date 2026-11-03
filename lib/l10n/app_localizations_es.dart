@@ -4710,7 +4710,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get removeThisActivityFromThe =>
-      '¿Quitar esta actividad del historial local? Una sincronización posterior del proveedor puede importarla de nuevo.';
+      '¿Eliminar esta actividad? Seguirá eliminada aunque tus dispositivos vuelvan a sincronizar. Puedes restaurarla en Ajustes, en Eliminadas recientemente.';
 
   @override
   String get howDidThisSessionGo =>
@@ -6939,4 +6939,217 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get calendarPlanned => 'Planificado';
+
+  @override
+  String get recentlyDeleted => 'Eliminadas recientemente';
+
+  @override
+  String get recentlyDeletedExplain =>
+      'Las actividades eliminadas siguen eliminadas, también cuando tus dispositivos vuelven a sincronizar. Restaura una para recuperarla; su fuente vuelve a enviar la ruta y las curvas si aún las tiene.';
+
+  @override
+  String get noDeletedActivities => 'No hay actividades eliminadas.';
+
+  @override
+  String activityDeleted(String name) {
+    return '$name eliminada';
+  }
+
+  @override
+  String activityRestored(String name) {
+    return '$name restaurada';
+  }
+
+  @override
+  String activityRestoredSummaryOnly(String name) {
+    return '$name restaurada con sus totales; su fuente ya no envía la ruta ni las curvas.';
+  }
+
+  @override
+  String deletedOn(String date) {
+    return 'eliminada el $date';
+  }
+
+  @override
+  String get restore => 'Restaurar';
+
+  @override
+  String get coachWhyThisToday => '¿Por qué este entreno hoy?';
+
+  @override
+  String get coachHowDidItGo => '¿Qué tal fue esta sesión?';
+
+  @override
+  String get coachWhyRestDay => '¿Por qué es un día de descanso?';
+
+  @override
+  String get coachWhatInstead => '¿Qué debería hacer en su lugar?';
+
+  @override
+  String get newChat => 'Nuevo chat';
+
+  @override
+  String weekOfPlanned(String duration) {
+    return 'de $duration planificados';
+  }
+
+  @override
+  String get weekDoneNothingPlanned => 'hecho · sin entrenos planificados';
+
+  @override
+  String sessionDropped(String reason, String duration) {
+    return '$reason · $duration descartados';
+  }
+
+  @override
+  String get importTitle => 'Importar';
+
+  @override
+  String get stravaArchive => 'Archivo de Strava';
+
+  @override
+  String get stravaArchiveZip => 'Archivo de Strava (ZIP)';
+
+  @override
+  String get stravaArchiveSubtitle =>
+      'Todo tu historial de Strava con rutas y fotos';
+
+  @override
+  String get stravaIntro =>
+      'Trae todo tu historial de Strava a Fjelia: actividades con ruta, frecuencia cardiaca y potencia, y sus fotos.';
+
+  @override
+  String get stravaHowTo =>
+      'En strava.com: Ajustes → Mi cuenta → Descargar o eliminar tu cuenta → Solicitar tu archivo. Strava te envía un ZIP por correo; elígelo aquí tal cual, sin descomprimirlo.';
+
+  @override
+  String get stravaChooseZip => 'Elegir ZIP';
+
+  @override
+  String get stravaReading => 'Leyendo el archivo…';
+
+  @override
+  String get stravaNotArchive =>
+      'Este ZIP no es un archivo de cuenta de Strava: falta activities.csv.';
+
+  @override
+  String stravaFound(int count) {
+    return '$count actividades encontradas';
+  }
+
+  @override
+  String stravaWithFiles(int count) {
+    return '$count con grabación (ruta y curvas)';
+  }
+
+  @override
+  String stravaPhotos(int photos, int videos) {
+    return '$photos fotos, $videos vídeos';
+  }
+
+  @override
+  String stravaAlready(int count) {
+    return '$count duplicados, ya en Fjelia o dobles en Strava: solo se añaden las fotos que faltan';
+  }
+
+  @override
+  String stravaDeletedSkip(int count) {
+    return '$count eliminadas antes, omitidas';
+  }
+
+  @override
+  String stravaNew(int count) {
+    return '$count nuevas';
+  }
+
+  @override
+  String stravaStorage(int mb) {
+    return 'unos $mb MB para fotos y vídeos';
+  }
+
+  @override
+  String get stravaPrivacy =>
+      'Todo se lee en este dispositivo. No se sube nada y no hace falta iniciar sesión en Strava.';
+
+  @override
+  String stravaImportButton(int count) {
+    return 'Importar $count actividades';
+  }
+
+  @override
+  String get stravaImporting => 'Importando el archivo de Strava';
+
+  @override
+  String stravaProgressActivities(String done, String total) {
+    return 'Actividades: $done / $total';
+  }
+
+  @override
+  String stravaImportedCount(int count) {
+    return '$count actividades importadas';
+  }
+
+  @override
+  String stravaProgressPhotos(int count) {
+    return 'Fotos: $count importadas';
+  }
+
+  @override
+  String stravaProgressDuplicates(int count) {
+    return 'Duplicados: $count omitidos';
+  }
+
+  @override
+  String stravaProgressDeleted(int count) {
+    return 'Eliminadas antes: $count omitidas';
+  }
+
+  @override
+  String stravaProgressErrors(int count) {
+    return 'Errores: $count';
+  }
+
+  @override
+  String get stravaKeepOpen =>
+      'Puedes usar la app mientras tanto. Mantén Fjelia abierta hasta que termine la importación.';
+
+  @override
+  String get stravaComplete => 'Importación de Strava completada';
+
+  @override
+  String get stravaPartial => 'Importación de Strava incompleta';
+
+  @override
+  String get stravaCancelled => 'Importación de Strava cancelada';
+
+  @override
+  String get stravaShowErrors => 'Mostrar errores';
+
+  @override
+  String get stravaAgainHint =>
+      'Volver a importar el mismo archivo solo añade lo que aún falta.';
+
+  @override
+  String get renameActivity => 'Renombrar actividad';
+
+  @override
+  String get activityTitleLabel => 'Título';
+
+  @override
+  String get activityTitleKept =>
+      'Tu título se mantiene cuando la actividad vuelve a sincronizarse. Solo cambia en Fjelia, no en la plataforma de origen.';
+
+  @override
+  String originalTitle(String name) {
+    return 'Original: $name';
+  }
+
+  @override
+  String get useOriginalTitle => 'Usar el título original';
+
+  @override
+  String get loadOlderActivities => 'Cargar actividades anteriores';
+
+  @override
+  String get noOlderActivities => 'No hay actividades anteriores';
 }

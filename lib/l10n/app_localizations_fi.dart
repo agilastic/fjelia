@@ -4691,7 +4691,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get removeThisActivityFromThe =>
-      'Poistetaanko tämä aktiviteetti paikallisesta historiasta? Myöhempi palveluntarjoajan synkronointi voi tuoda sen uudelleen.';
+      'Poistetaanko tämä aktiviteetti? Se pysyy poistettuna, myös kun laitteesi synkronoivat uudelleen. Voit palauttaa sen asetuksista kohdasta Äskettäin poistetut.';
 
   @override
   String get howDidThisSessionGo =>
@@ -6918,4 +6918,217 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get calendarPlanned => 'Suunniteltu';
+
+  @override
+  String get recentlyDeleted => 'Äskettäin poistetut';
+
+  @override
+  String get recentlyDeletedExplain =>
+      'Poistetut aktiviteetit pysyvät poistettuina, myös kun laitteesi synkronoivat uudelleen. Palauta aktiviteetti saadaksesi sen takaisin; sen lähde lähettää reitin ja käyrät uudelleen, jos sillä on ne vielä.';
+
+  @override
+  String get noDeletedActivities => 'Ei poistettuja aktiviteetteja.';
+
+  @override
+  String activityDeleted(String name) {
+    return '$name poistettu';
+  }
+
+  @override
+  String activityRestored(String name) {
+    return '$name palautettu';
+  }
+
+  @override
+  String activityRestoredSummaryOnly(String name) {
+    return '$name palautettu kokonaisarvoineen; lähde ei enää lähetä reittiä eikä käyriä.';
+  }
+
+  @override
+  String deletedOn(String date) {
+    return 'poistettu $date';
+  }
+
+  @override
+  String get restore => 'Palauta';
+
+  @override
+  String get coachWhyThisToday => 'Miksi tämä harjoitus tänään?';
+
+  @override
+  String get coachHowDidItGo => 'Miten tämä harjoitus meni?';
+
+  @override
+  String get coachWhyRestDay => 'Miksi tämä on lepopäivä?';
+
+  @override
+  String get coachWhatInstead => 'Mitä minun pitäisi tehdä sen sijaan?';
+
+  @override
+  String get newChat => 'Uusi keskustelu';
+
+  @override
+  String weekOfPlanned(String duration) {
+    return '/ $duration suunniteltu';
+  }
+
+  @override
+  String get weekDoneNothingPlanned => 'tehty · ei suunniteltuja harjoituksia';
+
+  @override
+  String sessionDropped(String reason, String duration) {
+    return '$reason · $duration jäi pois';
+  }
+
+  @override
+  String get importTitle => 'Tuo';
+
+  @override
+  String get stravaArchive => 'Strava-arkisto';
+
+  @override
+  String get stravaArchiveZip => 'Strava-arkisto (ZIP)';
+
+  @override
+  String get stravaArchiveSubtitle =>
+      'Koko Strava-historiasi reitteineen ja kuvineen';
+
+  @override
+  String get stravaIntro =>
+      'Tuo koko Strava-historiasi Fjeliaan: aktiviteetit reitin, sykkeen ja tehon kera sekä niiden kuvat.';
+
+  @override
+  String get stravaHowTo =>
+      'Strava.comissa: Asetukset → Oma tili → Lataa tai poista tilisi → Pyydä arkisto. Strava lähettää ZIP-tiedoston sähköpostilla; valitse se tässä sellaisenaan purkamatta.';
+
+  @override
+  String get stravaChooseZip => 'Valitse ZIP';
+
+  @override
+  String get stravaReading => 'Luetaan arkistoa…';
+
+  @override
+  String get stravaNotArchive =>
+      'Tämä ZIP ei ole Strava-tilin arkisto: activities.csv puuttuu.';
+
+  @override
+  String stravaFound(int count) {
+    return '$count aktiviteettia löytyi';
+  }
+
+  @override
+  String stravaWithFiles(int count) {
+    return '$count tallenteella (reitti ja käyrät)';
+  }
+
+  @override
+  String stravaPhotos(int photos, int videos) {
+    return '$photos kuvaa, $videos videota';
+  }
+
+  @override
+  String stravaAlready(int count) {
+    return '$count kaksoiskappaletta, jo Fjeliassa tai kahdesti Stravassa: vain puuttuvat kuvat lisätään';
+  }
+
+  @override
+  String stravaDeletedSkip(int count) {
+    return '$count poistettu aiemmin, ohitetaan';
+  }
+
+  @override
+  String stravaNew(int count) {
+    return '$count uutta';
+  }
+
+  @override
+  String stravaStorage(int mb) {
+    return 'noin $mb Mt kuville ja videoille';
+  }
+
+  @override
+  String get stravaPrivacy =>
+      'Kaikki luetaan tällä laitteella. Mitään ei ladata palvelimelle, eikä Strava-kirjautumista tarvita.';
+
+  @override
+  String stravaImportButton(int count) {
+    return 'Tuo $count aktiviteettia';
+  }
+
+  @override
+  String get stravaImporting => 'Tuodaan Strava-arkistoa';
+
+  @override
+  String stravaProgressActivities(String done, String total) {
+    return 'Aktiviteetit: $done / $total';
+  }
+
+  @override
+  String stravaImportedCount(int count) {
+    return '$count aktiviteettia tuotu';
+  }
+
+  @override
+  String stravaProgressPhotos(int count) {
+    return 'Kuvat: $count tuotu';
+  }
+
+  @override
+  String stravaProgressDuplicates(int count) {
+    return 'Kaksoiskappaleet: $count ohitettu';
+  }
+
+  @override
+  String stravaProgressDeleted(int count) {
+    return 'Aiemmin poistetut: $count ohitettu';
+  }
+
+  @override
+  String stravaProgressErrors(int count) {
+    return 'Virheet: $count';
+  }
+
+  @override
+  String get stravaKeepOpen =>
+      'Voit käyttää sovellusta sillä välin. Pidä Fjelia auki, kunnes tuonti on valmis.';
+
+  @override
+  String get stravaComplete => 'Strava-tuonti valmis';
+
+  @override
+  String get stravaPartial => 'Strava-tuonti keskeneräinen';
+
+  @override
+  String get stravaCancelled => 'Strava-tuonti peruttu';
+
+  @override
+  String get stravaShowErrors => 'Näytä virheet';
+
+  @override
+  String get stravaAgainHint =>
+      'Saman arkiston tuominen uudelleen lisää vain sen, mikä vielä puuttuu.';
+
+  @override
+  String get renameActivity => 'Nimeä aktiviteetti uudelleen';
+
+  @override
+  String get activityTitleLabel => 'Otsikko';
+
+  @override
+  String get activityTitleKept =>
+      'Otsikkosi säilyy, kun aktiviteetti synkronoidaan uudelleen. Se muuttuu vain Fjeliassa, ei alkuperäisessä palvelussa.';
+
+  @override
+  String originalTitle(String name) {
+    return 'Alkuperäinen: $name';
+  }
+
+  @override
+  String get useOriginalTitle => 'Käytä alkuperäistä otsikkoa';
+
+  @override
+  String get loadOlderActivities => 'Lataa vanhempia aktiviteetteja';
+
+  @override
+  String get noOlderActivities => 'Ei vanhempia aktiviteetteja';
 }

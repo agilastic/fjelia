@@ -4671,7 +4671,7 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get removeThisActivityFromThe =>
-      'Fjerne denne aktivitet fra den lokale historik? En senere synkronisering fra udbyderen kan importere den igen.';
+      'Slet denne aktivitet? Den forbliver slettet, også når dine enheder synkroniserer igen. Du kan gendanne den i Indstillinger under Senest slettet.';
 
   @override
   String get howDidThisSessionGo =>
@@ -6896,4 +6896,217 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get calendarPlanned => 'Planlagt';
+
+  @override
+  String get recentlyDeleted => 'Senest slettet';
+
+  @override
+  String get recentlyDeletedExplain =>
+      'Slettede aktiviteter forbliver slettet, også når dine enheder synkroniserer igen. Gendan en for at få den tilbage; kilden sender så rute og kurver igen, hvis den stadig har dem.';
+
+  @override
+  String get noDeletedActivities => 'Ingen slettede aktiviteter.';
+
+  @override
+  String activityDeleted(String name) {
+    return '$name slettet';
+  }
+
+  @override
+  String activityRestored(String name) {
+    return '$name gendannet';
+  }
+
+  @override
+  String activityRestoredSummaryOnly(String name) {
+    return '$name gendannet med totalerne; kilden sender ikke længere rute og kurver.';
+  }
+
+  @override
+  String deletedOn(String date) {
+    return 'slettet $date';
+  }
+
+  @override
+  String get restore => 'Gendan';
+
+  @override
+  String get coachWhyThisToday => 'Hvorfor denne træning i dag?';
+
+  @override
+  String get coachHowDidItGo => 'Hvordan gik denne træning?';
+
+  @override
+  String get coachWhyRestDay => 'Hvorfor er det en hviledag?';
+
+  @override
+  String get coachWhatInstead => 'Hvad skal jeg gøre i stedet?';
+
+  @override
+  String get newChat => 'Ny chat';
+
+  @override
+  String weekOfPlanned(String duration) {
+    return 'af $duration planlagt';
+  }
+
+  @override
+  String get weekDoneNothingPlanned => 'gennemført · ingen træninger planlagt';
+
+  @override
+  String sessionDropped(String reason, String duration) {
+    return '$reason · $duration droppet';
+  }
+
+  @override
+  String get importTitle => 'Importér';
+
+  @override
+  String get stravaArchive => 'Strava-arkiv';
+
+  @override
+  String get stravaArchiveZip => 'Strava-arkiv (ZIP)';
+
+  @override
+  String get stravaArchiveSubtitle =>
+      'Hele din Strava-historik med ruter og fotos';
+
+  @override
+  String get stravaIntro =>
+      'Tag hele din Strava-historik med til Fjelia: aktiviteter med rute, puls og watt samt deres fotos.';
+
+  @override
+  String get stravaHowTo =>
+      'På strava.com: Indstillinger → Min konto → Download eller slet din konto → Anmod om dit arkiv. Strava sender dig en ZIP pr. e-mail; vælg den her, som den er, uden at pakke den ud.';
+
+  @override
+  String get stravaChooseZip => 'Vælg ZIP';
+
+  @override
+  String get stravaReading => 'Læser arkivet …';
+
+  @override
+  String get stravaNotArchive =>
+      'Denne ZIP er ikke et Strava-kontoarkiv: activities.csv mangler.';
+
+  @override
+  String stravaFound(int count) {
+    return '$count aktiviteter fundet';
+  }
+
+  @override
+  String stravaWithFiles(int count) {
+    return '$count med optagelse (rute og kurver)';
+  }
+
+  @override
+  String stravaPhotos(int photos, int videos) {
+    return '$photos fotos, $videos videoer';
+  }
+
+  @override
+  String stravaAlready(int count) {
+    return '$count dubletter, allerede i Fjelia eller dobbelt i Strava: kun manglende fotos tilføjes';
+  }
+
+  @override
+  String stravaDeletedSkip(int count) {
+    return '$count slettet tidligere, sprunget over';
+  }
+
+  @override
+  String stravaNew(int count) {
+    return '$count nye';
+  }
+
+  @override
+  String stravaStorage(int mb) {
+    return 'cirka $mb MB til fotos og videoer';
+  }
+
+  @override
+  String get stravaPrivacy =>
+      'Alt læses på denne enhed. Intet uploades, og der kræves intet Strava-login.';
+
+  @override
+  String stravaImportButton(int count) {
+    return 'Importér $count aktiviteter';
+  }
+
+  @override
+  String get stravaImporting => 'Importerer Strava-arkivet';
+
+  @override
+  String stravaProgressActivities(String done, String total) {
+    return 'Aktiviteter: $done / $total';
+  }
+
+  @override
+  String stravaImportedCount(int count) {
+    return '$count aktiviteter importeret';
+  }
+
+  @override
+  String stravaProgressPhotos(int count) {
+    return 'Fotos: $count importeret';
+  }
+
+  @override
+  String stravaProgressDuplicates(int count) {
+    return 'Dubletter: $count sprunget over';
+  }
+
+  @override
+  String stravaProgressDeleted(int count) {
+    return 'Slettet tidligere: $count sprunget over';
+  }
+
+  @override
+  String stravaProgressErrors(int count) {
+    return 'Fejl: $count';
+  }
+
+  @override
+  String get stravaKeepOpen =>
+      'Du kan bruge appen imens. Hold Fjelia åben, til importen er færdig.';
+
+  @override
+  String get stravaComplete => 'Strava-import fuldført';
+
+  @override
+  String get stravaPartial => 'Strava-import ufuldstændig';
+
+  @override
+  String get stravaCancelled => 'Strava-import annulleret';
+
+  @override
+  String get stravaShowErrors => 'Vis fejl';
+
+  @override
+  String get stravaAgainHint =>
+      'Importerer du samme arkiv igen, tilføjes kun det, der stadig mangler.';
+
+  @override
+  String get renameActivity => 'Omdøb aktivitet';
+
+  @override
+  String get activityTitleLabel => 'Titel';
+
+  @override
+  String get activityTitleKept =>
+      'Din titel bliver, når aktiviteten synkroniseres igen. Den ændres kun i Fjelia, ikke på platformen, den kom fra.';
+
+  @override
+  String originalTitle(String name) {
+    return 'Oprindelig: $name';
+  }
+
+  @override
+  String get useOriginalTitle => 'Brug oprindelig titel';
+
+  @override
+  String get loadOlderActivities => 'Indlæs ældre aktiviteter';
+
+  @override
+  String get noOlderActivities => 'Ingen ældre aktiviteter';
 }

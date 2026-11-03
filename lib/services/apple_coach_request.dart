@@ -140,7 +140,7 @@ class AppleCoachRequest {
             : coachBriefingRulesShort) +
         localeHint +
         (briefingInstructions == null
-            ? 'Answer the latest question in 3 to 5 sentences, with the data as evidence.${coachLanguageName() == 'British English' && budget >= 3000 ? appleChatExample : ''}'
+            ? 'Answer the latest question like a personal trainer: start with the answer, then 3 to 6 sentences with the data as evidence. NO tables, NO introduction, NO headings.${coachLanguageName() == 'British English' && budget >= 3000 ? appleChatExample : ''}'
             : 'Give a ${period ?? 'daily'} briefing in 2 or 3 short plain sentences: what the findings mean and the next action. '
                   '${dailyBrief?.today.isNotEmpty == true
                       ? 'All of today\'s scheduled sessions remain planned; a completed activity does not cancel them. '

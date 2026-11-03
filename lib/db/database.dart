@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:drift/drift.dart';
 
 import '../models/heart_rate.dart';
@@ -423,6 +425,38 @@ class GripStrengthRecords extends Table {
   DateTimeColumn get measuredAt => dateTime()();
   RealColumn get leftKg => real().nullable()();
   RealColumn get rightKg => real().nullable()();
+}
+
+/// A title the athlete gave an activity. It wins over the provider's name
+/// on every sync and import; [originalName] is what the provider called it,
+/// for going back.
+class ActivityTitles extends Table {
+  TextColumn get activityId => text()();
+  TextColumn get title => text()();
+  TextColumn get originalName => text()();
+  DateTimeColumn get editedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {activityId};
+}
+
+/// An activity the athlete deleted. It stays deleted: no sync brings it
+/// back while this row exists. [summaryJson] is the activity without its
+/// route and curves, enough to list it and to restore it before its source
+/// sends the rest again.
+class DeletedActivities extends Table {
+  TextColumn get activityId => text()();
+  TextColumn get source => text().nullable()();
+  TextColumn get name => text()();
+  TextColumn get type => text()();
+  DateTimeColumn get startDate => dateTime()();
+  IntColumn get durationSeconds => integer()();
+  RealColumn get distanceMeters => real().nullable()();
+  DateTimeColumn get deletedAt => dateTime()();
+  TextColumn get summaryJson => text()();
+
+  @override
+  Set<Column> get primaryKey => {activityId};
 }
 
 /// Waist (and, when measured, hip) circumference over time. The newest one is
@@ -1196,6 +1230,10 @@ class MediaItems extends Table {
   IntColumn get position => integer()();
   DateTimeColumn get createdAt => dateTime()();
 
+  /// Where an imported file came from, e.g. `strava:media/….jpg`, so a
+  /// repeated import does not add it twice. Null for the athlete's own.
+  TextColumn get sourceRef => text().nullable()();
+
   @override
   Set<Column> get primaryKey => {id};
 }
@@ -1224,6 +1262,8 @@ class MediaItems extends Table {
     DayScoreRecords,
     GripStrengthRecords,
     WaistMeasurements,
+    DeletedActivities,
+    ActivityTitles,
     SpotHrvMeasurements,
     HrvTrainingEpisodes,
     HrvEpisodeAliases,
@@ -1272,7 +1312,7 @@ class AppDatabase extends _$AppDatabase {
       defaultSourcePriorities[group.name]!;
 
   @override
-  int get schemaVersion => 57;
+  int get schemaVersion => 60;
 
   Future<void> saveHeartRateSamples(List<TimedHeartRate> samples) async {
     if (samples.isEmpty) return;
@@ -1480,6 +1520,23 @@ class AppDatabase extends _$AppDatabase {
         }
       }
     }
+    // An Apple Health copy of a workout the athlete deleted is that workout:
+    // it goes too. Copies from other platforms are their own recordings.
+    final deleted = await select(deletedActivities).get();
+    for (final copy in all.where((a) => a.source == 'health_connect')) {
+      if (deleted.any(
+        (d) => isSameWorkout(
+          d.startDate,
+          d.durationSeconds,
+          d.type,
+          copy.startDate,
+          copy.durationSeconds,
+          copy.type,
+        ),
+      )) {
+        toDelete.add(copy.activityId);
+      }
+    }
     if (toDelete.isEmpty) return 0;
     return transaction(() async {
       for (final gone in all.where((a) => toDelete.contains(a.activityId))) {
@@ -1490,6 +1547,28 @@ class AppDatabase extends _$AppDatabase {
         activityRecords,
       )..where((t) => t.activityId.isIn(toDelete))).go();
     });
+  }
+
+  /// A title the athlete gave the copy that goes moves to the copy that
+  /// stays, unless that one has its own.
+  Future<void> _followTitle(ActivityRecord gone, ActivityRecord keep) async {
+    final title = await activityTitle(gone.activityId);
+    if (title == null) return;
+    await (delete(
+      activityTitles,
+    )..where((t) => t.activityId.equals(gone.activityId))).go();
+    if (await activityTitle(keep.activityId) != null) return;
+    await into(activityTitles).insert(
+      ActivityTitlesCompanion.insert(
+        activityId: keep.activityId,
+        title: title.title,
+        originalName: keep.name,
+        editedAt: title.editedAt,
+      ),
+    );
+    await (update(activityRecords)
+          ..where((t) => t.activityId.equals(keep.activityId)))
+        .write(ActivityRecordsCompanion(name: Value(title.title)));
   }
 
   /// Keeps the DFA alpha1 of a removed copy (e.g. an imported file) for the
@@ -1518,6 +1597,7 @@ class AppDatabase extends _$AppDatabase {
   /// the reminder. Automatic links are recomputed from the facts afterwards.
   Future<void> _followDuplicate(ActivityRecord gone, ActivityRecord keep) async {
     await _followNutrition(gone.activityId, keep.activityId);
+    await _followTitle(gone, keep);
     await _followDfaAlpha1(gone.activityId, keep.activityId);
     await (update(mediaItems)..where(
           (t) =>
@@ -1609,6 +1689,122 @@ class AppDatabase extends _$AppDatabase {
           ..orderBy([(t) => OrderingTerm.desc(t.startDate)]))
         .get();
   }
+
+  // ── Deleted activities ─────────────────────────────────────────────────
+
+  /// Deletes an activity the athlete removed and remembers it, so no sync
+  /// imports it again. Route and curves are not kept.
+  Future<void> deleteActivityByUser(String activityId) => transaction(() async {
+    final a = await getActivityById(activityId);
+    if (a != null) {
+      final summary = a.toJson()
+        ..remove('id')
+        ..['gpxJson'] = null
+        ..['metricsJson'] = null
+        ..['plannedStepsJson'] = null;
+      await into(deletedActivities).insertOnConflictUpdate(
+        DeletedActivitiesCompanion.insert(
+          activityId: a.activityId,
+          source: Value(a.source),
+          name: a.name,
+          type: a.type,
+          startDate: a.startDate,
+          durationSeconds: a.durationSeconds,
+          distanceMeters: Value(a.distanceMeters),
+          deletedAt: DateTime.now(),
+          summaryJson: jsonEncode(summary),
+        ),
+      );
+    }
+    await deleteActivityById(activityId);
+  });
+
+  /// Gives the activity the athlete's own title. The provider's name is
+  /// kept the first time, for [resetActivityTitle].
+  Future<void> renameActivity(String activityId, String title) =>
+      transaction(() async {
+        final a = await getActivityById(activityId);
+        if (a == null) return;
+        final had = await (select(
+          activityTitles,
+        )..where((t) => t.activityId.equals(activityId))).getSingleOrNull();
+        await into(activityTitles).insertOnConflictUpdate(
+          ActivityTitlesCompanion.insert(
+            activityId: activityId,
+            title: title,
+            originalName: had?.originalName ?? a.name,
+            editedAt: DateTime.now(),
+          ),
+        );
+        await (update(activityRecords)
+              ..where((t) => t.activityId.equals(activityId)))
+            .write(ActivityRecordsCompanion(name: Value(title)));
+      });
+
+  /// Back to the provider's name; later syncs may change it again.
+  Future<void> resetActivityTitle(String activityId) => transaction(() async {
+    final had = await (select(
+      activityTitles,
+    )..where((t) => t.activityId.equals(activityId))).getSingleOrNull();
+    if (had == null) return;
+    await (delete(
+      activityTitles,
+    )..where((t) => t.activityId.equals(activityId))).go();
+    await (update(activityRecords)
+          ..where((t) => t.activityId.equals(activityId)))
+        .write(ActivityRecordsCompanion(name: Value(had.originalName)));
+  });
+
+  Future<ActivityTitle?> activityTitle(String activityId) => (select(
+    activityTitles,
+  )..where((t) => t.activityId.equals(activityId))).getSingleOrNull();
+
+  Future<Set<String>> deletedActivityIds() async => {
+    for (final row in await select(deletedActivities).get()) row.activityId,
+  };
+
+  /// Newest deletion first.
+  Future<List<DeletedActivity>> getDeletedActivities() =>
+      (select(deletedActivities)..orderBy([
+            (t) => OrderingTerm.desc(t.deletedAt),
+            (t) => OrderingTerm.desc(t.startDate),
+          ]))
+          .get();
+
+  /// Forgets the deletion and puts the activity back from its summary. Its
+  /// source can then fill in route and curves again. Null when it was not
+  /// deleted.
+  Future<ActivityRecord?> restoreDeletedActivity(String activityId) =>
+      transaction(() async {
+        final tombstone = await (select(
+          deletedActivities,
+        )..where((t) => t.activityId.equals(activityId))).getSingleOrNull();
+        if (tombstone == null) return null;
+        await (delete(
+          deletedActivities,
+        )..where((t) => t.activityId.equals(activityId))).go();
+        if (await getActivityById(activityId) == null) {
+          ActivityRecordsCompanion row;
+          try {
+            row = ActivityRecord.fromJson({
+              ...jsonDecode(tombstone.summaryJson) as Map<String, dynamic>,
+              'id': 0,
+            }).toCompanion(true).copyWith(id: const Value.absent());
+          } catch (_) {
+            row = ActivityRecordsCompanion.insert(
+              activityId: tombstone.activityId,
+              name: tombstone.name,
+              type: tombstone.type,
+              startDate: tombstone.startDate,
+              durationSeconds: tombstone.durationSeconds,
+              distanceMeters: Value(tombstone.distanceMeters),
+              source: Value(tombstone.source),
+            );
+          }
+          await into(activityRecords).insert(row);
+        }
+        return getActivityById(activityId);
+      });
 
   Future<ActivityRecord?> getActivityById(String activityId) {
     return (select(activityRecords)
@@ -2301,8 +2497,43 @@ class AppDatabase extends _$AppDatabase {
         await customStatement('CREATE INDEX IF NOT EXISTS $index');
       }
       await ensureHrvIdentity();
+      // A deleted activity cannot come back through any import path; the
+      // syncs skip it before downloading, this is the last guard.
+      await customStatement(
+        'CREATE TRIGGER IF NOT EXISTS trg_deleted_activity_stays_deleted '
+        'BEFORE INSERT ON activity_records '
+        'WHEN EXISTS (SELECT 1 FROM deleted_activities '
+        'WHERE activity_id = NEW.activity_id) '
+        'BEGIN SELECT RAISE(IGNORE); END',
+      );
+      // A title the athlete gave stays, whatever a sync or import writes:
+      // a new or replaced row and every later update take it over again.
+      const keep =
+          'UPDATE activity_records SET name = (SELECT title FROM '
+          'activity_titles WHERE activity_id = NEW.activity_id) '
+          'WHERE id = NEW.id; END';
+      const edited =
+          'EXISTS (SELECT 1 FROM activity_titles t WHERE '
+          't.activity_id = NEW.activity_id AND t.title IS NOT NEW.name)';
+      await customStatement(
+        'CREATE TRIGGER IF NOT EXISTS trg_activity_title_on_insert '
+        'AFTER INSERT ON activity_records WHEN $edited BEGIN $keep',
+      );
+      await customStatement(
+        'CREATE TRIGGER IF NOT EXISTS trg_activity_title_on_update '
+        'AFTER UPDATE OF name ON activity_records WHEN $edited BEGIN $keep',
+      );
     },
     onUpgrade: (m, from, to) async {
+      if (from < 60) await m.createTable(activityTitles);
+      if (from >= 56 && from < 59) {
+        await _addColumnIfMissing(
+          'media_items',
+          'source_ref',
+          () => m.addColumn(mediaItems, mediaItems.sourceRef),
+        );
+      }
+      if (from < 58) await m.createTable(deletedActivities);
       if (from < 57) await m.createTable(waistMeasurements);
       if (from < 56) await m.createTable(mediaItems);
       if (from < 55) await m.createTable(dfaAlpha1Results);

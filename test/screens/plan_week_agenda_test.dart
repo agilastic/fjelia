@@ -170,7 +170,7 @@ void main() {
     expect(find.text('PLANNED'), findsNWidgets(3));
     expect(find.text('45 min'), findsOneWidget);
     expect(find.text('of 4 h 20 min planned'), findsOneWidget);
-    expect(find.text('77 min'), findsOneWidget);
+    expect(find.text('1 h 17 min'), findsOneWidget);
     expect(find.text('26–1 Nov'), findsNothing);
     expect(find.textContaining('Nov'), findsWidgets);
 

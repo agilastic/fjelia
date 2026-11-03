@@ -1,3 +1,4 @@
+import '../../l10n/formats.dart';
 import '../../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
@@ -132,7 +133,7 @@ class _WeekTable extends StatelessWidget {
                   spacing: 6,
                   children: [
                     Text(
-                      _duration(done),
+                      planDuration(done),
                       style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
@@ -142,8 +143,8 @@ class _WeekTable extends StatelessWidget {
                       padding: const EdgeInsets.only(bottom: 3),
                       child: Text(
                         planned > 0
-                            ? 'of ${_duration(planned)} planned'
-                            : 'completed · no workouts planned',
+                            ? context.l10n.weekOfPlanned(planDuration(planned))
+                            : context.l10n.weekDoneNothingPlanned,
                         style: const TextStyle(fontSize: 13, color: muted),
                       ),
                     ),
@@ -183,10 +184,6 @@ class _WeekTable extends StatelessWidget {
     );
   }
 }
-
-String _duration(int minutes) => minutes < 120
-    ? '$minutes min'
-    : '${minutes ~/ 60} h${minutes % 60 == 0 ? '' : ' ${minutes % 60} min'}';
 
 String sportLabel(String sport) => switch (activityKind(sport)) {
   ActivityKind.running => tr.running,
@@ -354,7 +351,7 @@ class _ItemLine extends StatelessWidget {
             : missed
             ? context.l10n.notRecorded
             : item.title,
-        trailing: item.minutes == null ? '—' : '${item.minutes} min',
+        trailing: item.minutes == null ? '—' : planDuration(item.minutes!),
         dim: skipped || missed,
         struck: skipped,
         done: done,
@@ -374,7 +371,7 @@ class _ItemLine extends StatelessWidget {
             color: Colors.white38,
             label: sportLabel(item.plannedSport),
             detail: item.plannedTitle,
-            trailing: planned == null ? '—' : '$planned min',
+            trailing: planned == null ? '—' : planDuration(planned),
             dim: true,
             struck: true,
           ),

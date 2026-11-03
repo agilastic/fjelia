@@ -1,3 +1,4 @@
+import '../../l10n/formats.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -478,7 +479,7 @@ class _Hero extends StatelessWidget {
                     // Plan titles often carry the minutes already.
                     if (item.plannedMinutes != null &&
                         !item.plannedTitle.contains('${item.plannedMinutes}'))
-                      '${item.plannedMinutes} min',
+                      planDuration(item.plannedMinutes!),
                     context.l10n.missedTodayTag,
                   ].join(' · '),
                   style: const TextStyle(fontSize: 12, color: Colors.white70),

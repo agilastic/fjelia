@@ -8228,7 +8228,7 @@ abstract class AppLocalizations {
   /// No description provided for @removeThisActivityFromThe.
   ///
   /// In en, this message translates to:
-  /// **'Remove this activity from the local history? A later provider sync may import it again.'**
+  /// **'Delete this activity? It stays deleted, also after your devices sync again. You can restore it in Settings under Recently deleted.'**
   String get removeThisActivityFromThe;
 
   /// No description provided for @howDidThisSessionGo.
@@ -12011,6 +12011,330 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Planned'**
   String get calendarPlanned;
+
+  /// No description provided for @recentlyDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently deleted'**
+  String get recentlyDeleted;
+
+  /// No description provided for @recentlyDeletedExplain.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted activities stay deleted, also when your devices sync again. Restore one to bring it back; its source then sends route and curves again where it still has them.'**
+  String get recentlyDeletedExplain;
+
+  /// No description provided for @noDeletedActivities.
+  ///
+  /// In en, this message translates to:
+  /// **'No deleted activities.'**
+  String get noDeletedActivities;
+
+  /// No description provided for @activityDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} deleted'**
+  String activityDeleted(String name);
+
+  /// No description provided for @activityRestored.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} restored'**
+  String activityRestored(String name);
+
+  /// No description provided for @activityRestoredSummaryOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} restored with its totals; its source no longer sends route and curves.'**
+  String activityRestoredSummaryOnly(String name);
+
+  /// No description provided for @deletedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'deleted {date}'**
+  String deletedOn(String date);
+
+  /// No description provided for @restore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore'**
+  String get restore;
+
+  /// No description provided for @coachWhyThisToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Why this workout today?'**
+  String get coachWhyThisToday;
+
+  /// No description provided for @coachHowDidItGo.
+  ///
+  /// In en, this message translates to:
+  /// **'How did this session go?'**
+  String get coachHowDidItGo;
+
+  /// No description provided for @coachWhyRestDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Why is this a rest day?'**
+  String get coachWhyRestDay;
+
+  /// No description provided for @coachWhatInstead.
+  ///
+  /// In en, this message translates to:
+  /// **'What should I do instead?'**
+  String get coachWhatInstead;
+
+  /// No description provided for @newChat.
+  ///
+  /// In en, this message translates to:
+  /// **'New chat'**
+  String get newChat;
+
+  /// No description provided for @weekOfPlanned.
+  ///
+  /// In en, this message translates to:
+  /// **'of {duration} planned'**
+  String weekOfPlanned(String duration);
+
+  /// No description provided for @weekDoneNothingPlanned.
+  ///
+  /// In en, this message translates to:
+  /// **'completed · no workouts planned'**
+  String get weekDoneNothingPlanned;
+
+  /// No description provided for @sessionDropped.
+  ///
+  /// In en, this message translates to:
+  /// **'{reason} · {duration} dropped'**
+  String sessionDropped(String reason, String duration);
+
+  /// No description provided for @importTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Import'**
+  String get importTitle;
+
+  /// No description provided for @stravaArchive.
+  ///
+  /// In en, this message translates to:
+  /// **'Strava archive'**
+  String get stravaArchive;
+
+  /// No description provided for @stravaArchiveZip.
+  ///
+  /// In en, this message translates to:
+  /// **'Strava archive (ZIP)'**
+  String get stravaArchiveZip;
+
+  /// No description provided for @stravaArchiveSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your whole Strava history with routes and photos'**
+  String get stravaArchiveSubtitle;
+
+  /// No description provided for @stravaIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Bring your whole Strava history to Fjelia: activities with route, heart rate and power, and their photos.'**
+  String get stravaIntro;
+
+  /// No description provided for @stravaHowTo.
+  ///
+  /// In en, this message translates to:
+  /// **'On strava.com: Settings → My Account → Download or delete your account → Request your archive. Strava emails you a ZIP; choose it here as it is, without unpacking it.'**
+  String get stravaHowTo;
+
+  /// No description provided for @stravaChooseZip.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose ZIP'**
+  String get stravaChooseZip;
+
+  /// No description provided for @stravaReading.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading the archive…'**
+  String get stravaReading;
+
+  /// No description provided for @stravaNotArchive.
+  ///
+  /// In en, this message translates to:
+  /// **'This ZIP is not a Strava account archive: activities.csv is missing.'**
+  String get stravaNotArchive;
+
+  /// No description provided for @stravaFound.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 activity found} other{{count} activities found}}'**
+  String stravaFound(int count);
+
+  /// No description provided for @stravaWithFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} with a recording (route and curves)'**
+  String stravaWithFiles(int count);
+
+  /// No description provided for @stravaPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'{photos} photos, {videos} videos'**
+  String stravaPhotos(int photos, int videos);
+
+  /// No description provided for @stravaAlready.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} duplicates, already in Fjelia or twice in Strava: only their missing photos are added'**
+  String stravaAlready(int count);
+
+  /// No description provided for @stravaDeletedSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} deleted earlier, skipped'**
+  String stravaDeletedSkip(int count);
+
+  /// No description provided for @stravaNew.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} new'**
+  String stravaNew(int count);
+
+  /// No description provided for @stravaStorage.
+  ///
+  /// In en, this message translates to:
+  /// **'about {mb} MB for photos and videos'**
+  String stravaStorage(int mb);
+
+  /// No description provided for @stravaPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Everything is read on this device. Nothing is uploaded, and no Strava login is needed.'**
+  String get stravaPrivacy;
+
+  /// No description provided for @stravaImportButton.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Import 1 activity} other{Import {count} activities}}'**
+  String stravaImportButton(int count);
+
+  /// No description provided for @stravaImporting.
+  ///
+  /// In en, this message translates to:
+  /// **'Importing Strava archive'**
+  String get stravaImporting;
+
+  /// No description provided for @stravaProgressActivities.
+  ///
+  /// In en, this message translates to:
+  /// **'Activities: {done} / {total}'**
+  String stravaProgressActivities(String done, String total);
+
+  /// No description provided for @stravaImportedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 activity imported} other{{count} activities imported}}'**
+  String stravaImportedCount(int count);
+
+  /// No description provided for @stravaProgressPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos: {count} imported'**
+  String stravaProgressPhotos(int count);
+
+  /// No description provided for @stravaProgressDuplicates.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicates: {count} skipped'**
+  String stravaProgressDuplicates(int count);
+
+  /// No description provided for @stravaProgressDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted earlier: {count} skipped'**
+  String stravaProgressDeleted(int count);
+
+  /// No description provided for @stravaProgressErrors.
+  ///
+  /// In en, this message translates to:
+  /// **'Errors: {count}'**
+  String stravaProgressErrors(int count);
+
+  /// No description provided for @stravaKeepOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'You can use the app meanwhile. Keep Fjelia open until the import is finished.'**
+  String get stravaKeepOpen;
+
+  /// No description provided for @stravaComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Strava import complete'**
+  String get stravaComplete;
+
+  /// No description provided for @stravaPartial.
+  ///
+  /// In en, this message translates to:
+  /// **'Strava import incomplete'**
+  String get stravaPartial;
+
+  /// No description provided for @stravaCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Strava import cancelled'**
+  String get stravaCancelled;
+
+  /// No description provided for @stravaShowErrors.
+  ///
+  /// In en, this message translates to:
+  /// **'Show errors'**
+  String get stravaShowErrors;
+
+  /// No description provided for @stravaAgainHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Importing the same archive again adds only what is still missing.'**
+  String get stravaAgainHint;
+
+  /// No description provided for @renameActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename activity'**
+  String get renameActivity;
+
+  /// No description provided for @activityTitleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get activityTitleLabel;
+
+  /// No description provided for @activityTitleKept.
+  ///
+  /// In en, this message translates to:
+  /// **'Your title stays when the activity syncs again. It only changes in Fjelia, not on the platform it came from.'**
+  String get activityTitleKept;
+
+  /// No description provided for @originalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Original: {name}'**
+  String originalTitle(String name);
+
+  /// No description provided for @useOriginalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Use original title'**
+  String get useOriginalTitle;
+
+  /// No description provided for @loadOlderActivities.
+  ///
+  /// In en, this message translates to:
+  /// **'Load older activities'**
+  String get loadOlderActivities;
+
+  /// No description provided for @noOlderActivities.
+  ///
+  /// In en, this message translates to:
+  /// **'No older activities'**
+  String get noOlderActivities;
 }
 
 class _AppLocalizationsDelegate

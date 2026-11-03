@@ -4705,7 +4705,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get removeThisActivityFromThe =>
-      'Rimuovere questa attività dalla cronologia locale? Una successiva sincronizzazione del provider può importarla di nuovo.';
+      'Eliminare questa attività? Resta eliminata anche dopo una nuova sincronizzazione dei dispositivi. Puoi ripristinarla nelle Impostazioni, in Eliminate di recente.';
 
   @override
   String get howDidThisSessionGo =>
@@ -6932,4 +6932,218 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get calendarPlanned => 'Pianificato';
+
+  @override
+  String get recentlyDeleted => 'Eliminate di recente';
+
+  @override
+  String get recentlyDeletedExplain =>
+      'Le attività eliminate restano eliminate, anche quando i dispositivi si sincronizzano di nuovo. Ripristinane una per recuperarla; la sua fonte invia di nuovo percorso e curve, se li ha ancora.';
+
+  @override
+  String get noDeletedActivities => 'Nessuna attività eliminata.';
+
+  @override
+  String activityDeleted(String name) {
+    return '$name eliminata';
+  }
+
+  @override
+  String activityRestored(String name) {
+    return '$name ripristinata';
+  }
+
+  @override
+  String activityRestoredSummaryOnly(String name) {
+    return '$name ripristinata con i totali; la sua fonte non invia più percorso e curve.';
+  }
+
+  @override
+  String deletedOn(String date) {
+    return 'eliminata il $date';
+  }
+
+  @override
+  String get restore => 'Ripristina';
+
+  @override
+  String get coachWhyThisToday => 'Perché questo allenamento oggi?';
+
+  @override
+  String get coachHowDidItGo => 'Com’è andata questa seduta?';
+
+  @override
+  String get coachWhyRestDay => 'Perché è un giorno di riposo?';
+
+  @override
+  String get coachWhatInstead => 'Cosa dovrei fare invece?';
+
+  @override
+  String get newChat => 'Nuova chat';
+
+  @override
+  String weekOfPlanned(String duration) {
+    return 'di $duration pianificate';
+  }
+
+  @override
+  String get weekDoneNothingPlanned =>
+      'completato · nessun allenamento pianificato';
+
+  @override
+  String sessionDropped(String reason, String duration) {
+    return '$reason · $duration saltate';
+  }
+
+  @override
+  String get importTitle => 'Importa';
+
+  @override
+  String get stravaArchive => 'Archivio Strava';
+
+  @override
+  String get stravaArchiveZip => 'Archivio Strava (ZIP)';
+
+  @override
+  String get stravaArchiveSubtitle =>
+      'Tutta la tua cronologia Strava con percorsi e foto';
+
+  @override
+  String get stravaIntro =>
+      'Porta tutta la tua cronologia Strava in Fjelia: attività con percorso, frequenza cardiaca e potenza, e le loro foto.';
+
+  @override
+  String get stravaHowTo =>
+      'Su strava.com: Impostazioni → Il mio account → Scarica o elimina il tuo account → Richiedi l’archivio. Strava ti invia uno ZIP via email; sceglilo qui così com’è, senza decomprimerlo.';
+
+  @override
+  String get stravaChooseZip => 'Scegli lo ZIP';
+
+  @override
+  String get stravaReading => 'Lettura dell’archivio…';
+
+  @override
+  String get stravaNotArchive =>
+      'Questo ZIP non è un archivio dell’account Strava: manca activities.csv.';
+
+  @override
+  String stravaFound(int count) {
+    return '$count attività trovate';
+  }
+
+  @override
+  String stravaWithFiles(int count) {
+    return '$count con registrazione (percorso e curve)';
+  }
+
+  @override
+  String stravaPhotos(int photos, int videos) {
+    return '$photos foto, $videos video';
+  }
+
+  @override
+  String stravaAlready(int count) {
+    return '$count duplicati, già in Fjelia o doppi su Strava: si aggiungono solo le foto mancanti';
+  }
+
+  @override
+  String stravaDeletedSkip(int count) {
+    return '$count eliminate in precedenza, saltate';
+  }
+
+  @override
+  String stravaNew(int count) {
+    return '$count nuove';
+  }
+
+  @override
+  String stravaStorage(int mb) {
+    return 'circa $mb MB per foto e video';
+  }
+
+  @override
+  String get stravaPrivacy =>
+      'Tutto viene letto su questo dispositivo. Nulla viene caricato e non serve l’accesso a Strava.';
+
+  @override
+  String stravaImportButton(int count) {
+    return 'Importa $count attività';
+  }
+
+  @override
+  String get stravaImporting => 'Importazione dell’archivio Strava';
+
+  @override
+  String stravaProgressActivities(String done, String total) {
+    return 'Attività: $done / $total';
+  }
+
+  @override
+  String stravaImportedCount(int count) {
+    return '$count attività importate';
+  }
+
+  @override
+  String stravaProgressPhotos(int count) {
+    return 'Foto: $count importate';
+  }
+
+  @override
+  String stravaProgressDuplicates(int count) {
+    return 'Duplicati: $count saltati';
+  }
+
+  @override
+  String stravaProgressDeleted(int count) {
+    return 'Eliminate in precedenza: $count saltate';
+  }
+
+  @override
+  String stravaProgressErrors(int count) {
+    return 'Errori: $count';
+  }
+
+  @override
+  String get stravaKeepOpen =>
+      'Puoi usare l’app nel frattempo. Tieni Fjelia aperta finché l’importazione non è finita.';
+
+  @override
+  String get stravaComplete => 'Importazione Strava completata';
+
+  @override
+  String get stravaPartial => 'Importazione Strava incompleta';
+
+  @override
+  String get stravaCancelled => 'Importazione Strava annullata';
+
+  @override
+  String get stravaShowErrors => 'Mostra errori';
+
+  @override
+  String get stravaAgainHint =>
+      'Importare di nuovo lo stesso archivio aggiunge solo ciò che manca.';
+
+  @override
+  String get renameActivity => 'Rinomina attività';
+
+  @override
+  String get activityTitleLabel => 'Titolo';
+
+  @override
+  String get activityTitleKept =>
+      'Il tuo titolo resta quando l’attività si sincronizza di nuovo. Cambia solo in Fjelia, non sulla piattaforma di origine.';
+
+  @override
+  String originalTitle(String name) {
+    return 'Originale: $name';
+  }
+
+  @override
+  String get useOriginalTitle => 'Usa il titolo originale';
+
+  @override
+  String get loadOlderActivities => 'Carica attività meno recenti';
+
+  @override
+  String get noOlderActivities => 'Nessuna attività meno recente';
 }

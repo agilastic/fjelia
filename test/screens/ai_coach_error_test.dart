@@ -142,4 +142,51 @@ void main() {
       await db.close();
     },
   );
+
+  testWidgets('New chat leaves the session; an empty chat has no button', (
+    tester,
+  ) async {
+    FlutterSecureStorage.setMockInitialValues({});
+    final db = AppDatabase(NativeDatabase.memory());
+    var started = 0;
+    Widget screen(CoachContextCard? card) => ProviderScope(
+      overrides: [
+        databaseProvider.overrideWithValue(db),
+        aiCoachSettingsProvider.overrideWith(_Settings.new),
+        userProfileProvider.overrideWith(_Profile.new),
+        aiCoachClientProvider.overrideWithValue(_Client()),
+      ],
+      child: MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: AiCoachScreen(
+            key: ValueKey(card),
+            contextCard: card,
+            onNewChat: () => started++,
+          ),
+        ),
+      ),
+    );
+    await tester.pumpWidget(screen(null));
+    await tester.pumpAndSettle();
+    expect(find.byTooltip('New chat'), findsNothing);
+
+    await tester.pumpWidget(
+      screen(
+        CoachContextCard.scheduled(
+          sport: 'running',
+          title: 'Easy run',
+          date: DateTime(2026, 10, 29),
+          summary: '45 min',
+          structure: const [],
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('New chat'));
+    expect(started, 1);
+    await tester.pumpWidget(const SizedBox());
+    await db.close();
+  });
 }

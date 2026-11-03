@@ -45,6 +45,9 @@ class _HomeState extends ConsumerState<HomeScreen> {
 
   /// The session the coach tab was last opened for.
   CoachRequest? coachRequest;
+
+  /// Counts new chats, so each one starts with an empty conversation.
+  int coachChat = 0;
   @override
   Widget build(BuildContext context) {
     // "Ask the coach about this session" from anywhere in the app: show the
@@ -168,10 +171,14 @@ class _HomeState extends ConsumerState<HomeScreen> {
                 1 => const PlanScreen(),
                 2 => const StrainScreen(embedded: true),
                 3 => AiCoachScreen(
-                  key: ValueKey(coachRequest?.id ?? 0),
+                  key: ValueKey('${coachRequest?.id ?? 0}-$coachChat'),
                   initialPrompt: coachRequest?.prompt,
                   activity: coachRequest?.activity,
                   contextCard: coachRequest?.card,
+                  onNewChat: () => setState(() {
+                    coachRequest = null;
+                    coachChat++;
+                  }),
                 ),
                 _ => const DebugScreen(),
               },

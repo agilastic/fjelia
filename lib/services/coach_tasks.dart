@@ -23,18 +23,12 @@ String coachTaskTemplate(CoachTask task) => switch (task) {
     '''
 
 ━━━ ANSWER STRUCTURE (planned session) ━━━
-1. Purpose: what this session trains, in one sentence.
-2. Execution: the main blocks with their zone or effort, concrete and short.
-3. Fit for today: whether it suits the current recovery and recent load, with at most three figures. If data is missing, name what would settle it.
-4. One rule for when to shorten or ease it.''',
+In a few sentences, without headings or numbering, cover what fits the question: what the session trains, how to run its main blocks (zone or effort), whether it suits today's recovery and recent load, and when to shorten or ease it.''',
   CoachTask.evaluateActivity =>
     '''
 
 ━━━ ANSWER STRUCTURE (finished session) ━━━
-1. Verdict: one sentence.
-2. Measured: at most three figures, compared with similar sessions where the Compare line has them.
-3. Interpretation: what the figures suggest. Say that it is an interpretation.
-4. Next days: one recommendation.''',
+In a few sentences, without headings or numbering: how it went in one line, the one to three figures that show it (against similar sessions where the Compare line has them, and the sessions around it), what they suggest, and one recommendation for the next days.''',
 };
 
 /// The same, short enough for Apple's small context window.

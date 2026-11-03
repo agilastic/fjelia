@@ -4656,7 +4656,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get removeThisActivityFromThe =>
-      'Remove this activity from the local history? A later provider sync may import it again.';
+      'Delete this activity? It stays deleted, also after your devices sync again. You can restore it in Settings under Recently deleted.';
 
   @override
   String get howDidThisSessionGo =>
@@ -6875,4 +6875,235 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get calendarPlanned => 'Planned';
+
+  @override
+  String get recentlyDeleted => 'Recently deleted';
+
+  @override
+  String get recentlyDeletedExplain =>
+      'Deleted activities stay deleted, also when your devices sync again. Restore one to bring it back; its source then sends route and curves again where it still has them.';
+
+  @override
+  String get noDeletedActivities => 'No deleted activities.';
+
+  @override
+  String activityDeleted(String name) {
+    return '$name deleted';
+  }
+
+  @override
+  String activityRestored(String name) {
+    return '$name restored';
+  }
+
+  @override
+  String activityRestoredSummaryOnly(String name) {
+    return '$name restored with its totals; its source no longer sends route and curves.';
+  }
+
+  @override
+  String deletedOn(String date) {
+    return 'deleted $date';
+  }
+
+  @override
+  String get restore => 'Restore';
+
+  @override
+  String get coachWhyThisToday => 'Why this workout today?';
+
+  @override
+  String get coachHowDidItGo => 'How did this session go?';
+
+  @override
+  String get coachWhyRestDay => 'Why is this a rest day?';
+
+  @override
+  String get coachWhatInstead => 'What should I do instead?';
+
+  @override
+  String get newChat => 'New chat';
+
+  @override
+  String weekOfPlanned(String duration) {
+    return 'of $duration planned';
+  }
+
+  @override
+  String get weekDoneNothingPlanned => 'completed · no workouts planned';
+
+  @override
+  String sessionDropped(String reason, String duration) {
+    return '$reason · $duration dropped';
+  }
+
+  @override
+  String get importTitle => 'Import';
+
+  @override
+  String get stravaArchive => 'Strava archive';
+
+  @override
+  String get stravaArchiveZip => 'Strava archive (ZIP)';
+
+  @override
+  String get stravaArchiveSubtitle =>
+      'Your whole Strava history with routes and photos';
+
+  @override
+  String get stravaIntro =>
+      'Bring your whole Strava history to Fjelia: activities with route, heart rate and power, and their photos.';
+
+  @override
+  String get stravaHowTo =>
+      'On strava.com: Settings → My Account → Download or delete your account → Request your archive. Strava emails you a ZIP; choose it here as it is, without unpacking it.';
+
+  @override
+  String get stravaChooseZip => 'Choose ZIP';
+
+  @override
+  String get stravaReading => 'Reading the archive…';
+
+  @override
+  String get stravaNotArchive =>
+      'This ZIP is not a Strava account archive: activities.csv is missing.';
+
+  @override
+  String stravaFound(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count activities found',
+      one: '1 activity found',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String stravaWithFiles(int count) {
+    return '$count with a recording (route and curves)';
+  }
+
+  @override
+  String stravaPhotos(int photos, int videos) {
+    return '$photos photos, $videos videos';
+  }
+
+  @override
+  String stravaAlready(int count) {
+    return '$count duplicates, already in Fjelia or twice in Strava: only their missing photos are added';
+  }
+
+  @override
+  String stravaDeletedSkip(int count) {
+    return '$count deleted earlier, skipped';
+  }
+
+  @override
+  String stravaNew(int count) {
+    return '$count new';
+  }
+
+  @override
+  String stravaStorage(int mb) {
+    return 'about $mb MB for photos and videos';
+  }
+
+  @override
+  String get stravaPrivacy =>
+      'Everything is read on this device. Nothing is uploaded, and no Strava login is needed.';
+
+  @override
+  String stravaImportButton(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Import $count activities',
+      one: 'Import 1 activity',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get stravaImporting => 'Importing Strava archive';
+
+  @override
+  String stravaProgressActivities(String done, String total) {
+    return 'Activities: $done / $total';
+  }
+
+  @override
+  String stravaImportedCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count activities imported',
+      one: '1 activity imported',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String stravaProgressPhotos(int count) {
+    return 'Photos: $count imported';
+  }
+
+  @override
+  String stravaProgressDuplicates(int count) {
+    return 'Duplicates: $count skipped';
+  }
+
+  @override
+  String stravaProgressDeleted(int count) {
+    return 'Deleted earlier: $count skipped';
+  }
+
+  @override
+  String stravaProgressErrors(int count) {
+    return 'Errors: $count';
+  }
+
+  @override
+  String get stravaKeepOpen =>
+      'You can use the app meanwhile. Keep Fjelia open until the import is finished.';
+
+  @override
+  String get stravaComplete => 'Strava import complete';
+
+  @override
+  String get stravaPartial => 'Strava import incomplete';
+
+  @override
+  String get stravaCancelled => 'Strava import cancelled';
+
+  @override
+  String get stravaShowErrors => 'Show errors';
+
+  @override
+  String get stravaAgainHint =>
+      'Importing the same archive again adds only what is still missing.';
+
+  @override
+  String get renameActivity => 'Rename activity';
+
+  @override
+  String get activityTitleLabel => 'Title';
+
+  @override
+  String get activityTitleKept =>
+      'Your title stays when the activity syncs again. It only changes in Fjelia, not on the platform it came from.';
+
+  @override
+  String originalTitle(String name) {
+    return 'Original: $name';
+  }
+
+  @override
+  String get useOriginalTitle => 'Use original title';
+
+  @override
+  String get loadOlderActivities => 'Load older activities';
+
+  @override
+  String get noOlderActivities => 'No older activities';
 }

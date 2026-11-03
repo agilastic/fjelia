@@ -171,6 +171,7 @@ class PolarService {
           if (a.source == _source) a.activityId: a,
       };
       final processed = <String>{};
+      final deleted = await _db.deletedActivityIds();
       // One diary request per calendar month keeps the answers small.
       var cursor = DateTime(begin.year, begin.month);
       while (!cursor.isAfter(end)) {
@@ -184,6 +185,7 @@ class PolarService {
         for (final w in list) {
           final id = 'polar_flow_${w.id}';
           if (!processed.add(id)) continue;
+          if (deleted.contains(id)) continue;
           // Old Flow imports stored neither speed nor altitude samples. Refill
           // those rows once, without requiring the user to delete a workout.
           final stored = existing[id];
@@ -663,6 +665,8 @@ class PolarService {
     final summary = PolarExerciseData.parse(e);
     if (exerciseId.isEmpty || summary == null) return false;
     final id = 'polar_$exerciseId';
+    // Deleted by the athlete: not imported again, nothing downloaded.
+    if ((await _db.deletedActivityIds()).contains(id)) return false;
     final start = summary.start;
     final duration = summary.durationSeconds;
 

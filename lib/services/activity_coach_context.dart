@@ -1,12 +1,19 @@
+import 'dart:convert';
+import 'dart:math' as math;
+
+import 'package:drift/drift.dart';
+
 import '../db/database.dart';
 import '../providers/training_load_provider.dart' show effectiveLoad;
 import 'hrv/hrv_ai_context_builder.dart';
 import 'hrv/hrv_comparison_service.dart';
 import 'hrv/hrv_training_service.dart';
 
-/// Compact TOON context for chatting about one activity: the activity, the
-/// 30 days of training leading up to it and the year's progression (with the
-/// same period of the previous year). Anchored to the activity's date, so
+/// Compact TOON context for chatting about one activity: the activity with
+/// its details (zones, pacing, DFA alpha1), the day around it (sleep, HRV,
+/// readiness), the planned session it fulfilled, the sessions just before and
+/// after it, the 30 days of training leading up to it and the year's
+/// progression (with the same period of the previous year). Anchored to the activity's date, so
 /// older activities are judged against the training around them. Names and
 /// GPS are never included.
 class ActivityCoachContextBuilder {
@@ -29,7 +36,88 @@ class ActivityCoachContextBuilder {
       all,
       hrvLine: nights.isEmpty ? null : nights,
     );
-    return pair == null ? base : '$base\n$pair';
+    final side = [
+      await _dayLine(activity),
+      await _planLine(activity),
+      await _dfaLine(activity),
+    ].whereType<String>();
+    return [base, ?pair, ...side].join('\n');
+  }
+
+  /// Sleep, readiness and daily load of the day the activity was on.
+  Future<String?> _dayLine(ActivityRecord a) async {
+    final day = DateTime(a.startDate.year, a.startDate.month, a.startDate.day);
+    final sleep = await _db.getSleepForDate(day);
+    final wellness = await _db.getWellnessForDate(day);
+    final score = await _db.getScoreForDate(day);
+    final readiness =
+        await (_db.select(_db.dailyReadinessRecords)
+              ..where(
+                (t) =>
+                    t.date.isBiggerOrEqualValue(day) &
+                    t.date.isSmallerThanValue(day.add(const Duration(days: 1))),
+              )
+              ..limit(1))
+            .getSingleOrNull();
+    final parts = [
+      if (sleep != null && sleep.totalSleepSeconds > 0)
+        'SleepH:${_dec(sleep.totalSleepSeconds / 3600)}',
+      if (sleep?.sleepScore != null) 'SleepScore:${_int(sleep!.sleepScore)}',
+      if (readiness?.restingHrToday != null)
+        'RHR:${_int(readiness!.restingHrToday)}'
+            '${readiness.restingHrElevation == null ? '' : '(${readiness.restingHrElevation! >= 0 ? '+' : ''}${_int(readiness.restingHrElevation)} vs 7d)'}',
+      if (readiness?.hrvDropPct != null)
+        'HRVvs7d:${readiness!.hrvDropPct! > 0 ? '-' : '+'}${_int(readiness.hrvDropPct!.abs())}%',
+      if (readiness?.tsb != null) 'TSB:${_int(readiness!.tsb)}',
+      if (score?.readinessScore != null)
+        'Readiness:${_int(score!.readinessScore)}',
+      if (score?.recoveryScore != null)
+        'Recovery:${_int(score!.recoveryScore)}',
+      if (wellness?.averageStress != null)
+        'Stress:${_int(wellness!.averageStress)}',
+      if (wellness?.bodyBatteryHighest != null)
+        'BodyBattery:${_int(wellness!.bodyBatteryLowest)}-${_int(wellness.bodyBatteryHighest)}',
+      if (wellness?.steps != null) 'Steps:${wellness!.steps}',
+    ];
+    return parts.isEmpty ? null : '[DayOfActivity:${parts.join(',')}]';
+  }
+
+  /// The planned session this activity fulfilled and how it went against it.
+  Future<String?> _planLine(ActivityRecord a) async {
+    final actual = await (_db.select(
+      _db.sessionActuals,
+    )..where((t) => t.activityId.equals(a.activityId))).getSingleOrNull();
+    if (actual == null) return null;
+    final session = await (_db.select(
+      _db.trainingSessions,
+    )..where((t) => t.id.equals(actual.sessionId))).getSingleOrNull();
+    final parts = [
+      if (session != null) ...[
+        'Type:${session.sessionType}',
+        'Phase:${session.phase}',
+        'PlannedMin:${session.plannedDurationMin}',
+        'PlannedZone:Z${session.primaryZone}',
+      ],
+      if (actual.durationRatio != null)
+        'DurationVsPlan:${_dec(actual.durationRatio)}x',
+      if (actual.executionScore != null)
+        'Execution:${actual.executionScore}/100',
+      if (actual.executionVerdict != null) 'Verdict:${actual.executionVerdict}',
+      if (actual.rpe != null) 'RPE:${actual.rpe}',
+    ];
+    return parts.isEmpty ? null : '[PlannedSession:${parts.join(',')}]';
+  }
+
+  /// DFA alpha1 thresholds from the beat-to-beat data, when there were any.
+  Future<String?> _dfaLine(ActivityRecord a) async {
+    final r = await (_db.select(
+      _db.dfaAlpha1Results,
+    )..where((t) => t.activityId.equals(a.activityId))).getSingleOrNull();
+    if (r == null || r.rrCount == 0) return null;
+    return '[DFAalpha1:Beats:${r.rrCount},Artifacts:${_dec(r.artifacts)}%,'
+        'HRVT1:${_int(r.hrvt1Bpm)}bpm,HRVT2:${_int(r.hrvt2Bpm)}bpm'
+        '${r.hrvt1Watts == null ? '' : ',HRVT1W:${_int(r.hrvt1Watts)}'}'
+        '${r.hrvt2Watts == null ? '' : ',HRVT2W:${_int(r.hrvt2Watts)}'}]';
   }
 
   /// The overnight HRV before and after the activity, when it was recorded.
@@ -131,6 +219,10 @@ class ActivityCoachContextBuilder {
       '[DataStatus:PreviousActivity:${earlier.isEmpty ? 'NoneInLoadedHistory' : '${_date(earlier.last)},DaysBefore:${DateTime(anchor.year, anchor.month, anchor.day).difference(DateTime(earlier.last.year, earlier.last.month, earlier.last.day)).inDays}'},'
           'MissingRecord:Unknown]',
       ?hrvLine,
+      ?_detailLine(activity),
+      ?_zonesLine(activity),
+      ?_halvesLine(activity),
+      ..._aroundLines(activity, all),
     ];
 
     // Last 30 days.
@@ -242,6 +334,144 @@ class ActivityCoachContextBuilder {
             ' (${a.avgHeartRate! - othersHr >= 0 ? '+' : '-'}${(a.avgHeartRate! - othersHr).abs().round()} bpm)',
     ];
     return '[Compare:$sport,N:${others.n},${parts.join(',')}]';
+  }
+
+  /// What the watch said beyond the totals.
+  static String? _detailLine(ActivityRecord a) {
+    final km = (a.distanceMeters ?? 0) / 1000;
+    final parts = [
+      'Start:${a.startDate.hour.toString().padLeft(2, '0')}:${a.startDate.minute.toString().padLeft(2, '0')}',
+      if (a.source != null) 'Source:${a.source}',
+      if (a.movingDurationSeconds != null)
+        'MovingMin:${_int(a.movingDurationSeconds! / 60)}',
+      if (a.avgRunCadence != null) 'Cadence:${_int(a.avgRunCadence)}',
+      if (a.recoveryTimeSeconds != null)
+        'RecoveryH:${_int(a.recoveryTimeSeconds! / 3600)}',
+      if (a.vo2maxActivity != null) 'VO2max:${_dec(a.vo2maxActivity)}',
+      if (a.activityFeedbackPhrase != null)
+        'WatchFeedback:${a.activityFeedbackPhrase}',
+      if (a.plannedDurationSeconds != null)
+        'PlannedMin:${_int(a.plannedDurationSeconds! / 60)}',
+      if (a.plannedDistanceMeters != null && km > 0)
+        'PlannedKm:${_dec(a.plannedDistanceMeters! / 1000)}',
+    ];
+    return '[ActivityDetail:${parts.join(',')}]';
+  }
+
+  /// Time in heart-rate zones, in percent; stored as percent or seconds.
+  static String? _zonesLine(ActivityRecord a) {
+    final raw = a.hrZonesJson;
+    if (raw == null) return null;
+    try {
+      final decoded = jsonDecode(raw);
+      if (decoded is! Map) return null;
+      final values = [
+        for (var i = 1; i <= 5; i++)
+          (decoded['zone$i'] is num ? decoded['zone$i'] as num : 0).toDouble(),
+      ];
+      final total = values.fold<double>(0, (s, v) => s + v);
+      if (total <= 0) return null;
+      final pct = total <= 102.5
+          ? values
+          : [for (final v in values) v / total * 100];
+      return '[HRZones%:${[for (var i = 0; i < 5; i++) 'Z${i + 1}:${pct[i].round()}'].join(',')}]';
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// First half against second half of the recording: pace (or speed) and
+  /// heart rate, and the heart-rate drift relative to speed (decoupling).
+  static String? _halvesLine(ActivityRecord a) {
+    final raw = a.metricsJson;
+    if (raw == null || a.durationSeconds < 20 * 60) return null;
+    try {
+      final samples = [
+        for (final s in jsonDecode(raw) as List)
+          if (s is Map && s['t'] is num) s,
+      ];
+      if (samples.length < 20) return null;
+      final t0 = (samples.first['t'] as num).toDouble();
+      final t1 = (samples.last['t'] as num).toDouble();
+      final mid = (t0 + t1) / 2;
+      ({double? hr, double? speed}) half(bool first) {
+        final part = [
+          for (final s in samples)
+            if (((s['t'] as num) < mid) == first) s,
+        ];
+        double? avg(String key, {double min = 0}) {
+          final v = [
+            for (final s in part)
+              if (s[key] is num && (s[key] as num) > min)
+                (s[key] as num).toDouble(),
+          ];
+          return v.isEmpty ? null : v.reduce((x, y) => x + y) / v.length;
+        }
+
+        // Stops do not count towards the moving speed.
+        return (hr: avg('hr'), speed: avg('spd', min: .5));
+      }
+
+      final a1 = half(true), a2 = half(false);
+      if (a1.hr == null || a2.hr == null) return null;
+      final sport = _sport(a.type);
+      final pace = const {'run', 'walk', 'hike'}.contains(sport);
+      String move(double? mps) => mps == null
+          ? 'na'
+          : pace
+          ? '${(1000 / mps / 60).floor()}:${((1000 / mps) % 60).round().toString().padLeft(2, '0')}/km'
+          : '${_dec(mps * 3.6)}km/h';
+      final drift = a1.speed != null && a2.speed != null
+          ? ((a2.hr! / a2.speed!) / (a1.hr! / a1.speed!) - 1) * 100
+          : null;
+      return '[Halves:First:${move(a1.speed)},HR${_int(a1.hr)};'
+          'Second:${move(a2.speed)},HR${_int(a2.hr)}'
+          '${drift == null ? '' : ',HRDrift:${drift >= 0 ? '+' : ''}${_dec(drift)}%'}]';
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// The sessions around the activity one by one: two weeks before, three
+  /// days after, and the last five of the same sport, so the coach sees the
+  /// pattern, not only totals.
+  static List<String> _aroundLines(
+    ActivityRecord activity,
+    List<ActivityRecord> all,
+  ) {
+    final anchor = activity.startDate;
+    final day = DateTime(anchor.year, anchor.month, anchor.day);
+    String line(ActivityRecord a) {
+      final d = DateTime(a.startDate.year, a.startDate.month, a.startDate.day);
+      final offset = d.difference(day).inDays;
+      return '- [D:${_date(a.startDate)} ${_weekday(a.startDate)}'
+          '(${offset >= 0 ? '+' : ''}$offset),Sport:${_sport(a.type)},${_stats(a)}]';
+    }
+
+    final others = [
+      for (final a in all)
+        if (a.activityId != activity.activityId) a,
+    ]..sort((a, b) => a.startDate.compareTo(b.startDate));
+    final around = [
+      for (final a in others)
+        if (!a.startDate.isBefore(day.subtract(const Duration(days: 14))) &&
+            a.startDate.isBefore(day.add(const Duration(days: 4))))
+          a,
+    ];
+    final sport = _sport(activity.type);
+    final sameBefore = [
+      for (final a in others)
+        if (_sport(a.type) == sport && a.startDate.isBefore(anchor)) a,
+    ];
+    final lastSame = sameBefore.sublist(math.max(0, sameBefore.length - 5));
+    return [
+      '[Around:14dBefore..3dAfter,N:${around.length}]',
+      for (final a in around.take(30)) line(a),
+      if (lastSame.isNotEmpty) ...[
+        '[SameSport:$sport:Last${lastSame.length}Before]',
+        for (final a in lastSame) line(a),
+      ],
+    ];
   }
 
   static String _stats(ActivityRecord a) {

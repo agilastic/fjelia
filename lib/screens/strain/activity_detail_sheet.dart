@@ -1,5 +1,6 @@
-import '../../l10n/l10n_ext.dart';
 import '../../providers/activity_history_provider.dart';
+import '../../widgets/recently_deleted_sheet.dart';
+import '../../l10n/l10n_ext.dart';
 
 import 'dart:io';
 
@@ -38,8 +39,32 @@ class ActivityDetailSheet extends ConsumerWidget {
       : d.inHours > 0
       ? '${d.inHours}h ${d.inMinutes % 60}m${d.inSeconds % 60 == 0 ? '' : ' ${d.inSeconds % 60}s'}'
       : '${d.inMinutes}m ${d.inSeconds % 60}s';
+  Future<void> _rename(BuildContext context, WidgetRef ref) async {
+    final id = activity.activityId;
+    final current = await ref.read(activityNameProvider(id).future);
+    if (!context.mounted) return;
+    final result = await showDialog<String>(
+      context: context,
+      builder: (c) => _RenameDialog(name: current),
+    );
+    if (result == null || !context.mounted) return;
+    await runUiAction(
+      context,
+      () => ref.read(renameActivityProvider)(id, result),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // The current name, also right after a rename: the card above the coach
+    // chat and the share card use it too.
+    final shownName = ref
+        .watch(activityNameProvider(this.activity.activityId))
+        .valueOrNull
+        ?.name;
+    final activity = shownName == null || shownName.isEmpty
+        ? this.activity
+        : this.activity.copyWith(name: shownName);
     final a = decodeActivityRecord(activity);
     // Strength is chosen before any endurance metric is built: no distance,
     // pace, elevation or route for a lifting session.
@@ -159,11 +184,32 @@ class ActivityDetailSheet extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      a.name,
-                      style: const TextStyle(
-                        fontSize: 19,
-                        fontWeight: FontWeight.w700,
+                    // The name, renamed in place: here at the top, far from
+                    // the delete button at the end of the sheet.
+                    InkWell(
+                      borderRadius: BorderRadius.circular(8),
+                      onTap: () => _rename(context, ref),
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              a.name,
+                              style: const TextStyle(
+                                fontSize: 19,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Tooltip(
+                            message: context.l10n.renameActivity,
+                            child: const Icon(
+                              Icons.edit_outlined,
+                              size: 16,
+                              color: Colors.white54,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -331,7 +377,7 @@ class ActivityDetailSheet extends ConsumerWidget {
                     }
                     if (!context.mounted) return;
                     await runUiAction(context, () async {
-                      await ref.read(deleteActivityProvider)(a.id);
+                      await deleteActivityWithUndo(context, activity);
                       if (context.mounted) Navigator.pop(context);
                     });
                   },
@@ -384,4 +430,82 @@ Color _cellColor(BuildContext context, String label) {
   if (label == l.elevation2 || label == l.altitude) return mint;
   if (label == l.trainingLoad2) return const Color(0xFF4FC3F7);
   return Colors.white70;
+}
+
+/// The title field. Returns the new title, '' for the original, null when
+/// cancelled.
+class _RenameDialog extends StatefulWidget {
+  const _RenameDialog({required this.name});
+  final ActivityName name;
+  @override
+  State<_RenameDialog> createState() => _RenameDialogState();
+}
+
+class _RenameDialogState extends State<_RenameDialog> {
+  late final field = TextEditingController(text: widget.name.name);
+
+  @override
+  void dispose() {
+    field.dispose();
+    super.dispose();
+  }
+
+  void _save() {
+    final text = field.text.trim();
+    if (text.isEmpty) return;
+    Navigator.pop(context, text);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final original = widget.name.original;
+    return AlertDialog(
+      title: Text(context.l10n.renameActivity),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextField(
+            controller: field,
+            autofocus: true,
+            maxLength: 80,
+            textCapitalization: TextCapitalization.sentences,
+            decoration: InputDecoration(
+              labelText: context.l10n.activityTitleLabel,
+            ),
+            onSubmitted: (_) => _save(),
+          ),
+          Text(
+            context.l10n.activityTitleKept,
+            style: const TextStyle(fontSize: 12, color: Colors.white70),
+          ),
+          if (widget.name.edited && original != null) ...[
+            const SizedBox(height: 10),
+            Text(
+              context.l10n.originalTitle(original),
+              style: const TextStyle(fontSize: 12, color: Colors.white54),
+            ),
+            TextButton(
+              style: TextButton.styleFrom(padding: EdgeInsets.zero),
+              onPressed: () => Navigator.pop(context, ''),
+              child: Text(context.l10n.useOriginalTitle),
+            ),
+          ],
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(context.l10n.cancel),
+        ),
+        ValueListenableBuilder(
+          valueListenable: field,
+          builder: (context, value, _) => FilledButton(
+            onPressed: value.text.trim().isEmpty ? null : _save,
+            child: Text(context.l10n.save),
+          ),
+        ),
+      ],
+    );
+  }
 }

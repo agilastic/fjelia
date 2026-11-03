@@ -1,6 +1,5 @@
 import '../../l10n/formats.dart';
 import '../../l10n/l10n_ext.dart';
-import 'weather_location_tab.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -344,13 +343,6 @@ class TrainingTab extends ConsumerWidget {
                         .read(heatAcclimationSettingsProvider.notifier)
                         .setEnabled(v),
                   ),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.location_on_outlined),
-                  title: Text(context.l10n.weatherLocation),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () =>
-                      showAppSheet(context, const WeatherLocationTab()),
                 ),
               ],
             ),

@@ -375,6 +375,21 @@ class HealthConnectService {
 
   /// Imports only the workouts of the last [lookback]. Used when Apple Health
   /// wakes the app for a new workout, where there is time for little else.
+  /// The workouts between [from] and [to] again, e.g. after one was
+  /// restored.
+  Future<int> syncWorkoutsBetween(DateTime from, DateTime to) async {
+    await _configure();
+    _healthStalled = false;
+    final result = HealthConnectSyncResult();
+    final raw = await _query(
+      types: [HealthDataType.WORKOUT],
+      startTime: from,
+      endTime: to,
+    );
+    await _processWorkouts(_health.removeDuplicates(raw), result);
+    return result.activities;
+  }
+
   Future<int> syncRecentWorkouts({
     Duration lookback = const Duration(days: 2),
   }) async {
@@ -679,6 +694,7 @@ class HealthConnectService {
     HealthConnectSyncResult result,
   ) async {
     log('[HC:workouts] raw points: ${points.length}');
+    final deleted = await db.deletedActivityIds();
 
     // HealthKit can report the same workout more than once; keep the longest.
     final unique = <DateTime, HealthDataPoint>{};
@@ -713,6 +729,7 @@ class HealthConnectService {
 
       final activityId = 'hc_${p.dateFrom.millisecondsSinceEpoch}';
       final duration = p.dateTo.difference(p.dateFrom).inSeconds;
+      if (deleted.contains(activityId)) continue;
 
       final existing =
           await (db.select(db.activityRecords)

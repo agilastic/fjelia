@@ -23,8 +23,13 @@ class AiCoachScreen extends ConsumerStatefulWidget {
     this.initialPrompt,
     this.activity,
     this.contextCard,
+    this.onNewChat,
   });
   final String? initialPrompt;
+
+  /// Starts an empty chat without a session. Without it the conversation is
+  /// only cleared.
+  final VoidCallback? onNewChat;
 
   /// The session the chat is about, shown as a card above the conversation.
   final CoachContextCard? contextCard;
@@ -58,6 +63,16 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
           ref.read(pendingCoachPromptProvider.notifier).state = null;
         }
       }
+    });
+  }
+
+  void _newChat() {
+    final start = widget.onNewChat;
+    if (start != null) return start();
+    setState(() {
+      messages.clear();
+      error = null;
+      input.clear();
     });
   }
 
@@ -194,6 +209,25 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
                   context.l10n.aiCoach,
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
+              ),
+              // Shown once there is something to start over from.
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 220),
+                transitionBuilder: (child, animation) => ScaleTransition(
+                  scale: animation,
+                  child: FadeTransition(opacity: animation, child: child),
+                ),
+                child:
+                    messages.isEmpty &&
+                        widget.contextCard == null &&
+                        widget.activity == null
+                    ? const SizedBox(width: 48)
+                    : IconButton(
+                        key: const ValueKey('new-chat'),
+                        tooltip: context.l10n.newChat,
+                        onPressed: sending ? null : _newChat,
+                        icon: const Icon(Icons.add_comment_outlined),
+                      ),
               ),
               IconButton(
                 tooltip: context.l10n.aiSettings,

@@ -1,3 +1,5 @@
+import '../l10n/formats.dart';
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -185,7 +187,7 @@ class MissedWorkoutReminderService {
       for (final i in items)
         i.plannedMinutes == null
             ? i.plannedTitle
-            : '${i.plannedTitle} (${i.plannedMinutes} min)',
+            : '${i.plannedTitle} (${planDuration(i.plannedMinutes!)})',
     ].join(', ');
     return (title: tr.missedWorkoutTitle, body: tr.missedWorkoutBody(names));
   }

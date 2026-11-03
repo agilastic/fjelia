@@ -38,6 +38,7 @@ class _ActivitySaveResult {
 
   static const missingLabelId = _ActivitySaveResult(false, 'missing_label_id');
   static const missingStart = _ActivitySaveResult(false, 'missing_start');
+  static const deleted = _ActivitySaveResult(false, 'deleted_by_athlete');
   static const ok = _ActivitySaveResult(true);
 
   final bool saved;
@@ -377,6 +378,19 @@ class CorosService {
 
   // ── sync ──────────────────────────────────────────────────────────────────
 
+  /// Activities of the days around [day] again, e.g. after one was
+  /// restored. Sleep and daily values are left alone.
+  Future<void> refetchActivitiesAround(DateTime day) async {
+    final auth = await _loadAuth();
+    if (auth == null) return;
+    _client.adopt(auth);
+    await _syncActivities(
+      CorosSyncResult(),
+      day.subtract(const Duration(days: 1)),
+      day.add(const Duration(days: 1)),
+    );
+  }
+
   Future<CorosSyncResult> sync({int days = 30}) async {
     var auth = await _loadAuth();
     if (auth == null) {
@@ -593,6 +607,9 @@ class CorosService {
     }
     final start = _parseActivityStart(row);
     if (start == null) return _ActivitySaveResult.missingStart;
+    if ((await _db.deletedActivityIds()).contains('coros:$labelId')) {
+      return _ActivitySaveResult.deleted;
+    }
     final duration = _parseActivityDuration(row) ?? 0;
     final id = 'coros:$labelId';
     final existing = await (_db.select(

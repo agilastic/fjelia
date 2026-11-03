@@ -607,15 +607,20 @@ class SyncService {
     int limit = 20,
     int start = 0,
     void Function(List<GarminActivity> page)? onPage,
+    Set<String>? only,
   }) async {
     if (!await _garmin.isLoggedIn) return 0;
     var gpsPatched = 0;
     try {
-      final activities = await _garmin.getActivities(
-        limit: limit,
-        start: start,
-      );
-      onPage?.call(activities);
+      final page = await _garmin.getActivities(limit: limit, start: start);
+      onPage?.call(page);
+      // What the athlete deleted is neither stored nor downloaded again.
+      final deleted = await _db.deletedActivityIds();
+      final activities = [
+        for (final a in page)
+          if (!deleted.contains(a.id) && (only == null || only.contains(a.id)))
+            a,
+      ];
       final cutoff = DateTime.now().subtract(const Duration(days: 1));
       final ids = activities.map((a) => a.id).toSet();
       final existing = {
@@ -998,6 +1003,32 @@ class SyncService {
     }
     await prefs.setBool('strain_trimp_migration_v1', true);
     log('[Migration] done — patched $patched days');
+  }
+
+  /// Fetches one Garmin activity again, e.g. after it was restored: the
+  /// activity list is read page by page back to its start date.
+  Future<bool> refetchGarminActivity(String id, DateTime start) async {
+    if (!await _garmin.isLoggedIn) return false;
+    final result = SyncResult();
+    for (var offset = 0; offset < 3000; offset += 100) {
+      var page = const <GarminActivity>[];
+      await _syncAllActivities(
+        result,
+        limit: 100,
+        start: offset,
+        only: {id},
+        onPage: (p) => page = p,
+      );
+      if (page.any((a) => a.id == id)) return true;
+      if (page.isEmpty ||
+          page.every(
+            (a) =>
+                a.startTime.isBefore(start.subtract(const Duration(days: 1))),
+          )) {
+        return false;
+      }
+    }
+    return false;
   }
 
   Future<SyncResult> syncGarminHistoric(

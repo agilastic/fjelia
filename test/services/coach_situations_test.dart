@@ -157,6 +157,11 @@ void main() {
           }
           final sent = jsonEncode(jsonDecode(body));
           expect(sent, contains('ANSWER STANDARD'));
+          // Short, trainer-like, never a table: last, so it sets the form.
+          expect(sent, contains('RESPONSE STYLE'));
+          expect(sent, contains('NEVER use tables'));
+          expect(sent, isNot(contains('|---')));
+          expect(sent, isNot(contains('BRIEFING RULES')));
           final template = jsonEncode(coachTaskTemplate(s.task));
           final inner = template.substring(1, template.length - 1);
           if (s.task == CoachTask.general) {
@@ -204,5 +209,34 @@ void main() {
     ], '[TrainingMonitor:CTL:52,ATL:61,TSB:-9,CurWeekH:6,PrevWeekH:7]');
     expect(request.prompt, contains('estimated by a model and not measured'));
     expect(request.prompt, contains('form (TSB) -9'));
+  });
+
+  test('the briefing keeps its own format, not the chat style', () async {
+    FlutterSecureStorage.setMockInitialValues({
+      'ai_coach_api_key_openai': 'test-key',
+    });
+    late String body;
+    final client = AiCoachClient(
+      client: MockClient((request) async {
+        body = request.body;
+        return http.Response('{}', 200);
+      }),
+    );
+    try {
+      await client.sendBriefing(
+        const AiCoachSettings(
+          provider: AiProvider.openai,
+          model: 'test-model',
+          hasApiKey: true,
+          enabled: true,
+          consentMode: AiConsentMode.session,
+        ),
+        '[Context:V4][Today:2026-11-03]',
+      );
+    } catch (_) {
+      // Only the request matters.
+    }
+    expect(body, contains('BRIEFING RULES'));
+    expect(body, isNot(contains('RESPONSE STYLE')));
   });
 }

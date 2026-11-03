@@ -115,6 +115,7 @@ String? strengthSourceLabel(String? source) => switch (source) {
   'health_connect' => tr.health,
   'manual' => tr.manual,
   'file' => tr.activityFileSource,
+  'strava' => 'Strava',
   _ => null,
 };
 

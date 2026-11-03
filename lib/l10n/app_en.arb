@@ -2655,7 +2655,7 @@
   "altitude": "Altitude",
   "explainMyHrvBeforeAnd": "Explain my HRV before and after this workout. What is comparable, what is not, and what is still unknown?",
   "deleteActivity": "Delete activity?",
-  "removeThisActivityFromThe": "Remove this activity from the local history? A later provider sync may import it again.",
+  "removeThisActivityFromThe": "Delete this activity? It stays deleted, also after your devices sync again. You can restore it in Settings under Recently deleted.",
   "howDidThisSessionGo": "How did this session go, and what does it mean for my next days?",
   "currentFixedFixed2": "Current {fixed}, {fixed2}",
   "@currentFixedFixed2": {
@@ -4137,5 +4137,215 @@
   "moveKeyEasyOnly": "easy only",
   "moveKeyHasSession": "has a session",
   "calendarCompleted": "Completed",
-  "calendarPlanned": "Planned"
+  "calendarPlanned": "Planned",
+  "recentlyDeleted": "Recently deleted",
+  "recentlyDeletedExplain": "Deleted activities stay deleted, also when your devices sync again. Restore one to bring it back; its source then sends route and curves again where it still has them.",
+  "noDeletedActivities": "No deleted activities.",
+  "activityDeleted": "{name} deleted",
+  "@activityDeleted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityRestored": "{name} restored",
+  "@activityRestored": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityRestoredSummaryOnly": "{name} restored with its totals; its source no longer sends route and curves.",
+  "@activityRestoredSummaryOnly": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "deletedOn": "deleted {date}",
+  "@deletedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "restore": "Restore",
+  "coachWhyThisToday": "Why this workout today?",
+  "coachHowDidItGo": "How did this session go?",
+  "coachWhyRestDay": "Why is this a rest day?",
+  "coachWhatInstead": "What should I do instead?",
+  "newChat": "New chat",
+  "weekOfPlanned": "of {duration} planned",
+  "@weekOfPlanned": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "weekDoneNothingPlanned": "completed · no workouts planned",
+  "sessionDropped": "{reason} · {duration} dropped",
+  "@sessionDropped": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "importTitle": "Import",
+  "stravaArchive": "Strava archive",
+  "stravaArchiveZip": "Strava archive (ZIP)",
+  "stravaArchiveSubtitle": "Your whole Strava history with routes and photos",
+  "stravaIntro": "Bring your whole Strava history to Fjelia: activities with route, heart rate and power, and their photos.",
+  "stravaHowTo": "On strava.com: Settings → My Account → Download or delete your account → Request your archive. Strava emails you a ZIP; choose it here as it is, without unpacking it.",
+  "stravaChooseZip": "Choose ZIP",
+  "stravaReading": "Reading the archive…",
+  "stravaNotArchive": "This ZIP is not a Strava account archive: activities.csv is missing.",
+  "stravaFound": "{count, plural, =1{1 activity found} other{{count} activities found}}",
+  "@stravaFound": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "stravaWithFiles": "{count} with a recording (route and curves)",
+  "@stravaWithFiles": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "stravaPhotos": "{photos} photos, {videos} videos",
+  "@stravaPhotos": {
+    "placeholders": {
+      "photos": {
+        "type": "int"
+      },
+      "videos": {
+        "type": "int"
+      }
+    }
+  },
+  "stravaAlready": "{count} duplicates, already in Fjelia or twice in Strava: only their missing photos are added",
+  "@stravaAlready": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "stravaDeletedSkip": "{count} deleted earlier, skipped",
+  "@stravaDeletedSkip": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "stravaNew": "{count} new",
+  "@stravaNew": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "stravaStorage": "about {mb} MB for photos and videos",
+  "@stravaStorage": {
+    "placeholders": {
+      "mb": {
+        "type": "int"
+      }
+    }
+  },
+  "stravaPrivacy": "Everything is read on this device. Nothing is uploaded, and no Strava login is needed.",
+  "stravaImportButton": "{count, plural, =1{Import 1 activity} other{Import {count} activities}}",
+  "@stravaImportButton": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "stravaImporting": "Importing Strava archive",
+  "stravaProgressActivities": "Activities: {done} / {total}",
+  "@stravaProgressActivities": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "stravaImportedCount": "{count, plural, =1{1 activity imported} other{{count} activities imported}}",
+  "@stravaImportedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "stravaProgressPhotos": "Photos: {count} imported",
+  "@stravaProgressPhotos": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "stravaProgressDuplicates": "Duplicates: {count} skipped",
+  "@stravaProgressDuplicates": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "stravaProgressDeleted": "Deleted earlier: {count} skipped",
+  "@stravaProgressDeleted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "stravaProgressErrors": "Errors: {count}",
+  "@stravaProgressErrors": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "stravaKeepOpen": "You can use the app meanwhile. Keep Fjelia open until the import is finished.",
+  "stravaComplete": "Strava import complete",
+  "stravaPartial": "Strava import incomplete",
+  "stravaCancelled": "Strava import cancelled",
+  "stravaShowErrors": "Show errors",
+  "stravaAgainHint": "Importing the same archive again adds only what is still missing.",
+  "renameActivity": "Rename activity",
+  "activityTitleLabel": "Title",
+  "activityTitleKept": "Your title stays when the activity syncs again. It only changes in Fjelia, not on the platform it came from.",
+  "originalTitle": "Original: {name}",
+  "@originalTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "useOriginalTitle": "Use original title",
+  "loadOlderActivities": "Load older activities",
+  "noOlderActivities": "No older activities"
 }

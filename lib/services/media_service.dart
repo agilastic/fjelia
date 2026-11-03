@@ -90,6 +90,7 @@ class MediaService {
     MediaOwner owner,
     List<String> paths, {
     void Function(int done, int total)? onProgress,
+    List<String?>? sourceRefs,
   }) async {
     final dir = await folder();
     var position = (await list(owner)).length;
@@ -120,7 +121,16 @@ class MediaService {
             await File(source).copy(path(name));
           }
         }
-        await _insert(owner, id, video, name, position, dir, meta);
+        await _insert(
+          owner,
+          id,
+          video,
+          name,
+          position,
+          dir,
+          meta,
+          sourceRef: sourceRefs?[index],
+        );
         position++;
         added++;
       } catch (e) {
@@ -152,8 +162,9 @@ class MediaService {
     String name,
     int position,
     Directory dir,
-    Map<Object?, Object?>? photoMeta,
-  ) async {
+    Map<Object?, Object?>? photoMeta, {
+    String? sourceRef,
+  }) async {
     final file = File(p.join(dir.path, name));
     final thumbName = '${id}_thumb.jpg';
     final thumb = await _native('thumbnail', {
@@ -198,9 +209,19 @@ class MediaService {
             longitude: Value((info['lng'] as num?)?.toDouble()),
             position: position,
             createdAt: DateTime.now(),
+            sourceRef: Value(sourceRef),
           ),
         );
   }
+
+  /// The source references already stored that start with [prefix], e.g.
+  /// every `strava:` photo, so an import adds each file once.
+  Future<Set<String>> sourceRefs(String prefix) async => {
+    for (final m in await (_db.select(
+      _db.mediaItems,
+    )..where((t) => t.sourceRef.like('$prefix%'))).get())
+      ?m.sourceRef,
+  };
 
   Future<bool> _transcode(String source, String target) async {
     if (!Platform.isIOS) return false;

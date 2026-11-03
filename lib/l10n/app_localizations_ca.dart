@@ -4710,7 +4710,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get removeThisActivityFromThe =>
-      'Treure aquesta activitat de l\'historial local? Una sincronització posterior del proveïdor pot tornar-la a importar.';
+      'Vols eliminar aquesta activitat? Continuarà eliminada encara que els dispositius tornin a sincronitzar. La pots restaurar a Configuració, a Eliminades recentment.';
 
   @override
   String get howDidThisSessionGo =>
@@ -6942,4 +6942,217 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get calendarPlanned => 'Planificat';
+
+  @override
+  String get recentlyDeleted => 'Eliminades recentment';
+
+  @override
+  String get recentlyDeletedExplain =>
+      'Les activitats eliminades continuen eliminades, també quan els dispositius tornen a sincronitzar. Restaura-ne una per recuperar-la; la seva font torna a enviar la ruta i les corbes si encara les té.';
+
+  @override
+  String get noDeletedActivities => 'No hi ha activitats eliminades.';
+
+  @override
+  String activityDeleted(String name) {
+    return '$name eliminada';
+  }
+
+  @override
+  String activityRestored(String name) {
+    return '$name restaurada';
+  }
+
+  @override
+  String activityRestoredSummaryOnly(String name) {
+    return '$name restaurada amb els totals; la seva font ja no envia la ruta ni les corbes.';
+  }
+
+  @override
+  String deletedOn(String date) {
+    return 'eliminada el $date';
+  }
+
+  @override
+  String get restore => 'Restaura';
+
+  @override
+  String get coachWhyThisToday => 'Per què aquest entrenament avui?';
+
+  @override
+  String get coachHowDidItGo => 'Com ha anat aquesta sessió?';
+
+  @override
+  String get coachWhyRestDay => 'Per què és un dia de descans?';
+
+  @override
+  String get coachWhatInstead => 'Què hauria de fer en lloc d’això?';
+
+  @override
+  String get newChat => 'Xat nou';
+
+  @override
+  String weekOfPlanned(String duration) {
+    return 'de $duration planificats';
+  }
+
+  @override
+  String get weekDoneNothingPlanned => 'fet · cap entrenament planificat';
+
+  @override
+  String sessionDropped(String reason, String duration) {
+    return '$reason · $duration descartats';
+  }
+
+  @override
+  String get importTitle => 'Importa';
+
+  @override
+  String get stravaArchive => 'Arxiu de Strava';
+
+  @override
+  String get stravaArchiveZip => 'Arxiu de Strava (ZIP)';
+
+  @override
+  String get stravaArchiveSubtitle =>
+      'Tot el teu historial de Strava amb rutes i fotos';
+
+  @override
+  String get stravaIntro =>
+      'Porta tot el teu historial de Strava a Fjelia: activitats amb ruta, freqüència cardíaca i potència, i les seves fotos.';
+
+  @override
+  String get stravaHowTo =>
+      'A strava.com: Configuració → El meu compte → Descarrega o elimina el compte → Sol·licita l’arxiu. Strava t’envia un ZIP per correu; tria’l aquí tal qual, sense descomprimir-lo.';
+
+  @override
+  String get stravaChooseZip => 'Tria el ZIP';
+
+  @override
+  String get stravaReading => 'Llegint l’arxiu…';
+
+  @override
+  String get stravaNotArchive =>
+      'Aquest ZIP no és un arxiu de compte de Strava: hi falta activities.csv.';
+
+  @override
+  String stravaFound(int count) {
+    return '$count activitats trobades';
+  }
+
+  @override
+  String stravaWithFiles(int count) {
+    return '$count amb enregistrament (ruta i corbes)';
+  }
+
+  @override
+  String stravaPhotos(int photos, int videos) {
+    return '$photos fotos, $videos vídeos';
+  }
+
+  @override
+  String stravaAlready(int count) {
+    return '$count duplicats, ja a Fjelia o dobles a Strava: només s’afegeixen les fotos que falten';
+  }
+
+  @override
+  String stravaDeletedSkip(int count) {
+    return '$count eliminades abans, omeses';
+  }
+
+  @override
+  String stravaNew(int count) {
+    return '$count noves';
+  }
+
+  @override
+  String stravaStorage(int mb) {
+    return 'uns $mb MB per a fotos i vídeos';
+  }
+
+  @override
+  String get stravaPrivacy =>
+      'Tot es llegeix en aquest dispositiu. No es puja res i no cal iniciar sessió a Strava.';
+
+  @override
+  String stravaImportButton(int count) {
+    return 'Importa $count activitats';
+  }
+
+  @override
+  String get stravaImporting => 'S’està important l’arxiu de Strava';
+
+  @override
+  String stravaProgressActivities(String done, String total) {
+    return 'Activitats: $done / $total';
+  }
+
+  @override
+  String stravaImportedCount(int count) {
+    return '$count activitats importades';
+  }
+
+  @override
+  String stravaProgressPhotos(int count) {
+    return 'Fotos: $count importades';
+  }
+
+  @override
+  String stravaProgressDuplicates(int count) {
+    return 'Duplicats: $count omesos';
+  }
+
+  @override
+  String stravaProgressDeleted(int count) {
+    return 'Eliminades abans: $count omeses';
+  }
+
+  @override
+  String stravaProgressErrors(int count) {
+    return 'Errors: $count';
+  }
+
+  @override
+  String get stravaKeepOpen =>
+      'Pots fer servir l’app mentrestant. Mantén Fjelia oberta fins que acabi la importació.';
+
+  @override
+  String get stravaComplete => 'Importació de Strava completada';
+
+  @override
+  String get stravaPartial => 'Importació de Strava incompleta';
+
+  @override
+  String get stravaCancelled => 'Importació de Strava cancel·lada';
+
+  @override
+  String get stravaShowErrors => 'Mostra els errors';
+
+  @override
+  String get stravaAgainHint =>
+      'Tornar a importar el mateix arxiu només afegeix el que encara falta.';
+
+  @override
+  String get renameActivity => 'Canvia el nom de l’activitat';
+
+  @override
+  String get activityTitleLabel => 'Títol';
+
+  @override
+  String get activityTitleKept =>
+      'El teu títol es manté quan l’activitat es torna a sincronitzar. Només canvia a Fjelia, no a la plataforma d’origen.';
+
+  @override
+  String originalTitle(String name) {
+    return 'Original: $name';
+  }
+
+  @override
+  String get useOriginalTitle => 'Fes servir el títol original';
+
+  @override
+  String get loadOlderActivities => 'Carrega activitats anteriors';
+
+  @override
+  String get noOlderActivities => 'No hi ha activitats anteriors';
 }

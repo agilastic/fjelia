@@ -1,3 +1,4 @@
+import '../../l10n/formats.dart';
 import '../../l10n/plan_text.dart';
 import '../../l10n/l10n_ext.dart';
 
@@ -324,7 +325,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
           const SizedBox(height: 20),
           WorkoutStatTiles(
             items: [
-              ('${s.plannedDurationMin} min', context.l10n.duration2),
+              (planDuration(s.plannedDurationMin), context.l10n.duration2),
               if (!strength) ...[
                 ('${s.plannedTrimp}', 'TRIMP'),
                 ('Z${s.primaryZone}', context.l10n.primaryZone),

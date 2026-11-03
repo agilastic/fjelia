@@ -1,3 +1,5 @@
+import '../l10n/formats.dart';
+
 import 'package:intl/intl.dart';
 
 import '../l10n/l10n_ext.dart';
@@ -83,7 +85,7 @@ class CoachContextCard {
       title: s.title,
       date: s.sessionDate,
       status: status,
-      facts: ['${s.plannedDurationMin} min', 'Z${s.primaryZone}'],
+      facts: [planDuration(s.plannedDurationMin), 'Z${s.primaryZone}'],
       contextLine: _sessionLine(
         status: status.name,
         date: s.sessionDate,
@@ -102,10 +104,7 @@ class CoachContextCard {
       ),
       questions: switch (status) {
         CoachCardStatus.completed => _completedQuestions,
-        CoachCardStatus.skipped => const [
-          'Why is this a rest day?',
-          'What should I do instead?',
-        ],
+        CoachCardStatus.skipped => [tr.coachWhyRestDay, tr.coachWhatInstead],
         _ => _plannedQuestions,
       },
     );
@@ -165,15 +164,17 @@ class CoachContextCard {
   String withContext(String toon) =>
       contextLine.isEmpty ? toon : '$contextLine\n$toon';
 
-  static const _plannedQuestions = [
-    'How do I execute this workout?',
-    'Why this workout today?',
-    'Should I adjust it today?',
+  /// In the app language: they are shown as chips and sent as typed. Two of
+  /// each are the follow-ups' own words, so those are not offered twice.
+  static List<String> get _plannedQuestions => [
+    tr.howDoIExecuteThis,
+    tr.coachWhyThisToday,
+    tr.followAdjustToday,
   ];
-  static const _completedQuestions = [
-    'How did this session go?',
-    'What does it mean for my next days?',
-    'How does it compare with similar sessions?',
+  static List<String> get _completedQuestions => [
+    tr.coachHowDidItGo,
+    tr.followNextDays,
+    tr.followCompareSimilar,
   ];
 
   static String _sessionLine({
