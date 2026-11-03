@@ -11,6 +11,20 @@ final metricHistoryProvider =
     FutureProvider.family<List<ChartPoint>, HealthMetric>((ref, metric) async {
       ref.watch(syncStatusListenerProvider);
       final db = ref.watch(databaseProvider);
+      if (metric == HealthMetric.waist) {
+        // The waist history; before its first measurement, the profile waist
+        // that scale readings carried along.
+        final measured = await db.getWaistMeasurements();
+        final first = measured.firstOrNull?.measuredAt;
+        final scale = await db.getRenphoRange(3650);
+        return [
+          for (final r in scale)
+            if (r.waistCm case final double v
+                when first == null || r.measuredAt.isBefore(first))
+              ChartPoint(r.measuredAt, v),
+          for (final m in measured) ChartPoint(m.measuredAt, m.waistCm),
+        ]..sort((a, b) => a.at.compareTo(b.at));
+      }
       if (metric.isBody) {
         final rows = await db.getRenphoRange(3650);
         return [
@@ -25,7 +39,6 @@ final metricHistoryProvider =
                   HealthMetric.visceralFat => r.visceralFat,
                   HealthMetric.bmr => r.bmr,
                   HealthMetric.bone => r.boneMass,
-                  HealthMetric.waist => r.waistCm,
                   _ => null,
                 })
                 case final double v)

@@ -196,7 +196,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get sendingSharesYourEmailSubject =>
-      'Ved sending deles e-postadressen din, emnet, meldingen og valgt diagnostikk med Fjelia-støtten på cloud.ebeling-hoppe.de.';
+      'Ved sending deles e-postadressen din, emnet, meldingen og valgt diagnostikk med Fjelia-støtten på www.fjelia.com.';
 
   @override
   String get copyReport => 'Kopier rapport';
@@ -6478,4 +6478,134 @@ class AppLocalizationsNb extends AppLocalizations {
   String daylightLength(int hours, int minutes) {
     return '$hours t $minutes min dagslys';
   }
+
+  @override
+  String h10Battery(int level) {
+    return 'Batteri $level %';
+  }
+
+  @override
+  String get h10BatteryUnknown => 'Batteriet er ikke lest ennå';
+
+  @override
+  String h10BatteryChecked(String date) {
+    return 'Sjekket $date';
+  }
+
+  @override
+  String get h10BatteryLowHint => 'Lavt: bytt CR2025-knappcellen snart.';
+
+  @override
+  String get h10BatteryCheck => 'Sjekk batteriet';
+
+  @override
+  String get h10BatteryUnreachable =>
+      'H10 svarte ikke. Ta den på (eller fukt kontaktene) og prøv igjen.';
+
+  @override
+  String get shareRaceCalendar => 'Del løpskalender';
+
+  @override
+  String get raceSeasonTitle => 'Min løpssesong';
+
+  @override
+  String get raceShareStylePoster => 'Plakat';
+
+  @override
+  String get raceShareStyleTickets => 'Billetter';
+
+  @override
+  String get raceShareStyleTimeline => 'Neon-tidslinje';
+
+  @override
+  String get raceShareStyleMagazine => 'Magasin';
+
+  @override
+  String get raceShareShowTarget => 'Vis måltider';
+
+  @override
+  String get bpOptimal => 'OPTIMALT';
+
+  @override
+  String get bpHighNormal => 'HØY NORMAL';
+
+  @override
+  String get bpLow => 'LAVT';
+
+  @override
+  String get bpLowHint =>
+      'Lavt blodtrykk: betyr bare noe hvis du blir svimmel.';
+
+  @override
+  String get waistCircumference => 'Livvidde';
+
+  @override
+  String get hipOptional => 'Hofte (valgfritt)';
+
+  @override
+  String get waistToHeightRatio => 'Midje-høyde-forhold';
+
+  @override
+  String get waistToHipRatio => 'Midje-hofte-forhold';
+
+  @override
+  String get waistRiskLow => 'Svært slank';
+
+  @override
+  String get waistRiskHealthy => 'Sunn';
+
+  @override
+  String get waistRiskIncreased => 'Økt risiko';
+
+  @override
+  String get waistRiskHigh => 'Høy risiko';
+
+  @override
+  String get waistHowToMeasure =>
+      'Mål om morgenen, stående, etter utpust: midjen midt mellom nederste ribbein og toppen av hoftebeinet, hoften på det bredeste.';
+
+  @override
+  String get waistNeedsHeight =>
+      'Legg inn høyden din under Innstillinger → Profil.';
+
+  @override
+  String get waistNeedsHip => 'Mål hoften én gang for WHR.';
+
+  @override
+  String get waistSyncsProfile =>
+      'Den nyeste målingen er også livvidden din i innstillingene.';
+
+  @override
+  String get waistChange30d => '30 dager';
+
+  @override
+  String get waistChange90d => '90 dager';
+
+  @override
+  String get waistChange1y => '1 år';
+
+  @override
+  String get waistDeleteText => 'Dette sletter den valgte livviddemålingen.';
+
+  @override
+  String waistAndHip(String waist, String hip) {
+    return '$waist cm · hofte $hip cm';
+  }
+
+  @override
+  String hipValue(String hip) {
+    return 'Hofte $hip cm';
+  }
+
+  @override
+  String get whtrTargetHint => 'Hold midjen under halvparten av høyden din.';
+
+  @override
+  String get noWaistYet => 'Ingen livvidde målt ennå.';
+
+  @override
+  String get enterValidWaist => 'Skriv inn midje og hofte mellom 20 og 300 cm.';
+
+  @override
+  String get waistFromProfile => 'Fra profilen din, uten dato';
 }

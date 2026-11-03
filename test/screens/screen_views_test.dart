@@ -692,7 +692,16 @@ void main() {
       const Offset(0, 600),
     );
     await tester.pumpAndSettle();
+    // LT2 opens every source of the threshold; its test is one tap on.
     await tester.tap(find.text('LT2 THRESHOLD'));
+    await tester.pumpAndSettle();
+    expect(find.text('THRESHOLDS & FITNESS TESTS'), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.text('30-minute time trial').last,
+      250,
+      scrollable: find.byType(Scrollable).last,
+    );
+    await tester.tap(find.text('30-minute time trial').last);
     await tester.pumpAndSettle();
     expect(find.text('PROTOCOL'), findsOneWidget);
     await tester.pumpWidget(const SizedBox());
@@ -876,8 +885,8 @@ void main() {
         ('VO2MAX RUNNING', 'load-vo2-running-modal', .55),
         ('ACTIVITY HOURS', 'load-hours-modal', .55),
         ('ACTIVITY KM', 'load-distance-modal', .55),
-        ('FTP CYCLING', 'load-ftp-modal', .72),
-        ('LT2 THRESHOLD', 'load-lt2-protocol-modal', .625),
+        ('FTP CYCLING', 'load-ftp-modal', .9),
+        ('LT2 THRESHOLD', 'load-thresholds-modal', .9),
       ]) {
         await tester.scrollUntilVisible(
           find.text(target.$1),
@@ -894,12 +903,27 @@ void main() {
         );
         await capture(tester, target.$2);
         if (target.$1 == 'LT2 THRESHOLD') {
+          await tester.scrollUntilVisible(
+            find.text('30-minute time trial').last,
+            250,
+            scrollable: find.byType(Scrollable).last,
+          );
+          await tester.tap(find.text('30-minute time trial').last);
+          await tester.pumpAndSettle();
+          await capture(tester, 'load-lt2-protocol-modal');
           await tester.tap(find.text('CALCULATE'));
           await tester.pumpAndSettle();
           await capture(tester, 'load-lt2-calculate-modal');
           await tester.tap(find.text('HISTORY'));
           await tester.pumpAndSettle();
           await capture(tester, 'load-lt2-history-modal');
+          // Back to the overview before it is closed below.
+          await tester.dragFrom(
+            tester.getTopLeft(find.byType(LoadSheet).last) +
+                const Offset(100, 14),
+            const Offset(0, 700),
+          );
+          await tester.pumpAndSettle();
         }
         await tester.dragFrom(
           tester.getTopLeft(find.byType(LoadSheet)) + const Offset(100, 14),

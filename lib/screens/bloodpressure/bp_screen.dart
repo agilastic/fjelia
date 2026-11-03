@@ -15,6 +15,7 @@ import 'package:intl/intl.dart';
 import 'bp_variation_chart.dart';
 import '../../utils/week.dart';
 import '../../providers/week_start_provider.dart';
+import '../../models/bp_category.dart';
 
 class BpScreen extends ConsumerStatefulWidget {
   const BpScreen({super.key});
@@ -107,13 +108,23 @@ class _BpState extends ConsumerState<BpScreen> {
                     Text(
                       bp == null
                           ? context.l10n.noMeasurements
-                          : bp.avgSystolic >= 140
-                          ? context.l10n.high2
-                          : bp.avgSystolic >= 120
-                          ? context.l10n.elevated
-                          : context.l10n.normal,
+                          // ESH categories, systolic and diastolic.
+                          : bpCategoryLabel(
+                              bpCategory(bp.avgSystolic, bp.avgDiastolic),
+                            ),
                       style: const TextStyle(fontSize: 10, color: mint),
                     ),
+                    if (bp != null &&
+                        bpCategory(bp.avgSystolic, bp.avgDiastolic) ==
+                            BpCategory.low)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Text(
+                          context.l10n.bpLowHint,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontSize: 10, color: muted),
+                        ),
+                      ),
                     const SizedBox(height: 18),
                   ],
                 ),

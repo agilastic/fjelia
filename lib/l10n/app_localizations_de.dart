@@ -197,7 +197,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get sendingSharesYourEmailSubject =>
-      'Beim Senden werden deine E-Mail-Adresse, der Betreff, die Nachricht und die ausgewählten Diagnosedaten mit dem Fjelia-Support unter cloud.ebeling-hoppe.de geteilt.';
+      'Beim Senden werden deine E-Mail-Adresse, der Betreff, die Nachricht und die ausgewählten Diagnosedaten mit dem Fjelia-Support unter www.fjelia.com geteilt.';
 
   @override
   String get copyReport => 'Bericht kopieren';
@@ -6516,4 +6516,136 @@ class AppLocalizationsDe extends AppLocalizations {
   String daylightLength(int hours, int minutes) {
     return '$hours Std. $minutes Min. Tageslicht';
   }
+
+  @override
+  String h10Battery(int level) {
+    return 'Akku $level %';
+  }
+
+  @override
+  String get h10BatteryUnknown => 'Akku noch nicht gelesen';
+
+  @override
+  String h10BatteryChecked(String date) {
+    return 'Geprüft $date';
+  }
+
+  @override
+  String get h10BatteryLowHint => 'Schwach: Knopfzelle CR2025 bald wechseln.';
+
+  @override
+  String get h10BatteryCheck => 'Akku prüfen';
+
+  @override
+  String get h10BatteryUnreachable =>
+      'Der H10 hat nicht geantwortet. Leg ihn an (oder befeuchte die Kontakte) und versuch es erneut.';
+
+  @override
+  String get shareRaceCalendar => 'Wettkampfkalender teilen';
+
+  @override
+  String get raceSeasonTitle => 'Meine Wettkampfsaison';
+
+  @override
+  String get raceShareStylePoster => 'Poster';
+
+  @override
+  String get raceShareStyleTickets => 'Tickets';
+
+  @override
+  String get raceShareStyleTimeline => 'Neon-Zeitleiste';
+
+  @override
+  String get raceShareStyleMagazine => 'Magazin';
+
+  @override
+  String get raceShareShowTarget => 'Zielzeiten anzeigen';
+
+  @override
+  String get bpOptimal => 'OPTIMAL';
+
+  @override
+  String get bpHighNormal => 'HOCH-NORMAL';
+
+  @override
+  String get bpLow => 'NIEDRIG';
+
+  @override
+  String get bpLowHint =>
+      'Niedriger Blutdruck: nur von Bedeutung, wenn dir schwindelig wird.';
+
+  @override
+  String get waistCircumference => 'Taillenumfang';
+
+  @override
+  String get hipOptional => 'Hüfte (optional)';
+
+  @override
+  String get waistToHeightRatio => 'Taille-Größe-Verhältnis';
+
+  @override
+  String get waistToHipRatio => 'Taille-Hüft-Verhältnis';
+
+  @override
+  String get waistRiskLow => 'Sehr schlank';
+
+  @override
+  String get waistRiskHealthy => 'Gesund';
+
+  @override
+  String get waistRiskIncreased => 'Erhöhtes Risiko';
+
+  @override
+  String get waistRiskHigh => 'Hohes Risiko';
+
+  @override
+  String get waistHowToMeasure =>
+      'Morgens im Stehen nach dem Ausatmen messen: Taille in der Mitte zwischen unterster Rippe und Oberkante des Beckenknochens, Hüfte an der breitesten Stelle.';
+
+  @override
+  String get waistNeedsHeight =>
+      'Trage deine Größe unter Einstellungen → Profil ein.';
+
+  @override
+  String get waistNeedsHip => 'Miss einmal deine Hüfte für das WHR.';
+
+  @override
+  String get waistSyncsProfile =>
+      'Die neueste Messung ist auch dein Taillenumfang in den Einstellungen.';
+
+  @override
+  String get waistChange30d => '30 Tage';
+
+  @override
+  String get waistChange90d => '90 Tage';
+
+  @override
+  String get waistChange1y => '1 Jahr';
+
+  @override
+  String get waistDeleteText => 'Die ausgewählte Taillenmessung wird gelöscht.';
+
+  @override
+  String waistAndHip(String waist, String hip) {
+    return '$waist cm · Hüfte $hip cm';
+  }
+
+  @override
+  String hipValue(String hip) {
+    return 'Hüfte $hip cm';
+  }
+
+  @override
+  String get whtrTargetHint =>
+      'Halte deine Taille unter der halben Körpergröße.';
+
+  @override
+  String get noWaistYet => 'Noch kein Taillenumfang gemessen.';
+
+  @override
+  String get enterValidWaist =>
+      'Gib Taille und Hüfte zwischen 20 und 300 cm ein.';
+
+  @override
+  String get waistFromProfile => 'Aus deinem Profil, ohne Datum';
 }

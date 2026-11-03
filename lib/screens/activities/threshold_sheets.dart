@@ -12,26 +12,55 @@ import '../../providers/ftp_provider.dart';
 import '../../widgets/app_widgets.dart';
 import '../../services/activity_power_estimator.dart';
 import 'load_visuals.dart';
+import 'lt2_test_sheet.dart';
 import 'threshold_overview_section.dart';
+import '../../providers/threshold_overview_provider.dart' show ThresholdKind;
 
 class ThresholdSheets extends ConsumerWidget {
   const ThresholdSheets({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final vo2 = ref.watch(vo2MaxProvider).valueOrNull;
-    return SheetPage(
+    return LoadSheet(
       title: context.l10n.thresholdsFitnessTests,
+      close: true,
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           ThresholdOverviewSection(
-            footer: Align(
-              alignment: Alignment.centerLeft,
-              child: TextButton(
-                onPressed: () => showAppSheet(context, const _FtpEditor()),
-                child: Text(context.l10n.setFtpManually),
+            // The app's own tests stay one tap away under their threshold.
+            footers: {
+              ThresholdKind.lt1: _TestLink(
+                label: context.l10n.thresholdSourceDrift,
+                onTap: () => showLoadSheet(
+                  context,
+                  const ThresholdTestSheet(),
+                  height: .72,
+                ),
               ),
-            ),
+              ThresholdKind.lt2: _TestLink(
+                label: context.l10n.thirtyMinuteTimeTrial,
+                onTap: () =>
+                    showLoadSheet(context, const Lt2TestSheet(), height: .625),
+              ),
+              ThresholdKind.ftp: Wrap(
+                spacing: 4,
+                children: [
+                  _TestLink(
+                    label: context.l10n.setFtpManually,
+                    onTap: () => showAppSheet(context, const _FtpEditor()),
+                  ),
+                  _TestLink(
+                    label: context.l10n.functionalThresholdPower,
+                    onTap: () => showLoadSheet(
+                      context,
+                      const FtpDetailSheet(),
+                      height: .72,
+                    ),
+                  ),
+                ],
+              ),
+            },
           ),
           SectionCard(
             title: context.l10n.voPace,
@@ -500,4 +529,20 @@ class _ThresholdTestState extends ConsumerState<ThresholdTestSheet> {
       ),
     );
   }
+}
+
+class _TestLink extends StatelessWidget {
+  const _TestLink({required this.label, required this.onTap});
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) => Align(
+    alignment: Alignment.centerLeft,
+    child: TextButton.icon(
+      onPressed: onTap,
+      icon: const Icon(Icons.science_outlined, size: 16),
+      label: Text(label),
+    ),
+  );
 }

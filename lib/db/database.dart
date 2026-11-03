@@ -425,6 +425,18 @@ class GripStrengthRecords extends Table {
   RealColumn get rightKg => real().nullable()();
 }
 
+/// Waist (and, when measured, hip) circumference over time. The newest one is
+/// also the waist in the profile.
+class WaistMeasurements extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  DateTimeColumn get measuredAt => dateTime()();
+  RealColumn get waistCm => real()();
+  RealColumn get hipCm => real().nullable()();
+
+  /// 'manual' from the + menu, 'profile' when typed into Settings.
+  TextColumn get source => text().withDefault(const Constant('manual'))();
+}
+
 class OcrMeasurements extends Table {
   IntColumn get id => integer().autoIncrement()();
   DateTimeColumn get measuredAt => dateTime()();
@@ -1211,6 +1223,7 @@ class MediaItems extends Table {
     StrengthProposalDecisions,
     DayScoreRecords,
     GripStrengthRecords,
+    WaistMeasurements,
     SpotHrvMeasurements,
     HrvTrainingEpisodes,
     HrvEpisodeAliases,
@@ -1259,7 +1272,7 @@ class AppDatabase extends _$AppDatabase {
       defaultSourcePriorities[group.name]!;
 
   @override
-  int get schemaVersion => 56;
+  int get schemaVersion => 57;
 
   Future<void> saveHeartRateSamples(List<TimedHeartRate> samples) async {
     if (samples.isEmpty) return;
@@ -2001,6 +2014,45 @@ class AppDatabase extends _$AppDatabase {
   Future<int> deleteGripStrength(int id) =>
       (delete(gripStrengthRecords)..where((t) => t.id.equals(id))).go();
 
+  // ── Waist ──────────────────────────────────────────────────────────────
+
+  /// Oldest first.
+  Future<List<WaistMeasurement>> getWaistMeasurements() =>
+      (select(waistMeasurements)..orderBy([
+            (t) => OrderingTerm(expression: t.measuredAt),
+            (t) => OrderingTerm(expression: t.id),
+          ]))
+          .get();
+
+  Future<int> insertWaistMeasurement(WaistMeasurementsCompanion entry) =>
+      into(waistMeasurements).insert(entry);
+
+  Future<int> deleteWaistMeasurement(int id) =>
+      (delete(waistMeasurements)..where((t) => t.id.equals(id))).go();
+
+  /// The value typed into Settings: one row per day, so typing a number
+  /// digit by digit leaves one measurement, not one per keystroke.
+  Future<void> putWaistFromProfile(DateTime at, double waistCm) =>
+      transaction(() async {
+        final day = DateTime(at.year, at.month, at.day);
+        await (delete(waistMeasurements)..where(
+              (t) =>
+                  t.source.equals('profile') &
+                  t.measuredAt.isBiggerOrEqualValue(day) &
+                  t.measuredAt.isSmallerThanValue(
+                    day.add(const Duration(days: 1)),
+                  ),
+            ))
+            .go();
+        await into(waistMeasurements).insert(
+          WaistMeasurementsCompanion.insert(
+            measuredAt: at,
+            waistCm: waistCm,
+            source: const Value('profile'),
+          ),
+        );
+      });
+
   Future<int> insertOcrMeasurement(OcrMeasurementsCompanion entry) =>
       into(ocrMeasurements).insert(entry);
 
@@ -2251,6 +2303,7 @@ class AppDatabase extends _$AppDatabase {
       await ensureHrvIdentity();
     },
     onUpgrade: (m, from, to) async {
+      if (from < 57) await m.createTable(waistMeasurements);
       if (from < 56) await m.createTable(mediaItems);
       if (from < 55) await m.createTable(dfaAlpha1Results);
       if (from >= 51 && from < 54) {

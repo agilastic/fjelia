@@ -459,7 +459,7 @@ abstract class AppLocalizations {
   /// No description provided for @sendingSharesYourEmailSubject.
   ///
   /// In en, this message translates to:
-  /// **'Sending shares your email, subject, message and any selected diagnostics with Fjelia support at cloud.ebeling-hoppe.de.'**
+  /// **'Sending shares your email, subject, message and any selected diagnostics with Fjelia support at www.fjelia.com.'**
   String get sendingSharesYourEmailSubject;
 
   /// No description provided for @copyReport.
@@ -11375,6 +11375,240 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{hours} h {minutes} min daylight'**
   String daylightLength(int hours, int minutes);
+
+  /// No description provided for @h10Battery.
+  ///
+  /// In en, this message translates to:
+  /// **'Battery {level} %'**
+  String h10Battery(int level);
+
+  /// No description provided for @h10BatteryUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Battery not read yet'**
+  String get h10BatteryUnknown;
+
+  /// No description provided for @h10BatteryChecked.
+  ///
+  /// In en, this message translates to:
+  /// **'Checked {date}'**
+  String h10BatteryChecked(String date);
+
+  /// No description provided for @h10BatteryLowHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Low: replace the CR2025 coin cell soon.'**
+  String get h10BatteryLowHint;
+
+  /// No description provided for @h10BatteryCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Check battery'**
+  String get h10BatteryCheck;
+
+  /// No description provided for @h10BatteryUnreachable.
+  ///
+  /// In en, this message translates to:
+  /// **'The H10 didn\'t answer. Put it on (or wet the contacts) and try again.'**
+  String get h10BatteryUnreachable;
+
+  /// No description provided for @shareRaceCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Share race calendar'**
+  String get shareRaceCalendar;
+
+  /// No description provided for @raceSeasonTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My race season'**
+  String get raceSeasonTitle;
+
+  /// No description provided for @raceShareStylePoster.
+  ///
+  /// In en, this message translates to:
+  /// **'Poster'**
+  String get raceShareStylePoster;
+
+  /// No description provided for @raceShareStyleTickets.
+  ///
+  /// In en, this message translates to:
+  /// **'Tickets'**
+  String get raceShareStyleTickets;
+
+  /// No description provided for @raceShareStyleTimeline.
+  ///
+  /// In en, this message translates to:
+  /// **'Neon timeline'**
+  String get raceShareStyleTimeline;
+
+  /// No description provided for @raceShareStyleMagazine.
+  ///
+  /// In en, this message translates to:
+  /// **'Magazine'**
+  String get raceShareStyleMagazine;
+
+  /// No description provided for @raceShareShowTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'Show target times'**
+  String get raceShareShowTarget;
+
+  /// No description provided for @bpOptimal.
+  ///
+  /// In en, this message translates to:
+  /// **'OPTIMAL'**
+  String get bpOptimal;
+
+  /// No description provided for @bpHighNormal.
+  ///
+  /// In en, this message translates to:
+  /// **'HIGH NORMAL'**
+  String get bpHighNormal;
+
+  /// No description provided for @bpLow.
+  ///
+  /// In en, this message translates to:
+  /// **'LOW'**
+  String get bpLow;
+
+  /// No description provided for @bpLowHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Low blood pressure: only a concern if you feel dizzy or light-headed.'**
+  String get bpLowHint;
+
+  /// No description provided for @waistCircumference.
+  ///
+  /// In en, this message translates to:
+  /// **'Waist circumference'**
+  String get waistCircumference;
+
+  /// No description provided for @hipOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Hip (optional)'**
+  String get hipOptional;
+
+  /// No description provided for @waistToHeightRatio.
+  ///
+  /// In en, this message translates to:
+  /// **'Waist-to-height ratio'**
+  String get waistToHeightRatio;
+
+  /// No description provided for @waistToHipRatio.
+  ///
+  /// In en, this message translates to:
+  /// **'Waist-to-hip ratio'**
+  String get waistToHipRatio;
+
+  /// No description provided for @waistRiskLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Very slim'**
+  String get waistRiskLow;
+
+  /// No description provided for @waistRiskHealthy.
+  ///
+  /// In en, this message translates to:
+  /// **'Healthy'**
+  String get waistRiskHealthy;
+
+  /// No description provided for @waistRiskIncreased.
+  ///
+  /// In en, this message translates to:
+  /// **'Increased risk'**
+  String get waistRiskIncreased;
+
+  /// No description provided for @waistRiskHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'High risk'**
+  String get waistRiskHigh;
+
+  /// No description provided for @waistHowToMeasure.
+  ///
+  /// In en, this message translates to:
+  /// **'Measure in the morning, standing, after breathing out: waist midway between the lowest rib and the top of the hip bone, hip at the widest point.'**
+  String get waistHowToMeasure;
+
+  /// No description provided for @waistNeedsHeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your height in Settings → Profile.'**
+  String get waistNeedsHeight;
+
+  /// No description provided for @waistNeedsHip.
+  ///
+  /// In en, this message translates to:
+  /// **'Measure your hip once for the WHR.'**
+  String get waistNeedsHip;
+
+  /// No description provided for @waistSyncsProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'The newest measurement is also your waist in Settings.'**
+  String get waistSyncsProfile;
+
+  /// No description provided for @waistChange30d.
+  ///
+  /// In en, this message translates to:
+  /// **'30 days'**
+  String get waistChange30d;
+
+  /// No description provided for @waistChange90d.
+  ///
+  /// In en, this message translates to:
+  /// **'90 days'**
+  String get waistChange90d;
+
+  /// No description provided for @waistChange1y.
+  ///
+  /// In en, this message translates to:
+  /// **'1 year'**
+  String get waistChange1y;
+
+  /// No description provided for @waistDeleteText.
+  ///
+  /// In en, this message translates to:
+  /// **'This removes the selected waist measurement.'**
+  String get waistDeleteText;
+
+  /// No description provided for @waistAndHip.
+  ///
+  /// In en, this message translates to:
+  /// **'{waist} cm · hip {hip} cm'**
+  String waistAndHip(String waist, String hip);
+
+  /// No description provided for @hipValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Hip {hip} cm'**
+  String hipValue(String hip);
+
+  /// No description provided for @whtrTargetHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep your waist under half your height.'**
+  String get whtrTargetHint;
+
+  /// No description provided for @noWaistYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No waist measured yet.'**
+  String get noWaistYet;
+
+  /// No description provided for @enterValidWaist.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a waist and hip between 20 and 300 cm.'**
+  String get enterValidWaist;
+
+  /// No description provided for @waistFromProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'From your profile, not dated'**
+  String get waistFromProfile;
 }
 
 class _AppLocalizationsDelegate

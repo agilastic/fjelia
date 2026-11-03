@@ -1,6 +1,7 @@
 import '../../l10n/l10n_ext.dart';
 import '../../l10n/formats.dart';
 import '../../providers/plan_weather_provider.dart';
+import '../../widgets/race_calendar_share.dart';
 import '../../widgets/rain_nowcast_line.dart';
 import '../../widgets/weather_visuals.dart';
 import '../weather/weather_screen.dart';
@@ -217,7 +218,16 @@ class RaceCountdownCard extends ConsumerWidget {
     // One goal is shown in full. With several they are one item, a line each,
     // that unfolds into the full cards.
     if (goals.length == 1) {
-      return _GoalCard(goal: goals.first, primary: true, showPriority: false);
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          _GoalCard(goal: goals.first, primary: true, showPriority: false),
+          Transform.translate(
+            offset: const Offset(0, -10),
+            child: _ShareGoalsButton(goals: goals, label: true),
+          ),
+        ],
+      );
     }
     return Column(
       children: [
@@ -409,6 +419,8 @@ class _GoalsAccordionState extends State<_GoalsAccordion> {
                           ],
                         ),
                       ),
+                      // Unfolded, the season can be shared as an image.
+                      if (open) _ShareGoalsButton(goals: goals),
                       Icon(
                         open ? Icons.expand_less : Icons.expand_more,
                         size: 22,
@@ -427,6 +439,33 @@ class _GoalsAccordionState extends State<_GoalsAccordion> {
       ),
     );
   }
+}
+
+/// Opens the race calendar as a shareable image.
+class _ShareGoalsButton extends StatelessWidget {
+  const _ShareGoalsButton({required this.goals, this.label = false});
+  final List<RaceGoal> goals;
+  final bool label;
+
+  void _open(BuildContext context) => Navigator.of(context).push(
+    MaterialPageRoute<void>(
+      builder: (_) => RaceCalendarSharePage(goals: goals),
+    ),
+  );
+
+  @override
+  Widget build(BuildContext context) => label
+      ? TextButton.icon(
+          onPressed: () => _open(context),
+          icon: const Icon(Icons.ios_share, size: 16),
+          label: Text(context.l10n.shareRaceCalendar),
+        )
+      : IconButton(
+          tooltip: context.l10n.shareRaceCalendar,
+          visualDensity: VisualDensity.compact,
+          onPressed: () => _open(context),
+          icon: const Icon(Icons.ios_share, size: 20, color: Colors.orange),
+        );
 }
 
 class _GoalCard extends ConsumerWidget {

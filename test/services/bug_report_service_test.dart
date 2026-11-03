@@ -11,7 +11,7 @@ void main() {
         expect(request.method, 'POST');
         expect(
           request.url.toString(),
-          'https://cloud.ebeling-hoppe.de/fjelia/report/',
+          'https://www.fjelia.com/report/',
         );
         expect(request.followRedirects, isFalse);
         expect(request.bodyFields, {
@@ -38,7 +38,7 @@ void main() {
           return http.Response(
             '',
             303,
-            headers: {'location': '/fjelia/report/sent'},
+            headers: {'location': '/report/sent?ref=abc123'},
           );
         }),
       );

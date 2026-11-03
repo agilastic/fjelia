@@ -12,7 +12,7 @@ class BugReportService {
   BugReportService({this.client});
   final http.Client? client;
   static final endpoint = Uri.parse(
-    'https://cloud.ebeling-hoppe.de/fjelia/report/',
+    'https://www.fjelia.com/report/',
   );
 
   Future<void> send({

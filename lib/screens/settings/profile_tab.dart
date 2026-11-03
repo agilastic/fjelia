@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../providers/user_profile_provider.dart';
+import '../../providers/waist_provider.dart';
 import '../../widgets/app_widgets.dart';
 import 'hr_zones_tab.dart';
 
@@ -91,6 +92,10 @@ class ProfileEditor extends ConsumerWidget {
                       .save(
                         UserProfile.fromJson({...current.toJson(), key: value}),
                       );
+                  // A waist typed here is today's measurement in the history.
+                  if (key == 'waistCm' && value is double) {
+                    await ref.read(waistActionsProvider).fromProfile(value);
+                  }
                 });
             Widget number(
               String label,

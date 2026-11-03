@@ -13557,6 +13557,358 @@ class GripStrengthRecordsCompanion extends UpdateCompanion<GripStrengthRecord> {
   }
 }
 
+class $WaistMeasurementsTable extends WaistMeasurements
+    with TableInfo<$WaistMeasurementsTable, WaistMeasurement> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $WaistMeasurementsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _measuredAtMeta = const VerificationMeta(
+    'measuredAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> measuredAt = GeneratedColumn<DateTime>(
+    'measured_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _waistCmMeta = const VerificationMeta(
+    'waistCm',
+  );
+  @override
+  late final GeneratedColumn<double> waistCm = GeneratedColumn<double>(
+    'waist_cm',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _hipCmMeta = const VerificationMeta('hipCm');
+  @override
+  late final GeneratedColumn<double> hipCm = GeneratedColumn<double>(
+    'hip_cm',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _sourceMeta = const VerificationMeta('source');
+  @override
+  late final GeneratedColumn<String> source = GeneratedColumn<String>(
+    'source',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('manual'),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    measuredAt,
+    waistCm,
+    hipCm,
+    source,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'waist_measurements';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<WaistMeasurement> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('measured_at')) {
+      context.handle(
+        _measuredAtMeta,
+        measuredAt.isAcceptableOrUnknown(data['measured_at']!, _measuredAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_measuredAtMeta);
+    }
+    if (data.containsKey('waist_cm')) {
+      context.handle(
+        _waistCmMeta,
+        waistCm.isAcceptableOrUnknown(data['waist_cm']!, _waistCmMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_waistCmMeta);
+    }
+    if (data.containsKey('hip_cm')) {
+      context.handle(
+        _hipCmMeta,
+        hipCm.isAcceptableOrUnknown(data['hip_cm']!, _hipCmMeta),
+      );
+    }
+    if (data.containsKey('source')) {
+      context.handle(
+        _sourceMeta,
+        source.isAcceptableOrUnknown(data['source']!, _sourceMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  WaistMeasurement map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return WaistMeasurement(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      measuredAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}measured_at'],
+      )!,
+      waistCm: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}waist_cm'],
+      )!,
+      hipCm: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}hip_cm'],
+      ),
+      source: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source'],
+      )!,
+    );
+  }
+
+  @override
+  $WaistMeasurementsTable createAlias(String alias) {
+    return $WaistMeasurementsTable(attachedDatabase, alias);
+  }
+}
+
+class WaistMeasurement extends DataClass
+    implements Insertable<WaistMeasurement> {
+  final int id;
+  final DateTime measuredAt;
+  final double waistCm;
+  final double? hipCm;
+
+  /// 'manual' from the + menu, 'profile' when typed into Settings.
+  final String source;
+  const WaistMeasurement({
+    required this.id,
+    required this.measuredAt,
+    required this.waistCm,
+    this.hipCm,
+    required this.source,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['measured_at'] = Variable<DateTime>(measuredAt);
+    map['waist_cm'] = Variable<double>(waistCm);
+    if (!nullToAbsent || hipCm != null) {
+      map['hip_cm'] = Variable<double>(hipCm);
+    }
+    map['source'] = Variable<String>(source);
+    return map;
+  }
+
+  WaistMeasurementsCompanion toCompanion(bool nullToAbsent) {
+    return WaistMeasurementsCompanion(
+      id: Value(id),
+      measuredAt: Value(measuredAt),
+      waistCm: Value(waistCm),
+      hipCm: hipCm == null && nullToAbsent
+          ? const Value.absent()
+          : Value(hipCm),
+      source: Value(source),
+    );
+  }
+
+  factory WaistMeasurement.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return WaistMeasurement(
+      id: serializer.fromJson<int>(json['id']),
+      measuredAt: serializer.fromJson<DateTime>(json['measuredAt']),
+      waistCm: serializer.fromJson<double>(json['waistCm']),
+      hipCm: serializer.fromJson<double?>(json['hipCm']),
+      source: serializer.fromJson<String>(json['source']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'measuredAt': serializer.toJson<DateTime>(measuredAt),
+      'waistCm': serializer.toJson<double>(waistCm),
+      'hipCm': serializer.toJson<double?>(hipCm),
+      'source': serializer.toJson<String>(source),
+    };
+  }
+
+  WaistMeasurement copyWith({
+    int? id,
+    DateTime? measuredAt,
+    double? waistCm,
+    Value<double?> hipCm = const Value.absent(),
+    String? source,
+  }) => WaistMeasurement(
+    id: id ?? this.id,
+    measuredAt: measuredAt ?? this.measuredAt,
+    waistCm: waistCm ?? this.waistCm,
+    hipCm: hipCm.present ? hipCm.value : this.hipCm,
+    source: source ?? this.source,
+  );
+  WaistMeasurement copyWithCompanion(WaistMeasurementsCompanion data) {
+    return WaistMeasurement(
+      id: data.id.present ? data.id.value : this.id,
+      measuredAt: data.measuredAt.present
+          ? data.measuredAt.value
+          : this.measuredAt,
+      waistCm: data.waistCm.present ? data.waistCm.value : this.waistCm,
+      hipCm: data.hipCm.present ? data.hipCm.value : this.hipCm,
+      source: data.source.present ? data.source.value : this.source,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WaistMeasurement(')
+          ..write('id: $id, ')
+          ..write('measuredAt: $measuredAt, ')
+          ..write('waistCm: $waistCm, ')
+          ..write('hipCm: $hipCm, ')
+          ..write('source: $source')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, measuredAt, waistCm, hipCm, source);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is WaistMeasurement &&
+          other.id == this.id &&
+          other.measuredAt == this.measuredAt &&
+          other.waistCm == this.waistCm &&
+          other.hipCm == this.hipCm &&
+          other.source == this.source);
+}
+
+class WaistMeasurementsCompanion extends UpdateCompanion<WaistMeasurement> {
+  final Value<int> id;
+  final Value<DateTime> measuredAt;
+  final Value<double> waistCm;
+  final Value<double?> hipCm;
+  final Value<String> source;
+  const WaistMeasurementsCompanion({
+    this.id = const Value.absent(),
+    this.measuredAt = const Value.absent(),
+    this.waistCm = const Value.absent(),
+    this.hipCm = const Value.absent(),
+    this.source = const Value.absent(),
+  });
+  WaistMeasurementsCompanion.insert({
+    this.id = const Value.absent(),
+    required DateTime measuredAt,
+    required double waistCm,
+    this.hipCm = const Value.absent(),
+    this.source = const Value.absent(),
+  }) : measuredAt = Value(measuredAt),
+       waistCm = Value(waistCm);
+  static Insertable<WaistMeasurement> custom({
+    Expression<int>? id,
+    Expression<DateTime>? measuredAt,
+    Expression<double>? waistCm,
+    Expression<double>? hipCm,
+    Expression<String>? source,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (measuredAt != null) 'measured_at': measuredAt,
+      if (waistCm != null) 'waist_cm': waistCm,
+      if (hipCm != null) 'hip_cm': hipCm,
+      if (source != null) 'source': source,
+    });
+  }
+
+  WaistMeasurementsCompanion copyWith({
+    Value<int>? id,
+    Value<DateTime>? measuredAt,
+    Value<double>? waistCm,
+    Value<double?>? hipCm,
+    Value<String>? source,
+  }) {
+    return WaistMeasurementsCompanion(
+      id: id ?? this.id,
+      measuredAt: measuredAt ?? this.measuredAt,
+      waistCm: waistCm ?? this.waistCm,
+      hipCm: hipCm ?? this.hipCm,
+      source: source ?? this.source,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (measuredAt.present) {
+      map['measured_at'] = Variable<DateTime>(measuredAt.value);
+    }
+    if (waistCm.present) {
+      map['waist_cm'] = Variable<double>(waistCm.value);
+    }
+    if (hipCm.present) {
+      map['hip_cm'] = Variable<double>(hipCm.value);
+    }
+    if (source.present) {
+      map['source'] = Variable<String>(source.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WaistMeasurementsCompanion(')
+          ..write('id: $id, ')
+          ..write('measuredAt: $measuredAt, ')
+          ..write('waistCm: $waistCm, ')
+          ..write('hipCm: $hipCm, ')
+          ..write('source: $source')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $SpotHrvMeasurementsTable extends SpotHrvMeasurements
     with TableInfo<$SpotHrvMeasurementsTable, SpotHrvMeasurement> {
   @override
@@ -44483,6 +44835,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   );
   late final $GripStrengthRecordsTable gripStrengthRecords =
       $GripStrengthRecordsTable(this);
+  late final $WaistMeasurementsTable waistMeasurements =
+      $WaistMeasurementsTable(this);
   late final $SpotHrvMeasurementsTable spotHrvMeasurements =
       $SpotHrvMeasurementsTable(this);
   late final $HrvTrainingEpisodesTable hrvTrainingEpisodes =
@@ -44577,6 +44931,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     strengthProposalDecisions,
     dayScoreRecords,
     gripStrengthRecords,
+    waistMeasurements,
     spotHrvMeasurements,
     hrvTrainingEpisodes,
     hrvEpisodeAliases,
@@ -51489,6 +51844,224 @@ typedef $$GripStrengthRecordsTableProcessedTableManager =
         >,
       ),
       GripStrengthRecord,
+      PrefetchHooks Function()
+    >;
+typedef $$WaistMeasurementsTableCreateCompanionBuilder =
+    WaistMeasurementsCompanion Function({
+      Value<int> id,
+      required DateTime measuredAt,
+      required double waistCm,
+      Value<double?> hipCm,
+      Value<String> source,
+    });
+typedef $$WaistMeasurementsTableUpdateCompanionBuilder =
+    WaistMeasurementsCompanion Function({
+      Value<int> id,
+      Value<DateTime> measuredAt,
+      Value<double> waistCm,
+      Value<double?> hipCm,
+      Value<String> source,
+    });
+
+class $$WaistMeasurementsTableFilterComposer
+    extends Composer<_$AppDatabase, $WaistMeasurementsTable> {
+  $$WaistMeasurementsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get measuredAt => $composableBuilder(
+    column: $table.measuredAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get waistCm => $composableBuilder(
+    column: $table.waistCm,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get hipCm => $composableBuilder(
+    column: $table.hipCm,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get source => $composableBuilder(
+    column: $table.source,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$WaistMeasurementsTableOrderingComposer
+    extends Composer<_$AppDatabase, $WaistMeasurementsTable> {
+  $$WaistMeasurementsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get measuredAt => $composableBuilder(
+    column: $table.measuredAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get waistCm => $composableBuilder(
+    column: $table.waistCm,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get hipCm => $composableBuilder(
+    column: $table.hipCm,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get source => $composableBuilder(
+    column: $table.source,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$WaistMeasurementsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $WaistMeasurementsTable> {
+  $$WaistMeasurementsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get measuredAt => $composableBuilder(
+    column: $table.measuredAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get waistCm =>
+      $composableBuilder(column: $table.waistCm, builder: (column) => column);
+
+  GeneratedColumn<double> get hipCm =>
+      $composableBuilder(column: $table.hipCm, builder: (column) => column);
+
+  GeneratedColumn<String> get source =>
+      $composableBuilder(column: $table.source, builder: (column) => column);
+}
+
+class $$WaistMeasurementsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $WaistMeasurementsTable,
+          WaistMeasurement,
+          $$WaistMeasurementsTableFilterComposer,
+          $$WaistMeasurementsTableOrderingComposer,
+          $$WaistMeasurementsTableAnnotationComposer,
+          $$WaistMeasurementsTableCreateCompanionBuilder,
+          $$WaistMeasurementsTableUpdateCompanionBuilder,
+          (
+            WaistMeasurement,
+            BaseReferences<
+              _$AppDatabase,
+              $WaistMeasurementsTable,
+              WaistMeasurement
+            >,
+          ),
+          WaistMeasurement,
+          PrefetchHooks Function()
+        > {
+  $$WaistMeasurementsTableTableManager(
+    _$AppDatabase db,
+    $WaistMeasurementsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$WaistMeasurementsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$WaistMeasurementsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$WaistMeasurementsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<DateTime> measuredAt = const Value.absent(),
+                Value<double> waistCm = const Value.absent(),
+                Value<double?> hipCm = const Value.absent(),
+                Value<String> source = const Value.absent(),
+              }) => WaistMeasurementsCompanion(
+                id: id,
+                measuredAt: measuredAt,
+                waistCm: waistCm,
+                hipCm: hipCm,
+                source: source,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required DateTime measuredAt,
+                required double waistCm,
+                Value<double?> hipCm = const Value.absent(),
+                Value<String> source = const Value.absent(),
+              }) => WaistMeasurementsCompanion.insert(
+                id: id,
+                measuredAt: measuredAt,
+                waistCm: waistCm,
+                hipCm: hipCm,
+                source: source,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$WaistMeasurementsTable, WaistMeasurement>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $WaistMeasurementsTable,
+                    WaistMeasurement
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$WaistMeasurementsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $WaistMeasurementsTable,
+      WaistMeasurement,
+      $$WaistMeasurementsTableFilterComposer,
+      $$WaistMeasurementsTableOrderingComposer,
+      $$WaistMeasurementsTableAnnotationComposer,
+      $$WaistMeasurementsTableCreateCompanionBuilder,
+      $$WaistMeasurementsTableUpdateCompanionBuilder,
+      (
+        WaistMeasurement,
+        BaseReferences<
+          _$AppDatabase,
+          $WaistMeasurementsTable,
+          WaistMeasurement
+        >,
+      ),
+      WaistMeasurement,
       PrefetchHooks Function()
     >;
 typedef $$SpotHrvMeasurementsTableCreateCompanionBuilder =
@@ -66245,6 +66818,8 @@ class $AppDatabaseManager {
       $$DayScoreRecordsTableTableManager(_db, _db.dayScoreRecords);
   $$GripStrengthRecordsTableTableManager get gripStrengthRecords =>
       $$GripStrengthRecordsTableTableManager(_db, _db.gripStrengthRecords);
+  $$WaistMeasurementsTableTableManager get waistMeasurements =>
+      $$WaistMeasurementsTableTableManager(_db, _db.waistMeasurements);
   $$SpotHrvMeasurementsTableTableManager get spotHrvMeasurements =>
       $$SpotHrvMeasurementsTableTableManager(_db, _db.spotHrvMeasurements);
   $$HrvTrainingEpisodesTableTableManager get hrvTrainingEpisodes =>

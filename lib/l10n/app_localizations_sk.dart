@@ -196,7 +196,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get sendingSharesYourEmailSubject =>
-      'Odoslaním sa zdieľa váš e-mail, predmet, správa a vybraná diagnostika s podporou Fjelia na cloud.ebeling-hoppe.de.';
+      'Odoslaním sa zdieľa váš e-mail, predmet, správa a vybraná diagnostika s podporou Fjelia na www.fjelia.com.';
 
   @override
   String get copyReport => 'Kopírovať hlásenie';
@@ -6499,4 +6499,133 @@ class AppLocalizationsSk extends AppLocalizations {
   String daylightLength(int hours, int minutes) {
     return '$hours h $minutes min denného svetla';
   }
+
+  @override
+  String h10Battery(int level) {
+    return 'Batéria $level %';
+  }
+
+  @override
+  String get h10BatteryUnknown => 'Batéria ešte nebola načítaná';
+
+  @override
+  String h10BatteryChecked(String date) {
+    return 'Skontrolované $date';
+  }
+
+  @override
+  String get h10BatteryLowHint =>
+      'Slabá: čoskoro vymeň gombíkovú batériu CR2025.';
+
+  @override
+  String get h10BatteryCheck => 'Skontrolovať batériu';
+
+  @override
+  String get h10BatteryUnreachable =>
+      'H10 neodpovedal. Nasaď si ho (alebo navlhči kontakty) a skús znova.';
+
+  @override
+  String get shareRaceCalendar => 'Zdieľať kalendár pretekov';
+
+  @override
+  String get raceSeasonTitle => 'Moja pretekárska sezóna';
+
+  @override
+  String get raceShareStylePoster => 'Plagát';
+
+  @override
+  String get raceShareStyleTickets => 'Vstupenky';
+
+  @override
+  String get raceShareStyleTimeline => 'Neónová časová os';
+
+  @override
+  String get raceShareStyleMagazine => 'Magazín';
+
+  @override
+  String get raceShareShowTarget => 'Zobraziť cieľové časy';
+
+  @override
+  String get bpOptimal => 'OPTIMÁLNY';
+
+  @override
+  String get bpHighNormal => 'VYSOKÝ NORMÁLNY';
+
+  @override
+  String get bpLow => 'NÍZKY';
+
+  @override
+  String get bpLowHint => 'Nízky tlak: dôležitý len pri závratoch.';
+
+  @override
+  String get waistCircumference => 'Obvod pása';
+
+  @override
+  String get hipOptional => 'Boky (voliteľné)';
+
+  @override
+  String get waistToHeightRatio => 'Pomer pás – výška';
+
+  @override
+  String get waistToHipRatio => 'Pomer pás – boky';
+
+  @override
+  String get waistRiskLow => 'Veľmi štíhly';
+
+  @override
+  String get waistRiskHealthy => 'Zdravý';
+
+  @override
+  String get waistRiskIncreased => 'Zvýšené riziko';
+
+  @override
+  String get waistRiskHigh => 'Vysoké riziko';
+
+  @override
+  String get waistHowToMeasure =>
+      'Merajte ráno v stoji po výdychu: pás v polovici medzi posledným rebrom a vrcholom panvovej kosti, boky v najširšom mieste.';
+
+  @override
+  String get waistNeedsHeight => 'Zadajte svoju výšku v Nastavenia → Profil.';
+
+  @override
+  String get waistNeedsHip => 'Raz si zmerajte boky pre WHR.';
+
+  @override
+  String get waistSyncsProfile =>
+      'Najnovšie meranie je zároveň váš obvod pása v nastaveniach.';
+
+  @override
+  String get waistChange30d => '30 dní';
+
+  @override
+  String get waistChange90d => '90 dní';
+
+  @override
+  String get waistChange1y => '1 rok';
+
+  @override
+  String get waistDeleteText => 'Týmto sa odstráni vybrané meranie pása.';
+
+  @override
+  String waistAndHip(String waist, String hip) {
+    return '$waist cm · boky $hip cm';
+  }
+
+  @override
+  String hipValue(String hip) {
+    return 'Boky $hip cm';
+  }
+
+  @override
+  String get whtrTargetHint => 'Udržujte pás pod polovicou svojej výšky.';
+
+  @override
+  String get noWaistYet => 'Obvod pása zatiaľ nebol zmeraný.';
+
+  @override
+  String get enterValidWaist => 'Zadajte pás a boky medzi 20 a 300 cm.';
+
+  @override
+  String get waistFromProfile => 'Z vášho profilu, bez dátumu';
 }

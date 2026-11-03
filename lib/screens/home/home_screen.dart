@@ -32,6 +32,7 @@ import '../planner/plan_screen.dart';
 import '../strain/strain_screen.dart';
 import '../ai_coach/ai_coach_screen.dart';
 import '../debug/debug_screen.dart';
+import '../../models/bp_category.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -348,15 +349,16 @@ class _HealthPage extends ConsumerWidget {
                     Text(
                       bp == null
                           ? context.l10n.noData2
-                          : bp.avgSystolic >= 140
-                          ? context.l10n.high2
-                          : bp.avgSystolic >= 120
-                          ? context.l10n.elevated
-                          : context.l10n.normal,
+                          // ESH categories, systolic and diastolic.
+                          : bpCategoryLabel(
+                              bpCategory(bp.avgSystolic, bp.avgDiastolic),
+                            ),
                       style: TextStyle(
-                        color: bp != null && bp.avgSystolic >= 140
-                            ? Colors.redAccent
-                            : const Color(0xFFD3E96D),
+                        color: bp == null
+                            ? const Color(0xFFD3E96D)
+                            : bpCategoryColor(
+                                bpCategory(bp.avgSystolic, bp.avgDiastolic),
+                              ),
                         fontSize: 10,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 1,

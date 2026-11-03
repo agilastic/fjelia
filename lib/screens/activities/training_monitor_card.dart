@@ -9,10 +9,11 @@ import '../../providers/lt1_drift_provider.dart';
 import '../../providers/lt2_tt_provider.dart';
 import '../../providers/vo2max_provider.dart';
 import '../../providers/ftp_provider.dart';
+import '../../providers/threshold_overview_provider.dart';
+import 'threshold_overview_section.dart';
 import '../../widgets/app_widgets.dart';
 import 'threshold_sheets.dart';
 import 'load_metric_sheet.dart';
-import 'lt2_test_sheet.dart';
 import '../../services/pfitzinger_zones.dart';
 import 'load_visuals.dart';
 
@@ -28,6 +29,36 @@ class TrainingMonitorCard extends ConsumerWidget {
         vo2 = ref.watch(vo2MaxProvider).valueOrNull,
         ftp = ref.watch(ftpProvider).valueOrNull;
     final drift = ref.watch(lt1DriftProvider).valueOrNull;
+    // The thresholds in use and where they come from (all sources).
+    final overview = ref.watch(thresholdOverviewProvider).valueOrNull;
+    ThresholdRow? row(ThresholdKind kind) =>
+        overview?.rows.where((r) => r.kind == kind).firstOrNull;
+    final lt1Row = row(ThresholdKind.lt1), lt2Row = row(ThresholdKind.lt2);
+    final ftpRow = row(ThresholdKind.ftp);
+    String pace(int? s) => s == null
+        ? ''
+        : '${s ~/ 60}:${(s % 60).toString().padLeft(2, '0')} /km';
+    // A proposal first; else where the best value comes from.
+    String? origin(ThresholdRow? r) {
+      if (r?.proposal case final p?) {
+        return context.l10n.thresholdProposal(
+          thresholdValue(p.kind, p.value, p.paceSecPerKm),
+          thresholdSourceLabel(p),
+        );
+      }
+      final best = r?.best;
+      if (best == null) return null;
+      return [
+        thresholdSourceLabel(best),
+        if (best.date case final d?) loadDate(d),
+      ].join(' · ');
+    }
+
+    final proposed = {
+      if (lt1Row?.proposal != null) 'LT1 threshold',
+      if (lt2Row?.proposal != null) 'LT2 threshold',
+      if (ftpRow?.proposal != null) 'FTP cycling',
+    };
     final cells = <(String, String, String)>[
       (
         'VO₂max running',
@@ -41,13 +72,14 @@ class TrainingMonitorCard extends ConsumerWidget {
       ),
       (
         'LT1 threshold',
-        '${lt1?.bpm ?? '—'} bpm  ${drift?.lt1Pace ?? ''}',
-        drift == null
-            ? context.l10n.aerobicThreshold2
-            : context.l10n.driftDriftAt(
-                valueText(drift.drift, 1),
-                loadDate(drift.at),
-              ),
+        '${lt1Row?.inUse ?? lt1?.bpm ?? '—'} bpm  ${drift?.lt1Pace ?? ''}',
+        origin(lt1Row) ??
+            (drift == null
+                ? context.l10n.aerobicThreshold2
+                : context.l10n.driftDriftAt(
+                    valueText(drift.drift, 1),
+                    loadDate(drift.at),
+                  )),
       ),
       (
         'Activity hours',
@@ -56,10 +88,12 @@ class TrainingMonitorCard extends ConsumerWidget {
       ),
       (
         'LT2 threshold',
-        '${lt2?.lt2 ?? '—'} bpm  ${lt2?.pace ?? ''}',
-        lt2 == null
-            ? context.l10n.thirtyMinuteTimeTrial
-            : context.l10n.thirtyMinTtDate(loadDate(lt2.at)),
+        '${lt2Row?.inUse ?? lt2?.lt2 ?? '—'} bpm  '
+            '${lt2Row?.inUsePaceSecPerKm != null ? pace(lt2Row!.inUsePaceSecPerKm) : lt2?.pace ?? ''}',
+        origin(lt2Row) ??
+            (lt2 == null
+                ? context.l10n.thirtyMinuteTimeTrial
+                : context.l10n.thirtyMinTtDate(loadDate(lt2.at))),
       ),
       (
         'Activity km',
@@ -70,7 +104,9 @@ class TrainingMonitorCard extends ConsumerWidget {
       (
         'FTP cycling',
         '${ftp?.ftpWatts ?? '—'} W',
-        '${valueText(ftp?.wattsPerKg, 2)} W/kg',
+        ftpRow?.proposal != null
+            ? origin(ftpRow)!
+            : '${valueText(ftp?.wattsPerKg, 2)} W/kg',
       ),
     ];
     return LoadCard(
@@ -103,16 +139,16 @@ class TrainingMonitorCard extends ConsumerWidget {
                       c.$1.startsWith('VO₂max ') && c.$1 != 'VO₂max pace' ||
                               c.$1.startsWith('Activity ')
                           ? LoadMetricSheet(metric: c.$1)
-                          : c.$1 == 'LT2 threshold'
-                          ? const Lt2TestSheet()
-                          : c.$1 == 'FTP cycling'
-                          ? const FtpDetailSheet()
+                          // Every source, the value in use and the tests.
+                          : c.$1 == 'LT1 threshold' ||
+                                c.$1 == 'LT2 threshold' ||
+                                c.$1 == 'FTP cycling'
+                          ? const ThresholdSheets()
                           : ThresholdTestSheet(vo2: c.$1 == 'VO₂max pace'),
-                      height: c.$1 == 'LT2 threshold'
-                          ? .625
-                          : c.$1 == 'FTP cycling'
-                          ? .72
-                          : c.$1 == 'LT1 threshold' || c.$1 == 'VO₂max pace'
+                      height:
+                          c.$1.contains('threshold') || c.$1 == 'FTP cycling'
+                          ? .9
+                          : c.$1 == 'VO₂max pace'
                           ? .72
                           : .55,
                     ),
@@ -151,6 +187,17 @@ class TrainingMonitorCard extends ConsumerWidget {
                                   ),
                                 ),
                               ),
+                              // A newer value from a source waits to be
+                              // applied or kept.
+                              if (proposed.contains(c.$1))
+                                Container(
+                                  width: 7,
+                                  height: 7,
+                                  decoration: const BoxDecoration(
+                                    color: mint,
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
                             ],
                           ),
                           const SizedBox(height: 5),
@@ -221,7 +268,9 @@ class TrainingMonitorCard extends ConsumerWidget {
           _ZoneStrip(
             title: context.l10n.pfitzingerZones,
             running: true,
-            subtitle: 'LT2 ${lt2?.lt2 ?? '—'} bpm · ${lt2?.pace ?? '—'}',
+            subtitle:
+                'LT2 ${lt2Row?.inUse ?? lt2?.lt2 ?? '—'} bpm · '
+                '${lt2Row?.inUsePaceSecPerKm != null ? pace(lt2Row!.inUsePaceSecPerKm) : lt2?.pace ?? '—'}',
             onTap: () =>
                 showLoadSheet(context, const LoadZonesSheet(), height: .7),
           ),
@@ -351,11 +400,20 @@ class LoadZonesSheet extends ConsumerWidget {
     final lt2 = ref.watch(lt2TtProvider).valueOrNull;
     final vo2 = ref.watch(vo2MaxProvider).valueOrNull;
     final ftp = ref.watch(ftpProvider).valueOrNull;
-    final zones = lt2 == null
+    // The LT2 in use (any source the athlete applied, or the device's),
+    // else the app's own time trial.
+    final inUse = ref
+        .watch(thresholdOverviewProvider)
+        .valueOrNull
+        ?.rows
+        .where((r) => r.kind == ThresholdKind.lt2)
+        .firstOrNull;
+    final lt2Hr = inUse?.inUse ?? lt2?.lt2;
+    final zones = lt2Hr == null
         ? <PfitzingerZone>[]
         : PfitzingerZones.calculate(
-            lt2Hr: lt2.lt2,
-            lt2PaceSec: lt2.paceSec,
+            lt2Hr: lt2Hr,
+            lt2PaceSec: inUse?.inUsePaceSecPerKm ?? lt2?.paceSec,
             vo2PaceSec: vo2?.paceSec,
           );
     return LoadSheet(
@@ -366,7 +424,7 @@ class LoadZonesSheet extends ConsumerWidget {
       child: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          if (!power && lt2 == null)
+          if (!power && lt2Hr == null)
             EmptyState(context.l10n.completeAnLt2TestTo),
           if (power && ftp == null)
             EmptyState(context.l10n.setFtpToCalculatePower2),

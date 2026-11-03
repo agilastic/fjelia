@@ -11,6 +11,7 @@ import '../providers/ai_coach_provider.dart';
 import '../providers/day_data_provider.dart';
 import '../providers/user_profile_provider.dart';
 import '../services/ai_coach_settings.dart';
+import '../services/briefing_consent.dart';
 import 'app_widgets.dart';
 
 class BriefingCard extends ConsumerStatefulWidget {
@@ -82,7 +83,10 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
               !briefing.isLoading)
             TextButton(
               onPressed: () => runUiAction(context, () async {
-                if (!settings.usesOnDeviceBriefing) {
+                // Asked once per AI provider and model, not every time.
+                if (!settings.usesOnDeviceBriefing &&
+                    !await BriefingConsent.given(settings)) {
+                  if (!context.mounted) return;
                   final message = context.l10n.shareBriefingContextWithName(
                     settings.provider == AiProvider.freeAi
                         ? '${context.l10n.freeAi} ($freeAiHost)'
@@ -97,6 +101,7 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
                   )) {
                     return;
                   }
+                  await BriefingConsent.remember(settings);
                 }
                 final profile = await ref.read(userProfileProvider.future);
                 await ref

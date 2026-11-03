@@ -197,7 +197,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sendingSharesYourEmailSubject =>
-      'Sending shares your email, subject, message and any selected diagnostics with Fjelia support at cloud.ebeling-hoppe.de.';
+      'Sending shares your email, subject, message and any selected diagnostics with Fjelia support at www.fjelia.com.';
 
   @override
   String get copyReport => 'Copy report';
@@ -6459,4 +6459,133 @@ class AppLocalizationsEn extends AppLocalizations {
   String daylightLength(int hours, int minutes) {
     return '$hours h $minutes min daylight';
   }
+
+  @override
+  String h10Battery(int level) {
+    return 'Battery $level %';
+  }
+
+  @override
+  String get h10BatteryUnknown => 'Battery not read yet';
+
+  @override
+  String h10BatteryChecked(String date) {
+    return 'Checked $date';
+  }
+
+  @override
+  String get h10BatteryLowHint => 'Low: replace the CR2025 coin cell soon.';
+
+  @override
+  String get h10BatteryCheck => 'Check battery';
+
+  @override
+  String get h10BatteryUnreachable =>
+      'The H10 didn\'t answer. Put it on (or wet the contacts) and try again.';
+
+  @override
+  String get shareRaceCalendar => 'Share race calendar';
+
+  @override
+  String get raceSeasonTitle => 'My race season';
+
+  @override
+  String get raceShareStylePoster => 'Poster';
+
+  @override
+  String get raceShareStyleTickets => 'Tickets';
+
+  @override
+  String get raceShareStyleTimeline => 'Neon timeline';
+
+  @override
+  String get raceShareStyleMagazine => 'Magazine';
+
+  @override
+  String get raceShareShowTarget => 'Show target times';
+
+  @override
+  String get bpOptimal => 'OPTIMAL';
+
+  @override
+  String get bpHighNormal => 'HIGH NORMAL';
+
+  @override
+  String get bpLow => 'LOW';
+
+  @override
+  String get bpLowHint =>
+      'Low blood pressure: only a concern if you feel dizzy or light-headed.';
+
+  @override
+  String get waistCircumference => 'Waist circumference';
+
+  @override
+  String get hipOptional => 'Hip (optional)';
+
+  @override
+  String get waistToHeightRatio => 'Waist-to-height ratio';
+
+  @override
+  String get waistToHipRatio => 'Waist-to-hip ratio';
+
+  @override
+  String get waistRiskLow => 'Very slim';
+
+  @override
+  String get waistRiskHealthy => 'Healthy';
+
+  @override
+  String get waistRiskIncreased => 'Increased risk';
+
+  @override
+  String get waistRiskHigh => 'High risk';
+
+  @override
+  String get waistHowToMeasure =>
+      'Measure in the morning, standing, after breathing out: waist midway between the lowest rib and the top of the hip bone, hip at the widest point.';
+
+  @override
+  String get waistNeedsHeight => 'Add your height in Settings → Profile.';
+
+  @override
+  String get waistNeedsHip => 'Measure your hip once for the WHR.';
+
+  @override
+  String get waistSyncsProfile =>
+      'The newest measurement is also your waist in Settings.';
+
+  @override
+  String get waistChange30d => '30 days';
+
+  @override
+  String get waistChange90d => '90 days';
+
+  @override
+  String get waistChange1y => '1 year';
+
+  @override
+  String get waistDeleteText => 'This removes the selected waist measurement.';
+
+  @override
+  String waistAndHip(String waist, String hip) {
+    return '$waist cm · hip $hip cm';
+  }
+
+  @override
+  String hipValue(String hip) {
+    return 'Hip $hip cm';
+  }
+
+  @override
+  String get whtrTargetHint => 'Keep your waist under half your height.';
+
+  @override
+  String get noWaistYet => 'No waist measured yet.';
+
+  @override
+  String get enterValidWaist => 'Enter a waist and hip between 20 and 300 cm.';
+
+  @override
+  String get waistFromProfile => 'From your profile, not dated';
 }

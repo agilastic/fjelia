@@ -34,7 +34,25 @@ class PolarH10Pairing {
   static Future<void> clear() => Future.wait([
     _storage.delete(key: _idKey),
     _storage.delete(key: _nameKey),
+    _storage.delete(key: _batteryKey),
   ]);
+
+  static const _batteryKey = 'polar_h10_battery';
+
+  /// The strap's battery as last read, with when.
+  static Future<({int level, DateTime at})?> readBattery() async {
+    final raw = await _storage.read(key: _batteryKey);
+    final parts = raw?.split('|');
+    if (parts == null || parts.length != 2) return null;
+    final level = int.tryParse(parts[0]);
+    final at = DateTime.tryParse(parts[1]);
+    return level == null || at == null ? null : (level: level, at: at);
+  }
+
+  static Future<void> writeBattery(int level) => _storage.write(
+    key: _batteryKey,
+    value: '$level|${DateTime.now().toIso8601String()}',
+  );
 }
 
 /// One foreground connection, independently of Polar cloud sign-in.
@@ -43,6 +61,11 @@ class PolarH10Service {
   Stream<H10HeartRatePacket> get packets => _packets.stream;
   BluetoothDevice? _device;
   StreamSubscription<List<int>>? _notifications;
+  StreamSubscription<List<int>>? _batteryUpdates;
+
+  /// Battery level in percent while connected (standard Battery Service).
+  final battery = StreamController<int>.broadcast();
+  int? lastBattery;
   StreamSubscription<BluetoothConnectionState>? _connection;
   bool _disposed = false, _ownsScan = false;
 
@@ -119,6 +142,8 @@ class PolarH10Service {
           if (c.uuid == Guid('2a37') && c.properties.notify) measurement = c;
         }
       }
+      // The battery never blocks a measurement.
+      unawaited(_watchBattery(services));
       if (measurement == null) {
         throw StateError(
           'This sensor does not expose heart rate and RR notifications.',
@@ -162,11 +187,66 @@ class PolarH10Service {
     }
   }
 
+  static BluetoothCharacteristic? _batteryOf(List<BluetoothService> services) {
+    for (final service in services) {
+      if (service.uuid != Guid('180f')) continue;
+      for (final c in service.characteristics) {
+        if (c.uuid == Guid('2a19') && c.properties.read) return c;
+      }
+    }
+    return null;
+  }
+
+  void _report(List<int> value) {
+    if (value.isEmpty || value.first > 100) return;
+    lastBattery = value.first;
+    if (!battery.isClosed) battery.add(value.first);
+    unawaited(PolarH10Pairing.writeBattery(value.first));
+  }
+
+  Future<void> _watchBattery(List<BluetoothService> services) async {
+    final c = _batteryOf(services);
+    if (c == null) return;
+    try {
+      _report(await c.read().timeout(const Duration(seconds: 5)));
+      if (c.properties.notify) {
+        _batteryUpdates = c.onValueReceived.listen(_report);
+        await c.setNotifyValue(true).timeout(const Duration(seconds: 5));
+      }
+    } catch (_) {
+      // An unanswered battery request leaves the measurement alone.
+    }
+  }
+
+  /// Connects to [found] just long enough to read its battery level.
+  Future<int?> readBattery(H10Device found) async {
+    await disconnect();
+    final device = BluetoothDevice.fromId(found.id);
+    _device = device;
+    try {
+      await device.connect(
+        autoConnect: false,
+        timeout: const Duration(seconds: 15),
+      );
+      final services = await device.discoverServices().timeout(
+        const Duration(seconds: 15),
+      );
+      final c = _batteryOf(services);
+      if (c == null) return null;
+      _report(await c.read().timeout(const Duration(seconds: 5)));
+      return lastBattery;
+    } finally {
+      await disconnect();
+    }
+  }
+
   Future<void> disconnect() async {
     final device = _device;
     _device = null;
     await _notifications?.cancel();
     _notifications = null;
+    await _batteryUpdates?.cancel();
+    _batteryUpdates = null;
     await _connection?.cancel();
     _connection = null;
     if (device != null) {
@@ -184,5 +264,6 @@ class PolarH10Service {
     }
     await disconnect();
     await _packets.close();
+    await battery.close();
   }
 }

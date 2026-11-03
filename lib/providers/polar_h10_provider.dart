@@ -15,7 +15,8 @@ import 'hrv_reminder_provider.dart';
 import 'nutrition_provider.dart';
 import 'spot_hrv_provider.dart';
 
-export '../services/polar_h10_service.dart' show H10Device, PolarH10Service;
+export '../services/polar_h10_service.dart'
+    show H10Device, PolarH10Service, PolarH10Pairing;
 
 /// The paired Polar H10, or null when none is paired.
 final polarH10PairedProvider = FutureProvider<H10Device?>(
@@ -23,6 +24,17 @@ final polarH10PairedProvider = FutureProvider<H10Device?>(
 );
 
 final polarH10ActionsProvider = Provider<PolarH10Actions>(PolarH10Actions.new);
+
+/// The paired strap's battery as last read (measurement or check).
+final polarH10BatteryProvider = FutureProvider<({int level, DateTime at})?>((
+  ref,
+) async {
+  try {
+    return await PolarH10Pairing.readBattery();
+  } catch (_) {
+    return null;
+  }
+});
 
 /// Spot HRV readings (Polar H10) that started in [start, end).
 final spotHrvWindowProvider =
@@ -63,6 +75,21 @@ class PolarH10Actions {
       return await sensor.scan();
     } finally {
       await sensor.dispose();
+    }
+  }
+
+  /// Connects briefly to the paired strap and reads its battery. The strap
+  /// has to be worn (or its contacts touched) to wake up.
+  Future<int?> checkBattery() async {
+    final device = await paired();
+    if (device == null) return null;
+    await [Permission.bluetoothConnect].request();
+    final sensor = createSensor();
+    try {
+      return await sensor.readBattery(device);
+    } finally {
+      await sensor.dispose();
+      ref.invalidate(polarH10BatteryProvider);
     }
   }
 

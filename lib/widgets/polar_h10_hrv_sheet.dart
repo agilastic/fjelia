@@ -15,6 +15,7 @@ import '../providers/hrv_reminder_provider.dart';
 import '../providers/polar_h10_provider.dart';
 import '../providers/spot_hrv_provider.dart';
 import 'app_widgets.dart';
+import 'h10_battery.dart';
 
 class PolarH10HrvSheet extends ConsumerStatefulWidget {
   const PolarH10HrvSheet({super.key, this.sensor, this.launch});
@@ -479,9 +480,23 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
               ),
           ],
           if (connected && !running) ...[
-            Text(
-              context.l10n.connectedName(device!.name),
-              style: const TextStyle(color: mint),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    context.l10n.connectedName(device!.name),
+                    style: const TextStyle(color: mint),
+                  ),
+                ),
+                // The strap's coin cell, read when it connected.
+                StreamBuilder<int>(
+                  stream: sensor.battery.stream,
+                  initialData: sensor.lastBattery,
+                  builder: (context, snap) => snap.data == null
+                      ? const SizedBox.shrink()
+                      : H10BatteryChip(level: snap.data!),
+                ),
+              ],
             ),
             if (!ready)
               Text(

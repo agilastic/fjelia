@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fjelia/services/briefing_consent.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 
@@ -200,10 +202,7 @@ void main() {
         ),
         findsOneWidget,
       );
-      expect(
-        find.textContaining('Free AI (ai.fjelia.com)'),
-        findsOneWidget,
-      );
+      expect(find.textContaining('Free AI (ai.fjelia.com)'), findsOneWidget);
       expect(requests, 0);
       await tester.tap(find.text('Abbrechen'));
       await tester.pumpAndSettle();
@@ -217,6 +216,7 @@ void main() {
   testWidgets('Free AI briefing needs confirmation for the displayed service', (
     tester,
   ) async {
+    SharedPreferences.setMockInitialValues({});
     late _Briefing briefing;
     await tester.pumpWidget(
       ProviderScope(
@@ -241,10 +241,7 @@ void main() {
 
     await tester.tap(find.text(l10n.generateBriefing));
     await tester.pumpAndSettle();
-    expect(
-      find.textContaining('Free AI (ai.fjelia.com)'),
-      findsOneWidget,
-    );
+    expect(find.textContaining('Free AI (ai.fjelia.com)'), findsOneWidget);
     expect(briefing.calls, 0);
     await tester.tap(find.text(l10n.cancel));
     await tester.pumpAndSettle();
@@ -256,6 +253,18 @@ void main() {
     await tester.pumpAndSettle();
     expect(briefing.calls, 1);
     expect(briefing.confirmed, isTrue);
+
+    // Same service, same model: the yes holds, no second question.
+    expect(
+      await BriefingConsent.given(
+        (await tester.runAsync(
+          () => ProviderScope.containerOf(
+            tester.element(find.byType(BriefingCard)),
+          ).read(aiCoachSettingsProvider.future),
+        ))!,
+      ),
+      isTrue,
+    );
     expect(tester.takeException(), isNull);
   });
 }

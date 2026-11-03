@@ -198,7 +198,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get sendingSharesYourEmailSubject =>
-      'L\'envoi partage ton e-mail, l\'objet, le message et les diagnostics sélectionnés avec l\'assistance Fjelia à cloud.ebeling-hoppe.de.';
+      'L\'envoi partage ton e-mail, l\'objet, le message et les diagnostics sélectionnés avec l\'assistance Fjelia à www.fjelia.com.';
 
   @override
   String get copyReport => 'Copier le rapport';
@@ -6538,4 +6538,137 @@ class AppLocalizationsFr extends AppLocalizations {
   String daylightLength(int hours, int minutes) {
     return '$hours h $minutes min de jour';
   }
+
+  @override
+  String h10Battery(int level) {
+    return 'Batterie $level %';
+  }
+
+  @override
+  String get h10BatteryUnknown => 'Batterie pas encore lue';
+
+  @override
+  String h10BatteryChecked(String date) {
+    return 'Vérifiée $date';
+  }
+
+  @override
+  String get h10BatteryLowHint => 'Faible : remplacez bientôt la pile CR2025.';
+
+  @override
+  String get h10BatteryCheck => 'Vérifier la batterie';
+
+  @override
+  String get h10BatteryUnreachable =>
+      'Le H10 n’a pas répondu. Portez-le (ou humidifiez les contacts) et réessayez.';
+
+  @override
+  String get shareRaceCalendar => 'Partager le calendrier des courses';
+
+  @override
+  String get raceSeasonTitle => 'Ma saison de courses';
+
+  @override
+  String get raceShareStylePoster => 'Affiche';
+
+  @override
+  String get raceShareStyleTickets => 'Billets';
+
+  @override
+  String get raceShareStyleTimeline => 'Frise néon';
+
+  @override
+  String get raceShareStyleMagazine => 'Magazine';
+
+  @override
+  String get raceShareShowTarget => 'Afficher les temps visés';
+
+  @override
+  String get bpOptimal => 'OPTIMALE';
+
+  @override
+  String get bpHighNormal => 'NORMALE HAUTE';
+
+  @override
+  String get bpLow => 'BASSE';
+
+  @override
+  String get bpLowHint =>
+      'Tension basse : à surveiller seulement en cas de vertiges.';
+
+  @override
+  String get waistCircumference => 'Tour de taille';
+
+  @override
+  String get hipOptional => 'Hanches (facultatif)';
+
+  @override
+  String get waistToHeightRatio => 'Rapport taille/taille corporelle';
+
+  @override
+  String get waistToHipRatio => 'Rapport taille/hanches';
+
+  @override
+  String get waistRiskLow => 'Très mince';
+
+  @override
+  String get waistRiskHealthy => 'Sain';
+
+  @override
+  String get waistRiskIncreased => 'Risque accru';
+
+  @override
+  String get waistRiskHigh => 'Risque élevé';
+
+  @override
+  String get waistHowToMeasure =>
+      'Mesure le matin, debout, après avoir expiré : la taille à mi-chemin entre la dernière côte et le haut de l’os iliaque, les hanches à l’endroit le plus large.';
+
+  @override
+  String get waistNeedsHeight =>
+      'Ajoute ta taille corporelle dans Réglages → Profil.';
+
+  @override
+  String get waistNeedsHip => 'Mesure une fois tes hanches pour le WHR.';
+
+  @override
+  String get waistSyncsProfile =>
+      'La mesure la plus récente est aussi ton tour de taille dans les réglages.';
+
+  @override
+  String get waistChange30d => '30 jours';
+
+  @override
+  String get waistChange90d => '90 jours';
+
+  @override
+  String get waistChange1y => '1 an';
+
+  @override
+  String get waistDeleteText =>
+      'Cela supprime la mesure de tour de taille sélectionnée.';
+
+  @override
+  String waistAndHip(String waist, String hip) {
+    return '$waist cm · hanches $hip cm';
+  }
+
+  @override
+  String hipValue(String hip) {
+    return 'Hanches $hip cm';
+  }
+
+  @override
+  String get whtrTargetHint =>
+      'Garde ton tour de taille sous la moitié de ta taille corporelle.';
+
+  @override
+  String get noWaistYet => 'Aucun tour de taille mesuré.';
+
+  @override
+  String get enterValidWaist =>
+      'Saisis une taille et des hanches entre 20 et 300 cm.';
+
+  @override
+  String get waistFromProfile => 'Depuis ton profil, sans date';
 }

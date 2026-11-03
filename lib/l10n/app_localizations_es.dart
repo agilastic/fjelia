@@ -198,7 +198,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get sendingSharesYourEmailSubject =>
-      'Al enviar se comparten tu correo, el asunto, el mensaje y los diagnósticos seleccionados con el soporte de Fjelia en cloud.ebeling-hoppe.de.';
+      'Al enviar se comparten tu correo, el asunto, el mensaje y los diagnósticos seleccionados con el soporte de Fjelia en www.fjelia.com.';
 
   @override
   String get copyReport => 'Copiar informe';
@@ -6522,4 +6522,134 @@ class AppLocalizationsEs extends AppLocalizations {
   String daylightLength(int hours, int minutes) {
     return '$hours h $minutes min de luz';
   }
+
+  @override
+  String h10Battery(int level) {
+    return 'Batería $level %';
+  }
+
+  @override
+  String get h10BatteryUnknown => 'Batería aún no leída';
+
+  @override
+  String h10BatteryChecked(String date) {
+    return 'Comprobada $date';
+  }
+
+  @override
+  String get h10BatteryLowHint => 'Baja: cambia pronto la pila CR2025.';
+
+  @override
+  String get h10BatteryCheck => 'Comprobar batería';
+
+  @override
+  String get h10BatteryUnreachable =>
+      'El H10 no ha respondido. Póntelo (o humedece los contactos) y vuelve a intentarlo.';
+
+  @override
+  String get shareRaceCalendar => 'Compartir calendario de carreras';
+
+  @override
+  String get raceSeasonTitle => 'Mi temporada de carreras';
+
+  @override
+  String get raceShareStylePoster => 'Póster';
+
+  @override
+  String get raceShareStyleTickets => 'Entradas';
+
+  @override
+  String get raceShareStyleTimeline => 'Cronología neón';
+
+  @override
+  String get raceShareStyleMagazine => 'Revista';
+
+  @override
+  String get raceShareShowTarget => 'Mostrar tiempos objetivo';
+
+  @override
+  String get bpOptimal => 'ÓPTIMA';
+
+  @override
+  String get bpHighNormal => 'NORMAL-ALTA';
+
+  @override
+  String get bpLow => 'BAJA';
+
+  @override
+  String get bpLowHint => 'Tensión baja: solo importa si te mareas.';
+
+  @override
+  String get waistCircumference => 'Perímetro de cintura';
+
+  @override
+  String get hipOptional => 'Cadera (opcional)';
+
+  @override
+  String get waistToHeightRatio => 'Índice cintura-altura';
+
+  @override
+  String get waistToHipRatio => 'Índice cintura-cadera';
+
+  @override
+  String get waistRiskLow => 'Muy delgado';
+
+  @override
+  String get waistRiskHealthy => 'Saludable';
+
+  @override
+  String get waistRiskIncreased => 'Riesgo aumentado';
+
+  @override
+  String get waistRiskHigh => 'Riesgo alto';
+
+  @override
+  String get waistHowToMeasure =>
+      'Mide por la mañana, de pie, tras exhalar: la cintura a medio camino entre la última costilla y la cresta ilíaca, la cadera en su punto más ancho.';
+
+  @override
+  String get waistNeedsHeight => 'Añade tu altura en Ajustes → Perfil.';
+
+  @override
+  String get waistNeedsHip => 'Mide tu cadera una vez para el WHR.';
+
+  @override
+  String get waistSyncsProfile =>
+      'La medición más reciente es también tu cintura en los ajustes.';
+
+  @override
+  String get waistChange30d => '30 días';
+
+  @override
+  String get waistChange90d => '90 días';
+
+  @override
+  String get waistChange1y => '1 año';
+
+  @override
+  String get waistDeleteText =>
+      'Esto elimina la medición de cintura seleccionada.';
+
+  @override
+  String waistAndHip(String waist, String hip) {
+    return '$waist cm · cadera $hip cm';
+  }
+
+  @override
+  String hipValue(String hip) {
+    return 'Cadera $hip cm';
+  }
+
+  @override
+  String get whtrTargetHint =>
+      'Mantén la cintura por debajo de la mitad de tu altura.';
+
+  @override
+  String get noWaistYet => 'Aún no hay cintura medida.';
+
+  @override
+  String get enterValidWaist => 'Introduce cintura y cadera entre 20 y 300 cm.';
+
+  @override
+  String get waistFromProfile => 'De tu perfil, sin fecha';
 }

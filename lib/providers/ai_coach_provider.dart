@@ -20,6 +20,8 @@ import '../utils/log.dart';
 import 'database_provider.dart';
 import 'local_model_provider.dart';
 import 'sync_provider.dart' show waitForSyncToSettle;
+import '../services/briefing_consent.dart';
+import 'user_profile_provider.dart';
 
 const _storage = FlutterSecureStorage();
 
@@ -47,7 +49,13 @@ final aiCoachClientProvider = Provider<AiCoachClient>(
 );
 
 final aiContextToonBuilderProvider = Provider<AiContextToonBuilder>(
-  (ref) => AiContextToonBuilder(ref.watch(databaseProvider)),
+  (ref) => AiContextToonBuilder(
+    ref.watch(databaseProvider),
+    bodyFrame: () async {
+      final p = await ref.read(userProfileProvider.future);
+      return (heightCm: p.heightCm, waistCm: p.waistCm);
+    },
+  ),
 );
 
 final aiCoachSettingsProvider =
@@ -102,11 +110,24 @@ final aiBriefingProvider =
       final notifier = AiBriefingNotifier(ref, period);
       ref.listen(aiCoachSettingsProvider, (previous, next) {
         final settings = next.valueOrNull;
-        if (settings != null &&
-            settings.readyForBriefing &&
-            settings.usesOnDeviceBriefing) {
+        if (settings == null || !settings.readyForBriefing) return;
+        if (settings.usesOnDeviceBriefing) {
           Future.microtask(() => notifier.load(settings));
+          return;
         }
+        // A cloud briefing writes itself once the athlete agreed to these
+        // settings; after a change in the AI settings the card asks again.
+        Future.microtask(() async {
+          if (settings.briefingMode == BriefingMode.ai &&
+              await BriefingConsent.given(settings)) {
+            final profile = await ref.read(userProfileProvider.future);
+            await notifier.load(
+              settings,
+              raceGoals: profile.raceGoals ?? '',
+              cloudConsent: true,
+            );
+          }
+        });
       }, fireImmediately: true);
       return notifier;
     });

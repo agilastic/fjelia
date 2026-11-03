@@ -198,7 +198,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get sendingSharesYourEmailSubject =>
-      'En enviar es comparteixen el teu correu, l\'assumpte, el missatge i els diagnòstics seleccionats amb l\'assistència de Fjelia a cloud.ebeling-hoppe.de.';
+      'En enviar es comparteixen el teu correu, l\'assumpte, el missatge i els diagnòstics seleccionats amb l\'assistència de Fjelia a www.fjelia.com.';
 
   @override
   String get copyReport => 'Copia l\'informe';
@@ -6523,4 +6523,135 @@ class AppLocalizationsCa extends AppLocalizations {
   String daylightLength(int hours, int minutes) {
     return '$hours h $minutes min de llum';
   }
+
+  @override
+  String h10Battery(int level) {
+    return 'Bateria $level %';
+  }
+
+  @override
+  String get h10BatteryUnknown => 'Bateria encara no llegida';
+
+  @override
+  String h10BatteryChecked(String date) {
+    return 'Comprovada $date';
+  }
+
+  @override
+  String get h10BatteryLowHint => 'Baixa: canvia aviat la pila CR2025.';
+
+  @override
+  String get h10BatteryCheck => 'Comprova la bateria';
+
+  @override
+  String get h10BatteryUnreachable =>
+      'L’H10 no ha respost. Posa-te’l (o humiteja els contactes) i torna-ho a provar.';
+
+  @override
+  String get shareRaceCalendar => 'Comparteix el calendari de curses';
+
+  @override
+  String get raceSeasonTitle => 'La meva temporada de curses';
+
+  @override
+  String get raceShareStylePoster => 'Pòster';
+
+  @override
+  String get raceShareStyleTickets => 'Entrades';
+
+  @override
+  String get raceShareStyleTimeline => 'Cronologia neó';
+
+  @override
+  String get raceShareStyleMagazine => 'Revista';
+
+  @override
+  String get raceShareShowTarget => 'Mostra els temps objectiu';
+
+  @override
+  String get bpOptimal => 'ÒPTIMA';
+
+  @override
+  String get bpHighNormal => 'NORMAL-ALTA';
+
+  @override
+  String get bpLow => 'BAIXA';
+
+  @override
+  String get bpLowHint => 'Tensió baixa: només importa si et mareges.';
+
+  @override
+  String get waistCircumference => 'Perímetre de cintura';
+
+  @override
+  String get hipOptional => 'Maluc (opcional)';
+
+  @override
+  String get waistToHeightRatio => 'Índex cintura-alçada';
+
+  @override
+  String get waistToHipRatio => 'Índex cintura-maluc';
+
+  @override
+  String get waistRiskLow => 'Molt prim';
+
+  @override
+  String get waistRiskHealthy => 'Saludable';
+
+  @override
+  String get waistRiskIncreased => 'Risc augmentat';
+
+  @override
+  String get waistRiskHigh => 'Risc alt';
+
+  @override
+  String get waistHowToMeasure =>
+      'Mesura al matí, dret, després d’expirar: la cintura a mig camí entre l’última costella i la cresta ilíaca, el maluc al punt més ample.';
+
+  @override
+  String get waistNeedsHeight =>
+      'Afegeix la teva alçada a Configuració → Perfil.';
+
+  @override
+  String get waistNeedsHip => 'Mesura el maluc un cop per al WHR.';
+
+  @override
+  String get waistSyncsProfile =>
+      'La mesura més recent és també la teva cintura a la configuració.';
+
+  @override
+  String get waistChange30d => '30 dies';
+
+  @override
+  String get waistChange90d => '90 dies';
+
+  @override
+  String get waistChange1y => '1 any';
+
+  @override
+  String get waistDeleteText =>
+      'Això elimina la mesura de cintura seleccionada.';
+
+  @override
+  String waistAndHip(String waist, String hip) {
+    return '$waist cm · maluc $hip cm';
+  }
+
+  @override
+  String hipValue(String hip) {
+    return 'Maluc $hip cm';
+  }
+
+  @override
+  String get whtrTargetHint =>
+      'Mantén la cintura per sota de la meitat de la teva alçada.';
+
+  @override
+  String get noWaistYet => 'Encara no hi ha cap cintura mesurada.';
+
+  @override
+  String get enterValidWaist => 'Introdueix cintura i maluc entre 20 i 300 cm.';
+
+  @override
+  String get waistFromProfile => 'Del teu perfil, sense data';
 }

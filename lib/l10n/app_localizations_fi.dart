@@ -197,7 +197,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get sendingSharesYourEmailSubject =>
-      'Lähettäminen jakaa sähköpostiosoitteesi, aiheen, viestin ja valitun diagnostiikan Fjelian tuen kanssa osoitteessa cloud.ebeling-hoppe.de.';
+      'Lähettäminen jakaa sähköpostiosoitteesi, aiheen, viestin ja valitun diagnostiikan Fjelian tuen kanssa osoitteessa www.fjelia.com.';
 
   @override
   String get copyReport => 'Kopioi raportti';
@@ -6502,4 +6502,134 @@ class AppLocalizationsFi extends AppLocalizations {
   String daylightLength(int hours, int minutes) {
     return '$hours h $minutes min päivänvaloa';
   }
+
+  @override
+  String h10Battery(int level) {
+    return 'Akku $level %';
+  }
+
+  @override
+  String get h10BatteryUnknown => 'Akkua ei ole vielä luettu';
+
+  @override
+  String h10BatteryChecked(String date) {
+    return 'Tarkistettu $date';
+  }
+
+  @override
+  String get h10BatteryLowHint => 'Heikko: vaihda CR2025-nappiparisto pian.';
+
+  @override
+  String get h10BatteryCheck => 'Tarkista akku';
+
+  @override
+  String get h10BatteryUnreachable =>
+      'H10 ei vastannut. Pue se päälle (tai kostuta kontaktit) ja yritä uudelleen.';
+
+  @override
+  String get shareRaceCalendar => 'Jaa kilpailukalenteri';
+
+  @override
+  String get raceSeasonTitle => 'Kilpailukauteni';
+
+  @override
+  String get raceShareStylePoster => 'Juliste';
+
+  @override
+  String get raceShareStyleTickets => 'Liput';
+
+  @override
+  String get raceShareStyleTimeline => 'Neon-aikajana';
+
+  @override
+  String get raceShareStyleMagazine => 'Lehti';
+
+  @override
+  String get raceShareShowTarget => 'Näytä tavoiteajat';
+
+  @override
+  String get bpOptimal => 'OPTIMAALINEN';
+
+  @override
+  String get bpHighNormal => 'KOHONNUT NORMAALI';
+
+  @override
+  String get bpLow => 'MATALA';
+
+  @override
+  String get bpLowHint =>
+      'Matala verenpaine: merkitsee vain, jos sinua huimaa.';
+
+  @override
+  String get waistCircumference => 'Vyötärönympärys';
+
+  @override
+  String get hipOptional => 'Lantio (valinnainen)';
+
+  @override
+  String get waistToHeightRatio => 'Vyötärö-pituussuhde';
+
+  @override
+  String get waistToHipRatio => 'Vyötärö-lantiosuhde';
+
+  @override
+  String get waistRiskLow => 'Hyvin hoikka';
+
+  @override
+  String get waistRiskHealthy => 'Terve';
+
+  @override
+  String get waistRiskIncreased => 'Kohonnut riski';
+
+  @override
+  String get waistRiskHigh => 'Korkea riski';
+
+  @override
+  String get waistHowToMeasure =>
+      'Mittaa aamulla seisten uloshengityksen jälkeen: vyötärö alimman kylkiluun ja lonkkaluun yläreunan puolivälistä, lantio leveimmästä kohdasta.';
+
+  @override
+  String get waistNeedsHeight =>
+      'Lisää pituutesi kohdassa Asetukset → Profiili.';
+
+  @override
+  String get waistNeedsHip => 'Mittaa lantiosi kerran WHR:ää varten.';
+
+  @override
+  String get waistSyncsProfile =>
+      'Uusin mittaus on myös vyötärösi asetuksissa.';
+
+  @override
+  String get waistChange30d => '30 päivää';
+
+  @override
+  String get waistChange90d => '90 päivää';
+
+  @override
+  String get waistChange1y => '1 vuosi';
+
+  @override
+  String get waistDeleteText => 'Tämä poistaa valitun vyötärömittauksen.';
+
+  @override
+  String waistAndHip(String waist, String hip) {
+    return '$waist cm · lantio $hip cm';
+  }
+
+  @override
+  String hipValue(String hip) {
+    return 'Lantio $hip cm';
+  }
+
+  @override
+  String get whtrTargetHint => 'Pidä vyötärösi alle puolet pituudestasi.';
+
+  @override
+  String get noWaistYet => 'Vyötäröä ei ole vielä mitattu.';
+
+  @override
+  String get enterValidWaist => 'Anna vyötärö ja lantio väliltä 20–300 cm.';
+
+  @override
+  String get waistFromProfile => 'Profiilistasi, ilman päivämäärää';
 }

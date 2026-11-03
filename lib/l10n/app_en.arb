@@ -71,7 +71,7 @@
   "includeDiagnostics": "Include diagnostics",
   "optionalLogsMayContainAccount": "Optional. Logs may contain account or health details. Review them below before sending.",
   "diagnosticsPreview": "DIAGNOSTICS PREVIEW",
-  "sendingSharesYourEmailSubject": "Sending shares your email, subject, message and any selected diagnostics with Fjelia support at cloud.ebeling-hoppe.de.",
+  "sendingSharesYourEmailSubject": "Sending shares your email, subject, message and any selected diagnostics with Fjelia support at www.fjelia.com.",
   "copyReport": "Copy report",
   "shareReport": "Share report",
   "appleHealth": "Apple Health",
@@ -3344,7 +3344,13 @@
   "mixBottle": "Bottle",
   "mixFilledWithWater": "topped up with water",
   "mixPerBottle": "per {ml} ml bottle",
-  "@mixPerBottle": {"placeholders": {"ml": {"type": "String"}}},
+  "@mixPerBottle": {
+    "placeholders": {
+      "ml": {
+        "type": "String"
+      }
+    }
+  },
   "mixStrength": "Strength",
   "mixRatio": "Glucose : fructose",
   "mixGlucose": "Glucose",
@@ -3363,9 +3369,24 @@
   "mixEmpty": "Pick a recipe or add an ingredient.",
   "mixRemove": "Remove",
   "mixRowGrams": "≈ {grams} g",
-  "@mixRowGrams": {"placeholders": {"grams": {"type": "String"}}},
+  "@mixRowGrams": {
+    "placeholders": {
+      "grams": {
+        "type": "String"
+      }
+    }
+  },
   "mixBottleSaved": "Saved as your bottle: {carbs} g carbohydrate per {ml} ml.",
-  "@mixBottleSaved": {"placeholders": {"carbs": {"type": "String"}, "ml": {"type": "String"}}},
+  "@mixBottleSaved": {
+    "placeholders": {
+      "carbs": {
+        "type": "String"
+      },
+      "ml": {
+        "type": "String"
+      }
+    }
+  },
   "mixMaltodextrin": "Maltodextrin",
   "mixSugar": "Sugar",
   "mixDextrose": "Dextrose",
@@ -3692,5 +3713,75 @@
         "type": "int"
       }
     }
-  }
+  },
+  "h10Battery": "Battery {level} %",
+  "@h10Battery": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "h10BatteryUnknown": "Battery not read yet",
+  "h10BatteryChecked": "Checked {date}",
+  "@h10BatteryChecked": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "h10BatteryLowHint": "Low: replace the CR2025 coin cell soon.",
+  "h10BatteryCheck": "Check battery",
+  "h10BatteryUnreachable": "The H10 didn't answer. Put it on (or wet the contacts) and try again.",
+  "shareRaceCalendar": "Share race calendar",
+  "raceSeasonTitle": "My race season",
+  "raceShareStylePoster": "Poster",
+  "raceShareStyleTickets": "Tickets",
+  "raceShareStyleTimeline": "Neon timeline",
+  "raceShareStyleMagazine": "Magazine",
+  "raceShareShowTarget": "Show target times",
+  "bpOptimal": "OPTIMAL",
+  "bpHighNormal": "HIGH NORMAL",
+  "bpLow": "LOW",
+  "bpLowHint": "Low blood pressure: only a concern if you feel dizzy or light-headed.",
+  "waistCircumference": "Waist circumference",
+  "hipOptional": "Hip (optional)",
+  "waistToHeightRatio": "Waist-to-height ratio",
+  "waistToHipRatio": "Waist-to-hip ratio",
+  "waistRiskLow": "Very slim",
+  "waistRiskHealthy": "Healthy",
+  "waistRiskIncreased": "Increased risk",
+  "waistRiskHigh": "High risk",
+  "waistHowToMeasure": "Measure in the morning, standing, after breathing out: waist midway between the lowest rib and the top of the hip bone, hip at the widest point.",
+  "waistNeedsHeight": "Add your height in Settings → Profile.",
+  "waistNeedsHip": "Measure your hip once for the WHR.",
+  "waistSyncsProfile": "The newest measurement is also your waist in Settings.",
+  "waistChange30d": "30 days",
+  "waistChange90d": "90 days",
+  "waistChange1y": "1 year",
+  "waistDeleteText": "This removes the selected waist measurement.",
+  "waistAndHip": "{waist} cm · hip {hip} cm",
+  "@waistAndHip": {
+    "placeholders": {
+      "waist": {
+        "type": "String"
+      },
+      "hip": {
+        "type": "String"
+      }
+    }
+  },
+  "hipValue": "Hip {hip} cm",
+  "@hipValue": {
+    "placeholders": {
+      "hip": {
+        "type": "String"
+      }
+    }
+  },
+  "whtrTargetHint": "Keep your waist under half your height.",
+  "noWaistYet": "No waist measured yet.",
+  "enterValidWaist": "Enter a waist and hip between 20 and 300 cm.",
+  "waistFromProfile": "From your profile, not dated"
 }

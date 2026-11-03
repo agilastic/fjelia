@@ -20,6 +20,7 @@ import 'season/season_report.dart';
 import '../utils/target_time.dart';
 import '../models/race_profile.dart';
 import 'open_meteo_client.dart';
+import '../models/waist_ratios.dart';
 
 /// Inputs from the training monitor.
 class AiContextTrainingMonitor {
@@ -60,10 +61,14 @@ class AiContextPlanInfo {
 /// Only explicitly selected fields leave the database: names, coordinates,
 /// activity IDs, free-form notes and raw payloads are never serialized.
 class AiContextToonBuilder {
-  AiContextToonBuilder(this._db, {DateTime Function()? now})
+  AiContextToonBuilder(this._db, {DateTime Function()? now, this.bodyFrame})
     : _now = now ?? DateTime.now;
   final AppDatabase _db;
   final DateTime Function() _now;
+
+  /// Height and the profile's waist from the athlete profile, for the waist
+  /// ratios. Only the ratios leave the device, not the height.
+  final Future<({double? heightCm, double? waistCm})> Function()? bodyFrame;
 
   Future<String> build(
     AiContextTrainingMonitor? monitor,
@@ -206,6 +211,20 @@ class AiContextToonBuilder {
         'BMR:${_num(r.bmr)}kcal,BodyAge:${_num(r.bodyAge)}]',
       );
     }
+    // Without the profile the waist line simply has no ratios.
+    ({double? heightCm, double? waistCm})? frame;
+    try {
+      frame = await bodyFrame?.call();
+    } catch (_) {}
+    final waist = waistContextLine(
+      [
+        for (final m in await _db.getWaistMeasurements())
+          (at: m.measuredAt, waistCm: m.waistCm, hipCm: m.hipCm),
+      ],
+      heightCm: frame?.heightCm,
+      profileWaistCm: frame?.waistCm,
+    );
+    if (waist != null) lines.add(waist);
     final recentGrip = grip
         .where(
           (r) =>
@@ -742,4 +761,41 @@ class AiContextToonBuilder {
         'WindKmh:${_num(wind)},WindChill:${_num(chill)}°C,RainChance:$rainChance%,'
         'RainMm:${_num(rain)},WetBulb:${_num(wetBulb)}°C]';
   }
+}
+
+/// Waist now, its ratios and how it moved over the whole history (oldest
+/// first). Without measurements the profile's waist, undated. Null with
+/// neither.
+String? waistContextLine(
+  List<WaistPoint> history, {
+  double? heightCm,
+  double? profileWaistCm,
+}) {
+  String ratio(double? v) => v == null ? 'na' : v.toStringAsFixed(2);
+  String cm(num? v) => v == null
+      ? 'na'
+      : v == v.roundToDouble()
+      ? v.toInt().toString()
+      : v.toStringAsFixed(1);
+  String change(Duration period) {
+    final d = waistChange(history, period);
+    return d == null ? 'na' : '${d > 0 ? '+' : ''}${cm(d)}cm';
+  }
+
+  final latest = history.lastOrNull;
+  final waist = latest?.waistCm ?? profileWaistCm;
+  if (waist == null) return null;
+  final hip = latestHip(history);
+  final head =
+      '[Waist:${latest == null ? 'FromProfile,Date:na' : 'Latest:${latest.at.toIso8601String().substring(0, 10)}'},'
+      'Cm:${cm(waist)},HipCm:${cm(hip)},'
+      'WHtR:${ratio(waistToHeight(waist, heightCm))},'
+      'WHR:${ratio(waistToHip(waist, hip))}';
+  if (history.length < 2) return '$head,n=${history.length}]';
+  final first = history.first;
+  return '$head,Chg30d:${change(const Duration(days: 30))},'
+      'Chg90d:${change(const Duration(days: 90))},'
+      'Chg365d:${change(const Duration(days: 365))},'
+      'First:${first.at.toIso8601String().substring(0, 10)}:${cm(first.waistCm)}cm,'
+      'n=${history.length}]';
 }

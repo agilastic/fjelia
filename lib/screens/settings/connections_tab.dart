@@ -25,6 +25,7 @@ import '../onboarding/connect_coros_screen.dart';
 import '../onboarding/connect_suunto_screen.dart';
 import '../onboarding/connect_polar_h10_screen.dart';
 import '../onboarding/connect_polar_screen.dart';
+import '../../widgets/h10_battery.dart';
 
 class ConnectionsTab extends ConsumerWidget {
   const ConnectionsTab({super.key});
@@ -117,6 +118,7 @@ class ConnectionsTab extends ConsumerWidget {
             const ConnectPolarH10Screen(fromOnboarding: true),
             disconnect: () => ref.read(polarH10ActionsProvider).unpair(),
           ),
+          const PolarH10BatteryTile(),
           HrvReminderTile(),
           SectionLabel(context.l10n.dataSourcePriority),
           Text(

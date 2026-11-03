@@ -44,6 +44,35 @@ class ActivityShareInfo {
   final List<RoutePoint> route;
 }
 
+/// Renders [boundary] at 3× (360 × 450 becomes 1080 × 1350, the 4:5 feeds
+/// expect) and opens the share sheet with it as a PNG.
+Future<void> shareRepaintBoundary(
+  GlobalKey boundary,
+  BuildContext buttonContext, {
+  String name = 'fjelia-card',
+}) async {
+  final render =
+      boundary.currentContext!.findRenderObject()! as RenderRepaintBoundary;
+  final image = await render.toImage(pixelRatio: 3);
+  final png = await image.toByteData(format: ui.ImageByteFormat.png);
+  image.dispose();
+  if (png == null) return;
+  final file = File(
+    '${(await getTemporaryDirectory()).path}/$name-${DateTime.now().millisecondsSinceEpoch}.png',
+  );
+  await file.writeAsBytes(png.buffer.asUint8List());
+  if (!buttonContext.mounted) return;
+  final box = buttonContext.findRenderObject() as RenderBox?;
+  await SharePlus.instance.share(
+    ShareParams(
+      files: [XFile(file.path)],
+      sharePositionOrigin: box == null
+          ? null
+          : box.localToGlobal(Offset.zero) & box.size,
+    ),
+  );
+}
+
 /// Preview of the card (photo, facts, route) and a button to share it as a
 /// 1080 × 1350 image.
 class MediaShareCardPage extends StatefulWidget {
@@ -180,29 +209,8 @@ class _MediaShareCardPageState extends State<MediaShareCardPage> {
     });
   }
 
-  Future<void> _share(BuildContext buttonContext) async {
-    final boundary =
-        _card.currentContext!.findRenderObject()! as RenderRepaintBoundary;
-    // 360 × 450 logical pixels at 3× gives the 4:5 format feeds expect.
-    final image = await boundary.toImage(pixelRatio: 3);
-    final png = await image.toByteData(format: ui.ImageByteFormat.png);
-    image.dispose();
-    if (png == null) return;
-    final file = File(
-      '${(await getTemporaryDirectory()).path}/fjelia-card-${DateTime.now().millisecondsSinceEpoch}.png',
-    );
-    await file.writeAsBytes(png.buffer.asUint8List());
-    if (!buttonContext.mounted) return;
-    final box = buttonContext.findRenderObject() as RenderBox?;
-    await SharePlus.instance.share(
-      ShareParams(
-        files: [XFile(file.path)],
-        sharePositionOrigin: box == null
-            ? null
-            : box.localToGlobal(Offset.zero) & box.size,
-      ),
-    );
-  }
+  Future<void> _share(BuildContext buttonContext) =>
+      shareRepaintBoundary(_card, buttonContext);
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -682,9 +690,9 @@ class _Placed extends StatelessWidget {
   );
 }
 
-/// App icon, name and address: the card's signature.
-class _Signature extends StatelessWidget {
-  const _Signature({this.color = Colors.white, this.size = 1});
+/// App icon, name and address: the signature on every shared image.
+class FjeliaSignature extends StatelessWidget {
+  const FjeliaSignature({super.key, this.color = Colors.white, this.size = 1});
   final Color color;
   final double size;
 
@@ -903,7 +911,7 @@ class _Overlay {
               const SizedBox(height: 12),
               Container(height: 1, color: Colors.white12),
               const SizedBox(height: 9),
-              const _Signature(),
+              const FjeliaSignature(),
             ],
           ),
         ),
@@ -996,7 +1004,7 @@ class _Overlay {
               ),
             ),
             const SizedBox(height: 10),
-            const _Signature(),
+            const FjeliaSignature(),
           ],
         ),
       ),
@@ -1054,7 +1062,7 @@ class _Overlay {
               ),
             ),
             const SizedBox(height: 12),
-            const _Signature(size: .8),
+            const FjeliaSignature(size: .8),
           ],
         ),
       ),
@@ -1153,7 +1161,7 @@ class _Overlay {
               style: const TextStyle(fontSize: 11, color: Color(0xFFE8D9FF)),
             ),
             const SizedBox(height: 10),
-            const _Signature(color: Color(0xFFFFD6F5)),
+            const FjeliaSignature(color: Color(0xFFFFD6F5)),
           ],
         ),
       ),
@@ -1254,7 +1262,7 @@ class _Overlay {
             borderRadius: BorderRadius.circular(14),
             border: Border.all(color: Colors.white, width: 3),
           ),
-          child: const _Signature(size: .85),
+          child: const FjeliaSignature(size: .85),
         ),
       ),
     ];
@@ -1543,7 +1551,7 @@ class _Overlay {
                 ),
               ),
               const SizedBox(height: 8),
-              const _Signature(size: .85),
+              const FjeliaSignature(size: .85),
             ],
           ),
         ),
@@ -1803,7 +1811,7 @@ class _Overlay {
                       children: [
                         rivet(),
                         const Spacer(),
-                        const _Signature(color: Color(0xFF1E2227), size: .85),
+                        const FjeliaSignature(color: Color(0xFF1E2227), size: .85),
                         const Spacer(),
                         rivet(),
                       ],
@@ -1920,7 +1928,7 @@ class _Overlay {
                   style: mono.copyWith(fontSize: 9.5),
                 ),
                 const SizedBox(height: 6),
-                const _Signature(color: Color(0xFFBFFBFF), size: .75),
+                const FjeliaSignature(color: Color(0xFFBFFBFF), size: .75),
               ],
             ),
           ),
@@ -2253,7 +2261,7 @@ class _Overlay {
                             ),
                           ),
                         ),
-                        const _Signature(color: Colors.black, size: .8),
+                        const FjeliaSignature(color: Colors.black, size: .8),
                       ],
                     ),
                   ],
@@ -2383,7 +2391,7 @@ class _Overlay {
                     ),
                   ],
                   const SizedBox(height: 8),
-                  const _Signature(color: forest, size: .85),
+                  const FjeliaSignature(color: forest, size: .85),
                 ],
               ),
             ),
