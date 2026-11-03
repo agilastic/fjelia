@@ -5,6 +5,7 @@ import '../api/garmin_client.dart';
 import '../db/database.dart';
 import 'season/goal_set.dart';
 import 'season/season_goal.dart';
+import 'media_service.dart';
 
 /// Usual race distances in km.
 const _standardRaceKm = [5.0, 10.0, 21.0975, 42.195, 50.0, 100.0];
@@ -170,6 +171,7 @@ class RaceGoalService {
 
   Future<void> delete(String id) async {
     await (_db.delete(_db.raceGoals)..where((t) => t.id.equals(id))).go();
+    await MediaService(_db).deleteAll(MediaOwner.raceGoal(id));
   }
 
   /// Imports race events from the Garmin calendar as B-priority goals and

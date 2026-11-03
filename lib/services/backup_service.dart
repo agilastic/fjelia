@@ -3,7 +3,7 @@ import '../l10n/l10n_ext.dart';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:archive/archive.dart';
+import 'package:archive/archive_io.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -14,10 +14,50 @@ import 'package:uuid/uuid.dart';
 import '../db/database.dart';
 import '../models/backup_restore.dart';
 import '../utils/log.dart';
+import 'media_service.dart';
 
 // Decompression and JSON parsing must not block the progress indicator.
-Map<String, dynamic> _decodeBackup(List<int> bytes) {
-  final archive = ZipDecoder().decodeBytes(bytes);
+Map<String, dynamic> _decodeBackup(List<int> bytes) =>
+    _decodeArchive(ZipDecoder().decodeBytes(bytes));
+
+/// Same for a backup on disk: entries are read as needed, so the photos and
+/// videos in it never have to fit into memory.
+Map<String, dynamic> _decodeBackupFile(String path) {
+  final input = InputFileStream(path);
+  try {
+    return _decodeArchive(ZipDecoder().decodeStream(input));
+  } finally {
+    input.closeSync();
+  }
+}
+
+/// The photos and videos of a backup (`media/…`), written into [folder] one
+/// by one. [source] is the backup's path or its bytes. Returns the count.
+int _extractMedia((Object source, String folder) job) {
+  final (source, folder) = job;
+  final input = source is String
+      ? InputFileStream(source)
+      : InputMemoryStream(source as List<int>);
+  try {
+    var count = 0;
+    for (final entry in ZipDecoder().decodeStream(input)) {
+      final name = entry.name;
+      if (!entry.isFile || !name.startsWith('media/')) continue;
+      final base = name.substring('media/'.length);
+      // Only plain file names: nothing may land outside the media folder.
+      if (base.isEmpty || base.contains('/') || base.contains('..')) continue;
+      final output = OutputFileStream('$folder/$base');
+      entry.writeContent(output);
+      output.closeSync();
+      count++;
+    }
+    return count;
+  } finally {
+    input.closeSync();
+  }
+}
+
+Map<String, dynamic> _decodeArchive(Archive archive) {
   final json = archive.findFile('backup.json');
   if (json != null) {
     return {'payload': jsonDecode(utf8.decode(json.content as List<int>))};
@@ -40,6 +80,8 @@ const _oldestRestorableSchema = 44;
 /// Tables added after the oldest restorable schema, with the schema that
 /// added them. A backup older than that has no such table, and none is owed.
 const _tableAddedIn = {
+  'media_items': 56,
+  'dfa_alpha1_results': 55,
   'strength_proposal_decisions': 53,
   'strength_exercise_variants': 52,
   'strength_equipment_increments': 52,
@@ -80,8 +122,13 @@ const _installationLocal = {
 const _reminderPreferences = 'hrv_reminder_preferences';
 
 class BackupService {
-  BackupService(this.db, {this.afterRestore});
+  BackupService(this.db, {this.afterRestore, this.mediaRoot});
   final AppDatabase db;
+
+  /// Where the media folder lives; the app's support folder unless given.
+  final Directory? mediaRoot;
+
+  MediaService get _media => MediaService(db, root: mediaRoot);
 
   /// Runs once a restore has committed, for work outside the database such as
   /// removing stale operating-system notifications.
@@ -96,7 +143,11 @@ class BackupService {
       key == 'ai_coach_provider' ||
       key == 'ai_coach_model' ||
       key == 'ai_coach_briefing_mode';
-  Future<File> export({Directory? directory}) async {
+
+  /// Writes the backup ZIP: the data as `backup.json` and the photos and
+  /// videos under `media/`, streamed from disk. Without [includeVideos] the
+  /// videos and their entries are left out.
+  Future<File> export({Directory? directory, bool includeVideos = true}) async {
     final tables = <String, Object?>{};
     await db.transaction(() async {
       for (final table in db.allTables) {
@@ -108,6 +159,12 @@ class BackupService {
         tables[name] = (await db.customSelect('SELECT * FROM "$name"').get())
             .map((r) => r.data)
             .toList();
+      }
+      if (!includeVideos) {
+        tables['media_items'] = [
+          for (final row in (tables['media_items'] as List?) ?? const [])
+            if ((row as Map)['kind'] != 'video') row,
+        ];
       }
       // The epoch and the switch are this installation's, not portable.
       for (final row in (tables[_reminderPreferences] as List?) ?? const []) {
@@ -140,13 +197,57 @@ class BackupService {
         'preferences': preferences,
       }),
     );
-    final zip = ZipEncoder().encode(
-      Archive()..addFile(ArchiveFile('backup.json', content.length, content)),
-    );
     final dir = directory ?? await getTemporaryDirectory();
-    return File(
-      '${dir.path}/fjelia_backup_${DateTime.now().millisecondsSinceEpoch}.zip',
-    ).writeAsBytes(zip);
+    final path =
+        '${dir.path}/fjelia_backup_${DateTime.now().millisecondsSinceEpoch}.zip';
+    final encoder = ZipFileEncoder()..create(path);
+    try {
+      encoder.addArchiveFile(
+        ArchiveFile('backup.json', content.length, content),
+      );
+      final media = ((tables['media_items'] as List?) ?? const []).cast<Map>();
+      if (media.isNotEmpty) {
+        final folder = await _media.folder();
+        for (final row in media) {
+          for (final name in [row['file_name'], row['thumb_name']]) {
+            if (name is! String) continue;
+            final file = File('${folder.path}/$name');
+            if (!await file.exists()) continue;
+            // Photos and videos are compressed already: stored as they are.
+            encoder.addArchiveFile(
+              ArchiveFile.stream('media/$name', InputFileStream(file.path))
+                ..compression = CompressionType.none,
+            );
+          }
+        }
+      }
+    } finally {
+      await encoder.close();
+    }
+    return File(path);
+  }
+
+  /// Videos that a backup would include, for asking before the export.
+  Future<({int count, int bytes})> videoSummary() async {
+    final row = await db
+        .customSelect(
+          "SELECT COUNT(*) AS n, COALESCE(SUM(bytes), 0) AS b "
+          "FROM media_items WHERE kind = 'video'",
+          readsFrom: {db.mediaItems},
+        )
+        .getSingle();
+    return (count: row.read<int>('n'), bytes: row.read<int>('b'));
+  }
+
+  /// Like [restore], reading the backup from [path] instead of memory, so a
+  /// backup with videos restores without loading it whole.
+  Future<BackupRestoreResult> restoreFile(
+    String path, {
+    void Function(BackupRestoreProgress)? onProgress,
+  }) async {
+    onProgress?.call(BackupRestoreProgress(tr.openingBackupZip, 0.02));
+    final decoded = await compute(_decodeBackupFile, path);
+    return _restoreDecoded(decoded, path, onProgress);
   }
 
   Future<BackupRestoreResult> restore(
@@ -155,6 +256,14 @@ class BackupService {
   }) async {
     onProgress?.call(BackupRestoreProgress(tr.openingBackupZip, 0.02));
     final decoded = await compute(_decodeBackup, bytes);
+    return _restoreDecoded(decoded, bytes, onProgress);
+  }
+
+  Future<BackupRestoreResult> _restoreDecoded(
+    Map<String, dynamic> decoded,
+    Object zip,
+    void Function(BackupRestoreProgress)? onProgress,
+  ) async {
     AppDatabase? source;
     Directory? temporary;
     try {
@@ -194,14 +303,31 @@ class BackupService {
       } else {
         payload = Map<String, dynamic>.from(decoded['payload'] as Map);
       }
-      return await _restorePayload(
+      final result = await _restorePayload(
         payload,
         source: source,
         onProgress: onProgress,
       );
+      await _replaceMedia(zip);
+      return result;
     } finally {
       await source?.close();
       if (temporary != null) await temporary.delete(recursive: true);
+    }
+  }
+
+  /// The restored data replaced every media entry: the folder now holds
+  /// exactly the backup's files. A failure here leaves the data restored.
+  Future<void> _replaceMedia(Object zip) async {
+    try {
+      final folder = await _media.folder();
+      await for (final entity in folder.list()) {
+        await entity.delete(recursive: true);
+      }
+      final count = await compute(_extractMedia, (zip, folder.path));
+      log('[Backup] restored $count media files');
+    } catch (e) {
+      log('[Backup] media not restored: $e');
     }
   }
 

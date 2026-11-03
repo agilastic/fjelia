@@ -13,13 +13,17 @@ class WeatherSpread {
 }
 
 class WeatherComparison {
+  /// [now]: hours before the current one get no range. They have happened,
+  /// and in Germany the main series holds what was measured.
   WeatherComparison(
     List<OpenMeteoPoint> primary,
     String source,
-    List<OpenMeteoResult> alternatives,
-  ) {
+    List<OpenMeteoResult> alternatives, {
+    DateTime? now,
+  }) {
     series = [WeatherForecastSeries(source, primary)];
     spread = [];
+    rainSpread = [];
     if (primary.isEmpty) return;
     final start = primary.first.time, end = primary.last.time;
     final seen = {source};
@@ -41,41 +45,52 @@ class WeatherComparison {
         series.add(WeatherForecastSeries(result.source, points));
       }
     }
+    final from = now == null ? null : _hour(now);
+    spread = _spreadOf((p) => p.temperatureC, from);
+    rainSpread = _spreadOf((p) => p.precipitationMm, from);
+  }
+
+  static int _hour(DateTime t) => t.millisecondsSinceEpoch ~/ 3600000;
+
+  /// Lowest and highest value of [value] across the forecasts, per hour
+  /// that at least two of them cover.
+  List<WeatherSpread> _spreadOf(
+    double Function(OpenMeteoPoint) value,
+    int? fromHour,
+  ) {
     final hours = <int, List<double>>{};
     final timestamps = <int, DateTime>{};
     for (final provider in series) {
       final unique = <int, double>{};
       for (final p in provider.points) {
-        if (p.temperatureC.isFinite) {
-          timestamps.putIfAbsent(
-            p.time.millisecondsSinceEpoch ~/ 3600000,
-            () => p.time,
-          );
-          unique.putIfAbsent(
-            p.time.millisecondsSinceEpoch ~/ 3600000,
-            () => p.temperatureC,
-          );
-        }
+        final v = value(p);
+        final hour = _hour(p.time);
+        if (!v.isFinite || (fromHour != null && hour < fromHour)) continue;
+        timestamps.putIfAbsent(hour, () => p.time);
+        unique.putIfAbsent(hour, () => v);
       }
       for (final entry in unique.entries) {
         hours.putIfAbsent(entry.key, () => []).add(entry.value);
       }
     }
-    for (final entry in hours.entries) {
-      if (entry.value.length < 2) continue;
-      entry.value.sort();
-      spread.add(
-        WeatherSpread(
-          timestamps[entry.key]!,
-          entry.value.first,
-          entry.value.last,
-        ),
-      );
-    }
-    spread.sort((a, b) => a.time.compareTo(b.time));
+    return [
+      for (final entry in hours.entries)
+        if (entry.value.length >= 2)
+          WeatherSpread(
+            timestamps[entry.key]!,
+            entry.value.reduce((a, b) => a < b ? a : b),
+            entry.value.reduce((a, b) => a > b ? a : b),
+          ),
+    ]..sort((a, b) => a.time.compareTo(b.time));
   }
+
   late final List<WeatherForecastSeries> series;
-  late final List<WeatherSpread> spread;
+
+  /// Temperature range per hour.
+  late List<WeatherSpread> spread;
+
+  /// Rain range per hour, mm.
+  late List<WeatherSpread> rainSpread;
 }
 
 /// Mark only the actual current hour in a single-day forecast.

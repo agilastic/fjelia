@@ -6197,4 +6197,306 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get restDayTitle => 'Deň voľna';
+
+  @override
+  String get importActivityFile => 'Importovať súbor aktivity';
+
+  @override
+  String get activityFileImportHint =>
+      'Súbory FIT, GPX alebo TCX (aj v ZIP, ako ich exportuje Garmin Connect) z cyklopočítača, Zwiftu, Stravy alebo inej aplikácie. Súbor môžeš do Fjelie poslať aj z aplikácie Súbory alebo cez ponuku Zdieľať.';
+
+  @override
+  String get chooseActivityFiles => 'Vybrať súbory';
+
+  @override
+  String get chooseOtherFiles => 'Vybrať iné súbory';
+
+  @override
+  String get activityFileUnreadable => 'Nečitateľný súbor aktivity';
+
+  @override
+  String get activityFileAlreadyImported => 'Už importované';
+
+  @override
+  String activityFileAlreadyFrom(String source) {
+    return 'Už je vo Fjelii zo zdroja $source';
+  }
+
+  @override
+  String importActivities(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Importovať $count aktivít',
+      few: 'Importovať $count aktivity',
+      one: 'Importovať $count aktivitu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String activitiesImported(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Importovaných $count aktivít.',
+      few: 'Importované $count aktivity.',
+      one: 'Importovaná $count aktivita.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get activityFileSource => 'Súbor';
+
+  @override
+  String get dfaAlpha1Title => 'Aeróbny prah (DFA α1)';
+
+  @override
+  String get dfaHrvt1 => 'Aeróbny prah (HRVT1)';
+
+  @override
+  String get dfaHrvt2 => 'Anaeróbny prah (HRVT2)';
+
+  @override
+  String dfaEasyShare(String percent) {
+    return '$percent % tréningu pod tvojím aeróbnym prahom (α1 ≥ 0,75).';
+  }
+
+  @override
+  String get dfaNoThreshold =>
+      'Tréning neprekročil jasne žiadny prah. Stupňovaný test alebo tréning, ktorý sa stupňuje od ľahkého po ťažký, poskytne odhad.';
+
+  @override
+  String dfaBeats(int beats, String artifacts) {
+    return '$beats úderov · $artifacts % artefaktov';
+  }
+
+  @override
+  String get dfaArtifactsHigh =>
+      'Veľa artefaktov: skontroluj, či hrudný pás pevne sedí a elektródy sú vlhké.';
+
+  @override
+  String get dfaExplainer =>
+      'Z údajov úder po údere z hrudného pásu. α1 okolo 1 je ľahké, 0,75 označuje aeróbny prah, 0,5 anaeróbny. Odhad, nie laboratórny test.';
+
+  @override
+  String get thresholdOrderNote =>
+      'Fjelia porovnáva všetky zdroje. Najprv navrhne vlastné testy aplikácie, potom tvoje hodinky, potom DFA α1 z viacerých tréningov a nakoniec profil Polar a vzorce. Nič sa nezmení, kým to nepoužiješ.';
+
+  @override
+  String thresholdInUse(String value) {
+    return 'Používa sa: $value';
+  }
+
+  @override
+  String thresholdProposal(String value, String source) {
+    return 'Návrh: $value zo zdroja $source';
+  }
+
+  @override
+  String get keepCurrent => 'Ponechať';
+
+  @override
+  String get lt2Cycling => 'LT2 · Cyklistika';
+
+  @override
+  String get thresholdSourceTt => '30-minútová časovka';
+
+  @override
+  String get thresholdSourceDrift => 'Test driftu TF';
+
+  @override
+  String thresholdSourceDfa(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'DFA α1, $count tréningov',
+      few: 'DFA α1, $count tréningy',
+      one: 'DFA α1, $count tréning',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get thresholdSourceEftp => 'eFTP z jázd na bicykli';
+
+  @override
+  String get thresholdSourcePolarProfile => 'Profil Polar';
+
+  @override
+  String get thresholdFormulaLt2 => 'LT2 − 30 bpm';
+
+  @override
+  String get thresholdFormulaMaxHr => '77 % max. TF';
+
+  @override
+  String get thresholdStale => 'staršie ako 6 mesiacov';
+
+  @override
+  String get thresholdsCoachLocked =>
+      'Tvoje prahy spravuje tvoj tréner, preto ich tu nemôžeš zmeniť.';
+
+  @override
+  String get mediaTitle => 'Fotky a videá';
+
+  @override
+  String get mediaAdd => 'Pridať';
+
+  @override
+  String get mediaFromLibrary => 'Vybrať z knižnice';
+
+  @override
+  String get mediaTakePhoto => 'Odfotiť';
+
+  @override
+  String get mediaRecordVideo => 'Nahrať video';
+
+  @override
+  String mediaAdding(int done, int total) {
+    return 'Pridáva sa $done z $total…';
+  }
+
+  @override
+  String get mediaMoveEarlier => 'Posunúť dopredu';
+
+  @override
+  String get mediaMoveLater => 'Posunúť dozadu';
+
+  @override
+  String get mediaDeleteTitle => 'Odstrániť z Fjelie?';
+
+  @override
+  String get mediaDeleteMessage =>
+      'Fotka alebo video sa odstráni z Fjelie. Originál v tvojej knižnici zostane.';
+
+  @override
+  String get mediaAddFailed => 'Niektoré súbory sa nepodarilo pridať.';
+
+  @override
+  String get mediaHint =>
+      'Ťukni na zobrazenie, podrž na presun alebo odstránenie.';
+
+  @override
+  String get backupVideosTitle => 'Zahrnúť videá?';
+
+  @override
+  String backupVideosMessage(String size) {
+    return 'Tvoje videá zaberajú $size. Bez nich je záloha oveľa menšia; fotky sú vždy zahrnuté.';
+  }
+
+  @override
+  String get backupWithVideos => 'S videami';
+
+  @override
+  String get backupWithoutVideos => 'Bez videí';
+
+  @override
+  String get mediaShareCard => 'Zdieľať ako kartu';
+
+  @override
+  String get mediaShareCardHint =>
+      'Potiahni panel alebo trasu a presuň ich. Fotku priblíž dvoma prstami a posuň; dvojité ťuknutie ju vráti.';
+
+  @override
+  String get shareStyleGlass => 'Sklo';
+
+  @override
+  String get shareStylePoster => 'Plagát';
+
+  @override
+  String get shareStyleMinimal => 'Minimal';
+
+  @override
+  String get shareStyleNeon => 'Neón';
+
+  @override
+  String get shareStyleSticker => 'Nálepka';
+
+  @override
+  String get shareStyleReceipt => 'Bloček';
+
+  @override
+  String get shareStyleKpop => 'K-pop';
+
+  @override
+  String get shareStylePixel => 'Pixel';
+
+  @override
+  String get shareStyleRobot => 'Robot';
+
+  @override
+  String get shareStyleScifi => 'Sci-fi';
+
+  @override
+  String get shareStyleCard => 'Zberateľská karta';
+
+  @override
+  String get shareStyleComic => 'Komiks';
+
+  @override
+  String get shareStyleOutdoor => 'Outdoor';
+
+  @override
+  String get shareStyleHolo => 'Holo karta';
+
+  @override
+  String get shareStyleHoloFull => 'Celoplošná karta';
+
+  @override
+  String nowcastRainSoon(int minutes) {
+    return 'Dážď asi o $minutes min';
+  }
+
+  @override
+  String nowcastRainingStops(int minutes) {
+    return 'Prší · sucho asi o $minutes min';
+  }
+
+  @override
+  String nowcastRainingOn(int minutes) {
+    return 'Prší, ešte aspoň $minutes min';
+  }
+
+  @override
+  String nowcastDry(int minutes) {
+    return 'Sucho najbližších $minutes min';
+  }
+
+  @override
+  String get sunAndMoon => 'Slnko a mesiac';
+
+  @override
+  String get moonNew => 'Nov';
+
+  @override
+  String get moonWaxingCrescent => 'Dorastajúci kosák';
+
+  @override
+  String get moonFirstQuarter => 'Prvá štvrť';
+
+  @override
+  String get moonWaxingGibbous => 'Dorastajúci mesiac';
+
+  @override
+  String get moonFull => 'Spln';
+
+  @override
+  String get moonWaningGibbous => 'Cúvajúci mesiac';
+
+  @override
+  String get moonLastQuarter => 'Posledná štvrť';
+
+  @override
+  String get moonWaningCrescent => 'Cúvajúci kosák';
+
+  @override
+  String moonLit(int percent) {
+    return '$percent % osvetlené';
+  }
+
+  @override
+  String daylightLength(int hours, int minutes) {
+    return '$hours h $minutes min denného svetla';
+  }
 }

@@ -6217,4 +6217,303 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get restDayTitle => 'Giorno di riposo';
+
+  @override
+  String get importActivityFile => 'Importa file attività';
+
+  @override
+  String get activityFileImportHint =>
+      'File FIT, GPX o TCX (anche in ZIP, come li esporta Garmin Connect) da un ciclocomputer, Zwift, Strava o un’altra app. Puoi anche condividere un file con Fjelia dall’app File o dal menu Condividi.';
+
+  @override
+  String get chooseActivityFiles => 'Scegli file';
+
+  @override
+  String get chooseOtherFiles => 'Scegli altri file';
+
+  @override
+  String get activityFileUnreadable => 'File attività non leggibile';
+
+  @override
+  String get activityFileAlreadyImported => 'Già importato';
+
+  @override
+  String activityFileAlreadyFrom(String source) {
+    return 'Già in Fjelia da $source';
+  }
+
+  @override
+  String importActivities(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Importa $count attività',
+      one: 'Importa $count attività',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String activitiesImported(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count attività importate.',
+      one: '$count attività importata.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get activityFileSource => 'File';
+
+  @override
+  String get dfaAlpha1Title => 'Soglia aerobica (DFA α1)';
+
+  @override
+  String get dfaHrvt1 => 'Soglia aerobica (HRVT1)';
+
+  @override
+  String get dfaHrvt2 => 'Soglia anaerobica (HRVT2)';
+
+  @override
+  String dfaEasyShare(String percent) {
+    return '$percent % della sessione sotto la tua soglia aerobica (α1 ≥ 0,75).';
+  }
+
+  @override
+  String get dfaNoThreshold =>
+      'La sessione non ha superato chiaramente una soglia. Un test incrementale, o una sessione che sale da facile a dura, fornisce una stima.';
+
+  @override
+  String dfaBeats(int beats, String artifacts) {
+    return '$beats battiti · $artifacts % di artefatti';
+  }
+
+  @override
+  String get dfaArtifactsHigh =>
+      'Molti artefatti: controlla che la fascia cardio sia ben stretta e gli elettrodi umidi.';
+
+  @override
+  String get dfaExplainer =>
+      'Dai dati battito per battito di una fascia cardio. α1 vicino a 1 è facile, 0,75 indica la soglia aerobica, 0,5 quella anaerobica. Una stima, non un test di laboratorio.';
+
+  @override
+  String get thresholdOrderNote =>
+      'Fjelia confronta tutte le fonti. Propone prima i test dell’app, poi il tuo orologio, poi DFA α1 su più sessioni, poi il profilo Polar e le formule. Nulla cambia finché non lo applichi.';
+
+  @override
+  String thresholdInUse(String value) {
+    return 'In uso: $value';
+  }
+
+  @override
+  String thresholdProposal(String value, String source) {
+    return 'Proposta: $value da $source';
+  }
+
+  @override
+  String get keepCurrent => 'Mantieni';
+
+  @override
+  String get lt2Cycling => 'LT2 · Ciclismo';
+
+  @override
+  String get thresholdSourceTt => 'Cronometro di 30 minuti';
+
+  @override
+  String get thresholdSourceDrift => 'Test di deriva della FC';
+
+  @override
+  String thresholdSourceDfa(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'DFA α1, $count sessioni',
+      one: 'DFA α1, $count sessione',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get thresholdSourceEftp => 'eFTP dalle uscite in bici';
+
+  @override
+  String get thresholdSourcePolarProfile => 'Profilo Polar';
+
+  @override
+  String get thresholdFormulaLt2 => 'LT2 − 30 bpm';
+
+  @override
+  String get thresholdFormulaMaxHr => '77 % della FC max';
+
+  @override
+  String get thresholdStale => 'più vecchio di 6 mesi';
+
+  @override
+  String get thresholdsCoachLocked =>
+      'Le tue soglie sono gestite dal tuo coach, quindi non puoi modificarle qui.';
+
+  @override
+  String get mediaTitle => 'Foto e video';
+
+  @override
+  String get mediaAdd => 'Aggiungi';
+
+  @override
+  String get mediaFromLibrary => 'Scegli dalla libreria';
+
+  @override
+  String get mediaTakePhoto => 'Scatta foto';
+
+  @override
+  String get mediaRecordVideo => 'Registra video';
+
+  @override
+  String mediaAdding(int done, int total) {
+    return 'Aggiunta di $done di $total…';
+  }
+
+  @override
+  String get mediaMoveEarlier => 'Sposta prima';
+
+  @override
+  String get mediaMoveLater => 'Sposta dopo';
+
+  @override
+  String get mediaDeleteTitle => 'Eliminare da Fjelia?';
+
+  @override
+  String get mediaDeleteMessage =>
+      'La foto o il video viene rimosso da Fjelia. L’originale nella tua libreria resta.';
+
+  @override
+  String get mediaAddFailed => 'Alcuni file non sono stati aggiunti.';
+
+  @override
+  String get mediaHint =>
+      'Tocca per vedere, tieni premuto per spostare o eliminare.';
+
+  @override
+  String get backupVideosTitle => 'Includere i video?';
+
+  @override
+  String backupVideosMessage(String size) {
+    return 'I tuoi video occupano $size. Senza di essi il backup è molto più piccolo; le foto sono sempre incluse.';
+  }
+
+  @override
+  String get backupWithVideos => 'Con i video';
+
+  @override
+  String get backupWithoutVideos => 'Senza video';
+
+  @override
+  String get mediaShareCard => 'Condividi come scheda';
+
+  @override
+  String get mediaShareCardHint =>
+      'Trascina il riquadro o il percorso per spostarli. Pizzica e trascina la foto per inquadrarla; doppio tocco per ripristinarla.';
+
+  @override
+  String get shareStyleGlass => 'Vetro';
+
+  @override
+  String get shareStylePoster => 'Poster';
+
+  @override
+  String get shareStyleMinimal => 'Minimal';
+
+  @override
+  String get shareStyleNeon => 'Neon';
+
+  @override
+  String get shareStyleSticker => 'Sticker';
+
+  @override
+  String get shareStyleReceipt => 'Scontrino';
+
+  @override
+  String get shareStyleKpop => 'K-pop';
+
+  @override
+  String get shareStylePixel => 'Pixel';
+
+  @override
+  String get shareStyleRobot => 'Robot';
+
+  @override
+  String get shareStyleScifi => 'Fantascienza';
+
+  @override
+  String get shareStyleCard => 'Carta collezionabile';
+
+  @override
+  String get shareStyleComic => 'Fumetto';
+
+  @override
+  String get shareStyleOutdoor => 'Outdoor';
+
+  @override
+  String get shareStyleHolo => 'Carta olografica';
+
+  @override
+  String get shareStyleHoloFull => 'Carta full art';
+
+  @override
+  String nowcastRainSoon(int minutes) {
+    return 'Pioggia tra circa $minutes min';
+  }
+
+  @override
+  String nowcastRainingStops(int minutes) {
+    return 'Piove · asciutto tra circa $minutes min';
+  }
+
+  @override
+  String nowcastRainingOn(int minutes) {
+    return 'Piove, ancora per almeno $minutes min';
+  }
+
+  @override
+  String nowcastDry(int minutes) {
+    return 'Asciutto per i prossimi $minutes min';
+  }
+
+  @override
+  String get sunAndMoon => 'Sole e luna';
+
+  @override
+  String get moonNew => 'Luna nuova';
+
+  @override
+  String get moonWaxingCrescent => 'Luna crescente';
+
+  @override
+  String get moonFirstQuarter => 'Primo quarto';
+
+  @override
+  String get moonWaxingGibbous => 'Gibbosa crescente';
+
+  @override
+  String get moonFull => 'Luna piena';
+
+  @override
+  String get moonWaningGibbous => 'Gibbosa calante';
+
+  @override
+  String get moonLastQuarter => 'Ultimo quarto';
+
+  @override
+  String get moonWaningCrescent => 'Luna calante';
+
+  @override
+  String moonLit(int percent) {
+    return '$percent % illuminata';
+  }
+
+  @override
+  String daylightLength(int hours, int minutes) {
+    return '$hours h $minutes min di luce';
+  }
 }

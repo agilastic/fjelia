@@ -34,6 +34,8 @@ import '../strength/strength_sections.dart';
 import '../../services/strength/strength_repository.dart';
 import '../../services/strength/strength_templates.dart';
 import 'workout_delivery_setup.dart';
+import '../../providers/media_provider.dart';
+import '../../widgets/media_gallery.dart';
 
 class PlanSessionSheet extends ConsumerStatefulWidget {
   const PlanSessionSheet({super.key, required this.session});
@@ -612,7 +614,9 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
               if (chosen != null) await moveTo(chosen);
             },
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: 16),
+          MediaGallery(owner: MediaOwner.session(s)),
+          const SizedBox(height: 16),
           OutlinedButton.icon(
             style: style(mint, filled: true),
             onPressed: () => openCoachTab(

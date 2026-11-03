@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../db/database.dart';
+import '../models/threshold_candidate.dart';
 import '../services/lt1_drift_service.dart';
+import '../services/threshold_choice_store.dart';
 import 'database_provider.dart';
 import 'day_data_provider.dart';
 import 'hr_zones_provider.dart';
@@ -51,6 +53,15 @@ class Lt1DriftNotifier extends StateNotifier<AsyncValue<Lt1DriftResult?>> {
           lt1Bpm: result.lt1,
         );
     await _ref.read(hrZonesProvider.notifier).applyLt1Ceiling(result.lt1);
+    // The athlete ran the test on purpose: a device sync must not undo it.
+    await const ThresholdChoiceStore().markApplied(
+      ThresholdCandidate(
+        kind: ThresholdKind.lt1,
+        source: 'drift',
+        value: result.lt1,
+        date: activity.startDate,
+      ),
+    );
     _ref.invalidate(thresholdHistoryProvider);
     return null;
   }

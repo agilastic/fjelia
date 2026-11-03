@@ -6203,4 +6203,303 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get restDayTitle => 'Lepopäivä';
+
+  @override
+  String get importActivityFile => 'Tuo aktiviteettitiedosto';
+
+  @override
+  String get activityFileImportHint =>
+      'FIT-, GPX- tai TCX-tiedostot (myös ZIP-pakattuina, kuten Garmin Connect ne vie) pyörätietokoneesta, Zwiftistä, Stravasta tai muusta sovelluksesta. Voit myös jakaa tiedoston Fjeliaan Tiedostot-sovelluksesta tai jakovalikosta.';
+
+  @override
+  String get chooseActivityFiles => 'Valitse tiedostot';
+
+  @override
+  String get chooseOtherFiles => 'Valitse muut tiedostot';
+
+  @override
+  String get activityFileUnreadable => 'Ei luettava aktiviteettitiedosto';
+
+  @override
+  String get activityFileAlreadyImported => 'Tuotu jo';
+
+  @override
+  String activityFileAlreadyFrom(String source) {
+    return 'Jo Fjeliassa lähteestä $source';
+  }
+
+  @override
+  String importActivities(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Tuo $count aktiviteettia',
+      one: 'Tuo $count aktiviteetti',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String activitiesImported(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count aktiviteettia tuotu.',
+      one: '$count aktiviteetti tuotu.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get activityFileSource => 'Tiedosto';
+
+  @override
+  String get dfaAlpha1Title => 'Aerobinen kynnys (DFA α1)';
+
+  @override
+  String get dfaHrvt1 => 'Aerobinen kynnys (HRVT1)';
+
+  @override
+  String get dfaHrvt2 => 'Anaerobinen kynnys (HRVT2)';
+
+  @override
+  String dfaEasyShare(String percent) {
+    return '$percent % harjoituksesta aerobisen kynnyksesi alapuolella (α1 ≥ 0,75).';
+  }
+
+  @override
+  String get dfaNoThreshold =>
+      'Harjoitus ei ylittänyt kynnystä selvästi. Portaittainen testi tai harjoitus, joka kiristyy kevyestä kovaan, antaa arvion.';
+
+  @override
+  String dfaBeats(int beats, String artifacts) {
+    return '$beats lyöntiä · $artifacts % artefakteja';
+  }
+
+  @override
+  String get dfaArtifactsHigh =>
+      'Paljon artefakteja: tarkista, että sykevyö istuu tiukasti ja elektrodit ovat kosteat.';
+
+  @override
+  String get dfaExplainer =>
+      'Sykevyön lyönti lyönniltä -datasta. α1 lähellä 1:tä on kevyttä, 0,75 merkitsee aerobista kynnystä ja 0,5 anaerobista. Arvio, ei laboratoriotesti.';
+
+  @override
+  String get thresholdOrderNote =>
+      'Fjelia vertaa kaikkia lähteitä. Ensin se ehdottaa sovelluksen omia testejä, sitten kelloasi, sitten useamman harjoituksen DFA α1:tä ja lopuksi Polar-profiilia ja kaavoja. Mikään ei muutu ennen kuin otat sen käyttöön.';
+
+  @override
+  String thresholdInUse(String value) {
+    return 'Käytössä: $value';
+  }
+
+  @override
+  String thresholdProposal(String value, String source) {
+    return 'Ehdotus: $value lähteestä $source';
+  }
+
+  @override
+  String get keepCurrent => 'Pidä nykyinen';
+
+  @override
+  String get lt2Cycling => 'LT2 · Pyöräily';
+
+  @override
+  String get thresholdSourceTt => '30 minuutin aika-ajo';
+
+  @override
+  String get thresholdSourceDrift => 'Sykedriftitesti';
+
+  @override
+  String thresholdSourceDfa(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'DFA α1, $count harjoitusta',
+      one: 'DFA α1, $count harjoitus',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get thresholdSourceEftp => 'eFTP pyörälenkeistä';
+
+  @override
+  String get thresholdSourcePolarProfile => 'Polar-profiili';
+
+  @override
+  String get thresholdFormulaLt2 => 'LT2 − 30 bpm';
+
+  @override
+  String get thresholdFormulaMaxHr => '77 % maksimisykkeestä';
+
+  @override
+  String get thresholdStale => 'yli 6 kuukautta vanha';
+
+  @override
+  String get thresholdsCoachLocked =>
+      'Valmentajasi hallitsee kynnyksiäsi, joten niitä ei voi muuttaa täällä.';
+
+  @override
+  String get mediaTitle => 'Kuvat ja videot';
+
+  @override
+  String get mediaAdd => 'Lisää';
+
+  @override
+  String get mediaFromLibrary => 'Valitse kirjastosta';
+
+  @override
+  String get mediaTakePhoto => 'Ota kuva';
+
+  @override
+  String get mediaRecordVideo => 'Kuvaa video';
+
+  @override
+  String mediaAdding(int done, int total) {
+    return 'Lisätään $done/$total…';
+  }
+
+  @override
+  String get mediaMoveEarlier => 'Siirrä aiemmaksi';
+
+  @override
+  String get mediaMoveLater => 'Siirrä myöhemmäksi';
+
+  @override
+  String get mediaDeleteTitle => 'Poistetaanko Fjeliasta?';
+
+  @override
+  String get mediaDeleteMessage =>
+      'Kuva tai video poistetaan Fjeliasta. Alkuperäinen jää kuvakirjastoosi.';
+
+  @override
+  String get mediaAddFailed => 'Joitakin tiedostoja ei voitu lisätä.';
+
+  @override
+  String get mediaHint =>
+      'Napauta katsoaksesi, pidä painettuna siirtääksesi tai poistaaksesi.';
+
+  @override
+  String get backupVideosTitle => 'Otetaanko videot mukaan?';
+
+  @override
+  String backupVideosMessage(String size) {
+    return 'Videosi vievät $size. Ilman niitä varmuuskopio on paljon pienempi; kuvat ovat aina mukana.';
+  }
+
+  @override
+  String get backupWithVideos => 'Videoiden kanssa';
+
+  @override
+  String get backupWithoutVideos => 'Ilman videoita';
+
+  @override
+  String get mediaShareCard => 'Jaa korttina';
+
+  @override
+  String get mediaShareCardHint =>
+      'Siirrä paneelia tai reittiä vetämällä. Nipistä ja vedä kuvaa rajataksesi sen; kaksoisnapautus palauttaa.';
+
+  @override
+  String get shareStyleGlass => 'Lasi';
+
+  @override
+  String get shareStylePoster => 'Juliste';
+
+  @override
+  String get shareStyleMinimal => 'Minimal';
+
+  @override
+  String get shareStyleNeon => 'Neon';
+
+  @override
+  String get shareStyleSticker => 'Tarra';
+
+  @override
+  String get shareStyleReceipt => 'Kuitti';
+
+  @override
+  String get shareStyleKpop => 'K-pop';
+
+  @override
+  String get shareStylePixel => 'Pikseli';
+
+  @override
+  String get shareStyleRobot => 'Robotti';
+
+  @override
+  String get shareStyleScifi => 'Sci-fi';
+
+  @override
+  String get shareStyleCard => 'Keräilykortti';
+
+  @override
+  String get shareStyleComic => 'Sarjakuva';
+
+  @override
+  String get shareStyleOutdoor => 'Retkeily';
+
+  @override
+  String get shareStyleHolo => 'Holokortti';
+
+  @override
+  String get shareStyleHoloFull => 'Kokokuvakortti';
+
+  @override
+  String nowcastRainSoon(int minutes) {
+    return 'Sadetta noin $minutes min päästä';
+  }
+
+  @override
+  String nowcastRainingStops(int minutes) {
+    return 'Sataa · poutaa noin $minutes min päästä';
+  }
+
+  @override
+  String nowcastRainingOn(int minutes) {
+    return 'Sataa, vielä vähintään $minutes min';
+  }
+
+  @override
+  String nowcastDry(int minutes) {
+    return 'Poutaa seuraavat $minutes min';
+  }
+
+  @override
+  String get sunAndMoon => 'Aurinko ja kuu';
+
+  @override
+  String get moonNew => 'Uusikuu';
+
+  @override
+  String get moonWaxingCrescent => 'Kasvava sirppi';
+
+  @override
+  String get moonFirstQuarter => 'Ensimmäinen neljännes';
+
+  @override
+  String get moonWaxingGibbous => 'Kasvava kuu';
+
+  @override
+  String get moonFull => 'Täysikuu';
+
+  @override
+  String get moonWaningGibbous => 'Vähenevä kuu';
+
+  @override
+  String get moonLastQuarter => 'Viimeinen neljännes';
+
+  @override
+  String get moonWaningCrescent => 'Vähenevä sirppi';
+
+  @override
+  String moonLit(int percent) {
+    return '$percent % valaistu';
+  }
+
+  @override
+  String daylightLength(int hours, int minutes) {
+    return '$hours h $minutes min päivänvaloa';
+  }
 }

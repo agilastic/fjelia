@@ -13,6 +13,8 @@ import '../../widgets/app_widgets.dart';
 import '../../widgets/weather_visuals.dart';
 import '../settings/weather_location_tab.dart';
 import 'weather_radar.dart';
+import '../../services/moon_phase.dart';
+import '../../widgets/weather_glyph.dart';
 
 class WeatherScreen extends ConsumerStatefulWidget {
   const WeatherScreen({super.key});
@@ -270,6 +272,8 @@ class _WeatherState extends ConsumerState<WeatherScreen> {
                     comparison:
                         ref.watch(weatherComparisonProvider).valueOrNull ?? [],
                     primarySource: data.result.source,
+                    sunrise: data.result.sunrise,
+                    sunset: data.result.sunset,
                   ),
                   if (data.availableDays(day, days) < days)
                     Padding(
@@ -327,33 +331,109 @@ class _WeatherState extends ConsumerState<WeatherScreen> {
                   ),
                   const SizedBox(height: 16),
                   const WeatherRadar(),
-                  SectionLabel(context.l10n.sunriseSunset),
+                  SectionLabel(context.l10n.sunAndMoon),
+                  // The moon tonight: how it looks, its phase and how much
+                  // of it is lit.
+                  Builder(
+                    builder: (context) {
+                      final night = DateTime(day.year, day.month, day.day, 22);
+                      final lit = moonIllumination(night);
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 6),
+                        child: Row(
+                          children: [
+                            MoonGlyph(
+                              illumination: lit,
+                              waxing: moonWaxing(night),
+                              size: 34,
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    moonPhaseName(context, moonPhaseOf(night)),
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Text(
+                                    context.l10n.moonLit((lit * 100).round()),
+                                    style: const TextStyle(
+                                      color: muted,
+                                      fontSize: 11,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
                   for (final key
                       in data.result.sunrise.keys
                           .where((key) => key.compareTo(todayKey) >= 0)
                           .take(days))
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            key == todayKey
-                                ? context.l10n.today
-                                : DateFormat.MMMEd().format(
-                                    DateTime.parse(key),
+                    Builder(
+                      builder: (context) {
+                        final rise = data.result.sunrise[key];
+                        final set = data.result.sunset[key];
+                        final daylight = rise != null && set != null
+                            ? set.difference(rise)
+                            : null;
+                        final night = DateTime.parse(key)
+                            .add(const Duration(hours: 22));
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 7),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  key == todayKey
+                                      ? context.l10n.today
+                                      : DateFormat.MMMEd().format(
+                                          DateTime.parse(key),
+                                        ),
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                              ),
+                              const Icon(
+                                Icons.wb_twilight,
+                                size: 14,
+                                color: Colors.amber,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                context.l10n.keyKey2(time(rise), time(set)),
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                              if (daylight != null) ...[
+                                const SizedBox(width: 8),
+                                Text(
+                                  context.l10n.daylightLength(
+                                    daylight.inHours,
+                                    daylight.inMinutes % 60,
                                   ),
-                            style: const TextStyle(fontSize: 12),
+                                  style: const TextStyle(
+                                    color: muted,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                              ],
+                              const SizedBox(width: 8),
+                              MoonGlyph(
+                                illumination: moonIllumination(night),
+                                waxing: moonWaxing(night),
+                                size: 16,
+                              ),
+                            ],
                           ),
-                          Text(
-                            context.l10n.keyKey2(
-                              time(data.result.sunrise[key]),
-                              time(data.result.sunset[key]),
-                            ),
-                            style: const TextStyle(color: muted, fontSize: 12),
-                          ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
                   const SizedBox(height: 12),
                   Text(
@@ -379,4 +459,18 @@ class _WeatherState extends ConsumerState<WeatherScreen> {
           },
         ),
   );
+}
+
+String moonPhaseName(BuildContext context, MoonPhase phase) {
+  final l10n = context.l10n;
+  return switch (phase) {
+    MoonPhase.newMoon => l10n.moonNew,
+    MoonPhase.waxingCrescent => l10n.moonWaxingCrescent,
+    MoonPhase.firstQuarter => l10n.moonFirstQuarter,
+    MoonPhase.waxingGibbous => l10n.moonWaxingGibbous,
+    MoonPhase.full => l10n.moonFull,
+    MoonPhase.waningGibbous => l10n.moonWaningGibbous,
+    MoonPhase.lastQuarter => l10n.moonLastQuarter,
+    MoonPhase.waningCrescent => l10n.moonWaningCrescent,
+  };
 }

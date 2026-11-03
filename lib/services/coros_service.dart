@@ -8,6 +8,7 @@ import '../api/coros_workout.dart';
 import '../models/prepared_workout.dart';
 import '../api/coros_client.dart';
 import '../db/database.dart';
+import 'device_threshold_store.dart';
 import '../models/heart_rate.dart';
 import '../utils/log.dart';
 import 'workout_providers/cleanup_queue.dart';
@@ -469,6 +470,31 @@ class CorosService {
       final saved = await _saveDayMetrics(entry.key, entry.value);
       r.daily += saved.$1;
       r.hrv += saved.$2;
+    }
+    await _saveThreshold(byDay);
+  }
+
+  /// COROS's current threshold heart rate (`lthr`) and pace (`ltsp`), from
+  /// the latest day that has them. Shown among the threshold candidates.
+  Future<void> _saveThreshold(Map<String, Map<String, dynamic>> byDay) async {
+    final days = byDay.keys.toList()..sort();
+    for (final key in days.reversed) {
+      final m = byDay[key]!;
+      final lthr = plausibleBpm(m['lthr']);
+      final pace = paceSecPerKm(m['ltsp']);
+      if (lthr == null && pace == null) continue;
+      final day = _parseDay(key);
+      if (day == null) continue;
+      log('[Coros] threshold $key: lthr=$lthr ltsp=${m['ltsp']}');
+      await const DeviceThresholdStore().save(
+        DeviceThreshold(
+          source: _source,
+          date: day,
+          lt2Bpm: lthr,
+          lt2PaceSecPerKm: pace,
+        ),
+      );
+      return;
     }
   }
 

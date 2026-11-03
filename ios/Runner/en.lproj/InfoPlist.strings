@@ -4,3 +4,6 @@
 "NSHealthUpdateUsageDescription" = "Fjelia writes your synced HRV, heart rate, sleep, steps and workout data to Apple Health so you don't lose it if you switch apps.";
 "NSLocationAlwaysAndWhenInUseUsageDescription" = "Fjelia only uses your location while the app is open, to evaluate heat risk for planned workouts.";
 "NSLocationWhenInUseUsageDescription" = "Fjelia uses your current location to evaluate heat risk for planned workouts.";
+"NSPhotoLibraryUsageDescription" = "Fjelia lets you add photos and videos from your library to your workouts, race goals and planned sessions.";
+"NSCameraUsageDescription" = "Fjelia uses the camera when you take a photo or video for a workout, race goal or planned session.";
+"NSMicrophoneUsageDescription" = "Fjelia uses the microphone for the sound of videos you record for a workout.";

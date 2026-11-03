@@ -1,6 +1,7 @@
 import '../l10n/formats.dart';
 import '../l10n/l10n_ext.dart';
 import '../models/weather_comparison.dart';
+import 'weather_glyph.dart';
 
 import 'dart:math' as math;
 
@@ -31,11 +32,16 @@ class WeatherForecastChart extends StatefulWidget {
     this.fullscreen = false,
     this.plotHeight = 250,
     this.initialSelected,
+    this.sunrise = const {},
+    this.sunset = const {},
   });
   final List<OpenMeteoPoint> points;
   final bool week;
   final List<OpenMeteoResult> comparison;
   final String? primarySource;
+
+  /// For the moon instead of the sun at night, keyed by `yyyy-MM-dd`.
+  final Map<String, DateTime> sunrise, sunset;
   final bool fullscreen;
   final double plotHeight;
   final int? initialSelected;
@@ -74,6 +80,7 @@ class _WeatherChartState extends State<WeatherForecastChart> {
       widget.points,
       widget.primarySource ?? context.l10n.forecast,
       widget.comparison,
+      now: DateTime.now(),
     );
     final currentHour = currentWeatherHourIndex(
       widget.points,
@@ -121,6 +128,8 @@ class _WeatherChartState extends State<WeatherForecastChart> {
                     comparison: widget.comparison,
                     primarySource: widget.primarySource,
                     selected: selected,
+                    sunrise: widget.sunrise,
+                    sunset: widget.sunset,
                   ),
                 ),
               ),
@@ -131,12 +140,21 @@ class _WeatherChartState extends State<WeatherForecastChart> {
               ),
             ),
           ),
+        // What the sky does, over the hours it applies to.
+        WeatherGlyphRow(
+          points: [
+            for (final p in widget.points) (time: p.time, code: p.weatherCode),
+          ],
+          week: widget.week,
+          sunrise: widget.sunrise,
+          sunset: widget.sunset,
+        ),
         if (widget.fullscreen) Expanded(child: plot) else plot,
         if (selected != null && selected! < widget.points.length)
           Padding(
             padding: const EdgeInsets.all(8),
             child: Text(
-              '${DateFormat.E().add_Hm().format(widget.points[selected!].time)} · ${widget.points[selected!].temperatureC.fixed(1)}°C${_rangeText(comparison, widget.points[selected!].time)} · ${widget.points[selected!].precipitationMm.fixed(1)} mm · UV ${widget.points[selected!].uvIndex ?? '—'}',
+              '${DateFormat.E().add_Hm().format(widget.points[selected!].time)} · ${widget.points[selected!].temperatureC.fixed(1)}°C${_rangeText(comparison, widget.points[selected!].time)} · ${widget.points[selected!].precipitationMm.fixed(1)} mm${_rainRangeText(comparison, widget.points[selected!].time)} · UV ${widget.points[selected!].uvIndex ?? '—'}',
               style: const TextStyle(fontSize: 11, color: Colors.white70),
             ),
           ),
@@ -194,6 +212,17 @@ String _rangeText(WeatherComparison comparison, DateTime time) {
   return '';
 }
 
+/// The rain range of all forecasts in that hour, e.g. ` (0.0–0.8 mm)`.
+String _rainRangeText(WeatherComparison comparison, DateTime time) {
+  final hour = time.millisecondsSinceEpoch ~/ 3600000;
+  for (final s in comparison.rainSpread) {
+    if (s.time.millisecondsSinceEpoch ~/ 3600000 != hour) continue;
+    final low = s.low.fixed(1), high = s.high.fixed(1);
+    return low == high ? '' : ' ($low–$high mm)';
+  }
+  return '';
+}
+
 /// The band between the lowest and highest of all forecasts, in the colour of
 /// the main temperature line it surrounds.
 final _rangeBand = Colors.deepOrangeAccent.withValues(alpha: .16);
@@ -231,8 +260,16 @@ class _WeatherPainter extends CustomPainter {
             .ceilToDouble();
     final rainMax = math.max(
       2.0,
-      points.map((p) => p.precipitationMm).reduce(math.max) * 1.15,
+      [
+            ...points.map((p) => p.precipitationMm),
+            ...comparison.rainSpread.map((s) => s.high),
+          ].reduce(math.max) *
+          1.15,
     );
+    final rainRange = {
+      for (final s in comparison.rainSpread)
+        s.time.millisecondsSinceEpoch ~/ 3600000: s,
+    };
     double x(int i) => plot.left + (i + .5) * plot.width / points.length;
     double y(double value) =>
         plot.bottom - (value - low) / (high - low) * plot.height;
@@ -322,6 +359,27 @@ class _WeatherPainter extends CustomPainter {
         ),
         Paint()..color = Colors.lightBlue.withValues(alpha: .35),
       );
+      // What the other forecasts expect in that hour: a whisker from the
+      // lowest to the highest amount.
+      final range = rainRange[p.time.millisecondsSinceEpoch ~/ 3600000];
+      if (range != null && range.high - range.low >= .05) {
+        double rainY(double mm) => plot.bottom - mm / rainMax * plot.height;
+        final half = plot.width / points.length * .18;
+        final whisker = Paint()
+          ..color = Colors.lightBlueAccent.withValues(alpha: .8)
+          ..strokeWidth = 1.2;
+        canvas
+          ..drawLine(
+            Offset(px, rainY(range.low)),
+            Offset(px, rainY(range.high)),
+            whisker,
+          )
+          ..drawLine(
+            Offset(px - half, rainY(range.high)),
+            Offset(px + half, rainY(range.high)),
+            whisker,
+          );
+      }
       final uvY =
           plot.bottom - (p.uvIndex ?? 0).clamp(0, 12) / 12 * plot.height;
       if (i == 0) {
@@ -377,12 +435,15 @@ class WeatherChartFullscreen extends StatelessWidget {
     required this.comparison,
     this.primarySource,
     this.selected,
+    this.sunrise = const {},
+    this.sunset = const {},
   });
   final List<OpenMeteoPoint> points;
   final bool week;
   final List<OpenMeteoResult> comparison;
   final String? primarySource;
   final int? selected;
+  final Map<String, DateTime> sunrise, sunset;
   @override
   Widget build(BuildContext context) => Scaffold(
     backgroundColor: const Color(0xFF111111),
@@ -420,6 +481,8 @@ class WeatherChartFullscreen extends StatelessWidget {
                     primarySource: primarySource,
                     fullscreen: true,
                     initialSelected: selected,
+                    sunrise: sunrise,
+                    sunset: sunset,
                   ),
                 ),
               ],

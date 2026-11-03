@@ -6180,4 +6180,302 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get restDayTitle => 'Hviledag';
+
+  @override
+  String get importActivityFile => 'Importér aktivitetsfil';
+
+  @override
+  String get activityFileImportHint =>
+      'FIT-, GPX- eller TCX-filer (også zippede, som Garmin Connect eksporterer dem) fra en cykelcomputer, Zwift, Strava eller en anden app. Du kan også dele en fil til Fjelia fra appen Filer eller delingsmenuen.';
+
+  @override
+  String get chooseActivityFiles => 'Vælg filer';
+
+  @override
+  String get chooseOtherFiles => 'Vælg andre filer';
+
+  @override
+  String get activityFileUnreadable => 'Ikke en læsbar aktivitetsfil';
+
+  @override
+  String get activityFileAlreadyImported => 'Allerede importeret';
+
+  @override
+  String activityFileAlreadyFrom(String source) {
+    return 'Findes allerede i Fjelia fra $source';
+  }
+
+  @override
+  String importActivities(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Importér $count aktiviteter',
+      one: 'Importér $count aktivitet',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String activitiesImported(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count aktiviteter importeret.',
+      one: '$count aktivitet importeret.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get activityFileSource => 'Fil';
+
+  @override
+  String get dfaAlpha1Title => 'Aerob tærskel (DFA α1)';
+
+  @override
+  String get dfaHrvt1 => 'Aerob tærskel (HRVT1)';
+
+  @override
+  String get dfaHrvt2 => 'Anaerob tærskel (HRVT2)';
+
+  @override
+  String dfaEasyShare(String percent) {
+    return '$percent % af træningen under din aerobe tærskel (α1 ≥ 0,75).';
+  }
+
+  @override
+  String get dfaNoThreshold =>
+      'Træningen krydsede ikke en tærskel tydeligt. En trappetest, eller en træning der bygger op fra let til hårdt, giver et estimat.';
+
+  @override
+  String dfaBeats(int beats, String artifacts) {
+    return '$beats slag · $artifacts % artefakter';
+  }
+
+  @override
+  String get dfaArtifactsHigh =>
+      'Mange artefakter: tjek at pulsbæltet sidder fast og at elektroderne er fugtige.';
+
+  @override
+  String get dfaExplainer =>
+      'Fra slag-til-slag-data fra et pulsbælte. α1 omkring 1 er let, 0,75 markerer den aerobe tærskel og 0,5 den anaerobe. Et estimat, ikke en labtest.';
+
+  @override
+  String get thresholdOrderNote =>
+      'Fjelia sammenligner alle kilder. Først foreslår den appens egne tests, så dit ur, så DFA α1 over flere træninger og derefter Polar-profilen og formler. Intet ændres, før du anvender det.';
+
+  @override
+  String thresholdInUse(String value) {
+    return 'I brug: $value';
+  }
+
+  @override
+  String thresholdProposal(String value, String source) {
+    return 'Forslag: $value fra $source';
+  }
+
+  @override
+  String get keepCurrent => 'Behold';
+
+  @override
+  String get lt2Cycling => 'LT2 · Cykling';
+
+  @override
+  String get thresholdSourceTt => '30-minutters enkeltstart';
+
+  @override
+  String get thresholdSourceDrift => 'Pulsdrift-test';
+
+  @override
+  String thresholdSourceDfa(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'DFA α1, $count træninger',
+      one: 'DFA α1, $count træning',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get thresholdSourceEftp => 'eFTP fra cykelture';
+
+  @override
+  String get thresholdSourcePolarProfile => 'Polar-profil';
+
+  @override
+  String get thresholdFormulaLt2 => 'LT2 − 30 bpm';
+
+  @override
+  String get thresholdFormulaMaxHr => '77 % af maks. puls';
+
+  @override
+  String get thresholdStale => 'ældre end 6 måneder';
+
+  @override
+  String get thresholdsCoachLocked =>
+      'Din træner styrer dine tærskler, så de kan ikke ændres her.';
+
+  @override
+  String get mediaTitle => 'Fotos og videoer';
+
+  @override
+  String get mediaAdd => 'Tilføj';
+
+  @override
+  String get mediaFromLibrary => 'Vælg fra biblioteket';
+
+  @override
+  String get mediaTakePhoto => 'Tag foto';
+
+  @override
+  String get mediaRecordVideo => 'Optag video';
+
+  @override
+  String mediaAdding(int done, int total) {
+    return 'Tilføjer $done af $total …';
+  }
+
+  @override
+  String get mediaMoveEarlier => 'Flyt frem';
+
+  @override
+  String get mediaMoveLater => 'Flyt tilbage';
+
+  @override
+  String get mediaDeleteTitle => 'Slet fra Fjelia?';
+
+  @override
+  String get mediaDeleteMessage =>
+      'Fotoet eller videoen fjernes fra Fjelia. Originalen i dit fotobibliotek bliver.';
+
+  @override
+  String get mediaAddFailed => 'Nogle filer kunne ikke tilføjes.';
+
+  @override
+  String get mediaHint => 'Tryk for at se, hold for at flytte eller slette.';
+
+  @override
+  String get backupVideosTitle => 'Medtag videoer?';
+
+  @override
+  String backupVideosMessage(String size) {
+    return 'Dine videoer fylder $size. Uden dem bliver sikkerhedskopien meget mindre; fotos er altid med.';
+  }
+
+  @override
+  String get backupWithVideos => 'Med videoer';
+
+  @override
+  String get backupWithoutVideos => 'Uden videoer';
+
+  @override
+  String get mediaShareCard => 'Del som kort';
+
+  @override
+  String get mediaShareCardHint =>
+      'Træk feltet eller ruten for at flytte dem. Knib og træk billedet for at beskære det; dobbelttryk nulstiller.';
+
+  @override
+  String get shareStyleGlass => 'Glas';
+
+  @override
+  String get shareStylePoster => 'Plakat';
+
+  @override
+  String get shareStyleMinimal => 'Minimal';
+
+  @override
+  String get shareStyleNeon => 'Neon';
+
+  @override
+  String get shareStyleSticker => 'Klistermærke';
+
+  @override
+  String get shareStyleReceipt => 'Kvittering';
+
+  @override
+  String get shareStyleKpop => 'K-pop';
+
+  @override
+  String get shareStylePixel => 'Pixel';
+
+  @override
+  String get shareStyleRobot => 'Robot';
+
+  @override
+  String get shareStyleScifi => 'Sci-fi';
+
+  @override
+  String get shareStyleCard => 'Samlekort';
+
+  @override
+  String get shareStyleComic => 'Tegneserie';
+
+  @override
+  String get shareStyleOutdoor => 'Friluft';
+
+  @override
+  String get shareStyleHolo => 'Holokort';
+
+  @override
+  String get shareStyleHoloFull => 'Fuldbilledkort';
+
+  @override
+  String nowcastRainSoon(int minutes) {
+    return 'Regn om ca. $minutes min';
+  }
+
+  @override
+  String nowcastRainingStops(int minutes) {
+    return 'Det regner · tørvejr om ca. $minutes min';
+  }
+
+  @override
+  String nowcastRainingOn(int minutes) {
+    return 'Det regner, mindst $minutes min endnu';
+  }
+
+  @override
+  String nowcastDry(int minutes) {
+    return 'Tørvejr de næste $minutes min';
+  }
+
+  @override
+  String get sunAndMoon => 'Sol og måne';
+
+  @override
+  String get moonNew => 'Nymåne';
+
+  @override
+  String get moonWaxingCrescent => 'Tiltagende månesegl';
+
+  @override
+  String get moonFirstQuarter => 'Første kvarter';
+
+  @override
+  String get moonWaxingGibbous => 'Tiltagende måne';
+
+  @override
+  String get moonFull => 'Fuldmåne';
+
+  @override
+  String get moonWaningGibbous => 'Aftagende måne';
+
+  @override
+  String get moonLastQuarter => 'Sidste kvarter';
+
+  @override
+  String get moonWaningCrescent => 'Aftagende månesegl';
+
+  @override
+  String moonLit(int percent) {
+    return '$percent % oplyst';
+  }
+
+  @override
+  String daylightLength(int hours, int minutes) {
+    return '$hours t $minutes min dagslys';
+  }
 }

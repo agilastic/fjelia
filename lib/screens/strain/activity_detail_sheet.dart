@@ -17,6 +17,11 @@ import '../../widgets/app_widgets.dart';
 import '../../widgets/activity_performance_chart.dart';
 import '../../widgets/activity_route_map.dart';
 import '../../widgets/activity_heat_card.dart';
+import '../../widgets/dfa_alpha1_card.dart';
+import '../../widgets/media_gallery.dart';
+import '../../widgets/media_share_card.dart';
+import '../../services/media_route.dart';
+import '../../providers/media_provider.dart';
 import '../../widgets/workout_hrv_card.dart';
 import '../../widgets/nutrition_widgets.dart';
 import '../planner/plan_overview_cards.dart';
@@ -84,6 +89,50 @@ class ActivityDetailSheet extends ConsumerWidget {
     final route = strength
         ? const <geo.LatLng>[]
         : [for (final p in a.route) geo.LatLng(p.lat, p.lng)];
+    final mediaOwner = MediaOwner.activity(activity.activityId);
+    final media =
+        ref.watch(mediaItemsProvider(mediaOwner)).valueOrNull ?? const [];
+    final routePoints = [for (final p in a.route) (lat: p.lat, lng: p.lng)];
+    final shareInfo = ActivityShareInfo(
+      title: a.name,
+      date: a.startTime,
+      duration: a.duration,
+      distanceMeters: a.distanceMeters,
+      paceSecPerKm: running && pace != null ? pace.round() : null,
+      watts: running ? null : a.avgPower,
+      ascentMeters: a.elevationGain,
+      avgHeartRate: a.avgHeartRate,
+      sport: a.type,
+      route: strength ? const [] : routePoints,
+    );
+    void openMedia(int index) => Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        fullscreenDialog: true,
+        builder: (_) => MediaViewer(
+          items: media,
+          initialIndex: index,
+          shareInfo: shareInfo,
+        ),
+      ),
+    );
+    // Photos and videos taken along the way, where they were taken.
+    final pins = <RoutePin>[
+      for (final (index, item) in media.indexed)
+        if (mediaRoutePoint(
+              route: routePoints,
+              start: a.startTime,
+              durationSeconds: a.duration.inSeconds,
+              latitude: item.latitude,
+              longitude: item.longitude,
+              takenAt: item.takenAt,
+            )
+            case final point?)
+          RoutePin(
+            point: geo.LatLng(point.lat, point.lng),
+            child: MediaThumb(item: item),
+            onTap: () => openMedia(index),
+          ),
+    ];
     return SheetPage(
       title: a.name,
       showHeader: false,
@@ -126,6 +175,30 @@ class ActivityDetailSheet extends ConsumerWidget {
                       ),
                     ),
                   ],
+                ),
+              ),
+              IconButton(
+                tooltip: context.l10n.mediaShareCard,
+                onPressed: () async {
+                  // The activity's photos to choose from; the route without.
+                  final service = ref.read(mediaServiceProvider);
+                  final photos = [
+                    for (final item in media)
+                      if (item.kind == 'photo')
+                        await service.file(item.fileName),
+                  ];
+                  if (!context.mounted) return;
+                  await Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) =>
+                          MediaShareCardPage(info: shareInfo, photos: photos),
+                    ),
+                  );
+                },
+                icon: const Icon(
+                  Icons.ios_share,
+                  color: Colors.white70,
+                  size: 22,
                 ),
               ),
               IconButton(
@@ -175,6 +248,7 @@ class ActivityDetailSheet extends ConsumerWidget {
           if (strength) CompletedStrengthSection(activity: activity),
           ActivityNutritionCard(activity: activity),
           ActivityHeatCard(activityId: a.id),
+          MediaGallery(owner: mediaOwner, shareInfo: shareInfo),
           if (route.isNotEmpty) ...[
             Padding(
               padding: EdgeInsets.only(top: 12, bottom: 12),
@@ -189,6 +263,7 @@ class ActivityDetailSheet extends ConsumerWidget {
             ),
             ActivityRouteMap(
               route: route,
+              pins: pins,
               exportGpx: (buttonContext) async {
                 final file = File(
                   '${(await getTemporaryDirectory()).path}/activity-${a.startTime.millisecondsSinceEpoch}.gpx',
@@ -212,6 +287,8 @@ class ActivityDetailSheet extends ConsumerWidget {
           if (a.samples.isNotEmpty && !strength)
             ActivityPerformanceChart(activity: a),
           if (a.hrZoneSeconds.isNotEmpty) ActivityZoneChart(activity: a),
+          if (!strength)
+            DfaAlpha1Card(activityId: activity.activityId, running: running),
           WorkoutHrvCard(
             activityId: activity.activityId,
             onExplain: () => openCoachTab(

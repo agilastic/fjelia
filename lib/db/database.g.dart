@@ -42792,6 +42792,1650 @@ class WorkoutTemplatesCompanion extends UpdateCompanion<WorkoutTemplate> {
   }
 }
 
+class $DfaAlpha1ResultsTable extends DfaAlpha1Results
+    with TableInfo<$DfaAlpha1ResultsTable, DfaAlpha1Result> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $DfaAlpha1ResultsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _activityIdMeta = const VerificationMeta(
+    'activityId',
+  );
+  @override
+  late final GeneratedColumn<String> activityId = GeneratedColumn<String>(
+    'activity_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _rrCountMeta = const VerificationMeta(
+    'rrCount',
+  );
+  @override
+  late final GeneratedColumn<int> rrCount = GeneratedColumn<int>(
+    'rr_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _artifactsMeta = const VerificationMeta(
+    'artifacts',
+  );
+  @override
+  late final GeneratedColumn<double> artifacts = GeneratedColumn<double>(
+    'artifacts',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _windowsJsonMeta = const VerificationMeta(
+    'windowsJson',
+  );
+  @override
+  late final GeneratedColumn<String> windowsJson = GeneratedColumn<String>(
+    'windows_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _hrvt1BpmMeta = const VerificationMeta(
+    'hrvt1Bpm',
+  );
+  @override
+  late final GeneratedColumn<double> hrvt1Bpm = GeneratedColumn<double>(
+    'hrvt1_bpm',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _hrvt1WattsMeta = const VerificationMeta(
+    'hrvt1Watts',
+  );
+  @override
+  late final GeneratedColumn<double> hrvt1Watts = GeneratedColumn<double>(
+    'hrvt1_watts',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _hrvt1SpeedMeta = const VerificationMeta(
+    'hrvt1Speed',
+  );
+  @override
+  late final GeneratedColumn<double> hrvt1Speed = GeneratedColumn<double>(
+    'hrvt1_speed',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _hrvt2BpmMeta = const VerificationMeta(
+    'hrvt2Bpm',
+  );
+  @override
+  late final GeneratedColumn<double> hrvt2Bpm = GeneratedColumn<double>(
+    'hrvt2_bpm',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _hrvt2WattsMeta = const VerificationMeta(
+    'hrvt2Watts',
+  );
+  @override
+  late final GeneratedColumn<double> hrvt2Watts = GeneratedColumn<double>(
+    'hrvt2_watts',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _hrvt2SpeedMeta = const VerificationMeta(
+    'hrvt2Speed',
+  );
+  @override
+  late final GeneratedColumn<double> hrvt2Speed = GeneratedColumn<double>(
+    'hrvt2_speed',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _computedAtMeta = const VerificationMeta(
+    'computedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> computedAt = GeneratedColumn<DateTime>(
+    'computed_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    activityId,
+    rrCount,
+    artifacts,
+    windowsJson,
+    hrvt1Bpm,
+    hrvt1Watts,
+    hrvt1Speed,
+    hrvt2Bpm,
+    hrvt2Watts,
+    hrvt2Speed,
+    computedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'dfa_alpha1_results';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<DfaAlpha1Result> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('activity_id')) {
+      context.handle(
+        _activityIdMeta,
+        activityId.isAcceptableOrUnknown(data['activity_id']!, _activityIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_activityIdMeta);
+    }
+    if (data.containsKey('rr_count')) {
+      context.handle(
+        _rrCountMeta,
+        rrCount.isAcceptableOrUnknown(data['rr_count']!, _rrCountMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_rrCountMeta);
+    }
+    if (data.containsKey('artifacts')) {
+      context.handle(
+        _artifactsMeta,
+        artifacts.isAcceptableOrUnknown(data['artifacts']!, _artifactsMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_artifactsMeta);
+    }
+    if (data.containsKey('windows_json')) {
+      context.handle(
+        _windowsJsonMeta,
+        windowsJson.isAcceptableOrUnknown(
+          data['windows_json']!,
+          _windowsJsonMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_windowsJsonMeta);
+    }
+    if (data.containsKey('hrvt1_bpm')) {
+      context.handle(
+        _hrvt1BpmMeta,
+        hrvt1Bpm.isAcceptableOrUnknown(data['hrvt1_bpm']!, _hrvt1BpmMeta),
+      );
+    }
+    if (data.containsKey('hrvt1_watts')) {
+      context.handle(
+        _hrvt1WattsMeta,
+        hrvt1Watts.isAcceptableOrUnknown(data['hrvt1_watts']!, _hrvt1WattsMeta),
+      );
+    }
+    if (data.containsKey('hrvt1_speed')) {
+      context.handle(
+        _hrvt1SpeedMeta,
+        hrvt1Speed.isAcceptableOrUnknown(data['hrvt1_speed']!, _hrvt1SpeedMeta),
+      );
+    }
+    if (data.containsKey('hrvt2_bpm')) {
+      context.handle(
+        _hrvt2BpmMeta,
+        hrvt2Bpm.isAcceptableOrUnknown(data['hrvt2_bpm']!, _hrvt2BpmMeta),
+      );
+    }
+    if (data.containsKey('hrvt2_watts')) {
+      context.handle(
+        _hrvt2WattsMeta,
+        hrvt2Watts.isAcceptableOrUnknown(data['hrvt2_watts']!, _hrvt2WattsMeta),
+      );
+    }
+    if (data.containsKey('hrvt2_speed')) {
+      context.handle(
+        _hrvt2SpeedMeta,
+        hrvt2Speed.isAcceptableOrUnknown(data['hrvt2_speed']!, _hrvt2SpeedMeta),
+      );
+    }
+    if (data.containsKey('computed_at')) {
+      context.handle(
+        _computedAtMeta,
+        computedAt.isAcceptableOrUnknown(data['computed_at']!, _computedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_computedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {activityId};
+  @override
+  DfaAlpha1Result map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return DfaAlpha1Result(
+      activityId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}activity_id'],
+      )!,
+      rrCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}rr_count'],
+      )!,
+      artifacts: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}artifacts'],
+      )!,
+      windowsJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}windows_json'],
+      )!,
+      hrvt1Bpm: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}hrvt1_bpm'],
+      ),
+      hrvt1Watts: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}hrvt1_watts'],
+      ),
+      hrvt1Speed: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}hrvt1_speed'],
+      ),
+      hrvt2Bpm: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}hrvt2_bpm'],
+      ),
+      hrvt2Watts: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}hrvt2_watts'],
+      ),
+      hrvt2Speed: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}hrvt2_speed'],
+      ),
+      computedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}computed_at'],
+      )!,
+    );
+  }
+
+  @override
+  $DfaAlpha1ResultsTable createAlias(String alias) {
+    return $DfaAlpha1ResultsTable(attachedDatabase, alias);
+  }
+}
+
+class DfaAlpha1Result extends DataClass implements Insertable<DfaAlpha1Result> {
+  final String activityId;
+  final int rrCount;
+
+  /// Share of beats removed as artifacts (0–1).
+  final double artifacts;
+
+  /// `[{t, a1, hr, art, w?, spd?}]`, one entry per 2-minute window.
+  final String windowsJson;
+  final double? hrvt1Bpm;
+  final double? hrvt1Watts;
+  final double? hrvt1Speed;
+  final double? hrvt2Bpm;
+  final double? hrvt2Watts;
+  final double? hrvt2Speed;
+  final DateTime computedAt;
+  const DfaAlpha1Result({
+    required this.activityId,
+    required this.rrCount,
+    required this.artifacts,
+    required this.windowsJson,
+    this.hrvt1Bpm,
+    this.hrvt1Watts,
+    this.hrvt1Speed,
+    this.hrvt2Bpm,
+    this.hrvt2Watts,
+    this.hrvt2Speed,
+    required this.computedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['activity_id'] = Variable<String>(activityId);
+    map['rr_count'] = Variable<int>(rrCount);
+    map['artifacts'] = Variable<double>(artifacts);
+    map['windows_json'] = Variable<String>(windowsJson);
+    if (!nullToAbsent || hrvt1Bpm != null) {
+      map['hrvt1_bpm'] = Variable<double>(hrvt1Bpm);
+    }
+    if (!nullToAbsent || hrvt1Watts != null) {
+      map['hrvt1_watts'] = Variable<double>(hrvt1Watts);
+    }
+    if (!nullToAbsent || hrvt1Speed != null) {
+      map['hrvt1_speed'] = Variable<double>(hrvt1Speed);
+    }
+    if (!nullToAbsent || hrvt2Bpm != null) {
+      map['hrvt2_bpm'] = Variable<double>(hrvt2Bpm);
+    }
+    if (!nullToAbsent || hrvt2Watts != null) {
+      map['hrvt2_watts'] = Variable<double>(hrvt2Watts);
+    }
+    if (!nullToAbsent || hrvt2Speed != null) {
+      map['hrvt2_speed'] = Variable<double>(hrvt2Speed);
+    }
+    map['computed_at'] = Variable<DateTime>(computedAt);
+    return map;
+  }
+
+  DfaAlpha1ResultsCompanion toCompanion(bool nullToAbsent) {
+    return DfaAlpha1ResultsCompanion(
+      activityId: Value(activityId),
+      rrCount: Value(rrCount),
+      artifacts: Value(artifacts),
+      windowsJson: Value(windowsJson),
+      hrvt1Bpm: hrvt1Bpm == null && nullToAbsent
+          ? const Value.absent()
+          : Value(hrvt1Bpm),
+      hrvt1Watts: hrvt1Watts == null && nullToAbsent
+          ? const Value.absent()
+          : Value(hrvt1Watts),
+      hrvt1Speed: hrvt1Speed == null && nullToAbsent
+          ? const Value.absent()
+          : Value(hrvt1Speed),
+      hrvt2Bpm: hrvt2Bpm == null && nullToAbsent
+          ? const Value.absent()
+          : Value(hrvt2Bpm),
+      hrvt2Watts: hrvt2Watts == null && nullToAbsent
+          ? const Value.absent()
+          : Value(hrvt2Watts),
+      hrvt2Speed: hrvt2Speed == null && nullToAbsent
+          ? const Value.absent()
+          : Value(hrvt2Speed),
+      computedAt: Value(computedAt),
+    );
+  }
+
+  factory DfaAlpha1Result.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return DfaAlpha1Result(
+      activityId: serializer.fromJson<String>(json['activityId']),
+      rrCount: serializer.fromJson<int>(json['rrCount']),
+      artifacts: serializer.fromJson<double>(json['artifacts']),
+      windowsJson: serializer.fromJson<String>(json['windowsJson']),
+      hrvt1Bpm: serializer.fromJson<double?>(json['hrvt1Bpm']),
+      hrvt1Watts: serializer.fromJson<double?>(json['hrvt1Watts']),
+      hrvt1Speed: serializer.fromJson<double?>(json['hrvt1Speed']),
+      hrvt2Bpm: serializer.fromJson<double?>(json['hrvt2Bpm']),
+      hrvt2Watts: serializer.fromJson<double?>(json['hrvt2Watts']),
+      hrvt2Speed: serializer.fromJson<double?>(json['hrvt2Speed']),
+      computedAt: serializer.fromJson<DateTime>(json['computedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'activityId': serializer.toJson<String>(activityId),
+      'rrCount': serializer.toJson<int>(rrCount),
+      'artifacts': serializer.toJson<double>(artifacts),
+      'windowsJson': serializer.toJson<String>(windowsJson),
+      'hrvt1Bpm': serializer.toJson<double?>(hrvt1Bpm),
+      'hrvt1Watts': serializer.toJson<double?>(hrvt1Watts),
+      'hrvt1Speed': serializer.toJson<double?>(hrvt1Speed),
+      'hrvt2Bpm': serializer.toJson<double?>(hrvt2Bpm),
+      'hrvt2Watts': serializer.toJson<double?>(hrvt2Watts),
+      'hrvt2Speed': serializer.toJson<double?>(hrvt2Speed),
+      'computedAt': serializer.toJson<DateTime>(computedAt),
+    };
+  }
+
+  DfaAlpha1Result copyWith({
+    String? activityId,
+    int? rrCount,
+    double? artifacts,
+    String? windowsJson,
+    Value<double?> hrvt1Bpm = const Value.absent(),
+    Value<double?> hrvt1Watts = const Value.absent(),
+    Value<double?> hrvt1Speed = const Value.absent(),
+    Value<double?> hrvt2Bpm = const Value.absent(),
+    Value<double?> hrvt2Watts = const Value.absent(),
+    Value<double?> hrvt2Speed = const Value.absent(),
+    DateTime? computedAt,
+  }) => DfaAlpha1Result(
+    activityId: activityId ?? this.activityId,
+    rrCount: rrCount ?? this.rrCount,
+    artifacts: artifacts ?? this.artifacts,
+    windowsJson: windowsJson ?? this.windowsJson,
+    hrvt1Bpm: hrvt1Bpm.present ? hrvt1Bpm.value : this.hrvt1Bpm,
+    hrvt1Watts: hrvt1Watts.present ? hrvt1Watts.value : this.hrvt1Watts,
+    hrvt1Speed: hrvt1Speed.present ? hrvt1Speed.value : this.hrvt1Speed,
+    hrvt2Bpm: hrvt2Bpm.present ? hrvt2Bpm.value : this.hrvt2Bpm,
+    hrvt2Watts: hrvt2Watts.present ? hrvt2Watts.value : this.hrvt2Watts,
+    hrvt2Speed: hrvt2Speed.present ? hrvt2Speed.value : this.hrvt2Speed,
+    computedAt: computedAt ?? this.computedAt,
+  );
+  DfaAlpha1Result copyWithCompanion(DfaAlpha1ResultsCompanion data) {
+    return DfaAlpha1Result(
+      activityId: data.activityId.present
+          ? data.activityId.value
+          : this.activityId,
+      rrCount: data.rrCount.present ? data.rrCount.value : this.rrCount,
+      artifacts: data.artifacts.present ? data.artifacts.value : this.artifacts,
+      windowsJson: data.windowsJson.present
+          ? data.windowsJson.value
+          : this.windowsJson,
+      hrvt1Bpm: data.hrvt1Bpm.present ? data.hrvt1Bpm.value : this.hrvt1Bpm,
+      hrvt1Watts: data.hrvt1Watts.present
+          ? data.hrvt1Watts.value
+          : this.hrvt1Watts,
+      hrvt1Speed: data.hrvt1Speed.present
+          ? data.hrvt1Speed.value
+          : this.hrvt1Speed,
+      hrvt2Bpm: data.hrvt2Bpm.present ? data.hrvt2Bpm.value : this.hrvt2Bpm,
+      hrvt2Watts: data.hrvt2Watts.present
+          ? data.hrvt2Watts.value
+          : this.hrvt2Watts,
+      hrvt2Speed: data.hrvt2Speed.present
+          ? data.hrvt2Speed.value
+          : this.hrvt2Speed,
+      computedAt: data.computedAt.present
+          ? data.computedAt.value
+          : this.computedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DfaAlpha1Result(')
+          ..write('activityId: $activityId, ')
+          ..write('rrCount: $rrCount, ')
+          ..write('artifacts: $artifacts, ')
+          ..write('windowsJson: $windowsJson, ')
+          ..write('hrvt1Bpm: $hrvt1Bpm, ')
+          ..write('hrvt1Watts: $hrvt1Watts, ')
+          ..write('hrvt1Speed: $hrvt1Speed, ')
+          ..write('hrvt2Bpm: $hrvt2Bpm, ')
+          ..write('hrvt2Watts: $hrvt2Watts, ')
+          ..write('hrvt2Speed: $hrvt2Speed, ')
+          ..write('computedAt: $computedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    activityId,
+    rrCount,
+    artifacts,
+    windowsJson,
+    hrvt1Bpm,
+    hrvt1Watts,
+    hrvt1Speed,
+    hrvt2Bpm,
+    hrvt2Watts,
+    hrvt2Speed,
+    computedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is DfaAlpha1Result &&
+          other.activityId == this.activityId &&
+          other.rrCount == this.rrCount &&
+          other.artifacts == this.artifacts &&
+          other.windowsJson == this.windowsJson &&
+          other.hrvt1Bpm == this.hrvt1Bpm &&
+          other.hrvt1Watts == this.hrvt1Watts &&
+          other.hrvt1Speed == this.hrvt1Speed &&
+          other.hrvt2Bpm == this.hrvt2Bpm &&
+          other.hrvt2Watts == this.hrvt2Watts &&
+          other.hrvt2Speed == this.hrvt2Speed &&
+          other.computedAt == this.computedAt);
+}
+
+class DfaAlpha1ResultsCompanion extends UpdateCompanion<DfaAlpha1Result> {
+  final Value<String> activityId;
+  final Value<int> rrCount;
+  final Value<double> artifacts;
+  final Value<String> windowsJson;
+  final Value<double?> hrvt1Bpm;
+  final Value<double?> hrvt1Watts;
+  final Value<double?> hrvt1Speed;
+  final Value<double?> hrvt2Bpm;
+  final Value<double?> hrvt2Watts;
+  final Value<double?> hrvt2Speed;
+  final Value<DateTime> computedAt;
+  final Value<int> rowid;
+  const DfaAlpha1ResultsCompanion({
+    this.activityId = const Value.absent(),
+    this.rrCount = const Value.absent(),
+    this.artifacts = const Value.absent(),
+    this.windowsJson = const Value.absent(),
+    this.hrvt1Bpm = const Value.absent(),
+    this.hrvt1Watts = const Value.absent(),
+    this.hrvt1Speed = const Value.absent(),
+    this.hrvt2Bpm = const Value.absent(),
+    this.hrvt2Watts = const Value.absent(),
+    this.hrvt2Speed = const Value.absent(),
+    this.computedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  DfaAlpha1ResultsCompanion.insert({
+    required String activityId,
+    required int rrCount,
+    required double artifacts,
+    required String windowsJson,
+    this.hrvt1Bpm = const Value.absent(),
+    this.hrvt1Watts = const Value.absent(),
+    this.hrvt1Speed = const Value.absent(),
+    this.hrvt2Bpm = const Value.absent(),
+    this.hrvt2Watts = const Value.absent(),
+    this.hrvt2Speed = const Value.absent(),
+    required DateTime computedAt,
+    this.rowid = const Value.absent(),
+  }) : activityId = Value(activityId),
+       rrCount = Value(rrCount),
+       artifacts = Value(artifacts),
+       windowsJson = Value(windowsJson),
+       computedAt = Value(computedAt);
+  static Insertable<DfaAlpha1Result> custom({
+    Expression<String>? activityId,
+    Expression<int>? rrCount,
+    Expression<double>? artifacts,
+    Expression<String>? windowsJson,
+    Expression<double>? hrvt1Bpm,
+    Expression<double>? hrvt1Watts,
+    Expression<double>? hrvt1Speed,
+    Expression<double>? hrvt2Bpm,
+    Expression<double>? hrvt2Watts,
+    Expression<double>? hrvt2Speed,
+    Expression<DateTime>? computedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (activityId != null) 'activity_id': activityId,
+      if (rrCount != null) 'rr_count': rrCount,
+      if (artifacts != null) 'artifacts': artifacts,
+      if (windowsJson != null) 'windows_json': windowsJson,
+      if (hrvt1Bpm != null) 'hrvt1_bpm': hrvt1Bpm,
+      if (hrvt1Watts != null) 'hrvt1_watts': hrvt1Watts,
+      if (hrvt1Speed != null) 'hrvt1_speed': hrvt1Speed,
+      if (hrvt2Bpm != null) 'hrvt2_bpm': hrvt2Bpm,
+      if (hrvt2Watts != null) 'hrvt2_watts': hrvt2Watts,
+      if (hrvt2Speed != null) 'hrvt2_speed': hrvt2Speed,
+      if (computedAt != null) 'computed_at': computedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  DfaAlpha1ResultsCompanion copyWith({
+    Value<String>? activityId,
+    Value<int>? rrCount,
+    Value<double>? artifacts,
+    Value<String>? windowsJson,
+    Value<double?>? hrvt1Bpm,
+    Value<double?>? hrvt1Watts,
+    Value<double?>? hrvt1Speed,
+    Value<double?>? hrvt2Bpm,
+    Value<double?>? hrvt2Watts,
+    Value<double?>? hrvt2Speed,
+    Value<DateTime>? computedAt,
+    Value<int>? rowid,
+  }) {
+    return DfaAlpha1ResultsCompanion(
+      activityId: activityId ?? this.activityId,
+      rrCount: rrCount ?? this.rrCount,
+      artifacts: artifacts ?? this.artifacts,
+      windowsJson: windowsJson ?? this.windowsJson,
+      hrvt1Bpm: hrvt1Bpm ?? this.hrvt1Bpm,
+      hrvt1Watts: hrvt1Watts ?? this.hrvt1Watts,
+      hrvt1Speed: hrvt1Speed ?? this.hrvt1Speed,
+      hrvt2Bpm: hrvt2Bpm ?? this.hrvt2Bpm,
+      hrvt2Watts: hrvt2Watts ?? this.hrvt2Watts,
+      hrvt2Speed: hrvt2Speed ?? this.hrvt2Speed,
+      computedAt: computedAt ?? this.computedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (activityId.present) {
+      map['activity_id'] = Variable<String>(activityId.value);
+    }
+    if (rrCount.present) {
+      map['rr_count'] = Variable<int>(rrCount.value);
+    }
+    if (artifacts.present) {
+      map['artifacts'] = Variable<double>(artifacts.value);
+    }
+    if (windowsJson.present) {
+      map['windows_json'] = Variable<String>(windowsJson.value);
+    }
+    if (hrvt1Bpm.present) {
+      map['hrvt1_bpm'] = Variable<double>(hrvt1Bpm.value);
+    }
+    if (hrvt1Watts.present) {
+      map['hrvt1_watts'] = Variable<double>(hrvt1Watts.value);
+    }
+    if (hrvt1Speed.present) {
+      map['hrvt1_speed'] = Variable<double>(hrvt1Speed.value);
+    }
+    if (hrvt2Bpm.present) {
+      map['hrvt2_bpm'] = Variable<double>(hrvt2Bpm.value);
+    }
+    if (hrvt2Watts.present) {
+      map['hrvt2_watts'] = Variable<double>(hrvt2Watts.value);
+    }
+    if (hrvt2Speed.present) {
+      map['hrvt2_speed'] = Variable<double>(hrvt2Speed.value);
+    }
+    if (computedAt.present) {
+      map['computed_at'] = Variable<DateTime>(computedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DfaAlpha1ResultsCompanion(')
+          ..write('activityId: $activityId, ')
+          ..write('rrCount: $rrCount, ')
+          ..write('artifacts: $artifacts, ')
+          ..write('windowsJson: $windowsJson, ')
+          ..write('hrvt1Bpm: $hrvt1Bpm, ')
+          ..write('hrvt1Watts: $hrvt1Watts, ')
+          ..write('hrvt1Speed: $hrvt1Speed, ')
+          ..write('hrvt2Bpm: $hrvt2Bpm, ')
+          ..write('hrvt2Watts: $hrvt2Watts, ')
+          ..write('hrvt2Speed: $hrvt2Speed, ')
+          ..write('computedAt: $computedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $MediaItemsTable extends MediaItems
+    with TableInfo<$MediaItemsTable, MediaItem> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $MediaItemsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _ownerKindMeta = const VerificationMeta(
+    'ownerKind',
+  );
+  @override
+  late final GeneratedColumn<String> ownerKind = GeneratedColumn<String>(
+    'owner_kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _ownerIdMeta = const VerificationMeta(
+    'ownerId',
+  );
+  @override
+  late final GeneratedColumn<String> ownerId = GeneratedColumn<String>(
+    'owner_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _ownerDateMeta = const VerificationMeta(
+    'ownerDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> ownerDate = GeneratedColumn<DateTime>(
+    'owner_date',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _ownerSportMeta = const VerificationMeta(
+    'ownerSport',
+  );
+  @override
+  late final GeneratedColumn<String> ownerSport = GeneratedColumn<String>(
+    'owner_sport',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _kindMeta = const VerificationMeta('kind');
+  @override
+  late final GeneratedColumn<String> kind = GeneratedColumn<String>(
+    'kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _fileNameMeta = const VerificationMeta(
+    'fileName',
+  );
+  @override
+  late final GeneratedColumn<String> fileName = GeneratedColumn<String>(
+    'file_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _thumbNameMeta = const VerificationMeta(
+    'thumbName',
+  );
+  @override
+  late final GeneratedColumn<String> thumbName = GeneratedColumn<String>(
+    'thumb_name',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _bytesMeta = const VerificationMeta('bytes');
+  @override
+  late final GeneratedColumn<int> bytes = GeneratedColumn<int>(
+    'bytes',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _widthMeta = const VerificationMeta('width');
+  @override
+  late final GeneratedColumn<int> width = GeneratedColumn<int>(
+    'width',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _heightMeta = const VerificationMeta('height');
+  @override
+  late final GeneratedColumn<int> height = GeneratedColumn<int>(
+    'height',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _durationMsMeta = const VerificationMeta(
+    'durationMs',
+  );
+  @override
+  late final GeneratedColumn<int> durationMs = GeneratedColumn<int>(
+    'duration_ms',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _takenAtMeta = const VerificationMeta(
+    'takenAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> takenAt = GeneratedColumn<DateTime>(
+    'taken_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _latitudeMeta = const VerificationMeta(
+    'latitude',
+  );
+  @override
+  late final GeneratedColumn<double> latitude = GeneratedColumn<double>(
+    'latitude',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _longitudeMeta = const VerificationMeta(
+    'longitude',
+  );
+  @override
+  late final GeneratedColumn<double> longitude = GeneratedColumn<double>(
+    'longitude',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _positionMeta = const VerificationMeta(
+    'position',
+  );
+  @override
+  late final GeneratedColumn<int> position = GeneratedColumn<int>(
+    'position',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    ownerKind,
+    ownerId,
+    ownerDate,
+    ownerSport,
+    kind,
+    fileName,
+    thumbName,
+    bytes,
+    width,
+    height,
+    durationMs,
+    takenAt,
+    latitude,
+    longitude,
+    position,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'media_items';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<MediaItem> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('owner_kind')) {
+      context.handle(
+        _ownerKindMeta,
+        ownerKind.isAcceptableOrUnknown(data['owner_kind']!, _ownerKindMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_ownerKindMeta);
+    }
+    if (data.containsKey('owner_id')) {
+      context.handle(
+        _ownerIdMeta,
+        ownerId.isAcceptableOrUnknown(data['owner_id']!, _ownerIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_ownerIdMeta);
+    }
+    if (data.containsKey('owner_date')) {
+      context.handle(
+        _ownerDateMeta,
+        ownerDate.isAcceptableOrUnknown(data['owner_date']!, _ownerDateMeta),
+      );
+    }
+    if (data.containsKey('owner_sport')) {
+      context.handle(
+        _ownerSportMeta,
+        ownerSport.isAcceptableOrUnknown(data['owner_sport']!, _ownerSportMeta),
+      );
+    }
+    if (data.containsKey('kind')) {
+      context.handle(
+        _kindMeta,
+        kind.isAcceptableOrUnknown(data['kind']!, _kindMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_kindMeta);
+    }
+    if (data.containsKey('file_name')) {
+      context.handle(
+        _fileNameMeta,
+        fileName.isAcceptableOrUnknown(data['file_name']!, _fileNameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_fileNameMeta);
+    }
+    if (data.containsKey('thumb_name')) {
+      context.handle(
+        _thumbNameMeta,
+        thumbName.isAcceptableOrUnknown(data['thumb_name']!, _thumbNameMeta),
+      );
+    }
+    if (data.containsKey('bytes')) {
+      context.handle(
+        _bytesMeta,
+        bytes.isAcceptableOrUnknown(data['bytes']!, _bytesMeta),
+      );
+    }
+    if (data.containsKey('width')) {
+      context.handle(
+        _widthMeta,
+        width.isAcceptableOrUnknown(data['width']!, _widthMeta),
+      );
+    }
+    if (data.containsKey('height')) {
+      context.handle(
+        _heightMeta,
+        height.isAcceptableOrUnknown(data['height']!, _heightMeta),
+      );
+    }
+    if (data.containsKey('duration_ms')) {
+      context.handle(
+        _durationMsMeta,
+        durationMs.isAcceptableOrUnknown(data['duration_ms']!, _durationMsMeta),
+      );
+    }
+    if (data.containsKey('taken_at')) {
+      context.handle(
+        _takenAtMeta,
+        takenAt.isAcceptableOrUnknown(data['taken_at']!, _takenAtMeta),
+      );
+    }
+    if (data.containsKey('latitude')) {
+      context.handle(
+        _latitudeMeta,
+        latitude.isAcceptableOrUnknown(data['latitude']!, _latitudeMeta),
+      );
+    }
+    if (data.containsKey('longitude')) {
+      context.handle(
+        _longitudeMeta,
+        longitude.isAcceptableOrUnknown(data['longitude']!, _longitudeMeta),
+      );
+    }
+    if (data.containsKey('position')) {
+      context.handle(
+        _positionMeta,
+        position.isAcceptableOrUnknown(data['position']!, _positionMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_positionMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  MediaItem map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return MediaItem(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      ownerKind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}owner_kind'],
+      )!,
+      ownerId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}owner_id'],
+      )!,
+      ownerDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}owner_date'],
+      ),
+      ownerSport: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}owner_sport'],
+      ),
+      kind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}kind'],
+      )!,
+      fileName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}file_name'],
+      )!,
+      thumbName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}thumb_name'],
+      ),
+      bytes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}bytes'],
+      )!,
+      width: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}width'],
+      ),
+      height: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}height'],
+      ),
+      durationMs: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}duration_ms'],
+      ),
+      takenAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}taken_at'],
+      ),
+      latitude: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}latitude'],
+      ),
+      longitude: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}longitude'],
+      ),
+      position: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}position'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $MediaItemsTable createAlias(String alias) {
+    return $MediaItemsTable(attachedDatabase, alias);
+  }
+}
+
+class MediaItem extends DataClass implements Insertable<MediaItem> {
+  final String id;
+
+  /// `activity`, `race_goal` or `session`.
+  final String ownerKind;
+  final String ownerId;
+
+  /// For a planned session: its day and sport, so the media can follow the
+  /// session that replaces it when the plan is generated again.
+  final DateTime? ownerDate;
+  final String? ownerSport;
+
+  /// `photo` or `video`.
+  final String kind;
+
+  /// File names inside the media folder.
+  final String fileName;
+  final String? thumbName;
+  final int bytes;
+  final int? width;
+  final int? height;
+  final int? durationMs;
+  final DateTime? takenAt;
+  final double? latitude;
+  final double? longitude;
+  final int position;
+  final DateTime createdAt;
+  const MediaItem({
+    required this.id,
+    required this.ownerKind,
+    required this.ownerId,
+    this.ownerDate,
+    this.ownerSport,
+    required this.kind,
+    required this.fileName,
+    this.thumbName,
+    required this.bytes,
+    this.width,
+    this.height,
+    this.durationMs,
+    this.takenAt,
+    this.latitude,
+    this.longitude,
+    required this.position,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['owner_kind'] = Variable<String>(ownerKind);
+    map['owner_id'] = Variable<String>(ownerId);
+    if (!nullToAbsent || ownerDate != null) {
+      map['owner_date'] = Variable<DateTime>(ownerDate);
+    }
+    if (!nullToAbsent || ownerSport != null) {
+      map['owner_sport'] = Variable<String>(ownerSport);
+    }
+    map['kind'] = Variable<String>(kind);
+    map['file_name'] = Variable<String>(fileName);
+    if (!nullToAbsent || thumbName != null) {
+      map['thumb_name'] = Variable<String>(thumbName);
+    }
+    map['bytes'] = Variable<int>(bytes);
+    if (!nullToAbsent || width != null) {
+      map['width'] = Variable<int>(width);
+    }
+    if (!nullToAbsent || height != null) {
+      map['height'] = Variable<int>(height);
+    }
+    if (!nullToAbsent || durationMs != null) {
+      map['duration_ms'] = Variable<int>(durationMs);
+    }
+    if (!nullToAbsent || takenAt != null) {
+      map['taken_at'] = Variable<DateTime>(takenAt);
+    }
+    if (!nullToAbsent || latitude != null) {
+      map['latitude'] = Variable<double>(latitude);
+    }
+    if (!nullToAbsent || longitude != null) {
+      map['longitude'] = Variable<double>(longitude);
+    }
+    map['position'] = Variable<int>(position);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  MediaItemsCompanion toCompanion(bool nullToAbsent) {
+    return MediaItemsCompanion(
+      id: Value(id),
+      ownerKind: Value(ownerKind),
+      ownerId: Value(ownerId),
+      ownerDate: ownerDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(ownerDate),
+      ownerSport: ownerSport == null && nullToAbsent
+          ? const Value.absent()
+          : Value(ownerSport),
+      kind: Value(kind),
+      fileName: Value(fileName),
+      thumbName: thumbName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(thumbName),
+      bytes: Value(bytes),
+      width: width == null && nullToAbsent
+          ? const Value.absent()
+          : Value(width),
+      height: height == null && nullToAbsent
+          ? const Value.absent()
+          : Value(height),
+      durationMs: durationMs == null && nullToAbsent
+          ? const Value.absent()
+          : Value(durationMs),
+      takenAt: takenAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(takenAt),
+      latitude: latitude == null && nullToAbsent
+          ? const Value.absent()
+          : Value(latitude),
+      longitude: longitude == null && nullToAbsent
+          ? const Value.absent()
+          : Value(longitude),
+      position: Value(position),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory MediaItem.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return MediaItem(
+      id: serializer.fromJson<String>(json['id']),
+      ownerKind: serializer.fromJson<String>(json['ownerKind']),
+      ownerId: serializer.fromJson<String>(json['ownerId']),
+      ownerDate: serializer.fromJson<DateTime?>(json['ownerDate']),
+      ownerSport: serializer.fromJson<String?>(json['ownerSport']),
+      kind: serializer.fromJson<String>(json['kind']),
+      fileName: serializer.fromJson<String>(json['fileName']),
+      thumbName: serializer.fromJson<String?>(json['thumbName']),
+      bytes: serializer.fromJson<int>(json['bytes']),
+      width: serializer.fromJson<int?>(json['width']),
+      height: serializer.fromJson<int?>(json['height']),
+      durationMs: serializer.fromJson<int?>(json['durationMs']),
+      takenAt: serializer.fromJson<DateTime?>(json['takenAt']),
+      latitude: serializer.fromJson<double?>(json['latitude']),
+      longitude: serializer.fromJson<double?>(json['longitude']),
+      position: serializer.fromJson<int>(json['position']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'ownerKind': serializer.toJson<String>(ownerKind),
+      'ownerId': serializer.toJson<String>(ownerId),
+      'ownerDate': serializer.toJson<DateTime?>(ownerDate),
+      'ownerSport': serializer.toJson<String?>(ownerSport),
+      'kind': serializer.toJson<String>(kind),
+      'fileName': serializer.toJson<String>(fileName),
+      'thumbName': serializer.toJson<String?>(thumbName),
+      'bytes': serializer.toJson<int>(bytes),
+      'width': serializer.toJson<int?>(width),
+      'height': serializer.toJson<int?>(height),
+      'durationMs': serializer.toJson<int?>(durationMs),
+      'takenAt': serializer.toJson<DateTime?>(takenAt),
+      'latitude': serializer.toJson<double?>(latitude),
+      'longitude': serializer.toJson<double?>(longitude),
+      'position': serializer.toJson<int>(position),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  MediaItem copyWith({
+    String? id,
+    String? ownerKind,
+    String? ownerId,
+    Value<DateTime?> ownerDate = const Value.absent(),
+    Value<String?> ownerSport = const Value.absent(),
+    String? kind,
+    String? fileName,
+    Value<String?> thumbName = const Value.absent(),
+    int? bytes,
+    Value<int?> width = const Value.absent(),
+    Value<int?> height = const Value.absent(),
+    Value<int?> durationMs = const Value.absent(),
+    Value<DateTime?> takenAt = const Value.absent(),
+    Value<double?> latitude = const Value.absent(),
+    Value<double?> longitude = const Value.absent(),
+    int? position,
+    DateTime? createdAt,
+  }) => MediaItem(
+    id: id ?? this.id,
+    ownerKind: ownerKind ?? this.ownerKind,
+    ownerId: ownerId ?? this.ownerId,
+    ownerDate: ownerDate.present ? ownerDate.value : this.ownerDate,
+    ownerSport: ownerSport.present ? ownerSport.value : this.ownerSport,
+    kind: kind ?? this.kind,
+    fileName: fileName ?? this.fileName,
+    thumbName: thumbName.present ? thumbName.value : this.thumbName,
+    bytes: bytes ?? this.bytes,
+    width: width.present ? width.value : this.width,
+    height: height.present ? height.value : this.height,
+    durationMs: durationMs.present ? durationMs.value : this.durationMs,
+    takenAt: takenAt.present ? takenAt.value : this.takenAt,
+    latitude: latitude.present ? latitude.value : this.latitude,
+    longitude: longitude.present ? longitude.value : this.longitude,
+    position: position ?? this.position,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  MediaItem copyWithCompanion(MediaItemsCompanion data) {
+    return MediaItem(
+      id: data.id.present ? data.id.value : this.id,
+      ownerKind: data.ownerKind.present ? data.ownerKind.value : this.ownerKind,
+      ownerId: data.ownerId.present ? data.ownerId.value : this.ownerId,
+      ownerDate: data.ownerDate.present ? data.ownerDate.value : this.ownerDate,
+      ownerSport: data.ownerSport.present
+          ? data.ownerSport.value
+          : this.ownerSport,
+      kind: data.kind.present ? data.kind.value : this.kind,
+      fileName: data.fileName.present ? data.fileName.value : this.fileName,
+      thumbName: data.thumbName.present ? data.thumbName.value : this.thumbName,
+      bytes: data.bytes.present ? data.bytes.value : this.bytes,
+      width: data.width.present ? data.width.value : this.width,
+      height: data.height.present ? data.height.value : this.height,
+      durationMs: data.durationMs.present
+          ? data.durationMs.value
+          : this.durationMs,
+      takenAt: data.takenAt.present ? data.takenAt.value : this.takenAt,
+      latitude: data.latitude.present ? data.latitude.value : this.latitude,
+      longitude: data.longitude.present ? data.longitude.value : this.longitude,
+      position: data.position.present ? data.position.value : this.position,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MediaItem(')
+          ..write('id: $id, ')
+          ..write('ownerKind: $ownerKind, ')
+          ..write('ownerId: $ownerId, ')
+          ..write('ownerDate: $ownerDate, ')
+          ..write('ownerSport: $ownerSport, ')
+          ..write('kind: $kind, ')
+          ..write('fileName: $fileName, ')
+          ..write('thumbName: $thumbName, ')
+          ..write('bytes: $bytes, ')
+          ..write('width: $width, ')
+          ..write('height: $height, ')
+          ..write('durationMs: $durationMs, ')
+          ..write('takenAt: $takenAt, ')
+          ..write('latitude: $latitude, ')
+          ..write('longitude: $longitude, ')
+          ..write('position: $position, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    ownerKind,
+    ownerId,
+    ownerDate,
+    ownerSport,
+    kind,
+    fileName,
+    thumbName,
+    bytes,
+    width,
+    height,
+    durationMs,
+    takenAt,
+    latitude,
+    longitude,
+    position,
+    createdAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is MediaItem &&
+          other.id == this.id &&
+          other.ownerKind == this.ownerKind &&
+          other.ownerId == this.ownerId &&
+          other.ownerDate == this.ownerDate &&
+          other.ownerSport == this.ownerSport &&
+          other.kind == this.kind &&
+          other.fileName == this.fileName &&
+          other.thumbName == this.thumbName &&
+          other.bytes == this.bytes &&
+          other.width == this.width &&
+          other.height == this.height &&
+          other.durationMs == this.durationMs &&
+          other.takenAt == this.takenAt &&
+          other.latitude == this.latitude &&
+          other.longitude == this.longitude &&
+          other.position == this.position &&
+          other.createdAt == this.createdAt);
+}
+
+class MediaItemsCompanion extends UpdateCompanion<MediaItem> {
+  final Value<String> id;
+  final Value<String> ownerKind;
+  final Value<String> ownerId;
+  final Value<DateTime?> ownerDate;
+  final Value<String?> ownerSport;
+  final Value<String> kind;
+  final Value<String> fileName;
+  final Value<String?> thumbName;
+  final Value<int> bytes;
+  final Value<int?> width;
+  final Value<int?> height;
+  final Value<int?> durationMs;
+  final Value<DateTime?> takenAt;
+  final Value<double?> latitude;
+  final Value<double?> longitude;
+  final Value<int> position;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const MediaItemsCompanion({
+    this.id = const Value.absent(),
+    this.ownerKind = const Value.absent(),
+    this.ownerId = const Value.absent(),
+    this.ownerDate = const Value.absent(),
+    this.ownerSport = const Value.absent(),
+    this.kind = const Value.absent(),
+    this.fileName = const Value.absent(),
+    this.thumbName = const Value.absent(),
+    this.bytes = const Value.absent(),
+    this.width = const Value.absent(),
+    this.height = const Value.absent(),
+    this.durationMs = const Value.absent(),
+    this.takenAt = const Value.absent(),
+    this.latitude = const Value.absent(),
+    this.longitude = const Value.absent(),
+    this.position = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  MediaItemsCompanion.insert({
+    required String id,
+    required String ownerKind,
+    required String ownerId,
+    this.ownerDate = const Value.absent(),
+    this.ownerSport = const Value.absent(),
+    required String kind,
+    required String fileName,
+    this.thumbName = const Value.absent(),
+    this.bytes = const Value.absent(),
+    this.width = const Value.absent(),
+    this.height = const Value.absent(),
+    this.durationMs = const Value.absent(),
+    this.takenAt = const Value.absent(),
+    this.latitude = const Value.absent(),
+    this.longitude = const Value.absent(),
+    required int position,
+    required DateTime createdAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       ownerKind = Value(ownerKind),
+       ownerId = Value(ownerId),
+       kind = Value(kind),
+       fileName = Value(fileName),
+       position = Value(position),
+       createdAt = Value(createdAt);
+  static Insertable<MediaItem> custom({
+    Expression<String>? id,
+    Expression<String>? ownerKind,
+    Expression<String>? ownerId,
+    Expression<DateTime>? ownerDate,
+    Expression<String>? ownerSport,
+    Expression<String>? kind,
+    Expression<String>? fileName,
+    Expression<String>? thumbName,
+    Expression<int>? bytes,
+    Expression<int>? width,
+    Expression<int>? height,
+    Expression<int>? durationMs,
+    Expression<DateTime>? takenAt,
+    Expression<double>? latitude,
+    Expression<double>? longitude,
+    Expression<int>? position,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (ownerKind != null) 'owner_kind': ownerKind,
+      if (ownerId != null) 'owner_id': ownerId,
+      if (ownerDate != null) 'owner_date': ownerDate,
+      if (ownerSport != null) 'owner_sport': ownerSport,
+      if (kind != null) 'kind': kind,
+      if (fileName != null) 'file_name': fileName,
+      if (thumbName != null) 'thumb_name': thumbName,
+      if (bytes != null) 'bytes': bytes,
+      if (width != null) 'width': width,
+      if (height != null) 'height': height,
+      if (durationMs != null) 'duration_ms': durationMs,
+      if (takenAt != null) 'taken_at': takenAt,
+      if (latitude != null) 'latitude': latitude,
+      if (longitude != null) 'longitude': longitude,
+      if (position != null) 'position': position,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  MediaItemsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? ownerKind,
+    Value<String>? ownerId,
+    Value<DateTime?>? ownerDate,
+    Value<String?>? ownerSport,
+    Value<String>? kind,
+    Value<String>? fileName,
+    Value<String?>? thumbName,
+    Value<int>? bytes,
+    Value<int?>? width,
+    Value<int?>? height,
+    Value<int?>? durationMs,
+    Value<DateTime?>? takenAt,
+    Value<double?>? latitude,
+    Value<double?>? longitude,
+    Value<int>? position,
+    Value<DateTime>? createdAt,
+    Value<int>? rowid,
+  }) {
+    return MediaItemsCompanion(
+      id: id ?? this.id,
+      ownerKind: ownerKind ?? this.ownerKind,
+      ownerId: ownerId ?? this.ownerId,
+      ownerDate: ownerDate ?? this.ownerDate,
+      ownerSport: ownerSport ?? this.ownerSport,
+      kind: kind ?? this.kind,
+      fileName: fileName ?? this.fileName,
+      thumbName: thumbName ?? this.thumbName,
+      bytes: bytes ?? this.bytes,
+      width: width ?? this.width,
+      height: height ?? this.height,
+      durationMs: durationMs ?? this.durationMs,
+      takenAt: takenAt ?? this.takenAt,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
+      position: position ?? this.position,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (ownerKind.present) {
+      map['owner_kind'] = Variable<String>(ownerKind.value);
+    }
+    if (ownerId.present) {
+      map['owner_id'] = Variable<String>(ownerId.value);
+    }
+    if (ownerDate.present) {
+      map['owner_date'] = Variable<DateTime>(ownerDate.value);
+    }
+    if (ownerSport.present) {
+      map['owner_sport'] = Variable<String>(ownerSport.value);
+    }
+    if (kind.present) {
+      map['kind'] = Variable<String>(kind.value);
+    }
+    if (fileName.present) {
+      map['file_name'] = Variable<String>(fileName.value);
+    }
+    if (thumbName.present) {
+      map['thumb_name'] = Variable<String>(thumbName.value);
+    }
+    if (bytes.present) {
+      map['bytes'] = Variable<int>(bytes.value);
+    }
+    if (width.present) {
+      map['width'] = Variable<int>(width.value);
+    }
+    if (height.present) {
+      map['height'] = Variable<int>(height.value);
+    }
+    if (durationMs.present) {
+      map['duration_ms'] = Variable<int>(durationMs.value);
+    }
+    if (takenAt.present) {
+      map['taken_at'] = Variable<DateTime>(takenAt.value);
+    }
+    if (latitude.present) {
+      map['latitude'] = Variable<double>(latitude.value);
+    }
+    if (longitude.present) {
+      map['longitude'] = Variable<double>(longitude.value);
+    }
+    if (position.present) {
+      map['position'] = Variable<int>(position.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MediaItemsCompanion(')
+          ..write('id: $id, ')
+          ..write('ownerKind: $ownerKind, ')
+          ..write('ownerId: $ownerId, ')
+          ..write('ownerDate: $ownerDate, ')
+          ..write('ownerSport: $ownerSport, ')
+          ..write('kind: $kind, ')
+          ..write('fileName: $fileName, ')
+          ..write('thumbName: $thumbName, ')
+          ..write('bytes: $bytes, ')
+          ..write('width: $width, ')
+          ..write('height: $height, ')
+          ..write('durationMs: $durationMs, ')
+          ..write('takenAt: $takenAt, ')
+          ..write('latitude: $latitude, ')
+          ..write('longitude: $longitude, ')
+          ..write('position: $position, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -42903,6 +44547,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $WorkoutTemplatesTable workoutTemplates = $WorkoutTemplatesTable(
     this,
   );
+  late final $DfaAlpha1ResultsTable dfaAlpha1Results = $DfaAlpha1ResultsTable(
+    this,
+  );
+  late final $MediaItemsTable mediaItems = $MediaItemsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -42963,6 +44611,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     coachNotes,
     coachReviews,
     workoutTemplates,
+    dfaAlpha1Results,
+    mediaItems,
   ];
 }
 
@@ -63753,6 +65403,785 @@ typedef $$WorkoutTemplatesTableProcessedTableManager =
       WorkoutTemplate,
       PrefetchHooks Function()
     >;
+typedef $$DfaAlpha1ResultsTableCreateCompanionBuilder =
+    DfaAlpha1ResultsCompanion Function({
+      required String activityId,
+      required int rrCount,
+      required double artifacts,
+      required String windowsJson,
+      Value<double?> hrvt1Bpm,
+      Value<double?> hrvt1Watts,
+      Value<double?> hrvt1Speed,
+      Value<double?> hrvt2Bpm,
+      Value<double?> hrvt2Watts,
+      Value<double?> hrvt2Speed,
+      required DateTime computedAt,
+      Value<int> rowid,
+    });
+typedef $$DfaAlpha1ResultsTableUpdateCompanionBuilder =
+    DfaAlpha1ResultsCompanion Function({
+      Value<String> activityId,
+      Value<int> rrCount,
+      Value<double> artifacts,
+      Value<String> windowsJson,
+      Value<double?> hrvt1Bpm,
+      Value<double?> hrvt1Watts,
+      Value<double?> hrvt1Speed,
+      Value<double?> hrvt2Bpm,
+      Value<double?> hrvt2Watts,
+      Value<double?> hrvt2Speed,
+      Value<DateTime> computedAt,
+      Value<int> rowid,
+    });
+
+class $$DfaAlpha1ResultsTableFilterComposer
+    extends Composer<_$AppDatabase, $DfaAlpha1ResultsTable> {
+  $$DfaAlpha1ResultsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get activityId => $composableBuilder(
+    column: $table.activityId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get rrCount => $composableBuilder(
+    column: $table.rrCount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get artifacts => $composableBuilder(
+    column: $table.artifacts,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get windowsJson => $composableBuilder(
+    column: $table.windowsJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get hrvt1Bpm => $composableBuilder(
+    column: $table.hrvt1Bpm,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get hrvt1Watts => $composableBuilder(
+    column: $table.hrvt1Watts,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get hrvt1Speed => $composableBuilder(
+    column: $table.hrvt1Speed,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get hrvt2Bpm => $composableBuilder(
+    column: $table.hrvt2Bpm,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get hrvt2Watts => $composableBuilder(
+    column: $table.hrvt2Watts,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get hrvt2Speed => $composableBuilder(
+    column: $table.hrvt2Speed,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get computedAt => $composableBuilder(
+    column: $table.computedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$DfaAlpha1ResultsTableOrderingComposer
+    extends Composer<_$AppDatabase, $DfaAlpha1ResultsTable> {
+  $$DfaAlpha1ResultsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get activityId => $composableBuilder(
+    column: $table.activityId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get rrCount => $composableBuilder(
+    column: $table.rrCount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get artifacts => $composableBuilder(
+    column: $table.artifacts,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get windowsJson => $composableBuilder(
+    column: $table.windowsJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get hrvt1Bpm => $composableBuilder(
+    column: $table.hrvt1Bpm,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get hrvt1Watts => $composableBuilder(
+    column: $table.hrvt1Watts,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get hrvt1Speed => $composableBuilder(
+    column: $table.hrvt1Speed,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get hrvt2Bpm => $composableBuilder(
+    column: $table.hrvt2Bpm,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get hrvt2Watts => $composableBuilder(
+    column: $table.hrvt2Watts,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get hrvt2Speed => $composableBuilder(
+    column: $table.hrvt2Speed,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get computedAt => $composableBuilder(
+    column: $table.computedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$DfaAlpha1ResultsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $DfaAlpha1ResultsTable> {
+  $$DfaAlpha1ResultsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get activityId => $composableBuilder(
+    column: $table.activityId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get rrCount =>
+      $composableBuilder(column: $table.rrCount, builder: (column) => column);
+
+  GeneratedColumn<double> get artifacts =>
+      $composableBuilder(column: $table.artifacts, builder: (column) => column);
+
+  GeneratedColumn<String> get windowsJson => $composableBuilder(
+    column: $table.windowsJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get hrvt1Bpm =>
+      $composableBuilder(column: $table.hrvt1Bpm, builder: (column) => column);
+
+  GeneratedColumn<double> get hrvt1Watts => $composableBuilder(
+    column: $table.hrvt1Watts,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get hrvt1Speed => $composableBuilder(
+    column: $table.hrvt1Speed,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get hrvt2Bpm =>
+      $composableBuilder(column: $table.hrvt2Bpm, builder: (column) => column);
+
+  GeneratedColumn<double> get hrvt2Watts => $composableBuilder(
+    column: $table.hrvt2Watts,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get hrvt2Speed => $composableBuilder(
+    column: $table.hrvt2Speed,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get computedAt => $composableBuilder(
+    column: $table.computedAt,
+    builder: (column) => column,
+  );
+}
+
+class $$DfaAlpha1ResultsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $DfaAlpha1ResultsTable,
+          DfaAlpha1Result,
+          $$DfaAlpha1ResultsTableFilterComposer,
+          $$DfaAlpha1ResultsTableOrderingComposer,
+          $$DfaAlpha1ResultsTableAnnotationComposer,
+          $$DfaAlpha1ResultsTableCreateCompanionBuilder,
+          $$DfaAlpha1ResultsTableUpdateCompanionBuilder,
+          (
+            DfaAlpha1Result,
+            BaseReferences<
+              _$AppDatabase,
+              $DfaAlpha1ResultsTable,
+              DfaAlpha1Result
+            >,
+          ),
+          DfaAlpha1Result,
+          PrefetchHooks Function()
+        > {
+  $$DfaAlpha1ResultsTableTableManager(
+    _$AppDatabase db,
+    $DfaAlpha1ResultsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$DfaAlpha1ResultsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$DfaAlpha1ResultsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$DfaAlpha1ResultsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> activityId = const Value.absent(),
+                Value<int> rrCount = const Value.absent(),
+                Value<double> artifacts = const Value.absent(),
+                Value<String> windowsJson = const Value.absent(),
+                Value<double?> hrvt1Bpm = const Value.absent(),
+                Value<double?> hrvt1Watts = const Value.absent(),
+                Value<double?> hrvt1Speed = const Value.absent(),
+                Value<double?> hrvt2Bpm = const Value.absent(),
+                Value<double?> hrvt2Watts = const Value.absent(),
+                Value<double?> hrvt2Speed = const Value.absent(),
+                Value<DateTime> computedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => DfaAlpha1ResultsCompanion(
+                activityId: activityId,
+                rrCount: rrCount,
+                artifacts: artifacts,
+                windowsJson: windowsJson,
+                hrvt1Bpm: hrvt1Bpm,
+                hrvt1Watts: hrvt1Watts,
+                hrvt1Speed: hrvt1Speed,
+                hrvt2Bpm: hrvt2Bpm,
+                hrvt2Watts: hrvt2Watts,
+                hrvt2Speed: hrvt2Speed,
+                computedAt: computedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String activityId,
+                required int rrCount,
+                required double artifacts,
+                required String windowsJson,
+                Value<double?> hrvt1Bpm = const Value.absent(),
+                Value<double?> hrvt1Watts = const Value.absent(),
+                Value<double?> hrvt1Speed = const Value.absent(),
+                Value<double?> hrvt2Bpm = const Value.absent(),
+                Value<double?> hrvt2Watts = const Value.absent(),
+                Value<double?> hrvt2Speed = const Value.absent(),
+                required DateTime computedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => DfaAlpha1ResultsCompanion.insert(
+                activityId: activityId,
+                rrCount: rrCount,
+                artifacts: artifacts,
+                windowsJson: windowsJson,
+                hrvt1Bpm: hrvt1Bpm,
+                hrvt1Watts: hrvt1Watts,
+                hrvt1Speed: hrvt1Speed,
+                hrvt2Bpm: hrvt2Bpm,
+                hrvt2Watts: hrvt2Watts,
+                hrvt2Speed: hrvt2Speed,
+                computedAt: computedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$DfaAlpha1ResultsTable, DfaAlpha1Result>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $DfaAlpha1ResultsTable,
+                    DfaAlpha1Result
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$DfaAlpha1ResultsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $DfaAlpha1ResultsTable,
+      DfaAlpha1Result,
+      $$DfaAlpha1ResultsTableFilterComposer,
+      $$DfaAlpha1ResultsTableOrderingComposer,
+      $$DfaAlpha1ResultsTableAnnotationComposer,
+      $$DfaAlpha1ResultsTableCreateCompanionBuilder,
+      $$DfaAlpha1ResultsTableUpdateCompanionBuilder,
+      (
+        DfaAlpha1Result,
+        BaseReferences<_$AppDatabase, $DfaAlpha1ResultsTable, DfaAlpha1Result>,
+      ),
+      DfaAlpha1Result,
+      PrefetchHooks Function()
+    >;
+typedef $$MediaItemsTableCreateCompanionBuilder = MediaItemsCompanion Function({
+  required String id,
+  required String ownerKind,
+  required String ownerId,
+  Value<DateTime?> ownerDate,
+  Value<String?> ownerSport,
+  required String kind,
+  required String fileName,
+  Value<String?> thumbName,
+  Value<int> bytes,
+  Value<int?> width,
+  Value<int?> height,
+  Value<int?> durationMs,
+  Value<DateTime?> takenAt,
+  Value<double?> latitude,
+  Value<double?> longitude,
+  required int position,
+  required DateTime createdAt,
+  Value<int> rowid,
+});
+typedef $$MediaItemsTableUpdateCompanionBuilder = MediaItemsCompanion Function({
+  Value<String> id,
+  Value<String> ownerKind,
+  Value<String> ownerId,
+  Value<DateTime?> ownerDate,
+  Value<String?> ownerSport,
+  Value<String> kind,
+  Value<String> fileName,
+  Value<String?> thumbName,
+  Value<int> bytes,
+  Value<int?> width,
+  Value<int?> height,
+  Value<int?> durationMs,
+  Value<DateTime?> takenAt,
+  Value<double?> latitude,
+  Value<double?> longitude,
+  Value<int> position,
+  Value<DateTime> createdAt,
+  Value<int> rowid,
+});
+
+class $$MediaItemsTableFilterComposer
+    extends Composer<_$AppDatabase, $MediaItemsTable> {
+  $$MediaItemsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get ownerKind => $composableBuilder(
+    column: $table.ownerKind,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get ownerId => $composableBuilder(
+    column: $table.ownerId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get ownerDate => $composableBuilder(
+    column: $table.ownerDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get ownerSport => $composableBuilder(
+    column: $table.ownerSport,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get fileName => $composableBuilder(
+    column: $table.fileName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get thumbName => $composableBuilder(
+    column: $table.thumbName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get bytes => $composableBuilder(
+    column: $table.bytes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get width => $composableBuilder(
+    column: $table.width,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get height => $composableBuilder(
+    column: $table.height,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get durationMs => $composableBuilder(
+    column: $table.durationMs,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get takenAt => $composableBuilder(
+    column: $table.takenAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get latitude => $composableBuilder(
+    column: $table.latitude,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get longitude => $composableBuilder(
+    column: $table.longitude,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get position => $composableBuilder(
+    column: $table.position,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$MediaItemsTableOrderingComposer
+    extends Composer<_$AppDatabase, $MediaItemsTable> {
+  $$MediaItemsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get ownerKind => $composableBuilder(
+    column: $table.ownerKind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get ownerId => $composableBuilder(
+    column: $table.ownerId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get ownerDate => $composableBuilder(
+    column: $table.ownerDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get ownerSport => $composableBuilder(
+    column: $table.ownerSport,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get fileName => $composableBuilder(
+    column: $table.fileName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get thumbName => $composableBuilder(
+    column: $table.thumbName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get bytes => $composableBuilder(
+    column: $table.bytes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get width => $composableBuilder(
+    column: $table.width,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get height => $composableBuilder(
+    column: $table.height,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get durationMs => $composableBuilder(
+    column: $table.durationMs,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get takenAt => $composableBuilder(
+    column: $table.takenAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get latitude => $composableBuilder(
+    column: $table.latitude,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get longitude => $composableBuilder(
+    column: $table.longitude,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get position => $composableBuilder(
+    column: $table.position,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$MediaItemsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $MediaItemsTable> {
+  $$MediaItemsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get ownerKind =>
+      $composableBuilder(column: $table.ownerKind, builder: (column) => column);
+
+  GeneratedColumn<String> get ownerId =>
+      $composableBuilder(column: $table.ownerId, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get ownerDate =>
+      $composableBuilder(column: $table.ownerDate, builder: (column) => column);
+
+  GeneratedColumn<String> get ownerSport => $composableBuilder(
+    column: $table.ownerSport,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get kind =>
+      $composableBuilder(column: $table.kind, builder: (column) => column);
+
+  GeneratedColumn<String> get fileName =>
+      $composableBuilder(column: $table.fileName, builder: (column) => column);
+
+  GeneratedColumn<String> get thumbName =>
+      $composableBuilder(column: $table.thumbName, builder: (column) => column);
+
+  GeneratedColumn<int> get bytes =>
+      $composableBuilder(column: $table.bytes, builder: (column) => column);
+
+  GeneratedColumn<int> get width =>
+      $composableBuilder(column: $table.width, builder: (column) => column);
+
+  GeneratedColumn<int> get height =>
+      $composableBuilder(column: $table.height, builder: (column) => column);
+
+  GeneratedColumn<int> get durationMs => $composableBuilder(
+    column: $table.durationMs,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get takenAt =>
+      $composableBuilder(column: $table.takenAt, builder: (column) => column);
+
+  GeneratedColumn<double> get latitude =>
+      $composableBuilder(column: $table.latitude, builder: (column) => column);
+
+  GeneratedColumn<double> get longitude =>
+      $composableBuilder(column: $table.longitude, builder: (column) => column);
+
+  GeneratedColumn<int> get position =>
+      $composableBuilder(column: $table.position, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$MediaItemsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $MediaItemsTable,
+          MediaItem,
+          $$MediaItemsTableFilterComposer,
+          $$MediaItemsTableOrderingComposer,
+          $$MediaItemsTableAnnotationComposer,
+          $$MediaItemsTableCreateCompanionBuilder,
+          $$MediaItemsTableUpdateCompanionBuilder,
+          (
+            MediaItem,
+            BaseReferences<_$AppDatabase, $MediaItemsTable, MediaItem>,
+          ),
+          MediaItem,
+          PrefetchHooks Function()
+        > {
+  $$MediaItemsTableTableManager(_$AppDatabase db, $MediaItemsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$MediaItemsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$MediaItemsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$MediaItemsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> ownerKind = const Value.absent(),
+                Value<String> ownerId = const Value.absent(),
+                Value<DateTime?> ownerDate = const Value.absent(),
+                Value<String?> ownerSport = const Value.absent(),
+                Value<String> kind = const Value.absent(),
+                Value<String> fileName = const Value.absent(),
+                Value<String?> thumbName = const Value.absent(),
+                Value<int> bytes = const Value.absent(),
+                Value<int?> width = const Value.absent(),
+                Value<int?> height = const Value.absent(),
+                Value<int?> durationMs = const Value.absent(),
+                Value<DateTime?> takenAt = const Value.absent(),
+                Value<double?> latitude = const Value.absent(),
+                Value<double?> longitude = const Value.absent(),
+                Value<int> position = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => MediaItemsCompanion(
+                id: id,
+                ownerKind: ownerKind,
+                ownerId: ownerId,
+                ownerDate: ownerDate,
+                ownerSport: ownerSport,
+                kind: kind,
+                fileName: fileName,
+                thumbName: thumbName,
+                bytes: bytes,
+                width: width,
+                height: height,
+                durationMs: durationMs,
+                takenAt: takenAt,
+                latitude: latitude,
+                longitude: longitude,
+                position: position,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String ownerKind,
+                required String ownerId,
+                Value<DateTime?> ownerDate = const Value.absent(),
+                Value<String?> ownerSport = const Value.absent(),
+                required String kind,
+                required String fileName,
+                Value<String?> thumbName = const Value.absent(),
+                Value<int> bytes = const Value.absent(),
+                Value<int?> width = const Value.absent(),
+                Value<int?> height = const Value.absent(),
+                Value<int?> durationMs = const Value.absent(),
+                Value<DateTime?> takenAt = const Value.absent(),
+                Value<double?> latitude = const Value.absent(),
+                Value<double?> longitude = const Value.absent(),
+                required int position,
+                required DateTime createdAt,
+                Value<int> rowid = const Value.absent(),
+              }) => MediaItemsCompanion.insert(
+                id: id,
+                ownerKind: ownerKind,
+                ownerId: ownerId,
+                ownerDate: ownerDate,
+                ownerSport: ownerSport,
+                kind: kind,
+                fileName: fileName,
+                thumbName: thumbName,
+                bytes: bytes,
+                width: width,
+                height: height,
+                durationMs: durationMs,
+                takenAt: takenAt,
+                latitude: latitude,
+                longitude: longitude,
+                position: position,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$MediaItemsTable, MediaItem>(table),
+                  BaseReferences<_$AppDatabase, $MediaItemsTable, MediaItem>(
+                    db,
+                    table,
+                    e,
+                  ),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$MediaItemsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $MediaItemsTable,
+      MediaItem,
+      $$MediaItemsTableFilterComposer,
+      $$MediaItemsTableOrderingComposer,
+      $$MediaItemsTableAnnotationComposer,
+      $$MediaItemsTableCreateCompanionBuilder,
+      $$MediaItemsTableUpdateCompanionBuilder,
+      (MediaItem, BaseReferences<_$AppDatabase, $MediaItemsTable, MediaItem>),
+      MediaItem,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -63903,4 +66332,8 @@ class $AppDatabaseManager {
       $$CoachReviewsTableTableManager(_db, _db.coachReviews);
   $$WorkoutTemplatesTableTableManager get workoutTemplates =>
       $$WorkoutTemplatesTableTableManager(_db, _db.workoutTemplates);
+  $$DfaAlpha1ResultsTableTableManager get dfaAlpha1Results =>
+      $$DfaAlpha1ResultsTableTableManager(_db, _db.dfaAlpha1Results);
+  $$MediaItemsTableTableManager get mediaItems =>
+      $$MediaItemsTableTableManager(_db, _db.mediaItems);
 }

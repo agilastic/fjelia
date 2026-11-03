@@ -14,6 +14,8 @@ import '../../db/database.dart' show RaceGoal;
 import '../../models/race_profile.dart';
 import '../../utils/decimal.dart';
 import '../../utils/target_time.dart';
+import '../../providers/media_provider.dart';
+import '../../widgets/media_gallery.dart';
 
 /// Opens the race goal sheet: a new goal, or [goal] to change.
 Future<void> showRaceGoalEditor(BuildContext context, {RaceGoal? goal}) =>
@@ -453,6 +455,10 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                       ambition,
                       (v) => setState(() => ambition = v),
                     ),
+                  ],
+                  if (widget.goal case final goal?) ...[
+                    const SizedBox(height: 16),
+                    MediaGallery(owner: MediaOwner.raceGoal(goal.id)),
                   ],
                   SizedBox(height: more ? 24 : 12),
                   FilledButton(

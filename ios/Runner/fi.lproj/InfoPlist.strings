@@ -4,3 +4,6 @@
 "NSHealthUpdateUsageDescription" = "Fjelia kirjoittaa synkronoidut HRV-, syke-, uni-, askel- ja harjoitustietosi Apple Terveyteen, jotta et menetä niitä vaihtaessasi sovellusta.";
 "NSLocationAlwaysAndWhenInUseUsageDescription" = "Fjelia käyttää sijaintiasi vain sovelluksen ollessa auki arvioidakseen suunniteltujen harjoitusten lämpöriskiä.";
 "NSLocationWhenInUseUsageDescription" = "Fjelia käyttää nykyistä sijaintiasi arvioidakseen suunniteltujen harjoitusten lämpöriskiä.";
+"NSPhotoLibraryUsageDescription" = "Fjelian avulla voit lisätä kuvia ja videoita kirjastostasi harjoituksiin, kilpailutavoitteisiin ja suunniteltuihin harjoituksiin.";
+"NSCameraUsageDescription" = "Fjelia käyttää kameraa, kun otat kuvan tai videon harjoitukseen, kilpailutavoitteeseen tai suunniteltuun harjoitukseen.";
+"NSMicrophoneUsageDescription" = "Fjelia käyttää mikrofonia harjoitukseen kuvaamiesi videoiden ääneen.";

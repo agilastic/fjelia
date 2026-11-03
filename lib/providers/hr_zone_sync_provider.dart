@@ -6,7 +6,9 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../db/database.dart';
 import '../models/device_hr_zones.dart';
+import '../services/device_threshold_store.dart';
 import '../services/device_zone_store.dart';
+import '../services/threshold_choice_store.dart';
 import '../services/source_priority_service.dart';
 import '../services/zone_recalculation_service.dart';
 import '../utils/log.dart';
@@ -30,9 +32,11 @@ final hrZoneSyncProvider = Provider<Future<void> Function()>(
   (ref) => () async {
     const store = DeviceZoneStore();
     if (ref.read(authProvider).garminConnected) {
-      await store.save(
-        'garmin_api',
-        await ref.read(garminClientProvider).getHrZoneSettings(),
+      final garmin = ref.read(garminClientProvider);
+      await store.save('garmin_api', await garmin.getHrZoneSettings());
+      // Shown as candidates; applied only when the athlete confirms.
+      await const DeviceThresholdStore().save(
+        await garmin.getDetectedThresholds(),
       );
     }
     final all = await store.all();
@@ -67,12 +71,18 @@ final hrZoneSyncProvider = Provider<Future<void> Function()>(
     if (run.isLthrBased && run.lthr != null) {
       await zones.saveDeviceScheme(run.floors, run.lthr!);
     }
-    final useDeviceRun = appLt2 == null;
+    // A threshold the athlete applied from another source (Settings →
+    // thresholds) wins over the device, like the app's own LT2 test.
+    final applied = await const ThresholdChoiceStore().applied();
+    final useDeviceRun = appLt2 == null && runZonesFollowDevice(applied);
+    final useDeviceBike = bikeZonesFollowDevice(applied);
     await zones.applyDeviceZones(
       running: useDeviceRun
           ? run.floors
           : ref.read(hrZonesProvider).running.bounds,
-      cycling: bike.floors,
+      cycling: useDeviceBike
+          ? bike.floors
+          : ref.read(hrZonesProvider).cycling.bounds,
     );
 
     final thresholds = ref.read(athleteThresholdsServiceProvider);
@@ -93,10 +103,12 @@ final hrZoneSyncProvider = Provider<Future<void> Function()>(
                 : ref.read(hrZonesProvider).running.bounds,
           ),
         ),
-        thresholdHrCyclingBpm: bike.lthr == null
+        thresholdHrCyclingBpm: !useDeviceBike || bike.lthr == null
             ? const Value.absent()
             : Value(bike.lthr),
-        bikeHrZonesJson: Value(jsonEncode(bike.floors)),
+        bikeHrZonesJson: useDeviceBike
+            ? Value(jsonEncode(bike.floors))
+            : const Value.absent(),
         thresholdHrSwimBpm: swim.lthr == null
             ? const Value.absent()
             : Value(swim.lthr),
@@ -106,7 +118,7 @@ final hrZoneSyncProvider = Provider<Future<void> Function()>(
       ),
     );
     log(
-      '[HrZones] source=$source running: ${useDeviceRun ? '${run.method} lthr=${run.lthr}' : 'app LT2=${appLt2.lt2Bpm}'} '
+      '[HrZones] source=$source running: ${useDeviceRun ? '${run.method} lthr=${run.lthr}' : 'app LT2=${appLt2?.lt2Bpm} applied=$applied'} '
       'floors=${ref.read(hrZonesProvider).running.bounds}; cycling: ${bike.method} '
       'floors=${bike.floors}',
     );

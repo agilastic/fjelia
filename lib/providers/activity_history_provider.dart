@@ -8,6 +8,7 @@ import 'nutrition_provider.dart';
 import 'strength_provider.dart';
 import 'day_data_provider.dart';
 import 'training_load_provider.dart';
+import 'media_provider.dart';
 
 final loadActivitiesProvider = FutureProvider<List<ActivityRecord>>((
   ref,
@@ -56,6 +57,8 @@ final deleteActivityProvider = Provider<Future<void> Function(String)>(
         ),
       );
     });
+    // The athlete's photos and videos of the activity go with it.
+    await ref.read(mediaServiceProvider).deleteAll(MediaOwner.activity(id));
     ref.invalidate(loadActivitiesProvider);
     ref.invalidate(trainingLoadProvider);
     ref.invalidate(trainingMonitorProvider);

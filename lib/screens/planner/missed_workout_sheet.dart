@@ -25,6 +25,7 @@ import '../../services/plan_session_actions.dart' show skipReasons;
 import '../../theme/activity_colors.dart';
 import '../../utils/log.dart';
 import '../../widgets/app_widgets.dart';
+import '../../widgets/rain_nowcast_line.dart';
 
 enum _Coach { idle, asking, done, failed }
 
@@ -259,6 +260,8 @@ class _MissedWorkoutSheetState extends ConsumerState<MissedWorkoutSheet> {
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
         children: [
           for (final i in items) _Hero(item: i),
+          // Whether going out now means getting wet.
+          const RainNowcastLine(padding: EdgeInsets.only(top: 10)),
           const SizedBox(height: 20),
           _PrimaryButton(label: l10n.stillToday, onPressed: _stillToday),
         ],
@@ -280,6 +283,7 @@ class _MissedWorkoutSheetState extends ConsumerState<MissedWorkoutSheet> {
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 32),
       children: [
         _Hero(item: items.firstWhere((i) => i.session?.id == missed.id)),
+        const RainNowcastLine(padding: EdgeInsets.only(top: 10)),
         const SizedBox(height: 14),
         if (_skipping)
           _SkipCard(

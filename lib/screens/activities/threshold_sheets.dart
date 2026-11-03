@@ -4,7 +4,6 @@ import '../../providers/activity_history_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../providers/lt1_provider.dart';
 import '../../providers/day_data_provider.dart';
 import '../../providers/lt1_drift_provider.dart';
 import '../../providers/lt2_tt_provider.dart';
@@ -13,52 +12,30 @@ import '../../providers/ftp_provider.dart';
 import '../../widgets/app_widgets.dart';
 import '../../services/activity_power_estimator.dart';
 import 'load_visuals.dart';
+import 'threshold_overview_section.dart';
 
 class ThresholdSheets extends ConsumerWidget {
   const ThresholdSheets({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final lt1 = ref.watch(lt1Provider),
-        lt2 = ref.watch(lt2TtProvider).valueOrNull,
-        vo2 = ref.watch(vo2MaxProvider).valueOrNull,
-        ftp = ref.watch(ftpProvider).valueOrNull;
+    final vo2 = ref.watch(vo2MaxProvider).valueOrNull;
     return SheetPage(
       title: context.l10n.thresholdsFitnessTests,
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          SectionCard(
-            title: context.l10n.lt1,
-            child: StatPair(
-              context.l10n.aerobicThreshold,
-              '${lt1?.bpm ?? '—'} bpm',
-            ),
-          ),
-          SectionCard(
-            title: context.l10n.lt2,
-            child: StatPair(
-              context.l10n.lactateThreshold,
-              '${lt2?.lt2 ?? '—'} bpm · ${lt2?.pace ?? '—'}',
+          ThresholdOverviewSection(
+            footer: Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                onPressed: () => showAppSheet(context, const _FtpEditor()),
+                child: Text(context.l10n.setFtpManually),
+              ),
             ),
           ),
           SectionCard(
             title: context.l10n.voPace,
             child: StatPair('5-minute max', vo2?.pace ?? '—'),
-          ),
-          SectionCard(
-            title: context.l10n.ftp,
-            child: Column(
-              children: [
-                StatPair(
-                  context.l10n.functionalThresholdPower,
-                  '${ftp?.ftpWatts ?? '—'} W',
-                ),
-                TextButton(
-                  onPressed: () => showAppSheet(context, const _FtpEditor()),
-                  child: Text(context.l10n.setFtpManually),
-                ),
-              ],
-            ),
           ),
           SectionLabel(context.l10n.calculateFromAnActivity),
           ref

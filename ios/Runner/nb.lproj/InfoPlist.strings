@@ -4,3 +4,6 @@
 "NSHealthUpdateUsageDescription" = "Fjelia skriver de synkroniserte dataene dine for HRV, puls, søvn, skritt og økter til Apple Helse, slik at du ikke mister dem hvis du bytter app.";
 "NSLocationAlwaysAndWhenInUseUsageDescription" = "Fjelia bruker posisjonen din bare mens appen er åpen, for å vurdere varmerisiko for planlagte økter.";
 "NSLocationWhenInUseUsageDescription" = "Fjelia bruker din nåværende posisjon for å vurdere varmerisiko for planlagte økter.";
+"NSPhotoLibraryUsageDescription" = "Fjelia lar deg legge til bilder og videoer fra biblioteket ditt på økter, løpsmål og planlagte økter.";
+"NSCameraUsageDescription" = "Fjelia bruker kameraet når du tar et bilde eller en video til en økt, et løpsmål eller en planlagt økt.";
+"NSMicrophoneUsageDescription" = "Fjelia bruker mikrofonen til lyden i videoer du tar opp til en økt.";

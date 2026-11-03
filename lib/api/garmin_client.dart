@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:io' show Platform;
 import 'dart:math' as math;
+import 'dart:typed_data';
 
 import 'package:cupertino_http/cupertino_http.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -11,6 +12,7 @@ import 'package:http/http.dart' as http;
 import '../models/device_hr_zones.dart';
 import '../models/garmin_data.dart';
 import '../models/heart_rate.dart';
+import '../services/device_threshold_store.dart';
 import '../utils/log.dart';
 
 class GarminApiException implements Exception {
@@ -760,6 +762,82 @@ class GarminClient {
       log('[Garmin] getActivities ERROR: $e');
       return <GarminActivity>[];
     }
+  }
+
+  /// The lactate threshold (heart rate, pace, cycling heart rate) and FTP
+  /// the watch detected. Fields Garmin doesn't have stay null; a failed
+  /// request gives an empty result, never an error.
+  Future<DeviceThreshold> getDetectedThresholds() async {
+    int? lt2, lt2Bike, pace, ftp;
+    DateTime? date;
+    void seen(Object? day) {
+      final d = DateTime.tryParse('${day ?? ''}');
+      if (d != null && (date == null || d.isAfter(date!))) date = d;
+    }
+
+    try {
+      final response = await _getWithRetry(
+        '/biometric-service/biometric/latestLactateThreshold',
+      );
+      if (response.statusCode == 200 && response.body.isNotEmpty) {
+        final body = jsonDecode(response.body);
+        for (final row in (body is List ? body : [body]).whereType<Map>()) {
+          lt2 = plausibleBpm(row['heartRate']) ?? lt2;
+          lt2Bike = plausibleBpm(row['heartRateCycling']) ?? lt2Bike;
+          final speed = row['speed'];
+          if (speed is num && speed > 0) {
+            // Garmin reports this speed in tenths of m/s (0.32 = 3.2 m/s).
+            pace = paceSecPerKm(speed < 1 ? speed * 10 : speed) ?? pace;
+          }
+          seen(row['calendarDate']);
+        }
+        log('[Garmin] lactate threshold: lt2=$lt2 bike=$lt2Bike pace=$pace');
+      }
+    } catch (e) {
+      log('[Garmin] lactate threshold unavailable: ${e.runtimeType}');
+    }
+    try {
+      final response = await _getWithRetry(
+        '/biometric-service/biometric/latestFunctionalThresholdPower/CYCLING',
+      );
+      if (response.statusCode == 200 && response.body.isNotEmpty) {
+        final body = jsonDecode(response.body);
+        final row = body is List ? body.whereType<Map>().firstOrNull : body;
+        if (row is Map) {
+          final watts = row['functionalThresholdPower'];
+          if (watts is num && watts >= 50 && watts <= 600) ftp = watts.round();
+          seen(row['calendarDate']);
+        }
+        log('[Garmin] FTP: $ftp');
+      }
+    } catch (e) {
+      log('[Garmin] FTP unavailable: ${e.runtimeType}');
+    }
+    return DeviceThreshold(
+      source: 'garmin_api',
+      date: date ?? DateTime.now(),
+      lt2Bpm: lt2,
+      lt2BikeBpm: lt2Bike,
+      lt2PaceSecPerKm: pace,
+      ftpWatts: ftp,
+    );
+  }
+
+  /// The original file of an activity as Garmin stores it: a ZIP holding
+  /// the FIT file (with beat-to-beat data when "Log HRV" was on). Null when
+  /// Garmin has none, e.g. for a manually entered activity.
+  Future<Uint8List?> downloadActivityOriginal(String activityId) async {
+    final response = await _getWithRetry(
+      '/download-service/files/activity/${Uri.encodeComponent(activityId)}',
+    );
+    if (response.statusCode == 200 && response.bodyBytes.isNotEmpty) {
+      return response.bodyBytes;
+    }
+    if (response.statusCode == 401 || response.statusCode == 403) {
+      throw GarminAuthException('Original file download refused.');
+    }
+    if (response.statusCode == 404) return null;
+    throw GarminApiException('FIT download failed: ${response.statusCode}');
   }
 
   /// GPS track, per-row samples and HR zones of one activity.

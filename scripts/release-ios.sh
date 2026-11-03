@@ -61,6 +61,9 @@ EOF
 
 flutter pub get
 flutter pub run build_runner build
+# flutter build ipa exits 0 even when the export fails, so clear old IPAs to
+# make the ls below fail instead of picking up a previous build.
+rm -rf build/ios/ipa
 flutter build ipa --release --no-pub --build-number "$build_number" \
   --export-options-plist "$options" ${DEFINES[@]+"${DEFINES[@]}"}
 

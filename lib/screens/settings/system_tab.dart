@@ -1,3 +1,4 @@
+import '../../l10n/formats.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../providers/data_export_provider.dart';
 import '../../models/backup_restore.dart';
@@ -9,6 +10,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../providers/user_profile_provider.dart';
 import '../../providers/day_data_provider.dart';
+import '../../widgets/activity_file_import_sheet.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/settings_widgets.dart';
 import '../../l10n/app_localizations.dart';
@@ -183,6 +185,14 @@ class _ExportState extends ConsumerState<DataExportPage> {
                 await share(file.path);
               }),
             ),
+            ListTile(
+              enabled: !busy,
+              title: Text(context.l10n.importActivityFile),
+              leading: const SettingsIcon(Icons.file_open_outlined, mint),
+              trailing: const Icon(Icons.chevron_right, size: 20),
+              onTap: () =>
+                  showAppSheet(context, const ActivityFileImportSheet()),
+            ),
           ],
         ),
         SettingsGroup(
@@ -196,7 +206,37 @@ class _ExportState extends ConsumerState<DataExportPage> {
               leading: const SettingsIcon(Icons.backup_outlined, Colors.blue),
               trailing: const Icon(Icons.chevron_right, size: 20),
               onTap: () => run(() async {
-                final file = await ref.read(backupServiceProvider).export();
+                final backup = ref.read(backupServiceProvider);
+                // Videos can make a backup very large: ask first.
+                final videos = await backup.videoSummary();
+                var includeVideos = true;
+                if (videos.count > 0) {
+                  if (!context.mounted) return;
+                  final choice = await showDialog<bool>(
+                    context: context,
+                    builder: (dialog) => AlertDialog(
+                      title: Text(context.l10n.backupVideosTitle),
+                      content: Text(
+                        context.l10n.backupVideosMessage(
+                          '${(videos.bytes / 1048576).fixed(0)} MB',
+                        ),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(dialog, false),
+                          child: Text(context.l10n.backupWithoutVideos),
+                        ),
+                        FilledButton(
+                          onPressed: () => Navigator.pop(dialog, true),
+                          child: Text(context.l10n.backupWithVideos),
+                        ),
+                      ],
+                    ),
+                  );
+                  if (choice == null) return;
+                  includeVideos = choice;
+                }
+                final file = await backup.export(includeVideos: includeVideos);
                 await share(file.path);
               }),
             ),
@@ -214,7 +254,11 @@ class _ExportState extends ConsumerState<DataExportPage> {
                   allowedExtensions: ['zip'],
                 );
                 if (file.isEmpty) return;
-                final bytes = await file.single.xFile.readAsBytes();
+                // A backup with videos is read from disk, not into memory.
+                final path = file.single.path;
+                final bytes = path == null
+                    ? await file.single.xFile.readAsBytes()
+                    : null;
                 if (!context.mounted ||
                     !await confirmAction(
                       context,
@@ -232,16 +276,14 @@ class _ExportState extends ConsumerState<DataExportPage> {
                   restoreError = null;
                 });
                 try {
-                  final result = await ref
-                      .read(backupServiceProvider)
-                      .restore(
-                        bytes,
-                        onProgress: (progress) {
-                          if (mounted) {
-                            setState(() => restoreProgress = progress);
-                          }
-                        },
-                      );
+                  void onProgress(BackupRestoreProgress progress) {
+                    if (mounted) setState(() => restoreProgress = progress);
+                  }
+
+                  final backup = ref.read(backupServiceProvider);
+                  final result = bytes != null
+                      ? await backup.restore(bytes, onProgress: onProgress)
+                      : await backup.restoreFile(path!, onProgress: onProgress);
                   if (mounted) setState(() => restoreResult = result);
                 } catch (error) {
                   if (mounted) setState(() => restoreError = error.toString());

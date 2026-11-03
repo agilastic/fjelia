@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'l10n/app_localizations.dart';
 import 'l10n/l10n_ext.dart';
+import 'providers/activity_file_import_provider.dart';
 import 'providers/auth_provider.dart';
 import 'providers/locale_provider.dart';
 import 'providers/day_data_provider.dart';
@@ -27,6 +28,7 @@ import 'services/notifications/local_notification_gateway.dart'
 import 'services/hrv/hrv_post_reminder_coordinator.dart'
     show ActionKind, ActionResult, HrvPostReminderCoordinator;
 import 'screens/strain/activity_detail_sheet.dart';
+import 'widgets/activity_file_import_sheet.dart';
 import 'widgets/app_widgets.dart' show showAppSheet;
 import 'widgets/polar_h10_hrv_sheet.dart';
 import 'providers/sync_provider.dart';
@@ -137,6 +139,7 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
       _listenForHealthAccessLost();
       _listenForHealthWorkouts();
       _listenForPlanChanges();
+      _listenForActivityFiles();
       _triggerSync();
       unawaited(_startHrvReminders());
     });
@@ -282,6 +285,15 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
     });
     ref.listenManual(scheduledWorkoutsProvider, (prev, next) {
       if (next.hasValue) reconcile();
+    });
+  }
+
+  /// FIT, GPX or TCX files opened in Fjelia from the share sheet or Files.
+  void _listenForActivityFiles() {
+    ActivityFileInbox().listen((files) async {
+      final context = await _homeContext();
+      if (context == null || !context.mounted) return;
+      await showAppSheet(context, ActivityFileImportSheet(files: files));
     });
   }
 

@@ -97,6 +97,31 @@ class WeatherRouter extends GlobalWeatherClient {
     throw Exception('All weather services failed or paused');
   }
 
+  /// [primary] wherever it has hours; [filler] only for the hours after its
+  /// last one. Keeps DWD's measured and forecast hours and lets the longer
+  /// global forecast complete the week.
+  static OpenMeteoResult mergeForecasts(
+    OpenMeteoResult primary,
+    OpenMeteoResult filler,
+  ) {
+    if (primary.points.isEmpty) return filler;
+    final last = primary.points
+        .map((p) => p.time)
+        .reduce((a, b) => a.isAfter(b) ? a : b);
+    return OpenMeteoResult(
+      points: [
+        ...primary.points,
+        ...filler.points.where((p) => p.time.isAfter(last)),
+      ]..sort((a, b) => a.time.compareTo(b.time)),
+      sunrise: {...filler.sunrise, ...primary.sunrise},
+      sunset: {...filler.sunset, ...primary.sunset},
+      fetchedAt: primary.fetchedAt,
+      rawJson: primary.rawJson,
+      source: primary.source,
+      elevation: primary.elevation ?? filler.elevation,
+    );
+  }
+
   @override
   Future<OpenMeteoResult> fetchHourlyWeather({
     required double latitude,
@@ -106,6 +131,36 @@ class WeatherRouter extends GlobalWeatherClient {
     double? elevation,
   }) async {
     final candidates = _available(latitude, longitude);
+    // In Germany a week ahead: DWD (Bright Sky) for every hour it covers,
+    // measured for the hours already past and its own forecast after, which
+    // catch drizzle the global models miss; Open-Meteo for the days beyond.
+    final dwd = candidates.whereType<BrightSkyClient>().firstOrNull;
+    final global = candidates.whereType<OpenMeteoClient>().firstOrNull;
+    if (end.difference(start).inDays >= 7 && dwd != null && global != null) {
+      Future<OpenMeteoResult?> load(GlobalWeatherClient c) async {
+        try {
+          log('[Weather] fetchHourlyWeather via ${c.serviceName}');
+          return await c.fetchHourlyWeather(
+            latitude: latitude,
+            longitude: longitude,
+            start: start,
+            end: end,
+            elevation: elevation,
+          );
+        } catch (e) {
+          _pause(c, e);
+          return null;
+        }
+      }
+
+      final results = await Future.wait([load(dwd), load(global)]);
+      final (fromDwd, fromGlobal) = (results[0], results[1]);
+      if (fromDwd != null && fromGlobal != null) {
+        return mergeForecasts(fromDwd, fromGlobal);
+      }
+      if (fromGlobal != null) return fromGlobal;
+      if (fromDwd != null) return fromDwd;
+    }
     if (end.difference(start).inDays >= 7) {
       candidates.sort(
         (a, b) => (a is OpenMeteoClient ? 0 : 1).compareTo(
@@ -152,8 +207,6 @@ class WeatherRouter extends GlobalWeatherClient {
       ).where((c) => c.serviceName != primarySource).map((client) async {
         try {
           final limitedEnd = client is WeatherApiClient
-              ? DateTime(start.year, start.month, start.day + 2)
-              : client is BrightSkyClient
               ? DateTime(start.year, start.month, start.day + 2)
               : end;
           return await client

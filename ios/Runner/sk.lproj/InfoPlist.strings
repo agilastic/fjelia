@@ -4,3 +4,6 @@
 "NSHealthUpdateUsageDescription" = "Fjelia zapisuje vaše synchronizované údaje o HRV, tepovej frekvencii, spánku, krokoch a tréningoch do Apple Zdravie, aby ste o ne neprišli pri zmene aplikácie.";
 "NSLocationAlwaysAndWhenInUseUsageDescription" = "Fjelia používa vašu polohu iba počas otvorenej aplikácie na vyhodnotenie rizika horúčav pri plánovaných tréningoch.";
 "NSLocationWhenInUseUsageDescription" = "Fjelia používa vašu aktuálnu polohu na vyhodnotenie rizika horúčav pri plánovaných tréningoch.";
+"NSPhotoLibraryUsageDescription" = "Fjelia ti umožňuje pridať fotky a videá z knižnice k tréningom, pretekárskym cieľom a plánovaným tréningom.";
+"NSCameraUsageDescription" = "Fjelia používa fotoaparát, keď fotíš alebo nahrávaš video k tréningu, pretekárskemu cieľu alebo plánovanému tréningu.";
+"NSMicrophoneUsageDescription" = "Fjelia používa mikrofón na zvuk videí, ktoré nahráš k tréningu.";

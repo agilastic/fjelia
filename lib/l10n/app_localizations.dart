@@ -10895,6 +10895,486 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Rest day'**
   String get restDayTitle;
+
+  /// No description provided for @importActivityFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Import activity file'**
+  String get importActivityFile;
+
+  /// No description provided for @activityFileImportHint.
+  ///
+  /// In en, this message translates to:
+  /// **'FIT, GPX or TCX files (also zipped, as Garmin Connect exports them) from a bike computer, Zwift, Strava or another app. You can also share a file to Fjelia from the Files app or the share sheet.'**
+  String get activityFileImportHint;
+
+  /// No description provided for @chooseActivityFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose files'**
+  String get chooseActivityFiles;
+
+  /// No description provided for @chooseOtherFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose other files'**
+  String get chooseOtherFiles;
+
+  /// No description provided for @activityFileUnreadable.
+  ///
+  /// In en, this message translates to:
+  /// **'Not a readable activity file'**
+  String get activityFileUnreadable;
+
+  /// No description provided for @activityFileAlreadyImported.
+  ///
+  /// In en, this message translates to:
+  /// **'Already imported'**
+  String get activityFileAlreadyImported;
+
+  /// No description provided for @activityFileAlreadyFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'Already in Fjelia from {source}'**
+  String activityFileAlreadyFrom(String source);
+
+  /// No description provided for @importActivities.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{Import {count} activity} other{Import {count} activities}}'**
+  String importActivities(int count);
+
+  /// No description provided for @activitiesImported.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{{count} activity imported.} other{{count} activities imported.}}'**
+  String activitiesImported(int count);
+
+  /// No description provided for @activityFileSource.
+  ///
+  /// In en, this message translates to:
+  /// **'File'**
+  String get activityFileSource;
+
+  /// No description provided for @dfaAlpha1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Aerobic threshold (DFA α1)'**
+  String get dfaAlpha1Title;
+
+  /// No description provided for @dfaHrvt1.
+  ///
+  /// In en, this message translates to:
+  /// **'Aerobic threshold (HRVT1)'**
+  String get dfaHrvt1;
+
+  /// No description provided for @dfaHrvt2.
+  ///
+  /// In en, this message translates to:
+  /// **'Anaerobic threshold (HRVT2)'**
+  String get dfaHrvt2;
+
+  /// No description provided for @dfaEasyShare.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent} % of the session below your aerobic threshold (α1 ≥ 0.75).'**
+  String dfaEasyShare(String percent);
+
+  /// No description provided for @dfaNoThreshold.
+  ///
+  /// In en, this message translates to:
+  /// **'The session didn\'t cross a threshold clearly. A ramp, or a session that builds from easy to hard, gives an estimate.'**
+  String get dfaNoThreshold;
+
+  /// No description provided for @dfaBeats.
+  ///
+  /// In en, this message translates to:
+  /// **'{beats} beats · {artifacts} % artifacts'**
+  String dfaBeats(int beats, String artifacts);
+
+  /// No description provided for @dfaArtifactsHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'Many artifacts: check that the chest strap sits firmly and the electrodes are moist.'**
+  String get dfaArtifactsHigh;
+
+  /// No description provided for @dfaExplainer.
+  ///
+  /// In en, this message translates to:
+  /// **'From the beat-to-beat data of a chest strap. α1 near 1 is easy, 0.75 marks the aerobic threshold, 0.5 the anaerobic one. An estimate, not a lab test.'**
+  String get dfaExplainer;
+
+  /// No description provided for @thresholdOrderNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Fjelia compares every source. It suggests the app\'s own tests first, then your watch, then DFA α1 over several sessions, then the Polar profile and formulas. Nothing changes until you apply it.'**
+  String get thresholdOrderNote;
+
+  /// No description provided for @thresholdInUse.
+  ///
+  /// In en, this message translates to:
+  /// **'In use: {value}'**
+  String thresholdInUse(String value);
+
+  /// No description provided for @thresholdProposal.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested: {value} from {source}'**
+  String thresholdProposal(String value, String source);
+
+  /// No description provided for @keepCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep current'**
+  String get keepCurrent;
+
+  /// No description provided for @lt2Cycling.
+  ///
+  /// In en, this message translates to:
+  /// **'LT2 · Cycling'**
+  String get lt2Cycling;
+
+  /// No description provided for @thresholdSourceTt.
+  ///
+  /// In en, this message translates to:
+  /// **'30-minute time trial'**
+  String get thresholdSourceTt;
+
+  /// No description provided for @thresholdSourceDrift.
+  ///
+  /// In en, this message translates to:
+  /// **'HR drift test'**
+  String get thresholdSourceDrift;
+
+  /// No description provided for @thresholdSourceDfa.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{DFA α1, {count} session} other{DFA α1, {count} sessions}}'**
+  String thresholdSourceDfa(int count);
+
+  /// No description provided for @thresholdSourceEftp.
+  ///
+  /// In en, this message translates to:
+  /// **'eFTP from rides'**
+  String get thresholdSourceEftp;
+
+  /// No description provided for @thresholdSourcePolarProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Polar profile'**
+  String get thresholdSourcePolarProfile;
+
+  /// No description provided for @thresholdFormulaLt2.
+  ///
+  /// In en, this message translates to:
+  /// **'LT2 − 30 bpm'**
+  String get thresholdFormulaLt2;
+
+  /// No description provided for @thresholdFormulaMaxHr.
+  ///
+  /// In en, this message translates to:
+  /// **'77 % of max HR'**
+  String get thresholdFormulaMaxHr;
+
+  /// No description provided for @thresholdStale.
+  ///
+  /// In en, this message translates to:
+  /// **'older than 6 months'**
+  String get thresholdStale;
+
+  /// No description provided for @thresholdsCoachLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Your coach manages your thresholds, so they can\'t be changed here.'**
+  String get thresholdsCoachLocked;
+
+  /// No description provided for @mediaTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos & videos'**
+  String get mediaTitle;
+
+  /// No description provided for @mediaAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get mediaAdd;
+
+  /// No description provided for @mediaFromLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from library'**
+  String get mediaFromLibrary;
+
+  /// No description provided for @mediaTakePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take photo'**
+  String get mediaTakePhoto;
+
+  /// No description provided for @mediaRecordVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Record video'**
+  String get mediaRecordVideo;
+
+  /// No description provided for @mediaAdding.
+  ///
+  /// In en, this message translates to:
+  /// **'Adding {done} of {total}…'**
+  String mediaAdding(int done, int total);
+
+  /// No description provided for @mediaMoveEarlier.
+  ///
+  /// In en, this message translates to:
+  /// **'Move earlier'**
+  String get mediaMoveEarlier;
+
+  /// No description provided for @mediaMoveLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Move later'**
+  String get mediaMoveLater;
+
+  /// No description provided for @mediaDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete from Fjelia?'**
+  String get mediaDeleteTitle;
+
+  /// No description provided for @mediaDeleteMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This removes the photo or video from Fjelia. The original in your photo library stays.'**
+  String get mediaDeleteMessage;
+
+  /// No description provided for @mediaAddFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Some files couldn\'t be added.'**
+  String get mediaAddFailed;
+
+  /// No description provided for @mediaHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to view, hold to move or delete.'**
+  String get mediaHint;
+
+  /// No description provided for @backupVideosTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Include videos?'**
+  String get backupVideosTitle;
+
+  /// No description provided for @backupVideosMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your videos take {size}. Without them the backup is much smaller; photos are always included.'**
+  String backupVideosMessage(String size);
+
+  /// No description provided for @backupWithVideos.
+  ///
+  /// In en, this message translates to:
+  /// **'With videos'**
+  String get backupWithVideos;
+
+  /// No description provided for @backupWithoutVideos.
+  ///
+  /// In en, this message translates to:
+  /// **'Without videos'**
+  String get backupWithoutVideos;
+
+  /// No description provided for @mediaShareCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Share as card'**
+  String get mediaShareCard;
+
+  /// No description provided for @mediaShareCardHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag the panel or the route to move them. Pinch and drag the photo to frame it; double-tap resets it.'**
+  String get mediaShareCardHint;
+
+  /// No description provided for @shareStyleGlass.
+  ///
+  /// In en, this message translates to:
+  /// **'Glass'**
+  String get shareStyleGlass;
+
+  /// No description provided for @shareStylePoster.
+  ///
+  /// In en, this message translates to:
+  /// **'Poster'**
+  String get shareStylePoster;
+
+  /// No description provided for @shareStyleMinimal.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimal'**
+  String get shareStyleMinimal;
+
+  /// No description provided for @shareStyleNeon.
+  ///
+  /// In en, this message translates to:
+  /// **'Neon'**
+  String get shareStyleNeon;
+
+  /// No description provided for @shareStyleSticker.
+  ///
+  /// In en, this message translates to:
+  /// **'Sticker'**
+  String get shareStyleSticker;
+
+  /// No description provided for @shareStyleReceipt.
+  ///
+  /// In en, this message translates to:
+  /// **'Receipt'**
+  String get shareStyleReceipt;
+
+  /// No description provided for @shareStyleKpop.
+  ///
+  /// In en, this message translates to:
+  /// **'K-Pop'**
+  String get shareStyleKpop;
+
+  /// No description provided for @shareStylePixel.
+  ///
+  /// In en, this message translates to:
+  /// **'Pixel'**
+  String get shareStylePixel;
+
+  /// No description provided for @shareStyleRobot.
+  ///
+  /// In en, this message translates to:
+  /// **'Robot'**
+  String get shareStyleRobot;
+
+  /// No description provided for @shareStyleScifi.
+  ///
+  /// In en, this message translates to:
+  /// **'Sci-Fi'**
+  String get shareStyleScifi;
+
+  /// No description provided for @shareStyleCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Trading card'**
+  String get shareStyleCard;
+
+  /// No description provided for @shareStyleComic.
+  ///
+  /// In en, this message translates to:
+  /// **'Comic'**
+  String get shareStyleComic;
+
+  /// No description provided for @shareStyleOutdoor.
+  ///
+  /// In en, this message translates to:
+  /// **'Outdoor'**
+  String get shareStyleOutdoor;
+
+  /// No description provided for @shareStyleHolo.
+  ///
+  /// In en, this message translates to:
+  /// **'Holo card'**
+  String get shareStyleHolo;
+
+  /// No description provided for @shareStyleHoloFull.
+  ///
+  /// In en, this message translates to:
+  /// **'Full-art card'**
+  String get shareStyleHoloFull;
+
+  /// No description provided for @nowcastRainSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Rain in about {minutes} min'**
+  String nowcastRainSoon(int minutes);
+
+  /// No description provided for @nowcastRainingStops.
+  ///
+  /// In en, this message translates to:
+  /// **'Raining now · dry in about {minutes} min'**
+  String nowcastRainingStops(int minutes);
+
+  /// No description provided for @nowcastRainingOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Raining now, for at least {minutes} min'**
+  String nowcastRainingOn(int minutes);
+
+  /// No description provided for @nowcastDry.
+  ///
+  /// In en, this message translates to:
+  /// **'Dry for the next {minutes} min'**
+  String nowcastDry(int minutes);
+
+  /// No description provided for @sunAndMoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Sun & moon'**
+  String get sunAndMoon;
+
+  /// No description provided for @moonNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New moon'**
+  String get moonNew;
+
+  /// No description provided for @moonWaxingCrescent.
+  ///
+  /// In en, this message translates to:
+  /// **'Waxing crescent'**
+  String get moonWaxingCrescent;
+
+  /// No description provided for @moonFirstQuarter.
+  ///
+  /// In en, this message translates to:
+  /// **'First quarter'**
+  String get moonFirstQuarter;
+
+  /// No description provided for @moonWaxingGibbous.
+  ///
+  /// In en, this message translates to:
+  /// **'Waxing gibbous'**
+  String get moonWaxingGibbous;
+
+  /// No description provided for @moonFull.
+  ///
+  /// In en, this message translates to:
+  /// **'Full moon'**
+  String get moonFull;
+
+  /// No description provided for @moonWaningGibbous.
+  ///
+  /// In en, this message translates to:
+  /// **'Waning gibbous'**
+  String get moonWaningGibbous;
+
+  /// No description provided for @moonLastQuarter.
+  ///
+  /// In en, this message translates to:
+  /// **'Last quarter'**
+  String get moonLastQuarter;
+
+  /// No description provided for @moonWaningCrescent.
+  ///
+  /// In en, this message translates to:
+  /// **'Waning crescent'**
+  String get moonWaningCrescent;
+
+  /// No description provided for @moonLit.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent} % lit'**
+  String moonLit(int percent);
+
+  /// No description provided for @daylightLength.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours} h {minutes} min daylight'**
+  String daylightLength(int hours, int minutes);
 }
 
 class _AppLocalizationsDelegate

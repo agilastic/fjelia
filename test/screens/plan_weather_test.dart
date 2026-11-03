@@ -304,7 +304,22 @@ void main() {
   testWidgets('other forecasts appear as one range, not as named lines', (
     tester,
   ) async {
-    final points = fixture().points.take(24).toList();
+    // Tomorrow's hours: hours already past get no range.
+    final tomorrow = DateUtils.dateOnly(
+      DateTime.now(),
+    ).add(const Duration(days: 1));
+    final points = [
+      for (final (i, p) in fixture().points.take(24).indexed)
+        OpenMeteoPoint(
+          time: tomorrow.add(Duration(hours: i)),
+          temperatureC: p.temperatureC,
+          humidityPct: p.humidityPct,
+          pressureHpa: p.pressureHpa,
+          precipitationMm: p.precipitationMm,
+          windSpeedKmh: p.windSpeedKmh,
+          windDirection: p.windDirection,
+        ),
+    ];
     final warmer = OpenMeteoResult(
       points: [
         for (final p in points)

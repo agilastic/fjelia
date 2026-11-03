@@ -7,6 +7,7 @@ Uint8List polarFitFixture({
   int? ascent = 20,
   bool records = true,
   int? sport,
+  List<int> rrMs = const [],
 }) {
   List<int> little(int value, int size) => [
     for (var i = 0; i < size; i++) (value >> (8 * i)) & 255,
@@ -56,6 +57,10 @@ Uint8List polarFitFixture({
         (7, 0x84, [275, 289, 300][i]),
       ]);
     }
+  }
+  // One beat-to-beat interval per HRV message (field 0, uint16, 1/1000 s).
+  for (final rr in rrMs) {
+    message(2, 78, [(0, 0x84, rr)]);
   }
   final bytes = [
     12,

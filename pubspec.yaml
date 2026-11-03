@@ -82,6 +82,7 @@ dependencies:
   timezone: ^0.11.2
   fit_sdk: ^0.3.0
   xml: ^7.0.1
+  video_player: ^2.14.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -114,6 +115,7 @@ flutter:
   assets:
     - assets/splash/
     - assets/licenses/
+    - assets/branding/app-icon-original.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

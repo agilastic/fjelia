@@ -13,16 +13,25 @@ class FitActivityData {
     this.distanceMeters,
     this.ascentMeters,
     this.avgPower,
+    this.avgHeartRate,
+    this.maxHeartRate,
     this.samples = const [],
     this.route = const [],
+    this.rrIntervals = const [],
   });
 
   final DateTime? start;
   final String? sport;
   final double? timerSeconds, movingSeconds, distanceMeters, ascentMeters;
   final double? avgPower;
+  final double? avgHeartRate, maxHeartRate;
   final List<Map<String, num>> samples;
   final List<Map<String, double>> route;
+
+  /// Beat-to-beat intervals in ms, in recording order, from HRV messages
+  /// (Garmin "Log HRV" or a Polar watch with a paired chest strap). Missing
+  /// beats are left out.
+  final List<double> rrIntervals;
 }
 
 /// Reads normal FIT files, including their CRC. An unavailable or damaged
@@ -38,9 +47,18 @@ FitActivityData? parseFitActivity(Uint8List bytes) {
   final sessions = <SessionMesg>[];
   final samples = <Map<String, num>>[];
   final route = <Map<String, double>>[];
+  final rr = <double>[];
   final decoder = Decode();
   decoder.onMesg = (message) {
-    if (message.num == MesgNum.session) {
+    if (message.num == MesgNum.hrv) {
+      // Up to five intervals per message, in seconds; 0xFFFF marks none.
+      for (var i = 0; i < message.getNumFieldValues(HrvMesg.fieldTime); i++) {
+        final value = message.getFieldValue(HrvMesg.fieldTime, index: i);
+        if (value is num && value.isFinite && value > 0 && value < 65) {
+          rr.add(value * 1000);
+        }
+      }
+    } else if (message.num == MesgNum.session) {
       sessions.add(SessionMesg.fromMesg(message));
     } else if (message.num == MesgNum.record) {
       final record = RecordMesg.fromMesg(message);
@@ -87,6 +105,30 @@ FitActivityData? parseFitActivity(Uint8List bytes) {
       return sum;
     }
 
+    // Heart rate from the session totals, else from the recorded samples.
+    var hrSum = 0.0, hrTime = 0.0, maxHr = 0.0;
+    for (final session in sessions) {
+      final avg = session.getAvgHeartRate();
+      final time = _nonnegative(session.getTotalTimerTime());
+      if (avg != null && avg > 0 && time != null && time > 0) {
+        hrSum += avg * time;
+        hrTime += time;
+      }
+      final max = session.getMaxHeartRate();
+      if (max != null && max > maxHr) maxHr = max.toDouble();
+    }
+    final hrSamples = [
+      for (final sample in samples)
+        if (sample['hr'] != null) sample['hr']!.toDouble(),
+    ];
+    if (hrTime <= 0 && hrSamples.isNotEmpty) {
+      hrSum = hrSamples.reduce((a, b) => a + b);
+      hrTime = hrSamples.length.toDouble();
+    }
+    for (final hr in hrSamples) {
+      if (hr > maxHr) maxHr = hr;
+    }
+
     var powerSum = 0.0, powerTime = 0.0;
     var completePower = sessions.isNotEmpty;
     for (final session in sessions) {
@@ -103,6 +145,10 @@ FitActivityData? parseFitActivity(Uint8List bytes) {
         sessions.map((s) => s.getStartTime()).whereType<DateTime>().toList()
           ..sort();
     final sports = sessions.map((s) => s.getSport()).whereType<int>().toSet();
+    final subSports = sessions
+        .map((s) => s.getSubSport())
+        .whereType<int>()
+        .toSet();
     return FitActivityData(
       sport: sports.length == 1
           ? switch (sports.single) {
@@ -112,6 +158,15 @@ FitActivityData? parseFitActivity(Uint8List bytes) {
               Sport.walking => 'walking',
               Sport.hiking => 'hiking',
               Sport.rowing => 'rowing',
+              // "Training" covers strength, yoga, cardio and more; only the
+              // sub sport says which.
+              Sport.training => switch (subSports.length == 1
+                  ? subSports.single
+                  : null) {
+                SubSport.strengthTraining => 'strength',
+                SubSport.yoga => 'yoga',
+                _ => null,
+              },
               Sport.crossCountrySkiing || Sport.alpineSkiing => 'skiing',
               _ => null,
             }
@@ -122,8 +177,11 @@ FitActivityData? parseFitActivity(Uint8List bytes) {
       distanceMeters: total((s) => s.getTotalDistance()),
       ascentMeters: total((s) => s.getTotalAscent()?.toDouble()),
       avgPower: completePower && powerTime > 0 ? powerSum / powerTime : null,
+      avgHeartRate: hrTime > 0 ? hrSum / hrTime : null,
+      maxHeartRate: maxHr > 0 ? maxHr : null,
       samples: samples,
       route: route,
+      rrIntervals: rr,
     );
   } catch (_) {
     return null;

@@ -112,6 +112,12 @@ class BrightSkyClient extends GlobalWeatherClient {
         windSpeedKmh: d('wind_speed', 0.0),
         windDirection: d('wind_direction', 0.0),
         cloudCover: (row['cloud_cover'] as num?)?.round(),
+        weatherCode: wmoCode(
+          condition: row['condition'] as String?,
+          icon: row['icon'] as String?,
+          precipitationMm: (row['precipitation'] as num?)?.toDouble() ?? 0,
+          cloudCover: (row['cloud_cover'] as num?)?.toDouble(),
+        ),
         sunshineSeconds: (sunshineMin * 60).round(),
       ));
     }
@@ -137,6 +143,42 @@ class BrightSkyClient extends GlobalWeatherClient {
       source: serviceName,
     );
   }
+
+  /// DWD's condition as a WMO weather code, like Open-Meteo reports it.
+  /// "rain" with under 0.3 mm in the hour is drizzle: DWD stations report
+  /// fine drizzle as rain, often with almost nothing in the gauge.
+  static int? wmoCode({
+    String? condition,
+    String? icon,
+    double precipitationMm = 0,
+    double? cloudCover,
+  }) => switch (condition) {
+    'thunderstorm' => 95,
+    'hail' => 96,
+    'snow' => precipitationMm >= 1 ? 73 : 71,
+    'sleet' => 66,
+    'rain' =>
+      precipitationMm < .3
+          ? 51
+          : precipitationMm < 2.5
+          ? 61
+          : 63,
+    'fog' => 45,
+    'dry' => switch (icon) {
+      'clear-day' || 'clear-night' => 0,
+      'partly-cloudy-day' || 'partly-cloudy-night' => 2,
+      'cloudy' => 3,
+      _ =>
+        cloudCover == null
+            ? null
+            : cloudCover < 20
+            ? 0
+            : cloudCover < 70
+            ? 2
+            : 3,
+    },
+    _ => null,
+  };
 
   /// NOAA solar position algorithm; null during polar day/night.
   static DateTime? _calcSunrise(

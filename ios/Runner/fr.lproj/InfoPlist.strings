@@ -4,3 +4,6 @@
 "NSHealthUpdateUsageDescription" = "Fjelia écrit dans Apple Santé tes données synchronisées de VFC, fréquence cardiaque, sommeil, pas et séances afin que tu ne les perdes pas si tu changes d'app.";
 "NSLocationAlwaysAndWhenInUseUsageDescription" = "Fjelia n'utilise ta position que lorsque l'app est ouverte, pour évaluer le risque de chaleur des séances prévues.";
 "NSLocationWhenInUseUsageDescription" = "Fjelia utilise ta position actuelle pour évaluer le risque de chaleur des séances prévues.";
+"NSPhotoLibraryUsageDescription" = "Fjelia vous permet d’ajouter des photos et vidéos de votre photothèque à vos séances, objectifs de course et séances prévues.";
+"NSCameraUsageDescription" = "Fjelia utilise l’appareil photo lorsque vous prenez une photo ou une vidéo pour une séance, un objectif de course ou une séance prévue.";
+"NSMicrophoneUsageDescription" = "Fjelia utilise le micro pour le son des vidéos que vous filmez pour une séance.";

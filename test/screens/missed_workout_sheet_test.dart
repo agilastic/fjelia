@@ -9,6 +9,7 @@ import 'package:fjelia/providers/database_provider.dart';
 import 'package:fjelia/services/ai_coach_settings.dart';
 import 'package:fjelia/providers/heat_acclimation_provider.dart';
 import 'package:fjelia/providers/planner_providers.dart';
+import 'package:fjelia/providers/plan_weather_provider.dart';
 import 'package:fjelia/screens/planner/missed_workout_sheet.dart';
 import 'package:fjelia/theme/app_theme.dart';
 import 'package:flutter/material.dart';
@@ -92,6 +93,7 @@ void main() {
           databaseProvider.overrideWithValue(db),
           upcomingSessionsProvider.overrideWith((ref) async => [tue, easy]),
           heatHourlyWeatherProvider.overrideWith((ref) async => null),
+          rainNowcastProvider.overrideWith((ref) async => null),
           aiCoachSettingsProvider.overrideWith(_CloudCoach.new),
         ],
         child: MaterialApp(

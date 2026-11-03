@@ -6225,4 +6225,302 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get restDayTitle => 'Dia de descans';
+
+  @override
+  String get importActivityFile => 'Importa un fitxer d’activitat';
+
+  @override
+  String get activityFileImportHint =>
+      'Fitxers FIT, GPX o TCX (també en ZIP, com els exporta Garmin Connect) d’un ciclocomputador, Zwift, Strava o una altra app. També pots compartir un fitxer amb Fjelia des de l’app Fitxers o el menú Comparteix.';
+
+  @override
+  String get chooseActivityFiles => 'Tria fitxers';
+
+  @override
+  String get chooseOtherFiles => 'Tria altres fitxers';
+
+  @override
+  String get activityFileUnreadable => 'No és un fitxer d’activitat llegible';
+
+  @override
+  String get activityFileAlreadyImported => 'Ja importat';
+
+  @override
+  String activityFileAlreadyFrom(String source) {
+    return 'Ja és a Fjelia des de $source';
+  }
+
+  @override
+  String importActivities(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Importa $count activitats',
+      one: 'Importa $count activitat',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String activitiesImported(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count activitats importades.',
+      one: '$count activitat importada.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get activityFileSource => 'Fitxer';
+
+  @override
+  String get dfaAlpha1Title => 'Llindar aeròbic (DFA α1)';
+
+  @override
+  String get dfaHrvt1 => 'Llindar aeròbic (HRVT1)';
+
+  @override
+  String get dfaHrvt2 => 'Llindar anaeròbic (HRVT2)';
+
+  @override
+  String dfaEasyShare(String percent) {
+    return '$percent % de la sessió per sota del teu llindar aeròbic (α1 ≥ 0,75).';
+  }
+
+  @override
+  String get dfaNoThreshold =>
+      'La sessió no ha creuat clarament cap llindar. Una prova en rampa, o una sessió que progressa de suau a dur, en dona una estimació.';
+
+  @override
+  String dfaBeats(int beats, String artifacts) {
+    return '$beats batecs · $artifacts % d’artefactes';
+  }
+
+  @override
+  String get dfaArtifactsHigh =>
+      'Molts artefactes: comprova que la banda de pit estigui ben ajustada i els elèctrodes humits.';
+
+  @override
+  String get dfaExplainer =>
+      'A partir de les dades batec a batec d’una banda de pit. α1 a prop d’1 és suau, 0,75 marca el llindar aeròbic i 0,5 l’anaeròbic. Una estimació, no una prova de laboratori.';
+
+  @override
+  String get thresholdOrderNote =>
+      'Fjelia compara totes les fonts. Primer proposa les proves de l’app, després el teu rellotge, després DFA α1 de diverses sessions, i després el perfil de Polar i les fórmules. No canvia res fins que ho apliquis.';
+
+  @override
+  String thresholdInUse(String value) {
+    return 'En ús: $value';
+  }
+
+  @override
+  String thresholdProposal(String value, String source) {
+    return 'Proposta: $value de $source';
+  }
+
+  @override
+  String get keepCurrent => 'Mantén';
+
+  @override
+  String get lt2Cycling => 'LT2 · Ciclisme';
+
+  @override
+  String get thresholdSourceTt => 'Contrarellotge de 30 minuts';
+
+  @override
+  String get thresholdSourceDrift => 'Prova de deriva de FC';
+
+  @override
+  String thresholdSourceDfa(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'DFA α1, $count sessions',
+      one: 'DFA α1, $count sessió',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get thresholdSourceEftp => 'eFTP de sortides en bici';
+
+  @override
+  String get thresholdSourcePolarProfile => 'Perfil de Polar';
+
+  @override
+  String get thresholdFormulaLt2 => 'LT2 − 30 ppm';
+
+  @override
+  String get thresholdFormulaMaxHr => '77 % de la FC màx.';
+
+  @override
+  String get thresholdStale => 'de fa més de 6 mesos';
+
+  @override
+  String get thresholdsCoachLocked =>
+      'El teu entrenador gestiona els teus llindars, així que no es poden canviar aquí.';
+
+  @override
+  String get mediaTitle => 'Fotos i vídeos';
+
+  @override
+  String get mediaAdd => 'Afegeix';
+
+  @override
+  String get mediaFromLibrary => 'Tria de la fototeca';
+
+  @override
+  String get mediaTakePhoto => 'Fes una foto';
+
+  @override
+  String get mediaRecordVideo => 'Grava un vídeo';
+
+  @override
+  String mediaAdding(int done, int total) {
+    return 'S’està afegint $done de $total…';
+  }
+
+  @override
+  String get mediaMoveEarlier => 'Mou abans';
+
+  @override
+  String get mediaMoveLater => 'Mou després';
+
+  @override
+  String get mediaDeleteTitle => 'Vols eliminar-ho de Fjelia?';
+
+  @override
+  String get mediaDeleteMessage =>
+      'La foto o el vídeo es treu de Fjelia. L’original es queda a la teva fototeca.';
+
+  @override
+  String get mediaAddFailed => 'No s’han pogut afegir alguns fitxers.';
+
+  @override
+  String get mediaHint => 'Toca per veure, mantén premut per moure o eliminar.';
+
+  @override
+  String get backupVideosTitle => 'Vols incloure els vídeos?';
+
+  @override
+  String backupVideosMessage(String size) {
+    return 'Els teus vídeos ocupen $size. Sense ells la còpia és molt més petita; les fotos sempre s’hi inclouen.';
+  }
+
+  @override
+  String get backupWithVideos => 'Amb vídeos';
+
+  @override
+  String get backupWithoutVideos => 'Sense vídeos';
+
+  @override
+  String get mediaShareCard => 'Comparteix com a targeta';
+
+  @override
+  String get mediaShareCardHint =>
+      'Arrossega el quadre o la ruta per moure’ls. Pessiga i arrossega la foto per enquadrar-la; toca dues vegades per restablir-la.';
+
+  @override
+  String get shareStyleGlass => 'Vidre';
+
+  @override
+  String get shareStylePoster => 'Pòster';
+
+  @override
+  String get shareStyleMinimal => 'Minimal';
+
+  @override
+  String get shareStyleNeon => 'Neó';
+
+  @override
+  String get shareStyleSticker => 'Adhesiu';
+
+  @override
+  String get shareStyleReceipt => 'Tiquet';
+
+  @override
+  String get shareStyleKpop => 'K-pop';
+
+  @override
+  String get shareStylePixel => 'Píxel';
+
+  @override
+  String get shareStyleRobot => 'Robot';
+
+  @override
+  String get shareStyleScifi => 'Ciència-ficció';
+
+  @override
+  String get shareStyleCard => 'Carta col·leccionable';
+
+  @override
+  String get shareStyleComic => 'Còmic';
+
+  @override
+  String get shareStyleOutdoor => 'Outdoor';
+
+  @override
+  String get shareStyleHolo => 'Carta holo';
+
+  @override
+  String get shareStyleHoloFull => 'Carta full art';
+
+  @override
+  String nowcastRainSoon(int minutes) {
+    return 'Pluja d’aquí a uns $minutes min';
+  }
+
+  @override
+  String nowcastRainingStops(int minutes) {
+    return 'Plou · sec d’aquí a uns $minutes min';
+  }
+
+  @override
+  String nowcastRainingOn(int minutes) {
+    return 'Plou, com a mínim $minutes min més';
+  }
+
+  @override
+  String nowcastDry(int minutes) {
+    return 'Sec durant els propers $minutes min';
+  }
+
+  @override
+  String get sunAndMoon => 'Sol i lluna';
+
+  @override
+  String get moonNew => 'Lluna nova';
+
+  @override
+  String get moonWaxingCrescent => 'Lluna creixent';
+
+  @override
+  String get moonFirstQuarter => 'Quart creixent';
+
+  @override
+  String get moonWaxingGibbous => 'Gibosa creixent';
+
+  @override
+  String get moonFull => 'Lluna plena';
+
+  @override
+  String get moonWaningGibbous => 'Gibosa minvant';
+
+  @override
+  String get moonLastQuarter => 'Quart minvant';
+
+  @override
+  String get moonWaningCrescent => 'Lluna minvant';
+
+  @override
+  String moonLit(int percent) {
+    return '$percent % il·luminada';
+  }
+
+  @override
+  String daylightLength(int hours, int minutes) {
+    return '$hours h $minutes min de llum';
+  }
 }

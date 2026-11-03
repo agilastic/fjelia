@@ -1,6 +1,7 @@
 import '../../l10n/l10n_ext.dart';
 import '../../l10n/formats.dart';
 import '../../providers/plan_weather_provider.dart';
+import '../../widgets/rain_nowcast_line.dart';
 import '../../widgets/weather_visuals.dart';
 import '../weather/weather_screen.dart';
 import '../../providers/upcoming_plan_provider.dart';
@@ -16,6 +17,7 @@ import 'package:intl/intl.dart';
 
 import '../../db/database.dart';
 import '../../providers/planner_providers.dart';
+import '../../services/open_meteo_client.dart' show OpenMeteoResult;
 import '../../services/race_predictor.dart';
 import '../../widgets/app_widgets.dart';
 import '../settings/training_tab.dart';
@@ -51,7 +53,11 @@ class PlanWeatherStrip extends ConsumerWidget {
                   style: TextStyle(color: muted),
                 );
               }
-              final days = data!.sevenDays(DateTime.now());
+              final now = DateTime.now();
+              final days = data!.sevenDays(now);
+              final others =
+                  ref.watch(weatherComparisonProvider).valueOrNull ??
+                  const <OpenMeteoResult>[];
               String amount(double? n) => n == null
                   ? '—'
                   : n < 10 && n != n.roundToDouble()
@@ -105,6 +111,8 @@ class PlanWeatherStrip extends ConsumerWidget {
                       const Icon(Icons.chevron_right, size: 16, color: muted),
                     ],
                   ),
+                  // The next hour or two from the DWD radar (Germany).
+                  const RainNowcastLine(padding: EdgeInsets.only(top: 4)),
                   const SizedBox(height: 5),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -143,7 +151,20 @@ class PlanWeatherStrip extends ConsumerWidget {
                                     ? '—'
                                     : '${day.minC!.round()}/${day.maxC!.round()}°',
                               ),
-                              cell(amount(day.rainMm), color: Colors.lightBlue),
+                              cell(switch (dailyRainRange(
+                                day.date,
+                                data.result,
+                                others,
+                                now,
+                              )) {
+                                // The forecasts disagree: their range.
+                                final r? when r.high - r.low >= .5 =>
+                                  '${amount(r.low)}–${amount(r.high)}',
+                                // Drizzle that barely registers still shows.
+                                _ when day.wet && (day.rainMm ?? 0) < .05 =>
+                                  '<0.1',
+                                _ => amount(day.rainMm),
+                              }, color: Colors.lightBlue),
                               cell(amount(day.uv), color: Colors.amber),
                               cell(amount(day.windKmh)),
                             ],

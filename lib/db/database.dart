@@ -1130,6 +1130,64 @@ class StrengthProposalDecisions extends Table {
   Set<Column> get primaryKey => {fingerprint};
 }
 
+/// DFA alpha1 of an activity whose file carried beat-to-beat intervals. A
+/// row with `rrCount` 0 records that the activity's file had none, so it is
+/// not downloaded again.
+class DfaAlpha1Results extends Table {
+  TextColumn get activityId => text()();
+  IntColumn get rrCount => integer()();
+
+  /// Share of beats removed as artifacts (0–1).
+  RealColumn get artifacts => real()();
+
+  /// `[{t, a1, hr, art, w?, spd?}]`, one entry per 2-minute window.
+  TextColumn get windowsJson => text()();
+  RealColumn get hrvt1Bpm => real().nullable()();
+  RealColumn get hrvt1Watts => real().nullable()();
+  RealColumn get hrvt1Speed => real().nullable()();
+  RealColumn get hrvt2Bpm => real().nullable()();
+  RealColumn get hrvt2Watts => real().nullable()();
+  RealColumn get hrvt2Speed => real().nullable()();
+  DateTimeColumn get computedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {activityId};
+}
+
+/// Photos and videos the athlete added to an activity, a race goal or a
+/// planned session. The files live in the app's `media/` folder.
+class MediaItems extends Table {
+  TextColumn get id => text()();
+
+  /// `activity`, `race_goal` or `session`.
+  TextColumn get ownerKind => text()();
+  TextColumn get ownerId => text()();
+
+  /// For a planned session: its day and sport, so the media can follow the
+  /// session that replaces it when the plan is generated again.
+  DateTimeColumn get ownerDate => dateTime().nullable()();
+  TextColumn get ownerSport => text().nullable()();
+
+  /// `photo` or `video`.
+  TextColumn get kind => text()();
+
+  /// File names inside the media folder.
+  TextColumn get fileName => text()();
+  TextColumn get thumbName => text().nullable()();
+  IntColumn get bytes => integer().withDefault(const Constant(0))();
+  IntColumn get width => integer().nullable()();
+  IntColumn get height => integer().nullable()();
+  IntColumn get durationMs => integer().nullable()();
+  DateTimeColumn get takenAt => dateTime().nullable()();
+  RealColumn get latitude => real().nullable()();
+  RealColumn get longitude => real().nullable()();
+  IntColumn get position => integer()();
+  DateTimeColumn get createdAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 @DriftDatabase(
   tables: [
     BpMeasurements,
@@ -1187,6 +1245,8 @@ class StrengthProposalDecisions extends Table {
     CoachNotes,
     CoachReviews,
     WorkoutTemplates,
+    DfaAlpha1Results,
+    MediaItems,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -1199,7 +1259,7 @@ class AppDatabase extends _$AppDatabase {
       defaultSourcePriorities[group.name]!;
 
   @override
-  int get schemaVersion => 54;
+  int get schemaVersion => 56;
 
   Future<void> saveHeartRateSamples(List<TimedHeartRate> samples) async {
     if (samples.isEmpty) return;
@@ -1360,7 +1420,8 @@ class AppDatabase extends _$AppDatabase {
   // ── Activities ───────────────────────────────────────────────────────────
 
   /// Removes duplicate workouts imported from several sources, as decided by
-  /// [isSameWorkout]. The Health Connect copy is dropped.
+  /// [isSameWorkout]. The Health Connect copy is dropped, then a copy
+  /// imported from a file.
   Future<int> deduplicateActivities() async {
     final all = await (select(
       activityRecords,
@@ -1394,6 +1455,15 @@ class AppDatabase extends _$AppDatabase {
         } else if (b.source == 'health_connect') {
           toDelete.add(b.activityId);
           survivor[b.activityId] = a;
+        } else if (a.source == 'file' && b.source != 'file') {
+          // An imported file gives way to the platform that synced the
+          // same workout later, as an Apple Health copy does.
+          toDelete.add(a.activityId);
+          survivor[a.activityId] = b;
+          break;
+        } else if (b.source == 'file' && a.source != 'file') {
+          toDelete.add(b.activityId);
+          survivor[b.activityId] = a;
         }
       }
     }
@@ -1409,11 +1479,39 @@ class AppDatabase extends _$AppDatabase {
     });
   }
 
+  /// Keeps the DFA alpha1 of a removed copy (e.g. an imported file) for the
+  /// copy that stays, unless that one has a result of its own.
+  Future<void> _followDfaAlpha1(String gone, String keep) async {
+    final kept = await (select(
+      dfaAlpha1Results,
+    )..where((t) => t.activityId.equals(keep))).getSingleOrNull();
+    if (kept == null || kept.rrCount == 0) {
+      await (delete(
+        dfaAlpha1Results,
+      )..where((t) => t.activityId.equals(keep) & t.rrCount.equals(0))).go();
+      await (update(dfaAlpha1Results)..where(
+            (t) =>
+                t.activityId.equals(gone) & t.rrCount.isBiggerThanValue(0),
+          ))
+          .write(DfaAlpha1ResultsCompanion(activityId: Value(keep)));
+    }
+    await (delete(
+      dfaAlpha1Results,
+    )..where((t) => t.activityId.equals(gone))).go();
+  }
+
   /// Moves what an HRV episode knows about a copy that is about to be removed
   /// to the copy that stays: its alias, the athlete's own links, feedback and
   /// the reminder. Automatic links are recomputed from the facts afterwards.
   Future<void> _followDuplicate(ActivityRecord gone, ActivityRecord keep) async {
     await _followNutrition(gone.activityId, keep.activityId);
+    await _followDfaAlpha1(gone.activityId, keep.activityId);
+    await (update(mediaItems)..where(
+          (t) =>
+              t.ownerKind.equals('activity') &
+              t.ownerId.equals(gone.activityId),
+        ))
+        .write(MediaItemsCompanion(ownerId: Value(keep.activityId)));
     final goneSource = gone.source ?? 'unknown';
     final keepSource = keep.source ?? 'unknown';
     final goneAlias = await (select(hrvEpisodeAliases)..where(
@@ -2153,6 +2251,8 @@ class AppDatabase extends _$AppDatabase {
       await ensureHrvIdentity();
     },
     onUpgrade: (m, from, to) async {
+      if (from < 56) await m.createTable(mediaItems);
+      if (from < 55) await m.createTable(dfaAlpha1Results);
       if (from >= 51 && from < 54) {
         await _addColumnIfMissing(
           'nutrition_reminder_records',

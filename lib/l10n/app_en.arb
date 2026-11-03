@@ -3488,5 +3488,209 @@
   },
   "briefRestDayToday": "Today is a planned rest day.",
   "restDayPlannedNote": "Recovery is part of your plan.",
-  "restDayTitle": "Rest day"
+  "restDayTitle": "Rest day",
+  "importActivityFile": "Import activity file",
+  "activityFileImportHint": "FIT, GPX or TCX files (also zipped, as Garmin Connect exports them) from a bike computer, Zwift, Strava or another app. You can also share a file to Fjelia from the Files app or the share sheet.",
+  "chooseActivityFiles": "Choose files",
+  "chooseOtherFiles": "Choose other files",
+  "activityFileUnreadable": "Not a readable activity file",
+  "activityFileAlreadyImported": "Already imported",
+  "activityFileAlreadyFrom": "Already in Fjelia from {source}",
+  "@activityFileAlreadyFrom": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "importActivities": "{count, plural, one{Import {count} activity} other{Import {count} activities}}",
+  "@importActivities": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activitiesImported": "{count, plural, one{{count} activity imported.} other{{count} activities imported.}}",
+  "@activitiesImported": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activityFileSource": "File",
+  "dfaAlpha1Title": "Aerobic threshold (DFA α1)",
+  "dfaHrvt1": "Aerobic threshold (HRVT1)",
+  "dfaHrvt2": "Anaerobic threshold (HRVT2)",
+  "dfaEasyShare": "{percent} % of the session below your aerobic threshold (α1 ≥ 0.75).",
+  "@dfaEasyShare": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "dfaNoThreshold": "The session didn't cross a threshold clearly. A ramp, or a session that builds from easy to hard, gives an estimate.",
+  "dfaBeats": "{beats} beats · {artifacts} % artifacts",
+  "@dfaBeats": {
+    "placeholders": {
+      "beats": {
+        "type": "int"
+      },
+      "artifacts": {
+        "type": "String"
+      }
+    }
+  },
+  "dfaArtifactsHigh": "Many artifacts: check that the chest strap sits firmly and the electrodes are moist.",
+  "dfaExplainer": "From the beat-to-beat data of a chest strap. α1 near 1 is easy, 0.75 marks the aerobic threshold, 0.5 the anaerobic one. An estimate, not a lab test.",
+  "thresholdOrderNote": "Fjelia compares every source. It suggests the app's own tests first, then your watch, then DFA α1 over several sessions, then the Polar profile and formulas. Nothing changes until you apply it.",
+  "thresholdInUse": "In use: {value}",
+  "@thresholdInUse": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "thresholdProposal": "Suggested: {value} from {source}",
+  "@thresholdProposal": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "keepCurrent": "Keep current",
+  "lt2Cycling": "LT2 · Cycling",
+  "thresholdSourceTt": "30-minute time trial",
+  "thresholdSourceDrift": "HR drift test",
+  "thresholdSourceDfa": "{count, plural, one{DFA α1, {count} session} other{DFA α1, {count} sessions}}",
+  "@thresholdSourceDfa": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "thresholdSourceEftp": "eFTP from rides",
+  "thresholdSourcePolarProfile": "Polar profile",
+  "thresholdFormulaLt2": "LT2 − 30 bpm",
+  "thresholdFormulaMaxHr": "77 % of max HR",
+  "thresholdStale": "older than 6 months",
+  "thresholdsCoachLocked": "Your coach manages your thresholds, so they can't be changed here.",
+  "mediaTitle": "Photos & videos",
+  "mediaAdd": "Add",
+  "mediaFromLibrary": "Choose from library",
+  "mediaTakePhoto": "Take photo",
+  "mediaRecordVideo": "Record video",
+  "mediaAdding": "Adding {done} of {total}…",
+  "@mediaAdding": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "mediaMoveEarlier": "Move earlier",
+  "mediaMoveLater": "Move later",
+  "mediaDeleteTitle": "Delete from Fjelia?",
+  "mediaDeleteMessage": "This removes the photo or video from Fjelia. The original in your photo library stays.",
+  "mediaAddFailed": "Some files couldn't be added.",
+  "mediaHint": "Tap to view, hold to move or delete.",
+  "backupVideosTitle": "Include videos?",
+  "backupVideosMessage": "Your videos take {size}. Without them the backup is much smaller; photos are always included.",
+  "@backupVideosMessage": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "backupWithVideos": "With videos",
+  "backupWithoutVideos": "Without videos",
+  "mediaShareCard": "Share as card",
+  "mediaShareCardHint": "Drag the panel or the route to move them. Pinch and drag the photo to frame it; double-tap resets it.",
+  "shareStyleGlass": "Glass",
+  "shareStylePoster": "Poster",
+  "shareStyleMinimal": "Minimal",
+  "shareStyleNeon": "Neon",
+  "shareStyleSticker": "Sticker",
+  "shareStyleReceipt": "Receipt",
+  "shareStyleKpop": "K-Pop",
+  "shareStylePixel": "Pixel",
+  "shareStyleRobot": "Robot",
+  "shareStyleScifi": "Sci-Fi",
+  "shareStyleCard": "Trading card",
+  "shareStyleComic": "Comic",
+  "shareStyleOutdoor": "Outdoor",
+  "shareStyleHolo": "Holo card",
+  "shareStyleHoloFull": "Full-art card",
+  "nowcastRainSoon": "Rain in about {minutes} min",
+  "@nowcastRainSoon": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "nowcastRainingStops": "Raining now · dry in about {minutes} min",
+  "@nowcastRainingStops": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "nowcastRainingOn": "Raining now, for at least {minutes} min",
+  "@nowcastRainingOn": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "nowcastDry": "Dry for the next {minutes} min",
+  "@nowcastDry": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "sunAndMoon": "Sun & moon",
+  "moonNew": "New moon",
+  "moonWaxingCrescent": "Waxing crescent",
+  "moonFirstQuarter": "First quarter",
+  "moonWaxingGibbous": "Waxing gibbous",
+  "moonFull": "Full moon",
+  "moonWaningGibbous": "Waning gibbous",
+  "moonLastQuarter": "Last quarter",
+  "moonWaningCrescent": "Waning crescent",
+  "moonLit": "{percent} % lit",
+  "@moonLit": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "daylightLength": "{hours} h {minutes} min daylight",
+  "@daylightLength": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  }
 }

@@ -12,6 +12,8 @@ import '../models/device_hr_zones.dart';
 import 'device_zone_store.dart';
 import 'source_priority_service.dart';
 import 'tcx_parser.dart';
+import 'device_threshold_store.dart';
+import 'dfa_alpha1_service.dart';
 import 'fit_activity_data.dart';
 import 'polar_exercise_data.dart';
 import '../utils/log.dart';
@@ -350,7 +352,18 @@ class PolarService {
     } else {
       await _db.into(_db.activityRecords).insert(companion);
     }
+    if (fit != null) await _saveDfaAlpha1(id, fit);
     return true;
+  }
+
+  /// DFA alpha1 from the FIT export when the watch logged beat-to-beat data
+  /// (Polar watch with a paired chest strap). Never fails the import.
+  Future<void> _saveDfaAlpha1(String id, FitActivityData fit) async {
+    try {
+      await DfaAlpha1Service(_db).saveFromFit(id, fit);
+    } catch (e) {
+      log('[Polar] DFA alpha1 for $id failed: ${e.runtimeType}');
+    }
   }
 
   static double? _flowNumber(Object? raw) =>
@@ -485,6 +498,7 @@ class PolarService {
       _syncSleep(result, from, to),
       _syncNightlyRecharge(result),
       _syncDailyActivity(result, from, to),
+      _syncPhysicalInfo(),
     ]);
     log(
       '[Polar] done — exercises=${result.exercises} sleep=${result.sleep} '
@@ -576,6 +590,29 @@ class PolarService {
       if (v is List) return v.whereType<Map<String, dynamic>>().toList();
     }
     return const [];
+  }
+
+  /// The aerobic and anaerobic threshold in the Polar profile. They are
+  /// often Polar's age-based defaults, so they rank low among candidates.
+  Future<void> _syncPhysicalInfo() async {
+    try {
+      final info = await _get('/users/physical-info');
+      if (info == null) return;
+      Object? field(String key) => info[key] ?? info[key.replaceAll('_', '-')];
+      final changed = DateTime.tryParse(
+        '${field('modified') ?? field('created') ?? ''}',
+      );
+      await const DeviceThresholdStore().save(
+        DeviceThreshold(
+          source: 'polar_profile',
+          date: changed ?? DateTime.now(),
+          lt1Bpm: plausibleBpm(field('aerobic_threshold')),
+          lt2Bpm: plausibleBpm(field('anaerobic_threshold')),
+        ),
+      );
+    } catch (e) {
+      log('[Polar] physical info unavailable: ${e.runtimeType}');
+    }
   }
 
   Future<void> _syncExercises(PolarSyncResult result) async {
@@ -742,6 +779,7 @@ class PolarService {
     } else {
       await _db.into(_db.activityRecords).insert(companion);
     }
+    if (fit != null) await _saveDfaAlpha1(id, fit);
     return true;
   }
 

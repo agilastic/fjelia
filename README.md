@@ -17,6 +17,14 @@ Website: <https://agilastic.github.io/fjelia/> (source in [`docs/`](docs/); serv
   resting heart rate, blood pressure, weight and body composition.
 - **Training load** — load per week and day, zone polarization, fitness and
   fatigue, race predictions.
+- **Aerobic threshold (DFA α1)** — from the beat-to-beat data of a chest strap
+  in a workout's FIT file (Garmin with "Log HRV" on, Polar watches with a
+  paired strap, or an imported file): heart rate, power or pace where α1
+  crosses 0.75 (HRVT1) and 0.5 (HRVT2).
+- **Thresholds from every source** — LT1, LT2 (running and cycling) and FTP
+  from the app's tests, Garmin, COROS, DFA α1, the Polar profile and formulas,
+  side by side. Fjelia proposes the best one; nothing changes until you apply
+  it.
 - **Training plan** — periodised plans towards a race goal, calibrated on your
   own history (volume, long sessions, intensity) and adapted to daily readiness;
   workouts can be pushed to Garmin.
@@ -28,7 +36,9 @@ Website: <https://agilastic.github.io/fjelia/> (source in [`docs/`](docs/); serv
   The local 4B option is available on iPhone 18 and newer.
 - **Heat acclimation** with weather data, home-screen widgets, backup and export.
 - **Data sources** — Garmin Connect, Polar, Suunto, COROS, Apple Health, Renpho
-  scales (Bluetooth), Aktiia and Hilo blood-pressure devices.
+  scales (Bluetooth), Aktiia and Hilo blood-pressure devices. FIT, GPX and TCX
+  files (also zipped) can be imported from any device or app, in Settings →
+  System or by sharing them to Fjelia.
 
 ## Privacy
 

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:isolate';
 import 'dart:math' as math;
 
 import 'package:drift/drift.dart';
@@ -13,12 +14,20 @@ import '../models/strength_workout.dart';
 import '../models/renpho_data.dart';
 import '../models/scores.dart';
 import '../utils/log.dart';
+import '../theme/activity_colors.dart';
 import 'activity_decoder.dart';
+import 'activity_file_import_service.dart' show activityFilesInZip;
+import 'dfa_alpha1_service.dart';
 import 'energie_calculator.dart';
+import 'fit_activity_data.dart';
 import 'heat_acclimation_service.dart';
 import 'score_calculator.dart';
 import 'strength/garmin_strength.dart';
 import 'strength/strength_repository.dart';
+
+/// Top level, so the isolate's closure holds only the bytes.
+Future<FitActivityData?> _parseFitInBackground(Uint8List bytes) =>
+    Isolate.run(() => parseFitActivity(bytes));
 
 const _zoneKeys = ['zone1', 'zone2', 'zone3', 'zone4', 'zone5'];
 const _zoneWeights = [1.0, 1.1, 1.2, 3.1, 8.0];
@@ -732,6 +741,7 @@ class SyncService {
         result.activities++;
       }
       await _importStrengthSets(activities);
+      await _analyseGarminDfaAlpha1(activities);
     } on GarminAuthException catch (e) {
       result.garminAuthError = true;
       result.errors.add('Garmin auth error: ${_clip(e)}');
@@ -739,6 +749,60 @@ class SyncService {
       result.errors.add('Activity sync error: ${_clip(e)}');
     }
     return gpsPatched;
+  }
+
+  /// DFA alpha1 for recent endurance activities: downloads the original FIT
+  /// once per activity (a few per sync) and keeps the result, or that the
+  /// file had no beat-to-beat data ("Log HRV" off or no chest strap).
+  /// Never fails the sync.
+  Future<void> _analyseGarminDfaAlpha1(List<GarminActivity> activities) async {
+    final dfa = DfaAlpha1Service(_db);
+    final now = DateTime.now();
+    final candidates = [
+      for (final a in activities)
+        if (now.difference(a.startTime) <= const Duration(days: 14) &&
+            a.duration >= const Duration(minutes: 20) &&
+            (a.avgHeartRate ?? 0) > 0 &&
+            !isStrengthSport(a.type) &&
+            !const {
+              ActivityKind.swimming,
+              ActivityKind.yoga,
+            }.contains(activityKind(a.type)))
+          a,
+    ]..sort((a, b) => b.startTime.compareTo(a.startTime));
+    var downloads = 0;
+    for (final a in candidates) {
+      if (downloads >= 3) break;
+      try {
+        if (await dfa.checked(a.id)) continue;
+        downloads++;
+        final original = await _garmin.downloadActivityOriginal(a.id);
+        final fitBytes = original == null
+            ? null
+            : activityFilesInZip(original)
+                  .where((f) => f.name.toLowerCase().endsWith('.fit'))
+                  .map((f) => f.bytes)
+                  .firstOrNull ??
+              original;
+        // A FIT file with beat-to-beat data can hold tens of thousands of
+        // messages; decode it away from the UI isolate.
+        final fit = fitBytes == null
+            ? null
+            : await _parseFitInBackground(fitBytes);
+        if (fit == null) {
+          await dfa.save(a.id, start: null, rrIntervals: const []);
+        } else {
+          await dfa.saveFromFit(a.id, fit);
+        }
+      } on GarminAuthException {
+        // The download service may refuse a session the other services
+        // accept; that is no reason to report the sync as signed out.
+        log('[Garmin] DFA alpha1: original file download not authorised');
+        break;
+      } catch (e) {
+        log('[Garmin] DFA alpha1 for ${a.id} failed: ${e.runtimeType}');
+      }
+    }
   }
 
   /// Exercise sets the watch recorded for recent strength activities. An

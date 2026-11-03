@@ -4,3 +4,6 @@
 "NSHealthUpdateUsageDescription" = "Fjelia escriu a Apple Salut les teves dades sincronitzades de VFC, freqüència cardíaca, son, passes i entrenaments perquè no les perdis si canvies d'aplicació.";
 "NSLocationAlwaysAndWhenInUseUsageDescription" = "Fjelia només fa servir la teva ubicació mentre l'aplicació és oberta, per avaluar el risc de calor dels entrenaments planificats.";
 "NSLocationWhenInUseUsageDescription" = "Fjelia fa servir la teva ubicació actual per avaluar el risc de calor dels entrenaments planificats.";
+"NSPhotoLibraryUsageDescription" = "Fjelia et permet afegir fotos i vídeos de la teva fototeca als teus entrenaments, objectius de cursa i sessions planificades.";
+"NSCameraUsageDescription" = "Fjelia fa servir la càmera quan fas una foto o graves un vídeo per a un entrenament, un objectiu de cursa o una sessió planificada.";
+"NSMicrophoneUsageDescription" = "Fjelia fa servir el micròfon per al so dels vídeos que graves per a un entrenament.";

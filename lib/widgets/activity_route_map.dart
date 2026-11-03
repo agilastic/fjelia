@@ -6,6 +6,14 @@ import 'package:latlong2/latlong.dart';
 
 import 'app_widgets.dart';
 
+/// A photo or video shown on the route: a small round thumbnail.
+class RoutePin {
+  const RoutePin({required this.point, required this.child, this.onTap});
+  final LatLng point;
+  final Widget child;
+  final VoidCallback? onTap;
+}
+
 class ActivityRouteMap extends StatefulWidget {
   const ActivityRouteMap({
     super.key,
@@ -13,8 +21,10 @@ class ActivityRouteMap extends StatefulWidget {
     required this.exportGpx,
     this.fullscreen = false,
     this.tileProvider,
+    this.pins = const [],
   });
   final List<LatLng> route;
+  final List<RoutePin> pins;
   final Future<void> Function(BuildContext) exportGpx;
   final bool fullscreen;
   final TileProvider? tileProvider;
@@ -113,6 +123,25 @@ class _RouteMapState extends State<ActivityRouteMap> {
                     ),
                   ),
                 ),
+              for (final pin in widget.pins)
+                Marker(
+                  point: pin.point,
+                  width: 34,
+                  height: 34,
+                  child: GestureDetector(
+                    onTap: pin.onTap,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
+                        boxShadow: const [
+                          BoxShadow(color: Colors.black45, blurRadius: 4),
+                        ],
+                      ),
+                      child: ClipOval(child: pin.child),
+                    ),
+                  ),
+                ),
             ],
           ),
           Positioned(
@@ -161,6 +190,7 @@ class _RouteMapState extends State<ActivityRouteMap> {
                             exportGpx: widget.exportGpx,
                             fullscreen: true,
                             tileProvider: widget.tileProvider,
+                            pins: widget.pins,
                           ),
                         ),
                       ),
