@@ -12335,6 +12335,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No older activities'**
   String get noOlderActivities;
+
+  /// No description provided for @maxSpeed.
+  ///
+  /// In en, this message translates to:
+  /// **'Max speed'**
+  String get maxSpeed;
+
+  /// No description provided for @caloriesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Calories'**
+  String get caloriesLabel;
+
+  /// No description provided for @activityDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get activityDescription;
+
+  /// No description provided for @nightCurves.
+  ///
+  /// In en, this message translates to:
+  /// **'Night curves'**
+  String get nightCurves;
+
+  /// No description provided for @noPhaseTimeline.
+  ///
+  /// In en, this message translates to:
+  /// **'This watch does not provide when each sleep stage happened, only the totals above. These are the HRV and stress it measured through the night.'**
+  String get noPhaseTimeline;
+
+  /// No description provided for @stagesEstimated.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated by Fjelia from the HRV and stress your COROS watch measured overnight. The stage totals are COROS\'s own; when each stage happened is an approximation.'**
+  String get stagesEstimated;
+
+  /// No description provided for @nightCurvesBasis.
+  ///
+  /// In en, this message translates to:
+  /// **'The HRV and stress measured overnight. The stage estimate above is built from them.'**
+  String get nightCurvesBasis;
 }
 
 class _AppLocalizationsDelegate

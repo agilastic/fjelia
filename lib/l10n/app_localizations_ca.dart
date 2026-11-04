@@ -7155,4 +7155,28 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get noOlderActivities => 'No hi ha activitats anteriors';
+
+  @override
+  String get maxSpeed => 'Velocitat màx.';
+
+  @override
+  String get caloriesLabel => 'Calories';
+
+  @override
+  String get activityDescription => 'Descripció';
+
+  @override
+  String get nightCurves => 'Corbes de la nit';
+
+  @override
+  String get noPhaseTimeline =>
+      'Aquest rellotge no indica quan va passar cada fase del son, només els totals de dalt. Aquests són la VFC i l’estrès que va mesurar durant la nit.';
+
+  @override
+  String get stagesEstimated =>
+      'Estimat per Fjelia a partir de la VFC i l’estrès que el teu rellotge COROS va mesurar durant la nit. Els totals de les fases són els de COROS; quan va passar cada fase és una aproximació.';
+
+  @override
+  String get nightCurvesBasis =>
+      'La VFC i l’estrès mesurats durant la nit. L’estimació de fases de dalt es basa en ells.';
 }

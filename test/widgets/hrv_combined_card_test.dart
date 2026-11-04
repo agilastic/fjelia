@@ -5,6 +5,7 @@ import 'package:fjelia/db/database.dart';
 import 'package:fjelia/providers/database_provider.dart';
 import 'package:fjelia/providers/day_data_provider.dart';
 import 'package:fjelia/providers/metric_history_provider.dart';
+import 'package:fjelia/providers/polar_h10_provider.dart';
 import 'package:fjelia/widgets/app_widgets.dart';
 import 'package:fjelia/widgets/hrv_combined_card.dart';
 import 'package:fjelia/widgets/metric_detail_sheet.dart';
@@ -50,7 +51,11 @@ void main() {
         ),
       );
 
-  Future<void> show(WidgetTester tester, Widget child) async {
+  Future<void> show(
+    WidgetTester tester,
+    Widget child, {
+    bool paired = true,
+  }) async {
     tester.view.physicalSize = const Size(390, 1600);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
@@ -59,6 +64,10 @@ void main() {
       ProviderScope(
         overrides: [
           databaseProvider.overrideWithValue(db),
+          polarH10PairedProvider.overrideWith(
+            (ref) async =>
+                paired ? const H10Device('h10', 'Polar H10', 0) : null,
+          ),
           selectedDateProvider.overrideWith((ref) => DateTime(2026, 10, 24)),
           metricHistoryProvider.overrideWith(
             (ref, metric) async => [
@@ -169,6 +178,24 @@ void main() {
     expect(find.text('No HRV readings in this period'), findsOneWidget);
     expect(find.byType(LineChart), findsNothing);
     expect(find.text('Measure with Polar H10'), findsOneWidget);
+    await close(tester);
+  });
+
+  testWidgets('without a paired Polar H10 there is no measure button', (
+    tester,
+  ) async {
+    await spot('resting', 2, 50);
+    await show(
+      tester,
+      HrvCombinedCard(
+        start: start,
+        end: start.add(const Duration(days: 14)),
+        sleepPoints: const [],
+      ),
+      paired: false,
+    );
+    expect(find.text('Resting'), findsOneWidget);
+    expect(find.text('Measure with Polar H10'), findsNothing);
     await close(tester);
   });
 

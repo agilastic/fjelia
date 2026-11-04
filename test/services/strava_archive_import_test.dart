@@ -111,6 +111,9 @@ void main() {
       expect(walk.avgHeartRate, 140);
       expect(walk.metricsJson, contains('"hr"'));
       expect(walk.gpxJson, isNotNull);
+      expect(walk.description, 'zwei\nZeilen');
+      expect(walk.calories, 136);
+      expect(walk.maxSpeedMps, 3.85);
       expect(
         await media.list(const MediaOwner.activity('strava_111')),
         hasLength(2),
@@ -124,8 +127,14 @@ void main() {
       // Deleted stays deleted.
       expect(await db.getActivityById('strava_333'), isNull);
 
+      // An earlier import without calories gets them; nothing else changes.
+      await (db.update(db.activityRecords)
+            ..where((t) => t.activityId.equals('strava_111')))
+          .write(const ActivityRecordsCompanion(calories: Value(null)));
+
       // Safe to run again: nothing new, no photo twice.
       final again = await importer.run(a);
+      expect((await db.getActivityById('strava_111'))!.calories, 136);
       expect(again.imported, 0);
       expect(again.photos, 0);
       expect(await db.select(db.mediaItems).get(), hasLength(3));

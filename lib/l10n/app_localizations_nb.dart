@@ -7108,4 +7108,28 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get noOlderActivities => 'Ingen eldre aktiviteter';
+
+  @override
+  String get maxSpeed => 'Maks. fart';
+
+  @override
+  String get caloriesLabel => 'Kalorier';
+
+  @override
+  String get activityDescription => 'Beskrivelse';
+
+  @override
+  String get nightCurves => 'Nattkurver';
+
+  @override
+  String get noPhaseTimeline =>
+      'Denne klokken viser ikke når hver søvnfase var, bare summene over. Dette er HRV og stress den målte gjennom natten.';
+
+  @override
+  String get stagesEstimated =>
+      'Anslått av Fjelia ut fra HRV og stress som COROS-klokken målte i natt. Summene for fasene er COROS’ egne; når hver fase var, er en tilnærming.';
+
+  @override
+  String get nightCurvesBasis =>
+      'HRV og stress målt gjennom natten. Faseanslaget over er laget ut fra dem.';
 }

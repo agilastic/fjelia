@@ -2907,6 +2907,17 @@ class $SleepRecordsTable extends SleepRecords
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _nightCurvesJsonMeta = const VerificationMeta(
+    'nightCurvesJson',
+  );
+  @override
+  late final GeneratedColumn<String> nightCurvesJson = GeneratedColumn<String>(
+    'night_curves_json',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _avgOvernightHrvMeta = const VerificationMeta(
     'avgOvernightHrv',
   );
@@ -2951,6 +2962,7 @@ class $SleepRecordsTable extends SleepRecords
     sleepStart,
     sleepEnd,
     phasesJson,
+    nightCurvesJson,
     avgOvernightHrv,
     sleepNeedSeconds,
     source,
@@ -3057,6 +3069,15 @@ class $SleepRecordsTable extends SleepRecords
         phasesJson.isAcceptableOrUnknown(data['phases_json']!, _phasesJsonMeta),
       );
     }
+    if (data.containsKey('night_curves_json')) {
+      context.handle(
+        _nightCurvesJsonMeta,
+        nightCurvesJson.isAcceptableOrUnknown(
+          data['night_curves_json']!,
+          _nightCurvesJsonMeta,
+        ),
+      );
+    }
     if (data.containsKey('avg_overnight_hrv')) {
       context.handle(
         _avgOvernightHrvMeta,
@@ -3134,6 +3155,10 @@ class $SleepRecordsTable extends SleepRecords
         DriftSqlType.string,
         data['${effectivePrefix}phases_json'],
       ),
+      nightCurvesJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}night_curves_json'],
+      ),
       avgOvernightHrv: attachedDatabase.typeMapping.read(
         DriftSqlType.double,
         data['${effectivePrefix}avg_overnight_hrv'],
@@ -3167,6 +3192,10 @@ class SleepRecord extends DataClass implements Insertable<SleepRecord> {
   final DateTime? sleepStart;
   final DateTime? sleepEnd;
   final String? phasesJson;
+
+  /// Curves over the night where the watch has no phase timeline (COROS):
+  /// `{"hrv": [[epochMs, ms], …], "stress": [[epochMs, value], …]}`.
+  final String? nightCurvesJson;
   final double? avgOvernightHrv;
   final int? sleepNeedSeconds;
   final String? source;
@@ -3182,6 +3211,7 @@ class SleepRecord extends DataClass implements Insertable<SleepRecord> {
     this.sleepStart,
     this.sleepEnd,
     this.phasesJson,
+    this.nightCurvesJson,
     this.avgOvernightHrv,
     this.sleepNeedSeconds,
     this.source,
@@ -3207,6 +3237,9 @@ class SleepRecord extends DataClass implements Insertable<SleepRecord> {
     }
     if (!nullToAbsent || phasesJson != null) {
       map['phases_json'] = Variable<String>(phasesJson);
+    }
+    if (!nullToAbsent || nightCurvesJson != null) {
+      map['night_curves_json'] = Variable<String>(nightCurvesJson);
     }
     if (!nullToAbsent || avgOvernightHrv != null) {
       map['avg_overnight_hrv'] = Variable<double>(avgOvernightHrv);
@@ -3241,6 +3274,9 @@ class SleepRecord extends DataClass implements Insertable<SleepRecord> {
       phasesJson: phasesJson == null && nullToAbsent
           ? const Value.absent()
           : Value(phasesJson),
+      nightCurvesJson: nightCurvesJson == null && nullToAbsent
+          ? const Value.absent()
+          : Value(nightCurvesJson),
       avgOvernightHrv: avgOvernightHrv == null && nullToAbsent
           ? const Value.absent()
           : Value(avgOvernightHrv),
@@ -3270,6 +3306,7 @@ class SleepRecord extends DataClass implements Insertable<SleepRecord> {
       sleepStart: serializer.fromJson<DateTime?>(json['sleepStart']),
       sleepEnd: serializer.fromJson<DateTime?>(json['sleepEnd']),
       phasesJson: serializer.fromJson<String?>(json['phasesJson']),
+      nightCurvesJson: serializer.fromJson<String?>(json['nightCurvesJson']),
       avgOvernightHrv: serializer.fromJson<double?>(json['avgOvernightHrv']),
       sleepNeedSeconds: serializer.fromJson<int?>(json['sleepNeedSeconds']),
       source: serializer.fromJson<String?>(json['source']),
@@ -3290,6 +3327,7 @@ class SleepRecord extends DataClass implements Insertable<SleepRecord> {
       'sleepStart': serializer.toJson<DateTime?>(sleepStart),
       'sleepEnd': serializer.toJson<DateTime?>(sleepEnd),
       'phasesJson': serializer.toJson<String?>(phasesJson),
+      'nightCurvesJson': serializer.toJson<String?>(nightCurvesJson),
       'avgOvernightHrv': serializer.toJson<double?>(avgOvernightHrv),
       'sleepNeedSeconds': serializer.toJson<int?>(sleepNeedSeconds),
       'source': serializer.toJson<String?>(source),
@@ -3308,6 +3346,7 @@ class SleepRecord extends DataClass implements Insertable<SleepRecord> {
     Value<DateTime?> sleepStart = const Value.absent(),
     Value<DateTime?> sleepEnd = const Value.absent(),
     Value<String?> phasesJson = const Value.absent(),
+    Value<String?> nightCurvesJson = const Value.absent(),
     Value<double?> avgOvernightHrv = const Value.absent(),
     Value<int?> sleepNeedSeconds = const Value.absent(),
     Value<String?> source = const Value.absent(),
@@ -3323,6 +3362,9 @@ class SleepRecord extends DataClass implements Insertable<SleepRecord> {
     sleepStart: sleepStart.present ? sleepStart.value : this.sleepStart,
     sleepEnd: sleepEnd.present ? sleepEnd.value : this.sleepEnd,
     phasesJson: phasesJson.present ? phasesJson.value : this.phasesJson,
+    nightCurvesJson: nightCurvesJson.present
+        ? nightCurvesJson.value
+        : this.nightCurvesJson,
     avgOvernightHrv: avgOvernightHrv.present
         ? avgOvernightHrv.value
         : this.avgOvernightHrv,
@@ -3360,6 +3402,9 @@ class SleepRecord extends DataClass implements Insertable<SleepRecord> {
       phasesJson: data.phasesJson.present
           ? data.phasesJson.value
           : this.phasesJson,
+      nightCurvesJson: data.nightCurvesJson.present
+          ? data.nightCurvesJson.value
+          : this.nightCurvesJson,
       avgOvernightHrv: data.avgOvernightHrv.present
           ? data.avgOvernightHrv.value
           : this.avgOvernightHrv,
@@ -3384,6 +3429,7 @@ class SleepRecord extends DataClass implements Insertable<SleepRecord> {
           ..write('sleepStart: $sleepStart, ')
           ..write('sleepEnd: $sleepEnd, ')
           ..write('phasesJson: $phasesJson, ')
+          ..write('nightCurvesJson: $nightCurvesJson, ')
           ..write('avgOvernightHrv: $avgOvernightHrv, ')
           ..write('sleepNeedSeconds: $sleepNeedSeconds, ')
           ..write('source: $source')
@@ -3404,6 +3450,7 @@ class SleepRecord extends DataClass implements Insertable<SleepRecord> {
     sleepStart,
     sleepEnd,
     phasesJson,
+    nightCurvesJson,
     avgOvernightHrv,
     sleepNeedSeconds,
     source,
@@ -3423,6 +3470,7 @@ class SleepRecord extends DataClass implements Insertable<SleepRecord> {
           other.sleepStart == this.sleepStart &&
           other.sleepEnd == this.sleepEnd &&
           other.phasesJson == this.phasesJson &&
+          other.nightCurvesJson == this.nightCurvesJson &&
           other.avgOvernightHrv == this.avgOvernightHrv &&
           other.sleepNeedSeconds == this.sleepNeedSeconds &&
           other.source == this.source);
@@ -3440,6 +3488,7 @@ class SleepRecordsCompanion extends UpdateCompanion<SleepRecord> {
   final Value<DateTime?> sleepStart;
   final Value<DateTime?> sleepEnd;
   final Value<String?> phasesJson;
+  final Value<String?> nightCurvesJson;
   final Value<double?> avgOvernightHrv;
   final Value<int?> sleepNeedSeconds;
   final Value<String?> source;
@@ -3455,6 +3504,7 @@ class SleepRecordsCompanion extends UpdateCompanion<SleepRecord> {
     this.sleepStart = const Value.absent(),
     this.sleepEnd = const Value.absent(),
     this.phasesJson = const Value.absent(),
+    this.nightCurvesJson = const Value.absent(),
     this.avgOvernightHrv = const Value.absent(),
     this.sleepNeedSeconds = const Value.absent(),
     this.source = const Value.absent(),
@@ -3471,6 +3521,7 @@ class SleepRecordsCompanion extends UpdateCompanion<SleepRecord> {
     this.sleepStart = const Value.absent(),
     this.sleepEnd = const Value.absent(),
     this.phasesJson = const Value.absent(),
+    this.nightCurvesJson = const Value.absent(),
     this.avgOvernightHrv = const Value.absent(),
     this.sleepNeedSeconds = const Value.absent(),
     this.source = const Value.absent(),
@@ -3492,6 +3543,7 @@ class SleepRecordsCompanion extends UpdateCompanion<SleepRecord> {
     Expression<DateTime>? sleepStart,
     Expression<DateTime>? sleepEnd,
     Expression<String>? phasesJson,
+    Expression<String>? nightCurvesJson,
     Expression<double>? avgOvernightHrv,
     Expression<int>? sleepNeedSeconds,
     Expression<String>? source,
@@ -3508,6 +3560,7 @@ class SleepRecordsCompanion extends UpdateCompanion<SleepRecord> {
       if (sleepStart != null) 'sleep_start': sleepStart,
       if (sleepEnd != null) 'sleep_end': sleepEnd,
       if (phasesJson != null) 'phases_json': phasesJson,
+      if (nightCurvesJson != null) 'night_curves_json': nightCurvesJson,
       if (avgOvernightHrv != null) 'avg_overnight_hrv': avgOvernightHrv,
       if (sleepNeedSeconds != null) 'sleep_need_seconds': sleepNeedSeconds,
       if (source != null) 'source': source,
@@ -3526,6 +3579,7 @@ class SleepRecordsCompanion extends UpdateCompanion<SleepRecord> {
     Value<DateTime?>? sleepStart,
     Value<DateTime?>? sleepEnd,
     Value<String?>? phasesJson,
+    Value<String?>? nightCurvesJson,
     Value<double?>? avgOvernightHrv,
     Value<int?>? sleepNeedSeconds,
     Value<String?>? source,
@@ -3542,6 +3596,7 @@ class SleepRecordsCompanion extends UpdateCompanion<SleepRecord> {
       sleepStart: sleepStart ?? this.sleepStart,
       sleepEnd: sleepEnd ?? this.sleepEnd,
       phasesJson: phasesJson ?? this.phasesJson,
+      nightCurvesJson: nightCurvesJson ?? this.nightCurvesJson,
       avgOvernightHrv: avgOvernightHrv ?? this.avgOvernightHrv,
       sleepNeedSeconds: sleepNeedSeconds ?? this.sleepNeedSeconds,
       source: source ?? this.source,
@@ -3584,6 +3639,9 @@ class SleepRecordsCompanion extends UpdateCompanion<SleepRecord> {
     if (phasesJson.present) {
       map['phases_json'] = Variable<String>(phasesJson.value);
     }
+    if (nightCurvesJson.present) {
+      map['night_curves_json'] = Variable<String>(nightCurvesJson.value);
+    }
     if (avgOvernightHrv.present) {
       map['avg_overnight_hrv'] = Variable<double>(avgOvernightHrv.value);
     }
@@ -3610,6 +3668,7 @@ class SleepRecordsCompanion extends UpdateCompanion<SleepRecord> {
           ..write('sleepStart: $sleepStart, ')
           ..write('sleepEnd: $sleepEnd, ')
           ..write('phasesJson: $phasesJson, ')
+          ..write('nightCurvesJson: $nightCurvesJson, ')
           ..write('avgOvernightHrv: $avgOvernightHrv, ')
           ..write('sleepNeedSeconds: $sleepNeedSeconds, ')
           ..write('source: $source')
@@ -6158,6 +6217,39 @@ class $ActivityRecordsTable extends ActivityRecords
     type: DriftSqlType.int,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _descriptionMeta = const VerificationMeta(
+    'description',
+  );
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+    'description',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _caloriesMeta = const VerificationMeta(
+    'calories',
+  );
+  @override
+  late final GeneratedColumn<double> calories = GeneratedColumn<double>(
+    'calories',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _maxSpeedMpsMeta = const VerificationMeta(
+    'maxSpeedMps',
+  );
+  @override
+  late final GeneratedColumn<double> maxSpeedMps = GeneratedColumn<double>(
+    'max_speed_mps',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -6187,6 +6279,9 @@ class $ActivityRecordsTable extends ActivityRecords
     avgRunCadence,
     vo2maxActivity,
     movingDurationSeconds,
+    description,
+    calories,
+    maxSpeedMps,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -6426,6 +6521,30 @@ class $ActivityRecordsTable extends ActivityRecords
         ),
       );
     }
+    if (data.containsKey('description')) {
+      context.handle(
+        _descriptionMeta,
+        description.isAcceptableOrUnknown(
+          data['description']!,
+          _descriptionMeta,
+        ),
+      );
+    }
+    if (data.containsKey('calories')) {
+      context.handle(
+        _caloriesMeta,
+        calories.isAcceptableOrUnknown(data['calories']!, _caloriesMeta),
+      );
+    }
+    if (data.containsKey('max_speed_mps')) {
+      context.handle(
+        _maxSpeedMpsMeta,
+        maxSpeedMps.isAcceptableOrUnknown(
+          data['max_speed_mps']!,
+          _maxSpeedMpsMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -6543,6 +6662,18 @@ class $ActivityRecordsTable extends ActivityRecords
         DriftSqlType.int,
         data['${effectivePrefix}moving_duration_seconds'],
       ),
+      description: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}description'],
+      ),
+      calories: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}calories'],
+      ),
+      maxSpeedMps: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}max_speed_mps'],
+      ),
     );
   }
 
@@ -6580,6 +6711,12 @@ class ActivityRecord extends DataClass implements Insertable<ActivityRecord> {
   final double? avgRunCadence;
   final double? vo2maxActivity;
   final int? movingDurationSeconds;
+
+  /// What the athlete wrote about it on the platform (Strava). Never sent
+  /// to the coach, like any free text.
+  final String? description;
+  final double? calories;
+  final double? maxSpeedMps;
   const ActivityRecord({
     required this.id,
     required this.activityId,
@@ -6608,6 +6745,9 @@ class ActivityRecord extends DataClass implements Insertable<ActivityRecord> {
     this.avgRunCadence,
     this.vo2maxActivity,
     this.movingDurationSeconds,
+    this.description,
+    this.calories,
+    this.maxSpeedMps,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -6685,6 +6825,15 @@ class ActivityRecord extends DataClass implements Insertable<ActivityRecord> {
     if (!nullToAbsent || movingDurationSeconds != null) {
       map['moving_duration_seconds'] = Variable<int>(movingDurationSeconds);
     }
+    if (!nullToAbsent || description != null) {
+      map['description'] = Variable<String>(description);
+    }
+    if (!nullToAbsent || calories != null) {
+      map['calories'] = Variable<double>(calories);
+    }
+    if (!nullToAbsent || maxSpeedMps != null) {
+      map['max_speed_mps'] = Variable<double>(maxSpeedMps);
+    }
     return map;
   }
 
@@ -6759,6 +6908,15 @@ class ActivityRecord extends DataClass implements Insertable<ActivityRecord> {
       movingDurationSeconds: movingDurationSeconds == null && nullToAbsent
           ? const Value.absent()
           : Value(movingDurationSeconds),
+      description: description == null && nullToAbsent
+          ? const Value.absent()
+          : Value(description),
+      calories: calories == null && nullToAbsent
+          ? const Value.absent()
+          : Value(calories),
+      maxSpeedMps: maxSpeedMps == null && nullToAbsent
+          ? const Value.absent()
+          : Value(maxSpeedMps),
     );
   }
 
@@ -6811,6 +6969,9 @@ class ActivityRecord extends DataClass implements Insertable<ActivityRecord> {
       movingDurationSeconds: serializer.fromJson<int?>(
         json['movingDurationSeconds'],
       ),
+      description: serializer.fromJson<String?>(json['description']),
+      calories: serializer.fromJson<double?>(json['calories']),
+      maxSpeedMps: serializer.fromJson<double?>(json['maxSpeedMps']),
     );
   }
   @override
@@ -6852,6 +7013,9 @@ class ActivityRecord extends DataClass implements Insertable<ActivityRecord> {
       'avgRunCadence': serializer.toJson<double?>(avgRunCadence),
       'vo2maxActivity': serializer.toJson<double?>(vo2maxActivity),
       'movingDurationSeconds': serializer.toJson<int?>(movingDurationSeconds),
+      'description': serializer.toJson<String?>(description),
+      'calories': serializer.toJson<double?>(calories),
+      'maxSpeedMps': serializer.toJson<double?>(maxSpeedMps),
     };
   }
 
@@ -6883,6 +7047,9 @@ class ActivityRecord extends DataClass implements Insertable<ActivityRecord> {
     Value<double?> avgRunCadence = const Value.absent(),
     Value<double?> vo2maxActivity = const Value.absent(),
     Value<int?> movingDurationSeconds = const Value.absent(),
+    Value<String?> description = const Value.absent(),
+    Value<double?> calories = const Value.absent(),
+    Value<double?> maxSpeedMps = const Value.absent(),
   }) => ActivityRecord(
     id: id ?? this.id,
     activityId: activityId ?? this.activityId,
@@ -6937,6 +7104,9 @@ class ActivityRecord extends DataClass implements Insertable<ActivityRecord> {
     movingDurationSeconds: movingDurationSeconds.present
         ? movingDurationSeconds.value
         : this.movingDurationSeconds,
+    description: description.present ? description.value : this.description,
+    calories: calories.present ? calories.value : this.calories,
+    maxSpeedMps: maxSpeedMps.present ? maxSpeedMps.value : this.maxSpeedMps,
   );
   ActivityRecord copyWithCompanion(ActivityRecordsCompanion data) {
     return ActivityRecord(
@@ -7007,6 +7177,13 @@ class ActivityRecord extends DataClass implements Insertable<ActivityRecord> {
       movingDurationSeconds: data.movingDurationSeconds.present
           ? data.movingDurationSeconds.value
           : this.movingDurationSeconds,
+      description: data.description.present
+          ? data.description.value
+          : this.description,
+      calories: data.calories.present ? data.calories.value : this.calories,
+      maxSpeedMps: data.maxSpeedMps.present
+          ? data.maxSpeedMps.value
+          : this.maxSpeedMps,
     );
   }
 
@@ -7039,7 +7216,10 @@ class ActivityRecord extends DataClass implements Insertable<ActivityRecord> {
           ..write('activityFeedbackPhrase: $activityFeedbackPhrase, ')
           ..write('avgRunCadence: $avgRunCadence, ')
           ..write('vo2maxActivity: $vo2maxActivity, ')
-          ..write('movingDurationSeconds: $movingDurationSeconds')
+          ..write('movingDurationSeconds: $movingDurationSeconds, ')
+          ..write('description: $description, ')
+          ..write('calories: $calories, ')
+          ..write('maxSpeedMps: $maxSpeedMps')
           ..write(')'))
         .toString();
   }
@@ -7073,6 +7253,9 @@ class ActivityRecord extends DataClass implements Insertable<ActivityRecord> {
     avgRunCadence,
     vo2maxActivity,
     movingDurationSeconds,
+    description,
+    calories,
+    maxSpeedMps,
   ]);
   @override
   bool operator ==(Object other) =>
@@ -7104,7 +7287,10 @@ class ActivityRecord extends DataClass implements Insertable<ActivityRecord> {
           other.activityFeedbackPhrase == this.activityFeedbackPhrase &&
           other.avgRunCadence == this.avgRunCadence &&
           other.vo2maxActivity == this.vo2maxActivity &&
-          other.movingDurationSeconds == this.movingDurationSeconds);
+          other.movingDurationSeconds == this.movingDurationSeconds &&
+          other.description == this.description &&
+          other.calories == this.calories &&
+          other.maxSpeedMps == this.maxSpeedMps);
 }
 
 class ActivityRecordsCompanion extends UpdateCompanion<ActivityRecord> {
@@ -7135,6 +7321,9 @@ class ActivityRecordsCompanion extends UpdateCompanion<ActivityRecord> {
   final Value<double?> avgRunCadence;
   final Value<double?> vo2maxActivity;
   final Value<int?> movingDurationSeconds;
+  final Value<String?> description;
+  final Value<double?> calories;
+  final Value<double?> maxSpeedMps;
   const ActivityRecordsCompanion({
     this.id = const Value.absent(),
     this.activityId = const Value.absent(),
@@ -7163,6 +7352,9 @@ class ActivityRecordsCompanion extends UpdateCompanion<ActivityRecord> {
     this.avgRunCadence = const Value.absent(),
     this.vo2maxActivity = const Value.absent(),
     this.movingDurationSeconds = const Value.absent(),
+    this.description = const Value.absent(),
+    this.calories = const Value.absent(),
+    this.maxSpeedMps = const Value.absent(),
   });
   ActivityRecordsCompanion.insert({
     this.id = const Value.absent(),
@@ -7192,6 +7384,9 @@ class ActivityRecordsCompanion extends UpdateCompanion<ActivityRecord> {
     this.avgRunCadence = const Value.absent(),
     this.vo2maxActivity = const Value.absent(),
     this.movingDurationSeconds = const Value.absent(),
+    this.description = const Value.absent(),
+    this.calories = const Value.absent(),
+    this.maxSpeedMps = const Value.absent(),
   }) : activityId = Value(activityId),
        name = Value(name),
        type = Value(type),
@@ -7225,6 +7420,9 @@ class ActivityRecordsCompanion extends UpdateCompanion<ActivityRecord> {
     Expression<double>? avgRunCadence,
     Expression<double>? vo2maxActivity,
     Expression<int>? movingDurationSeconds,
+    Expression<String>? description,
+    Expression<double>? calories,
+    Expression<double>? maxSpeedMps,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -7262,6 +7460,9 @@ class ActivityRecordsCompanion extends UpdateCompanion<ActivityRecord> {
       if (vo2maxActivity != null) 'vo2max_activity': vo2maxActivity,
       if (movingDurationSeconds != null)
         'moving_duration_seconds': movingDurationSeconds,
+      if (description != null) 'description': description,
+      if (calories != null) 'calories': calories,
+      if (maxSpeedMps != null) 'max_speed_mps': maxSpeedMps,
     });
   }
 
@@ -7293,6 +7494,9 @@ class ActivityRecordsCompanion extends UpdateCompanion<ActivityRecord> {
     Value<double?>? avgRunCadence,
     Value<double?>? vo2maxActivity,
     Value<int?>? movingDurationSeconds,
+    Value<String?>? description,
+    Value<double?>? calories,
+    Value<double?>? maxSpeedMps,
   }) {
     return ActivityRecordsCompanion(
       id: id ?? this.id,
@@ -7328,6 +7532,9 @@ class ActivityRecordsCompanion extends UpdateCompanion<ActivityRecord> {
       vo2maxActivity: vo2maxActivity ?? this.vo2maxActivity,
       movingDurationSeconds:
           movingDurationSeconds ?? this.movingDurationSeconds,
+      description: description ?? this.description,
+      calories: calories ?? this.calories,
+      maxSpeedMps: maxSpeedMps ?? this.maxSpeedMps,
     );
   }
 
@@ -7427,6 +7634,15 @@ class ActivityRecordsCompanion extends UpdateCompanion<ActivityRecord> {
         movingDurationSeconds.value,
       );
     }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (calories.present) {
+      map['calories'] = Variable<double>(calories.value);
+    }
+    if (maxSpeedMps.present) {
+      map['max_speed_mps'] = Variable<double>(maxSpeedMps.value);
+    }
     return map;
   }
 
@@ -7459,7 +7675,10 @@ class ActivityRecordsCompanion extends UpdateCompanion<ActivityRecord> {
           ..write('activityFeedbackPhrase: $activityFeedbackPhrase, ')
           ..write('avgRunCadence: $avgRunCadence, ')
           ..write('vo2maxActivity: $vo2maxActivity, ')
-          ..write('movingDurationSeconds: $movingDurationSeconds')
+          ..write('movingDurationSeconds: $movingDurationSeconds, ')
+          ..write('description: $description, ')
+          ..write('calories: $calories, ')
+          ..write('maxSpeedMps: $maxSpeedMps')
           ..write(')'))
         .toString();
   }
@@ -47384,6 +47603,7 @@ typedef $$SleepRecordsTableCreateCompanionBuilder =
       Value<DateTime?> sleepStart,
       Value<DateTime?> sleepEnd,
       Value<String?> phasesJson,
+      Value<String?> nightCurvesJson,
       Value<double?> avgOvernightHrv,
       Value<int?> sleepNeedSeconds,
       Value<String?> source,
@@ -47401,6 +47621,7 @@ typedef $$SleepRecordsTableUpdateCompanionBuilder =
       Value<DateTime?> sleepStart,
       Value<DateTime?> sleepEnd,
       Value<String?> phasesJson,
+      Value<String?> nightCurvesJson,
       Value<double?> avgOvernightHrv,
       Value<int?> sleepNeedSeconds,
       Value<String?> source,
@@ -47467,6 +47688,11 @@ class $$SleepRecordsTableFilterComposer
 
   ColumnFilters<String> get phasesJson => $composableBuilder(
     column: $table.phasesJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get nightCurvesJson => $composableBuilder(
+    column: $table.nightCurvesJson,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -47550,6 +47776,11 @@ class $$SleepRecordsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get nightCurvesJson => $composableBuilder(
+    column: $table.nightCurvesJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<double> get avgOvernightHrv => $composableBuilder(
     column: $table.avgOvernightHrv,
     builder: (column) => ColumnOrderings(column),
@@ -47624,6 +47855,11 @@ class $$SleepRecordsTableAnnotationComposer
     builder: (column) => column,
   );
 
+  GeneratedColumn<String> get nightCurvesJson => $composableBuilder(
+    column: $table.nightCurvesJson,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<double> get avgOvernightHrv => $composableBuilder(
     column: $table.avgOvernightHrv,
     builder: (column) => column,
@@ -47680,6 +47916,7 @@ class $$SleepRecordsTableTableManager
                 Value<DateTime?> sleepStart = const Value.absent(),
                 Value<DateTime?> sleepEnd = const Value.absent(),
                 Value<String?> phasesJson = const Value.absent(),
+                Value<String?> nightCurvesJson = const Value.absent(),
                 Value<double?> avgOvernightHrv = const Value.absent(),
                 Value<int?> sleepNeedSeconds = const Value.absent(),
                 Value<String?> source = const Value.absent(),
@@ -47695,6 +47932,7 @@ class $$SleepRecordsTableTableManager
                 sleepStart: sleepStart,
                 sleepEnd: sleepEnd,
                 phasesJson: phasesJson,
+                nightCurvesJson: nightCurvesJson,
                 avgOvernightHrv: avgOvernightHrv,
                 sleepNeedSeconds: sleepNeedSeconds,
                 source: source,
@@ -47712,6 +47950,7 @@ class $$SleepRecordsTableTableManager
                 Value<DateTime?> sleepStart = const Value.absent(),
                 Value<DateTime?> sleepEnd = const Value.absent(),
                 Value<String?> phasesJson = const Value.absent(),
+                Value<String?> nightCurvesJson = const Value.absent(),
                 Value<double?> avgOvernightHrv = const Value.absent(),
                 Value<int?> sleepNeedSeconds = const Value.absent(),
                 Value<String?> source = const Value.absent(),
@@ -47727,6 +47966,7 @@ class $$SleepRecordsTableTableManager
                 sleepStart: sleepStart,
                 sleepEnd: sleepEnd,
                 phasesJson: phasesJson,
+                nightCurvesJson: nightCurvesJson,
                 avgOvernightHrv: avgOvernightHrv,
                 sleepNeedSeconds: sleepNeedSeconds,
                 source: source,
@@ -48795,6 +49035,9 @@ typedef $$ActivityRecordsTableCreateCompanionBuilder =
       Value<double?> avgRunCadence,
       Value<double?> vo2maxActivity,
       Value<int?> movingDurationSeconds,
+      Value<String?> description,
+      Value<double?> calories,
+      Value<double?> maxSpeedMps,
     });
 typedef $$ActivityRecordsTableUpdateCompanionBuilder =
     ActivityRecordsCompanion Function({
@@ -48825,6 +49068,9 @@ typedef $$ActivityRecordsTableUpdateCompanionBuilder =
       Value<double?> avgRunCadence,
       Value<double?> vo2maxActivity,
       Value<int?> movingDurationSeconds,
+      Value<String?> description,
+      Value<double?> calories,
+      Value<double?> maxSpeedMps,
     });
 
 class $$ActivityRecordsTableFilterComposer
@@ -48968,6 +49214,21 @@ class $$ActivityRecordsTableFilterComposer
 
   ColumnFilters<int> get movingDurationSeconds => $composableBuilder(
     column: $table.movingDurationSeconds,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get calories => $composableBuilder(
+    column: $table.calories,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get maxSpeedMps => $composableBuilder(
+    column: $table.maxSpeedMps,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -49115,6 +49376,21 @@ class $$ActivityRecordsTableOrderingComposer
     column: $table.movingDurationSeconds,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get calories => $composableBuilder(
+    column: $table.calories,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get maxSpeedMps => $composableBuilder(
+    column: $table.maxSpeedMps,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$ActivityRecordsTableAnnotationComposer
@@ -49246,6 +49522,19 @@ class $$ActivityRecordsTableAnnotationComposer
     column: $table.movingDurationSeconds,
     builder: (column) => column,
   );
+
+  GeneratedColumn<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get calories =>
+      $composableBuilder(column: $table.calories, builder: (column) => column);
+
+  GeneratedColumn<double> get maxSpeedMps => $composableBuilder(
+    column: $table.maxSpeedMps,
+    builder: (column) => column,
+  );
 }
 
 class $$ActivityRecordsTableTableManager
@@ -49312,6 +49601,9 @@ class $$ActivityRecordsTableTableManager
                 Value<double?> avgRunCadence = const Value.absent(),
                 Value<double?> vo2maxActivity = const Value.absent(),
                 Value<int?> movingDurationSeconds = const Value.absent(),
+                Value<String?> description = const Value.absent(),
+                Value<double?> calories = const Value.absent(),
+                Value<double?> maxSpeedMps = const Value.absent(),
               }) => ActivityRecordsCompanion(
                 id: id,
                 activityId: activityId,
@@ -49340,6 +49632,9 @@ class $$ActivityRecordsTableTableManager
                 avgRunCadence: avgRunCadence,
                 vo2maxActivity: vo2maxActivity,
                 movingDurationSeconds: movingDurationSeconds,
+                description: description,
+                calories: calories,
+                maxSpeedMps: maxSpeedMps,
               ),
           createCompanionCallback:
               ({
@@ -49370,6 +49665,9 @@ class $$ActivityRecordsTableTableManager
                 Value<double?> avgRunCadence = const Value.absent(),
                 Value<double?> vo2maxActivity = const Value.absent(),
                 Value<int?> movingDurationSeconds = const Value.absent(),
+                Value<String?> description = const Value.absent(),
+                Value<double?> calories = const Value.absent(),
+                Value<double?> maxSpeedMps = const Value.absent(),
               }) => ActivityRecordsCompanion.insert(
                 id: id,
                 activityId: activityId,
@@ -49398,6 +49696,9 @@ class $$ActivityRecordsTableTableManager
                 avgRunCadence: avgRunCadence,
                 vo2maxActivity: vo2maxActivity,
                 movingDurationSeconds: movingDurationSeconds,
+                description: description,
+                calories: calories,
+                maxSpeedMps: maxSpeedMps,
               ),
           withReferenceMapper: (p0) => p0
               .map(

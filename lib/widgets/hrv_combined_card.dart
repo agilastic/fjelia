@@ -201,20 +201,23 @@ class _State extends ConsumerState<HrvCombinedCard> {
             to: widget.end,
           ),
         ],
-        const SizedBox(height: 14),
-        SizedBox(
-          width: double.infinity,
-          child: FilledButton.tonalIcon(
-            style: FilledButton.styleFrom(
-              backgroundColor: const Color(0x2200D4A0),
-              foregroundColor: mint,
-              padding: const EdgeInsets.symmetric(vertical: 14),
+        // Measuring needs a paired strap (Settings → Connections).
+        if (ref.watch(polarH10PairedProvider).valueOrNull != null) ...[
+          const SizedBox(height: 14),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton.tonalIcon(
+              style: FilledButton.styleFrom(
+                backgroundColor: const Color(0x2200D4A0),
+                foregroundColor: mint,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+              ),
+              onPressed: () => showAppSheet(context, const PolarH10HrvSheet()),
+              icon: const Icon(Icons.monitor_heart_outlined, size: 18),
+              label: Text(context.l10n.measureWithPolarH10),
             ),
-            onPressed: () => showAppSheet(context, const PolarH10HrvSheet()),
-            icon: const Icon(Icons.monitor_heart_outlined, size: 18),
-            label: Text(context.l10n.measureWithPolarH10),
           ),
-        ),
+        ],
         const SizedBox(height: 10),
         Text(
           context.l10n.overnightHrvComesFromYour,

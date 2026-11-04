@@ -3586,5 +3586,12 @@
   "originalTitle": "Originale: {name}",
   "useOriginalTitle": "Usa il titolo originale",
   "loadOlderActivities": "Carica attività meno recenti",
-  "noOlderActivities": "Nessuna attività meno recente"
+  "noOlderActivities": "Nessuna attività meno recente",
+  "maxSpeed": "Velocità max",
+  "caloriesLabel": "Calorie",
+  "activityDescription": "Descrizione",
+  "nightCurves": "Andamento notturno",
+  "noPhaseTimeline": "Questo orologio non indica quando si è verificata ogni fase del sonno, solo i totali sopra. Ecco HRV e stress misurati durante la notte.",
+  "stagesEstimated": "Stimato da Fjelia dall’HRV e dallo stress misurati di notte dal tuo orologio COROS. I totali delle fasi sono quelli di COROS; il momento di ogni fase è un’approssimazione.",
+  "nightCurvesBasis": "HRV e stress misurati durante la notte. La stima delle fasi qui sopra si basa su di essi."
 }

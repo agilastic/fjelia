@@ -103,6 +103,13 @@ class ActivityDetailSheet extends ConsumerWidget {
         (context.l10n.trainingLoad2, valueText(activityLoad(activity), 1)),
         if (a.avgPower != null)
           (context.l10n.avgPower, '${valueText(a.avgPower)} W'),
+        if (activity.maxSpeedMps != null)
+          (
+            context.l10n.maxSpeed,
+            '${valueText(activity.maxSpeedMps! * 3.6, 1)} km/h',
+          ),
+        if (activity.calories != null)
+          (context.l10n.caloriesLabel, '${valueText(activity.calories)} kcal'),
         (context.l10n.elevation2, '${valueText(a.elevationGain)} m'),
         if (a.samples.any((s) => s.elevation != null))
           (
@@ -344,6 +351,14 @@ class ActivityDetailSheet extends ConsumerWidget {
               card: CoachContextCard.completed(a),
             ),
           ),
+          if (activity.description?.trim().isNotEmpty ?? false)
+            SectionCard(
+              title: context.l10n.activityDescription,
+              child: SelectableText(
+                activity.description!.trim(),
+                style: const TextStyle(height: 1.4),
+              ),
+            ),
           if (a.activityFeedbackPhrase != null)
             SectionCard(
               title: context.l10n.feedback,

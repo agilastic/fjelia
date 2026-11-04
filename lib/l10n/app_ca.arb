@@ -3586,5 +3586,12 @@
   "originalTitle": "Original: {name}",
   "useOriginalTitle": "Fes servir el títol original",
   "loadOlderActivities": "Carrega activitats anteriors",
-  "noOlderActivities": "No hi ha activitats anteriors"
+  "noOlderActivities": "No hi ha activitats anteriors",
+  "maxSpeed": "Velocitat màx.",
+  "caloriesLabel": "Calories",
+  "activityDescription": "Descripció",
+  "nightCurves": "Corbes de la nit",
+  "noPhaseTimeline": "Aquest rellotge no indica quan va passar cada fase del son, només els totals de dalt. Aquests són la VFC i l’estrès que va mesurar durant la nit.",
+  "stagesEstimated": "Estimat per Fjelia a partir de la VFC i l’estrès que el teu rellotge COROS va mesurar durant la nit. Els totals de les fases són els de COROS; quan va passar cada fase és una aproximació.",
+  "nightCurvesBasis": "La VFC i l’estrès mesurats durant la nit. L’estimació de fases de dalt es basa en ells."
 }

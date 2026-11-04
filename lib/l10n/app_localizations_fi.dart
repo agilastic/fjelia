@@ -7131,4 +7131,28 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get noOlderActivities => 'Ei vanhempia aktiviteetteja';
+
+  @override
+  String get maxSpeed => 'Huippunopeus';
+
+  @override
+  String get caloriesLabel => 'Kalorit';
+
+  @override
+  String get activityDescription => 'Kuvaus';
+
+  @override
+  String get nightCurves => 'Yön käyrät';
+
+  @override
+  String get noPhaseTimeline =>
+      'Tämä kello ei kerro, milloin kukin univaihe oli, vain yllä olevat summat. Nämä ovat yön aikana mitatut HRV ja stressi.';
+
+  @override
+  String get stagesEstimated =>
+      'Fjelian arvio COROS-kellosi yöllä mittaamasta HRV:stä ja stressistä. Vaiheiden summat ovat COROSin omat; milloin kukin vaihe oli, on likiarvo.';
+
+  @override
+  String get nightCurvesBasis =>
+      'Yön aikana mitattu HRV ja stressi. Yllä oleva vaihearvio perustuu niihin.';
 }

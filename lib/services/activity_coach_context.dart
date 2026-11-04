@@ -348,6 +348,8 @@ class ActivityCoachContextBuilder {
       if (a.recoveryTimeSeconds != null)
         'RecoveryH:${_int(a.recoveryTimeSeconds! / 3600)}',
       if (a.vo2maxActivity != null) 'VO2max:${_dec(a.vo2maxActivity)}',
+      if (a.calories != null) 'Kcal:${_int(a.calories)}',
+      if (a.maxSpeedMps != null) 'MaxKmh:${_dec(a.maxSpeedMps! * 3.6)}',
       if (a.activityFeedbackPhrase != null)
         'WatchFeedback:${a.activityFeedbackPhrase}',
       if (a.plannedDurationSeconds != null)

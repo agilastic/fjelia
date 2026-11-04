@@ -38,6 +38,7 @@ class StravaActivityRow {
     this.maxWatts,
     this.avgWatts,
     this.calories,
+    this.maxSpeed,
     this.fileName,
     this.media = const [],
   });
@@ -50,6 +51,9 @@ class StravaActivityRow {
   final int? elapsedSeconds, movingSeconds;
   final double? distanceMeters, elevationGain;
   final double? maxHeartRate, avgHeartRate, maxWatts, avgWatts, calories;
+
+  /// m/s.
+  final double? maxSpeed;
 
   /// Path inside the archive, e.g. `activities/123.fit.gz`.
   final String? fileName;
@@ -182,6 +186,7 @@ List<StravaActivityRow> parseStravaActivities(String csv) {
           maxWatts: positive(r, 32),
           avgWatts: positive(r, 33),
           calories: positive(r, 34),
+          maxSpeed: positive(r, 18),
           fileName: at(r, 12).isEmpty ? null : at(r, 12),
           media: mediaColumn < 0
               ? const []
@@ -578,9 +583,12 @@ class StravaArchiveImporter {
     }
     if (existing != null) {
       if (r.fileName != null) _fileOwner[r.fileName!] = existing.activityId;
-      existing.activityId == r.activityId
-          ? progress.alreadyImported++
-          : progress.duplicates++;
+      if (existing.activityId == r.activityId) {
+        progress.alreadyImported++;
+        await _supplement(existing, r);
+      } else {
+        progress.duplicates++;
+      }
       // The workout is there already: only its photos may be missing.
       await _addPhotos(
         archive,
@@ -674,6 +682,9 @@ class StravaArchiveImporter {
                   ? moving
                   : null,
             ),
+            description: Value(r.description.isEmpty ? null : r.description),
+            calories: Value(r.calories),
+            maxSpeedMps: Value(r.maxSpeed),
             source: const Value(stravaSource),
           ),
           mode: InsertMode.insertOrIgnore,
@@ -695,6 +706,30 @@ class StravaArchiveImporter {
       } catch (_) {}
     }
     await _addPhotos(archive, r, r.activityId, progress, storedPhotos, temp);
+  }
+
+  /// Fills what an earlier import of this Strava activity did not store,
+  /// never what is there already.
+  Future<void> _supplement(ActivityRecord a, StravaActivityRow r) async {
+    final update = ActivityRecordsCompanion(
+      description: a.description == null && r.description.isNotEmpty
+          ? Value(r.description)
+          : const Value.absent(),
+      calories: a.calories == null && r.calories != null
+          ? Value(r.calories)
+          : const Value.absent(),
+      maxSpeedMps: a.maxSpeedMps == null && r.maxSpeed != null
+          ? Value(r.maxSpeed)
+          : const Value.absent(),
+    );
+    if (!update.description.present &&
+        !update.calories.present &&
+        !update.maxSpeedMps.present) {
+      return;
+    }
+    await (_db.update(
+      _db.activityRecords,
+    )..where((t) => t.activityId.equals(a.activityId))).write(update);
   }
 
   /// The row's photos and videos for [activityId], each once: the archive

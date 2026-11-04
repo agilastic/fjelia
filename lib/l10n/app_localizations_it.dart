@@ -7146,4 +7146,28 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get noOlderActivities => 'Nessuna attività meno recente';
+
+  @override
+  String get maxSpeed => 'Velocità max';
+
+  @override
+  String get caloriesLabel => 'Calorie';
+
+  @override
+  String get activityDescription => 'Descrizione';
+
+  @override
+  String get nightCurves => 'Andamento notturno';
+
+  @override
+  String get noPhaseTimeline =>
+      'Questo orologio non indica quando si è verificata ogni fase del sonno, solo i totali sopra. Ecco HRV e stress misurati durante la notte.';
+
+  @override
+  String get stagesEstimated =>
+      'Stimato da Fjelia dall’HRV e dallo stress misurati di notte dal tuo orologio COROS. I totali delle fasi sono quelli di COROS; il momento di ogni fase è un’approssimazione.';
+
+  @override
+  String get nightCurvesBasis =>
+      'HRV e stress misurati durante la notte. La stima delle fasi qui sopra si basa su di essi.';
 }

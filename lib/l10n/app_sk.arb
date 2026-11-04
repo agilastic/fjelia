@@ -3586,5 +3586,12 @@
   "originalTitle": "Pôvodný: {name}",
   "useOriginalTitle": "Použiť pôvodný názov",
   "loadOlderActivities": "Načítať staršie aktivity",
-  "noOlderActivities": "Žiadne staršie aktivity"
+  "noOlderActivities": "Žiadne staršie aktivity",
+  "maxSpeed": "Max. rýchlosť",
+  "caloriesLabel": "Kalórie",
+  "activityDescription": "Popis",
+  "nightCurves": "Nočný priebeh",
+  "noPhaseTimeline": "Tieto hodinky neuvádzajú, kedy bola ktorá fáza spánku, len súčty vyššie. Toto sú HRV a stres namerané počas noci.",
+  "stagesEstimated": "Odhadnuté aplikáciou Fjelia z HRV a stresu, ktoré vaše hodinky COROS namerali cez noc. Súčty fáz sú od COROS; kedy ktorá fáza bola, je približné.",
+  "nightCurvesBasis": "HRV a stres namerané cez noc. Odhad fáz vyššie vychádza z nich."
 }

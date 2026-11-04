@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../providers/device_actions_provider.dart';
+import '../../providers/polar_h10_provider.dart';
 import '../../providers/user_profile_provider.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/grip_strength_sheet.dart';
@@ -330,7 +331,9 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
               ('Grip Strength', Icons.back_hand_outlined),
               ('Waist Circumference', Icons.straighten),
               ('Import', Icons.download_outlined),
-              ('Polar H10 HRV measurement', Icons.monitor_heart_outlined),
+              // Only with a strap paired in Settings → Connections.
+              if (ref.watch(polarH10PairedProvider).valueOrNull != null)
+                ('Polar H10 HRV measurement', Icons.monitor_heart_outlined),
             ])
               SectionCard(
                 child: ListTile(

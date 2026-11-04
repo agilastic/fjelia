@@ -4347,5 +4347,12 @@
   },
   "useOriginalTitle": "Use original title",
   "loadOlderActivities": "Load older activities",
-  "noOlderActivities": "No older activities"
+  "noOlderActivities": "No older activities",
+  "maxSpeed": "Max speed",
+  "caloriesLabel": "Calories",
+  "activityDescription": "Description",
+  "nightCurves": "Night curves",
+  "noPhaseTimeline": "This watch does not provide when each sleep stage happened, only the totals above. These are the HRV and stress it measured through the night.",
+  "stagesEstimated": "Estimated by Fjelia from the HRV and stress your COROS watch measured overnight. The stage totals are COROS's own; when each stage happened is an approximation.",
+  "nightCurvesBasis": "The HRV and stress measured overnight. The stage estimate above is built from them."
 }

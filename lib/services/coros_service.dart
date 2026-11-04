@@ -9,6 +9,8 @@ import 'package:http/http.dart' as http;
 import '../api/coros_workout.dart';
 import '../models/prepared_workout.dart';
 import '../api/coros_client.dart';
+import '../api/coros_mcp_client.dart';
+import 'coros_health_text.dart';
 import '../db/database.dart';
 import 'device_threshold_store.dart';
 import '../models/heart_rate.dart';
@@ -57,10 +59,12 @@ class CorosService {
     this._db, {
     http.Client? client,
     void Function(String line)? trace,
-  }) : _client = CorosClient(client: client, trace: trace);
+  }) : _client = CorosClient(client: client, trace: trace),
+       _mcp = CorosMcpClient(client: client);
 
   final AppDatabase _db;
   final CorosClient _client;
+  final CorosMcpClient _mcp;
 
   static const _source = 'coros';
   static const _storage = FlutterSecureStorage();
@@ -133,8 +137,37 @@ class CorosService {
     await _saveAuth(auth);
     await _storage.write(key: 'coros_password', value: password);
     await _storage.write(key: 'coros_region', value: region);
+    // One sign-in for both: the official access for sleep, HRV and stress
+    // comes with it. A failure here leaves activities working.
+    await _healthLoginWith(email, password);
     return true;
   }
+
+  /// Signs in to the official access with the COROS account; true on
+  /// success.
+  Future<bool> _healthLoginWith(String email, String password) async {
+    try {
+      await _saveHealth(await _mcp.passwordLogin(email, password));
+      log('[Coros] health access connected with the COROS account');
+      return true;
+    } catch (e) {
+      log('[Coros] health access sign-in failed: $e');
+      return false;
+    }
+  }
+
+  /// The official access from the stored COROS account, when there is one.
+  Future<CorosMcpAuth?> _healthFromAccount() async {
+    final email = (await _loadAuth())?.email;
+    final password = await _storage.read(key: 'coros_password');
+    if (email == null || password == null) return null;
+    return await _healthLoginWith(email, password) ? _loadHealth() : null;
+  }
+
+  /// Connects the official access with the stored COROS account, without
+  /// asking again; false when there is no account or COROS refused.
+  Future<bool> connectHealthFromAccount() async =>
+      await _healthFromAccount() != null;
 
   /// Re-logs in with the stored credentials to renew an expired token.
   Future<bool> _relogin() async {
@@ -147,7 +180,243 @@ class CorosService {
     return ok;
   }
 
+  // ── official health access (COROS MCP) ─────────────────────────────────
+
+  static const _healthKey = 'coros_mcp_auth_v1';
+
+  Future<CorosMcpAuth?> _loadHealth() async {
+    final raw = await _storage.read(key: _healthKey);
+    if (raw == null) return null;
+    try {
+      return CorosMcpAuth.fromJson(jsonDecode(raw) as Map<String, dynamic>);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<void> _saveHealth(CorosMcpAuth auth) =>
+      _storage.write(key: _healthKey, value: jsonEncode(auth.toJson()));
+
+  /// Sleep, HRV, stress and resting heart rate come through COROS's
+  /// official access, signed in on COROS's own page.
+  Future<bool> get healthConnected async => await _loadHealth() != null;
+
+  /// Starts the sign-in; open the returned page for the athlete.
+  Future<CorosMcpPendingLogin> startHealthLogin() => _mcp.startLogin();
+
+  /// Waits for the sign-in on COROS's page; false when cancelled.
+  Future<bool> finishHealthLogin(
+    CorosMcpPendingLogin pending, {
+    bool Function()? cancelled,
+  }) async {
+    final auth = await _mcp.finishLogin(pending, cancelled: cancelled);
+    if (auth == null) return false;
+    await _saveHealth(auth);
+    return true;
+  }
+
+  Future<void> disconnectHealth() => _storage.delete(key: _healthKey);
+
+  /// The last week of sleep, HRV, resting heart rate and stress from
+  /// COROS's official tools. Values COROS has no data for are left alone.
+  Future<void> _syncHealth(CorosSyncResult r) async {
+    // A COROS account connected before this access existed gets it now,
+    // without asking again.
+    var auth = await _loadHealth() ?? await _healthFromAccount();
+    if (auth == null) {
+      log(
+        '[Coros] health access not connected — sleep, stress: '
+        'sign in to COROS again in Settings → Connections',
+      );
+      return;
+    }
+    try {
+      if (auth.expired) {
+        auth = await _mcp.refresh(auth);
+        await _saveHealth(auth);
+      }
+      try {
+        await _mcp.initialize(auth);
+      } on CorosMcpException catch (e) {
+        // Turned down before its time: renew once.
+        if (!'$e'.contains('expired')) rethrow;
+        auth = await _mcp.refresh(auth);
+        await _saveHealth(auth);
+        await _mcp.initialize(auth);
+      }
+      Future<String> tool(String name, Map<String, Object> args) async {
+        try {
+          return await _mcp.callTool(auth!, name, args);
+        } catch (e) {
+          log('[Coros] health $name: $e');
+          return '';
+        }
+      }
+
+      final overview = await tool('querySleepOverview', {'days': 7});
+      final daily = await tool('queryDailyHealthData', {'days': 7});
+      final hrv = await tool('querySleepHrv', {'days': 7});
+      final rhr = await tool('queryRestingHeartRate', {'days': 7});
+      final stress = await tool('queryStressLevel', {'days': 7});
+      final stressSeries = parseCorosStressSeries(
+        await tool('queryStressTimeSeries', {'days': 7}),
+      );
+      final nights = parseCorosSleepOverview(overview);
+      parseCorosDailyHealth(daily, nights: nights);
+      final hrvSeries = parseCorosHrvSeries(hrv);
+      for (final n in nights.values) {
+        if (!n.hasSleep) continue;
+        Value<T> v<T>(T? x) => x == null ? const Value.absent() : Value(x);
+        await _db.upsertSleep(
+          SleepRecordsCompanion(
+            date: Value(n.date),
+            totalSleepSeconds: Value(n.asleepMin! * 60),
+            deepSleepSeconds: Value((n.deepMin ?? 0) * 60),
+            lightSleepSeconds: Value((n.lightMin ?? 0) * 60),
+            remSleepSeconds: Value((n.remMin ?? 0) * 60),
+            awakeSleepSeconds: Value((n.awakeMin ?? 0) * 60),
+            sleepScore: v(n.score?.toDouble()),
+            sleepStart: v(n.start),
+            sleepEnd: v(n.end),
+            nightCurvesJson: v(
+              _nightCurves(n, hrvSeries[n.date], stressSeries),
+            ),
+            source: const Value(_source),
+          ),
+        );
+        r.sleep++;
+      }
+      final hrvByDay = parseCorosSleepHrv(hrv);
+      final rhrByDay = parseCorosRestingHr(rhr);
+      final stressByDay = parseCorosStress(stress);
+      // SpO2 and breathing rate only come from a wellness check on the
+      // watch, on the day it was taken.
+      final checks = {
+        for (final c in parseCorosHealthCheck(
+          await tool('queryHealthCheckTimeSeries', {'days': 7}),
+        ))
+          c.day: c,
+      };
+      for (final day in {
+        ...hrvByDay.keys,
+        ...rhrByDay.keys,
+        ...stressByDay.keys,
+        ...checks.keys,
+      }) {
+        await _db.upsertHrv(
+          HrvRecordsCompanion(
+            date: Value(day),
+            hrvLastNight: hrvByDay[day] == null
+                ? const Value.absent()
+                : Value(hrvByDay[day]),
+            restingHeartRate: rhrByDay[day] == null
+                ? const Value.absent()
+                : Value(rhrByDay[day]),
+            stressLevel: stressByDay[day] == null
+                ? const Value.absent()
+                : Value(stressByDay[day]!.toDouble()),
+            spo2: checks[day]?.spo2 == null
+                ? const Value.absent()
+                : Value(checks[day]!.spo2),
+            respirationRate: checks[day]?.respiration == null
+                ? const Value.absent()
+                : Value(checks[day]!.respiration),
+            source: const Value(_source),
+          ),
+        );
+        r.hrv++;
+      }
+      for (final c in checks.values) {
+        await _saveRestingHrv(c);
+      }
+      log(
+        '[Coros] health: ${nights.length} nights, ${hrvByDay.length} HRV, '
+        '${checks.length} wellness checks',
+      );
+    } on CorosMcpException catch (e) {
+      log('[Coros] health access: $e');
+      if ('$e'.contains('token refused')) {
+        // Renewal no longer works: sign in again with the account, or ask
+        // the athlete to.
+        await disconnectHealth();
+        await _healthFromAccount();
+      }
+    } catch (e) {
+      log('[Coros] health sync error: $e');
+    }
+  }
+
+  /// A wellness check's HRV as a resting HRV reading, next to the chest
+  /// strap's. COROS gives only the value and the heart rate: SDNN stays 0
+  /// (not measured) and there are no RR intervals. Saved once per check.
+  Future<void> _saveRestingHrv(CorosHealthCheck c) async {
+    final at = c.at, hrv = c.hrv;
+    if (at == null || hrv == null) return;
+    final uid = 'coros-check-${at.millisecondsSinceEpoch ~/ 1000}';
+    final table = _db.spotHrvMeasurements;
+    final known = await (_db.select(
+      table,
+    )..where((t) => t.measurementUid.equals(uid))).getSingleOrNull();
+    if (known != null) return;
+    final now = DateTime.now().toUtc();
+    await _db
+        .into(table)
+        .insert(
+          SpotHrvMeasurementsCompanion.insert(
+            startedAt: at,
+            context: 'resting',
+            posture: 'seated',
+            // A COROS wellness check takes about a minute, sitting still.
+            durationSeconds: 60,
+            settleSeconds: 0,
+            deviceId: _source,
+            deviceName: c.device ?? 'COROS',
+            rmssdMs: hrv,
+            sdnnMs: 0,
+            meanHr: c.heartRate ?? 0,
+            acceptedIntervals: 0,
+            totalIntervals: 0,
+            coverage: 1,
+            rrJson: '[]',
+            measurementUid: Value(uid),
+            samplingEndedAt: Value(at.add(const Duration(seconds: 60))),
+            captureStartedAt: Value(at),
+            timezoneOffsetMinutes: Value(at.timeZoneOffset.inMinutes),
+            protocolVersion: const Value('coros-wellness-check'),
+            analysisVersion: const Value('coros'),
+            qualityState: const Value('usable'),
+            qualityReasons: const Value('watchReading'),
+            createdAt: Value(now),
+            modifiedAt: Value(now),
+          ),
+        );
+  }
+
+  /// HRV and stress over [n]'s sleep window, for the sleep sheet: COROS
+  /// gives no phase timeline, these curves are what it measured.
+  static String? _nightCurves(
+    CorosNight n,
+    List<CurvePoint>? hrv,
+    List<CurvePoint> stress,
+  ) {
+    final from = n.start, to = n.end;
+    bool inNight(CurvePoint p) =>
+        from == null ||
+        to == null ||
+        (!p.at.isBefore(from.subtract(const Duration(minutes: 5))) &&
+            !p.at.isAfter(to.add(const Duration(minutes: 5))));
+    List<List<num>> pairs(Iterable<CurvePoint> pts) => [
+      for (final p in pts)
+        if (inNight(p)) [p.at.millisecondsSinceEpoch, p.value],
+    ];
+    final h = pairs(hrv ?? const []);
+    final s = from == null ? const <List<num>>[] : pairs(stress);
+    if (h.isEmpty && s.isEmpty) return null;
+    return jsonEncode({'hrv': h, 'stress': s});
+  }
+
   Future<void> disconnect() async {
+    await disconnectHealth();
     await _storage.delete(key: 'coros_auth_v1');
     await _storage.delete(key: 'coros_password');
     await _storage.delete(key: 'coros_region');
@@ -394,8 +663,11 @@ class CorosService {
   Future<CorosSyncResult> sync({int days = 30}) async {
     var auth = await _loadAuth();
     if (auth == null) {
-      log('[Coros] not connected — skipping sync');
-      return CorosSyncResult();
+      // Sleep and health can come through the official access alone.
+      final r = CorosSyncResult();
+      if (await healthConnected) await _syncHealth(r);
+      log('[Coros] no Training Hub login — health only (${r.sleep} nights)');
+      return r;
     }
     if (auth.isExpired) {
       log('[Coros] token expired — attempting silent relogin');
@@ -415,6 +687,7 @@ class CorosService {
         _syncActivities(r, from, to),
         _syncDailyMetrics(r, from, to),
         _syncSleep(r, from, to),
+        _syncHealth(r),
       ]);
       return r;
     }
@@ -824,7 +1097,6 @@ class CorosService {
       _ => 'coros_$type',
     };
   }
-
 
   int? _parseActivityDuration(Map<String, dynamic> row) {
     for (final key in const [

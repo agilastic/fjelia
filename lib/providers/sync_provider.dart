@@ -378,7 +378,7 @@ class SyncNotifier extends StateNotifier<SyncState> {
 
     Future<void> coros() async {
       final s = _ref.read(corosServiceProvider);
-      if (!await s.isConnected) return;
+      if (!await s.isConnected && !await s.healthConnected) return;
       try {
         await s.sync(days: 7);
       } catch (e) {

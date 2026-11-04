@@ -73,8 +73,29 @@ class SleepStagesSection extends StatelessWidget {
             phases: phases,
             start: sleep.sleepStart,
             end: sleep.sleepEnd,
-          )
-        else
+          ),
+        if (phases.isNotEmpty && sleep.phasesEstimated)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 14),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(Icons.auto_awesome, size: 14, color: muted),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    context.l10n.stagesEstimated,
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: muted,
+                      height: 1.4,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        if (phases.isEmpty)
           Padding(
             padding: EdgeInsets.only(bottom: 14),
             child: Text(

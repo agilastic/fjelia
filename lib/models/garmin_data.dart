@@ -435,6 +435,9 @@ class SleepData {
     this.avgOvernightHrv,
     this.restingHeartRate,
     this.sleepNeedSeconds,
+    this.hrvCurve = const [],
+    this.stressCurve = const [],
+    this.phasesEstimated = false,
   });
 
   factory SleepData.fromGarminJson(Map<String, dynamic> json) {
@@ -542,6 +545,14 @@ class SleepData {
   final double? avgOvernightHrv;
   final int? restingHeartRate;
   final int? sleepNeedSeconds;
+
+  /// HRV (ms) and stress over the night, for watches without a phase
+  /// timeline: (time, value) pairs.
+  final List<(DateTime, double)> hrvCurve, stressCurve;
+
+  /// [phases] are Fjelia's estimate from [hrvCurve] and [stressCurve], not
+  /// measured by the watch.
+  final bool phasesEstimated;
 
   /// Time asleep as a share of time in bed, 0–100.
   double get efficiency {

@@ -7152,4 +7152,28 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get noOlderActivities => 'No hay actividades anteriores';
+
+  @override
+  String get maxSpeed => 'Velocidad máx.';
+
+  @override
+  String get caloriesLabel => 'Calorías';
+
+  @override
+  String get activityDescription => 'Descripción';
+
+  @override
+  String get nightCurves => 'Curvas de la noche';
+
+  @override
+  String get noPhaseTimeline =>
+      'Este reloj no indica cuándo ocurrió cada fase del sueño, solo los totales de arriba. Estos son la VFC y el estrés que midió durante la noche.';
+
+  @override
+  String get stagesEstimated =>
+      'Estimado por Fjelia a partir de la VFC y el estrés que tu reloj COROS midió durante la noche. Los totales de las fases son los de COROS; cuándo ocurrió cada fase es una aproximación.';
+
+  @override
+  String get nightCurvesBasis =>
+      'La VFC y el estrés medidos durante la noche. La estimación de fases de arriba se basa en ellos.';
 }

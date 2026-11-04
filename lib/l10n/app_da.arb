@@ -3586,5 +3586,12 @@
   "originalTitle": "Oprindelig: {name}",
   "useOriginalTitle": "Brug oprindelig titel",
   "loadOlderActivities": "Indlæs ældre aktiviteter",
-  "noOlderActivities": "Ingen ældre aktiviteter"
+  "noOlderActivities": "Ingen ældre aktiviteter",
+  "maxSpeed": "Maks. fart",
+  "caloriesLabel": "Kalorier",
+  "activityDescription": "Beskrivelse",
+  "nightCurves": "Natkurver",
+  "noPhaseTimeline": "Dette ur viser ikke, hvornår hver søvnfase var, kun summerne ovenfor. Her er HRV og stress målt gennem natten.",
+  "stagesEstimated": "Anslået af Fjelia ud fra den HRV og stress, dit COROS-ur målte i nat. Summerne for faserne er COROS’ egne; hvornår hver fase var, er en tilnærmelse.",
+  "nightCurvesBasis": "HRV og stress målt gennem natten. Faseestimatet ovenfor er lavet ud fra dem."
 }

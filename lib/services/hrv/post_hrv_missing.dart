@@ -39,7 +39,9 @@ Future<Set<String>> postHrvMissing(
     final start = episode.start.toLocal();
     final restedBefore = snapshot.measurements.any((m) {
       final at = m.startedAt.toLocal();
+      // A watch's wellness check (COROS) is no cue for a strap reading.
       return m.context == 'resting' &&
+          m.deviceId != 'coros' &&
           m.usable &&
           at.isBefore(start) &&
           at.year == start.year &&

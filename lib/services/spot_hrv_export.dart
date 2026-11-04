@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import '../db/database.dart';
 
 String spotHrvCsv(SpotHrvMeasurement row) {
@@ -36,7 +37,7 @@ String spotHrvCsv(SpotHrvMeasurement row) {
         row.minutesAfterTraining,
         row.rmssdMs,
         row.rawRmssdMs,
-        row.sdnnMs,
+        row.sdnnMs == 0 ? null : row.sdnnMs,
         row.lnRmssd,
         row.meanHr,
         row.deviceName,

@@ -7106,4 +7106,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noOlderActivities => 'No older activities';
+
+  @override
+  String get maxSpeed => 'Max speed';
+
+  @override
+  String get caloriesLabel => 'Calories';
+
+  @override
+  String get activityDescription => 'Description';
+
+  @override
+  String get nightCurves => 'Night curves';
+
+  @override
+  String get noPhaseTimeline =>
+      'This watch does not provide when each sleep stage happened, only the totals above. These are the HRV and stress it measured through the night.';
+
+  @override
+  String get stagesEstimated =>
+      'Estimated by Fjelia from the HRV and stress your COROS watch measured overnight. The stage totals are COROS\'s own; when each stage happened is an approximation.';
+
+  @override
+  String get nightCurvesBasis =>
+      'The HRV and stress measured overnight. The stage estimate above is built from them.';
 }

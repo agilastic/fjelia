@@ -84,6 +84,10 @@ class SleepRecords extends Table {
   DateTimeColumn get sleepStart => dateTime().nullable()();
   DateTimeColumn get sleepEnd => dateTime().nullable()();
   TextColumn get phasesJson => text().nullable()();
+
+  /// Curves over the night where the watch has no phase timeline (COROS):
+  /// `{"hrv": [[epochMs, ms], …], "stress": [[epochMs, value], …]}`.
+  TextColumn get nightCurvesJson => text().nullable()();
   RealColumn get avgOvernightHrv => real().nullable()();
   IntColumn get sleepNeedSeconds => integer().nullable()();
   TextColumn get source => text().nullable()();
@@ -162,6 +166,12 @@ class ActivityRecords extends Table {
   RealColumn get avgRunCadence => real().nullable()();
   RealColumn get vo2maxActivity => real().nullable()();
   IntColumn get movingDurationSeconds => integer().nullable()();
+
+  /// What the athlete wrote about it on the platform (Strava). Never sent
+  /// to the coach, like any free text.
+  TextColumn get description => text().nullable()();
+  RealColumn get calories => real().nullable()();
+  RealColumn get maxSpeedMps => real().nullable()();
 }
 
 class DayScoreRecords extends Table {
@@ -1312,7 +1322,7 @@ class AppDatabase extends _$AppDatabase {
       defaultSourcePriorities[group.name]!;
 
   @override
-  int get schemaVersion => 60;
+  int get schemaVersion => 62;
 
   Future<void> saveHeartRateSamples(List<TimedHeartRate> samples) async {
     if (samples.isEmpty) return;
@@ -2525,6 +2535,26 @@ class AppDatabase extends _$AppDatabase {
       );
     },
     onUpgrade: (m, from, to) async {
+      if (from < 62) {
+        await _addColumnIfMissing(
+          'sleep_records',
+          'night_curves_json',
+          () => m.addColumn(sleepRecords, sleepRecords.nightCurvesJson),
+        );
+      }
+      if (from < 61) {
+        for (final (name, column) in [
+          ('description', activityRecords.description),
+          ('calories', activityRecords.calories),
+          ('max_speed_mps', activityRecords.maxSpeedMps),
+        ]) {
+          await _addColumnIfMissing(
+            'activity_records',
+            name,
+            () => m.addColumn(activityRecords, column),
+          );
+        }
+      }
       if (from < 60) await m.createTable(activityTitles);
       if (from >= 56 && from < 59) {
         await _addColumnIfMissing(

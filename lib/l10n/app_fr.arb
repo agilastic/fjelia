@@ -3586,5 +3586,12 @@
   "originalTitle": "Original : {name}",
   "useOriginalTitle": "Reprendre le titre d’origine",
   "loadOlderActivities": "Charger les activités plus anciennes",
-  "noOlderActivities": "Aucune activité plus ancienne"
+  "noOlderActivities": "Aucune activité plus ancienne",
+  "maxSpeed": "Vitesse max.",
+  "caloriesLabel": "Calories",
+  "activityDescription": "Description",
+  "nightCurves": "Courbes de la nuit",
+  "noPhaseTimeline": "Cette montre ne fournit pas le moment de chaque phase de sommeil, seulement les totaux ci-dessus. Voici la VFC et le stress mesurés pendant la nuit.",
+  "stagesEstimated": "Estimé par Fjelia à partir de la VFC et du stress mesurés cette nuit par ta montre COROS. Les totaux des phases sont ceux de COROS ; le moment de chaque phase est une approximation.",
+  "nightCurvesBasis": "La VFC et le stress mesurés pendant la nuit. L’estimation des phases ci-dessus en est tirée."
 }

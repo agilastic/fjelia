@@ -8,6 +8,7 @@ import '../../providers/day_data_provider.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/metric_detail_sheet.dart';
 import '../../widgets/sleep_stages.dart';
+import '../../widgets/night_curves.dart';
 
 class SleepScreen extends ConsumerWidget {
   const SleepScreen({super.key});
@@ -178,6 +179,16 @@ class SleepScreen extends ConsumerWidget {
                           if (sleep != null) ...[
                             SleepStagesSection(sleep: sleep),
                             const SizedBox(height: 32),
+                            // A watch without a phase timeline (COROS): the
+                            // curves it measured, which the estimate is
+                            // built from.
+                            if ((sleep.phases.isEmpty ||
+                                    sleep.phasesEstimated) &&
+                                (sleep.hrvCurve.length > 1 ||
+                                    sleep.stressCurve.length > 1)) ...[
+                              NightCurvesSection(sleep: sleep),
+                              const SizedBox(height: 32),
+                            ],
                           ],
                           GridView.count(
                             crossAxisCount: 2,

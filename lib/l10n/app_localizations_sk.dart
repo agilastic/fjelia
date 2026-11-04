@@ -7134,4 +7134,28 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get noOlderActivities => 'Žiadne staršie aktivity';
+
+  @override
+  String get maxSpeed => 'Max. rýchlosť';
+
+  @override
+  String get caloriesLabel => 'Kalórie';
+
+  @override
+  String get activityDescription => 'Popis';
+
+  @override
+  String get nightCurves => 'Nočný priebeh';
+
+  @override
+  String get noPhaseTimeline =>
+      'Tieto hodinky neuvádzajú, kedy bola ktorá fáza spánku, len súčty vyššie. Toto sú HRV a stres namerané počas noci.';
+
+  @override
+  String get stagesEstimated =>
+      'Odhadnuté aplikáciou Fjelia z HRV a stresu, ktoré vaše hodinky COROS namerali cez noc. Súčty fáz sú od COROS; kedy ktorá fáza bola, je približné.';
+
+  @override
+  String get nightCurvesBasis =>
+      'HRV a stres namerané cez noc. Odhad fáz vyššie vychádza z nich.';
 }

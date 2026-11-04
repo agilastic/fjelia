@@ -148,25 +148,38 @@ void main() {
       );
     }
 
-    // The session sheet: badges, purpose, steps and the move legend.
-    final swim = sessions.firstWhere(
-      (s) => s.sport == 'swimming' && s.sessionType == 'long',
+    // The session sheet: badges, purpose, steps and the move legend. The
+    // plan starts today, so the first session shown is a different one each
+    // day: take whichever comes first.
+    final ordered = [...sessions]
+      ..sort((a, b) => a.sessionDate.compareTo(b.sessionDate));
+    final first = ordered.firstWhere(
+      (s) =>
+          s.goalObjective != null && find.text(s.title).evaluate().isNotEmpty,
     );
-    await tester.tap(find.text(swim.title).first);
+    await tester.tap(find.text(first.title).first);
     for (var i = 0; i < 10; i++) {
       await tester.runAsync(
         () => Future.delayed(const Duration(milliseconds: 50)),
       );
       await tester.pump(const Duration(milliseconds: 200));
     }
-    expect(find.textContaining('GRUNDLAGE · LANG'), findsOneWidget);
-    expect(find.text('GEPLANT'), findsOneWidget);
     expect(
-      find.textContaining('Schwimmen: lange Einheit für Seeschwimmen'),
+      find.textContaining(
+        '${planPhaseLabel(l10n, first.phase)} · '
+        '${sessionTypeLabel(l10n, first.sessionType)}',
+      ),
       findsOneWidget,
     );
-    expect(find.textContaining('wiederholen'), findsWidgets);
+    expect(find.text('GEPLANT'), findsOneWidget);
+    expect(
+      find.textContaining(
+        planObjectiveLabel(l10n, first.goalObjective!, goalNames: names),
+      ),
+      findsOneWidget,
+    );
     expect(find.textContaining('repeat'), findsNothing);
+    expect(find.textContaining('Warm-up'), findsNothing);
     expect(find.text('Ruhetag'), findsOneWidget);
     expect(find.text('rest day'), findsNothing);
     await tester.runAsync(db.close);

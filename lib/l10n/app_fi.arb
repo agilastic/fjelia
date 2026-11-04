@@ -3586,5 +3586,12 @@
   "originalTitle": "Alkuperäinen: {name}",
   "useOriginalTitle": "Käytä alkuperäistä otsikkoa",
   "loadOlderActivities": "Lataa vanhempia aktiviteetteja",
-  "noOlderActivities": "Ei vanhempia aktiviteetteja"
+  "noOlderActivities": "Ei vanhempia aktiviteetteja",
+  "maxSpeed": "Huippunopeus",
+  "caloriesLabel": "Kalorit",
+  "activityDescription": "Kuvaus",
+  "nightCurves": "Yön käyrät",
+  "noPhaseTimeline": "Tämä kello ei kerro, milloin kukin univaihe oli, vain yllä olevat summat. Nämä ovat yön aikana mitatut HRV ja stressi.",
+  "stagesEstimated": "Fjelian arvio COROS-kellosi yöllä mittaamasta HRV:stä ja stressistä. Vaiheiden summat ovat COROSin omat; milloin kukin vaihe oli, on likiarvo.",
+  "nightCurvesBasis": "Yön aikana mitattu HRV ja stressi. Yllä oleva vaihearvio perustuu niihin."
 }

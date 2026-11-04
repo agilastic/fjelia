@@ -352,7 +352,8 @@ class HrvTrainingService {
       durationSeconds: r.durationSeconds,
       settleSeconds: r.settleSeconds,
       rmssdMs: r.rmssdMs,
-      sdnnMs: r.sdnnMs,
+      // 0 from a watch reading: not measured.
+      sdnnMs: r.sdnnMs == 0 ? null : r.sdnnMs,
       deviceId: r.deviceId,
       metricKind: r.metricKind,
       usable: r.qualityState != 'invalid',

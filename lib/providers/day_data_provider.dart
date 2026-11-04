@@ -11,6 +11,7 @@ import '../models/garmin_data.dart';
 import '../models/scores.dart';
 import '../services/activity_decoder.dart';
 import '../services/score_calculator.dart';
+import '../services/sleep_stage_estimate.dart';
 import '../utils/log.dart';
 import 'auth_provider.dart';
 import 'database_provider.dart';
@@ -65,6 +66,26 @@ SleepData sleepFromRecord(SleepRecord r) {
       }
     } catch (_) {}
   }
+  final hrvCurve = _curve(r.nightCurvesJson, 'hrv');
+  final stressCurve = _curve(r.nightCurvesJson, 'stress');
+  // No stage timeline from the watch (COROS): estimated from its night
+  // curves, matching its stage totals.
+  var estimated = false;
+  if (phases.isEmpty && r.sleepStart != null && r.sleepEnd != null) {
+    phases.addAll(
+      estimateSleepStages(
+        start: r.sleepStart!,
+        end: r.sleepEnd!,
+        deep: Duration(seconds: r.deepSleepSeconds),
+        light: Duration(seconds: r.lightSleepSeconds),
+        rem: Duration(seconds: r.remSleepSeconds),
+        awake: Duration(seconds: r.awakeSleepSeconds),
+        hrv: hrvCurve,
+        stress: stressCurve,
+      ),
+    );
+    estimated = phases.isNotEmpty;
+  }
   return SleepData(
     date: r.date,
     totalSleep: Duration(seconds: r.totalSleepSeconds),
@@ -78,7 +99,26 @@ SleepData sleepFromRecord(SleepRecord r) {
     phases: phases,
     avgOvernightHrv: r.avgOvernightHrv,
     sleepNeedSeconds: r.sleepNeedSeconds,
+    hrvCurve: hrvCurve,
+    stressCurve: stressCurve,
+    phasesEstimated: estimated,
   );
+}
+
+List<(DateTime, double)> _curve(String? json, String key) {
+  if (json == null) return const [];
+  try {
+    return [
+      for (final p in ((jsonDecode(json) as Map)[key] as List? ?? const []))
+        if (p is List && p.length == 2)
+          (
+            DateTime.fromMillisecondsSinceEpoch((p[0] as num).toInt()),
+            (p[1] as num).toDouble(),
+          ),
+    ];
+  } catch (_) {
+    return const [];
+  }
 }
 
 HrvData _hrvFromRecord(HrvRecord r) => HrvData(

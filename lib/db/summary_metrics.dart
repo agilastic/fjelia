@@ -49,7 +49,12 @@ extension SummaryMetricPersistence on AppDatabase {
             rowSource ??
             (entry.key == 'computed_energie' ? 'computed' : 'unknown');
         final previous = origins[entry.key]?.source ?? 'unknown';
-        final hasValue = existing?.data[entry.key] != null;
+        // An empty night (0 s asleep, score 0) is no measurement: another
+        // source's real night may replace it.
+        final stored = existing?.data[entry.key];
+        final hasValue =
+            stored != null &&
+            !(table.actualTableName == 'sleep_records' && stored == 0);
         final accept =
             !hasValue ||
             source == 'computed' ||

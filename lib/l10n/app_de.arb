@@ -3586,5 +3586,12 @@
   "originalTitle": "Original: {name}",
   "useOriginalTitle": "Ursprünglichen Titel verwenden",
   "loadOlderActivities": "Ältere Aktivitäten laden",
-  "noOlderActivities": "Keine älteren Aktivitäten"
+  "noOlderActivities": "Keine älteren Aktivitäten",
+  "maxSpeed": "Höchstgeschw.",
+  "caloriesLabel": "Kalorien",
+  "activityDescription": "Beschreibung",
+  "nightCurves": "Nachtverlauf",
+  "noPhaseTimeline": "Diese Uhr liefert nicht, wann welche Schlafphase war, nur die Summen oben. Das hier sind HRV und Stress, die sie über die Nacht gemessen hat.",
+  "stagesEstimated": "Von Fjelia geschätzt aus HRV und Stress, die deine COROS-Uhr über Nacht gemessen hat. Die Summen der Phasen sind die von COROS; wann welche Phase war, ist eine Annäherung.",
+  "nightCurvesBasis": "HRV und Stress, über die Nacht gemessen. Daraus ist die Phasen-Schätzung oben berechnet."
 }
