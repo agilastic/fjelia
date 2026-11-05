@@ -40,27 +40,64 @@ extension SummaryMetricPersistence on AppDatabase {
           : null;
       final patch = <String, Expression>{};
       final writes = <SummaryMetricOriginsCompanion>[];
-      for (final entry in candidates.entries) {
-        if (['id', 'date', 'source'].contains(entry.key)) continue;
-        final expression = entry.value;
-        if (expression is! Variable || expression.value == null) continue;
-        final source =
-            metricSources[entry.key] ??
-            rowSource ??
-            (entry.key == 'computed_energie' ? 'computed' : 'unknown');
-        final previous = origins[entry.key]?.source ?? 'unknown';
+      String sourceOf(String key) =>
+          metricSources[key] ??
+          rowSource ??
+          (key == 'computed_energie' ? 'computed' : 'unknown');
+      bool accepts(String key) {
+        final source = sourceOf(key);
+        final previous = origins[key]?.source ?? 'unknown';
         // An empty night (0 s asleep, score 0) is no measurement: another
         // source's real night may replace it.
-        final stored = existing?.data[entry.key];
+        final stored = existing?.data[key];
         final hasValue =
             stored != null &&
             !(table.actualTableName == 'sleep_records' && stored == 0);
-        final accept =
-            !hasValue ||
+        return !hasValue ||
             source == 'computed' ||
             source == 'manual' ||
             (source != 'unknown' && previous == 'unknown') ||
             shouldOverwrite(previous, source, order);
+      }
+
+      // A night's stages are one measurement: totals, window, timeline and
+      // curves all come from the same source. Otherwise one watch's totals
+      // end up under another's timeline.
+      final night = table.actualTableName == 'sleep_records'
+          ? _nightColumns
+          : const <String>{};
+      final total = candidates['total_sleep_seconds'];
+      final nightAccepted =
+          night.isNotEmpty &&
+          total is Variable &&
+          total.value != null &&
+          accepts('total_sleep_seconds');
+      for (final key in night) {
+        if (!nightAccepted) break;
+        final expression = candidates[key];
+        if (expression is Variable && expression.value != null) continue;
+        // The new night has none: the old source's must go with it.
+        if (existing?.data[key] == null) continue;
+        patch[key] = const Variable<Object>(null);
+        writes.add(
+          SummaryMetricOriginsCompanion.insert(
+            summaryTable: table.actualTableName,
+            date: day,
+            metric: key,
+            source: sourceOf('total_sleep_seconds'),
+            quality: 'observed',
+            updatedAt: DateTime.now(),
+          ),
+        );
+      }
+      for (final entry in candidates.entries) {
+        if (['id', 'date', 'source'].contains(entry.key)) continue;
+        final expression = entry.value;
+        if (expression is! Variable || expression.value == null) continue;
+        final source = sourceOf(entry.key);
+        final accept = night.contains(entry.key) && total is Variable
+            ? nightAccepted
+            : accepts(entry.key);
         if (!accept) continue;
         patch[entry.key] = expression;
         writes.add(
@@ -108,6 +145,19 @@ extension SummaryMetricPersistence on AppDatabase {
       );
     });
   }
+
+  /// The columns of one night's stage measurement, see [_mergeSummary].
+  static const _nightColumns = {
+    'total_sleep_seconds',
+    'deep_sleep_seconds',
+    'light_sleep_seconds',
+    'rem_sleep_seconds',
+    'awake_sleep_seconds',
+    'sleep_start',
+    'sleep_end',
+    'phases_json',
+    'night_curves_json',
+  };
 
   Future<void> _backfillUnknownMetricOrigins() async {
     // A legacy row's last source cannot prove where each existing field came from.

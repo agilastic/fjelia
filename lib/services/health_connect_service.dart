@@ -429,17 +429,27 @@ class HealthConnectService {
     HealthConnectSyncResult result,
     List<String> priority,
   ) async {
-    final byDay = <DateTime, List<HealthDataPoint>>{};
-    for (final p in points) {
-      if (!_isSleepType(p.type)) continue;
-      byDay.putIfAbsent(_day(p.dateFrom), () => []).add(p);
-    }
-    for (final entry in byDay.entries) {
+    final nights = healthSleepNights([
+      for (final p in points)
+        if (_isSleepType(p.type))
+          (type: p.type, from: p.dateFrom, to: p.dateTo, source: p.sourceName),
+    ], priority);
+    final byId = {
+      for (final p in points) (p.type, p.dateFrom, p.dateTo, p.sourceName): p,
+    };
+    for (final MapEntry(key: day, value: night) in nights.entries) {
+      log(
+        '[HealthConnect] sleep $day: "${night.source}" of '
+        '${night.sources.map((s) => '"$s"').join(', ')}',
+      );
       try {
-        await _saveSleepForDay(entry.key, entry.value, priority);
+        await _saveSleepForDay(day, [
+          for (final s in night.samples)
+            byId[(s.type, s.from, s.to, s.source)]!,
+        ], priority);
         result.sleep++;
       } catch (e) {
-        log('[HealthConnect] sleep save error ${entry.key}: $e');
+        log('[HealthConnect] sleep save error $day: $e');
       }
     }
   }
@@ -1181,4 +1191,84 @@ class HealthConnectService {
     );
     return result;
   }
+}
+
+/// One sleep sample from Apple Health / Health Connect.
+typedef HealthSleepSample = ({
+  HealthDataType type,
+  DateTime from,
+  DateTime to,
+  String source,
+});
+
+/// Sleep samples per night, filed under the wake-up day like every other
+/// source: anything starting from 18:00 belongs to the next morning.
+///
+/// Several apps write the same night (COROS, Garmin Connect, Polar Flow, the
+/// Apple Watch); mixing them stacks their stages on top of each other. Each
+/// night keeps one source: one with stages before one with only "asleep",
+/// then the first in the athlete's sleep priority, then the one with the
+/// most staged sleep.
+Map<
+  DateTime,
+  ({String source, List<String> sources, List<HealthSleepSample> samples})
+>
+healthSleepNights(List<HealthSleepSample> samples, List<String> priority) {
+  DateTime wakeDay(DateTime t) {
+    final l = t.toLocal();
+    final d = DateTime(l.year, l.month, l.day);
+    return l.hour >= 18 ? DateTime(d.year, d.month, d.day + 1) : d;
+  }
+
+  const staged = {
+    HealthDataType.SLEEP_DEEP,
+    HealthDataType.SLEEP_LIGHT,
+    HealthDataType.SLEEP_REM,
+  };
+  final byNight = <DateTime, Map<String, List<HealthSleepSample>>>{};
+  for (final s in samples) {
+    byNight
+        .putIfAbsent(wakeDay(s.from), () => {})
+        .putIfAbsent(s.source, () => [])
+        .add(s);
+  }
+  int rank(String source) {
+    final i = priority.indexOf(healthSleepSourceKey(source));
+    return i < 0 ? priority.length : i;
+  }
+
+  int stagedSeconds(List<HealthSleepSample> l) => l
+      .where((s) => staged.contains(s.type))
+      .fold(0, (a, s) => a + s.to.difference(s.from).inSeconds);
+  return {
+    for (final MapEntry(key: day, value: bySource) in byNight.entries)
+      day: () {
+        final names = bySource.keys.toList()
+          ..sort((a, b) {
+            final sa = stagedSeconds(bySource[a]!) > 0 ? 0 : 1;
+            final sb = stagedSeconds(bySource[b]!) > 0 ? 0 : 1;
+            if (sa != sb) return sa - sb;
+            final r = rank(a) - rank(b);
+            if (r != 0) return r;
+            return stagedSeconds(bySource[b]!) - stagedSeconds(bySource[a]!);
+          });
+        return (
+          source: names.first,
+          sources: names,
+          samples: bySource[names.first]!,
+        );
+      }(),
+  };
+}
+
+/// The Fjelia source an app writing to Apple Health stands for, for the
+/// sleep priority; the phone's and watch's own data is `health_connect`.
+String healthSleepSourceKey(String sourceName) {
+  final n = sourceName.toLowerCase();
+  if (n.contains('coros')) return 'coros';
+  if (n.contains('garmin') || n == 'connect') return 'garmin_api';
+  if (n.contains('polar')) return 'polar';
+  if (n.contains('suunto')) return 'suunto';
+  if (n.contains('hilo') || n.contains('aktiia')) return 'aktiia';
+  return 'health_connect';
 }

@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:drift/drift.dart';
 import 'package:fjelia_service_api/fjelia_service_api.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:health/health.dart';
 
 import '../api/garmin_client.dart';
 import '../db/database.dart' hide DailyBpSummary;
@@ -14,6 +15,7 @@ import '../services/score_calculator.dart';
 import '../services/sleep_stage_estimate.dart';
 import '../utils/log.dart';
 import 'auth_provider.dart';
+import 'health_connect_provider.dart';
 import 'database_provider.dart';
 import 'training_load_provider.dart';
 import 'user_profile_provider.dart';
@@ -50,7 +52,77 @@ WellnessData _wellnessFromRecord(WellnessRecord r) => WellnessData(
   fitnessAge: r.fitnessAge,
 );
 
-SleepData sleepFromRecord(SleepRecord r) {
+/// The night's heart rate per device that recorded it, from the same places
+/// as the heart-rate chart on the Status page: the stored samples of every
+/// source, the pulse of blood-pressure readings (Hilo) and, with access,
+/// Apple Health per app that wrote it. For the stage estimate of a night
+/// without a timeline.
+Future<List<List<(DateTime, double)>>> _nightHeartRate(
+  AppDatabase db,
+  SleepRecord r, {
+  bool health = false,
+}) async {
+  final from = r.sleepStart, to = r.sleepEnd;
+  if (r.phasesJson != null || r.nightCurvesJson == null) return const [];
+  if (from == null || to == null) return const [];
+  final a = from.subtract(const Duration(minutes: 5));
+  final b = to.add(const Duration(minutes: 5));
+  final bySource = <String, List<(DateTime, double)>>{};
+  for (final s in await db.getHeartRateSamples(a, b)) {
+    if (s.bpm > 0) {
+      (bySource[s.source] ??= []).add((s.measuredAt, s.bpm));
+    }
+  }
+  final bp =
+      await (db.select(db.bpMeasurements)..where(
+            (t) =>
+                t.measuredAt.isBiggerOrEqualValue(a) &
+                t.measuredAt.isSmallerThanValue(b),
+          ))
+          .get();
+  for (final m in bp) {
+    if (m.heartRate > 0) {
+      (bySource['bp'] ??= []).add((m.measuredAt, m.heartRate.toDouble()));
+    }
+  }
+  if (health) {
+    try {
+      final h = Health();
+      await h.configure();
+      final points = await h.getHealthDataFromTypes(
+        types: [HealthDataType.HEART_RATE],
+        startTime: a,
+        endTime: b,
+      );
+      final byApp = <String, List<(DateTime, double)>>{};
+      for (final p in points) {
+        final v = p.value;
+        if (v is NumericHealthValue && v.numericValue > 0) {
+          (byApp['health:${p.sourceName}'] ??= []).add((
+            p.dateFrom,
+            v.numericValue.toDouble(),
+          ));
+        }
+      }
+      if (byApp.isNotEmpty) {
+        // The stored copy mixes all Apple Health apps in one series.
+        bySource
+          ..remove('health_connect')
+          ..addAll(byApp);
+      }
+    } catch (e) {
+      log('[Sleep] night heart rate from Apple Health: $e');
+    }
+  }
+  return [
+    for (final l in bySource.values) l..sort((x, y) => x.$1.compareTo(y.$1)),
+  ];
+}
+
+SleepData sleepFromRecord(
+  SleepRecord r, {
+  List<List<(DateTime, double)>> heartRates = const [],
+}) {
   final phases = <SleepPhase>[];
   final json = r.phasesJson;
   if (json != null) {
@@ -82,6 +154,7 @@ SleepData sleepFromRecord(SleepRecord r) {
         awake: Duration(seconds: r.awakeSleepSeconds),
         hrv: hrvCurve,
         stress: stressCurve,
+        heartRates: heartRates,
       ),
     );
     estimated = phases.isNotEmpty;
@@ -228,8 +301,15 @@ final sleepDataProvider = FutureProvider.family<SleepData?, DateTime>((
   date,
 ) async {
   ref.watch(syncStatusListenerProvider);
-  final record = await ref.watch(databaseProvider).getSleepForDate(date);
-  return record == null ? null : sleepFromRecord(record);
+  final db = ref.watch(databaseProvider);
+  final health =
+      ref.watch(healthConnectPermissionProvider).valueOrNull ?? false;
+  final record = await db.getSleepForDate(date);
+  if (record == null) return null;
+  return sleepFromRecord(
+    record,
+    heartRates: await _nightHeartRate(db, record, health: health),
+  );
 });
 
 // ---------------------------------------------------------------------------
