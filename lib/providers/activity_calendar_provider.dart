@@ -61,6 +61,17 @@ final planCalendarActivitiesProvider =
                 s.garminAlternativeId,
               ],
             }..remove(null);
+            // Entries of sessions moved to another month (issue #1).
+            final owned = {
+              for (final o
+                  in await (db.select(db.trainingSessions)..where(
+                        (t) => t.garminAlternativeId.isIn([
+                          for (final w in scheduled) w.scheduleId,
+                        ]),
+                      ))
+                      .get())
+                ?o.garminAlternativeId,
+            };
             final result = <CalendarActivity>[
               for (final s in sessions)
                 if (s.status == 'planned' || s.status == 'adapted')
@@ -83,7 +94,8 @@ final planCalendarActivitiesProvider =
                     skipReason: reasons[s.id],
                   ),
               for (final w in scheduled)
-                if (!linked.contains(w.workoutId))
+                if (!linked.contains(w.workoutId) &&
+                    !owned.contains(w.scheduleId))
                   CalendarActivity(
                     date: w.scheduledDate,
                     sport: w.sportType,

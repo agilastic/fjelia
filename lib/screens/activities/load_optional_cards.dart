@@ -30,11 +30,8 @@ class _WeekdayLoadState extends ConsumerState<WeekdayLoadCard> {
     final previous = DateTime(monday.year, monday.month, monday.day - 7);
     final values = List.generate(14, (_) => 0.0);
     for (final a in ref.watch(loadActivitiesProvider).valueOrNull ?? []) {
-      final d = DateTime.utc(
-        a.startDate.year,
-        a.startDate.month,
-        a.startDate.day,
-      );
+      final local = a.startDate.toLocal();
+      final d = DateTime.utc(local.year, local.month, local.day);
       final i = d
           .difference(DateTime.utc(previous.year, previous.month, previous.day))
           .inDays;
@@ -52,7 +49,8 @@ class _WeekdayLoadState extends ConsumerState<WeekdayLoadCard> {
           Text(context.l10n.weekdayComparison2, style: loadLabel),
           SizedBox(height: 12),
           LoadRange(
-            labels: ['Load', context.l10n.time, context.l10n.distance],
+            // Fixed identifiers; only the text is translated (#5).
+            labels: const ['Load', 'Time', 'Distance'],
             display: {
               'Load': context.l10n.loadMetric,
               'Time': context.l10n.time,

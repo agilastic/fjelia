@@ -265,9 +265,13 @@ class LoadWeekBars extends StatelessWidget {
     this.limit = false,
     this.mondayFirst = true,
     this.inProgressLast = false,
+    this.unit = '',
   });
   final bool mondayFirst;
   final List<DateTime> dates;
+
+  /// Shown after a bar's value when it is touched, e.g. ` h` or ` km`.
+  final String unit;
   final List<double> values;
   final bool weekNumbers, limit;
 
@@ -299,7 +303,7 @@ class LoadWeekBars extends StatelessWidget {
                     Expanded(
                       child: Tooltip(
                         message:
-                            '${DateFormat.MMMd().format(dates[i])}: ${valueText(values[i], 1)}'
+                            '${DateFormat.MMMd().format(dates[i])}: ${valueText(values[i], 1)}$unit'
                             '${inProgressLast && i == values.length - 1 ? ' (so far)' : ''}',
                         child: LayoutBuilder(
                           builder: (context, box) => ClipRRect(

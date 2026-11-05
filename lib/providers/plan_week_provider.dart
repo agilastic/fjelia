@@ -99,12 +99,18 @@ PlanWeek buildPlanWeek({
   Map<String, String> linkedActivity = const {},
   Map<String, DateTime> completionStarts = const {},
   List<UpcomingPlanEntry> scheduled = const [],
+  Set<String> ownedScheduleIds = const {},
 }) {
   final entries = markDoneEntries(
-    mergeUpcomingPlan(sessions, [
-      for (final e in scheduled)
-        if (e.workout != null) e.workout!,
-    ], skipReasons: skipReasons),
+    mergeUpcomingPlan(
+      sessions,
+      [
+        for (final e in scheduled)
+          if (e.workout != null) e.workout!,
+      ],
+      skipReasons: skipReasons,
+      ownedScheduleIds: ownedScheduleIds,
+    ),
     activities,
     linkedActivity: linkedActivity,
     completionStarts: completionStarts,
@@ -257,6 +263,17 @@ Future<PlanWeek> loadPlanWeek(AppDatabase db, DateTime start) async {
                 t.scheduledDate.isSmallerThanValue(end),
           ))
           .get();
+  // Entries of sessions that now sit in another week (moved).
+  final owned = {
+    for (final o
+        in await (db.select(db.trainingSessions)..where(
+              (t) => t.garminAlternativeId.isIn([
+                for (final r in scheduled) r.scheduleId,
+              ]),
+            ))
+            .get())
+      ?o.garminAlternativeId,
+  };
   return buildPlanWeek(
     start: start,
     sessions: sessions,
@@ -281,6 +298,7 @@ Future<PlanWeek> loadPlanWeek(AppDatabase db, DateTime start) async {
           workout: scheduledWorkoutFromRecord(row),
         ),
     ],
+    ownedScheduleIds: owned,
   );
 }
 

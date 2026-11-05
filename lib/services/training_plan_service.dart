@@ -2168,6 +2168,23 @@ class TrainingPlanService {
       // time counts, and the slot it stands for is not planned a second time.
       // A skipped session takes nothing and is not made up for.
       final weekEndExclusive = _addDays(weekStart, 7);
+      bool inWeek(DateTime d) =>
+          !d.isBefore(weekStart) && d.isBefore(weekEndExclusive);
+      // A session the athlete moved to another week still stands for its
+      // slot here, in the week it was planned for: that week does not plan
+      // it a second time on its old day.
+      for (final p in kept) {
+        final original = DateTime.tryParse(p.sessionDateOriginal ?? '');
+        if (original == null ||
+            !inWeek(_day(original)) ||
+            inWeek(p.sessionDate)) {
+          continue;
+        }
+        final i = slots.indexWhere(
+          (s) => s.sport == p.sport && s.sessionType == p.sessionType,
+        );
+        if (i >= 0) slots.removeAt(i);
+      }
       var unmatchedMin = 0;
       for (final p in kept.where(
         (p) =>

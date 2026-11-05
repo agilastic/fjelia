@@ -42,7 +42,7 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
       _ => activityLoad(a),
     };
     for (final a in rows) {
-      final week = weekStartOf(a.startDate, mondayFirst: mondayFirst);
+      final week = weekStartOf(a.startDate.toLocal(), mondayFirst: mondayFirst);
       if (weeks.containsKey(week)) weeks[week] = weeks[week]! + value(a);
       if (week != monday && week != priorMonday) continue;
       final load = activityLoad(a), index = week == monday ? 0 : 1;
@@ -240,7 +240,8 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
               children: [
                 Text(context.l10n.t12WeekHistory, style: loadLabel),
                 LoadRange(
-                  labels: ['Load', context.l10n.time, context.l10n.distance],
+                  // Fixed identifiers; only the text is translated (#5).
+                  labels: const ['Load', 'Time', 'Distance'],
                   display: {
                     'Load': context.l10n.loadMetric,
                     'Time': context.l10n.time,
@@ -272,6 +273,11 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
             limit: true,
             mondayFirst: mondayFirst,
             inProgressLast: progress.inProgress,
+            unit: switch (metric) {
+              'Time' => ' h',
+              'Distance' => ' km',
+              _ => ' pts',
+            },
           ),
           if (current > 0 || previous > 0)
             Align(

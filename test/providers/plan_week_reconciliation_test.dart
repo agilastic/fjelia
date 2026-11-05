@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,6 +13,7 @@ import 'package:fjelia/providers/plan_week_provider.dart';
 import 'package:fjelia/providers/planner_providers.dart';
 import 'package:fjelia/providers/upcoming_plan_provider.dart';
 import 'package:fjelia/services/post_workout_scorer.dart' show noActivityReason;
+
 import 'upcoming_done_test.dart' show session, garminWorkout;
 
 final monday = DateTime(2026, 10, 19);
@@ -249,6 +251,35 @@ void main() {
     );
     expect(rows, hasLength(2));
     expect(rows.last.date, day(2));
+  });
+  test('issue #1: a moved session shows once, not again on its old day', () {
+    // Sent to Garmin on Tuesday, then moved to Thursday; Garmin's calendar
+    // still has it on Tuesday until it is sent again.
+    final moved = session('s', day(3)).copyWith(
+      garminWorkoutId: const Value('w-Easy run'),
+      garminAlternativeId: const Value('s-Easy run'),
+    );
+    final rows = mergeUpcomingPlan(
+      [moved],
+      [garminWorkout(day(1), 'Easy run', 3600)],
+    );
+    expect(rows, hasLength(1));
+    expect(rows.single.session?.id, 's');
+    expect(rows.single.date, day(3));
+    // The week view of a week without the session hides it as well.
+    final week = buildPlanWeek(
+      start: monday,
+      sessions: const [],
+      activities: const [],
+      scheduled: [
+        UpcomingPlanEntry(
+          date: day(1),
+          workout: garminWorkout(day(1), 'Easy run', 3600),
+        ),
+      ],
+      ownedScheduleIds: const {'s-Easy run'},
+    );
+    expect(week.days.expand((d) => d.items), isEmpty);
   });
   for (final explicitLink in [true, false]) {
     test(

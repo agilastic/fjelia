@@ -308,6 +308,7 @@ List<UpcomingPlanEntry> mergeUpcomingPlan(
   List<TrainingSession> sessions,
   List<ScheduledWorkout> workouts, {
   Map<String, String> skipReasons = const {},
+  Set<String> ownedScheduleIds = const {},
 }) {
   String key(DateTime date, String id) =>
       '${date.year}-${date.month}-${date.day}:$id';
@@ -315,6 +316,14 @@ List<UpcomingPlanEntry> mergeUpcomingPlan(
     for (final s in sessions)
       for (final id in [s.garminWorkoutId, s.garminAlternativeId])
         if (id != null) key(s.sessionDate, id),
+  };
+  // A calendar entry Fjelia scheduled for a session is that session's, on
+  // whatever day the watch still has it: a moved session shows once, on its
+  // new day, until it is sent again (issue #1). [ownedScheduleIds] adds the
+  // entries of sessions outside [sessions].
+  final owned = {
+    ...ownedScheduleIds,
+    for (final s in sessions) ?s.garminAlternativeId,
   };
   return [
     for (final s in sessions)
@@ -324,7 +333,8 @@ List<UpcomingPlanEntry> mergeUpcomingPlan(
         skipReason: s.status == 'skipped' ? skipReasons[s.id] : null,
       ),
     for (final w in workouts)
-      if (!linked.contains(key(w.scheduledDate, w.workoutId)))
+      if (!linked.contains(key(w.scheduledDate, w.workoutId)) &&
+          !owned.contains(w.scheduleId))
         UpcomingPlanEntry(date: w.scheduledDate, workout: w),
   ]..sort((a, b) => a.date.compareTo(b.date));
 }
