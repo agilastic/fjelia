@@ -3593,5 +3593,21 @@
   "nightCurves": "Curvas de la noche",
   "noPhaseTimeline": "Este reloj no indica cuándo ocurrió cada fase del sueño, solo los totales de arriba. Estos son la VFC y el estrés que midió durante la noche.",
   "stagesEstimated": "Estimado por Fjelia a partir de la VFC y el estrés que tu reloj COROS midió durante la noche. Los totales de las fases son los de COROS; cuándo ocurrió cada fase es una aproximación.",
-  "nightCurvesBasis": "La VFC y el estrés medidos durante la noche. La estimación de fases de arriba se basa en ellos."
+  "nightCurvesBasis": "La VFC y el estrés medidos durante la noche. La estimación de fases de arriba se basa en ellos.",
+  "swimShort": "Normalmente basta con agua. No hacen falta geles: una comida normal antes y después cubre esta sesión.",
+  "swimPoolLong": "Toma una bebida con carbohidratos en las pausas largas entre series, sobre todo si la sesión es intensa. En la piscina no hacen falta geles.",
+  "swimOpenFeeds": "Planifica carbohidratos y líquidos en torno a los avituallamientos disponibles (barco, kayak, orilla). No dependas de lo que no puedas alcanzar con seguridad nadando.",
+  "swimOpenUnsupported": "Sin asistencia no hay avituallamiento: come bien antes, ajusta la distancia a lo que eso cubre y reponte justo después.",
+  "swimOpenFeedsUnknown": "Aguas abiertas: indica en «Editar estrategia» si hay avituallamiento (con o sin asistencia).",
+  "swimFluidPool": "Hidratarse también cuenta en la piscina: en el agua se suda menos que en tierra, pero no nada. Deja una botella marcada en el borde y bebe en las pausas.",
+  "swimFluidOpen": "La previsión no da la temperatura del agua y el agua fría reduce la sed: bebe antes de salir, en cada avituallamiento y justo después.",
+  "swimBeforeAfter": "Antes: una comida habitual rica en carbohidratos 1–4 h antes. Después: unos 1 g de carbohidratos por kg con 20–25 g de proteína; si te has pesado, bebe unos 1,5 l por kg perdido, con algo de sodio.",
+  "swimNoDuration": "Sin duración prevista: agua en el borde basta para la mayoría de sesiones; bebida con carbohidratos solo a partir de 90 minutos.",
+  "swimCarryPool": "Sin geles. Botella en el borde: {bottles} × {bottleMl} ml; {drinkCarbs} g de carbohidratos vienen de la bebida.",
+  "swimCarryOpen": "Sin geles mientras nadas. En los avituallamientos: {bottles} × {bottleMl} ml; {drinkCarbs} g de carbohidratos vienen de la bebida.",
+  "swimPerBreak": "Cada 20 minutos, en una pausa o avituallamiento: unos {carbs} g de carbohidratos y {fluid} ml.",
+  "feedsLabel": "Avituallamiento (aguas abiertas)",
+  "feedsSupported": "Con asistencia (barco, kayak, orilla)",
+  "feedsUnsupported": "Sin asistencia",
+  "feedsUnknown": "Desconocido"
 }

@@ -7170,4 +7170,67 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get nightCurvesBasis =>
       'HRV e stress misurati durante la notte. La stima delle fasi qui sopra si basa su di essi.';
+
+  @override
+  String get swimShort =>
+      'In genere basta l’acqua. Nessun gel necessario: un pasto normale prima e dopo copre questa nuotata.';
+
+  @override
+  String get swimPoolLong =>
+      'Valuta una bevanda con carboidrati nelle pause più lunghe tra le serie, soprattutto se la seduta è intensa. In piscina non servono gel.';
+
+  @override
+  String get swimOpenFeeds =>
+      'Pianifica carboidrati e liquidi attorno alle occasioni di rifornimento (barca, kayak, riva). Non contare su ciò che non puoi raggiungere in sicurezza nuotando.';
+
+  @override
+  String get swimOpenUnsupported =>
+      'Senza assistenza non ci sono rifornimenti: mangia bene prima, adatta la nuotata a quanto basta e reintegra subito dopo.';
+
+  @override
+  String get swimOpenFeedsUnknown =>
+      'Acque libere: indica in «Modifica strategia» se sono possibili rifornimenti (con o senza assistenza).';
+
+  @override
+  String get swimFluidPool =>
+      'Bere conta anche in piscina: in acqua si suda meno che a terra, ma non zero. Tieni una borraccia con il nome a bordo vasca e bevi nelle pause.';
+
+  @override
+  String get swimFluidOpen =>
+      'Le previsioni non danno la temperatura dell’acqua e l’acqua fredda attenua la sete: bevi prima della partenza, a ogni rifornimento e subito dopo.';
+
+  @override
+  String get swimBeforeAfter =>
+      'Prima: un pasto abituale ricco di carboidrati 1–4 h prima. Dopo: circa 1 g di carboidrati per kg con 20–25 g di proteine; se ti sei pesato, bevi circa 1,5 l per kg perso, con un po’ di sodio.';
+
+  @override
+  String get swimNoDuration =>
+      'Nessuna durata prevista: l’acqua a bordo vasca basta per la maggior parte delle nuotate; una bevanda con carboidrati solo oltre i 90 minuti.';
+
+  @override
+  String swimCarryPool(String bottles, String bottleMl, String drinkCarbs) {
+    return 'Niente gel. Borraccia a bordo vasca: $bottles × $bottleMl ml; $drinkCarbs g di carboidrati vengono dalla bevanda.';
+  }
+
+  @override
+  String swimCarryOpen(String bottles, String bottleMl, String drinkCarbs) {
+    return 'Niente gel mentre nuoti. Ai rifornimenti: $bottles × $bottleMl ml; $drinkCarbs g di carboidrati vengono dalla bevanda.';
+  }
+
+  @override
+  String swimPerBreak(String carbs, String fluid) {
+    return 'Ogni 20 minuti, in una pausa o a un rifornimento: circa $carbs g di carboidrati e $fluid ml.';
+  }
+
+  @override
+  String get feedsLabel => 'Rifornimenti (acque libere)';
+
+  @override
+  String get feedsSupported => 'Con assistenza (barca, kayak, riva)';
+
+  @override
+  String get feedsUnsupported => 'Senza assistenza';
+
+  @override
+  String get feedsUnknown => 'Non noto';
 }

@@ -7195,4 +7195,67 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get nightCurvesBasis =>
       'La VFC et le stress mesurés pendant la nuit. L’estimation des phases ci-dessus en est tirée.';
+
+  @override
+  String get swimShort =>
+      'L’eau suffit en général. Pas besoin de gels : un repas normal avant et après couvre cette séance.';
+
+  @override
+  String get swimPoolLong =>
+      'Prévois une boisson glucidique pendant les pauses plus longues entre les séries, surtout si la séance est intense. Pas besoin de gels à la piscine.';
+
+  @override
+  String get swimOpenFeeds =>
+      'Planifie glucides et boissons autour des possibilités de ravitaillement (bateau, kayak, rive). Ne compte pas sur ce que tu ne peux pas atteindre en sécurité en nageant.';
+
+  @override
+  String get swimOpenUnsupported =>
+      'Pas de ravitaillement sans accompagnement : mange bien avant, adapte la distance et recharge juste après.';
+
+  @override
+  String get swimOpenFeedsUnknown =>
+      'Eau libre : indique dans « Modifier la stratégie » si un ravitaillement est possible (accompagné ou non).';
+
+  @override
+  String get swimFluidPool =>
+      'L’hydratation compte aussi à la piscine : on transpire moins dans l’eau que sur terre, mais pas du tout rien. Garde une bouteille marquée au bord et bois pendant les pauses.';
+
+  @override
+  String get swimFluidOpen =>
+      'Les prévisions ne donnent pas la température de l’eau, et l’eau froide atténue la soif : bois avant le départ, à chaque ravitaillement et juste après.';
+
+  @override
+  String get swimBeforeAfter =>
+      'Avant : un repas glucidique habituel 1–4 h avant. Après : environ 1 g de glucides par kg avec 20–25 g de protéines ; si tu t’es pesé, bois environ 1,5 l par kg perdu, avec un peu de sodium.';
+
+  @override
+  String get swimNoDuration =>
+      'Pas de durée prévue : de l’eau au bord suffit pour la plupart des séances ; une boisson glucidique seulement au-delà de 90 minutes.';
+
+  @override
+  String swimCarryPool(String bottles, String bottleMl, String drinkCarbs) {
+    return 'Pas de gels. Bouteille au bord du bassin : $bottles × $bottleMl ml ; $drinkCarbs g de glucides viennent de la boisson.';
+  }
+
+  @override
+  String swimCarryOpen(String bottles, String bottleMl, String drinkCarbs) {
+    return 'Pas de gels en nageant. Aux ravitaillements : $bottles × $bottleMl ml ; $drinkCarbs g de glucides viennent de la boisson.';
+  }
+
+  @override
+  String swimPerBreak(String carbs, String fluid) {
+    return 'Par tranche de 20 minutes, à une pause ou un ravitaillement : environ $carbs g de glucides et $fluid ml.';
+  }
+
+  @override
+  String get feedsLabel => 'Ravitaillement (eau libre)';
+
+  @override
+  String get feedsSupported => 'Accompagné (bateau, kayak, rive)';
+
+  @override
+  String get feedsUnsupported => 'Sans accompagnement';
+
+  @override
+  String get feedsUnknown => 'Inconnu';
 }

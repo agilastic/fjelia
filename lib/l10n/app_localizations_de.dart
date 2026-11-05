@@ -7191,4 +7191,67 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get nightCurvesBasis =>
       'HRV und Stress, über die Nacht gemessen. Daraus ist die Phasen-Schätzung oben berechnet.';
+
+  @override
+  String get swimShort =>
+      'Wasser reicht in der Regel. Keine Gels nötig: eine normale Mahlzeit davor und danach deckt diese Einheit.';
+
+  @override
+  String get swimPoolLong =>
+      'Nimm in längeren Satzpausen ein kohlenhydrathaltiges Getränk, besonders bei einer intensiven Einheit. Gels braucht es im Becken nicht.';
+
+  @override
+  String get swimOpenFeeds =>
+      'Plane Kohlenhydrate und Flüssigkeit um die Verpflegungsmöglichkeiten herum (Boot, Kajak, Ufer). Verlass dich nicht auf Verpflegung, die du beim Schwimmen nicht sicher erreichst.';
+
+  @override
+  String get swimOpenUnsupported =>
+      'Ohne Begleitung gibt es unterwegs keine Verpflegung: vorher gut essen, die Strecke darauf abstimmen und direkt danach auffüllen.';
+
+  @override
+  String get swimOpenFeedsUnknown =>
+      'Freiwasser: Lege unter „Strategie bearbeiten“ fest, ob Verpflegung möglich ist (mit oder ohne Begleitung).';
+
+  @override
+  String get swimFluidPool =>
+      'Trinken zählt auch im Becken: Im Wasser schwitzt du weniger als an Land, aber nicht gar nicht. Stell eine beschriftete Flasche an den Rand und trink in den Satzpausen.';
+
+  @override
+  String get swimFluidOpen =>
+      'Die Wettervorhersage nennt keine Wassertemperatur, und kaltes Wasser dämpft den Durst: vor dem Start, bei jeder Verpflegung und direkt danach trinken.';
+
+  @override
+  String get swimBeforeAfter =>
+      'Davor: eine gewohnte kohlenhydratreiche Mahlzeit 1–4 h vorher. Danach: etwa 1 g Kohlenhydrate pro kg mit 20–25 g Eiweiß; wenn du dich gewogen hast, etwa 1,5 l pro verlorenem kg trinken, mit etwas Natrium.';
+
+  @override
+  String get swimNoDuration =>
+      'Keine geplante Dauer: Wasser am Beckenrand reicht für die meisten Einheiten; ein Kohlenhydratgetränk erst ab über 90 Minuten.';
+
+  @override
+  String swimCarryPool(String bottles, String bottleMl, String drinkCarbs) {
+    return 'Keine Gels. Flasche am Beckenrand: $bottles × $bottleMl ml; $drinkCarbs g Kohlenhydrate stammen aus dem Getränkepulver.';
+  }
+
+  @override
+  String swimCarryOpen(String bottles, String bottleMl, String drinkCarbs) {
+    return 'Keine Gels beim Schwimmen. An den Verpflegungsstellen: $bottles × $bottleMl ml; $drinkCarbs g Kohlenhydrate stammen aus dem Getränkepulver.';
+  }
+
+  @override
+  String swimPerBreak(String carbs, String fluid) {
+    return 'Je 20 Minuten, in einer Pause oder bei der Verpflegung: etwa $carbs g Kohlenhydrate und $fluid ml.';
+  }
+
+  @override
+  String get feedsLabel => 'Verpflegung (Freiwasser)';
+
+  @override
+  String get feedsSupported => 'Mit Begleitung (Boot, Kajak, Ufer)';
+
+  @override
+  String get feedsUnsupported => 'Ohne Begleitung';
+
+  @override
+  String get feedsUnknown => 'Unbekannt';
 }

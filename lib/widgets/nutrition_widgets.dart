@@ -115,25 +115,29 @@ class _NutritionFieldsState extends State<_NutritionFields> {
           for (final e in widget.fields.entries)
             Padding(
               padding: const EdgeInsets.only(top: 12),
-              child: e.key == 'surface' || e.key == 'phase'
+              child: e.key == 'surface' || e.key == 'phase' || e.key == 'feeds'
                   ? DropdownButtonFormField<String>(
                       isExpanded: true,
                       initialValue: controllers[e.key]!.text,
                       decoration: InputDecoration(labelText: e.value.$1),
                       items: [
+                        // Stored values stay identifiers; only the
+                        // label is translated.
                         for (final value
                             in e.key == 'surface'
-                                ? [
+                                ? const [
                                     'Unknown',
                                     'Indoor',
                                     'Road',
-                                    context.l10n.trail,
-                                    context.l10n.technical,
-                                    context.l10n.snow,
-                                    context.l10n.pool,
-                                    context.l10n.openWater,
+                                    'Trail',
+                                    'Technical',
+                                    'Snow',
+                                    'Pool',
+                                    'Open water',
                                   ]
-                                : ['before', 'during', 'after'])
+                                : e.key == 'feeds'
+                                ? const ['Unknown', 'Supported', 'Unsupported']
+                                : const ['before', 'during', 'after'])
                           DropdownMenuItem(
                             value: value,
                             child: Text(
@@ -231,6 +235,8 @@ class PlannedNutritionCard extends ConsumerWidget {
         'fluid': (context.l10n.fluidTargetMlH, '${plan.fluid}'),
         'sodium': (context.l10n.sodiumTargetMgHNot, '${plan.sodium}'),
         'surface': (context.l10n.surfaceFeedingAccess, c.surface),
+        if (swimDiscipline(workout, c) != null)
+          'feeds': (context.l10n.feedsLabel, c.feeds),
         'ascent': (context.l10n.expectedAscentM, c.ascent?.toString() ?? ''),
         'altitude': (
           context.l10n.expectedAltitudeM,
@@ -248,6 +254,7 @@ class PlannedNutritionCard extends ConsumerWidget {
     if (values == null || !context.mounted) return;
     final edited = NutritionConditions(
       surface: values['surface']!,
+      feeds: values['feeds'] ?? c.feeds,
       ascent: parseDecimal(values['ascent']),
       altitude: parseDecimal(values['altitude']),
       temperature: parseDecimal(values['temperature']),
@@ -334,21 +341,37 @@ class PlannedNutritionCard extends ConsumerWidget {
                   ),
                   if (plan.carbs > 0)
                     Text(
-                      context.l10n.every20MinAboutCarbs(
-                        _v(plan.carbs / 3),
-                        _v(plan.fluid / 3),
-                      ),
+                      plan.gelsPractical
+                          ? context.l10n.every20MinAboutCarbs(
+                              _v(plan.carbs / 3),
+                              _v(plan.fluid / 3),
+                            )
+                          : context.l10n.swimPerBreak(
+                              _v(plan.carbs / 3),
+                              _v(plan.fluid / 3),
+                            ),
                       style: const TextStyle(fontSize: 11, color: muted),
                     ),
                   const SizedBox(height: 8),
+                  // In the water gels are no option (#8): the drink at the
+                  // pool edge or at feeds.
                   Text(
-                    context.l10n.carryAboutGelsGelsGelcarbs(
-                      plan.gels,
-                      _v(plan.preferences.gelCarbs),
-                      plan.bottles,
-                      _v(plan.preferences.bottleMl),
-                      _v(plan.drinkCarbs),
-                    ),
+                    plan.gelsPractical
+                        ? context.l10n.carryAboutGelsGelsGelcarbs(
+                            plan.gels,
+                            _v(plan.preferences.gelCarbs),
+                            plan.bottles,
+                            _v(plan.preferences.bottleMl),
+                            _v(plan.drinkCarbs),
+                          )
+                        : (swimDiscipline(plan.workout, plan.conditions) ==
+                                  'open'
+                              ? context.l10n.swimCarryOpen
+                              : context.l10n.swimCarryPool)(
+                            '${plan.bottles}',
+                            _v(plan.preferences.bottleMl),
+                            _v(plan.drinkCarbs),
+                          ),
                   ),
                   Text(
                     context.l10n.packQuantitiesIncludeFullContainers,
@@ -1506,6 +1529,8 @@ String _choiceLabel(BuildContext context, String value) => switch (value) {
   'Snow' => context.l10n.snow,
   'Pool' => context.l10n.pool,
   'Open water' => context.l10n.openWater,
+  'Supported' => context.l10n.feedsSupported,
+  'Unsupported' => context.l10n.feedsUnsupported,
   'Not recorded' => context.l10n.notRecorded,
   'Comfortable' => context.l10n.comfortable,
   'Mild symptoms' => context.l10n.mildSymptoms,

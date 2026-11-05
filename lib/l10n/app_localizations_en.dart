@@ -7130,4 +7130,67 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get nightCurvesBasis =>
       'The HRV and stress measured overnight. The stage estimate above is built from them.';
+
+  @override
+  String get swimShort =>
+      'Water is generally sufficient. No energy gels needed: a normal meal before and after covers this swim.';
+
+  @override
+  String get swimPoolLong =>
+      'Consider a carbohydrate-containing drink during longer breaks between sets, particularly if the session is intensive. Gels are not needed in the pool.';
+
+  @override
+  String get swimOpenFeeds =>
+      'Plan carbohydrate and fluid intake around the available feeding opportunities (boat, kayak, shore). Avoid relying on nutrition you cannot reach safely during the swim.';
+
+  @override
+  String get swimOpenUnsupported =>
+      'No feeds during an unsupported swim: fuel well beforehand, keep the swim within what that covers, and refuel right after.';
+
+  @override
+  String get swimOpenFeedsUnknown =>
+      'Open water: set whether feeds are possible (supported or unsupported) under Edit strategy.';
+
+  @override
+  String get swimFluidPool =>
+      'Hydration matters in the pool too: you sweat less in water than on land, but not nothing. Keep a labelled bottle on the deck and drink in set breaks.';
+
+  @override
+  String get swimFluidOpen =>
+      'Air forecasts do not give the water temperature, and cold water dulls thirst: drink before the start, at every feed and right after.';
+
+  @override
+  String get swimBeforeAfter =>
+      'Before: a familiar carbohydrate meal 1–4 h ahead. After: about 1 g carbohydrate per kg with 20–25 g protein; if you weighed yourself, drink about 1.5 l per kg lost, with some sodium.';
+
+  @override
+  String get swimNoDuration =>
+      'No planned duration: water at the pool edge is enough for most swims; add a carbohydrate drink only for swims over 90 minutes.';
+
+  @override
+  String swimCarryPool(String bottles, String bottleMl, String drinkCarbs) {
+    return 'No gels. Bottle at the pool edge: $bottles × $bottleMl ml; $drinkCarbs g carbohydrate comes from the drink mix.';
+  }
+
+  @override
+  String swimCarryOpen(String bottles, String bottleMl, String drinkCarbs) {
+    return 'No gels while swimming. At feeds: $bottles × $bottleMl ml; $drinkCarbs g carbohydrate comes from the drink mix.';
+  }
+
+  @override
+  String swimPerBreak(String carbs, String fluid) {
+    return 'Per 20 minutes, at a break or feed: about $carbs g carbs and $fluid ml.';
+  }
+
+  @override
+  String get feedsLabel => 'Feeds (open water)';
+
+  @override
+  String get feedsSupported => 'Supported (boat, kayak, shore)';
+
+  @override
+  String get feedsUnsupported => 'Unsupported';
+
+  @override
+  String get feedsUnknown => 'Not known';
 }

@@ -3593,5 +3593,21 @@
   "nightCurves": "Nachtverlauf",
   "noPhaseTimeline": "Diese Uhr liefert nicht, wann welche Schlafphase war, nur die Summen oben. Das hier sind HRV und Stress, die sie über die Nacht gemessen hat.",
   "stagesEstimated": "Von Fjelia geschätzt aus HRV und Stress, die deine COROS-Uhr über Nacht gemessen hat. Die Summen der Phasen sind die von COROS; wann welche Phase war, ist eine Annäherung.",
-  "nightCurvesBasis": "HRV und Stress, über die Nacht gemessen. Daraus ist die Phasen-Schätzung oben berechnet."
+  "nightCurvesBasis": "HRV und Stress, über die Nacht gemessen. Daraus ist die Phasen-Schätzung oben berechnet.",
+  "swimShort": "Wasser reicht in der Regel. Keine Gels nötig: eine normale Mahlzeit davor und danach deckt diese Einheit.",
+  "swimPoolLong": "Nimm in längeren Satzpausen ein kohlenhydrathaltiges Getränk, besonders bei einer intensiven Einheit. Gels braucht es im Becken nicht.",
+  "swimOpenFeeds": "Plane Kohlenhydrate und Flüssigkeit um die Verpflegungsmöglichkeiten herum (Boot, Kajak, Ufer). Verlass dich nicht auf Verpflegung, die du beim Schwimmen nicht sicher erreichst.",
+  "swimOpenUnsupported": "Ohne Begleitung gibt es unterwegs keine Verpflegung: vorher gut essen, die Strecke darauf abstimmen und direkt danach auffüllen.",
+  "swimOpenFeedsUnknown": "Freiwasser: Lege unter „Strategie bearbeiten“ fest, ob Verpflegung möglich ist (mit oder ohne Begleitung).",
+  "swimFluidPool": "Trinken zählt auch im Becken: Im Wasser schwitzt du weniger als an Land, aber nicht gar nicht. Stell eine beschriftete Flasche an den Rand und trink in den Satzpausen.",
+  "swimFluidOpen": "Die Wettervorhersage nennt keine Wassertemperatur, und kaltes Wasser dämpft den Durst: vor dem Start, bei jeder Verpflegung und direkt danach trinken.",
+  "swimBeforeAfter": "Davor: eine gewohnte kohlenhydratreiche Mahlzeit 1–4 h vorher. Danach: etwa 1 g Kohlenhydrate pro kg mit 20–25 g Eiweiß; wenn du dich gewogen hast, etwa 1,5 l pro verlorenem kg trinken, mit etwas Natrium.",
+  "swimNoDuration": "Keine geplante Dauer: Wasser am Beckenrand reicht für die meisten Einheiten; ein Kohlenhydratgetränk erst ab über 90 Minuten.",
+  "swimCarryPool": "Keine Gels. Flasche am Beckenrand: {bottles} × {bottleMl} ml; {drinkCarbs} g Kohlenhydrate stammen aus dem Getränkepulver.",
+  "swimCarryOpen": "Keine Gels beim Schwimmen. An den Verpflegungsstellen: {bottles} × {bottleMl} ml; {drinkCarbs} g Kohlenhydrate stammen aus dem Getränkepulver.",
+  "swimPerBreak": "Je 20 Minuten, in einer Pause oder bei der Verpflegung: etwa {carbs} g Kohlenhydrate und {fluid} ml.",
+  "feedsLabel": "Verpflegung (Freiwasser)",
+  "feedsSupported": "Mit Begleitung (Boot, Kajak, Ufer)",
+  "feedsUnsupported": "Ohne Begleitung",
+  "feedsUnknown": "Unbekannt"
 }

@@ -3593,5 +3593,21 @@
   "nightCurves": "Nočný priebeh",
   "noPhaseTimeline": "Tieto hodinky neuvádzajú, kedy bola ktorá fáza spánku, len súčty vyššie. Toto sú HRV a stres namerané počas noci.",
   "stagesEstimated": "Odhadnuté aplikáciou Fjelia z HRV a stresu, ktoré vaše hodinky COROS namerali cez noc. Súčty fáz sú od COROS; kedy ktorá fáza bola, je približné.",
-  "nightCurvesBasis": "HRV a stres namerané cez noc. Odhad fáz vyššie vychádza z nich."
+  "nightCurvesBasis": "HRV a stres namerané cez noc. Odhad fáz vyššie vychádza z nich.",
+  "swimShort": "Zvyčajne stačí voda. Gély nie sú potrebné: bežné jedlo pred a po pokryje tento tréning.",
+  "swimPoolLong": "V dlhších prestávkach medzi sériami si daj nápoj so sacharidmi, najmä pri intenzívnom tréningu. Gély v bazéne nie sú potrebné.",
+  "swimOpenFeeds": "Sacharidy a tekutiny si naplánuj podľa možností občerstvenia (čln, kajak, breh). Nespoliehaj sa na výživu, ku ktorej sa počas plávania bezpečne nedostaneš.",
+  "swimOpenUnsupported": "Bez sprievodu nie je počas plávania občerstvenie: dobre sa najedz vopred, prispôsob trasu a hneď potom doplň.",
+  "swimOpenFeedsUnknown": "Otvorená voda: v „Upraviť stratégiu“ nastav, či je občerstvenie možné (so sprievodom alebo bez).",
+  "swimFluidPool": "Pitie je dôležité aj v bazéne: vo vode sa potíš menej ako na suchu, ale nie vôbec. Polož si označenú fľašu na okraj a pi v prestávkach.",
+  "swimFluidOpen": "Predpoveď neuvádza teplotu vody a studená voda tlmí smäd: pi pred štartom, pri každom občerstvení a hneď potom.",
+  "swimBeforeAfter": "Pred: známe jedlo bohaté na sacharidy 1–4 h vopred. Po: asi 1 g sacharidov na kg s 20–25 g bielkovín; ak si sa odvážil, vypi asi 1,5 l na každý stratený kg, s trochou sodíka.",
+  "swimNoDuration": "Bez plánovanej dĺžky: voda na okraji stačí na väčšinu tréningov; sacharidový nápoj až nad 90 minút.",
+  "swimCarryPool": "Žiadne gély. Fľaša na okraji: {bottles} × {bottleMl} ml; {drinkCarbs} g sacharidov je z nápoja.",
+  "swimCarryOpen": "Počas plávania žiadne gély. Pri občerstvení: {bottles} × {bottleMl} ml; {drinkCarbs} g sacharidov je z nápoja.",
+  "swimPerBreak": "Na každých 20 minút, v prestávke alebo pri občerstvení: asi {carbs} g sacharidov a {fluid} ml.",
+  "feedsLabel": "Občerstvenie (otvorená voda)",
+  "feedsSupported": "So sprievodom (čln, kajak, breh)",
+  "feedsUnsupported": "Bez sprievodu",
+  "feedsUnknown": "Neznáme"
 }

@@ -120,8 +120,8 @@ void main() {
     'sport logistics distinguish pool, supported swimming, MTB and skiing',
     () {
       for (final pair in [
-        ('swimming_pool', 'pool deck'),
-        ('swimming_open_water', 'supported feeds'),
+        ('swimming_pool', 'on the deck'),
+        ('swimming_open_water', 'feeding opportunities'),
         ('cycling_mtb', 'technical descents'),
         ('nordic_skiing', 'insulated'),
         ('skate_skiing', 'gloves'),

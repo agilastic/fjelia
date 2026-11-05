@@ -3593,5 +3593,21 @@
   "nightCurves": "Corbes de la nit",
   "noPhaseTimeline": "Aquest rellotge no indica quan va passar cada fase del son, només els totals de dalt. Aquests són la VFC i l’estrès que va mesurar durant la nit.",
   "stagesEstimated": "Estimat per Fjelia a partir de la VFC i l’estrès que el teu rellotge COROS va mesurar durant la nit. Els totals de les fases són els de COROS; quan va passar cada fase és una aproximació.",
-  "nightCurvesBasis": "La VFC i l’estrès mesurats durant la nit. L’estimació de fases de dalt es basa en ells."
+  "nightCurvesBasis": "La VFC i l’estrès mesurats durant la nit. L’estimació de fases de dalt es basa en ells.",
+  "swimShort": "Normalment n’hi ha prou amb aigua. No calen gels: un àpat normal abans i després cobreix aquesta sessió.",
+  "swimPoolLong": "Pren una beguda amb hidrats de carboni a les pauses llargues entre sèries, sobretot si la sessió és intensa. A la piscina no calen gels.",
+  "swimOpenFeeds": "Planifica hidrats i líquids al voltant dels avituallaments disponibles (barca, caiac, riba). No depenguis del que no puguis abastar amb seguretat nedant.",
+  "swimOpenUnsupported": "Sense assistència no hi ha avituallament: menja bé abans, ajusta la distància i recupera just després.",
+  "swimOpenFeedsUnknown": "Aigües obertes: indica a «Edita l’estratègia» si hi ha avituallament (amb o sense assistència).",
+  "swimFluidPool": "Hidratar-se també compta a la piscina: a l’aigua se sua menys que a terra, però no gens. Deixa una ampolla marcada a la vora i beu a les pauses.",
+  "swimFluidOpen": "La previsió no dona la temperatura de l’aigua i l’aigua freda redueix la set: beu abans de sortir, a cada avituallament i just després.",
+  "swimBeforeAfter": "Abans: un àpat habitual ric en hidrats 1–4 h abans. Després: uns 1 g d’hidrats per kg amb 20–25 g de proteïna; si t’has pesat, beu uns 1,5 l per kg perdut, amb una mica de sodi.",
+  "swimNoDuration": "Sense durada prevista: aigua a la vora n’hi ha prou per a la majoria de sessions; beguda amb hidrats només a partir de 90 minuts.",
+  "swimCarryPool": "Sense gels. Ampolla a la vora: {bottles} × {bottleMl} ml; {drinkCarbs} g d’hidrats venen de la beguda.",
+  "swimCarryOpen": "Sense gels mentre nedes. Als avituallaments: {bottles} × {bottleMl} ml; {drinkCarbs} g d’hidrats venen de la beguda.",
+  "swimPerBreak": "Cada 20 minuts, en una pausa o avituallament: uns {carbs} g d’hidrats i {fluid} ml.",
+  "feedsLabel": "Avituallament (aigües obertes)",
+  "feedsSupported": "Amb assistència (barca, caiac, riba)",
+  "feedsUnsupported": "Sense assistència",
+  "feedsUnknown": "Desconegut"
 }

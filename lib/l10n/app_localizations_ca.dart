@@ -7179,4 +7179,67 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get nightCurvesBasis =>
       'La VFC i l’estrès mesurats durant la nit. L’estimació de fases de dalt es basa en ells.';
+
+  @override
+  String get swimShort =>
+      'Normalment n’hi ha prou amb aigua. No calen gels: un àpat normal abans i després cobreix aquesta sessió.';
+
+  @override
+  String get swimPoolLong =>
+      'Pren una beguda amb hidrats de carboni a les pauses llargues entre sèries, sobretot si la sessió és intensa. A la piscina no calen gels.';
+
+  @override
+  String get swimOpenFeeds =>
+      'Planifica hidrats i líquids al voltant dels avituallaments disponibles (barca, caiac, riba). No depenguis del que no puguis abastar amb seguretat nedant.';
+
+  @override
+  String get swimOpenUnsupported =>
+      'Sense assistència no hi ha avituallament: menja bé abans, ajusta la distància i recupera just després.';
+
+  @override
+  String get swimOpenFeedsUnknown =>
+      'Aigües obertes: indica a «Edita l’estratègia» si hi ha avituallament (amb o sense assistència).';
+
+  @override
+  String get swimFluidPool =>
+      'Hidratar-se també compta a la piscina: a l’aigua se sua menys que a terra, però no gens. Deixa una ampolla marcada a la vora i beu a les pauses.';
+
+  @override
+  String get swimFluidOpen =>
+      'La previsió no dona la temperatura de l’aigua i l’aigua freda redueix la set: beu abans de sortir, a cada avituallament i just després.';
+
+  @override
+  String get swimBeforeAfter =>
+      'Abans: un àpat habitual ric en hidrats 1–4 h abans. Després: uns 1 g d’hidrats per kg amb 20–25 g de proteïna; si t’has pesat, beu uns 1,5 l per kg perdut, amb una mica de sodi.';
+
+  @override
+  String get swimNoDuration =>
+      'Sense durada prevista: aigua a la vora n’hi ha prou per a la majoria de sessions; beguda amb hidrats només a partir de 90 minuts.';
+
+  @override
+  String swimCarryPool(String bottles, String bottleMl, String drinkCarbs) {
+    return 'Sense gels. Ampolla a la vora: $bottles × $bottleMl ml; $drinkCarbs g d’hidrats venen de la beguda.';
+  }
+
+  @override
+  String swimCarryOpen(String bottles, String bottleMl, String drinkCarbs) {
+    return 'Sense gels mentre nedes. Als avituallaments: $bottles × $bottleMl ml; $drinkCarbs g d’hidrats venen de la beguda.';
+  }
+
+  @override
+  String swimPerBreak(String carbs, String fluid) {
+    return 'Cada 20 minuts, en una pausa o avituallament: uns $carbs g d’hidrats i $fluid ml.';
+  }
+
+  @override
+  String get feedsLabel => 'Avituallament (aigües obertes)';
+
+  @override
+  String get feedsSupported => 'Amb assistència (barca, caiac, riba)';
+
+  @override
+  String get feedsUnsupported => 'Sense assistència';
+
+  @override
+  String get feedsUnknown => 'Desconegut';
 }

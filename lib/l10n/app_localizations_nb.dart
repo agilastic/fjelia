@@ -7132,4 +7132,67 @@ class AppLocalizationsNb extends AppLocalizations {
   @override
   String get nightCurvesBasis =>
       'HRV og stress målt gjennom natten. Faseanslaget over er laget ut fra dem.';
+
+  @override
+  String get swimShort =>
+      'Vann holder som regel. Ingen gel nødvendig: et vanlig måltid før og etter dekker denne økta.';
+
+  @override
+  String get swimPoolLong =>
+      'Ta en karbohydratholdig drikk i de lengre pausene mellom seriene, særlig hvis økta er hard. Gel trengs ikke i bassenget.';
+
+  @override
+  String get swimOpenFeeds =>
+      'Planlegg karbohydrater og væske rundt matingsmulighetene (båt, kajakk, land). Ikke stol på næring du ikke trygt når mens du svømmer.';
+
+  @override
+  String get swimOpenUnsupported =>
+      'Uten følge er det ingen mating underveis: spis godt før, tilpass svømmeturen og fyll på rett etter.';
+
+  @override
+  String get swimOpenFeedsUnknown =>
+      'Åpent vann: angi under «Rediger strategi» om mating er mulig (med eller uten følge).';
+
+  @override
+  String get swimFluidPool =>
+      'Drikke teller også i bassenget: du svetter mindre i vann enn på land, men ikke ingenting. Sett en merket flaske på kanten og drikk i pausene.';
+
+  @override
+  String get swimFluidOpen =>
+      'Værmeldingen gir ikke vanntemperaturen, og kaldt vann demper tørsten: drikk før start, ved hver mating og rett etter.';
+
+  @override
+  String get swimBeforeAfter =>
+      'Før: et kjent karbohydratrikt måltid 1–4 t før. Etter: rundt 1 g karbohydrat per kg med 20–25 g protein; hvis du har veid deg, drikk rundt 1,5 l per tapt kg, med litt natrium.';
+
+  @override
+  String get swimNoDuration =>
+      'Ingen planlagt varighet: vann på kanten holder for de fleste økter; karbohydratdrikk først over 90 minutter.';
+
+  @override
+  String swimCarryPool(String bottles, String bottleMl, String drinkCarbs) {
+    return 'Ingen gel. Flaske på kanten: $bottles × $bottleMl ml; $drinkCarbs g karbohydrat kommer fra drikkepulveret.';
+  }
+
+  @override
+  String swimCarryOpen(String bottles, String bottleMl, String drinkCarbs) {
+    return 'Ingen gel mens du svømmer. Ved mating: $bottles × $bottleMl ml; $drinkCarbs g karbohydrat kommer fra drikkepulveret.';
+  }
+
+  @override
+  String swimPerBreak(String carbs, String fluid) {
+    return 'Per 20 minutter, i en pause eller ved mating: rundt $carbs g karbohydrat og $fluid ml.';
+  }
+
+  @override
+  String get feedsLabel => 'Mating (åpent vann)';
+
+  @override
+  String get feedsSupported => 'Med følge (båt, kajakk, land)';
+
+  @override
+  String get feedsUnsupported => 'Uten følge';
+
+  @override
+  String get feedsUnknown => 'Ukjent';
 }

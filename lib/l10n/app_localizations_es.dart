@@ -7176,4 +7176,67 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get nightCurvesBasis =>
       'La VFC y el estrés medidos durante la noche. La estimación de fases de arriba se basa en ellos.';
+
+  @override
+  String get swimShort =>
+      'Normalmente basta con agua. No hacen falta geles: una comida normal antes y después cubre esta sesión.';
+
+  @override
+  String get swimPoolLong =>
+      'Toma una bebida con carbohidratos en las pausas largas entre series, sobre todo si la sesión es intensa. En la piscina no hacen falta geles.';
+
+  @override
+  String get swimOpenFeeds =>
+      'Planifica carbohidratos y líquidos en torno a los avituallamientos disponibles (barco, kayak, orilla). No dependas de lo que no puedas alcanzar con seguridad nadando.';
+
+  @override
+  String get swimOpenUnsupported =>
+      'Sin asistencia no hay avituallamiento: come bien antes, ajusta la distancia a lo que eso cubre y reponte justo después.';
+
+  @override
+  String get swimOpenFeedsUnknown =>
+      'Aguas abiertas: indica en «Editar estrategia» si hay avituallamiento (con o sin asistencia).';
+
+  @override
+  String get swimFluidPool =>
+      'Hidratarse también cuenta en la piscina: en el agua se suda menos que en tierra, pero no nada. Deja una botella marcada en el borde y bebe en las pausas.';
+
+  @override
+  String get swimFluidOpen =>
+      'La previsión no da la temperatura del agua y el agua fría reduce la sed: bebe antes de salir, en cada avituallamiento y justo después.';
+
+  @override
+  String get swimBeforeAfter =>
+      'Antes: una comida habitual rica en carbohidratos 1–4 h antes. Después: unos 1 g de carbohidratos por kg con 20–25 g de proteína; si te has pesado, bebe unos 1,5 l por kg perdido, con algo de sodio.';
+
+  @override
+  String get swimNoDuration =>
+      'Sin duración prevista: agua en el borde basta para la mayoría de sesiones; bebida con carbohidratos solo a partir de 90 minutos.';
+
+  @override
+  String swimCarryPool(String bottles, String bottleMl, String drinkCarbs) {
+    return 'Sin geles. Botella en el borde: $bottles × $bottleMl ml; $drinkCarbs g de carbohidratos vienen de la bebida.';
+  }
+
+  @override
+  String swimCarryOpen(String bottles, String bottleMl, String drinkCarbs) {
+    return 'Sin geles mientras nadas. En los avituallamientos: $bottles × $bottleMl ml; $drinkCarbs g de carbohidratos vienen de la bebida.';
+  }
+
+  @override
+  String swimPerBreak(String carbs, String fluid) {
+    return 'Cada 20 minutos, en una pausa o avituallamiento: unos $carbs g de carbohidratos y $fluid ml.';
+  }
+
+  @override
+  String get feedsLabel => 'Avituallamiento (aguas abiertas)';
+
+  @override
+  String get feedsSupported => 'Con asistencia (barco, kayak, orilla)';
+
+  @override
+  String get feedsUnsupported => 'Sin asistencia';
+
+  @override
+  String get feedsUnknown => 'Desconocido';
 }

@@ -21,6 +21,8 @@ import '../utils/target_time.dart';
 import '../models/race_profile.dart';
 import 'open_meteo_client.dart';
 import '../models/waist_ratios.dart';
+import '../models/workout_nutrition.dart';
+import 'nutrition_service.dart';
 
 /// Inputs from the training monitor.
 class AiContextTrainingMonitor {
@@ -92,6 +94,7 @@ class AiContextToonBuilder {
     final heat = await _db.getHeatStateForDate(today);
     final readiness = await _db.getTodayReadiness();
     final sessions = await _db.getUpcomingTrainingSessions();
+    final fuel = await _fuel(sessions);
     final cancelled = await _cancelledSessions(today);
     // Every plan session of today, also completed ones: a finished session
     // must not read as a rest day.
@@ -442,7 +445,7 @@ class AiContextToonBuilder {
         );
       }
       for (final s in todaySessions) {
-        lines.add('- [${_session(s)}]');
+        lines.add('- [${_session(s)}${fuel[s.id] ?? ''}]');
       }
     }
     // Sessions dropped in the last two weeks and the next two, with the reason
@@ -502,7 +505,9 @@ class AiContextToonBuilder {
     }
     lines.add('[TrainingPlan:Upcoming:${sessions.length}]');
     for (final s in sessions) {
-      lines.add('- [D:${_date(s.sessionDate)},${_session(s)}]');
+      lines.add(
+        '- [D:${_date(s.sessionDate)},${_session(s)}${fuel[s.id] ?? ''}]',
+      );
     }
     lines.add(
       '[Schedule:Next14d:Today=${_date(today)},Weekday:${_weekday(today)}]',
@@ -572,6 +577,43 @@ class AiContextToonBuilder {
   static String _workout(ScheduledWorkoutRecord w) =>
       'Src:garmin,Type:${_clean(w.sportType)},Dur:${_minutes(w.estimatedDurationSeconds)},'
       'DistKm:${_num(_km(w.estimatedDistanceMeters))}${_parseStepsSummary(w.stepsJson)}';
+
+  /// Fjelia's own fuelling plan per session, from the nutrition engine (a
+  /// saved or edited strategy first): the coach explains it, it does not
+  /// work out its own. Gels:no where they are no option, e.g. in the water.
+  Future<Map<String, String>> _fuel(List<TrainingSession> sessions) async {
+    final service = NutritionService(_db);
+    final prefs = await service.preferences();
+    final out = <String, String>{};
+    for (final s in sessions.take(14)) {
+      final workout = NutritionWorkout(
+        key: 'plan:${s.id}',
+        title: s.title,
+        sport: s.sport,
+        date: s.sessionDate,
+        minutes: s.plannedDurationMin.toDouble(),
+        zone: s.primaryZone,
+        indoor: s.indoor,
+      );
+      final plan =
+          await service.savedPlan(workout.key) ??
+          planNutrition(
+            workout,
+            prefs,
+            s.indoor
+                ? const NutritionConditions(surface: 'Indoor')
+                : swimDiscipline(workout, const NutritionConditions()) == 'pool'
+                ? const NutritionConditions(surface: 'Pool')
+                : const NutritionConditions(),
+          );
+      out[s.id] =
+          ',Fuel:CarbsGh:${_num(plan.carbs)},FluidMlH:${_num(plan.fluid)},'
+          'Gels:${plan.gelsPractical ? plan.gels : 'no'}'
+          '${swimDiscipline(plan.workout, plan.conditions) == null ? '' : ',Swim:${swimDiscipline(plan.workout, plan.conditions)},Feeds:${plan.conditions.feeds}'}';
+    }
+    return out;
+  }
+
   static String _session(TrainingSession s) =>
       'Src:plan,Sport:${_clean(s.sport)},Type:${_clean(s.sessionType)},'
       'Phase:${_clean(s.phase)},Zone:${s.primaryZone},Dur:${s.plannedDurationMin}m,'

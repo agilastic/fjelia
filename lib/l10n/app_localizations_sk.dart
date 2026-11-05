@@ -7158,4 +7158,67 @@ class AppLocalizationsSk extends AppLocalizations {
   @override
   String get nightCurvesBasis =>
       'HRV a stres namerané cez noc. Odhad fáz vyššie vychádza z nich.';
+
+  @override
+  String get swimShort =>
+      'Zvyčajne stačí voda. Gély nie sú potrebné: bežné jedlo pred a po pokryje tento tréning.';
+
+  @override
+  String get swimPoolLong =>
+      'V dlhších prestávkach medzi sériami si daj nápoj so sacharidmi, najmä pri intenzívnom tréningu. Gély v bazéne nie sú potrebné.';
+
+  @override
+  String get swimOpenFeeds =>
+      'Sacharidy a tekutiny si naplánuj podľa možností občerstvenia (čln, kajak, breh). Nespoliehaj sa na výživu, ku ktorej sa počas plávania bezpečne nedostaneš.';
+
+  @override
+  String get swimOpenUnsupported =>
+      'Bez sprievodu nie je počas plávania občerstvenie: dobre sa najedz vopred, prispôsob trasu a hneď potom doplň.';
+
+  @override
+  String get swimOpenFeedsUnknown =>
+      'Otvorená voda: v „Upraviť stratégiu“ nastav, či je občerstvenie možné (so sprievodom alebo bez).';
+
+  @override
+  String get swimFluidPool =>
+      'Pitie je dôležité aj v bazéne: vo vode sa potíš menej ako na suchu, ale nie vôbec. Polož si označenú fľašu na okraj a pi v prestávkach.';
+
+  @override
+  String get swimFluidOpen =>
+      'Predpoveď neuvádza teplotu vody a studená voda tlmí smäd: pi pred štartom, pri každom občerstvení a hneď potom.';
+
+  @override
+  String get swimBeforeAfter =>
+      'Pred: známe jedlo bohaté na sacharidy 1–4 h vopred. Po: asi 1 g sacharidov na kg s 20–25 g bielkovín; ak si sa odvážil, vypi asi 1,5 l na každý stratený kg, s trochou sodíka.';
+
+  @override
+  String get swimNoDuration =>
+      'Bez plánovanej dĺžky: voda na okraji stačí na väčšinu tréningov; sacharidový nápoj až nad 90 minút.';
+
+  @override
+  String swimCarryPool(String bottles, String bottleMl, String drinkCarbs) {
+    return 'Žiadne gély. Fľaša na okraji: $bottles × $bottleMl ml; $drinkCarbs g sacharidov je z nápoja.';
+  }
+
+  @override
+  String swimCarryOpen(String bottles, String bottleMl, String drinkCarbs) {
+    return 'Počas plávania žiadne gély. Pri občerstvení: $bottles × $bottleMl ml; $drinkCarbs g sacharidov je z nápoja.';
+  }
+
+  @override
+  String swimPerBreak(String carbs, String fluid) {
+    return 'Na každých 20 minút, v prestávke alebo pri občerstvení: asi $carbs g sacharidov a $fluid ml.';
+  }
+
+  @override
+  String get feedsLabel => 'Občerstvenie (otvorená voda)';
+
+  @override
+  String get feedsSupported => 'So sprievodom (čln, kajak, breh)';
+
+  @override
+  String get feedsUnsupported => 'Bez sprievodu';
+
+  @override
+  String get feedsUnknown => 'Neznáme';
 }

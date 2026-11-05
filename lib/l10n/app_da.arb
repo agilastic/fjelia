@@ -3593,5 +3593,21 @@
   "nightCurves": "Natkurver",
   "noPhaseTimeline": "Dette ur viser ikke, hvornår hver søvnfase var, kun summerne ovenfor. Her er HRV og stress målt gennem natten.",
   "stagesEstimated": "Anslået af Fjelia ud fra den HRV og stress, dit COROS-ur målte i nat. Summerne for faserne er COROS’ egne; hvornår hver fase var, er en tilnærmelse.",
-  "nightCurvesBasis": "HRV og stress målt gennem natten. Faseestimatet ovenfor er lavet ud fra dem."
+  "nightCurvesBasis": "HRV og stress målt gennem natten. Faseestimatet ovenfor er lavet ud fra dem.",
+  "swimShort": "Vand er som regel nok. Ingen gel nødvendig: et almindeligt måltid før og efter dækker denne træning.",
+  "swimPoolLong": "Tag en kulhydratholdig drik i de længere pauser mellem sættene, især hvis træningen er hård. Gel er ikke nødvendigt i bassinet.",
+  "swimOpenFeeds": "Planlæg kulhydrat og væske omkring forplejningsmulighederne (båd, kajak, bred). Stol ikke på forplejning, du ikke sikkert kan nå under svømningen.",
+  "swimOpenUnsupported": "Uden følgebåd er der ingen forplejning undervejs: spis godt før, tilpas svømmeturen og fyld op lige efter.",
+  "swimOpenFeedsUnknown": "Åbent vand: angiv under »Rediger strategi«, om forplejning er mulig (med eller uden følgebåd).",
+  "swimFluidPool": "Væske tæller også i bassinet: du sveder mindre i vand end på land, men ikke ingenting. Stil en mærket flaske på kanten og drik i pauserne.",
+  "swimFluidOpen": "Vejrudsigten giver ikke vandtemperaturen, og koldt vand dæmper tørsten: drik før start, ved hver forplejning og lige efter.",
+  "swimBeforeAfter": "Før: et velkendt kulhydratrigt måltid 1–4 t før. Efter: omkring 1 g kulhydrat pr. kg med 20–25 g protein; hvis du har vejet dig, drik omkring 1,5 l pr. tabt kg, med lidt natrium.",
+  "swimNoDuration": "Ingen planlagt varighed: vand på kanten er nok til de fleste træninger; kulhydratdrik først over 90 minutter.",
+  "swimCarryPool": "Ingen gel. Flaske på kanten: {bottles} × {bottleMl} ml; {drinkCarbs} g kulhydrat kommer fra drikkepulveret.",
+  "swimCarryOpen": "Ingen gel under svømningen. Ved forplejning: {bottles} × {bottleMl} ml; {drinkCarbs} g kulhydrat kommer fra drikkepulveret.",
+  "swimPerBreak": "Pr. 20 minutter, i en pause eller ved forplejning: omkring {carbs} g kulhydrat og {fluid} ml.",
+  "feedsLabel": "Forplejning (åbent vand)",
+  "feedsSupported": "Med følgebåd (båd, kajak, bred)",
+  "feedsUnsupported": "Uden følgebåd",
+  "feedsUnknown": "Ukendt"
 }

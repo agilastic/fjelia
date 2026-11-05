@@ -7155,4 +7155,67 @@ class AppLocalizationsFi extends AppLocalizations {
   @override
   String get nightCurvesBasis =>
       'Yön aikana mitattu HRV ja stressi. Yllä oleva vaihearvio perustuu niihin.';
+
+  @override
+  String get swimShort =>
+      'Vesi riittää yleensä. Geelejä ei tarvita: tavallinen ateria ennen ja jälkeen riittää tähän uintiin.';
+
+  @override
+  String get swimPoolLong =>
+      'Ota hiilihydraattipitoista juomaa sarjojen pidemmillä tauoilla, varsinkin jos harjoitus on kova. Altaalla geelejä ei tarvita.';
+
+  @override
+  String get swimOpenFeeds =>
+      'Suunnittele hiilihydraatit ja nesteet tankkausmahdollisuuksien mukaan (vene, kajakki, ranta). Älä luota ravintoon, jota et uidessa saa turvallisesti.';
+
+  @override
+  String get swimOpenUnsupported =>
+      'Ilman huoltoa uinnin aikana ei tankata: syö hyvin etukäteen, mitoita uinti sen mukaan ja tankkaa heti perään.';
+
+  @override
+  String get swimOpenFeedsUnknown =>
+      'Avovesi: valitse kohdassa ”Muokkaa strategiaa”, onko tankkaus mahdollista (huollettu vai ei).';
+
+  @override
+  String get swimFluidPool =>
+      'Juominen on tärkeää myös altaalla: vedessä hikoilet vähemmän kuin maalla, mutta et olematta. Pidä nimetty pullo reunalla ja juo taukojen aikana.';
+
+  @override
+  String get swimFluidOpen =>
+      'Sääennuste ei kerro veden lämpötilaa, ja kylmä vesi vaimentaa janoa: juo ennen lähtöä, joka tankkauksella ja heti perään.';
+
+  @override
+  String get swimBeforeAfter =>
+      'Ennen: tuttu hiilihydraattipitoinen ateria 1–4 t ennen. Jälkeen: noin 1 g hiilihydraattia/kg ja 20–25 g proteiinia; jos punnitsit itsesi, juo noin 1,5 l jokaista menetettyä kiloa kohden, vähän natriumia mukana.';
+
+  @override
+  String get swimNoDuration =>
+      'Ei suunniteltua kestoa: vesi reunalla riittää useimpiin uinteihin; hiilihydraattijuoma vasta yli 90 minuutin uintiin.';
+
+  @override
+  String swimCarryPool(String bottles, String bottleMl, String drinkCarbs) {
+    return 'Ei geelejä. Pullo altaan reunalla: $bottles × $bottleMl ml; $drinkCarbs g hiilihydraattia tulee juomajauheesta.';
+  }
+
+  @override
+  String swimCarryOpen(String bottles, String bottleMl, String drinkCarbs) {
+    return 'Ei geelejä uidessa. Tankkauksilla: $bottles × $bottleMl ml; $drinkCarbs g hiilihydraattia tulee juomajauheesta.';
+  }
+
+  @override
+  String swimPerBreak(String carbs, String fluid) {
+    return '20 minuuttia kohden, tauolla tai tankkauksella: noin $carbs g hiilihydraattia ja $fluid ml.';
+  }
+
+  @override
+  String get feedsLabel => 'Tankkaus (avovesi)';
+
+  @override
+  String get feedsSupported => 'Huollettu (vene, kajakki, ranta)';
+
+  @override
+  String get feedsUnsupported => 'Ilman huoltoa';
+
+  @override
+  String get feedsUnknown => 'Ei tiedossa';
 }

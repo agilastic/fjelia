@@ -106,10 +106,15 @@ class NutritionConditions {
     this.altitude,
     this.surface = 'Unknown',
     this.forecast = false,
+    this.feeds = 'Unknown',
   });
   final double? temperature, humidity, wind, uv, ascent, altitude;
   final String surface;
   final bool forecast;
+
+  /// Open water: `Supported` (boat, kayak or shore feeds), `Unsupported` or
+  /// `Unknown`.
+  final String feeds;
   Map<String, dynamic> toJson() => {
     'temperature': temperature,
     'humidity': humidity,
@@ -119,6 +124,7 @@ class NutritionConditions {
     'altitude': altitude,
     'surface': surface,
     'forecast': forecast,
+    'feeds': feeds,
   };
   factory NutritionConditions.fromJson(Map j) => NutritionConditions(
     temperature: (j['temperature'] as num?)?.toDouble(),
@@ -129,6 +135,7 @@ class NutritionConditions {
     altitude: (j['altitude'] as num?)?.toDouble(),
     surface: j['surface'] as String? ?? 'Unknown',
     forecast: j['forecast'] == true,
+    feeds: j['feeds'] as String? ?? 'Unknown',
   );
 }
 
@@ -157,8 +164,14 @@ class NutritionStrategy {
   double get totalSodium => sodium * hours;
   double get drinkCarbs =>
       totalFluid / preferences.bottleMl * preferences.drinkCarbs;
-  int get gels =>
-      (math.max(0, totalCarbs - drinkCarbs) / preferences.gelCarbs).ceil();
+
+  /// Whether gels are a practical way to take the carbohydrate during this
+  /// workout. In the water they are not: a swim fuels from a drink at the
+  /// pool edge or at feeds.
+  bool get gelsPractical => swimDiscipline(workout, conditions) == null;
+  int get gels => gelsPractical
+      ? (math.max(0, totalCarbs - drinkCarbs) / preferences.gelCarbs).ceil()
+      : 0;
   int get bottles => (totalFluid / preferences.bottleMl).ceil();
   Map<String, dynamic> toJson() => {
     'v': 1,
@@ -187,6 +200,34 @@ class NutritionStrategy {
   );
 }
 
+/// `pool` or `open` for a swim, null for any other sport.
+String? swimDiscipline(NutritionWorkout workout, NutritionConditions c) {
+  final sport = workout.sport.toLowerCase();
+  if (!sport.contains('swim') &&
+      c.surface != 'Pool' &&
+      c.surface != 'Open water') {
+    return null;
+  }
+  return sport.contains('open') || c.surface == 'Open water' ? 'open' : 'pool';
+}
+
+/// Carbohydrate during a swim, g/h, from the general range for its length:
+/// none below 90 minutes, whatever the intensity, then the usual range,
+/// taken as a drink at breaks or at feeds. An open-water swim without feeds
+/// takes nothing during: it is fuelled before and after. (SwimCamp, swim
+/// performance nutrition guide; Domínguez et al. 2017, J Exerc Nutrition
+/// Biochem 21(4).)
+(double, double) swimCarbRange(
+  String discipline,
+  double minutes,
+  NutritionConditions c,
+  (double, double) general,
+) {
+  if (minutes < 90) return (0, 0);
+  if (discipline == 'open' && c.feeds == 'Unsupported') return (0, 0);
+  return general;
+}
+
 NutritionStrategy planNutrition(
   NutritionWorkout workout,
   NutritionPreferences prefs,
@@ -202,9 +243,13 @@ NutritionStrategy planNutrition(
       : minutes <= 150
       ? (30.0, 60.0)
       : (60.0, 90.0);
-  final low = math.min(baseLow, prefs.trainedCarbs);
-  final high = math.min(baseHigh, prefs.trainedCarbs);
   final sport = workout.sport.toLowerCase();
+  final swim = swimDiscipline(workout, c);
+  final (sportLow, sportHigh) = swim == null
+      ? (baseLow, baseHigh)
+      : swimCarbRange(swim, minutes, c, (baseLow, baseHigh));
+  final low = math.min(sportLow, prefs.trainedCarbs);
+  final high = math.min(sportHigh, prefs.trainedCarbs);
   final swimming = sport.contains('swim');
   final pool =
       c.surface == 'Pool' ||
@@ -249,6 +294,22 @@ NutritionStrategy planNutrition(
   final fluidTarget =
       fluid ?? (prefs.sweatMl != null ? prefs.sweatMl! * .8 : typicalFluid());
   final carbTarget = carbs ?? (low + high) / 2;
+  if (swim != null) {
+    return NutritionStrategy(
+      workout: workout,
+      preferences: prefs,
+      conditions: c,
+      carbs: carbTarget,
+      fluid: fluidTarget,
+      sodium:
+          sodium ??
+          (minutes < 90 ? 0 : fluidTarget / 1000 * (prefs.sweatSodium ?? 500)),
+      carbLow: low,
+      carbHigh: high,
+      guidance: _swimNotes(swim, minutes, carbTarget, prefs, c),
+      savedAt: now ?? DateTime.now(),
+    );
+  }
   final notes = <String>[
     'Before: start fuelled and hydrated. Choose a familiar carbohydrate-rich meal; allow time to digest.',
     carbTarget == 0
@@ -266,13 +327,7 @@ NutritionStrategy planNutrition(
     if ((c.ascent ?? 0) >= 500 || c.surface == 'Technical') 'Climbing/technical terrain: plan by time on feet, not kilometres. Feed before difficult sections or stop somewhere safe.',
     if ((c.altitude ?? 0) >= 2000) 'At altitude, check appetite, access and tolerance. Do not replace food with a fixed altitude multiplier.',
   ];
-  if (swimming) {
-    notes.add(
-      sport.contains('open') || c.surface == 'Open water'
-          ? 'Open water: arrange supported feeds and safe stops; plan the longest gap between feeds. Air forecasts do not measure water temperature; personalise fluids using your swimming experience. Do not attempt to eat while swimming.'
-          : tr.swimmingPlaceALabelledBottle,
-    );
-  } else if (sport.contains('ski') || sport.contains('nordic')) {
+  if (sport.contains('ski') || sport.contains('nordic')) {
     notes.add(
       'Skiing: use an insulated bottle/tube, keep gels warm and check access with gloves. Plan feed stops before long remote sections.',
     );
@@ -305,6 +360,35 @@ NutritionStrategy planNutrition(
     guidance: notes,
     savedAt: now ?? DateTime.now(),
   );
+}
+
+/// What a swim needs said, and no more: a short pool session gets two
+/// lines, not a fuelling plan.
+List<String> _swimNotes(
+  String discipline,
+  double minutes,
+  double carbs,
+  NutritionPreferences prefs,
+  NutritionConditions c,
+) {
+  final open = discipline == 'open';
+  final unsupported = open && c.feeds == 'Unsupported';
+  return [
+    if (minutes <= 0)
+      tr.swimNoDuration
+    else if (unsupported)
+      tr.swimOpenUnsupported
+    else if (carbs == 0)
+      tr.swimShort
+    else if (open)
+      tr.swimOpenFeeds
+    else
+      tr.swimPoolLong,
+    open ? tr.swimFluidOpen : tr.swimFluidPool,
+    if (minutes >= 60 || open) tr.swimBeforeAfter,
+    if (carbs > 60) 'Use a practised glucose/fructose combination. Build gut tolerance in training before race day.',
+    if (open && (c.feeds == 'Unknown')) tr.swimOpenFeedsUnknown,
+  ];
 }
 
 class NutritionEntry {

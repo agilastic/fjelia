@@ -3593,5 +3593,21 @@
   "nightCurves": "Nattkurver",
   "noPhaseTimeline": "Denne klokken viser ikke når hver søvnfase var, bare summene over. Dette er HRV og stress den målte gjennom natten.",
   "stagesEstimated": "Anslått av Fjelia ut fra HRV og stress som COROS-klokken målte i natt. Summene for fasene er COROS’ egne; når hver fase var, er en tilnærming.",
-  "nightCurvesBasis": "HRV og stress målt gjennom natten. Faseanslaget over er laget ut fra dem."
+  "nightCurvesBasis": "HRV og stress målt gjennom natten. Faseanslaget over er laget ut fra dem.",
+  "swimShort": "Vann holder som regel. Ingen gel nødvendig: et vanlig måltid før og etter dekker denne økta.",
+  "swimPoolLong": "Ta en karbohydratholdig drikk i de lengre pausene mellom seriene, særlig hvis økta er hard. Gel trengs ikke i bassenget.",
+  "swimOpenFeeds": "Planlegg karbohydrater og væske rundt matingsmulighetene (båt, kajakk, land). Ikke stol på næring du ikke trygt når mens du svømmer.",
+  "swimOpenUnsupported": "Uten følge er det ingen mating underveis: spis godt før, tilpass svømmeturen og fyll på rett etter.",
+  "swimOpenFeedsUnknown": "Åpent vann: angi under «Rediger strategi» om mating er mulig (med eller uten følge).",
+  "swimFluidPool": "Drikke teller også i bassenget: du svetter mindre i vann enn på land, men ikke ingenting. Sett en merket flaske på kanten og drikk i pausene.",
+  "swimFluidOpen": "Værmeldingen gir ikke vanntemperaturen, og kaldt vann demper tørsten: drikk før start, ved hver mating og rett etter.",
+  "swimBeforeAfter": "Før: et kjent karbohydratrikt måltid 1–4 t før. Etter: rundt 1 g karbohydrat per kg med 20–25 g protein; hvis du har veid deg, drikk rundt 1,5 l per tapt kg, med litt natrium.",
+  "swimNoDuration": "Ingen planlagt varighet: vann på kanten holder for de fleste økter; karbohydratdrikk først over 90 minutter.",
+  "swimCarryPool": "Ingen gel. Flaske på kanten: {bottles} × {bottleMl} ml; {drinkCarbs} g karbohydrat kommer fra drikkepulveret.",
+  "swimCarryOpen": "Ingen gel mens du svømmer. Ved mating: {bottles} × {bottleMl} ml; {drinkCarbs} g karbohydrat kommer fra drikkepulveret.",
+  "swimPerBreak": "Per 20 minutter, i en pause eller ved mating: rundt {carbs} g karbohydrat og {fluid} ml.",
+  "feedsLabel": "Mating (åpent vann)",
+  "feedsSupported": "Med følge (båt, kajakk, land)",
+  "feedsUnsupported": "Uten følge",
+  "feedsUnknown": "Ukjent"
 }

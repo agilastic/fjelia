@@ -3593,5 +3593,21 @@
   "nightCurves": "Yön käyrät",
   "noPhaseTimeline": "Tämä kello ei kerro, milloin kukin univaihe oli, vain yllä olevat summat. Nämä ovat yön aikana mitatut HRV ja stressi.",
   "stagesEstimated": "Fjelian arvio COROS-kellosi yöllä mittaamasta HRV:stä ja stressistä. Vaiheiden summat ovat COROSin omat; milloin kukin vaihe oli, on likiarvo.",
-  "nightCurvesBasis": "Yön aikana mitattu HRV ja stressi. Yllä oleva vaihearvio perustuu niihin."
+  "nightCurvesBasis": "Yön aikana mitattu HRV ja stressi. Yllä oleva vaihearvio perustuu niihin.",
+  "swimShort": "Vesi riittää yleensä. Geelejä ei tarvita: tavallinen ateria ennen ja jälkeen riittää tähän uintiin.",
+  "swimPoolLong": "Ota hiilihydraattipitoista juomaa sarjojen pidemmillä tauoilla, varsinkin jos harjoitus on kova. Altaalla geelejä ei tarvita.",
+  "swimOpenFeeds": "Suunnittele hiilihydraatit ja nesteet tankkausmahdollisuuksien mukaan (vene, kajakki, ranta). Älä luota ravintoon, jota et uidessa saa turvallisesti.",
+  "swimOpenUnsupported": "Ilman huoltoa uinnin aikana ei tankata: syö hyvin etukäteen, mitoita uinti sen mukaan ja tankkaa heti perään.",
+  "swimOpenFeedsUnknown": "Avovesi: valitse kohdassa ”Muokkaa strategiaa”, onko tankkaus mahdollista (huollettu vai ei).",
+  "swimFluidPool": "Juominen on tärkeää myös altaalla: vedessä hikoilet vähemmän kuin maalla, mutta et olematta. Pidä nimetty pullo reunalla ja juo taukojen aikana.",
+  "swimFluidOpen": "Sääennuste ei kerro veden lämpötilaa, ja kylmä vesi vaimentaa janoa: juo ennen lähtöä, joka tankkauksella ja heti perään.",
+  "swimBeforeAfter": "Ennen: tuttu hiilihydraattipitoinen ateria 1–4 t ennen. Jälkeen: noin 1 g hiilihydraattia/kg ja 20–25 g proteiinia; jos punnitsit itsesi, juo noin 1,5 l jokaista menetettyä kiloa kohden, vähän natriumia mukana.",
+  "swimNoDuration": "Ei suunniteltua kestoa: vesi reunalla riittää useimpiin uinteihin; hiilihydraattijuoma vasta yli 90 minuutin uintiin.",
+  "swimCarryPool": "Ei geelejä. Pullo altaan reunalla: {bottles} × {bottleMl} ml; {drinkCarbs} g hiilihydraattia tulee juomajauheesta.",
+  "swimCarryOpen": "Ei geelejä uidessa. Tankkauksilla: {bottles} × {bottleMl} ml; {drinkCarbs} g hiilihydraattia tulee juomajauheesta.",
+  "swimPerBreak": "20 minuuttia kohden, tauolla tai tankkauksella: noin {carbs} g hiilihydraattia ja {fluid} ml.",
+  "feedsLabel": "Tankkaus (avovesi)",
+  "feedsSupported": "Huollettu (vene, kajakki, ranta)",
+  "feedsUnsupported": "Ilman huoltoa",
+  "feedsUnknown": "Ei tiedossa"
 }

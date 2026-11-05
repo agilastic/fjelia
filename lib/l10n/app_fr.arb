@@ -3593,5 +3593,21 @@
   "nightCurves": "Courbes de la nuit",
   "noPhaseTimeline": "Cette montre ne fournit pas le moment de chaque phase de sommeil, seulement les totaux ci-dessus. Voici la VFC et le stress mesurés pendant la nuit.",
   "stagesEstimated": "Estimé par Fjelia à partir de la VFC et du stress mesurés cette nuit par ta montre COROS. Les totaux des phases sont ceux de COROS ; le moment de chaque phase est une approximation.",
-  "nightCurvesBasis": "La VFC et le stress mesurés pendant la nuit. L’estimation des phases ci-dessus en est tirée."
+  "nightCurvesBasis": "La VFC et le stress mesurés pendant la nuit. L’estimation des phases ci-dessus en est tirée.",
+  "swimShort": "L’eau suffit en général. Pas besoin de gels : un repas normal avant et après couvre cette séance.",
+  "swimPoolLong": "Prévois une boisson glucidique pendant les pauses plus longues entre les séries, surtout si la séance est intense. Pas besoin de gels à la piscine.",
+  "swimOpenFeeds": "Planifie glucides et boissons autour des possibilités de ravitaillement (bateau, kayak, rive). Ne compte pas sur ce que tu ne peux pas atteindre en sécurité en nageant.",
+  "swimOpenUnsupported": "Pas de ravitaillement sans accompagnement : mange bien avant, adapte la distance et recharge juste après.",
+  "swimOpenFeedsUnknown": "Eau libre : indique dans « Modifier la stratégie » si un ravitaillement est possible (accompagné ou non).",
+  "swimFluidPool": "L’hydratation compte aussi à la piscine : on transpire moins dans l’eau que sur terre, mais pas du tout rien. Garde une bouteille marquée au bord et bois pendant les pauses.",
+  "swimFluidOpen": "Les prévisions ne donnent pas la température de l’eau, et l’eau froide atténue la soif : bois avant le départ, à chaque ravitaillement et juste après.",
+  "swimBeforeAfter": "Avant : un repas glucidique habituel 1–4 h avant. Après : environ 1 g de glucides par kg avec 20–25 g de protéines ; si tu t’es pesé, bois environ 1,5 l par kg perdu, avec un peu de sodium.",
+  "swimNoDuration": "Pas de durée prévue : de l’eau au bord suffit pour la plupart des séances ; une boisson glucidique seulement au-delà de 90 minutes.",
+  "swimCarryPool": "Pas de gels. Bouteille au bord du bassin : {bottles} × {bottleMl} ml ; {drinkCarbs} g de glucides viennent de la boisson.",
+  "swimCarryOpen": "Pas de gels en nageant. Aux ravitaillements : {bottles} × {bottleMl} ml ; {drinkCarbs} g de glucides viennent de la boisson.",
+  "swimPerBreak": "Par tranche de 20 minutes, à une pause ou un ravitaillement : environ {carbs} g de glucides et {fluid} ml.",
+  "feedsLabel": "Ravitaillement (eau libre)",
+  "feedsSupported": "Accompagné (bateau, kayak, rive)",
+  "feedsUnsupported": "Sans accompagnement",
+  "feedsUnknown": "Inconnu"
 }

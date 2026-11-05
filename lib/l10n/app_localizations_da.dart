@@ -7133,4 +7133,67 @@ class AppLocalizationsDa extends AppLocalizations {
   @override
   String get nightCurvesBasis =>
       'HRV og stress målt gennem natten. Faseestimatet ovenfor er lavet ud fra dem.';
+
+  @override
+  String get swimShort =>
+      'Vand er som regel nok. Ingen gel nødvendig: et almindeligt måltid før og efter dækker denne træning.';
+
+  @override
+  String get swimPoolLong =>
+      'Tag en kulhydratholdig drik i de længere pauser mellem sættene, især hvis træningen er hård. Gel er ikke nødvendigt i bassinet.';
+
+  @override
+  String get swimOpenFeeds =>
+      'Planlæg kulhydrat og væske omkring forplejningsmulighederne (båd, kajak, bred). Stol ikke på forplejning, du ikke sikkert kan nå under svømningen.';
+
+  @override
+  String get swimOpenUnsupported =>
+      'Uden følgebåd er der ingen forplejning undervejs: spis godt før, tilpas svømmeturen og fyld op lige efter.';
+
+  @override
+  String get swimOpenFeedsUnknown =>
+      'Åbent vand: angiv under »Rediger strategi«, om forplejning er mulig (med eller uden følgebåd).';
+
+  @override
+  String get swimFluidPool =>
+      'Væske tæller også i bassinet: du sveder mindre i vand end på land, men ikke ingenting. Stil en mærket flaske på kanten og drik i pauserne.';
+
+  @override
+  String get swimFluidOpen =>
+      'Vejrudsigten giver ikke vandtemperaturen, og koldt vand dæmper tørsten: drik før start, ved hver forplejning og lige efter.';
+
+  @override
+  String get swimBeforeAfter =>
+      'Før: et velkendt kulhydratrigt måltid 1–4 t før. Efter: omkring 1 g kulhydrat pr. kg med 20–25 g protein; hvis du har vejet dig, drik omkring 1,5 l pr. tabt kg, med lidt natrium.';
+
+  @override
+  String get swimNoDuration =>
+      'Ingen planlagt varighed: vand på kanten er nok til de fleste træninger; kulhydratdrik først over 90 minutter.';
+
+  @override
+  String swimCarryPool(String bottles, String bottleMl, String drinkCarbs) {
+    return 'Ingen gel. Flaske på kanten: $bottles × $bottleMl ml; $drinkCarbs g kulhydrat kommer fra drikkepulveret.';
+  }
+
+  @override
+  String swimCarryOpen(String bottles, String bottleMl, String drinkCarbs) {
+    return 'Ingen gel under svømningen. Ved forplejning: $bottles × $bottleMl ml; $drinkCarbs g kulhydrat kommer fra drikkepulveret.';
+  }
+
+  @override
+  String swimPerBreak(String carbs, String fluid) {
+    return 'Pr. 20 minutter, i en pause eller ved forplejning: omkring $carbs g kulhydrat og $fluid ml.';
+  }
+
+  @override
+  String get feedsLabel => 'Forplejning (åbent vand)';
+
+  @override
+  String get feedsSupported => 'Med følgebåd (båd, kajak, bred)';
+
+  @override
+  String get feedsUnsupported => 'Uden følgebåd';
+
+  @override
+  String get feedsUnknown => 'Ukendt';
 }

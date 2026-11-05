@@ -3593,5 +3593,21 @@
   "nightCurves": "Andamento notturno",
   "noPhaseTimeline": "Questo orologio non indica quando si è verificata ogni fase del sonno, solo i totali sopra. Ecco HRV e stress misurati durante la notte.",
   "stagesEstimated": "Stimato da Fjelia dall’HRV e dallo stress misurati di notte dal tuo orologio COROS. I totali delle fasi sono quelli di COROS; il momento di ogni fase è un’approssimazione.",
-  "nightCurvesBasis": "HRV e stress misurati durante la notte. La stima delle fasi qui sopra si basa su di essi."
+  "nightCurvesBasis": "HRV e stress misurati durante la notte. La stima delle fasi qui sopra si basa su di essi.",
+  "swimShort": "In genere basta l’acqua. Nessun gel necessario: un pasto normale prima e dopo copre questa nuotata.",
+  "swimPoolLong": "Valuta una bevanda con carboidrati nelle pause più lunghe tra le serie, soprattutto se la seduta è intensa. In piscina non servono gel.",
+  "swimOpenFeeds": "Pianifica carboidrati e liquidi attorno alle occasioni di rifornimento (barca, kayak, riva). Non contare su ciò che non puoi raggiungere in sicurezza nuotando.",
+  "swimOpenUnsupported": "Senza assistenza non ci sono rifornimenti: mangia bene prima, adatta la nuotata a quanto basta e reintegra subito dopo.",
+  "swimOpenFeedsUnknown": "Acque libere: indica in «Modifica strategia» se sono possibili rifornimenti (con o senza assistenza).",
+  "swimFluidPool": "Bere conta anche in piscina: in acqua si suda meno che a terra, ma non zero. Tieni una borraccia con il nome a bordo vasca e bevi nelle pause.",
+  "swimFluidOpen": "Le previsioni non danno la temperatura dell’acqua e l’acqua fredda attenua la sete: bevi prima della partenza, a ogni rifornimento e subito dopo.",
+  "swimBeforeAfter": "Prima: un pasto abituale ricco di carboidrati 1–4 h prima. Dopo: circa 1 g di carboidrati per kg con 20–25 g di proteine; se ti sei pesato, bevi circa 1,5 l per kg perso, con un po’ di sodio.",
+  "swimNoDuration": "Nessuna durata prevista: l’acqua a bordo vasca basta per la maggior parte delle nuotate; una bevanda con carboidrati solo oltre i 90 minuti.",
+  "swimCarryPool": "Niente gel. Borraccia a bordo vasca: {bottles} × {bottleMl} ml; {drinkCarbs} g di carboidrati vengono dalla bevanda.",
+  "swimCarryOpen": "Niente gel mentre nuoti. Ai rifornimenti: {bottles} × {bottleMl} ml; {drinkCarbs} g di carboidrati vengono dalla bevanda.",
+  "swimPerBreak": "Ogni 20 minuti, in una pausa o a un rifornimento: circa {carbs} g di carboidrati e {fluid} ml.",
+  "feedsLabel": "Rifornimenti (acque libere)",
+  "feedsSupported": "Con assistenza (barca, kayak, riva)",
+  "feedsUnsupported": "Senza assistenza",
+  "feedsUnknown": "Non noto"
 }

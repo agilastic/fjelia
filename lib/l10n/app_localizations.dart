@@ -12377,6 +12377,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The HRV and stress measured overnight. The stage estimate above is built from them.'**
   String get nightCurvesBasis;
+
+  /// No description provided for @swimShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Water is generally sufficient. No energy gels needed: a normal meal before and after covers this swim.'**
+  String get swimShort;
+
+  /// No description provided for @swimPoolLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Consider a carbohydrate-containing drink during longer breaks between sets, particularly if the session is intensive. Gels are not needed in the pool.'**
+  String get swimPoolLong;
+
+  /// No description provided for @swimOpenFeeds.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan carbohydrate and fluid intake around the available feeding opportunities (boat, kayak, shore). Avoid relying on nutrition you cannot reach safely during the swim.'**
+  String get swimOpenFeeds;
+
+  /// No description provided for @swimOpenUnsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'No feeds during an unsupported swim: fuel well beforehand, keep the swim within what that covers, and refuel right after.'**
+  String get swimOpenUnsupported;
+
+  /// No description provided for @swimOpenFeedsUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Open water: set whether feeds are possible (supported or unsupported) under Edit strategy.'**
+  String get swimOpenFeedsUnknown;
+
+  /// No description provided for @swimFluidPool.
+  ///
+  /// In en, this message translates to:
+  /// **'Hydration matters in the pool too: you sweat less in water than on land, but not nothing. Keep a labelled bottle on the deck and drink in set breaks.'**
+  String get swimFluidPool;
+
+  /// No description provided for @swimFluidOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Air forecasts do not give the water temperature, and cold water dulls thirst: drink before the start, at every feed and right after.'**
+  String get swimFluidOpen;
+
+  /// No description provided for @swimBeforeAfter.
+  ///
+  /// In en, this message translates to:
+  /// **'Before: a familiar carbohydrate meal 1–4 h ahead. After: about 1 g carbohydrate per kg with 20–25 g protein; if you weighed yourself, drink about 1.5 l per kg lost, with some sodium.'**
+  String get swimBeforeAfter;
+
+  /// No description provided for @swimNoDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'No planned duration: water at the pool edge is enough for most swims; add a carbohydrate drink only for swims over 90 minutes.'**
+  String get swimNoDuration;
+
+  /// No description provided for @swimCarryPool.
+  ///
+  /// In en, this message translates to:
+  /// **'No gels. Bottle at the pool edge: {bottles} × {bottleMl} ml; {drinkCarbs} g carbohydrate comes from the drink mix.'**
+  String swimCarryPool(String bottles, String bottleMl, String drinkCarbs);
+
+  /// No description provided for @swimCarryOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'No gels while swimming. At feeds: {bottles} × {bottleMl} ml; {drinkCarbs} g carbohydrate comes from the drink mix.'**
+  String swimCarryOpen(String bottles, String bottleMl, String drinkCarbs);
+
+  /// No description provided for @swimPerBreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Per 20 minutes, at a break or feed: about {carbs} g carbs and {fluid} ml.'**
+  String swimPerBreak(String carbs, String fluid);
+
+  /// No description provided for @feedsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Feeds (open water)'**
+  String get feedsLabel;
+
+  /// No description provided for @feedsSupported.
+  ///
+  /// In en, this message translates to:
+  /// **'Supported (boat, kayak, shore)'**
+  String get feedsSupported;
+
+  /// No description provided for @feedsUnsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsupported'**
+  String get feedsUnsupported;
+
+  /// No description provided for @feedsUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Not known'**
+  String get feedsUnknown;
 }
 
 class _AppLocalizationsDelegate
