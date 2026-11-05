@@ -5,15 +5,15 @@
   --surface: #101b2e;
   --surface-2: #152237;
   --border: #ffffff16;
-  --text: #e6edf6;
-  --muted: #a6b3c8;
-  --white: #fff;
+  --text: #eaf1f2;
+  --muted: #a2b0bf;
+  --white: #f4f8fa;
   --accent: #70f3c8;
-  --accent-ink: #06251d;
-  --mint: #70f3c8;
-  --lilac: #bba7ff;
+  --accent-ink: #08291f;
+  --lilac: #c5b3f6;
+  --peach: #ffb79b;
   --radius: 24px;
-  --max: 1160px;
+  --max: 1220px;
   --font: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif
 }
 * {
@@ -47,7 +47,7 @@ a {
   text-underline-offset: 4px
 }
 a:hover {
-  color: #b4ffe6
+  color: #b6ffe1
 }
 :focus-visible {
   outline: 3px solid var(--accent);
@@ -74,17 +74,17 @@ section[id],[id].privacy-card,[id].sports-compact {
 }
 h1,h2,h3 {
   color: var(--white);
-  line-height: 1.12;
+  line-height: 1.06;
   margin: 0 0 18px;
-  letter-spacing: -.04em
+  letter-spacing: -.055em
 }
 h1 {
-  font-size: clamp(48px,5.6vw,82px);
-  font-weight: 760
+  font-size: clamp(58px,6.15vw,92px);
+  font-weight: 800
 }
 h2 {
-  font-size: clamp(34px,3.9vw,58px);
-  font-weight: 720
+  font-size: clamp(38px,4.4vw,64px);
+  font-weight: 760
 }
 h3 {
   font-size: 21px;
@@ -150,7 +150,7 @@ header.site {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: #050b19d9;
+  background: #050b19e8;
   border-bottom: 1px solid var(--border);
   backdrop-filter: blur(22px) saturate(140%);
   -webkit-backdrop-filter: blur(22px) saturate(140%)
@@ -181,7 +181,7 @@ header.site .wrap {
 nav.main {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 21px;
   margin-left: auto
 }
 nav.main a {
@@ -204,7 +204,7 @@ nav.main a:hover {
   min-height: 52px;
   padding: 12px 23px;
   border: 1px solid transparent;
-  border-radius: 999px;
+  border-radius: 14px;
   text-decoration: none;
   font-size: 14px;
   font-weight: 750;
@@ -217,12 +217,12 @@ nav.main a:hover {
 .btn.primary {
   color: var(--accent-ink);
   background: var(--accent);
-  box-shadow: 0 8px 30px #70f3c818
+  box-shadow: 0 6px 0 #0003
 }
 .btn.primary:hover {
-  color: #03170f;
-  background: #a1ffdf;
-  box-shadow: 0 12px 40px #70f3c82c
+  color: var(--accent-ink);
+  background: #a5f6d5;
+  box-shadow: 0 8px 0 #0003
 }
 .btn.ghost {
   color: white;
@@ -279,112 +279,205 @@ header.site .btn {
   display: none
 }
 
-/* Two real screens, suspended in a quiet aurora. */
-.product-hero {
-  overflow: hidden;
-  padding: 62px 0 44px;
-  background: radial-gradient(ellipse at 84% 40%,#0b3b3d70,transparent 55%),radial-gradient(ellipse at 50% 0,#37306438,transparent 65%)
+/* The product is the hero: real app screens in graphite iPhone frames. */
+.marketing header.site {
+  position: fixed;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(100% - 48px,1220px);
+  border: 1px solid #ffffff1c;
+  border-radius: 22px;
+  background: #071124e8;
+  box-shadow: 0 12px 45px #0003
 }
-.product-hero::before {
+.marketing header.site .wrap {
+  width: calc(100% - 36px);
+  min-height: 64px;
+  gap: 20px
+}
+.marketing header.site .brand {
+  font-size: 13px
+}
+.marketing header.site .brand img {
+  width: 30px;
+  height: 30px
+}
+.marketing::after {
   content: "";
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(#a5b9d522 .7px,transparent .7px);
-  background-size: 28px 28px;
-  mask-image: linear-gradient(100deg,transparent 42%,#0004);
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 80;
+  height: 2px;
+  background: linear-gradient(90deg,var(--accent),#80cfff);
+  transform: scaleX(var(--page-progress,0));
+  transform-origin: left;
   pointer-events: none
 }
+.product-hero {
+  overflow: hidden;
+  padding: 152px 0 42px;
+  background: var(--bg);
+  isolation: isolate
+}
+.hero-atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none
+}
+.hero-aurora {
+  position: absolute;
+  inset: -10% -15% 0;
+  background: radial-gradient(ellipse at 35% 50%,#3eab8f1b,transparent 44%),radial-gradient(ellipse at 72% 56%,#3b7ad222,transparent 40%);
+  animation: hero-light 18s ease-in-out infinite alternate
+}
+.hero-contours {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: .65
+}
+@keyframes hero-light {
+  to { transform: translate(3%,-2%) scale(1.08) }
+}
+.previews-paused .hero-aurora {
+  animation-play-state: paused
+}
 .hero-layout {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  gap: 40px
+  display: block
 }
 .hero-copy {
   position: relative;
   z-index: 3;
-  min-width: 0
+  min-width: 0;
+  text-align: center;
+  max-width: 1060px;
+  margin: auto
 }
 .hero-copy h1 {
-  max-width: 10ch
+  max-width: none;
+  margin: 0 auto;
+  font-size: clamp(64px,7.8vw,116px);
+  line-height: 1.01;
+  font-weight: 750;
+  letter-spacing: -.065em;
+  text-wrap: balance
 }
 .hero-copy h1 .accent {
+  display: inline-block;
   color: var(--accent);
-  background: linear-gradient(105deg,#70f3c8 5%,#7ee3fa 65%,#c3b2ff);
-  background-clip: text;
+  background: linear-gradient(115deg,#a9f5d6 5%,#76dfc2 50%,#82c6ee);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent
 }
+.hero-kicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--muted);
+  letter-spacing: .13em;
+  font-size: 10px;
+  margin-bottom: 26px
+}
+.hero-beta {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 10px;
+  border: 1px solid #70f3c835;
+  border-radius: 999px;
+  background: #70f3c808;
+  color: var(--accent)
+}
+.hero-beta::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor
+}
 .hero-copy .lead {
+  max-width: 640px;
+  margin: 26px auto 20px;
   font-size: 18px;
-  max-width: 440px;
-  margin: 26px 0 20px
+  line-height: 1.7
 }
 .hero-ai-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 28px
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 26px
 }
 .hero-ai-links a {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  min-height: 36px;
-  padding: 6px 12px;
-  border: 1px solid #70f3c82c;
-  background: #70f3c808;
+  min-height: 32px;
+  padding: 4px 12px;
+  border: 1px solid #ffffff15;
   border-radius: 999px;
-  color: #c5f9e9;
-  font-size: 12px;
-  font-weight: 650;
+  background: #ffffff03;
+  color: #d6e3e4;
+  font-size: 11px;
+  font-weight: 550;
   text-decoration: none
 }
-.hero-ai-links a:last-child {
-  color: #dfd5ff;
-  border-color: #bba7ff30;
-  background: #bba7ff08
+.hero-ai-links a:hover {
+  border-color: #70f3c850
 }
 .status-dot {
-  width: 6px;
-  height: 6px;
+  flex-shrink: 0;
+  width: 5px;
+  height: 5px;
   background: var(--accent);
-  border-radius: 50%;
-  box-shadow: 0 0 12px #70f3c877
+  border-radius: 50%
 }
 .status-dot.local-dot {
-  background: var(--lilac);
-  box-shadow: 0 0 12px #bba7ff66
+  background: #92c8ff
 }
 .hero-download {
-  display: grid;
-  grid-template-columns: minmax(0,1fr) 92px;
-  gap: 20px;
-  max-width: 510px
+  position: relative;
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+  max-width: none
+}
+.hero-copy .cta {
+  justify-content: center
 }
 .hero-note {
-  margin: 16px 0 0;
-  font-size: 11px;
-  line-height: 1.8;
-  color: var(--muted)
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 11px
 }
 .hero-qr {
+  position: absolute;
+  top: 0;
+  left: calc(50% + 252px);
   display: grid;
-  gap: 6px;
-  align-self: start;
-  padding: 7px;
+  gap: 5px;
+  width: 75px;
+  padding: 6px;
   border: 1px solid var(--border);
   border-radius: 12px;
-  font-size: 9px;
-  line-height: 1.4;
+  color: var(--muted);
+  background: #ffffff03;
   text-align: center;
-  text-decoration: none;
-  background: #ffffff04;
-  color: var(--muted)
+  font-size: 8px;
+  line-height: 1.5;
+  text-decoration: none
 }
 .hero-qr img {
-  width: 76px;
-  height: 76px;
+  display: block;
+  width: 61px;
+  height: 61px;
   background: white;
   border-radius: 5px;
   image-rendering: pixelated
@@ -392,12 +485,13 @@ header.site .btn {
 .badges {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 16px;
+  justify-content: center;
   list-style: none;
-  margin: 24px 0 0;
   padding: 0;
-  font-size: 11px;
-  color: var(--muted)
+  margin: 22px 0 0;
+  gap: 8px 20px;
+  color: var(--muted);
+  font-size: 10px
 }
 .badges li::before {
   content: "✓";
@@ -406,133 +500,147 @@ header.site .btn {
 }
 .hero-visual {
   position: relative;
-  min-width: 0;
-  height: 740px;
+  width: min(100%,1020px);
+  height: 646px;
+  margin: 48px auto 0;
   isolation: isolate
 }
-.hero-orbit {
+.hero-wordmark {
   position: absolute;
-  inset: 95px 0 80px;
-  border: 1px solid #70f3c81c;
-  border-radius: 50%;
-  transform: rotate(-25deg);
-  box-shadow: 0 0 120px #70f3c809,inset 0 0 80px #70f3c809;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #dbeaff09;
+  font-size: clamp(100px,16vw,230px);
+  font-weight: 850;
+  line-height: 1;
+  letter-spacing: -.08em;
   pointer-events: none
 }
-.hero-orbit::before,.hero-orbit::after {
+.hero-phones {
+  position: absolute;
+  inset: 0 0 92px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(#000 65%,#000d 84%,transparent);
+  mask-image: linear-gradient(#000 65%,#000d 84%,transparent)
+}
+.hero-phone,.iphone-device {
+  position: relative;
+  margin: 0;
+  padding: 8px;
+  border: 1px solid #9aa2a5;
+  border-radius: 46px;
+  background: linear-gradient(135deg,#c2c6c7 0,#555d65 1%,#161b21 3%,#070a0d 48%,#57616b 96%,#b6babe 100%);
+  box-shadow: 0 0 0 2px #000,0 0 0 3px #ffffff13,inset 0 0 0 2px #000c,0 30px 70px #0008;
+  aspect-ratio: 942/2048;
+  transition: border-color .3s
+}
+.hero-phone::after,.iphone-device::after {
   content: "";
   position: absolute;
-  inset: 36px;
-  border: 1px solid #bba7ff1e;
-  border-radius: 50%;
-  transform: rotate(40deg)
+  inset: 4px;
+  border: 1px solid #ffffff13;
+  border-radius: 42px;
+  pointer-events: none;
+  z-index: 3
 }
-.hero-orbit::after {
-  inset: -30px;
-  transform: rotate(70deg);
-  border-color: #70f3c80a
-}
-.hero-phone {
+.hero-phone::before {
+  content: "";
   position: absolute;
-  margin: 0;
-  padding: 6px;
-  background: #111418;
-  border: 1px solid #58656b;
-  aspect-ratio: 600/1304;
-  border-radius: 40px;
-  overflow: hidden;
-  box-shadow: 0 30px 65px #0008;
-  transition: transform .6s
+  top: 18px;
+  left: 36%;
+  width: 28%;
+  height: 13px;
+  background: #030405;
+  border-radius: 999px;
+  z-index: 3
 }
-.hero-phone img {
+.hero-phone img,.hero-phone .app-preview,.hero-phone .video-fallback {
   display: block;
   width: 100%;
   height: 100%;
+  border-radius: 37px;
   object-fit: cover;
-  border-radius: 33px
+  background: #101214
 }
 .hero-phone.phone-front {
-  width: 252px;
-  top: 68px;
-  left: -16px;
-  transform: rotate(-11deg);
-  z-index: 1
+  position: absolute;
+  width: 258px;
+  left: 9%;
+  top: 82px;
+  transform: translateY(calc(var(--hero-progress,0) * -24px)) rotate(-12deg);
+  z-index: 1;
+  opacity: .8
 }
 .hero-phone.phone-ai {
-  width: 300px;
-  right: 3px;
-  top: 2px;
-  transform: rotate(5deg);
+  position: absolute;
+  width: 330px;
+  top: 8px;
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
   z-index: 2;
-  border-color: #8cbdaf;
-  box-shadow: 0 35px 85px #000a,0 0 70px #70f3c813
+  border-color: #b6c3c5;
+  box-shadow: 0 0 0 2px #000,0 0 0 3px #ffffff1b,inset 0 0 0 2px #000c,0 35px 90px #000a
 }
 .hero-phone.phone-ai::before {
-  content: "";
-  position: absolute;
-  top: 11px;
-  left: 36%;
-  width: 28%;
-  height: 12px;
-  border-radius: 20px;
-  background: #050505;
-  z-index: 2
+  top: 18px;
+  height: 13px
 }
 .hero-phone.phone-ai::after {
-  content: "";
-  position: absolute;
-  bottom: 10px;
-  left: 36%;
-  width: 28%;
-  height: 3px;
-  border-radius: 5px;
-  background: #aab3b1
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  width: auto;
+  height: auto;
+  background: none
 }
-.hero-phone.phone-ai .app-preview,.hero-phone.phone-ai .video-fallback {
-  display: block;
-  width: 100%;
-  height: 100%;
-  aspect-ratio: auto;
-  object-fit: cover;
-  border-radius: 33px;
-  background: #111
+.hero-phone.phone-threshold {
+  position: absolute;
+  width: 258px;
+  right: 9%;
+  top: 82px;
+  transform: translateY(calc(var(--hero-progress,0) * -38px)) rotate(12deg);
+  z-index: 1;
+  opacity: .8
 }
 .hero-story-nav {
   position: absolute;
-  z-index: 4;
   bottom: 42px;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 4;
   display: flex;
   gap: 4px;
   max-width: 100%;
   padding: 5px;
   border: 1px solid #ffffff24;
-  border-radius: 99px;
-  background: #0c182aeb;
-  backdrop-filter: blur(16px)
+  border-radius: 999px;
+  background: #101923e8;
+  backdrop-filter: blur(18px)
 }
 .hero-story-nav button {
   position: relative;
   overflow: hidden;
   min-height: 40px;
-  white-space: nowrap;
+  padding: 8px 15px;
   border: 0;
-  border-radius: 99px;
-  padding: 8px 14px;
-  font-size: 11px;
+  border-radius: 999px;
   background: transparent;
   color: var(--muted);
+  font-size: 11px;
+  white-space: nowrap;
   cursor: pointer
 }
 .hero-story-nav button>span:first-child {
+  margin-right: 6px;
   font-size: 9px;
-  margin-right: 5px;
   opacity: .6
 }
 .hero-story-nav button[aria-current] {
-  color: var(--accent);
-  background: #70f3c80e
+  background: #70f3c80e;
+  color: var(--accent)
 }
 .hero-story-nav button::after {
   content: "";
@@ -549,16 +657,16 @@ header.site .btn {
   position: absolute;
   bottom: 0;
   width: 100%;
-  margin: 0;
   min-height: 28px;
+  margin: 0;
   color: var(--muted);
   text-align: center;
   font-size: 11px
 }
 .connection-strip {
-  padding: 22px 0;
+  padding: 24px 0;
   border-block: 1px solid var(--border);
-  background: #ffffff02
+  background: #0a1325
 }
 .connection-strip .wrap {
   display: flex;
@@ -597,25 +705,37 @@ header.site .btn {
 .benefit-card {
   position: relative;
   display: block;
-  padding: 28px;
+  padding: 32px;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: linear-gradient(145deg,#14253d66,#0b1528);
+  background: linear-gradient(145deg,#13232e,#0b1528);
+  color: var(--text);
   text-decoration: none;
   transition: transform .25s,border-color .25s,box-shadow .25s
 }
 .benefit-card:hover {
   transform: translateY(-6px);
-  border-color: #70f3c844;
-  box-shadow: 0 20px 50px #0002
+  border-color: #70f3c855;
+  box-shadow: 0 16px 50px #0004;
+  color: var(--text)
+}
+.benefit-card:nth-child(2) {
+  background: linear-gradient(145deg,#172235,#0b1528)
+}
+.benefit-card:nth-child(3) {
+  background: linear-gradient(145deg,#1c2030,#0b1528)
+}
+.benefit-card>div {
+  min-width: 0
 }
 .icon {
   width: 46px;
   height: 46px;
   display: grid;
   place-items: center;
-  border-radius: 15px;
-  background: #70f3c810;
+  border: 1px solid #70f3c826;
+  border-radius: 50%;
+  background: transparent;
   color: var(--accent);
   margin-bottom: 25px
 }
@@ -624,15 +744,19 @@ header.site .btn {
   height: 25px
 }
 .benefit-card:nth-child(2) .icon {
-  color: #87d6ff;
-  background: #87d6ff10
+  color: #93c8ff;
+  background: transparent
 }
 .benefit-card:nth-child(3) .icon {
   color: var(--lilac);
-  background: #bba7ff10
+  background: transparent
 }
 .benefit-card h3 {
-  font-size: 20px
+  font-size: 25px;
+  color: var(--white);
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+  hyphens: auto
 }
 .benefit-card p {
   font-size: 14px;
@@ -643,13 +767,14 @@ header.site .btn {
   position: absolute;
   right: 26px;
   top: 26px;
-  color: #9aaec0
+  color: var(--muted);
+  font-size: 24px
 }
 
 /* AI: one place for the two ways to use the coach. */
 .ai-section {
   overflow: hidden;
-  background: radial-gradient(ellipse at 78% 50%,#25423b3d,transparent 52%),linear-gradient(120deg,#111a2c,#0b1021 65%);
+  background: var(--bg-2);
   border-block: 1px solid #ffffff14
 }
 .ai-layout {
@@ -685,11 +810,11 @@ header.site .btn {
 .ai-option h3 {
   font-size: 27px;
   margin: 10px 0;
-  color: #b4ffe4
+  color: #bbf3df
 }
 .ai-option p {
   font-size: 14px;
-  color: #c0d0d5;
+  color: #bdcbd3;
   margin: 0;
   line-height: 1.65
 }
@@ -711,11 +836,11 @@ header.site .btn {
   font-weight: 750
 }
 .local-option {
-  border-color: #bba7ff38;
-  background: linear-gradient(110deg,#bba7ff0e,#bba7ff02)
+  border-color: #c5b3f638;
+  background: linear-gradient(110deg,#c5b3f60e,#c5b3f602)
 }
 .local-option:hover {
-  border-color: #bba7ff77
+  border-color: #c5b3f677
 }
 .local-option h3,.local-option .ai-option-head {
   color: #d5c9ff
@@ -727,7 +852,7 @@ header.site .btn {
 .ai-more summary {
   padding: 14px 0;
   min-height: 48px;
-  color: #d8dfec;
+  color: #dee3d4;
   font-size: 14px;
   font-weight: 650;
   cursor: pointer
@@ -763,7 +888,7 @@ header.site .btn {
   margin: auto;
   padding: 5px;
   background: #111;
-  border: 1px solid #8ba6a46b;
+  border: 1px solid #b1b9a06b;
   border-radius: 38px;
   overflow: hidden;
   box-shadow: 0 30px 75px #0007;
@@ -937,6 +1062,126 @@ header.site .btn {
   margin: 0
 }
 
+/* Personal thresholds, with the actual source screenshots. */
+.threshold-section {
+  border-top: 1px solid var(--border)
+}
+.threshold-heading {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  align-items: end;
+  gap: 60px;
+  margin-bottom: 42px
+}
+.threshold-heading h2 {
+  margin: 0
+}
+.threshold-heading h2 span {
+  color: var(--lilac)
+}
+.threshold-heading .section-lead {
+  margin: 0 0 4px;
+  max-width: 480px
+}
+.threshold-layout {
+  display: grid;
+  grid-template-columns: minmax(0,.9fr) minmax(0,1.1fr);
+  gap: 62px;
+  align-items: center
+}
+.threshold-metrics {
+  display: grid;
+  gap: 12px
+}
+.threshold-metric {
+  --metric: #47d8b0;
+  padding: 21px 24px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--metric);
+  border-radius: 18px;
+  background: #ffffff03
+}
+.lt2-metric {
+  --metric: #ff995f
+}
+.ftp-metric {
+  --metric: #ffd157
+}
+.threshold-metric-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+  color: var(--metric)
+}
+.threshold-metric-head>span:last-child {
+  font-size: 10px;
+  letter-spacing: .08em
+}
+.threshold-code {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -.04em;
+  line-height: 1
+}
+.threshold-metric h3 {
+  margin-bottom: 7px;
+  font-size: 17px;
+  letter-spacing: -.02em
+}
+.threshold-metric p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6
+}
+.threshold-choice {
+  display: flex;
+  align-items: start;
+  gap: 12px;
+  margin: 22px 0 0;
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.6
+}
+.threshold-choice svg {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  color: var(--accent)
+}
+.threshold-captures {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  align-items: start;
+  gap: 24px;
+  width: 100%;
+  max-width: 574px;
+  margin-left: auto
+}
+.threshold-capture:nth-child(2) {
+  padding-top: 48px
+}
+.threshold-capture .feature-capture {
+  border-radius: 30px;
+  padding: 4px;
+  border-color: #c5b3f648
+}
+.threshold-capture .feature-capture img {
+  border-radius: 25px
+}
+.threshold-capture .feature-capture:hover {
+  border-color: var(--lilac)
+}
+.threshold-capture figcaption {
+  margin-top: 18px
+}
+.threshold-note {
+  margin: 26px 0 0;
+  font-size: 11px
+}
+
 /* Watch the actual app. Motion is user-controllable. */
 #screens .section-lead {
   margin-bottom: 14px
@@ -969,7 +1214,7 @@ header.site .btn {
   max-width: 270px;
   margin: auto;
   aspect-ratio: 600/1304;
-  border: 1px solid #586172;
+  border: 1px solid #6a705f;
   border-radius: 35px;
   background: #111;
   overflow: hidden;
@@ -1082,7 +1327,7 @@ header.site .btn {
   height: 44px;
   border: 1px solid #ffffff35;
   border-radius: 50%;
-  background: #0a1421e8;
+  background: #101923e8;
   color: #fff;
   font-size: 22px;
   backdrop-filter: blur(8px)
@@ -1133,11 +1378,11 @@ header.site .btn {
   background: #ffffff04;
   border-radius: 999px;
   font-size: 13px;
-  color: #d5dfec
+  color: #dde3d3
 }
 .history-import {
   font-size: 15px;
-  color: #c3d3e5;
+  color: #b9cbd6;
   max-width: 490px;
   padding-left: 18px;
   border-left: 2px solid var(--accent)
@@ -1194,7 +1439,7 @@ header.site .btn {
   list-style: none;
   padding: 0;
   margin: 20px 0;
-  color: #a0e7cf;
+  color: #c9e4a0;
   font-size: 12px
 }
 .privacy-card .fine {
@@ -1236,7 +1481,7 @@ header.site .btn {
   background: var(--accent)
 }
 .sport-chips li:nth-child(2n)::before {
-  background: #bba7ff
+  background: #c5b3f6
 }
 .sport-chips li:nth-child(3n)::before {
   background: #6fcbff
@@ -1460,7 +1705,7 @@ header.site .btn {
   position: relative;
   list-style: none;
   padding: 23px 30px 23px 0;
-  color: #e6edf8;
+  color: #eeeee6;
   font-size: 16px;
   font-weight: 650;
   cursor: pointer;
@@ -1502,7 +1747,7 @@ header.site .btn {
 }
 .support-form label {
   font-size: 13px;
-  color: #dce5f4;
+  color: #e2eaf2;
   font-weight: 650
 }
 .support-form input,.support-form textarea {
@@ -1522,7 +1767,7 @@ header.site .btn {
   resize: vertical
 }
 .support-form input::placeholder,.support-form textarea::placeholder {
-  color: #8191ac;
+  color: #9aaabd;
   opacity: 1
 }
 .support-form .fine {
@@ -1596,7 +1841,7 @@ footer.site a {
 /* The complete image remains available to keyboard and touch users. */
 .screenshot-dialog {
   color: var(--text);
-  background: #0c1422;
+  background: #101923;
   border: 1px solid #ffffff35;
   border-radius: 22px;
   width: min(94vw,680px);
@@ -1604,7 +1849,7 @@ footer.site a {
   padding: 0
 }
 .screenshot-dialog::backdrop {
-  background: #030813e8;
+  background: #090b08e8;
   backdrop-filter: blur(12px)
 }
 .dialog-toolbar {
@@ -1616,7 +1861,7 @@ footer.site a {
   justify-content: space-between;
   gap: 16px;
   padding: 12px 18px;
-  background: #0c1422f5
+  background: #101923f5
 }
 .dialog-toolbar p {
   font-size: 14px;
@@ -1656,7 +1901,7 @@ body.dialog-open {
 }
 .page p,.page li {
   font-size: 16px;
-  color: #c3d0e2
+  color: #c0cdda
 }
 .page ul {
   padding-left: 24px
@@ -1707,7 +1952,7 @@ td:first-child {
   color: white
 }
 pre {
-  background: #0c1422;
+  background: #101923;
   padding: 20px;
   border: 1px solid var(--border);
   border-radius: 16px;
@@ -1734,7 +1979,7 @@ body.previews-paused .capture-halo {
     padding-block: 75px
   }
   .hero-visual {
-    height: 750px
+    height: 760px
   }
 }
 @media(max-width:1180px) {
@@ -1753,7 +1998,7 @@ body.previews-paused .capture-halo {
     left: -8px
   }
   .hero-visual {
-    height: 680px
+    height: 740px
   }
   .hero-download {
     grid-template-columns: 1fr
@@ -1817,7 +2062,7 @@ body.previews-paused .capture-halo {
     gap: 25px
   }
   .hero-copy h1 {
-    font-size: clamp(45px,6vw,66px)
+    font-size: clamp(48px,6.4vw,68px)
   }
   .hero-copy .lead {
     font-size: 16px
@@ -1829,7 +2074,16 @@ body.previews-paused .capture-halo {
     width: 205px
   }
   .hero-visual {
-    height: 610px
+    height: 670px
+  }
+  .threshold-layout {
+    gap: 30px
+  }
+  .threshold-heading {
+    gap: 32px
+  }
+  .threshold-captures {
+    gap: 16px
   }
   .ai-options p {
     font-size: 13px
@@ -1846,19 +2100,19 @@ body.previews-paused .capture-halo {
     grid-template-columns: 1fr
   }
   .hero-copy {
-    text-align: center
+    text-align: left
   }
   .hero-copy h1 {
-    max-width: 14ch;
-    margin-inline: auto;
-    font-size: clamp(42px,8vw,66px)
+    max-width: none;
+    margin-inline: 0;
+    font-size: clamp(54px,9vw,76px)
   }
   .hero-copy .lead {
     max-width: 520px;
-    margin: 24px auto 20px
+    margin: 24px 0 20px
   }
   .hero-ai-links,.hero-copy .cta,.badges {
-    justify-content: center
+    justify-content: flex-start
   }
   .hero-download {
     max-width: none
@@ -1866,7 +2120,7 @@ body.previews-paused .capture-halo {
   .hero-visual {
     width: min(100%,490px);
     margin: 25px auto 0;
-    height: 655px
+    height: 715px
   }
   .hero-phone.phone-ai {
     width: 275px;
@@ -1877,9 +2131,6 @@ body.previews-paused .capture-halo {
     width: 235px;
     left: 8px;
     top: 65px
-  }
-  .hero-orbit {
-    inset: 80px 20px
   }
   .connection-strip .wrap {
     justify-content: center;
@@ -1936,6 +2187,24 @@ body.previews-paused .capture-halo {
   }
   .season-layout .section-lead {
     max-width: 600px
+  }
+  .threshold-heading,.threshold-layout {
+    grid-template-columns: 1fr;
+    gap: 28px
+  }
+  .threshold-heading .section-lead {
+    max-width: 600px
+  }
+  .threshold-metrics {
+    grid-template-columns: repeat(3,minmax(0,1fr))
+  }
+  .threshold-metric {
+    padding: 20px 17px
+  }
+  .threshold-captures {
+    max-width: 544px;
+    margin-inline: auto;
+    gap: 24px
   }
   .video-gallery {
     grid-template-columns: none;
@@ -2074,14 +2343,19 @@ body.previews-paused .capture-halo {
     padding: 36px 0 24px
   }
   .hero-copy h1 {
-    font-size: clamp(38px,9.7vw,52px);
+    font-size: clamp(43px,12.2vw,65px);
     letter-spacing: -.055em
+  }
+  .hero-kicker {
+    gap: 8px;
+    font-size: 9px;
+    margin-bottom: 24px
   }
   .hero-copy .lead {
     font-size: 15px;
     line-height: 1.65;
     max-width: 360px;
-    margin: 20px auto 18px
+    margin: 20px 0 18px
   }
   .hero-ai-links {
     gap: 7px;
@@ -2114,9 +2388,22 @@ body.previews-paused .capture-halo {
     margin-top: 18px
   }
   .hero-visual {
-    height: 555px;
+    height: 615px;
     width: min(100%,340px);
     margin-top: 30px
+  }
+  .hero-zone-link {
+    gap: 10px;
+    min-height: 46px;
+    padding: 8px 11px 8px 14px;
+    font-size: 11px
+  }
+  .hero-zone-metrics {
+    gap: 12px
+  }
+  .hero-zone-chip {
+    font-size: 11px;
+    gap: 5px
   }
   .hero-phone {
     border-radius: 30px;
@@ -2145,7 +2432,7 @@ body.previews-paused .capture-halo {
     height: 8px
   }
   .hero-story-nav {
-    bottom: 43px
+    bottom: 103px
   }
   .hero-story-nav button {
     min-height: 38px;
@@ -2181,7 +2468,7 @@ body.previews-paused .capture-halo {
     margin: 0;
     width: 40px;
     height: 40px;
-    border-radius: 13px
+    border-radius: 50%
   }
   .benefit-card h3 {
     font-size: 18px;
@@ -2241,6 +2528,60 @@ body.previews-paused .capture-halo {
   }
   .plan-view-picker button {
     font-size: 11px
+  }
+  .threshold-heading {
+    gap: 18px;
+    margin-bottom: 28px
+  }
+  .threshold-heading h2 {
+    font-size: 44px
+  }
+  .threshold-metrics {
+    grid-template-columns: 1fr
+  }
+  .threshold-metric {
+    display: grid;
+    grid-template-columns: 62px minmax(0,1fr);
+    column-gap: 16px;
+    padding: 19px 17px
+  }
+  .threshold-metric-head {
+    grid-row: span 2;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    gap: 9px;
+    margin: 0
+  }
+  .threshold-code {
+    font-size: 25px
+  }
+  .threshold-metric h3 {
+    font-size: 16px
+  }
+  .threshold-metric p {
+    font-size: 12px
+  }
+  .threshold-captures {
+    gap: 16px
+  }
+  .threshold-capture:nth-child(2) {
+    padding-top: 28px
+  }
+  .threshold-capture .feature-capture {
+    border-radius: 21px;
+    padding: 3px
+  }
+  .threshold-capture .feature-capture img {
+    border-radius: 17px
+  }
+  .threshold-capture .enlarge {
+    bottom: 7px;
+    right: 7px
+  }
+  .threshold-note {
+    font-size: 10px;
+    margin-top: 24px
   }
   .screen-gallery {
     grid-template-columns: repeat(2,minmax(0,1fr));
@@ -2451,4 +2792,648 @@ body.previews-paused .capture-halo {
 }
 .preview-control[aria-pressed="true"] .pause-icon {
   display: none;
+}
+
+
+/* One device component for every real app capture and recording. */
+.iphone-device {
+  position: relative;
+  width: 100%;
+  max-width: 330px;
+  margin-inline: auto;
+  overflow: visible
+}
+.iphone-device::after {
+  inset: 4px;
+  width: auto;
+  height: auto;
+  background: none
+}
+.iphone-device>.screen-link,.iphone-device>.weather-link,.iphone-device>.plan-capture-link,.iphone-device>.feature-capture {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 37px;
+  aspect-ratio: 942/2048;
+  overflow: hidden;
+  transform: none;
+  box-shadow: none;
+  background: #070a0c
+}
+.iphone-device>.screen-link img,.iphone-device>.weather-link img,.iphone-device>.plan-capture-link img,.iphone-device>.feature-capture img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  object-fit: cover
+}
+.iphone-device .device-island {
+  position: absolute;
+  z-index: 4;
+  top: 18px;
+  left: 37%;
+  width: 26%;
+  height: 13px;
+  border-radius: 999px;
+  background: #030405;
+  pointer-events: none
+}
+.device-island::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  width: 5px;
+  height: 5px;
+  border: 1px solid #1a2235;
+  border-radius: 50%;
+  background: #0a1322
+}
+.iphone-device .device-keys {
+  position: absolute;
+  top: 13%;
+  left: -4px;
+  display: grid;
+  gap: 14px;
+  pointer-events: none
+}
+.device-keys i {
+  width: 3px;
+  height: 18px;
+  background: linear-gradient(90deg,#272e36,#a5abb0);
+  border-radius: 2px
+}
+.device-keys i:not(:first-child) {
+  height: 32px
+}
+.device-power {
+  position: absolute;
+  top: 24%;
+  right: -4px;
+  width: 3px;
+  height: 42px;
+  border-radius: 2px;
+  background: linear-gradient(90deg,#a5abb0,#272e36);
+  pointer-events: none
+}
+.hero-phone::before,.video-frame.iphone-device::before {
+  display: none
+}
+.video-frame.iphone-device {
+  padding: 8px;
+  overflow: visible;
+  border-radius: 46px;
+  aspect-ratio: 600/1304
+}
+.video-frame.iphone-device video,.video-frame.iphone-device .video-fallback {
+  border-radius: 37px;
+  object-fit: cover
+}
+.screen-card .iphone-device {
+  max-width: 270px
+}
+.weather-card .iphone-device {
+  max-width: 248px
+}
+.connections-capture .iphone-device {
+  max-width: 286px
+}
+.threshold-capture .iphone-device {
+  max-width: 275px
+}
+.plan-view .iphone-device {
+  max-width: 330px
+}
+.screenshot-dialog .dialog-device {
+  width: calc(100% - 36px);
+  max-width: 460px;
+  margin: 18px auto 24px
+}
+.dialog-device>img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 37px
+}
+@media(max-width:560px) {
+  .iphone-device {
+    padding: 5px;
+    border-radius: 34px
+  }
+  .iphone-device::after {
+    inset: 3px;
+    border-radius: 31px
+  }
+  .iphone-device>.screen-link,.iphone-device>.weather-link,.iphone-device>.plan-capture-link,.iphone-device>.feature-capture,.dialog-device>img {
+    border-radius: 28px
+  }
+  .iphone-device .device-island {
+    top: 12px;
+    height: 8px
+  }
+  .device-island::after {
+    top: 2px;
+    right: 6px;
+    width: 4px;
+    height: 4px
+  }
+  .iphone-device .device-keys {
+    gap: 9px
+  }
+  .device-keys i {
+    height: 12px
+  }
+  .device-keys i:not(:first-child) {
+    height: 23px
+  }
+  .device-power {
+    height: 30px
+  }
+  .video-frame.iphone-device {
+    padding: 5px;
+    border-radius: 34px
+  }
+  .video-frame.iphone-device video,.video-frame.iphone-device .video-fallback {
+    border-radius: 28px
+  }
+}
+
+/* A single, stationary iPhone accompanies the three product chapters. */
+.product-story {
+  padding: 92px 0 100px;
+  position: relative;
+  background: linear-gradient(#050b19,#0a1429 50%,#050b19)
+}
+.story-intro {
+  text-align: center;
+  margin-bottom: 80px
+}
+.story-intro h2 {
+  font-size: clamp(42px,5vw,72px);
+  letter-spacing: -.055em;
+  line-height: 1.08
+}
+.story-intro h2 span {
+  color: #92a9bc
+}
+.story-intro .section-lead {
+  max-width: 640px;
+  margin: 24px auto 0
+}
+.story-stage {
+  display: none
+}
+.story-chapters .wrap {
+  width: 100%
+}
+.product-story .story-chapter {
+  background: none;
+  border: 0
+}
+.threshold-view-picker {
+  display: none
+}
+.footer-wordmark {
+  width: min(100% - 48px,var(--max));
+  margin: 56px auto 0;
+  overflow: hidden;
+  color: #dceafa16;
+  font-size: clamp(88px,19vw,270px);
+  line-height: .9;
+  font-weight: 850;
+  letter-spacing: -.08em;
+  user-select: none
+}
+.footer-wordmark span {
+  display: inline-block;
+  vertical-align: top;
+  margin: .12em 0 0 .4em;
+  font-size: .12em;
+  letter-spacing: 0
+}
+.marketing #screens {
+  background: radial-gradient(ellipse at 50% 20%,#365c7d15,transparent 65%);
+  border-top: 1px solid var(--border)
+}
+.marketing #screens>.wrap>.kicker,.marketing #screens>.wrap>h2,.marketing #screens>.wrap>.section-lead {
+  text-align: center;
+  margin-inline: auto
+}
+.marketing #screens .motion-toggle {
+  display: block;
+  margin-inline: auto
+}
+.marketing .privacy-card {
+  padding: 40px;
+  background: linear-gradient(120deg,#1233274d,#0f1825)
+}
+.marketing .sport-chips li {
+  background: #ffffff03
+}
+.marketing #weather .weather-gallery {
+  margin-top: 40px
+}
+.marketing .weather-card {
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 26px;
+  background: #ffffff02
+}
+.marketing .install-steps li {
+  padding: 76px 24px 20px;
+  border-top: 1px solid #ffffff24;
+  background: linear-gradient(#ffffff03,transparent)
+}
+.marketing .install-steps li::before {
+  top: 18px;
+  left: 24px;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  font-size: 25px;
+  font-weight: 500;
+  letter-spacing: -.05em
+}
+.marketing #get-started {
+  background: radial-gradient(ellipse at 50% 0,#4a8c7220,transparent 65%)
+}
+.marketing #get-started>.wrap>h2 {
+  max-width: 20ch
+}
+.marketing .section-cta .btn.primary {
+  min-height: 58px;
+  padding-inline: 28px
+}
+@media(min-width:1051px) {
+  .story-ready .story-layout {
+    display: grid;
+    grid-template-columns: minmax(0,.92fr) minmax(0,1.08fr);
+    gap: 86px;
+    align-items: start
+  }
+  .story-ready .story-stage {
+    position: sticky;
+    top: 108px;
+    display: grid;
+    align-content: start;
+    isolation: isolate
+  }
+  .story-stage-light {
+    position: absolute;
+    inset: 4% -10% 12%;
+    z-index: -1;
+    background: radial-gradient(ellipse,#3aa78b20,transparent 68%);
+    transition: background 1s;
+    pointer-events: none
+  }
+  .story-stage[data-story-active="thresholds"] .story-stage-light {
+    background: radial-gradient(ellipse,#38b4c91e,transparent 68%)
+  }
+  .story-stage[data-story-active="ai"] .story-stage-light {
+    background: radial-gradient(ellipse,#7673cc26,transparent 68%)
+  }
+  .story-stage-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: min(100%,338px);
+    margin: 0 auto 18px;
+    color: var(--muted);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .15em
+  }
+  .story-stage-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent)
+  }
+  .story-stage-index {
+    margin-left: auto;
+    font-family: ui-monospace,monospace;
+    color: #71869b
+  }
+  .story-stage .story-phone.iphone-device {
+    position: relative;
+    width: min(338px,calc((100svh - 262px) * .46));
+    min-width: 150px;
+    max-width: 100%;
+    margin: auto;
+    padding: 8px;
+    border-radius: 45px
+  }
+  .story-capture {
+    position: relative;
+    display: block;
+    height: 100%;
+    border-radius: 36px;
+    overflow: hidden;
+    background: #080a0b;
+    cursor: zoom-in
+  }
+  .story-capture img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 942/2048;
+    object-fit: cover
+  }
+  .device-island {
+    position: absolute;
+    z-index: 4;
+    top: 18px;
+    left: 37%;
+    width: 26%;
+    height: 13px;
+    border-radius: 999px;
+    background: #030405;
+    pointer-events: none
+  }
+  .device-keys {
+    position: absolute;
+    top: 13%;
+    left: -4px;
+    display: grid;
+    gap: 14px
+  }
+  .device-keys i {
+    width: 3px;
+    height: 18px;
+    background: linear-gradient(90deg,#272e36,#a5abb0);
+    border-radius: 2px
+  }
+  .device-keys i:not(:first-child) {
+    height: 32px
+  }
+  .story-zoom {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid #ffffff30;
+    border-radius: 50%;
+    background: #071018d9;
+    color: white;
+    backdrop-filter: blur(12px)
+  }
+  .story-zoom svg {
+    width: 15px;
+    height: 15px
+  }
+  .story-stage-nav {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    width: min(100%,370px);
+    margin: 22px auto 0
+  }
+  .story-stage-nav a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 40px;
+    padding: 8px 11px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.4;
+    text-decoration: none
+  }
+  .story-stage-nav a>span:first-child {
+    font-size: 9px;
+    opacity: .5
+  }
+  .story-stage-nav a[aria-current] {
+    color: var(--accent);
+    border-color: #70f3c826;
+    background: #70f3c809
+  }
+  .story-stage-caption {
+    margin: 12px 0 0;
+    color: #7b8e9f;
+    text-align: center;
+    font-size: 10px
+  }
+  .story-ready .story-chapters {
+    border-left: 1px solid #ffffff12;
+    padding-left: 46px
+  }
+  .story-ready .story-chapter {
+    min-height: 112svh;
+    padding: 125px 0 110px;
+    scroll-margin-top: 24px
+  }
+  .story-ready .story-chapter::before {
+    content: attr(data-step);
+    position: absolute;
+    top: 125px;
+    left: -64px;
+    display: grid;
+    place-items: center;
+    width: 35px;
+    height: 35px;
+    border: 1px solid #ffffff20;
+    border-radius: 50%;
+    background: #091429;
+    color: #73869a;
+    font-family: ui-monospace,monospace;
+    font-size: 10px;
+    transition: color .3s,border-color .3s
+  }
+  .story-ready .story-chapter.is-story-active::before {
+    border-color: #70f3c855;
+    color: var(--accent)
+  }
+  .story-ready .story-chapters .season-layout,.story-ready .story-chapters .ai-layout,.story-ready .story-chapters .threshold-layout,.story-ready .story-chapters .threshold-heading {
+    display: block
+  }
+  .story-ready .story-chapter .kicker {
+    display: inline-block;
+    max-width: 100%;
+    padding: 7px 11px;
+    border: 1px solid #ffffff1c;
+    border-radius: 999px;
+    background: #ffffff04;
+    color: #b8cbd8;
+    font-size: 9px;
+    letter-spacing: .09em
+  }
+  .story-ready .story-chapter h2 {
+    max-width: none;
+    font-size: clamp(38px,3.7vw,55px);
+    line-height: 1.1;
+    letter-spacing: -.05em;
+    text-wrap: balance
+  }
+  .story-ready .story-chapter .section-lead {
+    max-width: none;
+    margin-top: 24px;
+    margin-bottom: 30px;
+    font-size: 19px;
+    line-height: 1.7
+  }
+  .story-ready .story-chapters .threshold-captures,.story-ready .story-chapters .ai-capture,.story-ready .season-showcase .plan-captures,.story-ready .season-showcase .plan-capture-note {
+    display: none
+  }
+  .story-ready .season-showcase {
+    width: 100%;
+    margin: 30px 0 0
+  }
+  .story-ready .plan-points {
+    gap: 26px
+  }
+  .story-ready .plan-points h3 {
+    font-size: 18px;
+    line-height: 1.25
+  }
+  .story-ready .plan-points p {
+    font-size: 14px
+  }
+  .story-ready .threshold-heading {
+    margin-bottom: 0
+  }
+  .story-ready .threshold-heading h2 span {
+    color: var(--accent)
+  }
+  .story-ready .threshold-metric {
+    padding: 20px;
+    background: #ffffff02
+  }
+  .story-ready .threshold-metric p {
+    font-size: 14px
+  }
+  .story-ready .threshold-view-picker {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px
+  }
+  .threshold-view-picker button {
+    min-height: 40px;
+    padding: 7px 13px;
+    border: 1px solid #ffffff1c;
+    border-radius: 999px;
+    background: #ffffff03;
+    color: var(--muted);
+    font-size: 11px;
+    cursor: pointer
+  }
+  .threshold-view-picker button[aria-pressed="true"] {
+    border-color: #70f3c855;
+    color: var(--accent);
+    background: #70f3c808
+  }
+  .story-ready .ai-copy h2 {
+    font-size: 60px
+  }
+  .story-ready .ai-option {
+    padding: 23px
+  }
+  .story-ready .ai-option h3 {
+    font-size: 26px
+  }
+  .story-ready .threshold-note {
+    max-width: 50ch
+  }
+}
+
+/* Hero composition at each size; only app recordings move automatically. */
+@media(min-width:1600px) {
+  .product-hero { padding: 158px 0 44px }
+  .hero-visual { height: 670px }
+}
+@media(max-width:1180px) {
+  .marketing header.site .wrap { gap: 14px }
+  .marketing nav.main { gap: 15px }
+  .hero-qr { display: none }
+  .hero-phone.phone-front { width: 250px; left: 8% }
+  .hero-phone.phone-ai { width: 324px; right: auto }
+  .hero-phone.phone-threshold { width: 250px; right: 8% }
+  .hero-visual { height: 638px }
+}
+@media(max-width:1050px) {
+  .marketing header.site .wrap { gap: 0; min-height: 60px }
+  .marketing header.site { top: 14px; border-radius: 20px }
+  .product-hero { padding-top: 138px }
+  .hero-copy h1 { font-size: clamp(60px,9.2vw,94px) }
+  .hero-copy .lead { font-size: 17px }
+  .hero-visual { height: 610px }
+  .hero-phone.phone-front { width: 232px; left: 5%; top: 80px }
+  .hero-phone.phone-ai { width: 300px; top: 8px }
+  .hero-phone.phone-threshold { width: 232px; right: 5%; top: 80px }
+  .story-intro { margin-bottom: 20px }
+  .story-intro h2 { font-size: 58px }
+  .product-story { padding-top: 70px; padding-bottom: 35px }
+}
+@media(max-width:800px) {
+  .hero-copy { text-align: center }
+  .hero-copy h1 { max-width: none; margin-inline: auto; font-size: clamp(54px,9.7vw,78px) }
+  .hero-copy .lead { max-width: 590px; margin: 24px auto 20px; font-size: 16px }
+  .hero-kicker,.hero-ai-links,.hero-copy .cta,.badges { justify-content: center }
+  .hero-visual { width: 100%; height: 565px; margin-top: 40px }
+  .hero-phone.phone-front { width: 210px; left: 3%; top: 68px }
+  .hero-phone.phone-ai { width: 280px; left: 50%; right: auto; top: 8px; transform: translateX(-50%) }
+  .hero-phone.phone-threshold { width: 210px; right: 3%; top: 68px }
+  .hero-phone.phone-ai .app-preview,.hero-phone.phone-ai .video-fallback { border-radius: 37px }
+  .marketing .weather-card { padding: 18px }
+  .story-intro h2 { font-size: 50px }
+}
+@media(max-width:560px) {
+  .marketing header.site { width: calc(100% - 24px); top: 10px; border-radius: 18px }
+  .marketing header.site .wrap { width: calc(100% - 22px); min-height: 56px }
+  .marketing header.site .brand { font-size: 11px; gap: 8px; letter-spacing: .13em }
+  .marketing header.site .brand img { width: 27px; height: 27px }
+  .marketing .language-picker { margin-right: 7px }
+  .marketing .language-picker select { max-width: 91px; padding-left: 8px; padding-right: 25px; border-color: transparent; background: none; min-height: 40px; height: 40px }
+  .marketing .menu-toggle:not([hidden]) { border-color: #ffffff18; min-height: 38px; font-size: 11px; padding-inline: 9px }
+  .product-hero { padding: 110px 0 28px }
+  .hero-kicker { gap: 8px; font-size: 8px; letter-spacing: .09em; margin-bottom: 24px }
+  .hero-beta { padding: 5px 8px }
+  .hero-copy h1 { font-size: clamp(42px,11.5vw,63px); letter-spacing: -.06em; line-height: 1.05 }
+  .hero-copy .lead { max-width: 390px; margin: 22px auto 18px; font-size: 15px; line-height: 1.65 }
+  .hero-ai-links { gap: 8px; margin-bottom: 23px }
+  .hero-ai-links a { padding: 5px 10px; font-size: 10px }
+  .hero-copy .cta { gap: 8px }
+  .hero-copy .cta .ghost { border-color: #ffffff20; padding-inline: 13px }
+  .hero-note { margin-top: 13px; font-size: 9px }
+  .badges { gap: 6px 12px; font-size: 9px; margin-top: 18px }
+  .hero-visual { width: calc(100% + 16px); max-width: 450px; margin: 36px -8px 0; height: 478px }
+  .hero-wordmark { font-size: 107px; top: 18px }
+  .hero-phone { border-radius: 34px; padding: 5px }
+  .hero-phone::after { inset: 3px; border-radius: 31px }
+  .hero-phone img,.hero-phone.phone-ai .app-preview,.hero-phone.phone-ai .video-fallback { border-radius: 28px }
+  .hero-phone.phone-front { width: 155px; left: 2%; top: 61px; transform: rotate(-12deg) }
+  .hero-phone.phone-ai { width: 224px; top: 4px; left: 50%; right: auto; transform: translateX(-50%) }
+  .hero-phone.phone-threshold { width: 155px; right: 2%; top: 61px; transform: rotate(12deg) }
+  .hero-phone::before,.hero-phone.phone-ai::before { top: 12px; height: 8px }
+  .hero-phone.phone-ai::after { top: 3px; left: 3px; bottom: 3px; right: 3px }
+  .hero-story-nav { bottom: 37px }
+  .hero-story-nav button { padding-inline: 11px; font-size: 10px; min-height: 38px }
+  .visual-caption { bottom: 0; padding-inline: 8px; font-size: 10px; line-height: 1.5 }
+  .hero-phones { bottom: 88px }
+  .product-story { padding-top: 55px }
+  .story-intro { margin-bottom: 10px }
+  .story-intro h2 { font-size: 40px; text-wrap: balance }
+  .story-intro .section-lead { font-size: 16px }
+  .marketing .weather-gallery { gap: 12px }
+  .marketing .weather-card { padding: 12px 9px }
+  .marketing .weather-card h3 { font-size: 15px }
+  .marketing .weather-card p { font-size: 12px }
+  .marketing .privacy-card { padding: 25px }
+  .marketing .install-steps li { padding: 20px 16px 16px 66px }
+  .marketing .install-steps li::before { top: 20px; left: 16px; font-size: 22px }
+  .footer-wordmark { width: calc(100% - 36px); margin-top: 40px; font-size: 23vw }
+}
+@media(prefers-reduced-motion:reduce) {
+  .hero-phone.phone-ai { transform: translateX(-50%) }
+  .hero-phone.phone-front,.hero-phone.phone-threshold { transform: none }
 }

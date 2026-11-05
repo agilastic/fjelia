@@ -4,15 +4,15 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Fjelia — Know your body. Train smarter.</title>
+<title>Fjelia — Your training. Your rhythm.</title>
 <meta content="Generate one training plan for multiple race goals. Built around your history and available time, with AI coaching for training and recovery. Free AI included. On-device AI." name="description"/>
 <meta content="#050b19" name="theme-color"/>
 <link href="https://agilastic.github.io/fjelia/" rel="canonical"/>
 <link href="favicon.ico" rel="icon" sizes="any"/>
 <link href="apple-touch-icon.png" rel="apple-touch-icon"/>
-<link href="style.css?v=20261105news" rel="stylesheet"/>
+<link href="style.css?v=20261105experience3" rel="stylesheet"/>
 <meta content="website" property="og:type"/>
-<meta content="Fjelia — Know your body. Train smarter." property="og:title"/>
+<meta content="Fjelia — Your training. Your rhythm." property="og:title"/>
 <meta content="Generate one training plan for multiple race goals. Built around your history and available time, with AI coaching for training and recovery. Free AI included. On-device AI." property="og:description"/>
 <meta content="https://agilastic.github.io/fjelia/" property="og:url"/>
 <meta content="https://agilastic.github.io/fjelia/img/og-image.jpg" property="og:image"/>
@@ -20,7 +20,7 @@
 <meta content="630" property="og:image:height"/>
 <meta content="summary_large_image" name="twitter:card"/>
 </head>
-<body>
+<body class="marketing">
 <a class="skip" data-i18n="t000" href="#main">Skip to content</a>
 <header class="site">
 <div class="wrap">
@@ -31,6 +31,7 @@
 <button aria-controls="main-nav" aria-expanded="false" class="menu-toggle" data-i18n="t001" hidden="" type="button">Menu <span aria-hidden="true">☰</span></button>
 <nav aria-label="Main" class="main" id="main-nav">
 <a data-i18n="t004" href="#plan">Training plan</a>
+<a data-i18n="threshold_nav" href="#thresholds">Your zones</a>
 <a data-i18n="t054" href="#ai">AI coach</a>
 <a data-i18n="t003" href="#screens">Inside the app</a>
 <a data-i18n="t005" href="#privacy">Privacy</a>
@@ -44,11 +45,12 @@
 </header>
 <main id="main">
 <section aria-labelledby="hero-title" class="product-hero">
+<div aria-hidden="true" class="hero-atmosphere" style="position:absolute;inset:0;pointer-events:none"><div class="hero-aurora"></div><svg class="hero-contours" width="1440" height="0" fill="none" viewBox="0 0 1440 1200" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="contour-light" x1="0" y1="0" x2="1440" y2="1000" gradientUnits="userSpaceOnUse"><stop stop-color="#72efc3" stop-opacity="0"/><stop offset=".45" stop-color="#72efc3" stop-opacity=".35"/><stop offset="1" stop-color="#68b9ed" stop-opacity="0"/></linearGradient></defs><g stroke="url(#contour-light)" stroke-width=".7"><path d="M-240 1000C150 1100 330 200 730 350S1130 1160 1670 280"/><path d="M-240 1020C150 1120 330 220 730 370S1130 1180 1670 300"/><path d="M-240 1040C150 1140 330 240 730 390S1130 1200 1670 320"/><path d="M-240 1060C150 1160 330 260 730 410S1130 1220 1670 340"/><path d="M-240 1080C150 1180 330 280 730 430S1130 1240 1670 360"/><path d="M-240 1100C150 1200 330 300 730 450S1130 1260 1670 380"/><path d="M-240 1120C150 1220 330 320 730 470S1130 1280 1670 400"/><path d="M-240 1140C150 1240 330 340 730 490S1130 1300 1670 420"/></g></svg></div>
 <div class="wrap hero-layout">
 <div class="hero-copy">
-<p class="kicker" data-i18n="t009">Training and health in one place.</p>
-<h1 data-i18n="t010" id="hero-title">Know your body.<br/><span class="accent">Train smarter.</span></h1>
-<p class="lead" data-i18n="hero_ai_lead">Generate one training plan for multiple race goals. Built around your history and available time, with AI coaching for training and recovery.</p>
+<p class="kicker hero-kicker"><span class="hero-beta" data-i18n="hero_beta">Public beta</span><span data-i18n="t009">Training. Recovery. You.</span></p>
+<h1 data-i18n="t010" id="hero-title">Your training.<br/><span class="accent">Your rhythm.</span></h1>
+<p class="lead" data-i18n="hero_ai_lead">One plan for all your goals. Training, recovery and AI coaching, connected by your data.</p>
 <div class="hero-ai-links"><a href="#ai"><span aria-hidden="true" class="status-dot"></span><span data-i18n="hero_ai_free">Free AI included</span><span aria-hidden="true">↗</span></a><a href="#ai"><span aria-hidden="true" class="status-dot local-dot"></span><span data-i18n="hero_ai_local">On-device AI</span></a></div>
 <div class="hero-download">
 <div>
@@ -65,15 +67,16 @@
 <li data-i18n="t015">Open source</li>
 </ul>
 </div>
-<div class="hero-visual">
-<div aria-hidden="true" class="hero-orbit"></div>
+<div class="hero-visual"><span aria-hidden="true" class="hero-wordmark">FJELIA</span><div class="hero-phones">
 
-<figure class="hero-phone phone-front"><img alt="Fjelia daily overview with colourful sleep, energy and load gauges, a daily briefing and health trends" fetchpriority="high" height="2622" src="img/screen-overview-600.webp" width="1206"/></figure>
+<figure class="hero-phone phone-front story-phone iphone-device"><span aria-hidden="true" class="device-keys"><i></i><i></i><i></i></span><span aria-hidden="true" class="device-power"></span><img alt="Fjelia daily overview with colourful sleep, energy and load gauges, a daily briefing and health trends" fetchpriority="high" height="2622" src="img/screen-overview-600.webp" width="1206"/><span aria-hidden="true" class="device-island"></span></figure>
 
-<figure class="hero-phone phone-ai">
+<figure class="hero-phone phone-ai story-phone iphone-device"><span aria-hidden="true" class="device-keys"><i></i><i></i><i></i></span><span aria-hidden="true" class="device-power"></span>
 <video aria-label="Race goals, workout graphs and AI coaching: silent app walkthrough" autoplay="" controls="" class="app-preview hero-preview" height="1304" id="hero-story-video" loop="" muted="" playsinline="" poster="video/hero-training-story-poster.webp" preload="auto" webkit-playsinline="" width="600"><source src="video/hero-training-story.mp4" type="video/mp4"/><source src="video/hero-training-story.webm" type="video/webm"/></video>
 <img alt="Fjelia workout performance graphs" class="video-fallback" height="1304" hidden="" src="video/hero-training-story-poster.webp" width="600"/>
-</figure>
+<span aria-hidden="true" class="device-island"></span></figure>
+<figure class="hero-phone phone-threshold story-phone iphone-device"><span aria-hidden="true" class="device-keys"><i></i><i></i><i></i></span><span aria-hidden="true" class="device-power"></span><img alt="LT1 and LT2 in the real Fjelia app." data-i18n-alt="threshold_capture_run_body" decoding="async" height="2622" src="img/screen-threshold-lt1-lt2-600.webp" width="1206"/><span aria-hidden="true" class="device-island"></span></figure>
+</div>
 <div aria-label="App preview chapters" class="hero-story-nav" hidden="" role="group">
 <button aria-controls="hero-story-video" aria-current="step" data-preview-end="5.083333" data-preview-time="0" type="button"><span aria-hidden="true">01</span> <span data-i18n="hero_chapter_plan">Plan</span></button>
 <button aria-controls="hero-story-video" data-preview-end="10.833333" data-preview-time="5.083333" type="button"><span aria-hidden="true">02</span> <span data-i18n="hero_chapter_explore">Explore</span></button>
@@ -81,6 +84,7 @@
 <button aria-label="Pause previews" aria-pressed="false" class="preview-control" data-motion-toggle="" hidden="" type="button"><svg aria-hidden="true" fill="currentColor" height="16" viewBox="0 0 24 24" width="16"><g class="pause-icon"><rect height="14" rx="1" width="4" x="6" y="5"/><rect height="14" rx="1" width="4" x="14" y="5"/></g><path class="play-icon" d="m8 4 12 8-12 8Z"/></svg><span class="sr-only" data-i18n="t022" data-motion-label="">Pause previews</span></button>
 </div>
 <p class="visual-caption" data-i18n="scene_goals" id="hero-scene-caption">Set priorities across your races.</p>
+
 </div>
 </div>
 </section>
@@ -123,7 +127,22 @@
 <span aria-hidden="true" class="benefit-arrow">↗</span></a></div>
 </div>
 </section>
-<section class="alt season-section" id="plan">
+<div aria-labelledby="story-title" class="product-story" id="story">
+<div class="wrap story-intro"><p class="kicker" data-i18n="story_kicker">THE BIG PICTURE. THE SMALL DETAILS.</p><h2 data-i18n="story_title" id="story-title">Built around you.<br/><span>Your whole training life.</span></h2><p class="section-lead" data-i18n="story_lead">A plan for your goals. A clearer view of your body. A coach when you need one.</p></div>
+<div class="wrap story-layout">
+<aside aria-label="App preview" class="story-stage" hidden="">
+<div aria-hidden="true" class="story-stage-light"></div>
+<div class="story-stage-top"><span class="story-stage-dot" aria-hidden="true"></span><span data-i18n="story_preview">INSIDE FJELIA</span><span class="story-stage-index" aria-hidden="true">01 / 03</span></div>
+<figure class="story-phone iphone-device">
+<span aria-hidden="true" class="device-keys"><i></i><i></i><i></i></span><span aria-hidden="true" class="device-power"></span>
+<a aria-label="Enlarge screenshot: Week view" class="story-capture" data-caption="Week view" href="img/plan-week-progress-942.webp"><img alt="Your planned week in Fjelia." decoding="async" height="2048" loading="lazy" sizes="338px" src="img/plan-week-progress-600.webp" srcset="img/plan-week-progress-600.webp 600w, img/plan-week-progress-942.webp 942w" width="942"/><span aria-hidden="true" class="story-zoom"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" viewBox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5"/></svg></span></a>
+<span aria-hidden="true" class="device-island"></span>
+</figure>
+<nav aria-label="App preview chapters" class="story-stage-nav"><a aria-current="location" data-story-nav="plan" href="#plan"><span aria-hidden="true">01</span><span data-i18n="hero_chapter_plan">Plan</span></a><a data-story-nav="thresholds" href="#thresholds"><span aria-hidden="true">02</span><span data-i18n="threshold_nav">Your zones</span></a><a data-story-nav="ai" href="#ai"><span aria-hidden="true">03</span><span data-i18n="t054">AI coach</span></a></nav>
+<p class="story-stage-caption" data-i18n="story_scroll">Keep scrolling. Explore the real app.</p>
+</aside>
+<div class="story-chapters">
+<section class="alt season-section story-chapter" data-step="01" data-story-chapter="plan" id="plan">
 <div class="wrap season-layout">
 <div>
 <p class="kicker" data-i18n="plan_generator">MULTI-RACE TRAINING PLAN GENERATOR</p>
@@ -158,21 +177,21 @@
 </div>
 <div class="plan-captures">
 <figure class="plan-view" data-plan-panel="week" id="plan-view-week">
-<a aria-label="Enlarge screenshot: Week view" class="plan-capture-link" data-caption="Week view" href="img/plan-week-progress-942.webp">
+<div class="story-phone iphone-device"><span aria-hidden="true" class="device-keys"><i></i><i></i><i></i></span><span aria-hidden="true" class="device-power"></span><a aria-label="Enlarge screenshot: Week view" class="plan-capture-link" data-caption="Week view" href="img/plan-week-progress-942.webp">
 <img alt="Your planned week, with running, cycling, strength, rest days and multiple sessions on the same day." decoding="async" height="2048" loading="lazy" sizes="(max-width: 366px) calc(100vw - 2.5rem), 326px" src="img/plan-week-progress-600.webp" srcset="img/plan-week-progress-600.webp 600w, img/plan-week-progress-942.webp 942w" width="942"/>
-<span aria-hidden="true" class="enlarge">↗</span></a>
+<span aria-hidden="true" class="enlarge">↗</span></a><span aria-hidden="true" class="device-island"></span></div>
 <figcaption><h3 data-i18n="plan_week_view">Week view</h3><p data-i18n="plan_week_description">Planned, completed and extra sessions, with weekly progress across your sports.</p></figcaption>
 </figure>
 <figure class="plan-view" data-plan-panel="month" id="plan-view-month">
-<a aria-label="Enlarge screenshot: Month view" class="plan-capture-link" data-caption="Month view" href="img/plan-month-real.webp">
+<div class="story-phone iphone-device"><span aria-hidden="true" class="device-keys"><i></i><i></i><i></i></span><span aria-hidden="true" class="device-power"></span><a aria-label="Enlarge screenshot: Month view" class="plan-capture-link" data-caption="Month view" href="img/plan-month-real.webp">
 <img alt="A month of training, with sport colours and clear planned and completed markers." decoding="async" height="2622" loading="lazy" sizes="(max-width: 366px) calc(100vw - 2.5rem), 326px" src="img/plan-month-real-600.webp" srcset="img/plan-month-real-600.webp 600w, img/plan-month-real-942.webp 942w" width="1206"/>
-<span aria-hidden="true" class="enlarge">↗</span></a>
+<span aria-hidden="true" class="enlarge">↗</span></a><span aria-hidden="true" class="device-island"></span></div>
 <figcaption><h3 data-i18n="plan_month_view">Month view</h3><p data-i18n="plan_month_description">A month of training, with sport colours and clear planned and completed markers.</p></figcaption>
 </figure>
 <figure class="plan-view" data-plan-panel="goals" id="plan-view-goals">
-<a aria-label="Enlarge screenshot: Race goals" class="plan-capture-link" data-caption="Race goals" href="img/plan-goals-real.webp">
+<div class="story-phone iphone-device"><span aria-hidden="true" class="device-keys"><i></i><i></i><i></i></span><span aria-hidden="true" class="device-power"></span><a aria-label="Enlarge screenshot: Race goals" class="plan-capture-link" data-caption="Race goals" href="img/plan-goals-real.webp">
 <img alt="Your races with priorities, distances, elevation, dates, target times and countdowns." decoding="async" height="2622" loading="lazy" sizes="(max-width: 366px) calc(100vw - 2.5rem), 326px" src="img/plan-goals-real-600.webp" srcset="img/plan-goals-real-600.webp 600w, img/plan-goals-real-942.webp 942w" width="1206"/>
-<span aria-hidden="true" class="enlarge">↗</span></a>
+<span aria-hidden="true" class="enlarge">↗</span></a><span aria-hidden="true" class="device-island"></span></div>
 <figcaption><h3 data-i18n="plan_goals_view">Race goals</h3><p data-i18n="plan_goals_description">Your races with priorities, distances, elevation, dates, target times and countdowns.</p></figcaption>
 </figure>
 </div>
@@ -180,7 +199,31 @@
 </div>
 </div>
 </section>
-<section aria-labelledby="ai-title" class="ai-section" id="ai">
+<section aria-labelledby="threshold-title" class="threshold-section story-chapter" data-step="02" data-story-chapter="thresholds" id="thresholds">
+<div class="wrap">
+<div class="threshold-heading">
+<div><p class="kicker" data-i18n="threshold_kicker">Less guessing. More understanding.</p><h2 data-i18n="threshold_title" id="threshold-title">Your effort.<br/><span>Your numbers.</span></h2></div>
+<p class="section-lead" data-i18n="threshold_lead">LT1, LT2 and FTP, together. See your tests and connected-device values side by side, then choose what you use for training.</p>
+</div>
+<div class="threshold-layout">
+<div class="threshold-copy">
+<div aria-label="Choose a threshold screenshot" class="threshold-view-picker" hidden="" role="group"><button aria-pressed="true" data-threshold-view="run" type="button"><span data-i18n="threshold_capture_run">LT1 + LT2</span></button><button aria-pressed="false" data-threshold-view="bike" type="button"><span data-i18n="threshold_capture_bike">Cycling + FTP</span></button></div>
+<div class="threshold-metrics">
+<article class="threshold-metric lt1-metric"><div class="threshold-metric-head"><span class="threshold-code">LT1</span><span aria-hidden="true">01 /</span></div><h3 data-i18n="threshold_lt1_title">Aerobic threshold</h3><p data-i18n="threshold_lt1_body">Bring your heart-rate drift test and available estimates into one view.</p></article>
+<article class="threshold-metric lt2-metric"><div class="threshold-metric-head"><span class="threshold-code">LT2</span><span aria-hidden="true">02 /</span></div><h3 data-i18n="threshold_lt2_title">Lactate threshold</h3><p data-i18n="threshold_lt2_body">Review your 30-minute test alongside other sources. Running and cycling have their own values.</p></article>
+<article class="threshold-metric ftp-metric"><div class="threshold-metric-head"><span class="threshold-code">FTP</span><span aria-hidden="true">03 /</span></div><h3 data-i18n="threshold_ftp_title">Functional threshold power</h3><p data-i18n="threshold_ftp_body">Compare cycling power estimates and values from your connected devices, in watts.</p></article>
+</div>
+<p class="threshold-choice"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg><span data-i18n="threshold_choice">See the source. Compare the values. Changes are only applied when you confirm.</span></p>
+</div>
+<div class="threshold-captures">
+<figure class="capture-figure threshold-capture"><div class="story-phone iphone-device"><span aria-hidden="true" class="device-keys"><i></i><i></i><i></i></span><span aria-hidden="true" class="device-power"></span><a aria-label="Enlarge screenshot: LT1 + LT2" class="feature-capture" data-caption="LT1 + LT2" href="img/screen-threshold-lt1-lt2-942.webp"><img alt="LT1 and LT2 with the values in use, test results and comparison sources in Fjelia." decoding="async" height="2622" loading="lazy" sizes="(max-width: 560px) calc((100vw - 52px) / 2), (max-width: 800px) 260px, 275px" src="img/screen-threshold-lt1-lt2-600.webp" srcset="img/screen-threshold-lt1-lt2-600.webp 600w, img/screen-threshold-lt1-lt2-942.webp 942w" width="1206"/><span aria-hidden="true" class="enlarge">↗</span></a><span aria-hidden="true" class="device-island"></span></div><figcaption><h3 data-i18n="threshold_capture_run">LT1 + LT2</h3><p data-i18n="threshold_capture_run_body">Your heart-rate thresholds, with test results and sources.</p></figcaption></figure>
+<figure class="capture-figure threshold-capture"><div class="story-phone iphone-device"><span aria-hidden="true" class="device-keys"><i></i><i></i><i></i></span><span aria-hidden="true" class="device-power"></span><a aria-label="Enlarge screenshot: Cycling + FTP" class="feature-capture" data-caption="Cycling + FTP" href="img/screen-threshold-ftp-942.webp"><img alt="Running LT2 at 165 bpm, cycling LT2 at 166 bpm and FTP at 264 watts in Fjelia." decoding="async" height="2622" loading="lazy" sizes="(max-width: 560px) calc((100vw - 52px) / 2), (max-width: 800px) 260px, 275px" src="img/screen-threshold-ftp-600.webp" srcset="img/screen-threshold-ftp-600.webp 600w, img/screen-threshold-ftp-942.webp 942w" width="1206"/><span aria-hidden="true" class="enlarge">↗</span></a><span aria-hidden="true" class="device-island"></span></div><figcaption><h3 data-i18n="threshold_capture_bike">Cycling + FTP</h3><p data-i18n="threshold_capture_bike_body">Separate cycling LT2 and power values, with their sources.</p></figcaption></figure>
+</div>
+</div>
+<p class="fine threshold-note" data-i18n="threshold_note">Real screenshots from the German beta, showing example values from the developer’s own data. Tap to enlarge.</p>
+</div>
+</section>
+<section aria-labelledby="ai-title" class="ai-section story-chapter" data-step="03" data-story-chapter="ai" id="ai">
 <div class="wrap ai-layout">
 <div class="ai-copy">
 <p class="kicker" data-i18n="ai_kicker">AI COACHING. YOUR CHOICE.</p>
@@ -194,8 +237,9 @@ Your way.</h2>
 <details class="ai-more"><summary data-i18n="ai_more_title">More ways to make it yours</summary><p data-i18n="ai_more_body">Download an optional local Qwen model on supported devices, or configure a cloud provider with your own key in Settings.</p></details>
 <p class="fine ai-choice-note" data-i18n="ai_choice_note">Choose during setup. Change anytime. You can also continue without AI.</p>
 </div>
-<figure class="capture-figure ai-capture"><div aria-hidden="true" class="capture-halo"></div><a class="feature-capture" href="img/screen-ai-choice-942.webp"><img alt="Choose Free AI, Apple Intelligence or another model during setup." decoding="async" height="2048" loading="lazy" sizes="(max-width: 700px) 80vw, 340px" src="img/screen-ai-choice-600.webp" srcset="img/screen-ai-choice-600.webp 600w, img/screen-ai-choice-942.webp 942w" width="942"/><span aria-hidden="true" class="enlarge">↗</span></a><figcaption><h3 data-i18n="ai_capture_title">Meet your coach during setup</h3><p data-i18n="ai_capture_body">The real AI selection in Fjelia. Screenshot from the German beta.</p></figcaption></figure>
+<figure class="capture-figure ai-capture"><div aria-hidden="true" class="capture-halo"></div><div class="story-phone iphone-device"><span aria-hidden="true" class="device-keys"><i></i><i></i><i></i></span><span aria-hidden="true" class="device-power"></span><a class="feature-capture" href="img/screen-ai-choice-942.webp"><img alt="Choose Free AI, Apple Intelligence or another model during setup." decoding="async" height="2048" loading="lazy" sizes="(max-width: 700px) 80vw, 340px" src="img/screen-ai-choice-600.webp" srcset="img/screen-ai-choice-600.webp 600w, img/screen-ai-choice-942.webp 942w" width="942"/><span aria-hidden="true" class="enlarge">↗</span></a><span aria-hidden="true" class="device-island"></span></div><figcaption><h3 data-i18n="ai_capture_title">Meet your coach during setup</h3><p data-i18n="ai_capture_body">The real AI selection in Fjelia. Screenshot from the German beta.</p></figcaption></figure>
 </div></section>
+</div></div></div>
 <section aria-labelledby="screens-title" id="screens">
 <div class="wrap">
 <p class="kicker" data-i18n="t019">A look inside the app</p>
@@ -207,7 +251,7 @@ Your way.</h2>
 <button aria-controls="walkthrough-2" data-demo-index="2" type="button"><span data-i18n="gallery_progress">Fuel &amp; sync</span></button></div>
 <div class="video-gallery">
 <article class="video-card" id="walkthrough-0">
-<div class="video-frame">
+<div class="video-frame story-phone iphone-device"><span aria-hidden="true" class="device-keys"><i></i><i></i><i></i></span><span aria-hidden="true" class="device-power"></span><span aria-hidden="true" class="device-island"></span>
 <video aria-label="Editing a planned strength workout: silent app demonstration" controls="" class="app-preview" data-src="video/strength-plan.mp4" height="1304" loop="" muted="" playsinline="" poster="video/strength-plan-poster.jpg" preload="none" webkit-playsinline="" width="600"><source data-src="video/strength-plan.mp4" type="video/mp4"/>Your browser cannot play this video. <a href="video/strength-plan.mp4">Open the recording</a>.</video><img alt="Adjust exercises, sets, reps, load, rest and effort for the session." class="video-fallback" data-i18n-alt="t024" height="1304" hidden="" loading="lazy" src="video/strength-plan-poster.jpg" width="600"/>
 </div>
 <p class="video-index">01 / REAL APP WALKTHROUGH</p>
@@ -215,7 +259,7 @@ Your way.</h2>
 <p class="video-description" data-i18n="t024">Adjust exercises, sets, reps, load, rest and effort for the session.</p>
 </article>
 <article class="video-card" id="walkthrough-1">
-<div class="video-frame">
+<div class="video-frame story-phone iphone-device"><span aria-hidden="true" class="device-keys"><i></i><i></i><i></i></span><span aria-hidden="true" class="device-power"></span><span aria-hidden="true" class="device-island"></span>
 <video aria-label="Logging strength sets in Gym mode: silent app demonstration" controls="" class="app-preview" data-src="video/gym-mode.mp4" height="1304" loop="" muted="" playsinline="" poster="video/gym-mode-poster.jpg" preload="none" webkit-playsinline="" width="600"><source data-src="video/gym-mode.mp4" type="video/mp4"/>Your browser cannot play this video. <a href="video/gym-mode.mp4">Open the recording</a>.</video><img alt="Record reps and load, complete a set and move through your workout with the rest timer." class="video-fallback" data-i18n-alt="t026" height="1304" hidden="" loading="lazy" src="video/gym-mode-poster.jpg" width="600"/>
 </div>
 <p class="video-index">02 / REAL APP WALKTHROUGH</p>
@@ -223,7 +267,7 @@ Your way.</h2>
 <p class="video-description" data-i18n="t026">Record reps and load, complete a set and move through your workout with the rest timer.</p>
 </article>
 <article class="video-card" id="walkthrough-2">
-<div class="video-frame">
+<div class="video-frame story-phone iphone-device"><span aria-hidden="true" class="device-keys"><i></i><i></i><i></i></span><span aria-hidden="true" class="device-power"></span><span aria-hidden="true" class="device-island"></span>
 <video aria-label="Workout nutrition and device sync options: silent app demonstration" controls="" class="app-preview" data-src="video/nutrition-sync.mp4" height="1304" loop="" muted="" playsinline="" poster="video/nutrition-sync-poster.jpg" preload="none" webkit-playsinline="" width="600"><source data-src="video/nutrition-sync.mp4" type="video/mp4"/>Your browser cannot play this video. <a href="video/nutrition-sync.mp4">Open the recording</a>.</video><img alt="Review the session’s carb, fluid and sodium targets, then see the options for sending it to your watch." class="video-fallback" data-i18n-alt="demo_1_desc" height="1304" hidden="" loading="lazy" src="video/nutrition-sync-poster.jpg" width="600"/>
 </div>
 <p class="video-index">03 / REAL APP WALKTHROUGH</p>
@@ -241,27 +285,27 @@ Your way.</h2>
 <details class="more-screens">
 <summary data-i18n="t030">Explore six more app screens</summary>
 <div class="screen-gallery">
-<figure class="screen-card"><a aria-label="Enlarge screenshot: Your day, at a glance" class="screen-link" data-caption="Your day, at a glance" href="img/screen-overview-942.webp"><img alt="Sleep, energy, training load and your health monitor." decoding="async" height="2622" loading="lazy" src="img/screen-overview-600.webp" width="1206"/><span aria-hidden="true" class="enlarge">↗</span></a><figcaption>
+<figure class="screen-card"><div class="story-phone iphone-device"><span aria-hidden="true" class="device-keys"><i></i><i></i><i></i></span><span aria-hidden="true" class="device-power"></span><a aria-label="Enlarge screenshot: Your day, at a glance" class="screen-link" data-caption="Your day, at a glance" href="img/screen-overview-942.webp"><img alt="Sleep, energy, training load and your health monitor." decoding="async" height="2622" loading="lazy" src="img/screen-overview-600.webp" width="1206"/><span aria-hidden="true" class="enlarge">↗</span></a><span aria-hidden="true" class="device-island"></span></div><figcaption>
 <h3 data-i18n="t031">Your day at a glance</h3>
 <p data-i18n="t032">Sleep, energy, training load and your health monitor.</p>
 </figcaption></figure>
-<figure class="screen-card"><a aria-label="Enlarge screenshot: Make sense of your sleep" class="screen-link" data-caption="Make sense of your sleep" href="img/screen-sleep-942.webp"><img alt="Sleep performance, time asleep and your sleep stages." decoding="async" height="2622" loading="lazy" src="img/screen-sleep-600.webp" width="1206"/><span aria-hidden="true" class="enlarge">↗</span></a><figcaption>
+<figure class="screen-card"><div class="story-phone iphone-device"><span aria-hidden="true" class="device-keys"><i></i><i></i><i></i></span><span aria-hidden="true" class="device-power"></span><a aria-label="Enlarge screenshot: Make sense of your sleep" class="screen-link" data-caption="Make sense of your sleep" href="img/screen-sleep-942.webp"><img alt="Sleep performance, time asleep and your sleep stages." decoding="async" height="2622" loading="lazy" src="img/screen-sleep-600.webp" width="1206"/><span aria-hidden="true" class="enlarge">↗</span></a><span aria-hidden="true" class="device-island"></span></div><figcaption>
 <h3 data-i18n="t033">Your sleep in detail</h3>
 <p data-i18n="t034">Sleep performance, time asleep and your sleep stages.</p>
 </figcaption></figure>
-<figure class="screen-card"><a aria-label="Enlarge screenshot: See your own baseline" class="screen-link" data-caption="See your own baseline" href="img/screen-hrv-942.webp"><img alt="Follow overnight HRV against your longer-term trends." decoding="async" height="2622" loading="lazy" src="img/screen-hrv-600.webp" width="1206"/><span aria-hidden="true" class="enlarge">↗</span></a><figcaption>
+<figure class="screen-card"><div class="story-phone iphone-device"><span aria-hidden="true" class="device-keys"><i></i><i></i><i></i></span><span aria-hidden="true" class="device-power"></span><a aria-label="Enlarge screenshot: See your own baseline" class="screen-link" data-caption="See your own baseline" href="img/screen-hrv-942.webp"><img alt="Follow overnight HRV against your longer-term trends." decoding="async" height="2622" loading="lazy" src="img/screen-hrv-600.webp" width="1206"/><span aria-hidden="true" class="enlarge">↗</span></a><span aria-hidden="true" class="device-island"></span></div><figcaption>
 <h3 data-i18n="t035">Compare your HRV</h3>
 <p data-i18n="t036">Compare your overnight HRV with your longer-term trends.</p>
 </figcaption></figure>
-<figure class="screen-card"><a aria-label="Enlarge screenshot: Look inside every effort" class="screen-link" data-caption="Look inside every effort" href="img/screen-performance-942.webp"><img alt="Explore heart rate zones, speed and elevation together." decoding="async" height="2622" loading="lazy" src="img/screen-performance-600.webp" width="1206"/><span aria-hidden="true" class="enlarge">↗</span></a><figcaption>
+<figure class="screen-card"><div class="story-phone iphone-device"><span aria-hidden="true" class="device-keys"><i></i><i></i><i></i></span><span aria-hidden="true" class="device-power"></span><a aria-label="Enlarge screenshot: Look inside every effort" class="screen-link" data-caption="Look inside every effort" href="img/screen-performance-942.webp"><img alt="Explore heart rate zones, speed and elevation together." decoding="async" height="2622" loading="lazy" src="img/screen-performance-600.webp" width="1206"/><span aria-hidden="true" class="enlarge">↗</span></a><span aria-hidden="true" class="device-island"></span></div><figcaption>
 <h3 data-i18n="t037">Analyse your workouts</h3>
 <p data-i18n="t038">Explore heart rate zones, speed and elevation together.</p>
 </figcaption></figure>
-<figure class="screen-card"><a aria-label="Enlarge screenshot: Every session in context" class="screen-link" data-caption="Every session in context" href="img/screen-activity-942.webp"><img alt="Distance, time, heart rate and training load in one view." decoding="async" height="2622" loading="lazy" src="img/screen-activity-600.webp" width="1206"/><span aria-hidden="true" class="enlarge">↗</span></a><figcaption>
+<figure class="screen-card"><div class="story-phone iphone-device"><span aria-hidden="true" class="device-keys"><i></i><i></i><i></i></span><span aria-hidden="true" class="device-power"></span><a aria-label="Enlarge screenshot: Every session in context" class="screen-link" data-caption="Every session in context" href="img/screen-activity-942.webp"><img alt="Distance, time, heart rate and training load in one view." decoding="async" height="2622" loading="lazy" src="img/screen-activity-600.webp" width="1206"/><span aria-hidden="true" class="enlarge">↗</span></a><span aria-hidden="true" class="device-island"></span></div><figcaption>
 <h3 data-i18n="t039">Your workout summary</h3>
 <p data-i18n="t040">Distance, time, heart rate and training load in one view.</p>
 </figcaption></figure>
-<figure class="screen-card"><a aria-label="Enlarge screenshot: Follow your health trends" class="screen-link" data-caption="Follow your health trends" href="img/screen-blood-pressure-942.webp"><img alt="Review blood pressure over the day, week and month." decoding="async" height="2622" loading="lazy" src="img/screen-blood-pressure-600.webp" width="1206"/><span aria-hidden="true" class="enlarge">↗</span></a><figcaption>
+<figure class="screen-card"><div class="story-phone iphone-device"><span aria-hidden="true" class="device-keys"><i></i><i></i><i></i></span><span aria-hidden="true" class="device-power"></span><a aria-label="Enlarge screenshot: Follow your health trends" class="screen-link" data-caption="Follow your health trends" href="img/screen-blood-pressure-942.webp"><img alt="Review blood pressure over the day, week and month." decoding="async" height="2622" loading="lazy" src="img/screen-blood-pressure-600.webp" width="1206"/><span aria-hidden="true" class="enlarge">↗</span></a><span aria-hidden="true" class="device-island"></span></div><figcaption>
 <h3 data-i18n="t041">Follow your health trends</h3>
 <p data-i18n="t042">Review blood pressure over the day, week and month.</p>
 </figcaption></figure>
@@ -295,7 +339,7 @@ Your way.</h2>
 <p class="fine" data-i18n="sync_note">Workout details shown on the watch depend on provider and device support. Your planned strength session remains saved in Fjelia.</p>
 </details></div>
 
-<figure class="capture-figure connections-capture"><a class="feature-capture" href="img/screen-connections-942.webp"><img alt="Choose supported accounts and connected devices in Fjelia." decoding="async" height="2048" loading="lazy" sizes="(max-width: 700px) 80vw, 300px" src="img/screen-connections-600.webp" srcset="img/screen-connections-600.webp 600w, img/screen-connections-942.webp 942w" width="942"/><span aria-hidden="true" class="enlarge">↗</span></a><figcaption><h3 data-i18n="connections_capture_title">Your connections, together</h3><p data-i18n="connections_capture_body">Choose accounts and devices during setup. Screenshot from the German beta.</p></figcaption></figure></div><div class="privacy-card" id="privacy">
+<figure class="capture-figure connections-capture"><div class="story-phone iphone-device"><span aria-hidden="true" class="device-keys"><i></i><i></i><i></i></span><span aria-hidden="true" class="device-power"></span><a class="feature-capture" href="img/screen-connections-942.webp"><img alt="Choose supported accounts and connected devices in Fjelia." decoding="async" height="2048" loading="lazy" sizes="(max-width: 700px) 80vw, 300px" src="img/screen-connections-600.webp" srcset="img/screen-connections-600.webp 600w, img/screen-connections-942.webp 942w" width="942"/><span aria-hidden="true" class="enlarge">↗</span></a><span aria-hidden="true" class="device-island"></span></div><figcaption><h3 data-i18n="connections_capture_title">Your connections, together</h3><p data-i18n="connections_capture_body">Choose accounts and devices during setup. Screenshot from the German beta.</p></figcaption></figure></div><div class="privacy-card" id="privacy">
 <h2 data-i18n="t097">Your data stays yours</h2>
 <p data-i18n="t098">Health data is personal. Your Fjelia database stays on your phone. You choose the services you connect.</p>
 <p class="fine" data-i18n="t101">Cloud AI receives the context you approve. You choose the AI mode.</p>
@@ -328,15 +372,15 @@ Your way.</h2>
 <h2 data-i18n="t078" id="weather-title">Plan your outdoor training</h2>
 <p class="section-lead" data-i18n="t079">Compare forecasts and check wind, UV and rain radar before your next outdoor session.</p>
 <div class="weather-gallery">
-<figure class="weather-card"><a aria-label="Enlarge weather screenshot: Choose your time to train" class="weather-link" data-caption="Choose your time to train" href="img/screen-weather-day-942.webp"><img alt="Day forecast comparing temperature and rainfall from multiple weather providers." decoding="async" height="1792" loading="lazy" src="img/screen-weather-day-600.webp" width="828"/><span aria-hidden="true" class="enlarge">↗</span></a><figcaption>
+<figure class="weather-card"><div class="story-phone iphone-device"><span aria-hidden="true" class="device-keys"><i></i><i></i><i></i></span><span aria-hidden="true" class="device-power"></span><a aria-label="Enlarge weather screenshot: Choose your time to train" class="weather-link" data-caption="Choose your time to train" href="img/screen-weather-day-942.webp"><img alt="Day forecast comparing temperature and rainfall from multiple weather providers." decoding="async" height="1792" loading="lazy" src="img/screen-weather-day-600.webp" width="828"/><span aria-hidden="true" class="enlarge">↗</span></a><span aria-hidden="true" class="device-island"></span></div><figcaption>
 <h3 data-i18n="t080">Choose when to train</h3>
 <p data-i18n="t081">Compare hourly temperature and rain forecasts from several weather services.</p>
 </figcaption></figure>
-<figure class="weather-card"><a aria-label="Enlarge weather screenshot: Look beyond tomorrow" class="weather-link" data-caption="Look beyond tomorrow" href="img/screen-weather-forecast-942.webp"><img alt="Fourteen-day weather forecast with temperature, rain and UV index." decoding="async" height="1792" loading="lazy" src="img/screen-weather-forecast-600.webp" width="828"/><span aria-hidden="true" class="enlarge">↗</span></a><figcaption>
+<figure class="weather-card"><div class="story-phone iphone-device"><span aria-hidden="true" class="device-keys"><i></i><i></i><i></i></span><span aria-hidden="true" class="device-power"></span><a aria-label="Enlarge weather screenshot: Look beyond tomorrow" class="weather-link" data-caption="Look beyond tomorrow" href="img/screen-weather-forecast-942.webp"><img alt="Fourteen-day weather forecast with temperature, rain and UV index." decoding="async" height="1792" loading="lazy" src="img/screen-weather-forecast-600.webp" width="828"/><span aria-hidden="true" class="enlarge">↗</span></a><span aria-hidden="true" class="device-island"></span></div><figcaption>
 <h3 data-i18n="t082">Plan ahead</h3>
 <p data-i18n="t083">Check the 14-day outlook for your upcoming sessions.</p>
 </figcaption></figure>
-<figure class="weather-card"><a aria-label="Enlarge weather screenshot: Keep an eye on the rain" class="weather-link" data-caption="Keep an eye on the rain" href="img/screen-weather-radar-942.webp"><img alt="Weather view with wind and cloud conditions, a rain radar map, and visible RainViewer and OpenStreetMap attribution." decoding="async" height="1792" loading="lazy" src="img/screen-weather-radar-600.webp" width="828"/><span aria-hidden="true" class="enlarge">↗</span></a><figcaption>
+<figure class="weather-card"><div class="story-phone iphone-device"><span aria-hidden="true" class="device-keys"><i></i><i></i><i></i></span><span aria-hidden="true" class="device-power"></span><a aria-label="Enlarge weather screenshot: Keep an eye on the rain" class="weather-link" data-caption="Keep an eye on the rain" href="img/screen-weather-radar-942.webp"><img alt="Weather view with wind and cloud conditions, a rain radar map, and visible RainViewer and OpenStreetMap attribution." decoding="async" height="1792" loading="lazy" src="img/screen-weather-radar-600.webp" width="828"/><span aria-hidden="true" class="enlarge">↗</span></a><span aria-hidden="true" class="device-island"></span></div><figcaption>
 <h3 data-i18n="t084">See where it’s raining</h3>
 <p data-i18n="t085">Rain radar, wind, cloud cover and sunrise times in one view.</p>
 </figcaption></figure>
@@ -493,13 +537,14 @@ Your way.</h2>
 <a data-i18n="t149" href="https://github.com/agilastic/fjelia/blob/main/LICENSE">License</a>
 </nav>
 </div>
+<div aria-hidden="true" class="footer-wordmark">FJELIA</div>
 </footer>
 <dialog aria-labelledby="screenshot-caption" class="screenshot-dialog">
 <div class="dialog-toolbar">
 <p id="screenshot-caption"></p>
 <button aria-label="Close screenshot" class="dialog-close" data-i18n="t150" type="button">Close <span aria-hidden="true">×</span></button></div>
-<img alt="" src="img/screen-overview-600.webp"/>
+<div class="story-phone iphone-device dialog-device"><span aria-hidden="true" class="device-keys"><i></i><i></i><i></i></span><span aria-hidden="true" class="device-power"></span><img alt="" src="img/screen-overview-600.webp"/><span aria-hidden="true" class="device-island"></span></div>
 </dialog>
-<script defer="" src="i18n.js?v=20261105news"></script><script defer="" src="site.js?v=20261105autostart3"></script>
+<script defer="" src="i18n.js?v=20261105experience3"></script><script defer="" src="site.js?v=20261105experience3"></script>
 </body>
 </html>

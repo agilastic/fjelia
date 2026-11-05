@@ -30,8 +30,9 @@
   var image = dialog.querySelector('img');
   var caption = dialog.querySelector('#screenshot-caption');
   var trigger;
-  document.querySelectorAll('.screen-link, .weather-link, .plan-capture-link, .feature-capture').forEach(function (link) {
-    link.addEventListener('click', function (event) {
+  document.addEventListener('click', function (event) {
+      var link = event.target.closest('.screen-link, .weather-link, .plan-capture-link, .feature-capture, .story-capture');
+      if (!link) return;
       if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
       event.preventDefault();
       trigger = link;
@@ -40,7 +41,6 @@
       caption.textContent = link.dataset.caption || image.alt;
       dialog.showModal();
       document.body.classList.add('dialog-open');
-    });
   });
   dialog.querySelector('.dialog-close').addEventListener('click', function () { dialog.close(); });
   dialog.addEventListener('click', function (event) {
@@ -51,6 +51,108 @@
     document.body.classList.remove('dialog-open');
     if (trigger) trigger.focus();
   });
+})();
+
+/* Native scrolling drives one stationary device through the product story. */
+(function () {
+  'use strict';
+  var story = document.querySelector('.product-story');
+  var stage = document.querySelector('.story-stage');
+  var chapters = Array.from(document.querySelectorAll('[data-story-chapter]'));
+  if (!story || !stage || !chapters.length || !('IntersectionObserver' in window)) return;
+  var capture = stage.querySelector('.story-capture');
+  var screen = capture.querySelector('img');
+  var links = Array.from(stage.querySelectorAll('[data-story-nav]'));
+  var index = stage.querySelector('.story-stage-index');
+  var thresholdPicker = document.querySelector('.threshold-view-picker');
+  var wide = window.matchMedia('(min-width: 1051px)');
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var active = '';
+  var thresholdView = 'run';
+  var pending = null;
+
+  function sourceLink() {
+    if (active === 'ai') return document.querySelector('#ai .feature-capture');
+    if (active === 'thresholds') return document.querySelectorAll('#thresholds .feature-capture')[thresholdView === 'bike' ? 1 : 0];
+    return document.querySelector('#plan .plan-view:not([hidden]) .plan-capture-link') || document.querySelector('#plan .plan-capture-link');
+  }
+
+  function updateScreen() {
+    var source = sourceLink();
+    if (!source) return;
+    var sourceImage = source.querySelector('img');
+    var changed = screen.getAttribute('src') !== sourceImage.getAttribute('src');
+    capture.href = source.href;
+    capture.dataset.caption = source.dataset.caption || sourceImage.alt;
+    capture.setAttribute('aria-label', (window.FjeliaI18n ? window.FjeliaI18n.t('enlarge') : 'Enlarge screenshot:') + ' ' + capture.dataset.caption);
+    screen.alt = sourceImage.alt;
+    screen.src = sourceImage.getAttribute('src');
+    var srcset = sourceImage.getAttribute('srcset');
+    if (srcset) screen.srcset = srcset;
+    else screen.removeAttribute('srcset');
+    stage.dataset.storyFrame = active === 'thresholds' ? thresholdView : active;
+    if (changed && !reduced.matches && screen.animate) {
+      screen.getAnimations().forEach(function (animation) { animation.cancel(); });
+      screen.animate([{ opacity: .45, transform: 'translateY(7px)' }, { opacity: 1, transform: 'none' }], { duration: 380, easing: 'cubic-bezier(.2,.7,.2,1)' });
+    }
+  }
+
+  function choose(name) {
+    if (active === name) return;
+    active = name;
+    stage.dataset.storyActive = name;
+    chapters.forEach(function (chapter, chapterIndex) {
+      var selected = chapter.dataset.storyChapter === name;
+      chapter.classList.toggle('is-story-active', selected);
+      if (selected) index.textContent = '0' + (chapterIndex + 1) + ' / 03';
+    });
+    links.forEach(function (link) {
+      if (link.dataset.storyNav === name) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    });
+    updateScreen();
+  }
+
+  function measure() {
+    pending = null;
+    var root = document.documentElement;
+    var distance = root.scrollHeight - innerHeight;
+    root.style.setProperty('--page-progress', distance > 0 ? Math.min(1, scrollY / distance) : 0);
+    var hero = document.querySelector('.product-hero');
+    if (hero && !reduced.matches) hero.style.setProperty('--hero-progress', Math.min(1, Math.max(0, scrollY / hero.offsetHeight)));
+    if (!wide.matches) return;
+    var next = chapters[0].dataset.storyChapter;
+    var line = innerHeight * .48;
+    chapters.forEach(function (chapter) {
+      if (chapter.getBoundingClientRect().top <= line) next = chapter.dataset.storyChapter;
+    });
+    choose(next);
+  }
+  function schedule() {
+    if (pending === null) pending = requestAnimationFrame(measure);
+  }
+
+  if (thresholdPicker) {
+    thresholdPicker.hidden = false;
+    thresholdPicker.addEventListener('click', function (event) {
+      var button = event.target.closest('[data-threshold-view]');
+      if (!button) return;
+      thresholdView = button.dataset.thresholdView;
+      thresholdPicker.querySelectorAll('[data-threshold-view]').forEach(function (item) { item.setAttribute('aria-pressed', String(item === button)); });
+      choose('thresholds');
+      updateScreen();
+    });
+  }
+  var plans = document.querySelector('#plan .plan-captures');
+  if (plans) new MutationObserver(function () { if (active === 'plan') updateScreen(); }).observe(plans, { attributes: true, subtree: true, attributeFilter: ['hidden'] });
+  document.addEventListener('fjelia-language-change', function () { updateScreen(); schedule(); });
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', schedule);
+  reduced.addEventListener('change', schedule);
+  stage.hidden = false;
+  document.documentElement.classList.add('story-ready');
+  choose('plan');
+  schedule();
 })();
 
 /* One motion setting controls the previews, including the hero. */
