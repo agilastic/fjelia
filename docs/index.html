@@ -5,15 +5,15 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Fjelia — Know your body. Train smarter.</title>
-<meta content="Plan endurance and strength workouts, log gym sets, plan nutrition and bring recovery and training data together in Fjelia, a free open-source app." name="description"/>
-<meta content="#020c25" name="theme-color"/>
+<meta content="Generate one training plan for multiple race goals. Built around your history and available time, with AI coaching for training and recovery. Free AI included. On-device AI." name="description"/>
+<meta content="#050b19" name="theme-color"/>
 <link href="https://agilastic.github.io/fjelia/" rel="canonical"/>
 <link href="favicon.ico" rel="icon" sizes="any"/>
 <link href="apple-touch-icon.png" rel="apple-touch-icon"/>
-<link href="style.css?v=20261103b" rel="stylesheet"/>
+<link href="style.css?v=20261105news" rel="stylesheet"/>
 <meta content="website" property="og:type"/>
 <meta content="Fjelia — Know your body. Train smarter." property="og:title"/>
-<meta content="Plan strength and endurance, log sets in Gym mode, and prepare workout nutrition. Free, open source and private by design." property="og:description"/>
+<meta content="Generate one training plan for multiple race goals. Built around your history and available time, with AI coaching for training and recovery. Free AI included. On-device AI." property="og:description"/>
 <meta content="https://agilastic.github.io/fjelia/" property="og:url"/>
 <meta content="https://agilastic.github.io/fjelia/img/og-image.jpg" property="og:image"/>
 <meta content="1200" property="og:image:width"/>
@@ -30,12 +30,12 @@
       </a>
 <button aria-controls="main-nav" aria-expanded="false" class="menu-toggle" data-i18n="t001" hidden="" type="button">Menu <span aria-hidden="true">☰</span></button>
 <nav aria-label="Main" class="main" id="main-nav">
-<a data-i18n="t002" href="#features">Features</a>
-<a data-i18n="t003" href="#screens">Inside the app</a>
 <a data-i18n="t004" href="#plan">Training plan</a>
+<a data-i18n="t054" href="#ai">AI coach</a>
+<a data-i18n="t003" href="#screens">Inside the app</a>
 <a data-i18n="t005" href="#privacy">Privacy</a>
 <a data-i18n="t006" href="#faq">FAQ</a>
-<a data-i18n="t007" href="#support">Your ideas</a>
+
 <a class="btn primary" data-i18n="t008" href="https://testflight.apple.com/join/CqzrybFA">Join the beta</a>
 </nav>
 <div class="language-picker" hidden="">
@@ -48,16 +48,17 @@
 <div class="hero-copy">
 <p class="kicker" data-i18n="t009">Training and health in one place.</p>
 <h1 data-i18n="t010" id="hero-title">Know your body.<br/><span class="accent">Train smarter.</span></h1>
-<p data-i18n="hero_ai_lead" class="lead">Plan around your races. Understand your recovery. Ask your AI coach.</p>
+<p class="lead" data-i18n="hero_ai_lead">Generate one training plan for multiple race goals. Built around your history and available time, with AI coaching for training and recovery.</p>
+<div class="hero-ai-links"><a href="#ai"><span aria-hidden="true" class="status-dot"></span><span data-i18n="hero_ai_free">Free AI included</span><span aria-hidden="true">↗</span></a><a href="#ai"><span aria-hidden="true" class="status-dot local-dot"></span><span data-i18n="hero_ai_local">On-device AI</span></a></div>
 <div class="hero-download">
 <div>
 <div class="cta">
 <a class="btn primary" data-i18n="t207" href="https://testflight.apple.com/join/CqzrybFA">Join the free iOS beta <span aria-hidden="true">↗</span></a>
 <a class="btn ghost" data-i18n="t208" href="#screens">Explore the app <span aria-hidden="true">↓</span></a>
 </div>
-<p data-i18n="hero_install_note" class="hero-note">iPhone beta · AI is optional · <a href="#get-started">How to install</a></p>
+<p class="hero-note" data-i18n="hero_install_note">iPhone beta · AI is optional · <a href="#get-started">How to install</a></p>
 </div>
-<a class="hero-qr" href="https://testflight.apple.com/join/CqzrybFA" aria-label="Open the Fjelia beta invitation"><img src="img/testflight-qr.png" alt="" width="312" height="312"/><span data-i18n="qr_caption">Scan with your iPhone</span></a></div>
+<a aria-label="Open the Fjelia beta invitation" class="hero-qr" href="https://testflight.apple.com/join/CqzrybFA"><img alt="" height="312" src="img/testflight-qr.png" width="312"/><span data-i18n="qr_caption">Scan with your iPhone</span></a></div>
 <ul aria-label="Highlights" class="badges">
 <li data-i18n="t013">No Fjelia account</li>
 <li data-i18n="t014">No ads or trackers</li>
@@ -66,19 +67,20 @@
 </div>
 <div class="hero-visual">
 <div aria-hidden="true" class="hero-orbit"></div>
-<figure class="hero-phone phone-back"><img alt="Fjelia cycling activity with distance, duration, heart rate and training load" decoding="async" height="2622" src="img/screen-activity-600.webp" width="1206"/></figure>
+
 <figure class="hero-phone phone-front"><img alt="Fjelia daily overview with colourful sleep, energy and load gauges, a daily briefing and health trends" fetchpriority="high" height="2622" src="img/screen-overview-600.webp" width="1206"/></figure>
-<figure class="hero-phone phone-plan"><img alt="Planned easy recovery run with coaching cues, workout structure and heart rate zone targets" decoding="async" height="1119" src="img/shot-workout.webp" width="600"/></figure>
+
 <figure class="hero-phone phone-ai">
-<video aria-label="Race goals, workout graphs and AI coaching: silent app walkthrough" autoplay muted loop playsinline webkit-playsinline preload="metadata" class="app-preview hero-preview" id="hero-story-video" poster="video/hero-training-story-poster.webp" width="600" height="1304"><source src="video/hero-training-story.mp4" type="video/mp4"/><source src="video/hero-training-story.webm" type="video/webm"/></video>
-<img class="video-fallback" src="video/hero-training-story-poster.webp" alt="Fjelia workout performance graphs" width="600" height="1304" hidden/>
+<video aria-label="Race goals, workout graphs and AI coaching: silent app walkthrough" autoplay="" controls="" class="app-preview hero-preview" height="1304" id="hero-story-video" loop="" muted="" playsinline="" poster="video/hero-training-story-poster.webp" preload="auto" webkit-playsinline="" width="600"><source src="video/hero-training-story.mp4" type="video/mp4"/><source src="video/hero-training-story.webm" type="video/webm"/></video>
+<img alt="Fjelia workout performance graphs" class="video-fallback" height="1304" hidden="" src="video/hero-training-story-poster.webp" width="600"/>
 </figure>
-<div class="hero-story-nav" role="group" aria-label="App preview chapters" hidden>
-<button type="button" data-preview-time="0" data-preview-end="5.083333" aria-controls="hero-story-video" aria-current="step"><span aria-hidden="true">01</span> <span data-i18n="hero_chapter_plan">Plan</span></button>
-<button type="button" data-preview-time="5.083333" data-preview-end="10.833333" aria-controls="hero-story-video"><span aria-hidden="true">02</span> <span data-i18n="hero_chapter_explore">Explore</span></button>
-<button type="button" data-preview-time="10.833333" data-preview-end="13.791667" aria-controls="hero-story-video"><span aria-hidden="true">03</span> <span data-i18n="hero_chapter_ask">Ask</span></button>
+<div aria-label="App preview chapters" class="hero-story-nav" hidden="" role="group">
+<button aria-controls="hero-story-video" aria-current="step" data-preview-end="5.083333" data-preview-time="0" type="button"><span aria-hidden="true">01</span> <span data-i18n="hero_chapter_plan">Plan</span></button>
+<button aria-controls="hero-story-video" data-preview-end="10.833333" data-preview-time="5.083333" type="button"><span aria-hidden="true">02</span> <span data-i18n="hero_chapter_explore">Explore</span></button>
+<button aria-controls="hero-story-video" data-preview-end="13.791667" data-preview-time="10.833333" type="button"><span aria-hidden="true">03</span> <span data-i18n="hero_chapter_ask">Ask</span></button>
+<button aria-label="Pause previews" aria-pressed="false" class="preview-control" data-motion-toggle="" hidden="" type="button"><svg aria-hidden="true" fill="currentColor" height="16" viewBox="0 0 24 24" width="16"><g class="pause-icon"><rect height="14" rx="1" width="4" x="6" y="5"/><rect height="14" rx="1" width="4" x="14" y="5"/></g><path class="play-icon" d="m8 4 12 8-12 8Z"/></svg><span class="sr-only" data-i18n="t022" data-motion-label="">Pause previews</span></button>
 </div>
-<p data-i18n="scene_goals" class="visual-caption" id="hero-scene-caption">Set priorities across your races.</p>
+<p class="visual-caption" data-i18n="scene_goals" id="hero-scene-caption">Set priorities across your races.</p>
 </div>
 </div>
 </section>
@@ -96,131 +98,146 @@
 </ul>
 <a data-i18n="t209" href="#devices">Supported connections <span aria-hidden="true">→</span></a></div>
 </div>
-<section id="features" class="benefits">
+<section class="benefits" id="features">
 <div class="wrap">
 <h2 data-i18n="t044">Make every training day count.</h2>
-<p data-i18n="t045" class="section-lead">Your goals, your recovery and your progress, connected.</p>
+<p class="section-lead" data-i18n="t045">Your goals, your recovery and your progress, connected.</p>
 <div class="benefit-grid"><a class="benefit-card" href="#plan">
 <div aria-hidden="true" class="icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><rect height="16" rx="2.5" width="18" x="3" y="4.5"></rect><path d="M8 2.5v4M16 2.5v4M3 10h18"></path></svg></div>
 <div>
-<h3 data-i18n="t052">Plan your training</h3>
-<p data-i18n="t053">Combine race goals, sports and the time you actually have in one plan.</p>
+<h3 data-i18n="t052">Training plan generator</h3>
+<p data-i18n="t053">Bring several races into one plan, shaped by your training history, sports and available time.</p>
 </div>
-<span class="benefit-arrow" aria-hidden="true">↗</span></a><a class="benefit-card" href="#screens">
+<span aria-hidden="true" class="benefit-arrow">↗</span></a><a class="benefit-card" href="#screens">
 <div aria-hidden="true" class="icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M3 12h4l3 7 4-14 3 7h4"></path></svg></div>
 <div>
 <h3 data-i18n="t046">Understand your recovery</h3>
 <p data-i18n="t047">See sleep, HRV and recent training together before deciding what comes next.</p>
 </div>
-<span class="benefit-arrow" aria-hidden="true">↗</span></a><a class="benefit-card" href="#screens">
-<div aria-hidden="true" class="icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"></path></svg></div>
+<span aria-hidden="true" class="benefit-arrow">↗</span></a><a class="benefit-card" href="#ai">
+<div aria-hidden="true" class="icon"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewbox="0 0 24 24"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z"></path></svg></div>
 <div>
-<h3 data-i18n="t050">Review your progress</h3>
-<p data-i18n="t051">Explore workout graphs and follow fitness, fatigue and training load over time.</p>
+<h3 data-i18n="t054">AI coach</h3>
+<p data-i18n="t055">Ask about your session and read daily briefings with your training in context.</p>
 </div>
-<span class="benefit-arrow" aria-hidden="true">↗</span></a></div>
+<span aria-hidden="true" class="benefit-arrow">↗</span></a></div>
 </div>
 </section>
-<section id="plan" class="alt season-section">
+<section class="alt season-section" id="plan">
 <div class="wrap season-layout">
 <div>
-<p data-i18n="t004" class="kicker">Training plan</p>
+<p class="kicker" data-i18n="plan_generator">MULTI-RACE TRAINING PLAN GENERATOR</p>
 <h2 data-i18n="t069">Several race goals. One training plan.</h2>
-<p data-i18n="t070" class="section-lead">A marathon, a cycling event, a trail race. Give each a priority and build a season around your history and available time.</p>
+<p class="section-lead" data-i18n="t070">Marathon, cycling event, trail race. Add your races and let Fjelia generate one periodised plan that brings them together.</p>
 <ol class="plan-points">
-<li><span class="point-mark" aria-hidden="true">01</span>
+<li><span aria-hidden="true" class="point-mark">01</span>
 <div>
-<h3 data-i18n="plan_priorities">Set your priorities</h3>
-<p data-i18n="plan_priorities_body">A, B and C goals give each race its place in the season.</p>
+<h3 data-i18n="plan_priorities">Give every race its place</h3>
+<p data-i18n="plan_priorities_body">Dates, sports and A, B or C priorities define how your race goals fit into the season.</p>
 </div>
 </li>
-<li><span class="point-mark" aria-hidden="true">02</span>
+<li><span aria-hidden="true" class="point-mark">02</span>
 <div>
 <h3 data-i18n="plan_time">Fit the week you have</h3>
 <p data-i18n="plan_time_body">Your sports, weekly hours and rest days shape the plan.</p>
 </div>
 </li>
-<li><span class="point-mark" aria-hidden="true">03</span>
+<li><span aria-hidden="true" class="point-mark">03</span>
 <div>
-<h3 data-i18n="plan_change">Change a session when life changes</h3>
-<p data-i18n="plan_change_body">Move a workout or mark it skipped. Your choices stay in the plan.</p>
+<h3 data-i18n="plan_change">Build, taper and recover</h3>
+<p data-i18n="plan_change_body">Training phases account for your race dates and priorities, including lighter training before key races and recovery afterwards.</p>
 </div>
 </li>
 </ol>
 </div>
 <div class="season-showcase">
-<div class="plan-view-picker" role="group" aria-label="Choose a training plan screen" hidden>
-<button type="button" id="plan-tab-week" data-plan-view="week" aria-controls="plan-view-week"><span data-i18n="plan_week_view">Week view</span></button>
-<button type="button" id="plan-tab-month" data-plan-view="month" aria-controls="plan-view-month"><span data-i18n="plan_month_view">Month view</span></button>
-<button type="button" id="plan-tab-goals" data-plan-view="goals" aria-controls="plan-view-goals"><span data-i18n="plan_goals_view">Race goals</span></button>
+<div aria-label="Choose a training plan screen" class="plan-view-picker" hidden="" role="group">
+<button aria-controls="plan-view-week" data-plan-view="week" id="plan-tab-week" type="button"><span data-i18n="plan_week_view">Week view</span></button>
+<button aria-controls="plan-view-month" data-plan-view="month" id="plan-tab-month" type="button"><span data-i18n="plan_month_view">Month view</span></button>
+<button aria-controls="plan-view-goals" data-plan-view="goals" id="plan-tab-goals" type="button"><span data-i18n="plan_goals_view">Race goals</span></button>
 </div>
 <div class="plan-captures">
-<figure class="plan-view" id="plan-view-week" data-plan-panel="week">
-<a class="plan-capture-link" href="img/plan-week-real.webp?v=20261025planned" data-caption="Week view" aria-label="Enlarge screenshot: Week view">
-<img src="img/plan-week-real-600.webp?v=20261025planned" srcset="img/plan-week-real-600.webp?v=20261025planned 600w, img/plan-week-real-942.webp?v=20261025planned 942w" sizes="(max-width: 366px) calc(100vw - 2.5rem), 326px" alt="Your planned week, with running, cycling, strength, rest days and multiple sessions on the same day." width="1206" height="2622" loading="lazy" decoding="async"/>
+<figure class="plan-view" data-plan-panel="week" id="plan-view-week">
+<a aria-label="Enlarge screenshot: Week view" class="plan-capture-link" data-caption="Week view" href="img/plan-week-progress-942.webp">
+<img alt="Your planned week, with running, cycling, strength, rest days and multiple sessions on the same day." decoding="async" height="2048" loading="lazy" sizes="(max-width: 366px) calc(100vw - 2.5rem), 326px" src="img/plan-week-progress-600.webp" srcset="img/plan-week-progress-600.webp 600w, img/plan-week-progress-942.webp 942w" width="942"/>
 <span aria-hidden="true" class="enlarge">↗</span></a>
-<figcaption><h3 data-i18n="plan_week_view">Week view</h3><p data-i18n="plan_week_description">Your planned week, with running, cycling, strength, rest days and multiple sessions on the same day.</p></figcaption>
+<figcaption><h3 data-i18n="plan_week_view">Week view</h3><p data-i18n="plan_week_description">Planned, completed and extra sessions, with weekly progress across your sports.</p></figcaption>
 </figure>
-<figure class="plan-view" id="plan-view-month" data-plan-panel="month">
-<a class="plan-capture-link" href="img/plan-month-real.webp" data-caption="Month view" aria-label="Enlarge screenshot: Month view">
-<img src="img/plan-month-real-600.webp" srcset="img/plan-month-real-600.webp 600w, img/plan-month-real-942.webp 942w" sizes="(max-width: 366px) calc(100vw - 2.5rem), 326px" alt="A month of training, with sport colours and clear planned and completed markers." width="1206" height="2622" loading="lazy" decoding="async"/>
+<figure class="plan-view" data-plan-panel="month" id="plan-view-month">
+<a aria-label="Enlarge screenshot: Month view" class="plan-capture-link" data-caption="Month view" href="img/plan-month-real.webp">
+<img alt="A month of training, with sport colours and clear planned and completed markers." decoding="async" height="2622" loading="lazy" sizes="(max-width: 366px) calc(100vw - 2.5rem), 326px" src="img/plan-month-real-600.webp" srcset="img/plan-month-real-600.webp 600w, img/plan-month-real-942.webp 942w" width="1206"/>
 <span aria-hidden="true" class="enlarge">↗</span></a>
 <figcaption><h3 data-i18n="plan_month_view">Month view</h3><p data-i18n="plan_month_description">A month of training, with sport colours and clear planned and completed markers.</p></figcaption>
 </figure>
-<figure class="plan-view" id="plan-view-goals" data-plan-panel="goals">
-<a class="plan-capture-link" href="img/plan-goals-real.webp" data-caption="Race goals" aria-label="Enlarge screenshot: Race goals">
-<img src="img/plan-goals-real-600.webp" srcset="img/plan-goals-real-600.webp 600w, img/plan-goals-real-942.webp 942w" sizes="(max-width: 366px) calc(100vw - 2.5rem), 326px" alt="Your races with priorities, distances, elevation, dates, target times and countdowns." width="1206" height="2622" loading="lazy" decoding="async"/>
+<figure class="plan-view" data-plan-panel="goals" id="plan-view-goals">
+<a aria-label="Enlarge screenshot: Race goals" class="plan-capture-link" data-caption="Race goals" href="img/plan-goals-real.webp">
+<img alt="Your races with priorities, distances, elevation, dates, target times and countdowns." decoding="async" height="2622" loading="lazy" sizes="(max-width: 366px) calc(100vw - 2.5rem), 326px" src="img/plan-goals-real-600.webp" srcset="img/plan-goals-real-600.webp 600w, img/plan-goals-real-942.webp 942w" width="1206"/>
 <span aria-hidden="true" class="enlarge">↗</span></a>
 <figcaption><h3 data-i18n="plan_goals_view">Race goals</h3><p data-i18n="plan_goals_description">Your races with priorities, distances, elevation, dates, target times and countdowns.</p></figcaption>
 </figure>
 </div>
-<p data-i18n="plan_capture_note" class="fine plan-capture-note">Real app screenshots. Select a screen to enlarge.</p>
+<p class="fine plan-capture-note" data-i18n="plan_capture_note">Real app screenshots. Select a screen to enlarge.</p>
 </div>
 </div>
 </section>
+<section aria-labelledby="ai-title" class="ai-section" id="ai">
+<div class="wrap ai-layout">
+<div class="ai-copy">
+<p class="kicker" data-i18n="ai_kicker">AI COACHING. YOUR CHOICE.</p>
+<h2 data-i18n="ai_title" id="ai-title">Your coach.
+Your way.</h2>
+<p class="section-lead" data-i18n="ai_lead">Ask about a workout. Make sense of your recovery. Choose where your AI runs.</p>
+<div class="ai-options">
+<article class="ai-option free-option"><div class="ai-option-head"><span aria-hidden="true" class="ai-symbol">✦</span><span class="option-tag" data-i18n="ai_free_tag">INCLUDED · CLOUD</span></div><h3>Free AI</h3><p data-i18n="ai_free_body">Chat and daily briefings without a separate AI account or personal API key. Free AI works online and sends context after your confirmation.</p></article>
+<article class="ai-option local-option"><div class="ai-option-head"><svg aria-hidden="true" class="ai-symbol" fill="none" stroke="currentColor" stroke-width="1.5" viewbox="0 0 24 24"><rect height="20" rx="3" width="12" x="6" y="2"></rect><path d="M10 18h4"></path></svg><span class="option-tag" data-i18n="ai_local_tag">ON YOUR DEVICE</span></div><h3>Apple Intelligence</h3><p data-i18n="ai_local_body">Apple Intelligence keeps your AI requests on a compatible iPhone. Enable Apple Intelligence and use a supported language.</p></article>
+</div>
+<details class="ai-more"><summary data-i18n="ai_more_title">More ways to make it yours</summary><p data-i18n="ai_more_body">Download an optional local Qwen model on supported devices, or configure a cloud provider with your own key in Settings.</p></details>
+<p class="fine ai-choice-note" data-i18n="ai_choice_note">Choose during setup. Change anytime. You can also continue without AI.</p>
+</div>
+<figure class="capture-figure ai-capture"><div aria-hidden="true" class="capture-halo"></div><a class="feature-capture" href="img/screen-ai-choice-942.webp"><img alt="Choose Free AI, Apple Intelligence or another model during setup." decoding="async" height="2048" loading="lazy" sizes="(max-width: 700px) 80vw, 340px" src="img/screen-ai-choice-600.webp" srcset="img/screen-ai-choice-600.webp 600w, img/screen-ai-choice-942.webp 942w" width="942"/><span aria-hidden="true" class="enlarge">↗</span></a><figcaption><h3 data-i18n="ai_capture_title">Meet your coach during setup</h3><p data-i18n="ai_capture_body">The real AI selection in Fjelia. Screenshot from the German beta.</p></figcaption></figure>
+</div></section>
 <section aria-labelledby="screens-title" id="screens">
 <div class="wrap">
 <p class="kicker" data-i18n="t019">A look inside the app</p>
 <h2 data-i18n="t020" id="screens-title">See how Fjelia works</h2>
-<p data-i18n="demo_lead" class="section-lead">Plan strength sessions, log each set in Gym mode, and prepare nutrition for the workout ahead.</p>
-
-<div class="walkthrough-nav" role="group" aria-label="Choose an app walkthrough" hidden>
-<button type="button" data-demo-index="0" aria-controls="walkthrough-0" aria-current="true"><span data-i18n="gallery_day">Strength</span></button>
-<button type="button" data-demo-index="1" aria-controls="walkthrough-1"><span data-i18n="gallery_sleep">Gym mode</span></button>
-<button type="button" data-demo-index="2" aria-controls="walkthrough-2"><span data-i18n="gallery_progress">Fuel &amp; sync</span></button></div>
+<p class="section-lead" data-i18n="demo_lead">Plan strength sessions, log each set in Gym mode, and prepare nutrition for the workout ahead.</p><button aria-pressed="false" class="motion-toggle" data-i18n="t022" data-motion-toggle="" hidden="" type="button">Pause previews</button>
+<div aria-label="Choose an app walkthrough" class="walkthrough-nav" hidden="" role="group">
+<button aria-controls="walkthrough-0" aria-current="true" data-demo-index="0" type="button"><span data-i18n="gallery_day">Strength</span></button>
+<button aria-controls="walkthrough-1" data-demo-index="1" type="button"><span data-i18n="gallery_sleep">Gym mode</span></button>
+<button aria-controls="walkthrough-2" data-demo-index="2" type="button"><span data-i18n="gallery_progress">Fuel &amp; sync</span></button></div>
 <div class="video-gallery">
 <article class="video-card" id="walkthrough-0">
 <div class="video-frame">
-<video aria-label="Editing a planned strength workout: silent app demonstration" autoplay="" class="app-preview" data-src="video/strength-plan.mp4" height="1304" loop="" muted="" playsinline="" poster="video/strength-plan-poster.jpg" preload="none" webkit-playsinline="" width="600"><source data-src="video/strength-plan.mp4" type="video/mp4"/>Your browser cannot play this video. <a href="video/strength-plan.mp4">Open the recording</a>.</video><img class="video-fallback" data-i18n-alt="t024" src="video/strength-plan-poster.jpg" alt="Strength exercise editor with sets, rep ranges, rest and effort." width="600" height="1304" loading="lazy" hidden/>
+<video aria-label="Editing a planned strength workout: silent app demonstration" controls="" class="app-preview" data-src="video/strength-plan.mp4" height="1304" loop="" muted="" playsinline="" poster="video/strength-plan-poster.jpg" preload="none" webkit-playsinline="" width="600"><source data-src="video/strength-plan.mp4" type="video/mp4"/>Your browser cannot play this video. <a href="video/strength-plan.mp4">Open the recording</a>.</video><img alt="Adjust exercises, sets, reps, load, rest and effort for the session." class="video-fallback" data-i18n-alt="t024" height="1304" hidden="" loading="lazy" src="video/strength-plan-poster.jpg" width="600"/>
 </div>
 <p class="video-index">01 / REAL APP WALKTHROUGH</p>
 <h3 data-i18n="t023">Build a strength session</h3>
-<p class="video-description" data-i18n="t024">Edit exercises and configure sets, reps, load, rest and effort for each set.</p>
+<p class="video-description" data-i18n="t024">Adjust exercises, sets, reps, load, rest and effort for the session.</p>
 </article>
 <article class="video-card" id="walkthrough-1">
 <div class="video-frame">
-<video aria-label="Logging strength sets in Gym mode: silent app demonstration" autoplay="" class="app-preview" data-src="video/gym-mode.mp4" height="1304" loop="" muted="" playsinline="" poster="video/gym-mode-poster.jpg" preload="none" webkit-playsinline="" width="600"><source data-src="video/gym-mode.mp4" type="video/mp4"/>Your browser cannot play this video. <a href="video/gym-mode.mp4">Open the recording</a>.</video><img class="video-fallback" data-i18n-alt="t026" src="video/gym-mode-poster.jpg" alt="Gym mode showing a planned strength set, logging controls and rest timer." width="600" height="1304" loading="lazy" hidden/>
+<video aria-label="Logging strength sets in Gym mode: silent app demonstration" controls="" class="app-preview" data-src="video/gym-mode.mp4" height="1304" loop="" muted="" playsinline="" poster="video/gym-mode-poster.jpg" preload="none" webkit-playsinline="" width="600"><source data-src="video/gym-mode.mp4" type="video/mp4"/>Your browser cannot play this video. <a href="video/gym-mode.mp4">Open the recording</a>.</video><img alt="Record reps and load, complete a set and move through your workout with the rest timer." class="video-fallback" data-i18n-alt="t026" height="1304" hidden="" loading="lazy" src="video/gym-mode-poster.jpg" width="600"/>
 </div>
 <p class="video-index">02 / REAL APP WALKTHROUGH</p>
 <h3 data-i18n="t025">Log sets as you train</h3>
-<p class="video-description" data-i18n="t026">Record reps and load, mark a set complete, and use the built-in rest timer.</p>
+<p class="video-description" data-i18n="t026">Record reps and load, complete a set and move through your workout with the rest timer.</p>
 </article>
 <article class="video-card" id="walkthrough-2">
 <div class="video-frame">
-<video aria-label="Workout nutrition and device sync options: silent app demonstration" autoplay="" class="app-preview" data-src="video/nutrition-sync.mp4" height="1304" loop="" muted="" playsinline="" poster="video/nutrition-sync-poster.jpg" preload="none" webkit-playsinline="" width="600"><source data-src="video/nutrition-sync.mp4" type="video/mp4"/>Your browser cannot play this video. <a href="video/nutrition-sync.mp4">Open the recording</a>.</video><img class="video-fallback" data-i18n-alt="demo_1_desc" src="video/nutrition-sync-poster.jpg" alt="Workout details showing a nutrition strategy and provider sync actions." width="600" height="1304" loading="lazy" hidden/>
+<video aria-label="Workout nutrition and device sync options: silent app demonstration" controls="" class="app-preview" data-src="video/nutrition-sync.mp4" height="1304" loop="" muted="" playsinline="" poster="video/nutrition-sync-poster.jpg" preload="none" webkit-playsinline="" width="600"><source data-src="video/nutrition-sync.mp4" type="video/mp4"/>Your browser cannot play this video. <a href="video/nutrition-sync.mp4">Open the recording</a>.</video><img alt="Review the session’s carb, fluid and sodium targets, then see the options for sending it to your watch." class="video-fallback" data-i18n-alt="demo_1_desc" height="1304" hidden="" loading="lazy" src="video/nutrition-sync-poster.jpg" width="600"/>
 </div>
 <p class="video-index">03 / REAL APP WALKTHROUGH</p>
-<h3 data-i18n="demo_1_title">Plan and review workout fuel</h3>
-<p class="video-description" data-i18n="demo_1_desc">Set carb, fluid and sodium targets, then log what you actually took in.</p>
+<h3 data-i18n="demo_1_title">Check your fuel plan. Send your workout.</h3>
+<p class="video-description" data-i18n="demo_1_desc">Review the session’s carb, fluid and sodium targets, then see the options for sending it to your watch.</p>
 </article>
 </div>
 <details class="metrics-details">
 <summary data-i18n="metrics_summary">Strength metrics and progression</summary>
-<p data-i18n="metrics_volume">For linked sessions, compare planned and completed sets. Strength details show training volume and estimate 1RM only for eligible loaded sets (1–10 reps).</p>
-<p data-i18n="metrics_load">Training-load and heart-rate/zone views use recorded activity data; they do not infer cardiovascular load from lifting volume. Review load-increase suggestions after two comparable qualifying sessions.</p>
+<p data-i18n="metrics_volume">For linked sessions, compare planned and completed sets. Strength details show volume and estimate 1RM only for eligible loaded sets (1–10 reps).</p>
+<p data-i18n="metrics_load">Strength activities appear in training history. Load, form and heart-rate/zone summaries use recorded activity load or HR data; lifting volume alone does not create cardiovascular load. Review a load-increase proposal before applying it; it requires two comparable qualifying sessions.</p>
 </details>
-<p data-i18n="gallery_hint" class="gallery-hint">Swipe to explore the other walkthroughs.</p>
-<p class="fine video-note" data-i18n="t029">Edited screen recordings from the app. Videos play silently and loop automatically while visible. Available features depend on your connected devices.</p>
+<p class="gallery-hint" data-i18n="gallery_hint">Swipe to explore strength planning, Gym mode and workout fuel.</p>
+<p class="fine video-note" data-i18n="t029">Edited app recordings play silently and loop while visible. The nutrition figures are for the workout shown; your strategy is set per session and conditions. Features depend on your devices.</p>
 <details class="more-screens">
 <summary data-i18n="t030">Explore six more app screens</summary>
 <div class="screen-gallery">
@@ -253,13 +270,13 @@
 </details>
 </div>
 </section>
-<section id="devices" class="alt">
+<section class="alt" id="devices">
 <div class="wrap">
 <div class="connections-layout">
 <div>
 <h2 data-i18n="t058">Bring your device data together</h2>
-<p data-i18n="t059" class="section-lead">Connect the services you already use. Fjelia puts their data on one timeline and stores it on your device.</p>
-<ul class="chips" aria-label="Supported data sources">
+<p class="section-lead" data-i18n="t059">Connect the services you already use. Fjelia puts their data on one timeline and stores it on your device.</p>
+<ul aria-label="Supported data sources" class="chips">
 <li>Apple Health</li>
 <li>Garmin Connect</li>
 <li>Polar</li>
@@ -268,29 +285,24 @@
 <li>Renpho</li>
 <li>Hilo</li>
 </ul>
-</div>
-<div class="privacy-card" id="privacy">
-<h2 data-i18n="t097">Your data stays yours</h2>
-<p data-i18n="t098">Health data is personal. Your Fjelia database stays on your phone. You choose the services you connect.</p>
-<ul class="privacy-facts">
-<li><span data-i18n="t013">No Fjelia account</span></li>
-<li><span data-i18n="t014">No ads or trackers</span></li>
-<li><span data-i18n="t015">Open source</span></li>
-</ul>
-<p data-i18n="t101" class="fine">On compatible devices, the AI coach runs on-device with Apple Intelligence. A cloud AI is only used if you choose one, add your own key and agree to each transfer.</p>
-<p data-i18n="t103"><a class="btn ghost" href="privacy.html">Read the privacy policy</a></p>
-</div>
-</div>
-<p data-i18n="t063" class="fine connection-note">Names are trademarks of their respective owners. Fjelia is an independent project and is not affiliated with or endorsed by any of them.</p>
-<details class="sync-details">
+<p class="history-import" data-i18n="history_import">Your history comes too. Import a Strava archive, including activities, routes and photos, directly on your iPhone.</p><details class="sync-details">
 <summary data-i18n="sync_title">Workout sync: what each connection supports</summary>
 <ul class="sync-list">
-<li><h3>Garmin Connect</h3><p data-i18n="t060">Send supported planned sessions, including structured strength exercises, sets, reps and loads; watch recordings return to Fjelia and matching Gym logs are reconciled when recognized. Rep ranges, tempo and effort remain in Fjelia.</p></li>
+<li><h3>Garmin Connect</h3><p data-i18n="t060">Garmin can send supported strength exercises, sets, reps and loads; rep ranges, tempo and effort stay in Fjelia. A completed watch workout returns as one activity. Fjelia reconciles matching Gym logs when it recognizes them.</p></li>
 <li><h3>Polar Flow</h3><p data-i18n="t061">Import activities and push supported planned endurance workouts. Strength sharing provides an exercise list to enter in Polar; set details are not sent as a structured workout.</p></li>
-<li><h3>COROS</h3><p data-i18n="t062">Connected accounts can receive supported planned endurance workouts and return activities. Strength sharing provides an exercise list to enter in COROS.</p></li>
+<li><h3>COROS</h3><p data-i18n="t062">Supported endurance workouts upload automatically while your COROS account is connected. Activities import back to Fjelia. For strength, share an exercise list and enter the session in COROS.</p></li>
 </ul>
 <p class="fine" data-i18n="sync_note">Workout details shown on the watch depend on provider and device support. Your planned strength session remains saved in Fjelia.</p>
-</details>
+</details></div>
+
+<figure class="capture-figure connections-capture"><a class="feature-capture" href="img/screen-connections-942.webp"><img alt="Choose supported accounts and connected devices in Fjelia." decoding="async" height="2048" loading="lazy" sizes="(max-width: 700px) 80vw, 300px" src="img/screen-connections-600.webp" srcset="img/screen-connections-600.webp 600w, img/screen-connections-942.webp 942w" width="942"/><span aria-hidden="true" class="enlarge">↗</span></a><figcaption><h3 data-i18n="connections_capture_title">Your connections, together</h3><p data-i18n="connections_capture_body">Choose accounts and devices during setup. Screenshot from the German beta.</p></figcaption></figure></div><div class="privacy-card" id="privacy">
+<h2 data-i18n="t097">Your data stays yours</h2>
+<p data-i18n="t098">Health data is personal. Your Fjelia database stays on your phone. You choose the services you connect.</p>
+<p class="fine" data-i18n="t101">Cloud AI receives the context you approve. You choose the AI mode.</p>
+<p data-i18n="t103"><a class="btn ghost" href="privacy.html">Read the privacy policy</a></p>
+</div>
+<p class="fine connection-note" data-i18n="t063">Names are trademarks of their respective owners. Fjelia is an independent project and is not affiliated with or endorsed by any of them.</p>
+
 </div>
 </section>
 <section class="training-extras">
@@ -306,7 +318,7 @@
 <li><span data-i18n="t094">Inline skating</span></li>
 <li><span data-i18n="t095">Strength training</span></li>
 </ul>
-<p data-i18n="t096" class="fine"><strong>More activities</strong> Hiking, rowing, Nordic skiing and yoga also count towards your load and activity history.</p>
+<p class="fine" data-i18n="t096"><strong>More activities</strong> Hiking, rowing, Nordic skiing and yoga also count towards your load and activity history.</p>
 </div>
 </div>
 </section>
@@ -314,7 +326,7 @@
 <div class="wrap">
 <p class="kicker" data-i18n="t077">Weather for your training</p>
 <h2 data-i18n="t078" id="weather-title">Plan your outdoor training</h2>
-<p data-i18n="t079" class="section-lead">Compare forecasts and check wind, UV and rain radar before your next outdoor session.</p>
+<p class="section-lead" data-i18n="t079">Compare forecasts and check wind, UV and rain radar before your next outdoor session.</p>
 <div class="weather-gallery">
 <figure class="weather-card"><a aria-label="Enlarge weather screenshot: Choose your time to train" class="weather-link" data-caption="Choose your time to train" href="img/screen-weather-day-942.webp"><img alt="Day forecast comparing temperature and rainfall from multiple weather providers." decoding="async" height="1792" loading="lazy" src="img/screen-weather-day-600.webp" width="828"/><span aria-hidden="true" class="enlarge">↗</span></a><figcaption>
 <h3 data-i18n="t080">Choose when to train</h3>
@@ -336,38 +348,27 @@
 <div class="wrap">
 <div class="latest-heading">
 <div>
-<p data-i18n="beta_kicker" class="kicker">Beta highlights · November 2026</p>
+<p class="kicker" data-i18n="beta_kicker">From the latest beta</p>
 <h2 data-i18n="beta_title">Latest in Fjelia</h2>
 </div>
 <a class="text-link" href="https://github.com/agilastic/fjelia/commits/main/"><span data-i18n="beta_link">Follow development on GitHub ↗</span></a></div>
 <div class="latest-months">
-<details class="latest-month" open>
-<summary><span class="latest-month-name" data-i18n="latest_nov">November 2026</span><span class="latest-count" data-i18n="latest_nov_count">Latest</span><span class="latest-chevron" aria-hidden="true"></span></summary>
+<details class="latest-month" open="">
+<summary><span class="latest-month-name" data-i18n="latest_nov">November 2026</span><span class="latest-count" data-i18n="latest_nov_count">Latest</span><span aria-hidden="true" class="latest-chevron"></span></summary>
 <div class="latest-body">
-<p class="latest-summary" data-i18n="nov_summary">Fjelia now brings your whole training life together. Move years of Strava history over in one go, see every workout in full detail, and talk to a coach that really knows your training.</p>
-<ul class="latest-points">
-<li data-i18n="nov_p1"><strong>Your whole Strava history in one step:</strong> activities, routes and photos straight from Strava’s archive. Nothing is uploaded.</li>
-<li data-i18n="nov_p2"><strong>Every workout in full:</strong> COROS and Polar sessions now bring route, heart-rate curve and maximum heart rate. FIT, GPX and TCX files open too.</li>
-<li data-i18n="nov_p3"><strong>A coach that knows the context:</strong> it sees the session, your day, your plan and the workouts around it, and gets straight to the point.</li>
-<li data-i18n="nov_p4"><strong>Your history, your way:</strong> rename workouts, swipe to delete or to ask the coach, undo with one tap, scroll back through the years.</li>
-<li data-i18n="nov_p5"><strong>More for body and health:</strong> waist tracking with WHtR, blood pressure by the latest European guidelines, all your thresholds in one place, precise weather for Germany, photos on workouts and cards to share.</li>
-</ul>
+<div class="latest-summary" data-i18n="nov_summary"><p>In November, your training history comes with you to Fjelia: import your Strava ZIP archive directly on your iPhone, including activities, recorded routes and any photos or videos it contains. The importer recognizes existing sessions and adds missing photos. You can also import individual FIT, GPX and TCX files.</p><p>You can rename activities in Fjelia, add your own pictures and share them as styled cards. Deleted sessions no longer reappear after the next sync; you can restore them under “Recently deleted”. When you ask about a workout, the AI coach also considers your plan and the sessions before and after it.</p><p>COROS workouts now include routes and heart-rate graphs. Importing sleep, HRV and stress data has also improved. A new overview brings together your LT1, LT2 and FTP training thresholds. Other additions include waist-measurement history, DWD weather forecasts and short-term rain forecasts for planning your training in Germany.</p></div>
+
 </div>
 </details>
 <details class="latest-month">
-<summary><span class="latest-month-name" data-i18n="latest_oct">October 2026</span><span class="latest-count" data-i18n="latest_oct_count">Earlier</span><span class="latest-chevron" aria-hidden="true"></span></summary>
+<summary><span class="latest-month-name" data-i18n="latest_oct">October 2026</span><span class="latest-count" data-i18n="latest_oct_count">Earlier</span><span aria-hidden="true" class="latest-chevron"></span></summary>
 <div class="latest-body">
 <p class="latest-summary" data-i18n="oct_summary">October turned Fjelia into a training partner: strength workouts with a gym mode, a fuel plan for every session, Polar sync, and an app that speaks your language.</p>
-<ul class="latest-points">
-<li data-i18n="oct_p1"><strong>Strength training:</strong> programmes built around your race goals, with a gym mode for sets, reps and loads.</li>
-<li data-i18n="oct_p2"><strong>Workout fuel:</strong> carbs, fluids and sodium for each session, and a quick log of what you actually took.</li>
-<li data-i18n="oct_p3"><strong>Polar Flow:</strong> import your activities and send planned workouts to your watch.</li>
-<li data-i18n="oct_p4"><strong>Ten languages</strong>, a load forecast and smarter daily briefings.</li>
-</ul>
+
 </div>
 </details>
 </div></div>
-</div>
+
 </section>
 <section aria-labelledby="start-title" id="get-started">
 <div class="wrap">
@@ -390,17 +391,17 @@
 </ol>
 <div class="install-requirements">
 <div>
-<p data-i18n="install_app_label" class="requirement-label">The app</p>
+<p class="requirement-label" data-i18n="install_app_label">The app</p>
 <h3 data-i18n="install_app_title">iPhone · TestFlight beta</h3>
 <p data-i18n="install_app_body">Open the invitation to check the current iOS requirements.</p>
 </div>
 <div>
-<p data-i18n="install_ai_label" class="requirement-label">On-device AI · optional</p>
-<h3 data-i18n="install_ai_title">Apple Intelligence · iOS 26+</h3>
-<p data-i18n="install_ai_body">Needs a compatible iPhone, Apple Intelligence enabled and a supported language.</p>
+<p class="requirement-label" data-i18n="t054">AI coach</p>
+<h3 data-i18n="install_ai_title">AI is your choice</h3>
+<p data-i18n="install_ai_body">Free AI is included. Local Apple Intelligence needs compatible hardware; additional local models require a download.</p>
 </div>
 </div>
-<p data-i18n="install_ai_note" class="fine">Training, health data and charts also work without AI. Optional cloud coaching uses your own API key.</p>
+<p class="fine" data-i18n="install_ai_note">Health data, training plans and charts also work without AI. <a href="#ai">Explore your coach options →</a></p>
 <div class="section-cta"><a class="btn primary" data-i18n="t207" href="https://testflight.apple.com/join/CqzrybFA">Join the free iOS beta <span aria-hidden="true">↗</span></a>
 <p class="fine" data-i18n="t113">Still in development. Your feedback helps us improve Fjelia.</p>
 </div>
@@ -416,20 +417,17 @@
 <div class="faq-list">
 <details>
 <summary data-i18n="t117">Is Fjelia free?</summary>
-<p data-i18n="t118">The public beta is free. The source code is available under the GPL. If you use an optional cloud AI service, that provider may charge for requests made with your API key.</p>
+<p data-i18n="t118">The public beta and Free AI are free. Using your own API key with another cloud provider may incur charges from that provider.</p>
 </details>
 <details>
 <summary data-i18n="t119">Which iPhone do I need?</summary>
-<p data-i18n="t120">Open the TestFlight invitation to check whether the current version supports your iPhone. On-device AI coaching also requires an Apple Intelligence-compatible device with iOS 26 or later. Apple Intelligence must be enabled and set to a supported language.</p>
+<p data-i18n="t120">Check the TestFlight invitation for current iPhone requirements. Free AI works without Apple Intelligence. For local Apple AI, you need a compatible device with iOS 26+, Apple Intelligence enabled and a supported language.</p>
 </details>
 <details>
 <summary data-i18n="t121">Do I need a particular watch?</summary>
 <p data-i18n="t122">No. You can connect Apple Health or supported services including Garmin, Polar, Suunto and COROS. Available metrics depend on what each device measures and each service shares. Some connections may be unavailable in a particular beta build.</p>
 </details>
-<details>
-<summary data-i18n="t123">Can I use Fjelia without Apple Intelligence?</summary>
-<p data-i18n="t124">Yes. You can view your synced health data, activities and training features without on-device AI. Optional cloud coaching requires a supported provider, your API key and your consent to send data.</p>
-</details>
+
 <details>
 <summary data-i18n="t125">Where does my data go?</summary>
 <p data-i18n="t126">Your database stays on your device. Connected services exchange data directly with your phone. Optional cloud coaching sends the context you approve to your selected provider. Weather and maps contact their providers when used. <a href="privacy.html">Read the full privacy policy.</a></p>
@@ -448,28 +446,28 @@
 <section class="alt" id="support">
 <div class="wrap support-layout">
 <div>
-<p class="kicker" data-i18n="t131">Help shape Fjelia</p>
-<h2 data-i18n="t132">What would you like to see next?</h2>
-<p class="section-lead" data-i18n="t133">Suggest a feature or a new device connection. Tell us how it would help you. Bug reports are welcome too.</p>
+<p class="kicker" data-i18n="t131">Report a problem or share an idea</p>
+<h2 data-i18n="t132">Help improve Fjelia</h2>
+<p class="section-lead" data-i18n="t133">Tell us about crashes, blocked actions, incorrect values or layout issues. Include your app version, device and steps to reproduce; feature ideas are welcome too.</p>
 </div>
 <form accept-charset="UTF-8" action="https://www.fjelia.com/report/" class="support-form" method="post">
 <label data-i18n="t134" for="support-email">Your email address</label>
 <input autocomplete="email" data-i18n-placeholder="t151" id="support-email" maxlength="254" name="fromemail" placeholder="you@example.com" required="" type="email"/>
 <label data-i18n="t135" for="support-subject">Subject</label>
-<input data-i18n-placeholder="t152" id="support-subject" maxlength="200" name="subject" placeholder="Your idea for Fjelia" required="" type="text"/>
+<input data-i18n-placeholder="t152" id="support-subject" maxlength="200" name="subject" placeholder="Crash, blocked action, incorrect value or layout issue" required="" type="text"/>
 <label data-i18n="t136" for="support-body">Message</label>
-<textarea aria-describedby="support-help support-privacy" data-i18n-placeholder="t153" id="support-body" maxlength="10000" minlength="10" name="body" placeholder="Describe the feature you would like and how it would help you." required="" rows="6"></textarea>
+<textarea aria-describedby="support-help support-privacy" data-i18n-placeholder="t153" id="support-body" maxlength="10000" minlength="10" name="body" placeholder="Include your app version, device and steps to reproduce. What did you expect, and what happened?" required="" rows="6"></textarea>
 <p class="fine" data-i18n="t137" id="support-help">Please do not include passwords, API keys or personal health readings.</p>
 <p class="fine" data-i18n="t138" id="support-privacy">Your email address, subject and message are sent to Fjelia support at www.fjelia.com. <a href="privacy.html#website-contact">Privacy details</a>.</p>
-<button class="btn primary" data-i18n="t139" type="submit">Send your idea <span aria-hidden="true">↗</span></button>
+<button class="btn primary" data-i18n="t139" type="submit">Send feedback <span aria-hidden="true">↗</span></button>
 <p class="fine" data-i18n="t140">You can also <a href="https://github.com/agilastic/fjelia/issues">suggest a feature or report a bug on GitHub</a>. Please leave out private information.</p>
 </form></div>
 </section>
-<section id="open-source" class="open-source-compact">
+<section class="open-source-compact" id="open-source">
 <div class="wrap">
 <div>
 <h3 data-i18n="t141">Free and open-source software</h3>
-<p data-i18n="t142" class="fine">Fjelia is licensed under the GNU General Public License, version 3 or later. Explore the code, build the app and help improve it.</p>
+<p class="fine" data-i18n="t142">Fjelia is licensed under the GNU General Public License, version 3 or later. Explore the code, build the app and help improve it.</p>
 </div>
 <div class="source-links"><a class="text-link" href="https://github.com/agilastic/fjelia">GitHub ↗</a><a class="text-link" href="https://github.com/agilastic/fjelia/blob/main/README.md#build-and-run"><span data-i18n="developer_link">Build and contribute ↗</span></a></div>
 </div>
@@ -488,7 +486,7 @@
 <p data-i18n="t148">© 2026 Alex Ebeling-Hoppe. Free software under the GPL-3.0-or-later. The name and logo are not licensed for forks.</p>
 </div>
 <nav aria-label="Footer">
-<a data-i18n="t007" href="#support">Your ideas</a>
+<a data-i18n="t007" href="#support">Feedback</a>
 <a data-i18n="t006" href="#faq">FAQ</a>
 <a data-i18n="t005" href="privacy.html">Privacy</a>
 <a href="https://github.com/agilastic/fjelia">GitHub</a>
@@ -502,6 +500,6 @@
 <button aria-label="Close screenshot" class="dialog-close" data-i18n="t150" type="button">Close <span aria-hidden="true">×</span></button></div>
 <img alt="" src="img/screen-overview-600.webp"/>
 </dialog>
-<script defer="" src="i18n.js?v=20261103b"></script><script defer="" src="site.js?v=20261103"></script>
+<script defer="" src="i18n.js?v=20261105news"></script><script defer="" src="site.js?v=20261105autostart3"></script>
 </body>
 </html>

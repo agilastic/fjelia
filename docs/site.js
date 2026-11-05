@@ -30,14 +30,14 @@
   var image = dialog.querySelector('img');
   var caption = dialog.querySelector('#screenshot-caption');
   var trigger;
-  document.querySelectorAll('.screen-link, .weather-link, .plan-capture-link').forEach(function (link) {
+  document.querySelectorAll('.screen-link, .weather-link, .plan-capture-link, .feature-capture').forEach(function (link) {
     link.addEventListener('click', function (event) {
       if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
       event.preventDefault();
       trigger = link;
       image.src = link.href;
       image.alt = link.querySelector('img').alt;
-      caption.textContent = link.dataset.caption;
+      caption.textContent = link.dataset.caption || image.alt;
       dialog.showModal();
       document.body.classList.add('dialog-open');
     });
@@ -53,6 +53,36 @@
   });
 })();
 
+/* One motion setting controls the previews, including the hero. */
+(function () {
+  'use strict';
+  var buttons = Array.from(document.querySelectorAll('[data-motion-toggle]'));
+  var paused = false;
+  function update() {
+    document.body.classList.toggle('previews-paused', paused);
+    buttons.forEach(function (button) {
+      var label = button.querySelector('[data-motion-label]') || button;
+      var key = paused ? 'resume' : 't022';
+      label.dataset.i18n = key;
+      label.textContent = window.FjeliaI18n ? window.FjeliaI18n.t(key) : paused ? 'Resume previews' : 'Pause previews';
+      button.setAttribute('aria-pressed', String(paused));
+      button.setAttribute('aria-label', label.textContent);
+      button.title = label.textContent;
+    });
+  }
+  function change(value) {
+    paused = value;
+    update();
+    document.dispatchEvent(new Event('fjelia-motion-change'));
+  }
+  buttons.forEach(function (button) {
+    button.hidden = false;
+    button.addEventListener('click', function () { change(!paused); });
+  });
+  document.addEventListener('fjelia-language-change', update);
+  update();
+})();
+
 /* Gentle screenshot previews respect the system motion preference. */
 (function () {
   'use strict';
@@ -64,7 +94,7 @@
   });
   function sync(state) {
     if (!state.animation) return;
-    if (reduced.matches || document.hidden || !state.visible || state.held || document.body.classList.contains('dialog-open')) state.animation.pause();
+    if (reduced.matches || document.hidden || !state.visible || state.held || document.body.classList.contains('dialog-open') || document.body.classList.contains('previews-paused')) state.animation.pause();
     else state.animation.play();
   }
   function measure(state) {
@@ -103,6 +133,8 @@
     if (observer) observer.observe(state.card);
     if (resize) resize.observe(state.card);
     state.img.addEventListener('load', function () { measure(state); });
+    state.card.addEventListener('mouseenter', function () { state.held = true; sync(state); });
+    state.card.addEventListener('mouseleave', function () { state.held = state.card.contains(document.activeElement); sync(state); });
     ['focusin'].forEach(function (event) {
       state.card.addEventListener(event, function () { state.held = true; sync(state); });
     });
@@ -120,14 +152,22 @@
   if (!resize) window.addEventListener('resize', function () { states.forEach(measure); });
 })();
 
-/* Edited screen recordings autoplay only while visible. */
+/* The hero starts with its section; other recordings play when visible. */
 (function () {
   'use strict';
   var states = Array.from(document.querySelectorAll('.app-preview')).map(function (video) {
     video.muted = true;
     video.defaultMuted = true;
     video.playsInline = true;
-    var state = { video: video, visible: false, failed: false };
+    video.controls = false;
+    var hero = video.classList.contains('hero-preview');
+    var state = {
+      video: video,
+      target: hero ? video.closest('.product-hero') || video : video,
+      hero: hero,
+      visible: false,
+      failed: false
+    };
     function showFallback() {
       // Empty lazy sources may emit errors before they have been assigned a URL.
       if (!video.dataset.loaded) return;
@@ -145,15 +185,18 @@
     return state;
   });
   function sync(state) {
-    var allowed = !state.failed && state.visible && !document.hidden &&
-      !document.body.classList.contains('dialog-open');
-    state.video.autoplay = allowed;
-    if (!allowed) { state.video.pause(); return; }
-    if (!state.video.dataset.loaded) {
-      state.video.querySelectorAll('source[data-src]').forEach(function (source) { source.src = source.dataset.src; });
+    if (state.failed) return;
+    if (state.visible && !state.video.dataset.loaded) {
+      var lazySources = state.video.querySelectorAll('source[data-src]');
+      lazySources.forEach(function (source) { source.src = source.dataset.src; });
       state.video.dataset.loaded = 'true';
-      state.video.load();
+      if (lazySources.length) state.video.load();
     }
+    var paused = document.body.classList.contains('previews-paused');
+    var allowed = state.visible && !document.hidden && !document.body.classList.contains('dialog-open') && !paused;
+    state.video.autoplay = allowed;
+    state.video.controls = paused || state.video.dataset.playbackError === 'NotAllowedError';
+    if (!allowed) { state.video.pause(); return; }
     var result = state.video.play();
     if (result && result.catch) result.catch(function (error) {
       state.video.dataset.playbackError = error.name;
@@ -164,18 +207,19 @@
   }
   var observer = 'IntersectionObserver' in window ? new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
-      var state = states.find(function (s) { return s.video === entry.target; });
-      state.visible = entry.isIntersecting && entry.intersectionRatio >= .15;
+      var state = states.find(function (s) { return s.target === entry.target; });
+      state.visible = entry.isIntersecting && (state.hero || entry.intersectionRatio >= .15);
       sync(state);
     });
-  }, { threshold: .15 }) : null;
+  }, { threshold: [0, .15] }) : null;
   states.forEach(function (state) {
-    var bounds = state.video.getBoundingClientRect();
+    var bounds = state.target.getBoundingClientRect();
     state.visible = bounds.bottom > 0 && bounds.top < window.innerHeight;
     sync(state);
-    if (observer) observer.observe(state.video);
+    if (observer) observer.observe(state.target);
   });
   document.addEventListener('visibilitychange', function () { states.forEach(sync); });
+  document.addEventListener('fjelia-motion-change', function () { states.forEach(sync); });
   window.addEventListener('pageshow', function () { states.forEach(sync); });
   new MutationObserver(function () { states.forEach(sync); }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
 })();
@@ -227,7 +271,7 @@
   update();
 })();
 
-/* Show the actual Week and Race Goals screens, with accessible image tabs. */
+/* Plan previews keep rotating; manual choices restart the interval. */
 (function () {
   'use strict';
   var showcase = document.querySelector('.season-showcase');
@@ -236,16 +280,20 @@
   var buttons = Array.from(picker.querySelectorAll('[data-plan-view]'));
   var panels = Array.from(showcase.querySelectorAll('[data-plan-panel]'));
   var timer = null;
+  var keyboardActive = false;
   var bounds = showcase.getBoundingClientRect();
   var visible = bounds.bottom > 0 && bounds.top < window.innerHeight;
   function schedule() {
     if (timer !== null) { clearTimeout(timer); timer = null; }
-    if (!visible || document.hidden || document.body.classList.contains('dialog-open')) return;
+    var active = document.activeElement;
+    var keyboardFocus = showcase.contains(active) && (keyboardActive || active.matches(':focus-visible'));
+    if (!visible || keyboardFocus || document.hidden ||
+      document.body.classList.contains('dialog-open') || document.body.classList.contains('previews-paused')) return;
     timer = setTimeout(function () {
       timer = null;
       var index = buttons.findIndex(function (button) { return button.getAttribute('aria-selected') === 'true'; });
       choose(buttons[(index + 1) % buttons.length].dataset.planView, false);
-    }, 3000);
+    }, 6500);
   }
   function choose(view, focus) {
     var selected = buttons.find(function (button) { return button.dataset.planView === view; });
@@ -273,6 +321,7 @@
     var button = event.target.closest('[data-plan-view]');
     if (!button || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
     event.preventDefault();
+    keyboardActive = true;
     var index = buttons.indexOf(button);
     index = event.key === 'Home' ? 0 : event.key === 'End' ? buttons.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + buttons.length) % buttons.length;
     choose(buttons[index].dataset.planView, true);
@@ -281,10 +330,20 @@
     var panel = panels.find(function (item) { return '#' + item.id === location.hash; });
     if (panel) choose(panel.dataset.planPanel, false);
   }
-  choose('week', false);
+  choose('goals', false);
   fragment();
   window.addEventListener('hashchange', fragment);
   document.addEventListener('visibilitychange', schedule);
+  function focusChanged() {
+    requestAnimationFrame(function () {
+      var active = document.activeElement;
+      keyboardActive = showcase.contains(active) && (keyboardActive || active.matches(':focus-visible'));
+      schedule();
+    });
+  }
+  showcase.addEventListener('focusin', focusChanged);
+  showcase.addEventListener('focusout', focusChanged);
+  showcase.addEventListener('pointerdown', function () { keyboardActive = false; schedule(); });
   new MutationObserver(schedule).observe(document.body, { attributes: true, attributeFilter: ['class'] });
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(function (entries) {
@@ -293,6 +352,24 @@
     }, { threshold: .2 }).observe(showcase);
   }
   picker.hidden = false;
+})();
+
+/* Reveal small accents once; all content is visible without JavaScript. */
+(function () {
+  'use strict';
+  if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-visible');
+      observer.unobserve(entry.target);
+    });
+  }, { rootMargin: '0px 0px 40px 0px', threshold: .08 });
+  document.querySelectorAll('.benefit-card, .ai-option, .latest-month, .install-steps li').forEach(function (item) {
+    item.dataset.reveal = '';
+    observer.observe(item);
+  });
+  document.documentElement.classList.add('reveal-ready');
 })();
 
 /* Mobile walkthroughs remain swipeable and readable without JavaScript. */
