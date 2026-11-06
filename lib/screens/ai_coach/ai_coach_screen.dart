@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import '../../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
@@ -24,8 +26,15 @@ class AiCoachScreen extends ConsumerStatefulWidget {
     this.activity,
     this.contextCard,
     this.onNewChat,
+    this.autoSend = false,
+    this.onAutoSent,
   });
   final String? initialPrompt;
+
+  /// Sends [initialPrompt] right away, for a button that already asked the
+  /// question (such as "Discuss this ECG").
+  final bool autoSend;
+  final VoidCallback? onAutoSent;
 
   /// Starts an empty chat without a session. Without it the conversation is
   /// only cleared.
@@ -47,6 +56,10 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
   final messages = <ChatMessage>[];
   bool sending = false;
   String? error;
+
+  /// Runs while a reply is on its way, for the clock in the waiting bubble.
+  final _watch = Stopwatch();
+  Timer? _tick;
   @override
   void initState() {
     super.initState();
@@ -58,9 +71,13 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
       final aboutSession =
           widget.contextCard != null || widget.activity != null;
       if (p != null) {
-        if (!aboutSession) input.text = p;
+        if (!aboutSession || widget.autoSend) input.text = p;
         if (widget.initialPrompt == null) {
           ref.read(pendingCoachPromptProvider.notifier).state = null;
+        }
+        if (widget.autoSend) {
+          widget.onAutoSent?.call();
+          send();
         }
       }
     });
@@ -78,6 +95,7 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
 
   @override
   void dispose() {
+    _tick?.cancel();
     input.dispose();
     scroll.dispose();
     super.dispose();
@@ -120,6 +138,13 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
       consent = AiConsentToken.confirmed();
     }
     if (!mounted) return;
+    _watch
+      ..reset()
+      ..start();
+    _tick?.cancel();
+    _tick = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (mounted) setState(() {});
+    });
     setState(() {
       sending = true;
       error = null;
@@ -160,6 +185,8 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
         );
       }
     } finally {
+      _tick?.cancel();
+      _watch.stop();
       if (mounted) {
         setState(() => sending = false);
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -237,6 +264,13 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
             ],
           ),
         ),
+        // Stays on top while scrolling: the chat about a health measurement
+        // never reads like a doctor's opinion.
+        if (widget.contextCard?.medicalWarning ?? false)
+          const Padding(
+            padding: EdgeInsets.fromLTRB(16, 4, 16, 8),
+            child: CoachMedicalWarning(),
+          ),
         Expanded(
           child: messages.isEmpty && error == null
               ? ListView(
@@ -278,7 +312,9 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
                   itemCount:
                       (widget.contextCard == null ? 0 : 1) +
                       messages.length +
-                      (error != null || followUps.isNotEmpty ? 1 : 0),
+                      (sending || error != null || followUps.isNotEmpty
+                          ? 1
+                          : 0),
                   itemBuilder: (c, index) {
                     final card = widget.contextCard;
                     if (card != null && index == 0) {
@@ -288,6 +324,11 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
                       );
                     }
                     final i = index - (card == null ? 0 : 1);
+                    if (i == messages.length && sending) {
+                      return _ThinkingBubble(
+                        seconds: _watch.elapsed.inSeconds,
+                      );
+                    }
                     if (i == messages.length && error == null) {
                       return Wrap(
                         spacing: 8,
@@ -392,6 +433,52 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
   }
 }
 
+/// Shown in place of the answer while the coach works: a spinner and a
+/// running clock, so a slow model does not look like a hung app.
+class _ThinkingBubble extends StatelessWidget {
+  const _ThinkingBubble({required this.seconds});
+  final int seconds;
+
+  @override
+  Widget build(BuildContext context) {
+    final clock =
+        '${seconds ~/ 60}:${(seconds % 60).toString().padLeft(2, '0')}';
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Semantics(
+        liveRegion: true,
+        label: context.l10n.coachThinking,
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          decoration: BoxDecoration(
+            color: panel,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(
+                width: 18,
+                height: 18,
+                child: CircularProgressIndicator(strokeWidth: 2, color: mint),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                '${context.l10n.coachThinking}  $clock',
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontFeatures: [FontFeature.tabularFigures()],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 /// Opens the coach tab about a session: closes the sheets on top, then the
 /// home screen shows the coach with [card] above the chat, [prompt] as the
 /// draft question and, for an [activity], its training context.
@@ -400,12 +487,14 @@ void openCoachTab(
   required String prompt,
   ActivityRecord? activity,
   CoachContextCard? card,
+  bool autoSend = false,
 }) {
   final container = ProviderScope.containerOf(context);
   container.read(coachRequestProvider.notifier).state = CoachRequest(
     prompt: prompt,
     activity: activity,
     card: card,
+    autoSend: autoSend,
   );
   Navigator.of(context, rootNavigator: true).popUntil((r) => r.isFirst);
 }

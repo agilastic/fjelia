@@ -21,6 +21,7 @@ import 'coros_provider.dart';
 import 'database_provider.dart';
 import 'day_data_provider.dart';
 import 'health_connect_provider.dart';
+import 'gym_treadmill_provider.dart';
 import 'heat_acclimation_provider.dart';
 import 'hilo_sync_provider.dart';
 import 'hr_zone_sync_provider.dart';
@@ -426,7 +427,16 @@ class SyncNotifier extends StateNotifier<SyncState> {
       }
     }
 
-    await Future.wait([polar(), suunto(), coros(), health()]);
+    Future<void> matrix() async {
+      try {
+        await _ref.read(gymTreadmillActionsProvider).sync();
+      } catch (_) {
+        // The connection sheet shows a sanitized error and offers sign-in.
+        log('[Sync] Matrix xID sync did not complete');
+      }
+    }
+
+    await Future.wait([polar(), suunto(), coros(), health(), matrix()]);
     state = state.copyWith(progress: 70);
     // A workout Apple Health delivered in the background comes again from its
     // own platform now; the platform's copy stays, the reminder follows it.
@@ -618,12 +628,12 @@ class SyncNotifier extends StateNotifier<SyncState> {
     // Heart rate and blood pressure older than two days keep one value per
     // 15 minutes. Never blocks the sync.
     unawaited(
-      VitalsRetentionService(
-        _ref.read(databaseProvider),
-      ).run().catchError((Object e) {
-        log('[Retention] $e');
-        return (bpRemoved: 0, hrRemoved: 0);
-      }),
+      VitalsRetentionService(_ref.read(databaseProvider))
+          .run()
+          .catchError((Object e) {
+            log('[Retention] $e');
+            return (bpRemoved: 0, hrRemoved: 0);
+          }),
     );
     // A workout that arrived with the sync takes tonight's reminder back.
     unawaited(
@@ -1047,6 +1057,7 @@ class HistoricSyncNotifier extends StateNotifier<HistoricSyncState> {
 final hasHistorySourceProvider = Provider<bool>((ref) {
   bool on(AsyncValue<bool> v) => v.valueOrNull ?? false;
   return ref.watch(authProvider).garminConnected ||
+      ref.watch(matrixXidSessionProvider).valueOrNull != null ||
       on(ref.watch(corosConnectedProvider)) ||
       on(ref.watch(suuntoConnectedProvider)) ||
       on(ref.watch(polarConnectedProvider)) ||

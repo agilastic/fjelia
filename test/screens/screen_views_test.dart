@@ -2344,7 +2344,8 @@ void main() {
     tester,
   ) async {
     await render(tester, const ManualEntrySheet(), 'entry');
-    await tester.tap(find.text('Blood Pressure'));
+    await tester.ensureVisible(find.text('Log BP'));
+    await tester.tap(find.text('Log BP'));
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextField).at(0), '125');
     await tester.enterText(find.byType(TextField).at(1), '75');

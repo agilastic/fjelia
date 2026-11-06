@@ -49,6 +49,47 @@ Map<String, double>? zonePercentFromSamples(
   };
 }
 
+/// Indoor samples carry an active timer as well as wall time. Pause time and
+/// missing HR must not be extrapolated into a full session of known HR zones.
+/// Percentages may sum to less than 100 when part of the session is unknown.
+Map<String, double>? zonePercentFromActiveSamples(
+  String? metricsJson,
+  List<int> floors,
+  double durationSeconds,
+) {
+  if (metricsJson == null || floors.length < 5 || durationSeconds <= 0) {
+    return null;
+  }
+  final List<dynamic> samples;
+  try {
+    final decoded = jsonDecode(metricsJson);
+    if (decoded is! List) return null;
+    samples = decoded;
+  } on FormatException {
+    return null;
+  }
+  final seconds = List<double>.filled(5, 0);
+  var previous = 0.0, known = 0.0;
+  for (final sample in samples) {
+    if (sample is! Map) continue;
+    final timer = sample['timer'], hr = sample['hr'];
+    if (timer is! num || !timer.isFinite || timer < previous) continue;
+    final current = timer.toDouble().clamp(0.0, durationSeconds);
+    final weight = (current - previous).clamp(0.0, 2.0);
+    previous = current;
+    if (hr is! num || !hr.isFinite || hr <= 0 || hr >= 255 || weight <= 0) {
+      continue;
+    }
+    seconds[zoneOf(hr.toDouble(), floors) - 1] += weight;
+    known += weight;
+  }
+  if (known == 0) return null;
+  return {
+    for (var i = 0; i < 5; i++)
+      'zone${i + 1}': seconds[i] / durationSeconds * 100,
+  };
+}
+
 /// Recorded seconds per zone, when samples have usable timestamps. Untimed
 /// split summaries can describe proportions, but cannot establish elapsed time.
 List<double>? zoneSecondsFromSamples(String? metricsJson, List<int> floors) {

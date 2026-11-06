@@ -7258,4 +7258,665 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get feedsUnknown => 'Inconnu';
+
+  @override
+  String get ecgTitle => 'ECG';
+
+  @override
+  String get ecgChooseDevice => 'Choisir le Polar H10';
+
+  @override
+  String get ecgStart => 'Enregistrer un ECG';
+
+  @override
+  String get ecgStopSave => 'Arrêter et enregistrer';
+
+  @override
+  String get ecgImport => 'Importer un fichier ECG';
+
+  @override
+  String get ecgHistory => 'Historique ECG';
+
+  @override
+  String get ecgWaveform => 'Signal';
+
+  @override
+  String get ecgReport => 'Rapport';
+
+  @override
+  String get ecgExportCsv => 'Exporter le signal (CSV)';
+
+  @override
+  String get ecgExportMetadata => 'Exporter les métadonnées ECG';
+
+  @override
+  String get ecgExportOriginal => 'Partager le fichier original';
+
+  @override
+  String get ecgRecording => 'Enregistrement ECG';
+
+  @override
+  String get ecgRecordingDate => 'Date et heure de l’enregistrement';
+
+  @override
+  String get ecgLinkedWorkout => 'Séance associée';
+
+  @override
+  String get ecgIndependent => 'Aucune séance associée';
+
+  @override
+  String get ecgNoRecordings => 'Aucun enregistrement ECG.';
+
+  @override
+  String ecgSamples(int count) {
+    return '$count échantillons';
+  }
+
+  @override
+  String ecgSignalGaps(int count) {
+    return '$count interruptions du signal';
+  }
+
+  @override
+  String get ecgDeleteConfirm =>
+      'Supprimer définitivement cet enregistrement et son fichier original ?';
+
+  @override
+  String get ecgDescription =>
+      'Enregistrez avec le Polar H10, importez des signaux CSV ou conservez des rapports PDF.';
+
+  @override
+  String get ecgPrivacy =>
+      'Stocké sur cet appareil et inclus dans vos sauvegardes. Les signaux bruts ne sont pas envoyés au coach.';
+
+  @override
+  String get ecgLimitations =>
+      'Pour l’enregistrement et la consultation personnels. La VFC issue de l’ECG et la qualité du signal ne sont pas validées ici ; aucun diagnostic ni score de récupération n’est calculé.';
+
+  @override
+  String get ecgImportLimitations =>
+      'Les PDF Garmin et Apple Watch sont des rapports. Les signaux nécessitent les colonnes CSV time_seconds (ou time_ms) et ecg_uv (ou ecg_mv).';
+
+  @override
+  String get ecgReportOnly =>
+      'Rapport uniquement. Aucun échantillon brut disponible. Partagez le fichier original pour consulter le rapport.';
+
+  @override
+  String get indoorTitle => 'Entraînement en intérieur';
+
+  @override
+  String get indoorEquipment => 'Appareil de fitness';
+
+  @override
+  String get indoorChooseEquipment => 'Choisir un appareil';
+
+  @override
+  String get indoorChooseHeartRate => 'Choisir un capteur cardiaque';
+
+  @override
+  String get indoorStart => 'Démarrer l’enregistrement';
+
+  @override
+  String get indoorPause => 'Suspendre l’enregistrement';
+
+  @override
+  String get indoorFinish => 'Terminer et enregistrer';
+
+  @override
+  String get indoorSaved => 'Enregistré dans l’historique';
+
+  @override
+  String get indoorExportFit => 'Partager l’activité FIT';
+
+  @override
+  String get indoorUnfinished => 'Enregistrements inachevés';
+
+  @override
+  String get indoorReviewResume => 'Consulter ou reprendre';
+
+  @override
+  String get indoorDiscard => 'Supprimer l’enregistrement';
+
+  @override
+  String get indoorDiscardConfirm =>
+      'Supprimer définitivement cet enregistrement inachevé ?';
+
+  @override
+  String get indoorExternalHeartRate => 'Utiliser le capteur cardiaque externe';
+
+  @override
+  String get indoorEquipmentHeartRate =>
+      'Désactivé : utiliser le pouls de l’appareil';
+
+  @override
+  String get indoorCurrentInterval => 'Intervalle actuel';
+
+  @override
+  String get indoorNextInterval => 'Intervalle suivant';
+
+  @override
+  String get indoorPlanComplete => 'Intervalles prévus terminés';
+
+  @override
+  String get indoorAuthorizeControl => 'Autoriser le contrôle de l’appareil';
+
+  @override
+  String get indoorManualOverride => 'Passer au contrôle manuel';
+
+  @override
+  String get indoorAutoPower =>
+      'Suivre automatiquement la puissance des intervalles';
+
+  @override
+  String get indoorApplyTarget => 'Appliquer la cible';
+
+  @override
+  String get indoorDescription =>
+      'Connectez un appareil Bluetooth FTMS et enregistrez une séance en intérieur.';
+
+  @override
+  String get indoorKeepOpen =>
+      'L’enregistrement continue dans une autre app ou écran verrouillé. Pause arrête les mesures ; utilisez les commandes de la machine pour la mettre en pause.';
+
+  @override
+  String get indoorFitHint =>
+      'Enregistrez le fichier FIT ou ouvrez-le dans une application compatible via le partage.';
+
+  @override
+  String get indoorNoEquipment =>
+      'Aucun appareil FTMS trouvé. Allumez l’appareil et activez sa connexion Bluetooth.';
+
+  @override
+  String get indoorControlPrompt =>
+      'Autoriser Fjelia à modifier les cibles de cette séance ? Restez près des commandes. Vous pouvez repasser au contrôle manuel à tout moment.';
+
+  @override
+  String get indoorTreadmillSafety =>
+      'Attachez la clé de sécurité et restez près des commandes. Confirmez seulement les petits changements, jusqu’à 0,5 km/h ou 1% de pente. Utilisez l’appareil pour les autres changements.';
+
+  @override
+  String get recordingTime => 'Durée d’enregistrement';
+
+  @override
+  String get recordingSpeed => 'Vitesse';
+
+  @override
+  String get recordingPower => 'Puissance';
+
+  @override
+  String get recordingCadence => 'Cadence';
+
+  @override
+  String get recordingIncline => 'Pente';
+
+  @override
+  String get recordingResistance => 'Résistance';
+
+  @override
+  String get recordingSource => 'Source';
+
+  @override
+  String get recordingNext => 'Étape suivante';
+
+  @override
+  String get recordingConnecting => 'Connexion en cours';
+
+  @override
+  String get recordingReconnecting => 'Reconnexion en cours';
+
+  @override
+  String get recordingInterrupted => 'Interrompu';
+
+  @override
+  String get recordingPaused => 'En pause';
+
+  @override
+  String get indoorMatrixReadOnly =>
+      'Enregistrement uniquement sur les tapis Matrix. Réglez vitesse et pente sur la console ; le contrôle à distance n’est pas vérifié pour ce modèle.';
+
+  @override
+  String ecgCoverage(String value) {
+    return '$value% des échantillons capturés';
+  }
+
+  @override
+  String get recordingBeforeRestore =>
+      'Terminez l’enregistrement avant de restaurer une sauvegarde.';
+
+  @override
+  String get gymTitle => 'Tapis de course en salle';
+
+  @override
+  String get gymDescription =>
+      'Enregistrez avec votre téléphone, importez les séances xID ou scannez le résumé de la console.';
+
+  @override
+  String get gymDirectConnection => 'Connexion directe';
+
+  @override
+  String get gymConsoleSupport =>
+      'Les connexions dépendent de la console. Une ancienne console Matrix peut proposer xID plutôt que des données Bluetooth en direct.';
+
+  @override
+  String get gymFindEquipment => 'Rechercher des appareils';
+
+  @override
+  String get gymLiveAvailable =>
+      'Cette console peut envoyer les données directement à Fjelia.';
+
+  @override
+  String get gymLiveUnavailable =>
+      'Aucune donnée en direct compatible. Importez les séances xID ou enregistrez un résumé de console.';
+
+  @override
+  String get gymSpeedOnly =>
+      'La vitesse et la cadence sont disponibles. Cette connexion ne fournit ni inclinaison ni commande à distance.';
+
+  @override
+  String get gymUseMachine => 'Utiliser cet appareil';
+
+  @override
+  String get gymConnectionReport => 'Rapport de connexion';
+
+  @override
+  String get gymShareReport => 'Partager le rapport de connexion';
+
+  @override
+  String get gymXid => 'Matrix xID';
+
+  @override
+  String get gymXidDescription =>
+      'Importez les séances sur tapis enregistrées par le réseau xID de votre salle.';
+
+  @override
+  String get gymPortal => 'Portail Netpulse de la salle';
+
+  @override
+  String get gymPortalHelp =>
+      'Saisissez l’adresse du portail Netpulse fournie par votre salle.';
+
+  @override
+  String get gymPasscode => 'Code xID';
+
+  @override
+  String get gymSessionHelp =>
+      'Votre session est conservée de manière sécurisée. Votre code n’est pas enregistré.';
+
+  @override
+  String get gymAutoSync => 'Synchroniser automatiquement les séances xID';
+
+  @override
+  String gymLastDays(int days) {
+    return '$days derniers jours';
+  }
+
+  @override
+  String get gymLoadWorkouts => 'Charger les séances';
+
+  @override
+  String get gymNoWorkouts =>
+      'Aucune séance sur tapis trouvée pour cette période.';
+
+  @override
+  String gymSkipped(int count) {
+    return '$count séances illisibles ignorées.';
+  }
+
+  @override
+  String gymImported(int count, int duplicates) {
+    return '$count séances importées ; $duplicates doublons ignorés.';
+  }
+
+  @override
+  String get gymSummary => 'Résumé du tapis';
+
+  @override
+  String get gymSummaryDescription =>
+      'Photographiez l’écran final de la console, puis vérifiez les valeurs avant de les enregistrer.';
+
+  @override
+  String get gymTakePhoto => 'Prendre une photo';
+
+  @override
+  String get gymChoosePhoto => 'Choisir une photo';
+
+  @override
+  String get gymReview =>
+      'Vérifiez les unités, l’heure et les valeurs. Les photos sont lues sur votre téléphone. Seul le résumé est enregistré.';
+
+  @override
+  String get gymStartTime => 'Début de la séance';
+
+  @override
+  String get gymDurationHelp =>
+      'Saisissez mm:ss ou hh:mm:ss, par exemple 30:00.';
+
+  @override
+  String get gymDistanceUnit => 'Unité de distance';
+
+  @override
+  String get gymCalories => 'Calories';
+
+  @override
+  String get manualRecordTitle => 'Enregistrer une activité';
+
+  @override
+  String get manualRecordDescription =>
+      'Enregistrez une activité avec GPS, ECG et fréquence cardiaque en option. L’enregistrement continue si vous changez d’app ou verrouillez l’écran, jusqu’à Pause ou Arrêter.';
+
+  @override
+  String get manualTreadmill => 'Course sur tapis';
+
+  @override
+  String get manualChooseH10 => 'Choisir un Polar H10';
+
+  @override
+  String get manualRecordEcg => 'Enregistrer l’ECG avec Polar H10';
+
+  @override
+  String get manualChooseHelp =>
+      'Choisissez un Polar H10 pour enregistrer l’ECG et la fréquence cardiaque.';
+
+  @override
+  String manualEcgSegments(int count) {
+    return 'Segments ECG liés : $count';
+  }
+
+  @override
+  String get manualEcgInterrupted =>
+      'ECG arrêté. Le chronomètre de l’activité continue.';
+
+  @override
+  String get manualRestartEcg => 'Relancer l’enregistrement ECG';
+
+  @override
+  String get manualFinalDistance => 'Distance finale (facultatif)';
+
+  @override
+  String get manualDiscardNote =>
+      'Abandonner cette activité ? Les enregistrements ECG restent dans l’historique ECG.';
+
+  @override
+  String get manualRecordHeartRate => 'Enregistrer la fréquence cardiaque';
+
+  @override
+  String get manualChooseHr => 'Choisir un capteur cardiaque';
+
+  @override
+  String get manualHrWithEcg => 'Utilise la même connexion H10 que l’ECG.';
+
+  @override
+  String get manualRecordGps => 'Enregistrer le parcours GPS et la distance';
+
+  @override
+  String get manualGpsHelp =>
+      'Pour les activités en extérieur. Autorisez la position précise pour enregistrer écran éteint.';
+
+  @override
+  String get manualGpsWaiting => 'En attente d’une position GPS précise';
+
+  @override
+  String manualGpsAccuracy(int meters) {
+    return 'Précision GPS : $meters m';
+  }
+
+  @override
+  String get manualRecordBp => 'Inclure les mesures de tension';
+
+  @override
+  String get manualBpHelp =>
+      'Affiche les mesures Hilo, Aktiia et Health prises pendant l’enregistrement, même après une synchronisation ultérieure.';
+
+  @override
+  String get manualBpUnavailable =>
+      'Impossible de charger les mesures de tension.';
+
+  @override
+  String get manualBpEmpty =>
+      'Aucune mesure de tension pendant cet enregistrement.';
+
+  @override
+  String get manualHrDisconnected => 'Capteur cardiaque déconnecté.';
+
+  @override
+  String get manualReconnectHr => 'Reconnecter le capteur cardiaque';
+
+  @override
+  String get manualBackgroundNotification =>
+      'L’enregistrement continue écran éteint';
+
+  @override
+  String get ecgAskCoach => 'En parler au coach IA';
+
+  @override
+  String get ecgCoachWarningTitle => 'Pas un avis médical';
+
+  @override
+  String get ecgCoachWarningBody =>
+      'Le coach IA n\'est pas un médecin et ne peut pas poser de diagnostic. Un ECG de ceinture thoracique n\'a qu\'une seule dérivation : il ne peut pas exclure un infarctus ou une autre maladie cardiaque, et l\'analyse peut être fausse.\n\nDouleur ou oppression dans la poitrine, essoufflement, douleur dans le bras, la mâchoire ou le dos, sueurs froides ou malaise : appelle le 112 maintenant. N\'attends pas la réponse de l\'IA.\n\nLes valeurs analysées et 10 secondes du signal brut sont envoyées au modèle d\'IA choisi dans les réglages IA.';
+
+  @override
+  String get ecgCoachUnderstood => 'J\'ai compris';
+
+  @override
+  String get ecgCoachBanner =>
+      'Pas un avis médical. L\'IA n\'est pas un médecin et ne peut pas exclure un infarctus. Urgence : appelle le 112.';
+
+  @override
+  String get ecgCoachCardTitle => 'Pré-analyse ECG';
+
+  @override
+  String get statusMeasured => 'Mesuré';
+
+  @override
+  String get ecgQuestionOverview => 'Que montre mon ECG ?';
+
+  @override
+  String get ecgQuestionRhythm => 'Mon rythme cardiaque est-il régulier ?';
+
+  @override
+  String get ecgQuestionDoctor => 'Un médecin devrait-il regarder cela ?';
+
+  @override
+  String get ecgFollowSymptoms =>
+      'Quels symptômes doivent m\'amener chez le médecin ?';
+
+  @override
+  String get ecgFollowRiskFactors => 'Que changent mes facteurs de risque ?';
+
+  @override
+  String get ecgFollowTraining => 'Puis-je m\'entraîner normalement ?';
+
+  @override
+  String get ecgFollowBetterRecording =>
+      'Comment enregistrer un meilleur ECG ?';
+
+  @override
+  String get manualTreadmillConnect =>
+      'Connecter le tapis de course (Bluetooth, facultatif)';
+
+  @override
+  String get manualTreadmillHelp =>
+      'La vitesse, la distance et l\'inclinaison viennent alors du tapis. Sans connexion, saisis la distance à la fin.';
+
+  @override
+  String get sportIndoorCycling => 'Vélo d’intérieur';
+
+  @override
+  String get sportElliptical => 'Vélo elliptique';
+
+  @override
+  String get sportStairClimber => 'Stepper';
+
+  @override
+  String get manualWrongMachine =>
+      'Cet appareil ne correspond pas au sport choisi.';
+
+  @override
+  String get manualEquipmentHelp =>
+      'Connecte un appareil Bluetooth (FTMS). La vitesse, la puissance, la cadence et la distance viennent de l’appareil.';
+
+  @override
+  String get plusTitle => 'Suivre';
+
+  @override
+  String get plusStartWorkout => 'Démarrer une séance';
+
+  @override
+  String get plusStartWorkoutHint =>
+      'En direct avec GPS, tapis ou vélo d’intérieur · ECG & pouls';
+
+  @override
+  String get plusGroupTraining => 'Entraînement';
+
+  @override
+  String get plusGroupHeart => 'Cœur & circulation';
+
+  @override
+  String get plusGroupBody => 'Corps';
+
+  @override
+  String get plusGroupRecovery => 'Récupération';
+
+  @override
+  String get plusLogWorkout => 'Ajouter une séance';
+
+  @override
+  String get plusLogWorkoutHint => 'Une séance passée, à la main';
+
+  @override
+  String get plusImport => 'Importer';
+
+  @override
+  String get plusImportHint => 'Strava, FIT, GPX, tapis de salle';
+
+  @override
+  String get plusEcg => 'Enregistrer un ECG';
+
+  @override
+  String get plusEcgHint => 'Polar H10 ou fichier ECG';
+
+  @override
+  String get plusHrv => 'Check VFC';
+
+  @override
+  String get plusHrvHint => 'Mesure courte avec Polar H10';
+
+  @override
+  String get plusBpMeasure => 'Mesurer la tension';
+
+  @override
+  String get plusBpMeasureHint => 'Brassard Hilo en Bluetooth';
+
+  @override
+  String get plusBpLog => 'Saisir la tension';
+
+  @override
+  String get plusBpLogHint => 'Entrer une mesure';
+
+  @override
+  String get plusBpReport => 'Rapport Hilo';
+
+  @override
+  String get plusBpReportHint => 'Importer le PDF';
+
+  @override
+  String get plusSpo2 => 'SpO₂ & pouls';
+
+  @override
+  String get plusSpo2Hint => 'Depuis un oxymètre';
+
+  @override
+  String get plusWeigh => 'Se peser';
+
+  @override
+  String get plusWeighHint => 'Balance RENPHO en Bluetooth';
+
+  @override
+  String get plusWeightLog => 'Saisir le poids';
+
+  @override
+  String get plusWeightLogHint => 'Poids, masse grasse, IMC';
+
+  @override
+  String get plusWaist => 'Tour de taille';
+
+  @override
+  String get plusWaistHint => 'Tour & rapports';
+
+  @override
+  String get plusGrip => 'Force de préhension';
+
+  @override
+  String get plusGripHint => 'Mesure au dynamomètre';
+
+  @override
+  String get plusSleep => 'Saisir le sommeil';
+
+  @override
+  String get plusSleepHint => 'Durée, profond et paradoxal';
+
+  @override
+  String get recPace => 'Allure (/km)';
+
+  @override
+  String get recAvgPace => 'Allure moy.';
+
+  @override
+  String get recPace500 => 'Allure (/500 m)';
+
+  @override
+  String get recSpeedKmh => 'Vitesse (km/h)';
+
+  @override
+  String get recPowerW => 'Puissance (W)';
+
+  @override
+  String get recDistanceKm => 'Distance (km)';
+
+  @override
+  String get recHeartRate => 'Fréquence cardiaque';
+
+  @override
+  String get recMap => 'Carte';
+
+  @override
+  String get recStart => 'Démarrer';
+
+  @override
+  String get recResume => 'Reprendre';
+
+  @override
+  String get recFinish => 'Terminer';
+
+  @override
+  String get recDiscard => 'Supprimer';
+
+  @override
+  String get recLive => 'Enregistrement';
+
+  @override
+  String get recNew => 'Nouvelle activité';
+
+  @override
+  String get recCadence => 'Cadence';
+
+  @override
+  String get recMachine => 'Appareil';
+
+  @override
+  String get recGps => 'GPS';
+
+  @override
+  String get recEcg => 'ECG';
+
+  @override
+  String get recBloodPressure => 'Tension';
+
+  @override
+  String get recBannerOpen => 'Touche pour ouvrir';
+
+  @override
+  String get bpActivityHint =>
+      'Les brassards mesurent souvent mal en mouvement. Les mesures avant ou après l’activité n’apparaissent pas ici.';
 }

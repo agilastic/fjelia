@@ -4365,13 +4365,304 @@
   "swimBeforeAfter": "Before: a familiar carbohydrate meal 1–4 h ahead. After: about 1 g carbohydrate per kg with 20–25 g protein; if you weighed yourself, drink about 1.5 l per kg lost, with some sodium.",
   "swimNoDuration": "No planned duration: water at the pool edge is enough for most swims; add a carbohydrate drink only for swims over 90 minutes.",
   "swimCarryPool": "No gels. Bottle at the pool edge: {bottles} × {bottleMl} ml; {drinkCarbs} g carbohydrate comes from the drink mix.",
-  "@swimCarryPool": {"placeholders": {"bottles": {"type": "String"}, "bottleMl": {"type": "String"}, "drinkCarbs": {"type": "String"}}},
+  "@swimCarryPool": {
+    "placeholders": {
+      "bottles": {
+        "type": "String"
+      },
+      "bottleMl": {
+        "type": "String"
+      },
+      "drinkCarbs": {
+        "type": "String"
+      }
+    }
+  },
   "swimCarryOpen": "No gels while swimming. At feeds: {bottles} × {bottleMl} ml; {drinkCarbs} g carbohydrate comes from the drink mix.",
-  "@swimCarryOpen": {"placeholders": {"bottles": {"type": "String"}, "bottleMl": {"type": "String"}, "drinkCarbs": {"type": "String"}}},
+  "@swimCarryOpen": {
+    "placeholders": {
+      "bottles": {
+        "type": "String"
+      },
+      "bottleMl": {
+        "type": "String"
+      },
+      "drinkCarbs": {
+        "type": "String"
+      }
+    }
+  },
   "swimPerBreak": "Per 20 minutes, at a break or feed: about {carbs} g carbs and {fluid} ml.",
-  "@swimPerBreak": {"placeholders": {"carbs": {"type": "String"}, "fluid": {"type": "String"}}},
+  "@swimPerBreak": {
+    "placeholders": {
+      "carbs": {
+        "type": "String"
+      },
+      "fluid": {
+        "type": "String"
+      }
+    }
+  },
   "feedsLabel": "Feeds (open water)",
   "feedsSupported": "Supported (boat, kayak, shore)",
   "feedsUnsupported": "Unsupported",
-  "feedsUnknown": "Not known"
+  "feedsUnknown": "Not known",
+  "ecgTitle": "ECG",
+  "ecgChooseDevice": "Choose Polar H10",
+  "ecgStart": "Record ECG",
+  "ecgStopSave": "Stop and save",
+  "ecgImport": "Import ECG file",
+  "ecgHistory": "ECG history",
+  "ecgWaveform": "Waveform",
+  "ecgReport": "Report",
+  "ecgExportCsv": "Export waveform (CSV)",
+  "ecgExportMetadata": "Export ECG metadata",
+  "ecgExportOriginal": "Share original file",
+  "ecgRecording": "Recording ECG",
+  "ecgRecordingDate": "Recording date and time",
+  "ecgLinkedWorkout": "Linked workout",
+  "ecgIndependent": "No linked workout",
+  "ecgNoRecordings": "No ECG recordings yet.",
+  "ecgSamples": "{count} samples",
+  "ecgSignalGaps": "{count} signal gaps",
+  "ecgDeleteConfirm": "Permanently delete this recording and its original file?",
+  "ecgDescription": "Record with Polar H10, import CSV waveforms or keep PDF reports.",
+  "ecgPrivacy": "Stored on this device and included in your backups. Raw signals are not sent to the coach.",
+  "ecgLimitations": "For personal recording and review. ECG-derived HRV and signal quality are not validated here; no diagnosis or recovery score is calculated.",
+  "ecgImportLimitations": "Garmin and Apple Watch PDF exports are reports. Waveforms require CSV columns time_seconds (or time_ms) and ecg_uv (or ecg_mv).",
+  "ecgReportOnly": "Report only. No raw waveform samples are available. Share the original file to view the report.",
+  "indoorTitle": "Indoor Training",
+  "indoorEquipment": "Fitness equipment",
+  "indoorChooseEquipment": "Choose equipment",
+  "indoorChooseHeartRate": "Choose heart-rate sensor",
+  "indoorStart": "Start recording",
+  "indoorPause": "Pause recording",
+  "indoorFinish": "Finish and save",
+  "indoorSaved": "Saved to activity history",
+  "indoorExportFit": "Share FIT activity",
+  "indoorUnfinished": "Unfinished recordings",
+  "indoorReviewResume": "Review or resume",
+  "indoorDiscard": "Discard recording",
+  "indoorDiscardConfirm": "Permanently discard this unfinished recording?",
+  "indoorExternalHeartRate": "Use external heart-rate sensor",
+  "indoorEquipmentHeartRate": "Off: use heart rate from the equipment",
+  "indoorCurrentInterval": "Current interval",
+  "indoorNextInterval": "Next interval",
+  "indoorPlanComplete": "Planned intervals complete",
+  "indoorAuthorizeControl": "Allow equipment control",
+  "indoorManualOverride": "Use manual control",
+  "indoorAutoPower": "Follow interval power automatically",
+  "indoorApplyTarget": "Apply target",
+  "indoorDescription": "Connect Bluetooth FTMS equipment and record an indoor workout.",
+  "indoorKeepOpen": "Recording continues when you switch apps or lock the screen. Pause stops recording metrics; use the equipment controls to pause the machine.",
+  "indoorFitHint": "Save the FIT file or open it in a compatible training app using the share sheet.",
+  "indoorNoEquipment": "No FTMS equipment found. Wake the machine and enable its Bluetooth connection.",
+  "indoorControlPrompt": "Allow Fjelia to change targets for this session? Stay near the machine controls. You can switch to manual control at any time.",
+  "indoorTreadmillSafety": "Attach the safety key and stay near the controls. Confirm only small changes, up to 0.5 km/h or 1% incline. Use the machine controls for larger changes.",
+  "recordingTime": "Recording time",
+  "recordingSpeed": "Speed",
+  "recordingPower": "Power",
+  "recordingCadence": "Cadence / stroke rate",
+  "recordingIncline": "Incline",
+  "recordingResistance": "Resistance",
+  "recordingSource": "Source",
+  "recordingNext": "Next step",
+  "recordingConnecting": "Connecting",
+  "recordingReconnecting": "Reconnecting",
+  "recordingInterrupted": "Interrupted",
+  "recordingPaused": "Paused",
+  "@ecgSamples": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@ecgSignalGaps": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "indoorMatrixReadOnly": "Matrix treadmill recording only. Use the console for speed and incline; remote control has not been verified for this model.",
+  "ecgCoverage": "{value}% sample coverage",
+  "recordingBeforeRestore": "Finish the device recording before restoring a backup.",
+  "@ecgCoverage": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "gymTitle": "Gym treadmills",
+  "gymDescription": "Record with your phone, import xID workouts, or scan the console summary.",
+  "gymDirectConnection": "Direct connection",
+  "gymConsoleSupport": "Connection options depend on the console. An older Matrix console may support xID instead of live Bluetooth data.",
+  "gymFindEquipment": "Find gym equipment",
+  "gymLiveAvailable": "This console can send workout data directly to Fjelia.",
+  "gymLiveUnavailable": "No supported live workout data found. Import xID workouts or save a console summary.",
+  "gymSpeedOnly": "Speed and cadence are available. This connection does not provide incline or remote control.",
+  "gymUseMachine": "Use this machine",
+  "gymConnectionReport": "Connection report",
+  "gymShareReport": "Share connection report",
+  "gymXid": "Matrix xID",
+  "gymXidDescription": "Import treadmill workouts saved by your gym’s xID network.",
+  "gymPortal": "Gym Netpulse portal",
+  "gymPortalHelp": "Enter the Netpulse portal address provided by your gym.",
+  "gymPasscode": "xID passcode",
+  "gymSessionHelp": "Your session is stored securely. Your passcode is not saved.",
+  "gymAutoSync": "Sync xID workouts automatically",
+  "gymLastDays": "Last {days} days",
+  "gymLoadWorkouts": "Load workouts",
+  "gymNoWorkouts": "No treadmill workouts found for this period.",
+  "gymSkipped": "{count} unreadable workouts skipped.",
+  "gymImported": "{count} workouts imported; {duplicates} duplicates skipped.",
+  "gymSummary": "Treadmill summary",
+  "gymSummaryDescription": "Photograph the final console screen, then review the values before saving.",
+  "gymTakePhoto": "Take photo",
+  "gymChoosePhoto": "Choose photo",
+  "gymReview": "Check the units, start time and values. Photos are read on your phone. Only the workout summary is saved.",
+  "gymStartTime": "Workout start",
+  "gymDurationHelp": "Enter mm:ss or hh:mm:ss, for example 30:00.",
+  "gymDistanceUnit": "Distance unit",
+  "gymCalories": "Calories",
+  "@gymLastDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "@gymSkipped": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@gymImported": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "duplicates": {
+        "type": "int"
+      }
+    }
+  },
+  "manualRecordTitle": "Record activity",
+  "manualRecordDescription": "Record an activity with optional GPS, ECG and heart rate. Recording continues when you switch apps or lock the screen, until you press Pause or Stop.",
+  "manualTreadmill": "Treadmill run",
+  "manualChooseH10": "Choose Polar H10",
+  "manualRecordEcg": "Record ECG with Polar H10",
+  "manualChooseHelp": "Choose a Polar H10 to record ECG and heart rate.",
+  "manualEcgSegments": "Linked ECG segments: {count}",
+  "manualEcgInterrupted": "ECG stopped. The activity timer is still running.",
+  "manualRestartEcg": "Restart ECG recording",
+  "manualFinalDistance": "Final distance (optional)",
+  "manualDiscardNote": "Discard this activity? ECG recordings stay in ECG history.",
+  "@manualEcgSegments": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "manualRecordHeartRate": "Record heart rate",
+  "manualChooseHr": "Choose a heart-rate sensor",
+  "manualHrWithEcg": "Uses the same H10 connection as ECG.",
+  "manualRecordGps": "Record GPS route and distance",
+  "manualGpsHelp": "For outdoor activities. Allow precise location to record your route with the screen off.",
+  "manualGpsWaiting": "Waiting for an accurate GPS fix",
+  "manualGpsAccuracy": "GPS accuracy: {meters} m",
+  "manualRecordBp": "Include blood pressure readings",
+  "manualBpHelp": "Shows Hilo, Aktiia and Health readings taken during this recording, including after later syncs.",
+  "manualBpUnavailable": "Blood pressure readings could not be loaded.",
+  "manualBpEmpty": "No blood pressure readings during this recording.",
+  "manualHrDisconnected": "Heart-rate sensor disconnected.",
+  "manualReconnectHr": "Reconnect heart-rate sensor",
+  "manualBackgroundNotification": "Recording continues with the screen off",
+  "@manualGpsAccuracy": {
+    "placeholders": {
+      "meters": {
+        "type": "int"
+      }
+    }
+  },
+  "ecgAskCoach": "Discuss with AI Coach",
+  "ecgCoachWarningTitle": "Not medical advice",
+  "ecgCoachWarningBody": "The AI Coach is not a doctor and cannot make a diagnosis. A chest-strap ECG has only one lead: it cannot rule out a heart attack or other heart disease, and the analysis can be wrong.\n\nChest pain or pressure, shortness of breath, pain in the arm, jaw or back, cold sweat or fainting: call 999 or 112 now. Do not wait for an answer from the AI.\n\nThe analysed figures and 10 seconds of the raw signal go to the AI model chosen in AI settings.",
+  "ecgCoachUnderstood": "I understand",
+  "ecgCoachBanner": "Not medical advice. The AI is not a doctor and cannot rule out a heart attack. Emergency: call 999 or 112.",
+  "ecgCoachCardTitle": "ECG pre-analysis",
+  "statusMeasured": "Measured",
+  "ecgQuestionOverview": "What does my ECG show?",
+  "ecgQuestionRhythm": "Is my heart rhythm regular?",
+  "ecgQuestionDoctor": "Should a doctor look at this?",
+  "ecgFollowSymptoms": "Which symptoms mean I should see a doctor?",
+  "ecgFollowRiskFactors": "How do my risk factors change this?",
+  "ecgFollowTraining": "Can I train normally?",
+  "ecgFollowBetterRecording": "How do I record a better ECG?",
+  "manualTreadmillConnect": "Connect treadmill (Bluetooth, optional)",
+  "manualTreadmillHelp": "Speed, distance and incline then come from the treadmill. Without a connection, enter the distance at the end.",
+  "sportIndoorCycling": "Indoor cycling",
+  "sportElliptical": "Elliptical",
+  "sportStairClimber": "Stair climber",
+  "manualWrongMachine": "This equipment does not match the chosen sport.",
+  "manualEquipmentHelp": "Connect Bluetooth (FTMS) equipment. Speed, power, cadence and distance come from the machine.",
+  "plusTitle": "Track",
+  "plusStartWorkout": "Start workout",
+  "plusStartWorkoutHint": "Live with GPS, treadmill or indoor bike · ECG & heart rate",
+  "plusGroupTraining": "Training",
+  "plusGroupHeart": "Heart & circulation",
+  "plusGroupBody": "Body",
+  "plusGroupRecovery": "Recovery",
+  "plusLogWorkout": "Log a workout",
+  "plusLogWorkoutHint": "Add a past session by hand",
+  "plusImport": "Import",
+  "plusImportHint": "Strava, FIT, GPX, gym treadmill",
+  "plusEcg": "Record ECG",
+  "plusEcgHint": "Polar H10 or ECG file",
+  "plusHrv": "HRV check",
+  "plusHrvHint": "Short reading with Polar H10",
+  "plusBpMeasure": "Measure BP",
+  "plusBpMeasureHint": "Hilo cuff via Bluetooth",
+  "plusBpLog": "Log BP",
+  "plusBpLogHint": "Type in a reading",
+  "plusBpReport": "Hilo report",
+  "plusBpReportHint": "Import the PDF",
+  "plusSpo2": "SpO₂ & pulse",
+  "plusSpo2Hint": "From a pulse oximeter",
+  "plusWeigh": "Weigh in",
+  "plusWeighHint": "RENPHO scale via Bluetooth",
+  "plusWeightLog": "Log weight",
+  "plusWeightLogHint": "Weight, body fat, BMI",
+  "plusWaist": "Waist",
+  "plusWaistHint": "Circumference & ratios",
+  "plusGrip": "Grip strength",
+  "plusGripHint": "Dynamometer reading",
+  "plusSleep": "Log sleep",
+  "plusSleepHint": "Duration, deep and REM",
+  "recPace": "Pace (/km)",
+  "recAvgPace": "Avg pace",
+  "recPace500": "Pace (/500 m)",
+  "recSpeedKmh": "Speed (km/h)",
+  "recPowerW": "Power (W)",
+  "recDistanceKm": "Distance (km)",
+  "recHeartRate": "Heart rate",
+  "recMap": "Map",
+  "recStart": "Start",
+  "recResume": "Resume",
+  "recFinish": "Finish",
+  "recDiscard": "Discard",
+  "recLive": "Recording",
+  "recNew": "New activity",
+  "recCadence": "Cadence",
+  "recMachine": "Equipment",
+  "recGps": "GPS",
+  "recEcg": "ECG",
+  "recBloodPressure": "Blood pressure",
+  "recBannerOpen": "Tap to open",
+  "bpActivityHint": "Cuffs often cannot measure while you move. Readings from before or after the activity are not shown here."
 }

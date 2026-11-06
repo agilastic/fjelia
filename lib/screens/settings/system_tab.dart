@@ -17,6 +17,7 @@ import '../../widgets/activity_file_import_sheet.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/settings_widgets.dart';
 import '../../l10n/app_localizations.dart';
+import '../../providers/ecg_provider.dart';
 import 'bug_report_sheet.dart';
 
 class SystemTab extends StatelessWidget {
@@ -176,6 +177,18 @@ class _ExportState extends ConsumerState<DataExportPage> {
           title: context.l10n.activities,
           footer: context.l10n.exportAllRecordedWorkoutsAs,
           children: [
+            ListTile(
+              enabled: !busy,
+              title: Text(context.l10n.ecgExportMetadata),
+              leading: const SettingsIcon(Icons.monitor_heart_outlined, mint),
+              trailing: const Icon(Icons.chevron_right, size: 20),
+              onTap: () => run(() async {
+                final file = await ref
+                    .read(ecgStorageProvider)
+                    .exportMetadataCsv();
+                await share(file.path);
+              }),
+            ),
             ListTile(
               enabled: !busy,
               title: Text(context.l10n.exportActivitiesCsv),

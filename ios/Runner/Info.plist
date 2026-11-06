@@ -67,7 +67,7 @@
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Fjelia uses the microphone for the sound of videos you record for a workout.</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Fjelia uses Bluetooth to connect to your health devices (Hilo, Aktiia, Garmin).</string>
+	<string>Fjelia connects to health and training devices to record ECG, heart rate and workout data, including while the screen is locked.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>Fjelia uses Bluetooth to connect to your health devices.</string>
 	<key>NSHealthShareUsageDescription</key>
@@ -75,9 +75,14 @@
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Fjelia writes your synced HRV, heart rate, sleep, steps and workout data to Apple Health so you don't lose it if you switch apps.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Fjelia only uses your location while the app is open, to evaluate heat risk for planned workouts.</string>
+	<string>Fjelia records your workout route when you enable GPS, including while you use another app or lock the screen. Location recording ends when you pause or stop.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Fjelia uses your current location to evaluate heat risk for planned workouts.</string>
+	<string>Fjelia uses location for workout routes when you enable GPS and to evaluate heat risk for planned workouts.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>bluetooth-central</string>
+		<string>location</string>
+	</array>
 	<key>UTImportedTypeDeclarations</key>
 	<array>
 		<dict>

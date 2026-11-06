@@ -203,6 +203,101 @@ void main() {
     });
   });
 
+  group('an ECG recording', () {
+    const ecg =
+        '[ECG:Key,Quality:good,Analysed:60s,OneChestStrapLead,HR:60bpm,Pattern:regular,Premature:0,Pauses>2s:0,QRS:85ms,PR:177ms,ST60:-1uV,QTcF:408ms]\n'
+        '[ECG:Summary,Device:Polar H10,Source:Polar H10,Recorded:2026-11-05 08:00,Situation:not linked to a workout,Lead:single chest-strap lead (not a 12-lead ECG; electrode position not standardised),Rate:130Hz (7.7ms per sample),Duration:60s,Analysed:60s in 6 of 6 windows,Quality:good,PacerSpikes:not assessable below 500Hz]\n'
+        '[ECG:Rhythm,RR:58,HRmean:60bpm,HRmin5beat:58bpm,HRmax5beat:63bpm,RRmedian:1000ms,Pattern:regular,PrematureBeats:0 (same QRS shape:0 different QRS shape:0)]\n'
+        '[ECG:Beat,TemplateBeats:59,ShapeConsistency:1.00,QRSpolarity:positive,R:1189uV,S:-251uV,QRS:85ms,P:130uV,PR:177ms,STatJ+60ms:-1uV,T:+305uV upright,QT:408ms,QTcBazett:408ms,QTcFridericia:408ms]\n'
+        '[ECG:Raw,Start:40.0s,Hz:130,Rpeaks s from start:0.50 1.50,uV as recorded:1 -7 11 -8 11]\n'
+        '[HRV:Latest:52ms,Avg7d:55ms]';
+
+    test('is recognised as an ECG chat', () {
+      expect(coachTaskFor(ecg), CoachTask.ecg);
+      expect(followUpQuestions(CoachTask.ecg), hasLength(3));
+    });
+
+    test('the cloud prompt ends with the ECG safety rules', () async {
+      FlutterSecureStorage.setMockInitialValues({
+        'ai_coach_api_key_openai': 'test-key',
+      });
+      late String body;
+      final client = AiCoachClient(
+        client: MockClient((request) async {
+          body = request.body;
+          return http.Response('{}', 200);
+        }),
+      );
+      try {
+        await client.send(
+          const AiCoachSettings(
+            provider: AiProvider.openai,
+            model: 'test-model',
+            hasApiKey: true,
+            enabled: true,
+            consentMode: AiConsentMode.session,
+          ),
+          [ChatMessage(text: 'What does my ECG show?', isUser: true)],
+          ecg,
+        );
+      } catch (_) {
+        // Only the request matters.
+      }
+      final sent = jsonDecode(body).toString();
+      expect(sent, contains('ECG RECORDING'));
+      expect(sent, contains('emergency number now'));
+      expect(sent, contains('cannot be confirmed or excluded with one lead'));
+      expect(sent, contains('uV as recorded'));
+      // The app shows the warning; the model analyses instead of declining.
+      expect(sent, contains('Going through the figures IS the task'));
+      expect(sent, contains('Do NOT open with a disclaimer'));
+      // After the chat style, so its limits on headings do not apply.
+      expect(
+        sent.indexOf('ECG RECORDING'),
+        greaterThan(sent.indexOf('RESPONSE STYLE')),
+      );
+    });
+
+    test('an ordinary chat does not get the ECG rules', () async {
+      FlutterSecureStorage.setMockInitialValues({
+        'ai_coach_api_key_openai': 'test-key',
+      });
+      late String body;
+      final client = AiCoachClient(
+        client: MockClient((request) async {
+          body = request.body;
+          return http.Response('{}', 200);
+        }),
+      );
+      try {
+        await client.send(
+          const AiCoachSettings(
+            provider: AiProvider.openai,
+            model: 'test-model',
+            hasApiKey: true,
+            enabled: true,
+            consentMode: AiConsentMode.session,
+          ),
+          [ChatMessage(text: 'Am I recovered?', isUser: true)],
+          '[HRV:Latest:52ms,Avg7d:55ms]',
+        );
+      } catch (_) {}
+      expect(body, isNot(contains('ECG RECORDING')));
+    });
+
+    test('the Apple prompt keeps the analysis and drops the raw samples', () {
+      final request = AppleCoachRequest.build([
+        const ChatMessage(text: 'What does my ECG show?', isUser: true),
+      ], ecg);
+      expect(request.inputBytes, lessThanOrEqualTo(3000));
+      expect(
+        request.instructions,
+        contains(coachTaskTemplateShort(CoachTask.ecg)),
+      );
+      expect(request.prompt, contains('408'));
+    });
+  });
+
   test('the training status is worded as an estimate', () {
     final request = AppleCoachRequest.build([
       ChatMessage(text: 'Am I fit?', isUser: true),

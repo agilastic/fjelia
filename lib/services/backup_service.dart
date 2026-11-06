@@ -80,6 +80,9 @@ const _oldestRestorableSchema = 44;
 /// Tables added after the oldest restorable schema, with the schema that
 /// added them. A backup older than that has no such table, and none is owed.
 const _tableAddedIn = {
+  'ecg_recordings': 63,
+  'ecg_sample_chunks': 63,
+  'indoor_recordings': 63,
   'activity_titles': 60,
   'deleted_activities': 58,
   'waist_measurements': 57,
@@ -125,7 +128,7 @@ const _installationLocal = {
 const _reminderPreferences = 'hrv_reminder_preferences';
 
 class BackupService {
-  BackupService(this.db, {this.afterRestore, this.mediaRoot});
+  BackupService(this.db, {this.beforeRestore, this.afterRestore, this.mediaRoot});
   final AppDatabase db;
 
   /// Where the media folder lives; the app's support folder unless given.
@@ -136,6 +139,7 @@ class BackupService {
   /// Runs once a restore has committed, for work outside the database such as
   /// removing stale operating-system notifications.
   final Future<void> Function()? afterRestore;
+  final Future<void> Function()? beforeRestore;
   static const _storage = FlutterSecureStorage();
   static bool _include(String key) =>
       key == 'user_profile_v1' ||
@@ -267,6 +271,7 @@ class BackupService {
     Object zip,
     void Function(BackupRestoreProgress)? onProgress,
   ) async {
+    await beforeRestore?.call();
     AppDatabase? source;
     Directory? temporary;
     try {

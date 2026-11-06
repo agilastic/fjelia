@@ -1,10 +1,12 @@
 import AVFoundation
+import CoreLocation
 import ImageIO
 import Flutter
 import HealthKit
 import PDFKit
 import UIKit
 import UserNotifications
+import Vision
 // Needed for FlutterLocalNotificationsPlugin.setPluginRegistrantCallback.
 import flutter_local_notifications
 // The plugins the headless workout check uses.
@@ -34,11 +36,17 @@ import shared_preferences_foundation
       GeneratedPluginRegistrant.register(with: registry)
     }
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
+    if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "ActivityRecordingChannel") {
+      ActivityRecordingChannel.shared.attach(messenger: registrar.messenger())
+    }
     if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "LocalModelChannel") {
       LocalModelChannel.register(messenger: registrar.messenger())
     }
     if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "PdfTextChannel") {
       PdfTextChannel.register(messenger: registrar.messenger())
+    }
+    if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "WorkoutTextChannel") {
+      WorkoutTextChannel.register(messenger: registrar.messenger())
     }
     if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "MediaChannel") {
       MediaChannel.register(messenger: registrar.messenger())
@@ -48,6 +56,119 @@ import shared_preferences_foundation
     }
     if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "HealthWorkoutObserver") {
       HealthWorkoutObserver.shared.attach(messenger: registrar.messenger())
+    }
+  }
+}
+
+/// A user-started workout can receive GPS and BLE events while locked. This
+/// does not use a finite UIApplication background task or keep the screen on.
+final class ActivityRecordingChannel: NSObject, CLLocationManagerDelegate {
+  static let shared = ActivityRecordingChannel()
+  private let manager = CLLocationManager()
+  private var channel: FlutterMethodChannel?
+  private var session: CLBackgroundActivitySession?
+  private var recordingGPS = false
+
+  func attach(messenger: FlutterBinaryMessenger) {
+    let channel = FlutterMethodChannel(name: "fjelia/activity_recording", binaryMessenger: messenger)
+    self.channel = channel
+    manager.delegate = self
+    manager.activityType = .fitness
+    manager.desiredAccuracy = kCLLocationAccuracyBest
+    manager.distanceFilter = 3
+    manager.pausesLocationUpdatesAutomatically = false
+    manager.showsBackgroundLocationIndicator = true
+    channel.setMethodCallHandler { [weak self] call, result in
+      if call.method == "clock" {
+        var info = mach_timebase_info_data_t()
+        mach_timebase_info(&info)
+        result(Int64(Double(mach_continuous_time()) * Double(info.numer) / Double(info.denom) / 1_000_000))
+        return
+      }
+      guard let self, call.method == "configure", let args = call.arguments as? [String: Any] else {
+        result(FlutterMethodNotImplemented)
+        return
+      }
+      let gps = args["active"] as? Bool == true && args["gps"] as? Bool == true
+      if gps && !self.recordingGPS {
+        guard CLLocationManager.locationServicesEnabled(),
+          [.authorizedWhenInUse, .authorizedAlways].contains(self.manager.authorizationStatus) else {
+          result(FlutterError(code: "location_permission", message: "Allow location access to record GPS.", details: nil))
+          return
+        }
+        self.manager.allowsBackgroundLocationUpdates = true
+        self.session = CLBackgroundActivitySession()
+        self.recordingGPS = true
+        self.manager.startUpdatingLocation()
+      } else if !gps {
+        self.recordingGPS = false
+        self.manager.stopUpdatingLocation()
+        self.manager.allowsBackgroundLocationUpdates = false
+        self.session?.invalidate()
+        self.session = nil
+      }
+      result(nil)
+    }
+  }
+
+  func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    guard recordingGPS else { return }
+    for location in locations where location.horizontalAccuracy >= 0 {
+      var fix: [String: Any] = [
+        "t": location.timestamp.timeIntervalSince1970 * 1000,
+        "lat": location.coordinate.latitude, "lng": location.coordinate.longitude,
+        "accuracy": location.horizontalAccuracy,
+      ]
+      if location.verticalAccuracy >= 0 && location.verticalAccuracy <= 20 {
+        fix["altitude"] = location.altitude
+      }
+      if location.speed >= 0 { fix["speed"] = location.speed }
+      channel?.invokeMethod("location", arguments: fix)
+    }
+  }
+
+  func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+    guard recordingGPS else { return }
+    channel?.invokeMethod("error", arguments: "location_unavailable")
+  }
+}
+
+/// Console photos are recognized on the phone; no image is uploaded.
+final class WorkoutTextChannel {
+  static func register(messenger: FlutterBinaryMessenger) {
+    let channel = FlutterMethodChannel(name: "fjelia/workout_text", binaryMessenger: messenger)
+    channel.setMethodCallHandler { call, result in
+      guard call.method == "recognize", let path = call.arguments as? String else {
+        result(FlutterMethodNotImplemented)
+        return
+      }
+      DispatchQueue.global(qos: .userInitiated).async {
+        do {
+          let url = URL(fileURLWithPath: path)
+          guard let source = CGImageSourceCreateWithURL(url as CFURL, nil) else {
+            throw NSError(domain: "WorkoutText", code: 1)
+          }
+          let properties = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [CFString: Any]
+          let raw = (properties?[kCGImagePropertyOrientation] as? NSNumber)?.uint32Value ?? 1
+          let orientation = CGImagePropertyOrientation(rawValue: raw) ?? .up
+          let request = VNRecognizeTextRequest()
+          request.recognitionLevel = .accurate
+          request.usesLanguageCorrection = false
+          request.automaticallyDetectsLanguage = true
+          try VNImageRequestHandler(url: url, orientation: orientation).perform([request])
+          let lines: [[String: Any]] = (request.results ?? []).compactMap { observation in
+            guard let text = observation.topCandidates(1).first?.string else { return nil }
+            let box = observation.boundingBox
+            return ["text": text, "left": box.minX, "top": 1 - box.maxY,
+                    "width": box.width, "height": box.height]
+          }
+          DispatchQueue.main.async { result(lines) }
+        } catch {
+          DispatchQueue.main.async {
+            result(FlutterError(code: "workout_photo", message: "Could not read this photo. Try a clearer image or enter the values.", details: nil))
+          }
+        }
+      }
     }
   }
 }

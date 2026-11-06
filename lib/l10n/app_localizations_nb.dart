@@ -7195,4 +7195,659 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get feedsUnknown => 'Ukjent';
+
+  @override
+  String get ecgTitle => 'EKG';
+
+  @override
+  String get ecgChooseDevice => 'Velg Polar H10';
+
+  @override
+  String get ecgStart => 'Registrer EKG';
+
+  @override
+  String get ecgStopSave => 'Stopp og lagre';
+
+  @override
+  String get ecgImport => 'Importer EKG-fil';
+
+  @override
+  String get ecgHistory => 'EKG-historikk';
+
+  @override
+  String get ecgWaveform => 'Kurve';
+
+  @override
+  String get ecgReport => 'Rapport';
+
+  @override
+  String get ecgExportCsv => 'Eksporter kurve (CSV)';
+
+  @override
+  String get ecgExportMetadata => 'Eksporter EKG-metadata';
+
+  @override
+  String get ecgExportOriginal => 'Del originalfil';
+
+  @override
+  String get ecgRecording => 'Registrerer EKG';
+
+  @override
+  String get ecgRecordingDate => 'Dato og tid for opptaket';
+
+  @override
+  String get ecgLinkedWorkout => 'Tilknyttet økt';
+
+  @override
+  String get ecgIndependent => 'Ingen tilknyttet økt';
+
+  @override
+  String get ecgNoRecordings => 'Ingen EKG-opptak ennå.';
+
+  @override
+  String ecgSamples(int count) {
+    return '$count målepunkter';
+  }
+
+  @override
+  String ecgSignalGaps(int count) {
+    return '$count signalbrudd';
+  }
+
+  @override
+  String get ecgDeleteConfirm =>
+      'Slette dette opptaket og originalfilen permanent?';
+
+  @override
+  String get ecgDescription =>
+      'Registrer med Polar H10, importer CSV-kurver eller lagre PDF-rapporter.';
+
+  @override
+  String get ecgPrivacy =>
+      'Lagres på denne enheten og tas med i sikkerhetskopier. Råsignaler sendes ikke til treneren.';
+
+  @override
+  String get ecgLimitations =>
+      'For personlig registrering og gjennomgang. EKG-basert HRV og signalkvalitet er ikke validert her; det beregnes ingen diagnose eller restitusjonsscore.';
+
+  @override
+  String get ecgImportLimitations =>
+      'PDF-eksporter fra Garmin og Apple Watch er rapporter. Kurver krever CSV-kolonnene time_seconds (eller time_ms) og ecg_uv (eller ecg_mv).';
+
+  @override
+  String get ecgReportOnly =>
+      'Kun rapport. Ingen råkurve er tilgjengelig. Del originalfilen for å se rapporten.';
+
+  @override
+  String get indoorTitle => 'Innendørstrening';
+
+  @override
+  String get indoorEquipment => 'Treningsapparat';
+
+  @override
+  String get indoorChooseEquipment => 'Velg apparat';
+
+  @override
+  String get indoorChooseHeartRate => 'Velg pulssensor';
+
+  @override
+  String get indoorStart => 'Start opptak';
+
+  @override
+  String get indoorPause => 'Sett opptak på pause';
+
+  @override
+  String get indoorFinish => 'Avslutt og lagre';
+
+  @override
+  String get indoorSaved => 'Lagret i aktivitetshistorikken';
+
+  @override
+  String get indoorExportFit => 'Del FIT-aktivitet';
+
+  @override
+  String get indoorUnfinished => 'Uferdige opptak';
+
+  @override
+  String get indoorReviewResume => 'Se eller fortsett';
+
+  @override
+  String get indoorDiscard => 'Forkast opptak';
+
+  @override
+  String get indoorDiscardConfirm =>
+      'Forkaste dette uferdige opptaket permanent?';
+
+  @override
+  String get indoorExternalHeartRate => 'Bruk ekstern pulssensor';
+
+  @override
+  String get indoorEquipmentHeartRate => 'Av: bruk puls fra apparatet';
+
+  @override
+  String get indoorCurrentInterval => 'Gjeldende intervall';
+
+  @override
+  String get indoorNextInterval => 'Neste intervall';
+
+  @override
+  String get indoorPlanComplete => 'Planlagte intervaller fullført';
+
+  @override
+  String get indoorAuthorizeControl => 'Tillat apparatstyring';
+
+  @override
+  String get indoorManualOverride => 'Bruk manuell styring';
+
+  @override
+  String get indoorAutoPower => 'Følg intervalleffekten automatisk';
+
+  @override
+  String get indoorApplyTarget => 'Bruk målverdi';
+
+  @override
+  String get indoorDescription =>
+      'Koble til Bluetooth FTMS-utstyr og registrer en innendørsøkt.';
+
+  @override
+  String get indoorKeepOpen =>
+      'Opptaket fortsetter i en annen app eller med låst skjerm. Pause stopper målingene; bruk maskinens kontroller for å sette den på pause.';
+
+  @override
+  String get indoorFitHint =>
+      'Lagre FIT-filen eller åpne den i en kompatibel treningsapp via delingsmenyen.';
+
+  @override
+  String get indoorNoEquipment =>
+      'Fant ikke FTMS-utstyr. Slå på apparatet og aktiver Bluetooth-tilkoblingen.';
+
+  @override
+  String get indoorControlPrompt =>
+      'Tillate Fjelia å endre mål for denne økten? Hold deg nær apparatets kontroller. Du kan bytte til manuell styring når som helst.';
+
+  @override
+  String get indoorTreadmillSafety =>
+      'Fest sikkerhetsnøkkelen og hold deg nær kontrollene. Bekreft bare små endringer, opptil 0,5 km/t eller 1% stigning. Bruk apparatet for større endringer.';
+
+  @override
+  String get recordingTime => 'Opptakstid';
+
+  @override
+  String get recordingSpeed => 'Hastighet';
+
+  @override
+  String get recordingPower => 'Effekt';
+
+  @override
+  String get recordingCadence => 'Tråkk- / taktfrekvens';
+
+  @override
+  String get recordingIncline => 'Stigning';
+
+  @override
+  String get recordingResistance => 'Motstand';
+
+  @override
+  String get recordingSource => 'Kilde';
+
+  @override
+  String get recordingNext => 'Neste trinn';
+
+  @override
+  String get recordingConnecting => 'Kobler til';
+
+  @override
+  String get recordingReconnecting => 'Kobler til igjen';
+
+  @override
+  String get recordingInterrupted => 'Avbrutt';
+
+  @override
+  String get recordingPaused => 'På pause';
+
+  @override
+  String get indoorMatrixReadOnly =>
+      'Kun opptak på Matrix-tredemøller. Bruk konsollen for hastighet og stigning; fjernstyring er ikke bekreftet for denne modellen.';
+
+  @override
+  String ecgCoverage(String value) {
+    return '$value% av målepunktene registrert';
+  }
+
+  @override
+  String get recordingBeforeRestore =>
+      'Avslutt opptaket før du gjenoppretter en sikkerhetskopi.';
+
+  @override
+  String get gymTitle => 'Tredemøller på treningssenteret';
+
+  @override
+  String get gymDescription =>
+      'Registrer med telefonen, importer xID-økter eller skann konsollens oppsummering.';
+
+  @override
+  String get gymDirectConnection => 'Direkte tilkobling';
+
+  @override
+  String get gymConsoleSupport =>
+      'Tilkoblingen avhenger av konsollen. Eldre Matrix-konsoller kan tilby xID i stedet for Bluetooth-sanntidsdata.';
+
+  @override
+  String get gymFindEquipment => 'Finn treningsutstyr';
+
+  @override
+  String get gymLiveAvailable =>
+      'Denne konsollen kan sende treningsdata direkte til Fjelia.';
+
+  @override
+  String get gymLiveUnavailable =>
+      'Ingen støttede sanntidsdata funnet. Importer xID-økter eller lagre en konsolloppsummering.';
+
+  @override
+  String get gymSpeedOnly =>
+      'Hastighet og kadens er tilgjengelig. Denne tilkoblingen tilbyr ikke stigning eller fjernstyring.';
+
+  @override
+  String get gymUseMachine => 'Bruk dette utstyret';
+
+  @override
+  String get gymConnectionReport => 'Tilkoblingsrapport';
+
+  @override
+  String get gymShareReport => 'Del tilkoblingsrapport';
+
+  @override
+  String get gymXid => 'Matrix xID';
+
+  @override
+  String get gymXidDescription =>
+      'Importer tredemølleøkter lagret av treningssenterets xID-nettverk.';
+
+  @override
+  String get gymPortal => 'Senterets Netpulse-portal';
+
+  @override
+  String get gymPortalHelp =>
+      'Skriv inn Netpulse-portaladressen du har fått fra treningssenteret.';
+
+  @override
+  String get gymPasscode => 'xID-kode';
+
+  @override
+  String get gymSessionHelp =>
+      'Økten din lagres sikkert. Koden din lagres ikke.';
+
+  @override
+  String get gymAutoSync => 'Synkroniser xID-økter automatisk';
+
+  @override
+  String gymLastDays(int days) {
+    return 'Siste $days dager';
+  }
+
+  @override
+  String get gymLoadWorkouts => 'Hent treningsøkter';
+
+  @override
+  String get gymNoWorkouts =>
+      'Ingen tredemølleøkter funnet for denne perioden.';
+
+  @override
+  String gymSkipped(int count) {
+    return '$count uleselige treningsøkter hoppet over.';
+  }
+
+  @override
+  String gymImported(int count, int duplicates) {
+    return '$count treningsøkter importert; $duplicates duplikater hoppet over.';
+  }
+
+  @override
+  String get gymSummary => 'Tredemølleoppsummering';
+
+  @override
+  String get gymSummaryDescription =>
+      'Fotografer konsollens sluttskjerm og kontroller verdiene før du lagrer.';
+
+  @override
+  String get gymTakePhoto => 'Ta bilde';
+
+  @override
+  String get gymChoosePhoto => 'Velg bilde';
+
+  @override
+  String get gymReview =>
+      'Kontroller enheter, starttid og verdier. Bilder leses på telefonen din. Bare treningsoppsummeringen lagres.';
+
+  @override
+  String get gymStartTime => 'Treningsstart';
+
+  @override
+  String get gymDurationHelp =>
+      'Skriv inn mm:ss eller hh:mm:ss, for eksempel 30:00.';
+
+  @override
+  String get gymDistanceUnit => 'Avstandsenhet';
+
+  @override
+  String get gymCalories => 'Kalorier';
+
+  @override
+  String get manualRecordTitle => 'Registrer aktivitet';
+
+  @override
+  String get manualRecordDescription =>
+      'Ta opp en aktivitet med valgfri GPS, EKG og puls. Opptaket fortsetter når du bytter app eller låser skjermen, til du trykker Pause eller Stopp.';
+
+  @override
+  String get manualTreadmill => 'Løping på tredemølle';
+
+  @override
+  String get manualChooseH10 => 'Velg Polar H10';
+
+  @override
+  String get manualRecordEcg => 'Registrer EKG med Polar H10';
+
+  @override
+  String get manualChooseHelp => 'Velg en Polar H10 for å ta opp EKG og puls.';
+
+  @override
+  String manualEcgSegments(int count) {
+    return 'Tilknyttede EKG-segmenter: $count';
+  }
+
+  @override
+  String get manualEcgInterrupted =>
+      'EKG stoppet. Aktivitetens tidtaker fortsetter.';
+
+  @override
+  String get manualRestartEcg => 'Start EKG-opptak på nytt';
+
+  @override
+  String get manualFinalDistance => 'Endelig avstand (valgfritt)';
+
+  @override
+  String get manualDiscardNote =>
+      'Forkaste denne aktiviteten? EKG-opptakene blir i EKG-historikken.';
+
+  @override
+  String get manualRecordHeartRate => 'Ta opp puls';
+
+  @override
+  String get manualChooseHr => 'Velg en pulssensor';
+
+  @override
+  String get manualHrWithEcg => 'Bruker samme H10-tilkobling som EKG.';
+
+  @override
+  String get manualRecordGps => 'Ta opp GPS-rute og distanse';
+
+  @override
+  String get manualGpsHelp =>
+      'For utendørsaktiviteter. Tillat nøyaktig posisjon for opptak med avslått skjerm.';
+
+  @override
+  String get manualGpsWaiting => 'Venter på en nøyaktig GPS-posisjon';
+
+  @override
+  String manualGpsAccuracy(int meters) {
+    return 'GPS-nøyaktighet: $meters m';
+  }
+
+  @override
+  String get manualRecordBp => 'Ta med blodtrykksmålinger';
+
+  @override
+  String get manualBpHelp =>
+      'Viser målinger fra Hilo, Aktiia og Health tatt under opptaket, også etter senere synkronisering.';
+
+  @override
+  String get manualBpUnavailable => 'Kunne ikke laste blodtrykksmålinger.';
+
+  @override
+  String get manualBpEmpty => 'Ingen blodtrykksmålinger under dette opptaket.';
+
+  @override
+  String get manualHrDisconnected => 'Pulssensor frakoblet.';
+
+  @override
+  String get manualReconnectHr => 'Koble til pulssensor igjen';
+
+  @override
+  String get manualBackgroundNotification =>
+      'Opptaket fortsetter med avslått skjerm';
+
+  @override
+  String get ecgAskCoach => 'Snakk med KI-treneren om dette';
+
+  @override
+  String get ecgCoachWarningTitle => 'Ikke medisinsk råd';
+
+  @override
+  String get ecgCoachWarningBody =>
+      'KI-treneren er ikke lege og kan ikke stille en diagnose. Et EKG fra brystbelte har bare én avledning: det kan ikke utelukke hjerteinfarkt eller annen hjertesykdom, og analysen kan være feil.\n\nBrystsmerter eller trykk i brystet, tungpust, smerter i arm, kjeve eller rygg, kaldsvette eller besvimelse: ring 113 nå. Ikke vent på svar fra KI-en.\n\nDe analyserte verdiene og 10 sekunder av råsignalet går til KI-modellen som er valgt i KI-innstillinger.';
+
+  @override
+  String get ecgCoachUnderstood => 'Jeg forstår';
+
+  @override
+  String get ecgCoachBanner =>
+      'Ikke medisinsk råd. KI-en er ikke lege og kan ikke utelukke hjerteinfarkt. Nødsituasjon: ring 113.';
+
+  @override
+  String get ecgCoachCardTitle => 'EKG-foranalyse';
+
+  @override
+  String get statusMeasured => 'Målt';
+
+  @override
+  String get ecgQuestionOverview => 'Hva viser EKG-et mitt?';
+
+  @override
+  String get ecgQuestionRhythm => 'Er hjerterytmen min regelmessig?';
+
+  @override
+  String get ecgQuestionDoctor => 'Bør en lege se på dette?';
+
+  @override
+  String get ecgFollowSymptoms =>
+      'Hvilke symptomer betyr at jeg bør gå til lege?';
+
+  @override
+  String get ecgFollowRiskFactors => 'Hva endrer risikofaktorene mine?';
+
+  @override
+  String get ecgFollowTraining => 'Kan jeg trene som normalt?';
+
+  @override
+  String get ecgFollowBetterRecording => 'Hvordan tar jeg opp et bedre EKG?';
+
+  @override
+  String get manualTreadmillConnect =>
+      'Koble til tredemølle (Bluetooth, valgfritt)';
+
+  @override
+  String get manualTreadmillHelp =>
+      'Fart, distanse og stigning kommer da fra tredemøllen. Uten tilkobling legger du inn distansen til slutt.';
+
+  @override
+  String get sportIndoorCycling => 'Innendørssykling';
+
+  @override
+  String get sportElliptical => 'Crosstrainer';
+
+  @override
+  String get sportStairClimber => 'Trappemaskin';
+
+  @override
+  String get manualWrongMachine =>
+      'Dette apparatet passer ikke til valgt idrett.';
+
+  @override
+  String get manualEquipmentHelp =>
+      'Koble til et Bluetooth-apparat (FTMS). Fart, effekt, kadens og distanse kommer fra apparatet.';
+
+  @override
+  String get plusTitle => 'Registrer';
+
+  @override
+  String get plusStartWorkout => 'Start trening';
+
+  @override
+  String get plusStartWorkoutHint =>
+      'Live med GPS, tredemølle eller innendørssykkel · EKG og puls';
+
+  @override
+  String get plusGroupTraining => 'Trening';
+
+  @override
+  String get plusGroupHeart => 'Hjerte og sirkulasjon';
+
+  @override
+  String get plusGroupBody => 'Kropp';
+
+  @override
+  String get plusGroupRecovery => 'Restitusjon';
+
+  @override
+  String get plusLogWorkout => 'Legg inn trening';
+
+  @override
+  String get plusLogWorkoutHint => 'En tidligere økt, manuelt';
+
+  @override
+  String get plusImport => 'Importer';
+
+  @override
+  String get plusImportHint => 'Strava, FIT, GPX, tredemølle på senteret';
+
+  @override
+  String get plusEcg => 'Ta opp EKG';
+
+  @override
+  String get plusEcgHint => 'Polar H10 eller EKG-fil';
+
+  @override
+  String get plusHrv => 'HRV-sjekk';
+
+  @override
+  String get plusHrvHint => 'Kort måling med Polar H10';
+
+  @override
+  String get plusBpMeasure => 'Mål blodtrykk';
+
+  @override
+  String get plusBpMeasureHint => 'Hilo-mansjett via Bluetooth';
+
+  @override
+  String get plusBpLog => 'Legg inn blodtrykk';
+
+  @override
+  String get plusBpLogHint => 'Skriv inn en måling';
+
+  @override
+  String get plusBpReport => 'Hilo-rapport';
+
+  @override
+  String get plusBpReportHint => 'Importer PDF';
+
+  @override
+  String get plusSpo2 => 'SpO₂ og puls';
+
+  @override
+  String get plusSpo2Hint => 'Fra pulsoksymeter';
+
+  @override
+  String get plusWeigh => 'Vei deg';
+
+  @override
+  String get plusWeighHint => 'RENPHO-vekt via Bluetooth';
+
+  @override
+  String get plusWeightLog => 'Legg inn vekt';
+
+  @override
+  String get plusWeightLogHint => 'Vekt, fett, BMI';
+
+  @override
+  String get plusWaist => 'Midje';
+
+  @override
+  String get plusWaistHint => 'Omkrets og forhold';
+
+  @override
+  String get plusGrip => 'Grepsstyrke';
+
+  @override
+  String get plusGripHint => 'Verdi fra dynamometer';
+
+  @override
+  String get plusSleep => 'Legg inn søvn';
+
+  @override
+  String get plusSleepHint => 'Varighet, dyp og REM';
+
+  @override
+  String get recPace => 'Tempo (/km)';
+
+  @override
+  String get recAvgPace => 'Snittempo';
+
+  @override
+  String get recPace500 => 'Tempo (/500 m)';
+
+  @override
+  String get recSpeedKmh => 'Fart (km/t)';
+
+  @override
+  String get recPowerW => 'Effekt (W)';
+
+  @override
+  String get recDistanceKm => 'Distanse (km)';
+
+  @override
+  String get recHeartRate => 'Puls';
+
+  @override
+  String get recMap => 'Kart';
+
+  @override
+  String get recStart => 'Start';
+
+  @override
+  String get recResume => 'Fortsett';
+
+  @override
+  String get recFinish => 'Ferdig';
+
+  @override
+  String get recDiscard => 'Forkast';
+
+  @override
+  String get recLive => 'Tar opp';
+
+  @override
+  String get recNew => 'Ny aktivitet';
+
+  @override
+  String get recCadence => 'Kadens';
+
+  @override
+  String get recMachine => 'Apparat';
+
+  @override
+  String get recGps => 'GPS';
+
+  @override
+  String get recEcg => 'EKG';
+
+  @override
+  String get recBloodPressure => 'Blodtrykk';
+
+  @override
+  String get recBannerOpen => 'Trykk for å åpne';
+
+  @override
+  String get bpActivityHint =>
+      'Mansjetter måler ofte ikke mens du beveger deg. Målinger før eller etter aktiviteten vises ikke her.';
 }

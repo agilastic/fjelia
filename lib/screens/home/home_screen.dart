@@ -14,12 +14,14 @@ import '../../providers/body_measurements_provider.dart';
 import '../../providers/grip_strength_provider.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/history_sync_card.dart';
+import '../../widgets/recording_banner.dart';
 import '../../widgets/day_navigator.dart';
 import '../../widgets/plan_view_switcher.dart';
 import '../../widgets/spinning_sync_icon.dart';
 import '../../widgets/day_summary_card.dart';
 import '../../widgets/health_monitor_grid.dart';
 import '../../widgets/hr_timeline_card.dart';
+import '../../widgets/ecg_sheet.dart';
 import '../../widgets/grip_strength_sheet.dart';
 import '../../widgets/bio_age_card.dart';
 import '../../widgets/briefing_card.dart';
@@ -151,6 +153,7 @@ class _HomeState extends ConsumerState<HomeScreen> {
               ),
             ),
           ],
+          const RecordingBanner(),
           const HistorySyncCard(),
           if (sync.errorMessage != null)
             Padding(
@@ -175,6 +178,8 @@ class _HomeState extends ConsumerState<HomeScreen> {
                   initialPrompt: coachRequest?.prompt,
                   activity: coachRequest?.activity,
                   contextCard: coachRequest?.card,
+                  autoSend: coachRequest?.autoSend ?? false,
+                  onAutoSent: () => coachRequest?.autoSend = false,
                   onNewChat: () => setState(() {
                     coachRequest = null;
                     coachChat++;
@@ -390,6 +395,23 @@ class _HealthPage extends ConsumerWidget {
         ),
 
         if (vis['hr_timeline'] ?? true) const HrTimelineCard(),
+        SectionCard(
+          title: context.l10n.ecgTitle,
+          onTap: () => showAppSheet(context, const EcgSheet()),
+          child: Row(
+            children: [
+              const Icon(Icons.monitor_heart_outlined, color: mint),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  context.l10n.ecgDescription,
+                  style: const TextStyle(color: muted, fontSize: 12),
+                ),
+              ),
+              const Icon(Icons.chevron_right, color: muted),
+            ],
+          ),
+        ),
         if (vis['grip_strength'] ?? true)
           SectionCard(
             title: context.l10n.gripStrength,

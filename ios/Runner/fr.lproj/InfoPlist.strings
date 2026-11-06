@@ -1,9 +1,9 @@
-"NSBluetoothAlwaysUsageDescription" = "Fjelia utilise le Bluetooth pour se connecter à tes appareils de santé (Hilo, Aktiia, Garmin).";
+"NSBluetoothAlwaysUsageDescription" = "Fjelia connecte vos appareils de santé et de sport pour enregistrer ECG, fréquence cardiaque et entraînements, même écran verrouillé.";
 "NSBluetoothPeripheralUsageDescription" = "Fjelia utilise le Bluetooth pour se connecter à tes appareils de santé.";
 "NSHealthShareUsageDescription" = "Fjelia lit tes données de santé (sommeil, fréquence cardiaque, VFC, pas, SpO2) dans Apple Santé pour te proposer des analyses d'entraînement personnalisées.";
 "NSHealthUpdateUsageDescription" = "Fjelia écrit dans Apple Santé tes données synchronisées de VFC, fréquence cardiaque, sommeil, pas et séances afin que tu ne les perdes pas si tu changes d'app.";
-"NSLocationAlwaysAndWhenInUseUsageDescription" = "Fjelia n'utilise ta position que lorsque l'app est ouverte, pour évaluer le risque de chaleur des séances prévues.";
-"NSLocationWhenInUseUsageDescription" = "Fjelia utilise ta position actuelle pour évaluer le risque de chaleur des séances prévues.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Si vous activez le GPS, Fjelia enregistre votre parcours même dans une autre app ou écran verrouillé. Pause ou Arrêter termine la localisation.";
+"NSLocationWhenInUseUsageDescription" = "Fjelia utilise votre position pour les parcours avec GPS activé et pour évaluer le risque de chaleur des entraînements prévus.";
 "NSPhotoLibraryUsageDescription" = "Fjelia vous permet d’ajouter des photos et vidéos de votre photothèque à vos séances, objectifs de course et séances prévues.";
 "NSCameraUsageDescription" = "Fjelia utilise l’appareil photo lorsque vous prenez une photo ou une vidéo pour une séance, un objectif de course ou une séance prévue.";
 "NSMicrophoneUsageDescription" = "Fjelia utilise le micro pour le son des vidéos que vous filmez pour une séance.";

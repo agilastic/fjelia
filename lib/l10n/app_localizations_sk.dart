@@ -7221,4 +7221,658 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get feedsUnknown => 'Neznáme';
+
+  @override
+  String get ecgTitle => 'EKG';
+
+  @override
+  String get ecgChooseDevice => 'Vybrať Polar H10';
+
+  @override
+  String get ecgStart => 'Zaznamenať EKG';
+
+  @override
+  String get ecgStopSave => 'Zastaviť a uložiť';
+
+  @override
+  String get ecgImport => 'Importovať súbor EKG';
+
+  @override
+  String get ecgHistory => 'História EKG';
+
+  @override
+  String get ecgWaveform => 'Krivka';
+
+  @override
+  String get ecgReport => 'Správa';
+
+  @override
+  String get ecgExportCsv => 'Exportovať krivku (CSV)';
+
+  @override
+  String get ecgExportMetadata => 'Exportovať metadáta EKG';
+
+  @override
+  String get ecgExportOriginal => 'Zdieľať pôvodný súbor';
+
+  @override
+  String get ecgRecording => 'Zaznamenáva sa EKG';
+
+  @override
+  String get ecgRecordingDate => 'Dátum a čas záznamu';
+
+  @override
+  String get ecgLinkedWorkout => 'Priradený tréning';
+
+  @override
+  String get ecgIndependent => 'Bez priradeného tréningu';
+
+  @override
+  String get ecgNoRecordings => 'Zatiaľ žiadne záznamy EKG.';
+
+  @override
+  String ecgSamples(int count) {
+    return '$count vzoriek';
+  }
+
+  @override
+  String ecgSignalGaps(int count) {
+    return '$count výpadkov signálu';
+  }
+
+  @override
+  String get ecgDeleteConfirm =>
+      'Natrvalo odstrániť tento záznam aj pôvodný súbor?';
+
+  @override
+  String get ecgDescription =>
+      'Zaznamenávajte pomocou Polar H10, importujte krivky CSV alebo ukladajte správy PDF.';
+
+  @override
+  String get ecgPrivacy =>
+      'Uložené v tomto zariadení a zahrnuté do záloh. Surové signály sa neposielajú trénerovi.';
+
+  @override
+  String get ecgLimitations =>
+      'Na osobné zaznamenávanie a prezeranie. HRV z EKG a kvalita signálu tu nie sú overené; nevytvára sa diagnóza ani skóre zotavenia.';
+
+  @override
+  String get ecgImportLimitations =>
+      'Exporty PDF z Garmin a Apple Watch sú správy. Krivky vyžadujú stĺpce CSV time_seconds (alebo time_ms) a ecg_uv (alebo ecg_mv).';
+
+  @override
+  String get ecgReportOnly =>
+      'Iba správa. Surové vzorky krivky nie sú k dispozícii. Zdieľajte pôvodný súbor na zobrazenie správy.';
+
+  @override
+  String get indoorTitle => 'Tréning v interiéri';
+
+  @override
+  String get indoorEquipment => 'Tréningové zariadenie';
+
+  @override
+  String get indoorChooseEquipment => 'Vybrať zariadenie';
+
+  @override
+  String get indoorChooseHeartRate => 'Vybrať snímač tepu';
+
+  @override
+  String get indoorStart => 'Spustiť záznam';
+
+  @override
+  String get indoorPause => 'Pozastaviť záznam';
+
+  @override
+  String get indoorFinish => 'Ukončiť a uložiť';
+
+  @override
+  String get indoorSaved => 'Uložené do histórie aktivít';
+
+  @override
+  String get indoorExportFit => 'Zdieľať aktivitu FIT';
+
+  @override
+  String get indoorUnfinished => 'Nedokončené záznamy';
+
+  @override
+  String get indoorReviewResume => 'Prezrieť alebo pokračovať';
+
+  @override
+  String get indoorDiscard => 'Zahodiť záznam';
+
+  @override
+  String get indoorDiscardConfirm =>
+      'Natrvalo zahodiť tento nedokončený záznam?';
+
+  @override
+  String get indoorExternalHeartRate => 'Použiť externý snímač tepu';
+
+  @override
+  String get indoorEquipmentHeartRate => 'Vypnuté: použiť tep zo zariadenia';
+
+  @override
+  String get indoorCurrentInterval => 'Aktuálny interval';
+
+  @override
+  String get indoorNextInterval => 'Ďalší interval';
+
+  @override
+  String get indoorPlanComplete => 'Plánované intervaly dokončené';
+
+  @override
+  String get indoorAuthorizeControl => 'Povoliť ovládanie zariadenia';
+
+  @override
+  String get indoorManualOverride => 'Použiť ručné ovládanie';
+
+  @override
+  String get indoorAutoPower => 'Automaticky sledovať výkon intervalov';
+
+  @override
+  String get indoorApplyTarget => 'Použiť cieľ';
+
+  @override
+  String get indoorDescription =>
+      'Pripojte zariadenie Bluetooth FTMS a zaznamenajte tréning v interiéri.';
+
+  @override
+  String get indoorKeepOpen =>
+      'Záznam pokračuje v inej aplikácii alebo pri zamknutej obrazovke. Pozastavenie zastaví merania; stroj pozastavte jeho ovládacími prvkami.';
+
+  @override
+  String get indoorFitHint =>
+      'Uložte súbor FIT alebo ho otvorte v kompatibilnej tréningovej aplikácii cez ponuku zdieľania.';
+
+  @override
+  String get indoorNoEquipment =>
+      'Nenašlo sa zariadenie FTMS. Zapnite zariadenie a povoľte jeho pripojenie Bluetooth.';
+
+  @override
+  String get indoorControlPrompt =>
+      'Povoliť Fjelia meniť ciele tejto jednotky? Zostaňte pri ovládačoch zariadenia. Kedykoľvek môžete prepnúť na ručné ovládanie.';
+
+  @override
+  String get indoorTreadmillSafety =>
+      'Pripnite bezpečnostný kľúč a zostaňte pri ovládačoch. Potvrďte iba malé zmeny do 0,5 km/h alebo 1% sklonu. Väčšie zmeny vykonajte na zariadení.';
+
+  @override
+  String get recordingTime => 'Čas záznamu';
+
+  @override
+  String get recordingSpeed => 'Rýchlosť';
+
+  @override
+  String get recordingPower => 'Výkon';
+
+  @override
+  String get recordingCadence => 'Kadencia / frekvencia záberov';
+
+  @override
+  String get recordingIncline => 'Sklon';
+
+  @override
+  String get recordingResistance => 'Odpor';
+
+  @override
+  String get recordingSource => 'Zdroj';
+
+  @override
+  String get recordingNext => 'Ďalší krok';
+
+  @override
+  String get recordingConnecting => 'Pripájanie';
+
+  @override
+  String get recordingReconnecting => 'Opätovné pripájanie';
+
+  @override
+  String get recordingInterrupted => 'Prerušené';
+
+  @override
+  String get recordingPaused => 'Pozastavené';
+
+  @override
+  String get indoorMatrixReadOnly =>
+      'Na páse Matrix iba záznam. Rýchlosť a sklon nastavte na konzole; diaľkové ovládanie pre tento model nie je overené.';
+
+  @override
+  String ecgCoverage(String value) {
+    return '$value% zachytených vzoriek';
+  }
+
+  @override
+  String get recordingBeforeRestore =>
+      'Pred obnovením zálohy ukončite záznam zariadenia.';
+
+  @override
+  String get gymTitle => 'Bežecké pásy v posilňovni';
+
+  @override
+  String get gymDescription =>
+      'Nahrávaj telefónom, importuj tréningy xID alebo naskenuj súhrn konzoly.';
+
+  @override
+  String get gymDirectConnection => 'Priame pripojenie';
+
+  @override
+  String get gymConsoleSupport =>
+      'Pripojenie závisí od konzoly. Staršie konzoly Matrix môžu podporovať xID namiesto živých údajov cez Bluetooth.';
+
+  @override
+  String get gymFindEquipment => 'Nájsť zariadenia';
+
+  @override
+  String get gymLiveAvailable =>
+      'Táto konzola môže posielať tréningové údaje priamo do Fjelia.';
+
+  @override
+  String get gymLiveUnavailable =>
+      'Nenašli sa podporované živé údaje. Importuj tréningy xID alebo ulož súhrn konzoly.';
+
+  @override
+  String get gymSpeedOnly =>
+      'Rýchlosť a kadencia sú dostupné. Toto pripojenie neposkytuje sklon ani diaľkové ovládanie.';
+
+  @override
+  String get gymUseMachine => 'Použiť toto zariadenie';
+
+  @override
+  String get gymConnectionReport => 'Správa o pripojení';
+
+  @override
+  String get gymShareReport => 'Zdieľať správu o pripojení';
+
+  @override
+  String get gymXid => 'Matrix xID';
+
+  @override
+  String get gymXidDescription =>
+      'Importuj tréningy na páse uložené v sieti xID tvojej posilňovne.';
+
+  @override
+  String get gymPortal => 'Portál Netpulse posilňovne';
+
+  @override
+  String get gymPortalHelp =>
+      'Zadaj adresu portálu Netpulse, ktorú ti poskytla posilňovňa.';
+
+  @override
+  String get gymPasscode => 'Kód xID';
+
+  @override
+  String get gymSessionHelp =>
+      'Relácia je bezpečne uložená. Tvoj kód sa neukladá.';
+
+  @override
+  String get gymAutoSync => 'Automaticky synchronizovať tréningy xID';
+
+  @override
+  String gymLastDays(int days) {
+    return 'Posledných $days dní';
+  }
+
+  @override
+  String get gymLoadWorkouts => 'Načítať tréningy';
+
+  @override
+  String get gymNoWorkouts => 'V tomto období sa nenašli tréningy na páse.';
+
+  @override
+  String gymSkipped(int count) {
+    return '$count nečitateľných tréningov preskočených.';
+  }
+
+  @override
+  String gymImported(int count, int duplicates) {
+    return '$count tréningov importovaných; $duplicates duplikátov preskočených.';
+  }
+
+  @override
+  String get gymSummary => 'Súhrn bežeckého pásu';
+
+  @override
+  String get gymSummaryDescription =>
+      'Odfotografuj záverečnú obrazovku konzoly a pred uložením skontroluj hodnoty.';
+
+  @override
+  String get gymTakePhoto => 'Odfotografovať';
+
+  @override
+  String get gymChoosePhoto => 'Vybrať fotografiu';
+
+  @override
+  String get gymReview =>
+      'Skontroluj jednotky, čas začiatku a hodnoty. Fotografie sa čítajú v telefóne. Ukladá sa iba súhrn tréningu.';
+
+  @override
+  String get gymStartTime => 'Začiatok tréningu';
+
+  @override
+  String get gymDurationHelp => 'Zadaj mm:ss alebo hh:mm:ss, napríklad 30:00.';
+
+  @override
+  String get gymDistanceUnit => 'Jednotka vzdialenosti';
+
+  @override
+  String get gymCalories => 'Kalórie';
+
+  @override
+  String get manualRecordTitle => 'Zaznamenať aktivitu';
+
+  @override
+  String get manualRecordDescription =>
+      'Zaznamenajte aktivitu s voliteľným GPS, EKG a tepom. Záznam pokračuje pri prepnutí aplikácie aj zamknutí obrazovky, kým nestlačíte Pozastaviť alebo Zastaviť.';
+
+  @override
+  String get manualTreadmill => 'Beh na páse';
+
+  @override
+  String get manualChooseH10 => 'Vybrať Polar H10';
+
+  @override
+  String get manualRecordEcg => 'Zaznamenať EKG s Polar H10';
+
+  @override
+  String get manualChooseHelp => 'Vyberte Polar H10 na záznam EKG a tepu.';
+
+  @override
+  String manualEcgSegments(int count) {
+    return 'Prepojené úseky EKG: $count';
+  }
+
+  @override
+  String get manualEcgInterrupted =>
+      'EKG sa zastavilo. Časovač aktivity pokračuje.';
+
+  @override
+  String get manualRestartEcg => 'Znova spustiť záznam EKG';
+
+  @override
+  String get manualFinalDistance => 'Konečná vzdialenosť (voliteľné)';
+
+  @override
+  String get manualDiscardNote =>
+      'Zahodiť túto aktivitu? Záznamy EKG zostanú v histórii EKG.';
+
+  @override
+  String get manualRecordHeartRate => 'Zaznamenávať tep';
+
+  @override
+  String get manualChooseHr => 'Vybrať snímač tepu';
+
+  @override
+  String get manualHrWithEcg => 'Používa rovnaké pripojenie H10 ako EKG.';
+
+  @override
+  String get manualRecordGps => 'Zaznamenávať GPS trasu a vzdialenosť';
+
+  @override
+  String get manualGpsHelp =>
+      'Pre aktivity vonku. Povoľte presnú polohu pre záznam pri vypnutej obrazovke.';
+
+  @override
+  String get manualGpsWaiting => 'Čaká sa na presnú GPS polohu';
+
+  @override
+  String manualGpsAccuracy(int meters) {
+    return 'Presnosť GPS: $meters m';
+  }
+
+  @override
+  String get manualRecordBp => 'Zahrnúť merania krvného tlaku';
+
+  @override
+  String get manualBpHelp =>
+      'Zobrazuje merania Hilo, Aktiia a Health počas záznamu, aj po neskoršej synchronizácii.';
+
+  @override
+  String get manualBpUnavailable =>
+      'Merania krvného tlaku sa nepodarilo načítať.';
+
+  @override
+  String get manualBpEmpty =>
+      'Počas tohto záznamu nie sú merania krvného tlaku.';
+
+  @override
+  String get manualHrDisconnected => 'Snímač tepu je odpojený.';
+
+  @override
+  String get manualReconnectHr => 'Znova pripojiť snímač tepu';
+
+  @override
+  String get manualBackgroundNotification =>
+      'Záznam pokračuje pri vypnutej obrazovke';
+
+  @override
+  String get ecgAskCoach => 'Prebrať s AI trénerom';
+
+  @override
+  String get ecgCoachWarningTitle => 'Nie je to lekárska rada';
+
+  @override
+  String get ecgCoachWarningBody =>
+      'AI tréner nie je lekár a nemôže stanoviť diagnózu. EKG z hrudného pásu má iba jeden zvod: nedokáže vylúčiť infarkt ani iné ochorenie srdca a analýza môže byť nesprávna.\n\nBolesť alebo tlak na hrudi, dýchavičnosť, bolesť v ruke, čeľusti alebo chrbte, studený pot alebo mdloba: zavolaj hneď 112. Nečakaj na odpoveď AI.\n\nAnalyzované hodnoty a 10 sekúnd surového signálu idú do AI modelu zvoleného v nastaveniach AI.';
+
+  @override
+  String get ecgCoachUnderstood => 'Rozumiem';
+
+  @override
+  String get ecgCoachBanner =>
+      'Nie je to lekárska rada. AI nie je lekár a nemôže vylúčiť infarkt. Núdza: volaj 112.';
+
+  @override
+  String get ecgCoachCardTitle => 'Predbežná analýza EKG';
+
+  @override
+  String get statusMeasured => 'Namerané';
+
+  @override
+  String get ecgQuestionOverview => 'Čo ukazuje moje EKG?';
+
+  @override
+  String get ecgQuestionRhythm => 'Je môj srdcový rytmus pravidelný?';
+
+  @override
+  String get ecgQuestionDoctor => 'Mal by sa na to pozrieť lekár?';
+
+  @override
+  String get ecgFollowSymptoms => 'Pri akých príznakoch mám ísť k lekárovi?';
+
+  @override
+  String get ecgFollowRiskFactors => 'Čo menia moje rizikové faktory?';
+
+  @override
+  String get ecgFollowTraining => 'Môžem normálne trénovať?';
+
+  @override
+  String get ecgFollowBetterRecording => 'Ako nahrám lepšie EKG?';
+
+  @override
+  String get manualTreadmillConnect =>
+      'Pripojiť bežecký pás (Bluetooth, voliteľné)';
+
+  @override
+  String get manualTreadmillHelp =>
+      'Rýchlosť, vzdialenosť a sklon potom prichádzajú z pásu. Bez pripojenia zadáš vzdialenosť na konci.';
+
+  @override
+  String get sportIndoorCycling => 'Indoor cyklistika';
+
+  @override
+  String get sportElliptical => 'Eliptický trenažér';
+
+  @override
+  String get sportStairClimber => 'Stepper';
+
+  @override
+  String get manualWrongMachine =>
+      'Toto zariadenie nezodpovedá zvolenému športu.';
+
+  @override
+  String get manualEquipmentHelp =>
+      'Pripoj zariadenie Bluetooth (FTMS). Rýchlosť, výkon, kadencia a vzdialenosť prichádzajú zo zariadenia.';
+
+  @override
+  String get plusTitle => 'Zaznamenať';
+
+  @override
+  String get plusStartWorkout => 'Spustiť tréning';
+
+  @override
+  String get plusStartWorkoutHint =>
+      'Naživo s GPS, pásom alebo indoor bicyklom · EKG a pulz';
+
+  @override
+  String get plusGroupTraining => 'Tréning';
+
+  @override
+  String get plusGroupHeart => 'Srdce a obeh';
+
+  @override
+  String get plusGroupBody => 'Telo';
+
+  @override
+  String get plusGroupRecovery => 'Regenerácia';
+
+  @override
+  String get plusLogWorkout => 'Doplniť tréning';
+
+  @override
+  String get plusLogWorkoutHint => 'Minulý tréning ručne';
+
+  @override
+  String get plusImport => 'Importovať';
+
+  @override
+  String get plusImportHint => 'Strava, FIT, GPX, pás v posilňovni';
+
+  @override
+  String get plusEcg => 'Nahrať EKG';
+
+  @override
+  String get plusEcgHint => 'Polar H10 alebo súbor EKG';
+
+  @override
+  String get plusHrv => 'Kontrola HRV';
+
+  @override
+  String get plusHrvHint => 'Krátke meranie s Polar H10';
+
+  @override
+  String get plusBpMeasure => 'Zmerať tlak';
+
+  @override
+  String get plusBpMeasureHint => 'Manžeta Hilo cez Bluetooth';
+
+  @override
+  String get plusBpLog => 'Zapísať tlak';
+
+  @override
+  String get plusBpLogHint => 'Zadaj hodnotu';
+
+  @override
+  String get plusBpReport => 'Správa Hilo';
+
+  @override
+  String get plusBpReportHint => 'Importovať PDF';
+
+  @override
+  String get plusSpo2 => 'SpO₂ a pulz';
+
+  @override
+  String get plusSpo2Hint => 'Z pulzného oxymetra';
+
+  @override
+  String get plusWeigh => 'Odvážiť sa';
+
+  @override
+  String get plusWeighHint => 'Váha RENPHO cez Bluetooth';
+
+  @override
+  String get plusWeightLog => 'Zapísať hmotnosť';
+
+  @override
+  String get plusWeightLogHint => 'Hmotnosť, tuk, BMI';
+
+  @override
+  String get plusWaist => 'Pás';
+
+  @override
+  String get plusWaistHint => 'Obvod a pomery';
+
+  @override
+  String get plusGrip => 'Sila stisku';
+
+  @override
+  String get plusGripHint => 'Hodnota z dynamometra';
+
+  @override
+  String get plusSleep => 'Zapísať spánok';
+
+  @override
+  String get plusSleepHint => 'Trvanie, hlboký a REM';
+
+  @override
+  String get recPace => 'Tempo (/km)';
+
+  @override
+  String get recAvgPace => 'Ø tempo';
+
+  @override
+  String get recPace500 => 'Tempo (/500 m)';
+
+  @override
+  String get recSpeedKmh => 'Rýchlosť (km/h)';
+
+  @override
+  String get recPowerW => 'Výkon (W)';
+
+  @override
+  String get recDistanceKm => 'Vzdialenosť (km)';
+
+  @override
+  String get recHeartRate => 'Pulz';
+
+  @override
+  String get recMap => 'Mapa';
+
+  @override
+  String get recStart => 'Štart';
+
+  @override
+  String get recResume => 'Pokračovať';
+
+  @override
+  String get recFinish => 'Hotovo';
+
+  @override
+  String get recDiscard => 'Zahodiť';
+
+  @override
+  String get recLive => 'Nahráva sa';
+
+  @override
+  String get recNew => 'Nová aktivita';
+
+  @override
+  String get recCadence => 'Kadencia';
+
+  @override
+  String get recMachine => 'Zariadenie';
+
+  @override
+  String get recGps => 'GPS';
+
+  @override
+  String get recEcg => 'EKG';
+
+  @override
+  String get recBloodPressure => 'Tlak';
+
+  @override
+  String get recBannerOpen => 'Ťukni na otvorenie';
+
+  @override
+  String get bpActivityHint =>
+      'Manžety v pohybe často nemerajú. Merania pred aktivitou alebo po nej sa tu nezobrazujú.';
 }

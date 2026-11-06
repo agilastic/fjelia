@@ -131,7 +131,9 @@ class AppleCoachRequest {
         base +
         // The briefing has its own, shorter rule block below.
         (briefingInstructions == null
-            ? budget < 3000 && !context.contains('[HRV:Pair')
+            // An ECG chat needs room for its figures, not the HRV pair rules.
+            ? (budget < 3000 || context.contains('[ECG:Key')) &&
+                      !context.contains('[HRV:Pair')
                   ? coachAnswerStandardCoreShort
                   : coachAnswerStandardShort
             : '') +
@@ -214,6 +216,11 @@ class AppleCoachRequest {
     }
     // Preserve complete TOON lines, prioritizing current measurements and plans.
     const priorities = [
+      // An ECG chat is about the recording; its raw samples do not fit.
+      '[ECG:Key',
+      '[ECG:Summary',
+      '[ECG:Rhythm',
+      '[ECG:Beat',
       '[Context:',
       '[Analysis:Overall',
       '[Session:',

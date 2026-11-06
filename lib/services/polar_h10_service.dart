@@ -57,6 +57,8 @@ class PolarH10Pairing {
 
 /// One foreground connection, independently of Polar cloud sign-in.
 class PolarH10Service {
+  PolarH10Service({this._connectionAllowed});
+  final bool Function()? _connectionAllowed;
   final _packets = StreamController<H10HeartRatePacket>.broadcast();
   Stream<H10HeartRatePacket> get packets => _packets.stream;
   BluetoothDevice? _device;
@@ -115,6 +117,9 @@ class PolarH10Service {
   }
 
   Future<void> connect(H10Device found) async {
+    if (_connectionAllowed?.call() == false) {
+      throw StateError('Finish the other device recording first.');
+    }
     if (_disposed) return;
     await disconnect();
     final device = BluetoothDevice.fromId(found.id);
@@ -220,6 +225,9 @@ class PolarH10Service {
 
   /// Connects to [found] just long enough to read its battery level.
   Future<int?> readBattery(H10Device found) async {
+    if (_connectionAllowed?.call() == false) {
+      throw StateError('Finish the other device recording first.');
+    }
     await disconnect();
     final device = BluetoothDevice.fromId(found.id);
     _device = device;

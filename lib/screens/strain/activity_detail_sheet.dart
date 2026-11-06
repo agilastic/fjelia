@@ -30,6 +30,9 @@ import '../strength/strength_sections.dart';
 import '../activities/activities_screen.dart';
 import '../../models/coach_context_card.dart';
 import '../ai_coach/ai_coach_screen.dart';
+import '../../providers/indoor_recording_provider.dart';
+import '../../widgets/ecg_sheet.dart' show ActivityEcgCard, shareRecordingFile;
+import '../../widgets/activity_blood_pressure_card.dart';
 
 class ActivityDetailSheet extends ConsumerWidget {
   const ActivityDetailSheet({super.key, required this.activity});
@@ -302,6 +305,25 @@ class ActivityDetailSheet extends ConsumerWidget {
           ActivityNutritionCard(activity: activity),
           ActivityHeatCard(activityId: a.id),
           MediaGallery(owner: mediaOwner, shareInfo: shareInfo),
+          if ({'ftms', 'manual_recording'}.contains(activity.source)) ...[
+            OutlinedButton.icon(
+              icon: const Icon(Icons.ios_share),
+              label: Text(context.l10n.indoorExportFit),
+              onPressed: () => runUiAction(context, () async {
+                final path = await ref
+                    .read(indoorActionsProvider)
+                    .exportFit(activity.activityId);
+                if (context.mounted) await shareRecordingFile(context, path);
+              }),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 6, bottom: 12),
+              child: Text(
+                context.l10n.indoorFitHint,
+                style: const TextStyle(fontSize: 12, color: muted),
+              ),
+            ),
+          ],
           if (route.isNotEmpty) ...[
             Padding(
               padding: EdgeInsets.only(top: 12, bottom: 12),
@@ -339,7 +361,11 @@ class ActivityDetailSheet extends ConsumerWidget {
           ],
           if (a.samples.isNotEmpty && !strength)
             ActivityPerformanceChart(activity: a),
+          // Blood pressure on its own, below heart rate, pace and elevation.
+          if ({'ftms', 'manual_recording'}.contains(activity.source))
+            RecordedActivityBloodPressureCard(activityId: activity.activityId),
           if (a.hrZoneSeconds.isNotEmpty) ActivityZoneChart(activity: a),
+          ActivityEcgCard(activityId: activity.activityId),
           if (!strength)
             DfaAlpha1Card(activityId: activity.activityId, running: running),
           WorkoutHrvCard(

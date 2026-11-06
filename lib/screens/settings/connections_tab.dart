@@ -26,6 +26,10 @@ import '../onboarding/connect_suunto_screen.dart';
 import '../onboarding/connect_polar_h10_screen.dart';
 import '../onboarding/connect_polar_screen.dart';
 import '../../widgets/h10_battery.dart';
+import '../../providers/indoor_recording_provider.dart';
+import '../../widgets/manual_activity_sheet.dart';
+import '../../widgets/gym_treadmill_sheet.dart';
+import '../../providers/gym_treadmill_provider.dart';
 
 class ConnectionsTab extends ConsumerWidget {
   const ConnectionsTab({super.key});
@@ -44,6 +48,17 @@ class ConnectionsTab extends ConsumerWidget {
             const ConnectHealthScreen(fromOnboarding: true),
           ),
           SectionLabel(context.l10n.connectedServices),
+          ListTile(
+            leading: const Icon(Icons.fitness_center, color: mint),
+            title: Text(context.l10n.gymTitle),
+            subtitle: Text(
+              ref.watch(matrixXidSessionProvider).valueOrNull != null
+                  ? context.l10n.connected
+                  : context.l10n.gymDescription,
+            ),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => showAppSheet(context, const GymTreadmillSheet()),
+          ),
           for (final e in <(ConnectionType, String, bool, Widget)>[
             (
               ConnectionType.garmin,
@@ -120,6 +135,14 @@ class ConnectionsTab extends ConsumerWidget {
           ),
           const PolarH10BatteryTile(),
           HrvReminderTile(),
+          SectionLabel(context.l10n.indoorTitle),
+          _Connection(
+            ref.watch(indoorPairedProvider).valueOrNull?.name ??
+                context.l10n.indoorEquipment,
+            ref.watch(indoorPairedProvider).valueOrNull != null,
+            const ManualActivitySheet(),
+            disconnect: () => ref.read(indoorActionsProvider).forgetEquipment(),
+          ),
           SectionLabel(context.l10n.dataSourcePriority),
           Text(
             context.l10n.whenMultipleSourcesProvideThe,

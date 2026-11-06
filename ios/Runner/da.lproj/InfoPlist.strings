@@ -1,9 +1,9 @@
-"NSBluetoothAlwaysUsageDescription" = "Fjelia bruger Bluetooth til at oprette forbindelse til dine sundhedsenheder (Hilo, Aktiia, Garmin).";
+"NSBluetoothAlwaysUsageDescription" = "Fjelia forbinder sundheds- og træningsenheder for at optage EKG, puls og træningsdata, også med låst skærm.";
 "NSBluetoothPeripheralUsageDescription" = "Fjelia bruger Bluetooth til at oprette forbindelse til dine sundhedsenheder.";
 "NSHealthShareUsageDescription" = "Fjelia læser dine sundhedsdata (søvn, puls, HRV, skridt, SpO2) fra Apple Sundhed for at give dig personlige træningsindsigter.";
 "NSHealthUpdateUsageDescription" = "Fjelia skriver dine synkroniserede data om HRV, puls, søvn, skridt og træninger til Apple Sundhed, så du ikke mister dem, hvis du skifter app.";
-"NSLocationAlwaysAndWhenInUseUsageDescription" = "Fjelia bruger kun din placering, mens appen er åben, til at vurdere varmerisikoen ved planlagte træninger.";
-"NSLocationWhenInUseUsageDescription" = "Fjelia bruger din nuværende placering til at vurdere varmerisikoen ved planlagte træninger.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Med GPS aktiveret optager Fjelia din rute, også i en anden app eller med låst skærm. Pause eller Stop afslutter placeringsoptagelsen.";
+"NSLocationWhenInUseUsageDescription" = "Fjelia bruger placering til ruter med GPS aktiveret og til at vurdere varmerisiko ved planlagte træninger.";
 "NSPhotoLibraryUsageDescription" = "Fjelia lader dig tilføje fotos og videoer fra dit bibliotek til træninger, løbsmål og planlagte træninger.";
 "NSCameraUsageDescription" = "Fjelia bruger kameraet, når du tager et foto eller en video til en træning, et løbsmål eller en planlagt træning.";
 "NSMicrophoneUsageDescription" = "Fjelia bruger mikrofonen til lyden i videoer, du optager til en træning.";

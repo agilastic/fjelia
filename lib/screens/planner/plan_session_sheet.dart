@@ -38,6 +38,7 @@ import '../../services/strength/strength_templates.dart';
 import 'workout_delivery_setup.dart';
 import '../../providers/media_provider.dart';
 import '../../widgets/media_gallery.dart';
+import '../../widgets/manual_activity_sheet.dart';
 
 class PlanSessionSheet extends ConsumerStatefulWidget {
   const PlanSessionSheet({super.key, required this.session});
@@ -441,6 +442,25 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
               ),
             ),
           if (!strength) ...[
+            if (editable &&
+                s.indoor &&
+                (sport.contains('run') ||
+                    sport.contains('cycl') ||
+                    sport.contains('bik') ||
+                    sport.contains('row')))
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: FilledButton.icon(
+                  onPressed: busy
+                      ? null
+                      : () => showAppSheet(
+                          context,
+                          ManualActivitySheet(session: s),
+                        ),
+                  icon: const Icon(Icons.bluetooth),
+                  label: Text(context.l10n.manualRecordTitle),
+                ),
+              ),
             heading(context.l10n.workoutStructure),
             if (profile.isNotEmpty) ...[
               WorkoutProfileBar(blocks: profile),

@@ -1,9 +1,9 @@
-"NSBluetoothAlwaysUsageDescription" = "Fjelia používa Bluetooth na pripojenie k vašim zdravotným zariadeniam (Hilo, Aktiia, Garmin).";
+"NSBluetoothAlwaysUsageDescription" = "Fjelia pripája zdravotné a tréningové zariadenia na záznam EKG, tepu a tréningových dát aj pri zamknutej obrazovke.";
 "NSBluetoothPeripheralUsageDescription" = "Fjelia používa Bluetooth na pripojenie k vašim zdravotným zariadeniam.";
 "NSHealthShareUsageDescription" = "Fjelia číta vaše zdravotné údaje (spánok, tepovú frekvenciu, HRV, kroky, SpO2) z Apple Zdravie, aby vám poskytla prispôsobené tréningové poznatky.";
 "NSHealthUpdateUsageDescription" = "Fjelia zapisuje vaše synchronizované údaje o HRV, tepovej frekvencii, spánku, krokoch a tréningoch do Apple Zdravie, aby ste o ne neprišli pri zmene aplikácie.";
-"NSLocationAlwaysAndWhenInUseUsageDescription" = "Fjelia používa vašu polohu iba počas otvorenej aplikácie na vyhodnotenie rizika horúčav pri plánovaných tréningoch.";
-"NSLocationWhenInUseUsageDescription" = "Fjelia používa vašu aktuálnu polohu na vyhodnotenie rizika horúčav pri plánovaných tréningoch.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Pri zapnutom GPS Fjelia zaznamenáva trasu aj v inej aplikácii alebo pri zamknutej obrazovke. Pozastavenie alebo zastavenie ukončí záznam polohy.";
+"NSLocationWhenInUseUsageDescription" = "Fjelia používa polohu na trasy pri zapnutom GPS a na vyhodnotenie rizika tepla pri plánovaných tréningoch.";
 "NSPhotoLibraryUsageDescription" = "Fjelia ti umožňuje pridať fotky a videá z knižnice k tréningom, pretekárskym cieľom a plánovaným tréningom.";
 "NSCameraUsageDescription" = "Fjelia používa fotoaparát, keď fotíš alebo nahrávaš video k tréningu, pretekárskemu cieľu alebo plánovanému tréningu.";
 "NSMicrophoneUsageDescription" = "Fjelia používa mikrofón na zvuk videí, ktoré nahráš k tréningu.";

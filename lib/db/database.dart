@@ -232,6 +232,50 @@ class SpotHrvMeasurements extends Table {
   IntColumn get revision => integer().withDefault(const Constant(0))();
 }
 
+/// ECG is kept apart from daily recovery summaries. Waveforms never become
+/// recovery scores or AI context merely because a recording was saved.
+class EcgRecordings extends Table {
+  TextColumn get recordingId => text()();
+  DateTimeColumn get recordedAt => dateTime()();
+  TextColumn get source => text()();
+  TextColumn get deviceName => text()();
+  TextColumn get deviceId => text().nullable()();
+  TextColumn get kind => text()(); // waveform or report
+  TextColumn get status => text()(); // recording, complete, interrupted
+  RealColumn get sampleRateHz => real().nullable()();
+  IntColumn get sampleCount => integer().withDefault(const Constant(0))();
+  IntColumn get durationMs => integer().withDefault(const Constant(0))();
+  TextColumn get activityId => text().nullable()();
+  TextColumn get metadataJson => text().withDefault(const Constant('{}'))();
+  TextColumn get contentHash => text().nullable().unique()();
+  TextColumn get originalFileName => text().nullable()();
+  TextColumn get originalBase64 => text().nullable()();
+  @override
+  Set<Column> get primaryKey => {recordingId};
+}
+
+/// Small, ordered batches allow a live recording to be committed without
+/// rewriting its history. The original device timestamp is kept in each batch.
+class EcgSampleChunks extends Table {
+  TextColumn get recordingId => text()();
+  IntColumn get sequence => integer()();
+  TextColumn get dataJson => text()();
+  @override
+  Set<Column> get primaryKey => {recordingId, sequence};
+}
+
+/// Checkpoints and device/interval metadata for indoor activities. Completed
+/// workouts themselves live in ActivityRecords like every other activity.
+class IndoorRecordings extends Table {
+  TextColumn get recordingId => text()();
+  DateTimeColumn get startedAt => dateTime()();
+  DateTimeColumn get updatedAt => dateTime()();
+  TextColumn get status => text()();
+  TextColumn get dataJson => text()();
+  @override
+  Set<Column> get primaryKey => {recordingId};
+}
+
 /// One physical workout as the HRV feature sees it. The identity is its own,
 /// independent of a plan, a planned session and whichever provider copy
 /// survives de-duplication.
@@ -367,7 +411,8 @@ class HrvPostReminders extends Table {
   /// `none`, `schedulePending`, `accepted`, `cancelPending`, `unknown`,
   /// `failed`. Accepted is not proof that anything was displayed.
   TextColumn get osState => text().withDefault(const Constant('none'))();
-  TextColumn get scheduleFingerprint => text().withDefault(const Constant(''))();
+  TextColumn get scheduleFingerprint =>
+      text().withDefault(const Constant(''))();
   TextColumn get permissionSnapshot => text().nullable()();
   DateTimeColumn get lastAttemptAt => dateTime().nullable()();
   TextColumn get lastError => text().nullable()();
@@ -413,8 +458,12 @@ class HrvNotificationActionReceipts extends Table {
   DateTimeColumn get handledAtUtc => dateTime()();
 
   @override
-  Set<Column> get primaryKey =>
-      {installationEpoch, reminderId, generation, actionKind};
+  Set<Column> get primaryKey => {
+    installationEpoch,
+    reminderId,
+    generation,
+    actionKind,
+  };
 }
 
 /// Native notification ids whose removal is still owed, for example after a
@@ -1275,6 +1324,9 @@ class MediaItems extends Table {
     DeletedActivities,
     ActivityTitles,
     SpotHrvMeasurements,
+    EcgRecordings,
+    EcgSampleChunks,
+    IndoorRecordings,
     HrvTrainingEpisodes,
     HrvEpisodeAliases,
     HrvEpisodeMeasurements,
@@ -1322,7 +1374,7 @@ class AppDatabase extends _$AppDatabase {
       defaultSourcePriorities[group.name]!;
 
   @override
-  int get schemaVersion => 62;
+  int get schemaVersion => 63;
 
   Future<void> saveHeartRateSamples(List<TimedHeartRate> samples) async {
     if (samples.isEmpty) return;
@@ -1511,13 +1563,34 @@ class AppDatabase extends _$AppDatabase {
         )) {
           continue;
         }
-        if (a.source == 'health_connect') {
+        if ({'matrix_xid', 'gym_summary'}.contains(a.source) &&
+            !{'matrix_xid', 'gym_summary'}.contains(b.source)) {
+          // Summary-only imports give way to a complete recorded activity.
+          toDelete.add(a.activityId);
+          survivor[a.activityId] = b;
+          break;
+        } else if ({'matrix_xid', 'gym_summary'}.contains(b.source) &&
+            !{'matrix_xid', 'gym_summary'}.contains(a.source)) {
+          toDelete.add(b.activityId);
+          survivor[b.activityId] = a;
+        } else if (a.source == 'health_connect') {
           toDelete.add(a.activityId);
           survivor[a.activityId] = b;
           break;
         } else if (b.source == 'health_connect') {
           toDelete.add(b.activityId);
           survivor[b.activityId] = a;
+        } else if ({'ftms', 'manual_recording'}.contains(a.source) &&
+            !{'ftms', 'manual_recording'}.contains(b.source)) {
+          // Keep the original indoor samples and equipment metadata when a
+          // platform later sends back a copy of the recorded workout.
+          toDelete.add(b.activityId);
+          survivor[b.activityId] = a;
+        } else if ({'ftms', 'manual_recording'}.contains(b.source) &&
+            !{'ftms', 'manual_recording'}.contains(a.source)) {
+          toDelete.add(a.activityId);
+          survivor[a.activityId] = b;
+          break;
         } else if (a.source == 'file' && b.source != 'file') {
           // An imported file gives way to the platform that synced the
           // same workout later, as an Apple Health copy does.
@@ -1592,8 +1665,7 @@ class AppDatabase extends _$AppDatabase {
         dfaAlpha1Results,
       )..where((t) => t.activityId.equals(keep) & t.rrCount.equals(0))).go();
       await (update(dfaAlpha1Results)..where(
-            (t) =>
-                t.activityId.equals(gone) & t.rrCount.isBiggerThanValue(0),
+            (t) => t.activityId.equals(gone) & t.rrCount.isBiggerThanValue(0),
           ))
           .write(DfaAlpha1ResultsCompanion(activityId: Value(keep)));
     }
@@ -1605,7 +1677,13 @@ class AppDatabase extends _$AppDatabase {
   /// Moves what an HRV episode knows about a copy that is about to be removed
   /// to the copy that stays: its alias, the athlete's own links, feedback and
   /// the reminder. Automatic links are recomputed from the facts afterwards.
-  Future<void> _followDuplicate(ActivityRecord gone, ActivityRecord keep) async {
+  Future<void> _followDuplicate(
+    ActivityRecord gone,
+    ActivityRecord keep,
+  ) async {
+    await (update(ecgRecordings)
+          ..where((t) => t.activityId.equals(gone.activityId)))
+        .write(EcgRecordingsCompanion(activityId: Value(keep.activityId)));
     await _followNutrition(gone.activityId, keep.activityId);
     await _followTitle(gone, keep);
     await _followDfaAlpha1(gone.activityId, keep.activityId);
@@ -1617,19 +1695,21 @@ class AppDatabase extends _$AppDatabase {
         .write(MediaItemsCompanion(ownerId: Value(keep.activityId)));
     final goneSource = gone.source ?? 'unknown';
     final keepSource = keep.source ?? 'unknown';
-    final goneAlias = await (select(hrvEpisodeAliases)..where(
-          (t) =>
-              t.source.equals(goneSource) &
-              t.sourceActivityId.equals(gone.activityId),
-        ))
-        .getSingleOrNull();
+    final goneAlias =
+        await (select(hrvEpisodeAliases)..where(
+              (t) =>
+                  t.source.equals(goneSource) &
+                  t.sourceActivityId.equals(gone.activityId),
+            ))
+            .getSingleOrNull();
     if (goneAlias == null) return;
-    final keepAlias = await (select(hrvEpisodeAliases)..where(
-          (t) =>
-              t.source.equals(keepSource) &
-              t.sourceActivityId.equals(keep.activityId),
-        ))
-        .getSingleOrNull();
+    final keepAlias =
+        await (select(hrvEpisodeAliases)..where(
+              (t) =>
+                  t.source.equals(keepSource) &
+                  t.sourceActivityId.equals(keep.activityId),
+            ))
+            .getSingleOrNull();
     final from = goneAlias.episodeId;
     final to = keepAlias?.episodeId ?? from;
     if (keepAlias == null) {
@@ -1662,13 +1742,15 @@ class AppDatabase extends _$AppDatabase {
                 t.associationMethod.equals('automaticTimeline').not(),
           ))
           .write(HrvEpisodeMeasurementsCompanion(episodeId: Value(to)));
-      await (update(hrvTrainingEpisodes)..where((t) => t.episodeId.equals(from)))
+      await (update(hrvTrainingEpisodes)
+            ..where((t) => t.episodeId.equals(from)))
           .write(const HrvTrainingEpisodesCompanion(state: Value('deleted')));
     }
-    await (update(hrvTrainingEpisodes)..where((t) => t.episodeId.equals(to)))
-        .write(HrvTrainingEpisodesCompanion(
-          primaryActivityId: Value(keep.activityId),
-        ));
+    await (update(
+      hrvTrainingEpisodes,
+    )..where((t) => t.episodeId.equals(to))).write(
+      HrvTrainingEpisodesCompanion(primaryActivityId: Value(keep.activityId)),
+    );
   }
 
   /// The intake log and the reminder follow the copy that stays, so a
@@ -1934,6 +2016,11 @@ class AppDatabase extends _$AppDatabase {
   /// compared with stays.
   Future<int> deleteActivityById(String activityId) => transaction(() async {
     await deleteStrengthLog(activityId);
+    await (delete(
+      indoorRecordings,
+    )..where((t) => t.recordingId.equals(activityId))).go();
+    await (update(ecgRecordings)..where((t) => t.activityId.equals(activityId)))
+        .write(const EcgRecordingsCompanion(activityId: Value(null)));
     return (delete(
       activityRecords,
     )..where((t) => t.activityId.equals(activityId))).go();
@@ -2265,17 +2352,15 @@ class AppDatabase extends _$AppDatabase {
   // ── Heat acclimation / weather ───────────────────────────────────────────
 
   Future<int> upsertHeatDailyState(HeatDailyStateRecordsCompanion entry) =>
-      into(
-        heatDailyStateRecords,
-      ).insert(entry, mode: InsertMode.insertOrReplace);
+      into(heatDailyStateRecords)
+          .insert(entry, mode: InsertMode.insertOrReplace);
 
   Future<int> upsertHeatWorkoutContext(HeatWorkoutContextsCompanion entry) =>
       into(heatWorkoutContexts).insert(entry, mode: InsertMode.insertOrReplace);
 
   Future<int> upsertWeatherSnapshot(WeatherSnapshotRecordsCompanion entry) =>
-      into(
-        weatherSnapshotRecords,
-      ).insert(entry, mode: InsertMode.insertOrReplace);
+      into(weatherSnapshotRecords)
+          .insert(entry, mode: InsertMode.insertOrReplace);
 
   /// Cached weather within ~1 km and ±30 min of [at].
   Future<WeatherSnapshotRecord?> getWeatherSnapshotNear(
@@ -2624,7 +2709,8 @@ class AppDatabase extends _$AppDatabase {
           await _addColumnIfMissing(
             table,
             column,
-            () => customStatement('ALTER TABLE $table ADD COLUMN $column $type'),
+            () =>
+                customStatement('ALTER TABLE $table ADD COLUMN $column $type'),
           );
         }
         await m.createTable(planGoals);
@@ -3087,6 +3173,11 @@ class AppDatabase extends _$AppDatabase {
       }
       // Last, so a table created by an older step above has its final shape.
       if (from < 49) await _addHrvEpisodes(m);
+      if (from < 63) {
+        await m.createTable(ecgRecordings);
+        await m.createTable(ecgSampleChunks);
+        await m.createTable(indoorRecordings);
+      }
     },
   );
 

@@ -65,6 +65,9 @@ String _system(String? taskPrompt, [String context = '']) =>
           coachAnswerStandard +
           (taskPrompt == null ? coachTaskTemplate(coachTaskFor(context)) : '') +
           (taskPrompt == null ? coachChatStyle : coachBriefingRules) +
+          (taskPrompt == null && coachTaskFor(context) == CoachTask.ecg
+              ? coachEcgRules
+              : '') +
           '\n\nDATE: ${coachTodayLine()}' +
           coachLanguageDirective(chat: taskPrompt == null);
 
@@ -558,8 +561,14 @@ class AiCoachClient {
       'user': ?installationId,
       'temperature': 0.3,
       'messages': [
-        {'role': 'system', 'content': _system(systemPrompt, toonContext)},
-        {'role': 'system', 'content': 'HEALTH_CONTEXT:\n$toonContext'},
+        // One system message: chat templates of open models (Mistral, Qwen
+        // behind Free AI) reject a second one with "System message must be
+        // at the beginning".
+        {
+          'role': 'system',
+          'content':
+              '${_system(systemPrompt, toonContext)}\n\nHEALTH_CONTEXT:\n$toonContext',
+        },
         for (final m in messages)
           {'role': m.isUser ? 'user' : 'assistant', 'content': m.text},
       ],

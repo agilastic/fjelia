@@ -7254,4 +7254,662 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get feedsUnknown => 'Unbekannt';
+
+  @override
+  String get ecgTitle => 'EKG';
+
+  @override
+  String get ecgChooseDevice => 'Polar H10 auswählen';
+
+  @override
+  String get ecgStart => 'EKG aufzeichnen';
+
+  @override
+  String get ecgStopSave => 'Stoppen und speichern';
+
+  @override
+  String get ecgImport => 'EKG-Datei importieren';
+
+  @override
+  String get ecgHistory => 'EKG-Verlauf';
+
+  @override
+  String get ecgWaveform => 'Kurve';
+
+  @override
+  String get ecgReport => 'Bericht';
+
+  @override
+  String get ecgExportCsv => 'Kurve exportieren (CSV)';
+
+  @override
+  String get ecgExportMetadata => 'EKG-Metadaten exportieren';
+
+  @override
+  String get ecgExportOriginal => 'Originaldatei teilen';
+
+  @override
+  String get ecgRecording => 'EKG-Aufzeichnung läuft';
+
+  @override
+  String get ecgRecordingDate => 'Datum und Uhrzeit der Aufzeichnung';
+
+  @override
+  String get ecgLinkedWorkout => 'Verknüpftes Training';
+
+  @override
+  String get ecgIndependent => 'Ohne Trainingsverknüpfung';
+
+  @override
+  String get ecgNoRecordings => 'Noch keine EKG-Aufzeichnungen.';
+
+  @override
+  String ecgSamples(int count) {
+    return '$count Messwerte';
+  }
+
+  @override
+  String ecgSignalGaps(int count) {
+    return '$count Signallücken';
+  }
+
+  @override
+  String get ecgDeleteConfirm =>
+      'Diese Aufzeichnung und ihre Originaldatei endgültig löschen?';
+
+  @override
+  String get ecgDescription =>
+      'Mit Polar H10 aufzeichnen, CSV-Kurven importieren oder PDF-Berichte aufbewahren.';
+
+  @override
+  String get ecgPrivacy =>
+      'Auf diesem Gerät gespeichert und in Backups enthalten. Rohsignale werden nicht an den Coach gesendet.';
+
+  @override
+  String get ecgLimitations =>
+      'Zur persönlichen Aufzeichnung und Ansicht. EKG-basierte HRV und Signalqualität sind hier nicht validiert; es werden keine Diagnosen oder Erholungswerte berechnet.';
+
+  @override
+  String get ecgImportLimitations =>
+      'Garmin- und Apple-Watch-PDF-Exporte sind Berichte. Kurven benötigen die CSV-Spalten time_seconds (oder time_ms) und ecg_uv (oder ecg_mv).';
+
+  @override
+  String get ecgReportOnly =>
+      'Nur Bericht. Keine Rohdaten der Kurve verfügbar. Teile die Originaldatei, um den Bericht anzusehen.';
+
+  @override
+  String get indoorTitle => 'Indoor-Training';
+
+  @override
+  String get indoorEquipment => 'Trainingsgerät';
+
+  @override
+  String get indoorChooseEquipment => 'Trainingsgerät auswählen';
+
+  @override
+  String get indoorChooseHeartRate => 'Pulssensor auswählen';
+
+  @override
+  String get indoorStart => 'Aufzeichnung starten';
+
+  @override
+  String get indoorPause => 'Aufzeichnung pausieren';
+
+  @override
+  String get indoorFinish => 'Beenden und speichern';
+
+  @override
+  String get indoorSaved => 'Im Aktivitätsverlauf gespeichert';
+
+  @override
+  String get indoorExportFit => 'FIT-Aktivität teilen';
+
+  @override
+  String get indoorUnfinished => 'Unvollendete Aufzeichnungen';
+
+  @override
+  String get indoorReviewResume => 'Ansehen oder fortsetzen';
+
+  @override
+  String get indoorDiscard => 'Aufzeichnung verwerfen';
+
+  @override
+  String get indoorDiscardConfirm =>
+      'Diese unvollendete Aufzeichnung endgültig verwerfen?';
+
+  @override
+  String get indoorExternalHeartRate => 'Externen Pulssensor verwenden';
+
+  @override
+  String get indoorEquipmentHeartRate =>
+      'Aus: Puls vom Trainingsgerät verwenden';
+
+  @override
+  String get indoorCurrentInterval => 'Aktuelles Intervall';
+
+  @override
+  String get indoorNextInterval => 'Nächstes Intervall';
+
+  @override
+  String get indoorPlanComplete => 'Geplante Intervalle abgeschlossen';
+
+  @override
+  String get indoorAuthorizeControl => 'Gerätesteuerung erlauben';
+
+  @override
+  String get indoorManualOverride => 'Manuell steuern';
+
+  @override
+  String get indoorAutoPower => 'Intervallleistung automatisch übernehmen';
+
+  @override
+  String get indoorApplyTarget => 'Zielwert übernehmen';
+
+  @override
+  String get indoorDescription =>
+      'Bluetooth-FTMS-Trainingsgerät verbinden und Indoor-Training aufzeichnen.';
+
+  @override
+  String get indoorKeepOpen =>
+      'Die Aufzeichnung läuft beim App-Wechsel und bei gesperrtem Bildschirm weiter. Pause stoppt die Messaufzeichnung; pausiere das Gerät mit seinen Bedienelementen.';
+
+  @override
+  String get indoorFitHint =>
+      'FIT-Datei über das Teilen-Menü speichern oder in einer kompatiblen Trainings-App öffnen.';
+
+  @override
+  String get indoorNoEquipment =>
+      'Kein FTMS-Gerät gefunden. Gerät einschalten und seine Bluetooth-Verbindung aktivieren.';
+
+  @override
+  String get indoorControlPrompt =>
+      'Darf Fjelia für diese Einheit Zielwerte ändern? Bleibe in der Nähe der Gerätebedienung. Du kannst jederzeit auf manuelle Steuerung umschalten.';
+
+  @override
+  String get indoorTreadmillSafety =>
+      'Sicherheitsschlüssel anlegen und nahe der Bedienung bleiben. Nur kleine Änderungen bis 0,5 km/h oder 1% Steigung bestätigen. Größere Änderungen am Gerät vornehmen.';
+
+  @override
+  String get recordingTime => 'Aufzeichnungsdauer';
+
+  @override
+  String get recordingSpeed => 'Geschwindigkeit';
+
+  @override
+  String get recordingPower => 'Leistung';
+
+  @override
+  String get recordingCadence => 'Tritt- / Schlagfrequenz';
+
+  @override
+  String get recordingIncline => 'Steigung';
+
+  @override
+  String get recordingResistance => 'Widerstand';
+
+  @override
+  String get recordingSource => 'Quelle';
+
+  @override
+  String get recordingNext => 'Nächster Schritt';
+
+  @override
+  String get recordingConnecting => 'Verbindung wird hergestellt';
+
+  @override
+  String get recordingReconnecting => 'Verbindung wird wiederhergestellt';
+
+  @override
+  String get recordingInterrupted => 'Unterbrochen';
+
+  @override
+  String get recordingPaused => 'Pausiert';
+
+  @override
+  String get indoorMatrixReadOnly =>
+      'Matrix-Laufband: nur Aufzeichnung. Geschwindigkeit und Steigung an der Konsole einstellen; Fernsteuerung ist für dieses Modell nicht verifiziert.';
+
+  @override
+  String ecgCoverage(String value) {
+    return '$value% Datenabdeckung';
+  }
+
+  @override
+  String get recordingBeforeRestore =>
+      'Beende die Geräteaufzeichnung, bevor du ein Backup wiederherstellst.';
+
+  @override
+  String get gymTitle => 'Laufbänder im Fitnessstudio';
+
+  @override
+  String get gymDescription =>
+      'Mit dem Smartphone aufzeichnen, xID-Trainings importieren oder die Konsolenübersicht scannen.';
+
+  @override
+  String get gymDirectConnection => 'Direkte Verbindung';
+
+  @override
+  String get gymConsoleSupport =>
+      'Die Verbindung hängt von der Konsole ab. Ältere Matrix-Konsolen unterstützen eventuell xID statt Bluetooth-Livedaten.';
+
+  @override
+  String get gymFindEquipment => 'Fitnessgeräte suchen';
+
+  @override
+  String get gymLiveAvailable =>
+      'Diese Konsole kann Trainingsdaten direkt an Fjelia senden.';
+
+  @override
+  String get gymLiveUnavailable =>
+      'Keine unterstützten Livedaten gefunden. xID-Trainings importieren oder eine Konsolenübersicht speichern.';
+
+  @override
+  String get gymSpeedOnly =>
+      'Geschwindigkeit und Schrittfrequenz sind verfügbar. Diese Verbindung liefert keine Steigung und erlaubt keine Fernsteuerung.';
+
+  @override
+  String get gymUseMachine => 'Dieses Gerät verwenden';
+
+  @override
+  String get gymConnectionReport => 'Verbindungsbericht';
+
+  @override
+  String get gymShareReport => 'Verbindungsbericht teilen';
+
+  @override
+  String get gymXid => 'Matrix xID';
+
+  @override
+  String get gymXidDescription =>
+      'Laufbandtrainings aus dem xID-Netzwerk deines Fitnessstudios importieren.';
+
+  @override
+  String get gymPortal => 'Netpulse-Portal des Studios';
+
+  @override
+  String get gymPortalHelp =>
+      'Die vom Fitnessstudio angegebene Netpulse-Portaladresse eingeben.';
+
+  @override
+  String get gymPasscode => 'xID-PIN';
+
+  @override
+  String get gymSessionHelp =>
+      'Deine Sitzung wird sicher gespeichert. Deine PIN wird nicht gespeichert.';
+
+  @override
+  String get gymAutoSync => 'xID-Trainings automatisch synchronisieren';
+
+  @override
+  String gymLastDays(int days) {
+    return 'Letzte $days Tage';
+  }
+
+  @override
+  String get gymLoadWorkouts => 'Trainings laden';
+
+  @override
+  String get gymNoWorkouts =>
+      'Für diesen Zeitraum wurden keine Laufbandtrainings gefunden.';
+
+  @override
+  String gymSkipped(int count) {
+    return '$count nicht lesbare Trainings übersprungen.';
+  }
+
+  @override
+  String gymImported(int count, int duplicates) {
+    return '$count Trainings importiert; $duplicates Duplikate übersprungen.';
+  }
+
+  @override
+  String get gymSummary => 'Laufbandübersicht';
+
+  @override
+  String get gymSummaryDescription =>
+      'Den Abschlussbildschirm fotografieren und die Werte vor dem Speichern prüfen.';
+
+  @override
+  String get gymTakePhoto => 'Foto aufnehmen';
+
+  @override
+  String get gymChoosePhoto => 'Foto auswählen';
+
+  @override
+  String get gymReview =>
+      'Einheiten, Startzeit und Werte prüfen. Fotos werden auf deinem Smartphone gelesen. Gespeichert wird nur die Trainingsübersicht.';
+
+  @override
+  String get gymStartTime => 'Trainingsbeginn';
+
+  @override
+  String get gymDurationHelp =>
+      'mm:ss oder hh:mm:ss eingeben, zum Beispiel 30:00.';
+
+  @override
+  String get gymDistanceUnit => 'Distanzeinheit';
+
+  @override
+  String get gymCalories => 'Kalorien';
+
+  @override
+  String get manualRecordTitle => 'Aktivität aufzeichnen';
+
+  @override
+  String get manualRecordDescription =>
+      'Zeichne eine Aktivität mit optionalem GPS, EKG und Puls auf. Die Aufzeichnung läuft beim App-Wechsel und bei gesperrtem Bildschirm weiter, bis du Pause oder Stopp drückst.';
+
+  @override
+  String get manualTreadmill => 'Laufbandlauf';
+
+  @override
+  String get manualChooseH10 => 'Polar H10 auswählen';
+
+  @override
+  String get manualRecordEcg => 'EKG mit Polar H10 aufzeichnen';
+
+  @override
+  String get manualChooseHelp => 'Wähle einen Polar H10 für EKG und Puls.';
+
+  @override
+  String manualEcgSegments(int count) {
+    return 'Verknüpfte EKG-Abschnitte: $count';
+  }
+
+  @override
+  String get manualEcgInterrupted =>
+      'EKG gestoppt. Die Aktivitätszeit läuft weiter.';
+
+  @override
+  String get manualRestartEcg => 'EKG-Aufzeichnung neu starten';
+
+  @override
+  String get manualFinalDistance => 'Enddistanz (optional)';
+
+  @override
+  String get manualDiscardNote =>
+      'Diese Aktivität verwerfen? EKG-Aufzeichnungen bleiben im EKG-Verlauf.';
+
+  @override
+  String get manualRecordHeartRate => 'Herzfrequenz aufzeichnen';
+
+  @override
+  String get manualChooseHr => 'Herzfrequenzsensor auswählen';
+
+  @override
+  String get manualHrWithEcg => 'Nutzt dieselbe H10-Verbindung wie das EKG.';
+
+  @override
+  String get manualRecordGps => 'GPS-Route und Distanz aufzeichnen';
+
+  @override
+  String get manualGpsHelp =>
+      'Für Aktivitäten im Freien. Erlaube den genauen Standort für die Routenaufzeichnung bei ausgeschaltetem Bildschirm.';
+
+  @override
+  String get manualGpsWaiting => 'Warte auf ein genaues GPS-Signal';
+
+  @override
+  String manualGpsAccuracy(int meters) {
+    return 'GPS-Genauigkeit: $meters m';
+  }
+
+  @override
+  String get manualRecordBp => 'Blutdruckmessungen einbeziehen';
+
+  @override
+  String get manualBpHelp =>
+      'Zeigt Messungen von Hilo, Aktiia und Health während der Aufzeichnung, auch nach späterer Synchronisierung.';
+
+  @override
+  String get manualBpUnavailable =>
+      'Blutdruckmessungen konnten nicht geladen werden.';
+
+  @override
+  String get manualBpEmpty =>
+      'Keine Blutdruckmessungen während dieser Aufzeichnung.';
+
+  @override
+  String get manualHrDisconnected =>
+      'Verbindung zum Herzfrequenzsensor getrennt.';
+
+  @override
+  String get manualReconnectHr => 'Herzfrequenzsensor erneut verbinden';
+
+  @override
+  String get manualBackgroundNotification =>
+      'Aufzeichnung läuft bei ausgeschaltetem Bildschirm weiter';
+
+  @override
+  String get ecgAskCoach => 'Mit KI-Coach besprechen';
+
+  @override
+  String get ecgCoachWarningTitle => 'Keine medizinische Beratung';
+
+  @override
+  String get ecgCoachWarningBody =>
+      'Der KI-Coach ist kein Arzt und kann keine Diagnose stellen. Ein Brustgurt-EKG hat nur eine Ableitung: Es kann einen Herzinfarkt oder andere Herzerkrankungen nicht ausschließen, und die Auswertung kann falsch sein.\n\nBrustschmerz oder Druck auf der Brust, Atemnot, Schmerzen in Arm, Kiefer oder Rücken, kalter Schweiß oder Ohnmacht: Ruf jetzt die 112 an. Warte nicht auf eine Antwort der KI.\n\nDie ausgewerteten Werte und 10 Sekunden Rohsignal gehen an das KI-Modell, das in den KI-Einstellungen gewählt ist.';
+
+  @override
+  String get ecgCoachUnderstood => 'Verstanden';
+
+  @override
+  String get ecgCoachBanner =>
+      'Keine medizinische Beratung. Die KI ist kein Arzt und kann einen Herzinfarkt nicht ausschließen. Notfall: 112 anrufen.';
+
+  @override
+  String get ecgCoachCardTitle => 'EKG-Vorabanalyse';
+
+  @override
+  String get statusMeasured => 'Gemessen';
+
+  @override
+  String get ecgQuestionOverview => 'Was zeigt mein EKG?';
+
+  @override
+  String get ecgQuestionRhythm => 'Ist mein Herzrhythmus regelmäßig?';
+
+  @override
+  String get ecgQuestionDoctor => 'Sollte ein Arzt das ansehen?';
+
+  @override
+  String get ecgFollowSymptoms => 'Bei welchen Symptomen sollte ich zum Arzt?';
+
+  @override
+  String get ecgFollowRiskFactors => 'Was ändern meine Risikofaktoren daran?';
+
+  @override
+  String get ecgFollowTraining => 'Kann ich normal trainieren?';
+
+  @override
+  String get ecgFollowBetterRecording => 'Wie nehme ich ein besseres EKG auf?';
+
+  @override
+  String get manualTreadmillConnect =>
+      'Laufband verbinden (Bluetooth, optional)';
+
+  @override
+  String get manualTreadmillHelp =>
+      'Tempo, Distanz und Steigung kommen dann vom Laufband. Ohne Verbindung trägst du die Distanz am Ende ein.';
+
+  @override
+  String get sportIndoorCycling => 'Indoor-Radfahren';
+
+  @override
+  String get sportElliptical => 'Crosstrainer';
+
+  @override
+  String get sportStairClimber => 'Stepper';
+
+  @override
+  String get manualWrongMachine =>
+      'Dieses Gerät passt nicht zur gewählten Sportart.';
+
+  @override
+  String get manualEquipmentHelp =>
+      'Verbinde ein Bluetooth-Gerät (FTMS). Tempo, Leistung, Trittfrequenz und Distanz kommen vom Gerät.';
+
+  @override
+  String get plusTitle => 'Erfassen';
+
+  @override
+  String get plusStartWorkout => 'Training starten';
+
+  @override
+  String get plusStartWorkoutHint =>
+      'Live mit GPS, Laufband oder Indoor-Rad · EKG & Puls';
+
+  @override
+  String get plusGroupTraining => 'Training';
+
+  @override
+  String get plusGroupHeart => 'Herz & Kreislauf';
+
+  @override
+  String get plusGroupBody => 'Körper';
+
+  @override
+  String get plusGroupRecovery => 'Erholung';
+
+  @override
+  String get plusLogWorkout => 'Training nachtragen';
+
+  @override
+  String get plusLogWorkoutHint => 'Vergangene Einheit von Hand';
+
+  @override
+  String get plusImport => 'Importieren';
+
+  @override
+  String get plusImportHint => 'Strava, FIT, GPX, Gym-Laufband';
+
+  @override
+  String get plusEcg => 'EKG aufnehmen';
+
+  @override
+  String get plusEcgHint => 'Polar H10 oder EKG-Datei';
+
+  @override
+  String get plusHrv => 'HRV-Check';
+
+  @override
+  String get plusHrvHint => 'Kurze Messung mit Polar H10';
+
+  @override
+  String get plusBpMeasure => 'Blutdruck messen';
+
+  @override
+  String get plusBpMeasureHint => 'Hilo-Manschette per Bluetooth';
+
+  @override
+  String get plusBpLog => 'Blutdruck eintragen';
+
+  @override
+  String get plusBpLogHint => 'Wert von Hand eintragen';
+
+  @override
+  String get plusBpReport => 'Hilo-Bericht';
+
+  @override
+  String get plusBpReportHint => 'PDF importieren';
+
+  @override
+  String get plusSpo2 => 'SpO₂ & Puls';
+
+  @override
+  String get plusSpo2Hint => 'Vom Pulsoximeter';
+
+  @override
+  String get plusWeigh => 'Wiegen';
+
+  @override
+  String get plusWeighHint => 'RENPHO-Waage per Bluetooth';
+
+  @override
+  String get plusWeightLog => 'Gewicht eintragen';
+
+  @override
+  String get plusWeightLogHint => 'Gewicht, Körperfett, BMI';
+
+  @override
+  String get plusWaist => 'Taille';
+
+  @override
+  String get plusWaistHint => 'Umfang & Verhältnisse';
+
+  @override
+  String get plusGrip => 'Griffkraft';
+
+  @override
+  String get plusGripHint => 'Wert vom Dynamometer';
+
+  @override
+  String get plusSleep => 'Schlaf eintragen';
+
+  @override
+  String get plusSleepHint => 'Dauer, Tief- und REM-Schlaf';
+
+  @override
+  String get recPace => 'Tempo (/km)';
+
+  @override
+  String get recAvgPace => 'Ø Tempo';
+
+  @override
+  String get recPace500 => 'Tempo (/500 m)';
+
+  @override
+  String get recSpeedKmh => 'Geschwindigkeit (km/h)';
+
+  @override
+  String get recPowerW => 'Leistung (W)';
+
+  @override
+  String get recDistanceKm => 'Distanz (km)';
+
+  @override
+  String get recHeartRate => 'Puls';
+
+  @override
+  String get recMap => 'Karte';
+
+  @override
+  String get recStart => 'Start';
+
+  @override
+  String get recResume => 'Fortsetzen';
+
+  @override
+  String get recFinish => 'Fertig';
+
+  @override
+  String get recDiscard => 'Verwerfen';
+
+  @override
+  String get recLive => 'Aufnahme läuft';
+
+  @override
+  String get recNew => 'Neue Aktivität';
+
+  @override
+  String get recCadence => 'Frequenz';
+
+  @override
+  String get recMachine => 'Gerät';
+
+  @override
+  String get recGps => 'GPS';
+
+  @override
+  String get recEcg => 'EKG';
+
+  @override
+  String get recBloodPressure => 'Blutdruck';
+
+  @override
+  String get recBannerOpen => 'Tippen zum Öffnen';
+
+  @override
+  String get bpActivityHint =>
+      'Manschetten messen in Bewegung oft nicht. Messungen vor oder nach der Aktivität stehen hier nicht.';
 }

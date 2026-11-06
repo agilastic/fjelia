@@ -285,6 +285,10 @@ void main() {
       expect(sent.body, contains('Review my training.'));
       expect(sent.body, contains('HEALTH_CONTEXT:'));
       expect(sent.body, contains('ANSWER STANDARD'));
+      // Open-model chat templates accept one system message, at the start.
+      final roles = [for (final m in body['messages'] as List) m['role']];
+      expect(roles.where((r) => r == 'system'), hasLength(1));
+      expect(roles.first, 'system');
     });
 
     test('chat without cloud consent does not make an HTTP request', () async {

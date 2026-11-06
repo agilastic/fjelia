@@ -75,14 +75,22 @@ final activityCoachContextProvider = FutureProvider.autoDispose
 /// A request to open the coach tab about one session: the draft question,
 /// the activity whose context is loaded and the card shown above the chat.
 class CoachRequest {
-  CoachRequest({required this.prompt, this.activity, this.card})
-    : id = DateTime.now().microsecondsSinceEpoch;
+  CoachRequest({
+    required this.prompt,
+    this.activity,
+    this.card,
+    this.autoSend = false,
+  }) : id = DateTime.now().microsecondsSinceEpoch;
 
   /// Tells requests apart, so a new request starts a fresh conversation.
   final int id;
   final String prompt;
   final ActivityRecord? activity;
   final CoachContextCard? card;
+
+  /// Sends [prompt] as soon as the coach tab shows. Cleared once sent, so
+  /// coming back to the tab does not ask a second time.
+  bool autoSend;
 }
 
 /// Set by the places that offer "ask the coach about this session"; the home

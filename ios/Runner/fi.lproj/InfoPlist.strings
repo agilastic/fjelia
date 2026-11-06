@@ -1,9 +1,9 @@
-"NSBluetoothAlwaysUsageDescription" = "Fjelia käyttää Bluetoothia yhdistääkseen terveyslaitteisiisi (Hilo, Aktiia, Garmin).";
+"NSBluetoothAlwaysUsageDescription" = "Fjelia yhdistää terveys- ja harjoituslaitteet EKG:n, sykkeen ja harjoitustietojen tallentamiseen myös näytön ollessa lukittuna.";
 "NSBluetoothPeripheralUsageDescription" = "Fjelia käyttää Bluetoothia yhdistääkseen terveyslaitteisiisi.";
 "NSHealthShareUsageDescription" = "Fjelia lukee terveystietosi (uni, syke, HRV, askeleet, SpO2) Apple Terveydestä antaakseen sinulle henkilökohtaisia harjoitusanalyyseja.";
 "NSHealthUpdateUsageDescription" = "Fjelia kirjoittaa synkronoidut HRV-, syke-, uni-, askel- ja harjoitustietosi Apple Terveyteen, jotta et menetä niitä vaihtaessasi sovellusta.";
-"NSLocationAlwaysAndWhenInUseUsageDescription" = "Fjelia käyttää sijaintiasi vain sovelluksen ollessa auki arvioidakseen suunniteltujen harjoitusten lämpöriskiä.";
-"NSLocationWhenInUseUsageDescription" = "Fjelia käyttää nykyistä sijaintiasi arvioidakseen suunniteltujen harjoitusten lämpöriskiä.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Kun GPS on käytössä, Fjelia tallentaa reitin myös toisessa sovelluksessa tai näyttö lukittuna. Tauko tai Lopeta päättää sijainnin tallennuksen.";
+"NSLocationWhenInUseUsageDescription" = "Fjelia käyttää sijaintia reitteihin GPS:n ollessa käytössä ja suunniteltujen harjoitusten lämpöriskin arviointiin.";
 "NSPhotoLibraryUsageDescription" = "Fjelian avulla voit lisätä kuvia ja videoita kirjastostasi harjoituksiin, kilpailutavoitteisiin ja suunniteltuihin harjoituksiin.";
 "NSCameraUsageDescription" = "Fjelia käyttää kameraa, kun otat kuvan tai videon harjoitukseen, kilpailutavoitteeseen tai suunniteltuun harjoitukseen.";
 "NSMicrophoneUsageDescription" = "Fjelia käyttää mikrofonia harjoitukseen kuvaamiesi videoiden ääneen.";

@@ -10,6 +10,8 @@ import '../../l10n/l10n_ext.dart';
 import '../../theme/activity_colors.dart'
     show completedActivityColor, activitySportIcon;
 import '../../providers/activity_history_provider.dart';
+import '../../providers/ecg_provider.dart';
+import '../../widgets/ecg_sheet.dart' show EcgHistoryTile;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -159,13 +161,22 @@ class _HistoryState extends ConsumerState<ActivityHistory> {
   }) {
     {
       {
-        final filtered = rows
-            .where(
-              (a) => widget.selectedDayOnly
-                  ? DateUtils.isSameDay(a.startDate, selected)
-                  : !a.startDate.isBefore(start) && a.startDate.isBefore(end),
-            )
-            .toList();
+        bool inView(DateTime at) => widget.selectedDayOnly
+            ? DateUtils.isSameDay(at, selected)
+            : !at.isBefore(start) && at.isBefore(end);
+        // Recordings of their own sit between the activities; those taken
+        // during an activity show in its details instead.
+        final filtered = <(DateTime, Object)>[
+          for (final a in rows)
+            if (inView(a.startDate)) (a.startDate, a),
+          for (final e
+              in ref.watch(ecgHistoryProvider).valueOrNull ??
+                  const <EcgRecording>[])
+            if (e.activityId == null &&
+                e.status != 'recording' &&
+                inView(e.recordedAt.toLocal()))
+              (e.recordedAt.toLocal(), e),
+        ]..sort((a, b) => b.$1.compareTo(a.$1));
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -184,22 +195,26 @@ class _HistoryState extends ConsumerState<ActivityHistory> {
               EmptyState(context.l10n.noActivitiesInThisPeriod),
             for (var i = 0; i < filtered.length; i++) ...[
               if (i == 0 ||
-                  !DateUtils.isSameDay(
-                    filtered[i].startDate,
-                    filtered[i - 1].startDate,
-                  ))
+                  !DateUtils.isSameDay(filtered[i].$1, filtered[i - 1].$1))
                 Padding(
                   padding: const EdgeInsets.only(top: 12, bottom: 6),
                   child: Text(
-                    dayHeading(context, filtered[i].startDate),
+                    dayHeading(context, filtered[i].$1),
                     style: const TextStyle(fontSize: 9, color: muted),
                   ),
                 ),
-              _ActivityHistoryTile(
-                key: ValueKey(filtered[i].activityId),
-                activity: filtered[i],
-                peek: i == 0 && _peek,
-              ),
+              switch (filtered[i].$2) {
+                final ActivityRecord a => _ActivityHistoryTile(
+                  key: ValueKey(a.activityId),
+                  activity: a,
+                  peek: i == 0 && _peek,
+                ),
+                final EcgRecording e => EcgHistoryTile(
+                  key: ValueKey(e.recordingId),
+                  recording: e,
+                ),
+                _ => const SizedBox.shrink(),
+              },
             ],
             if (widget.rollingDays != null)
               _OlderActivities(start: start, loading: loading),

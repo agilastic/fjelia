@@ -7,6 +7,7 @@ import '../providers/strava_import_provider.dart';
 import '../services/strava_archive_import.dart' show StravaPreview;
 import 'activity_file_import_sheet.dart';
 import 'app_widgets.dart';
+import 'gym_treadmill_sheet.dart';
 
 const _accent = Color(0xFFFF7A3D);
 
@@ -35,6 +36,13 @@ class ImportSheet extends StatelessWidget {
             context.l10n.importActivityFile,
             'FIT · GPX · TCX',
             const ActivityFileImportSheet() as Widget,
+          ),
+          (
+            Icons.fitness_center,
+            mint,
+            context.l10n.gymTitle,
+            context.l10n.gymDescription,
+            const GymTreadmillSheet() as Widget,
           ),
         ])
           SectionCard(

@@ -32,8 +32,15 @@ class ZoneRecalculationService {
       final cyclingLike =
           t.contains('cycl') || t.contains('bik') || t.contains('ride');
       final floors = cyclingLike ? cycling : running;
-      var zones = zonePercentFromSamples(a.metricsJson, floors);
-      if (zones == null) {
+      final activeSamples = {'ftms', 'manual_recording'}.contains(a.source);
+      var zones = activeSamples
+          ? zonePercentFromActiveSamples(
+              a.metricsJson,
+              floors,
+              a.durationSeconds.toDouble(),
+            )
+          : zonePercentFromSamples(a.metricsJson, floors);
+      if (zones == null && !activeSamples) {
         final hr = await _db.getHeartRateSamples(
           a.startDate,
           a.startDate.add(Duration(seconds: a.durationSeconds)),

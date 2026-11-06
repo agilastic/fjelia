@@ -7218,4 +7218,659 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get feedsUnknown => 'Ei tiedossa';
+
+  @override
+  String get ecgTitle => 'EKG';
+
+  @override
+  String get ecgChooseDevice => 'Valitse Polar H10';
+
+  @override
+  String get ecgStart => 'Tallenna EKG';
+
+  @override
+  String get ecgStopSave => 'Lopeta ja tallenna';
+
+  @override
+  String get ecgImport => 'Tuo EKG-tiedosto';
+
+  @override
+  String get ecgHistory => 'EKG-historia';
+
+  @override
+  String get ecgWaveform => 'Käyrä';
+
+  @override
+  String get ecgReport => 'Raportti';
+
+  @override
+  String get ecgExportCsv => 'Vie käyrä (CSV)';
+
+  @override
+  String get ecgExportMetadata => 'Vie EKG-metatiedot';
+
+  @override
+  String get ecgExportOriginal => 'Jaa alkuperäinen tiedosto';
+
+  @override
+  String get ecgRecording => 'EKG-tallennus käynnissä';
+
+  @override
+  String get ecgRecordingDate => 'Tallennuksen päivämäärä ja aika';
+
+  @override
+  String get ecgLinkedWorkout => 'Liitetty harjoitus';
+
+  @override
+  String get ecgIndependent => 'Ei liitettyä harjoitusta';
+
+  @override
+  String get ecgNoRecordings => 'Ei vielä EKG-tallennuksia.';
+
+  @override
+  String ecgSamples(int count) {
+    return '$count näytettä';
+  }
+
+  @override
+  String ecgSignalGaps(int count) {
+    return '$count signaalikatkoa';
+  }
+
+  @override
+  String get ecgDeleteConfirm =>
+      'Poistetaanko tämä tallennus ja sen alkuperäinen tiedosto pysyvästi?';
+
+  @override
+  String get ecgDescription =>
+      'Tallenna Polar H10:llä, tuo CSV-käyriä tai säilytä PDF-raportteja.';
+
+  @override
+  String get ecgPrivacy =>
+      'Tallennetaan tälle laitteelle ja sisällytetään varmuuskopioihin. Raakasignaaleja ei lähetetä valmentajalle.';
+
+  @override
+  String get ecgLimitations =>
+      'Omaan tallennukseen ja tarkasteluun. EKG-pohjaista HRV:tä ja signaalin laatua ei ole validoitu tässä; diagnoosia tai palautumispisteitä ei lasketa.';
+
+  @override
+  String get ecgImportLimitations =>
+      'Garminin ja Apple Watchin PDF-viennit ovat raportteja. Käyrät vaativat CSV-sarakkeet time_seconds (tai time_ms) ja ecg_uv (tai ecg_mv).';
+
+  @override
+  String get ecgReportOnly =>
+      'Vain raportti. Raakasignaalin näytteitä ei ole saatavilla. Jaa alkuperäinen tiedosto nähdäksesi raportin.';
+
+  @override
+  String get indoorTitle => 'Sisäharjoittelu';
+
+  @override
+  String get indoorEquipment => 'Harjoittelulaite';
+
+  @override
+  String get indoorChooseEquipment => 'Valitse laite';
+
+  @override
+  String get indoorChooseHeartRate => 'Valitse sykeanturi';
+
+  @override
+  String get indoorStart => 'Aloita tallennus';
+
+  @override
+  String get indoorPause => 'Keskeytä tallennus';
+
+  @override
+  String get indoorFinish => 'Lopeta ja tallenna';
+
+  @override
+  String get indoorSaved => 'Tallennettu harjoitushistoriaan';
+
+  @override
+  String get indoorExportFit => 'Jaa FIT-harjoitus';
+
+  @override
+  String get indoorUnfinished => 'Keskeneräiset tallennukset';
+
+  @override
+  String get indoorReviewResume => 'Tarkastele tai jatka';
+
+  @override
+  String get indoorDiscard => 'Hylkää tallennus';
+
+  @override
+  String get indoorDiscardConfirm =>
+      'Hylätäänkö tämä keskeneräinen tallennus pysyvästi?';
+
+  @override
+  String get indoorExternalHeartRate => 'Käytä ulkoista sykeanturia';
+
+  @override
+  String get indoorEquipmentHeartRate => 'Pois: käytä laitteen sykettä';
+
+  @override
+  String get indoorCurrentInterval => 'Nykyinen intervalli';
+
+  @override
+  String get indoorNextInterval => 'Seuraava intervalli';
+
+  @override
+  String get indoorPlanComplete => 'Suunnitellut intervallit suoritettu';
+
+  @override
+  String get indoorAuthorizeControl => 'Salli laitteen ohjaus';
+
+  @override
+  String get indoorManualOverride => 'Käytä käsiohjausta';
+
+  @override
+  String get indoorAutoPower => 'Seuraa intervallitehoa automaattisesti';
+
+  @override
+  String get indoorApplyTarget => 'Aseta tavoite';
+
+  @override
+  String get indoorDescription =>
+      'Yhdistä Bluetooth FTMS -laite ja tallenna sisäharjoitus.';
+
+  @override
+  String get indoorKeepOpen =>
+      'Tallennus jatkuu toisessa sovelluksessa tai näyttö lukittuna. Tauko keskeyttää mittaukset; pysäytä laite sen omilla painikkeilla.';
+
+  @override
+  String get indoorFitHint =>
+      'Tallenna FIT-tiedosto tai avaa se yhteensopivassa harjoitussovelluksessa jakovalikon kautta.';
+
+  @override
+  String get indoorNoEquipment =>
+      'FTMS-laitteita ei löytynyt. Käynnistä laite ja ota Bluetooth-yhteys käyttöön.';
+
+  @override
+  String get indoorControlPrompt =>
+      'Saako Fjelia muuttaa tämän harjoituksen tavoitteita? Pysy laitteen säätimien lähellä. Voit vaihtaa käsiohjaukseen milloin tahansa.';
+
+  @override
+  String get indoorTreadmillSafety =>
+      'Kiinnitä turva-avain ja pysy säätimien lähellä. Vahvista vain pienet muutokset, enintään 0,5 km/h tai 1% kaltevuutta. Tee suuremmat muutokset laitteen säätimillä.';
+
+  @override
+  String get recordingTime => 'Tallennusaika';
+
+  @override
+  String get recordingSpeed => 'Nopeus';
+
+  @override
+  String get recordingPower => 'Teho';
+
+  @override
+  String get recordingCadence => 'Kadenssi / vetotiheys';
+
+  @override
+  String get recordingIncline => 'Kaltevuus';
+
+  @override
+  String get recordingResistance => 'Vastus';
+
+  @override
+  String get recordingSource => 'Lähde';
+
+  @override
+  String get recordingNext => 'Seuraava vaihe';
+
+  @override
+  String get recordingConnecting => 'Yhdistetään';
+
+  @override
+  String get recordingReconnecting => 'Yhdistetään uudelleen';
+
+  @override
+  String get recordingInterrupted => 'Keskeytynyt';
+
+  @override
+  String get recordingPaused => 'Tauolla';
+
+  @override
+  String get indoorMatrixReadOnly =>
+      'Matrix-juoksumatolla vain tallennus. Säädä nopeutta ja kaltevuutta konsolista; kauko-ohjausta ei ole varmistettu tälle mallille.';
+
+  @override
+  String ecgCoverage(String value) {
+    return '$value% näytteistä tallennettu';
+  }
+
+  @override
+  String get recordingBeforeRestore =>
+      'Lopeta tallennus ennen varmuuskopion palauttamista.';
+
+  @override
+  String get gymTitle => 'Kuntosalin juoksumatot';
+
+  @override
+  String get gymDescription =>
+      'Tallenna puhelimella, tuo xID-harjoituksia tai skannaa konsolin yhteenveto.';
+
+  @override
+  String get gymDirectConnection => 'Suora yhteys';
+
+  @override
+  String get gymConsoleSupport =>
+      'Yhteys riippuu konsolista. Vanhemmat Matrix-konsolit voivat tukea xID:tä Bluetooth-reaaliaikatietojen sijaan.';
+
+  @override
+  String get gymFindEquipment => 'Etsi kuntolaitteita';
+
+  @override
+  String get gymLiveAvailable =>
+      'Tämä konsoli voi lähettää harjoitustietoja suoraan Fjeliaan.';
+
+  @override
+  String get gymLiveUnavailable =>
+      'Tuettuja reaaliaikatietoja ei löytynyt. Tuo xID-harjoituksia tai tallenna konsolin yhteenveto.';
+
+  @override
+  String get gymSpeedOnly =>
+      'Nopeus ja askeltiheys ovat saatavilla. Tämä yhteys ei tarjoa kaltevuutta tai etäohjausta.';
+
+  @override
+  String get gymUseMachine => 'Käytä tätä laitetta';
+
+  @override
+  String get gymConnectionReport => 'Yhteysraportti';
+
+  @override
+  String get gymShareReport => 'Jaa yhteysraportti';
+
+  @override
+  String get gymXid => 'Matrix xID';
+
+  @override
+  String get gymXidDescription =>
+      'Tuo kuntosalin xID-verkkoon tallennetut juoksumattoharjoitukset.';
+
+  @override
+  String get gymPortal => 'Kuntosalin Netpulse-portaali';
+
+  @override
+  String get gymPortalHelp =>
+      'Syötä kuntosalisi antama Netpulse-portaalin osoite.';
+
+  @override
+  String get gymPasscode => 'xID-tunnusluku';
+
+  @override
+  String get gymSessionHelp =>
+      'Istunto tallennetaan turvallisesti. Tunnuslukua ei tallenneta.';
+
+  @override
+  String get gymAutoSync => 'Synkronoi xID-harjoitukset automaattisesti';
+
+  @override
+  String gymLastDays(int days) {
+    return 'Viimeiset $days päivää';
+  }
+
+  @override
+  String get gymLoadWorkouts => 'Lataa harjoitukset';
+
+  @override
+  String get gymNoWorkouts =>
+      'Tälle ajanjaksolle ei löytynyt juoksumattoharjoituksia.';
+
+  @override
+  String gymSkipped(int count) {
+    return '$count lukukelvotonta harjoitusta ohitettu.';
+  }
+
+  @override
+  String gymImported(int count, int duplicates) {
+    return '$count harjoitusta tuotu; $duplicates kaksoiskappaletta ohitettu.';
+  }
+
+  @override
+  String get gymSummary => 'Juoksumaton yhteenveto';
+
+  @override
+  String get gymSummaryDescription =>
+      'Kuvaa konsolin loppunäkymä ja tarkista arvot ennen tallentamista.';
+
+  @override
+  String get gymTakePhoto => 'Ota kuva';
+
+  @override
+  String get gymChoosePhoto => 'Valitse kuva';
+
+  @override
+  String get gymReview =>
+      'Tarkista yksiköt, aloitusaika ja arvot. Kuvat luetaan puhelimellasi. Vain harjoituksen yhteenveto tallennetaan.';
+
+  @override
+  String get gymStartTime => 'Harjoituksen alku';
+
+  @override
+  String get gymDurationHelp => 'Syötä mm:ss tai hh:mm:ss, esimerkiksi 30:00.';
+
+  @override
+  String get gymDistanceUnit => 'Matkan yksikkö';
+
+  @override
+  String get gymCalories => 'Kalorit';
+
+  @override
+  String get manualRecordTitle => 'Tallenna aktiviteetti';
+
+  @override
+  String get manualRecordDescription =>
+      'Tallenna harjoitus valinnaisella GPS:llä, EKG:llä ja sykkeellä. Tallennus jatkuu sovellusta vaihtaessa ja näyttö lukittuna, kunnes painat Tauko tai Lopeta.';
+
+  @override
+  String get manualTreadmill => 'Juoksumattojuoksu';
+
+  @override
+  String get manualChooseH10 => 'Valitse Polar H10';
+
+  @override
+  String get manualRecordEcg => 'Tallenna EKG Polar H10:llä';
+
+  @override
+  String get manualChooseHelp =>
+      'Valitse Polar H10 EKG:n ja sykkeen tallentamiseen.';
+
+  @override
+  String manualEcgSegments(int count) {
+    return 'Liitetyt EKG-osuudet: $count';
+  }
+
+  @override
+  String get manualEcgInterrupted =>
+      'EKG pysähtyi. Aktiviteetin ajastin jatkuu.';
+
+  @override
+  String get manualRestartEcg => 'Käynnistä EKG-tallennus uudelleen';
+
+  @override
+  String get manualFinalDistance => 'Lopullinen matka (valinnainen)';
+
+  @override
+  String get manualDiscardNote =>
+      'Hylätäänkö aktiviteetti? EKG-tallenteet säilyvät EKG-historiassa.';
+
+  @override
+  String get manualRecordHeartRate => 'Tallenna syke';
+
+  @override
+  String get manualChooseHr => 'Valitse sykeanturi';
+
+  @override
+  String get manualHrWithEcg => 'Käyttää samaa H10-yhteyttä kuin EKG.';
+
+  @override
+  String get manualRecordGps => 'Tallenna GPS-reitti ja matka';
+
+  @override
+  String get manualGpsHelp =>
+      'Ulkoharjoitteluun. Salli tarkka sijainti, jotta reitti tallentuu näytön ollessa sammutettuna.';
+
+  @override
+  String get manualGpsWaiting => 'Odotetaan tarkkaa GPS-sijaintia';
+
+  @override
+  String manualGpsAccuracy(int meters) {
+    return 'GPS-tarkkuus: $meters m';
+  }
+
+  @override
+  String get manualRecordBp => 'Sisällytä verenpainemittaukset';
+
+  @override
+  String get manualBpHelp =>
+      'Näyttää tallennuksen aikana tehdyt Hilo-, Aktiia- ja Health-mittaukset myös myöhemmän synkronoinnin jälkeen.';
+
+  @override
+  String get manualBpUnavailable => 'Verenpainemittauksia ei voitu ladata.';
+
+  @override
+  String get manualBpEmpty =>
+      'Ei verenpainemittauksia tämän tallennuksen aikana.';
+
+  @override
+  String get manualHrDisconnected => 'Sykeanturin yhteys katkennut.';
+
+  @override
+  String get manualReconnectHr => 'Yhdistä sykeanturi uudelleen';
+
+  @override
+  String get manualBackgroundNotification =>
+      'Tallennus jatkuu näytön ollessa sammutettuna';
+
+  @override
+  String get ecgAskCoach => 'Keskustele tekoälyvalmentajan kanssa';
+
+  @override
+  String get ecgCoachWarningTitle => 'Ei lääketieteellinen neuvo';
+
+  @override
+  String get ecgCoachWarningBody =>
+      'Tekoälyvalmentaja ei ole lääkäri eikä voi tehdä diagnoosia. Rintavyön EKG:ssä on vain yksi kytkentä: se ei voi sulkea pois sydäninfarktia tai muuta sydänsairautta, ja analyysi voi olla väärä.\n\nRintakipu tai puristus rinnassa, hengenahdistus, kipu käsivarressa, leuassa tai selässä, kylmä hiki tai pyörtyminen: soita heti 112. Älä odota tekoälyn vastausta.\n\nAnalysoidut arvot ja 10 sekuntia raakasignaalia menevät tekoälyasetuksissa valittuun tekoälymalliin.';
+
+  @override
+  String get ecgCoachUnderstood => 'Ymmärrän';
+
+  @override
+  String get ecgCoachBanner =>
+      'Ei lääketieteellinen neuvo. Tekoäly ei ole lääkäri eikä voi sulkea pois sydäninfarktia. Hätätilanteessa soita 112.';
+
+  @override
+  String get ecgCoachCardTitle => 'EKG:n esianalyysi';
+
+  @override
+  String get statusMeasured => 'Mitattu';
+
+  @override
+  String get ecgQuestionOverview => 'Mitä EKG:ni näyttää?';
+
+  @override
+  String get ecgQuestionRhythm => 'Onko sydämeni rytmi säännöllinen?';
+
+  @override
+  String get ecgQuestionDoctor => 'Pitäisikö lääkärin katsoa tämä?';
+
+  @override
+  String get ecgFollowSymptoms =>
+      'Minkä oireiden kanssa minun pitäisi mennä lääkäriin?';
+
+  @override
+  String get ecgFollowRiskFactors => 'Miten riskitekijäni vaikuttavat tähän?';
+
+  @override
+  String get ecgFollowTraining => 'Voinko harjoitella normaalisti?';
+
+  @override
+  String get ecgFollowBetterRecording => 'Miten tallennan paremman EKG:n?';
+
+  @override
+  String get manualTreadmillConnect =>
+      'Yhdistä juoksumatto (Bluetooth, valinnainen)';
+
+  @override
+  String get manualTreadmillHelp =>
+      'Nopeus, matka ja kaltevuus tulevat silloin juoksumatolta. Ilman yhteyttä syötä matka lopuksi.';
+
+  @override
+  String get sportIndoorCycling => 'Sisäpyöräily';
+
+  @override
+  String get sportElliptical => 'Crosstrainer';
+
+  @override
+  String get sportStairClimber => 'Porraskone';
+
+  @override
+  String get manualWrongMachine => 'Tämä laite ei sovi valittuun lajiin.';
+
+  @override
+  String get manualEquipmentHelp =>
+      'Yhdistä Bluetooth-laite (FTMS). Nopeus, teho, kadenssi ja matka tulevat laitteelta.';
+
+  @override
+  String get plusTitle => 'Kirjaa';
+
+  @override
+  String get plusStartWorkout => 'Aloita harjoitus';
+
+  @override
+  String get plusStartWorkoutHint =>
+      'Livenä GPS:llä, matolla tai sisäpyörällä · EKG ja syke';
+
+  @override
+  String get plusGroupTraining => 'Harjoittelu';
+
+  @override
+  String get plusGroupHeart => 'Sydän ja verenkierto';
+
+  @override
+  String get plusGroupBody => 'Keho';
+
+  @override
+  String get plusGroupRecovery => 'Palautuminen';
+
+  @override
+  String get plusLogWorkout => 'Lisää harjoitus';
+
+  @override
+  String get plusLogWorkoutHint => 'Mennyt harjoitus käsin';
+
+  @override
+  String get plusImport => 'Tuo';
+
+  @override
+  String get plusImportHint => 'Strava, FIT, GPX, salin juoksumatto';
+
+  @override
+  String get plusEcg => 'Tallenna EKG';
+
+  @override
+  String get plusEcgHint => 'Polar H10 tai EKG-tiedosto';
+
+  @override
+  String get plusHrv => 'HRV-tarkistus';
+
+  @override
+  String get plusHrvHint => 'Lyhyt mittaus Polar H10:llä';
+
+  @override
+  String get plusBpMeasure => 'Mittaa verenpaine';
+
+  @override
+  String get plusBpMeasureHint => 'Hilo-mansetti Bluetoothilla';
+
+  @override
+  String get plusBpLog => 'Kirjaa verenpaine';
+
+  @override
+  String get plusBpLogHint => 'Syötä lukema';
+
+  @override
+  String get plusBpReport => 'Hilo-raportti';
+
+  @override
+  String get plusBpReportHint => 'Tuo PDF';
+
+  @override
+  String get plusSpo2 => 'SpO₂ ja syke';
+
+  @override
+  String get plusSpo2Hint => 'Pulssioksimetrista';
+
+  @override
+  String get plusWeigh => 'Punnitse';
+
+  @override
+  String get plusWeighHint => 'RENPHO-vaaka Bluetoothilla';
+
+  @override
+  String get plusWeightLog => 'Kirjaa paino';
+
+  @override
+  String get plusWeightLogHint => 'Paino, rasva, BMI';
+
+  @override
+  String get plusWaist => 'Vyötärö';
+
+  @override
+  String get plusWaistHint => 'Ympärys ja suhteet';
+
+  @override
+  String get plusGrip => 'Puristusvoima';
+
+  @override
+  String get plusGripHint => 'Dynamometrin lukema';
+
+  @override
+  String get plusSleep => 'Kirjaa uni';
+
+  @override
+  String get plusSleepHint => 'Kesto, syvä ja REM';
+
+  @override
+  String get recPace => 'Vauhti (/km)';
+
+  @override
+  String get recAvgPace => 'Keskivauhti';
+
+  @override
+  String get recPace500 => 'Vauhti (/500 m)';
+
+  @override
+  String get recSpeedKmh => 'Nopeus (km/h)';
+
+  @override
+  String get recPowerW => 'Teho (W)';
+
+  @override
+  String get recDistanceKm => 'Matka (km)';
+
+  @override
+  String get recHeartRate => 'Syke';
+
+  @override
+  String get recMap => 'Kartta';
+
+  @override
+  String get recStart => 'Aloita';
+
+  @override
+  String get recResume => 'Jatka';
+
+  @override
+  String get recFinish => 'Valmis';
+
+  @override
+  String get recDiscard => 'Hylkää';
+
+  @override
+  String get recLive => 'Tallentaa';
+
+  @override
+  String get recNew => 'Uusi suoritus';
+
+  @override
+  String get recCadence => 'Kadenssi';
+
+  @override
+  String get recMachine => 'Laite';
+
+  @override
+  String get recGps => 'GPS';
+
+  @override
+  String get recEcg => 'EKG';
+
+  @override
+  String get recBloodPressure => 'Verenpaine';
+
+  @override
+  String get recBannerOpen => 'Avaa napauttamalla';
+
+  @override
+  String get bpActivityHint =>
+      'Mansetit eivät usein mittaa liikkeessä. Ennen tai jälkeen suorituksen otetut mittaukset eivät näy tässä.';
 }

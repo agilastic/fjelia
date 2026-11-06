@@ -8,6 +8,7 @@ import 'app_widgets.dart';
 
 IconData _sportIcon(String sport) {
   final t = sport.toLowerCase();
+  if (t == 'ecg') return Icons.monitor_heart_outlined;
   if (t.contains('run')) return Icons.directions_run;
   if (t.contains('cycl') || t.contains('bik') || t.contains('ride')) {
     return Icons.directions_bike;
@@ -23,7 +24,46 @@ Color _statusColor(CoachCardStatus status) => switch (status) {
   CoachCardStatus.adapted => const Color(0xFFFFA94D),
   CoachCardStatus.completed => mint,
   CoachCardStatus.skipped => const Color(0xFF9E9E9E),
+  CoachCardStatus.measured => const Color(0xFFFF6B6B),
 };
+
+/// The warning above a chat about a health measurement: the coach is no
+/// doctor and the emergency number comes first.
+class CoachMedicalWarning extends StatelessWidget {
+  const CoachMedicalWarning({super.key});
+
+  @override
+  Widget build(BuildContext context) => Semantics(
+    container: true,
+    liveRegion: true,
+    child: Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: const Color(0x33FF5252),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.redAccent, width: 1.5),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(Icons.warning_amber_rounded, color: Colors.redAccent),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              context.l10n.ecgCoachBanner,
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                height: 1.3,
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
 
 /// The session a coach chat is about, as a card at the top of the chat.
 class CoachContextCardView extends StatelessWidget {

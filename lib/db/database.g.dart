@@ -16753,6 +16753,1546 @@ class SpotHrvMeasurementsCompanion extends UpdateCompanion<SpotHrvMeasurement> {
   }
 }
 
+class $EcgRecordingsTable extends EcgRecordings
+    with TableInfo<$EcgRecordingsTable, EcgRecording> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $EcgRecordingsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _recordingIdMeta = const VerificationMeta(
+    'recordingId',
+  );
+  @override
+  late final GeneratedColumn<String> recordingId = GeneratedColumn<String>(
+    'recording_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _recordedAtMeta = const VerificationMeta(
+    'recordedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> recordedAt = GeneratedColumn<DateTime>(
+    'recorded_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _sourceMeta = const VerificationMeta('source');
+  @override
+  late final GeneratedColumn<String> source = GeneratedColumn<String>(
+    'source',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _deviceNameMeta = const VerificationMeta(
+    'deviceName',
+  );
+  @override
+  late final GeneratedColumn<String> deviceName = GeneratedColumn<String>(
+    'device_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _deviceIdMeta = const VerificationMeta(
+    'deviceId',
+  );
+  @override
+  late final GeneratedColumn<String> deviceId = GeneratedColumn<String>(
+    'device_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _kindMeta = const VerificationMeta('kind');
+  @override
+  late final GeneratedColumn<String> kind = GeneratedColumn<String>(
+    'kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+    'status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _sampleRateHzMeta = const VerificationMeta(
+    'sampleRateHz',
+  );
+  @override
+  late final GeneratedColumn<double> sampleRateHz = GeneratedColumn<double>(
+    'sample_rate_hz',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _sampleCountMeta = const VerificationMeta(
+    'sampleCount',
+  );
+  @override
+  late final GeneratedColumn<int> sampleCount = GeneratedColumn<int>(
+    'sample_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _durationMsMeta = const VerificationMeta(
+    'durationMs',
+  );
+  @override
+  late final GeneratedColumn<int> durationMs = GeneratedColumn<int>(
+    'duration_ms',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _activityIdMeta = const VerificationMeta(
+    'activityId',
+  );
+  @override
+  late final GeneratedColumn<String> activityId = GeneratedColumn<String>(
+    'activity_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _metadataJsonMeta = const VerificationMeta(
+    'metadataJson',
+  );
+  @override
+  late final GeneratedColumn<String> metadataJson = GeneratedColumn<String>(
+    'metadata_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('{}'),
+  );
+  static const VerificationMeta _contentHashMeta = const VerificationMeta(
+    'contentHash',
+  );
+  @override
+  late final GeneratedColumn<String> contentHash = GeneratedColumn<String>(
+    'content_hash',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
+  );
+  static const VerificationMeta _originalFileNameMeta = const VerificationMeta(
+    'originalFileName',
+  );
+  @override
+  late final GeneratedColumn<String> originalFileName = GeneratedColumn<String>(
+    'original_file_name',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _originalBase64Meta = const VerificationMeta(
+    'originalBase64',
+  );
+  @override
+  late final GeneratedColumn<String> originalBase64 = GeneratedColumn<String>(
+    'original_base64',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    recordingId,
+    recordedAt,
+    source,
+    deviceName,
+    deviceId,
+    kind,
+    status,
+    sampleRateHz,
+    sampleCount,
+    durationMs,
+    activityId,
+    metadataJson,
+    contentHash,
+    originalFileName,
+    originalBase64,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'ecg_recordings';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<EcgRecording> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('recording_id')) {
+      context.handle(
+        _recordingIdMeta,
+        recordingId.isAcceptableOrUnknown(
+          data['recording_id']!,
+          _recordingIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_recordingIdMeta);
+    }
+    if (data.containsKey('recorded_at')) {
+      context.handle(
+        _recordedAtMeta,
+        recordedAt.isAcceptableOrUnknown(data['recorded_at']!, _recordedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_recordedAtMeta);
+    }
+    if (data.containsKey('source')) {
+      context.handle(
+        _sourceMeta,
+        source.isAcceptableOrUnknown(data['source']!, _sourceMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sourceMeta);
+    }
+    if (data.containsKey('device_name')) {
+      context.handle(
+        _deviceNameMeta,
+        deviceName.isAcceptableOrUnknown(data['device_name']!, _deviceNameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_deviceNameMeta);
+    }
+    if (data.containsKey('device_id')) {
+      context.handle(
+        _deviceIdMeta,
+        deviceId.isAcceptableOrUnknown(data['device_id']!, _deviceIdMeta),
+      );
+    }
+    if (data.containsKey('kind')) {
+      context.handle(
+        _kindMeta,
+        kind.isAcceptableOrUnknown(data['kind']!, _kindMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_kindMeta);
+    }
+    if (data.containsKey('status')) {
+      context.handle(
+        _statusMeta,
+        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_statusMeta);
+    }
+    if (data.containsKey('sample_rate_hz')) {
+      context.handle(
+        _sampleRateHzMeta,
+        sampleRateHz.isAcceptableOrUnknown(
+          data['sample_rate_hz']!,
+          _sampleRateHzMeta,
+        ),
+      );
+    }
+    if (data.containsKey('sample_count')) {
+      context.handle(
+        _sampleCountMeta,
+        sampleCount.isAcceptableOrUnknown(
+          data['sample_count']!,
+          _sampleCountMeta,
+        ),
+      );
+    }
+    if (data.containsKey('duration_ms')) {
+      context.handle(
+        _durationMsMeta,
+        durationMs.isAcceptableOrUnknown(data['duration_ms']!, _durationMsMeta),
+      );
+    }
+    if (data.containsKey('activity_id')) {
+      context.handle(
+        _activityIdMeta,
+        activityId.isAcceptableOrUnknown(data['activity_id']!, _activityIdMeta),
+      );
+    }
+    if (data.containsKey('metadata_json')) {
+      context.handle(
+        _metadataJsonMeta,
+        metadataJson.isAcceptableOrUnknown(
+          data['metadata_json']!,
+          _metadataJsonMeta,
+        ),
+      );
+    }
+    if (data.containsKey('content_hash')) {
+      context.handle(
+        _contentHashMeta,
+        contentHash.isAcceptableOrUnknown(
+          data['content_hash']!,
+          _contentHashMeta,
+        ),
+      );
+    }
+    if (data.containsKey('original_file_name')) {
+      context.handle(
+        _originalFileNameMeta,
+        originalFileName.isAcceptableOrUnknown(
+          data['original_file_name']!,
+          _originalFileNameMeta,
+        ),
+      );
+    }
+    if (data.containsKey('original_base64')) {
+      context.handle(
+        _originalBase64Meta,
+        originalBase64.isAcceptableOrUnknown(
+          data['original_base64']!,
+          _originalBase64Meta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {recordingId};
+  @override
+  EcgRecording map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return EcgRecording(
+      recordingId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}recording_id'],
+      )!,
+      recordedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}recorded_at'],
+      )!,
+      source: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source'],
+      )!,
+      deviceName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}device_name'],
+      )!,
+      deviceId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}device_id'],
+      ),
+      kind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}kind'],
+      )!,
+      status: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}status'],
+      )!,
+      sampleRateHz: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}sample_rate_hz'],
+      ),
+      sampleCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}sample_count'],
+      )!,
+      durationMs: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}duration_ms'],
+      )!,
+      activityId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}activity_id'],
+      ),
+      metadataJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}metadata_json'],
+      )!,
+      contentHash: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}content_hash'],
+      ),
+      originalFileName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}original_file_name'],
+      ),
+      originalBase64: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}original_base64'],
+      ),
+    );
+  }
+
+  @override
+  $EcgRecordingsTable createAlias(String alias) {
+    return $EcgRecordingsTable(attachedDatabase, alias);
+  }
+}
+
+class EcgRecording extends DataClass implements Insertable<EcgRecording> {
+  final String recordingId;
+  final DateTime recordedAt;
+  final String source;
+  final String deviceName;
+  final String? deviceId;
+  final String kind;
+  final String status;
+  final double? sampleRateHz;
+  final int sampleCount;
+  final int durationMs;
+  final String? activityId;
+  final String metadataJson;
+  final String? contentHash;
+  final String? originalFileName;
+  final String? originalBase64;
+  const EcgRecording({
+    required this.recordingId,
+    required this.recordedAt,
+    required this.source,
+    required this.deviceName,
+    this.deviceId,
+    required this.kind,
+    required this.status,
+    this.sampleRateHz,
+    required this.sampleCount,
+    required this.durationMs,
+    this.activityId,
+    required this.metadataJson,
+    this.contentHash,
+    this.originalFileName,
+    this.originalBase64,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['recording_id'] = Variable<String>(recordingId);
+    map['recorded_at'] = Variable<DateTime>(recordedAt);
+    map['source'] = Variable<String>(source);
+    map['device_name'] = Variable<String>(deviceName);
+    if (!nullToAbsent || deviceId != null) {
+      map['device_id'] = Variable<String>(deviceId);
+    }
+    map['kind'] = Variable<String>(kind);
+    map['status'] = Variable<String>(status);
+    if (!nullToAbsent || sampleRateHz != null) {
+      map['sample_rate_hz'] = Variable<double>(sampleRateHz);
+    }
+    map['sample_count'] = Variable<int>(sampleCount);
+    map['duration_ms'] = Variable<int>(durationMs);
+    if (!nullToAbsent || activityId != null) {
+      map['activity_id'] = Variable<String>(activityId);
+    }
+    map['metadata_json'] = Variable<String>(metadataJson);
+    if (!nullToAbsent || contentHash != null) {
+      map['content_hash'] = Variable<String>(contentHash);
+    }
+    if (!nullToAbsent || originalFileName != null) {
+      map['original_file_name'] = Variable<String>(originalFileName);
+    }
+    if (!nullToAbsent || originalBase64 != null) {
+      map['original_base64'] = Variable<String>(originalBase64);
+    }
+    return map;
+  }
+
+  EcgRecordingsCompanion toCompanion(bool nullToAbsent) {
+    return EcgRecordingsCompanion(
+      recordingId: Value(recordingId),
+      recordedAt: Value(recordedAt),
+      source: Value(source),
+      deviceName: Value(deviceName),
+      deviceId: deviceId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deviceId),
+      kind: Value(kind),
+      status: Value(status),
+      sampleRateHz: sampleRateHz == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sampleRateHz),
+      sampleCount: Value(sampleCount),
+      durationMs: Value(durationMs),
+      activityId: activityId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(activityId),
+      metadataJson: Value(metadataJson),
+      contentHash: contentHash == null && nullToAbsent
+          ? const Value.absent()
+          : Value(contentHash),
+      originalFileName: originalFileName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(originalFileName),
+      originalBase64: originalBase64 == null && nullToAbsent
+          ? const Value.absent()
+          : Value(originalBase64),
+    );
+  }
+
+  factory EcgRecording.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return EcgRecording(
+      recordingId: serializer.fromJson<String>(json['recordingId']),
+      recordedAt: serializer.fromJson<DateTime>(json['recordedAt']),
+      source: serializer.fromJson<String>(json['source']),
+      deviceName: serializer.fromJson<String>(json['deviceName']),
+      deviceId: serializer.fromJson<String?>(json['deviceId']),
+      kind: serializer.fromJson<String>(json['kind']),
+      status: serializer.fromJson<String>(json['status']),
+      sampleRateHz: serializer.fromJson<double?>(json['sampleRateHz']),
+      sampleCount: serializer.fromJson<int>(json['sampleCount']),
+      durationMs: serializer.fromJson<int>(json['durationMs']),
+      activityId: serializer.fromJson<String?>(json['activityId']),
+      metadataJson: serializer.fromJson<String>(json['metadataJson']),
+      contentHash: serializer.fromJson<String?>(json['contentHash']),
+      originalFileName: serializer.fromJson<String?>(json['originalFileName']),
+      originalBase64: serializer.fromJson<String?>(json['originalBase64']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'recordingId': serializer.toJson<String>(recordingId),
+      'recordedAt': serializer.toJson<DateTime>(recordedAt),
+      'source': serializer.toJson<String>(source),
+      'deviceName': serializer.toJson<String>(deviceName),
+      'deviceId': serializer.toJson<String?>(deviceId),
+      'kind': serializer.toJson<String>(kind),
+      'status': serializer.toJson<String>(status),
+      'sampleRateHz': serializer.toJson<double?>(sampleRateHz),
+      'sampleCount': serializer.toJson<int>(sampleCount),
+      'durationMs': serializer.toJson<int>(durationMs),
+      'activityId': serializer.toJson<String?>(activityId),
+      'metadataJson': serializer.toJson<String>(metadataJson),
+      'contentHash': serializer.toJson<String?>(contentHash),
+      'originalFileName': serializer.toJson<String?>(originalFileName),
+      'originalBase64': serializer.toJson<String?>(originalBase64),
+    };
+  }
+
+  EcgRecording copyWith({
+    String? recordingId,
+    DateTime? recordedAt,
+    String? source,
+    String? deviceName,
+    Value<String?> deviceId = const Value.absent(),
+    String? kind,
+    String? status,
+    Value<double?> sampleRateHz = const Value.absent(),
+    int? sampleCount,
+    int? durationMs,
+    Value<String?> activityId = const Value.absent(),
+    String? metadataJson,
+    Value<String?> contentHash = const Value.absent(),
+    Value<String?> originalFileName = const Value.absent(),
+    Value<String?> originalBase64 = const Value.absent(),
+  }) => EcgRecording(
+    recordingId: recordingId ?? this.recordingId,
+    recordedAt: recordedAt ?? this.recordedAt,
+    source: source ?? this.source,
+    deviceName: deviceName ?? this.deviceName,
+    deviceId: deviceId.present ? deviceId.value : this.deviceId,
+    kind: kind ?? this.kind,
+    status: status ?? this.status,
+    sampleRateHz: sampleRateHz.present ? sampleRateHz.value : this.sampleRateHz,
+    sampleCount: sampleCount ?? this.sampleCount,
+    durationMs: durationMs ?? this.durationMs,
+    activityId: activityId.present ? activityId.value : this.activityId,
+    metadataJson: metadataJson ?? this.metadataJson,
+    contentHash: contentHash.present ? contentHash.value : this.contentHash,
+    originalFileName: originalFileName.present
+        ? originalFileName.value
+        : this.originalFileName,
+    originalBase64: originalBase64.present
+        ? originalBase64.value
+        : this.originalBase64,
+  );
+  EcgRecording copyWithCompanion(EcgRecordingsCompanion data) {
+    return EcgRecording(
+      recordingId: data.recordingId.present
+          ? data.recordingId.value
+          : this.recordingId,
+      recordedAt: data.recordedAt.present
+          ? data.recordedAt.value
+          : this.recordedAt,
+      source: data.source.present ? data.source.value : this.source,
+      deviceName: data.deviceName.present
+          ? data.deviceName.value
+          : this.deviceName,
+      deviceId: data.deviceId.present ? data.deviceId.value : this.deviceId,
+      kind: data.kind.present ? data.kind.value : this.kind,
+      status: data.status.present ? data.status.value : this.status,
+      sampleRateHz: data.sampleRateHz.present
+          ? data.sampleRateHz.value
+          : this.sampleRateHz,
+      sampleCount: data.sampleCount.present
+          ? data.sampleCount.value
+          : this.sampleCount,
+      durationMs: data.durationMs.present
+          ? data.durationMs.value
+          : this.durationMs,
+      activityId: data.activityId.present
+          ? data.activityId.value
+          : this.activityId,
+      metadataJson: data.metadataJson.present
+          ? data.metadataJson.value
+          : this.metadataJson,
+      contentHash: data.contentHash.present
+          ? data.contentHash.value
+          : this.contentHash,
+      originalFileName: data.originalFileName.present
+          ? data.originalFileName.value
+          : this.originalFileName,
+      originalBase64: data.originalBase64.present
+          ? data.originalBase64.value
+          : this.originalBase64,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('EcgRecording(')
+          ..write('recordingId: $recordingId, ')
+          ..write('recordedAt: $recordedAt, ')
+          ..write('source: $source, ')
+          ..write('deviceName: $deviceName, ')
+          ..write('deviceId: $deviceId, ')
+          ..write('kind: $kind, ')
+          ..write('status: $status, ')
+          ..write('sampleRateHz: $sampleRateHz, ')
+          ..write('sampleCount: $sampleCount, ')
+          ..write('durationMs: $durationMs, ')
+          ..write('activityId: $activityId, ')
+          ..write('metadataJson: $metadataJson, ')
+          ..write('contentHash: $contentHash, ')
+          ..write('originalFileName: $originalFileName, ')
+          ..write('originalBase64: $originalBase64')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    recordingId,
+    recordedAt,
+    source,
+    deviceName,
+    deviceId,
+    kind,
+    status,
+    sampleRateHz,
+    sampleCount,
+    durationMs,
+    activityId,
+    metadataJson,
+    contentHash,
+    originalFileName,
+    originalBase64,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is EcgRecording &&
+          other.recordingId == this.recordingId &&
+          other.recordedAt == this.recordedAt &&
+          other.source == this.source &&
+          other.deviceName == this.deviceName &&
+          other.deviceId == this.deviceId &&
+          other.kind == this.kind &&
+          other.status == this.status &&
+          other.sampleRateHz == this.sampleRateHz &&
+          other.sampleCount == this.sampleCount &&
+          other.durationMs == this.durationMs &&
+          other.activityId == this.activityId &&
+          other.metadataJson == this.metadataJson &&
+          other.contentHash == this.contentHash &&
+          other.originalFileName == this.originalFileName &&
+          other.originalBase64 == this.originalBase64);
+}
+
+class EcgRecordingsCompanion extends UpdateCompanion<EcgRecording> {
+  final Value<String> recordingId;
+  final Value<DateTime> recordedAt;
+  final Value<String> source;
+  final Value<String> deviceName;
+  final Value<String?> deviceId;
+  final Value<String> kind;
+  final Value<String> status;
+  final Value<double?> sampleRateHz;
+  final Value<int> sampleCount;
+  final Value<int> durationMs;
+  final Value<String?> activityId;
+  final Value<String> metadataJson;
+  final Value<String?> contentHash;
+  final Value<String?> originalFileName;
+  final Value<String?> originalBase64;
+  final Value<int> rowid;
+  const EcgRecordingsCompanion({
+    this.recordingId = const Value.absent(),
+    this.recordedAt = const Value.absent(),
+    this.source = const Value.absent(),
+    this.deviceName = const Value.absent(),
+    this.deviceId = const Value.absent(),
+    this.kind = const Value.absent(),
+    this.status = const Value.absent(),
+    this.sampleRateHz = const Value.absent(),
+    this.sampleCount = const Value.absent(),
+    this.durationMs = const Value.absent(),
+    this.activityId = const Value.absent(),
+    this.metadataJson = const Value.absent(),
+    this.contentHash = const Value.absent(),
+    this.originalFileName = const Value.absent(),
+    this.originalBase64 = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  EcgRecordingsCompanion.insert({
+    required String recordingId,
+    required DateTime recordedAt,
+    required String source,
+    required String deviceName,
+    this.deviceId = const Value.absent(),
+    required String kind,
+    required String status,
+    this.sampleRateHz = const Value.absent(),
+    this.sampleCount = const Value.absent(),
+    this.durationMs = const Value.absent(),
+    this.activityId = const Value.absent(),
+    this.metadataJson = const Value.absent(),
+    this.contentHash = const Value.absent(),
+    this.originalFileName = const Value.absent(),
+    this.originalBase64 = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : recordingId = Value(recordingId),
+       recordedAt = Value(recordedAt),
+       source = Value(source),
+       deviceName = Value(deviceName),
+       kind = Value(kind),
+       status = Value(status);
+  static Insertable<EcgRecording> custom({
+    Expression<String>? recordingId,
+    Expression<DateTime>? recordedAt,
+    Expression<String>? source,
+    Expression<String>? deviceName,
+    Expression<String>? deviceId,
+    Expression<String>? kind,
+    Expression<String>? status,
+    Expression<double>? sampleRateHz,
+    Expression<int>? sampleCount,
+    Expression<int>? durationMs,
+    Expression<String>? activityId,
+    Expression<String>? metadataJson,
+    Expression<String>? contentHash,
+    Expression<String>? originalFileName,
+    Expression<String>? originalBase64,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (recordingId != null) 'recording_id': recordingId,
+      if (recordedAt != null) 'recorded_at': recordedAt,
+      if (source != null) 'source': source,
+      if (deviceName != null) 'device_name': deviceName,
+      if (deviceId != null) 'device_id': deviceId,
+      if (kind != null) 'kind': kind,
+      if (status != null) 'status': status,
+      if (sampleRateHz != null) 'sample_rate_hz': sampleRateHz,
+      if (sampleCount != null) 'sample_count': sampleCount,
+      if (durationMs != null) 'duration_ms': durationMs,
+      if (activityId != null) 'activity_id': activityId,
+      if (metadataJson != null) 'metadata_json': metadataJson,
+      if (contentHash != null) 'content_hash': contentHash,
+      if (originalFileName != null) 'original_file_name': originalFileName,
+      if (originalBase64 != null) 'original_base64': originalBase64,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  EcgRecordingsCompanion copyWith({
+    Value<String>? recordingId,
+    Value<DateTime>? recordedAt,
+    Value<String>? source,
+    Value<String>? deviceName,
+    Value<String?>? deviceId,
+    Value<String>? kind,
+    Value<String>? status,
+    Value<double?>? sampleRateHz,
+    Value<int>? sampleCount,
+    Value<int>? durationMs,
+    Value<String?>? activityId,
+    Value<String>? metadataJson,
+    Value<String?>? contentHash,
+    Value<String?>? originalFileName,
+    Value<String?>? originalBase64,
+    Value<int>? rowid,
+  }) {
+    return EcgRecordingsCompanion(
+      recordingId: recordingId ?? this.recordingId,
+      recordedAt: recordedAt ?? this.recordedAt,
+      source: source ?? this.source,
+      deviceName: deviceName ?? this.deviceName,
+      deviceId: deviceId ?? this.deviceId,
+      kind: kind ?? this.kind,
+      status: status ?? this.status,
+      sampleRateHz: sampleRateHz ?? this.sampleRateHz,
+      sampleCount: sampleCount ?? this.sampleCount,
+      durationMs: durationMs ?? this.durationMs,
+      activityId: activityId ?? this.activityId,
+      metadataJson: metadataJson ?? this.metadataJson,
+      contentHash: contentHash ?? this.contentHash,
+      originalFileName: originalFileName ?? this.originalFileName,
+      originalBase64: originalBase64 ?? this.originalBase64,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (recordingId.present) {
+      map['recording_id'] = Variable<String>(recordingId.value);
+    }
+    if (recordedAt.present) {
+      map['recorded_at'] = Variable<DateTime>(recordedAt.value);
+    }
+    if (source.present) {
+      map['source'] = Variable<String>(source.value);
+    }
+    if (deviceName.present) {
+      map['device_name'] = Variable<String>(deviceName.value);
+    }
+    if (deviceId.present) {
+      map['device_id'] = Variable<String>(deviceId.value);
+    }
+    if (kind.present) {
+      map['kind'] = Variable<String>(kind.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
+    if (sampleRateHz.present) {
+      map['sample_rate_hz'] = Variable<double>(sampleRateHz.value);
+    }
+    if (sampleCount.present) {
+      map['sample_count'] = Variable<int>(sampleCount.value);
+    }
+    if (durationMs.present) {
+      map['duration_ms'] = Variable<int>(durationMs.value);
+    }
+    if (activityId.present) {
+      map['activity_id'] = Variable<String>(activityId.value);
+    }
+    if (metadataJson.present) {
+      map['metadata_json'] = Variable<String>(metadataJson.value);
+    }
+    if (contentHash.present) {
+      map['content_hash'] = Variable<String>(contentHash.value);
+    }
+    if (originalFileName.present) {
+      map['original_file_name'] = Variable<String>(originalFileName.value);
+    }
+    if (originalBase64.present) {
+      map['original_base64'] = Variable<String>(originalBase64.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('EcgRecordingsCompanion(')
+          ..write('recordingId: $recordingId, ')
+          ..write('recordedAt: $recordedAt, ')
+          ..write('source: $source, ')
+          ..write('deviceName: $deviceName, ')
+          ..write('deviceId: $deviceId, ')
+          ..write('kind: $kind, ')
+          ..write('status: $status, ')
+          ..write('sampleRateHz: $sampleRateHz, ')
+          ..write('sampleCount: $sampleCount, ')
+          ..write('durationMs: $durationMs, ')
+          ..write('activityId: $activityId, ')
+          ..write('metadataJson: $metadataJson, ')
+          ..write('contentHash: $contentHash, ')
+          ..write('originalFileName: $originalFileName, ')
+          ..write('originalBase64: $originalBase64, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $EcgSampleChunksTable extends EcgSampleChunks
+    with TableInfo<$EcgSampleChunksTable, EcgSampleChunk> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $EcgSampleChunksTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _recordingIdMeta = const VerificationMeta(
+    'recordingId',
+  );
+  @override
+  late final GeneratedColumn<String> recordingId = GeneratedColumn<String>(
+    'recording_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _sequenceMeta = const VerificationMeta(
+    'sequence',
+  );
+  @override
+  late final GeneratedColumn<int> sequence = GeneratedColumn<int>(
+    'sequence',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _dataJsonMeta = const VerificationMeta(
+    'dataJson',
+  );
+  @override
+  late final GeneratedColumn<String> dataJson = GeneratedColumn<String>(
+    'data_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [recordingId, sequence, dataJson];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'ecg_sample_chunks';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<EcgSampleChunk> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('recording_id')) {
+      context.handle(
+        _recordingIdMeta,
+        recordingId.isAcceptableOrUnknown(
+          data['recording_id']!,
+          _recordingIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_recordingIdMeta);
+    }
+    if (data.containsKey('sequence')) {
+      context.handle(
+        _sequenceMeta,
+        sequence.isAcceptableOrUnknown(data['sequence']!, _sequenceMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sequenceMeta);
+    }
+    if (data.containsKey('data_json')) {
+      context.handle(
+        _dataJsonMeta,
+        dataJson.isAcceptableOrUnknown(data['data_json']!, _dataJsonMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_dataJsonMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {recordingId, sequence};
+  @override
+  EcgSampleChunk map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return EcgSampleChunk(
+      recordingId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}recording_id'],
+      )!,
+      sequence: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}sequence'],
+      )!,
+      dataJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}data_json'],
+      )!,
+    );
+  }
+
+  @override
+  $EcgSampleChunksTable createAlias(String alias) {
+    return $EcgSampleChunksTable(attachedDatabase, alias);
+  }
+}
+
+class EcgSampleChunk extends DataClass implements Insertable<EcgSampleChunk> {
+  final String recordingId;
+  final int sequence;
+  final String dataJson;
+  const EcgSampleChunk({
+    required this.recordingId,
+    required this.sequence,
+    required this.dataJson,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['recording_id'] = Variable<String>(recordingId);
+    map['sequence'] = Variable<int>(sequence);
+    map['data_json'] = Variable<String>(dataJson);
+    return map;
+  }
+
+  EcgSampleChunksCompanion toCompanion(bool nullToAbsent) {
+    return EcgSampleChunksCompanion(
+      recordingId: Value(recordingId),
+      sequence: Value(sequence),
+      dataJson: Value(dataJson),
+    );
+  }
+
+  factory EcgSampleChunk.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return EcgSampleChunk(
+      recordingId: serializer.fromJson<String>(json['recordingId']),
+      sequence: serializer.fromJson<int>(json['sequence']),
+      dataJson: serializer.fromJson<String>(json['dataJson']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'recordingId': serializer.toJson<String>(recordingId),
+      'sequence': serializer.toJson<int>(sequence),
+      'dataJson': serializer.toJson<String>(dataJson),
+    };
+  }
+
+  EcgSampleChunk copyWith({
+    String? recordingId,
+    int? sequence,
+    String? dataJson,
+  }) => EcgSampleChunk(
+    recordingId: recordingId ?? this.recordingId,
+    sequence: sequence ?? this.sequence,
+    dataJson: dataJson ?? this.dataJson,
+  );
+  EcgSampleChunk copyWithCompanion(EcgSampleChunksCompanion data) {
+    return EcgSampleChunk(
+      recordingId: data.recordingId.present
+          ? data.recordingId.value
+          : this.recordingId,
+      sequence: data.sequence.present ? data.sequence.value : this.sequence,
+      dataJson: data.dataJson.present ? data.dataJson.value : this.dataJson,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('EcgSampleChunk(')
+          ..write('recordingId: $recordingId, ')
+          ..write('sequence: $sequence, ')
+          ..write('dataJson: $dataJson')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(recordingId, sequence, dataJson);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is EcgSampleChunk &&
+          other.recordingId == this.recordingId &&
+          other.sequence == this.sequence &&
+          other.dataJson == this.dataJson);
+}
+
+class EcgSampleChunksCompanion extends UpdateCompanion<EcgSampleChunk> {
+  final Value<String> recordingId;
+  final Value<int> sequence;
+  final Value<String> dataJson;
+  final Value<int> rowid;
+  const EcgSampleChunksCompanion({
+    this.recordingId = const Value.absent(),
+    this.sequence = const Value.absent(),
+    this.dataJson = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  EcgSampleChunksCompanion.insert({
+    required String recordingId,
+    required int sequence,
+    required String dataJson,
+    this.rowid = const Value.absent(),
+  }) : recordingId = Value(recordingId),
+       sequence = Value(sequence),
+       dataJson = Value(dataJson);
+  static Insertable<EcgSampleChunk> custom({
+    Expression<String>? recordingId,
+    Expression<int>? sequence,
+    Expression<String>? dataJson,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (recordingId != null) 'recording_id': recordingId,
+      if (sequence != null) 'sequence': sequence,
+      if (dataJson != null) 'data_json': dataJson,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  EcgSampleChunksCompanion copyWith({
+    Value<String>? recordingId,
+    Value<int>? sequence,
+    Value<String>? dataJson,
+    Value<int>? rowid,
+  }) {
+    return EcgSampleChunksCompanion(
+      recordingId: recordingId ?? this.recordingId,
+      sequence: sequence ?? this.sequence,
+      dataJson: dataJson ?? this.dataJson,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (recordingId.present) {
+      map['recording_id'] = Variable<String>(recordingId.value);
+    }
+    if (sequence.present) {
+      map['sequence'] = Variable<int>(sequence.value);
+    }
+    if (dataJson.present) {
+      map['data_json'] = Variable<String>(dataJson.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('EcgSampleChunksCompanion(')
+          ..write('recordingId: $recordingId, ')
+          ..write('sequence: $sequence, ')
+          ..write('dataJson: $dataJson, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $IndoorRecordingsTable extends IndoorRecordings
+    with TableInfo<$IndoorRecordingsTable, IndoorRecording> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $IndoorRecordingsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _recordingIdMeta = const VerificationMeta(
+    'recordingId',
+  );
+  @override
+  late final GeneratedColumn<String> recordingId = GeneratedColumn<String>(
+    'recording_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _startedAtMeta = const VerificationMeta(
+    'startedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> startedAt = GeneratedColumn<DateTime>(
+    'started_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+    'status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _dataJsonMeta = const VerificationMeta(
+    'dataJson',
+  );
+  @override
+  late final GeneratedColumn<String> dataJson = GeneratedColumn<String>(
+    'data_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    recordingId,
+    startedAt,
+    updatedAt,
+    status,
+    dataJson,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'indoor_recordings';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<IndoorRecording> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('recording_id')) {
+      context.handle(
+        _recordingIdMeta,
+        recordingId.isAcceptableOrUnknown(
+          data['recording_id']!,
+          _recordingIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_recordingIdMeta);
+    }
+    if (data.containsKey('started_at')) {
+      context.handle(
+        _startedAtMeta,
+        startedAt.isAcceptableOrUnknown(data['started_at']!, _startedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_startedAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    if (data.containsKey('status')) {
+      context.handle(
+        _statusMeta,
+        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_statusMeta);
+    }
+    if (data.containsKey('data_json')) {
+      context.handle(
+        _dataJsonMeta,
+        dataJson.isAcceptableOrUnknown(data['data_json']!, _dataJsonMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_dataJsonMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {recordingId};
+  @override
+  IndoorRecording map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return IndoorRecording(
+      recordingId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}recording_id'],
+      )!,
+      startedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}started_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      status: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}status'],
+      )!,
+      dataJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}data_json'],
+      )!,
+    );
+  }
+
+  @override
+  $IndoorRecordingsTable createAlias(String alias) {
+    return $IndoorRecordingsTable(attachedDatabase, alias);
+  }
+}
+
+class IndoorRecording extends DataClass implements Insertable<IndoorRecording> {
+  final String recordingId;
+  final DateTime startedAt;
+  final DateTime updatedAt;
+  final String status;
+  final String dataJson;
+  const IndoorRecording({
+    required this.recordingId,
+    required this.startedAt,
+    required this.updatedAt,
+    required this.status,
+    required this.dataJson,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['recording_id'] = Variable<String>(recordingId);
+    map['started_at'] = Variable<DateTime>(startedAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    map['status'] = Variable<String>(status);
+    map['data_json'] = Variable<String>(dataJson);
+    return map;
+  }
+
+  IndoorRecordingsCompanion toCompanion(bool nullToAbsent) {
+    return IndoorRecordingsCompanion(
+      recordingId: Value(recordingId),
+      startedAt: Value(startedAt),
+      updatedAt: Value(updatedAt),
+      status: Value(status),
+      dataJson: Value(dataJson),
+    );
+  }
+
+  factory IndoorRecording.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return IndoorRecording(
+      recordingId: serializer.fromJson<String>(json['recordingId']),
+      startedAt: serializer.fromJson<DateTime>(json['startedAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      status: serializer.fromJson<String>(json['status']),
+      dataJson: serializer.fromJson<String>(json['dataJson']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'recordingId': serializer.toJson<String>(recordingId),
+      'startedAt': serializer.toJson<DateTime>(startedAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'status': serializer.toJson<String>(status),
+      'dataJson': serializer.toJson<String>(dataJson),
+    };
+  }
+
+  IndoorRecording copyWith({
+    String? recordingId,
+    DateTime? startedAt,
+    DateTime? updatedAt,
+    String? status,
+    String? dataJson,
+  }) => IndoorRecording(
+    recordingId: recordingId ?? this.recordingId,
+    startedAt: startedAt ?? this.startedAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    status: status ?? this.status,
+    dataJson: dataJson ?? this.dataJson,
+  );
+  IndoorRecording copyWithCompanion(IndoorRecordingsCompanion data) {
+    return IndoorRecording(
+      recordingId: data.recordingId.present
+          ? data.recordingId.value
+          : this.recordingId,
+      startedAt: data.startedAt.present ? data.startedAt.value : this.startedAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      status: data.status.present ? data.status.value : this.status,
+      dataJson: data.dataJson.present ? data.dataJson.value : this.dataJson,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('IndoorRecording(')
+          ..write('recordingId: $recordingId, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('status: $status, ')
+          ..write('dataJson: $dataJson')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(recordingId, startedAt, updatedAt, status, dataJson);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is IndoorRecording &&
+          other.recordingId == this.recordingId &&
+          other.startedAt == this.startedAt &&
+          other.updatedAt == this.updatedAt &&
+          other.status == this.status &&
+          other.dataJson == this.dataJson);
+}
+
+class IndoorRecordingsCompanion extends UpdateCompanion<IndoorRecording> {
+  final Value<String> recordingId;
+  final Value<DateTime> startedAt;
+  final Value<DateTime> updatedAt;
+  final Value<String> status;
+  final Value<String> dataJson;
+  final Value<int> rowid;
+  const IndoorRecordingsCompanion({
+    this.recordingId = const Value.absent(),
+    this.startedAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.status = const Value.absent(),
+    this.dataJson = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  IndoorRecordingsCompanion.insert({
+    required String recordingId,
+    required DateTime startedAt,
+    required DateTime updatedAt,
+    required String status,
+    required String dataJson,
+    this.rowid = const Value.absent(),
+  }) : recordingId = Value(recordingId),
+       startedAt = Value(startedAt),
+       updatedAt = Value(updatedAt),
+       status = Value(status),
+       dataJson = Value(dataJson);
+  static Insertable<IndoorRecording> custom({
+    Expression<String>? recordingId,
+    Expression<DateTime>? startedAt,
+    Expression<DateTime>? updatedAt,
+    Expression<String>? status,
+    Expression<String>? dataJson,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (recordingId != null) 'recording_id': recordingId,
+      if (startedAt != null) 'started_at': startedAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (status != null) 'status': status,
+      if (dataJson != null) 'data_json': dataJson,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  IndoorRecordingsCompanion copyWith({
+    Value<String>? recordingId,
+    Value<DateTime>? startedAt,
+    Value<DateTime>? updatedAt,
+    Value<String>? status,
+    Value<String>? dataJson,
+    Value<int>? rowid,
+  }) {
+    return IndoorRecordingsCompanion(
+      recordingId: recordingId ?? this.recordingId,
+      startedAt: startedAt ?? this.startedAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      status: status ?? this.status,
+      dataJson: dataJson ?? this.dataJson,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (recordingId.present) {
+      map['recording_id'] = Variable<String>(recordingId.value);
+    }
+    if (startedAt.present) {
+      map['started_at'] = Variable<DateTime>(startedAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
+    if (dataJson.present) {
+      map['data_json'] = Variable<String>(dataJson.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('IndoorRecordingsCompanion(')
+          ..write('recordingId: $recordingId, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('status: $status, ')
+          ..write('dataJson: $dataJson, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $HrvTrainingEpisodesTable extends HrvTrainingEpisodes
     with TableInfo<$HrvTrainingEpisodesTable, HrvTrainingEpisode> {
   @override
@@ -46018,6 +47558,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $ActivityTitlesTable activityTitles = $ActivityTitlesTable(this);
   late final $SpotHrvMeasurementsTable spotHrvMeasurements =
       $SpotHrvMeasurementsTable(this);
+  late final $EcgRecordingsTable ecgRecordings = $EcgRecordingsTable(this);
+  late final $EcgSampleChunksTable ecgSampleChunks = $EcgSampleChunksTable(
+    this,
+  );
+  late final $IndoorRecordingsTable indoorRecordings = $IndoorRecordingsTable(
+    this,
+  );
   late final $HrvTrainingEpisodesTable hrvTrainingEpisodes =
       $HrvTrainingEpisodesTable(this);
   late final $HrvEpisodeAliasesTable hrvEpisodeAliases =
@@ -46114,6 +47661,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     deletedActivities,
     activityTitles,
     spotHrvMeasurements,
+    ecgRecordings,
+    ecgSampleChunks,
+    indoorRecordings,
     hrvTrainingEpisodes,
     hrvEpisodeAliases,
     hrvEpisodeMeasurements,
@@ -54572,6 +56122,823 @@ typedef $$SpotHrvMeasurementsTableProcessedTableManager =
         >,
       ),
       SpotHrvMeasurement,
+      PrefetchHooks Function()
+    >;
+typedef $$EcgRecordingsTableCreateCompanionBuilder =
+    EcgRecordingsCompanion Function({
+      required String recordingId,
+      required DateTime recordedAt,
+      required String source,
+      required String deviceName,
+      Value<String?> deviceId,
+      required String kind,
+      required String status,
+      Value<double?> sampleRateHz,
+      Value<int> sampleCount,
+      Value<int> durationMs,
+      Value<String?> activityId,
+      Value<String> metadataJson,
+      Value<String?> contentHash,
+      Value<String?> originalFileName,
+      Value<String?> originalBase64,
+      Value<int> rowid,
+    });
+typedef $$EcgRecordingsTableUpdateCompanionBuilder =
+    EcgRecordingsCompanion Function({
+      Value<String> recordingId,
+      Value<DateTime> recordedAt,
+      Value<String> source,
+      Value<String> deviceName,
+      Value<String?> deviceId,
+      Value<String> kind,
+      Value<String> status,
+      Value<double?> sampleRateHz,
+      Value<int> sampleCount,
+      Value<int> durationMs,
+      Value<String?> activityId,
+      Value<String> metadataJson,
+      Value<String?> contentHash,
+      Value<String?> originalFileName,
+      Value<String?> originalBase64,
+      Value<int> rowid,
+    });
+
+class $$EcgRecordingsTableFilterComposer
+    extends Composer<_$AppDatabase, $EcgRecordingsTable> {
+  $$EcgRecordingsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get recordingId => $composableBuilder(
+    column: $table.recordingId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get recordedAt => $composableBuilder(
+    column: $table.recordedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get source => $composableBuilder(
+    column: $table.source,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get deviceName => $composableBuilder(
+    column: $table.deviceName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get deviceId => $composableBuilder(
+    column: $table.deviceId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get sampleRateHz => $composableBuilder(
+    column: $table.sampleRateHz,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get sampleCount => $composableBuilder(
+    column: $table.sampleCount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get durationMs => $composableBuilder(
+    column: $table.durationMs,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get activityId => $composableBuilder(
+    column: $table.activityId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get metadataJson => $composableBuilder(
+    column: $table.metadataJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get contentHash => $composableBuilder(
+    column: $table.contentHash,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get originalFileName => $composableBuilder(
+    column: $table.originalFileName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get originalBase64 => $composableBuilder(
+    column: $table.originalBase64,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$EcgRecordingsTableOrderingComposer
+    extends Composer<_$AppDatabase, $EcgRecordingsTable> {
+  $$EcgRecordingsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get recordingId => $composableBuilder(
+    column: $table.recordingId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get recordedAt => $composableBuilder(
+    column: $table.recordedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get source => $composableBuilder(
+    column: $table.source,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get deviceName => $composableBuilder(
+    column: $table.deviceName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get deviceId => $composableBuilder(
+    column: $table.deviceId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get sampleRateHz => $composableBuilder(
+    column: $table.sampleRateHz,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get sampleCount => $composableBuilder(
+    column: $table.sampleCount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get durationMs => $composableBuilder(
+    column: $table.durationMs,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get activityId => $composableBuilder(
+    column: $table.activityId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get metadataJson => $composableBuilder(
+    column: $table.metadataJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get contentHash => $composableBuilder(
+    column: $table.contentHash,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get originalFileName => $composableBuilder(
+    column: $table.originalFileName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get originalBase64 => $composableBuilder(
+    column: $table.originalBase64,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$EcgRecordingsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $EcgRecordingsTable> {
+  $$EcgRecordingsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get recordingId => $composableBuilder(
+    column: $table.recordingId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get recordedAt => $composableBuilder(
+    column: $table.recordedAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get source =>
+      $composableBuilder(column: $table.source, builder: (column) => column);
+
+  GeneratedColumn<String> get deviceName => $composableBuilder(
+    column: $table.deviceName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get deviceId =>
+      $composableBuilder(column: $table.deviceId, builder: (column) => column);
+
+  GeneratedColumn<String> get kind =>
+      $composableBuilder(column: $table.kind, builder: (column) => column);
+
+  GeneratedColumn<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<double> get sampleRateHz => $composableBuilder(
+    column: $table.sampleRateHz,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get sampleCount => $composableBuilder(
+    column: $table.sampleCount,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get durationMs => $composableBuilder(
+    column: $table.durationMs,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get activityId => $composableBuilder(
+    column: $table.activityId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get metadataJson => $composableBuilder(
+    column: $table.metadataJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get contentHash => $composableBuilder(
+    column: $table.contentHash,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get originalFileName => $composableBuilder(
+    column: $table.originalFileName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get originalBase64 => $composableBuilder(
+    column: $table.originalBase64,
+    builder: (column) => column,
+  );
+}
+
+class $$EcgRecordingsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $EcgRecordingsTable,
+          EcgRecording,
+          $$EcgRecordingsTableFilterComposer,
+          $$EcgRecordingsTableOrderingComposer,
+          $$EcgRecordingsTableAnnotationComposer,
+          $$EcgRecordingsTableCreateCompanionBuilder,
+          $$EcgRecordingsTableUpdateCompanionBuilder,
+          (
+            EcgRecording,
+            BaseReferences<_$AppDatabase, $EcgRecordingsTable, EcgRecording>,
+          ),
+          EcgRecording,
+          PrefetchHooks Function()
+        > {
+  $$EcgRecordingsTableTableManager(_$AppDatabase db, $EcgRecordingsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$EcgRecordingsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$EcgRecordingsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$EcgRecordingsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> recordingId = const Value.absent(),
+                Value<DateTime> recordedAt = const Value.absent(),
+                Value<String> source = const Value.absent(),
+                Value<String> deviceName = const Value.absent(),
+                Value<String?> deviceId = const Value.absent(),
+                Value<String> kind = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<double?> sampleRateHz = const Value.absent(),
+                Value<int> sampleCount = const Value.absent(),
+                Value<int> durationMs = const Value.absent(),
+                Value<String?> activityId = const Value.absent(),
+                Value<String> metadataJson = const Value.absent(),
+                Value<String?> contentHash = const Value.absent(),
+                Value<String?> originalFileName = const Value.absent(),
+                Value<String?> originalBase64 = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => EcgRecordingsCompanion(
+                recordingId: recordingId,
+                recordedAt: recordedAt,
+                source: source,
+                deviceName: deviceName,
+                deviceId: deviceId,
+                kind: kind,
+                status: status,
+                sampleRateHz: sampleRateHz,
+                sampleCount: sampleCount,
+                durationMs: durationMs,
+                activityId: activityId,
+                metadataJson: metadataJson,
+                contentHash: contentHash,
+                originalFileName: originalFileName,
+                originalBase64: originalBase64,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String recordingId,
+                required DateTime recordedAt,
+                required String source,
+                required String deviceName,
+                Value<String?> deviceId = const Value.absent(),
+                required String kind,
+                required String status,
+                Value<double?> sampleRateHz = const Value.absent(),
+                Value<int> sampleCount = const Value.absent(),
+                Value<int> durationMs = const Value.absent(),
+                Value<String?> activityId = const Value.absent(),
+                Value<String> metadataJson = const Value.absent(),
+                Value<String?> contentHash = const Value.absent(),
+                Value<String?> originalFileName = const Value.absent(),
+                Value<String?> originalBase64 = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => EcgRecordingsCompanion.insert(
+                recordingId: recordingId,
+                recordedAt: recordedAt,
+                source: source,
+                deviceName: deviceName,
+                deviceId: deviceId,
+                kind: kind,
+                status: status,
+                sampleRateHz: sampleRateHz,
+                sampleCount: sampleCount,
+                durationMs: durationMs,
+                activityId: activityId,
+                metadataJson: metadataJson,
+                contentHash: contentHash,
+                originalFileName: originalFileName,
+                originalBase64: originalBase64,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$EcgRecordingsTable, EcgRecording>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $EcgRecordingsTable,
+                    EcgRecording
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$EcgRecordingsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $EcgRecordingsTable,
+      EcgRecording,
+      $$EcgRecordingsTableFilterComposer,
+      $$EcgRecordingsTableOrderingComposer,
+      $$EcgRecordingsTableAnnotationComposer,
+      $$EcgRecordingsTableCreateCompanionBuilder,
+      $$EcgRecordingsTableUpdateCompanionBuilder,
+      (
+        EcgRecording,
+        BaseReferences<_$AppDatabase, $EcgRecordingsTable, EcgRecording>,
+      ),
+      EcgRecording,
+      PrefetchHooks Function()
+    >;
+typedef $$EcgSampleChunksTableCreateCompanionBuilder =
+    EcgSampleChunksCompanion Function({
+      required String recordingId,
+      required int sequence,
+      required String dataJson,
+      Value<int> rowid,
+    });
+typedef $$EcgSampleChunksTableUpdateCompanionBuilder =
+    EcgSampleChunksCompanion Function({
+      Value<String> recordingId,
+      Value<int> sequence,
+      Value<String> dataJson,
+      Value<int> rowid,
+    });
+
+class $$EcgSampleChunksTableFilterComposer
+    extends Composer<_$AppDatabase, $EcgSampleChunksTable> {
+  $$EcgSampleChunksTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get recordingId => $composableBuilder(
+    column: $table.recordingId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get sequence => $composableBuilder(
+    column: $table.sequence,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get dataJson => $composableBuilder(
+    column: $table.dataJson,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$EcgSampleChunksTableOrderingComposer
+    extends Composer<_$AppDatabase, $EcgSampleChunksTable> {
+  $$EcgSampleChunksTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get recordingId => $composableBuilder(
+    column: $table.recordingId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get sequence => $composableBuilder(
+    column: $table.sequence,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get dataJson => $composableBuilder(
+    column: $table.dataJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$EcgSampleChunksTableAnnotationComposer
+    extends Composer<_$AppDatabase, $EcgSampleChunksTable> {
+  $$EcgSampleChunksTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get recordingId => $composableBuilder(
+    column: $table.recordingId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get sequence =>
+      $composableBuilder(column: $table.sequence, builder: (column) => column);
+
+  GeneratedColumn<String> get dataJson =>
+      $composableBuilder(column: $table.dataJson, builder: (column) => column);
+}
+
+class $$EcgSampleChunksTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $EcgSampleChunksTable,
+          EcgSampleChunk,
+          $$EcgSampleChunksTableFilterComposer,
+          $$EcgSampleChunksTableOrderingComposer,
+          $$EcgSampleChunksTableAnnotationComposer,
+          $$EcgSampleChunksTableCreateCompanionBuilder,
+          $$EcgSampleChunksTableUpdateCompanionBuilder,
+          (
+            EcgSampleChunk,
+            BaseReferences<
+              _$AppDatabase,
+              $EcgSampleChunksTable,
+              EcgSampleChunk
+            >,
+          ),
+          EcgSampleChunk,
+          PrefetchHooks Function()
+        > {
+  $$EcgSampleChunksTableTableManager(
+    _$AppDatabase db,
+    $EcgSampleChunksTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$EcgSampleChunksTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$EcgSampleChunksTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$EcgSampleChunksTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> recordingId = const Value.absent(),
+                Value<int> sequence = const Value.absent(),
+                Value<String> dataJson = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => EcgSampleChunksCompanion(
+                recordingId: recordingId,
+                sequence: sequence,
+                dataJson: dataJson,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String recordingId,
+                required int sequence,
+                required String dataJson,
+                Value<int> rowid = const Value.absent(),
+              }) => EcgSampleChunksCompanion.insert(
+                recordingId: recordingId,
+                sequence: sequence,
+                dataJson: dataJson,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$EcgSampleChunksTable, EcgSampleChunk>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $EcgSampleChunksTable,
+                    EcgSampleChunk
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$EcgSampleChunksTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $EcgSampleChunksTable,
+      EcgSampleChunk,
+      $$EcgSampleChunksTableFilterComposer,
+      $$EcgSampleChunksTableOrderingComposer,
+      $$EcgSampleChunksTableAnnotationComposer,
+      $$EcgSampleChunksTableCreateCompanionBuilder,
+      $$EcgSampleChunksTableUpdateCompanionBuilder,
+      (
+        EcgSampleChunk,
+        BaseReferences<_$AppDatabase, $EcgSampleChunksTable, EcgSampleChunk>,
+      ),
+      EcgSampleChunk,
+      PrefetchHooks Function()
+    >;
+typedef $$IndoorRecordingsTableCreateCompanionBuilder =
+    IndoorRecordingsCompanion Function({
+      required String recordingId,
+      required DateTime startedAt,
+      required DateTime updatedAt,
+      required String status,
+      required String dataJson,
+      Value<int> rowid,
+    });
+typedef $$IndoorRecordingsTableUpdateCompanionBuilder =
+    IndoorRecordingsCompanion Function({
+      Value<String> recordingId,
+      Value<DateTime> startedAt,
+      Value<DateTime> updatedAt,
+      Value<String> status,
+      Value<String> dataJson,
+      Value<int> rowid,
+    });
+
+class $$IndoorRecordingsTableFilterComposer
+    extends Composer<_$AppDatabase, $IndoorRecordingsTable> {
+  $$IndoorRecordingsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get recordingId => $composableBuilder(
+    column: $table.recordingId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get startedAt => $composableBuilder(
+    column: $table.startedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get dataJson => $composableBuilder(
+    column: $table.dataJson,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$IndoorRecordingsTableOrderingComposer
+    extends Composer<_$AppDatabase, $IndoorRecordingsTable> {
+  $$IndoorRecordingsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get recordingId => $composableBuilder(
+    column: $table.recordingId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get startedAt => $composableBuilder(
+    column: $table.startedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get dataJson => $composableBuilder(
+    column: $table.dataJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$IndoorRecordingsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $IndoorRecordingsTable> {
+  $$IndoorRecordingsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get recordingId => $composableBuilder(
+    column: $table.recordingId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get startedAt =>
+      $composableBuilder(column: $table.startedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<String> get dataJson =>
+      $composableBuilder(column: $table.dataJson, builder: (column) => column);
+}
+
+class $$IndoorRecordingsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $IndoorRecordingsTable,
+          IndoorRecording,
+          $$IndoorRecordingsTableFilterComposer,
+          $$IndoorRecordingsTableOrderingComposer,
+          $$IndoorRecordingsTableAnnotationComposer,
+          $$IndoorRecordingsTableCreateCompanionBuilder,
+          $$IndoorRecordingsTableUpdateCompanionBuilder,
+          (
+            IndoorRecording,
+            BaseReferences<
+              _$AppDatabase,
+              $IndoorRecordingsTable,
+              IndoorRecording
+            >,
+          ),
+          IndoorRecording,
+          PrefetchHooks Function()
+        > {
+  $$IndoorRecordingsTableTableManager(
+    _$AppDatabase db,
+    $IndoorRecordingsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$IndoorRecordingsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$IndoorRecordingsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$IndoorRecordingsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> recordingId = const Value.absent(),
+                Value<DateTime> startedAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<String> dataJson = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => IndoorRecordingsCompanion(
+                recordingId: recordingId,
+                startedAt: startedAt,
+                updatedAt: updatedAt,
+                status: status,
+                dataJson: dataJson,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String recordingId,
+                required DateTime startedAt,
+                required DateTime updatedAt,
+                required String status,
+                required String dataJson,
+                Value<int> rowid = const Value.absent(),
+              }) => IndoorRecordingsCompanion.insert(
+                recordingId: recordingId,
+                startedAt: startedAt,
+                updatedAt: updatedAt,
+                status: status,
+                dataJson: dataJson,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$IndoorRecordingsTable, IndoorRecording>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $IndoorRecordingsTable,
+                    IndoorRecording
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$IndoorRecordingsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $IndoorRecordingsTable,
+      IndoorRecording,
+      $$IndoorRecordingsTableFilterComposer,
+      $$IndoorRecordingsTableOrderingComposer,
+      $$IndoorRecordingsTableAnnotationComposer,
+      $$IndoorRecordingsTableCreateCompanionBuilder,
+      $$IndoorRecordingsTableUpdateCompanionBuilder,
+      (
+        IndoorRecording,
+        BaseReferences<_$AppDatabase, $IndoorRecordingsTable, IndoorRecording>,
+      ),
+      IndoorRecording,
       PrefetchHooks Function()
     >;
 typedef $$HrvTrainingEpisodesTableCreateCompanionBuilder =
@@ -68606,6 +70973,12 @@ class $AppDatabaseManager {
       $$ActivityTitlesTableTableManager(_db, _db.activityTitles);
   $$SpotHrvMeasurementsTableTableManager get spotHrvMeasurements =>
       $$SpotHrvMeasurementsTableTableManager(_db, _db.spotHrvMeasurements);
+  $$EcgRecordingsTableTableManager get ecgRecordings =>
+      $$EcgRecordingsTableTableManager(_db, _db.ecgRecordings);
+  $$EcgSampleChunksTableTableManager get ecgSampleChunks =>
+      $$EcgSampleChunksTableTableManager(_db, _db.ecgSampleChunks);
+  $$IndoorRecordingsTableTableManager get indoorRecordings =>
+      $$IndoorRecordingsTableTableManager(_db, _db.indoorRecordings);
   $$HrvTrainingEpisodesTableTableManager get hrvTrainingEpisodes =>
       $$HrvTrainingEpisodesTableTableManager(_db, _db.hrvTrainingEpisodes);
   $$HrvEpisodeAliasesTableTableManager get hrvEpisodeAliases =>

@@ -14,6 +14,7 @@ import 'database_provider.dart';
 import 'hrv_reminder_provider.dart';
 import 'nutrition_provider.dart';
 import 'spot_hrv_provider.dart';
+import 'device_recording_owner_provider.dart';
 
 export '../services/polar_h10_service.dart'
     show H10Device, PolarH10Service, PolarH10Pairing;
@@ -58,7 +59,9 @@ class PolarH10Actions {
   PolarH10Actions(this.ref);
   final Ref ref;
 
-  PolarH10Service createSensor() => PolarH10Service();
+  PolarH10Service createSensor() => PolarH10Service(
+    connectionAllowed: () => ref.read(deviceRecordingOwnerProvider) == null,
+  );
 
   Future<H10Device?> paired() async {
     try {

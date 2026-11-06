@@ -12,7 +12,8 @@ enum CoachCardStatus {
   planned,
   adapted,
   completed,
-  skipped;
+  skipped,
+  measured;
 
   /// What the card says, in the app language.
   String get label => switch (this) {
@@ -20,6 +21,7 @@ enum CoachCardStatus {
     adapted => tr.statusAdapted,
     completed => tr.statusCompleted,
     skipped => tr.statusRest,
+    measured => tr.statusMeasured,
   };
 }
 
@@ -37,6 +39,7 @@ class CoachContextCard {
     this.facts = const [],
     this.contextLine = '',
     this.questions = const [],
+    this.medicalWarning = false,
   });
 
   final String sport, title;
@@ -51,6 +54,10 @@ class CoachContextCard {
 
   /// Questions offered as one-tap starters.
   final List<String> questions;
+
+  /// Health measurements such as an ECG: the chat keeps a warning on top that
+  /// the coach gives no medical advice.
+  final bool medicalWarning;
 
   /// A planned session of the training plan.
   ///
@@ -161,6 +168,26 @@ class CoachContextCard {
   );
 
   /// The request context with the session described first.
+  /// An ECG recording with the app's pre-analysis as context lines.
+  factory CoachContextCard.ecg({
+    required DateTime recordedAt,
+    required List<String> facts,
+    required List<String> contextLines,
+  }) => CoachContextCard(
+    sport: 'ecg',
+    title: tr.ecgCoachCardTitle,
+    date: recordedAt,
+    status: CoachCardStatus.measured,
+    facts: facts,
+    contextLine: contextLines.join('\n'),
+    questions: [
+      tr.ecgQuestionOverview,
+      tr.ecgQuestionRhythm,
+      tr.ecgQuestionDoctor,
+    ],
+    medicalWarning: true,
+  );
+
   String withContext(String toon) =>
       contextLine.isEmpty ? toon : '$contextLine\n$toon';
 

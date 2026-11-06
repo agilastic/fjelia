@@ -12473,6 +12473,1200 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Not known'**
   String get feedsUnknown;
+
+  /// No description provided for @ecgTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'ECG'**
+  String get ecgTitle;
+
+  /// No description provided for @ecgChooseDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Polar H10'**
+  String get ecgChooseDevice;
+
+  /// No description provided for @ecgStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Record ECG'**
+  String get ecgStart;
+
+  /// No description provided for @ecgStopSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop and save'**
+  String get ecgStopSave;
+
+  /// No description provided for @ecgImport.
+  ///
+  /// In en, this message translates to:
+  /// **'Import ECG file'**
+  String get ecgImport;
+
+  /// No description provided for @ecgHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'ECG history'**
+  String get ecgHistory;
+
+  /// No description provided for @ecgWaveform.
+  ///
+  /// In en, this message translates to:
+  /// **'Waveform'**
+  String get ecgWaveform;
+
+  /// No description provided for @ecgReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Report'**
+  String get ecgReport;
+
+  /// No description provided for @ecgExportCsv.
+  ///
+  /// In en, this message translates to:
+  /// **'Export waveform (CSV)'**
+  String get ecgExportCsv;
+
+  /// No description provided for @ecgExportMetadata.
+  ///
+  /// In en, this message translates to:
+  /// **'Export ECG metadata'**
+  String get ecgExportMetadata;
+
+  /// No description provided for @ecgExportOriginal.
+  ///
+  /// In en, this message translates to:
+  /// **'Share original file'**
+  String get ecgExportOriginal;
+
+  /// No description provided for @ecgRecording.
+  ///
+  /// In en, this message translates to:
+  /// **'Recording ECG'**
+  String get ecgRecording;
+
+  /// No description provided for @ecgRecordingDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Recording date and time'**
+  String get ecgRecordingDate;
+
+  /// No description provided for @ecgLinkedWorkout.
+  ///
+  /// In en, this message translates to:
+  /// **'Linked workout'**
+  String get ecgLinkedWorkout;
+
+  /// No description provided for @ecgIndependent.
+  ///
+  /// In en, this message translates to:
+  /// **'No linked workout'**
+  String get ecgIndependent;
+
+  /// No description provided for @ecgNoRecordings.
+  ///
+  /// In en, this message translates to:
+  /// **'No ECG recordings yet.'**
+  String get ecgNoRecordings;
+
+  /// No description provided for @ecgSamples.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} samples'**
+  String ecgSamples(int count);
+
+  /// No description provided for @ecgSignalGaps.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} signal gaps'**
+  String ecgSignalGaps(int count);
+
+  /// No description provided for @ecgDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Permanently delete this recording and its original file?'**
+  String get ecgDeleteConfirm;
+
+  /// No description provided for @ecgDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Record with Polar H10, import CSV waveforms or keep PDF reports.'**
+  String get ecgDescription;
+
+  /// No description provided for @ecgPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Stored on this device and included in your backups. Raw signals are not sent to the coach.'**
+  String get ecgPrivacy;
+
+  /// No description provided for @ecgLimitations.
+  ///
+  /// In en, this message translates to:
+  /// **'For personal recording and review. ECG-derived HRV and signal quality are not validated here; no diagnosis or recovery score is calculated.'**
+  String get ecgLimitations;
+
+  /// No description provided for @ecgImportLimitations.
+  ///
+  /// In en, this message translates to:
+  /// **'Garmin and Apple Watch PDF exports are reports. Waveforms require CSV columns time_seconds (or time_ms) and ecg_uv (or ecg_mv).'**
+  String get ecgImportLimitations;
+
+  /// No description provided for @ecgReportOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Report only. No raw waveform samples are available. Share the original file to view the report.'**
+  String get ecgReportOnly;
+
+  /// No description provided for @indoorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Indoor Training'**
+  String get indoorTitle;
+
+  /// No description provided for @indoorEquipment.
+  ///
+  /// In en, this message translates to:
+  /// **'Fitness equipment'**
+  String get indoorEquipment;
+
+  /// No description provided for @indoorChooseEquipment.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose equipment'**
+  String get indoorChooseEquipment;
+
+  /// No description provided for @indoorChooseHeartRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose heart-rate sensor'**
+  String get indoorChooseHeartRate;
+
+  /// No description provided for @indoorStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start recording'**
+  String get indoorStart;
+
+  /// No description provided for @indoorPause.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause recording'**
+  String get indoorPause;
+
+  /// No description provided for @indoorFinish.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish and save'**
+  String get indoorFinish;
+
+  /// No description provided for @indoorSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to activity history'**
+  String get indoorSaved;
+
+  /// No description provided for @indoorExportFit.
+  ///
+  /// In en, this message translates to:
+  /// **'Share FIT activity'**
+  String get indoorExportFit;
+
+  /// No description provided for @indoorUnfinished.
+  ///
+  /// In en, this message translates to:
+  /// **'Unfinished recordings'**
+  String get indoorUnfinished;
+
+  /// No description provided for @indoorReviewResume.
+  ///
+  /// In en, this message translates to:
+  /// **'Review or resume'**
+  String get indoorReviewResume;
+
+  /// No description provided for @indoorDiscard.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard recording'**
+  String get indoorDiscard;
+
+  /// No description provided for @indoorDiscardConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Permanently discard this unfinished recording?'**
+  String get indoorDiscardConfirm;
+
+  /// No description provided for @indoorExternalHeartRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Use external heart-rate sensor'**
+  String get indoorExternalHeartRate;
+
+  /// No description provided for @indoorEquipmentHeartRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Off: use heart rate from the equipment'**
+  String get indoorEquipmentHeartRate;
+
+  /// No description provided for @indoorCurrentInterval.
+  ///
+  /// In en, this message translates to:
+  /// **'Current interval'**
+  String get indoorCurrentInterval;
+
+  /// No description provided for @indoorNextInterval.
+  ///
+  /// In en, this message translates to:
+  /// **'Next interval'**
+  String get indoorNextInterval;
+
+  /// No description provided for @indoorPlanComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Planned intervals complete'**
+  String get indoorPlanComplete;
+
+  /// No description provided for @indoorAuthorizeControl.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow equipment control'**
+  String get indoorAuthorizeControl;
+
+  /// No description provided for @indoorManualOverride.
+  ///
+  /// In en, this message translates to:
+  /// **'Use manual control'**
+  String get indoorManualOverride;
+
+  /// No description provided for @indoorAutoPower.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow interval power automatically'**
+  String get indoorAutoPower;
+
+  /// No description provided for @indoorApplyTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply target'**
+  String get indoorApplyTarget;
+
+  /// No description provided for @indoorDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect Bluetooth FTMS equipment and record an indoor workout.'**
+  String get indoorDescription;
+
+  /// No description provided for @indoorKeepOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Recording continues when you switch apps or lock the screen. Pause stops recording metrics; use the equipment controls to pause the machine.'**
+  String get indoorKeepOpen;
+
+  /// No description provided for @indoorFitHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Save the FIT file or open it in a compatible training app using the share sheet.'**
+  String get indoorFitHint;
+
+  /// No description provided for @indoorNoEquipment.
+  ///
+  /// In en, this message translates to:
+  /// **'No FTMS equipment found. Wake the machine and enable its Bluetooth connection.'**
+  String get indoorNoEquipment;
+
+  /// No description provided for @indoorControlPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow Fjelia to change targets for this session? Stay near the machine controls. You can switch to manual control at any time.'**
+  String get indoorControlPrompt;
+
+  /// No description provided for @indoorTreadmillSafety.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach the safety key and stay near the controls. Confirm only small changes, up to 0.5 km/h or 1% incline. Use the machine controls for larger changes.'**
+  String get indoorTreadmillSafety;
+
+  /// No description provided for @recordingTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Recording time'**
+  String get recordingTime;
+
+  /// No description provided for @recordingSpeed.
+  ///
+  /// In en, this message translates to:
+  /// **'Speed'**
+  String get recordingSpeed;
+
+  /// No description provided for @recordingPower.
+  ///
+  /// In en, this message translates to:
+  /// **'Power'**
+  String get recordingPower;
+
+  /// No description provided for @recordingCadence.
+  ///
+  /// In en, this message translates to:
+  /// **'Cadence / stroke rate'**
+  String get recordingCadence;
+
+  /// No description provided for @recordingIncline.
+  ///
+  /// In en, this message translates to:
+  /// **'Incline'**
+  String get recordingIncline;
+
+  /// No description provided for @recordingResistance.
+  ///
+  /// In en, this message translates to:
+  /// **'Resistance'**
+  String get recordingResistance;
+
+  /// No description provided for @recordingSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Source'**
+  String get recordingSource;
+
+  /// No description provided for @recordingNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next step'**
+  String get recordingNext;
+
+  /// No description provided for @recordingConnecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting'**
+  String get recordingConnecting;
+
+  /// No description provided for @recordingReconnecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconnecting'**
+  String get recordingReconnecting;
+
+  /// No description provided for @recordingInterrupted.
+  ///
+  /// In en, this message translates to:
+  /// **'Interrupted'**
+  String get recordingInterrupted;
+
+  /// No description provided for @recordingPaused.
+  ///
+  /// In en, this message translates to:
+  /// **'Paused'**
+  String get recordingPaused;
+
+  /// No description provided for @indoorMatrixReadOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Matrix treadmill recording only. Use the console for speed and incline; remote control has not been verified for this model.'**
+  String get indoorMatrixReadOnly;
+
+  /// No description provided for @ecgCoverage.
+  ///
+  /// In en, this message translates to:
+  /// **'{value}% sample coverage'**
+  String ecgCoverage(String value);
+
+  /// No description provided for @recordingBeforeRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish the device recording before restoring a backup.'**
+  String get recordingBeforeRestore;
+
+  /// No description provided for @gymTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Gym treadmills'**
+  String get gymTitle;
+
+  /// No description provided for @gymDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Record with your phone, import xID workouts, or scan the console summary.'**
+  String get gymDescription;
+
+  /// No description provided for @gymDirectConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'Direct connection'**
+  String get gymDirectConnection;
+
+  /// No description provided for @gymConsoleSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection options depend on the console. An older Matrix console may support xID instead of live Bluetooth data.'**
+  String get gymConsoleSupport;
+
+  /// No description provided for @gymFindEquipment.
+  ///
+  /// In en, this message translates to:
+  /// **'Find gym equipment'**
+  String get gymFindEquipment;
+
+  /// No description provided for @gymLiveAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This console can send workout data directly to Fjelia.'**
+  String get gymLiveAvailable;
+
+  /// No description provided for @gymLiveUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No supported live workout data found. Import xID workouts or save a console summary.'**
+  String get gymLiveUnavailable;
+
+  /// No description provided for @gymSpeedOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Speed and cadence are available. This connection does not provide incline or remote control.'**
+  String get gymSpeedOnly;
+
+  /// No description provided for @gymUseMachine.
+  ///
+  /// In en, this message translates to:
+  /// **'Use this machine'**
+  String get gymUseMachine;
+
+  /// No description provided for @gymConnectionReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection report'**
+  String get gymConnectionReport;
+
+  /// No description provided for @gymShareReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Share connection report'**
+  String get gymShareReport;
+
+  /// No description provided for @gymXid.
+  ///
+  /// In en, this message translates to:
+  /// **'Matrix xID'**
+  String get gymXid;
+
+  /// No description provided for @gymXidDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Import treadmill workouts saved by your gym’s xID network.'**
+  String get gymXidDescription;
+
+  /// No description provided for @gymPortal.
+  ///
+  /// In en, this message translates to:
+  /// **'Gym Netpulse portal'**
+  String get gymPortal;
+
+  /// No description provided for @gymPortalHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the Netpulse portal address provided by your gym.'**
+  String get gymPortalHelp;
+
+  /// No description provided for @gymPasscode.
+  ///
+  /// In en, this message translates to:
+  /// **'xID passcode'**
+  String get gymPasscode;
+
+  /// No description provided for @gymSessionHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Your session is stored securely. Your passcode is not saved.'**
+  String get gymSessionHelp;
+
+  /// No description provided for @gymAutoSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync xID workouts automatically'**
+  String get gymAutoSync;
+
+  /// No description provided for @gymLastDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Last {days} days'**
+  String gymLastDays(int days);
+
+  /// No description provided for @gymLoadWorkouts.
+  ///
+  /// In en, this message translates to:
+  /// **'Load workouts'**
+  String get gymLoadWorkouts;
+
+  /// No description provided for @gymNoWorkouts.
+  ///
+  /// In en, this message translates to:
+  /// **'No treadmill workouts found for this period.'**
+  String get gymNoWorkouts;
+
+  /// No description provided for @gymSkipped.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} unreadable workouts skipped.'**
+  String gymSkipped(int count);
+
+  /// No description provided for @gymImported.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} workouts imported; {duplicates} duplicates skipped.'**
+  String gymImported(int count, int duplicates);
+
+  /// No description provided for @gymSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Treadmill summary'**
+  String get gymSummary;
+
+  /// No description provided for @gymSummaryDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Photograph the final console screen, then review the values before saving.'**
+  String get gymSummaryDescription;
+
+  /// No description provided for @gymTakePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take photo'**
+  String get gymTakePhoto;
+
+  /// No description provided for @gymChoosePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose photo'**
+  String get gymChoosePhoto;
+
+  /// No description provided for @gymReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the units, start time and values. Photos are read on your phone. Only the workout summary is saved.'**
+  String get gymReview;
+
+  /// No description provided for @gymStartTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Workout start'**
+  String get gymStartTime;
+
+  /// No description provided for @gymDurationHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter mm:ss or hh:mm:ss, for example 30:00.'**
+  String get gymDurationHelp;
+
+  /// No description provided for @gymDistanceUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'Distance unit'**
+  String get gymDistanceUnit;
+
+  /// No description provided for @gymCalories.
+  ///
+  /// In en, this message translates to:
+  /// **'Calories'**
+  String get gymCalories;
+
+  /// No description provided for @manualRecordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Record activity'**
+  String get manualRecordTitle;
+
+  /// No description provided for @manualRecordDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Record an activity with optional GPS, ECG and heart rate. Recording continues when you switch apps or lock the screen, until you press Pause or Stop.'**
+  String get manualRecordDescription;
+
+  /// No description provided for @manualTreadmill.
+  ///
+  /// In en, this message translates to:
+  /// **'Treadmill run'**
+  String get manualTreadmill;
+
+  /// No description provided for @manualChooseH10.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Polar H10'**
+  String get manualChooseH10;
+
+  /// No description provided for @manualRecordEcg.
+  ///
+  /// In en, this message translates to:
+  /// **'Record ECG with Polar H10'**
+  String get manualRecordEcg;
+
+  /// No description provided for @manualChooseHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a Polar H10 to record ECG and heart rate.'**
+  String get manualChooseHelp;
+
+  /// No description provided for @manualEcgSegments.
+  ///
+  /// In en, this message translates to:
+  /// **'Linked ECG segments: {count}'**
+  String manualEcgSegments(int count);
+
+  /// No description provided for @manualEcgInterrupted.
+  ///
+  /// In en, this message translates to:
+  /// **'ECG stopped. The activity timer is still running.'**
+  String get manualEcgInterrupted;
+
+  /// No description provided for @manualRestartEcg.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart ECG recording'**
+  String get manualRestartEcg;
+
+  /// No description provided for @manualFinalDistance.
+  ///
+  /// In en, this message translates to:
+  /// **'Final distance (optional)'**
+  String get manualFinalDistance;
+
+  /// No description provided for @manualDiscardNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard this activity? ECG recordings stay in ECG history.'**
+  String get manualDiscardNote;
+
+  /// No description provided for @manualRecordHeartRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Record heart rate'**
+  String get manualRecordHeartRate;
+
+  /// No description provided for @manualChooseHr.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a heart-rate sensor'**
+  String get manualChooseHr;
+
+  /// No description provided for @manualHrWithEcg.
+  ///
+  /// In en, this message translates to:
+  /// **'Uses the same H10 connection as ECG.'**
+  String get manualHrWithEcg;
+
+  /// No description provided for @manualRecordGps.
+  ///
+  /// In en, this message translates to:
+  /// **'Record GPS route and distance'**
+  String get manualRecordGps;
+
+  /// No description provided for @manualGpsHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'For outdoor activities. Allow precise location to record your route with the screen off.'**
+  String get manualGpsHelp;
+
+  /// No description provided for @manualGpsWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for an accurate GPS fix'**
+  String get manualGpsWaiting;
+
+  /// No description provided for @manualGpsAccuracy.
+  ///
+  /// In en, this message translates to:
+  /// **'GPS accuracy: {meters} m'**
+  String manualGpsAccuracy(int meters);
+
+  /// No description provided for @manualRecordBp.
+  ///
+  /// In en, this message translates to:
+  /// **'Include blood pressure readings'**
+  String get manualRecordBp;
+
+  /// No description provided for @manualBpHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Shows Hilo, Aktiia and Health readings taken during this recording, including after later syncs.'**
+  String get manualBpHelp;
+
+  /// No description provided for @manualBpUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Blood pressure readings could not be loaded.'**
+  String get manualBpUnavailable;
+
+  /// No description provided for @manualBpEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No blood pressure readings during this recording.'**
+  String get manualBpEmpty;
+
+  /// No description provided for @manualHrDisconnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Heart-rate sensor disconnected.'**
+  String get manualHrDisconnected;
+
+  /// No description provided for @manualReconnectHr.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconnect heart-rate sensor'**
+  String get manualReconnectHr;
+
+  /// No description provided for @manualBackgroundNotification.
+  ///
+  /// In en, this message translates to:
+  /// **'Recording continues with the screen off'**
+  String get manualBackgroundNotification;
+
+  /// No description provided for @ecgAskCoach.
+  ///
+  /// In en, this message translates to:
+  /// **'Discuss with AI Coach'**
+  String get ecgAskCoach;
+
+  /// No description provided for @ecgCoachWarningTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Not medical advice'**
+  String get ecgCoachWarningTitle;
+
+  /// No description provided for @ecgCoachWarningBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The AI Coach is not a doctor and cannot make a diagnosis. A chest-strap ECG has only one lead: it cannot rule out a heart attack or other heart disease, and the analysis can be wrong.\n\nChest pain or pressure, shortness of breath, pain in the arm, jaw or back, cold sweat or fainting: call 999 or 112 now. Do not wait for an answer from the AI.\n\nThe analysed figures and 10 seconds of the raw signal go to the AI model chosen in AI settings.'**
+  String get ecgCoachWarningBody;
+
+  /// No description provided for @ecgCoachUnderstood.
+  ///
+  /// In en, this message translates to:
+  /// **'I understand'**
+  String get ecgCoachUnderstood;
+
+  /// No description provided for @ecgCoachBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Not medical advice. The AI is not a doctor and cannot rule out a heart attack. Emergency: call 999 or 112.'**
+  String get ecgCoachBanner;
+
+  /// No description provided for @ecgCoachCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'ECG pre-analysis'**
+  String get ecgCoachCardTitle;
+
+  /// No description provided for @statusMeasured.
+  ///
+  /// In en, this message translates to:
+  /// **'Measured'**
+  String get statusMeasured;
+
+  /// No description provided for @ecgQuestionOverview.
+  ///
+  /// In en, this message translates to:
+  /// **'What does my ECG show?'**
+  String get ecgQuestionOverview;
+
+  /// No description provided for @ecgQuestionRhythm.
+  ///
+  /// In en, this message translates to:
+  /// **'Is my heart rhythm regular?'**
+  String get ecgQuestionRhythm;
+
+  /// No description provided for @ecgQuestionDoctor.
+  ///
+  /// In en, this message translates to:
+  /// **'Should a doctor look at this?'**
+  String get ecgQuestionDoctor;
+
+  /// No description provided for @ecgFollowSymptoms.
+  ///
+  /// In en, this message translates to:
+  /// **'Which symptoms mean I should see a doctor?'**
+  String get ecgFollowSymptoms;
+
+  /// No description provided for @ecgFollowRiskFactors.
+  ///
+  /// In en, this message translates to:
+  /// **'How do my risk factors change this?'**
+  String get ecgFollowRiskFactors;
+
+  /// No description provided for @ecgFollowTraining.
+  ///
+  /// In en, this message translates to:
+  /// **'Can I train normally?'**
+  String get ecgFollowTraining;
+
+  /// No description provided for @ecgFollowBetterRecording.
+  ///
+  /// In en, this message translates to:
+  /// **'How do I record a better ECG?'**
+  String get ecgFollowBetterRecording;
+
+  /// No description provided for @manualTreadmillConnect.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect treadmill (Bluetooth, optional)'**
+  String get manualTreadmillConnect;
+
+  /// No description provided for @manualTreadmillHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Speed, distance and incline then come from the treadmill. Without a connection, enter the distance at the end.'**
+  String get manualTreadmillHelp;
+
+  /// No description provided for @sportIndoorCycling.
+  ///
+  /// In en, this message translates to:
+  /// **'Indoor cycling'**
+  String get sportIndoorCycling;
+
+  /// No description provided for @sportElliptical.
+  ///
+  /// In en, this message translates to:
+  /// **'Elliptical'**
+  String get sportElliptical;
+
+  /// No description provided for @sportStairClimber.
+  ///
+  /// In en, this message translates to:
+  /// **'Stair climber'**
+  String get sportStairClimber;
+
+  /// No description provided for @manualWrongMachine.
+  ///
+  /// In en, this message translates to:
+  /// **'This equipment does not match the chosen sport.'**
+  String get manualWrongMachine;
+
+  /// No description provided for @manualEquipmentHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect Bluetooth (FTMS) equipment. Speed, power, cadence and distance come from the machine.'**
+  String get manualEquipmentHelp;
+
+  /// No description provided for @plusTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Track'**
+  String get plusTitle;
+
+  /// No description provided for @plusStartWorkout.
+  ///
+  /// In en, this message translates to:
+  /// **'Start workout'**
+  String get plusStartWorkout;
+
+  /// No description provided for @plusStartWorkoutHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Live with GPS, treadmill or indoor bike · ECG & heart rate'**
+  String get plusStartWorkoutHint;
+
+  /// No description provided for @plusGroupTraining.
+  ///
+  /// In en, this message translates to:
+  /// **'Training'**
+  String get plusGroupTraining;
+
+  /// No description provided for @plusGroupHeart.
+  ///
+  /// In en, this message translates to:
+  /// **'Heart & circulation'**
+  String get plusGroupHeart;
+
+  /// No description provided for @plusGroupBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Body'**
+  String get plusGroupBody;
+
+  /// No description provided for @plusGroupRecovery.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery'**
+  String get plusGroupRecovery;
+
+  /// No description provided for @plusLogWorkout.
+  ///
+  /// In en, this message translates to:
+  /// **'Log a workout'**
+  String get plusLogWorkout;
+
+  /// No description provided for @plusLogWorkoutHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a past session by hand'**
+  String get plusLogWorkoutHint;
+
+  /// No description provided for @plusImport.
+  ///
+  /// In en, this message translates to:
+  /// **'Import'**
+  String get plusImport;
+
+  /// No description provided for @plusImportHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Strava, FIT, GPX, gym treadmill'**
+  String get plusImportHint;
+
+  /// No description provided for @plusEcg.
+  ///
+  /// In en, this message translates to:
+  /// **'Record ECG'**
+  String get plusEcg;
+
+  /// No description provided for @plusEcgHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Polar H10 or ECG file'**
+  String get plusEcgHint;
+
+  /// No description provided for @plusHrv.
+  ///
+  /// In en, this message translates to:
+  /// **'HRV check'**
+  String get plusHrv;
+
+  /// No description provided for @plusHrvHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Short reading with Polar H10'**
+  String get plusHrvHint;
+
+  /// No description provided for @plusBpMeasure.
+  ///
+  /// In en, this message translates to:
+  /// **'Measure BP'**
+  String get plusBpMeasure;
+
+  /// No description provided for @plusBpMeasureHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Hilo cuff via Bluetooth'**
+  String get plusBpMeasureHint;
+
+  /// No description provided for @plusBpLog.
+  ///
+  /// In en, this message translates to:
+  /// **'Log BP'**
+  String get plusBpLog;
+
+  /// No description provided for @plusBpLogHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Type in a reading'**
+  String get plusBpLogHint;
+
+  /// No description provided for @plusBpReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Hilo report'**
+  String get plusBpReport;
+
+  /// No description provided for @plusBpReportHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Import the PDF'**
+  String get plusBpReportHint;
+
+  /// No description provided for @plusSpo2.
+  ///
+  /// In en, this message translates to:
+  /// **'SpO₂ & pulse'**
+  String get plusSpo2;
+
+  /// No description provided for @plusSpo2Hint.
+  ///
+  /// In en, this message translates to:
+  /// **'From a pulse oximeter'**
+  String get plusSpo2Hint;
+
+  /// No description provided for @plusWeigh.
+  ///
+  /// In en, this message translates to:
+  /// **'Weigh in'**
+  String get plusWeigh;
+
+  /// No description provided for @plusWeighHint.
+  ///
+  /// In en, this message translates to:
+  /// **'RENPHO scale via Bluetooth'**
+  String get plusWeighHint;
+
+  /// No description provided for @plusWeightLog.
+  ///
+  /// In en, this message translates to:
+  /// **'Log weight'**
+  String get plusWeightLog;
+
+  /// No description provided for @plusWeightLogHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight, body fat, BMI'**
+  String get plusWeightLogHint;
+
+  /// No description provided for @plusWaist.
+  ///
+  /// In en, this message translates to:
+  /// **'Waist'**
+  String get plusWaist;
+
+  /// No description provided for @plusWaistHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Circumference & ratios'**
+  String get plusWaistHint;
+
+  /// No description provided for @plusGrip.
+  ///
+  /// In en, this message translates to:
+  /// **'Grip strength'**
+  String get plusGrip;
+
+  /// No description provided for @plusGripHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Dynamometer reading'**
+  String get plusGripHint;
+
+  /// No description provided for @plusSleep.
+  ///
+  /// In en, this message translates to:
+  /// **'Log sleep'**
+  String get plusSleep;
+
+  /// No description provided for @plusSleepHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration, deep and REM'**
+  String get plusSleepHint;
+
+  /// No description provided for @recPace.
+  ///
+  /// In en, this message translates to:
+  /// **'Pace (/km)'**
+  String get recPace;
+
+  /// No description provided for @recAvgPace.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg pace'**
+  String get recAvgPace;
+
+  /// No description provided for @recPace500.
+  ///
+  /// In en, this message translates to:
+  /// **'Pace (/500 m)'**
+  String get recPace500;
+
+  /// No description provided for @recSpeedKmh.
+  ///
+  /// In en, this message translates to:
+  /// **'Speed (km/h)'**
+  String get recSpeedKmh;
+
+  /// No description provided for @recPowerW.
+  ///
+  /// In en, this message translates to:
+  /// **'Power (W)'**
+  String get recPowerW;
+
+  /// No description provided for @recDistanceKm.
+  ///
+  /// In en, this message translates to:
+  /// **'Distance (km)'**
+  String get recDistanceKm;
+
+  /// No description provided for @recHeartRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Heart rate'**
+  String get recHeartRate;
+
+  /// No description provided for @recMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Map'**
+  String get recMap;
+
+  /// No description provided for @recStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get recStart;
+
+  /// No description provided for @recResume.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume'**
+  String get recResume;
+
+  /// No description provided for @recFinish.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish'**
+  String get recFinish;
+
+  /// No description provided for @recDiscard.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get recDiscard;
+
+  /// No description provided for @recLive.
+  ///
+  /// In en, this message translates to:
+  /// **'Recording'**
+  String get recLive;
+
+  /// No description provided for @recNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New activity'**
+  String get recNew;
+
+  /// No description provided for @recCadence.
+  ///
+  /// In en, this message translates to:
+  /// **'Cadence'**
+  String get recCadence;
+
+  /// No description provided for @recMachine.
+  ///
+  /// In en, this message translates to:
+  /// **'Equipment'**
+  String get recMachine;
+
+  /// No description provided for @recGps.
+  ///
+  /// In en, this message translates to:
+  /// **'GPS'**
+  String get recGps;
+
+  /// No description provided for @recEcg.
+  ///
+  /// In en, this message translates to:
+  /// **'ECG'**
+  String get recEcg;
+
+  /// No description provided for @recBloodPressure.
+  ///
+  /// In en, this message translates to:
+  /// **'Blood pressure'**
+  String get recBloodPressure;
+
+  /// No description provided for @recBannerOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to open'**
+  String get recBannerOpen;
+
+  /// No description provided for @bpActivityHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Cuffs often cannot measure while you move. Readings from before or after the activity are not shown here.'**
+  String get bpActivityHint;
 }
 
 class _AppLocalizationsDelegate
