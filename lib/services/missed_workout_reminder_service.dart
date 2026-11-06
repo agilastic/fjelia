@@ -17,7 +17,7 @@ const missedWorkoutNotificationBase = 7300000;
 const missedWorkoutNotificationLimit = 7400000;
 
 /// How many days ahead reminders are scheduled. iOS cannot wake the app at
-/// 21:30, so the notification is set up in advance and taken back as soon as
+/// 19:30, so the notification is set up in advance and taken back as soon as
 /// the workout is recorded, moved or skipped.
 const _scheduleDays = 7;
 
@@ -26,11 +26,11 @@ const _minutesKey = 'missed_workout_reminder_minutes_v1';
 const _daysAheadKey = 'missed_workout_move_days_v1';
 const _ackKey = 'missed_workout_reminder_ack_v1';
 
-/// On by default at 21:30; a missed session may move up to 3 days ahead.
+/// On by default at 19:30; a missed session may move up to 3 days ahead.
 class MissedWorkoutSettings {
   const MissedWorkoutSettings({
     this.enabled = true,
-    this.minutes = 21 * 60 + 30,
+    this.minutes = 19 * 60 + 30,
     this.daysAhead = 3,
   });
   final bool enabled;
@@ -58,7 +58,7 @@ class MissedWorkoutSettings {
     final prefs = await SharedPreferences.getInstance();
     return MissedWorkoutSettings(
       enabled: prefs.getBool(_enabledKey) ?? true,
-      minutes: (prefs.getInt(_minutesKey) ?? 21 * 60 + 30).clamp(
+      minutes: (prefs.getInt(_minutesKey) ?? 19 * 60 + 30).clamp(
         0,
         24 * 60 - 1,
       ),

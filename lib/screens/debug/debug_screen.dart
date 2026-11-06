@@ -11,7 +11,7 @@ import '../planner/missed_workout_sheet.dart';
 class DebugScreen extends ConsumerWidget {
   const DebugScreen({super.key});
 
-  /// Tries the evening reminder on the device without waiting for 21:30.
+  /// Tries the evening reminder on the device without waiting for 19:30.
   Future<void> _testReminder(
     BuildContext context,
     WidgetRef ref,

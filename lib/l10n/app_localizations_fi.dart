@@ -1,6 +1,5 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -1393,10 +1392,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String acceptedLengthUsableIntervalsTostringasfixed(
-    Object accepted,
-    Object length,
-    Object toStringAsFixed,
-  ) {
+      Object accepted, Object length, Object toStringAsFixed) {
     return '$accepted/$length käyttökelpoista väliä · $toStringAsFixed % kattavuus';
   }
 
@@ -1421,10 +1417,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String historyLabelLabel2DurationMin(
-    Object label,
-    Object label2,
-    Object duration,
-  ) {
+      Object label, Object label2, Object duration) {
     return 'Historia · $label · $label2 · $duration min';
   }
 
@@ -1437,9 +1430,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String tostringasfixedMsRmssdTostringasfixed2Bpm(
-    Object toStringAsFixed,
-    Object toStringAsFixed2,
-  ) {
+      Object toStringAsFixed, Object toStringAsFixed2) {
     return '$toStringAsFixed ms RMSSD · $toStringAsFixed2 bpm';
   }
 
@@ -1552,10 +1543,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String duringTotalTotalcarbsGCarbs(
-    Object totalCarbs,
-    Object totalFluid,
-    Object totalSodium,
-  ) {
+      Object totalCarbs, Object totalFluid, Object totalSodium) {
     return 'Yhteensä aikana: $totalCarbs g hiilihydraatteja · $totalFluid ml · $totalSodium mg natriumia';
   }
 
@@ -2892,11 +2880,10 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String
-  ruleVstrengthprogressionruleversionTheLastStrengthprogressionminsessions(
-    Object strengthProgressionRuleVersion,
-    Object strengthProgressionMinSessions,
-    Object reason,
-  ) {
+      ruleVstrengthprogressionruleversionTheLastStrengthprogressionminsessions(
+          Object strengthProgressionRuleVersion,
+          Object strengthProgressionMinSessions,
+          Object reason) {
     return 'Sääntö v$strengthProgressionRuleVersion: viimeiset $strengthProgressionMinSessions vertailukelpoista harjoitusta, jokainen sarja toistotavoitteen yläpäässä, rasitus kirjattuna eikä aiottua raskaampi. $reason';
   }
 
@@ -2971,13 +2958,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get ambientTemperatureC => 'Ympäristön lämpötila °C';
 
   @override
-  String carryAboutGelsGelsGelcarbs(
-    Object gels,
-    Object gelCarbs,
-    Object bottles,
-    Object bottleMl,
-    Object drinkCarbs,
-  ) {
+  String carryAboutGelsGelsGelcarbs(Object gels, Object gelCarbs,
+      Object bottles, Object bottleMl, Object drinkCarbs) {
     return 'Ota mukaan noin $gels geeliä ($gelCarbs g hiilihydraatteja kukin) + $bottles × $bottleMl ml pulloa. $drinkCarbs g hiilihydraatteja tulee juomajauheesta.';
   }
 
@@ -3204,9 +3186,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String usingCurrentLocationTostringasfixedTostringasfixed2(
-    Object toStringAsFixed,
-    Object toStringAsFixed2,
-  ) {
+      Object toStringAsFixed, Object toStringAsFixed2) {
     return 'Käytetään nykyistä sijaintia: $toStringAsFixed, $toStringAsFixed2';
   }
 
@@ -3442,8 +3422,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String needsStrengthprogressionminsessionsRecordedSessionsOf(
-    Object strengthProgressionMinSessions,
-  ) {
+      Object strengthProgressionMinSessions) {
     return 'Vaatii $strengthProgressionMinSessions kirjattua harjoitusta tästä liikkeestä.';
   }
 
@@ -3668,12 +3647,11 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String durationsecondshDurationseconds2mDistancemetersKmAvgheartrate(
-    Object durationSeconds,
-    Object durationSeconds2,
-    Object distanceMeters,
-    Object avgHeartRate,
-    Object totalElevation,
-  ) {
+      Object durationSeconds,
+      Object durationSeconds2,
+      Object distanceMeters,
+      Object avgHeartRate,
+      Object totalElevation) {
     return '${durationSeconds}h ${durationSeconds2}m · $distanceMeters km · $avgHeartRate bpm · ↑$totalElevation m';
   }
 
@@ -3731,9 +3709,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String weekCurrentweekDurationinweeks(
-    Object currentWeek,
-    Object durationInWeeks,
-  ) {
+      Object currentWeek, Object durationInWeeks) {
     return 'Viikko $currentWeek / $durationInWeeks';
   }
 
@@ -3945,10 +3921,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String weightKgFatBodyfatMuscle(
-    Object weight,
-    Object bodyFat,
-    Object muscleMass,
-  ) {
+      Object weight, Object bodyFat, Object muscleMass) {
     return '$weight kg · Rasva $bodyFat % · Lihakset $muscleMass kg';
   }
 
@@ -4309,20 +4282,13 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String yourEligibleSimilarWorkoutsTolocal(
-    Object eligible,
-    Object toLocal,
-    Object toLocal2,
-  ) {
+      Object eligible, Object toLocal, Object toLocal2) {
     return 'Samankaltaiset $eligible harjoitustasi · $toLocal–$toLocal2';
   }
 
   @override
   String middleHalfQ1msToQ3ms(
-    Object q1Ms,
-    Object q3Ms,
-    Object medianMs,
-    Object delta,
-  ) {
+      Object q1Ms, Object q3Ms, Object medianMs, Object delta) {
     return 'Keskimmäinen puolisko $q1Ms–$q3Ms ms · mediaani $medianMs ms · tämä harjoitus $delta ms';
   }
 
@@ -4795,9 +4761,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String recordedCoverageInhourshInminutesminTime(
-    Object inHours,
-    Object inMinutes,
-  ) {
+      Object inHours, Object inMinutes) {
     return 'Tallennettu kattavuus: $inHours h $inMinutes min · aikapainotettu keskiarvo';
   }
 
@@ -4895,9 +4859,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String changeDeltamsMillisecondsDeltapercentPercent(
-    Object deltaMs,
-    Object deltaPercent,
-  ) {
+      Object deltaMs, Object deltaPercent) {
     return 'Muutos $deltaMs millisekuntia, $deltaPercent prosenttia.';
   }
 
@@ -4944,14 +4906,8 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String yourSimilarWorkoutsEligibleTolocal(
-    Object eligible,
-    Object toLocal,
-    Object toLocal2,
-    Object medianMs,
-    Object q1Ms,
-    Object q3Ms,
-  ) {
+  String yourSimilarWorkoutsEligibleTolocal(Object eligible, Object toLocal,
+      Object toLocal2, Object medianMs, Object q1Ms, Object q3Ms) {
     return 'Samankaltaiset harjoituksesi ($eligible, $toLocal–$toLocal2): mediaani $medianMs ms, keskimmäinen puolisko $q1Ms–$q3Ms ms.';
   }
 
@@ -6793,12 +6749,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String conflictFlexibleOverlap(
-    String a,
-    String b,
-    int gap,
-    int overlap,
-    String skip,
-  ) {
+      String a, String b, int gap, int overlap, String skip) {
     return '$a ja $b ovat $gap päivän välein ja menevät päällekkäin $overlap päivää. $skip on merkitty joustavaksi: sen pois jättäminen vapauttaisi toista tapahtumaa edeltävät viikot.';
   }
 
@@ -6834,7 +6785,8 @@ class AppLocalizationsFi extends AppLocalizations {
       locale: localeName,
       other:
           '$n siirtämääsi harjoitusta on tapahtumapäivänä tai sitä edeltävänä lepopäivänä. Suunnitelma jättää ne siihen, mihin ne laitoit.',
-      one: '1 siirtämäsi harjoitus on tapahtumapäivänä tai sitä edeltävänä lepopäivänä. Suunnitelma jättää sen siihen, mihin sen laitoit.',
+      one:
+          '1 siirtämäsi harjoitus on tapahtumapäivänä tai sitä edeltävänä lepopäivänä. Suunnitelma jättää sen siihen, mihin sen laitoit.',
     );
     return '$_temp0';
   }
@@ -6846,7 +6798,8 @@ class AppLocalizationsFi extends AppLocalizations {
       locale: localeName,
       other:
           '$n harjoitusta jätettiin pois, koska valitut harjoitukset olivat pidempiä kuin viikolle jäänyt aika.',
-      one: '1 harjoitus jätettiin pois, koska valittu harjoitus oli pidempi kuin viikolle jäänyt aika.',
+      one:
+          '1 harjoitus jätettiin pois, koska valittu harjoitus oli pidempi kuin viikolle jäänyt aika.',
     );
     return '$_temp0';
   }
@@ -6858,7 +6811,8 @@ class AppLocalizationsFi extends AppLocalizations {
       locale: localeName,
       other:
           '$n siirtämääsi kovaa harjoitusta on tapahtuman jälkeisinä kevyinä päivinä. Suunnitelma jättää ne siihen, mihin ne laitoit.',
-      one: '1 siirtämäsi kova harjoitus on tapahtuman jälkeisinä kevyinä päivinä. Suunnitelma jättää sen siihen, mihin sen laitoit.',
+      one:
+          '1 siirtämäsi kova harjoitus on tapahtuman jälkeisinä kevyinä päivinä. Suunnitelma jättää sen siihen, mihin sen laitoit.',
     );
     return '$_temp0';
   }

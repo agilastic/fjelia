@@ -1,6 +1,5 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -1395,10 +1394,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String acceptedLengthUsableIntervalsTostringasfixed(
-    Object accepted,
-    Object length,
-    Object toStringAsFixed,
-  ) {
+      Object accepted, Object length, Object toStringAsFixed) {
     return '$accepted/$length použiteľných intervalov · $toStringAsFixed % pokrytie';
   }
 
@@ -1423,10 +1419,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String historyLabelLabel2DurationMin(
-    Object label,
-    Object label2,
-    Object duration,
-  ) {
+      Object label, Object label2, Object duration) {
     return 'História · $label · $label2 · $duration min';
   }
 
@@ -1440,9 +1433,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String tostringasfixedMsRmssdTostringasfixed2Bpm(
-    Object toStringAsFixed,
-    Object toStringAsFixed2,
-  ) {
+      Object toStringAsFixed, Object toStringAsFixed2) {
     return '$toStringAsFixed ms RMSSD · $toStringAsFixed2 bpm';
   }
 
@@ -1556,10 +1547,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String duringTotalTotalcarbsGCarbs(
-    Object totalCarbs,
-    Object totalFluid,
-    Object totalSodium,
-  ) {
+      Object totalCarbs, Object totalFluid, Object totalSodium) {
     return 'Spolu počas: $totalCarbs g sacharidov · $totalFluid ml · $totalSodium mg sodíka';
   }
 
@@ -2898,11 +2886,10 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String
-  ruleVstrengthprogressionruleversionTheLastStrengthprogressionminsessions(
-    Object strengthProgressionRuleVersion,
-    Object strengthProgressionMinSessions,
-    Object reason,
-  ) {
+      ruleVstrengthprogressionruleversionTheLastStrengthprogressionminsessions(
+          Object strengthProgressionRuleVersion,
+          Object strengthProgressionMinSessions,
+          Object reason) {
     return 'Pravidlo v$strengthProgressionRuleVersion: posledné $strengthProgressionMinSessions porovnateľné tréningy, každá séria na hornej hranici cieľa opakovaní, so zaznamenanou námahou a nie ťažšie, než bolo zamýšľané. $reason';
   }
 
@@ -2977,13 +2964,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get ambientTemperatureC => 'Okolitá teplota °C';
 
   @override
-  String carryAboutGelsGelsGelcarbs(
-    Object gels,
-    Object gelCarbs,
-    Object bottles,
-    Object bottleMl,
-    Object drinkCarbs,
-  ) {
+  String carryAboutGelsGelsGelcarbs(Object gels, Object gelCarbs,
+      Object bottles, Object bottleMl, Object drinkCarbs) {
     return 'Vezmite približne $gels gélov ($gelCarbs g sacharidov každý) + $bottles × fľaše po $bottleMl ml. $drinkCarbs g sacharidov pochádza z nápojového prášku.';
   }
 
@@ -3207,9 +3189,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String usingCurrentLocationTostringasfixedTostringasfixed2(
-    Object toStringAsFixed,
-    Object toStringAsFixed2,
-  ) {
+      Object toStringAsFixed, Object toStringAsFixed2) {
     return 'Používa sa aktuálna poloha: $toStringAsFixed, $toStringAsFixed2';
   }
 
@@ -3443,8 +3423,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String needsStrengthprogressionminsessionsRecordedSessionsOf(
-    Object strengthProgressionMinSessions,
-  ) {
+      Object strengthProgressionMinSessions) {
     return 'Vyžaduje $strengthProgressionMinSessions zaznamenané tréningy tohto cviku.';
   }
 
@@ -3663,12 +3642,11 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String durationsecondshDurationseconds2mDistancemetersKmAvgheartrate(
-    Object durationSeconds,
-    Object durationSeconds2,
-    Object distanceMeters,
-    Object avgHeartRate,
-    Object totalElevation,
-  ) {
+      Object durationSeconds,
+      Object durationSeconds2,
+      Object distanceMeters,
+      Object avgHeartRate,
+      Object totalElevation) {
     return '${durationSeconds}h ${durationSeconds2}m · $distanceMeters km · $avgHeartRate bpm · ↑$totalElevation m';
   }
 
@@ -3725,9 +3703,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String weekCurrentweekDurationinweeks(
-    Object currentWeek,
-    Object durationInWeeks,
-  ) {
+      Object currentWeek, Object durationInWeeks) {
     return 'Týždeň $currentWeek / $durationInWeeks';
   }
 
@@ -3940,10 +3916,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String weightKgFatBodyfatMuscle(
-    Object weight,
-    Object bodyFat,
-    Object muscleMass,
-  ) {
+      Object weight, Object bodyFat, Object muscleMass) {
     return '$weight kg · Tuk $bodyFat % · Svaly $muscleMass kg';
   }
 
@@ -4303,20 +4276,13 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String yourEligibleSimilarWorkoutsTolocal(
-    Object eligible,
-    Object toLocal,
-    Object toLocal2,
-  ) {
+      Object eligible, Object toLocal, Object toLocal2) {
     return 'Vaše $eligible podobné tréningy · $toLocal–$toLocal2';
   }
 
   @override
   String middleHalfQ1msToQ3ms(
-    Object q1Ms,
-    Object q3Ms,
-    Object medianMs,
-    Object delta,
-  ) {
+      Object q1Ms, Object q3Ms, Object medianMs, Object delta) {
     return 'Stredná polovica $q1Ms až $q3Ms ms · medián $medianMs ms · tento tréning $delta ms';
   }
 
@@ -4792,9 +4758,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String recordedCoverageInhourshInminutesminTime(
-    Object inHours,
-    Object inMinutes,
-  ) {
+      Object inHours, Object inMinutes) {
     return 'Zaznamenané pokrytie: $inHours h $inMinutes min · časovo vážený priemer';
   }
 
@@ -4892,9 +4856,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String changeDeltamsMillisecondsDeltapercentPercent(
-    Object deltaMs,
-    Object deltaPercent,
-  ) {
+      Object deltaMs, Object deltaPercent) {
     return 'Zmena $deltaMs milisekúnd, $deltaPercent percent.';
   }
 
@@ -4941,14 +4903,8 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
-  String yourSimilarWorkoutsEligibleTolocal(
-    Object eligible,
-    Object toLocal,
-    Object toLocal2,
-    Object medianMs,
-    Object q1Ms,
-    Object q3Ms,
-  ) {
+  String yourSimilarWorkoutsEligibleTolocal(Object eligible, Object toLocal,
+      Object toLocal2, Object medianMs, Object q1Ms, Object q3Ms) {
     return 'Vaše podobné tréningy ($eligible, $toLocal–$toLocal2): medián $medianMs ms, stredná polovica $q1Ms až $q3Ms ms.';
   }
 
@@ -6790,12 +6746,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String conflictFlexibleOverlap(
-    String a,
-    String b,
-    int gap,
-    int overlap,
-    String skip,
-  ) {
+      String a, String b, int gap, int overlap, String skip) {
     return '$a a $b delí $gap dní a prekrývajú sa o $overlap dní. $skip je označené ako flexibilné: jeho vynechanie by uvoľnilo týždne pred druhým podujatím.';
   }
 
@@ -6833,7 +6784,8 @@ class AppLocalizationsSk extends AppLocalizations {
           '$n tréningov, ktoré ste presunuli, je v deň podujatia alebo v deň voľna pred ním. Plán ich nechá tam, kam ste ich dali.',
       few:
           '$n tréningy, ktoré ste presunuli, sú v deň podujatia alebo v deň voľna pred ním. Plán ich nechá tam, kam ste ich dali.',
-      one: '1 tréning, ktorý ste presunuli, je v deň podujatia alebo v deň voľna pred ním. Plán ho nechá tam, kam ste ho dali.',
+      one:
+          '1 tréning, ktorý ste presunuli, je v deň podujatia alebo v deň voľna pred ním. Plán ho nechá tam, kam ste ho dali.',
     );
     return '$_temp0';
   }
@@ -6847,7 +6799,8 @@ class AppLocalizationsSk extends AppLocalizations {
           '$n tréningov bolo vynechaných, pretože zvolené tréningy boli dlhšie ako zostávajúci čas v týždni.',
       few:
           '$n tréningy boli vynechané, pretože zvolené tréningy boli dlhšie ako zostávajúci čas v týždni.',
-      one: '1 tréning bol vynechaný, pretože zvolený tréning bol dlhší ako zostávajúci čas v týždni.',
+      one:
+          '1 tréning bol vynechaný, pretože zvolený tréning bol dlhší ako zostávajúci čas v týždni.',
     );
     return '$_temp0';
   }
@@ -6861,7 +6814,8 @@ class AppLocalizationsSk extends AppLocalizations {
           '$n náročných tréningov, ktoré ste presunuli, je v ľahkých dňoch po podujatí. Plán ich nechá tam, kam ste ich dali.',
       few:
           '$n náročné tréningy, ktoré ste presunuli, sú v ľahkých dňoch po podujatí. Plán ich nechá tam, kam ste ich dali.',
-      one: '1 náročný tréning, ktorý ste presunuli, je v ľahkých dňoch po podujatí. Plán ho nechá tam, kam ste ho dali.',
+      one:
+          '1 náročný tréning, ktorý ste presunuli, je v ľahkých dňoch po podujatí. Plán ho nechá tam, kam ste ho dali.',
     );
     return '$_temp0';
   }

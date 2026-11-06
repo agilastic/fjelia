@@ -52,7 +52,7 @@ void main() {
   });
   tearDown(() => db.close());
 
-  test('schedules 21:30 on each day with an open session', () async {
+  test('schedules 19:30 on each day with an open session', () async {
     await service().reconcile();
     final byId = {for (final n in gateway.scheduled) n.id: n};
     final mon = byId[missedWorkoutNotificationId(day(0))]!;

@@ -6,8 +6,9 @@ publish_to: 'none'
 version: 0.1.0
 
 environment:
-  sdk: ^3.13.5
+  sdk: ^3.1.0
 
 dependencies:
   fjelia_service_api:
     path: ../fjelia_service_api
+  flutter_secure_storage: ^11.2.0

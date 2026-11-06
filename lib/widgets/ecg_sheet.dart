@@ -561,6 +561,23 @@ Future<void> _askCoach(
       '[EcgCoach] quality=${analysis.quality} analysed=${analysis.analysedSeconds.round()}s beats=${analysis.beats}',
     );
     if (!context.mounted) return;
+
+    // Use enhanced timeline context for long recordings (>10 min).
+    final useTimeline = row.durationMs > 600000;
+    final contextLines = useTimeline
+        ? analysis.contextLinesWithTimeline(
+            device: row.deviceName,
+            source: row.source,
+            recordedAt: row.recordedAt,
+            linkedToWorkout: row.activityId != null,
+          )
+        : analysis.contextLines(
+            device: row.deviceName,
+            source: row.source,
+            recordedAt: row.recordedAt,
+            linkedToWorkout: row.activityId != null,
+          );
+
     openCoachTab(
       context,
       prompt: l.ecgQuestionOverview,
@@ -571,12 +588,7 @@ Future<void> _askCoach(
           recordingDuration(row.durationMs),
           if (analysis.rhythm case final r?) '${r.hrMean} bpm',
         ],
-        contextLines: analysis.contextLines(
-          device: row.deviceName,
-          source: row.source,
-          recordedAt: row.recordedAt,
-          linkedToWorkout: row.activityId != null,
-        ),
+        contextLines: contextLines,
       ),
     );
   });

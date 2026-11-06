@@ -58,3 +58,6 @@ assets/fjelia-appstore-search*
 
 # Local override that swaps the stub for the private service package.
 pubspec_overrides.yaml
+
+# FVM Version Cache
+.fvm/
