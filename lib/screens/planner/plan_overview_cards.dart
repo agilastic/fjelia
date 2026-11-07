@@ -22,6 +22,7 @@ import '../../providers/planner_providers.dart';
 import '../../services/open_meteo_client.dart' show OpenMeteoResult;
 import '../../services/race_predictor.dart';
 import '../../widgets/app_widgets.dart';
+import '../../widgets/plan_timeline.dart';
 import '../settings/training_tab.dart';
 import 'plan_session_sheet.dart';
 import '../../utils/target_time.dart';
@@ -630,45 +631,26 @@ class _UpcomingState extends State<UpcomingWorkoutList> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(top: 8, bottom: 10),
-          child: Text(
-            context.l10n.upcoming,
-            style: TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.w800,
-              letterSpacing: .8,
-            ),
+          padding: const EdgeInsets.only(top: 8, bottom: 4),
+          child: TimelineSectionHeader(
+            label: context.l10n.upcoming,
+            icon: Icons.rocket_launch_rounded,
+            colors: planGradient,
           ),
         ),
         if (showRest) ...[
-          Padding(
-            padding: const EdgeInsets.only(top: 12, bottom: 6),
-            child: Text(
-              context.l10n.today2,
-              style: const TextStyle(
-                fontSize: 10,
-                color: muted,
-                letterSpacing: .7,
-              ),
-            ),
-          ),
+          TimelineDayLabel(context.l10n.today2, future: true, highlight: true),
           const _RestTile(),
         ],
         for (final e in entries) ...[
-          Padding(
-            padding: const EdgeInsets.only(top: 12, bottom: 6),
-            child: Text(
-              e.key == today
-                  ? context.l10n.today2
-                  : e.key == tomorrow
-                  ? context.l10n.tomorrow
-                  : DateFormat.MMMMEEEEd().format(e.key).toUpperCase(),
-              style: const TextStyle(
-                fontSize: 10,
-                color: muted,
-                letterSpacing: .7,
-              ),
-            ),
+          TimelineDayLabel(
+            e.key == today
+                ? context.l10n.today2
+                : e.key == tomorrow
+                ? context.l10n.tomorrow
+                : DateFormat.MMMMEEEEd().format(e.key).toUpperCase(),
+            future: true,
+            highlight: e.key == today,
           ),
           for (final s in e.value)
             if (s.session != null)
@@ -683,7 +665,7 @@ class _UpcomingState extends State<UpcomingWorkoutList> {
         if (groups.length > entries.length)
           TextButton(
             style: TextButton.styleFrom(
-              foregroundColor: mint,
+              foregroundColor: planGradient.last,
               padding: EdgeInsets.zero,
             ),
             onPressed: () => setState(() => visibleDays += 5),
@@ -704,49 +686,109 @@ class _RestTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const color = Color(0xFF9FA8DA);
-    return Container(
+    return _PlannedCard(
       key: const Key('rest-day-today'),
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: panel,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: color.withValues(alpha: .35), width: 1.5),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: color.withValues(alpha: .12),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: const Icon(Icons.bedtime_outlined, color: color, size: 20),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  context.l10n.restDayTitle,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
+      color: color,
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            const _PlannedIcon(icon: Icons.bedtime_outlined, color: color),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    context.l10n.restDayTitle,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  context.l10n.restDayPlannedNote,
-                  style: const TextStyle(fontSize: 12, color: muted),
-                ),
-              ],
+                  const SizedBox(height: 2),
+                  Text(
+                    context.l10n.restDayPlannedNote,
+                    style: const TextStyle(fontSize: 12, color: muted),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
+}
+
+/// The frame of a planned entry: a ghost card with a dashed edge in the
+/// sport's colour and a faint glow of what is ahead. Once the entry is done
+/// the edge turns solid, like the cards in the history.
+class _PlannedCard extends StatelessWidget {
+  const _PlannedCard({
+    super.key,
+    required this.color,
+    required this.child,
+    this.solid = false,
+    this.onTap,
+  });
+  final Color color;
+  final Widget child;
+  final bool solid;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final radius = BorderRadius.circular(14);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: CustomPaint(
+        foregroundPainter: solid
+            ? null
+            : DashedBorderPainter(color: color.withValues(alpha: .75)),
+        child: Material(
+          color: ghostPanel,
+          shape: RoundedRectangleBorder(
+            borderRadius: radius,
+            side: solid
+                ? BorderSide(color: color.withValues(alpha: .55), width: 1.5)
+                : BorderSide.none,
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: Ink(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  planGradient.first.withValues(alpha: solid ? 0 : .10),
+                  planGradient.last.withValues(alpha: 0),
+                ],
+              ),
+            ),
+            child: InkWell(onTap: onTap, child: child),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The sport icon of a planned entry: only outlined, not filled in yet.
+class _PlannedIcon extends StatelessWidget {
+  const _PlannedIcon({required this.icon, required this.color});
+  final IconData icon;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) => Container(
+    padding: const EdgeInsets.all(9),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(10),
+      border: Border.all(color: color.withValues(alpha: .6), width: 1.5),
+    ),
+    child: Icon(icon, color: color, size: 20),
+  );
 }
 
 /// "0h59m · 9.4 km" for the activity that did a planned entry.
@@ -807,103 +849,80 @@ class _SessionTile extends StatelessWidget {
     final phaseColor = skipped
         ? Colors.orangeAccent
         : plannedActivityColor(s.phase);
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Material(
-        color: panel,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
-          side: BorderSide(color: color.withValues(alpha: .45), width: 1.5),
-        ),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(14),
-          onTap: () => showAppSheet(context, PlanSessionSheet(session: s)),
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: color.withValues(alpha: .12),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Icon(
-                    workoutSportIcon(s.sport),
-                    color: color,
-                    size: 22,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+    return _PlannedCard(
+      color: color,
+      solid: done,
+      onTap: () => showAppSheet(context, PlanSessionSheet(session: s)),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            _PlannedIcon(icon: workoutSportIcon(s.sport), color: color),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Wrap(
+                    spacing: 6,
+                    runSpacing: 4,
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
-                      Wrap(
-                        spacing: 6,
-                        runSpacing: 4,
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 5,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: phaseColor.withValues(alpha: .15),
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: Text(
-                              skipped
-                                  ? context.l10n.skipped2
-                                  : planPhaseLabel(context.l10n, s.phase),
-                              style: TextStyle(
-                                fontSize: 9,
-                                color: phaseColor,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 5,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: phaseColor.withValues(alpha: .15),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          skipped
+                              ? context.l10n.skipped2
+                              : planPhaseLabel(context.l10n, s.phase),
+                          style: TextStyle(
+                            fontSize: 9,
+                            color: phaseColor,
+                            fontWeight: FontWeight.w700,
                           ),
-                          Text(
-                            s.title,
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w700,
-                              color: skipped || done ? Colors.white54 : null,
-                              decoration: skipped || done
-                                  ? TextDecoration.lineThrough
-                                  : null,
-                              decorationColor: done ? mint : null,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                      const SizedBox(height: 5),
                       Text(
-                        skipped
-                            ? context.l10n.sessionDropped(
-                                skipReason ?? context.l10n.skipped,
-                                planDuration(s.plannedDurationMin),
-                              )
-                            : done
-                            ? 'Done${doneBy == null ? '' : ' · ${_doneSummary(doneBy!)}'}'
-                            : '${planDuration(s.plannedDurationMin)} · TRIMP ${s.plannedTrimp} · Z${s.primaryZone}',
-                        style: const TextStyle(
-                          fontSize: 11,
-                          color: Colors.white70,
+                        s.title,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                          color: skipped || done ? Colors.white54 : null,
+                          decoration: skipped || done
+                              ? TextDecoration.lineThrough
+                              : null,
+                          decorationColor: done ? mint : null,
                         ),
                       ),
                     ],
                   ),
-                ),
-                const SizedBox(width: 6),
-                if (done)
-                  const _DoneCheck()
-                else
-                  const Icon(Icons.chevron_right, size: 20, color: muted),
-              ],
+                  const SizedBox(height: 5),
+                  Text(
+                    skipped
+                        ? context.l10n.sessionDropped(
+                            skipReason ?? context.l10n.skipped,
+                            planDuration(s.plannedDurationMin),
+                          )
+                        : done
+                        ? 'Done${doneBy == null ? '' : ' · ${_doneSummary(doneBy!)}'}'
+                        : '${planDuration(s.plannedDurationMin)} · TRIMP ${s.plannedTrimp} · Z${s.primaryZone}',
+                    style: const TextStyle(fontSize: 11, color: Colors.white70),
+                  ),
+                ],
+              ),
             ),
-          ),
+            const SizedBox(width: 6),
+            if (done)
+              const _DoneCheck()
+            else
+              const Icon(Icons.chevron_right, size: 20, color: muted),
+          ],
         ),
       ),
     );
@@ -920,53 +939,36 @@ class _ScheduledTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final done = doneBy != null;
     final color = done ? mint : completedActivityColor(workout.sportType);
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Material(
-        color: panel,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
-          side: BorderSide(color: color.withValues(alpha: .45), width: 1.5),
+    return _PlannedCard(
+      color: color,
+      solid: done,
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        leading: _PlannedIcon(
+          icon: workoutSportIcon(workout.sportType),
+          color: color,
         ),
-        child: ListTile(
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 12,
-            vertical: 4,
+        title: Text(
+          workout.name,
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w700,
+            color: done ? Colors.white54 : null,
+            decoration: done ? TextDecoration.lineThrough : null,
+            decorationColor: done ? mint : null,
           ),
-          leading: Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: color.withValues(alpha: .12),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Icon(
-              workoutSportIcon(workout.sportType),
-              color: color,
-              size: 22,
-            ),
-          ),
-          title: Text(
-            workout.name,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
-              color: done ? Colors.white54 : null,
-              decoration: done ? TextDecoration.lineThrough : null,
-              decorationColor: done ? mint : null,
-            ),
-          ),
-          subtitle: Text(
-            done
-                ? context.l10n.doneDoneby(_doneSummary(doneBy!))
-                : context.l10n.garminWorkoutWorkout(workoutSummary(workout)),
-            style: const TextStyle(fontSize: 11, color: Colors.white70),
-          ),
-          trailing: done
-              ? const _DoneCheck()
-              : const Icon(Icons.chevron_right, size: 20, color: muted),
-          onTap: () =>
-              showAppSheet(context, WorkoutDetailSheet(workout: workout)),
         ),
+        subtitle: Text(
+          done
+              ? context.l10n.doneDoneby(_doneSummary(doneBy!))
+              : context.l10n.garminWorkoutWorkout(workoutSummary(workout)),
+          style: const TextStyle(fontSize: 11, color: Colors.white70),
+        ),
+        trailing: done
+            ? const _DoneCheck()
+            : const Icon(Icons.chevron_right, size: 20, color: muted),
+        onTap: () =>
+            showAppSheet(context, WorkoutDetailSheet(workout: workout)),
       ),
     );
   }

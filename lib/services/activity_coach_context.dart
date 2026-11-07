@@ -103,6 +103,11 @@ class ActivityCoachContextBuilder {
       if (actual.executionScore != null)
         'Execution:${actual.executionScore}/100',
       if (actual.executionVerdict != null) 'Verdict:${actual.executionVerdict}',
+      if (actual.outcome != null) 'Outcome:${actual.outcome}',
+      if (actual.intensityVerdict != null)
+        'IntensityVsPlan:${actual.intensityVerdict}',
+      if (actual.shortReason != null) 'ShorterBecause:${actual.shortReason}',
+      if (actual.matchKind != null) 'DoneAs:${actual.matchKind}',
       if (actual.rpe != null) 'RPE:${actual.rpe}',
     ];
     return parts.isEmpty ? null : '[PlannedSession:${parts.join(',')}]';

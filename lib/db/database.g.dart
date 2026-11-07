@@ -32424,6 +32424,19 @@ class $TrainingSessionsTable extends TrainingSessions
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _lockedMeta = const VerificationMeta('locked');
+  @override
+  late final GeneratedColumn<bool> locked = GeneratedColumn<bool>(
+    'locked',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("locked" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   static const VerificationMeta _sessionDateOriginalMeta =
       const VerificationMeta('sessionDateOriginal');
   @override
@@ -32491,6 +32504,7 @@ class $TrainingSessionsTable extends TrainingSessions
     actualDurationMin,
     dateModified,
     modifiedBy,
+    locked,
     sessionDateOriginal,
   ];
   @override
@@ -32959,6 +32973,12 @@ class $TrainingSessionsTable extends TrainingSessions
         modifiedBy.isAcceptableOrUnknown(data['modified_by']!, _modifiedByMeta),
       );
     }
+    if (data.containsKey('locked')) {
+      context.handle(
+        _lockedMeta,
+        locked.isAcceptableOrUnknown(data['locked']!, _lockedMeta),
+      );
+    }
     if (data.containsKey('session_date_original')) {
       context.handle(
         _sessionDateOriginalMeta,
@@ -33193,6 +33213,10 @@ class $TrainingSessionsTable extends TrainingSessions
         DriftSqlType.string,
         data['${effectivePrefix}modified_by'],
       ),
+      locked: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}locked'],
+      )!,
       sessionDateOriginal: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}session_date_original'],
@@ -33267,6 +33291,9 @@ class TrainingSession extends DataClass implements Insertable<TrainingSession> {
   final int? actualDurationMin;
   final DateTime? dateModified;
   final String? modifiedBy;
+
+  /// Kept as the athlete set it: automatic plan changes leave it alone.
+  final bool locked;
   final String? sessionDateOriginal;
   const TrainingSession({
     required this.id,
@@ -33323,6 +33350,7 @@ class TrainingSession extends DataClass implements Insertable<TrainingSession> {
     this.actualDurationMin,
     this.dateModified,
     this.modifiedBy,
+    required this.locked,
     this.sessionDateOriginal,
   });
   @override
@@ -33448,6 +33476,7 @@ class TrainingSession extends DataClass implements Insertable<TrainingSession> {
     if (!nullToAbsent || modifiedBy != null) {
       map['modified_by'] = Variable<String>(modifiedBy);
     }
+    map['locked'] = Variable<bool>(locked);
     if (!nullToAbsent || sessionDateOriginal != null) {
       map['session_date_original'] = Variable<String>(sessionDateOriginal);
     }
@@ -33574,6 +33603,7 @@ class TrainingSession extends DataClass implements Insertable<TrainingSession> {
       modifiedBy: modifiedBy == null && nullToAbsent
           ? const Value.absent()
           : Value(modifiedBy),
+      locked: Value(locked),
       sessionDateOriginal: sessionDateOriginal == null && nullToAbsent
           ? const Value.absent()
           : Value(sessionDateOriginal),
@@ -33658,6 +33688,7 @@ class TrainingSession extends DataClass implements Insertable<TrainingSession> {
       actualDurationMin: serializer.fromJson<int?>(json['actualDurationMin']),
       dateModified: serializer.fromJson<DateTime?>(json['dateModified']),
       modifiedBy: serializer.fromJson<String?>(json['modifiedBy']),
+      locked: serializer.fromJson<bool>(json['locked']),
       sessionDateOriginal: serializer.fromJson<String?>(
         json['sessionDateOriginal'],
       ),
@@ -33723,6 +33754,7 @@ class TrainingSession extends DataClass implements Insertable<TrainingSession> {
       'actualDurationMin': serializer.toJson<int?>(actualDurationMin),
       'dateModified': serializer.toJson<DateTime?>(dateModified),
       'modifiedBy': serializer.toJson<String?>(modifiedBy),
+      'locked': serializer.toJson<bool>(locked),
       'sessionDateOriginal': serializer.toJson<String?>(sessionDateOriginal),
     };
   }
@@ -33782,6 +33814,7 @@ class TrainingSession extends DataClass implements Insertable<TrainingSession> {
     Value<int?> actualDurationMin = const Value.absent(),
     Value<DateTime?> dateModified = const Value.absent(),
     Value<String?> modifiedBy = const Value.absent(),
+    bool? locked,
     Value<String?> sessionDateOriginal = const Value.absent(),
   }) => TrainingSession(
     id: id ?? this.id,
@@ -33875,6 +33908,7 @@ class TrainingSession extends DataClass implements Insertable<TrainingSession> {
         : this.actualDurationMin,
     dateModified: dateModified.present ? dateModified.value : this.dateModified,
     modifiedBy: modifiedBy.present ? modifiedBy.value : this.modifiedBy,
+    locked: locked ?? this.locked,
     sessionDateOriginal: sessionDateOriginal.present
         ? sessionDateOriginal.value
         : this.sessionDateOriginal,
@@ -34011,6 +34045,7 @@ class TrainingSession extends DataClass implements Insertable<TrainingSession> {
       modifiedBy: data.modifiedBy.present
           ? data.modifiedBy.value
           : this.modifiedBy,
+      locked: data.locked.present ? data.locked.value : this.locked,
       sessionDateOriginal: data.sessionDateOriginal.present
           ? data.sessionDateOriginal.value
           : this.sessionDateOriginal,
@@ -34074,6 +34109,7 @@ class TrainingSession extends DataClass implements Insertable<TrainingSession> {
           ..write('actualDurationMin: $actualDurationMin, ')
           ..write('dateModified: $dateModified, ')
           ..write('modifiedBy: $modifiedBy, ')
+          ..write('locked: $locked, ')
           ..write('sessionDateOriginal: $sessionDateOriginal')
           ..write(')'))
         .toString();
@@ -34135,6 +34171,7 @@ class TrainingSession extends DataClass implements Insertable<TrainingSession> {
     actualDurationMin,
     dateModified,
     modifiedBy,
+    locked,
     sessionDateOriginal,
   ]);
   @override
@@ -34195,6 +34232,7 @@ class TrainingSession extends DataClass implements Insertable<TrainingSession> {
           other.actualDurationMin == this.actualDurationMin &&
           other.dateModified == this.dateModified &&
           other.modifiedBy == this.modifiedBy &&
+          other.locked == this.locked &&
           other.sessionDateOriginal == this.sessionDateOriginal);
 }
 
@@ -34253,6 +34291,7 @@ class TrainingSessionsCompanion extends UpdateCompanion<TrainingSession> {
   final Value<int?> actualDurationMin;
   final Value<DateTime?> dateModified;
   final Value<String?> modifiedBy;
+  final Value<bool> locked;
   final Value<String?> sessionDateOriginal;
   final Value<int> rowid;
   const TrainingSessionsCompanion({
@@ -34310,6 +34349,7 @@ class TrainingSessionsCompanion extends UpdateCompanion<TrainingSession> {
     this.actualDurationMin = const Value.absent(),
     this.dateModified = const Value.absent(),
     this.modifiedBy = const Value.absent(),
+    this.locked = const Value.absent(),
     this.sessionDateOriginal = const Value.absent(),
     this.rowid = const Value.absent(),
   });
@@ -34368,6 +34408,7 @@ class TrainingSessionsCompanion extends UpdateCompanion<TrainingSession> {
     this.actualDurationMin = const Value.absent(),
     this.dateModified = const Value.absent(),
     this.modifiedBy = const Value.absent(),
+    this.locked = const Value.absent(),
     this.sessionDateOriginal = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
@@ -34439,6 +34480,7 @@ class TrainingSessionsCompanion extends UpdateCompanion<TrainingSession> {
     Expression<int>? actualDurationMin,
     Expression<DateTime>? dateModified,
     Expression<String>? modifiedBy,
+    Expression<bool>? locked,
     Expression<String>? sessionDateOriginal,
     Expression<int>? rowid,
   }) {
@@ -34505,6 +34547,7 @@ class TrainingSessionsCompanion extends UpdateCompanion<TrainingSession> {
       if (actualDurationMin != null) 'actual_duration_min': actualDurationMin,
       if (dateModified != null) 'date_modified': dateModified,
       if (modifiedBy != null) 'modified_by': modifiedBy,
+      if (locked != null) 'locked': locked,
       if (sessionDateOriginal != null)
         'session_date_original': sessionDateOriginal,
       if (rowid != null) 'rowid': rowid,
@@ -34566,6 +34609,7 @@ class TrainingSessionsCompanion extends UpdateCompanion<TrainingSession> {
     Value<int?>? actualDurationMin,
     Value<DateTime?>? dateModified,
     Value<String?>? modifiedBy,
+    Value<bool>? locked,
     Value<String?>? sessionDateOriginal,
     Value<int>? rowid,
   }) {
@@ -34625,6 +34669,7 @@ class TrainingSessionsCompanion extends UpdateCompanion<TrainingSession> {
       actualDurationMin: actualDurationMin ?? this.actualDurationMin,
       dateModified: dateModified ?? this.dateModified,
       modifiedBy: modifiedBy ?? this.modifiedBy,
+      locked: locked ?? this.locked,
       sessionDateOriginal: sessionDateOriginal ?? this.sessionDateOriginal,
       rowid: rowid ?? this.rowid,
     );
@@ -34805,6 +34850,9 @@ class TrainingSessionsCompanion extends UpdateCompanion<TrainingSession> {
     if (modifiedBy.present) {
       map['modified_by'] = Variable<String>(modifiedBy.value);
     }
+    if (locked.present) {
+      map['locked'] = Variable<bool>(locked.value);
+    }
     if (sessionDateOriginal.present) {
       map['session_date_original'] = Variable<String>(
         sessionDateOriginal.value,
@@ -34873,6 +34921,7 @@ class TrainingSessionsCompanion extends UpdateCompanion<TrainingSession> {
           ..write('actualDurationMin: $actualDurationMin, ')
           ..write('dateModified: $dateModified, ')
           ..write('modifiedBy: $modifiedBy, ')
+          ..write('locked: $locked, ')
           ..write('sessionDateOriginal: $sessionDateOriginal, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -35169,6 +35218,61 @@ class $SessionActualsTable extends SessionActuals
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _matchKindMeta = const VerificationMeta(
+    'matchKind',
+  );
+  @override
+  late final GeneratedColumn<String> matchKind = GeneratedColumn<String>(
+    'match_kind',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _creditedByActivityIdMeta =
+      const VerificationMeta('creditedByActivityId');
+  @override
+  late final GeneratedColumn<String> creditedByActivityId =
+      GeneratedColumn<String>(
+        'credited_by_activity_id',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _outcomeMeta = const VerificationMeta(
+    'outcome',
+  );
+  @override
+  late final GeneratedColumn<String> outcome = GeneratedColumn<String>(
+    'outcome',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _intensityVerdictMeta = const VerificationMeta(
+    'intensityVerdict',
+  );
+  @override
+  late final GeneratedColumn<String> intensityVerdict = GeneratedColumn<String>(
+    'intensity_verdict',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _shortReasonMeta = const VerificationMeta(
+    'shortReason',
+  );
+  @override
+  late final GeneratedColumn<String> shortReason = GeneratedColumn<String>(
+    'short_reason',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     sessionId,
@@ -35196,6 +35300,11 @@ class $SessionActualsTable extends SessionActuals
     startedAt,
     completedAt,
     activityId,
+    matchKind,
+    creditedByActivityId,
+    outcome,
+    intensityVerdict,
+    shortReason,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -35412,6 +35521,45 @@ class $SessionActualsTable extends SessionActuals
         activityId.isAcceptableOrUnknown(data['activity_id']!, _activityIdMeta),
       );
     }
+    if (data.containsKey('match_kind')) {
+      context.handle(
+        _matchKindMeta,
+        matchKind.isAcceptableOrUnknown(data['match_kind']!, _matchKindMeta),
+      );
+    }
+    if (data.containsKey('credited_by_activity_id')) {
+      context.handle(
+        _creditedByActivityIdMeta,
+        creditedByActivityId.isAcceptableOrUnknown(
+          data['credited_by_activity_id']!,
+          _creditedByActivityIdMeta,
+        ),
+      );
+    }
+    if (data.containsKey('outcome')) {
+      context.handle(
+        _outcomeMeta,
+        outcome.isAcceptableOrUnknown(data['outcome']!, _outcomeMeta),
+      );
+    }
+    if (data.containsKey('intensity_verdict')) {
+      context.handle(
+        _intensityVerdictMeta,
+        intensityVerdict.isAcceptableOrUnknown(
+          data['intensity_verdict']!,
+          _intensityVerdictMeta,
+        ),
+      );
+    }
+    if (data.containsKey('short_reason')) {
+      context.handle(
+        _shortReasonMeta,
+        shortReason.isAcceptableOrUnknown(
+          data['short_reason']!,
+          _shortReasonMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -35521,6 +35669,26 @@ class $SessionActualsTable extends SessionActuals
         DriftSqlType.string,
         data['${effectivePrefix}activity_id'],
       ),
+      matchKind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}match_kind'],
+      ),
+      creditedByActivityId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}credited_by_activity_id'],
+      ),
+      outcome: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}outcome'],
+      ),
+      intensityVerdict: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}intensity_verdict'],
+      ),
+      shortReason: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}short_reason'],
+      ),
     );
   }
 
@@ -35560,6 +35728,24 @@ class SessionActual extends DataClass implements Insertable<SessionActual> {
   /// one session (a unique index); null for skips and for completions from
   /// before the link existed.
   final String? activityId;
+
+  /// How the activity was found: null on its own day, `swap` when it was
+  /// done on another day than planned, `substitute` when it delivered at
+  /// least what the session asked for, `credit` when another workout (see
+  /// [creditedByActivityId]) covered it.
+  final String? matchKind;
+
+  /// The workout whose stimulus covered this session, for a `credit`: it
+  /// already completes a session of its own, so it is not [activityId].
+  final String? creditedByActivityId;
+
+  /// How the session was carried out (an `ExecutionOutcome` name), its
+  /// intensity against the plan (`hard`, `easy`, `on`; null without zones)
+  /// and, for a shorter one, why (`time`, `weather`, `fatigue`, `pain`,
+  /// `other`) as the athlete answered.
+  final String? outcome;
+  final String? intensityVerdict;
+  final String? shortReason;
   const SessionActual({
     required this.sessionId,
     required this.z1ActualSeconds,
@@ -35586,6 +35772,11 @@ class SessionActual extends DataClass implements Insertable<SessionActual> {
     this.startedAt,
     this.completedAt,
     this.activityId,
+    this.matchKind,
+    this.creditedByActivityId,
+    this.outcome,
+    this.intensityVerdict,
+    this.shortReason,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -35649,6 +35840,21 @@ class SessionActual extends DataClass implements Insertable<SessionActual> {
     if (!nullToAbsent || activityId != null) {
       map['activity_id'] = Variable<String>(activityId);
     }
+    if (!nullToAbsent || matchKind != null) {
+      map['match_kind'] = Variable<String>(matchKind);
+    }
+    if (!nullToAbsent || creditedByActivityId != null) {
+      map['credited_by_activity_id'] = Variable<String>(creditedByActivityId);
+    }
+    if (!nullToAbsent || outcome != null) {
+      map['outcome'] = Variable<String>(outcome);
+    }
+    if (!nullToAbsent || intensityVerdict != null) {
+      map['intensity_verdict'] = Variable<String>(intensityVerdict);
+    }
+    if (!nullToAbsent || shortReason != null) {
+      map['short_reason'] = Variable<String>(shortReason);
+    }
     return map;
   }
 
@@ -35711,6 +35917,21 @@ class SessionActual extends DataClass implements Insertable<SessionActual> {
       activityId: activityId == null && nullToAbsent
           ? const Value.absent()
           : Value(activityId),
+      matchKind: matchKind == null && nullToAbsent
+          ? const Value.absent()
+          : Value(matchKind),
+      creditedByActivityId: creditedByActivityId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(creditedByActivityId),
+      outcome: outcome == null && nullToAbsent
+          ? const Value.absent()
+          : Value(outcome),
+      intensityVerdict: intensityVerdict == null && nullToAbsent
+          ? const Value.absent()
+          : Value(intensityVerdict),
+      shortReason: shortReason == null && nullToAbsent
+          ? const Value.absent()
+          : Value(shortReason),
     );
   }
 
@@ -35751,6 +35972,13 @@ class SessionActual extends DataClass implements Insertable<SessionActual> {
       startedAt: serializer.fromJson<DateTime?>(json['startedAt']),
       completedAt: serializer.fromJson<DateTime?>(json['completedAt']),
       activityId: serializer.fromJson<String?>(json['activityId']),
+      matchKind: serializer.fromJson<String?>(json['matchKind']),
+      creditedByActivityId: serializer.fromJson<String?>(
+        json['creditedByActivityId'],
+      ),
+      outcome: serializer.fromJson<String?>(json['outcome']),
+      intensityVerdict: serializer.fromJson<String?>(json['intensityVerdict']),
+      shortReason: serializer.fromJson<String?>(json['shortReason']),
     );
   }
   @override
@@ -35782,6 +36010,11 @@ class SessionActual extends DataClass implements Insertable<SessionActual> {
       'startedAt': serializer.toJson<DateTime?>(startedAt),
       'completedAt': serializer.toJson<DateTime?>(completedAt),
       'activityId': serializer.toJson<String?>(activityId),
+      'matchKind': serializer.toJson<String?>(matchKind),
+      'creditedByActivityId': serializer.toJson<String?>(creditedByActivityId),
+      'outcome': serializer.toJson<String?>(outcome),
+      'intensityVerdict': serializer.toJson<String?>(intensityVerdict),
+      'shortReason': serializer.toJson<String?>(shortReason),
     };
   }
 
@@ -35811,6 +36044,11 @@ class SessionActual extends DataClass implements Insertable<SessionActual> {
     Value<DateTime?> startedAt = const Value.absent(),
     Value<DateTime?> completedAt = const Value.absent(),
     Value<String?> activityId = const Value.absent(),
+    Value<String?> matchKind = const Value.absent(),
+    Value<String?> creditedByActivityId = const Value.absent(),
+    Value<String?> outcome = const Value.absent(),
+    Value<String?> intensityVerdict = const Value.absent(),
+    Value<String?> shortReason = const Value.absent(),
   }) => SessionActual(
     sessionId: sessionId ?? this.sessionId,
     z1ActualSeconds: z1ActualSeconds ?? this.z1ActualSeconds,
@@ -35855,6 +36093,15 @@ class SessionActual extends DataClass implements Insertable<SessionActual> {
     startedAt: startedAt.present ? startedAt.value : this.startedAt,
     completedAt: completedAt.present ? completedAt.value : this.completedAt,
     activityId: activityId.present ? activityId.value : this.activityId,
+    matchKind: matchKind.present ? matchKind.value : this.matchKind,
+    creditedByActivityId: creditedByActivityId.present
+        ? creditedByActivityId.value
+        : this.creditedByActivityId,
+    outcome: outcome.present ? outcome.value : this.outcome,
+    intensityVerdict: intensityVerdict.present
+        ? intensityVerdict.value
+        : this.intensityVerdict,
+    shortReason: shortReason.present ? shortReason.value : this.shortReason,
   );
   SessionActual copyWithCompanion(SessionActualsCompanion data) {
     return SessionActual(
@@ -35921,6 +36168,17 @@ class SessionActual extends DataClass implements Insertable<SessionActual> {
       activityId: data.activityId.present
           ? data.activityId.value
           : this.activityId,
+      matchKind: data.matchKind.present ? data.matchKind.value : this.matchKind,
+      creditedByActivityId: data.creditedByActivityId.present
+          ? data.creditedByActivityId.value
+          : this.creditedByActivityId,
+      outcome: data.outcome.present ? data.outcome.value : this.outcome,
+      intensityVerdict: data.intensityVerdict.present
+          ? data.intensityVerdict.value
+          : this.intensityVerdict,
+      shortReason: data.shortReason.present
+          ? data.shortReason.value
+          : this.shortReason,
     );
   }
 
@@ -35951,7 +36209,12 @@ class SessionActual extends DataClass implements Insertable<SessionActual> {
           ..write('executionVerdict: $executionVerdict, ')
           ..write('startedAt: $startedAt, ')
           ..write('completedAt: $completedAt, ')
-          ..write('activityId: $activityId')
+          ..write('activityId: $activityId, ')
+          ..write('matchKind: $matchKind, ')
+          ..write('creditedByActivityId: $creditedByActivityId, ')
+          ..write('outcome: $outcome, ')
+          ..write('intensityVerdict: $intensityVerdict, ')
+          ..write('shortReason: $shortReason')
           ..write(')'))
         .toString();
   }
@@ -35983,6 +36246,11 @@ class SessionActual extends DataClass implements Insertable<SessionActual> {
     startedAt,
     completedAt,
     activityId,
+    matchKind,
+    creditedByActivityId,
+    outcome,
+    intensityVerdict,
+    shortReason,
   ]);
   @override
   bool operator ==(Object other) =>
@@ -36012,7 +36280,12 @@ class SessionActual extends DataClass implements Insertable<SessionActual> {
           other.executionVerdict == this.executionVerdict &&
           other.startedAt == this.startedAt &&
           other.completedAt == this.completedAt &&
-          other.activityId == this.activityId);
+          other.activityId == this.activityId &&
+          other.matchKind == this.matchKind &&
+          other.creditedByActivityId == this.creditedByActivityId &&
+          other.outcome == this.outcome &&
+          other.intensityVerdict == this.intensityVerdict &&
+          other.shortReason == this.shortReason);
 }
 
 class SessionActualsCompanion extends UpdateCompanion<SessionActual> {
@@ -36041,6 +36314,11 @@ class SessionActualsCompanion extends UpdateCompanion<SessionActual> {
   final Value<DateTime?> startedAt;
   final Value<DateTime?> completedAt;
   final Value<String?> activityId;
+  final Value<String?> matchKind;
+  final Value<String?> creditedByActivityId;
+  final Value<String?> outcome;
+  final Value<String?> intensityVerdict;
+  final Value<String?> shortReason;
   final Value<int> rowid;
   const SessionActualsCompanion({
     this.sessionId = const Value.absent(),
@@ -36068,6 +36346,11 @@ class SessionActualsCompanion extends UpdateCompanion<SessionActual> {
     this.startedAt = const Value.absent(),
     this.completedAt = const Value.absent(),
     this.activityId = const Value.absent(),
+    this.matchKind = const Value.absent(),
+    this.creditedByActivityId = const Value.absent(),
+    this.outcome = const Value.absent(),
+    this.intensityVerdict = const Value.absent(),
+    this.shortReason = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   SessionActualsCompanion.insert({
@@ -36096,6 +36379,11 @@ class SessionActualsCompanion extends UpdateCompanion<SessionActual> {
     this.startedAt = const Value.absent(),
     this.completedAt = const Value.absent(),
     this.activityId = const Value.absent(),
+    this.matchKind = const Value.absent(),
+    this.creditedByActivityId = const Value.absent(),
+    this.outcome = const Value.absent(),
+    this.intensityVerdict = const Value.absent(),
+    this.shortReason = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : sessionId = Value(sessionId);
   static Insertable<SessionActual> custom({
@@ -36124,6 +36412,11 @@ class SessionActualsCompanion extends UpdateCompanion<SessionActual> {
     Expression<DateTime>? startedAt,
     Expression<DateTime>? completedAt,
     Expression<String>? activityId,
+    Expression<String>? matchKind,
+    Expression<String>? creditedByActivityId,
+    Expression<String>? outcome,
+    Expression<String>? intensityVerdict,
+    Expression<String>? shortReason,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -36154,6 +36447,12 @@ class SessionActualsCompanion extends UpdateCompanion<SessionActual> {
       if (startedAt != null) 'started_at': startedAt,
       if (completedAt != null) 'completed_at': completedAt,
       if (activityId != null) 'activity_id': activityId,
+      if (matchKind != null) 'match_kind': matchKind,
+      if (creditedByActivityId != null)
+        'credited_by_activity_id': creditedByActivityId,
+      if (outcome != null) 'outcome': outcome,
+      if (intensityVerdict != null) 'intensity_verdict': intensityVerdict,
+      if (shortReason != null) 'short_reason': shortReason,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -36184,6 +36483,11 @@ class SessionActualsCompanion extends UpdateCompanion<SessionActual> {
     Value<DateTime?>? startedAt,
     Value<DateTime?>? completedAt,
     Value<String?>? activityId,
+    Value<String?>? matchKind,
+    Value<String?>? creditedByActivityId,
+    Value<String?>? outcome,
+    Value<String?>? intensityVerdict,
+    Value<String?>? shortReason,
     Value<int>? rowid,
   }) {
     return SessionActualsCompanion(
@@ -36212,6 +36516,11 @@ class SessionActualsCompanion extends UpdateCompanion<SessionActual> {
       startedAt: startedAt ?? this.startedAt,
       completedAt: completedAt ?? this.completedAt,
       activityId: activityId ?? this.activityId,
+      matchKind: matchKind ?? this.matchKind,
+      creditedByActivityId: creditedByActivityId ?? this.creditedByActivityId,
+      outcome: outcome ?? this.outcome,
+      intensityVerdict: intensityVerdict ?? this.intensityVerdict,
+      shortReason: shortReason ?? this.shortReason,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -36294,6 +36603,23 @@ class SessionActualsCompanion extends UpdateCompanion<SessionActual> {
     if (activityId.present) {
       map['activity_id'] = Variable<String>(activityId.value);
     }
+    if (matchKind.present) {
+      map['match_kind'] = Variable<String>(matchKind.value);
+    }
+    if (creditedByActivityId.present) {
+      map['credited_by_activity_id'] = Variable<String>(
+        creditedByActivityId.value,
+      );
+    }
+    if (outcome.present) {
+      map['outcome'] = Variable<String>(outcome.value);
+    }
+    if (intensityVerdict.present) {
+      map['intensity_verdict'] = Variable<String>(intensityVerdict.value);
+    }
+    if (shortReason.present) {
+      map['short_reason'] = Variable<String>(shortReason.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -36328,6 +36654,11 @@ class SessionActualsCompanion extends UpdateCompanion<SessionActual> {
           ..write('startedAt: $startedAt, ')
           ..write('completedAt: $completedAt, ')
           ..write('activityId: $activityId, ')
+          ..write('matchKind: $matchKind, ')
+          ..write('creditedByActivityId: $creditedByActivityId, ')
+          ..write('outcome: $outcome, ')
+          ..write('intensityVerdict: $intensityVerdict, ')
+          ..write('shortReason: $shortReason, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -39480,6 +39811,674 @@ class SessionAdaptationsCompanion extends UpdateCompanion<SessionAdaptation> {
           ..write('executionScore: $executionScore, ')
           ..write('rpe: $rpe, ')
           ..write('athleteOverrode: $athleteOverrode, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $PlanAdjustmentsTable extends PlanAdjustments
+    with TableInfo<$PlanAdjustmentsTable, PlanAdjustment> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $PlanAdjustmentsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _groupIdMeta = const VerificationMeta(
+    'groupId',
+  );
+  @override
+  late final GeneratedColumn<String> groupId = GeneratedColumn<String>(
+    'group_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _kindMeta = const VerificationMeta('kind');
+  @override
+  late final GeneratedColumn<String> kind = GeneratedColumn<String>(
+    'kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _sessionIdMeta = const VerificationMeta(
+    'sessionId',
+  );
+  @override
+  late final GeneratedColumn<String> sessionId = GeneratedColumn<String>(
+    'session_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _activityIdMeta = const VerificationMeta(
+    'activityId',
+  );
+  @override
+  late final GeneratedColumn<String> activityId = GeneratedColumn<String>(
+    'activity_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _beforeJsonMeta = const VerificationMeta(
+    'beforeJson',
+  );
+  @override
+  late final GeneratedColumn<String> beforeJson = GeneratedColumn<String>(
+    'before_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _reasonCodeMeta = const VerificationMeta(
+    'reasonCode',
+  );
+  @override
+  late final GeneratedColumn<String> reasonCode = GeneratedColumn<String>(
+    'reason_code',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _paramsJsonMeta = const VerificationMeta(
+    'paramsJson',
+  );
+  @override
+  late final GeneratedColumn<String> paramsJson = GeneratedColumn<String>(
+    'params_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('{}'),
+  );
+  static const VerificationMeta _sourceMeta = const VerificationMeta('source');
+  @override
+  late final GeneratedColumn<String> source = GeneratedColumn<String>(
+    'source',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('controller'),
+  );
+  static const VerificationMeta _undoneAtMeta = const VerificationMeta(
+    'undoneAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> undoneAt = GeneratedColumn<DateTime>(
+    'undone_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    groupId,
+    createdAt,
+    kind,
+    sessionId,
+    activityId,
+    beforeJson,
+    reasonCode,
+    paramsJson,
+    source,
+    undoneAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'plan_adjustments';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<PlanAdjustment> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('group_id')) {
+      context.handle(
+        _groupIdMeta,
+        groupId.isAcceptableOrUnknown(data['group_id']!, _groupIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_groupIdMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('kind')) {
+      context.handle(
+        _kindMeta,
+        kind.isAcceptableOrUnknown(data['kind']!, _kindMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_kindMeta);
+    }
+    if (data.containsKey('session_id')) {
+      context.handle(
+        _sessionIdMeta,
+        sessionId.isAcceptableOrUnknown(data['session_id']!, _sessionIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sessionIdMeta);
+    }
+    if (data.containsKey('activity_id')) {
+      context.handle(
+        _activityIdMeta,
+        activityId.isAcceptableOrUnknown(data['activity_id']!, _activityIdMeta),
+      );
+    }
+    if (data.containsKey('before_json')) {
+      context.handle(
+        _beforeJsonMeta,
+        beforeJson.isAcceptableOrUnknown(data['before_json']!, _beforeJsonMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_beforeJsonMeta);
+    }
+    if (data.containsKey('reason_code')) {
+      context.handle(
+        _reasonCodeMeta,
+        reasonCode.isAcceptableOrUnknown(data['reason_code']!, _reasonCodeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_reasonCodeMeta);
+    }
+    if (data.containsKey('params_json')) {
+      context.handle(
+        _paramsJsonMeta,
+        paramsJson.isAcceptableOrUnknown(data['params_json']!, _paramsJsonMeta),
+      );
+    }
+    if (data.containsKey('source')) {
+      context.handle(
+        _sourceMeta,
+        source.isAcceptableOrUnknown(data['source']!, _sourceMeta),
+      );
+    }
+    if (data.containsKey('undone_at')) {
+      context.handle(
+        _undoneAtMeta,
+        undoneAt.isAcceptableOrUnknown(data['undone_at']!, _undoneAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  PlanAdjustment map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return PlanAdjustment(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      groupId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}group_id'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      kind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}kind'],
+      )!,
+      sessionId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}session_id'],
+      )!,
+      activityId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}activity_id'],
+      ),
+      beforeJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}before_json'],
+      )!,
+      reasonCode: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}reason_code'],
+      )!,
+      paramsJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}params_json'],
+      )!,
+      source: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source'],
+      )!,
+      undoneAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}undone_at'],
+      ),
+    );
+  }
+
+  @override
+  $PlanAdjustmentsTable createAlias(String alias) {
+    return $PlanAdjustmentsTable(attachedDatabase, alias);
+  }
+}
+
+class PlanAdjustment extends DataClass implements Insertable<PlanAdjustment> {
+  final String id;
+  final String groupId;
+  final DateTime createdAt;
+
+  /// `swap`, `substitute`, `credit`, `move` or `ease`.
+  final String kind;
+  final String sessionId;
+
+  /// The workout the decision was about.
+  final String? activityId;
+
+  /// The session row before the change, as JSON.
+  final String beforeJson;
+
+  /// Why, as a code the app words in the athlete's language, and its numbers.
+  final String reasonCode;
+  final String paramsJson;
+
+  /// `controller` (automatic), `readiness`, `coach` or `athlete`.
+  final String source;
+  final DateTime? undoneAt;
+  const PlanAdjustment({
+    required this.id,
+    required this.groupId,
+    required this.createdAt,
+    required this.kind,
+    required this.sessionId,
+    this.activityId,
+    required this.beforeJson,
+    required this.reasonCode,
+    required this.paramsJson,
+    required this.source,
+    this.undoneAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['group_id'] = Variable<String>(groupId);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['kind'] = Variable<String>(kind);
+    map['session_id'] = Variable<String>(sessionId);
+    if (!nullToAbsent || activityId != null) {
+      map['activity_id'] = Variable<String>(activityId);
+    }
+    map['before_json'] = Variable<String>(beforeJson);
+    map['reason_code'] = Variable<String>(reasonCode);
+    map['params_json'] = Variable<String>(paramsJson);
+    map['source'] = Variable<String>(source);
+    if (!nullToAbsent || undoneAt != null) {
+      map['undone_at'] = Variable<DateTime>(undoneAt);
+    }
+    return map;
+  }
+
+  PlanAdjustmentsCompanion toCompanion(bool nullToAbsent) {
+    return PlanAdjustmentsCompanion(
+      id: Value(id),
+      groupId: Value(groupId),
+      createdAt: Value(createdAt),
+      kind: Value(kind),
+      sessionId: Value(sessionId),
+      activityId: activityId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(activityId),
+      beforeJson: Value(beforeJson),
+      reasonCode: Value(reasonCode),
+      paramsJson: Value(paramsJson),
+      source: Value(source),
+      undoneAt: undoneAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(undoneAt),
+    );
+  }
+
+  factory PlanAdjustment.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return PlanAdjustment(
+      id: serializer.fromJson<String>(json['id']),
+      groupId: serializer.fromJson<String>(json['groupId']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      kind: serializer.fromJson<String>(json['kind']),
+      sessionId: serializer.fromJson<String>(json['sessionId']),
+      activityId: serializer.fromJson<String?>(json['activityId']),
+      beforeJson: serializer.fromJson<String>(json['beforeJson']),
+      reasonCode: serializer.fromJson<String>(json['reasonCode']),
+      paramsJson: serializer.fromJson<String>(json['paramsJson']),
+      source: serializer.fromJson<String>(json['source']),
+      undoneAt: serializer.fromJson<DateTime?>(json['undoneAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'groupId': serializer.toJson<String>(groupId),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'kind': serializer.toJson<String>(kind),
+      'sessionId': serializer.toJson<String>(sessionId),
+      'activityId': serializer.toJson<String?>(activityId),
+      'beforeJson': serializer.toJson<String>(beforeJson),
+      'reasonCode': serializer.toJson<String>(reasonCode),
+      'paramsJson': serializer.toJson<String>(paramsJson),
+      'source': serializer.toJson<String>(source),
+      'undoneAt': serializer.toJson<DateTime?>(undoneAt),
+    };
+  }
+
+  PlanAdjustment copyWith({
+    String? id,
+    String? groupId,
+    DateTime? createdAt,
+    String? kind,
+    String? sessionId,
+    Value<String?> activityId = const Value.absent(),
+    String? beforeJson,
+    String? reasonCode,
+    String? paramsJson,
+    String? source,
+    Value<DateTime?> undoneAt = const Value.absent(),
+  }) => PlanAdjustment(
+    id: id ?? this.id,
+    groupId: groupId ?? this.groupId,
+    createdAt: createdAt ?? this.createdAt,
+    kind: kind ?? this.kind,
+    sessionId: sessionId ?? this.sessionId,
+    activityId: activityId.present ? activityId.value : this.activityId,
+    beforeJson: beforeJson ?? this.beforeJson,
+    reasonCode: reasonCode ?? this.reasonCode,
+    paramsJson: paramsJson ?? this.paramsJson,
+    source: source ?? this.source,
+    undoneAt: undoneAt.present ? undoneAt.value : this.undoneAt,
+  );
+  PlanAdjustment copyWithCompanion(PlanAdjustmentsCompanion data) {
+    return PlanAdjustment(
+      id: data.id.present ? data.id.value : this.id,
+      groupId: data.groupId.present ? data.groupId.value : this.groupId,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      kind: data.kind.present ? data.kind.value : this.kind,
+      sessionId: data.sessionId.present ? data.sessionId.value : this.sessionId,
+      activityId: data.activityId.present
+          ? data.activityId.value
+          : this.activityId,
+      beforeJson: data.beforeJson.present
+          ? data.beforeJson.value
+          : this.beforeJson,
+      reasonCode: data.reasonCode.present
+          ? data.reasonCode.value
+          : this.reasonCode,
+      paramsJson: data.paramsJson.present
+          ? data.paramsJson.value
+          : this.paramsJson,
+      source: data.source.present ? data.source.value : this.source,
+      undoneAt: data.undoneAt.present ? data.undoneAt.value : this.undoneAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PlanAdjustment(')
+          ..write('id: $id, ')
+          ..write('groupId: $groupId, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('kind: $kind, ')
+          ..write('sessionId: $sessionId, ')
+          ..write('activityId: $activityId, ')
+          ..write('beforeJson: $beforeJson, ')
+          ..write('reasonCode: $reasonCode, ')
+          ..write('paramsJson: $paramsJson, ')
+          ..write('source: $source, ')
+          ..write('undoneAt: $undoneAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    groupId,
+    createdAt,
+    kind,
+    sessionId,
+    activityId,
+    beforeJson,
+    reasonCode,
+    paramsJson,
+    source,
+    undoneAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is PlanAdjustment &&
+          other.id == this.id &&
+          other.groupId == this.groupId &&
+          other.createdAt == this.createdAt &&
+          other.kind == this.kind &&
+          other.sessionId == this.sessionId &&
+          other.activityId == this.activityId &&
+          other.beforeJson == this.beforeJson &&
+          other.reasonCode == this.reasonCode &&
+          other.paramsJson == this.paramsJson &&
+          other.source == this.source &&
+          other.undoneAt == this.undoneAt);
+}
+
+class PlanAdjustmentsCompanion extends UpdateCompanion<PlanAdjustment> {
+  final Value<String> id;
+  final Value<String> groupId;
+  final Value<DateTime> createdAt;
+  final Value<String> kind;
+  final Value<String> sessionId;
+  final Value<String?> activityId;
+  final Value<String> beforeJson;
+  final Value<String> reasonCode;
+  final Value<String> paramsJson;
+  final Value<String> source;
+  final Value<DateTime?> undoneAt;
+  final Value<int> rowid;
+  const PlanAdjustmentsCompanion({
+    this.id = const Value.absent(),
+    this.groupId = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.kind = const Value.absent(),
+    this.sessionId = const Value.absent(),
+    this.activityId = const Value.absent(),
+    this.beforeJson = const Value.absent(),
+    this.reasonCode = const Value.absent(),
+    this.paramsJson = const Value.absent(),
+    this.source = const Value.absent(),
+    this.undoneAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  PlanAdjustmentsCompanion.insert({
+    required String id,
+    required String groupId,
+    required DateTime createdAt,
+    required String kind,
+    required String sessionId,
+    this.activityId = const Value.absent(),
+    required String beforeJson,
+    required String reasonCode,
+    this.paramsJson = const Value.absent(),
+    this.source = const Value.absent(),
+    this.undoneAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       groupId = Value(groupId),
+       createdAt = Value(createdAt),
+       kind = Value(kind),
+       sessionId = Value(sessionId),
+       beforeJson = Value(beforeJson),
+       reasonCode = Value(reasonCode);
+  static Insertable<PlanAdjustment> custom({
+    Expression<String>? id,
+    Expression<String>? groupId,
+    Expression<DateTime>? createdAt,
+    Expression<String>? kind,
+    Expression<String>? sessionId,
+    Expression<String>? activityId,
+    Expression<String>? beforeJson,
+    Expression<String>? reasonCode,
+    Expression<String>? paramsJson,
+    Expression<String>? source,
+    Expression<DateTime>? undoneAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (groupId != null) 'group_id': groupId,
+      if (createdAt != null) 'created_at': createdAt,
+      if (kind != null) 'kind': kind,
+      if (sessionId != null) 'session_id': sessionId,
+      if (activityId != null) 'activity_id': activityId,
+      if (beforeJson != null) 'before_json': beforeJson,
+      if (reasonCode != null) 'reason_code': reasonCode,
+      if (paramsJson != null) 'params_json': paramsJson,
+      if (source != null) 'source': source,
+      if (undoneAt != null) 'undone_at': undoneAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  PlanAdjustmentsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? groupId,
+    Value<DateTime>? createdAt,
+    Value<String>? kind,
+    Value<String>? sessionId,
+    Value<String?>? activityId,
+    Value<String>? beforeJson,
+    Value<String>? reasonCode,
+    Value<String>? paramsJson,
+    Value<String>? source,
+    Value<DateTime?>? undoneAt,
+    Value<int>? rowid,
+  }) {
+    return PlanAdjustmentsCompanion(
+      id: id ?? this.id,
+      groupId: groupId ?? this.groupId,
+      createdAt: createdAt ?? this.createdAt,
+      kind: kind ?? this.kind,
+      sessionId: sessionId ?? this.sessionId,
+      activityId: activityId ?? this.activityId,
+      beforeJson: beforeJson ?? this.beforeJson,
+      reasonCode: reasonCode ?? this.reasonCode,
+      paramsJson: paramsJson ?? this.paramsJson,
+      source: source ?? this.source,
+      undoneAt: undoneAt ?? this.undoneAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (groupId.present) {
+      map['group_id'] = Variable<String>(groupId.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (kind.present) {
+      map['kind'] = Variable<String>(kind.value);
+    }
+    if (sessionId.present) {
+      map['session_id'] = Variable<String>(sessionId.value);
+    }
+    if (activityId.present) {
+      map['activity_id'] = Variable<String>(activityId.value);
+    }
+    if (beforeJson.present) {
+      map['before_json'] = Variable<String>(beforeJson.value);
+    }
+    if (reasonCode.present) {
+      map['reason_code'] = Variable<String>(reasonCode.value);
+    }
+    if (paramsJson.present) {
+      map['params_json'] = Variable<String>(paramsJson.value);
+    }
+    if (source.present) {
+      map['source'] = Variable<String>(source.value);
+    }
+    if (undoneAt.present) {
+      map['undone_at'] = Variable<DateTime>(undoneAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PlanAdjustmentsCompanion(')
+          ..write('id: $id, ')
+          ..write('groupId: $groupId, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('kind: $kind, ')
+          ..write('sessionId: $sessionId, ')
+          ..write('activityId: $activityId, ')
+          ..write('beforeJson: $beforeJson, ')
+          ..write('reasonCode: $reasonCode, ')
+          ..write('paramsJson: $paramsJson, ')
+          ..write('source: $source, ')
+          ..write('undoneAt: $undoneAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -47616,6 +48615,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $DailyReadinessRecordsTable(this);
   late final $SessionAdaptationsTable sessionAdaptations =
       $SessionAdaptationsTable(this);
+  late final $PlanAdjustmentsTable planAdjustments = $PlanAdjustmentsTable(
+    this,
+  );
   late final $WeekSummariesTable weekSummaries = $WeekSummariesTable(this);
   late final $AthleteThresholdsTable athleteThresholds =
       $AthleteThresholdsTable(this);
@@ -47690,6 +48692,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     sessionXp,
     dailyReadinessRecords,
     sessionAdaptations,
+    planAdjustments,
     weekSummaries,
     athleteThresholds,
     coachProfiles,
@@ -63792,6 +64795,7 @@ typedef $$TrainingSessionsTableCreateCompanionBuilder =
       Value<int?> actualDurationMin,
       Value<DateTime?> dateModified,
       Value<String?> modifiedBy,
+      Value<bool> locked,
       Value<String?> sessionDateOriginal,
       Value<int> rowid,
     });
@@ -63851,6 +64855,7 @@ typedef $$TrainingSessionsTableUpdateCompanionBuilder =
       Value<int?> actualDurationMin,
       Value<DateTime?> dateModified,
       Value<String?> modifiedBy,
+      Value<bool> locked,
       Value<String?> sessionDateOriginal,
       Value<int> rowid,
     });
@@ -64131,6 +65136,11 @@ class $$TrainingSessionsTableFilterComposer
 
   ColumnFilters<String> get modifiedBy => $composableBuilder(
     column: $table.modifiedBy,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get locked => $composableBuilder(
+    column: $table.locked,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -64419,6 +65429,11 @@ class $$TrainingSessionsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<bool> get locked => $composableBuilder(
+    column: $table.locked,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get sessionDateOriginal => $composableBuilder(
     column: $table.sessionDateOriginal,
     builder: (column) => ColumnOrderings(column),
@@ -64672,6 +65687,9 @@ class $$TrainingSessionsTableAnnotationComposer
     builder: (column) => column,
   );
 
+  GeneratedColumn<bool> get locked =>
+      $composableBuilder(column: $table.locked, builder: (column) => column);
+
   GeneratedColumn<String> get sessionDateOriginal => $composableBuilder(
     column: $table.sessionDateOriginal,
     builder: (column) => column,
@@ -64769,6 +65787,7 @@ class $$TrainingSessionsTableTableManager
                 Value<int?> actualDurationMin = const Value.absent(),
                 Value<DateTime?> dateModified = const Value.absent(),
                 Value<String?> modifiedBy = const Value.absent(),
+                Value<bool> locked = const Value.absent(),
                 Value<String?> sessionDateOriginal = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => TrainingSessionsCompanion(
@@ -64826,6 +65845,7 @@ class $$TrainingSessionsTableTableManager
                 actualDurationMin: actualDurationMin,
                 dateModified: dateModified,
                 modifiedBy: modifiedBy,
+                locked: locked,
                 sessionDateOriginal: sessionDateOriginal,
                 rowid: rowid,
               ),
@@ -64885,6 +65905,7 @@ class $$TrainingSessionsTableTableManager
                 Value<int?> actualDurationMin = const Value.absent(),
                 Value<DateTime?> dateModified = const Value.absent(),
                 Value<String?> modifiedBy = const Value.absent(),
+                Value<bool> locked = const Value.absent(),
                 Value<String?> sessionDateOriginal = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => TrainingSessionsCompanion.insert(
@@ -64942,6 +65963,7 @@ class $$TrainingSessionsTableTableManager
                 actualDurationMin: actualDurationMin,
                 dateModified: dateModified,
                 modifiedBy: modifiedBy,
+                locked: locked,
                 sessionDateOriginal: sessionDateOriginal,
                 rowid: rowid,
               ),
@@ -65006,6 +66028,11 @@ typedef $$SessionActualsTableCreateCompanionBuilder =
       Value<DateTime?> startedAt,
       Value<DateTime?> completedAt,
       Value<String?> activityId,
+      Value<String?> matchKind,
+      Value<String?> creditedByActivityId,
+      Value<String?> outcome,
+      Value<String?> intensityVerdict,
+      Value<String?> shortReason,
       Value<int> rowid,
     });
 typedef $$SessionActualsTableUpdateCompanionBuilder =
@@ -65035,6 +66062,11 @@ typedef $$SessionActualsTableUpdateCompanionBuilder =
       Value<DateTime?> startedAt,
       Value<DateTime?> completedAt,
       Value<String?> activityId,
+      Value<String?> matchKind,
+      Value<String?> creditedByActivityId,
+      Value<String?> outcome,
+      Value<String?> intensityVerdict,
+      Value<String?> shortReason,
       Value<int> rowid,
     });
 
@@ -65169,6 +66201,31 @@ class $$SessionActualsTableFilterComposer
 
   ColumnFilters<String> get activityId => $composableBuilder(
     column: $table.activityId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get matchKind => $composableBuilder(
+    column: $table.matchKind,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get creditedByActivityId => $composableBuilder(
+    column: $table.creditedByActivityId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get outcome => $composableBuilder(
+    column: $table.outcome,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get intensityVerdict => $composableBuilder(
+    column: $table.intensityVerdict,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get shortReason => $composableBuilder(
+    column: $table.shortReason,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -65306,6 +66363,31 @@ class $$SessionActualsTableOrderingComposer
     column: $table.activityId,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get matchKind => $composableBuilder(
+    column: $table.matchKind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get creditedByActivityId => $composableBuilder(
+    column: $table.creditedByActivityId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get outcome => $composableBuilder(
+    column: $table.outcome,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get intensityVerdict => $composableBuilder(
+    column: $table.intensityVerdict,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get shortReason => $composableBuilder(
+    column: $table.shortReason,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$SessionActualsTableAnnotationComposer
@@ -65429,6 +66511,27 @@ class $$SessionActualsTableAnnotationComposer
     column: $table.activityId,
     builder: (column) => column,
   );
+
+  GeneratedColumn<String> get matchKind =>
+      $composableBuilder(column: $table.matchKind, builder: (column) => column);
+
+  GeneratedColumn<String> get creditedByActivityId => $composableBuilder(
+    column: $table.creditedByActivityId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get outcome =>
+      $composableBuilder(column: $table.outcome, builder: (column) => column);
+
+  GeneratedColumn<String> get intensityVerdict => $composableBuilder(
+    column: $table.intensityVerdict,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get shortReason => $composableBuilder(
+    column: $table.shortReason,
+    builder: (column) => column,
+  );
 }
 
 class $$SessionActualsTableTableManager
@@ -65489,6 +66592,11 @@ class $$SessionActualsTableTableManager
                 Value<DateTime?> startedAt = const Value.absent(),
                 Value<DateTime?> completedAt = const Value.absent(),
                 Value<String?> activityId = const Value.absent(),
+                Value<String?> matchKind = const Value.absent(),
+                Value<String?> creditedByActivityId = const Value.absent(),
+                Value<String?> outcome = const Value.absent(),
+                Value<String?> intensityVerdict = const Value.absent(),
+                Value<String?> shortReason = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => SessionActualsCompanion(
                 sessionId: sessionId,
@@ -65516,6 +66624,11 @@ class $$SessionActualsTableTableManager
                 startedAt: startedAt,
                 completedAt: completedAt,
                 activityId: activityId,
+                matchKind: matchKind,
+                creditedByActivityId: creditedByActivityId,
+                outcome: outcome,
+                intensityVerdict: intensityVerdict,
+                shortReason: shortReason,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -65545,6 +66658,11 @@ class $$SessionActualsTableTableManager
                 Value<DateTime?> startedAt = const Value.absent(),
                 Value<DateTime?> completedAt = const Value.absent(),
                 Value<String?> activityId = const Value.absent(),
+                Value<String?> matchKind = const Value.absent(),
+                Value<String?> creditedByActivityId = const Value.absent(),
+                Value<String?> outcome = const Value.absent(),
+                Value<String?> intensityVerdict = const Value.absent(),
+                Value<String?> shortReason = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => SessionActualsCompanion.insert(
                 sessionId: sessionId,
@@ -65572,6 +66690,11 @@ class $$SessionActualsTableTableManager
                 startedAt: startedAt,
                 completedAt: completedAt,
                 activityId: activityId,
+                matchKind: matchKind,
+                creditedByActivityId: creditedByActivityId,
+                outcome: outcome,
+                intensityVerdict: intensityVerdict,
+                shortReason: shortReason,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -67134,6 +68257,343 @@ typedef $$SessionAdaptationsTableProcessedTableManager =
         >,
       ),
       SessionAdaptation,
+      PrefetchHooks Function()
+    >;
+typedef $$PlanAdjustmentsTableCreateCompanionBuilder =
+    PlanAdjustmentsCompanion Function({
+      required String id,
+      required String groupId,
+      required DateTime createdAt,
+      required String kind,
+      required String sessionId,
+      Value<String?> activityId,
+      required String beforeJson,
+      required String reasonCode,
+      Value<String> paramsJson,
+      Value<String> source,
+      Value<DateTime?> undoneAt,
+      Value<int> rowid,
+    });
+typedef $$PlanAdjustmentsTableUpdateCompanionBuilder =
+    PlanAdjustmentsCompanion Function({
+      Value<String> id,
+      Value<String> groupId,
+      Value<DateTime> createdAt,
+      Value<String> kind,
+      Value<String> sessionId,
+      Value<String?> activityId,
+      Value<String> beforeJson,
+      Value<String> reasonCode,
+      Value<String> paramsJson,
+      Value<String> source,
+      Value<DateTime?> undoneAt,
+      Value<int> rowid,
+    });
+
+class $$PlanAdjustmentsTableFilterComposer
+    extends Composer<_$AppDatabase, $PlanAdjustmentsTable> {
+  $$PlanAdjustmentsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get groupId => $composableBuilder(
+    column: $table.groupId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get sessionId => $composableBuilder(
+    column: $table.sessionId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get activityId => $composableBuilder(
+    column: $table.activityId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get beforeJson => $composableBuilder(
+    column: $table.beforeJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get reasonCode => $composableBuilder(
+    column: $table.reasonCode,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get paramsJson => $composableBuilder(
+    column: $table.paramsJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get source => $composableBuilder(
+    column: $table.source,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get undoneAt => $composableBuilder(
+    column: $table.undoneAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$PlanAdjustmentsTableOrderingComposer
+    extends Composer<_$AppDatabase, $PlanAdjustmentsTable> {
+  $$PlanAdjustmentsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get groupId => $composableBuilder(
+    column: $table.groupId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get sessionId => $composableBuilder(
+    column: $table.sessionId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get activityId => $composableBuilder(
+    column: $table.activityId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get beforeJson => $composableBuilder(
+    column: $table.beforeJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get reasonCode => $composableBuilder(
+    column: $table.reasonCode,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get paramsJson => $composableBuilder(
+    column: $table.paramsJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get source => $composableBuilder(
+    column: $table.source,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get undoneAt => $composableBuilder(
+    column: $table.undoneAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$PlanAdjustmentsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $PlanAdjustmentsTable> {
+  $$PlanAdjustmentsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get groupId =>
+      $composableBuilder(column: $table.groupId, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<String> get kind =>
+      $composableBuilder(column: $table.kind, builder: (column) => column);
+
+  GeneratedColumn<String> get sessionId =>
+      $composableBuilder(column: $table.sessionId, builder: (column) => column);
+
+  GeneratedColumn<String> get activityId => $composableBuilder(
+    column: $table.activityId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get beforeJson => $composableBuilder(
+    column: $table.beforeJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get reasonCode => $composableBuilder(
+    column: $table.reasonCode,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get paramsJson => $composableBuilder(
+    column: $table.paramsJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get source =>
+      $composableBuilder(column: $table.source, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get undoneAt =>
+      $composableBuilder(column: $table.undoneAt, builder: (column) => column);
+}
+
+class $$PlanAdjustmentsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $PlanAdjustmentsTable,
+          PlanAdjustment,
+          $$PlanAdjustmentsTableFilterComposer,
+          $$PlanAdjustmentsTableOrderingComposer,
+          $$PlanAdjustmentsTableAnnotationComposer,
+          $$PlanAdjustmentsTableCreateCompanionBuilder,
+          $$PlanAdjustmentsTableUpdateCompanionBuilder,
+          (
+            PlanAdjustment,
+            BaseReferences<
+              _$AppDatabase,
+              $PlanAdjustmentsTable,
+              PlanAdjustment
+            >,
+          ),
+          PlanAdjustment,
+          PrefetchHooks Function()
+        > {
+  $$PlanAdjustmentsTableTableManager(
+    _$AppDatabase db,
+    $PlanAdjustmentsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$PlanAdjustmentsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PlanAdjustmentsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$PlanAdjustmentsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> groupId = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<String> kind = const Value.absent(),
+                Value<String> sessionId = const Value.absent(),
+                Value<String?> activityId = const Value.absent(),
+                Value<String> beforeJson = const Value.absent(),
+                Value<String> reasonCode = const Value.absent(),
+                Value<String> paramsJson = const Value.absent(),
+                Value<String> source = const Value.absent(),
+                Value<DateTime?> undoneAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => PlanAdjustmentsCompanion(
+                id: id,
+                groupId: groupId,
+                createdAt: createdAt,
+                kind: kind,
+                sessionId: sessionId,
+                activityId: activityId,
+                beforeJson: beforeJson,
+                reasonCode: reasonCode,
+                paramsJson: paramsJson,
+                source: source,
+                undoneAt: undoneAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String groupId,
+                required DateTime createdAt,
+                required String kind,
+                required String sessionId,
+                Value<String?> activityId = const Value.absent(),
+                required String beforeJson,
+                required String reasonCode,
+                Value<String> paramsJson = const Value.absent(),
+                Value<String> source = const Value.absent(),
+                Value<DateTime?> undoneAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => PlanAdjustmentsCompanion.insert(
+                id: id,
+                groupId: groupId,
+                createdAt: createdAt,
+                kind: kind,
+                sessionId: sessionId,
+                activityId: activityId,
+                beforeJson: beforeJson,
+                reasonCode: reasonCode,
+                paramsJson: paramsJson,
+                source: source,
+                undoneAt: undoneAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$PlanAdjustmentsTable, PlanAdjustment>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $PlanAdjustmentsTable,
+                    PlanAdjustment
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$PlanAdjustmentsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $PlanAdjustmentsTable,
+      PlanAdjustment,
+      $$PlanAdjustmentsTableFilterComposer,
+      $$PlanAdjustmentsTableOrderingComposer,
+      $$PlanAdjustmentsTableAnnotationComposer,
+      $$PlanAdjustmentsTableCreateCompanionBuilder,
+      $$PlanAdjustmentsTableUpdateCompanionBuilder,
+      (
+        PlanAdjustment,
+        BaseReferences<_$AppDatabase, $PlanAdjustmentsTable, PlanAdjustment>,
+      ),
+      PlanAdjustment,
       PrefetchHooks Function()
     >;
 typedef $$WeekSummariesTableCreateCompanionBuilder =
@@ -71050,6 +72510,8 @@ class $AppDatabaseManager {
       $$DailyReadinessRecordsTableTableManager(_db, _db.dailyReadinessRecords);
   $$SessionAdaptationsTableTableManager get sessionAdaptations =>
       $$SessionAdaptationsTableTableManager(_db, _db.sessionAdaptations);
+  $$PlanAdjustmentsTableTableManager get planAdjustments =>
+      $$PlanAdjustmentsTableTableManager(_db, _db.planAdjustments);
   $$WeekSummariesTableTableManager get weekSummaries =>
       $$WeekSummariesTableTableManager(_db, _db.weekSummaries);
   $$AthleteThresholdsTableTableManager get athleteThresholds =>

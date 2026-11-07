@@ -24,6 +24,18 @@ void main() {
       ),
       ('Intervals for Hannover Marathon', 'Intervalle für Hannover Marathon'),
       (
+        'Threshold ride for Hannover Marathon',
+        'Radfahren: Schwellentraining für Hannover Marathon',
+      ),
+      (
+        'Hill hike for Hannover Marathon',
+        'Wandern: Bergeinheit für Hannover Marathon',
+      ),
+      (
+        'Openers for Hannover Marathon',
+        'Kurze Aktivierung für Hannover Marathon',
+      ),
+      (
         'Easy swim: recovery around Hannover Marathon',
         'Schwimmen locker: Erholung rund um Hannover Marathon',
       ),

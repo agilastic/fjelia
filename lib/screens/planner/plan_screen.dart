@@ -12,9 +12,12 @@ import '../../providers/plan_view_provider.dart';
 import '../../providers/day_data_provider.dart';
 import '../../providers/user_profile_provider.dart';
 import '../../widgets/app_widgets.dart';
+import '../../widgets/plan_timeline.dart';
+import 'plan_adjustments_card.dart';
 import 'plan_overview_cards.dart';
 import 'plan_calendar_markers.dart';
 import 'plan_week_agenda.dart';
+import 'short_sessions_card.dart';
 import '../activities/activities_screen.dart';
 
 class PlanScreen extends ConsumerStatefulWidget {
@@ -58,6 +61,8 @@ class _PlanState extends ConsumerState<PlanScreen> {
         children: [
           const PlanWeatherStrip(),
           const RaceCountdownCard(),
+          const PlanAdjustmentsCard(),
+          const ShortSessionsCard(),
           Center(
             child: Text(
               view == 'Week'
@@ -236,6 +241,7 @@ class _PlanState extends ConsumerState<PlanScreen> {
                     ref.watch(plannedRestTodayProvider).valueOrNull ?? false,
               ),
             ),
+          if (view == 'List') NowDivider(label: context.l10n.now2),
           if (view != 'Week')
             ActivityHistory(
               showHeader: false,

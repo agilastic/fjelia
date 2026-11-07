@@ -10,12 +10,15 @@ import '../../db/database.dart';
 import '../../config/free_ai.dart';
 import '../../models/coach_context_card.dart';
 import '../../providers/ai_coach_provider.dart';
+import '../../providers/ecg_provider.dart';
 import '../../providers/user_profile_provider.dart';
 import '../../services/ai_coach_client.dart';
 import '../../services/ai_coach_settings.dart';
 import '../../services/coach_tasks.dart';
+import '../../services/ecg_coach_context.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/coach_context_card.dart';
+import '../../widgets/ecg_sheet.dart' show confirmEcgCoachWarning;
 import '../../utils/log.dart';
 import '../settings/ai_settings_tab.dart';
 
@@ -57,6 +60,14 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
   bool sending = false;
   String? error;
 
+  /// The ECG this conversation has loaded, once its warning was confirmed;
+  /// follow-up questions keep its analysis in the context.
+  String? _ecgId;
+  bool _ecgWarned = false;
+
+  /// The coach was told several ECGs fit and asked which one is meant.
+  bool _ecgChoosing = false;
+
   /// Runs while a reply is on its way, for the clock in the waiting bubble.
   final _watch = Stopwatch();
   Timer? _tick;
@@ -90,6 +101,9 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
       messages.clear();
       error = null;
       input.clear();
+      _ecgId = null;
+      _ecgWarned = false;
+      _ecgChoosing = false;
     });
   }
 
@@ -138,6 +152,8 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
       consent = AiConsentToken.confirmed();
     }
     if (!mounted) return;
+    final ecgLines = await _ecgLinesFor(draft);
+    if (!mounted) return;
     _watch
       ..reset()
       ..start();
@@ -169,7 +185,8 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
           .send(
             settings,
             List.of(messages),
-            widget.contextCard?.withContext(toon) ?? toon,
+            widget.contextCard?.withContext([...ecgLines, toon].join('\n')) ??
+                [...ecgLines, toon].join('\n'),
             consent,
           );
       if (mounted) {
@@ -202,7 +219,51 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
     }
   }
 
+  /// The ECG lines for [question]: which recordings exist and, once the
+  /// question is about one of them and the warning was confirmed, its full
+  /// analysis. A chat opened from an ECG has its analysis already.
+  Future<List<String>> _ecgLinesFor(String question) async {
+    if (widget.contextCard?.contextLine.contains('[ECG:') ?? false) {
+      return const [];
+    }
+    final coach = ref.read(ecgCoachProvider);
+    final EcgCoachContext prep;
+    try {
+      prep = await coach.prepare(
+        question: question,
+        activity: widget.activity,
+        current: _ecgId,
+        choosing: _ecgChoosing,
+      );
+    } catch (e) {
+      log('[AiCoach] ECG context failed: $e');
+      return const [];
+    }
+    _ecgChoosing = prep.lines.any((l) => l.startsWith('[ECG:Choose'));
+    final row = prep.detail;
+    if (row == null) return prep.lines;
+    if (!_ecgWarned) {
+      if (!mounted || !await confirmEcgCoachWarning(context, ref)) {
+        return [ecgAvailableLine(row), ecgDeclinedLine];
+      }
+      _ecgWarned = true;
+    }
+    try {
+      final lines = await coach.detail(
+        row,
+        question,
+        activity: widget.activity,
+      );
+      if (mounted) setState(() => _ecgId = row.recordingId);
+      return lines;
+    } catch (e) {
+      log('[AiCoach] ECG analysis failed: $e');
+      return [ecgAvailableLine(row), ecgFailedLine];
+    }
+  }
+
   CoachTask get _task {
+    if (_ecgId != null) return CoachTask.ecg;
     final line = widget.contextCard?.contextLine ?? '';
     return line.isEmpty && widget.activity != null
         ? CoachTask.evaluateActivity
@@ -266,7 +327,7 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
         ),
         // Stays on top while scrolling: the chat about a health measurement
         // never reads like a doctor's opinion.
-        if (widget.contextCard?.medicalWarning ?? false)
+        if ((widget.contextCard?.medicalWarning ?? false) || _ecgId != null)
           const Padding(
             padding: EdgeInsets.fromLTRB(16, 4, 16, 8),
             child: CoachMedicalWarning(),

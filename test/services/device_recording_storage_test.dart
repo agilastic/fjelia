@@ -380,7 +380,7 @@ void main() {
             .data
             .values
             .single,
-        63,
+        migrated.schemaVersion,
       );
     },
   );

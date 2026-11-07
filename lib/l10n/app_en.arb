@@ -4664,5 +4664,148 @@
   "recEcg": "ECG",
   "recBloodPressure": "Blood pressure",
   "recBannerOpen": "Tap to open",
-  "bpActivityHint": "Cuffs often cannot measure while you move. Readings from before or after the activity are not shown here."
+  "bpActivityHint": "Cuffs often cannot measure while you move. Readings from before or after the activity are not shown here.",
+  "objectiveKeyLong": "Key long {sport} for {goal}",
+  "seasonKeyRides": "In {n} weeks a key long session steps up towards half the event, once per block and never next to another event.",
+  "seasonEventAsLong": "In {n} weeks another event is the long session for a bigger goal.",
+  "@objectiveKeyLong": {
+    "placeholders": {
+      "sport": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "@seasonKeyRides": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "@seasonEventAsLong": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "objectiveThreshold": "Threshold {sport} for {goal}",
+  "objectiveHills": "Hill {sport} for {goal}",
+  "objectiveOpeners": "Openers for {goal}",
+  "@objectiveThreshold": {
+    "placeholders": {
+      "sport": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "@objectiveHills": {
+    "placeholders": {
+      "sport": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "@objectiveOpeners": {
+    "placeholders": {
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "planAdjustedTitle": "Plan adjusted automatically",
+  "planAdjSwap": "{session}: done on {day} instead of {from}.",
+  "planAdjSubstitute": "{activity} counts as {session} from {from}.",
+  "planAdjStrengthCredit": "{activity} covers the leg strength of {session}.",
+  "planAdjMoved": "{session} moves to {day}, which became free.",
+  "planAdjMovedEasy": "{session} moves to {day}, easier: your legs recover from {activity}.",
+  "planAdjUndone": "Change undone.",
+  "@planAdjSwap": {
+    "placeholders": {
+      "session": {
+        "type": "String"
+      },
+      "day": {
+        "type": "String"
+      },
+      "from": {
+        "type": "String"
+      }
+    }
+  },
+  "@planAdjSubstitute": {
+    "placeholders": {
+      "activity": {
+        "type": "String"
+      },
+      "session": {
+        "type": "String"
+      },
+      "from": {
+        "type": "String"
+      }
+    }
+  },
+  "@planAdjStrengthCredit": {
+    "placeholders": {
+      "activity": {
+        "type": "String"
+      },
+      "session": {
+        "type": "String"
+      }
+    }
+  },
+  "@planAdjMoved": {
+    "placeholders": {
+      "session": {
+        "type": "String"
+      },
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "@planAdjMovedEasy": {
+    "placeholders": {
+      "session": {
+        "type": "String"
+      },
+      "day": {
+        "type": "String"
+      },
+      "activity": {
+        "type": "String"
+      }
+    }
+  },
+  "shortSessionTitle": "Shorter than planned – why?",
+  "shortSessionLine": "{session}: {done} of {planned} min",
+  "shortReasonTime": "No time",
+  "shortReasonWeather": "Weather",
+  "shortReasonFatigue": "Tired",
+  "shortReasonPain": "Pain",
+  "shortReasonOther": "Other",
+  "@shortSessionLine": {
+    "placeholders": {
+      "session": {
+        "type": "String"
+      },
+      "done": {
+        "type": "int"
+      },
+      "planned": {
+        "type": "int"
+      }
+    }
+  }
 }

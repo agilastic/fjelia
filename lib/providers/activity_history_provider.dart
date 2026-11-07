@@ -9,6 +9,7 @@ import 'strength_provider.dart';
 import 'day_data_provider.dart';
 import 'training_load_provider.dart';
 import '../utils/log.dart';
+import 'planner_providers.dart';
 import 'coros_provider.dart';
 import 'health_connect_provider.dart';
 import 'polar_provider.dart';
@@ -128,6 +129,13 @@ final deleteActivityProvider = Provider<Future<void> Function(String)>(
       )..where((t) => t.recordKey.equals('intake:$id'))).go();
       if (activity != null) await _refreshDayStrain(db, activity.startDate);
     });
+    // The session it completed is open again, and what it moved goes back.
+    try {
+      final changes = await ref.read(planReconcilerProvider).forgetActivity(id);
+      await ref.read(applyPlanChangesProvider)(changes);
+    } catch (e) {
+      log('[Delete] plan for $id: $e');
+    }
     _activitiesChanged(ref);
     // The workout is gone; its HRV readings stay, its reminder does not.
     await ref.read(hrvReminderActionsProvider).reconcile();
@@ -148,6 +156,14 @@ final restoreActivityProvider =
         final activity = await db.restoreDeletedActivity(id);
         if (activity == null) return (activity: null, refetched: false);
         await _refreshDayStrain(db, activity.startDate);
+        // It completes its session again, or is placed as before.
+        try {
+          await ref.read(postWorkoutScorerProvider).scoreIfUnscored(activity);
+          final changes = await ref.read(planReconcilerProvider).reconcile();
+          await ref.read(applyPlanChangesProvider)(changes);
+        } catch (e) {
+          log('[Restore] plan for $id: $e');
+        }
         _activitiesChanged(ref);
         var refetched = false;
         try {

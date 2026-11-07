@@ -117,6 +117,8 @@ class AllocationInput {
     this.footLongCap,
     this.allowedSports,
     this.events = const [],
+    this.goalWeeks = const [],
+    this.cycle = 4,
   });
 
   final List<SportNeed> needs;
@@ -167,6 +169,13 @@ class AllocationInput {
   /// Events inside the week. Their time is already taken off [budgetMin]:
   /// an event is real work, whatever its priority, and counted once.
   final List<({String name, int minutes})> events;
+
+  /// Every goal's intent this week, also those a sport's need does not carry:
+  /// a key long ride must not land next to another goal's event.
+  final List<GoalWeek> goalWeeks;
+
+  /// Weeks per block; the last is the unloading week.
+  final int cycle;
 }
 
 /// What the week holds and what it could not.
@@ -331,12 +340,24 @@ class WeekAllocator {
     // event itself is the hard day.
     final recovering = input.recoveringFromEvent || input.events.isNotEmpty;
     final wanted = <String, int>{};
+    final keyRides = <String>{};
     for (final n in needs) {
       if (!_wantsLong(n)) continue;
-      final minutes = _longWanted(n, input);
+      // Another goal's event of the same kind is this week's long session:
+      // a 200 km brevet is training for the 600, not a second long ride.
+      final serving = _eventAsLong(n, input);
+      if (serving != null) {
+        tradeoffs.add(
+          '${serving.name} is this week\'s long ${_noun(n.sport)} for '
+          '${n.goal.name}.',
+        );
+        continue;
+      }
+      final long = _longWanted(n, input);
+      if (long.key) keyRides.add(n.sport);
       wanted[n.sport] = recovering && n.intent != GoalIntent.recover
-          ? math.max(45, (minutes * 0.75).round())
-          : minutes;
+          ? math.max(45, (long.minutes * 0.75).round())
+          : long.minutes;
     }
 
     // 2. Fit the long sessions into the week together.
@@ -347,6 +368,7 @@ class WeekAllocator {
       wanted: wanted,
       budget: input.budgetMin,
       weekIndex: input.weekIndex,
+      keyRide: keyRides.isNotEmpty && wanted.length == 1,
       tradeoffs: tradeoffs,
       unmet: unmet,
     );
@@ -359,20 +381,34 @@ class WeekAllocator {
     var keysLeft = input.maxKeySessions ?? 99;
     if (input.easyStart || recovering) keysLeft = math.min(keysLeft, 1);
     if (input.events.isNotEmpty) keysLeft = 0;
+    // The hard sessions go round the sports by weight, one each before any
+    // takes a second: a sport with a goal never loses all its quality to
+    // another.
+    final share = List.filled(needs.length, 0);
+    final wants = [for (final n in needs) _qualityKinds(n, input).length];
+    for (var round = 1; round <= 2; round++) {
+      for (var i = 0; i < needs.length && keysLeft > 0; i++) {
+        if (wants[i] < round) continue;
+        share[i]++;
+        keysLeft--;
+      }
+    }
+    var spare = 0;
     var longRank = 0;
-    for (final n in needs) {
+    for (final (i, n) in needs.indexed) {
       final sportRest = rest * n.weight / totalWeight;
       final built = _sportSlots(
         need: n,
         long: longs[n.sport],
+        keyRide: keyRides.contains(n.sport),
         restMin: sportRest,
-        keysLeft: keysLeft,
+        keysLeft: share[i] + spare,
         input: input,
         longRank: longRank,
         unmet: unmet,
         tradeoffs: tradeoffs,
       );
-      keysLeft -= built.keys;
+      spare += share[i] - built.keys;
       if (longs[n.sport] != null) longRank++;
       slots.addAll(built.slots);
       minutesBySport[n.sport] = built.slots.fold(0, (a, s) => a + s.targetMin);
@@ -484,18 +520,18 @@ class WeekAllocator {
 
   /// The longest session a sport's goal and the athlete's history support
   /// this week: the event's duration decides the target, history the limit.
-  int _longWanted(SportNeed n, AllocationInput input) {
+  /// [key] marks the occasional key long session of an ultra event.
+  ({int minutes, bool key}) _longWanted(SportNeed n, AllocationInput input) {
     final demand = n.goal.demand;
     final cap =
         input.capacities[n.sport] ?? input.capacities[_related(n.sport)];
-    final share = switch (n.intent) {
-      GoalIntent.maintain => 0.30,
-      GoalIntent.sharpen => 0.35,
-      GoalIntent.unload => (0.30 + 0.30 * n.progress) * 0.7,
-      _ => 0.30 + 0.30 * n.progress,
-    };
     double target;
-    if (_isFoot(n.sport) && input.footLongCap != null) {
+    var key = false;
+    if (!_isFoot(n.sport) && demand.planningMinutes >= ultraEventMin) {
+      final ultra = _ultraLong(n, input);
+      target = ultra.minutes;
+      key = ultra.key;
+    } else if (_isFoot(n.sport) && input.footLongCap != null) {
       final footCap = input.footLongCap!(n.goal).toDouble();
       final ramp = switch (n.intent) {
         GoalIntent.maintain => 0.55,
@@ -505,7 +541,13 @@ class WeekAllocator {
       };
       target = footCap * ramp;
     } else {
-      target = demand.planningMinutes * share;
+      final ramp = switch (n.intent) {
+        GoalIntent.maintain => 0.6,
+        GoalIntent.sharpen => 0.65,
+        GoalIntent.unload => (0.55 + 0.45 * n.progress) * 0.7,
+        _ => 0.55 + 0.45 * n.progress,
+      };
+      target = _longPeak(demand) * ramp;
     }
     // History limits what can be added to what the athlete has done.
     double historyCap;
@@ -522,8 +564,107 @@ class WeekAllocator {
       // No history in this sport: start modestly and grow.
       historyCap = 75.0 + 6 * input.weekInRun;
     }
-    final out = math.min(math.min(target, historyCap), 600.0);
-    return out.round().clamp(45, 600);
+    final out = math.min(
+      math.min(target, historyCap),
+      longestSessionMin.toDouble(),
+    );
+    final minutes = out.round().clamp(45, longestSessionMin);
+    // A key session that history holds back to an ordinary one is not a key
+    // session.
+    return (minutes: minutes, key: key && minutes > _ultraRegular(demand));
+  }
+
+  /// The longest session a shorter event prepares with, reached late in the
+  /// preparation: a short race is ridden in training for its full length and
+  /// a bit more, a longer one for a shrinking share of it, joining the ultra
+  /// rule's half at [ultraEventMin]. A ride is never under two and a half
+  /// hours: endurance on the bike is built in long rides whatever the race.
+  static double _longPeak(GoalDemand d) {
+    final m = d.planningMinutes;
+    final share = (1.1 - 0.55 * (m - 180) / (ultraEventMin - 180)).clamp(
+      0.55,
+      1.1,
+    );
+    return d.isRide ? math.max(150.0, m * share) : m * share;
+  }
+
+  /// Events from this long are ultra events: a long session that grows a
+  /// little every week until it reaches half the event would mean riding
+  /// half a 600 km brevet every weekend.
+  static const ultraEventMin = 480.0;
+
+  /// The longest session the planner ever asks for.
+  static const longestSessionMin = 900;
+
+  /// The ordinary weekend long session of an ultra event: a quarter of the
+  /// event, between three and five hours.
+  static double _ultraRegular(GoalDemand d) =>
+      (d.planningMinutes * 0.25).clamp(180.0, 300.0);
+
+  /// Long sessions for an ultra event. Ordinary weeks hold the regular long
+  /// session, a little shorter at the start of a block. Once a block, in its
+  /// last loading week, a key long session steps up from block to block
+  /// towards half the event (the 50 % rule), reached at 75 % of the
+  /// preparation, about four weeks out.
+  /// It never lands next to another goal's event; that block keeps the
+  /// regular one.
+  ({double minutes, bool key}) _ultraLong(SportNeed n, AllocationInput input) {
+    final demand = n.goal.demand;
+    final peak = demand.planningMinutes * 0.5;
+    final regular = math.min(peak, _ultraRegular(demand));
+    final blockWeek = input.weekIndex % math.max(2, input.cycle);
+    final ramp = 0.6 + 0.4 * n.progress;
+    switch (n.intent) {
+      case GoalIntent.unload:
+      case GoalIntent.sharpen:
+        return (minutes: regular * 0.5, key: false);
+      case GoalIntent.maintain:
+        return (minutes: regular * 0.7, key: false);
+      case GoalIntent.build:
+      case GoalIntent.specificPreparation:
+        final step = ((n.progress - 0.3) / 0.45).clamp(0.0, 1.0);
+        if (blockWeek == math.max(2, input.cycle) - 2 &&
+            step > 0 &&
+            !_nearOtherEvent(n, input)) {
+          return (minutes: regular + (peak - regular) * step, key: true);
+        }
+      default:
+        break;
+    }
+    return (minutes: regular * ramp * (blockWeek == 0 ? 0.85 : 1), key: false);
+  }
+
+  /// Another goal is raced, sharpened for or recovered from this week, or
+  /// raced next week: a key long session would take from it.
+  static bool _nearOtherEvent(SportNeed n, AllocationInput input) =>
+      input.events.isNotEmpty ||
+      input.recoveringFromEvent ||
+      input.goalWeeks.any(
+        (w) =>
+            w.goal.id != n.goal.id &&
+            (w.intent == GoalIntent.event ||
+                w.intent == GoalIntent.sharpen ||
+                w.intent == GoalIntent.recover ||
+                w.weeksToEvent == 1),
+      );
+
+  /// Another goal's event this week that is long enough, in a sport of the
+  /// same kind, to be this week's long session for [n].
+  static SeasonGoal? _eventAsLong(SportNeed n, AllocationInput input) {
+    for (final w in input.goalWeeks) {
+      if (w.goal.id == n.goal.id || w.intent != GoalIntent.event) continue;
+      final ride = n.sport.startsWith('cycl');
+      if (ride != w.goal.sport.startsWith('cycl') ||
+          (!ride && _isFoot(n.sport) != _isFoot(w.goal.sport))) {
+        continue;
+      }
+      final d = n.goal.demand;
+      final regular = d.planningMinutes >= ultraEventMin
+          ? _ultraRegular(d)
+          : _longPeak(d) * 0.55;
+      if (w.goal.demand.planningMinutes >= regular) return w.goal;
+    }
+    return null;
   }
 
   static String? _related(String sport) => switch (sport) {
@@ -543,6 +684,7 @@ class WeekAllocator {
     required Map<String, int> wanted,
     required double budget,
     required int weekIndex,
+    bool keyRide = false,
     required List<String> tradeoffs,
     required List<String> unmet,
   }) {
@@ -595,7 +737,9 @@ class WeekAllocator {
     }
     final picked = {for (final s in chosen) s: wanted[s]!};
     final total = picked.values.fold<int>(0, (a, b) => a + b);
-    final limit = budget * _longShare;
+    // A key long session alone in its week may take more of it: the rest of
+    // that week is easy anyway.
+    final limit = budget * (keyRide ? _longShareLimit : _longShare);
     if (total <= limit) return picked;
     final scale = limit / total;
     if (scale < 0.95 && fit == order.length) {
@@ -648,6 +792,7 @@ class WeekAllocator {
   ({List<AllocatedSlot> slots, int keys}) _sportSlots({
     required SportNeed need,
     required int? long,
+    bool keyRide = false,
     required double restMin,
     required int keysLeft,
     required AllocationInput input,
@@ -674,41 +819,40 @@ class WeekAllocator {
           weekday: longRank == 0 ? 6 : 7,
           targetMin: long,
           minMin: 45,
-          maxMin: 600,
+          maxMin: longestSessionMin,
           goalId: goal.id,
           role: role,
-          objective: 'Long ${_noun(sport)} for $label',
+          objective: keyRide
+              ? 'Key long ${_noun(sport)} for $label'
+              : 'Long ${_noun(sport)} for $label',
           phase: phase,
           rank: longRank,
         ),
       );
     }
 
-    // Quality sessions, as many as the intent and the level allow.
-    var wantKeys = switch (need.intent) {
-      GoalIntent.build || GoalIntent.specificPreparation => ride ? 1 : 2,
-      GoalIntent.foundation => 1,
-      GoalIntent.maintain => input.weekIndex.isEven ? 1 : 0,
-      GoalIntent.sharpen => 1,
-      _ => 0,
-    };
-    // A long event raced to finish needs endurance first; hard intervals are
-    // for those who race it hard, or have not said.
-    final planning = goal.demand.planningMinutes;
-    if (ride && planning >= 240 && goal.ambition != Ambition.performance) {
-      wantKeys = math.min(wantKeys, 1);
+    // Quality sessions: as many as the allowance from the allocation, of the
+    // kinds [_qualityKinds] picks for the goal and the week.
+    var kinds = _qualityKinds(need, input);
+    // Fewer hard sessions allowed than the goal wants: they take turns.
+    if (keysLeft > 0 && keysLeft < kinds.length) {
+      final from = input.weekIndex % kinds.length;
+      kinds = [...kinds.skip(from), ...kinds.take(from)];
     }
-    wantKeys = math.min(wantKeys, math.max(0, keysLeft));
+    kinds = kinds.take(math.max(0, keysLeft)).toList();
     var restLeft = restMin;
-    for (var i = 0; i < wantKeys; i++) {
-      final first = i == 0;
+    var i = 0;
+    for (final kind in kinds) {
+      final first = i++ == 0;
+      final cap = switch (kind) {
+        _Quality.openers => 45,
+        _Quality.vo2 => ride ? 75 : 60,
+        _ => ride ? 100 : 75,
+      };
       final minutes = restLeft < 60
           ? 0
           : math
-                .max(
-                  45,
-                  math.min(restLeft * (first ? 0.45 : 0.4), ride ? 100 : 75),
-                )
+                .max(45, math.min(restLeft * (first ? 0.45 : 0.4), cap))
                 .round();
       if (minutes < 40) {
         if (need.weight >= 0.5 && keys == 0) {
@@ -718,22 +862,25 @@ class WeekAllocator {
         }
         break;
       }
-      final hard =
-          goal.ambition == Ambition.performance &&
-          need.intent != GoalIntent.foundation;
-      var zone = need.intent == GoalIntent.sharpen
-          ? 3
-          : first
-          ? (ride && !hard ? 3 : 4)
-          : 5;
-      // An athlete who rarely trains hard starts with one moderate session:
-      // steady work in zone 3 at most, and the steps are held to it.
-      if (input.easyStart) zone = math.min(zone, 3);
+      final noun = _noun(sport);
+      final (subType, zone, objective) = switch (kind) {
+        _Quality.steady => ('tempo', 3, 'Steady quality $noun for $label'),
+        // Only the road bike has threshold workouts of its own; elsewhere
+        // threshold is a tempo session ridden or run in zone 4.
+        _Quality.threshold => (
+          sport == 'cycling_road' ? 'threshold' : 'tempo',
+          4,
+          'Threshold $noun for $label',
+        ),
+        _Quality.vo2 => ('intervals', 5, 'Intervals for $label'),
+        _Quality.hills => ('hills', 4, 'Hill $noun for $label'),
+        _Quality.openers => ('intervals', 5, 'Openers for $label'),
+      };
       slots.add(
         AllocatedSlot(
           sport: sport,
           sessionType: 'key',
-          subType: first ? 'tempo' : 'intervals',
+          subType: subType,
           zone: zone,
           maxZone: input.easyStart ? 3 : null,
           weekday: first ? (ride ? 2 : 3) : 4,
@@ -742,9 +889,7 @@ class WeekAllocator {
           maxMin: ride ? 150 : 90,
           goalId: goal.id,
           role: role,
-          objective: first
-              ? 'Steady quality ${_noun(sport)} for $label'
-              : 'Intervals for $label',
+          objective: objective,
           phase: phase,
           rank: 2,
         ),
@@ -770,7 +915,13 @@ class WeekAllocator {
         need.intent == GoalIntent.deprioritised;
     for (var i = 0; i < easyCount; i++) {
       final share = restLeft / (easyCount - i);
-      final cap = recoveryWeek ? 45 : (ride ? 120 : 75);
+      // An easy session is never longer than the week's long one.
+      final cap = recoveryWeek
+          ? 45
+          : math.min(
+              ride ? 120 : 75,
+              long == null ? 999 : math.max(30, (long * 0.8).round()),
+            );
       final minutes = share.round().clamp(recoveryWeek ? 20 : 30, cap);
       slots.add(
         AllocatedSlot(
@@ -796,10 +947,64 @@ class WeekAllocator {
     return (slots: slots, keys: keys);
   }
 
+  /// The quality sessions a sport's goal wants this week, most important
+  /// first. Every endurance sport keeps some work near its ceiling, short
+  /// intervals in zone 5, besides the work at race intensity. A long event
+  /// raced to finish takes the two in turns and late in its build only race
+  /// intensity; a shorter or ambitious one has both each build week. Hiking
+  /// has hills in place of intervals.
+  static List<_Quality> _qualityKinds(SportNeed n, AllocationInput input) {
+    final goal = n.goal;
+    final planning = goal.demand.planningMinutes;
+    final hike = n.sport == 'hiking';
+    // Long for the sport: beyond a marathon on foot, four hours elsewhere.
+    final long = planning >= (_isFoot(n.sport) ? 360 : 240);
+    final finish = goal.ambition == Ambition.finish;
+    // Raced near threshold: an ambitious goal, a target time over a few
+    // hours, or any race under three.
+    final hard =
+        goal.ambition == Ambition.performance ||
+        (!finish && goal.targetSeconds != null && planning < 300) ||
+        (!finish && planning < 180);
+    final race = hike
+        ? _Quality.hills
+        : hard
+        ? _Quality.threshold
+        : _Quality.steady;
+    final top = hike ? _Quality.hills : _Quality.vo2;
+    final odd = input.weekIndex.isOdd;
+    final kinds = switch (n.intent) {
+      // Base: aerobic tempo, every other week a touch of the top end (on the
+      // bike threshold, its base workouts).
+      GoalIntent.foundation => [
+        !odd
+            ? _Quality.steady
+            : n.sport.startsWith('cycl')
+            ? _Quality.threshold
+            : top,
+      ],
+      GoalIntent.build || GoalIntent.specificPreparation =>
+        hike
+            ? [race]
+            : long && goal.ambition != Ambition.performance
+            ? [n.progress >= 0.7 || !odd ? race : top]
+            : [race, top],
+      GoalIntent.maintain => input.weekIndex.isEven ? [race] : <_Quality>[],
+      // Short openers keep a short race sharp; a long one only needs to feel
+      // its pace.
+      GoalIntent.sharpen => [long || hike ? _Quality.steady : _Quality.openers],
+      _ => <_Quality>[],
+    };
+    // An athlete who rarely trains hard starts with one moderate session.
+    if (input.easyStart) return kinds.isEmpty ? kinds : [_Quality.steady];
+    return kinds;
+  }
+
   static String _noun(String sport) {
     if (sport.startsWith('cycl')) return 'ride';
     if (sport == 'running' || sport == 'trail_running') return 'run';
     if (sport == 'swimming') return 'swim';
+    if (sport == 'hiking') return 'hike';
     return sport.replaceAll('_', ' ');
   }
 
@@ -915,3 +1120,6 @@ class WeekAllocator {
     return list;
   }
 }
+
+/// What a quality session works on.
+enum _Quality { steady, threshold, vo2, hills, openers }

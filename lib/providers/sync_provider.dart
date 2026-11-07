@@ -483,6 +483,7 @@ class SyncNotifier extends StateNotifier<SyncState> {
       log('[Sync] readiness adaptation error: $e');
     }
     await _scoreRecentWorkouts();
+    await _reconcilePlan();
     try {
       await _autoGeneratePlanIfNeeded(_ref);
     } catch (e) {
@@ -495,6 +496,20 @@ class SyncNotifier extends StateNotifier<SyncState> {
       unawaited(_ref.read(historicSyncProvider.notifier).start(force: true));
     }
     _finish(result);
+  }
+
+  /// Places workouts done on another day than planned, or in place of a
+  /// later session, and brings the watch in line.
+  Future<void> _reconcilePlan() async {
+    try {
+      final profile = _ref.read(userProfileProvider).valueOrNull;
+      final changes = await _ref
+          .read(planReconcilerProvider)
+          .reconcile(maxPerDay: profile?.maxSessionsPerDay ?? 1);
+      await _ref.read(applyPlanChangesProvider)(changes);
+    } catch (e) {
+      log('[Sync] plan reconcile error: $e');
+    }
   }
 
   /// Scores the last week's completed workouts against planned sessions.

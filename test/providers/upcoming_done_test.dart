@@ -39,6 +39,7 @@ TrainingSession session(
   addedByAthlete: false,
   historical: false,
   indoor: false,
+  locked: false,
   isMovedFromDifferentWeek: false,
 );
 

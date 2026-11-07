@@ -1,12 +1,16 @@
 import 'dart:async';
+import 'dart:isolate';
 
 import 'package:drift/drift.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/widgets.dart';
 
 import '../db/database.dart';
 import '../models/ecg.dart';
+import '../services/ecg_analysis.dart';
+import '../services/ecg_coach_context.dart';
 import '../services/ecg_ble_service.dart';
 import '../services/ecg_storage_service.dart';
 import '../services/training_ble.dart';
@@ -28,6 +32,127 @@ final ecgStorageProvider = Provider(
 final ecgHistoryProvider = StreamProvider(
   (ref) => ref.watch(ecgStorageProvider).watchHistory(),
 );
+
+/// Recordings swiped away while their undo is still on offer: hidden from the
+/// lists, deleted for good once the offer has passed.
+final pendingEcgDeletesProvider = StateProvider<Set<String>>((ref) => const {});
+
+/// The analysis of one waveform recording, worked out off the UI thread
+/// once and kept (a few kilobytes), so follow-up questions in the coach chat
+/// do not analyse it again.
+final ecgAnalysisProvider = FutureProvider.family<EcgAnalysis, String>((
+  ref,
+  id,
+) async {
+  final storage = ref.read(ecgStorageProvider);
+  final row = await storage.recording(id);
+  final hz = row?.sampleRateHz;
+  if (row == null || row.kind != 'waveform' || hz == null) {
+    throw StateError('ECG $id has no waveform to analyse.');
+  }
+  final chunks = await storage.chunks(id);
+  return Isolate.run(() => analyzeEcg(chunks, hz));
+});
+
+/// What the coach chat adds to its context about ECGs for one question.
+class EcgCoachContext {
+  const EcgCoachContext({this.lines = const [], this.detail});
+
+  /// Lines to add as they are: availability, or a request to choose.
+  final List<String> lines;
+
+  /// The recording whose full analysis the question needs; the chat asks
+  /// for the medical warning to be confirmed before loading it.
+  final EcgRecording? detail;
+}
+
+final ecgCoachProvider = Provider(EcgCoach.new);
+
+/// ECG awareness by default, the full analysis on demand.
+class EcgCoach {
+  EcgCoach(this.ref);
+  final Ref ref;
+
+  static const _warningKey = 'ecg_coach_warning_confirmed_v1';
+
+  /// The medical warning before an ECG goes to the coach is shown once ever;
+  /// these record and read that it was confirmed.
+  Future<bool> warningConfirmed() async {
+    try {
+      return (await SharedPreferences.getInstance()).getBool(_warningKey) ??
+          false;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<void> confirmWarning() async {
+    try {
+      await (await SharedPreferences.getInstance()).setBool(_warningKey, true);
+    } catch (_) {}
+  }
+
+  /// Reads [question]: an ECG question about a recording that can be told
+  /// apart asks for its [EcgCoachContext.detail]; otherwise the coach only
+  /// learns which recordings exist. [current] is the recording this chat is
+  /// already about; [choosing] says the coach just asked which one.
+  Future<EcgCoachContext> prepare({
+    required String question,
+    ActivityRecord? activity,
+    String? current,
+    bool choosing = false,
+    DateTime? now,
+  }) async {
+    final rows = await ref.read(ecgStorageProvider).history();
+    final at = now ?? DateTime.now();
+    // A follow-up in a chat already about a recording stays with it, unless
+    // the question names another time.
+    if (current != null && askedClock(question) == null) {
+      final row = rows.where((r) => r.recordingId == current).firstOrNull;
+      if (row != null) return EcgCoachContext(detail: row);
+    }
+    final own = activity == null
+        ? [
+            for (final r in rows)
+              if (at.difference(r.recordedAt).inDays < 14) r,
+          ].take(3).toList()
+        : activityEcgs(rows, activity);
+    final available = [for (final r in own) ecgAvailableLine(r)];
+    if (!choosing && !asksAboutEcg(question)) {
+      return EcgCoachContext(lines: available);
+    }
+    return switch (pickEcg(
+      rows,
+      question: question,
+      activity: activity,
+      now: at,
+    )) {
+      OneEcg(:final recording) => EcgCoachContext(detail: recording),
+      SeveralEcgs(:final recordings) => EcgCoachContext(
+        lines: [...available, ecgChoiceLine(recordings)],
+      ),
+      NoEcg() => EcgCoachContext(lines: available),
+    };
+  }
+
+  /// The full analysis lines of [row] for [question].
+  Future<List<String>> detail(
+    EcgRecording row,
+    String question, {
+    ActivityRecord? activity,
+  }) async {
+    final analysis = row.kind == 'waveform' && row.sampleRateHz != null
+        ? await ref.read(ecgAnalysisProvider(row.recordingId).future)
+        : null;
+    return ecgDetailLines(
+      row,
+      analysis,
+      minutes: askedMinutes(question),
+      activity: activity,
+    );
+  }
+}
+
 final ecgDeviceFactoryProvider = Provider<EcgDeviceService Function()>(
   (ref) => EcgDeviceService.new,
 );

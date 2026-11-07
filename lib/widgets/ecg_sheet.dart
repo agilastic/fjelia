@@ -1,4 +1,4 @@
-import 'dart:isolate';
+import 'dart:async';
 import 'dart:math' as math;
 import 'dart:typed_data';
 
@@ -13,8 +13,10 @@ import '../providers/ecg_provider.dart';
 import '../providers/polar_h10_provider.dart';
 import '../screens/ai_coach/ai_coach_screen.dart' show openCoachTab;
 import '../services/ecg_analysis.dart';
+import '../services/ecg_coach_context.dart' show ecgAnalysisLines;
 import '../utils/log.dart';
 import 'app_widgets.dart';
+import 'swipe_action_tile.dart';
 
 class EcgSheet extends ConsumerStatefulWidget {
   const EcgSheet({super.key});
@@ -404,7 +406,7 @@ class EcgDetailSheet extends ConsumerWidget {
             ),
             const SizedBox(height: 8),
             FilledButton.icon(
-              onPressed: () => _askCoach(context, ref, row),
+              onPressed: () => askCoachAboutEcg(context, ref, row),
               icon: const Icon(Icons.chat_bubble_outline),
               label: Text(l.ecgAskCoach),
             ),
@@ -497,18 +499,14 @@ class EcgDetailSheet extends ConsumerWidget {
 
 /// Top level on purpose: a closure inside a widget method would take the
 /// widget's context and ref along, which cannot be sent to an isolate.
-Future<EcgAnalysis> _analyseInBackground(List<EcgChunk> chunks, double hz) =>
-    Isolate.run(() => analyzeEcg(chunks, hz));
-
-/// The warning comes first and must be confirmed; then the app analyses the
-/// recording and opens the coach with the analysis as the chat's context.
-Future<void> _askCoach(
-  BuildContext context,
-  WidgetRef ref,
-  EcgRecording row,
-) async {
+/// The medical warning before an ECG goes to the coach; true once the
+/// athlete confirmed it. It is shown once ever: after the first confirmation
+/// it is not asked again.
+Future<bool> confirmEcgCoachWarning(BuildContext context, WidgetRef ref) async {
+  final coach = ref.read(ecgCoachProvider);
+  if (await coach.warningConfirmed()) return true;
+  if (!context.mounted) return false;
   final l = context.l10n;
-  log('[EcgCoach] ask tapped ${row.recordingId}');
   final accepted = await showDialog<bool>(
     context: context,
     barrierDismissible: false,
@@ -546,13 +544,26 @@ Future<void> _askCoach(
       ],
     ),
   );
+  if (accepted == true) await coach.confirmWarning();
+  return accepted == true;
+}
+
+/// The warning comes first and must be confirmed; then the app analyses the
+/// recording and opens the coach with the analysis as the chat's context.
+Future<void> askCoachAboutEcg(
+  BuildContext context,
+  WidgetRef ref,
+  EcgRecording row,
+) async {
+  final l = context.l10n;
+  log('[EcgCoach] ask tapped ${row.recordingId}');
+  final accepted = await confirmEcgCoachWarning(context, ref);
   if (accepted != true || !context.mounted) return;
   await runUiAction(context, () async {
     log('[EcgCoach] analysing ${row.recordingId}');
-    final chunks = await ref.read(ecgChunksProvider(row.recordingId).future);
     final EcgAnalysis analysis;
     try {
-      analysis = await _analyseInBackground(chunks, row.sampleRateHz!);
+      analysis = await ref.read(ecgAnalysisProvider(row.recordingId).future);
     } catch (e) {
       log('[EcgCoach] analysis failed: $e');
       rethrow;
@@ -562,21 +573,8 @@ Future<void> _askCoach(
     );
     if (!context.mounted) return;
 
-    // Use enhanced timeline context for long recordings (>10 min).
-    final useTimeline = row.durationMs > 600000;
-    final contextLines = useTimeline
-        ? analysis.contextLinesWithTimeline(
-            device: row.deviceName,
-            source: row.source,
-            recordedAt: row.recordedAt,
-            linkedToWorkout: row.activityId != null,
-          )
-        : analysis.contextLines(
-            device: row.deviceName,
-            source: row.source,
-            recordedAt: row.recordedAt,
-            linkedToWorkout: row.activityId != null,
-          );
+    // The timeline context for long recordings (>10 min), as in the chat.
+    final contextLines = ecgAnalysisLines(row, analysis);
 
     openCoachTab(
       context,
@@ -830,14 +828,29 @@ class ActivityEcgCard extends ConsumerWidget {
   }
 }
 
-/// A recording on its own, as an entry of the activity history.
-class EcgHistoryTile extends StatelessWidget {
+/// A recording on its own, as an entry of the activity history. Swiped like
+/// an activity: to the left it is deleted (with undo), to the right the
+/// coach is asked about it, the same way as from its details.
+class EcgHistoryTile extends ConsumerWidget {
   const EcgHistoryTile({super.key, required this.recording});
   final EcgRecording recording;
   @override
-  Widget build(BuildContext context) {
-    const color = Color(0xFFFF5C7A);
+  Widget build(BuildContext context, WidgetRef ref) {
     final r = recording;
+    return SwipeActionTile(
+      deleteLabel: context.l10n.delete,
+      coachLabel: context.l10n.askCoachShort,
+      onDelete: () async => deleteEcgWithUndo(context, r),
+      // A report alone holds no curve to analyse: its details say so.
+      onCoach: () => r.kind == 'waveform' && r.sampleRateHz != null
+          ? askCoachAboutEcg(context, ref, r)
+          : showAppSheet(context, EcgDetailSheet(recording: r)),
+      child: _card(context, r),
+    );
+  }
+
+  Widget _card(BuildContext context, EcgRecording r) {
+    const color = Color(0xFFFF5C7A);
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
@@ -874,4 +887,56 @@ class EcgHistoryTile extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Deletes a recording with undo. It leaves the lists at once and the snack
+/// bar offers to bring it back; only once that offer has passed is it deleted
+/// for good. A recording has no "Recently deleted" like an activity, so this
+/// is its only way back. If the delete fails it shows again.
+void deleteEcgWithUndo(BuildContext context, EcgRecording r) {
+  final messenger = ScaffoldMessenger.maybeOf(context);
+  final container = ProviderScope.containerOf(context);
+  final l = context.l10n;
+  final pending = container.read(pendingEcgDeletesProvider.notifier);
+  final id = r.recordingId;
+  pending.update((s) => {...s, id});
+  void show() => pending.update((s) => {...s}..remove(id));
+  Future<void> delete() async {
+    try {
+      await container.read(ecgStorageProvider).delete(id);
+    } catch (e) {
+      log('[Ecg] delete failed: $e');
+      show();
+      messenger?.showSnackBar(
+        SnackBar(content: Text(l.deletingFailedFailure('$e'))),
+      );
+    }
+  }
+
+  if (messenger == null) {
+    unawaited(delete());
+    return;
+  }
+  messenger.hideCurrentSnackBar();
+  final closed = messenger
+      .showSnackBar(
+        SnackBar(
+          content: Text(l.activityDeleted(l.ecgTitle)),
+          // A snack bar with an action stays until dismissed; this one has
+          // to pass, or the recording would never be deleted.
+          persist: false,
+          duration: const Duration(seconds: 5),
+          action: SnackBarAction(label: l.undo, onPressed: () {}),
+        ),
+      )
+      .closed;
+  unawaited(
+    closed.then((reason) {
+      if (reason == SnackBarClosedReason.action) {
+        show();
+      } else {
+        return delete();
+      }
+    }),
+  );
 }

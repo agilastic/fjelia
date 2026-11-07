@@ -198,6 +198,28 @@ class SeasonReport {
         'eventWeeks',
       );
     }
+    final keyRides = allocations.where(
+      (a) => a.slots.any((s) => s.objective.startsWith('Key long')),
+    );
+    if (keyRides.isNotEmpty) {
+      say(
+        'In ${keyRides.length} weeks a key long session steps up towards half '
+            'the event, once per block and never next to another event.',
+        'keyRides',
+        {'n': keyRides.length},
+      );
+    }
+    final asLong = allocations.where(
+      (a) => a.tradeoffs.any((t) => t.contains('this week\'s long')),
+    );
+    if (asLong.isNotEmpty) {
+      say(
+        'In ${asLong.length} weeks another event is the long session for a '
+            'bigger goal.',
+        'eventAsLong',
+        {'n': asLong.length},
+      );
+    }
     final unmet = allocations.where((a) => a.unmet.isNotEmpty).toList();
     if (unmet.isNotEmpty) {
       say(

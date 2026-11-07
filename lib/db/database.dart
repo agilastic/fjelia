@@ -798,6 +798,9 @@ class TrainingSessions extends Table {
   IntColumn get actualDurationMin => integer().nullable()();
   DateTimeColumn get dateModified => dateTime().nullable()();
   TextColumn get modifiedBy => text().nullable()();
+
+  /// Kept as the athlete set it: automatic plan changes leave it alone.
+  BoolColumn get locked => boolean().withDefault(const Constant(false))();
   TextColumn get sessionDateOriginal => text().nullable()();
 
   @override
@@ -835,6 +838,24 @@ class SessionActuals extends Table {
   /// one session (a unique index); null for skips and for completions from
   /// before the link existed.
   TextColumn get activityId => text().nullable()();
+
+  /// How the activity was found: null on its own day, `swap` when it was
+  /// done on another day than planned, `substitute` when it delivered at
+  /// least what the session asked for, `credit` when another workout (see
+  /// [creditedByActivityId]) covered it.
+  TextColumn get matchKind => text().nullable()();
+
+  /// The workout whose stimulus covered this session, for a `credit`: it
+  /// already completes a session of its own, so it is not [activityId].
+  TextColumn get creditedByActivityId => text().nullable()();
+
+  /// How the session was carried out (an `ExecutionOutcome` name), its
+  /// intensity against the plan (`hard`, `easy`, `on`; null without zones)
+  /// and, for a shorter one, why (`time`, `weather`, `fatigue`, `pain`,
+  /// `other`) as the athlete answered.
+  TextColumn get outcome => text().nullable()();
+  TextColumn get intensityVerdict => text().nullable()();
+  TextColumn get shortReason => text().nullable()();
 
   @override
   Set<Column> get primaryKey => {sessionId};
@@ -891,6 +912,37 @@ class DailyReadinessRecords extends Table {
   BoolColumn get athleteOverrode =>
       boolean().withDefault(const Constant(false))();
   DateTimeColumn get computedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+/// Changes the app made to planned sessions by itself, each with the
+/// session as it was, the numbers behind it and its reason, so it can be
+/// explained and undone. One decision can change several sessions; they
+/// share a [groupId] and are undone together.
+class PlanAdjustments extends Table {
+  TextColumn get id => text()();
+  TextColumn get groupId => text()();
+  DateTimeColumn get createdAt => dateTime()();
+
+  /// `swap`, `substitute`, `credit`, `move` or `ease`.
+  TextColumn get kind => text()();
+  TextColumn get sessionId => text()();
+
+  /// The workout the decision was about.
+  TextColumn get activityId => text().nullable()();
+
+  /// The session row before the change, as JSON.
+  TextColumn get beforeJson => text()();
+
+  /// Why, as a code the app words in the athlete's language, and its numbers.
+  TextColumn get reasonCode => text()();
+  TextColumn get paramsJson => text().withDefault(const Constant('{}'))();
+
+  /// `controller` (automatic), `readiness`, `coach` or `athlete`.
+  TextColumn get source => text().withDefault(const Constant('controller'))();
+  DateTimeColumn get undoneAt => dateTime().nullable()();
 
   @override
   Set<Column> get primaryKey => {id};
@@ -1353,6 +1405,7 @@ class MediaItems extends Table {
     SessionXp,
     DailyReadinessRecords,
     SessionAdaptations,
+    PlanAdjustments,
     WeekSummaries,
     AthleteThresholds,
     CoachProfiles,
@@ -1374,7 +1427,7 @@ class AppDatabase extends _$AppDatabase {
       defaultSourcePriorities[group.name]!;
 
   @override
-  int get schemaVersion => 63;
+  int get schemaVersion => 64;
 
   Future<void> saveHeartRateSamples(List<TimedHeartRate> samples) async {
     if (samples.isEmpty) return;
@@ -2352,15 +2405,17 @@ class AppDatabase extends _$AppDatabase {
   // ── Heat acclimation / weather ───────────────────────────────────────────
 
   Future<int> upsertHeatDailyState(HeatDailyStateRecordsCompanion entry) =>
-      into(heatDailyStateRecords)
-          .insert(entry, mode: InsertMode.insertOrReplace);
+      into(
+        heatDailyStateRecords,
+      ).insert(entry, mode: InsertMode.insertOrReplace);
 
   Future<int> upsertHeatWorkoutContext(HeatWorkoutContextsCompanion entry) =>
       into(heatWorkoutContexts).insert(entry, mode: InsertMode.insertOrReplace);
 
   Future<int> upsertWeatherSnapshot(WeatherSnapshotRecordsCompanion entry) =>
-      into(weatherSnapshotRecords)
-          .insert(entry, mode: InsertMode.insertOrReplace);
+      into(
+        weatherSnapshotRecords,
+      ).insert(entry, mode: InsertMode.insertOrReplace);
 
   /// Cached weather within ~1 km and ±30 min of [at].
   Future<WeatherSnapshotRecord?> getWeatherSnapshotNear(
@@ -3177,6 +3232,37 @@ class AppDatabase extends _$AppDatabase {
         await m.createTable(ecgRecordings);
         await m.createTable(ecgSampleChunks);
         await m.createTable(indoorRecordings);
+      }
+      // An older step may have created these tables in their final shape.
+      if (from < 64) {
+        await _addColumnIfMissing(
+          'session_actuals',
+          'match_kind',
+          () => m.addColumn(sessionActuals, sessionActuals.matchKind),
+        );
+        await _addColumnIfMissing(
+          'session_actuals',
+          'credited_by_activity_id',
+          () =>
+              m.addColumn(sessionActuals, sessionActuals.creditedByActivityId),
+        );
+        for (final (name, column) in <(String, GeneratedColumn<Object>)>[
+          ('outcome', sessionActuals.outcome),
+          ('intensity_verdict', sessionActuals.intensityVerdict),
+          ('short_reason', sessionActuals.shortReason),
+        ]) {
+          await _addColumnIfMissing(
+            'session_actuals',
+            name,
+            () => m.addColumn(sessionActuals, column),
+          );
+        }
+        await _addColumnIfMissing(
+          'training_sessions',
+          'locked',
+          () => m.addColumn(trainingSessions, trainingSessions.locked),
+        );
+        await m.createTable(planAdjustments);
       }
     },
   );

@@ -2062,6 +2062,8 @@ class TrainingPlanService {
             ),
             allowedSports: allowedSports,
             events: events,
+            goalWeeks: weekIntents,
+            cycle: athlete.recoveryCycle,
           ),
         );
         allocations.add(allocation);
@@ -2439,7 +2441,10 @@ class TrainingPlanService {
         if (multi && slot.targetMin != null && weekBudget > 0) {
           final actual = semantics.isEmpty
               ? duration
-              : semantics.totalMinutes.clamp(1, 600);
+              : semantics.totalMinutes.clamp(
+                  1,
+                  WeekAllocator.longestSessionMin,
+                );
           final room = (weekBudget - weekPlannedMin).floor();
           if (actual > room) {
             final minimum = slot.minMin ?? 20;
@@ -2466,7 +2471,10 @@ class TrainingPlanService {
               if (shorter != null) compile(shorter, room);
               final after = semantics.isEmpty
                   ? room
-                  : semantics.totalMinutes.clamp(1, 600);
+                  : semantics.totalMinutes.clamp(
+                      1,
+                      WeekAllocator.longestSessionMin,
+                    );
               if (shorter == null || after > room) {
                 weekNotes.add('noRoom');
                 dropped(slot, 'its workout ran longer than the time left');
@@ -2488,7 +2496,10 @@ class TrainingPlanService {
         if (semantics.isEmpty) {
           trimp = duration * _zoneWeights[(slot.zone - 1).clamp(0, 4)];
         } else {
-          duration = semantics.totalMinutes.clamp(1, 600);
+          duration = semantics.totalMinutes.clamp(
+            1,
+            WeekAllocator.longestSessionMin,
+          );
           trimp = semantics.legacyLoad;
           if (scaled) title = retimeTitle(title, duration);
         }

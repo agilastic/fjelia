@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:fjelia/services/season/goal_set.dart';
 import 'package:fjelia/services/season/season_goal.dart';
 import 'package:fjelia/services/season/season_timeline.dart';
@@ -410,6 +412,175 @@ void main() {
     });
   });
 
+  group('shorter rides', () {
+    // 100 km in 3 h: training rides reach the race's own length.
+    final race = SeasonGoal(
+      id: 'r100',
+      name: 'Race 100',
+      sport: 'cycling_road',
+      date: DateTime(2027, 5, 29),
+      distanceM: 100000,
+      elevationM: 800,
+      targetSeconds: 3 * 3600,
+    );
+
+    test('the long ride grows to the length of a short race', () {
+      final early = allocator.allocate(
+        input([need(race, GoalIntent.foundation, progress: 0)], w: 0),
+      );
+      final late = allocator.allocate(
+        input([need(race, GoalIntent.specificPreparation, progress: 1)]),
+      );
+      expect(early.longTargets['cycling_road']!, inInclusiveRange(100, 120));
+      expect(late.longTargets['cycling_road']!, inInclusiveRange(180, 200));
+    });
+
+    test('no easy ride is longer than the long one', () {
+      for (final p in [0.0, 0.5, 1.0]) {
+        final a = allocator.allocate(
+          input([need(race, GoalIntent.build, progress: p)], budget: 900),
+        );
+        final long = a.longTargets['cycling_road']!;
+        for (final s in a.slots.where((s) => s.sessionType == 'recovery')) {
+          expect(s.targetMin, lessThan(long), reason: 'progress $p');
+        }
+      }
+    });
+
+    test('a target time brings threshold work into the build', () {
+      final build = allocator.allocate(input([need(race, GoalIntent.build)]));
+      final key = build.slots.firstWhere((s) => s.sessionType == 'key');
+      expect(key.zone, 4);
+      final finish = SeasonGoal(
+        id: 'r100f',
+        name: 'Race 100',
+        sport: 'cycling_road',
+        date: DateTime(2027, 5, 29),
+        distanceM: 100000,
+        targetSeconds: 3 * 3600,
+        ambition: Ambition.finish,
+      );
+      final easy = allocator.allocate(input([need(finish, GoalIntent.build)]));
+      expect(easy.slots.firstWhere((s) => s.sessionType == 'key').zone, 3);
+    });
+
+    test('a short time trial still rides two and a half hours', () {
+      final tt = SeasonGoal(
+        id: 'tt',
+        name: 'TT',
+        sport: 'cycling_road',
+        date: DateTime(2027, 5, 29),
+        distanceM: 40000,
+        targetSeconds: 3600,
+      );
+      final a = allocator.allocate(
+        input([need(tt, GoalIntent.specificPreparation, progress: 1)]),
+      );
+      expect(a.longTargets['cycling_road'], 150);
+    });
+  });
+
+  group('ultra long rides', () {
+    // 600 km in 28 h: half the event is 14 h, the regular ride 5 h.
+    final ultra = SeasonGoal(
+      id: 'bm600',
+      name: 'Brevet 600',
+      sport: 'cycling_road',
+      date: DateTime(2027, 5, 29),
+      distanceM: 600000,
+      elevationM: 3500,
+      targetSeconds: 28 * 3600,
+    );
+    const rider = {
+      'cycling_road': SportCapacity(
+        sessions: 40,
+        longestMin: 420,
+        medianMin: 120,
+        yearLongestMin: 1055,
+      ),
+    };
+    WeekAllocation ride(
+      int at,
+      GoalIntent intent,
+      double progress, {
+      List<GoalWeek> others = const [],
+    }) => allocator.allocate(
+      AllocationInput(
+        needs: [need(ultra, intent, progress: progress)],
+        budgetMin: 1500,
+        sessionCap: 8,
+        capacities: rider,
+        weekInRun: at,
+        weekIndex: at,
+        maxKeySessions: 2,
+        goalWeeks: [
+          week(ultra, intent, progress: progress),
+          ...others,
+        ],
+      ),
+    );
+
+    test('the long ride does not grow every week up to the 50 % rule', () {
+      final longs = [
+        for (var w = 0; w < 24; w++)
+          ride(
+            w,
+            w % 4 == 3 ? GoalIntent.unload : GoalIntent.build,
+            w / 23,
+          ).longTargets['cycling_road']!,
+      ];
+      for (var w = 0; w < 24; w++) {
+        if (w % 4 == 3) {
+          expect(longs[w], lessThanOrEqualTo(180), reason: 'unload week $w');
+        } else if (w % 4 != 2 || w / 23 <= 0.3) {
+          expect(longs[w], lessThanOrEqualTo(300), reason: 'week $w');
+        }
+      }
+      // Key rides only once a block, stepping up to half the event.
+      final keys = [
+        for (var w = 0; w < 24; w++)
+          if (longs[w] > 300) w,
+      ];
+      expect(keys.length, greaterThanOrEqualTo(3));
+      expect(keys.every((w) => w % 4 == 2), isTrue);
+      for (var i = 1; i < keys.length; i++) {
+        expect(longs[keys[i]], greaterThanOrEqualTo(longs[keys[i - 1]]));
+      }
+      expect(longs[keys.first], lessThan(longs[keys.last]));
+      expect(longs.reduce(math.max), 840);
+    });
+
+    test('late in the preparation the key ride is half the event', () {
+      final a = ride(18, GoalIntent.specificPreparation, 0.8);
+      expect(a.longTargets['cycling_road'], 840);
+      final long = a.slots.firstWhere((s) => s.isLong);
+      expect(long.objective, startsWith('Key long'));
+      expect(long.maxMin, greaterThanOrEqualTo(840));
+    });
+
+    test('a key ride never lands next to another goal\'s event', () {
+      final a = ride(
+        18,
+        GoalIntent.specificPreparation,
+        0.9,
+        others: [week(marathon, GoalIntent.build, weeksToEvent: 1)],
+      );
+      expect(a.longTargets['cycling_road']!, lessThanOrEqualTo(300));
+      expect(a.slots.any((s) => s.objective.startsWith('Key')), isFalse);
+    });
+
+    test('a shorter brevet that week is the long ride', () {
+      final a = ride(
+        17,
+        GoalIntent.build,
+        0.8,
+        others: [week(brevet, GoalIntent.event, weeksToEvent: 0)],
+      );
+      expect(a.longTargets.containsKey('cycling_road'), isFalse);
+      expect(a.tradeoffs.join(' '), contains("Brevet is this week's long"));
+    });
+  });
+
   group('budget factor', () {
     test('a build week keeps its time', () {
       expect(WeekAllocator.budgetFactor([week(marathon, GoalIntent.build)]), 1);
@@ -632,6 +803,118 @@ void main() {
       ];
       expect(WeekAllocator.isRecoveringFromLongEvent(weeks), isTrue);
       expect(WeekAllocator.budgetFactor(weeks), lessThanOrEqualTo(0.75));
+    });
+  });
+
+  group('quality in every sport', () {
+    SeasonGoal goal(
+      String sport,
+      double km, {
+      int? targetH,
+      Ambition? ambition,
+    }) => SeasonGoal(
+      id: sport,
+      name: 'Race',
+      sport: sport,
+      date: DateTime(2027, 5, 29),
+      distanceM: km * 1000,
+      targetSeconds: targetH == null ? null : targetH * 3600,
+      ambition: ambition,
+    );
+    List<AllocatedSlot> keys(
+      SeasonGoal g,
+      GoalIntent intent, {
+      double progress = 0.5,
+      int w = 8,
+      int? maxKeys = 2,
+    }) => allocator
+        .allocate(
+          input(
+            [need(g, intent, progress: progress)],
+            budget: 900,
+            w: w,
+            maxKeys: maxKeys,
+          ),
+        )
+        .slots
+        .where((s) => s.sessionType == 'key')
+        .toList();
+
+    test('a long ride raced to finish takes tempo and intervals in turns', () {
+      final ultra = goal('cycling_road', 600, targetH: 28);
+      final even = keys(ultra, GoalIntent.build, progress: 0.4);
+      final odd = keys(ultra, GoalIntent.build, progress: 0.4, w: 9);
+      expect(even.map((s) => (s.subType, s.zone)), [('tempo', 3)]);
+      expect(odd.map((s) => (s.subType, s.zone)), [('intervals', 5)]);
+      // Late in the build only race intensity is left.
+      final late = keys(ultra, GoalIntent.build, progress: 0.8, w: 9);
+      expect(late.map((s) => s.zone), [3]);
+    });
+
+    test('a short ride with a target time has threshold and intervals', () {
+      final race = goal('cycling_road', 100, targetH: 3);
+      final k = keys(race, GoalIntent.build);
+      expect(k.map((s) => (s.subType, s.zone)), [
+        ('threshold', 4),
+        ('intervals', 5),
+      ]);
+      expect(k.first.objective, 'Threshold ride for Race');
+      // One hard session allowed: they take turns.
+      final one = [
+        for (final w in [8, 9]) keys(race, GoalIntent.build, w: w, maxKeys: 1),
+      ];
+      expect(one.map((k) => k.single.zone), [4, 5]);
+    });
+
+    test('rowing, skiing and swimming get intervals too', () {
+      for (final sport in ['indoor_rowing', 'nordic_skiing', 'swimming']) {
+        final k = keys(goal(sport, 10), GoalIntent.build);
+        expect(k.map((s) => s.zone), contains(5), reason: sport);
+      }
+    });
+
+    test('a trail ultra raced to finish leaves a hard slot for the bike', () {
+      final trail = goal('trail_running', 80);
+      final ride = goal('cycling_road', 100, targetH: 3);
+      final a = allocator.allocate(
+        input([
+          need(trail, GoalIntent.build),
+          need(ride, GoalIntent.build),
+        ], budget: 900),
+      );
+      final sports = a.slots
+          .where((s) => s.sessionType == 'key')
+          .map((s) => s.sport);
+      expect(sports, containsAll(['trail_running', 'cycling_road']));
+    });
+
+    test('a hiking goal gets hills, never intervals', () {
+      final hike = goal('hiking', 40);
+      for (final w in [8, 9]) {
+        final k = keys(hike, GoalIntent.build, w: w);
+        expect(k.map((s) => s.subType), ['hills'], reason: 'week $w');
+        expect(k.single.objective, 'Hill hike for Race');
+      }
+    });
+
+    test('sharpening: openers before a short race, pace before a long one', () {
+      final short = keys(goal('running', 10), GoalIntent.sharpen);
+      expect(short.single.objective, 'Openers for Race');
+      expect(short.single.zone, 5);
+      expect(short.single.targetMin, lessThanOrEqualTo(45));
+      final long = keys(goal('cycling_road', 600), GoalIntent.sharpen);
+      expect(long.single.zone, 3);
+    });
+
+    test('base alternates tempo with a touch of the top end', () {
+      final run = goal('running', 21);
+      expect(keys(run, GoalIntent.foundation).single.zone, 3);
+      expect(keys(run, GoalIntent.foundation, w: 9).single.zone, 5);
+      final ride = goal('cycling_road', 100, targetH: 3);
+      expect(
+        keys(ride, GoalIntent.foundation, w: 9).single.subType,
+        'threshold',
+      );
     });
   });
 }

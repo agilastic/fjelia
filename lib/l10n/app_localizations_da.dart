@@ -1,5 +1,6 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
+
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -1381,7 +1382,10 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String acceptedLengthUsableIntervalsTostringasfixed(
-      Object accepted, Object length, Object toStringAsFixed) {
+    Object accepted,
+    Object length,
+    Object toStringAsFixed,
+  ) {
     return '$accepted/$length brugbare intervaller · $toStringAsFixed % dækning';
   }
 
@@ -1406,7 +1410,10 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String historyLabelLabel2DurationMin(
-      Object label, Object label2, Object duration) {
+    Object label,
+    Object label2,
+    Object duration,
+  ) {
     return 'Historik · $label · $label2 · $duration min';
   }
 
@@ -1419,7 +1426,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String tostringasfixedMsRmssdTostringasfixed2Bpm(
-      Object toStringAsFixed, Object toStringAsFixed2) {
+    Object toStringAsFixed,
+    Object toStringAsFixed2,
+  ) {
     return '$toStringAsFixed ms RMSSD · $toStringAsFixed2 bpm';
   }
 
@@ -1532,7 +1541,10 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String duringTotalTotalcarbsGCarbs(
-      Object totalCarbs, Object totalFluid, Object totalSodium) {
+    Object totalCarbs,
+    Object totalFluid,
+    Object totalSodium,
+  ) {
     return 'I alt under: $totalCarbs g kulhydrater · $totalFluid ml · $totalSodium mg natrium';
   }
 
@@ -2864,10 +2876,11 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String
-      ruleVstrengthprogressionruleversionTheLastStrengthprogressionminsessions(
-          Object strengthProgressionRuleVersion,
-          Object strengthProgressionMinSessions,
-          Object reason) {
+  ruleVstrengthprogressionruleversionTheLastStrengthprogressionminsessions(
+    Object strengthProgressionRuleVersion,
+    Object strengthProgressionMinSessions,
+    Object reason,
+  ) {
     return 'Regel v$strengthProgressionRuleVersion: de seneste $strengthProgressionMinSessions sammenlignelige sessioner, hvert sæt i toppen af gentagelsesmålet, med registreret anstrengelse og ikke hårdere end tilsigtet. $reason';
   }
 
@@ -2941,8 +2954,13 @@ class AppLocalizationsDa extends AppLocalizations {
   String get ambientTemperatureC => 'Omgivelsestemperatur °C';
 
   @override
-  String carryAboutGelsGelsGelcarbs(Object gels, Object gelCarbs,
-      Object bottles, Object bottleMl, Object drinkCarbs) {
+  String carryAboutGelsGelsGelcarbs(
+    Object gels,
+    Object gelCarbs,
+    Object bottles,
+    Object bottleMl,
+    Object drinkCarbs,
+  ) {
     return 'Medbring omkring $gels geler ($gelCarbs g kulhydrater hver) + $bottles × $bottleMl ml flasker. $drinkCarbs g kulhydrater kommer fra drikkepulveret.';
   }
 
@@ -3165,7 +3183,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String usingCurrentLocationTostringasfixedTostringasfixed2(
-      Object toStringAsFixed, Object toStringAsFixed2) {
+    Object toStringAsFixed,
+    Object toStringAsFixed2,
+  ) {
     return 'Bruger nuværende placering: $toStringAsFixed, $toStringAsFixed2';
   }
 
@@ -3403,7 +3423,8 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String needsStrengthprogressionminsessionsRecordedSessionsOf(
-      Object strengthProgressionMinSessions) {
+    Object strengthProgressionMinSessions,
+  ) {
     return 'Kræver $strengthProgressionMinSessions registrerede sessioner med denne øvelse.';
   }
 
@@ -3629,11 +3650,12 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String durationsecondshDurationseconds2mDistancemetersKmAvgheartrate(
-      Object durationSeconds,
-      Object durationSeconds2,
-      Object distanceMeters,
-      Object avgHeartRate,
-      Object totalElevation) {
+    Object durationSeconds,
+    Object durationSeconds2,
+    Object distanceMeters,
+    Object avgHeartRate,
+    Object totalElevation,
+  ) {
     return '${durationSeconds}h ${durationSeconds2}m · $distanceMeters km · $avgHeartRate bpm · ↑$totalElevation m';
   }
 
@@ -3690,7 +3712,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String weekCurrentweekDurationinweeks(
-      Object currentWeek, Object durationInWeeks) {
+    Object currentWeek,
+    Object durationInWeeks,
+  ) {
     return 'Uge $currentWeek / $durationInWeeks';
   }
 
@@ -3901,7 +3925,10 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String weightKgFatBodyfatMuscle(
-      Object weight, Object bodyFat, Object muscleMass) {
+    Object weight,
+    Object bodyFat,
+    Object muscleMass,
+  ) {
     return '$weight kg · Fedt $bodyFat % · Muskler $muscleMass kg';
   }
 
@@ -4261,13 +4288,20 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String yourEligibleSimilarWorkoutsTolocal(
-      Object eligible, Object toLocal, Object toLocal2) {
+    Object eligible,
+    Object toLocal,
+    Object toLocal2,
+  ) {
     return 'Dine $eligible lignende træninger · $toLocal–$toLocal2';
   }
 
   @override
   String middleHalfQ1msToQ3ms(
-      Object q1Ms, Object q3Ms, Object medianMs, Object delta) {
+    Object q1Ms,
+    Object q3Ms,
+    Object medianMs,
+    Object delta,
+  ) {
     return 'Midterste halvdel $q1Ms til $q3Ms ms · median $medianMs ms · denne træning $delta ms';
   }
 
@@ -4742,7 +4776,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String recordedCoverageInhourshInminutesminTime(
-      Object inHours, Object inMinutes) {
+    Object inHours,
+    Object inMinutes,
+  ) {
     return 'Registreret dækning: $inHours t $inMinutes min · tidsvægtet gennemsnit';
   }
 
@@ -4840,7 +4876,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String changeDeltamsMillisecondsDeltapercentPercent(
-      Object deltaMs, Object deltaPercent) {
+    Object deltaMs,
+    Object deltaPercent,
+  ) {
     return 'Ændring $deltaMs millisekunder, $deltaPercent procent.';
   }
 
@@ -4887,8 +4925,14 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
-  String yourSimilarWorkoutsEligibleTolocal(Object eligible, Object toLocal,
-      Object toLocal2, Object medianMs, Object q1Ms, Object q3Ms) {
+  String yourSimilarWorkoutsEligibleTolocal(
+    Object eligible,
+    Object toLocal,
+    Object toLocal2,
+    Object medianMs,
+    Object q1Ms,
+    Object q3Ms,
+  ) {
     return 'Dine lignende træninger ($eligible, $toLocal–$toLocal2): median $medianMs ms, midterste halvdel $q1Ms til $q3Ms ms.';
   }
 
@@ -6727,7 +6771,12 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String conflictFlexibleOverlap(
-      String a, String b, int gap, int overlap, String skip) {
+    String a,
+    String b,
+    int gap,
+    int overlap,
+    String skip,
+  ) {
     return '$a og $b har $gap dage imellem og overlapper med $overlap dage. $skip er markeret som fleksibel: at droppe det frigør ugerne før det andet arrangement.';
   }
 
@@ -6763,8 +6812,7 @@ class AppLocalizationsDa extends AppLocalizations {
       locale: localeName,
       other:
           '$n træninger, du flyttede, ligger på en arrangementsdag eller hviledagen før. Planen lader dem ligge, hvor du satte dem.',
-      one:
-          '1 træning, du flyttede, ligger på en arrangementsdag eller hviledagen før. Planen lader den ligge, hvor du satte den.',
+      one: '1 træning, du flyttede, ligger på en arrangementsdag eller hviledagen før. Planen lader den ligge, hvor du satte den.',
     );
     return '$_temp0';
   }
@@ -6776,8 +6824,7 @@ class AppLocalizationsDa extends AppLocalizations {
       locale: localeName,
       other:
           '$n træninger blev udeladt, fordi de valgte træninger var længere end den tid, der var tilbage i ugen.',
-      one:
-          '1 træning blev udeladt, fordi den valgte træning var længere end den tid, der var tilbage i ugen.',
+      one: '1 træning blev udeladt, fordi den valgte træning var længere end den tid, der var tilbage i ugen.',
     );
     return '$_temp0';
   }
@@ -6789,8 +6836,7 @@ class AppLocalizationsDa extends AppLocalizations {
       locale: localeName,
       other:
           '$n hårde træninger, du flyttede, ligger i de rolige dage efter et arrangement. Planen lader dem ligge, hvor du satte dem.',
-      one:
-          '1 hård træning, du flyttede, ligger i de rolige dage efter et arrangement. Planen lader den ligge, hvor du satte den.',
+      one: '1 hård træning, du flyttede, ligger i de rolige dage efter et arrangement. Planen lader den ligge, hvor du satte den.',
     );
     return '$_temp0';
   }
@@ -7803,4 +7849,88 @@ class AppLocalizationsDa extends AppLocalizations {
   @override
   String get bpActivityHint =>
       'Manchetter måler ofte ikke, mens du bevæger dig. Målinger før eller efter aktiviteten vises ikke her.';
+
+  @override
+  String objectiveKeyLong(String sport, String goal) {
+    return '$sport: nøglelangtur til $goal';
+  }
+
+  @override
+  String seasonKeyRides(int n) {
+    return 'I $n uger øges en nøglelangtur mod halvdelen af løbet, én gang pr. blok og aldrig ved siden af et andet løb.';
+  }
+
+  @override
+  String seasonEventAsLong(int n) {
+    return 'I $n uger er et andet løb langturen til et større mål.';
+  }
+
+  @override
+  String objectiveThreshold(String sport, String goal) {
+    return '$sport ved tærskel til $goal';
+  }
+
+  @override
+  String objectiveHills(String sport, String goal) {
+    return '$sport i bakker til $goal';
+  }
+
+  @override
+  String objectiveOpeners(String goal) {
+    return 'Korte åbnere til $goal';
+  }
+
+  @override
+  String get planAdjustedTitle => 'Planen er justeret automatisk';
+
+  @override
+  String planAdjSwap(String session, String day, String from) {
+    return '$session: gennemført $day i stedet for $from.';
+  }
+
+  @override
+  String planAdjSubstitute(String activity, String session, String from) {
+    return '$activity tæller som $session fra $from.';
+  }
+
+  @override
+  String planAdjStrengthCredit(String activity, String session) {
+    return '$activity dækker benstyrken i $session.';
+  }
+
+  @override
+  String planAdjMoved(String session, String day) {
+    return '$session flyttes til $day, som blev ledig.';
+  }
+
+  @override
+  String planAdjMovedEasy(String session, String day, String activity) {
+    return '$session flyttes til $day, roligere: benene restituerer efter $activity.';
+  }
+
+  @override
+  String get planAdjUndone => 'Ændringen er fortrudt.';
+
+  @override
+  String get shortSessionTitle => 'Kortere end planlagt – hvorfor?';
+
+  @override
+  String shortSessionLine(String session, int done, int planned) {
+    return '$session: $done af $planned min';
+  }
+
+  @override
+  String get shortReasonTime => 'Ingen tid';
+
+  @override
+  String get shortReasonWeather => 'Vejr';
+
+  @override
+  String get shortReasonFatigue => 'Træt';
+
+  @override
+  String get shortReasonPain => 'Smerter';
+
+  @override
+  String get shortReasonOther => 'Andet';
 }

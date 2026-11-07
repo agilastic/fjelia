@@ -41,7 +41,7 @@ void main() {
       findsOneWidget,
     );
     expect(find.text('Remind me at'), findsOneWidget);
-    expect(find.text('9:30 PM'), findsWidgets);
+    expect(find.text('7:30 PM'), findsWidgets);
     await tester.tap(find.byKey(const ValueKey('onboarding-missed-switch')));
     await tester.pumpAndSettle();
     expect(find.text('Remind me at'), findsNothing);

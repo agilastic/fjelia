@@ -9,6 +9,8 @@ import '../models/strength_workout.dart';
 import '../providers/training_load_provider.dart';
 import '../utils/log.dart';
 import 'athlete_thresholds_service.dart';
+import 'control/execution.dart';
+import 'control/stimulus.dart';
 
 /// The reason stored for a past session nothing was recorded for. It is not
 /// something the athlete decided.
@@ -64,21 +66,7 @@ class PostWorkoutScorer {
     if (session == null) return false;
 
     final durationSec = activity.durationSeconds.toDouble();
-    var zoneSec = _parseZoneSec(activity.hrZonesJson, durationSec);
-    if (zoneSec == null && activity.metricsJson != null) {
-      final thresholds = await _thresholds.get();
-      final floors = thresholds == null
-          ? null
-          : _thresholds.hrZoneFloorsFor(thresholds, session.sport);
-      if (floors != null) {
-        zoneSec = _zoneSecFromSamples(
-          activity.metricsJson!,
-          floors,
-          durationSec,
-        );
-      }
-    }
-    zoneSec ??= List<double>.filled(6, 0.0);
+    final zoneSec = await zoneSeconds(activity, session.sport);
 
     final actualMin = durationSec / 60;
     final planned = _plannedZoneDistribution(session.plannedZonesJson);
@@ -100,6 +88,21 @@ class PostWorkoutScorer {
     final verdict = strength
         ? null
         : _executionVerdict(durationRatio, zoneSec, planned);
+    // Intensity on its own: an hour at Z4 for an hour planned at Z2 is not
+    // a completed session, however long it was.
+    final intensity = strength
+        ? null
+        : intensityVerdict(
+            Stimulus.planned(session),
+            Stimulus.done(activity, zoneSec),
+            loadRatio: tssRatio,
+            durationRatio: durationRatio,
+          );
+    final outcome = executionOutcome(
+      durationRatio: durationRatio,
+      intensity: intensity,
+      readinessLevel: await _readinessOn(activity.startDate),
+    );
 
     await _db
         .into(_db.sessionActuals)
@@ -126,6 +129,8 @@ class PostWorkoutScorer {
             avgPowerWatts: Value(activity.avgWatts?.round()),
             polarizationIndex: Value(pi),
             executionVerdict: Value(verdict),
+            intensityVerdict: Value(intensity),
+            outcome: Value(outcome.name),
             activityId: Value(activity.activityId),
             startedAt: Value(activity.startDate),
             completedAt: Value(
@@ -291,6 +296,74 @@ class PostWorkoutScorer {
       );
     }
   }
+
+  /// Seconds in each of six zones: from the activity's own zone split, else
+  /// from its heart-rate samples against the athlete's zones for [sport].
+  /// All zero when neither is known.
+  Future<List<double>> zoneSeconds(
+    ActivityRecord activity,
+    String sport,
+  ) async {
+    final durationSec = activity.durationSeconds.toDouble();
+    var zoneSec = _parseZoneSec(activity.hrZonesJson, durationSec);
+    if (zoneSec == null && activity.metricsJson != null) {
+      final thresholds = await _thresholds.get();
+      final floors = thresholds == null
+          ? null
+          : _thresholds.hrZoneFloorsFor(thresholds, sport);
+      if (floors != null) {
+        zoneSec = _zoneSecFromSamples(
+          activity.metricsJson!,
+          floors,
+          durationSec,
+        );
+      }
+    }
+    return zoneSec ?? List<double>.filled(6, 0.0);
+  }
+
+  /// The morning readiness level of [at]'s day, if it was scored.
+  Future<String?> _readinessOn(DateTime at) async {
+    final day = _day(at);
+    final row =
+        await (_db.select(_db.dailyReadinessRecords)
+              ..where(
+                (t) =>
+                    t.athleteId.equals('self') &
+                    t.date.isBiggerOrEqualValue(day) &
+                    t.date.isSmallerThanValue(day.add(const Duration(days: 1))),
+              )
+              ..limit(1))
+            .getSingleOrNull();
+    return row?.level;
+  }
+
+  /// The athlete's answer why [sessionId] was shorter; its outcome follows.
+  Future<void> setShortReason(String sessionId, String reason) async {
+    final a = await (_db.select(
+      _db.sessionActuals,
+    )..where((t) => t.sessionId.equals(sessionId))).getSingleOrNull();
+    if (a == null) return;
+    final outcome = executionOutcome(
+      durationRatio: a.durationRatio ?? 1,
+      intensity: a.intensityVerdict,
+      shortReason: reason,
+      readinessLevel: a.startedAt == null
+          ? null
+          : await _readinessOn(a.startedAt!),
+    );
+    await (_db.update(
+      _db.sessionActuals,
+    )..where((t) => t.sessionId.equals(sessionId))).write(
+      SessionActualsCompanion(
+        shortReason: Value(reason),
+        outcome: Value(outcome.name),
+      ),
+    );
+  }
+
+  /// Sums the week of [day] again after its sessions changed.
+  Future<void> refreshWeek(DateTime day) => _aggregateWeek(_weekStart(day));
 
   static DateTime _weekStart(DateTime d) {
     final day = _day(d);
@@ -476,8 +549,11 @@ class PostWorkoutScorer {
     return (score / weight * 100).round();
   }
 
+  List<double>? _plannedZoneDistribution(String? json) =>
+      plannedZoneDistribution(json);
+
   /// Planned share of time per zone (fractions summing to 1).
-  List<double>? _plannedZoneDistribution(String? json) {
+  static List<double>? plannedZoneDistribution(String? json) {
     if (json == null) return null;
     final decoded = jsonDecode(json);
     List<double> values;
@@ -681,6 +757,7 @@ class PostWorkoutScorer {
               SessionActualsCompanion.insert(
                 sessionId: s.id,
                 skipReason: const Value(noActivityReason),
+                outcome: Value(ExecutionOutcome.missed.name),
               ),
             );
       });

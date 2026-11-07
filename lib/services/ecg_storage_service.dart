@@ -164,6 +164,11 @@ class EcgStorageService {
     db.ecgRecordings,
   )..orderBy([(t) => OrderingTerm.desc(t.recordedAt)])).watch();
 
+  /// All recordings, newest first, read once.
+  Future<List<EcgRecording>> history() => (db.select(
+    db.ecgRecordings,
+  )..orderBy([(t) => OrderingTerm.desc(t.recordedAt)])).get();
+
   Future<void> recoverInterrupted() =>
       (db.update(db.ecgRecordings)..where((t) => t.status.equals('recording')))
           .write(const EcgRecordingsCompanion(status: Value('interrupted')));

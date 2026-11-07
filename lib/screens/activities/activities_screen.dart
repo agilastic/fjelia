@@ -20,6 +20,7 @@ import '../../db/database.dart';
 import '../../providers/training_load_provider.dart';
 import '../../providers/day_data_provider.dart';
 import '../../widgets/app_widgets.dart';
+import '../../widgets/plan_timeline.dart';
 import '../strain/activity_detail_sheet.dart';
 import '../../utils/week.dart';
 import '../../providers/week_start_provider.dart';
@@ -166,6 +167,7 @@ class _HistoryState extends ConsumerState<ActivityHistory> {
             : !at.isBefore(start) && at.isBefore(end);
         // Recordings of their own sit between the activities; those taken
         // during an activity show in its details instead.
+        final deleting = ref.watch(pendingEcgDeletesProvider);
         final filtered = <(DateTime, Object)>[
           for (final a in rows)
             if (inView(a.startDate)) (a.startDate, a),
@@ -174,6 +176,7 @@ class _HistoryState extends ConsumerState<ActivityHistory> {
                   const <EcgRecording>[])
             if (e.activityId == null &&
                 e.status != 'recording' &&
+                !deleting.contains(e.recordingId) &&
                 inView(e.recordedAt.toLocal()))
               (e.recordedAt.toLocal(), e),
         ]..sort((a, b) => b.$1.compareTo(a.$1));
@@ -181,14 +184,11 @@ class _HistoryState extends ConsumerState<ActivityHistory> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.only(top: 12, bottom: 8),
-              child: Text(
-                context.l10n.history2,
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: .8,
-                ),
+              padding: const EdgeInsets.only(top: 12, bottom: 4),
+              child: TimelineSectionHeader(
+                label: context.l10n.history2,
+                icon: Icons.bolt_rounded,
+                colors: doneGradient,
               ),
             ),
             if (filtered.isEmpty)
@@ -196,12 +196,9 @@ class _HistoryState extends ConsumerState<ActivityHistory> {
             for (var i = 0; i < filtered.length; i++) ...[
               if (i == 0 ||
                   !DateUtils.isSameDay(filtered[i].$1, filtered[i - 1].$1))
-                Padding(
-                  padding: const EdgeInsets.only(top: 12, bottom: 6),
-                  child: Text(
-                    dayHeading(context, filtered[i].$1),
-                    style: const TextStyle(fontSize: 9, color: muted),
-                  ),
+                TimelineDayLabel(
+                  dayHeading(context, filtered[i].$1),
+                  future: false,
                 ),
               switch (filtered[i].$2) {
                 final ActivityRecord a => _ActivityHistoryTile(
@@ -310,50 +307,75 @@ class _ActivityHistoryTile extends StatelessWidget {
     );
   }
 
+  /// Done is solid: a card washed in the sport's colour with a bar on its
+  /// edge and a filled icon, unlike the dashed outline of what is planned.
   Widget _card(BuildContext context, ActivityRecord a) {
     final color = completedActivityColor(a.type);
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
+      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: panel,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withValues(alpha: .35)),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: color.withValues(alpha: .45)),
+        gradient: LinearGradient(
+          colors: [color.withValues(alpha: .22), panel, panel],
+          stops: const [0, .55, 1],
+        ),
+        boxShadow: [
+          BoxShadow(color: color.withValues(alpha: .12), blurRadius: 10),
+        ],
       ),
       child: Material(
         type: MaterialType.transparency,
-        borderRadius: BorderRadius.circular(12),
-        child: ListTile(
-          dense: true,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-          leading: CircleAvatar(
-            radius: 17,
-            backgroundColor: color.withValues(alpha: .12),
-            child: Icon(activitySportIcon(a.type), size: 19, color: color),
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(width: 4, color: color),
+              Expanded(child: _tile(context, a, color)),
+            ],
           ),
-          title: Text(
-            a.name,
-            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-          ),
-          subtitle: Text(
-            context.l10n
-                .durationsecondshDurationseconds2mDistancemetersKmAvgheartrate(
-                  a.durationSeconds ~/ 3600,
-                  a.durationSeconds ~/ 60 % 60,
-                  valueText(
-                    a.distanceMeters == null ? null : a.distanceMeters! / 1000,
-                    1,
-                  ),
-                  valueText(a.avgHeartRate),
-                  valueText(a.totalElevation),
-                ),
-            style: const TextStyle(fontSize: 9, color: muted),
-          ),
-          trailing: Icon(Icons.check_circle_outline, size: 15, color: color),
-          onTap: () => showAppSheet(context, ActivityDetailSheet(activity: a)),
         ),
       ),
     );
   }
+
+  Widget _tile(BuildContext context, ActivityRecord a, Color color) => ListTile(
+    dense: true,
+    contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+    leading: Container(
+      width: 36,
+      height: 36,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color,
+        boxShadow: [
+          BoxShadow(color: color.withValues(alpha: .5), blurRadius: 8),
+        ],
+      ),
+      child: Icon(activitySportIcon(a.type), size: 19, color: Colors.black87),
+    ),
+    title: Text(
+      a.name,
+      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+    ),
+    subtitle: Text(
+      context.l10n
+          .durationsecondshDurationseconds2mDistancemetersKmAvgheartrate(
+            a.durationSeconds ~/ 3600,
+            a.durationSeconds ~/ 60 % 60,
+            valueText(
+              a.distanceMeters == null ? null : a.distanceMeters! / 1000,
+              1,
+            ),
+            valueText(a.avgHeartRate),
+            valueText(a.totalElevation),
+          ),
+      style: const TextStyle(fontSize: 10, color: Colors.white70),
+    ),
+    trailing: Icon(Icons.check_circle_rounded, size: 20, color: color),
+    onTap: () => showAppSheet(context, ActivityDetailSheet(activity: a)),
+  );
 }
 
 double activityLoad(ActivityRecord a) {

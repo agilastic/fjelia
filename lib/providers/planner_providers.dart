@@ -6,18 +6,23 @@ import '../services/race_predictor.dart';
 
 import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../db/database.dart';
 import '../services/athlete_thresholds_service.dart';
+import '../services/control/plan_reconciler.dart';
 import '../services/post_workout_scorer.dart';
+import '../services/session_adaptation_service.dart';
 import '../services/race_goal_service.dart';
 import '../services/season/goal_set.dart';
 import '../services/season/season_report.dart';
 import '../services/training_plan_service.dart';
 import '../services/workout_template_library.dart';
+import '../utils/log.dart';
 import 'auth_provider.dart';
 import 'database_provider.dart';
 import 'user_profile_provider.dart';
+import 'workout_destination_provider.dart';
 import 'workout_providers_provider.dart';
 
 final athleteThresholdsServiceProvider = Provider<AthleteThresholdsService>(
@@ -142,6 +147,167 @@ final planSessionActionsProvider = Provider<PlanSessionActions>(
     ref.watch(workoutProvidersProvider),
   ),
 );
+
+/// Places workouts done on another day than planned, or in place of a
+/// later session (the first step of the closed training loop).
+final planReconcilerProvider = Provider<PlanReconciler>(
+  (ref) => PlanReconciler(
+    ref.watch(databaseProvider),
+    ref.watch(postWorkoutScorerProvider),
+    ref.watch(planSessionActionsProvider),
+    SessionAdaptationService(ref.watch(databaseProvider)),
+  ),
+);
+
+/// Brings the watch calendar in line with automatic plan changes: sessions
+/// done or covered leave it, moved or changed ones go up again. Then the
+/// plan screens read the sessions anew.
+final applyPlanChangesProvider = Provider<Future<void> Function(PlanChanges)>(
+  (ref) => (changes) async {
+    if (changes.isEmpty) return;
+    final db = ref.read(databaseProvider);
+    Future<TrainingSession?> read(String id) => (db.select(
+      db.trainingSessions,
+    )..where((t) => t.id.equals(id))).getSingleOrNull();
+    final actions = ref.read(planSessionActionsProvider);
+    for (final id in changes.release) {
+      final s = await read(id);
+      if (s == null) continue;
+      try {
+        await actions.releaseDeliveries(s);
+      } catch (e) {
+        log('[Reconcile] release $id: $e');
+      }
+    }
+    try {
+      final pushers = await ref.read(pushProvidersProvider.future);
+      final plans = ref.read(trainingPlanServiceProvider);
+      for (final id in changes.deliver) {
+        for (final p in pushers) {
+          try {
+            await plans.deliver(id, p);
+          } catch (e) {
+            log('[Reconcile] ${p.label} push $id: $e');
+          }
+        }
+      }
+    } catch (e) {
+      log('[Reconcile] push: $e');
+    }
+    ref.invalidate(upcomingSessionsProvider);
+    ref.read(syncStatusListenerProvider.notifier).update((v) => v + 1);
+  },
+);
+
+/// One automatic decision and the sessions it changed.
+class PlanAdjustmentGroup {
+  const PlanAdjustmentGroup(this.id, this.items);
+  final String id;
+  final List<PlanAdjustment> items;
+}
+
+const _seenAdjustmentsKey = 'plan_adjustments_seen_v1';
+
+/// Automatic plan changes of the last two days that are not undone or
+/// put away, newest first.
+final recentPlanAdjustmentsProvider = FutureProvider<List<PlanAdjustmentGroup>>(
+  (ref) async {
+    ref.watch(syncStatusListenerProvider);
+    final db = ref.watch(databaseProvider);
+    final since = DateTime.now().subtract(const Duration(days: 2));
+    final rows =
+        await (db.select(db.planAdjustments)
+              ..where(
+                (t) =>
+                    t.createdAt.isBiggerThanValue(since) &
+                    t.undoneAt.isNull() &
+                    t.source.equals('controller'),
+              )
+              ..orderBy([(t) => OrderingTerm.asc(t.createdAt)]))
+            .get();
+    var seen = const <String>[];
+    try {
+      seen =
+          (await SharedPreferences.getInstance()).getStringList(
+            _seenAdjustmentsKey,
+          ) ??
+          const [];
+    } catch (_) {}
+    final groups = <String, List<PlanAdjustment>>{};
+    for (final x in rows) {
+      if (seen.contains(x.groupId)) continue;
+      (groups[x.groupId] ??= []).add(x);
+    }
+    return [
+      for (final e in groups.entries) PlanAdjustmentGroup(e.key, e.value),
+    ].reversed.toList();
+  },
+);
+
+/// Takes back one automatic decision and brings the watch in line.
+final undoPlanAdjustmentProvider = Provider<Future<void> Function(String)>(
+  (ref) => (groupId) async {
+    final changes = await ref.read(planReconcilerProvider).undo(groupId);
+    await ref.read(applyPlanChangesProvider)(changes);
+    ref.invalidate(recentPlanAdjustmentsProvider);
+  },
+);
+
+/// Puts a decision's note away; the change itself stays.
+final dismissPlanAdjustmentProvider = Provider<Future<void> Function(String)>(
+  (ref) => (groupId) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final seen = prefs.getStringList(_seenAdjustmentsKey) ?? const [];
+      // The last few dozen are enough: older notes are past the window.
+      await prefs.setStringList(_seenAdjustmentsKey, [
+        ...seen.skip(seen.length > 50 ? seen.length - 50 : 0),
+        groupId,
+      ]);
+    } catch (_) {}
+    ref.invalidate(recentPlanAdjustmentsProvider);
+  },
+);
+
+/// A recent session that was clearly shorter than planned and whose reason
+/// is not known yet.
+typedef ShortSession = ({TrainingSession session, SessionActual actual});
+
+/// Shorter sessions of the last three days the athlete has not explained.
+final shortSessionsProvider = FutureProvider<List<ShortSession>>((ref) async {
+  ref.watch(syncStatusListenerProvider);
+  final db = ref.watch(databaseProvider);
+  final since = DateTime.now().subtract(const Duration(days: 3));
+  final rows =
+      await (db.select(db.sessionActuals)..where(
+            (t) =>
+                t.outcome.equals('partial') &
+                t.shortReason.isNull() &
+                t.startedAt.isBiggerThanValue(since),
+          ))
+          .get();
+  final out = <ShortSession>[];
+  for (final a in rows) {
+    final s = await (db.select(
+      db.trainingSessions,
+    )..where((t) => t.id.equals(a.sessionId))).getSingleOrNull();
+    if (s != null) out.add((session: s, actual: a));
+  }
+  return out
+    ..sort((a, b) => b.session.sessionDate.compareTo(a.session.sessionDate));
+});
+
+/// Records why a session was shorter.
+final setShortReasonProvider =
+    Provider<Future<void> Function(String sessionId, String reason)>(
+      (ref) => (sessionId, reason) async {
+        await ref
+            .read(postWorkoutScorerProvider)
+            .setShortReason(sessionId, reason);
+        ref.invalidate(shortSessionsProvider);
+      },
+    );
+
 final raceGoalImportProvider = Provider<Future<void> Function()>(
   (ref) => () async {
     await ref

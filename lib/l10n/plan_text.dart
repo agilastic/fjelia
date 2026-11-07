@@ -67,6 +67,7 @@ String _sport(AppLocalizations l, String noun) => switch (noun) {
   'run' => sportLabel('running'),
   'ride' => sportLabel('cycling'),
   'swim' => sportLabel('swimming'),
+  'hike' => sportLabel('hiking'),
   _ => sportLabel(noun.replaceAll(' ', '_')),
 };
 
@@ -100,6 +101,15 @@ String planObjectiveLabel(
   if (m(r'intervals for (.+)') case final x?) {
     return l.objectiveIntervals(g(x, 1));
   }
+  if (m(r'openers for (.+)') case final x?) {
+    return l.objectiveOpeners(g(x, 1));
+  }
+  if (m(r'threshold (.+?) for (.+)') case final x?) {
+    return l.objectiveThreshold(_sport(l, x[1]!), g(x, 2));
+  }
+  if (m(r'hill (.+?) for (.+)') case final x?) {
+    return l.objectiveHills(_sport(l, x[1]!), g(x, 2));
+  }
   if (m(r'steady quality (.+?) for (.+)') case final x?) {
     return l.objectiveSteady(_sport(l, x[1]!), g(x, 2));
   }
@@ -108,6 +118,9 @@ String planObjectiveLabel(
   }
   if (m(r'easy endurance (.+?) for (.+)') case final x?) {
     return l.objectiveEasyEndurance(_sport(l, x[1]!), g(x, 2));
+  }
+  if (m(r'key long (.+?) for (.+)') case final x?) {
+    return l.objectiveKeyLong(_sport(l, x[1]!), g(x, 2));
   }
   if (m(r'long (.+?) for (.+)') case final x?) {
     return l.objectiveLong(_sport(l, x[1]!), g(x, 2));
@@ -264,6 +277,8 @@ String? _summaryLine(AppLocalizations l, Map c, List<String> names) {
     'noRoom' => l.seasonNoRoom(n('n')),
     'movedHardNearEvent' => l.seasonMovedHardNearEvent(n('n')),
     'eventWeeks' => l.seasonEventWeeks,
+    'keyRides' => l.seasonKeyRides(n('n')),
+    'eventAsLong' => l.seasonEventAsLong(n('n')),
     'unmet' => l.seasonUnmet(
       n('n'),
       planUnmetLabel(l, '${c['detail']}', goalNames: names),

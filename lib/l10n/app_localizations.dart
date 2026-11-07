@@ -71,7 +71,7 @@ import 'app_localizations_sk.dart';
 /// property.
 abstract class AppLocalizations {
   AppLocalizations(String locale)
-      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -94,11 +94,11 @@ abstract class AppLocalizations {
   /// of delegates is preferred or required.
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
       <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
@@ -111,7 +111,7 @@ abstract class AppLocalizations {
     Locale('fr'),
     Locale('it'),
     Locale('nb'),
-    Locale('sk')
+    Locale('sk'),
   ];
 
   /// No description provided for @freeAi.
@@ -2513,7 +2513,10 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{accepted}/{length} usable intervals · {toStringAsFixed}% coverage'**
   String acceptedLengthUsableIntervalsTostringasfixed(
-      Object accepted, Object length, Object toStringAsFixed);
+    Object accepted,
+    Object length,
+    Object toStringAsFixed,
+  );
 
   /// No description provided for @lnrmssdLnrmssdRawRmssdRawrmssdms.
   ///
@@ -2550,7 +2553,10 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'History · {label} · {label2} · {duration} min'**
   String historyLabelLabel2DurationMin(
-      Object label, Object label2, Object duration);
+    Object label,
+    Object label2,
+    Object duration,
+  );
 
   /// No description provided for @onlyReadingsWithTheSame.
   ///
@@ -2569,7 +2575,9 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{toStringAsFixed} ms RMSSD · {toStringAsFixed2} bpm'**
   String tostringasfixedMsRmssdTostringasfixed2Bpm(
-      Object toStringAsFixed, Object toStringAsFixed2);
+    Object toStringAsFixed,
+    Object toStringAsFixed2,
+  );
 
   /// No description provided for @exportRrIntervalsCsv.
   ///
@@ -2756,7 +2764,10 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'During total: {totalCarbs} g carbs · {totalFluid} ml · {totalSodium} mg sodium'**
   String duringTotalTotalcarbsGCarbs(
-      Object totalCarbs, Object totalFluid, Object totalSodium);
+    Object totalCarbs,
+    Object totalFluid,
+    Object totalSodium,
+  );
 
   /// No description provided for @every20MinAboutCarbs.
   ///
@@ -5181,10 +5192,11 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Rule v{strengthProgressionRuleVersion}: the last {strengthProgressionMinSessions} comparable sessions, every set done at the top of its repetition target with effort recorded and not harder than intended. {reason}'**
   String
-      ruleVstrengthprogressionruleversionTheLastStrengthprogressionminsessions(
-          Object strengthProgressionRuleVersion,
-          Object strengthProgressionMinSessions,
-          Object reason);
+  ruleVstrengthprogressionruleversionTheLastStrengthprogressionminsessions(
+    Object strengthProgressionRuleVersion,
+    Object strengthProgressionMinSessions,
+    Object reason,
+  );
 
   /// No description provided for @stepOnYourScaleBefore.
   ///
@@ -5316,8 +5328,13 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Carry about {gels} gels ({gelCarbs} g carbs each) + {bottles} × {bottleMl} ml bottles. {drinkCarbs} g carbohydrate comes from the drink mix.'**
-  String carryAboutGelsGelsGelcarbs(Object gels, Object gelCarbs,
-      Object bottles, Object bottleMl, Object drinkCarbs);
+  String carryAboutGelsGelsGelcarbs(
+    Object gels,
+    Object gelCarbs,
+    Object bottles,
+    Object bottleMl,
+    Object drinkCarbs,
+  );
 
   /// No description provided for @intakeNotRecorded.
   ///
@@ -5708,7 +5725,9 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Using current location: {toStringAsFixed}, {toStringAsFixed2}'**
   String usingCurrentLocationTostringasfixedTostringasfixed2(
-      Object toStringAsFixed, Object toStringAsFixed2);
+    Object toStringAsFixed,
+    Object toStringAsFixed2,
+  );
 
   /// No description provided for @typeSleep.
   ///
@@ -6117,7 +6136,8 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Needs {strengthProgressionMinSessions} recorded sessions of this exercise.'**
   String needsStrengthprogressionminsessionsRecordedSessionsOf(
-      Object strengthProgressionMinSessions);
+    Object strengthProgressionMinSessions,
+  );
 
   /// No description provided for @recentHistoryIsTooOld.
   ///
@@ -6508,11 +6528,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{durationSeconds}h {durationSeconds2}m · {distanceMeters} km · {avgHeartRate} bpm · ↑{totalElevation} m'**
   String durationsecondshDurationseconds2mDistancemetersKmAvgheartrate(
-      Object durationSeconds,
-      Object durationSeconds2,
-      Object distanceMeters,
-      Object avgHeartRate,
-      Object totalElevation);
+    Object durationSeconds,
+    Object durationSeconds2,
+    Object distanceMeters,
+    Object avgHeartRate,
+    Object totalElevation,
+  );
 
   /// No description provided for @heatAcclimation2.
   ///
@@ -6603,7 +6624,9 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Week {currentWeek} / {durationInWeeks}'**
   String weekCurrentweekDurationinweeks(
-      Object currentWeek, Object durationInWeeks);
+    Object currentWeek,
+    Object durationInWeeks,
+  );
 
   /// No description provided for @t30MinTimeTrialLt2.
   ///
@@ -6970,7 +6993,10 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{weight} kg · Fat {bodyFat}% · Muscle {muscleMass} kg'**
   String weightKgFatBodyfatMuscle(
-      Object weight, Object bodyFat, Object muscleMass);
+    Object weight,
+    Object bodyFat,
+    Object muscleMass,
+  );
 
   /// No description provided for @titleSportTolowercase.
   ///
@@ -7553,14 +7579,21 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your {eligible} similar workouts · {toLocal}–{toLocal2}'**
   String yourEligibleSimilarWorkoutsTolocal(
-      Object eligible, Object toLocal, Object toLocal2);
+    Object eligible,
+    Object toLocal,
+    Object toLocal2,
+  );
 
   /// No description provided for @middleHalfQ1msToQ3ms.
   ///
   /// In en, this message translates to:
   /// **'Middle half {q1Ms} to {q3Ms} ms · median {medianMs} ms · this workout {delta} ms'**
   String middleHalfQ1msToQ3ms(
-      Object q1Ms, Object q3Ms, Object medianMs, Object delta);
+    Object q1Ms,
+    Object q3Ms,
+    Object medianMs,
+    Object delta,
+  );
 
   /// No description provided for @rpeI.
   ///
@@ -8371,7 +8404,9 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Recorded coverage: {inHours}h {inMinutes}min · Time-weighted average'**
   String recordedCoverageInhourshInminutesminTime(
-      Object inHours, Object inMinutes);
+    Object inHours,
+    Object inMinutes,
+  );
 
   /// No description provided for @lying.
   ///
@@ -8534,7 +8569,9 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Change {deltaMs} milliseconds, {deltaPercent} percent.'**
   String changeDeltamsMillisecondsDeltapercentPercent(
-      Object deltaMs, Object deltaPercent);
+    Object deltaMs,
+    Object deltaPercent,
+  );
 
   /// No description provided for @noPreTrainingMeasurementRecorded.
   ///
@@ -8606,8 +8643,14 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Your similar workouts ({eligible}, {toLocal}–{toLocal2}): median {medianMs} ms, middle half {q1Ms} to {q3Ms} ms.'**
-  String yourSimilarWorkoutsEligibleTolocal(Object eligible, Object toLocal,
-      Object toLocal2, Object medianMs, Object q1Ms, Object q3Ms);
+  String yourSimilarWorkoutsEligibleTolocal(
+    Object eligible,
+    Object toLocal,
+    Object toLocal2,
+    Object medianMs,
+    Object q1Ms,
+    Object q3Ms,
+  );
 
   /// No description provided for @howHardDidItFeel.
   ///
@@ -11824,7 +11867,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{a} and {b} are {gap} days apart and overlap by {overlap} days. {skip} is marked flexible: dropping it would free the weeks before the other event.'**
   String conflictFlexibleOverlap(
-      String a, String b, int gap, int overlap, String skip);
+    String a,
+    String b,
+    int gap,
+    int overlap,
+    String skip,
+  );
 
   /// No description provided for @conflictRecoveryOverlap.
   ///
@@ -13619,6 +13667,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cuffs often cannot measure while you move. Readings from before or after the activity are not shown here.'**
   String get bpActivityHint;
+
+  /// No description provided for @objectiveKeyLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Key long {sport} for {goal}'**
+  String objectiveKeyLong(String sport, String goal);
+
+  /// No description provided for @seasonKeyRides.
+  ///
+  /// In en, this message translates to:
+  /// **'In {n} weeks a key long session steps up towards half the event, once per block and never next to another event.'**
+  String seasonKeyRides(int n);
+
+  /// No description provided for @seasonEventAsLong.
+  ///
+  /// In en, this message translates to:
+  /// **'In {n} weeks another event is the long session for a bigger goal.'**
+  String seasonEventAsLong(int n);
+
+  /// No description provided for @objectiveThreshold.
+  ///
+  /// In en, this message translates to:
+  /// **'Threshold {sport} for {goal}'**
+  String objectiveThreshold(String sport, String goal);
+
+  /// No description provided for @objectiveHills.
+  ///
+  /// In en, this message translates to:
+  /// **'Hill {sport} for {goal}'**
+  String objectiveHills(String sport, String goal);
+
+  /// No description provided for @objectiveOpeners.
+  ///
+  /// In en, this message translates to:
+  /// **'Openers for {goal}'**
+  String objectiveOpeners(String goal);
+
+  /// No description provided for @planAdjustedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan adjusted automatically'**
+  String get planAdjustedTitle;
+
+  /// No description provided for @planAdjSwap.
+  ///
+  /// In en, this message translates to:
+  /// **'{session}: done on {day} instead of {from}.'**
+  String planAdjSwap(String session, String day, String from);
+
+  /// No description provided for @planAdjSubstitute.
+  ///
+  /// In en, this message translates to:
+  /// **'{activity} counts as {session} from {from}.'**
+  String planAdjSubstitute(String activity, String session, String from);
+
+  /// No description provided for @planAdjStrengthCredit.
+  ///
+  /// In en, this message translates to:
+  /// **'{activity} covers the leg strength of {session}.'**
+  String planAdjStrengthCredit(String activity, String session);
+
+  /// No description provided for @planAdjMoved.
+  ///
+  /// In en, this message translates to:
+  /// **'{session} moves to {day}, which became free.'**
+  String planAdjMoved(String session, String day);
+
+  /// No description provided for @planAdjMovedEasy.
+  ///
+  /// In en, this message translates to:
+  /// **'{session} moves to {day}, easier: your legs recover from {activity}.'**
+  String planAdjMovedEasy(String session, String day, String activity);
+
+  /// No description provided for @planAdjUndone.
+  ///
+  /// In en, this message translates to:
+  /// **'Change undone.'**
+  String get planAdjUndone;
+
+  /// No description provided for @shortSessionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Shorter than planned – why?'**
+  String get shortSessionTitle;
+
+  /// No description provided for @shortSessionLine.
+  ///
+  /// In en, this message translates to:
+  /// **'{session}: {done} of {planned} min'**
+  String shortSessionLine(String session, int done, int planned);
+
+  /// No description provided for @shortReasonTime.
+  ///
+  /// In en, this message translates to:
+  /// **'No time'**
+  String get shortReasonTime;
+
+  /// No description provided for @shortReasonWeather.
+  ///
+  /// In en, this message translates to:
+  /// **'Weather'**
+  String get shortReasonWeather;
+
+  /// No description provided for @shortReasonFatigue.
+  ///
+  /// In en, this message translates to:
+  /// **'Tired'**
+  String get shortReasonFatigue;
+
+  /// No description provided for @shortReasonPain.
+  ///
+  /// In en, this message translates to:
+  /// **'Pain'**
+  String get shortReasonPain;
+
+  /// No description provided for @shortReasonOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get shortReasonOther;
 }
 
 class _AppLocalizationsDelegate
@@ -13632,17 +13800,17 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) => <String>[
-        'ca',
-        'da',
-        'de',
-        'en',
-        'es',
-        'fi',
-        'fr',
-        'it',
-        'nb',
-        'sk'
-      ].contains(locale.languageCode);
+    'ca',
+    'da',
+    'de',
+    'en',
+    'es',
+    'fi',
+    'fr',
+    'it',
+    'nb',
+    'sk',
+  ].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -13674,8 +13842,9 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   }
 
   throw FlutterError(
-      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-      'an issue with the localizations generation tool. Please file an issue '
-      'on GitHub with a reproducible sample app and the gen-l10n configuration '
-      'that was used.');
+    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+    'an issue with the localizations generation tool. Please file an issue '
+    'on GitHub with a reproducible sample app and the gen-l10n configuration '
+    'that was used.',
+  );
 }
