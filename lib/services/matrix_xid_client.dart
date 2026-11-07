@@ -78,7 +78,7 @@ class MatrixXidClient {
       'Accept': 'application/json',
       'X-NP-API-Version': '1.5',
       'User-Agent': 'Fjelia',
-      'X-NP-User-Agent': 'clientType=MOBILE_DEVICE; applicationName=Fjelia; applicationVersion=1.3.0',
+      'X-NP-User-Agent': 'clientType=MOBILE_DEVICE; applicationName=Fjelia; applicationVersion=1.3.1',
     });
     try {
       return await (() async {
