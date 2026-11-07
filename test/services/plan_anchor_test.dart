@@ -293,7 +293,7 @@ void main() {
       // Bounded on both sides.
       expect(maxLongRunMinutes('marathon', targetMin: 60), 126);
       expect(maxLongRunMinutes('marathon', targetMin: 600), 216);
-      expect(maxLongRunMinutes('ultra', targetMin: 690), 288);
+      expect(maxLongRunMinutes('ultra', targetMin: 690), 587);
     });
 
     Future<int> hillSessions(double distanceM, double? elevationM) async {

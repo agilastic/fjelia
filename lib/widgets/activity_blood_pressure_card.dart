@@ -108,7 +108,10 @@ class ActivityBloodPressureCard extends ConsumerWidget {
                     for (final r in rows)
                       LineChartBarData(
                         spots: [
-                          FlSpot(minuteOf(r.measuredAt), r.diastolic.toDouble()),
+                          FlSpot(
+                            minuteOf(r.measuredAt),
+                            r.diastolic.toDouble(),
+                          ),
                           FlSpot(minuteOf(r.measuredAt), r.systolic.toDouble()),
                         ],
                         color: _bpColor,
@@ -138,16 +141,24 @@ class ActivityBloodPressureCard extends ConsumerWidget {
                       style: const TextStyle(color: muted),
                     ),
                     const SizedBox(width: 12),
-                    Text(
-                      '${r.systolic}/${r.diastolic}',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 15,
+                    Text.rich(
+                      TextSpan(
+                        text: '${r.systolic}/${r.diastolic}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 15,
+                        ),
+                        children: const [
+                          TextSpan(
+                            text: ' mmHg',
+                            style: TextStyle(
+                              color: muted,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    const Text(
-                      ' mmHg',
-                      style: TextStyle(color: muted, fontSize: 12),
                     ),
                     const Spacer(),
                     if (r.heartRate > 0)

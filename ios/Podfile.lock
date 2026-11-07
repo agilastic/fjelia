@@ -14,6 +14,8 @@ PODS:
     - OrderedSet (~> 6.0.3)
   - foundation_models_framework (0.2.1):
     - Flutter
+  - home_widget (0.0.1):
+    - Flutter
   - OrderedSet (6.0.3)
 
 DEPENDENCIES:
@@ -22,6 +24,7 @@ DEPENDENCIES:
   - flutter_blue_plus (from `.symlinks/plugins/flutter_blue_plus/ios`)
   - flutter_inappwebview_ios (from `.symlinks/plugins/flutter_inappwebview_ios/ios`)
   - foundation_models_framework (from `.symlinks/plugins/foundation_models_framework/ios`)
+  - home_widget (from `.symlinks/plugins/home_widget/ios`)
 
 SPEC REPOS:
   trunk:
@@ -38,6 +41,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_inappwebview_ios/ios"
   foundation_models_framework:
     :path: ".symlinks/plugins/foundation_models_framework/ios"
+  home_widget:
+    :path: ".symlinks/plugins/home_widget/ios"
 
 SPEC CHECKSUMS:
   cupertino_http: 94ac07f5ff090b8effa6c5e2c47871d48ab7c86c
@@ -45,6 +50,7 @@ SPEC CHECKSUMS:
   flutter_blue_plus: e5808fc4e5ebc58bb911635f8fdaf5e2b4da2754
   flutter_inappwebview_ios: b89ba3482b96fb25e00c967aae065701b66e9b99
   foundation_models_framework: a90ae77b73bb691d63a4442ba5d64fb4d85e0d63
+  home_widget: f169fc41fd807b4d46ab6615dc44d62adbf9f64f
   OrderedSet: e539b66b644ff081c73a262d24ad552a69be3a94
 
 PODFILE CHECKSUM: 5cfe27f3d468ce38bf454cbe7f19e42e6e5d1101

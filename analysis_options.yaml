@@ -16,12 +16,6 @@ analyzer:
     - android/**
     - third_party/**
     - macos/**
-  language:
-    # null-aware-elements (e.g. `?expr` in collection literals) is Dart 3.14+;
-    # the project targets Dart 3.13.5 via Flutter 3.47.7, but some dependencies
-    # already use the syntax. Enable it here so `flutter analyze` does not fail
-    # on third-party code while we migrate.
-    enable-experiment: [null-aware-elements]
 
 linter:
   # The lint rules applied to this project can be customized in the

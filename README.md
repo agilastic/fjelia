@@ -60,7 +60,7 @@ device-only Keychain storage.
 
 ## Requirements
 
-- Flutter (stable channel), Xcode for iOS/macOS builds.
+- Flutter 3.47.0 or newer (Dart 3.13+), Xcode for iOS/macOS builds.
 - iOS 17 or later is the primary target; macOS builds too. Apple Intelligence
   needs a supported device with iOS/macOS 26 or later. Local Qwen uses MLX on
   compatible iPhones with A14 or newer; see [device requirements](docs/local-model.md#device-requirements).

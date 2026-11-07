@@ -6,6 +6,8 @@ import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/l10n/app_localizations.dart';
 import 'package:fjelia/providers/database_provider.dart';
+import 'package:fjelia/widgets/activity_blood_pressure_card.dart';
+import 'package:fjelia/providers/activity_blood_pressure_provider.dart';
 import 'package:fjelia/providers/ecg_provider.dart';
 import 'package:fjelia/providers/indoor_recording_provider.dart';
 import 'package:fjelia/providers/polar_h10_provider.dart';
@@ -312,6 +314,62 @@ void main() {
     });
     return row;
   }
+
+  testWidgets('blood pressure sits apart on its own time axis', (tester) async {
+    final start = DateTime.utc(2026, 11, 5, 8);
+    final c = IndoorCapture(
+      id: 'bp-preview',
+      startedAt: start,
+      device: const TrainingDevice(id: 'phone', name: 'Fjelia'),
+      machine: FtmsMachine.treadmill,
+      dataProtocol: 'manual',
+      activityTypeOverride: 'running',
+      name: 'Running',
+      includeBloodPressure: true,
+    );
+    c.event('start', start);
+    c.samples.add({
+      't': start.add(const Duration(minutes: 40)).millisecondsSinceEpoch,
+    });
+    BpMeasurement reading(int minutes, int sys) => BpMeasurement(
+      id: minutes,
+      measuredAt: start.add(Duration(minutes: minutes)),
+      timezone: 'UTC',
+      systolic: sys,
+      diastolic: 80,
+      heartRate: 120,
+      measurementType: 'POD',
+    );
+    Future<void> show(List<BpMeasurement> rows) async {
+      // A fresh scope, so the override of the previous case does not stay.
+      await tester.pumpWidget(const SizedBox());
+      await tester.pumpWidget(
+        app(
+          SingleChildScrollView(child: ActivityBloodPressureCard(capture: c)),
+          overrides: [
+            activityBloodPressureProvider.overrideWith(
+              (ref, start) => Stream.value(rows),
+            ),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+    }
+
+    // During the activity: the chart and the reading.
+    await show([reading(20, 142), reading(55, 130)]);
+    expect(find.byKey(const ValueKey('activity-bp-chart')), findsOneWidget);
+    expect(find.textContaining('142/80 mmHg'), findsOneWidget);
+    // After the end it does not count.
+    expect(find.textContaining('130/80'), findsNothing);
+    // Nothing measured while moving: say why instead of an empty chart.
+    await show([reading(55, 130)]);
+    expect(find.byKey(const ValueKey('activity-bp-chart')), findsNothing);
+    expect(find.textContaining('Cuffs often cannot measure'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox());
+    await tester.pumpAndSettle();
+  });
 
   testWidgets('an ECG taken during an activity shows in its details', (
     tester,

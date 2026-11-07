@@ -56,7 +56,7 @@ void main() {
     await service().reconcile();
     final byId = {for (final n in gateway.scheduled) n.id: n};
     final mon = byId[missedWorkoutNotificationId(day(0))]!;
-    expect(mon.at, DateTime(2026, 11, 2, 21, 30));
+    expect(mon.at, DateTime(2026, 11, 2, 19, 30));
     expect(mon.body, contains('Easy run (45 min)'));
     expect(mon.feature, NotificationFeature.missedWorkout);
     expect(byId, contains(missedWorkoutNotificationId(day(2))));

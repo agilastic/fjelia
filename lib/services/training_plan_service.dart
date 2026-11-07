@@ -371,7 +371,7 @@ int _maxLongRunMin(String category) => switch (category) {
   '10k' => 90,
   'half' => 120,
   'marathon' => 180,
-  'ultra' => 240,
+  'ultra' => 600,
   _ => 180,
 };
 
@@ -973,7 +973,7 @@ class TrainingPlanService {
       _ => 1.0,
     };
     final factor = (ctlF * tierF).clamp(0.6, 1.4);
-    return (baseMin * factor).round().clamp(20, 240);
+    return (baseMin * factor).round().clamp(20, 600);
   }
 
   static int _baseDuration(String sessionType) => switch (sessionType) {
