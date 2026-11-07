@@ -7982,4 +7982,54 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get shortReasonOther => 'Otro';
+
+  @override
+  String get styleTitle => 'Estilo';
+
+  @override
+  String get styleAuto => 'Automático';
+
+  @override
+  String get styleAutoHint =>
+      'Sigue a tu teléfono: LightFjelia de día, DarkFjelia de noche.';
+
+  @override
+  String get connectMyWhoosh => 'Conectar MyWhoosh';
+
+  @override
+  String get myWhooshSubtitle =>
+      'Inicia sesión con tu cuenta de MyWhoosh para traer tus rodajes indoor con potencia, cadencia y frecuencia cardíaca.';
+
+  @override
+  String get myWhooshCredentialsInfo =>
+      'Las credenciales de MyWhoosh se guardan cifradas en tu dispositivo. Fjelia lee tus rodajes directamente de MyWhoosh, a través de la interfaz de la app de MyWhoosh. Fjelia no está afiliada a MyWhoosh.';
+
+  @override
+  String get myWhooshTile => 'Rodajes indoor';
+
+  @override
+  String get myWhooshSignedInElsewhere =>
+      'MyWhoosh solo permite una sesión por cuenta y has iniciado sesión en otro dispositivo. Cierra MyWhoosh allí (cierra sesión si hace falta) y vuelve a intentarlo.';
+
+  @override
+  String get shareWorkout => 'Compartir entrenamiento';
+
+  @override
+  String get shareFitFile => 'Compartir como archivo FIT';
+
+  @override
+  String get shareFitFileHint =>
+      'Para Strava, COROS, TrainingPeaks y otras apps';
+
+  @override
+  String get sendToGarmin => 'Enviar a Garmin Connect';
+
+  @override
+  String get sendToGarminHint => 'Sube el entrenamiento a tu cuenta de Garmin';
+
+  @override
+  String get sentToGarmin => 'Enviado a Garmin Connect';
+
+  @override
+  String get alreadyOnGarmin => 'Este entrenamiento ya está en Garmin Connect';
 }

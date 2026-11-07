@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/formats.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../providers/weather_location_provider.dart';
@@ -81,7 +82,7 @@ class _WeatherState extends ConsumerState<WeatherScreen> {
               width: (MediaQuery.sizeOf(context).width - 52) / 2,
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
-                color: const Color(0xFF292929),
+                color: duo(0xFF292929, 0xFFEEF1F5),
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Column(
@@ -89,24 +90,20 @@ class _WeatherState extends ConsumerState<WeatherScreen> {
                 children: [
                   Row(
                     children: [
-                      const Icon(
-                        Icons.location_on_outlined,
-                        size: 15,
-                        color: muted,
-                      ),
+                      Icon(Icons.location_on_outlined, size: 15, color: muted),
                       const SizedBox(width: 5),
                       Expanded(
                         child: Text(
                           ref.watch(weatherPlaceNameProvider).valueOrNull ??
                               context.l10n.localWeather,
-                          style: const TextStyle(fontSize: 12, color: muted),
+                          style: TextStyle(fontSize: 12, color: muted),
                         ),
                       ),
                       IconButton(
                         tooltip: context.l10n.weatherLocation,
                         onPressed: () =>
                             showAppSheet(context, const WeatherLocationTab()),
-                        icon: const Icon(Icons.tune, size: 18, color: muted),
+                        icon: Icon(Icons.tune, size: 18, color: muted),
                       ),
                     ],
                   ),
@@ -114,10 +111,7 @@ class _WeatherState extends ConsumerState<WeatherScreen> {
                     children: [
                       Icon(icon, color: muted, size: 16),
                       const SizedBox(width: 6),
-                      Text(
-                        title,
-                        style: const TextStyle(fontSize: 10, color: muted),
-                      ),
+                      Text(title, style: TextStyle(fontSize: 10, color: muted)),
                     ],
                   ),
                   const SizedBox(height: 12),
@@ -128,10 +122,7 @@ class _WeatherState extends ConsumerState<WeatherScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text(
-                    detail,
-                    style: const TextStyle(color: muted, fontSize: 11),
-                  ),
+                  Text(detail, style: TextStyle(color: muted, fontSize: 11)),
                 ],
               ),
             );
@@ -166,26 +157,17 @@ class _WeatherState extends ConsumerState<WeatherScreen> {
                                 current.humidityPct.round(),
                                 current.pressureHpa.round(),
                               ),
-                              style: const TextStyle(
-                                color: muted,
-                                fontSize: 12,
-                              ),
+                              style: TextStyle(color: muted, fontSize: 12),
                             ),
                             Text(
                               context.l10n.wetBulbTostringasfixedC(
                                 data.wetBulb!.fixed(1),
                               ),
-                              style: const TextStyle(
-                                color: muted,
-                                fontSize: 12,
-                              ),
+                              style: TextStyle(color: muted, fontSize: 12),
                             ),
                             Text(
                               '${current.windSpeedKmh.round()} km/h · ${current.cloudCover ?? '—'}% cloud',
-                              style: const TextStyle(
-                                color: muted,
-                                fontSize: 12,
-                              ),
+                              style: TextStyle(color: muted, fontSize: 12),
                             ),
                           ],
                         ),
@@ -242,8 +224,9 @@ class _WeatherState extends ConsumerState<WeatherScreen> {
                           tooltip: context.l10n.nextForecastDay,
                           onPressed:
                               day.isBefore(
-                                DateUtils.dateOnly(now)
-                                    .add(const Duration(days: 13)),
+                                DateUtils.dateOnly(
+                                  now,
+                                ).add(const Duration(days: 13)),
                               )
                               ? () => setState(
                                   () => day = DateTime(
@@ -283,7 +266,7 @@ class _WeatherState extends ConsumerState<WeatherScreen> {
                           data.availableDays(day, days),
                           days,
                         ),
-                        style: const TextStyle(fontSize: 10, color: muted),
+                        style: TextStyle(fontSize: 10, color: muted),
                       ),
                     ),
                   SectionLabel(context.l10n.now),
@@ -361,7 +344,7 @@ class _WeatherState extends ConsumerState<WeatherScreen> {
                                   ),
                                   Text(
                                     context.l10n.moonLit((lit * 100).round()),
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       color: muted,
                                       fontSize: 11,
                                     ),
@@ -385,8 +368,9 @@ class _WeatherState extends ConsumerState<WeatherScreen> {
                         final daylight = rise != null && set != null
                             ? set.difference(rise)
                             : null;
-                        final night = DateTime.parse(key)
-                            .add(const Duration(hours: 22));
+                        final night = DateTime.parse(
+                          key,
+                        ).add(const Duration(hours: 22));
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 7),
                           child: Row(
@@ -418,10 +402,7 @@ class _WeatherState extends ConsumerState<WeatherScreen> {
                                     daylight.inHours,
                                     daylight.inMinutes % 60,
                                   ),
-                                  style: const TextStyle(
-                                    color: muted,
-                                    fontSize: 10,
-                                  ),
+                                  style: TextStyle(color: muted, fontSize: 10),
                                 ),
                               ],
                               const SizedBox(width: 8),
@@ -451,7 +432,7 @@ class _WeatherState extends ConsumerState<WeatherScreen> {
                       }.join(', '),
                       DateFormat.Hm().format(data.result.fetchedAt),
                     ),
-                    style: const TextStyle(fontSize: 10, color: muted),
+                    style: TextStyle(fontSize: 10, color: muted),
                   ),
                 ],
               ),

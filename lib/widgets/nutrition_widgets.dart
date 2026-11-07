@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import '../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
@@ -328,7 +329,7 @@ class PlannedNutritionCard extends ConsumerWidget {
                     ),
                   Text(
                     context.l10n.strategySavedSavedat(dayText(plan.savedAt)),
-                    style: const TextStyle(fontSize: 10, color: muted),
+                    style: TextStyle(fontSize: 10, color: muted),
                   ),
                   const SizedBox(height: 6),
                   Text(
@@ -337,7 +338,7 @@ class PlannedNutritionCard extends ConsumerWidget {
                       _v(plan.totalFluid),
                       _v(plan.totalSodium),
                     ),
-                    style: const TextStyle(fontSize: 11, color: muted),
+                    style: TextStyle(fontSize: 11, color: muted),
                   ),
                   if (plan.carbs > 0)
                     Text(
@@ -350,7 +351,7 @@ class PlannedNutritionCard extends ConsumerWidget {
                               _v(plan.carbs / 3),
                               _v(plan.fluid / 3),
                             ),
-                      style: const TextStyle(fontSize: 11, color: muted),
+                      style: TextStyle(fontSize: 11, color: muted),
                     ),
                   const SizedBox(height: 8),
                   // In the water gels are no option (#8): the drink at the
@@ -394,7 +395,7 @@ class PlannedNutritionCard extends ConsumerWidget {
                         '${_v(plan.conditions.temperature)} °C · ${_v(plan.conditions.humidity)}% humidity · '
                         '${_v(plan.conditions.wind)} km/h wind. '
                         '${plan.conditions.surface} · ascent ${_v(plan.conditions.ascent)} m · altitude ${_v(plan.conditions.altitude)} m.',
-                        style: const TextStyle(fontSize: 11, color: muted),
+                        style: TextStyle(fontSize: 11, color: muted),
                       ),
                       for (final note in plan.guidance)
                         Padding(
@@ -491,7 +492,7 @@ class ActivityNutritionCard extends ConsumerWidget {
               'All phases: '
               '${total('caffeine', (e) => e.caffeine, 'mg caffeine', during: false)} · '
               '${total('protein', (e) => e.protein, 'g protein', during: false)}',
-              style: const TextStyle(fontSize: 11, color: muted),
+              style: TextStyle(fontSize: 11, color: muted),
             ),
           if (log != null &&
               log.status == 'complete' &&
@@ -503,7 +504,7 @@ class ActivityNutritionCard extends ConsumerWidget {
             Text(
               'During: ${_v(log.total((e) => e.carbs, during: true) / (elapsed / 60))} g/h '
               '· saved plan ${_v(plan.carbs)} g/h',
-              style: const TextStyle(fontSize: 11, color: muted),
+              style: TextStyle(fontSize: 11, color: muted),
             ),
           TextButton.icon(
             onPressed: () =>
@@ -761,9 +762,9 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
         width: double.infinity,
         padding: padding ?? const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: color ?? const Color(0xFF1E1E1E),
+          color: color ?? duo(0xFF1E1E1E, 0xFFFFFFFF),
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: Colors.white10),
+          border: Border.all(color: fjInk10),
         ),
         child: child,
       );
@@ -772,7 +773,7 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
     padding: const EdgeInsets.only(top: 22, bottom: 10),
     child: Text(
       text.toUpperCase(),
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 11,
         letterSpacing: 1.2,
         fontWeight: FontWeight.w700,
@@ -791,7 +792,7 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         gradient: LinearGradient(
-          colors: [color.withValues(alpha: .28), const Color(0xFF1A1A1A)],
+          colors: [color.withValues(alpha: .28), duo(0xFF1A1A1A, 0xFFF7F8FA)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -825,16 +826,12 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
                 const SizedBox(height: 3),
                 Text(
                   '${dayHeading(context, start)} · ${DateFormat.Hm().format(start)} · $minutes min',
-                  style: const TextStyle(fontSize: 12, color: Colors.white70),
+                  style: TextStyle(fontSize: 12, color: fjInk70),
                 ),
                 const SizedBox(height: 6),
                 Text(
                   context.l10n.recordWhatYouActuallyHad,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    height: 1.35,
-                    color: muted,
-                  ),
+                  style: TextStyle(fontSize: 12, height: 1.35, color: muted),
                 ),
               ],
             ),
@@ -849,7 +846,7 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
     style: SegmentedButton.styleFrom(
       selectedBackgroundColor: _blue.withValues(alpha: .22),
       selectedForegroundColor: _blue,
-      side: const BorderSide(color: Colors.white12),
+      side: BorderSide(color: fjInk12),
     ),
     segments: [
       ButtonSegment(
@@ -882,7 +879,7 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Material(
-        color: const Color(0xFF1E1E1E),
+        color: duo(0xFF1E1E1E, 0xFFFFFFFF),
         borderRadius: BorderRadius.circular(16),
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
@@ -891,7 +888,7 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
             padding: const EdgeInsets.fromLTRB(14, 12, 6, 12),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.white10),
+              border: Border.all(color: fjInk10),
             ),
             child: Row(
               children: [
@@ -924,7 +921,7 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
                       Text(
                         '${_choiceLabel(context, e.phase)}'
                         '${e.minute == null ? '' : ' · ${context.l10n.atMinute(_v(e.minute))}'}',
-                        style: const TextStyle(fontSize: 12, color: muted),
+                        style: TextStyle(fontSize: 12, color: muted),
                       ),
                       if (facts.isNotEmpty) ...[
                         const SizedBox(height: 8),
@@ -940,7 +937,7 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
                                 ),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
-                                  color: Colors.white.withValues(alpha: .07),
+                                  color: fjInk.withValues(alpha: .07),
                                 ),
                                 child: Text(
                                   '${f.$1} ${f.$2.toLowerCase()}',
@@ -958,7 +955,7 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
                   onPressed: busy
                       ? null
                       : () => setState(() => entries.removeAt(index)),
-                  icon: const Icon(Icons.close_rounded, color: muted),
+                  icon: Icon(Icons.close_rounded, color: muted),
                 ),
               ],
             ),
@@ -993,15 +990,11 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
             value,
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
           ),
-          Text(unit, style: const TextStyle(fontSize: 11, color: muted)),
+          Text(unit, style: TextStyle(fontSize: 11, color: muted)),
           const SizedBox(height: 2),
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 10,
-              letterSpacing: .6,
-              color: muted,
-            ),
+            style: TextStyle(fontSize: 10, letterSpacing: .6, color: muted),
           ),
           SizedBox(
             height: 14,
@@ -1060,16 +1053,12 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
               padding: const EdgeInsets.only(top: 10),
               child: Row(
                 children: [
-                  const Icon(
-                    Icons.info_outline_rounded,
-                    size: 15,
-                    color: muted,
-                  ),
+                  Icon(Icons.info_outline_rounded, size: 15, color: muted),
                   const SizedBox(width: 6),
                   Expanded(
                     child: Text(
                       context.l10n.someProductValuesAreUnknown,
-                      style: const TextStyle(fontSize: 11, color: muted),
+                      style: TextStyle(fontSize: 11, color: muted),
                     ),
                   ),
                 ],
@@ -1110,7 +1099,7 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
             label: Text(_choiceLabel(context, o.$1)),
             selected: gut == o.$1,
             selectedColor: o.$3.withValues(alpha: .2),
-            side: BorderSide(color: gut == o.$1 ? o.$3 : Colors.white12),
+            side: BorderSide(color: gut == o.$1 ? o.$3 : fjInk12),
             onSelected: busy
                 // Tapping the chosen one again clears it.
                 ? null
@@ -1131,7 +1120,7 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
               elapsed.text.trim().isNotEmpty || planKey?.isNotEmpty == true,
           tilePadding: const EdgeInsets.symmetric(horizontal: 16),
           childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-          leading: const Icon(Icons.tune_rounded, color: muted),
+          leading: Icon(Icons.tune_rounded, color: muted),
           title: Text(
             context.l10n.detailsOptional,
             style: const TextStyle(fontWeight: FontWeight.w600),
@@ -1205,9 +1194,9 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
       20,
       12 + MediaQuery.of(context).padding.bottom,
     ),
-    decoration: const BoxDecoration(
-      color: Color(0xFF151515),
-      border: Border(top: BorderSide(color: Colors.white10)),
+    decoration: BoxDecoration(
+      color: duo(0xFF151515, 0xFFF7F8FA),
+      border: Border(top: BorderSide(color: fjInk10)),
     ),
     child: Column(
       mainAxisSize: MainAxisSize.min,
@@ -1283,18 +1272,12 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
                         _card(
                           child: Row(
                             children: [
-                              const Icon(
-                                Icons.local_dining_rounded,
-                                color: muted,
-                              ),
+                              Icon(Icons.local_dining_rounded, color: muted),
                               const SizedBox(width: 12),
                               Expanded(
                                 child: Text(
                                   context.l10n.nothingAddedYet,
-                                  style: const TextStyle(
-                                    color: muted,
-                                    height: 1.35,
-                                  ),
+                                  style: TextStyle(color: muted, height: 1.35),
                                 ),
                               ),
                             ],
@@ -1349,7 +1332,7 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
                         labelText:
                             context.l10n.whatWorkedSymptomsAccessProblems,
                         filled: true,
-                        fillColor: const Color(0xFF1E1E1E),
+                        fillColor: duo(0xFF1E1E1E, 0xFFFFFFFF),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(16),
                           borderSide: BorderSide.none,

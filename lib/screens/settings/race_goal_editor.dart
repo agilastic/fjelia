@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/formats.dart';
 import '../../l10n/l10n_ext.dart';
 
@@ -117,7 +118,7 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
       padding: const EdgeInsets.only(top: 20, bottom: 8),
       child: Text(
         text,
-        style: const TextStyle(
+        style: TextStyle(
           color: muted,
           fontSize: 10,
           letterSpacing: 1.1,
@@ -142,15 +143,15 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
     );
     InputDecoration decoration(String hint) => InputDecoration(
       hintText: hint,
-      hintStyle: const TextStyle(color: muted),
+      hintStyle: TextStyle(color: muted),
       filled: false,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(color: Colors.white12),
+        borderSide: BorderSide(color: fjInk12),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(color: Colors.white12),
+        borderSide: BorderSide(color: fjInk12),
       ),
     );
     Widget number(
@@ -179,7 +180,7 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
             width: 36,
             height: 4,
             decoration: BoxDecoration(
-              color: Colors.white24,
+              color: fjInk24,
               borderRadius: BorderRadius.circular(3),
             ),
           ),
@@ -237,9 +238,9 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                           materialTapTargetSize:
                               MaterialTapTargetSize.shrinkWrap,
                           selectedColor: accent.withValues(alpha: .15),
-                          backgroundColor: Colors.white.withValues(alpha: .04),
+                          backgroundColor: fjInk.withValues(alpha: .04),
                           side: BorderSide(
-                            color: sport == e.key ? accent : Colors.white12,
+                            color: sport == e.key ? accent : fjInk12,
                           ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(9),
@@ -247,7 +248,7 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                           labelStyle: TextStyle(
                             fontSize: 12,
                             fontFamily: 'Roboto',
-                            color: sport == e.key ? accent : Colors.white70,
+                            color: sport == e.key ? accent : fjInk70,
                           ),
                         ),
                     ],
@@ -282,16 +283,14 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                                           minimumSize: const Size(0, 44),
                                           foregroundColor: p == priority
                                               ? accent
-                                              : Colors.white70,
+                                              : fjInk70,
                                           backgroundColor: p == priority
                                               ? accent.withValues(alpha: .15)
-                                              : Colors.white.withValues(
-                                                  alpha: .04,
-                                                ),
+                                              : fjInk.withValues(alpha: .04),
                                           side: BorderSide(
                                             color: p == priority
                                                 ? accent
-                                                : Colors.white12,
+                                                : fjInk12,
                                           ),
                                           shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(
@@ -319,7 +318,7 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                     padding: EdgeInsets.only(bottom: 8),
                     child: Text(
                       context.l10n.optionalTotalClimbingForThis,
-                      style: TextStyle(fontSize: 12, color: Colors.white70),
+                      style: TextStyle(fontSize: 12, color: fjInk70),
                     ),
                   ),
                   number(elevation, 'e.g. 2400 (optional)', optional: true),
@@ -328,10 +327,7 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                     padding: const EdgeInsets.only(bottom: 8),
                     child: Text(
                       _paceHint(),
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.white70,
-                      ),
+                      style: TextStyle(fontSize: 12, color: fjInk70),
                     ),
                   ),
                   TextFormField(
@@ -356,8 +352,8 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                   OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
                       alignment: Alignment.centerLeft,
-                      foregroundColor: date == null ? muted : Colors.white,
-                      side: const BorderSide(color: Colors.white12),
+                      foregroundColor: date == null ? muted : fjInk,
+                      side: BorderSide(color: fjInk12),
                       minimumSize: const Size(double.infinity, 48),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -417,7 +413,7 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                         minimumSize: Size(0, 30),
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         visualDensity: VisualDensity.compact,
-                        foregroundColor: Colors.white70,
+                        foregroundColor: fjInk70,
                       ),
                       icon: Icon(
                         more ? Icons.expand_less : Icons.expand_more,
@@ -442,7 +438,7 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                       padding: EdgeInsets.only(bottom: 8),
                       child: Text(
                         context.l10n.flexibleThePlanMayDrop,
-                        style: TextStyle(fontSize: 12, color: Colors.white70),
+                        style: TextStyle(fontSize: 12, color: fjInk70),
                       ),
                     ),
                     label(context.l10n.whatIWantFromIt),

@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
@@ -97,7 +98,7 @@ class SleepScreen extends ConsumerWidget {
                       children: [
                         Text(
                           label,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: muted,
                             fontSize: 10,
                             letterSpacing: 1,
@@ -165,7 +166,7 @@ class SleepScreen extends ConsumerWidget {
                               duration(
                                 context.l10n.hoursOfSleep,
                                 sleep == null ? '—' : hours(sleep.totalSleep),
-                                Colors.white70,
+                                fjInk70,
                               ),
                               const SizedBox(width: 12),
                               duration(
@@ -221,7 +222,7 @@ class SleepScreen extends ConsumerWidget {
                                     ? '—'
                                     : '${sleep!.efficiency.round()}%',
                                 Icons.speed,
-                                Colors.white70,
+                                fjInk70,
                               ),
                               metric(
                                 'BEDTIME',
@@ -251,10 +252,10 @@ class SleepScreen extends ConsumerWidget {
                                 Expanded(
                                   child: Text(
                                     tip,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 13,
                                       height: 1.5,
-                                      color: Colors.white70,
+                                      color: fjInk70,
                                     ),
                                   ),
                                 ),

@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
@@ -20,7 +21,7 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) => SheetPage(
     title: title,
     showHeader: false,
-    backgroundColor: const Color(0xFF111111),
+    backgroundColor: duo(0xFF111111, 0xFFF2F4F7),
     child: Column(
       children: [
         SizedBox(
@@ -85,8 +86,8 @@ class _NavigationButton extends StatelessWidget {
     tooltip: label,
     onPressed: () => Navigator.pop(context),
     style: IconButton.styleFrom(
-      backgroundColor: const Color(0xFF252527),
-      foregroundColor: Colors.white,
+      backgroundColor: duo(0xFF252527, 0xFFEEF1F5),
+      foregroundColor: fjInk,
       fixedSize: const Size(40, 40),
     ),
     icon: Icon(icon, size: 22),
@@ -115,7 +116,7 @@ class SettingsGroup extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
             child: Text(
               title!,
-              style: const TextStyle(
+              style: TextStyle(
                 color: muted,
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
@@ -124,7 +125,7 @@ class SettingsGroup extends StatelessWidget {
             ),
           ),
         Material(
-          color: const Color(0xFF242426),
+          color: duo(0xFF242426, 0xFFEEF1F5),
           borderRadius: BorderRadius.circular(22),
           clipBehavior: Clip.antiAlias,
           child: ListTileTheme(
@@ -137,7 +138,7 @@ class SettingsGroup extends StatelessWidget {
               minLeadingWidth: 30,
               horizontalTitleGap: 12,
               titleTextStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                color: const Color(0xFFF2F2F7),
+                color: duo(0xFFF2F2F7, 0xFF1F2937),
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
                 letterSpacing: 0,
@@ -159,7 +160,7 @@ class SettingsGroup extends StatelessWidget {
                       height: 1,
                       thickness: .5,
                       indent: dividerIndent,
-                      color: const Color(0xFF424245),
+                      color: duo(0xFF424245, 0xFFC9CED6),
                     ),
                   children[i],
                 ],
@@ -172,7 +173,7 @@ class SettingsGroup extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
             child: Text(
               footer!,
-              style: const TextStyle(
+              style: TextStyle(
                 color: muted,
                 fontSize: 13,
                 height: 1.35,
@@ -198,9 +199,9 @@ class SettingsIcon extends StatelessWidget {
       gradient: LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
-        colors: [color.withValues(alpha: .26), const Color(0xFF161618)],
+        colors: [color.withValues(alpha: .26), duo(0xFF161618, 0xFFF7F8FA)],
       ),
-      border: Border.all(color: Colors.white.withValues(alpha: .13), width: .7),
+      border: Border.all(color: fjInk.withValues(alpha: .13), width: .7),
     ),
     child: Icon(icon, color: color, size: 20),
   );

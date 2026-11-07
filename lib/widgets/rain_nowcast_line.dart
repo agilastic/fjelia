@@ -89,7 +89,7 @@ class _RainNowcastLineState extends ConsumerState<RainNowcastLine> {
               ),
             ),
           ),
-          const Text('DWD', style: TextStyle(fontSize: 9, color: muted)),
+          Text('DWD', style: TextStyle(fontSize: 9, color: muted)),
         ],
       ),
     );

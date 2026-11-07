@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -280,8 +281,8 @@ class _Backdrop extends StatelessWidget {
           CircularProgressIndicator(
             value: reveal,
             strokeWidth: 2.5,
-            color: Colors.white,
-            backgroundColor: Colors.white24,
+            color: fjInk,
+            backgroundColor: fjInk24,
           ),
           AnimatedScale(
             scale: armed ? 1.25 : .7 + .3 * reveal,
@@ -292,7 +293,7 @@ class _Backdrop extends StatelessWidget {
               angle: left
                   ? (armed ? math.sin(progress * 18) * .18 : 0)
                   : reveal * math.pi / 2,
-              child: Icon(icon, color: Colors.white, size: 20),
+              child: Icon(icon, color: fjInk, size: 20),
             ),
           ),
         ],
@@ -304,8 +305,8 @@ class _Backdrop extends StatelessWidget {
       child: Text(
         label.toUpperCase(),
         maxLines: 1,
-        style: const TextStyle(
-          color: Colors.white,
+        style: TextStyle(
+          color: fjInk,
           fontWeight: FontWeight.w800,
           fontSize: 12,
           letterSpacing: 1.2,

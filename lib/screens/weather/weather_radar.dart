@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 
 import 'dart:async';
@@ -85,7 +86,7 @@ class _RadarState extends ConsumerState<WeatherRadar> {
                           decoration: BoxDecoration(
                             color: Colors.lightBlue,
                             shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white, width: 3),
+                            border: Border.all(color: fjInk, width: 3),
                           ),
                         ),
                       ),
@@ -160,7 +161,7 @@ class _RadarState extends ConsumerState<WeatherRadar> {
                     ),
                     Text(
                       DateFormat.Hm().format(frames[selected].time),
-                      style: const TextStyle(fontSize: 11, color: muted),
+                      style: TextStyle(fontSize: 11, color: muted),
                     ),
                     Expanded(
                       child: Slider(

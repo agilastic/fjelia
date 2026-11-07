@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import '../../providers/hilo_sync_provider.dart';
 import '../../providers/polar_h10_provider.dart';
 import '../../providers/polar_provider.dart';
 import '../../providers/suunto_provider.dart';
+import '../../providers/mywhoosh_provider.dart';
 import 'connect_aktiia_screen.dart';
 import 'connect_coros_screen.dart';
 import 'connect_garmin_screen.dart';
@@ -21,15 +23,16 @@ import 'connect_polar_screen.dart';
 import 'connect_renpho_ble_screen.dart';
 import 'connect_renpho_screen.dart';
 import 'connect_suunto_screen.dart';
+import 'connect_mywhoosh_screen.dart';
 import 'ai_coach_onboarding_screen.dart';
 
 /// Onboarding grid of every supported source.
 class ConnectDevicesScreen extends ConsumerWidget {
   const ConnectDevicesScreen({super.key});
 
-  void _push(BuildContext context, Widget screen) =>
-      Navigator.of(context)
-          .push(MaterialPageRoute<void>(builder: (_) => screen));
+  void _push(BuildContext context, Widget screen) => Navigator.of(
+    context,
+  ).push(MaterialPageRoute<void>(builder: (_) => screen));
 
   ({List<_DeviceTile> ble, List<_DeviceTile> api}) _tiles(
     BuildContext context, {
@@ -37,6 +40,7 @@ class ConnectDevicesScreen extends ConsumerWidget {
     required bool hiloBle,
     required bool coros,
     required bool suunto,
+    required bool myWhoosh,
     required bool polar,
     required bool health,
     required bool renphoBle,
@@ -87,6 +91,14 @@ class ConnectDevicesScreen extends ConsumerWidget {
         connected: suunto,
         onTap: () =>
             _push(context, const ConnectSuuntoScreen(fromOnboarding: true)),
+      ),
+      _DeviceTile(
+        icon: Icons.directions_bike_rounded,
+        color: const Color(0xFFFF6B1A),
+        name: 'MyWhoosh',
+        subtitle: context.l10n.myWhooshTile,
+        connected: myWhoosh,
+        onTap: () => _push(context, const ConnectMyWhooshScreen()),
       ),
       _DeviceTile(
         icon: Icons.monitor_heart_outlined,
@@ -156,8 +168,8 @@ class ConnectDevicesScreen extends ConsumerWidget {
         padding: const EdgeInsets.fromLTRB(4, 0, 4, 10),
         child: Text(
           title,
-          style: const TextStyle(
-            color: Color(0xFF888888),
+          style: TextStyle(
+            color: duo(0xFF888888, 0xFF6B7280),
             fontSize: 11,
             fontWeight: FontWeight.w700,
             letterSpacing: 1.1,
@@ -184,13 +196,14 @@ class ConnectDevicesScreen extends ConsumerWidget {
       hiloBle: ref.watch(hiloBleConnectedProvider).valueOrNull ?? false,
       coros: ref.watch(corosConnectedProvider).valueOrNull ?? false,
       suunto: ref.watch(suuntoConnectedProvider).valueOrNull ?? false,
+      myWhoosh: ref.watch(myWhooshConnectedProvider).valueOrNull ?? false,
       polar: ref.watch(polarConnectedProvider).valueOrNull ?? false,
       health: ref.watch(healthConnectPermissionProvider).valueOrNull ?? false,
       renphoBle: ref.watch(renphoBleConnectedProvider).valueOrNull ?? false,
       polarH10: ref.watch(polarH10PairedProvider).valueOrNull != null,
     );
     return Scaffold(
-      backgroundColor: const Color(0xFF111111),
+      backgroundColor: duo(0xFF111111, 0xFFF2F4F7),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -201,7 +214,7 @@ class ConnectDevicesScreen extends ConsumerWidget {
               child: Text(
                 context.l10n.connectYourDevices,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: fjInk,
                   fontSize: 28,
                   fontWeight: FontWeight.w800,
                   letterSpacing: -0.5,
@@ -214,7 +227,7 @@ class ConnectDevicesScreen extends ConsumerWidget {
               child: Text(
                 context.l10n.connectAnyCombinationYouCan,
                 style: TextStyle(
-                  color: Color(0xFFCCCCCC),
+                  color: duo(0xFFCCCCCC, 0xFF374151),
                   fontSize: 14,
                   height: 1.4,
                 ),
@@ -297,12 +310,12 @@ class _DeviceTile extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: const Color(0xFF1E1E1E),
+          color: duo(0xFF1E1E1E, 0xFFFFFFFF),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: connected
                 ? const Color(0xFF00D4A0)
-                : const Color(0xFF333333),
+                : duo(0xFF333333, 0xFFE3E7EC),
             width: connected ? 1.5 : 1,
           ),
         ),
@@ -336,18 +349,18 @@ class _DeviceTile extends StatelessWidget {
                     ),
                   )
                 else
-                  const Icon(
+                  Icon(
                     Icons.add_rounded,
                     size: 18,
-                    color: Color(0xFF888888),
+                    color: duo(0xFF888888, 0xFF6B7280),
                   ),
               ],
             ),
             const Spacer(),
             Text(
               name,
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: fjInk,
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
               ),
@@ -355,7 +368,10 @@ class _DeviceTile extends StatelessWidget {
             const SizedBox(height: 2),
             Text(
               subtitle,
-              style: const TextStyle(color: Color(0xFF888888), fontSize: 11),
+              style: TextStyle(
+                color: duo(0xFF888888, 0xFF6B7280),
+                fontSize: 11,
+              ),
             ),
           ],
         ),

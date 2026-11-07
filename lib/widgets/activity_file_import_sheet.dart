@@ -84,7 +84,7 @@ class _State extends ConsumerState<ActivityFileImportSheet> {
             const SizedBox(height: 8),
             Text(
               l10n.activityFileImportHint,
-              style: const TextStyle(color: muted, fontSize: 12),
+              style: TextStyle(color: muted, fontSize: 12),
             ),
             if (error != null)
               Padding(
@@ -171,7 +171,7 @@ class _PreviewTile extends StatelessWidget {
       title: Text(file?.name ?? preview.fileName),
       subtitle: Text(
         status == null ? facts : '$facts\n$status',
-        style: const TextStyle(fontSize: 12, color: muted),
+        style: TextStyle(fontSize: 12, color: muted),
       ),
     );
   }

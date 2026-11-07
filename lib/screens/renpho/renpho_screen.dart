@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
@@ -52,12 +53,9 @@ class RenphoScreen extends ConsumerWidget {
                           children: [
                             TextSpan(
                               text: valueText(r?.weight, 1),
-                              style: const TextStyle(
-                                fontSize: 36,
-                                color: Colors.white,
-                              ),
+                              style: TextStyle(fontSize: 36, color: fjInk),
                             ),
-                            const TextSpan(
+                            TextSpan(
                               text: ' kg',
                               style: TextStyle(fontSize: 12, color: muted),
                             ),
@@ -71,7 +69,7 @@ class RenphoScreen extends ConsumerWidget {
                             : context.l10n.latestReadingAtTimestamp(
                                 DateFormat.yMd().add_Hm().format(r.timestamp),
                               ),
-                        style: const TextStyle(color: muted, fontSize: 11),
+                        style: TextStyle(color: muted, fontSize: 11),
                       ),
                       const Divider(),
                       Wrap(
@@ -119,7 +117,7 @@ class RenphoScreen extends ConsumerWidget {
                           label: pair.$1.label,
                           value: valueText(pair.$2, 1),
                           unit: pair.$1.unit,
-                          color: Colors.white,
+                          color: fjInk,
                           onTap: pair.$1 == HealthMetric.waist
                               ? () => showAppSheet(context, const WaistSheet())
                               : () => MetricDetailSheet.show(context, pair.$1),
@@ -128,7 +126,7 @@ class RenphoScreen extends ConsumerWidget {
                         label: 'WHtR',
                         value: valueText(whtr, 2),
                         color: whtr == null
-                            ? Colors.white
+                            ? fjInk
                             : waistRiskColor(whtrRisk(whtr)),
                         onTap: () => showAppSheet(context, const WaistSheet()),
                       ),

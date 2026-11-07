@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
@@ -43,7 +44,7 @@ Widget _heading(String title) => Padding(
     header: true,
     child: Text(
       title,
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 11,
         color: muted,
         fontWeight: FontWeight.w700,
@@ -208,7 +209,7 @@ class PlannedStrengthSection extends ConsumerWidget {
           e is StrengthUnreadableException
               ? '${e.message} The workout details above are unaffected.'
               : context.l10n.theExercisesCouldNotBe,
-          style: const TextStyle(color: Colors.white70, fontSize: 13),
+          style: TextStyle(color: fjInk70, fontSize: 13),
         ),
       );
     }
@@ -232,7 +233,7 @@ class PlannedStrengthSection extends ConsumerWidget {
               children: [
                 Text(
                   context.l10n.noExercisesArePlannedFor,
-                  style: TextStyle(color: Colors.white70, fontSize: 13),
+                  style: TextStyle(color: fjInk70, fontSize: 13),
                 ),
                 if (editable) ...[
                   const SizedBox(height: 12),
@@ -301,7 +302,7 @@ class PlannedStrengthSection extends ConsumerWidget {
             padding: const EdgeInsets.only(top: 10),
             child: Text(
               plan.notes!,
-              style: const TextStyle(fontSize: 13, color: Colors.white70),
+              style: TextStyle(fontSize: 13, color: fjInk70),
             ),
           ),
         _heading(context.l10n.exercises2),
@@ -434,7 +435,7 @@ class _PlannedExerciseCard extends ConsumerWidget {
               formatStrengthLoad(accepted.toKg, unit),
               accepted.ruleVersion,
             ),
-            style: const TextStyle(fontSize: 11, color: muted),
+            style: TextStyle(fontSize: 11, color: muted),
           );
     if (eval == null ||
         !eval.qualifies ||
@@ -448,10 +449,7 @@ class _PlannedExerciseCard extends ConsumerWidget {
       unit: unit,
     );
     if (eval.outcome == StrengthProgressionOutcome.blocked) {
-      return Text(
-        eval.reason,
-        style: const TextStyle(fontSize: 11, color: muted),
-      );
+      return Text(eval.reason, style: TextStyle(fontSize: 11, color: muted));
     }
     return StrengthProgressionCard(
       evaluation: eval,
@@ -570,10 +568,7 @@ class _PlannedExerciseCard extends ConsumerWidget {
         if (e.notes != null)
           Padding(
             padding: const EdgeInsets.only(top: 6),
-            child: Text(
-              e.notes!,
-              style: const TextStyle(fontSize: 12, color: muted),
-            ),
+            child: Text(e.notes!, style: TextStyle(fontSize: 12, color: muted)),
           ),
       ],
       footer: [
@@ -657,7 +652,7 @@ class CompletedStrengthSection extends ConsumerWidget {
           e is StrengthUnreadableException
               ? '${e.message} The activity itself is unaffected.'
               : context.l10n.theRecordedExercisesCouldNot,
-          style: const TextStyle(color: Colors.white70, fontSize: 13),
+          style: TextStyle(color: fjInk70, fontSize: 13),
         ),
       );
     }
@@ -750,7 +745,7 @@ class CompletedStrengthSection extends ConsumerWidget {
             padding: const EdgeInsets.only(top: 10),
             child: Text(
               work.join(' · '),
-              style: const TextStyle(fontSize: 12, color: Colors.white70),
+              style: TextStyle(fontSize: 12, color: fjInk70),
             ),
           ),
         if (log.baseline != null)
@@ -760,7 +755,7 @@ class CompletedStrengthSection extends ConsumerWidget {
               log.baseline!.retrospective
                   ? 'Compared with “${log.baseline!.plan.title ?? 'a saved workout'}”, chosen after the workout.'
                   : context.l10n.comparedWithThePlanAs,
-              style: const TextStyle(fontSize: 11, color: muted),
+              style: TextStyle(fontSize: 11, color: muted),
             ),
           ),
         _heading(context.l10n.exercises2),
@@ -801,19 +796,13 @@ class CompletedStrengthSection extends ConsumerWidget {
                     unit: unit,
                   ),
                 if (e.notes != null)
-                  Text(
-                    e.notes!,
-                    style: const TextStyle(fontSize: 12, color: muted),
-                  ),
+                  Text(e.notes!, style: TextStyle(fontSize: 12, color: muted)),
                 if (oneRm != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 6),
                     child: Text(
                       context.l10n.estimated1rmUnit(oneRmText(oneRm, unit)),
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.white70,
-                      ),
+                      style: TextStyle(fontSize: 12, color: fjInk70),
                     ),
                   ),
               ],
@@ -833,7 +822,7 @@ class CompletedStrengthSection extends ConsumerWidget {
             title: context.l10n.plannedNotRecorded,
             child: Text(
               missing.map((m) => m.planned!.name).join(', '),
-              style: const TextStyle(fontSize: 13, color: Colors.white70),
+              style: TextStyle(fontSize: 13, color: fjInk70),
             ),
           ),
         if (log.notes != null)
@@ -887,7 +876,7 @@ class StrengthProgrammeUpdateCard extends ConsumerWidget {
       children: [
         Text(
           context.l10n.thisSessionUsesAnEarlier,
-          style: TextStyle(fontSize: 13, color: Colors.white70, height: 1.4),
+          style: TextStyle(fontSize: 13, color: fjInk70, height: 1.4),
         ),
         const SizedBox(height: 10),
         OutlinedButton.icon(

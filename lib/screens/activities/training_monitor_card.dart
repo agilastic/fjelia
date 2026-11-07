@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
@@ -110,10 +111,15 @@ class TrainingMonitorCard extends ConsumerWidget {
       ),
     ];
     return LoadCard(
+      accent: const [Color(0xFF9D7BFF), Color(0xFFFF7AD9)],
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(context.l10n.trainingMonitor2, style: loadLabel),
+          GradientTitle(
+            context.l10n.trainingMonitor2,
+            colors: const [Color(0xFF9D7BFF), Color(0xFFFF7AD9)],
+            size: 11,
+          ),
           const SizedBox(height: 10),
           GridView.count(
             crossAxisCount: 2,
@@ -125,7 +131,7 @@ class TrainingMonitorCard extends ConsumerWidget {
             children: [
               for (final c in cells)
                 Material(
-                  color: Colors.white.withValues(alpha: .04),
+                  color: fjInk.withValues(alpha: .04),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(13),
                     side: c.$1 == 'VO₂max pace'
@@ -181,10 +187,7 @@ class TrainingMonitorCard extends ConsumerWidget {
                                     c.$1,
                                   ).toUpperCase().replaceAll('₂', '2'),
                                   maxLines: 1,
-                                  style: const TextStyle(
-                                    fontSize: 10,
-                                    color: muted,
-                                  ),
+                                  style: TextStyle(fontSize: 10, color: muted),
                                 ),
                               ),
                               // A newer value from a source waits to be
@@ -212,19 +215,19 @@ class TrainingMonitorCard extends ConsumerWidget {
                                       children: [
                                         TextSpan(
                                           text: c.$2.split(' ').first,
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.w700,
-                                            color: Colors.white,
+                                            color: fjInk,
                                           ),
                                         ),
                                         TextSpan(
                                           text: c.$2.contains(' ')
                                               ? ' ${c.$2.substring(c.$2.indexOf(' ') + 1)}'
                                               : '',
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontSize: 12,
-                                            color: Color(0xFFBBBBBB),
+                                            color: duo(0xFFBBBBBB, 0xFF4B5563),
                                           ),
                                         ),
                                       ],
@@ -254,7 +257,7 @@ class TrainingMonitorCard extends ConsumerWidget {
                               c.$3,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontSize: 9, color: muted),
+                              style: TextStyle(fontSize: 9, color: muted),
                             ),
                           ),
                         ],
@@ -289,28 +292,28 @@ class TrainingMonitorCard extends ConsumerWidget {
               height: .7,
             ),
           ),
-          const Divider(height: 24, color: Colors.white10),
+          Divider(height: 24, color: fjInk10),
         ],
       ),
     );
   }
 }
 
-const _zoneColors = [
-  Color(0xFF888888),
+List<Color> get _zoneColors => [
+  duo(0xFF888888, 0xFF6B7280),
   loadBlue,
   mint,
   Color(0xFFFFCC00),
   loadOrange,
   loadRed,
 ];
-const _runningColors = [
+List<Color> get _runningColors => [
   mint,
   mint,
   Color(0xFF81B784),
   Color(0xFFFFCC00),
   loadOrange,
-  Color(0xFF777777),
+  duo(0xFF777777, 0xFF6B7280),
 ];
 
 class _ZoneStrip extends StatelessWidget {
@@ -328,7 +331,7 @@ class _ZoneStrip extends StatelessWidget {
     color: loadInset,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(13),
-      side: const BorderSide(color: Colors.white10),
+      side: BorderSide(color: fjInk10),
     ),
     child: InkWell(
       onTap: onTap,
@@ -377,7 +380,7 @@ class _ZoneStrip extends StatelessWidget {
                       ),
                     ),
                   ),
-                const Icon(Icons.chevron_right, size: 16, color: muted),
+                Icon(Icons.chevron_right, size: 16, color: muted),
               ],
             ),
             const SizedBox(height: 5),

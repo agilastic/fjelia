@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
@@ -39,7 +40,7 @@ class HrZonesTab extends ConsumerWidget {
                         ),
                         Text(
                           context.l10n.lt2Lt2BpmAt(tt.lt2, dayText(tt.at)),
-                          style: const TextStyle(color: muted, fontSize: 9),
+                          style: TextStyle(color: muted, fontSize: 9),
                         ),
                       ],
                     ),
@@ -130,7 +131,7 @@ class HrZonesTab extends ConsumerWidget {
                               context.l10n.lactateThreshold,
                               'VO₂max',
                             ][i],
-                            style: const TextStyle(fontSize: 10, color: muted),
+                            style: TextStyle(fontSize: 10, color: muted),
                           ),
                           Text(
                             hrZoneRange(
@@ -138,10 +139,7 @@ class HrZonesTab extends ConsumerWidget {
                               i,
                               maxHr,
                             ),
-                            style: const TextStyle(
-                              fontSize: 9,
-                              color: Colors.white,
-                            ),
+                            style: TextStyle(fontSize: 9, color: fjInk),
                           ),
                         ],
                       ),
@@ -234,7 +232,7 @@ class HrZonesPreview extends ConsumerWidget {
                         children: [
                           Text(
                             'Z${i + 1}',
-                            style: const TextStyle(fontSize: 8, color: muted),
+                            style: TextStyle(fontSize: 8, color: muted),
                           ),
                           Text(
                             '${(bike ? state.cycling : state.running).bounds[i]}',
@@ -253,7 +251,7 @@ class HrZonesPreview extends ConsumerWidget {
                                               .last
                                 ? '$maxHr'
                                 : '+',
-                            style: const TextStyle(fontSize: 7, color: muted),
+                            style: TextStyle(fontSize: 7, color: muted),
                           ),
                         ],
                       ),

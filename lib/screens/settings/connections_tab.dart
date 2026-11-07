@@ -10,6 +10,7 @@ import '../../providers/health_connect_provider.dart';
 import '../../providers/hilo_sync_provider.dart';
 import '../../providers/coros_provider.dart';
 import '../../providers/suunto_provider.dart';
+import '../../providers/mywhoosh_provider.dart';
 import '../../providers/polar_h10_provider.dart';
 import '../../providers/polar_provider.dart';
 import '../../widgets/app_widgets.dart';
@@ -23,6 +24,7 @@ import '../onboarding/connect_hilo_ble_screen.dart';
 import '../onboarding/connect_renpho_screen.dart';
 import '../onboarding/connect_coros_screen.dart';
 import '../onboarding/connect_suunto_screen.dart';
+import '../onboarding/connect_mywhoosh_screen.dart';
 import '../onboarding/connect_polar_h10_screen.dart';
 import '../onboarding/connect_polar_screen.dart';
 import '../../widgets/h10_battery.dart';
@@ -89,6 +91,12 @@ class ConnectionsTab extends ConsumerWidget {
               context.l10n.suunto,
               ref.watch(suuntoConnectedProvider).valueOrNull ?? false,
               const ConnectSuuntoScreen(fromOnboarding: true),
+            ),
+            (
+              ConnectionType.myWhoosh,
+              'MyWhoosh',
+              ref.watch(myWhooshConnectedProvider).valueOrNull ?? false,
+              const ConnectMyWhooshScreen(),
             ),
             (
               ConnectionType.polar,
@@ -230,7 +238,7 @@ class _Connection extends StatelessWidget {
       title: Text(label),
       subtitle: Text(
         connected ? context.l10n.connected : context.l10n.notConnected,
-        style: const TextStyle(color: muted, fontSize: 10),
+        style: TextStyle(color: muted, fontSize: 10),
       ),
       trailing: connected && disconnect != null
           ? TextButton(

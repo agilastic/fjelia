@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../ai_coach/ai_coach_screen.dart' show openCoachTab;
 import '../../services/activity_decoder.dart';
 import '../../models/coach_context_card.dart';
@@ -187,7 +188,6 @@ class _HistoryState extends ConsumerState<ActivityHistory> {
               padding: const EdgeInsets.only(top: 12, bottom: 4),
               child: TimelineSectionHeader(
                 label: context.l10n.history2,
-                icon: Icons.bolt_rounded,
                 colors: doneGradient,
               ),
             ),
@@ -264,7 +264,7 @@ class _OlderState extends ConsumerState<_OlderActivities> {
         child: Center(
           child: Text(
             context.l10n.noOlderActivities,
-            style: const TextStyle(color: muted, fontSize: 12),
+            style: TextStyle(color: muted, fontSize: 12),
           ),
         ),
       );
@@ -371,7 +371,7 @@ class _ActivityHistoryTile extends StatelessWidget {
             valueText(a.avgHeartRate),
             valueText(a.totalElevation),
           ),
-      style: const TextStyle(fontSize: 10, color: Colors.white70),
+      style: TextStyle(fontSize: 10, color: fjInk70),
     ),
     trailing: Icon(Icons.check_circle_rounded, size: 20, color: color),
     onTap: () => showAppSheet(context, ActivityDetailSheet(activity: a)),

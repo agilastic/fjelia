@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' show DateFormat;
@@ -23,16 +24,12 @@ class NightCurvesSection extends StatelessWidget {
       children: [
         Text(
           l10n.nightCurves.toUpperCase(),
-          style: const TextStyle(
-            color: muted,
-            fontSize: 12,
-            letterSpacing: 1.6,
-          ),
+          style: TextStyle(color: muted, fontSize: 12, letterSpacing: 1.6),
         ),
         const SizedBox(height: 6),
         Text(
           sleep.phasesEstimated ? l10n.nightCurvesBasis : l10n.noPhaseTimeline,
-          style: const TextStyle(color: muted, fontSize: 11, height: 1.4),
+          style: TextStyle(color: muted, fontSize: 11, height: 1.4),
         ),
         if (sleep.hrvCurve.length > 1) ...[
           const SizedBox(height: 16),
@@ -94,7 +91,7 @@ class _Curve extends StatelessWidget {
             Text(
               '⌀ ${avg.round()}${unit.isEmpty ? '' : ' $unit'} · '
               '${lo.round()}–${hi.round()}',
-              style: const TextStyle(color: Colors.white70, fontSize: 12),
+              style: TextStyle(color: fjInk70, fontSize: 12),
             ),
           ],
         ),
@@ -113,7 +110,7 @@ class _Curve extends StatelessWidget {
                 horizontalLines: [
                   HorizontalLine(
                     y: avg,
-                    color: Colors.white24,
+                    color: fjInk24,
                     strokeWidth: 1,
                     dashArray: const [4, 4],
                   ),
@@ -145,12 +142,12 @@ class _Curve extends StatelessWidget {
           children: [
             Text(
               fmt.format(sorted.first.$1),
-              style: const TextStyle(color: muted, fontSize: 11),
+              style: TextStyle(color: muted, fontSize: 11),
             ),
             const Spacer(),
             Text(
               fmt.format(sorted.last.$1),
-              style: const TextStyle(color: muted, fontSize: 11),
+              style: TextStyle(color: muted, fontSize: 11),
             ),
           ],
         ),

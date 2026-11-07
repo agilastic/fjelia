@@ -3,6 +3,7 @@ import '../../l10n/l10n_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../providers/style_provider.dart';
 import '../../providers/visibility_provider.dart';
 import '../../widgets/app_widgets.dart';
 
@@ -17,6 +18,54 @@ class DisplayTab extends ConsumerWidget {
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          SectionLabel(context.l10n.styleTitle),
+          SectionCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  child: SegmentedButton<StyleChoice>(
+                    showSelectedIcon: false,
+                    segments: [
+                      ButtonSegment(
+                        value: StyleChoice.auto,
+                        icon: const Icon(Icons.brightness_auto_outlined),
+                        label: Text(context.l10n.styleAuto),
+                      ),
+                      const ButtonSegment(
+                        value: StyleChoice.dark,
+                        icon: Icon(Icons.dark_mode_outlined),
+                        label: Text('DarkFjelia'),
+                      ),
+                      const ButtonSegment(
+                        value: StyleChoice.light,
+                        icon: Icon(Icons.light_mode_outlined),
+                        label: Text('LightFjelia'),
+                      ),
+                    ],
+                    selected: {
+                      ref.watch(styleChoiceProvider).valueOrNull ??
+                          StyleChoice.dark,
+                    },
+                    onSelectionChanged: (s) => runUiAction(
+                      context,
+                      () => ref.read(styleChoiceProvider.notifier).set(s.first),
+                    ),
+                  ),
+                ),
+                if (ref.watch(styleChoiceProvider).valueOrNull ==
+                    StyleChoice.auto)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Text(
+                      context.l10n.styleAutoHint,
+                      style: TextStyle(fontSize: 11, color: muted),
+                    ),
+                  ),
+              ],
+            ),
+          ),
           SectionLabel(context.l10n.healthPage),
           SectionCard(
             child: Column(

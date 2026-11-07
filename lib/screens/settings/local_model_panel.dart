@@ -24,7 +24,7 @@ class LocalModelPanel extends ConsumerWidget {
         const SizedBox(height: 6),
         Text(
           context.l10n.localModelRamGb(localModelSpec(modelId).minimumMemoryGb),
-          style: const TextStyle(fontSize: 11, color: muted),
+          style: TextStyle(fontSize: 11, color: muted),
         ),
         const SizedBox(height: 12),
         ref
@@ -65,7 +65,7 @@ class LocalModelPanel extends ConsumerWidget {
                       context.l10n.localModelSizeMb(
                         valueText(status.totalBytes / 1e6),
                       ),
-                      style: const TextStyle(fontSize: 11, color: muted),
+                      style: TextStyle(fontSize: 11, color: muted),
                     ),
                     if (status.error != null) ...[
                       const SizedBox(height: 8),

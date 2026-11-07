@@ -3835,5 +3835,20 @@
   "shortReasonWeather": "Sää",
   "shortReasonFatigue": "Väsynyt",
   "shortReasonPain": "Kipu",
-  "shortReasonOther": "Muu"
+  "shortReasonOther": "Muu",
+  "styleTitle": "Tyyli",
+  "styleAuto": "Automaattinen",
+  "styleAutoHint": "Seuraa puhelinta: päivällä LightFjelia, yöllä DarkFjelia.",
+  "connectMyWhoosh": "Yhdistä MyWhoosh",
+  "myWhooshSubtitle": "Kirjaudu MyWhoosh-tililläsi, niin sisäajosi tulevat tehon, kadenssin ja sykkeen kanssa.",
+  "myWhooshCredentialsInfo": "MyWhoosh-tunnukset tallennetaan salattuina laitteellesi. Fjelia lukee ajosi suoraan MyWhooshista MyWhoosh-sovelluksen rajapinnan kautta. Fjelia ei ole MyWhooshin yhteistyökumppani.",
+  "myWhooshTile": "Sisäajot",
+  "myWhooshSignedInElsewhere": "MyWhoosh sallii vain yhden istunnon tiliä kohden, ja olet kirjautuneena toisella laitteella. Sulje MyWhoosh siellä (kirjaudu tarvittaessa ulos) ja yritä uudelleen.",
+  "shareWorkout": "Jaa harjoitus",
+  "shareFitFile": "Jaa FIT-tiedostona",
+  "shareFitFileHint": "Stravaan, COROSiin, TrainingPeaksiin ja muihin sovelluksiin",
+  "sendToGarmin": "Lähetä Garmin Connectiin",
+  "sendToGarminHint": "Lataa harjoituksen Garmin-tilillesi",
+  "sentToGarmin": "Lähetetty Garmin Connectiin",
+  "alreadyOnGarmin": "Tämä harjoitus on jo Garmin Connectissa"
 }

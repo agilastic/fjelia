@@ -17,6 +17,7 @@ class ActivityIntervalResolver {
     'coros',
     'suunto',
     'polar',
+    'mywhoosh',
   };
 
   ActualInterval resolve({

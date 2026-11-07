@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../l10n/formats.dart';
 import '../../models/workout_presentation.dart';
@@ -26,7 +27,7 @@ class WorkoutDetailSheet extends StatelessWidget {
     padding: const EdgeInsets.only(top: 22, bottom: 10),
     child: Text(
       title,
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 11,
         color: muted,
         fontWeight: FontWeight.w700,
@@ -53,7 +54,7 @@ class WorkoutDetailSheet extends StatelessWidget {
             context.l10n.garminWorkoutScheduleddate(
               dayText(workout.scheduledDate),
             ),
-            style: const TextStyle(fontSize: 13, color: Colors.white70),
+            style: TextStyle(fontSize: 13, color: fjInk70),
           ),
           const SizedBox(height: 16),
           WorkoutStatTiles(
@@ -74,11 +75,7 @@ class WorkoutDetailSheet extends StatelessWidget {
             _heading(context.l10n.aboutThisWorkout),
             Text(
               workout.description!,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.white70,
-                height: 1.6,
-              ),
+              style: TextStyle(fontSize: 14, color: fjInk70, height: 1.6),
             ),
           ],
           if (strength)

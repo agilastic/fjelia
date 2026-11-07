@@ -70,7 +70,7 @@ class HistorySyncCard extends ConsumerWidget {
               padding: const EdgeInsets.only(right: 8, bottom: 8),
               child: Text(
                 s.phase!,
-                style: const TextStyle(fontSize: 12, color: muted),
+                style: TextStyle(fontSize: 12, color: muted),
               ),
             ),
           Padding(

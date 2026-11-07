@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../providers/activity_history_provider.dart';
 
@@ -44,7 +45,7 @@ class _Lt2TestState extends ConsumerState<Lt2TestSheet> {
             TabBar(
               labelColor: loadBlue,
               indicatorColor: loadBlue,
-              dividerColor: Colors.white10,
+              dividerColor: fjInk10,
               labelStyle: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
@@ -84,7 +85,7 @@ class _Lt2TestState extends ConsumerState<Lt2TestSheet> {
                               child: Text(
                                 context.l10n.recordAsANormalOutdoor,
                                 style: TextStyle(
-                                  color: Color(0xFFBBBBBB),
+                                  color: duo(0xFFBBBBBB, 0xFF4B5563),
                                   fontSize: 13,
                                 ),
                               ),
@@ -139,7 +140,7 @@ class _Lt2TestState extends ConsumerState<Lt2TestSheet> {
                                         width: 2,
                                         color: step.$1 == 'COOL-DOWN'
                                             ? Colors.transparent
-                                            : Colors.white12,
+                                            : fjInk12,
                                       ),
                                     ),
                                   ],
@@ -169,9 +170,9 @@ class _Lt2TestState extends ConsumerState<Lt2TestSheet> {
                                           ),
                                           Text(
                                             step.$3,
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               fontSize: 12,
-                                              color: Colors.white,
+                                              color: fjInk,
                                             ),
                                           ),
                                         ],
@@ -179,9 +180,9 @@ class _Lt2TestState extends ConsumerState<Lt2TestSheet> {
                                       const SizedBox(height: 5),
                                       Text(
                                         step.$2,
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontSize: 11,
-                                          color: Color(0xFFBBBBBB),
+                                          color: duo(0xFFBBBBBB, 0xFF4B5563),
                                         ),
                                       ),
                                       if (step.$1 == '30-MIN TT')
@@ -203,7 +204,7 @@ class _Lt2TestState extends ConsumerState<Lt2TestSheet> {
                             ],
                           ),
                         ),
-                      const Divider(height: 30, color: Colors.white10),
+                      Divider(height: 30, color: fjInk10),
                       Text(
                         context.l10n.theAppAveragesHrAnd,
                         style: TextStyle(color: muted, fontSize: 12),
@@ -219,9 +220,9 @@ class _Lt2TestState extends ConsumerState<Lt2TestSheet> {
                           const SizedBox(width: 10),
                           Text(
                             '${result?.lt2 ?? '—'} bpm',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 18,
-                              color: Colors.white,
+                              color: fjInk,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -233,9 +234,9 @@ class _Lt2TestState extends ConsumerState<Lt2TestSheet> {
                                 Text(context.l10n.lt2Pace, style: loadCaption),
                                 Text(
                                   result?.pace ?? '—',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 18,
-                                    color: Colors.white,
+                                    color: fjInk,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -244,7 +245,7 @@ class _Lt2TestState extends ConsumerState<Lt2TestSheet> {
                           ),
                         ],
                       ),
-                      const Divider(height: 32, color: Colors.white10),
+                      Divider(height: 32, color: fjInk10),
                       Text(context.l10n.recalculate),
                       const SizedBox(height: 8),
                       Text(

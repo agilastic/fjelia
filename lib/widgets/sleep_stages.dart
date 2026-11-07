@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import '../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
@@ -17,16 +18,16 @@ Map<String, String> get _stageLabels => {
 };
 
 /// Bar colors: white awake, then teal getting darker with depth.
-const sleepStageColors = {
-  'awake': Color(0xFFFFFFFF),
+Map<String, Color> get sleepStageColors => {
+  'awake': duo(0xFFFFFFFF, 0xFF15171A),
   'rem': Color(0xFF00BFBF),
   'light': Color(0xFF007B7B),
   'deep': Color(0xFF004A4A),
 };
 
 // Label/legend tints readable on the dark panel (deep is too dark as is).
-const _stageTextColors = {
-  'awake': Color(0xFFFFFFFF),
+Map<String, Color> get _stageTextColors => {
+  'awake': duo(0xFFFFFFFF, 0xFF15171A),
   'rem': Color(0xFF00BFBF),
   'light': Color(0xFF2FA3A3),
   'deep': Color(0xFF4FA8A8),
@@ -80,16 +81,12 @@ class SleepStagesSection extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Icons.auto_awesome, size: 14, color: muted),
+                Icon(Icons.auto_awesome, size: 14, color: muted),
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
                     context.l10n.stagesEstimated,
-                    style: const TextStyle(
-                      fontSize: 11,
-                      color: muted,
-                      height: 1.4,
-                    ),
+                    style: TextStyle(fontSize: 11, color: muted, height: 1.4),
                   ),
                 ),
               ],
@@ -174,7 +171,7 @@ class SleepStageBreakdown extends StatelessWidget {
                       (durations[stage]!.inSeconds / total * 100).round(),
                     ),
                     textAlign: TextAlign.right,
-                    style: const TextStyle(fontSize: 12, color: muted),
+                    style: TextStyle(fontSize: 12, color: muted),
                   ),
                 ),
               ],
@@ -322,7 +319,7 @@ class _SleepStagesPainter extends CustomPainter {
     final span = to.difference(from).inMilliseconds.toDouble();
     if (span <= 0) return;
     final grid = Paint()
-      ..color = const Color(0xFF333333)
+      ..color = duo(0xFF333333, 0xFFE3E7EC)
       ..strokeWidth = 1;
     for (var i = 0; i <= sleepStageOrder.length; i++) {
       final y = i * _rowHeight;
@@ -347,7 +344,7 @@ class _SleepStagesPainter extends CustomPainter {
     final hours = to.difference(from).inMinutes / 60;
     final stepHours = hours <= 6 ? 1 : (hours / 6).ceil();
     var tick = DateTime(from.year, from.month, from.day, from.hour + 1);
-    final style = const TextStyle(fontSize: 10, color: muted);
+    final style = TextStyle(fontSize: 10, color: muted);
     final axisTop = sleepStageOrder.length * _rowHeight + 6;
     var n = 0;
     while (tick.isBefore(to)) {
@@ -377,7 +374,7 @@ class _SleepStagesPainter extends CustomPainter {
         Offset(f * size.width, 0),
         Offset(f * size.width, sleepStageOrder.length * _rowHeight),
         Paint()
-          ..color = Colors.white54
+          ..color = fjInk54
           ..strokeWidth = 1.5,
       );
     }

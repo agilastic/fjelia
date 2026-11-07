@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import '../l10n/formats.dart';
 import '../l10n/l10n_ext.dart';
 import '../models/weather_comparison.dart';
@@ -155,7 +156,7 @@ class _WeatherChartState extends State<WeatherForecastChart> {
             padding: const EdgeInsets.all(8),
             child: Text(
               '${DateFormat.E().add_Hm().format(widget.points[selected!].time)} · ${widget.points[selected!].temperatureC.fixed(1)}°C${_rangeText(comparison, widget.points[selected!].time)} · ${widget.points[selected!].precipitationMm.fixed(1)} mm${_rainRangeText(comparison, widget.points[selected!].time)} · UV ${widget.points[selected!].uvIndex ?? '—'}',
-              style: const TextStyle(fontSize: 11, color: Colors.white70),
+              style: TextStyle(fontSize: 11, color: fjInk70),
             ),
           ),
         Padding(
@@ -312,7 +313,7 @@ class _WeatherPainter extends CustomPainter {
       canvas.drawLine(
         Offset(plot.left, y(value)),
         Offset(plot.right, y(value)),
-        Paint()..color = Colors.white12,
+        Paint()..color = fjInk12,
       );
       label('${value.round()}°', Offset(0, y(value) - 5), muted);
       label(
@@ -417,7 +418,7 @@ class _WeatherPainter extends CustomPainter {
         Offset(x(selected!), plot.top),
         Offset(x(selected!), plot.bottom),
         Paint()
-          ..color = Colors.white54
+          ..color = fjInk54
           ..strokeWidth = 1,
       );
     }
@@ -446,7 +447,7 @@ class WeatherChartFullscreen extends StatelessWidget {
   final Map<String, DateTime> sunrise, sunset;
   @override
   Widget build(BuildContext context) => Scaffold(
-    backgroundColor: const Color(0xFF111111),
+    backgroundColor: duo(0xFF111111, 0xFFF2F4F7),
     body: SafeArea(
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -459,10 +460,10 @@ class WeatherChartFullscreen extends StatelessWidget {
                     Expanded(
                       child: Text(
                         'WEATHER · ${primarySource ?? 'FORECAST'}',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
-                          color: Colors.white70,
+                          color: fjInk70,
                         ),
                       ),
                     ),

@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -35,7 +36,7 @@ class _MediaGalleryState extends ConsumerState<MediaGallery> {
     final l10n = context.l10n;
     final choice = await showModalBottomSheet<String>(
       context: context,
-      backgroundColor: const Color(0xFF1A1A1A),
+      backgroundColor: duo(0xFF1A1A1A, 0xFFF7F8FA),
       builder: (context) => SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -86,8 +87,9 @@ class _MediaGalleryState extends ConsumerState<MediaGallery> {
     } catch (e) {
       log('[Media] picker failed: $e');
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(l10n.mediaAddFailed)));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.mediaAddFailed)));
       }
       return;
     }
@@ -105,8 +107,9 @@ class _MediaGalleryState extends ConsumerState<MediaGallery> {
     if (!mounted) return;
     setState(() => progress = null);
     if (added < files.length) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(l10n.mediaAddFailed)));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.mediaAddFailed)));
     }
   }
 
@@ -115,7 +118,7 @@ class _MediaGalleryState extends ConsumerState<MediaGallery> {
     final service = ref.read(mediaServiceProvider);
     final action = await showModalBottomSheet<String>(
       context: context,
-      backgroundColor: const Color(0xFF1A1A1A),
+      backgroundColor: duo(0xFF1A1A1A, 0xFFF7F8FA),
       builder: (context) => SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -214,14 +217,14 @@ class _MediaGalleryState extends ConsumerState<MediaGallery> {
                 busy.$1 + 1 > busy.$2 ? busy.$2 : busy.$1 + 1,
                 busy.$2,
               ),
-              style: const TextStyle(color: muted, fontSize: 11),
+              style: TextStyle(color: muted, fontSize: 11),
             ),
           ] else if (items.isNotEmpty)
             Padding(
               padding: const EdgeInsets.only(top: 6),
               child: Text(
                 l10n.mediaHint,
-                style: const TextStyle(color: muted, fontSize: 11),
+                style: TextStyle(color: muted, fontSize: 11),
               ),
             ),
         ],
@@ -242,19 +245,19 @@ class _AddTile extends StatelessWidget {
       width: 88,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.white24),
+        border: Border.all(color: fjInk24),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
             Icons.add_photo_alternate_outlined,
-            color: onTap == null ? Colors.white24 : mint,
+            color: onTap == null ? fjInk24 : mint,
           ),
           const SizedBox(height: 4),
           Text(
             context.l10n.mediaAdd,
-            style: const TextStyle(fontSize: 11, color: muted),
+            style: TextStyle(fontSize: 11, color: muted),
           ),
         ],
       ),
@@ -270,7 +273,7 @@ class MediaThumb extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       item.thumbName == null && item.kind == 'video'
-      ? const ColoredBox(color: Color(0xFF282828))
+      ? ColoredBox(color: duo(0xFF282828, 0xFFEEF1F5))
       : _MediaFile(
           name: item.thumbName ?? item.fileName,
           builder: (file) => Image.file(
@@ -278,7 +281,7 @@ class MediaThumb extends StatelessWidget {
             fit: BoxFit.cover,
             cacheWidth: 264,
             errorBuilder: (_, _, _) =>
-                const ColoredBox(color: Color(0xFF282828)),
+                ColoredBox(color: duo(0xFF282828, 0xFFEEF1F5)),
           ),
         );
 }
@@ -293,7 +296,7 @@ class _MediaFile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) => FutureBuilder<File>(
     future: ref.read(mediaServiceProvider).file(name),
     builder: (context, snapshot) => snapshot.data == null
-        ? const ColoredBox(color: Color(0xFF282828))
+        ? ColoredBox(color: duo(0xFF282828, 0xFFEEF1F5))
         : builder(snapshot.data!),
   );
 }
@@ -515,11 +518,7 @@ class _VideoPageState extends State<_VideoPage> {
             child: VideoPlayer(video),
           ),
           if (!video.value.isPlaying)
-            const Icon(
-              Icons.play_circle_outline,
-              size: 72,
-              color: Colors.white70,
-            ),
+            Icon(Icons.play_circle_outline, size: 72, color: fjInk70),
           Positioned(
             left: 0,
             right: 0,

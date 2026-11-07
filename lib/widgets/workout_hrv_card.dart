@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import '../l10n/l10n_ext.dart';
 import '../l10n/formats.dart';
 
@@ -16,7 +17,7 @@ import '../theme/hrv_colors.dart';
 import 'app_widgets.dart';
 import 'polar_h10_hrv_sheet.dart';
 
-const _surface = Color(0xFF282828);
+Color get _surface => duo(0xFF282828, 0xFFEEF1F5);
 const _line = Color(0x1FFFFFFF);
 
 /// "HRV around this workout": the readings taken before and after one
@@ -306,8 +307,8 @@ class _BodyState extends ConsumerState<_Body> {
                       const Duration(hours: 6))
                 m,
           ];
-    TextStyle small([Color color = muted]) =>
-        TextStyle(fontSize: 12, color: color, height: 1.4);
+    TextStyle small([Color? color]) =>
+        TextStyle(fontSize: 12, color: color ?? muted, height: 1.4);
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(top: 10),
@@ -502,14 +503,17 @@ class _Timeline extends StatelessWidget {
     // With large text or a narrow screen the timeline runs top to bottom, so
     // no label is squeezed.
     if (MediaQuery.textScalerOf(context).scale(10) > 13) {
-      Widget row(Widget lead, String text, {Color color = muted}) => Padding(
+      Widget row(Widget lead, String text, {Color? color}) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 3),
         child: Row(
           children: [
             SizedBox(width: 28, child: Center(child: lead)),
             const SizedBox(width: 10),
             Expanded(
-              child: Text(text, style: TextStyle(fontSize: 13, color: color)),
+              child: Text(
+                text,
+                style: TextStyle(fontSize: 13, color: color ?? muted),
+              ),
             ),
           ],
         ),
@@ -533,13 +537,13 @@ class _Timeline extends StatelessWidget {
                 : context.l10n.beforeTolocal(
                     _time.format(pre!.startedAt.toLocal()),
                   ),
-            color: Colors.white,
+            color: fjInk,
           ),
           if (preGap != null) row(stem, gap(preGap)),
           row(
             Icon(activitySportIcon(sport), size: 18, color: sportColor),
             context.l10n.workoutWorkouttext(workoutText),
-            color: Colors.white,
+            color: fjInk,
           ),
           if (postDelay != null) row(stem, gap(postDelay)),
           row(
@@ -549,7 +553,7 @@ class _Timeline extends StatelessWidget {
                 : context.l10n.afterTolocal(
                     _time.format(post!.startedAt.toLocal()),
                   ),
-            color: Colors.white,
+            color: fjInk,
           ),
         ],
       );
@@ -592,7 +596,7 @@ class _Timeline extends StatelessWidget {
                   workoutText,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 11, color: muted),
+                  style: TextStyle(fontSize: 11, color: muted),
                 ),
               ],
             ),
@@ -647,7 +651,7 @@ class _Point extends StatelessWidget {
           child: Text(
             time,
             maxLines: 1,
-            style: const TextStyle(fontSize: 11, color: muted),
+            style: TextStyle(fontSize: 11, color: muted),
           ),
         ),
       ],
@@ -746,7 +750,7 @@ class _ReadingTile extends StatelessWidget {
                   label.toUpperCase(),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 10,
                     letterSpacing: 1,
                     fontWeight: FontWeight.w700,
@@ -758,7 +762,7 @@ class _ReadingTile extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           if (m == null)
-            Text(missing, style: const TextStyle(color: muted, fontSize: 12))
+            Text(missing, style: TextStyle(color: muted, fontSize: 12))
           else ...[
             Row(
               crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -804,7 +808,7 @@ class _ReadingTile extends StatelessWidget {
                   ),
                 ],
               ),
-              style: const TextStyle(fontSize: 11, color: muted, height: 1.3),
+              style: TextStyle(fontSize: 11, color: muted, height: 1.3),
             ),
           ],
         ],
@@ -844,7 +848,7 @@ class _ChangePill extends StatelessWidget {
             child: Icon(
               down ? Icons.south_east_rounded : Icons.north_east_rounded,
               size: 18,
-              color: Colors.white,
+              color: fjInk,
             ),
           ),
           const SizedBox(width: 12),
@@ -867,7 +871,7 @@ class _ChangePill extends StatelessWidget {
                       padding: const EdgeInsets.only(bottom: 2),
                       child: Text(
                         context.l10n.deltapercent(hrvSigned(a.deltaPercent!)),
-                        style: const TextStyle(fontSize: 15, color: muted),
+                        style: TextStyle(fontSize: 15, color: muted),
                       ),
                     ),
                   ],
@@ -905,7 +909,7 @@ class _History extends ConsumerWidget {
           children: [
             Text(
               context.l10n.notEnoughComparableWorkoutsYet2(c.eligible, need),
-              style: const TextStyle(fontSize: 12, color: muted),
+              style: TextStyle(fontSize: 12, color: muted),
             ),
             const SizedBox(height: 6),
             ExcludeSemantics(
@@ -949,7 +953,7 @@ class _History extends ConsumerWidget {
                 day.format(c.first!.toLocal()),
                 day.format(c.last!.toLocal()),
               ),
-              style: const TextStyle(fontSize: 12, color: muted),
+              style: TextStyle(fontSize: 12, color: muted),
             ),
             const SizedBox(height: 8),
             SizedBox(
@@ -972,7 +976,7 @@ class _History extends ConsumerWidget {
                 hrvSigned(c.medianMs!),
                 hrvSigned(delta),
               ),
-              style: const TextStyle(fontSize: 11, color: muted, height: 1.3),
+              style: TextStyle(fontSize: 11, color: muted, height: 1.3),
             ),
           ],
         ),
@@ -1014,7 +1018,7 @@ class _RangePainter extends CustomPainter {
       Offset(x(median), y - 8),
       Offset(x(median), y + 8),
       Paint()
-        ..color = Colors.white70
+        ..color = fjInk70
         ..strokeWidth = 2,
     );
     canvas.drawCircle(Offset(x(value), y), 7, Paint()..color = hrvAfterColor);
@@ -1022,7 +1026,7 @@ class _RangePainter extends CustomPainter {
       Offset(x(value), y),
       7,
       Paint()
-        ..color = const Color(0xFF202020)
+        ..color = duo(0xFF202020, 0xFFFFFFFF)
         ..style = PaintingStyle.stroke
         ..strokeWidth = 2,
     );
@@ -1083,11 +1087,7 @@ class _ReminderPill extends StatelessWidget {
     ),
     child: Row(
       children: [
-        const Icon(
-          Icons.notifications_none_rounded,
-          size: 16,
-          color: Colors.white70,
-        ),
+        Icon(Icons.notifications_none_rounded, size: 16, color: fjInk70),
         const SizedBox(width: 8),
         Expanded(
           child: Text(text, style: const TextStyle(fontSize: 12, height: 1.3)),
@@ -1116,7 +1116,7 @@ class _Rpe extends StatelessWidget {
           f.rpe == null
               ? context.l10n.howHardDidItFeel
               : 'RPE ${f.rpe}${f.fromSession ? ' · from your plan session' : ''}',
-          style: const TextStyle(color: muted, fontSize: 12),
+          style: TextStyle(color: muted, fontSize: 12),
         ),
         const SizedBox(height: 8),
         Row(
@@ -1150,8 +1150,8 @@ class _Rpe extends StatelessWidget {
                                 fontSize: 13,
                                 fontWeight: FontWeight.w700,
                                 color: f.rpe == i
-                                    ? const Color(0xFF111111)
-                                    : Colors.white70,
+                                    ? duo(0xFF111111, 0xFFF2F4F7)
+                                    : fjInk70,
                               ),
                             ),
                           ),

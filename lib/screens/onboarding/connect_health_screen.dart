@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../providers/connection_actions_provider.dart';
 
@@ -52,16 +53,19 @@ class _ConnectHealthScreenState extends ConsumerState<ConnectHealthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF111111),
+      backgroundColor: duo(0xFF111111, 0xFFF2F4F7),
       appBar: AppBar(
-        leading: const BackButton(color: Color(0xFFCCCCCC)),
+        leading: BackButton(color: duo(0xFFCCCCCC, 0xFF374151)),
         title: const Text(''),
         actions: [
           TextButton(
             onPressed: _next,
             child: Text(
               context.l10n.skip,
-              style: TextStyle(color: Color(0xFFCCCCCC), fontSize: 14),
+              style: TextStyle(
+                color: duo(0xFFCCCCCC, 0xFF374151),
+                fontSize: 14,
+              ),
             ),
           ),
         ],
@@ -94,7 +98,7 @@ class _ConnectHealthScreenState extends ConsumerState<ConnectHealthScreen> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: _accent,
-                    foregroundColor: Colors.white,
+                    foregroundColor: fjInk,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
@@ -102,11 +106,11 @@ class _ConnectHealthScreenState extends ConsumerState<ConnectHealthScreen> {
                   ),
                   onPressed: _loading ? null : _connect,
                   child: _loading
-                      ? const SizedBox(
+                      ? SizedBox(
                           width: 22,
                           height: 22,
                           child: CircularProgressIndicator(
-                            color: Colors.white,
+                            color: fjInk,
                             strokeWidth: 2.5,
                           ),
                         )
@@ -147,9 +151,9 @@ class _DataPointsBox extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E),
+        color: duo(0xFF1E1E1E, 0xFFFFFFFF),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFF333333)),
+        border: Border.all(color: duo(0xFF333333, 0xFFE3E7EC)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,7 +161,7 @@ class _DataPointsBox extends StatelessWidget {
           Text(
             context.l10n.dataSynced,
             style: TextStyle(
-              color: Color(0xFFCCCCCC),
+              color: duo(0xFFCCCCCC, 0xFF374151),
               fontSize: 11,
               fontWeight: FontWeight.w600,
               letterSpacing: 0.8,
@@ -169,22 +173,16 @@ class _DataPointsBox extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 6),
               child: Row(
                 children: [
-                  Icon(icon, size: 18, color: const Color(0xFF888888)),
+                  Icon(icon, size: 18, color: duo(0xFF888888, 0xFF6B7280)),
                   const SizedBox(width: 12),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        title,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 13,
-                        ),
-                      ),
+                      Text(title, style: TextStyle(color: fjInk, fontSize: 13)),
                       Text(
                         sub,
-                        style: const TextStyle(
-                          color: Color(0xFFCCCCCC),
+                        style: TextStyle(
+                          color: duo(0xFFCCCCCC, 0xFF374151),
                           fontSize: 11,
                         ),
                       ),

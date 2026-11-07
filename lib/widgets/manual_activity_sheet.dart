@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -180,7 +181,7 @@ class _ManualActivityState extends ConsumerState<ManualActivitySheet> {
     final state = ref.read(indoorRecorderProvider);
     final picked = await showModalBottomSheet<String>(
       context: context,
-      backgroundColor: const Color(0xFF111111),
+      backgroundColor: duo(0xFF111111, 0xFFF2F4F7),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -476,7 +477,7 @@ class _ManualActivityState extends ConsumerState<ManualActivitySheet> {
             padding: const EdgeInsets.only(top: 10),
             child: Text(
               l.indoorMatrixReadOnly,
-              style: const TextStyle(color: muted, fontSize: 12),
+              style: TextStyle(color: muted, fontSize: 12),
             ),
           ),
         if (state.phase == IndoorPhase.starting)
@@ -504,7 +505,7 @@ class _ManualActivityState extends ConsumerState<ManualActivitySheet> {
         const SizedBox(height: 18),
         Text(
           l.manualRecordDescription,
-          style: const TextStyle(color: muted, fontSize: 12, height: 1.4),
+          style: TextStyle(color: muted, fontSize: 12, height: 1.4),
         ),
       ],
     );
@@ -627,7 +628,7 @@ class _ManualActivityState extends ConsumerState<ManualActivitySheet> {
                 Text(
                   l.manualGpsWaiting,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(color: muted, fontSize: 12),
+                  style: TextStyle(color: muted, fontSize: 12),
                 ),
               if (stats.isNotEmpty) ...[
                 const SizedBox(height: 22),
@@ -704,7 +705,7 @@ class _ManualActivityState extends ConsumerState<ManualActivitySheet> {
                           ),
                           Text(
                             l.manualEcgSegments(capture.ecgRecordingIds.length),
-                            style: const TextStyle(color: muted, fontSize: 11),
+                            style: TextStyle(color: muted, fontSize: 11),
                           ),
                         ],
                       ),
@@ -745,7 +746,7 @@ class _ManualActivityState extends ConsumerState<ManualActivitySheet> {
                   padding: const EdgeInsets.only(top: 12),
                   child: Text(
                     l.indoorMatrixReadOnly,
-                    style: const TextStyle(color: muted, fontSize: 12),
+                    style: TextStyle(color: muted, fontSize: 12),
                   ),
                 ),
               const SizedBox(height: 12),
@@ -785,7 +786,7 @@ class _ManualActivityState extends ConsumerState<ManualActivitySheet> {
                               key: const ValueKey('record-finish'),
                               icon: Icons.sports_score_rounded,
                               label: l.recFinish,
-                              background: Colors.white,
+                              background: fjInk,
                               foreground: Colors.black,
                               onTap: waiting || capture.elapsedMs < 1000
                                   ? null
@@ -1023,7 +1024,7 @@ class _RoundAction extends StatelessWidget {
                             color: mint,
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: const Color(0xFF111111),
+                              color: duo(0xFF111111, 0xFFF2F4F7),
                               width: 2,
                             ),
                           ),
@@ -1047,7 +1048,7 @@ class _RoundAction extends StatelessWidget {
               style: TextStyle(
                 fontSize: primary ? 16 : 13,
                 fontWeight: primary ? FontWeight.w800 : FontWeight.w600,
-                color: primary ? mint : Colors.white,
+                color: primary ? mint : fjInk,
               ),
             ),
           ],
@@ -1107,7 +1108,7 @@ class _OptionRow extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
       child: Row(
         children: [
-          Icon(icon, color: Colors.white, size: 26),
+          Icon(icon, color: fjInk, size: 26),
           const SizedBox(width: 18),
           Expanded(
             child: Column(
@@ -1125,7 +1126,7 @@ class _OptionRow extends StatelessWidget {
                     subtitle!,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(color: muted, fontSize: 12),
+                    style: TextStyle(color: muted, fontSize: 12),
                   ),
               ],
             ),
@@ -1133,7 +1134,7 @@ class _OptionRow extends StatelessWidget {
           if (value != null)
             Switch(value: value!, onChanged: onChanged, activeThumbColor: mint)
           else
-            const Icon(Icons.chevron_right_rounded, color: muted),
+            Icon(Icons.chevron_right_rounded, color: muted),
         ],
       ),
     ),
@@ -1199,7 +1200,7 @@ class _ClockBand extends StatelessWidget {
             fontSize: 44,
             fontWeight: FontWeight.w800,
             letterSpacing: -.5,
-            color: paused ? Colors.black : Colors.white,
+            color: paused ? Colors.black : fjInk,
             fontFeatures: const [FontFeature.tabularFigures()],
           ),
         ),
@@ -1227,7 +1228,7 @@ class _BigFigure extends StatelessWidget {
           style: TextStyle(
             fontSize: size,
             height: 1.05,
-            color: Colors.white,
+            color: fjInk,
             fontWeight: FontWeight.w900,
             letterSpacing: -2,
             fontFeatures: const [FontFeature.tabularFigures()],
@@ -1236,7 +1237,7 @@ class _BigFigure extends StatelessWidget {
       ),
       Text(
         label,
-        style: const TextStyle(
+        style: TextStyle(
           color: muted,
           fontSize: 14,
           fontWeight: FontWeight.w600,
@@ -1278,7 +1279,7 @@ class _StatPill extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 4),
-        Text(unit, style: const TextStyle(color: muted, fontSize: 12)),
+        Text(unit, style: TextStyle(color: muted, fontSize: 12)),
       ],
     ),
   );
@@ -1420,7 +1421,7 @@ class _LiveRouteMapState extends State<_LiveRouteMap> {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: const Color(0xFF38BDF8),
-                    border: Border.all(color: Colors.white, width: 3),
+                    border: Border.all(color: fjInk, width: 3),
                   ),
                 ),
               ),

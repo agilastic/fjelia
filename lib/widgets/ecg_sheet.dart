@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import 'dart:async';
 import 'dart:math' as math;
 import 'dart:typed_data';
@@ -118,7 +119,7 @@ class _EcgSheetState extends ConsumerState<EcgSheet> {
                   ),
                   Text(
                     context.l10n.ecgImportLimitations,
-                    style: const TextStyle(fontSize: 12, color: muted),
+                    style: TextStyle(fontSize: 12, color: muted),
                   ),
                 ],
               ),
@@ -168,7 +169,7 @@ class _EcgSheetState extends ConsumerState<EcgSheet> {
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          Text(l.ecgDescription, style: const TextStyle(color: muted)),
+          Text(l.ecgDescription, style: TextStyle(color: muted)),
           const SizedBox(height: 12),
           if (busy ||
               state.phase == EcgPhase.connecting ||
@@ -203,7 +204,7 @@ class _EcgSheetState extends ConsumerState<EcgSheet> {
                   ),
                   Text(
                     '${l.ecgSamples(state.count)} · ${l.ecgSignalGaps(state.gaps)}',
-                    style: const TextStyle(fontSize: 12, color: muted),
+                    style: TextStyle(fontSize: 12, color: muted),
                   ),
                   const SizedBox(height: 12),
                   FilledButton.icon(
@@ -255,15 +256,9 @@ class _EcgSheetState extends ConsumerState<EcgSheet> {
               ),
             ),
           ],
-          Text(
-            l.ecgPrivacy,
-            style: const TextStyle(fontSize: 12, color: muted),
-          ),
+          Text(l.ecgPrivacy, style: TextStyle(fontSize: 12, color: muted)),
           const SizedBox(height: 8),
-          Text(
-            l.ecgLimitations,
-            style: const TextStyle(fontSize: 12, color: muted),
-          ),
+          Text(l.ecgLimitations, style: TextStyle(fontSize: 12, color: muted)),
           const SizedBox(height: 20),
           Row(
             children: [
@@ -296,7 +291,7 @@ class _EcgSheetState extends ConsumerState<EcgSheet> {
                         padding: const EdgeInsets.all(16),
                         child: Text(
                           l.ecgNoRecordings,
-                          style: const TextStyle(color: muted),
+                          style: TextStyle(color: muted),
                         ),
                       ),
                     for (final row in rows)
@@ -356,7 +351,7 @@ class EcgDetailSheet extends ConsumerWidget {
           ),
           Text(
             '${dayText(row.recordedAt.toLocal())} · ${TimeOfDay.fromDateTime(row.recordedAt.toLocal()).format(context)} · ${row.source}',
-            style: const TextStyle(color: muted),
+            style: TextStyle(color: muted),
           ),
           const SizedBox(height: 16),
           if (row.status == 'interrupted')
@@ -378,7 +373,7 @@ class EcgDetailSheet extends ConsumerWidget {
                               .clamp(0, 100))
                     .toStringAsFixed(0),
               ),
-              style: const TextStyle(color: muted, fontSize: 12),
+              style: TextStyle(color: muted, fontSize: 12),
             ),
             ref
                 .watch(ecgChunksProvider(row.recordingId))
@@ -464,10 +459,7 @@ class EcgDetailSheet extends ConsumerWidget {
               }),
             ),
           ),
-          Text(
-            l.ecgLimitations,
-            style: const TextStyle(fontSize: 12, color: muted),
-          ),
+          Text(l.ecgLimitations, style: TextStyle(fontSize: 12, color: muted)),
           const SizedBox(height: 20),
           TextButton.icon(
             onPressed: () async {
@@ -623,7 +615,7 @@ class _WaveformState extends State<EcgWaveform> {
               height: 200,
               clipBehavior: Clip.hardEdge,
               decoration: BoxDecoration(
-                color: const Color(0xff131c1a),
+                color: duo(0xFF131C1A, 0xFFF7F8FA),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: CustomPaint(
@@ -643,7 +635,7 @@ class _WaveformState extends State<EcgWaveform> {
           children: [
             Text(
               '${start.toStringAsFixed(1)}–${(start + window).toStringAsFixed(1)} s · µV',
-              style: const TextStyle(fontSize: 11, color: muted),
+              style: TextStyle(fontSize: 11, color: muted),
             ),
             if (!widget.live)
               DropdownButton<double>(
@@ -879,7 +871,7 @@ class EcgHistoryTile extends ConsumerWidget {
           ),
           subtitle: Text(
             '${TimeOfDay.fromDateTime(r.recordedAt.toLocal()).format(context)} · ${r.kind == 'report' ? context.l10n.ecgReport : recordingDuration(r.durationMs)}',
-            style: const TextStyle(fontSize: 9, color: muted),
+            style: TextStyle(fontSize: 9, color: muted),
           ),
           trailing: const Icon(Icons.chevron_right, size: 15, color: color),
           onTap: () => showAppSheet(context, EcgDetailSheet(recording: r)),

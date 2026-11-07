@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import '../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ class HiloDevicePicker extends ConsumerStatefulWidget {
         devices ?? container.read(deviceActionsProvider).knownBracelets();
     return showModalBottomSheet<void>(
       context: context,
-      backgroundColor: const Color(0xFF1E1E1E),
+      backgroundColor: duo(0xFF1E1E1E, 0xFFFFFFFF),
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
@@ -82,7 +83,7 @@ class _HiloDevicePickerState extends ConsumerState<HiloDevicePicker> {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF888888),
+                  color: duo(0xFF888888, 0xFF6B7280),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -94,7 +95,7 @@ class _HiloDevicePickerState extends ConsumerState<HiloDevicePicker> {
                   child: Text(
                     context.l10n.selectHiloPodWristband,
                     style: TextStyle(
-                      color: Colors.white,
+                      color: fjInk,
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                     ),
@@ -112,7 +113,10 @@ class _HiloDevicePickerState extends ConsumerState<HiloDevicePicker> {
                 else
                   IconButton(
                     tooltip: context.l10n.rescan,
-                    icon: const Icon(Icons.refresh, color: Color(0xFFCCCCCC)),
+                    icon: Icon(
+                      Icons.refresh,
+                      color: duo(0xFFCCCCCC, 0xFF374151),
+                    ),
                     onPressed: _rescan,
                   ),
               ],
@@ -120,7 +124,10 @@ class _HiloDevicePickerState extends ConsumerState<HiloDevicePicker> {
             const SizedBox(height: 4),
             Text(
               context.l10n.selectYourAktiiaPWristband,
-              style: TextStyle(color: Color(0xFFCCCCCC), fontSize: 13),
+              style: TextStyle(
+                color: duo(0xFFCCCCCC, 0xFF374151),
+                fontSize: 13,
+              ),
             ),
             const SizedBox(height: 12),
             if (_devices.isEmpty)
@@ -129,7 +136,10 @@ class _HiloDevicePickerState extends ConsumerState<HiloDevicePicker> {
                 child: Center(
                   child: Text(
                     context.l10n.noDevicesFoundTapTo,
-                    style: TextStyle(color: Color(0xFF888888), fontSize: 14),
+                    style: TextStyle(
+                      color: duo(0xFF888888, 0xFF6B7280),
+                      fontSize: 14,
+                    ),
                   ),
                 ),
               )
@@ -139,7 +149,7 @@ class _HiloDevicePickerState extends ConsumerState<HiloDevicePicker> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: _devices.length,
                 separatorBuilder: (_, _) =>
-                    const Divider(color: Color(0xFF888888), height: 1),
+                    Divider(color: duo(0xFF888888, 0xFF6B7280), height: 1),
                 itemBuilder: (context, i) {
                   final d = _devices[i];
                   final pairing = _pairingMac == d.mac;
@@ -152,8 +162,8 @@ class _HiloDevicePickerState extends ConsumerState<HiloDevicePicker> {
                     ),
                     title: Text(
                       d.name,
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: TextStyle(
+                        color: fjInk,
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
                       ),
@@ -161,8 +171,8 @@ class _HiloDevicePickerState extends ConsumerState<HiloDevicePicker> {
                     subtitle: Text(
                       '${d.mac}  •  ${d.rssi} dBm'
                       '${d.isBonded ? '  •  Bonded' : ''}',
-                      style: const TextStyle(
-                        color: Color(0xFFCCCCCC),
+                      style: TextStyle(
+                        color: duo(0xFFCCCCCC, 0xFF374151),
                         fontSize: 12,
                       ),
                     ),
@@ -175,9 +185,9 @@ class _HiloDevicePickerState extends ConsumerState<HiloDevicePicker> {
                               strokeWidth: 2,
                             ),
                           )
-                        : const Icon(
+                        : Icon(
                             Icons.chevron_right,
-                            color: Color(0xFF888888),
+                            color: duo(0xFF888888, 0xFF6B7280),
                           ),
                     onTap: _pairingMac == null ? () => _pair(d) : null,
                   );

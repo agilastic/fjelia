@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart' show DateFormat;
@@ -153,14 +154,10 @@ class _WaistState extends ConsumerState<WaistSheet> {
             padding: const EdgeInsets.symmetric(vertical: 6),
             child: Row(
               children: [
-                const Icon(Icons.event, size: 18, color: muted),
+                Icon(Icons.event, size: 18, color: muted),
                 const SizedBox(width: 10),
                 Expanded(child: Text(DateFormat.yMMMd().add_Hm().format(at))),
-                const Icon(
-                  Icons.edit_calendar_outlined,
-                  size: 18,
-                  color: muted,
-                ),
+                Icon(Icons.edit_calendar_outlined, size: 18, color: muted),
               ],
             ),
           ),
@@ -212,12 +209,12 @@ class _WaistState extends ConsumerState<WaistSheet> {
         const SizedBox(height: 10),
         Text(
           context.l10n.waistHowToMeasure,
-          style: const TextStyle(color: muted, fontSize: 11),
+          style: TextStyle(color: muted, fontSize: 11),
         ),
         const SizedBox(height: 4),
         Text(
           context.l10n.waistSyncsProfile,
-          style: const TextStyle(color: muted, fontSize: 11),
+          style: TextStyle(color: muted, fontSize: 11),
         ),
       ],
     ),
@@ -280,7 +277,7 @@ class WaistSummaryCard extends StatelessWidget {
       return SectionCard(
         child: Row(
           children: [
-            const Icon(Icons.straighten, color: muted),
+            Icon(Icons.straighten, color: muted),
             const SizedBox(width: 12),
             Expanded(child: Text(context.l10n.noWaistYet)),
           ],
@@ -331,7 +328,7 @@ class WaistSummaryCard extends StatelessWidget {
                   height: 1,
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(left: 4, bottom: 4),
                 child: Text('cm', style: TextStyle(color: muted)),
               ),
@@ -344,7 +341,7 @@ class WaistSummaryCard extends StatelessWidget {
             latest == null
                 ? context.l10n.waistFromProfile
                 : DateFormat.yMMMd().add_Hm().format(latest.at),
-            style: const TextStyle(color: muted, fontSize: 11),
+            style: TextStyle(color: muted, fontSize: 11),
           ),
           if (changes.isNotEmpty) ...[
             const SizedBox(height: 12),
@@ -432,7 +429,7 @@ class _ChangeChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: .06),
+        color: fjInk.withValues(alpha: .06),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Text.rich(
@@ -440,7 +437,7 @@ class _ChangeChip extends StatelessWidget {
           children: [
             TextSpan(
               text: '$label  ',
-              style: const TextStyle(color: muted, fontSize: 11),
+              style: TextStyle(color: muted, fontSize: 11),
             ),
             TextSpan(
               text: '$sign${delta.abs().fixed(1)} cm',
@@ -485,7 +482,7 @@ class _Ratio extends StatelessWidget {
         children: [
           Text(
             short,
-            style: const TextStyle(
+            style: TextStyle(
               color: muted,
               fontSize: 11,
               fontWeight: FontWeight.w700,
@@ -496,7 +493,7 @@ class _Ratio extends StatelessWidget {
             title,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(color: muted, fontSize: 10),
+            style: TextStyle(color: muted, fontSize: 10),
           ),
           const SizedBox(height: 6),
           if (value == null)
@@ -517,7 +514,7 @@ class _Ratio extends StatelessWidget {
           ],
           if (hint != null && value != null) ...[
             const SizedBox(height: 4),
-            Text(hint!, style: const TextStyle(color: muted, fontSize: 10)),
+            Text(hint!, style: TextStyle(color: muted, fontSize: 10)),
           ],
         ],
       ),

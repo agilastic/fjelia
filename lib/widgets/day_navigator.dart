@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import '../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ class DayNavigator extends ConsumerWidget {
         IconButton(
           tooltip: context.l10n.previousDay,
           style: IconButton.styleFrom(
-            backgroundColor: const Color(0xFF333333),
+            backgroundColor: duo(0xFF333333, 0xFFE3E7EC),
             minimumSize: const Size(32, 32),
             padding: EdgeInsets.zero,
             shape: RoundedRectangleBorder(
@@ -47,19 +48,19 @@ class DayNavigator extends ConsumerWidget {
             d.year == n.year && d.month == n.month && d.day == n.day
                 ? context.l10n.today2
                 : DateFormat.MMMd().format(d).toUpperCase(),
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12,
               letterSpacing: 1.2,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: fjInk,
             ),
           ),
         ),
         IconButton(
           tooltip: context.l10n.nextDay,
           style: IconButton.styleFrom(
-            backgroundColor: const Color(0xFF282828),
-            disabledBackgroundColor: const Color(0xFF282828),
+            backgroundColor: duo(0xFF282828, 0xFFEEF1F5),
+            disabledBackgroundColor: duo(0xFF282828, 0xFFEEF1F5),
             minimumSize: const Size(32, 32),
             padding: EdgeInsets.zero,
             shape: RoundedRectangleBorder(

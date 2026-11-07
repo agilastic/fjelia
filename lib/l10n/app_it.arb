@@ -3835,5 +3835,20 @@
   "shortReasonWeather": "Meteo",
   "shortReasonFatigue": "Stanco",
   "shortReasonPain": "Dolore",
-  "shortReasonOther": "Altro"
+  "shortReasonOther": "Altro",
+  "styleTitle": "Stile",
+  "styleAuto": "Auto",
+  "styleAutoHint": "Segue il telefono: LightFjelia di giorno, DarkFjelia di notte.",
+  "connectMyWhoosh": "Collega MyWhoosh",
+  "myWhooshSubtitle": "Accedi con il tuo account MyWhoosh per importare le uscite indoor con potenza, cadenza e frequenza cardiaca.",
+  "myWhooshCredentialsInfo": "Le credenziali MyWhoosh sono salvate cifrate sul tuo dispositivo. Fjelia legge le uscite direttamente da MyWhoosh, tramite l'interfaccia dell'app MyWhoosh. Fjelia non è affiliata a MyWhoosh.",
+  "myWhooshTile": "Uscite indoor",
+  "myWhooshSignedInElsewhere": "MyWhoosh consente una sola sessione per account e hai già effettuato l'accesso su un altro dispositivo. Chiudi MyWhoosh lì (esci se serve) e riprova.",
+  "shareWorkout": "Condividi allenamento",
+  "shareFitFile": "Condividi come file FIT",
+  "shareFitFileHint": "Per Strava, COROS, TrainingPeaks e altre app",
+  "sendToGarmin": "Invia a Garmin Connect",
+  "sendToGarminHint": "Carica l'allenamento nel tuo account Garmin",
+  "sentToGarmin": "Inviato a Garmin Connect",
+  "alreadyOnGarmin": "Questo allenamento è già in Garmin Connect"
 }

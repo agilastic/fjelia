@@ -63,14 +63,15 @@ class _PlanState extends ConsumerState<PlanScreen> {
           const RaceCountdownCard(),
           const PlanAdjustmentsCard(),
           const ShortSessionsCard(),
-          Center(
-            child: Text(
-              view == 'Week'
-                  ? context.l10n.weeklyPlan
-                  : context.l10n.activityLog3,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+          // List and month speak through their Upcoming and History heads.
+          if (view == 'Week')
+            Padding(
+              padding: const EdgeInsets.only(top: 4, bottom: 4),
+              child: TimelineSectionHeader(
+                label: context.l10n.weeklyPlan.toUpperCase(),
+                colors: planGradient,
+              ),
             ),
-          ),
           if (view == 'Month') ...[
             Row(
               children: [
@@ -108,7 +109,7 @@ class _PlanState extends ConsumerState<PlanScreen> {
                   Center(
                     child: Text(
                       d,
-                      style: const TextStyle(fontSize: 10, color: muted),
+                      style: TextStyle(fontSize: 10, color: muted),
                     ),
                   ),
                 for (
@@ -207,7 +208,7 @@ class _PlanState extends ConsumerState<PlanScreen> {
                               : entry.skipped
                               ? ' · skipped'
                               : ' · ${entry.phase ?? 'planned'}'}',
-                          style: const TextStyle(fontSize: 9, color: muted),
+                          style: TextStyle(fontSize: 9, color: muted),
                         ),
                       ],
                     ),
@@ -241,7 +242,7 @@ class _PlanState extends ConsumerState<PlanScreen> {
                     ref.watch(plannedRestTodayProvider).valueOrNull ?? false,
               ),
             ),
-          if (view == 'List') NowDivider(label: context.l10n.now2),
+          if (view == 'List') const SizedBox(height: 16),
           if (view != 'Week')
             ActivityHistory(
               showHeader: false,

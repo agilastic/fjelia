@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../providers/connection_actions_provider.dart';
 
@@ -59,16 +60,16 @@ class _ConnectRenphoScreenState extends ConsumerState<ConnectRenphoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF111111),
+      backgroundColor: duo(0xFF111111, 0xFFF2F4F7),
       appBar: AppBar(
-        leading: const BackButton(color: Color(0xFFCCCCCC)),
+        leading: BackButton(color: duo(0xFFCCCCCC, 0xFF374151)),
         title: const OnboardingStepIndicator(current: 6, total: 6),
         actions: [
           TextButton(
             onPressed: _next,
             child: Text(
               context.l10n.skip,
-              style: TextStyle(color: Color(0xFFCCCCCC)),
+              style: TextStyle(color: duo(0xFFCCCCCC, 0xFF374151)),
             ),
           ),
         ],
@@ -97,7 +98,7 @@ class _ConnectRenphoScreenState extends ConsumerState<ConnectRenphoScreen> {
                   controller: _email,
                   keyboardType: TextInputType.emailAddress,
                   autocorrect: false,
-                  style: const TextStyle(color: Colors.white),
+                  style: TextStyle(color: fjInk),
                   decoration: onboardingInputDecoration(
                     'you@example.com',
                     accent: _accent,
@@ -116,7 +117,7 @@ class _ConnectRenphoScreenState extends ConsumerState<ConnectRenphoScreen> {
                 TextFormField(
                   controller: _password,
                   obscureText: _obscure,
-                  style: const TextStyle(color: Colors.white),
+                  style: TextStyle(color: fjInk),
                   decoration:
                       onboardingInputDecoration(
                         '••••••••',
@@ -131,7 +132,7 @@ class _ConnectRenphoScreenState extends ConsumerState<ConnectRenphoScreen> {
                             _obscure
                                 ? Icons.visibility_outlined
                                 : Icons.visibility_off_outlined,
-                            color: const Color(0xFF888888),
+                            color: duo(0xFF888888, 0xFF6B7280),
                           ),
                           onPressed: () => setState(() => _obscure = !_obscure),
                         ),
@@ -152,8 +153,8 @@ class _ConnectRenphoScreenState extends ConsumerState<ConnectRenphoScreen> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: _accent,
-                      foregroundColor: Colors.white,
-                      disabledBackgroundColor: const Color(0xFF2A2A2A),
+                      foregroundColor: fjInk,
+                      disabledBackgroundColor: duo(0xFF2A2A2A, 0xFFEEF1F5),
                       textStyle: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
@@ -164,11 +165,11 @@ class _ConnectRenphoScreenState extends ConsumerState<ConnectRenphoScreen> {
                     ),
                     onPressed: _loading ? null : _login,
                     child: _loading
-                        ? const SizedBox(
+                        ? SizedBox(
                             width: 22,
                             height: 22,
                             child: CircularProgressIndicator(
-                              color: Colors.white,
+                              color: fjInk,
                               strokeWidth: 2.5,
                             ),
                           )

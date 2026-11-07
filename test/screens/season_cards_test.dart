@@ -57,17 +57,22 @@ void main() {
     target: 27000,
   );
 
-  testWidgets('several goals are one item with a line each', (tester) async {
+  testWidgets('several goals are one slim item: a dot per goal on the season '
+      'line and the weeks to the plan\'s goal', (tester) async {
     await tester.pumpWidget(host([marathon, brevet], null));
     await tester.pumpAndSettle();
     expect(find.text('Race goals · 2'), findsOneWidget);
-    // Each goal is a line: name, priority, date, weeks to go.
-    expect(find.textContaining('Marathon · A'), findsOneWidget);
-    expect(find.textContaining('Brevet 200 · B'), findsOneWidget);
-    expect(find.textContaining(' wk'), findsNWidgets(2));
-    // The details wait behind it.
+    // The priorities as dots on the line, the details wait behind it.
+    expect(find.text('A'), findsOneWidget);
+    expect(find.text('B'), findsOneWidget);
+    expect(find.textContaining('weeks'), findsOneWidget);
+    expect(find.textContaining('Marathon'), findsNothing);
     expect(find.textContaining('7:30:00'), findsNothing);
     expect(find.textContaining('26.7 km/h'), findsNothing);
+    expect(
+      tester.getSize(find.byKey(const Key('goals-header'))).height,
+      lessThanOrEqualTo(60),
+    );
   });
 
   testWidgets('a tap unfolds every goal into its card, a second folds them', (
@@ -84,22 +89,26 @@ void main() {
     expect(find.textContaining('7:30:00'), findsOneWidget);
     expect(find.textContaining('26.7 km/h'), findsOneWidget);
     expect(find.textContaining('1500'), findsOneWidget);
-    // The overview lines are not shown twice.
-    expect(find.textContaining(' wk'), findsNothing);
+    expect(find.byIcon(Icons.ios_share), findsOneWidget);
     await tester.tap(find.byKey(const Key('goals-header')));
     await tester.pumpAndSettle();
     expect(find.textContaining('7:30:00'), findsNothing);
-    expect(find.textContaining(' wk'), findsNWidgets(2));
+    expect(find.textContaining('Marathon'), findsNothing);
   });
 
-  testWidgets('one goal looks as it always did', (tester) async {
+  testWidgets('one goal folds the same way, named in the header', (
+    tester,
+  ) async {
     await tester.pumpWidget(host([marathon], null));
     await tester.pumpAndSettle();
     expect(find.text('Marathon'), findsOneWidget);
-    expect(find.textContaining('Season'), findsNothing);
-    // No accordion for a single goal: the card is already open.
-    expect(find.byKey(const Key('goals-header')), findsNothing);
     expect(find.textContaining('Race goals'), findsNothing);
+    expect(find.textContaining('Season'), findsNothing);
+    await tester.tap(find.byKey(const Key('goals-header')));
+    await tester.pumpAndSettle();
+    // The card without a priority, as before.
+    expect(find.text('Marathon'), findsNWidgets(2));
+    expect(find.textContaining('Marathon · A'), findsNothing);
   });
 
   testWidgets('trade-offs and conflicts are told, with what could be done', (

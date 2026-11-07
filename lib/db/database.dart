@@ -1644,13 +1644,17 @@ class AppDatabase extends _$AppDatabase {
           toDelete.add(a.activityId);
           survivor[a.activityId] = b;
           break;
-        } else if (a.source == 'file' && b.source != 'file') {
+        } else if (_givesWay.contains(a.source) &&
+            !_givesWay.contains(b.source)) {
           // An imported file gives way to the platform that synced the
-          // same workout later, as an Apple Health copy does.
+          // same workout later, as an Apple Health copy does. So does a
+          // MyWhoosh ride that MyWhoosh also sent to Garmin, where it gains
+          // training effect and load.
           toDelete.add(a.activityId);
           survivor[a.activityId] = b;
           break;
-        } else if (b.source == 'file' && a.source != 'file') {
+        } else if (_givesWay.contains(b.source) &&
+            !_givesWay.contains(a.source)) {
           toDelete.add(b.activityId);
           survivor[b.activityId] = a;
         }
@@ -1689,7 +1693,14 @@ class AppDatabase extends _$AppDatabase {
   /// stays, unless that one has its own.
   Future<void> _followTitle(ActivityRecord gone, ActivityRecord keep) async {
     final title = await activityTitle(gone.activityId);
-    if (title == null) return;
+    if (title == null) {
+      // MyWhoosh names the ride after the workout and route; the platform
+      // copy that stays only says "Virtual ride".
+      if (gone.source == 'mywhoosh') {
+        await adoptActivityName(keep.activityId, gone.name);
+      }
+      return;
+    }
     await (delete(
       activityTitles,
     )..where((t) => t.activityId.equals(gone.activityId))).go();
@@ -1885,6 +1896,16 @@ class AppDatabase extends _$AppDatabase {
               ..where((t) => t.activityId.equals(activityId)))
             .write(ActivityRecordsCompanion(name: Value(title)));
       });
+
+  /// Gives the activity [name] from another copy of the same workout, as
+  /// a title that syncs keep, unless the athlete titled it already. The
+  /// provider's name stays for [resetActivityTitle].
+  Future<void> adoptActivityName(String activityId, String name) async {
+    if (await activityTitle(activityId) != null) return;
+    final a = await getActivityById(activityId);
+    if (a == null || a.name == name) return;
+    await renameActivity(activityId, name);
+  }
 
   /// Back to the provider's name; later syncs may change it again.
   Future<void> resetActivityTitle(String activityId) => transaction(() async {
@@ -3366,6 +3387,9 @@ class AppDatabase extends _$AppDatabase {
     return rows.any((r) => r.read<String>('name') == column);
   }
 }
+
+/// Sources whose copy of a workout gives way to any platform's copy.
+const _givesWay = {'file', 'mywhoosh'};
 
 /// How far apart two copies of one workout may start.
 const sameWorkoutMaxStartGap = Duration(minutes: 5);

@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -52,7 +53,7 @@ class ImportSheet extends StatelessWidget {
               title: Text(title),
               subtitle: Text(
                 subtitle,
-                style: const TextStyle(color: muted, fontSize: 12),
+                style: TextStyle(color: muted, fontSize: 12),
               ),
               trailing: const Icon(Icons.chevron_right),
               onTap: () => showAppSheet(context, page),
@@ -164,7 +165,7 @@ class StravaImportSheet extends ConsumerWidget {
           value: share,
           minHeight: 10,
           color: _accent,
-          backgroundColor: Colors.white12,
+          backgroundColor: fjInk12,
         ),
       ),
       const SizedBox(height: 14),
@@ -275,7 +276,7 @@ class StravaImportSheet extends ConsumerWidget {
                   padding: const EdgeInsets.only(bottom: 6),
                   child: Text(
                     e,
-                    style: const TextStyle(color: Colors.white70, fontSize: 12),
+                    style: TextStyle(color: fjInk70, fontSize: 12),
                   ),
                 ),
             ],
@@ -360,8 +361,6 @@ class _Note extends StatelessWidget {
   final String text;
 
   @override
-  Widget build(BuildContext context) => Text(
-    text,
-    style: const TextStyle(color: muted, fontSize: 12, height: 1.4),
-  );
+  Widget build(BuildContext context) =>
+      Text(text, style: TextStyle(color: muted, fontSize: 12, height: 1.4));
 }

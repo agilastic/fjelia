@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import '../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
@@ -144,9 +145,9 @@ class _MoveWorkoutCardState extends State<MoveWorkoutCard> {
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 14, 14, 12),
       decoration: BoxDecoration(
-        color: const Color(0xFF282828),
+        color: duo(0xFF282828, 0xFFEEF1F5),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: fjInk10),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,11 +188,7 @@ class _MoveWorkoutCardState extends State<MoveWorkoutCard> {
             context.l10n.nowOnCurrentTapA(
               DateFormat.MMMMEEEEd().format(widget.current),
             ),
-            style: const TextStyle(
-              fontSize: 12,
-              color: Colors.white70,
-              height: 1.4,
-            ),
+            style: TextStyle(fontSize: 12, color: fjInk70, height: 1.4),
           ),
           if (widget.movedFrom != null) ...[
             const SizedBox(height: 10),
@@ -236,10 +233,7 @@ class _MoveWorkoutCardState extends State<MoveWorkoutCard> {
                       padding: const EdgeInsets.only(right: 8, bottom: 4),
                       child: Text(
                         widget.note!,
-                        style: const TextStyle(
-                          fontSize: 11,
-                          color: Colors.white70,
-                        ),
+                        style: TextStyle(fontSize: 11, color: fjInk70),
                       ),
                     ),
                 ],
@@ -368,7 +362,7 @@ class _Pill extends StatelessWidget {
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w700,
-              color: lifted ? Colors.black : Colors.white,
+              color: lifted ? Colors.black : fjInk,
             ),
           ),
         ),
@@ -396,8 +390,8 @@ class _DayChip extends StatelessWidget {
         ? mint
         : hovered
         ? mint.withValues(alpha: .28)
-        : Colors.white.withValues(alpha: .05);
-    final textColor = isCurrent ? Colors.black : Colors.white;
+        : fjInk.withValues(alpha: .05);
+    final textColor = isCurrent ? Colors.black : fjInk;
     return Semantics(
       button: true,
       selected: isCurrent,
@@ -421,7 +415,7 @@ class _DayChip extends StatelessWidget {
                   ? mint
                   : isToday
                   ? Colors.amber
-                  : Colors.white12,
+                  : fjInk12,
               width: hovered || isToday ? 1.6 : 1,
             ),
           ),
@@ -477,7 +471,7 @@ class _DayChip extends StatelessWidget {
                                     ? Colors.orangeAccent
                                     : isCurrent
                                     ? Colors.black87
-                                    : Colors.white54,
+                                    : fjInk54,
                               ),
                             ),
                         ],
@@ -505,7 +499,7 @@ class _Key extends StatelessWidget {
     children: [
       Icon(icon, size: small ? 6 : 12, color: muted),
       const SizedBox(width: 4),
-      Text(text, style: const TextStyle(fontSize: 10, color: muted)),
+      Text(text, style: TextStyle(fontSize: 10, color: muted)),
     ],
   );
 }

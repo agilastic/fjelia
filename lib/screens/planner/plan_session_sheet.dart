@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/formats.dart';
 import '../../l10n/plan_text.dart';
 import '../../l10n/l10n_ext.dart';
@@ -188,8 +189,8 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
         return;
       }
       final previous = s.sessionDate;
-      final onWatch = (await ref.read(workoutProvidersProvider).deliveredTo(s))
-          .isNotEmpty;
+      final onWatch =
+          (await ref.read(workoutProvidersProvider).deliveredTo(s)).isNotEmpty;
       await perform(() async {
         await actions.moveToDate(s, day);
       });
@@ -223,7 +224,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
       padding: const EdgeInsets.only(top: 22, bottom: 10),
       child: Text(
         title,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 11,
           color: muted,
           fontWeight: FontWeight.w700,
@@ -296,7 +297,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
           const SizedBox(height: 6),
           Text(
             DateFormat.yMMMMEEEEd().format(s.sessionDate),
-            style: const TextStyle(fontSize: 13, color: Colors.white70),
+            style: TextStyle(fontSize: 13, color: fjInk70),
           ),
           if (s.goalObjective != null)
             Padding(
@@ -371,7 +372,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                           ? context.l10n.wattsNeedYourFtpSet
                           : context.l10n.mainTargetInWattsFrom)
                     : context.l10n.mainTargetHeartRateWatts,
-                style: const TextStyle(fontSize: 11, color: muted),
+                style: TextStyle(fontSize: 11, color: muted),
               ),
             ),
           ],
@@ -380,31 +381,23 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
               padding: const EdgeInsets.only(top: 12),
               child: Text(
                 guide,
-                style: const TextStyle(fontSize: 12, color: Colors.white70),
+                style: TextStyle(fontSize: 12, color: fjInk70),
               ),
             ),
           if (s.sessionNotes?.isNotEmpty ?? false) ...[
             heading(context.l10n.aboutThisWorkout),
             Text(
               s.sessionNotes!,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.white70,
-                height: 1.6,
-              ),
+              style: TextStyle(fontSize: 14, color: fjInk70, height: 1.6),
             ),
           ],
           if (s.mainSet?.isNotEmpty ?? false) ...[
             heading(context.l10n.coachingCues),
             SectionCard(
-              color: const Color(0xFF282828),
+              color: duo(0xFF282828, 0xFFEEF1F5),
               child: Text(
                 s.mainSet!,
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: Colors.white70,
-                  height: 1.5,
-                ),
+                style: TextStyle(fontSize: 13, color: fjInk70, height: 1.5),
               ),
             ),
           ],
@@ -472,7 +465,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                       formatBlockDuration(totals.total),
                       s.plannedDurationMin,
                     ),
-                    style: const TextStyle(fontSize: 11, color: muted),
+                    style: TextStyle(fontSize: 11, color: muted),
                   ),
                 ),
               const SizedBox(height: 14),
@@ -489,7 +482,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                           .whereType<String>()
                           .where((s) => s.isNotEmpty)
                           .join('\n'),
-                style: const TextStyle(fontSize: 13, color: Colors.white70),
+                style: TextStyle(fontSize: 13, color: fjInk70),
               ),
             WorkoutStructureList(steps: steps),
             heading(context.l10n.targets),
@@ -502,7 +495,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                 ),
               ),
             SectionCard(
-              color: const Color(0xFF282828),
+              color: duo(0xFF282828, 0xFFEEF1F5),
               child: Column(
                 children: [
                   for (var i = 0; i < 5; i++)
@@ -517,7 +510,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w600,
-                                color: Colors.white70,
+                                color: fjInk70,
                               ),
                             ),
                           ),
@@ -534,10 +527,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                                     context.l10n.threshold,
                                     'VO2max',
                                   ][i],
-                                  style: const TextStyle(
-                                    fontSize: 10,
-                                    color: muted,
-                                  ),
+                                  style: TextStyle(fontSize: 10, color: muted),
                                 ),
                                 for (final part in zoneTargetText(
                                   i + 1,
@@ -546,9 +536,9 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                                 ).split(' · ').skip(1))
                                   Text(
                                     part,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 9,
-                                      color: Colors.white38,
+                                      color: fjInk38,
                                     ),
                                   ),
                               ],
@@ -558,7 +548,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                             child: LinearProgressIndicator(
                               value: fractions[i],
                               color: colors[i],
-                              backgroundColor: Colors.white10,
+                              backgroundColor: fjInk10,
                               borderRadius: BorderRadius.circular(5),
                               minHeight: 6,
                             ),
@@ -569,10 +559,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                             child: Text(
                               context.l10n.round3((fractions[i] * 100).round()),
                               textAlign: TextAlign.right,
-                              style: const TextStyle(
-                                fontSize: 10,
-                                color: Colors.white70,
-                              ),
+                              style: TextStyle(fontSize: 10, color: fjInk70),
                             ),
                           ),
                         ],
@@ -586,7 +573,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
             heading(context.l10n.adaptation),
             Text(
               s.adaptationTrigger!,
-              style: const TextStyle(fontSize: 12, color: Colors.white70),
+              style: TextStyle(fontSize: 12, color: fjInk70),
             ),
           ],
           const SizedBox(height: 12),
@@ -672,8 +659,9 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                 if (!context.mounted || !buttonContext.mounted) return;
                 final box = buttonContext.findRenderObject() as RenderBox?;
                 if (why != null) {
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text(why)));
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(why)));
                 }
                 await SharePlus.instance.share(
                   ShareParams(
@@ -773,7 +761,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                           strengthShare
                               ? '${provider.label} does not take strength exercises from Fjelia. Share the list and enter it in the ${provider.label} app.'
                               : provider.shareNote,
-                          style: const TextStyle(fontSize: 11, color: muted),
+                          style: TextStyle(fontSize: 11, color: muted),
                         ),
                       ),
                     if (!pushes && !strengthShare && provider.optIn != null)
@@ -810,7 +798,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                           context.l10n.labelGetsEachExerciseWith(
                             provider.label,
                           ),
-                          style: const TextStyle(fontSize: 11, color: muted),
+                          style: TextStyle(fontSize: 11, color: muted),
                         ),
                       ),
                     if (pushes && provider.pushNote != null)
@@ -818,7 +806,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                         padding: const EdgeInsets.only(top: 6),
                         child: Text(
                           provider.pushNote!,
-                          style: const TextStyle(fontSize: 11, color: muted),
+                          style: TextStyle(fontSize: 11, color: muted),
                         ),
                       ),
                   ],
@@ -903,7 +891,7 @@ Future<String?> _pickSkipReason(
               ? context.l10n.whyNothingIsAddedTo
               : 'Why? It is also taken off your ${platforms.join(' and ')} '
                     'calendar. Nothing is added to make it up.',
-          style: const TextStyle(fontSize: 13, color: Colors.white70),
+          style: TextStyle(fontSize: 13, color: fjInk70),
         ),
       ),
       for (final reason in skipReasons)
@@ -913,10 +901,7 @@ Future<String?> _pickSkipReason(
         ),
       SimpleDialogOption(
         onPressed: () => Navigator.pop(context),
-        child: Text(
-          context.l10n.cancel,
-          style: TextStyle(color: Colors.white54),
-        ),
+        child: Text(context.l10n.cancel, style: TextStyle(color: fjInk54)),
       ),
     ],
   ),

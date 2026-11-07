@@ -1,10 +1,11 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/plan_text.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../l10n/formats.dart';
 import '../../providers/plan_weather_provider.dart';
 import '../../widgets/race_calendar_share.dart';
 import '../../widgets/rain_nowcast_line.dart';
-import '../../widgets/weather_visuals.dart';
+import '../../widgets/weather_glyph.dart';
 import '../weather/weather_screen.dart';
 import '../../providers/upcoming_plan_provider.dart';
 import '../../models/garmin_data.dart';
@@ -13,13 +14,14 @@ import '../activities/workout_detail_sheet.dart';
 import '../../theme/activity_colors.dart'
     show plannedActivityColor, completedActivityColor, activitySportIcon;
 
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../db/database.dart';
 import '../../providers/planner_providers.dart';
-import '../../services/open_meteo_client.dart' show OpenMeteoResult;
 import '../../services/race_predictor.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/plan_timeline.dart';
@@ -28,6 +30,9 @@ import 'plan_session_sheet.dart';
 import '../../utils/target_time.dart';
 import '../../models/race_profile.dart';
 
+/// The coming week as small skies: the day's weather is the picture
+/// (sun glow, clouds, rain falling as hard as forecast, wind streaks) and
+/// only the high and low are written on it. A tap opens the full forecast.
 class PlanWeatherStrip extends ConsumerWidget {
   const PlanWeatherStrip({super.key});
   @override
@@ -36,7 +41,7 @@ class PlanWeatherStrip extends ConsumerWidget {
       return const SizedBox.shrink();
     }
     return SectionCard(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      padding: const EdgeInsets.all(6),
       onTap: () => showAppSheet(context, const WeatherScreen()),
       child: ref
           .watch(planWeatherProvider)
@@ -45,135 +50,60 @@ class PlanWeatherStrip extends ConsumerWidget {
               height: 28,
               child: Center(child: LinearProgressIndicator()),
             ),
-            error: (_, _) => Text(
-              context.l10n.weatherUnavailableTapToRetry,
-              style: TextStyle(color: muted),
+            error: (_, _) => Padding(
+              padding: const EdgeInsets.all(6),
+              child: Text(
+                context.l10n.weatherUnavailableTapToRetry,
+                style: TextStyle(color: muted),
+              ),
             ),
             data: (data) {
               if (data?.current == null) {
-                return Text(
-                  context.l10n.weatherSetYourLocation,
-                  style: TextStyle(color: muted),
+                return Padding(
+                  padding: const EdgeInsets.all(6),
+                  child: Text(
+                    context.l10n.weatherSetYourLocation,
+                    style: TextStyle(color: muted),
+                  ),
                 );
               }
               final now = DateTime.now();
               final days = data!.sevenDays(now);
-              final others =
-                  ref.watch(weatherComparisonProvider).valueOrNull ??
-                  const <OpenMeteoResult>[];
-              String amount(double? n) => n == null
-                  ? '—'
-                  : n < 10 && n != n.roundToDouble()
-                  ? n.fixed(1)
-                  : n.round().toString();
-              const small = TextStyle(fontSize: 9, color: muted);
-              Widget cell(String text, {Color? color, bool bold = false}) =>
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // The next hour or two from the DWD radar (Germany).
+                  const RainNowcastLine(
+                    padding: EdgeInsets.fromLTRB(6, 2, 6, 6),
+                  ),
+                  // About four and a half days in view, the rest a swipe away.
                   SizedBox(
-                    height: 15,
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        text,
-                        style: TextStyle(
-                          fontSize: 9,
-                          color: color ?? Colors.white70,
-                          fontWeight: bold
-                              ? FontWeight.w700
-                              : FontWeight.normal,
+                    height: 64,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: days.length,
+                      separatorBuilder: (_, _) => const SizedBox(width: 6),
+                      itemBuilder: (context, i) => SizedBox(
+                        width: 74,
+                        child: _SkyTile(
+                          day: days[i],
+                          label: i == 0
+                              ? context.l10n.today
+                              : DateFormat.E().format(days[i].date),
+                          // The daytime hours make the picture.
+                          kind: dominantWeather(
+                            data
+                                .pointsFor(days[i].date, false)
+                                .where(
+                                  (p) => p.time.hour >= 7 && p.time.hour < 20,
+                                )
+                                .map((p) => weatherKindOf(p.weatherCode)),
+                          ),
+                          index: i,
                         ),
                       ),
                     ),
-                  );
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        weatherIcon(data.current!.weatherCode),
-                        size: 15,
-                        color: Colors.lightBlue,
-                      ),
-                      const SizedBox(width: 6),
-                      Expanded(
-                        child: Text(
-                          context.l10n.t7DayForecast,
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        context.l10n.round2(data.current!.temperatureC.round()),
-                        style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      const Icon(Icons.chevron_right, size: 16, color: muted),
-                    ],
-                  ),
-                  // The next hour or two from the DWD radar (Germany).
-                  const RainNowcastLine(padding: EdgeInsets.only(top: 4)),
-                  const SizedBox(height: 5),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 42,
-                        child: Column(
-                          children: [
-                            SizedBox(height: 15),
-                            SizedBox(
-                              height: 15,
-                              child: Text(context.l10n.minMax, style: small),
-                            ),
-                            SizedBox(
-                              height: 15,
-                              child: Text(context.l10n.rainMm2, style: small),
-                            ),
-                            SizedBox(
-                              height: 15,
-                              child: Text(context.l10n.uvMax, style: small),
-                            ),
-                            SizedBox(
-                              height: 15,
-                              child: Text(context.l10n.kmH, style: small),
-                            ),
-                          ],
-                        ),
-                      ),
-                      for (final day in days)
-                        Expanded(
-                          child: Column(
-                            children: [
-                              cell(DateFormat.E().format(day.date), bold: true),
-                              cell(
-                                day.minC == null
-                                    ? '—'
-                                    : '${day.minC!.round()}/${day.maxC!.round()}°',
-                              ),
-                              cell(switch (dailyRainRange(
-                                day.date,
-                                data.result,
-                                others,
-                                now,
-                              )) {
-                                // The forecasts disagree: their range.
-                                final r? when r.high - r.low >= .5 =>
-                                  '${amount(r.low)}–${amount(r.high)}',
-                                // Drizzle that barely registers still shows.
-                                _ when day.wet && (day.rainMm ?? 0) < .05 =>
-                                  '<0.1',
-                                _ => amount(day.rainMm),
-                              }, color: Colors.lightBlue),
-                              cell(amount(day.uv), color: Colors.amber),
-                              cell(amount(day.windKmh)),
-                            ],
-                          ),
-                        ),
-                    ],
                   ),
                 ],
               );
@@ -181,6 +111,219 @@ class PlanWeatherStrip extends ConsumerWidget {
           ),
     );
   }
+}
+
+/// One day: the sky behind, the high large and the low beside it.
+class _SkyTile extends StatelessWidget {
+  const _SkyTile({
+    required this.day,
+    required this.label,
+    required this.kind,
+    required this.index,
+  });
+  final PlanWeatherDay day;
+  final String label;
+  final WeatherKind? kind;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    final kind = this.kind ?? WeatherKind.cloudy;
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0, end: 1),
+      duration: Duration(milliseconds: 400 + 80 * index),
+      curve: Curves.easeOutCubic,
+      // Moves and grows in rather than fading: an Opacity layer over the
+      // glyph's blurred glow trips Impeller's validation.
+      builder: (context, t, child) => Transform.translate(
+        offset: Offset(0, (1 - t) * 8),
+        child: Transform.scale(scale: .9 + .1 * t, child: child),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: SizedBox(
+          height: 64,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              CustomPaint(
+                painter: _SkyPainter(
+                  kind,
+                  rainMm: day.rainMm ?? 0,
+                  windKmh: day.windKmh ?? 0,
+                ),
+              ),
+              Positioned(
+                right: -9,
+                top: -5,
+                child: WeatherGlyph(kind: kind, size: 44),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 6, 6, 6),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      label,
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        color: fjInk,
+                        shadows: _shadow,
+                      ),
+                    ),
+                    const Spacer(),
+                    if (day.maxC != null)
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerLeft,
+                        child: Text.rich(
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                text: '${day.maxC!.round()}°',
+                                style: const TextStyle(
+                                  fontSize: 19,
+                                  height: 1,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                              TextSpan(
+                                text: ' ${day.minC!.round()}°',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: fjInk70,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                          style: TextStyle(color: fjInk, shadows: _shadow),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  static const _shadow = [Shadow(color: Colors.black45, blurRadius: 4)];
+}
+
+/// The sky of a day: a gradient for its weather, a warm glow when the sun
+/// shows, rain streaks as dense as the forecast amount, and wind lines on a
+/// windy day.
+class _SkyPainter extends CustomPainter {
+  _SkyPainter(this.kind, {required this.rainMm, required this.windKmh});
+  final WeatherKind kind;
+  final double rainMm;
+  final double windKmh;
+
+  static const _skies = {
+    WeatherKind.clear: [Color(0xFF1D5FB4), Color(0xFF4A9BE8)],
+    WeatherKind.partly: [Color(0xFF2B5C8E), Color(0xFF6A8DB3)],
+    WeatherKind.cloudy: [Color(0xFF36404D), Color(0xFF5E6978)],
+    WeatherKind.fog: [Color(0xFF474E57), Color(0xFF7A828C)],
+    WeatherKind.drizzle: [Color(0xFF283A4E), Color(0xFF465C75)],
+    WeatherKind.rain: [Color(0xFF1C2B3D), Color(0xFF39506B)],
+    WeatherKind.snow: [Color(0xFF51647C), Color(0xFF9BB0C8)],
+    WeatherKind.thunder: [Color(0xFF211C36), Color(0xFF4A3B6B)],
+  };
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rect = Offset.zero & size;
+    canvas.drawRect(
+      rect,
+      Paint()
+        ..shader = LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: _skies[kind]!,
+        ).createShader(rect),
+    );
+    if (kind == WeatherKind.clear || kind == WeatherKind.partly) {
+      final glow = Offset(size.width * .85, size.height * .2);
+      canvas.drawCircle(
+        glow,
+        size.height,
+        Paint()
+          ..shader = RadialGradient(
+            colors: [
+              Colors.amber.withValues(
+                alpha: kind == WeatherKind.clear ? .55 : .3,
+              ),
+              Colors.amber.withValues(alpha: 0),
+            ],
+          ).createShader(Rect.fromCircle(center: glow, radius: size.height)),
+      );
+    }
+    // Rain: a streak per fixed spot, more of them the more is forecast.
+    final wet =
+        kind == WeatherKind.rain ||
+        kind == WeatherKind.drizzle ||
+        kind == WeatherKind.thunder;
+    if (wet || rainMm >= .2) {
+      final streaks = (6 + rainMm * 4).clamp(6, 40).round();
+      final paint = Paint()
+        ..color = Colors.lightBlueAccent.withValues(alpha: .45)
+        ..strokeWidth = 1.2
+        ..strokeCap = StrokeCap.round;
+      final random = math.Random(7);
+      for (var i = 0; i < streaks; i++) {
+        final x = random.nextDouble() * size.width;
+        final y = random.nextDouble() * size.height;
+        final length = 6 + random.nextDouble() * 6;
+        canvas.drawLine(Offset(x, y), Offset(x - 2.5, y + length), paint);
+      }
+    }
+    if (kind == WeatherKind.snow) {
+      final paint = Paint()..color = fjInk.withValues(alpha: .7);
+      final random = math.Random(3);
+      for (var i = 0; i < 18; i++) {
+        canvas.drawCircle(
+          Offset(
+            random.nextDouble() * size.width,
+            random.nextDouble() * size.height,
+          ),
+          1 + random.nextDouble() * 1.2,
+          paint,
+        );
+      }
+    }
+    // Wind from 25 km/h: soft curved lines across the sky.
+    if (windKmh >= 25) {
+      final lines = windKmh >= 45 ? 3 : 2;
+      final paint = Paint()
+        ..color = fjInk.withValues(alpha: .28)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1.4
+        ..strokeCap = StrokeCap.round;
+      for (var i = 0; i < lines; i++) {
+        final y = size.height * (.45 + i * .16);
+        final x = size.width * (.3 + i * .1);
+        canvas.drawPath(
+          Path()
+            ..moveTo(x, y)
+            ..quadraticBezierTo(
+              x + size.width * .25,
+              y - 6,
+              x + size.width * .5,
+              y,
+            ),
+          paint,
+        );
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(_SkyPainter old) =>
+      old.kind != kind || old.rainMm != rainMm || old.windKmh != windKmh;
 }
 
 RaceProfile _profileOf(RaceGoal goal) => RaceProfile(
@@ -217,24 +360,10 @@ class RaceCountdownCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final goals = ref.watch(seasonGoalsProvider).valueOrNull ?? const [];
     if (goals.isEmpty) return const SizedBox.shrink();
-    // One goal is shown in full. With several they are one item, a line each,
-    // that unfolds into the full cards.
-    if (goals.length == 1) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          _GoalCard(goal: goals.first, primary: true, showPriority: false),
-          Transform.translate(
-            offset: const Offset(0, -10),
-            child: _ShareGoalsButton(goals: goals, label: true),
-          ),
-        ],
-      );
-    }
     return Column(
       children: [
         _GoalsAccordion(goals: goals),
-        const SeasonSummaryCard(),
+        if (goals.length > 1) const SeasonSummaryCard(),
       ],
     );
   }
@@ -284,7 +413,7 @@ class SeasonSummaryCard extends ConsumerWidget {
               lines.isEmpty ? context.l10n.allGoalsFit : lines.first,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 11, color: Colors.white70),
+              style: TextStyle(fontSize: 11, color: fjInk70),
             ),
             childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 14),
             expandedCrossAxisAlignment: CrossAxisAlignment.start,
@@ -310,8 +439,9 @@ class SeasonSummaryCard extends ConsumerWidget {
   }
 }
 
-/// All race goals as one item: a header with a line per goal (name, priority,
-/// date, weeks to go) that unfolds into the full cards and folds back.
+/// All race goals as one slim item: the season as a line from today to the
+/// last race with a dot per goal, and the weeks to the plan's own goal. A tap
+/// unfolds the full cards and folds them back.
 class _GoalsAccordion extends StatefulWidget {
   const _GoalsAccordion({required this.goals});
   final List<RaceGoal> goals;
@@ -331,9 +461,10 @@ class _GoalsAccordionState extends State<_GoalsAccordion> {
   @override
   Widget build(BuildContext context) {
     final goals = widget.goals;
+    final first = goals.first;
     return AnimatedSize(
-      duration: const Duration(milliseconds: 180),
-      curve: Curves.easeOut,
+      duration: const Duration(milliseconds: 260),
+      curve: Curves.easeOutCubic,
       alignment: Alignment.topCenter,
       child: Column(
         children: [
@@ -345,79 +476,77 @@ class _GoalsAccordionState extends State<_GoalsAccordion> {
                 borderRadius: BorderRadius.circular(14),
                 side: BorderSide(color: Colors.orange.withValues(alpha: .6)),
               ),
+              clipBehavior: Clip.antiAlias,
               child: InkWell(
                 key: const Key('goals-header'),
-                borderRadius: BorderRadius.circular(14),
                 onTap: () => setState(() => open = !open),
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(14, 12, 10, 12),
+                  padding: const EdgeInsets.fromLTRB(12, 9, 6, 9),
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        padding: const EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(7),
                         decoration: BoxDecoration(
                           color: Colors.orange.withValues(alpha: .15),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(9),
                         ),
-                        child: const Icon(
-                          Icons.flag_outlined,
-                          size: 22,
+                        child: Icon(
+                          first.primarySport.startsWith('cycl')
+                              ? Icons.pedal_bike
+                              : Icons.flag_outlined,
+                          size: 18,
                           color: Colors.orange,
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: 10),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              context.l10n.raceGoalsLength(goals.length),
+                              goals.length == 1
+                                  ? first.name
+                                  : context.l10n.raceGoalsLength(goals.length),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
-                                fontSize: 15,
+                                fontSize: 14,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
-                            if (!open)
-                              for (final (i, g) in goals.indexed)
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 4),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          '${g.name} · ${g.priority.toUpperCase()}'
-                                          ' · ${dayText(g.raceDate)}',
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.white70,
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        context.l10n.gWk(_weeks(g)),
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w700,
-                                          color: i == 0
-                                              ? Colors.orange
-                                              : Colors.lightBlue,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                            const SizedBox(height: 6),
+                            _SeasonTrack(goals: goals),
                           ],
                         ),
                       ),
+                      const SizedBox(width: 10),
                       // Unfolded, the season can be shared as an image.
-                      if (open) _ShareGoalsButton(goals: goals),
-                      Icon(
-                        open ? Icons.expand_less : Icons.expand_more,
-                        size: 22,
-                        color: muted,
+                      if (open)
+                        _ShareGoalsButton(goals: goals)
+                      else
+                        Text.rich(
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                text: context.l10n.weeks(_weeks(first)),
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.orange,
+                                ),
+                              ),
+                              TextSpan(
+                                text: ' ${context.l10n.weeks2}',
+                                style: TextStyle(fontSize: 11, color: muted),
+                              ),
+                            ],
+                          ),
+                        ),
+                      AnimatedRotation(
+                        turns: open ? .5 : 0,
+                        duration: const Duration(milliseconds: 260),
+                        curve: Curves.easeOutCubic,
+                        child: Icon(Icons.expand_more, size: 22, color: muted),
                       ),
                     ],
                   ),
@@ -427,8 +556,144 @@ class _GoalsAccordionState extends State<_GoalsAccordion> {
           ),
           if (open)
             for (final (i, g) in goals.indexed)
-              _GoalCard(goal: g, primary: i == 0, showPriority: true),
+              // The cards come in one after the other.
+              TweenAnimationBuilder<double>(
+                key: ValueKey(g.id),
+                tween: Tween(begin: 0, end: 1),
+                duration: Duration(milliseconds: 260 + 70 * i),
+                curve: Curves.easeOutCubic,
+                builder: (context, t, child) => Transform.translate(
+                  offset: Offset(0, (1 - t) * -12),
+                  child: Transform.scale(scale: .96 + .04 * t, child: child),
+                ),
+                child: _GoalCard(
+                  goal: g,
+                  primary: i == 0,
+                  showPriority: goals.length > 1,
+                ),
+              ),
         ],
+      ),
+    );
+  }
+}
+
+/// The season from today to the last race: the line draws itself in and a
+/// dot per goal, lettered with its priority, pops up where its date falls.
+class _SeasonTrack extends StatelessWidget {
+  const _SeasonTrack({required this.goals});
+  final List<RaceGoal> goals;
+
+  static Color _color(RaceGoal g, bool primary) => primary
+      ? Colors.orange
+      : switch (g.priority.toLowerCase()) {
+          'a' => Colors.deepOrangeAccent,
+          'b' => Colors.lightBlue,
+          _ => fjInk54,
+        };
+
+  @override
+  Widget build(BuildContext context) {
+    final today = DateUtils.dateOnly(DateTime.now());
+    final span = goals
+        .map((g) => g.raceDate.difference(today).inDays)
+        .fold(1, (a, b) => b > a ? b : a);
+    const dot = 16.0;
+    return SizedBox(
+      height: dot,
+      child: LayoutBuilder(
+        builder: (context, box) {
+          final width = box.maxWidth - dot;
+          // The plan's own goal last, so it sits on top where dates meet.
+          final order = [...goals.indexed.skip(1), goals.indexed.first];
+          return TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0, end: 1),
+            duration: const Duration(milliseconds: 900),
+            curve: Curves.easeOutCubic,
+            builder: (context, t, _) => Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Positioned(
+                  left: dot / 2,
+                  right: dot / 2,
+                  top: dot / 2 - 1,
+                  child: Container(height: 2, color: fjInk12),
+                ),
+                Positioned(
+                  left: dot / 2,
+                  top: dot / 2 - 1,
+                  child: Container(
+                    width: width * t,
+                    height: 2,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(1),
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.orange.withValues(alpha: .15),
+                          Colors.orange,
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                // Today.
+                Positioned(
+                  left: dot / 2 - 3,
+                  top: dot / 2 - 3,
+                  child: Container(
+                    width: 6,
+                    height: 6,
+                    decoration: BoxDecoration(
+                      color: fjInk70,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+                for (final (i, g) in order)
+                  () {
+                    final at = (g.raceDate.difference(today).inDays / span)
+                        .clamp(0.0, 1.0);
+                    final shown = ((t - at * .8) / .2).clamp(0.0, 1.0);
+                    final color = _color(g, i == 0);
+                    return Positioned(
+                      left: width * at,
+                      top: 0,
+                      child: Transform.scale(
+                        scale: Curves.easeOutBack.transform(shown),
+                        child: Container(
+                          width: dot,
+                          height: dot,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: color,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: panel, width: 1.5),
+                            boxShadow: i == 0
+                                ? [
+                                    BoxShadow(
+                                      color: color.withValues(alpha: .55),
+                                      blurRadius: 8,
+                                    ),
+                                  ]
+                                : null,
+                          ),
+                          child: Text(
+                            g.priority.toUpperCase(),
+                            style: const TextStyle(
+                              fontSize: 8.5,
+                              height: 1,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.black87,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }(),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -436,29 +701,20 @@ class _GoalsAccordionState extends State<_GoalsAccordion> {
 
 /// Opens the race calendar as a shareable image.
 class _ShareGoalsButton extends StatelessWidget {
-  const _ShareGoalsButton({required this.goals, this.label = false});
+  const _ShareGoalsButton({required this.goals});
   final List<RaceGoal> goals;
-  final bool label;
-
-  void _open(BuildContext context) => Navigator.of(context).push(
-    MaterialPageRoute<void>(
-      builder: (_) => RaceCalendarSharePage(goals: goals),
-    ),
-  );
 
   @override
-  Widget build(BuildContext context) => label
-      ? TextButton.icon(
-          onPressed: () => _open(context),
-          icon: const Icon(Icons.ios_share, size: 16),
-          label: Text(context.l10n.shareRaceCalendar),
-        )
-      : IconButton(
-          tooltip: context.l10n.shareRaceCalendar,
-          visualDensity: VisualDensity.compact,
-          onPressed: () => _open(context),
-          icon: const Icon(Icons.ios_share, size: 20, color: Colors.orange),
-        );
+  Widget build(BuildContext context) => IconButton(
+    tooltip: context.l10n.shareRaceCalendar,
+    visualDensity: VisualDensity.compact,
+    onPressed: () => Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => RaceCalendarSharePage(goals: goals),
+      ),
+    ),
+    icon: const Icon(Icons.ios_share, size: 20, color: Colors.orange),
+  );
 }
 
 class _GoalCard extends ConsumerWidget {
@@ -525,10 +781,7 @@ class _GoalCard extends ConsumerWidget {
                       const SizedBox(height: 4),
                       Text(
                         '${valueText(goal.distanceM / 1000, goal.distanceM % 1000 == 0 ? 0 : 1)} km${goal.elevationM == null ? '' : ' · ↑${valueText(goal.elevationM)} m'} · ${dayText(goal.raceDate)}',
-                        style: const TextStyle(
-                          fontSize: 11,
-                          color: Colors.white70,
-                        ),
+                        style: TextStyle(fontSize: 11, color: fjInk70),
                       ),
                       if (goal.targetFinishSeconds != null)
                         Text(
@@ -552,7 +805,7 @@ class _GoalCard extends ConsumerWidget {
                             fontSize: 12,
                             color: goal.targetFinishSeconds == null
                                 ? accent
-                                : Colors.white70,
+                                : fjInk70,
                           ),
                         ),
                     ],
@@ -634,7 +887,6 @@ class _UpcomingState extends State<UpcomingWorkoutList> {
           padding: const EdgeInsets.only(top: 8, bottom: 4),
           child: TimelineSectionHeader(
             label: context.l10n.upcoming,
-            icon: Icons.rocket_launch_rounded,
             colors: planGradient,
           ),
         ),
@@ -709,7 +961,7 @@ class _RestTile extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     context.l10n.restDayPlannedNote,
-                    style: const TextStyle(fontSize: 12, color: muted),
+                    style: TextStyle(fontSize: 12, color: muted),
                   ),
                 ],
               ),
@@ -842,7 +1094,7 @@ class _SessionTile extends StatelessWidget {
     // plan shows what was dropped and why. A finished one is struck through
     // too, with a check, and says what was really done.
     final color = skipped
-        ? Colors.white38
+        ? fjInk38
         : done
         ? mint
         : completedActivityColor(s.sport);
@@ -893,7 +1145,7 @@ class _SessionTile extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
-                          color: skipped || done ? Colors.white54 : null,
+                          color: skipped || done ? fjInk54 : null,
                           decoration: skipped || done
                               ? TextDecoration.lineThrough
                               : null,
@@ -912,7 +1164,7 @@ class _SessionTile extends StatelessWidget {
                         : done
                         ? 'Done${doneBy == null ? '' : ' · ${_doneSummary(doneBy!)}'}'
                         : '${planDuration(s.plannedDurationMin)} · TRIMP ${s.plannedTrimp} · Z${s.primaryZone}',
-                    style: const TextStyle(fontSize: 11, color: Colors.white70),
+                    style: TextStyle(fontSize: 11, color: fjInk70),
                   ),
                 ],
               ),
@@ -921,7 +1173,7 @@ class _SessionTile extends StatelessWidget {
             if (done)
               const _DoneCheck()
             else
-              const Icon(Icons.chevron_right, size: 20, color: muted),
+              Icon(Icons.chevron_right, size: 20, color: muted),
           ],
         ),
       ),
@@ -953,7 +1205,7 @@ class _ScheduledTile extends StatelessWidget {
           style: TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w700,
-            color: done ? Colors.white54 : null,
+            color: done ? fjInk54 : null,
             decoration: done ? TextDecoration.lineThrough : null,
             decorationColor: done ? mint : null,
           ),
@@ -962,11 +1214,11 @@ class _ScheduledTile extends StatelessWidget {
           done
               ? context.l10n.doneDoneby(_doneSummary(doneBy!))
               : context.l10n.garminWorkoutWorkout(workoutSummary(workout)),
-          style: const TextStyle(fontSize: 11, color: Colors.white70),
+          style: TextStyle(fontSize: 11, color: fjInk70),
         ),
         trailing: done
             ? const _DoneCheck()
-            : const Icon(Icons.chevron_right, size: 20, color: muted),
+            : Icon(Icons.chevron_right, size: 20, color: muted),
         onTap: () =>
             showAppSheet(context, WorkoutDetailSheet(workout: workout)),
       ),

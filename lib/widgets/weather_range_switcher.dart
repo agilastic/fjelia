@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import '../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
@@ -16,9 +17,9 @@ class WeatherRangeSwitcher extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.all(3),
     decoration: BoxDecoration(
-      color: const Color(0xFF1D1F20),
+      color: duo(0xFF1D1F20, 0xFFFFFFFF),
       borderRadius: BorderRadius.circular(14),
-      border: Border.all(color: Colors.white.withValues(alpha: .07)),
+      border: Border.all(color: fjInk.withValues(alpha: .07)),
     ),
     child: Row(
       children: [

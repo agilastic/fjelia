@@ -14,6 +14,7 @@ import 'coros_provider.dart';
 import 'health_connect_provider.dart';
 import 'polar_provider.dart';
 import 'suunto_provider.dart';
+import 'mywhoosh_provider.dart';
 import 'sync_provider.dart';
 
 final loadActivitiesProvider = FutureProvider<List<ActivityRecord>>((
@@ -205,6 +206,11 @@ Future<bool> _refetch(Ref ref, ActivityRecord a) async {
       final suunto = ref.read(suuntoServiceProvider);
       if (!await suunto.isConnected) return false;
       await suunto.refetchWorkoutsSince(day.subtract(const Duration(days: 1)));
+      return true;
+    case 'mywhoosh':
+      final myWhoosh = ref.read(myWhooshServiceProvider);
+      if (!await myWhoosh.isConnected) return false;
+      await myWhoosh.refetchSince(day.subtract(const Duration(days: 1)));
       return true;
     case 'polar':
       final polar = ref.read(polarServiceProvider);

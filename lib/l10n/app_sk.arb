@@ -3835,5 +3835,20 @@
   "shortReasonWeather": "Počasie",
   "shortReasonFatigue": "Únava",
   "shortReasonPain": "Bolesť",
-  "shortReasonOther": "Iné"
+  "shortReasonOther": "Iné",
+  "styleTitle": "Štýl",
+  "styleAuto": "Automaticky",
+  "styleAutoHint": "Riadi sa telefónom: cez deň LightFjelia, v noci DarkFjelia.",
+  "connectMyWhoosh": "Pripojiť MyWhoosh",
+  "myWhooshSubtitle": "Prihlás sa účtom MyWhoosh a prenes si indoor jazdy s výkonom, kadenciou a tepovou frekvenciou.",
+  "myWhooshCredentialsInfo": "Prihlasovacie údaje MyWhoosh sú uložené šifrovane v tvojom zariadení. Fjelia číta jazdy priamo z MyWhoosh cez rozhranie aplikácie MyWhoosh. Fjelia nie je prepojená so spoločnosťou MyWhoosh.",
+  "myWhooshTile": "Indoor jazdy",
+  "myWhooshSignedInElsewhere": "MyWhoosh povoľuje len jednu reláciu na účet a si prihlásený na inom zariadení. Zatvor tam MyWhoosh (v prípade potreby sa odhlás) a skús to znova.",
+  "shareWorkout": "Zdieľať tréning",
+  "shareFitFile": "Zdieľať ako súbor FIT",
+  "shareFitFileHint": "Pre Strava, COROS, TrainingPeaks a ďalšie aplikácie",
+  "sendToGarmin": "Odoslať do Garmin Connect",
+  "sendToGarminHint": "Nahrá tréning do tvojho účtu Garmin",
+  "sentToGarmin": "Odoslané do Garmin Connect",
+  "alreadyOnGarmin": "Tento tréning už je v Garmin Connect"
 }

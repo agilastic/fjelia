@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import '../l10n/l10n_ext.dart';
 import '../providers/activity_heat_provider.dart';
 
@@ -36,11 +37,7 @@ class ActivityHeatCard extends ConsumerWidget {
         children: [
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 9,
-              letterSpacing: .8,
-              color: Colors.white70,
-            ),
+            style: TextStyle(fontSize: 9, letterSpacing: .8, color: fjInk70),
           ),
           const SizedBox(height: 5),
           FittedBox(
@@ -53,7 +50,7 @@ class ActivityHeatCard extends ConsumerWidget {
       ),
     );
     return SectionCard(
-      color: const Color(0xFF282828),
+      color: duo(0xFF282828, 0xFFEEF1F5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -71,7 +68,7 @@ class ActivityHeatCard extends ConsumerWidget {
                   style: TextStyle(
                     fontSize: 10,
                     letterSpacing: 1,
-                    color: Colors.white70,
+                    color: fjInk70,
                   ),
                 ),
               ),
@@ -124,7 +121,7 @@ class ActivityHeatCard extends ConsumerWidget {
             h.qualifies
                 ? context.l10n.workoutQualifiedForHeatAccumulation
                 : context.l10n.workoutDidNotAddHeat,
-            style: const TextStyle(fontSize: 12, color: Colors.white70),
+            style: TextStyle(fontSize: 12, color: fjInk70),
           ),
           const SizedBox(height: 14),
           GridView.count(
@@ -145,11 +142,7 @@ class ActivityHeatCard extends ConsumerWidget {
             const SizedBox(height: 26),
             Text(
               context.l10n.temperatureOverTime,
-              style: TextStyle(
-                fontSize: 10,
-                letterSpacing: 1,
-                color: Colors.white70,
-              ),
+              style: TextStyle(fontSize: 10, letterSpacing: 1, color: fjInk70),
             ),
             const SizedBox(height: 14),
             SizedBox(
@@ -171,7 +164,7 @@ class ActivityHeatCard extends ConsumerWidget {
                         reservedSize: 28,
                         getTitlesWidget: (v, _) => Text(
                           context.l10n.round2(v.round()),
-                          style: const TextStyle(fontSize: 9, color: muted),
+                          style: TextStyle(fontSize: 9, color: muted),
                         ),
                       ),
                     ),
@@ -182,7 +175,7 @@ class ActivityHeatCard extends ConsumerWidget {
                         interval: 1,
                         getTitlesWidget: (v, _) => Text(
                           context.l10n.roundh(v.round()),
-                          style: const TextStyle(fontSize: 9, color: muted),
+                          style: TextStyle(fontSize: 9, color: muted),
                         ),
                       ),
                     ),

@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 
 import 'dart:math' as math;
@@ -96,7 +97,7 @@ class BatteryScreen extends ConsumerWidget {
                             r.samples.last.timestamp.toLocal(),
                           ),
                         ),
-                        style: const TextStyle(color: muted, fontSize: 10),
+                        style: TextStyle(color: muted, fontSize: 10),
                       ),
                     ),
                   ),
@@ -126,14 +127,11 @@ class BatteryScreen extends ConsumerWidget {
                                 const SizedBox(height: 6),
                                 Text(
                                   '${e.$3 == 'CHARGED' ? '+' : '−'}${valueText(e.$2)}',
-                                  style: const TextStyle(
-                                    fontSize: 24,
-                                    color: Colors.white,
-                                  ),
+                                  style: TextStyle(fontSize: 24, color: fjInk),
                                 ),
                                 Text(
                                   e.$3,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 9,
                                     color: muted,
                                     letterSpacing: 1,
@@ -145,7 +143,7 @@ class BatteryScreen extends ConsumerWidget {
                       ],
                     ),
                   ),
-                const Divider(height: 20, color: Colors.white10),
+                Divider(height: 20, color: fjInk10),
                 Row(
                   children: [
                     Expanded(
@@ -164,7 +162,7 @@ class BatteryScreen extends ConsumerWidget {
                           r.samples.first.value,
                           r.samples.last.value,
                         ),
-                        style: const TextStyle(fontSize: 10, color: muted),
+                        style: TextStyle(fontSize: 10, color: muted),
                       ),
                   ],
                 ),
@@ -181,7 +179,7 @@ class BatteryScreen extends ConsumerWidget {
                       style: TextStyle(fontSize: 10, color: muted),
                     ),
                     SizedBox(width: 20),
-                    Icon(Icons.circle, color: Colors.white12, size: 8),
+                    Icon(Icons.circle, color: fjInk12, size: 8),
                     SizedBox(width: 5),
                     Text(
                       context.l10n.noData,
@@ -206,7 +204,7 @@ class _EnergyArc extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 9
       ..strokeCap = StrokeCap.round
-      ..color = Colors.white12;
+      ..color = fjInk12;
     canvas.drawArc(rect, math.pi * .75, math.pi * 1.5, false, paint);
     if (value != null) {
       paint.color = value! < 50 ? Colors.amber : mint;
@@ -258,16 +256,10 @@ class EnergyTimeline extends StatelessWidget {
             drawVerticalLine: true,
             horizontalInterval: 25,
             verticalInterval: 6,
-            getDrawingHorizontalLine: (_) => const FlLine(
-              color: Colors.white10,
-              strokeWidth: .5,
-              dashArray: [2, 3],
-            ),
-            getDrawingVerticalLine: (_) => const FlLine(
-              color: Colors.white10,
-              strokeWidth: .5,
-              dashArray: [2, 3],
-            ),
+            getDrawingHorizontalLine: (_) =>
+                FlLine(color: fjInk10, strokeWidth: .5, dashArray: [2, 3]),
+            getDrawingVerticalLine: (_) =>
+                FlLine(color: fjInk10, strokeWidth: .5, dashArray: [2, 3]),
           ),
           titlesData: FlTitlesData(
             topTitles: const AxisTitles(
@@ -283,7 +275,7 @@ class EnergyTimeline extends StatelessWidget {
                 interval: 25,
                 getTitlesWidget: (v, _) => Text(
                   valueText(v),
-                  style: const TextStyle(fontSize: 8, color: muted),
+                  style: TextStyle(fontSize: 8, color: muted),
                 ),
               ),
             ),
@@ -294,7 +286,7 @@ class EnergyTimeline extends StatelessWidget {
                 reservedSize: 24,
                 getTitlesWidget: (v, _) => Text(
                   v.toInt().toString().padLeft(2, '0'),
-                  style: const TextStyle(fontSize: 9, color: muted),
+                  style: TextStyle(fontSize: 9, color: muted),
                 ),
               ),
             ),
@@ -309,7 +301,7 @@ class EnergyTimeline extends StatelessWidget {
                     s.value.toDouble(),
                   ),
               ],
-              color: Colors.white,
+              color: fjInk,
               barWidth: 1.5,
               dotData: FlDotData(show: samples.length == 1),
               belowBarData: BarAreaData(

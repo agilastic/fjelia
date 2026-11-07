@@ -3835,5 +3835,20 @@
   "shortReasonWeather": "Temps",
   "shortReasonFatigue": "Cansat",
   "shortReasonPain": "Dolor",
-  "shortReasonOther": "Altre"
+  "shortReasonOther": "Altre",
+  "styleTitle": "Estil",
+  "styleAuto": "Automàtic",
+  "styleAutoHint": "Segueix el telèfon: LightFjelia de dia, DarkFjelia de nit.",
+  "connectMyWhoosh": "Connecta MyWhoosh",
+  "myWhooshSubtitle": "Inicia sessió amb el teu compte de MyWhoosh per portar les teves sortides indoor amb potència, cadència i freqüència cardíaca.",
+  "myWhooshCredentialsInfo": "Les credencials de MyWhoosh es desen xifrades al teu dispositiu. Fjelia llegeix les sortides directament de MyWhoosh, a través de la interfície de l'app de MyWhoosh. Fjelia no està afiliada a MyWhoosh.",
+  "myWhooshTile": "Sortides indoor",
+  "myWhooshSignedInElsewhere": "MyWhoosh només permet una sessió per compte i has iniciat sessió en un altre dispositiu. Tanca MyWhoosh allà (tanca la sessió si cal) i torna-ho a provar.",
+  "shareWorkout": "Comparteix l'entrenament",
+  "shareFitFile": "Comparteix com a fitxer FIT",
+  "shareFitFileHint": "Per a Strava, COROS, TrainingPeaks i altres apps",
+  "sendToGarmin": "Envia a Garmin Connect",
+  "sendToGarminHint": "Puja l'entrenament al teu compte de Garmin",
+  "sentToGarmin": "Enviat a Garmin Connect",
+  "alreadyOnGarmin": "Aquest entrenament ja és a Garmin Connect"
 }

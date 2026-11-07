@@ -100,7 +100,7 @@ class _ScalePairingState extends ConsumerState<ScalePairingTile> {
                 s.data == null
                     ? context.l10n.stepOnYourScaleBefore
                     : context.l10n.paired,
-                style: const TextStyle(fontSize: 10, color: muted),
+                style: TextStyle(fontSize: 10, color: muted),
               ),
         trailing: TextButton(
           onPressed: scanning ? null : pair,

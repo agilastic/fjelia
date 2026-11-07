@@ -3,6 +3,7 @@ import 'package:fjelia/widgets/weather_visuals.dart';
 import 'package:fjelia/models/weather_comparison.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fjelia/widgets/weather_glyph.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fjelia/providers/heat_acclimation_provider.dart';
 import 'package:fjelia/providers/plan_weather_provider.dart';
@@ -396,11 +397,17 @@ void main() {
       await tester.pumpAndSettle();
       expect(
         tester.getSize(find.byType(PlanWeatherStrip)).height,
-        lessThan(140),
+        lessThan(100),
       );
-      expect(find.text('7-DAY FORECAST'), findsOneWidget);
+      // The week as small skies, only their temperatures written on them.
+      expect(find.text('Today'), findsOneWidget);
+      expect(find.byType(WeatherGlyph), findsAtLeastNWidgets(4));
+      expect(
+        find.textContaining('°'),
+        findsNWidgets(tester.widgetList(find.byType(WeatherGlyph)).length),
+      );
       for (final label in ['min/max', 'rain mm', 'UV max', 'km/h']) {
-        expect(find.text(label), findsOneWidget);
+        expect(find.text(label), findsNothing);
       }
       await tester.tap(find.byType(PlanWeatherStrip));
       await tester.pumpAndSettle();

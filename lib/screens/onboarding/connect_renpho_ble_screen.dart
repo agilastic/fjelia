@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
@@ -91,8 +92,8 @@ class _ConnectRenphoBleScreenState
   Widget build(BuildContext context) {
     final paired = _pairedName != null;
     return Scaffold(
-      backgroundColor: const Color(0xFF111111),
-      appBar: AppBar(leading: const BackButton(color: Color(0xFFCCCCCC))),
+      backgroundColor: duo(0xFF111111, 0xFFF2F4F7),
+      appBar: AppBar(leading: BackButton(color: duo(0xFFCCCCCC, 0xFF374151))),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(28),
@@ -129,8 +130,8 @@ class _ConnectRenphoBleScreenState
                       Expanded(
                         child: Text(
                           _pairedName!,
-                          style: const TextStyle(
-                            color: Colors.white,
+                          style: TextStyle(
+                            color: fjInk,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                           ),
@@ -151,8 +152,8 @@ class _ConnectRenphoBleScreenState
                 child: ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: _accent,
-                    foregroundColor: Colors.white,
-                    disabledBackgroundColor: const Color(0xFF2A2A2A),
+                    foregroundColor: fjInk,
+                    disabledBackgroundColor: duo(0xFF2A2A2A, 0xFFEEF1F5),
                     textStyle: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
@@ -163,11 +164,11 @@ class _ConnectRenphoBleScreenState
                   ),
                   onPressed: _scanning ? null : _scan,
                   icon: _scanning
-                      ? const SizedBox(
+                      ? SizedBox(
                           width: 18,
                           height: 18,
                           child: CircularProgressIndicator(
-                            color: Colors.white,
+                            color: fjInk,
                             strokeWidth: 2,
                           ),
                         )

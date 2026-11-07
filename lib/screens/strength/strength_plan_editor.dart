@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
@@ -418,7 +419,7 @@ class _PlanEditorState extends ConsumerState<StrengthPlanEditor> {
           children: [
             Text(
               widget.ownershipNote ?? context.l10n.changesApplyToThisWorkout,
-              style: const TextStyle(fontSize: 12, color: muted),
+              style: TextStyle(fontSize: 12, color: muted),
             ),
             if (dirty)
               Padding(
@@ -433,7 +434,7 @@ class _PlanEditorState extends ConsumerState<StrengthPlanEditor> {
               Text(
                 '${summary.exercises} exercises · ${summary.workingSets} working sets'
                 '${summary.warmupSets > 0 ? ' · ${summary.warmupSets} warm-up' : ''}',
-                style: const TextStyle(fontSize: 12, color: Colors.white70),
+                style: TextStyle(fontSize: 12, color: fjInk70),
               ),
               const SizedBox(height: 12),
             ],

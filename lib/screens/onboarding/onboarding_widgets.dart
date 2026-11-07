@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import 'package:flutter/material.dart';
 
 /// Text-field decoration shared by the connect screens.
@@ -13,9 +14,9 @@ InputDecoration onboardingInputDecoration(
   );
   return InputDecoration(
     hintText: hint,
-    hintStyle: const TextStyle(color: Color(0xFF888888)),
+    hintStyle: TextStyle(color: duo(0xFF888888, 0xFF6B7280)),
     filled: true,
-    fillColor: const Color(0xFF1E1E1E),
+    fillColor: duo(0xFF1E1E1E, 0xFFFFFFFF),
     contentPadding: const EdgeInsets.all(16),
     prefixIcon: prefixIcon,
     suffixIcon: suffixIcon,
@@ -23,7 +24,7 @@ InputDecoration onboardingInputDecoration(
       borderRadius: BorderRadius.circular(14),
       borderSide: BorderSide.none,
     ),
-    enabledBorder: border(const Color(0xFF333333), 1),
+    enabledBorder: border(duo(0xFF333333, 0xFFE3E7EC), 1),
     focusedBorder: border(accent, 1.5),
     errorBorder: border(const Color(0xFFFF4444), 1),
     focusedErrorBorder: border(const Color(0xFFFF4444), 1.5),
@@ -40,20 +41,24 @@ class OnboardingInfoBox extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E),
+        color: duo(0xFF1E1E1E, 0xFFFFFFFF),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFF333333)),
+        border: Border.all(color: duo(0xFF333333, 0xFFE3E7EC)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.shield_outlined, size: 16, color: Color(0xFF888888)),
+          Icon(
+            Icons.shield_outlined,
+            size: 16,
+            color: duo(0xFF888888, 0xFF6B7280),
+          ),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
               text,
-              style: const TextStyle(
-                color: Color(0xFF888888),
+              style: TextStyle(
+                color: duo(0xFF888888, 0xFF6B7280),
                 fontSize: 12,
                 height: 1.5,
               ),
@@ -105,8 +110,8 @@ class OnboardingInputLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: const TextStyle(
-        color: Color(0xFFCCCCCC),
+      style: TextStyle(
+        color: duo(0xFFCCCCCC, 0xFF374151),
         fontSize: 13,
         fontWeight: FontWeight.w600,
         letterSpacing: 0.3,
@@ -175,11 +180,59 @@ class OnboardingStepIndicator extends StatelessWidget {
           width: active ? 20 : 8,
           height: 8,
           decoration: BoxDecoration(
-            color: active ? const Color(0xFF00D4A0) : const Color(0xFF2A2A2A),
+            color: active
+                ? const Color(0xFF00D4A0)
+                : duo(0xFF2A2A2A, 0xFFEEF1F5),
             borderRadius: BorderRadius.circular(4),
           ),
         );
       }),
+    );
+  }
+}
+
+/// The full-width button that connects an account.
+class OnboardingPrimaryButton extends StatelessWidget {
+  const OnboardingPrimaryButton({
+    super.key,
+    required this.label,
+    required this.color,
+    required this.loading,
+    required this.onPressed,
+  });
+
+  final String label;
+  final Color color;
+  final bool loading;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: 56,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: color,
+          foregroundColor: fjInk,
+          disabledBackgroundColor: duo(0xFF2A2A2A, 0xFFEEF1F5),
+          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+        onPressed: loading ? null : onPressed,
+        child: loading
+            ? SizedBox(
+                width: 22,
+                height: 22,
+                child: CircularProgressIndicator(
+                  color: fjInk,
+                  strokeWidth: 2.5,
+                ),
+              )
+            : Text(label),
+      ),
     );
   }
 }

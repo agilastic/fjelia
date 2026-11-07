@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
@@ -40,10 +41,7 @@ class StrengthTrendSheet extends ConsumerWidget {
       ),
       const SizedBox(width: 6),
       Flexible(
-        child: Text(
-          label,
-          style: const TextStyle(fontSize: 11, color: Colors.white70),
-        ),
+        child: Text(label, style: TextStyle(fontSize: 11, color: fjInk70)),
       ),
     ],
   );
@@ -84,16 +82,16 @@ class StrengthTrendSheet extends ConsumerWidget {
                   if (equipment.isNotEmpty) equipment,
                   convention.text,
                 ].join(' · '),
-                style: const TextStyle(fontSize: 12, color: muted),
+                style: TextStyle(fontSize: 12, color: muted),
               ),
               const SizedBox(height: 16),
               if (load.length < 2)
-                const Padding(
+                Padding(
                   padding: EdgeInsets.symmetric(vertical: 12),
                   child: Text(
                     'A trend appears after two logged sessions with this '
                     'exercise, equipment and load setup.',
-                    style: TextStyle(color: Colors.white70, fontSize: 13),
+                    style: TextStyle(color: fjInk70, fontSize: 13),
                   ),
                 )
               else ...[

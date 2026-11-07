@@ -217,7 +217,7 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
               const SizedBox(height: 12),
               Row(
                 children: [
-                  const Icon(Icons.straighten, color: muted, size: 16),
+                  Icon(Icons.straighten, color: muted, size: 16),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
@@ -226,7 +226,7 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
                           : context.l10n.waistWaistCmUpdateMonthly(
                               waist.fixed(waist % 1 == 0 ? 0 : 1),
                             ),
-                      style: const TextStyle(color: muted, fontSize: 13),
+                      style: TextStyle(color: muted, fontSize: 13),
                     ),
                   ),
                 ],
@@ -757,11 +757,7 @@ class _PlusTile extends StatelessWidget {
               const SizedBox(height: 3),
               Text(
                 entry.hint,
-                style: const TextStyle(
-                  color: muted,
-                  fontSize: 11.5,
-                  height: 1.3,
-                ),
+                style: TextStyle(color: muted, fontSize: 11.5, height: 1.3),
               ),
             ],
           ),

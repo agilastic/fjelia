@@ -37,6 +37,7 @@ import 'readiness_provider.dart';
 import 'source_priority_provider.dart';
 import 'workout_destination_provider.dart';
 import 'suunto_provider.dart';
+import 'mywhoosh_provider.dart';
 import 'user_profile_provider.dart';
 import 'workout_generation_provider.dart';
 
@@ -250,6 +251,7 @@ class SyncState {
     this.polarAuthError = false,
     this.suuntoAuthError = false,
     this.corosAuthError = false,
+    this.myWhooshAuthError = false,
   });
 
   final SyncStatus status;
@@ -264,6 +266,7 @@ class SyncState {
   final bool polarAuthError;
   final bool suuntoAuthError;
   final bool corosAuthError;
+  final bool myWhooshAuthError;
 
   bool get hasAuthError =>
       garminAuthError ||
@@ -271,7 +274,8 @@ class SyncState {
       renphoAuthError ||
       polarAuthError ||
       suuntoAuthError ||
-      corosAuthError;
+      corosAuthError ||
+      myWhooshAuthError;
 
   SyncState copyWith({
     SyncStatus? status,
@@ -285,6 +289,7 @@ class SyncState {
     bool? polarAuthError,
     bool? suuntoAuthError,
     bool? corosAuthError,
+    bool? myWhooshAuthError,
   }) => SyncState(
     status: status ?? this.status,
     lastSync: lastSync ?? this.lastSync,
@@ -296,6 +301,7 @@ class SyncState {
     polarAuthError: polarAuthError ?? this.polarAuthError,
     suuntoAuthError: suuntoAuthError ?? this.suuntoAuthError,
     corosAuthError: corosAuthError ?? this.corosAuthError,
+    myWhooshAuthError: myWhooshAuthError ?? this.myWhooshAuthError,
   );
 }
 
@@ -377,6 +383,13 @@ class SyncNotifier extends StateNotifier<SyncState> {
       }
     }
 
+    Future<void> myWhoosh() async {
+      final s = _ref.read(myWhooshServiceProvider);
+      if (!await s.isConnected) return;
+      final r = await s.sync(days: 7);
+      state = state.copyWith(myWhooshAuthError: r.authError);
+    }
+
     Future<void> coros() async {
       final s = _ref.read(corosServiceProvider);
       if (!await s.isConnected && !await s.healthConnected) return;
@@ -436,7 +449,14 @@ class SyncNotifier extends StateNotifier<SyncState> {
       }
     }
 
-    await Future.wait([polar(), suunto(), coros(), health(), matrix()]);
+    await Future.wait([
+      polar(),
+      suunto(),
+      coros(),
+      myWhoosh(),
+      health(),
+      matrix(),
+    ]);
     state = state.copyWith(progress: 70);
     // A workout Apple Health delivered in the background comes again from its
     // own platform now; the platform's copy stays, the reminder follows it.
@@ -643,12 +663,12 @@ class SyncNotifier extends StateNotifier<SyncState> {
     // Heart rate and blood pressure older than two days keep one value per
     // 15 minutes. Never blocks the sync.
     unawaited(
-      VitalsRetentionService(_ref.read(databaseProvider))
-          .run()
-          .catchError((Object e) {
-            log('[Retention] $e');
-            return (bpRemoved: 0, hrRemoved: 0);
-          }),
+      VitalsRetentionService(_ref.read(databaseProvider)).run().catchError((
+        Object e,
+      ) {
+        log('[Retention] $e');
+        return (bpRemoved: 0, hrRemoved: 0);
+      }),
     );
     // A workout that arrived with the sync takes tonight's reminder back.
     unawaited(
@@ -941,6 +961,7 @@ class HistoricSyncNotifier extends StateNotifier<HistoricSyncState> {
       final polar = _ref.read(polarServiceProvider);
       final suunto = _ref.read(suuntoServiceProvider);
       final coros = _ref.read(corosServiceProvider);
+      final myWhoosh = _ref.read(myWhooshServiceProvider);
       await Future.wait([
         integration('Polar', polar.isConnected, () async {
           await polar.sync(days: days);
@@ -965,6 +986,11 @@ class HistoricSyncNotifier extends StateNotifier<HistoricSyncState> {
           () => suunto.sync(days: days),
         ),
         integration('Coros', coros.isConnected, () => coros.sync(days: days)),
+        integration(
+          'MyWhoosh',
+          myWhoosh.isConnected,
+          () => myWhoosh.sync(days: days),
+        ),
       ]);
       log('[HistoricSync] done — garmin=$garmin bp=$bp');
 
@@ -1075,6 +1101,7 @@ final hasHistorySourceProvider = Provider<bool>((ref) {
       ref.watch(matrixXidSessionProvider).valueOrNull != null ||
       on(ref.watch(corosConnectedProvider)) ||
       on(ref.watch(suuntoConnectedProvider)) ||
+      on(ref.watch(myWhooshConnectedProvider)) ||
       on(ref.watch(polarConnectedProvider)) ||
       on(ref.watch(healthConnectPermissionProvider));
 });

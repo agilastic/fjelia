@@ -7934,4 +7934,54 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get shortReasonOther => 'Annet';
+
+  @override
+  String get styleTitle => 'Stil';
+
+  @override
+  String get styleAuto => 'Automatisk';
+
+  @override
+  String get styleAutoHint =>
+      'Følger telefonen: LightFjelia om dagen, DarkFjelia om natten.';
+
+  @override
+  String get connectMyWhoosh => 'Koble til MyWhoosh';
+
+  @override
+  String get myWhooshSubtitle =>
+      'Logg inn med MyWhoosh-kontoen din for å hente innendørsturene med watt, tråkkfrekvens og puls.';
+
+  @override
+  String get myWhooshCredentialsInfo =>
+      'MyWhoosh-innloggingen lagres kryptert på enheten din. Fjelia leser turene direkte fra MyWhoosh, via grensesnittet til MyWhoosh-appen. Fjelia er ikke tilknyttet MyWhoosh.';
+
+  @override
+  String get myWhooshTile => 'Innendørsturer';
+
+  @override
+  String get myWhooshSignedInElsewhere =>
+      'MyWhoosh tillater bare én økt per konto, og du er logget inn på en annen enhet. Lukk MyWhoosh der (logg ut om nødvendig), og prøv igjen.';
+
+  @override
+  String get shareWorkout => 'Del økten';
+
+  @override
+  String get shareFitFile => 'Del som FIT-fil';
+
+  @override
+  String get shareFitFileHint =>
+      'For Strava, COROS, TrainingPeaks og andre apper';
+
+  @override
+  String get sendToGarmin => 'Send til Garmin Connect';
+
+  @override
+  String get sendToGarminHint => 'Laster opp økten til Garmin-kontoen din';
+
+  @override
+  String get sentToGarmin => 'Sendt til Garmin Connect';
+
+  @override
+  String get alreadyOnGarmin => 'Denne økten er allerede i Garmin Connect';
 }

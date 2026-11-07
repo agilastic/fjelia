@@ -7959,4 +7959,54 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get shortReasonOther => 'Iné';
+
+  @override
+  String get styleTitle => 'Štýl';
+
+  @override
+  String get styleAuto => 'Automaticky';
+
+  @override
+  String get styleAutoHint =>
+      'Riadi sa telefónom: cez deň LightFjelia, v noci DarkFjelia.';
+
+  @override
+  String get connectMyWhoosh => 'Pripojiť MyWhoosh';
+
+  @override
+  String get myWhooshSubtitle =>
+      'Prihlás sa účtom MyWhoosh a prenes si indoor jazdy s výkonom, kadenciou a tepovou frekvenciou.';
+
+  @override
+  String get myWhooshCredentialsInfo =>
+      'Prihlasovacie údaje MyWhoosh sú uložené šifrovane v tvojom zariadení. Fjelia číta jazdy priamo z MyWhoosh cez rozhranie aplikácie MyWhoosh. Fjelia nie je prepojená so spoločnosťou MyWhoosh.';
+
+  @override
+  String get myWhooshTile => 'Indoor jazdy';
+
+  @override
+  String get myWhooshSignedInElsewhere =>
+      'MyWhoosh povoľuje len jednu reláciu na účet a si prihlásený na inom zariadení. Zatvor tam MyWhoosh (v prípade potreby sa odhlás) a skús to znova.';
+
+  @override
+  String get shareWorkout => 'Zdieľať tréning';
+
+  @override
+  String get shareFitFile => 'Zdieľať ako súbor FIT';
+
+  @override
+  String get shareFitFileHint =>
+      'Pre Strava, COROS, TrainingPeaks a ďalšie aplikácie';
+
+  @override
+  String get sendToGarmin => 'Odoslať do Garmin Connect';
+
+  @override
+  String get sendToGarminHint => 'Nahrá tréning do tvojho účtu Garmin';
+
+  @override
+  String get sentToGarmin => 'Odoslané do Garmin Connect';
+
+  @override
+  String get alreadyOnGarmin => 'Tento tréning už je v Garmin Connect';
 }

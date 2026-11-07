@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart' show DateFormat;
@@ -26,7 +27,7 @@ class ThresholdOverviewSection extends ConsumerWidget {
             children: [
               Text(
                 context.l10n.thresholdOrderNote,
-                style: const TextStyle(color: muted, fontSize: 12),
+                style: TextStyle(color: muted, fontSize: 12),
               ),
               const SizedBox(height: 12),
               for (final row in overview.rows)
@@ -126,7 +127,10 @@ class _ThresholdCard extends ConsumerWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [look.color.withValues(alpha: .13), const Color(0xFF1C1C1C)],
+          colors: [
+            look.color.withValues(alpha: .13),
+            duo(0xFF1C1C1C, 0xFFFFFFFF),
+          ],
           stops: const [0, .55],
         ),
         borderRadius: BorderRadius.circular(18),
@@ -162,7 +166,7 @@ class _ThresholdCard extends ConsumerWidget {
                     ),
                     Text(
                       look.meaning,
-                      style: const TextStyle(fontSize: 11, color: muted),
+                      style: TextStyle(fontSize: 11, color: muted),
                     ),
                   ],
                 ),
@@ -173,7 +177,7 @@ class _ThresholdCard extends ConsumerWidget {
           // The value zones and plan use, big.
           Text(
             l10n.thresholdInUse('').replaceAll(':', '').trim().toUpperCase(),
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 9.5,
               letterSpacing: 1.2,
               color: muted,
@@ -195,10 +199,7 @@ class _ThresholdCard extends ConsumerWidget {
                 ),
               ),
               const SizedBox(width: 5),
-              Text(
-                unit,
-                style: const TextStyle(fontSize: 14, color: Colors.white70),
-              ),
+              Text(unit, style: TextStyle(fontSize: 14, color: fjInk70)),
               if (row.inUsePaceSecPerKm case final pace?) ...[
                 const SizedBox(width: 10),
                 Container(
@@ -207,7 +208,7 @@ class _ThresholdCard extends ConsumerWidget {
                     vertical: 3,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: .07),
+                    color: fjInk.withValues(alpha: .07),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
@@ -284,7 +285,7 @@ class _ThresholdCard extends ConsumerWidget {
                   if (locked)
                     Text(
                       l10n.thresholdsCoachLocked,
-                      style: const TextStyle(color: muted, fontSize: 12),
+                      style: TextStyle(color: muted, fontSize: 12),
                     )
                   else
                     Row(
@@ -357,7 +358,7 @@ class _CandidateLine extends StatelessWidget {
         decoration: BoxDecoration(
           color: best
               ? color.withValues(alpha: .1)
-              : Colors.white.withValues(alpha: .03),
+              : fjInk.withValues(alpha: .03),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
@@ -365,7 +366,7 @@ class _CandidateLine extends StatelessWidget {
             Icon(
               _sourceIcon(c.source),
               size: 16,
-              color: best ? color : Colors.white54,
+              color: best ? color : fjInk54,
             ),
             const SizedBox(width: 10),
             Expanded(
@@ -388,7 +389,7 @@ class _CandidateLine extends StatelessWidget {
                           DateFormat.yMMMd().format(d.toLocal()),
                         if (stale) context.l10n.thresholdStale,
                       ].join(' · '),
-                      style: const TextStyle(fontSize: 10, color: muted),
+                      style: TextStyle(fontSize: 10, color: muted),
                     ),
                 ],
               ),
@@ -398,7 +399,7 @@ class _CandidateLine extends StatelessWidget {
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
-                color: best ? color : Colors.white,
+                color: best ? color : fjInk,
                 fontFeatures: const [FontFeature.tabularFigures()],
               ),
             ),
@@ -445,7 +446,7 @@ class _RangePainter extends CustomPainter {
         Rect.fromLTRB(side, y - 2, size.width - side, y + 2),
         const Radius.circular(2),
       ),
-      Paint()..color = Colors.white12,
+      Paint()..color = fjInk12,
     );
     if (values.length > 1) {
       final vs = values.map((v) => v.$1);
@@ -466,7 +467,7 @@ class _RangePainter extends CustomPainter {
       canvas.drawCircle(
         Offset(x(v), y),
         best ? 5.5 : 4,
-        Paint()..color = best ? color : Colors.white70,
+        Paint()..color = best ? color : fjInk70,
       );
     }
     if (proposed case final p?) {
@@ -486,7 +487,7 @@ class _RangePainter extends CustomPainter {
           Offset(px, y - 11),
           Offset(px, y + 11),
           Paint()
-            ..color = Colors.white
+            ..color = fjInk
             ..strokeWidth = 2.5
             ..strokeCap = StrokeCap.round,
         )
@@ -496,7 +497,7 @@ class _RangePainter extends CustomPainter {
             ..lineTo(px + 5, 0)
             ..lineTo(px, 6)
             ..close(),
-          Paint()..color = Colors.white,
+          Paint()..color = fjInk,
         );
     }
     // Lowest and highest value at the ends.
@@ -504,7 +505,7 @@ class _RangePainter extends CustomPainter {
       final tp = TextPainter(
         text: TextSpan(
           text: text,
-          style: const TextStyle(color: muted, fontSize: 9),
+          style: TextStyle(color: muted, fontSize: 9),
         ),
         textDirection: TextDirection.ltr,
       )..layout();

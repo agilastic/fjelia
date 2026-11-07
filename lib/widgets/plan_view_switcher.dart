@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import '../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
@@ -15,9 +16,9 @@ class PlanViewSwitcher extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(
-        color: const Color(0xFF1D1F20),
+        color: duo(0xFF1D1F20, 0xFFFFFFFF),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withValues(alpha: .07)),
+        border: Border.all(color: fjInk.withValues(alpha: .07)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -56,7 +57,9 @@ class PlanViewSwitcher extends ConsumerWidget {
                       child: Icon(
                         item.$3,
                         size: 21,
-                        color: view == item.$1 ? mint : const Color(0xFF8D9295),
+                        color: view == item.$1
+                            ? mint
+                            : duo(0xFF8D9295, 0xFF6B7280),
                       ),
                     ),
                   ),

@@ -57,7 +57,7 @@ class _GymTreadmillState extends ConsumerState<GymTreadmillSheet> {
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          Text(l.gymDescription, style: const TextStyle(color: muted)),
+          Text(l.gymDescription, style: TextStyle(color: muted)),
           const SizedBox(height: 16),
           if (busy) const LinearProgressIndicator(),
           SectionCard(
@@ -72,7 +72,7 @@ class _GymTreadmillState extends ConsumerState<GymTreadmillSheet> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                Text(l.gymConsoleSupport, style: const TextStyle(color: muted)),
+                Text(l.gymConsoleSupport, style: TextStyle(color: muted)),
                 const SizedBox(height: 12),
                 OutlinedButton.icon(
                   onPressed: busy || active ? null : inspect,
@@ -93,7 +93,7 @@ class _GymTreadmillState extends ConsumerState<GymTreadmillSheet> {
                       padding: const EdgeInsets.only(top: 8),
                       child: Text(
                         l.gymSpeedOnly,
-                        style: const TextStyle(color: muted),
+                        style: TextStyle(color: muted),
                       ),
                     ),
                   if (found.canRecord)
@@ -141,8 +141,9 @@ class _GymTreadmillState extends ConsumerState<GymTreadmillSheet> {
                                   '${dir.path}/fjelia-equipment-services.json',
                                 );
                                 await file.writeAsString(
-                                  const JsonEncoder.withIndent('  ')
-                                      .convert(found.toJson()),
+                                  const JsonEncoder.withIndent(
+                                    '  ',
+                                  ).convert(found.toJson()),
                                 );
                                 if (context.mounted) {
                                   await shareRecordingFile(context, file.path);
@@ -243,7 +244,7 @@ class _MatrixXidState extends ConsumerState<MatrixXidSheet> {
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          Text(l.gymXidDescription, style: const TextStyle(color: muted)),
+          Text(l.gymXidDescription, style: TextStyle(color: muted)),
           const SizedBox(height: 12),
           if (waiting) const LinearProgressIndicator(),
           if (error != null)
@@ -305,7 +306,7 @@ class _MatrixXidState extends ConsumerState<MatrixXidSheet> {
             const SizedBox(height: 8),
             Text(
               l.gymSessionHelp,
-              style: const TextStyle(color: muted, fontSize: 12),
+              style: TextStyle(color: muted, fontSize: 12),
             ),
             SwitchListTile(
               contentPadding: EdgeInsets.zero,
@@ -534,7 +535,7 @@ class _GymSummaryState extends ConsumerState<GymSummarySheet> {
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          Text(l.gymSummaryDescription, style: const TextStyle(color: muted)),
+          Text(l.gymSummaryDescription, style: TextStyle(color: muted)),
           const SizedBox(height: 12),
           if (busy) const LinearProgressIndicator(),
           Wrap(
@@ -554,7 +555,7 @@ class _GymSummaryState extends ConsumerState<GymSummarySheet> {
             ],
           ),
           const SizedBox(height: 12),
-          Text(l.gymReview, style: const TextStyle(color: muted, fontSize: 12)),
+          Text(l.gymReview, style: TextStyle(color: muted, fontSize: 12)),
           ListTile(
             contentPadding: EdgeInsets.zero,
             title: Text(l.gymStartTime),

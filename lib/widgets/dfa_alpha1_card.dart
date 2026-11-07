@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -48,7 +49,7 @@ class DfaAlpha1Card extends ConsumerWidget {
             const SizedBox(height: 4),
             Text(
               l10n.dfaNoThreshold,
-              style: const TextStyle(color: muted, fontSize: 12),
+              style: TextStyle(color: muted, fontSize: 12),
             ),
           ],
           const SizedBox(height: 12),
@@ -56,7 +57,7 @@ class DfaAlpha1Card extends ConsumerWidget {
           const SizedBox(height: 8),
           Text(
             l10n.dfaBeats(dfa.rrCount, (dfa.artifacts * 100).fixed(1)),
-            style: const TextStyle(color: muted, fontSize: 11),
+            style: TextStyle(color: muted, fontSize: 11),
           ),
           if (dfa.artifacts > dfaMaxArtifacts)
             Text(
@@ -64,10 +65,7 @@ class DfaAlpha1Card extends ConsumerWidget {
               style: const TextStyle(color: Colors.orangeAccent, fontSize: 11),
             ),
           const SizedBox(height: 4),
-          Text(
-            l10n.dfaExplainer,
-            style: const TextStyle(color: muted, fontSize: 11),
-          ),
+          Text(l10n.dfaExplainer, style: TextStyle(color: muted, fontSize: 11)),
         ],
       ),
     );
@@ -143,7 +141,7 @@ class _Chart extends StatelessWidget {
               interval: 0.5,
               getTitlesWidget: (v, _) => Text(
                 v.toStringAsFixed(1),
-                style: const TextStyle(color: muted, fontSize: 9),
+                style: TextStyle(color: muted, fontSize: 9),
               ),
             ),
           ),
@@ -154,7 +152,7 @@ class _Chart extends StatelessWidget {
               interval: spots.last.x > 90 ? 30 : 10,
               getTitlesWidget: (v, _) => Text(
                 '${v.round()}′',
-                style: const TextStyle(color: muted, fontSize: 9),
+                style: TextStyle(color: muted, fontSize: 9),
               ),
             ),
           ),
@@ -170,7 +168,7 @@ class _Chart extends StatelessWidget {
           LineChartBarData(
             spots: spots,
             isCurved: false,
-            color: Colors.white70,
+            color: fjInk70,
             barWidth: 1.5,
             dotData: const FlDotData(show: false),
           ),

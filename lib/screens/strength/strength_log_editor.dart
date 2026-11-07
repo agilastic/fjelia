@@ -289,7 +289,7 @@ class _LogEditorState extends ConsumerState<StrengthLogEditor> {
                   baseline.retrospective
                       ? context.l10n.comparedWithAPlanChosen
                       : context.l10n.plannedValuesAreHintsNot,
-                  style: const TextStyle(fontSize: 12, color: muted),
+                  style: TextStyle(fontSize: 12, color: muted),
                 ),
               ),
             const SizedBox(height: 12),
@@ -345,7 +345,7 @@ class _LogEditorState extends ConsumerState<StrengthLogEditor> {
     initiallyExpanded: true,
     menu: PopupMenuButton<String>(
       tooltip: context.l10n.actionsForName(e.name),
-      icon: const Icon(Icons.more_horiz, color: muted),
+      icon: Icon(Icons.more_horiz, color: muted),
       onSelected: (v) {
         switch (v) {
           case 'edit':

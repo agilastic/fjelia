@@ -1,3 +1,4 @@
+import 'package:fjelia/screens/planner/plan_overview_cards.dart';
 import 'package:fjelia/l10n/app_localizations.dart';
 import 'package:fjelia/providers/heat_acclimation_provider.dart';
 
@@ -110,7 +111,7 @@ void main() {
     expect(switcher, findsOneWidget);
     expect(
       tester.getTopLeft(switcher).dy,
-      lessThan(tester.getTopLeft(find.text('ACTIVITY LOG')).dy),
+      lessThan(tester.getTopLeft(find.byType(RaceCountdownCard)).dy),
     );
     expect(
       find.descendant(

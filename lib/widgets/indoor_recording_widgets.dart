@@ -69,7 +69,7 @@ class IndoorMetrics extends StatelessWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontSize: 12, color: muted)),
+        Text(label, style: TextStyle(fontSize: 12, color: muted)),
         Text(
           value,
           style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
@@ -99,7 +99,7 @@ class IndoorIntervalCard extends ConsumerWidget {
         children: [
           Text(
             l.indoorCurrentInterval,
-            style: const TextStyle(color: muted, fontSize: 12),
+            style: TextStyle(color: muted, fontSize: 12),
           ),
           if (capture.currentStep case final step?) ...[
             Text(
@@ -122,7 +122,7 @@ class IndoorIntervalCard extends ConsumerWidget {
             if (capture.stepIndex + 1 < capture.steps.length)
               Text(
                 '${l.indoorNextInterval}: ${_stepLabel(context, capture.steps[capture.stepIndex + 1].label)} · ${_stepTarget(capture.steps[capture.stepIndex + 1])}',
-                style: const TextStyle(color: muted),
+                style: TextStyle(color: muted),
               ),
             TextButton.icon(
               onPressed: waiting || state.phase != IndoorPhase.recording

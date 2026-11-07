@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 
 import 'dart:math' as math;
@@ -12,59 +13,70 @@ import '../../utils/week.dart';
 const loadBlue = Color(0xFF4BC0EB);
 const loadOrange = Color(0xFFFF9100);
 const loadRed = Color(0xFFFF454B);
-const loadSurface = Color(0xFF1E1E1E);
-const loadInset = Color(0xFF282828);
-const loadLabel = TextStyle(
+Color get loadSurface => duo(0xFF1E1E1E, 0xFFFFFFFF);
+Color get loadInset => duo(0xFF282828, 0xFFEEF1F5);
+TextStyle get loadLabel => TextStyle(
   fontSize: 11,
-  color: Color(0xFFBBBBBB),
+  color: duo(0xFFBBBBBB, 0xFF4B5563),
   letterSpacing: 1,
   fontWeight: FontWeight.w600,
 );
-const loadCaption = TextStyle(fontSize: 10, color: Color(0xFF888888));
+TextStyle get loadCaption =>
+    TextStyle(fontSize: 10, color: duo(0xFF888888, 0xFF6B7280));
 
 class LoadCard extends StatelessWidget {
   const LoadCard({
     super.key,
     required this.child,
-    this.color = loadSurface,
+    this.color,
     this.padding = const EdgeInsets.all(16),
+    this.accent,
   });
   final Widget child;
-  final Color color;
+  final Color? color;
   final EdgeInsetsGeometry padding;
+
+  /// The card's own glow: a faint light from the top left and a tinted edge.
+  final List<Color>? accent;
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(bottom: 12),
-    child: Material(
-      color: color,
-      borderRadius: BorderRadius.circular(20),
-      child: Padding(padding: padding, child: child),
-    ),
-  );
+  Widget build(BuildContext context) {
+    final accent = this.accent;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Material(
+        color: color ?? loadSurface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: accent == null ? BorderSide.none : fjEdge(accent),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Ink(
+          decoration: accent == null ? null : fjGlow(accent),
+          child: Padding(padding: padding, child: child),
+        ),
+      ),
+    );
+  }
 }
 
 class LoadBadge extends StatelessWidget {
-  const LoadBadge(
-    this.text, {
-    super.key,
-    this.color = const Color(0xFFBBBBBB),
-    this.fontSize = 11,
-  });
+  const LoadBadge(this.text, {super.key, this.color, this.fontSize = 11});
   final String text;
-  final Color color;
+  final Color? color;
+  Color get _color => color ?? duo(0xFFBBBBBB, 0xFF4B5563);
   final double fontSize;
   @override
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
     decoration: BoxDecoration(
-      color: color.withValues(alpha: .13),
+      color: _color.withValues(alpha: .13),
       borderRadius: BorderRadius.circular(8),
     ),
     child: Text(
       text,
       style: TextStyle(
         fontSize: fontSize,
-        color: color,
+        color: _color,
         fontWeight: FontWeight.w600,
       ),
     ),
@@ -206,7 +218,7 @@ class LoadSheet extends StatelessWidget {
           width: 36,
           height: 4,
           decoration: BoxDecoration(
-            color: Colors.white12,
+            color: fjInk12,
             borderRadius: BorderRadius.circular(4),
           ),
         ),
@@ -221,7 +233,7 @@ class LoadSheet extends StatelessWidget {
                   textAlign: centerTitle ? TextAlign.center : TextAlign.left,
                   style: loadLabel.copyWith(
                     fontSize: largeTitle ? 16 : 11,
-                    color: largeTitle ? Colors.white : const Color(0xFFBBBBBB),
+                    color: largeTitle ? fjInk : duo(0xFFBBBBBB, 0xFF4B5563),
                   ),
                 ),
               ),
@@ -310,9 +322,7 @@ class LoadWeekBars extends StatelessWidget {
                             borderRadius: BorderRadius.circular(3),
                             child: Stack(
                               children: [
-                                Container(
-                                  color: Colors.white.withValues(alpha: .045),
-                                ),
+                                Container(color: fjInk.withValues(alpha: .045)),
                                 Align(
                                   alignment: Alignment.bottomCenter,
                                   child: FractionallySizedBox(
@@ -332,12 +342,8 @@ class LoadWeekBars extends StatelessWidget {
                                                   ? loadOrange.withValues(
                                                       alpha: .5,
                                                     )
-                                                  : Colors.white.withValues(
-                                                      alpha: .19,
-                                                    )
-                                            : Colors.white.withValues(
-                                                alpha: .19,
-                                              ),
+                                                  : fjInk.withValues(alpha: .19)
+                                            : fjInk.withValues(alpha: .19),
                                         borderRadius: BorderRadius.circular(3),
                                         border:
                                             inProgressLast &&
@@ -376,8 +382,8 @@ class LoadWeekBars extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 8,
                         color: i == values.length - 1
-                            ? const Color(0xFFBBBBBB)
-                            : const Color(0xFF777777),
+                            ? duo(0xFFBBBBBB, 0xFF4B5563)
+                            : duo(0xFF777777, 0xFF6B7280),
                       ),
                     ),
                   ],
@@ -457,7 +463,7 @@ class LoadTrendChart extends StatelessWidget {
             pace
                 ? '${v ~/ 60}:${(v.round() % 60).toString().padLeft(2, '0')}'
                 : '${valueText(v, v.abs() < 10 ? 1 : 0)}$unit',
-            style: const TextStyle(fontSize: 8, color: Color(0xFF777777)),
+            style: TextStyle(fontSize: 8, color: duo(0xFF777777, 0xFF6B7280)),
           ),
         ),
       ),
@@ -478,7 +484,10 @@ class LoadTrendChart extends StatelessWidget {
               padding: const EdgeInsets.only(top: 5),
               child: Text(
                 DateFormat.Md().format(date),
-                style: const TextStyle(fontSize: 7, color: Color(0xFF777777)),
+                style: TextStyle(
+                  fontSize: 7,
+                  color: duo(0xFF777777, 0xFF6B7280),
+                ),
               ),
             );
           },
@@ -490,7 +499,7 @@ class LoadTrendChart extends StatelessWidget {
       drawVerticalLine: false,
       horizontalInterval: heat ? 20 : null,
       getDrawingHorizontalLine: (_) => FlLine(
-        color: Colors.white12,
+        color: fjInk12,
         strokeWidth: .6,
         dashArray: heat ? [8, 4] : null,
       ),
@@ -541,7 +550,7 @@ class LoadTrendChart extends StatelessWidget {
                 gridData: grid,
                 borderData: FlBorderData(
                   show: heat,
-                  border: Border.all(color: Colors.white10),
+                  border: Border.all(color: fjInk10),
                 ),
                 lineBarsData: [
                   LineChartBarData(

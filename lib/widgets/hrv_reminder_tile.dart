@@ -49,7 +49,7 @@ class _HrvReminderTileState extends ConsumerState<HrvReminderTile> {
             style: TextStyle(fontWeight: FontWeight.w600),
           ),
           subtitle: Text(
-            style: const TextStyle(color: muted, fontSize: 12, height: 1.35),
+            style: TextStyle(color: muted, fontSize: 12, height: 1.35),
             !status.sensorReady
                 ? context.l10n.pairAPolarH10First
                 : context.l10n.around30MinutesAfterTraining,
@@ -115,7 +115,7 @@ class _HrvReminderTileState extends ConsumerState<HrvReminderTile> {
             child: Text(
               ref.watch(hrvDiagnosticsProvider).valueOrNull?.lines.join('\n') ??
                   context.l10n.loading,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'monospace',
                 fontSize: 11,
                 color: muted,

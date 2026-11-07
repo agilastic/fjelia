@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 
 import 'dart:ui' as ui;
@@ -17,7 +18,7 @@ import '../../widgets/history_sync_card.dart';
 import '../../widgets/recording_banner.dart';
 import '../../widgets/day_navigator.dart';
 import '../../widgets/plan_view_switcher.dart';
-import '../../widgets/spinning_sync_icon.dart';
+import '../../widgets/sync_orb.dart';
 import '../../widgets/day_summary_card.dart';
 import '../../widgets/health_monitor_grid.dart';
 import '../../widgets/hr_timeline_card.dart';
@@ -74,7 +75,7 @@ class _HomeState extends ConsumerState<HomeScreen> {
             children: [
               IconButton(
                 tooltip: context.l10n.settings,
-                icon: const Icon(Icons.menu, size: 20, color: muted),
+                icon: Icon(Icons.menu, size: 20, color: muted),
                 onPressed: () => SettingsSheet.show(context),
               ),
               Expanded(
@@ -87,11 +88,7 @@ class _HomeState extends ConsumerState<HomeScreen> {
               ),
               IconButton(
                 tooltip: context.l10n.sendFeedbackOrReportA,
-                icon: const Icon(
-                  Icons.feedback_outlined,
-                  size: 20,
-                  color: muted,
-                ),
+                icon: Icon(Icons.feedback_outlined, size: 20, color: muted),
                 onPressed: () => showAppSheet(context, const BugReportSheet()),
               ),
               IconButton(
@@ -101,11 +98,19 @@ class _HomeState extends ConsumerState<HomeScreen> {
               ),
               PopupMenuButton<String>(
                 tooltip: context.l10n.syncLabel2,
-                icon: SpinningSyncIcon(
+                icon: SyncOrb(
                   spinning:
                       sync.status == SyncStatus.syncing ||
                       ref.watch(historicSyncProvider).running,
-                  color: sync.status == SyncStatus.syncing ? mint : muted,
+                  freshness:
+                      sync.status == SyncStatus.error ||
+                          sync.errorMessage != null
+                      ? SyncFreshness.error
+                      : sync.lastSync != null &&
+                            DateTime.now().difference(sync.lastSync!) <
+                                const Duration(hours: 3)
+                      ? SyncFreshness.fresh
+                      : SyncFreshness.stale,
                 ),
                 onSelected: (choice) => runUiAction(context, () async {
                   if (choice == 'today') {
@@ -210,7 +215,7 @@ class _HomeState extends ConsumerState<HomeScreen> {
                             end: Alignment.bottomCenter,
                             colors: [
                               Colors.transparent,
-                              Colors.black.withValues(alpha: .55),
+                              fjBackground.withValues(alpha: .55),
                             ],
                           ),
                         ),
@@ -232,7 +237,7 @@ class _HomeState extends ConsumerState<HomeScreen> {
               decoration: BoxDecoration(
                 color: panel.withValues(alpha: .94),
                 borderRadius: BorderRadius.circular(28),
-                border: Border.all(color: const Color(0xFF333333)),
+                border: Border.all(color: duo(0xFF333333, 0xFFE3E7EC)),
               ),
               child: Row(
                 children: [
@@ -328,6 +333,7 @@ class _HealthPage extends ConsumerWidget {
         if (vis['health_monitor'] ?? true) const HealthMonitorGrid(),
         SectionCard(
           title: context.l10n.typeBloodPressure,
+          accent: const [Color(0xFFFF5A7A), Color(0xFFFF9A5A)],
           onTap: () => showAppSheet(context, const BpScreen()),
           child: Row(
             children: [
@@ -345,7 +351,7 @@ class _HealthPage extends ConsumerWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const TextSpan(
+                      TextSpan(
                         text: ' mmHg',
                         style: TextStyle(color: muted, fontSize: 11),
                       ),
@@ -384,7 +390,7 @@ class _HealthPage extends ConsumerWidget {
                             : bp.avgSystolic > yesterdayBp.avgSystolic
                             ? '↑'
                             : '→'} vs. yesterday',
-                        style: const TextStyle(color: muted, fontSize: 10),
+                        style: TextStyle(color: muted, fontSize: 10),
                       ),
                     ],
                   ],
@@ -397,6 +403,7 @@ class _HealthPage extends ConsumerWidget {
         if (vis['hr_timeline'] ?? true) const HrTimelineCard(),
         SectionCard(
           title: context.l10n.ecgTitle,
+          accent: const [mint, Color(0xFF3EE0FF)],
           onTap: () => showAppSheet(context, const EcgSheet()),
           child: Row(
             children: [
@@ -405,16 +412,17 @@ class _HealthPage extends ConsumerWidget {
               Expanded(
                 child: Text(
                   context.l10n.ecgDescription,
-                  style: const TextStyle(color: muted, fontSize: 12),
+                  style: TextStyle(color: muted, fontSize: 12),
                 ),
               ),
-              const Icon(Icons.chevron_right, color: muted),
+              Icon(Icons.chevron_right, color: muted),
             ],
           ),
         ),
         if (vis['grip_strength'] ?? true)
           SectionCard(
             title: context.l10n.gripStrength,
+            accent: const [Color(0xFF6FA8FF), Color(0xFF3EE0FF)],
             onTap: () => showAppSheet(context, const GripStrengthSheet()),
             child: Text(
               context.l10n.lLeftkgRRightkgKg2(
@@ -431,6 +439,7 @@ class _HealthPage extends ConsumerWidget {
         if (vis['body_composition'] ?? true)
           SectionCard(
             title: context.l10n.bodyComposition,
+            accent: const [Color(0xFFFFB13D), Color(0xFFFFE066)],
             onTap: () => showAppSheet(context, const RenphoScreen()),
             child: Text(
               context.l10n.weightKgFatBodyfatMuscle(
@@ -438,7 +447,7 @@ class _HealthPage extends ConsumerWidget {
                 valueText(body?.bodyFat, 1),
                 valueText(body?.muscleMass, 1),
               ),
-              style: const TextStyle(color: muted, fontSize: 11),
+              style: TextStyle(color: muted, fontSize: 11),
             ),
           ),
         if (vis['bio_age'] ?? true) const BioAgeCard(),
@@ -451,7 +460,7 @@ class _HealthPage extends ConsumerWidget {
                     dayText(last),
                     TimeOfDay.fromDateTime(last).format(context),
                   ),
-            style: const TextStyle(fontSize: 10, color: muted),
+            style: TextStyle(fontSize: 10, color: muted),
           ),
         ),
       ],

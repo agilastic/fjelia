@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
@@ -59,6 +60,7 @@ class LoadHistoryCards extends ConsumerWidget {
             if (!polarization) {
               final elevation = weeks.last.elevation;
               return LoadCard(
+                accent: const [Color(0xFFC6FF4D), Color(0xFF00D4A0)],
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -78,7 +80,14 @@ class LoadHistoryCards extends ConsumerWidget {
                         ),
                         const SizedBox(width: 10),
                         Expanded(
-                          child: Text(context.l10n.elevation, style: loadLabel),
+                          child: GradientTitle(
+                            context.l10n.elevation,
+                            colors: const [
+                              Color(0xFFC6FF4D),
+                              Color(0xFF00D4A0),
+                            ],
+                            size: 11,
+                          ),
                         ),
                         Text(context.l10n.t12WeekHistory, style: loadCaption),
                       ],
@@ -89,12 +98,12 @@ class LoadHistoryCards extends ConsumerWidget {
                       values: [for (final week in weeks) week.elevation],
                       mondayFirst: mondayFirst,
                     ),
-                    const Divider(height: 30, color: Colors.white10),
+                    Divider(height: 30, color: fjInk10),
                     Text(
                       elevation == 0
                           ? context.l10n.noElevationThisWeek
                           : '${valueText(elevation)} m this week',
-                      style: const TextStyle(fontSize: 13, color: muted),
+                      style: TextStyle(fontSize: 13, color: muted),
                     ),
                     const SizedBox(height: 10),
                   ],
@@ -116,10 +125,15 @@ class LoadHistoryCards extends ConsumerWidget {
             );
             return LoadCard(
               color: loadInset,
+              accent: const [Color(0xFF3EE0FF), Color(0xFF00D4A0)],
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(context.l10n.zonePolarization2, style: loadLabel),
+                  GradientTitle(
+                    context.l10n.zonePolarization2,
+                    colors: const [Color(0xFF3EE0FF), Color(0xFF00D4A0)],
+                    size: 11,
+                  ),
                   const SizedBox(height: 10),
                   Wrap(
                     spacing: 12,
@@ -218,7 +232,7 @@ class _ZoneWeekRow extends StatelessWidget {
           margin: const EdgeInsets.symmetric(vertical: 2),
           padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 4),
           decoration: BoxDecoration(
-            color: selected ? Colors.white.withValues(alpha: .04) : null,
+            color: selected ? fjInk.withValues(alpha: .04) : null,
             borderRadius: BorderRadius.circular(6),
           ),
           child: Row(
@@ -235,14 +249,12 @@ class _ZoneWeekRow extends StatelessWidget {
                         fontWeight: selected
                             ? FontWeight.w800
                             : FontWeight.w500,
-                        color: selected
-                            ? Colors.white
-                            : const Color(0xFFBBBBBB),
+                        color: selected ? fjInk : duo(0xFFBBBBBB, 0xFF4B5563),
                       ),
                     ),
                     Text(
                       DateFormat.MMMd().format(week.start),
-                      style: const TextStyle(fontSize: 8, color: muted),
+                      style: TextStyle(fontSize: 8, color: muted),
                     ),
                   ],
                 ),
@@ -256,7 +268,7 @@ class _ZoneWeekRow extends StatelessWidget {
                           status,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontSize: 10, color: muted),
+                          style: TextStyle(fontSize: 10, color: muted),
                         ),
                       )
                     : ClipRRect(

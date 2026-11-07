@@ -108,7 +108,7 @@ class _State extends ConsumerState<HiloReportImportSheet> {
               Text(
                 '${p.newReadings} new, ${p.alreadyStored} already stored'
                 '${p.report.rejected > 0 ? ', ${p.report.rejected} skipped (implausible)' : ''}',
-                style: const TextStyle(color: muted, fontSize: 12),
+                style: TextStyle(color: muted, fontSize: 12),
               ),
               const SizedBox(height: 12),
               FilledButton(

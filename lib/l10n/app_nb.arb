@@ -3835,5 +3835,20 @@
   "shortReasonWeather": "Vær",
   "shortReasonFatigue": "Sliten",
   "shortReasonPain": "Smerter",
-  "shortReasonOther": "Annet"
+  "shortReasonOther": "Annet",
+  "styleTitle": "Stil",
+  "styleAuto": "Automatisk",
+  "styleAutoHint": "Følger telefonen: LightFjelia om dagen, DarkFjelia om natten.",
+  "connectMyWhoosh": "Koble til MyWhoosh",
+  "myWhooshSubtitle": "Logg inn med MyWhoosh-kontoen din for å hente innendørsturene med watt, tråkkfrekvens og puls.",
+  "myWhooshCredentialsInfo": "MyWhoosh-innloggingen lagres kryptert på enheten din. Fjelia leser turene direkte fra MyWhoosh, via grensesnittet til MyWhoosh-appen. Fjelia er ikke tilknyttet MyWhoosh.",
+  "myWhooshTile": "Innendørsturer",
+  "myWhooshSignedInElsewhere": "MyWhoosh tillater bare én økt per konto, og du er logget inn på en annen enhet. Lukk MyWhoosh der (logg ut om nødvendig), og prøv igjen.",
+  "shareWorkout": "Del økten",
+  "shareFitFile": "Del som FIT-fil",
+  "shareFitFileHint": "For Strava, COROS, TrainingPeaks og andre apper",
+  "sendToGarmin": "Send til Garmin Connect",
+  "sendToGarminHint": "Laster opp økten til Garmin-kontoen din",
+  "sentToGarmin": "Sendt til Garmin Connect",
+  "alreadyOnGarmin": "Denne økten er allerede i Garmin Connect"
 }

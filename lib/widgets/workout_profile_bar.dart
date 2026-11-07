@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import '../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
@@ -89,9 +90,9 @@ class _State extends State<WorkoutProfileBar> {
                                 ),
                                 borderRadius: BorderRadius.circular(5),
                                 border: selected == i
-                                    ? Border.all(color: Colors.white, width: 2)
+                                    ? Border.all(color: fjInk, width: 2)
                                     : blocks[i].estimated
-                                    ? Border.all(color: Colors.white38)
+                                    ? Border.all(color: fjInk38)
                                     : null,
                               ),
                             ),
@@ -112,7 +113,7 @@ class _State extends State<WorkoutProfileBar> {
                     '${block.estimated ? ' · estimated length' : ''}',
           style: TextStyle(
             fontSize: 12,
-            color: block == null ? muted : Colors.white,
+            color: block == null ? muted : fjInk,
             fontWeight: block == null ? FontWeight.w400 : FontWeight.w600,
           ),
         ),

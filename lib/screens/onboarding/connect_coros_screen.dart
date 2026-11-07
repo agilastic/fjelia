@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../providers/connection_actions_provider.dart';
 
@@ -78,16 +79,16 @@ class _ConnectCorosScreenState extends ConsumerState<ConnectCorosScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF111111),
+      backgroundColor: duo(0xFF111111, 0xFFF2F4F7),
       appBar: AppBar(
-        leading: const BackButton(color: Color(0xFFCCCCCC)),
+        leading: BackButton(color: duo(0xFFCCCCCC, 0xFF374151)),
         title: const OnboardingStepIndicator(current: 4, total: 6),
         actions: [
           TextButton(
             onPressed: _next,
             child: Text(
               context.l10n.skip,
-              style: TextStyle(color: Color(0xFFCCCCCC)),
+              style: TextStyle(color: duo(0xFFCCCCCC, 0xFF374151)),
             ),
           ),
         ],
@@ -116,7 +117,7 @@ class _ConnectCorosScreenState extends ConsumerState<ConnectCorosScreen> {
                   controller: _email,
                   keyboardType: TextInputType.emailAddress,
                   autocorrect: false,
-                  style: const TextStyle(color: Colors.white),
+                  style: TextStyle(color: fjInk),
                   decoration: onboardingInputDecoration(
                     'you@example.com',
                     accent: _accent,
@@ -132,7 +133,7 @@ class _ConnectCorosScreenState extends ConsumerState<ConnectCorosScreen> {
                 TextFormField(
                   controller: _password,
                   obscureText: _obscure,
-                  style: const TextStyle(color: Colors.white),
+                  style: TextStyle(color: fjInk),
                   decoration:
                       onboardingInputDecoration(
                         '••••••••',
@@ -147,7 +148,7 @@ class _ConnectCorosScreenState extends ConsumerState<ConnectCorosScreen> {
                             _obscure
                                 ? Icons.visibility_outlined
                                 : Icons.visibility_off_outlined,
-                            color: const Color(0xFF888888),
+                            color: duo(0xFF888888, 0xFF6B7280),
                           ),
                           onPressed: () => setState(() => _obscure = !_obscure),
                         ),
@@ -158,8 +159,8 @@ class _ConnectCorosScreenState extends ConsumerState<ConnectCorosScreen> {
                 const SizedBox(height: 8),
                 DropdownButtonFormField<String>(
                   initialValue: _region,
-                  dropdownColor: const Color(0xFF1E1E1E),
-                  style: TextStyle(color: Colors.white, fontSize: 15),
+                  dropdownColor: duo(0xFF1E1E1E, 0xFFFFFFFF),
+                  style: TextStyle(color: fjInk, fontSize: 15),
                   decoration: onboardingInputDecoration('', accent: _accent)
                       .copyWith(
                         prefixIcon: Icon(Icons.public_outlined, color: _accent),
@@ -186,7 +187,7 @@ class _ConnectCorosScreenState extends ConsumerState<ConnectCorosScreen> {
                   context.l10n.corosCredentialsAreStoredEncrypted,
                 ),
                 const SizedBox(height: 32),
-                _PrimaryButton(
+                OnboardingPrimaryButton(
                   label: context.l10n.connectCoros,
                   color: _accent,
                   loading: _loading,
@@ -196,50 +197,6 @@ class _ConnectCorosScreenState extends ConsumerState<ConnectCorosScreen> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _PrimaryButton extends StatelessWidget {
-  const _PrimaryButton({
-    required this.label,
-    required this.color,
-    required this.loading,
-    required this.onPressed,
-  });
-
-  final String label;
-  final Color color;
-  final bool loading;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 56,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: color,
-          foregroundColor: Colors.white,
-          disabledBackgroundColor: const Color(0xFF2A2A2A),
-          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-        ),
-        onPressed: loading ? null : onPressed,
-        child: loading
-            ? const SizedBox(
-                width: 22,
-                height: 22,
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                  strokeWidth: 2.5,
-                ),
-              )
-            : Text(label),
       ),
     );
   }

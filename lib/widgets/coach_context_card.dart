@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import '../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
@@ -23,7 +24,7 @@ Color _statusColor(CoachCardStatus status) => switch (status) {
   CoachCardStatus.planned => const Color(0xFF4FC3F7),
   CoachCardStatus.adapted => const Color(0xFFFFA94D),
   CoachCardStatus.completed => mint,
-  CoachCardStatus.skipped => const Color(0xFF9E9E9E),
+  CoachCardStatus.skipped => duo(0xFF9E9E9E, 0xFF6B7280),
   CoachCardStatus.measured => const Color(0xFFFF6B6B),
 };
 
@@ -122,7 +123,7 @@ class CoachContextCardView extends StatelessWidget {
                     children: [
                       Text(
                         DateFormat.yMMMEd().format(card.date),
-                        style: const TextStyle(color: muted, fontSize: 12),
+                        style: TextStyle(color: muted, fontSize: 12),
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(
@@ -149,7 +150,7 @@ class CoachContextCardView extends StatelessWidget {
                     const SizedBox(height: 8),
                     Text(
                       card.facts.join(' · '),
-                      style: const TextStyle(color: muted, fontSize: 12),
+                      style: TextStyle(color: muted, fontSize: 12),
                     ),
                   ],
                 ],

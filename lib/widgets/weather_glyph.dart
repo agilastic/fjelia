@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -178,8 +179,8 @@ class _GlyphPainter extends CustomPainter {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: dark
-                ? const [Color(0xFFE9EDF2), Color(0xFFA9B4C0)]
-                : const [Colors.white, Color(0xFFD3DBE4)],
+                ? [duo(0xFFE9EDF2, 0xFF1F2937), Color(0xFFA9B4C0)]
+                : [fjInk, Color(0xFFD3DBE4)],
           ).createShader(r),
       );
   }
@@ -244,7 +245,7 @@ class _GlyphPainter extends CustomPainter {
         ..shader = LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: const [Color(0xFFF2F4F8), Color(0xFF9AA3B0)],
+          colors: [duo(0xFFF2F4F8, 0xFF1F2937), Color(0xFF9AA3B0)],
         ).createShader(Rect.fromCircle(center: c, radius: radius)),
     );
   }
@@ -270,7 +271,7 @@ class _GlyphPainter extends CustomPainter {
 
   void _flake(Canvas canvas, Offset c, double r) {
     final paint = Paint()
-      ..color = Colors.white
+      ..color = fjInk
       ..strokeWidth = r * .32
       ..strokeCap = StrokeCap.round;
     for (var i = 0; i < 3; i++) {

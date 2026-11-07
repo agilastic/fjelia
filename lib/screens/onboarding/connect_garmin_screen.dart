@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../providers/connection_actions_provider.dart';
 
@@ -82,16 +83,16 @@ class _ConnectGarminScreenState extends ConsumerState<ConnectGarminScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF111111),
+      backgroundColor: duo(0xFF111111, 0xFFF2F4F7),
       appBar: AppBar(
-        leading: const BackButton(color: Color(0xFFCCCCCC)),
+        leading: BackButton(color: duo(0xFFCCCCCC, 0xFF374151)),
         title: const OnboardingStepIndicator(current: 3, total: 6),
         actions: [
           TextButton(
             onPressed: _next,
             child: Text(
               context.l10n.skip,
-              style: TextStyle(color: Color(0xFFCCCCCC)),
+              style: TextStyle(color: duo(0xFFCCCCCC, 0xFF374151)),
             ),
           ),
         ],
@@ -123,7 +124,7 @@ class _ConnectGarminScreenState extends ConsumerState<ConnectGarminScreen> {
                     controller: _email,
                     keyboardType: TextInputType.emailAddress,
                     autocorrect: false,
-                    style: const TextStyle(color: Colors.white),
+                    style: TextStyle(color: fjInk),
                     decoration: onboardingInputDecoration(
                       'you@example.com',
                       accent: _accent,
@@ -139,7 +140,7 @@ class _ConnectGarminScreenState extends ConsumerState<ConnectGarminScreen> {
                   TextFormField(
                     controller: _password,
                     obscureText: _obscure,
-                    style: const TextStyle(color: Colors.white),
+                    style: TextStyle(color: fjInk),
                     decoration:
                         onboardingInputDecoration(
                           '••••••••',
@@ -154,7 +155,7 @@ class _ConnectGarminScreenState extends ConsumerState<ConnectGarminScreen> {
                               _obscure
                                   ? Icons.visibility_outlined
                                   : Icons.visibility_off_outlined,
-                              color: const Color(0xFF888888),
+                              color: duo(0xFF888888, 0xFF6B7280),
                             ),
                             onPressed: () =>
                                 setState(() => _obscure = !_obscure),
@@ -175,7 +176,7 @@ class _ConnectGarminScreenState extends ConsumerState<ConnectGarminScreen> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: _accent,
                       foregroundColor: Colors.black,
-                      disabledBackgroundColor: const Color(0xFF2A2A2A),
+                      disabledBackgroundColor: duo(0xFF2A2A2A, 0xFFEEF1F5),
                       textStyle: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
@@ -186,11 +187,11 @@ class _ConnectGarminScreenState extends ConsumerState<ConnectGarminScreen> {
                     ),
                     onPressed: _loading ? null : _submit,
                     child: _loading
-                        ? const SizedBox(
+                        ? SizedBox(
                             width: 22,
                             height: 22,
                             child: CircularProgressIndicator(
-                              color: Colors.white,
+                              color: fjInk,
                               strokeWidth: 2.5,
                             ),
                           )
@@ -239,8 +240,9 @@ class _MfaSection extends StatelessWidget {
                 child: Text(
                   'Garmin requires two-factor authentication. Check your '
                   'Garmin Connect app or email for the verification code.',
-                  style: Theme.of(context).textTheme.bodySmall
-                      ?.copyWith(color: _accent, height: 1.4),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: _accent, height: 1.4),
                 ),
               ),
             ],
@@ -255,28 +257,28 @@ class _MfaSection extends StatelessWidget {
           maxLength: 6,
           textAlign: TextAlign.center,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: fjInk,
             fontSize: 28,
             fontWeight: FontWeight.w600,
             letterSpacing: 10,
           ),
           decoration: InputDecoration(
             hintText: '000000',
-            hintStyle: const TextStyle(
-              color: Color(0xFF888888),
+            hintStyle: TextStyle(
+              color: duo(0xFF888888, 0xFF6B7280),
               fontSize: 28,
               letterSpacing: 10,
             ),
             counterText: '',
             filled: true,
-            fillColor: const Color(0xFF1E1E1E),
+            fillColor: duo(0xFF1E1E1E, 0xFFFFFFFF),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
               vertical: 20,
             ),
             border: border(Colors.transparent, 0),
-            enabledBorder: border(const Color(0xFF333333), 1),
+            enabledBorder: border(duo(0xFF333333, 0xFFE3E7EC), 1),
             focusedBorder: border(_accent, 1.5),
           ),
           validator: (v) => v == null || v.trim().isEmpty

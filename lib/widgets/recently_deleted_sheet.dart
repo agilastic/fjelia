@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart' show DateFormat;
@@ -91,7 +92,7 @@ class _DeletedState extends ConsumerState<RecentlyDeletedSheet> {
             children: [
               Text(
                 context.l10n.recentlyDeletedExplain,
-                style: const TextStyle(color: muted, fontSize: 12),
+                style: TextStyle(color: muted, fontSize: 12),
               ),
               const SizedBox(height: 14),
               if (rows.isEmpty)
@@ -99,15 +100,11 @@ class _DeletedState extends ConsumerState<RecentlyDeletedSheet> {
                   padding: const EdgeInsets.symmetric(vertical: 40),
                   child: Column(
                     children: [
-                      const Icon(
-                        Icons.delete_sweep_outlined,
-                        size: 48,
-                        color: muted,
-                      ),
+                      Icon(Icons.delete_sweep_outlined, size: 48, color: muted),
                       const SizedBox(height: 10),
                       Text(
                         context.l10n.noDeletedActivities,
-                        style: const TextStyle(color: muted),
+                        style: TextStyle(color: muted),
                       ),
                     ],
                   ),
@@ -154,7 +151,7 @@ class _DeletedTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: panel,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.white10),
+          border: Border.all(color: fjInk10),
         ),
         child: Row(
           children: [
@@ -179,14 +176,8 @@ class _DeletedTile extends StatelessWidget {
                     style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 2),
-                  Text(
-                    when,
-                    style: const TextStyle(color: Colors.white70, fontSize: 12),
-                  ),
-                  Text(
-                    facts,
-                    style: const TextStyle(color: Colors.white70, fontSize: 12),
-                  ),
+                  Text(when, style: TextStyle(color: fjInk70, fontSize: 12)),
+                  Text(facts, style: TextStyle(color: fjInk70, fontSize: 12)),
                   const SizedBox(height: 2),
                   Text(
                     [
@@ -195,7 +186,7 @@ class _DeletedTile extends StatelessWidget {
                         DateFormat.yMMMd().format(d.deletedAt.toLocal()),
                       ),
                     ].join(' · '),
-                    style: const TextStyle(color: muted, fontSize: 11),
+                    style: TextStyle(color: muted, fontSize: 11),
                   ),
                 ],
               ),

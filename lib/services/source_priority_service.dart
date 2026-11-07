@@ -15,7 +15,14 @@ const defaultSourcePriorities = <String, List<String>>{
     'polar',
     'suunto',
   ],
-  'activity': ['garmin_api', 'coros', 'polar', 'suunto', 'health_connect'],
+  'activity': [
+    'garmin_api',
+    'coros',
+    'polar',
+    'suunto',
+    'mywhoosh',
+    'health_connect',
+  ],
   'body': [
     'health_connect',
     'garmin_api',

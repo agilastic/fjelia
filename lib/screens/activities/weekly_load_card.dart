@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../providers/activity_history_provider.dart';
 
@@ -62,6 +63,7 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
         : null;
     final limit = previous * 1.1;
     return LoadCard(
+      accent: const [Color(0xFFFFB13D), Color(0xFFFFE066)],
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -77,14 +79,10 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
               ),
               const SizedBox(width: 10),
               Expanded(
-                child: Text(
+                child: GradientTitle(
                   context.l10n.weeklyTrainingLoad2,
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: Colors.white,
-                    letterSpacing: .5,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  colors: const [Color(0xFFFFB13D), Color(0xFFFFE066)],
+                  size: 11,
                 ),
               ),
               if (change != null) LoadBadge('${change.round()}%'),
@@ -98,7 +96,7 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
               previousComparable: previousComparable,
               progress: progress,
             ),
-            style: const TextStyle(fontSize: 12, color: Color(0xFFBBBBBB)),
+            style: TextStyle(fontSize: 12, color: duo(0xFFBBBBBB, 0xFF4B5563)),
           ),
           const SizedBox(height: 14),
           Row(
@@ -120,13 +118,13 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
                         children: [
                           TextSpan(
                             text: valueText(current),
-                            style: const TextStyle(
-                              color: Colors.white,
+                            style: TextStyle(
+                              color: fjInk,
                               fontSize: 32,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const TextSpan(
+                          TextSpan(
                             text: '     pts',
                             style: TextStyle(fontSize: 14, color: muted),
                           ),
@@ -143,9 +141,9 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
                   const SizedBox(height: 4),
                   Text(
                     valueText(previous),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 23,
-                      color: Color(0xFFBBBBBB),
+                      color: duo(0xFFBBBBBB, 0xFF4B5563),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -157,7 +155,7 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
           LinearProgressIndicator(
             value: limit > 0 ? (current / limit).clamp(0, 1) : 0,
             color: current > limit ? loadOrange : mint,
-            backgroundColor: Colors.white.withValues(alpha: .045),
+            backgroundColor: fjInk.withValues(alpha: .045),
             minHeight: 6,
             borderRadius: BorderRadius.circular(6),
           ),
@@ -186,7 +184,7 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
                 ),
               ],
             ),
-          const Divider(height: 30, color: Colors.white10),
+          Divider(height: 30, color: fjInk10),
           Text(context.l10n.bySport, style: loadLabel),
           const SizedBox(height: 5),
           for (final e in sports.entries)
@@ -197,18 +195,18 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
                   Icon(
                     sportIcon(e.key),
                     size: 16,
-                    color: const Color(0xFFBBBBBB),
+                    color: duo(0xFFBBBBBB, 0xFF4B5563),
                   ),
                   const SizedBox(width: 7),
                   Expanded(
                     child: Text(
                       sportName(e.key),
-                      style: const TextStyle(fontSize: 14, color: Colors.white),
+                      style: TextStyle(fontSize: 14, color: fjInk),
                     ),
                   ),
                   Text(
                     valueText(e.value[0]),
-                    style: const TextStyle(color: Colors.white, fontSize: 13),
+                    style: TextStyle(color: fjInk, fontSize: 13),
                   ),
                   if (e.value[1] > 0)
                     Padding(
@@ -230,7 +228,7 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
                 style: loadCaption,
               ),
             ),
-          Divider(height: 28, color: Colors.white10),
+          Divider(height: 28, color: fjInk10),
           LayoutBuilder(
             builder: (context, constraints) => Wrap(
               alignment: WrapAlignment.spaceBetween,

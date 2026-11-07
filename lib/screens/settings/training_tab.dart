@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/formats.dart';
 import '../../l10n/l10n_ext.dart';
 
@@ -45,7 +46,7 @@ class TrainingTab extends ConsumerWidget {
               padding: EdgeInsets.only(bottom: 10),
               child: Text(
                 context.l10n.usedByAiCoachAnd,
-                style: TextStyle(fontSize: 12, color: Colors.white70),
+                style: TextStyle(fontSize: 12, color: fjInk70),
               ),
             ),
             Wrap(
@@ -80,14 +81,14 @@ class TrainingTab extends ConsumerWidget {
                     side: BorderSide(
                       color: p.preferredSports.contains(e.key)
                           ? Colors.orange
-                          : Colors.white12,
+                          : fjInk12,
                     ),
                     labelStyle: TextStyle(
                       fontFamily: 'Roboto',
                       fontSize: 12,
                       color: p.preferredSports.contains(e.key)
                           ? Colors.orange
-                          : Colors.white,
+                          : fjInk,
                     ),
                     selected: p.preferredSports.contains(e.key),
                     onSelected: (selected) => runUiAction(context, () async {
@@ -221,7 +222,7 @@ class TrainingTab extends ConsumerWidget {
               padding: EdgeInsets.only(bottom: 12),
               child: Text(
                 context.l10n.canYouFitTwoWorkouts,
-                style: TextStyle(color: Colors.white70, fontSize: 12),
+                style: TextStyle(color: fjInk70, fontSize: 12),
               ),
             ),
             SettingsSegments(
@@ -244,7 +245,7 @@ class TrainingTab extends ConsumerWidget {
               padding: EdgeInsets.only(bottom: 12),
               child: Text(
                 context.l10n.weightsThemselvesAreSetIn,
-                style: TextStyle(color: Colors.white70, fontSize: 12),
+                style: TextStyle(color: fjInk70, fontSize: 12),
               ),
             ),
             SettingsSegments(
@@ -264,7 +265,7 @@ class TrainingTab extends ConsumerWidget {
             SectionLabel(context.l10n.hoursAvailableWeek, color: Colors.orange),
             Text(
               context.l10n.hoursperweekHWeek(valueText(p.hoursPerWeek)),
-              style: const TextStyle(fontSize: 12, color: Colors.white70),
+              style: TextStyle(fontSize: 12, color: fjInk70),
             ),
             Slider(
               value: p.hoursPerWeek.clamp(3, 25),
@@ -277,7 +278,7 @@ class TrainingTab extends ConsumerWidget {
                   .read(userProfileProvider.notifier)
                   .save(p.copyWith(hoursPerWeek: v)),
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('3 h', style: TextStyle(color: muted, fontSize: 10)),
@@ -320,7 +321,7 @@ class TrainingTab extends ConsumerWidget {
           const MissedWorkoutSettingsCard(),
           SectionLabel(context.l10n.heatAcclimation, color: Colors.orange),
           SectionCard(
-            color: const Color(0xFF282828),
+            color: duo(0xFF282828, 0xFFEEF1F5),
             child: Column(
               children: [
                 SwitchListTile(
@@ -332,7 +333,7 @@ class TrainingTab extends ConsumerWidget {
                   ),
                   subtitle: Text(
                     context.l10n.weatherEvaluatedAgainstAConfigurable,
-                    style: TextStyle(fontSize: 12, color: Colors.white70),
+                    style: TextStyle(fontSize: 12, color: fjInk70),
                   ),
                   activeThumbColor: Colors.orange,
                   activeTrackColor: Colors.orangeAccent.withValues(alpha: .4),
@@ -352,11 +353,7 @@ class TrainingTab extends ConsumerWidget {
             padding: EdgeInsets.only(bottom: 14),
             child: Text(
               context.l10n.regenerateReplacesFutureSessionsAnd,
-              style: TextStyle(
-                fontSize: 12,
-                height: 1.5,
-                color: Colors.white70,
-              ),
+              style: TextStyle(fontSize: 12, height: 1.5, color: fjInk70),
             ),
           ),
           OutlinedButton.icon(
@@ -467,7 +464,7 @@ class RaceGoalsCard extends ConsumerWidget {
   const RaceGoalsCard({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) => SectionCard(
-    color: const Color(0xFF282828),
+    color: duo(0xFF282828, 0xFFEEF1F5),
     child: Column(
       children: [
         Row(
@@ -494,7 +491,7 @@ class RaceGoalsCard extends ConsumerWidget {
             ),
           ],
         ),
-        const Divider(height: 20, color: Colors.white12),
+        Divider(height: 20, color: fjInk12),
         ref
             .watch(upcomingRaceGoalsProvider)
             .when(
@@ -634,13 +631,11 @@ class SettingsSegments extends StatelessWidget {
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 4),
                 minimumSize: const Size(0, 38),
-                foregroundColor: selected == e.key ? color : Colors.white70,
+                foregroundColor: selected == e.key ? color : fjInk70,
                 backgroundColor: selected == e.key
                     ? color.withValues(alpha: .12)
-                    : const Color(0xFF282828),
-                side: BorderSide(
-                  color: selected == e.key ? color : Colors.white12,
-                ),
+                    : duo(0xFF282828, 0xFFEEF1F5),
+                side: BorderSide(color: selected == e.key ? color : fjInk12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -685,7 +680,7 @@ Future<void> _deleteAll(BuildContext context, WidgetRef ref) async {
               const SizedBox(height: 12),
               Text(
                 p.$2 == 0 ? p.$3 : '${p.$3} · ${p.$1} of ${p.$2}',
-                style: const TextStyle(fontSize: 12, color: muted),
+                style: TextStyle(fontSize: 12, color: muted),
               ),
             ],
           ),

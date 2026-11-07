@@ -39,7 +39,7 @@ Website: <https://agilastic.github.io/fjelia/> (source in [`docs/`](docs/); serv
   Mistral or DeepSeek with your own API key.
   The local 4B option is available on iPhone 18 and newer.
 - **Heat acclimation** with weather data, home-screen widgets, backup and export.
-- **Data sources** — Garmin Connect, Polar, Suunto, COROS, Apple Health, Renpho
+- **Data sources** — Garmin Connect, Polar, Suunto, COROS, MyWhoosh, Apple Health, Renpho
   scales (Bluetooth), Aktiia and Hilo blood-pressure devices. FIT, GPX and TCX
   files (also zipped) can be imported from any device or app, in Settings →
   System or by sharing them to Fjelia.
@@ -141,10 +141,10 @@ does not belong in this repository, its example configuration, or user settings.
   blood pressure, training advice) are informational. Talk to a doctor about
   health concerns and before changing your training because of this app.
 - **Unofficial integrations.** Several services (Garmin Connect, Suunto, COROS,
-  Aktiia, Renpho) are accessed through their apps' undocumented interfaces, which
+  MyWhoosh, Aktiia, Renpho) are accessed through their apps' undocumented interfaces, which
   can change or stop working at any time and may be subject to those services'
   terms. Fjelia is **not affiliated with, endorsed by or sponsored by** Garmin,
-  Polar, Suunto, COROS, Renpho, Aktiia, Hilo or Apple. All trademarks belong to
+  Polar, Suunto, COROS, MyWhoosh, Renpho, Aktiia, Hilo or Apple. All trademarks belong to
   their owners. Use at your own risk and with your own accounts only.
 
 ## Third-party code

@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../providers/activity_history_provider.dart';
 
@@ -194,17 +195,17 @@ class FtpDetailSheet extends ConsumerWidget {
                         children: [
                           TextSpan(
                             text: '${ftp?.ftpWatts ?? '—'} W',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 22,
-                              color: Colors.white,
+                              color: fjInk,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           TextSpan(
                             text: ' · ${valueText(ftp?.wattsPerKg, 2)} W/kg',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 13,
-                              color: Color(0xFFBBBBBB),
+                              color: duo(0xFFBBBBBB, 0xFF4B5563),
                             ),
                           ),
                         ],
@@ -254,7 +255,7 @@ class FtpDetailSheet extends ConsumerWidget {
           const SizedBox(height: 5),
           Text(
             context.l10n.tapAnActivityFtpBest,
-            style: TextStyle(fontSize: 11, color: Color(0xFFBBBBBB)),
+            style: TextStyle(fontSize: 11, color: duo(0xFFBBBBBB, 0xFF4B5563)),
           ),
           const SizedBox(height: 10),
           for (final ride in rides.where((r) => r.$2 != null).take(20))
@@ -264,7 +265,7 @@ class FtpDetailSheet extends ConsumerWidget {
                 color: loadInset,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
-                  side: const BorderSide(color: Colors.white10),
+                  side: BorderSide(color: fjInk10),
                 ),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(12),
@@ -282,11 +283,7 @@ class FtpDetailSheet extends ConsumerWidget {
                     padding: const EdgeInsets.all(12),
                     child: Row(
                       children: [
-                        const Icon(
-                          Icons.directions_bike,
-                          size: 16,
-                          color: muted,
-                        ),
+                        Icon(Icons.directions_bike, size: 16, color: muted),
                         const SizedBox(width: 10),
                         Expanded(
                           child: Column(
@@ -294,10 +291,7 @@ class FtpDetailSheet extends ConsumerWidget {
                             children: [
                               Text(
                                 ride.$1.name,
-                                style: const TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.white,
-                                ),
+                                style: TextStyle(fontSize: 13, color: fjInk),
                               ),
                               Text(
                                 loadDate(ride.$1.startDate),
@@ -312,9 +306,9 @@ class FtpDetailSheet extends ConsumerWidget {
                           children: [
                             Text(
                               context.l10n.ridew(valueText(ride.$2)),
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 12,
-                                color: Colors.white,
+                                color: fjInk,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -348,7 +342,7 @@ class FtpDetailSheet extends ConsumerWidget {
               child: Text(
                 context.l10n.enterFtpManually,
                 style: TextStyle(
-                  color: Color(0xFFBBBBBB),
+                  color: duo(0xFFBBBBBB, 0xFF4B5563),
                   fontSize: 12,
                   letterSpacing: 1,
                 ),
@@ -416,11 +410,13 @@ class _ThresholdTestState extends ConsumerState<ThresholdTestSheet> {
                         widget.vo2
                             ? context.l10n.afterWarmingUpRunFive
                             : context.l10n.recordAtLeast40Minutes,
-                        style: const TextStyle(color: Color(0xFFBBBBBB)),
+                        style: TextStyle(color: duo(0xFFBBBBBB, 0xFF4B5563)),
                       ),
                       const SizedBox(height: 20),
                       Text(
-                        widget.vo2 ? context.l10n.theFastestFiveMinuteWindow : 'A low drift indicates that this steady effort is at or below your aerobic threshold.',
+                        widget.vo2
+                            ? context.l10n.theFastestFiveMinuteWindow
+                            : 'A low drift indicates that this steady effort is at or below your aerobic threshold.',
                         style: loadCaption,
                       ),
                     ],
@@ -434,8 +430,8 @@ class _ThresholdTestState extends ConsumerState<ThresholdTestSheet> {
                             : drift == null
                             ? context.l10n.noResultYet
                             : '${drift.lt1} bpm · Drift ${valueText(drift.drift, 1)}%',
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: fjInk,
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),

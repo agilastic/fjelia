@@ -4807,5 +4807,20 @@
         "type": "int"
       }
     }
-  }
+  },
+  "styleTitle": "Style",
+  "styleAuto": "Auto",
+  "styleAutoHint": "Follows your phone: LightFjelia by day, DarkFjelia at night.",
+  "connectMyWhoosh": "Connect MyWhoosh",
+  "myWhooshSubtitle": "Sign in with your MyWhoosh account to bring in your indoor rides with power, cadence and heart rate.",
+  "myWhooshCredentialsInfo": "MyWhoosh credentials are stored encrypted on your device. Fjelia reads your rides directly from MyWhoosh, through the interface of the MyWhoosh app. Fjelia is not affiliated with MyWhoosh.",
+  "myWhooshTile": "Indoor rides",
+  "myWhooshSignedInElsewhere": "MyWhoosh allows one session per account and you are signed in on another device. Close MyWhoosh there (sign out if needed), then try again.",
+  "shareWorkout": "Share workout",
+  "shareFitFile": "Share as FIT file",
+  "shareFitFileHint": "For Strava, COROS, TrainingPeaks and other apps",
+  "sendToGarmin": "Send to Garmin Connect",
+  "sendToGarminHint": "Uploads the workout to your Garmin account",
+  "sentToGarmin": "Sent to Garmin Connect",
+  "alreadyOnGarmin": "This workout is already in Garmin Connect"
 }

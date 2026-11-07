@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 
 import 'dart:async';
@@ -65,20 +66,16 @@ class _FormState extends ConsumerState<TrainingFormCard> {
         : 150.0;
     return LoadCard(
       color: loadInset,
+      accent: const [Color(0xFF00D4A0), Color(0xFF3EE0FF)],
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
               Expanded(
-                child: Text(
+                child: GradientTitle(
                   context.l10n.formAtlCtlTsb2,
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: Color(0xFFBBBBBB),
-                    letterSpacing: .7,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  colors: const [Color(0xFF00D4A0), Color(0xFF3EE0FF)],
                 ),
               ),
               if (widget.fullscreen)
@@ -89,7 +86,7 @@ class _FormState extends ConsumerState<TrainingFormCard> {
                     height: 36,
                   ),
                   padding: EdgeInsets.zero,
-                  icon: const Icon(Icons.close, size: 20, color: muted),
+                  icon: Icon(Icons.close, size: 20, color: muted),
                   onPressed: widget.onClose ?? () => Navigator.pop(context),
                 )
               else
@@ -100,7 +97,7 @@ class _FormState extends ConsumerState<TrainingFormCard> {
                     height: 30,
                   ),
                   padding: EdgeInsets.zero,
-                  icon: const Icon(Icons.fullscreen, size: 18, color: muted),
+                  icon: Icon(Icons.fullscreen, size: 18, color: muted),
                   onPressed: () => Navigator.of(context).push<void>(
                     MaterialPageRoute<void>(
                       fullscreenDialog: true,
@@ -142,7 +139,7 @@ class _FormState extends ConsumerState<TrainingFormCard> {
                       side: BorderSide(
                         color: days == n
                             ? loadBlue.withValues(alpha: .45)
-                            : Colors.white12,
+                            : fjInk12,
                       ),
                     ),
                   ),
@@ -208,7 +205,7 @@ class _FormState extends ConsumerState<TrainingFormCard> {
                   gridData: FlGridData(
                     drawVerticalLine: false,
                     getDrawingHorizontalLine: (_) =>
-                        const FlLine(color: Colors.white10, strokeWidth: .6),
+                        FlLine(color: fjInk10, strokeWidth: .6),
                   ),
                   titlesData: FlTitlesData(
                     topTitles: const AxisTitles(
@@ -225,7 +222,7 @@ class _FormState extends ConsumerState<TrainingFormCard> {
                         maxIncluded: false,
                         getTitlesWidget: (v, _) => Text(
                           valueText(v),
-                          style: const TextStyle(fontSize: 9, color: muted),
+                          style: TextStyle(fontSize: 9, color: muted),
                         ),
                       ),
                     ),
@@ -244,7 +241,7 @@ class _FormState extends ConsumerState<TrainingFormCard> {
                               start.day + v.round(),
                             ),
                           ),
-                          style: const TextStyle(fontSize: 9, color: muted),
+                          style: TextStyle(fontSize: 9, color: muted),
                         ),
                       ),
                     ),

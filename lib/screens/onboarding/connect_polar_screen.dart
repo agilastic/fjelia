@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../providers/connection_actions_provider.dart';
 
@@ -49,7 +50,7 @@ class _ConnectPolarScreenState extends ConsumerState<ConnectPolarScreen> {
   Widget build(BuildContext context) {
     if (widget.forWorkoutUpload) {
       return Scaffold(
-        backgroundColor: const Color(0xFF111111),
+        backgroundColor: duo(0xFF111111, 0xFFF2F4F7),
         appBar: AppBar(title: Text(context.l10n.sendWorkoutToPolar)),
         body: SafeArea(
           child: SingleChildScrollView(
@@ -62,8 +63,8 @@ class _ConnectPolarScreenState extends ConsumerState<ConnectPolarScreen> {
       );
     }
     return Scaffold(
-      backgroundColor: const Color(0xFF111111),
-      appBar: AppBar(leading: const BackButton(color: Color(0xFFCCCCCC))),
+      backgroundColor: duo(0xFF111111, 0xFFF2F4F7),
+      appBar: AppBar(leading: BackButton(color: duo(0xFFCCCCCC, 0xFF374151))),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(28),
@@ -87,8 +88,8 @@ class _ConnectPolarScreenState extends ConsumerState<ConnectPolarScreen> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: _accent,
-                    foregroundColor: Colors.white,
-                    disabledBackgroundColor: const Color(0xFF2A2A2A),
+                    foregroundColor: fjInk,
+                    disabledBackgroundColor: duo(0xFF2A2A2A, 0xFFEEF1F5),
                     textStyle: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
@@ -99,11 +100,11 @@ class _ConnectPolarScreenState extends ConsumerState<ConnectPolarScreen> {
                   ),
                   onPressed: _loading ? null : _connect,
                   child: _loading
-                      ? const SizedBox(
+                      ? SizedBox(
                           width: 22,
                           height: 22,
                           child: CircularProgressIndicator(
-                            color: Colors.white,
+                            color: fjInk,
                             strokeWidth: 2.5,
                           ),
                         )
@@ -115,7 +116,10 @@ class _ConnectPolarScreenState extends ConsumerState<ConnectPolarScreen> {
                 child: Text(
                   context.l10n.syncsSleepStagesHrvResting,
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Color(0xFF888888), fontSize: 11),
+                  style: TextStyle(
+                    color: duo(0xFF888888, 0xFF6B7280),
+                    fontSize: 11,
+                  ),
                 ),
               ),
               const SizedBox(height: 28),
@@ -210,12 +214,12 @@ class _FlowHistoryLoginState extends ConsumerState<_FlowHistoryLogin> {
 
   @override
   Widget build(BuildContext context) {
-    const muted = Color(0xFF999999);
+    final muted = duo(0xFF999999, 0xFF6B7280);
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFF2E2E2E)),
+        border: Border.all(color: duo(0xFF2E2E2E, 0xFFE3E7EC)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -224,7 +228,7 @@ class _FlowHistoryLoginState extends ConsumerState<_FlowHistoryLogin> {
             widget.onSaved == null
                 ? context.l10n.flowLoginOptional
                 : context.l10n.polarFlowLogin,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w700,
               letterSpacing: 1,
@@ -236,7 +240,7 @@ class _FlowHistoryLoginState extends ConsumerState<_FlowHistoryLogin> {
             widget.onSaved == null
                 ? context.l10n.saveYourPolarFlowLogin
                 : context.l10n.signInToSendThis,
-            style: const TextStyle(fontSize: 12, height: 1.4, color: muted),
+            style: TextStyle(fontSize: 12, height: 1.4, color: muted),
           ),
           const SizedBox(height: 12),
           if (_savedEmail != null) ...[

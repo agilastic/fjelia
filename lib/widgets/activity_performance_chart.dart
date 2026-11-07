@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import '../l10n/l10n_ext.dart';
 import '../l10n/formats.dart';
 
@@ -190,13 +191,13 @@ class ActivityPerformanceChart extends ConsumerWidget {
                 gridData: FlGridData(
                   show: true,
                   drawVerticalLine: true,
-                  getDrawingHorizontalLine: (_) => const FlLine(
-                    color: Colors.white12,
+                  getDrawingHorizontalLine: (_) => FlLine(
+                    color: fjInk12,
                     strokeWidth: .5,
                     dashArray: [4, 4],
                   ),
-                  getDrawingVerticalLine: (_) => const FlLine(
-                    color: Colors.white10,
+                  getDrawingVerticalLine: (_) => FlLine(
+                    color: fjInk10,
                     strokeWidth: .5,
                     dashArray: [4, 4],
                   ),
@@ -239,10 +240,7 @@ class ActivityPerformanceChart extends ConsumerWidget {
                       maxIncluded: false,
                       getTitlesWidget: (v, _) => Text(
                         pace ? _pace(-v) : valueText(v),
-                        style: const TextStyle(
-                          fontSize: 9,
-                          color: Colors.white70,
-                        ),
+                        style: TextStyle(fontSize: 9, color: fjInk70),
                       ),
                     ),
                   ),
@@ -257,10 +255,7 @@ class ActivityPerformanceChart extends ConsumerWidget {
                         byTime
                             ? formatAxisMinutes(v, maxX)
                             : '${v.fixed(v == 0 ? 0 : 1)} km',
-                        style: const TextStyle(
-                          fontSize: 9,
-                          color: Colors.white70,
-                        ),
+                        style: TextStyle(fontSize: 9, color: fjInk70),
                       ),
                     ),
                   ),
@@ -282,7 +277,7 @@ class ActivityPerformanceChart extends ConsumerWidget {
               ),
             ),
           ),
-          if (!last) const Divider(height: 18, color: Colors.white10),
+          if (!last) Divider(height: 18, color: fjInk10),
         ],
       );
     }
@@ -296,15 +291,11 @@ class ActivityPerformanceChart extends ConsumerWidget {
             byTime
                 ? context.l10n.performanceTime2
                 : context.l10n.performanceDistance2,
-            style: const TextStyle(
-              fontSize: 11,
-              color: Colors.white70,
-              letterSpacing: 1,
-            ),
+            style: TextStyle(fontSize: 11, color: fjInk70, letterSpacing: 1),
           ),
         ),
         SectionCard(
-          color: const Color(0xFF282828),
+          color: duo(0xFF282828, 0xFFEEF1F5),
           padding: const EdgeInsets.all(10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -314,7 +305,7 @@ class ActivityPerformanceChart extends ConsumerWidget {
                   alignment: Alignment.centerRight,
                   child: TextButton.icon(
                     style: TextButton.styleFrom(
-                      foregroundColor: Colors.white70,
+                      foregroundColor: fjInk70,
                       textStyle: const TextStyle(fontSize: 10),
                     ),
                     icon: const Icon(Icons.fullscreen, size: 16),
@@ -370,7 +361,7 @@ class ActivityZoneChart extends ConsumerWidget {
 
     return SectionCard(
       title: context.l10n.timeInHrZones,
-      color: const Color(0xFF282828),
+      color: duo(0xFF282828, 0xFFEEF1F5),
       child: Column(
         children: [
           if (sum > 0)
@@ -412,10 +403,7 @@ class ActivityZoneChart extends ConsumerWidget {
                           i == 4
                               ? '${bounds[i]}+ bpm'
                               : '${bounds[i]}–${bounds[i + 1]} bpm',
-                          style: const TextStyle(
-                            fontSize: 9,
-                            color: Colors.white70,
-                          ),
+                          style: TextStyle(fontSize: 9, color: fjInk70),
                         ),
                       ],
                     ),
@@ -425,7 +413,7 @@ class ActivityZoneChart extends ConsumerWidget {
                     child: LinearProgressIndicator(
                       value: values[i] / 100,
                       color: _zoneColors[i],
-                      backgroundColor: Colors.white10,
+                      backgroundColor: fjInk10,
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),
@@ -444,7 +432,7 @@ class ActivityZoneChart extends ConsumerWidget {
                         ),
                         Text(
                           context.l10n.round3(values[i].round()),
-                          style: const TextStyle(fontSize: 9, color: muted),
+                          style: TextStyle(fontSize: 9, color: muted),
                         ),
                       ],
                     ),

@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../providers/activity_history_provider.dart';
 
@@ -87,9 +88,9 @@ class _LoadMetricState extends ConsumerState<LoadMetricSheet> {
               ),
               child: Text(
                 context.l10n.avgAverageUnit(valueText(average, 1), unit),
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 12,
-                  color: Colors.white,
+                  color: fjInk,
                   fontWeight: FontWeight.w600,
                 ),
               ),

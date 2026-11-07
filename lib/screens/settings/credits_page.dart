@@ -64,7 +64,7 @@ class CreditsPage extends StatelessWidget {
               title: Text(library.$1, style: const TextStyle(fontSize: 12)),
               subtitle: Text(
                 library.$2,
-                style: const TextStyle(fontSize: 10, color: muted),
+                style: TextStyle(fontSize: 10, color: muted),
               ),
               trailing: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),

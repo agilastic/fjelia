@@ -77,7 +77,7 @@ class _MetricDetailState extends ConsumerState<MetricDetailSheet> {
                     children: [
                       Text(
                         context.l10n.daysDAvg(days),
-                        style: const TextStyle(color: muted, fontSize: 9),
+                        style: TextStyle(color: muted, fontSize: 9),
                       ),
                       Text(
                         context.l10n.averageUnit(
@@ -92,7 +92,7 @@ class _MetricDetailState extends ConsumerState<MetricDetailSheet> {
                             : widget.metric == HealthMetric.rhr
                             ? '30D AVG'
                             : context.l10n.allTime,
-                        style: const TextStyle(color: muted, fontSize: 9),
+                        style: TextStyle(color: muted, fontSize: 9),
                       ),
                       Text(
                         context.l10n.baselineUnit(
@@ -109,12 +109,12 @@ class _MetricDetailState extends ConsumerState<MetricDetailSheet> {
                   padding: const EdgeInsets.only(top: 10),
                   child: Row(
                     children: [
-                      const Icon(Icons.info_outline, size: 12, color: muted),
+                      Icon(Icons.info_outline, size: 12, color: muted),
                       const SizedBox(width: 5),
                       Expanded(
                         child: Text(
                           hint,
-                          style: const TextStyle(fontSize: 10, color: muted),
+                          style: TextStyle(fontSize: 10, color: muted),
                         ),
                       ),
                     ],
@@ -156,7 +156,7 @@ class _MetricDetailState extends ConsumerState<MetricDetailSheet> {
                                 ? context.l10n.lastYear
                                 : context.l10n.lastDaysDays(days)
                           : '${dayText(start)} – ${dayText(DateTime(end.year, end.month, end.day - 1))}',
-                      style: const TextStyle(color: muted, fontSize: 11),
+                      style: TextStyle(color: muted, fontSize: 11),
                     ),
                   ),
                   IconButton(

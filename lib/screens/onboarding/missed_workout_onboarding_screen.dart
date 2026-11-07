@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -81,13 +82,13 @@ class _MissedWorkoutOnboardingScreenState
     return PopScope(
       canPop: !_saving,
       child: Scaffold(
-        backgroundColor: const Color(0xFF101416),
+        backgroundColor: duo(0xFF101416, 0xFFF2F4F7),
         body: DecoratedBox(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: RadialGradient(
               center: Alignment(-1.1, -1),
               radius: 1.2,
-              colors: [Color(0xFF1F2A44), Color(0xFF101416)],
+              colors: [Color(0xFF1F2A44), duo(0xFF101416, 0xFFF2F4F7)],
             ),
           ),
           child: SafeArea(
@@ -96,14 +97,14 @@ class _MissedWorkoutOnboardingScreenState
                 constraints: const BoxConstraints(maxWidth: 560),
                 child: Column(
                   children: [
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.fromLTRB(24, 20, 24, 8),
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           'FJELIA',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: fjInk,
                             fontSize: 13,
                             fontWeight: FontWeight.w800,
                             letterSpacing: 3.8,
@@ -119,8 +120,8 @@ class _MissedWorkoutOnboardingScreenState
                           children: [
                             Text(
                               l10n.onbReminderTitle,
-                              style: const TextStyle(
-                                color: Colors.white,
+                              style: TextStyle(
+                                color: fjInk,
                                 fontSize: 34,
                                 fontWeight: FontWeight.w700,
                                 letterSpacing: -1.4,
@@ -211,8 +212,8 @@ class _MissedWorkoutOnboardingScreenState
 
   Widget _footer(BuildContext context) => Container(
     decoration: BoxDecoration(
-      color: const Color(0xFF101416),
-      border: Border(top: BorderSide(color: Colors.white.withAlpha(14))),
+      color: duo(0xFF101416, 0xFFF2F4F7),
+      border: Border(top: BorderSide(color: fjInk.withAlpha(14))),
     ),
     padding: const EdgeInsets.fromLTRB(24, 16, 24, 12),
     child: Column(
@@ -275,10 +276,10 @@ class _Panel extends StatelessWidget {
   // A Material, not a coloured box: the rows inside keep their tap ripple.
   @override
   Widget build(BuildContext context) => Material(
-    color: Colors.white.withAlpha(10),
+    color: fjInk.withAlpha(10),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(20),
-      side: BorderSide(color: Colors.white.withAlpha(18)),
+      side: BorderSide(color: fjInk.withAlpha(18)),
     ),
     clipBehavior: Clip.antiAlias,
     child: Padding(
@@ -357,7 +358,7 @@ class _NotificationPreview extends StatelessWidget {
                   child: Text(
                     time,
                     style: TextStyle(
-                      color: Colors.white.withAlpha(220),
+                      color: fjInk.withAlpha(220),
                       fontSize: 44,
                       fontWeight: FontWeight.w200,
                       letterSpacing: -1,
@@ -421,9 +422,9 @@ class _Card extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.all(12),
     decoration: BoxDecoration(
-      color: Colors.white.withAlpha(30),
+      color: fjInk.withAlpha(30),
       borderRadius: BorderRadius.circular(18),
-      border: Border.all(color: Colors.white.withAlpha(26)),
+      border: Border.all(color: fjInk.withAlpha(26)),
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -444,13 +445,13 @@ class _Card extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
-            const Text(
+            Text(
               'FJELIA',
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 1.2,
-                color: Colors.white70,
+                color: fjInk70,
               ),
             ),
             const Spacer(),
@@ -467,7 +468,7 @@ class _Card extends StatelessWidget {
           body,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
-          style: const TextStyle(fontSize: 13, color: Colors.white70),
+          style: TextStyle(fontSize: 13, color: fjInk70),
         ),
         const SizedBox(height: 10),
         Row(
@@ -484,7 +485,7 @@ class _Card extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: i == 0
                             ? _mint.withAlpha(40)
-                            : Colors.white.withAlpha(22),
+                            : fjInk.withAlpha(22),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
@@ -495,7 +496,7 @@ class _Card extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
-                          color: i == 0 ? _mint : Colors.white,
+                          color: i == 0 ? _mint : fjInk,
                         ),
                       ),
                     ),
@@ -517,13 +518,13 @@ class _SkyPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final random = math.Random(7);
-    final star = Paint()..color = Colors.white;
+    final star = Paint()..color = fjInk;
     for (var i = 0; i < 28; i++) {
       final o = Offset(
         random.nextDouble() * size.width,
         random.nextDouble() * size.height * .45,
       );
-      star.color = Colors.white.withAlpha(40 + random.nextInt(120));
+      star.color = fjInk.withAlpha(40 + random.nextInt(120));
       canvas.drawCircle(o, .6 + random.nextDouble() * .9, star);
     }
     final moon = Offset(size.width - 52, 46);

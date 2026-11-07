@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
@@ -34,7 +35,7 @@ class ProfileTab extends ConsumerWidget {
                   title: Text(e.$1),
                   subtitle: Text(
                     e.$2,
-                    style: const TextStyle(fontSize: 11, color: muted),
+                    style: TextStyle(fontSize: 11, color: muted),
                   ),
                   leading: Container(
                     padding: const EdgeInsets.all(6),
@@ -48,15 +49,11 @@ class ProfileTab extends ConsumerWidget {
                         Icons.local_fire_department,
                         Icons.science_outlined,
                       ][e.$3],
-                      color: Colors.white,
+                      color: fjInk,
                       size: 16,
                     ),
                   ),
-                  trailing: const Icon(
-                    Icons.chevron_right,
-                    size: 16,
-                    color: muted,
-                  ),
+                  trailing: Icon(Icons.chevron_right, size: 16, color: muted),
                   onTap: () =>
                       showAppSheet(context, ProfileEditor(section: e.$3)),
                 ),
@@ -109,10 +106,7 @@ class ProfileEditor extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    label,
-                    style: const TextStyle(fontSize: 10, color: muted),
-                  ),
+                  Text(label, style: TextStyle(fontSize: 10, color: muted)),
                   const SizedBox(height: 5),
                   TextFormField(
                     key: ValueKey(key),
@@ -148,10 +142,7 @@ class ProfileEditor extends ConsumerWidget {
                       padding: const EdgeInsets.only(top: 3),
                       child: Text(
                         context.l10n.ageRound(p.age?.round() ?? ""),
-                        style: const TextStyle(
-                          fontSize: 10,
-                          color: Colors.white,
-                        ),
+                        style: TextStyle(fontSize: 10, color: fjInk),
                       ),
                     ),
                 ],
@@ -187,7 +178,7 @@ class ProfileEditor extends ConsumerWidget {
                               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                               backgroundColor: p.toJson()[key] == e.key
                                   ? Colors.lightBlue.withValues(alpha: .13)
-                                  : const Color(0xFF282828),
+                                  : duo(0xFF282828, 0xFFEEF1F5),
                               side: BorderSide(
                                 color: p.toJson()[key] == e.key
                                     ? Colors.lightBlue.withValues(alpha: .6)

@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import '../l10n/plan_text.dart';
 import '../l10n/l10n_ext.dart';
 
@@ -10,7 +11,7 @@ import 'workout_profile_bar.dart';
 /// Colour of a step: its intensity zone, the same as in the profile above
 /// the list. Repeat groups are faint, steps without a zone grey.
 Color workoutStepColor(PlannedStepLine step) {
-  if (step.repeat) return Colors.white24;
+  if (step.repeat) return fjInk24;
   final zone = step.colorZone ?? step.zone;
   return zone == null ? Colors.grey : workoutZoneColors[zone.clamp(1, 5) - 1];
 }
@@ -50,21 +51,21 @@ class WorkoutStructureList extends StatelessWidget {
                           children: [
                             TextSpan(
                               text: stepAmountLabel(context.l10n, step.amount),
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontWeight: FontWeight.w600,
-                                color: Colors.white,
+                                color: fjInk,
                               ),
                             ),
                             if (step.label.isNotEmpty)
                               TextSpan(
                                 text:
                                     '  ${stepRoleLabel(context.l10n, step.label)}',
-                                style: const TextStyle(color: Colors.white70),
+                                style: TextStyle(color: fjInk70),
                               ),
                             if (step.zone != null && step.target == null)
                               TextSpan(
                                 text: ' Z${step.zone}',
-                                style: const TextStyle(color: muted),
+                                style: TextStyle(color: muted),
                               ),
                           ],
                         ),
@@ -73,14 +74,14 @@ class WorkoutStructureList extends StatelessWidget {
                       if (step.target != null)
                         Text(
                           step.target!,
-                          style: const TextStyle(fontSize: 11, color: muted),
+                          style: TextStyle(fontSize: 11, color: muted),
                         ),
                       if (step.note != null)
                         Text(
                           step.note!,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 11,
-                            color: Colors.white54,
+                            color: fjInk54,
                             height: 1.35,
                           ),
                         ),
@@ -112,7 +113,7 @@ class WorkoutStatTiles extends StatelessWidget {
             margin: const EdgeInsets.only(right: 6),
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 12),
             decoration: BoxDecoration(
-              color: const Color(0xFF282828),
+              color: duo(0xFF282828, 0xFFEEF1F5),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Column(
@@ -130,7 +131,7 @@ class WorkoutStatTiles extends StatelessWidget {
                 FittedBox(
                   child: Text(
                     e.$2,
-                    style: const TextStyle(fontSize: 8, color: muted),
+                    style: TextStyle(fontSize: 8, color: muted),
                   ),
                 ),
               ],

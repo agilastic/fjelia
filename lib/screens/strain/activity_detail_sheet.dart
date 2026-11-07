@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../providers/activity_history_provider.dart';
 import '../../widgets/recently_deleted_sheet.dart';
 import '../../l10n/l10n_ext.dart';
@@ -26,6 +27,7 @@ import '../../providers/media_provider.dart';
 import '../../widgets/workout_hrv_card.dart';
 import '../../widgets/nutrition_widgets.dart';
 import '../planner/plan_overview_cards.dart';
+import 'activity_share_menu.dart';
 import '../strength/strength_sections.dart';
 import '../activities/activities_screen.dart';
 import '../../models/coach_context_card.dart';
@@ -213,10 +215,10 @@ class ActivityDetailSheet extends ConsumerWidget {
                           const SizedBox(width: 6),
                           Tooltip(
                             message: context.l10n.renameActivity,
-                            child: const Icon(
+                            child: Icon(
                               Icons.edit_outlined,
                               size: 16,
-                              color: Colors.white54,
+                              color: fjInk54,
                             ),
                           ),
                         ],
@@ -225,42 +227,40 @@ class ActivityDetailSheet extends ConsumerWidget {
                     const SizedBox(height: 4),
                     Text(
                       '${a.type.replaceAll('_', ' ')} · ${DateFormat.MMMd().add_Hm().format(a.startTime)}',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.white70,
-                      ),
+                      style: TextStyle(fontSize: 12, color: fjInk70),
                     ),
                   ],
                 ),
               ),
               IconButton(
-                tooltip: context.l10n.mediaShareCard,
-                onPressed: () async {
-                  // The activity's photos to choose from; the route without.
-                  final service = ref.read(mediaServiceProvider);
-                  final photos = [
-                    for (final item in media)
-                      if (item.kind == 'photo')
-                        await service.file(item.fileName),
-                  ];
-                  if (!context.mounted) return;
-                  await Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (_) =>
-                          MediaShareCardPage(info: shareInfo, photos: photos),
-                    ),
-                  );
-                },
-                icon: const Icon(
-                  Icons.ios_share,
-                  color: Colors.white70,
-                  size: 22,
+                tooltip: context.l10n.shareWorkout,
+                onPressed: () => showActivityShareMenu(
+                  context,
+                  ref,
+                  activity: activity,
+                  shareCard: () async {
+                    // The activity's photos to choose from; the route without.
+                    final service = ref.read(mediaServiceProvider);
+                    final photos = [
+                      for (final item in media)
+                        if (item.kind == 'photo')
+                          await service.file(item.fileName),
+                    ];
+                    if (!context.mounted) return;
+                    await Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) =>
+                            MediaShareCardPage(info: shareInfo, photos: photos),
+                      ),
+                    );
+                  },
                 ),
+                icon: Icon(Icons.ios_share, color: fjInk70, size: 22),
               ),
               IconButton(
                 tooltip: context.l10n.close,
                 onPressed: () => Navigator.pop(context),
-                icon: const Icon(Icons.close, color: Colors.white70, size: 24),
+                icon: Icon(Icons.close, color: fjInk70, size: 24),
               ),
             ],
           ),
@@ -277,7 +277,7 @@ class ActivityDetailSheet extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF282828),
+                    color: duo(0xFF282828, 0xFFEEF1F5),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Row(
@@ -320,7 +320,7 @@ class ActivityDetailSheet extends ConsumerWidget {
               padding: const EdgeInsets.only(top: 6, bottom: 12),
               child: Text(
                 context.l10n.indoorFitHint,
-                style: const TextStyle(fontSize: 12, color: muted),
+                style: TextStyle(fontSize: 12, color: muted),
               ),
             ),
           ],
@@ -330,7 +330,7 @@ class ActivityDetailSheet extends ConsumerWidget {
               child: Text(
                 context.l10n.route,
                 style: TextStyle(
-                  color: Colors.white70,
+                  color: fjInk70,
                   fontSize: 11,
                   letterSpacing: 1,
                 ),
@@ -470,7 +470,7 @@ Color _cellColor(BuildContext context, String label) {
   if (label == l.avgHr || label == l.maxHr) return Colors.redAccent;
   if (label == l.elevation2 || label == l.altitude) return mint;
   if (label == l.trainingLoad2) return const Color(0xFF4FC3F7);
-  return Colors.white70;
+  return fjInk70;
 }
 
 /// The title field. Returns the new title, '' for the original, null when
@@ -518,13 +518,13 @@ class _RenameDialogState extends State<_RenameDialog> {
           ),
           Text(
             context.l10n.activityTitleKept,
-            style: const TextStyle(fontSize: 12, color: Colors.white70),
+            style: TextStyle(fontSize: 12, color: fjInk70),
           ),
           if (widget.name.edited && original != null) ...[
             const SizedBox(height: 10),
             Text(
               context.l10n.originalTitle(original),
-              style: const TextStyle(fontSize: 12, color: Colors.white54),
+              style: TextStyle(fontSize: 12, color: fjInk54),
             ),
             TextButton(
               style: TextButton.styleFrom(padding: EdgeInsets.zero),

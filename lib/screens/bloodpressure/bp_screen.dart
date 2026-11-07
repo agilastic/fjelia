@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/formats.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../providers/blood_pressure_insights_provider.dart';
@@ -89,7 +90,7 @@ class _BpState extends ConsumerState<BpScreen> {
                           : DateUtils.isSameDay(d, today)
                           ? "TODAY’S READING"
                           : dayText(d),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 9,
                         color: muted,
                         letterSpacing: 1,
@@ -122,7 +123,7 @@ class _BpState extends ConsumerState<BpScreen> {
                         child: Text(
                           context.l10n.bpLowHint,
                           textAlign: TextAlign.center,
-                          style: const TextStyle(fontSize: 10, color: muted),
+                          style: TextStyle(fontSize: 10, color: muted),
                         ),
                       ),
                     const SizedBox(height: 18),
@@ -197,7 +198,7 @@ class _BpState extends ConsumerState<BpScreen> {
                     Expanded(
                       child: Text(
                         periodLabel,
-                        style: const TextStyle(fontSize: 11, color: muted),
+                        style: TextStyle(fontSize: 11, color: muted),
                       ),
                     ),
                     IconButton(
@@ -260,7 +261,7 @@ class _BpArc extends CustomPainter {
         rect.center +
             Offset(math.cos(angle) * (r + 9), math.sin(angle) * (r + 9)),
         Paint()
-          ..color = Colors.white
+          ..color = fjInk
           ..strokeWidth = 2
           ..strokeCap = StrokeCap.round,
       );

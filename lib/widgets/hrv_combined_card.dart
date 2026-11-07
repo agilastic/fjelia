@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import '../l10n/l10n_ext.dart';
 import '../l10n/formats.dart';
 
@@ -27,7 +28,7 @@ const _colors = {
   HrvSeries.resting: hrvRestingColor,
 };
 
-const _surface = Color(0xFF262626);
+Color get _surface => duo(0xFF262626, 0xFFEEF1F5);
 const _grid = Color(0x14FFFFFF);
 
 /// Overnight HRV and Polar H10 spot readings (before / after training,
@@ -142,7 +143,7 @@ class _State extends ConsumerState<HrvCombinedCard> {
               textStyle: const TextStyle(fontSize: 12),
               side: const BorderSide(color: Color(0x1FFFFFFF)),
               foregroundColor: muted,
-              selectedForegroundColor: Colors.white,
+              selectedForegroundColor: fjInk,
               selectedBackgroundColor: const Color(0x3300D4A0),
             ),
             segments: [
@@ -180,14 +181,14 @@ class _State extends ConsumerState<HrvCombinedCard> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Container(width: 16, height: 1.5, color: Colors.white38),
+                Container(width: 16, height: 1.5, color: fjInk38),
                 const SizedBox(width: 6),
                 Text(
                   context.l10n.averagelabelFixedMs(
                     widget.averageLabel,
                     widget.average!.fixed(0),
                   ),
-                  style: const TextStyle(fontSize: 10, color: muted),
+                  style: TextStyle(fontSize: 10, color: muted),
                 ),
               ],
             ),
@@ -337,7 +338,7 @@ class _Tile extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w700,
-                        color: dim ? const Color(0x80FFFFFF) : Colors.white,
+                        color: dim ? const Color(0x80FFFFFF) : fjInk,
                       ),
                     ),
                     const SizedBox(width: 4),
@@ -477,7 +478,7 @@ class _Chart extends StatelessWidget {
             if (average != null)
               HorizontalLine(
                 y: average!,
-                color: Colors.white38,
+                color: fjInk38,
                 strokeWidth: 1,
                 dashArray: const [5, 4],
               ),
@@ -498,7 +499,7 @@ class _Chart extends StatelessWidget {
               maxIncluded: false,
               getTitlesWidget: (v, _) => Text(
                 v.fixed(0),
-                style: const TextStyle(fontSize: 10, color: muted),
+                style: TextStyle(fontSize: 10, color: muted),
               ),
             ),
           ),
@@ -517,7 +518,7 @@ class _Chart extends StatelessWidget {
                         ? end.subtract(const Duration(days: 1))
                         : start.add(Duration(minutes: (v * 1440).round())),
                   ),
-                  style: const TextStyle(fontSize: 10, color: muted),
+                  style: TextStyle(fontSize: 10, color: muted),
                 ),
               ),
             ),
@@ -536,7 +537,7 @@ class _Chart extends StatelessWidget {
             if (id != null) onOpen(id);
           },
           touchTooltipData: LineTouchTooltipData(
-            getTooltipColor: (_) => const Color(0xFF2E2E2E),
+            getTooltipColor: (_) => duo(0xFF2E2E2E, 0xFFE3E7EC),
             tooltipBorderRadius: BorderRadius.circular(10),
             tooltipPadding: const EdgeInsets.symmetric(
               horizontal: 10,
@@ -554,8 +555,8 @@ class _Chart extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: '${spot.y.fixed(0)} ms',
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: TextStyle(
+                        color: fjInk,
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                       ),
@@ -563,8 +564,8 @@ class _Chart extends StatelessWidget {
                     TextSpan(
                       text:
                           '\n${DateFormat.MMMd().add_Hm().format(series[spot.barIndex].points[spot.spotIndex].at)}',
-                      style: const TextStyle(
-                        color: Colors.white54,
+                      style: TextStyle(
+                        color: fjInk54,
                         fontSize: 10,
                         fontWeight: FontWeight.w400,
                       ),
@@ -574,8 +575,8 @@ class _Chart extends StatelessWidget {
                       TextSpan(
                         text:
                             '\n${series[spot.barIndex].details[spot.spotIndex]}',
-                        style: const TextStyle(
-                          color: Colors.white54,
+                        style: TextStyle(
+                          color: fjInk54,
                           fontSize: 10,
                           fontWeight: FontWeight.w400,
                         ),

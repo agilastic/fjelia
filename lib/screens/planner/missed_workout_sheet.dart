@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/formats.dart';
 import 'dart:async';
 
@@ -239,10 +240,7 @@ class _MissedWorkoutSheetState extends ConsumerState<MissedWorkoutSheet> {
                 children: [
                   const CircularProgressIndicator(color: mint),
                   const SizedBox(height: 14),
-                  Text(
-                    l10n.checkingForWorkout,
-                    style: const TextStyle(color: muted),
-                  ),
+                  Text(l10n.checkingForWorkout, style: TextStyle(color: muted)),
                 ],
               ),
             )
@@ -482,7 +480,7 @@ class _Hero extends StatelessWidget {
                       planDuration(item.plannedMinutes!),
                     context.l10n.missedTodayTag,
                   ].join(' · '),
-                  style: const TextStyle(fontSize: 12, color: Colors.white70),
+                  style: TextStyle(fontSize: 12, color: fjInk70),
                 ),
               ],
             ),
@@ -513,9 +511,9 @@ class _ProposalCard extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.fromLTRB(14, 14, 14, 12),
     decoration: BoxDecoration(
-      color: Colors.white.withValues(alpha: .04),
+      color: fjInk.withValues(alpha: .04),
       borderRadius: BorderRadius.circular(20),
-      border: Border.all(color: Colors.white.withValues(alpha: .08)),
+      border: Border.all(color: fjInk.withValues(alpha: .08)),
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -669,7 +667,7 @@ class _CoachLineState extends State<_CoachLine> {
               ? l10n.coachCouldNotAnswer
               : l10n.askCoachSends(widget.provider),
           textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 11, color: muted),
+          style: TextStyle(fontSize: 11, color: muted),
         ),
       ],
     );
@@ -734,7 +732,7 @@ class _DayColumn extends StatelessWidget {
         decoration: BoxDecoration(
           color: changed
               ? mint.withValues(alpha: .08)
-              : Colors.white.withValues(alpha: .025),
+              : fjInk.withValues(alpha: .025),
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
             color: pickable
@@ -752,18 +750,18 @@ class _DayColumn extends StatelessWidget {
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
-                color: isToday ? Colors.white54 : Colors.white,
+                color: isToday ? fjInk54 : fjInk,
               ),
             ),
             Text(
               '${day.date.day}',
-              style: const TextStyle(fontSize: 10, color: muted),
+              style: TextStyle(fontSize: 10, color: muted),
             ),
             const SizedBox(height: 6),
             if (day.items.isEmpty)
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(top: 8),
-                child: Text('–', style: TextStyle(color: Colors.white24)),
+                child: Text('–', style: TextStyle(color: fjInk24)),
               ),
             for (final item in day.items) _Chip(item: item),
           ],
@@ -784,9 +782,7 @@ class _Chip extends StatelessWidget {
         item.kind == PreviewKind.missed || item.kind == PreviewKind.dropped;
     final fresh = item.kind == PreviewKind.movedIn;
     final changed = item.kind == PreviewKind.adjusted;
-    final color = gone
-        ? Colors.white30
-        : completedActivityColor(item.session.sport);
+    final color = gone ? fjInk30 : completedActivityColor(item.session.sport);
     final minutes = item.minutesBefore == null
         ? '${item.minutes}′'
         : '${item.minutesBefore}→${item.minutes}′';
@@ -804,7 +800,7 @@ class _Chip extends StatelessWidget {
             ? mint.withValues(alpha: .18)
             : changed
             ? Colors.amber.withValues(alpha: .14)
-            : Colors.white.withValues(alpha: .05),
+            : fjInk.withValues(alpha: .05),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
@@ -829,10 +825,10 @@ class _Chip extends StatelessWidget {
                   : changed
                   ? Colors.amber
                   : gone
-                  ? Colors.white30
-                  : Colors.white70,
+                  ? fjInk30
+                  : fjInk70,
               decoration: gone ? TextDecoration.lineThrough : null,
-              decorationColor: Colors.white30,
+              decorationColor: fjInk30,
             ),
           ),
           for (final t in tags)
@@ -866,9 +862,9 @@ class _SkipCard extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.all(14),
     decoration: BoxDecoration(
-      color: Colors.white.withValues(alpha: .04),
+      color: fjInk.withValues(alpha: .04),
       borderRadius: BorderRadius.circular(20),
-      border: Border.all(color: Colors.white.withValues(alpha: .08)),
+      border: Border.all(color: fjInk.withValues(alpha: .08)),
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -944,7 +940,7 @@ class _Action extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = active ? mint : Colors.white70;
+    final color = active ? mint : fjInk70;
     return Expanded(
       child: InkWell(
         onTap: onTap,
@@ -960,7 +956,7 @@ class _Action extends StatelessWidget {
                   shape: BoxShape.circle,
                   color: active
                       ? mint.withValues(alpha: .16)
-                      : Colors.white.withValues(alpha: .06),
+                      : fjInk.withValues(alpha: .06),
                 ),
                 child: Icon(icon, size: 20, color: color),
               ),
@@ -1007,7 +1003,7 @@ class _AlreadyDone extends StatelessWidget {
         Text(
           context.l10n.alreadyDoneBody,
           textAlign: TextAlign.center,
-          style: const TextStyle(color: muted),
+          style: TextStyle(color: muted),
         ),
         const SizedBox(height: 20),
         _PrimaryButton(label: context.l10n.done, onPressed: onClose),

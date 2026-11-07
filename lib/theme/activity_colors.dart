@@ -23,7 +23,8 @@ ActivityKind activityKind(String sport) {
     return ActivityKind.strength;
   }
   if (RegExp('row|rudern').hasMatch(key)) return ActivityKind.rowing;
-  if (RegExp('cycl|bik|mtb|gravel|radfahr').hasMatch(key)) {
+  // 'virtual_ride' (Garmin), 'Ride' (Strava); not 'stride'.
+  if (RegExp(r'cycl|bik|mtb|gravel|radfahr|(?<!st)ride$').hasMatch(key)) {
     return ActivityKind.cycling;
   }
   if (RegExp('swim|schwimm|pool').hasMatch(key)) return ActivityKind.swimming;

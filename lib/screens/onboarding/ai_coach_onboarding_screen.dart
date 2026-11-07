@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -185,13 +186,13 @@ class _AiCoachOnboardingScreenState
     return PopScope(
       canPop: !_saving,
       child: Scaffold(
-        backgroundColor: const Color(0xFF101416),
+        backgroundColor: duo(0xFF101416, 0xFFF2F4F7),
         body: DecoratedBox(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: RadialGradient(
               center: Alignment(1.1, -1),
               radius: 1.1,
-              colors: [Color(0xFF203C39), Color(0xFF101416)],
+              colors: [Color(0xFF203C39), duo(0xFF101416, 0xFFF2F4F7)],
             ),
           ),
           child: SafeArea(
@@ -366,10 +367,10 @@ class _AiCoachOnboardingScreenState
               )
             else
               const SizedBox(width: 12, height: 48),
-            const Text(
+            Text(
               'FJELIA',
               style: TextStyle(
-                color: Colors.white,
+                color: fjInk,
                 fontSize: 13,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 3.8,
@@ -397,7 +398,7 @@ class _AiCoachOnboardingScreenState
                   decoration: BoxDecoration(
                     color: index < 2
                         ? _mint.withAlpha(index == 0 ? 90 : 255)
-                        : Colors.white.withAlpha(24),
+                        : fjInk.withAlpha(24),
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
@@ -417,8 +418,8 @@ class _AiCoachOnboardingScreenState
           Expanded(
             child: Text(
               context.l10n.aiOnboardingTitle,
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: fjInk,
                 fontSize: 34,
                 fontWeight: FontWeight.w700,
                 letterSpacing: -1.4,
@@ -466,8 +467,8 @@ class _AiCoachOnboardingScreenState
     final l10n = context.l10n;
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF101416),
-        border: Border(top: BorderSide(color: Colors.white.withAlpha(14))),
+        color: duo(0xFF101416, 0xFFF2F4F7),
+        border: Border(top: BorderSide(color: fjInk.withAlpha(14))),
       ),
       padding: const EdgeInsets.fromLTRB(24, 16, 24, 12),
       child: Column(
@@ -585,11 +586,11 @@ class _CoachOption extends StatelessWidget {
             end: Alignment.bottomRight,
             colors: selected
                 ? [accent.withAlpha(30), accent.withAlpha(9)]
-                : [Colors.white.withAlpha(9), Colors.white.withAlpha(4)],
+                : [fjInk.withAlpha(9), fjInk.withAlpha(4)],
           ),
           borderRadius: BorderRadius.circular(22),
           border: Border.all(
-            color: selected ? accent : Colors.white.withAlpha(22),
+            color: selected ? accent : fjInk.withAlpha(22),
             width: 1.2,
           ),
           boxShadow: selected
@@ -645,7 +646,7 @@ class _CoachOption extends StatelessWidget {
                           Text(
                             title,
                             style: TextStyle(
-                              color: selected ? accent : Colors.white,
+                              color: selected ? accent : fjInk,
                               fontSize: disclosure ? 14 : 17,
                               fontWeight: FontWeight.w700,
                               letterSpacing: -.3,
@@ -686,7 +687,7 @@ class _CoachOption extends StatelessWidget {
                             ? Icons.check_circle_rounded
                             : Icons.radio_button_unchecked_rounded,
                         size: disclosure ? 15 : 21,
-                        color: selected ? accent : Colors.white30,
+                        color: selected ? accent : fjInk30,
                       ),
                     ),
                   ],
@@ -772,7 +773,7 @@ class _OrbPainter extends CustomPainter {
       Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = 1
-        ..color = Colors.white.withAlpha(100),
+        ..color = fjInk.withAlpha(100),
     );
     final star = Path();
     for (var i = 0; i < 8; i++) {
@@ -789,7 +790,7 @@ class _OrbPainter extends CustomPainter {
     for (final (offset, color, dotRadius) in [
       (const Offset(43, -29), _lilac, 4.0),
       (const Offset(-43, 27), _mint, 3.0),
-      (const Offset(-31, -41), Colors.white70, 1.8),
+      (const Offset(-31, -41), fjInk70, 1.8),
     ]) {
       canvas.drawCircle(center + offset, dotRadius, Paint()..color = color);
     }

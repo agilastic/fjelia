@@ -255,7 +255,7 @@ class _MediaShareCardPageState extends State<MediaShareCardPage> {
           ),
           Text(
             context.l10n.mediaShareCardHint,
-            style: const TextStyle(color: muted, fontSize: 12),
+            style: TextStyle(color: muted, fontSize: 12),
           ),
           const SizedBox(height: 8),
           SizedBox(
@@ -1811,7 +1811,10 @@ class _Overlay {
                       children: [
                         rivet(),
                         const Spacer(),
-                        const FjeliaSignature(color: Color(0xFF1E2227), size: .85),
+                        const FjeliaSignature(
+                          color: Color(0xFF1E2227),
+                          size: .85,
+                        ),
                         const Spacer(),
                         rivet(),
                       ],

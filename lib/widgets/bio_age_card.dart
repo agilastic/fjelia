@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import '../l10n/l10n_ext.dart';
 
 import 'dart:math' as math;
@@ -23,6 +24,7 @@ class BioAgeCard extends ConsumerWidget {
       error: (e, _) => DataError(e),
       data: (r) => SectionCard(
         title: context.l10n.biologicalAge,
+        accent: const [Color(0xFF9D7BFF), Color(0xFFFF7AD9)],
         onTap: expanded
             ? null
             : () => showAppSheet(
@@ -68,7 +70,7 @@ class BioAgeCard extends ConsumerWidget {
                       valueText(r.vo2max, 1),
                       r.vo2Class,
                     ),
-                    style: const TextStyle(fontSize: 11, color: muted),
+                    style: TextStyle(fontSize: 11, color: muted),
                   ),
                   if (!r.activity.isComplete || r.activity.usesStepEstimate)
                     Padding(
@@ -76,18 +78,14 @@ class BioAgeCard extends ConsumerWidget {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Icon(
-                            Icons.info_outline,
-                            size: 14,
-                            color: muted,
-                          ),
+                          Icon(Icons.info_outline, size: 14, color: muted),
                           const SizedBox(width: 6),
                           Expanded(
                             child: Text(
                               r.activity.isComplete
                                   ? context.l10n.bioAgeActivityEstimatedLabel
                                   : context.l10n.bioAgeActivityUnknownLabel,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 11,
                                 color: muted,
                                 height: 1.4,
@@ -109,10 +107,7 @@ class BioAgeCard extends ConsumerWidget {
                                 e.key == 'activity'
                                     ? context.l10n.bioAgeActivity
                                     : e.key,
-                                style: const TextStyle(
-                                  fontSize: 11,
-                                  color: muted,
-                                ),
+                                style: TextStyle(fontSize: 11, color: muted),
                               ),
                             ),
                             SizedBox(
@@ -120,7 +115,7 @@ class BioAgeCard extends ConsumerWidget {
                               child: LinearProgressIndicator(
                                 value: (e.value.abs() / 10).clamp(0, 1),
                                 color: e.value <= 0 ? mint : Colors.red,
-                                backgroundColor: Colors.white10,
+                                backgroundColor: fjInk10,
                               ),
                             ),
                             const SizedBox(width: 10),
@@ -144,7 +139,7 @@ class BioAgeCard extends ConsumerWidget {
                         math.min(r.rangeLow, r.rangeHigh).round(),
                         math.max(r.rangeLow, r.rangeHigh).round(),
                       ),
-                      style: const TextStyle(color: muted, fontSize: 10),
+                      style: TextStyle(color: muted, fontSize: 10),
                     ),
                   ],
                 ],
@@ -166,21 +161,18 @@ class _ActivityDetails extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white.withAlpha(8),
+        color: fjInk.withAlpha(8),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: fjInk10),
       ),
       child: DefaultTextStyle.merge(
-        style: const TextStyle(fontSize: 11, color: muted, height: 1.5),
+        style: TextStyle(fontSize: 11, color: muted, height: 1.5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               l10n.bioAgeActivityBasis,
-              style: const TextStyle(
-                color: Colors.white70,
-                fontWeight: FontWeight.w600,
-              ),
+              style: TextStyle(color: fjInk70, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 6),
             if (activity.reportedDays > 0)

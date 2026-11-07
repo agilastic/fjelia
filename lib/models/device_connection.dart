@@ -6,6 +6,7 @@ enum ConnectionType {
   bodyScale,
   coros,
   suunto,
+  myWhoosh,
   polar,
   health,
 }
@@ -27,6 +28,11 @@ class ConnectionFailure implements Exception {
   final String message;
   @override
   String toString() => message;
+}
+
+/// The account is open on another device and must be signed out there first.
+class SignedInElsewhere implements Exception {
+  const SignedInElsewhere();
 }
 
 class VerificationRequired implements Exception {

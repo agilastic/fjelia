@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
@@ -74,7 +75,7 @@ class _FormSheet extends StatelessWidget {
   Widget build(BuildContext context) => FractionallySizedBox(
     heightFactor: .92,
     child: Material(
-      color: const Color(0xFF111111),
+      color: duo(0xFF111111, 0xFFF2F4F7),
       child: ListView(
         padding: EdgeInsets.fromLTRB(
           20,
@@ -92,7 +93,7 @@ class _FormSheet extends StatelessWidget {
               padding: const EdgeInsets.only(top: 6),
               child: Text(
                 subtitle!,
-                style: const TextStyle(fontSize: 12, color: muted),
+                style: TextStyle(fontSize: 12, color: muted),
               ),
             ),
           ...children,
@@ -918,7 +919,7 @@ class _ExercisePickerState extends State<_ExercisePicker> {
     return FractionallySizedBox(
       heightFactor: .92,
       child: Material(
-        color: const Color(0xFF111111),
+        color: duo(0xFF111111, 0xFFF2F4F7),
         child: Column(
           children: [
             Padding(
@@ -1073,10 +1074,7 @@ class _FieldsDialogState extends State<_FieldsDialog> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (widget.message != null)
-            Text(
-              widget.message!,
-              style: const TextStyle(fontSize: 12, color: muted),
-            ),
+            Text(widget.message!, style: TextStyle(fontSize: 12, color: muted)),
           for (var i = 0; i < widget.fields.length; i++)
             TextField(
               controller: controllers[i],

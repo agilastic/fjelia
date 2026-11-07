@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import '../l10n/formats.dart';
 import '../models/chart_point.dart';
 export '../models/chart_point.dart';
@@ -10,8 +11,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 
 const mint = Color(0xFF00D4A0);
-const panel = Color(0xFF202020);
-const muted = Color(0xFF999999);
+Color get panel => fjPanel;
+Color get muted => fjMuted;
 String valueText(num? v, [int digits = 0]) =>
     v == null || !v.isFinite ? '—' : v.fixed(digits);
 String dayText(DateTime d) => DateFormat.yMMMd().format(d);
@@ -35,7 +36,7 @@ Future<T?> showAppSheet<T>(BuildContext context, Widget child) =>
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
-      backgroundColor: const Color(0xFF111111),
+      backgroundColor: duo(0xFF111111, 0xFFF2F4F7),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -70,7 +71,7 @@ class SheetPage extends StatelessWidget {
           width: 36,
           height: 4,
           decoration: BoxDecoration(
-            color: Colors.white24,
+            color: fjInk24,
             borderRadius: BorderRadius.circular(3),
           ),
         ),
@@ -104,7 +105,7 @@ class SheetPage extends StatelessWidget {
               ],
             ),
           ),
-        if (headerDivider) const Divider(height: 1, color: Colors.white12),
+        if (headerDivider) Divider(height: 1, color: fjInk12),
         Expanded(child: child),
       ],
     ),
@@ -119,59 +120,84 @@ class SectionCard extends StatelessWidget {
     this.onTap,
     this.color,
     this.padding = const EdgeInsets.all(16),
+    this.accent,
   });
   final String? title;
   final Widget child;
   final VoidCallback? onTap;
   final Color? color;
   final EdgeInsetsGeometry padding;
+
+  /// Two colours that give the card its own glow: the title in their
+  /// gradient, a faint light from the top left and a tinted edge.
+  final List<Color>? accent;
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(bottom: 12),
-    child: Material(
-      color: color ?? panel,
-      borderRadius: BorderRadius.circular(16),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: padding,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (title != null) ...[
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        title!.toUpperCase(),
-                        style: const TextStyle(
-                          fontSize: 10,
-                          color: muted,
-                          letterSpacing: 1,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                    if (onTap != null)
-                      const Icon(Icons.chevron_right, size: 16, color: muted),
-                  ],
+  Widget build(BuildContext context) {
+    final accent = this.accent;
+    final label = title?.toUpperCase();
+    final heading = label == null
+        ? null
+        : accent == null
+        ? Text(
+            label,
+            style: TextStyle(
+              fontSize: 10,
+              color: muted,
+              letterSpacing: 1,
+              fontWeight: FontWeight.w700,
+            ),
+          )
+        : GradientTitle(label, colors: accent);
+    final body = Padding(
+      padding: padding,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (heading != null) ...[
+            Row(
+              children: [
+                Expanded(
+                  child: Align(alignment: Alignment.centerLeft, child: heading),
                 ),
-                const SizedBox(height: 12),
+                if (onTap != null)
+                  Icon(
+                    Icons.chevron_right,
+                    size: 16,
+                    color: accent == null
+                        ? muted
+                        : fjAccent(accent.last).withValues(alpha: .8),
+                  ),
               ],
-              child,
-            ],
-          ),
+            ),
+            const SizedBox(height: 12),
+          ],
+          child,
+        ],
+      ),
+    );
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Material(
+        color: color ?? panel,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: accent == null ? BorderSide.none : fjEdge(accent),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Ink(
+          decoration: accent == null ? null : fjGlow(accent, strength: .55),
+          child: InkWell(onTap: onTap, child: body),
         ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 class SectionLabel extends StatelessWidget {
-  const SectionLabel(this.text, {super.key, this.color = muted});
+  const SectionLabel(this.text, {super.key, this.color});
   final String text;
-  final Color color;
+  final Color? color;
+  Color get _color => color ?? muted;
   @override
   Widget build(BuildContext context) => Padding(
     padding: const EdgeInsets.fromLTRB(12, 22, 12, 8),
@@ -180,7 +206,7 @@ class SectionLabel extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          color: color,
+          color: _color,
           fontSize: 13,
           letterSpacing: 0,
           fontWeight: FontWeight.w500,
@@ -199,7 +225,7 @@ class EmptyState extends StatelessWidget {
     child: Center(
       child: Text(
         message,
-        style: const TextStyle(color: muted, fontSize: 12),
+        style: TextStyle(color: muted, fontSize: 12),
         textAlign: TextAlign.center,
       ),
     ),
@@ -221,21 +247,17 @@ class DataError extends StatelessWidget {
 }
 
 class StatPair extends StatelessWidget {
-  const StatPair(
-    this.label,
-    this.value, {
-    super.key,
-    this.color = Colors.white,
-  });
+  const StatPair(this.label, this.value, {super.key, this.color});
   final String label, value;
-  final Color color;
+  final Color? color;
+  Color get _color => color ?? fjInk;
   @override
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Text(
         label.toUpperCase(),
-        style: const TextStyle(color: muted, fontSize: 9, letterSpacing: .8),
+        style: TextStyle(color: muted, fontSize: 9, letterSpacing: .8),
       ),
       const SizedBox(height: 5),
       Text(
@@ -243,7 +265,7 @@ class StatPair extends StatelessWidget {
         style: TextStyle(
           fontSize: 22,
           fontWeight: FontWeight.w600,
-          color: color,
+          color: _color,
         ),
       ),
     ],
@@ -293,7 +315,7 @@ class HistoryChart extends StatelessWidget {
         (span < 2 ? DateFormat.Hm() : DateFormat.MMMd()).format(
           origin.add(Duration(seconds: (v * 86400).round())),
         ),
-        style: const TextStyle(fontSize: 8, color: muted),
+        style: TextStyle(fontSize: 8, color: muted),
       ),
     );
     final titles = FlTitlesData(
@@ -308,7 +330,7 @@ class HistoryChart extends StatelessWidget {
           getTitlesWidget: (v, m) => Text(
             valueText(v, axisDigits ?? (v.abs() < 100 ? 1 : 0)),
             maxLines: 1,
-            style: const TextStyle(fontSize: 9, color: muted),
+            style: TextStyle(fontSize: 9, color: muted),
           ),
         ),
       ),
@@ -323,8 +345,7 @@ class HistoryChart extends StatelessWidget {
     );
     final grid = FlGridData(
       show: true,
-      getDrawingHorizontalLine: (_) =>
-          const FlLine(color: Colors.white10, strokeWidth: .5),
+      getDrawingHorizontalLine: (_) => FlLine(color: fjInk10, strokeWidth: .5),
       drawVerticalLine: false,
     );
     Widget chart;
@@ -357,7 +378,7 @@ class HistoryChart extends StatelessWidget {
                 getTitlesWidget: (v, m) => Text(
                   valueText(v, axisDigits ?? (v.abs() < 100 ? 1 : 0)),
                   maxLines: 1,
-                  style: const TextStyle(fontSize: 9, color: muted),
+                  style: TextStyle(fontSize: 9, color: muted),
                 ),
               ),
             ),
@@ -371,7 +392,7 @@ class HistoryChart extends StatelessWidget {
                   return i >= 0 && i < clean.length
                       ? Text(
                           DateFormat.d().format(clean[i].at),
-                          style: const TextStyle(fontSize: 8, color: muted),
+                          style: TextStyle(fontSize: 8, color: muted),
                         )
                       : const SizedBox();
                 },

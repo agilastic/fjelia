@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
@@ -41,7 +42,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF111111),
+      backgroundColor: duo(0xFF111111, 0xFFF2F4F7),
       body: SafeArea(
         child: FadeTransition(
           opacity: _fade,
@@ -85,7 +86,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                         Text(
                           context.l10n.knowYourBodyTrainSmarter,
                           style: TextStyle(
-                            color: Colors.white,
+                            color: fjInk,
                             fontSize: 38,
                             fontWeight: FontWeight.w800,
                             letterSpacing: -1,
@@ -96,7 +97,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                         Text(
                           context.l10n.allYourHealthDevicesOne,
                           style: TextStyle(
-                            color: Color(0xFFCCCCCC),
+                            color: duo(0xFFCCCCCC, 0xFF374151),
                             fontSize: 16,
                             height: 1.5,
                           ),
@@ -181,7 +182,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                         context.l10n.yourDataStaysOnYour,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Color(0xFF888888),
+                          color: duo(0xFF888888, 0xFF6B7280),
                           fontSize: 12,
                         ),
                       ),
@@ -216,7 +217,7 @@ class _FeatureCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E),
+        color: duo(0xFF1E1E1E, 0xFFFFFFFF),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: color.withAlpha(40)),
       ),
@@ -238,8 +239,8 @@ class _FeatureCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: fjInk,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     height: 1.3,
@@ -248,8 +249,8 @@ class _FeatureCard extends StatelessWidget {
                 const SizedBox(height: 3),
                 Text(
                   subtitle,
-                  style: const TextStyle(
-                    color: Color(0xFF888888),
+                  style: TextStyle(
+                    color: duo(0xFF888888, 0xFF6B7280),
                     fontSize: 12,
                   ),
                 ),

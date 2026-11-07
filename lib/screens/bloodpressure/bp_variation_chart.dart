@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../services/blood_pressure_chart_data.dart';
 export '../../services/blood_pressure_chart_data.dart'
@@ -136,7 +137,7 @@ class _BpVariationChartState extends State<BpVariationChart> {
                   widget.period == BpPeriod.day
                       ? context.l10n.hourlyVariation
                       : context.l10n.dailyVariation,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: muted,
                     fontSize: 10,
                     letterSpacing: 1,
@@ -146,11 +147,7 @@ class _BpVariationChartState extends State<BpVariationChart> {
               if (!widget.fullscreen)
                 IconButton(
                   tooltip: context.l10n.fullscreenBloodPressureChart,
-                  icon: const Icon(
-                    Icons.fullscreen_rounded,
-                    size: 21,
-                    color: muted,
-                  ),
+                  icon: Icon(Icons.fullscreen_rounded, size: 21, color: muted),
                   onPressed: () =>
                       Navigator.of(context, rootNavigator: true).push(
                         MaterialPageRoute<void>(
@@ -175,7 +172,7 @@ class _BpVariationChartState extends State<BpVariationChart> {
             style: TextStyle(fontSize: 10, color: muted),
           ),
           if (widget.buckets.any((b) => b.mark != BpBucketMark.none))
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(top: 4),
               child: Wrap(
                 spacing: 12,
@@ -208,7 +205,7 @@ class _BpInfoBox extends StatelessWidget {
     decoration: BoxDecoration(
       color: const Color(0xF51A2325),
       borderRadius: BorderRadius.circular(12),
-      border: Border.all(color: Colors.white.withValues(alpha: .16)),
+      border: Border.all(color: fjInk.withValues(alpha: .16)),
       boxShadow: const [
         BoxShadow(color: Colors.black38, blurRadius: 16, offset: Offset(0, 4)),
       ],
@@ -222,9 +219,9 @@ class _BpInfoBox extends StatelessWidget {
                   ? DateFormat.MMMd().add_Hm()
                   : DateFormat.yMMMEd())
               .format(bucket.date),
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 12,
-            color: Colors.white,
+            color: fjInk,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -264,10 +261,7 @@ class _BpInfoBox extends StatelessWidget {
                         bucket.maximum(sys),
                       ),
                       textAlign: TextAlign.right,
-                      style: const TextStyle(
-                        color: Colors.white70,
-                        fontSize: 10,
-                      ),
+                      style: TextStyle(color: fjInk70, fontSize: 10),
                     ),
                   ),
                 ],
@@ -276,7 +270,7 @@ class _BpInfoBox extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             context.l10n.lengthReadingsAverageMinMax(bucket.readings.length),
-            style: const TextStyle(color: muted, fontSize: 9),
+            style: TextStyle(color: muted, fontSize: 9),
           ),
         ],
       ],
@@ -295,7 +289,7 @@ class BpChartFullscreen extends StatelessWidget {
   final BpPeriod period;
   @override
   Widget build(BuildContext context) => Scaffold(
-    backgroundColor: const Color(0xFF111111),
+    backgroundColor: duo(0xFF111111, 0xFFF2F4F7),
     body: SafeArea(
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -310,9 +304,9 @@ class BpChartFullscreen extends StatelessWidget {
                         context.l10n.bloodPressureTouppercaseMmhg(
                           period.name.toUpperCase(),
                         ),
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 12,
-                          color: Colors.white70,
+                          color: fjInk70,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -375,7 +369,7 @@ class _VariationPainter extends CustomPainter {
       canvas.drawLine(
         Offset(plot.left, y(v)),
         Offset(plot.right, y(v)),
-        Paint()..color = Colors.white.withValues(alpha: .07),
+        Paint()..color = fjInk.withValues(alpha: .07),
       );
       text('${v.round()}', Offset(0, y(v) - 5), muted);
     }
@@ -482,7 +476,7 @@ class _VariationPainter extends CustomPainter {
       if (selected == i) {
         canvas.drawRect(
           Rect.fromLTWH(x - step / 2, plot.top, step, plot.height),
-          Paint()..color = Colors.white.withValues(alpha: .06),
+          Paint()..color = fjInk.withValues(alpha: .06),
         );
       }
       if (i % stride == 0 || i == buckets.length - 1) {
@@ -533,7 +527,7 @@ class _MarkLegend extends StatelessWidget {
     children: [
       Icon(icon, size: 12, color: color),
       const SizedBox(width: 3),
-      Text(text, style: const TextStyle(fontSize: 10, color: muted)),
+      Text(text, style: TextStyle(fontSize: 10, color: muted)),
     ],
   );
 }

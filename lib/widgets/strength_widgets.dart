@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import '../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ import 'app_widgets.dart';
 /// Shared strength presentation: summary tiles, exercise cards and set rows
 /// for planned targets and recorded results alike.
 
-const _tile = Color(0xFF282828);
+Color get _tile => duo(0xFF282828, 0xFFEEF1F5);
 const _tabular = [FontFeature.tabularFigures()];
 
 String _repsText(int reps, StrengthConvention c) =>
@@ -116,6 +117,7 @@ String? strengthSourceLabel(String? source) => switch (source) {
   'manual' => tr.manual,
   'file' => tr.activityFileSource,
   'strava' => 'Strava',
+  'mywhoosh' => 'MyWhoosh',
   _ => null,
 };
 
@@ -159,7 +161,7 @@ class StrengthSummaryGrid extends StatelessWidget {
                   children: [
                     Text(
                       t.label.toUpperCase(),
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: muted,
                         fontSize: 9,
                         letterSpacing: .8,
@@ -179,7 +181,7 @@ class StrengthSummaryGrid extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 2),
                         child: Text(
                           t.caption!,
-                          style: const TextStyle(fontSize: 11, color: muted),
+                          style: TextStyle(fontSize: 11, color: muted),
                         ),
                       ),
                   ],
@@ -270,10 +272,7 @@ class _StrengthExerciseCardState extends State<StrengthExerciseCard> {
                               padding: const EdgeInsets.only(top: 3),
                               child: Text(
                                 widget.detail,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: muted,
-                                ),
+                                style: TextStyle(fontSize: 12, color: muted),
                               ),
                             ),
                           if (widget.summary != null)
@@ -281,9 +280,9 @@ class _StrengthExerciseCardState extends State<StrengthExerciseCard> {
                               padding: const EdgeInsets.only(top: 4),
                               child: Text(
                                 widget.summary!,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 13,
-                                  color: Colors.white70,
+                                  color: fjInk70,
                                   fontFeatures: _tabular,
                                 ),
                               ),
@@ -304,7 +303,7 @@ class _StrengthExerciseCardState extends State<StrengthExerciseCard> {
                         duration: reduce
                             ? Duration.zero
                             : const Duration(milliseconds: 180),
-                        child: const Icon(Icons.expand_more, color: muted),
+                        child: Icon(Icons.expand_more, color: muted),
                       ),
                     ),
                 ],
@@ -424,7 +423,7 @@ class StrengthTargetRow extends StatelessWidget {
                       if (extra.isNotEmpty)
                         Text(
                           extra.join(' · '),
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 11,
                             color: muted,
                             fontFeatures: _tabular,
@@ -515,7 +514,7 @@ class StrengthResultRow extends StatelessWidget {
                       if (extra.isNotEmpty)
                         Text(
                           extra.join(' · '),
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 11,
                             color: muted,
                             fontFeatures: _tabular,
@@ -540,7 +539,7 @@ class StrengthResultRow extends StatelessWidget {
   StrengthSetStatus.completed => (Icons.check_circle, mint),
   StrengthSetStatus.partial => (Icons.timelapse, const Color(0xFFFFC857)),
   StrengthSetStatus.failed => (Icons.cancel, Colors.redAccent),
-  StrengthSetStatus.skipped => (Icons.skip_next, Colors.white54),
+  StrengthSetStatus.skipped => (Icons.skip_next, fjInk54),
   StrengthSetStatus.unrecorded => (Icons.radio_button_unchecked, muted),
 };
 
@@ -604,7 +603,7 @@ class StrengthGroupHeader extends StatelessWidget {
                   if (rests.isNotEmpty)
                     Text(
                       'Rest ${rests.join(', ')}',
-                      style: const TextStyle(fontSize: 11, color: muted),
+                      style: TextStyle(fontSize: 11, color: muted),
                     ),
                 ],
               ),
@@ -708,7 +707,7 @@ class StrengthMissingDataCard extends StatelessWidget {
       children: [
         Text(
           context.l10n.exerciseDetailsWereNotProvided,
-          style: TextStyle(fontSize: 13, color: Colors.white70, height: 1.4),
+          style: TextStyle(fontSize: 13, color: fjInk70, height: 1.4),
         ),
         const SizedBox(height: 12),
         if (onLogFromPlan != null)
@@ -876,7 +875,7 @@ Future<void> showStrengthSupportingSets(
                   strengthProgressionMinSessions,
                   evaluation.reason,
                 ),
-            style: const TextStyle(fontSize: 12, color: muted),
+            style: TextStyle(fontSize: 12, color: muted),
           ),
           for (final s in evaluation.supporting) ...[
             const SizedBox(height: 14),

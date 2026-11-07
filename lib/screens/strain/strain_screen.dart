@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../l10n/formats.dart';
 import '../../providers/activity_history_provider.dart';
@@ -49,6 +50,7 @@ class StrainScreen extends ConsumerWidget {
           ),
         if (vis['heat_acclimation'] ?? true)
           LoadCard(
+            accent: const [Color(0xFFFF8A4D), Color(0xFFFF5A7A)],
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: InkWell(
               onTap: () => heatEnabled || heat != null
@@ -65,14 +67,10 @@ class StrainScreen extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        GradientTitle(
                           context.l10n.heatAcclimation2,
-                          style: TextStyle(
-                            fontSize: 11,
-                            color: muted,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1,
-                          ),
+                          colors: const [Color(0xFFFF8A4D), Color(0xFFFF5A7A)],
+                          size: 11,
                         ),
                         SizedBox(height: 5),
                         Text(
@@ -148,22 +146,19 @@ class DayTrainingLoadCard extends StatelessWidget {
         ? mint
         : status == 'HIGH'
         ? Colors.orange
-        : const Color(0xFFCCCCCC);
+        : duo(0xFFCCCCCC, 0xFF374151);
     return LoadCard(
+      accent: const [Color(0xFFFFB13D), Color(0xFFFF4D8D)],
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
               Expanded(
-                child: Text(
+                child: GradientTitle(
                   context.l10n.dayTrainingLoad2,
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: muted,
-                    letterSpacing: 1,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  colors: const [Color(0xFFFFB13D), Color(0xFFFF4D8D)],
+                  size: 11,
                 ),
               ),
               Container(
@@ -220,7 +215,7 @@ class DayTrainingLoadCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(6),
                 child: Stack(
                   children: [
-                    Container(color: Colors.white10),
+                    Container(color: fjInk10),
                     if (hasTarget)
                       Positioned(
                         left: (low! / scale).clamp(0, 1) * box.maxWidth,
@@ -249,7 +244,7 @@ class DayTrainingLoadCard extends StatelessWidget {
           const SizedBox(height: 10),
           Row(
             children: [
-              const Icon(Icons.info_outline, size: 12, color: muted),
+              Icon(Icons.info_outline, size: 12, color: muted),
               const SizedBox(width: 5),
               Expanded(
                 child: Text(
@@ -259,7 +254,7 @@ class DayTrainingLoadCard extends StatelessWidget {
                           valueText(high),
                         )
                       : context.l10n.targetUnavailableSyncTrainingHistory,
-                  style: const TextStyle(fontSize: 10, color: muted),
+                  style: TextStyle(fontSize: 10, color: muted),
                 ),
               ),
             ],

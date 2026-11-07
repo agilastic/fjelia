@@ -83,7 +83,7 @@ class DebugScreen extends ConsumerWidget {
               for (final line in (s.data ?? []).reversed)
                 SelectableText(
                   line,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'monospace',
                     fontSize: 10,
                     color: muted,

@@ -7957,4 +7957,54 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get shortReasonOther => 'Muu';
+
+  @override
+  String get styleTitle => 'Tyyli';
+
+  @override
+  String get styleAuto => 'Automaattinen';
+
+  @override
+  String get styleAutoHint =>
+      'Seuraa puhelinta: päivällä LightFjelia, yöllä DarkFjelia.';
+
+  @override
+  String get connectMyWhoosh => 'Yhdistä MyWhoosh';
+
+  @override
+  String get myWhooshSubtitle =>
+      'Kirjaudu MyWhoosh-tililläsi, niin sisäajosi tulevat tehon, kadenssin ja sykkeen kanssa.';
+
+  @override
+  String get myWhooshCredentialsInfo =>
+      'MyWhoosh-tunnukset tallennetaan salattuina laitteellesi. Fjelia lukee ajosi suoraan MyWhooshista MyWhoosh-sovelluksen rajapinnan kautta. Fjelia ei ole MyWhooshin yhteistyökumppani.';
+
+  @override
+  String get myWhooshTile => 'Sisäajot';
+
+  @override
+  String get myWhooshSignedInElsewhere =>
+      'MyWhoosh sallii vain yhden istunnon tiliä kohden, ja olet kirjautuneena toisella laitteella. Sulje MyWhoosh siellä (kirjaudu tarvittaessa ulos) ja yritä uudelleen.';
+
+  @override
+  String get shareWorkout => 'Jaa harjoitus';
+
+  @override
+  String get shareFitFile => 'Jaa FIT-tiedostona';
+
+  @override
+  String get shareFitFileHint =>
+      'Stravaan, COROSiin, TrainingPeaksiin ja muihin sovelluksiin';
+
+  @override
+  String get sendToGarmin => 'Lähetä Garmin Connectiin';
+
+  @override
+  String get sendToGarminHint => 'Lataa harjoituksen Garmin-tilillesi';
+
+  @override
+  String get sentToGarmin => 'Lähetetty Garmin Connectiin';
+
+  @override
+  String get alreadyOnGarmin => 'Tämä harjoitus on jo Garmin Connectissa';
 }

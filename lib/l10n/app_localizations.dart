@@ -13787,6 +13787,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Other'**
   String get shortReasonOther;
+
+  /// No description provided for @styleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Style'**
+  String get styleTitle;
+
+  /// No description provided for @styleAuto.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto'**
+  String get styleAuto;
+
+  /// No description provided for @styleAutoHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Follows your phone: LightFjelia by day, DarkFjelia at night.'**
+  String get styleAutoHint;
+
+  /// No description provided for @connectMyWhoosh.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect MyWhoosh'**
+  String get connectMyWhoosh;
+
+  /// No description provided for @myWhooshSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in with your MyWhoosh account to bring in your indoor rides with power, cadence and heart rate.'**
+  String get myWhooshSubtitle;
+
+  /// No description provided for @myWhooshCredentialsInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'MyWhoosh credentials are stored encrypted on your device. Fjelia reads your rides directly from MyWhoosh, through the interface of the MyWhoosh app. Fjelia is not affiliated with MyWhoosh.'**
+  String get myWhooshCredentialsInfo;
+
+  /// No description provided for @myWhooshTile.
+  ///
+  /// In en, this message translates to:
+  /// **'Indoor rides'**
+  String get myWhooshTile;
+
+  /// No description provided for @myWhooshSignedInElsewhere.
+  ///
+  /// In en, this message translates to:
+  /// **'MyWhoosh allows one session per account and you are signed in on another device. Close MyWhoosh there (sign out if needed), then try again.'**
+  String get myWhooshSignedInElsewhere;
+
+  /// No description provided for @shareWorkout.
+  ///
+  /// In en, this message translates to:
+  /// **'Share workout'**
+  String get shareWorkout;
+
+  /// No description provided for @shareFitFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Share as FIT file'**
+  String get shareFitFile;
+
+  /// No description provided for @shareFitFileHint.
+  ///
+  /// In en, this message translates to:
+  /// **'For Strava, COROS, TrainingPeaks and other apps'**
+  String get shareFitFileHint;
+
+  /// No description provided for @sendToGarmin.
+  ///
+  /// In en, this message translates to:
+  /// **'Send to Garmin Connect'**
+  String get sendToGarmin;
+
+  /// No description provided for @sendToGarminHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploads the workout to your Garmin account'**
+  String get sendToGarminHint;
+
+  /// No description provided for @sentToGarmin.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent to Garmin Connect'**
+  String get sentToGarmin;
+
+  /// No description provided for @alreadyOnGarmin.
+  ///
+  /// In en, this message translates to:
+  /// **'This workout is already in Garmin Connect'**
+  String get alreadyOnGarmin;
 }
 
 class _AppLocalizationsDelegate

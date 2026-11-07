@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
@@ -93,7 +94,7 @@ class _BugReportState extends State<BugReportSheet> {
       focusedBorder: border(mint, 1.5),
       errorBorder: border(Colors.redAccent),
       focusedErrorBorder: border(Colors.redAccent, 1.5),
-      labelStyle: const TextStyle(color: muted),
+      labelStyle: TextStyle(color: muted),
       floatingLabelStyle: WidgetStateTextStyle.resolveWith(
         (states) => TextStyle(
           color: states.contains(WidgetState.error)
@@ -191,8 +192,9 @@ class _BugReportState extends State<BugReportSheet> {
                     onTapOutside: (_) => _dismissKeyboard(),
                     decoration: _decoration(context.l10n.yourEmail),
                     validator: (value) =>
-                        RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$')
-                            .hasMatch((value ?? '').trim())
+                        RegExp(
+                          r'^[^\s@]+@[^\s@]+\.[^\s@]+$',
+                        ).hasMatch((value ?? '').trim())
                         ? null
                         : context.l10n.enterAValidEmailAddress,
                   ),
@@ -235,7 +237,7 @@ class _BugReportState extends State<BugReportSheet> {
                   ),
                   const SizedBox(height: 18),
                   Material(
-                    color: const Color(0xFF1E1E1E),
+                    color: duo(0xFF1E1E1E, 0xFFFFFFFF),
                     clipBehavior: Clip.antiAlias,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
@@ -292,7 +294,7 @@ class _BugReportState extends State<BugReportSheet> {
                               child: SingleChildScrollView(
                                 child: SelectableText(
                                   DebugLog.lines.join('\n'),
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontFamily: 'monospace',
                                     fontSize: 9,
                                     color: muted,
@@ -423,7 +425,7 @@ class _BugReportState extends State<BugReportSheet> {
   );
 }
 
-const _fieldFill = Color(0xFF262626);
+Color get _fieldFill => duo(0xFF262626, 0xFFEEF1F5);
 
 final _primaryButton = FilledButton.styleFrom(
   backgroundColor: mint,

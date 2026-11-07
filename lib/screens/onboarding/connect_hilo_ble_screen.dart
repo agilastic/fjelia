@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../providers/device_actions_provider.dart';
 
@@ -78,8 +79,8 @@ class _ConnectHiloBleScreenState extends ConsumerState<ConnectHiloBleScreen> {
   Widget build(BuildContext context) {
     final paired = _pairedMac != null;
     return Scaffold(
-      backgroundColor: const Color(0xFF111111),
-      appBar: AppBar(leading: const BackButton(color: Color(0xFFCCCCCC))),
+      backgroundColor: duo(0xFF111111, 0xFFF2F4F7),
+      appBar: AppBar(leading: BackButton(color: duo(0xFFCCCCCC, 0xFF374151))),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(28),
@@ -114,7 +115,7 @@ class _ConnectHiloBleScreenState extends ConsumerState<ConnectHiloBleScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: _accent,
                     foregroundColor: Colors.black,
-                    disabledBackgroundColor: const Color(0xFF2A2A2A),
+                    disabledBackgroundColor: duo(0xFF2A2A2A, 0xFFEEF1F5),
                     textStyle: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
@@ -125,11 +126,11 @@ class _ConnectHiloBleScreenState extends ConsumerState<ConnectHiloBleScreen> {
                   ),
                   onPressed: _scanning ? null : _scan,
                   icon: _scanning
-                      ? const SizedBox(
+                      ? SizedBox(
                           width: 18,
                           height: 18,
                           child: CircularProgressIndicator(
-                            color: Colors.white,
+                            color: fjInk,
                             strokeWidth: 2,
                           ),
                         )
@@ -207,16 +208,16 @@ class _PairedBanner extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: fjInk,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 Text(
                   mac,
-                  style: const TextStyle(
-                    color: Color(0xFF888888),
+                  style: TextStyle(
+                    color: duo(0xFF888888, 0xFF6B7280),
                     fontSize: 11,
                   ),
                 ),

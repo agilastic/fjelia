@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
-/// Dark-only, WHOOP-inspired palette.
+import 'fjelia_style.dart';
+
+/// The app's palette. Surfaces and text follow DarkFjelia or LightFjelia;
+/// the signal colours are the same in both.
 abstract final class AppColors {
-  static const background = Color(0xFF111111);
-  static const surface = Color(0xFF1E1E1E);
-  static const surfaceVariant = Color(0xFF2A2A2A);
-  static const surfaceHighlight = Color(0xFF333333);
+  static Color get background => duo(0xFF111111, 0xFFF2F4F7);
+  static Color get surface => duo(0xFF1E1E1E, 0xFFFFFFFF);
+  static Color get surfaceVariant => duo(0xFF2A2A2A, 0xFFEEF1F5);
+  static Color get surfaceHighlight => duo(0xFF333333, 0xFFE3E7EC);
 
   static const green = Color(0xFF00D4A0);
   static const yellow = Color(0xFFFFCC00);
@@ -13,21 +16,37 @@ abstract final class AppColors {
   static const blue = Color(0xFF4FC3F7);
   static const orange = Color(0xFFFF8C00);
 
-  static const textPrimary = Color(0xFFFFFFFF);
-  static const textSecondary = Color(0xFF9E9E9E);
-  static const textTertiary = Color(0xFF616161);
+  static Color get textPrimary => duo(0xFFFFFFFF, 0xFF15171A);
+  static Color get textSecondary => duo(0xFF9E9E9E, 0xFF6B7280);
+  static Color get textTertiary => duo(0xFF616161, 0xFF9AA0A8);
 
-  static const chartGrid = Color(0xFF2A2A2A);
+  static Color get chartGrid => duo(0xFF2A2A2A, 0xFFE3E7EC);
 }
 
 abstract class AppTheme {
-  static ThemeData dark() {
-    const muted = Color(0xFFCCCCCC);
+  /// DarkFjelia.
+  static ThemeData dark() => _build(FjeliaStyle.dark);
+
+  /// LightFjelia.
+  static ThemeData light() => _build(FjeliaStyle.light);
+
+  static ThemeData _build(FjeliaStyle style) {
+    final before = Fjelia.style;
+    Fjelia.style = style;
+    try {
+      return _theme(style == FjeliaStyle.light);
+    } finally {
+      Fjelia.style = before;
+    }
+  }
+
+  static ThemeData _theme(bool light) {
+    final muted = duo(0xFFCCCCCC, 0xFF4B5563);
     return ThemeData(
       useMaterial3: true,
-      brightness: Brightness.dark,
+      brightness: light ? Brightness.light : Brightness.dark,
       scaffoldBackgroundColor: AppColors.background,
-      colorScheme: const ColorScheme.dark(
+      colorScheme: (light ? ColorScheme.light : ColorScheme.dark)(
         primary: AppColors.blue,
         onPrimary: Colors.black,
         secondary: AppColors.green,
@@ -44,7 +63,7 @@ abstract class AppTheme {
         showCheckmark: false,
         side: BorderSide.none,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-        labelStyle: const TextStyle(
+        labelStyle: TextStyle(
           fontFamily: 'Roboto',
           fontSize: 11,
           color: AppColors.textSecondary,
@@ -63,8 +82,8 @@ abstract class AppTheme {
           horizontal: 12,
           vertical: 10,
         ),
-        labelStyle: const TextStyle(color: muted, fontSize: 11),
-        suffixStyle: const TextStyle(color: muted, fontSize: 11),
+        labelStyle: TextStyle(color: muted, fontSize: 11),
+        suffixStyle: TextStyle(color: muted, fontSize: 11),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide.none,
@@ -91,7 +110,7 @@ abstract class AppTheme {
         ),
         trackOutlineColor: const WidgetStatePropertyAll(Colors.transparent),
       ),
-      appBarTheme: const AppBarTheme(
+      appBarTheme: AppBarTheme(
         backgroundColor: AppColors.background,
         foregroundColor: AppColors.textPrimary,
         elevation: 0,
@@ -109,7 +128,7 @@ abstract class AppTheme {
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
-      tabBarTheme: const TabBarThemeData(
+      tabBarTheme: TabBarThemeData(
         indicatorColor: AppColors.green,
         labelColor: AppColors.textPrimary,
         labelStyle: TextStyle(
@@ -124,7 +143,7 @@ abstract class AppTheme {
           letterSpacing: 0.8,
         ),
       ),
-      textTheme: const TextTheme(
+      textTheme: TextTheme(
         displayLarge: TextStyle(
           color: AppColors.textPrimary,
           fontSize: 72,

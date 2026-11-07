@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -26,7 +27,7 @@ class MissedWorkoutSettingsCard extends ConsumerWidget {
       () => ref.read(missedWorkoutSettingsProvider.notifier).save(next),
     );
     return SectionCard(
-      color: const Color(0xFF282828),
+      color: duo(0xFF282828, 0xFFEEF1F5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -42,7 +43,7 @@ class MissedWorkoutSettingsCard extends ConsumerWidget {
             ),
             subtitle: Text(
               l10n.missedWorkoutReminderSubtitle,
-              style: const TextStyle(fontSize: 12, color: Colors.white70),
+              style: TextStyle(fontSize: 12, color: fjInk70),
             ),
             activeThumbColor: Colors.orange,
             activeTrackColor: Colors.orangeAccent.withValues(alpha: .4),
@@ -74,7 +75,7 @@ class MissedWorkoutSettingsCard extends ConsumerWidget {
               padding: const EdgeInsets.only(top: 4, bottom: 8),
               child: Text(
                 l10n.moveWithinDays,
-                style: const TextStyle(fontSize: 12, color: Colors.white70),
+                style: TextStyle(fontSize: 12, color: fjInk70),
               ),
             ),
             SettingsSegments(

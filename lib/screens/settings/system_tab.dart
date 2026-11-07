@@ -233,7 +233,7 @@ class _ExportState extends ConsumerState<DataExportPage> {
                       .isNotEmpty)
                     Text(
                       '${ref.watch(deletedActivitiesProvider).value!.length}',
-                      style: const TextStyle(color: muted),
+                      style: TextStyle(color: muted),
                     ),
                   const Icon(Icons.chevron_right, size: 20),
                 ],

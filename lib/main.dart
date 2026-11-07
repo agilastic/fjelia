@@ -12,6 +12,8 @@ import 'l10n/l10n_ext.dart';
 import 'providers/activity_file_import_provider.dart';
 import 'providers/auth_provider.dart';
 import 'providers/locale_provider.dart';
+import 'providers/style_provider.dart';
+import 'theme/fjelia_style.dart';
 import 'providers/day_data_provider.dart';
 import 'providers/health_connect_provider.dart';
 import 'providers/hilo_sync_provider.dart';
@@ -359,9 +361,9 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
       title: 'Fjelia',
       navigatorKey: _navigatorKey,
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.dark(),
+      theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),
-      themeMode: ThemeMode.system,
+      themeMode: ref.watch(themeModeProvider),
       locale: locale,
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: const [
@@ -370,10 +372,11 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      themeAnimationDuration: const Duration(milliseconds: 200),
-      themeAnimationCurve: Curves.linear,
-      builder: (context, child) =>
-          DismissKeyboardOnTapOutside(child: child ?? const SizedBox()),
+      // The colours switch at once with the look, so the theme does too.
+      themeAnimationDuration: Duration.zero,
+      builder: (context, child) => FjeliaStyleScope(
+        child: DismissKeyboardOnTapOutside(child: child ?? const SizedBox()),
+      ),
       home: const _AppRouter(),
     );
   }

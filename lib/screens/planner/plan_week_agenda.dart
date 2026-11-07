@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/formats.dart';
 import '../../l10n/l10n_ext.dart';
 
@@ -145,7 +146,7 @@ class _WeekTable extends StatelessWidget {
                         planned > 0
                             ? context.l10n.weekOfPlanned(planDuration(planned))
                             : context.l10n.weekDoneNothingPlanned,
-                        style: const TextStyle(fontSize: 13, color: muted),
+                        style: TextStyle(fontSize: 13, color: muted),
                       ),
                     ),
                   ],
@@ -155,7 +156,7 @@ class _WeekTable extends StatelessWidget {
                   borderRadius: BorderRadius.circular(4),
                   child: Stack(
                     children: [
-                      Container(height: 6, color: Colors.white10),
+                      Container(height: 6, color: fjInk10),
                       FractionallySizedBox(
                         widthFactor: progress,
                         child: Container(
@@ -216,7 +217,7 @@ class _DayRow extends StatelessWidget {
         ? Colors.transparent
         : first.state == PlanWeekState.skipped ||
               first.state == PlanWeekState.missed
-        ? Colors.white24
+        ? fjInk24
         : completedActivityColor(first.sport);
     return Container(
       decoration: BoxDecoration(
@@ -264,7 +265,7 @@ class _DayRow extends StatelessWidget {
                 else
                   Text(
                     context.l10n.day(day.date.day),
-                    style: const TextStyle(fontSize: 11, color: Colors.white38),
+                    style: TextStyle(fontSize: 11, color: fjInk38),
                   ),
               ],
             ),
@@ -273,7 +274,7 @@ class _DayRow extends StatelessWidget {
             child: day.rest
                 ? _Line(
                     icon: Icons.bedtime_outlined,
-                    color: Colors.white38,
+                    color: fjInk38,
                     label: context.l10n.restDay,
                     trailing: '—',
                     dim: true,
@@ -319,9 +320,7 @@ class _ItemLine extends StatelessWidget {
       borderRadius: BorderRadius.circular(10),
       child: _Line(
         icon: activitySportIcon(item.sport),
-        color: skipped || missed
-            ? Colors.white38
-            : completedActivityColor(item.sport),
+        color: skipped || missed ? fjInk38 : completedActivityColor(item.sport),
         label: sportLabel(item.sport),
         badge: done
             ? context.l10n.done2
@@ -368,7 +367,7 @@ class _ItemLine extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           child: _Line(
             icon: activitySportIcon(item.plannedSport),
-            color: Colors.white38,
+            color: fjInk38,
             label: sportLabel(item.plannedSport),
             detail: item.plannedTitle,
             trailing: planned == null ? '—' : planDuration(planned),
@@ -392,7 +391,7 @@ class _Line extends StatelessWidget {
     this.badge,
     this.secondaryBadge,
     this.badgeTooltip,
-    this.badgeColor = muted,
+    this.badgeColor,
     this.dim = false,
     this.struck = false,
     this.done = false,
@@ -401,12 +400,13 @@ class _Line extends StatelessWidget {
   final Color color;
   final String label, trailing;
   final String? detail, badge, secondaryBadge, badgeTooltip;
-  final Color badgeColor;
+  final Color? badgeColor;
+  Color get _badgeColor => badgeColor ?? muted;
   final bool dim, struck, done;
 
   @override
   Widget build(BuildContext context) {
-    final text = dim ? Colors.white38 : Colors.white;
+    final text = dim ? fjInk38 : fjInk;
     Widget statusBadge(String value, Color color) => Container(
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
       decoration: BoxDecoration(
@@ -455,13 +455,13 @@ class _Line extends StatelessWidget {
                         color: text,
                         fontWeight: FontWeight.w600,
                         decoration: struck ? TextDecoration.lineThrough : null,
-                        decorationColor: Colors.white38,
+                        decorationColor: fjInk38,
                       ),
                     ),
                     if (badge != null)
                       Tooltip(
                         message: badgeTooltip ?? badge!,
-                        child: statusBadge(badge!, badgeColor),
+                        child: statusBadge(badge!, _badgeColor),
                       ),
                     if (secondaryBadge != null)
                       statusBadge(secondaryBadge!, muted),
@@ -476,9 +476,9 @@ class _Line extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 11,
-                        color: Colors.white54,
+                        color: fjInk54,
                         decoration: struck ? TextDecoration.lineThrough : null,
-                        decorationColor: Colors.white38,
+                        decorationColor: fjInk38,
                       ),
                     ),
                   ),
@@ -505,9 +505,7 @@ class _Line extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
-                      color: done
-                          ? mint
-                          : (dim ? Colors.white38 : Colors.white70),
+                      color: done ? mint : (dim ? fjInk38 : fjInk70),
                       fontFeatures: const [FontFeature.tabularFigures()],
                     ),
                   ),

@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import 'package:flutter/material.dart';
 
 import 'app_widgets.dart' show mint, muted;
@@ -10,42 +11,26 @@ const doneGradient = [mint, Color(0xFFC6FF4D)];
 
 /// The background of a card that is only planned: darker than a done one,
 /// so it reads as not there yet.
-const ghostPanel = Color(0xFF161616);
+Color get ghostPanel => duo(0xFF161616, 0xFFF7F8FA);
 
-/// The heading of the Upcoming or History part of the plan: a glowing
-/// badge and the label in the part's gradient, so the two never look alike.
+/// The heading of the Upcoming or History part of the plan: the label in
+/// the part's gradient, so the two never look alike.
 class TimelineSectionHeader extends StatelessWidget {
   const TimelineSectionHeader({
     super.key,
     required this.label,
-    required this.icon,
     required this.colors,
   });
   final String label;
-  final IconData icon;
   final List<Color> colors;
 
   @override
   Widget build(BuildContext context) {
-    final gradient = LinearGradient(colors: colors);
+    final gradient = LinearGradient(
+      colors: [for (final c in colors) fjAccent(c)],
+    );
     return Row(
       children: [
-        Container(
-          width: 28,
-          height: 28,
-          decoration: BoxDecoration(
-            gradient: gradient,
-            borderRadius: BorderRadius.circular(9),
-            boxShadow: [
-              BoxShadow(
-                color: colors.first.withValues(alpha: .45),
-                blurRadius: 12,
-              ),
-            ],
-          ),
-          child: Icon(icon, size: 17, color: Colors.black87),
-        ),
-        const SizedBox(width: 10),
         ShaderMask(
           blendMode: BlendMode.srcIn,
           shaderCallback: gradient.createShader,
@@ -129,51 +114,6 @@ class TimelineDayLabel extends StatelessWidget {
               ),
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-/// The line between what is planned and what is done.
-class NowDivider extends StatelessWidget {
-  const NowDivider({super.key, required this.label});
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    Widget line(List<Color> colors) => Expanded(
-      child: Container(
-        height: 1.5,
-        decoration: BoxDecoration(gradient: LinearGradient(colors: colors)),
-      ),
-    );
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 14),
-      child: Row(
-        children: [
-          line([planGradient.last.withValues(alpha: 0), planGradient.last]),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 8),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              gradient: const LinearGradient(colors: [Color(0xFF3EE0FF), mint]),
-              boxShadow: [
-                BoxShadow(color: mint.withValues(alpha: .4), blurRadius: 14),
-              ],
-            ),
-            child: Text(
-              label,
-              style: const TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w900,
-                letterSpacing: 1.4,
-                color: Colors.black87,
-              ),
-            ),
-          ),
-          line([doneGradient.first, doneGradient.first.withValues(alpha: 0)]),
         ],
       ),
     );

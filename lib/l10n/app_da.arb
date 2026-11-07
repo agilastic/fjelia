@@ -3835,5 +3835,20 @@
   "shortReasonWeather": "Vejr",
   "shortReasonFatigue": "Træt",
   "shortReasonPain": "Smerter",
-  "shortReasonOther": "Andet"
+  "shortReasonOther": "Andet",
+  "styleTitle": "Stil",
+  "styleAuto": "Automatisk",
+  "styleAutoHint": "Følger telefonen: LightFjelia om dagen, DarkFjelia om natten.",
+  "connectMyWhoosh": "Forbind MyWhoosh",
+  "myWhooshSubtitle": "Log ind med din MyWhoosh-konto for at hente dine indendørsture med watt, kadence og puls.",
+  "myWhooshCredentialsInfo": "MyWhoosh-loginoplysninger gemmes krypteret på din enhed. Fjelia læser dine ture direkte fra MyWhoosh via MyWhoosh-appens grænseflade. Fjelia er ikke tilknyttet MyWhoosh.",
+  "myWhooshTile": "Indendørsture",
+  "myWhooshSignedInElsewhere": "MyWhoosh tillader kun én session pr. konto, og du er logget ind på en anden enhed. Luk MyWhoosh der (log ud om nødvendigt), og prøv igen.",
+  "shareWorkout": "Del træning",
+  "shareFitFile": "Del som FIT-fil",
+  "shareFitFileHint": "Til Strava, COROS, TrainingPeaks og andre apps",
+  "sendToGarmin": "Send til Garmin Connect",
+  "sendToGarminHint": "Uploader træningen til din Garmin-konto",
+  "sentToGarmin": "Sendt til Garmin Connect",
+  "alreadyOnGarmin": "Denne træning er allerede i Garmin Connect"
 }

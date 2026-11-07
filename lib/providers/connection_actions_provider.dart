@@ -5,10 +5,12 @@ import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import '../models/device_connection.dart';
 import 'package:fjelia_service_api/fjelia_service_api.dart';
 import '../api/garmin_client.dart';
+import '../api/mywhoosh_client.dart';
 import '../api/polar_flow_web_client.dart';
 import '../services/polar_service.dart';
 import 'auth_provider.dart';
 import 'coros_provider.dart';
+import 'mywhoosh_provider.dart';
 import 'suunto_provider.dart';
 import 'polar_provider.dart';
 import 'health_connect_provider.dart';
@@ -42,10 +44,19 @@ class ConnectionActions {
           ref.invalidate(corosConnectedProvider);
           ref.invalidate(corosEmailProvider);
           return ok;
+        case ConnectionType.myWhoosh:
+          final ok = await ref
+              .read(myWhooshServiceProvider)
+              .login(email, password);
+          ref.invalidate(myWhooshConnectedProvider);
+          ref.invalidate(myWhooshEmailProvider);
+          return ok;
         default:
           throw const ConnectionFailure('Unsupported sign-in method');
       }
       return true;
+    } on MyWhooshSignedInElsewhere {
+      throw const SignedInElsewhere();
     } on GarminMfaRequiredException {
       throw const VerificationRequired();
     } on GarminAuthException catch (e) {
@@ -150,6 +161,10 @@ class ConnectionActions {
         await ref.read(suuntoServiceProvider).disconnect();
         ref.invalidate(suuntoConnectedProvider);
         ref.invalidate(suuntoEmailProvider);
+      case ConnectionType.myWhoosh:
+        await ref.read(myWhooshServiceProvider).disconnect();
+        ref.invalidate(myWhooshConnectedProvider);
+        ref.invalidate(myWhooshEmailProvider);
       case ConnectionType.polar:
         await ref.read(polarServiceProvider).disconnect();
         ref.invalidate(polarFlowConnectedProvider);

@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../providers/connection_actions_provider.dart';
 
@@ -105,16 +106,16 @@ class _ConnectSuuntoScreenState extends ConsumerState<ConnectSuuntoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF111111),
+      backgroundColor: duo(0xFF111111, 0xFFF2F4F7),
       appBar: AppBar(
-        leading: const BackButton(color: Color(0xFFCCCCCC)),
+        leading: BackButton(color: duo(0xFFCCCCCC, 0xFF374151)),
         title: const OnboardingStepIndicator(current: 5, total: 6),
         actions: [
           TextButton(
             onPressed: _next,
             child: Text(
               context.l10n.skip,
-              style: TextStyle(color: Color(0xFFCCCCCC)),
+              style: TextStyle(color: duo(0xFFCCCCCC, 0xFF374151)),
             ),
           ),
         ],
@@ -141,7 +142,7 @@ class _ConnectSuuntoScreenState extends ConsumerState<ConnectSuuntoScreen> {
                 TextField(
                   controller: _phone,
                   keyboardType: TextInputType.phone,
-                  style: const TextStyle(color: Colors.white),
+                  style: TextStyle(color: fjInk),
                   decoration: onboardingInputDecoration(
                     '+49 123 456 7890',
                     accent: _accent,
@@ -158,7 +159,7 @@ class _ConnectSuuntoScreenState extends ConsumerState<ConnectSuuntoScreen> {
                   controller: _email,
                   keyboardType: TextInputType.emailAddress,
                   autocorrect: false,
-                  style: const TextStyle(color: Colors.white),
+                  style: TextStyle(color: fjInk),
                   decoration: onboardingInputDecoration(
                     'you@example.com',
                     accent: _accent,
@@ -171,13 +172,16 @@ class _ConnectSuuntoScreenState extends ConsumerState<ConnectSuuntoScreen> {
                 const SizedBox(height: 6),
                 Text(
                   context.l10n.theEmailIsUsedFor,
-                  style: TextStyle(color: Color(0xFF888888), fontSize: 11),
+                  style: TextStyle(
+                    color: duo(0xFF888888, 0xFF6B7280),
+                    fontSize: 11,
+                  ),
                 ),
               ] else ...[
                 Text(
                   context.l10n.smsSentToTrim(_phone.text.trim()),
-                  style: const TextStyle(
-                    color: Color(0xFFCCCCCC),
+                  style: TextStyle(
+                    color: duo(0xFFCCCCCC, 0xFF374151),
                     fontSize: 13,
                   ),
                 ),
@@ -190,8 +194,8 @@ class _ConnectSuuntoScreenState extends ConsumerState<ConnectSuuntoScreen> {
                   textAlign: TextAlign.center,
                   maxLength: 6,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: fjInk,
                     fontSize: 28,
                     fontWeight: FontWeight.w600,
                     letterSpacing: 10,
@@ -223,8 +227,8 @@ class _ConnectSuuntoScreenState extends ConsumerState<ConnectSuuntoScreen> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: _accent,
-                    foregroundColor: Colors.white,
-                    disabledBackgroundColor: const Color(0xFF2A2A2A),
+                    foregroundColor: fjInk,
+                    disabledBackgroundColor: duo(0xFF2A2A2A, 0xFFEEF1F5),
                     textStyle: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
@@ -235,11 +239,11 @@ class _ConnectSuuntoScreenState extends ConsumerState<ConnectSuuntoScreen> {
                   ),
                   onPressed: _loading ? null : (_smsSent ? _verify : _sendSms),
                   child: _loading
-                      ? const SizedBox(
+                      ? SizedBox(
                           width: 22,
                           height: 22,
                           child: CircularProgressIndicator(
-                            color: Colors.white,
+                            color: fjInk,
                             strokeWidth: 2.5,
                           ),
                         )

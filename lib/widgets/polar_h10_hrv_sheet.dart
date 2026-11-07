@@ -329,7 +329,7 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
             color: mint,
           ),
         ),
-        Text(title, style: const TextStyle(fontSize: 11, color: muted)),
+        Text(title, style: TextStyle(fontSize: 11, color: muted)),
       ],
     ),
   );
@@ -427,7 +427,7 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Text(
                 _delayText() ?? context.l10n.timingFollowsYourWorkout,
-                style: const TextStyle(color: muted, fontSize: 12),
+                style: TextStyle(color: muted, fontSize: 12),
               ),
             )
           else if (contextType == SpotHrvContext.afterTraining)
@@ -558,14 +558,14 @@ class _HrvState extends ConsumerState<PolarH10HrvSheet>
                 result.samples.length,
                 (result.coverage * 100).fixed(0),
               ),
-              style: const TextStyle(color: muted, fontSize: 12),
+              style: TextStyle(color: muted, fontSize: 12),
             ),
             Text(
               context.l10n.lnrmssdLnrmssdRawRmssdRawrmssdms(
                 valueText(result.lnRmssd, 2),
                 valueText(result.rawRmssdMs, 1),
               ),
-              style: const TextStyle(color: muted, fontSize: 12),
+              style: TextStyle(color: muted, fontSize: 12),
             ),
             const SizedBox(height: 8),
             HistoryChart(

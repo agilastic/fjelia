@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import 'dart:async';
 
 import '../../l10n/l10n_ext.dart';
@@ -293,9 +294,13 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
           child: Row(
             children: [
               Expanded(
-                child: Text(
-                  context.l10n.aiCoach,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: GradientTitle(
+                    context.l10n.aiCoach,
+                    colors: coachGradient,
+                    size: 18,
+                  ),
                 ),
               ),
               // Shown once there is something to start over from.
@@ -363,7 +368,9 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
                         ],
                       ),
                     ] else
-                      EmptyState(context.l10n.askAboutYourRecoveryTraining),
+                      _CoachOrb(
+                        text: context.l10n.askAboutYourRecoveryTraining,
+                      ),
                   ],
                 )
               : ListView.builder(
@@ -386,9 +393,7 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
                     }
                     final i = index - (card == null ? 0 : 1);
                     if (i == messages.length && sending) {
-                      return _ThinkingBubble(
-                        seconds: _watch.elapsed.inSeconds,
-                      );
+                      return _ThinkingBubble(seconds: _watch.elapsed.inSeconds);
                     }
                     if (i == messages.length && error == null) {
                       return Wrap(
@@ -452,10 +457,52 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
                       child: Container(
                         margin: const EdgeInsets.only(bottom: 12),
                         padding: const EdgeInsets.all(14),
-                        decoration: BoxDecoration(
-                          color: m.isUser ? mint.withValues(alpha: .12) : panel,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
+                        decoration: m.isUser
+                            // Yours in the coach's gradient, the coach's
+                            // answer on a panel with its glow.
+                            ? BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    for (final c in coachGradient)
+                                      c.withValues(alpha: .2),
+                                  ],
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(18),
+                                  topRight: Radius.circular(18),
+                                  bottomLeft: Radius.circular(18),
+                                  bottomRight: Radius.circular(6),
+                                ),
+                                border: Border.all(
+                                  color: coachGradient.last.withValues(
+                                    alpha: .3,
+                                  ),
+                                ),
+                              )
+                            : BoxDecoration(
+                                // The glow laid onto the panel, as a
+                                // gradient replaces the colour.
+                                gradient: RadialGradient(
+                                  center: Alignment.topLeft,
+                                  radius: 1.6,
+                                  colors: [
+                                    Color.alphaBlend(
+                                      mint.withValues(alpha: .1),
+                                      panel,
+                                    ),
+                                    panel,
+                                  ],
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(18),
+                                  topRight: Radius.circular(18),
+                                  bottomLeft: Radius.circular(6),
+                                  bottomRight: Radius.circular(18),
+                                ),
+                                border: Border.fromBorderSide(
+                                  fjEdge(const [mint, Color(0xFF3EE0FF)]),
+                                ),
+                              ),
                         child: MarkdownBody(data: m.text, selectable: true),
                       ),
                     );
@@ -474,16 +521,61 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
                   maxLines: 4,
                   decoration: InputDecoration(
                     hintText: context.l10n.askYourCoach,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 18,
+                      vertical: 12,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(24),
+                      borderSide: BorderSide(
+                        color: coachGradient.first.withValues(alpha: .35),
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(24),
+                      borderSide: BorderSide(
+                        color: coachGradient.last.withValues(alpha: .8),
+                        width: 1.4,
+                      ),
+                    ),
                   ),
                   onSubmitted: (_) => send(),
                 ),
               ),
+              const SizedBox(width: 8),
               // Sending keeps the keyboard open for the next message.
               TextFieldTapRegion(
-                child: IconButton(
-                  tooltip: context.l10n.sendMessage,
-                  onPressed: sending ? null : send,
-                  icon: const Icon(Icons.arrow_upward, color: mint),
+                // Dimmed by its colours while sending: an Opacity layer over
+                // the blurred glow trips Impeller's validation.
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      colors: [
+                        for (final c in coachGradient)
+                          c.withValues(alpha: sending ? .4 : 1),
+                      ],
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: coachGradient.last.withValues(
+                          alpha: sending ? 0 : .45,
+                        ),
+                        blurRadius: 14,
+                      ),
+                    ],
+                  ),
+                  child: IconButton(
+                    tooltip: context.l10n.sendMessage,
+                    onPressed: sending ? null : send,
+                    icon: Icon(
+                      Icons.arrow_upward,
+                      color: Colors.black87.withValues(
+                        alpha: sending ? .35 : .87,
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -558,4 +650,64 @@ void openCoachTab(
     autoSend: autoSend,
   );
   Navigator.of(context, rootNavigator: true).popUntil((r) => r.isFirst);
+}
+
+/// The coach's colours: violet into cyan.
+const coachGradient = [Color(0xFF9D7BFF), Color(0xFF3EE0FF)];
+
+/// The empty chat: a glowing orb that grows in, and what to ask about.
+class _CoachOrb extends StatelessWidget {
+  const _CoachOrb({required this.text});
+  final String text;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.fromLTRB(32, 56, 32, 24),
+    child: Column(
+      children: [
+        TweenAnimationBuilder<double>(
+          tween: Tween(begin: 0, end: 1),
+          duration: const Duration(milliseconds: 700),
+          curve: Curves.easeOutBack,
+          builder: (context, t, child) =>
+              Transform.scale(scale: .6 + .4 * t, child: child),
+          child: Container(
+            width: 88,
+            height: 88,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: coachGradient,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: coachGradient.first.withValues(alpha: .5),
+                  blurRadius: 28,
+                  spreadRadius: 2,
+                ),
+                BoxShadow(
+                  color: coachGradient.last.withValues(alpha: .35),
+                  blurRadius: 44,
+                  spreadRadius: 6,
+                ),
+              ],
+            ),
+            child: const Icon(
+              Icons.auto_awesome,
+              size: 38,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        const SizedBox(height: 28),
+        Text(
+          text,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 14, color: fjInk70, height: 1.4),
+        ),
+      ],
+    ),
+  );
 }

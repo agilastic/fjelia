@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 
 import 'dart:async';
@@ -294,7 +295,7 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
       children: [
         Text(
           label.toUpperCase(),
-          style: const TextStyle(fontSize: 10, color: muted, letterSpacing: .8),
+          style: TextStyle(fontSize: 10, color: muted, letterSpacing: .8),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -405,11 +406,11 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
           children: [
             Row(
               children: [
-                const Icon(Icons.timer_outlined, size: 16, color: muted),
+                Icon(Icons.timer_outlined, size: 16, color: muted),
                 const SizedBox(width: 6),
                 Text(
                   _clock(elapsed),
-                  style: const TextStyle(color: muted, fontFeatures: _tabular),
+                  style: TextStyle(color: muted, fontFeatures: _tabular),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -466,7 +467,7 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
                           if (log.sets.any((x) => x.status == st))
                             '${log.sets.where((x) => x.status == st).length} ${st.label.toLowerCase()}',
                       ].join(' · '),
-                      style: const TextStyle(color: Colors.white70),
+                      style: TextStyle(color: fjInk70),
                     ),
                   ],
                 ),
@@ -519,7 +520,7 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
                   if (s.exercise.equipment.isNotEmpty) s.exercise.equipment,
                   c.text,
                 ].join(' · '),
-                style: const TextStyle(color: muted, fontSize: 12),
+                style: TextStyle(color: muted, fontSize: 12),
               ),
               if (StrengthExerciseDemo.has(s.exercise.variantId))
                 Padding(
@@ -537,7 +538,7 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
                   child: Text(
                     'Planned ${strengthTargetText(s.target!, c, unit)}'
                     '${s.target!.effort == null ? '' : ' · ${s.target!.effort!.text}'}',
-                    style: const TextStyle(fontSize: 15, color: Colors.white70),
+                    style: TextStyle(fontSize: 15, color: fjInk70),
                   ),
                 ),
               if (s.set.status != StrengthSetStatus.unrecorded)
@@ -550,7 +551,7 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
                       Expanded(
                         child: Text(
                           strengthResultText(s.set, c, unit),
-                          style: const TextStyle(color: Colors.white70),
+                          style: TextStyle(color: fjInk70),
                         ),
                       ),
                     ],
@@ -590,7 +591,7 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
                           context.l10n.plannedResttarget(
                             formatStrengthSeconds(restTarget),
                           ),
-                          style: const TextStyle(color: muted),
+                          style: TextStyle(color: muted),
                         ),
                     ],
                   ),

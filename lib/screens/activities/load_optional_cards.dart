@@ -1,3 +1,4 @@
+import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../providers/activity_history_provider.dart';
 
@@ -43,10 +44,15 @@ class _WeekdayLoadState extends ConsumerState<WeekdayLoadCard> {
       };
     }
     return LoadCard(
+      accent: const [Color(0xFF3EE0FF), Color(0xFF6FA8FF)],
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(context.l10n.weekdayComparison2, style: loadLabel),
+          GradientTitle(
+            context.l10n.weekdayComparison2,
+            colors: const [Color(0xFF3EE0FF), Color(0xFF6FA8FF)],
+            size: 11,
+          ),
           SizedBox(height: 12),
           LoadRange(
             // Fixed identifiers; only the text is translated (#5).
@@ -105,7 +111,7 @@ class _WeekdayLoadState extends ConsumerState<WeekdayLoadCard> {
                       barRods: [
                         BarChartRodData(
                           toY: values[i],
-                          color: Colors.white24,
+                          color: fjInk24,
                           width: 8,
                         ),
                         BarChartRodData(
@@ -136,14 +142,19 @@ class TrainingPlanProgressCard extends ConsumerWidget {
         data: (plan) => plan == null
             ? const SizedBox.shrink()
             : LoadCard(
+                accent: const [Color(0xFF9D7BFF), Color(0xFF3EE0FF)],
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(context.l10n.trainingPlanProgress2, style: loadLabel),
+                    GradientTitle(
+                      context.l10n.trainingPlanProgress2,
+                      colors: const [Color(0xFF9D7BFF), Color(0xFF3EE0FF)],
+                      size: 11,
+                    ),
                     const SizedBox(height: 10),
                     Text(
                       plan.planName,
-                      style: const TextStyle(color: Colors.white, fontSize: 14),
+                      style: TextStyle(color: fjInk, fontSize: 14),
                     ),
                     const SizedBox(height: 8),
                     Text(
@@ -162,7 +173,7 @@ class TrainingPlanProgressCard extends ConsumerWidget {
                             )
                           : 0,
                       color: mint,
-                      backgroundColor: Colors.white10,
+                      backgroundColor: fjInk10,
                     ),
                   ],
                 ),

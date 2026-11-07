@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import '../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
@@ -34,165 +35,176 @@ class HrTimelineCard extends ConsumerWidget {
           color: panel,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
-            side: BorderSide(color: Colors.redAccent.withValues(alpha: .10)),
+            side: BorderSide(color: Colors.redAccent.withValues(alpha: .28)),
           ),
           clipBehavior: Clip.antiAlias,
-          child: InkWell(
-            onTap: () => showAppSheet(context, const HrTimelineScreen()),
-            child: SizedBox(
-              height: 88,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 14,
-                  vertical: 10,
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.favorite,
-                          color: Colors.redAccent,
-                          size: 14,
-                        ),
-                        const SizedBox(width: 7),
-                        Text(
-                          context.l10n.heartRate2,
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: .7,
-                          ),
-                        ),
-                        const Spacer(),
-                        if (data.isLoading)
-                          Text(
-                            context.l10n.updating,
-                            style: TextStyle(fontSize: 9, color: muted),
-                          ),
-                        const Icon(Icons.chevron_right, color: muted, size: 15),
-                      ],
-                    ),
-                    const SizedBox(height: 5),
-                    Expanded(
-                      child: Row(
+          child: Ink(
+            decoration: BoxDecoration(
+              gradient: RadialGradient(
+                center: Alignment.topLeft,
+                radius: 1.6,
+                colors: [
+                  Colors.redAccent.withValues(alpha: .07),
+                  Colors.transparent,
+                ],
+              ),
+            ),
+            child: InkWell(
+              onTap: () => showAppSheet(context, const HrTimelineScreen()),
+              child: SizedBox(
+                height: 88,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 10,
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
                         children: [
-                          SizedBox(
-                            width: 65,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  context.l10n.resting,
-                                  style: TextStyle(
-                                    fontSize: 8,
-                                    color: muted,
-                                    letterSpacing: .6,
+                          const Icon(
+                            Icons.favorite,
+                            color: Colors.redAccent,
+                            size: 14,
+                          ),
+                          const SizedBox(width: 7),
+                          GradientTitle(
+                            context.l10n.heartRate2,
+                            colors: const [
+                              Color(0xFFFF5A7A),
+                              Color(0xFFFF9A5A),
+                            ],
+                          ),
+                          const Spacer(),
+                          if (data.isLoading)
+                            Text(
+                              context.l10n.updating,
+                              style: TextStyle(fontSize: 9, color: muted),
+                            ),
+                          Icon(Icons.chevron_right, color: muted, size: 15),
+                        ],
+                      ),
+                      const SizedBox(height: 5),
+                      Expanded(
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 65,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    context.l10n.resting,
+                                    style: TextStyle(
+                                      fontSize: 8,
+                                      color: muted,
+                                      letterSpacing: .6,
+                                    ),
                                   ),
-                                ),
-                                Text.rich(
-                                  TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text: valueText(resting),
-                                        style: const TextStyle(
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.w700,
-                                          color: mint,
+                                  Text.rich(
+                                    TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: valueText(resting),
+                                          style: const TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w700,
+                                            color: mint,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text: ' bpm',
+                                          style: TextStyle(
+                                            fontSize: 9,
+                                            color: muted,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    maxLines: 1,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: points.isEmpty
+                                  ? Center(
+                                      child: Text(
+                                        context.l10n.noTimedReadings,
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          color: muted,
                                         ),
                                       ),
-                                      const TextSpan(
-                                        text: ' bpm',
+                                    )
+                                  : HrTimelinePlot(
+                                      points: points,
+                                      date: shownDate,
+                                      activities: activities,
+                                      average: avg,
+                                      compact: true,
+                                      height: 44,
+                                    ),
+                            ),
+                            const SizedBox(width: 12),
+                            SizedBox(
+                              width: 68,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        context.l10n.avg,
                                         style: TextStyle(
-                                          fontSize: 9,
+                                          fontSize: 8,
                                           color: muted,
+                                        ),
+                                      ),
+                                      Text(
+                                        valueText(avg),
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600,
+                                          color: fjInk70,
                                         ),
                                       ),
                                     ],
                                   ),
-                                  maxLines: 1,
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: points.isEmpty
-                                ? Center(
-                                    child: Text(
-                                      context.l10n.noTimedReadings,
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        color: muted,
+                                  const SizedBox(height: 5),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        context.l10n.peak,
+                                        style: TextStyle(
+                                          fontSize: 8,
+                                          color: muted,
+                                        ),
                                       ),
-                                    ),
-                                  )
-                                : HrTimelinePlot(
-                                    points: points,
-                                    date: shownDate,
-                                    activities: activities,
-                                    average: avg,
-                                    compact: true,
-                                    height: 44,
+                                      Text(
+                                        valueText(peak),
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.redAccent,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                          ),
-                          const SizedBox(width: 12),
-                          SizedBox(
-                            width: 68,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      context.l10n.avg,
-                                      style: TextStyle(
-                                        fontSize: 8,
-                                        color: muted,
-                                      ),
-                                    ),
-                                    Text(
-                                      valueText(avg),
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.white70,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 5),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      context.l10n.peak,
-                                      style: TextStyle(
-                                        fontSize: 8,
-                                        color: muted,
-                                      ),
-                                    ),
-                                    Text(
-                                      valueText(peak),
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.redAccent,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -244,7 +256,7 @@ class HrTimelineCard extends ConsumerWidget {
                         DateFormat.Hm().format(a.startDate.toLocal()),
                         (a.durationSeconds / 60).round(),
                       ),
-                      style: const TextStyle(color: muted, fontSize: 10),
+                      style: TextStyle(color: muted, fontSize: 10),
                     ),
                     const SizedBox(width: 8),
                     Text(
@@ -264,7 +276,7 @@ class HrTimelineCard extends ConsumerWidget {
             padding: const EdgeInsets.all(16),
             margin: const EdgeInsets.only(top: 12),
             decoration: BoxDecoration(
-              color: const Color(0xFF2A2A2A),
+              color: duo(0xFF2A2A2A, 0xFFEEF1F5),
               borderRadius: BorderRadius.circular(14),
             ),
             child: Row(
@@ -275,7 +287,7 @@ class HrTimelineCard extends ConsumerWidget {
                 Expanded(
                   child: Tooltip(
                     message: context.l10n.timeWeightedAverageOverRecorded,
-                    child: _HrStat(context.l10n.avg2, avg, Colors.white),
+                    child: _HrStat(context.l10n.avg2, avg, fjInk),
                   ),
                 ),
                 if (activities.isNotEmpty)
@@ -295,7 +307,7 @@ class HrTimelineCard extends ConsumerWidget {
                         summary.coveredDuration.inHours,
                         summary.coveredDuration.inMinutes % 60,
                       ),
-                style: const TextStyle(fontSize: 10, color: muted),
+                style: TextStyle(fontSize: 10, color: muted),
               ),
             ),
         ],
@@ -357,9 +369,7 @@ class _HrTimelineState extends ConsumerState<HrTimelineScreen> {
                           ? Colors.redAccent.withValues(alpha: .18)
                           : Colors.transparent,
                       border: Border.all(
-                        color: days == e.key
-                            ? Colors.redAccent
-                            : Colors.white12,
+                        color: days == e.key ? Colors.redAccent : fjInk12,
                       ),
                     ),
                     child: Text(
@@ -397,7 +407,7 @@ class _HrTimelineState extends ConsumerState<HrTimelineScreen> {
                       ? DateFormat.yMMM().format(date)
                       : '${DateFormat.Md().format(start)} – ${DateFormat.Md().format(date)}',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 11, color: muted),
+                  style: TextStyle(fontSize: 11, color: muted),
                 ),
               ),
               IconButton(
@@ -469,7 +479,7 @@ class _HrStat extends StatelessWidget {
     children: [
       Text(
         label.toUpperCase(),
-        style: const TextStyle(fontSize: 9, color: muted, letterSpacing: .8),
+        style: TextStyle(fontSize: 9, color: muted, letterSpacing: .8),
       ),
       const SizedBox(height: 6),
       Text.rich(
@@ -483,7 +493,7 @@ class _HrStat extends StatelessWidget {
                 color: color,
               ),
             ),
-            const TextSpan(
+            TextSpan(
               text: ' bpm',
               style: TextStyle(fontSize: 11, color: muted),
             ),

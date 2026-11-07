@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import '../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
@@ -72,7 +73,7 @@ class _RouteMapState extends State<ActivityRouteMap> {
           constraints: const BoxConstraints.tightFor(width: 34, height: 34),
           padding: EdgeInsets.zero,
           onPressed: ready ? action : null,
-          icon: Icon(icon, size: 22, color: Colors.white),
+          icon: Icon(icon, size: 22, color: fjInk),
         ),
       ),
     );
@@ -119,7 +120,7 @@ class _RouteMapState extends State<ActivityRouteMap> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: e.$2,
-                      border: Border.all(color: Colors.white, width: 2),
+                      border: Border.all(color: fjInk, width: 2),
                     ),
                   ),
                 ),
@@ -133,7 +134,7 @@ class _RouteMapState extends State<ActivityRouteMap> {
                     child: Container(
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2),
+                        border: Border.all(color: fjInk, width: 2),
                         boxShadow: const [
                           BoxShadow(color: Colors.black45, blurRadius: 4),
                         ],
@@ -220,7 +221,7 @@ class _RouteMapState extends State<ActivityRouteMap> {
             const SizedBox(width: 5),
             Text(
               context.l10n.start,
-              style: TextStyle(fontSize: 11, color: Colors.white70),
+              style: TextStyle(fontSize: 11, color: fjInk70),
             ),
             const SizedBox(width: 12),
             const Icon(Icons.circle, size: 10, color: Colors.redAccent),
@@ -228,14 +229,14 @@ class _RouteMapState extends State<ActivityRouteMap> {
             Expanded(
               child: Text(
                 context.l10n.routeFinish,
-                style: TextStyle(fontSize: 11, color: Colors.white70),
+                style: TextStyle(fontSize: 11, color: fjInk70),
               ),
             ),
             Builder(
               builder: (buttonContext) => TextButton.icon(
                 style: TextButton.styleFrom(
-                  foregroundColor: Colors.white70,
-                  backgroundColor: Colors.white.withValues(alpha: .04),
+                  foregroundColor: fjInk70,
+                  backgroundColor: fjInk.withValues(alpha: .04),
                 ),
                 icon: const Icon(Icons.download, size: 15),
                 label: Text(context.l10n.gpx),

@@ -1359,6 +1359,37 @@ class GarminClient {
     );
   }
 
+  /// Uploads a FIT activity, as the Garmin Connect import does. False when
+  /// Garmin already holds the same activity (HTTP 409).
+  Future<bool> uploadActivityFit(Uint8List bytes, String fileName) async {
+    final uri = Uri.parse('$_api/upload-service/upload');
+    Future<http.Response> send() async {
+      final request = http.MultipartRequest('POST', uri)
+        ..headers.addAll(await _authHeaders())
+        ..files.add(
+          http.MultipartFile.fromBytes('file', bytes, filename: fileName),
+        );
+      return http.Response.fromStream(await _http.send(request));
+    }
+
+    log('[Garmin] POST $uri (${bytes.length} bytes)');
+    var response = await send();
+    if (response.statusCode == 401) {
+      await _refreshDiToken();
+      response = await send();
+    }
+    log(
+      '[Garmin] upload → ${response.statusCode}: '
+      '${response.body.length > 400 ? response.body.substring(0, 400) : response.body}',
+    );
+    if (response.statusCode == 409) return false;
+    if (response.statusCode == 403) {
+      throw GarminAuthException('Upload refused.');
+    }
+    if (response.statusCode >= 200 && response.statusCode < 300) return true;
+    throw GarminApiException('Upload failed ${response.statusCode}');
+  }
+
   /// Puts a workout on the Garmin calendar; returns the schedule id.
   Future<String?> scheduleWorkout(String workoutId, DateTime date) async {
     final dateStr = _dateStr(date);

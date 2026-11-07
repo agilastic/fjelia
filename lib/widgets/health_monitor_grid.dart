@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import '../l10n/l10n_ext.dart';
 
 import 'dart:math' as math;
@@ -43,6 +44,7 @@ class HealthMonitorGrid extends ConsumerWidget {
     };
     return SectionCard(
       title: context.l10n.healthMonitor,
+      accent: const [Color(0xFF3EE0FF), mint],
       child: LayoutBuilder(
         builder: (context, constraints) {
           final textScale = MediaQuery.textScalerOf(context).scale(11) / 11;
@@ -76,6 +78,16 @@ class HealthMonitorGrid extends ConsumerWidget {
                         'sleep' => Icons.bedtime_outlined,
                         _ => Icons.favorite_border,
                       },
+                      accent: switch (e.key) {
+                        'rhr' => const Color(0xFFFF5A7A),
+                        'hrv' => mint,
+                        'spo2' => const Color(0xFF3EE0FF),
+                        'resp' => const Color(0xFF6FA8FF),
+                        'stress' => const Color(0xFFFFB13D),
+                        'skin_temp' => const Color(0xFFFF8A4D),
+                        'steps' => const Color(0xFFC6FF4D),
+                        _ => const Color(0xFF9D7BFF),
+                      },
                       showTrend: e.key != 'sleep' && e.key != 'steps',
                       trendDelta: e.key == 'rhr'
                           ? trends.rhr
@@ -99,7 +111,7 @@ class HealthMonitorGrid extends ConsumerWidget {
                                   : 0,
                             ),
                       unit: e.value.$3,
-                      color: Colors.white,
+                      color: fjInk,
                       onTap: () => MetricDetailSheet.show(context, e.value.$1),
                     ),
                   ),

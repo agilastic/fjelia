@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -142,7 +143,7 @@ class _DrinkMixSheetState extends ConsumerState<DrinkMixSheet> {
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Text(
                     context.l10n.mixEmpty,
-                    style: const TextStyle(color: muted),
+                    style: TextStyle(color: muted),
                   ),
                 ),
               _addButton(context),
@@ -186,7 +187,7 @@ class _DrinkMixSheetState extends ConsumerState<DrinkMixSheet> {
     padding: const EdgeInsets.only(top: 22, bottom: 10),
     child: Text(
       text.toUpperCase(),
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 11,
         letterSpacing: 1.2,
         fontWeight: FontWeight.w700,
@@ -219,7 +220,7 @@ class _DrinkMixSheetState extends ConsumerState<DrinkMixSheet> {
       padding: const EdgeInsets.only(top: 4),
       child: PopupMenuButton<MixIngredient>(
         tooltip: context.l10n.mixAddIngredient,
-        color: const Color(0xFF242424),
+        color: duo(0xFF242424, 0xFFEEF1F5),
         onSelected: (ingredient) {
           final facts = mixFacts[ingredient]!;
           final unit = facts.units.first;
@@ -301,7 +302,7 @@ class _DrinkMixSheetState extends ConsumerState<DrinkMixSheet> {
                 child: Text(
                   text,
                   style: TextStyle(
-                    color: color == muted ? muted : Colors.white70,
+                    color: color == muted ? muted : fjInk70,
                     fontSize: 13,
                     height: 1.35,
                   ),
@@ -333,13 +334,13 @@ class _MixSummary extends StatelessWidget {
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: fjInk10),
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
             _blue.withValues(alpha: .22),
-            const Color(0xFF1A1A1A),
+            duo(0xFF1A1A1A, 0xFFF7F8FA),
             verdictColor.withValues(alpha: .14),
           ],
         ),
@@ -370,10 +371,10 @@ class _MixSummary extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 5),
                   child: Text(
                     'g ${context.l10n.carbsLabel}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
-                      color: Colors.white70,
+                      color: fjInk70,
                     ),
                   ),
                 ),
@@ -383,7 +384,7 @@ class _MixSummary extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             context.l10n.mixPerBottle('${mix.bottleMl.round()}'),
-            style: const TextStyle(color: muted, fontSize: 13),
+            style: TextStyle(color: muted, fontSize: 13),
           ),
           const SizedBox(height: 18),
           _labelled(
@@ -462,7 +463,7 @@ class _MixSummary extends StatelessWidget {
   Widget _labelled(String label, String value) => Row(
     children: [
       Expanded(
-        child: Text(label, style: const TextStyle(color: muted, fontSize: 12)),
+        child: Text(label, style: TextStyle(color: muted, fontSize: 12)),
       ),
       Text(value, style: const TextStyle(fontWeight: FontWeight.w700)),
     ],
@@ -477,24 +478,24 @@ class _MixSummary extends StatelessWidget {
         decoration: BoxDecoration(color: color, shape: BoxShape.circle),
       ),
       const SizedBox(width: 5),
-      Text(text, style: const TextStyle(color: muted, fontSize: 11)),
+      Text(text, style: TextStyle(color: muted, fontSize: 11)),
     ],
   );
 
   Widget _fact(IconData icon, String value, String label) => Container(
     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
     decoration: BoxDecoration(
-      color: Colors.white.withValues(alpha: .06),
+      color: fjInk.withValues(alpha: .06),
       borderRadius: BorderRadius.circular(12),
     ),
     child: Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 14, color: Colors.white70),
+        Icon(icon, size: 14, color: fjInk70),
         const SizedBox(width: 6),
         Text(value, style: const TextStyle(fontWeight: FontWeight.w700)),
         const SizedBox(width: 4),
-        Text(label, style: const TextStyle(color: muted, fontSize: 12)),
+        Text(label, style: TextStyle(color: muted, fontSize: 12)),
       ],
     ),
   );
@@ -516,7 +517,7 @@ class _RatioBar extends StatelessWidget {
         child: LayoutBuilder(
           builder: (context, c) => Stack(
             children: [
-              Container(color: Colors.white10),
+              Container(color: fjInk10),
               if (total > 0) ...[
                 Container(color: _fructose),
                 AnimatedContainer(
@@ -579,9 +580,12 @@ class _StrengthGauge extends StatelessWidget {
                 width: 18,
                 height: 18,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: fjInk,
                   shape: BoxShape.circle,
-                  border: Border.all(color: const Color(0xFF111111), width: 3),
+                  border: Border.all(
+                    color: duo(0xFF111111, 0xFFF2F4F7),
+                    width: 3,
+                  ),
                 ),
               ),
             ),
@@ -610,9 +614,9 @@ class _RowCard extends StatelessWidget {
     margin: const EdgeInsets.only(bottom: 10),
     padding: const EdgeInsets.fromLTRB(12, 12, 8, 12),
     decoration: BoxDecoration(
-      color: const Color(0xFF1E1E1E),
+      color: duo(0xFF1E1E1E, 0xFFFFFFFF),
       borderRadius: BorderRadius.circular(16),
-      border: Border.all(color: Colors.white10),
+      border: Border.all(color: fjInk10),
     ),
     child: Row(
       children: [
@@ -632,10 +636,7 @@ class _RowCard extends StatelessWidget {
             children: [
               Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
               const SizedBox(height: 2),
-              Text(
-                subtitle,
-                style: const TextStyle(color: muted, fontSize: 12),
-              ),
+              Text(subtitle, style: TextStyle(color: muted, fontSize: 12)),
             ],
           ),
         ),
@@ -674,9 +675,9 @@ class _IngredientRow extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.fromLTRB(12, 12, 4, 10),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E),
+        color: duo(0xFF1E1E1E, 0xFFFFFFFF),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: fjInk10),
       ),
       child: Column(
         children: [
@@ -703,7 +704,7 @@ class _IngredientRow extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       details.join(' · '),
-                      style: const TextStyle(color: muted, fontSize: 12),
+                      style: TextStyle(color: muted, fontSize: 12),
                     ),
                   ],
                 ),
@@ -712,7 +713,7 @@ class _IngredientRow extends StatelessWidget {
                 tooltip: context.l10n.mixRemove,
                 visualDensity: VisualDensity.compact,
                 onPressed: onRemove,
-                icon: const Icon(Icons.close_rounded, size: 18, color: muted),
+                icon: Icon(Icons.close_rounded, size: 18, color: muted),
               ),
             ],
           ),
@@ -750,7 +751,7 @@ class _IngredientRow extends StatelessWidget {
   Widget _unitPicker(BuildContext context, IngredientFacts facts) =>
       PopupMenuButton<MixUnit>(
         tooltip: '',
-        color: const Color(0xFF242424),
+        color: duo(0xFF242424, 0xFFEEF1F5),
         initialValue: item.unit,
         onSelected: (unit) => onChanged(
           MixItem(item.ingredient, unit == MixUnit.grams ? 10 : 1, unit),
@@ -765,7 +766,7 @@ class _IngredientRow extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.fromLTRB(10, 6, 4, 6),
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: .07),
+            color: fjInk.withValues(alpha: .07),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Row(
@@ -808,18 +809,14 @@ class _Stepper extends StatelessWidget {
   );
 
   Widget _round(IconData icon, VoidCallback? onTap) => Material(
-    color: Colors.white.withValues(alpha: onTap == null ? .03 : .08),
+    color: fjInk.withValues(alpha: onTap == null ? .03 : .08),
     shape: const CircleBorder(),
     child: InkWell(
       customBorder: const CircleBorder(),
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.all(6),
-        child: Icon(
-          icon,
-          size: 18,
-          color: onTap == null ? Colors.white24 : Colors.white,
-        ),
+        child: Icon(icon, size: 18, color: onTap == null ? fjInk24 : fjInk),
       ),
     ),
   );
@@ -895,7 +892,7 @@ Color _color(MixIngredient i) => switch (i) {
   MixIngredient.sugar => _fructose,
   MixIngredient.dextrose => mint,
   MixIngredient.honey => _amber,
-  MixIngredient.salt => Colors.white70,
+  MixIngredient.salt => fjInk70,
   MixIngredient.orangeJuice => _fructose,
   MixIngredient.appleJuice => const Color(0xFF9BD770),
   MixIngredient.cola => const Color(0xFFB98563),

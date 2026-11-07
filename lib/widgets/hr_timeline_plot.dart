@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import '../l10n/l10n_ext.dart';
 
 import 'dart:math' as math;
@@ -109,7 +110,7 @@ class _HrPainter extends CustomPainter {
         canvas.drawLine(
           Offset(plot.left, yy),
           Offset(plot.right, yy),
-          Paint()..color = Colors.white.withValues(alpha: .1),
+          Paint()..color = fjInk.withValues(alpha: .1),
         );
         text('${(hi - (hi - lo) * i / 4).round()}', Offset(0, yy - 5), muted);
       }
@@ -119,7 +120,7 @@ class _HrPainter extends CustomPainter {
           canvas.drawLine(
             Offset(xx, plot.top),
             Offset(xx, plot.bottom),
-            Paint()..color = Colors.white.withValues(alpha: .08),
+            Paint()..color = fjInk.withValues(alpha: .08),
           );
         }
         text('00:00', Offset(plot.left - 8, plot.bottom + 12), muted);
@@ -162,7 +163,7 @@ class _HrPainter extends CustomPainter {
           Offset(xx, yy),
           Offset(math.min(xx + 6, plot.right), yy),
           Paint()
-            ..color = Colors.white30
+            ..color = fjInk30
             ..strokeWidth = 1,
         );
       }

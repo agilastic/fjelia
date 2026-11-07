@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import '../l10n/l10n_ext.dart';
 
 import 'dart:math' as math;
@@ -779,7 +780,8 @@ final Map<String, _Demo> _demos = {
     ],
   ),
   'dead_bug': _Demo(
-    cue: 'Back flat on the floor. Reach one arm back as the opposite leg extends.',
+    cue:
+        'Back flat on the floor. Reach one arm back as the opposite leg extends.',
     knee: 1,
     farKnee: 1,
     elbow: 1,
@@ -849,7 +851,8 @@ final Map<String, _Demo> _demos = {
     ],
   ),
   'step_up': _Demo(
-    cue: 'Whole foot on the box. Drive up through the front leg, step down slowly.',
+    cue:
+        'Whole foot on the box. Drive up through the front leg, step down slowly.',
     prop: _Prop.dumbbells,
     scene: const _Scene(bench: Rect.fromLTRB(.04, -.22, .36, -.17)),
     elbow: 1,
@@ -882,7 +885,8 @@ final Map<String, _Demo> _demos = {
     ],
   ),
   'single_leg_rdl': _Demo(
-    cue: 'Stand on one leg. Hinge forward as the free leg reaches back, back flat.',
+    cue:
+        'Stand on one leg. Hinge forward as the free leg reaches back, back flat.',
     prop: _Prop.dumbbell,
     elbow: 1,
     keys: const [
@@ -947,7 +951,8 @@ final Map<String, _Demo> _demos = {
     ],
   ),
   'leg_curl': _Demo(
-    cue: 'Seated, pad above the heels. Curl the heels under the seat, return slowly.',
+    cue:
+        'Seated, pad above the heels. Curl the heels under the seat, return slowly.',
     scene: const _Scene(seat: Rect.fromLTRB(-.36, -.24, .1, -.19)),
     knee: -1,
     elbow: 1,
@@ -975,7 +980,8 @@ final Map<String, _Demo> _demos = {
     ],
   ),
   'lat_pulldown': _Demo(
-    cue: 'Seated, chest up. Pull the bar to the upper chest, let it rise under control.',
+    cue:
+        'Seated, chest up. Pull the bar to the upper chest, let it rise under control.',
     scene: const _Scene(
       seat: Rect.fromLTRB(-.34, -.24, .06, -.19),
       bandAnchor: Offset(-.04, -1.05),
@@ -1057,7 +1063,8 @@ final Map<String, _Demo> _demos = {
     ],
   ),
   'pallof_press': _Demo(
-    cue: 'Side-on to the band. Press the hands straight out and resist the turn.',
+    cue:
+        'Side-on to the band. Press the hands straight out and resist the turn.',
     scene: const _Scene(bandAnchor: Offset(-.58, -.66)),
     elbow: 1,
     keys: const [
@@ -1158,8 +1165,8 @@ class _DemoPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round;
-    final scenery = line(Colors.white24, .02);
-    final equipment = line(Colors.white60, .022);
+    final scenery = line(fjInk24, .02);
+    final equipment = line(fjInk60, .022);
     final far = line(color.withValues(alpha: .4));
     final near = line(color);
 
@@ -1167,13 +1174,13 @@ class _DemoPainter extends CustomPainter {
     canvas.drawLine(
       Offset(view.left, 0),
       Offset(view.right, 0),
-      line(Colors.white12, .012),
+      line(fjInk12, .012),
     );
     final s = demo.scene;
     for (final r in [s.bench, s.seat].whereType<Rect>()) {
       canvas.drawRRect(
         RRect.fromRectAndRadius(r, const Radius.circular(.015)),
-        Paint()..color = Colors.white12,
+        Paint()..color = fjInk12,
       );
       canvas.drawLine(
         Offset(r.left + .04, r.bottom),
@@ -1229,12 +1236,12 @@ class _DemoPainter extends CustomPainter {
     foot(near, b.ankle);
 
     // Equipment held in the hands sits between the arms.
-    final plate = Paint()..color = Colors.white.withValues(alpha: .12);
+    final plate = Paint()..color = fjInk.withValues(alpha: .12);
     switch (demo.prop) {
       case _Prop.barbell:
         canvas.drawCircle(b.hand, .11, plate);
         canvas.drawCircle(b.hand, .11, equipment);
-        canvas.drawCircle(b.hand, .018, Paint()..color = Colors.white60);
+        canvas.drawCircle(b.hand, .018, Paint()..color = fjInk60);
       case _Prop.curlBar:
         canvas.drawCircle(b.hand, .065, plate);
         canvas.drawCircle(b.hand, .065, equipment);
@@ -1333,7 +1340,7 @@ class _StrengthExerciseDemoState extends State<StrengthExerciseDemo>
           Container(
             height: widget.height,
             decoration: BoxDecoration(
-              color: const Color(0xFF181818),
+              color: duo(0xFF181818, 0xFFF7F8FA),
               borderRadius: BorderRadius.circular(12),
             ),
             padding: const EdgeInsets.all(8),
@@ -1353,7 +1360,7 @@ class _StrengthExerciseDemoState extends State<StrengthExerciseDemo>
               padding: const EdgeInsets.only(top: 6),
               child: Text(
                 demo.cue,
-                style: const TextStyle(fontSize: 12, color: muted, height: 1.3),
+                style: TextStyle(fontSize: 12, color: muted, height: 1.3),
               ),
             ),
         ],

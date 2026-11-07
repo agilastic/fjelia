@@ -1,3 +1,4 @@
+import '../theme/fjelia_style.dart';
 import 'dart:math' as math;
 
 import 'package:fl_chart/fl_chart.dart';
@@ -54,7 +55,7 @@ class ActivityBloodPressureCard extends ConsumerWidget {
             const SizedBox(height: 4),
             Text(
               l.bpActivityHint,
-              style: const TextStyle(color: muted, fontSize: 12),
+              style: TextStyle(color: muted, fontSize: 12),
             ),
           ],
           if (rows.isNotEmpty) ...[
@@ -71,8 +72,8 @@ class ActivityBloodPressureCard extends ConsumerWidget {
                   gridData: FlGridData(
                     drawVerticalLine: false,
                     horizontalInterval: 40,
-                    getDrawingHorizontalLine: (_) => const FlLine(
-                      color: Colors.white12,
+                    getDrawingHorizontalLine: (_) => FlLine(
+                      color: fjInk12,
                       strokeWidth: .5,
                       dashArray: [4, 4],
                     ),
@@ -88,7 +89,7 @@ class ActivityBloodPressureCard extends ConsumerWidget {
                         interval: 40,
                         getTitlesWidget: (v, _) => Text(
                           v.round().toString(),
-                          style: const TextStyle(fontSize: 9, color: muted),
+                          style: TextStyle(fontSize: 9, color: muted),
                         ),
                       ),
                     ),
@@ -99,7 +100,7 @@ class ActivityBloodPressureCard extends ConsumerWidget {
                         interval: math.max(5, (maxX / 4).roundToDouble()),
                         getTitlesWidget: (v, _) => Text(
                           '${v.round()}′',
-                          style: const TextStyle(fontSize: 9, color: muted),
+                          style: TextStyle(fontSize: 9, color: muted),
                         ),
                       ),
                     ),
@@ -120,7 +121,7 @@ class ActivityBloodPressureCard extends ConsumerWidget {
                         dotData: FlDotData(
                           getDotPainter: (_, _, _, _) => FlDotCirclePainter(
                             radius: 3.5,
-                            color: Colors.white,
+                            color: fjInk,
                             strokeColor: _bpColor,
                             strokeWidth: 2,
                           ),
@@ -138,7 +139,7 @@ class ActivityBloodPressureCard extends ConsumerWidget {
                   children: [
                     Text(
                       DateFormat.Hm().format(r.measuredAt.toLocal()),
-                      style: const TextStyle(color: muted),
+                      style: TextStyle(color: muted),
                     ),
                     const SizedBox(width: 12),
                     Text.rich(
@@ -148,7 +149,7 @@ class ActivityBloodPressureCard extends ConsumerWidget {
                           fontWeight: FontWeight.w700,
                           fontSize: 15,
                         ),
-                        children: const [
+                        children: [
                           TextSpan(
                             text: ' mmHg',
                             style: TextStyle(
@@ -164,7 +165,7 @@ class ActivityBloodPressureCard extends ConsumerWidget {
                     if (r.heartRate > 0)
                       Text(
                         '${r.heartRate} bpm',
-                        style: const TextStyle(color: muted, fontSize: 12),
+                        style: TextStyle(color: muted, fontSize: 12),
                       ),
                   ],
                 ),
