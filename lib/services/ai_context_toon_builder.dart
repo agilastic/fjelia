@@ -268,17 +268,20 @@ class AiContextToonBuilder {
       );
     }
     if (bioAge != null) {
-      // BioAgeResult exposes lifeExpectancy, but not a base/adjusted/death-age
-      // trio. Do not fabricate those missing values.
+      // The lifespan is a wide statistical band, never a personal age: the
+      // model is not validated as a whole. The coach gets only the band and
+      // the direction of each factor, so it cannot name a single age either.
+      final band = bioAge.lifespanBand;
       lines.add(
         '[BioAge:FitnessAge:${_num(bioAge.fitnessAge)},'
         'VO2max:${_num(bioAge.vo2max)},VO2maxClass:${_clean(bioAge.vo2Class)},'
-        'DeltaYears:${_num(bioAge.deltaYears)},BaseLifeExp:na,'
-        'AdjLifeExp:${_num(bioAge.lifeExpectancy)},EstDeathAge:na,'
-        'Range:${_num(bioAge.rangeLow)}-${_num(bioAge.rangeHigh)}yr]',
+        'Lean:${bioAge.lean.name},'
+        'LifespanBand:${band.low}-${band.high} (population statistics for '
+        'similar values; never state a single age, a predicted death age or '
+        'years gained or lost)]',
       );
       lines.add(
-        '[BioAge:Contributions:${bioAge.contributions.entries.map((e) => '${_clean(e.key)}:${_num(e.value)}').join(',')}]',
+        '[BioAge:Factors:${bioAge.pushes.map((p) => '${_clean(p.factor)}:${p.push.name}').join(',')}]',
       );
     }
     if (monitor != null) {

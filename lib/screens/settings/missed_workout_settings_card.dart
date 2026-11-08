@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../providers/hrv_reminder_provider.dart';
 import '../../providers/missed_workout_provider.dart';
+import '../../providers/plan_proposal_provider.dart';
 import '../../services/missed_workout_reminder_service.dart';
 import '../../services/notifications/local_notification_gateway.dart';
 import '../../widgets/app_widgets.dart';
@@ -49,6 +50,27 @@ class MissedWorkoutSettingsCard extends ConsumerWidget {
             activeTrackColor: Colors.orangeAccent.withValues(alpha: .4),
             value: s.enabled,
             onChanged: (v) => save(s.copyWith(enabled: v)),
+          ),
+          // Applies to readiness and trend changes, whatever the evening
+          // reminder is set to.
+          SwitchListTile(
+            contentPadding: EdgeInsets.zero,
+            secondary: const Icon(Icons.rule_rounded, color: Colors.orange),
+            title: Text(
+              l10n.askBeforePlanChanges,
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+            ),
+            subtitle: Text(
+              l10n.askBeforePlanChangesHint,
+              style: TextStyle(fontSize: 12, color: fjInk70),
+            ),
+            activeThumbColor: Colors.orange,
+            activeTrackColor: Colors.orangeAccent.withValues(alpha: .4),
+            value: ref.watch(askBeforePlanChangesProvider).valueOrNull ?? true,
+            onChanged: (v) => runUiAction(
+              context,
+              () => ref.read(askBeforePlanChangesProvider.notifier).set(v),
+            ),
           ),
           if (s.enabled) ...[
             ListTile(

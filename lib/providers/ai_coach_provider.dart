@@ -247,15 +247,34 @@ class AiBriefingNotifier extends StateNotifier<AsyncValue<String?>> {
           );
       final client = _ref.read(aiCoachClientProvider);
       final future = switch (period) {
-        AiBriefingPeriod.morning => client.sendBriefing(settings, toon),
-        AiBriefingPeriod.lunch => client.sendLunchBriefing(settings, toon),
+        AiBriefingPeriod.morning => client.sendBriefing(
+          settings,
+          toon,
+          cloudFallback: cloudConsent,
+        ),
+        AiBriefingPeriod.lunch => client.sendLunchBriefing(
+          settings,
+          toon,
+          cloudFallback: cloudConsent,
+        ),
         AiBriefingPeriod.afternoon => client.sendAfternoonBriefing(
           settings,
           toon,
+          cloudFallback: cloudConsent,
         ),
-        AiBriefingPeriod.evening => client.sendEveningBriefing(settings, toon),
+        AiBriefingPeriod.evening => client.sendEveningBriefing(
+          settings,
+          toon,
+          cloudFallback: cloudConsent,
+        ),
       };
       final timeout = switch (settings.provider) {
+        // Apple Intelligence alone, without a cloud fallback.
+        _
+            when settings.usesOnDeviceBriefing &&
+                !settings.provider.isLocal &&
+                !cloudConsent =>
+          const Duration(seconds: 30),
         AiProvider.freeAi => freeAiGenerationTimeout,
         AiProvider.localQwen => const Duration(seconds: 120),
         _ => const Duration(seconds: 30),
@@ -348,12 +367,11 @@ class AiCoachSettingsNotifier extends AsyncNotifier<AiCoachSettings> {
         localModelInstalled: local.$2,
       );
     }
-    if (settings.provider != AiProvider.appleIntelligence) return settings;
-    var available = false;
-    try {
-      available = await ref.watch(appleIntelligenceAvailabilityProvider)();
-    } catch (e) {
-      log('[AiCoach] Apple Intelligence availability check failed: $e');
+    final available = await _appleAvailable();
+    // With Free AI or an own key the chat goes to the cloud, but briefings
+    // are written on the device whenever Apple Intelligence runs here.
+    if (settings.provider != AiProvider.appleIntelligence) {
+      return settings.copyWith(onDeviceAvailable: available);
     }
     if (available) {
       return settings.copyWith(model: 'on-device', onDeviceAvailable: true);
@@ -365,6 +383,15 @@ class AiCoachSettingsNotifier extends AsyncNotifier<AiCoachSettings> {
       onDeviceAvailable: false,
       appleIntelligenceForBriefing: false,
     );
+  }
+
+  Future<bool> _appleAvailable() async {
+    try {
+      return await ref.watch(appleIntelligenceAvailabilityProvider)();
+    } catch (e) {
+      log('[AiCoach] Apple Intelligence availability check failed: $e');
+      return false;
+    }
   }
 
   AiCoachSettings get _current => state.valueOrNull ?? const AiCoachSettings();

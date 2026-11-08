@@ -4822,5 +4822,131 @@
   "sendToGarmin": "Send to Garmin Connect",
   "sendToGarminHint": "Uploads the workout to your Garmin account",
   "sentToGarmin": "Sent to Garmin Connect",
-  "alreadyOnGarmin": "This workout is already in Garmin Connect"
+  "alreadyOnGarmin": "This workout is already in Garmin Connect",
+  "missedWorkoutPastTitle": "Missed workout",
+  "leaveIt": "Leave it",
+  "reviewChange": "Review",
+  "keepPlan": "Keep plan",
+  "missedYesterdayTitle": "Missed yesterday",
+  "proposalReplanTitle": "Rebuild your plan?",
+  "proposalRestTitle": "Rest day today?",
+  "proposalRecoveryTitle": "Only easy today?",
+  "proposalEasierTitle": "A bit easier today?",
+  "proposalReplanBody": "Load or HRV point to a rebuilt plan.",
+  "proposalCardTitle": "Suggestion for today",
+  "replanMissed": "Reschedule",
+  "askBeforePlanChanges": "Ask before plan changes",
+  "askBeforePlanChangesHint": "Readiness and trends suggest changes, you decide. Off: Fjelia adjusts the plan by itself.",
+  "missedOnDayTitle": "Missed on {day}",
+  "@missedOnDayTitle": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "missedPastBody": "{names}. Move or skip?",
+  "@missedPastBody": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "proposalDropsLine": "{title} is dropped",
+  "@proposalDropsLine": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "proposalChangeLine": "{from} → {to}",
+  "@proposalChangeLine": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "proposalAnswered": "Already answered, nothing left to decide.",
+  "ecgTrainingWarningTitle": "For training only",
+  "ecgTrainingWarningBody": "Fjelia does not read ECGs medically. The coach explains heart rate, HRV and signal quality for your training only. It says nothing about heart conditions or rhythm disorders: for that, export the recording and show it to a doctor.\n\nChest pain or pressure, shortness of breath, pain in the arm, jaw or back, cold sweat or fainting: call 999 or 112 now.\n\nHeart rate, HRV and signal quality go to the AI model chosen in AI settings.",
+  "ecgQuestionTraining": "What does my ECG say for training?",
+  "ecgFollowHrv": "What does the HRV say about my recovery?",
+  "ecgFollowHeartRate": "How did my heart rate develop?",
+  "bioLeanMuchYounger": "Way younger on the road",
+  "bioLeanYounger": "Younger on the road",
+  "bioLeanEven": "Right on track",
+  "bioLeanOlder": "Some room to grow",
+  "bioLeanMuchOlder": "Lots of room to grow",
+  "fitnessSameAsAge": "Fit like your age",
+  "lifespanBandTitle": "Your life span",
+  "lifespanBandNote": "A band from statistics for people with similar values, not a forecast for you.",
+  "factorHelps": "Helps you",
+  "factorSlows": "Holds you back",
+  "bioFactorBloodPressure": "Blood pressure",
+  "bioFactorVisceralFat": "Visceral fat",
+  "bioFactorLipids": "Blood lipids",
+  "bioFactorInflammation": "Inflammation (CRP)",
+  "bioFactorKidney": "Kidney function",
+  "bioAgeModelNote": "Fitness age compares your VO₂max with age norms. The life span comes from a model built on study values: no medical statement and no personal prediction.",
+  "fitnessYoungerBy": "{years, plural, =1{1 year younger than your age} other{{years} years younger than your age}}",
+  "@fitnessYoungerBy": {
+    "placeholders": {
+      "years": {
+        "type": "int"
+      }
+    }
+  },
+  "fitnessOlderBy": "{years, plural, =1{1 year above your age} other{{years} years above your age}}",
+  "@fitnessOlderBy": {
+    "placeholders": {
+      "years": {
+        "type": "int"
+      }
+    }
+  },
+  "lifespanBandYears": "{low}–{high}",
+  "@lifespanBandYears": {
+    "placeholders": {
+      "low": {
+        "type": "int"
+      },
+      "high": {
+        "type": "int"
+      }
+    }
+  },
+  "todayAge": "Today {age}",
+  "@todayAge": {
+    "placeholders": {
+      "age": {
+        "type": "int"
+      }
+    }
+  },
+  "vo2ClassBelowAvg": "below average",
+  "vo2ClassAverage": "average",
+  "vo2ClassAboveAvg": "above average",
+  "vo2ClassGood": "good",
+  "vo2ClassExcellent": "excellent",
+  "vo2ClassElite": "elite",
+  "fjeliaProHint": "FjeliaPro gives you more detailed information and analyses.",
+  "@fjeliaProHint": {
+    "description": "AI settings, shown while a local coach (Apple Intelligence or Qwen) is selected and FjeliaPro can be bought."
+  },
+  "rowingStrokeRate": "Strokes / min",
+  "rowingStrokeAverage": "{count, plural, one{Ø 1 stroke} other{Ø {count} strokes}}",
+  "@rowingStrokeAverage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rowingTapToSwitch": "Tap to switch"
 }

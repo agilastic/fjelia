@@ -29,6 +29,45 @@ class AdaptationResult {
   final String? reason;
 }
 
+/// What the morning check would do to a session, before it is applied.
+class AdaptationPreview {
+  const AdaptationPreview({
+    required this.session,
+    required this.title,
+    required this.durationMin,
+    required this.rest,
+  });
+
+  /// The session as it is now.
+  final TrainingSession session;
+
+  /// Its title and length after the change.
+  final String title;
+  final int durationMin;
+
+  /// Rest is advised: the session is released, nothing replaces it.
+  final bool rest;
+}
+
+class _Change {
+  const _Change({
+    required this.rest,
+    required this.level,
+    required this.duration,
+    required this.zone,
+    required this.title,
+    required this.steps,
+    required this.trimp,
+    required this.notes,
+    required this.shift,
+  });
+  final bool rest;
+  final int level, duration, zone, shift;
+  final String title, notes;
+  final String? steps;
+  final int? trimp;
+}
+
 /// Adjusts today's planned sessions to the morning readiness level:
 /// yellow trims duration by 15 % and drops every HR zone by one, red swaps
 /// the session for an easy zone-2 recovery.
@@ -39,6 +78,26 @@ class SessionAdaptationService {
 
   Future<List<AdaptationResult>> adaptDay(ReadinessResult readiness) async {
     if (readiness.level == ReadinessLevel.green) return const [];
+    return [for (final s in await _today()) await adapt(s, readiness)];
+  }
+
+  /// What [adaptDay] would change today, without changing anything; empty
+  /// when nothing would.
+  Future<List<AdaptationPreview>> previewDay(ReadinessResult readiness) async {
+    if (readiness.level == ReadinessLevel.green) return const [];
+    return [
+      for (final s in await _today())
+        if (await _change(s, readiness) case final c?)
+          AdaptationPreview(
+            session: s,
+            title: c.title,
+            durationMin: c.rest ? 0 : c.duration,
+            rest: c.rest,
+          ),
+    ];
+  }
+
+  Future<List<TrainingSession>> _today() async {
     final now = DateTime.now();
     final start = DateTime(now.year, now.month, now.day);
     final end = start.add(const Duration(days: 1));
@@ -52,16 +111,15 @@ class SessionAdaptationService {
               )
               ..orderBy([(t) => OrderingTerm(expression: t.sessionNumber)]))
             .get();
-    return [for (final s in sessions) await adapt(s, readiness)];
+    return sessions;
   }
 
-  Future<AdaptationResult> adapt(
+  /// The change readiness asks of [session]; null when it asks none.
+  Future<_Change?> _change(
     TrainingSession session,
     ReadinessResult readiness,
   ) async {
-    if (readiness.level == ReadinessLevel.green) {
-      return AdaptationResult(session: session);
-    }
+    if (readiness.level == ReadinessLevel.green) return null;
     if (session.status == 'adapted') {
       // An earlier adjustment stands unless today's finding is stronger: the
       // same evidence read twice must not cut a session twice.
@@ -74,9 +132,9 @@ class SessionAdaptationService {
       final stronger =
           readiness.level == ReadinessLevel.red &&
           last?.readinessLevel != 'red';
-      if (!stronger) return AdaptationResult(session: session);
+      if (!stronger) return null;
     } else if (session.status != 'planned') {
-      return AdaptationResult(session: session);
+      return null;
     }
 
     final red = readiness.level == ReadinessLevel.red;
@@ -143,6 +201,34 @@ class SessionAdaptationService {
       }
     }
 
+    return _Change(
+      rest: rest,
+      level: newLevel,
+      duration: newDuration,
+      zone: newZone,
+      title: newTitle,
+      steps: newSteps,
+      trimp: newTrimp,
+      notes: notes,
+      shift: shift,
+    );
+  }
+
+  Future<AdaptationResult> adapt(
+    TrainingSession session,
+    ReadinessResult readiness,
+  ) async {
+    final c = await _change(session, readiness);
+    if (c == null) return AdaptationResult(session: session);
+    final rest = c.rest;
+    final newLevel = c.level;
+    final newDuration = c.duration;
+    final newZone = c.zone;
+    final newTitle = c.title;
+    final newSteps = c.steps;
+    final newTrimp = c.trimp;
+    final notes = c.notes;
+    final shift = c.shift;
     await _db.transaction(() async {
       await (_db.update(
         _db.trainingSessions,

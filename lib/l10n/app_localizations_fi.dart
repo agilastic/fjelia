@@ -8007,4 +8007,208 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get alreadyOnGarmin => 'Tämä harjoitus on jo Garmin Connectissa';
+
+  @override
+  String get missedWorkoutPastTitle => 'Väliin jäänyt harjoitus';
+
+  @override
+  String get leaveIt => 'Anna olla';
+
+  @override
+  String get reviewChange => 'Katso';
+
+  @override
+  String get keepPlan => 'Pidä suunnitelma';
+
+  @override
+  String get missedYesterdayTitle => 'Jäi eilen väliin';
+
+  @override
+  String get proposalReplanTitle => 'Laaditaanko suunnitelma uudelleen?';
+
+  @override
+  String get proposalRestTitle => 'Lepopäivä tänään?';
+
+  @override
+  String get proposalRecoveryTitle => 'Tänään vain kevyesti?';
+
+  @override
+  String get proposalEasierTitle => 'Vähän kevyemmin tänään?';
+
+  @override
+  String get proposalReplanBody =>
+      'Kuormitus tai HRV puoltaa uutta suunnitelmaa.';
+
+  @override
+  String get proposalCardTitle => 'Ehdotus tälle päivälle';
+
+  @override
+  String get replanMissed => 'Ajoita uudelleen';
+
+  @override
+  String get askBeforePlanChanges => 'Kysy ennen suunnitelman muutoksia';
+
+  @override
+  String get askBeforePlanChangesHint =>
+      'Valmius ja trendit ehdottavat muutoksia, sinä päätät. Pois: Fjelia muokkaa suunnitelmaa itse.';
+
+  @override
+  String missedOnDayTitle(String day) {
+    return 'Jäi väliin: $day';
+  }
+
+  @override
+  String missedPastBody(String names) {
+    return '$names. Siirrä vai ohita?';
+  }
+
+  @override
+  String proposalDropsLine(String title) {
+    return '$title jää pois';
+  }
+
+  @override
+  String proposalChangeLine(String from, String to) {
+    return '$from → $to';
+  }
+
+  @override
+  String get proposalAnswered => 'Jo vastattu, ei enää päätettävää.';
+
+  @override
+  String get ecgTrainingWarningTitle => 'Vain harjoitteluun';
+
+  @override
+  String get ecgTrainingWarningBody =>
+      'Fjelia ei tulkitse EKG:tä lääketieteellisesti. Valmentaja selittää vain sykkeen, HRV:n ja signaalin laadun harjoittelua varten. Sydänsairauksista tai rytmihäiriöistä se ei sano mitään: vie tallenne ja näytä se lääkärille.\n\nRintakipu tai puristus, hengenahdistus, kipu käsivarressa, leuassa tai selässä, kylmä hiki tai pyörtyminen: soita heti 112.\n\nSyke, HRV ja signaalin laatu lähetetään tekoälyasetuksissa valitulle mallille.';
+
+  @override
+  String get ecgQuestionTraining => 'Mitä EKG:ni kertoo harjoittelusta?';
+
+  @override
+  String get ecgFollowHrv => 'Mitä HRV kertoo palautumisestani?';
+
+  @override
+  String get ecgFollowHeartRate => 'Miten sykkeeni kehittyi?';
+
+  @override
+  String get bioLeanMuchYounger => 'Selvästi nuorempi';
+
+  @override
+  String get bioLeanYounger => 'Nuorempi';
+
+  @override
+  String get bioLeanEven => 'Juuri keskitasolla';
+
+  @override
+  String get bioLeanOlder => 'Vähän kasvunvaraa';
+
+  @override
+  String get bioLeanMuchOlder => 'Paljon kasvunvaraa';
+
+  @override
+  String get fitnessSameAsAge => 'Ikäisesi kunnossa';
+
+  @override
+  String get lifespanBandTitle => 'Elinikäsi haarukka';
+
+  @override
+  String get lifespanBandNote =>
+      'Tilastojen haarukka samankaltaisille arvoille, ei ennuste sinulle.';
+
+  @override
+  String get factorHelps => 'Auttaa sinua';
+
+  @override
+  String get factorSlows => 'Jarruttaa sinua';
+
+  @override
+  String get bioFactorBloodPressure => 'Verenpaine';
+
+  @override
+  String get bioFactorVisceralFat => 'Viskeraalirasva';
+
+  @override
+  String get bioFactorLipids => 'Veren rasvat';
+
+  @override
+  String get bioFactorInflammation => 'Tulehdus (CRP)';
+
+  @override
+  String get bioFactorKidney => 'Munuaisten toiminta';
+
+  @override
+  String get bioAgeModelNote =>
+      'Kuntoikä vertaa VO₂maxiasi ikänormeihin. Elinikähaarukka tulee tutkimuksiin perustuvasta mallista: ei lääketieteellinen väite eikä henkilökohtainen ennuste.';
+
+  @override
+  String fitnessYoungerBy(int years) {
+    String _temp0 = intl.Intl.pluralLogic(
+      years,
+      locale: localeName,
+      other: '$years vuotta ikääsi nuorempi',
+      one: '1 vuoden ikääsi nuorempi',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String fitnessOlderBy(int years) {
+    String _temp0 = intl.Intl.pluralLogic(
+      years,
+      locale: localeName,
+      other: '$years vuotta ikäsi yli',
+      one: '1 vuosi ikäsi yli',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String lifespanBandYears(int low, int high) {
+    return '$low–$high';
+  }
+
+  @override
+  String todayAge(int age) {
+    return 'Tänään $age';
+  }
+
+  @override
+  String get vo2ClassBelowAvg => 'alle keskitason';
+
+  @override
+  String get vo2ClassAverage => 'keskitaso';
+
+  @override
+  String get vo2ClassAboveAvg => 'yli keskitason';
+
+  @override
+  String get vo2ClassGood => 'hyvä';
+
+  @override
+  String get vo2ClassExcellent => 'erinomainen';
+
+  @override
+  String get vo2ClassElite => 'huippuluokka';
+
+  @override
+  String get fjeliaProHint =>
+      'FjeliaPro antaa sinulle tarkempaa tietoa ja analyyseja.';
+
+  @override
+  String get rowingStrokeRate => 'Vetoa / min';
+
+  @override
+  String rowingStrokeAverage(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Ø $count vetoa',
+      one: 'Ø 1 veto',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get rowingTapToSwitch => 'Vaihda napauttamalla';
 }

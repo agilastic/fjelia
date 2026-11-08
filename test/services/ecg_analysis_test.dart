@@ -6,6 +6,8 @@ import 'package:fjelia/models/ecg.dart';
 import 'package:fjelia/services/apple_coach_request.dart';
 import 'package:fjelia/services/coach_tasks.dart';
 import 'package:fjelia/services/ecg_analysis.dart';
+import 'package:fjelia_service/fjelia_service.dart';
+import 'package:fjelia_service_api/fjelia_service_api.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 const hz = 130.0;
@@ -64,74 +66,213 @@ List<double> _regular(double seconds, double rr, {double start = .5}) => [
   for (var t = start; t < seconds - .6; t += rr) t,
 ];
 
-void main() {
-  test('regular sinus rhythm: rate, intervals and levels', () {
-    final a = analyzeEcg(_ecg(_regular(60, 1.0), 60, noise: 10), hz);
-    expect(a.quality, 'good');
-    expect(a.analysedSeconds, greaterThanOrEqualTo(50));
-    final r = a.rhythm!;
-    expect(r.hrMean, inInclusiveRange(59, 61));
-    expect(r.pattern, 'regular');
-    expect(r.premature, 0);
-    expect(r.pausesOver2s, 0);
-    final m = a.morphology!;
-    expect(m.polarity, 'positive');
-    expect(m.rUv, inInclusiveRange(1000, 1300));
-    expect(m.qrsMs, inInclusiveRange(60, 130));
-    expect(m.prMs, isNotNull);
-    expect(m.prMs, inInclusiveRange(110, 260));
-    expect(m.tUv, greaterThan(150));
-    expect(m.st60Uv!.abs(), lessThan(100));
-    expect(m.qtMs, inInclusiveRange(330, 480));
-    expect(a.raw!.microvolts.length, 1300);
-    expect(a.raw!.rPeaks.length, inInclusiveRange(9, 11));
-    expect(a.template!.microvolts, isNotEmpty);
-    final lines = a.contextLines(
-      device: 'Polar H10',
-      source: 'Polar H10',
-      recordedAt: DateTime(2026, 11, 5, 8),
-      linkedToWorkout: false,
+/// FjeliaPro's medical reading, from the private package.
+EcgAnalysis _read(List<EcgChunk> chunks) =>
+    analyzeEcg(chunks, hz, clinical: createEcgClinicalRules());
+
+List<String> _lines(EcgAnalysis a, {int seconds = 60, bool linked = false}) =>
+    a.clinical!.lines(
+      EcgRecordingMeta(
+        device: 'Polar H10',
+        source: 'Polar H10',
+        recordedAt: DateTime(2026, 11, 5, 8),
+        durationMs: seconds * 1000,
+        linkedToWorkout: linked,
+      ),
     );
-    expect(lines.map((l) => l.substring(0, 10)), [
-      '[ECG:Key,Q',
-      '[ECG:Summa',
-      '[ECG:Rhyth',
-      '[ECG:Beat,',
-      '[ECG:Templ',
-      '[ECG:Raw,S',
-    ]);
-    expect(a.pacerSpikes, isNull);
+
+/// The number after [key] in the reading's lines ("QRS:96ms" → 96).
+int? _figure(List<String> lines, String key) {
+  final m = RegExp(
+    '[\\[,]${RegExp.escape(key)}:([+-]?\\d+)',
+  ).firstMatch(lines.join('\n'));
+  return m == null ? null : int.parse(m[1]!);
+}
+
+String? _text(List<String> lines, String key) => RegExp(
+  '[\\[,]${RegExp.escape(key)}:([^,\\]]+)',
+).firstMatch(lines.join('\n'))?[1];
+
+void main() {
+  group('FjeliaPro medical reading', skip: !hasServicePackage, () {
+    test('regular sinus rhythm: rate, intervals and levels', () {
+      final a = _read(_ecg(_regular(60, 1.0), 60, noise: 10));
+      expect(a.quality, 'good');
+      expect(a.analysedSeconds, greaterThanOrEqualTo(50));
+      final lines = _lines(a);
+      expect(_figure(lines, 'HRmean'), inInclusiveRange(59, 61));
+      expect(_text(lines, 'Pattern'), 'regular');
+      expect(_figure(lines, 'PrematureBeats'), 0);
+      expect(_figure(lines, 'Pauses>2s'), 0);
+      expect(_text(lines, 'QRSpolarity'), 'positive');
+      expect(_figure(lines, 'R'), inInclusiveRange(1000, 1300));
+      expect(_figure(lines, 'QRS'), inInclusiveRange(60, 130));
+      expect(_figure(lines, 'PR'), inInclusiveRange(110, 260));
+      expect(_text(lines, 'T'), contains('upright'));
+      expect(_figure(lines, 'STatJ+60ms')!.abs(), lessThan(100));
+      expect(_figure(lines, 'QT'), inInclusiveRange(330, 480));
+      final raw = lines.singleWhere((l) => l.startsWith('[ECG:Raw'));
+      expect(raw.split('uV as recorded:').last.split(' '), hasLength(1300));
+      expect(lines.map((l) => l.substring(0, 10)), [
+        '[ECG:Key,Q',
+        '[ECG:Summa',
+        '[ECG:Rhyth',
+        '[ECG:Beat,',
+        '[ECG:Templ',
+        '[ECG:Raw,S',
+      ]);
+      expect(_text(lines, 'PacerSpikes'), 'not assessable below 500Hz');
+    });
+
+    // A strap worn upside down records the mirror image; the reading says so
+    // and measures the beat flipped back.
+    test('an inverted lead is recognised and corrected', () {
+      final upright = _lines(_read(_ecg(_regular(60, 1.0), 60, noise: 10)));
+      final flipped = _lines(
+        _read([
+          for (final c in _ecg(_regular(60, 1.0), 60, noise: 10))
+            EcgChunk(
+              offsetUs: c.offsetUs,
+              microvolts: [for (final v in c.microvolts) -v],
+            ),
+        ]),
+      );
+      expect(_text(flipped, 'QRSpolarity'), 'negative as recorded');
+      expect(_text(flipped, 'Orientation'), startsWith('inverted lead'));
+      expect(_figure(flipped, 'R'), closeTo(_figure(upright, 'R')!, 30));
+      expect(_text(flipped, 'T'), contains('upright'));
+      expect(_text(upright, 'Orientation'), isNull);
+    });
+
+    test('a premature beat with a different shape is counted', () {
+      final peaks = _regular(60, 1.0);
+      // Beat 30 comes 400 ms early and is wide, then a compensatory pause.
+      peaks[30] -= .4;
+      final lines = _lines(_read(_ecg(peaks, 60, noise: 10, wide: {30})));
+      expect(_figure(lines, 'PrematureBeats'), 1);
+      expect(_text(lines, 'PrematureBeats'), contains('different QRS shape:1'));
+      expect(_figure(lines, 'QRS'), inInclusiveRange(60, 130));
+    });
+
+    test('random intervals read as irregular, not as premature beats', () {
+      final random = math.Random(7);
+      final peaks = <double>[];
+      for (var t = .5; t < 59; t += .55 + random.nextDouble() * .5) {
+        peaks.add(t);
+      }
+      final lines = _lines(_read(_ecg(peaks, 60, noise: 10)));
+      expect(_text(lines, 'Pattern'), 'irregular');
+    });
+
+    test('a long pause is reported', () {
+      final peaks = [
+        ..._regular(30, 1.0),
+        for (var t = 32.5; t < 59; t += 1.0) t,
+      ];
+      final lines = _lines(_read(_ecg(peaks, 60, noise: 10)));
+      expect(_figure(lines, 'Pauses>2s'), 1);
+      expect(_figure(lines, 'LongestRR'), greaterThan(2400));
+    });
+
+    test('an unusable recording gets only its key and summary', () {
+      final noisy = _read(_ecg(_regular(60, 1.0), 60, noise: 900));
+      final lines = _lines(noisy);
+      expect(lines, hasLength(2));
+      expect(lines.first, startsWith('[ECG:Key,Quality:insufficient'));
+    });
+
+    test('ST elevation shows at J+60 ms', () {
+      final lines = _lines(
+        _read(_ecg(_regular(60, 1.0), 60, noise: 10, st: 250)),
+      );
+      expect(_figure(lines, 'STatJ+60ms'), greaterThan(150));
+    });
+
+    test('a wide QRS in every beat is measured as wide', () {
+      final lines = _lines(
+        _read(_ecg(_regular(60, 1.0), 60, noise: 10, width: 2.2)),
+      );
+      expect(_figure(lines, 'QRS'), greaterThanOrEqualTo(120));
+    });
+
+    test('a regular fast rhythm reads as regular at 120 bpm', () {
+      final lines = _lines(_read(_ecg(_regular(60, .5), 60, noise: 10)));
+      expect(_figure(lines, 'HRmean'), inInclusiveRange(118, 122));
+      expect(_text(lines, 'Pattern'), 'regular');
+      expect(_figure(lines, 'TimeOver100bpm'), greaterThan(50));
+    });
+
+    test('a five-minute recording fits the coach context', () {
+      final a = _read(_ecg(_regular(300, .9), 300, noise: 10));
+      final context = _lines(a, seconds: 300, linked: true).join('\n');
+      expect(coachTaskFor(context), CoachTask.ecg);
+      // Raw excerpt plus template stay a few thousand tokens for the cloud.
+      expect(context.length, lessThan(12000));
+      final apple = AppleCoachRequest.build([
+        const ChatMessage(text: 'What does my ECG show?', isUser: true),
+      ], context);
+      expect(apple.inputBytes, lessThanOrEqualTo(3000));
+      expect(apple.prompt, contains('QTcF'));
+      expect(apple.prompt, isNot(contains('uV as recorded')));
+    });
+
+    test('the timeline of a long recording places its premature beat', () {
+      final peaks = _regular(660, 1.0);
+      peaks[30] -= .4;
+      final lines = _lines(
+        _read(_ecg(peaks, 660, noise: 10, wide: {30})),
+        seconds: 660,
+      );
+      expect(_figure(lines, 'PrematureBeats'), 1);
+      final blocks = [
+        for (final l in lines)
+          if (l.startsWith('[ECG:Block,')) l,
+      ];
+      expect(blocks.first, contains('1 premature'));
+      expect(blocks.skip(1).any((b) => b.contains('premature')), isFalse);
+      expect(lines, contains(startsWith('[ECG:Anomalies,')));
+    });
+
+    test('runs in the analysis isolate', () async {
+      final chunks = _ecg(_regular(30, 1.0), 30, noise: 10);
+      final rules = createEcgClinicalRules();
+      final a = await Isolate.run(
+        () => analyzeEcg(chunks, hz, clinical: rules),
+      );
+      expect(
+        _figure(_lines(a, seconds: 30), 'HRmean'),
+        inInclusiveRange(59, 61),
+      );
+    });
   });
 
-  test('a premature beat with a different shape is counted', () {
-    final peaks = _regular(60, 1.0);
-    // Beat 30 comes 400 ms early and is wide, then a compensatory pause.
-    peaks[30] -= .4;
-    final a = analyzeEcg(_ecg(peaks, 60, noise: 10, wide: {30}), hz);
-    final r = a.rhythm!;
-    expect(r.premature, 1);
-    expect(r.prematureDifferentShape, 1);
-    expect(a.morphology!.qrsMs, inInclusiveRange(60, 130));
+  test('without the reading the analysis has only the training figures', () {
+    final a = analyzeEcg(_ecg(_regular(60, 1.0), 60, noise: 10), hz);
+    expect(a.clinical, isNull);
+    expect(a.heartRate!.hrMean, inInclusiveRange(59, 61));
+    expect(a.heartRate!.rmssd, isNotNull);
   });
 
-  test('random intervals read as irregular, not as premature beats', () {
-    final random = math.Random(7);
-    final peaks = <double>[];
-    for (var t = .5; t < 59; t += .55 + random.nextDouble() * .5) {
-      peaks.add(t);
-    }
-    final a = analyzeEcg(_ecg(peaks, 60, noise: 10), hz);
-    expect(a.rhythm!.pattern, 'irregular');
-  });
-
-  test('a long pause is reported', () {
-    final peaks = [
-      ..._regular(30, 1.0),
-      for (var t = 32.5; t < 59; t += 1.0) t,
-    ];
-    final a = analyzeEcg(_ecg(peaks, 60, noise: 10), hz);
-    expect(a.rhythm!.pausesOver2s, 1);
-    expect(a.rhythm!.longestRrMs, greaterThan(2400));
+  // The quality gate compares the beats of a window with each other: extra
+  // beats of one shape and a wide QRS in every beat are not noise.
+  test('a bigeminy and a wide QRS pass the quality gate', () {
+    final peaks = _regular(60, .8);
+    final bigeminy = analyzeEcg(
+      _ecg(
+        peaks,
+        60,
+        noise: 10,
+        wide: {for (var k = 1; k < peaks.length; k += 2) k},
+      ),
+      hz,
+    );
+    expect(bigeminy.excluded['noise'], isNull);
+    final wide = analyzeEcg(
+      _ecg(_regular(60, 1.0), 60, noise: 10, width: 2.2),
+      hz,
+    );
+    expect(wide.excluded['noise'], isNull);
+    expect(wide.quality, 'good');
   });
 
   test('noisy and flat windows are left out', () {
@@ -144,66 +285,56 @@ void main() {
     final noisy = analyzeEcg(_ecg(_regular(60, 1.0), 60, noise: 900), hz);
     expect(noisy.usable, isFalse);
     expect(noisy.quality, 'insufficient');
-    final lines = noisy.contextLines(
-      device: 'Polar H10',
-      source: 'Polar H10',
-      recordedAt: DateTime(2026, 11, 5),
-      linkedToWorkout: false,
-    );
-    expect(lines, hasLength(2));
-    expect(lines.first, startsWith('[ECG:Key,Quality:insufficient'));
   });
 
-  test('ST elevation shows at J+60 ms', () {
-    final a = analyzeEcg(_ecg(_regular(60, 1.0), 60, noise: 10, st: 250), hz);
-    expect(a.morphology!.st60Uv, greaterThan(150));
-  });
-
-  test('a wide QRS in every beat is measured as wide', () {
-    final a = analyzeEcg(
-      _ecg(_regular(60, 1.0), 60, noise: 10, width: 2.2),
-      hz,
-    );
-    expect(a.morphology!.qrsMs, greaterThanOrEqualTo(120));
-  });
-
-  test('a regular fast rhythm reads as regular at 120 bpm', () {
-    final a = analyzeEcg(_ecg(_regular(60, .5), 60, noise: 10), hz);
-    expect(a.rhythm!.hrMean, inInclusiveRange(118, 122));
-    expect(a.rhythm!.pattern, 'regular');
-    expect(a.rhythm!.secondsOver100, greaterThan(50));
-  });
-
-  test('a five-minute recording fits the coach context', () {
-    final a = analyzeEcg(_ecg(_regular(300, .9), 300, noise: 10), hz);
+  test('the training view says nothing medical', () {
+    final peaks = _regular(660, 1.0);
+    peaks[30] -= .4;
+    final a = analyzeEcg(_ecg(peaks, 660, noise: 10, wide: {30}), hz);
     final context = a
-        .contextLines(
+        .fitnessLines(
           device: 'Polar H10',
           source: 'Polar H10',
           recordedAt: DateTime(2026, 11, 5, 8),
-          linkedToWorkout: true,
+          linkedToWorkout: false,
         )
         .join('\n');
+    // Still an ECG chat, with heart rate and HRV per block.
     expect(coachTaskFor(context), CoachTask.ecg);
-    // Raw excerpt plus template stay a few thousand tokens for the cloud.
-    expect(context.length, lessThan(12000));
-    final apple = AppleCoachRequest.build([
-      const ChatMessage(text: 'What does my ECG show?', isUser: true),
-    ], context);
-    expect(apple.inputBytes, lessThanOrEqualTo(3000));
-    expect(apple.prompt, contains('QTcF'));
-    expect(apple.prompt, isNot(contains('uV as recorded')));
+    expect(context, contains('RMSSD'));
+    expect(context, contains('[ECG:Block'));
+    for (final medical in [
+      'premature',
+      'Premature',
+      'Pause',
+      'QRS',
+      'QTc',
+      'PR:',
+      'ST',
+      'Pattern',
+      'Irregular',
+      'Pacer',
+      'Template',
+      'uV',
+    ]) {
+      expect(context, isNot(contains(medical)), reason: medical);
+    }
+    // Without the private rules the coach reads the ECG for training only.
+    expect(ecgClinicalMode, isFalse);
+    expect(coachEcgRules, contains('TRAINING VIEW'));
+    expect(coachEcgRules, isNot(contains('AV block')));
+    expect(coachTaskTemplateShort(CoachTask.ecg), isNot(contains('pattern')));
   });
 
   test('runs in an isolate and the result comes back', () async {
     final chunks = _ecg(_regular(30, 1.0), 30, noise: 10);
     final a = await Isolate.run(() => analyzeEcg(chunks, hz));
-    expect(a.rhythm!.hrMean, inInclusiveRange(59, 61));
+    expect(a.heartRate!.hrMean, inInclusiveRange(59, 61));
   });
 
   test('too short a recording is not interpreted', () {
     final a = analyzeEcg(_ecg(_regular(6, 1.0), 6), hz);
     expect(a.usable, isFalse);
-    expect(a.rhythm, isNull);
+    expect(a.heartRate, isNull);
   });
 }

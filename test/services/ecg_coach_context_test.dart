@@ -1,7 +1,9 @@
 import 'dart:math' as math;
 
 import 'package:fjelia/db/database.dart';
+import 'package:fjelia/models/chat_message.dart';
 import 'package:fjelia/models/ecg.dart';
+import 'package:fjelia/services/apple_coach_request.dart';
 import 'package:fjelia/services/coach_tasks.dart';
 import 'package:fjelia/services/ecg_analysis.dart';
 import 'package:fjelia/services/ecg_coach_context.dart';
@@ -167,11 +169,12 @@ void main() {
       expect(coachTaskFor(line), isNot(CoachTask.ecg));
     });
 
-    test('stage 2 is the full context of the ECG sheet', () {
+    // Builds without the private rules read the ECG for training only.
+    test('stage 2 is the training context of the ECG sheet', () {
       final lines = ecgDetailLines(row, analysis);
       expect(
         lines,
-        analysis.contextLines(
+        analysis.fitnessLines(
           device: row.deviceName,
           source: row.source,
           recordedAt: row.recordedAt,
@@ -181,18 +184,55 @@ void main() {
       expect(coachTaskFor(lines.join('\n')), CoachTask.ecg);
     });
 
-    test('long recordings get the timeline, as on the ECG sheet', () {
+    test('long recordings get their blocks, as on the ECG sheet', () {
       final long = ecg('e2', row.recordedAt, seconds: 900);
       final a = analyzeEcg(regularEcg(900), hz);
+      expect(ecgDetailLines(long, a), contains(startsWith('[ECG:Block,')));
       expect(
         ecgDetailLines(long, a),
-        a.contextLinesWithTimeline(
+        a.fitnessLines(
           device: long.deviceName,
           source: long.source,
           recordedAt: long.recordedAt,
           linkedToWorkout: false,
         ),
       );
+    });
+
+    test(
+      'long recordings also get heart-rate phases and quality, no anomalies',
+      () {
+        final lines = ecgDetailLines(
+          ecg('e3', row.recordedAt, seconds: 1800),
+          analyzeEcg(regularEcg(1800), hz),
+        );
+        expect(lines, contains('[ECG:Phases,Phases: resting 0–1500s]'));
+        expect(lines, contains('[ECG:QualityMap,All blocks good quality]'));
+        expect(lines, isNot(contains(startsWith('[ECG:Anomalies'))));
+      },
+    );
+
+    // The on-device chat window is 3000 bytes: the blocks go as one line,
+    // ahead of the summary's device details.
+    test('Apple gets the training figures and all blocks of an hour', () {
+      final long = ecg('e4', row.recordedAt, activityId: 'a1', seconds: 3600);
+      final context = [
+        '[Activity:Id:a1,Type:running,Duration:60min,AvgHR:150]',
+        ...ecgDetailLines(long, analyzeEcg(regularEcg(3600), hz)),
+        for (var i = 0; i < 15; i++) '[Last30d:item$i,${'y' * 120}]',
+      ].join('\n');
+      final prompt = AppleCoachRequest.build([
+        const ChatMessage(text: 'Was sagt mein EKG?', isUser: true),
+      ], context).prompt;
+      expect(prompt, contains('[ECG:Training,HRmean:60bpm'));
+      expect(
+        prompt,
+        contains(
+          '[ECG:Blocks,Heart rate bpm per 5 minutes:min 0-5 60 (60-60); ',
+        ),
+      );
+      expect(prompt, contains('min 55-60 60 (60-60)]'));
+      expect(prompt, isNot(contains('[ECG:Block,')));
     });
 
     test('a workout minute is placed in the recording, nothing removed', () {

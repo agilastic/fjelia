@@ -37,7 +37,11 @@ void main() {
 
   tearDown(() => setActiveLocale(const Locale('en')));
 
-  BioAgeResult fixture({bool estimated = true, bool complete = true}) {
+  BioAgeResult fixture({
+    bool estimated = true,
+    bool complete = true,
+    int steps = 6000,
+  }) {
     final activity = BioAgeActivity.fromDays([
       for (var i = 0; i < (complete ? 7 : 6); i++)
         BioAgeActivityDay(
@@ -47,7 +51,7 @@ void main() {
               : estimated
               ? null
               : 0,
-          steps: 6000,
+          steps: steps,
         ),
     ], today: today);
     return estimateBioAge(
@@ -138,25 +142,22 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  Finder approximateYears() => find.byWidgetPredicate(
-    (widget) =>
-        widget is Text &&
-        (widget.data?.startsWith('≈ ') ?? false) &&
-        (widget.data?.endsWith(' y') ?? false),
-  );
+  // A factor shows only its direction, never years; an estimate is marked
+  // on its name.
+  Finder approximateFactor() => find.text('≈ Bewegung');
 
   testWidgets('walking estimates are marked in the summary and factor', (
     tester,
   ) async {
-    await show(tester, fixture());
+    // Few enough steps that activity counts as a factor at all.
+    await show(tester, fixture(steps: 3000));
     expect(find.text('Aktivität enthält geschätzte Gehzeit.'), findsOneWidget);
-    expect(find.text('Bewegung'), findsOneWidget);
-    expect(approximateYears(), findsOneWidget);
+    expect(approximateFactor(), findsOneWidget);
     await tester.ensureVisible(find.text('Bewegungsdaten · letzte 7 Tage'));
     await tester.pumpAndSettle();
     expect(find.text('72 gemeldete moderate Minuten'), findsOneWidget);
     expect(
-      find.text('≈ 360 Gehminuten aus Schritten geschätzt'),
+      find.text('≈ 180 Gehminuten aus Schritten geschätzt'),
       findsOneWidget,
     );
     expect(find.text('Daten für 7 von 7 Tagen'), findsOneWidget);
@@ -184,7 +185,7 @@ void main() {
   ) async {
     await show(tester, fixture(estimated: false));
     expect(find.text('Aktivität enthält geschätzte Gehzeit.'), findsNothing);
-    expect(approximateYears(), findsNothing);
+    expect(approximateFactor(), findsNothing);
     expect(find.text('72 gemeldete moderate Minuten'), findsOneWidget);
     expect(
       find.textContaining('Gehminuten aus Schritten geschätzt'),
@@ -199,7 +200,7 @@ void main() {
       await show(tester, fixture(complete: false));
       expect(find.text('Bewegungsdaten unvollständig'), findsOneWidget);
       expect(find.text('Bewegung'), findsNothing);
-      expect(approximateYears(), findsNothing);
+      expect(approximateFactor(), findsNothing);
       await tester.ensureVisible(find.text('Daten für 6 von 7 Tagen'));
       await tester.pumpAndSettle();
       expect(

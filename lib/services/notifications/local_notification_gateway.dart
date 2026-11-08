@@ -11,7 +11,7 @@ enum NotificationPermission {
   bool get allowed => this == granted || this == provisional;
 }
 
-enum NotificationFeature { hrv, nutrition, missedWorkout }
+enum NotificationFeature { hrv, nutrition, missedWorkout, planProposal }
 
 class NutritionNotificationPayload {
   const NutritionNotificationPayload(this.activityId, this.token);

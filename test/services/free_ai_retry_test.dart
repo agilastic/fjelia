@@ -15,6 +15,8 @@ const _settings = AiCoachSettings(
   model: 'default',
   hasApiKey: true,
   enabled: true,
+  // No Apple Intelligence here: briefings go to Free AI.
+  onDeviceAvailable: false,
 );
 
 http.Response _reply() => http.Response(

@@ -44,7 +44,11 @@ class PlanRebalanceApplier {
         );
         continue;
       }
-      if (x.op == RebalanceOp.move) s = await actions.moveToDate(s, x.to!);
+      if (x.op == RebalanceOp.move) {
+        // A session closed as missed opens again where it moves to.
+        if (s.status == 'skipped') s = await actions.restore(s);
+        s = await actions.moveToDate(s, x.to!);
+      }
       if (x.durationMin != null || x.intensity != RebalanceIntensity.keep) {
         s = await adaptation.adjust(
           s,

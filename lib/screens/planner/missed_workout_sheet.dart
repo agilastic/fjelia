@@ -31,6 +31,11 @@ import '../../widgets/rain_nowcast_line.dart';
 
 enum _Coach { idle, asking, done, failed }
 
+/// The rules' proposal, the coach's, and the skip.
+const _rulesAccent = [Color(0xFF3EE0FF), mint];
+const _coachAccent = [Color(0xFF9D7BFF), Color(0xFF3EE0FF)];
+const _skipAccent = [Color(0xFFFF5A7A), Color(0xFFFF9A5A)];
+
 /// Opened from the evening reminder. One proposal for the missed workout,
 /// shown as the next days before and after, and one button to apply it.
 /// Other choices are small links underneath.
@@ -92,6 +97,23 @@ class _MissedWorkoutSheetState extends ConsumerState<MissedWorkoutSheet> {
     if (mounted) setState(() => _items = items);
   }
 
+  /// The reminder is about a day that has passed: the session can move from
+  /// today on, and "still today" means leaving it be.
+  bool get _past {
+    final now = DateTime.now();
+    return widget.day.isBefore(DateTime(now.year, now.month, now.day));
+  }
+
+  String _tag(BuildContext context) {
+    final l10n = context.l10n;
+    if (!_past) return l10n.missedTodayTag;
+    final now = DateTime.now();
+    final yesterday = DateTime(now.year, now.month, now.day - 1);
+    return widget.day == yesterday
+        ? l10n.missedYesterdayTitle
+        : l10n.missedOnDayTitle(DateFormat.EEEE().format(widget.day));
+  }
+
   TrainingSession? get _missed {
     final sessions = [
       for (final i in _items ?? const <PlanWeekItem>[])
@@ -127,7 +149,15 @@ class _MissedWorkoutSheetState extends ConsumerState<MissedWorkoutSheet> {
       upcoming:
           ref.watch(upcomingSessionsProvider).valueOrNull ??
           const <TrainingSession>[],
-      today: widget.day,
+      // A past day's session is placed as if missed yesterday, so the first
+      // day it may take is today.
+      today: _past
+          ? DateTime(
+              DateTime.now().year,
+              DateTime.now().month,
+              DateTime.now().day - 1,
+            )
+          : widget.day,
       daysAhead: settings.daysAhead,
       maxPerDay: profile?.maxSessionsPerDay ?? 1,
       restWeekdays: profile?.restDays ?? const [],
@@ -232,7 +262,7 @@ class _MissedWorkoutSheetState extends ConsumerState<MissedWorkoutSheet> {
     final l10n = context.l10n;
     final items = _items;
     return SheetPage(
-      title: l10n.openWorkoutToday,
+      title: _past ? l10n.missedWorkoutPastTitle : l10n.openWorkoutToday,
       child: items == null
           ? Center(
               child: Column(
@@ -258,11 +288,16 @@ class _MissedWorkoutSheetState extends ConsumerState<MissedWorkoutSheet> {
       return ListView(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
         children: [
-          for (final i in items) _Hero(item: i),
+          for (final i in items) _Hero(item: i, tag: _tag(context)),
           // Whether going out now means getting wet.
-          const RainNowcastLine(padding: EdgeInsets.only(top: 10)),
+          if (!_past)
+            if (!_past)
+              const RainNowcastLine(padding: EdgeInsets.only(top: 10)),
           const SizedBox(height: 20),
-          _PrimaryButton(label: l10n.stillToday, onPressed: _stillToday),
+          _PrimaryButton(
+            label: _past ? l10n.leaveIt : l10n.stillToday,
+            onPressed: _stillToday,
+          ),
         ],
       );
     }
@@ -281,8 +316,11 @@ class _MissedWorkoutSheetState extends ConsumerState<MissedWorkoutSheet> {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 32),
       children: [
-        _Hero(item: items.firstWhere((i) => i.session?.id == missed.id)),
-        const RainNowcastLine(padding: EdgeInsets.only(top: 10)),
+        _Hero(
+          item: items.firstWhere((i) => i.session?.id == missed.id),
+          tag: _tag(context),
+        ),
+        if (!_past) const RainNowcastLine(padding: EdgeInsets.only(top: 10)),
         const SizedBox(height: 14),
         if (_skipping)
           _SkipCard(
@@ -342,8 +380,8 @@ class _MissedWorkoutSheetState extends ConsumerState<MissedWorkoutSheet> {
         Row(
           children: [
             _Action(
-              icon: Icons.bolt_rounded,
-              label: l10n.stillToday,
+              icon: _past ? Icons.check_rounded : Icons.bolt_rounded,
+              label: _past ? l10n.leaveIt : l10n.stillToday,
               onTap: _busy ? null : _stillToday,
             ),
             if (!_skipping) ...[
@@ -427,8 +465,11 @@ class _MissedWorkoutSheetState extends ConsumerState<MissedWorkoutSheet> {
 
 /// The missed workout, large, in its sport's colour.
 class _Hero extends StatelessWidget {
-  const _Hero({required this.item});
+  const _Hero({required this.item, required this.tag});
   final PlanWeekItem item;
+
+  /// "missed today", or the past day it was missed on.
+  final String tag;
 
   @override
   Widget build(BuildContext context) {
@@ -443,6 +484,9 @@ class _Hero extends StatelessWidget {
           colors: [color.withValues(alpha: .22), color.withValues(alpha: .05)],
         ),
         border: Border.all(color: color.withValues(alpha: .35)),
+        boxShadow: [
+          BoxShadow(color: color.withValues(alpha: .18), blurRadius: 22),
+        ],
       ),
       child: Row(
         children: [
@@ -450,12 +494,20 @@ class _Hero extends StatelessWidget {
             width: 46,
             height: 46,
             decoration: BoxDecoration(
-              color: color.withValues(alpha: .2),
               borderRadius: BorderRadius.circular(14),
+              gradient: LinearGradient(
+                colors: [
+                  color.withValues(alpha: .35),
+                  color.withValues(alpha: .12),
+                ],
+              ),
+              boxShadow: [
+                BoxShadow(color: color.withValues(alpha: .35), blurRadius: 12),
+              ],
             ),
             child: Icon(
               activitySportIcon(item.plannedSport),
-              color: color,
+              color: fjAccent(color),
               size: 24,
             ),
           ),
@@ -478,7 +530,7 @@ class _Hero extends StatelessWidget {
                     if (item.plannedMinutes != null &&
                         !item.plannedTitle.contains('${item.plannedMinutes}'))
                       planDuration(item.plannedMinutes!),
-                    context.l10n.missedTodayTag,
+                    tag,
                   ].join(' · '),
                   style: TextStyle(fontSize: 12, color: fjInk70),
                 ),
@@ -508,48 +560,68 @@ class _ProposalCard extends StatelessWidget {
   final Widget? coach;
 
   @override
-  Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.fromLTRB(14, 14, 14, 12),
-    decoration: BoxDecoration(
-      color: fjInk.withValues(alpha: .04),
-      borderRadius: BorderRadius.circular(20),
-      border: Border.all(color: fjInk.withValues(alpha: .08)),
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Icon(
-              sparkle ? Icons.auto_awesome : Icons.lightbulb_outline,
-              size: 16,
-              color: sparkle ? mint : muted,
-            ),
-            const SizedBox(width: 6),
-            Text(
-              title.toUpperCase(),
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 1.1,
-                color: sparkle ? mint : muted,
+  Widget build(BuildContext context) {
+    final accent = sparkle ? _coachAccent : _rulesAccent;
+    return _GlowCard(
+      accent: accent,
+      padding: const EdgeInsets.fromLTRB(14, 14, 14, 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                sparkle ? Icons.auto_awesome : Icons.lightbulb_outline,
+                size: 16,
+                color: fjAccent(accent.first),
               ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        AnimatedSwitcher(
-          duration: const Duration(milliseconds: 250),
-          child: Text(
-            summary,
-            key: ValueKey(summary),
-            style: const TextStyle(fontSize: 15, height: 1.35),
+              const SizedBox(width: 6),
+              GradientTitle(title.toUpperCase(), colors: accent, size: 11),
+            ],
           ),
-        ),
-        const SizedBox(height: 14),
-        _WeekStrip(days: days, picking: picking, onPickDay: onPickDay),
-        if (coach != null) ...[const SizedBox(height: 14), coach!],
-      ],
+          const SizedBox(height: 8),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 250),
+            child: Text(
+              summary,
+              key: ValueKey(summary),
+              style: const TextStyle(fontSize: 15, height: 1.35),
+            ),
+          ),
+          const SizedBox(height: 14),
+          _WeekStrip(days: days, picking: picking, onPickDay: onPickDay),
+          if (coach != null) ...[const SizedBox(height: 14), coach!],
+        ],
+      ),
+    );
+  }
+}
+
+/// A card of this sheet in the Fjelia look: panel, soft light from the top
+/// left in its accent and a tinted edge.
+class _GlowCard extends StatelessWidget {
+  const _GlowCard({
+    required this.accent,
+    required this.child,
+    this.padding = const EdgeInsets.all(14),
+  });
+  final List<Color> accent;
+  final Widget child;
+  final EdgeInsetsGeometry padding;
+
+  @override
+  Widget build(BuildContext context) => DecoratedBox(
+    decoration: BoxDecoration(
+      color: panel,
+      borderRadius: BorderRadius.circular(20),
+    ),
+    child: Container(
+      padding: padding,
+      decoration: fjGlow(accent).copyWith(
+        borderRadius: BorderRadius.circular(20),
+        border: Border.fromBorderSide(fjEdge(accent)),
+      ),
+      child: child,
     ),
   );
 }
@@ -628,10 +700,12 @@ class _CoachLineState extends State<_CoachLine> {
           child: OutlinedButton(
             onPressed: asking ? null : widget.onAsk,
             style: OutlinedButton.styleFrom(
-              foregroundColor: mint,
-              disabledForegroundColor: mint,
-              backgroundColor: mint.withValues(alpha: .08),
-              side: BorderSide(color: mint.withValues(alpha: .55)),
+              foregroundColor: fjAccent(_coachAccent.first),
+              disabledForegroundColor: fjAccent(_coachAccent.first),
+              backgroundColor: _coachAccent.first.withValues(alpha: .1),
+              side: BorderSide(
+                color: _coachAccent.first.withValues(alpha: .55),
+              ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(14),
               ),
@@ -640,11 +714,11 @@ class _CoachLineState extends State<_CoachLine> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (asking)
-                  const SizedBox.square(
+                  SizedBox.square(
                     dimension: 16,
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
-                      color: mint,
+                      color: _coachAccent.last,
                     ),
                   )
                 else
@@ -810,7 +884,7 @@ class _Chip extends StatelessWidget {
                 ? Icons.home_outlined
                 : activitySportIcon(item.session.sport),
             size: 15,
-            color: fresh ? mint : color,
+            color: fjAccent(fresh ? mint : color),
           ),
           Text(
             (fresh ? '+' : '') + minutes,
@@ -821,9 +895,9 @@ class _Chip extends StatelessWidget {
               fontSize: 10,
               fontWeight: FontWeight.w700,
               color: fresh
-                  ? mint
+                  ? fjAccent(mint)
                   : changed
-                  ? Colors.amber
+                  ? fjAccent(Colors.amber)
                   : gone
                   ? fjInk30
                   : fjInk70,
@@ -859,19 +933,15 @@ class _SkipCard extends StatelessWidget {
   final ValueChanged<String> onSelect;
 
   @override
-  Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.all(14),
-    decoration: BoxDecoration(
-      color: fjInk.withValues(alpha: .04),
-      borderRadius: BorderRadius.circular(20),
-      border: Border.all(color: fjInk.withValues(alpha: .08)),
-    ),
+  Widget build(BuildContext context) => _GlowCard(
+    accent: _skipAccent,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          context.l10n.whySkip,
-          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+        GradientTitle(
+          context.l10n.whySkip.toUpperCase(),
+          colors: _skipAccent,
+          size: 11,
         ),
         const SizedBox(height: 12),
         Wrap(
@@ -883,7 +953,7 @@ class _SkipCard extends StatelessWidget {
                 label: Text(label(reason)),
                 selected: selected == reason,
                 showCheckmark: false,
-                selectedColor: mint.withValues(alpha: .25),
+                selectedColor: _skipAccent.first.withValues(alpha: .25),
                 onSelected: (_) => onSelect(reason),
               ),
           ],
@@ -904,24 +974,46 @@ class _PrimaryButton extends StatelessWidget {
   final bool busy;
 
   @override
-  Widget build(BuildContext context) => FilledButton(
-    onPressed: onPressed,
-    style: FilledButton.styleFrom(
-      backgroundColor: mint,
-      foregroundColor: const Color(0xFF062A20),
-      disabledBackgroundColor: mint.withValues(alpha: .3),
-      minimumSize: const Size.fromHeight(54),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+  Widget build(BuildContext context) => AnimatedContainer(
+    duration: const Duration(milliseconds: 200),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(16),
+      // Dimmed by its colours when it cannot be pressed: an Opacity layer
+      // over the glow trips Impeller's validation.
+      gradient: LinearGradient(
+        colors: [
+          for (final c in const [mint, Color(0xFF3EE0FF)])
+            c.withValues(alpha: onPressed == null ? .3 : 1),
+        ],
+      ),
+      boxShadow: [
+        BoxShadow(
+          color: mint.withValues(alpha: onPressed == null ? 0 : .35),
+          blurRadius: 18,
+        ),
+      ],
     ),
-    child: busy
-        ? const SizedBox.square(
-            dimension: 20,
-            child: CircularProgressIndicator(strokeWidth: 2),
-          )
-        : Text(
-            label,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-          ),
+    child: FilledButton(
+      onPressed: onPressed,
+      style: FilledButton.styleFrom(
+        backgroundColor: Colors.transparent,
+        disabledBackgroundColor: Colors.transparent,
+        foregroundColor: const Color(0xFF062A20),
+        disabledForegroundColor: const Color(0xFF062A20).withValues(alpha: .5),
+        shadowColor: Colors.transparent,
+        minimumSize: const Size.fromHeight(54),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      ),
+      child: busy
+          ? const SizedBox.square(
+              dimension: 20,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            )
+          : Text(
+              label,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+            ),
+    ),
   );
 }
 

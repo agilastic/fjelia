@@ -5,8 +5,10 @@ set -euo pipefail
 [ -f "$(dirname "$0")/local.env" ] && . "$(dirname "$0")/local.env"
 # Build-time credentials (see secrets.example.json); absent = services unavailable.
 DEFINES=()
-[ -f "$(dirname "$0")/../secrets.json" ] && DEFINES+=(--dart-define-from-file=secrets.json)
-[ -f "$(dirname "$0")/../../fjelia-service/secrets.json" ] && DEFINES+=(--dart-define-from-file=../fjelia-service/secrets.json)
+# Without the developer's own switches, see public-defines.sh.
+. "$(dirname "$0")/public-defines.sh"
+[ -f "$(dirname "$0")/../secrets.json" ] && DEFINES+=(--dart-define-from-file="$(public_defines "$(dirname "$0")/../secrets.json")")
+[ -f "$(dirname "$0")/../../fjelia-service/secrets.json" ] && DEFINES+=(--dart-define-from-file="$(public_defines "$(dirname "$0")/../../fjelia-service/secrets.json")")
 cd "$(dirname "$0")/.."
 
 usage() {

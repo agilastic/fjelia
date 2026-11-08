@@ -142,12 +142,15 @@ class MissedWorkoutReminderService {
   }
 
   /// Planned sessions and watch workouts of [day] that are neither done nor
-  /// skipped.
+  /// skipped; on a past day they count as missed.
   Future<List<PlanWeekItem>> openItems(
     DateTime day, [
     Map<DateTime, Future<PlanWeek>>? weeks,
   ]) async {
     final d = _dateOnly(day);
+    // Sessions of the day before yesterday are closed as missed by then;
+    // a skip the athlete chose today stays a skip.
+    final past = d.isBefore(_dateOnly(now()));
     final start = weekStartFor(d);
     final week = await (weeks == null
         ? loadPlanWeek(db, start)
@@ -156,10 +159,31 @@ class MissedWorkoutReminderService {
       if (_dayKey(w.date) != _dayKey(d)) continue;
       return [
         for (final i in w.items)
-          if (i.hasPlan && i.state == PlanWeekState.planned) i,
+          if (i.hasPlan &&
+              (i.state == PlanWeekState.planned ||
+                  (past && i.state == PlanWeekState.missed)))
+            i,
       ];
     }
     return const [];
+  }
+
+  /// The last [days] days before today with sessions still open that the
+  /// athlete has not answered yet, latest first.
+  Future<List<({DateTime day, List<PlanWeekItem> items})>> pastMissed({
+    int days = 2,
+  }) async {
+    final today = _dateOnly(now());
+    final acked = await _acknowledged();
+    final weeks = <DateTime, Future<PlanWeek>>{};
+    return [
+      for (var back = 1; back <= days; back++)
+        if (DateTime(today.year, today.month, today.day - back) case final day
+            when !acked.contains(_dayKey(day)))
+          if (await openItems(day, weeks) case final items
+              when items.isNotEmpty)
+            (day: day, items: items),
+    ];
   }
 
   /// Days the athlete already answered with "still today".
@@ -168,7 +192,8 @@ class MissedWorkoutReminderService {
     return (prefs.getStringList(_ackKey) ?? const <String>[]).toSet();
   }
 
-  /// "Still today": no further reminder for [day].
+  /// "Still today", or "leave it" for a past day: no further reminder for
+  /// [day].
   Future<void> acknowledge(DateTime day) => _acknowledge(day);
 
   static Future<void> _acknowledge(DateTime day) async {

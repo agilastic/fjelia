@@ -20,10 +20,13 @@ import 'providers/hilo_sync_provider.dart';
 import 'providers/hrv_reminder_provider.dart';
 import 'providers/hrv_training_provider.dart';
 import 'providers/missed_workout_provider.dart';
+import 'providers/plan_proposal_provider.dart';
 import 'providers/nutrition_provider.dart';
 import 'providers/planner_providers.dart' show upcomingSessionsProvider;
 import 'screens/planner/missed_workout_sheet.dart';
+import 'screens/planner/plan_proposal_cards.dart';
 import 'services/missed_workout_reminder_service.dart';
+import 'services/plan_proposal_notifications.dart' show PlanProposalPayload;
 import 'widgets/nutrition_widgets.dart';
 import 'services/notifications/local_notification_gateway.dart'
     as notifications;
@@ -155,7 +158,13 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) _onResume();
+    if (state == AppLifecycleState.resumed) {
+      unawaited(ref.read(planProposalLifecycleProvider).foreground());
+      _onResume();
+    } else if (state == AppLifecycleState.paused) {
+      // Proposals not answered yet are told a few minutes later.
+      unawaited(ref.read(planProposalLifecycleProvider).background());
+    }
   }
 
   /// Jump back to today and resync when the app returns after a while.
@@ -185,6 +194,8 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
       router.onOtherResponse = (r) =>
           MissedWorkoutPayload.decode(r.payload) != null
           ? _onMissedWorkoutAction(r)
+          : PlanProposalPayload.decode(r.payload) != null
+          ? _onPlanProposalAction(r)
           : _onNutritionAction(r);
       await Future.wait([
         ref
@@ -271,6 +282,21 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
       context,
       MissedWorkoutSheet(day: action.day, intent: action.kind),
     );
+  }
+
+  Future<void> _onPlanProposalAction(
+    notifications.NotificationResponse response,
+  ) async {
+    final p = PlanProposalPayload.decode(response.payload);
+    if (p == null || !mounted) return;
+    final lifecycle = ref.read(planProposalLifecycleProvider);
+    if (response.actionId == 'keep') {
+      await lifecycle.keepFromNotification(p.day);
+      return;
+    }
+    final context = await _homeContext();
+    if (context == null || !context.mounted) return;
+    await showAppSheet(context, ReadinessProposalSheet(day: p.day));
   }
 
   /// A moved, skipped or newly planned session changes which evenings need

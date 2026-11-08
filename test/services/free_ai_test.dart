@@ -12,11 +12,15 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 
 const _store = AiCoachSettingsStore(freeAiApiKey: 'test-free-ai-key');
+
+/// Free AI on a device without Apple Intelligence: briefings go to the
+/// cloud, and only with consent.
 const _free = AiCoachSettings(
   provider: AiProvider.freeAi,
   model: 'default',
   hasApiKey: true,
   enabled: true,
+  onDeviceAvailable: false,
 );
 
 void main() {
@@ -46,6 +50,29 @@ void main() {
       expect(settings.provider, AiProvider.appleIntelligence);
       expect(settings.model, 'on-device');
       expect(settings.ready, isTrue);
+    });
+
+    test('with Free AI, Apple Intelligence writes the briefings where it '
+        'runs', () async {
+      FlutterSecureStorage.setMockInitialValues({
+        'ai_coach_provider': 'freeAi',
+      });
+      final container = settingsContainer(availability: () async => true);
+      final settings = await container.read(aiCoachSettingsProvider.future);
+      expect(settings.provider, AiProvider.freeAi);
+      expect(settings.onDeviceAvailable, isTrue);
+      expect(settings.appleIntelligenceForBriefing, isTrue);
+      expect(settings.usesOnDeviceBriefing, isTrue);
+    });
+
+    test('the athlete can keep briefings on Free AI', () async {
+      FlutterSecureStorage.setMockInitialValues({
+        'ai_coach_provider': 'freeAi',
+        'ai_apple_briefing': 'false',
+      });
+      final container = settingsContainer(availability: () async => true);
+      final settings = await container.read(aiCoachSettingsProvider.future);
+      expect(settings.usesOnDeviceBriefing, isFalse);
     });
 
     test('unavailable Apple Intelligence selects ready Free AI', () async {
@@ -312,6 +339,30 @@ void main() {
         isNull,
       );
     });
+
+    test(
+      'with Apple Intelligence here, no briefing costs Free AI tokens',
+      () async {
+        final client = AiCoachClient(
+          store: _store,
+          client: MockClient(
+            (_) async => fail('The briefing must not go to Free AI'),
+          ),
+          appleSender: (_) async =>
+              'Your recovery looks solid today, so the planned run fits well.',
+        );
+        final settings = _free.copyWith(onDeviceAvailable: true);
+        expect(settings.usesOnDeviceBriefing, isTrue);
+        for (final send in [
+          client.sendBriefing,
+          client.sendLunchBriefing,
+          client.sendAfternoonBriefing,
+          client.sendEveningBriefing,
+        ]) {
+          expect(await send(settings, ''), isNotEmpty);
+        }
+      },
+    );
 
     test('all four briefings use Free AI without a personal API key', () async {
       final sent = <http.Request>[];

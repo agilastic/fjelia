@@ -7983,4 +7983,202 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get alreadyOnGarmin => 'Denne træning er allerede i Garmin Connect';
+
+  @override
+  String get missedWorkoutPastTitle => 'Misset træning';
+
+  @override
+  String get leaveIt => 'Lad det være';
+
+  @override
+  String get reviewChange => 'Se';
+
+  @override
+  String get keepPlan => 'Behold planen';
+
+  @override
+  String get missedYesterdayTitle => 'Misset i går';
+
+  @override
+  String get proposalReplanTitle => 'Lav planen om?';
+
+  @override
+  String get proposalRestTitle => 'Hviledag i dag?';
+
+  @override
+  String get proposalRecoveryTitle => 'Kun roligt i dag?';
+
+  @override
+  String get proposalEasierTitle => 'Lidt lettere i dag?';
+
+  @override
+  String get proposalReplanBody => 'Belastning eller HRV taler for en ny plan.';
+
+  @override
+  String get proposalCardTitle => 'Forslag til i dag';
+
+  @override
+  String get replanMissed => 'Planlæg igen';
+
+  @override
+  String get askBeforePlanChanges => 'Spørg før planen ændres';
+
+  @override
+  String get askBeforePlanChangesHint =>
+      'Parathed og tendenser foreslår ændringer, du bestemmer. Fra: Fjelia tilpasser planen selv.';
+
+  @override
+  String missedOnDayTitle(String day) {
+    return 'Misset $day';
+  }
+
+  @override
+  String missedPastBody(String names) {
+    return '$names. Flyt eller spring over?';
+  }
+
+  @override
+  String proposalDropsLine(String title) {
+    return '$title udgår';
+  }
+
+  @override
+  String proposalChangeLine(String from, String to) {
+    return '$from → $to';
+  }
+
+  @override
+  String get proposalAnswered =>
+      'Allerede besvaret, intet tilbage at beslutte.';
+
+  @override
+  String get ecgTrainingWarningTitle => 'Kun til træning';
+
+  @override
+  String get ecgTrainingWarningBody =>
+      'Fjelia tolker ikke EKG medicinsk. Coachen forklarer kun puls, HRV og signalkvalitet til din træning. Den siger intet om hjertesygdomme eller rytmeforstyrrelser: eksportér optagelsen og vis den til en læge.\n\nBrystsmerter eller trykken i brystet, åndenød, smerter i arm, kæbe eller ryg, koldsved eller besvimelse: ring 112 nu.\n\nPuls, HRV og signalkvalitet sendes til den AI-model, der er valgt i AI-indstillingerne.';
+
+  @override
+  String get ecgQuestionTraining => 'Hvad siger mit EKG om træningen?';
+
+  @override
+  String get ecgFollowHrv => 'Hvad siger HRV om min restitution?';
+
+  @override
+  String get ecgFollowHeartRate => 'Hvordan udviklede min puls sig?';
+
+  @override
+  String get bioLeanMuchYounger => 'Godt yngre på vej';
+
+  @override
+  String get bioLeanYounger => 'Yngre på vej';
+
+  @override
+  String get bioLeanEven => 'Lige i snittet';
+
+  @override
+  String get bioLeanOlder => 'Lidt plads til mere';
+
+  @override
+  String get bioLeanMuchOlder => 'Masser af plads til mere';
+
+  @override
+  String get fitnessSameAsAge => 'Form som din alder';
+
+  @override
+  String get lifespanBandTitle => 'Dit livsspænd';
+
+  @override
+  String get lifespanBandNote =>
+      'Et spænd fra statistik for folk med lignende værdier, ikke en forudsigelse for dig.';
+
+  @override
+  String get factorHelps => 'Hjælper dig';
+
+  @override
+  String get factorSlows => 'Bremser dig';
+
+  @override
+  String get bioFactorBloodPressure => 'Blodtryk';
+
+  @override
+  String get bioFactorVisceralFat => 'Visceralt fedt';
+
+  @override
+  String get bioFactorLipids => 'Blodfedt';
+
+  @override
+  String get bioFactorInflammation => 'Inflammation (CRP)';
+
+  @override
+  String get bioFactorKidney => 'Nyrefunktion';
+
+  @override
+  String get bioAgeModelNote =>
+      'Formalderen sammenligner din VO₂max med aldersnormer. Livsspændet kommer fra en model bygget på studier: ingen medicinsk udtalelse og ingen personlig forudsigelse.';
+
+  @override
+  String fitnessYoungerBy(int years) {
+    String _temp0 = intl.Intl.pluralLogic(
+      years,
+      locale: localeName,
+      other: '$years år yngre end din alder',
+      one: '1 år yngre end din alder',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String fitnessOlderBy(int years) {
+    String _temp0 = intl.Intl.pluralLogic(
+      years,
+      locale: localeName,
+      other: '$years år over din alder',
+      one: '1 år over din alder',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String lifespanBandYears(int low, int high) {
+    return '$low–$high';
+  }
+
+  @override
+  String todayAge(int age) {
+    return 'I dag $age';
+  }
+
+  @override
+  String get vo2ClassBelowAvg => 'under gennemsnittet';
+
+  @override
+  String get vo2ClassAverage => 'gennemsnitligt';
+
+  @override
+  String get vo2ClassAboveAvg => 'over gennemsnittet';
+
+  @override
+  String get vo2ClassGood => 'god';
+
+  @override
+  String get vo2ClassExcellent => 'fremragende';
+
+  @override
+  String get vo2ClassElite => 'elite';
+
+  @override
+  String get fjeliaProHint =>
+      'FjeliaPro giver dig mere detaljerede oplysninger og analyser.';
+
+  @override
+  String get rowingStrokeRate => 'Tag / min';
+
+  @override
+  String rowingStrokeAverage(int count) {
+    return 'Ø $count tag';
+  }
+
+  @override
+  String get rowingTapToSwitch => 'Tryk for at skifte';
 }

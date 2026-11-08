@@ -158,10 +158,12 @@ class AppleCoachRequest {
         questionTooLongMessage ?? tr.messageTooLongForApple,
       );
     }
-    final allLines = context
-        .split('\n')
-        .where((s) => includeContext && s.trim().isNotEmpty)
-        .toList();
+    final allLines = appleEcgBlocks(
+      context
+          .split('\n')
+          .where((s) => includeContext && s.trim().isNotEmpty)
+          .toList(),
+    );
     final raceCalendar = appleRaceCalendarFacts(allLines);
     // A briefing gets the worked-out comparison with the athlete's own
     // average right before the question, where the small model reads best,
@@ -218,9 +220,16 @@ class AppleCoachRequest {
     const priorities = [
       // An ECG chat is about the recording; its raw samples do not fit.
       '[ECG:Key',
-      '[ECG:Summary',
+      // The training view and the 5-minute blocks of a long recording come
+      // before the device and timing details of the summary.
+      '[ECG:Training',
+      '[ECG:Focus',
+      '[ECG:Blocks',
+      '[ECG:Phases',
       '[ECG:Rhythm',
       '[ECG:Beat',
+      '[ECG:Summary',
+      '[ECG:QualityMap',
       '[Context:',
       '[Analysis:Overall',
       '[Session:',

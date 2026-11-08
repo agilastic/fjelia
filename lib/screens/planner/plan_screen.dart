@@ -15,6 +15,7 @@ import '../../widgets/app_widgets.dart';
 import '../../widgets/plan_timeline.dart';
 import 'plan_adjustments_card.dart';
 import 'plan_overview_cards.dart';
+import 'plan_proposal_cards.dart';
 import 'plan_calendar_markers.dart';
 import 'plan_week_agenda.dart';
 import 'short_sessions_card.dart';
@@ -59,6 +60,8 @@ class _PlanState extends ConsumerState<PlanScreen> {
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 128),
         children: [
+          // Waiting for an answer: first, above everything else.
+          const PlanProposalCards(),
           const PlanWeatherStrip(),
           const RaceCountdownCard(),
           const PlanAdjustmentsCard(),

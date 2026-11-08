@@ -8009,4 +8009,211 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get alreadyOnGarmin => 'Tento tréning už je v Garmin Connect';
+
+  @override
+  String get missedWorkoutPastTitle => 'Zmeškaný tréning';
+
+  @override
+  String get leaveIt => 'Nechať tak';
+
+  @override
+  String get reviewChange => 'Pozrieť';
+
+  @override
+  String get keepPlan => 'Ponechať plán';
+
+  @override
+  String get missedYesterdayTitle => 'Včera zmeškané';
+
+  @override
+  String get proposalReplanTitle => 'Prepočítať plán?';
+
+  @override
+  String get proposalRestTitle => 'Dnes radšej oddych?';
+
+  @override
+  String get proposalRecoveryTitle => 'Dnes len ľahko?';
+
+  @override
+  String get proposalEasierTitle => 'Dnes trochu ľahšie?';
+
+  @override
+  String get proposalReplanBody =>
+      'Záťaž alebo HRV hovoria za prepočítaný plán.';
+
+  @override
+  String get proposalCardTitle => 'Návrh na dnes';
+
+  @override
+  String get replanMissed => 'Preplánovať';
+
+  @override
+  String get askBeforePlanChanges => 'Pýtať sa pred zmenou plánu';
+
+  @override
+  String get askBeforePlanChangesHint =>
+      'Pripravenosť a trendy navrhujú zmeny, rozhoduješ ty. Vypnuté: Fjelia upraví plán sama.';
+
+  @override
+  String missedOnDayTitle(String day) {
+    return 'Zmeškané v $day';
+  }
+
+  @override
+  String missedPastBody(String names) {
+    return '$names. Presunúť alebo vynechať?';
+  }
+
+  @override
+  String proposalDropsLine(String title) {
+    return '$title odpadá';
+  }
+
+  @override
+  String proposalChangeLine(String from, String to) {
+    return '$from → $to';
+  }
+
+  @override
+  String get proposalAnswered => 'Už zodpovedané, nie je čo rozhodnúť.';
+
+  @override
+  String get ecgTrainingWarningTitle => 'Len na tréning';
+
+  @override
+  String get ecgTrainingWarningBody =>
+      'Fjelia nevyhodnocuje EKG z medicínskeho hľadiska. Kouč vysvetľuje iba tepovú frekvenciu, HRV a kvalitu signálu pre tvoj tréning. O srdcových ochoreniach ani poruchách rytmu nehovorí nič: na to záznam exportuj a ukáž ho lekárovi.\n\nBolesť alebo tlak na hrudi, dýchavičnosť, bolesť v ramene, čeľusti alebo chrbte, studený pot alebo mdloba: zavolaj hneď 112.\n\nTepová frekvencia, HRV a kvalita signálu idú do modelu AI zvoleného v nastaveniach AI.';
+
+  @override
+  String get ecgQuestionTraining => 'Čo hovorí moje EKG o tréningu?';
+
+  @override
+  String get ecgFollowHrv => 'Čo hovorí HRV o mojej regenerácii?';
+
+  @override
+  String get ecgFollowHeartRate => 'Ako sa vyvíjala moja tepová frekvencia?';
+
+  @override
+  String get bioLeanMuchYounger => 'Výrazne mladší';
+
+  @override
+  String get bioLeanYounger => 'Mladší';
+
+  @override
+  String get bioLeanEven => 'Presne v priemere';
+
+  @override
+  String get bioLeanOlder => 'Trochu priestoru navyše';
+
+  @override
+  String get bioLeanMuchOlder => 'Veľa priestoru navyše';
+
+  @override
+  String get fitnessSameAsAge => 'Fit ako tvoj vek';
+
+  @override
+  String get lifespanBandTitle => 'Tvoje životné rozpätie';
+
+  @override
+  String get lifespanBandNote =>
+      'Rozpätie zo štatistiky pre ľudí s podobnými hodnotami, nie predpoveď pre teba.';
+
+  @override
+  String get factorHelps => 'Pomáha ti';
+
+  @override
+  String get factorSlows => 'Brzdí ťa';
+
+  @override
+  String get bioFactorBloodPressure => 'Krvný tlak';
+
+  @override
+  String get bioFactorVisceralFat => 'Viscerálny tuk';
+
+  @override
+  String get bioFactorLipids => 'Krvné tuky';
+
+  @override
+  String get bioFactorInflammation => 'Zápal (CRP)';
+
+  @override
+  String get bioFactorKidney => 'Funkcia obličiek';
+
+  @override
+  String get bioAgeModelNote =>
+      'Fitness vek porovnáva tvoje VO₂max s vekovými normami. Životné rozpätie pochádza z modelu zo štúdií: žiadne lekárske tvrdenie ani osobná predpoveď.';
+
+  @override
+  String fitnessYoungerBy(int years) {
+    String _temp0 = intl.Intl.pluralLogic(
+      years,
+      locale: localeName,
+      other: 'o $years rokov mladší než tvoj vek',
+      few: 'o $years roky mladší než tvoj vek',
+      one: 'o 1 rok mladší než tvoj vek',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String fitnessOlderBy(int years) {
+    String _temp0 = intl.Intl.pluralLogic(
+      years,
+      locale: localeName,
+      other: 'o $years rokov nad tvojím vekom',
+      few: 'o $years roky nad tvojím vekom',
+      one: 'o 1 rok nad tvojím vekom',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String lifespanBandYears(int low, int high) {
+    return '$low–$high';
+  }
+
+  @override
+  String todayAge(int age) {
+    return 'Dnes $age';
+  }
+
+  @override
+  String get vo2ClassBelowAvg => 'pod priemerom';
+
+  @override
+  String get vo2ClassAverage => 'priemer';
+
+  @override
+  String get vo2ClassAboveAvg => 'nad priemerom';
+
+  @override
+  String get vo2ClassGood => 'dobré';
+
+  @override
+  String get vo2ClassExcellent => 'vynikajúce';
+
+  @override
+  String get vo2ClassElite => 'elitné';
+
+  @override
+  String get fjeliaProHint =>
+      'FjeliaPro ti poskytne podrobnejšie informácie a analýzy.';
+
+  @override
+  String get rowingStrokeRate => 'Zábery / min';
+
+  @override
+  String rowingStrokeAverage(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Ø $count záberov',
+      few: 'Ø $count zábery',
+      one: 'Ø 1 záber',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get rowingTapToSwitch => 'Ťuknutím prepnúť';
 }

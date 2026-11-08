@@ -1,4 +1,7 @@
+import 'package:fjelia_service_api/fjelia_service_api.dart';
+
 import '../db/database.dart';
+import 'coach_tasks.dart' show ecgClinicalMode;
 import 'ecg_analysis.dart';
 
 /// ECG context for the coach chat, in two stages. By default the coach only
@@ -202,22 +205,26 @@ const ecgFailedLine =
     'say nothing about its content]';
 
 /// The analysis lines the chat about one recording gets, exactly as the
-/// ECG sheet builds them: the short form up to 10 minutes, the timeline
-/// beyond.
+/// ECG sheet builds them: FjeliaPro's medical reading when the analysis has
+/// it, the training view otherwise.
 List<String> ecgAnalysisLines(EcgRecording r, EcgAnalysis analysis) =>
-    r.durationMs > 600000
-    ? analysis.contextLinesWithTimeline(
+    switch (analysis.clinical) {
+      final reading? when ecgClinicalMode => reading.lines(
+        EcgRecordingMeta(
+          device: r.deviceName,
+          source: r.source,
+          recordedAt: r.recordedAt,
+          durationMs: r.durationMs,
+          linkedToWorkout: r.activityId != null,
+        ),
+      ),
+      _ => analysis.fitnessLines(
         device: r.deviceName,
         source: r.source,
         recordedAt: r.recordedAt,
         linkedToWorkout: r.activityId != null,
-      )
-    : analysis.contextLines(
-        device: r.deviceName,
-        source: r.source,
-        recordedAt: r.recordedAt,
-        linkedToWorkout: r.activityId != null,
-      );
+      ),
+    };
 
 /// Stage 2: the full analysis of [r], the same lines the ECG sheet's "ask
 /// the coach" gives. A period in the question ([minutes], counted from the

@@ -7,8 +7,10 @@ cd "$(dirname "$0")/.."
 # Optional per-developer settings (git-ignored): FJELIA_TEAM_ID, ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_PATH.
 [ -f scripts/local.env ] && . scripts/local.env
 DEFINES=()
-[ -f secrets.json ] && DEFINES+=(--dart-define-from-file=secrets.json)
-[ -f ../fjelia-service/secrets.json ] && DEFINES+=(--dart-define-from-file=../fjelia-service/secrets.json)
+# Without the developer's own switches, see public-defines.sh.
+. scripts/public-defines.sh
+[ -f secrets.json ] && DEFINES+=(--dart-define-from-file="$(public_defines secrets.json)")
+[ -f ../fjelia-service/secrets.json ] && DEFINES+=(--dart-define-from-file="$(public_defines ../fjelia-service/secrets.json)")
 
 usage() {
   cat <<'EOF'

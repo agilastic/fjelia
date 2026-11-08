@@ -173,6 +173,7 @@ class CoachContextCard {
     required DateTime recordedAt,
     required List<String> facts,
     required List<String> contextLines,
+    bool clinical = false,
   }) => CoachContextCard(
     sport: 'ecg',
     title: tr.ecgCoachCardTitle,
@@ -180,11 +181,10 @@ class CoachContextCard {
     status: CoachCardStatus.measured,
     facts: facts,
     contextLine: contextLines.join('\n'),
-    questions: [
-      tr.ecgQuestionOverview,
-      tr.ecgQuestionRhythm,
-      tr.ecgQuestionDoctor,
-    ],
+    // Without the medical reading, only what the ECG says for training.
+    questions: clinical
+        ? [tr.ecgQuestionOverview, tr.ecgQuestionRhythm, tr.ecgQuestionDoctor]
+        : [tr.ecgQuestionTraining, tr.ecgFollowHrv, tr.ecgFollowHeartRate],
     medicalWarning: true,
   );
 

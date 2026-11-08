@@ -61,6 +61,12 @@ class BioAgePerson {
   bool get isMale => sex == 'm';
 }
 
+/// Which way the factors lean, without a number of years.
+enum BioAgeLean { muchYounger, younger, even, older, muchOlder }
+
+/// How strongly one factor pushes: only the direction and two steps.
+enum FactorPush { helpsMuch, helps, slows, slowsMuch }
+
 class BioAgeResult {
   const BioAgeResult({
     required this.bioAge,
@@ -89,6 +95,48 @@ class BioAgeResult {
   /// Years added (+) or removed (−) per factor.
   final Map<String, double> contributions;
   final BioAgeActivity activity;
+
+  /// The calendar age the result was computed for.
+  double get age => bioAge - deltaYears;
+
+  /// The lifespan as it can honestly be shown: a band rounded to five years
+  /// around the model's centre, never below today. The model weights its
+  /// factors with one fixed overlap and is not validated as a whole, so a
+  /// single age (or the old fixed ±4 years) would claim a precision it does
+  /// not have.
+  ({int low, int high}) get lifespanBand {
+    final today = age.floor();
+    var low = ((lifeExpectancy - 4) / 5).floor() * 5;
+    var high = ((lifeExpectancy + 4) / 5).ceil() * 5;
+    if (low <= today) low = (today ~/ 5 + 1) * 5;
+    if (high < low + 5) high = low + 5;
+    return (low: low, high: high);
+  }
+
+  BioAgeLean get lean => switch (deltaYears) {
+    <= -5 => BioAgeLean.muchYounger,
+    <= -1.5 => BioAgeLean.younger,
+    < 1.5 => BioAgeLean.even,
+    < 5 => BioAgeLean.older,
+    _ => BioAgeLean.muchOlder,
+  };
+
+  /// The factors that matter, strongest first; tiny ones are left out.
+  List<({String factor, FactorPush push})> get pushes {
+    final relevant =
+        contributions.entries.where((e) => e.value.abs() >= .5).toList()
+          ..sort((a, b) => b.value.abs().compareTo(a.value.abs()));
+    return [
+      for (final e in relevant)
+        (
+          factor: e.key,
+          // Negative years are younger: the factor helps.
+          push: e.value < 0
+              ? (e.value <= -2 ? FactorPush.helpsMuch : FactorPush.helps)
+              : (e.value >= 2 ? FactorPush.slowsMuch : FactorPush.slows),
+        ),
+    ];
+  }
 }
 
 /// Mortality doubles roughly every 8 years of age (Gompertz law).

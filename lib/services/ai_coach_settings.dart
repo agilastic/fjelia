@@ -87,7 +87,7 @@ class AiCoachSettings {
     this.enabled = false,
     this.consentMode = AiConsentMode.everyMessage,
     this.briefingMode = BriefingMode.ai,
-    this.appleIntelligenceForBriefing = false,
+    this.appleIntelligenceForBriefing = true,
     this.onDeviceAvailable = true,
     this.localModelAvailable = false,
     this.localModelInstalled = false,
@@ -99,11 +99,14 @@ class AiCoachSettings {
   final bool enabled;
   final AiConsentMode consentMode;
   final BriefingMode briefingMode;
+
+  /// Briefings are written by Apple Intelligence whenever it runs here,
+  /// whatever answers the chat: it costs no tokens and nothing leaves the
+  /// phone. On by default; the athlete can switch it off.
   final bool appleIntelligenceForBriefing;
 
-  /// Whether the on-device model can run here (device, OS, Apple
-  /// Intelligence switched on, language). Only relevant for Apple
-  /// Intelligence.
+  /// Whether Apple's on-device model can run here (device, OS, Apple
+  /// Intelligence switched on, language), checked for every provider.
   final bool onDeviceAvailable;
   final bool localModelAvailable, localModelInstalled;
 
@@ -119,9 +122,10 @@ class AiCoachSettings {
         _ => hasApiKey,
       };
 
+  /// A local model writes the briefing itself; with Free AI or an own key,
+  /// Apple Intelligence writes it when it runs on this device.
   bool get usesOnDeviceBriefing =>
-      provider.isLocal ||
-      (provider.requiresUserApiKey && appleIntelligenceForBriefing);
+      provider.isLocal || (appleIntelligenceForBriefing && onDeviceAvailable);
 
   bool get readyForBriefing =>
       briefingMode == BriefingMode.ai &&
@@ -245,7 +249,7 @@ class AiCoachSettingsStore {
         await _storage.read(key: 'ai_briefing_mode'),
       ),
       appleIntelligenceForBriefing:
-          await _storage.read(key: 'ai_apple_briefing') == 'true',
+          await _storage.read(key: 'ai_apple_briefing') != 'false',
     );
   }
 

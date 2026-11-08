@@ -1,13 +1,17 @@
 import 'dart:math' as math;
 
+import 'package:fjelia_service_api/fjelia_service_api.dart';
+
 import '../models/ecg.dart';
 
-/// App-side pre-analysis of a single-lead ECG for the coach.
+/// App-side pre-analysis of a single-lead ECG for training: heart rate,
+/// heart-rate variability and signal quality.
 ///
 /// The signal is cut into 10 s windows and only windows that pass the quality
 /// checks (contact, noise, plausible beat spacing) are analysed. Every figure
 /// is left out (`na`) when the data behind it is too thin to be plausible.
-/// These are screening measurements of one chest-strap lead, not a diagnosis.
+/// The medical reading (rhythm, intervals, the beat's shape) is FjeliaPro's
+/// and comes from the private package ([clinical]).
 class EcgAnalysis {
   EcgAnalysis._({
     required this.sampleRateHz,
@@ -18,11 +22,8 @@ class EcgAnalysis {
     required this.excluded,
     required this.blocks,
     required this.beats,
-    required this.rhythm,
-    required this.morphology,
-    required this.pacerSpikes,
-    required this.raw,
-    required this.template,
+    required this.heartRate,
+    required this.clinical,
   });
 
   final double sampleRateHz, durationSeconds, analysedSeconds;
@@ -31,19 +32,14 @@ class EcgAnalysis {
   /// Why windows were left out, e.g. {'noise': 2, 'no contact': 1}.
   final Map<String, int> excluded;
 
-  /// Per-block temporal summaries for long recordings. Each block covers
-  /// roughly [blockSeconds] seconds of the recording and contains HR stats,
-  /// quality, and anomaly counts for that interval.
+  /// Five-minute blocks (at most 12) with heart rate and signal quality.
   final List<EcgBlock> blocks;
 
   final int beats;
-  final EcgRhythm? rhythm;
-  final EcgMorphology? morphology;
+  final EcgHeartRate? heartRate;
 
-  /// Null when the sample rate is too low to see pacemaker spikes.
-  final int? pacerSpikes;
-  final EcgExcerpt? raw;
-  final EcgTemplate? template;
+  /// The medical reading, when it was asked for and this build has it.
+  final EcgClinicalReading? clinical;
 
   /// At least 10 s of clean signal; below that nothing is interpreted.
   bool get usable => analysedSeconds >= 10 && beats >= 8;
@@ -58,165 +54,47 @@ class EcgAnalysis {
         : 'poor';
   }
 
-  /// Context lines for the coach, in English like the rest of its context.
-  /// Lists inside a line are separated by spaces, not commas.
-  List<String> contextLines({
+  /// The coach's context for training only: heart rate, heart-rate
+  /// variability and signal quality, per 5-minute block on long recordings.
+  /// Nothing about rhythm patterns, extra beats, pauses, intervals or the
+  /// waveform: reading those is FjeliaPro's medical reading ([clinical]).
+  List<String> fitnessLines({
     required String device,
     required String source,
     required DateTime recordedAt,
     required bool linkedToWorkout,
   }) {
-    final hz = sampleRateHz;
     final local = recordedAt.toLocal();
     String two(int v) => v.toString().padLeft(2, '0');
-    final summary = [
-      'Device:${_clean(device)}',
-      'Source:${_clean(source)}',
-      'Recorded:${local.year}-${two(local.month)}-${two(local.day)} ${two(local.hour)}:${two(local.minute)}',
-      'Situation:${linkedToWorkout ? 'linked to a workout (may be during or after exercise)' : 'not linked to a workout'}',
-      'Lead:single chest-strap lead (not a 12-lead ECG; electrode position not standardised)',
-      'Rate:${hz.toStringAsFixed(hz % 1 == 0 ? 0 : 1)}Hz (${(1000 / hz).toStringAsFixed(1)}ms per sample)',
-      'Duration:${durationSeconds.round()}s',
-      'Analysed:${analysedSeconds.round()}s in $usableWindows of $windows windows',
-      if (excluded.isNotEmpty)
-        'Excluded:${[for (final e in excluded.entries) '${e.value}x ${e.key}'].join(' ')}',
-      'Quality:$quality',
-      'PacerSpikes:${pacerSpikes == null ? 'not assessable below 500Hz' : '$pacerSpikes'}',
-    ];
-    final r = rhythm, m = morphology;
-    // The few figures a small on-device model can take, first.
-    final key = [
-      'Quality:$quality',
-      'Analysed:${analysedSeconds.round()}s',
-      'OneChestStrapLead',
-      if (r != null) ...[
-        'HR:${r.hrMean}bpm',
-        'Pattern:${r.pattern.split(' ').first}',
-        'Premature:${r.premature}',
-        'Pauses>2s:${r.pausesOver2s}',
-      ],
-      if (m != null) ...[
-        'QRS:${_na(m.qrsMs, 'ms')}',
-        'PR:${_na(m.prMs, 'ms')}',
-        'ST60:${_signed(m.st60Uv)}',
-        'QTcF:${_na(m.qtcFridericia, 'ms')}',
-      ],
-    ];
+    final r = heartRate;
     final lines = [
-      '[ECG:Key,${key.join(',')}]',
-      '[ECG:Summary,${summary.join(',')}]',
+      '[ECG:Key,Quality:$quality,Analysed:${analysedSeconds.round()}s,'
+          'TrainingViewOnly${r == null ? '' : ',HR:${r.hrMean}bpm,RMSSD:${_na(r.rmssd, 'ms')}'}]',
+      '[ECG:Summary,Device:${_clean(device)},Source:${_clean(source)},'
+          'Recorded:${local.year}-${two(local.month)}-${two(local.day)} ${two(local.hour)}:${two(local.minute)},'
+          'Situation:${linkedToWorkout ? 'linked to a workout (may be during or after exercise)' : 'not linked to a workout'},'
+          'Duration:${durationSeconds.round()}s,'
+          'Analysed:${analysedSeconds.round()}s in $usableWindows of $windows windows,'
+          '${excluded.isEmpty ? '' : 'Excluded:${[for (final e in excluded.entries) '${e.value}x ${e.key}'].join(' ')},'}'
+          'Quality:$quality,'
+          'Use:training view only (heart rate, HRV, signal quality); no medical reading]',
     ];
-    if (!usable) return lines;
-    if (r != null) lines.add('[ECG:Rhythm,${r.fields().join(',')}]');
-    if (m != null) lines.add('[ECG:Beat,${m.fields().join(',')}]');
-    if (template case final t?) {
-      lines.add(
-        '[ECG:Template,Beats:${t.beats},StartMs:${t.startMs},StepMs:${(1000 / t.hz).toStringAsFixed(1)},'
-        'uV relative to PR baseline:${t.microvolts.join(' ')}]',
-      );
-    }
-    if (raw case final e?) {
-      lines.add(
-        '[ECG:Raw,Start:${e.startSeconds.toStringAsFixed(1)}s,Hz:${e.hz.toStringAsFixed(e.hz % 1 == 0 ? 0 : 1)},'
-        'Rpeaks s from start:${[for (final t in e.rPeaks) t.toStringAsFixed(2)].join(' ')},'
-        'uV as recorded:${e.microvolts.join(' ')}]',
-      );
-    }
-    return lines;
-  }
-
-  /// Enhanced context for long recordings (>10 min). Adds per-block temporal
-  /// breakdown so the AI can see how HR, quality, and anomalies evolve over time.
-  List<String> contextLinesWithTimeline({
-    required String device,
-    required String source,
-    required DateTime recordedAt,
-    bool linkedToWorkout = false,
-  }) {
-    final lines = <String>[
-      '[ECG:Meta,Device:$device,Source:$source,'
-      'Recorded:${recordedAt.toLocal().toString().substring(0, 19)},'
-      'Duration:${durationSeconds.round()}s,Analysed:${analysedSeconds.round()}s,'
-      'Windows:$windows/$usableWindows,Beats:$beats]',
-    ];
-
-    // Quality overview.
-    final usable = analysedSeconds > 0;
-    if (!usable) {
-      lines.add('[ECG:Quality,No usable signal]');
-      return lines;
-    }
-
-    // Key findings.
-    final key = <String>[];
-    if (rhythm != null) {
-      if (rhythm!.pattern == 'irregular') key.add('Irregular rhythm');
-      if (rhythm!.premature > 0) key.add('${rhythm!.premature} premature beats');
-      if (rhythm!.pausesOver2s > 0) key.add('${rhythm!.pausesOver2s} pauses>2s');
-      if (rhythm!.secondsOver100 > 30) key.add('Tachycardia ${rhythm!.secondsOver100}s');
-      if (rhythm!.secondsUnder50 > 30) key.add('Bradycardia ${rhythm!.secondsUnder50}s');
-    }
-    if (pacerSpikes != null && pacerSpikes! > 0) key.add('Pacemaker spikes');
-    lines.add('[ECG:Key,${key.join(',')}]');
-
-    // Summary.
-    final summary = <String>[];
-    if (rhythm != null) {
-      summary.add('HRmean:${rhythm!.hrMean}bpm');
-      summary.add('HRrange:${rhythm!.hrMin}-${rhythm!.hrMax}bpm');
-      summary.add('Pattern:${rhythm!.pattern}');
-    }
-    if (morphology != null) {
-      final m = morphology!;
-      summary.add('QRS:${m.qrsMs ?? 'na'}ms');
-      summary.add('QTcB:${m.qtcBazett ?? 'na'}ms');
-      summary.add('STdev:${m.st60Uv?.round() ?? 'na'}uV');
-    }
-    lines.add('[ECG:Summary,${summary.join(',')}]');
-
-    if (!usable) return lines;
-    if (rhythm != null) lines.add('[ECG:Rhythm,${rhythm!.fields().join(',')}]');
-    if (morphology != null) lines.add('[ECG:Beat,${morphology!.fields().join(',')}]');
-    if (template case final t?) {
-      lines.add(
-        '[ECG:Template,Beats:${t.beats},StartMs:${t.startMs},StepMs:${(1000 / t.hz).toStringAsFixed(1)},'
-        'uV relative to PR baseline:${t.microvolts.join(' ')}]',
-      );
-    }
-    if (raw case final e?) {
-      lines.add(
-        '[ECG:Raw,Start:${e.startSeconds.toStringAsFixed(1)}s,Hz:${e.hz.toStringAsFixed(e.hz % 1 == 0 ? 0 : 1)},'
-        'Rpeaks s from start:${[for (final t in e.rPeaks) t.toStringAsFixed(2)].join(' ')},'
-        'uV as recorded:${e.microvolts.join(' ')}]',
-      );
-    }
-
-    // Temporal breakdown for long recordings.
-    if (blocks.isNotEmpty) {
+    if (!usable || r == null) return lines;
+    lines.add(
+      '[ECG:Training,HRmean:${r.hrMean}bpm,HRmin5beat:${r.hrMin}bpm,'
+      'HRmax5beat:${r.hrMax}bpm,RMSSD:${_na(r.rmssd, 'ms')},'
+      'SDNN:${_na(r.sdnn, 'ms')},pNN50:${_na(r.pnn50, '%')}]',
+    );
+    if (blocks.length > 1) {
       lines.add('[ECG:Timeline,Blocks:${blocks.length}]');
       for (final b in blocks) {
-        lines.add('[ECG:Block,${b.toLine()}]');
+        lines.add('[ECG:Block,${b.toTrainingLine()}]');
       }
-
-      // Phase summary — identify resting/exercise/recovery phases.
-      final phaseSummary = _phaseSummary(blocks);
-      if (phaseSummary != null) {
-        lines.add('[ECG:Phases,$phaseSummary]');
-      }
-
-      // Anomaly timeline — where did problems occur?
-      final anomalyTimeline = _anomalyTimeline(blocks);
-      if (anomalyTimeline != null) {
-        lines.add('[ECG:Anomalies,$anomalyTimeline]');
-      }
-
-      // Quality map — which parts are reliable?
-      final qualityMap = _qualityMap(blocks);
-      if (qualityMap != null) {
-        lines.add('[ECG:QualityMap,$qualityMap]');
-      }
+      // Heart-rate phases and signal quality, as on long recordings before;
+      // the anomaly timeline is a rhythm reading and stays out.
+      if (_phaseSummary(blocks) case final p?) lines.add('[ECG:Phases,$p]');
+      if (_qualityMap(blocks) case final q?) lines.add('[ECG:QualityMap,$q]');
     }
-
     return lines;
   }
 
@@ -252,33 +130,7 @@ class EcgAnalysis {
     // Close the last phase.
     phases.add('$phase ${phaseStart}–${blocks.last.startSeconds.round()}s');
 
-    // Summarize.
-    final hrTrend = <String>[];
-    for (final p in phases) {
-      final parts = p.split(' ');
-      if (parts.length >= 3) {
-        hrTrend.add('${parts[0]} ${parts[1]}–${parts[2]}s');
-      }
-    }
-
-    return 'Phases: ${hrTrend.join(", ")}';
-  }
-
-  /// Identifies where anomalies (premature beats, pauses) are concentrated.
-  String? _anomalyTimeline(List<EcgBlock> blocks) {
-    final anomalies = <String>[];
-
-    for (final b in blocks) {
-      if (b.premature > 0 || b.pausesOver2s > 0) {
-        final parts = <String>[];
-        if (b.premature > 0) parts.add('${b.premature} premature');
-        if (b.pausesOver2s > 0) parts.add('${b.pausesOver2s} pauses>2s');
-        anomalies.add('Block ${b.startSeconds.round()}–${(b.startSeconds + b.durationSeconds).round()}s: ${parts.join(", ")}');
-      }
-    }
-
-    if (anomalies.isEmpty) return null;
-    return 'Anomalies: ${anomalies.join("; ")}';
+    return 'Phases: ${phases.join(", ")}';
   }
 
   /// Summarizes signal quality across the recording.
@@ -287,13 +139,19 @@ class EcgAnalysis {
 
     for (final b in blocks) {
       if (b.totalWindows == 0) {
-        qualityParts.add('Block ${b.startSeconds.round()}–${(b.startSeconds + b.durationSeconds).round()}s: no data');
+        qualityParts.add(
+          'Block ${b.startSeconds.round()}–${(b.startSeconds + b.durationSeconds).round()}s: no data',
+        );
       } else {
         final ratio = b.usableWindows / b.totalWindows;
         if (ratio < .5) {
-          qualityParts.add('Block ${b.startSeconds.round()}–${(b.startSeconds + b.durationSeconds).round()}s: poor (${b.usableWindows}/${b.totalWindows})');
+          qualityParts.add(
+            'Block ${b.startSeconds.round()}–${(b.startSeconds + b.durationSeconds).round()}s: poor (${b.usableWindows}/${b.totalWindows})',
+          );
         } else if (ratio < .8) {
-          qualityParts.add('Block ${b.startSeconds.round()}–${(b.startSeconds + b.durationSeconds).round()}s: fair (${b.usableWindows}/${b.totalWindows})');
+          qualityParts.add(
+            'Block ${b.startSeconds.round()}–${(b.startSeconds + b.durationSeconds).round()}s: fair (${b.usableWindows}/${b.totalWindows})',
+          );
         }
       }
     }
@@ -302,6 +160,7 @@ class EcgAnalysis {
     return 'Quality issues: ${qualityParts.join("; ")}';
   }
 }
+
 class EcgBlock {
   const EcgBlock({
     required this.startSeconds,
@@ -312,8 +171,6 @@ class EcgBlock {
     required this.beats,
     required this.usableWindows,
     required this.totalWindows,
-    required this.premature,
-    required this.pausesOver2s,
   });
 
   /// Start of the block in seconds from recording start.
@@ -329,178 +186,42 @@ class EcgBlock {
   /// Quality: usable windows vs total windows in this block.
   final int usableWindows, totalWindows;
 
-  /// Premature beats and pauses >2s in this block.
-  final int premature, pausesOver2s;
+  String get _quality => totalWindows == 0
+      ? 'no data'
+      : usableWindows / totalWindows >= .9
+      ? 'good'
+      : usableWindows / totalWindows >= .6
+      ? 'fair'
+      : 'poor';
 
-  /// Short label like "min 0–5: ~68 bpm, good".
-  String get label {
-    final min = (startSeconds / 60).floor();
-    final max = ((startSeconds + durationSeconds) / 60).ceil();
-    return 'min $min–$max: ~${hrMean} bpm, ${usableWindows}/${totalWindows} windows';
-  }
-
-  /// One-line summary for the coach prompt.
-  String toLine() {
-    final quality = totalWindows == 0
-        ? 'no data'
-        : usableWindows / totalWindows >= .9
-            ? 'good'
-            : usableWindows / totalWindows >= .6
-                ? 'fair'
-                : 'poor';
-    final extras = <String>[];
-    if (premature > 0) extras.add('$premature premature');
-    if (pausesOver2s > 0) extras.add('$pausesOver2s pauses>2s');
-    return 'Block ${startSeconds.round()}–${(startSeconds + durationSeconds).round()}s: HR~${hrMean}bpm (${hrMin}–${hrMax}), quality=$quality, beats=$beats${extras.isNotEmpty ? ', ${extras.join(", ")}' : ''}';
-  }
+  /// Heart rate and quality of the block, for the training view.
+  String toTrainingLine() =>
+      'Block ${startSeconds.round()}–${(startSeconds + durationSeconds).round()}s: '
+      'HR~${hrMean}bpm ($hrMin–$hrMax), quality=$_quality';
 }
 
-class EcgRhythm {
-  const EcgRhythm({
+/// Heart rate and heart-rate variability of the clean beats.
+class EcgHeartRate {
+  const EcgHeartRate({
     required this.rrCount,
     required this.hrMean,
     required this.hrMin,
     required this.hrMax,
-    required this.rrMedianMs,
-    required this.longestRrMs,
     required this.sdnn,
     required this.rmssd,
     required this.pnn50,
-    required this.irregularityPct,
-    required this.pattern,
-    required this.premature,
-    required this.prematureSameShape,
-    required this.prematureDifferentShape,
-    required this.differentShapeRuns,
-    required this.longestDifferentShapeRun,
-    required this.pausesOver2s,
-    required this.doubleRrPauses,
-    required this.secondsOver100,
-    required this.secondsUnder50,
   });
   final int rrCount;
-  final int hrMean, hrMin, hrMax, rrMedianMs, longestRrMs;
+
+  /// The range comes from five-interval means, so one beat does not set it.
+  final int hrMean, hrMin, hrMax;
 
   /// Null when there are too few normal beats for HRV.
   final double? sdnn, rmssd, pnn50;
-  final double irregularityPct;
-
-  /// regular, mildly variable, irregular, or na (recording too short).
-  final String pattern;
-  final int premature, prematureSameShape, prematureDifferentShape;
-  final int differentShapeRuns, longestDifferentShapeRun;
-  final int pausesOver2s, doubleRrPauses, secondsOver100, secondsUnder50;
-
-  List<String> fields() => [
-    'RR:$rrCount',
-    'HRmean:${hrMean}bpm',
-    'HRmin5beat:${hrMin}bpm',
-    'HRmax5beat:${hrMax}bpm',
-    'RRmedian:${rrMedianMs}ms',
-    'LongestRR:${longestRrMs}ms',
-    'SDNN:${_na(sdnn, 'ms')}',
-    'RMSSD:${_na(rmssd, 'ms')}',
-    'pNN50:${_na(pnn50, '%')}',
-    'Irregularity:${irregularityPct.toStringAsFixed(1)}% (median successive RR change / mean RR)',
-    'Pattern:$pattern',
-    'PrematureBeats:$premature (same QRS shape:$prematureSameShape different QRS shape:$prematureDifferentShape)',
-    'RunsOf3+DifferentShapeBeats:$differentShapeRuns${longestDifferentShapeRun > 0 ? ' (longest $longestDifferentShapeRun beats)' : ''}',
-    'Pauses>2s:$pausesOver2s',
-    'PausesAbout2xRR:$doubleRrPauses',
-    'TimeOver100bpm:${secondsOver100}s',
-    'TimeUnder50bpm:${secondsUnder50}s',
-  ];
-}
-
-class EcgMorphology {
-  const EcgMorphology({
-    required this.baseline,
-    required this.beats,
-    required this.consistency,
-    required this.polarity,
-    required this.rUv,
-    required this.sUv,
-    required this.qrsMs,
-    required this.pUv,
-    required this.prMs,
-    required this.st60Uv,
-    required this.tUv,
-    required this.qtMs,
-    required this.qtcBazett,
-    required this.qtcFridericia,
-  });
-
-  /// The PR-segment level the other levels are measured against.
-  final double baseline;
-  final int beats;
-  final double consistency;
-  final String polarity;
-  final int rUv, sUv;
-  final int? qrsMs, pUv, prMs, st60Uv, tUv, qtMs;
-  final int? qtcBazett, qtcFridericia;
-
-  List<String> fields() => [
-    'TemplateBeats:$beats',
-    'ShapeConsistency:${consistency.toStringAsFixed(2)}',
-    'QRSpolarity:$polarity',
-    'R:${rUv}uV',
-    'S:${sUv}uV',
-    'QRS:${_na(qrsMs, 'ms')}',
-    'P:${pUv == null ? 'not identified' : '${pUv}uV'}',
-    'PR:${_na(prMs, 'ms')}',
-    'STatJ+60ms:${_signed(st60Uv)}',
-    'T:${tUv == null
-        ? 'na'
-        : tUv!.abs() < 50
-        ? 'flat (${tUv}uV)'
-        : '${_signed(tUv)} ${tUv! > 0 ? 'upright' : 'inverted'}'}',
-    'QT:${_na(qtMs, 'ms')}',
-    'QTcBazett:${_na(qtcBazett, 'ms')}',
-    'QTcFridericia:${_na(qtcFridericia, 'ms')}',
-  ];
-}
-
-class EcgTemplate {
-  const EcgTemplate(this.hz, this.startMs, this.beats, this.microvolts);
-  final double hz;
-  final int startMs, beats;
-  final List<int> microvolts;
-}
-
-class EcgExcerpt {
-  const EcgExcerpt(this.startSeconds, this.hz, this.rPeaks, this.microvolts);
-  final double startSeconds, hz;
-  final List<double> rPeaks;
-  final List<int> microvolts;
-}
-
-/// A time segment of the recording with per-segment rhythm stats.
-class EcgSegment {
-  const EcgSegment({
-    required this.startSeconds,
-    required this.durationSeconds,
-    required this.hrMean,
-    required this.pattern,
-    required this.noiseRatio,
-    required this.prematureCount,
-  });
-
-  final double startSeconds;
-  final double durationSeconds;
-  final int hrMean;
-  final String pattern; // regular, mildly variable, irregular, na
-  final double noiseRatio;
-  final int prematureCount;
-
-  /// Compact one-line for the coach context.
-  String toLine() =>
-      'Seg${startSeconds.round()}s:HR${hrMean}bpm,Pattern:$pattern,Noise:${noiseRatio.toStringAsFixed(2)},Premature:$prematureCount';
 }
 
 String _na(num? v, String unit) =>
     v == null ? 'na' : '${v is double ? v.toStringAsFixed(1) : v}$unit';
-
-String _signed(int? uv) => uv == null ? 'na' : '${uv >= 0 ? '+' : ''}${uv}uV';
 
 String _clean(String s) => s.replaceAll(RegExp(r'[,:\[\]]'), ' ').trim();
 
@@ -537,8 +258,13 @@ class _Window {
 }
 
 /// Runs the whole pre-analysis. Pure and synchronous: callers with long
-/// recordings run it in an isolate.
-EcgAnalysis analyzeEcg(List<EcgChunk> chunks, double hz) {
+/// recordings run it in an isolate. With [clinical] the medical reading of
+/// the private package is added; callers pass it only when it is available.
+EcgAnalysis analyzeEcg(
+  List<EcgChunk> chunks,
+  double hz, {
+  EcgClinicalRules? clinical,
+}) {
   final segments = _segments(chunks, hz);
   final duration = segments.isEmpty
       ? 0.0
@@ -559,12 +285,13 @@ EcgAnalysis analyzeEcg(List<EcgChunk> chunks, double hz) {
     s.r = _detectR(s.y, hz);
     s.m = _isoelectric(s.raw, s.r, hz);
     final hf = _movingAverage(s.y, math.max(3, (0.02 * hz).round()));
+    final clean = _highPass(s.raw, hz, .5);
     final step = (_windowSeconds * hz).round();
     for (var from = 0; from < s.raw.length; from += step) {
       final to = math.min(s.raw.length, from + step);
       if (to - from < hz * 5) break;
       final w = _Window(s, from, to);
-      _rateWindow(w, hz, hf);
+      _rateWindow(w, hz, hf, clean);
       windows.add(w);
     }
     for (final i in s.r) {
@@ -594,82 +321,55 @@ EcgAnalysis analyzeEcg(List<EcgChunk> chunks, double hz) {
     }
     b.rrBefore = (b.index - a.index) / hz * 1000;
   }
-  final pacer = hz >= 500 ? _pacerSpikes(segments, hz) : null;
   final rr = [
     for (final b in beats)
       if (b.rrBefore != null) b.rrBefore!,
   ];
-
-  // Per-block temporal summaries for long recordings (blockSeconds=300 = 5 min).
-  final blocks = _computeBlocks(beats, windows, hz);
-
-  if (analysed < 10 || beats.length < 8 || rr.length < 6) {
-    return EcgAnalysis._(
-      sampleRateHz: hz,
+  final enough = analysed >= 10 && beats.length >= 8 && rr.length >= 6;
+  if (enough) {
+    final medianRr = _median(rr);
+    // Premature beats and beats of another shape stay out of the HRV, as in
+    // any HRV analysis; the app does not report them.
+    _markPremature(beats);
+    _compareShapes(beats, medianRr, hz);
+  }
+  final reading = clinical?.read(
+    EcgSignal(
+      hz: hz,
       durationSeconds: duration,
       analysedSeconds: analysed,
-      windows: windows.length,
-      usableWindows: usableWindows.length,
       excluded: excluded,
-      blocks: blocks,
-      beats: beats.length,
-      rhythm: null,
-      morphology: null,
-      pacerSpikes: pacer,
-      raw: null,
-      template: null,
-    );
-  }
-  final medianRr = _median(rr);
-  _markPremature(beats);
-  final pre = math.min(0.35, 0.45 * medianRr / 1000),
-      post = math.min(0.6, 0.7 * medianRr / 1000);
-  final preN = (pre * hz).round(), postN = (post * hz).round();
-  List<double>? cut(_Beat b) =>
-      b.index - preN < 0 || b.index + postN >= b.segment.m.length
-      ? null
-      : b.segment.m.sublist(b.index - preN, b.index + postN + 1);
-  // A first template from beats at normal timing, then each beat's QRS is
-  // compared with it.
-  final firstTemplate = _medianBeat([
-    for (final b in beats.where((b) => !b.premature).take(400))
-      if (cut(b) != null) cut(b)!,
-  ]);
-  final qrsFrom = math.max(0, preN - (0.1 * hz).round()),
-      qrsTo = math.min(preN + postN, preN + (0.15 * hz).round());
-  if (firstTemplate != null) {
-    for (final b in beats) {
-      final c = cut(b);
-      if (c != null) {
-        b.corr = _correlation(
-          c.sublist(qrsFrom, qrsTo + 1),
-          firstTemplate.sublist(qrsFrom, qrsTo + 1),
-        );
-      }
-    }
-  }
-  final rhythm = _rhythm(beats, hz);
-  final normal = [
-    for (final b in beats)
-      if (!b.premature && b.corr >= .9 && cut(b) != null) cut(b)!,
-  ];
-  final template = normal.length >= 8 ? _medianBeat(normal) : null;
-  final morphology = template == null
-      ? null
-      : _morphology(
-          template,
-          preN,
-          hz,
-          medianRr,
-          normal.length,
-          consistency: _median([
-            for (final b in beats)
-              if (!b.premature) b.corr,
-          ]),
-          noise: _median([for (final w in usableWindows) w.noiseRatio]),
-        );
-  final best = usableWindows.reduce(
-    (a, b) => b.noiseRatio < a.noiseRatio ? b : a,
+      segments: [
+        for (final s in segments)
+          EcgSignalSegment(
+            startSeconds: s.start,
+            raw: s.raw,
+            isoelectric: s.m,
+            rPeaks: s.r,
+          ),
+      ],
+      windows: [
+        for (final w in windows)
+          EcgSignalWindow(
+            segment: segments.indexOf(w.segment),
+            from: w.from,
+            to: w.to,
+            problem: w.problem,
+            noiseRatio: w.noiseRatio,
+          ),
+      ],
+      beats: [
+        for (final b in beats)
+          EcgSignalBeat(
+            segment: segments.indexOf(b.segment),
+            index: b.index,
+            timeSeconds: b.time,
+            rrBeforeMs: b.rrBefore,
+            premature: b.premature,
+            shapeCorrelation: b.corr,
+          ),
+      ],
+    ),
   );
   return EcgAnalysis._(
     sampleRateHz: hz,
@@ -678,16 +378,38 @@ EcgAnalysis analyzeEcg(List<EcgChunk> chunks, double hz) {
     windows: windows.length,
     usableWindows: usableWindows.length,
     excluded: excluded,
-    blocks: blocks,
+    blocks: _computeBlocks(beats, windows, hz),
     beats: beats.length,
-    rhythm: rhythm,
-    morphology: morphology,
-    pacerSpikes: pacer,
-    raw: _excerpt(best, hz),
-    template: template == null || morphology == null
-        ? null
-        : _templateOut(template, preN, hz, normal.length, morphology),
+    heartRate: enough ? _heartRate(beats) : null,
+    clinical: reading,
   );
+}
+
+/// Each beat's QRS against the median beat of the beats at normal timing.
+void _compareShapes(List<_Beat> beats, double medianRr, double hz) {
+  final pre = math.min(0.35, 0.45 * medianRr / 1000),
+      post = math.min(0.6, 0.7 * medianRr / 1000);
+  final preN = (pre * hz).round(), postN = (post * hz).round();
+  List<double>? cut(_Beat b) =>
+      b.index - preN < 0 || b.index + postN >= b.segment.m.length
+      ? null
+      : b.segment.m.sublist(b.index - preN, b.index + postN + 1);
+  final template = _medianBeat([
+    for (final b in beats.where((b) => !b.premature).take(400))
+      if (cut(b) != null) cut(b)!,
+  ]);
+  if (template == null) return;
+  final qrsFrom = math.max(0, preN - (0.1 * hz).round()),
+      qrsTo = math.min(preN + postN, preN + (0.15 * hz).round());
+  for (final b in beats) {
+    final c = cut(b);
+    if (c != null) {
+      b.corr = _correlation(
+        c.sublist(qrsFrom, qrsTo + 1),
+        template.sublist(qrsFrom, qrsTo + 1),
+      );
+    }
+  }
 }
 
 List<_Segment> _segments(List<EcgChunk> chunks, double hz) {
@@ -857,7 +579,12 @@ List<int> _detectR(List<double> y, double hz) {
   return out;
 }
 
-void _rateWindow(_Window w, double hz, List<double> smooth) {
+void _rateWindow(
+  _Window w,
+  double hz,
+  List<double> smooth,
+  List<double> clean,
+) {
   final s = w.segment;
   final raw = s.raw.sublist(w.from, w.to);
   if (_std(raw) < 15) {
@@ -898,7 +625,197 @@ void _rateWindow(_Window w, double hz, List<double> smooth) {
     w.problem = 'noise';
   } else if (close > .1 * peaks.length) {
     w.problem = 'implausible beat spacing';
+  } else {
+    // Thresholds from the bench (tools/ecg_bench in the private package):
+    // MIT-BIH keeps 98 % of its windows, noise at 0 dB is mostly rejected.
+    final similar = _beatSimilarity(clean, peaks, hz);
+    final sqi = _zhaoQuality(clean.sublist(w.from, w.to), peaks, hz);
+    // Electrode motion makes false detections that resemble each other: a
+    // borderline spectrum then also needs clearly alike beats.
+    if (similar.median < .85 ||
+        similar.orphans > .25 ||
+        sqi == _Sqi.unacceptable ||
+        (sqi == _Sqi.barelyAcceptable && similar.median < .94)) {
+      w.problem = 'noise';
+    }
   }
+}
+
+/// How much the window's beats look like each other: per beat the best
+/// correlation with another beat of the window (±250 ms around the R peak).
+/// Extra beats of one shape still find their match, so a bundle branch block
+/// or a bigeminy is not read as noise; noise and false detections match
+/// nothing. Fewer than three beats in ten seconds count as noise.
+({double median, double orphans}) _beatSimilarity(
+  List<double> clean,
+  List<int> peaks,
+  double hz,
+) {
+  final half = (.25 * hz).round();
+  final beats = [
+    for (final p in peaks)
+      if (p - half >= 0 && p + half < clean.length)
+        clean.sublist(p - half, p + half),
+  ];
+  if (beats.length < 3) return (median: 0, orphans: 1);
+  final best = <double>[];
+  for (var i = 0; i < beats.length; i++) {
+    var top = -1.0;
+    for (var j = 0; j < beats.length; j++) {
+      if (i != j) top = math.max(top, _correlation(beats[i], beats[j]));
+    }
+    best.add(top);
+  }
+  return (
+    median: _median(best),
+    orphans: best.where((c) => c < .8).length / best.length,
+  );
+}
+
+enum _Sqi { excellent, barelyAcceptable, unacceptable }
+
+/// Signal quality after Zhao and Zhang (2018), "simple" rules as in
+/// NeuroKit2 (`ecg_quality`, method zhao2018; MIT licence): the QRS band's
+/// share of the power (pSQI), the kurtosis (kSQI) and the share outside the
+/// baseline band (basSQI) of a [clean] (0.5 Hz high-passed) window.
+_Sqi _zhaoQuality(List<double> clean, List<int> peaks, double hz) {
+  final power = _powerSpectrum(clean, hz);
+  double band(double lo, double hi) {
+    var sum = 0.0;
+    for (final (f, p) in power) {
+      if (f >= lo && f <= hi) sum += p;
+    }
+    return sum;
+  }
+
+  final total = band(0, 40), qrsBand = band(5, 40);
+  final pSqi = qrsBand == 0 ? 0.0 : band(5, 15) / qrsBand;
+  final basSqi = total == 0 ? 0.0 : 1 - band(0, 1) / total;
+  final kSqi = _kurtosis(clean);
+  // The fastest rate in the window picks the pSQI limits.
+  var minRr = double.infinity;
+  for (var k = 1; k < peaks.length; k++) {
+    minRr = math.min(minRr, (peaks[k] - peaks[k - 1]) / hz);
+  }
+  final fast = minRr.isFinite && 60 / minRr >= 130;
+  final (l1, l2, l3) = fast ? (.4, .7, .3) : (.5, .8, .4);
+  // Unlike NeuroKit2, a pSQI above the band only counts as suspicious: it
+  // comes from electrode motion, but also from the smooth QRS of a clean
+  // 130 Hz chest-strap signal with some baseline wander (MIT-BIH 121, 202).
+  final p = pSqi > l1 && pSqi < l2
+      ? 2
+      : pSqi > l3
+      ? 1
+      : 0;
+  final k = kSqi > 5 ? 2 : 0;
+  final b = basSqi >= .95
+      ? 2
+      : basSqi < .9
+      ? 0
+      : 1;
+  final classes = [p, k, b];
+  final optimal = classes.where((c) => c == 2).length;
+  final suspicious = classes.where((c) => c == 1).length;
+  final unqualified = classes.where((c) => c == 0).length;
+  if (unqualified >= 2 || (unqualified == 1 && suspicious == 2)) {
+    return _Sqi.unacceptable;
+  }
+  return optimal >= 2 && unqualified == 0
+      ? _Sqi.excellent
+      : _Sqi.barelyAcceptable;
+}
+
+/// Pearson's kurtosis (3 for a normal distribution).
+double _kurtosis(List<double> x) {
+  final n = x.length;
+  if (n < 4) return 0;
+  final mean = x.reduce((a, b) => a + b) / n;
+  var m2 = 0.0, m4 = 0.0;
+  for (final v in x) {
+    final d = (v - mean) * (v - mean);
+    m2 += d;
+    m4 += d * d;
+  }
+  m2 /= n;
+  m4 /= n;
+  return m2 == 0 ? 0 : m4 / (m2 * m2);
+}
+
+/// One Hann-windowed periodogram of [x]: (frequency, power) per bin.
+List<(double, double)> _powerSpectrum(List<double> x, double hz) {
+  var n = 1;
+  while (n < x.length) {
+    n <<= 1;
+  }
+  final mean = x.reduce((a, b) => a + b) / x.length;
+  final re = List<double>.filled(n, 0), im = List<double>.filled(n, 0);
+  for (var i = 0; i < x.length; i++) {
+    final w = .5 - .5 * math.cos(2 * math.pi * i / (x.length - 1));
+    re[i] = (x[i] - mean) * w;
+  }
+  _fft(re, im);
+  return [
+    for (var k = 0; k <= n ~/ 2; k++)
+      (k * hz / n, re[k] * re[k] + im[k] * im[k]),
+  ];
+}
+
+/// In-place radix-2 FFT; the length must be a power of two.
+void _fft(List<double> re, List<double> im) {
+  final n = re.length;
+  for (var i = 1, j = 0; i < n; i++) {
+    var bit = n >> 1;
+    for (; j & bit != 0; bit >>= 1) {
+      j ^= bit;
+    }
+    j ^= bit;
+    if (i < j) {
+      final r = re[i], m = im[i];
+      re[i] = re[j];
+      im[i] = im[j];
+      re[j] = r;
+      im[j] = m;
+    }
+  }
+  for (var len = 2; len <= n; len <<= 1) {
+    final angle = -2 * math.pi / len;
+    for (var i = 0; i < n; i += len) {
+      for (var k = 0; k < len ~/ 2; k++) {
+        final c = math.cos(angle * k), sn = math.sin(angle * k);
+        final a = i + k, b = a + len ~/ 2;
+        final tr = re[b] * c - im[b] * sn, ti = re[b] * sn + im[b] * c;
+        re[b] = re[a] - tr;
+        im[b] = im[a] - ti;
+        re[a] += tr;
+        im[a] += ti;
+      }
+    }
+  }
+}
+
+/// A 2nd-order Butterworth high-pass run forward and backward (zero phase,
+/// 4th order in effect), like the 0.5 Hz cleaning step NeuroKit2 uses.
+List<double> _highPass(List<double> x, double hz, double cutoff) {
+  if (x.length < 3) return List.of(x);
+  final k = math.tan(math.pi * cutoff / hz), q = math.sqrt2;
+  final norm = 1 / (1 + k * q + k * k);
+  final b0 = norm, b1 = -2 * norm, b2 = norm;
+  final a1 = 2 * (k * k - 1) * norm, a2 = (1 - k * q + k * k) * norm;
+  List<double> pass(List<double> v) {
+    final out = List<double>.filled(v.length, 0);
+    var x1 = v.first, x2 = v.first, y1 = 0.0, y2 = 0.0;
+    for (var i = 0; i < v.length; i++) {
+      final y = b0 * v[i] + b1 * x1 + b2 * x2 - a1 * y1 - a2 * y2;
+      x2 = x1;
+      x1 = v[i];
+      y2 = y1;
+      y1 = y;
+      out[i] = y;
+    }
+    return out;
+  }
+
+  return pass(pass(x).reversed.toList()).reversed.toList();
 }
 
 _Window? _windowOf(List<_Window> windows, _Segment s, int i) {
@@ -938,14 +855,12 @@ void _markPremature(List<_Beat> beats) {
   }
 }
 
-EcgRhythm _rhythm(List<_Beat> beats, double hz) {
+EcgHeartRate _heartRate(List<_Beat> beats) {
   final rr = [
     for (final b in beats)
       if (b.rrBefore != null) b.rrBefore!,
   ];
   final mean = rr.reduce((a, b) => a + b) / rr.length;
-  final median = _median(rr);
-  // HR range from five-interval means, so a single beat does not set it.
   var lo = double.infinity, hi = 0.0;
   for (var k = 0; k + 5 <= rr.length; k++) {
     final m = rr.sublist(k, k + 5).reduce((a, b) => a + b) / 5;
@@ -953,61 +868,25 @@ EcgRhythm _rhythm(List<_Beat> beats, double hz) {
     hi = math.max(hi, m);
   }
   if (hi == 0) lo = hi = mean;
-  // Successive differences only between intervals that follow each other.
-  final diffs = <double>[], nnDiffs = <double>[], nn = <double>[];
+  // Successive differences only between normal intervals that follow each
+  // other.
+  final nnDiffs = <double>[], nn = <double>[];
   for (var k = 1; k < beats.length; k++) {
     final a = beats[k - 1], b = beats[k];
     final normal = b.rrBefore != null && !b.premature && b.corr >= .9;
     if (normal) nn.add(b.rrBefore!);
     if (a.rrBefore == null || b.rrBefore == null) continue;
-    final d = b.rrBefore! - a.rrBefore!;
-    diffs.add(d.abs());
-    if (normal && !a.premature && a.corr >= .9) nnDiffs.add(d);
-  }
-  final premature = beats.where((b) => b.premature).toList();
-  final prematureShare = premature.length / beats.length;
-  final hrv = nn.length >= 20 && nnDiffs.length >= 15 && prematureShare < .2;
-  final irregularity = diffs.isEmpty ? 0.0 : _median(diffs) / mean * 100;
-  final seconds = rr.fold<double>(0, (a, b) => a + b) / 1000;
-  final pattern = seconds < 30 || rr.length < 25
-      ? 'na (under 30 s of clean signal)'
-      : irregularity > 8 && prematureShare < .3
-      ? 'irregular'
-      : irregularity < 4
-      ? 'regular'
-      : 'mildly variable';
-  // Runs of beats with a different QRS shape at a fast rate.
-  var runs = 0, longest = 0, current = 0;
-  for (final b in beats) {
-    final different = b.corr < .8 && (b.premature || (b.rrBefore ?? 1e9) < 600);
-    current = different ? current + 1 : 0;
-    if (current == 3) runs++;
-    longest = math.max(longest, current);
-  }
-  var doubled = 0;
-  for (var k = 0; k < beats.length; k++) {
-    final v = beats[k].rrBefore;
-    if (v == null) continue;
-    final around = [
-      for (
-        var j = math.max(0, k - 4);
-        j <= math.min(beats.length - 1, k + 4);
-        j++
-      )
-        if (j != k && beats[j].rrBefore != null) beats[j].rrBefore!,
-    ];
-    if (around.length >= 4) {
-      final m = _median(around);
-      if (v > 1.8 * m && v < 2.2 * m) doubled++;
+    if (normal && !a.premature && a.corr >= .9) {
+      nnDiffs.add(b.rrBefore! - a.rrBefore!);
     }
   }
-  return EcgRhythm(
+  final share = beats.where((b) => b.premature).length / beats.length;
+  final hrv = nn.length >= 20 && nnDiffs.length >= 15 && share < .2;
+  return EcgHeartRate(
     rrCount: rr.length,
     hrMean: (60000 / mean).round(),
     hrMin: (60000 / hi).round(),
     hrMax: (60000 / lo).round(),
-    rrMedianMs: median.round(),
-    longestRrMs: rr.reduce(math.max).round(),
     sdnn: hrv ? _std(nn) : null,
     rmssd: hrv
         ? math.sqrt(
@@ -1017,184 +896,7 @@ EcgRhythm _rhythm(List<_Beat> beats, double hz) {
     pnn50: hrv
         ? nnDiffs.where((d) => d.abs() > 50).length / nnDiffs.length * 100
         : null,
-    irregularityPct: irregularity,
-    pattern: pattern,
-    premature: premature.length,
-    prematureSameShape: premature.where((b) => b.corr >= .9).length,
-    prematureDifferentShape: premature.where((b) => b.corr < .9).length,
-    differentShapeRuns: runs,
-    longestDifferentShapeRun: longest >= 3 ? longest : 0,
-    pausesOver2s: rr.where((v) => v > 2000).length,
-    doubleRrPauses: doubled,
-    secondsOver100:
-        (rr.where((v) => v < 600).fold<double>(0, (a, b) => a + b) / 1000)
-            .round(),
-    secondsUnder50:
-        (rr.where((v) => v > 1200).fold<double>(0, (a, b) => a + b) / 1000)
-            .round(),
   );
-}
-
-/// Intervals and levels of the median beat. Each one is only given when it
-/// lands in a physiologically plausible range; otherwise it is na.
-EcgMorphology _morphology(
-  List<double> t,
-  int r,
-  double hz,
-  double medianRr,
-  int beats, {
-  required double consistency,
-  required double noise,
-}) {
-  int ms(num samples) => (samples / hz * 1000).round();
-  int at(double seconds) => (seconds * hz).round();
-  final n = t.length;
-  final slope = [for (var i = 0; i < n - 1; i++) (t[i + 1] - t[i]).abs(), 0.0];
-  var maxSlope = 0.0;
-  for (var i = math.max(0, r - at(.08)); i < math.min(n, r + at(.1)); i++) {
-    maxSlope = math.max(maxSlope, slope[i]);
-  }
-  final flatSlope = .12 * maxSlope;
-  bool flat(int i) => i >= 1 && i < n - 1 && slope[i] < flatSlope;
-  var onset = r;
-  while (onset > 1 &&
-      onset > r - at(.12) &&
-      !(flat(onset - 1) && flat(onset - 2))) {
-    onset--;
-  }
-  var offset = r + 1;
-  while (offset < n - 2 &&
-      offset < r + at(.16) &&
-      !(flat(offset) && flat(offset + 1))) {
-    offset++;
-  }
-  final qrs = ms(offset - onset);
-  final qrsOk = qrs >= 40 && qrs <= 200;
-  final baseFrom = math.max<int>(0, onset - math.max<int>(2, at(.04)));
-  final baseline = onset - baseFrom < 2
-      ? t[math.max(0, onset - 1)]
-      : _median(t.sublist(baseFrom, onset));
-  double level(int i) => t[i.clamp(0, n - 1)] - baseline;
-  final rUv = level(r).round();
-  // S: the deepest deflection against the R direction up to the J point.
-  var sUv = 0.0;
-  for (var i = r; i <= offset && i < n; i++) {
-    final v = level(i);
-    if (rUv >= 0 ? v < sUv : v > sUv) sUv = v;
-  }
-  final reliable = beats >= 8 && consistency >= .9 && noise < .12 && qrsOk;
-  int? st60, tUv, qt, qtcB, qtcF, pUv, pr;
-  if (reliable) {
-    if (offset + at(.06) < n) st60 = level(offset + at(.06)).round();
-    final tFrom = offset + at(.08), tTo = math.min(n - 1, offset + at(.45));
-    if (tFrom < tTo) {
-      var peak = tFrom;
-      for (var i = tFrom; i <= tTo; i++) {
-        if (level(i).abs() > level(peak).abs()) peak = i;
-      }
-      tUv = level(peak).round();
-      if (tUv.abs() >= 50) {
-        var end = peak;
-        while (end < n - 1 && level(end).abs() > .15 * tUv.abs()) {
-          end++;
-        }
-        final q = ms(end - onset);
-        if (end < n - 1 && q >= 280 && q <= 600) {
-          qt = q;
-          final rrS = medianRr / 1000;
-          qtcB = (q / math.sqrt(rrS)).round();
-          qtcF = (q / math.pow(rrS, 1 / 3)).round();
-        }
-      }
-    }
-    final pFrom = math.max(1, onset - at(.25)), pTo = onset - at(.04);
-    if (pTo - pFrom >= at(.08)) {
-      var peak = pFrom;
-      for (var i = pFrom; i <= pTo; i++) {
-        if (level(i).abs() > level(peak).abs()) peak = i;
-      }
-      final amp = level(peak);
-      if (amp.abs() >= 40 &&
-          amp.abs() < .5 * rUv.abs() &&
-          amp.abs() > 4 * noise * rUv.abs() / math.sqrt(beats)) {
-        pUv = amp.round();
-        var start = peak;
-        while (start > 0 && level(start).abs() > .2 * amp.abs()) {
-          start--;
-        }
-        final p = ms(onset - start);
-        if (start > 1 && p >= 80 && p <= 400) pr = p;
-      }
-    }
-  }
-  return EcgMorphology(
-    baseline: baseline,
-    beats: beats,
-    consistency: consistency,
-    polarity: rUv >= 0 ? 'positive' : 'negative',
-    rUv: rUv,
-    sUv: sUv.round(),
-    qrsMs: qrsOk ? qrs : null,
-    pUv: pUv,
-    prMs: pr,
-    st60Uv: st60,
-    tUv: tUv,
-    qtMs: qt,
-    qtcBazett: qtcB,
-    qtcFridericia: qtcF,
-  );
-}
-
-EcgTemplate _templateOut(
-  List<double> t,
-  int r,
-  double hz,
-  int beats,
-  EcgMorphology m,
-) {
-  final base = m.baseline, step = _decimation(hz);
-  final values = <int>[];
-  for (var i = 0; i + step <= t.length; i += step) {
-    values.add(
-      (t.sublist(i, i + step).reduce((a, b) => a + b) / step - base).round(),
-    );
-  }
-  return EcgTemplate(hz / step, -(r / hz * 1000).round(), beats, values);
-}
-
-EcgExcerpt _excerpt(_Window w, double hz) {
-  final s = w.segment, step = _decimation(hz);
-  final values = <int>[];
-  for (var i = w.from; i + step <= w.to; i += step) {
-    values.add(
-      (s.raw.sublist(i, i + step).reduce((a, b) => a + b) / step).round(),
-    );
-  }
-  return EcgExcerpt(s.start + w.from / hz, hz / step, [
-    for (final r in s.r)
-      if (r >= w.from && r < w.to) (r - w.from) / hz,
-  ], values);
-}
-
-/// Keeps the text samples at no more than about 250 Hz.
-int _decimation(double hz) => math.max(1, (hz / 250).ceil());
-
-int _pacerSpikes(List<_Segment> segments, double hz) {
-  var count = 0;
-  final width = math.max(2, (0.004 * hz).round());
-  for (final s in segments) {
-    var last = -hz.toInt();
-    for (var i = 1; i + width < s.raw.length; i++) {
-      final jump = s.raw[i] - s.raw[i - 1];
-      if (jump.abs() > 1500 &&
-          (s.raw[i + width] - s.raw[i - 1]).abs() < jump.abs() * .3 &&
-          i - last > .2 * hz) {
-        count++;
-        last = i;
-      }
-    }
-  }
-  return count;
 }
 
 List<double>? _medianBeat(List<List<double>> beats) {
@@ -1235,9 +937,8 @@ double _std(List<double> values) {
   );
 }
 
-/// Computes per-block temporal summaries for long recordings.
-/// Groups beats and windows into [blockSeconds]-second intervals starting
-/// from the recording beginning. Returns at most 12 blocks (to keep prompt size bounded).
+/// Heart rate and quality per 5-minute block, at most 12 so the coach's
+/// context stays bounded.
 List<EcgBlock> _computeBlocks(
   List<_Beat> beats,
   List<_Window> windows,
@@ -1303,25 +1004,18 @@ List<EcgBlock> _computeBlocks(
     final blockWindows = winBlocks[i]!;
     final usable = blockWindows.where((w) => w.problem == null).length;
 
-    // Count premature beats and pauses in this block.
-    int premature = 0, pausesOver2s = 0;
-    for (final b in blockBeats) {
-      if (b.premature) premature++;
-      if (b.rrBefore != null && b.rrBefore! > 2000) pausesOver2s++;
-    }
-
-    result.add(EcgBlock(
-      startSeconds: startSec,
-      durationSeconds: actualBlockSeconds,
-      hrMean: hrMean,
-      hrMin: hrMin,
-      hrMax: hrMax,
-      beats: blockBeats.length,
-      usableWindows: usable,
-      totalWindows: blockWindows.length,
-      premature: premature,
-      pausesOver2s: pausesOver2s,
-    ));
+    result.add(
+      EcgBlock(
+        startSeconds: startSec,
+        durationSeconds: actualBlockSeconds,
+        hrMean: hrMean,
+        hrMin: hrMin,
+        hrMax: hrMax,
+        beats: blockBeats.length,
+        usableWindows: usable,
+        totalWindows: blockWindows.length,
+      ),
+    );
   }
 
   return result;

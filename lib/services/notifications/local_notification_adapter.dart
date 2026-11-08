@@ -11,6 +11,7 @@ import 'package:timezone/data/latest_all.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
 
 import '../missed_workout_reminder_service.dart' show MissedWorkoutPayload;
+import '../plan_proposal_notifications.dart' show PlanProposalPayload;
 import 'local_notification_gateway.dart';
 
 const _channelId = 'hrv_post_reminder';
@@ -80,7 +81,8 @@ void hrvNotificationBackgroundHandler(fln.NotificationResponse response) {
   final payload = HrvNotificationPayload.decode(response.payload);
   if (payload == null &&
       NutritionNotificationPayload.decode(response.payload) == null &&
-      MissedWorkoutPayload.decode(response.payload) == null) {
+      MissedWorkoutPayload.decode(response.payload) == null &&
+      PlanProposalPayload.decode(response.payload) == null) {
     return;
   }
   unawaited(
@@ -142,6 +144,33 @@ class FlutterLocalNotificationGateway implements LocalNotificationGateway {
                   tr.skip,
                   options: {fln.DarwinNotificationActionOption.foreground},
                 ),
+              ],
+            ),
+            // A session missed on a past day: no "still today".
+            fln.DarwinNotificationCategory(
+              'missed_past',
+              actions: [
+                fln.DarwinNotificationAction.plain(
+                  'move',
+                  tr.moveWorkoutAction,
+                  options: {fln.DarwinNotificationActionOption.foreground},
+                ),
+                fln.DarwinNotificationAction.plain(
+                  'skip',
+                  tr.skip,
+                  options: {fln.DarwinNotificationActionOption.foreground},
+                ),
+              ],
+            ),
+            fln.DarwinNotificationCategory(
+              'plan_proposal',
+              actions: [
+                fln.DarwinNotificationAction.plain(
+                  'open',
+                  tr.reviewChange,
+                  options: {fln.DarwinNotificationActionOption.foreground},
+                ),
+                fln.DarwinNotificationAction.plain('keep', tr.keepPlan),
               ],
             ),
             fln.DarwinNotificationCategory(
@@ -243,6 +272,9 @@ class FlutterLocalNotificationGateway implements LocalNotificationGateway {
     if (n.feature == NotificationFeature.missedWorkout) {
       return _scheduleMissedWorkout(n);
     }
+    if (n.feature == NotificationFeature.planProposal) {
+      return _schedulePlanProposal(n);
+    }
     final nutrition = n.feature == NotificationFeature.nutrition;
     await _plugin.zonedSchedule(
       id: n.id,
@@ -311,10 +343,8 @@ class FlutterLocalNotificationGateway implements LocalNotificationGateway {
           priority: fln.Priority.defaultPriority,
           category: fln.AndroidNotificationCategory.reminder,
           actions: [
-            fln.AndroidNotificationAction(
-              'today',
-              labels['today'] ?? 'Still today',
-            ),
+            if (labels['today'] case final today?)
+              fln.AndroidNotificationAction('today', today),
             fln.AndroidNotificationAction(
               'move',
               labels['move'] ?? 'Move…',
@@ -327,9 +357,47 @@ class FlutterLocalNotificationGateway implements LocalNotificationGateway {
             ),
           ],
         ),
-        iOS: const fln.DarwinNotificationDetails(
-          categoryIdentifier: 'missed_workout',
+        iOS: fln.DarwinNotificationDetails(
+          // A past day has no "still today".
+          categoryIdentifier: labels.containsKey('today')
+              ? 'missed_workout'
+              : 'missed_past',
           threadIdentifier: 'missed_workout',
+          presentBadge: false,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _schedulePlanProposal(ScheduledNotification n) async {
+    final labels = n.actionLabels;
+    await _plugin.zonedSchedule(
+      id: n.id,
+      title: n.title,
+      body: n.body,
+      payload: n.payload,
+      scheduledDate: tz.TZDateTime.from(n.at.toUtc(), tz.UTC),
+      androidScheduleMode: fln.AndroidScheduleMode.inexactAllowWhileIdle,
+      notificationDetails: fln.NotificationDetails(
+        android: fln.AndroidNotificationDetails(
+          'missed_workout_reminder',
+          tr.missedWorkoutChannel,
+          channelDescription: tr.missedWorkoutChannelDescription,
+          importance: fln.Importance.defaultImportance,
+          priority: fln.Priority.defaultPriority,
+          category: fln.AndroidNotificationCategory.recommendation,
+          actions: [
+            fln.AndroidNotificationAction(
+              'open',
+              labels['open'] ?? 'Review',
+              showsUserInterface: true,
+            ),
+            fln.AndroidNotificationAction('keep', labels['keep'] ?? 'Keep'),
+          ],
+        ),
+        iOS: const fln.DarwinNotificationDetails(
+          categoryIdentifier: 'plan_proposal',
+          threadIdentifier: 'plan_proposal',
           presentBadge: false,
         ),
       ),

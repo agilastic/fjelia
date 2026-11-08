@@ -4,6 +4,7 @@ import 'activity_location.dart';
 
 import 'training_device.dart';
 import 'ftms.dart';
+import 'rowing_stroke_average.dart';
 
 class IndoorStep {
   const IndoorStep({
@@ -49,9 +50,9 @@ List<IndoorStep> indoorSteps(List<Map<String, dynamic>> steps) {
       if (item is! Map || out.length >= 200) continue;
       if (item['workoutSteps'] is List) {
         final times =
-            positive(item['numberOfIterations'] ?? item['endConditionValue'])
-                ?.round()
-                .clamp(1, 100) ??
+            positive(
+              item['numberOfIterations'] ?? item['endConditionValue'],
+            )?.round().clamp(1, 100) ??
             1;
         for (var i = 0; i < times && out.length < 200; i++) {
           read(item['workoutSteps'] as List, depth + 1);
@@ -130,6 +131,7 @@ class IndoorCapture {
   final samples = <Map<String, num>>[];
   final events = <Map<String, Object?>>[];
   final _latest = <String, ({num value, DateTime at})>{};
+  final rowing = RowingStrokeAverage();
   final _counters = <String, num>{};
   final totals = <String, double>{};
   int elapsedMs = 0, movingMs = 0, stepIndex = 0, stepStartedMs = 0;
@@ -156,6 +158,7 @@ class IndoorCapture {
   void clearContinuity() {
     _counters.clear();
     _latest.clear();
+    rowing.clear();
     _speedAt = null;
     _speed = null;
     _gpsAnchor = null;
@@ -242,8 +245,10 @@ class IndoorCapture {
     if (!recording) {
       _counters.clear();
       _speedAt = null;
+      rowing.clear();
       return;
     }
+    if (machine == FtmsMachine.rower) rowing.ingest(values, at);
     const counters = {
       'machine_distance': 'd',
       'machine_kcal': 'kcal',

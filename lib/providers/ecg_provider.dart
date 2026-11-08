@@ -9,6 +9,7 @@ import 'package:flutter/widgets.dart';
 
 import '../db/database.dart';
 import '../models/ecg.dart';
+import '../services/coach_tasks.dart' show ecgClinical, ecgClinicalMode;
 import '../services/ecg_analysis.dart';
 import '../services/ecg_coach_context.dart';
 import '../services/ecg_ble_service.dart';
@@ -51,7 +52,9 @@ final ecgAnalysisProvider = FutureProvider.family<EcgAnalysis, String>((
     throw StateError('ECG $id has no waveform to analyse.');
   }
   final chunks = await storage.chunks(id);
-  return Isolate.run(() => analyzeEcg(chunks, hz));
+  // FjeliaPro's medical reading runs in the same isolate, when available.
+  final clinical = ecgClinicalMode ? ecgClinical : null;
+  return Isolate.run(() => analyzeEcg(chunks, hz, clinical: clinical));
 });
 
 /// What the coach chat adds to its context about ECGs for one question.
@@ -73,7 +76,11 @@ class EcgCoach {
   EcgCoach(this.ref);
   final Ref ref;
 
-  static const _warningKey = 'ecg_coach_warning_confirmed_v1';
+  /// The training-only notice is new to everyone who confirmed the medical
+  /// warning before, so it has its own key.
+  static String get _warningKey => ecgClinicalMode
+      ? 'ecg_coach_warning_confirmed_v1'
+      : 'ecg_coach_training_notice_confirmed_v1';
 
   /// The medical warning before an ECG goes to the coach is shown once ever;
   /// these record and read that it was confirmed.

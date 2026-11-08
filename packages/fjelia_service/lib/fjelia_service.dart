@@ -20,6 +20,38 @@ HiloBleService createHiloBleService({
 
 SuuntoRequestSigner createSuuntoSigner() => _UnavailableSuuntoSigner();
 
+/// Public builds never read ECGs medically.
+EcgClinicalRules createEcgClinicalRules() => const _NoEcgClinicalRules();
+
+class _NoEcgClinicalRules implements EcgClinicalRules {
+  const _NoEcgClinicalRules();
+
+  @override
+  bool get isAvailable => false;
+
+  @override
+  String get rules => '';
+
+  @override
+  String get shortRules => '';
+
+  @override
+  EcgClinicalReading? read(EcgSignal signal) => null;
+}
+
+/// Public builds are always the free edition and never offer FjeliaPro.
+FjeliaEdition createFjeliaEdition() => const _FreeEdition();
+
+class _FreeEdition implements FjeliaEdition {
+  const _FreeEdition();
+
+  @override
+  bool get proOffered => false;
+
+  @override
+  bool get isPro => false;
+}
+
 const _message = 'Aktiia / Hilo is not available in this build.';
 
 class _UnavailableSuuntoSigner implements SuuntoRequestSigner {

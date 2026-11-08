@@ -38,6 +38,7 @@ import 'source_priority_provider.dart';
 import 'workout_destination_provider.dart';
 import 'suunto_provider.dart';
 import 'mywhoosh_provider.dart';
+import 'plan_proposal_provider.dart';
 import 'user_profile_provider.dart';
 import 'workout_generation_provider.dart';
 
@@ -678,6 +679,9 @@ class SyncNotifier extends StateNotifier<SyncState> {
         log('[MissedWorkout] reminder reconciliation: $e');
       }),
     );
+    // Something to ask about: told a few minutes later when the app is
+    // already in the background.
+    unawaited(_ref.read(planProposalLifecycleProvider).afterSync());
     // Imported exercise sets may have arrived with the activities.
     invalidateStrength(_ref.invalidate);
     if (result.garmin > 0 || result.activities > 0 || result.bp > 0) {

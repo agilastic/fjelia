@@ -13877,6 +13877,330 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This workout is already in Garmin Connect'**
   String get alreadyOnGarmin;
+
+  /// No description provided for @missedWorkoutPastTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed workout'**
+  String get missedWorkoutPastTitle;
+
+  /// No description provided for @leaveIt.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave it'**
+  String get leaveIt;
+
+  /// No description provided for @reviewChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Review'**
+  String get reviewChange;
+
+  /// No description provided for @keepPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep plan'**
+  String get keepPlan;
+
+  /// No description provided for @missedYesterdayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed yesterday'**
+  String get missedYesterdayTitle;
+
+  /// No description provided for @proposalReplanTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Rebuild your plan?'**
+  String get proposalReplanTitle;
+
+  /// No description provided for @proposalRestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Rest day today?'**
+  String get proposalRestTitle;
+
+  /// No description provided for @proposalRecoveryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Only easy today?'**
+  String get proposalRecoveryTitle;
+
+  /// No description provided for @proposalEasierTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A bit easier today?'**
+  String get proposalEasierTitle;
+
+  /// No description provided for @proposalReplanBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Load or HRV point to a rebuilt plan.'**
+  String get proposalReplanBody;
+
+  /// No description provided for @proposalCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggestion for today'**
+  String get proposalCardTitle;
+
+  /// No description provided for @replanMissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Reschedule'**
+  String get replanMissed;
+
+  /// No description provided for @askBeforePlanChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask before plan changes'**
+  String get askBeforePlanChanges;
+
+  /// No description provided for @askBeforePlanChangesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Readiness and trends suggest changes, you decide. Off: Fjelia adjusts the plan by itself.'**
+  String get askBeforePlanChangesHint;
+
+  /// No description provided for @missedOnDayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed on {day}'**
+  String missedOnDayTitle(String day);
+
+  /// No description provided for @missedPastBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{names}. Move or skip?'**
+  String missedPastBody(String names);
+
+  /// No description provided for @proposalDropsLine.
+  ///
+  /// In en, this message translates to:
+  /// **'{title} is dropped'**
+  String proposalDropsLine(String title);
+
+  /// No description provided for @proposalChangeLine.
+  ///
+  /// In en, this message translates to:
+  /// **'{from} → {to}'**
+  String proposalChangeLine(String from, String to);
+
+  /// No description provided for @proposalAnswered.
+  ///
+  /// In en, this message translates to:
+  /// **'Already answered, nothing left to decide.'**
+  String get proposalAnswered;
+
+  /// No description provided for @ecgTrainingWarningTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'For training only'**
+  String get ecgTrainingWarningTitle;
+
+  /// No description provided for @ecgTrainingWarningBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Fjelia does not read ECGs medically. The coach explains heart rate, HRV and signal quality for your training only. It says nothing about heart conditions or rhythm disorders: for that, export the recording and show it to a doctor.\n\nChest pain or pressure, shortness of breath, pain in the arm, jaw or back, cold sweat or fainting: call 999 or 112 now.\n\nHeart rate, HRV and signal quality go to the AI model chosen in AI settings.'**
+  String get ecgTrainingWarningBody;
+
+  /// No description provided for @ecgQuestionTraining.
+  ///
+  /// In en, this message translates to:
+  /// **'What does my ECG say for training?'**
+  String get ecgQuestionTraining;
+
+  /// No description provided for @ecgFollowHrv.
+  ///
+  /// In en, this message translates to:
+  /// **'What does the HRV say about my recovery?'**
+  String get ecgFollowHrv;
+
+  /// No description provided for @ecgFollowHeartRate.
+  ///
+  /// In en, this message translates to:
+  /// **'How did my heart rate develop?'**
+  String get ecgFollowHeartRate;
+
+  /// No description provided for @bioLeanMuchYounger.
+  ///
+  /// In en, this message translates to:
+  /// **'Way younger on the road'**
+  String get bioLeanMuchYounger;
+
+  /// No description provided for @bioLeanYounger.
+  ///
+  /// In en, this message translates to:
+  /// **'Younger on the road'**
+  String get bioLeanYounger;
+
+  /// No description provided for @bioLeanEven.
+  ///
+  /// In en, this message translates to:
+  /// **'Right on track'**
+  String get bioLeanEven;
+
+  /// No description provided for @bioLeanOlder.
+  ///
+  /// In en, this message translates to:
+  /// **'Some room to grow'**
+  String get bioLeanOlder;
+
+  /// No description provided for @bioLeanMuchOlder.
+  ///
+  /// In en, this message translates to:
+  /// **'Lots of room to grow'**
+  String get bioLeanMuchOlder;
+
+  /// No description provided for @fitnessSameAsAge.
+  ///
+  /// In en, this message translates to:
+  /// **'Fit like your age'**
+  String get fitnessSameAsAge;
+
+  /// No description provided for @lifespanBandTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your life span'**
+  String get lifespanBandTitle;
+
+  /// No description provided for @lifespanBandNote.
+  ///
+  /// In en, this message translates to:
+  /// **'A band from statistics for people with similar values, not a forecast for you.'**
+  String get lifespanBandNote;
+
+  /// No description provided for @factorHelps.
+  ///
+  /// In en, this message translates to:
+  /// **'Helps you'**
+  String get factorHelps;
+
+  /// No description provided for @factorSlows.
+  ///
+  /// In en, this message translates to:
+  /// **'Holds you back'**
+  String get factorSlows;
+
+  /// No description provided for @bioFactorBloodPressure.
+  ///
+  /// In en, this message translates to:
+  /// **'Blood pressure'**
+  String get bioFactorBloodPressure;
+
+  /// No description provided for @bioFactorVisceralFat.
+  ///
+  /// In en, this message translates to:
+  /// **'Visceral fat'**
+  String get bioFactorVisceralFat;
+
+  /// No description provided for @bioFactorLipids.
+  ///
+  /// In en, this message translates to:
+  /// **'Blood lipids'**
+  String get bioFactorLipids;
+
+  /// No description provided for @bioFactorInflammation.
+  ///
+  /// In en, this message translates to:
+  /// **'Inflammation (CRP)'**
+  String get bioFactorInflammation;
+
+  /// No description provided for @bioFactorKidney.
+  ///
+  /// In en, this message translates to:
+  /// **'Kidney function'**
+  String get bioFactorKidney;
+
+  /// No description provided for @bioAgeModelNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Fitness age compares your VO₂max with age norms. The life span comes from a model built on study values: no medical statement and no personal prediction.'**
+  String get bioAgeModelNote;
+
+  /// No description provided for @fitnessYoungerBy.
+  ///
+  /// In en, this message translates to:
+  /// **'{years, plural, =1{1 year younger than your age} other{{years} years younger than your age}}'**
+  String fitnessYoungerBy(int years);
+
+  /// No description provided for @fitnessOlderBy.
+  ///
+  /// In en, this message translates to:
+  /// **'{years, plural, =1{1 year above your age} other{{years} years above your age}}'**
+  String fitnessOlderBy(int years);
+
+  /// No description provided for @lifespanBandYears.
+  ///
+  /// In en, this message translates to:
+  /// **'{low}–{high}'**
+  String lifespanBandYears(int low, int high);
+
+  /// No description provided for @todayAge.
+  ///
+  /// In en, this message translates to:
+  /// **'Today {age}'**
+  String todayAge(int age);
+
+  /// No description provided for @vo2ClassBelowAvg.
+  ///
+  /// In en, this message translates to:
+  /// **'below average'**
+  String get vo2ClassBelowAvg;
+
+  /// No description provided for @vo2ClassAverage.
+  ///
+  /// In en, this message translates to:
+  /// **'average'**
+  String get vo2ClassAverage;
+
+  /// No description provided for @vo2ClassAboveAvg.
+  ///
+  /// In en, this message translates to:
+  /// **'above average'**
+  String get vo2ClassAboveAvg;
+
+  /// No description provided for @vo2ClassGood.
+  ///
+  /// In en, this message translates to:
+  /// **'good'**
+  String get vo2ClassGood;
+
+  /// No description provided for @vo2ClassExcellent.
+  ///
+  /// In en, this message translates to:
+  /// **'excellent'**
+  String get vo2ClassExcellent;
+
+  /// No description provided for @vo2ClassElite.
+  ///
+  /// In en, this message translates to:
+  /// **'elite'**
+  String get vo2ClassElite;
+
+  /// AI settings, shown while a local coach (Apple Intelligence or Qwen) is selected and FjeliaPro can be bought.
+  ///
+  /// In en, this message translates to:
+  /// **'FjeliaPro gives you more detailed information and analyses.'**
+  String get fjeliaProHint;
+
+  /// No description provided for @rowingStrokeRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Strokes / min'**
+  String get rowingStrokeRate;
+
+  /// No description provided for @rowingStrokeAverage.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{Ø 1 stroke} other{Ø {count} strokes}}'**
+  String rowingStrokeAverage(int count);
+
+  /// No description provided for @rowingTapToSwitch.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to switch'**
+  String get rowingTapToSwitch;
 }
 
 class _AppLocalizationsDelegate

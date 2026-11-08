@@ -11,6 +11,7 @@ import 'package:uuid/uuid.dart';
 import '../db/database.dart' show TrainingSession;
 import '../models/ftms.dart';
 import '../models/indoor_recording.dart';
+import '../models/rowing_stroke_average.dart';
 import '../services/ftms_device_service.dart';
 import '../services/indoor_fit_export.dart';
 import '../services/indoor_recording_service.dart';
@@ -29,6 +30,7 @@ import 'sync_provider.dart';
 
 export '../models/ftms.dart';
 export '../models/indoor_recording.dart';
+export '../models/rowing_stroke_average.dart';
 export '../services/training_ble.dart' show TrainingDevice;
 
 final indoorStorageProvider = Provider(
@@ -103,8 +105,9 @@ class IndoorActions {
     final bp = await ref.read(indoorStorageProvider).bloodPressure(capture);
     final bytes = indoorFit(capture, bloodPressure: bp);
     final dir = await getTemporaryDirectory();
-    final file = await File('${dir.path}/fjelia_$id.fit')
-        .writeAsBytes(bytes, flush: true);
+    final file = await File(
+      '${dir.path}/fjelia_$id.fit',
+    ).writeAsBytes(bytes, flush: true);
     return file.path;
   }
 }
@@ -128,6 +131,7 @@ class IndoorRecorderState {
     this.connected = false,
     this.capture,
     this.live = const {},
+    this.rowing = const RowingLiveMetrics(),
     this.error,
     this.heartRateDevice,
     this.heartRateConnected = false,
@@ -148,6 +152,7 @@ class IndoorRecorderState {
       reconnecting;
   final IndoorCapture? capture;
   final Map<String, num> live;
+  final RowingLiveMetrics rowing;
   final Map<FtmsTarget, FtmsRange> ranges;
   final String? error;
   bool get active =>
@@ -286,6 +291,7 @@ class IndoorRecorder extends StateNotifier<IndoorRecorderState>
       connected: connected ?? state.connected,
       capture: _capture,
       live: Map.unmodifiable(live),
+      rowing: _capture?.rowing.live(at) ?? const RowingLiveMetrics(),
       error: error,
       heartRateDevice: heartRate ?? state.heartRateDevice,
       heartRateConnected: hrConnected ?? state.heartRateConnected,
@@ -738,7 +744,9 @@ class IndoorRecorder extends StateNotifier<IndoorRecorderState>
         }
       }
       _publish(
-        error: _writeError == null ? state.error : 'Could not save a recording checkpoint. Pause and try saving again.',
+        error: _writeError == null
+            ? state.error
+            : 'Could not save a recording checkpoint. Pause and try saving again.',
       );
     } finally {
       _tickBusy = false;

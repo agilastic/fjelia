@@ -19,6 +19,7 @@ import 'app_widgets.dart';
 import 'ecg_sheet.dart';
 import 'activity_blood_pressure_card.dart';
 import 'indoor_recording_widgets.dart';
+import 'rowing_recording_dashboard.dart';
 
 /// The sports, outdoor first. Indoor sports record a Bluetooth (FTMS)
 /// machine; a treadmill run also works without one.
@@ -524,6 +525,7 @@ class _ManualActivityState extends ConsumerState<ManualActivitySheet> {
     final paused = state.phase == IndoorPhase.paused;
     final sport = capture.activityType;
     final kind = activityKind(sport);
+    final rowing = kind == ActivityKind.rowing;
     final speed = state.live['spd'];
     final power = state.live['w'];
     final distanceKm = capture.distanceMeters / 1000;
@@ -591,170 +593,188 @@ class _ManualActivityState extends ConsumerState<ManualActivitySheet> {
     ];
     return Column(
       children: [
-        _ClockBand(
-          paused: paused,
-          time: _clock(capture.elapsedMs),
-          status: paused
-              ? l.recordingPaused
-              : capture.isManual
-              ? l.recLive
-              : state.reconnecting
-              ? l.recordingReconnecting
-              : state.connected
-              ? '${capture.device.name} · ${l.connected}'
-              : l.recordingInterrupted,
-          warn: !paused && !capture.isManual && !state.connected,
-        ),
+        if (!rowing)
+          _ClockBand(
+            paused: paused,
+            time: _clock(capture.elapsedMs),
+            status: paused
+                ? l.recordingPaused
+                : capture.isManual
+                ? l.recLive
+                : state.reconnecting
+                ? l.recordingReconnecting
+                : state.connected
+                ? '${capture.device.name} · ${l.connected}'
+                : l.recordingInterrupted,
+            warn: !paused && !capture.isManual && !state.connected,
+          ),
         Expanded(
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-            children: [
-              if (state.error != null) _ErrorLine(state.error!),
-              _BigFigure(
-                value: primary.$1,
-                label: primary.$2,
-                size: 96,
-                key: const ValueKey('record-primary'),
-              ),
-              if (hasDistance) ...[
-                const SizedBox(height: 8),
-                _BigFigure(
-                  value: distanceKm.fixed(2),
-                  label: l.recDistanceKm,
-                  size: 64,
-                ),
-              ],
-              if (capture.gpsEnabled && capture.route.isEmpty)
-                Text(
-                  l.manualGpsWaiting,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: muted, fontSize: 12),
-                ),
-              if (stats.isNotEmpty) ...[
-                const SizedBox(height: 22),
-                Wrap(
-                  alignment: WrapAlignment.center,
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    for (final s in stats)
-                      _StatPill(
-                        icon: s.$1,
-                        value: s.$2,
-                        unit: s.$3,
-                        color: s.$4,
-                      ),
-                  ],
-                ),
-              ],
-              if (capture.gpsEnabled) ...[
-                const SizedBox(height: 16),
-                Center(
-                  child: FilterChip(
-                    key: const ValueKey('record-map'),
-                    avatar: const Icon(Icons.map_rounded, size: 18),
-                    label: Text(l.recMap),
-                    selected: showMap,
-                    showCheckmark: false,
-                    selectedColor: mint.withValues(alpha: .25),
-                    shape: const StadiumBorder(),
-                    onSelected: (v) => setState(() => showMap = v),
+          child: LayoutBuilder(
+            builder: (context, constraints) => ListView(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+              children: [
+                if (state.error != null) _ErrorLine(state.error!),
+                if (rowing)
+                  RowingRecordingDashboard(
+                    key: ValueKey(capture.id),
+                    state: state,
+                    ecg: ecg,
+                    clock: _clock(capture.elapsedMs),
+                    availableHeight: constraints.maxHeight,
+                    onRestartEcg: waiting
+                        ? null
+                        : () => run(recorder.restartActivityEcg),
+                  )
+                else ...[
+                  _BigFigure(
+                    value: primary.$1,
+                    label: primary.$2,
+                    size: 96,
+                    key: const ValueKey('record-primary'),
                   ),
-                ),
-                if (showMap && route.isNotEmpty) ...[
-                  const SizedBox(height: 10),
-                  _LiveRouteMap(route: route),
+                  if (hasDistance) ...[
+                    const SizedBox(height: 8),
+                    _BigFigure(
+                      value: distanceKm.fixed(2),
+                      label: l.recDistanceKm,
+                      size: 64,
+                    ),
+                  ],
+                  if (capture.gpsEnabled && capture.route.isEmpty)
+                    Text(
+                      l.manualGpsWaiting,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: muted, fontSize: 12),
+                    ),
+                  if (stats.isNotEmpty) ...[
+                    const SizedBox(height: 22),
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        for (final s in stats)
+                          _StatPill(
+                            icon: s.$1,
+                            value: s.$2,
+                            unit: s.$3,
+                            color: s.$4,
+                          ),
+                      ],
+                    ),
+                  ],
                 ],
-              ],
-              if (capture.heartRateDevice != null &&
-                  capture.ecgDevice == null &&
-                  state.phase == IndoorPhase.recording &&
-                  !state.heartRateConnected)
-                _SensorWarning(
-                  text: l.manualHrDisconnected,
-                  action: l.manualReconnectHr,
-                  onTap: waiting
-                      ? null
-                      : () => run(
-                          () => recorder.connectHeartRate(
-                            capture.heartRateDevice!,
-                          ),
-                        ),
-                ),
-              if (capture.ecgDevice != null) ...[
-                const SizedBox(height: 16),
-                _GlassCard(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.monitor_heart_rounded,
-                            color: Color(0xFFFF5C7A),
-                            size: 18,
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              capture.ecgDevice!.name,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w700,
-                              ),
+                if (capture.gpsEnabled) ...[
+                  const SizedBox(height: 16),
+                  Center(
+                    child: FilterChip(
+                      key: const ValueKey('record-map'),
+                      avatar: const Icon(Icons.map_rounded, size: 18),
+                      label: Text(l.recMap),
+                      selected: showMap,
+                      showCheckmark: false,
+                      selectedColor: mint.withValues(alpha: .25),
+                      shape: const StadiumBorder(),
+                      onSelected: (v) => setState(() => showMap = v),
+                    ),
+                  ),
+                  if (showMap && route.isNotEmpty) ...[
+                    const SizedBox(height: 10),
+                    _LiveRouteMap(route: route),
+                  ],
+                ],
+                if (capture.heartRateDevice != null &&
+                    capture.ecgDevice == null &&
+                    state.phase == IndoorPhase.recording &&
+                    !state.heartRateConnected)
+                  _SensorWarning(
+                    text: l.manualHrDisconnected,
+                    action: l.manualReconnectHr,
+                    onTap: waiting
+                        ? null
+                        : () => run(
+                            () => recorder.connectHeartRate(
+                              capture.heartRateDevice!,
                             ),
                           ),
-                          Text(
-                            l.manualEcgSegments(capture.ecgRecordingIds.length),
-                            style: TextStyle(color: muted, fontSize: 11),
+                  ),
+                if (capture.ecgDevice != null && !rowing) ...[
+                  const SizedBox(height: 16),
+                  _GlassCard(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.monitor_heart_rounded,
+                              color: Color(0xFFFF5C7A),
+                              size: 18,
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                capture.ecgDevice!.name,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              l.manualEcgSegments(
+                                capture.ecgRecordingIds.length,
+                              ),
+                              style: TextStyle(color: muted, fontSize: 11),
+                            ),
+                          ],
+                        ),
+                        if (capture.ecgRecordingIds.contains(ecg.recordingId))
+                          EcgWaveform(
+                            chunks: ecg.preview,
+                            hz: ecg.rate,
+                            duration: ecg.durationMs / 1000,
+                            live: ecg.active,
                           ),
-                        ],
-                      ),
-                      if (capture.ecgRecordingIds.contains(ecg.recordingId))
-                        EcgWaveform(
-                          chunks: ecg.preview,
-                          hz: ecg.rate,
-                          duration: ecg.durationMs / 1000,
-                          live: ecg.active,
-                        ),
-                      if (state.phase == IndoorPhase.recording && !ecg.active)
-                        _SensorWarning(
-                          text: l.manualEcgInterrupted,
-                          action: l.manualRestartEcg,
-                          onTap: waiting
-                              ? null
-                              : () => run(recorder.restartActivityEcg),
-                        ),
-                    ],
+                        if (state.phase == IndoorPhase.recording && !ecg.active)
+                          _SensorWarning(
+                            text: l.manualEcgInterrupted,
+                            action: l.manualRestartEcg,
+                            onTap: waiting
+                                ? null
+                                : () => run(recorder.restartActivityEcg),
+                          ),
+                      ],
+                    ),
                   ),
-                ),
+                ],
+                if (!capture.isManual &&
+                    capture.heartRateDevice != null &&
+                    capture.ecgDevice == null)
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(l.indoorExternalHeartRate),
+                    subtitle: Text(l.indoorEquipmentHeartRate),
+                    value: state.preferExternal,
+                    onChanged: waiting ? null : recorder.preferExternal,
+                  ),
+                if (!capture.isManual &&
+                    capture.machine == FtmsMachine.treadmill &&
+                    ftmsCompatibilityForName(capture.device.name) ==
+                        FtmsCompatibility.matrix)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: Text(
+                      l.indoorMatrixReadOnly,
+                      style: TextStyle(color: muted, fontSize: 12),
+                    ),
+                  ),
+                const SizedBox(height: 12),
+                IndoorIntervalCard(waiting: waiting),
+                const IndoorControlCard(),
+                if (capture.includeBloodPressure)
+                  ActivityBloodPressureCard(capture: capture),
               ],
-              if (!capture.isManual &&
-                  capture.heartRateDevice != null &&
-                  capture.ecgDevice == null)
-                SwitchListTile(
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(l.indoorExternalHeartRate),
-                  subtitle: Text(l.indoorEquipmentHeartRate),
-                  value: state.preferExternal,
-                  onChanged: waiting ? null : recorder.preferExternal,
-                ),
-              if (!capture.isManual &&
-                  capture.machine == FtmsMachine.treadmill &&
-                  ftmsCompatibilityForName(capture.device.name) ==
-                      FtmsCompatibility.matrix)
-                Padding(
-                  padding: const EdgeInsets.only(top: 12),
-                  child: Text(
-                    l.indoorMatrixReadOnly,
-                    style: TextStyle(color: muted, fontSize: 12),
-                  ),
-                ),
-              const SizedBox(height: 12),
-              IndoorIntervalCard(waiting: waiting),
-              const IndoorControlCard(),
-              if (capture.includeBloodPressure)
-                ActivityBloodPressureCard(capture: capture),
-            ],
+            ),
           ),
         ),
         // Big thumb buttons, like on a watch.

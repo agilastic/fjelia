@@ -14,6 +14,7 @@ import '../providers/ecg_provider.dart';
 import '../providers/polar_h10_provider.dart';
 import '../screens/ai_coach/ai_coach_screen.dart' show openCoachTab;
 import '../services/ecg_analysis.dart';
+import '../services/coach_tasks.dart' show ecgClinicalMode;
 import '../services/ecg_coach_context.dart' show ecgAnalysisLines;
 import '../utils/log.dart';
 import 'app_widgets.dart';
@@ -509,7 +510,7 @@ Future<bool> confirmEcgCoachWarning(BuildContext context, WidgetRef ref) async {
         size: 56,
       ),
       title: Text(
-        l.ecgCoachWarningTitle,
+        ecgClinicalMode ? l.ecgCoachWarningTitle : l.ecgTrainingWarningTitle,
         textAlign: TextAlign.center,
         style: const TextStyle(
           color: Colors.redAccent,
@@ -519,7 +520,7 @@ Future<bool> confirmEcgCoachWarning(BuildContext context, WidgetRef ref) async {
       ),
       content: SingleChildScrollView(
         child: Text(
-          l.ecgCoachWarningBody,
+          ecgClinicalMode ? l.ecgCoachWarningBody : l.ecgTrainingWarningBody,
           style: const TextStyle(fontSize: 15, height: 1.4),
         ),
       ),
@@ -570,15 +571,16 @@ Future<void> askCoachAboutEcg(
 
     openCoachTab(
       context,
-      prompt: l.ecgQuestionOverview,
+      prompt: ecgClinicalMode ? l.ecgQuestionOverview : l.ecgQuestionTraining,
       autoSend: true,
       card: CoachContextCard.ecg(
         recordedAt: row.recordedAt.toLocal(),
         facts: [
           recordingDuration(row.durationMs),
-          if (analysis.rhythm case final r?) '${r.hrMean} bpm',
+          if (analysis.heartRate case final r?) '${r.hrMean} bpm',
         ],
         contextLines: contextLines,
+        clinical: ecgClinicalMode,
       ),
     );
   });
@@ -591,10 +593,15 @@ class EcgWaveform extends StatefulWidget {
     required this.hz,
     required this.duration,
     this.live = false,
+    this.height = 200,
+    this.showControls = true,
+    this.strokeWidth = 1.25,
   });
   final List<EcgChunk> chunks;
   final double hz, duration;
   final bool live;
+  final double height, strokeWidth;
+  final bool showControls;
   @override
   State<EcgWaveform> createState() => _WaveformState();
 }
@@ -607,48 +614,50 @@ class _WaveformState extends State<EcgWaveform> {
     final start = widget.live ? maxPosition : position.clamp(0.0, maxPosition);
     return Column(
       children: [
-        const SizedBox(height: 12),
+        if (widget.showControls) const SizedBox(height: 12),
         Semantics(
           label: context.l10n.ecgWaveform,
           child: LayoutBuilder(
             builder: (context, constraints) => Container(
-              height: 200,
+              height: widget.height,
               clipBehavior: Clip.hardEdge,
               decoration: BoxDecoration(
                 color: duo(0xFF131C1A, 0xFFF7F8FA),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: CustomPaint(
-                size: Size(constraints.maxWidth, 200),
+                size: Size(constraints.maxWidth, widget.height),
                 painter: _EcgPainter(
                   widget.chunks,
                   widget.hz,
                   start,
                   start + window,
+                  widget.strokeWidth,
                 ),
               ),
             ),
           ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              '${start.toStringAsFixed(1)}–${(start + window).toStringAsFixed(1)} s · µV',
-              style: TextStyle(fontSize: 11, color: muted),
-            ),
-            if (!widget.live)
-              DropdownButton<double>(
-                value: window,
-                items: [
-                  for (final n in [2.0, 5.0, 10.0, 30.0])
-                    DropdownMenuItem(value: n, child: Text('${n.round()} s')),
-                ],
-                onChanged: (value) => setState(() => window = value ?? 5),
+        if (widget.showControls)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '${start.toStringAsFixed(1)}–${(start + window).toStringAsFixed(1)} s · µV',
+                style: TextStyle(fontSize: 11, color: muted),
               ),
-          ],
-        ),
-        if (!widget.live)
+              if (!widget.live)
+                DropdownButton<double>(
+                  value: window,
+                  items: [
+                    for (final n in [2.0, 5.0, 10.0, 30.0])
+                      DropdownMenuItem(value: n, child: Text('${n.round()} s')),
+                  ],
+                  onChanged: (value) => setState(() => window = value ?? 5),
+                ),
+            ],
+          ),
+        if (!widget.live && widget.showControls)
           Slider(
             label: position.toStringAsFixed(1),
             value: start,
@@ -663,9 +672,9 @@ class _WaveformState extends State<EcgWaveform> {
 }
 
 class _EcgPainter extends CustomPainter {
-  _EcgPainter(this.chunks, this.hz, this.start, this.end);
+  _EcgPainter(this.chunks, this.hz, this.start, this.end, this.strokeWidth);
   final List<EcgChunk> chunks;
-  final double hz, start, end;
+  final double hz, start, end, strokeWidth;
   @override
   void paint(Canvas canvas, Size size) {
     final points = [
@@ -685,7 +694,7 @@ class _EcgPainter extends CustomPainter {
       }
     }
     final grid = Paint()
-      ..color = const Color(0xff28433b)
+      ..color = duo(0xFF28433B, 0xFFD2E6DD)
       ..strokeWidth = .5;
     for (var t = (start / .2).ceil() * .2; t < end; t += .2) {
       final x = (t - start) / (end - start) * size.width;
@@ -695,9 +704,9 @@ class _EcgPainter extends CustomPainter {
       canvas.drawLine(Offset(0, y), Offset(size.width, y), grid);
     }
     final pen = Paint()
-      ..color = mint
+      ..color = fjAccent(mint)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.25;
+      ..strokeWidth = strokeWidth;
     for (final group in points) {
       final path = Path();
       for (var i = 0; i < group.length; i++) {

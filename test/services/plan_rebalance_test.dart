@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/services/plan_rebalance.dart';
@@ -350,6 +351,29 @@ void main() {
       expect((await read('thu')).plannedDurationMin, 40);
       expect((await read('thu')).status, 'planned');
       expect((await read('tue')).status, 'planned');
+    });
+
+    test('a session closed as missed opens again where it moves', () async {
+      await (db.update(db.trainingSessions)
+            ..where((t) => t.id.equals('missed')))
+          .write(const TrainingSessionsCompanion(status: Value('skipped')));
+      await db
+          .into(db.sessionActuals)
+          .insert(
+            SessionActualsCompanion.insert(
+              sessionId: 'missed',
+              skipReason: const Value('No matching activity'),
+            ),
+          );
+      await applier.apply(
+        p([
+          {'op': 'move', 'session': 'missed', 'to': iso(day(2))},
+        ]),
+        missedId: 'missed',
+      );
+      final moved = await read('missed');
+      expect(moved.sessionDate, day(2));
+      expect(moved.status, 'planned');
     });
   });
 }

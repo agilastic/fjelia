@@ -217,6 +217,36 @@ String appleFactLine(String line) {
   }
 }
 
+/// The 5-minute blocks of a long ECG as one short line in their place: a line
+/// per block does not fit the on-device window next to the summary.
+List<String> appleEcgBlocks(List<String> lines) {
+  final block = RegExp(
+    r'^\[ECG:Block,Block (\d+)–(\d+)s: HR~(\d+)bpm \((\d+)–(\d+)\), quality=(\w+)(.*)\]$',
+  );
+  // Only the medical reading's blocks carry these.
+  final events = RegExp(r'\d+ (?:premature|pauses>2s)');
+  final parts = <String>[];
+  final out = <String>[];
+  for (final line in lines) {
+    final m = block.firstMatch(line);
+    if (m == null) {
+      out.add(line);
+      continue;
+    }
+    String min(String s) => '${(int.parse(s) / 60).round()}';
+    if (parts.isEmpty) out.add('');
+    parts.add(
+      'min ${min(m[1]!)}-${min(m[2]!)} ${m[3]} (${m[4]}-${m[5]})'
+      '${m[6] == 'good' ? '' : ' ${m[6]}'}'
+      '${[for (final e in events.allMatches(m[7]!)) ' ${e[0]}'].join()}',
+    );
+  }
+  if (parts.isEmpty) return lines;
+  final at = out.indexOf('');
+  out[at] = '[ECG:Blocks,Heart rate bpm per 5 minutes:${parts.join('; ')}]';
+  return out;
+}
+
 /// Keep the calendar together when fitting the local model's context. Detailed
 /// goal lines can otherwise be dropped one by one, leaving just the primary.
 String? appleRaceCalendarFacts(Iterable<String> lines) {

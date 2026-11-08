@@ -22,6 +22,8 @@ class _FreeSettings extends AiCoachSettingsNotifier {
     model: 'default',
     enabled: true,
     hasApiKey: true,
+    // No Apple Intelligence here: briefings go to Free AI after consent.
+    onDeviceAvailable: false,
   );
 }
 

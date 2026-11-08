@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../providers/ai_coach_provider.dart';
+import '../../providers/fjelia_edition_provider.dart';
 import '../../config/free_ai.dart';
 import '../../providers/local_model_provider.dart';
 import '../../services/ai_coach_settings.dart';
@@ -24,6 +25,7 @@ class AiSettingsTab extends ConsumerWidget {
           error: (e, _) => DataError(e),
           data: (s) {
             final n = ref.read(aiCoachSettingsProvider.notifier);
+            final edition = ref.watch(fjeliaEditionProvider);
             final supports4b =
                 s.provider == AiProvider.localQwen &&
                 ref.watch(
@@ -73,6 +75,26 @@ class AiSettingsTab extends ConsumerWidget {
                       ),
                   ],
                 ),
+                // Local coaches stay free; Pro adds the detailed analyses.
+                if (s.provider.isLocal && edition.proOffered && !edition.isPro)
+                  SectionCard(
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.auto_awesome,
+                          color: Color(0xFF9D7BFF),
+                          size: 20,
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            context.l10n.fjeliaProHint,
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 if (s.provider == AiProvider.freeAi)
                   SectionCard(
                     child: Text(
@@ -179,7 +201,9 @@ class AiSettingsTab extends ConsumerWidget {
                     onTap: () =>
                         runUiAction(context, () => n.setBriefingMode(mode)),
                   ),
-                if (s.provider.requiresUserApiKey)
+                // Free AI and own keys alike: briefings on the device save
+                // tokens and keep the data on the phone.
+                if (!s.provider.isLocal && s.onDeviceAvailable)
                   SwitchListTile(
                     title: Text(context.l10n.useAppleIntelligenceForBriefings),
                     subtitle: Text(context.l10n.useOnDeviceAiFor),

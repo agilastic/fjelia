@@ -254,46 +254,58 @@ class AiCoachClient {
     );
   }
 
-  Future<String> sendBriefing(AiCoachSettings settings, String toonContext) =>
-      _sendBriefingRequest(
-        settings,
-        toonContext,
-        _morningSysPrompt,
-        _morningUserPrompt,
-        'briefing.morning',
-      );
+  /// [cloudFallback]: the athlete agreed to a cloud briefing, so one that
+  /// Apple Intelligence cannot write may go to the chat's cloud model.
+  Future<String> sendBriefing(
+    AiCoachSettings settings,
+    String toonContext, {
+    bool cloudFallback = false,
+  }) => _sendBriefingRequest(
+    settings,
+    toonContext,
+    _morningSysPrompt,
+    _morningUserPrompt,
+    'briefing.morning',
+    cloudFallback: cloudFallback,
+  );
 
   Future<String> sendLunchBriefing(
     AiCoachSettings settings,
-    String toonContext,
-  ) => _sendBriefingRequest(
+    String toonContext, {
+    bool cloudFallback = false,
+  }) => _sendBriefingRequest(
     settings,
     toonContext,
     _lunchSysPrompt,
     _lunchUserPrompt,
     'briefing.lunch',
+    cloudFallback: cloudFallback,
   );
 
   Future<String> sendAfternoonBriefing(
     AiCoachSettings settings,
-    String toonContext,
-  ) => _sendBriefingRequest(
+    String toonContext, {
+    bool cloudFallback = false,
+  }) => _sendBriefingRequest(
     settings,
     toonContext,
     _afternoonSysPrompt,
     _afternoonUserPrompt,
     'briefing.afternoon',
+    cloudFallback: cloudFallback,
   );
 
   Future<String> sendEveningBriefing(
     AiCoachSettings settings,
-    String toonContext,
-  ) => _sendBriefingRequest(
+    String toonContext, {
+    bool cloudFallback = false,
+  }) => _sendBriefingRequest(
     settings,
     toonContext,
     _eveningSysPrompt,
     _eveningUserPrompt,
     'briefing.evening',
+    cloudFallback: cloudFallback,
   );
 
   /// One plain paragraph, or the app's own short text when the model's answer
@@ -411,8 +423,9 @@ class AiCoachClient {
     String toonContext,
     String systemPrompt,
     String userPrompt,
-    String kind,
-  ) async {
+    String kind, {
+    bool cloudFallback = false,
+  }) async {
     if (!settings.readyForBriefing) {
       throw StateError('AI Coach is not configured.');
     }
@@ -447,7 +460,9 @@ class AiCoachClient {
       if (reply != null) {
         return _finishBriefing(reply, toonContext, kind);
       }
-      if (settings.provider == AiProvider.appleIntelligence) {
+      // Health data goes to the cloud only with the athlete's consent;
+      // without it an on-device briefing that fails stays unwritten.
+      if (settings.provider == AiProvider.appleIntelligence || !cloudFallback) {
         throw StateError(tr.appleNotAvailableOnDevice);
       }
       log(

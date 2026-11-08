@@ -217,7 +217,7 @@ void main() {
       expect(followUpQuestions(CoachTask.ecg), hasLength(3));
     });
 
-    test('the cloud prompt ends with the ECG safety rules', () async {
+    test('the cloud prompt ends with the ECG training rules', () async {
       FlutterSecureStorage.setMockInitialValues({
         'ai_coach_api_key_openai': 'test-key',
       });
@@ -244,13 +244,13 @@ void main() {
         // Only the request matters.
       }
       final sent = jsonDecode(body).toString();
-      expect(sent, contains('ECG RECORDING'));
+      expect(sent, contains('ECG RECORDING, TRAINING VIEW'));
       expect(sent, contains('emergency number now'));
-      expect(sent, contains('cannot be confirmed or excluded with one lead'));
-      expect(sent, contains('uV as recorded'));
-      // The app shows the warning; the model analyses instead of declining.
-      expect(sent, contains('Going through the figures IS the task'));
-      expect(sent, contains('Do NOT open with a disclaimer'));
+      // Without the private rules the ECG is read for training only: no
+      // patterns, no urgency, a doctor for anything medical.
+      expect(sent, contains('Fjelia does not read ECGs medically'));
+      expect(sent, isNot(contains('atrial fibrillation (')));
+      expect(sent, isNot(contains('CLOSE the first answer')));
       // After the chat style, so its limits on headings do not apply.
       expect(
         sent.indexOf('ECG RECORDING'),
@@ -325,6 +325,8 @@ void main() {
           hasApiKey: true,
           enabled: true,
           consentMode: AiConsentMode.session,
+          // The cloud briefing's request is what this test reads.
+          onDeviceAvailable: false,
         ),
         '[Context:V4][Today:2026-11-03]',
       );
