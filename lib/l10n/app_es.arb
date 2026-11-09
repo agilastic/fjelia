@@ -3911,5 +3911,17 @@
       }
     }
   },
-  "rowingTapToSwitch": "Toca para cambiar"
+  "rowingTapToSwitch": "Toca para cambiar",
+  "copyAnswer": "Copiar respuesta",
+  "answerCopied": "Copiado ✨",
+  "coachMemories": "Tarjetas de memoria",
+  "coachMemoriesIntro": "Cuéntale a tu coach lo que siempre debe saber. Tus tarjetas van en cada chat.",
+  "coachMemoryNew": "Nueva tarjeta",
+  "coachMemoryTitle": "Título",
+  "coachMemoryTitleHint": "p. ej. Rodilla izquierda",
+  "coachMemoryBody": "¿Qué debe saber tu coach?",
+  "coachMemoryBodyHint": "p. ej. Correr cuesta abajo me duele desde la primavera. Cuesta arriba, bien.",
+  "coachMemoryEmpty": "Aún no hay tarjetas. Crea la primera 🔥",
+  "coachMemoryDeleteQuestion": "¿Eliminar esta tarjeta?",
+  "coachMemoryCount": "{count, plural, =0{Sin tarjetas} one{1 tarjeta en la cabeza de tu coach} other{{count} tarjetas en la cabeza de tu coach}}"
 }

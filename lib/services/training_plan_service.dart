@@ -1889,6 +1889,20 @@ class TrainingPlanService {
             .where((s) => s.sessionType != 'long' || s.weekday == 6)
             .toList();
       }
+      // A beginner gets one long session a week: the second long slot of the
+      // template becomes an easy run.
+      if (athlete.isBeginner) {
+        var longs = 0;
+        for (var i = 0; i < slots.length; i++) {
+          if (slots[i].sessionType == 'long' && ++longs > 1) {
+            slots[i] = slots[i].copyWith(
+              sessionType: 'recovery',
+              clearSubType: true,
+              zone: 2,
+            );
+          }
+        }
+      }
       // Rotate the general-development sport into easy slots.
       if (rotation.length > 1) {
         slots = slots.map((s) {
@@ -2286,6 +2300,8 @@ class TrainingPlanService {
               fitness.tier,
               fitness.ctl,
             );
+        // The longest long session the athlete's history supports, if any.
+        int? historyLongCap;
         if (slot.targetMin == null) {
           if (phase == 'taper') duration = (duration * 0.7).round();
           if (phase == 'recovery') duration = (duration * 0.7).round();
@@ -2314,7 +2330,8 @@ class TrainingPlanService {
                   ),
                 );
               }
-              duration = math.min(duration, cap.round());
+              historyLongCap = cap.round();
+              duration = math.min(duration, historyLongCap);
             } else if (slot.sessionType == 'recovery') {
               // Easy sessions sized like the athlete's usual sessions.
               duration = duration
@@ -2434,6 +2451,15 @@ class TrainingPlanService {
           template = null;
           synthetic = true;
           steadyLead = 'Steady';
+        }
+        // A structured long session is left whole, but never longer than the
+        // athlete's history allows: then a steady one of the allowed length.
+        if (historyLongCap != null &&
+            template != null &&
+            semantics.totalMinutes > historyLongCap) {
+          compileSteps(_steadySteps(duration, slot.zone), duration);
+          template = null;
+          synthetic = true;
         }
         // The hours the athlete gave are a limit, not a hope: a workout whose
         // steps run longer than the week has left is made shorter, or left

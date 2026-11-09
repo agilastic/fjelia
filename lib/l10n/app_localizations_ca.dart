@@ -8241,4 +8241,51 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get rowingTapToSwitch => 'Toca per canviar';
+
+  @override
+  String get copyAnswer => 'Copia la resposta';
+
+  @override
+  String get answerCopied => 'Copiat ✨';
+
+  @override
+  String get coachMemories => 'Targetes de memòria';
+
+  @override
+  String get coachMemoriesIntro =>
+      'Explica al teu coach el que ha de saber sempre. Les teves targetes van amb cada xat.';
+
+  @override
+  String get coachMemoryNew => 'Targeta nova';
+
+  @override
+  String get coachMemoryTitle => 'Títol';
+
+  @override
+  String get coachMemoryTitleHint => 'p. ex. Genoll esquerre';
+
+  @override
+  String get coachMemoryBody => 'Què ha de saber el teu coach?';
+
+  @override
+  String get coachMemoryBodyHint =>
+      'p. ex. Córrer baixada em fa mal des de la primavera. Pujada, bé.';
+
+  @override
+  String get coachMemoryEmpty => 'Encara no hi ha targetes. Crea la primera 🔥';
+
+  @override
+  String get coachMemoryDeleteQuestion => 'Vols eliminar aquesta targeta?';
+
+  @override
+  String coachMemoryCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count targetes al cap del teu coach',
+      one: '1 targeta al cap del teu coach',
+      zero: 'Cap targeta',
+    );
+    return '$_temp0';
+  }
 }

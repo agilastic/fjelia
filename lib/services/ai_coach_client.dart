@@ -12,6 +12,7 @@ import 'apple_coach_request.dart';
 import 'briefing_brief.dart';
 import 'briefing_text.dart';
 import 'coach_language.dart';
+import 'coach_memory_context.dart';
 import 'coach_tasks.dart';
 import 'local_model_service.dart';
 import 'local_coach_reply.dart';
@@ -67,6 +68,9 @@ String _system(String? taskPrompt, [String context = '']) =>
           (taskPrompt == null ? coachChatStyle : coachBriefingRules) +
           (taskPrompt == null && coachTaskFor(context) == CoachTask.ecg
               ? coachEcgRules
+              : '') +
+          (taskPrompt == null && context.contains('[Memory:')
+              ? coachMemoryRule
               : '') +
           '\n\nDATE: ${coachTodayLine()}' +
           coachLanguageDirective(chat: taskPrompt == null);

@@ -86,10 +86,10 @@ void main() {
     if (Platform.environment['FJELIA_UI_PREVIEW_DIR'] == null) return;
     final font = File('/System/Library/Fonts/Supplemental/Arial.ttf');
     if (font.existsSync()) {
-      await (FontLoader('Roboto')..addFont(
-            Future.value(ByteData.sublistView(await font.readAsBytes())),
-          ))
-          .load();
+      final bytes = ByteData.sublistView(await font.readAsBytes());
+      for (final family in ['Roboto', 'Ahem']) {
+        await (FontLoader(family)..addFont(Future.value(bytes))).load();
+      }
     }
     await (FontLoader(
       'MaterialIcons',
@@ -150,13 +150,16 @@ void main() {
       ),
       home: Scaffold(
         body: RepaintBoundary(
-          key: const ValueKey('rowing-preview'),
-          child: SafeArea(
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: FractionallySizedBox(
-                heightFactor: .94,
-                child: const ManualActivitySheet(),
+          key: const ValueKey('rowing-screen-preview'),
+          child: ColoredBox(
+            color: light ? const Color(0xFFF2F4F7) : const Color(0xFF111111),
+            child: SafeArea(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: FractionallySizedBox(
+                  heightFactor: .94,
+                  child: const ManualActivitySheet(),
+                ),
               ),
             ),
           ),
@@ -169,7 +172,7 @@ void main() {
     final output = Platform.environment['FJELIA_UI_PREVIEW_DIR'];
     if (output == null) return;
     final boundary = tester.renderObject<RenderRepaintBoundary>(
-      find.byKey(const ValueKey('rowing-preview')),
+      find.byKey(const ValueKey('rowing-screen-preview')),
     );
     await tester.runAsync(() async {
       final rendered = await boundary.toImage(pixelRatio: 2);
@@ -208,6 +211,14 @@ void main() {
       final pause = tester.getRect(find.byKey(const ValueKey('record-pause')));
       final ecg = tester.getRect(find.byKey(const ValueKey('rowing-ecg')));
       expect(ecg.bottom, lessThan(pause.top));
+      // Time and distance are the figures themselves, shrunk to their half
+      // of the row: the clock's digits fit at about 34 px.
+      for (final key in ['record-clock', 'rowing-distance']) {
+        expect(
+          tester.getRect(find.byKey(ValueKey(key))).height,
+          greaterThan(30),
+        );
+      }
       expect(
         tester.getRect(find.byKey(const ValueKey('rowing-heart-rate'))).height,
         greaterThan(40),
@@ -228,6 +239,13 @@ void main() {
       );
       expect(find.text('3:30 /500 m'), findsOneWidget);
       await screenshot(tester, 'rowing-dark-strokes');
+      await tester.tap(find.byKey(const ValueKey('rowing-ecg-fullscreen')));
+      await tester.pumpAndSettle();
+      final expanded = find.byKey(const ValueKey('rowing-ecg-expanded'));
+      expect(tester.widget<EcgWaveform>(expanded).height, greaterThan(300));
+      expect(tester.widget<EcgWaveform>(expanded).live, isTrue);
+      Navigator.of(tester.element(expanded)).pop();
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const ValueKey('record-pause')));
       await tester.pumpAndSettle();
       expect(find.byKey(const ValueKey('record-resume')), findsOneWidget);
@@ -279,6 +297,13 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byKey(const ValueKey('record-pause')), findsOneWidget);
       expect(tester.takeException(), isNull);
+      if (config.viewport.height >= 640 && config.scale == 1) {
+        final ecg = tester.getRect(find.byKey(const ValueKey('rowing-ecg')));
+        final pause = tester.getRect(
+          find.byKey(const ValueKey('record-pause')),
+        );
+        expect(ecg.bottom, lessThan(pause.top));
+      }
       await screenshot(tester, config.name);
       await tester.ensureVisible(find.byType(EcgWaveform));
       await tester.pumpAndSettle();

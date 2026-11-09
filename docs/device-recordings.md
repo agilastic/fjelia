@@ -178,6 +178,71 @@ Automatic activity uploads are not implemented. The app offers explicit FIT
 sharing rather than treating a connected account or planned-workout delivery
 integration as a working activity-upload destination.
 
+### Concept2 PM5
+
+A Concept2 PM5 is read through Concept2's own Bluetooth Smart profile
+(`CE06xxxx-43E5-11E4-916C-0800200C9A66`, from the *Concept2 PM CSAFE
+Communication Definition*, rev. 0.31). This works on every PM5 firmware with
+Bluetooth. Newer firmware, above V150, also offers FTMS, but Fjelia still
+prefers the PM5 profile, because it carries more:
+
+- General and additional status give elapsed time, distance, speed, stroke
+  rate, pace and average pace, calories, average power and the drag factor.
+- Stroke data give drive length and time, recovery time, distance per stroke,
+  peak and average force (converted from pounds to newtons), work per stroke
+  and the stroke count. Additional stroke data give the stroke power.
+- The end-of-workout summary is kept as `c2_summary_*` values.
+- Heart rate from a belt paired to the PM5 arrives as equipment heart rate.
+  255 means no belt and stays absent.
+
+The values use the FTMS keys (`pace_500m`, `cad`, `w`, `machine_strokes`,
+…), so the rowing display, the stroke averages, recording and FIT export
+work as for an FTMS rower. Values only the PM5 has are kept as `c2_*` and
+end up in the FIT developer fields.
+
+Further details:
+
+- **Notification rate:** The status rate is set to 250 ms. If that fails,
+  the PM5's default of 500 ms stays.
+- **Multiplexed records:** A PM5 that offers only the multiplexed
+  characteristic (`0x0080`) is read from it.
+- **Machine type:** A BikeErg (erg type 192–207) records as a bike. A RowErg,
+  a SkiErg and an unknown erg record as a rower. Firmware before V150 cannot
+  name the erg, so it records as a rower.
+- **No control:** Fjelia does not control a PM5. Programming workouts over
+  CSAFE is not built.
+
+The decoder (`lib/models/concept2.dart`) is tested with records laid out as
+in the specification (`test/models/concept2_test.dart`). It has not been
+tested on a real PM5 yet.
+
+### Live rowing display
+
+The recording screen has a dedicated rowing dashboard. Tap the large figure
+to switch between pace per 500 metres and strokes per minute. Power and the
+chosen sensor's current heart rate have separate large fields. Duration and
+distance also use large figures; duration omits zero hours. The dashboard uses
+high-contrast text without coloured frames, gradients or tinted metric cards.
+The live ECG stays with these readings; tap its area to open a full-screen
+trace without stopping the recording.
+Small screens use a more compact layout, and larger accessibility text can
+scroll. Colours follow DarkFjelia and LightFjelia.
+
+`RowingStrokeAverage` smooths pace, stroke rate and power over up to three
+distinct FTMS `machine_strokes` counts. Updates and split notifications for
+the same count update that stroke instead of weighting it repeatedly. The
+badge shows how many observed strokes contribute to each displayed mean.
+Skipped strokes and absent fields are not filled in. Without a usable stroke
+counter, the display uses fresh live readings without claiming a stroke mean.
+Readings expire after five seconds; pause, reconnect and counter reset start
+a new window. Stored samples, workout averages and FIT exports keep their
+original values. Heart rate retains its existing source and freshness rules.
+
+Focused checks: `test/models/rowing_stroke_average_test.dart` and
+`test/widgets/rowing_recording_dashboard_test.dart`. Set
+`FJELIA_UI_PREVIEW_DIR` when running the widget test to render local previews
+for the two main figures, light mode, a small screen, landscape and large text.
+
 ## Matrix compatibility
 
 The reviewed reports are [TMIW #223](https://github.com/TrackMyIndoorWorkout/TrackMyIndoorWorkout/issues/223),

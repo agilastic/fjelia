@@ -115,6 +115,18 @@ List<EcgRecording> activityEcgs(
   ];
 }
 
+/// [rows] without fragments of a few seconds (a strap reconnecting at the
+/// start of a workout), as long as a real recording is among them: a
+/// fragment next to the workout's recording must not make the coach ask
+/// which one is meant.
+List<EcgRecording> withoutFragments(List<EcgRecording> rows) {
+  final real = [
+    for (final r in rows)
+      if (r.durationMs >= 30000) r,
+  ];
+  return real.isEmpty ? rows : real;
+}
+
 /// The recording [question] is about, among [rows] (newest first). With an
 /// [activity] only its recordings count. A clock time, "today", "yesterday"
 /// or "last" narrow the choice; without any, the only recording of the last
@@ -125,7 +137,9 @@ EcgPick pickEcg(
   ActivityRecord? activity,
   required DateTime now,
 }) {
-  var candidates = activity == null ? rows : activityEcgs(rows, activity);
+  var candidates = withoutFragments(
+    activity == null ? rows : activityEcgs(rows, activity),
+  );
   if (candidates.isEmpty) return const NoEcg();
   final local = now.toLocal();
   final today = DateTime(local.year, local.month, local.day);

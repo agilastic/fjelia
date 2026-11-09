@@ -131,6 +131,25 @@ void main() {
       expect(line, isNot(contains('[ECG:Summary')));
     });
 
+    // A strap reconnecting at the start leaves a fragment of a few seconds
+    // next to the workout's recording; the chat loads the real one.
+    test('a fragment of a few seconds does not make the coach ask', () {
+      final fragment = ecg(
+        'fragment',
+        DateTime(2026, 11, 7, 7, 1),
+        activityId: 'a1',
+        seconds: 5,
+      );
+      final pick = pickEcg(
+        [linked, fragment],
+        question: 'Was sagt das EKG?',
+        activity: activity,
+        now: now,
+      );
+      expect((pick as OneEcg).recording, linked);
+      expect(withoutFragments([fragment]), [fragment]);
+    });
+
     test('a clock time, a day or "last" picks one', () {
       OneEcg one(String q, {ActivityRecord? a}) =>
           pickEcg([during, linked, other], question: q, activity: a, now: now)

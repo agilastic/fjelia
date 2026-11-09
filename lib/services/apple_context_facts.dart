@@ -1,3 +1,5 @@
+import 'coach_memory_context.dart';
+
 /// Plain-language versions of the TOON lines the on-device model has to use.
 ///
 /// The compact `[Tag:key:value,...]` format suits large cloud models. The small
@@ -5,6 +7,7 @@
 /// lines that matter most for a chat about a session become short sentences
 /// with the same figures; every other line stays as it is.
 String appleFactLine(String line) {
+  if (line.startsWith('[Memory:')) return coachMemoryFact(line);
   if (line.startsWith('[Context:')) {
     // "[Context:V4][Today:2026-10-28,Weekday:Wed,TimeNow:20:58]..."
     final m = RegExp(

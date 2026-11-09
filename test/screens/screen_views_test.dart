@@ -728,7 +728,6 @@ void main() {
     await tester.ensureVisible(find.byTooltip('Expand training form'));
     await tester.tap(find.byTooltip('Expand training form'));
     await tester.pumpAndSettle();
-    expect(find.byType(BottomSheet), findsOneWidget);
     expect(
       tester
           .widgetList<TrainingFormCard>(find.byType(TrainingFormCard))

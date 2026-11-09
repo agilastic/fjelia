@@ -115,6 +115,8 @@ void main() {
     expect(window.live(at(2)).rate.value, 0);
     expect(window.live(at(2)).power.value, 0);
     expect(window.live(at(2)).power.strokes, 0);
+    window.ingest({'w': 0}, at(3));
+    expect(window.live(at(3)).power.strokes, 0);
   });
 
   test('capture smoothing leaves recorded samples and checkpoint data raw', () {

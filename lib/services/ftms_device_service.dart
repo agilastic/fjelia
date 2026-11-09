@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
+import '../models/concept2.dart';
 import '../models/ftms.dart';
 import '../models/spot_hrv.dart';
 import '../models/running_speed.dart';
@@ -20,6 +21,9 @@ class FtmsDeviceService {
   Stream<Map<String, num>> get measurements => _measurements.stream;
   Stream<String> get status => _status.stream;
   FtmsMachine? machine;
+
+  /// Connected to a Concept2 PM5 through its own profile, read-only.
+  bool concept2 = false;
   FtmsCompatibility compatibility = FtmsCompatibility.standard;
   int measurementFeatures = 0, targetFeatures = 0;
   final ranges = <FtmsTarget, FtmsRange>{};
@@ -48,6 +52,12 @@ class FtmsDeviceService {
         }
         _status.add('disconnected');
       };
+      concept2 = report!.concept2;
+      if (concept2) {
+        await _connectConcept2();
+        _status.add('connected');
+        return;
+      }
       final available = report!.machines;
       if (available.isEmpty) {
         if (!report!.runningSpeed) throw UnsupportedTrainingDevice(report!);
@@ -143,6 +153,82 @@ class FtmsDeviceService {
       await _connection.close();
       rethrow;
     }
+  }
+
+  /// A PM5 is read through its own rowing service on every firmware, also
+  /// when it offers FTMS: the records carry more (strokes, force, drag
+  /// factor) and an old PM5 has nothing else. Fjelia does not control it.
+  Future<void> _connectConcept2() async {
+    int? ergType;
+    final type = _connection.characteristic(
+      concept2InfoService,
+      concept2MachineTypeCharacteristic,
+    );
+    if (type?.properties.read ?? false) {
+      try {
+        final bytes = await type!.read().timeout(const Duration(seconds: 4));
+        if (bytes.isNotEmpty) ergType = bytes.first;
+      } catch (_) {
+        /* Firmware before V150: the status records name the erg later. */
+      }
+    }
+    machine = concept2Machine(ergType);
+    _control = null;
+    ranges.clear();
+    measurementFeatures = 0;
+    targetFeatures = 0;
+    // Status twice a second is the PM5's default; four times keeps the
+    // display as fresh as an FTMS rower's.
+    final rate = _connection.characteristic(
+      concept2RowingService,
+      concept2SampleRateCharacteristic,
+    );
+    if (rate?.properties.write ?? false) {
+      try {
+        await rate!.write([2]).timeout(const Duration(seconds: 4));
+      } catch (_) {
+        /* The default rate still records. */
+      }
+    }
+    void receive(int id, List<int> bytes) {
+      try {
+        final values = decodeConcept2(id, bytes);
+        if (values.isNotEmpty) _measurements.add(values);
+      } on FormatException {
+        _status.add('invalid_packet');
+      }
+    }
+
+    var subscribed = 0;
+    for (final id in concept2LiveIds) {
+      final c = _connection.characteristic(
+        concept2RowingService,
+        concept2Uuid(id),
+      );
+      if (c == null || !(c.properties.notify || c.properties.indicate)) {
+        continue;
+      }
+      await _connection.subscribe(
+        c,
+        (bytes) => receive(id, bytes),
+        onError: (e) => _status.add('invalid_packet'),
+      );
+      subscribed++;
+    }
+    // Everything not subscribed on its own arrives here.
+    final multiplexed = _connection.characteristic(
+      concept2RowingService,
+      concept2Uuid(concept2MultiplexedId),
+    );
+    if (multiplexed?.properties.notify ?? false) {
+      await _connection.subscribe(
+        multiplexed!,
+        (bytes) => receive(concept2MultiplexedId, bytes),
+        onError: (e) => _status.add('invalid_packet'),
+      );
+      subscribed++;
+    }
+    if (subscribed == 0) throw UnsupportedTrainingDevice(report!);
   }
 
   Future<void> _command(List<int> command) async {

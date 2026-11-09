@@ -127,6 +127,41 @@ void main() {
     },
   );
 
+  test('a schema 63 JSON backup has no plan log and no memory cards', () async {
+    await db.saveCoachMemory(
+      CoachMemory(
+        id: 'm',
+        title: 'Left knee',
+        body: 'Downhill hurts.',
+        createdAt: DateTime(2026, 11, 9),
+        updatedAt: DateTime(2026, 11, 9),
+      ),
+    );
+    final file = await BackupService(db).export(directory: dir);
+    final backup =
+        jsonDecode(
+              utf8.decode(
+                ZipDecoder()
+                        .decodeBytes(await file.readAsBytes())
+                        .findFile('backup.json')!
+                        .content
+                    as List<int>,
+              ),
+            )
+            as Map<String, dynamic>;
+    expect((backup['tables'] as Map)['coach_memories'], hasLength(1));
+    backup['schema'] = 63;
+    (backup['tables'] as Map)
+      ..remove('plan_adjustments')
+      ..remove('coach_memories');
+    final bytes = utf8.encode(jsonEncode(backup));
+    final zip = ZipEncoder().encode(
+      Archive()..addFile(ArchiveFile('backup.json', bytes.length, bytes)),
+    );
+    await BackupService(db).restore(zip);
+    expect(await db.coachMemoryList(), isEmpty);
+  });
+
   test('a schema 50 JSON backup can omit the new nutrition tables', () async {
     final file = await BackupService(db).export(directory: dir);
     final backup =

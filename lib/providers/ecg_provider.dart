@@ -124,7 +124,9 @@ class EcgCoach {
               if (at.difference(r.recordedAt).inDays < 14) r,
           ].take(3).toList()
         : activityEcgs(rows, activity);
-    final available = [for (final r in own) ecgAvailableLine(r)];
+    final available = [
+      for (final r in withoutFragments(own)) ecgAvailableLine(r),
+    ];
     if (!choosing && !asksAboutEcg(question)) {
       return EcgCoachContext(lines: available);
     }

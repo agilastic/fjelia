@@ -1,3 +1,4 @@
+import 'concept2.dart';
 import 'ftms.dart';
 import 'training_device.dart';
 
@@ -58,14 +59,22 @@ class TrainingBleReport {
   );
   List<FtmsMachine> get machines => [
     for (final m in FtmsMachine.values)
-      if (streams('1826', m.characteristic)) m,
+      if (streams('1826', m.characteristic) ||
+          (m == FtmsMachine.rower && concept2 && !streams('1826', '2ad1')))
+        m,
   ];
+
+  /// A Concept2 PM5 with its own rowing service, on any firmware.
+  bool get concept2 =>
+      streams(concept2RowingService, concept2Uuid(0x31)) ||
+      streams(concept2RowingService, concept2Uuid(concept2MultiplexedId));
   bool get runningSpeed => streams('1814', '2a53');
   bool get canRecord => machines.isNotEmpty || runningSpeed;
   Map<String, Object> toJson() => {
     'format': 'fjelia-training-ble-v1',
     'device': device.toJson(),
     'ftms_machines': [for (final m in machines) m.name],
+    'concept2': concept2,
     'running_speed_and_cadence': runningSpeed,
     'services': [for (final s in services) s.toJson()],
   };

@@ -3911,5 +3911,17 @@
       }
     }
   },
-  "rowingTapToSwitch": "Trykk for å bytte"
+  "rowingTapToSwitch": "Trykk for å bytte",
+  "copyAnswer": "Kopier svar",
+  "answerCopied": "Kopiert ✨",
+  "coachMemories": "Minnekort",
+  "coachMemoriesIntro": "Fortell coachen din hva den alltid skal vite. Kortene dine følger med i hver chat.",
+  "coachMemoryNew": "Nytt kort",
+  "coachMemoryTitle": "Tittel",
+  "coachMemoryTitleHint": "f.eks. Venstre kne",
+  "coachMemoryBody": "Hva skal coachen din vite?",
+  "coachMemoryBodyHint": "f.eks. Løping nedover har gjort vondt siden våren. Oppover går fint.",
+  "coachMemoryEmpty": "Ingen kort ennå. Lag ditt første 🔥",
+  "coachMemoryDeleteQuestion": "Slette dette kortet?",
+  "coachMemoryCount": "{count, plural, =0{Ingen kort} one{1 kort i hodet til coachen din} other{{count} kort i hodet til coachen din}}"
 }

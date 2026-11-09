@@ -3911,5 +3911,17 @@
       }
     }
   },
-  "rowingTapToSwitch": "Zum Wechseln tippen"
+  "rowingTapToSwitch": "Zum Wechseln tippen",
+  "copyAnswer": "Antwort kopieren",
+  "answerCopied": "Kopiert ✨",
+  "coachMemories": "Memory Cards",
+  "coachMemoriesIntro": "Sag deinem Coach, was er immer wissen soll. Deine Cards gehen bei jedem Chat mit.",
+  "coachMemoryNew": "Neue Card",
+  "coachMemoryTitle": "Titel",
+  "coachMemoryTitleHint": "z. B. Linkes Knie",
+  "coachMemoryBody": "Was soll dein Coach wissen?",
+  "coachMemoryBodyHint": "z. B. Bergab laufen tut seit dem Frühjahr weh. Bergauf ist okay.",
+  "coachMemoryEmpty": "Noch keine Cards. Leg deine erste an 🔥",
+  "coachMemoryDeleteQuestion": "Diese Card löschen?",
+  "coachMemoryCount": "{count, plural, =0{Keine Cards} one{1 Card im Kopf deines Coachs} other{{count} Cards im Kopf deines Coachs}}"
 }

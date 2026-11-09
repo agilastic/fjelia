@@ -1313,6 +1313,19 @@ class DfaAlpha1Results extends Table {
 
 /// Photos and videos the athlete added to an activity, a race goal or a
 /// planned session. The files live in the app's `media/` folder.
+/// The athlete's own notes for the AI coach (FjeliaPro): whatever they want
+/// it to know, sent along as additional information.
+class CoachMemories extends Table {
+  TextColumn get id => text()();
+  TextColumn get title => text()();
+  TextColumn get body => text()();
+  DateTimeColumn get createdAt => dateTime()();
+  DateTimeColumn get updatedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 class MediaItems extends Table {
   TextColumn get id => text()();
 
@@ -1415,6 +1428,7 @@ class MediaItems extends Table {
     WorkoutTemplates,
     DfaAlpha1Results,
     MediaItems,
+    CoachMemories,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -1427,7 +1441,7 @@ class AppDatabase extends _$AppDatabase {
       defaultSourcePriorities[group.name]!;
 
   @override
-  int get schemaVersion => 64;
+  int get schemaVersion => 65;
 
   Future<void> saveHeartRateSamples(List<TimedHeartRate> samples) async {
     if (samples.isEmpty) return;
@@ -3285,8 +3299,24 @@ class AppDatabase extends _$AppDatabase {
         );
         await m.createTable(planAdjustments);
       }
+      if (from < 65) await m.createTable(coachMemories);
     },
   );
+
+  /// The athlete's memory cards for the coach, the newest change first.
+  Stream<List<CoachMemory>> watchCoachMemories() => (select(
+    coachMemories,
+  )..orderBy([(t) => OrderingTerm.desc(t.updatedAt)])).watch();
+
+  Future<List<CoachMemory>> coachMemoryList() => (select(
+    coachMemories,
+  )..orderBy([(t) => OrderingTerm.desc(t.updatedAt)])).get();
+
+  Future<void> saveCoachMemory(CoachMemory memory) =>
+      into(coachMemories).insertOnConflictUpdate(memory);
+
+  Future<void> deleteCoachMemory(String id) =>
+      (delete(coachMemories)..where((t) => t.id.equals(id))).go();
 
   /// Adds the identity and provenance of spot readings and the tables of the
   /// workout HRV feature. Nothing is invented: a reading from before keeps an

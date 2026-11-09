@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../providers/ai_coach_provider.dart';
+import '../../providers/coach_memory_provider.dart';
 import '../../providers/fjelia_edition_provider.dart';
 import '../../config/free_ai.dart';
 import '../../providers/local_model_provider.dart';
 import '../../services/ai_coach_settings.dart';
 import '../../services/local_model_catalog.dart';
 import '../../widgets/app_widgets.dart';
+import '../ai_coach/coach_memories_screen.dart';
 import 'bug_report_sheet.dart';
 import 'local_model_panel.dart';
 
@@ -93,6 +95,48 @@ class AiSettingsTab extends ConsumerWidget {
                           ),
                         ),
                       ],
+                    ),
+                  ),
+                // FjeliaPro: the athlete's notes that every chat sends along.
+                if (edition.isPro)
+                  SectionCard(
+                    child: InkWell(
+                      onTap: () =>
+                          showAppSheet(context, const CoachMemoriesScreen()),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.psychology_alt_rounded,
+                            color: Color(0xFFFF4FD8),
+                            size: 22,
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  context.l10n.coachMemories,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                                Text(
+                                  context.l10n.coachMemoryCount(
+                                    ref
+                                            .watch(coachMemoriesProvider)
+                                            .value
+                                            ?.length ??
+                                        0,
+                                  ),
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Icon(Icons.chevron_right),
+                        ],
+                      ),
                     ),
                   ),
                 if (s.provider == AiProvider.freeAi)

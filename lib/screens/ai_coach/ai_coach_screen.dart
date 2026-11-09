@@ -1,9 +1,11 @@
 import '../../theme/fjelia_style.dart';
+
 import 'dart:async';
 
 import '../../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
@@ -11,10 +13,13 @@ import '../../db/database.dart';
 import '../../config/free_ai.dart';
 import '../../models/coach_context_card.dart';
 import '../../providers/ai_coach_provider.dart';
+import '../../providers/coach_memory_provider.dart';
 import '../../providers/ecg_provider.dart';
+import '../../providers/fjelia_edition_provider.dart';
 import '../../providers/user_profile_provider.dart';
 import '../../services/ai_coach_client.dart';
 import '../../services/ai_coach_settings.dart';
+import '../../services/coach_memory_context.dart';
 import '../../services/coach_tasks.dart';
 import '../../services/ecg_coach_context.dart';
 import '../../widgets/app_widgets.dart';
@@ -22,6 +27,7 @@ import '../../widgets/coach_context_card.dart';
 import '../../widgets/ecg_sheet.dart' show confirmEcgCoachWarning;
 import '../../utils/log.dart';
 import '../settings/ai_settings_tab.dart';
+import 'coach_memories_screen.dart';
 
 class AiCoachScreen extends ConsumerStatefulWidget {
   const AiCoachScreen({
@@ -181,13 +187,17 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
             .read(toonCacheProvider.notifier)
             .getOrBuild(null, profile.raceGoals ?? '', null);
       }
+      // FjeliaPro: what the athlete asked the coach to always know.
+      final memories = ref.read(fjeliaEditionProvider).isPro
+          ? coachMemoryLines(await ref.read(coachMemoryStoreProvider).all())
+          : const <String>[];
+      final context = [...ecgLines, toon, ...memories].join('\n');
       final reply = await ref
           .read(aiCoachClientProvider)
           .send(
             settings,
             List.of(messages),
-            widget.contextCard?.withContext([...ecgLines, toon].join('\n')) ??
-                [...ecgLines, toon].join('\n'),
+            widget.contextCard?.withContext(context) ?? context,
             consent,
           );
       if (mounted) {
@@ -287,6 +297,7 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
   @override
   Widget build(BuildContext context) {
     final followUps = _followUps;
+    final pro = ref.watch(fjeliaEditionProvider).isPro;
     return Column(
       children: [
         Padding(
@@ -322,6 +333,13 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
                         icon: const Icon(Icons.add_comment_outlined),
                       ),
               ),
+              if (ref.watch(fjeliaEditionProvider).isPro)
+                IconButton(
+                  tooltip: context.l10n.coachMemories,
+                  onPressed: () =>
+                      showAppSheet(context, const CoachMemoriesScreen()),
+                  icon: const Icon(Icons.psychology_alt_outlined),
+                ),
               IconButton(
                 tooltip: context.l10n.aiSettings,
                 onPressed: () => showAppSheet(context, const AiSettingsTab()),
@@ -503,7 +521,18 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
                                   fjEdge(const [mint, Color(0xFF3EE0FF)]),
                                 ),
                               ),
-                        child: MarkdownBody(data: m.text, selectable: true),
+                        child: m.isUser || !pro
+                            ? MarkdownBody(data: m.text, selectable: true)
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  MarkdownBody(data: m.text, selectable: true),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: _CopyButton(text: m.text),
+                                  ),
+                                ],
+                              ),
                       ),
                     );
                   },
@@ -582,6 +611,78 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// FjeliaPro: copies a coach answer, with a short flash of confirmation.
+class _CopyButton extends StatefulWidget {
+  const _CopyButton({required this.text});
+  final String text;
+
+  @override
+  State<_CopyButton> createState() => _CopyButtonState();
+}
+
+class _CopyButtonState extends State<_CopyButton> {
+  bool copied = false;
+
+  Future<void> _copy() async {
+    await Clipboard.setData(ClipboardData(text: widget.text));
+    if (!mounted) return;
+    setState(() => copied = true);
+    await Future<void>.delayed(const Duration(milliseconds: 1600));
+    if (mounted) setState(() => copied = false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = copied ? const [mint, Color(0xFFB6FF3C)] : coachGradient;
+    return Padding(
+      padding: const EdgeInsets.only(top: 8),
+      child: Material(
+        type: MaterialType.transparency,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(20),
+          onTap: copied ? null : _copy,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 220),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              gradient: LinearGradient(
+                colors: [for (final c in colors) c.withValues(alpha: .18)],
+              ),
+              border: Border.all(color: colors.last.withValues(alpha: .5)),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 220),
+                  transitionBuilder: (child, a) =>
+                      ScaleTransition(scale: a, child: child),
+                  child: Icon(
+                    copied ? Icons.check_rounded : Icons.copy_rounded,
+                    key: ValueKey(copied),
+                    size: 15,
+                    color: fjAccent(colors.last),
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  copied ? context.l10n.answerCopied : context.l10n.copyAnswer,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800,
+                    color: fjAccent(colors.last),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

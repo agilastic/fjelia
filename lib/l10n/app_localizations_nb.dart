@@ -8181,4 +8181,51 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get rowingTapToSwitch => 'Trykk for å bytte';
+
+  @override
+  String get copyAnswer => 'Kopier svar';
+
+  @override
+  String get answerCopied => 'Kopiert ✨';
+
+  @override
+  String get coachMemories => 'Minnekort';
+
+  @override
+  String get coachMemoriesIntro =>
+      'Fortell coachen din hva den alltid skal vite. Kortene dine følger med i hver chat.';
+
+  @override
+  String get coachMemoryNew => 'Nytt kort';
+
+  @override
+  String get coachMemoryTitle => 'Tittel';
+
+  @override
+  String get coachMemoryTitleHint => 'f.eks. Venstre kne';
+
+  @override
+  String get coachMemoryBody => 'Hva skal coachen din vite?';
+
+  @override
+  String get coachMemoryBodyHint =>
+      'f.eks. Løping nedover har gjort vondt siden våren. Oppover går fint.';
+
+  @override
+  String get coachMemoryEmpty => 'Ingen kort ennå. Lag ditt første 🔥';
+
+  @override
+  String get coachMemoryDeleteQuestion => 'Slette dette kortet?';
+
+  @override
+  String coachMemoryCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count kort i hodet til coachen din',
+      one: '1 kort i hodet til coachen din',
+      zero: 'Ingen kort',
+    );
+    return '$_temp0';
+  }
 }

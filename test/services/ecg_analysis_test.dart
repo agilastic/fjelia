@@ -244,6 +244,17 @@ void main() {
         inInclusiveRange(59, 61),
       );
     });
+
+    test('the rhythm line names what was seen, not a condition', () {
+      final rules = createEcgClinicalRules();
+      final a = analyzeEcg(
+        _ecg(_regular(30, 1.0), 30, noise: 10),
+        hz,
+        clinical: rules,
+      );
+      expect(_text(_lines(a, seconds: 30), 'IrregularWithoutP'), 'none');
+      expect(_lines(a, seconds: 30).join(), isNot(contains('PossibleAF')));
+    });
   });
 
   test('without the reading the analysis has only the training figures', () {

@@ -1,5 +1,6 @@
 import 'package:fjelia/l10n/app_localizations.dart';
 import 'package:fjelia/providers/ai_coach_provider.dart';
+import 'package:fjelia/providers/coach_memory_provider.dart';
 import 'package:fjelia/providers/fjelia_edition_provider.dart';
 import 'package:fjelia/screens/settings/ai_settings_tab.dart';
 import 'package:fjelia/services/ai_coach_settings.dart';
@@ -41,6 +42,7 @@ void main() {
         overrides: [
           aiCoachSettingsProvider.overrideWith(() => _Settings(provider)),
           fjeliaEditionProvider.overrideWithValue(edition),
+          coachMemoriesProvider.overrideWith((ref) => Stream.value(const [])),
         ],
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,

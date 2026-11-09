@@ -4948,5 +4948,33 @@
       }
     }
   },
-  "rowingTapToSwitch": "Tap to switch"
+  "rowingTapToSwitch": "Tap to switch",
+  "copyAnswer": "Copy answer",
+  "@copyAnswer": {
+    "description": "AI coach chat, FjeliaPro: button under an answer that copies it."
+  },
+  "answerCopied": "Copied ✨",
+  "@answerCopied": {
+    "description": "Snack bar after an AI coach answer was copied."
+  },
+  "coachMemories": "Memory Cards",
+  "@coachMemories": {
+    "description": "FjeliaPro: the athlete's own notes for the AI coach, as cards."
+  },
+  "coachMemoriesIntro": "Tell your coach what it should always know. Your cards go along with every chat.",
+  "coachMemoryNew": "New card",
+  "coachMemoryTitle": "Title",
+  "coachMemoryTitleHint": "e.g. Left knee",
+  "coachMemoryBody": "What should your coach know?",
+  "coachMemoryBodyHint": "e.g. Runs downhill hurt since the spring. Climbs are fine.",
+  "coachMemoryEmpty": "No cards yet. Drop your first one 🔥",
+  "coachMemoryDeleteQuestion": "Delete this card?",
+  "coachMemoryCount": "{count, plural, =0{No cards} one{1 card in your coach's head} other{{count} cards in your coach's head}}",
+  "@coachMemoryCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

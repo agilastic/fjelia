@@ -14201,6 +14201,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tap to switch'**
   String get rowingTapToSwitch;
+
+  /// AI coach chat, FjeliaPro: button under an answer that copies it.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy answer'**
+  String get copyAnswer;
+
+  /// Snack bar after an AI coach answer was copied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied ✨'**
+  String get answerCopied;
+
+  /// FjeliaPro: the athlete's own notes for the AI coach, as cards.
+  ///
+  /// In en, this message translates to:
+  /// **'Memory Cards'**
+  String get coachMemories;
+
+  /// No description provided for @coachMemoriesIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell your coach what it should always know. Your cards go along with every chat.'**
+  String get coachMemoriesIntro;
+
+  /// No description provided for @coachMemoryNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New card'**
+  String get coachMemoryNew;
+
+  /// No description provided for @coachMemoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get coachMemoryTitle;
+
+  /// No description provided for @coachMemoryTitleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Left knee'**
+  String get coachMemoryTitleHint;
+
+  /// No description provided for @coachMemoryBody.
+  ///
+  /// In en, this message translates to:
+  /// **'What should your coach know?'**
+  String get coachMemoryBody;
+
+  /// No description provided for @coachMemoryBodyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Runs downhill hurt since the spring. Climbs are fine.'**
+  String get coachMemoryBodyHint;
+
+  /// No description provided for @coachMemoryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No cards yet. Drop your first one 🔥'**
+  String get coachMemoryEmpty;
+
+  /// No description provided for @coachMemoryDeleteQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this card?'**
+  String get coachMemoryDeleteQuestion;
+
+  /// No description provided for @coachMemoryCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No cards} one{1 card in your coach\'s head} other{{count} cards in your coach\'s head}}'**
+  String coachMemoryCount(int count);
 }
 
 class _AppLocalizationsDelegate

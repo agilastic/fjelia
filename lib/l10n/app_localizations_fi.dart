@@ -8211,4 +8211,51 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get rowingTapToSwitch => 'Vaihda napauttamalla';
+
+  @override
+  String get copyAnswer => 'Kopioi vastaus';
+
+  @override
+  String get answerCopied => 'Kopioitu ✨';
+
+  @override
+  String get coachMemories => 'Muistikortit';
+
+  @override
+  String get coachMemoriesIntro =>
+      'Kerro valmentajallesi, mitä sen pitää aina tietää. Korttisi kulkevat jokaisessa keskustelussa mukana.';
+
+  @override
+  String get coachMemoryNew => 'Uusi kortti';
+
+  @override
+  String get coachMemoryTitle => 'Otsikko';
+
+  @override
+  String get coachMemoryTitleHint => 'esim. Vasen polvi';
+
+  @override
+  String get coachMemoryBody => 'Mitä valmentajasi pitää tietää?';
+
+  @override
+  String get coachMemoryBodyHint =>
+      'esim. Alamäkijuoksu on sattunut keväästä asti. Ylämäki on ok.';
+
+  @override
+  String get coachMemoryEmpty => 'Ei vielä kortteja. Tee ensimmäinen 🔥';
+
+  @override
+  String get coachMemoryDeleteQuestion => 'Poistetaanko tämä kortti?';
+
+  @override
+  String coachMemoryCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count korttia valmentajasi muistissa',
+      one: '1 kortti valmentajasi muistissa',
+      zero: 'Ei kortteja',
+    );
+    return '$_temp0';
+  }
 }

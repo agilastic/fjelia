@@ -84,6 +84,14 @@ void main() {
       expect(s.plannedDurationMin, lessThanOrEqualTo(68));
     }
 
+    // Beginner: one long run a week.
+    for (final w in sessions.map((s) => s.weekNumber).toSet()) {
+      expect(
+        week(w).where((s) => s.sessionType == 'long'),
+        hasLength(lessThanOrEqualTo(1)),
+      );
+    }
+
     // Beginner: at most one hard session per week.
     for (final w in sessions.map((s) => s.weekNumber).toSet()) {
       expect(

@@ -9,6 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../db/database.dart' show TrainingSession;
+import '../models/concept2.dart';
 import '../models/ftms.dart';
 import '../models/indoor_recording.dart';
 import '../models/rowing_stroke_average.dart';
@@ -74,8 +75,10 @@ final indoorHeartRatePairedProvider = FutureProvider((ref) async {
 class IndoorActions {
   IndoorActions(this.ref);
   final Ref ref;
-  Future<List<TrainingDevice>> scanEquipment() =>
-      scanTrainingDevices(serviceUuids: const ['1826', '1814']);
+  Future<List<TrainingDevice>> scanEquipment() => scanTrainingDevices(
+    // A Concept2 PM5 advertises its own service, with or without FTMS.
+    serviceUuids: ['1826', '1814', concept2DiscoveryService],
+  );
 
   Future<List<TrainingDevice>> scanAllEquipment() => scanTrainingDevices();
   Future<List<TrainingDevice>> scanHeartRate() =>

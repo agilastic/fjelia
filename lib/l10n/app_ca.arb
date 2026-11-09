@@ -3911,5 +3911,17 @@
       }
     }
   },
-  "rowingTapToSwitch": "Toca per canviar"
+  "rowingTapToSwitch": "Toca per canviar",
+  "copyAnswer": "Copia la resposta",
+  "answerCopied": "Copiat ✨",
+  "coachMemories": "Targetes de memòria",
+  "coachMemoriesIntro": "Explica al teu coach el que ha de saber sempre. Les teves targetes van amb cada xat.",
+  "coachMemoryNew": "Targeta nova",
+  "coachMemoryTitle": "Títol",
+  "coachMemoryTitleHint": "p. ex. Genoll esquerre",
+  "coachMemoryBody": "Què ha de saber el teu coach?",
+  "coachMemoryBodyHint": "p. ex. Córrer baixada em fa mal des de la primavera. Pujada, bé.",
+  "coachMemoryEmpty": "Encara no hi ha targetes. Crea la primera 🔥",
+  "coachMemoryDeleteQuestion": "Vols eliminar aquesta targeta?",
+  "coachMemoryCount": "{count, plural, =0{Cap targeta} one{1 targeta al cap del teu coach} other{{count} targetes al cap del teu coach}}"
 }

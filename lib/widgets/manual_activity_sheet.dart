@@ -1373,7 +1373,10 @@ class _PillButton extends StatelessWidget {
         foregroundColor: foreground,
         disabledBackgroundColor: background.withValues(alpha: .35),
         shape: const StadiumBorder(),
-        textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+        textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
+          fontSize: 18,
+          fontWeight: FontWeight.w800,
+        ),
       ),
       onPressed: onTap,
       icon: Icon(icon, size: 28),

@@ -79,7 +79,8 @@ class RowingStrokeAverage {
       _count = count;
       _counterAt = at;
     }
-    if (packet['cad'] == 0) {
+    final lastRate = _latest['rate'];
+    if (lastRate != null && lastRate.value == 0 && _fresh(lastRate.at, at)) {
       _strokes.clear();
       return;
     }

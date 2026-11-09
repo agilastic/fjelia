@@ -11,13 +11,16 @@ import 'package:flutter_test/flutter_test.dart';
 /// Issue #5: the 12-week history switches between load, time and distance
 /// in every language, not only in English.
 void main() {
-  final day = DateTime(2026, 11, 4);
+  // The card asks the real clock whether its week is still running, so the
+  // test's week is this one.
+  final now = DateTime.now();
+  final day = DateTime(now.year, now.month, now.day);
   ActivityRecord run(int daysAgo) => ActivityRecord(
     id: daysAgo,
     activityId: 'a$daysAgo',
     name: 'Run',
     type: 'running',
-    startDate: DateTime(day.year, day.month, day.day - daysAgo, 7),
+    startDate: DateTime(day.year, day.month, day.day - daysAgo, 0, 1),
     durationSeconds: 5400,
     distanceMeters: 15000,
     trainingLoad: 80,

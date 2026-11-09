@@ -8216,4 +8216,52 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get rowingTapToSwitch => 'Ťuknutím prepnúť';
+
+  @override
+  String get copyAnswer => 'Kopírovať odpoveď';
+
+  @override
+  String get answerCopied => 'Skopírované ✨';
+
+  @override
+  String get coachMemories => 'Pamäťové karty';
+
+  @override
+  String get coachMemoriesIntro =>
+      'Povedz svojmu trénerovi, čo má vždy vedieť. Tvoje karty idú s každým chatom.';
+
+  @override
+  String get coachMemoryNew => 'Nová karta';
+
+  @override
+  String get coachMemoryTitle => 'Názov';
+
+  @override
+  String get coachMemoryTitleHint => 'napr. Ľavé koleno';
+
+  @override
+  String get coachMemoryBody => 'Čo má tvoj tréner vedieť?';
+
+  @override
+  String get coachMemoryBodyHint =>
+      'napr. Beh z kopca bolí od jari. Do kopca je to v poriadku.';
+
+  @override
+  String get coachMemoryEmpty => 'Zatiaľ žiadne karty. Vytvor prvú 🔥';
+
+  @override
+  String get coachMemoryDeleteQuestion => 'Odstrániť túto kartu?';
+
+  @override
+  String coachMemoryCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count kariet v hlave tvojho trénera',
+      few: '$count karty v hlave tvojho trénera',
+      one: '1 karta v hlave tvojho trénera',
+      zero: 'Žiadne karty',
+    );
+    return '$_temp0';
+  }
 }

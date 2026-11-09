@@ -3911,5 +3911,17 @@
       }
     }
   },
-  "rowingTapToSwitch": "Ťuknutím prepnúť"
+  "rowingTapToSwitch": "Ťuknutím prepnúť",
+  "copyAnswer": "Kopírovať odpoveď",
+  "answerCopied": "Skopírované ✨",
+  "coachMemories": "Pamäťové karty",
+  "coachMemoriesIntro": "Povedz svojmu trénerovi, čo má vždy vedieť. Tvoje karty idú s každým chatom.",
+  "coachMemoryNew": "Nová karta",
+  "coachMemoryTitle": "Názov",
+  "coachMemoryTitleHint": "napr. Ľavé koleno",
+  "coachMemoryBody": "Čo má tvoj tréner vedieť?",
+  "coachMemoryBodyHint": "napr. Beh z kopca bolí od jari. Do kopca je to v poriadku.",
+  "coachMemoryEmpty": "Zatiaľ žiadne karty. Vytvor prvú 🔥",
+  "coachMemoryDeleteQuestion": "Odstrániť túto kartu?",
+  "coachMemoryCount": "{count, plural, =0{Žiadne karty} one{1 karta v hlave tvojho trénera} few{{count} karty v hlave tvojho trénera} other{{count} kariet v hlave tvojho trénera}}"
 }

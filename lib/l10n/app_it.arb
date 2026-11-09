@@ -3911,5 +3911,17 @@
       }
     }
   },
-  "rowingTapToSwitch": "Tocca per cambiare"
+  "rowingTapToSwitch": "Tocca per cambiare",
+  "copyAnswer": "Copia risposta",
+  "answerCopied": "Copiato ✨",
+  "coachMemories": "Memory card",
+  "coachMemoriesIntro": "Di' al tuo coach cosa deve sapere sempre. Le tue card vanno con ogni chat.",
+  "coachMemoryNew": "Nuova card",
+  "coachMemoryTitle": "Titolo",
+  "coachMemoryTitleHint": "es. Ginocchio sinistro",
+  "coachMemoryBody": "Cosa deve sapere il tuo coach?",
+  "coachMemoryBodyHint": "es. Correre in discesa fa male dalla primavera. In salita va bene.",
+  "coachMemoryEmpty": "Ancora nessuna card. Crea la prima 🔥",
+  "coachMemoryDeleteQuestion": "Eliminare questa card?",
+  "coachMemoryCount": "{count, plural, =0{Nessuna card} one{1 card nella testa del tuo coach} other{{count} card nella testa del tuo coach}}"
 }

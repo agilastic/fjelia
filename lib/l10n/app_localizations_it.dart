@@ -8228,4 +8228,51 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get rowingTapToSwitch => 'Tocca per cambiare';
+
+  @override
+  String get copyAnswer => 'Copia risposta';
+
+  @override
+  String get answerCopied => 'Copiato ✨';
+
+  @override
+  String get coachMemories => 'Memory card';
+
+  @override
+  String get coachMemoriesIntro =>
+      'Di\' al tuo coach cosa deve sapere sempre. Le tue card vanno con ogni chat.';
+
+  @override
+  String get coachMemoryNew => 'Nuova card';
+
+  @override
+  String get coachMemoryTitle => 'Titolo';
+
+  @override
+  String get coachMemoryTitleHint => 'es. Ginocchio sinistro';
+
+  @override
+  String get coachMemoryBody => 'Cosa deve sapere il tuo coach?';
+
+  @override
+  String get coachMemoryBodyHint =>
+      'es. Correre in discesa fa male dalla primavera. In salita va bene.';
+
+  @override
+  String get coachMemoryEmpty => 'Ancora nessuna card. Crea la prima 🔥';
+
+  @override
+  String get coachMemoryDeleteQuestion => 'Eliminare questa card?';
+
+  @override
+  String coachMemoryCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count card nella testa del tuo coach',
+      one: '1 card nella testa del tuo coach',
+      zero: 'Nessuna card',
+    );
+    return '$_temp0';
+  }
 }

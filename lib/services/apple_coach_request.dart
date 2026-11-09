@@ -231,6 +231,8 @@ class AppleCoachRequest {
       '[ECG:Summary',
       '[ECG:QualityMap',
       '[Context:',
+      // What the athlete asked the coach to always know (FjeliaPro).
+      '[Memory:',
       '[Analysis:Overall',
       '[Session:',
       '[Activity:',
