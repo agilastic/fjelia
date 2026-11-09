@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import '../theme/fjelia_style.dart';
 import '../l10n/formats.dart';
 import '../models/chart_point.dart';
@@ -246,31 +248,320 @@ class DataError extends StatelessWidget {
   );
 }
 
+/// A small figure with its label above, like LINKS 42 kg (style.md: key
+/// figure).
 class StatPair extends StatelessWidget {
-  const StatPair(this.label, this.value, {super.key, this.color});
+  const StatPair(this.label, this.value, {super.key, this.color, this.unit});
   final String label, value;
+  final String? unit;
   final Color? color;
-  Color get _color => color ?? fjInk;
   @override
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(
-        label.toUpperCase(),
-        style: TextStyle(color: muted, fontSize: 9, letterSpacing: .8),
-      ),
-      const SizedBox(height: 5),
-      Text(
-        value,
-        style: TextStyle(
-          fontSize: 22,
-          fontWeight: FontWeight.w600,
-          color: _color,
-        ),
-      ),
+      FigureLabel(label),
+      const SizedBox(height: 4),
+      KeyFigure(value, unit: unit, color: color),
     ],
   );
 }
+
+/// The small upper-case label of a figure (IN RUHE, SPITZE).
+class FigureLabel extends StatelessWidget {
+  const FigureLabel(this.text, {super.key});
+  final String text;
+  @override
+  Widget build(BuildContext context) => Text(
+    text.toUpperCase(),
+    maxLines: 1,
+    overflow: TextOverflow.ellipsis,
+    style: TextStyle(
+      fontSize: 10,
+      color: muted,
+      letterSpacing: 1,
+      fontWeight: FontWeight.w700,
+    ),
+  );
+}
+
+/// A figure with its unit after it. [size] 44 is a card's hero figure
+/// (135/75 mmHg), the default 24 a key figure (style.md: Figures).
+class KeyFigure extends StatelessWidget {
+  const KeyFigure(
+    this.value, {
+    super.key,
+    this.unit,
+    this.color,
+    this.size = 24,
+  });
+  const KeyFigure.hero(this.value, {super.key, this.unit, this.color})
+    : size = 44;
+  final String value;
+  final String? unit;
+  final Color? color;
+  final double size;
+  @override
+  Widget build(BuildContext context) => FittedBox(
+    fit: BoxFit.scaleDown,
+    alignment: Alignment.centerLeft,
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.baseline,
+      textBaseline: TextBaseline.alphabetic,
+      children: [
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: size,
+            fontWeight: FontWeight.w900,
+            letterSpacing: size >= 40 ? -1 : -.3,
+            color: color ?? fjInk,
+          ),
+        ),
+        if (unit != null && unit!.isNotEmpty) ...[
+          SizedBox(width: size >= 40 ? 6 : 4),
+          Text(
+            unit!,
+            style: TextStyle(fontSize: size >= 40 ? 14 : 11, color: muted),
+          ),
+        ],
+      ],
+    ),
+  );
+}
+
+/// The status word beside a hero figure (HOCH-NORMAL, OPTIMAL) and the
+/// comparison below it.
+class StatusWord extends StatelessWidget {
+  const StatusWord(this.word, {super.key, required this.color, this.detail});
+  final String word;
+  final Color color;
+  final String? detail;
+  @override
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.end,
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Text(
+        word.toUpperCase(),
+        textAlign: TextAlign.end,
+        style: TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.w800,
+          letterSpacing: 2,
+          color: fjAccent(color),
+        ),
+      ),
+      if (detail != null) ...[
+        const SizedBox(height: 6),
+        Text(
+          detail!,
+          textAlign: TextAlign.end,
+          style: TextStyle(fontSize: 11, color: muted),
+        ),
+      ],
+    ],
+  );
+}
+
+/// A hero figure with its status on the right: the head of a card like
+/// blood pressure, day load or form.
+class HeroRow extends StatelessWidget {
+  const HeroRow({
+    super.key,
+    required this.value,
+    this.unit,
+    this.status,
+    this.statusColor = mint,
+    this.detail,
+  });
+  final String value;
+  final String? unit, status, detail;
+  final Color statusColor;
+  @override
+  Widget build(BuildContext context) => Row(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      Expanded(child: KeyFigure.hero(value, unit: unit)),
+      if (status != null || detail != null) ...[
+        const SizedBox(width: 12),
+        Flexible(
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: StatusWord(status ?? '', color: statusColor, detail: detail),
+          ),
+        ),
+      ],
+    ],
+  );
+}
+
+/// A tile in a card's grid, like the health monitor's: an icon in a tinted
+/// circle, the name, the figure with its unit and an optional trend.
+class FigureTile extends StatelessWidget {
+  const FigureTile({
+    super.key,
+    required this.icon,
+    required this.name,
+    required this.value,
+    required this.color,
+    this.unit,
+    this.trend,
+    this.trendColor,
+    this.onTap,
+  });
+  final IconData icon;
+  final String name, value;
+  final String? unit;
+  final Color color;
+  final IconData? trend;
+  final Color? trendColor;
+  final VoidCallback? onTap;
+  @override
+  Widget build(BuildContext context) => Material(
+    color: Colors.transparent,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+      side: BorderSide(color: color.withValues(alpha: .16)),
+    ),
+    clipBehavior: Clip.antiAlias,
+    child: Ink(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [color.withValues(alpha: .09), Colors.transparent],
+        ),
+      ),
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 26,
+                    height: 26,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: color.withValues(alpha: .16),
+                    ),
+                    child: Icon(icon, size: 13, color: fjAccent(color)),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: fjInk,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Expanded(child: KeyFigure(value, unit: unit, size: 22)),
+                  if (trend != null)
+                    Icon(trend, size: 18, color: trendColor ?? muted),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+/// Tiles two by two, 8 apart (one column with large text).
+class FigureGrid extends StatelessWidget {
+  const FigureGrid(this.tiles, {super.key});
+  final List<Widget> tiles;
+  @override
+  Widget build(BuildContext context) {
+    final one = MediaQuery.textScalerOf(context).scale(10) / 10 >= 1.3;
+    if (one) {
+      return Column(
+        children: [
+          for (final (i, t) in tiles.indexed) ...[
+            if (i > 0) const SizedBox(height: 8),
+            t,
+          ],
+        ],
+      );
+    }
+    return Column(
+      children: [
+        for (var i = 0; i < tiles.length; i += 2) ...[
+          if (i > 0) const SizedBox(height: 8),
+          IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(child: tiles[i]),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: i + 1 < tiles.length
+                      ? tiles[i + 1]
+                      : const SizedBox.shrink(),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+/// Chart tooltips with rounded figures (style.md: no decimals in overview
+/// figures), on the panel, each value in its line's colour.
+/// [format] writes a value its own way (a pace).
+LineTouchData roundedLineTouch({
+  int decimals = 0,
+  String Function(double)? format,
+}) => LineTouchData(
+  touchTooltipData: LineTouchTooltipData(
+    getTooltipColor: (_) => duo(0xFF2E2E2E, 0xFFE3E7EC),
+    fitInsideHorizontally: true,
+    fitInsideVertically: true,
+    getTooltipItems: (spots) => [
+      for (final s in spots)
+        LineTooltipItem(
+          format?.call(s.y) ?? valueText(s.y, decimals),
+          TextStyle(
+            color: fjAccent(
+              s.bar.color ?? s.bar.gradient?.colors.first ?? fjInk,
+            ),
+            fontWeight: FontWeight.w800,
+            fontSize: 13,
+          ),
+        ),
+    ],
+  ),
+);
+
+/// The same for bar charts.
+BarTouchData roundedBarTouch({int decimals = 0}) => BarTouchData(
+  touchTooltipData: BarTouchTooltipData(
+    getTooltipColor: (_) => duo(0xFF2E2E2E, 0xFFE3E7EC),
+    fitInsideHorizontally: true,
+    fitInsideVertically: true,
+    getTooltipItem: (group, groupIndex, rod, rodIndex) => BarTooltipItem(
+      valueText(rod.toY, decimals),
+      TextStyle(color: fjInk, fontWeight: FontWeight.w800, fontSize: 13),
+    ),
+  ),
+);
 
 class HistoryChart extends StatelessWidget {
   const HistoryChart({
@@ -305,6 +596,13 @@ class HistoryChart extends StatelessWidget {
         : axisSpan < 10
         ? 1
         : 0;
+    // Whole numbers, unless the values lie so close that they would all
+    // read the same (weight, waist).
+    final values = [for (final p in clean) p.value];
+    final tipDigits =
+        values.isEmpty || values.reduce(math.max) - values.reduce(math.min) >= 5
+        ? 0
+        : 1;
     final origin = clean.first.at;
     double x(ChartPoint p) => p.at.difference(origin).inSeconds / 86400;
     final last = x(clean.last);
@@ -352,6 +650,7 @@ class HistoryChart extends StatelessWidget {
     if (bars) {
       chart = BarChart(
         BarChartData(
+          barTouchData: roundedBarTouch(decimals: tipDigits),
           minY: minY,
           maxY: maxY,
           extraLinesData: ExtraLinesData(
@@ -422,6 +721,7 @@ class HistoryChart extends StatelessWidget {
     } else {
       chart = LineChart(
         LineChartData(
+          lineTouchData: roundedLineTouch(decimals: tipDigits),
           minY: minY,
           maxY: maxY,
           extraLinesData: ExtraLinesData(

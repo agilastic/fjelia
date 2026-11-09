@@ -149,6 +149,7 @@ class ActivityHeatCard extends ConsumerWidget {
               height: 115,
               child: LineChart(
                 LineChartData(
+                  lineTouchData: roundedLineTouch(),
                   borderData: FlBorderData(show: false),
                   gridData: const FlGridData(show: false),
                   titlesData: FlTitlesData(

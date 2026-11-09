@@ -6,6 +6,7 @@ import '../../providers/plan_weather_provider.dart';
 import '../../widgets/race_calendar_share.dart';
 import '../../widgets/rain_nowcast_line.dart';
 import '../../widgets/weather_glyph.dart';
+import '../../widgets/weather_sky.dart';
 import '../weather/weather_screen.dart';
 import '../../providers/upcoming_plan_provider.dart';
 import '../../models/garmin_data.dart';
@@ -13,8 +14,6 @@ import '../../models/workout_presentation.dart';
 import '../activities/workout_detail_sheet.dart';
 import '../../theme/activity_colors.dart'
     show plannedActivityColor, completedActivityColor, activitySportIcon;
-
-import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,7 +31,8 @@ import '../../models/race_profile.dart';
 
 /// The coming week as small skies: the day's weather is the picture
 /// (sun glow, clouds, rain falling as hard as forecast, wind streaks) and
-/// only the high and low are written on it. A tap opens the full forecast.
+/// only the high and low are written on it. A tap on a day opens the full
+/// forecast on that day; a tap elsewhere opens it on today.
 class PlanWeatherStrip extends ConsumerWidget {
   const PlanWeatherStrip({super.key});
   @override
@@ -84,23 +84,31 @@ class PlanWeatherStrip extends ConsumerWidget {
                       scrollDirection: Axis.horizontal,
                       itemCount: days.length,
                       separatorBuilder: (_, _) => const SizedBox(width: 6),
-                      itemBuilder: (context, i) => SizedBox(
-                        width: 74,
-                        child: _SkyTile(
-                          day: days[i],
-                          label: i == 0
-                              ? context.l10n.today
-                              : DateFormat.E().format(days[i].date),
-                          // The daytime hours make the picture.
-                          kind: dominantWeather(
-                            data
-                                .pointsFor(days[i].date, false)
-                                .where(
-                                  (p) => p.time.hour >= 7 && p.time.hour < 20,
-                                )
-                                .map((p) => weatherKindOf(p.weatherCode)),
+                      itemBuilder: (context, i) => GestureDetector(
+                        key: ValueKey('plan-weather-day-$i'),
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () => showAppSheet(
+                          context,
+                          WeatherScreen(initialDay: days[i].date),
+                        ),
+                        child: SizedBox(
+                          width: 74,
+                          child: _SkyTile(
+                            day: days[i],
+                            label: i == 0
+                                ? context.l10n.today
+                                : DateFormat.E().format(days[i].date),
+                            // The daytime hours make the picture.
+                            kind: dominantWeather(
+                              data
+                                  .pointsFor(days[i].date, false)
+                                  .where(
+                                    (p) => p.time.hour >= 7 && p.time.hour < 20,
+                                  )
+                                  .map((p) => weatherKindOf(p.weatherCode)),
+                            ),
+                            index: i,
                           ),
-                          index: i,
                         ),
                       ),
                     ),
@@ -147,7 +155,7 @@ class _SkyTile extends StatelessWidget {
             fit: StackFit.expand,
             children: [
               CustomPaint(
-                painter: _SkyPainter(
+                painter: WeatherSkyPainter(
                   kind,
                   rainMm: day.rainMm ?? 0,
                   windKmh: day.windKmh ?? 0,
@@ -214,118 +222,6 @@ class _SkyTile extends StatelessWidget {
   static const _shadow = [Shadow(color: Colors.black45, blurRadius: 4)];
 }
 
-/// The sky of a day: a gradient for its weather, a warm glow when the sun
-/// shows, rain streaks as dense as the forecast amount, and wind lines on a
-/// windy day.
-class _SkyPainter extends CustomPainter {
-  _SkyPainter(this.kind, {required this.rainMm, required this.windKmh});
-  final WeatherKind kind;
-  final double rainMm;
-  final double windKmh;
-
-  static const _skies = {
-    WeatherKind.clear: [Color(0xFF1D5FB4), Color(0xFF4A9BE8)],
-    WeatherKind.partly: [Color(0xFF2B5C8E), Color(0xFF6A8DB3)],
-    WeatherKind.cloudy: [Color(0xFF36404D), Color(0xFF5E6978)],
-    WeatherKind.fog: [Color(0xFF474E57), Color(0xFF7A828C)],
-    WeatherKind.drizzle: [Color(0xFF283A4E), Color(0xFF465C75)],
-    WeatherKind.rain: [Color(0xFF1C2B3D), Color(0xFF39506B)],
-    WeatherKind.snow: [Color(0xFF51647C), Color(0xFF9BB0C8)],
-    WeatherKind.thunder: [Color(0xFF211C36), Color(0xFF4A3B6B)],
-  };
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final rect = Offset.zero & size;
-    canvas.drawRect(
-      rect,
-      Paint()
-        ..shader = LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: _skies[kind]!,
-        ).createShader(rect),
-    );
-    if (kind == WeatherKind.clear || kind == WeatherKind.partly) {
-      final glow = Offset(size.width * .85, size.height * .2);
-      canvas.drawCircle(
-        glow,
-        size.height,
-        Paint()
-          ..shader = RadialGradient(
-            colors: [
-              Colors.amber.withValues(
-                alpha: kind == WeatherKind.clear ? .55 : .3,
-              ),
-              Colors.amber.withValues(alpha: 0),
-            ],
-          ).createShader(Rect.fromCircle(center: glow, radius: size.height)),
-      );
-    }
-    // Rain: a streak per fixed spot, more of them the more is forecast.
-    final wet =
-        kind == WeatherKind.rain ||
-        kind == WeatherKind.drizzle ||
-        kind == WeatherKind.thunder;
-    if (wet || rainMm >= .2) {
-      final streaks = (6 + rainMm * 4).clamp(6, 40).round();
-      final paint = Paint()
-        ..color = Colors.lightBlueAccent.withValues(alpha: .45)
-        ..strokeWidth = 1.2
-        ..strokeCap = StrokeCap.round;
-      final random = math.Random(7);
-      for (var i = 0; i < streaks; i++) {
-        final x = random.nextDouble() * size.width;
-        final y = random.nextDouble() * size.height;
-        final length = 6 + random.nextDouble() * 6;
-        canvas.drawLine(Offset(x, y), Offset(x - 2.5, y + length), paint);
-      }
-    }
-    if (kind == WeatherKind.snow) {
-      final paint = Paint()..color = fjInk.withValues(alpha: .7);
-      final random = math.Random(3);
-      for (var i = 0; i < 18; i++) {
-        canvas.drawCircle(
-          Offset(
-            random.nextDouble() * size.width,
-            random.nextDouble() * size.height,
-          ),
-          1 + random.nextDouble() * 1.2,
-          paint,
-        );
-      }
-    }
-    // Wind from 25 km/h: soft curved lines across the sky.
-    if (windKmh >= 25) {
-      final lines = windKmh >= 45 ? 3 : 2;
-      final paint = Paint()
-        ..color = fjInk.withValues(alpha: .28)
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 1.4
-        ..strokeCap = StrokeCap.round;
-      for (var i = 0; i < lines; i++) {
-        final y = size.height * (.45 + i * .16);
-        final x = size.width * (.3 + i * .1);
-        canvas.drawPath(
-          Path()
-            ..moveTo(x, y)
-            ..quadraticBezierTo(
-              x + size.width * .25,
-              y - 6,
-              x + size.width * .5,
-              y,
-            ),
-          paint,
-        );
-      }
-    }
-  }
-
-  @override
-  bool shouldRepaint(_SkyPainter old) =>
-      old.kind != kind || old.rainMm != rainMm || old.windKmh != windKmh;
-}
-
 RaceProfile _profileOf(RaceGoal goal) => RaceProfile(
   sport: goal.primarySport,
   distanceM: goal.distanceM,
@@ -360,82 +256,9 @@ class RaceCountdownCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final goals = ref.watch(seasonGoalsProvider).valueOrNull ?? const [];
     if (goals.isEmpty) return const SizedBox.shrink();
-    return Column(
-      children: [
-        _GoalsAccordion(goals: goals),
-        if (goals.length > 1) const SeasonSummaryCard(),
-      ],
-    );
-  }
-}
-
-/// How the goals fit together: the outcome and, in words, what is limited or
-/// needs a decision. Nothing is shown when the plan is plainly feasible.
-class SeasonSummaryCard extends ConsumerWidget {
-  const SeasonSummaryCard({super.key});
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final report = ref.watch(seasonReportProvider).valueOrNull;
-    if (report == null) return const SizedBox.shrink();
-    final outcome = report['outcome'] as String? ?? 'feasible';
-    final lines = seasonReportLines(context.l10n, report);
-    if (outcome == 'feasible' && lines.isEmpty) return const SizedBox.shrink();
-    final (label, color) = switch (outcome) {
-      'feasibleWithTradeoffs' => (
-        context.l10n.seasonWithTradeOffs,
-        Colors.orange,
-      ),
-      'requiresDecision' => (
-        context.l10n.seasonNeedsYourDecision,
-        Colors.redAccent,
-      ),
-      'infeasible' => (context.l10n.seasonCannotBeCombined, Colors.redAccent),
-      'insufficientData' => (context.l10n.seasonProvisional, Colors.amber),
-      _ => (context.l10n.season, Colors.green),
-    };
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
-      child: Material(
-        color: panel,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
-          side: BorderSide(color: color.withValues(alpha: .6)),
-        ),
-        child: Theme(
-          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-          child: ExpansionTile(
-            leading: Icon(Icons.balance_outlined, color: color),
-            title: Text(
-              label,
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
-            ),
-            subtitle: Text(
-              lines.isEmpty ? context.l10n.allGoalsFit : lines.first,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 11, color: fjInk70),
-            ),
-            childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 14),
-            expandedCrossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              for (final line in lines)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: Text(line, style: const TextStyle(fontSize: 12)),
-                ),
-              for (final alt in seasonAlternatives(context.l10n, report))
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
-                  child: Text(
-                    context.l10n.alt(alt),
-                    style: const TextStyle(fontSize: 12, color: Colors.orange),
-                  ),
-                ),
-            ],
-          ),
-        ),
-      ),
-    );
+    // How the goals fit together goes into the FjeliaPro season analysis
+    // (seasonCheckLines), not onto the plan.
+    return _GoalsAccordion(goals: goals);
   }
 }
 
@@ -451,6 +274,7 @@ class _GoalsAccordion extends StatefulWidget {
 }
 
 class _GoalsAccordionState extends State<_GoalsAccordion> {
+  static const _accent = [Color(0xFFFFB13D), Color(0xFFFFE066)];
   bool open = false;
 
   static int _weeks(RaceGoal g) =>
@@ -468,90 +292,50 @@ class _GoalsAccordionState extends State<_GoalsAccordion> {
       alignment: Alignment.topCenter,
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 14),
-            child: Material(
-              color: panel,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14),
-                side: BorderSide(color: Colors.orange.withValues(alpha: .6)),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: InkWell(
-                key: const Key('goals-header'),
-                onTap: () => setState(() => open = !open),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 9, 6, 9),
-                  child: Row(
+          // The same accordion card as everywhere (style.md): title, the
+          // season and its weeks, the large chevron centred on the right.
+          SectionCard(
+            key: const Key('goals-header'),
+            accent: _accent,
+            padding: const EdgeInsets.fromLTRB(16, 14, 12, 14),
+            onTap: () => setState(() => open = !open),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        padding: const EdgeInsets.all(7),
-                        decoration: BoxDecoration(
-                          color: Colors.orange.withValues(alpha: .15),
-                          borderRadius: BorderRadius.circular(9),
-                        ),
-                        child: Icon(
-                          first.primarySport.startsWith('cycl')
-                              ? Icons.pedal_bike
-                              : Icons.flag_outlined,
-                          size: 18,
-                          color: Colors.orange,
-                        ),
+                      GradientTitle(
+                        goals.length == 1
+                            ? first.name
+                            : context.l10n.raceGoalsLength(goals.length),
+                        colors: _accent,
                       ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              goals.length == 1
-                                  ? first.name
-                                  : context.l10n.raceGoalsLength(goals.length),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
-                              ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          Expanded(child: _SeasonTrack(goals: goals)),
+                          const SizedBox(width: 12),
+                          // Unfolded, the season can be shared as an image.
+                          if (open)
+                            _ShareGoalsButton(goals: goals)
+                          else
+                            KeyFigure(
+                              context.l10n.weeks(_weeks(first)),
+                              unit: context.l10n.weeks2,
                             ),
-                            const SizedBox(height: 6),
-                            _SeasonTrack(goals: goals),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      // Unfolded, the season can be shared as an image.
-                      if (open)
-                        _ShareGoalsButton(goals: goals)
-                      else
-                        Text.rich(
-                          TextSpan(
-                            children: [
-                              TextSpan(
-                                text: context.l10n.weeks(_weeks(first)),
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.orange,
-                                ),
-                              ),
-                              TextSpan(
-                                text: ' ${context.l10n.weeks2}',
-                                style: TextStyle(fontSize: 11, color: muted),
-                              ),
-                            ],
-                          ),
-                        ),
-                      AnimatedRotation(
-                        turns: open ? .5 : 0,
-                        duration: const Duration(milliseconds: 260),
-                        curve: Curves.easeOutCubic,
-                        child: Icon(Icons.expand_more, size: 22, color: muted),
+                        ],
                       ),
                     ],
                   ),
                 ),
-              ),
+                const SizedBox(width: 12),
+                AnimatedRotation(
+                  turns: open ? .5 : 0,
+                  duration: const Duration(milliseconds: 220),
+                  child: Icon(Icons.expand_more, size: 28, color: fjInk),
+                ),
+              ],
             ),
           ),
           if (open)
@@ -585,10 +369,10 @@ class _SeasonTrack extends StatelessWidget {
   final List<RaceGoal> goals;
 
   static Color _color(RaceGoal g, bool primary) => primary
-      ? Colors.orange
+      ? const Color(0xFFFFB13D)
       : switch (g.priority.toLowerCase()) {
-          'a' => Colors.deepOrangeAccent,
-          'b' => Colors.lightBlue,
+          'a' => const Color(0xFFFF4D8D),
+          'b' => const Color(0xFF6FA8FF),
           _ => fjInk54,
         };
 
@@ -629,8 +413,8 @@ class _SeasonTrack extends StatelessWidget {
                       borderRadius: BorderRadius.circular(1),
                       gradient: LinearGradient(
                         colors: [
-                          Colors.orange.withValues(alpha: .15),
-                          Colors.orange,
+                          const Color(0xFFFFB13D).withValues(alpha: .15),
+                          const Color(0xFFFFB13D),
                         ],
                       ),
                     ),
@@ -713,7 +497,11 @@ class _ShareGoalsButton extends StatelessWidget {
         builder: (_) => RaceCalendarSharePage(goals: goals),
       ),
     ),
-    icon: const Icon(Icons.ios_share, size: 20, color: Colors.orange),
+    icon: Icon(
+      Icons.ios_share,
+      size: 20,
+      color: fjAccent(const Color(0xFFFFB13D)),
+    ),
   );
 }
 
@@ -734,104 +522,93 @@ class _GoalCard extends ConsumerWidget {
                 7)
             .ceil()
             .clamp(0, 999);
-    final accent = primary ? Colors.orange : Colors.lightBlue;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
-      child: Material(
-        color: panel,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
-          side: BorderSide(color: accent.withValues(alpha: .6)),
-        ),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(14),
-          onTap: () => showAppSheet(context, const TrainingTab()),
-          child: Padding(
-            padding: const EdgeInsets.all(14),
-            child: Row(
+    final accent = primary ? const Color(0xFFFFB13D) : const Color(0xFF6FA8FF);
+    return SectionCard(
+      accent: primary
+          ? const [Color(0xFFFFB13D), Color(0xFFFFE066)]
+          : const [Color(0xFF6FA8FF), Color(0xFF3EE0FF)],
+      onTap: () => showAppSheet(context, const TrainingTab()),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: accent.withValues(alpha: .15),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(
+              goal.primarySport.startsWith('cycl')
+                  ? Icons.pedal_bike
+                  : Icons.flag_outlined,
+              size: 24,
+              color: accent,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: accent.withValues(alpha: .15),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Icon(
-                    goal.primarySport.startsWith('cycl')
-                        ? Icons.pedal_bike
-                        : Icons.flag_outlined,
-                    size: 24,
-                    color: accent,
+                Text(
+                  showPriority
+                      ? '${goal.name} · ${goal.priority.toUpperCase()}'
+                      : goal.name,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        showPriority
-                            ? '${goal.name} · ${goal.priority.toUpperCase()}'
-                            : goal.name,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        '${valueText(goal.distanceM / 1000, goal.distanceM % 1000 == 0 ? 0 : 1)} km${goal.elevationM == null ? '' : ' · ↑${valueText(goal.elevationM)} m'} · ${dayText(goal.raceDate)}',
-                        style: TextStyle(fontSize: 11, color: fjInk70),
-                      ),
-                      if (goal.targetFinishSeconds != null)
-                        Text(
-                          context.l10n.goalTargetfinishsecondsgoal(
-                            formatTargetTime(goal.targetFinishSeconds!),
-                            _goalPace(goal),
-                          ),
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: accent,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      if (estimate != null)
-                        Text(
-                          context.l10n.estEstimateestimate2(
-                            RacePredictor.formatTime(estimate),
-                            _ambition(goal, estimate),
-                          ),
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: goal.targetFinishSeconds == null
-                                ? accent
-                                : fjInk70,
-                          ),
-                        ),
-                    ],
-                  ),
+                const SizedBox(height: 4),
+                Text(
+                  '${valueText(goal.distanceM / 1000, goal.distanceM % 1000 == 0 ? 0 : 1)} km${goal.elevationM == null ? '' : ' · ↑${valueText(goal.elevationM)} m'} · ${dayText(goal.raceDate)}',
+                  style: TextStyle(fontSize: 11, color: fjInk70),
                 ),
-                const SizedBox(width: 10),
-                Column(
-                  children: [
-                    Text(
-                      context.l10n.weeks(weeks),
-                      style: TextStyle(
-                        fontSize: 27,
-                        fontWeight: FontWeight.w700,
-                        color: accent,
-                      ),
+                if (goal.targetFinishSeconds != null)
+                  Text(
+                    context.l10n.goalTargetfinishsecondsgoal(
+                      formatTargetTime(goal.targetFinishSeconds!),
+                      _goalPace(goal),
                     ),
-                    Text(
-                      context.l10n.weeks2,
-                      style: TextStyle(fontSize: 11, color: muted),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: accent,
+                      fontWeight: FontWeight.w600,
                     ),
-                  ],
-                ),
+                  ),
+                if (estimate != null)
+                  Text(
+                    context.l10n.estEstimateestimate2(
+                      RacePredictor.formatTime(estimate),
+                      _ambition(goal, estimate),
+                    ),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: goal.targetFinishSeconds == null
+                          ? accent
+                          : fjInk70,
+                    ),
+                  ),
               ],
             ),
           ),
-        ),
+          const SizedBox(width: 10),
+          Column(
+            children: [
+              Text(
+                context.l10n.weeks(weeks),
+                style: TextStyle(
+                  fontSize: 27,
+                  fontWeight: FontWeight.w700,
+                  color: accent,
+                ),
+              ),
+              Text(
+                context.l10n.weeks2,
+                style: TextStyle(fontSize: 11, color: muted),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

@@ -8,3 +8,10 @@ abstract class FjeliaEdition {
   /// Whether the athlete has FjeliaPro.
   bool get isPro;
 }
+
+/// The FjeliaPro subscription this device holds, as the app last verified
+/// it with the Fjelia service (StoreKit 2 transaction checked against the
+/// App Store). Set by the app; the private package's edition reads it.
+abstract final class FjeliaProEntitlement {
+  static bool active = false;
+}

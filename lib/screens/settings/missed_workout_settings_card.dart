@@ -1,8 +1,10 @@
 import '../../theme/fjelia_style.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../l10n/l10n_ext.dart';
+import '../../providers/fjelia_edition_provider.dart';
 import '../../providers/hrv_reminder_provider.dart';
 import '../../providers/missed_workout_provider.dart';
 import '../../providers/plan_proposal_provider.dart';
@@ -72,6 +74,31 @@ class MissedWorkoutSettingsCard extends ConsumerWidget {
               () => ref.read(askBeforePlanChangesProvider.notifier).set(v),
             ),
           ),
+          if (ref.watch(fjeliaEditionProvider).isPro)
+            SwitchListTile(
+              key: const ValueKey('proposal-pro-coach'),
+              contentPadding: EdgeInsets.zero,
+              secondary: const Icon(
+                Icons.auto_awesome,
+                color: Color(0xFF9D7BFF),
+              ),
+              title: Text(
+                l10n.proposalProCoach,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              subtitle: Text(
+                l10n.proposalProCoachHint,
+                style: TextStyle(fontSize: 12, color: fjInk70),
+              ),
+              value: ref.watch(proposalProCoachProvider).valueOrNull ?? true,
+              onChanged: (v) => runUiAction(
+                context,
+                () => ref.read(proposalProCoachProvider.notifier).set(v),
+              ),
+            ),
           if (s.enabled) ...[
             ListTile(
               contentPadding: EdgeInsets.zero,

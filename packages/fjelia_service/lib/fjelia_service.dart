@@ -39,6 +39,22 @@ class _NoEcgClinicalRules implements EcgClinicalRules {
   EcgClinicalReading? read(EcgSignal signal) => null;
 }
 
+/// Public builds never write FjeliaPro analyses.
+ProAnalysisPrompts createProAnalysisPrompts() => const _NoProAnalysisPrompts();
+
+class _NoProAnalysisPrompts implements ProAnalysisPrompts {
+  const _NoProAnalysisPrompts();
+
+  @override
+  bool get isAvailable => false;
+
+  @override
+  String instructions(ProAnalysisKind kind) => '';
+
+  @override
+  String get morningRevision => '';
+}
+
 /// Public builds are always the free edition and never offer FjeliaPro.
 FjeliaEdition createFjeliaEdition() => const _FreeEdition();
 

@@ -22,7 +22,6 @@ import '../../widgets/sync_orb.dart';
 import '../../widgets/day_summary_card.dart';
 import '../../widgets/health_monitor_grid.dart';
 import '../../widgets/hr_timeline_card.dart';
-import '../../widgets/ecg_sheet.dart';
 import '../../widgets/grip_strength_sheet.dart';
 import '../../widgets/bio_age_card.dart';
 import '../../widgets/briefing_card.dart';
@@ -335,105 +334,53 @@ class _HealthPage extends ConsumerWidget {
           title: context.l10n.typeBloodPressure,
           accent: const [Color(0xFFFF5A7A), Color(0xFFFF9A5A)],
           onTap: () => showAppSheet(context, const BpScreen()),
-          child: Row(
-            children: [
-              Expanded(
-                flex: 3,
-                child: Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: bp == null
-                            ? '—/—'
-                            : '${bp.avgSystolic.round()}/${bp.avgDiastolic.round()}',
-                        style: const TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      TextSpan(
-                        text: ' mmHg',
-                        style: TextStyle(color: muted, fontSize: 11),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      bp == null
-                          ? context.l10n.noData2
-                          // ESH categories, systolic and diastolic.
-                          : bpCategoryLabel(
-                              bpCategory(bp.avgSystolic, bp.avgDiastolic),
-                            ),
-                      style: TextStyle(
-                        color: bp == null
-                            ? const Color(0xFFD3E96D)
-                            : bpCategoryColor(
-                                bpCategory(bp.avgSystolic, bp.avgDiastolic),
-                              ),
-                        fontSize: 10,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 1,
-                      ),
-                    ),
-                    if (bp != null && yesterdayBp != null) ...[
-                      const SizedBox(height: 5),
-                      Text(
-                        '${bp.avgSystolic < yesterdayBp.avgSystolic
-                            ? '↓'
-                            : bp.avgSystolic > yesterdayBp.avgSystolic
-                            ? '↑'
-                            : '→'} vs. yesterday',
-                        style: TextStyle(color: muted, fontSize: 10),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-            ],
+          child: HeroRow(
+            value: bp == null
+                ? '—/—'
+                : '${bp.avgSystolic.round()}/${bp.avgDiastolic.round()}',
+            unit: 'mmHg',
+            status: bp == null
+                ? context.l10n.noData2
+                // ESH categories, systolic and diastolic.
+                : bpCategoryLabel(bpCategory(bp.avgSystolic, bp.avgDiastolic)),
+            statusColor: bp == null
+                ? muted
+                : bpCategoryColor(bpCategory(bp.avgSystolic, bp.avgDiastolic)),
+            detail: bp != null && yesterdayBp != null
+                ? context.l10n.vsYesterday(
+                    bp.avgSystolic < yesterdayBp.avgSystolic
+                        ? '↓'
+                        : bp.avgSystolic > yesterdayBp.avgSystolic
+                        ? '↑'
+                        : '→',
+                  )
+                : null,
           ),
         ),
 
         if (vis['hr_timeline'] ?? true) const HrTimelineCard(),
-        SectionCard(
-          title: context.l10n.ecgTitle,
-          accent: const [mint, Color(0xFF3EE0FF)],
-          onTap: () => showAppSheet(context, const EcgSheet()),
-          child: Row(
-            children: [
-              const Icon(Icons.monitor_heart_outlined, color: mint),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  context.l10n.ecgDescription,
-                  style: TextStyle(color: muted, fontSize: 12),
-                ),
-              ),
-              Icon(Icons.chevron_right, color: muted),
-            ],
-          ),
-        ),
         if (vis['grip_strength'] ?? true)
           SectionCard(
             title: context.l10n.gripStrength,
             accent: const [Color(0xFF6FA8FF), Color(0xFF3EE0FF)],
             onTap: () => showAppSheet(context, const GripStrengthSheet()),
-            child: Text(
-              context.l10n.lLeftkgRRightkgKg2(
-                valueText(grip?.leftKg, 1),
-                valueText(grip?.rightKg, 1),
-              ),
-              style: const TextStyle(
-                color: Colors.lightBlue,
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-              ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: StatPair(
+                    context.l10n.gripLeft,
+                    valueText(grip?.leftKg),
+                    unit: 'kg',
+                  ),
+                ),
+                Expanded(
+                  child: StatPair(
+                    context.l10n.gripRight,
+                    valueText(grip?.rightKg),
+                    unit: 'kg',
+                  ),
+                ),
+              ],
             ),
           ),
         if (vis['body_composition'] ?? true)
@@ -441,13 +388,30 @@ class _HealthPage extends ConsumerWidget {
             title: context.l10n.bodyComposition,
             accent: const [Color(0xFFFFB13D), Color(0xFFFFE066)],
             onTap: () => showAppSheet(context, const RenphoScreen()),
-            child: Text(
-              context.l10n.weightKgFatBodyfatMuscle(
-                valueText(body?.weight, 1),
-                valueText(body?.bodyFat, 1),
-                valueText(body?.muscleMass, 1),
-              ),
-              style: TextStyle(color: muted, fontSize: 11),
+            child: Row(
+              children: [
+                Expanded(
+                  child: StatPair(
+                    context.l10n.weight,
+                    valueText(body?.weight, 1),
+                    unit: 'kg',
+                  ),
+                ),
+                Expanded(
+                  child: StatPair(
+                    context.l10n.bodyFat,
+                    valueText(body?.bodyFat, 1),
+                    unit: '%',
+                  ),
+                ),
+                Expanded(
+                  child: StatPair(
+                    context.l10n.muscleShort,
+                    valueText(body?.muscleMass, 1),
+                    unit: 'kg',
+                  ),
+                ),
+              ],
             ),
           ),
         if (vis['bio_age'] ?? true) const BioAgeCard(),

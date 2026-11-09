@@ -3,6 +3,8 @@ import 'dart:math' as math;
 import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
+import 'package:fjelia/providers/plan_proposal_provider.dart'
+    show parseMorningPush;
 import 'package:fjelia/services/daily_readiness_service.dart';
 import 'package:fjelia/services/missed_workout_reminder_service.dart';
 import 'package:fjelia/services/notifications/local_notification_gateway.dart';
@@ -141,36 +143,65 @@ void main() {
             random: math.Random(1),
           );
 
-      test('come 3 to 6 minutes after leaving the app, once', () async {
-        final n = notifications(() => now);
-        await n.onBackground(
-          readiness: (day: day(0), title: 'A bit easier today?', body: 'x'),
-        );
-        expect(gateway.scheduled, hasLength(3));
-        for (final s in gateway.scheduled) {
-          final wait = s.at.difference(now).inSeconds;
-          expect(wait, inInclusiveRange(180, 360));
-        }
-        final readiness = gateway.scheduled.firstWhere(
-          (s) => s.feature == NotificationFeature.planProposal,
-        );
-        expect(readiness.actionLabels.keys, ['open', 'keep']);
-        expect(PlanProposalPayload.decode(readiness.payload)?.day, day(0));
-        // A past day has no "still today".
-        final missed = gateway.scheduled.where(
-          (s) => s.feature == NotificationFeature.missedWorkout,
-        );
-        expect(missed.every((s) => !s.actionLabels.containsKey('today')), true);
-        expect(missed.map((s) => MissedWorkoutPayload.decode(s.payload)?.day), [
-          day(-1),
-          day(-2),
-        ]);
+      test(
+        'missed days come 3 to 6 minutes after leaving the app, once',
+        () async {
+          final n = notifications(() => now);
+          await n.onBackground();
+          expect(gateway.scheduled, hasLength(2));
+          for (final s in gateway.scheduled) {
+            final wait = s.at.difference(now).inSeconds;
+            expect(wait, inInclusiveRange(180, 360));
+          }
+          // A past day has no "still today".
+          expect(
+            gateway.scheduled.every(
+              (s) => !s.actionLabels.containsKey('today'),
+            ),
+            true,
+          );
+          expect(
+            gateway.scheduled.map(
+              (s) => MissedWorkoutPayload.decode(s.payload)?.day,
+            ),
+            [day(-1), day(-2)],
+          );
+          // Leaving the app again does not ring twice.
+          await n.onBackground();
+          expect(gateway.scheduled, hasLength(2));
+        },
+      );
 
-        // Leaving the app again does not ring twice.
-        await n.onBackground(
-          readiness: (day: day(0), title: 'A bit easier today?', body: 'x'),
+      test(
+        'today\'s proposal is one push 10 to 20 minutes after the morning sync',
+        () async {
+          final sync = DateTime(now.year, now.month, now.day, 7, 10);
+          final n = notifications(() => sync);
+          final text = (day: day(0), title: 'A bit easier today?', body: 'x');
+          final due = await n.scheduleMorning(text);
+          expect(due!.difference(sync).inSeconds, inInclusiveRange(600, 1200));
+          final push = gateway.scheduled.single;
+          expect(push.feature, NotificationFeature.planProposal);
+          expect(push.actionLabels.keys, ['open', 'keep']);
+          expect(PlanProposalPayload.decode(push.payload)?.day, day(0));
+          // A later sync the same day changes nothing, and the app opened
+          // before it appears does not take it back: it has no card.
+          expect(await n.scheduleMorning(text), isNull);
+          await notifications(() => sync.add(const Duration(minutes: 10)))
+              .onForeground();
+          expect(gateway.cancelled, isEmpty);
+          expect(gateway.scheduled, hasLength(1));
+        },
+      );
+
+      test('after noon the morning push is not sent', () async {
+        final late = DateTime(now.year, now.month, now.day, 11, 55);
+        expect(
+          await notifications(() => late)
+              .scheduleMorning((day: day(0), title: 't', body: 'b')),
+          isNull,
         );
-        expect(gateway.scheduled, hasLength(3));
+        expect(gateway.scheduled, isEmpty);
       });
 
       test('back in the app before they appear, they are taken back and '
@@ -207,5 +238,18 @@ void main() {
         expect(gateway.scheduled, isEmpty);
       });
     });
+  });
+
+  test('the coach\'s two lines become the push, anything else is refused', () {
+    final day = DateTime(2026, 11, 10);
+    final p = parseMorningPush(
+      '**Heute ruhiger laufen**\n\nDie HRV liegt unter deinem Schnitt; der '
+      'Lauf wird 25 Minuten kürzer.',
+      day,
+    );
+    expect(p?.title, 'Heute ruhiger laufen');
+    expect(p?.body, startsWith('Die HRV liegt'));
+    expect(parseMorningPush('Only one line', day), isNull);
+    expect(parseMorningPush('${'x' * 70}\nbody', day), isNull);
   });
 }

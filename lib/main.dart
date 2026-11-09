@@ -11,6 +11,7 @@ import 'l10n/app_localizations.dart';
 import 'l10n/l10n_ext.dart';
 import 'providers/activity_file_import_provider.dart';
 import 'providers/auth_provider.dart';
+import 'providers/fjelia_pro_provider.dart';
 import 'providers/locale_provider.dart';
 import 'providers/style_provider.dart';
 import 'theme/fjelia_style.dart';
@@ -147,6 +148,9 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
       _listenForActivityFiles();
       _triggerSync();
       unawaited(_startHrvReminders());
+      // FjeliaPro listens to the App Store from the start (renewals,
+      // interrupted purchases).
+      ref.read(fjeliaProProvider);
     });
   }
 
@@ -160,6 +164,7 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       unawaited(ref.read(planProposalLifecycleProvider).foreground());
+      unawaited(ref.read(fjeliaProProvider.notifier).refresh());
       _onResume();
     } else if (state == AppLifecycleState.paused) {
       // Proposals not answered yet are told a few minutes later.

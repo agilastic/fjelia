@@ -13,6 +13,7 @@ import '../../services/local_model_catalog.dart';
 import '../../widgets/app_widgets.dart';
 import '../ai_coach/coach_memories_screen.dart';
 import 'bug_report_sheet.dart';
+import 'fjelia_pro_sheet.dart';
 import 'local_model_panel.dart';
 
 class AiSettingsTab extends ConsumerWidget {
@@ -77,9 +78,44 @@ class AiSettingsTab extends ConsumerWidget {
                       ),
                   ],
                 ),
+                // FjeliaPro on offer: its status, and the way to it.
+                if (edition.proOffered && !s.provider.isLocal)
+                  SectionCard(
+                    key: const ValueKey('fjelia-pro-entry'),
+                    onTap: () => showAppSheet(context, const FjeliaProSheet()),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.bolt_rounded,
+                          color: Color(0xFFFF4FD8),
+                          size: 22,
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'FjeliaPro',
+                                style: TextStyle(fontWeight: FontWeight.w800),
+                              ),
+                              Text(
+                                edition.isPro
+                                    ? context.l10n.proUsesFjeliaAi
+                                    : context.l10n.proTagline,
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Icon(Icons.chevron_right),
+                      ],
+                    ),
+                  ),
                 // Local coaches stay free; Pro adds the detailed analyses.
                 if (s.provider.isLocal && edition.proOffered && !edition.isPro)
                   SectionCard(
+                    onTap: () => showAppSheet(context, const FjeliaProSheet()),
                     child: Row(
                       children: [
                         const Icon(

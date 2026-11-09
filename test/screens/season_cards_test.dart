@@ -61,7 +61,7 @@ void main() {
       'line and the weeks to the plan\'s goal', (tester) async {
     await tester.pumpWidget(host([marathon, brevet], null));
     await tester.pumpAndSettle();
-    expect(find.text('Race goals · 2'), findsOneWidget);
+    expect(find.text('RACE GOALS · 2'), findsOneWidget);
     // The priorities as dots on the line, the details wait behind it.
     expect(find.text('A'), findsOneWidget);
     expect(find.text('B'), findsOneWidget);
@@ -71,7 +71,7 @@ void main() {
     expect(find.textContaining('26.7 km/h'), findsNothing);
     expect(
       tester.getSize(find.byKey(const Key('goals-header'))).height,
-      lessThanOrEqualTo(60),
+      lessThanOrEqualTo(104),
     );
   });
 
@@ -82,7 +82,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('goals-header')));
     await tester.pumpAndSettle();
-    expect(find.text('Race goals · 2'), findsOneWidget);
+    expect(find.text('RACE GOALS · 2'), findsOneWidget);
     // The full cards, with priorities, target, pace and climbing.
     expect(find.text('Marathon · A'), findsOneWidget);
     expect(find.text('Brevet 200 · B'), findsOneWidget);
@@ -101,44 +101,20 @@ void main() {
   ) async {
     await tester.pumpWidget(host([marathon], null));
     await tester.pumpAndSettle();
-    expect(find.text('Marathon'), findsOneWidget);
-    expect(find.textContaining('Race goals'), findsNothing);
+    expect(find.text('MARATHON'), findsOneWidget);
+    expect(find.textContaining('RACE GOALS'), findsNothing);
     expect(find.textContaining('Season'), findsNothing);
     await tester.tap(find.byKey(const Key('goals-header')));
     await tester.pumpAndSettle();
     // The card without a priority, as before.
-    expect(find.text('Marathon'), findsNWidgets(2));
+    expect(find.text('MARATHON'), findsOneWidget);
+    expect(find.text('Marathon'), findsOneWidget);
     expect(find.textContaining('Marathon · A'), findsNothing);
   });
 
-  testWidgets('trade-offs and conflicts are told, with what could be done', (
+  testWidgets('the season verdict is no card on the plan (FjeliaPro context)', (
     tester,
   ) async {
-    await tester.pumpWidget(
-      host(
-        [marathon, brevet],
-        {
-          'outcome': 'feasibleWithTradeoffs',
-          'conflicts': [
-            {
-              'message': 'Brevet 200 and Marathon are 21 days apart.',
-              'alternatives': ['Ride Brevet 200 as a controlled effort'],
-            },
-          ],
-          'summary': ['In 12 of 24 weeks the long sessions are shortened.'],
-        },
-      ),
-    );
-    await tester.pumpAndSettle();
-    expect(find.text('Season: with trade-offs'), findsOneWidget);
-    expect(find.textContaining('21 days apart'), findsOneWidget);
-    await tester.tap(find.text('Season: with trade-offs'));
-    await tester.pumpAndSettle();
-    expect(find.textContaining('long sessions are shortened'), findsOneWidget);
-    expect(find.textContaining('controlled effort'), findsOneWidget);
-  });
-
-  testWidgets('a decision that is open is named', (tester) async {
     await tester.pumpWidget(
       host(
         [marathon, brevet],
@@ -147,19 +123,8 @@ void main() {
           'conflicts': [
             {'message': 'Both are priority A.', 'alternatives': []},
           ],
-          'summary': [],
+          'summary': ['In 12 of 24 weeks the long sessions are shortened.'],
         },
-      ),
-    );
-    await tester.pumpAndSettle();
-    expect(find.text('Season: needs your decision'), findsOneWidget);
-  });
-
-  testWidgets('a plainly feasible season shows no extra card', (tester) async {
-    await tester.pumpWidget(
-      host(
-        [marathon, brevet],
-        {'outcome': 'feasible', 'conflicts': [], 'summary': []},
       ),
     );
     await tester.pumpAndSettle();

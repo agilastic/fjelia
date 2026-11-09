@@ -6,14 +6,14 @@ import '../../l10n/l10n_ext.dart';
 import '../../providers/coach_memory_provider.dart';
 import '../../theme/fjelia_style.dart';
 import '../../widgets/app_widgets.dart';
+import 'ai_coach_screen.dart' show coachGradient;
 
-/// The neon pairs the cards cycle through, so no two neighbours look alike.
+/// The accent pairs the cards take in turn (Fjelia Aurora: at most three
+/// on a screen, one per card).
 const memoryGradients = [
-  [Color(0xFFFF4FD8), Color(0xFFFF9A3C)],
-  [Color(0xFF9D7BFF), Color(0xFF3EE0FF)],
-  [Color(0xFFB6FF3C), Color(0xFF00D4A0)],
-  [Color(0xFFFFE14F), Color(0xFFFF4F8B)],
-  [Color(0xFF3EE0FF), Color(0xFF4F6BFF)],
+  coachGradient,
+  [Color(0xFFFF7AD9), Color(0xFF9D7BFF)],
+  [mint, Color(0xFFC6FF4D)],
 ];
 
 /// FjeliaPro: the athlete's own memory cards for the AI coach. Every chat
@@ -25,98 +25,100 @@ class CoachMemoriesScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final cards = ref.watch(coachMemoriesProvider).value ?? const [];
     final l = context.l10n;
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      const _Spark(),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: GradientTitle(
-                          l.coachMemories,
-                          colors: const [
-                            Color(0xFFFF4FD8),
-                            Color(0xFF9D7BFF),
-                            Color(0xFF3EE0FF),
-                          ],
-                          size: 24,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        icon: const Icon(Icons.close),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    l.coachMemoriesIntro,
-                    style: TextStyle(
-                      color: fjInk70,
-                      fontSize: 14,
-                      height: 1.35,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    l.coachMemoryCount(cards.length),
-                    style: TextStyle(
-                      color: fjAccent(const Color(0xFF3EE0FF)),
-                      fontSize: 12,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: .4,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+    return SheetPage(
+      title: l.coachMemories,
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
+        children: [
+          const _Hero(),
+          Text(
+            l.coachMemoriesIntro,
+            textAlign: TextAlign.center,
+            style: TextStyle(color: fjInk70, fontSize: 14, height: 1.4),
           ),
+          const SizedBox(height: 6),
+          Text(
+            l.coachMemoryCount(cards.length),
+            textAlign: TextAlign.center,
+            style: TextStyle(color: muted, fontSize: 12),
+          ),
+          const SizedBox(height: 16),
+          FilledButton.icon(
+            style: FilledButton.styleFrom(
+              minimumSize: const Size.fromHeight(52),
+            ),
+            onPressed: () => editCoachMemory(context, ref),
+            icon: const Icon(Icons.add_rounded),
+            label: Text(l.coachMemoryNew),
+          ),
+          const SizedBox(height: 16),
           if (cards.isEmpty)
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 40, 20, 20),
-                child: Text(
-                  l.coachMemoryEmpty,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: fjInk60,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24),
+              child: Text(
+                l.coachMemoryEmpty,
+                textAlign: TextAlign.center,
+                style: TextStyle(color: muted, fontSize: 14),
               ),
             )
           else
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
-              sliver: SliverList.separated(
-                itemCount: cards.length,
-                separatorBuilder: (_, _) => const SizedBox(height: 14),
-                itemBuilder: (c, i) => _MemoryCardView(
-                  card: cards[i],
-                  colors: memoryGradients[i % memoryGradients.length],
-                  tilt: i.isEven ? -.006 : .006,
-                ),
+            for (final (i, card) in cards.indexed)
+              _MemoryCardView(
+                card: card,
+                colors: memoryGradients[i % memoryGradients.length],
               ),
-            ),
         ],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: _GlowPill(
-        label: l.coachMemoryNew,
-        icon: Icons.add_rounded,
-        onTap: () => editCoachMemory(context, ref),
       ),
     );
   }
+}
+
+/// The coach's orb with the memory icon; it scales in once.
+class _Hero extends StatelessWidget {
+  const _Hero();
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(top: 8, bottom: 16),
+    child: Center(
+      child: TweenAnimationBuilder<double>(
+        tween: Tween(begin: 0, end: 1),
+        duration: const Duration(milliseconds: 700),
+        curve: Curves.easeOutBack,
+        builder: (context, t, child) =>
+            Transform.scale(scale: .6 + .4 * t, child: child),
+        child: Container(
+          width: 64,
+          height: 64,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: coachGradient,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: coachGradient.first.withValues(alpha: .45),
+                blurRadius: 24,
+                spreadRadius: 1,
+              ),
+              BoxShadow(
+                color: coachGradient.last.withValues(alpha: .3),
+                blurRadius: 36,
+                spreadRadius: 3,
+              ),
+            ],
+          ),
+          child: const Icon(
+            Icons.psychology_alt_rounded,
+            size: 34,
+            color: Colors.white,
+          ),
+        ),
+      ),
+    ),
+  );
 }
 
 /// Opens the editor for a new card or for [card].
@@ -125,131 +127,73 @@ Future<void> editCoachMemory(
   WidgetRef ref, [
   CoachMemory? card,
 ]) async {
-  final saved = await showModalBottomSheet<(String, String)>(
-    context: context,
-    isScrollControlled: true,
-    useSafeArea: true,
-    backgroundColor: duo(0xFF111111, 0xFFF2F4F7),
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-    ),
-    builder: (_) => _MemoryEditor(card: card),
+  final saved = await showAppSheet<(String, String)>(
+    context,
+    _MemoryEditor(card: card),
   );
   if (saved == null) return;
   final (title, body) = saved;
   await ref.read(coachMemoryStoreProvider).save(title, body, card);
 }
 
+/// One card: an accented section card with its title, its text and a
+/// delete button; a tap edits it.
 class _MemoryCardView extends ConsumerWidget {
-  const _MemoryCardView({
-    required this.card,
-    required this.colors,
-    required this.tilt,
-  });
+  const _MemoryCardView({required this.card, required this.colors});
   final CoachMemory card;
   final List<Color> colors;
-  final double tilt;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = context.l10n;
-    return Transform.rotate(
-      angle: tilt,
-      child: Container(
-        // The gradient frame around the panel.
-        padding: const EdgeInsets.all(1.6),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: colors,
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(26),
-          boxShadow: [
-            BoxShadow(
-              color: colors.last.withValues(alpha: Fjelia.light ? .18 : .3),
-              blurRadius: 22,
-              offset: const Offset(0, 8),
-            ),
-          ],
-        ),
-        child: Material(
-          color: panel,
-          borderRadius: BorderRadius.circular(24.4),
-          clipBehavior: Clip.antiAlias,
-          child: InkWell(
-            onTap: () => editCoachMemory(context, ref, card),
-            child: Ink(
-              decoration: fjGlow(colors, strength: 1.6),
-              padding: const EdgeInsets.fromLTRB(18, 14, 6, 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: 10,
-                        height: 10,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(colors: colors),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Text(
-                          card.title.isEmpty ? '✦' : card.title,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w900,
-                            color: fjInk,
-                            letterSpacing: -.2,
-                          ),
-                        ),
-                      ),
-                      IconButton(
-                        tooltip: l.delete,
-                        visualDensity: VisualDensity.compact,
-                        icon: Icon(
-                          Icons.delete_outline_rounded,
-                          color: fjInk38,
-                          size: 20,
-                        ),
-                        onPressed: () async {
-                          if (await confirmAction(
-                            context,
-                            l.coachMemoryDeleteQuestion,
-                            card.title,
-                          )) {
-                            await ref
-                                .read(coachMemoryStoreProvider)
-                                .delete(card.id);
-                          }
-                        },
-                      ),
-                    ],
+    return SectionCard(
+      accent: colors,
+      padding: const EdgeInsets.fromLTRB(16, 12, 4, 16),
+      onTap: () => editCoachMemory(context, ref, card),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  card.title.isEmpty ? '✦' : card.title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                    color: fjInk,
                   ),
-                  if (card.body.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 12),
-                      child: Text(
-                        card.body,
-                        maxLines: 6,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: fjInk70,
-                          fontSize: 14,
-                          height: 1.4,
-                        ),
-                      ),
-                    ),
-                ],
+                ),
+              ),
+              IconButton(
+                tooltip: l.delete,
+                visualDensity: VisualDensity.compact,
+                icon: Icon(Icons.delete_outline, color: muted, size: 20),
+                onPressed: () async {
+                  if (await confirmAction(
+                    context,
+                    l.coachMemoryDeleteQuestion,
+                    card.title,
+                  )) {
+                    await ref.read(coachMemoryStoreProvider).delete(card.id);
+                  }
+                },
+              ),
+            ],
+          ),
+          if (card.body.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: Text(
+                card.body,
+                maxLines: 6,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(color: fjInk70, fontSize: 14, height: 1.4),
               ),
             ),
-          ),
-        ),
+        ],
       ),
     );
   }
@@ -280,45 +224,25 @@ class _MemoryEditorState extends State<_MemoryEditor> {
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
-    InputDecoration field(String label, String hint) => InputDecoration(
-      labelText: label,
-      hintText: hint,
-      hintStyle: TextStyle(color: fjInk30),
-      filled: true,
-      fillColor: panel,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(18),
-        borderSide: BorderSide.none,
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(18),
-        borderSide: const BorderSide(color: Color(0xFF9D7BFF), width: 1.6),
-      ),
-    );
-    return SingleChildScrollView(
-      padding: EdgeInsets.fromLTRB(
-        20,
-        20,
-        20,
-        20 + MediaQuery.viewInsetsOf(context).bottom,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+    return SheetPage(
+      title: widget.card == null ? l.coachMemoryNew : l.coachMemories,
+      child: ListView(
+        padding: EdgeInsets.fromLTRB(
+          16,
+          8,
+          16,
+          16 + MediaQuery.viewInsetsOf(context).bottom,
+        ),
         children: [
-          GradientTitle(
-            widget.card == null ? l.coachMemoryNew : l.coachMemories,
-            colors: memoryGradients[0],
-            size: 16,
-          ),
-          const SizedBox(height: 16),
           TextField(
             controller: title,
             autofocus: widget.card == null,
             maxLength: 80,
             textCapitalization: TextCapitalization.sentences,
-            style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
-            decoration: field(l.coachMemoryTitle, l.coachMemoryTitleHint),
+            decoration: InputDecoration(
+              labelText: l.coachMemoryTitle,
+              hintText: l.coachMemoryTitleHint,
+            ),
             onChanged: (_) => setState(() {}),
           ),
           const SizedBox(height: 8),
@@ -328,123 +252,28 @@ class _MemoryEditorState extends State<_MemoryEditor> {
             maxLines: 10,
             maxLength: 1500,
             textCapitalization: TextCapitalization.sentences,
-            decoration: field(l.coachMemoryBody, l.coachMemoryBodyHint),
+            decoration: InputDecoration(
+              labelText: l.coachMemoryBody,
+              hintText: l.coachMemoryBodyHint,
+              alignLabelWithHint: true,
+            ),
             onChanged: (_) => setState(() {}),
           ),
           const SizedBox(height: 12),
-          Center(
-            child: _GlowPill(
-              label: l.save,
-              icon: Icons.bolt_rounded,
-              onTap: _ready
-                  ? () => Navigator.pop(context, (
-                      title.text.trim(),
-                      body.text.trim(),
-                    ))
-                  : null,
+          FilledButton(
+            style: FilledButton.styleFrom(
+              minimumSize: const Size.fromHeight(52),
             ),
+            onPressed: _ready
+                ? () => Navigator.pop(context, (
+                    title.text.trim(),
+                    body.text.trim(),
+                  ))
+                : null,
+            child: Text(l.save),
           ),
         ],
       ),
     );
   }
-}
-
-/// The loud gradient button of the memory screens.
-class _GlowPill extends StatelessWidget {
-  const _GlowPill({required this.label, required this.icon, this.onTap});
-  final String label;
-  final IconData icon;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    const colors = [Color(0xFFFF4FD8), Color(0xFF9D7BFF), Color(0xFF3EE0FF)];
-    final on = onTap != null;
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(40),
-        gradient: LinearGradient(
-          colors: [for (final c in colors) c.withValues(alpha: on ? 1 : .35)],
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: colors[1].withValues(alpha: on ? .5 : 0),
-            blurRadius: 20,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: Material(
-        type: MaterialType.transparency,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(40),
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 14),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(icon, color: Colors.black87, size: 20),
-                const SizedBox(width: 8),
-                Text(
-                  label,
-                  style: const TextStyle(
-                    color: Colors.black87,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 15,
-                    letterSpacing: .3,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// A slowly turning gradient orb next to the title.
-class _Spark extends StatefulWidget {
-  const _Spark();
-
-  @override
-  State<_Spark> createState() => _SparkState();
-}
-
-class _SparkState extends State<_Spark> with SingleTickerProviderStateMixin {
-  late final spin = AnimationController(
-    vsync: this,
-    duration: const Duration(seconds: 6),
-  )..repeat();
-
-  @override
-  void dispose() {
-    spin.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) => RotationTransition(
-    turns: spin,
-    child: Container(
-      width: 36,
-      height: 36,
-      decoration: const BoxDecoration(
-        shape: BoxShape.circle,
-        gradient: SweepGradient(
-          colors: [
-            Color(0xFFFF4FD8),
-            Color(0xFF9D7BFF),
-            Color(0xFF3EE0FF),
-            Color(0xFFB6FF3C),
-            Color(0xFFFF4FD8),
-          ],
-        ),
-      ),
-      child: const Icon(Icons.psychology_alt_rounded, color: Colors.black87),
-    ),
-  );
 }

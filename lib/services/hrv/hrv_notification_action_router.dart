@@ -2,6 +2,7 @@ import 'dart:async';
 
 import '../notifications/local_notification_adapter.dart';
 import '../missed_workout_reminder_service.dart' show MissedWorkoutPayload;
+import '../plan_proposal_notifications.dart' show PlanProposalPayload;
 import '../notifications/local_notification_gateway.dart';
 import 'hrv_post_reminder_coordinator.dart';
 
@@ -68,8 +69,11 @@ class HrvNotificationActionRouter {
   }
 
   Future<void> _process(NotificationResponse r, DateTime? at) async {
+    // Other features' pushes go to the app; before, a tap on the plan
+    // proposal reached the HRV coordinator and was ignored.
     if (NutritionNotificationPayload.decode(r.payload) != null ||
-        MissedWorkoutPayload.decode(r.payload) != null) {
+        MissedWorkoutPayload.decode(r.payload) != null ||
+        PlanProposalPayload.decode(r.payload) != null) {
       await onOtherResponse?.call(r);
       return;
     }

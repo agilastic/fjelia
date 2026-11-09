@@ -247,6 +247,7 @@ class EnergyTimeline extends StatelessWidget {
       height: 180,
       child: LineChart(
         LineChartData(
+          lineTouchData: roundedLineTouch(),
           minX: 0,
           maxX: 24,
           minY: 0,

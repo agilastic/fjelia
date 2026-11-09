@@ -1,6 +1,6 @@
+import '../activities/sport_stats_card.dart';
 import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
-import '../../l10n/formats.dart';
 import '../../providers/activity_history_provider.dart';
 
 import 'package:flutter/material.dart';
@@ -35,9 +35,6 @@ class StrainScreen extends ConsumerWidget {
     final heatEnabled =
         ref.watch(heatAcclimationSettingsProvider).valueOrNull?.enabled ??
         false;
-    final location = heat == null
-        ? null
-        : ref.watch(heatPreferredLocationProvider).valueOrNull;
     final content = ListView(
       physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
@@ -48,64 +45,82 @@ class StrainScreen extends ConsumerWidget {
             rows.error!,
             retry: () => ref.invalidate(loadActivitiesProvider),
           ),
-        if (vis['heat_acclimation'] ?? true)
-          LoadCard(
-            accent: const [Color(0xFFFF8A4D), Color(0xFFFF5A7A)],
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            child: InkWell(
-              onTap: () => heatEnabled || heat != null
-                  ? showLoadSheet(context, HeatWeatherSheet(), height: .82)
-                  : showAppSheet(context, TrainingTab()),
-              child: Row(
-                children: [
-                  Text(
-                    heat == null ? '—' : '${valueText(heat.score)}%',
-                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(width: 14),
-                  Expanded(
-                    child: Column(
+        // Heat and the day's load side by side, each a small card.
+        Builder(
+          builder: (context) {
+            final cards = <Widget>[
+              if (vis['heat_acclimation'] ?? true)
+                SectionCard(
+                  title: context.l10n.heatShort,
+                  accent: const [Color(0xFFFF8A4D), Color(0xFFFF5A7A)],
+                  padding: const EdgeInsets.all(14),
+                  onTap: () => heatEnabled || heat != null
+                      ? showLoadSheet(context, HeatWeatherSheet(), height: .82)
+                      : showAppSheet(context, TrainingTab()),
+                  child: TweenAnimationBuilder<double>(
+                    tween: Tween(begin: 0, end: 1),
+                    duration: const Duration(milliseconds: 700),
+                    curve: Curves.easeOutCubic,
+                    builder: (context, t, _) => Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        GradientTitle(
-                          context.l10n.heatAcclimation2,
-                          colors: const [Color(0xFFFF8A4D), Color(0xFFFF5A7A)],
-                          size: 11,
+                        KeyFigure(
+                          heat == null ? '—' : valueText(heat.score * t),
+                          unit: heat == null ? null : '%',
+                          size: 30,
                         ),
-                        SizedBox(height: 5),
+                        const SizedBox(height: 6),
                         Text(
-                          location != null
-                              ? context.l10n.currentFixedFixed2(
-                                  location.latitude.fixed(4),
-                                  location.longitude.fixed(4),
-                                )
-                              : !heatEnabled
+                          !heatEnabled
                               ? context.l10n.setUpInTrainingSettings
                               : heatState.hasError
                               ? context.l10n.couldNotLoadHeatData
                               : heatState.isLoading
                               ? context.l10n.loadingHeatHistory
-                              : context.l10n.noHeatDataYet,
-                          style: TextStyle(fontSize: 11, color: muted),
+                              : heat == null
+                              ? context.l10n.noHeatDataYet
+                              : context.l10n.heatAcclimation,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontSize: 10, color: muted),
+                        ),
+                        const SizedBox(height: 10),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(6),
+                          child: LinearProgressIndicator(
+                            value: ((heat?.score ?? 0) / 100 * t).clamp(0, 1),
+                            minHeight: 6,
+                            color: fjAccent(const Color(0xFFFF8A4D)),
+                            backgroundColor: fjInk10,
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  Icon(Icons.chevron_right, color: muted, size: 20),
+                ),
+              if (vis['day_load'] ?? true)
+                DayTrainingLoadCard(
+                  load: monitor?.dayLoad,
+                  low: monitor?.optimalLow,
+                  high: monitor?.optimalHigh,
+                ),
+            ];
+            if (cards.length < 2) return Column(children: cards);
+            return IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(child: cards[0]),
+                  const SizedBox(width: 10),
+                  Expanded(child: cards[1]),
                 ],
               ),
-            ),
-          ),
-        if (vis['day_load'] ?? true)
-          DayTrainingLoadCard(
-            load: monitor?.dayLoad,
-            low: monitor?.optimalLow,
-            high: monitor?.optimalHigh,
-          ),
-        if ((vis['day_load'] ?? true) && (vis['weekly_load'] ?? true))
-          SizedBox(height: 12),
+            );
+          },
+        ),
         if (vis['weekday_load'] ?? true) const WeekdayLoadCard(),
         if (vis['weekly_load'] ?? true) const WeeklyLoadCard(),
+        if (vis['sport_stats'] ?? true) const SportStatsCard(),
         if (vis['zone_polarization'] ?? true)
           const LoadHistoryCards(polarization: true),
         if (vis['elevation'] ?? true)
@@ -142,122 +157,91 @@ class DayTrainingLoadCard extends StatelessWidget {
         : value > high!
         ? context.l10n.high2
         : context.l10n.optimal2;
-    final tint = status == 'OPTIMAL'
-        ? mint
-        : status == 'HIGH'
-        ? Colors.orange
-        : duo(0xFFCCCCCC, 0xFF374151);
-    return LoadCard(
+    final tint = !hasTarget
+        ? muted
+        : value < low!
+        ? const Color(0xFF6FA8FF)
+        : value > high!
+        ? const Color(0xFFFFB13D)
+        : mint;
+    return SectionCard(
+      title: context.l10n.dayTrainingLoad2,
       accent: const [Color(0xFFFFB13D), Color(0xFFFF4D8D)],
+      padding: const EdgeInsets.all(14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: GradientTitle(
-                  context.l10n.dayTrainingLoad2,
-                  colors: const [Color(0xFFFFB13D), Color(0xFFFF4D8D)],
-                  size: 11,
+          // The figure counts up and the bar fills when the card appears.
+          TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0, end: 1),
+            duration: const Duration(milliseconds: 700),
+            curve: Curves.easeOutCubic,
+            builder: (context, t, _) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                KeyFigure(
+                  load == null ? '—' : valueText(value * t),
+                  unit: context.l10n.trimp,
+                  size: 30,
                 ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: tint.withValues(alpha: .12),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  status,
+                const SizedBox(height: 6),
+                Text(
+                  status.toUpperCase(),
                   style: TextStyle(
-                    color: tint,
-                    fontSize: 11,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 1.6,
+                    color: fjAccent(tint),
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                valueText(load),
-                style: TextStyle(
-                  fontSize: 32,
-                  color: tint,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 4),
-                child: Text(
-                  context.l10n.trimp,
-                  style: TextStyle(color: muted, fontSize: 13),
-                ),
-              ),
-              const Spacer(),
-              if (hasTarget)
-                LoadBadge(
-                  context.l10n.optimalLowHigh(valueText(low), valueText(high)),
-                ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          SizedBox(
-            height: 8,
-            child: LayoutBuilder(
-              builder: (context, box) => ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                child: Stack(
-                  children: [
-                    Container(color: fjInk10),
-                    if (hasTarget)
-                      Positioned(
-                        left: (low! / scale).clamp(0, 1) * box.maxWidth,
-                        width:
-                            ((high! - low!).clamp(0, scale) /
-                                    scale *
-                                    box.maxWidth)
-                                .clamp(
-                                  0,
-                                  box.maxWidth -
-                                      (low! / scale).clamp(0, 1) * box.maxWidth,
-                                ),
-                        top: 0,
-                        bottom: 0,
-                        child: Container(color: mint.withValues(alpha: .25)),
+                const SizedBox(height: 10),
+                SizedBox(
+                  height: 6,
+                  child: LayoutBuilder(
+                    builder: (context, box) => ClipRRect(
+                      borderRadius: BorderRadius.circular(6),
+                      child: Stack(
+                        children: [
+                          Container(color: fjInk10),
+                          if (hasTarget)
+                            Positioned(
+                              left: (low! / scale).clamp(0, 1) * box.maxWidth,
+                              width:
+                                  ((high! - low!).clamp(0, scale) /
+                                          scale *
+                                          box.maxWidth)
+                                      .clamp(
+                                        0,
+                                        box.maxWidth -
+                                            (low! / scale).clamp(0, 1) *
+                                                box.maxWidth,
+                                      ),
+                              top: 0,
+                              bottom: 0,
+                              child: Container(
+                                color: mint.withValues(alpha: .25),
+                              ),
+                            ),
+                          FractionallySizedBox(
+                            widthFactor: (value / scale * t).clamp(0, 1),
+                            child: Container(color: tint),
+                          ),
+                        ],
                       ),
-                    FractionallySizedBox(
-                      widthFactor: (value / scale).clamp(0, 1),
-                      child: Container(color: tint),
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              Icon(Icons.info_outline, size: 12, color: muted),
-              const SizedBox(width: 5),
-              Expanded(
-                child: Text(
-                  hasTarget
-                      ? context.l10n.optimalLowHighTrimp(
-                          valueText(low),
-                          valueText(high),
-                        )
-                      : context.l10n.targetUnavailableSyncTrainingHistory,
-                  style: TextStyle(fontSize: 10, color: muted),
-                ),
-              ),
-            ],
+          const SizedBox(height: 8),
+          Text(
+            hasTarget
+                ? context.l10n.optimalLowHigh(valueText(low), valueText(high))
+                : context.l10n.noTarget,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontSize: 10, color: muted),
           ),
         ],
       ),

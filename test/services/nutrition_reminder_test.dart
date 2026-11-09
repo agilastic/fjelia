@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/models/workout_nutrition.dart';
+import 'package:fjelia/services/plan_proposal_notifications.dart';
 import 'package:fjelia/services/nutrition_service.dart';
 import 'package:fjelia/services/nutrition_reminder_service.dart';
 import 'package:fjelia/services/notifications/local_notification_gateway.dart';
@@ -229,6 +230,27 @@ void main() {
       expect(opened, ['a', 'b']);
     },
   );
+  test('a tap on the plan proposal push reaches the app', () async {
+    final hrv = HrvPostReminderCoordinator(
+      db: db,
+      gateway: gateway,
+      sensorReady: () async => false,
+    );
+    final payloads = <String?>[];
+    final router = HrvNotificationActionRouter(
+      coordinator: hrv,
+      gateway: gateway,
+      inbox: () async => [],
+    );
+    addTearDown(router.dispose);
+    router.onOtherResponse = (r) async => payloads.add(r.payload);
+    router.attach();
+    await router.markReady();
+    final payload = PlanProposalPayload(DateTime(2026, 11, 10)).encode();
+    gateway.respond(NotificationResponse(actionId: 'open', payload: payload));
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+    expect(payloads, [payload]);
+  });
   test('the banner names the activity; text without HRV hint', () async {
     await add('a');
     await reminders.reconcile();

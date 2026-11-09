@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 
+import '../config/fjelia_pro.dart';
 import '../config/free_ai.dart';
 
 import 'package:foundation_models_framework/foundation_models_framework.dart';
+import 'package:fjelia_service_api/fjelia_service_api.dart';
 import 'package:http/http.dart' as http;
 
 import 'ai_coach_rules.dart';
@@ -14,6 +16,7 @@ import 'briefing_text.dart';
 import 'coach_language.dart';
 import 'coach_memory_context.dart';
 import 'coach_tasks.dart';
+import 'fjelia_pro.dart';
 import 'local_model_service.dart';
 import 'local_coach_reply.dart';
 import '../l10n/l10n_ext.dart';
@@ -75,6 +78,12 @@ String _system(String? taskPrompt, [String context = '']) =>
           '\n\nDATE: ${coachTodayLine()}' +
           coachLanguageDirective(chat: taskPrompt == null);
 
+/// The system prompt a cloud chat sends for [context], as the coach gets
+/// it. The model comparison in fjelia-service (`tools/ai_compare`) uses it,
+/// so it measures the prompt the app really sends.
+String coachChatSystemPrompt(String context) =>
+    '${_system(null, context)}\n\nHEALTH_CONTEXT:\n$context';
+
 /// Proof that the user just agreed to send health data to a cloud model.
 class AiConsentToken {
   const AiConsentToken._(this.confirmedAt);
@@ -96,8 +105,11 @@ class AiCoachClient {
     AppleSender? appleSender,
     LocalModelService? localModel,
     LocalModelService Function(String modelId)? localModelFor,
+    ProAccessStore proAccess = const ProAccessStore(),
   }) : _http = client ?? http.Client(),
        _store = store ?? const AiCoachSettingsStore(),
+       // ignore: prefer_initializing_formals
+       _proAccess = proAccess,
        // ignore: prefer_initializing_formals
        _appleSender = appleSender,
        _localModelFor =
@@ -110,6 +122,15 @@ class AiCoachClient {
 
   final http.Client _http;
   final AiCoachSettingsStore _store;
+  final ProAccessStore _proAccess;
+
+  /// The FjeliaPro access when the subscription is on and current.
+  Future<ProAccess?> _activePro() async {
+    if (!FjeliaProEntitlement.active) return null;
+    final access = await _proAccess.read();
+    return access != null && access.activeAt(DateTime.now()) ? access : null;
+  }
+
   final LocalModelService Function(String modelId) _localModelFor;
 
   static String _providerLabel(AiProvider p) => switch (p) {
@@ -186,6 +207,42 @@ class AiCoachClient {
       throw StateError('Explicit data transfer consent is required.');
     }
     return _sendCloud(settings, messages, toonContext, 'chat');
+  }
+
+  /// A FjeliaPro analysis: its own instructions, written by the large model
+  /// on the subscription's key. A gateway or key without that model answers
+  /// with the Pro model; without an active subscription nothing is sent.
+  ///
+  /// [deep] false asks the quick Pro model only (a push, not a report).
+  Future<({String text, String model})> sendProAnalysis(
+    String systemPrompt,
+    String userPrompt,
+    String toonContext, {
+    bool deep = true,
+  }) async {
+    final pro = await _activePro();
+    if (pro == null) throw StateError('FjeliaPro is not active.');
+    Future<String> ask(String model) => _sendOpenAiCompatible(
+      freeAiChatCompletionsUri,
+      pro.key,
+      model,
+      [ChatMessage(text: userPrompt, isUser: true)],
+      toonContext,
+      systemPrompt: '$_rawTask$systemPrompt',
+      freeAiKind: 'planning',
+      anonymous: true,
+    );
+    if (!deep) return (text: await ask(proAiModel), model: proAiModel);
+    try {
+      return (text: await ask(proAiDeepModel), model: proAiDeepModel);
+    } on StateError catch (e) {
+      if (!RegExp(r'failed \((400|401|403|404|429|503)\)')
+          .hasMatch(e.message)) {
+        rethrow;
+      }
+      log('[FjeliaPro] $proAiDeepModel refused, $proAiModel answers');
+    }
+    return (text: await ask(proAiModel), model: proAiModel);
   }
 
   /// One short planning answer with its own instructions, e.g. where a missed
@@ -504,6 +561,31 @@ class AiCoachClient {
     }
     switch (provider) {
       case AiProvider.freeAi:
+        // With FjeliaPro the same service answers with the Pro model, on
+        // the subscription's own key and budget.
+        final pro = await _activePro();
+        if (pro != null) {
+          try {
+            return await _sendOpenAiCompatible(
+              freeAiChatCompletionsUri,
+              pro.key,
+              proAiModel,
+              messages,
+              toonContext,
+              systemPrompt: systemPrompt,
+              freeAiKind: kind,
+              // The free tier's per-installation budget does not apply.
+              anonymous: true,
+            );
+          } on StateError catch (e) {
+            // A Pro key past its monthly budget, or blocked, is refused
+            // (4xx); the athlete still gets an answer from Free AI.
+            final refused = RegExp(r'failed \((400|401|403|429)\)')
+                .hasMatch(e.message);
+            if (!refused) rethrow;
+            log('[FjeliaPro] Pro key refused, Free AI answers: ${e.message}');
+          }
+        }
         return _sendOpenAiCompatible(
           freeAiChatCompletionsUri,
           key,
@@ -571,13 +653,14 @@ class AiCoachClient {
     String toonContext, {
     String? systemPrompt,
     String? freeAiKind,
+    bool anonymous = false,
   }) async {
     final installationId = freeAiKind == null
         ? null
         : await _store.readFreeAiInstallationId();
     final body = jsonEncode(<String, Object>{
       'model': model,
-      'user': ?installationId,
+      'user': ?(anonymous ? null : installationId),
       'temperature': 0.3,
       'messages': [
         // One system message: chat templates of open models (Mistral, Qwen

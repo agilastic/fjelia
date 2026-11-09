@@ -1313,6 +1313,21 @@ class DfaAlpha1Results extends Table {
 
 /// Photos and videos the athlete added to an activity, a race goal or a
 /// planned session. The files live in the app's `media/` folder.
+/// FjeliaPro analyses the large model wrote (plan check, weekly review,
+/// race plan, season), kept so they can be read again offline. One per kind
+/// and reference: the day, the week, the race goal or the season.
+class ProReports extends Table {
+  TextColumn get id => text()();
+  TextColumn get kind => text()();
+  TextColumn get refKey => text()();
+  TextColumn get body => text()();
+  TextColumn get model => text().nullable()();
+  DateTimeColumn get createdAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 /// The athlete's own notes for the AI coach (FjeliaPro): whatever they want
 /// it to know, sent along as additional information.
 class CoachMemories extends Table {
@@ -1429,6 +1444,7 @@ class MediaItems extends Table {
     DfaAlpha1Results,
     MediaItems,
     CoachMemories,
+    ProReports,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -1441,7 +1457,7 @@ class AppDatabase extends _$AppDatabase {
       defaultSourcePriorities[group.name]!;
 
   @override
-  int get schemaVersion => 65;
+  int get schemaVersion => 66;
 
   Future<void> saveHeartRateSamples(List<TimedHeartRate> samples) async {
     if (samples.isEmpty) return;
@@ -3300,6 +3316,7 @@ class AppDatabase extends _$AppDatabase {
         await m.createTable(planAdjustments);
       }
       if (from < 65) await m.createTable(coachMemories);
+      if (from < 66) await m.createTable(proReports);
     },
   );
 
@@ -3317,6 +3334,12 @@ class AppDatabase extends _$AppDatabase {
 
   Future<void> deleteCoachMemory(String id) =>
       (delete(coachMemories)..where((t) => t.id.equals(id))).go();
+
+  Stream<ProReport?> watchProReport(String id) =>
+      (select(proReports)..where((t) => t.id.equals(id))).watchSingleOrNull();
+
+  Future<void> saveProReport(ProReport report) =>
+      into(proReports).insertOnConflictUpdate(report);
 
   /// Adds the identity and provenance of spot readings and the tables of the
   /// workout HRV feature. Nothing is invented: a reading from before keeps an

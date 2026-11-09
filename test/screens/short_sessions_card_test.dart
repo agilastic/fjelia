@@ -60,7 +60,7 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    expect(find.text('Shorter than planned – why?'), findsOneWidget);
+    expect(find.text('SHORTER THAN PLANNED – WHY?'), findsOneWidget);
     expect(find.text('Long ride: 120 of 240 min'), findsOneWidget);
 
     await tester.runAsync(() async {
@@ -74,6 +74,6 @@ void main() {
     );
     expect(a!.shortReason, 'fatigue');
     expect(a.outcome, 'stoppedFatigue');
-    expect(find.text('Shorter than planned – why?'), findsNothing);
+    expect(find.text('SHORTER THAN PLANNED – WHY?'), findsNothing);
   });
 }

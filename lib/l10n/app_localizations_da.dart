@@ -8237,4 +8237,289 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get sportSkiErg => 'SkiErg (langrend indendørs)';
+
+  @override
+  String get weatherRain => 'REGN';
+
+  @override
+  String weatherLowHigh(int low, int high) {
+    return 'Lav $low° · Høj $high°';
+  }
+
+  @override
+  String get weatherDayPeak => 'Dagens top';
+
+  @override
+  String get weatherDayTotal => 'Samlet for dagen';
+
+  @override
+  String get proTagline => 'Din coach. På pro-niveau.';
+
+  @override
+  String get proBenefitCoach =>
+      'AI-coach med Pro-modellen: hurtigere, grundigere, egen kvote';
+
+  @override
+  String get proBenefitMemory => 'Memory-kort: det din coach altid skal vide';
+
+  @override
+  String get proBenefitEcg => 'Detaljeret EKG-analyse';
+
+  @override
+  String get proBenefitCopy => 'Kopiér svar med ét tryk';
+
+  @override
+  String get proMonthly => 'Månedlig';
+
+  @override
+  String get proYearly => 'Årlig';
+
+  @override
+  String proPerMonth(String price) {
+    return '$price / måned';
+  }
+
+  @override
+  String proPerYear(String price) {
+    return '$price / år';
+  }
+
+  @override
+  String get proBestValue => 'BEDSTE KØB';
+
+  @override
+  String get proSubscribe => 'Få FjeliaPro';
+
+  @override
+  String get proRestore => 'Gendan køb';
+
+  @override
+  String get proManage => 'Administrer abonnement';
+
+  @override
+  String proActiveUntil(String date) {
+    return 'Pro er aktiv til $date';
+  }
+
+  @override
+  String get proAutoRenew =>
+      'Abonnementet fornyes automatisk, medmindre du opsiger det mindst 24 timer før periodens udløb i indstillingerne for din Apple-konto. Betalingen trækkes fra din Apple-konto.';
+
+  @override
+  String get proTerms => 'Vilkår for brug';
+
+  @override
+  String get proPrivacy => 'Privatliv';
+
+  @override
+  String get proProblemStore => 'App Store gennemførte ikke købet.';
+
+  @override
+  String get proProblemService =>
+      'Dit køb er registreret, men kunne ikke kontrolleres endnu. Fjelia prøver igen ved næste start.';
+
+  @override
+  String get proProblemNothing => 'Intet FjeliaPro-abonnement at gendanne.';
+
+  @override
+  String get proProblemNotActive => 'Dette abonnement er udløbet.';
+
+  @override
+  String get proUnavailable =>
+      'Abonnementerne kan ikke indlæses lige nu. Prøv igen senere.';
+
+  @override
+  String get proWelcome => 'Velkommen til FjeliaPro 🔥';
+
+  @override
+  String get proUsesFjeliaAi =>
+      'Pro-modellen svarer, når \"Fjelia AI\" er valgt i AI-indstillingerne.';
+
+  @override
+  String get proToolsTitle => 'Pro-analyser';
+
+  @override
+  String get proPlanCheck => 'Dagens plan-tjek';
+
+  @override
+  String get proPlanCheckHint => 'Passer dagens plan til din restitution?';
+
+  @override
+  String get proWeekReview => 'Ugentlig tilbageblik';
+
+  @override
+  String get proWeekReviewHint => 'Hvad virkede, og hvad du ændrer næste uge';
+
+  @override
+  String get proRacePlan => 'Løbsplan';
+
+  @override
+  String proRacePlanHint(String race) {
+    return '$race: nedtrapning, pacing, energi';
+  }
+
+  @override
+  String get proSeason => 'Sæsonanalyse';
+
+  @override
+  String get proSeasonHint => 'Mål, faser og risici i din sæson';
+
+  @override
+  String get proAnalysisCreate => 'Lav analyse';
+
+  @override
+  String get proAnalysisRedo => 'Lav igen';
+
+  @override
+  String proAnalysisFrom(String time) {
+    return 'Oprettet $time';
+  }
+
+  @override
+  String get proAnalysisWorking => 'Den store model analyserer …';
+
+  @override
+  String get proAnalysisFailed => 'Analysen lykkedes ikke. Prøv igen.';
+
+  @override
+  String get proBenefitPlanCheck => 'Daglig plan-tjek med den store model';
+
+  @override
+  String get proBenefitReview => 'Ugentligt tilbageblik og sæsonanalyse';
+
+  @override
+  String get proBenefitRacePlan => 'Løbsplan: nedtrapning, pacing, energi';
+
+  @override
+  String get statsTitle => 'Statistik';
+
+  @override
+  String get statsLast4Weeks => 'Seneste 4 uger · pr. uge';
+
+  @override
+  String get statsElevation => 'Højdemeter';
+
+  @override
+  String get statsAllTimeTotals => 'I alt';
+
+  @override
+  String get statsBestEfforts => 'Bedste præstationer';
+
+  @override
+  String get statsLongest => 'Længste';
+
+  @override
+  String get statsMostElevation => 'Flest højdemeter';
+
+  @override
+  String get statsNone => 'Ingen aktiviteter endnu.';
+
+  @override
+  String get proBenefitStats =>
+      'Statistik: bedste præstationer, i år og de seneste 4 uger';
+
+  @override
+  String get statsFourWeeks => '4 uger';
+
+  @override
+  String get statsTickerWeek => 'pr. uge, seneste 4 uger';
+
+  @override
+  String statsTickerYear(String year) {
+    return 'i $year';
+  }
+
+  @override
+  String statsTickerBest(String distance) {
+    return 'Bedste $distance';
+  }
+
+  @override
+  String get statsPerWeekShort => '/ uge';
+
+  @override
+  String get gripLeft => 'Venstre';
+
+  @override
+  String get gripRight => 'Højre';
+
+  @override
+  String get muscleShort => 'Muskler';
+
+  @override
+  String vsYesterday(String arrow) {
+    return '$arrow vs. i går';
+  }
+
+  @override
+  String get proposalProCoach => 'Coachen skriver morgenbeskeden';
+
+  @override
+  String get proposalProCoachHint =>
+      'FjeliaPro: dagens parathed, plan og sundhedskontekst sendes til Fjelia AI Pro, som formulerer forslaget kort efter morgensynkroniseringen.';
+
+  @override
+  String get heatShort => 'Varme';
+
+  @override
+  String get coachRevisionLabel => 'Coachens forslag';
+
+  @override
+  String get revisionBefore => 'Før';
+
+  @override
+  String get revisionAfter => 'Efter';
+
+  @override
+  String get revisionSwapped => 'Byttet';
+
+  @override
+  String get revisionRestDay => 'Hviledag i stedet';
+
+  @override
+  String get revisionDropped => 'udeladt';
+
+  @override
+  String get revisionAccept => 'Brug det';
+
+  @override
+  String revisionSets(String sets, String reps) {
+    return '$sets × $reps';
+  }
+
+  @override
+  String get testMorningProposal => 'Test morgenforslag';
+
+  @override
+  String get testMorningProposalHint =>
+      'Kører morgentjekket nu med gul parathed; beskeden kommer om 5 sekunder.';
+
+  @override
+  String get proposalRulesEasier =>
+      'Restitutionen er ikke helt der: dagens træning bliver kortere og lettere, formålet bliver.';
+
+  @override
+  String get proposalRulesRecovery =>
+      'Tydelige tegn på træthed: i dag kun roligt eller hvile.';
+
+  @override
+  String get proposalCoachUnavailable =>
+      'Coachen kunne ikke nås lige nu; dette er forslaget efter reglerne.';
+
+  @override
+  String get revisionKeep => 'Forbliver som planlagt';
+
+  @override
+  String get revisionAlternative => 'Alternativ';
+
+  @override
+  String get revisionTakeAlternative => 'Brug dette i stedet';
+
+  @override
+  String proposalForDay(String day) {
+    return 'Forslag for $day';
+  }
+
+  @override
+  String get proposalDayTomorrow => 'i morgen';
 }

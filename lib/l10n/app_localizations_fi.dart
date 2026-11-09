@@ -8267,4 +8267,293 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get sportSkiErg => 'SkiErg (hiihto sisällä)';
+
+  @override
+  String get weatherRain => 'SADE';
+
+  @override
+  String weatherLowHigh(int low, int high) {
+    return 'Alin $low° · Ylin $high°';
+  }
+
+  @override
+  String get weatherDayPeak => 'Päivän huippu';
+
+  @override
+  String get weatherDayTotal => 'Päivän yhteensä';
+
+  @override
+  String get proTagline => 'Valmentajasi. Pro-tasolla.';
+
+  @override
+  String get proBenefitCoach =>
+      'AI-valmentaja Pro-mallilla: nopeampi, perusteellisempi, oma kiintiö';
+
+  @override
+  String get proBenefitMemory =>
+      'Muistikortit: mitä valmentajasi pitää aina tietää';
+
+  @override
+  String get proBenefitEcg => 'Yksityiskohtainen EKG-analyysi';
+
+  @override
+  String get proBenefitCopy => 'Kopioi vastaukset yhdellä napautuksella';
+
+  @override
+  String get proMonthly => 'Kuukausittain';
+
+  @override
+  String get proYearly => 'Vuosittain';
+
+  @override
+  String proPerMonth(String price) {
+    return '$price / kk';
+  }
+
+  @override
+  String proPerYear(String price) {
+    return '$price / vuosi';
+  }
+
+  @override
+  String get proBestValue => 'PARAS DIILI';
+
+  @override
+  String get proSubscribe => 'Hanki FjeliaPro';
+
+  @override
+  String get proRestore => 'Palauta ostot';
+
+  @override
+  String get proManage => 'Hallitse tilausta';
+
+  @override
+  String proActiveUntil(String date) {
+    return 'Pro on voimassa $date asti';
+  }
+
+  @override
+  String get proAutoRenew =>
+      'Tilaus uusiutuu automaattisesti, ellet peru sitä vähintään 24 tuntia ennen jakson päättymistä Apple-tilisi asetuksista. Maksu veloitetaan Apple-tililtäsi.';
+
+  @override
+  String get proTerms => 'Käyttöehdot';
+
+  @override
+  String get proPrivacy => 'Tietosuoja';
+
+  @override
+  String get proProblemStore => 'App Store ei viimeistellyt ostoa.';
+
+  @override
+  String get proProblemService =>
+      'Ostosi on tehty, mutta sitä ei voitu vielä tarkistaa. Fjelia yrittää uudelleen seuraavalla käynnistyksellä.';
+
+  @override
+  String get proProblemNothing =>
+      'Palautettavaa FjeliaPro-tilausta ei löytynyt.';
+
+  @override
+  String get proProblemNotActive => 'Tämä tilaus on päättynyt.';
+
+  @override
+  String get proUnavailable =>
+      'Tilauksia ei voi ladata juuri nyt. Yritä myöhemmin uudelleen.';
+
+  @override
+  String get proWelcome => 'Tervetuloa FjeliaProhon 🔥';
+
+  @override
+  String get proUsesFjeliaAi =>
+      'Pro-malli vastaa, kun AI-asetuksissa on valittuna \"Fjelia AI\".';
+
+  @override
+  String get proToolsTitle => 'Pro-analyysit';
+
+  @override
+  String get proPlanCheck => 'Päivän suunnitelmatarkistus';
+
+  @override
+  String get proPlanCheckHint => 'Sopiiko päivän suunnitelma palautumiseesi?';
+
+  @override
+  String get proWeekReview => 'Viikkokatsaus';
+
+  @override
+  String get proWeekReviewHint => 'Mikä toimi ja mitä muuttaa ensi viikolla';
+
+  @override
+  String get proRacePlan => 'Kisasuunnitelma';
+
+  @override
+  String proRacePlanHint(String race) {
+    return '$race: keventäminen, vauhdinjako, tankkaus';
+  }
+
+  @override
+  String get proSeason => 'Kausianalyysi';
+
+  @override
+  String get proSeasonHint => 'Kautesi tavoitteet, vaiheet ja riskit';
+
+  @override
+  String get proAnalysisCreate => 'Luo analyysi';
+
+  @override
+  String get proAnalysisRedo => 'Luo uudelleen';
+
+  @override
+  String proAnalysisFrom(String time) {
+    return 'Luotu $time';
+  }
+
+  @override
+  String get proAnalysisWorking => 'Iso malli analysoi…';
+
+  @override
+  String get proAnalysisFailed => 'Analyysi ei onnistunut. Yritä uudelleen.';
+
+  @override
+  String get proBenefitPlanCheck =>
+      'Päivittäinen suunnitelmatarkistus isolla mallilla';
+
+  @override
+  String get proBenefitReview => 'Viikkokatsaus ja kausianalyysi';
+
+  @override
+  String get proBenefitRacePlan =>
+      'Kisasuunnitelma: keventäminen, vauhdinjako, tankkaus';
+
+  @override
+  String get statsTitle => 'Tilastot';
+
+  @override
+  String get statsLast4Weeks => 'Viimeiset 4 viikkoa · viikossa';
+
+  @override
+  String get statsElevation => 'Nousu';
+
+  @override
+  String get statsAllTimeTotals => 'Kaikki';
+
+  @override
+  String get statsBestEfforts => 'Parhaat suoritukset';
+
+  @override
+  String get statsLongest => 'Pisin';
+
+  @override
+  String get statsMostElevation => 'Eniten nousua';
+
+  @override
+  String get statsNone => 'Ei vielä suorituksia.';
+
+  @override
+  String get proBenefitStats =>
+      'Tilastot: parhaat suoritukset, tämä vuosi ja viimeiset 4 viikkoa';
+
+  @override
+  String get statsFourWeeks => '4 viikkoa';
+
+  @override
+  String get statsTickerWeek => 'viikossa, viimeiset 4 viikkoa';
+
+  @override
+  String statsTickerYear(String year) {
+    return 'vuonna $year';
+  }
+
+  @override
+  String statsTickerBest(String distance) {
+    return 'Paras $distance';
+  }
+
+  @override
+  String get statsPerWeekShort => '/ vko';
+
+  @override
+  String get gripLeft => 'Vasen';
+
+  @override
+  String get gripRight => 'Oikea';
+
+  @override
+  String get muscleShort => 'Lihas';
+
+  @override
+  String vsYesterday(String arrow) {
+    return '$arrow vs. eilen';
+  }
+
+  @override
+  String get proposalProCoach => 'Valmentaja kirjoittaa aamuilmoituksen';
+
+  @override
+  String get proposalProCoachHint =>
+      'FjeliaPro: tämän päivän valmius, suunnitelma ja terveystiedot lähetetään Fjelia AI Prolle, joka muotoilee ehdotuksen pian aamun synkronoinnin jälkeen.';
+
+  @override
+  String get heatShort => 'Helle';
+
+  @override
+  String get coachRevisionLabel => 'Valmentajan ehdotus';
+
+  @override
+  String get revisionBefore => 'Ennen';
+
+  @override
+  String get revisionAfter => 'Jälkeen';
+
+  @override
+  String get revisionSwapped => 'Vaihdettu';
+
+  @override
+  String get revisionRestDay => 'Lepopäivä sen sijaan';
+
+  @override
+  String get revisionDropped => 'jätetty pois';
+
+  @override
+  String get revisionAccept => 'Ota käyttöön';
+
+  @override
+  String revisionSets(String sets, String reps) {
+    return '$sets × $reps';
+  }
+
+  @override
+  String get testMorningProposal => 'Testaa aamuehdotus';
+
+  @override
+  String get testMorningProposalHint =>
+      'Ajaa aamutarkistuksen nyt keltaisella valmiudella; ilmoitus tulee 5 sekunnissa.';
+
+  @override
+  String get proposalRulesEasier =>
+      'Palautuminen ei ole vielä täysi: tämän päivän harjoitukset lyhenevät ja kevenevät, tavoite säilyy.';
+
+  @override
+  String get proposalRulesRecovery =>
+      'Selviä väsymyksen merkkejä: tänään vain kevyttä tai lepoa.';
+
+  @override
+  String get proposalCoachUnavailable =>
+      'Valmentajaa ei juuri nyt tavoitettu; tämä on sääntöjen mukainen ehdotus.';
+
+  @override
+  String get revisionKeep => 'Pysyy suunnitellusti';
+
+  @override
+  String get revisionAlternative => 'Vaihtoehto';
+
+  @override
+  String get revisionTakeAlternative => 'Ota tämä sen sijaan';
+
+  @override
+  String proposalForDay(String day) {
+    return 'Ehdotus: $day';
+  }
+
+  @override
+  String get proposalDayTomorrow => 'huomenna';
 }

@@ -44,6 +44,11 @@ whose path is printed at startup. Press `r` to hot reload, `R` to hot restart,
 `q` to stop, or `d` to detach. The script starts Flutter in debug mode; enable
 Developer Mode and trust the developer profile on the iPhone beforehand.
 
+Settings → System → Developer is hidden by default. `dev-ios.sh` enables it
+with `FJELIA_DEVELOPER_MENU=true`, including when using `--release`. The
+distribution scripts strip this switch from define files, so tester builds
+keep the developer menu hidden.
+
 Physical iPhone debug sessions use Flutter's Xcode launch path, configured by
 `flutter.config.enable-lldb-debugging: false` in `pubspec.yaml`. This avoids a
 [direct LLDB launcher JIT race](https://github.com/flutter/flutter/issues/190307)

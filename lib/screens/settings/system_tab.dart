@@ -1,4 +1,6 @@
 import '../../widgets/strava_import_sheet.dart';
+import '../../config/build_features.dart';
+import '../../providers/plan_proposal_provider.dart';
 import '../../providers/activity_history_provider.dart';
 import '../../widgets/recently_deleted_sheet.dart';
 import '../../l10n/formats.dart';
@@ -43,16 +45,17 @@ class SystemTab extends StatelessWidget {
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => showAppSheet(context, const DataExportPage()),
               ),
-              ListTile(
-                leading: const SettingsIcon(
-                  Icons.bug_report_outlined,
-                  Colors.orange,
+              if (developerMenuEnabled)
+                ListTile(
+                  leading: const SettingsIcon(
+                    Icons.bug_report_outlined,
+                    Colors.orange,
+                  ),
+                  title: Text(l10n.developer),
+                  subtitle: Text(l10n.developerSubtitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => showAppSheet(context, const DeveloperPage()),
                 ),
-                title: Text(l10n.developer),
-                subtitle: Text(l10n.developerSubtitle),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => showAppSheet(context, const DeveloperPage()),
-              ),
             ],
           ),
         ],
@@ -65,6 +68,7 @@ class DeveloperPage extends ConsumerWidget {
   const DeveloperPage({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    if (!developerMenuEnabled) return const SizedBox.shrink();
     final l10n = AppLocalizations.of(context);
     return SettingsPage(
       title: l10n.developer,
@@ -82,6 +86,21 @@ class DeveloperPage extends ConsumerWidget {
               await ref
                   .read(userProfileProvider.notifier)
                   .save(p.copyWith(debugMode: v));
+            }),
+          ),
+          ListTile(
+            key: const ValueKey('test-morning-proposal'),
+            leading: const Icon(Icons.auto_awesome),
+            title: Text(l10n.testMorningProposal),
+            subtitle: Text(l10n.testMorningProposalHint),
+            onTap: () => runUiAction(context, () async {
+              final result = await ref
+                  .read(planProposalLifecycleProvider)
+                  .testMorning();
+              if (!context.mounted) return;
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(result)));
             }),
           ),
           SectionLabel(l10n.support),

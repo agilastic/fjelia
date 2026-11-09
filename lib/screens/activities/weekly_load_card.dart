@@ -63,32 +63,11 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
         : null;
     final limit = previous * 1.1;
     return LoadCard(
+      title: context.l10n.weeklyTrainingLoad2,
       accent: const [Color(0xFFFFB13D), Color(0xFFFFE066)],
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(9),
-                decoration: BoxDecoration(
-                  color: loadOrange.withValues(alpha: .15),
-                  borderRadius: BorderRadius.circular(9),
-                ),
-                child: const Icon(Icons.bolt, color: loadOrange, size: 20),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: GradientTitle(
-                  context.l10n.weeklyTrainingLoad2,
-                  colors: const [Color(0xFFFFB13D), Color(0xFFFFE066)],
-                  size: 11,
-                ),
-              ),
-              if (change != null) LoadBadge('${change.round()}%'),
-            ],
-          ),
-          const SizedBox(height: 8),
           Text(
             weeklyLoadHeadline(
               weekNumber: loadWeekNumber(monday, mondayFirst: mondayFirst),
@@ -96,7 +75,7 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
               previousComparable: previousComparable,
               progress: progress,
             ),
-            style: TextStyle(fontSize: 12, color: duo(0xFFBBBBBB, 0xFF4B5563)),
+            style: TextStyle(fontSize: 12, color: fjInk70),
           ),
           const SizedBox(height: 14),
           Row(
@@ -106,47 +85,31 @@ class _WeeklyLoadState extends ConsumerState<WeeklyLoadCard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    FigureLabel(
                       progress.inProgress
                           ? context.l10n.thisWeekSoFar
                           : context.l10n.week2,
-                      style: loadCaption,
                     ),
-                    const SizedBox(height: 8),
-                    Text.rich(
-                      TextSpan(
-                        children: [
-                          TextSpan(
-                            text: valueText(current),
-                            style: TextStyle(
-                              color: fjInk,
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          TextSpan(
-                            text: '     pts',
-                            style: TextStyle(fontSize: 14, color: muted),
-                          ),
-                        ],
-                      ),
-                    ),
+                    const SizedBox(height: 4),
+                    KeyFigure.hero(valueText(current), unit: 'pts'),
                   ],
                 ),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(context.l10n.prevWeek, style: loadCaption),
-                  const SizedBox(height: 4),
-                  Text(
-                    valueText(previous),
-                    style: TextStyle(
-                      fontSize: 23,
-                      color: duo(0xFFBBBBBB, 0xFF4B5563),
-                      fontWeight: FontWeight.bold,
+                  if (change != null) ...[
+                    StatusWord(
+                      '${change > 0 ? '+' : ''}${change.round()}%',
+                      color: current > limit
+                          ? const Color(0xFFFFB13D)
+                          : mint,
                     ),
-                  ),
+                    const SizedBox(height: 8),
+                  ],
+                  FigureLabel(context.l10n.prevWeek),
+                  const SizedBox(height: 4),
+                  KeyFigure(valueText(previous), color: fjInk70),
                 ],
               ),
             ],

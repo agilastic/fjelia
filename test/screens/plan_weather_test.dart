@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fjelia/widgets/weather_glyph.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/intl.dart';
 import 'package:fjelia/providers/heat_acclimation_provider.dart';
 import 'package:fjelia/providers/plan_weather_provider.dart';
 import 'package:fjelia/screens/planner/plan_overview_cards.dart';
@@ -409,7 +410,7 @@ void main() {
       for (final label in ['min/max', 'rain mm', 'UV max', 'km/h']) {
         expect(find.text(label), findsNothing);
       }
-      await tester.tap(find.byType(PlanWeatherStrip));
+      await tester.tap(find.byKey(const ValueKey('plan-weather-day-0')));
       await tester.pumpAndSettle();
       expect(find.byType(WeatherScreen), findsOneWidget);
       expect(find.textContaining('Wet-bulb'), findsOneWidget);
@@ -422,10 +423,69 @@ void main() {
       await tester.scrollUntilVisible(
         find.text('UV INDEX'),
         200,
-        scrollable: find.byType(Scrollable).last,
+        scrollable: find
+            .descendant(
+              of: find.byKey(const ValueKey('weather-list')),
+              matching: find.byType(Scrollable),
+            )
+            .first,
       );
       expect(find.text('UV INDEX'), findsOneWidget);
       expect(tester.takeException(), isNull);
     },
   );
+
+  testWidgets('a tap on a day of the strip opens the forecast on that day', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 852);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          heatHourlyWeatherProvider.overrideWith((ref) async => fixture()),
+          heatPreferredLocationProvider.overrideWith((ref) async => null),
+        ],
+        child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Scaffold(
+            body: SingleChildScrollView(child: PlanWeatherStrip()),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final now = DateTime.now();
+    final third = DateTime(now.year, now.month, now.day + 2);
+    await tester.tap(find.byKey(const ValueKey('plan-weather-day-2')));
+    await tester.pumpAndSettle();
+    final hero = find.byKey(const ValueKey('weather-hero'));
+    expect(
+      find.descendant(
+        of: hero,
+        matching: find.text(DateFormat.MMMMEEEEd().format(third).toUpperCase()),
+      ),
+      findsOneWidget,
+    );
+    // Today's live readings belong to today only.
+    expect(find.textContaining('Wet-bulb'), findsNothing);
+    // The row starts at the day before, and another day moves the
+    // forecast there.
+    final tomorrow = DateTime(now.year, now.month, now.day + 1);
+    await tester.tap(find.byKey(const ValueKey('weather-day-1')));
+    await tester.pumpAndSettle();
+    expect(
+      find.descendant(
+        of: hero,
+        matching: find.text(
+          DateFormat.MMMMEEEEd().format(tomorrow).toUpperCase(),
+        ),
+      ),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+  });
 }

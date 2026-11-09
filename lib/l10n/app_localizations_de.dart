@@ -8307,4 +8307,295 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get sportSkiErg => 'SkiErg (Langlauf indoor)';
+
+  @override
+  String get weatherRain => 'REGEN';
+
+  @override
+  String weatherLowHigh(int low, int high) {
+    return 'Tief $low° · Hoch $high°';
+  }
+
+  @override
+  String get weatherDayPeak => 'Spitze des Tages';
+
+  @override
+  String get weatherDayTotal => 'Summe des Tages';
+
+  @override
+  String get proTagline => 'Dein Coach. Auf Pro-Level.';
+
+  @override
+  String get proBenefitCoach =>
+      'KI-Coach mit dem Pro-Modell: schneller, gründlicher, eigenes Kontingent';
+
+  @override
+  String get proBenefitMemory =>
+      'Memory Cards: was dein Coach immer wissen soll';
+
+  @override
+  String get proBenefitEcg => 'Ausführliche EKG-Auswertung';
+
+  @override
+  String get proBenefitCopy => 'Antworten mit einem Tipp kopieren';
+
+  @override
+  String get proMonthly => 'Monatlich';
+
+  @override
+  String get proYearly => 'Jährlich';
+
+  @override
+  String proPerMonth(String price) {
+    return '$price / Monat';
+  }
+
+  @override
+  String proPerYear(String price) {
+    return '$price / Jahr';
+  }
+
+  @override
+  String get proBestValue => 'BESTER DEAL';
+
+  @override
+  String get proSubscribe => 'FjeliaPro holen';
+
+  @override
+  String get proRestore => 'Käufe wiederherstellen';
+
+  @override
+  String get proManage => 'Abo verwalten';
+
+  @override
+  String proActiveUntil(String date) {
+    return 'Pro ist aktiv bis $date';
+  }
+
+  @override
+  String get proAutoRenew =>
+      'Das Abo verlängert sich automatisch, wenn du es nicht mindestens 24 Stunden vor Ende des Zeitraums in den Einstellungen deines Apple-Accounts kündigst. Bezahlt wird über deinen Apple-Account.';
+
+  @override
+  String get proTerms => 'Nutzungsbedingungen';
+
+  @override
+  String get proPrivacy => 'Datenschutz';
+
+  @override
+  String get proProblemStore =>
+      'Der App Store hat den Kauf nicht abgeschlossen.';
+
+  @override
+  String get proProblemService =>
+      'Dein Kauf ist da, konnte aber noch nicht geprüft werden. Fjelia versucht es beim nächsten Start erneut.';
+
+  @override
+  String get proProblemNothing =>
+      'Kein FjeliaPro-Abo zum Wiederherstellen gefunden.';
+
+  @override
+  String get proProblemNotActive => 'Dieses Abo ist abgelaufen.';
+
+  @override
+  String get proUnavailable =>
+      'Die Abos lassen sich gerade nicht laden. Versuch es später noch einmal.';
+
+  @override
+  String get proWelcome => 'Willkommen bei FjeliaPro 🔥';
+
+  @override
+  String get proUsesFjeliaAi =>
+      'Das Pro-Modell antwortet, wenn in den KI-Einstellungen „Fjelia AI“ gewählt ist.';
+
+  @override
+  String get proToolsTitle => 'Pro-Analysen';
+
+  @override
+  String get proPlanCheck => 'Plan-Check heute';
+
+  @override
+  String get proPlanCheckHint => 'Passt der heutige Plan zu deiner Erholung?';
+
+  @override
+  String get proWeekReview => 'Wochenrückblick';
+
+  @override
+  String get proWeekReviewHint => 'Was lief und was du nächste Woche änderst';
+
+  @override
+  String get proRacePlan => 'Wettkampfplan';
+
+  @override
+  String proRacePlanHint(String race) {
+    return '$race: Tapering, Pacing, Verpflegung';
+  }
+
+  @override
+  String get proSeason => 'Saison-Analyse';
+
+  @override
+  String get proSeasonHint => 'Ziele, Phasen und Risiken deiner Saison';
+
+  @override
+  String get proAnalysisCreate => 'Analyse erstellen';
+
+  @override
+  String get proAnalysisRedo => 'Neu erstellen';
+
+  @override
+  String proAnalysisFrom(String time) {
+    return 'Erstellt $time';
+  }
+
+  @override
+  String get proAnalysisWorking => 'Das große Modell analysiert …';
+
+  @override
+  String get proAnalysisFailed =>
+      'Die Analyse hat nicht geklappt. Versuch es noch einmal.';
+
+  @override
+  String get proBenefitPlanCheck =>
+      'Täglicher Plan-Check mit dem großen Modell';
+
+  @override
+  String get proBenefitReview => 'Wochenrückblick und Saison-Analyse';
+
+  @override
+  String get proBenefitRacePlan =>
+      'Wettkampfplan: Tapering, Pacing, Verpflegung';
+
+  @override
+  String get statsTitle => 'Statistik';
+
+  @override
+  String get statsLast4Weeks => 'Letzte 4 Wochen · pro Woche';
+
+  @override
+  String get statsElevation => 'Höhenmeter';
+
+  @override
+  String get statsAllTimeTotals => 'Gesamt';
+
+  @override
+  String get statsBestEfforts => 'Bestzeiten';
+
+  @override
+  String get statsLongest => 'Längste';
+
+  @override
+  String get statsMostElevation => 'Meiste Höhenmeter';
+
+  @override
+  String get statsNone => 'Noch keine Aktivitäten.';
+
+  @override
+  String get proBenefitStats =>
+      'Statistik: Bestzeiten, dieses Jahr und die letzten 4 Wochen';
+
+  @override
+  String get statsFourWeeks => '4 Wochen';
+
+  @override
+  String get statsTickerWeek => 'pro Woche, letzte 4 Wochen';
+
+  @override
+  String statsTickerYear(String year) {
+    return 'in $year';
+  }
+
+  @override
+  String statsTickerBest(String distance) {
+    return 'Bestzeit $distance';
+  }
+
+  @override
+  String get statsPerWeekShort => '/ Woche';
+
+  @override
+  String get gripLeft => 'Links';
+
+  @override
+  String get gripRight => 'Rechts';
+
+  @override
+  String get muscleShort => 'Muskeln';
+
+  @override
+  String vsYesterday(String arrow) {
+    return '$arrow vs. gestern';
+  }
+
+  @override
+  String get proposalProCoach => 'Coach schreibt den Morgen-Push';
+
+  @override
+  String get proposalProCoachHint =>
+      'FjeliaPro: Readiness, Plan und Gesundheitskontext von heute gehen an Fjelia AI Pro, das den Vorschlag kurz nach dem Morgen-Sync formuliert.';
+
+  @override
+  String get heatShort => 'Hitze';
+
+  @override
+  String get coachRevisionLabel => 'Coach-Vorschlag';
+
+  @override
+  String get revisionBefore => 'Vorher';
+
+  @override
+  String get revisionAfter => 'Nachher';
+
+  @override
+  String get revisionSwapped => 'Getauscht';
+
+  @override
+  String get revisionRestDay => 'Stattdessen Ruhetag';
+
+  @override
+  String get revisionDropped => 'weggelassen';
+
+  @override
+  String get revisionAccept => 'Übernehmen';
+
+  @override
+  String revisionSets(String sets, String reps) {
+    return '$sets × $reps';
+  }
+
+  @override
+  String get testMorningProposal => 'Morgen-Vorschlag testen';
+
+  @override
+  String get testMorningProposalHint =>
+      'Startet den Morgen-Check jetzt mit Readiness gelb; der Push kommt in 5 Sekunden.';
+
+  @override
+  String get proposalRulesEasier =>
+      'Die Erholung ist noch nicht ganz da: die Einheiten von heute werden kürzer und leichter, ihr Ziel bleibt.';
+
+  @override
+  String get proposalRulesRecovery =>
+      'Deutliche Zeichen von Ermüdung: heute nur locker oder Ruhe.';
+
+  @override
+  String get proposalCoachUnavailable =>
+      'Der Coach war gerade nicht erreichbar; das ist der Vorschlag nach Regeln.';
+
+  @override
+  String get revisionKeep => 'Bleibt wie geplant';
+
+  @override
+  String get revisionAlternative => 'Alternative';
+
+  @override
+  String get revisionTakeAlternative => 'Stattdessen übernehmen';
+
+  @override
+  String proposalForDay(String day) {
+    return 'Vorschlag für $day';
+  }
+
+  @override
+  String get proposalDayTomorrow => 'morgen';
 }

@@ -1,4 +1,5 @@
 import '../l10n/l10n_ext.dart';
+import '../theme/fjelia_style.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,11 +26,14 @@ class HistorySyncCard extends ConsumerWidget {
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 8, 16, 4),
       padding: const EdgeInsets.fromLTRB(14, 10, 6, 12),
-      decoration: BoxDecoration(
-        color: panel,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: mint.withValues(alpha: .35)),
-      ),
+      decoration: fjGlow(const [mint, Color(0xFFC6FF4D)], strength: .55)
+          .copyWith(
+            color: panel,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.fromBorderSide(
+              fjEdge(const [mint, Color(0xFFC6FF4D)]),
+            ),
+          ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

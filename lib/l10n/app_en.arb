@@ -4982,5 +4982,172 @@
   "sportSkiErg": "SkiErg (Nordic indoor)",
   "@sportSkiErg": {
     "description": "Recording sheet sport: a Concept2 SkiErg (PM5), saved as Nordic skiing."
+  },
+  "weatherRain": "RAIN",
+  "weatherLowHigh": "Low {low}° · High {high}°",
+  "@weatherLowHigh": {
+    "placeholders": {
+      "low": {
+        "type": "int"
+      },
+      "high": {
+        "type": "int"
+      }
+    }
+  },
+  "weatherDayPeak": "Peak of the day",
+  "weatherDayTotal": "Total for the day",
+  "proTagline": "Your coach. On pro level.",
+  "proBenefitCoach": "AI Coach with the Pro model: faster, more thorough, its own budget",
+  "proBenefitMemory": "Memory Cards: what your coach should always know",
+  "proBenefitEcg": "Detailed ECG analysis",
+  "proBenefitCopy": "Copy answers with one tap",
+  "proMonthly": "Monthly",
+  "proYearly": "Yearly",
+  "proPerMonth": "{price} / month",
+  "@proPerMonth": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "proPerYear": "{price} / year",
+  "@proPerYear": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "proBestValue": "BEST VALUE",
+  "proSubscribe": "Get FjeliaPro",
+  "proRestore": "Restore purchases",
+  "proManage": "Manage subscription",
+  "proActiveUntil": "Pro is on until {date}",
+  "@proActiveUntil": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "proAutoRenew": "The subscription renews automatically unless you cancel it at least 24 hours before the end of the period in your Apple account settings. Payment is charged to your Apple account.",
+  "proTerms": "Terms of Use",
+  "proPrivacy": "Privacy",
+  "proProblemStore": "The App Store did not complete the purchase.",
+  "proProblemService": "Your purchase is there, but it could not be checked yet. Fjelia tries again on the next start.",
+  "proProblemNothing": "No FjeliaPro subscription to restore.",
+  "proProblemNotActive": "This subscription has ended.",
+  "proUnavailable": "The subscriptions cannot be loaded right now. Please try again later.",
+  "proWelcome": "Welcome to FjeliaPro 🔥",
+  "proUsesFjeliaAi": "The Pro model answers when \"Fjelia AI\" is chosen in the AI settings.",
+  "proToolsTitle": "Pro analyses",
+  "proPlanCheck": "Today's plan check",
+  "proPlanCheckHint": "Does today's plan fit your recovery?",
+  "proWeekReview": "Weekly review",
+  "proWeekReviewHint": "What worked, what to change next week",
+  "proRacePlan": "Race plan",
+  "proRacePlanHint": "{race}: taper, pacing, fuelling",
+  "@proRacePlanHint": {
+    "placeholders": {
+      "race": {
+        "type": "String"
+      }
+    }
+  },
+  "proSeason": "Season analysis",
+  "proSeasonHint": "Goals, phases and risks of your season",
+  "proAnalysisCreate": "Create analysis",
+  "proAnalysisRedo": "Create again",
+  "proAnalysisFrom": "Created {time}",
+  "@proAnalysisFrom": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "proAnalysisWorking": "The large model is analysing…",
+  "proAnalysisFailed": "The analysis did not work. Please try again.",
+  "proBenefitPlanCheck": "Daily plan check with the large model",
+  "proBenefitReview": "Weekly review and season analysis",
+  "proBenefitRacePlan": "Race plan: taper, pacing, fuelling",
+  "statsTitle": "Statistics",
+  "statsLast4Weeks": "Last 4 weeks · per week",
+  "statsElevation": "Elevation",
+  "statsAllTimeTotals": "All time",
+  "statsBestEfforts": "Best efforts",
+  "statsLongest": "Longest",
+  "statsMostElevation": "Most elevation",
+  "statsNone": "No activities yet.",
+  "proBenefitStats": "Statistics: best efforts, this year and the last 4 weeks",
+  "statsFourWeeks": "4 weeks",
+  "statsTickerWeek": "per week, last 4 weeks",
+  "statsTickerYear": "in {year}",
+  "@statsTickerYear": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "statsTickerBest": "Best {distance}",
+  "@statsTickerBest": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "statsPerWeekShort": "/ week",
+  "gripLeft": "Left",
+  "gripRight": "Right",
+  "muscleShort": "Muscle",
+  "vsYesterday": "{arrow} vs. yesterday",
+  "@vsYesterday": {
+    "placeholders": {
+      "arrow": {
+        "type": "String"
+      }
+    }
+  },
+  "proposalProCoach": "Coach writes the morning push",
+  "proposalProCoachHint": "FjeliaPro: today's readiness, plan and health context go to Fjelia AI Pro, which words the proposal shortly after the morning sync.",
+  "heatShort": "Heat",
+  "coachRevisionLabel": "Coach proposal",
+  "revisionBefore": "Before",
+  "revisionAfter": "After",
+  "revisionSwapped": "Swapped",
+  "revisionRestDay": "Rest day instead",
+  "revisionDropped": "left out",
+  "revisionAccept": "Take it",
+  "revisionSets": "{sets} × {reps}",
+  "testMorningProposal": "Test morning proposal",
+  "testMorningProposalHint": "Runs the morning check now with readiness as yellow; the push comes in 5 seconds.",
+  "@revisionSets": {
+    "placeholders": {
+      "sets": {
+        "type": "String"
+      },
+      "reps": {
+        "type": "String"
+      }
+    }
+  },
+  "proposalRulesEasier": "Recovery is not quite there: today's sessions get shorter and easier, their purpose stays.",
+  "proposalRulesRecovery": "Clear signs of fatigue: today only easy, or rest.",
+  "proposalCoachUnavailable": "The coach could not be reached just now; this is the proposal by the rules.",
+  "revisionKeep": "Stays as planned",
+  "revisionAlternative": "Alternative",
+  "revisionTakeAlternative": "Take this instead",
+  "proposalForDay": "Proposal for {day}",
+  "proposalDayTomorrow": "tomorrow",
+  "@proposalForDay": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
   }
 }

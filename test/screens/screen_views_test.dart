@@ -266,8 +266,9 @@ void main() {
         final image = await boundary.toImage(pixelRatio: 2);
         final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
         await Directory(output).create(recursive: true);
-        await File('$output/$name.png')
-            .writeAsBytes(bytes!.buffer.asUint8List());
+        await File(
+          '$output/$name.png',
+        ).writeAsBytes(bytes!.buffer.asUint8List());
         image.dispose();
       });
       await tester.pumpAndSettle();
@@ -632,6 +633,26 @@ void main() {
   for (final page in pages.entries) {
     testWidgets('${page.key} renders at iPhone width', (tester) async {
       await render(tester, page.value, page.key);
+      const developerBuild = bool.fromEnvironment('FJELIA_DEVELOPER_MENU');
+      if (page.key == 'system') {
+        final l10n = AppLocalizations.of(
+          tester.element(find.byType(SystemTab)),
+        );
+        expect(
+          find.widgetWithText(ListTile, l10n.developer),
+          developerBuild ? findsOneWidget : findsNothing,
+        );
+        expect(find.widgetWithText(ListTile, l10n.dataExport), findsOneWidget);
+      } else if (page.key == 'developer') {
+        expect(
+          find.byKey(const ValueKey('test-morning-proposal')),
+          developerBuild ? findsOneWidget : findsNothing,
+        );
+        expect(
+          find.byType(SwitchListTile),
+          developerBuild ? findsOneWidget : findsNothing,
+        );
+      }
       await tester.pumpWidget(const SizedBox());
       await tester.pump(Duration.zero);
       await tester.binding.setSurfaceSize(null);
@@ -933,12 +954,12 @@ void main() {
       }
       if (Platform.environment['FJELIA_UI_PREVIEW_DIR'] != null) {
         await tester.scrollUntilVisible(
-          find.text('HEAT ACCLIMATION'),
+          find.text('HEAT'),
           -300,
           scrollable: find.byType(Scrollable).first,
         );
         await tester.pumpAndSettle();
-        await tester.tap(find.text('HEAT ACCLIMATION'));
+        await tester.tap(find.text('HEAT'));
         await tester.pumpAndSettle();
         expect(
           tester.getSize(find.byType(LoadSheet)).height,
@@ -958,9 +979,9 @@ void main() {
     'heat setup remains reachable when disabled and follows its visibility setting',
     (tester) async {
       await render(tester, const StrainScreen(embedded: true), 'heat-disabled');
-      expect(find.text('HEAT ACCLIMATION'), findsOneWidget);
+      expect(find.text('HEAT'), findsOneWidget);
       expect(find.text('Set up in Training settings'), findsOneWidget);
-      await tester.tap(find.text('HEAT ACCLIMATION'));
+      await tester.tap(find.text('HEAT'));
       await tester.pumpAndSettle();
       expect(find.byType(TrainingTab), findsOneWidget);
       await tester.pumpWidget(const SizedBox());
@@ -968,7 +989,7 @@ void main() {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('visible_load_heat_acclimation', false);
       await render(tester, const StrainScreen(embedded: true), 'heat-hidden');
-      expect(find.text('HEAT ACCLIMATION'), findsNothing);
+      expect(find.text('HEAT'), findsNothing);
       await tester.pumpWidget(const SizedBox());
       await tester.pump(Duration.zero);
       await tester.binding.setSurfaceSize(null);
@@ -1490,33 +1511,33 @@ void main() {
     await tester.pump(Duration.zero);
     await tester.binding.setSurfaceSize(null);
   });
-  testWidgets(
-    'Home heart-rate preview is no taller than blood pressure and opens detail',
-    (tester) async {
-      await render(tester, const HomeScreen(), 'compact-heart-home');
-      await tester.scrollUntilVisible(
-        find.byType(HrTimelineCard),
-        220,
-        scrollable: find.byType(Scrollable).first,
-      );
-      await tester.pumpAndSettle();
-      final bloodPressure = find
-          .ancestor(
-            of: find.text('BLOOD PRESSURE'),
-            matching: find.byType(SectionCard),
-          )
-          .first;
-      expect(
-        tester.getSize(find.byType(HrTimelineCard)).height,
-        lessThanOrEqualTo(tester.getSize(bloodPressure).height),
-      );
-      await tester.tap(find.byType(HrTimelineCard));
-      await tester.pumpAndSettle();
-      expect(find.byType(HrTimelineScreen), findsOneWidget);
-      expect(find.text('DAY'), findsOneWidget);
-      expect(tester.takeException(), isNull);
-    },
-  );
+  testWidgets('Home heart-rate preview stays compact and opens detail', (
+    tester,
+  ) async {
+    await render(tester, const HomeScreen(), 'compact-heart-home');
+    await tester.scrollUntilVisible(
+      find.byType(HrTimelineCard),
+      80,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
+    final bloodPressure = find
+        .ancestor(
+          of: find.text('BLOOD PRESSURE'),
+          matching: find.byType(SectionCard),
+        )
+        .first;
+    // Labelled figures like every card (style.md); still a compact row.
+    expect(
+      tester.getSize(find.byType(HrTimelineCard)).height,
+      lessThanOrEqualTo(tester.getSize(bloodPressure).height + 30),
+    );
+    await tester.tap(find.byType(HrTimelineCard));
+    await tester.pumpAndSettle();
+    expect(find.byType(HrTimelineScreen), findsOneWidget);
+    expect(find.text('DAY'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
   testWidgets('Health Monitor ends immediately below its last tile', (
     tester,
   ) async {
@@ -1893,8 +1914,9 @@ void main() {
       40,
       43,
     );
-    var original = DateUtils.dateOnly(DateTime.now())
-        .add(const Duration(days: 1));
+    var original = DateUtils.dateOnly(
+      DateTime.now(),
+    ).add(const Duration(days: 1));
     while (original.weekday != DateTime.tuesday) {
       original = DateTime(original.year, original.month, original.day + 1);
     }
@@ -2278,7 +2300,7 @@ void main() {
             );
       }
       await render(tester, const PlanScreen(), 'plan-upcoming');
-      expect(find.text('marathon Hannover'), findsOneWidget);
+      expect(find.text('MARATHON HANNOVER'), findsOneWidget);
       expect(find.text('UPCOMING'), findsOneWidget);
       expect(find.text('Short Shakeout 0'), findsOneWidget);
       final more = find.text('+ 5 more days');
@@ -2362,10 +2384,12 @@ void main() {
 
 class AuditTiles extends TileProvider {
   @override
-  ImageProvider getImage(TileCoordinates coordinates, TileLayer options) =>
-      MemoryImage(
-        base64Decode(
-          'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGPYcunOfwAIAgNiJBgw5wAAAABJRU5ErkJggg==',
-        ),
-      );
+  ImageProvider getImage(
+    TileCoordinates coordinates,
+    TileLayer options,
+  ) => MemoryImage(
+    base64Decode(
+      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGPYcunOfwAIAgNiJBgw5wAAAABJRU5ErkJggg==',
+    ),
+  );
 }

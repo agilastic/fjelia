@@ -83,10 +83,13 @@ class SessionAdaptationService {
 
   /// What [adaptDay] would change today, without changing anything; empty
   /// when nothing would.
-  Future<List<AdaptationPreview>> previewDay(ReadinessResult readiness) async {
+  Future<List<AdaptationPreview>> previewDay(
+    ReadinessResult readiness, {
+    DateTime? day,
+  }) async {
     if (readiness.level == ReadinessLevel.green) return const [];
     return [
-      for (final s in await _today())
+      for (final s in await _today(day))
         if (await _change(s, readiness) case final c?)
           AdaptationPreview(
             session: s,
@@ -97,8 +100,8 @@ class SessionAdaptationService {
     ];
   }
 
-  Future<List<TrainingSession>> _today() async {
-    final now = DateTime.now();
+  Future<List<TrainingSession>> _today([DateTime? day]) async {
+    final now = day ?? DateTime.now();
     final start = DateTime(now.year, now.month, now.day);
     final end = start.add(const Duration(days: 1));
     final sessions =
@@ -106,7 +109,10 @@ class SessionAdaptationService {
               ..where(
                 (t) =>
                     t.athleteId.equals('self') &
-                    t.sessionDate.isBetweenValues(start, end) &
+                    // Up to midnight, not including it: tomorrow's
+                    // sessions are stored at 00:00.
+                    t.sessionDate.isBiggerOrEqualValue(start) &
+                    t.sessionDate.isSmallerThanValue(end) &
                     t.status.isIn(const ['planned', 'adapted']),
               )
               ..orderBy([(t) => OrderingTerm(expression: t.sessionNumber)]))

@@ -100,7 +100,7 @@ void main() {
   testWidgets('shows the reason and undoes the change', (tester) async {
     await seed(tester);
     await pump(tester);
-    expect(find.text('Plan adjusted automatically'), findsOneWidget);
+    expect(find.text('PLAN ADJUSTED AUTOMATICALLY'), findsOneWidget);
     expect(
       find.text('Endurance ride: done on Monday instead of Tuesday.'),
       findsOneWidget,
@@ -117,7 +117,7 @@ void main() {
     );
     expect(ride!.status, 'planned');
     expect(ride.sessionDate, tuesday);
-    expect(find.text('Plan adjusted automatically'), findsNothing);
+    expect(find.text('PLAN ADJUSTED AUTOMATICALLY'), findsNothing);
     expect(find.text('Change undone.'), findsOneWidget);
   });
 
@@ -129,7 +129,7 @@ void main() {
       await Future<void>.delayed(const Duration(milliseconds: 100));
     });
     await tester.pumpAndSettle();
-    expect(find.text('Plan adjusted automatically'), findsNothing);
+    expect(find.text('PLAN ADJUSTED AUTOMATICALLY'), findsNothing);
     final ride = await tester.runAsync(
       () => db.select(db.trainingSessions).getSingle(),
     );

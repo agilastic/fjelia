@@ -3,6 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 const _askFirstKey = 'plan_changes_ask_first_v1';
 const _decidedKey = 'readiness_proposal_decided_v1';
 const _notifiedKey = 'plan_proposal_notified_v1';
+const _proCoachKey = 'plan_proposal_pro_coach_v1';
+const _revisionKey = 'plan_proposal_revision_v1';
 
 String _dayKey(DateTime d) =>
     DateTime(d.year, d.month, d.day).toIso8601String().substring(0, 10);
@@ -16,6 +18,31 @@ abstract final class PlanProposalStore {
 
   static Future<void> setAskFirst(bool value) async =>
       (await SharedPreferences.getInstance()).setBool(_askFirstKey, value);
+
+  /// FjeliaPro: the coach writes the morning push. On by default for Pro;
+  /// the switch in Settings → Training says what is sent and turns it off.
+  static Future<bool> proCoach() async =>
+      (await SharedPreferences.getInstance()).getBool(_proCoachKey) ?? true;
+
+  static Future<void> setProCoach(bool value) async =>
+      (await SharedPreferences.getInstance()).setBool(_proCoachKey, value);
+
+  /// The coach's revision of [day] as it answered (JSON), kept so the push
+  /// still opens it after the app was closed.
+  static Future<String?> revision(DateTime day) async {
+    final raw = (await SharedPreferences.getInstance()).getString(_revisionKey);
+    if (raw == null || !raw.startsWith('${_dayKey(day)}|')) return null;
+    return raw.substring(11);
+  }
+
+  static Future<void> saveRevision(DateTime day, String json) async =>
+      (await SharedPreferences.getInstance()).setString(
+        _revisionKey,
+        '${_dayKey(day)}|$json',
+      );
+
+  static Future<void> clearRevision() async =>
+      (await SharedPreferences.getInstance()).remove(_revisionKey);
 
   /// Whether the readiness proposal of [day] was answered (either way).
   static Future<bool> decided(DateTime day) async =>

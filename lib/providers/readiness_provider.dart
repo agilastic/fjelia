@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../services/replan_triggers.dart';
 import '../utils/week.dart';
 
@@ -173,10 +174,12 @@ class MorningAdaptationNotifier extends StateNotifier<MorningAdaptationState> {
     DateTime today,
     ReadinessResult readiness, {
     String? replanned,
+    bool toWatch = true,
   }) async {
     final adapted = await _ref
         .read(sessionAdaptationServiceProvider)
         .adaptDay(readiness);
+    if (!toWatch) return adapted;
     // A session the readiness released leaves the watch calendar too.
     final actions = _ref.read(planSessionActionsProvider);
     for (final a in adapted) {
@@ -208,9 +211,27 @@ class MorningAdaptationNotifier extends StateNotifier<MorningAdaptationState> {
       final plan = await _activePlan();
       if (plan != null) replanned = await _replanNow(plan.id, reason);
     }
-    await _apply(p.day, p.readiness, replanned: replanned);
+    // The athlete sends the changed sessions to the watch.
+    await _apply(p.day, p.readiness, replanned: replanned, toWatch: false);
     _ref.invalidate(upcomingSessionsProvider);
     log('[Readiness] proposal accepted');
+  }
+
+  /// Settings → System → Debug: a proposal for [p.day] as if the morning
+  /// check had found it.
+  void debugPropose(ReadinessProposal p) => state = MorningAdaptationState(
+    notification: state.notification,
+    proposal: p,
+  );
+
+  /// The coach's revision was taken instead of the rules' changes.
+  Future<void> acceptedElsewhere() async {
+    final p = state.proposal;
+    if (p == null) return;
+    state = MorningAdaptationState(notification: state.notification);
+    await PlanProposalStore.decide(p.day);
+    _ref.invalidate(upcomingSessionsProvider);
+    log('[Readiness] coach revision accepted');
   }
 
   /// The athlete keeps the plan as it is today.

@@ -8273,4 +8273,291 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get sportSkiErg => 'SkiErg (bežky indoor)';
+
+  @override
+  String get weatherRain => 'DÁŽĎ';
+
+  @override
+  String weatherLowHigh(int low, int high) {
+    return 'Min $low° · Max $high°';
+  }
+
+  @override
+  String get weatherDayPeak => 'Maximum dňa';
+
+  @override
+  String get weatherDayTotal => 'Spolu za deň';
+
+  @override
+  String get proTagline => 'Tvoj tréner. Na úrovni pro.';
+
+  @override
+  String get proBenefitCoach =>
+      'AI tréner s modelom Pro: rýchlejší, dôkladnejší, vlastná kvóta';
+
+  @override
+  String get proBenefitMemory =>
+      'Pamäťové karty: čo má tvoj tréner vždy vedieť';
+
+  @override
+  String get proBenefitEcg => 'Podrobné vyhodnotenie EKG';
+
+  @override
+  String get proBenefitCopy => 'Kopíruj odpovede jedným ťuknutím';
+
+  @override
+  String get proMonthly => 'Mesačne';
+
+  @override
+  String get proYearly => 'Ročne';
+
+  @override
+  String proPerMonth(String price) {
+    return '$price / mesiac';
+  }
+
+  @override
+  String proPerYear(String price) {
+    return '$price / rok';
+  }
+
+  @override
+  String get proBestValue => 'NAJLEPŠIA PONUKA';
+
+  @override
+  String get proSubscribe => 'Získať FjeliaPro';
+
+  @override
+  String get proRestore => 'Obnoviť nákupy';
+
+  @override
+  String get proManage => 'Spravovať predplatné';
+
+  @override
+  String proActiveUntil(String date) {
+    return 'Pro je aktívne do $date';
+  }
+
+  @override
+  String get proAutoRenew =>
+      'Predplatné sa automaticky obnoví, ak ho nezrušíš aspoň 24 hodín pred koncom obdobia v nastaveniach svojho účtu Apple. Platba sa účtuje na tvoj účet Apple.';
+
+  @override
+  String get proTerms => 'Podmienky používania';
+
+  @override
+  String get proPrivacy => 'Ochrana súkromia';
+
+  @override
+  String get proProblemStore => 'App Store nedokončil nákup.';
+
+  @override
+  String get proProblemService =>
+      'Nákup je zaznamenaný, ale ešte sa nepodarilo overiť. Fjelia to skúsi znova pri ďalšom spustení.';
+
+  @override
+  String get proProblemNothing =>
+      'Nenašlo sa žiadne predplatné FjeliaPro na obnovenie.';
+
+  @override
+  String get proProblemNotActive => 'Toto predplatné vypršalo.';
+
+  @override
+  String get proUnavailable =>
+      'Predplatné sa teraz nedá načítať. Skús to neskôr.';
+
+  @override
+  String get proWelcome => 'Vitaj vo FjeliaPro 🔥';
+
+  @override
+  String get proUsesFjeliaAi =>
+      'Model Pro odpovedá, keď je v nastaveniach AI zvolené „Fjelia AI“.';
+
+  @override
+  String get proToolsTitle => 'Pro analýzy';
+
+  @override
+  String get proPlanCheck => 'Dnešná kontrola plánu';
+
+  @override
+  String get proPlanCheckHint => 'Sedí dnešný plán s tvojou regeneráciou?';
+
+  @override
+  String get proWeekReview => 'Týždenný prehľad';
+
+  @override
+  String get proWeekReviewHint => 'Čo fungovalo a čo zmeniť budúci týždeň';
+
+  @override
+  String get proRacePlan => 'Pretekový plán';
+
+  @override
+  String proRacePlanHint(String race) {
+    return '$race: vyladenie, tempo, výživa';
+  }
+
+  @override
+  String get proSeason => 'Analýza sezóny';
+
+  @override
+  String get proSeasonHint => 'Ciele, fázy a riziká tvojej sezóny';
+
+  @override
+  String get proAnalysisCreate => 'Vytvoriť analýzu';
+
+  @override
+  String get proAnalysisRedo => 'Vytvoriť znova';
+
+  @override
+  String proAnalysisFrom(String time) {
+    return 'Vytvorené $time';
+  }
+
+  @override
+  String get proAnalysisWorking => 'Veľký model analyzuje…';
+
+  @override
+  String get proAnalysisFailed => 'Analýza sa nepodarila. Skús to znova.';
+
+  @override
+  String get proBenefitPlanCheck => 'Denná kontrola plánu s veľkým modelom';
+
+  @override
+  String get proBenefitReview => 'Týždenný prehľad a analýza sezóny';
+
+  @override
+  String get proBenefitRacePlan => 'Pretekový plán: vyladenie, tempo, výživa';
+
+  @override
+  String get statsTitle => 'Štatistiky';
+
+  @override
+  String get statsLast4Weeks => 'Posledné 4 týždne · za týždeň';
+
+  @override
+  String get statsElevation => 'Prevýšenie';
+
+  @override
+  String get statsAllTimeTotals => 'Celkovo';
+
+  @override
+  String get statsBestEfforts => 'Najlepšie výkony';
+
+  @override
+  String get statsLongest => 'Najdlhšia';
+
+  @override
+  String get statsMostElevation => 'Najväčšie prevýšenie';
+
+  @override
+  String get statsNone => 'Zatiaľ žiadne aktivity.';
+
+  @override
+  String get proBenefitStats =>
+      'Štatistiky: najlepšie výkony, tento rok a posledné 4 týždne';
+
+  @override
+  String get statsFourWeeks => '4 týždne';
+
+  @override
+  String get statsTickerWeek => 'za týždeň, posledné 4 týždne';
+
+  @override
+  String statsTickerYear(String year) {
+    return 'v roku $year';
+  }
+
+  @override
+  String statsTickerBest(String distance) {
+    return 'Najlepší $distance';
+  }
+
+  @override
+  String get statsPerWeekShort => '/ týždeň';
+
+  @override
+  String get gripLeft => 'Ľavá';
+
+  @override
+  String get gripRight => 'Pravá';
+
+  @override
+  String get muscleShort => 'Svaly';
+
+  @override
+  String vsYesterday(String arrow) {
+    return '$arrow vs. včera';
+  }
+
+  @override
+  String get proposalProCoach => 'Kouč napíše rannú notifikáciu';
+
+  @override
+  String get proposalProCoachHint =>
+      'FjeliaPro: dnešná pripravenosť, plán a zdravotný kontext idú do Fjelia AI Pro, ktoré sformuluje návrh krátko po rannej synchronizácii.';
+
+  @override
+  String get heatShort => 'Teplo';
+
+  @override
+  String get coachRevisionLabel => 'Návrh kouča';
+
+  @override
+  String get revisionBefore => 'Predtým';
+
+  @override
+  String get revisionAfter => 'Potom';
+
+  @override
+  String get revisionSwapped => 'Vymenené';
+
+  @override
+  String get revisionRestDay => 'Namiesto toho deň voľna';
+
+  @override
+  String get revisionDropped => 'vynechané';
+
+  @override
+  String get revisionAccept => 'Prevziať';
+
+  @override
+  String revisionSets(String sets, String reps) {
+    return '$sets × $reps';
+  }
+
+  @override
+  String get testMorningProposal => 'Otestovať ranný návrh';
+
+  @override
+  String get testMorningProposalHint =>
+      'Spustí ranný check teraz so žltou pripravenosťou; notifikácia príde o 5 sekúnd.';
+
+  @override
+  String get proposalRulesEasier =>
+      'Regenerácia ešte nie je úplná: dnešné tréningy budú kratšie a ľahšie, ich cieľ zostáva.';
+
+  @override
+  String get proposalRulesRecovery =>
+      'Jasné známky únavy: dnes len ľahko alebo oddych.';
+
+  @override
+  String get proposalCoachUnavailable =>
+      'Kouč nebol práve dostupný; toto je návrh podľa pravidiel.';
+
+  @override
+  String get revisionKeep => 'Zostáva podľa plánu';
+
+  @override
+  String get revisionAlternative => 'Alternatíva';
+
+  @override
+  String get revisionTakeAlternative => 'Prevziať radšej toto';
+
+  @override
+  String proposalForDay(String day) {
+    return 'Návrh na $day';
+  }
+
+  @override
+  String get proposalDayTomorrow => 'zajtra';
 }

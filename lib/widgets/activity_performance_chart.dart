@@ -182,6 +182,9 @@ class ActivityPerformanceChart extends ConsumerWidget {
             height: fullscreen ? 215 : 120,
             child: LineChart(
               LineChartData(
+                lineTouchData: roundedLineTouch(
+                  format: pace ? (y) => _pace(-y) : null,
+                ),
                 minX: 0,
                 maxX: maxX,
                 minY: low,

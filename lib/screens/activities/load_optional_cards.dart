@@ -43,30 +43,32 @@ class _WeekdayLoadState extends ConsumerState<WeekdayLoadCard> {
         _ => activityLoad(a),
       };
     }
+    final maxY = math.max(1.0, values.reduce(math.max)) * 1.15;
     return LoadCard(
+      title: context.l10n.weekdayComparison2,
       accent: const [Color(0xFF3EE0FF), Color(0xFF6FA8FF)],
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          GradientTitle(
-            context.l10n.weekdayComparison2,
-            colors: const [Color(0xFF3EE0FF), Color(0xFF6FA8FF)],
-            size: 11,
+          Row(
+            children: [
+              Expanded(
+                child: LoadRange(
+                  // Fixed identifiers; only the text is translated (#5).
+                  labels: const ['Load', 'Time', 'Distance'],
+                  display: {
+                    'Load': context.l10n.loadMetric,
+                    'Time': context.l10n.time,
+                    'Distance': context.l10n.distance,
+                  },
+                  selected: metric,
+                  segmented: true,
+                  onChanged: (v) => setState(() => metric = v),
+                ),
+              ),
+            ],
           ),
-          SizedBox(height: 12),
-          LoadRange(
-            // Fixed identifiers; only the text is translated (#5).
-            labels: const ['Load', 'Time', 'Distance'],
-            display: {
-              'Load': context.l10n.loadMetric,
-              'Time': context.l10n.time,
-              'Distance': context.l10n.distance,
-            },
-            selected: metric,
-            segmented: true,
-            onChanged: (v) => setState(() => metric = v),
-          ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
           Wrap(
             spacing: 16,
             children: [
@@ -74,54 +76,63 @@ class _WeekdayLoadState extends ConsumerState<WeekdayLoadCard> {
               LoadLegend(context.l10n.thisWeek, mint),
             ],
           ),
-          const SizedBox(height: 12),
-          SizedBox(
-            height: 110,
-            child: BarChart(
-              BarChartData(
-                maxY: math.max(1, values.reduce(math.max)) * 1.15,
-                borderData: FlBorderData(show: false),
-                gridData: const FlGridData(show: false),
-                titlesData: FlTitlesData(
-                  topTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                  rightTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                  leftTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                  bottomTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      getTitlesWidget: (v, _) => Text(
-                        weekdayInitials(mondayFirst: mondayFirst)[v
-                            .toInt()
-                            .clamp(0, 6)],
-                        style: loadCaption,
+          const SizedBox(height: 8),
+          // The bars grow in when the card appears.
+          TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0, end: 1),
+            duration: const Duration(milliseconds: 700),
+            curve: Curves.easeOutCubic,
+            builder: (context, t, _) => SizedBox(
+              height: 76,
+              child: BarChart(
+                duration: Duration.zero,
+                BarChartData(
+                  barTouchData: roundedBarTouch(),
+                  maxY: maxY,
+                  borderData: FlBorderData(show: false),
+                  gridData: const FlGridData(show: false),
+                  titlesData: FlTitlesData(
+                    topTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    rightTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    leftTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    bottomTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        reservedSize: 18,
+                        getTitlesWidget: (v, _) => Text(
+                          weekdayInitials(mondayFirst: mondayFirst)[v
+                              .toInt()
+                              .clamp(0, 6)],
+                          style: loadCaption,
+                        ),
                       ),
                     ),
                   ),
+                  barGroups: [
+                    for (var i = 0; i < 7; i++)
+                      BarChartGroupData(
+                        x: i,
+                        barRods: [
+                          BarChartRodData(
+                            toY: values[i] * t,
+                            color: fjInk24,
+                            width: 8,
+                          ),
+                          BarChartRodData(
+                            toY: values[i + 7] * t,
+                            color: mint,
+                            width: 8,
+                          ),
+                        ],
+                      ),
+                  ],
                 ),
-                barGroups: [
-                  for (var i = 0; i < 7; i++)
-                    BarChartGroupData(
-                      x: i,
-                      barRods: [
-                        BarChartRodData(
-                          toY: values[i],
-                          color: fjInk24,
-                          width: 8,
-                        ),
-                        BarChartRodData(
-                          toY: values[i + 7],
-                          color: mint,
-                          width: 8,
-                        ),
-                      ],
-                    ),
-                ],
               ),
             ),
           ),
@@ -149,7 +160,6 @@ class TrainingPlanProgressCard extends ConsumerWidget {
                     GradientTitle(
                       context.l10n.trainingPlanProgress2,
                       colors: const [Color(0xFF9D7BFF), Color(0xFF3EE0FF)],
-                      size: 11,
                     ),
                     const SizedBox(height: 10),
                     Text(

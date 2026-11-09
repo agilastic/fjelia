@@ -14291,6 +14291,510 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'SkiErg (Nordic indoor)'**
   String get sportSkiErg;
+
+  /// No description provided for @weatherRain.
+  ///
+  /// In en, this message translates to:
+  /// **'RAIN'**
+  String get weatherRain;
+
+  /// No description provided for @weatherLowHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'Low {low}° · High {high}°'**
+  String weatherLowHigh(int low, int high);
+
+  /// No description provided for @weatherDayPeak.
+  ///
+  /// In en, this message translates to:
+  /// **'Peak of the day'**
+  String get weatherDayPeak;
+
+  /// No description provided for @weatherDayTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total for the day'**
+  String get weatherDayTotal;
+
+  /// No description provided for @proTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'Your coach. On pro level.'**
+  String get proTagline;
+
+  /// No description provided for @proBenefitCoach.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Coach with the Pro model: faster, more thorough, its own budget'**
+  String get proBenefitCoach;
+
+  /// No description provided for @proBenefitMemory.
+  ///
+  /// In en, this message translates to:
+  /// **'Memory Cards: what your coach should always know'**
+  String get proBenefitMemory;
+
+  /// No description provided for @proBenefitEcg.
+  ///
+  /// In en, this message translates to:
+  /// **'Detailed ECG analysis'**
+  String get proBenefitEcg;
+
+  /// No description provided for @proBenefitCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy answers with one tap'**
+  String get proBenefitCopy;
+
+  /// No description provided for @proMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get proMonthly;
+
+  /// No description provided for @proYearly.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly'**
+  String get proYearly;
+
+  /// No description provided for @proPerMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'{price} / month'**
+  String proPerMonth(String price);
+
+  /// No description provided for @proPerYear.
+  ///
+  /// In en, this message translates to:
+  /// **'{price} / year'**
+  String proPerYear(String price);
+
+  /// No description provided for @proBestValue.
+  ///
+  /// In en, this message translates to:
+  /// **'BEST VALUE'**
+  String get proBestValue;
+
+  /// No description provided for @proSubscribe.
+  ///
+  /// In en, this message translates to:
+  /// **'Get FjeliaPro'**
+  String get proSubscribe;
+
+  /// No description provided for @proRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore purchases'**
+  String get proRestore;
+
+  /// No description provided for @proManage.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage subscription'**
+  String get proManage;
+
+  /// No description provided for @proActiveUntil.
+  ///
+  /// In en, this message translates to:
+  /// **'Pro is on until {date}'**
+  String proActiveUntil(String date);
+
+  /// No description provided for @proAutoRenew.
+  ///
+  /// In en, this message translates to:
+  /// **'The subscription renews automatically unless you cancel it at least 24 hours before the end of the period in your Apple account settings. Payment is charged to your Apple account.'**
+  String get proAutoRenew;
+
+  /// No description provided for @proTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Use'**
+  String get proTerms;
+
+  /// No description provided for @proPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy'**
+  String get proPrivacy;
+
+  /// No description provided for @proProblemStore.
+  ///
+  /// In en, this message translates to:
+  /// **'The App Store did not complete the purchase.'**
+  String get proProblemStore;
+
+  /// No description provided for @proProblemService.
+  ///
+  /// In en, this message translates to:
+  /// **'Your purchase is there, but it could not be checked yet. Fjelia tries again on the next start.'**
+  String get proProblemService;
+
+  /// No description provided for @proProblemNothing.
+  ///
+  /// In en, this message translates to:
+  /// **'No FjeliaPro subscription to restore.'**
+  String get proProblemNothing;
+
+  /// No description provided for @proProblemNotActive.
+  ///
+  /// In en, this message translates to:
+  /// **'This subscription has ended.'**
+  String get proProblemNotActive;
+
+  /// No description provided for @proUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'The subscriptions cannot be loaded right now. Please try again later.'**
+  String get proUnavailable;
+
+  /// No description provided for @proWelcome.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to FjeliaPro 🔥'**
+  String get proWelcome;
+
+  /// No description provided for @proUsesFjeliaAi.
+  ///
+  /// In en, this message translates to:
+  /// **'The Pro model answers when \"Fjelia AI\" is chosen in the AI settings.'**
+  String get proUsesFjeliaAi;
+
+  /// No description provided for @proToolsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pro analyses'**
+  String get proToolsTitle;
+
+  /// No description provided for @proPlanCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s plan check'**
+  String get proPlanCheck;
+
+  /// No description provided for @proPlanCheckHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Does today\'s plan fit your recovery?'**
+  String get proPlanCheckHint;
+
+  /// No description provided for @proWeekReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly review'**
+  String get proWeekReview;
+
+  /// No description provided for @proWeekReviewHint.
+  ///
+  /// In en, this message translates to:
+  /// **'What worked, what to change next week'**
+  String get proWeekReviewHint;
+
+  /// No description provided for @proRacePlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Race plan'**
+  String get proRacePlan;
+
+  /// No description provided for @proRacePlanHint.
+  ///
+  /// In en, this message translates to:
+  /// **'{race}: taper, pacing, fuelling'**
+  String proRacePlanHint(String race);
+
+  /// No description provided for @proSeason.
+  ///
+  /// In en, this message translates to:
+  /// **'Season analysis'**
+  String get proSeason;
+
+  /// No description provided for @proSeasonHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Goals, phases and risks of your season'**
+  String get proSeasonHint;
+
+  /// No description provided for @proAnalysisCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'Create analysis'**
+  String get proAnalysisCreate;
+
+  /// No description provided for @proAnalysisRedo.
+  ///
+  /// In en, this message translates to:
+  /// **'Create again'**
+  String get proAnalysisRedo;
+
+  /// No description provided for @proAnalysisFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'Created {time}'**
+  String proAnalysisFrom(String time);
+
+  /// No description provided for @proAnalysisWorking.
+  ///
+  /// In en, this message translates to:
+  /// **'The large model is analysing…'**
+  String get proAnalysisWorking;
+
+  /// No description provided for @proAnalysisFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The analysis did not work. Please try again.'**
+  String get proAnalysisFailed;
+
+  /// No description provided for @proBenefitPlanCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily plan check with the large model'**
+  String get proBenefitPlanCheck;
+
+  /// No description provided for @proBenefitReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly review and season analysis'**
+  String get proBenefitReview;
+
+  /// No description provided for @proBenefitRacePlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Race plan: taper, pacing, fuelling'**
+  String get proBenefitRacePlan;
+
+  /// No description provided for @statsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Statistics'**
+  String get statsTitle;
+
+  /// No description provided for @statsLast4Weeks.
+  ///
+  /// In en, this message translates to:
+  /// **'Last 4 weeks · per week'**
+  String get statsLast4Weeks;
+
+  /// No description provided for @statsElevation.
+  ///
+  /// In en, this message translates to:
+  /// **'Elevation'**
+  String get statsElevation;
+
+  /// No description provided for @statsAllTimeTotals.
+  ///
+  /// In en, this message translates to:
+  /// **'All time'**
+  String get statsAllTimeTotals;
+
+  /// No description provided for @statsBestEfforts.
+  ///
+  /// In en, this message translates to:
+  /// **'Best efforts'**
+  String get statsBestEfforts;
+
+  /// No description provided for @statsLongest.
+  ///
+  /// In en, this message translates to:
+  /// **'Longest'**
+  String get statsLongest;
+
+  /// No description provided for @statsMostElevation.
+  ///
+  /// In en, this message translates to:
+  /// **'Most elevation'**
+  String get statsMostElevation;
+
+  /// No description provided for @statsNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No activities yet.'**
+  String get statsNone;
+
+  /// No description provided for @proBenefitStats.
+  ///
+  /// In en, this message translates to:
+  /// **'Statistics: best efforts, this year and the last 4 weeks'**
+  String get proBenefitStats;
+
+  /// No description provided for @statsFourWeeks.
+  ///
+  /// In en, this message translates to:
+  /// **'4 weeks'**
+  String get statsFourWeeks;
+
+  /// No description provided for @statsTickerWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'per week, last 4 weeks'**
+  String get statsTickerWeek;
+
+  /// No description provided for @statsTickerYear.
+  ///
+  /// In en, this message translates to:
+  /// **'in {year}'**
+  String statsTickerYear(String year);
+
+  /// No description provided for @statsTickerBest.
+  ///
+  /// In en, this message translates to:
+  /// **'Best {distance}'**
+  String statsTickerBest(String distance);
+
+  /// No description provided for @statsPerWeekShort.
+  ///
+  /// In en, this message translates to:
+  /// **'/ week'**
+  String get statsPerWeekShort;
+
+  /// No description provided for @gripLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'Left'**
+  String get gripLeft;
+
+  /// No description provided for @gripRight.
+  ///
+  /// In en, this message translates to:
+  /// **'Right'**
+  String get gripRight;
+
+  /// No description provided for @muscleShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Muscle'**
+  String get muscleShort;
+
+  /// No description provided for @vsYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'{arrow} vs. yesterday'**
+  String vsYesterday(String arrow);
+
+  /// No description provided for @proposalProCoach.
+  ///
+  /// In en, this message translates to:
+  /// **'Coach writes the morning push'**
+  String get proposalProCoach;
+
+  /// No description provided for @proposalProCoachHint.
+  ///
+  /// In en, this message translates to:
+  /// **'FjeliaPro: today\'s readiness, plan and health context go to Fjelia AI Pro, which words the proposal shortly after the morning sync.'**
+  String get proposalProCoachHint;
+
+  /// No description provided for @heatShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Heat'**
+  String get heatShort;
+
+  /// No description provided for @coachRevisionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Coach proposal'**
+  String get coachRevisionLabel;
+
+  /// No description provided for @revisionBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'Before'**
+  String get revisionBefore;
+
+  /// No description provided for @revisionAfter.
+  ///
+  /// In en, this message translates to:
+  /// **'After'**
+  String get revisionAfter;
+
+  /// No description provided for @revisionSwapped.
+  ///
+  /// In en, this message translates to:
+  /// **'Swapped'**
+  String get revisionSwapped;
+
+  /// No description provided for @revisionRestDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Rest day instead'**
+  String get revisionRestDay;
+
+  /// No description provided for @revisionDropped.
+  ///
+  /// In en, this message translates to:
+  /// **'left out'**
+  String get revisionDropped;
+
+  /// No description provided for @revisionAccept.
+  ///
+  /// In en, this message translates to:
+  /// **'Take it'**
+  String get revisionAccept;
+
+  /// No description provided for @revisionSets.
+  ///
+  /// In en, this message translates to:
+  /// **'{sets} × {reps}'**
+  String revisionSets(String sets, String reps);
+
+  /// No description provided for @testMorningProposal.
+  ///
+  /// In en, this message translates to:
+  /// **'Test morning proposal'**
+  String get testMorningProposal;
+
+  /// No description provided for @testMorningProposalHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Runs the morning check now with readiness as yellow; the push comes in 5 seconds.'**
+  String get testMorningProposalHint;
+
+  /// No description provided for @proposalRulesEasier.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery is not quite there: today\'s sessions get shorter and easier, their purpose stays.'**
+  String get proposalRulesEasier;
+
+  /// No description provided for @proposalRulesRecovery.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear signs of fatigue: today only easy, or rest.'**
+  String get proposalRulesRecovery;
+
+  /// No description provided for @proposalCoachUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'The coach could not be reached just now; this is the proposal by the rules.'**
+  String get proposalCoachUnavailable;
+
+  /// No description provided for @revisionKeep.
+  ///
+  /// In en, this message translates to:
+  /// **'Stays as planned'**
+  String get revisionKeep;
+
+  /// No description provided for @revisionAlternative.
+  ///
+  /// In en, this message translates to:
+  /// **'Alternative'**
+  String get revisionAlternative;
+
+  /// No description provided for @revisionTakeAlternative.
+  ///
+  /// In en, this message translates to:
+  /// **'Take this instead'**
+  String get revisionTakeAlternative;
+
+  /// No description provided for @proposalForDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Proposal for {day}'**
+  String proposalForDay(String day);
+
+  /// No description provided for @proposalDayTomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'tomorrow'**
+  String get proposalDayTomorrow;
 }
 
 class _AppLocalizationsDelegate

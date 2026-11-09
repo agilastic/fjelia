@@ -31,32 +31,28 @@ class LoadCard extends StatelessWidget {
     this.color,
     this.padding = const EdgeInsets.all(16),
     this.accent,
+    this.title,
+    this.onTap,
   });
   final Widget child;
+  final String? title;
+  final VoidCallback? onTap;
   final Color? color;
   final EdgeInsetsGeometry padding;
 
   /// The card's own glow: a faint light from the top left and a tinted edge.
   final List<Color>? accent;
+
+  /// The same frame as every other card (style.md): a `SectionCard`.
   @override
-  Widget build(BuildContext context) {
-    final accent = this.accent;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Material(
-        color: color ?? loadSurface,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-          side: accent == null ? BorderSide.none : fjEdge(accent),
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: Ink(
-          decoration: accent == null ? null : fjGlow(accent),
-          child: Padding(padding: padding, child: child),
-        ),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => SectionCard(
+    title: title,
+    onTap: onTap,
+    color: color,
+    padding: padding,
+    accent: accent,
+    child: child,
+  );
 }
 
 class LoadBadge extends StatelessWidget {
@@ -509,6 +505,7 @@ class LoadTrendChart extends StatelessWidget {
       child: bars
           ? BarChart(
               BarChartData(
+                barTouchData: roundedBarTouch(),
                 minY: low,
                 maxY: high,
                 titlesData: titles,
@@ -542,6 +539,7 @@ class LoadTrendChart extends StatelessWidget {
             )
           : LineChart(
               LineChartData(
+                lineTouchData: roundedLineTouch(),
                 minX: 0,
                 maxX: math.max(1, last),
                 minY: low,

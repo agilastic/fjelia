@@ -29,185 +29,54 @@ class HrTimelineCard extends ConsumerWidget {
     final avg = summary?.average;
     final peak = summary?.peak;
     if (!expanded) {
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 12),
-        child: Material(
-          color: panel,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-            side: BorderSide(color: Colors.redAccent.withValues(alpha: .28)),
-          ),
-          clipBehavior: Clip.antiAlias,
-          child: Ink(
-            decoration: BoxDecoration(
-              gradient: RadialGradient(
-                center: Alignment.topLeft,
-                radius: 1.6,
-                colors: [
-                  Colors.redAccent.withValues(alpha: .07),
-                  Colors.transparent,
+      // The same card as every other (style.md): title, resting rate, the
+      // day's line, average and peak.
+      return SectionCard(
+        title: context.l10n.heartRate2,
+        accent: const [Color(0xFFFF4D8D), Color(0xFF9D7BFF)],
+        onTap: () => showAppSheet(context, const HrTimelineScreen()),
+        child: SizedBox(
+          height: 56,
+          child: Row(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  FigureLabel(context.l10n.resting),
+                  const SizedBox(height: 4),
+                  KeyFigure(valueText(resting), unit: 'bpm'),
                 ],
               ),
-            ),
-            child: InkWell(
-              onTap: () => showAppSheet(context, const HrTimelineScreen()),
-              child: SizedBox(
-                height: 88,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 10,
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.favorite,
-                            color: Colors.redAccent,
-                            size: 14,
-                          ),
-                          const SizedBox(width: 7),
-                          GradientTitle(
-                            context.l10n.heartRate2,
-                            colors: const [
-                              Color(0xFFFF5A7A),
-                              Color(0xFFFF9A5A),
-                            ],
-                          ),
-                          const Spacer(),
-                          if (data.isLoading)
-                            Text(
-                              context.l10n.updating,
-                              style: TextStyle(fontSize: 9, color: muted),
-                            ),
-                          Icon(Icons.chevron_right, color: muted, size: 15),
-                        ],
-                      ),
-                      const SizedBox(height: 5),
-                      Expanded(
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: 65,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    context.l10n.resting,
-                                    style: TextStyle(
-                                      fontSize: 8,
-                                      color: muted,
-                                      letterSpacing: .6,
-                                    ),
-                                  ),
-                                  Text.rich(
-                                    TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: valueText(resting),
-                                          style: const TextStyle(
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.w700,
-                                            color: mint,
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text: ' bpm',
-                                          style: TextStyle(
-                                            fontSize: 9,
-                                            color: muted,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    maxLines: 1,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: points.isEmpty
-                                  ? Center(
-                                      child: Text(
-                                        context.l10n.noTimedReadings,
-                                        style: TextStyle(
-                                          fontSize: 10,
-                                          color: muted,
-                                        ),
-                                      ),
-                                    )
-                                  : HrTimelinePlot(
-                                      points: points,
-                                      date: shownDate,
-                                      activities: activities,
-                                      average: avg,
-                                      compact: true,
-                                      height: 44,
-                                    ),
-                            ),
-                            const SizedBox(width: 12),
-                            SizedBox(
-                              width: 68,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        context.l10n.avg,
-                                        style: TextStyle(
-                                          fontSize: 8,
-                                          color: muted,
-                                        ),
-                                      ),
-                                      Text(
-                                        valueText(avg),
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w600,
-                                          color: fjInk70,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        context.l10n.peak,
-                                        style: TextStyle(
-                                          fontSize: 8,
-                                          color: muted,
-                                        ),
-                                      ),
-                                      Text(
-                                        valueText(peak),
-                                        style: const TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.redAccent,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+              const SizedBox(width: 14),
+              Expanded(
+                child: points.isEmpty
+                    ? Center(
+                        child: Text(
+                          context.l10n.noTimedReadings,
+                          style: TextStyle(fontSize: 10, color: muted),
                         ),
+                      )
+                    : HrTimelinePlot(
+                        points: points,
+                        date: shownDate,
+                        activities: activities,
+                        average: avg,
+                        compact: true,
+                        height: 44,
                       ),
-                    ],
-                  ),
-                ),
               ),
-            ),
+              const SizedBox(width: 14),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  FigureLabel(context.l10n.peak),
+                  const SizedBox(height: 4),
+                  KeyFigure(valueText(peak)),
+                ],
+              ),
+            ],
           ),
         ),
       );

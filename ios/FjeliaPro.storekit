@@ -1,0 +1,104 @@
+{
+  "identifier" : "7E8B5D0A-5C2B-4D46-9E1A-3F1E11A0F001",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+    "_applicationInternalID" : "",
+    "_developerTeamID" : "BVQA6C27NX",
+    "_failTransactionsEnabled" : false,
+    "_locale" : "de_DE",
+    "_storefront" : "DEU",
+    "_storeKitErrors" : [
+
+    ]
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "21500001",
+      "localizations" : [
+        {
+          "description" : "FjeliaPro",
+          "displayName" : "FjeliaPro",
+          "locale" : "de"
+        }
+      ],
+      "name" : "FjeliaPro",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "4.99",
+          "familyShareable" : true,
+          "groupNumber" : 1,
+          "internalID" : "6739500001",
+          "introductoryOffer" : {
+            "internalID" : "6739500011",
+            "numberOfPeriods" : 1,
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P1W"
+          },
+          "localizations" : [
+            {
+              "description" : "KI-Coach mit Pro-Modell, Memory Cards, EKG-Auswertung",
+              "displayName" : "FjeliaPro monatlich",
+              "locale" : "de"
+            }
+          ],
+          "productID" : "fjelia.pro.monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "FjeliaPro monthly",
+          "subscriptionGroupID" : "21500001",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "39.99",
+          "familyShareable" : true,
+          "groupNumber" : 1,
+          "internalID" : "6739500002",
+          "introductoryOffer" : {
+            "internalID" : "6739500012",
+            "numberOfPeriods" : 1,
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P1W"
+          },
+          "localizations" : [
+            {
+              "description" : "KI-Coach mit Pro-Modell, Memory Cards, EKG-Auswertung",
+              "displayName" : "FjeliaPro jährlich",
+              "locale" : "de"
+            }
+          ],
+          "productID" : "fjelia.pro.yearly",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "FjeliaPro yearly",
+          "subscriptionGroupID" : "21500001",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}

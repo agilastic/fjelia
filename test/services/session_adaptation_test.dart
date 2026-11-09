@@ -193,4 +193,39 @@ void main() {
     expect(result.adapted, isFalse);
     expect((await reload()).status, 'planned');
   });
+
+  test(
+    'today means today: tomorrow\'s sessions at midnight stay out',
+    () async {
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+      Future<void> at(String id, DateTime day) => db
+          .into(db.trainingSessions)
+          .insert(
+            TrainingSessionsCompanion.insert(
+              id: id,
+              planId: 'p',
+              athleteId: 'self',
+              sessionDate: day,
+              sessionNumber: 1,
+              weekNumber: 1,
+              sport: 'running',
+              sessionType: 'long',
+              phase: 'base',
+              primaryZone: 2,
+              title: 'Long Run (115 min)',
+              stepsJson: Value(jsonEncode(steady)),
+              plannedDurationMin: 115,
+              plannedTrimp: 100,
+              sessionLevel: 5,
+            ),
+          );
+      // A rest day today, the long run tomorrow.
+      await at('tomorrow', today.add(const Duration(days: 1)));
+      expect(await service.previewDay(yellow), isEmpty);
+      await at('today', today);
+      final preview = await service.previewDay(yellow);
+      expect([for (final p in preview) p.session.id], ['today']);
+    },
+  );
 }

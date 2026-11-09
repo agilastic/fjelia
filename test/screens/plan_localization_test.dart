@@ -7,6 +7,7 @@ import 'package:fjelia/l10n/plan_text.dart';
 import 'package:fjelia/providers/database_provider.dart';
 import 'package:fjelia/screens/planner/plan_screen.dart';
 import 'package:fjelia/services/race_goal_service.dart';
+import 'package:fjelia/services/season/season_report.dart';
 import 'package:fjelia/services/training_plan_service.dart';
 import 'package:fjelia/services/workout_template_library.dart';
 import 'package:fjelia/theme/app_theme.dart';
@@ -115,19 +116,24 @@ void main() {
       await tester.pump(const Duration(milliseconds: 200));
     }
     final l10n = lookupAppLocalizations(const Locale('de'));
-    final card = find.text(l10n.seasonNeedsYourDecision);
-    expect(card, findsOneWidget);
-    await tester.tap(card);
-    await tester.pump(const Duration(milliseconds: 500));
-    // Conflicts, trade-offs and alternatives in German.
-    expect(find.textContaining('haben beide Priorität A'), findsWidgets);
-    expect(
-      find.textContaining('daher ist der Plan für das B-Ziel vorläufig'),
-      findsOneWidget,
+    // The season's verdict is no card on the plan any more (it feeds the
+    // FjeliaPro season analysis); its words still read German.
+    expect(find.text(l10n.seasonNeedsYourDecision), findsNothing);
+    final plan = await tester.runAsync(
+      () => db.select(db.trainingPlans).getSingle(),
     );
-    expect(find.text('→ Eines der Events verschieben'), findsOneWidget);
-    expect(find.textContaining('priority'), findsNothing);
-    expect(find.textContaining(' weeks '), findsNothing);
+    final report = SeasonReport.decode(plan!.seasonJson)!;
+    expect(report['outcome'], 'requiresDecision');
+    final words = [
+      ...seasonReportLines(l10n, report),
+      ...seasonAlternatives(l10n, report),
+    ].join('\n');
+    // Conflicts, trade-offs and alternatives in German.
+    expect(words, contains('haben beide Priorität A'));
+    expect(words, contains('daher ist der Plan für das B-Ziel vorläufig'));
+    expect(words, contains('Eines der Events verschieben'));
+    expect(words, isNot(contains('priority')));
+    expect(words, isNot(contains(' weeks ')));
     expect(find.text('GRUNDLAGE'), findsWidgets);
 
     // Every purpose the planner wrote is recognised.

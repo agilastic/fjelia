@@ -21,71 +21,45 @@ class PlanAdjustmentsCard extends ConsumerWidget {
         ref.watch(recentPlanAdjustmentsProvider).valueOrNull ?? const [];
     if (groups.isEmpty) return const SizedBox.shrink();
     final l = context.l10n;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
-      child: Material(
-        color: panel,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
-          side: BorderSide(color: Colors.lightBlueAccent.withValues(alpha: .6)),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(14, 12, 6, 6),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Icon(
-                    Icons.auto_fix_high_outlined,
-                    color: Colors.lightBlueAccent,
-                    size: 20,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    l.planAdjustedTitle,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ],
+    return SectionCard(
+      title: l.planAdjustedTitle,
+      accent: const [Color(0xFF6FA8FF), Color(0xFF3EE0FF)],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for (final g in groups) ...[
+            const SizedBox(height: 8),
+            for (final x in g.items)
+              Padding(
+                padding: const EdgeInsets.only(right: 8, bottom: 4),
+                child: Text(
+                  planAdjustmentText(l, x),
+                  style: const TextStyle(fontSize: 12),
+                ),
               ),
-              for (final g in groups) ...[
-                const SizedBox(height: 8),
-                for (final x in g.items)
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8, bottom: 4),
-                    child: Text(
-                      planAdjustmentText(l, x),
-                      style: const TextStyle(fontSize: 12),
-                    ),
-                  ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () =>
-                          ref.read(dismissPlanAdjustmentProvider)(g.id),
-                      child: Text(l.ok),
-                    ),
-                    TextButton.icon(
-                      icon: const Icon(Icons.undo, size: 18),
-                      label: Text(l.undo),
-                      onPressed: () async {
-                        final messenger = ScaffoldMessenger.maybeOf(context);
-                        await ref.read(undoPlanAdjustmentProvider)(g.id);
-                        messenger?.showSnackBar(
-                          SnackBar(content: Text(l.planAdjUndone)),
-                        );
-                      },
-                    ),
-                  ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () =>
+                      ref.read(dismissPlanAdjustmentProvider)(g.id),
+                  child: Text(l.ok),
+                ),
+                TextButton.icon(
+                  icon: const Icon(Icons.undo, size: 18),
+                  label: Text(l.undo),
+                  onPressed: () async {
+                    final messenger = ScaffoldMessenger.maybeOf(context);
+                    await ref.read(undoPlanAdjustmentProvider)(g.id);
+                    messenger?.showSnackBar(
+                      SnackBar(content: Text(l.planAdjUndone)),
+                    );
+                  },
                 ),
               ],
-            ],
-          ),
-        ),
+            ),
+          ],
+        ],
       ),
     );
   }

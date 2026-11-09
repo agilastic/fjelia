@@ -49,10 +49,11 @@ class PlanProposalPayload {
 /// What a readiness proposal says in a notification.
 typedef ProposalText = ({DateTime day, String title, String body});
 
-/// Tells about proposals the athlete has not answered once the app is in
-/// the background: today's readiness changes and sessions missed in the last
-/// two days. Never while the app is open (the Plan shows them as cards), and
-/// a few minutes late, so a quick switch to another app does not ring.
+/// Tells about proposals the athlete has not answered: today's readiness
+/// change as one push in the morning ([scheduleMorning]), sessions missed
+/// in the last two days once the app is in the background, a few minutes
+/// late, so a quick switch to another app does not ring (the Plan shows
+/// those as cards).
 class PlanProposalNotifications {
   PlanProposalNotifications(
     this.gateway,
@@ -70,27 +71,65 @@ class PlanProposalNotifications {
   /// 3 to 6 minutes from now.
   DateTime _due() => now().add(Duration(seconds: 180 + random.nextInt(181)));
 
-  /// The app went to the background with proposals still open.
-  Future<void> onBackground({ProposalText? readiness}) async {
+  /// When the morning push about today's plan appears: 10 to 20 minutes
+  /// after the sync that found it.
+  Duration _morningDelay() => Duration(seconds: 600 + random.nextInt(601));
+
+  /// After noon the day is half gone; the push is not sent.
+  static const morningLatestHour = 12;
+
+  /// Today's readiness proposal as one push in the morning, 10 to 20
+  /// minutes after the first full sync. Once per day; later syncs change
+  /// nothing.
+  Future<DateTime?> scheduleMorning(ProposalText readiness) async {
+    final key = readinessKey(readiness.day);
+    if (await PlanProposalStore.notifiedAt(key) != null) return null;
+    final due = now().add(_morningDelay());
+    if (due.hour >= morningLatestHour ||
+        _dayNumber(due) != _dayNumber(readiness.day)) {
+      log('[PlanProposal] morning push skipped: due ${due.toLocal()}');
+      return null;
+    }
+    if (!(await gateway.permission()).allowed) return null;
+    await gateway.schedule(
+      ScheduledNotification(
+        id: planProposalNotificationBase + _dayNumber(readiness.day),
+        at: due,
+        payload: PlanProposalPayload(readiness.day).encode(),
+        title: readiness.title,
+        body: readiness.body,
+        feature: NotificationFeature.planProposal,
+        actionLabels: {'open': tr.reviewChange, 'keep': tr.keepPlan},
+      ),
+    );
+    await PlanProposalStore.markNotified(key, due);
+    log('[PlanProposal] morning push set for ${due.toLocal()}');
+    return due;
+  }
+
+  /// Settings → System → Debug: the morning push after [delay], whatever the
+  /// time of day.
+  Future<void> scheduleTest(ProposalText readiness, Duration delay) async {
+    if (!(await gateway.permission()).allowed) return;
+    final due = now().add(delay);
+    await gateway.schedule(
+      ScheduledNotification(
+        id: planProposalNotificationBase + _dayNumber(readiness.day),
+        at: due,
+        payload: PlanProposalPayload(readiness.day).encode(),
+        title: readiness.title,
+        body: readiness.body,
+        feature: NotificationFeature.planProposal,
+        actionLabels: {'open': tr.reviewChange, 'keep': tr.keepPlan},
+      ),
+    );
+    await PlanProposalStore.markNotified(readinessKey(readiness.day), due);
+  }
+
+  /// The app went to the background with missed sessions still open.
+  Future<void> onBackground() async {
     if (!(await gateway.permission()).allowed) return;
     final due = _due();
-    if (readiness != null) {
-      final key = 'r:${_dayKey(readiness.day)}';
-      if (await PlanProposalStore.notifiedAt(key) == null) {
-        await gateway.schedule(
-          ScheduledNotification(
-            id: planProposalNotificationBase + _dayNumber(readiness.day),
-            at: due,
-            payload: PlanProposalPayload(readiness.day).encode(),
-            title: readiness.title,
-            body: readiness.body,
-            feature: NotificationFeature.planProposal,
-            actionLabels: {'open': tr.reviewChange, 'keep': tr.keepPlan},
-          ),
-        );
-        await PlanProposalStore.markNotified(key, due);
-      }
-    }
     // Missed sessions follow the evening reminder's switch.
     final missedOn = (await missed.settings()).enabled;
     for (final m in missedOn ? await missed.pastMissed() : const []) {
@@ -121,12 +160,13 @@ class PlanProposalNotifications {
     log('[PlanProposal] background: notifications set for ${due.toLocal()}');
   }
 
-  /// Back in the app: what has not appeared yet is taken back (the cards
-  /// show it) and may come again the next time the app is left.
+  /// Back in the app: missed sessions not shown yet are taken back (the
+  /// cards show them) and may come again the next time the app is left.
+  /// The morning push stays: it has no card.
   Future<void> onForeground() async {
     final at = now();
     for (final n in await PlanProposalStore.notifications()) {
-      if (!n.at.isAfter(at)) continue;
+      if (!n.at.isAfter(at) || n.key.startsWith('r:')) continue;
       final id = _idOf(n.key);
       if (id != null) await gateway.cancel(id);
       await PlanProposalStore.forget(n.key);

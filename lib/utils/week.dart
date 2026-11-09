@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 // Week arithmetic that follows the "calendar week start" setting.
 
 /// The first day (midnight) of the week containing [d].
@@ -12,9 +14,12 @@ int weekdayIndex(DateTime d, {bool mondayFirst = true}) =>
     mondayFirst ? d.weekday - 1 : d.weekday % 7;
 
 /// Single-letter weekday headings in display order.
-List<String> weekdayInitials({bool mondayFirst = true}) => mondayFirst
-    ? const ['M', 'T', 'W', 'T', 'F', 'S', 'S']
-    : const ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+List<String> weekdayInitials({bool mondayFirst = true}) {
+  // In the app's language (D for Dienstag); 1 January 2024 is a Monday.
+  final f = DateFormat('EEEEE');
+  final days = [for (var i = 0; i < 7; i++) f.format(DateTime(2024, 1, 1 + i))];
+  return mondayFirst ? days : [days[6], ...days.take(6)];
+}
 
 /// ISO-8601 week number of the week that starts on [weekStart]. A Sunday-first
 /// week is numbered like the ISO week of the Monday inside it.

@@ -65,7 +65,6 @@ class _FormState extends ConsumerState<TrainingFormCard> {
               : screen.height * .42
         : 150.0;
     return LoadCard(
-      color: loadInset,
       accent: const [Color(0xFF00D4A0), Color(0xFF3EE0FF)],
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,65 +120,30 @@ class _FormState extends ConsumerState<TrainingFormCard> {
                   Padding(
                     padding: const EdgeInsets.only(right: 5),
                     child: ChoiceChip(
-                      label: Text(_trainingRangeLabel(n)),
+                      label: Text(
+                        _trainingRangeLabel(n),
+                        style: const TextStyle(fontSize: 12),
+                      ),
                       selected: days == n,
+                      showCheckmark: false,
                       onSelected: (_) {
                         setState(() => days = n);
                         widget.onDaysChanged?.call(n);
                       },
                       visualDensity: VisualDensity.compact,
                       materialTapTargetSize: MaterialTapTargetSize.padded,
-                      selectedColor: loadBlue.withValues(alpha: .2),
-                      backgroundColor: loadInset,
-                      labelStyle: TextStyle(
-                        fontSize: 11,
-                        color: days == n ? loadBlue : muted,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      side: BorderSide(
-                        color: days == n
-                            ? loadBlue.withValues(alpha: .45)
-                            : fjInk12,
-                      ),
                     ),
                   ),
               ],
             ),
           ),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              for (final stat in [
-                ('CTL', last?.ctl, colors[0]),
-                ('ATL', last?.atl, colors[1]),
-                ('TSB', last?.tsb, statusColor),
-              ])
-                Padding(
-                  padding: const EdgeInsets.only(right: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(stat.$1, style: loadCaption),
-                      Text(
-                        valueText(stat.$2),
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                          color: stat.$3,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              const Spacer(),
-              Flexible(
-                flex: 2,
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: LoadBadge(status, color: statusColor, fontSize: 11),
-                ),
-              ),
-            ],
+          const SizedBox(height: 12),
+          HeroRow(
+            value: valueText(last?.tsb),
+            unit: 'TSB',
+            status: status,
+            statusColor: statusColor,
+            detail: 'CTL ${valueText(last?.ctl)} · ATL ${valueText(last?.atl)}',
           ),
           const SizedBox(height: 20),
           if (history.isLoading && !history.hasValue)
@@ -199,6 +163,7 @@ class _FormState extends ConsumerState<TrainingFormCard> {
               height: chartHeight,
               child: LineChart(
                 LineChartData(
+                  lineTouchData: roundedLineTouch(),
                   borderData: FlBorderData(show: false),
                   minX: 0,
                   maxX: (days - 1).toDouble(),

@@ -49,18 +49,17 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
         : briefing.valueOrNull;
     // Never markdown or line breaks, also for a briefing saved earlier.
     final text = raw == null ? null : flattenBriefing(raw);
-    return Padding(
-      padding: const EdgeInsets.only(top: 8, bottom: 16),
+    return SectionCard(
+      title: switch (period) {
+        AiBriefingPeriod.morning => context.l10n.morningBriefing,
+        AiBriefingPeriod.lunch => context.l10n.lunchBriefing,
+        AiBriefingPeriod.afternoon => context.l10n.afternoonBriefing,
+        AiBriefingPeriod.evening => context.l10n.eveningBriefing,
+      },
+      accent: const [Color(0xFF9D7BFF), Color(0xFF3EE0FF)],
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(switch (period) {
-            AiBriefingPeriod.morning => context.l10n.morningBriefing,
-            AiBriefingPeriod.lunch => context.l10n.lunchBriefing,
-            AiBriefingPeriod.afternoon => context.l10n.afternoonBriefing,
-            AiBriefingPeriod.evening => context.l10n.eveningBriefing,
-          }, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
-          const SizedBox(height: 10),
           if (text != null)
             Text(
               text,

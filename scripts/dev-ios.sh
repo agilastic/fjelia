@@ -8,6 +8,8 @@ umask 077
 DEFINES=()
 [ -f "$(dirname "$0")/../secrets.json" ] && DEFINES+=(--dart-define-from-file=secrets.json)
 [ -f "$(dirname "$0")/../../fjelia-service/secrets.json" ] && DEFINES+=(--dart-define-from-file=../fjelia-service/secrets.json)
+# Only this launcher enables Settings > System > Developer.
+DEFINES+=(--dart-define=FJELIA_DEVELOPER_MENU=true)
 
 usage() {
   cat <<'EOF'
@@ -17,7 +19,7 @@ Device: --device, or FJELIA_IOS_DEVICE (set it in scripts/local.env).
 Starts a debug build with DDS disabled; logs appear live and are saved to a
 unique temporary file. --log chooses a file instead (overwritten each run).
 --prepare fetches dependencies and regenerates Drift sources before launch.
---release runs a release build instead (no hot reload; use it to test what testers get).
+--release runs a release build instead (no hot reload; keeps the developer menu).
 
 Flutter controls: r = hot reload, R = hot restart, q = stop, d = detach.
 The iPhone must be unlocked, paired, have Developer Mode enabled, and trust your

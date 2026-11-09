@@ -500,6 +500,7 @@ class SyncNotifier extends StateNotifier<SyncState> {
     }
     try {
       await _ref.read(morningAdaptationProvider.notifier).runIfNeeded();
+      await _ref.read(planProposalLifecycleProvider).morning();
     } catch (e) {
       log('[Sync] readiness adaptation error: $e');
     }

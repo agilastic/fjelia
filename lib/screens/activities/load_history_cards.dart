@@ -66,19 +66,6 @@ class LoadHistoryCards extends ConsumerWidget {
                   children: [
                     Row(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.all(9),
-                          decoration: BoxDecoration(
-                            color: mint.withValues(alpha: .13),
-                            borderRadius: BorderRadius.circular(9),
-                          ),
-                          child: const Icon(
-                            Icons.landscape,
-                            color: mint,
-                            size: 20,
-                          ),
-                        ),
-                        const SizedBox(width: 10),
                         Expanded(
                           child: GradientTitle(
                             context.l10n.elevation,
@@ -86,7 +73,6 @@ class LoadHistoryCards extends ConsumerWidget {
                               Color(0xFFC6FF4D),
                               Color(0xFF00D4A0),
                             ],
-                            size: 11,
                           ),
                         ),
                         Text(context.l10n.t12WeekHistory, style: loadCaption),
@@ -124,7 +110,6 @@ class LoadHistoryCards extends ConsumerWidget {
               (sum, week) => sum + week.activitiesFromSamples,
             );
             return LoadCard(
-              color: loadInset,
               accent: const [Color(0xFF3EE0FF), Color(0xFF00D4A0)],
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,7 +117,6 @@ class LoadHistoryCards extends ConsumerWidget {
                   GradientTitle(
                     context.l10n.zonePolarization2,
                     colors: const [Color(0xFF3EE0FF), Color(0xFF00D4A0)],
-                    size: 11,
                   ),
                   const SizedBox(height: 10),
                   Wrap(

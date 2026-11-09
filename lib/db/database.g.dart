@@ -48855,6 +48855,408 @@ class CoachMemoriesCompanion extends UpdateCompanion<CoachMemory> {
   }
 }
 
+class $ProReportsTable extends ProReports
+    with TableInfo<$ProReportsTable, ProReport> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ProReportsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _kindMeta = const VerificationMeta('kind');
+  @override
+  late final GeneratedColumn<String> kind = GeneratedColumn<String>(
+    'kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _refKeyMeta = const VerificationMeta('refKey');
+  @override
+  late final GeneratedColumn<String> refKey = GeneratedColumn<String>(
+    'ref_key',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _bodyMeta = const VerificationMeta('body');
+  @override
+  late final GeneratedColumn<String> body = GeneratedColumn<String>(
+    'body',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _modelMeta = const VerificationMeta('model');
+  @override
+  late final GeneratedColumn<String> model = GeneratedColumn<String>(
+    'model',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    kind,
+    refKey,
+    body,
+    model,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'pro_reports';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ProReport> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('kind')) {
+      context.handle(
+        _kindMeta,
+        kind.isAcceptableOrUnknown(data['kind']!, _kindMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_kindMeta);
+    }
+    if (data.containsKey('ref_key')) {
+      context.handle(
+        _refKeyMeta,
+        refKey.isAcceptableOrUnknown(data['ref_key']!, _refKeyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_refKeyMeta);
+    }
+    if (data.containsKey('body')) {
+      context.handle(
+        _bodyMeta,
+        body.isAcceptableOrUnknown(data['body']!, _bodyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_bodyMeta);
+    }
+    if (data.containsKey('model')) {
+      context.handle(
+        _modelMeta,
+        model.isAcceptableOrUnknown(data['model']!, _modelMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ProReport map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ProReport(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      kind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}kind'],
+      )!,
+      refKey: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}ref_key'],
+      )!,
+      body: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}body'],
+      )!,
+      model: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}model'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $ProReportsTable createAlias(String alias) {
+    return $ProReportsTable(attachedDatabase, alias);
+  }
+}
+
+class ProReport extends DataClass implements Insertable<ProReport> {
+  final String id;
+  final String kind;
+  final String refKey;
+  final String body;
+  final String? model;
+  final DateTime createdAt;
+  const ProReport({
+    required this.id,
+    required this.kind,
+    required this.refKey,
+    required this.body,
+    this.model,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['kind'] = Variable<String>(kind);
+    map['ref_key'] = Variable<String>(refKey);
+    map['body'] = Variable<String>(body);
+    if (!nullToAbsent || model != null) {
+      map['model'] = Variable<String>(model);
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  ProReportsCompanion toCompanion(bool nullToAbsent) {
+    return ProReportsCompanion(
+      id: Value(id),
+      kind: Value(kind),
+      refKey: Value(refKey),
+      body: Value(body),
+      model: model == null && nullToAbsent
+          ? const Value.absent()
+          : Value(model),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory ProReport.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ProReport(
+      id: serializer.fromJson<String>(json['id']),
+      kind: serializer.fromJson<String>(json['kind']),
+      refKey: serializer.fromJson<String>(json['refKey']),
+      body: serializer.fromJson<String>(json['body']),
+      model: serializer.fromJson<String?>(json['model']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'kind': serializer.toJson<String>(kind),
+      'refKey': serializer.toJson<String>(refKey),
+      'body': serializer.toJson<String>(body),
+      'model': serializer.toJson<String?>(model),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  ProReport copyWith({
+    String? id,
+    String? kind,
+    String? refKey,
+    String? body,
+    Value<String?> model = const Value.absent(),
+    DateTime? createdAt,
+  }) => ProReport(
+    id: id ?? this.id,
+    kind: kind ?? this.kind,
+    refKey: refKey ?? this.refKey,
+    body: body ?? this.body,
+    model: model.present ? model.value : this.model,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  ProReport copyWithCompanion(ProReportsCompanion data) {
+    return ProReport(
+      id: data.id.present ? data.id.value : this.id,
+      kind: data.kind.present ? data.kind.value : this.kind,
+      refKey: data.refKey.present ? data.refKey.value : this.refKey,
+      body: data.body.present ? data.body.value : this.body,
+      model: data.model.present ? data.model.value : this.model,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ProReport(')
+          ..write('id: $id, ')
+          ..write('kind: $kind, ')
+          ..write('refKey: $refKey, ')
+          ..write('body: $body, ')
+          ..write('model: $model, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, kind, refKey, body, model, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ProReport &&
+          other.id == this.id &&
+          other.kind == this.kind &&
+          other.refKey == this.refKey &&
+          other.body == this.body &&
+          other.model == this.model &&
+          other.createdAt == this.createdAt);
+}
+
+class ProReportsCompanion extends UpdateCompanion<ProReport> {
+  final Value<String> id;
+  final Value<String> kind;
+  final Value<String> refKey;
+  final Value<String> body;
+  final Value<String?> model;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const ProReportsCompanion({
+    this.id = const Value.absent(),
+    this.kind = const Value.absent(),
+    this.refKey = const Value.absent(),
+    this.body = const Value.absent(),
+    this.model = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ProReportsCompanion.insert({
+    required String id,
+    required String kind,
+    required String refKey,
+    required String body,
+    this.model = const Value.absent(),
+    required DateTime createdAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       kind = Value(kind),
+       refKey = Value(refKey),
+       body = Value(body),
+       createdAt = Value(createdAt);
+  static Insertable<ProReport> custom({
+    Expression<String>? id,
+    Expression<String>? kind,
+    Expression<String>? refKey,
+    Expression<String>? body,
+    Expression<String>? model,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (kind != null) 'kind': kind,
+      if (refKey != null) 'ref_key': refKey,
+      if (body != null) 'body': body,
+      if (model != null) 'model': model,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ProReportsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? kind,
+    Value<String>? refKey,
+    Value<String>? body,
+    Value<String?>? model,
+    Value<DateTime>? createdAt,
+    Value<int>? rowid,
+  }) {
+    return ProReportsCompanion(
+      id: id ?? this.id,
+      kind: kind ?? this.kind,
+      refKey: refKey ?? this.refKey,
+      body: body ?? this.body,
+      model: model ?? this.model,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (kind.present) {
+      map['kind'] = Variable<String>(kind.value);
+    }
+    if (refKey.present) {
+      map['ref_key'] = Variable<String>(refKey.value);
+    }
+    if (body.present) {
+      map['body'] = Variable<String>(body.value);
+    }
+    if (model.present) {
+      map['model'] = Variable<String>(model.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ProReportsCompanion(')
+          ..write('id: $id, ')
+          ..write('kind: $kind, ')
+          ..write('refKey: $refKey, ')
+          ..write('body: $body, ')
+          ..write('model: $model, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -48986,6 +49388,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   );
   late final $MediaItemsTable mediaItems = $MediaItemsTable(this);
   late final $CoachMemoriesTable coachMemories = $CoachMemoriesTable(this);
+  late final $ProReportsTable proReports = $ProReportsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -49056,6 +49459,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     dfaAlpha1Results,
     mediaItems,
     coachMemories,
+    proReports,
   ];
 }
 
@@ -72925,6 +73329,229 @@ typedef $$CoachMemoriesTableProcessedTableManager =
       CoachMemory,
       PrefetchHooks Function()
     >;
+typedef $$ProReportsTableCreateCompanionBuilder = ProReportsCompanion Function({
+  required String id,
+  required String kind,
+  required String refKey,
+  required String body,
+  Value<String?> model,
+  required DateTime createdAt,
+  Value<int> rowid,
+});
+typedef $$ProReportsTableUpdateCompanionBuilder = ProReportsCompanion Function({
+  Value<String> id,
+  Value<String> kind,
+  Value<String> refKey,
+  Value<String> body,
+  Value<String?> model,
+  Value<DateTime> createdAt,
+  Value<int> rowid,
+});
+
+class $$ProReportsTableFilterComposer
+    extends Composer<_$AppDatabase, $ProReportsTable> {
+  $$ProReportsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get refKey => $composableBuilder(
+    column: $table.refKey,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get body => $composableBuilder(
+    column: $table.body,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get model => $composableBuilder(
+    column: $table.model,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$ProReportsTableOrderingComposer
+    extends Composer<_$AppDatabase, $ProReportsTable> {
+  $$ProReportsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get refKey => $composableBuilder(
+    column: $table.refKey,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get body => $composableBuilder(
+    column: $table.body,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get model => $composableBuilder(
+    column: $table.model,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$ProReportsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ProReportsTable> {
+  $$ProReportsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get kind =>
+      $composableBuilder(column: $table.kind, builder: (column) => column);
+
+  GeneratedColumn<String> get refKey =>
+      $composableBuilder(column: $table.refKey, builder: (column) => column);
+
+  GeneratedColumn<String> get body =>
+      $composableBuilder(column: $table.body, builder: (column) => column);
+
+  GeneratedColumn<String> get model =>
+      $composableBuilder(column: $table.model, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$ProReportsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ProReportsTable,
+          ProReport,
+          $$ProReportsTableFilterComposer,
+          $$ProReportsTableOrderingComposer,
+          $$ProReportsTableAnnotationComposer,
+          $$ProReportsTableCreateCompanionBuilder,
+          $$ProReportsTableUpdateCompanionBuilder,
+          (
+            ProReport,
+            BaseReferences<_$AppDatabase, $ProReportsTable, ProReport>,
+          ),
+          ProReport,
+          PrefetchHooks Function()
+        > {
+  $$ProReportsTableTableManager(_$AppDatabase db, $ProReportsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ProReportsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ProReportsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ProReportsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> kind = const Value.absent(),
+                Value<String> refKey = const Value.absent(),
+                Value<String> body = const Value.absent(),
+                Value<String?> model = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ProReportsCompanion(
+                id: id,
+                kind: kind,
+                refKey: refKey,
+                body: body,
+                model: model,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String kind,
+                required String refKey,
+                required String body,
+                Value<String?> model = const Value.absent(),
+                required DateTime createdAt,
+                Value<int> rowid = const Value.absent(),
+              }) => ProReportsCompanion.insert(
+                id: id,
+                kind: kind,
+                refKey: refKey,
+                body: body,
+                model: model,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$ProReportsTable, ProReport>(table),
+                  BaseReferences<_$AppDatabase, $ProReportsTable, ProReport>(
+                    db,
+                    table,
+                    e,
+                  ),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$ProReportsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ProReportsTable,
+      ProReport,
+      $$ProReportsTableFilterComposer,
+      $$ProReportsTableOrderingComposer,
+      $$ProReportsTableAnnotationComposer,
+      $$ProReportsTableCreateCompanionBuilder,
+      $$ProReportsTableUpdateCompanionBuilder,
+      (ProReport, BaseReferences<_$AppDatabase, $ProReportsTable, ProReport>),
+      ProReport,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -73095,4 +73722,6 @@ class $AppDatabaseManager {
       $$MediaItemsTableTableManager(_db, _db.mediaItems);
   $$CoachMemoriesTableTableManager get coachMemories =>
       $$CoachMemoriesTableTableManager(_db, _db.coachMemories);
+  $$ProReportsTableTableManager get proReports =>
+      $$ProReportsTableTableManager(_db, _db.proReports);
 }

@@ -118,7 +118,6 @@ class TrainingMonitorCard extends ConsumerWidget {
           GradientTitle(
             context.l10n.trainingMonitor2,
             colors: const [Color(0xFF9D7BFF), Color(0xFFFF7AD9)],
-            size: 11,
           ),
           const SizedBox(height: 10),
           GridView.count(
@@ -133,13 +132,13 @@ class TrainingMonitorCard extends ConsumerWidget {
                 Material(
                   color: fjInk.withValues(alpha: .04),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(13),
+                    borderRadius: BorderRadius.circular(12),
                     side: c.$1 == 'VO₂max pace'
                         ? BorderSide(color: loadBlue.withValues(alpha: .5))
                         : BorderSide.none,
                   ),
                   child: InkWell(
-                    borderRadius: BorderRadius.circular(13),
+                    borderRadius: BorderRadius.circular(12),
                     onTap: () => showLoadSheet(
                       context,
                       c.$1.startsWith('VO₂max ') && c.$1 != 'VO₂max pace' ||
@@ -330,12 +329,12 @@ class _ZoneStrip extends StatelessWidget {
   Widget build(BuildContext context) => Material(
     color: loadInset,
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(13),
+      borderRadius: BorderRadius.circular(12),
       side: BorderSide(color: fjInk10),
     ),
     child: InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(13),
+      borderRadius: BorderRadius.circular(12),
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: Column(

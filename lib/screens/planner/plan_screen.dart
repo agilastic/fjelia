@@ -1,3 +1,4 @@
+import 'pro_analysis_sheet.dart';
 import '../../providers/activity_history_provider.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../providers/upcoming_plan_provider.dart';
@@ -63,6 +64,8 @@ class _PlanState extends ConsumerState<PlanScreen> {
           // Waiting for an answer: first, above everything else.
           const PlanProposalCards(),
           const PlanWeatherStrip(),
+          // FjeliaPro analyses (or the way to Pro while it is on offer).
+          const ProToolsCard(),
           const RaceCountdownCard(),
           const PlanAdjustmentsCard(),
           const ShortSessionsCard(),
