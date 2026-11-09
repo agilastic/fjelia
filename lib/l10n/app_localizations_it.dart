@@ -6416,6 +6416,12 @@ class AppLocalizationsIt extends AppLocalizations {
       'Trascina il riquadro o il percorso per spostarli. Pizzica e trascina la foto per inquadrarla; doppio tocco per ripristinarla.';
 
   @override
+  String get shareGymPhoto => 'Foto della palestra';
+
+  @override
+  String get shareWithoutPhoto => 'Senza foto';
+
+  @override
   String get shareStyleGlass => 'Vetro';
 
   @override
@@ -8275,4 +8281,7 @@ class AppLocalizationsIt extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get sportSkiErg => 'SkiErg (sci di fondo indoor)';
 }

@@ -3398,6 +3398,8 @@
   "backupWithoutVideos": "Ohne Videos",
   "mediaShareCard": "Als Karte teilen",
   "mediaShareCardHint": "Ziehe das Feld oder die Route, um sie zu verschieben. Foto mit zwei Fingern zoomen und ziehen; Doppeltippen setzt es zurück.",
+  "shareGymPhoto": "Gym-Foto",
+  "shareWithoutPhoto": "Ohne Foto",
   "shareStyleGlass": "Glas",
   "shareStylePoster": "Poster",
   "shareStyleMinimal": "Minimal",
@@ -3923,5 +3925,6 @@
   "coachMemoryBodyHint": "z. B. Bergab laufen tut seit dem Frühjahr weh. Bergauf ist okay.",
   "coachMemoryEmpty": "Noch keine Cards. Leg deine erste an 🔥",
   "coachMemoryDeleteQuestion": "Diese Card löschen?",
-  "coachMemoryCount": "{count, plural, =0{Keine Cards} one{1 Card im Kopf deines Coachs} other{{count} Cards im Kopf deines Coachs}}"
+  "coachMemoryCount": "{count, plural, =0{Keine Cards} one{1 Card im Kopf deines Coachs} other{{count} Cards im Kopf deines Coachs}}",
+  "sportSkiErg": "SkiErg (Langlauf indoor)"
 }

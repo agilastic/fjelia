@@ -6416,6 +6416,12 @@ class AppLocalizationsDe extends AppLocalizations {
       'Ziehe das Feld oder die Route, um sie zu verschieben. Foto mit zwei Fingern zoomen und ziehen; Doppeltippen setzt es zurück.';
 
   @override
+  String get shareGymPhoto => 'Gym-Foto';
+
+  @override
+  String get shareWithoutPhoto => 'Ohne Foto';
+
+  @override
   String get shareStyleGlass => 'Glas';
 
   @override
@@ -8298,4 +8304,7 @@ class AppLocalizationsDe extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get sportSkiErg => 'SkiErg (Langlauf indoor)';
 }

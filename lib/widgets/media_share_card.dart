@@ -15,6 +15,12 @@ import '../screens/planner/plan_week_agenda.dart' show sportLabel;
 import '../services/media_route.dart';
 import 'app_widgets.dart';
 
+/// Bundled photos, so indoor erg cards also work without a network.
+const rowingGymShareBackground = AssetImage(
+  'assets/share/indoor-rowing-gym.jpg',
+);
+const skiErgGymShareBackground = AssetImage('assets/share/skierg-gym.jpg');
+
 /// The workout facts printed on a share card.
 class ActivityShareInfo {
   const ActivityShareInfo({
@@ -27,6 +33,7 @@ class ActivityShareInfo {
     this.ascentMeters,
     this.avgHeartRate,
     this.sport,
+    this.indoor = false,
     this.route = const [],
   });
 
@@ -37,6 +44,22 @@ class ActivityShareInfo {
 
   /// The activity type, for the icon next to the date.
   final String? sport;
+  final bool indoor;
+
+  /// Match the indoor sport rather than the activity's editable title.
+  AssetImage? get gymBackground {
+    if (!indoor) return null;
+    final type = (sport ?? '').toLowerCase().replaceAll(RegExp(r'[\s_-]'), '');
+    if (type.contains('row')) return rowingGymShareBackground;
+    return switch (type) {
+      'nordicskiing' ||
+      'crosscountryskiing' ||
+      'indoorskiing' ||
+      'skierg' => skiErgGymShareBackground,
+      _ => null,
+    };
+  }
+
   final DateTime date;
   final Duration duration;
   final double? distanceMeters, ascentMeters, watts;
@@ -84,11 +107,11 @@ class MediaShareCardPage extends StatefulWidget {
   });
   final ActivityShareInfo info;
 
-  /// The activity's photos to choose from; without any, the card shows the
-  /// route on a dark background.
+  /// The activity's photos to choose from. Indoor rowing and SkiErg also offer
+  /// a bundled gym photo; other workouts start with the route without photos.
   final List<File> photos;
 
-  /// Index into [photos] to start with; null starts with the route.
+  /// Index into [photos] to start with; overrides the indoor gym default.
   final int? initialPhoto;
 
   @override
@@ -98,7 +121,11 @@ class MediaShareCardPage extends StatefulWidget {
 class _MediaShareCardPageState extends State<MediaShareCardPage> {
   final _card = GlobalKey();
   bool _loaded = false;
-  late int? _photo = widget.initialPhoto ?? (widget.photos.isEmpty ? null : 0);
+  late int? _photo =
+      widget.initialPhoto ??
+      (widget.info.gymBackground != null || widget.photos.isEmpty ? null : 0);
+  late bool _gymBackground =
+      widget.info.gymBackground != null && widget.initialPhoto == null;
   ShareCardStyle _style = ShareCardStyle.glass;
   static const _styleKey = 'share_card_style';
 
@@ -154,7 +181,7 @@ class _MediaShareCardPageState extends State<MediaShareCardPage> {
         ? 'tile'
         : d.pointerCount == 1 && _hit(_panelKey, d.focalPoint)
         ? 'panel'
-        : _photo != null
+        : _photo != null || _gymBackground
         ? 'photo'
         : null;
     _last = _box(_card)?.globalToLocal(d.focalPoint);
@@ -201,11 +228,14 @@ class _MediaShareCardPageState extends State<MediaShareCardPage> {
     _pan = Offset.zero;
   });
 
-  void _choose(int? photo) {
-    if (photo == _photo) return;
+  void _choose(int? photo, {bool gym = false}) {
+    if (photo == _photo && gym == _gymBackground) return;
     setState(() {
       _photo = photo;
+      _gymBackground = gym;
       _loaded = false;
+      _zoom = 1;
+      _pan = Offset.zero;
     });
   }
 
@@ -240,9 +270,12 @@ class _MediaShareCardPageState extends State<MediaShareCardPage> {
                       panelKey: _panelKey,
                       tileKey: _tileKey,
                       // A new card per choice, so loading is reported again.
-                      key: ValueKey(_photo),
+                      key: ValueKey((_photo, _gymBackground)),
                       style: _style,
                       photo: _photo == null ? null : widget.photos[_photo!],
+                      backgroundImage: _gymBackground
+                          ? widget.info.gymBackground
+                          : null,
                       info: widget.info,
                       onLoaded: () {
                         if (mounted && !_loaded) setState(() => _loaded = true);
@@ -281,7 +314,7 @@ class _MediaShareCardPageState extends State<MediaShareCardPage> {
             ),
           ),
           const SizedBox(height: 8),
-          if (widget.photos.isNotEmpty)
+          if (widget.photos.isNotEmpty || widget.info.gymBackground != null)
             SizedBox(
               height: 64,
               child: ListView(
@@ -289,13 +322,24 @@ class _MediaShareCardPageState extends State<MediaShareCardPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 children: [
                   _Choice(
-                    selected: _photo == null,
+                    selected: _photo == null && !_gymBackground,
                     onTap: () => _choose(null),
+                    label: context.l10n.shareWithoutPhoto,
                     child: const ColoredBox(
                       color: Color(0xFF0E2A2E),
-                      child: Icon(Icons.route, color: mint),
+                      child: Icon(Icons.hide_image_outlined, color: mint),
                     ),
                   ),
+                  if (widget.info.gymBackground != null)
+                    _Choice(
+                      selected: _gymBackground,
+                      onTap: () => _choose(null, gym: true),
+                      label: context.l10n.shareGymPhoto,
+                      child: Image(
+                        image: widget.info.gymBackground!,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   for (final (i, file) in widget.photos.indexed)
                     _Choice(
                       selected: _photo == i,
@@ -335,28 +379,52 @@ class _Choice extends StatelessWidget {
     required this.selected,
     required this.onTap,
     required this.child,
+    this.label,
   });
   final bool selected;
   final VoidCallback onTap;
   final Widget child;
+  final String? label;
 
   @override
   Widget build(BuildContext context) => Padding(
     padding: const EdgeInsets.only(right: 8),
-    child: GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 56,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: selected ? mint : Colors.white24,
-            width: selected ? 2 : 1,
+    child: Semantics(
+      button: true,
+      selected: selected,
+      child: GestureDetector(
+        onTap: onTap,
+        child: SizedBox(
+          width: label == null ? 56 : 76,
+          child: Column(
+            children: [
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: selected ? mint : Colors.white24,
+                      width: selected ? 2 : 1,
+                    ),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: SizedBox.expand(child: child),
+                  ),
+                ),
+              ),
+              if (label != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 3),
+                  child: Text(
+                    label!,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(color: Colors.white, fontSize: 10),
+                  ),
+                ),
+            ],
           ),
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: SizedBox.expand(child: child),
         ),
       ),
     ),
@@ -459,6 +527,7 @@ class _Facts {
         when s.contains('cycl') || s.contains('bik') || s.contains('ride') =>
       Icons.directions_bike,
     final s when s.contains('swim') => Icons.pool,
+    final s when s.contains('row') => Icons.rowing_rounded,
     final s when s.contains('hik') || s.contains('walk') => Icons.hiking,
     final s when s.contains('ski') => Icons.downhill_skiing,
     _ => Icons.directions_run,
@@ -472,6 +541,7 @@ class ShareCard extends StatelessWidget {
     super.key,
     required this.info,
     this.photo,
+    this.backgroundImage,
     this.onLoaded,
     this.style = ShareCardStyle.glass,
     this.panelY = 1,
@@ -486,8 +556,9 @@ class ShareCard extends StatelessWidget {
   final double photoZoom;
   final Offset photoPan;
 
-  /// Without a photo the route, drawn large, is the picture.
+  /// An athlete's photo takes priority over the optional bundled background.
   final File? photo;
+  final ImageProvider? backgroundImage;
   final ActivityShareInfo info;
   final VoidCallback? onLoaded;
   final ShareCardStyle style;
@@ -507,7 +578,8 @@ class ShareCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final facts = _Facts(info, context);
-    final hasTile = photo != null && info.route.length > 1;
+    final image = photo == null ? backgroundImage : FileImage(photo!);
+    final hasTile = image != null && info.route.length > 1;
     final overlay = _Overlay(
       facts: facts,
       panelY: panelY,
@@ -529,7 +601,7 @@ class ShareCard extends StatelessWidget {
             height: 450,
             child: _HoloCard(
               facts: facts,
-              photo: photo,
+              photo: image,
               onLoaded: onLoaded,
               panelKey: panelKey,
               zoom: photoZoom,
@@ -553,9 +625,9 @@ class ShareCard extends StatelessWidget {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              if (photo case final photo?)
+              if (image != null)
                 _FramedPhoto(
-                  file: photo,
+                  image: image,
                   zoom: photoZoom,
                   pan: photoPan,
                   onLoaded: onLoaded,
@@ -3063,13 +3135,13 @@ class RouteOutlinePainter extends CustomPainter {
 /// It always covers the box: the pan reaches only as far as the zoom allows.
 class _FramedPhoto extends StatelessWidget {
   const _FramedPhoto({
-    required this.file,
+    required this.image,
     this.zoom = 1,
     this.pan = Offset.zero,
     this.onLoaded,
   });
 
-  final File file;
+  final ImageProvider image;
   final double zoom;
   final Offset pan;
   final VoidCallback? onLoaded;
@@ -3084,8 +3156,8 @@ class _FramedPhoto extends StatelessWidget {
           alignment: Alignment.center,
           transform: Matrix4.translationValues(dx, dy, 0)
             ..multiply(Matrix4.diagonal3Values(zoom, zoom, 1)),
-          child: Image.file(
-            file,
+          child: Image(
+            image: image,
             fit: BoxFit.cover,
             width: box.maxWidth,
             height: box.maxHeight,
@@ -3176,7 +3248,7 @@ class _HoloCard extends StatelessWidget {
   final Key? tileKey;
 
   final _Facts facts;
-  final File? photo;
+  final ImageProvider? photo;
   final VoidCallback? onLoaded;
   final Key? panelKey;
 
@@ -3355,7 +3427,7 @@ class _HoloCard extends StatelessWidget {
               children: [
                 if (photo case final photo?)
                   _FramedPhoto(
-                    file: photo,
+                    image: photo,
                     zoom: zoom,
                     pan: pan,
                     onLoaded: onLoaded,
@@ -3663,7 +3735,7 @@ class _HoloCard extends StatelessWidget {
                       children: [
                         if (photo case final photo?)
                           _FramedPhoto(
-                            file: photo,
+                            image: photo,
                             zoom: zoom,
                             pan: pan,
                             onLoaded: onLoaded,

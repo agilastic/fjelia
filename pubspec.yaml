@@ -113,6 +113,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/share/
     - assets/splash/
     - assets/licenses/
     - assets/branding/app-icon-original.png

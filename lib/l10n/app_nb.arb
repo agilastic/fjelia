@@ -3398,6 +3398,8 @@
   "backupWithoutVideos": "Uten videoer",
   "mediaShareCard": "Del som kort",
   "mediaShareCardHint": "Dra feltet eller ruten for å flytte dem. Knip og dra bildet for å beskjære det; dobbelttrykk tilbakestiller.",
+  "shareGymPhoto": "Bilde fra treningssenter",
+  "shareWithoutPhoto": "Uten bilde",
   "shareStyleGlass": "Glass",
   "shareStylePoster": "Plakat",
   "shareStyleMinimal": "Minimal",
@@ -3923,5 +3925,6 @@
   "coachMemoryBodyHint": "f.eks. Løping nedover har gjort vondt siden våren. Oppover går fint.",
   "coachMemoryEmpty": "Ingen kort ennå. Lag ditt første 🔥",
   "coachMemoryDeleteQuestion": "Slette dette kortet?",
-  "coachMemoryCount": "{count, plural, =0{Ingen kort} one{1 kort i hodet til coachen din} other{{count} kort i hodet til coachen din}}"
+  "coachMemoryCount": "{count, plural, =0{Ingen kort} one{1 kort i hodet til coachen din} other{{count} kort i hodet til coachen din}}",
+  "sportSkiErg": "SkiErg (langrenn innendørs)"
 }

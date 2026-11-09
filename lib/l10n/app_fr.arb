@@ -3398,6 +3398,8 @@
   "backupWithoutVideos": "Sans les vidéos",
   "mediaShareCard": "Partager en carte",
   "mediaShareCardHint": "Faites glisser le panneau ou le parcours pour les déplacer. Pincez et faites glisser la photo pour la cadrer ; touchez deux fois pour réinitialiser.",
+  "shareGymPhoto": "Photo de salle",
+  "shareWithoutPhoto": "Sans photo",
   "shareStyleGlass": "Verre",
   "shareStylePoster": "Affiche",
   "shareStyleMinimal": "Minimal",
@@ -3923,5 +3925,6 @@
   "coachMemoryBodyHint": "ex. Courir en descente fait mal depuis le printemps. La montée, ça va.",
   "coachMemoryEmpty": "Pas encore de cartes. Crée la première 🔥",
   "coachMemoryDeleteQuestion": "Supprimer cette carte ?",
-  "coachMemoryCount": "{count, plural, =0{Aucune carte} one{1 carte dans la tête de ton coach} other{{count} cartes dans la tête de ton coach}}"
+  "coachMemoryCount": "{count, plural, =0{Aucune carte} one{1 carte dans la tête de ton coach} other{{count} cartes dans la tête de ton coach}}",
+  "sportSkiErg": "SkiErg (ski de fond en salle)"
 }

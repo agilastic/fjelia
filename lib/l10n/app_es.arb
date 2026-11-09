@@ -3398,6 +3398,8 @@
   "backupWithoutVideos": "Sin vídeos",
   "mediaShareCard": "Compartir como tarjeta",
   "mediaShareCardHint": "Arrastra el panel o la ruta para moverlos. Pellizca y arrastra la foto para encuadrarla; toca dos veces para restablecerla.",
+  "shareGymPhoto": "Foto del gimnasio",
+  "shareWithoutPhoto": "Sin foto",
   "shareStyleGlass": "Cristal",
   "shareStylePoster": "Póster",
   "shareStyleMinimal": "Minimal",
@@ -3923,5 +3925,6 @@
   "coachMemoryBodyHint": "p. ej. Correr cuesta abajo me duele desde la primavera. Cuesta arriba, bien.",
   "coachMemoryEmpty": "Aún no hay tarjetas. Crea la primera 🔥",
   "coachMemoryDeleteQuestion": "¿Eliminar esta tarjeta?",
-  "coachMemoryCount": "{count, plural, =0{Sin tarjetas} one{1 tarjeta en la cabeza de tu coach} other{{count} tarjetas en la cabeza de tu coach}}"
+  "coachMemoryCount": "{count, plural, =0{Sin tarjetas} one{1 tarjeta en la cabeza de tu coach} other{{count} tarjetas en la cabeza de tu coach}}",
+  "sportSkiErg": "SkiErg (esquí de fondo indoor)"
 }

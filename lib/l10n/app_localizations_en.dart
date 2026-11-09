@@ -6359,6 +6359,12 @@ class AppLocalizationsEn extends AppLocalizations {
       'Drag the panel or the route to move them. Pinch and drag the photo to frame it; double-tap resets it.';
 
   @override
+  String get shareGymPhoto => 'Gym photo';
+
+  @override
+  String get shareWithoutPhoto => 'Without photo';
+
+  @override
   String get shareStyleGlass => 'Glass';
 
   @override
@@ -8233,4 +8239,7 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get sportSkiErg => 'SkiErg (Nordic indoor)';
 }

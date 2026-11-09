@@ -6402,6 +6402,12 @@ class AppLocalizationsFi extends AppLocalizations {
       'Siirrä paneelia tai reittiä vetämällä. Nipistä ja vedä kuvaa rajataksesi sen; kaksoisnapautus palauttaa.';
 
   @override
+  String get shareGymPhoto => 'Kuntosalikuva';
+
+  @override
+  String get shareWithoutPhoto => 'Ilman kuvaa';
+
+  @override
   String get shareStyleGlass => 'Lasi';
 
   @override
@@ -8258,4 +8264,7 @@ class AppLocalizationsFi extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get sportSkiErg => 'SkiErg (hiihto sisällä)';
 }

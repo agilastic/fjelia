@@ -6422,6 +6422,12 @@ class AppLocalizationsEs extends AppLocalizations {
       'Arrastra el panel o la ruta para moverlos. Pellizca y arrastra la foto para encuadrarla; toca dos veces para restablecerla.';
 
   @override
+  String get shareGymPhoto => 'Foto del gimnasio';
+
+  @override
+  String get shareWithoutPhoto => 'Sin foto';
+
+  @override
   String get shareStyleGlass => 'Cristal';
 
   @override
@@ -8283,4 +8289,7 @@ class AppLocalizationsEs extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get sportSkiErg => 'SkiErg (esquí de fondo indoor)';
 }

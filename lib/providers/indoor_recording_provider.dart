@@ -395,8 +395,11 @@ class IndoorRecorder extends StateNotifier<IndoorRecorderState>
   /// Records the connected machine. With [ecgDevice] an H10 records the ECG
   /// alongside, as in a phone-recorded activity; [includeBloodPressure] links
   /// the cuff readings taken during the session.
+  /// [activityType] is the sport the athlete chose when it is not the
+  /// machine's own, such as Nordic skiing on a Concept2 SkiErg.
   Future<void> start({
     TrainingSession? session,
+    String? activityType,
     TrainingDevice? ecgDevice,
     bool includeBloodPressure = false,
   }) async {
@@ -417,7 +420,11 @@ class IndoorRecorder extends StateNotifier<IndoorRecorderState>
       List<Map<String, dynamic>> planSteps = [];
       if (session != null) {
         if (activityKind(session.sport) !=
-            activityKind(_machine!.machine!.activityType)) {
+            activityKind(
+              activityType ??
+                  _machine!.activityTypeOverride ??
+                  _machine!.machine!.activityType,
+            )) {
           throw StateError('Connect equipment that matches the planned sport.');
         }
         final prepared = await ref
@@ -434,8 +441,15 @@ class IndoorRecorder extends StateNotifier<IndoorRecorderState>
         startedAt: now,
         device: state.device!,
         machine: _machine!.machine!,
-        dataProtocol: _machine!.runningSpeedOnly ? 'rsc' : 'ftms',
-        name: session?.title ?? '${_machine!.machine!.label} (Fjelia)',
+        dataProtocol: _machine!.concept2
+            ? 'concept2'
+            : _machine!.runningSpeedOnly
+            ? 'rsc'
+            : 'ftms',
+        activityTypeOverride: activityType ?? _machine!.activityTypeOverride,
+        name:
+            session?.title ??
+            '${(activityType ?? _machine!.activityTypeOverride) == 'nordic_skiing' ? 'SkiErg' : _machine!.machine!.label} (Fjelia)',
         sessionId: session?.id,
         plannedStepsJson: session == null ? null : jsonEncode(planSteps),
         plannedDurationSeconds: session == null

@@ -3398,6 +3398,8 @@
   "backupWithoutVideos": "Bez videí",
   "mediaShareCard": "Zdieľať ako kartu",
   "mediaShareCardHint": "Potiahni panel alebo trasu a presuň ich. Fotku priblíž dvoma prstami a posuň; dvojité ťuknutie ju vráti.",
+  "shareGymPhoto": "Fotka z posilňovne",
+  "shareWithoutPhoto": "Bez fotky",
   "shareStyleGlass": "Sklo",
   "shareStylePoster": "Plagát",
   "shareStyleMinimal": "Minimal",
@@ -3923,5 +3925,6 @@
   "coachMemoryBodyHint": "napr. Beh z kopca bolí od jari. Do kopca je to v poriadku.",
   "coachMemoryEmpty": "Zatiaľ žiadne karty. Vytvor prvú 🔥",
   "coachMemoryDeleteQuestion": "Odstrániť túto kartu?",
-  "coachMemoryCount": "{count, plural, =0{Žiadne karty} one{1 karta v hlave tvojho trénera} few{{count} karty v hlave tvojho trénera} other{{count} kariet v hlave tvojho trénera}}"
+  "coachMemoryCount": "{count, plural, =0{Žiadne karty} one{1 karta v hlave tvojho trénera} few{{count} karty v hlave tvojho trénera} other{{count} kariet v hlave tvojho trénera}}",
+  "sportSkiErg": "SkiErg (bežky indoor)"
 }

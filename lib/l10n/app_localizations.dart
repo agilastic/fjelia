@@ -11196,6 +11196,18 @@ abstract class AppLocalizations {
   /// **'Drag the panel or the route to move them. Pinch and drag the photo to frame it; double-tap resets it.'**
   String get mediaShareCardHint;
 
+  /// No description provided for @shareGymPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Gym photo'**
+  String get shareGymPhoto;
+
+  /// No description provided for @shareWithoutPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Without photo'**
+  String get shareWithoutPhoto;
+
   /// No description provided for @shareStyleGlass.
   ///
   /// In en, this message translates to:
@@ -14273,6 +14285,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =0{No cards} one{1 card in your coach\'s head} other{{count} cards in your coach\'s head}}'**
   String coachMemoryCount(int count);
+
+  /// Recording sheet sport: a Concept2 SkiErg (PM5), saved as Nordic skiing.
+  ///
+  /// In en, this message translates to:
+  /// **'SkiErg (Nordic indoor)'**
+  String get sportSkiErg;
 }
 
 class _AppLocalizationsDelegate

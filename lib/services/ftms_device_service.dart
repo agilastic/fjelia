@@ -24,6 +24,13 @@ class FtmsDeviceService {
 
   /// Connected to a Concept2 PM5 through its own profile, read-only.
   bool concept2 = false;
+
+  /// The erg behind a PM5, when its firmware names it.
+  int? concept2ErgType;
+
+  /// The activity when it is not the machine's own (a PM5 on a SkiErg).
+  String? get activityTypeOverride =>
+      concept2 ? concept2ActivityType(concept2ErgType) : null;
   FtmsCompatibility compatibility = FtmsCompatibility.standard;
   int measurementFeatures = 0, targetFeatures = 0;
   final ranges = <FtmsTarget, FtmsRange>{};
@@ -53,6 +60,7 @@ class FtmsDeviceService {
         _status.add('disconnected');
       };
       concept2 = report!.concept2;
+      concept2ErgType = null;
       if (concept2) {
         await _connectConcept2();
         _status.add('connected');
@@ -167,7 +175,7 @@ class FtmsDeviceService {
     if (type?.properties.read ?? false) {
       try {
         final bytes = await type!.read().timeout(const Duration(seconds: 4));
-        if (bytes.isNotEmpty) ergType = bytes.first;
+        if (bytes.isNotEmpty) ergType = concept2ErgType = bytes.first;
       } catch (_) {
         /* Firmware before V150: the status records name the erg later. */
       }
@@ -193,6 +201,8 @@ class FtmsDeviceService {
     void receive(int id, List<int> bytes) {
       try {
         final values = decodeConcept2(id, bytes);
+        // Firmware without the erg type characteristic names it here.
+        concept2ErgType ??= values['c2_erg_type']?.toInt();
         if (values.isNotEmpty) _measurements.add(values);
       } on FormatException {
         _status.add('invalid_packet');

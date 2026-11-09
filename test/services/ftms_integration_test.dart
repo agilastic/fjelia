@@ -1,3 +1,4 @@
+import 'package:fjelia/models/concept2.dart';
 import 'package:fjelia/models/ftms.dart';
 import 'package:fjelia/models/indoor_recording.dart';
 import 'package:fjelia/services/training_ble.dart';
@@ -500,6 +501,40 @@ void main() {
       expect(restored.elapsedMs, 16200);
     },
   );
+
+  test('a PM5 on a SkiErg exports as indoor Nordic skiing', () {
+    final at = DateTime.utc(2026, 11, 9, 12);
+    final c = IndoorCapture(
+      id: 'concept2_ski',
+      startedAt: at,
+      device: const TrainingDevice(id: 'pm5', name: 'PM5 430000000'),
+      machine: FtmsMachine.rower,
+      dataProtocol: 'concept2',
+      activityTypeOverride: concept2ActivityType(128),
+      name: 'SkiErg (Fjelia)',
+    );
+    expect(c.activityType, 'nordic_skiing');
+    c.ingest(
+      {'pace_500m': 130, 'cad': 40, 'machine_distance': 100},
+      at,
+      recording: true,
+    );
+    c.snapshot(at.add(const Duration(seconds: 1)), 1000);
+    final messages = <fit.Mesg>[];
+    FitDecode()
+      ..onMesg = messages.add
+      ..read(indoorFit(c));
+    final session = fit.SessionMesg.fromMesg(
+      messages.singleWhere((m) => m.num == fit.MesgNum.session),
+    );
+    expect(session.getSport(), fit.Sport.crossCountrySkiing);
+    expect(session.getSubSport(), fit.SubSport.indoorSkiing);
+    final restored = IndoorCapture.fromJson(
+      jsonDecode(jsonEncode(c.toJson())) as Map<String, dynamic>,
+    );
+    expect(restored.activityType, 'nordic_skiing');
+    expect(restored.dataProtocol, 'concept2');
+  });
 
   test(
     'FIT preserves wall/timer time, zero power, device and all raw metrics',

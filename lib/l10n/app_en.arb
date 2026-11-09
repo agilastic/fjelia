@@ -3639,6 +3639,8 @@
   "backupWithoutVideos": "Without videos",
   "mediaShareCard": "Share as card",
   "mediaShareCardHint": "Drag the panel or the route to move them. Pinch and drag the photo to frame it; double-tap resets it.",
+  "shareGymPhoto": "Gym photo",
+  "shareWithoutPhoto": "Without photo",
   "shareStyleGlass": "Glass",
   "shareStylePoster": "Poster",
   "shareStyleMinimal": "Minimal",
@@ -4976,5 +4978,9 @@
         "type": "int"
       }
     }
+  },
+  "sportSkiErg": "SkiErg (Nordic indoor)",
+  "@sportSkiErg": {
+    "description": "Recording sheet sport: a Concept2 SkiErg (PM5), saved as Nordic skiing."
   }
 }

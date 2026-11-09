@@ -27,12 +27,23 @@ const concept2LiveIds = [0x31, 0x32, 0x33, 0x35, 0x36, 0x39];
 const concept2MultiplexedId = 0x80;
 
 /// The erg behind the PM5: a BikeErg records as a bike; a RowErg, a SkiErg
-/// and unknown types as a rower, the PM5's usual erg.
+/// (see [concept2ActivityType]) and unknown types as a rower, the PM5's
+/// usual erg.
 FtmsMachine concept2Machine(int? ergType) => switch (ergType) {
   final t? when t >= 192 && t <= 207 => FtmsMachine.bike,
   final t? when t == 226 => FtmsMachine.bike,
   _ => FtmsMachine.rower,
 };
+
+/// Whether [ergType] is a SkiErg (static, simulator or in a multi-erg
+/// workout).
+bool concept2IsSki(int? ergType) =>
+    ergType == 128 || ergType == 143 || ergType == 225;
+
+/// The activity a PM5 records when it is not the machine's own: a SkiErg
+/// is Nordic skiing, read like a rower (pace per 500 m, strokes).
+String? concept2ActivityType(int? ergType) =>
+    concept2IsSki(ergType) ? 'nordic_skiing' : null;
 
 const _newtonPerPound = 4.4482216152605;
 

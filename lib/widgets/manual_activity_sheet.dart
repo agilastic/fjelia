@@ -30,6 +30,7 @@ const _sports = [
   'treadmill_running',
   'indoor_cycling',
   'rowing',
+  'nordic_skiing',
   'elliptical',
   'stair_climbing',
 ];
@@ -37,6 +38,8 @@ const _machines = {
   'treadmill_running': {FtmsMachine.treadmill},
   'indoor_cycling': {FtmsMachine.bike},
   'rowing': {FtmsMachine.rower},
+  // A Concept2 SkiErg reports through its PM5 like a rower.
+  'nordic_skiing': {FtmsMachine.rower},
   'elliptical': {FtmsMachine.crossTrainer},
   'stair_climbing': {FtmsMachine.stairClimber, FtmsMachine.stepClimber},
 };
@@ -50,6 +53,7 @@ IconData _sportIcon(String sport) => switch (sport) {
   'treadmill_running' => Icons.run_circle_outlined,
   'indoor_cycling' => Icons.pedal_bike_rounded,
   'rowing' => Icons.rowing_rounded,
+  'nordic_skiing' => Icons.downhill_skiing_rounded,
   'elliptical' => Icons.fitness_center_rounded,
   'stair_climbing' => Icons.stairs_rounded,
   _ => Icons.directions_run_rounded,
@@ -59,6 +63,8 @@ IconData _sportIcon(String sport) => switch (sport) {
 String _sessionSport(TrainingSession s) => switch (activityKind(s.sport)) {
   ActivityKind.cycling => 'indoor_cycling',
   ActivityKind.rowing => 'rowing',
+  _ when RegExp('nordic|ski', caseSensitive: false).hasMatch(s.sport) =>
+    'nordic_skiing',
   _ => 'treadmill_running',
 };
 
@@ -122,6 +128,7 @@ class _ManualActivityState extends ConsumerState<ManualActivitySheet> {
     'treadmill_running' => context.l10n.manualTreadmill,
     'indoor_cycling' => context.l10n.sportIndoorCycling,
     'rowing' => context.l10n.rowing,
+    'nordic_skiing' => context.l10n.sportSkiErg,
     'elliptical' => context.l10n.sportElliptical,
     'stair_climbing' => context.l10n.sportStairClimber,
     _ => context.l10n.running,
@@ -309,6 +316,8 @@ class _ManualActivityState extends ConsumerState<ManualActivitySheet> {
         if (withHr && !withEcg) await recorder.connectHeartRate(hrDevice!);
         await recorder.start(
           session: session,
+          // Chosen before: a SkiErg on any PM5 firmware saves as skiing.
+          activityType: type == 'nordic_skiing' ? type : null,
           ecgDevice: withEcg ? device : null,
           includeBloodPressure: withBp,
         );

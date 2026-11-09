@@ -6399,6 +6399,12 @@ class AppLocalizationsSk extends AppLocalizations {
       'Potiahni panel alebo trasu a presuň ich. Fotku priblíž dvoma prstami a posuň; dvojité ťuknutie ju vráti.';
 
   @override
+  String get shareGymPhoto => 'Fotka z posilňovne';
+
+  @override
+  String get shareWithoutPhoto => 'Bez fotky';
+
+  @override
   String get shareStyleGlass => 'Sklo';
 
   @override
@@ -8264,4 +8270,7 @@ class AppLocalizationsSk extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get sportSkiErg => 'SkiErg (bežky indoor)';
 }

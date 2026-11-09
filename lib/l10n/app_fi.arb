@@ -3398,6 +3398,8 @@
   "backupWithoutVideos": "Ilman videoita",
   "mediaShareCard": "Jaa korttina",
   "mediaShareCardHint": "Siirrä paneelia tai reittiä vetämällä. Nipistä ja vedä kuvaa rajataksesi sen; kaksoisnapautus palauttaa.",
+  "shareGymPhoto": "Kuntosalikuva",
+  "shareWithoutPhoto": "Ilman kuvaa",
   "shareStyleGlass": "Lasi",
   "shareStylePoster": "Juliste",
   "shareStyleMinimal": "Minimal",
@@ -3923,5 +3925,6 @@
   "coachMemoryBodyHint": "esim. Alamäkijuoksu on sattunut keväästä asti. Ylämäki on ok.",
   "coachMemoryEmpty": "Ei vielä kortteja. Tee ensimmäinen 🔥",
   "coachMemoryDeleteQuestion": "Poistetaanko tämä kortti?",
-  "coachMemoryCount": "{count, plural, =0{Ei kortteja} one{1 kortti valmentajasi muistissa} other{{count} korttia valmentajasi muistissa}}"
+  "coachMemoryCount": "{count, plural, =0{Ei kortteja} one{1 kortti valmentajasi muistissa} other{{count} korttia valmentajasi muistissa}}",
+  "sportSkiErg": "SkiErg (hiihto sisällä)"
 }

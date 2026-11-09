@@ -140,6 +140,10 @@ class ActivityDetailSheet extends ConsumerWidget {
       ascentMeters: a.elevationGain,
       avgHeartRate: a.avgHeartRate,
       sport: a.type,
+      indoor:
+          a.type.toLowerCase().contains('indoor') ||
+          ({'ftms', 'manual_recording'}.contains(activity.source) &&
+              a.route.isEmpty),
       route: strength ? const [] : routePoints,
     );
     void openMedia(int index) => Navigator.of(context).push(
@@ -239,7 +243,7 @@ class ActivityDetailSheet extends ConsumerWidget {
                   ref,
                   activity: activity,
                   shareCard: () async {
-                    // The activity's photos to choose from; the route without.
+                    // Indoor rowing also offers the bundled gym background.
                     final service = ref.read(mediaServiceProvider);
                     final photos = [
                       for (final item in media)

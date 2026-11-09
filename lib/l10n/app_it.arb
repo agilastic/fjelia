@@ -3398,6 +3398,8 @@
   "backupWithoutVideos": "Senza video",
   "mediaShareCard": "Condividi come scheda",
   "mediaShareCardHint": "Trascina il riquadro o il percorso per spostarli. Pizzica e trascina la foto per inquadrarla; doppio tocco per ripristinarla.",
+  "shareGymPhoto": "Foto della palestra",
+  "shareWithoutPhoto": "Senza foto",
   "shareStyleGlass": "Vetro",
   "shareStylePoster": "Poster",
   "shareStyleMinimal": "Minimal",
@@ -3923,5 +3925,6 @@
   "coachMemoryBodyHint": "es. Correre in discesa fa male dalla primavera. In salita va bene.",
   "coachMemoryEmpty": "Ancora nessuna card. Crea la prima 🔥",
   "coachMemoryDeleteQuestion": "Eliminare questa card?",
-  "coachMemoryCount": "{count, plural, =0{Nessuna card} one{1 card nella testa del tuo coach} other{{count} card nella testa del tuo coach}}"
+  "coachMemoryCount": "{count, plural, =0{Nessuna card} one{1 card nella testa del tuo coach} other{{count} card nella testa del tuo coach}}",
+  "sportSkiErg": "SkiErg (sci di fondo indoor)"
 }

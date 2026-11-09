@@ -6438,6 +6438,12 @@ class AppLocalizationsFr extends AppLocalizations {
       'Faites glisser le panneau ou le parcours pour les déplacer. Pincez et faites glisser la photo pour la cadrer ; touchez deux fois pour réinitialiser.';
 
   @override
+  String get shareGymPhoto => 'Photo de salle';
+
+  @override
+  String get shareWithoutPhoto => 'Sans photo';
+
+  @override
   String get shareStyleGlass => 'Verre';
 
   @override
@@ -8304,4 +8310,7 @@ class AppLocalizationsFr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get sportSkiErg => 'SkiErg (ski de fond en salle)';
 }

@@ -6378,6 +6378,12 @@ class AppLocalizationsDa extends AppLocalizations {
       'Træk feltet eller ruten for at flytte dem. Knib og træk billedet for at beskære det; dobbelttryk nulstiller.';
 
   @override
+  String get shareGymPhoto => 'Foto fra fitnesscenter';
+
+  @override
+  String get shareWithoutPhoto => 'Uden foto';
+
+  @override
   String get shareStyleGlass => 'Glas';
 
   @override
@@ -8228,4 +8234,7 @@ class AppLocalizationsDa extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get sportSkiErg => 'SkiErg (langrend indendørs)';
 }

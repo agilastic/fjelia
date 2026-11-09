@@ -65,7 +65,9 @@ class _Treadmill extends FtmsDeviceService {
   Stream<String> get status => statuses.stream;
   @override
   Future<void> connect(TrainingDevice device, {FtmsMachine? preferred}) async {
-    machine = FtmsMachine.treadmill;
+    // A PM5 with old firmware: a rower whose erg type is unknown.
+    concept2 = device.name.startsWith('PM5');
+    machine = concept2 ? FtmsMachine.rower : FtmsMachine.treadmill;
   }
 
   @override
@@ -214,6 +216,23 @@ void main() {
       expect(recordings.every((r) => r.activityId == id), isTrue);
     },
   );
+  test('a SkiErg chosen before saves as Nordic skiing on any PM5', () async {
+    const pm5 = TrainingDevice(id: 'pm5', name: 'PM5 430000000');
+    await recorder.connect(pm5, preferred: FtmsMachine.rower);
+    await recorder.start(activityType: 'nordic_skiing');
+    final capture = container.read(indoorRecorderProvider).capture!;
+    expect(capture.activityType, 'nordic_skiing');
+    expect(capture.dataProtocol, 'concept2');
+    expect(capture.name, 'SkiErg (Fjelia)');
+    treadmills.single.data.add({'pace_500m': 130, 'machine_distance': 100});
+    treadmills.single.data.add({'pace_500m': 130, 'machine_distance': 350});
+    await Future<void>.delayed(const Duration(milliseconds: 1100));
+    final id = await recorder.finish();
+    final activity = await db.getActivityById(id!);
+    expect(activity!.type, 'nordic_skiing');
+    expect(activity.distanceMeters, 250);
+  });
+
   test('pause and resume create ECG segments for one activity', () async {
     await recorder.startManual(
       type: 'treadmill_running',

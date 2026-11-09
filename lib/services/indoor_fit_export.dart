@@ -43,6 +43,8 @@ Uint8List indoorFit(
           'walking' => fit.Sport.walking,
           _ => fit.Sport.running,
         }
+      : capture.activityType == 'nordic_skiing'
+      ? fit.Sport.crossCountrySkiing
       : switch (capture.machine) {
           FtmsMachine.bike => fit.Sport.cycling,
           FtmsMachine.treadmill => fit.Sport.running,
@@ -52,6 +54,8 @@ Uint8List indoorFit(
   final subSport =
       capture.isManual && capture.activityType != 'treadmill_running'
       ? fit.SubSport.generic
+      : capture.activityType == 'nordic_skiing'
+      ? fit.SubSport.indoorSkiing
       : switch (capture.machine) {
           FtmsMachine.bike => fit.SubSport.indoorCycling,
           FtmsMachine.treadmill => fit.SubSport.treadmill,

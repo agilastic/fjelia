@@ -6423,6 +6423,12 @@ class AppLocalizationsCa extends AppLocalizations {
       'Arrossega el quadre o la ruta per moure’ls. Pessiga i arrossega la foto per enquadrar-la; toca dues vegades per restablir-la.';
 
   @override
+  String get shareGymPhoto => 'Foto del gimnàs';
+
+  @override
+  String get shareWithoutPhoto => 'Sense foto';
+
+  @override
   String get shareStyleGlass => 'Vidre';
 
   @override
@@ -8288,4 +8294,7 @@ class AppLocalizationsCa extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get sportSkiErg => 'SkiErg (esquí de fons indoor)';
 }

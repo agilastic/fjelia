@@ -206,9 +206,13 @@ Further details:
   the PM5's default of 500 ms stays.
 - **Multiplexed records:** A PM5 that offers only the multiplexed
   characteristic (`0x0080`) is read from it.
-- **Machine type:** A BikeErg (erg type 192–207) records as a bike. A RowErg,
-  a SkiErg and an unknown erg record as a rower. Firmware before V150 cannot
-  name the erg, so it records as a rower.
+- **Machine type:** A BikeErg (erg type 192–207) records as a bike. A SkiErg
+  (erg type 128, 143, or 225 in a multi-erg workout) uses the rowing display,
+  since it also gives pace per 500 m and strokes, but saves as Nordic skiing
+  (`nordic_skiing`, FIT cross-country skiing / indoor skiing). A RowErg and
+  an unknown erg record as a rower. Firmware before V150 cannot name the
+  erg; choosing *SkiErg* as the sport before connecting saves the session
+  as Nordic skiing on any firmware. A planned Nordic session preselects it.
 - **No control:** Fjelia does not control a PM5. Programming workouts over
   CSAFE is not built.
 

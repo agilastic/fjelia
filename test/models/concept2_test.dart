@@ -156,6 +156,15 @@ void main() {
     expect(concept2Machine(192), FtmsMachine.bike);
   });
 
+  test('a SkiErg is Nordic skiing, a RowErg keeps its own activity', () {
+    for (final ski in [128, 143, 225]) {
+      expect(concept2ActivityType(ski), 'nordic_skiing');
+    }
+    expect(concept2ActivityType(0), isNull);
+    expect(concept2ActivityType(null), isNull);
+    expect(concept2ActivityType(192), isNull);
+  });
+
   TrainingBleReport report({required bool ftms}) => TrainingBleReport(
     device: const TrainingDevice(id: 'pm5', name: 'PM5 430000000', rssi: -60),
     services: [
