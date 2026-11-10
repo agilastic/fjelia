@@ -4010,5 +4010,15 @@
   "revisionAlternative": "Vaihtoehto",
   "revisionTakeAlternative": "Ota tämä sen sijaan",
   "proposalForDay": "Ehdotus: {day}",
-  "proposalDayTomorrow": "huomenna"
+  "proposalDayTomorrow": "huomenna",
+  "feelingQuestion": "Miltä tänään tuntuu?",
+  "feelingGood": "Hyvältä",
+  "feelingTired": "Väsynyt",
+  "feelingSore": "Lihaskipua",
+  "feelingIll": "Sairas",
+  "feelingShort": "Vähän aikaa",
+  "feelingAsking": "Valmentaja miettii uudelleen…",
+  "proSwitchTitle": "Vaihdetaanko ProAI:hin?",
+  "proSwitchBody": "FjeliaPro-tilauksesi on voimassa. Käyttääkö valmentaja tästä lähtien ProAI:ta palvelun {provider} sijaan?",
+  "proAiRouting": "Valmentaja ja päivittäiset ehdotukset käyttävät ProAI:ta; kisasuunnitelma ja kausianalyysi käyttävät itsestään suurempaa ProAI-deepiä."
 }

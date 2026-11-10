@@ -4010,5 +4010,15 @@
   "revisionAlternative": "Alternativa",
   "revisionTakeAlternative": "Acceptar això en lloc",
   "proposalForDay": "Proposta per a {day}",
-  "proposalDayTomorrow": "demà"
+  "proposalDayTomorrow": "demà",
+  "feelingQuestion": "Com et trobes avui?",
+  "feelingGood": "Bé",
+  "feelingTired": "Cansat",
+  "feelingSore": "Adolorit",
+  "feelingIll": "Malalt",
+  "feelingShort": "Poc temps",
+  "feelingAsking": "El coach hi torna a pensar…",
+  "proSwitchTitle": "Passar a ProAI?",
+  "proSwitchBody": "La teva subscripció FjeliaPro està activa. Vols que el coach faci servir ProAI a partir d'ara en lloc de {provider}?",
+  "proAiRouting": "El coach i les propostes diàries fan servir ProAI; el pla de cursa i l'anàlisi de temporada fan servir ProAI-deep automàticament."
 }

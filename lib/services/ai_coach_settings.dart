@@ -58,7 +58,10 @@ extension AiProviderLabel on AiProvider {
     AiProvider.deepseek => const ['deepseek-chat', 'deepseek-reasoner'],
     AiProvider.appleIntelligence => const ['on-device'],
     AiProvider.localQwen => const [localQwenModelId, localQwen4bModelId],
-    AiProvider.freeAi => const ['default'],
+    // `ProAI` only answers with an active FjeliaPro subscription; without it
+    // Free AI uses `default`. ProAI-deep is never chosen: the race plan and
+    // the season analysis take it by themselves.
+    AiProvider.freeAi => const ['default', 'ProAI'],
   };
 
   String get defaultModel => switch (this) {

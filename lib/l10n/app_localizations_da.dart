@@ -8522,4 +8522,37 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get proposalDayTomorrow => 'i morgen';
+
+  @override
+  String get feelingQuestion => 'Hvordan har du det i dag?';
+
+  @override
+  String get feelingGood => 'Godt';
+
+  @override
+  String get feelingTired => 'Træt';
+
+  @override
+  String get feelingSore => 'Øm';
+
+  @override
+  String get feelingIll => 'Syg';
+
+  @override
+  String get feelingShort => 'Lidt tid';
+
+  @override
+  String get feelingAsking => 'Coachen tænker igen…';
+
+  @override
+  String get proSwitchTitle => 'Skift til ProAI?';
+
+  @override
+  String proSwitchBody(String provider) {
+    return 'Dit FjeliaPro-abonnement er aktivt. Skal coachen bruge ProAI fra nu af i stedet for $provider?';
+  }
+
+  @override
+  String get proAiRouting =>
+      'Coachen og de daglige forslag bruger ProAI; løbsplanen og sæsonanalysen bruger selv den større ProAI-deep.';
 }

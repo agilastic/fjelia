@@ -4010,5 +4010,15 @@
   "revisionAlternative": "Alternativ",
   "revisionTakeAlternative": "Brug dette i stedet",
   "proposalForDay": "Forslag for {day}",
-  "proposalDayTomorrow": "i morgen"
+  "proposalDayTomorrow": "i morgen",
+  "feelingQuestion": "Hvordan har du det i dag?",
+  "feelingGood": "Godt",
+  "feelingTired": "Træt",
+  "feelingSore": "Øm",
+  "feelingIll": "Syg",
+  "feelingShort": "Lidt tid",
+  "feelingAsking": "Coachen tænker igen…",
+  "proSwitchTitle": "Skift til ProAI?",
+  "proSwitchBody": "Dit FjeliaPro-abonnement er aktivt. Skal coachen bruge ProAI fra nu af i stedet for {provider}?",
+  "proAiRouting": "Coachen og de daglige forslag bruger ProAI; løbsplanen og sæsonanalysen bruger selv den større ProAI-deep."
 }

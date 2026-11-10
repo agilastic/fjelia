@@ -8574,4 +8574,37 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get proposalDayTomorrow => 'domani';
+
+  @override
+  String get feelingQuestion => 'Come ti senti oggi?';
+
+  @override
+  String get feelingGood => 'Bene';
+
+  @override
+  String get feelingTired => 'Stanco';
+
+  @override
+  String get feelingSore => 'Indolenzito';
+
+  @override
+  String get feelingIll => 'Malato';
+
+  @override
+  String get feelingShort => 'Poco tempo';
+
+  @override
+  String get feelingAsking => 'Il coach ci ripensa…';
+
+  @override
+  String get proSwitchTitle => 'Passare a ProAI?';
+
+  @override
+  String proSwitchBody(String provider) {
+    return 'Il tuo abbonamento FjeliaPro è attivo. Il coach deve usare ProAI d\'ora in poi invece di $provider?';
+  }
+
+  @override
+  String get proAiRouting =>
+      'Il coach e le proposte giornaliere usano ProAI; il piano gara e l\'analisi della stagione usano da soli il modello più grande ProAI-deep.';
 }

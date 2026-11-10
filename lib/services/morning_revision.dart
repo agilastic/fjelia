@@ -5,7 +5,8 @@ import 'package:drift/drift.dart';
 
 import '../db/database.dart';
 import '../models/strength_workout.dart';
-import 'missed_workout_planner.dart' show SessionWeight, weightOf;
+import 'missed_workout_planner.dart'
+    show SessionWeight, hasIndoorAlternative, weightOf;
 import 'strength/strength_repository.dart';
 import 'workout_semantics.dart';
 
@@ -63,9 +64,13 @@ class RevisionChange {
     this.steps,
     this.exercises,
     this.why,
+    this.indoor,
   });
   final RevisionOp op;
   final String sessionId;
+
+  /// Do it indoors (treadmill, trainer) instead, e.g. for the weather.
+  final bool? indoor;
 
   /// The coach's reason for this session, one short sentence.
   final String? why;
@@ -111,8 +116,33 @@ class RevisionContext {
     this.strengthPlans = const {},
     this.readinessLevel = 'yellow',
     this.reason = '',
+    this.races = const [],
+    this.weather = const {},
+    this.hoursPerWeek,
+    this.trainingDaysPerWeek,
+    this.onWatch = const {},
+    this.feeling,
     DateTime? today,
   }) : realToday = today ?? DateTime.now();
+
+  /// Race goals from [day] on: date, priority (A/B/C) and sport; names stay
+  /// out of the context.
+  final List<({DateTime date, String priority, String sport})> races;
+
+  /// The forecast by day (midnight): rain from 7 to 20 h, the day's high.
+  final Map<DateTime, ({bool rain, double? maxC})> weather;
+
+  /// Settings → Training: the weekly time and the training days.
+  final double? hoursPerWeek;
+  final int? trainingDaysPerWeek;
+
+  /// Sessions already on a watch or platform: changed, they need sending
+  /// again.
+  final Set<String> onWatch;
+
+  /// What the athlete says about today (good, tired, sore, ill, short on
+  /// time); null when not said.
+  final String? feeling;
 
   final DateTime day;
 
@@ -207,8 +237,11 @@ String revisionInputJson(RevisionContext c) {
     'zone': s.primaryZone,
     'min': s.plannedDurationMin,
     'hard': weightOf(s) == SessionWeight.hard,
+    'phase': s.phase,
+    if (s.status == 'adapted') 'status': 'adapted',
     if (s.locked) 'locked': true,
     if (s.indoor) 'indoor': true,
+    if (hasIndoorAlternative(s)) 'can_go_indoor': true,
     'title': s.title,
     if (detail && !isStrengthSession(s)) 'steps': stepsOf(s),
     if (detail && isStrengthSession(s))
@@ -241,10 +274,38 @@ String revisionInputJson(RevisionContext c) {
       for (final s in c.week)
         if (_open(s) && s.sessionDate.isAfter(c.nextDay)) session(s),
     ],
+    if (c.feeling != null) 'athlete_says': c.feeling,
+    if (c.races.isNotEmpty)
+      'races': [
+        for (final r in c.races.take(4))
+          {
+            'date': _date(r.date),
+            'priority': r.priority,
+            'sport': r.sport,
+            'days_from_day': DateTime(
+              r.date.year,
+              r.date.month,
+              r.date.day,
+            ).difference(c.day).inDays,
+          },
+      ],
+    if (c.weather.isNotEmpty)
+      'weather': [
+        for (final e in c.weather.entries)
+          if (!e.key.isBefore(c.day))
+            {
+              'date': _date(e.key),
+              'rain': e.value.rain,
+              if (e.value.maxC != null) 'max_c': e.value.maxC!.round(),
+            },
+      ],
     'settings': {
       'rest_weekdays': c.restWeekdays,
       'strength_weekdays': c.strengthWeekdays,
       'max_sessions_per_day': c.maxPerDay,
+      if (c.hoursPerWeek != null) 'hours_per_week': c.hoursPerWeek,
+      if (c.trainingDaysPerWeek != null)
+        'training_days_per_week': c.trainingDaysPerWeek,
     },
   });
 }
@@ -333,6 +394,7 @@ MorningRevision? _revisionOf(Map j) {
             sessionId: id,
             withId: c['with'] as String,
             why: why,
+            indoor: c['indoor'] is bool ? c['indoor'] as bool : null,
           ),
         );
       case 'revise':
@@ -367,7 +429,8 @@ MorningRevision? _revisionOf(Map j) {
             ),
           );
         }
-        if (items.isEmpty && exercises.isEmpty) return null;
+        final indoor = c['indoor'] is bool ? c['indoor'] as bool : null;
+        if (items.isEmpty && exercises.isEmpty && indoor != true) return null;
         changes.add(
           RevisionChange(
             op: RevisionOp.revise,
@@ -375,6 +438,7 @@ MorningRevision? _revisionOf(Map j) {
             steps: items.isEmpty ? null : items,
             exercises: exercises.isEmpty ? null : exercises,
             why: why,
+            indoor: indoor,
           ),
         );
       default:
@@ -382,6 +446,40 @@ MorningRevision? _revisionOf(Map j) {
     }
   }
   return MorningRevision(title: title, body: body, changes: changes);
+}
+
+/// Whether [ch] changes too little to bother the athlete: an endurance
+/// session less than 5 % shorter with no lower zone, or strength targets
+/// that only lose a few percent of the load. Such a change counts as keep.
+bool _tooSmall(RevisionChange ch, RevisionContext c) {
+  if (ch.op != RevisionOp.revise || (ch.indoor ?? false)) return false;
+  final s = c.byId(ch.sessionId);
+  if (s == null) return false;
+  if (ch.steps != null) {
+    final before = WorkoutSemantics.of(s.stepsJson, sport: s.sport);
+    final after = WorkoutSemantics.of(
+      revisionStepsJson(ch.steps!),
+      sport: s.sport,
+    );
+    final planned = before.isEmpty
+        ? s.plannedDurationMin * 60.0
+        : before.totalSeconds;
+    if (planned <= 0) return false;
+    final shorter = (planned - after.totalSeconds) / planned;
+    final planZone = before.isEmpty ? s.primaryZone : _maxZone(before);
+    final easier = _maxZone(after) < planZone;
+    return shorter < .05 && !easier;
+  }
+  if (ch.exercises != null) {
+    return ch.exercises!.every(
+      (e) =>
+          !e.drop &&
+          e.sets == null &&
+          e.reps == null &&
+          (e.loadPercent == null || e.loadPercent! >= 95),
+    );
+  }
+  return false;
 }
 
 /// [r] as it may be shown: null when its own changes fail a check (see
@@ -397,7 +495,14 @@ MorningRevision? checkedRevision(
     final day = {for (final s in c.focus) s.id};
     final kept = [
       for (final ch in x.changes)
-        if (ch.op != RevisionOp.keep || day.contains(ch.sessionId)) ch,
+        if (ch.op != RevisionOp.keep || day.contains(ch.sessionId))
+          _tooSmall(ch, c)
+              ? RevisionChange(
+                  op: RevisionOp.keep,
+                  sessionId: ch.sessionId,
+                  why: ch.why,
+                )
+              : ch,
     ];
     return MorningRevision(
       title: x.title,
@@ -475,6 +580,17 @@ String? revisionProblem(MorningRevision r, RevisionContext c) {
     // A session the athlete fixed stays as it is.
     if (s.locked && x.op != RevisionOp.keep) return 'locked ${s.id}';
     if (!touched.add(s.id)) return 'session changed twice';
+    if ((x.indoor ?? false) && !hasIndoorAlternative(s)) {
+      return 'no indoor form ${s.id}';
+    }
+    // A key, long or test session is the week's backbone: only red
+    // readiness takes it out completely.
+    if (x.op == RevisionOp.rest &&
+        weightOf(s) == SessionWeight.hard &&
+        c.readinessLevel != 'red' &&
+        c.feeling != 'ill') {
+      return 'key session dropped without red readiness';
+    }
     switch (x.op) {
       case RevisionOp.keep:
         break;
@@ -608,6 +724,119 @@ String? revisionProblem(MorningRevision r, RevisionContext c) {
       }
     }
   }
+
+  // Strength the day before a key or long session takes the legs: no new
+  // such pair.
+  bool strengthBeforeHard(DateTime d, bool after) {
+    DateTime on(TrainingSession s) => after ? dayOf[s.id]! : s.sessionDate;
+    final next = DateTime(d.year, d.month, d.day + 1);
+    final live = [
+      for (final s in c.week)
+        if (_open(s) && !(after && gone.contains(s.id))) s,
+    ];
+    return live.any((s) => isStrengthSession(s) && _sameDay(on(s), d)) &&
+        live.any(
+          (s) =>
+              !isStrengthSession(s) &&
+              weightOf(s) == SessionWeight.hard &&
+              _sameDay(on(s), next),
+        );
+  }
+
+  for (final d in {
+    ...days,
+    for (final d in days) d.subtract(const Duration(days: 1)),
+  }) {
+    if (strengthBeforeHard(d, true) && !strengthBeforeHard(d, false)) {
+      return 'strength the day before a key session';
+    }
+  }
+
+  // Races: no hard session newly in the two days before an A or B race.
+  for (final race in c.races) {
+    if (race.priority.toUpperCase() == 'C') continue;
+    final rd = DateTime(race.date.year, race.date.month, race.date.day);
+    for (final s in c.week) {
+      if (!_open(s) || gone.contains(s.id)) continue;
+      if (weightOf(s) != SessionWeight.hard) continue;
+      final to = dayOf[s.id]!;
+      final gap = rd.difference(DateTime(to.year, to.month, to.day)).inDays;
+      final was = rd
+          .difference(
+            DateTime(
+              s.sessionDate.year,
+              s.sessionDate.month,
+              s.sessionDate.day,
+            ),
+          )
+          .inDays;
+      if (gap >= 0 && gap <= 2 && !(was >= 0 && was <= 2)) {
+        return 'hard session moved next to a race';
+      }
+    }
+  }
+
+  // Weather: an outdoor session moved onto a rainy day goes inside, when it
+  // can.
+  for (final x in r.changes.where((x) => x.op == RevisionOp.swap)) {
+    for (final id in [x.sessionId, x.withId!]) {
+      final s = c.byId(id)!;
+      final to = dayOf[id]!;
+      final rain = c.weather[DateTime(to.year, to.month, to.day)]?.rain;
+      final wasRain = c
+          .weather[DateTime(
+            s.sessionDate.year,
+            s.sessionDate.month,
+            s.sessionDate.day,
+          )]
+          ?.rain;
+      final inside = s.indoor || (id == x.sessionId && (x.indoor ?? false));
+      if ((rain ?? false) &&
+          !(wasRain ?? false) &&
+          !inside &&
+          hasIndoorAlternative(s)) {
+        return 'moved outdoors onto a rain day';
+      }
+    }
+  }
+
+  // Settings → Training: the weekly hours and training days, never more
+  // than before where the plan already uses them up.
+  DateTime monday(DateTime d) =>
+      DateTime(d.year, d.month, d.day - d.weekday + 1);
+  final weeks = {for (final d in days) monday(d)};
+  for (final w in weeks) {
+    bool inWeek(DateTime d) =>
+        !d.isBefore(w) && d.isBefore(w.add(const Duration(days: 7)));
+    var minutesBefore = 0, minutesAfter = 0;
+    final daysBefore = <DateTime>{}, daysAfter = <DateTime>{};
+    for (final s in c.week) {
+      if (!_open(s)) continue;
+      if (inWeek(s.sessionDate)) {
+        minutesBefore += s.plannedDurationMin;
+        daysBefore.add(
+          DateTime(s.sessionDate.year, s.sessionDate.month, s.sessionDate.day),
+        );
+      }
+      final to = dayOf[s.id]!;
+      if (!gone.contains(s.id) && inWeek(to)) {
+        minutesAfter += s.plannedDurationMin;
+        daysAfter.add(DateTime(to.year, to.month, to.day));
+      }
+    }
+    final hours = c.hoursPerWeek;
+    if (hours != null &&
+        minutesAfter > hours * 60 &&
+        minutesAfter > minutesBefore) {
+      return 'over the weekly hours';
+    }
+    final trainingDays = c.trainingDaysPerWeek;
+    if (trainingDays != null &&
+        daysAfter.length > trainingDays &&
+        daysAfter.length > daysBefore.length) {
+      return 'more training days than set';
+    }
+  }
   return null;
 }
 
@@ -639,7 +868,12 @@ Future<void> applyMorningRevision(
           await (db.update(
             db.trainingSessions,
           )..where((t) => t.id.equals(s.id))).write(
-            TrainingSessionsCompanion(sessionDate: Value(other.sessionDate)),
+            TrainingSessionsCompanion(
+              sessionDate: Value(other.sessionDate),
+              indoor: x.indoor == true
+                  ? const Value(true)
+                  : const Value.absent(),
+            ),
           );
           await (db.update(
             db.trainingSessions,
@@ -648,6 +882,16 @@ Future<void> applyMorningRevision(
           );
         });
       case RevisionOp.revise:
+        if (x.indoor == true) {
+          await (db.update(
+            db.trainingSessions,
+          )..where((t) => t.id.equals(s.id))).write(
+            const TrainingSessionsCompanion(
+              indoor: Value(true),
+              adaptationTrigger: Value('coach_morning'),
+            ),
+          );
+        }
         if (x.steps != null) {
           final json = revisionStepsJson(x.steps!);
           final w = WorkoutSemantics.of(json, sport: s.sport);

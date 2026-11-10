@@ -8556,4 +8556,37 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get proposalDayTomorrow => 'huomenna';
+
+  @override
+  String get feelingQuestion => 'Miltä tänään tuntuu?';
+
+  @override
+  String get feelingGood => 'Hyvältä';
+
+  @override
+  String get feelingTired => 'Väsynyt';
+
+  @override
+  String get feelingSore => 'Lihaskipua';
+
+  @override
+  String get feelingIll => 'Sairas';
+
+  @override
+  String get feelingShort => 'Vähän aikaa';
+
+  @override
+  String get feelingAsking => 'Valmentaja miettii uudelleen…';
+
+  @override
+  String get proSwitchTitle => 'Vaihdetaanko ProAI:hin?';
+
+  @override
+  String proSwitchBody(String provider) {
+    return 'FjeliaPro-tilauksesi on voimassa. Käyttääkö valmentaja tästä lähtien ProAI:ta palvelun $provider sijaan?';
+  }
+
+  @override
+  String get proAiRouting =>
+      'Valmentaja ja päivittäiset ehdotukset käyttävät ProAI:ta; kisasuunnitelma ja kausianalyysi käyttävät itsestään suurempaa ProAI-deepiä.';
 }

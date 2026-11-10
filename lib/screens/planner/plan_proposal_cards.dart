@@ -6,7 +6,7 @@ import '../../l10n/formats.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../providers/plan_proposal_provider.dart';
 import '../../providers/plan_week_provider.dart' show PlanWeekItem;
-import '../../providers/fjelia_edition_provider.dart';
+import '../../providers/fjelia_pro_provider.dart' show proSubscribedProvider;
 import '../../providers/readiness_provider.dart';
 import 'coach_revision_view.dart';
 import '../../providers/sync_provider.dart';
@@ -71,7 +71,7 @@ class ReadinessProposalSheet extends ConsumerWidget {
             RulesProposalView(
               proposal: proposal,
               coachUnavailable:
-                  ref.watch(fjeliaEditionProvider).isPro &&
+                  ref.watch(proSubscribedProvider) &&
                   (ref.watch(proposalProCoachProvider).valueOrNull ?? true),
               onDone: () => Navigator.of(context).pop(),
             )

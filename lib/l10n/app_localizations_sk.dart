@@ -8560,4 +8560,37 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get proposalDayTomorrow => 'zajtra';
+
+  @override
+  String get feelingQuestion => 'Ako sa dnes cítiš?';
+
+  @override
+  String get feelingGood => 'Dobre';
+
+  @override
+  String get feelingTired => 'Unavený';
+
+  @override
+  String get feelingSore => 'Svalovica';
+
+  @override
+  String get feelingIll => 'Chorý';
+
+  @override
+  String get feelingShort => 'Málo času';
+
+  @override
+  String get feelingAsking => 'Kouč premýšľa znova…';
+
+  @override
+  String get proSwitchTitle => 'Prepnúť na ProAI?';
+
+  @override
+  String proSwitchBody(String provider) {
+    return 'Tvoje predplatné FjeliaPro je aktívne. Má kouč odteraz používať ProAI namiesto $provider?';
+  }
+
+  @override
+  String get proAiRouting =>
+      'Kouč a denné návrhy používajú ProAI; plán pretekov a analýza sezóny používajú samy väčší ProAI-deep.';
 }

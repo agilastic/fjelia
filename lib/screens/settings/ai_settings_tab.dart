@@ -1,17 +1,17 @@
+import '../../config/fjelia_pro.dart';
 import '../../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../providers/fjelia_pro_provider.dart';
 import '../../providers/ai_coach_provider.dart';
-import '../../providers/coach_memory_provider.dart';
 import '../../providers/fjelia_edition_provider.dart';
 import '../../config/free_ai.dart';
 import '../../providers/local_model_provider.dart';
 import '../../services/ai_coach_settings.dart';
 import '../../services/local_model_catalog.dart';
 import '../../widgets/app_widgets.dart';
-import '../ai_coach/coach_memories_screen.dart';
 import 'bug_report_sheet.dart';
 import 'fjelia_pro_sheet.dart';
 import 'local_model_panel.dart';
@@ -29,6 +29,7 @@ class AiSettingsTab extends ConsumerWidget {
           data: (s) {
             final n = ref.read(aiCoachSettingsProvider.notifier);
             final edition = ref.watch(fjeliaEditionProvider);
+            final subscribed = ref.watch(proSubscribedProvider);
             final supports4b =
                 s.provider == AiProvider.localQwen &&
                 ref.watch(
@@ -57,8 +58,23 @@ class AiSettingsTab extends ConsumerWidget {
                 Wrap(
                   spacing: 8,
                   children: [
+                    // With an active subscription Fjelia AI is ProAI; the
+                    // larger ProAI-deep is taken by itself for the race plan
+                    // and the season, never chosen here.
+                    ChoiceChip(
+                      key: const ValueKey('provider-fjelia'),
+                      label: Text(
+                        subscribed ? 'ProAI / ProAI-deep' : context.l10n.freeAi,
+                      ),
+                      selected: s.provider == AiProvider.freeAi,
+                      onSelected: (_) => runUiAction(context, () async {
+                        if (s.provider != AiProvider.freeAi) {
+                          await n.setProvider(AiProvider.freeAi);
+                        }
+                        await n.setModel(subscribed ? proAiModel : 'default');
+                      }),
+                    ),
                     for (final p in [
-                      AiProvider.freeAi,
                       AiProvider.appleIntelligence,
                       AiProvider.localQwen,
                       ...AiProvider.values.where((p) => p.requiresUserApiKey),
@@ -133,49 +149,14 @@ class AiSettingsTab extends ConsumerWidget {
                       ],
                     ),
                   ),
-                // FjeliaPro: the athlete's notes that every chat sends along.
-                if (edition.isPro)
+                if (s.provider == AiProvider.freeAi && subscribed)
                   SectionCard(
-                    child: InkWell(
-                      onTap: () =>
-                          showAppSheet(context, const CoachMemoriesScreen()),
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.psychology_alt_rounded,
-                            color: Color(0xFFFF4FD8),
-                            size: 22,
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  context.l10n.coachMemories,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                                ),
-                                Text(
-                                  context.l10n.coachMemoryCount(
-                                    ref
-                                            .watch(coachMemoriesProvider)
-                                            .value
-                                            ?.length ??
-                                        0,
-                                  ),
-                                  style: const TextStyle(fontSize: 12),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const Icon(Icons.chevron_right),
-                        ],
-                      ),
+                    child: Text(
+                      context.l10n.proAiRouting,
+                      style: TextStyle(color: mint, fontSize: 12),
                     ),
                   ),
-                if (s.provider == AiProvider.freeAi)
+                if (s.provider == AiProvider.freeAi && !subscribed)
                   SectionCard(
                     child: Text(
                       s.hasApiKey

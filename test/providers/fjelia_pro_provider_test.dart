@@ -64,17 +64,18 @@ ProAccess access(String id, {Duration left = const Duration(days: 20)}) =>
       checkedAt: now,
     );
 
-PurchaseDetails purchase(String id, PurchaseStatus status) => PurchaseDetails(
-  purchaseID: id,
-  productID: 'fjelia.pro.monthly',
-  verificationData: PurchaseVerificationData(
-    localVerificationData: '',
-    serverVerificationData: '',
-    source: 'app_store',
-  ),
-  transactionDate: null,
-  status: status,
-)..pendingCompletePurchase = true;
+PurchaseDetails purchase(String id, PurchaseStatus status, {String? date}) =>
+    PurchaseDetails(
+      purchaseID: id,
+      productID: 'fjelia.pro.monthly',
+      verificationData: PurchaseVerificationData(
+        localVerificationData: '',
+        serverVerificationData: '',
+        source: 'app_store',
+      ),
+      transactionDate: date,
+      status: status,
+    )..pendingCompletePurchase = true;
 
 void main() {
   late FakeStore store;
@@ -115,6 +116,25 @@ void main() {
     expect(server.asked, ['1001']);
     expect(store.completed, ['1001']);
     expect((await const ProAccessStore().read())!.key, 'sk-pro-1001');
+  });
+
+  test('every renewal at once: only the newest is asked about', () async {
+    container = start();
+    container.read(fjeliaProProvider);
+    server.answer = (id) => ProActive(access(id));
+    store.controller.add([
+      for (final (id, ms) in [
+        ('1001', '1000'),
+        ('1003', '3000'),
+        ('1002', '2000'),
+      ])
+        purchase(id, PurchaseStatus.restored, date: ms),
+    ]);
+    await settle();
+    await settle();
+    expect(server.asked, ['1003']);
+    expect(store.completed.toSet(), {'1001', '1002', '1003'});
+    expect(container.read(fjeliaProProvider).activeAt(now), isTrue);
   });
 
   test('a failed check leaves the purchase unfinished for StoreKit', () async {
@@ -183,7 +203,7 @@ void main() {
   });
 
   group('Fjelia AI with Pro', () {
-    Future<Map> send() async {
+    Future<Map> send({String model = 'default'}) async {
       Map? sent;
       final client = AiCoachClient(
         store: const AiCoachSettingsStore(freeAiApiKey: 'free-key'),
@@ -205,9 +225,9 @@ void main() {
         }),
       );
       await client.send(
-        const AiCoachSettings(
+        AiCoachSettings(
           provider: AiProvider.freeAi,
-          model: 'default',
+          model: model,
           hasApiKey: true,
           enabled: true,
         ),
@@ -290,6 +310,32 @@ void main() {
       );
       expect(reply, 'Easy run today.');
       expect(models, ['ProAI', 'default']);
+    });
+
+    test('a stored ProAI-deep choice still chats on ProAI', () async {
+      container = start();
+      await const ProAccessStore().write(
+        ProAccess(
+          transactionId: '1001',
+          key: 'sk-pro-1001',
+          productId: 'fjelia.pro.monthly',
+          expiresAt: DateTime.now().add(const Duration(days: 10)),
+          checkedAt: DateTime.now(),
+        ),
+      );
+      FjeliaProEntitlement.active = true;
+      final sent = await send(model: 'ProAI-deep');
+      expect(sent['model'], 'ProAI');
+      expect(sent['auth'], 'Bearer sk-pro-1001');
+    });
+
+    test('without a subscription no Pro model is ever asked', () async {
+      container = start();
+      for (final model in ['ProAI', 'ProAI-deep']) {
+        final sent = await send(model: model);
+        expect(sent['model'], 'default');
+        expect(sent['auth'], 'Bearer free-key');
+      }
     });
 
     test('stays on Free AI without Pro', () async {

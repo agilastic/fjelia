@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../l10n/l10n_ext.dart';
-import '../../providers/fjelia_edition_provider.dart';
+import '../../providers/fjelia_pro_provider.dart' show proSubscribedProvider;
 import '../../providers/hrv_reminder_provider.dart';
 import '../../providers/missed_workout_provider.dart';
 import '../../providers/plan_proposal_provider.dart';
@@ -74,7 +74,7 @@ class MissedWorkoutSettingsCard extends ConsumerWidget {
               () => ref.read(askBeforePlanChangesProvider.notifier).set(v),
             ),
           ),
-          if (ref.watch(fjeliaEditionProvider).isPro)
+          if (ref.watch(proSubscribedProvider))
             SwitchListTile(
               key: const ValueKey('proposal-pro-coach'),
               contentPadding: EdgeInsets.zero,

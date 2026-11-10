@@ -133,7 +133,23 @@ class FjeliaProNotifier extends Notifier<ProState> {
 
   Future<void> _onPurchases(List<PurchaseDetails> purchases) async {
     final store = ref.read(proStoreProvider);
+    // A restore or start brings every renewal of the subscription; the
+    // service is asked once, with the newest, the others are only finished.
+    final granted = [
+      for (final p in purchases)
+        if (proProductIds.contains(p.productID) &&
+            (p.status == PurchaseStatus.purchased ||
+                p.status == PurchaseStatus.restored))
+          p,
+    ];
+    int date(PurchaseDetails p) => int.tryParse(p.transactionDate ?? '') ?? 0;
+    granted.sort((a, b) => date(b).compareTo(date(a)));
+    for (final p in granted.skip(1)) {
+      if (p.pendingCompletePurchase) await store.complete(p);
+    }
+    final newest = granted.firstOrNull;
     for (final p in purchases) {
+      if (granted.contains(p) && p != newest) continue;
       if (!proProductIds.contains(p.productID)) continue;
       switch (p.status) {
         case PurchaseStatus.pending:
@@ -175,6 +191,13 @@ class FjeliaProNotifier extends Notifier<ProState> {
     }
   }
 }
+
+/// Whether a FjeliaPro subscription is really active now. ProAI and
+/// ProAI-deep need it; the developer switch FJELIA_PRO only unlocks the
+/// screens.
+final proSubscribedProvider = Provider<bool>(
+  (ref) => ref.watch(fjeliaProProvider).activeAt(ref.read(proClockProvider)()),
+);
 
 /// The subscriptions with their App Store prices, cheapest first.
 final proProductsProvider = FutureProvider.autoDispose<List<ProductDetails>>((

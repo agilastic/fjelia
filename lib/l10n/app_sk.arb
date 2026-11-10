@@ -4010,5 +4010,15 @@
   "revisionAlternative": "Alternatíva",
   "revisionTakeAlternative": "Prevziať radšej toto",
   "proposalForDay": "Návrh na {day}",
-  "proposalDayTomorrow": "zajtra"
+  "proposalDayTomorrow": "zajtra",
+  "feelingQuestion": "Ako sa dnes cítiš?",
+  "feelingGood": "Dobre",
+  "feelingTired": "Unavený",
+  "feelingSore": "Svalovica",
+  "feelingIll": "Chorý",
+  "feelingShort": "Málo času",
+  "feelingAsking": "Kouč premýšľa znova…",
+  "proSwitchTitle": "Prepnúť na ProAI?",
+  "proSwitchBody": "Tvoje predplatné FjeliaPro je aktívne. Má kouč odteraz používať ProAI namiesto {provider}?",
+  "proAiRouting": "Kouč a denné návrhy používajú ProAI; plán pretekov a analýza sezóny používajú samy väčší ProAI-deep."
 }

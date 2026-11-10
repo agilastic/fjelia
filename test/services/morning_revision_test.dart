@@ -504,4 +504,165 @@ Here you go:
     final locked = ctx([run, long.copyWith(locked: true)]);
     expect(revisionProblem(shorter, locked), 'locked w');
   });
+
+  group('the wider checks', () {
+    final hard = s('t', tue, type: 'key', zone: 4, steps: intervals);
+    final easyThu = s('thu', on(4), minutes: 40);
+    MorningRevision swap({bool? indoor}) => rev([
+      RevisionChange(
+        op: RevisionOp.swap,
+        sessionId: 't',
+        withId: 'thu',
+        indoor: indoor,
+      ),
+    ]);
+
+    test('a key session is only rested on red readiness or when ill', () {
+      final rest = rev([
+        const RevisionChange(op: RevisionOp.rest, sessionId: 't'),
+      ]);
+      expect(
+        revisionProblem(rest, ctx([hard])),
+        'key session dropped without red readiness',
+      );
+      final red = RevisionContext(
+        day: tue,
+        week: [hard],
+        restWeekdays: const [],
+        strengthWeekdays: const [],
+        maxPerDay: 1,
+        readinessLevel: 'red',
+      );
+      expect(revisionProblem(rest, red), isNull);
+      final ill = RevisionContext(
+        day: tue,
+        week: [hard],
+        restWeekdays: const [],
+        strengthWeekdays: const [],
+        maxPerDay: 1,
+        feeling: 'ill',
+      );
+      expect(revisionProblem(rest, ill), isNull);
+    });
+
+    test('no hard session newly in the two days before an A race', () {
+      final c = RevisionContext(
+        day: tue,
+        week: [hard, easyThu],
+        restWeekdays: const [],
+        strengthWeekdays: const [],
+        maxPerDay: 1,
+        races: [(date: on(6), priority: 'A', sport: 'running')],
+      );
+      expect(revisionProblem(swap(), c), 'hard session moved next to a race');
+    });
+
+    test('an outdoor session moved onto a rain day must go inside', () {
+      final c = RevisionContext(
+        day: tue,
+        week: [hard, easyThu],
+        restWeekdays: const [],
+        strengthWeekdays: const [],
+        maxPerDay: 1,
+        weather: {tue: (rain: false, maxC: 12), on(4): (rain: true, maxC: 10)},
+      );
+      expect(revisionProblem(swap(), c), 'moved outdoors onto a rain day');
+      expect(revisionProblem(swap(indoor: true), c), isNull);
+    });
+
+    test('not over the weekly hours or training days', () {
+      // Moving Thursday's run to an empty Wednesday adds a training day.
+      final gym = s('g', tue, sport: 'strength', minutes: 30);
+      final wed = s('wed', on(3), minutes: 30);
+      final c = RevisionContext(
+        day: tue,
+        week: [gym, hard, wed],
+        restWeekdays: const [],
+        strengthWeekdays: const [],
+        maxPerDay: 2,
+        trainingDaysPerWeek: 2,
+      );
+      final r = rev([
+        const RevisionChange(
+          op: RevisionOp.swap,
+          sessionId: 'g',
+          withId: 'wed',
+        ),
+      ]);
+      // Swapping keeps two training days: fine.
+      expect(revisionProblem(r, c), isNull);
+    });
+
+    test('strength not the day before a key session', () {
+      final gym = s('g', tue, sport: 'strength', minutes: 30);
+      final easyWed = s('wed', on(3), minutes: 30);
+      final keyThu = s('k', on(4), type: 'key', zone: 4);
+      // Strength to Wednesday lands the day before Thursday's key session.
+      final r = rev([
+        const RevisionChange(
+          op: RevisionOp.swap,
+          sessionId: 'g',
+          withId: 'wed',
+        ),
+      ]);
+      expect(
+        revisionProblem(r, ctx([gym, easyWed, keyThu])),
+        'strength the day before a key session',
+      );
+    });
+
+    test('indoor only where the sport has an indoor form', () {
+      final gym = s('g', tue, sport: 'strength', minutes: 30);
+      final r = rev([
+        const RevisionChange(
+          op: RevisionOp.revise,
+          sessionId: 'g',
+          indoor: true,
+        ),
+      ]);
+      expect(revisionProblem(r, ctx([gym])), 'no indoor form g');
+    });
+  });
+
+  test('a change under 5 % counts as keep', () {
+    // 90 minutes of steady running, the coach takes off one minute.
+    final run = s(
+      'r',
+      tue,
+      minutes: 90,
+      steps: jsonEncode([
+        step('warmup', 600, 1),
+        step('interval', 4200, 2),
+        step('cooldown', 600, 1),
+      ]),
+    );
+    final oneMinute = rev([
+      RevisionChange(
+        op: RevisionOp.revise,
+        sessionId: 'r',
+        steps: [
+          st('warmup', 10, 1),
+          st('interval', 69, 2),
+          st('cooldown', 10, 1),
+        ],
+      ),
+    ]);
+    // Nothing worth showing is left.
+    expect(checkedRevision(oneMinute, ctx([run])), isNull);
+    final tenMinutes = rev([
+      RevisionChange(
+        op: RevisionOp.revise,
+        sessionId: 'r',
+        steps: [
+          st('warmup', 10, 1),
+          st('interval', 60, 2),
+          st('cooldown', 10, 1),
+        ],
+      ),
+    ]);
+    expect(
+      checkedRevision(tenMinutes, ctx([run]))?.changes.single.op,
+      RevisionOp.revise,
+    );
+  });
 }

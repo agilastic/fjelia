@@ -9,7 +9,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'l10n/app_localizations.dart';
 import 'l10n/l10n_ext.dart';
+import 'config/fjelia_pro.dart' show proAiModel;
 import 'providers/activity_file_import_provider.dart';
+import 'providers/ai_coach_provider.dart' show aiCoachSettingsProvider;
+import 'services/ai_coach_settings.dart' show AiProvider;
 import 'providers/auth_provider.dart';
 import 'providers/fjelia_pro_provider.dart';
 import 'providers/locale_provider.dart';
@@ -35,7 +38,7 @@ import 'services/hrv/hrv_post_reminder_coordinator.dart'
     show ActionKind, ActionResult, HrvPostReminderCoordinator;
 import 'screens/strain/activity_detail_sheet.dart';
 import 'widgets/activity_file_import_sheet.dart';
-import 'widgets/app_widgets.dart' show showAppSheet;
+import 'widgets/app_widgets.dart' show confirmAction, showAppSheet;
 import 'widgets/polar_h10_hrv_sheet.dart';
 import 'providers/sync_provider.dart';
 import 'screens/home/home_screen.dart';
@@ -145,6 +148,7 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
       _listenForHealthAccessLost();
       _listenForHealthWorkouts();
       _listenForPlanChanges();
+      _listenForPro();
       _listenForActivityFiles();
       _triggerSync();
       unawaited(_startHrvReminders());
@@ -302,6 +306,45 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
     final context = await _homeContext();
     if (context == null || !context.mounted) return;
     await showAppSheet(context, ReadinessProposalSheet(day: p.day));
+  }
+
+  /// FjeliaPro became active: Free AI turns into ProAI by itself, another
+  /// provider is asked first. When it ends, a Pro model falls back to Free
+  /// AI's own.
+  void _listenForPro() {
+    ref.listenManual<bool>(proSubscribedProvider, (was, now) async {
+      if (was == null || was == now) return;
+      final settings = await ref.read(aiCoachSettingsProvider.future);
+      final notifier = ref.read(aiCoachSettingsProvider.notifier);
+      if (!now) {
+        if (settings.provider == AiProvider.freeAi &&
+            settings.model != 'default') {
+          await notifier.setModel('default');
+        }
+        return;
+      }
+      if (settings.provider == AiProvider.freeAi) {
+        await notifier.setModel(proAiModel);
+        return;
+      }
+      final context = await _homeContext();
+      if (context == null || !context.mounted) return;
+      final l = context.l10n;
+      final provider = switch (settings.provider) {
+        AiProvider.appleIntelligence => l.appleIntelligence,
+        AiProvider.localQwen => l.localQwen,
+        AiProvider.openai => l.openai,
+        final p => p.name[0].toUpperCase() + p.name.substring(1),
+      };
+      if (await confirmAction(
+        context,
+        l.proSwitchTitle,
+        l.proSwitchBody(provider),
+      )) {
+        await notifier.setProvider(AiProvider.freeAi);
+        await notifier.setModel(proAiModel);
+      }
+    });
   }
 
   /// A moved, skipped or newly planned session changes which evenings need

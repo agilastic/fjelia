@@ -1,15 +1,19 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../db/database.dart';
 import '../l10n/formats.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/l10n_ext.dart';
 import '../services/coach_language.dart';
 import '../services/daily_readiness_service.dart';
+import '../services/missed_workout_planner.dart' show isRainyDay;
 import '../services/morning_revision.dart';
+import '../services/open_meteo_client.dart' show OpenMeteoPoint;
 import '../services/plan_week_context.dart';
 import '../services/strength/strength_repository.dart'
     show StoredStrengthPlan, StrengthPlanOwner;
@@ -20,7 +24,8 @@ import '../utils/log.dart';
 import 'ai_coach_provider.dart';
 import 'database_provider.dart';
 import 'day_data_provider.dart' show activityListProvider;
-import 'fjelia_edition_provider.dart';
+import 'fjelia_pro_provider.dart' show proSubscribedProvider;
+import 'heat_acclimation_provider.dart' show heatHourlyWeatherProvider;
 import 'hrv_reminder_provider.dart';
 import 'missed_workout_provider.dart';
 import 'plan_week_provider.dart' show PlanWeekItem, weekStartFor;
@@ -74,7 +79,7 @@ class ProposalProCoachNotifier extends AsyncNotifier<bool> {
 /// Builds what the coach may work with on [day]: the week's sessions, the
 /// strength plans of the day and Settings → Training.
 final revisionContextProvider = Provider(
-  (ref) => (DateTime day, ReadinessResult readiness) async {
+  (ref) => (DateTime day, ReadinessResult readiness, {String? feeling}) async {
     final db = ref.read(databaseProvider);
     final profile = await ref.read(userProfileProvider.future);
     final start = weekStartFor(day, mondayFirst: profile.weekStartsOnMonday);
@@ -117,6 +122,46 @@ final revisionContextProvider = Provider(
         log('[PlanProposal] strength plan ${s.id}: $e');
       }
     }
+    // Race goals ahead, without names.
+    final races =
+        await (db.select(db.raceGoals)
+              ..where(
+                (t) =>
+                    t.athleteId.equals('self') &
+                    t.raceDate.isBiggerOrEqualValue(day),
+              )
+              ..orderBy([(t) => OrderingTerm.asc(t.raceDate)]))
+            .get();
+    // The forecast by day: rain between 7 and 20 h and the day's high.
+    final weather = <DateTime, ({bool rain, double? maxC})>{};
+    try {
+      final hourly = await ref.read(heatHourlyWeatherProvider.future);
+      final hours = [
+        for (final p in hourly?.points ?? const <OpenMeteoPoint>[])
+          (
+            time: p.time,
+            mm: p.precipitationMm,
+            probability: p.precipitationProbability,
+          ),
+      ];
+      final highs = <DateTime, double>{};
+      for (final p in hourly?.points ?? const <OpenMeteoPoint>[]) {
+        final d = DateTime(p.time.year, p.time.month, p.time.day);
+        highs[d] = math.max(highs[d] ?? -100, p.temperatureC);
+      }
+      for (final d in highs.keys) {
+        weather[d] = (rain: isRainyDay(hours, d), maxC: highs[d]);
+      }
+    } catch (e) {
+      log('[PlanProposal] weather: $e');
+    }
+    // Sessions already sent to a watch or platform.
+    final ids = [for (final s in week) s.id];
+    final delivered = ids.isEmpty
+        ? const <WorkoutDelivery>[]
+        : await (db.select(
+            db.workoutDeliveries,
+          )..where((t) => t.sessionId.isIn(ids))).get();
     return RevisionContext(
       day: day,
       week: week,
@@ -126,8 +171,23 @@ final revisionContextProvider = Provider(
       strengthPlans: plans,
       readinessLevel: readiness.level.name,
       reason: readiness.adaptationReason,
+      races: [
+        for (final r in races)
+          (date: r.raceDate, priority: r.priority, sport: r.primarySport),
+      ],
+      weather: weather,
+      hoursPerWeek: profile.hoursPerWeek,
+      trainingDaysPerWeek: profile.trainingDaysPerWeek,
+      onWatch: {for (final d in delivered) d.sessionId},
+      feeling: feeling,
     );
   },
+);
+
+/// What the athlete said about [day] in the proposal sheet (good, tired,
+/// sore, ill, short); the coach is asked again with it.
+final proposalFeelingProvider = StateProvider.family<String?, DateTime>(
+  (ref, day) => null,
 );
 
 /// The coach's checked revision of [day] with what it was checked against,
@@ -142,7 +202,11 @@ final coachRevisionProvider = FutureProvider.autoDispose
       final r = parseMorningRevision(raw);
       final p = ref.watch(morningAdaptationProvider).proposal;
       if (r == null || p == null || p.day != day) return null;
-      final c = await ref.read(revisionContextProvider)(day, p.readiness);
+      final c = await ref.read(revisionContextProvider)(
+        day,
+        p.readiness,
+        feeling: ref.watch(proposalFeelingProvider(day)),
+      );
       // The plan may have changed since the coach answered.
       final checked = checkedRevision(r, c);
       if (checked == null) return null;
@@ -280,15 +344,22 @@ class PlanProposalLifecycle {
   /// FjeliaPro: the coach's revision of [p]'s day, checked and kept for the
   /// sheet; its title and body are the push. Null when not Pro, switched
   /// off, or the answer fails a check.
-  Future<ProposalText?> _coachRevision(ReadinessProposal p) async {
-    if (!ref.read(fjeliaEditionProvider).isPro ||
+  Future<ProposalText?> _coachRevision(
+    ReadinessProposal p, {
+    String? feeling,
+  }) async {
+    if (!ref.read(proSubscribedProvider) ||
         !proAnalysisPrompts.isAvailable ||
         !await PlanProposalStore.proCoach()) {
       return null;
     }
     try {
-      final c = await ref.read(revisionContextProvider)(p.day, p.readiness);
-      if (c.today.isEmpty) return null;
+      final c = await ref.read(revisionContextProvider)(
+        p.day,
+        p.readiness,
+        feeling: feeling,
+      );
+      if (c.focus.isEmpty) return null;
       final profile = await ref.read(userProfileProvider.future);
       final general = await ref
           .read(toonCacheProvider.notifier)
@@ -332,6 +403,17 @@ class PlanProposalLifecycle {
       log('[PlanProposal] coach revision failed, rules: $e');
       return null;
     }
+  }
+
+  /// The athlete said how they feel in the sheet: the coach is asked again
+  /// with it. True when a new revision passed the checks.
+  Future<bool> refine(DateTime day, String feeling) async {
+    final p = ref.read(morningAdaptationProvider).proposal;
+    if (p == null || p.day != day) return false;
+    ref.read(proposalFeelingProvider(day).notifier).state = feeling;
+    final text = await _coachRevision(p, feeling: feeling);
+    ref.invalidate(coachRevisionProvider(day));
+    return text != null;
   }
 
   /// The coach's revision was taken: it is written (not sent to a watch)

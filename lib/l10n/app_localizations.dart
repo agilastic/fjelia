@@ -14795,6 +14795,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'tomorrow'**
   String get proposalDayTomorrow;
+
+  /// No description provided for @feelingQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'How do you feel today?'**
+  String get feelingQuestion;
+
+  /// No description provided for @feelingGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Good'**
+  String get feelingGood;
+
+  /// No description provided for @feelingTired.
+  ///
+  /// In en, this message translates to:
+  /// **'Tired'**
+  String get feelingTired;
+
+  /// No description provided for @feelingSore.
+  ///
+  /// In en, this message translates to:
+  /// **'Sore'**
+  String get feelingSore;
+
+  /// No description provided for @feelingIll.
+  ///
+  /// In en, this message translates to:
+  /// **'Ill'**
+  String get feelingIll;
+
+  /// No description provided for @feelingShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Short on time'**
+  String get feelingShort;
+
+  /// No description provided for @feelingAsking.
+  ///
+  /// In en, this message translates to:
+  /// **'The coach is thinking again…'**
+  String get feelingAsking;
+
+  /// No description provided for @proSwitchTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Use ProAI?'**
+  String get proSwitchTitle;
+
+  /// No description provided for @proSwitchBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your FjeliaPro subscription is active. Should the coach use ProAI from now on instead of {provider}?'**
+  String proSwitchBody(String provider);
+
+  /// No description provided for @proAiRouting.
+  ///
+  /// In en, this message translates to:
+  /// **'The coach and the daily proposals use ProAI; the race plan and the season analysis use the larger ProAI-deep by themselves.'**
+  String get proAiRouting;
 }
 
 class _AppLocalizationsDelegate

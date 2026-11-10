@@ -561,35 +561,38 @@ class AiCoachClient {
     }
     switch (provider) {
       case AiProvider.freeAi:
-        // With FjeliaPro the same service answers with the Pro model, on
-        // the subscription's own key and budget.
+        // With FjeliaPro the same service answers with the chosen Pro model,
+        // on the subscription's own key and budget. Without an active
+        // subscription neither Pro model is ever asked.
         final pro = await _activePro();
         if (pro != null) {
-          try {
-            return await _sendOpenAiCompatible(
-              freeAiChatCompletionsUri,
-              pro.key,
-              proAiModel,
-              messages,
-              toonContext,
-              systemPrompt: systemPrompt,
-              freeAiKind: kind,
-              // The free tier's per-installation budget does not apply.
-              anonymous: true,
-            );
-          } on StateError catch (e) {
-            // A Pro key past its monthly budget, or blocked, is refused
-            // (4xx); the athlete still gets an answer from Free AI.
-            final refused = RegExp(r'failed \((400|401|403|429)\)')
-                .hasMatch(e.message);
-            if (!refused) rethrow;
-            log('[FjeliaPro] Pro key refused, Free AI answers: ${e.message}');
+          for (final model in const [proAiModel]) {
+            try {
+              return await _sendOpenAiCompatible(
+                freeAiChatCompletionsUri,
+                pro.key,
+                model,
+                messages,
+                toonContext,
+                systemPrompt: systemPrompt,
+                freeAiKind: kind,
+                // The free tier's per-installation budget does not apply.
+                anonymous: true,
+              );
+            } on StateError catch (e) {
+              // A Pro key past its monthly budget, or blocked, is refused
+              // (4xx); the athlete still gets an answer from Free AI.
+              final refused = RegExp(r'failed \((400|401|403|404|429|503)\)')
+                  .hasMatch(e.message);
+              if (!refused) rethrow;
+              log('[FjeliaPro] $model refused: ${e.message}');
+            }
           }
         }
         return _sendOpenAiCompatible(
           freeAiChatCompletionsUri,
           key,
-          settings.model,
+          'default',
           messages,
           toonContext,
           systemPrompt: systemPrompt,

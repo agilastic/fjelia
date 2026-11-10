@@ -5149,5 +5149,22 @@
         "type": "String"
       }
     }
-  }
+  },
+  "feelingQuestion": "How do you feel today?",
+  "feelingGood": "Good",
+  "feelingTired": "Tired",
+  "feelingSore": "Sore",
+  "feelingIll": "Ill",
+  "feelingShort": "Short on time",
+  "feelingAsking": "The coach is thinking again…",
+  "proSwitchTitle": "Use ProAI?",
+  "proSwitchBody": "Your FjeliaPro subscription is active. Should the coach use ProAI from now on instead of {provider}?",
+  "@proSwitchBody": {
+    "placeholders": {
+      "provider": {
+        "type": "String"
+      }
+    }
+  },
+  "proAiRouting": "The coach and the daily proposals use ProAI; the race plan and the season analysis use the larger ProAI-deep by themselves."
 }

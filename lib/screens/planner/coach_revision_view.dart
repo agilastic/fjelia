@@ -73,6 +73,7 @@ class _CoachRevisionViewState extends ConsumerState<CoachRevisionView> {
               : '${l.coachRevisionLabel} · ${dayName(context, c.day, c.realToday)}',
         ),
         const SizedBox(height: 16),
+        FeelingRow(day: c.day),
         // Every session of the day and the next, changed or not, with the
         // coach's reason, under its day.
         for (final (d, sessions) in [(c.day, c.today), (c.nextDay, c.next)])
@@ -691,6 +692,7 @@ class _RulesProposalViewState extends ConsumerState<RulesProposalView> {
           note: widget.coachUnavailable ? l.proposalCoachUnavailable : null,
         ),
         const SizedBox(height: 16),
+        if (widget.coachUnavailable) FeelingRow(day: p.day),
         for (final (i, c) in p.changes.indexed)
           _Enter(
             index: i,
@@ -897,6 +899,84 @@ class _AlternativeCard extends StatelessWidget {
             onPressed: busy ? null : onTake,
             child: Text(l.revisionTakeAlternative),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+/// How the athlete feels: a choice asks the coach again with it.
+class FeelingRow extends ConsumerStatefulWidget {
+  const FeelingRow({super.key, required this.day});
+  final DateTime day;
+
+  @override
+  ConsumerState<FeelingRow> createState() => _FeelingRowState();
+}
+
+class _FeelingRowState extends ConsumerState<FeelingRow> {
+  bool _asking = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final chosen = ref.watch(proposalFeelingProvider(widget.day));
+    final options = [
+      ('good', l.feelingGood),
+      ('tired', l.feelingTired),
+      ('sore', l.feelingSore),
+      ('ill', l.feelingIll),
+      ('short_on_time', l.feelingShort),
+    ];
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(4, 0, 4, 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          FigureLabel(l.feelingQuestion),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 6,
+            runSpacing: 6,
+            children: [
+              for (final (key, label) in options)
+                ChoiceChip(
+                  label: Text(label, style: const TextStyle(fontSize: 12)),
+                  showCheckmark: false,
+                  visualDensity: VisualDensity.compact,
+                  selected: chosen == key,
+                  onSelected: _asking
+                      ? null
+                      : (_) async {
+                          setState(() => _asking = true);
+                          await runUiAction(
+                            context,
+                            () => ref
+                                .read(planProposalLifecycleProvider)
+                                .refine(widget.day, key),
+                          );
+                          if (mounted) setState(() => _asking = false);
+                        },
+                ),
+            ],
+          ),
+          if (_asking)
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Row(
+                children: [
+                  const SizedBox.square(
+                    dimension: 14,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    l.feelingAsking,
+                    style: TextStyle(fontSize: 12, color: muted),
+                  ),
+                ],
+              ),
+            ),
         ],
       ),
     );

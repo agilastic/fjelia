@@ -4010,5 +4010,15 @@
   "revisionAlternative": "Alternative",
   "revisionTakeAlternative": "Prendre plutôt ceci",
   "proposalForDay": "Proposition pour {day}",
-  "proposalDayTomorrow": "demain"
+  "proposalDayTomorrow": "demain",
+  "feelingQuestion": "Comment te sens-tu aujourd'hui ?",
+  "feelingGood": "Bien",
+  "feelingTired": "Fatigué",
+  "feelingSore": "Courbatures",
+  "feelingIll": "Malade",
+  "feelingShort": "Peu de temps",
+  "feelingAsking": "Le coach réfléchit à nouveau…",
+  "proSwitchTitle": "Passer à ProAI ?",
+  "proSwitchBody": "Ton abonnement FjeliaPro est actif. Le coach doit-il utiliser ProAI désormais au lieu de {provider} ?",
+  "proAiRouting": "Le coach et les propositions du jour utilisent ProAI ; le plan de course et l'analyse de saison prennent d'eux-mêmes le modèle plus grand ProAI-deep."
 }
