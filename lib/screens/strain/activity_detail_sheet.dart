@@ -1,4 +1,5 @@
 import '../../theme/fjelia_style.dart';
+import '../../providers/short_session_provider.dart';
 import '../../providers/activity_history_provider.dart';
 import '../../widgets/recently_deleted_sheet.dart';
 import '../../l10n/l10n_ext.dart';
@@ -381,6 +382,7 @@ class ActivityDetailSheet extends ConsumerWidget {
               card: CoachContextCard.completed(a),
             ),
           ),
+          ActivityNoteCard(activityId: activity.activityId),
           if (activity.description?.trim().isNotEmpty ?? false)
             SectionCard(
               title: context.l10n.activityDescription,
@@ -551,6 +553,59 @@ class _RenameDialogState extends State<_RenameDialog> {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// The athlete's own note on the activity, e.g. why it was shorter than
+/// planned; the coach reads it. Tap to write or change it.
+class ActivityNoteCard extends ConsumerWidget {
+  const ActivityNoteCard({super.key, required this.activityId});
+  final String activityId;
+
+  Future<void> _edit(BuildContext context, WidgetRef ref, String? note) async {
+    final controller = TextEditingController(text: note ?? '');
+    final saved = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(context.l10n.activityNote),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          minLines: 2,
+          maxLines: 6,
+          maxLength: 400,
+          decoration: InputDecoration(hintText: context.l10n.noteForCoach),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(context.l10n.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, controller.text),
+            child: Text(context.l10n.save),
+          ),
+        ],
+      ),
+    );
+    controller.dispose();
+    if (saved == null) return;
+    await ref.read(saveActivityNoteProvider)(activityId, saved);
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final note = ref.watch(activityNoteProvider(activityId)).valueOrNull;
+    final has = note?.trim().isNotEmpty ?? false;
+    return SectionCard(
+      key: const ValueKey('activity-note'),
+      title: context.l10n.activityNote,
+      onTap: () => _edit(context, ref, note),
+      child: Text(
+        has ? note!.trim() : context.l10n.activityNoteAdd,
+        style: TextStyle(height: 1.4, color: has ? fjInk : muted),
+      ),
     );
   }
 }

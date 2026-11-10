@@ -2,8 +2,11 @@ import 'weather_location_tab.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../../providers/fjelia_edition_provider.dart';
+import '../../providers/fjelia_pro_provider.dart';
 import '../../providers/locale_provider.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/settings_widgets.dart';
@@ -12,6 +15,7 @@ import 'training_tab.dart';
 import 'display_tab.dart';
 import 'connections_tab.dart';
 import 'ai_settings_tab.dart';
+import 'fjelia_pro_sheet.dart';
 import 'system_tab.dart';
 import 'language_page.dart';
 import 'credits_page.dart';
@@ -32,6 +36,30 @@ class SettingsSheet extends ConsumerWidget {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
         children: [
+          // The subscription on its own, where an app's plan is expected.
+          if (ref.watch(fjeliaEditionProvider).proOffered)
+            SettingsGroup(
+              dividerIndent: 58,
+              children: [
+                ListTile(
+                  key: const ValueKey('settings-fjelia-pro'),
+                  leading: const SettingsIcon(
+                    Icons.bolt_rounded,
+                    Color(0xFF9D7BFF),
+                  ),
+                  title: const Text('FjeliaPro'),
+                  subtitle: Text(switch (ref.watch(fjeliaProProvider)) {
+                    final p when ref.watch(proSubscribedProvider) =>
+                      l10n.proActiveUntilShort(
+                        DateFormat.yMMMd().format(p.access!.expiresAt),
+                      ),
+                    _ => l10n.proTagline,
+                  }),
+                  trailing: const Icon(Icons.chevron_right, size: 20),
+                  onTap: () => showAppSheet(context, const FjeliaProSheet()),
+                ),
+              ],
+            ),
           SettingsGroup(
             dividerIndent: 58,
             children: [

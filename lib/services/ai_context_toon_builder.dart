@@ -396,7 +396,9 @@ class AiContextToonBuilder {
         'ElevM:${_num(a.totalElevation)}${_parseHrZones(a.hrZonesJson)},'
         'Src:${_clean(a.source)},PlannedDur:${_minutes(a.plannedDurationSeconds)},'
         'PlannedKm:${_num(_km(a.plannedDistanceMeters))}'
-        '${_parseStepsSummary(a.plannedStepsJson)}]',
+        '${_parseStepsSummary(a.plannedStepsJson)}'
+        // The athlete's own note for the coach (not the platform text).
+        '${_note(a.athleteNote)}]',
       );
     }
     final todayWorkouts = workouts
@@ -722,6 +724,15 @@ class AiContextToonBuilder {
         'Goals:${goals is Map ? goals.values.map(goal).join('|') : 'none'},'
         'Conflicts:${joined(data['conflicts'], conflict)},'
         'Tradeoffs:${joined(data['summary'], (c) => _clean(c as String?))}]';
+  }
+
+  /// The athlete's note on an activity, short and on one line; empty when
+  /// there is none.
+  static String _note(String? note) {
+    final t = note?.trim() ?? '';
+    if (t.isEmpty) return '';
+    final one = _clean(t);
+    return ',Note:${one.length > 160 ? '${one.substring(0, 157)}…' : one}';
   }
 
   static String _clean(String? value) {

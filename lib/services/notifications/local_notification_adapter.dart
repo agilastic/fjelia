@@ -173,6 +173,22 @@ class FlutterLocalNotificationGateway implements LocalNotificationGateway {
                 fln.DarwinNotificationAction.plain('keep', tr.keepPlan),
               ],
             ),
+            // Why a session was shorter: answered from the banner.
+            fln.DarwinNotificationCategory(
+              'short_session',
+              actions: [
+                fln.DarwinNotificationAction.plain('time', tr.shortReasonTime),
+                fln.DarwinNotificationAction.plain(
+                  'weather',
+                  tr.shortReasonWeather,
+                ),
+                fln.DarwinNotificationAction.plain(
+                  'fatigue',
+                  tr.shortReasonFatigue,
+                ),
+                fln.DarwinNotificationAction.plain('pain', tr.shortReasonPain),
+              ],
+            ),
             fln.DarwinNotificationCategory(
               'nutrition_post',
               actions: [
@@ -274,6 +290,9 @@ class FlutterLocalNotificationGateway implements LocalNotificationGateway {
     }
     if (n.feature == NotificationFeature.planProposal) {
       return _schedulePlanProposal(n);
+    }
+    if (n.feature == NotificationFeature.shortSession) {
+      return _scheduleShortSession(n);
     }
     final nutrition = n.feature == NotificationFeature.nutrition;
     await _plugin.zonedSchedule(
@@ -398,6 +417,37 @@ class FlutterLocalNotificationGateway implements LocalNotificationGateway {
         iOS: const fln.DarwinNotificationDetails(
           categoryIdentifier: 'plan_proposal',
           threadIdentifier: 'plan_proposal',
+          presentBadge: false,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _scheduleShortSession(ScheduledNotification n) async {
+    final labels = n.actionLabels;
+    await _plugin.zonedSchedule(
+      id: n.id,
+      title: n.title,
+      body: n.body,
+      payload: n.payload,
+      scheduledDate: tz.TZDateTime.from(n.at.toUtc(), tz.UTC),
+      androidScheduleMode: fln.AndroidScheduleMode.inexactAllowWhileIdle,
+      notificationDetails: fln.NotificationDetails(
+        android: fln.AndroidNotificationDetails(
+          'missed_workout_reminder',
+          tr.missedWorkoutChannel,
+          channelDescription: tr.missedWorkoutChannelDescription,
+          importance: fln.Importance.defaultImportance,
+          priority: fln.Priority.defaultPriority,
+          category: fln.AndroidNotificationCategory.reminder,
+          actions: [
+            for (final e in labels.entries.take(3))
+              fln.AndroidNotificationAction(e.key, e.value),
+          ],
+        ),
+        iOS: const fln.DarwinNotificationDetails(
+          categoryIdentifier: 'short_session',
+          threadIdentifier: 'short_session',
           presentBadge: false,
         ),
       ),

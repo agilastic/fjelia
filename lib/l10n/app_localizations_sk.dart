@@ -8420,7 +8420,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get proAnalysisFailed => 'Analýza sa nepodarila. Skús to znova.';
 
   @override
-  String get proBenefitPlanCheck => 'Denná kontrola plánu s veľkým modelom';
+  String get proBenefitPlanCheck =>
+      'Ranný návrh a kontrola plánu: kouč upraví dnešný tréning';
 
   @override
   String get proBenefitReview => 'Týždenný prehľad a analýza sezóny';
@@ -8593,4 +8594,23 @@ class AppLocalizationsSk extends AppLocalizations {
   @override
   String get proAiRouting =>
       'Kouč a denné návrhy používajú ProAI; plán pretekov a analýza sezóny používajú samy väčší ProAI-deep.';
+
+  @override
+  String proActiveUntilShort(String date) {
+    return 'Aktívne do $date';
+  }
+
+  @override
+  String shortSessionNote(int done, int planned) {
+    return 'Kratšie, než bolo plánované ($done z $planned min)';
+  }
+
+  @override
+  String get noteForCoach => 'Poznámka pre kouča (nepovinné)';
+
+  @override
+  String get activityNote => 'Poznámka';
+
+  @override
+  String get activityNoteAdd => 'Pridaj poznámku pre kouča';
 }

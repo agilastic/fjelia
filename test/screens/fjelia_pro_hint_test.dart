@@ -9,11 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fjelia/screens/settings/settings_sheet.dart';
 
 class _Edition implements FjeliaEdition {
-  const _Edition({required this.proOffered, this.isPro = false});
+  const _Edition({required this.proOffered});
   @override
-  final bool proOffered, isPro;
+  final bool proOffered;
+  @override
+  bool get isPro => false;
 }
 
 class _Settings extends AiCoachSettingsNotifier {
@@ -56,37 +59,36 @@ void main() {
 
   const hint = 'FjeliaPro gives you more detailed information and analyses.';
 
-  testWidgets('a local coach points to FjeliaPro once it is offered', (
+  testWidgets('AI & more no longer carries FjeliaPro', (tester) async {
+    for (final provider in [AiProvider.appleIntelligence, AiProvider.freeAi]) {
+      await show(tester, provider, const _Edition(proOffered: true));
+      expect(find.text(hint), findsNothing);
+      expect(find.byKey(const ValueKey('fjelia-pro-entry')), findsNothing);
+    }
+  });
+
+  Future<void> settings(WidgetTester tester, FjeliaEdition edition) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [fjeliaEditionProvider.overrideWithValue(edition)],
+        child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: const Scaffold(body: SettingsSheet()),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+  }
+
+  testWidgets('Settings has FjeliaPro as its own row once it is offered', (
     tester,
   ) async {
-    await show(
-      tester,
-      AiProvider.appleIntelligence,
-      const _Edition(proOffered: true),
-    );
-    expect(find.text(hint), findsOneWidget);
-  });
-
-  testWidgets('no hint before FjeliaPro is offered', (tester) async {
-    await show(
-      tester,
-      AiProvider.appleIntelligence,
-      const _Edition(proOffered: false),
-    );
-    expect(find.text(hint), findsNothing);
-  });
-
-  testWidgets('no hint for someone who has FjeliaPro', (tester) async {
-    await show(
-      tester,
-      AiProvider.appleIntelligence,
-      const _Edition(proOffered: true, isPro: true),
-    );
-    expect(find.text(hint), findsNothing);
-  });
-
-  testWidgets('no hint with a cloud coach', (tester) async {
-    await show(tester, AiProvider.freeAi, const _Edition(proOffered: true));
-    expect(find.text(hint), findsNothing);
+    await settings(tester, const _Edition(proOffered: true));
+    expect(find.byKey(const ValueKey('settings-fjelia-pro')), findsOneWidget);
+    expect(find.text('FjeliaPro'), findsOneWidget);
+    await settings(tester, const _Edition(proOffered: false));
+    expect(find.byKey(const ValueKey('settings-fjelia-pro')), findsNothing);
   });
 }

@@ -8457,7 +8457,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get proBenefitPlanCheck =>
-      'Täglicher Plan-Check mit dem großen Modell';
+      'Morgen-Vorschlag und Plan-Check: der Coach baut das Training des Tages um';
 
   @override
   String get proBenefitReview => 'Wochenrückblick und Saison-Analyse';
@@ -8630,5 +8630,24 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get proAiRouting =>
-      'Coach und tägliche Vorschläge nutzen ProAI; Wettkampfplan und Saison-Analyse nehmen von selbst das größere ProAI-deep.';
+      'Für Wettkampf- und Saisonpläne nutzt FjeliaPro eine leistungsstärkere KI. Coach und tägliche Trainingsvorschläge verwenden das reguläre Pro-Modell.';
+
+  @override
+  String proActiveUntilShort(String date) {
+    return 'Aktiv bis $date';
+  }
+
+  @override
+  String shortSessionNote(int done, int planned) {
+    return 'Kürzer als geplant ($done von $planned min)';
+  }
+
+  @override
+  String get noteForCoach => 'Notiz für den Coach (optional)';
+
+  @override
+  String get activityNote => 'Notiz';
+
+  @override
+  String get activityNoteAdd => 'Notiz für den Coach hinzufügen';
 }

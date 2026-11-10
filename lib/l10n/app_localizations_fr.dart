@@ -8462,7 +8462,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get proBenefitPlanCheck =>
-      'Vérif quotidienne du plan avec le grand modèle';
+      'Proposition du matin et contrôle du plan : le coach adapte l\'entraînement du jour';
 
   @override
   String get proBenefitReview => 'Bilan hebdo et analyse de saison';
@@ -8636,4 +8636,23 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get proAiRouting =>
       'Le coach et les propositions du jour utilisent ProAI ; le plan de course et l\'analyse de saison prennent d\'eux-mêmes le modèle plus grand ProAI-deep.';
+
+  @override
+  String proActiveUntilShort(String date) {
+    return 'Actif jusqu\'au $date';
+  }
+
+  @override
+  String shortSessionNote(int done, int planned) {
+    return 'Plus court que prévu ($done sur $planned min)';
+  }
+
+  @override
+  String get noteForCoach => 'Note pour le coach (facultatif)';
+
+  @override
+  String get activityNote => 'Note';
+
+  @override
+  String get activityNoteAdd => 'Ajouter une note pour le coach';
 }

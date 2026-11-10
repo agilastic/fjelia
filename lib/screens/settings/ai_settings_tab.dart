@@ -6,14 +6,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../providers/fjelia_pro_provider.dart';
 import '../../providers/ai_coach_provider.dart';
-import '../../providers/fjelia_edition_provider.dart';
 import '../../config/free_ai.dart';
 import '../../providers/local_model_provider.dart';
 import '../../services/ai_coach_settings.dart';
 import '../../services/local_model_catalog.dart';
 import '../../widgets/app_widgets.dart';
 import 'bug_report_sheet.dart';
-import 'fjelia_pro_sheet.dart';
 import 'local_model_panel.dart';
 
 class AiSettingsTab extends ConsumerWidget {
@@ -28,7 +26,6 @@ class AiSettingsTab extends ConsumerWidget {
           error: (e, _) => DataError(e),
           data: (s) {
             final n = ref.read(aiCoachSettingsProvider.notifier);
-            final edition = ref.watch(fjeliaEditionProvider);
             final subscribed = ref.watch(proSubscribedProvider);
             final supports4b =
                 s.provider == AiProvider.localQwen &&
@@ -94,61 +91,6 @@ class AiSettingsTab extends ConsumerWidget {
                       ),
                   ],
                 ),
-                // FjeliaPro on offer: its status, and the way to it.
-                if (edition.proOffered && !s.provider.isLocal)
-                  SectionCard(
-                    key: const ValueKey('fjelia-pro-entry'),
-                    onTap: () => showAppSheet(context, const FjeliaProSheet()),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.bolt_rounded,
-                          color: Color(0xFFFF4FD8),
-                          size: 22,
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'FjeliaPro',
-                                style: TextStyle(fontWeight: FontWeight.w800),
-                              ),
-                              Text(
-                                edition.isPro
-                                    ? context.l10n.proUsesFjeliaAi
-                                    : context.l10n.proTagline,
-                                style: const TextStyle(fontSize: 12),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const Icon(Icons.chevron_right),
-                      ],
-                    ),
-                  ),
-                // Local coaches stay free; Pro adds the detailed analyses.
-                if (s.provider.isLocal && edition.proOffered && !edition.isPro)
-                  SectionCard(
-                    onTap: () => showAppSheet(context, const FjeliaProSheet()),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.auto_awesome,
-                          color: Color(0xFF9D7BFF),
-                          size: 20,
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Text(
-                            context.l10n.fjeliaProHint,
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                 if (s.provider == AiProvider.freeAi && subscribed)
                   SectionCard(
                     child: Text(

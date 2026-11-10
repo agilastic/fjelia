@@ -14547,7 +14547,7 @@ abstract class AppLocalizations {
   /// No description provided for @proBenefitPlanCheck.
   ///
   /// In en, this message translates to:
-  /// **'Daily plan check with the large model'**
+  /// **'Morning proposal and plan check: the coach reworks the day\'s training'**
   String get proBenefitPlanCheck;
 
   /// No description provided for @proBenefitReview.
@@ -14853,8 +14853,38 @@ abstract class AppLocalizations {
   /// No description provided for @proAiRouting.
   ///
   /// In en, this message translates to:
-  /// **'The coach and the daily proposals use ProAI; the race plan and the season analysis use the larger ProAI-deep by themselves.'**
+  /// **'FjeliaPro uses a more powerful AI for race and season plans. Your coach and daily training suggestions use the regular Pro model.'**
   String get proAiRouting;
+
+  /// No description provided for @proActiveUntilShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Active until {date}'**
+  String proActiveUntilShort(String date);
+
+  /// No description provided for @shortSessionNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Shorter than planned ({done} of {planned} min)'**
+  String shortSessionNote(int done, int planned);
+
+  /// No description provided for @noteForCoach.
+  ///
+  /// In en, this message translates to:
+  /// **'Note for the coach (optional)'**
+  String get noteForCoach;
+
+  /// No description provided for @activityNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get activityNote;
+
+  /// No description provided for @activityNoteAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a note for the coach'**
+  String get activityNoteAdd;
 }
 
 class _AppLocalizationsDelegate

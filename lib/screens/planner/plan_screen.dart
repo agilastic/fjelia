@@ -19,7 +19,6 @@ import 'plan_overview_cards.dart';
 import 'plan_proposal_cards.dart';
 import 'plan_calendar_markers.dart';
 import 'plan_week_agenda.dart';
-import 'short_sessions_card.dart';
 import '../activities/activities_screen.dart';
 
 class PlanScreen extends ConsumerStatefulWidget {
@@ -68,7 +67,6 @@ class _PlanState extends ConsumerState<PlanScreen> {
           const ProToolsCard(),
           const RaceCountdownCard(),
           const PlanAdjustmentsCard(),
-          const ShortSessionsCard(),
           // List and month speak through their Upcoming and History heads.
           if (view == 'Week')
             Padding(

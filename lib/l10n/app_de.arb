@@ -3969,7 +3969,7 @@
   "proAnalysisFrom": "Erstellt {time}",
   "proAnalysisWorking": "Das große Modell analysiert …",
   "proAnalysisFailed": "Die Analyse hat nicht geklappt. Versuch es noch einmal.",
-  "proBenefitPlanCheck": "Täglicher Plan-Check mit dem großen Modell",
+  "proBenefitPlanCheck": "Morgen-Vorschlag und Plan-Check: der Coach baut das Training des Tages um",
   "proBenefitReview": "Wochenrückblick und Saison-Analyse",
   "proBenefitRacePlan": "Wettkampfplan: Tapering, Pacing, Verpflegung",
   "statsTitle": "Statistik",
@@ -4020,5 +4020,10 @@
   "feelingAsking": "Der Coach denkt neu nach…",
   "proSwitchTitle": "Auf ProAI umstellen?",
   "proSwitchBody": "Dein FjeliaPro-Abo ist aktiv. Soll der Coach ab jetzt ProAI statt {provider} nutzen?",
-  "proAiRouting": "Coach und tägliche Vorschläge nutzen ProAI; Wettkampfplan und Saison-Analyse nehmen von selbst das größere ProAI-deep."
+  "proAiRouting": "Für Wettkampf- und Saisonpläne nutzt FjeliaPro eine leistungsstärkere KI. Coach und tägliche Trainingsvorschläge verwenden das reguläre Pro-Modell.",
+  "proActiveUntilShort": "Aktiv bis {date}",
+  "shortSessionNote": "Kürzer als geplant ({done} von {planned} min)",
+  "noteForCoach": "Notiz für den Coach (optional)",
+  "activityNote": "Notiz",
+  "activityNoteAdd": "Notiz für den Coach hinzufügen"
 }

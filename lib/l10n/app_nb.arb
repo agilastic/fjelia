@@ -3969,7 +3969,7 @@
   "proAnalysisFrom": "Laget {time}",
   "proAnalysisWorking": "Den store modellen analyserer …",
   "proAnalysisFailed": "Analysen fungerte ikke. Prøv igjen.",
-  "proBenefitPlanCheck": "Daglig plansjekk med den store modellen",
+  "proBenefitPlanCheck": "Morgenforslag og plansjekk: coachen tilpasser dagens trening",
   "proBenefitReview": "Ukentlig tilbakeblikk og sesonganalyse",
   "proBenefitRacePlan": "Løpsplan: nedtrapping, pacing, energi",
   "statsTitle": "Statistikk",
@@ -4020,5 +4020,10 @@
   "feelingAsking": "Coachen tenker på nytt…",
   "proSwitchTitle": "Bytte til ProAI?",
   "proSwitchBody": "FjeliaPro-abonnementet ditt er aktivt. Skal coachen bruke ProAI fra nå av i stedet for {provider}?",
-  "proAiRouting": "Coachen og de daglige forslagene bruker ProAI; løpsplanen og sesonganalysen bruker selv den større ProAI-deep."
+  "proAiRouting": "Coachen og de daglige forslagene bruker ProAI; løpsplanen og sesonganalysen bruker selv den større ProAI-deep.",
+  "proActiveUntilShort": "Aktiv til {date}",
+  "shortSessionNote": "Kortere enn planlagt ({done} av {planned} min)",
+  "noteForCoach": "Notat til coachen (valgfritt)",
+  "activityNote": "Notat",
+  "activityNoteAdd": "Legg til et notat til coachen"
 }

@@ -8447,7 +8447,8 @@ class AppLocalizationsCa extends AppLocalizations {
       'L\'anàlisi no ha funcionat. Torna-ho a provar.';
 
   @override
-  String get proBenefitPlanCheck => 'Revisió diària del pla amb el model gran';
+  String get proBenefitPlanCheck =>
+      'Proposta del matí i revisió del pla: el coach adapta l\'entrenament del dia';
 
   @override
   String get proBenefitReview => 'Resum setmanal i anàlisi de temporada';
@@ -8621,4 +8622,23 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get proAiRouting =>
       'El coach i les propostes diàries fan servir ProAI; el pla de cursa i l\'anàlisi de temporada fan servir ProAI-deep automàticament.';
+
+  @override
+  String proActiveUntilShort(String date) {
+    return 'Activa fins al $date';
+  }
+
+  @override
+  String shortSessionNote(int done, int planned) {
+    return 'Més curt del previst ($done de $planned min)';
+  }
+
+  @override
+  String get noteForCoach => 'Nota per al coach (opcional)';
+
+  @override
+  String get activityNote => 'Nota';
+
+  @override
+  String get activityNoteAdd => 'Afegeix una nota per al coach';
 }

@@ -69,17 +69,27 @@ rm -rf build/ios/ipa
 flutter build ipa --release --no-pub --build-number "$build_number" \
   --export-options-plist "$options" ${DEFINES[@]+"${DEFINES[@]}"}
 
+auth=()
+if [ -n "${ASC_KEY_ID:-}" ]; then
+  auth=(-authenticationKeyID "$ASC_KEY_ID"
+        -authenticationKeyIssuerID "${ASC_ISSUER_ID:?set ASC_ISSUER_ID}"
+        -authenticationKeyPath "${ASC_KEY_PATH:?set ASC_KEY_PATH}")
+fi
+
+# flutter's own export may not update provisioning profiles; a profile made
+# before the current distribution certificate then fails ("doesn't include
+# signing certificate"). Export again with profile updates allowed.
+if ! ls build/ios/ipa/*.ipa >/dev/null 2>&1; then
+  echo "Flutter's export failed; exporting with provisioning updates allowed."
+  xcodebuild -exportArchive -archivePath build/ios/archive/Runner.xcarchive \
+    -exportOptionsPlist "$options" -exportPath build/ios/ipa \
+    -allowProvisioningUpdates ${auth[@]+"${auth[@]}"}
+fi
 ls build/ios/ipa/*.ipa
 
 if [ "$upload" -eq 1 ]; then
   # Upload the archive in a second step so the IPA above is always kept locally.
   sed -i '' 's#<string>export</string>#<string>upload</string>#' "$options"
-  auth=()
-  if [ -n "${ASC_KEY_ID:-}" ]; then
-    auth=(-authenticationKeyID "$ASC_KEY_ID"
-          -authenticationKeyIssuerID "${ASC_ISSUER_ID:?set ASC_ISSUER_ID}"
-          -authenticationKeyPath "${ASC_KEY_PATH:?set ASC_KEY_PATH}")
-  fi
   xcodebuild -exportArchive -archivePath build/ios/archive/Runner.xcarchive \
     -exportOptionsPlist "$options" -exportPath build/ios/upload \
     -allowProvisioningUpdates ${auth[@]+"${auth[@]}"}

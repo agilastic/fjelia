@@ -8415,7 +8415,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get proBenefitPlanCheck =>
-      'Päivittäinen suunnitelmatarkistus isolla mallilla';
+      'Aamuehdotus ja suunnitelman tarkistus: valmentaja muokkaa päivän harjoituksen';
 
   @override
   String get proBenefitReview => 'Viikkokatsaus ja kausianalyysi';
@@ -8589,4 +8589,23 @@ class AppLocalizationsFi extends AppLocalizations {
   @override
   String get proAiRouting =>
       'Valmentaja ja päivittäiset ehdotukset käyttävät ProAI:ta; kisasuunnitelma ja kausianalyysi käyttävät itsestään suurempaa ProAI-deepiä.';
+
+  @override
+  String proActiveUntilShort(String date) {
+    return 'Voimassa $date asti';
+  }
+
+  @override
+  String shortSessionNote(int done, int planned) {
+    return 'Suunniteltua lyhyempi ($done/$planned min)';
+  }
+
+  @override
+  String get noteForCoach => 'Huomio valmentajalle (valinnainen)';
+
+  @override
+  String get activityNote => 'Huomio';
+
+  @override
+  String get activityNoteAdd => 'Lisää huomio valmentajalle';
 }

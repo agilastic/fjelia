@@ -5070,7 +5070,7 @@
   },
   "proAnalysisWorking": "The large model is analysing…",
   "proAnalysisFailed": "The analysis did not work. Please try again.",
-  "proBenefitPlanCheck": "Daily plan check with the large model",
+  "proBenefitPlanCheck": "Morning proposal and plan check: the coach reworks the day's training",
   "proBenefitReview": "Weekly review and season analysis",
   "proBenefitRacePlan": "Race plan: taper, pacing, fuelling",
   "statsTitle": "Statistics",
@@ -5166,5 +5166,27 @@
       }
     }
   },
-  "proAiRouting": "The coach and the daily proposals use ProAI; the race plan and the season analysis use the larger ProAI-deep by themselves."
+  "proAiRouting": "FjeliaPro uses a more powerful AI for race and season plans. Your coach and daily training suggestions use the regular Pro model.",
+  "proActiveUntilShort": "Active until {date}",
+  "@proActiveUntilShort": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "shortSessionNote": "Shorter than planned ({done} of {planned} min)",
+  "@shortSessionNote": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "planned": {
+        "type": "int"
+      }
+    }
+  },
+  "noteForCoach": "Note for the coach (optional)",
+  "activityNote": "Note",
+  "activityNoteAdd": "Add a note for the coach"
 }

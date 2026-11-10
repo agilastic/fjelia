@@ -3969,7 +3969,7 @@
   "proAnalysisFrom": "Luotu {time}",
   "proAnalysisWorking": "Iso malli analysoi…",
   "proAnalysisFailed": "Analyysi ei onnistunut. Yritä uudelleen.",
-  "proBenefitPlanCheck": "Päivittäinen suunnitelmatarkistus isolla mallilla",
+  "proBenefitPlanCheck": "Aamuehdotus ja suunnitelman tarkistus: valmentaja muokkaa päivän harjoituksen",
   "proBenefitReview": "Viikkokatsaus ja kausianalyysi",
   "proBenefitRacePlan": "Kisasuunnitelma: keventäminen, vauhdinjako, tankkaus",
   "statsTitle": "Tilastot",
@@ -4020,5 +4020,10 @@
   "feelingAsking": "Valmentaja miettii uudelleen…",
   "proSwitchTitle": "Vaihdetaanko ProAI:hin?",
   "proSwitchBody": "FjeliaPro-tilauksesi on voimassa. Käyttääkö valmentaja tästä lähtien ProAI:ta palvelun {provider} sijaan?",
-  "proAiRouting": "Valmentaja ja päivittäiset ehdotukset käyttävät ProAI:ta; kisasuunnitelma ja kausianalyysi käyttävät itsestään suurempaa ProAI-deepiä."
+  "proAiRouting": "Valmentaja ja päivittäiset ehdotukset käyttävät ProAI:ta; kisasuunnitelma ja kausianalyysi käyttävät itsestään suurempaa ProAI-deepiä.",
+  "proActiveUntilShort": "Voimassa {date} asti",
+  "shortSessionNote": "Suunniteltua lyhyempi ({done}/{planned} min)",
+  "noteForCoach": "Huomio valmentajalle (valinnainen)",
+  "activityNote": "Huomio",
+  "activityNoteAdd": "Lisää huomio valmentajalle"
 }

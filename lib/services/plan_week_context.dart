@@ -75,7 +75,7 @@ Future<List<String>> planWeekLines(
       final other => other,
     };
     lines.add(
-      '[PlanWeek:Session,${['date:${day(s.sessionDate)}', 'title:${clean(s.title)}', 'sport:${s.sport}', 'type:${s.sessionType}${s.subType == null ? '' : '/${s.subType}'}', 'zone:Z${s.primaryZone}', 'planned:${s.plannedDurationMin}min', 'status:$status', if (activity != null) 'actual:${(activity.durationSeconds / 60).round()}min ${clean(activity.name)}', if (a?.durationRatio != null) 'durationRatio:${a!.durationRatio!.toStringAsFixed(2)}', if (a?.executionScore != null) 'execution:${a!.executionScore}/100', if (a?.intensityVerdict != null) 'intensity:${clean(a!.intensityVerdict!)}', if (a?.outcome != null) 'outcome:${clean(a!.outcome!)}', if (a?.skipReason != null) 'reason:${clean(a!.skipReason!)}', if (a?.shortReason != null) 'note:${clean(a!.shortReason!)}', if (s.sessionDateOriginal != null || s.priorSessionDate != null) 'movedFrom:${s.sessionDateOriginal ?? s.priorSessionDate}', if (a?.rpe != null) 'rpe:${a!.rpe}'].join(',')}]',
+      '[PlanWeek:Session,${['date:${day(s.sessionDate)}', 'title:${clean(s.title)}', 'sport:${s.sport}', 'type:${s.sessionType}${s.subType == null ? '' : '/${s.subType}'}', 'zone:Z${s.primaryZone}', 'planned:${s.plannedDurationMin}min', 'status:$status', if (activity != null) 'actual:${(activity.durationSeconds / 60).round()}min ${clean(activity.name)}', if (a?.durationRatio != null) 'durationRatio:${a!.durationRatio!.toStringAsFixed(2)}', if (a?.executionScore != null) 'execution:${a!.executionScore}/100', if (a?.intensityVerdict != null) 'intensity:${clean(a!.intensityVerdict!)}', if (a?.outcome != null) 'outcome:${clean(a!.outcome!)}', if (a?.skipReason != null) 'reason:${clean(a!.skipReason!)}', if (a?.shortReason != null) 'shortReason:${clean(a!.shortReason!)}', if (activity?.athleteNote?.trim().isNotEmpty ?? false) 'note:${clean(activity!.athleteNote!.trim())}', if (s.sessionDateOriginal != null || s.priorSessionDate != null) 'movedFrom:${s.sessionDateOriginal ?? s.priorSessionDate}', if (a?.rpe != null) 'rpe:${a!.rpe}'].join(',')}]',
     );
   }
   for (final c in changes) {
@@ -86,7 +86,7 @@ Future<List<String>> planWeekLines(
   for (final a in activities) {
     if (used.contains(a.activityId)) continue;
     lines.add(
-      '[PlanWeek:Extra,${['date:${day(a.startDate)}', 'name:${clean(a.name)}', 'type:${a.type}', 'duration:${(a.durationSeconds / 60).round()}min', if (a.trainingLoad != null) 'load:${a.trainingLoad!.round()}'].join(',')}]',
+      '[PlanWeek:Extra,${['date:${day(a.startDate)}', 'name:${clean(a.name)}', 'type:${a.type}', 'duration:${(a.durationSeconds / 60).round()}min', if (a.trainingLoad != null) 'load:${a.trainingLoad!.round()}', if (a.athleteNote?.trim().isNotEmpty ?? false) 'note:${clean(a.athleteNote!.trim())}'].join(',')}]',
     );
   }
   return lines;

@@ -172,6 +172,10 @@ class ActivityRecords extends Table {
   TextColumn get description => text().nullable()();
   RealColumn get calories => real().nullable()();
   RealColumn get maxSpeedMps => real().nullable()();
+
+  /// The athlete's own note in Fjelia, e.g. why it was shorter than planned.
+  /// Written for the coach: unlike [description] it goes into its context.
+  TextColumn get athleteNote => text().nullable()();
 }
 
 class DayScoreRecords extends Table {
@@ -1457,7 +1461,7 @@ class AppDatabase extends _$AppDatabase {
       defaultSourcePriorities[group.name]!;
 
   @override
-  int get schemaVersion => 66;
+  int get schemaVersion => 67;
 
   Future<void> saveHeartRateSamples(List<TimedHeartRate> samples) async {
     if (samples.isEmpty) return;
@@ -3317,6 +3321,13 @@ class AppDatabase extends _$AppDatabase {
       }
       if (from < 65) await m.createTable(coachMemories);
       if (from < 66) await m.createTable(proReports);
+      if (from < 67) {
+        await _addColumnIfMissing(
+          'activity_records',
+          'athlete_note',
+          () => m.addColumn(activityRecords, activityRecords.athleteNote),
+        );
+      }
     },
   );
 

@@ -304,6 +304,15 @@ var copy = {
     "ai_free_body": "Chat and daily briefings without a separate AI account or personal API key. Free AI works online and sends context after your confirmation.",
     "ai_local_tag": "ON YOUR DEVICE",
     "ai_local_body": "Apple Intelligence keeps your AI requests on a compatible iPhone. Enable Apple Intelligence and use a supported language.",
+    "pro_tag": "OPTIONAL SUBSCRIPTION",
+    "pro_body": "A more capable AI coach, personalized daily training suggestions, and in-depth plan and season analyses. Pro AI uses Mistral models through an EU-based server by default; OpenAI is the fallback.",
+    "pro_monthly": "Monthly",
+    "pro_yearly": "Yearly",
+    "pro_per_month": "/ month",
+    "pro_per_year": "/ year",
+    "pro_billed_monthly": "Billed monthly",
+    "pro_year_saving": "About 33% less than 12 monthly payments",
+    "pro_renewal": "Auto-renews at the displayed price. Manage or cancel in your Apple account settings. Currency follows your browser's country setting.",
     "ai_more_title": "More ways to make it yours",
     "ai_more_body": "Download an optional local Qwen model on supported devices, or configure a cloud provider with your own key in Settings.",
     "ai_choice_note": "Choose during setup. Change anytime. You can also continue without AI.",
@@ -315,12 +324,12 @@ var copy = {
     "privacy_free_ai": "<strong>Free AI:</strong> the included cloud service at ai.fjelia.com needs no personal API key or separate AI account. After your confirmation, your message and a health/training summary are sent to this service for processing.",
     "privacy_free_ai_id": "To keep Free AI reliably available for everyone, requests include a random installation ID. It helps identify unusual use and block abusive requests. The ID contains neither your name nor account details. The service can process technical connection and request-usage data to operate and protect the service.",
     "privacy_qwen": "<strong>Local Qwen:</strong> optional models are downloaded from their model host after you choose a download. On supported hardware, inference then runs on your device.",
-    "privacy_ai_consent": "Cloud chat asks for confirmation once per session by default. You can choose confirmation before every message in Settings. Cloud briefings ask for confirmation on first use and after a change of AI provider or model. The context summary leaves out names and GPS tracks; anything you type in a message is sent with that message.",
+    "privacy_ai_consent": "Cloud chat asks for confirmation once per session by default. You can choose confirmation before every message in Settings. Cloud briefings ask for confirmation on first use and after a change of AI provider or model. The context summary leaves out names and GPS tracks; anything you type in a message is sent with that message. Notes you add to an activity (for example why it was shorter) are part of the summary.",
     "privacy_pro_h": "6a. FjeliaPro subscription",
     "privacy_pro_buy": "FjeliaPro is an auto-renewing subscription sold by Apple. Apple handles payment; Fjelia never sees your payment details. To unlock Pro, the app sends the purchase's transaction ID to push.fjelia.com. The service asks Apple's App Store Server API for the subscription status and keeps the transaction ID, product, expiry date, status and a generated access key for Fjelia AI Pro. Apple also notifies this service of renewals, cancellations and refunds. You manage or cancel the subscription in your Apple account settings.",
     "privacy_pro_ai": "With Pro, Fjelia AI answers with the Pro models on your subscription's own access key, without the installation ID: ProAI for the chat and the daily proposals, the larger ProAI-deep for the race plan and the season analysis. After your confirmation, chat messages and the health and training summary are sent as described in section 6. The Pro analyses (plan check, week review, race plan, season) also send your plan by weeks, the last days as they went, race goals without their names and your sport statistics. Pro reports and your Memory Cards are stored on your device; Memory Cards are sent with chat messages so the coach can use them.",
     "privacy_pro_morning": "Morning proposal: when the readiness check suggests changing the day's training and \"Coach writes the morning push\" is on (Settings → Training, on by default with Pro), Fjelia sends that day's and the next day's sessions, the rest of the week, your training settings, the weather forecast, race goals without names and the health summary to Fjelia AI Pro without asking each time. Turn the switch off to keep these proposals on your device; they are then made by fixed rules.",
-    "privacy_pro_provider": "Fjelia AI Pro forwards requests to the language models of its AI provider (currently OpenAI). Neither the service nor the provider receives your name, e-mail address or GPS tracks from Fjelia. Without an active subscription no Pro request is sent.",
+    "privacy_pro_provider": "Fjelia AI Pro sends requests to Mistral models through an EU-based server by default. If Mistral is unavailable, the service may use OpenAI as a fallback. Neither the service nor the AI providers receive your name, e-mail address or GPS tracks from Fjelia. Without an active subscription no Pro request is sent.",
     "plan_generator": "MULTI-RACE TRAINING PLAN GENERATOR",
     "hero_beta": "Public beta",
     "threshold_nav": "Your zones",
@@ -649,6 +658,15 @@ var copy = {
     "ai_free_body": "Chat und tägliche Briefings ohne eigenes KI-Konto oder persönlichen API-Schlüssel. Free AI arbeitet online und überträgt Kontext nach deiner Freigabe.",
     "ai_local_tag": "AUF DEINEM GERÄT",
     "ai_local_body": "Mit Apple Intelligence bleiben deine KI-Anfragen auf einem kompatiblen iPhone. Apple Intelligence muss aktiviert und eine unterstützte Sprache eingestellt sein.",
+    "pro_tag": "OPTIONALES ABO",
+    "pro_body": "Ein leistungsfähigerer KI-Coach, persönliche Trainingsvorschläge und ausführliche Analysen deines Plans und deiner Saison. Pro AI nutzt standardmäßig Mistral-Modelle über einen EU-Server; OpenAI ist der Fallback.",
+    "pro_monthly": "Monatlich",
+    "pro_yearly": "Jährlich",
+    "pro_per_month": "/ Monat",
+    "pro_per_year": "/ Jahr",
+    "pro_billed_monthly": "Monatliche Zahlung",
+    "pro_year_saving": "Etwa 33 % günstiger als 12 Monatszahlungen",
+    "pro_renewal": "Verlängert sich automatisch zum angezeigten Preis. Verwalte oder kündige das Abo in deinen Apple-Account-Einstellungen. Die Währung richtet sich nach der Länderangabe deines Browsers.",
     "ai_more_title": "Noch mehr Möglichkeiten",
     "ai_more_body": "Lade auf unterstützten Geräten ein lokales Qwen-Modell herunter oder richte in den Einstellungen einen Cloud-Anbieter mit eigenem Schlüssel ein.",
     "ai_choice_note": "Bei der Einrichtung wählen. Jederzeit wechseln. Auch ohne KI fortfahren.",
@@ -660,12 +678,12 @@ var copy = {
     "privacy_free_ai": "<strong>Free AI:</strong> Der enthaltene Cloud-Dienst unter ai.fjelia.com benötigt weder einen persönlichen API-Schlüssel noch ein separates KI-Konto. Nach deiner Freigabe werden deine Nachricht und eine Zusammenfassung deiner Gesundheits- und Trainingsdaten an diesen Dienst zur Verarbeitung gesendet.",
     "privacy_free_ai_id": "Damit Free AI für alle zuverlässig verfügbar bleibt, senden wir eine zufällige Installations-ID mit. Sie hilft uns, auffällige Nutzung zu erkennen und missbräuchliche Anfragen zu blockieren. Die ID enthält weder deinen Namen noch Kontodaten. Der Dienst kann technische Verbindungsdaten und Angaben zur Anfragenutzung verarbeiten, um den Betrieb zu ermöglichen und zu schützen.",
     "privacy_qwen": "<strong>Lokales Qwen:</strong> Optionale Modelle werden nach deinem gewählten Download vom Modellanbieter geladen. Auf unterstützter Hardware werden Anfragen anschließend auf deinem Gerät verarbeitet.",
-    "privacy_ai_consent": "Cloud-Chat fragt standardmäßig einmal pro Sitzung nach deiner Freigabe. In den Einstellungen kannst du eine Bestätigung vor jeder Nachricht wählen. Cloud-Briefings fragen bei der ersten Nutzung und nach einem Wechsel von KI-Anbieter oder Modell nach Freigabe. Die Kontextzusammenfassung enthält keine Namen oder GPS-Strecken; selbst eingegebener Nachrichtentext wird mit der Nachricht übertragen.",
+    "privacy_ai_consent": "Cloud-Chat fragt standardmäßig einmal pro Sitzung nach deiner Freigabe. In den Einstellungen kannst du eine Bestätigung vor jeder Nachricht wählen. Cloud-Briefings fragen bei der ersten Nutzung und nach einem Wechsel von KI-Anbieter oder Modell nach Freigabe. Die Kontextzusammenfassung enthält keine Namen oder GPS-Strecken; selbst eingegebener Nachrichtentext wird mit der Nachricht übertragen. Notizen, die du an einer Aktivität hinterlässt (z. B. warum sie kürzer war), sind Teil der Zusammenfassung.",
     "privacy_pro_h": "6a. FjeliaPro-Abo",
     "privacy_pro_buy": "FjeliaPro ist ein automatisch verlängertes Abo, das Apple verkauft. Apple wickelt die Zahlung ab; Fjelia sieht deine Zahlungsdaten nie. Um Pro freizuschalten, sendet die App die Transaktions-ID des Kaufs an push.fjelia.com. Der Dienst fragt den Abo-Status bei Apples App Store Server API ab und speichert Transaktions-ID, Produkt, Ablaufdatum, Status und einen erzeugten Zugangsschlüssel für Fjelia AI Pro. Apple meldet diesem Dienst außerdem Verlängerungen, Kündigungen und Erstattungen. Verwalten oder kündigen kannst du das Abo in deinen Apple-Account-Einstellungen.",
     "privacy_pro_ai": "Mit Pro antwortet Fjelia AI mit den Pro-Modellen über den eigenen Zugangsschlüssel deines Abos, ohne Installations-ID: ProAI für den Chat und die täglichen Vorschläge, das größere ProAI-deep für Wettkampfplan und Saison-Analyse. Nach deiner Bestätigung werden Chat-Nachrichten und die Gesundheits- und Trainingszusammenfassung wie in Abschnitt 6 beschrieben gesendet. Die Pro-Analysen (Plan-Check, Wochenrückblick, Wettkampfplan, Saison) senden zusätzlich deinen Plan nach Wochen, die letzten Tage wie sie liefen, Wettkampfziele ohne Namen und deine Sport-Statistiken. Pro-Berichte und deine Memory Cards werden auf deinem Gerät gespeichert; Memory Cards werden mit Chat-Nachrichten gesendet, damit der Coach sie nutzen kann.",
     "privacy_pro_morning": "Morgen-Vorschlag: Wenn der Readiness-Check eine Änderung am Training des Tages vorschlägt und „Coach schreibt den Morgen-Push“ an ist (Einstellungen → Training, mit Pro standardmäßig an), sendet Fjelia die Einheiten dieses und des nächsten Tages, den Rest der Woche, deine Trainingseinstellungen, die Wettervorhersage, Wettkampfziele ohne Namen und die Gesundheitszusammenfassung an Fjelia AI Pro, ohne jedes Mal zu fragen. Schalte den Schalter aus, damit diese Vorschläge auf deinem Gerät bleiben; sie entstehen dann nach festen Regeln.",
-    "privacy_pro_provider": "Fjelia AI Pro leitet Anfragen an die Sprachmodelle seines KI-Anbieters weiter (derzeit OpenAI). Weder der Dienst noch der Anbieter erhalten von Fjelia deinen Namen, deine E-Mail-Adresse oder GPS-Tracks. Ohne aktives Abo wird keine Pro-Anfrage gesendet.",
+    "privacy_pro_provider": "Fjelia AI Pro sendet Anfragen standardmäßig an Mistral-Modelle über einen EU-Server. Falls Mistral nicht verfügbar ist, kann der Dienst OpenAI als Fallback nutzen. Weder der Dienst noch die KI-Anbieter erhalten von Fjelia deinen Namen, deine E-Mail-Adresse oder GPS-Strecken. Ohne aktives Abo wird keine Pro-Anfrage gesendet.",
     "plan_generator": "TRAININGSPLAN-GENERATOR FÜR MEHRERE WETTKÄMPFE",
     "hero_beta": "Öffentliche Beta",
     "threshold_nav": "Deine Zonen",
@@ -994,6 +1012,15 @@ var copy = {
     "ai_free_body": "Chat y resúmenes diarios sin cuenta de IA ni clave API propia. Free AI funciona en línea y envía contexto tras tu confirmación.",
     "ai_local_tag": "EN TU DISPOSITIVO",
     "ai_local_body": "Apple Intelligence mantiene las consultas en un iPhone compatible. Debe estar activado y configurado en un idioma compatible.",
+    "pro_tag": "SUSCRIPCIÓN OPCIONAL",
+    "pro_body": "Un coach de IA más capaz, sugerencias de entrenamiento personalizadas y análisis detallados de tu plan y temporada. Pro AI usa por defecto modelos de Mistral a través de un servidor en la UE; OpenAI es la alternativa.",
+    "pro_monthly": "Mensual",
+    "pro_yearly": "Anual",
+    "pro_per_month": "/ mes",
+    "pro_per_year": "/ año",
+    "pro_billed_monthly": "Pago mensual",
+    "pro_year_saving": "Aproximadamente un 33 % menos que 12 pagos mensuales",
+    "pro_renewal": "Se renueva automáticamente al precio indicado. Gestiona o cancela la suscripción en los ajustes de tu cuenta de Apple. La moneda depende del país configurado en tu navegador.",
     "ai_more_title": "Más opciones para ti",
     "ai_more_body": "Descarga un modelo Qwen local en dispositivos compatibles o configura en Ajustes un proveedor en la nube con tu propia clave.",
     "ai_choice_note": "Elige al configurar. Cambia cuando quieras. También puedes continuar sin IA.",
@@ -1005,12 +1032,12 @@ var copy = {
     "privacy_free_ai": "<strong>Free AI:</strong> el servicio en la nube incluido en ai.fjelia.com no requiere clave API personal ni cuenta de IA. Tras tu confirmación, recibe tu mensaje y un resumen de tus datos de salud y entrenamiento para procesarlos.",
     "privacy_free_ai_id": "Para mantener Free AI disponible para todos, las solicitudes incluyen un ID de instalación aleatorio. Permite detectar usos inusuales y bloquear solicitudes abusivas. No contiene tu nombre ni datos de cuenta. El servicio puede procesar datos técnicos de conexión y uso de solicitudes para operar y proteger el servicio.",
     "privacy_qwen": "<strong>Qwen local:</strong> los modelos opcionales se descargan del proveedor cuando eliges descargarlos. Después, las consultas se procesan en tu dispositivo si el hardware es compatible.",
-    "privacy_ai_consent": "El chat en la nube pide confirmación una vez por sesión por defecto. En Ajustes puedes elegir confirmar cada mensaje. Los resúmenes en la nube piden confirmación en el primer uso y tras cambiar de proveedor o modelo de IA. El resumen de contexto omite nombres y rutas GPS; el texto que escribes se envía con el mensaje.",
+    "privacy_ai_consent": "El chat en la nube pide confirmación una vez por sesión por defecto. En Ajustes puedes elegir confirmar cada mensaje. Los resúmenes en la nube piden confirmación en el primer uso y tras cambiar de proveedor o modelo de IA. El resumen de contexto omite nombres y rutas GPS; el texto que escribes se envía con el mensaje. Las notas que añades a una actividad (por ejemplo, por qué fue más corta) forman parte del resumen.",
     "privacy_pro_h": "6a. Suscripción FjeliaPro",
     "privacy_pro_buy": "FjeliaPro es una suscripción de renovación automática vendida por Apple. Apple gestiona el pago; Fjelia nunca ve tus datos de pago. Para activar Pro, la app envía el ID de transacción de la compra a push.fjelia.com. El servicio consulta el estado de la suscripción en la App Store Server API de Apple y guarda el ID de transacción, el producto, la fecha de caducidad, el estado y una clave de acceso generada para Fjelia AI Pro. Apple también notifica a este servicio las renovaciones, cancelaciones y reembolsos. Gestionas o cancelas la suscripción en los ajustes de tu cuenta de Apple.",
     "privacy_pro_ai": "Con Pro, Fjelia AI responde con los modelos Pro mediante la clave de acceso propia de tu suscripción, sin el ID de instalación: ProAI para el chat y las propuestas diarias, el modelo mayor ProAI-deep para el plan de carrera y el análisis de temporada. Tras tu confirmación, los mensajes del chat y el resumen de salud y entrenamiento se envían como se describe en la sección 6. Los análisis Pro (revisión del plan, resumen semanal, plan de carrera, temporada) envían además tu plan por semanas, los últimos días tal como fueron, los objetivos de carrera sin sus nombres y tus estadísticas deportivas. Los informes Pro y tus Memory Cards se guardan en tu dispositivo; las Memory Cards se envían con los mensajes del chat para que el coach pueda usarlas.",
     "privacy_pro_morning": "Propuesta matinal: cuando el control de preparación sugiere cambiar el entrenamiento del día y «El coach escribe el aviso de la mañana» está activado (Ajustes → Entrenamiento, activado por defecto con Pro), Fjelia envía a Fjelia AI Pro las sesiones de ese día y del siguiente, el resto de la semana, tus ajustes de entrenamiento, la previsión del tiempo, los objetivos de carrera sin nombres y el resumen de salud, sin preguntar cada vez. Desactiva el interruptor para que estas propuestas se queden en tu dispositivo; entonces se crean con reglas fijas.",
-    "privacy_pro_provider": "Fjelia AI Pro reenvía las solicitudes a los modelos de lenguaje de su proveedor de IA (actualmente OpenAI). Ni el servicio ni el proveedor reciben de Fjelia tu nombre, tu correo electrónico ni tus rutas GPS. Sin una suscripción activa no se envía ninguna solicitud Pro.",
+    "privacy_pro_provider": "Fjelia AI Pro envía las solicitudes por defecto a modelos de Mistral a través de un servidor en la UE. Si Mistral no está disponible, el servicio puede usar OpenAI como alternativa. Ni el servicio ni los proveedores de IA reciben de Fjelia tu nombre, correo electrónico o rutas GPS. Sin una suscripción activa no se envían solicitudes Pro.",
     "plan_generator": "GENERADOR DE PLANES PARA VARIAS CARRERAS",
     "hero_beta": "Beta pública",
     "threshold_nav": "Tus zonas",
@@ -1339,6 +1366,15 @@ var copy = {
     "ai_free_body": "Chat et bilans quotidiens sans compte IA ni clé API personnelle. Free AI fonctionne en ligne et envoie le contexte après votre confirmation.",
     "ai_local_tag": "SUR VOTRE APPAREIL",
     "ai_local_body": "Apple Intelligence garde les requêtes sur un iPhone compatible. Il doit être activé et utiliser une langue prise en charge.",
+    "pro_tag": "ABONNEMENT FACULTATIF",
+    "pro_body": "Un coach IA plus performant, des suggestions d’entraînement personnalisées et des analyses détaillées du plan et de la saison. Pro AI utilise par défaut les modèles Mistral via un serveur situé dans l’UE ; OpenAI sert de solution de repli.",
+    "pro_monthly": "Mensuel",
+    "pro_yearly": "Annuel",
+    "pro_per_month": "/ mois",
+    "pro_per_year": "/ an",
+    "pro_billed_monthly": "Paiement mensuel",
+    "pro_year_saving": "Environ 33 % de moins que 12 paiements mensuels",
+    "pro_renewal": "Renouvellement automatique au prix affiché. Gérez ou résiliez l’abonnement dans les réglages de votre compte Apple. La devise dépend du pays indiqué par votre navigateur.",
     "ai_more_title": "Encore plus de possibilités",
     "ai_more_body": "Téléchargez un modèle Qwen local sur un appareil compatible ou configurez un fournisseur cloud avec votre propre clé dans les réglages.",
     "ai_choice_note": "Choisissez à la configuration. Changez quand vous voulez. Vous pouvez aussi continuer sans IA.",
@@ -1350,12 +1386,12 @@ var copy = {
     "privacy_free_ai": "<strong>Free AI :</strong> le service cloud inclus sur ai.fjelia.com ne nécessite ni clé API personnelle ni compte IA. Après votre confirmation, votre message et un résumé de vos données de santé et d’entraînement sont envoyés au service pour traitement.",
     "privacy_free_ai_id": "Pour garder Free AI disponible pour tous, les requêtes incluent un identifiant d’installation aléatoire. Il aide à repérer les usages inhabituels et à bloquer les abus. Il ne contient ni votre nom ni vos données de compte. Le service peut traiter des données techniques de connexion et d’utilisation des requêtes pour fonctionner et se protéger.",
     "privacy_qwen": "<strong>Qwen local :</strong> les modèles optionnels sont téléchargés auprès de leur fournisseur lorsque vous le demandez. Les requêtes sont ensuite traitées sur votre appareil si le matériel est compatible.",
-    "privacy_ai_consent": "Le chat cloud demande par défaut une confirmation par session. Vous pouvez choisir de confirmer chaque message dans les réglages. Les bilans cloud demandent une confirmation à la première utilisation et après un changement de fournisseur ou de modèle IA. Le résumé de contexte exclut noms et tracés GPS ; le texte que vous saisissez est envoyé avec le message.",
+    "privacy_ai_consent": "Le chat cloud demande par défaut une confirmation par session. Vous pouvez choisir de confirmer chaque message dans les réglages. Les bilans cloud demandent une confirmation à la première utilisation et après un changement de fournisseur ou de modèle IA. Le résumé de contexte exclut noms et tracés GPS ; le texte que vous saisissez est envoyé avec le message. Les notes que tu ajoutes à une activité (par exemple pourquoi elle a été plus courte) font partie du résumé.",
     "privacy_pro_h": "6a. Abonnement FjeliaPro",
     "privacy_pro_buy": "FjeliaPro est un abonnement à renouvellement automatique vendu par Apple. Apple gère le paiement ; Fjelia ne voit jamais tes données de paiement. Pour activer Pro, l'app envoie l'identifiant de transaction de l'achat à push.fjelia.com. Le service interroge l'App Store Server API d'Apple sur l'état de l'abonnement et conserve l'identifiant de transaction, le produit, la date d'expiration, l'état et une clé d'accès générée pour Fjelia AI Pro. Apple informe aussi ce service des renouvellements, résiliations et remboursements. Tu gères ou résilies l'abonnement dans les réglages de ton compte Apple.",
     "privacy_pro_ai": "Avec Pro, Fjelia AI répond avec les modèles Pro via la clé d'accès propre à ton abonnement, sans l'identifiant d'installation : ProAI pour le chat et les propositions du jour, le modèle plus grand ProAI-deep pour le plan de course et l'analyse de saison. Après ta confirmation, les messages du chat et le résumé santé et entraînement sont envoyés comme décrit à la section 6. Les analyses Pro (contrôle du plan, bilan de la semaine, plan de course, saison) envoient en plus ton plan par semaines, les derniers jours tels qu'ils se sont passés, les objectifs de course sans leur nom et tes statistiques sportives. Les rapports Pro et tes Memory Cards sont enregistrés sur ton appareil ; les Memory Cards sont envoyées avec les messages du chat pour que le coach puisse les utiliser.",
     "privacy_pro_morning": "Proposition du matin : lorsque le contrôle de forme suggère de modifier l'entraînement du jour et que « Le coach rédige la notification du matin » est activé (Réglages → Entraînement, activé par défaut avec Pro), Fjelia envoie à Fjelia AI Pro les séances de ce jour et du lendemain, le reste de la semaine, tes réglages d'entraînement, les prévisions météo, les objectifs de course sans nom et le résumé santé, sans demander à chaque fois. Désactive l'interrupteur pour garder ces propositions sur ton appareil ; elles sont alors établies selon des règles fixes.",
-    "privacy_pro_provider": "Fjelia AI Pro transmet les demandes aux modèles de langage de son fournisseur d'IA (actuellement OpenAI). Ni le service ni le fournisseur ne reçoivent de Fjelia ton nom, ton adresse e-mail ou tes traces GPS. Sans abonnement actif, aucune demande Pro n'est envoyée.",
+    "privacy_pro_provider": "Fjelia AI Pro envoie les demandes par défaut aux modèles Mistral via un serveur situé dans l’UE. Si Mistral est indisponible, le service peut utiliser OpenAI comme solution de repli. Ni le service ni les fournisseurs d’IA ne reçoivent de Fjelia ton nom, ton adresse e-mail ou tes traces GPS. Sans abonnement actif, aucune demande Pro n’est envoyée.",
     "plan_generator": "GÉNÉRATEUR DE PLANS POUR PLUSIEURS COURSES",
     "hero_beta": "Bêta publique",
     "threshold_nav": "Vos zones",
@@ -1684,6 +1720,15 @@ var copy = {
     "ai_free_body": "Chat e riepiloghi quotidiani senza account IA o chiave API personale. Free AI funziona online e invia il contesto dopo la tua conferma.",
     "ai_local_tag": "SUL TUO DISPOSITIVO",
     "ai_local_body": "Apple Intelligence mantiene le richieste su un iPhone compatibile. Deve essere attivo e usare una lingua supportata.",
+    "pro_tag": "ABBONAMENTO OPZIONALE",
+    "pro_body": "Un coach IA più potente, suggerimenti di allenamento personalizzati e analisi dettagliate del piano e della stagione. Pro AI usa di default i modelli Mistral tramite un server nell’UE; OpenAI è il fallback.",
+    "pro_monthly": "Mensile",
+    "pro_yearly": "Annuale",
+    "pro_per_month": "/ mese",
+    "pro_per_year": "/ anno",
+    "pro_billed_monthly": "Pagamento mensile",
+    "pro_year_saving": "Circa il 33 % in meno rispetto a 12 pagamenti mensili",
+    "pro_renewal": "Rinnovo automatico al prezzo indicato. Gestisci o annulla l’abbonamento nelle impostazioni del tuo account Apple. La valuta dipende dal Paese indicato dal browser.",
     "ai_more_title": "Ancora più possibilità",
     "ai_more_body": "Scarica un modello Qwen locale su dispositivi supportati o configura un provider cloud con la tua chiave nelle impostazioni.",
     "ai_choice_note": "Scegli durante la configurazione. Cambia quando vuoi. Puoi anche continuare senza IA.",
@@ -1695,12 +1740,12 @@ var copy = {
     "privacy_free_ai": "<strong>Free AI:</strong> il servizio cloud incluso su ai.fjelia.com non richiede chiave API personale o account IA. Dopo la conferma, il messaggio e un riepilogo dei dati sulla salute e sull’allenamento vengono inviati al servizio per l’elaborazione.",
     "privacy_free_ai_id": "Per mantenere Free AI disponibile per tutti, le richieste includono un ID di installazione casuale. Aiuta a individuare utilizzi insoliti e bloccare abusi. Non contiene nome o dati dell’account. Il servizio può elaborare dati tecnici di connessione e utilizzo delle richieste per funzionare e proteggersi.",
     "privacy_qwen": "<strong>Qwen locale:</strong> i modelli opzionali vengono scaricati dal fornitore quando scegli il download. Le richieste vengono poi elaborate sul dispositivo se l’hardware è supportato.",
-    "privacy_ai_consent": "Per impostazione predefinita, la chat cloud chiede conferma una volta per sessione. Puoi scegliere di confermare ogni messaggio nelle impostazioni. I riepiloghi cloud chiedono conferma al primo utilizzo e dopo un cambio di provider o modello IA. Il riepilogo del contesto esclude nomi e tracce GPS; il testo digitato viene inviato con il messaggio.",
+    "privacy_ai_consent": "Per impostazione predefinita, la chat cloud chiede conferma una volta per sessione. Puoi scegliere di confermare ogni messaggio nelle impostazioni. I riepiloghi cloud chiedono conferma al primo utilizzo e dopo un cambio di provider o modello IA. Il riepilogo del contesto esclude nomi e tracce GPS; il testo digitato viene inviato con il messaggio. Le note che aggiungi a un'attività (ad esempio perché è stata più breve) fanno parte del riepilogo.",
     "privacy_pro_h": "6a. Abbonamento FjeliaPro",
     "privacy_pro_buy": "FjeliaPro è un abbonamento a rinnovo automatico venduto da Apple. Apple gestisce il pagamento; Fjelia non vede mai i tuoi dati di pagamento. Per sbloccare Pro, l'app invia l'ID transazione dell'acquisto a push.fjelia.com. Il servizio chiede lo stato dell'abbonamento all'App Store Server API di Apple e conserva ID transazione, prodotto, data di scadenza, stato e una chiave di accesso generata per Fjelia AI Pro. Apple notifica inoltre a questo servizio rinnovi, disdette e rimborsi. Gestisci o disdici l'abbonamento nelle impostazioni del tuo account Apple.",
     "privacy_pro_ai": "Con Pro, Fjelia AI risponde con i modelli Pro tramite la chiave di accesso del tuo abbonamento, senza ID di installazione: ProAI per la chat e le proposte giornaliere, il modello più grande ProAI-deep per il piano gara e l'analisi della stagione. Dopo la tua conferma, i messaggi della chat e il riepilogo di salute e allenamento vengono inviati come descritto nella sezione 6. Le analisi Pro (controllo del piano, riepilogo settimanale, piano gara, stagione) inviano inoltre il tuo piano per settimane, gli ultimi giorni come sono andati, gli obiettivi di gara senza nome e le tue statistiche sportive. I report Pro e le tue Memory Cards sono salvati sul dispositivo; le Memory Cards vengono inviate con i messaggi della chat perché il coach possa usarle.",
     "privacy_pro_morning": "Proposta del mattino: quando il controllo della prontezza suggerisce di cambiare l'allenamento del giorno e «Il coach scrive la notifica del mattino» è attivo (Impostazioni → Allenamento, attivo di default con Pro), Fjelia invia a Fjelia AI Pro le sessioni di quel giorno e del successivo, il resto della settimana, le tue impostazioni di allenamento, le previsioni meteo, gli obiettivi di gara senza nome e il riepilogo di salute, senza chiedere ogni volta. Disattiva l'interruttore per tenere queste proposte sul dispositivo; vengono allora create con regole fisse.",
-    "privacy_pro_provider": "Fjelia AI Pro inoltra le richieste ai modelli linguistici del suo fornitore di IA (attualmente OpenAI). Né il servizio né il fornitore ricevono da Fjelia il tuo nome, il tuo indirizzo e-mail o le tracce GPS. Senza un abbonamento attivo non viene inviata alcuna richiesta Pro.",
+    "privacy_pro_provider": "Fjelia AI Pro invia le richieste per impostazione predefinita ai modelli Mistral tramite un server nell’UE. Se Mistral non è disponibile, il servizio può usare OpenAI come fallback. Né il servizio né i fornitori di IA ricevono da Fjelia il tuo nome, l’indirizzo e-mail o le tracce GPS. Senza un abbonamento attivo non vengono inviate richieste Pro.",
     "plan_generator": "GENERATORE DI PIANI PER PIÙ GARE",
     "hero_beta": "Beta pubblica",
     "threshold_nav": "Le tue zone",
@@ -1734,10 +1779,24 @@ var originalTitle = document.title;
 var selected;
 try { selected = localStorage.getItem('fjelia-language'); } catch (_) {}
 var requested = new URL(location.href).searchParams.get('lang');
-var browserLanguage = (navigator.language || 'en').split('-')[0].toLowerCase();
+var browserLocale = navigator.language || 'en';
+var browserLanguage = browserLocale.split('-')[0].toLowerCase();
 var current = supported.includes(requested) ? requested : supported.includes(selected) ? selected : supported.includes(browserLanguage) ? browserLanguage : 'en';
+var euCountries = new Set(['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE']);
 function text(key) { return copy[current][key] || copy.en[key] || key; }
 function plain(html) { var temp = document.createElement('div'); temp.innerHTML = html; return temp.textContent; }
+function proCurrency() {
+  var match = browserLocale.match(/[-_]([A-Za-z]{2})(?:[-_]|$)/);
+  return match && euCountries.has(match[1].toUpperCase()) ? 'EUR' : 'USD';
+}
+function updateProPrices() {
+  var currency = proCurrency();
+  var locale = current === 'de' ? 'de-DE' : current === 'fr' ? 'fr-FR' : current === 'es' ? 'es-ES' : current === 'it' ? 'it-IT' : 'en-US';
+  var prices = {monthly: 4.99, yearly: 39.99};
+  document.querySelectorAll('[data-pro-price]').forEach(function (el) {
+    el.textContent = new Intl.NumberFormat(locale, {style:'currency',currency:currency}).format(prices[el.dataset.proPrice]);
+  });
+}
 function updateLinks() {
   document.querySelectorAll('a[href]').forEach(function (link) {
     var href = link.getAttribute('href');
@@ -1752,6 +1811,7 @@ function apply(lang, remember) {
   if (!supported.includes(lang)) lang = 'en';
   current = lang;
   document.documentElement.lang = lang;
+  updateProPrices();
   document.querySelectorAll('[data-i18n]').forEach(function (el) {
     el.innerHTML = text(el.dataset.i18n);
   });

@@ -8384,7 +8384,8 @@ class AppLocalizationsNb extends AppLocalizations {
   String get proAnalysisFailed => 'Analysen fungerte ikke. Prøv igjen.';
 
   @override
-  String get proBenefitPlanCheck => 'Daglig plansjekk med den store modellen';
+  String get proBenefitPlanCheck =>
+      'Morgenforslag og plansjekk: coachen tilpasser dagens trening';
 
   @override
   String get proBenefitReview => 'Ukentlig tilbakeblikk og sesonganalyse';
@@ -8557,4 +8558,23 @@ class AppLocalizationsNb extends AppLocalizations {
   @override
   String get proAiRouting =>
       'Coachen og de daglige forslagene bruker ProAI; løpsplanen og sesonganalysen bruker selv den større ProAI-deep.';
+
+  @override
+  String proActiveUntilShort(String date) {
+    return 'Aktiv til $date';
+  }
+
+  @override
+  String shortSessionNote(int done, int planned) {
+    return 'Kortere enn planlagt ($done av $planned min)';
+  }
+
+  @override
+  String get noteForCoach => 'Notat til coachen (valgfritt)';
+
+  @override
+  String get activityNote => 'Notat';
+
+  @override
+  String get activityNoteAdd => 'Legg til et notat til coachen';
 }

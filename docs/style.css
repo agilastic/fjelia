@@ -845,6 +845,58 @@ header.site .btn {
 .local-option h3,.local-option .ai-option-head {
   color: #d5c9ff
 }
+.pro-option {
+  border-color: #ffb79b45;
+  background: linear-gradient(110deg,#ffb79b12,#ffb79b03)
+}
+.pro-option h3,.pro-option .ai-option-head {
+  color: #ffd0bb
+}
+.pro-pricing {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 10px;
+  margin-top: 20px
+}
+.pro-price-card {
+  min-width: 0;
+  padding: 15px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: #050b1977
+}
+.pro-price-card h4 {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: .08em;
+  text-transform: uppercase
+}
+.pro-price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 5px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px
+}
+.pro-price strong {
+  color: var(--white);
+  font-size: clamp(21px,3vw,29px);
+  letter-spacing: -.045em
+}
+.pro-billing,.pro-renewal {
+  margin: 7px 0 0;
+  color: var(--muted);
+  font-size: 12px
+}
+.pro-yearly {
+  border-color: #70f3c84a
+}
+.pro-yearly h4 {
+  color: var(--accent)
+}
 .ai-more {
   border-bottom: 1px solid var(--border);
   margin-top: 14px

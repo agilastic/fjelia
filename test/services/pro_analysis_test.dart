@@ -77,36 +77,52 @@ void main() {
     });
     tearDown(() => FjeliaProEntitlement.active = false);
 
-    AiCoachClient client(List<String> models, {bool deepRefused = false}) =>
-        AiCoachClient(
-          store: const AiCoachSettingsStore(freeAiApiKey: 'free'),
-          client: MockClient((r) async {
-            final body = jsonDecode(r.body) as Map;
-            models.add(body['model'] as String);
-            expect(r.headers['Authorization'], 'Bearer sk-pro-1001');
-            if (deepRefused && body['model'] == 'ProAI-deep') {
-              return http.Response(
-                jsonEncode({
-                  'error': {'message': 'key not allowed to access model'},
-                }),
-                401,
-              );
-            }
-            final system = (body['messages'] as List).first['content'];
-            expect(system, startsWith('You are Fjelia'));
-            expect(system, contains('HEALTH_CONTEXT:'));
-            return http.Response(
-              jsonEncode({
-                'choices': [
-                  {
-                    'message': {'content': '## Verdict\nAs planned.'},
-                  },
-                ],
-              }),
-              200,
-            );
+    AiCoachClient client(
+      List<String> models, {
+      bool deepRefused = false,
+      bool proOut = false,
+    }) => AiCoachClient(
+      store: const AiCoachSettingsStore(freeAiApiKey: 'free'),
+      client: MockClient((r) async {
+        final body = jsonDecode(r.body) as Map;
+        models.add(body['model'] as String);
+        if (body['model'] == 'default') {
+          // Free AI on its own key.
+          expect(r.headers['Authorization'], 'Bearer free');
+        } else {
+          expect(r.headers['Authorization'], 'Bearer sk-pro-1001');
+        }
+        if (proOut && body['model'] != 'default') {
+          return http.Response(
+            jsonEncode({
+              'error': {'message': 'All deployments are in cooldown'},
+            }),
+            429,
+          );
+        }
+        if (deepRefused && body['model'] == 'ProAI-deep') {
+          return http.Response(
+            jsonEncode({
+              'error': {'message': 'key not allowed to access model'},
+            }),
+            401,
+          );
+        }
+        final system = (body['messages'] as List).first['content'];
+        expect(system, startsWith('You are Fjelia'));
+        expect(system, contains('HEALTH_CONTEXT:'));
+        return http.Response(
+          jsonEncode({
+            'choices': [
+              {
+                'message': {'content': '## Verdict\nAs planned.'},
+              },
+            ],
           }),
+          200,
         );
+      }),
+    );
 
     test('the large model writes the race plan and the season', () async {
       final models = <String>[];
@@ -141,6 +157,18 @@ void main() {
       );
       expect(models, ['ProAI']);
       expect(answer.model, 'ProAI');
+    });
+
+    test('both Pro models out: Free AI writes the analysis', () async {
+      final models = <String>[];
+      final answer = await client(models, proOut: true).sendProAnalysis(
+        proAnalysisInstructions(ProAnalysisRef.season(DateTime.now())),
+        'Season',
+        '[HRV:Latest:52ms]',
+      );
+      expect(models, ['ProAI-deep', 'ProAI', 'default']);
+      expect(answer.model, 'default');
+      expect(answer.text, contains('As planned'));
     });
 
     test('nothing is sent without Pro', () async {

@@ -39,6 +39,7 @@ import 'workout_destination_provider.dart';
 import 'suunto_provider.dart';
 import 'mywhoosh_provider.dart';
 import 'plan_proposal_provider.dart';
+import 'short_session_provider.dart';
 import 'user_profile_provider.dart';
 import 'workout_generation_provider.dart';
 
@@ -505,6 +506,15 @@ class SyncNotifier extends StateNotifier<SyncState> {
       log('[Sync] readiness adaptation error: $e');
     }
     await _scoreRecentWorkouts();
+    // A session that came out clearly shorter: ask why, a few minutes on.
+    unawaited(
+      _ref.read(shortSessionReminderProvider).reconcile().catchError((
+        Object e,
+      ) {
+        log('[ShortSession] $e');
+        return 0;
+      }),
+    );
     await _reconcilePlan();
     try {
       await _autoGeneratePlanIfNeeded(_ref);

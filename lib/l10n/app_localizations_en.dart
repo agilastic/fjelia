@@ -8389,7 +8389,8 @@ class AppLocalizationsEn extends AppLocalizations {
       'The analysis did not work. Please try again.';
 
   @override
-  String get proBenefitPlanCheck => 'Daily plan check with the large model';
+  String get proBenefitPlanCheck =>
+      'Morning proposal and plan check: the coach reworks the day\'s training';
 
   @override
   String get proBenefitReview => 'Weekly review and season analysis';
@@ -8561,5 +8562,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get proAiRouting =>
-      'The coach and the daily proposals use ProAI; the race plan and the season analysis use the larger ProAI-deep by themselves.';
+      'FjeliaPro uses a more powerful AI for race and season plans. Your coach and daily training suggestions use the regular Pro model.';
+
+  @override
+  String proActiveUntilShort(String date) {
+    return 'Active until $date';
+  }
+
+  @override
+  String shortSessionNote(int done, int planned) {
+    return 'Shorter than planned ($done of $planned min)';
+  }
+
+  @override
+  String get noteForCoach => 'Note for the coach (optional)';
+
+  @override
+  String get activityNote => 'Note';
+
+  @override
+  String get activityNoteAdd => 'Add a note for the coach';
 }

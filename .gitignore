@@ -61,3 +61,5 @@ pubspec_overrides.yaml
 
 # FVM Version Cache
 .fvm/
+AGENTS.md
+memory.md

@@ -3969,7 +3969,7 @@
   "proAnalysisFrom": "Vytvorené {time}",
   "proAnalysisWorking": "Veľký model analyzuje…",
   "proAnalysisFailed": "Analýza sa nepodarila. Skús to znova.",
-  "proBenefitPlanCheck": "Denná kontrola plánu s veľkým modelom",
+  "proBenefitPlanCheck": "Ranný návrh a kontrola plánu: kouč upraví dnešný tréning",
   "proBenefitReview": "Týždenný prehľad a analýza sezóny",
   "proBenefitRacePlan": "Pretekový plán: vyladenie, tempo, výživa",
   "statsTitle": "Štatistiky",
@@ -4020,5 +4020,10 @@
   "feelingAsking": "Kouč premýšľa znova…",
   "proSwitchTitle": "Prepnúť na ProAI?",
   "proSwitchBody": "Tvoje predplatné FjeliaPro je aktívne. Má kouč odteraz používať ProAI namiesto {provider}?",
-  "proAiRouting": "Kouč a denné návrhy používajú ProAI; plán pretekov a analýza sezóny používajú samy väčší ProAI-deep."
+  "proAiRouting": "Kouč a denné návrhy používajú ProAI; plán pretekov a analýza sezóny používajú samy väčší ProAI-deep.",
+  "proActiveUntilShort": "Aktívne do {date}",
+  "shortSessionNote": "Kratšie, než bolo plánované ({done} z {planned} min)",
+  "noteForCoach": "Poznámka pre kouča (nepovinné)",
+  "activityNote": "Poznámka",
+  "activityNoteAdd": "Pridaj poznámku pre kouča"
 }

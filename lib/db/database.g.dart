@@ -6250,6 +6250,17 @@ class $ActivityRecordsTable extends ActivityRecords
     type: DriftSqlType.double,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _athleteNoteMeta = const VerificationMeta(
+    'athleteNote',
+  );
+  @override
+  late final GeneratedColumn<String> athleteNote = GeneratedColumn<String>(
+    'athlete_note',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -6282,6 +6293,7 @@ class $ActivityRecordsTable extends ActivityRecords
     description,
     calories,
     maxSpeedMps,
+    athleteNote,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -6545,6 +6557,15 @@ class $ActivityRecordsTable extends ActivityRecords
         ),
       );
     }
+    if (data.containsKey('athlete_note')) {
+      context.handle(
+        _athleteNoteMeta,
+        athleteNote.isAcceptableOrUnknown(
+          data['athlete_note']!,
+          _athleteNoteMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -6674,6 +6695,10 @@ class $ActivityRecordsTable extends ActivityRecords
         DriftSqlType.double,
         data['${effectivePrefix}max_speed_mps'],
       ),
+      athleteNote: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}athlete_note'],
+      ),
     );
   }
 
@@ -6717,6 +6742,10 @@ class ActivityRecord extends DataClass implements Insertable<ActivityRecord> {
   final String? description;
   final double? calories;
   final double? maxSpeedMps;
+
+  /// The athlete's own note in Fjelia, e.g. why it was shorter than planned.
+  /// Written for the coach: unlike [description] it goes into its context.
+  final String? athleteNote;
   const ActivityRecord({
     required this.id,
     required this.activityId,
@@ -6748,6 +6777,7 @@ class ActivityRecord extends DataClass implements Insertable<ActivityRecord> {
     this.description,
     this.calories,
     this.maxSpeedMps,
+    this.athleteNote,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -6834,6 +6864,9 @@ class ActivityRecord extends DataClass implements Insertable<ActivityRecord> {
     if (!nullToAbsent || maxSpeedMps != null) {
       map['max_speed_mps'] = Variable<double>(maxSpeedMps);
     }
+    if (!nullToAbsent || athleteNote != null) {
+      map['athlete_note'] = Variable<String>(athleteNote);
+    }
     return map;
   }
 
@@ -6917,6 +6950,9 @@ class ActivityRecord extends DataClass implements Insertable<ActivityRecord> {
       maxSpeedMps: maxSpeedMps == null && nullToAbsent
           ? const Value.absent()
           : Value(maxSpeedMps),
+      athleteNote: athleteNote == null && nullToAbsent
+          ? const Value.absent()
+          : Value(athleteNote),
     );
   }
 
@@ -6972,6 +7008,7 @@ class ActivityRecord extends DataClass implements Insertable<ActivityRecord> {
       description: serializer.fromJson<String?>(json['description']),
       calories: serializer.fromJson<double?>(json['calories']),
       maxSpeedMps: serializer.fromJson<double?>(json['maxSpeedMps']),
+      athleteNote: serializer.fromJson<String?>(json['athleteNote']),
     );
   }
   @override
@@ -7016,6 +7053,7 @@ class ActivityRecord extends DataClass implements Insertable<ActivityRecord> {
       'description': serializer.toJson<String?>(description),
       'calories': serializer.toJson<double?>(calories),
       'maxSpeedMps': serializer.toJson<double?>(maxSpeedMps),
+      'athleteNote': serializer.toJson<String?>(athleteNote),
     };
   }
 
@@ -7050,6 +7088,7 @@ class ActivityRecord extends DataClass implements Insertable<ActivityRecord> {
     Value<String?> description = const Value.absent(),
     Value<double?> calories = const Value.absent(),
     Value<double?> maxSpeedMps = const Value.absent(),
+    Value<String?> athleteNote = const Value.absent(),
   }) => ActivityRecord(
     id: id ?? this.id,
     activityId: activityId ?? this.activityId,
@@ -7107,6 +7146,7 @@ class ActivityRecord extends DataClass implements Insertable<ActivityRecord> {
     description: description.present ? description.value : this.description,
     calories: calories.present ? calories.value : this.calories,
     maxSpeedMps: maxSpeedMps.present ? maxSpeedMps.value : this.maxSpeedMps,
+    athleteNote: athleteNote.present ? athleteNote.value : this.athleteNote,
   );
   ActivityRecord copyWithCompanion(ActivityRecordsCompanion data) {
     return ActivityRecord(
@@ -7184,6 +7224,9 @@ class ActivityRecord extends DataClass implements Insertable<ActivityRecord> {
       maxSpeedMps: data.maxSpeedMps.present
           ? data.maxSpeedMps.value
           : this.maxSpeedMps,
+      athleteNote: data.athleteNote.present
+          ? data.athleteNote.value
+          : this.athleteNote,
     );
   }
 
@@ -7219,7 +7262,8 @@ class ActivityRecord extends DataClass implements Insertable<ActivityRecord> {
           ..write('movingDurationSeconds: $movingDurationSeconds, ')
           ..write('description: $description, ')
           ..write('calories: $calories, ')
-          ..write('maxSpeedMps: $maxSpeedMps')
+          ..write('maxSpeedMps: $maxSpeedMps, ')
+          ..write('athleteNote: $athleteNote')
           ..write(')'))
         .toString();
   }
@@ -7256,6 +7300,7 @@ class ActivityRecord extends DataClass implements Insertable<ActivityRecord> {
     description,
     calories,
     maxSpeedMps,
+    athleteNote,
   ]);
   @override
   bool operator ==(Object other) =>
@@ -7290,7 +7335,8 @@ class ActivityRecord extends DataClass implements Insertable<ActivityRecord> {
           other.movingDurationSeconds == this.movingDurationSeconds &&
           other.description == this.description &&
           other.calories == this.calories &&
-          other.maxSpeedMps == this.maxSpeedMps);
+          other.maxSpeedMps == this.maxSpeedMps &&
+          other.athleteNote == this.athleteNote);
 }
 
 class ActivityRecordsCompanion extends UpdateCompanion<ActivityRecord> {
@@ -7324,6 +7370,7 @@ class ActivityRecordsCompanion extends UpdateCompanion<ActivityRecord> {
   final Value<String?> description;
   final Value<double?> calories;
   final Value<double?> maxSpeedMps;
+  final Value<String?> athleteNote;
   const ActivityRecordsCompanion({
     this.id = const Value.absent(),
     this.activityId = const Value.absent(),
@@ -7355,6 +7402,7 @@ class ActivityRecordsCompanion extends UpdateCompanion<ActivityRecord> {
     this.description = const Value.absent(),
     this.calories = const Value.absent(),
     this.maxSpeedMps = const Value.absent(),
+    this.athleteNote = const Value.absent(),
   });
   ActivityRecordsCompanion.insert({
     this.id = const Value.absent(),
@@ -7387,6 +7435,7 @@ class ActivityRecordsCompanion extends UpdateCompanion<ActivityRecord> {
     this.description = const Value.absent(),
     this.calories = const Value.absent(),
     this.maxSpeedMps = const Value.absent(),
+    this.athleteNote = const Value.absent(),
   }) : activityId = Value(activityId),
        name = Value(name),
        type = Value(type),
@@ -7423,6 +7472,7 @@ class ActivityRecordsCompanion extends UpdateCompanion<ActivityRecord> {
     Expression<String>? description,
     Expression<double>? calories,
     Expression<double>? maxSpeedMps,
+    Expression<String>? athleteNote,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -7463,6 +7513,7 @@ class ActivityRecordsCompanion extends UpdateCompanion<ActivityRecord> {
       if (description != null) 'description': description,
       if (calories != null) 'calories': calories,
       if (maxSpeedMps != null) 'max_speed_mps': maxSpeedMps,
+      if (athleteNote != null) 'athlete_note': athleteNote,
     });
   }
 
@@ -7497,6 +7548,7 @@ class ActivityRecordsCompanion extends UpdateCompanion<ActivityRecord> {
     Value<String?>? description,
     Value<double?>? calories,
     Value<double?>? maxSpeedMps,
+    Value<String?>? athleteNote,
   }) {
     return ActivityRecordsCompanion(
       id: id ?? this.id,
@@ -7535,6 +7587,7 @@ class ActivityRecordsCompanion extends UpdateCompanion<ActivityRecord> {
       description: description ?? this.description,
       calories: calories ?? this.calories,
       maxSpeedMps: maxSpeedMps ?? this.maxSpeedMps,
+      athleteNote: athleteNote ?? this.athleteNote,
     );
   }
 
@@ -7643,6 +7696,9 @@ class ActivityRecordsCompanion extends UpdateCompanion<ActivityRecord> {
     if (maxSpeedMps.present) {
       map['max_speed_mps'] = Variable<double>(maxSpeedMps.value);
     }
+    if (athleteNote.present) {
+      map['athlete_note'] = Variable<String>(athleteNote.value);
+    }
     return map;
   }
 
@@ -7678,7 +7734,8 @@ class ActivityRecordsCompanion extends UpdateCompanion<ActivityRecord> {
           ..write('movingDurationSeconds: $movingDurationSeconds, ')
           ..write('description: $description, ')
           ..write('calories: $calories, ')
-          ..write('maxSpeedMps: $maxSpeedMps')
+          ..write('maxSpeedMps: $maxSpeedMps, ')
+          ..write('athleteNote: $athleteNote')
           ..write(')'))
         .toString();
   }
@@ -52349,6 +52406,7 @@ typedef $$ActivityRecordsTableCreateCompanionBuilder =
       Value<String?> description,
       Value<double?> calories,
       Value<double?> maxSpeedMps,
+      Value<String?> athleteNote,
     });
 typedef $$ActivityRecordsTableUpdateCompanionBuilder =
     ActivityRecordsCompanion Function({
@@ -52382,6 +52440,7 @@ typedef $$ActivityRecordsTableUpdateCompanionBuilder =
       Value<String?> description,
       Value<double?> calories,
       Value<double?> maxSpeedMps,
+      Value<String?> athleteNote,
     });
 
 class $$ActivityRecordsTableFilterComposer
@@ -52540,6 +52599,11 @@ class $$ActivityRecordsTableFilterComposer
 
   ColumnFilters<double> get maxSpeedMps => $composableBuilder(
     column: $table.maxSpeedMps,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get athleteNote => $composableBuilder(
+    column: $table.athleteNote,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -52702,6 +52766,11 @@ class $$ActivityRecordsTableOrderingComposer
     column: $table.maxSpeedMps,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get athleteNote => $composableBuilder(
+    column: $table.athleteNote,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$ActivityRecordsTableAnnotationComposer
@@ -52846,6 +52915,11 @@ class $$ActivityRecordsTableAnnotationComposer
     column: $table.maxSpeedMps,
     builder: (column) => column,
   );
+
+  GeneratedColumn<String> get athleteNote => $composableBuilder(
+    column: $table.athleteNote,
+    builder: (column) => column,
+  );
 }
 
 class $$ActivityRecordsTableTableManager
@@ -52915,6 +52989,7 @@ class $$ActivityRecordsTableTableManager
                 Value<String?> description = const Value.absent(),
                 Value<double?> calories = const Value.absent(),
                 Value<double?> maxSpeedMps = const Value.absent(),
+                Value<String?> athleteNote = const Value.absent(),
               }) => ActivityRecordsCompanion(
                 id: id,
                 activityId: activityId,
@@ -52946,6 +53021,7 @@ class $$ActivityRecordsTableTableManager
                 description: description,
                 calories: calories,
                 maxSpeedMps: maxSpeedMps,
+                athleteNote: athleteNote,
               ),
           createCompanionCallback:
               ({
@@ -52979,6 +53055,7 @@ class $$ActivityRecordsTableTableManager
                 Value<String?> description = const Value.absent(),
                 Value<double?> calories = const Value.absent(),
                 Value<double?> maxSpeedMps = const Value.absent(),
+                Value<String?> athleteNote = const Value.absent(),
               }) => ActivityRecordsCompanion.insert(
                 id: id,
                 activityId: activityId,
@@ -53010,6 +53087,7 @@ class $$ActivityRecordsTableTableManager
                 description: description,
                 calories: calories,
                 maxSpeedMps: maxSpeedMps,
+                athleteNote: athleteNote,
               ),
           withReferenceMapper: (p0) => p0
               .map(

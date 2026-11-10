@@ -31,6 +31,10 @@ import 'screens/planner/missed_workout_sheet.dart';
 import 'screens/planner/plan_proposal_cards.dart';
 import 'services/missed_workout_reminder_service.dart';
 import 'services/plan_proposal_notifications.dart' show PlanProposalPayload;
+import 'services/short_session_reminder.dart' show ShortSessionPayload;
+import 'services/control/execution.dart' show shortReasons;
+import 'providers/short_session_provider.dart';
+import 'screens/planner/short_session_sheet.dart';
 import 'widgets/nutrition_widgets.dart';
 import 'services/notifications/local_notification_gateway.dart'
     as notifications;
@@ -205,6 +209,8 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
           ? _onMissedWorkoutAction(r)
           : PlanProposalPayload.decode(r.payload) != null
           ? _onPlanProposalAction(r)
+          : ShortSessionPayload.decode(r.payload) != null
+          ? _onShortSessionAction(r)
           : _onNutritionAction(r);
       await Future.wait([
         ref
@@ -276,6 +282,25 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
     } finally {
       _nutritionOpen = false;
     }
+  }
+
+  /// "Shorter than planned": a reason from the banner is saved at once; a
+  /// tap opens the sheet with a note for the coach.
+  Future<void> _onShortSessionAction(
+    notifications.NotificationResponse response,
+  ) async {
+    final p = ShortSessionPayload.decode(response.payload);
+    if (p == null || !mounted) return;
+    if (shortReasons.contains(response.actionId)) {
+      await ref.read(answerShortSessionProvider)(
+        p.sessionId,
+        response.actionId,
+      );
+      return;
+    }
+    final context = await _homeContext();
+    if (context == null || !context.mounted) return;
+    await showAppSheet(context, ShortSessionSheet(sessionId: p.sessionId));
   }
 
   Future<void> _onMissedWorkoutAction(
