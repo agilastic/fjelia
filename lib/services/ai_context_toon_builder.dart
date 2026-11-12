@@ -184,7 +184,7 @@ class AiContextToonBuilder {
       final r = bp.first;
       lines.add(
         '[BP:Latest:${_date(r.measuredAt)},Sys:${r.systolic},'
-        'Dia:${r.diastolic},HR:${r.heartRate}]',
+        'Dia:${r.diastolic},HR:${r.heartRate > 0 ? r.heartRate : "unknown"}]',
       );
       final weeks = <int, List<BpMeasurement>>{};
       for (final reading in bp) {

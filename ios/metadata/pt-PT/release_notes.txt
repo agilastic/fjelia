@@ -1,0 +1,5 @@
+• Planos de treino: planos multidesportivos adaptativos com vários objetivos de prova, ajustes e sessões que podes mover.
+• Treino: planos de força com modo ginásio, nutrição desportiva e registo da ingestão real.
+• Atividades: importa arquivos Strava e ficheiros FIT, GPX e TCX; edita, partilha e restaura atividades.
+• Dispositivos: ligações melhoradas a COROS, Polar e Garmin, além de MyWhoosh e gravação com Concept2 Rower e SkiErg.
+• Saúde e coaching: novos limites e medidas de cintura, melhor análise do sono e HRV, meteorologia no plano e coach de IA FjeliaPro expandido.

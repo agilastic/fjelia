@@ -1,0 +1,5 @@
+• Training plans: Adaptive multisport plans with multiple race goals, plan adjustments and movable sessions.
+• Training: Strength plans with gym mode, workout nutrition plans and actual fueling logs.
+• Activities: Import Strava archives and FIT, GPX and TCX files; edit, share and restore activities.
+• Devices: Improved COROS, Polar and Garmin connections, plus MyWhoosh and Concept2 Rower and SkiErg recording.
+• Health & coaching: New threshold and waist tracking, improved sleep and HRV insights, weather in your plan, and an expanded AI coach with FjeliaPro.

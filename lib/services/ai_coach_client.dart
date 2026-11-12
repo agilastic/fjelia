@@ -41,7 +41,7 @@ const _eveningSysPrompt =
     'You are Fjelia AI Coach. Generate a short evening briefing. Be a cautious coach: reflect on today, prepare for tomorrow.\n\nTOON CONTEXT FORMAT: compact key:value blocks. "na" = unavailable.\n- HRV, Sleep, Recovery, Stress, TrainingMonitor (CTL/ATL/TSB), Activities (today), TodayWorkout/TomorrowWorkout options, Body (BMR/calories), HeatAcclimation, Weather.\n- TodayWorkout/upcoming: Src:plan = internal training plan, Src:garmin = Garmin-synced workout. Both are valid options.\n\nEVENING BRIEFING RULES — plain text, 2–3 short sentences, no markdown, no bullet points:\n1. Open with today: activity type + duration/distance if done, or "rest day". One sentence.\n2. If today\'s session was ≥75 min: one sentence on post-workout recovery nutrition (20–40g protein + carbs; note if the 60-min window has passed).\n3. If ATL spiked this week or TSB is very negative: flag accumulated fatigue with numbers.\n4. Check tomorrow\'s scheduled sessions (upcoming). Fjelia is the primary plan; Garmin can contain copies. Keep all scheduled sessions when giving advice. Give ONE recommendation:\n   - Hard today + negative TSB → scale back tomorrow or swap to easy.\n   - Easy/rest today + neutral/positive TSB → confirm tomorrow\'s plan.\n   - Tomorrow has no session: count consecutive training days in Activities. If ≥3 days in a row (including today), confirm rest — do NOT suggest an opportunistic workout.\n   - No strength in recent Activities + tomorrow is easy/rest + <3 consecutive training days → suggest a short strength block.\n5. One sleep/recovery tip: target sleep duration, wind-down routine, or nutrition timing.\n- Mention tomorrow\'s weather or heat if it affects the session.\n- No guilt about today. No streak language. Frame tomorrow as an opportunity, not an obligation.\n- Do not diagnose medical conditions.\n';
 
 const _morningUserPrompt =
-    'Give me my morning briefing. Check if I have a workout scheduled today and tell me whether to do it as planned, modify it, add something, or skip it — based on my recovery, HRV, and fatigue. Plain text only, no markdown, no bullet points, 2-3 short sentences max.';
+    'Give me my morning briefing. Check if I have a workout scheduled today and tell me whether to do it as planned, modify it, add something, or skip it — based on my recovery, HRV, and fatigue. If TodayWorkout says cancelled, respect my decision to skip and do not suggest a replacement workout. Plain text only, no markdown, no bullet points, 2-3 short sentences max.';
 
 const _lunchUserPrompt =
     'Give me my lunch briefing. Use the latest synced morning and midday data. Reassess today\'s plan, recovery, fueling, hydration, and whether the rest of the day should stay as planned or be adjusted. Plain text only, no markdown, no bullet points, 2-3 short sentences max.';
@@ -599,8 +599,9 @@ class AiCoachClient {
             } on StateError catch (e) {
               // A Pro key past its monthly budget, or blocked, is refused
               // (4xx); the athlete still gets an answer from Free AI.
-              final refused = RegExp(r'failed \((400|401|403|404|429|503)\)')
-                  .hasMatch(e.message);
+              final refused = RegExp(
+                r'failed \((400|401|403|404|429|503)\)',
+              ).hasMatch(e.message);
               if (!refused) rethrow;
               log('[FjeliaPro] $model refused: ${e.message}');
             }

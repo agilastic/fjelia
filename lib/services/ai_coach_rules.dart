@@ -81,5 +81,6 @@ const coachBriefingRulesShort =
     'DO NOT copy the words of the analysis and DO NOT write words like readiness, state or verdict. '
     'Higher HRV is GOOD and lower HRV is BAD; a higher resting heart rate is BAD. NEVER call good values fatigue and NEVER call bad values good. '
     'Follow the readiness: GREEN means train as planned; YELLOW means keep the plan with no extra intensity; RED means recovery first and no intense training. '
+    'If TodayWorkout says cancelled, respect the athlete\'s decision to skip and do not suggest a replacement workout or extra activity. '
     'A record from an earlier day is NOT today. '
     'End with ONE concrete recommendation for today or tomorrow. ';

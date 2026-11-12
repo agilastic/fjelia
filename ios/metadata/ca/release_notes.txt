@@ -1,0 +1,5 @@
+• Plans d’entrenament: plans multiesport adaptatius amb diversos objectius de cursa, ajustos i sessions que pots moure.
+• Entrenament: plans de força amb mode gimnàs, nutrició esportiva i registre de la ingesta real.
+• Activitats: importa arxius Strava i FIT, GPX i TCX; edita, comparteix i restaura activitats.
+• Dispositius: millor connexió amb COROS, Polar i Garmin, a més de MyWhoosh i enregistrament amb Concept2 Rower i SkiErg.
+• Salut i coaching: seguiment de llindars i cintura, millors anàlisis del son i HRV, meteorologia al pla i coach d’IA ampliat amb FjeliaPro.

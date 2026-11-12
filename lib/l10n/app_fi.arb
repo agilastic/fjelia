@@ -4,7 +4,7 @@
   "freeAiUsageTracking": "Jotta Free AI pysyy luotettavasti kaikkien saatavilla, lähetämme satunnaisen asennustunnisteen. Se auttaa tunnistamaan poikkeavaa käyttöä ja estämään väärinkäyttöön liittyviä pyyntöjä. Tunniste ei sisällä nimeäsi eikä käyttäjätilisi tietoja.",
   "freeAiDescription": "Maksuton tekoälychat ja yhteenvedot {host}-palvelun kautta. Erillistä tiliä tai API-avainta ei tarvita. Vahvistuksesi jälkeen viestit sekä terveys- ja harjoitteluyhteenveto lähetetään palveluun.",
   "freeAiUnavailable": "Free AI ei ole käytettävissä tässä versiossa. Valitse toinen palveluntarjoaja.",
-  "shareBriefingContextWithName": "Yhteenveto terveys- ja harjoittelutiedoistasi lähetetään palveluun {name}.",
+  "shareBriefingContextWithName": "Yhteenveto terveys- ja harjoittelutiedoistasi lähetetään palveluun {name}. Tämä kertaluonteinen suostumus koskee myös tulevia pilvipohjaisia tekoälypalveluja, jotka valitset katsauksia varten.",
   "language": "Kieli",
   "languageSystem": "Järjestelmän oletus",
   "settings": "Asetukset",
@@ -3779,8 +3779,8 @@
   "plusEcgHint": "Polar H10 tai EKG-tiedosto",
   "plusHrv": "HRV-tarkistus",
   "plusHrvHint": "Lyhyt mittaus Polar H10:llä",
-  "plusBpMeasure": "Mittaa verenpaine",
-  "plusBpMeasureHint": "Hilo-mansetti Bluetoothilla",
+  "plusBpMeasure": "Mittaa Hilo-mansetilla",
+  "plusBpMeasureHint": "Yhdistä Hilo-verenpainemansetti Bluetoothilla",
   "plusBpLog": "Kirjaa verenpaine",
   "plusBpLogHint": "Syötä lukema",
   "plusBpReport": "Hilo-raportti",
@@ -4025,5 +4025,7 @@
   "shortSessionNote": "Suunniteltua lyhyempi ({done}/{planned} min)",
   "noteForCoach": "Huomio valmentajalle (valinnainen)",
   "activityNote": "Huomio",
-  "activityNoteAdd": "Lisää huomio valmentajalle"
+  "activityNoteAdd": "Lisää huomio valmentajalle",
+  "plusOmronBle": "Etsi BLE-verenpainemittareita",
+  "plusOmronBleHint": "Etsi tavallisia Bluetooth-verenpainemittareita ja tuettuja Omron-profiileja."
 }

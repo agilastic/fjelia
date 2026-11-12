@@ -4,7 +4,7 @@
   "freeAiUsageTracking": "Pour que Free AI reste fiable et accessible à tous, nous envoyons un identifiant d'installation aléatoire. Il nous aide à repérer une utilisation inhabituelle et à bloquer les requêtes abusives. Cet identifiant ne contient ni votre nom ni les informations de votre compte.",
   "freeAiDescription": "IA gratuite dans le cloud pour le chat et les résumés via {host}. Aucun compte ni clé API personnels nécessaires. Après votre confirmation, les messages et un résumé de santé et d'entraînement sont envoyés à ce service.",
   "freeAiUnavailable": "Free AI n'est pas disponible dans cette version. Choisissez un autre fournisseur.",
-  "shareBriefingContextWithName": "Un résumé de vos données de santé et d'entraînement sera envoyé à {name}.",
+  "shareBriefingContextWithName": "Un résumé de vos données de santé et d'entraînement sera envoyé à {name}. Ce consentement unique couvre aussi les futurs services d'IA cloud que vous choisirez pour les bilans.",
   "language": "Langue",
   "languageSystem": "Langue du système",
   "settings": "Réglages",
@@ -3779,8 +3779,8 @@
   "plusEcgHint": "Polar H10 ou fichier ECG",
   "plusHrv": "Check VFC",
   "plusHrvHint": "Mesure courte avec Polar H10",
-  "plusBpMeasure": "Mesurer la tension",
-  "plusBpMeasureHint": "Brassard Hilo en Bluetooth",
+  "plusBpMeasure": "Mesurer avec le brassard Hilo",
+  "plusBpMeasureHint": "Associer le brassard Hilo en Bluetooth",
   "plusBpLog": "Saisir la tension",
   "plusBpLogHint": "Entrer une mesure",
   "plusBpReport": "Rapport Hilo",
@@ -4025,5 +4025,7 @@
   "shortSessionNote": "Plus court que prévu ({done} sur {planned} min)",
   "noteForCoach": "Note pour le coach (facultatif)",
   "activityNote": "Note",
-  "activityNoteAdd": "Ajouter une note pour le coach"
+  "activityNoteAdd": "Ajouter une note pour le coach",
+  "plusOmronBle": "Rechercher des tensiomètres BLE",
+  "plusOmronBleHint": "Recherchez des tensiomètres Bluetooth standard et des profils Omron compatibles."
 }

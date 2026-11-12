@@ -1,0 +1,1 @@
+Training,Radfahren,Laufen,Schlaf,HRV,Puls,Erholung,Coach,Zonen,Plan,Workout,Fitness,Gesundheit

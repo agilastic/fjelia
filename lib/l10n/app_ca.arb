@@ -4,7 +4,7 @@
   "freeAiUsageTracking": "Perquè Free AI continuï disponible de manera fiable per a tothom, enviem un identificador aleatori de la instal·lació. Ens ajuda a detectar usos inusuals i a bloquejar sol·licituds abusives. L'identificador no conté el teu nom ni dades del teu compte.",
   "freeAiDescription": "IA gratuïta al núvol per al xat i els resums a través de {host}. No cal cap compte ni clau API propis. Amb la teva confirmació, els missatges i un resum de salut i entrenament s'envien a aquest servei.",
   "freeAiUnavailable": "Free AI no està disponible en aquesta versió. Tria un altre proveïdor.",
-  "shareBriefingContextWithName": "S'enviarà un resum de les teves dades de salut i entrenament a {name}.",
+  "shareBriefingContextWithName": "S'enviarà un resum de les teves dades de salut i entrenament a {name}. Aquest consentiment únic també s'aplica als futurs proveïdors d'IA al núvol que triïs per als resums.",
   "language": "Idioma",
   "languageSystem": "Predeterminat del sistema",
   "settings": "Configuració",
@@ -3779,8 +3779,8 @@
   "plusEcgHint": "Polar H10 o fitxer ECG",
   "plusHrv": "Check de VFC",
   "plusHrvHint": "Mesura curta amb Polar H10",
-  "plusBpMeasure": "Mesura la pressió",
-  "plusBpMeasureHint": "Maniguet Hilo per Bluetooth",
+  "plusBpMeasure": "Mesura amb el maneguet Hilo",
+  "plusBpMeasureHint": "Vincula el maneguet Hilo per Bluetooth",
   "plusBpLog": "Anota la pressió",
   "plusBpLogHint": "Escriu una mesura",
   "plusBpReport": "Informe Hilo",
@@ -4025,5 +4025,7 @@
   "shortSessionNote": "Més curt del previst ({done} de {planned} min)",
   "noteForCoach": "Nota per al coach (opcional)",
   "activityNote": "Nota",
-  "activityNoteAdd": "Afegeix una nota per al coach"
+  "activityNoteAdd": "Afegeix una nota per al coach",
+  "plusOmronBle": "Cerca tensiòmetres BLE",
+  "plusOmronBleHint": "Cerca dispositius estàndard de pressió arterial i perfils Omron compatibles per Bluetooth."
 }

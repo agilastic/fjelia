@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,13 +18,42 @@ import '../../widgets/app_widgets.dart';
 import '../ai_coach/ai_coach_screen.dart' show coachGradient;
 import '../settings/fjelia_pro_sheet.dart';
 
-/// The FjeliaPro analyses on the plan: today's check, the week, the next
-/// race and the season. Without Pro each row leads to the Pro sheet.
-class ProToolsCard extends ConsumerWidget {
+/// The FjeliaPro analyses on the plan: the week, the next race and the season.
+/// Today's plan check is part of the briefing. Without Pro each row leads to
+/// the Pro sheet.
+class ProToolsCard extends ConsumerStatefulWidget {
   const ProToolsCard({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ProToolsCard> createState() => _ProToolsCardState();
+}
+
+class _ProToolsCardState extends ConsumerState<ProToolsCard> {
+  bool _expanded = false;
+  int _highlighted = 0;
+  Timer? _highlightTimer;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (MediaQuery.disableAnimationsOf(context)) {
+      _highlightTimer?.cancel();
+      _highlightTimer = null;
+    } else {
+      _highlightTimer ??= Timer.periodic(const Duration(seconds: 4), (_) {
+        if (mounted && !_expanded) setState(() => _highlighted++);
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _highlightTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final edition = ref.watch(fjeliaEditionProvider);
     if (!edition.proOffered && !edition.isPro) return const SizedBox.shrink();
     final l = context.l10n;
@@ -33,12 +64,6 @@ class ProToolsCard extends ConsumerWidget {
         ?.where((g) => g.participation != 'cancelled')
         .firstOrNull;
     final rows = [
-      (
-        Icons.today_rounded,
-        l.proPlanCheck,
-        l.proPlanCheckHint,
-        ProAnalysisRef.planCheck(now),
-      ),
       (
         Icons.insights_rounded,
         l.proWeekReview,
@@ -64,26 +89,100 @@ class ProToolsCard extends ConsumerWidget {
       title: l.proToolsTitle,
       accent: coachGradient,
       padding: const EdgeInsets.fromLTRB(16, 16, 8, 8),
+      onTap: () => setState(() => _expanded = !_expanded),
       child: Column(
         children: [
-          for (final (icon, title, hint, analysis) in rows)
-            _ToolRow(
-              key: ValueKey('pro-tool-${analysis.kind.name}'),
-              icon: icon,
-              title: title,
-              hint: hint,
-              locked: !edition.isPro,
-              onTap: () => showAppSheet(
-                context,
-                edition.isPro
-                    ? ProAnalysisSheet(analysis: analysis, title: title)
-                    : const FjeliaProSheet(),
+          if (_expanded)
+            for (final (icon, title, hint, analysis) in rows)
+              _ToolRow(
+                key: ValueKey('pro-tool-${analysis.kind.name}'),
+                icon: icon,
+                title: title,
+                hint: hint,
+                locked: !edition.isPro,
+                onTap: () => showAppSheet(
+                  context,
+                  edition.isPro
+                      ? ProAnalysisSheet(analysis: analysis, title: title)
+                      : const FjeliaProSheet(),
+                ),
+              )
+          else
+            AnimatedSize(
+              duration: Duration(
+                milliseconds: MediaQuery.disableAnimationsOf(context) ? 0 : 220,
+              ),
+              child: AnimatedSwitcher(
+                duration: Duration(
+                  milliseconds: MediaQuery.disableAnimationsOf(context)
+                      ? 0
+                      : 300,
+                ),
+                child: _CompactToolHighlight(
+                  key: ValueKey(_highlighted % rows.length),
+                  icon: rows[_highlighted % rows.length].$1,
+                  title: rows[_highlighted % rows.length].$2,
+                  hint: rows[_highlighted % rows.length].$3,
+                  locked: !edition.isPro,
+                ),
               ),
             ),
         ],
       ),
     );
   }
+}
+
+class _CompactToolHighlight extends StatelessWidget {
+  const _CompactToolHighlight({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.hint,
+    required this.locked,
+  });
+  final IconData icon;
+  final String title, hint;
+  final bool locked;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(bottom: 8),
+    child: Row(
+      children: [
+        ShaderMask(
+          blendMode: BlendMode.srcIn,
+          shaderCallback: LinearGradient(
+            colors: [for (final c in coachGradient) fjAccent(c)],
+          ).createShader,
+          child: Icon(icon, size: 22),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: TextStyle(fontWeight: FontWeight.w700, color: fjInk),
+              ),
+              Text(
+                hint,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 12, color: muted),
+              ),
+            ],
+          ),
+        ),
+        if (locked)
+          const Padding(
+            padding: EdgeInsets.only(right: 4),
+            child: GradientTitle('Pro', colors: coachGradient),
+          ),
+      ],
+    ),
+  );
 }
 
 class _ToolRow extends StatelessWidget {
@@ -198,7 +297,16 @@ class _ProAnalysisSheetState extends ConsumerState<ProAnalysisSheet> {
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
-    final report = ref.watch(proReportProvider(widget.analysis.id)).valueOrNull;
+    final reportAsync = ref.watch(proReportProvider(widget.analysis.id));
+    final report = reportAsync.valueOrNull;
+    final hasText = report != null && report.body.trim().isNotEmpty;
+    final canRegenerate = switch (widget.analysis.kind) {
+      ProAnalysisKind.racePlan || ProAnalysisKind.season =>
+        !hasText ||
+            DateTime.now().difference(report!.createdAt) >=
+                const Duration(days: 7),
+      _ => !hasText,
+    };
     return SheetPage(
       title: widget.title,
       child: ListView(
@@ -249,16 +357,15 @@ class _ProAnalysisSheetState extends ConsumerState<ProAnalysisSheet> {
                 style: const TextStyle(color: Colors.orange, fontSize: 13),
               ),
             ),
-          FilledButton(
-            key: const ValueKey('pro-analysis-create'),
-            style: FilledButton.styleFrom(
-              minimumSize: const Size.fromHeight(52),
+          if (!reportAsync.isLoading && canRegenerate)
+            FilledButton(
+              key: const ValueKey('pro-analysis-create'),
+              style: FilledButton.styleFrom(
+                minimumSize: const Size.fromHeight(52),
+              ),
+              onPressed: working ? null : _create,
+              child: Text(hasText ? l.proAnalysisRedo : l.proAnalysisCreate),
             ),
-            onPressed: working ? null : _create,
-            child: Text(
-              report == null ? l.proAnalysisCreate : l.proAnalysisRedo,
-            ),
-          ),
         ],
       ),
     );

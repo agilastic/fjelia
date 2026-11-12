@@ -75,6 +75,7 @@ List<BpVariationBucket> bpVariationBuckets(
       ),
   ];
   for (final r in readings) {
+    if (r.systolic <= r.diastolic) continue;
     final local = r.measuredAt.toLocal();
     if (local.isBefore(start) || !local.isBefore(end)) continue;
     final index = period == BpPeriod.day

@@ -14,13 +14,13 @@ void main() {
     enabled: true,
   );
 
-  test('asked once, then given for the same provider and model', () async {
+  test('asked once, then given for cloud briefings', () async {
     expect(await BriefingConsent.given(free), isFalse);
     await BriefingConsent.remember(free);
     expect(await BriefingConsent.given(free), isTrue);
   });
 
-  test('a change in the AI settings asks again', () async {
+  test('a change in AI provider or model does not ask again', () async {
     await BriefingConsent.remember(free);
     const otherProvider = AiCoachSettings(
       provider: AiProvider.anthropic,
@@ -28,13 +28,13 @@ void main() {
       hasApiKey: true,
       enabled: true,
     );
-    expect(await BriefingConsent.given(otherProvider), isFalse);
+    expect(await BriefingConsent.given(otherProvider), isTrue);
     const otherModel = AiCoachSettings(
       provider: AiProvider.freeAi,
       model: 'free-large',
       hasApiKey: true,
       enabled: true,
     );
-    expect(await BriefingConsent.given(otherModel), isFalse);
+    expect(await BriefingConsent.given(otherModel), isTrue);
   });
 }

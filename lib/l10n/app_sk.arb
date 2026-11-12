@@ -4,7 +4,7 @@
   "freeAiUsageTracking": "Aby bola služba Free AI spoľahlivo dostupná pre všetkých, odosielame náhodný identifikátor inštalácie. Pomáha nám rozpoznať neobvyklé používanie a blokovať požiadavky zneužívajúce službu. Identifikátor neobsahuje vaše meno ani údaje o účte.",
   "freeAiDescription": "Bezplatný AI chat a súhrny cez {host}. Nepotrebujete vlastný účet ani API kľúč. Po vašom potvrdení sa správy a súhrn zdravotných a tréningových údajov odošlú tejto službe.",
   "freeAiUnavailable": "Free AI nie je v tejto verzii dostupná. Vyberte iného poskytovateľa.",
-  "shareBriefingContextWithName": "Súhrn vašich zdravotných a tréningových údajov sa odošle poskytovateľovi {name}.",
+  "shareBriefingContextWithName": "Súhrn vašich zdravotných a tréningových údajov sa odošle poskytovateľovi {name}. Tento jednorazový súhlas sa vzťahuje aj na budúcich poskytovateľov cloudovej AI, ktorých si vyberiete pre prehľady.",
   "language": "Jazyk",
   "languageSystem": "Predvolené systémom",
   "settings": "Nastavenia",
@@ -3779,8 +3779,8 @@
   "plusEcgHint": "Polar H10 alebo súbor EKG",
   "plusHrv": "Kontrola HRV",
   "plusHrvHint": "Krátke meranie s Polar H10",
-  "plusBpMeasure": "Zmerať tlak",
-  "plusBpMeasureHint": "Manžeta Hilo cez Bluetooth",
+  "plusBpMeasure": "Merať manžetou Hilo",
+  "plusBpMeasureHint": "Spárujte manžetu Hilo cez Bluetooth",
   "plusBpLog": "Zapísať tlak",
   "plusBpLogHint": "Zadaj hodnotu",
   "plusBpReport": "Správa Hilo",
@@ -4025,5 +4025,7 @@
   "shortSessionNote": "Kratšie, než bolo plánované ({done} z {planned} min)",
   "noteForCoach": "Poznámka pre kouča (nepovinné)",
   "activityNote": "Poznámka",
-  "activityNoteAdd": "Pridaj poznámku pre kouča"
+  "activityNoteAdd": "Pridaj poznámku pre kouča",
+  "plusOmronBle": "Hľadať BLE tlakové merače",
+  "plusOmronBleHint": "Vyhľadajte štandardné Bluetooth tlakové merače a podporované profily Omron."
 }

@@ -1,0 +1,35 @@
+Train smarter. Recover better. See the whole picture.
+
+Fjelia brings your training, sleep, recovery and health data together, helping you understand your progress and plan what comes next.
+
+Core training and health features are free, with basic access to Free AI. You can also choose an available on-device AI model. Some models and features require a compatible device.
+
+PLAN YOUR SEASON
+
+Build an adaptive multisport training plan around your sports, experience, schedule and goals. Plan for multiple races in one season, track training load, review activities and explore heart-rate zones. Your history and completed sessions help guide adjustments as you progress.
+
+UNDERSTAND YOUR RECOVERY
+
+Follow heart-rate variability (HRV), resting heart rate, sleep and recovery trends alongside training. See how your body responds to effort over time, beyond a single workout.
+
+BRING YOUR DATA TOGETHER
+
+Connect Apple Health and supported services including Garmin, Polar, Suunto, COROS and MyWhoosh. Import a Strava ZIP archive or individual FIT, GPX and TCX files. Record indoor rowing and SkiErg sessions with Concept2 PM5 monitors. Review activity, sleep, blood pressure, body composition and fitness trends in one place.
+
+CHOOSE YOUR AI COACH
+
+Ask about training and recovery and put your trends into context. Use basic Free AI access, an available on-device model or your own supported AI provider. On-device AI requires compatible hardware and configuration.
+
+FJELIAPRO (OPTIONAL SUBSCRIPTION)
+
+Get advanced coaching and analysis with a dedicated Pro model and its own usage budget:
+• Daily training suggestions that can adapt planned sessions
+• Weekly reviews and season analysis
+• Race plans for tapering, pacing and fueling
+• Training stats, best efforts and recent progress
+• Memory Cards with important context for your coach
+• Detailed ECG analysis
+
+Features and metrics depend on connected devices, data sources and device capabilities. AI provider availability may vary.
+
+Fjelia provides general fitness and wellness information. It is not a medical device and does not provide medical advice, diagnosis or treatment. Consult a qualified healthcare professional about medical concerns.

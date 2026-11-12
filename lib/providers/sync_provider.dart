@@ -10,6 +10,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../services/ai_context_toon_builder.dart';
+import '../services/ai_coach_settings.dart';
+import '../services/briefing_consent.dart';
 import '../services/health_connect_service.dart' show HealthAccess;
 import '../services/sync_service.dart';
 import '../services/workout_background.dart';
@@ -695,12 +697,15 @@ class SyncNotifier extends StateNotifier<SyncState> {
     unawaited(_ref.read(planProposalLifecycleProvider).afterSync());
     // Imported exercise sets may have arrived with the activities.
     invalidateStrength(_ref.invalidate);
-    if (result.garmin > 0 || result.activities > 0 || result.bp > 0) {
+    final briefingDataChanged =
+        result.garmin > 0 || result.activities > 0 || result.bp > 0;
+    if (briefingDataChanged) {
       _ref.invalidate(aiBriefingProvider);
       log('[Sync] new data — briefing invalidated');
-      // After the sync is really finished, never in the middle of it.
-      unawaited(_prewarmBriefingAfterSync());
     }
+    // Generate once after every completed sync, even if it imported no new
+    // activities. The notifier reuses today's cached text unless data changed.
+    unawaited(_prewarmBriefingAfterSync(force: briefingDataChanged));
     final errors = result.errors.join('\n');
     state = state.copyWith(
       status: result.hasErrors ? SyncStatus.error : SyncStatus.done,
@@ -716,19 +721,21 @@ class SyncNotifier extends StateNotifier<SyncState> {
     );
   }
 
-  Future<void> _prewarmBriefingAfterSync() async {
+  Future<void> _prewarmBriefingAfterSync({required bool force}) async {
     await waitForSyncToSettle(_ref, stillWanted: () => mounted);
-    if (mounted) _prewarmBriefing();
+    if (mounted) await _prewarmBriefing(force: force);
   }
 
-  /// Builds local briefings in the background; cloud briefings need a UI action.
-  void _prewarmBriefing() {
+  /// Builds a local briefing or a cloud briefing previously consented to.
+  Future<void> _prewarmBriefing({required bool force}) async {
     final settings = _ref.read(aiCoachSettingsProvider).valueOrNull;
     if (settings == null ||
         !settings.readyForBriefing ||
-        !settings.usesOnDeviceBriefing) {
+        settings.briefingMode != BriefingMode.ai) {
       return;
     }
+    final cloudConsent = !settings.usesOnDeviceBriefing;
+    if (cloudConsent && !await BriefingConsent.given(settings)) return;
     final hour = DateTime.now().hour;
     final period = hour < 11
         ? AiBriefingPeriod.morning
@@ -747,7 +754,7 @@ class SyncNotifier extends StateNotifier<SyncState> {
       _ref.read(heatHourlyWeatherProvider).valueOrNull,
     );
     final profile = _ref.read(userProfileProvider).valueOrNull;
-    _ref
+    await _ref
         .read(aiBriefingProvider(period).notifier)
         .load(
           settings,
@@ -769,7 +776,8 @@ class SyncNotifier extends StateNotifier<SyncState> {
                 ),
           raceGoals: profile?.raceGoals ?? '',
           weatherSummary: weather,
-          force: true,
+          force: force,
+          cloudConsent: cloudConsent,
         );
     log('[Sync] AI briefing pre-warm triggered (${period.name})');
   }

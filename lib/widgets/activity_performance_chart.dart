@@ -48,9 +48,11 @@ class ActivityPerformanceChart extends ConsumerWidget {
     super.key,
     required this.activity,
     this.fullscreen = false,
+    this.showStrokeRate = false,
   });
   final GarminActivity activity;
   final bool fullscreen;
+  final bool showStrokeRate;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final running = activity.type.toLowerCase().contains('run');
@@ -122,6 +124,13 @@ class ActivityPerformanceChart extends ConsumerWidget {
 
     add(context.l10n.hrBpm, Colors.redAccent, (s) => s.heartRate);
     addMotion();
+    if (showStrokeRate) {
+      add(
+        '${context.l10n.rowingStrokeRate} (SPM)',
+        const Color(0xFF60A5FA),
+        (s) => s.cadence != null && s.cadence! > 0 ? s.cadence : null,
+      );
+    }
     add(context.l10n.elevationM, mint, (s) => s.elevation);
     add(context.l10n.powerW, Colors.purpleAccent, (s) => s.power);
     if (series.isEmpty) return const SizedBox.shrink();

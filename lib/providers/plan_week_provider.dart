@@ -135,7 +135,9 @@ PlanWeek buildPlanWeek({
       final state = e.done || s?.status == 'completed' || actual != null
           ? PlanWeekState.done
           : s?.status == 'skipped'
-          ? (reason == null || reason == noActivityReason
+          ? (s?.adaptationTrigger == 'coach_morning'
+                ? PlanWeekState.skipped
+                : reason == null || reason == noActivityReason
                 ? PlanWeekState.missed
                 : PlanWeekState.skipped)
           : PlanWeekState.planned;

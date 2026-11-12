@@ -124,7 +124,9 @@ void main() {
     tester,
   ) async {
     await show(tester, pro: false);
-    expect(find.text("Today's plan check"), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('pro-tools')));
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.text("Today's plan check"), findsNothing);
     expect(find.text('Race plan'), findsOneWidget);
     expect(
       find.text('Frankfurt Half: taper, pacing, fuelling'),
@@ -140,7 +142,10 @@ void main() {
     tester,
   ) async {
     await show(tester, pro: true);
-    await tester.tap(find.byKey(const ValueKey('pro-tool-planCheck')));
+    await tester.tap(find.byKey(const ValueKey('pro-tools')));
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.text("Today's plan check"), findsNothing);
+    await tester.tap(find.byKey(const ValueKey('pro-tool-weekReview')));
     for (var i = 0; i < 8; i++) {
       await tester.pump(const Duration(milliseconds: 100));
     }
@@ -152,10 +157,10 @@ void main() {
     expect(find.textContaining('Fjelia AI Pro'), findsOneWidget);
     await tester.tap(find.text('Continue'));
     await settle(tester);
-    expect(actions!.asked.single, startsWith('planCheck:'));
+    expect(actions!.asked.single, startsWith('weekReview:'));
     expect(find.byKey(const ValueKey('pro-report')), findsOneWidget);
     expect(find.text('As planned'), findsOneWidget);
-    expect(find.text('Create again'), findsOneWidget);
+    expect(find.text('Create again'), findsNothing);
     await close(tester);
   });
 }

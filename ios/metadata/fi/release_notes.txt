@@ -1,0 +1,5 @@
+• Harjoitussuunnitelmat: mukautuvat monilajisuunnitelmat ja useita kilpailutavoitteita, suunnitelman muutoksia sekä siirrettäviä harjoituksia.
+• Harjoittelu: voimaharjoitteluohjelmat kuntosalilla, urheiluravitsemuksen suunnittelu ja toteutuneen tankkauksen kirjaaminen.
+• Suoritukset: tuo Strava-arkistoja ja FIT-, GPX- ja TCX-tiedostoja; muokkaa, jaa ja palauta suorituksia.
+• Laitteet: paremmat COROS-, Polar- ja Garmin-yhteydet, MyWhoosh sekä Concept2 Rower- ja SkiErg-tallennus.
+• Terveys ja valmennus: kynnysarvot ja vyötärömittaukset, paremmat uni- ja HRV-näkymät, sää harjoitussuunnitelmassa ja laajennettu FjeliaPro-tekoälyvalmentaja.

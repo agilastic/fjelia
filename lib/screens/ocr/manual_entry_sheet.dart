@@ -12,6 +12,8 @@ import '../../providers/user_profile_provider.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/grip_strength_sheet.dart';
 import '../../widgets/hilo_report_import_sheet.dart';
+import '../../widgets/hilo_cuff_measurement_sheet.dart';
+import '../../widgets/omron_ble_import_sheet.dart';
 import '../../widgets/polar_h10_hrv_sheet.dart';
 import '../../widgets/waist_sheet.dart';
 import '../../widgets/ecg_sheet.dart';
@@ -54,21 +56,6 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
       await ref.read(manualMeasurementActionsProvider).save(type, at, {
         for (final e in fields.entries) e.key: e.value.text,
       });
-      if (mounted) Navigator.pop(context);
-    } catch (e) {
-      if (mounted) setState(() => error = '$e');
-    } finally {
-      if (mounted) setState(() => saving = false);
-    }
-  }
-
-  Future<void> cuff() async {
-    setState(() {
-      saving = true;
-      error = null;
-    });
-    try {
-      await ref.read(deviceActionsProvider).measureAndSave(DeviceRole.cuff);
       if (mounted) Navigator.pop(context);
     } catch (e) {
       if (mounted) setState(() => error = '$e');
@@ -393,7 +380,9 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
       case 'Import':
         showAppSheet(context, const ImportSheet());
       case 'Hilo Cuff (BLE)':
-        cuff();
+        showAppSheet(context, const HiloCuffMeasurementSheet());
+      case 'Omron BLE':
+        showAppSheet(context, const OmronBleImportSheet());
       case 'RENPHO Scale (BLE)':
         scale();
       default:
@@ -449,6 +438,13 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
             Icons.bluetooth_rounded,
             l.plusBpMeasure,
             l.plusBpMeasureHint,
+            badge: 'BLE',
+          ),
+          _Entry(
+            'Omron BLE',
+            Icons.monitor_heart_rounded,
+            l.plusOmronBle,
+            l.plusOmronBleHint,
             badge: 'BLE',
           ),
           _Entry(

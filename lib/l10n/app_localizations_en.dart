@@ -27,7 +27,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String shareBriefingContextWithName(String name) {
-    return 'A summary of your health and training data will be sent to $name.';
+    return 'A summary of your health and training data will be sent to $name. This one-time approval also covers future cloud AI providers you select for briefings.';
   }
 
   @override
@@ -7739,10 +7739,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get plusHrvHint => 'Short reading with Polar H10';
 
   @override
-  String get plusBpMeasure => 'Measure BP';
+  String get plusBpMeasure => 'Measure with Hilo cuff';
 
   @override
-  String get plusBpMeasureHint => 'Hilo cuff via Bluetooth';
+  String get plusBpMeasureHint =>
+      'Pair the Hilo blood-pressure cuff over Bluetooth';
 
   @override
   String get plusBpLog => 'Log BP';
@@ -8582,4 +8583,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get activityNoteAdd => 'Add a note for the coach';
+
+  @override
+  String get plusOmronBle => 'Find BLE blood-pressure monitors';
+
+  @override
+  String get plusOmronBleHint =>
+      'Search for standard Bluetooth blood-pressure devices and supported Omron profiles.';
 }

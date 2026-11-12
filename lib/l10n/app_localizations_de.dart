@@ -27,7 +27,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String shareBriefingContextWithName(String name) {
-    return 'Eine Zusammenfassung deiner Gesundheits- und Trainingsdaten wird an $name gesendet.';
+    return 'Eine Zusammenfassung deiner Gesundheits- und Trainingsdaten wird an $name gesendet. Diese einmalige Zustimmung gilt auch für künftig von dir ausgewählte Cloud-KI-Anbieter für Briefings.';
   }
 
   @override
@@ -7802,10 +7802,11 @@ class AppLocalizationsDe extends AppLocalizations {
   String get plusHrvHint => 'Kurze Messung mit Polar H10';
 
   @override
-  String get plusBpMeasure => 'Blutdruck messen';
+  String get plusBpMeasure => 'Mit Hilo-Manschette messen';
 
   @override
-  String get plusBpMeasureHint => 'Hilo-Manschette per Bluetooth';
+  String get plusBpMeasureHint =>
+      'Hilo-Blutdruckmanschette per Bluetooth koppeln';
 
   @override
   String get plusBpLog => 'Blutdruck eintragen';
@@ -8650,4 +8651,11 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get activityNoteAdd => 'Notiz für den Coach hinzufügen';
+
+  @override
+  String get plusOmronBle => 'BLE-Blutdruckgeräte suchen';
+
+  @override
+  String get plusOmronBleHint =>
+      'Suche nach Bluetooth-Blutdruckgeräten mit Standarddienst und unterstützten Omron-Profilen.';
 }

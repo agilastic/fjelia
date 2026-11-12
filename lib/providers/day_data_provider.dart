@@ -321,6 +321,7 @@ DailyBpSummary? buildBpSummaryFromRecords(
   DateTime date,
   List<BpMeasurement> readings,
 ) {
+  readings = readings.where((r) => r.systolic > r.diastolic).toList();
   if (readings.isEmpty) return null;
   final byHour = <int, List<BpMeasurement>>{};
   for (final m in readings) {
@@ -329,6 +330,10 @@ DailyBpSummary? buildBpSummaryFromRecords(
   final segments = byHour.entries.map((e) {
     final list = e.value;
     final sys = list.map((m) => m.systolic);
+    final heartRates = list
+        .map((m) => m.heartRate)
+        .where((hr) => hr > 0)
+        .toList();
     final first = list.first.measuredAt.toLocal();
     final night = e.key < 6 || e.key >= 22;
     return BpSegment(
@@ -337,9 +342,9 @@ DailyBpSummary? buildBpSummaryFromRecords(
       diastolic:
           (list.map((m) => m.diastolic).reduce((a, b) => a + b) / list.length)
               .round(),
-      heartRate:
-          (list.map((m) => m.heartRate).reduce((a, b) => a + b) / list.length)
-              .round(),
+      heartRate: heartRates.isEmpty
+          ? 0
+          : (heartRates.reduce((a, b) => a + b) / heartRates.length).round(),
       maxSystolic: sys.reduce(math.max),
       minSystolic: sys.reduce(math.min),
       count: list.length,
@@ -350,6 +355,10 @@ DailyBpSummary? buildBpSummaryFromRecords(
   final n = readings.length;
   double avg(int Function(BpMeasurement) f) =>
       readings.map(f).reduce((a, b) => a + b) / n;
+  final availableHeartRates = readings
+      .map((m) => m.heartRate)
+      .where((hr) => hr > 0)
+      .toList();
   final sys = readings.map((m) => m.systolic);
   final dia = readings.map((m) => m.diastolic);
   final normal = readings
@@ -359,7 +368,10 @@ DailyBpSummary? buildBpSummaryFromRecords(
     date: date,
     avgSystolic: avg((m) => m.systolic),
     avgDiastolic: avg((m) => m.diastolic),
-    avgHeartRate: avg((m) => m.heartRate),
+    avgHeartRate: availableHeartRates.isEmpty
+        ? 0
+        : availableHeartRates.reduce((a, b) => a + b) /
+              availableHeartRates.length,
     maxSystolic: sys.reduce(math.max),
     minSystolic: sys.reduce(math.min),
     maxDiastolic: dia.reduce(math.max),

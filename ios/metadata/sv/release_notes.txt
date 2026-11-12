@@ -1,0 +1,5 @@
+• Träningsplaner: anpassningsbara multisportplaner med flera tävlingsmål, planändringar och pass som kan flyttas.
+• Träning: styrkeprogram med gym-läge, träningsnutrition och loggning av faktiskt intag.
+• Aktiviteter: importera Strava-arkiv och FIT-, GPX- och TCX-filer; redigera, dela och återställ aktiviteter.
+• Enheter: förbättrade anslutningar till COROS, Polar och Garmin, samt MyWhoosh och inspelning med Concept2 Rower och SkiErg.
+• Hälsa och coachning: nya tröskel- och midjemått, bättre sömn- och HRV-insikter, väder i planen och en utökad AI-coach med FjeliaPro.

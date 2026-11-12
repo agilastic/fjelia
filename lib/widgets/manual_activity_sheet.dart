@@ -535,6 +535,8 @@ class _ManualActivityState extends ConsumerState<ManualActivitySheet> {
     final sport = capture.activityType;
     final kind = activityKind(sport);
     final rowing = kind == ActivityKind.rowing;
+    final skiErg = sport == 'nordic_skiing';
+    final strokeErg = rowing || skiErg;
     final speed = state.live['spd'];
     final power = state.live['w'];
     final distanceKm = capture.distanceMeters / 1000;
@@ -549,6 +551,8 @@ class _ManualActivityState extends ConsumerState<ManualActivitySheet> {
         speed == null ? '0' : (speed * 3.6).fixed(1),
         l.recSpeedKmh,
       ),
+      ActivityKind.rowing ||
+      ActivityKind.other when skiErg => (_pace(speed, per: 500), l.recPace500),
       ActivityKind.rowing => (_pace(speed, per: 500), l.recPace500),
       ActivityKind.running || ActivityKind.walking => (_pace(speed), l.recPace),
       _ when power != null => ('${power.round()}', l.recPowerW),
@@ -602,7 +606,7 @@ class _ManualActivityState extends ConsumerState<ManualActivitySheet> {
     ];
     return Column(
       children: [
-        if (!rowing)
+        if (!strokeErg)
           _ClockBand(
             paused: paused,
             time: _clock(capture.elapsedMs),
@@ -623,11 +627,12 @@ class _ManualActivityState extends ConsumerState<ManualActivitySheet> {
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
               children: [
                 if (state.error != null) _ErrorLine(state.error!),
-                if (rowing)
+                if (strokeErg)
                   RowingRecordingDashboard(
                     key: ValueKey(capture.id),
                     state: state,
                     ecg: ecg,
+                    skiErg: skiErg,
                     clock: _clock(capture.elapsedMs),
                     availableHeight: constraints.maxHeight,
                     onRestartEcg: waiting
@@ -707,7 +712,7 @@ class _ManualActivityState extends ConsumerState<ManualActivitySheet> {
                             ),
                           ),
                   ),
-                if (capture.ecgDevice != null && !rowing) ...[
+                if (capture.ecgDevice != null && !strokeErg) ...[
                   const SizedBox(height: 16),
                   _GlassCard(
                     child: Column(

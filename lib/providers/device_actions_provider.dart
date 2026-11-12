@@ -41,6 +41,7 @@ class DeviceActions {
     }
     return DeviceRole.primaryScale;
   }
+
   List<NearbyDevice> _bracelets(Iterable<NearbyDevice> input) {
     final named = input
         .where((d) => d.name.toUpperCase().startsWith('AKTIIA'))
@@ -122,6 +123,7 @@ class DeviceActions {
 
   Future<void> synchronizeBracelet() =>
       ref.read(hiloBleServiceProvider).triggerSync();
+
   /// Takes a measurement with the cuff or a RENPHO scale and stores it. A scale
   /// measurement returns its headline values; [onStatus] reports progress.
   Future<ScaleSummary?> measureAndSave(
@@ -187,6 +189,24 @@ class DeviceActions {
     }
     ref.read(syncStatusListenerProvider.notifier).state++;
     return summary;
+  }
+
+  /// Measures with a Hilo cuff, persists the reading, and returns the values
+  /// for the immediate result screen.
+  Future<({int systolic, int diastolic, int heartRate})>
+  measureCuffAndSave() async {
+    final m = await ref.read(hiloBleServiceProvider).triggerCuffMeasurement();
+    await ref.read(databaseProvider).insertBpMeasurements([
+      BpMeasurementsCompanion.insert(
+        measuredAt: DateTime.now(),
+        systolic: m.systolic,
+        diastolic: m.diastolic,
+        heartRate: m.heartRate,
+        measurementType: const Value('CUFF'),
+      ),
+    ]);
+    ref.read(syncStatusListenerProvider.notifier).state++;
+    return m;
   }
 }
 

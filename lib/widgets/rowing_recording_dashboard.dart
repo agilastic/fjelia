@@ -30,6 +30,7 @@ class RowingRecordingDashboard extends StatefulWidget {
     required this.ecg,
     required this.clock,
     required this.availableHeight,
+    this.skiErg = false,
     this.onRestartEcg,
   });
 
@@ -37,6 +38,7 @@ class RowingRecordingDashboard extends StatefulWidget {
   final EcgRecorderState ecg;
   final String clock;
   final double availableHeight;
+  final bool skiErg;
   final VoidCallback? onRestartEcg;
 
   @override
@@ -88,7 +90,13 @@ class _RowingDashboardState extends State<RowingRecordingDashboard> {
       children: [
         Row(
           children: [
-            Icon(Icons.rowing_rounded, color: _readingAccent(_lime), size: 20),
+            Icon(
+              widget.skiErg
+                  ? Icons.downhill_skiing_rounded
+                  : Icons.rowing_rounded,
+              color: _readingAccent(_lime),
+              size: 20,
+            ),
             const SizedBox(width: 7),
             Expanded(
               child: Text(
@@ -167,7 +175,7 @@ class _RowingDashboardState extends State<RowingRecordingDashboard> {
                         children: [
                           Expanded(
                             child: Text(
-                              (_showRate ? l.rowingStrokeRate : l.recPace500)
+                              '${_showRate ? l.rowingStrokeRate : l.recPace500}${_showRate ? ' (SPM)' : ''}'
                                   .toUpperCase(),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,

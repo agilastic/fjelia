@@ -1,0 +1,7 @@
+• Plans d’entraînement : programmes multisports adaptatifs avec plusieurs objectifs de compétition, ajustements automatiques et séances déplaçables.
+• Entraînement : programmes de musculation avec mode salle, plans de nutrition sportive et suivi des apports réels pendant l’effort.
+• Activités : importation des archives Strava et des fichiers FIT, GPX et TCX ; modification, partage et restauration des activités.
+
+• Appareils : connexions améliorées avec COROS, Polar et Garmin, ainsi qu’avec MyWhoosh. Enregistrement des séances sur rameur Concept2 et SkiErg.
+
+• Santé et coaching : nouveau suivi des seuils physiologiques et du tour de taille, analyses améliorées du sommeil et de la VFC, météo intégrée au programme et coach IA enrichi avec FjeliaPro.

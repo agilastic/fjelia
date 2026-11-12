@@ -21,5 +21,6 @@ final activityBloodPressureProvider = StreamProvider.autoDispose
       return (db.select(db.bpMeasurements)
             ..where((t) => t.measuredAt.isBiggerOrEqualValue(start))
             ..orderBy([(t) => OrderingTerm.asc(t.measuredAt)]))
-          .watch();
+          .watch()
+          .map((rows) => rows.where((r) => r.systolic > r.diastolic).toList());
     });

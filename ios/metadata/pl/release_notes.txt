@@ -1,0 +1,5 @@
+• Plany treningowe: adaptacyjne plany wielu dyscyplin z kilkoma celami startowymi, zmianami planu i przenoszonymi sesjami.
+• Trening: plany siłowe z trybem siłowni, żywienie sportowe i dziennik rzeczywistego spożycia.
+• Aktywności: import archiwów Strava oraz plików FIT, GPX i TCX; edytowanie, udostępnianie i przywracanie aktywności.
+• Urządzenia: lepsze połączenia COROS, Polar i Garmin, MyWhoosh oraz nagrywanie z Concept2 Rower i SkiErg.
+• Zdrowie i coaching: nowe śledzenie progów i obwodu talii, lepsze analizy snu i HRV, pogoda w planie i rozszerzony trener AI FjeliaPro.

@@ -4,7 +4,7 @@
   "freeAiUsageTracking": "Damit Free AI für alle zuverlässig verfügbar bleibt, senden wir eine zufällige Installations-ID mit. Sie hilft uns, auffällige Nutzung zu erkennen und missbräuchliche Anfragen zu blockieren. Die ID enthält weder deinen Namen noch Kontodaten.",
   "freeAiDescription": "Kostenlose KI für Chat und Briefings über {host}. Kein eigenes Konto oder API-Schlüssel nötig. Nach deiner Freigabe werden Nachrichten sowie eine Gesundheits- und Trainingszusammenfassung an den Dienst gesendet.",
   "freeAiUnavailable": "Free AI ist in diesem Build nicht verfügbar. Wähle einen anderen Anbieter.",
-  "shareBriefingContextWithName": "Eine Zusammenfassung deiner Gesundheits- und Trainingsdaten wird an {name} gesendet.",
+  "shareBriefingContextWithName": "Eine Zusammenfassung deiner Gesundheits- und Trainingsdaten wird an {name} gesendet. Diese einmalige Zustimmung gilt auch für künftig von dir ausgewählte Cloud-KI-Anbieter für Briefings.",
   "language": "Sprache",
   "languageSystem": "Systemstandard",
   "settings": "Einstellungen",
@@ -3779,8 +3779,8 @@
   "plusEcgHint": "Polar H10 oder EKG-Datei",
   "plusHrv": "HRV-Check",
   "plusHrvHint": "Kurze Messung mit Polar H10",
-  "plusBpMeasure": "Blutdruck messen",
-  "plusBpMeasureHint": "Hilo-Manschette per Bluetooth",
+  "plusBpMeasure": "Mit Hilo-Manschette messen",
+  "plusBpMeasureHint": "Hilo-Blutdruckmanschette per Bluetooth koppeln",
   "plusBpLog": "Blutdruck eintragen",
   "plusBpLogHint": "Wert von Hand eintragen",
   "plusBpReport": "Hilo-Bericht",
@@ -4025,5 +4025,7 @@
   "shortSessionNote": "Kürzer als geplant ({done} von {planned} min)",
   "noteForCoach": "Notiz für den Coach (optional)",
   "activityNote": "Notiz",
-  "activityNoteAdd": "Notiz für den Coach hinzufügen"
+  "activityNoteAdd": "Notiz für den Coach hinzufügen",
+  "plusOmronBle": "BLE-Blutdruckgeräte suchen",
+  "plusOmronBleHint": "Suche nach Bluetooth-Blutdruckgeräten mit Standarddienst und unterstützten Omron-Profilen."
 }

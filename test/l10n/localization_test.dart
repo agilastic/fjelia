@@ -16,11 +16,9 @@ Map<String, dynamic> _arb(String code) =>
     jsonDecode(File('lib/l10n/app_$code.arb').readAsStringSync())
         as Map<String, dynamic>;
 
-Set<String> _placeholders(String text) =>
-    RegExp(r'\{(\w+)(?:\s*,|\})')
-        .allMatches(text)
-        .map((m) => m.group(1)!)
-        .toSet();
+Set<String> _placeholders(String text) => RegExp(
+  r'\{(\w+)(?:\s*,|\})',
+).allMatches(text).map((m) => m.group(1)!).toSet();
 
 void main() {
   final en = _arb('en');
@@ -64,6 +62,9 @@ void main() {
       'sk': ['meraní', 'meranie', 'merania', 'meraní'],
       'fi': ['mittausta', 'mittaus', 'mittausta', 'mittausta'],
       'da': ['målinger', 'måling', 'målinger', 'målinger'],
+      'nl': ['metingen', 'meting', 'metingen', 'metingen'],
+      'pl': ['pomiarów', 'pomiar', 'pomiary', 'pomiarów'],
+      'pt': ['medições', 'medição', 'medições', 'medições'],
     };
     const counts = [0, 1, 2, 5];
     expect(forms.keys.toSet(), supportedLanguageCodes.toSet());

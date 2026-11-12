@@ -123,8 +123,7 @@ final aiBriefingProvider =
           Future.microtask(() => notifier.load(settings));
           return;
         }
-        // A cloud briefing writes itself once the athlete agreed to these
-        // settings; after a change in the AI settings the card asks again.
+        // A cloud briefing writes itself after the athlete's one-time consent.
         Future.microtask(() async {
           if (settings.briefingMode == BriefingMode.ai &&
               await BriefingConsent.given(settings)) {
@@ -156,8 +155,8 @@ String _briefingKey(AiBriefingPeriod period) {
       '${now.year}-${now.month.toString().padLeft(2, '0')}-'
       '${now.day.toString().padLeft(2, '0')}';
   // The language is part of the key: a briefing is written in one language.
-  // Bump the version when the prompts change so stale briefings regenerate.
-  return 'ai_briefing_${period.name}_${day}_${activeLocale.languageCode}_v5';
+  // Bump the version when prompts or deterministic readiness rules change.
+  return 'ai_briefing_${period.name}_${day}_${activeLocale.languageCode}_v7';
 }
 
 /// Today's briefing for one period, cached in secure storage per day.
@@ -213,6 +212,35 @@ class AiBriefingNotifier extends StateNotifier<AsyncValue<String?>> {
   Future<void> _persist(String text) =>
       _storage.write(key: _briefingKey(period), value: text);
 
+  /// Refreshes an existing morning briefing after the athlete changes today's
+  /// plan. Cloud models are used only when the athlete has given consent for
+  /// recorded; the plan interaction never triggers a consent flow.
+  Future<void> refreshAfterPlanChange() async {
+    if (period != AiBriefingPeriod.morning || !mounted) return;
+    try {
+      final settings = await _ref.read(aiCoachSettingsProvider.future);
+      if (!settings.readyForBriefing ||
+          settings.briefingMode != BriefingMode.ai) {
+        return;
+      }
+      final key = _briefingKey(period);
+      final cached = state.valueOrNull ?? await _storage.read(key: key);
+      final cloudConsent = !settings.usesOnDeviceBriefing;
+      if (cloudConsent && !await BriefingConsent.given(settings)) return;
+      final profile = await _ref.read(userProfileProvider.future);
+      await load(
+        settings,
+        raceGoals: profile.raceGoals ?? '',
+        // A plan response can arrive before any briefing exists today. Create
+        // it then; regenerate an existing one with the updated plan context.
+        force: cached != null,
+        cloudConsent: cloudConsent,
+      );
+    } catch (e) {
+      log('[AiBriefing] refresh after plan change: $e');
+    }
+  }
+
   /// Generates the briefing unless one exists for today (or [force]).
   /// Cloud-only briefings require confirmation from the initiating UI action.
   Future<void> load(
@@ -226,6 +254,17 @@ class AiBriefingNotifier extends StateNotifier<AsyncValue<String?>> {
     bool cloudConsent = false,
   }) async {
     if (!settings.usesOnDeviceBriefing && !cloudConsent) return;
+    if (!mounted || state.isLoading || (!force && state.valueOrNull != null)) {
+      return;
+    }
+    if (!force && state.valueOrNull == null) {
+      final cached = await _storage.read(key: _briefingKey(period));
+      if (!mounted || state.isLoading) return;
+      if (cached != null) {
+        state = AsyncData(cached);
+        return;
+      }
+    }
     if (!mounted || state.isLoading || (!force && state.valueOrNull != null)) {
       return;
     }

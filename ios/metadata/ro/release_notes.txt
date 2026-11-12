@@ -1,0 +1,5 @@
+• Planuri de antrenament: planuri multisport adaptive cu mai multe obiective de cursă, ajustări și sesiuni care pot fi mutate.
+• Antrenament: planuri de forță cu mod de sală, nutriție sportivă și jurnalul aportului real.
+• Activități: importă arhive Strava și fișiere FIT, GPX și TCX; editează, partajează și restaurează activități.
+• Dispozitive: conexiuni îmbunătățite COROS, Polar și Garmin, plus MyWhoosh și înregistrare Concept2 Rower și SkiErg.
+• Sănătate și coaching: praguri și măsurători ale taliei, analize mai bune pentru somn și HRV, vreme în plan și coach AI FjeliaPro extins.

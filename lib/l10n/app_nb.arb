@@ -4,7 +4,7 @@
   "freeAiUsageTracking": "For at Free AI skal fortsette å fungere pålitelig for alle, sender vi en tilfeldig installasjons-ID. Den hjelper oss med å oppdage uvanlig bruk og blokkere forespørsler som misbruker tjenesten. ID-en inneholder verken navnet ditt eller kontoopplysninger.",
   "freeAiDescription": "Gratis KI-chat og oppsummeringer via {host}. Ingen egen konto eller API-nøkkel er nødvendig. Etter din bekreftelse sendes meldinger og en oppsummering av helse og trening til tjenesten.",
   "freeAiUnavailable": "Free AI er ikke tilgjengelig i denne versjonen. Velg en annen leverandør.",
-  "shareBriefingContextWithName": "En oppsummering av helse- og treningsdataene dine sendes til {name}.",
+  "shareBriefingContextWithName": "En oppsummering av helse- og treningsdataene dine sendes til {name}. Dette engangssamtykket gjelder også fremtidige skybaserte KI-tjenester du velger for briefinger.",
   "language": "Språk",
   "languageSystem": "Systemstandard",
   "settings": "Innstillinger",
@@ -3779,8 +3779,8 @@
   "plusEcgHint": "Polar H10 eller EKG-fil",
   "plusHrv": "HRV-sjekk",
   "plusHrvHint": "Kort måling med Polar H10",
-  "plusBpMeasure": "Mål blodtrykk",
-  "plusBpMeasureHint": "Hilo-mansjett via Bluetooth",
+  "plusBpMeasure": "Mål med Hilo-mansjett",
+  "plusBpMeasureHint": "Koble til Hilo-blodtrykksmansjetten via Bluetooth",
   "plusBpLog": "Legg inn blodtrykk",
   "plusBpLogHint": "Skriv inn en måling",
   "plusBpReport": "Hilo-rapport",
@@ -4025,5 +4025,7 @@
   "shortSessionNote": "Kortere enn planlagt ({done} av {planned} min)",
   "noteForCoach": "Notat til coachen (valgfritt)",
   "activityNote": "Notat",
-  "activityNoteAdd": "Legg til et notat til coachen"
+  "activityNoteAdd": "Legg til et notat til coachen",
+  "plusOmronBle": "Finn BLE-blodtrykksmålere",
+  "plusOmronBleHint": "Søk etter standard Bluetooth-blodtrykksmålere og støttede Omron-profiler."
 }

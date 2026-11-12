@@ -1,0 +1,19 @@
+Train smarter. Recover better. See the whole picture.
+
+Fjelia unifies your workouts, sleep, and recovery into one adaptive training hub. Plan your season, prevent overtraining, and ask your AI coach what to do next.
+Core features are free. Coaching is powered by flexible AI—including an optional on-device model for complete privacy.
+KEY FEATURES
+• Adaptive Multi-Sport Plans: Build dynamic plans for running, cycling, or multisport that automatically adjust based on your fatigue and completed workouts.
+• Recovery & HRV Insights: Track resting heart rate, sleep trends, and HRV to know exactly when to push and when to rest.
+• Unified Health Data: Sync seamlessly with Apple Health to track load, heart-rate zones, body composition, and performance trends in one view.
+• Privacy-First AI: Run coaching models locally on compatible devices. Your data stays on your phone.
+
+FJELIAPRO (OPTIONAL UPGRADE)
+Unlock advanced coaching tools and expanded AI access:
+• Race-day pacing, fueling strategies, and course prep
+• Weekly training reviews and long-term season analysis
+• AI Coach Memory (tracks your history, goals, and feedback)
+• Advanced ECG signal and heart rate metrics
+• Priority AI access
+Notice: Features depend on connected devices. On-device AI requires a compatible device.
+Medical Disclaimer: Fjelia is for fitness and wellness purposes only. It is not a medical device and does not diagnose, treat, or monitor medical conditions. Consult a doctor regarding any health concerns.

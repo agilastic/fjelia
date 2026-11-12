@@ -185,6 +185,9 @@ class MetricAnalysis {
       better: 'a lower breathing rate is calmer',
       digits: 1,
       steady: 1,
+      // A single elevated night is a prompt to watch the trend, not enough
+      // on its own to label overall readiness as severely impaired.
+      twoDaysRed: true,
     );
     add(resp?.line, 'RespRate', resp?.verdict);
     if (resp != null) {
@@ -266,19 +269,25 @@ class MetricAnalysis {
       for (final e in verdicts.entries)
         if (e.value == 'worse' || e.value == 'clearlyWorse') e.key,
     ];
-    // The traffic light follows the two core markers, sleep HRV and resting
-    // heart rate: green = train as planned, yellow = functional overload,
-    // red = non-functional overload, recovery first.
-    final core = [verdicts['SleepHRV'], verdicts['RHR']];
-    final readiness = core.contains('clearlyWorse')
+    // Keep warnings from being cancelled by positive markers, but do not let
+    // one secondary signal (sleep need, breathing rate, skin temperature)
+    // turn an otherwise fresh and stable day into a severe warning. Red is
+    // reserved for strong HRV/RHR/SpO2 signals or very high accumulated load.
+    const severeFlags = {'hrvLow', 'rhrUp', 'spo2Low', 'formVeryTired'};
+    final hasSevereFlag = flags.any(
+      (f) => severeFlags.contains(f.$1) && f.$2 == 'red',
+    );
+    final hasWarning = flags.any((f) => f.$2 == 'red' || f.$2 == 'yellow');
+    final readiness = hasSevereFlag
         ? 'red'
-        : core.contains('worse')
+        : hasWarning
         ? 'yellow'
         : 'green';
     final advice = switch (readiness) {
       'red' =>
         'RED: recovery comes first; easy day or rest and no intense training',
-      'yellow' => 'YELLOW: functional overload; keep planned training but add no extra intensity',
+      'yellow' =>
+        'YELLOW: functional overload; keep planned training but add no extra intensity',
       _ => 'GREEN: train as planned; hard sessions are fine',
     };
     // The Brief: what matters, ranked, decided here and not by a model.

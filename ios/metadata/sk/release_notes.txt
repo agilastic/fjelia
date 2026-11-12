@@ -1,0 +1,5 @@
+• Tréningové plány: adaptívne viacšportové plány s viacerými pretekárskymi cieľmi, úpravami plánu a presúvateľnými tréningami.
+• Tréning: silové plány s režimom posilňovne, športovou výživou a záznamom skutočného príjmu.
+• Aktivity: importuj archívy Strava a súbory FIT, GPX a TCX; upravuj, zdieľaj a obnovuj aktivity.
+• Zariadenia: lepšie pripojenie ku COROS, Polar a Garmin, MyWhoosh a záznam Concept2 Rower a SkiErg.
+• Zdravie a koučovanie: nové sledovanie prahov a obvodu pásu, lepšie analýzy spánku a HRV, počasie v pláne a rozšírený AI kouč FjeliaPro.

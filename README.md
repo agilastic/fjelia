@@ -6,8 +6,8 @@ and turns it into recovery, sleep, load and training-plan guidance — with an A
 coach that prefers **on-device Apple Intelligence** and offers Free AI when
 it is unavailable.
 
-> Fjelia is a hobby project. It is **not a medical device** and gives no medical
-> advice. See [Disclaimer](#disclaimer).
+> Fjelia is **not a medical device** and does not provide medical advice. See
+> [Disclaimer](#disclaimer).
 
 Website: <https://agilastic.github.io/fjelia/> (source in [`docs/`](docs/); served by GitHub Pages).
 

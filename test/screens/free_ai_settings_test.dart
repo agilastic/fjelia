@@ -256,7 +256,7 @@ void main() {
     expect(briefing.calls, 1);
     expect(briefing.confirmed, isTrue);
 
-    // Same service, same model: the yes holds, no second question.
+    // The one-time cloud briefing consent is remembered after the first yes.
     expect(
       await BriefingConsent.given(
         (await tester.runAsync(

@@ -27,7 +27,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String shareBriefingContextWithName(String name) {
-    return 'En oppsummering av helse- og treningsdataene dine sendes til $name.';
+    return 'En oppsummering av helse- og treningsdataene dine sendes til $name. Dette engangssamtykket gjelder også fremtidige skybaserte KI-tjenester du velger for briefinger.';
   }
 
   @override
@@ -7740,10 +7740,11 @@ class AppLocalizationsNb extends AppLocalizations {
   String get plusHrvHint => 'Kort måling med Polar H10';
 
   @override
-  String get plusBpMeasure => 'Mål blodtrykk';
+  String get plusBpMeasure => 'Mål med Hilo-mansjett';
 
   @override
-  String get plusBpMeasureHint => 'Hilo-mansjett via Bluetooth';
+  String get plusBpMeasureHint =>
+      'Koble til Hilo-blodtrykksmansjetten via Bluetooth';
 
   @override
   String get plusBpLog => 'Legg inn blodtrykk';
@@ -8577,4 +8578,11 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get activityNoteAdd => 'Legg til et notat til coachen';
+
+  @override
+  String get plusOmronBle => 'Finn BLE-blodtrykksmålere';
+
+  @override
+  String get plusOmronBleHint =>
+      'Søk etter standard Bluetooth-blodtrykksmålere og støttede Omron-profiler.';
 }

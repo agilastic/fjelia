@@ -1,0 +1,5 @@
+• Trainingsplannen: adaptieve multisportplannen met meerdere wedstrijddoelen, planaanpassingen en verplaatsbare sessies.
+• Training: krachtplannen met gymmodus, sportvoedingsplannen en registratie van je daadwerkelijke inname.
+• Activiteiten: importeer Strava-archieven en FIT-, GPX- en TCX-bestanden; bewerk, deel en herstel activiteiten.
+• Apparaten: verbeterde COROS-, Polar- en Garmin-verbindingen, plus MyWhoosh en opnames met Concept2 Rower en SkiErg.
+• Gezondheid en coaching: nieuwe drempel- en taillemetingen, betere slaap- en HRV-inzichten, weer in je plan en een uitgebreidere AI-coach met FjeliaPro.

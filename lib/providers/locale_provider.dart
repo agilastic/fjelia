@@ -10,7 +10,19 @@ const _prefsKey = 'app_language';
 
 /// Language codes the app is translated into. English is the fallback.
 const supportedLanguageCodes = [
-  'en', 'de', 'fr', 'it', 'es', 'ca', 'nb', 'sk', 'fi', 'da', //
+  'en',
+  'de',
+  'fr',
+  'it',
+  'es',
+  'ca',
+  'nb',
+  'sk',
+  'fi',
+  'da',
+  'nl',
+  'pl',
+  'pt', //
 ];
 
 /// Each language written in itself, for the picker.
@@ -25,6 +37,9 @@ const languageNames = <String, String>{
   'sk': 'Slovenčina',
   'fi': 'Suomi',
   'da': 'Dansk',
+  'nl': 'Nederlands',
+  'pl': 'Polski',
+  'pt': 'Português',
 };
 
 /// The saved language code, or null to follow the phone.

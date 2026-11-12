@@ -27,7 +27,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String shareBriefingContextWithName(String name) {
-    return 'Se enviará un resumen de tus datos de salud y entrenamiento a $name.';
+    return 'Se enviará un resumen de tus datos de salud y entrenamiento a $name. Este consentimiento único también se aplica a futuros proveedores de IA en la nube que elijas para los informes.';
   }
 
   @override
@@ -7788,10 +7788,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get plusHrvHint => 'Medición corta con Polar H10';
 
   @override
-  String get plusBpMeasure => 'Medir tensión';
+  String get plusBpMeasure => 'Medir con el manguito Hilo';
 
   @override
-  String get plusBpMeasureHint => 'Manguito Hilo por Bluetooth';
+  String get plusBpMeasureHint => 'Conecta el manguito Hilo por Bluetooth';
 
   @override
   String get plusBpLog => 'Anotar tensión';
@@ -8635,4 +8635,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get activityNoteAdd => 'Añade una nota para el coach';
+
+  @override
+  String get plusOmronBle => 'Buscar tensiómetros BLE';
+
+  @override
+  String get plusOmronBleHint =>
+      'Busca tensiómetros Bluetooth estándar y perfiles Omron compatibles.';
 }

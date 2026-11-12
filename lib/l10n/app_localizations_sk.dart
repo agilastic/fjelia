@@ -27,7 +27,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String shareBriefingContextWithName(String name) {
-    return 'Súhrn vašich zdravotných a tréningových údajov sa odošle poskytovateľovi $name.';
+    return 'Súhrn vašich zdravotných a tréningových údajov sa odošle poskytovateľovi $name. Tento jednorazový súhlas sa vzťahuje aj na budúcich poskytovateľov cloudovej AI, ktorých si vyberiete pre prehľady.';
   }
 
   @override
@@ -7765,10 +7765,10 @@ class AppLocalizationsSk extends AppLocalizations {
   String get plusHrvHint => 'Krátke meranie s Polar H10';
 
   @override
-  String get plusBpMeasure => 'Zmerať tlak';
+  String get plusBpMeasure => 'Merať manžetou Hilo';
 
   @override
-  String get plusBpMeasureHint => 'Manžeta Hilo cez Bluetooth';
+  String get plusBpMeasureHint => 'Spárujte manžetu Hilo cez Bluetooth';
 
   @override
   String get plusBpLog => 'Zapísať tlak';
@@ -8613,4 +8613,11 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get activityNoteAdd => 'Pridaj poznámku pre kouča';
+
+  @override
+  String get plusOmronBle => 'Hľadať BLE tlakové merače';
+
+  @override
+  String get plusOmronBleHint =>
+      'Vyhľadajte štandardné Bluetooth tlakové merače a podporované profily Omron.';
 }

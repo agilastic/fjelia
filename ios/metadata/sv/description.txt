@@ -1,0 +1,35 @@
+Träna smartare. Återhämta dig bättre. Se helheten.
+
+Fjelia samlar dina tränings-, sömn-, återhämtnings- och hälsodata så att du kan förstå dina framsteg och planera nästa pass.
+
+Grundläggande tränings- och hälsofunktioner är gratis, med grundläggande tillgång till Free AI. Du kan också välja en tillgänglig AI-modell som körs på din enhet. Vissa modeller och funktioner kräver en kompatibel enhet.
+
+PLANERA SÄSONGEN
+
+Skapa en anpassningsbar multisportplan utifrån dina sporter, erfarenhet, schema och mål. Planera flera tävlingar under samma säsong, följ träningsbelastningen, granska aktiviteter och se pulszoner. Din träningshistorik och genomförda pass hjälper till att styra ändringar när du utvecklas.
+
+FÖRSTÅ DIN ÅTERHÄMTNING
+
+Följ hjärtfrekvensvariabilitet (HRV), vilopuls, sömn och återhämtning tillsammans med träningen. Se hur kroppen reagerar på belastning över tid.
+
+SAMLA DINA DATA
+
+Anslut Apple Health och tjänster som stöds, till exempel Garmin, Polar, Suunto, COROS och MyWhoosh. Importera ett Strava ZIP-arkiv eller enskilda FIT-, GPX- och TCX-filer. Registrera rodd och SkiErg inomhus med Concept2 PM5-monitorer. Se aktiviteter, sömn, blodtryck, kroppssammansättning och träningsutveckling på ett ställe.
+
+VÄLJ DIN AI-COACH
+
+Fråga om träning och återhämtning och sätt dina trender i sammanhang. Använd grundläggande Free AI, en tillgänglig modell på enheten eller din egen AI-tjänst som stöds. AI på enheten kräver kompatibel hårdvara och konfiguration.
+
+FJELIAPRO (VALFRITT ABONNEMANG)
+
+Få avancerad coachning och analys med en egen Pro-modell och separat användningsbudget:
+• Dagliga förslag som kan anpassa dagens planerade pass
+• Veckosammanfattningar och säsongsanalys
+• Tävlingsplaner för nedtrappning, tempo och energiintag
+• Träningsstatistik, personliga rekord och aktuell utveckling
+• Memory Cards med viktig information till coachen
+• Detaljerad EKG-analys
+
+Tillgängliga funktioner och mätvärden beror på anslutna enheter, datakällor och enhetens kapacitet. AI-tjänsternas tillgänglighet kan variera.
+
+Fjelia ger allmän information om träning och välmående. Appen är ingen medicinteknisk produkt och ger inte medicinska råd, diagnoser eller behandlingar. Kontakta kvalificerad vårdpersonal vid medicinska frågor.

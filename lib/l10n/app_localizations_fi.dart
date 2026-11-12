@@ -27,7 +27,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String shareBriefingContextWithName(String name) {
-    return 'Yhteenveto terveys- ja harjoittelutiedoistasi lähetetään palveluun $name.';
+    return 'Yhteenveto terveys- ja harjoittelutiedoistasi lähetetään palveluun $name. Tämä kertaluonteinen suostumus koskee myös tulevia pilvipohjaisia tekoälypalveluja, jotka valitset katsauksia varten.';
   }
 
   @override
@@ -7763,10 +7763,11 @@ class AppLocalizationsFi extends AppLocalizations {
   String get plusHrvHint => 'Lyhyt mittaus Polar H10:llä';
 
   @override
-  String get plusBpMeasure => 'Mittaa verenpaine';
+  String get plusBpMeasure => 'Mittaa Hilo-mansetilla';
 
   @override
-  String get plusBpMeasureHint => 'Hilo-mansetti Bluetoothilla';
+  String get plusBpMeasureHint =>
+      'Yhdistä Hilo-verenpainemansetti Bluetoothilla';
 
   @override
   String get plusBpLog => 'Kirjaa verenpaine';
@@ -8608,4 +8609,11 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get activityNoteAdd => 'Lisää huomio valmentajalle';
+
+  @override
+  String get plusOmronBle => 'Etsi BLE-verenpainemittareita';
+
+  @override
+  String get plusOmronBleHint =>
+      'Etsi tavallisia Bluetooth-verenpainemittareita ja tuettuja Omron-profiileja.';
 }

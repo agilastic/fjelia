@@ -436,6 +436,15 @@ class PlanProposalLifecycle {
     await ref
         .read(planProposalNotificationsProvider)
         .resolved(PlanProposalNotifications.readinessKey(day));
+    // A morning coach can mark today's sessions as rest. Remove any evening
+    // missed-workout push that was scheduled before that decision was stored.
+    await ref
+        .read(planProposalNotificationsProvider)
+        .resolved(PlanProposalNotifications.missedKey(day));
+    ref.invalidate(pastMissedProvider);
+    await ref
+        .read(aiBriefingProvider(AiBriefingPeriod.morning).notifier)
+        .refreshAfterPlanChange();
   }
 
   Future<void> foreground() async {
@@ -463,6 +472,11 @@ class PlanProposalLifecycle {
       await ref
           .read(planProposalNotificationsProvider)
           .resolved(PlanProposalNotifications.readinessKey(day));
+    }
+    if (accept) {
+      await ref
+          .read(aiBriefingProvider(AiBriefingPeriod.morning).notifier)
+          .refreshAfterPlanChange();
     }
   }
 

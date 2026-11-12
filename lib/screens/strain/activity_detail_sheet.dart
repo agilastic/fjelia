@@ -1,4 +1,5 @@
 import '../../theme/fjelia_style.dart';
+import '../../theme/activity_colors.dart';
 import '../../providers/short_session_provider.dart';
 import '../../providers/activity_history_provider.dart';
 import '../../widgets/recently_deleted_sheet.dart';
@@ -76,6 +77,19 @@ class ActivityDetailSheet extends ConsumerWidget {
     // pace, elevation or route for a lifting session.
     final strength = isStrengthSport(a.type);
     final running = a.type.toLowerCase().contains('run');
+    final strokeSport =
+        activityKind(a.type) == ActivityKind.rowing ||
+        a.type == 'nordic_skiing';
+    final strokeRates = strokeSport
+        ? a.samples
+              .map((sample) => sample.cadence)
+              .whereType<double>()
+              .where((rate) => rate > 0 && rate.isFinite)
+              .toList()
+        : const <double>[];
+    final avgStrokeRate = strokeRates.isEmpty
+        ? null
+        : strokeRates.reduce((a, b) => a + b) / strokeRates.length;
     final km = (a.distanceMeters ?? 0) / 1000;
     final pace = km > 0 ? a.duration.inSeconds / km : null;
     final cells = <(String, String)>[
@@ -106,6 +120,11 @@ class ActivityDetailSheet extends ConsumerWidget {
         ),
         (context.l10n.avgHr, '${valueText(a.avgHeartRate)} bpm'),
         (context.l10n.maxHr, '${valueText(a.maxHeartRate)} bpm'),
+        if (avgStrokeRate != null)
+          (
+            '${context.l10n.rowingStrokeRate} (SPM)',
+            '${valueText(avgStrokeRate)} SPM',
+          ),
         (context.l10n.trainingLoad2, valueText(activityLoad(activity), 1)),
         if (a.avgPower != null)
           (context.l10n.avgPower, '${valueText(a.avgPower)} W'),
@@ -365,7 +384,7 @@ class ActivityDetailSheet extends ConsumerWidget {
             ),
           ],
           if (a.samples.isNotEmpty && !strength)
-            ActivityPerformanceChart(activity: a),
+            ActivityPerformanceChart(activity: a, showStrokeRate: strokeSport),
           // Blood pressure on its own, below heart rate, pace and elevation.
           if ({'ftms', 'manual_recording'}.contains(activity.source))
             RecordedActivityBloodPressureCard(activityId: activity.activityId),

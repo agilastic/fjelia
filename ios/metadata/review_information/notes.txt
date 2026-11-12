@@ -1,0 +1,39 @@
+1. SCREEN RECORDING
+Attached in Zip-file (fjelia_v2.mov), recorded on a physical iPhone 11 running iOS 27.2. It starts on the home screen and shows:
+- App launch and welcome flow
+- Connecting Apple Health and optional accounts
+- Setting a race goal and generating the adaptive training plan
+- Health dashboard, Plan (calendar and workouts), Load analysis and the AI Coach
+
+Accounts and purchases: Fjelia has no own user accounts (no sign-up, no login), so no account deletion is needed (5.1.1(v)). Data is stored on the device; Settings > System > Data Export offers CSV export and backup. No user-generated content is shared, no paid content, no In-App Purchases.
+
+2. PURPOSE AND AUDIENCE
+Fjelia is a training and recovery companion for endurance athletes (running, trail running, cycling, swimming, triathlon).
+Problem: athletes keep their data in separate apps and devices (watches, sleep trackers, blood pressure monitors) and follow static plans that do not adapt when they are tired.
+Solution: Fjelia brings sleep, HRV, resting heart rate, blood pressure and workouts into one dashboard, assesses daily readiness and adapts the training plan to the athlete's actual recovery.
+
+3. SETUP FOR REVIEW
+- Launch the app, tap "Get Started".
+- Connect Apple Health (recommended) or skip.
+- Set a race goal (or skip) to generate the plan.
+- Tabs: Health (readiness dashboard), Plan (adaptive plan, calendar, workouts), Load (fitness, fatigue, form), Coach (AI coach: Free AI, Apple Intelligence, an on-device model or a cloud AI with the user's own key).
+- Sample data: the attached fjelia_review_sample.zip holds about three months of sample training, sleep, HRV and blood pressure data and a training plan. Save it to the Files app, then in Fjelia: Settings > System > Data Export > "Restore from backup" and pick the file.
+- Vendor accounts (Polar, Garmin, Suunto, COROS, Hilo/Aktiia, Renpho) are optional; the app works with Apple Health or manual entries alone.
+
+4. EXTERNAL SERVICES AND PRIVACY
+- Apple HealthKit: read to show and analyse fitness and recovery data on the device. Never used for advertising, never sold.
+- Cloud AI (optional): Free AI, Fjelia's own free service at ai.fjelia.com (open-weight Qwen model), or OpenAI, Anthropic, Mistral, Google Gemini or DeepSeek with the user's own API key. Health data is never sent automatically: before a cloud request the app asks for confirmation and names the provider. This happens before every request by default; users may switch it to once per chat session.
+- On-device AI: Apple Intelligence, or a Qwen model downloaded once from huggingface.co that then runs on the device.
+- Vendor accounts: the user signs in with their own account of that vendor. Fjelia is not affiliated with these vendors.
+- Weather and maps: Open-Meteo, Bright Sky (Deutscher Wetterdienst), Pirate Weather, WeatherAPI.com, RainViewer, OpenStreetMap.
+- Bug reports: only when the user sends one from Settings, to the developer's support server.
+No analytics, tracking or advertising SDKs. Logins and API keys are stored in the iOS Keychain.
+Privacy policy: https://www.fjelia.com/privacy.html
+
+5. REGIONAL AVAILABILITY
+Works the same worldwide, localised into 10 languages. Service differences only: Bright Sky weather in Germany, Open-Meteo elsewhere; Apple Intelligence follows Apple's availability; some vendor accounts ask for their region (e.g. COROS).
+
+6. REGULATED CONTENT
+Fjelia is a sports, fitness and wellness app, not a medical device, and gives no medical advice. It does not diagnose or treat. Blood pressure values come from the user's own monitor, Apple Health or manual entry and are shown as recorded. The AI coach is instructed not to diagnose and to advise seeing a doctor for symptoms; estimates such as biological age are labelled as not a medical diagnosis. No protected third-party material.
+
+

@@ -854,14 +854,24 @@ Future<void> applyMorningRevision(
       case RevisionOp.keep:
         break;
       case RevisionOp.rest:
-        await (db.update(
-          db.trainingSessions,
-        )..where((t) => t.id.equals(s.id))).write(
-          const TrainingSessionsCompanion(
-            status: Value('skipped'),
-            adaptationTrigger: Value('coach_morning'),
-          ),
-        );
+        await db.transaction(() async {
+          await (db.update(
+            db.trainingSessions,
+          )..where((t) => t.id.equals(s.id))).write(
+            const TrainingSessionsCompanion(
+              status: Value('skipped'),
+              adaptationTrigger: Value('coach_morning'),
+            ),
+          );
+          await db
+              .into(db.sessionActuals)
+              .insertOnConflictUpdate(
+                SessionActualsCompanion.insert(
+                  sessionId: s.id,
+                  skipReason: const Value('Fatigue'),
+                ),
+              );
+        });
       case RevisionOp.swap:
         final other = c.byId(x.withId!)!;
         await db.transaction(() async {

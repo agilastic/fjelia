@@ -1,0 +1,37 @@
+Während der Early-Access-Phase kostenlos! Alle, die jetzt einsteigen, behalten dauerhaft Zugriff auf sämtliche Funktionen – auch wenn Fjelia später auf einen einmaligen Kaufpreis umgestellt wird.
+
+Fjelia vereint deine Trainings-, Schlaf-, Erholungs- und Gesundheitsdaten an einem Ort. So verstehst du deinen Körper besser und kannst fundierte Entscheidungen für dein nächstes Training treffen.
+
+Ob Laufen, Radfahren, Schwimmen, Skaten, Krafttraining oder Triathlon – Fjelia hilft dir zu verstehen, wie Training und Regeneration zusammenhängen.
+
+VERSTEHE DEINEN KÖRPER
+
+Behalte deine Herzfrequenzvariabilität (HRV), deinen Ruhepuls sowie deine Schlaf- und Erholungstrends im Blick. Betrachte nicht nur einzelne Trainingseinheiten, sondern erkenne, wie dein Körper langfristig auf Belastung und Erholung reagiert.
+
+TRAINIERE INTELLIGENTER
+
+Analysiere deine Trainingsbelastung, werte deine Aktivitäten aus und entdecke deine Herzfrequenzzonen. Erstelle einen Trainingsplan, der zu deinen Zielen, deiner Erfahrung und deinem Alltag passt. Nutze deine bisherigen Trainingsdaten, um deinen Plan gezielt anzupassen.
+
+BEHALTE DAS GROSSE GANZE IM BLICK
+
+Führe Daten aus Apple Health sowie unterstützten Geräten und Diensten zusammen. Analysiere Schlaf, Blutdruck, Körperzusammensetzung und Fitnessentwicklung im Zusammenhang mit deinem Training.
+
+HOLE MEHR AUS DEINEN DATEN HERAUS
+
+Nutze den integrierten KI-Coach, um dein Training und deine Regeneration besser zu verstehen. Stelle Fragen, analysiere deine Entwicklung und erhalte hilfreiche Einordnungen deiner persönlichen Trends.
+
+Auf unterstützten Geräten kann der KI-Coach mit Apple Intelligence direkt auf deinem Gerät ausgeführt werden.
+
+Du entscheidest, welche KI du verwendest: lokal auf deinem Gerät, über einen kostenlosen KI-Dienst oder mit deinem eigenen API-Schlüssel für OpenAI, Anthropic, Gemini oder Mistral.
+
+FÜR DEINEN TÄGLICHEN FORTSCHRITT
+
+Egal, ob du gerade erst mit regelmäßigem Sport beginnst oder dich auf deinen nächsten Wettkampf vorbereitest: Fjelia unterstützt dich dabei, Training und Erholung in Einklang zu bringen und deine Fortschritte besser zu verstehen.
+
+DEINE DATEN. DEIN TRAINING. DEINE ENTSCHEIDUNG.
+
+Die verfügbaren Funktionen und Messwerte hängen von deinen verbundenen Geräten, Datenquellen und technischen Voraussetzungen ab. Apple Intelligence erfordert ein kompatibles Gerät und eine unterstützte Konfiguration.
+
+Gesundheitshinweis
+
+Fjelia dient ausschließlich der allgemeinen Fitness- und Gesundheitsinformation. Die App ist kein Medizinprodukt und bietet keine medizinische Beratung, Diagnose oder Behandlung. Wende dich bei gesundheitlichen Fragen oder Beschwerden immer an qualifiziertes medizinisches Fachpersonal.

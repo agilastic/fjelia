@@ -1,0 +1,35 @@
+Treina melhor. Recupera melhor. Vê o panorama completo.
+
+A Fjelia reúne os teus dados de treino, sono, recuperação e saúde para te ajudar a compreender a evolução e planear o próximo treino.
+
+As funções essenciais de treino e saúde são gratuitas, com acesso básico ao Free AI. Também podes escolher um modelo de IA disponível que funciona no dispositivo. Alguns modelos e funções exigem um dispositivo compatível.
+
+PLANEIA A ÉPOCA
+
+Cria um plano multidesportivo adaptativo de acordo com as modalidades, experiência, horário e objetivos. Planeia várias provas na mesma época, acompanha a carga de treino, consulta atividades e explora zonas de frequência cardíaca. O histórico e as sessões concluídas ajudam a orientar os ajustes à medida que evoluis.
+
+COMPREENDE A RECUPERAÇÃO
+
+Acompanha a variabilidade da frequência cardíaca (HRV), a frequência cardíaca em repouso, o sono e as tendências de recuperação em conjunto com o treino. Percebe como o corpo responde ao esforço ao longo do tempo.
+
+REÚNE OS TEUS DADOS
+
+Liga o Apple Health e serviços compatíveis como Garmin, Polar, Suunto, COROS e MyWhoosh. Importa um arquivo ZIP do Strava ou ficheiros FIT, GPX e TCX. Regista sessões de remo indoor e SkiErg com monitores Concept2 PM5. Consulta atividades, sono, pressão arterial, composição corporal e tendências de condição física num só lugar.
+
+ESCOLHE O TEU COACH DE IA
+
+Faz perguntas sobre treino e recuperação e compreende melhor as tuas tendências. Usa o acesso básico ao Free AI, um modelo disponível no dispositivo ou o teu próprio fornecedor de IA compatível. A IA no dispositivo requer equipamento e configuração compatíveis.
+
+FJELIAPRO (SUBSCRIÇÃO OPCIONAL)
+
+Acede a coaching e análises avançadas com um modelo Pro dedicado e um orçamento de utilização próprio:
+• Sugestões diárias para adaptar as sessões planeadas
+• Resumos semanais e análise da época
+• Planos de prova: redução de carga, ritmo e alimentação
+• Estatísticas de treino, recordes pessoais e progresso recente
+• Memory Cards com informações importantes para o coach
+• Análise detalhada de ECG
+
+As funções e métricas disponíveis dependem dos dispositivos ligados, das fontes de dados e das capacidades do dispositivo. A disponibilidade dos fornecedores de IA pode variar.
+
+A Fjelia fornece informação geral sobre condição física e bem-estar. Não é um dispositivo médico e não fornece aconselhamento médico, diagnóstico ou tratamento. Consulta um profissional de saúde qualificado para questões médicas.

@@ -27,7 +27,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String shareBriefingContextWithName(String name) {
-    return 'S\'enviarà un resum de les teves dades de salut i entrenament a $name.';
+    return 'S\'enviarà un resum de les teves dades de salut i entrenament a $name. Aquest consentiment únic també s\'aplica als futurs proveïdors d\'IA al núvol que triïs per als resums.';
   }
 
   @override
@@ -7792,10 +7792,10 @@ class AppLocalizationsCa extends AppLocalizations {
   String get plusHrvHint => 'Mesura curta amb Polar H10';
 
   @override
-  String get plusBpMeasure => 'Mesura la pressió';
+  String get plusBpMeasure => 'Mesura amb el maneguet Hilo';
 
   @override
-  String get plusBpMeasureHint => 'Maniguet Hilo per Bluetooth';
+  String get plusBpMeasureHint => 'Vincula el maneguet Hilo per Bluetooth';
 
   @override
   String get plusBpLog => 'Anota la pressió';
@@ -8641,4 +8641,11 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get activityNoteAdd => 'Afegeix una nota per al coach';
+
+  @override
+  String get plusOmronBle => 'Cerca tensiòmetres BLE';
+
+  @override
+  String get plusOmronBleHint =>
+      'Cerca dispositius estàndard de pressió arterial i perfils Omron compatibles per Bluetooth.';
 }

@@ -1,0 +1,35 @@
+Antrenează-te mai inteligent. Recuperează-te mai bine. Vezi imaginea de ansamblu.
+
+Fjelia reunește datele despre antrenament, somn, recuperare și sănătate, ca să-ți înțelegi progresul și să planifici următorul antrenament.
+
+Funcțiile de bază pentru antrenament și sănătate sunt gratuite, cu acces de bază la Free AI. Poți alege și un model AI disponibil care rulează pe dispozitiv. Unele modele și funcții necesită un dispozitiv compatibil.
+
+PLANIFICĂ SEZONUL
+
+Creează un plan multisport adaptiv în funcție de sporturile practicate, experiență, program și obiective. Planifică mai multe competiții într-un singur sezon, urmărește încărcarea, analizează activitățile și zonele de puls. Istoricul și sesiunile finalizate ajută la ajustarea planului pe măsură ce progresezi.
+
+ÎNȚELEGE RECUPERAREA
+
+Urmărește variabilitatea ritmului cardiac (HRV), pulsul în repaus, somnul și tendințele recuperării alături de antrenamente. Vezi cum reacționează corpul la efort în timp.
+
+ADUNĂ DATELE LA UN LOC
+
+Conectează Apple Health și serviciile compatibile, precum Garmin, Polar, Suunto, COROS și MyWhoosh. Importă o arhivă ZIP Strava sau fișiere FIT, GPX și TCX. Înregistrează sesiuni de vâslit indoor și SkiErg cu monitoare Concept2 PM5. Consultă activitățile, somnul, tensiunea arterială, compoziția corporală și tendințele de fitness într-un singur loc.
+
+ALEGE-ȚI COACH-UL AI
+
+Întreabă despre antrenament și recuperare și înțelege mai bine tendințele tale. Folosește accesul de bază la Free AI, un model disponibil pe dispozitiv sau propriul furnizor AI compatibil. AI pe dispozitiv necesită hardware și configurare compatibile.
+
+FJELIAPRO (ABONAMENT OPȚIONAL)
+
+Obține coaching și analize avansate cu un model Pro dedicat și un buget de utilizare separat:
+• Sugestii zilnice pentru adaptarea sesiunilor planificate
+• Analize săptămânale și de sezon
+• Planuri de cursă: reducerea volumului, ritm și alimentare
+• Statistici, recorduri personale și progres recent
+• Memory Cards cu informații importante pentru coach
+• Analiză ECG detaliată
+
+Funcțiile și valorile disponibile depind de dispozitivele conectate, sursele de date și capacitățile dispozitivului. Disponibilitatea furnizorilor AI poate varia.
+
+Fjelia oferă informații generale despre fitness și bunăstare. Nu este un dispozitiv medical și nu oferă sfaturi medicale, diagnostic sau tratament. Pentru probleme de sănătate, consultă un profesionist medical calificat.

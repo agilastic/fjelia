@@ -14,6 +14,9 @@ import 'app_localizations_fi.dart';
 import 'app_localizations_fr.dart';
 import 'app_localizations_it.dart';
 import 'app_localizations_nb.dart';
+import 'app_localizations_nl.dart';
+import 'app_localizations_pl.dart';
+import 'app_localizations_pt.dart';
 import 'app_localizations_sk.dart';
 
 // ignore_for_file: type=lint
@@ -111,6 +114,9 @@ abstract class AppLocalizations {
     Locale('fr'),
     Locale('it'),
     Locale('nb'),
+    Locale('nl'),
+    Locale('pl'),
+    Locale('pt'),
     Locale('sk'),
   ];
 
@@ -141,7 +147,7 @@ abstract class AppLocalizations {
   /// No description provided for @shareBriefingContextWithName.
   ///
   /// In en, this message translates to:
-  /// **'A summary of your health and training data will be sent to {name}.'**
+  /// **'A summary of your health and training data will be sent to {name}. This one-time approval also covers future cloud AI providers you select for briefings.'**
   String shareBriefingContextWithName(String name);
 
   /// No description provided for @language.
@@ -13449,13 +13455,13 @@ abstract class AppLocalizations {
   /// No description provided for @plusBpMeasure.
   ///
   /// In en, this message translates to:
-  /// **'Measure BP'**
+  /// **'Measure with Hilo cuff'**
   String get plusBpMeasure;
 
   /// No description provided for @plusBpMeasureHint.
   ///
   /// In en, this message translates to:
-  /// **'Hilo cuff via Bluetooth'**
+  /// **'Pair the Hilo blood-pressure cuff over Bluetooth'**
   String get plusBpMeasureHint;
 
   /// No description provided for @plusBpLog.
@@ -14885,6 +14891,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add a note for the coach'**
   String get activityNoteAdd;
+
+  /// No description provided for @plusOmronBle.
+  ///
+  /// In en, this message translates to:
+  /// **'Find BLE blood-pressure monitors'**
+  String get plusOmronBle;
+
+  /// No description provided for @plusOmronBleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for standard Bluetooth blood-pressure devices and supported Omron profiles.'**
+  String get plusOmronBleHint;
 }
 
 class _AppLocalizationsDelegate
@@ -14907,6 +14925,9 @@ class _AppLocalizationsDelegate
     'fr',
     'it',
     'nb',
+    'nl',
+    'pl',
+    'pt',
     'sk',
   ].contains(locale.languageCode);
 
@@ -14935,6 +14956,12 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsIt();
     case 'nb':
       return AppLocalizationsNb();
+    case 'nl':
+      return AppLocalizationsNl();
+    case 'pl':
+      return AppLocalizationsPl();
+    case 'pt':
+      return AppLocalizationsPt();
     case 'sk':
       return AppLocalizationsSk();
   }

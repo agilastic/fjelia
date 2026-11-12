@@ -48,7 +48,9 @@ Future<List<String>> seasonWeekLines(
   final lastGoal = goals.isEmpty ? null : goals.last.raceDate;
   final planWeeks = lastGoal == null
       ? 4
-      : (lastGoal.difference(monday).inDays ~/ 7 + 1).clamp(1, maxPlanWeeks);
+      : (lastGoal.difference(monday).inDays ~/ 7 + 1)
+            .clamp(1, maxPlanWeeks)
+            .toInt();
   final planTo = DateTime(
     monday.year,
     monday.month,
@@ -74,9 +76,9 @@ Future<List<String>> seasonWeekLines(
   /// The week of [d] counted from this week's Monday (negative: before).
   int weekOf(DateTime d) =>
       (DateTime(d.year, d.month, d.day).difference(monday).inDays / 7).floor();
-  String start(int w) =>
-      DateFormat('yyyy-MM-dd')
-          .format(DateTime(monday.year, monday.month, monday.day + 7 * w));
+  String start(int w) => DateFormat(
+    'yyyy-MM-dd',
+  ).format(DateTime(monday.year, monday.month, monday.day + 7 * w));
   String sport(String type) => switch (activityKind(type)) {
     ActivityKind.other => type.replaceAll(RegExp(r'[,\[\]]'), ' '),
     final k => k.name,

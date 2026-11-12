@@ -1381,6 +1381,9 @@ class MediaItems extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+List<BpMeasurement> _validBpRows(List<BpMeasurement> rows) =>
+    rows.where((r) => r.systolic > r.diastolic).toList();
+
 @DriftDatabase(
   tables: [
     BpMeasurements,
@@ -2259,7 +2262,7 @@ class AppDatabase extends _$AppDatabase {
 
   // ── Blood pressure ───────────────────────────────────────────────────────
 
-  Future<List<BpMeasurement>> getBpForDate(DateTime date) {
+  Future<List<BpMeasurement>> getBpForDate(DateTime date) async {
     final start = _dayStart(date);
     final end = start.add(const Duration(days: 1));
     return (select(bpMeasurements)
@@ -2269,11 +2272,12 @@ class AppDatabase extends _$AppDatabase {
                 t.measuredAt.isSmallerThanValue(end)),
           )
           ..orderBy([(t) => OrderingTerm(expression: t.measuredAt)]))
-        .get();
+        .get()
+        .then(_validBpRows);
   }
 
   /// Local-calendar range, inclusive start and exclusive end.
-  Future<List<BpMeasurement>> getBpInRange(DateTime start, DateTime end) {
+  Future<List<BpMeasurement>> getBpInRange(DateTime start, DateTime end) async {
     return (select(bpMeasurements)
           ..where(
             (t) =>
@@ -2281,10 +2285,11 @@ class AppDatabase extends _$AppDatabase {
                 t.measuredAt.isSmallerThanValue(end),
           )
           ..orderBy([(t) => OrderingTerm(expression: t.measuredAt)]))
-        .get();
+        .get()
+        .then(_validBpRows);
   }
 
-  Future<List<BpMeasurement>> getBpForWeek(DateTime weekStart) {
+  Future<List<BpMeasurement>> getBpForWeek(DateTime weekStart) async {
     final start = _dayStart(weekStart);
     final end = start.add(const Duration(days: 7));
     return (select(bpMeasurements)
@@ -2294,7 +2299,8 @@ class AppDatabase extends _$AppDatabase {
                 t.measuredAt.isSmallerThanValue(end)),
           )
           ..orderBy([(t) => OrderingTerm(expression: t.measuredAt)]))
-        .get();
+        .get()
+        .then(_validBpRows);
   }
 
   /// Polar H10 spot HRV readings that started in [from, to), oldest first.
@@ -2312,12 +2318,13 @@ class AppDatabase extends _$AppDatabase {
         .get();
   }
 
-  Future<List<BpMeasurement>> getRecentBp(int days) {
+  Future<List<BpMeasurement>> getRecentBp(int days) async {
     final since = DateTime.now().subtract(Duration(days: days));
     return (select(bpMeasurements)
           ..where((t) => t.measuredAt.isBiggerOrEqualValue(since))
           ..orderBy([(t) => OrderingTerm(expression: t.measuredAt)]))
-        .get();
+        .get()
+        .then(_validBpRows);
   }
 
   /// The measurements that are not stored yet. A reading counts as stored when
@@ -2327,6 +2334,11 @@ class AppDatabase extends _$AppDatabase {
   Future<List<BpMeasurementsCompanion>> newBpMeasurements(
     List<BpMeasurementsCompanion> measurements,
   ) async {
+    // A systolic value cannot be below or equal to its paired diastolic value.
+    // Drop malformed device/API samples rather than polluting averages/charts.
+    measurements = measurements
+        .where((m) => m.systolic.value > m.diastolic.value)
+        .toList();
     if (measurements.isEmpty) return const [];
     int minute(DateTime t) => t.millisecondsSinceEpoch ~/ 60000;
     String key(DateTime t, int sys, int dia) => '${minute(t)}/$sys/$dia';
@@ -2685,6 +2697,12 @@ class AppDatabase extends _$AppDatabase {
   MigrationStrategy get migration => MigrationStrategy(
     beforeOpen: (details) async {
       await _clearBlankActivityJson();
+      // Remove legacy blood-pressure samples with impossible ordering. New
+      // imports are already rejected; this cleans rows stored before that
+      // validation existed.
+      await customStatement(
+        'DELETE FROM bp_measurements WHERE systolic <= diastolic',
+      );
       // An activity completes one session; the index makes that a rule of
       // the data, not only of the code. Null links stay unconstrained.
       await customStatement(
