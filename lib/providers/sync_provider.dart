@@ -697,15 +697,10 @@ class SyncNotifier extends StateNotifier<SyncState> {
     unawaited(_ref.read(planProposalLifecycleProvider).afterSync());
     // Imported exercise sets may have arrived with the activities.
     invalidateStrength(_ref.invalidate);
-    final briefingDataChanged =
-        result.garmin > 0 || result.activities > 0 || result.bp > 0;
-    if (briefingDataChanged) {
-      _ref.invalidate(aiBriefingProvider);
-      log('[Sync] new data — briefing invalidated');
-    }
-    // Generate once after every completed sync, even if it imported no new
-    // activities. The notifier reuses today's cached text unless data changed.
-    unawaited(_prewarmBriefingAfterSync(force: briefingDataChanged));
+    // Check the actual briefing context after every sync. Import counts are too
+    // coarse: a sync can import irrelevant rows or change inputs without those
+    // counters, while identical context should never trigger a new AI request.
+    unawaited(_prewarmBriefingAfterSync());
     final errors = result.errors.join('\n');
     state = state.copyWith(
       status: result.hasErrors ? SyncStatus.error : SyncStatus.done,
@@ -721,13 +716,13 @@ class SyncNotifier extends StateNotifier<SyncState> {
     );
   }
 
-  Future<void> _prewarmBriefingAfterSync({required bool force}) async {
+  Future<void> _prewarmBriefingAfterSync() async {
     await waitForSyncToSettle(_ref, stillWanted: () => mounted);
-    if (mounted) await _prewarmBriefing(force: force);
+    if (mounted) await _prewarmBriefing();
   }
 
   /// Builds a local briefing or a cloud briefing previously consented to.
-  Future<void> _prewarmBriefing({required bool force}) async {
+  Future<void> _prewarmBriefing() async {
     final settings = _ref.read(aiCoachSettingsProvider).valueOrNull;
     if (settings == null ||
         !settings.readyForBriefing ||
@@ -776,7 +771,7 @@ class SyncNotifier extends StateNotifier<SyncState> {
                 ),
           raceGoals: profile?.raceGoals ?? '',
           weatherSummary: weather,
-          force: force,
+          checkDataChanges: true,
           cloudConsent: cloudConsent,
         );
     log('[Sync] AI briefing pre-warm triggered (${period.name})');

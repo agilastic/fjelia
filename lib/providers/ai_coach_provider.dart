@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'day_data_provider.dart' show dayScoresProvider, trainingMonitorProvider;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../l10n/l10n_ext.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:crypto/crypto.dart';
 import 'package:foundation_models_framework/foundation_models_framework.dart';
 
 import '../config/free_ai.dart';
@@ -156,7 +159,24 @@ String _briefingKey(AiBriefingPeriod period) {
       '${now.day.toString().padLeft(2, '0')}';
   // The language is part of the key: a briefing is written in one language.
   // Bump the version when prompts or deterministic readiness rules change.
-  return 'ai_briefing_${period.name}_${day}_${activeLocale.languageCode}_v7';
+  return 'ai_briefing_${period.name}_${day}_${activeLocale.languageCode}_v8';
+}
+
+String _briefingInputHashKey(AiBriefingPeriod period) =>
+    '${_briefingKey(period)}_input_hash';
+
+String _briefingInputHash(AiCoachSettings settings, String toon) {
+  // The clock changes on every refresh but does not change the substance of
+  // the briefing. Keep the date and all other context fields in the hash.
+  final stableToon = toon.replaceAll(
+    RegExp(r'TimeNow:[^\]]+'),
+    'TimeNow:<omitted>',
+  );
+  return sha256
+      .convert(
+        utf8.encode('${settings.provider.name}|${settings.model}|$stableToon'),
+      )
+      .toString();
 }
 
 /// Today's briefing for one period, cached in secure storage per day.
@@ -167,6 +187,7 @@ class AiBriefingNotifier extends StateNotifier<AsyncValue<String?>> {
 
   final Ref _ref;
   final AiBriefingPeriod period;
+  bool _checkingInputs = false;
 
   Future<void> _loadFromDisk() async {
     final cached = await _storage.read(key: _briefingKey(period));
@@ -209,8 +230,10 @@ class AiBriefingNotifier extends StateNotifier<AsyncValue<String?>> {
     }
   }
 
-  Future<void> _persist(String text) =>
-      _storage.write(key: _briefingKey(period), value: text);
+  Future<void> _persist(String text, String inputHash) async {
+    await _storage.write(key: _briefingKey(period), value: text);
+    await _storage.write(key: _briefingInputHashKey(period), value: inputHash);
+  }
 
   /// Refreshes an existing morning briefing after the athlete changes today's
   /// plan. Cloud models are used only when the athlete has given consent for
@@ -223,17 +246,17 @@ class AiBriefingNotifier extends StateNotifier<AsyncValue<String?>> {
           settings.briefingMode != BriefingMode.ai) {
         return;
       }
-      final key = _briefingKey(period);
-      final cached = state.valueOrNull ?? await _storage.read(key: key);
+      final cached =
+          state.valueOrNull ?? await _storage.read(key: _briefingKey(period));
       final cloudConsent = !settings.usesOnDeviceBriefing;
       if (cloudConsent && !await BriefingConsent.given(settings)) return;
       final profile = await _ref.read(userProfileProvider.future);
       await load(
         settings,
         raceGoals: profile.raceGoals ?? '',
-        // A plan response can arrive before any briefing exists today. Create
-        // it then; regenerate an existing one with the updated plan context.
-        force: cached != null,
+        // Compare the full current context so a plan response regenerates only
+        // when it actually changed an input to the briefing.
+        checkDataChanges: cached != null,
         cloudConsent: cloudConsent,
       );
     } catch (e) {
@@ -241,7 +264,7 @@ class AiBriefingNotifier extends StateNotifier<AsyncValue<String?>> {
     }
   }
 
-  /// Generates the briefing unless one exists for today (or [force]).
+  /// Generates a briefing and reuses today's result while its inputs match.
   /// Cloud-only briefings require confirmation from the initiating UI action.
   Future<void> load(
     AiCoachSettings settings, {
@@ -250,28 +273,27 @@ class AiBriefingNotifier extends StateNotifier<AsyncValue<String?>> {
     String? weatherSummary,
     BioAgeResult? bioAge,
     AiContextPlanInfo? planInfo,
-    bool force = false,
+    bool checkDataChanges = false,
     bool cloudConsent = false,
   }) async {
     if (!settings.usesOnDeviceBriefing && !cloudConsent) return;
-    if (!mounted || state.isLoading || (!force && state.valueOrNull != null)) {
+    if (!mounted || state.isLoading || _checkingInputs) {
       return;
     }
-    if (!force && state.valueOrNull == null) {
-      final cached = await _storage.read(key: _briefingKey(period));
+    var previousText = state.valueOrNull;
+    if (previousText == null) {
+      previousText = await _storage.read(key: _briefingKey(period));
       if (!mounted || state.isLoading) return;
-      if (cached != null) {
-        state = AsyncData(cached);
-        return;
-      }
+      if (previousText != null) state = AsyncData(previousText);
     }
-    if (!mounted || state.isLoading || (!force && state.valueOrNull != null)) {
+    if (previousText != null && !checkDataChanges) {
       return;
     }
-    state = const AsyncLoading();
+    if (!mounted || state.isLoading) return;
+    _checkingInputs = true;
     try {
-      // Never in the middle of a sync: wait until it is really finished, then
-      // read the data, so the briefing is written from complete records.
+      // Keep the existing briefing visible while inputs are collected and
+      // compared; a routine app refresh should not flash an empty card.
       await waitForSyncToSettle(_ref, stillWanted: () => mounted);
       if (!mounted) return;
       monitor ??= await _currentMonitor();
@@ -284,6 +306,14 @@ class AiBriefingNotifier extends StateNotifier<AsyncValue<String?>> {
             bioAge: bioAge,
             planInfo: planInfo,
           );
+      final inputHash = _briefingInputHash(settings, toon);
+      final savedHash = await _storage.read(key: _briefingInputHashKey(period));
+      if (!mounted) return;
+      if (previousText != null && checkDataChanges && savedHash == inputHash) {
+        state = AsyncData(previousText);
+        return;
+      }
+      state = const AsyncLoading();
       final client = _ref.read(aiCoachClientProvider);
       final future = switch (period) {
         AiBriefingPeriod.morning => client.sendBriefing(
@@ -321,10 +351,18 @@ class AiBriefingNotifier extends StateNotifier<AsyncValue<String?>> {
       final text = await future.timeout(timeout);
       if (!mounted) return;
       state = AsyncData(text);
-      await _persist(text);
+      await _persist(text, inputHash);
     } catch (e, st) {
       log('[AiBriefing] ${period.name} error: $e');
-      if (mounted) state = AsyncError(e, st);
+      if (mounted) {
+        // If refreshing an existing briefing fails, keep the previous useful
+        // result visible and retry at the next refresh.
+        state = previousText == null
+            ? AsyncError(e, st)
+            : AsyncData(previousText);
+      }
+    } finally {
+      _checkingInputs = false;
     }
   }
 }
