@@ -15,17 +15,26 @@ class EcgDeviceService {
   final _connection = TrainingBleConnection();
   final _frames = StreamController<EcgFrame>.broadcast();
   Stream<EcgFrame> get frames => _frames.stream;
+  final _acceleration = StreamController<AccelerationFrame>.broadcast();
+  Stream<AccelerationFrame> get acceleration => _acceleration.stream;
   final _heartRate = StreamController<H10HeartRatePacket>.broadcast();
   Stream<H10HeartRatePacket> get heartRate => _heartRate.stream;
   BluetoothCharacteristic? _control;
   Completer<List<int>>? _response;
   final _responseBytes = <int>[];
   int? _opcode;
+  int? _commandType;
   bool _started = false, _disposed = false;
+  bool _accelerationStarted = false;
+  bool accelerationAvailable = false;
   double sampleRateHz = 130;
+  double accelerationRateHz = 25;
   int resolutionBits = 14;
 
-  Future<void> connect(TrainingDevice device) async {
+  Future<void> connect(
+    TrainingDevice device, {
+    bool withAcceleration = false,
+  }) async {
     if (_disposed) throw StateError('ECG connection closed.');
     try {
       await _connection.connect(device);
@@ -53,12 +62,37 @@ class EcgDeviceService {
       final settings = parseEcgSettings(await _command(1));
       sampleRateHz = settings.sampleRate.toDouble();
       resolutionBits = settings.resolution;
-      await _connection.subscribe(stream, (bytes) {
-        if (bytes.isEmpty || bytes.first != 0) return;
+      if (withAcceleration) {
         try {
-          _frames.add(EcgFrame.decode(bytes));
+          accelerationRateHz = parseAccelerationSettings(
+            await _command(1, type: 2),
+          ).sampleRate.toDouble();
+          accelerationAvailable = true;
         } catch (_) {
-          _frames.addError(const FormatException('Invalid ECG signal packet.'));
+          accelerationAvailable = false;
+        }
+      }
+      await _connection.subscribe(stream, (bytes) {
+        if (bytes.isEmpty) return;
+        try {
+          switch (bytes.first & 0x3f) {
+            case 0:
+              _frames.add(EcgFrame.decode(bytes));
+              break;
+            case 2:
+              _acceleration.add(AccelerationFrame.decode(bytes));
+              break;
+          }
+        } catch (_) {
+          if ((bytes.first & 0x3f) == 0) {
+            _frames.addError(
+              const FormatException('Invalid ECG signal packet.'),
+            );
+          } else if ((bytes.first & 0x3f) == 2) {
+            _acceleration.addError(
+              const FormatException('Invalid accelerometer packet.'),
+            );
+          }
         }
       }, onError: _frames.addError);
       // H10's normal HR/RR notifications share the ECG connection. No second
@@ -90,7 +124,7 @@ class EcgDeviceService {
         bytes.length < 4 ||
         bytes[0] != 0xf0 ||
         bytes[1] != _opcode ||
-        bytes[2] != 0) {
+        bytes[2] != _commandType) {
       return;
     }
     if (bytes[3] != 0) {
@@ -106,9 +140,10 @@ class EcgDeviceService {
   }
 
   Future<List<int>> _command(
-    int opcode, [
+    int opcode, {
     List<int> parameters = const [],
-  ]) async {
+    int type = 0,
+  }) async {
     if (_response != null) {
       throw StateError('An ECG request is already in progress.');
     }
@@ -116,13 +151,14 @@ class EcgDeviceService {
     if (cp == null) throw StateError('Connect an ECG sensor first.');
     final response = Completer<List<int>>();
     _opcode = opcode;
+    _commandType = type;
     _responseBytes.clear();
     _response = response;
     final reply = response.future.timeout(const Duration(seconds: 8));
     try {
       final results = await Future.wait<Object?>([
         reply,
-        cp.write([opcode, 0, ...parameters], withoutResponse: false),
+        cp.write([opcode, type, ...parameters], withoutResponse: false),
       ], eagerError: true);
       return results.first as List<int>;
     } finally {
@@ -130,22 +166,52 @@ class EcgDeviceService {
     }
   }
 
-  Future<void> start() async {
+  Future<void> start({bool withAcceleration = false}) async {
     final hz = sampleRateHz.round();
-    await _command(2, [
-      0,
-      1,
-      hz & 255,
-      hz >> 8,
-      1,
-      1,
-      resolutionBits & 255,
-      resolutionBits >> 8,
-    ]);
+    await _command(
+      2,
+      parameters: [
+        0,
+        1,
+        hz & 255,
+        hz >> 8,
+        1,
+        1,
+        resolutionBits & 255,
+        resolutionBits >> 8,
+      ],
+    );
     _started = true;
+    if (withAcceleration) {
+      if (!accelerationAvailable) {
+        await stop();
+        throw StateError('This Polar sensor does not support ACC streaming.');
+      }
+      try {
+        final hz = accelerationRateHz.round();
+        await _command(
+          2,
+          parameters: [0, 1, hz & 255, hz >> 8, 1, 1, 16, 0, 2, 1, 8, 0],
+          type: 2,
+        );
+        _accelerationStarted = true;
+      } catch (_) {
+        await stop();
+        rethrow;
+      }
+    }
   }
 
   Future<void> stop() async {
+    if (!_started && !_accelerationStarted) return;
+    if (_accelerationStarted) {
+      _accelerationStarted = false;
+      try {
+        await _command(3, type: 2);
+      } catch (_) {
+        // Keep stopping the ECG stream if the optional stream already ended.
+      }
+    }
     if (!_started) return;
     _started = false;
     await _command(3);
@@ -164,8 +230,41 @@ class EcgDeviceService {
     }
     await _connection.close();
     await _frames.close();
+    await _acceleration.close();
     await _heartRate.close();
   }
+}
+
+({int sampleRate, int resolution}) parseAccelerationSettings(List<int> bytes) {
+  final settings = <int, List<int>>{};
+  const sizes = {0: 2, 1: 2, 2: 2, 3: 4, 4: 1, 5: 4};
+  var offset = 0;
+  while (offset < bytes.length) {
+    if (offset + 2 > bytes.length) {
+      throw const FormatException('Truncated accelerometer settings.');
+    }
+    final type = bytes[offset++], count = bytes[offset++];
+    final size = sizes[type];
+    if (size == null || count == 0 || offset + size * count > bytes.length) {
+      throw const FormatException('Unsupported accelerometer settings.');
+    }
+    final values = <int>[];
+    for (var i = 0; i < count; i++) {
+      var value = 0;
+      for (var j = 0; j < size; j++) {
+        value |= bytes[offset++] << (8 * j);
+      }
+      values.add(value);
+    }
+    settings[type] = values;
+  }
+  final rates = settings[0] ?? [], resolutions = settings[1] ?? [];
+  if (!rates.contains(25) || !resolutions.contains(16)) {
+    throw const FormatException(
+      'This Polar sensor does not offer accelerometer data at 25 Hz / 16 bits.',
+    );
+  }
+  return (sampleRate: 25, resolution: 16);
 }
 
 /// Query settings before starting, rather than silently assuming every

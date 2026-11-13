@@ -13,10 +13,12 @@ import '../models/scores.dart';
 import '../services/activity_decoder.dart';
 import '../services/score_calculator.dart';
 import '../services/sleep_stage_estimate.dart';
+import '../services/ecg_storage_service.dart';
 import '../utils/log.dart';
 import 'auth_provider.dart';
 import 'health_connect_provider.dart';
 import 'database_provider.dart';
+import 'source_priority_provider.dart';
 import 'training_load_provider.dart';
 import 'user_profile_provider.dart';
 import 'week_start_provider.dart';
@@ -296,11 +298,24 @@ final hrvIntradayProvider =
       }
     });
 
+/// Rebuilds legacy H10 sleep summaries from saved model epochs whenever the
+/// selected source order changes, without rerunning ECG model inference.
+final savedEcgSleepSummaryBackfillProvider = FutureProvider<void>((ref) async {
+  final priorityState = ref.watch(sourcePriorityProvider);
+  if (priorityState.isLoading) {
+    await ref.watch(sourcePriorityProvider.future);
+  }
+  await EcgStorageService(
+    ref.read(databaseProvider),
+  ).reprocessSavedSleepStageSummaries();
+});
+
 final sleepDataProvider = FutureProvider.family<SleepData?, DateTime>((
   ref,
   date,
 ) async {
   ref.watch(syncStatusListenerProvider);
+  await ref.watch(savedEcgSleepSummaryBackfillProvider.future);
   final db = ref.watch(databaseProvider);
   final health =
       ref.watch(healthConnectPermissionProvider).valueOrNull ?? false;

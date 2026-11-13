@@ -10,6 +10,9 @@ import 'package:uuid/uuid.dart';
 
 import '../db/database.dart';
 import '../models/ecg.dart';
+import '../models/ecg_sleep_staging.dart';
+import 'pdf_text_extractor.dart';
+import 'source_priority_service.dart' show SourceGroup, priorityForGroup;
 
 class EcgImport {
   const EcgImport({
@@ -54,9 +57,9 @@ EcgImport decodeEcgImport(Uint8List bytes) {
           lines[headerIndex].trim().isEmpty)) {
     final line = lines[headerIndex++];
     if (line.startsWith('# fjelia-ecg-v1 ')) {
-      meta = jsonDecode(
-        line.substring('# fjelia-ecg-v1 '.length),
-      ) as Map<String, dynamic>;
+      meta =
+          jsonDecode(line.substring('# fjelia-ecg-v1 '.length))
+              as Map<String, dynamic>;
     }
   }
   if (headerIndex >= lines.length) {
@@ -178,6 +181,8 @@ class EcgStorageService {
     required String deviceName,
     required double rate,
     required int resolution,
+    double? accelerationRate,
+    String purpose = 'ecg',
     String? activityId,
   }) async {
     final id = const Uuid().v4();
@@ -203,6 +208,8 @@ class EcgStorageService {
                     'device_relative; phone recording start is approximate',
                 'device_epoch': '2000-01-01; not assumed synchronized',
                 'analysis': 'none',
+                'capture_purpose': purpose,
+                'accelerometer_sample_rate_hz': ?accelerationRate,
               }),
             ),
           ),
@@ -214,6 +221,7 @@ class EcgStorageService {
     String id,
     List<EcgChunk> chunks,
     int sequence, {
+    List<AccelerationChunk> acceleration = const [],
     required int count,
     required int durationMs,
     required int gaps,
@@ -225,6 +233,12 @@ class EcgStorageService {
             recordingId: id,
             sequence: sequence + i,
             dataJson: jsonEncode(chunks[i].toJson()),
+          ),
+        for (var i = 0; i < acceleration.length; i++)
+          EcgSampleChunksCompanion.insert(
+            recordingId: id,
+            sequence: sequence + chunks.length + i,
+            dataJson: jsonEncode(acceleration[i].toJson()),
           ),
       ]),
     );
@@ -263,7 +277,20 @@ class EcgStorageService {
               ..where((t) => t.recordingId.equals(id))
               ..orderBy([(t) => OrderingTerm(expression: t.sequence)]))
             .get())
-      EcgChunk.fromJson(jsonDecode(c.dataJson) as Map<String, dynamic>),
+      if ((jsonDecode(c.dataJson) as Map<String, dynamic>)['stream'] != 'acc')
+        EcgChunk.fromJson(jsonDecode(c.dataJson) as Map<String, dynamic>),
+  ];
+
+  Future<List<AccelerationChunk>> accelerationChunks(String id) async => [
+    for (final c
+        in await (db.select(db.ecgSampleChunks)
+              ..where((t) => t.recordingId.equals(id))
+              ..orderBy([(t) => OrderingTerm(expression: t.sequence)]))
+            .get())
+      if ((jsonDecode(c.dataJson) as Map<String, dynamic>)['stream'] == 'acc')
+        AccelerationChunk.fromJson(
+          jsonDecode(c.dataJson) as Map<String, dynamic>,
+        ),
   ];
 
   Future<String> import(
@@ -331,6 +358,130 @@ class EcgStorageService {
         .write(EcgRecordingsCompanion(activityId: Value(activityId)));
   }
 
+  Future<void> updateNote(String id, String? note) async {
+    final trimmed = note?.trim();
+    await (db.update(
+      db.ecgRecordings,
+    )..where((t) => t.recordingId.equals(id))).write(
+      EcgRecordingsCompanion(
+        note: Value(
+          trimmed == null || trimmed.isEmpty
+              ? null
+              : trimmed.length <= 12000
+              ? trimmed
+              : trimmed.substring(0, 12000),
+        ),
+      ),
+    );
+  }
+
+  Future<void> saveSleepStageEstimate(
+    String id,
+    EcgSleepStageEstimate estimate,
+  ) async {
+    final row = await recording(id);
+    if (row == null || row.kind != 'waveform' || row.sampleRateHz == null) {
+      throw StateError('This ECG recording cannot store sleep stages.');
+    }
+    final metadata = jsonDecode(row.metadataJson) as Map<String, dynamic>;
+    if (metadata['capture_purpose'] != 'sleep') {
+      throw StateError('Sleep-stage estimation is only for sleep recordings.');
+    }
+    metadata['sleep_stage_estimate'] = estimate.toJson();
+    metadata['sleep_stage_summary_version'] = 1;
+    metadata['sleep_stage_summary_step_seconds'] = 300;
+    metadata['sleep_stage_summary_priority'] = await priorityForGroup(
+      SourceGroup.sleep,
+    );
+    await (db.update(
+      db.ecgRecordings,
+    )..where((t) => t.recordingId.equals(id))).write(
+      EcgRecordingsCompanion(metadataJson: Value(jsonEncode(metadata))),
+    );
+
+    final phases = estimate.fiveMinutePhases(row.recordedAt.toLocal());
+    if (phases.isEmpty) return;
+    var deep = 0, light = 0, rem = 0, awake = 0;
+    for (final phase in phases) {
+      final seconds = phase.end.difference(phase.start).inSeconds;
+      switch (phase.phase) {
+        case 'deep':
+          deep += seconds;
+        case 'light':
+          light += seconds;
+        case 'rem':
+          rem += seconds;
+        default:
+          awake += seconds;
+      }
+    }
+    final sleepStart = phases.first.start;
+    final sleepEnd = phases.last.end;
+    final date = DateTime(sleepEnd.year, sleepEnd.month, sleepEnd.day);
+    await db.upsertSleep(
+      SleepRecordsCompanion(
+        date: Value(date),
+        totalSleepSeconds: Value(deep + light + rem),
+        deepSleepSeconds: Value(deep),
+        remSleepSeconds: Value(rem),
+        lightSleepSeconds: Value(light),
+        awakeSleepSeconds: Value(awake),
+        sleepStart: Value(sleepStart),
+        sleepEnd: Value(sleepEnd),
+        phasesJson: Value(
+          jsonEncode([
+            for (final phase in phases)
+              {
+                's': phase.start.toUtc().toIso8601String(),
+                'e': phase.end.toUtc().toIso8601String(),
+                'p': phase.phase,
+              },
+          ]),
+        ),
+        source: const Value('fjelia_ecg'),
+      ),
+    );
+  }
+
+  /// One-time post-processing for completed sleep recordings that already
+  /// contain the raw model output but predate five-minute summary blocks.
+  /// No model inference is rerun; the active sleep-source priority still
+  /// governs whether each H10 summary may replace the current night.
+  Future<int> reprocessSavedSleepStageSummaries() async {
+    final rows = await history();
+    final currentPriority = await priorityForGroup(SourceGroup.sleep);
+    var changed = 0;
+    for (final row in rows.reversed) {
+      if (row.status != 'complete' ||
+          row.kind != 'waveform' ||
+          row.sampleRateHz == null) {
+        continue;
+      }
+      final metadata = jsonDecode(row.metadataJson) as Map<String, dynamic>;
+      final previousPriority =
+          (metadata['sleep_stage_summary_priority'] as List?)?.cast<String>();
+      final alreadyCurrent =
+          metadata['sleep_stage_summary_version'] == 1 &&
+          metadata['sleep_stage_summary_step_seconds'] == 300 &&
+          previousPriority != null &&
+          previousPriority.length == currentPriority.length &&
+          List.generate(
+            currentPriority.length,
+            (index) => previousPriority[index] == currentPriority[index],
+          ).every((matches) => matches);
+      if (metadata['capture_purpose'] != 'sleep' || alreadyCurrent) {
+        continue;
+      }
+      final estimate = EcgSleepStageEstimate.fromRecordingMetadata(
+        row.metadataJson,
+      );
+      if (estimate == null || estimate.epochs.isEmpty) continue;
+      await saveSleepStageEstimate(row.recordingId, estimate);
+      changed++;
+    }
+    return changed;
+  }
+
   Future<void> delete(String id, {Directory? cacheDirectory}) async {
     await db.transaction(() async {
       await (db.delete(
@@ -377,8 +528,107 @@ class EcgStorageService {
       }
     }
     final dir = directory ?? await getTemporaryDirectory();
-    return File('${dir.path}/fjelia_ecg_${_fileId(row.recordingId)}.csv')
-        .writeAsString(output.toString(), flush: true);
+    return File(
+      '${dir.path}/fjelia_ecg_${_fileId(row.recordingId)}.csv',
+    ).writeAsString(output.toString(), flush: true);
+  }
+
+  /// Exports overnight raw signals as a pair of CSV files. Timestamps use the
+  /// H10 device clock (nanoseconds since 2000), not claimed UTC time.
+  Future<List<File>> exportSleepCsvFiles(
+    EcgRecording row, {
+    Directory? directory,
+  }) async {
+    final meta = jsonDecode(row.metadataJson) as Map<String, dynamic>;
+    if (meta['capture_purpose'] != 'sleep' || row.sampleRateHz == null) {
+      throw StateError('This is not an overnight H10 recording.');
+    }
+    final accelerationRate = (meta['accelerometer_sample_rate_hz'] as num?)
+        ?.toDouble();
+    if (accelerationRate == null || accelerationRate <= 0) {
+      throw StateError('The recording has no accelerometer rate metadata.');
+    }
+    final folder = directory ?? await getTemporaryDirectory();
+    final id = _fileId(row.recordingId);
+    final ecgFile = File('${folder.path}/fjelia_sleep_${id}_ecg.csv');
+    final accFile = File('${folder.path}/fjelia_sleep_${id}_acc.csv');
+    final ecgSink = ecgFile.openWrite();
+    final accSink = accFile.openWrite();
+    final common = jsonEncode({
+      'recorded_at': row.recordedAt.toUtc().toIso8601String(),
+      'source': row.source,
+      'device_name': row.deviceName,
+      'time_basis':
+          'Polar device clock, nanoseconds since 2000-01-01; not UTC synchronized',
+    });
+    ecgSink
+      ..writeln('# fjelia-sleep-ecg-v1 $common')
+      ..writeln('# ecg_units=uV; sample_rate_hz=${row.sampleRateHz}')
+      ..writeln('time,ecg,hr,rr,marker');
+    accSink
+      ..writeln('# fjelia-sleep-acc-v1 $common')
+      ..writeln('# acceleration_units=mG; sample_rate_hz=$accelerationRate')
+      ..writeln('time_ns,x_mg,y_mg,z_mg');
+
+    try {
+      var after = -1;
+      while (true) {
+        final batch =
+            await (db.select(db.ecgSampleChunks)
+                  ..where(
+                    (t) =>
+                        t.recordingId.equals(row.recordingId) &
+                        t.sequence.isBiggerThanValue(after),
+                  )
+                  ..orderBy([(t) => OrderingTerm(expression: t.sequence)])
+                  ..limit(128))
+                .get();
+        if (batch.isEmpty) break;
+        after = batch.last.sequence;
+        for (final stored in batch) {
+          final data = jsonDecode(stored.dataJson) as Map<String, dynamic>;
+          if (data['stream'] == 'acc') {
+            final chunk = AccelerationChunk.fromJson(data);
+            final lastNs = chunk.deviceLastSampleNs;
+            if (lastNs == null) {
+              throw StateError('Accelerometer sample has no device timestamp.');
+            }
+            for (var i = 0; i < chunk.samplesMilliG.length; i++) {
+              final sample = chunk.samplesMilliG[i];
+              final ns =
+                  lastNs -
+                  ((chunk.samplesMilliG.length - 1 - i) *
+                          1e9 /
+                          accelerationRate)
+                      .round();
+              accSink.writeln('$ns,${sample.x},${sample.y},${sample.z}');
+            }
+          } else {
+            final chunk = EcgChunk.fromJson(data);
+            final lastNs = chunk.deviceLastSampleNs;
+            if (lastNs == null) {
+              throw StateError('ECG sample has no device timestamp.');
+            }
+            for (var i = 0; i < chunk.microvolts.length; i++) {
+              final ns =
+                  lastNs -
+                  ((chunk.microvolts.length - 1 - i) * 1e9 / row.sampleRateHz!)
+                      .round();
+              ecgSink.writeln('$ns,${chunk.microvolts[i]}');
+            }
+          }
+        }
+      }
+    } catch (_) {
+      await ecgSink.close();
+      await accSink.close();
+      await ecgFile.delete().catchError((_) => ecgFile);
+      await accFile.delete().catchError((_) => accFile);
+      rethrow;
+    }
+    await ecgSink.close();
+    await accSink.close();
+    return [ecgFile, accFile];
   }
 
   Future<File> exportOriginal(EcgRecording row, {Directory? directory}) async {
@@ -424,7 +674,34 @@ class EcgStorageService {
         ],
     ];
     final dir = directory ?? await getTemporaryDirectory();
-    return File('${dir.path}/fjelia_ecg_metadata.csv')
-        .writeAsString(lines.map((r) => r.map(cell).join(',')).join('\n'));
+    return File(
+      '${dir.path}/fjelia_ecg_metadata.csv',
+    ).writeAsString(lines.map((r) => r.map(cell).join(',')).join('\n'));
+  }
+
+  /// Extracts selectable text from an imported ECG PDF for an explicitly
+  /// requested Pro coach discussion. The temporary copy is removed promptly.
+  Future<String> extractReportText(
+    EcgRecording row, {
+    PdfTextExtractor extractor = const PdfTextExtractor(),
+  }) async {
+    if (row.kind != 'report' ||
+        row.originalBase64 == null ||
+        !extractor.isSupported) {
+      return '';
+    }
+    final dir = await getTemporaryDirectory();
+    final file = File(
+      '${dir.path}/fjelia_ecg_${_fileId(row.recordingId)}_coach_${DateTime.now().microsecondsSinceEpoch}.pdf',
+    );
+    try {
+      await file.writeAsBytes(base64Decode(row.originalBase64!), flush: true);
+      return (await extractor.pages(file.path))
+          .map((page) => page.trim())
+          .where((page) => page.isNotEmpty)
+          .join('\n\n');
+    } finally {
+      if (await file.exists()) await file.delete();
+    }
   }
 }

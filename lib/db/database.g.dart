@@ -16979,6 +16979,15 @@ class $EcgRecordingsTable extends EcgRecordings
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+    'note',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     recordingId,
@@ -16996,6 +17005,7 @@ class $EcgRecordingsTable extends EcgRecordings
     contentHash,
     originalFileName,
     originalBase64,
+    note,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -17132,6 +17142,12 @@ class $EcgRecordingsTable extends EcgRecordings
         ),
       );
     }
+    if (data.containsKey('note')) {
+      context.handle(
+        _noteMeta,
+        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
+      );
+    }
     return context;
   }
 
@@ -17201,6 +17217,10 @@ class $EcgRecordingsTable extends EcgRecordings
         DriftSqlType.string,
         data['${effectivePrefix}original_base64'],
       ),
+      note: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note'],
+      ),
     );
   }
 
@@ -17226,6 +17246,7 @@ class EcgRecording extends DataClass implements Insertable<EcgRecording> {
   final String? contentHash;
   final String? originalFileName;
   final String? originalBase64;
+  final String? note;
   const EcgRecording({
     required this.recordingId,
     required this.recordedAt,
@@ -17242,6 +17263,7 @@ class EcgRecording extends DataClass implements Insertable<EcgRecording> {
     this.contentHash,
     this.originalFileName,
     this.originalBase64,
+    this.note,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -17272,6 +17294,9 @@ class EcgRecording extends DataClass implements Insertable<EcgRecording> {
     }
     if (!nullToAbsent || originalBase64 != null) {
       map['original_base64'] = Variable<String>(originalBase64);
+    }
+    if (!nullToAbsent || note != null) {
+      map['note'] = Variable<String>(note);
     }
     return map;
   }
@@ -17305,6 +17330,7 @@ class EcgRecording extends DataClass implements Insertable<EcgRecording> {
       originalBase64: originalBase64 == null && nullToAbsent
           ? const Value.absent()
           : Value(originalBase64),
+      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
     );
   }
 
@@ -17329,6 +17355,7 @@ class EcgRecording extends DataClass implements Insertable<EcgRecording> {
       contentHash: serializer.fromJson<String?>(json['contentHash']),
       originalFileName: serializer.fromJson<String?>(json['originalFileName']),
       originalBase64: serializer.fromJson<String?>(json['originalBase64']),
+      note: serializer.fromJson<String?>(json['note']),
     );
   }
   @override
@@ -17350,6 +17377,7 @@ class EcgRecording extends DataClass implements Insertable<EcgRecording> {
       'contentHash': serializer.toJson<String?>(contentHash),
       'originalFileName': serializer.toJson<String?>(originalFileName),
       'originalBase64': serializer.toJson<String?>(originalBase64),
+      'note': serializer.toJson<String?>(note),
     };
   }
 
@@ -17369,6 +17397,7 @@ class EcgRecording extends DataClass implements Insertable<EcgRecording> {
     Value<String?> contentHash = const Value.absent(),
     Value<String?> originalFileName = const Value.absent(),
     Value<String?> originalBase64 = const Value.absent(),
+    Value<String?> note = const Value.absent(),
   }) => EcgRecording(
     recordingId: recordingId ?? this.recordingId,
     recordedAt: recordedAt ?? this.recordedAt,
@@ -17389,6 +17418,7 @@ class EcgRecording extends DataClass implements Insertable<EcgRecording> {
     originalBase64: originalBase64.present
         ? originalBase64.value
         : this.originalBase64,
+    note: note.present ? note.value : this.note,
   );
   EcgRecording copyWithCompanion(EcgRecordingsCompanion data) {
     return EcgRecording(
@@ -17429,6 +17459,7 @@ class EcgRecording extends DataClass implements Insertable<EcgRecording> {
       originalBase64: data.originalBase64.present
           ? data.originalBase64.value
           : this.originalBase64,
+      note: data.note.present ? data.note.value : this.note,
     );
   }
 
@@ -17449,7 +17480,8 @@ class EcgRecording extends DataClass implements Insertable<EcgRecording> {
           ..write('metadataJson: $metadataJson, ')
           ..write('contentHash: $contentHash, ')
           ..write('originalFileName: $originalFileName, ')
-          ..write('originalBase64: $originalBase64')
+          ..write('originalBase64: $originalBase64, ')
+          ..write('note: $note')
           ..write(')'))
         .toString();
   }
@@ -17471,6 +17503,7 @@ class EcgRecording extends DataClass implements Insertable<EcgRecording> {
     contentHash,
     originalFileName,
     originalBase64,
+    note,
   );
   @override
   bool operator ==(Object other) =>
@@ -17490,7 +17523,8 @@ class EcgRecording extends DataClass implements Insertable<EcgRecording> {
           other.metadataJson == this.metadataJson &&
           other.contentHash == this.contentHash &&
           other.originalFileName == this.originalFileName &&
-          other.originalBase64 == this.originalBase64);
+          other.originalBase64 == this.originalBase64 &&
+          other.note == this.note);
 }
 
 class EcgRecordingsCompanion extends UpdateCompanion<EcgRecording> {
@@ -17509,6 +17543,7 @@ class EcgRecordingsCompanion extends UpdateCompanion<EcgRecording> {
   final Value<String?> contentHash;
   final Value<String?> originalFileName;
   final Value<String?> originalBase64;
+  final Value<String?> note;
   final Value<int> rowid;
   const EcgRecordingsCompanion({
     this.recordingId = const Value.absent(),
@@ -17526,6 +17561,7 @@ class EcgRecordingsCompanion extends UpdateCompanion<EcgRecording> {
     this.contentHash = const Value.absent(),
     this.originalFileName = const Value.absent(),
     this.originalBase64 = const Value.absent(),
+    this.note = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   EcgRecordingsCompanion.insert({
@@ -17544,6 +17580,7 @@ class EcgRecordingsCompanion extends UpdateCompanion<EcgRecording> {
     this.contentHash = const Value.absent(),
     this.originalFileName = const Value.absent(),
     this.originalBase64 = const Value.absent(),
+    this.note = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : recordingId = Value(recordingId),
        recordedAt = Value(recordedAt),
@@ -17567,6 +17604,7 @@ class EcgRecordingsCompanion extends UpdateCompanion<EcgRecording> {
     Expression<String>? contentHash,
     Expression<String>? originalFileName,
     Expression<String>? originalBase64,
+    Expression<String>? note,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -17585,6 +17623,7 @@ class EcgRecordingsCompanion extends UpdateCompanion<EcgRecording> {
       if (contentHash != null) 'content_hash': contentHash,
       if (originalFileName != null) 'original_file_name': originalFileName,
       if (originalBase64 != null) 'original_base64': originalBase64,
+      if (note != null) 'note': note,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -17605,6 +17644,7 @@ class EcgRecordingsCompanion extends UpdateCompanion<EcgRecording> {
     Value<String?>? contentHash,
     Value<String?>? originalFileName,
     Value<String?>? originalBase64,
+    Value<String?>? note,
     Value<int>? rowid,
   }) {
     return EcgRecordingsCompanion(
@@ -17623,6 +17663,7 @@ class EcgRecordingsCompanion extends UpdateCompanion<EcgRecording> {
       contentHash: contentHash ?? this.contentHash,
       originalFileName: originalFileName ?? this.originalFileName,
       originalBase64: originalBase64 ?? this.originalBase64,
+      note: note ?? this.note,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -17675,6 +17716,9 @@ class EcgRecordingsCompanion extends UpdateCompanion<EcgRecording> {
     if (originalBase64.present) {
       map['original_base64'] = Variable<String>(originalBase64.value);
     }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -17699,6 +17743,7 @@ class EcgRecordingsCompanion extends UpdateCompanion<EcgRecording> {
           ..write('contentHash: $contentHash, ')
           ..write('originalFileName: $originalFileName, ')
           ..write('originalBase64: $originalBase64, ')
+          ..write('note: $note, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -57980,6 +58025,7 @@ typedef $$EcgRecordingsTableCreateCompanionBuilder =
       Value<String?> contentHash,
       Value<String?> originalFileName,
       Value<String?> originalBase64,
+      Value<String?> note,
       Value<int> rowid,
     });
 typedef $$EcgRecordingsTableUpdateCompanionBuilder =
@@ -57999,6 +58045,7 @@ typedef $$EcgRecordingsTableUpdateCompanionBuilder =
       Value<String?> contentHash,
       Value<String?> originalFileName,
       Value<String?> originalBase64,
+      Value<String?> note,
       Value<int> rowid,
     });
 
@@ -58083,6 +58130,11 @@ class $$EcgRecordingsTableFilterComposer
 
   ColumnFilters<String> get originalBase64 => $composableBuilder(
     column: $table.originalBase64,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get note => $composableBuilder(
+    column: $table.note,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -58170,6 +58222,11 @@ class $$EcgRecordingsTableOrderingComposer
     column: $table.originalBase64,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$EcgRecordingsTableAnnotationComposer
@@ -58247,6 +58304,9 @@ class $$EcgRecordingsTableAnnotationComposer
     column: $table.originalBase64,
     builder: (column) => column,
   );
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
 }
 
 class $$EcgRecordingsTableTableManager
@@ -58295,6 +58355,7 @@ class $$EcgRecordingsTableTableManager
                 Value<String?> contentHash = const Value.absent(),
                 Value<String?> originalFileName = const Value.absent(),
                 Value<String?> originalBase64 = const Value.absent(),
+                Value<String?> note = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => EcgRecordingsCompanion(
                 recordingId: recordingId,
@@ -58312,6 +58373,7 @@ class $$EcgRecordingsTableTableManager
                 contentHash: contentHash,
                 originalFileName: originalFileName,
                 originalBase64: originalBase64,
+                note: note,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -58331,6 +58393,7 @@ class $$EcgRecordingsTableTableManager
                 Value<String?> contentHash = const Value.absent(),
                 Value<String?> originalFileName = const Value.absent(),
                 Value<String?> originalBase64 = const Value.absent(),
+                Value<String?> note = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => EcgRecordingsCompanion.insert(
                 recordingId: recordingId,
@@ -58348,6 +58411,7 @@ class $$EcgRecordingsTableTableManager
                 contentHash: contentHash,
                 originalFileName: originalFileName,
                 originalBase64: originalBase64,
+                note: note,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

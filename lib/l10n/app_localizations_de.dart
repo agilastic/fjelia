@@ -8658,4 +8658,53 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get plusOmronBleHint =>
       'Suche nach Bluetooth-Blutdruckgeräten mit Standarddienst und unterstützten Omron-Profilen.';
+
+  @override
+  String get sleepEcgTitle => 'Schlaf aufzeichnen';
+
+  @override
+  String get sleepEcgHint => 'EKG und Bewegung mit Polar H10';
+
+  @override
+  String get sleepEcgDescription =>
+      'Zeichnet gleichzeitig EKG mit 130 Hz und dreiachsige Bewegung mit 25 Hz auf. Trage den Polar H10 und halte dein iPhone in Bluetooth-Reichweite. Die Schlafphasenschätzung ist optional und wird separat gestartet; Atemfrequenz und medizinische Befunde werden nicht berechnet.';
+
+  @override
+  String get sleepEcgStart => 'Nachtaufzeichnung starten';
+
+  @override
+  String sleepEcgMotionSamples(int count) {
+    return 'Bewegungsmesswerte: $count';
+  }
+
+  @override
+  String get sleepEcgKeepOpenHint =>
+      'Du kannst diese Ansicht verlassen; die Aufzeichnung läuft weiter. Lass Fjelia im App-Umschalter geöffnet und das iPhone in der Nähe des H10. Wenn du die App vollständig beendest, wird die Aufzeichnung unterbrochen.';
+
+  @override
+  String get sleepEcgRawNote =>
+      'Rohdaten der nächtlichen EKG- und Bewegungsaufzeichnung. Eine experimentelle Schlafphasenschätzung kann separat gestartet werden. Atemfrequenz und medizinische Befunde werden nicht berechnet.';
+
+  @override
+  String get sleepEcgExportRaw => 'Rohdaten: EKG + Bewegung exportieren';
+
+  @override
+  String get sleepEcgStagesTitle => 'Geschätzte Schlafphasen';
+
+  @override
+  String get sleepEcgStagesButton => 'Schlafphasen schätzen';
+
+  @override
+  String get sleepEcgStagesAgain => 'Neu schätzen';
+
+  @override
+  String get sleepEcgStagesDisclaimer =>
+      'Experimentelle Schätzung aus dem Polar-H10-EKG mit einem EKG-Forschungsmodell. N1 und N2 werden als Leichtschlaf zusammengefasst. Keine PSG- oder medizinische Messung.';
+
+  @override
+  String get sleepEcgStagesWorking => 'Schlafphasen werden geschätzt …';
+
+  @override
+  String get sleepEcgStagesFailed =>
+      'Schlafphasen konnten nicht geschätzt werden. Prüfe, ob die Aufzeichnung vollständig ist, und versuche es erneut.';
 }

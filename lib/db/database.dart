@@ -254,6 +254,7 @@ class EcgRecordings extends Table {
   TextColumn get contentHash => text().nullable().unique()();
   TextColumn get originalFileName => text().nullable()();
   TextColumn get originalBase64 => text().nullable()();
+  TextColumn get note => text().nullable()();
   @override
   Set<Column> get primaryKey => {recordingId};
 }
@@ -1464,7 +1465,7 @@ class AppDatabase extends _$AppDatabase {
       defaultSourcePriorities[group.name]!;
 
   @override
-  int get schemaVersion => 67;
+  int get schemaVersion => 68;
 
   Future<void> saveHeartRateSamples(List<TimedHeartRate> samples) async {
     if (samples.isEmpty) return;
@@ -3344,6 +3345,13 @@ class AppDatabase extends _$AppDatabase {
           'activity_records',
           'athlete_note',
           () => m.addColumn(activityRecords, activityRecords.athleteNote),
+        );
+      }
+      if (from < 68) {
+        await _addColumnIfMissing(
+          'ecg_recordings',
+          'note',
+          () => m.addColumn(ecgRecordings, ecgRecordings.note),
         );
       }
     },

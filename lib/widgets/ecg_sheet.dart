@@ -1,8 +1,10 @@
-import '../theme/fjelia_style.dart';
+import 'dart:convert';
 import 'dart:async';
+import 'dart:io';
 import 'dart:math' as math;
 import 'dart:typed_data';
 
+import '../theme/fjelia_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
@@ -10,15 +12,19 @@ import 'package:share_plus/share_plus.dart';
 import '../db/database.dart' show EcgRecording;
 import '../l10n/l10n_ext.dart';
 import '../models/coach_context_card.dart';
+import '../models/ecg_sleep_staging.dart';
 import '../providers/ecg_provider.dart';
+import '../providers/day_data_provider.dart' show syncStatusListenerProvider;
 import '../providers/polar_h10_provider.dart';
 import '../screens/ai_coach/ai_coach_screen.dart' show openCoachTab;
-import '../services/ecg_analysis.dart';
 import '../services/coach_tasks.dart' show ecgClinicalMode;
-import '../services/ecg_coach_context.dart' show ecgAnalysisLines;
+import '../services/ecg_sleep_staging_service.dart';
 import '../utils/log.dart';
 import 'app_widgets.dart';
 import 'swipe_action_tile.dart';
+import 'sleep_stages.dart'
+    show SleepStageBreakdown, SleepStagesChart, sleepStageOrder;
+import 'ecg_respiration_chart.dart';
 
 class EcgSheet extends ConsumerStatefulWidget {
   const EcgSheet({super.key});
@@ -329,18 +335,145 @@ class _EcgSheetState extends ConsumerState<EcgSheet> {
   }
 }
 
-class EcgDetailSheet extends ConsumerWidget {
+bool _isSleepCapture(EcgRecording recording) {
+  try {
+    return (jsonDecode(recording.metadataJson)
+            as Map<String, dynamic>)['capture_purpose'] ==
+        'sleep';
+  } catch (_) {
+    return false;
+  }
+}
+
+String _sleepRespirationLabel(BuildContext context, String key) {
+  final isGerman = Localizations.localeOf(context).languageCode == 'de';
+  return switch ((isGerman, key)) {
+    (true, 'title') => 'Atembezogenes Signal · experimentell',
+    (true, 'description') =>
+      'Relative Änderungen der EKG-Schlagamplitude und Bewegung des Brustgurts im Zeitverlauf. Das ist weder Atemfluss noch eine kalibrierte Atemmessung. Niedrige oder wechselnde Signale können andere Ursachen haben; Fjelia erkennt oder diagnostiziert hier keine Apnoe.',
+    (true, 'working') => 'Signalübersicht wird erstellt …',
+    (false, 'title') => 'Breathing-related signal · exploratory',
+    (false, 'description') =>
+      'Relative ECG beat-amplitude changes and chest-strap movement over time. This is not airflow or a calibrated breathing measurement. Low or changing signals can have other causes; Fjelia does not detect or diagnose apnea from this view.',
+    _ => 'Preparing signal overview…',
+  };
+}
+
+class EcgDetailSheet extends ConsumerStatefulWidget {
   const EcgDetailSheet({super.key, required this.recording});
   final EcgRecording recording;
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<EcgDetailSheet> createState() => _EcgDetailSheetState();
+}
+
+class _EcgDetailSheetState extends ConsumerState<EcgDetailSheet> {
+  late final TextEditingController _noteController;
+  bool _exportingSleepRaw = false;
+  bool _preparingCoach = false;
+  bool _savingNote = false;
+  bool _noteEdited = false;
+  bool _estimatingSleepStages = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _noteController = TextEditingController(text: widget.recording.note ?? '');
+  }
+
+  @override
+  void dispose() {
+    _noteController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _exportSleepRaw(EcgRecording row) async {
+    if (_exportingSleepRaw) return;
+    setState(() => _exportingSleepRaw = true);
+    List<File>? files;
+    try {
+      await runUiAction(context, () async {
+        files = await ref.read(ecgStorageProvider).exportSleepCsvFiles(row);
+      });
+    } finally {
+      if (mounted) setState(() => _exportingSleepRaw = false);
+    }
+    if (files != null && mounted) {
+      await shareRecordingFiles(
+        context,
+        files!.map((file) => file.path).toList(),
+      );
+    }
+  }
+
+  Future<void> _estimateSleepStages(EcgRecording row) async {
+    if (_estimatingSleepStages || row.sampleRateHz == null) return;
+    setState(() => _estimatingSleepStages = true);
+    try {
+      final storage = ref.read(ecgStorageProvider);
+      final estimate = await EcgSleepStagingService().estimate(
+        chunks: await storage.chunks(row.recordingId),
+        sampleRateHz: row.sampleRateHz!,
+        recordedAt: row.recordedAt,
+      );
+      await storage.saveSleepStageEstimate(row.recordingId, estimate);
+      ref.read(syncStatusListenerProvider.notifier).state++;
+      ref.invalidate(ecgHistoryProvider);
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(context.l10n.sleepEcgStagesFailed)),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _estimatingSleepStages = false);
+    }
+  }
+
+  Future<void> _askCoach(EcgRecording row) => askCoachAboutEcg(
+    context,
+    ref,
+    row,
+    onBusyChanged: (busy) {
+      if (mounted) setState(() => _preparingCoach = busy);
+    },
+  );
+
+  Future<void> _saveNote(EcgRecording row) async {
+    if (_savingNote) return;
+    setState(() => _savingNote = true);
+    try {
+      await ref
+          .read(ecgStorageProvider)
+          .updateNote(row.recordingId, _noteController.text);
+      if (mounted) setState(() => _noteEdited = false);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('$e')));
+      }
+    } finally {
+      if (mounted) setState(() => _savingNote = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final rows = ref.watch(ecgHistoryProvider).valueOrNull;
     final row =
         rows
-            ?.where((r) => r.recordingId == recording.recordingId)
+            ?.where((r) => r.recordingId == widget.recording.recordingId)
             .firstOrNull ??
-        recording;
+        widget.recording;
+    if (!_noteEdited && _noteController.text != (row.note ?? '')) {
+      _noteController.text = row.note ?? '';
+    }
     final l = context.l10n;
+    final sleepCapture = _isSleepCapture(row);
+    final sleepEstimate = sleepCapture
+        ? EcgSleepStageEstimate.fromRecordingMetadata(row.metadataJson)
+        : null;
     return SheetPage(
       title: l.ecgTitle,
       child: ListView(
@@ -364,6 +497,120 @@ class EcgDetailSheet extends ConsumerWidget {
             Text(
               '${recordingDuration(row.durationMs)} · ${row.sampleRateHz!.toStringAsFixed(1)} Hz · ${l.ecgSamples(row.sampleCount)}',
             ),
+            if (sleepCapture)
+              Padding(
+                padding: const EdgeInsets.only(top: 6),
+                child: Text(
+                  l.sleepEcgRawNote,
+                  style: TextStyle(color: muted, fontSize: 13),
+                ),
+              ),
+            if (sleepCapture && row.status != 'recording') ...[
+              ref
+                  .watch(ecgRespirationReviewProvider(row.recordingId))
+                  .when(
+                    loading: () => SectionCard(
+                      title: _sleepRespirationLabel(context, 'title'),
+                      child: Text(_sleepRespirationLabel(context, 'working')),
+                    ),
+                    error: (error, stack) => const SizedBox.shrink(),
+                    data: (review) => review == null
+                        ? const SizedBox.shrink()
+                        : Padding(
+                            padding: const EdgeInsets.only(top: 12),
+                            child: SectionCard(
+                              title: _sleepRespirationLabel(context, 'title'),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  EcgRespirationChart(review: review),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    _sleepRespirationLabel(
+                                      context,
+                                      'description',
+                                    ),
+                                    style: TextStyle(
+                                      color: muted,
+                                      fontSize: 12,
+                                      height: 1.4,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                  ),
+              if (sleepEstimate != null && sleepEstimate.epochs.isNotEmpty) ...[
+                const SizedBox(height: 12),
+                SectionCard(
+                  title: l.sleepEcgStagesTitle,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SleepStagesChart(
+                        phases: sleepEstimate.fiveMinutePhases(
+                          row.recordedAt.toLocal(),
+                        ),
+                        start: row.recordedAt.toLocal(),
+                        end: row.recordedAt.toLocal().add(
+                          Duration(
+                            seconds:
+                                sleepEstimate.epochs.last.startOffsetSeconds +
+                                30,
+                          ),
+                        ),
+                      ),
+                      SleepStageBreakdown(
+                        durations: {
+                          for (final stage in sleepStageOrder)
+                            stage: Duration(
+                              seconds:
+                                  sleepEstimate.epochs
+                                      .where(
+                                        (epoch) => epoch.chartStage == stage,
+                                      )
+                                      .length *
+                                  30,
+                            ),
+                        },
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        l.sleepEcgStagesDisclaimer,
+                        style: TextStyle(
+                          color: muted,
+                          fontSize: 12,
+                          height: 1.4,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+              OutlinedButton.icon(
+                onPressed: _estimatingSleepStages
+                    ? null
+                    : () => _estimateSleepStages(row),
+                icon: _estimatingSleepStages
+                    ? const SizedBox.square(
+                        dimension: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Icon(Icons.bedtime_outlined),
+                label: Text(
+                  _estimatingSleepStages
+                      ? l.sleepEcgStagesWorking
+                      : sleepEstimate == null
+                      ? l.sleepEcgStagesButton
+                      : l.sleepEcgStagesAgain,
+                ),
+              ),
+              if (_estimatingSleepStages) ...[
+                const SizedBox(height: 6),
+                const LinearProgressIndicator(minHeight: 3),
+              ],
+            ],
             Text(
               l.ecgCoverage(
                 (row.durationMs <= 0
@@ -400,14 +647,86 @@ class EcgDetailSheet extends ConsumerWidget {
               icon: const Icon(Icons.ios_share),
               label: Text(l.ecgExportCsv),
             ),
-            const SizedBox(height: 8),
-            FilledButton.icon(
-              onPressed: () => askCoachAboutEcg(context, ref, row),
-              icon: const Icon(Icons.chat_bubble_outline),
-              label: Text(l.ecgAskCoach),
-            ),
+            if (sleepCapture)
+              OutlinedButton.icon(
+                onPressed: _exportingSleepRaw
+                    ? null
+                    : () => _exportSleepRaw(row),
+                icon: _exportingSleepRaw
+                    ? const SizedBox.square(
+                        dimension: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Icon(Icons.nightlight_outlined),
+                label: Text(l.sleepEcgExportRaw),
+              ),
+            if (sleepCapture && _exportingSleepRaw) ...[
+              const SizedBox(height: 6),
+              const LinearProgressIndicator(minHeight: 3),
+            ],
           ] else
             SectionCard(child: Text(l.ecgReportOnly)),
+          if (ecgClinicalMode) ...[
+            const SizedBox(height: 12),
+            SectionCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l.activityNote,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: _noteController,
+                    minLines: 3,
+                    maxLines: 8,
+                    onChanged: (_) => setState(() => _noteEdited = true),
+                    decoration: InputDecoration(
+                      hintText: l.activityNoteAdd,
+                      border: const OutlineInputBorder(),
+                    ),
+                  ),
+                  if (_noteEdited) ...[
+                    const SizedBox(height: 8),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: FilledButton.icon(
+                        onPressed: _savingNote ? null : () => _saveNote(row),
+                        icon: _savingNote
+                            ? const SizedBox.square(
+                                dimension: 18,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : const Icon(Icons.save_outlined),
+                        label: Text(l.save),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ],
+          const SizedBox(height: 8),
+          FilledButton.icon(
+            onPressed: _preparingCoach ? null : () => _askCoach(row),
+            icon: _preparingCoach
+                ? const SizedBox.square(
+                    dimension: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Icon(Icons.chat_bubble_outline),
+            label: Text(l.ecgAskCoach),
+          ),
+          if (_preparingCoach) ...[
+            const SizedBox(height: 6),
+            const LinearProgressIndicator(minHeight: 3),
+          ],
           if (row.originalBase64 != null)
             OutlinedButton.icon(
               onPressed: () => runUiAction(context, () async {
@@ -546,44 +865,39 @@ Future<bool> confirmEcgCoachWarning(BuildContext context, WidgetRef ref) async {
 Future<void> askCoachAboutEcg(
   BuildContext context,
   WidgetRef ref,
-  EcgRecording row,
-) async {
+  EcgRecording row, {
+  ValueChanged<bool>? onBusyChanged,
+}) async {
   final l = context.l10n;
   log('[EcgCoach] ask tapped ${row.recordingId}');
   final accepted = await confirmEcgCoachWarning(context, ref);
   if (accepted != true || !context.mounted) return;
-  await runUiAction(context, () async {
-    log('[EcgCoach] analysing ${row.recordingId}');
-    final EcgAnalysis analysis;
-    try {
-      analysis = await ref.read(ecgAnalysisProvider(row.recordingId).future);
-    } catch (e) {
-      log('[EcgCoach] analysis failed: $e');
-      rethrow;
-    }
-    log(
-      '[EcgCoach] quality=${analysis.quality} analysed=${analysis.analysedSeconds.round()}s beats=${analysis.beats}',
-    );
-    if (!context.mounted) return;
+  onBusyChanged?.call(true);
+  try {
+    await runUiAction(context, () async {
+      log('[EcgCoach] analysing ${row.recordingId}');
+      final prompt = ecgClinicalMode
+          ? l.ecgQuestionOverview
+          : l.ecgQuestionTraining;
+      final contextLines = await ref.read(ecgCoachProvider).detail(row, prompt);
+      if (!context.mounted) return;
 
-    // The timeline context for long recordings (>10 min), as in the chat.
-    final contextLines = ecgAnalysisLines(row, analysis);
-
-    openCoachTab(
-      context,
-      prompt: ecgClinicalMode ? l.ecgQuestionOverview : l.ecgQuestionTraining,
-      autoSend: true,
-      card: CoachContextCard.ecg(
-        recordedAt: row.recordedAt.toLocal(),
-        facts: [
-          recordingDuration(row.durationMs),
-          if (analysis.heartRate case final r?) '${r.hrMean} bpm',
-        ],
-        contextLines: contextLines,
-        clinical: ecgClinicalMode,
-      ),
-    );
-  });
+      openCoachTab(
+        context,
+        prompt: prompt,
+        autoSend: true,
+        card: CoachContextCard.ecg(
+          recordingId: row.recordingId,
+          recordedAt: row.recordedAt.toLocal(),
+          facts: [recordingDuration(row.durationMs)],
+          contextLines: contextLines,
+          clinical: ecgClinicalMode,
+        ),
+      );
+    });
+  } finally {
+    onBusyChanged?.call(false);
+  }
 }
 
 class EcgWaveform extends StatefulWidget {
@@ -769,6 +1083,21 @@ Future<void> shareRecordingFile(BuildContext context, String path) async {
   await SharePlus.instance.share(
     ShareParams(
       files: [XFile(path)],
+      sharePositionOrigin: box == null
+          ? null
+          : box.localToGlobal(Offset.zero) & box.size,
+    ),
+  );
+}
+
+Future<void> shareRecordingFiles(
+  BuildContext context,
+  List<String> paths,
+) async {
+  final box = context.findRenderObject() as RenderBox?;
+  await SharePlus.instance.share(
+    ShareParams(
+      files: [for (final path in paths) XFile(path)],
       sharePositionOrigin: box == null
           ? null
           : box.localToGlobal(Offset.zero) & box.size,

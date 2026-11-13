@@ -4027,5 +4027,19 @@
   "activityNote": "Poznámka",
   "activityNoteAdd": "Pridaj poznámku pre kouča",
   "plusOmronBle": "Hľadať BLE tlakové merače",
-  "plusOmronBleHint": "Vyhľadajte štandardné Bluetooth tlakové merače a podporované profily Omron."
+  "plusOmronBleHint": "Vyhľadajte štandardné Bluetooth tlakové merače a podporované profily Omron.",
+  "sleepEcgTitle": "Record sleep",
+  "sleepEcgHint": "ECG and movement with Polar H10",
+  "sleepEcgDescription": "Súčasne zaznamenáva EKG pri 130 Hz a pohyb v troch osiach pri 25 Hz. Noste Polar H10 a držte iPhone v dosahu Bluetooth. Odhad fáz spánku je voliteľný a spúšťa sa samostatne; frekvencia dýchania ani zdravotné nálezy sa nevypočítavajú.",
+  "sleepEcgStart": "Start overnight recording",
+  "sleepEcgMotionSamples": "Movement samples: {count}",
+  "sleepEcgKeepOpenHint": "You can leave this screen while recording continues. Keep Fjelia open in the app switcher and your iPhone near the H10. Force quitting the app interrupts the recording.",
+  "sleepEcgRawNote": "Surové údaje z nočného záznamu EKG a pohybu. Experimentálny odhad fáz spánku môžete spustiť samostatne. Frekvencia dýchania ani zdravotné nálezy sa nevypočítavajú.",
+  "sleepEcgExportRaw": "Export raw ECG + movement CSVs",
+  "sleepEcgStagesTitle": "Odhadované fázy spánku",
+  "sleepEcgStagesButton": "Odhadnúť fázy spánku",
+  "sleepEcgStagesAgain": "Odhadnúť znova",
+  "sleepEcgStagesDisclaimer": "Experimentálny odhad z EKG Polar H10 pomocou výskumného modelu využívajúceho iba EKG. N1 a N2 sa spájajú do ľahkého spánku. Nejde o PSG ani o zdravotnícke meranie.",
+  "sleepEcgStagesWorking": "Odhadujú sa fázy spánku…",
+  "sleepEcgStagesFailed": "Fázy spánku sa nepodarilo odhadnúť. Skontrolujte, či je záznam úplný, a skúste to znova."
 }

@@ -5190,5 +5190,19 @@
   "activityNote": "Note",
   "activityNoteAdd": "Add a note for the coach",
   "plusOmronBle": "Szukaj ciśnieniomierzy BLE",
-  "plusOmronBleHint": "Szukaj standardowych ciśnieniomierzy Bluetooth i obsługiwanych profili Omron."
+  "plusOmronBleHint": "Szukaj standardowych ciśnieniomierzy Bluetooth i obsługiwanych profili Omron.",
+  "sleepEcgTitle": "Record sleep",
+  "sleepEcgHint": "ECG and movement with Polar H10",
+  "sleepEcgDescription": "Jednocześnie rejestruje EKG z częstotliwością 130 Hz i ruch w trzech osiach z częstotliwością 25 Hz. Załóż Polar H10 i trzymaj iPhone’a w zasięgu Bluetooth. Szacowanie faz snu jest opcjonalne i uruchamiane osobno; częstość oddechów ani wyniki medyczne nie są obliczane.",
+  "sleepEcgStart": "Start overnight recording",
+  "sleepEcgMotionSamples": "Movement samples: {count}",
+  "sleepEcgKeepOpenHint": "You can leave this screen while recording continues. Keep Fjelia open in the app switcher and your iPhone near the H10. Force quitting the app interrupts the recording.",
+  "sleepEcgRawNote": "Surowe dane z nocnego zapisu EKG i ruchu. Możesz osobno uruchomić eksperymentalne szacowanie faz snu. Częstość oddechów ani wyniki medyczne nie są obliczane.",
+  "sleepEcgExportRaw": "Export raw ECG + movement CSVs",
+  "sleepEcgStagesTitle": "Szacowane fazy snu",
+  "sleepEcgStagesButton": "Oszacuj fazy snu",
+  "sleepEcgStagesAgain": "Oszacuj ponownie",
+  "sleepEcgStagesDisclaimer": "Eksperymentalne oszacowanie na podstawie EKG Polar H10 przy użyciu modelu badawczego wykorzystującego wyłącznie EKG. N1 i N2 są łączone jako sen płytki. To nie jest badanie PSG ani pomiar medyczny.",
+  "sleepEcgStagesWorking": "Szacowanie faz snu…",
+  "sleepEcgStagesFailed": "Nie udało się oszacować faz snu. Sprawdź, czy nagranie jest kompletne, i spróbuj ponownie."
 }

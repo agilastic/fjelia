@@ -8620,4 +8620,53 @@ class AppLocalizationsSk extends AppLocalizations {
   @override
   String get plusOmronBleHint =>
       'Vyhľadajte štandardné Bluetooth tlakové merače a podporované profily Omron.';
+
+  @override
+  String get sleepEcgTitle => 'Record sleep';
+
+  @override
+  String get sleepEcgHint => 'ECG and movement with Polar H10';
+
+  @override
+  String get sleepEcgDescription =>
+      'Súčasne zaznamenáva EKG pri 130 Hz a pohyb v troch osiach pri 25 Hz. Noste Polar H10 a držte iPhone v dosahu Bluetooth. Odhad fáz spánku je voliteľný a spúšťa sa samostatne; frekvencia dýchania ani zdravotné nálezy sa nevypočítavajú.';
+
+  @override
+  String get sleepEcgStart => 'Start overnight recording';
+
+  @override
+  String sleepEcgMotionSamples(int count) {
+    return 'Movement samples: $count';
+  }
+
+  @override
+  String get sleepEcgKeepOpenHint =>
+      'You can leave this screen while recording continues. Keep Fjelia open in the app switcher and your iPhone near the H10. Force quitting the app interrupts the recording.';
+
+  @override
+  String get sleepEcgRawNote =>
+      'Surové údaje z nočného záznamu EKG a pohybu. Experimentálny odhad fáz spánku môžete spustiť samostatne. Frekvencia dýchania ani zdravotné nálezy sa nevypočítavajú.';
+
+  @override
+  String get sleepEcgExportRaw => 'Export raw ECG + movement CSVs';
+
+  @override
+  String get sleepEcgStagesTitle => 'Odhadované fázy spánku';
+
+  @override
+  String get sleepEcgStagesButton => 'Odhadnúť fázy spánku';
+
+  @override
+  String get sleepEcgStagesAgain => 'Odhadnúť znova';
+
+  @override
+  String get sleepEcgStagesDisclaimer =>
+      'Experimentálny odhad z EKG Polar H10 pomocou výskumného modelu využívajúceho iba EKG. N1 a N2 sa spájajú do ľahkého spánku. Nejde o PSG ani o zdravotnícke meranie.';
+
+  @override
+  String get sleepEcgStagesWorking => 'Odhadujú sa fázy spánku…';
+
+  @override
+  String get sleepEcgStagesFailed =>
+      'Fázy spánku sa nepodarilo odhadnúť. Skontrolujte, či je záznam úplný, a skúste to znova.';
 }

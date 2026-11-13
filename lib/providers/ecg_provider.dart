@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:isolate';
 
 import 'package:drift/drift.dart';
@@ -14,10 +15,14 @@ import '../services/ecg_analysis.dart';
 import '../services/ecg_coach_context.dart';
 import '../services/ecg_ble_service.dart';
 import '../services/ecg_storage_service.dart';
+import '../services/ecg_sleep_staging_service.dart';
+import '../services/ecg_respiration_review.dart';
+import '../utils/log.dart';
 import '../services/training_ble.dart';
 import '../services/activity_background.dart';
 import 'activity_background_provider.dart';
 import 'database_provider.dart';
+import 'day_data_provider.dart' show syncStatusListenerProvider;
 import 'polar_h10_provider.dart';
 import 'device_recording_owner_provider.dart';
 import 'hrv_reminder_provider.dart' show hrvCaptureActiveProvider;
@@ -33,6 +38,28 @@ final ecgStorageProvider = Provider(
 final ecgHistoryProvider = StreamProvider(
   (ref) => ref.watch(ecgStorageProvider).watchHistory(),
 );
+
+/// Exploratory H10 EDR/movement visualization for a completed paired capture.
+final ecgRespirationReviewProvider = FutureProvider.family((
+  ref,
+  String id,
+) async {
+  final storage = ref.read(ecgStorageProvider);
+  final row = await storage.recording(id);
+  if (row == null || row.sampleRateHz == null) return null;
+  final metadata = jsonDecode(row.metadataJson) as Map<String, dynamic>;
+  final accelerationRate = (metadata['accelerometer_sample_rate_hz'] as num?)
+      ?.toDouble();
+  if (accelerationRate == null || accelerationRate <= 0) return null;
+  final acceleration = await storage.accelerationChunks(id);
+  if (acceleration.isEmpty) return null;
+  return reviewH10Signals(
+    ecg: await storage.chunks(id),
+    acceleration: acceleration,
+    ecgRateHz: row.sampleRateHz!,
+    accelerationRateHz: accelerationRate,
+  );
+});
 
 /// Recordings swiped away while their undo is still on offer: hidden from the
 /// lists, deleted for good once the offer has passed.
@@ -153,9 +180,18 @@ class EcgCoach {
     final analysis = row.kind == 'waveform' && row.sampleRateHz != null
         ? await ref.read(ecgAnalysisProvider(row.recordingId).future)
         : null;
+    String? reportText;
+    if (row.kind == 'report' && ecgClinicalMode) {
+      try {
+        reportText = await ref.read(ecgStorageProvider).extractReportText(row);
+      } catch (_) {
+        // The context builder tells the coach when report text is unavailable.
+      }
+    }
     return ecgDetailLines(
       row,
       analysis,
+      reportText: reportText,
       minutes: askedMinutes(question),
       activity: activity,
     );
@@ -211,6 +247,8 @@ class EcgRecorderState {
     this.rate = 130,
     this.gaps = 0,
     this.preview = const [],
+    this.accelerationSamples = 0,
+    this.withAcceleration = false,
     this.error,
     this.heartRate,
     this.heartRateAt,
@@ -220,6 +258,8 @@ class EcgRecorderState {
   final String? recordingId, error;
   final TrainingDevice? device;
   final int count, durationMs, gaps;
+  final int accelerationSamples;
+  final bool withAcceleration;
   final double rate;
   final int? heartRate;
   final DateTime? heartRateAt;
@@ -254,12 +294,15 @@ class EcgRecorder extends StateNotifier<EcgRecorderState>
   StreamSubscription<String>? _actions;
   EcgDeviceService? _sensor;
   StreamSubscription<EcgFrame>? _frames;
+  StreamSubscription<AccelerationFrame>? _accelerationFrames;
   StreamSubscription<dynamic>? _heartRate;
   int? _bpm;
   DateTime? _bpmAt;
   bool? _contact;
   bool _ownsLease = true;
   EcgTimeline? _timeline;
+  AccelerationTimeline? _accelerationTimeline;
+  bool _withAcceleration = false;
   Timer? _timer;
   final _pending = <EcgChunk>[], _preview = <EcgChunk>[];
   Future<void> _writes = Future.value();
@@ -277,6 +320,8 @@ class EcgRecorder extends StateNotifier<EcgRecorderState>
     TrainingDevice device, {
     String? activityId,
     String? parentOwner,
+    bool withAcceleration = false,
+    String purpose = 'ecg',
   }) async {
     if (state.active) return;
     final owner = ref.read(deviceRecordingOwnerProvider);
@@ -299,12 +344,14 @@ class EcgRecorder extends StateNotifier<EcgRecorderState>
     _bpm = null;
     _bpmAt = null;
     _contact = null;
+    _withAcceleration = withAcceleration;
+    _pendingAcceleration.clear();
     try {
       await _ready;
       if (generation != _generation) return;
       final sensor = ref.read(ecgDeviceFactoryProvider)();
       _sensor = sensor;
-      await sensor.connect(device);
+      await sensor.connect(device, withAcceleration: withAcceleration);
       if (generation != _generation) {
         await sensor.dispose();
         return;
@@ -316,6 +363,10 @@ class EcgRecorder extends StateNotifier<EcgRecorderState>
             deviceName: device.name,
             rate: sensor.sampleRateHz,
             resolution: sensor.resolutionBits,
+            accelerationRate: withAcceleration
+                ? sensor.accelerationRateHz
+                : null,
+            purpose: purpose,
             activityId: activityId,
           );
       if (generation != _generation) {
@@ -324,6 +375,9 @@ class EcgRecorder extends StateNotifier<EcgRecorderState>
         return;
       }
       _timeline = EcgTimeline(sensor.sampleRateHz);
+      _accelerationTimeline = withAcceleration
+          ? AccelerationTimeline(sensor.accelerationRateHz)
+          : null;
       _heartRate = sensor.heartRate.listen((packet) {
         _bpm = packet.bpm;
         _bpmAt = DateTime.now().toUtc();
@@ -335,6 +389,7 @@ class EcgRecorder extends StateNotifier<EcgRecorderState>
         recordingId: id,
         device: device,
         rate: sensor.sampleRateHz,
+        withAcceleration: withAcceleration,
       );
       _frames = sensor.frames.listen(
         _receive,
@@ -342,6 +397,14 @@ class EcgRecorder extends StateNotifier<EcgRecorderState>
           unawaited(stop(interrupted: true, error: error.toString()));
         },
       );
+      if (withAcceleration) {
+        _accelerationFrames = sensor.acceleration.listen(
+          _receiveAcceleration,
+          onError: (Object error) {
+            unawaited(stop(interrupted: true, error: error.toString()));
+          },
+        );
+      }
       if (_ownsLease) await _background.prepare(gps: false);
       await _background.start(
         'ecg',
@@ -353,7 +416,7 @@ class EcgRecorder extends StateNotifier<EcgRecorderState>
         await _background.stop('ecg');
         return;
       }
-      await sensor.start();
+      await sensor.start(withAcceleration: withAcceleration);
       if (generation != _generation) return;
       _publish(EcgPhase.recording);
       _timer = Timer.periodic(const Duration(seconds: 1), (_) => _enqueue());
@@ -361,6 +424,20 @@ class EcgRecorder extends StateNotifier<EcgRecorderState>
       if (generation != _generation) return;
       await stop(interrupted: true, error: e.toString());
     }
+  }
+
+  final _pendingAcceleration = <AccelerationChunk>[];
+
+  void _receiveAcceleration(AccelerationFrame frame) {
+    if (state.phase != EcgPhase.recording &&
+        state.phase != EcgPhase.connecting) {
+      return;
+    }
+    final chunk = _accelerationTimeline?.add(frame, DateTime.now().toUtc());
+    if (chunk == null) return;
+    _pendingAcceleration.add(chunk);
+    _publish(state.phase);
+    if (_pendingAcceleration.length >= 25) _enqueue();
   }
 
   void _receive(EcgFrame frame) {
@@ -396,6 +473,8 @@ class EcgRecorder extends StateNotifier<EcgRecorderState>
       count: t?.sampleCount ?? 0,
       durationMs: (t?.durationUs ?? 0) ~/ 1000,
       gaps: t?.gaps ?? 0,
+      accelerationSamples: _accelerationTimeline?.sampleCount ?? 0,
+      withAcceleration: _withAcceleration,
       preview: List.unmodifiable(_preview),
       error: error,
       heartRate: _bpm,
@@ -405,14 +484,18 @@ class EcgRecorder extends StateNotifier<EcgRecorderState>
   }
 
   void _enqueue() {
-    if (_pending.isEmpty || _writeError != null || state.recordingId == null) {
+    if ((_pending.isEmpty && _pendingAcceleration.isEmpty) ||
+        _writeError != null ||
+        state.recordingId == null) {
       return;
     }
     final chunks = List.of(_pending);
+    final acceleration = List.of(_pendingAcceleration);
     _lastFlushUs = _timeline!.durationUs;
     _pending.clear();
+    _pendingAcceleration.clear();
     final sequence = _sequence;
-    _sequence += chunks.length;
+    _sequence += chunks.length + acceleration.length;
     final id = state.recordingId!, t = _timeline!;
     final count = t.sampleCount, duration = t.durationUs ~/ 1000, gaps = t.gaps;
     _writes = _writes
@@ -423,6 +506,7 @@ class EcgRecorder extends StateNotifier<EcgRecorderState>
                 id,
                 chunks,
                 sequence,
+                acceleration: acceleration,
                 count: count,
                 durationMs: duration,
                 gaps: gaps,
@@ -452,18 +536,39 @@ class EcgRecorder extends StateNotifier<EcgRecorderState>
         interrupted = true;
       }
       await _frames?.cancel();
+      await _accelerationFrames?.cancel();
       await _heartRate?.cancel();
       _heartRate = null;
       _frames = null;
+      _accelerationFrames = null;
       await _sensor?.dispose();
       _sensor = null;
       _enqueue();
       await _writes;
       final id = state.recordingId;
       if (id != null) {
-        await ref
-            .read(ecgStorageProvider)
-            .finish(id, interrupted: interrupted || _writeError != null);
+        final storage = ref.read(ecgStorageProvider);
+        final completed = !interrupted && _writeError == null;
+        await storage.finish(id, interrupted: !completed);
+        if (completed) {
+          try {
+            final row = await storage.recording(id);
+            if (row != null &&
+                row.kind == 'waveform' &&
+                row.sampleRateHz != null &&
+                jsonDecode(row.metadataJson)['capture_purpose'] == 'sleep') {
+              final estimate = await EcgSleepStagingService().estimate(
+                chunks: await storage.chunks(id),
+                sampleRateHz: row.sampleRateHz!,
+                recordedAt: row.recordedAt,
+              );
+              await storage.saveSleepStageEstimate(id, estimate);
+              ref.read(syncStatusListenerProvider.notifier).state++;
+            }
+          } catch (e) {
+            log('[ECG] automatic sleep-stage estimate failed: $e');
+          }
+        }
       }
       _publish(
         id == null ? EcgPhase.failed : EcgPhase.saved,
@@ -489,6 +594,7 @@ class EcgRecorder extends StateNotifier<EcgRecorderState>
     WidgetsBinding.instance.removeObserver(this);
     _timer?.cancel();
     unawaited(_frames?.cancel());
+    unawaited(_accelerationFrames?.cancel());
     unawaited(_heartRate?.cancel());
     unawaited(_sensor?.dispose());
     unawaited(_actions?.cancel());

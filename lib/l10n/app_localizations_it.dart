@@ -8633,4 +8633,53 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get plusOmronBleHint =>
       'Cerca dispositivi Bluetooth standard per la pressione e profili Omron supportati.';
+
+  @override
+  String get sleepEcgTitle => 'Record sleep';
+
+  @override
+  String get sleepEcgHint => 'ECG and movement with Polar H10';
+
+  @override
+  String get sleepEcgDescription =>
+      'Registra contemporaneamente l’ECG a 130 Hz e il movimento a tre assi a 25 Hz. Indossa Polar H10 e tieni l’iPhone entro la portata Bluetooth. La stima delle fasi del sonno è facoltativa e viene avviata separatamente; non vengono calcolati la frequenza respiratoria o dati medici.';
+
+  @override
+  String get sleepEcgStart => 'Start overnight recording';
+
+  @override
+  String sleepEcgMotionSamples(int count) {
+    return 'Movement samples: $count';
+  }
+
+  @override
+  String get sleepEcgKeepOpenHint =>
+      'You can leave this screen while recording continues. Keep Fjelia open in the app switcher and your iPhone near the H10. Force quitting the app interrupts the recording.';
+
+  @override
+  String get sleepEcgRawNote =>
+      'Dati grezzi dell’ECG e del movimento registrati durante la notte. Puoi avviare separatamente una stima sperimentale delle fasi del sonno. Non vengono calcolati la frequenza respiratoria o dati medici.';
+
+  @override
+  String get sleepEcgExportRaw => 'Export raw ECG + movement CSVs';
+
+  @override
+  String get sleepEcgStagesTitle => 'Fasi del sonno stimate';
+
+  @override
+  String get sleepEcgStagesButton => 'Stima le fasi del sonno';
+
+  @override
+  String get sleepEcgStagesAgain => 'Stima di nuovo';
+
+  @override
+  String get sleepEcgStagesDisclaimer =>
+      'Stima sperimentale dall’ECG Polar H10 con un modello di ricerca basato solo sull’ECG. N1 e N2 sono raggruppati come sonno leggero. Non è una polisonnografia né una misurazione medica.';
+
+  @override
+  String get sleepEcgStagesWorking => 'Stima delle fasi del sonno…';
+
+  @override
+  String get sleepEcgStagesFailed =>
+      'Impossibile stimare le fasi del sonno. Verifica che la registrazione sia completa e riprova.';
 }

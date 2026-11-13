@@ -40,6 +40,7 @@ class CoachContextCard {
     this.contextLine = '',
     this.questions = const [],
     this.medicalWarning = false,
+    this.ecgRecordingId,
   });
 
   final String sport, title;
@@ -58,6 +59,10 @@ class CoachContextCard {
   /// Health measurements such as an ECG: the chat keeps a warning on top that
   /// the coach gives no medical advice.
   final bool medicalWarning;
+
+  /// The source recording for an ECG details chat, used to save its Pro
+  /// overview in the recording's note after the first coach reply.
+  final String? ecgRecordingId;
 
   /// A planned session of the training plan.
   ///
@@ -170,6 +175,7 @@ class CoachContextCard {
   /// The request context with the session described first.
   /// An ECG recording with the app's pre-analysis as context lines.
   factory CoachContextCard.ecg({
+    String? recordingId,
     required DateTime recordedAt,
     required List<String> facts,
     required List<String> contextLines,
@@ -186,6 +192,7 @@ class CoachContextCard {
         ? [tr.ecgQuestionOverview, tr.ecgQuestionRhythm, tr.ecgQuestionDoctor]
         : [tr.ecgQuestionTraining, tr.ecgFollowHrv, tr.ecgFollowHeartRate],
     medicalWarning: true,
+    ecgRecordingId: recordingId,
   );
 
   String withContext(String toon) =>

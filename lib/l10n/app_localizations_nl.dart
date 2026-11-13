@@ -8590,4 +8590,53 @@ class AppLocalizationsNl extends AppLocalizations {
   @override
   String get plusOmronBleHint =>
       'Zoek naar standaard Bluetooth-bloeddrukmeters en ondersteunde Omron-profielen.';
+
+  @override
+  String get sleepEcgTitle => 'Record sleep';
+
+  @override
+  String get sleepEcgHint => 'ECG and movement with Polar H10';
+
+  @override
+  String get sleepEcgDescription =>
+      'Neemt tegelijkertijd ECG op met 130 Hz en beweging over drie assen met 25 Hz. Draag de Polar H10 en houd je iPhone binnen Bluetooth-bereik. Een schatting van slaapfasen is optioneel en wordt apart uitgevoerd; ademhalingsfrequentie en medische bevindingen worden niet berekend.';
+
+  @override
+  String get sleepEcgStart => 'Start overnight recording';
+
+  @override
+  String sleepEcgMotionSamples(int count) {
+    return 'Movement samples: $count';
+  }
+
+  @override
+  String get sleepEcgKeepOpenHint =>
+      'You can leave this screen while recording continues. Keep Fjelia open in the app switcher and your iPhone near the H10. Force quitting the app interrupts the recording.';
+
+  @override
+  String get sleepEcgRawNote =>
+      'Ruwe gegevens van de nachtelijke ECG- en bewegingsopname. Je kunt apart een experimentele schatting van slaapfasen starten. Ademhalingsfrequentie en medische bevindingen worden niet berekend.';
+
+  @override
+  String get sleepEcgExportRaw => 'Export raw ECG + movement CSVs';
+
+  @override
+  String get sleepEcgStagesTitle => 'Geschatte slaapfasen';
+
+  @override
+  String get sleepEcgStagesButton => 'Slaapfasen schatten';
+
+  @override
+  String get sleepEcgStagesAgain => 'Opnieuw schatten';
+
+  @override
+  String get sleepEcgStagesDisclaimer =>
+      'Experimentele schatting op basis van Polar H10-ECG met een onderzoeksmodel dat alleen ECG gebruikt. N1 en N2 worden samengevoegd tot lichte slaap. Dit is geen PSG- of medische meting.';
+
+  @override
+  String get sleepEcgStagesWorking => 'Slaapfasen schatten…';
+
+  @override
+  String get sleepEcgStagesFailed =>
+      'Slaapfasen konden niet worden geschat. Controleer of de opname compleet is en probeer het opnieuw.';
 }

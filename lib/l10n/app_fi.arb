@@ -4027,5 +4027,19 @@
   "activityNote": "Huomio",
   "activityNoteAdd": "Lisää huomio valmentajalle",
   "plusOmronBle": "Etsi BLE-verenpainemittareita",
-  "plusOmronBleHint": "Etsi tavallisia Bluetooth-verenpainemittareita ja tuettuja Omron-profiileja."
+  "plusOmronBleHint": "Etsi tavallisia Bluetooth-verenpainemittareita ja tuettuja Omron-profiileja.",
+  "sleepEcgTitle": "Record sleep",
+  "sleepEcgHint": "ECG and movement with Polar H10",
+  "sleepEcgDescription": "Tallentaa samanaikaisesti EKG:tä 130 Hz:n ja kolmiakselista liikettä 25 Hz:n taajuudella. Käytä Polar H10:tä ja pidä iPhone Bluetooth-kantaman sisällä. Univaiheiden arviointi on valinnainen ja tehdään erikseen; hengitystiheyttä tai lääketieteellisiä löydöksiä ei lasketa.",
+  "sleepEcgStart": "Start overnight recording",
+  "sleepEcgMotionSamples": "Movement samples: {count}",
+  "sleepEcgKeepOpenHint": "You can leave this screen while recording continues. Keep Fjelia open in the app switcher and your iPhone near the H10. Force quitting the app interrupts the recording.",
+  "sleepEcgRawNote": "Yön EKG- ja liiketallenteen raakadata. Voit käynnistää kokeellisen univaihearvion erikseen. Hengitystiheyttä tai lääketieteellisiä löydöksiä ei lasketa.",
+  "sleepEcgExportRaw": "Export raw ECG + movement CSVs",
+  "sleepEcgStagesTitle": "Arvioidut univaiheet",
+  "sleepEcgStagesButton": "Arvioi univaiheet",
+  "sleepEcgStagesAgain": "Arvioi uudelleen",
+  "sleepEcgStagesDisclaimer": "Kokeellinen arvio Polar H10:n EKG:stä vain EKG:tä käyttävällä tutkimusmallilla. N1 ja N2 yhdistetään kevyeksi uneksi. Tämä ei ole PSG- eikä lääketieteellinen mittaus.",
+  "sleepEcgStagesWorking": "Arvioidaan univaiheita…",
+  "sleepEcgStagesFailed": "Univaiheita ei voitu arvioida. Tarkista, että tallennus on valmis, ja yritä uudelleen."
 }

@@ -8582,4 +8582,53 @@ class AppLocalizationsDa extends AppLocalizations {
   @override
   String get plusOmronBleHint =>
       'Søg efter standard Bluetooth-blodtryksmålere og understøttede Omron-profiler.';
+
+  @override
+  String get sleepEcgTitle => 'Record sleep';
+
+  @override
+  String get sleepEcgHint => 'ECG and movement with Polar H10';
+
+  @override
+  String get sleepEcgDescription =>
+      'Optager samtidig EKG ved 130 Hz og bevægelse i tre akser ved 25 Hz. Bær Polar H10, og hold din iPhone inden for Bluetooth-rækkevidde. Estimering af søvnstadier er valgfri og køres separat; vejrtrækningsfrekvens og medicinske fund beregnes ikke.';
+
+  @override
+  String get sleepEcgStart => 'Start overnight recording';
+
+  @override
+  String sleepEcgMotionSamples(int count) {
+    return 'Movement samples: $count';
+  }
+
+  @override
+  String get sleepEcgKeepOpenHint =>
+      'You can leave this screen while recording continues. Keep Fjelia open in the app switcher and your iPhone near the H10. Force quitting the app interrupts the recording.';
+
+  @override
+  String get sleepEcgRawNote =>
+      'Rådata fra nattens EKG- og bevægelsesoptagelse. Du kan separat starte en eksperimentel estimering af søvnstadier. Vejrtrækningsfrekvens og medicinske fund beregnes ikke.';
+
+  @override
+  String get sleepEcgExportRaw => 'Export raw ECG + movement CSVs';
+
+  @override
+  String get sleepEcgStagesTitle => 'Estimerede søvnstadier';
+
+  @override
+  String get sleepEcgStagesButton => 'Estimér søvnstadier';
+
+  @override
+  String get sleepEcgStagesAgain => 'Estimér igen';
+
+  @override
+  String get sleepEcgStagesDisclaimer =>
+      'Eksperimentelt estimat ud fra Polar H10-EKG med en forskningsmodel, der kun bruger EKG. N1 og N2 vises samlet som let søvn. Det er ikke en PSG-måling eller en medicinsk måling.';
+
+  @override
+  String get sleepEcgStagesWorking => 'Beregner søvnstadier…';
+
+  @override
+  String get sleepEcgStagesFailed =>
+      'Søvnstadierne kunne ikke beregnes. Kontrollér, at optagelsen er fuldført, og prøv igen.';
 }

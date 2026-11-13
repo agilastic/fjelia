@@ -202,6 +202,65 @@ class SleepStagesChart extends StatefulWidget {
 class _SleepStagesChartState extends State<SleepStagesChart> {
   double? _touchFraction;
 
+  /// Keep the rendered hypnogram exclusive even if an upstream source sends
+  /// overlapping intervals. A new stage takes over at its own start time;
+  /// gaps remain gaps instead of being filled with invented stages.
+  List<SleepPhase> get _chartPhases {
+    final source = widget.phases
+        .where(
+          (p) =>
+              sleepStageColors.containsKey(p.phase) && p.end.isAfter(p.start),
+        )
+        .toList();
+    final boundaries =
+        source
+            .expand(
+              (p) => [
+                p.start.millisecondsSinceEpoch,
+                p.end.millisecondsSinceEpoch,
+              ],
+            )
+            .toSet()
+            .toList()
+          ..sort();
+    final normalized = <SleepPhase>[];
+    for (var i = 0; i + 1 < boundaries.length; i++) {
+      final startMs = boundaries[i], endMs = boundaries[i + 1];
+      if (endMs <= startMs) continue;
+      final active =
+          source
+              .where(
+                (p) =>
+                    p.start.millisecondsSinceEpoch <= startMs &&
+                    p.end.millisecondsSinceEpoch >= endMs,
+              )
+              .toList()
+            ..sort((a, b) => a.start.compareTo(b.start));
+      if (active.isEmpty) continue;
+      final stage = active.last.phase;
+      final start = DateTime.fromMillisecondsSinceEpoch(
+        startMs,
+        isUtc: active.last.start.isUtc,
+      );
+      final end = DateTime.fromMillisecondsSinceEpoch(
+        endMs,
+        isUtc: active.last.start.isUtc,
+      );
+      if (normalized.isNotEmpty &&
+          normalized.last.phase == stage &&
+          normalized.last.end.isAtSameMomentAs(start)) {
+        normalized[normalized.length - 1] = SleepPhase(
+          normalized.last.start,
+          end,
+          stage,
+        );
+      } else {
+        normalized.add(SleepPhase(start, end, stage));
+      }
+    }
+    return normalized;
+  }
+
   DateTime get _from =>
       widget.start ??
       widget.phases.map((p) => p.start).reduce((a, b) => a.isBefore(b) ? a : b);
@@ -210,7 +269,7 @@ class _SleepStagesChartState extends State<SleepStagesChart> {
       widget.phases.map((p) => p.end).reduce((a, b) => a.isAfter(b) ? a : b);
 
   SleepPhase? _phaseAt(DateTime t) {
-    for (final p in widget.phases) {
+    for (final p in _chartPhases) {
       if (!t.isBefore(p.start) && t.isBefore(p.end)) return p;
     }
     return null;
@@ -221,6 +280,8 @@ class _SleepStagesChartState extends State<SleepStagesChart> {
 
   @override
   Widget build(BuildContext context) {
+    final phases = _chartPhases;
+    if (phases.isEmpty) return const SizedBox.shrink();
     final from = _from, to = _to;
     final span = to.difference(from).inSeconds;
     if (span <= 0) return const SizedBox.shrink();
@@ -269,7 +330,7 @@ class _SleepStagesChartState extends State<SleepStagesChart> {
                     child: CustomPaint(
                       size: Size(c.maxWidth, c.maxHeight),
                       painter: _SleepStagesPainter(
-                        phases: widget.phases,
+                        phases: phases,
                         from: from,
                         to: to,
                         touchFraction: fraction,
@@ -331,7 +392,8 @@ class _SleepStagesPainter extends CustomPainter {
       final x0 = p.start.difference(from).inMilliseconds / span * size.width;
       final x1 = p.end.difference(from).inMilliseconds / span * size.width;
       final left = x0.clamp(0.0, size.width);
-      final width = (x1.clamp(0.0, size.width) - left).clamp(2.0, size.width);
+      final width = x1.clamp(0.0, size.width) - left;
+      if (width <= 0) continue;
       canvas.drawRRect(
         RRect.fromRectAndRadius(
           Rect.fromLTWH(left, row * _rowHeight + 4, width, _rowHeight - 8),

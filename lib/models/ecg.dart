@@ -25,6 +25,96 @@ class EcgFrame {
   }
 }
 
+/// Polar PMD accelerometer type 2, uncompressed frame type 1. Values are
+/// signed milli-g on the wire; keep the device timestamp for synchronization.
+class AccelerationFrame {
+  const AccelerationFrame(this.lastSampleNs, this.samplesMilliG);
+  final int lastSampleNs;
+  final List<({int x, int y, int z})> samplesMilliG;
+
+  factory AccelerationFrame.decode(List<int> bytes) {
+    if (bytes.length < 16 ||
+        bytes[0] != 2 ||
+        bytes[9] != 1 ||
+        (bytes.length - 10) % 6 != 0) {
+      throw const FormatException('Unsupported or truncated Polar ACC frame.');
+    }
+    final data = ByteData.sublistView(Uint8List.fromList(bytes));
+    final samples = <({int x, int y, int z})>[];
+    for (var i = 10; i < bytes.length; i += 6) {
+      samples.add((
+        x: data.getInt16(i, Endian.little),
+        y: data.getInt16(i + 2, Endian.little),
+        z: data.getInt16(i + 4, Endian.little),
+      ));
+    }
+    return AccelerationFrame(data.getUint64(1, Endian.little), samples);
+  }
+}
+
+class AccelerationChunk {
+  const AccelerationChunk({
+    required this.offsetUs,
+    required this.samplesMilliG,
+    this.deviceLastSampleNs,
+    this.receivedAt,
+  });
+  final int offsetUs;
+  final List<({int x, int y, int z})> samplesMilliG;
+  final int? deviceLastSampleNs;
+  final DateTime? receivedAt;
+
+  Map<String, Object?> toJson() => {
+    'stream': 'acc',
+    'offset_us': offsetUs,
+    'mg': [
+      for (final s in samplesMilliG) [s.x, s.y, s.z],
+    ],
+    'device_last_sample_ns': deviceLastSampleNs?.toString(),
+    'received_at': receivedAt?.toUtc().toIso8601String(),
+  };
+
+  factory AccelerationChunk.fromJson(Map<String, dynamic> json) =>
+      AccelerationChunk(
+        offsetUs: (json['offset_us'] as num).toInt(),
+        samplesMilliG: [
+          for (final row in json['mg'] as List)
+            (
+              x: ((row as List)[0] as num).toInt(),
+              y: (row[1] as num).toInt(),
+              z: (row[2] as num).toInt(),
+            ),
+        ],
+        deviceLastSampleNs: int.tryParse('${json['device_last_sample_ns']}'),
+        receivedAt: DateTime.tryParse('${json['received_at']}'),
+      );
+}
+
+class AccelerationTimeline {
+  AccelerationTimeline(this.sampleRateHz);
+  final double sampleRateHz;
+  int? _firstNs, _lastNs;
+  int sampleCount = 0;
+
+  AccelerationChunk? add(AccelerationFrame frame, DateTime receivedAt) {
+    if (_lastNs != null && frame.lastSampleNs <= _lastNs!) return null;
+    final period = 1e9 / sampleRateHz;
+    final start =
+        frame.lastSampleNs -
+        ((frame.samplesMilliG.length - 1) * period).round();
+    _firstNs ??= start;
+    final offset = ((start - _firstNs!) / 1000).round();
+    _lastNs = frame.lastSampleNs;
+    sampleCount += frame.samplesMilliG.length;
+    return AccelerationChunk(
+      offsetUs: offset,
+      samplesMilliG: frame.samplesMilliG,
+      deviceLastSampleNs: frame.lastSampleNs,
+      receivedAt: receivedAt,
+    );
+  }
+}
+
 class EcgChunk {
   const EcgChunk({
     required this.offsetUs,

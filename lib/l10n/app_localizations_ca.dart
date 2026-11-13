@@ -8648,4 +8648,53 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get plusOmronBleHint =>
       'Cerca dispositius estàndard de pressió arterial i perfils Omron compatibles per Bluetooth.';
+
+  @override
+  String get sleepEcgTitle => 'Record sleep';
+
+  @override
+  String get sleepEcgHint => 'ECG and movement with Polar H10';
+
+  @override
+  String get sleepEcgDescription =>
+      'Enregistra alhora l’ECG a 130 Hz i el moviment en tres eixos a 25 Hz. Porta el Polar H10 i mantén l’iPhone a l’abast del Bluetooth. L’estimació de les fases del son és opcional i es fa després; no es calcula la freqüència respiratòria ni es generen conclusions mèdiques.';
+
+  @override
+  String get sleepEcgStart => 'Start overnight recording';
+
+  @override
+  String sleepEcgMotionSamples(int count) {
+    return 'Movement samples: $count';
+  }
+
+  @override
+  String get sleepEcgKeepOpenHint =>
+      'You can leave this screen while recording continues. Keep Fjelia open in the app switcher and your iPhone near the H10. Force quitting the app interrupts the recording.';
+
+  @override
+  String get sleepEcgRawNote =>
+      'Dades brutes de l’ECG i del moviment durant la nit. Pots iniciar per separat una estimació experimental de les fases del son. No es calcula la freqüència respiratòria ni es generen conclusions mèdiques.';
+
+  @override
+  String get sleepEcgExportRaw => 'Export raw ECG + movement CSVs';
+
+  @override
+  String get sleepEcgStagesTitle => 'Fases del son estimades';
+
+  @override
+  String get sleepEcgStagesButton => 'Estimar les fases del son';
+
+  @override
+  String get sleepEcgStagesAgain => 'Torna a estimar';
+
+  @override
+  String get sleepEcgStagesDisclaimer =>
+      'Estimació experimental a partir de l’ECG del Polar H10 amb un model de recerca només d’ECG. N1 i N2 s’agrupen com a son lleuger. No és una polisomnografia ni una mesura mèdica.';
+
+  @override
+  String get sleepEcgStagesWorking => 'S’estan estimant les fases del son…';
+
+  @override
+  String get sleepEcgStagesFailed =>
+      'No s’han pogut estimar les fases del son. Comprova que la gravació estigui completa i torna-ho a provar.';
 }

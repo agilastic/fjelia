@@ -8595,4 +8595,53 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String get plusOmronBleHint =>
       'Szukaj standardowych ciśnieniomierzy Bluetooth i obsługiwanych profili Omron.';
+
+  @override
+  String get sleepEcgTitle => 'Record sleep';
+
+  @override
+  String get sleepEcgHint => 'ECG and movement with Polar H10';
+
+  @override
+  String get sleepEcgDescription =>
+      'Jednocześnie rejestruje EKG z częstotliwością 130 Hz i ruch w trzech osiach z częstotliwością 25 Hz. Załóż Polar H10 i trzymaj iPhone’a w zasięgu Bluetooth. Szacowanie faz snu jest opcjonalne i uruchamiane osobno; częstość oddechów ani wyniki medyczne nie są obliczane.';
+
+  @override
+  String get sleepEcgStart => 'Start overnight recording';
+
+  @override
+  String sleepEcgMotionSamples(int count) {
+    return 'Movement samples: $count';
+  }
+
+  @override
+  String get sleepEcgKeepOpenHint =>
+      'You can leave this screen while recording continues. Keep Fjelia open in the app switcher and your iPhone near the H10. Force quitting the app interrupts the recording.';
+
+  @override
+  String get sleepEcgRawNote =>
+      'Surowe dane z nocnego zapisu EKG i ruchu. Możesz osobno uruchomić eksperymentalne szacowanie faz snu. Częstość oddechów ani wyniki medyczne nie są obliczane.';
+
+  @override
+  String get sleepEcgExportRaw => 'Export raw ECG + movement CSVs';
+
+  @override
+  String get sleepEcgStagesTitle => 'Szacowane fazy snu';
+
+  @override
+  String get sleepEcgStagesButton => 'Oszacuj fazy snu';
+
+  @override
+  String get sleepEcgStagesAgain => 'Oszacuj ponownie';
+
+  @override
+  String get sleepEcgStagesDisclaimer =>
+      'Eksperymentalne oszacowanie na podstawie EKG Polar H10 przy użyciu modelu badawczego wykorzystującego wyłącznie EKG. N1 i N2 są łączone jako sen płytki. To nie jest badanie PSG ani pomiar medyczny.';
+
+  @override
+  String get sleepEcgStagesWorking => 'Szacowanie faz snu…';
+
+  @override
+  String get sleepEcgStagesFailed =>
+      'Nie udało się oszacować faz snu. Sprawdź, czy nagranie jest kompletne, i spróbuj ponownie.';
 }

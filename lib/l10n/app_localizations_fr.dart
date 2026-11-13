@@ -8662,4 +8662,53 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get plusOmronBleHint =>
       'Recherchez des tensiomètres Bluetooth standard et des profils Omron compatibles.';
+
+  @override
+  String get sleepEcgTitle => 'Record sleep';
+
+  @override
+  String get sleepEcgHint => 'ECG and movement with Polar H10';
+
+  @override
+  String get sleepEcgDescription =>
+      'Enregistre simultanément l’ECG à 130 Hz et les mouvements sur trois axes à 25 Hz. Portez le Polar H10 et gardez votre iPhone à portée Bluetooth. L’estimation des phases de sommeil est facultative et s’effectue séparément ; la fréquence respiratoire et les résultats médicaux ne sont pas calculés.';
+
+  @override
+  String get sleepEcgStart => 'Start overnight recording';
+
+  @override
+  String sleepEcgMotionSamples(int count) {
+    return 'Movement samples: $count';
+  }
+
+  @override
+  String get sleepEcgKeepOpenHint =>
+      'You can leave this screen while recording continues. Keep Fjelia open in the app switcher and your iPhone near the H10. Force quitting the app interrupts the recording.';
+
+  @override
+  String get sleepEcgRawNote =>
+      'Données brutes de l’ECG et des mouvements enregistrés pendant la nuit. Vous pouvez lancer séparément une estimation expérimentale des phases de sommeil. La fréquence respiratoire et les résultats médicaux ne sont pas calculés.';
+
+  @override
+  String get sleepEcgExportRaw => 'Export raw ECG + movement CSVs';
+
+  @override
+  String get sleepEcgStagesTitle => 'Phases de sommeil estimées';
+
+  @override
+  String get sleepEcgStagesButton => 'Estimer les phases de sommeil';
+
+  @override
+  String get sleepEcgStagesAgain => 'Estimer à nouveau';
+
+  @override
+  String get sleepEcgStagesDisclaimer =>
+      'Estimation expérimentale à partir de l’ECG Polar H10 avec un modèle de recherche utilisant uniquement l’ECG. N1 et N2 sont regroupés en sommeil léger. Ce n’est ni une polysomnographie ni une mesure médicale.';
+
+  @override
+  String get sleepEcgStagesWorking => 'Estimation des phases de sommeil…';
+
+  @override
+  String get sleepEcgStagesFailed =>
+      'Impossible d’estimer les phases de sommeil. Vérifiez que l’enregistrement est complet, puis réessayez.';
 }

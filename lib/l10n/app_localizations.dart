@@ -14903,6 +14903,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search for standard Bluetooth blood-pressure devices and supported Omron profiles.'**
   String get plusOmronBleHint;
+
+  /// No description provided for @sleepEcgTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Record sleep'**
+  String get sleepEcgTitle;
+
+  /// No description provided for @sleepEcgHint.
+  ///
+  /// In en, this message translates to:
+  /// **'ECG and movement with Polar H10'**
+  String get sleepEcgHint;
+
+  /// No description provided for @sleepEcgDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Records ECG at 130 Hz and three-axis movement at 25 Hz at the same time. Wear the Polar H10 and keep your iPhone within Bluetooth range. Sleep-stage estimation is optional and runs separately; breathing rate and medical findings are not calculated.'**
+  String get sleepEcgDescription;
+
+  /// No description provided for @sleepEcgStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start overnight recording'**
+  String get sleepEcgStart;
+
+  /// No description provided for @sleepEcgMotionSamples.
+  ///
+  /// In en, this message translates to:
+  /// **'Movement samples: {count}'**
+  String sleepEcgMotionSamples(int count);
+
+  /// No description provided for @sleepEcgKeepOpenHint.
+  ///
+  /// In en, this message translates to:
+  /// **'You can leave this screen while recording continues. Keep Fjelia open in the app switcher and your iPhone near the H10. Force quitting the app interrupts the recording.'**
+  String get sleepEcgKeepOpenHint;
+
+  /// No description provided for @sleepEcgRawNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Raw overnight ECG and movement data. You can run an experimental sleep-stage estimate separately. Breathing rate and medical findings are not calculated.'**
+  String get sleepEcgRawNote;
+
+  /// No description provided for @sleepEcgExportRaw.
+  ///
+  /// In en, this message translates to:
+  /// **'Export raw ECG + movement CSVs'**
+  String get sleepEcgExportRaw;
+
+  /// No description provided for @sleepEcgStagesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated sleep stages'**
+  String get sleepEcgStagesTitle;
+
+  /// No description provided for @sleepEcgStagesButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimate sleep stages'**
+  String get sleepEcgStagesButton;
+
+  /// No description provided for @sleepEcgStagesAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimate again'**
+  String get sleepEcgStagesAgain;
+
+  /// No description provided for @sleepEcgStagesDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Experimental estimate from Polar H10 ECG using an ECG-only research model. N1 and N2 are grouped as light sleep. This is not a PSG or medical measurement.'**
+  String get sleepEcgStagesDisclaimer;
+
+  /// No description provided for @sleepEcgStagesWorking.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimating sleep stages…'**
+  String get sleepEcgStagesWorking;
+
+  /// No description provided for @sleepEcgStagesFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep stages could not be estimated. Check that the recording is complete and try again.'**
+  String get sleepEcgStagesFailed;
 }
 
 class _AppLocalizationsDelegate

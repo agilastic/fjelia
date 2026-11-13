@@ -17,6 +17,7 @@ import '../../widgets/omron_ble_import_sheet.dart';
 import '../../widgets/polar_h10_hrv_sheet.dart';
 import '../../widgets/waist_sheet.dart';
 import '../../widgets/ecg_sheet.dart';
+import '../../widgets/sleep_ecg_recording_sheet.dart';
 import '../../widgets/manual_activity_sheet.dart';
 import '../../utils/decimal.dart';
 
@@ -369,6 +370,8 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
         showAppSheet(context, const ManualActivitySheet());
       case 'ECG':
         showAppSheet(context, const EcgSheet());
+      case 'Sleep ECG':
+        showAppSheet(context, const SleepEcgRecordingSheet());
       case 'Polar H10 HRV measurement':
         showAppSheet(context, const PolarH10HrvSheet());
       case 'Add Hilo BP report (PDF)':
@@ -417,6 +420,13 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
         l.plusGroupHeart,
         _heartColor,
         [
+          _Entry(
+            'Sleep ECG',
+            Icons.bedtime_rounded,
+            l.sleepEcgTitle,
+            l.sleepEcgHint,
+            badge: 'LIVE',
+          ),
           _Entry(
             'ECG',
             Icons.monitor_heart_rounded,

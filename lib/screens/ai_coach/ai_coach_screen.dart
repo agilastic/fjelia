@@ -71,6 +71,7 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
   /// follow-up questions keep its analysis in the context.
   String? _ecgId;
   bool _ecgWarned = false;
+  bool _saveInitialEcgSummary = false;
 
   /// The coach was told several ECGs fit and asked which one is meant.
   bool _ecgChoosing = false;
@@ -81,6 +82,8 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
   @override
   void initState() {
     super.initState();
+    _saveInitialEcgSummary =
+        widget.autoSend && widget.contextCard?.ecgRecordingId != null;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       final p = widget.initialPrompt ?? ref.read(pendingCoachPromptProvider);
@@ -202,6 +205,15 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
           );
       if (mounted) {
         setState(() => messages.add(ChatMessage(text: reply, isUser: false)));
+      }
+      final recordingId = widget.contextCard?.ecgRecordingId;
+      if (_saveInitialEcgSummary && recordingId != null && ecgClinicalMode) {
+        _saveInitialEcgSummary = false;
+        try {
+          await ref.read(ecgStorageProvider).updateNote(recordingId, reply);
+        } catch (e) {
+          log('[AiCoach] could not save Pro ECG summary: $e');
+        }
       }
     } catch (e) {
       log('[AiCoach] send failed: $e');

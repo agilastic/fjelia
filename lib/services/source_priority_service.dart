@@ -14,6 +14,7 @@ const defaultSourcePriorities = <String, List<String>>{
     'coros',
     'polar',
     'suunto',
+    'fjelia_ecg',
   ],
   'activity': [
     'garmin_api',

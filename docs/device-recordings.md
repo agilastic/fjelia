@@ -16,6 +16,14 @@ required before calling either issue complete.
 - **+ → ECG**, or **Health → ECG**: choose a Polar H10, start/stop a recording,
   review its waveform, import a file, export or delete a recording, and link it
   to an existing workout. Existing H10 pairing is reused.
+- **+ → Heart & circulation → Record sleep** starts an overnight Polar H10
+  capture with ECG (130 Hz) and three-axis accelerometer data (25 Hz) in the
+  same BLE connection. The stream is stored locally and included in backups.
+  It does not automatically calculate sleep stages or breathing rate. Its
+  detail view can export paired ECG and ACC CSVs for local analysis and ask the
+  AI coach about the ECG after the existing one-time warning. Sample timestamps
+  use the H10 device clock and are not assumed to be synchronized with UTC.
+  Force-quitting the app interrupts capture.
 - **+ → Indoor Training**, or an eligible indoor calendar workout: pair FTMS
   equipment, optionally select a standard BLE heart-rate sensor, record,
   pause/resume, and save. Settings → Connections remembers the equipment.
@@ -121,6 +129,13 @@ time_seconds,ecg_uv,device_frame_end_ns,frame_sample_index
 0.007692308,456,599616023171427290,1
 ```
 
+Sleep captures store accelerometer frames alongside ECG batches in
+`ecg_sample_chunks`, tagged with `stream: acc`, and identify the capture purpose
+and accelerometer sample rate in recording metadata. ECG readers filter out
+those tagged rows, preserving existing ECG analysis and CSV behavior. ACC raw
+frames currently support the H10's uncompressed three-axis format; compressed
+or unexpected frames interrupt the capture rather than being guessed.
+
 The final two columns preserve Polar frame identity; they are empty where no
 device timestamp is available. Re-importing the same original file is
 deduplicated by SHA-256. The original file is retained separately.
@@ -129,13 +144,22 @@ Garmin and Apple Watch **PDF reports** can be imported and shared in their
 original format. They are not treated as raw waveforms, and no raw Garmin
 Connect endpoint is assumed. There is no direct Apple Health ECG reader in
 this change. Signal gaps and sample coverage describe completeness; ECG beat
-detection, ECG-derived HR/HRV, rhythm classification and diagnostic analysis
-are not enabled. Existing HRV and recovery summaries are not overwritten.
+detection, estimated HR/HRV and signal-quality checks are available for
+waveform recordings. Rhythm or interval interpretation is only available when
+the optional FjeliaPro clinical module is enabled; it is not inferred from a
+report-only record. Existing HRV and recovery summaries are not overwritten.
 
 Raw ECG stays in the app-private database, using the same OS storage protection
 as Fjelia's other health data. This change does not introduce an additional
-application-level database-encryption layer. Waveforms are excluded from coach
-context and logs. Explicit exports and full backups contain sensitive data.
+application-level database-encryption layer. A waveform is analyzed and added
+to coach context only after the athlete explicitly opens the ECG coach action
+and confirms the one-time warning. Report-only records can also be discussed;
+on Pro builds, selectable PDF text is included for the coach to explain the
+report's stated findings and distinguish them from an independent waveform
+analysis. If text extraction is unavailable, the coach is told that. The first
+Pro overview reply opened from an ECG detail is saved in that recording's note
+field. Raw samples are not written to logs. Explicit exports and full backups
+contain sensitive data.
 
 ## FTMS implementation
 

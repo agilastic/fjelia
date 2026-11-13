@@ -161,6 +161,46 @@ class EcgAnalysis {
   }
 }
 
+/// Beat-level ECG amplitude samples used for exploratory ECG-derived
+/// respiration (EDR) visualization. These are signal features, not breaths.
+class EcgRespirationAmplitude {
+  const EcgRespirationAmplitude(this.seconds, this.microvolts);
+  final double seconds;
+  final double microvolts;
+}
+
+/// Derive a beat-amplitude modulation trace from cleanly timestamped ECG
+/// segments. Respiratory motion can modulate single-lead ECG amplitude, but
+/// electrode contact and posture do too; callers must not present this as
+/// measured airflow or use it alone to diagnose respiratory events.
+List<EcgRespirationAmplitude> deriveEcgRespirationAmplitude(
+  List<EcgChunk> chunks,
+  double hz,
+) {
+  if (!hz.isFinite || hz < 20 || hz > 4000) return const [];
+  final out = <EcgRespirationAmplitude>[];
+  for (final segment in _segments(chunks, hz)) {
+    if (segment.raw.length < hz * 5) continue;
+    final baseline = _movingMedian(
+      _movingMedian(segment.raw, (0.2 * hz).round(), hz),
+      (0.6 * hz).round(),
+      hz,
+    );
+    final detectionSignal = [
+      for (var i = 0; i < segment.raw.length; i++) segment.raw[i] - baseline[i],
+    ];
+    final peaks = _detectR(detectionSignal, hz);
+    if (peaks.length < 4) continue;
+    final isoelectric = _isoelectric(segment.raw, peaks, hz);
+    for (final peak in peaks) {
+      final amplitude = (segment.raw[peak] - isoelectric[peak]).abs();
+      if (!amplitude.isFinite || amplitude <= 0) continue;
+      out.add(EcgRespirationAmplitude(segment.start + peak / hz, amplitude));
+    }
+  }
+  return out;
+}
+
 class EcgBlock {
   const EcgBlock({
     required this.startSeconds,

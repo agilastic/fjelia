@@ -4027,5 +4027,19 @@
   "activityNote": "Notiz",
   "activityNoteAdd": "Notiz für den Coach hinzufügen",
   "plusOmronBle": "BLE-Blutdruckgeräte suchen",
-  "plusOmronBleHint": "Suche nach Bluetooth-Blutdruckgeräten mit Standarddienst und unterstützten Omron-Profilen."
+  "plusOmronBleHint": "Suche nach Bluetooth-Blutdruckgeräten mit Standarddienst und unterstützten Omron-Profilen.",
+  "sleepEcgTitle": "Schlaf aufzeichnen",
+  "sleepEcgHint": "EKG und Bewegung mit Polar H10",
+  "sleepEcgDescription": "Zeichnet gleichzeitig EKG mit 130 Hz und dreiachsige Bewegung mit 25 Hz auf. Trage den Polar H10 und halte dein iPhone in Bluetooth-Reichweite. Die Schlafphasenschätzung ist optional und wird separat gestartet; Atemfrequenz und medizinische Befunde werden nicht berechnet.",
+  "sleepEcgStart": "Nachtaufzeichnung starten",
+  "sleepEcgMotionSamples": "Bewegungsmesswerte: {count}",
+  "sleepEcgKeepOpenHint": "Du kannst diese Ansicht verlassen; die Aufzeichnung läuft weiter. Lass Fjelia im App-Umschalter geöffnet und das iPhone in der Nähe des H10. Wenn du die App vollständig beendest, wird die Aufzeichnung unterbrochen.",
+  "sleepEcgRawNote": "Rohdaten der nächtlichen EKG- und Bewegungsaufzeichnung. Eine experimentelle Schlafphasenschätzung kann separat gestartet werden. Atemfrequenz und medizinische Befunde werden nicht berechnet.",
+  "sleepEcgExportRaw": "Rohdaten: EKG + Bewegung exportieren",
+  "sleepEcgStagesTitle": "Geschätzte Schlafphasen",
+  "sleepEcgStagesButton": "Schlafphasen schätzen",
+  "sleepEcgStagesAgain": "Neu schätzen",
+  "sleepEcgStagesDisclaimer": "Experimentelle Schätzung aus dem Polar-H10-EKG. 30-Sekunden-Modellwerte werden für die Übersicht zu 5-Minuten-Abschnitten zusammengefasst. N1 und N2 gelten als Leichtschlaf. Keine PSG- oder medizinische Messung.",
+  "sleepEcgStagesWorking": "Schlafphasen werden geschätzt …",
+  "sleepEcgStagesFailed": "Schlafphasen konnten nicht geschätzt werden. Prüfe, ob die Aufzeichnung vollständig ist, und versuche es erneut."
 }

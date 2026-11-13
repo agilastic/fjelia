@@ -4027,5 +4027,19 @@
   "activityNote": "Note",
   "activityNoteAdd": "Ajouter une note pour le coach",
   "plusOmronBle": "Rechercher des tensiomètres BLE",
-  "plusOmronBleHint": "Recherchez des tensiomètres Bluetooth standard et des profils Omron compatibles."
+  "plusOmronBleHint": "Recherchez des tensiomètres Bluetooth standard et des profils Omron compatibles.",
+  "sleepEcgTitle": "Record sleep",
+  "sleepEcgHint": "ECG and movement with Polar H10",
+  "sleepEcgDescription": "Enregistre simultanément l’ECG à 130 Hz et les mouvements sur trois axes à 25 Hz. Portez le Polar H10 et gardez votre iPhone à portée Bluetooth. L’estimation des phases de sommeil est facultative et s’effectue séparément ; la fréquence respiratoire et les résultats médicaux ne sont pas calculés.",
+  "sleepEcgStart": "Start overnight recording",
+  "sleepEcgMotionSamples": "Movement samples: {count}",
+  "sleepEcgKeepOpenHint": "You can leave this screen while recording continues. Keep Fjelia open in the app switcher and your iPhone near the H10. Force quitting the app interrupts the recording.",
+  "sleepEcgRawNote": "Données brutes de l’ECG et des mouvements enregistrés pendant la nuit. Vous pouvez lancer séparément une estimation expérimentale des phases de sommeil. La fréquence respiratoire et les résultats médicaux ne sont pas calculés.",
+  "sleepEcgExportRaw": "Export raw ECG + movement CSVs",
+  "sleepEcgStagesTitle": "Phases de sommeil estimées",
+  "sleepEcgStagesButton": "Estimer les phases de sommeil",
+  "sleepEcgStagesAgain": "Estimer à nouveau",
+  "sleepEcgStagesDisclaimer": "Estimation expérimentale à partir de l’ECG Polar H10 avec un modèle de recherche utilisant uniquement l’ECG. N1 et N2 sont regroupés en sommeil léger. Ce n’est ni une polysomnographie ni une mesure médicale.",
+  "sleepEcgStagesWorking": "Estimation des phases de sommeil…",
+  "sleepEcgStagesFailed": "Impossible d’estimer les phases de sommeil. Vérifiez que l’enregistrement est complet, puis réessayez."
 }

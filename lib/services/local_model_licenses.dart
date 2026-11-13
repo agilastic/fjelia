@@ -12,5 +12,8 @@ void registerLocalModelLicenses() {
     yield LicenseEntryWithLineBreaks([
       'Qwen3.5',
     ], await rootBundle.loadString('assets/licenses/qwen35.txt'));
+    yield LicenseEntryWithLineBreaks([
+      'ECG sleep-staging model',
+    ], await rootBundle.loadString('assets/licenses/ecg-sleep-staging.txt'));
   });
 }

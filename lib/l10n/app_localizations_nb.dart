@@ -8585,4 +8585,53 @@ class AppLocalizationsNb extends AppLocalizations {
   @override
   String get plusOmronBleHint =>
       'Søk etter standard Bluetooth-blodtrykksmålere og støttede Omron-profiler.';
+
+  @override
+  String get sleepEcgTitle => 'Record sleep';
+
+  @override
+  String get sleepEcgHint => 'ECG and movement with Polar H10';
+
+  @override
+  String get sleepEcgDescription =>
+      'Registrerer samtidig EKG ved 130 Hz og bevegelse i tre akser ved 25 Hz. Bruk Polar H10 og hold iPhone innenfor Bluetooth-rekkevidde. Beregning av søvnfaser er valgfri og kjøres separat; pustefrekvens og medisinske funn beregnes ikke.';
+
+  @override
+  String get sleepEcgStart => 'Start overnight recording';
+
+  @override
+  String sleepEcgMotionSamples(int count) {
+    return 'Movement samples: $count';
+  }
+
+  @override
+  String get sleepEcgKeepOpenHint =>
+      'You can leave this screen while recording continues. Keep Fjelia open in the app switcher and your iPhone near the H10. Force quitting the app interrupts the recording.';
+
+  @override
+  String get sleepEcgRawNote =>
+      'Rådata fra nattens EKG- og bevegelsesopptak. Du kan starte et eksperimentelt estimat av søvnfaser separat. Pustefrekvens og medisinske funn beregnes ikke.';
+
+  @override
+  String get sleepEcgExportRaw => 'Export raw ECG + movement CSVs';
+
+  @override
+  String get sleepEcgStagesTitle => 'Estimerte søvnfaser';
+
+  @override
+  String get sleepEcgStagesButton => 'Beregn søvnfaser';
+
+  @override
+  String get sleepEcgStagesAgain => 'Beregn på nytt';
+
+  @override
+  String get sleepEcgStagesDisclaimer =>
+      'Eksperimentelt estimat fra Polar H10-EKG med en forskningsmodell som bare bruker EKG. N1 og N2 grupperes som lett søvn. Dette er ikke en PSG- eller medisinsk måling.';
+
+  @override
+  String get sleepEcgStagesWorking => 'Beregner søvnfaser…';
+
+  @override
+  String get sleepEcgStagesFailed =>
+      'Kunne ikke beregne søvnfasene. Kontroller at opptaket er fullført, og prøv igjen.';
 }

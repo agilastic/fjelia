@@ -85,6 +85,7 @@ dependencies:
   video_player: ^2.8.0
   in_app_purchase: ^3.3.1
   in_app_purchase_storekit: ^0.4.17
+  flutter_onnxruntime: ^1.9.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -119,6 +120,7 @@ flutter:
     - assets/splash/
     - assets/licenses/
     - assets/branding/app-icon-original.png
+    - assets/models/ecg_sleep_staging.onnx
 
   # To add assets to your application, add an assets section, like this:
   # assets:

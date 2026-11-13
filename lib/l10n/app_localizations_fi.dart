@@ -8616,4 +8616,53 @@ class AppLocalizationsFi extends AppLocalizations {
   @override
   String get plusOmronBleHint =>
       'Etsi tavallisia Bluetooth-verenpainemittareita ja tuettuja Omron-profiileja.';
+
+  @override
+  String get sleepEcgTitle => 'Record sleep';
+
+  @override
+  String get sleepEcgHint => 'ECG and movement with Polar H10';
+
+  @override
+  String get sleepEcgDescription =>
+      'Tallentaa samanaikaisesti EKG:tä 130 Hz:n ja kolmiakselista liikettä 25 Hz:n taajuudella. Käytä Polar H10:tä ja pidä iPhone Bluetooth-kantaman sisällä. Univaiheiden arviointi on valinnainen ja tehdään erikseen; hengitystiheyttä tai lääketieteellisiä löydöksiä ei lasketa.';
+
+  @override
+  String get sleepEcgStart => 'Start overnight recording';
+
+  @override
+  String sleepEcgMotionSamples(int count) {
+    return 'Movement samples: $count';
+  }
+
+  @override
+  String get sleepEcgKeepOpenHint =>
+      'You can leave this screen while recording continues. Keep Fjelia open in the app switcher and your iPhone near the H10. Force quitting the app interrupts the recording.';
+
+  @override
+  String get sleepEcgRawNote =>
+      'Yön EKG- ja liiketallenteen raakadata. Voit käynnistää kokeellisen univaihearvion erikseen. Hengitystiheyttä tai lääketieteellisiä löydöksiä ei lasketa.';
+
+  @override
+  String get sleepEcgExportRaw => 'Export raw ECG + movement CSVs';
+
+  @override
+  String get sleepEcgStagesTitle => 'Arvioidut univaiheet';
+
+  @override
+  String get sleepEcgStagesButton => 'Arvioi univaiheet';
+
+  @override
+  String get sleepEcgStagesAgain => 'Arvioi uudelleen';
+
+  @override
+  String get sleepEcgStagesDisclaimer =>
+      'Kokeellinen arvio Polar H10:n EKG:stä vain EKG:tä käyttävällä tutkimusmallilla. N1 ja N2 yhdistetään kevyeksi uneksi. Tämä ei ole PSG- eikä lääketieteellinen mittaus.';
+
+  @override
+  String get sleepEcgStagesWorking => 'Arvioidaan univaiheita…';
+
+  @override
+  String get sleepEcgStagesFailed =>
+      'Univaiheita ei voitu arvioida. Tarkista, että tallennus on valmis, ja yritä uudelleen.';
 }

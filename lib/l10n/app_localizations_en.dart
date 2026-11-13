@@ -8590,4 +8590,53 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get plusOmronBleHint =>
       'Search for standard Bluetooth blood-pressure devices and supported Omron profiles.';
+
+  @override
+  String get sleepEcgTitle => 'Record sleep';
+
+  @override
+  String get sleepEcgHint => 'ECG and movement with Polar H10';
+
+  @override
+  String get sleepEcgDescription =>
+      'Records ECG at 130 Hz and three-axis movement at 25 Hz at the same time. Wear the Polar H10 and keep your iPhone within Bluetooth range. Sleep-stage estimation is optional and runs separately; breathing rate and medical findings are not calculated.';
+
+  @override
+  String get sleepEcgStart => 'Start overnight recording';
+
+  @override
+  String sleepEcgMotionSamples(int count) {
+    return 'Movement samples: $count';
+  }
+
+  @override
+  String get sleepEcgKeepOpenHint =>
+      'You can leave this screen while recording continues. Keep Fjelia open in the app switcher and your iPhone near the H10. Force quitting the app interrupts the recording.';
+
+  @override
+  String get sleepEcgRawNote =>
+      'Raw overnight ECG and movement data. You can run an experimental sleep-stage estimate separately. Breathing rate and medical findings are not calculated.';
+
+  @override
+  String get sleepEcgExportRaw => 'Export raw ECG + movement CSVs';
+
+  @override
+  String get sleepEcgStagesTitle => 'Estimated sleep stages';
+
+  @override
+  String get sleepEcgStagesButton => 'Estimate sleep stages';
+
+  @override
+  String get sleepEcgStagesAgain => 'Estimate again';
+
+  @override
+  String get sleepEcgStagesDisclaimer =>
+      'Experimental estimate from Polar H10 ECG using an ECG-only research model. N1 and N2 are grouped as light sleep. This is not a PSG or medical measurement.';
+
+  @override
+  String get sleepEcgStagesWorking => 'Estimating sleep stages…';
+
+  @override
+  String get sleepEcgStagesFailed =>
+      'Sleep stages could not be estimated. Check that the recording is complete and try again.';
 }

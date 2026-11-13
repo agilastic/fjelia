@@ -8642,4 +8642,53 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get plusOmronBleHint =>
       'Busca tensiómetros Bluetooth estándar y perfiles Omron compatibles.';
+
+  @override
+  String get sleepEcgTitle => 'Record sleep';
+
+  @override
+  String get sleepEcgHint => 'ECG and movement with Polar H10';
+
+  @override
+  String get sleepEcgDescription =>
+      'Registra simultáneamente el ECG a 130 Hz y el movimiento en tres ejes a 25 Hz. Lleva el Polar H10 y mantén el iPhone dentro del alcance del Bluetooth. La estimación de las fases del sueño es opcional y se ejecuta por separado; no se calcula la frecuencia respiratoria ni se generan hallazgos médicos.';
+
+  @override
+  String get sleepEcgStart => 'Start overnight recording';
+
+  @override
+  String sleepEcgMotionSamples(int count) {
+    return 'Movement samples: $count';
+  }
+
+  @override
+  String get sleepEcgKeepOpenHint =>
+      'You can leave this screen while recording continues. Keep Fjelia open in the app switcher and your iPhone near the H10. Force quitting the app interrupts the recording.';
+
+  @override
+  String get sleepEcgRawNote =>
+      'Datos brutos del ECG y el movimiento registrados durante la noche. Puedes iniciar por separado una estimación experimental de las fases del sueño. No se calcula la frecuencia respiratoria ni se generan hallazgos médicos.';
+
+  @override
+  String get sleepEcgExportRaw => 'Export raw ECG + movement CSVs';
+
+  @override
+  String get sleepEcgStagesTitle => 'Fases del sueño estimadas';
+
+  @override
+  String get sleepEcgStagesButton => 'Estimar fases del sueño';
+
+  @override
+  String get sleepEcgStagesAgain => 'Volver a estimar';
+
+  @override
+  String get sleepEcgStagesDisclaimer =>
+      'Estimación experimental a partir del ECG del Polar H10 con un modelo de investigación que solo usa ECG. N1 y N2 se agrupan como sueño ligero. No es una polisomnografía ni una medición médica.';
+
+  @override
+  String get sleepEcgStagesWorking => 'Estimando las fases del sueño…';
+
+  @override
+  String get sleepEcgStagesFailed =>
+      'No se pudieron estimar las fases del sueño. Comprueba que la grabación esté completa e inténtalo de nuevo.';
 }

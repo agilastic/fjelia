@@ -5190,5 +5190,19 @@
   "activityNote": "Note",
   "activityNoteAdd": "Add a note for the coach",
   "plusOmronBle": "BLE-bloeddrukmeters zoeken",
-  "plusOmronBleHint": "Zoek naar standaard Bluetooth-bloeddrukmeters en ondersteunde Omron-profielen."
+  "plusOmronBleHint": "Zoek naar standaard Bluetooth-bloeddrukmeters en ondersteunde Omron-profielen.",
+  "sleepEcgTitle": "Record sleep",
+  "sleepEcgHint": "ECG and movement with Polar H10",
+  "sleepEcgDescription": "Neemt tegelijkertijd ECG op met 130 Hz en beweging over drie assen met 25 Hz. Draag de Polar H10 en houd je iPhone binnen Bluetooth-bereik. Een schatting van slaapfasen is optioneel en wordt apart uitgevoerd; ademhalingsfrequentie en medische bevindingen worden niet berekend.",
+  "sleepEcgStart": "Start overnight recording",
+  "sleepEcgMotionSamples": "Movement samples: {count}",
+  "sleepEcgKeepOpenHint": "You can leave this screen while recording continues. Keep Fjelia open in the app switcher and your iPhone near the H10. Force quitting the app interrupts the recording.",
+  "sleepEcgRawNote": "Ruwe gegevens van de nachtelijke ECG- en bewegingsopname. Je kunt apart een experimentele schatting van slaapfasen starten. Ademhalingsfrequentie en medische bevindingen worden niet berekend.",
+  "sleepEcgExportRaw": "Export raw ECG + movement CSVs",
+  "sleepEcgStagesTitle": "Geschatte slaapfasen",
+  "sleepEcgStagesButton": "Slaapfasen schatten",
+  "sleepEcgStagesAgain": "Opnieuw schatten",
+  "sleepEcgStagesDisclaimer": "Experimentele schatting op basis van Polar H10-ECG met een onderzoeksmodel dat alleen ECG gebruikt. N1 en N2 worden samengevoegd tot lichte slaap. Dit is geen PSG- of medische meting.",
+  "sleepEcgStagesWorking": "Slaapfasen schatten…",
+  "sleepEcgStagesFailed": "Slaapfasen konden niet worden geschat. Controleer of de opname compleet is en probeer het opnieuw."
 }

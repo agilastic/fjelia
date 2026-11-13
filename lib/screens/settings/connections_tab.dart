@@ -195,6 +195,7 @@ class ConnectionsTab extends ConsumerWidget {
                                       'hilo_ble': context.l10n.hiloBle,
                                       'garmin_api': context.l10n.garminApi,
                                       'renpho': context.l10n.renphoScale,
+                                      'fjelia_ecg': 'Fjelia · H10',
                                     }[source] ??
                                     source,
                               ),

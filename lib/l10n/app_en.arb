@@ -5190,5 +5190,26 @@
   "activityNote": "Note",
   "activityNoteAdd": "Add a note for the coach",
   "plusOmronBle": "Find BLE blood-pressure monitors",
-  "plusOmronBleHint": "Search for standard Bluetooth blood-pressure devices and supported Omron profiles."
+  "plusOmronBleHint": "Search for standard Bluetooth blood-pressure devices and supported Omron profiles.",
+  "sleepEcgTitle": "Record sleep",
+  "sleepEcgHint": "ECG and movement with Polar H10",
+  "sleepEcgDescription": "Records ECG at 130 Hz and three-axis movement at 25 Hz at the same time. Wear the Polar H10 and keep your iPhone within Bluetooth range. Sleep-stage estimation is optional and runs separately; breathing rate and medical findings are not calculated.",
+  "sleepEcgStart": "Start overnight recording",
+  "sleepEcgMotionSamples": "Movement samples: {count}",
+  "sleepEcgKeepOpenHint": "You can leave this screen while recording continues. Keep Fjelia open in the app switcher and your iPhone near the H10. Force quitting the app interrupts the recording.",
+  "@sleepEcgMotionSamples": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sleepEcgRawNote": "Raw overnight ECG and movement data. You can run an experimental sleep-stage estimate separately. Breathing rate and medical findings are not calculated.",
+  "sleepEcgExportRaw": "Export raw ECG + movement CSVs",
+  "sleepEcgStagesTitle": "Estimated sleep stages",
+  "sleepEcgStagesButton": "Estimate sleep stages",
+  "sleepEcgStagesAgain": "Estimate again",
+  "sleepEcgStagesDisclaimer": "Experimental estimate from Polar H10 ECG. The model's 30-second outputs are grouped into five-minute blocks for the overview. N1 and N2 are grouped as light sleep. This is not a PSG or medical measurement.",
+  "sleepEcgStagesWorking": "Estimating sleep stages…",
+  "sleepEcgStagesFailed": "Sleep stages could not be estimated. Check that the recording is complete and try again."
 }

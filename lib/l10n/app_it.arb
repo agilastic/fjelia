@@ -4027,5 +4027,19 @@
   "activityNote": "Nota",
   "activityNoteAdd": "Aggiungi una nota per il coach",
   "plusOmronBle": "Cerca misuratori di pressione BLE",
-  "plusOmronBleHint": "Cerca dispositivi Bluetooth standard per la pressione e profili Omron supportati."
+  "plusOmronBleHint": "Cerca dispositivi Bluetooth standard per la pressione e profili Omron supportati.",
+  "sleepEcgTitle": "Record sleep",
+  "sleepEcgHint": "ECG and movement with Polar H10",
+  "sleepEcgDescription": "Registra contemporaneamente l’ECG a 130 Hz e il movimento a tre assi a 25 Hz. Indossa Polar H10 e tieni l’iPhone entro la portata Bluetooth. La stima delle fasi del sonno è facoltativa e viene avviata separatamente; non vengono calcolati la frequenza respiratoria o dati medici.",
+  "sleepEcgStart": "Start overnight recording",
+  "sleepEcgMotionSamples": "Movement samples: {count}",
+  "sleepEcgKeepOpenHint": "You can leave this screen while recording continues. Keep Fjelia open in the app switcher and your iPhone near the H10. Force quitting the app interrupts the recording.",
+  "sleepEcgRawNote": "Dati grezzi dell’ECG e del movimento registrati durante la notte. Puoi avviare separatamente una stima sperimentale delle fasi del sonno. Non vengono calcolati la frequenza respiratoria o dati medici.",
+  "sleepEcgExportRaw": "Export raw ECG + movement CSVs",
+  "sleepEcgStagesTitle": "Fasi del sonno stimate",
+  "sleepEcgStagesButton": "Stima le fasi del sonno",
+  "sleepEcgStagesAgain": "Stima di nuovo",
+  "sleepEcgStagesDisclaimer": "Stima sperimentale dall’ECG Polar H10 con un modello di ricerca basato solo sull’ECG. N1 e N2 sono raggruppati come sonno leggero. Non è una polisonnografia né una misurazione medica.",
+  "sleepEcgStagesWorking": "Stima delle fasi del sonno…",
+  "sleepEcgStagesFailed": "Impossibile stimare le fasi del sonno. Verifica che la registrazione sia completa e riprova."
 }

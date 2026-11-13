@@ -4027,5 +4027,19 @@
   "activityNote": "Nota",
   "activityNoteAdd": "Añade una nota para el coach",
   "plusOmronBle": "Buscar tensiómetros BLE",
-  "plusOmronBleHint": "Busca tensiómetros Bluetooth estándar y perfiles Omron compatibles."
+  "plusOmronBleHint": "Busca tensiómetros Bluetooth estándar y perfiles Omron compatibles.",
+  "sleepEcgTitle": "Record sleep",
+  "sleepEcgHint": "ECG and movement with Polar H10",
+  "sleepEcgDescription": "Registra simultáneamente el ECG a 130 Hz y el movimiento en tres ejes a 25 Hz. Lleva el Polar H10 y mantén el iPhone dentro del alcance del Bluetooth. La estimación de las fases del sueño es opcional y se ejecuta por separado; no se calcula la frecuencia respiratoria ni se generan hallazgos médicos.",
+  "sleepEcgStart": "Start overnight recording",
+  "sleepEcgMotionSamples": "Movement samples: {count}",
+  "sleepEcgKeepOpenHint": "You can leave this screen while recording continues. Keep Fjelia open in the app switcher and your iPhone near the H10. Force quitting the app interrupts the recording.",
+  "sleepEcgRawNote": "Datos brutos del ECG y el movimiento registrados durante la noche. Puedes iniciar por separado una estimación experimental de las fases del sueño. No se calcula la frecuencia respiratoria ni se generan hallazgos médicos.",
+  "sleepEcgExportRaw": "Export raw ECG + movement CSVs",
+  "sleepEcgStagesTitle": "Fases del sueño estimadas",
+  "sleepEcgStagesButton": "Estimar fases del sueño",
+  "sleepEcgStagesAgain": "Volver a estimar",
+  "sleepEcgStagesDisclaimer": "Estimación experimental a partir del ECG del Polar H10 con un modelo de investigación que solo usa ECG. N1 y N2 se agrupan como sueño ligero. No es una polisomnografía ni una medición médica.",
+  "sleepEcgStagesWorking": "Estimando las fases del sueño…",
+  "sleepEcgStagesFailed": "No se pudieron estimar las fases del sueño. Comprueba que la grabación esté completa e inténtalo de nuevo."
 }
