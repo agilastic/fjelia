@@ -9007,4 +9007,20 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get metricBaseline7 => 'BASE 7 D';
+
+  @override
+  String get sportVirtualRide => 'Ciclismo virtual';
+
+  @override
+  String get sportVirtualRun => 'Carrera virtual';
+
+  @override
+  String get sportMountainBike => 'Bicicleta de montaña';
+
+  @override
+  String get activitySportKept =>
+      'Solo cambia en Fjelia y se mantiene cuando la actividad se vuelve a sincronizar. La carga, las zonas y las estadísticas usan el nuevo deporte.';
+
+  @override
+  String get useOriginalSport => 'Usar el deporte original';
 }

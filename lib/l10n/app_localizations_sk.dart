@@ -8986,4 +8986,20 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get metricBaseline7 => 'ZÁKLAD 7 D';
+
+  @override
+  String get sportVirtualRide => 'Virtuálna jazda';
+
+  @override
+  String get sportVirtualRun => 'Virtuálny beh';
+
+  @override
+  String get sportMountainBike => 'Horský bicykel';
+
+  @override
+  String get activitySportKept =>
+      'Mení sa len vo Fjelii a zostane aj po ďalšej synchronizácii. Záťaž, zóny a štatistiky počítajú s novým športom.';
+
+  @override
+  String get useOriginalSport => 'Použiť pôvodný šport';
 }

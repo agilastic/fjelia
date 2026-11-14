@@ -15090,6 +15090,331 @@ class ActivityTitlesCompanion extends UpdateCompanion<ActivityTitle> {
   }
 }
 
+class $ActivitySportsTable extends ActivitySports
+    with TableInfo<$ActivitySportsTable, ActivitySport> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ActivitySportsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _activityIdMeta = const VerificationMeta(
+    'activityId',
+  );
+  @override
+  late final GeneratedColumn<String> activityId = GeneratedColumn<String>(
+    'activity_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+    'type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _originalTypeMeta = const VerificationMeta(
+    'originalType',
+  );
+  @override
+  late final GeneratedColumn<String> originalType = GeneratedColumn<String>(
+    'original_type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _editedAtMeta = const VerificationMeta(
+    'editedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> editedAt = GeneratedColumn<DateTime>(
+    'edited_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    activityId,
+    type,
+    originalType,
+    editedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'activity_sports';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ActivitySport> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('activity_id')) {
+      context.handle(
+        _activityIdMeta,
+        activityId.isAcceptableOrUnknown(data['activity_id']!, _activityIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_activityIdMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+        _typeMeta,
+        type.isAcceptableOrUnknown(data['type']!, _typeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('original_type')) {
+      context.handle(
+        _originalTypeMeta,
+        originalType.isAcceptableOrUnknown(
+          data['original_type']!,
+          _originalTypeMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_originalTypeMeta);
+    }
+    if (data.containsKey('edited_at')) {
+      context.handle(
+        _editedAtMeta,
+        editedAt.isAcceptableOrUnknown(data['edited_at']!, _editedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_editedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {activityId};
+  @override
+  ActivitySport map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ActivitySport(
+      activityId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}activity_id'],
+      )!,
+      type: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}type'],
+      )!,
+      originalType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}original_type'],
+      )!,
+      editedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}edited_at'],
+      )!,
+    );
+  }
+
+  @override
+  $ActivitySportsTable createAlias(String alias) {
+    return $ActivitySportsTable(attachedDatabase, alias);
+  }
+}
+
+class ActivitySport extends DataClass implements Insertable<ActivitySport> {
+  final String activityId;
+  final String type;
+  final String originalType;
+  final DateTime editedAt;
+  const ActivitySport({
+    required this.activityId,
+    required this.type,
+    required this.originalType,
+    required this.editedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['activity_id'] = Variable<String>(activityId);
+    map['type'] = Variable<String>(type);
+    map['original_type'] = Variable<String>(originalType);
+    map['edited_at'] = Variable<DateTime>(editedAt);
+    return map;
+  }
+
+  ActivitySportsCompanion toCompanion(bool nullToAbsent) {
+    return ActivitySportsCompanion(
+      activityId: Value(activityId),
+      type: Value(type),
+      originalType: Value(originalType),
+      editedAt: Value(editedAt),
+    );
+  }
+
+  factory ActivitySport.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ActivitySport(
+      activityId: serializer.fromJson<String>(json['activityId']),
+      type: serializer.fromJson<String>(json['type']),
+      originalType: serializer.fromJson<String>(json['originalType']),
+      editedAt: serializer.fromJson<DateTime>(json['editedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'activityId': serializer.toJson<String>(activityId),
+      'type': serializer.toJson<String>(type),
+      'originalType': serializer.toJson<String>(originalType),
+      'editedAt': serializer.toJson<DateTime>(editedAt),
+    };
+  }
+
+  ActivitySport copyWith({
+    String? activityId,
+    String? type,
+    String? originalType,
+    DateTime? editedAt,
+  }) => ActivitySport(
+    activityId: activityId ?? this.activityId,
+    type: type ?? this.type,
+    originalType: originalType ?? this.originalType,
+    editedAt: editedAt ?? this.editedAt,
+  );
+  ActivitySport copyWithCompanion(ActivitySportsCompanion data) {
+    return ActivitySport(
+      activityId: data.activityId.present
+          ? data.activityId.value
+          : this.activityId,
+      type: data.type.present ? data.type.value : this.type,
+      originalType: data.originalType.present
+          ? data.originalType.value
+          : this.originalType,
+      editedAt: data.editedAt.present ? data.editedAt.value : this.editedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ActivitySport(')
+          ..write('activityId: $activityId, ')
+          ..write('type: $type, ')
+          ..write('originalType: $originalType, ')
+          ..write('editedAt: $editedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(activityId, type, originalType, editedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ActivitySport &&
+          other.activityId == this.activityId &&
+          other.type == this.type &&
+          other.originalType == this.originalType &&
+          other.editedAt == this.editedAt);
+}
+
+class ActivitySportsCompanion extends UpdateCompanion<ActivitySport> {
+  final Value<String> activityId;
+  final Value<String> type;
+  final Value<String> originalType;
+  final Value<DateTime> editedAt;
+  final Value<int> rowid;
+  const ActivitySportsCompanion({
+    this.activityId = const Value.absent(),
+    this.type = const Value.absent(),
+    this.originalType = const Value.absent(),
+    this.editedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ActivitySportsCompanion.insert({
+    required String activityId,
+    required String type,
+    required String originalType,
+    required DateTime editedAt,
+    this.rowid = const Value.absent(),
+  }) : activityId = Value(activityId),
+       type = Value(type),
+       originalType = Value(originalType),
+       editedAt = Value(editedAt);
+  static Insertable<ActivitySport> custom({
+    Expression<String>? activityId,
+    Expression<String>? type,
+    Expression<String>? originalType,
+    Expression<DateTime>? editedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (activityId != null) 'activity_id': activityId,
+      if (type != null) 'type': type,
+      if (originalType != null) 'original_type': originalType,
+      if (editedAt != null) 'edited_at': editedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ActivitySportsCompanion copyWith({
+    Value<String>? activityId,
+    Value<String>? type,
+    Value<String>? originalType,
+    Value<DateTime>? editedAt,
+    Value<int>? rowid,
+  }) {
+    return ActivitySportsCompanion(
+      activityId: activityId ?? this.activityId,
+      type: type ?? this.type,
+      originalType: originalType ?? this.originalType,
+      editedAt: editedAt ?? this.editedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (activityId.present) {
+      map['activity_id'] = Variable<String>(activityId.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (originalType.present) {
+      map['original_type'] = Variable<String>(originalType.value);
+    }
+    if (editedAt.present) {
+      map['edited_at'] = Variable<DateTime>(editedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ActivitySportsCompanion(')
+          ..write('activityId: $activityId, ')
+          ..write('type: $type, ')
+          ..write('originalType: $originalType, ')
+          ..write('editedAt: $editedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $SpotHrvMeasurementsTable extends SpotHrvMeasurements
     with TableInfo<$SpotHrvMeasurementsTable, SpotHrvMeasurement> {
   @override
@@ -49411,6 +49736,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $DeletedActivitiesTable deletedActivities =
       $DeletedActivitiesTable(this);
   late final $ActivityTitlesTable activityTitles = $ActivityTitlesTable(this);
+  late final $ActivitySportsTable activitySports = $ActivitySportsTable(this);
   late final $SpotHrvMeasurementsTable spotHrvMeasurements =
       $SpotHrvMeasurementsTable(this);
   late final $EcgRecordingsTable ecgRecordings = $EcgRecordingsTable(this);
@@ -49520,6 +49846,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     waistMeasurements,
     deletedActivities,
     activityTitles,
+    activitySports,
     spotHrvMeasurements,
     ecgRecordings,
     ecgSampleChunks,
@@ -57257,6 +57584,202 @@ typedef $$ActivityTitlesTableProcessedTableManager =
         BaseReferences<_$AppDatabase, $ActivityTitlesTable, ActivityTitle>,
       ),
       ActivityTitle,
+      PrefetchHooks Function()
+    >;
+typedef $$ActivitySportsTableCreateCompanionBuilder =
+    ActivitySportsCompanion Function({
+      required String activityId,
+      required String type,
+      required String originalType,
+      required DateTime editedAt,
+      Value<int> rowid,
+    });
+typedef $$ActivitySportsTableUpdateCompanionBuilder =
+    ActivitySportsCompanion Function({
+      Value<String> activityId,
+      Value<String> type,
+      Value<String> originalType,
+      Value<DateTime> editedAt,
+      Value<int> rowid,
+    });
+
+class $$ActivitySportsTableFilterComposer
+    extends Composer<_$AppDatabase, $ActivitySportsTable> {
+  $$ActivitySportsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get activityId => $composableBuilder(
+    column: $table.activityId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get originalType => $composableBuilder(
+    column: $table.originalType,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get editedAt => $composableBuilder(
+    column: $table.editedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$ActivitySportsTableOrderingComposer
+    extends Composer<_$AppDatabase, $ActivitySportsTable> {
+  $$ActivitySportsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get activityId => $composableBuilder(
+    column: $table.activityId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get originalType => $composableBuilder(
+    column: $table.originalType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get editedAt => $composableBuilder(
+    column: $table.editedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$ActivitySportsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ActivitySportsTable> {
+  $$ActivitySportsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get activityId => $composableBuilder(
+    column: $table.activityId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<String> get originalType => $composableBuilder(
+    column: $table.originalType,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get editedAt =>
+      $composableBuilder(column: $table.editedAt, builder: (column) => column);
+}
+
+class $$ActivitySportsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ActivitySportsTable,
+          ActivitySport,
+          $$ActivitySportsTableFilterComposer,
+          $$ActivitySportsTableOrderingComposer,
+          $$ActivitySportsTableAnnotationComposer,
+          $$ActivitySportsTableCreateCompanionBuilder,
+          $$ActivitySportsTableUpdateCompanionBuilder,
+          (
+            ActivitySport,
+            BaseReferences<_$AppDatabase, $ActivitySportsTable, ActivitySport>,
+          ),
+          ActivitySport,
+          PrefetchHooks Function()
+        > {
+  $$ActivitySportsTableTableManager(
+    _$AppDatabase db,
+    $ActivitySportsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ActivitySportsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ActivitySportsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ActivitySportsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> activityId = const Value.absent(),
+                Value<String> type = const Value.absent(),
+                Value<String> originalType = const Value.absent(),
+                Value<DateTime> editedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ActivitySportsCompanion(
+                activityId: activityId,
+                type: type,
+                originalType: originalType,
+                editedAt: editedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String activityId,
+                required String type,
+                required String originalType,
+                required DateTime editedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => ActivitySportsCompanion.insert(
+                activityId: activityId,
+                type: type,
+                originalType: originalType,
+                editedAt: editedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$ActivitySportsTable, ActivitySport>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $ActivitySportsTable,
+                    ActivitySport
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$ActivitySportsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ActivitySportsTable,
+      ActivitySport,
+      $$ActivitySportsTableFilterComposer,
+      $$ActivitySportsTableOrderingComposer,
+      $$ActivitySportsTableAnnotationComposer,
+      $$ActivitySportsTableCreateCompanionBuilder,
+      $$ActivitySportsTableUpdateCompanionBuilder,
+      (
+        ActivitySport,
+        BaseReferences<_$AppDatabase, $ActivitySportsTable, ActivitySport>,
+      ),
+      ActivitySport,
       PrefetchHooks Function()
     >;
 typedef $$SpotHrvMeasurementsTableCreateCompanionBuilder =
@@ -73763,6 +74286,8 @@ class $AppDatabaseManager {
       $$DeletedActivitiesTableTableManager(_db, _db.deletedActivities);
   $$ActivityTitlesTableTableManager get activityTitles =>
       $$ActivityTitlesTableTableManager(_db, _db.activityTitles);
+  $$ActivitySportsTableTableManager get activitySports =>
+      $$ActivitySportsTableTableManager(_db, _db.activitySports);
   $$SpotHrvMeasurementsTableTableManager get spotHrvMeasurements =>
       $$SpotHrvMeasurementsTableTableManager(_db, _db.spotHrvMeasurements);
   $$EcgRecordingsTableTableManager get ecgRecordings =>

@@ -9041,4 +9041,20 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get metricBaseline7 => 'BAZA 7 D';
+
+  @override
+  String get sportVirtualRide => 'Jazda wirtualna';
+
+  @override
+  String get sportVirtualRun => 'Bieg wirtualny';
+
+  @override
+  String get sportMountainBike => 'Rower górski';
+
+  @override
+  String get activitySportKept =>
+      'Zmienia się tylko w Fjelii i zostaje po kolejnej synchronizacji. Obciążenie, strefy i statystyki liczą się dla nowego sportu.';
+
+  @override
+  String get useOriginalSport => 'Użyj pierwotnego sportu';
 }

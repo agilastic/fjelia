@@ -4,6 +4,7 @@ import '../../providers/short_session_provider.dart';
 import '../../providers/activity_history_provider.dart';
 import '../../widgets/recently_deleted_sheet.dart';
 import '../../l10n/l10n_ext.dart';
+import '../../l10n/sport_text.dart';
 
 import 'dart:io';
 
@@ -61,17 +62,40 @@ class ActivityDetailSheet extends ConsumerWidget {
     );
   }
 
+  Future<void> _changeSport(BuildContext context, WidgetRef ref) async {
+    final id = activity.activityId;
+    final current = await ref.read(activitySportProvider(id).future);
+    if (current == null || !context.mounted) return;
+    final result = await showDialog<String>(
+      context: context,
+      builder: (c) => _SportDialog(sport: current),
+    );
+    if (result == null || result == current.type || !context.mounted) return;
+    await runUiAction(
+      context,
+      () => ref.read(changeActivitySportProvider)(
+        id,
+        result == current.original ? null : result,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // The current name, also right after a rename: the card above the coach
-    // chat and the share card use it too.
+    // The current name and sport, also right after a change: the card above
+    // the coach chat and the share card use them too.
     final shownName = ref
         .watch(activityNameProvider(this.activity.activityId))
         .valueOrNull
         ?.name;
-    final activity = shownName == null || shownName.isEmpty
-        ? this.activity
-        : this.activity.copyWith(name: shownName);
+    final shownSport = ref
+        .watch(activitySportProvider(this.activity.activityId))
+        .valueOrNull
+        ?.type;
+    final activity = this.activity.copyWith(
+      name: shownName == null || shownName.isEmpty ? null : shownName,
+      type: shownSport,
+    );
     final a = decodeActivityRecord(activity);
     // Strength is chosen before any endurance metric is built: no distance,
     // pace, elevation or route for a lifting session.
@@ -161,7 +185,7 @@ class ActivityDetailSheet extends ConsumerWidget {
       avgHeartRate: a.avgHeartRate,
       sport: a.type,
       indoor:
-          a.type.toLowerCase().contains('indoor') ||
+          RegExp('indoor|treadmill|virtual').hasMatch(a.type.toLowerCase()) ||
           ({'ftms', 'manual_recording'}.contains(activity.source) &&
               a.route.isEmpty),
       route: strength ? const [] : routePoints,
@@ -249,9 +273,28 @@ class ActivityDetailSheet extends ConsumerWidget {
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Text(
-                      '${a.type.replaceAll('_', ' ')} · ${DateFormat.MMMd().add_Hm().format(a.startTime)}',
-                      style: TextStyle(fontSize: 12, color: fjInk70),
+                    InkWell(
+                      borderRadius: BorderRadius.circular(6),
+                      onTap: () => _changeSport(context, ref),
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              '${activitySportLabel(context.l10n, a.type)} · ${DateFormat.MMMd().add_Hm().format(a.startTime)}',
+                              style: TextStyle(fontSize: 12, color: fjInk70),
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Tooltip(
+                            message: context.l10n.changeSport,
+                            child: Icon(
+                              Icons.swap_horiz_rounded,
+                              size: 14,
+                              color: fjInk54,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -625,6 +668,78 @@ class ActivityNoteCard extends ConsumerWidget {
         has ? note!.trim() : context.l10n.activityNoteAdd,
         style: TextStyle(height: 1.4, color: has ? fjInk : muted),
       ),
+    );
+  }
+}
+
+/// Picks the sport of a done activity, e.g. indoor or virtual for a ride on
+/// the trainer the watch saved as an outdoor ride.
+class _SportDialog extends StatelessWidget {
+  const _SportDialog({required this.sport});
+  final ActivitySportChoice sport;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final original = sport.original;
+    final known = activitySportChoices.expand((group) => group).toSet();
+    final groups = [
+      // A sport outside the list stays choosable as it is.
+      if (!known.contains(sport.type)) [sport.type],
+      if (original != null &&
+          original != sport.type &&
+          !known.contains(original))
+        [original],
+      ...activitySportChoices,
+    ];
+    Widget chip(String type) => ChoiceChip(
+      label: Text(activitySportLabel(l, type)),
+      selected: type == sport.type,
+      showCheckmark: false,
+      visualDensity: VisualDensity.compact,
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      onSelected: (_) => Navigator.pop(context, type),
+    );
+    return AlertDialog(
+      title: Text(l.changeSport),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (final group in groups) ...[
+              Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                children: [for (final type in group) chip(type)],
+              ),
+              const SizedBox(height: 10),
+            ],
+            Text(
+              l.activitySportKept,
+              style: TextStyle(fontSize: 12, color: fjInk70),
+            ),
+            if (original != null && original != sport.type) ...[
+              const SizedBox(height: 10),
+              Text(
+                l.originalTitle(activitySportLabel(l, original)),
+                style: TextStyle(fontSize: 12, color: fjInk54),
+              ),
+              TextButton(
+                style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                onPressed: () => Navigator.pop(context, original),
+                child: Text(l.useOriginalSport),
+              ),
+            ],
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(l.cancel),
+        ),
+      ],
     );
   }
 }

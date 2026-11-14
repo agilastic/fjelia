@@ -9013,4 +9013,20 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get metricBaseline7 => '7 D BASIS';
+
+  @override
+  String get sportVirtualRide => 'Virtuele rit';
+
+  @override
+  String get sportVirtualRun => 'Virtuele loop';
+
+  @override
+  String get sportMountainBike => 'Mountainbike';
+
+  @override
+  String get activitySportKept =>
+      'Verandert alleen in Fjelia en blijft staan als de activiteit opnieuw synchroniseert. Belasting, zones en statistieken gebruiken de nieuwe sport.';
+
+  @override
+  String get useOriginalSport => 'Oorspronkelijke sport gebruiken';
 }

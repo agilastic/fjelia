@@ -248,6 +248,34 @@ final activityNameProvider = FutureProvider.autoDispose
       );
     });
 
+/// The sport an activity shows now, and the provider's when the athlete
+/// changed it.
+typedef ActivitySportChoice = ({String type, String? original});
+
+final activitySportProvider = FutureProvider.autoDispose
+    .family<ActivitySportChoice?, String>((ref, id) async {
+      ref.watch(syncStatusListenerProvider);
+      final db = ref.watch(databaseProvider);
+      final a = await db.getActivityById(id);
+      if (a == null) return null;
+      final sport = await db.activitySport(id);
+      return (type: a.type, original: sport?.originalType);
+    });
+
+/// Changes an activity's sport in Fjelia only; null goes back to the
+/// provider's. Nothing is sent to the provider.
+final changeActivitySportProvider =
+    Provider<Future<void> Function(String id, String? type)>(
+      (ref) => (id, type) async {
+        final db = ref.read(databaseProvider);
+        type == null
+            ? await db.resetActivitySport(id)
+            : await db.changeActivitySport(id, type);
+        ref.invalidate(activitySportProvider(id));
+        _activitiesChanged(ref);
+      },
+    );
+
 /// Renames an activity in Fjelia only; null or blank goes back to the
 /// provider's name. Nothing is sent to the provider.
 final renameActivityProvider =

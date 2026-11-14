@@ -504,6 +504,19 @@ class ActivityTitles extends Table {
   Set<Column> get primaryKey => {activityId};
 }
 
+/// A sport the athlete set for an activity, e.g. a ride on the trainer the
+/// watch saved as an outdoor ride. It wins over the provider's type on every
+/// sync and import; [originalType] is what the provider said, for going back.
+class ActivitySports extends Table {
+  TextColumn get activityId => text()();
+  TextColumn get type => text()();
+  TextColumn get originalType => text()();
+  DateTimeColumn get editedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {activityId};
+}
+
 /// An activity the athlete deleted. It stays deleted: no sync brings it
 /// back while this row exists. [summaryJson] is the activity without its
 /// route and curves, enough to list it and to restore it before its source
@@ -1411,6 +1424,7 @@ List<BpMeasurement> _validBpRows(List<BpMeasurement> rows) =>
     WaistMeasurements,
     DeletedActivities,
     ActivityTitles,
+    ActivitySports,
     SpotHrvMeasurements,
     EcgRecordings,
     EcgSampleChunks,
@@ -1465,7 +1479,7 @@ class AppDatabase extends _$AppDatabase {
       defaultSourcePriorities[group.name]!;
 
   @override
-  int get schemaVersion => 68;
+  int get schemaVersion => 69;
 
   Future<void> saveHeartRateSamples(List<TimedHeartRate> samples) async {
     if (samples.isEmpty) return;
@@ -1632,6 +1646,13 @@ class AppDatabase extends _$AppDatabase {
     final all = await (select(
       activityRecords,
     )..orderBy([(t) => OrderingTerm(expression: t.startDate)])).get();
+    // Copies are compared by what their providers recorded: a sport the
+    // athlete changed on one copy does not make the other a new workout.
+    final providerType = {
+      for (final s in await select(activitySports).get())
+        s.activityId: s.originalType,
+    };
+    String typeOf(ActivityRecord a) => providerType[a.activityId] ?? a.type;
     final toDelete = <String>{};
     // The copy that stays for each copy that goes, so what points at a copy
     // (an HRV episode) can follow it.
@@ -1647,10 +1668,10 @@ class AppDatabase extends _$AppDatabase {
         if (!isSameWorkout(
           a.startDate,
           a.durationSeconds,
-          a.type,
+          typeOf(a),
           b.startDate,
           b.durationSeconds,
-          b.type,
+          typeOf(b),
         )) {
           continue;
         }
@@ -1756,6 +1777,28 @@ class AppDatabase extends _$AppDatabase {
         .write(ActivityRecordsCompanion(name: Value(title.title)));
   }
 
+  /// A sport the athlete set on the copy that goes moves to the copy that
+  /// stays, unless that one has its own.
+  Future<void> _followSport(ActivityRecord gone, ActivityRecord keep) async {
+    final sport = await activitySport(gone.activityId);
+    if (sport == null) return;
+    await (delete(
+      activitySports,
+    )..where((t) => t.activityId.equals(gone.activityId))).go();
+    if (await activitySport(keep.activityId) != null) return;
+    await into(activitySports).insert(
+      ActivitySportsCompanion.insert(
+        activityId: keep.activityId,
+        type: sport.type,
+        originalType: keep.type,
+        editedAt: sport.editedAt,
+      ),
+    );
+    await (update(activityRecords)
+          ..where((t) => t.activityId.equals(keep.activityId)))
+        .write(ActivityRecordsCompanion(type: Value(sport.type)));
+  }
+
   /// Keeps the DFA alpha1 of a removed copy (e.g. an imported file) for the
   /// copy that stays, unless that one has a result of its own.
   Future<void> _followDfaAlpha1(String gone, String keep) async {
@@ -1788,6 +1831,7 @@ class AppDatabase extends _$AppDatabase {
         .write(EcgRecordingsCompanion(activityId: Value(keep.activityId)));
     await _followNutrition(gone.activityId, keep.activityId);
     await _followTitle(gone, keep);
+    await _followSport(gone, keep);
     await _followDfaAlpha1(gone.activityId, keep.activityId);
     await (update(mediaItems)..where(
           (t) =>
@@ -1958,6 +2002,45 @@ class AppDatabase extends _$AppDatabase {
           ..where((t) => t.activityId.equals(activityId)))
         .write(ActivityRecordsCompanion(name: Value(had.originalName)));
   });
+
+  /// Gives the activity the sport the athlete chose. The provider's type is
+  /// kept the first time, for [resetActivitySport]; choosing it again is the
+  /// same as going back.
+  Future<void> changeActivitySport(String activityId, String type) =>
+      transaction(() async {
+        final a = await getActivityById(activityId);
+        if (a == null) return;
+        final had = await activitySport(activityId);
+        final original = had?.originalType ?? a.type;
+        if (type == original) return resetActivitySport(activityId);
+        await into(activitySports).insertOnConflictUpdate(
+          ActivitySportsCompanion.insert(
+            activityId: activityId,
+            type: type,
+            originalType: original,
+            editedAt: DateTime.now(),
+          ),
+        );
+        await (update(activityRecords)
+              ..where((t) => t.activityId.equals(activityId)))
+            .write(ActivityRecordsCompanion(type: Value(type)));
+      });
+
+  /// Back to the provider's sport; later syncs may change it again.
+  Future<void> resetActivitySport(String activityId) => transaction(() async {
+    final had = await activitySport(activityId);
+    if (had == null) return;
+    await (delete(
+      activitySports,
+    )..where((t) => t.activityId.equals(activityId))).go();
+    await (update(activityRecords)
+          ..where((t) => t.activityId.equals(activityId)))
+        .write(ActivityRecordsCompanion(type: Value(had.originalType)));
+  });
+
+  Future<ActivitySport?> activitySport(String activityId) => (select(
+    activitySports,
+  )..where((t) => t.activityId.equals(activityId))).getSingleOrNull();
 
   Future<ActivityTitle?> activityTitle(String activityId) => (select(
     activityTitles,
@@ -2747,6 +2830,23 @@ class AppDatabase extends _$AppDatabase {
         'CREATE TRIGGER IF NOT EXISTS trg_activity_title_on_update '
         'AFTER UPDATE OF name ON activity_records WHEN $edited BEGIN $keep',
       );
+      // The same for a sport the athlete set.
+      const keepSport =
+          'UPDATE activity_records SET type = (SELECT type FROM '
+          'activity_sports WHERE activity_id = NEW.activity_id) '
+          'WHERE id = NEW.id; END';
+      const changedSport =
+          'EXISTS (SELECT 1 FROM activity_sports s WHERE '
+          's.activity_id = NEW.activity_id AND s.type IS NOT NEW.type)';
+      await customStatement(
+        'CREATE TRIGGER IF NOT EXISTS trg_activity_sport_on_insert '
+        'AFTER INSERT ON activity_records WHEN $changedSport BEGIN $keepSport',
+      );
+      await customStatement(
+        'CREATE TRIGGER IF NOT EXISTS trg_activity_sport_on_update '
+        'AFTER UPDATE OF type ON activity_records WHEN $changedSport '
+        'BEGIN $keepSport',
+      );
     },
     onUpgrade: (m, from, to) async {
       if (from < 62) {
@@ -3354,6 +3454,7 @@ class AppDatabase extends _$AppDatabase {
           () => m.addColumn(ecgRecordings, ecgRecordings.note),
         );
       }
+      if (from < 69) await m.createTable(activitySports);
     },
   );
 

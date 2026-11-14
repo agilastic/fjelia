@@ -4119,5 +4119,10 @@
   "hrvAfterWorkout": "{time} po tréningu",
   "hrvExtraAfter": "ďalšie meranie po tréningu",
   "hrvNotAssigned": "nepriradené k tréningu",
-  "metricBaseline7": "ZÁKLAD 7 D"
+  "metricBaseline7": "ZÁKLAD 7 D",
+  "sportVirtualRide": "Virtuálna jazda",
+  "sportVirtualRun": "Virtuálny beh",
+  "sportMountainBike": "Horský bicykel",
+  "activitySportKept": "Mení sa len vo Fjelii a zostane aj po ďalšej synchronizácii. Záťaž, zóny a štatistiky počítajú s novým športom.",
+  "useOriginalSport": "Použiť pôvodný šport"
 }

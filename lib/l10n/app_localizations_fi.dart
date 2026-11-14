@@ -8981,4 +8981,20 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get metricBaseline7 => '7 PV PERUSTASO';
+
+  @override
+  String get sportVirtualRide => 'Virtuaalipyöräily';
+
+  @override
+  String get sportVirtualRun => 'Virtuaalijuoksu';
+
+  @override
+  String get sportMountainBike => 'Maastopyöräily';
+
+  @override
+  String get activitySportKept =>
+      'Muuttuu vain Fjeliassa ja säilyy, kun aktiviteetti synkronoidaan uudelleen. Kuorma, alueet ja tilastot käyttävät uutta lajia.';
+
+  @override
+  String get useOriginalSport => 'Käytä alkuperäistä lajia';
 }

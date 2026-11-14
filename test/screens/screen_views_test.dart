@@ -1652,6 +1652,40 @@ void main() {
     await tester.pump(Duration.zero);
     await tester.binding.setSurfaceSize(null);
   });
+  testWidgets('a done activity changes sport, also to indoor or virtual', (
+    tester,
+  ) async {
+    final row = (await db.select(db.activityRecords).get()).single;
+    final original = row.type;
+    await render(tester, ActivityDetailSheet(activity: row), 'activity-sport');
+    await tester.tap(find.byTooltip('Change sport'));
+    await tester.pumpAndSettle();
+    await capture(tester, 'activity-sport-dialog');
+    await tester.tap(find.text('Virtual ride'));
+    await tester.pumpAndSettle();
+    expect((await db.getActivityById(row.activityId))!.type, 'virtual_ride');
+    expect(find.textContaining('Virtual ride ·'), findsOneWidget);
+    // A sync writing the provider's sport again: the change stays.
+    await db
+        .into(db.activityRecords)
+        .insert(
+          row.toCompanion(true).copyWith(id: const Value.absent()),
+          mode: InsertMode.insertOrReplace,
+        );
+    expect((await db.getActivityById(row.activityId))!.type, 'virtual_ride');
+    // The provider's sport is one tap away.
+    await tester.tap(find.byTooltip('Change sport'));
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('Use original sport'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Use original sport'));
+    await tester.pumpAndSettle();
+    expect((await db.getActivityById(row.activityId))!.type, original);
+    expect(await db.activitySport(row.activityId), isNull);
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(Duration.zero);
+    await tester.binding.setSurfaceSize(null);
+  });
   testWidgets(
     'activity details render charts, fullscreen and confirm or cancel deletion',
     (tester) async {

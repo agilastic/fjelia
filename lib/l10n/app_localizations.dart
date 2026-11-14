@@ -15501,6 +15501,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'7D BASELINE'**
   String get metricBaseline7;
+
+  /// No description provided for @sportVirtualRide.
+  ///
+  /// In en, this message translates to:
+  /// **'Virtual ride'**
+  String get sportVirtualRide;
+
+  /// No description provided for @sportVirtualRun.
+  ///
+  /// In en, this message translates to:
+  /// **'Virtual run'**
+  String get sportVirtualRun;
+
+  /// No description provided for @sportMountainBike.
+  ///
+  /// In en, this message translates to:
+  /// **'Mountain bike'**
+  String get sportMountainBike;
+
+  /// No description provided for @activitySportKept.
+  ///
+  /// In en, this message translates to:
+  /// **'Only changes in Fjelia and stays when the activity syncs again. Load, zones and statistics use the new sport.'**
+  String get activitySportKept;
+
+  /// No description provided for @useOriginalSport.
+  ///
+  /// In en, this message translates to:
+  /// **'Use original sport'**
+  String get useOriginalSport;
 }
 
 class _AppLocalizationsDelegate

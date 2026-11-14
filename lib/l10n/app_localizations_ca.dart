@@ -9013,4 +9013,20 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get metricBaseline7 => 'BASE 7 D';
+
+  @override
+  String get sportVirtualRide => 'Ciclisme virtual';
+
+  @override
+  String get sportVirtualRun => 'Cursa virtual';
+
+  @override
+  String get sportMountainBike => 'Bicicleta de muntanya';
+
+  @override
+  String get activitySportKept =>
+      'Només canvia a Fjelia i es manté quan l\'activitat es torna a sincronitzar. La càrrega, les zones i les estadístiques fan servir el nou esport.';
+
+  @override
+  String get useOriginalSport => 'Fer servir l\'esport original';
 }

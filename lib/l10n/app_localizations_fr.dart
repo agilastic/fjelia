@@ -9027,4 +9027,20 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get metricBaseline7 => 'BASE 7 J';
+
+  @override
+  String get sportVirtualRide => 'Vélo virtuel';
+
+  @override
+  String get sportVirtualRun => 'Course virtuelle';
+
+  @override
+  String get sportMountainBike => 'VTT';
+
+  @override
+  String get activitySportKept =>
+      'Ne change que dans Fjelia et reste lors des prochaines synchronisations. La charge, les zones et les statistiques utilisent le nouveau sport.';
+
+  @override
+  String get useOriginalSport => 'Utiliser le sport d\'origine';
 }

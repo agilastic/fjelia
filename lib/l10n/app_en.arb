@@ -5312,5 +5312,10 @@
   "@hrvAfterWorkout": {"placeholders": {"time": {"type": "String"}}},
   "hrvExtraAfter": "extra reading after the workout",
   "hrvNotAssigned": "not assigned to a workout",
-  "metricBaseline7": "7D BASELINE"
+  "metricBaseline7": "7D BASELINE",
+  "sportVirtualRide": "Virtual ride",
+  "sportVirtualRun": "Virtual run",
+  "sportMountainBike": "Mountain bike",
+  "activitySportKept": "Only changes in Fjelia and stays when the activity syncs again. Load, zones and statistics use the new sport.",
+  "useOriginalSport": "Use original sport"
 }

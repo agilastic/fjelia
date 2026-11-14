@@ -5282,5 +5282,10 @@
   "hrvAfterWorkout": "{time} depois do treino",
   "hrvExtraAfter": "medição extra depois do treino",
   "hrvNotAssigned": "não associado a um treino",
-  "metricBaseline7": "BASE 7 D"
+  "metricBaseline7": "BASE 7 D",
+  "sportVirtualRide": "Ciclismo virtual",
+  "sportVirtualRun": "Corrida virtual",
+  "sportMountainBike": "BTT",
+  "activitySportKept": "Só muda no Fjelia e mantém-se quando a atividade volta a sincronizar. A carga, as zonas e as estatísticas usam o novo desporto.",
+  "useOriginalSport": "Usar o desporto original"
 }

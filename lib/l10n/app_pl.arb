@@ -5282,5 +5282,10 @@
   "hrvAfterWorkout": "{time} po treningu",
   "hrvExtraAfter": "dodatkowy pomiar po treningu",
   "hrvNotAssigned": "nieprzypisany do treningu",
-  "metricBaseline7": "BAZA 7 D"
+  "metricBaseline7": "BAZA 7 D",
+  "sportVirtualRide": "Jazda wirtualna",
+  "sportVirtualRun": "Bieg wirtualny",
+  "sportMountainBike": "Rower górski",
+  "activitySportKept": "Zmienia się tylko w Fjelii i zostaje po kolejnej synchronizacji. Obciążenie, strefy i statystyki liczą się dla nowego sportu.",
+  "useOriginalSport": "Użyj pierwotnego sportu"
 }

@@ -4119,5 +4119,10 @@
   "hrvAfterWorkout": "{time} harjoituksen jälkeen",
   "hrvExtraAfter": "lisämittaus harjoituksen jälkeen",
   "hrvNotAssigned": "ei liitetty harjoitukseen",
-  "metricBaseline7": "7 PV PERUSTASO"
+  "metricBaseline7": "7 PV PERUSTASO",
+  "sportVirtualRide": "Virtuaalipyöräily",
+  "sportVirtualRun": "Virtuaalijuoksu",
+  "sportMountainBike": "Maastopyöräily",
+  "activitySportKept": "Muuttuu vain Fjeliassa ja säilyy, kun aktiviteetti synkronoidaan uudelleen. Kuorma, alueet ja tilastot käyttävät uutta lajia.",
+  "useOriginalSport": "Käytä alkuperäistä lajia"
 }
