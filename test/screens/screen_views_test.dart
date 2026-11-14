@@ -1664,7 +1664,7 @@ void main() {
     await tester.tap(find.text('Virtual ride'));
     await tester.pumpAndSettle();
     expect((await db.getActivityById(row.activityId))!.type, 'virtual_ride');
-    expect(find.textContaining('Virtual ride ·'), findsOneWidget);
+    expect(find.text('Virtual ride'), findsOneWidget);
     // A sync writing the provider's sport again: the change stays.
     await db
         .into(db.activityRecords)

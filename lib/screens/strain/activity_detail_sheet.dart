@@ -227,16 +227,19 @@ class ActivityDetailSheet extends ConsumerWidget {
         children: [
           Row(
             children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF4FC3F7).withValues(alpha: .15),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: Icon(
-                  workoutSportIcon(a.type),
-                  color: const Color(0xFF4FC3F7),
-                  size: 28,
+              GestureDetector(
+                onTap: () => _changeSport(context, ref),
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF4FC3F7).withValues(alpha: .15),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Icon(
+                    workoutSportIcon(a.type),
+                    color: const Color(0xFF4FC3F7),
+                    size: 28,
+                  ),
                 ),
               ),
               const SizedBox(width: 12),
@@ -272,29 +275,57 @@ class ActivityDetailSheet extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    InkWell(
-                      borderRadius: BorderRadius.circular(6),
-                      onTap: () => _changeSport(context, ref),
-                      child: Row(
-                        children: [
-                          Flexible(
-                            child: Text(
-                              '${activitySportLabel(context.l10n, a.type)} · ${DateFormat.MMMd().add_Hm().format(a.startTime)}',
-                              style: TextStyle(fontSize: 12, color: fjInk70),
+                    const SizedBox(height: 6),
+                    // The sport looks like a choice: a done activity the
+                    // watch saved as the wrong sport is fixed here.
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 4,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        Tooltip(
+                          message: context.l10n.changeSport,
+                          child: Material(
+                            color: const Color(0xFF4FC3F7)
+                                .withValues(alpha: .12),
+                            shape: StadiumBorder(
+                              side: BorderSide(
+                                color: const Color(0xFF4FC3F7)
+                                    .withValues(alpha: .45),
+                              ),
+                            ),
+                            child: InkWell(
+                              customBorder: const StadiumBorder(),
+                              onTap: () => _changeSport(context, ref),
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(10, 4, 4, 4),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      activitySportLabel(context.l10n, a.type),
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600,
+                                        color: Color(0xFF4FC3F7),
+                                      ),
+                                    ),
+                                    const Icon(
+                                      Icons.arrow_drop_down_rounded,
+                                      size: 20,
+                                      color: Color(0xFF4FC3F7),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
-                          const SizedBox(width: 4),
-                          Tooltip(
-                            message: context.l10n.changeSport,
-                            child: Icon(
-                              Icons.swap_horiz_rounded,
-                              size: 14,
-                              color: fjInk54,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                        Text(
+                          DateFormat.MMMd().add_Hm().format(a.startTime),
+                          style: TextStyle(fontSize: 12, color: fjInk70),
+                        ),
+                      ],
                     ),
                   ],
                 ),
