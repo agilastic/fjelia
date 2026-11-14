@@ -562,11 +562,13 @@ class GarminClient {
     return headers;
   }
 
-  Future<Map<String, String>> _authHeaders() async {
+  Future<Map<String, String>> _authHeaders({
+    String accept = 'application/json',
+  }) async {
     final token = await _getValidToken();
     return _nativeHeaders({
       'Authorization': 'Bearer $token',
-      'Accept': 'application/json',
+      'Accept': accept,
     });
   }
 
@@ -669,15 +671,22 @@ class GarminClient {
   Future<http.Response> _getWithRetry(
     String path, {
     Map<String, String>? params,
+    String accept = 'application/json',
   }) async {
     final uri = Uri.parse('$_api$path').replace(queryParameters: params);
     log('[Garmin] GET $uri');
-    var response = await _http.get(uri, headers: await _authHeaders());
+    var response = await _http.get(
+      uri,
+      headers: await _authHeaders(accept: accept),
+    );
     log('[Garmin] → ${response.statusCode} (${response.body.length} bytes)');
     if (response.statusCode == 401) {
       log('[Garmin] 401 — forcing token refresh and retrying');
       await _refreshDiToken();
-      response = await _http.get(uri, headers: await _authHeaders());
+      response = await _http.get(
+        uri,
+        headers: await _authHeaders(accept: accept),
+      );
       log('[Garmin] retry → ${response.statusCode}');
     }
     return response;
@@ -829,6 +838,8 @@ class GarminClient {
   Future<Uint8List?> downloadActivityOriginal(String activityId) async {
     final response = await _getWithRetry(
       '/download-service/files/activity/${Uri.encodeComponent(activityId)}',
+      // A ZIP, not JSON: asking for JSON gets 406.
+      accept: '*/*',
     );
     if (response.statusCode == 200 && response.bodyBytes.isNotEmpty) {
       return response.bodyBytes;
