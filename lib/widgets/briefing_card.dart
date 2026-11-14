@@ -143,7 +143,11 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
                 alignment: Alignment.centerLeft,
               ),
               onPressed: () => setState(() => _expanded = !_expanded),
-              child: Text(_expanded ? 'show less' : 'read more'),
+              child: Text(
+                _expanded
+                    ? context.l10n.briefingShowLess
+                    : context.l10n.briefingReadMore,
+              ),
             ),
           if (_expanded && !fallback)
             Padding(

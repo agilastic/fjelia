@@ -14,6 +14,7 @@ import '../providers/visibility_provider.dart';
 import 'app_widgets.dart';
 import 'metric_card.dart';
 import 'metric_detail_sheet.dart';
+import '../l10n/metric_text.dart';
 
 class HealthMonitorGrid extends ConsumerWidget {
   const HealthMonitorGrid({super.key});
@@ -66,7 +67,7 @@ class HealthMonitorGrid extends ConsumerWidget {
                     width: width,
                     height: height,
                     child: MetricCard(
-                      label: e.value.$1.label,
+                      label: healthMetricLabel(context.l10n, e.value.$1),
                       highlighted: alerts.contains(e.value.$1),
                       icon: switch (e.key) {
                         'hrv' => Icons.show_chart,
@@ -89,16 +90,21 @@ class HealthMonitorGrid extends ConsumerWidget {
                         _ => const Color(0xFF9D7BFF),
                       },
                       showTrend: e.key != 'sleep' && e.key != 'steps',
-                      trendDelta: e.key == 'rhr'
-                          ? trends.rhr
-                          : e.key == 'hrv'
-                          ? trends.hrv
-                          : null,
-                      higherIsBetter: e.key != 'rhr',
+                      trendDelta: switch (e.key) {
+                        'rhr' => trends.rhr,
+                        'hrv' => trends.hrv,
+                        'spo2' => trends.spo2,
+                        'resp' => trends.resp,
+                        'stress' => trends.stress,
+                        'skin_temp' => trends.skinTemp,
+                        _ => null,
+                      },
+                      higherIsBetter: const {'hrv', 'spo2'}.contains(e.key),
+                      deviationIsBad: e.key == 'skin_temp',
                       helper: e.key == 'sleep'
-                          ? 'recommended'
+                          ? context.l10n.metricRecommended
                           : e.key == 'steps'
-                          ? '/ 10k steps'
+                          ? context.l10n.metricStepGoal
                           : null,
                       value: e.key == 'sleep' && need != null
                           ? '${need.inHours}h ${(need.inMinutes % 60).toString().padLeft(2, '0')}min'
@@ -110,7 +116,9 @@ class HealthMonitorGrid extends ConsumerWidget {
                                   ? 1
                                   : 0,
                             ),
-                      unit: e.value.$3,
+                      unit: e.key == 'steps'
+                          ? context.l10n.unitSteps
+                          : e.value.$3,
                       color: fjInk,
                       onTap: () => MetricDetailSheet.show(context, e.value.$1),
                     ),

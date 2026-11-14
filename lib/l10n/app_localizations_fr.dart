@@ -8885,4 +8885,146 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get bpTodaysReading => 'MESURE DU JOUR';
+
+  @override
+  String get metricHrvSleep => 'VFC sommeil';
+
+  @override
+  String get metricRhrSleep => 'FC repos sommeil';
+
+  @override
+  String get metricSpo2Sleep => 'SpO2 sommeil';
+
+  @override
+  String get metricRespRate => 'Fréq. respiratoire';
+
+  @override
+  String get metricSkinTemp => 'Temp. cutanée';
+
+  @override
+  String get metricTonightSleep => 'Sommeil cette nuit';
+
+  @override
+  String get metricMuscleMass => 'Masse musculaire';
+
+  @override
+  String get metricBmi => 'IMC';
+
+  @override
+  String get metricBodyWater => 'Eau corporelle';
+
+  @override
+  String get metricProtein => 'Protéines';
+
+  @override
+  String get metricVisceralFat => 'Graisse viscérale';
+
+  @override
+  String get metricBmr => 'Métabolisme de base';
+
+  @override
+  String get metricBoneMass => 'Masse osseuse';
+
+  @override
+  String get metricHintLower => 'Plus bas, c\'est mieux';
+
+  @override
+  String get metricHintHigher => 'Plus haut, c\'est mieux';
+
+  @override
+  String get metricHintUsual => 'Dans ta plage habituelle, c\'est mieux';
+
+  @override
+  String get metricHintSteps => 'Vise ton objectif de pas quotidien';
+
+  @override
+  String get metricHintSleep => 'Vise ta durée de sommeil recommandée';
+
+  @override
+  String metricPeriodDays(int days) {
+    return '$days jours';
+  }
+
+  @override
+  String metricAvgShort(int days) {
+    return 'Moy. $days j';
+  }
+
+  @override
+  String metricAvgLegend(int days) {
+    return 'Moyenne $days jours';
+  }
+
+  @override
+  String get metricAverage => 'Moyenne';
+
+  @override
+  String get metricRecommended => 'recommandé';
+
+  @override
+  String get metricStepGoal => '/ 10 000 pas';
+
+  @override
+  String get unitSteps => 'pas';
+
+  @override
+  String get briefingReadMore => 'lire la suite';
+
+  @override
+  String get briefingShowLess => 'réduire';
+
+  @override
+  String get hrvSeriesSleep => 'Sommeil';
+
+  @override
+  String get hrvSeriesBefore => 'Avant l\'entraînement';
+
+  @override
+  String get hrvSeriesAfter => 'Après l\'entraînement';
+
+  @override
+  String get hrvSeriesResting => 'Au repos';
+
+  @override
+  String hrvReadingCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count mesures',
+      one: '1 mesure',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String hrvReadingsMixed(int count) {
+    return 'Mesures : $count · positions mélangées';
+  }
+
+  @override
+  String hrvPairSummary(int pairs, String ms, String pct) {
+    return 'Paires de séances comparables : $pairs · variation médiane $ms ms ($pct %)';
+  }
+
+  @override
+  String get hrvOlderReading => 'mesure ancienne, qualité non enregistrée';
+
+  @override
+  String hrvEndedBefore(String time) {
+    return 'terminée $time avant la séance';
+  }
+
+  @override
+  String hrvAfterWorkout(String time) {
+    return '$time après la séance';
+  }
+
+  @override
+  String get hrvExtraAfter => 'mesure supplémentaire après la séance';
+
+  @override
+  String get hrvNotAssigned => 'non associée à une séance';
+
+  @override
+  String get metricBaseline7 => 'BASE 7 J';
 }

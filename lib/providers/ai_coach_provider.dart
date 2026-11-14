@@ -157,7 +157,7 @@ String _briefingKey(AiBriefingPeriod period) {
       '${now.day.toString().padLeft(2, '0')}';
   // The language is part of the key: a briefing is written in one language.
   // Bump the version when prompts or deterministic readiness rules change.
-  return 'ai_briefing_${period.name}_${day}_${activeLocale.languageCode}_v9';
+  return 'ai_briefing_${period.name}_${day}_${activeLocale.languageCode}_v10';
 }
 
 String _briefingInputHashKey(AiBriefingPeriod period) =>

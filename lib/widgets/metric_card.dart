@@ -17,6 +17,7 @@ class MetricCard extends StatelessWidget {
     this.showTrend = false,
     this.trendDelta,
     this.higherIsBetter = true,
+    this.deviationIsBad = false,
     this.helper,
     this.highlighted = false,
     this.accent,
@@ -26,6 +27,9 @@ class MetricCard extends StatelessWidget {
   final VoidCallback? onTap;
   final Color color;
   final bool showTrend, higherIsBetter, highlighted;
+
+  /// Any change from the usual is a warning, up or down (skin temperature).
+  final bool deviationIsBad;
   final double? trendDelta;
   final String? helper;
 
@@ -152,6 +156,8 @@ class MetricCard extends StatelessWidget {
                             ? Colors.black
                             : trendDelta == null || trendDelta!.abs() < .01
                             ? muted
+                            : deviationIsBad
+                            ? Colors.orange
                             : (trendDelta! > 0) == higherIsBetter
                             ? mint
                             : Colors.orange,

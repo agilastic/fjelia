@@ -32,8 +32,8 @@ class MetricAnalysis {
     final out = <String>[];
     // Findings for the Brief: id, severity (red, yellow, good) and a fixed
     // rank that orders equally severe ones.
-    final flags = <(String, String, int)>[];
-    void flag(String id, String severity, int rank) =>
+    final flags = <(String, String, num)>[];
+    void flag(String id, String severity, num rank) =>
         flags.add((id, severity, rank));
     String sev(String? verdict) => switch (verdict) {
       'clearlyWorse' => 'red',
@@ -166,9 +166,19 @@ class MetricAnalysis {
       worse: 'higher stress is worse',
       better: 'lower stress is better',
       steady: 5,
+      // Points, not percent: the daily score swings a lot, and 28 to 33 is
+      // +18 % but still low stress.
+      yellowAbs: 10,
+      redAbs: 20,
     );
     add(stress?.line, 'Stress', stress?.verdict);
-    if (stress != null) {
+    final latestStress = [
+      for (final r in hrv)
+        if (r.stressLevel != null) r.stressLevel!,
+    ].firstOrNull;
+    // Below 40 the day counts as low stress (Garmin: up to 50), however it
+    // compares with the week.
+    if (stress != null && (latestStress ?? 0) >= 40) {
       final v = sev(stress.verdict);
       if (v == 'red' || v == 'yellow') flag('stressHigh', v, 5);
     }
@@ -225,7 +235,11 @@ class MetricAnalysis {
         '${verdict == 'normal' ? 'within the normal range' : 'an unusual shift that can come with illness or a very hard load'}.]',
       );
       if (verdict != 'normal') verdicts['SkinTemp'] = 'worse';
-      if (verdict != 'normal') flag('skinTempOff', 'yellow', 8);
+      // Often the first sign of an infection: right after HRV and resting
+      // heart rate, and red from a full degree.
+      if (verdict != 'normal') {
+        flag('skinTempOff', v.abs() >= 1 ? 'red' : 'yellow', 1.5);
+      }
     }
 
     if (tsb != null) {
@@ -291,7 +305,7 @@ class MetricAnalysis {
       _ => 'GREEN: train as planned; hard sessions are fine',
     };
     // The Brief: what matters, ranked, decided here and not by a model.
-    int bySeverity((String, String, int) a, (String, String, int) b) {
+    int bySeverity((String, String, num) a, (String, String, num) b) {
       const order = {'red': 0, 'yellow': 1, 'good': 2};
       final c = order[a.$2]!.compareTo(order[b.$2]!);
       return c != 0 ? c : a.$3.compareTo(b.$3);

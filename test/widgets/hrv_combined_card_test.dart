@@ -148,7 +148,9 @@ void main() {
       expect(find.byType(LineChart), findsOneWidget);
       // The change is the pair of one workout, not two averages.
       expect(
-        find.textContaining('1 comparable workout pair · median change −15 ms'),
+        find.textContaining(
+          'Comparable workout pairs: 1 · median change −15 ms',
+        ),
         findsOneWidget,
       );
       expect(find.textContaining('vs before training'), findsNothing);
@@ -158,7 +160,7 @@ void main() {
       await tester.tap(find.text('Before training'));
       await tester.pump();
       // With a series hidden the comparison goes with it.
-      expect(find.textContaining('comparable workout pair'), findsNothing);
+      expect(find.textContaining('Comparable workout pairs'), findsNothing);
       expect(find.byType(LineChart), findsOneWidget);
       await close(tester);
     },
@@ -223,7 +225,7 @@ void main() {
     await tester.tap(find.text('Both'));
     await tester.pump(const Duration(milliseconds: 300));
     // Both are listed, but two positions are not one average.
-    expect(find.text('2 readings · mixed positions'), findsOneWidget);
+    expect(find.text('Readings: 2 · mixed positions'), findsOneWidget);
     expect(inTile('Resting', '—'), findsOneWidget);
     expect(inTile('Resting', '65'), findsNothing);
     await close(tester);
@@ -254,7 +256,7 @@ void main() {
         sleepPoints: const [],
       ),
     );
-    expect(find.textContaining('1 comparable workout pair'), findsOneWidget);
+    expect(find.textContaining('Comparable workout pairs: 1'), findsOneWidget);
 
     // Lying down: this ride has no lying pair, so nothing is claimed for it.
     await tester.tap(find.text('Lying down'));
@@ -264,7 +266,7 @@ void main() {
       );
       await tester.pump(const Duration(milliseconds: 100));
     }
-    expect(find.textContaining('comparable workout pair'), findsNothing);
+    expect(find.textContaining('Comparable workout pairs'), findsNothing);
     expect(
       find.text(
         'No workout in this period has a comparable before and after pair.',
@@ -288,7 +290,7 @@ void main() {
         sleepPoints: const [],
       ),
     );
-    expect(find.textContaining('comparable workout pair'), findsNothing);
+    expect(find.textContaining('Comparable workout pairs'), findsNothing);
     expect(find.textContaining('−40'), findsNothing);
     await close(tester);
   });

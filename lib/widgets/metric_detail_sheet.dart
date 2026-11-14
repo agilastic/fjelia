@@ -10,6 +10,7 @@ import '../providers/day_data_provider.dart';
 import 'app_widgets.dart';
 import 'hrv_combined_card.dart';
 import '../screens/activities/load_visuals.dart';
+import '../l10n/metric_text.dart';
 
 class MetricDetailSheet extends ConsumerStatefulWidget {
   const MetricDetailSheet({super.key, required this.metric});
@@ -50,7 +51,7 @@ class _MetricDetailState extends ConsumerState<MetricDetailSheet> {
       )),
     );
     return SheetPage(
-      title: widget.metric.label.toUpperCase(),
+      title: healthMetricLabel(context.l10n, widget.metric).toUpperCase(),
       showHeader: false,
       backgroundColor: panel,
       child: data.when(
@@ -69,7 +70,10 @@ class _MetricDetailState extends ConsumerState<MetricDetailSheet> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   StatPair(
-                    widget.metric.label.toUpperCase(),
+                    healthMetricLabel(
+                      context.l10n,
+                      widget.metric,
+                    ).toUpperCase(),
                     '${valueText(latest?.value, widget.metric.isBody || [HealthMetric.skinTemperature, HealthMetric.respiration, HealthMetric.sleep].contains(widget.metric) ? 1 : 0)} ${widget.metric.unit}',
                   ),
                   Column(
@@ -88,9 +92,9 @@ class _MetricDetailState extends ConsumerState<MetricDetailSheet> {
                       const SizedBox(height: 8),
                       Text(
                         widget.metric == HealthMetric.hrv
-                            ? '7D BASELINE'
+                            ? context.l10n.metricBaseline7
                             : widget.metric == HealthMetric.rhr
-                            ? '30D AVG'
+                            ? context.l10n.daysDAvg(30)
                             : context.l10n.allTime,
                         style: TextStyle(color: muted, fontSize: 9),
                       ),
@@ -104,7 +108,8 @@ class _MetricDetailState extends ConsumerState<MetricDetailSheet> {
                   ),
                 ],
               ),
-              if (widget.metric.directionHint case final String hint)
+              if (healthMetricHint(context.l10n, widget.metric)
+                  case final String hint)
                 Padding(
                   padding: const EdgeInsets.only(top: 10),
                   child: Row(
@@ -125,8 +130,12 @@ class _MetricDetailState extends ConsumerState<MetricDetailSheet> {
                 spacing: 8,
                 children: [
                   for (final range in {
-                    14: widget.metric.isBody ? '14D' : '14 Days',
-                    30: widget.metric.isBody ? 'M' : '30 Days',
+                    14: widget.metric.isBody
+                        ? '14D'
+                        : context.l10n.metricPeriodDays(14),
+                    30: widget.metric.isBody
+                        ? 'M'
+                        : context.l10n.metricPeriodDays(30),
                     if (widget.metric.isBody) 90: 'Q',
                     if (widget.metric.isBody) 365: 'Y',
                   }.entries)
@@ -176,7 +185,7 @@ class _MetricDetailState extends ConsumerState<MetricDetailSheet> {
                   end: end,
                   sleepPoints: points,
                   average: window.average,
-                  averageLabel: '${days}D avg',
+                  averageLabel: context.l10n.metricAvgShort(days),
                 )
               else ...[
                 HistoryChart(
@@ -193,7 +202,11 @@ class _MetricDetailState extends ConsumerState<MetricDetailSheet> {
                 if (!widget.metric.isBody)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 12),
-                    child: LoadLegend('${days}D average', mint, line: true),
+                    child: LoadLegend(
+                      context.l10n.metricAvgLegend(days),
+                      mint,
+                      line: true,
+                    ),
                   ),
               ],
               if (widget.metric == HealthMetric.hrv)

@@ -15261,6 +15261,246 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'TODAY’S READING'**
   String get bpTodaysReading;
+
+  /// No description provided for @metricHrvSleep.
+  ///
+  /// In en, this message translates to:
+  /// **'HRV Sleep'**
+  String get metricHrvSleep;
+
+  /// No description provided for @metricRhrSleep.
+  ///
+  /// In en, this message translates to:
+  /// **'RHR Sleep'**
+  String get metricRhrSleep;
+
+  /// No description provided for @metricSpo2Sleep.
+  ///
+  /// In en, this message translates to:
+  /// **'SpO2 Sleep'**
+  String get metricSpo2Sleep;
+
+  /// No description provided for @metricRespRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Resp Rate'**
+  String get metricRespRate;
+
+  /// No description provided for @metricSkinTemp.
+  ///
+  /// In en, this message translates to:
+  /// **'Skin Temp'**
+  String get metricSkinTemp;
+
+  /// No description provided for @metricTonightSleep.
+  ///
+  /// In en, this message translates to:
+  /// **'Tonight’s Sleep'**
+  String get metricTonightSleep;
+
+  /// No description provided for @metricMuscleMass.
+  ///
+  /// In en, this message translates to:
+  /// **'Muscle Mass'**
+  String get metricMuscleMass;
+
+  /// No description provided for @metricBmi.
+  ///
+  /// In en, this message translates to:
+  /// **'BMI'**
+  String get metricBmi;
+
+  /// No description provided for @metricBodyWater.
+  ///
+  /// In en, this message translates to:
+  /// **'Body Water'**
+  String get metricBodyWater;
+
+  /// No description provided for @metricProtein.
+  ///
+  /// In en, this message translates to:
+  /// **'Protein'**
+  String get metricProtein;
+
+  /// No description provided for @metricVisceralFat.
+  ///
+  /// In en, this message translates to:
+  /// **'Visceral Fat'**
+  String get metricVisceralFat;
+
+  /// No description provided for @metricBmr.
+  ///
+  /// In en, this message translates to:
+  /// **'BMR'**
+  String get metricBmr;
+
+  /// No description provided for @metricBoneMass.
+  ///
+  /// In en, this message translates to:
+  /// **'Bone Mass'**
+  String get metricBoneMass;
+
+  /// No description provided for @metricHintLower.
+  ///
+  /// In en, this message translates to:
+  /// **'Lower is better'**
+  String get metricHintLower;
+
+  /// No description provided for @metricHintHigher.
+  ///
+  /// In en, this message translates to:
+  /// **'Higher is better'**
+  String get metricHintHigher;
+
+  /// No description provided for @metricHintUsual.
+  ///
+  /// In en, this message translates to:
+  /// **'Within your usual range is better'**
+  String get metricHintUsual;
+
+  /// No description provided for @metricHintSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Work toward your daily step goal'**
+  String get metricHintSteps;
+
+  /// No description provided for @metricHintSleep.
+  ///
+  /// In en, this message translates to:
+  /// **'Aim for your recommended sleep duration'**
+  String get metricHintSleep;
+
+  /// No description provided for @metricPeriodDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} Days'**
+  String metricPeriodDays(int days);
+
+  /// No description provided for @metricAvgShort.
+  ///
+  /// In en, this message translates to:
+  /// **'{days}D avg'**
+  String metricAvgShort(int days);
+
+  /// No description provided for @metricAvgLegend.
+  ///
+  /// In en, this message translates to:
+  /// **'{days}D average'**
+  String metricAvgLegend(int days);
+
+  /// No description provided for @metricAverage.
+  ///
+  /// In en, this message translates to:
+  /// **'Average'**
+  String get metricAverage;
+
+  /// No description provided for @metricRecommended.
+  ///
+  /// In en, this message translates to:
+  /// **'recommended'**
+  String get metricRecommended;
+
+  /// No description provided for @metricStepGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'/ 10k steps'**
+  String get metricStepGoal;
+
+  /// No description provided for @unitSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'steps'**
+  String get unitSteps;
+
+  /// No description provided for @briefingReadMore.
+  ///
+  /// In en, this message translates to:
+  /// **'read more'**
+  String get briefingReadMore;
+
+  /// No description provided for @briefingShowLess.
+  ///
+  /// In en, this message translates to:
+  /// **'show less'**
+  String get briefingShowLess;
+
+  /// No description provided for @hrvSeriesSleep.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep'**
+  String get hrvSeriesSleep;
+
+  /// No description provided for @hrvSeriesBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'Before training'**
+  String get hrvSeriesBefore;
+
+  /// No description provided for @hrvSeriesAfter.
+  ///
+  /// In en, this message translates to:
+  /// **'After training'**
+  String get hrvSeriesAfter;
+
+  /// No description provided for @hrvSeriesResting.
+  ///
+  /// In en, this message translates to:
+  /// **'Resting'**
+  String get hrvSeriesResting;
+
+  /// No description provided for @hrvReadingCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{1 reading} other{{count} readings}}'**
+  String hrvReadingCount(int count);
+
+  /// No description provided for @hrvReadingsMixed.
+  ///
+  /// In en, this message translates to:
+  /// **'Readings: {count} · mixed positions'**
+  String hrvReadingsMixed(int count);
+
+  /// No description provided for @hrvPairSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Comparable workout pairs: {pairs} · median change {ms} ms ({pct} %)'**
+  String hrvPairSummary(int pairs, String ms, String pct);
+
+  /// No description provided for @hrvOlderReading.
+  ///
+  /// In en, this message translates to:
+  /// **'older reading, quality not recorded'**
+  String get hrvOlderReading;
+
+  /// No description provided for @hrvEndedBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'ended {time} before the workout'**
+  String hrvEndedBefore(String time);
+
+  /// No description provided for @hrvAfterWorkout.
+  ///
+  /// In en, this message translates to:
+  /// **'{time} after the workout'**
+  String hrvAfterWorkout(String time);
+
+  /// No description provided for @hrvExtraAfter.
+  ///
+  /// In en, this message translates to:
+  /// **'extra reading after the workout'**
+  String get hrvExtraAfter;
+
+  /// No description provided for @hrvNotAssigned.
+  ///
+  /// In en, this message translates to:
+  /// **'not assigned to a workout'**
+  String get hrvNotAssigned;
+
+  /// No description provided for @metricBaseline7.
+  ///
+  /// In en, this message translates to:
+  /// **'7D BASELINE'**
+  String get metricBaseline7;
 }
 
 class _AppLocalizationsDelegate

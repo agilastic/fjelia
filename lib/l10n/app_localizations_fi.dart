@@ -8839,4 +8839,146 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get bpTodaysReading => 'TÄMÄN PÄIVÄN MITTAUS';
+
+  @override
+  String get metricHrvSleep => 'HRV uni';
+
+  @override
+  String get metricRhrSleep => 'Leposyke uni';
+
+  @override
+  String get metricSpo2Sleep => 'SpO2 uni';
+
+  @override
+  String get metricRespRate => 'Hengitystiheys';
+
+  @override
+  String get metricSkinTemp => 'Ihon lämpötila';
+
+  @override
+  String get metricTonightSleep => 'Uni tänä yönä';
+
+  @override
+  String get metricMuscleMass => 'Lihasmassa';
+
+  @override
+  String get metricBmi => 'BMI';
+
+  @override
+  String get metricBodyWater => 'Kehon vesi';
+
+  @override
+  String get metricProtein => 'Proteiini';
+
+  @override
+  String get metricVisceralFat => 'Viskeraalirasva';
+
+  @override
+  String get metricBmr => 'Perusaineenvaihdunta';
+
+  @override
+  String get metricBoneMass => 'Luumassa';
+
+  @override
+  String get metricHintLower => 'Matalampi on parempi';
+
+  @override
+  String get metricHintHigher => 'Korkeampi on parempi';
+
+  @override
+  String get metricHintUsual => 'Tavallisella alueellasi on parempi';
+
+  @override
+  String get metricHintSteps => 'Tavoittele päivittäistä askeltavoitettasi';
+
+  @override
+  String get metricHintSleep => 'Tavoittele suositeltua unen pituutta';
+
+  @override
+  String metricPeriodDays(int days) {
+    return '$days päivää';
+  }
+
+  @override
+  String metricAvgShort(int days) {
+    return 'Ka. $days pv';
+  }
+
+  @override
+  String metricAvgLegend(int days) {
+    return 'Keskiarvo $days pv';
+  }
+
+  @override
+  String get metricAverage => 'Keskiarvo';
+
+  @override
+  String get metricRecommended => 'suositus';
+
+  @override
+  String get metricStepGoal => '/ 10 000 askelta';
+
+  @override
+  String get unitSteps => 'askelta';
+
+  @override
+  String get briefingReadMore => 'lue lisää';
+
+  @override
+  String get briefingShowLess => 'näytä vähemmän';
+
+  @override
+  String get hrvSeriesSleep => 'Uni';
+
+  @override
+  String get hrvSeriesBefore => 'Ennen harjoitusta';
+
+  @override
+  String get hrvSeriesAfter => 'Harjoituksen jälkeen';
+
+  @override
+  String get hrvSeriesResting => 'Levossa';
+
+  @override
+  String hrvReadingCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count mittausta',
+      one: '1 mittaus',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String hrvReadingsMixed(int count) {
+    return 'Mittauksia: $count · eri asennoissa';
+  }
+
+  @override
+  String hrvPairSummary(int pairs, String ms, String pct) {
+    return 'Vertailukelpoisia harjoituspareja: $pairs · mediaanimuutos $ms ms ($pct %)';
+  }
+
+  @override
+  String get hrvOlderReading => 'vanhempi mittaus, laatua ei tallennettu';
+
+  @override
+  String hrvEndedBefore(String time) {
+    return 'päättyi $time ennen harjoitusta';
+  }
+
+  @override
+  String hrvAfterWorkout(String time) {
+    return '$time harjoituksen jälkeen';
+  }
+
+  @override
+  String get hrvExtraAfter => 'lisämittaus harjoituksen jälkeen';
+
+  @override
+  String get hrvNotAssigned => 'ei liitetty harjoitukseen';
+
+  @override
+  String get metricBaseline7 => '7 PV PERUSTASO';
 }

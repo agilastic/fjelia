@@ -9,26 +9,31 @@ import 'package:fjelia/services/briefing_text.dart';
 import 'package:flutter/widgets.dart' show Locale;
 import 'package:flutter_test/flutter_test.dart';
 
-HrvRecord _row(int daysAgo, {double? hrv, int? rhr, double? stress}) =>
-    HrvRecord(
-      id: daysAgo,
-      date: DateTime(2026, 10, 28).subtract(Duration(days: daysAgo)),
-      hrvLastNight: hrv,
-      hrvWeeklyAvg: null,
-      restingHeartRate: rhr,
-      stressLevel: stress,
-      bodyBattery: null,
-      computedEnergie: null,
-      spo2: null,
-      respirationRate: null,
-      skinTempDelta: null,
-      hrvIntradayJson: null,
-      source: null,
-    );
+HrvRecord _row(
+  int daysAgo, {
+  double? hrv,
+  int? rhr,
+  double? stress,
+  double? skin,
+}) => HrvRecord(
+  id: daysAgo,
+  date: DateTime(2026, 10, 28).subtract(Duration(days: daysAgo)),
+  hrvLastNight: hrv,
+  hrvWeeklyAvg: null,
+  restingHeartRate: rhr,
+  stressLevel: stress,
+  bodyBattery: null,
+  computedEnergie: null,
+  spo2: null,
+  respirationRate: null,
+  skinTempDelta: skin,
+  hrvIntradayJson: null,
+  source: null,
+);
 
-List<String> _lines(List<HrvRecord> hrv) => MetricAnalysis(
-  DateTime(2026, 10, 28, 21),
-).lines(hrv: hrv, sleep: const [], wellness: const []);
+List<String> _lines(List<HrvRecord> hrv) =>
+    MetricAnalysis(DateTime(2026, 10, 28, 21))
+        .lines(hrv: hrv, sleep: const [], wellness: const []);
 
 String _line(List<String> lines, String name) =>
     lines.firstWhere((l) => l.startsWith('[Analysis:$name,'));
@@ -162,29 +167,26 @@ void main() {
     expect(request.instructions, contains('DO NOT list or repeat'));
   });
 
-  test(
-    'a full briefing request fits the budget on the first try and on retry',
-    () {
-      for (final budget in [4600, 3600]) {
-        final request = AppleCoachRequest.build(
-          [
-            const ChatMessage(
-              text: 'Give me my evening briefing. Write it in German.',
-              isUser: true,
-            ),
-          ],
-          '[Context:V4][Today:2026-10-28,Weekday:Wed,TimeNow:21:15][Range:60d]\n'
-          '${briefLines(trainingHrv: 'down').join('\n')}\n'
-          '${'[Activities:today:${'run ' * 80}]\n' * 6}[TodayWorkout:Status:rest_day]',
-          briefingInstructions:
-              'You are Fjelia AI Coach. Generate a short evening briefing.',
-          budget: budget,
-        );
-        expect(request.inputBytes, lessThanOrEqualTo(budget));
-        expect(request.prompt, contains('Readiness RED'));
-      }
-    },
-  );
+  test('a full briefing request fits the budget on the first try and on retry', () {
+    for (final budget in [4600, 3600]) {
+      final request = AppleCoachRequest.build(
+        [
+          const ChatMessage(
+            text: 'Give me my evening briefing. Write it in German.',
+            isUser: true,
+          ),
+        ],
+        '[Context:V4][Today:2026-10-28,Weekday:Wed,TimeNow:21:15][Range:60d]\n'
+        '${briefLines(trainingHrv: 'down').join('\n')}\n'
+        '${'[Activities:today:${'run ' * 80}]\n' * 6}[TodayWorkout:Status:rest_day]',
+        briefingInstructions:
+            'You are Fjelia AI Coach. Generate a short evening briefing.',
+        budget: budget,
+      );
+      expect(request.inputBytes, lessThanOrEqualTo(budget));
+      expect(request.prompt, contains('Readiness RED'));
+    }
+  });
 
   group('briefing guard', () {
     test('short, in the right language and not a copy is usable', () {
@@ -268,5 +270,39 @@ void main() {
     );
     const green = BriefingBrief(readiness: 'green');
     expect(green.localText(de), contains('Keiner deiner Werte'));
+  });
+
+  BriefingBrief brief(List<HrvRecord> hrv) => BriefingBrief.parse(
+    MetricAnalysis(DateTime(2026, 10, 28, 21))
+        .lines(hrv: hrv, sleep: const [], wellness: const [])
+        .join('\n'),
+  )!;
+
+  test('a low stress day is not called high stress against its week', () {
+    // 33 against 28: +18 %, but still low stress.
+    final b = brief([
+      _row(0, hrv: 55, rhr: 47, stress: 33),
+      for (var i = 1; i <= 8; i++) _row(i, hrv: 55, rhr: 47, stress: 28),
+    ]);
+    expect(b.findings, isNot(contains('stressHigh')));
+  });
+
+  test('clearly raised stress is still a finding', () {
+    final b = brief([
+      _row(0, hrv: 55, rhr: 47, stress: 52),
+      for (var i = 1; i <= 8; i++) _row(i, hrv: 55, rhr: 47, stress: 28),
+    ]);
+    expect(b.findings, contains('stressHigh'));
+  });
+
+  test('an unusual skin temperature ranks before stress', () {
+    // All warnings yellow, like 2026-11-14: the skin temperature is among
+    // the three reasons, stress is not.
+    final b = brief([
+      _row(0, hrv: 49, rhr: 49, stress: 40, skin: .6),
+      for (var i = 1; i <= 8; i++)
+        _row(i, hrv: 55, rhr: 47, stress: 28, skin: 0),
+    ]);
+    expect(b.findings, ['hrvLow', 'rhrUp', 'skinTempOff']);
   });
 }

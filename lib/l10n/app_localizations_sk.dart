@@ -8842,4 +8842,148 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get bpTodaysReading => 'DNEŠNÉ MERANIE';
+
+  @override
+  String get metricHrvSleep => 'HRV spánok';
+
+  @override
+  String get metricRhrSleep => 'Pokojový tep spánok';
+
+  @override
+  String get metricSpo2Sleep => 'SpO2 spánok';
+
+  @override
+  String get metricRespRate => 'Dychová frekvencia';
+
+  @override
+  String get metricSkinTemp => 'Teplota pokožky';
+
+  @override
+  String get metricTonightSleep => 'Spánok dnes v noci';
+
+  @override
+  String get metricMuscleMass => 'Svalová hmota';
+
+  @override
+  String get metricBmi => 'BMI';
+
+  @override
+  String get metricBodyWater => 'Voda v tele';
+
+  @override
+  String get metricProtein => 'Bielkoviny';
+
+  @override
+  String get metricVisceralFat => 'Viscerálny tuk';
+
+  @override
+  String get metricBmr => 'Bazálny metabolizmus';
+
+  @override
+  String get metricBoneMass => 'Kostná hmota';
+
+  @override
+  String get metricHintLower => 'Nižšie je lepšie';
+
+  @override
+  String get metricHintHigher => 'Vyššie je lepšie';
+
+  @override
+  String get metricHintUsual => 'V tvojom obvyklom rozsahu je lepšie';
+
+  @override
+  String get metricHintSteps => 'Smeruj k dennému cieľu krokov';
+
+  @override
+  String get metricHintSleep => 'Snaž sa o odporúčanú dĺžku spánku';
+
+  @override
+  String metricPeriodDays(int days) {
+    return 'Dni: $days';
+  }
+
+  @override
+  String metricAvgShort(int days) {
+    return 'Priemer $days d';
+  }
+
+  @override
+  String metricAvgLegend(int days) {
+    return 'Priemer za $days dní';
+  }
+
+  @override
+  String get metricAverage => 'Priemer';
+
+  @override
+  String get metricRecommended => 'odporúčané';
+
+  @override
+  String get metricStepGoal => '/ 10 000 krokov';
+
+  @override
+  String get unitSteps => 'krokov';
+
+  @override
+  String get briefingReadMore => 'čítať ďalej';
+
+  @override
+  String get briefingShowLess => 'zobraziť menej';
+
+  @override
+  String get hrvSeriesSleep => 'Spánok';
+
+  @override
+  String get hrvSeriesBefore => 'Pred tréningom';
+
+  @override
+  String get hrvSeriesAfter => 'Po tréningu';
+
+  @override
+  String get hrvSeriesResting => 'V pokoji';
+
+  @override
+  String hrvReadingCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count meraní',
+      many: '$count merania',
+      few: '$count merania',
+      one: '1 meranie',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String hrvReadingsMixed(int count) {
+    return 'Merania: $count · rôzne polohy';
+  }
+
+  @override
+  String hrvPairSummary(int pairs, String ms, String pct) {
+    return 'Porovnateľné páry tréningov: $pairs · mediánová zmena $ms ms ($pct %)';
+  }
+
+  @override
+  String get hrvOlderReading => 'staršie meranie, kvalita nezaznamenaná';
+
+  @override
+  String hrvEndedBefore(String time) {
+    return 'skončilo $time pred tréningom';
+  }
+
+  @override
+  String hrvAfterWorkout(String time) {
+    return '$time po tréningu';
+  }
+
+  @override
+  String get hrvExtraAfter => 'ďalšie meranie po tréningu';
+
+  @override
+  String get hrvNotAssigned => 'nepriradené k tréningu';
+
+  @override
+  String get metricBaseline7 => 'ZÁKLAD 7 D';
 }

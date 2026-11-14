@@ -20,6 +20,7 @@ import '../theme/hrv_colors.dart';
 import 'app_widgets.dart';
 import 'hrv_finish_prompt.dart';
 import 'polar_h10_hrv_sheet.dart';
+import '../l10n/metric_text.dart';
 
 const _colors = {
   HrvSeries.sleep: hrvSleepColor,
@@ -41,7 +42,7 @@ class HrvCombinedCard extends ConsumerStatefulWidget {
     required this.end,
     required this.sleepPoints,
     this.average,
-    this.averageLabel = 'Average',
+    this.averageLabel,
   });
 
   final DateTime start, end;
@@ -49,7 +50,7 @@ class HrvCombinedCard extends ConsumerStatefulWidget {
 
   /// Average of the overnight readings, drawn as a reference line.
   final double? average;
-  final String averageLabel;
+  final String? averageLabel;
 
   @override
   ConsumerState<HrvCombinedCard> createState() => _State();
@@ -67,21 +68,20 @@ class _State extends ConsumerState<HrvCombinedCard> {
     final parts = [
       r.posture == 'supine' ? context.l10n.lying : context.l10n.enumSeated,
       '${(r.durationSeconds / 60).round()} min',
-      if (r.qualityState == 'legacyUnverified')
-        'older reading, quality not recorded',
+      if (r.qualityState == 'legacyUnverified') context.l10n.hrvOlderReading,
     ];
     final id = snapshot?.episodeOfMeasurement(hrvMeasurementUid(r));
     final a = id == null ? null : snapshot!.assessments[id];
     if (a != null) {
       if (a.pre?.uid == hrvMeasurementUid(r) && a.preGap != null) {
-        parts.add('ended ${hrvMinutes(a.preGap!)} before the workout');
+        parts.add(context.l10n.hrvEndedBefore(hrvMinutes(a.preGap!)));
       } else if (a.post?.uid == hrvMeasurementUid(r) && a.postDelay != null) {
-        parts.add('${hrvMinutes(a.postDelay!)} after the workout');
+        parts.add(context.l10n.hrvAfterWorkout(hrvMinutes(a.postDelay!)));
       } else if (a.additionalPosts.any((m) => m.uid == hrvMeasurementUid(r))) {
-        parts.add('extra reading after the workout');
+        parts.add(context.l10n.hrvExtraAfter);
       }
     } else if (r.context != 'resting') {
-      parts.add('not assigned to a workout');
+      parts.add(context.l10n.hrvNotAssigned);
     }
     return parts.join(' · ');
   }
@@ -172,7 +172,7 @@ class _State extends ConsumerState<HrvCombinedCard> {
               average: _hidden.contains(HrvSeries.sleep)
                   ? null
                   : widget.average,
-              averageLabel: widget.averageLabel,
+              averageLabel: widget.averageLabel ?? context.l10n.metricAverage,
             ),
           ),
         if (widget.average != null && !_hidden.contains(HrvSeries.sleep))
@@ -185,7 +185,7 @@ class _State extends ConsumerState<HrvCombinedCard> {
                 const SizedBox(width: 6),
                 Text(
                   context.l10n.averagelabelFixedMs(
-                    widget.averageLabel,
+                    widget.averageLabel ?? context.l10n.metricAverage,
                     widget.average!.fixed(0),
                   ),
                   style: TextStyle(fontSize: 10, color: muted),
@@ -280,11 +280,11 @@ class _Tile extends StatelessWidget {
     return Semantics(
       button: !empty,
       label:
-          '${data.series.label}, ${empty
-              ? 'no readings'
+          '${hrvSeriesLabel(context.l10n, data.series)}, ${empty
+              ? context.l10n.noReadings
               : mixed
-              ? '${data.count} readings in different positions, no average'
-              : '${average!.round()} milliseconds, ${data.count} readings'}',
+              ? context.l10n.hrvReadingsMixed(data.count)
+              : '${average!.round()} ms, ${context.l10n.hrvReadingCount(data.count)}'}',
       child: Material(
         color: dim ? _surface : color.withValues(alpha: .12),
         borderRadius: BorderRadius.circular(14),
@@ -317,7 +317,7 @@ class _Tile extends StatelessWidget {
                     const SizedBox(width: 6),
                     Expanded(
                       child: Text(
-                        data.series.label,
+                        hrvSeriesLabel(context.l10n, data.series),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -355,10 +355,8 @@ class _Tile extends StatelessWidget {
                   empty
                       ? context.l10n.noReadings
                       : mixed
-                      ? '${data.count} readings · mixed positions'
-                      : data.count == 1
-                      ? '1 reading'
-                      : '${data.count} readings',
+                      ? context.l10n.hrvReadingsMixed(data.count)
+                      : context.l10n.hrvReadingCount(data.count),
                   style: TextStyle(
                     fontSize: 10,
                     color: dim ? const Color(0x66FFFFFF) : muted,
@@ -398,10 +396,11 @@ class _PairSummary extends ConsumerWidget {
       );
     }
     final color = _colors[HrvSeries.after]!;
-    final text =
-        '${summary.pairs} comparable workout ${summary.pairs == 1 ? 'pair' : 'pairs'} · '
-        'median change ${hrvSigned(summary.medianMs!)} ms '
-        '(${hrvSigned(summary.medianPercent!)} %)';
+    final text = context.l10n.hrvPairSummary(
+      summary.pairs,
+      hrvSigned(summary.medianMs!),
+      hrvSigned(summary.medianPercent!),
+    );
     return Semantics(
       container: true,
       label: text,
@@ -546,7 +545,7 @@ class _Chart extends StatelessWidget {
             getTooltipItems: (touched) => [
               for (final spot in touched)
                 LineTooltipItem(
-                  '${series[spot.barIndex].series.label}\n',
+                  '${hrvSeriesLabel(context.l10n, series[spot.barIndex].series)}\n',
                   TextStyle(
                     color: _colors[series[spot.barIndex].series],
                     fontSize: 11,

@@ -8807,4 +8807,146 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get bpTodaysReading => 'DAGENS MÅLING';
+
+  @override
+  String get metricHrvSleep => 'HRV søvn';
+
+  @override
+  String get metricRhrSleep => 'Hvilepuls søvn';
+
+  @override
+  String get metricSpo2Sleep => 'SpO2 søvn';
+
+  @override
+  String get metricRespRate => 'Pustefrekvens';
+
+  @override
+  String get metricSkinTemp => 'Hudtemperatur';
+
+  @override
+  String get metricTonightSleep => 'Søvn i natt';
+
+  @override
+  String get metricMuscleMass => 'Muskelmasse';
+
+  @override
+  String get metricBmi => 'KMI';
+
+  @override
+  String get metricBodyWater => 'Kroppsvann';
+
+  @override
+  String get metricProtein => 'Protein';
+
+  @override
+  String get metricVisceralFat => 'Visceralt fett';
+
+  @override
+  String get metricBmr => 'Hvilemetabolisme';
+
+  @override
+  String get metricBoneMass => 'Benmasse';
+
+  @override
+  String get metricHintLower => 'Lavere er bedre';
+
+  @override
+  String get metricHintHigher => 'Høyere er bedre';
+
+  @override
+  String get metricHintUsual => 'Innenfor ditt vanlige område er bedre';
+
+  @override
+  String get metricHintSteps => 'Jobb mot ditt daglige skrittmål';
+
+  @override
+  String get metricHintSleep => 'Sikt mot anbefalt søvnlengde';
+
+  @override
+  String metricPeriodDays(int days) {
+    return '$days dager';
+  }
+
+  @override
+  String metricAvgShort(int days) {
+    return 'Snitt $days d';
+  }
+
+  @override
+  String metricAvgLegend(int days) {
+    return 'Snitt $days dager';
+  }
+
+  @override
+  String get metricAverage => 'Snitt';
+
+  @override
+  String get metricRecommended => 'anbefalt';
+
+  @override
+  String get metricStepGoal => '/ 10 000 skritt';
+
+  @override
+  String get unitSteps => 'skritt';
+
+  @override
+  String get briefingReadMore => 'les mer';
+
+  @override
+  String get briefingShowLess => 'vis mindre';
+
+  @override
+  String get hrvSeriesSleep => 'Søvn';
+
+  @override
+  String get hrvSeriesBefore => 'Før trening';
+
+  @override
+  String get hrvSeriesAfter => 'Etter trening';
+
+  @override
+  String get hrvSeriesResting => 'Hvile';
+
+  @override
+  String hrvReadingCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count målinger',
+      one: '1 måling',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String hrvReadingsMixed(int count) {
+    return 'Målinger: $count · blandede stillinger';
+  }
+
+  @override
+  String hrvPairSummary(int pairs, String ms, String pct) {
+    return 'Sammenlignbare øktpar: $pairs · medianendring $ms ms ($pct %)';
+  }
+
+  @override
+  String get hrvOlderReading => 'eldre måling, kvalitet ikke registrert';
+
+  @override
+  String hrvEndedBefore(String time) {
+    return 'sluttet $time før økten';
+  }
+
+  @override
+  String hrvAfterWorkout(String time) {
+    return '$time etter økten';
+  }
+
+  @override
+  String get hrvExtraAfter => 'ekstra måling etter økten';
+
+  @override
+  String get hrvNotAssigned => 'ikke knyttet til en økt';
+
+  @override
+  String get metricBaseline7 => '7 D BASIS';
 }
