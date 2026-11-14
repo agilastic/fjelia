@@ -14,20 +14,20 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get freeAiUsageTracking =>
-      'To keep Free AI reliably available for everyone, we send a random installation ID. It helps us identify unusual usage and block abusive requests. The ID contains neither your name nor account details.';
+      'Para manter o Free AI disponível de forma fiável para todos, enviamos um ID de instalação aleatório. Ajuda-nos a identificar utilização invulgar e a bloquear pedidos abusivos. O ID não contém o teu nome nem dados da conta.';
 
   @override
   String freeAiDescription(String host) {
-    return 'Free AI provides free cloud chat and briefings through $host. No separate account or API key is needed. Messages and a health/training summary are sent to this service after your confirmation.';
+    return 'O Free AI oferece chat na nuvem e resumos gratuitos através de $host. Não precisas de conta própria nem de chave de API. As mensagens e um resumo da tua saúde e treino são enviados para este serviço depois da tua confirmação.';
   }
 
   @override
   String get freeAiUnavailable =>
-      'Free AI is not available in this build. Choose another provider.';
+      'O Free AI não está disponível nesta versão. Escolhe outro fornecedor.';
 
   @override
   String shareBriefingContextWithName(String name) {
-    return 'A summary of your health and training data will be sent to $name. This one-time approval also covers future cloud AI providers you select for briefings.';
+    return 'Será enviado a $name um resumo dos teus dados de saúde e treino. Esta autorização única cobre também os fornecedores de IA na nuvem que escolheres no futuro para os resumos.';
   }
 
   @override
@@ -40,31 +40,32 @@ class AppLocalizationsPt extends AppLocalizations {
   String get settings => 'Definições';
 
   @override
-  String get profile => 'Profile';
+  String get profile => 'Perfil';
 
   @override
   String get training => 'Treino';
 
   @override
-  String get weatherLocation => 'Weather & Location';
+  String get weatherLocation => 'Meteorologia e localização';
 
   @override
   String get display => 'Ecrã';
 
   @override
-  String get connections => 'Connections';
+  String get connections => 'Ligações';
 
   @override
-  String get aiAndMore => 'AI & More';
+  String get aiAndMore => 'IA e mais';
 
   @override
-  String get system => 'System';
+  String get system => 'Sistema';
 
   @override
-  String get runSetupAgain => 'Run setup again';
+  String get runSetupAgain => 'Repetir a configuração';
 
   @override
-  String get runSetupAgainSubtitle => 'Accounts, race goal and training plan';
+  String get runSetupAgainSubtitle =>
+      'Contas, objetivo de prova e plano de treino';
 
   @override
   String get back => 'Voltar';
@@ -73,186 +74,187 @@ class AppLocalizationsPt extends AppLocalizations {
   String get close => 'Fechar';
 
   @override
-  String get dataExport => 'Data Export';
+  String get dataExport => 'Exportação de dados';
 
   @override
-  String get dataExportSubtitle => 'CSV export, backup & restore';
+  String get dataExportSubtitle =>
+      'Exportação CSV, cópia de segurança e restauro';
 
   @override
-  String get developer => 'Developer';
+  String get developer => 'Programador';
 
   @override
-  String get developerSubtitle => 'Debug mode, diagnostics';
+  String get developerSubtitle => 'Modo de depuração, diagnóstico';
 
   @override
-  String get debug => 'Debug';
+  String get debug => 'Depuração';
 
   @override
-  String get debugMode => 'Debug mode';
+  String get debugMode => 'Modo de depuração';
 
   @override
-  String get debugModeSubtitle => 'Shows the DEBUG tab';
+  String get debugModeSubtitle => 'Mostra o separador DEBUG';
 
   @override
-  String get support => 'Support';
+  String get support => 'Suporte';
 
   @override
-  String get reportBug => 'Report a bug';
+  String get reportBug => 'Comunicar um erro';
 
   @override
-  String get aiCoach => 'AI Coach';
+  String get aiCoach => 'Treinador IA';
 
   @override
-  String get enableAiCoach => 'Enable AI Coach';
+  String get enableAiCoach => 'Ativar treinador IA';
 
   @override
-  String get onDeviceAiOrCloud => 'On-device AI or cloud provider';
+  String get onDeviceAiOrCloud => 'IA no dispositivo ou fornecedor na nuvem';
 
   @override
-  String get provider => 'Provider';
+  String get provider => 'Fornecedor';
 
   @override
-  String get model => 'Model';
+  String get model => 'Modelo';
 
   @override
   String get chatAndAiBriefingsUse =>
-      'Chat and AI briefings use Apple Intelligence on this device. No API key required. If the model is unavailable, briefings show a non-AI summary.';
+      'O chat e os resumos de IA usam o Apple Intelligence neste dispositivo. Não é necessária chave de API. Se o modelo não estiver disponível, os resumos mostram uma síntese sem IA.';
 
   @override
-  String get briefing => 'Briefing';
+  String get briefing => 'Resumo';
 
   @override
   String get useAppleIntelligenceForBriefings =>
-      'Use Apple Intelligence for briefings';
+      'Usar o Apple Intelligence nos resumos';
 
   @override
   String get useOnDeviceAiFor =>
-      'Use on-device AI for briefings while keeping the selected provider for chat.';
+      'Usar IA no dispositivo para os resumos e manter o fornecedor escolhido para o chat.';
 
   @override
-  String get healthDataSharing => 'Health data sharing';
+  String get healthDataSharing => 'Partilha de dados de saúde';
 
   @override
-  String get askOncePerChatSession => 'Ask once per chat session';
+  String get askOncePerChatSession => 'Perguntar uma vez por sessão de chat';
 
   @override
   String get otherwiseAskBeforeEveryCloud =>
-      'Otherwise ask before every cloud message';
+      'Caso contrário, perguntar antes de cada mensagem para a nuvem';
 
   @override
-  String get reportABug => 'Report a Bug';
+  String get reportABug => 'Comunicar um erro';
 
   @override
-  String get weatherData => 'Weather data';
+  String get weatherData => 'Dados meteorológicos';
 
   @override
-  String get openSourceLibraries => 'Open source libraries';
+  String get openSourceLibraries => 'Bibliotecas de código aberto';
 
   @override
-  String get license => 'License';
+  String get license => 'Licença';
 
   @override
-  String get licenses => 'Licenses';
+  String get licenses => 'Licenças';
 
   @override
-  String get apiKey => 'API key';
+  String get apiKey => 'Chave de API';
 
   @override
-  String get saveApiKey => 'Save API key';
+  String get saveApiKey => 'Guardar chave de API';
 
   @override
-  String get feedbackBugReport => 'Feedback & bug report';
+  String get feedbackBugReport => 'Comentários e comunicação de erros';
 
   @override
-  String get reportSentThankYou => 'Report sent. Thank you!';
+  String get reportSentThankYou => 'Relatório enviado. Obrigado!';
 
   @override
   String get weReadEveryMessageIf =>
-      'We read every message. If you left your email, you may get a reply.';
+      'Lemos todas as mensagens. Se deixaste o teu e-mail, poderás receber uma resposta.';
 
   @override
   String get done => 'Concluído';
 
   @override
   String get shareAnIdeaSuggestAn =>
-      'Share an idea, suggest an improvement, or tell us what happened and what you expected.';
+      'Partilha uma ideia, sugere uma melhoria ou conta o que aconteceu e o que esperavas.';
 
   @override
-  String get whatHappenedAndWhatDid =>
-      'What happened, and what did you expect?';
+  String get whatHappenedAndWhatDid => 'O que aconteceu e o que esperavas?';
 
   @override
   String get pleaseLeaveOutPasswordsApi =>
-      'Please leave out passwords, API keys and personal health readings.';
+      'Não incluas palavras-passe, chaves de API nem medições pessoais de saúde.';
 
   @override
-  String get includeDiagnostics => 'Include diagnostics';
+  String get includeDiagnostics => 'Incluir diagnóstico';
 
   @override
   String get optionalLogsMayContainAccount =>
-      'Optional. Logs may contain account or health details. Review them below before sending.';
+      'Opcional. Os registos podem conter dados da conta ou de saúde. Revê-os abaixo antes de enviar.';
 
   @override
-  String get diagnosticsPreview => 'DIAGNOSTICS PREVIEW';
+  String get diagnosticsPreview => 'PRÉ-VISUALIZAÇÃO DO DIAGNÓSTICO';
 
   @override
   String get sendingSharesYourEmailSubject =>
-      'Sending shares your email, subject, message and any selected diagnostics with Fjelia support at www.fjelia.com.';
+      'Ao enviar, partilhas o teu e-mail, assunto, mensagem e o diagnóstico selecionado com o suporte da Fjelia em www.fjelia.com.';
 
   @override
-  String get copyReport => 'Copy report';
+  String get copyReport => 'Copiar relatório';
 
   @override
-  String get shareReport => 'Share report';
+  String get shareReport => 'Partilhar relatório';
 
   @override
-  String get appleHealth => 'Apple Health';
+  String get appleHealth => 'Apple Saúde';
 
   @override
-  String get connectedServices => 'Connected Services';
+  String get connectedServices => 'Serviços ligados';
 
   @override
-  String get hiloBloodPressureBle => 'Hilo Blood Pressure BLE';
+  String get hiloBloodPressureBle => 'Tensão arterial Hilo BLE';
 
   @override
-  String get writeHeartDataToApple => 'Write Heart data to Apple Health';
+  String get writeHeartDataToApple => 'Escrever dados cardíacos no Apple Saúde';
 
   @override
-  String get writeWeightDataToApple => 'Write Weight data to Apple Health';
+  String get writeWeightDataToApple => 'Escrever dados de peso no Apple Saúde';
 
   @override
-  String get renphoScaleBle => 'Renpho Scale (BLE)';
+  String get renphoScaleBle => 'Balança Renpho (BLE)';
 
   @override
-  String get polarH10HrvStrapBle => 'Polar H10 (HRV strap, BLE)';
+  String get polarH10HrvStrapBle => 'Polar H10 (cinta HRV, BLE)';
 
   @override
-  String get dataSourcePriority => 'Data Source Priority';
+  String get dataSourcePriority => 'Prioridade das fontes de dados';
 
   @override
   String get whenMultipleSourcesProvideThe =>
-      'When multiple sources provide the same metric, the higher source wins. Drag to reorder.';
+      'Quando várias fontes fornecem a mesma métrica, ganha a fonte mais acima. Arrasta para reordenar.';
 
   @override
-  String get resetToDefault => 'Reset to default';
+  String get resetToDefault => 'Repor predefinição';
 
   @override
-  String get disconnect => 'Disconnect';
+  String get disconnect => 'Desligar';
 
   @override
-  String get healthPage => 'Health Page';
+  String get healthPage => 'Página de saúde';
 
   @override
-  String get loadPage => 'Load Page';
+  String get loadPage => 'Página de carga';
 
   @override
-  String get healthMonitor => 'Health Monitor';
+  String get healthMonitor => 'Monitor de saúde';
 
   @override
-  String get hrZones => 'HR Zones';
+  String get hrZones => 'Zonas de FC';
 
   @override
-  String get t30MinTtAvailableSync => '30-min TT available — sync HR zones';
+  String get t30MinTtAvailableSync =>
+      'Contrarrelógio de 30 min disponível — sincronizar zonas de FC';
 
   @override
   String lt2Lt2BpmAt(Object lt2, Object at) {
@@ -260,160 +262,163 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get syncLabel => 'SYNC';
+  String get syncLabel => 'SINC';
 
   @override
-  String get autoadjust => 'AUTOADJUST';
+  String get autoadjust => 'AUTOAJUSTE';
 
   @override
   String zoneI(Object i) {
-    return 'Zone $i';
+    return 'Zona $i';
   }
 
   @override
-  String get hrZones2 => 'HR ZONES';
+  String get hrZones2 => 'ZONAS DE FC';
 
   @override
   String ageRound(Object round) {
-    return 'age $round';
+    return 'idade $round';
   }
 
   @override
-  String get basics => 'Basics';
+  String get basics => 'Básico';
 
   @override
   String get updateWaistMonthlyUsedFor =>
-      'ⓘ Update waist monthly — used for visceral fat estimate.';
+      'ⓘ Atualiza a cintura todos os meses — usada para estimar a gordura visceral.';
 
   @override
-  String get alcohol => 'Alcohol';
+  String get alcohol => 'Álcool';
 
   @override
-  String get t1Drink033L => '1 drink ≈ 0.33 L beer / 0.2 L wine / 4 cl spirits';
+  String get t1Drink033L =>
+      '1 bebida ≈ 0,33 l de cerveja / 0,2 l de vinho / 4 cl de bebidas destiladas';
 
   @override
-  String get clinicalLabsOptional => 'Clinical labs (optional)';
+  String get clinicalLabsOptional => 'Análises clínicas (opcional)';
 
   @override
-  String get glycemic => 'Glycemic';
+  String get glycemic => 'Glicemia';
 
   @override
   String get optimalForLongevity48 =>
-      'Optimal for longevity: 4.8–5.4% · Prediabetes: 5.7–6.4%';
+      'Ideal para a longevidade: 4,8–5,4% · Pré-diabetes: 5,7–6,4%';
 
   @override
-  String get lipids => 'Lipids';
+  String get lipids => 'Lípidos';
 
   @override
   String get apobReplacesLdlWhenBoth =>
-      'ApoB replaces LDL when both are entered.';
+      'A ApoB substitui o LDL quando ambos são introduzidos.';
 
   @override
-  String get inflammationKidney => 'Inflammation & Kidney';
+  String get inflammationKidney => 'Inflamação e rim';
 
   @override
-  String get changesAreSavedAutomatically => 'Changes are saved automatically';
+  String get changesAreSavedAutomatically =>
+      'As alterações são guardadas automaticamente';
 
   @override
   String get optionalTotalClimbingForThis =>
-      'Optional total climbing for this race.';
+      'Opcional: desnível positivo total desta prova.';
 
   @override
-  String get moreAboutThisEvent => 'More about this event';
+  String get moreAboutThisEvent => 'Mais sobre este evento';
 
   @override
   String distanceOfDistancekmKm(Object distanceKm) {
-    return 'Distance of $distanceKm km?';
+    return 'Distância de $distanceKm km?';
   }
 
   @override
   String keepDistancekmKm(Object distanceKm) {
-    return 'Keep $distanceKm km';
+    return 'Manter $distanceKm km';
   }
 
   @override
   String useLikelyKm(Object likely) {
-    return 'Use $likely km';
+    return 'Usar $likely km';
   }
 
   @override
   String get thisBackupContainsNoCalendar =>
-      'This backup contains no calendar activities.';
+      'Esta cópia de segurança não contém atividades do calendário.';
 
   @override
   String get activities => 'Atividades';
 
   @override
-  String get exportActivitiesCsv => 'Export activities CSV';
+  String get exportActivitiesCsv => 'Exportar atividades em CSV';
 
   @override
-  String get backupRestore => 'Backup & restore';
+  String get backupRestore => 'Cópia de segurança e restauro';
 
   @override
-  String get backup => 'Backup';
+  String get backup => 'Cópia de segurança';
 
   @override
-  String get restoreFromBackup => 'Restore from backup';
+  String get restoreFromBackup => 'Restaurar a partir da cópia de segurança';
 
   @override
   String get backupRestoredRestartTheApp =>
-      'Backup restored. Restart the app to reload all settings.';
+      'Cópia de segurança restaurada. Reinicia a app para carregar todas as definições.';
 
   @override
-  String get raceGoals => 'Race Goals';
+  String get raceGoals => 'Objetivos de prova';
 
   @override
-  String get yourActivities => 'Your Activities';
+  String get yourActivities => 'As tuas atividades';
 
   @override
   String get usedByAiCoachAnd =>
-      'Used by AI Coach and training plan. Plan sports marked with ✦.';
+      'Usado pelo treinador IA e pelo plano de treino. Desportos do plano marcados com ✦.';
 
   @override
-  String get calendarWeekStart => 'Calendar week start';
+  String get calendarWeekStart => 'Início da semana no calendário';
 
   @override
-  String get planDefaultView => 'Plan Default View';
+  String get planDefaultView => 'Vista predefinida do plano';
 
   @override
-  String get weeklySchedule => 'Weekly Schedule';
+  String get weeklySchedule => 'Horário semanal';
 
   @override
   String trainingdaysperweekTrainingDaysTapTo(int trainingDaysPerWeek) {
     String _temp0 = intl.Intl.pluralLogic(
       trainingDaysPerWeek,
       locale: localeName,
-      other: '$trainingDaysPerWeek training days',
-      one: '$trainingDaysPerWeek training day',
+      other: '$trainingDaysPerWeek dias de treino',
+      one: '$trainingDaysPerWeek dia de treino',
     );
-    return '$_temp0 · tap to cycle Training / Rest / Strength';
+    return '$_temp0 · toca para alternar treino / descanso / força';
   }
 
   @override
-  String get updatePlanToThisSchedule => 'Update plan to this schedule';
+  String get updatePlanToThisSchedule => 'Ajustar o plano a este horário';
 
   @override
-  String get updateStrengthSessions => 'Update strength sessions';
+  String get updateStrengthSessions => 'Atualizar treinos de força';
 
   @override
-  String get sessionsPerDay => 'Sessions per day';
+  String get sessionsPerDay => 'Treinos por dia';
 
   @override
-  String get canYouFitTwoWorkouts => 'Can you fit two workouts in one day?';
+  String get canYouFitTwoWorkouts =>
+      'Consegues fazer dois treinos no mesmo dia?';
 
   @override
-  String get strengthLoadUnit => 'Strength load unit';
+  String get strengthLoadUnit => 'Unidade de carga de força';
 
   @override
   String get weightsThemselvesAreSetIn =>
-      'Weights themselves are set in each workout and remembered from your history.';
+      'Os pesos definem-se em cada treino e são lembrados a partir do teu histórico.';
 
   @override
-  String get hoursAvailableWeek => 'Hours available / week';
+  String get hoursAvailableWeek => 'Horas disponíveis / semana';
 
   @override
   String hoursperweekHWeek(Object hoursPerWeek) {
-    return '$hoursPerWeek h / week';
+    return '$hoursPerWeek h / semana';
   }
 
   @override
@@ -422,21 +427,21 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get heatAcclimation => 'Heat Acclimation';
+  String get heatAcclimation => 'Aclimatação ao calor';
 
   @override
-  String get showHeatAcclimation => 'Show Heat Acclimation';
+  String get showHeatAcclimation => 'Mostrar aclimatação ao calor';
 
   @override
   String get weatherEvaluatedAgainstAConfigurable =>
-      'Weather evaluated against a configurable location.';
+      'A meteorologia é avaliada para uma localização configurável.';
 
   @override
-  String get trainingPlan => 'Training Plan';
+  String get trainingPlan => 'Plano de treino';
 
   @override
   String get regenerateReplacesFutureSessionsAnd =>
-      'Regenerate replaces future sessions and rebuilds from today using current settings.';
+      'Gerar de novo substitui os treinos futuros e reconstrói o plano a partir de hoje com as definições atuais.';
 
   @override
   String valueUpcomingWorkoutsGenerated(int value) {
@@ -451,14 +456,14 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get generationFailedCheckYourRace =>
-      'Generation failed. Check your race goal and try again.';
+      'A geração falhou. Verifica o objetivo de prova e tenta novamente.';
 
   @override
-  String get deleteAllWorkouts => 'Delete All Workouts';
+  String get deleteAllWorkouts => 'Eliminar todos os treinos';
 
   @override
   String get changesAreSavedAutomatically2 =>
-      '✓ Changes are saved automatically';
+      '✓ As alterações são guardadas automaticamente';
 
   @override
   String countUpcomingWorkoutsGenerated(int count) {
@@ -472,60 +477,62 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get importRaceGoalsFromGarmin => 'Import race goals from Garmin';
+  String get importRaceGoalsFromGarmin =>
+      'Importar objetivos de prova da Garmin';
 
   @override
-  String get addRaceGoal => 'Add race goal';
+  String get addRaceGoal => 'Adicionar objetivo de prova';
 
   @override
   String priorityTouppercase(Object toUpperCase) {
-    return 'Priority $toUpperCase';
+    return 'Prioridade $toUpperCase';
   }
 
   @override
   String get goalsAreSharedWithAi =>
-      'Goals are shared with AI Coach. Priority A, B and C decide how the plan weighs your races against each other.';
+      'Os objetivos são partilhados com o treinador IA. As prioridades A, B e C definem como o plano pondera as tuas provas entre si.';
 
   @override
-  String get deletingWorkouts => 'Deleting workouts';
+  String get deletingWorkouts => 'A eliminar treinos';
 
   @override
-  String get cityOrTown => 'City or town';
+  String get cityOrTown => 'Cidade ou localidade';
 
   @override
-  String get eGHannoverOrPalma => 'e.g. Hannover or Palma';
+  String get eGHannoverOrPalma => 'p. ex. Hanôver ou Palma';
 
   @override
-  String get noCitiesFoundTryA => 'No cities found. Try a nearby town.';
+  String get noCitiesFoundTryA =>
+      'Nenhuma cidade encontrada. Experimenta uma localidade próxima.';
 
   @override
   String get chooseTheLocationForThe =>
-      'Choose the location for the Plan forecast, radar and heat acclimation. Weather works even when heat acclimation is off.';
+      'Escolhe a localização para a previsão do plano, o radar e a aclimatação ao calor. A meteorologia funciona mesmo com a aclimatação ao calor desligada.';
 
   @override
-  String get none => 'None';
+  String get none => 'Nenhuma';
 
   @override
   String get disableLocalWeatherAndLocation =>
-      'Disable local weather and location requests';
+      'Desativar meteorologia local e pedidos de localização';
 
   @override
-  String get currentLocation => 'Current location';
+  String get currentLocation => 'Localização atual';
 
   @override
-  String get followYourDeviceLocation => 'Follow your device location';
+  String get followYourDeviceLocation => 'Seguir a localização do dispositivo';
 
   @override
-  String get fixedLocation => 'Fixed location';
+  String get fixedLocation => 'Localização fixa';
 
   @override
-  String get chooseACityOrEnter => 'Choose a city or enter coordinates';
+  String get chooseACityOrEnter => 'Escolhe uma cidade ou introduz coordenadas';
 
   @override
-  String get chooseCity => 'Choose city';
+  String get chooseCity => 'Escolher cidade';
 
   @override
-  String get coordinates => 'Coordinates';
+  String get coordinates => 'Coordenadas';
 
   @override
   String get latitude => 'Latitude';
@@ -534,26 +541,26 @@ class AppLocalizationsPt extends AppLocalizations {
   String get longitude => 'Longitude';
 
   @override
-  String get saveLocation => 'Save location';
+  String get saveLocation => 'Guardar localização';
 
   @override
-  String get refreshCurrentLocation => 'Refresh current location';
+  String get refreshCurrentLocation => 'Atualizar localização atual';
 
   @override
   String get citySearchOpenMeteoGeonames =>
-      'City search: Open-Meteo / GeoNames';
+      'Pesquisa de cidades: Open-Meteo / GeoNames';
 
   @override
-  String get cityNamesOpenstreetmap => 'City names: © OpenStreetMap';
+  String get cityNamesOpenstreetmap => 'Nomes de localidades: © OpenStreetMap';
 
   @override
-  String get energy => 'ENERGY';
+  String get energy => 'ENERGIA';
 
   @override
-  String get currentEnergy => 'CURRENT ENERGY';
+  String get currentEnergy => 'ENERGIA ATUAL';
 
   @override
-  String get dailyTimeline => 'DAILY TIMELINE';
+  String get dailyTimeline => 'EVOLUÇÃO DIÁRIA';
 
   @override
   String valueValue2(Object value, Object value2) {
@@ -561,41 +568,42 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get energy2 => 'Energy';
+  String get energy2 => 'Energia';
 
   @override
-  String get noData => 'No data';
+  String get noData => 'Sem dados';
 
   @override
-  String get bloodPressureInsights => 'BLOOD PRESSURE INSIGHTS';
+  String get bloodPressureInsights => 'ANÁLISE DA TENSÃO ARTERIAL';
 
   @override
-  String get sys => ' Sys';
+  String get sys => ' Sis';
 
   @override
   String get diaMmhg => ' Dia · mmHg';
 
   @override
-  String get previousBloodPressurePeriod => 'Previous blood-pressure period';
+  String get previousBloodPressurePeriod => 'Período de tensão anterior';
 
   @override
-  String get nextBloodPressurePeriod => 'Next blood-pressure period';
+  String get nextBloodPressurePeriod => 'Período de tensão seguinte';
 
   @override
-  String get nightDipping => 'Night Dipping';
+  String get nightDipping => 'Descida noturna';
 
   @override
-  String get noMeasurementsInThisPeriod => 'No measurements in this period';
+  String get noMeasurementsInThisPeriod => 'Sem medições neste período';
 
   @override
-  String get fullscreenBloodPressureChart => 'Fullscreen blood-pressure chart';
+  String get fullscreenBloodPressureChart =>
+      'Gráfico da tensão em ecrã inteiro';
 
   @override
   String get barsMinMaxLineDots =>
-      'Bars: min–max · line/dots: average · tap or drag to inspect';
+      'Barras: mín.–máx. · linha/pontos: média · toca ou arrasta para ver';
 
   @override
-  String get noMeasurements => 'No measurements';
+  String get noMeasurements => 'Sem medições';
 
   @override
   String round(Object round) {
@@ -621,19 +629,19 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String bloodPressureTouppercaseMmhg(Object toUpperCase) {
-    return 'BLOOD PRESSURE · $toUpperCase · mmHg';
+    return 'TENSÃO ARTERIAL · $toUpperCase · mmHg';
   }
 
   @override
   String get closeFullscreenBloodPressureChart =>
-      'Close fullscreen blood-pressure chart';
+      'Fechar gráfico da tensão em ecrã inteiro';
 
   @override
-  String get chooseScale => 'Choose scale';
+  String get chooseScale => 'Escolher balança';
 
   @override
   String get noScalesFoundStepOn =>
-      'No scales found. Step on your scale and try again.';
+      'Nenhuma balança encontrada. Sobe para a balança e tenta novamente.';
 
   @override
   String nameRssiDbm(Object name, Object rssi) {
@@ -641,229 +649,233 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get renphoSaved => 'RENPHO saved:';
+  String get renphoSaved => 'RENPHO guardado:';
 
   @override
-  String get renphoScaleBle2 => 'RENPHO Scale (BLE)';
+  String get renphoScaleBle2 => 'Balança RENPHO (BLE)';
 
   @override
-  String get changeMeasurementType => 'Change measurement type';
+  String get changeMeasurementType => 'Mudar tipo de medição';
 
   @override
-  String get addMeasurement => 'Add Measurement';
+  String get addMeasurement => 'Adicionar medição';
 
   @override
-  String get whatAreYouMeasuring => 'What are you measuring?';
+  String get whatAreYouMeasuring => 'O que estás a medir?';
 
   @override
-  String get chooseAnotherMeasurement => 'Choose another measurement';
+  String get chooseAnotherMeasurement => 'Escolher outra medição';
 
   @override
-  String get saveMeasurement => 'Save measurement';
+  String get saveMeasurement => 'Guardar medição';
 
   @override
-  String get skip => 'Skip';
+  String get skip => 'Saltar';
 
   @override
-  String get connectHiloService => 'Connect Hilo Service';
+  String get connectHiloService => 'Ligar o serviço Hilo';
 
   @override
-  String get connectHilo => 'Connect Hilo';
+  String get connectHilo => 'Ligar Hilo';
 
   @override
-  String get connectCoros => 'Connect Coros';
+  String get connectCoros => 'Ligar Coros';
 
   @override
-  String get europe => 'Europe';
+  String get europe => 'Europa';
 
   @override
-  String get unitedStates => 'United States';
+  String get unitedStates => 'Estados Unidos';
 
   @override
-  String get asia => 'Asia';
+  String get asia => 'Ásia';
 
   @override
-  String get bluetoothBloodPressure => 'Bluetooth · blood pressure';
+  String get bluetoothBloodPressure => 'Bluetooth · tensão arterial';
 
   @override
-  String get cloudCuffData => 'Cloud · cuff data';
+  String get cloudCuffData => 'Nuvem · dados da braçadeira';
 
   @override
-  String get apiSync => 'API sync';
+  String get apiSync => 'Sincronização por API';
 
   @override
-  String get bluetoothHrvStrap => 'Bluetooth · HRV strap';
+  String get bluetoothHrvStrap => 'Bluetooth · cinta HRV';
 
   @override
   String get accesslinkApi => 'AccessLink API';
 
   @override
-  String get systemHealthData => 'System health data';
+  String get systemHealthData => 'Dados de saúde do sistema';
 
   @override
-  String get cloudScaleHistory => 'Cloud · scale history';
+  String get cloudScaleHistory => 'Nuvem · histórico da balança';
 
   @override
-  String get bluetoothWeightBody => 'Bluetooth · weight & body';
+  String get bluetoothWeightBody => 'Bluetooth · peso e corpo';
 
   @override
-  String get connectYourDevices => 'Connect your devices';
+  String get connectYourDevices => 'Liga os teus dispositivos';
 
   @override
   String get continueLabel => 'Continuar';
 
   @override
-  String get connectGarmin => 'Connect Garmin';
+  String get connectGarmin => 'Ligar Garmin';
 
   @override
-  String get connectAppleHealth => 'Connect Apple Health';
+  String get connectAppleHealth => 'Ligar Apple Saúde';
 
   @override
-  String get dataSynced => 'DATA SYNCED';
+  String get dataSynced => 'DADOS SINCRONIZADOS';
 
   @override
-  String get pairHiloPod => 'Pair Hilo Pod';
+  String get pairHiloPod => 'Emparelhar Hilo Pod';
 
   @override
-  String get chooseStrap => 'Choose strap';
+  String get chooseStrap => 'Escolher cinta';
 
   @override
   String namePaired(Object name) {
-    return '$name paired.';
+    return '$name emparelhado.';
   }
 
   @override
-  String get pairPolarH10 => 'Pair Polar H10';
+  String get pairPolarH10 => 'Emparelhar Polar H10';
 
   @override
-  String get forget => 'Forget';
+  String get forget => 'Esquecer';
 
   @override
-  String get sendWorkoutToPolar => 'Send workout to Polar';
+  String get sendWorkoutToPolar => 'Enviar treino para a Polar';
 
   @override
-  String get connectPolar => 'Connect Polar';
+  String get connectPolar => 'Ligar Polar';
 
   @override
-  String get signInWithPolarFlow => 'Sign in with Polar Flow';
+  String get signInWithPolarFlow => 'Iniciar sessão com o Polar Flow';
 
   @override
   String get syncsSleepStagesHrvResting =>
-      'Syncs sleep stages · HRV · resting HR · workouts · steps';
+      'Sincroniza fases do sono · HRV · FC em repouso · treinos · passos';
 
   @override
   String savedForV(Object v) {
-    return 'Saved for $v';
+    return 'Guardado para $v';
   }
 
   @override
-  String get remove => 'Remove';
+  String get remove => 'Remover';
 
   @override
-  String get polarEMail => 'Polar e-mail';
+  String get polarEMail => 'E-mail da Polar';
 
   @override
-  String get polarPassword => 'Polar password';
+  String get polarPassword => 'Palavra-passe da Polar';
 
   @override
-  String get pairRenphoScale => 'Pair RENPHO Scale';
+  String get pairRenphoScale => 'Emparelhar balança RENPHO';
 
   @override
-  String get connectRenpho => 'Connect Renpho';
+  String get connectRenpho => 'Ligar Renpho';
 
   @override
-  String get connectSuunto => 'Connect Suunto';
+  String get connectSuunto => 'Ligar Suunto';
 
   @override
   String smsSentToTrim(Object trim) {
-    return 'SMS sent to $trim';
+    return 'SMS enviado para $trim';
   }
 
   @override
-  String get resendSms => 'Resend SMS';
+  String get resendSms => 'Reenviar SMS';
 
   @override
-  String get retryLoadingPreferences => 'Retry loading preferences';
+  String get retryLoadingPreferences => 'Voltar a carregar preferências';
 
   @override
   String weeklyTrainingTimeTostringasfixedH(Object toStringAsFixed) {
-    return 'WEEKLY TRAINING TIME · $toStringAsFixed h';
+    return 'TEMPO DE TREINO SEMANAL · $toStringAsFixed h';
   }
 
   @override
-  String get tapADayToCycle => 'Tap a day to cycle Training / Rest / Strength.';
+  String get tapADayToCycle =>
+      'Toca num dia para alternar treino / descanso / força.';
 
   @override
-  String get doubleDayOk => 'Double day ok';
+  String get doubleDayOk => 'Dia duplo ok';
 
   @override
-  String get birthYearOptional => 'Birth year (optional)';
+  String get birthYearOptional => 'Ano de nascimento (opcional)';
 
   @override
-  String get addAnother => 'Add another';
+  String get addAnother => 'Adicionar outro';
 
   @override
-  String get knowYourBodyTrainSmarter => 'Know your body.\nTrain smarter.';
+  String get knowYourBodyTrainSmarter =>
+      'Conhece o teu corpo.\nTreina de forma mais inteligente.';
 
   @override
   String get allYourHealthDevicesOne =>
-      'All your health devices. One intelligent view.';
+      'Todos os teus dispositivos de saúde. Uma vista inteligente.';
 
   @override
-  String get areYouReadyToTrain => 'Are you ready to train today?';
+  String get areYouReadyToTrain => 'Estás pronto para treinar hoje?';
 
   @override
-  String get hrvRecoveryScoreRestingHr => 'HRV · Recovery Score · Resting HR';
+  String get hrvRecoveryScoreRestingHr =>
+      'HRV · Pontuação de recuperação · FC em repouso';
 
   @override
-  String get didYouActuallyRecoverLast =>
-      'Did you actually recover last night?';
+  String get didYouActuallyRecoverLast => 'Recuperaste mesmo esta noite?';
 
   @override
-  String get sleepStagesDeepSleepSpo => 'Sleep Stages · Deep Sleep · SpO₂';
+  String get sleepStagesDeepSleepSpo => 'Fases do sono · Sono profundo · SpO₂';
 
   @override
   String get isYourBloodPressureUnder =>
-      'Is your blood pressure under control?';
+      'A tua tensão arterial está controlada?';
 
   @override
   String get continuousBpNightDippingTrends =>
-      'Continuous BP · Night Dipping · Trends';
+      'Tensão contínua · Descida noturna · Tendências';
 
   @override
-  String get howHardDidYouPush => 'How hard did you push this week?';
+  String get howHardDidYouPush => 'Quanto te esforçaste esta semana?';
 
   @override
   String get trainingLoadTrimpStrainScore =>
-      'Training Load · TRIMP · Strain Score';
+      'Carga de treino · TRIMP · Strain Score';
 
   @override
   String get isYourBodyCompositionImproving =>
-      'Is your body composition improving?';
+      'A tua composição corporal está a melhorar?';
 
   @override
-  String get weightBodyFatMuscleMass => 'Weight · Body Fat · Muscle Mass';
+  String get weightBodyFatMuscleMass =>
+      'Peso · Gordura corporal · Massa muscular';
 
   @override
-  String get getStarted => 'Get Started';
+  String get getStarted => 'Começar';
 
   @override
-  String get yourDataStaysOnYour => 'Your data. You choose what to share.';
+  String get yourDataStaysOnYour =>
+      'Os teus dados. Tu escolhes o que partilhas.';
 
   @override
-  String get bodyScale => 'Body Scale';
+  String get bodyScale => 'Balança';
 
   @override
-  String get bodyComposition => 'Body Composition';
+  String get bodyComposition => 'Composição corporal';
 
   @override
   String get sleep => 'SONO';
 
   @override
-  String get sleepPerformance => 'SLEEP PERFORMANCE';
+  String get sleepPerformance => 'DESEMPENHO DO SONO';
 
   @override
-  String get sleepHistory => 'Sleep history';
+  String get sleepHistory => 'Histórico do sono';
 
   @override
   String labelValue(Object label, Object value) {
@@ -872,334 +884,335 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String lessLabel(Object label) {
-    return 'Less $label';
+    return 'Menos $label';
   }
 
   @override
   String moreLabel(Object label) {
-    return 'More $label';
+    return 'Mais $label';
   }
 
   @override
-  String get gymMode => 'Gym mode';
+  String get gymMode => 'Modo ginásio';
 
   @override
-  String get finishWorkout => 'Finish workout';
+  String get finishWorkout => 'Terminar treino';
 
   @override
-  String get workoutActions => 'Workout actions';
+  String get workoutActions => 'Ações do treino';
 
   @override
-  String get discardWorkout => 'Discard workout';
+  String get discardWorkout => 'Descartar treino';
 
   @override
-  String get allSetsRecorded => 'All sets recorded';
+  String get allSetsRecorded => 'Todas as séries registadas';
 
   @override
-  String get reviewSets => 'Review sets';
+  String get reviewSets => 'Rever séries';
 
   @override
-  String get rest => 'REST';
+  String get rest => 'DESCANSO';
 
   @override
   String plannedResttarget(Object restTarget) {
-    return 'Planned $restTarget';
+    return 'Previsto $restTarget';
   }
 
   @override
-  String get startSet => 'Start set';
+  String get startSet => 'Iniciar série';
 
   @override
-  String get seconds => 'Seconds';
+  String get seconds => 'Segundos';
 
   @override
-  String get previousSet => 'Previous set';
+  String get previousSet => 'Série anterior';
 
   @override
-  String get allSets => 'All sets';
+  String get allSets => 'Todas as séries';
 
   @override
-  String get nextSet => 'Next set';
+  String get nextSet => 'Série seguinte';
 
   @override
   String get everySetIsSavedAs =>
-      'Every set is saved as you go. Close this screen any time and resume from the planned workout.';
+      'Cada série é guardada à medida que avanças. Fecha este ecrã quando quiseres e retoma a partir do treino planeado.';
 
   @override
   String get cancel => 'Cancelar';
 
   @override
-  String get apply => 'Apply';
+  String get apply => 'Aplicar';
 
   @override
-  String get effortScale => 'Effort scale';
+  String get effortScale => 'Escala de esforço';
 
   @override
-  String get setType => 'Set type';
+  String get setType => 'Tipo de série';
 
   @override
   String get reps => 'Reps';
 
   @override
-  String get range => 'Range';
+  String get range => 'Intervalo';
 
   @override
-  String get time => 'Time';
+  String get time => 'Tempo';
 
   @override
-  String get t45Or100 => '45 or 1:00';
+  String get t45Or100 => '45 ou 1:00';
 
   @override
-  String get blankWhenNotSet => 'Blank when not set';
+  String get blankWhenNotSet => 'Vazio se não definido';
 
   @override
-  String get redBand => 'Red band';
+  String get redBand => 'Elástico vermelho';
 
   @override
-  String get t90Or130 => '90 or 1:30';
+  String get t90Or130 => '90 ou 1:30';
 
   @override
-  String get blankWhenUnknown => 'Blank when unknown';
+  String get blankWhenUnknown => 'Vazio se desconhecido';
 
   @override
-  String get usePlannedLoad => 'Use planned load';
+  String get usePlannedLoad => 'Usar carga planeada';
 
   @override
-  String get blankWhenNotMeasured => 'Blank when not measured';
+  String get blankWhenNotMeasured => 'Vazio se não medido';
 
   @override
-  String get exercise => 'Exercise';
+  String get exercise => 'Exercício';
 
   @override
   String get changingTheLoadConventionStarts =>
-      'Changing the load convention starts a separate history for this exercise.';
+      'Mudar a forma de registar a carga inicia um histórico separado para este exercício.';
 
   @override
-  String get barbellMachine => 'Barbell, machine…';
+  String get barbellMachine => 'Barra, máquina…';
 
   @override
   String get load => 'Carga';
 
   @override
-  String get loadRefersTo => 'Load refers to';
+  String get loadRefersTo => 'A carga refere-se a';
 
   @override
-  String get t2ForAPair => '2 for a pair';
+  String get t2ForAPair => '2 para um par';
 
   @override
-  String get repetitions => 'Repetitions';
+  String get repetitions => 'Repetições';
 
   @override
-  String get availablePlatesOrDumbbells => 'Available plates or dumbbells';
+  String get availablePlatesOrDumbbells => 'Discos ou halteres disponíveis';
 
   @override
-  String get rememberForThisEquipment => 'Remember for this equipment';
+  String get rememberForThisEquipment => 'Lembrar para este equipamento';
 
   @override
-  String get findOrNameAnExercise => 'Find or name an exercise';
+  String get findOrNameAnExercise => 'Procura ou dá nome a um exercício';
 
   @override
   String createTrim(Object trim) {
-    return 'Create “$trim”';
+    return 'Criar “$trim”';
   }
 
   @override
-  String get customExercise => 'Custom exercise';
+  String get customExercise => 'Exercício personalizado';
 
   @override
-  String get smallestLoadStep => 'Smallest load step';
+  String get smallestLoadStep => 'Menor incremento de carga';
 
   @override
   String whatRemoved(Object what) {
-    return '$what removed';
+    return '$what removido';
   }
 
   @override
-  String get undo => 'Undo';
+  String get undo => 'Anular';
 
   @override
-  String get retry => 'Retry';
+  String get retry => 'Tentar novamente';
 
   @override
-  String get performance => 'Performance';
+  String get performance => 'Desempenho';
 
   @override
-  String get addExercise => 'Add exercise';
+  String get addExercise => 'Adicionar exercício';
 
   @override
-  String get finishLog => 'Finish log';
+  String get finishLog => 'Terminar registo';
 
   @override
-  String get keepAsDraft => 'Keep as draft';
+  String get keepAsDraft => 'Manter como rascunho';
 
   @override
   String actionsForName(Object name) {
-    return 'Actions for $name';
+    return 'Ações para $name';
   }
 
   @override
-  String get editExercise => 'Edit exercise';
+  String get editExercise => 'Editar exercício';
 
   @override
-  String get moveUp => 'Move up';
+  String get moveUp => 'Subir';
 
   @override
-  String get moveDown => 'Move down';
+  String get moveDown => 'Descer';
 
   @override
-  String get addSet => 'Add set';
+  String get addSet => 'Adicionar série';
 
   @override
-  String get removeLastSet => 'Remove last set';
+  String get removeLastSet => 'Remover última série';
 
   @override
-  String get saveAsTemplate => 'Save as template';
+  String get saveAsTemplate => 'Guardar como modelo';
 
   @override
   String savedTitleAsATemplate(Object title) {
-    return 'Saved “$title” as a template. This workout is unchanged until you save it.';
+    return '“$title” guardado como modelo. Este treino só muda quando o guardares.';
   }
 
   @override
   String nameSetN(Object name, Object n) {
-    return '$name · Set $n';
+    return '$name · Série $n';
   }
 
   @override
   String nameAllWorkingSets(Object name) {
-    return '$name · All working sets';
+    return '$name · Todas as séries de trabalho';
   }
 
   @override
   String labelRest(Object label) {
-    return '$label rest';
+    return '$label descanso';
   }
 
   @override
-  String get secondsOrMSs => 'Seconds or m:ss';
+  String get secondsOrMSs => 'Segundos ou m:ss';
 
   @override
-  String get applyToAllSets => 'Apply to all sets';
+  String get applyToAllSets => 'Aplicar a todas as séries';
 
   @override
-  String get duplicate => 'Duplicate';
+  String get duplicate => 'Duplicar';
 
   @override
-  String get supersetWithNext => 'Superset with next';
+  String get supersetWithNext => 'Supersérie com o seguinte';
 
   @override
-  String get circuitWithNext => 'Circuit with next';
+  String get circuitWithNext => 'Circuito com o seguinte';
 
   @override
   String actionsForSetN(Object n) {
-    return 'Actions for set $n';
+    return 'Ações para a série $n';
   }
 
   @override
-  String get editSet => 'Edit set';
+  String get editSet => 'Editar série';
 
   @override
-  String get duplicateSet => 'Duplicate set';
+  String get duplicateSet => 'Duplicar série';
 
   @override
-  String get removeSet => 'Remove set';
+  String get removeSet => 'Remover série';
 
   @override
   String labelActions(Object label) {
-    return '$label actions';
+    return 'Ações de $label';
   }
 
   @override
-  String get editRests => 'Edit rests';
+  String get editRests => 'Editar descansos';
 
   @override
-  String get ungroup => 'Ungroup';
+  String get ungroup => 'Desagrupar';
 
   @override
-  String get editExercises => 'Edit exercises';
+  String get editExercises => 'Editar exercícios';
 
   @override
-  String get unsavedChanges => 'Unsaved changes';
+  String get unsavedChanges => 'Alterações não guardadas';
 
   @override
   String couldNotSaveError(Object error) {
-    return 'Could not save: $error';
+    return 'Não foi possível guardar: $error';
   }
 
   @override
-  String get history => 'History';
+  String get history => 'Histórico';
 
   @override
-  String get exercises => 'Exercises';
+  String get exercises => 'Exercícios';
 
   @override
   String get noExercisesArePlannedFor =>
-      'No exercises are planned for this workout yet. The notes above describe it.';
+      'Ainda não há exercícios planeados para este treino. As notas acima descrevem-no.';
 
   @override
-  String get addExercises => 'Add exercises';
+  String get addExercises => 'Adicionar exercícios';
 
   @override
   String get fromTheBuiltInTemplate =>
-      'From the built-in template. Loads are yours to set; history appears once you log a workout.';
+      'Do modelo integrado. As cargas defines tu; o histórico aparece quando registares um treino.';
 
   @override
-  String get shareExerciseList => 'Share exercise list';
+  String get shareExerciseList => 'Partilhar lista de exercícios';
 
   @override
   String get noSavedStrengthTemplatesYet =>
-      'No saved strength templates yet. Save one from a planned workout first.';
+      'Ainda não há modelos de força guardados. Guarda primeiro um a partir de um treino planeado.';
 
   @override
-  String get compareWith => 'Compare with';
+  String get compareWith => 'Comparar com';
 
   @override
   String estimated1rmUnit(Object unit) {
-    return 'Estimated 1RM $unit';
+    return '1RM estimado $unit';
   }
 
   @override
-  String get plannedNotRecorded => 'Planned, not recorded';
+  String get plannedNotRecorded => 'Planeado, não registado';
 
   @override
-  String get notes => 'Notes';
+  String get notes => 'Notas';
 
   @override
-  String get editPerformance => 'Edit performance';
+  String get editPerformance => 'Editar desempenho';
 
   @override
-  String get compareWithASavedWorkout => 'Compare with a saved workout';
+  String get compareWithASavedWorkout => 'Comparar com um treino guardado';
 
   @override
-  String get sessions => 'Sessions';
+  String get sessions => 'Treinos';
 
   @override
-  String get radarUnavailableRetry => 'Radar unavailable · Retry';
+  String get radarUnavailableRetry => 'Radar indisponível · Tentar novamente';
 
   @override
   String get radar => 'Radar';
 
   @override
-  String get weatherDataByRainviewer => 'Weather data by RainViewer';
+  String get weatherDataByRainviewer => 'Dados meteorológicos da RainViewer';
 
   @override
-  String get openstreetmapContributors => '© OpenStreetMap contributors';
+  String get openstreetmapContributors => '© Colaboradores do OpenStreetMap';
 
   @override
-  String get weather => 'Weather';
+  String get weather => 'Meteorologia';
 
   @override
-  String get weatherUnavailableRetry => 'Weather unavailable · Retry';
+  String get weatherUnavailableRetry =>
+      'Meteorologia indisponível · Tentar novamente';
 
   @override
   String get chooseAFixedLocationIn =>
-      'Choose a fixed location in Weather & Location settings, or allow location access for local weather.';
+      'Escolhe uma localização fixa nas definições de Meteorologia e localização ou permite o acesso à localização para a meteorologia local.';
 
   @override
-  String get locationSettings => 'Location settings';
+  String get locationSettings => 'Definições de localização';
 
   @override
-  String get retryLocation => 'Retry location';
+  String get retryLocation => 'Tentar localização novamente';
 
   @override
   String round2(Object round) {
@@ -1208,35 +1221,35 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String roundRhRound2Hpa(Object round, Object round2) {
-    return '$round% RH · $round2 hPa';
+    return '$round% HR · $round2 hPa';
   }
 
   @override
   String wetBulbTostringasfixedC(Object toStringAsFixed) {
-    return 'Wet-bulb $toStringAsFixed°C';
+    return 'Bolbo húmido $toStringAsFixed°C';
   }
 
   @override
-  String get previousForecastDay => 'Previous forecast day';
+  String get previousForecastDay => 'Dia de previsão anterior';
 
   @override
-  String get nextForecastDay => 'Next forecast day';
+  String get nextForecastDay => 'Dia de previsão seguinte';
 
   @override
   String daysDayForecast(Object days) {
-    return '$days-Day Forecast';
+    return 'Previsão a $days dias';
   }
 
   @override
   String thisProviderCurrentlySuppliesDays(Object days, Object days2) {
-    return 'This provider currently supplies $days of $days2 forecast days.';
+    return 'Este fornecedor indica atualmente $days de $days2 dias de previsão.';
   }
 
   @override
-  String get now => 'Now';
+  String get now => 'Agora';
 
   @override
-  String get sunriseSunset => 'Sunrise / Sunset';
+  String get sunriseSunset => 'Nascer / pôr do sol';
 
   @override
   String keyKey2(Object key, Object key2) {
@@ -1244,143 +1257,144 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get use => 'Use';
+  String get use => 'Usar';
 
   @override
   String get exerciseDetailsWereNotProvided =>
-      'Exercise details were not provided by this activity source.';
+      'Esta fonte de atividade não forneceu detalhes dos exercícios.';
 
   @override
-  String get logFromPlan => 'Log from plan';
+  String get logFromPlan => 'Registar a partir do plano';
 
   @override
-  String get addExerciseDetails => 'Add exercise details';
+  String get addExerciseDetails => 'Adicionar detalhes dos exercícios';
 
   @override
-  String get loadSuggestion => 'Load suggestion';
+  String get loadSuggestion => 'Sugestão de carga';
 
   @override
-  String get applyToThisWorkout => 'Apply to this workout';
+  String get applyToThisWorkout => 'Aplicar a este treino';
 
   @override
-  String get keepCurrentLoad => 'Keep current load';
+  String get keepCurrentLoad => 'Manter carga atual';
 
   @override
-  String get setLoadStep => 'Set load step';
+  String get setLoadStep => 'Definir incremento de carga';
 
   @override
-  String get viewSupportingSets => 'View supporting sets';
+  String get viewSupportingSets => 'Ver séries de apoio';
 
   @override
-  String get supportingSets => 'Supporting sets';
+  String get supportingSets => 'Séries de apoio';
 
   @override
-  String get noRecordedSessionsYet => 'No recorded sessions yet.';
+  String get noRecordedSessionsYet => 'Ainda não há treinos registados.';
 
   @override
   String nameDemonstrationCue(Object name, Object cue) {
-    return '$name demonstration. $cue';
+    return 'Demonstração de $name. $cue';
   }
 
   @override
   String get noScalesFoundStepOn2 =>
-      'No scales found. Step on the scale and try again.';
+      'Nenhuma balança encontrada. Sobe para a balança e tenta novamente.';
 
   @override
-  String get scalePaired => 'Scale paired';
+  String get scalePaired => 'Balança emparelhada';
 
   @override
   String get ok => 'OK';
 
   @override
-  String get pairedReadyToMeasure => '✓ Paired — ready to measure';
+  String get pairedReadyToMeasure => '✓ Emparelhado — pronto para medir';
 
   @override
-  String get chooseHiloCuff => 'Choose Hilo cuff';
+  String get chooseHiloCuff => 'Escolher braçadeira Hilo';
 
   @override
   String get noCuffFoundWakeYour =>
-      'No cuff found. Wake your cuff and try scanning again.';
+      'Nenhuma braçadeira encontrada. Ativa a braçadeira e procura novamente.';
 
   @override
-  String get hiloCuffAktiiaC => 'Hilo cuff (AKTIIA C…)';
+  String get hiloCuffAktiiaC => 'Braçadeira Hilo (AKTIIA C…)';
 
   @override
-  String get onDemandBloodPressureVia => 'On-demand blood pressure via BLE';
+  String get onDemandBloodPressureVia => 'Tensão arterial a pedido por BLE';
 
   @override
-  String get selectHiloPodWristband => 'Select Hilo Pod (Wristband)';
+  String get selectHiloPodWristband => 'Selecionar Hilo Pod (pulseira)';
 
   @override
-  String get rescan => 'Rescan';
+  String get rescan => 'Procurar novamente';
 
   @override
-  String get noDevicesFoundTapTo => 'No devices found. Tap ↻ to scan again.';
+  String get noDevicesFoundTapTo =>
+      'Nenhum dispositivo encontrado. Toca em ↻ para procurar novamente.';
 
   @override
-  String get polarH10SpotHrv => 'Polar H10 · Spot HRV';
+  String get polarH10SpotHrv => 'Polar H10 · HRV pontual';
 
   @override
   String get aSeparateHrvReadingBefore =>
-      'A separate HRV reading before or after training. These measurements do not replace Garmin overnight HRV or change your readiness score.';
+      'Uma medição de HRV separada antes ou depois do treino. Estas medições não substituem a HRV noturna da Garmin nem alteram a tua pontuação de prontidão.';
 
   @override
   String get wearTheStrapWithMoist =>
-      'Wear the strap with moist electrodes. Keep still and breathe normally. Use the same posture and recording length for comparisons. After training, note how long you rested first.';
+      'Usa a cinta com os elétrodos humedecidos. Fica quieto e respira normalmente. Para comparações, usa a mesma posição e a mesma duração. Depois do treino, regista quanto tempo descansaste primeiro.';
 
   @override
-  String get measurement => 'Measurement';
+  String get measurement => 'Medição';
 
   @override
-  String get posture => 'Posture';
+  String get posture => 'Posição';
 
   @override
   String get recordingLengthPlus1Min =>
-      'Recording length · plus 1 min settling';
+      'Duração da medição · mais 1 min para estabilizar';
 
   @override
-  String get t2Minutes => '2 minutes';
+  String get t2Minutes => '2 minutos';
 
   @override
-  String get t5Minutes => '5 minutes';
+  String get t5Minutes => '5 minutos';
 
   @override
   String get minutesSinceTrainingEndedOptional =>
-      'Minutes since training ended (optional)';
+      'Minutos desde o fim do treino (opcional)';
 
   @override
-  String get sessionOrNotesOptional => 'Session or notes (optional)';
+  String get sessionOrNotesOptional => 'Treino ou notas (opcional)';
 
   @override
   String connectName(Object name) {
-    return 'Connect $name';
+    return 'Ligar $name';
   }
 
   @override
-  String get findPolarH10 => 'Find Polar H10';
+  String get findPolarH10 => 'Procurar Polar H10';
 
   @override
   String signalRssiDbm(Object rssi) {
-    return 'Signal $rssi dBm';
+    return 'Sinal $rssi dBm';
   }
 
   @override
   String connectedName(Object name) {
-    return 'Connected: $name';
+    return 'Ligado: $name';
   }
 
   @override
   String get waitingForHeartRateAnd =>
-      'Waiting for heart rate and RR intervals. Check the strap contact.';
+      'A aguardar frequência cardíaca e intervalos RR. Verifica o contacto da cinta.';
 
   @override
-  String get startMeasurement => 'Start measurement';
+  String get startMeasurement => 'Iniciar medição';
 
   @override
-  String get cancelMeasurement => 'Cancel measurement';
+  String get cancelMeasurement => 'Cancelar medição';
 
   @override
-  String get spotHrvRmssd => 'Spot HRV · RMSSD';
+  String get spotHrvRmssd => 'HRV pontual · RMSSD';
 
   @override
   String acceptedLengthUsableIntervalsTostringasfixed(
@@ -1388,27 +1402,27 @@ class AppLocalizationsPt extends AppLocalizations {
     Object length,
     Object toStringAsFixed,
   ) {
-    return '$accepted/$length usable intervals · $toStringAsFixed% coverage';
+    return '$accepted/$length intervalos utilizáveis · $toStringAsFixed% de cobertura';
   }
 
   @override
   String lnrmssdLnrmssdRawRmssdRawrmssdms(Object lnRmssd, Object rawRmssdMs) {
-    return 'lnRMSSD: $lnRmssd · Raw RMSSD: $rawRmssdMs ms';
+    return 'lnRMSSD: $lnRmssd · RMSSD bruto: $rawRmssdMs ms';
   }
 
   @override
   String get signalQualityIsTooLow =>
-      'Signal quality is too low to save. Repeat the measurement with good strap contact. At least 95% usable intervals and 90% coverage are required.';
+      'A qualidade do sinal é demasiado baixa para guardar. Repete a medição com bom contacto da cinta. São necessários pelo menos 95% de intervalos utilizáveis e 90% de cobertura.';
 
   @override
-  String get savedToSpotHrvHistory => 'Saved to spot HRV history.';
+  String get savedToSpotHrvHistory => 'Guardado no histórico de HRV pontual.';
 
   @override
-  String get newMeasurement => 'New measurement';
+  String get newMeasurement => 'Nova medição';
 
   @override
   String get signalScreeningExcludesPoorContact =>
-      'Signal screening excludes poor contact, RR outside 250–2500 ms and intervals more than 25% from the local median. Gaps are not bridged. This is not a medical test or a standalone readiness score.';
+      'A verificação do sinal exclui mau contacto, RR fora de 250–2500 ms e intervalos que se afastam mais de 25% da mediana local. As falhas não são preenchidas. Não é um exame médico nem uma pontuação de prontidão isolada.';
 
   @override
   String historyLabelLabel2DurationMin(
@@ -1416,15 +1430,16 @@ class AppLocalizationsPt extends AppLocalizations {
     Object label2,
     Object duration,
   ) {
-    return 'History · $label · $label2 · $duration min';
+    return 'Histórico · $label · $label2 · $duration min';
   }
 
   @override
   String get onlyReadingsWithTheSame =>
-      'Only readings with the same context, posture and duration are shown together.';
+      'Só são mostradas juntas medições com o mesmo contexto, posição e duração.';
 
   @override
-  String get noMatchingMeasurementsYet => 'No matching measurements yet.';
+  String get noMatchingMeasurementsYet =>
+      'Ainda não há medições correspondentes.';
 
   @override
   String tostringasfixedMsRmssdTostringasfixed2Bpm(
@@ -1435,57 +1450,58 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get exportRrIntervalsCsv => 'Export RR intervals (CSV)';
+  String get exportRrIntervalsCsv => 'Exportar intervalos RR (CSV)';
 
   @override
-  String get deleteMeasurement => 'Delete measurement';
+  String get deleteMeasurement => 'Eliminar medição';
 
   @override
-  String get remindMeToMeasureHrv => 'Remind me to measure HRV after training';
+  String get remindMeToMeasureHrv =>
+      'Lembrar-me de medir a HRV depois do treino';
 
   @override
-  String get appleHealthIsNoLonger => 'Apple Health is no longer available';
+  String get appleHealthIsNoLonger => 'O Apple Saúde já não está disponível';
 
   @override
-  String get later => 'Later';
+  String get later => 'Mais tarde';
 
   @override
-  String get reconnect => 'Reconnect';
+  String get reconnect => 'Voltar a ligar';
 
   @override
-  String get gripStrength => 'Grip Strength';
+  String get gripStrength => 'Força de preensão';
 
   @override
-  String get leftKg => 'Left (kg)';
+  String get leftKg => 'Esquerda (kg)';
 
   @override
-  String get rightKg => 'Right (kg)';
+  String get rightKg => 'Direita (kg)';
 
   @override
   String lLeftkgRRightkgKg(Object leftKg, Object rightKg) {
-    return 'L $leftKg · R $rightKg kg';
+    return 'E $leftKg · D $rightKg kg';
   }
 
   @override
   String get notificationsAreOffYouCan =>
-      'Notifications are off. You can still measure from your workout.';
+      'As notificações estão desativadas. Podes continuar a medir a partir do treino.';
 
   @override
-  String get noRemindersFrom2200 => 'No reminders from 22:00 to 07:00';
+  String get noRemindersFrom2200 => 'Sem lembretes das 22:00 às 07:00';
 
   @override
   String get aReminderThatWouldFall =>
-      'A reminder that would fall in this time is skipped, not moved to the morning.';
+      'Um lembrete que calhe neste período é ignorado, não passa para a manhã.';
 
   @override
   String get remindersArriveQuietlyInThe =>
-      'Reminders arrive quietly in the notification list.';
+      'Os lembretes chegam em silêncio à lista de notificações.';
 
   @override
-  String get noForecastForThisDay => 'No forecast for this day';
+  String get noForecastForThisDay => 'Sem previsão para este dia';
 
   @override
-  String get fullscreen => 'Fullscreen';
+  String get fullscreen => 'Ecrã inteiro';
 
   @override
   String source(Object source) {
@@ -1493,22 +1509,24 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get temperatureC => '● Temperature °C';
+  String get temperatureC => '● Temperatura °C';
 
   @override
-  String get rainMm => '▥ Rain mm';
+  String get rainMm => '▥ Chuva mm';
 
   @override
-  String get uvIndex => '— UV index';
+  String get uvIndex => '— Índice UV';
 
   @override
-  String get closeFullscreenWeatherChart => 'Close fullscreen weather chart';
+  String get closeFullscreenWeatherChart =>
+      'Fechar gráfico meteorológico em ecrã inteiro';
 
   @override
-  String get sleepStages => 'SLEEP STAGES';
+  String get sleepStages => 'FASES DO SONO';
 
   @override
-  String get noStageTimelineForThis => 'No stage timeline for this night.';
+  String get noStageTimelineForThis =>
+      'Sem evolução das fases para esta noite.';
 
   @override
   String round3(Object round) {
@@ -1517,27 +1535,27 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get examplesOnlyCheckAndEnter =>
-      'Examples only: check and enter your product label values per serving. Leave unknown nutrients blank; enter 0 only when known.';
+      'Apenas exemplos: verifica e introduz os valores do rótulo do produto por dose. Deixa em branco os nutrientes desconhecidos; introduz 0 só quando souberes.';
 
   @override
-  String get nutritionStrategy => 'Nutrition strategy';
+  String get nutritionStrategy => 'Estratégia de nutrição';
 
   @override
   String get noPreWorkoutNutritionStrategy =>
-      'No pre-workout nutrition strategy was saved.';
+      'Não foi guardada nenhuma estratégia de nutrição pré-treino.';
 
   @override
   String carbsGCarbsHFluid(Object carbs, Object fluid, Object sodium) {
-    return '$carbs g carbs/h · $fluid ml/h · $sodium mg sodium/h';
+    return '$carbs g hidratos/h · $fluid ml/h · $sodium mg sódio/h';
   }
 
   @override
   String get forecastUpdatedReviewOrRecalculate =>
-      'Forecast updated — review or recalculate the saved strategy.';
+      'Previsão atualizada — revê ou recalcula a estratégia guardada.';
 
   @override
   String strategySavedSavedat(Object savedAt) {
-    return 'Strategy saved $savedAt';
+    return 'Estratégia guardada $savedAt';
   }
 
   @override
@@ -1546,62 +1564,63 @@ class AppLocalizationsPt extends AppLocalizations {
     Object totalFluid,
     Object totalSodium,
   ) {
-    return 'During total: $totalCarbs g carbs · $totalFluid ml · $totalSodium mg sodium';
+    return 'Total durante: $totalCarbs g hidratos · $totalFluid ml · $totalSodium mg sódio';
   }
 
   @override
   String every20MinAboutCarbs(Object carbs, Object fluid) {
-    return 'Every 20 min: about $carbs g carbs and $fluid ml.';
+    return 'A cada 20 min: cerca de $carbs g de hidratos e $fluid ml.';
   }
 
   @override
   String get packQuantitiesIncludeFullContainers =>
-      'Pack quantities include full containers; they are not a requirement to consume everything.';
+      'As quantidades a levar incluem embalagens completas; não tens de consumir tudo.';
 
   @override
   String get workoutChangedReviewOrRecalculate =>
-      'Workout changed — review or recalculate this saved strategy.';
+      'O treino mudou — revê ou recalcula esta estratégia guardada.';
 
   @override
-  String get conditionsAndFeedingPlan => 'Conditions and feeding plan';
+  String get conditionsAndFeedingPlan => 'Condições e plano de alimentação';
 
   @override
-  String get editStrategy => 'Edit strategy';
+  String get editStrategy => 'Editar estratégia';
 
   @override
-  String get recalculate => 'Recalculate';
+  String get recalculate => 'Recalcular';
 
   @override
-  String get actualNutrition => 'Actual nutrition';
+  String get actualNutrition => 'Nutrição real';
 
   @override
   String get someProductValuesAreUnknown =>
-      'Some product values are unknown; totals are incomplete.';
+      'Alguns valores de produtos são desconhecidos; os totais estão incompletos.';
 
   @override
-  String get logFoodAndFluids => 'Log food and fluids';
+  String get logFoodAndFluids => 'Registar comida e líquidos';
 
   @override
   String get recordWhatYouActuallyHad =>
-      'Record what you actually had. Planned intake is not copied into this log.';
+      'Regista o que realmente consumiste. A ingestão planeada não é copiada para este registo.';
 
   @override
   String get elapsedMinutesIncludingStopsOptional =>
-      'Elapsed minutes including stops (optional)';
+      'Minutos decorridos incluindo paragens (opcional)';
 
   @override
   String recordedDurationActivityMin(Object activity) {
-    return 'Recorded duration: $activity min';
+    return 'Duração registada: $activity min';
   }
 
   @override
-  String get compareWithSavedStrategy => 'Compare with saved strategy';
+  String get compareWithSavedStrategy => 'Comparar com a estratégia guardada';
 
   @override
-  String get useMatchedSessionIfAvailable => 'Use matched session if available';
+  String get useMatchedSessionIfAvailable =>
+      'Usar o treino associado, se disponível';
 
   @override
-  String get noPlanComparison => 'No plan comparison';
+  String get noPlanComparison => 'Sem comparação com o plano';
 
   @override
   String titleDate(Object title, Object date) {
@@ -1609,7 +1628,7 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get linkedStrategyUnavailable => 'Linked strategy unavailable';
+  String get linkedStrategyUnavailable => 'Estratégia associada indisponível';
 
   @override
   String quantityName(Object quantity, Object name) {
@@ -1617,151 +1636,151 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get removeIntake => 'Remove intake';
+  String get removeIntake => 'Remover ingestão';
 
   @override
-  String get addFoodOrDrink => 'Add food or drink';
+  String get addFoodOrDrink => 'Adicionar comida ou bebida';
 
   @override
-  String get iHadNoIntake => 'I had no intake';
+  String get iHadNoIntake => 'Não consumi nada';
 
   @override
-  String get giGutComfort => 'GI / gut comfort';
+  String get giGutComfort => 'Conforto gastrointestinal';
 
   @override
   String get whatWorkedSymptomsAccessProblems =>
-      'What worked / symptoms / access problems';
+      'O que funcionou / sintomas / problemas de acesso';
 
   @override
-  String get saveDraft => 'Save draft';
+  String get saveDraft => 'Guardar rascunho';
 
   @override
-  String get skipLoggingThisActivity => 'Skip logging this activity';
+  String get skipLoggingThisActivity => 'Não registar esta atividade';
 
   @override
-  String get nutritionAndFluids => 'Nutrition and fluids';
+  String get nutritionAndFluids => 'Nutrição e líquidos';
 
   @override
   String get productsToleranceAndMeasuredSweat =>
-      'Products, tolerance and measured sweat losses';
+      'Produtos, tolerância e perdas de suor medidas';
 
   @override
-  String get postWorkoutIntakeReminder => 'Post-workout intake reminder';
+  String get postWorkoutIntakeReminder => 'Lembrete de ingestão pós-treino';
 
   @override
   String get onceAfterARecentEndurance =>
-      'Once after a recent endurance workout; quiet hours 22:00–08:00.';
+      'Uma vez depois de um treino de resistência recente; horas de silêncio 22:00–08:00.';
 
   @override
-  String get addHiloBpReport => 'Add Hilo BP report';
+  String get addHiloBpReport => 'Adicionar relatório de tensão Hilo';
 
   @override
   String get readingPdfReportsIsOnly =>
-      'Reading PDF reports is only available on iOS and macOS.';
+      'A leitura de relatórios PDF só está disponível no iOS e no macOS.';
 
   @override
-  String get chooseAnotherReport => 'Choose another report';
+  String get chooseAnotherReport => 'Escolher outro relatório';
 
   @override
-  String get biologicalAge => 'Biological Age';
+  String get biologicalAge => 'Idade biológica';
 
   @override
   String voMaxVo2maxMlKg(Object vo2max, Object vo2Class) {
-    return 'VO₂max $vo2max ml/kg/min · $vo2Class';
+    return 'VO₂máx $vo2max ml/kg/min · $vo2Class';
   }
 
   @override
-  String get factorContributions => 'Factor contributions';
+  String get factorContributions => 'Contribuição dos fatores';
 
   @override
   String estimatedRangeRoundRound2Years(Object round, Object round2) {
-    return 'Estimated range $round–$round2 years. A model estimate, not a medical diagnosis.';
+    return 'Intervalo estimado $round–$round2 anos. Uma estimativa do modelo, não um diagnóstico médico.';
   }
 
   @override
   String get noEnergyMeasurementsForThis =>
-      'No energy measurements for this day';
+      'Sem medições de energia para este dia';
 
   @override
   String get scanningStepOnTheScale =>
-      'Scanning… step on the scale when ready.';
+      'A procurar… sobe para a balança quando estiveres pronto.';
 
   @override
   String waistWaistCmUpdateMonthly(Object waist) {
-    return 'Waist: $waist cm — update monthly in Profile';
+    return 'Cintura: $waist cm — atualiza todos os meses no Perfil';
   }
 
   @override
-  String get measuring => 'Measuring…';
+  String get measuring => 'A medir…';
 
   @override
-  String get tryAgain => 'Try again';
+  String get tryAgain => 'Tentar novamente';
 
   @override
-  String get systolic => 'Systolic';
+  String get systolic => 'Sistólica';
 
   @override
-  String get diastolic => 'Diastolic';
+  String get diastolic => 'Diastólica';
 
   @override
-  String get heartRate => 'Heart Rate';
+  String get heartRate => 'Frequência cardíaca';
 
   @override
-  String get weight => 'Weight';
+  String get weight => 'Peso';
 
   @override
-  String get bodyFat => 'Body Fat';
+  String get bodyFat => 'Gordura corporal';
 
   @override
-  String get duration => 'Duration';
+  String get duration => 'Duração';
 
   @override
-  String get deep => 'Deep';
+  String get deep => 'Profundo';
 
   @override
   String get spo => 'SpO₂';
 
   @override
-  String get activityName => 'Activity name';
+  String get activityName => 'Nome da atividade';
 
   @override
-  String get sport => 'Sport';
+  String get sport => 'Desporto';
 
   @override
-  String get distance => 'Distance';
+  String get distance => 'Distância';
 
   @override
-  String get saved => 'Saved';
+  String get saved => 'Guardado';
 
   @override
   String get connectionFailedCheckYourInternet =>
-      'Connection failed. Check your internet connection.';
+      'A ligação falhou. Verifica a tua ligação à internet.';
 
   @override
-  String get email => 'Email';
+  String get email => 'E-mail';
 
   @override
-  String get password => 'Password';
+  String get password => 'Palavra-passe';
 
   @override
-  String get passwordTooShort => 'Password too short';
+  String get passwordTooShort => 'Palavra-passe demasiado curta';
 
   @override
   String get loginFailedCheckYourEmail =>
-      'Login failed. Check your email and password.';
+      'O início de sessão falhou. Verifica o e-mail e a palavra-passe.';
 
   @override
   String get connectionFailedCheckYourCredentials =>
-      'Connection failed. Check your credentials and internet connection.';
+      'A ligação falhou. Verifica as credenciais e a ligação à internet.';
 
   @override
-  String get region => 'Region';
+  String get region => 'Região';
 
   @override
   String get hiloPod => 'Hilo pod';
 
   @override
-  String get hiloAccount => 'Hilo account';
+  String get hiloAccount => 'Conta Hilo';
 
   @override
   String get garmin => 'Garmin';
@@ -1779,324 +1798,325 @@ class AppLocalizationsPt extends AppLocalizations {
   String get polar => 'Polar';
 
   @override
-  String get renphoAccount => 'Renpho account';
+  String get renphoAccount => 'Conta Renpho';
 
   @override
-  String get garminConnectEmail => 'Garmin Connect Email';
+  String get garminConnectEmail => 'E-mail do Garmin Connect';
 
   @override
-  String get verifyMfaCode => 'Verify MFA Code';
+  String get verifyMfaCode => 'Verificar código MFA';
 
   @override
-  String get verificationCode => 'Verification Code';
+  String get verificationCode => 'Código de verificação';
 
   @override
   String errorE(Object e) {
-    return 'Error: $e';
+    return 'Erro: $e';
   }
 
   @override
   String get noHiloPodFoundMake =>
-      'No Hilo pod found. Make sure it is charged and nearby.';
+      'Nenhum Hilo pod encontrado. Confirma que está carregado e por perto.';
 
   @override
   String scanFailedE(Object e) {
-    return 'Scan failed: $e';
+    return 'A procura falhou: $e';
   }
 
   @override
   String get hiloPod2 => 'Hilo Pod';
 
   @override
-  String get scanForPod => 'Scan for pod';
+  String get scanForPod => 'Procurar pod';
 
   @override
-  String get scanForPolarH10 => 'Scan for Polar H10';
+  String get scanForPolarH10 => 'Procurar Polar H10';
 
   @override
   String get couldNotReachPolarCheck =>
-      'Could not reach Polar. Check your connection.';
+      'Não foi possível contactar a Polar. Verifica a ligação.';
 
   @override
-  String get signInAndSendWorkout => 'Sign in and send workout';
+  String get signInAndSendWorkout => 'Iniciar sessão e enviar treino';
 
   @override
-  String get scanForScale => 'Scan for scale';
+  String get scanForScale => 'Procurar balança';
 
   @override
-  String get passwordRequired => 'Password required';
+  String get passwordRequired => 'Palavra-passe obrigatória';
 
   @override
   String get enterYourPhoneNumberWith =>
-      'Enter your phone number (with country code, e.g. +49…) and Suunto email.';
+      'Introduz o teu número de telefone (com indicativo, p. ex. +351…) e o e-mail da Suunto.';
 
   @override
-  String get enterThePinFromThe => 'Enter the PIN from the SMS.';
+  String get enterThePinFromThe => 'Introduz o PIN do SMS.';
 
   @override
-  String get incorrectPinPleaseTryAgain => 'Incorrect PIN. Please try again.';
+  String get incorrectPinPleaseTryAgain => 'PIN incorreto. Tenta novamente.';
 
   @override
-  String get phoneNumber => 'Phone Number';
+  String get phoneNumber => 'Número de telefone';
 
   @override
-  String get suuntoAccountEmail => 'Suunto Account Email';
+  String get suuntoAccountEmail => 'E-mail da conta Suunto';
 
   @override
-  String get enterPinFromSms => 'Enter PIN from SMS';
+  String get enterPinFromSms => 'Introduzir PIN do SMS';
 
   @override
-  String get verifyConnect => 'Verify & Connect';
+  String get verifyConnect => 'Verificar e ligar';
 
   @override
-  String get sendSmsCode => 'Send SMS Code';
+  String get sendSmsCode => 'Enviar código por SMS';
 
   @override
   String couldNotSavePreferencesE(Object e) {
-    return 'Could not save preferences: $e';
+    return 'Não foi possível guardar as preferências: $e';
   }
 
   @override
-  String get mon => 'Mon';
+  String get mon => 'Seg';
 
   @override
-  String get tue => 'Tue';
+  String get tue => 'Ter';
 
   @override
-  String get wed => 'Wed';
+  String get wed => 'Qua';
 
   @override
-  String get thu => 'Thu';
+  String get thu => 'Qui';
 
   @override
-  String get fri => 'Fri';
+  String get fri => 'Sex';
 
   @override
-  String get sat => 'Sat';
+  String get sat => 'Sáb';
 
   @override
-  String get sun => 'Sun';
+  String get sun => 'Dom';
 
   @override
-  String get male => 'Male';
+  String get male => 'Masculino';
 
   @override
-  String get female => 'Female';
+  String get female => 'Feminino';
 
   @override
-  String get other => 'Other';
+  String get other => 'Outro';
 
   @override
-  String get running => 'Running';
+  String get running => 'Corrida';
 
   @override
-  String get trailRunning => 'Trail running';
+  String get trailRunning => 'Trail';
 
   @override
-  String get cycling => 'Cycling';
+  String get cycling => 'Ciclismo';
 
   @override
-  String get swimming => 'Swimming';
+  String get swimming => 'Natação';
 
   @override
-  String get triathlon => 'Triathlon';
+  String get triathlon => 'Triatlo';
 
   @override
-  String get hiking => 'Hiking';
+  String get hiking => 'Caminhada';
 
   @override
-  String get rowing => 'Rowing';
+  String get rowing => 'Remo';
 
   @override
-  String get buildMyPlan => 'Build My Plan';
+  String get buildMyPlan => 'Criar o meu plano';
 
   @override
   String get keepAConsistentBedtimeAnd =>
-      'Keep a consistent bedtime and wake time to support your sleep routine.';
+      'Mantém horários regulares de deitar e acordar para apoiar a tua rotina de sono.';
 
   @override
-  String get thisWorkoutHasNoSets => 'This workout has no sets.';
+  String get thisWorkoutHasNoSets => 'Este treino não tem séries.';
 
   @override
   String loadName(Object name) {
-    return 'Load ($name)';
+    return 'Carga ($name)';
   }
 
   @override
-  String get setLabel => 'Set';
+  String get setLabel => 'Série';
 
   @override
-  String get lowestReps => 'Lowest reps';
+  String get lowestReps => 'Menos reps';
 
   @override
-  String get highestReps => 'Highest reps';
+  String get highestReps => 'Mais reps';
 
   @override
-  String get repsPerSide => 'Reps per side';
+  String get repsPerSide => 'Reps por lado';
 
   @override
-  String get fromReps => 'From reps';
+  String get fromReps => 'De reps';
 
   @override
-  String get toReps => 'To reps';
+  String get toReps => 'Até reps';
 
   @override
-  String get addedLoad => 'Added load';
+  String get addedLoad => 'Carga adicional';
 
   @override
-  String get assistance => 'Assistance';
+  String get assistance => 'Assistência';
 
   @override
-  String get tempoOptional => 'Tempo (optional)';
+  String get tempoOptional => 'Cadência (opcional)';
 
   @override
-  String get notesOptional => 'Notes (optional)';
+  String get notesOptional => 'Notas (opcional)';
 
   @override
-  String get enterTheRepetitionsDone => 'Enter the repetitions done.';
+  String get enterTheRepetitionsDone => 'Introduz as repetições feitas.';
 
   @override
   String plannedUnit(Object unit) {
-    return 'Planned $unit';
+    return 'Planeado $unit';
   }
 
   @override
-  String get repsDone => 'Reps done';
+  String get repsDone => 'Reps feitas';
 
   @override
-  String get resistance => 'Resistance';
+  String get resistance => 'Resistência';
 
   @override
-  String get implementsLabel => 'Implements';
+  String get implementsLabel => 'Acessórios';
 
   @override
-  String get name => 'Name';
+  String get name => 'Nome';
 
   @override
-  String get instructionsOptional => 'Instructions (optional)';
+  String get instructionsOptional => 'Instruções (opcional)';
 
   @override
-  String get remember => 'Remember';
+  String get remember => 'Lembrar';
 
   @override
-  String get notSavedYet => 'Not saved yet';
+  String get notSavedYet => 'Ainda não guardado';
 
   @override
-  String get saving => 'Saving…';
+  String get saving => 'A guardar…';
 
   @override
-  String get couldNotSave => 'Could not save';
+  String get couldNotSave => 'Não foi possível guardar';
 
   @override
   String get plannedValuesAreHintsNot =>
-      'Planned values are hints, not results. Tap a set to record it.';
+      'Os valores planeados são sugestões, não resultados. Toca numa série para a registar.';
 
   @override
-  String get completedAsPlanned => 'Completed as planned';
+  String get completedAsPlanned => 'Concluído conforme planeado';
 
   @override
   String get save => 'Guardar';
 
   @override
-  String get nameTheTemplate => 'Name the template.';
+  String get nameTheTemplate => 'Dá um nome ao modelo.';
 
   @override
   String setN(Object n) {
-    return 'Set $n';
+    return 'Série $n';
   }
 
   @override
   String get changesApplyToThisWorkout =>
-      'Changes apply to this workout only. Completed workouts and other sessions stay as they are.';
+      'As alterações aplicam-se só a este treino. Os treinos concluídos e as outras sessões ficam como estão.';
 
   @override
-  String get saveForThisWorkout => 'Save for this workout';
+  String get saveForThisWorkout => 'Guardar para este treino';
 
   @override
   String knownForKnownOfOf(Object known, Object of) {
-    return 'Known for $known of $of loaded sets';
+    return 'Conhecido para $known de $of séries com carga';
   }
 
   @override
-  String get sessionEstimate => 'Session estimate';
+  String get sessionEstimate => 'Estimativa do treino';
 
   @override
-  String get calculatedRange => 'Calculated range';
+  String get calculatedRange => 'Intervalo calculado';
 
   @override
-  String get timedWork => 'Timed work';
+  String get timedWork => 'Trabalho por tempo';
 
   @override
-  String get strengthTraining => 'Strength training';
+  String get strengthTraining => 'Treino de força';
 
   @override
-  String get theExercisesCouldNotBe => 'The exercises could not be loaded.';
+  String get theExercisesCouldNotBe =>
+      'Não foi possível carregar os exercícios.';
 
   @override
-  String get resumeWorkout => 'Resume workout';
+  String get resumeWorkout => 'Retomar treino';
 
   @override
-  String get strengthWorkout => 'Strength workout';
+  String get strengthWorkout => 'Treino de força';
 
   @override
-  String get untitledTemplate => 'Untitled template';
+  String get untitledTemplate => 'Modelo sem título';
 
   @override
   String get theRecordedExercisesCouldNot =>
-      'The recorded exercises could not be loaded.';
+      'Não foi possível carregar os exercícios registados.';
 
   @override
-  String get exercisesPerformed => 'Exercises performed';
+  String get exercisesPerformed => 'Exercícios realizados';
 
   @override
   String get comparedWithThePlanAs =>
-      'Compared with the plan as it was when logging started.';
+      'Comparado com o plano tal como estava quando o registo começou.';
 
   @override
   String topWorkingLoadName(Object name) {
-    return 'Top working load ($name)';
+    return 'Carga de trabalho máxima ($name)';
   }
 
   @override
-  String get estimated1rmMiddleOfRange => 'Estimated 1RM, middle of range';
+  String get estimated1rmMiddleOfRange => '1RM estimado, meio do intervalo';
 
   @override
-  String get noLoggedSessionsYet => 'No logged sessions yet.';
+  String get noLoggedSessionsYet => 'Ainda não há treinos registados.';
 
   @override
-  String get noRadarFramesAvailable => 'No radar frames available';
+  String get noRadarFramesAvailable => 'Sem imagens de radar disponíveis';
 
   @override
-  String get playRadar => 'Play radar';
+  String get playRadar => 'Reproduzir radar';
 
   @override
-  String get pauseRadar => 'Pause radar';
+  String get pauseRadar => 'Pausar radar';
 
   @override
-  String get high => 'High';
+  String get high => 'Alto';
 
   @override
-  String get clear => 'Clear';
+  String get clear => 'Limpo';
 
   @override
-  String get bodyweight => 'Bodyweight';
+  String get bodyweight => 'Peso corporal';
 
   @override
-  String get resistance2 => 'Resistance —';
+  String get resistance2 => 'Resistência —';
 
   @override
   String assistUnit(Object unit) {
-    return 'Assist $unit';
+    return 'Assistência $unit';
   }
 
   @override
   String get reps2 => 'Reps —';
 
   @override
-  String get notRecorded => 'Not recorded';
+  String get notRecorded => 'Não registado';
 
   @override
-  String get skipped => 'Skipped';
+  String get skipped => 'Saltado';
 
   @override
   String get health => 'Saúde';
@@ -2106,162 +2126,164 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String expandName(Object name) {
-    return 'Expand $name';
+    return 'Expandir $name';
   }
 
   @override
-  String get open => 'Open';
+  String get open => 'Abrir';
 
   @override
-  String get noScalePaired => 'No scale paired';
+  String get noScalePaired => 'Nenhuma balança emparelhada';
 
   @override
-  String get paired => 'Paired';
+  String get paired => 'Emparelhado';
 
   @override
-  String get change => 'Change';
+  String get change => 'Alterar';
 
   @override
-  String get noCuffPaired => 'No cuff paired';
+  String get noCuffPaired => 'Nenhuma braçadeira emparelhada';
 
   @override
   String get noPolarH10FoundWear =>
-      'No Polar H10 found. Wear the strap, wet its electrodes and check that another app is not using both Bluetooth connections.';
+      'Nenhum Polar H10 encontrado. Coloca a cinta, molha os elétrodos e verifica se outra app não está a usar as duas ligações Bluetooth.';
 
   @override
   String get enterMinutesSinceTrainingEnded =>
-      'Enter minutes since training ended, from 0 to 1440.';
+      'Introduz os minutos desde o fim do treino, de 0 a 1440.';
 
   @override
-  String get timingFollowsYourWorkout => 'Timing follows your workout.';
+  String get timingFollowsYourWorkout => 'A hora acompanha o teu treino.';
 
   @override
-  String get recordingStayStill => 'Recording · stay still';
+  String get recordingStayStill => 'A gravar · fica quieto';
 
   @override
-  String get meanHrBpm => 'Mean HR · bpm';
+  String get meanHrBpm => 'FC média · bpm';
 
   @override
-  String get pairAPolarH10First => 'Pair a Polar H10 first.';
+  String get pairAPolarH10First => 'Emparelha primeiro um Polar H10.';
 
   @override
   String get around30MinutesAfterTraining =>
-      'Around 30 minutes after training, when the workout is available in time.';
+      'Cerca de 30 minutos depois do treino, quando o treino estiver disponível a tempo.';
 
   @override
-  String get reminderDiagnostics => 'Reminder diagnostics';
+  String get reminderDiagnostics => 'Diagnóstico dos lembretes';
 
   @override
-  String get forecast => 'Forecast';
+  String get forecast => 'Previsão';
 
   @override
   String forecastRange(int count) {
-    return 'Shaded: range of $count forecasts';
+    return 'Sombreado: intervalo de $count previsões';
   }
 
   @override
-  String get enterAName => 'Enter a name';
+  String get enterAName => 'Introduz um nome';
 
   @override
-  String get enterAValidAmount => 'Enter a valid amount';
+  String get enterAValidAmount => 'Introduz uma quantidade válida';
 
   @override
-  String get enterAPositiveAmount => 'Enter a positive amount';
+  String get enterAPositiveAmount => 'Introduz uma quantidade positiva';
 
   @override
-  String get maximum120GH => 'Maximum 120 g/h';
+  String get maximum120GH => 'Máximo 120 g/h';
 
   @override
-  String get carbohydrateTargetGH => 'Carbohydrate target g/h';
+  String get carbohydrateTargetGH => 'Objetivo de hidratos g/h';
 
   @override
-  String get fluidTargetMlH => 'Fluid target ml/h';
+  String get fluidTargetMlH => 'Objetivo de líquidos ml/h';
 
   @override
-  String get sodiumTargetMgHNot => 'Sodium target mg/h (not salt)';
+  String get sodiumTargetMgHNot => 'Objetivo de sódio mg/h (não sal)';
 
   @override
-  String get surfaceFeedingAccess => 'Surface / feeding access';
+  String get surfaceFeedingAccess => 'Piso / acesso à alimentação';
 
   @override
-  String get expectedAscentM => 'Expected ascent m';
+  String get expectedAscentM => 'Subida prevista m';
 
   @override
-  String get expectedAltitudeM => 'Expected altitude m';
+  String get expectedAltitudeM => 'Altitude prevista m';
 
   @override
-  String get humidity => 'Humidity %';
+  String get humidity => 'Humidade %';
 
   @override
-  String get windKmH => 'Wind km/h';
+  String get windKmH => 'Vento km/h';
 
   @override
-  String get dayForecast => 'Day forecast';
+  String get dayForecast => 'Previsão do dia';
 
   @override
-  String get enteredConditions => 'Entered conditions';
+  String get enteredConditions => 'Condições introduzidas';
 
   @override
-  String get productFoodName => 'Product / food name';
+  String get productFoodName => 'Produto / nome do alimento';
 
   @override
-  String get servingsQuantity => 'Servings / quantity';
+  String get servingsQuantity => 'Doses / quantidade';
 
   @override
-  String get when => 'When';
+  String get when => 'Quando';
 
   @override
-  String get carbohydrateGServing => 'Carbohydrate g / serving';
+  String get carbohydrateGServing => 'Hidratos g / dose';
 
   @override
-  String get fluidMlServing => 'Fluid ml / serving';
+  String get fluidMlServing => 'Líquido ml / dose';
 
   @override
-  String get caffeineMgServing => 'Caffeine mg / serving';
+  String get caffeineMgServing => 'Cafeína mg / dose';
 
   @override
-  String get proteinGServing => 'Protein g / serving';
+  String get proteinGServing => 'Proteína g / dose';
 
   @override
   String get gel => 'Gel';
 
   @override
-  String get water => 'Water';
+  String get water => 'Água';
 
   @override
-  String get sportsDrink => 'Sports drink';
+  String get sportsDrink => 'Bebida desportiva';
 
   @override
-  String get bar => 'Bar';
+  String get bar => 'Barra';
 
   @override
-  String get finishIntakeLog => 'Finish intake log';
+  String get finishIntakeLog => 'Terminar registo de ingestão';
 
   @override
-  String get importing => 'Importing…';
+  String get importing => 'A importar…';
 
   @override
   String importNewreadings(Object newReadings) {
-    return 'Import $newReadings';
+    return 'Importar $newReadings';
   }
 
   @override
-  String get reading => 'Reading…';
+  String get reading => 'A ler…';
 
   @override
-  String get chooseReportPdf => 'Choose report (PDF)';
+  String get chooseReportPdf => 'Escolher relatório (PDF)';
 
   @override
-  String get yourTrainingHistoryIsReady => 'Your training history is ready';
+  String get yourTrainingHistoryIsReady =>
+      'O teu histórico de treino está pronto';
 
   @override
-  String get importingYourTrainingHistory => 'Importing your training history';
+  String get importingYourTrainingHistory =>
+      'A importar o teu histórico de treino';
 
   @override
-  String get stopImport => 'Stop import';
+  String get stopImport => 'Parar importação';
 
   @override
-  String get dismiss => 'Dismiss';
+  String get dismiss => 'Fechar';
 
   @override
   String get openai => 'OpenAI';
@@ -2270,99 +2292,100 @@ class AppLocalizationsPt extends AppLocalizations {
   String get appleIntelligence => 'Apple Intelligence';
 
   @override
-  String get nonAiBriefing => 'Non-AI Briefing';
+  String get nonAiBriefing => 'Resumo sem IA';
 
   @override
-  String get noBriefing => 'No Briefing';
+  String get noBriefing => 'Sem resumo';
 
   @override
   String get ruleBasedSummaryFromYour =>
-      'Rule-based summary from your health data — no API calls';
+      'Resumo baseado em regras a partir dos teus dados de saúde — sem chamadas de API';
 
   @override
-  String get hideTheBriefingCard => 'Hide the briefing card';
+  String get hideTheBriefingCard => 'Ocultar o cartão de resumo';
 
   @override
   String get flutter => 'Flutter';
 
   @override
-  String get stateManagement => 'State management';
+  String get stateManagement => 'Gestão de estado';
 
   @override
   String get bluetoothLe => 'Bluetooth LE';
 
   @override
-  String get interactiveMaps => 'Interactive maps';
+  String get interactiveMaps => 'Mapas interativos';
 
   @override
-  String get chartsGraphs => 'Charts & graphs';
+  String get chartsGraphs => 'Gráficos';
 
   @override
-  String get secureCredentialStorage => 'Secure credential storage';
+  String get secureCredentialStorage => 'Armazenamento seguro de credenciais';
 
   @override
-  String get markdownRendering => 'Markdown rendering';
+  String get markdownRendering => 'Apresentação de Markdown';
 
   @override
-  String get appleOnDeviceAi => 'Apple on-device AI';
+  String get appleOnDeviceAi => 'IA da Apple no dispositivo';
 
   @override
-  String get cryptography => 'Cryptography';
+  String get cryptography => 'Criptografia';
 
   @override
-  String get appleHealthHealthConnect => 'Apple Health & Health Connect';
+  String get appleHealthHealthConnect => 'Apple Saúde e Health Connect';
 
   @override
-  String get runtimePermissions => 'Runtime permissions';
+  String get runtimePermissions => 'Permissões em execução';
 
   @override
-  String get shareExport => 'Share & export';
+  String get shareExport => 'Partilhar e exportar';
 
   @override
-  String get openUrls => 'Open URLs';
+  String get openUrls => 'Abrir URLs';
 
   @override
-  String get internationalisation => 'Internationalisation';
+  String get internationalisation => 'Internacionalização';
 
   @override
-  String get utilities => 'Utilities';
+  String get utilities => 'Utilitários';
 
   @override
-  String get icons => 'Icons';
+  String get icons => 'Ícones';
 
   @override
   String get fjelia => 'Fjelia';
 
   @override
-  String get fjeliaFeedback => 'Fjelia feedback';
+  String get fjeliaFeedback => 'Comentários sobre a Fjelia';
 
   @override
   String get couldNotSendTheReport =>
-      'Could not send the report. Your text is still here. Please try again.';
+      'Não foi possível enviar o relatório. O teu texto continua aqui. Tenta novamente.';
 
   @override
-  String get yourEmail => 'Your email';
+  String get yourEmail => 'O teu e-mail';
 
   @override
-  String get enterAValidEmailAddress => 'Enter a valid email address.';
+  String get enterAValidEmailAddress =>
+      'Introduz um endereço de e-mail válido.';
 
   @override
-  String get subject => 'Subject';
+  String get subject => 'Assunto';
 
   @override
-  String get sending => 'Sending…';
+  String get sending => 'A enviar…';
 
   @override
-  String get sendReport => 'Send report';
+  String get sendReport => 'Enviar relatório';
 
   @override
-  String get sleepRecovery => 'Sleep & Recovery';
+  String get sleepRecovery => 'Sono e recuperação';
 
   @override
-  String get activitiesTraining => 'Activities & Training';
+  String get activitiesTraining => 'Atividades e treino';
 
   @override
-  String get bodyWellness => 'Body & Wellness';
+  String get bodyWellness => 'Corpo e bem-estar';
 
   @override
   String get hilo => 'Hilo';
@@ -2374,46 +2397,46 @@ class AppLocalizationsPt extends AppLocalizations {
   String get garminApi => 'Garmin (API)';
 
   @override
-  String get renphoScale => 'Renpho Scale';
+  String get renphoScale => 'Balança Renpho';
 
   @override
-  String get connected => 'Connected';
+  String get connected => 'Ligado';
 
   @override
-  String get notConnected => 'Not connected';
+  String get notConnected => 'Não ligado';
 
   @override
-  String get manage => 'Manage';
+  String get manage => 'Gerir';
 
   @override
-  String get connect => 'Connect';
+  String get connect => 'Ligar';
 
   @override
-  String get habits => 'Habits';
+  String get habits => 'Hábitos';
 
   @override
-  String get smokingAlcohol => 'Smoking, alcohol';
+  String get smokingAlcohol => 'Tabaco, álcool';
 
   @override
-  String get clinicalLab => 'Clinical Lab';
+  String get clinicalLab => 'Análises clínicas';
 
   @override
-  String get hba1cLipidsKidney => 'HbA1c, lipids, kidney';
+  String get hba1cLipidsKidney => 'HbA1c, lípidos, rim';
 
   @override
-  String get sex => 'Sex';
+  String get sex => 'Sexo';
 
   @override
-  String get smoking => 'Smoking';
+  String get smoking => 'Tabaco';
 
   @override
-  String get never => 'Never';
+  String get never => 'Nunca';
 
   @override
-  String get former => 'Former';
+  String get former => 'Antigo';
 
   @override
-  String get current => 'Current';
+  String get current => 'Atual';
 
   @override
   String get hba1c => 'HbA1c';
@@ -2422,456 +2445,458 @@ class AppLocalizationsPt extends AppLocalizations {
   String get diabetes => 'Diabetes';
 
   @override
-  String get prediabetes => 'Prediabetes';
+  String get prediabetes => 'Pré-diabetes';
 
   @override
-  String get type1 => 'Type 1';
+  String get type1 => 'Tipo 1';
 
   @override
-  String get type2 => 'Type 2';
+  String get type2 => 'Tipo 2';
 
   @override
   String get apob => 'ApoB';
 
   @override
   String get optionalPlansAndPaceGuides =>
-      'Optional. Plans and pace guides use it; the climbing above shapes the training too.';
+      'Opcional. Os planos e guias de ritmo usam-no; o desnível acima também molda o treino.';
 
   @override
-  String get addRaceGoal2 => 'Add Race Goal';
+  String get addRaceGoal2 => 'Adicionar objetivo de prova';
 
   @override
-  String get editRaceGoal => 'Edit Race Goal';
+  String get editRaceGoal => 'Editar objetivo de prova';
 
   @override
-  String get trailRunning2 => 'Trail Running';
+  String get trailRunning2 => 'Trail';
 
   @override
-  String get roadCycling => 'Road Cycling';
+  String get roadCycling => 'Ciclismo de estrada';
 
   @override
   String get gravel => 'Gravel';
 
   @override
-  String get indoorRowing => 'Indoor Rowing';
+  String get indoorRowing => 'Remo indoor';
 
   @override
-  String get selectDate => 'Select date';
+  String get selectDate => 'Selecionar data';
 
   @override
-  String get committed => 'Committed';
+  String get committed => 'Confirmado';
 
   @override
-  String get flexible => 'Flexible';
+  String get flexible => 'Flexível';
 
   @override
-  String get notGoing => 'Not going';
+  String get notGoing => 'Não vou';
 
   @override
-  String get notSaid => 'Not said';
+  String get notSaid => 'Não indicado';
 
   @override
-  String get finish => 'Finish';
+  String get finish => 'Terminar';
 
   @override
-  String get saveGoal => 'Save Goal';
+  String get saveGoal => 'Guardar objetivo';
 
   @override
   String get exportAllRecordedWorkoutsAs =>
-      'Export all recorded workouts as a spreadsheet.';
+      'Exportar todos os treinos registados como folha de cálculo.';
 
   @override
   String get backupsIncludeYourHealthData =>
-      'Backups include your health data, training plans and profile settings. Login credentials are excluded. Restoring replaces local data.';
+      'As cópias de segurança incluem os teus dados de saúde, planos de treino e definições do perfil. As credenciais de início de sessão ficam de fora. Restaurar substitui os dados locais.';
 
   @override
-  String get trail => 'Trail';
+  String get trail => 'Trilho';
 
   @override
-  String get inlineSkating => 'Inline Skating';
+  String get inlineSkating => 'Patinagem em linha';
 
   @override
-  String get nordicClassic => 'Nordic Classic';
+  String get nordicClassic => 'Esqui de fundo clássico';
 
   @override
-  String get skateSkiing => 'Skate Skiing';
+  String get skateSkiing => 'Esqui de fundo skating';
 
   @override
-  String get strength => 'Strength';
+  String get strength => 'Força';
 
   @override
-  String get walking => 'Walking';
+  String get walking => 'Caminhada';
 
   @override
-  String get yoga => 'Yoga';
+  String get yoga => 'Ioga';
 
   @override
-  String get skiing => 'Skiing';
+  String get skiing => 'Esqui';
 
   @override
-  String get climbing => 'Climbing';
+  String get climbing => 'Escalada';
 
   @override
-  String get monday => 'Monday';
+  String get monday => 'Segunda-feira';
 
   @override
-  String get sunday => 'Sunday';
+  String get sunday => 'Domingo';
 
   @override
-  String get month => 'Month';
+  String get month => 'Mês';
 
   @override
-  String get week => 'Week';
+  String get week => 'Semana';
 
   @override
-  String get list => 'List';
+  String get list => 'Lista';
 
   @override
-  String get train => 'Train';
+  String get train => 'Treino';
 
   @override
-  String get restDay => 'Rest';
+  String get restDay => 'Descanso';
 
   @override
-  String get kilogramsKg => 'Kilograms (kg)';
+  String get kilogramsKg => 'Quilogramas (kg)';
 
   @override
-  String get poundsLb => 'Pounds (lb)';
+  String get poundsLb => 'Libras (lb)';
 
   @override
-  String get regenerateWorkouts => 'Regenerate Workouts';
+  String get regenerateWorkouts => 'Gerar treinos novamente';
 
   @override
-  String get starting => 'Starting';
+  String get starting => 'A iniciar';
 
   @override
-  String get allPlannedWorkoutsDeleted => 'All planned workouts deleted.';
+  String get allPlannedWorkoutsDeleted =>
+      'Todos os treinos planeados foram eliminados.';
 
   @override
-  String get searching => 'Searching…';
+  String get searching => 'A procurar…';
 
   @override
-  String get searchCity => 'Search city';
+  String get searchCity => 'Procurar cidade';
 
   @override
   String get fixedLocationSavedWeatherWill =>
-      'Fixed location saved. Weather will refresh.';
+      'Localização fixa guardada. A meteorologia vai ser atualizada.';
 
   @override
   String get locationDisabledThePlanWeather =>
-      'Location disabled. The Plan weather card is hidden.';
+      'Localização desativada. O cartão meteorológico do plano está oculto.';
 
   @override
   String locationSetToName(Object name) {
-    return 'Location set to $name';
+    return 'Localização definida para $name';
   }
 
   @override
   String get notEnoughDaytimeAndNighttime =>
-      'Not enough daytime and nighttime readings';
+      'Medições diurnas e noturnas insuficientes';
 
   @override
   String get onlyTheWeightWasReceived =>
-      'Only the weight was received. For body fat, muscle and the other values stand barefoot on the metal electrodes and stay on until the scale finishes.';
+      'Só foi recebido o peso. Para gordura corporal, músculo e os outros valores, sobe descalço para os elétrodos metálicos e fica até a balança terminar.';
 
   @override
   String get addYourWaistInProfile =>
-      'Add your waist in Profile for visceral fat.';
+      'Adiciona a cintura no Perfil para a gordura visceral.';
 
   @override
-  String get manualActivity => 'Manual Activity';
+  String get manualActivity => 'Atividade manual';
 
   @override
   String get theseCredentialsAreStoredEncrypted =>
-      'These credentials are stored encrypted on your device (iOS Keychain / Android Keystore). They are never sent to any server other than Hilo.';
+      'Estas credenciais são guardadas encriptadas no teu dispositivo (Porta-chaves do iOS / Android Keystore). Nunca são enviadas para nenhum servidor além do da Hilo.';
 
   @override
   String get corosCredentialsAreStoredEncrypted =>
-      'Coros credentials are stored encrypted on your device. Fjelia reads data directly from the Coros cloud API. This uses the same API as the Coros Training Hub web app.';
+      'As credenciais da Coros são guardadas encriptadas no teu dispositivo. A Fjelia lê os dados diretamente da API na nuvem da Coros. É a mesma API usada pela app web Coros Training Hub.';
 
   @override
   String get connectAnyCombinationYouCan =>
-      'Connect any combination — you can always add more later in Settings.';
+      'Liga qualquer combinação — podes sempre adicionar mais tarde nas Definições.';
 
   @override
   String get garminCredentialsAreStoredEncrypted =>
-      'Garmin credentials are stored encrypted on your device. Fjelia uses the unofficial Garmin Connect API – the same approach used by many community apps.';
+      'As credenciais da Garmin são guardadas encriptadas no teu dispositivo. A Fjelia usa a API não oficial do Garmin Connect – a mesma abordagem de muitas apps da comunidade.';
 
   @override
-  String get enterTheVerificationCode => 'Enter the verification code';
+  String get enterTheVerificationCode => 'Introduz o código de verificação';
 
   @override
   String get appleHealthDataAccess =>
-      'Fjelia reads your health data from Apple Health. With your permission, it can also write synced data to Apple Health. Manage access in your device settings.';
+      'A Fjelia lê os teus dados de saúde do Apple Saúde. Com a tua autorização, também pode escrever lá os dados sincronizados. Gere o acesso nas definições do dispositivo.';
 
   @override
-  String get scanAgain => 'Scan again';
+  String get scanAgain => 'Procurar novamente';
 
   @override
   String get wearTheHiloBandDuring =>
-      'Wear the Hilo band during sleep for continuous blood pressure recording. Data syncs automatically each morning when the app opens.';
+      'Usa a pulseira Hilo durante o sono para registar continuamente a tensão arterial. Os dados sincronizam automaticamente todas as manhãs quando abres a app.';
 
   @override
   String get noPolarH10FoundWear2 =>
-      'No Polar H10 found. Wear the strap with moist electrodes and make sure no other app (or watch) is connected to it, then scan again.';
+      'Nenhum Polar H10 encontrado. Coloca a cinta com os elétrodos humedecidos, confirma que nenhuma outra app (ou relógio) está ligada a ela e procura novamente.';
 
   @override
   String get wearTheStrapWithMoist2 =>
-      'Wear the strap with moist electrodes before scanning. Measure later with + → Polar H10 HRV measurement; results appear next to your overnight HRV.';
+      'Coloca a cinta com os elétrodos humedecidos antes de procurar. Depois mede com + → Medição de HRV Polar H10; os resultados aparecem junto da tua HRV noturna.';
 
   @override
   String get signedInPlannedWorkoutsCan =>
-      'Signed in. Planned workouts can now be sent to Polar. Older sessions are imported with the next full history sync.';
+      'Sessão iniciada. Já podes enviar treinos planeados para a Polar. Os treinos mais antigos são importados na próxima sincronização completa do histórico.';
 
   @override
   String get saveYourPolarFlowLogin =>
-      'Save your Polar Flow login to send planned workouts and import sessions older than 30 days. It stays in this device\'s keychain and is sent only to Polar. Send a workout from its planner sheet, then sync Polar Flow to your watch. Check that your Polar heart-rate zones match Fjelia.';
+      'Guarda o teu início de sessão do Polar Flow para enviar treinos planeados e importar treinos com mais de 30 dias. Fica no porta-chaves deste dispositivo e só é enviado para a Polar. Envia um treino a partir da sua ficha no plano e depois sincroniza o Polar Flow com o relógio. Confirma que as zonas de FC da Polar coincidem com as da Fjelia.';
 
   @override
   String get signInToSendThis =>
-      'Sign in to send this workout to your Polar Flow calendar. Your login stays in this device\'s keychain and is sent only to Polar. After sending, sync Polar Flow to your watch.';
+      'Inicia sessão para enviar este treino para o calendário do Polar Flow. O teu início de sessão fica no porta-chaves deste dispositivo e só é enviado para a Polar. Depois de enviar, sincroniza o Polar Flow com o relógio.';
 
   @override
-  String get checkAndSave => 'Check and save';
+  String get checkAndSave => 'Verificar e guardar';
 
   @override
   String get noScaleFoundStepOn =>
-      'No scale found. Step on the scale so it wakes up, then scan again.';
+      'Nenhuma balança encontrada. Sobe para a balança para a ativar e procura novamente.';
 
   @override
   String get stepOnTheScaleBefore =>
-      'Step on the scale before scanning so it wakes up. Later, use + → RENPHO Scale to take a measurement.';
+      'Sobe para a balança antes de procurar, para que se ative. Depois mede com + → Balança RENPHO.';
 
   @override
   String get renphoCredentialsAreStoredEncrypted =>
-      'Renpho credentials are stored encrypted on your device. Fjelia talks directly to the Renpho cloud API.';
+      'As credenciais da Renpho são guardadas encriptadas no teu dispositivo. A Fjelia comunica diretamente com a API na nuvem da Renpho.';
 
   @override
   String get couldNotSendSmsCheck =>
-      'Could not send SMS. Check your phone number and internet connection.';
+      'Não foi possível enviar o SMS. Verifica o número de telefone e a ligação à internet.';
 
   @override
   String get theEmailIsUsedFor =>
-      'The email is used for secure request signing and is not sent to Suunto servers.';
+      'O e-mail é usado para assinar pedidos com segurança e não é enviado para os servidores da Suunto.';
 
   @override
   String get suuntoUsesSmsVerificationSame =>
-      'Suunto uses SMS verification (same as the Suunto app). A one-time PIN will be sent to your phone. Your credentials are stored encrypted on-device only.';
+      'A Suunto usa verificação por SMS (como a app Suunto). Será enviado um PIN único para o teu telemóvel. As credenciais são guardadas encriptadas apenas no dispositivo.';
 
   @override
   String get tellUsAboutYourRace =>
-      'Tell us about your race and schedule. Fjelia builds your plan now and works out your level from your past activities (Garmin, Suunto, Polar, COROS, Apple Health) once they are downloaded.';
+      'Fala-nos da tua prova e do teu horário. A Fjelia cria o teu plano já e calcula o teu nível a partir das atividades anteriores (Garmin, Suunto, Polar, COROS, Apple Saúde) quando forem descarregadas.';
 
   @override
   String get noAccountConnectedSoFjelia =>
-      'No account connected, so Fjelia has no history to learn from. Connect Garmin, Suunto, Polar, COROS or Apple Health and your real training decides instead.';
+      'Nenhuma conta ligada, por isso a Fjelia não tem histórico com que aprender. Liga a Garmin, Suunto, Polar, COROS ou o Apple Saúde e o teu treino real passa a decidir.';
 
   @override
   String get yourPastActivitiesAreStill =>
-      'Your past activities are still being imported. You can build your plan now — it is refined automatically when the import finishes.';
+      'As tuas atividades anteriores ainda estão a ser importadas. Podes criar já o plano — é afinado automaticamente quando a importação terminar.';
 
   @override
-  String get buildingYourPlan => 'Building your plan…';
+  String get buildingYourPlan => 'A criar o teu plano…';
 
   @override
-  String get saveContinue => 'Save & Continue';
+  String get saveContinue => 'Guardar e continuar';
 
   @override
   String get addYourMainPriorityA =>
-      'Add your main (priority A) race. The plan is periodised towards it: base, build, peak and taper. Without a race goal no plan is generated yet.';
+      'Adiciona a tua prova principal (prioridade A). O plano é periodizado para ela: base, construção, pico e afinação. Sem objetivo de prova ainda não é gerado nenhum plano.';
 
   @override
-  String get noMeasurementsYet => 'No measurements yet';
+  String get noMeasurementsYet => 'Ainda sem medições';
 
   @override
-  String get date => 'Date';
+  String get date => 'Data';
 
   @override
   String deepSleepIsBelowOptimal(Object round) {
-    return 'Deep sleep is below optimal ($round%). Avoid alcohol and heavy meals 3h before bed.';
+    return 'O sono profundo está abaixo do ideal ($round%). Evita álcool e refeições pesadas 3 h antes de deitar.';
   }
 
   @override
-  String get finishWithSetsOpen => 'Finish with sets open?';
+  String get finishWithSetsOpen => 'Terminar com séries em aberto?';
 
   @override
-  String get completeThePlannedWorkout => 'Complete the planned workout?';
+  String get completeThePlannedWorkout => 'Concluir o treino planeado?';
 
   @override
   String get marksThePlannedSessionAs =>
-      'Marks the planned session as done with this workout.';
+      'Marca o treino planeado como feito com este treino.';
 
   @override
-  String get discardThisWorkout => 'Discard this workout?';
+  String get discardThisWorkout => 'Descartar este treino?';
 
   @override
   String get removesTheWorkoutAndEvery =>
-      'Removes the workout and every set recorded in it.';
+      'Remove o treino e todas as séries registadas nele.';
 
   @override
   String assistanceName(Object name) {
-    return 'Assistance ($name)';
+    return 'Assistência ($name)';
   }
 
   @override
-  String get enterSecondsOrMSs => 'Enter seconds or m:ss.';
+  String get enterSecondsOrMSs => 'Introduz segundos ou m:ss.';
 
   @override
-  String get enterTheLoadAsA => 'Enter the load as a number.';
+  String get enterTheLoadAsA => 'Introduz a carga como número.';
 
   @override
-  String get loadCannotBeNegative => 'Load cannot be negative.';
+  String get loadCannotBeNegative => 'A carga não pode ser negativa.';
 
   @override
-  String get enterTheEffortValue => 'Enter the effort value.';
+  String get enterTheEffortValue => 'Introduz o valor de esforço.';
 
   @override
-  String get nameTheExercise => 'Name the exercise.';
+  String get nameTheExercise => 'Dá um nome ao exercício.';
 
   @override
-  String get atLeastOneImplement => 'At least one implement.';
+  String get atLeastOneImplement => 'Pelo menos um acessório.';
 
   @override
-  String get anIncrementMustBePositive => 'An increment must be positive.';
+  String get anIncrementMustBePositive => 'O incremento tem de ser positivo.';
 
   @override
-  String get enterAPositiveStep => 'Enter a positive step.';
+  String get enterAPositiveStep => 'Introduz um incremento positivo.';
 
   @override
-  String get repsInReserve => 'Reps in reserve';
+  String get repsInReserve => 'Reps em reserva';
 
   @override
-  String get loadPerImplement => 'Load per implement';
+  String get loadPerImplement => 'Carga por acessório';
 
   @override
-  String get restAfterThisSet => 'Rest after this set';
+  String get restAfterThisSet => 'Descanso depois desta série';
 
   @override
-  String get enterHowLongTheSet => 'Enter how long the set lasted.';
+  String get enterHowLongTheSet => 'Introduz quanto tempo durou a série.';
 
   @override
-  String get repsDonePerSide => 'Reps done per side';
+  String get repsDonePerSide => 'Reps feitas por lado';
 
   @override
   String plannedRepminRepmax(Object repMin, Object repMax) {
-    return 'Planned $repMin–$repMax';
+    return 'Planeado $repMin–$repMax';
   }
 
   @override
-  String get restTakenBeforeTheNext => 'Rest taken before the next set';
+  String get restTakenBeforeTheNext => 'Descanso antes da série seguinte';
 
   @override
-  String get equipment => 'Equipment';
+  String get equipment => 'Equipamento';
 
   @override
-  String get implementsUsedTogether => 'Implements used together';
+  String get implementsUsedTogether => 'Acessórios usados em conjunto';
 
   @override
-  String get smallestLoadStepOptional => 'Smallest load step (optional)';
+  String get smallestLoadStepOptional => 'Menor incremento de carga (opcional)';
 
   @override
   String get theSmallestChangeYourPlates =>
-      'The smallest change your plates, dumbbells or machine allow, remembered for this equipment.';
+      'A menor alteração que os teus discos, halteres ou máquina permitem, lembrada para este equipamento.';
 
   @override
-  String get loadStep => 'Load step';
+  String get loadStep => 'Incremento de carga';
 
   @override
-  String get finishWithIncompleteData => 'Finish with incomplete data?';
+  String get finishWithIncompleteData => 'Terminar com dados incompletos?';
 
   @override
-  String get leaveWithoutSaving => 'Leave without saving?';
+  String get leaveWithoutSaving => 'Sair sem guardar?';
 
   @override
-  String get theLastChangeCouldNot => 'The last change could not be saved.';
+  String get theLastChangeCouldNot =>
+      'Não foi possível guardar a última alteração.';
 
   @override
   String get comparedWithAPlanChosen =>
-      'Compared with a plan chosen after the workout. Planned values are hints, not results.';
+      'Comparado com um plano escolhido depois do treino. Os valores planeados são sugestões, não resultados.';
 
   @override
-  String get lastSet => 'Last set';
+  String get lastSet => 'Última série';
 
   @override
-  String get templateName => 'Template name';
+  String get templateName => 'Nome do modelo';
 
   @override
-  String get betweenExercises => 'Between exercises';
+  String get betweenExercises => 'Entre exercícios';
 
   @override
-  String get betweenRounds => 'Between rounds';
+  String get betweenRounds => 'Entre voltas';
 
   @override
-  String get discardChanges => 'Discard changes?';
+  String get discardChanges => 'Descartar alterações?';
 
   @override
   String get yourEditsToThisWorkout =>
-      'Your edits to this workout are not saved.';
+      'As tuas alterações a este treino não foram guardadas.';
 
   @override
-  String get estimatedDuration => 'Estimated duration';
+  String get estimatedDuration => 'Duração estimada';
 
   @override
-  String get workingSets => 'Working sets';
+  String get workingSets => 'Séries de trabalho';
 
   @override
-  String get estimatedExternalVolume => 'Estimated external volume';
+  String get estimatedExternalVolume => 'Volume externo estimado';
 
   @override
   String loadRaisedFromUnitTo(Object unit, Object unit2, Object ruleVersion) {
-    return 'Load raised from $unit to $unit2 after your review (rule v$ruleVersion).';
+    return 'Carga aumentada de $unit para $unit2 depois da tua avaliação (regra v$ruleVersion).';
   }
 
   @override
   String get thePlannedWorkoutHasNo =>
-      'The planned workout has no exercises to log from.';
+      'O treino planeado não tem exercícios para registar.';
 
   @override
-  String get completedSets => 'Completed sets';
+  String get completedSets => 'Séries concluídas';
 
   @override
-  String get knownExternalVolume => 'Known external volume';
+  String get knownExternalVolume => 'Volume externo conhecido';
 
   @override
-  String get updateStrengthSessions2 => 'Update strength sessions?';
+  String get updateStrengthSessions2 => 'Atualizar treinos de força?';
 
   @override
   String get upcomingSessionsArePlannedAgain =>
-      'Upcoming sessions are planned again from today: strength follows your race goals on every strength day, with sessions that vary. Completed and skipped workouts stay; exercises you changed in an upcoming strength session are replaced.';
+      'Os próximos treinos são planeados de novo a partir de hoje: a força segue os teus objetivos de prova em cada dia de força, com treinos variados. Os treinos concluídos e saltados mantêm-se; os exercícios que alteraste num próximo treino de força são substituídos.';
 
   @override
   String get thisSessionUsesAnEarlier =>
-      'This session uses an earlier strength template. Updated plans vary strength by phase and race goal and use every strength day.';
+      'Este treino usa um modelo de força anterior. Os planos atualizados variam a força por fase e objetivo de prova e usam todos os dias de força.';
 
   @override
   String get estimated1rmUsesEpleyAnd =>
-      'Estimated 1RM uses Epley and Brzycki on completed working sets of 1–10 reps with a known load, shown as the range between them. It is an estimate, not a tested maximum.';
+      'O 1RM estimado usa Epley e Brzycki em séries de trabalho concluídas de 1–10 reps com carga conhecida, mostrado como o intervalo entre ambos. É uma estimativa, não um máximo testado.';
 
   @override
-  String get localWeather => 'Local weather';
+  String get localWeather => 'Meteorologia local';
 
   @override
   String get today => 'Hoje';
 
   @override
-  String get low => 'Low';
+  String get low => 'Baixo';
 
   @override
-  String get moderate => 'Moderate';
+  String get moderate => 'Moderado';
 
   @override
-  String get overcast => 'Overcast';
+  String get overcast => 'Encoberto';
 
   @override
-  String get partlyCloudy => 'Partly cloudy';
+  String get partlyCloudy => 'Parcialmente nublado';
 
   @override
   String collapseName(Object name) {
-    return 'Collapse $name';
+    return 'Recolher $name';
   }
 
   @override
-  String get variableLoads => 'Variable loads';
+  String get variableLoads => 'Cargas variáveis';
 
   @override
   String
@@ -2880,77 +2905,77 @@ class AppLocalizationsPt extends AppLocalizations {
     Object strengthProgressionMinSessions,
     Object reason,
   ) {
-    return 'Rule v$strengthProgressionRuleVersion: the last $strengthProgressionMinSessions comparable sessions, every set done at the top of its repetition target with effort recorded and not harder than intended. $reason';
+    return 'Regra v$strengthProgressionRuleVersion: os últimos $strengthProgressionMinSessions treinos comparáveis, com cada série feita no topo do objetivo de repetições, com esforço registado e não mais duro do que o previsto. $reason';
   }
 
   @override
-  String get stepOnYourScaleBefore => 'Step on your scale before scanning';
+  String get stepOnYourScaleBefore => 'Sobe para a balança antes de procurar';
 
   @override
-  String get scanning => 'Scanning…';
+  String get scanning => 'A procurar…';
 
   @override
-  String get pair => 'Pair';
+  String get pair => 'Emparelhar';
 
   @override
   String get selectYourAktiiaPWristband =>
-      'Select your AKTIIA P… wristband. Place it on the charger to wake it up if not visible.';
+      'Seleciona a tua pulseira AKTIIA P…. Coloca-a no carregador para a ativar se não aparecer.';
 
   @override
   String get measurementInterruptedWhileTheApp =>
-      'Measurement interrupted while the app was in the background. Please repeat it.';
+      'A medição foi interrompida enquanto a app estava em segundo plano. Repete-a.';
 
   @override
   String get noRecentRrDataWith =>
-      'No recent RR data with good contact. Check the strap and repeat the measurement.';
+      'Sem dados RR recentes com bom contacto. Verifica a cinta e repete a medição.';
 
   @override
-  String get settlingStayStill => 'Settling · stay still';
+  String get settlingStayStill => 'A estabilizar · fica quieto';
 
   @override
-  String get deleteSpotHrvMeasurement => 'Delete spot HRV measurement?';
+  String get deleteSpotHrvMeasurement => 'Eliminar medição de HRV pontual?';
 
   @override
   String get thisRemovesTheRecordingAnd =>
-      'This removes the recording and its raw RR intervals.';
+      'Isto remove a gravação e os intervalos RR em bruto.';
 
   @override
   String get appleHealthStoppedAnsweringSo =>
-      'Apple Health stopped answering, so Fjelia disconnected it and no longer reads or writes Health data.\n\nAllow Fjelia again under Settings → Health → Data Access & Devices → Fjelia, then reconnect Apple Health.';
+      'O Apple Saúde deixou de responder, por isso a Fjelia desligou-o e já não lê nem escreve dados de saúde.\n\nVolta a autorizar a Fjelia em Definições → Saúde → Acesso a dados e dispositivos → Fjelia e depois volta a ligar o Apple Saúde.';
 
   @override
   String get thisRemovesTheSelectedGrip =>
-      'This removes the selected grip reading.';
+      'Isto remove a medição de preensão selecionada.';
 
   @override
-  String get hideReminderDiagnostics => 'Hide reminder diagnostics';
+  String get hideReminderDiagnostics => 'Ocultar diagnóstico dos lembretes';
 
   @override
-  String get loading => 'Loading…';
+  String get loading => 'A carregar…';
 
   @override
-  String get touchTheChartForDetails => 'Touch the chart for details';
+  String get touchTheChartForDetails => 'Toca no gráfico para ver detalhes';
 
   @override
-  String get indoor => 'Indoor';
+  String get indoor => 'Interior';
 
   @override
-  String get road => 'Road';
+  String get road => 'Estrada';
 
   @override
-  String get technical => 'Technical';
+  String get technical => 'Técnico';
 
   @override
-  String get snow => 'Snow';
+  String get snow => 'Neve';
 
   @override
-  String get pool => 'Pool';
+  String get pool => 'Piscina';
 
   @override
-  String get openWater => 'Open water';
+  String get openWater => 'Águas abertas';
 
   @override
-  String get ambientTemperatureC => 'Ambient temperature °C';
+  String get ambientTemperatureC => 'Temperatura ambiente °C';
 
   @override
   String carryAboutGelsGelsGelcarbs(
@@ -2960,224 +2985,227 @@ class AppLocalizationsPt extends AppLocalizations {
     Object bottleMl,
     Object drinkCarbs,
   ) {
-    return 'Carry about $gels gels ($gelCarbs g carbs each) + $bottles × $bottleMl ml bottles. $drinkCarbs g carbohydrate comes from the drink mix.';
+    return 'Leva cerca de $gels géis ($gelCarbs g de hidratos cada) + $bottles × garrafas de $bottleMl ml. $drinkCarbs g de hidratos vêm da bebida.';
   }
 
   @override
-  String get intakeNotRecorded => 'Intake not recorded';
+  String get intakeNotRecorded => 'Ingestão não registada';
 
   @override
   String get loggingDeclinedIntakeUnknown =>
-      'Logging declined — intake unknown';
+      'Registo recusado — ingestão desconhecida';
 
   @override
-  String get confirmedNoIntake => 'Confirmed: no intake';
+  String get confirmedNoIntake => 'Confirmado: sem ingestão';
 
   @override
-  String get draft => 'Draft · ';
+  String get draft => 'Rascunho · ';
 
   @override
-  String get actualIntakePerServing => 'Actual intake · per serving';
+  String get actualIntakePerServing => 'Ingestão real · por dose';
 
   @override
   String get minuteIntoWorkoutDuringOnly =>
-      'Minute into workout (during only, optional)';
+      'Minuto do treino (só durante, opcional)';
 
   @override
-  String get sodiumMgServingNotSalt => 'Sodium mg / serving (not salt)';
+  String get sodiumMgServingNotSalt => 'Sódio mg / dose (não sal)';
 
   @override
-  String get comfortable => 'Comfortable';
+  String get comfortable => 'Confortável';
 
   @override
-  String get mildSymptoms => 'Mild symptoms';
+  String get mildSymptoms => 'Sintomas ligeiros';
 
   @override
-  String get moderateSymptoms => 'Moderate symptoms';
+  String get moderateSymptoms => 'Sintomas moderados';
 
   @override
-  String get severeSymptoms => 'Severe symptoms';
+  String get severeSymptoms => 'Sintomas graves';
 
   @override
-  String get personalNutritionSettings => 'Personal nutrition settings';
+  String get personalNutritionSettings => 'Definições pessoais de nutrição';
 
   @override
   String get practisedCarbohydrateToleranceGH =>
-      'Practised carbohydrate tolerance g/h (up to 120)';
+      'Tolerância treinada a hidratos g/h (até 120)';
 
   @override
   String get exportTheMonthlyReportAs =>
-      'Export the monthly report as PDF in the Hilo app, then choose it here. Only the readings are imported; name, e-mail and body data in the report are ignored.';
+      'Exporta o relatório mensal em PDF na app Hilo e escolhe-o aqui. Só as medições são importadas; o nome, o e-mail e os dados corporais do relatório são ignorados.';
 
   @override
   String get nothingNewAllReadingsWere =>
-      'Nothing new: all readings were already stored.';
+      'Nada de novo: todas as medições já estavam guardadas.';
 
   @override
-  String get historyImportIncomplete => 'History import incomplete';
+  String get historyImportIncomplete => 'Importação do histórico incompleta';
 
   @override
   String get youCanKeepUsingFjelia =>
-      'You can keep using Fjelia, but keep it open: iOS pauses the import when the app is in the background and it continues the next time you open Fjelia. Your plan is calibrated when the import finishes.';
+      'Podes continuar a usar a Fjelia, mas mantém-na aberta: o iOS pausa a importação quando a app está em segundo plano e retoma-a da próxima vez que abrires a Fjelia. O teu plano é calibrado quando a importação terminar.';
 
   @override
   String get addYourBirthYearIn =>
-      'Add your birth year in Settings → Profile to see your estimate.';
+      'Adiciona o teu ano de nascimento em Definições → Perfil para veres a estimativa.';
 
   @override
-  String get fitnessAge => 'Fitness Age';
+  String get fitnessAge => 'Idade física';
 
   @override
-  String get estLifespan => 'Est. Lifespan';
+  String get estLifespan => 'Esperança de vida est.';
 
   @override
-  String get delta => 'Delta';
+  String get delta => 'Diferença';
 
   @override
   String couldNotOpenKey(Object key) {
-    return 'Could not open $key';
+    return 'Não foi possível abrir $key';
   }
 
   @override
   String get appleIntelligenceIsNotAvailable =>
-      'Apple Intelligence is not available on this device. Use Free AI or choose another provider.';
+      'O Apple Intelligence não está disponível neste dispositivo. Usa o Free AI ou escolhe outro fornecedor.';
 
   @override
   String get personalisedMorningLunchAfternoonEvening =>
-      'Personalised morning/lunch/afternoon/evening summary';
+      'Resumo personalizado de manhã/almoço/tarde/noite';
 
   @override
-  String get enterASubject => 'Enter a subject.';
+  String get enterASubject => 'Introduz um assunto.';
 
   @override
-  String get message => 'Message';
+  String get message => 'Mensagem';
 
   @override
-  String get enterAMessageOfAt => 'Enter a message of at least 10 characters.';
+  String get enterAMessageOfAt =>
+      'Introduz uma mensagem com pelo menos 10 carateres.';
 
   @override
   String get garminConnect => 'Garmin Connect';
 
   @override
-  String get hiloBloodPressure => 'Hilo (Blood Pressure)';
+  String get hiloBloodPressure => 'Hilo (tensão arterial)';
 
   @override
-  String get renphoBodyScale => 'Renpho (Body Scale)';
+  String get renphoBodyScale => 'Renpho (balança)';
 
   @override
-  String get hiloPodCuff => 'Hilo pod / cuff';
+  String get hiloPodCuff => 'Hilo pod / braçadeira';
 
   @override
   String disconnectLabel(Object label) {
-    return 'Disconnect $label?';
+    return 'Desligar $label?';
   }
 
   @override
   String get yourSavedMeasurementsWillRemain =>
-      'Your saved measurements will remain on this device.';
+      'As tuas medições guardadas ficam neste dispositivo.';
 
   @override
   String get notEnoughRecentHeartRate =>
-      'Not enough recent heart-rate data to adjust zones.';
+      'Dados recentes de frequência cardíaca insuficientes para ajustar as zonas.';
 
   @override
-  String get aerobicBase => 'Aerobic Base';
+  String get aerobicBase => 'Base aeróbia';
 
   @override
-  String get tempo => 'Tempo';
+  String get tempo => 'Ritmo';
 
   @override
-  String get lactateThreshold => 'Lactate Threshold';
+  String get lactateThreshold => 'Limiar de lactato';
 
   @override
-  String get birthYearHeightWaist => 'Birth year, height, waist';
+  String get birthYearHeightWaist => 'Ano de nascimento, altura, cintura';
 
   @override
-  String get enterAValidValue => 'Enter a valid value';
+  String get enterAValidValue => 'Introduz um valor válido';
 
   @override
-  String get birthYear => 'Birth year';
+  String get birthYear => 'Ano de nascimento';
 
   @override
-  String get height => 'Height';
+  String get height => 'Altura';
 
   @override
-  String get waist => 'Waist';
+  String get waist => 'Cintura';
 
   @override
-  String get yearsSinceQuit => 'Years since quit';
+  String get yearsSinceQuit => 'Anos desde que deixou';
 
   @override
-  String get cigarettesPerDay => 'Cigarettes per day';
+  String get cigarettesPerDay => 'Cigarros por dia';
 
   @override
-  String get standardDrinksPerMonth => 'Standard drinks per month';
+  String get standardDrinksPerMonth => 'Bebidas padrão por mês';
 
   @override
-  String get enterAValidNumber => 'Enter a valid number';
+  String get enterAValidNumber => 'Introduz um número válido';
 
   @override
-  String get enterARaceName => 'Enter a race name';
+  String get enterARaceName => 'Introduz o nome da prova';
 
   @override
-  String get useHMmOrH => 'Use h:mm or h:mm:ss, a time you could really run';
+  String get useHMmOrH =>
+      'Usa h:mm ou h:mm:ss, um tempo que consigas mesmo fazer';
 
   @override
   String get flexibleThePlanMayDrop =>
-      'Flexible: the plan may drop this event if it clashes with a more important one.';
+      'Flexível: o plano pode retirar este evento se coincidir com um mais importante.';
 
   @override
-  String get selectARaceDate => 'Select a race date';
+  String get selectARaceDate => 'Seleciona a data da prova';
 
   @override
   String thatIsTenTimesOr(Object likely) {
-    return 'That is ten times (or a tenth of) the usual $likely km. Use $likely km instead?';
+    return 'Isso é dez vezes (ou um décimo) dos habituais $likely km. Usar $likely km?';
   }
 
   @override
-  String get addGoal => 'Add Goal';
+  String get addGoal => 'Adicionar objetivo';
 
   @override
-  String get restoreFailed => 'Restore failed';
+  String get restoreFailed => 'O restauro falhou';
 
   @override
-  String get replaceLocalData => 'Replace local data?';
+  String get replaceLocalData => 'Substituir os dados locais?';
 
   @override
   String get restoringThisBackupReplacesAll =>
-      'Restoring this backup replaces all local health and training records. Existing login credentials are kept.';
+      'Restaurar esta cópia substitui todos os registos locais de saúde e treino. As credenciais de início de sessão existentes mantêm-se.';
 
   @override
-  String get openingBackupZip => 'Opening backup ZIP';
+  String get openingBackupZip => 'A abrir ZIP da cópia de segurança';
 
   @override
-  String get addAFutureRaceGoal => 'Add a future race goal first.';
+  String get addAFutureRaceGoal =>
+      'Adiciona primeiro um objetivo de prova futuro.';
 
   @override
-  String get deleteAllWorkouts2 => 'Delete all workouts?';
+  String get deleteAllWorkouts2 => 'Eliminar todos os treinos?';
 
   @override
   String get thisDeletesPlannedWorkoutsOn =>
-      'This deletes planned workouts on this phone and on your connected watch platform. Completed activities are kept.';
+      'Isto elimina os treinos planeados neste telemóvel e na plataforma do relógio ligada. As atividades concluídas mantêm-se.';
 
   @override
-  String get regenerateWorkouts2 => 'Regenerate workouts?';
+  String get regenerateWorkouts2 => 'Gerar treinos novamente?';
 
   @override
   String get noRaceGoalsYetAdd =>
-      'No race goals yet. Add one or sync from Garmin.';
+      'Ainda sem objetivos de prova. Adiciona um ou sincroniza a partir da Garmin.';
 
   @override
-  String get deleteRaceGoal => 'Delete race goal?';
+  String get deleteRaceGoal => 'Eliminar objetivo de prova?';
 
   @override
   String deletingFailedFailure(Object failure) {
-    return 'Deleting failed: $failure';
+    return 'A eliminação falhou: $failure';
   }
 
   @override
   String allPlannedWorkoutsDeletedRemoved(Object removed) {
-    return 'All planned workouts deleted. Removed from your platforms: $removed.';
+    return 'Todos os treinos planeados foram eliminados. Removidos das tuas plataformas: $removed.';
   }
 
   @override
@@ -3185,99 +3213,99 @@ class AppLocalizationsPt extends AppLocalizations {
     Object toStringAsFixed,
     Object toStringAsFixed2,
   ) {
-    return 'Using current location: $toStringAsFixed, $toStringAsFixed2';
+    return 'A usar a localização atual: $toStringAsFixed, $toStringAsFixed2';
   }
 
   @override
-  String get typeSleep => 'Sleep';
+  String get typeSleep => 'Sono';
 
   @override
-  String get typeBloodPressure => 'Blood Pressure';
+  String get typeBloodPressure => 'Tensão arterial';
 
   @override
-  String get addHiloBpReportPdf => 'Add Hilo BP report (PDF)';
+  String get addHiloBpReportPdf => 'Adicionar relatório de tensão Hilo (PDF)';
 
   @override
-  String get hiloCuffBle => 'Hilo Cuff (BLE)';
+  String get hiloCuffBle => 'Braçadeira Hilo (BLE)';
 
   @override
-  String get typeSpo2 => 'SpO₂ / Pulse Oximeter';
+  String get typeSpo2 => 'SpO₂ / oxímetro';
 
   @override
-  String get typeWeightScale => 'Weight Scale';
+  String get typeWeightScale => 'Balança';
 
   @override
-  String get polarH10HrvMeasurement => 'Polar H10 HRV measurement';
+  String get polarH10HrvMeasurement => 'Medição de HRV Polar H10';
 
   @override
   String samplingWouldStartMinutes(Object minutes) {
-    return 'Sampling would start about $minutes min after your workout ended.';
+    return 'A medição começaria cerca de $minutes min depois do fim do treino.';
   }
 
   @override
   String samplingStartedMinutes(Object minutes) {
-    return 'Sampling started $minutes min after your workout ended.';
+    return 'A medição começou $minutes min depois do fim do treino.';
   }
 
   @override
-  String get unknown => 'Unknown';
+  String get unknown => 'Desconhecido';
 
   @override
-  String get before => 'Before';
+  String get before => 'Antes';
 
   @override
-  String get during => 'During';
+  String get during => 'Durante';
 
   @override
-  String get after => 'After';
+  String get after => 'Depois';
 
   @override
-  String get enumWarmUp => 'Warm-up';
+  String get enumWarmUp => 'Aquecimento';
 
   @override
-  String get enumWorking => 'Working';
+  String get enumWorking => 'Trabalho';
 
   @override
   String get enumBackOff => 'Back-off';
 
   @override
-  String get enumTechnique => 'Technique';
+  String get enumTechnique => 'Técnica';
 
   @override
-  String get enumExternalLoad => 'External load';
+  String get enumExternalLoad => 'Carga externa';
 
   @override
-  String get enumBandResistance => 'Band / resistance';
+  String get enumBandResistance => 'Elástico / resistência';
 
   @override
-  String get enumTotalLoad => 'Total load';
+  String get enumTotalLoad => 'Carga total';
 
   @override
-  String get enumPerImplement => 'Per implement';
+  String get enumPerImplement => 'Por acessório';
 
   @override
-  String get enumOneImplement => 'One implement';
+  String get enumOneImplement => 'Um acessório';
 
   @override
-  String get enumBothSides => 'Both sides';
+  String get enumBothSides => 'Ambos os lados';
 
   @override
-  String get enumAlternatingTotalReps => 'Alternating, total reps';
+  String get enumAlternatingTotalReps => 'Alternado, reps totais';
 
   @override
-  String get enumPartial => 'Partial';
+  String get enumPartial => 'Parcial';
 
   @override
-  String get enumFailed => 'Failed';
+  String get enumFailed => 'Falhada';
 
   @override
-  String get enumStraightSets => 'Straight sets';
+  String get enumStraightSets => 'Séries simples';
 
   @override
-  String get enumSuperset => 'Superset';
+  String get enumSuperset => 'Supersérie';
 
   @override
-  String get enumCircuit => 'Circuit';
+  String get enumCircuit => 'Circuito';
 
   @override
   String get enumRir => 'RIR';
@@ -3286,358 +3314,367 @@ class AppLocalizationsPt extends AppLocalizations {
   String get enumRpe110 => 'RPE 1–10';
 
   @override
-  String get enumBeforeTraining => 'Before training';
+  String get enumBeforeTraining => 'Antes do treino';
 
   @override
-  String get enumAfterTraining => 'After training';
+  String get enumAfterTraining => 'Depois do treino';
 
   @override
-  String get enumResting => 'Resting';
+  String get enumResting => 'Em repouso';
 
   @override
-  String get enumSeated => 'Seated';
+  String get enumSeated => 'Sentado';
 
   @override
-  String get enumLyingDown => 'Lying down';
+  String get enumLyingDown => 'Deitado';
 
   @override
   String get duringRoutineGelsAreNot =>
-      'During: routine gels are not needed for this short/easy session. Drink to thirst.';
+      'Durante: neste treino curto/leve não são precisos géis. Bebe conforme a sede.';
 
   @override
   String get duringSpreadCarbohydrateAndDrinks =>
-      'During: spread carbohydrate and drinks over small, regular feeds. Count drink carbohydrate in the same total as gels and food.';
+      'Durante: distribui os hidratos e a bebida por tomas pequenas e regulares. Conta os hidratos da bebida no mesmo total que os géis e a comida.';
 
   @override
   String get fluidIsAnEditableStarting =>
-      'Fluid is an editable starting estimate, not a quota. Use thirst, practised intake and measured sweat losses; do not force extra water.';
+      'O líquido é uma estimativa inicial editável, não uma quota. Guia-te pela sede, pela ingestão treinada e pelas perdas de suor medidas; não forces água a mais.';
 
   @override
   String get afterHaveCarbohydrateAndA =>
-      'After: have carbohydrate and a protein-containing meal. Prioritise refuelling and rehydration when another session is soon.';
+      'Depois: come hidratos e uma refeição com proteína. Dá prioridade a reabastecer e reidratar quando houver outro treino em breve.';
 
   @override
   String get swimmingPlaceALabelledBottle =>
-      'Swimming: place a labelled bottle on the pool deck and use set breaks for sips or feeds. Pool conditions may differ from outdoor weather.';
+      'Natação: deixa uma garrafa identificada no cais da piscina e usa as pausas entre séries para beber ou comer. As condições da piscina podem diferir da meteorologia exterior.';
 
   @override
   String get runningCarryAccessibleGelsFlasks =>
-      'Running: carry accessible gels/flasks or plan aid-station feeds; practise the same products and timing before racing.';
+      'Corrida: leva géis/frascos à mão ou planeia comer nos abastecimentos; treina os mesmos produtos e horários antes da prova.';
 
   @override
   String get servingSizesAndToleranceMust =>
-      'Serving sizes and tolerance must be positive.';
+      'As doses e a tolerância têm de ser positivas.';
 
   @override
   String get enterFiniteNonNegativeMeasurements =>
-      'Enter finite, non-negative measurements.';
+      'Introduz medições finitas e não negativas.';
 
   @override
   String get targetsMustBeFiniteAnd =>
-      'Targets must be finite and non-negative.';
+      'Os objetivos têm de ser finitos e não negativos.';
 
   @override
   String get conditionsMustBeFiniteOr =>
-      'Conditions must be finite or unknown.';
+      'As condições têm de ser finitas ou desconhecidas.';
 
   @override
-  String get humidityMustBeBetween0 => 'Humidity must be between 0 and 100%.';
+  String get humidityMustBeBetween0 =>
+      'A humidade tem de estar entre 0 e 100%.';
 
   @override
   String get noIntakeCannotIncludeFood =>
-      '“No intake” cannot include food or drinks.';
+      '“Sem ingestão” não pode incluir comida nem bebidas.';
 
   @override
   String get addAnItemOrConfirm =>
-      'Add an item or confirm that you had no intake.';
+      'Adiciona um item ou confirma que não consumiste nada.';
 
   @override
   String get eachIntakeNeedsAProduct =>
-      'Each intake needs a product and a valid timing.';
+      'Cada ingestão precisa de um produto e de um momento válido.';
 
   @override
-  String get quantityMustBePositive => 'Quantity must be positive.';
+  String get quantityMustBePositive => 'A quantidade tem de ser positiva.';
 
   @override
-  String get thisActivityNoLongerExists => 'This activity no longer exists.';
+  String get thisActivityNoLongerExists => 'Esta atividade já não existe.';
 
   @override
   String get practisedCarbohydrateToleranceMustNot =>
-      'Practised carbohydrate tolerance must not exceed 120 g/h.';
+      'A tolerância treinada a hidratos não pode exceder 120 g/h.';
 
   @override
   String get measuredSweatRateMustBe =>
-      'Measured sweat rate must be positive or left unknown.';
+      'A taxa de suor medida tem de ser positiva ou ficar desconhecida.';
 
   @override
   String get increasePractisedToleranceInNutrition =>
-      'Increase practised tolerance in Nutrition settings before choosing a higher target.';
+      'Aumenta a tolerância treinada nas definições de nutrição antes de escolheres um objetivo mais alto.';
 
   @override
   String get fluidTargetExceedsYourMeasured =>
-      'Fluid target exceeds your measured sweat rate. Review the measurement or target.';
+      'O objetivo de líquidos excede a tua taxa de suor medida. Revê a medição ou o objetivo.';
 
   @override
   String get elapsedWorkoutTimeMustBe =>
-      'Elapsed workout time must be positive or left blank.';
+      'O tempo decorrido do treino tem de ser positivo ou ficar em branco.';
 
   @override
   String get intakeAmountsMustBeFinite =>
-      'Intake amounts must be finite and non-negative.';
+      'As quantidades ingeridas têm de ser finitas e não negativas.';
 
   @override
   String get selectedStrategyUnavailableChooseAnother =>
-      'Selected strategy unavailable. Choose another strategy or no comparison.';
+      'Estratégia selecionada indisponível. Escolhe outra estratégia ou nenhuma comparação.';
 
   @override
-  String get recordYourWorkoutNutrition => 'Record your workout nutrition';
+  String get recordYourWorkoutNutrition => 'Regista a nutrição do treino';
 
   @override
   String get addTheFoodAndFluids =>
-      'Add the food and fluids you actually consumed in your activity history.';
+      'Adiciona ao histórico de atividades a comida e os líquidos que realmente consumiste.';
 
   @override
-  String get logIntake => 'Log intake';
+  String get logIntake => 'Registar ingestão';
 
   @override
   String nutritionReminderTitle(String name) {
-    return 'New activity: $name';
+    return 'Nova atividade: $name';
   }
 
   @override
-  String get nutritionReminderBody => 'Add what you ate and drank.';
+  String get nutritionReminderBody => 'Adiciona o que comeste e bebeste.';
 
   @override
   String get nutritionReminderHrvHint =>
-      'Your post-workout HRV hasn\'t been measured yet.';
+      'A tua HRV pós-treino ainda não foi medida.';
 
   @override
-  String get in30Minutes => 'In 30 minutes';
+  String get in30Minutes => 'Daqui a 30 minutos';
 
   @override
   String get loadSuggestionsCoverStraightSets =>
-      'Load suggestions cover straight sets with repetitions only.';
+      'As sugestões de carga só abrangem séries simples com repetições.';
 
   @override
   String needsStrengthprogressionminsessionsRecordedSessionsOf(
     Object strengthProgressionMinSessions,
   ) {
-    return 'Needs $strengthProgressionMinSessions recorded sessions of this exercise.';
+    return 'São necessários $strengthProgressionMinSessions treinos registados deste exercício.';
   }
 
   @override
   String get recentHistoryIsTooOld =>
-      'Recent history is too old for a suggestion.';
+      'O histórico recente é demasiado antigo para uma sugestão.';
 
   @override
   String get theLastSessionDidNot =>
-      'The last session did not use one known load.';
+      'O último treino não usou uma única carga conhecida.';
 
   @override
   String get theLoadChangedBetweenThe =>
-      'The load changed between the recent sessions.';
+      'A carga mudou entre os treinos recentes.';
 
   @override
   String get notEverySetReachedThe =>
-      'Not every set reached the top of its repetition target.';
+      'Nem todas as séries chegaram ao topo do objetivo de repetições.';
 
   @override
   String get recordEffortRirOrRpe =>
-      'Record effort (RIR or RPE) on the last set to get suggestions.';
+      'Regista o esforço (RIR ou RPE) na última série para receberes sugestões.';
 
   @override
   String get recentSetsWereHarderThan =>
-      'Recent sets were harder than intended.';
+      'As séries recentes foram mais duras do que o previsto.';
 
   @override
   String get thisWorkoutAlreadyHasIts =>
-      'This workout already has its own load; it stays as set.';
+      'Este treino já tem a sua própria carga; mantém-se como definida.';
 
   @override
   String get yourRecentSetsMetThe =>
-      'Your recent sets met the progression rule. Set the smallest load step for this equipment to review a load.';
+      'As tuas séries recentes cumpriram a regra de progressão. Define o menor incremento de carga para este equipamento para avaliar uma carga.';
 
   @override
-  String get thisWorkoutNoLongerExists => 'This workout no longer exists.';
+  String get thisWorkoutNoLongerExists => 'Este treino já não existe.';
 
   @override
   String thisStrengthPlanCannotBe(Object message) {
-    return 'This strength plan cannot be read ($message).';
+    return 'Não é possível ler este plano de força ($message).';
   }
 
   @override
-  String get thisStrengthPlanCannotBe2 => 'This strength plan cannot be read.';
+  String get thisStrengthPlanCannotBe2 =>
+      'Não é possível ler este plano de força.';
 
   @override
-  String get addAtLeastOneExercise => 'Add at least one exercise.';
+  String get addAtLeastOneExercise => 'Adiciona pelo menos um exercício.';
 
   @override
   String get thisWorkoutWasChangedElsewhere =>
-      'This workout was changed elsewhere. Your edits are kept; reload to see the newer version.';
+      'Este treino foi alterado noutro sítio. As tuas alterações mantêm-se; volta a carregar para veres a versão mais recente.';
 
   @override
   String get thePlanThisWorkoutIs =>
-      'The plan this workout is compared with cannot be read.';
+      'Não é possível ler o plano com que este treino é comparado.';
 
   @override
   String get thisLogWasChangedElsewhere =>
-      'This log was changed elsewhere. Your entries are kept; reload to see the newer version.';
+      'Este registo foi alterado noutro sítio. As tuas entradas mantêm-se; volta a carregar para veres a versão mais recente.';
 
   @override
-  String get thisZipIsNotA => 'This ZIP is not a supported Fjelia backup.';
+  String get thisZipIsNotA =>
+      'Este ZIP não é uma cópia de segurança da Fjelia suportada.';
 
   @override
-  String get theBackupDatabaseIsDamaged => 'The backup database is damaged.';
+  String get theBackupDatabaseIsDamaged =>
+      'A base de dados da cópia de segurança está danificada.';
 
   @override
-  String get invalidBackupData => 'Invalid backup data.';
+  String get invalidBackupData => 'Dados da cópia de segurança inválidos.';
 
   @override
-  String get backupTablesDoNotMatch => 'Backup tables do not match.';
+  String get backupTablesDoNotMatch =>
+      'As tabelas da cópia de segurança não coincidem.';
 
   @override
-  String get invalidBackupColumns => 'Invalid backup columns.';
+  String get invalidBackupColumns => 'Colunas da cópia de segurança inválidas.';
 
   @override
-  String get migratingOriginalAppBackup => 'Migrating original app backup';
+  String get migratingOriginalAppBackup =>
+      'A migrar a cópia de segurança da app original';
 
   @override
   String get theOriginalBackupIsMissing =>
-      'The original backup is missing required tables.';
+      'Faltam tabelas obrigatórias na cópia de segurança original.';
 
   @override
   String get backupFormatOrDatabaseVersion =>
-      'Backup format or database version does not match.';
+      'O formato da cópia ou a versão da base de dados não coincide.';
 
   @override
-  String get restoringRecords => 'Restoring records';
+  String get restoringRecords => 'A restaurar registos';
 
   @override
-  String get restoringSettings => 'Restoring settings';
+  String get restoringSettings => 'A restaurar definições';
 
   @override
-  String get restoreComplete => 'Restore complete';
+  String get restoreComplete => 'Restauro concluído';
 
   @override
-  String get effortMustBeANumber => 'Effort must be a number.';
+  String get effortMustBeANumber => 'O esforço tem de ser um número.';
 
   @override
   String get theDurationEstimateMustBe =>
-      'The duration estimate must be positive.';
+      'A duração estimada tem de ser positiva.';
 
   @override
-  String get restCannotBeNegative => 'Rest cannot be negative.';
+  String get restCannotBeNegative => 'O descanso não pode ser negativo.';
 
   @override
   String get enterTheRepetitionsDoneThe =>
-      'Enter the repetitions done; the plan has a range.';
+      'Introduz as repetições feitas; o plano tem um intervalo.';
 
   @override
-  String get enterTheLoadThePlan => 'Enter the load; the plan has none.';
+  String get enterTheLoadThePlan =>
+      'Introduz a carga; o plano não tem nenhuma.';
 
   @override
   String get enterTheResistanceThePlan =>
-      'Enter the resistance; the plan has none.';
+      'Introduz a resistência; o plano não tem nenhuma.';
 
   @override
-  String get poorSensorContact => 'Poor sensor contact';
+  String get poorSensorContact => 'Mau contacto do sensor';
 
   @override
-  String get moreThan25FromLocal => 'More than 25% from local median';
+  String get moreThan25FromLocal => 'Mais de 25% da mediana local';
 
   @override
-  String get workoutNutrition => 'Workout nutrition';
+  String get workoutNutrition => 'Nutrição do treino';
 
   @override
   String get postWorkoutFoodAndFluid =>
-      'Post-workout food and fluid log reminder';
+      'Lembrete de registo de comida e líquidos pós-treino';
 
   @override
   String get postTrainingHrvMeasurementReminder =>
-      'Post-training HRV measurement reminder';
+      'Lembrete de medição de HRV pós-treino';
 
   @override
-  String get rirRunsFrom0To => 'RIR runs from 0 to 10+.';
+  String get rirRunsFrom0To => 'O RIR vai de 0 a 10+.';
 
   @override
-  String get rpeRunsFrom1To => 'RPE runs from 1 to 10.';
+  String get rpeRunsFrom1To => 'O RPE vai de 1 a 10.';
 
   @override
-  String get repetitionsCannotBeNegative => 'Repetitions cannot be negative.';
+  String get repetitionsCannotBeNegative =>
+      'As repetições não podem ser negativas.';
 
   @override
   String get timedWorkMustBeLonger =>
-      'Timed work must be longer than zero seconds.';
+      'O trabalho por tempo tem de durar mais de zero segundos.';
 
   @override
   String get chooseRepetitionsOrTimedWork =>
-      'Choose repetitions or timed work, not both.';
+      'Escolhe repetições ou trabalho por tempo, não ambos.';
 
   @override
-  String get loadMustBeAFinite => 'Load must be a finite, non-negative number.';
+  String get loadMustBeAFinite =>
+      'A carga tem de ser um número finito e não negativo.';
 
   @override
-  String get durationCannotBeNegative => 'Duration cannot be negative.';
+  String get durationCannotBeNegative => 'A duração não pode ser negativa.';
 
   @override
-  String get hrTimeline => 'HR Timeline';
+  String get hrTimeline => 'Evolução da FC';
 
   @override
-  String get dayTrainingLoad => 'Day Training Load';
+  String get dayTrainingLoad => 'Carga de treino do dia';
 
   @override
-  String get weekdayComparison => 'Weekday Comparison';
+  String get weekdayComparison => 'Comparação por dia da semana';
 
   @override
-  String get weeklyTrainingLoad => 'Weekly Training Load';
+  String get weeklyTrainingLoad => 'Carga de treino semanal';
 
   @override
-  String get zonePolarization => 'Zone Polarization';
+  String get zonePolarization => 'Polarização das zonas';
 
   @override
-  String get elevationOverview => 'Elevation Overview';
+  String get elevationOverview => 'Resumo do desnível';
 
   @override
-  String get trainingMonitor => 'Training Monitor';
+  String get trainingMonitor => 'Monitor de treino';
 
   @override
-  String get formAtlCtlTsb => 'ATL / CTL / TSB Form';
+  String get formAtlCtlTsb => 'Forma ATL / CTL / TSB';
 
   @override
-  String get trainingPlanProgress => 'Training Plan Progress';
+  String get trainingPlanProgress => 'Progresso do plano de treino';
 
   @override
-  String get rhrSleep => 'RHR Sleep';
+  String get rhrSleep => 'FC em repouso no sono';
 
   @override
-  String get hrvSleep => 'HRV Sleep';
+  String get hrvSleep => 'HRV no sono';
 
   @override
-  String get spo2Sleep => 'SpO₂ Sleep';
+  String get spo2Sleep => 'SpO₂ no sono';
 
   @override
-  String get respRate => 'Resp Rate';
+  String get respRate => 'Freq. respiratória';
 
   @override
   String get stress => 'Stress';
 
   @override
-  String get skinTemp => 'Skin Temp';
+  String get skinTemp => 'Temp. da pele';
 
   @override
-  String get steps => 'Steps';
+  String get steps => 'Passos';
 
   @override
-  String get tonightsSleep => 'Tonight\'s Sleep';
+  String get tonightsSleep => 'Sono desta noite';
 
   @override
-  String get activityLog => 'Activity Log';
+  String get activityLog => 'Registo de atividades';
 
   @override
-  String get activityLog2 => 'Activity log';
+  String get activityLog2 => 'Registo de atividades';
 
   @override
-  String get history2 => 'HISTORY';
+  String get history2 => 'HISTÓRICO';
 
   @override
   String durationsecondshDurationseconds2mDistancemetersKmAvgheartrate(
@@ -3647,11 +3684,11 @@ class AppLocalizationsPt extends AppLocalizations {
     Object avgHeartRate,
     Object totalElevation,
   ) {
-    return '${durationSeconds}h ${durationSeconds2}m · $distanceMeters km · $avgHeartRate bpm · ↑$totalElevation m';
+    return '$durationSeconds h $durationSeconds2 min · $distanceMeters km · $avgHeartRate bpm · ↑$totalElevation m';
   }
 
   @override
-  String get heatAcclimation2 => 'HEAT ACCLIMATION';
+  String get heatAcclimation2 => 'ACLIMATAÇÃO AO CALOR';
 
   @override
   String score(Object score) {
@@ -3659,87 +3696,88 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get elevation => 'ELEVATION';
+  String get elevation => 'DESNÍVEL';
 
   @override
-  String get t12WeekHistory => '12-WEEK HISTORY';
+  String get t12WeekHistory => 'HISTÓRICO DE 12 SEMANAS';
 
   @override
-  String get zonePolarization2 => 'ZONE POLARIZATION';
+  String get zonePolarization2 => 'POLARIZAÇÃO DAS ZONAS';
 
   @override
-  String get t5WeekHistory => '5-WEEK HISTORY';
+  String get t5WeekHistory => 'HISTÓRICO DE 5 SEMANAS';
 
   @override
-  String get easy => 'EASY %';
+  String get easy => 'LEVE %';
 
   @override
   String withzonesOfRecordedActivitiesWith(Object withZones, Object recorded) {
-    return '$withZones of $recorded activities with HR-zone data';
+    return '$withZones de $recorded atividades com dados de zonas de FC';
   }
 
   @override
   String fromsamplesReconstructedFromRecordedHr(Object fromSamples) {
-    return '$fromSamples reconstructed from recorded HR samples';
+    return '$fromSamples reconstruídas a partir de amostras de FC registadas';
   }
 
   @override
-  String get easyZ12ModerateZ3 => 'Easy: Z1–2 · Moderate: Z3 · Hard: Z4–5';
+  String get easyZ12ModerateZ3 => 'Leve: Z1–2 · Moderado: Z3 · Intenso: Z4–5';
 
   @override
   String get activitiesWithoutHrZoneData =>
-      'Activities without HR-zone data are excluded from percentages.';
+      'As atividades sem dados de zonas de FC ficam de fora das percentagens.';
 
   @override
   String avgAverageUnit(Object average, Object unit) {
-    return 'AVG  $average $unit';
+    return 'MÉD.  $average $unit';
   }
 
   @override
-  String get weekdayComparison2 => 'WEEKDAY COMPARISON';
+  String get weekdayComparison2 => 'COMPARAÇÃO POR DIA DA SEMANA';
 
   @override
-  String get trainingPlanProgress2 => 'TRAINING PLAN PROGRESS';
+  String get trainingPlanProgress2 => 'PROGRESSO DO PLANO DE TREINO';
 
   @override
   String weekCurrentweekDurationinweeks(
     Object currentWeek,
     Object durationInWeeks,
   ) {
-    return 'Week $currentWeek / $durationInWeeks';
+    return 'Semana $currentWeek / $durationInWeeks';
   }
 
   @override
-  String get t30MinTimeTrialLt2 => '30-MIN TIME TRIAL — LT2';
+  String get t30MinTimeTrialLt2 => 'CONTRARRELÓGIO DE 30 MIN — LT2';
 
   @override
   String get run30MinutesAtThe =>
-      'Run 30 minutes at the hardest effort you can sustain — controlled, not sprinting. Build into the effort; do not start too fast. The average pace and HR of the final 20 minutes are your LT2.';
+      'Corre 30 minutos ao esforço mais alto que consegues manter — controlado, sem sprintar. Entra no esforço aos poucos; não comeces demasiado rápido. O ritmo e a FC médios dos últimos 20 minutos são o teu LT2.';
 
   @override
   String get recordAsANormalOutdoor =>
-      'Record as a normal outdoor run. Start your watch, note the time, run 30 min at race effort.';
+      'Regista como uma corrida normal ao ar livre. Inicia o relógio, anota a hora e corre 30 min ao esforço de prova.';
 
   @override
   String get t50MinTotalFlatCourse =>
-      '~50 min total · flat course · not after hard training';
+      '~50 min no total · percurso plano · não depois de treino duro';
 
   @override
-  String get doNotStartTooFast => 'Do not start too fast. Aim for even splits.';
+  String get doNotStartTooFast =>
+      'Não comeces demasiado rápido. Procura parciais iguais.';
 
   @override
   String get theAppAveragesHrAnd =>
-      'The app averages HR and pace over the final 20 minutes of the TT, after the warm-up and first 10 minutes. Select the recorded activity in Calculate.';
+      'A app faz a média da FC e do ritmo nos últimos 20 minutos do contrarrelógio, depois do aquecimento e dos primeiros 10 minutos. Seleciona a atividade registada em Calcular.';
 
   @override
-  String get lt2Pace => 'LT2 PACE';
+  String get lt2Pace => 'RITMO LT2';
 
   @override
   String get activityRunningEnoughTimeFor =>
-      'Activity (running, enough time for warm-up + 30 min, with HR)';
+      'Atividade (corrida, tempo suficiente para aquecimento + 30 min, com FC)';
 
   @override
-  String get selectTheTtActivity => 'Select the TT activity';
+  String get selectTheTtActivity => 'Seleciona a atividade do contrarrelógio';
 
   @override
   String nameStartdate(Object name, Object startDate) {
@@ -3747,7 +3785,7 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get warmUpBeforeTt => 'Warm-up before TT';
+  String get warmUpBeforeTt => 'Aquecimento antes do contrarrelógio';
 
   @override
   String roundMin(Object round) {
@@ -3755,16 +3793,16 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get clearResults => 'Clear results';
+  String get clearResults => 'Limpar resultados';
 
   @override
-  String get heartRate2 => 'HEART RATE';
+  String get heartRate2 => 'FREQUÊNCIA CARDÍACA';
 
   @override
-  String get paceSecKmLowerIs => 'PACE (sec/km — lower is faster)';
+  String get paceSecKmLowerIs => 'RITMO (s/km — menos é mais rápido)';
 
   @override
-  String get thresholdsFitnessTests => 'Thresholds & Fitness Tests';
+  String get thresholdsFitnessTests => 'Limiares e testes de condição física';
 
   @override
   String get lt1 => 'LT1';
@@ -3773,77 +3811,78 @@ class AppLocalizationsPt extends AppLocalizations {
   String get lt2 => 'LT2';
 
   @override
-  String get voPace => 'VO₂ Pace';
+  String get voPace => 'Ritmo VO₂';
 
   @override
   String get ftp => 'FTP';
 
   @override
-  String get setFtpManually => 'Set FTP manually';
+  String get setFtpManually => 'Definir FTP manualmente';
 
   @override
-  String get calculateFromAnActivity => 'Calculate from an activity';
+  String get calculateFromAnActivity => 'Calcular a partir de uma atividade';
 
   @override
-  String get setFtp => 'Set FTP';
+  String get setFtp => 'Definir FTP';
 
   @override
   String get ftpWatts => 'FTP (watts)';
 
   @override
-  String get ftpCyclingThresholdPower => 'FTP — CYCLING THRESHOLD POWER';
+  String get ftpCyclingThresholdPower => 'FTP — POTÊNCIA DE LIMIAR NO CICLISMO';
 
   @override
-  String get ftpHistory => 'FTP HISTORY';
+  String get ftpHistory => 'HISTÓRICO DE FTP';
 
   @override
-  String get updateFromActivity => 'UPDATE FROM ACTIVITY';
+  String get updateFromActivity => 'ATUALIZAR A PARTIR DE ATIVIDADE';
 
   @override
   String get tapAnActivityFtpBest =>
-      'Tap an activity — FTP = best 20-min power × 0.95';
+      'Toca numa atividade — FTP = melhor potência de 20 min × 0,95';
 
   @override
   String ridew(Object ride) {
-    return '${ride}W';
+    return '$ride W';
   }
 
   @override
   String ftpRoundw(Object round) {
-    return '→ FTP ${round}W';
+    return '→ FTP $round W';
   }
 
   @override
   String get noRidesWith20Minutes =>
-      'No rides with 20 minutes of continuous power samples.';
+      'Sem saídas com 20 minutos de dados de potência contínuos.';
 
   @override
-  String get enterFtpManually => 'Enter FTP manually';
+  String get enterFtpManually => 'Introduzir FTP manualmente';
 
   @override
-  String get selectTheTestActivity => 'Select the test activity';
+  String get selectTheTestActivity => 'Seleciona a atividade de teste';
 
   @override
-  String get formAtlCtlTsb2 => 'FORM · ATL / CTL / TSB';
+  String get formAtlCtlTsb2 => 'FORMA · ATL / CTL / TSB';
 
   @override
-  String get closeTrainingFormFullscreen => 'Close training form fullscreen';
+  String get closeTrainingFormFullscreen =>
+      'Fechar forma de treino em ecrã inteiro';
 
   @override
-  String get expandTrainingForm => 'Expand training form';
+  String get expandTrainingForm => 'Expandir forma de treino';
 
   @override
   String get calculatedFromTheFirstAvailable =>
-      'Calculated from the first available load record. Days without recorded load count as zero; earlier training is unknown.';
+      'Calculado a partir do primeiro registo de carga disponível. Os dias sem carga registada contam como zero; o treino anterior é desconhecido.';
 
   @override
-  String get trainingMonitor2 => 'TRAINING MONITOR';
+  String get trainingMonitor2 => 'MONITOR DE TREINO';
 
   @override
-  String get pfitzingerZones => 'PFITZINGER ZONES';
+  String get pfitzingerZones => 'ZONAS PFITZINGER';
 
   @override
-  String get cyclingPowerZones => 'CYCLING POWER ZONES';
+  String get cyclingPowerZones => 'ZONAS DE POTÊNCIA NO CICLISMO';
 
   @override
   String znumber(Object number) {
@@ -3856,61 +3895,61 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get weeklyTrainingLoad2 => 'WEEKLY TRAINING LOAD';
+  String get weeklyTrainingLoad2 => 'CARGA DE TREINO SEMANAL';
 
   @override
-  String get prevWeek => 'PREV WEEK';
+  String get prevWeek => 'SEMANA ANT.';
 
   @override
-  String get bySport => 'BY SPORT';
+  String get bySport => 'POR DESPORTO';
 
   @override
-  String get noActivitiesThisWeek => 'No activities this week';
+  String get noActivitiesThisWeek => 'Sem atividades esta semana';
 
   @override
   String garminWorkoutScheduleddate(Object scheduledDate) {
-    return 'Garmin Workout · $scheduledDate';
+    return 'Treino Garmin · $scheduledDate';
   }
 
   @override
-  String get yourNote => 'Your note';
+  String get yourNote => 'A tua nota';
 
   @override
-  String get askAiCoach => 'Ask AI Coach';
+  String get askAiCoach => 'Perguntar ao treinador IA';
 
   @override
-  String get aiSettings => 'AI settings';
+  String get aiSettings => 'Definições de IA';
 
   @override
-  String get askYourCoach => 'Ask your coach…';
+  String get askYourCoach => 'Pergunta ao teu treinador…';
 
   @override
-  String get sendMessage => 'Send message';
+  String get sendMessage => 'Enviar mensagem';
 
   @override
-  String get sendFeedbackOrReportA => 'Send feedback or report a bug';
+  String get sendFeedbackOrReportA => 'Enviar comentários ou comunicar um erro';
 
   @override
-  String get addMeasurement2 => 'Add measurement';
+  String get addMeasurement2 => 'Adicionar medição';
 
   @override
-  String get syncLabel2 => 'Sync';
+  String get syncLabel2 => 'Sincronizar';
 
   @override
-  String get syncToday => 'Sync Today';
+  String get syncToday => 'Sincronizar hoje';
 
   @override
-  String get fullSync1Year => 'Full Sync · 1 year';
+  String get fullSync1Year => 'Sincronização completa · 1 ano';
 
   @override
-  String get fullSyncComplete => 'Full Sync · Complete';
+  String get fullSyncComplete => 'Sincronização completa · concluída';
 
   @override
-  String get syncingYourData => 'Syncing your data…';
+  String get syncingYourData => 'A sincronizar os teus dados…';
 
   @override
   String lLeftkgRRightkgKg2(Object leftKg, Object rightKg) {
-    return 'L $leftKg  R $rightKg kg';
+    return 'E $leftKg  D $rightKg kg';
   }
 
   @override
@@ -3919,7 +3958,7 @@ class AppLocalizationsPt extends AppLocalizations {
     Object bodyFat,
     Object muscleMass,
   ) {
-    return '$weight kg · Fat $bodyFat% · Muscle $muscleMass kg';
+    return '$weight kg · Gordura $bodyFat% · Músculo $muscleMass kg';
   }
 
   @override
@@ -3929,22 +3968,23 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get weatherUnavailableTapToRetry =>
-      'Weather unavailable · Tap to retry';
+      'Meteorologia indisponível · Toca para tentar novamente';
 
   @override
-  String get weatherSetYourLocation => 'Weather · Set your location';
+  String get weatherSetYourLocation =>
+      'Meteorologia · Define a tua localização';
 
   @override
-  String get t7DayForecast => '7-DAY FORECAST';
+  String get t7DayForecast => 'PREVISÃO A 7 DIAS';
 
   @override
-  String get minMax => 'min/max';
+  String get minMax => 'mín/máx';
 
   @override
-  String get rainMm2 => 'rain mm';
+  String get rainMm2 => 'chuva mm';
 
   @override
-  String get uvMax => 'UV max';
+  String get uvMax => 'UV máx';
 
   @override
   String get kmH => 'km/h';
@@ -3956,12 +3996,12 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String raceGoalsLength(Object length) {
-    return 'Race goals · $length';
+    return 'Objetivos de prova · $length';
   }
 
   @override
   String gWk(Object g) {
-    return '$g wk';
+    return '$g sem';
   }
 
   @override
@@ -3970,14 +4010,14 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get weeks2 => 'weeks';
+  String get weeks2 => 'semanas';
 
   @override
-  String get upcoming => 'UPCOMING';
+  String get upcoming => 'PRÓXIMOS';
 
   @override
   String lengthMoreDays(Object length) {
-    return '+ $length more days';
+    return '+ mais $length dias';
   }
 
   @override
@@ -3991,30 +4031,30 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get plannedCompletedSkipped => '○ Planned   ● Completed   ✕ Skipped';
+  String get plannedCompletedSkipped => '○ Planeado   ● Concluído   ✕ Saltado';
 
   @override
-  String get heartRate3 => 'Heart rate';
+  String get heartRate3 => 'Frequência cardíaca';
 
   @override
   String get watts => 'Watts';
 
   @override
   String theStepsAddUpTo(Object total, Object plannedDurationMin) {
-    return 'The steps add up to $total; the plan counts $plannedDurationMin min.';
+    return 'Os passos somam $total; o plano conta $plannedDurationMin min.';
   }
 
   @override
   String get typicalSplitForThisKind =>
-      'Typical split for this kind of session; no steps to calculate it from.';
+      'Divisão típica para este tipo de treino; não há passos para a calcular.';
 
   @override
   String labelGetsEachExerciseWith(Object label) {
-    return '$label gets each exercise with its sets, reps and loads. Rep ranges, effort and tempo stay in Fjelia.';
+    return '$label recebe cada exercício com as suas séries, reps e cargas. Os intervalos de reps, o esforço e a cadência ficam na Fjelia.';
   }
 
   @override
-  String get markAsRest => 'Mark as Rest';
+  String get markAsRest => 'Marcar como descanso';
 
   @override
   String get changeSport => 'Mudar de desporto';
@@ -4035,46 +4075,46 @@ class AppLocalizationsPt extends AppLocalizations {
   String get applySportChange => 'Planear treino de substituição';
 
   @override
-  String get restoreWorkout => 'Restore workout';
+  String get restoreWorkout => 'Restaurar treino';
 
   @override
-  String get skipThisWorkout => 'Skip this workout?';
+  String get skipThisWorkout => 'Saltar este treino?';
 
   @override
-  String get previousWeek => 'Previous week';
+  String get previousWeek => 'Semana anterior';
 
   @override
-  String get backToThisWeek => 'Back to this week';
+  String get backToThisWeek => 'Voltar a esta semana';
 
   @override
-  String get thisWeek => 'This week';
+  String get thisWeek => 'Esta semana';
 
   @override
-  String get nextWeek => 'Next week';
+  String get nextWeek => 'Semana seguinte';
 
   @override
-  String get today2 => 'TODAY';
+  String get today2 => 'HOJE';
 
   @override
-  String get route => 'ROUTE';
+  String get route => 'PERCURSO';
 
   @override
-  String get feedback => 'Feedback';
+  String get feedback => 'Comentários';
 
   @override
-  String get plannedWorkout => 'Planned Workout';
+  String get plannedWorkout => 'Treino planeado';
 
   @override
-  String get delete => 'Delete';
+  String get delete => 'Eliminar';
 
   @override
-  String get chatAi => 'Chat AI';
+  String get chatAi => 'Chat IA';
 
   @override
-  String get trainingLoad => 'Training Load';
+  String get trainingLoad => 'Carga de treino';
 
   @override
-  String get dayTrainingLoad2 => 'DAY TRAINING LOAD';
+  String get dayTrainingLoad2 => 'CARGA DE TREINO DO DIA';
 
   @override
   String get trimp => ' TRIMP';
@@ -4085,35 +4125,35 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get temperatureOverTime => 'TEMPERATURE OVER TIME';
+  String get temperatureOverTime => 'EVOLUÇÃO DA TEMPERATURA';
 
   @override
   String roundh(Object round) {
-    return '${round}h';
+    return '$round h';
   }
 
   @override
-  String get timeInHrZones => 'Time in HR zones';
+  String get timeInHrZones => 'Tempo nas zonas de FC';
 
   @override
-  String get route2 => 'Route';
+  String get route2 => 'Percurso';
 
   @override
-  String get start => 'Start';
+  String get start => 'Início';
 
   @override
   String get gpx => 'GPX';
 
   @override
   String touppercasesubstringBriefing(Object toUpperCase, Object substring) {
-    return '$toUpperCase$substring Briefing';
+    return 'Resumo $toUpperCase$substring';
   }
 
   @override
-  String get chatWithAiAboutThis => 'Chat with AI about this briefing';
+  String get chatWithAiAboutThis => 'Falar com a IA sobre este resumo';
 
   @override
-  String get whyThisRecommendation => 'Why this recommendation?';
+  String get whyThisRecommendation => 'Porquê esta recomendação?';
 
   @override
   String titleDateLabel(Object title, Object date, Object label) {
@@ -4121,54 +4161,54 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get previousDay => 'Previous day';
+  String get previousDay => 'Dia anterior';
 
   @override
-  String get nextDay => 'Next day';
+  String get nextDay => 'Dia seguinte';
 
   @override
-  String get updating => 'Updating';
+  String get updating => 'A atualizar';
 
   @override
-  String get resting => 'RESTING';
+  String get resting => 'EM REPOUSO';
 
   @override
-  String get noTimedReadings => 'No timed readings';
+  String get noTimedReadings => 'Sem medições com hora';
 
   @override
-  String get avg => 'AVG';
+  String get avg => 'MÉD.';
 
   @override
-  String get peak => 'PEAK';
+  String get peak => 'PICO';
 
   @override
   String tolocalRoundmin(Object toLocal, Object round) {
-    return '$toLocal · ${round}min';
+    return '$toLocal · $round min';
   }
 
   @override
   String avgheartrateBpmAvg(Object avgHeartRate) {
-    return '$avgHeartRate bpm avg';
+    return '$avgHeartRate bpm méd.';
   }
 
   @override
   String get timeWeightedAverageOverRecorded =>
-      'Time-weighted average over recorded periods. Gaps without readings are excluded.';
+      'Média ponderada pelo tempo nos períodos registados. As falhas sem medições ficam de fora.';
 
   @override
-  String get previousHeartRatePeriod => 'Previous heart-rate period';
+  String get previousHeartRatePeriod => 'Período de FC anterior';
 
   @override
-  String get nextHeartRatePeriod => 'Next heart-rate period';
+  String get nextHeartRatePeriod => 'Período de FC seguinte';
 
   @override
-  String get avgHr => 'Avg HR';
+  String get avgHr => 'FC média';
 
   @override
-  String get restingHr => 'Resting HR';
+  String get restingHr => 'FC em repouso';
 
   @override
-  String get both => 'Both';
+  String get both => 'Ambos';
 
   @override
   String averagelabelFixedMs(Object averageLabel, Object fixed) {
@@ -4176,37 +4216,37 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get measureWithPolarH10 => 'Measure with Polar H10';
+  String get measureWithPolarH10 => 'Medir com o Polar H10';
 
   @override
   String get ms => 'ms';
 
   @override
   String get noWorkoutInThisPeriod =>
-      'No workout in this period has a comparable before and after pair.';
+      'Nenhum treino deste período tem um par comparável antes e depois.';
 
   @override
   String textEachWorkoutCountsOnce(Object text) {
-    return '$text. Each workout counts once; this describes your pairs, it does not score them.';
+    return '$text. Cada treino conta uma vez; isto descreve os teus pares, não os classifica.';
   }
 
   @override
-  String get workoutFinished => 'Workout finished?';
+  String get workoutFinished => 'Treino terminado?';
 
   @override
   String get yourWorkoutIsNotIn =>
-      'Your workout is not in Fjelia yet. If it ended, say when, and the reminder can follow its real end. Otherwise it appears once your watch syncs.';
+      'O teu treino ainda não está na Fjelia. Se já terminou, diz quando, para o lembrete acompanhar o fim real. Caso contrário, aparece quando o relógio sincronizar.';
 
   @override
-  String get workoutFinished2 => 'Workout finished';
+  String get workoutFinished2 => 'Treino terminado';
 
   @override
   String get theWorkoutMustStartAfter =>
-      'The workout must start after the measurement and end after it started, not in the future.';
+      'O treino tem de começar depois da medição e terminar depois de ter começado, não no futuro.';
 
   @override
   String daysDAvg(Object days) {
-    return '$days D AVG';
+    return 'MÉD. $days D';
   }
 
   @override
@@ -4220,54 +4260,54 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get previousPeriod => 'Previous period';
+  String get previousPeriod => 'Período anterior';
 
   @override
-  String get nextPeriod => 'Next period';
+  String get nextPeriod => 'Período seguinte';
 
   @override
   String get overnightHrvReflectsRecoveryCompare =>
-      'Overnight HRV reflects recovery. Compare your readings with your own baseline over time.';
+      'A HRV noturna reflete a recuperação. Compara as tuas medições com a tua própria referência ao longo do tempo.';
 
   @override
-  String get moveThisWorkout => 'MOVE THIS WORKOUT';
+  String get moveThisWorkout => 'MOVER ESTE TREINO';
 
   @override
-  String get pickDate => 'Pick date';
+  String get pickDate => 'Escolher data';
 
   @override
   String movedFromMovedfrom(Object movedFrom) {
-    return 'Moved from $movedFrom';
+    return 'Movido de $movedFrom';
   }
 
   @override
-  String get hrvAroundThisWorkout => 'HRV around this workout';
+  String get hrvAroundThisWorkout => 'HRV em torno deste treino';
 
   @override
-  String get measureAfterTraining => 'Measure after training';
+  String get measureAfterTraining => 'Medir depois do treino';
 
   @override
-  String get measureAgain => 'Measure again';
+  String get measureAgain => 'Medir novamente';
 
   @override
-  String get explainWithAi => 'Explain with AI';
+  String get explainWithAi => 'Explicar com IA';
 
   @override
   String beforeEndedPregapAheadOf(Object preGap) {
-    return 'Before ended $preGap ahead of the start.';
+    return 'A medição antes terminou $preGap antes do início.';
   }
 
   @override
   String lengthFurtherMeasurementSAfter(Object length) {
-    return '$length further measurement(s) after this workout are kept as extra observations.';
+    return '$length medição(ões) adicional(is) depois deste treino ficam guardadas como observações extra.';
   }
 
   @override
   String get noHrvMeasurementRecordedAround =>
-      'No HRV measurement recorded around this workout.';
+      'Nenhuma medição de HRV registada em torno deste treino.';
 
   @override
-  String get measureHrv => 'Measure HRV';
+  String get measureHrv => 'Medir HRV';
 
   @override
   String deltamsMs(Object deltaMs) {
@@ -4281,16 +4321,16 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get aDescriptionOfThisPair =>
-      'A description of this pair, not a score for the workout.';
+      'Uma descrição deste par, não uma pontuação do treino.';
 
   @override
   String notEnoughComparableWorkoutsYet(Object eligible, Object need) {
-    return 'Not enough comparable workouts yet, $eligible of $need.';
+    return 'Ainda não há treinos comparáveis suficientes, $eligible de $need.';
   }
 
   @override
   String notEnoughComparableWorkoutsYet2(Object eligible, Object need) {
-    return 'Not enough comparable workouts yet ($eligible of $need).';
+    return 'Ainda não há treinos comparáveis suficientes ($eligible de $need).';
   }
 
   @override
@@ -4299,7 +4339,7 @@ class AppLocalizationsPt extends AppLocalizations {
     Object toLocal,
     Object toLocal2,
   ) {
-    return 'Your $eligible similar workouts · $toLocal–$toLocal2';
+    return 'Os teus $eligible treinos semelhantes · $toLocal–$toLocal2';
   }
 
   @override
@@ -4309,7 +4349,7 @@ class AppLocalizationsPt extends AppLocalizations {
     Object medianMs,
     Object delta,
   ) {
-    return 'Middle half $q1Ms to $q3Ms ms · median $medianMs ms · this workout $delta ms';
+    return 'Metade central $q1Ms a $q3Ms ms · mediana $medianMs ms · este treino $delta ms';
   }
 
   @override
@@ -4318,230 +4358,234 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get easy2 => 'easy';
+  String get easy2 => 'fácil';
 
   @override
-  String get allOut => 'all out';
+  String get allOut => 'no máximo';
 
   @override
   String workoutProfileDescription(Object description) {
-    return 'Workout profile: $description';
+    return 'Perfil do treino: $description';
   }
 
   @override
-  String get noActivitiesInThisPeriod => 'No activities in this period';
+  String get noActivitiesInThisPeriod => 'Sem atividades neste período';
 
   @override
   String get enableHeatAcclimationInTraining =>
-      'Enable heat acclimation in Training settings.';
+      'Ativa a aclimatação ao calor nas definições de treino.';
 
   @override
-  String get noElevationThisWeek => 'No elevation this week';
+  String get noElevationThisWeek => 'Sem desnível esta semana';
 
   @override
-  String get noActivitiesSynced => 'No activities synced';
+  String get noActivitiesSynced => 'Nenhuma atividade sincronizada';
 
   @override
-  String get noHrZoneData => 'No HR-zone data';
+  String get noHrZoneData => 'Sem dados de zonas de FC';
 
   @override
-  String get easyJogGetHrElevated => 'Easy jog — get HR elevated, legs loose';
+  String get easyJogGetHrElevated =>
+      'Trote leve — subir a FC, soltar as pernas';
 
   @override
   String get fastestSustainablePaceLikeA =>
-      'Fastest sustainable pace — like a 30-min race';
+      'Ritmo mais rápido sustentável — como numa prova de 30 min';
 
   @override
-  String get walkCardiacRecovery => 'Walk — cardiac recovery';
+  String get walkCardiacRecovery => 'Caminhar — recuperação cardíaca';
 
   @override
-  String get selectTheTtActivityFirst => 'Select the TT activity first.';
+  String get selectTheTtActivityFirst =>
+      'Seleciona primeiro a atividade do contrarrelógio.';
 
   @override
-  String get calculating => 'Calculating…';
+  String get calculating => 'A calcular…';
 
   @override
-  String get calculateLt2 => 'Calculate LT2';
+  String get calculateLt2 => 'Calcular LT2';
 
   @override
-  String get enterFtpBetween30And => 'Enter FTP between 30 and 1000 W.';
+  String get enterFtpBetween30And => 'Introduz um FTP entre 30 e 1000 W.';
 
   @override
-  String get aerobicThreshold => 'Aerobic Threshold';
+  String get aerobicThreshold => 'Limiar aeróbio';
 
   @override
-  String get functionalThresholdPower => 'Functional Threshold Power';
+  String get functionalThresholdPower => 'Potência funcional de limiar';
 
   @override
-  String get estimated => 'Estimated';
+  String get estimated => 'Estimado';
 
   @override
   String get afterWarmingUpRunFive =>
-      'After warming up, run five minutes at your fastest sustainable effort. Record the run with speed or distance data.';
+      'Depois de aquecer, corre cinco minutos ao esforço mais rápido que consegues manter. Regista a corrida com dados de velocidade ou distância.';
 
   @override
   String get recordAtLeast40Minutes =>
-      'Record at least 40 minutes of steady running at a constant effort. The test compares heart rate in each half to estimate aerobic drift.';
+      'Regista pelo menos 40 minutos de corrida regular a esforço constante. O teste compara a FC em cada metade para estimar a deriva aeróbia.';
 
   @override
   String get theFastestFiveMinuteWindow =>
-      'The fastest five-minute window provides your VO2max pace.';
+      'A janela de cinco minutos mais rápida dá o teu ritmo VO2máx.';
 
   @override
-  String get noResultYet => 'No result yet';
+  String get noResultYet => 'Ainda sem resultado';
 
   @override
-  String get calculateVo2maxPace => 'Calculate VO2max pace';
+  String get calculateVo2maxPace => 'Calcular ritmo VO2máx';
 
   @override
-  String get calculateLt1 => 'Calculate LT1';
+  String get calculateLt1 => 'Calcular LT1';
 
   @override
-  String get loading2 => 'Loading';
+  String get loading2 => 'A carregar';
 
   @override
-  String get unavailable => 'Unavailable';
+  String get unavailable => 'Indisponível';
 
   @override
-  String get noTrainingHistory => 'No training history';
+  String get noTrainingHistory => 'Sem histórico de treino';
 
   @override
-  String get fitnessCtl => 'Fitness (CTL)';
+  String get fitnessCtl => 'Condição (CTL)';
 
   @override
-  String get fatigueAtl => 'Fatigue (ATL)';
+  String get fatigueAtl => 'Fadiga (ATL)';
 
   @override
-  String get formTsb => 'Form (TSB)';
+  String get formTsb => 'Forma (TSB)';
 
   @override
-  String get noHistory => 'No history';
+  String get noHistory => 'Sem histórico';
 
   @override
-  String get fresh => 'Fresh';
+  String get fresh => 'Fresco';
 
   @override
-  String get optimal => 'Optimal';
+  String get optimal => 'Ideal';
 
   @override
-  String get neutral => 'Neutral';
+  String get neutral => 'Neutro';
 
   @override
-  String get tired => 'Tired';
+  String get tired => 'Cansado';
 
   @override
-  String get veryFatigued => 'Very Fatigued';
+  String get veryFatigued => 'Muito cansado';
 
   @override
-  String get garminRunningVo2max => 'Garmin running VO2max';
+  String get garminRunningVo2max => 'VO2máx de corrida Garmin';
 
   @override
-  String get garminCyclingVo2max => 'Garmin cycling VO2max';
+  String get garminCyclingVo2max => 'VO2máx de ciclismo Garmin';
 
   @override
-  String get aerobicThreshold2 => 'Aerobic threshold';
+  String get aerobicThreshold2 => 'Limiar aeróbio';
 
   @override
   String driftDriftAt(Object drift, Object at) {
-    return 'Drift $drift% · $at';
+    return 'Deriva $drift% · $at';
   }
 
   @override
-  String get activityHours => 'Activity hours';
+  String get activityHours => 'Horas de atividade';
 
   @override
-  String get activityKm => 'Activity km';
+  String get activityKm => 'Km de atividade';
 
   @override
-  String get tap5MinuteMaxTest => 'Tap · 5-minute max test';
+  String get tap5MinuteMaxTest => 'Toca · teste máximo de 5 minutos';
 
   @override
-  String get setFtpToCalculatePower => 'Set FTP to calculate power zones';
+  String get setFtpToCalculatePower =>
+      'Define o FTP para calcular as zonas de potência';
 
   @override
-  String get cyclingPowerZones2 => 'Cycling power zones';
+  String get cyclingPowerZones2 => 'Zonas de potência no ciclismo';
 
   @override
-  String get pfitzingerZones2 => 'Pfitzinger zones';
+  String get pfitzingerZones2 => 'Zonas Pfitzinger';
 
   @override
   String get completeAnLt2TestTo =>
-      'Complete an LT2 test to calculate running zones.';
+      'Faz um teste LT2 para calcular as zonas de corrida.';
 
   @override
-  String get setFtpToCalculatePower2 => 'Set FTP to calculate power zones.';
+  String get setFtpToCalculatePower2 =>
+      'Define o FTP para calcular as zonas de potência.';
 
   @override
-  String get endurance => 'Endurance';
+  String get endurance => 'Resistência';
 
   @override
-  String get threshold => 'Threshold';
+  String get threshold => 'Limiar';
 
   @override
-  String get anaerobic => 'Anaerobic';
+  String get anaerobic => 'Anaeróbio';
 
   @override
-  String get whatExplainsThisRise => 'What explains this rise?';
+  String get whatExplainsThisRise => 'O que explica esta subida?';
 
   @override
-  String get whatExplainsThisDrop => 'What explains this drop';
+  String get whatExplainsThisDrop => 'O que explica esta descida';
 
   @override
-  String get whatExplainsThisRise2 => 'What explains this rise';
+  String get whatExplainsThisRise2 => 'O que explica esta subida';
 
   @override
   String get editsAreKeptInFjelia =>
-      'Edits are kept in Fjelia as a local copy for this date. The workout on Garmin is not changed.';
+      'As alterações ficam guardadas na Fjelia como cópia local para esta data. O treino na Garmin não é alterado.';
 
   @override
-  String get howDoIExecuteThis => 'How do I execute this workout?';
+  String get howDoIExecuteThis => 'Como faço este treino?';
 
   @override
   String shareHealthContextWithName(Object name) {
-    return 'Share health context with $name?';
+    return 'Partilhar o contexto de saúde com $name?';
   }
 
   @override
   String get yourMessageAndAHealth =>
-      'Your message and a health/training summary will be sent to this cloud AI provider. Names and GPS are excluded from the generated summary.';
+      'A tua mensagem e um resumo de saúde e treino serão enviados para este fornecedor de IA na nuvem. Os nomes e o GPS ficam fora do resumo.';
 
   @override
   String get couldNotGetAReply =>
-      'Could not get a reply. Check your AI settings and try again.';
+      'Não foi possível obter resposta. Verifica as definições de IA e tenta novamente.';
 
   @override
   String get askAboutYourRecoveryTraining =>
-      'Ask about your recovery, training, or today’s plan.';
+      'Pergunta sobre a tua recuperação, treino ou o plano de hoje.';
 
   @override
-  String get noSyncYet => 'No sync yet';
+  String get noSyncYet => 'Ainda sem sincronização';
 
   @override
   String lastSyncLastContext(Object last, Object context) {
-    return 'Last sync: $last $context';
+    return 'Última sincronização: $last $context';
   }
 
   @override
-  String get seasonWithTradeOffs => 'Season: with trade-offs';
+  String get seasonWithTradeOffs => 'Época: com compromissos';
 
   @override
-  String get seasonNeedsYourDecision => 'Season: needs your decision';
+  String get seasonNeedsYourDecision => 'Época: precisa da tua decisão';
 
   @override
-  String get seasonCannotBeCombined => 'Season: cannot be combined';
+  String get seasonCannotBeCombined => 'Época: não é possível combinar';
 
   @override
-  String get seasonProvisional => 'Season: provisional';
+  String get seasonProvisional => 'Época: provisória';
 
   @override
-  String get season => 'Season';
+  String get season => 'Época';
 
   @override
-  String get allGoalsFit => 'All goals fit.';
+  String get allGoalsFit => 'Todos os objetivos cabem.';
 
   @override
   String goalTargetfinishsecondsgoal(Object targetFinishSeconds, Object goal) {
-    return 'Goal $targetFinishSeconds$goal';
+    return 'Objetivo $targetFinishSeconds$goal';
   }
 
   @override
@@ -4551,330 +4595,332 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String doneDoneby(Object doneBy) {
-    return 'Done · $doneBy';
+    return 'Feito · $doneBy';
   }
 
   @override
   String garminWorkoutWorkout(Object workout) {
-    return 'Garmin Workout · $workout';
+    return 'Treino Garmin · $workout';
   }
 
   @override
-  String get moveAnyway => 'Move anyway?';
+  String get moveAnyway => 'Mover mesmo assim?';
 
   @override
   String get wattsNeedYourFtpSet =>
-      'Watts need your FTP: set it under Load, Thresholds.';
+      'Os watts precisam do teu FTP: define-o em Carga, Limiares.';
 
   @override
   String get mainTargetInWattsFrom =>
-      'Main target in watts from your FTP, heart rate as the guide.';
+      'Objetivo principal em watts a partir do teu FTP, com a FC como guia.';
 
   @override
   String get mainTargetHeartRateWatts =>
-      'Main target heart rate, watts are not set on the watch.';
+      'Objetivo principal na FC; os watts não são definidos no relógio.';
 
   @override
-  String get taperPhase => 'Taper phase';
+  String get taperPhase => 'Fase de afinação';
 
   @override
-  String get recoverySession => 'Recovery session';
+  String get recoverySession => 'Treino de recuperação';
 
   @override
-  String get closeToYourEvent => 'Close to your event';
+  String get closeToYourEvent => 'Perto do teu evento';
 
   @override
-  String get noWorkoutStructureAvailable => 'No workout structure available.';
+  String get noWorkoutStructureAvailable =>
+      'Sem estrutura de treino disponível.';
 
   @override
-  String get aerobic => 'Aerobic';
+  String get aerobic => 'Aeróbio';
 
   @override
   String get pushAgainToUpdateYour =>
-      'Push again to update your watch calendar.';
+      'Envia novamente para atualizar o calendário do relógio.';
 
   @override
   String workoutSentToLabel(Object label) {
-    return 'Workout sent to $label';
+    return 'Treino enviado para $label';
   }
 
   @override
-  String get updating2 => 'Updating…';
+  String get updating2 => 'A atualizar…';
 
   @override
   String pushToLabel(Object label) {
-    return 'Push to $label';
+    return 'Enviar para $label';
   }
 
   @override
   String shareExerciseListForLabel(Object label) {
-    return 'Share exercise list for $label';
+    return 'Partilhar lista de exercícios para $label';
   }
 
   @override
   String shareWorkoutForLabel(Object label) {
-    return 'Share workout for $label';
+    return 'Partilhar treino para $label';
   }
 
   @override
-  String get whyNothingIsAddedTo => 'Why? Nothing is added to make it up.';
+  String get whyNothingIsAddedTo =>
+      'Porquê? Nada é acrescentado para compensar.';
 
   @override
-  String get workout => 'Workout';
+  String get workout => 'Treino';
 
   @override
   String get recordedActivityLinkedToThis =>
-      'Recorded activity linked to this workout';
+      'Atividade registada associada a este treino';
 
   @override
   String get matchedToTheRecordedWorkout =>
-      'Matched to the recorded workout start';
+      'Associado ao início do treino registado';
 
   @override
   String get matchedByWorkoutNameSport =>
-      'Matched by workout name, sport and date';
+      'Associado por nome do treino, desporto e data';
 
   @override
-  String get matchedBySportDateAnd => 'Matched by sport, date and duration';
+  String get matchedBySportDateAnd => 'Associado por desporto, data e duração';
 
   @override
   String planPlannedminutesMin(Object plannedMinutes) {
-    return 'Plan $plannedMinutes min';
+    return 'Plano $plannedMinutes min';
   }
 
   @override
-  String get maxHr => 'Max HR';
+  String get maxHr => 'FC máx.';
 
   @override
-  String get trainingLoad2 => 'Training load';
+  String get trainingLoad2 => 'Carga de treino';
 
   @override
-  String get active => 'Active';
+  String get active => 'Ativo';
 
   @override
-  String get avgPace => 'Avg pace';
+  String get avgPace => 'Ritmo médio';
 
   @override
-  String get avgSpeed => 'Avg speed';
+  String get avgSpeed => 'Velocidade média';
 
   @override
-  String get avgPower => 'Avg power';
+  String get avgPower => 'Potência média';
 
   @override
-  String get elevation2 => 'Elevation';
+  String get elevation2 => 'Desnível';
 
   @override
   String get altitude => 'Altitude';
 
   @override
   String get explainMyHrvBeforeAnd =>
-      'Explain my HRV before and after this workout. What is comparable, what is not, and what is still unknown?';
+      'Explica a minha HRV antes e depois deste treino. O que é comparável, o que não é e o que ainda é desconhecido?';
 
   @override
-  String get deleteActivity => 'Delete activity?';
+  String get deleteActivity => 'Eliminar atividade?';
 
   @override
   String get removeThisActivityFromThe =>
-      'Delete this activity? It stays deleted, also after your devices sync again. You can restore it in Settings under Recently deleted.';
+      'Eliminar esta atividade? Fica eliminada, mesmo depois de os teus dispositivos voltarem a sincronizar. Podes restaurá-la nas Definições em Eliminados recentemente.';
 
   @override
   String get howDidThisSessionGo =>
-      'How did this session go, and what does it mean for my next days?';
+      'Como correu este treino e o que significa para os meus próximos dias?';
 
   @override
   String currentFixedFixed2(Object fixed, Object fixed2) {
-    return 'Current $fixed, $fixed2';
+    return 'Atual $fixed, $fixed2';
   }
 
   @override
-  String get setUpInTrainingSettings => 'Set up in Training settings';
+  String get setUpInTrainingSettings => 'Configurar nas definições de treino';
 
   @override
   String get couldNotLoadHeatData =>
-      'Could not load heat data — tap for details';
+      'Não foi possível carregar os dados de calor — toca para ver detalhes';
 
   @override
-  String get loadingHeatHistory => 'Loading heat history…';
+  String get loadingHeatHistory => 'A carregar histórico de calor…';
 
   @override
-  String get noHeatDataYet => 'No heat data yet';
+  String get noHeatDataYet => 'Ainda sem dados de calor';
 
   @override
   String optimalLowHigh(Object low, Object high) {
-    return 'Optimal $low–$high';
+    return 'Ideal $low–$high';
   }
 
   @override
   String optimalLowHighTrimp(Object low, Object high) {
-    return 'Optimal: $low–$high TRIMP';
+    return 'Ideal: $low–$high TRIMP';
   }
 
   @override
   String get targetUnavailableSyncTrainingHistory =>
-      'Target unavailable — sync training history';
+      'Objetivo indisponível — sincroniza o histórico de treino';
 
   @override
   String get workoutQualifiedForHeatAccumulation =>
-      'Workout qualified for heat accumulation.';
+      'O treino contou para a acumulação de calor.';
 
   @override
-  String get workoutDidNotAddHeat => 'Workout did not add heat accumulation.';
+  String get workoutDidNotAddHeat =>
+      'O treino não contou para a acumulação de calor.';
 
   @override
-  String get performanceTime => 'Performance / Time';
+  String get performanceTime => 'Desempenho / tempo';
 
   @override
-  String get performanceDistance => 'Performance / Distance';
+  String get performanceDistance => 'Desempenho / distância';
 
   @override
-  String get noRecordedRoute => 'No recorded route';
+  String get noRecordedRoute => 'Sem percurso registado';
 
   @override
-  String get zoomIn => 'Zoom in';
+  String get zoomIn => 'Aproximar';
 
   @override
-  String get zoomOut => 'Zoom out';
+  String get zoomOut => 'Afastar';
 
   @override
-  String get fitRoute => 'Fit route';
+  String get fitRoute => 'Ajustar ao percurso';
 
   @override
-  String get fullscreenMap => 'Fullscreen map';
+  String get fullscreenMap => 'Mapa em ecrã inteiro';
 
   @override
-  String get openstreetmapContributors2 => 'OpenStreetMap contributors';
+  String get openstreetmapContributors2 => 'Colaboradores do OpenStreetMap';
 
   @override
   String get appleIntelligenceIsUnavailableShowing =>
-      'Apple Intelligence is unavailable. Showing a non-AI summary.';
+      'O Apple Intelligence não está disponível. A mostrar um resumo sem IA.';
 
   @override
-  String get generateAiBriefing => 'Generate AI briefing?';
+  String get generateAiBriefing => 'Gerar resumo de IA?';
 
   @override
-  String get retryAiBriefing => 'Retry AI briefing';
+  String get retryAiBriefing => 'Tentar resumo de IA novamente';
 
   @override
-  String get generateBriefing => 'Generate briefing';
+  String get generateBriefing => 'Gerar resumo';
 
   @override
   String discussThisBriefingWithMe(Object text) {
-    return 'Discuss this briefing with me and suggest the next best action.\n\n$text';
+    return 'Discute comigo este resumo e sugere a melhor ação seguinte.\n\n$text';
   }
 
   @override
   String whyThisRecommendationWhichOf(Object text) {
-    return 'Why this recommendation? Which of my figures and which gaps in the data led to it, and what would change it?\n\n$text';
+    return 'Porquê esta recomendação? Que valores meus e que falhas nos dados levaram a ela, e o que a mudaria?\n\n$text';
   }
 
   @override
-  String get avg2 => 'Avg';
+  String get avg2 => 'Méd.';
 
   @override
-  String get peak2 => 'Peak';
+  String get peak2 => 'Pico';
 
   @override
   String get notEnoughContinuousReadingsFor =>
-      'Not enough continuous readings for an average.';
+      'Medições contínuas insuficientes para uma média.';
 
   @override
   String recordedCoverageInhourshInminutesminTime(
     Object inHours,
     Object inMinutes,
   ) {
-    return 'Recorded coverage: ${inHours}h ${inMinutes}min · Time-weighted average';
+    return 'Cobertura registada: $inHours h $inMinutes min · média ponderada pelo tempo';
   }
 
   @override
-  String get lying => 'Lying';
+  String get lying => 'Deitado';
 
   @override
-  String get noHrvReadingsInThis => 'No HRV readings in this period';
+  String get noHrvReadingsInThis => 'Sem medições de HRV neste período';
 
   @override
   String get overnightHrvComesFromYour =>
-      'Overnight HRV comes from your watch, spot readings from the Polar H10 (RMSSD). The methods differ: compare trends, not single values.';
+      'A HRV noturna vem do teu relógio, as medições pontuais do Polar H10 (RMSSD). Os métodos diferem: compara tendências, não valores isolados.';
 
   @override
-  String get noReadings => 'No readings';
+  String get noReadings => 'Sem medições';
 
   @override
-  String get whenDidTheWorkoutStart => 'When did the workout start?';
+  String get whenDidTheWorkoutStart => 'Quando começou o treino?';
 
   @override
-  String get whenDidItEnd => 'When did it end?';
+  String get whenDidItEnd => 'Quando terminou?';
 
   @override
-  String get last3Months => 'Last 3 months';
+  String get last3Months => 'Últimos 3 meses';
 
   @override
-  String get lastYear => 'Last year';
+  String get lastYear => 'Último ano';
 
   @override
   String lastDaysDays(Object days) {
-    return 'Last $days days';
+    return 'Últimos $days dias';
   }
 
   @override
   String nowOnCurrentTapA(Object current) {
-    return 'Now on $current. Tap a day, or drag the workout onto one. The steps stay as they are.';
+    return 'Agora em $current. Toca num dia ou arrasta o treino para lá. Os passos ficam como estão.';
   }
 
   @override
-  String get monthView => 'Month view';
+  String get monthView => 'Vista mensal';
 
   @override
-  String get syncing => 'Syncing';
+  String get syncing => 'A sincronizar';
 
   @override
-  String get trendUnavailable => 'Trend unavailable';
+  String get trendUnavailable => 'Tendência indisponível';
 
   @override
-  String get stable => 'Stable';
+  String get stable => 'Estável';
 
   @override
-  String get increasing => 'Increasing';
+  String get increasing => 'A subir';
 
   @override
-  String get decreasing => 'Decreasing';
+  String get decreasing => 'A descer';
 
   @override
-  String get unclear => 'Unclear';
+  String get unclear => 'Pouco claro';
 
   @override
-  String get notComparable => 'Not comparable';
+  String get notComparable => 'Não comparável';
 
   @override
-  String get waitingForAfter => 'Waiting for after';
+  String get waitingForAfter => 'A aguardar o depois';
 
   @override
-  String get afterOnly => 'After only';
+  String get afterOnly => 'Só depois';
 
   @override
-  String get waitingForTheActualWorkout =>
-      'Waiting for the actual workout end.';
+  String get waitingForTheActualWorkout => 'A aguardar o fim real do treino.';
 
   @override
   String reminderAroundTolocal(Object toLocal) {
-    return 'Reminder around $toLocal';
+    return 'Lembrete por volta das $toLocal';
   }
 
   @override
   String get reminderIsDueMeasureWhen =>
-      'Reminder is due. Measure when you are ready.';
+      'O lembrete está ativo. Mede quando estiveres pronto.';
 
   @override
   String get thisReminderIsNoLonger =>
-      'This reminder is no longer current. Open the workout to view your measurements.';
+      'Este lembrete já não está atual. Abre o treino para veres as tuas medições.';
 
   @override
   String beforeFixedMilliseconds(Object fixed) {
-    return 'Before $fixed milliseconds. ';
+    return 'Antes $fixed milissegundos. ';
   }
 
   @override
   String afterFixedMilliseconds(Object fixed) {
-    return 'After $fixed milliseconds';
+    return 'Depois $fixed milissegundos';
   }
 
   @override
@@ -4882,49 +4928,49 @@ class AppLocalizationsPt extends AppLocalizations {
     Object deltaMs,
     Object deltaPercent,
   ) {
-    return 'Change $deltaMs milliseconds, $deltaPercent percent.';
+    return 'Variação de $deltaMs milissegundos, $deltaPercent por cento.';
   }
 
   @override
   String get noPreTrainingMeasurementRecorded =>
-      'No pre-training measurement recorded.';
+      'Nenhuma medição pré-treino registada.';
 
   @override
-  String get notMeasuredYet => 'Not measured yet';
+  String get notMeasuredYet => 'Ainda não medido';
 
   @override
   String leftOutOfTheComparison(Object excludedTotal, Object c) {
-    return 'Left out of the comparison: $excludedTotal workouts ($c).';
+    return 'Fora da comparação: $excludedTotal treinos ($c).';
   }
 
   @override
-  String get notFromThisWorkout => 'Not from this workout';
+  String get notFromThisWorkout => 'Não é deste treino';
 
   @override
-  String get useAsBefore => 'Use as before';
+  String get useAsBefore => 'Usar como antes';
 
   @override
-  String get useAsAfter => 'Use as after';
+  String get useAsAfter => 'Usar como depois';
 
   @override
-  String get beforeNotMeasured => 'Before · not measured';
+  String get beforeNotMeasured => 'Antes · não medido';
 
   @override
   String beforeTolocal(Object toLocal) {
-    return 'Before · $toLocal';
+    return 'Antes · $toLocal';
   }
 
   @override
   String workoutWorkouttext(Object workoutText) {
-    return 'Workout · $workoutText';
+    return 'Treino · $workoutText';
   }
 
   @override
-  String get afterNotMeasuredYet => 'After · not measured yet';
+  String get afterNotMeasuredYet => 'Depois · ainda não medido';
 
   @override
   String afterTolocal(Object toLocal) {
-    return 'After · $toLocal';
+    return 'Depois · $toLocal';
   }
 
   @override
@@ -4936,56 +4982,56 @@ class AppLocalizationsPt extends AppLocalizations {
     Object q1Ms,
     Object q3Ms,
   ) {
-    return 'Your similar workouts ($eligible, $toLocal–$toLocal2): median $medianMs ms, middle half $q1Ms to $q3Ms ms.';
+    return 'Os teus treinos semelhantes ($eligible, $toLocal–$toLocal2): mediana $medianMs ms, metade central $q1Ms a $q3Ms ms.';
   }
 
   @override
-  String get howHardDidItFeel => 'How hard did it feel? (RPE)';
+  String get howHardDidItFeel => 'Quão duro foi? (RPE)';
 
   @override
-  String get loadMetric => 'Load';
+  String get loadMetric => 'Carga';
 
   @override
-  String get clearAction => 'Clear';
+  String get clearAction => 'Limpar';
 
   @override
-  String get routeFinish => 'Finish';
+  String get routeFinish => 'Meta';
 
   @override
-  String get month2 => 'MONTH';
+  String get month2 => 'MÊS';
 
   @override
-  String get week2 => 'WEEK';
+  String get week2 => 'SEMANA';
 
   @override
-  String get quarter => 'QUARTER';
+  String get quarter => 'TRIMESTRE';
 
   @override
-  String get year => 'YEAR';
+  String get year => 'ANO';
 
   @override
-  String get easy3 => 'EASY';
+  String get easy3 => 'LEVE';
 
   @override
-  String get mod => 'MOD';
+  String get mod => 'MOD.';
 
   @override
-  String get hard => 'HARD';
+  String get hard => 'INTENSO';
 
   @override
-  String get protocol => 'PROTOCOL';
+  String get protocol => 'PROTOCOLO';
 
   @override
-  String get calculate => 'CALCULATE';
+  String get calculate => 'CALCULAR';
 
   @override
-  String get warmUp => 'WARM-UP';
+  String get warmUp => 'AQUECIMENTO';
 
   @override
-  String get coolDown => 'COOL-DOWN';
+  String get coolDown => 'RETORNO À CALMA';
 
   @override
-  String get ftpCycling => 'FTP cycling';
+  String get ftpCycling => 'FTP ciclismo';
 
   @override
   String ftpFtpwattsWWattsperkgW(Object ftpWatts, Object wattsPerKg) {
@@ -4993,242 +5039,242 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get thisWeekSoFar => 'THIS WEEK · SO FAR';
+  String get thisWeekSoFar => 'ESTA SEMANA · ATÉ AGORA';
 
   @override
-  String get duration2 => 'DURATION';
+  String get duration2 => 'DURAÇÃO';
 
   @override
-  String get distance2 => 'DISTANCE';
+  String get distance2 => 'DISTÂNCIA';
 
   @override
-  String get sport2 => 'SPORT';
+  String get sport2 => 'DESPORTO';
 
   @override
-  String get repeatSets => 'REPEAT SETS';
+  String get repeatSets => 'SÉRIES REPETIDAS';
 
   @override
-  String get aboutThisWorkout => 'ABOUT THIS WORKOUT';
+  String get aboutThisWorkout => 'SOBRE ESTE TREINO';
 
   @override
-  String get workoutStructure => 'WORKOUT STRUCTURE';
+  String get workoutStructure => 'ESTRUTURA DO TREINO';
 
   @override
-  String get health2 => 'HEALTH';
+  String get health2 => 'SAÚDE';
 
   @override
-  String get high2 => 'HIGH';
+  String get high2 => 'ALTA';
 
   @override
-  String get elevated => 'ELEVATED';
+  String get elevated => 'ELEVADA';
 
   @override
   String get normal => 'NORMAL';
 
   @override
-  String get tomorrow => 'TOMORROW';
+  String get tomorrow => 'AMANHÃ';
 
   @override
-  String get skipped2 => 'SKIPPED';
+  String get skipped2 => 'SALTADO';
 
   @override
-  String get weeklyPlan => 'WEEKLY PLAN';
+  String get weeklyPlan => 'PLANO SEMANAL';
 
   @override
-  String get activityLog3 => 'ACTIVITY LOG';
+  String get activityLog3 => 'REGISTO DE ATIVIDADES';
 
   @override
   String skippedTouppercase(Object toUpperCase) {
-    return 'SKIPPED · $toUpperCase';
+    return 'SALTADO · $toUpperCase';
   }
 
   @override
-  String get primaryZone => 'PRIMARY ZONE';
+  String get primaryZone => 'ZONA PRINCIPAL';
 
   @override
-  String get coachingCues => 'COACHING CUES';
+  String get coachingCues => 'DICAS DO TREINADOR';
 
   @override
-  String get targets => 'TARGETS';
+  String get targets => 'OBJETIVOS';
 
   @override
-  String get adaptation => 'ADAPTATION';
+  String get adaptation => 'ADAPTAÇÃO';
 
   @override
-  String get done2 => 'DONE';
+  String get done2 => 'FEITO';
 
   @override
-  String get notRecorded2 => 'NOT RECORDED';
+  String get notRecorded2 => 'NÃO REGISTADO';
 
   @override
-  String get planned => 'PLANNED';
+  String get planned => 'PLANEADO';
 
   @override
   String get extra => 'EXTRA';
 
   @override
-  String get optimal2 => 'OPTIMAL';
+  String get optimal2 => 'IDEAL';
 
   @override
-  String get qualified => 'QUALIFIED';
+  String get qualified => 'CONTOU';
 
   @override
   String get temp => 'TEMP';
 
   @override
-  String get humidity2 => 'HUMIDITY';
+  String get humidity2 => 'HUMIDADE';
 
   @override
-  String get pressure => 'PRESSURE';
+  String get pressure => 'PRESSÃO';
 
   @override
-  String get wetBulb => 'WET BULB';
+  String get wetBulb => 'BOLBO HÚMIDO';
 
   @override
-  String get paceMinKm => 'PACE (min/km)';
+  String get paceMinKm => 'RITMO (min/km)';
 
   @override
-  String get speedKmH => 'SPEED (km/h)';
+  String get speedKmH => 'VELOCIDADE (km/h)';
 
   @override
-  String get elevationM => 'ELEVATION (m)';
+  String get elevationM => 'ALTITUDE (m)';
 
   @override
-  String get powerW => 'POWER (W)';
+  String get powerW => 'POTÊNCIA (W)';
 
   @override
-  String get performanceTime2 => 'PERFORMANCE / TIME';
+  String get performanceTime2 => 'DESEMPENHO / TEMPO';
 
   @override
-  String get performanceDistance2 => 'PERFORMANCE / DISTANCE';
+  String get performanceDistance2 => 'DESEMPENHO / DISTÂNCIA';
 
   @override
-  String get load2 => 'LOAD';
+  String get load2 => 'CARGA';
 
   @override
-  String get day2 => 'DAY';
+  String get day2 => 'DIA';
 
   @override
-  String get allTime => 'ALL-TIME';
+  String get allTime => 'DESDE SEMPRE';
 
   @override
-  String get hrvAroundThisWorkout2 => 'HRV around this workout. ';
+  String get hrvAroundThisWorkout2 => 'HRV em torno deste treino. ';
 
   @override
-  String get lowReserve => 'LOW RESERVE';
+  String get lowReserve => 'RESERVA BAIXA';
 
   @override
-  String get goodReserve => 'GOOD RESERVE';
+  String get goodReserve => 'BOA RESERVA';
 
   @override
   String latestReadingAtTolocal(Object toLocal) {
-    return 'Latest reading at $toLocal';
+    return 'Última medição às $toLocal';
   }
 
   @override
-  String get weeklyAvg => 'WEEKLY AVG';
+  String get weeklyAvg => 'MÉDIA SEMANAL';
 
   @override
-  String get monthlyAvg => 'MONTHLY AVG';
+  String get monthlyAvg => 'MÉDIA MENSAL';
 
   @override
-  String get systolic2 => 'SYSTOLIC';
+  String get systolic2 => 'SISTÓLICA';
 
   @override
-  String get diastolic2 => 'DIASTOLIC';
+  String get diastolic2 => 'DIASTÓLICA';
 
   @override
-  String get hourlyVariation => 'HOURLY VARIATION';
+  String get hourlyVariation => 'VARIAÇÃO HORÁRIA';
 
   @override
-  String get dailyVariation => 'DAILY VARIATION';
+  String get dailyVariation => 'VARIAÇÃO DIÁRIA';
 
   @override
-  String get sys2 => 'SYS';
+  String get sys2 => 'SIS';
 
   @override
   String get dia => 'DIA';
 
   @override
-  String get bluetoothDevices => 'BLUETOOTH DEVICES';
+  String get bluetoothDevices => 'DISPOSITIVOS BLUETOOTH';
 
   @override
-  String get accountsServices => 'ACCOUNTS & SERVICES';
+  String get accountsServices => 'CONTAS E SERVIÇOS';
 
   @override
-  String get flowLoginOptional => 'FLOW LOGIN (OPTIONAL)';
+  String get flowLoginOptional => 'INÍCIO DE SESSÃO FLOW (OPCIONAL)';
 
   @override
-  String get polarFlowLogin => 'POLAR FLOW LOGIN';
+  String get polarFlowLogin => 'INÍCIO DE SESSÃO POLAR FLOW';
 
   @override
-  String get raceGoal => 'RACE GOAL';
+  String get raceGoal => 'OBJETIVO DE PROVA';
 
   @override
-  String get experienceLevel => 'EXPERIENCE LEVEL';
+  String get experienceLevel => 'NÍVEL DE EXPERIÊNCIA';
 
   @override
-  String get weeklySchedule2 => 'WEEKLY SCHEDULE';
+  String get weeklySchedule2 => 'HORÁRIO SEMANAL';
 
   @override
-  String get sessionsPerDay2 => 'SESSIONS PER DAY';
+  String get sessionsPerDay2 => 'TREINOS POR DIA';
 
   @override
-  String get aboutYou => 'ABOUT YOU';
+  String get aboutYou => 'SOBRE TI';
 
   @override
-  String get yourActivities2 => 'YOUR ACTIVITIES';
+  String get yourActivities2 => 'AS TUAS ATIVIDADES';
 
   @override
   String latestReadingAtTimestamp(Object timestamp) {
-    return 'Latest reading at $timestamp';
+    return 'Última medição às $timestamp';
   }
 
   @override
-  String get poorSleep => 'POOR SLEEP';
+  String get poorSleep => 'SONO FRACO';
 
   @override
-  String get fairSleep => 'FAIR SLEEP';
+  String get fairSleep => 'SONO RAZOÁVEL';
 
   @override
-  String get goodSleep => 'GOOD SLEEP';
+  String get goodSleep => 'SONO BOM';
 
   @override
-  String get hoursOfSleep => 'HOURS OF SLEEP';
+  String get hoursOfSleep => 'HORAS DE SONO';
 
   @override
-  String get sleepNeeded => 'SLEEP NEEDED';
+  String get sleepNeeded => 'SONO NECESSÁRIO';
 
   @override
-  String get deepSleep => 'DEEP SLEEP';
+  String get deepSleep => 'SONO PROFUNDO';
 
   @override
-  String get exercises2 => 'EXERCISES';
+  String get exercises2 => 'EXERCÍCIOS';
 
   @override
-  String get strengthSummary => 'STRENGTH SUMMARY';
+  String get strengthSummary => 'RESUMO DE FORÇA';
 
   @override
-  String get strengthDraft => 'STRENGTH · DRAFT';
+  String get strengthDraft => 'FORÇA · RASCUNHO';
 
   @override
-  String get strengthFinishedWithGaps => 'STRENGTH · FINISHED WITH GAPS';
+  String get strengthFinishedWithGaps => 'FORÇA · TERMINADO COM FALHAS';
 
   @override
-  String get strength2 => 'STRENGTH';
+  String get strength2 => 'FORÇA';
 
   @override
-  String get wind => 'WIND';
+  String get wind => 'VENTO';
 
   @override
-  String get sun2 => 'SUN';
+  String get sun2 => 'SOL';
 
   @override
-  String get cloud => 'CLOUD';
+  String get cloud => 'NUVENS';
 
   @override
   String dataSourceUpdatedFetchedat(Object source, Object fetchedAt) {
-    return 'Data: $source · Updated $fetchedAt';
+    return 'Dados: $source · Atualizado $fetchedAt';
   }
 
   @override
@@ -5241,425 +5287,429 @@ class AppLocalizationsPt extends AppLocalizations {
   String get sdnnMs => 'SDNN · ms';
 
   @override
-  String get now2 => 'NOW';
+  String get now2 => 'AGORA';
 
   @override
-  String get awake => 'AWAKE';
+  String get awake => 'ACORDADO';
 
   @override
-  String get light => 'LIGHT';
+  String get light => 'LEVE';
 
   @override
-  String get deep2 => 'DEEP';
+  String get deep2 => 'PROFUNDO';
 
   @override
-  String get sqliteOrm => 'SQLite ORM';
+  String get sqliteOrm => 'ORM SQLite';
 
   @override
-  String get httpClients => 'HTTP clients';
+  String get httpClients => 'Clientes HTTP';
 
   @override
-  String get gpsLocation => 'GPS location';
+  String get gpsLocation => 'Localização GPS';
 
   @override
-  String get hdlCholesterol => 'HDL Cholesterol';
+  String get hdlCholesterol => 'Colesterol HDL';
 
   @override
-  String get ldlCholesterol => 'LDL Cholesterol';
+  String get ldlCholesterol => 'Colesterol LDL';
 
   @override
-  String get raceName => 'RACE NAME';
+  String get raceName => 'NOME DA PROVA';
 
   @override
-  String get mtb => 'MTB';
+  String get mtb => 'BTT';
 
   @override
-  String get distanceKm => 'DISTANCE (km)';
+  String get distanceKm => 'DISTÂNCIA (km)';
 
   @override
-  String get priority => 'PRIORITY';
+  String get priority => 'PRIORIDADE';
 
   @override
-  String get elevationGainM => 'ELEVATION GAIN (m)';
+  String get elevationGainM => 'DESNÍVEL POSITIVO (m)';
 
   @override
-  String get targetTime => 'TARGET TIME';
+  String get targetTime => 'TEMPO-OBJETIVO';
 
   @override
-  String get raceDate => 'RACE DATE';
+  String get raceDate => 'DATA DA PROVA';
 
   @override
-  String get participation => 'PARTICIPATION';
+  String get participation => 'PARTICIPAÇÃO';
 
   @override
-  String get whatIWantFromIt => 'WHAT I WANT FROM IT';
+  String get whatIWantFromIt => 'O QUE QUERO DISTO';
 
   @override
   String periodTimeline(Object period) {
-    return '$period TIMELINE';
+    return 'EVOLUÇÃO $period';
   }
 
   @override
-  String get tabPlan => 'PLAN';
+  String get tabPlan => 'PLANO';
 
   @override
-  String get tabLoad => 'LOAD';
+  String get tabLoad => 'CARGA';
 
   @override
   String get tabCoach => 'COACH';
 
   @override
-  String get hrDriftTestLt1 => 'HR DRIFT TEST — LT1';
+  String get hrDriftTestLt1 => 'TESTE DE DERIVA DA FC — LT1';
 
   @override
-  String get asSentByGarmin => 'AS SENT BY GARMIN';
+  String get asSentByGarmin => 'TAL COMO ENVIADO PELA GARMIN';
 
   @override
-  String get noData2 => 'NO DATA';
+  String get noData2 => 'SEM DADOS';
 
   @override
-  String get noTarget => 'NO TARGET';
+  String get noTarget => 'SEM OBJETIVO';
 
   @override
-  String get noHeatLoad => 'NO HEAT LOAD';
+  String get noHeatLoad => 'SEM CARGA DE CALOR';
 
   @override
-  String get hrBpm => 'HR (bpm)';
+  String get hrBpm => 'FC (bpm)';
 
   @override
   String get aiBriefingUnavailableShowingA =>
-      'AI briefing unavailable. Showing a non-AI summary.';
+      'Resumo de IA indisponível. A mostrar um resumo sem IA.';
 
   @override
-  String get uvIndex2 => 'UV INDEX';
+  String get uvIndex2 => 'ÍNDICE UV';
 
   @override
-  String get aiBriefing => 'AI Briefing';
+  String get aiBriefing => 'Resumo de IA';
 
   @override
-  String get uiFrameworkByGoogle => 'UI framework by Google';
+  String get uiFrameworkByGoogle => 'Framework de UI da Google';
 
   @override
-  String get unableToLoadData => 'Unable to load data';
+  String get unableToLoadData => 'Não foi possível carregar os dados';
 
   @override
   String briefingSummary(Object recovery, Object sleep, Object load) {
-    return 'Recovery $recovery / 100. Sleep $sleep / 100. Today’s training load is $load TRIMP.';
+    return 'Recuperação $recovery / 100. Sono $sleep / 100. A carga de treino de hoje é $load TRIMP.';
   }
 
   @override
-  String get morningBriefing => 'Morning briefing';
+  String get morningBriefing => 'Resumo da manhã';
 
   @override
-  String get lunchBriefing => 'Lunch briefing';
+  String get lunchBriefing => 'Resumo do almoço';
 
   @override
-  String get afternoonBriefing => 'Afternoon briefing';
+  String get afternoonBriefing => 'Resumo da tarde';
 
   @override
-  String get eveningBriefing => 'Evening briefing';
+  String get eveningBriefing => 'Resumo da noite';
 
   @override
   String get appleUnusableAnswer =>
-      'Apple Intelligence could not produce a usable answer: it repeated itself or your data. Try rephrasing the question, or choose another AI provider in the settings.';
+      'O Apple Intelligence não conseguiu dar uma resposta útil: repetiu-se ou repetiu os teus dados. Reformula a pergunta ou escolhe outro fornecedor de IA nas definições.';
 
   @override
   String get appleCouldNotAnswer =>
-      'Apple Intelligence could not answer. Please try again.';
+      'O Apple Intelligence não conseguiu responder. Tenta novamente.';
 
   @override
   String get appleNotAvailableOnDevice =>
-      'Apple Intelligence is not available on this device.';
+      'O Apple Intelligence não está disponível neste dispositivo.';
 
   @override
   String get appleLanguageRejected =>
-      'Apple Intelligence rejected the request’s language. Try a short question in English. Also check the language settings for iPhone and Siri.';
+      'O Apple Intelligence rejeitou o idioma do pedido. Experimenta uma pergunta curta em inglês. Verifica também as definições de idioma do iPhone e da Siri.';
 
   @override
   String get appleRequestTooLarge =>
-      'Apple Intelligence could not fit this request. Try a shorter question.';
+      'Este pedido é demasiado grande para o Apple Intelligence. Experimenta uma pergunta mais curta.';
 
   @override
   String get messageTooLongForApple =>
-      'This message is too long for Apple Intelligence. Shorten it and send again.';
+      'Esta mensagem é demasiado longa para o Apple Intelligence. Encurta-a e envia novamente.';
 
   @override
-  String get vo2maxRunning => 'VO₂max running';
+  String get vo2maxRunning => 'VO₂máx corrida';
 
   @override
-  String get vo2maxCycling => 'VO₂max cycling';
+  String get vo2maxCycling => 'VO₂máx ciclismo';
 
   @override
-  String get vo2maxPaceLabel => 'VO₂max pace';
+  String get vo2maxPaceLabel => 'Ritmo VO₂máx';
 
   @override
-  String get lt1Threshold => 'LT1 threshold';
+  String get lt1Threshold => 'Limiar LT1';
 
   @override
-  String get lt2Threshold => 'LT2 threshold';
+  String get lt2Threshold => 'Limiar LT2';
 
   @override
   String hoursPreviousWeek(Object value) {
-    return '$value h previous week';
+    return '$value h na semana anterior';
   }
 
   @override
   String kmPreviousWeek(Object value) {
-    return '$value km previous week';
+    return '$value km na semana anterior';
   }
 
   @override
-  String get thirtyMinuteTimeTrial => '30-minute time trial';
+  String get thirtyMinuteTimeTrial => 'Contrarrelógio de 30 minutos';
 
   @override
   String thirtyMinTtDate(Object date) {
-    return '30-min TT · $date';
+    return 'Contrarrelógio 30 min · $date';
   }
 
   @override
-  String get yesterday2 => 'YESTERDAY';
+  String get yesterday2 => 'ONTEM';
 
   @override
-  String get briefHeadGreen => 'You are well recovered.';
+  String get briefHeadGreen => 'Estás bem recuperado.';
 
   @override
-  String get briefHeadYellow => 'You are carrying some strain.';
+  String get briefHeadYellow => 'Tens alguma carga acumulada.';
 
   @override
-  String get briefHeadRed => 'You are clearly under strain.';
+  String get briefHeadRed => 'Estás claramente sob carga.';
 
   @override
   String briefMain(Object reasons) {
-    return 'Main reasons: $reasons.';
+    return 'Razões principais: $reasons.';
   }
 
   @override
-  String get briefAllClear => 'None of your values shows a warning sign.';
+  String get briefAllClear => 'Nenhum dos teus valores dá sinal de alerta.';
 
   @override
-  String get briefAdviceGreen => 'Train as planned.';
+  String get briefAdviceGreen => 'Treina conforme planeado.';
 
   @override
-  String get briefAdviceYellow => 'Keep your plan but add no extra intensity.';
+  String get briefAdviceYellow =>
+      'Mantém o plano, mas não acrescentes intensidade.';
 
   @override
   String get briefAdviceRed =>
-      'Recovery comes first: take an easy day or rest.';
+      'A recuperação vem primeiro: faz um dia leve ou descansa.';
 
   @override
-  String get briefReasonHrvLow => 'low sleep HRV';
+  String get briefReasonHrvLow => 'HRV do sono baixa';
 
   @override
-  String get briefReasonHrvHigh => 'high sleep HRV';
+  String get briefReasonHrvHigh => 'HRV do sono alta';
 
   @override
-  String get briefReasonRhrUp => 'raised resting heart rate';
+  String get briefReasonRhrUp => 'FC em repouso elevada';
 
   @override
-  String get briefReasonRhrDown => 'low resting heart rate';
+  String get briefReasonRhrDown => 'FC em repouso baixa';
 
   @override
-  String get briefReasonSleepShort => 'too little sleep';
+  String get briefReasonSleepShort => 'pouco sono';
 
   @override
-  String get briefReasonSleepGood => 'sleep need met';
+  String get briefReasonSleepGood => 'necessidade de sono cumprida';
 
   @override
-  String get briefReasonEnergyLow => 'low energy';
+  String get briefReasonEnergyLow => 'pouca energia';
 
   @override
-  String get briefReasonEnergyHigh => 'good energy';
+  String get briefReasonEnergyHigh => 'boa energia';
 
   @override
-  String get briefReasonStressHigh => 'high stress';
+  String get briefReasonStressHigh => 'stress elevado';
 
   @override
-  String get briefReasonRespHigh => 'raised breathing rate';
+  String get briefReasonRespHigh => 'frequência respiratória elevada';
 
   @override
-  String get briefReasonSpo2Low => 'low blood oxygen';
+  String get briefReasonSpo2Low => 'oxigénio no sangue baixo';
 
   @override
-  String get briefReasonSkinTempOff => 'unusual skin temperature';
+  String get briefReasonSkinTempOff => 'temperatura da pele invulgar';
 
   @override
-  String get briefReasonFormTired => 'accumulated training fatigue';
+  String get briefReasonFormTired => 'fadiga de treino acumulada';
 
   @override
-  String get briefReasonFormVeryTired => 'very high training fatigue';
+  String get briefReasonFormVeryTired => 'fadiga de treino muito elevada';
 
   @override
-  String get briefReasonFormFresh => 'fresh and rested';
+  String get briefReasonFormFresh => 'fresco e descansado';
 
   @override
-  String get briefTrainingHrvUp => 'Your HRV rose after training, a good sign.';
+  String get briefTrainingHrvUp =>
+      'A tua HRV subiu depois do treino, um bom sinal.';
 
   @override
   String get briefTrainingHrvDown =>
-      'Your HRV fell after training, a less good sign.';
+      'A tua HRV desceu depois do treino, um sinal menos bom.';
 
   @override
   String get reminderNeedsNotifications =>
-      'The reminder needs notifications. Allow them for Fjelia in the system settings, then switch it on again.';
+      'O lembrete precisa de notificações. Permite-as para a Fjelia nas definições do sistema e volta a ativá-lo.';
 
   @override
-  String get whatDidYouHave => 'What did you have?';
+  String get whatDidYouHave => 'O que consumiste?';
 
   @override
-  String get intakeSomething => 'I had something';
+  String get intakeSomething => 'Consumi algo';
 
   @override
-  String get intakeNothing => 'Nothing';
+  String get intakeNothing => 'Nada';
 
   @override
-  String get totalIntake => 'Total intake';
+  String get totalIntake => 'Ingestão total';
 
   @override
-  String get carbsLabel => 'Carbs';
+  String get carbsLabel => 'Hidratos';
 
   @override
-  String get fluidLabel => 'Fluid';
+  String get fluidLabel => 'Líquidos';
 
   @override
-  String get sodiumLabel => 'Sodium';
+  String get sodiumLabel => 'Sódio';
 
   @override
-  String get caffeineLabel => 'Caffeine';
+  String get caffeineLabel => 'Cafeína';
 
   @override
-  String get detailsOptional => 'Details (optional)';
+  String get detailsOptional => 'Detalhes (opcional)';
 
   @override
   String atMinute(Object minute) {
-    return 'minute $minute';
+    return 'minuto $minute';
   }
 
   @override
   String get nothingAddedYet =>
-      'Nothing added yet. Add what you ate or drank, or choose “Nothing”.';
+      'Ainda nada adicionado. Adiciona o que comeste ou bebeste, ou escolhe “Nada”.';
 
   @override
-  String get followFocusWeek => 'What should I focus on this week?';
+  String get followFocusWeek => 'Em que me devo concentrar esta semana?';
 
   @override
-  String get followRecoveryTrend => 'How is my recovery trending?';
+  String get followRecoveryTrend => 'Como está a evoluir a minha recuperação?';
 
   @override
-  String get followLoadTooHigh => 'Is my training load too high?';
+  String get followLoadTooHigh => 'A minha carga de treino é demasiado alta?';
 
   @override
-  String get followImproveSleep => 'What would improve my sleep?';
+  String get followImproveSleep => 'O que melhoraria o meu sono?';
 
   @override
-  String get followIntervalsFeel => 'How should the intervals feel?';
+  String get followIntervalsFeel => 'Como devem ser sentidos os intervalos?';
 
   @override
-  String get followTiredToday => 'What if I feel tired today?';
+  String get followTiredToday => 'E se hoje me sentir cansado?';
 
   @override
-  String get followEatBefore => 'What should I eat before it?';
+  String get followEatBefore => 'O que devo comer antes?';
 
   @override
-  String get followAdjustToday => 'Should I adjust it today?';
+  String get followAdjustToday => 'Devo ajustá-lo hoje?';
 
   @override
-  String get followNextDays => 'What does it mean for my next days?';
+  String get followNextDays => 'O que significa para os meus próximos dias?';
 
   @override
-  String get followCompareSimilar =>
-      'How does it compare with similar sessions?';
+  String get followCompareSimilar => 'Como se compara com treinos semelhantes?';
 
   @override
-  String get followRecover => 'What should I do to recover?';
+  String get followRecover => 'O que devo fazer para recuperar?';
 
   @override
-  String get followIntensityRight => 'Was the intensity right?';
+  String get followIntensityRight => 'A intensidade foi a certa?';
 
   @override
-  String get statusPlanned => 'Planned';
+  String get statusPlanned => 'Planeado';
 
   @override
-  String get statusAdapted => 'Adapted';
+  String get statusAdapted => 'Adaptado';
 
   @override
-  String get statusCompleted => 'Completed';
+  String get statusCompleted => 'Concluído';
 
   @override
-  String get statusRest => 'Rest';
+  String get statusRest => 'Descanso';
 
   @override
   String loadValue(Object value) {
-    return '$value load';
+    return 'Carga $value';
   }
 
   @override
-  String get actIntensityEasy => 'That was an easy aerobic session.';
+  String get actIntensityEasy => 'Foi um treino aeróbio leve.';
 
   @override
-  String get actIntensityModerate => 'That was a moderate session.';
+  String get actIntensityModerate => 'Foi um treino moderado.';
 
   @override
-  String get actIntensityHard => 'That was a hard session.';
+  String get actIntensityHard => 'Foi um treino intenso.';
 
   @override
-  String get actIntensityUnknown => 'That session is logged.';
+  String get actIntensityUnknown => 'Esse treino está registado.';
 
   @override
-  String get actLenLonger => 'It was longer than your similar sessions.';
+  String get actLenLonger =>
+      'Foi mais longo do que os teus treinos semelhantes.';
 
   @override
-  String get actLenShorter => 'It was shorter than your similar sessions.';
+  String get actLenShorter =>
+      'Foi mais curto do que os teus treinos semelhantes.';
 
   @override
-  String get actLoadHigher => 'The load was higher than usual.';
+  String get actLoadHigher => 'A carga foi mais alta do que o habitual.';
 
   @override
-  String get actLoadLower => 'The load was lower than usual.';
+  String get actLoadLower => 'A carga foi mais baixa do que o habitual.';
 
   @override
-  String get actLoadSame => 'The load was about the same as usual.';
+  String get actLoadSame => 'A carga foi mais ou menos a habitual.';
 
   @override
   String get actHrLower =>
-      'Your heart rate was lower than usual, so it felt easier.';
+      'A tua FC foi mais baixa do que o habitual, por isso pareceu mais fácil.';
 
   @override
   String get actHrHigher =>
-      'Your heart rate was higher than usual, so it felt harder.';
+      'A tua FC foi mais alta do que o habitual, por isso pareceu mais duro.';
 
   @override
-  String get actAdviceUnknown => 'Plan your next days by how you feel.';
+  String get actAdviceUnknown =>
+      'Planeia os próximos dias conforme te sentires.';
 
   @override
   String briefOutlookRest(Object days) {
-    return 'With about $days easy days your form is back in the optimal range.';
+    return 'Com cerca de $days dias leves, a tua forma volta ao intervalo ideal.';
   }
 
   @override
   String get briefOutlookLongRest =>
-      'Your form needs more than a few easy days to recover.';
+      'A tua forma precisa de mais do que alguns dias leves para recuperar.';
 
   @override
   String get briefOutlookPlanTired =>
-      'Following the plan keeps your form low for the next days.';
+      'Seguir o plano mantém a tua forma baixa nos próximos dias.';
 
   @override
   String get localQwen => 'Qwen3.5 · local';
 
   @override
   String get localModelDescription =>
-      'Optional Qwen3.5, 4-bit MLX. Download once, then use chat and briefings on this device without an API key. Your health data stays on this device.';
+      'Qwen3.5 opcional, MLX de 4 bits. Descarrega uma vez e depois usa o chat e os resumos neste dispositivo sem chave de API. Os teus dados de saúde ficam neste dispositivo.';
 
   @override
   String localModelSizeMb(Object megabytes) {
-    return '$megabytes MB download · additional memory is needed while running.';
+    return 'Transferência de $megabytes MB · é precisa memória adicional durante a execução.';
   }
 
   @override
-  String get localModelDownload => 'Download model';
+  String get localModelDownload => 'Descarregar modelo';
 
   @override
-  String get localModelResumeDownload => 'Resume download';
+  String get localModelResumeDownload => 'Retomar transferência';
 
   @override
   String localModelDownloading(Object downloaded, Object total) {
@@ -5667,265 +5717,269 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get localModelInstalled => 'Downloaded · available offline';
+  String get localModelInstalled => 'Descarregado · disponível offline';
 
   @override
-  String get localModelRemove => 'Delete model';
+  String get localModelRemove => 'Eliminar modelo';
 
   @override
   String get localModelUnsupported =>
-      'This MLX model needs an iPhone with iOS 17 or later and an A14 or newer chip. Older devices are not supported.';
+      'Este modelo MLX precisa de um iPhone com iOS 17 ou posterior e um chip A14 ou mais recente. Os dispositivos mais antigos não são suportados.';
 
   @override
   String get localModelMemoryUnsupported =>
-      'This device does not have enough memory to run the local model.';
+      'Este dispositivo não tem memória suficiente para executar o modelo local.';
 
   @override
   String get localModelDownloadFailed =>
-      'Download failed. Try again; completed files are kept.';
+      'A transferência falhou. Tenta novamente; os ficheiros concluídos mantêm-se.';
 
   @override
   String get localModelDownloadFirst =>
-      'Download Qwen in Settings → AI & More first.';
+      'Descarrega primeiro o Qwen em Definições → IA e mais.';
 
   @override
   String get localModelContextTooLong =>
-      'This conversation is too long for the local model. Start a new chat or shorten your question.';
+      'Esta conversa é demasiado longa para o modelo local. Começa um novo chat ou encurta a pergunta.';
 
   @override
   String get localModelBusy =>
-      'The local model is answering another request. Try again shortly.';
+      'O modelo local está a responder a outro pedido. Tenta novamente daqui a pouco.';
 
   @override
   String get localModelInterrupted =>
-      'Local generation was interrupted. Keep Fjelia open and try again.';
+      'A geração local foi interrompida. Mantém a Fjelia aberta e tenta novamente.';
 
   @override
   String get localModelCouldNotAnswer =>
-      'The local model could not answer. Check the model in Settings → AI & More and try again.';
+      'O modelo local não conseguiu responder. Verifica o modelo em Definições → IA e mais e tenta novamente.';
 
   @override
   String get localModelBriefingUnavailable =>
-      'Local AI briefing unavailable. Showing the app\'s summary.';
+      'Resumo de IA local indisponível. A mostrar o resumo da app.';
 
   @override
-  String get localModelInfo => 'Model details & licence';
+  String get localModelInfo => 'Detalhes do modelo e licença';
 
   @override
   String localModelRamGb(int gigabytes) {
-    return 'Requires at least $gigabytes GB of device memory.';
+    return 'Requer pelo menos $gigabytes GB de memória do dispositivo.';
   }
 
   @override
-  String get localModelIPhone18 => '4B is available on iPhone 18 and later.';
+  String get localModelIPhone18 =>
+      'O 4B está disponível no iPhone 18 e posteriores.';
 
   @override
   String briefPlannedTodayCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'There are $count training sessions planned for today.',
-      one: 'There is 1 training session planned for today.',
+      other: 'Há $count treinos planeados para hoje.',
+      one: 'Há $count treino planeado para hoje.',
     );
     return '$_temp0';
   }
 
   @override
   String get coachDataFallback =>
-      'The model\'s answer conflicts with the data. Here is Fjelia\'s summary:';
+      'A resposta do modelo contradiz os dados. Aqui está o resumo da Fjelia:';
 
   @override
-  String get coachSevenDayAverage => '7-day average';
+  String get coachSevenDayAverage => 'Média de 7 dias';
 
   @override
   String coachSleepNeedAndShortfall(String need, String shortfall) {
-    return 'Sleep need: $need h; shortfall: $shortfall h.';
+    return 'Necessidade de sono: $need h; défice: $shortfall h.';
   }
 
   @override
   String coachCurrentForm(String value) {
-    return 'Current form (TSB): $value points.';
+    return 'Forma atual (TSB): $value pontos.';
   }
 
   @override
-  String get aiOnboardingStep => 'Step 2 of 3';
+  String get aiOnboardingStep => 'Passo 2 de 3';
 
   @override
-  String get aiOnboardingTitle => 'Your coach.\nYour way.';
+  String get aiOnboardingTitle => 'O teu treinador.\nÀ tua maneira.';
 
   @override
   String get aiOnboardingSubtitle =>
-      'Turn your health data into insights for better training and recovery.';
+      'Transforma os teus dados de saúde em conclusões para treinar e recuperar melhor.';
 
   @override
-  String get aiOnboardingChoose => 'CHOOSE YOUR AI COACH';
+  String get aiOnboardingChoose => 'ESCOLHE O TEU TREINADOR IA';
 
   @override
-  String get aiOnboardingFreeDetail => 'Free · No AI account needed';
+  String get aiOnboardingFreeDetail => 'Grátis · sem conta de IA';
 
   @override
-  String get aiOnboardingFreeBody => 'Cloud AI for training and recovery.';
+  String get aiOnboardingFreeBody => 'IA na nuvem para treino e recuperação.';
 
   @override
-  String get aiOnboardingRecommended => 'Recommended';
+  String get aiOnboardingRecommended => 'Recomendado';
 
   @override
-  String get aiOnboardingOnDevice => 'On your device';
+  String get aiOnboardingOnDevice => 'No teu dispositivo';
 
   @override
-  String get aiOnboardingLocalBody => 'Your AI requests stay on this device.';
+  String get aiOnboardingLocalBody =>
+      'Os teus pedidos de IA ficam neste dispositivo.';
 
   @override
-  String get aiOnboardingUnavailable => 'Currently unavailable';
+  String get aiOnboardingUnavailable => 'Indisponível de momento';
 
   @override
-  String get aiOnboardingMore => 'More AI models';
+  String get aiOnboardingMore => 'Mais modelos de IA';
 
   @override
-  String get aiOnboardingMoreBody => 'Local Qwen or your own cloud provider';
+  String get aiOnboardingMoreBody =>
+      'Qwen local ou o teu próprio fornecedor na nuvem';
 
   @override
   String get aiOnboardingConsent =>
-      'Cloud requests only after your confirmation.';
+      'Pedidos à nuvem só depois da tua confirmação.';
 
   @override
   String get aiOnboardingError =>
-      'Your AI choice could not be saved or loaded. Please try again.';
+      'Não foi possível guardar ou carregar a tua escolha de IA. Tenta novamente.';
 
   @override
-  String get aiOnboardingWithout => 'Continue without AI';
+  String get aiOnboardingWithout => 'Continuar sem IA';
 
   @override
-  String get aiOnboardingConfigure => 'Set up model';
+  String get aiOnboardingConfigure => 'Configurar modelo';
 
   @override
   String aiOnboardingContinue(String provider) {
-    return 'Continue with $provider';
+    return 'Continuar com $provider';
   }
 
   @override
   String get aiOnboardingChangeLater =>
-      'You can change this anytime in Settings.';
+      'Podes mudar isto a qualquer momento nas Definições.';
 
   @override
-  String get creditsAndLicenses => 'Credits & licenses';
+  String get creditsAndLicenses => 'Créditos e licenças';
 
   @override
-  String get bioAgeActivity => 'Activity';
+  String get bioAgeActivity => 'Atividade';
 
   @override
-  String get bioAgeActivityBasis => 'Activity data · last 7 days';
+  String get bioAgeActivityBasis => 'Dados de atividade · últimos 7 dias';
 
   @override
   String bioAgeActivityReported(String minutes) {
-    return '$minutes reported moderate minutes';
+    return '$minutes minutos moderados registados';
   }
 
   @override
   String bioAgeActivitySteps(String minutes) {
-    return '≈ $minutes walking minutes estimated from steps';
+    return '≈ $minutes minutos de caminhada estimados a partir dos passos';
   }
 
   @override
   String bioAgeActivityCoverage(int days) {
-    return 'Data for $days of 7 days';
+    return 'Dados de $days de 7 dias';
   }
 
   @override
   String get bioAgeActivityEstimateNotice =>
-      'Assumption: 100 steps ≈ 1 walking minute. Daily step totals do not reveal pace or intensity. Reported minutes take priority each day; that day’s steps are not counted again.';
+      'Pressuposto: 100 passos ≈ 1 minuto de caminhada. Os totais diários de passos não revelam ritmo nem intensidade. Os minutos registados têm prioridade em cada dia; os passos desse dia não voltam a contar.';
 
   @override
   String get bioAgeActivityIncomplete =>
-      'Activity data is missing. An activity contribution in years is calculated only when all 7 days have data.';
+      'Faltam dados de atividade. A contribuição da atividade em anos só é calculada quando os 7 dias têm dados.';
 
   @override
   String get bioAgeActivityEstimatedLabel =>
-      'Activity includes estimated walking time.';
+      'A atividade inclui tempo de caminhada estimado.';
 
   @override
-  String get bioAgeActivityUnknownLabel => 'Activity data is incomplete';
+  String get bioAgeActivityUnknownLabel =>
+      'Os dados de atividade estão incompletos';
 
   @override
-  String get mixTitle => 'Mix a drink';
+  String get mixTitle => 'Preparar bebida';
 
   @override
-  String get mixMyBottle => 'Mix my bottle';
+  String get mixMyBottle => 'Preparar a minha garrafa';
 
   @override
-  String get mixRecipes => 'Recipes';
+  String get mixRecipes => 'Receitas';
 
   @override
-  String get mixIngredients => 'Ingredients';
+  String get mixIngredients => 'Ingredientes';
 
   @override
-  String get mixAddIngredient => 'Add ingredient';
+  String get mixAddIngredient => 'Adicionar ingrediente';
 
   @override
-  String get mixBottle => 'Bottle';
+  String get mixBottle => 'Garrafa';
 
   @override
-  String get mixFilledWithWater => 'topped up with water';
+  String get mixFilledWithWater => 'completada com água';
 
   @override
   String mixPerBottle(String ml) {
-    return 'per $ml ml bottle';
+    return 'por garrafa de $ml ml';
   }
 
   @override
-  String get mixStrength => 'Strength';
+  String get mixStrength => 'Concentração';
 
   @override
-  String get mixRatio => 'Glucose : fructose';
+  String get mixRatio => 'Glicose : frutose';
 
   @override
-  String get mixGlucose => 'Glucose';
+  String get mixGlucose => 'Glicose';
 
   @override
-  String get mixFructose => 'Fructose';
+  String get mixFructose => 'Frutose';
 
   @override
-  String get mixGlucoseOnly => 'Glucose only';
+  String get mixGlucoseOnly => 'Só glicose';
 
   @override
-  String get mixGentle => 'Easy on the stomach – up to 8 %.';
+  String get mixGentle => 'Suave para o estômago – até 8 %.';
 
   @override
-  String get mixStrong => 'Concentrated – only with a trained gut.';
+  String get mixStrong => 'Concentrada – só com o intestino treinado.';
 
   @override
-  String get mixTooStrong => 'Very concentrated – add water.';
+  String get mixTooStrong => 'Muito concentrada – junta água.';
 
   @override
   String get mixNoFructoseHint =>
-      'Glucose only: above about 60 g carbohydrate per hour, add fructose (sugar) – around 2:1 is absorbed better.';
+      'Só glicose: acima de cerca de 60 g de hidratos por hora, junta frutose (açúcar) – cerca de 2:1 é melhor absorvido.';
 
   @override
   String get mixFructoseHeavyHint =>
-      'More fructose than glucose can upset the stomach – add maltodextrin or dextrose.';
+      'Mais frutose do que glicose pode incomodar o estômago – junta maltodextrina ou dextrose.';
 
   @override
   String get mixSpoonNote =>
-      'Spoon sizes vary. Weigh your spoon once, or use grams for exact values.';
+      'O tamanho das colheres varia. Pesa a tua colher uma vez ou usa gramas para valores exatos.';
 
   @override
   String get mixTooMuchLiquid =>
-      'Juice and cola alone are more than the bottle holds – make the bottle bigger.';
+      'Só o sumo e a cola já são mais do que cabe na garrafa – aumenta a garrafa.';
 
   @override
-  String get mixAddToIntake => 'Add to intake';
+  String get mixAddToIntake => 'Adicionar à ingestão';
 
   @override
-  String get mixUseAsBottle => 'Use as my bottle';
+  String get mixUseAsBottle => 'Usar como a minha garrafa';
 
   @override
-  String get mixDefaultName => 'Drink mix';
+  String get mixDefaultName => 'Mistura de bebida';
 
   @override
-  String get mixEmpty => 'Pick a recipe or add an ingredient.';
+  String get mixEmpty => 'Escolhe uma receita ou adiciona um ingrediente.';
 
   @override
-  String get mixRemove => 'Remove';
+  String get mixRemove => 'Remover';
 
   @override
   String mixRowGrams(String grams) {
@@ -5934,275 +5988,275 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String mixBottleSaved(String carbs, String ml) {
-    return 'Saved as your bottle: $carbs g carbohydrate per $ml ml.';
+    return 'Guardado como a tua garrafa: $carbs g de hidratos por $ml ml.';
   }
 
   @override
-  String get mixMaltodextrin => 'Maltodextrin';
+  String get mixMaltodextrin => 'Maltodextrina';
 
   @override
-  String get mixSugar => 'Sugar';
+  String get mixSugar => 'Açúcar';
 
   @override
   String get mixDextrose => 'Dextrose';
 
   @override
-  String get mixHoney => 'Honey';
+  String get mixHoney => 'Mel';
 
   @override
-  String get mixSalt => 'Salt';
+  String get mixSalt => 'Sal';
 
   @override
-  String get mixOrangeJuice => 'Orange juice';
+  String get mixOrangeJuice => 'Sumo de laranja';
 
   @override
-  String get mixAppleJuice => 'Apple juice';
+  String get mixAppleJuice => 'Sumo de maçã';
 
   @override
   String get mixCola => 'Cola';
 
   @override
-  String get unitTspLevel => 'level tsp';
+  String get unitTspLevel => 'colher de chá rasa';
 
   @override
-  String get unitTspHeaped => 'heaped tsp';
+  String get unitTspHeaped => 'colher de chá cheia';
 
   @override
-  String get unitTbspLevel => 'level tbsp';
+  String get unitTbspLevel => 'colher de sopa rasa';
 
   @override
-  String get unitTbspHeaped => 'heaped tbsp';
+  String get unitTbspHeaped => 'colher de sopa cheia';
 
   @override
-  String get unitPinch => 'pinch';
+  String get unitPinch => 'pitada';
 
   @override
-  String get unitTsp => 'tsp';
+  String get unitTsp => 'c. chá';
 
   @override
-  String get unitTbsp => 'tbsp';
+  String get unitTbsp => 'c. sopa';
 
   @override
-  String get mixRecipeMaltoSugar => 'Malto + sugar 2:1';
+  String get mixRecipeMaltoSugar => 'Malto + açúcar 2:1';
 
   @override
-  String get mixRecipeJuice => 'Juice spritzer';
+  String get mixRecipeJuice => 'Sumo com água com gás';
 
   @override
-  String get mixRecipeJuicePlus => 'Juice spritzer + malto';
+  String get mixRecipeJuicePlus => 'Sumo com água com gás + malto';
 
   @override
-  String get mixRecipeCola => 'Cola spritzer';
+  String get mixRecipeCola => 'Cola com água com gás';
 
   @override
-  String get missedWorkoutTitle => 'Still on your plan today';
+  String get missedWorkoutTitle => 'Ainda no teu plano de hoje';
 
   @override
   String missedWorkoutBody(String workouts) {
-    return '$workouts. Still today, move it or skip it?';
+    return '$workouts. Ainda hoje, mover ou saltar?';
   }
 
   @override
-  String get stillToday => 'Still today';
+  String get stillToday => 'Ainda hoje';
 
   @override
-  String get moveWorkoutAction => 'Move…';
+  String get moveWorkoutAction => 'Mover…';
 
   @override
-  String get missedWorkoutChannel => 'Missed workouts';
+  String get missedWorkoutChannel => 'Treinos perdidos';
 
   @override
   String get missedWorkoutChannelDescription =>
-      'Evening reminder of planned workouts still open that day';
+      'Lembrete ao fim do dia de treinos planeados ainda em aberto nesse dia';
 
   @override
-  String get missedWorkoutReminder => 'Missed workout reminder';
+  String get missedWorkoutReminder => 'Lembrete de treino perdido';
 
   @override
   String get missedWorkoutReminderSubtitle =>
-      'In the evening, if a planned workout is still open';
+      'Ao fim do dia, se um treino planeado ainda estiver em aberto';
 
   @override
-  String get moveWithinDays => 'Move within';
+  String get moveWithinDays => 'Mover dentro de';
 
   @override
   String daysN(int count) {
-    return '$count days';
+    return '$count dias';
   }
 
   @override
   String get notificationsAreOff =>
-      'Notifications are off for Fjelia. Allow them to get this reminder.';
+      'As notificações da Fjelia estão desativadas. Permite-as para receberes este lembrete.';
 
   @override
-  String get allowNotifications => 'Allow notifications';
+  String get allowNotifications => 'Permitir notificações';
 
   @override
-  String get openWorkoutToday => 'Still open today';
+  String get openWorkoutToday => 'Ainda em aberto hoje';
 
   @override
-  String get checkingForWorkout => 'Looking for your workout…';
+  String get checkingForWorkout => 'A procurar o teu treino…';
 
   @override
-  String get alreadyDone => 'Already done ✓';
+  String get alreadyDone => 'Já feito ✓';
 
   @override
   String get alreadyDoneBody =>
-      'Your workout was recorded. Nothing left to do today.';
+      'O teu treino foi registado. Não há mais nada para hoje.';
 
   @override
-  String get dropIt => 'Drop it';
+  String get dropIt => 'Deixar cair';
 
   @override
   String askCoachSends(String provider) {
-    return 'Sends your training summary to $provider.';
+    return 'Envia o teu resumo de treino para $provider.';
   }
 
   @override
-  String get coachThinking => 'The coach is thinking…';
+  String get coachThinking => 'O treinador está a pensar…';
 
   @override
   String get coachCouldNotAnswer =>
-      'The coach could not answer. The suggestion above still holds.';
+      'O treinador não conseguiu responder. A sugestão acima mantém-se.';
 
   @override
-  String get whySkip => 'Why skip it?';
+  String get whySkip => 'Porquê saltar?';
 
   @override
-  String get skipReasonIllness => 'Illness';
+  String get skipReasonIllness => 'Doença';
 
   @override
-  String get skipReasonInjury => 'Injury or pain';
+  String get skipReasonInjury => 'Lesão ou dor';
 
   @override
-  String get skipReasonFatigue => 'Fatigue';
+  String get skipReasonFatigue => 'Cansaço';
 
   @override
-  String get skipReasonNoTime => 'No time';
+  String get skipReasonNoTime => 'Sem tempo';
 
   @override
-  String get skipReasonTravel => 'Travel';
+  String get skipReasonTravel => 'Viagem';
 
   @override
-  String get skipReasonConditions => 'Conditions';
+  String get skipReasonConditions => 'Condições';
 
   @override
-  String get skipReasonMyChoice => 'My choice';
+  String get skipReasonMyChoice => 'Escolha minha';
 
   @override
-  String get onbReminderTitle => 'Stay on track';
+  String get onbReminderTitle => 'Mantém o rumo';
 
   @override
   String get onbReminderSubtitle =>
-      'If a planned workout is still open in the evening, Fjelia reminds you once, so you can still do it, move it or skip it.';
+      'Se um treino planeado ainda estiver em aberto ao fim do dia, a Fjelia lembra-te uma vez, para que ainda o possas fazer, mover ou saltar.';
 
   @override
-  String get onbExampleWorkout => 'Easy run (45 min)';
+  String get onbExampleWorkout => 'Corrida leve (45 min)';
 
   @override
-  String get onbReminderToggle => 'Evening reminder';
+  String get onbReminderToggle => 'Lembrete ao fim do dia';
 
   @override
-  String get onbReminderTime => 'Remind me at';
+  String get onbReminderTime => 'Lembrar-me às';
 
   @override
   String get onbReminderFootnote =>
-      'You can change this any time in Settings → Training.';
+      'Podes mudar isto a qualquer momento em Definições → Treino.';
 
   @override
-  String get nowLabel => 'now';
+  String get nowLabel => 'agora';
 
   @override
-  String get coachSuggests => 'Coach suggests';
+  String get coachSuggests => 'O treinador sugere';
 
   @override
-  String get suggestionLabel => 'Suggestion';
+  String get suggestionLabel => 'Sugestão';
 
   @override
-  String get askCoachShort => 'Ask coach';
+  String get askCoachShort => 'Perguntar ao treinador';
 
   @override
-  String get otherDay => 'Other day';
+  String get otherDay => 'Outro dia';
 
   @override
-  String get skipEllipsis => 'Skip…';
+  String get skipEllipsis => 'Saltar…';
 
   @override
-  String get pickADay => 'Tap a day above';
+  String get pickADay => 'Toca num dia acima';
 
   @override
-  String get dayDoesNotFit => 'That day doesn’t fit the plan.';
+  String get dayDoesNotFit => 'Esse dia não encaixa no plano.';
 
   @override
-  String get planUpdated => 'Plan updated';
+  String get planUpdated => 'Plano atualizado';
 
   @override
-  String get missedTodayTag => 'missed today';
+  String get missedTodayTag => 'perdido hoje';
 
   @override
   String summaryMove(String day) {
-    return 'Move it to $day.';
+    return 'Move-o para $day.';
   }
 
   @override
   String summaryMoveIndoor(String day) {
-    return 'Move it to $day, indoors – rain is forecast.';
+    return 'Move-o para $day, em interior – prevê-se chuva.';
   }
 
   @override
   String get summaryDropEasy =>
-      'Drop it – an easy session isn’t worth making up.';
+      'Deixa cair – um treino leve não vale a pena compensar.';
 
   @override
   String summaryDropNoDay(int days) {
-    return 'Drop it – no day fits in the next $days days.';
+    return 'Deixa cair – nenhum dia encaixa nos próximos $days dias.';
   }
 
   @override
-  String get tagIndoor => 'indoor';
+  String get tagIndoor => 'interior';
 
   @override
-  String get tagEasier => 'easier';
+  String get tagEasier => 'mais leve';
 
   @override
-  String get tagRecovery => 'recovery';
+  String get tagRecovery => 'recuperação';
 
   @override
   String summaryMoveEasier(String day) {
-    return 'Move it to $day, a bit easier – it sits next to a hard day.';
+    return 'Move-o para $day, um pouco mais leve – fica ao lado de um dia duro.';
   }
 
   @override
-  String get briefRestDayToday => 'Today is a planned rest day.';
+  String get briefRestDayToday => 'Hoje é um dia de descanso planeado.';
 
   @override
-  String get restDayPlannedNote => 'Recovery is part of your plan.';
+  String get restDayPlannedNote => 'A recuperação faz parte do teu plano.';
 
   @override
-  String get restDayTitle => 'Rest day';
+  String get restDayTitle => 'Dia de descanso';
 
   @override
-  String get importActivityFile => 'Import activity file';
+  String get importActivityFile => 'Importar ficheiro de atividade';
 
   @override
   String get activityFileImportHint =>
-      'FIT, GPX or TCX files (also zipped, as Garmin Connect exports them) from a bike computer, Zwift, Strava or another app. You can also share a file to Fjelia from the Files app or the share sheet.';
+      'Ficheiros FIT, GPX ou TCX (também comprimidos, como o Garmin Connect os exporta) de um ciclocomputador, Zwift, Strava ou outra app. Também podes partilhar um ficheiro com a Fjelia a partir da app Ficheiros ou do menu de partilha.';
 
   @override
-  String get chooseActivityFiles => 'Choose files';
+  String get chooseActivityFiles => 'Escolher ficheiros';
 
   @override
-  String get chooseOtherFiles => 'Choose other files';
+  String get chooseOtherFiles => 'Escolher outros ficheiros';
 
   @override
-  String get activityFileUnreadable => 'Not a readable activity file';
+  String get activityFileUnreadable => 'Não é um ficheiro de atividade legível';
 
   @override
-  String get activityFileAlreadyImported => 'Already imported';
+  String get activityFileAlreadyImported => 'Já importado';
 
   @override
   String activityFileAlreadyFrom(String source) {
-    return 'Already in Fjelia from $source';
+    return 'Já está na Fjelia a partir de $source';
   }
 
   @override
@@ -6210,8 +6264,8 @@ class AppLocalizationsPt extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Import $count activities',
-      one: 'Import $count activity',
+      other: 'Importar $count atividades',
+      one: 'Importar $count atividade',
     );
     return '$_temp0';
   }
@@ -6221,556 +6275,560 @@ class AppLocalizationsPt extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count activities imported.',
-      one: '$count activity imported.',
+      other: '$count atividades importadas.',
+      one: '$count atividade importada.',
     );
     return '$_temp0';
   }
 
   @override
-  String get activityFileSource => 'File';
+  String get activityFileSource => 'Ficheiro';
 
   @override
-  String get dfaAlpha1Title => 'Aerobic threshold (DFA α1)';
+  String get dfaAlpha1Title => 'Limiar aeróbio (DFA α1)';
 
   @override
-  String get dfaHrvt1 => 'Aerobic threshold (HRVT1)';
+  String get dfaHrvt1 => 'Limiar aeróbio (HRVT1)';
 
   @override
-  String get dfaHrvt2 => 'Anaerobic threshold (HRVT2)';
+  String get dfaHrvt2 => 'Limiar anaeróbio (HRVT2)';
 
   @override
   String dfaEasyShare(String percent) {
-    return '$percent % of the session below your aerobic threshold (α1 ≥ 0.75).';
+    return '$percent % do treino abaixo do teu limiar aeróbio (α1 ≥ 0,75).';
   }
 
   @override
   String get dfaNoThreshold =>
-      'The session didn\'t cross a threshold clearly. A ramp, or a session that builds from easy to hard, gives an estimate.';
+      'O treino não ultrapassou claramente um limiar. Um teste em rampa, ou um treino que vai de leve a duro, dá uma estimativa.';
 
   @override
   String dfaBeats(int beats, String artifacts) {
-    return '$beats beats · $artifacts % artifacts';
+    return '$beats batimentos · $artifacts % de artefactos';
   }
 
   @override
   String get dfaArtifactsHigh =>
-      'Many artifacts: check that the chest strap sits firmly and the electrodes are moist.';
+      'Muitos artefactos: verifica se a cinta peitoral está bem ajustada e os elétrodos humedecidos.';
 
   @override
   String get dfaExplainer =>
-      'From the beat-to-beat data of a chest strap. α1 near 1 is easy, 0.75 marks the aerobic threshold, 0.5 the anaerobic one. An estimate, not a lab test.';
+      'A partir dos dados batimento a batimento de uma cinta peitoral. α1 perto de 1 é leve, 0,75 marca o limiar aeróbio e 0,5 o anaeróbio. Uma estimativa, não um teste de laboratório.';
 
   @override
   String get thresholdOrderNote =>
-      'Fjelia compares every source. It suggests the app\'s own tests first, then your watch, then DFA α1 over several sessions, then the Polar profile and formulas. Nothing changes until you apply it.';
+      'A Fjelia compara todas as fontes. Sugere primeiro os testes da própria app, depois o teu relógio, depois o DFA α1 de vários treinos e por fim o perfil Polar e as fórmulas. Nada muda até o aplicares.';
 
   @override
   String thresholdInUse(String value) {
-    return 'In use: $value';
+    return 'Em uso: $value';
   }
 
   @override
   String thresholdProposal(String value, String source) {
-    return 'Suggested: $value from $source';
+    return 'Sugerido: $value de $source';
   }
 
   @override
-  String get keepCurrent => 'Keep current';
+  String get keepCurrent => 'Manter atual';
 
   @override
-  String get lt2Cycling => 'LT2 · Cycling';
+  String get lt2Cycling => 'LT2 · Ciclismo';
 
   @override
-  String get thresholdSourceTt => '30-minute time trial';
+  String get thresholdSourceTt => 'Contrarrelógio de 30 minutos';
 
   @override
-  String get thresholdSourceDrift => 'HR drift test';
+  String get thresholdSourceDrift => 'Teste de deriva da FC';
 
   @override
   String thresholdSourceDfa(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'DFA α1, $count sessions',
-      one: 'DFA α1, $count session',
+      other: 'DFA α1, $count treinos',
+      one: 'DFA α1, $count treino',
     );
     return '$_temp0';
   }
 
   @override
-  String get thresholdSourceEftp => 'eFTP from rides';
+  String get thresholdSourceEftp => 'eFTP a partir de saídas';
 
   @override
-  String get thresholdSourcePolarProfile => 'Polar profile';
+  String get thresholdSourcePolarProfile => 'Perfil Polar';
 
   @override
   String get thresholdFormulaLt2 => 'LT2 − 30 bpm';
 
   @override
-  String get thresholdFormulaMaxHr => '77 % of max HR';
+  String get thresholdFormulaMaxHr => '77 % da FC máx.';
 
   @override
-  String get thresholdStale => 'older than 6 months';
+  String get thresholdStale => 'com mais de 6 meses';
 
   @override
   String get thresholdsCoachLocked =>
-      'Your coach manages your thresholds, so they can\'t be changed here.';
+      'O teu treinador gere os teus limiares, por isso não podem ser alterados aqui.';
 
   @override
-  String get mediaTitle => 'Photos & videos';
+  String get mediaTitle => 'Fotos e vídeos';
 
   @override
-  String get mediaAdd => 'Add';
+  String get mediaAdd => 'Adicionar';
 
   @override
-  String get mediaFromLibrary => 'Choose from library';
+  String get mediaFromLibrary => 'Escolher da biblioteca';
 
   @override
-  String get mediaTakePhoto => 'Take photo';
+  String get mediaTakePhoto => 'Tirar foto';
 
   @override
-  String get mediaRecordVideo => 'Record video';
+  String get mediaRecordVideo => 'Gravar vídeo';
 
   @override
   String mediaAdding(int done, int total) {
-    return 'Adding $done of $total…';
+    return 'A adicionar $done de $total…';
   }
 
   @override
-  String get mediaMoveEarlier => 'Move earlier';
+  String get mediaMoveEarlier => 'Mover para antes';
 
   @override
-  String get mediaMoveLater => 'Move later';
+  String get mediaMoveLater => 'Mover para depois';
 
   @override
-  String get mediaDeleteTitle => 'Delete from Fjelia?';
+  String get mediaDeleteTitle => 'Eliminar da Fjelia?';
 
   @override
   String get mediaDeleteMessage =>
-      'This removes the photo or video from Fjelia. The original in your photo library stays.';
+      'Isto remove a foto ou o vídeo da Fjelia. O original na tua biblioteca de fotos mantém-se.';
 
   @override
-  String get mediaAddFailed => 'Some files couldn\'t be added.';
+  String get mediaAddFailed => 'Não foi possível adicionar alguns ficheiros.';
 
   @override
-  String get mediaHint => 'Tap to view, hold to move or delete.';
+  String get mediaHint =>
+      'Toca para ver, mantém premido para mover ou eliminar.';
 
   @override
-  String get backupVideosTitle => 'Include videos?';
+  String get backupVideosTitle => 'Incluir vídeos?';
 
   @override
   String backupVideosMessage(String size) {
-    return 'Your videos take $size. Without them the backup is much smaller; photos are always included.';
+    return 'Os teus vídeos ocupam $size. Sem eles a cópia é muito mais pequena; as fotos são sempre incluídas.';
   }
 
   @override
-  String get backupWithVideos => 'With videos';
+  String get backupWithVideos => 'Com vídeos';
 
   @override
-  String get backupWithoutVideos => 'Without videos';
+  String get backupWithoutVideos => 'Sem vídeos';
 
   @override
-  String get mediaShareCard => 'Share as card';
+  String get mediaShareCard => 'Partilhar como cartão';
 
   @override
   String get mediaShareCardHint =>
-      'Drag the panel or the route to move them. Pinch and drag the photo to frame it; double-tap resets it.';
+      'Arrasta o painel ou o percurso para os mover. Afasta os dedos e arrasta a foto para a enquadrar; dois toques repõem-na.';
 
   @override
-  String get shareGymPhoto => 'Gym photo';
+  String get shareGymPhoto => 'Foto do ginásio';
 
   @override
-  String get shareWithoutPhoto => 'Without photo';
+  String get shareWithoutPhoto => 'Sem foto';
 
   @override
-  String get shareStyleGlass => 'Glass';
+  String get shareStyleGlass => 'Vidro';
 
   @override
-  String get shareStylePoster => 'Poster';
+  String get shareStylePoster => 'Cartaz';
 
   @override
-  String get shareStyleMinimal => 'Minimal';
+  String get shareStyleMinimal => 'Minimalista';
 
   @override
-  String get shareStyleNeon => 'Neon';
+  String get shareStyleNeon => 'Néon';
 
   @override
-  String get shareStyleSticker => 'Sticker';
+  String get shareStyleSticker => 'Autocolante';
 
   @override
-  String get shareStyleReceipt => 'Receipt';
+  String get shareStyleReceipt => 'Talão';
 
   @override
-  String get shareStyleKpop => 'K-Pop';
+  String get shareStyleKpop => 'K-pop';
 
   @override
-  String get shareStylePixel => 'Pixel';
+  String get shareStylePixel => 'Píxel';
 
   @override
-  String get shareStyleRobot => 'Robot';
+  String get shareStyleRobot => 'Robô';
 
   @override
-  String get shareStyleScifi => 'Sci-Fi';
+  String get shareStyleScifi => 'Ficção científica';
 
   @override
-  String get shareStyleCard => 'Trading card';
+  String get shareStyleCard => 'Cromo';
 
   @override
-  String get shareStyleComic => 'Comic';
+  String get shareStyleComic => 'Banda desenhada';
 
   @override
   String get shareStyleOutdoor => 'Outdoor';
 
   @override
-  String get shareStyleHolo => 'Holo card';
+  String get shareStyleHolo => 'Cartão holográfico';
 
   @override
-  String get shareStyleHoloFull => 'Full-art card';
+  String get shareStyleHoloFull => 'Cartão de arte integral';
 
   @override
   String nowcastRainSoon(int minutes) {
-    return 'Rain in about $minutes min';
+    return 'Chuva dentro de cerca de $minutes min';
   }
 
   @override
   String nowcastRainingStops(int minutes) {
-    return 'Raining now · dry in about $minutes min';
+    return 'A chover agora · seco dentro de cerca de $minutes min';
   }
 
   @override
   String nowcastRainingOn(int minutes) {
-    return 'Raining now, for at least $minutes min';
+    return 'A chover agora, durante pelo menos $minutes min';
   }
 
   @override
   String nowcastDry(int minutes) {
-    return 'Dry for the next $minutes min';
+    return 'Seco nos próximos $minutes min';
   }
 
   @override
-  String get sunAndMoon => 'Sun & moon';
+  String get sunAndMoon => 'Sol e lua';
 
   @override
-  String get moonNew => 'New moon';
+  String get moonNew => 'Lua nova';
 
   @override
-  String get moonWaxingCrescent => 'Waxing crescent';
+  String get moonWaxingCrescent => 'Lua crescente';
 
   @override
-  String get moonFirstQuarter => 'First quarter';
+  String get moonFirstQuarter => 'Quarto crescente';
 
   @override
-  String get moonWaxingGibbous => 'Waxing gibbous';
+  String get moonWaxingGibbous => 'Crescente gibosa';
 
   @override
-  String get moonFull => 'Full moon';
+  String get moonFull => 'Lua cheia';
 
   @override
-  String get moonWaningGibbous => 'Waning gibbous';
+  String get moonWaningGibbous => 'Minguante gibosa';
 
   @override
-  String get moonLastQuarter => 'Last quarter';
+  String get moonLastQuarter => 'Quarto minguante';
 
   @override
-  String get moonWaningCrescent => 'Waning crescent';
+  String get moonWaningCrescent => 'Lua minguante';
 
   @override
   String moonLit(int percent) {
-    return '$percent % lit';
+    return '$percent % iluminada';
   }
 
   @override
   String daylightLength(int hours, int minutes) {
-    return '$hours h $minutes min daylight';
+    return '$hours h $minutes min de luz do dia';
   }
 
   @override
   String h10Battery(int level) {
-    return 'Battery $level %';
+    return 'Bateria $level %';
   }
 
   @override
-  String get h10BatteryUnknown => 'Battery not read yet';
+  String get h10BatteryUnknown => 'Bateria ainda não lida';
 
   @override
   String h10BatteryChecked(String date) {
-    return 'Checked $date';
+    return 'Verificada $date';
   }
 
   @override
-  String get h10BatteryLowHint => 'Low: replace the CR2025 coin cell soon.';
+  String get h10BatteryLowHint => 'Fraca: substitui em breve a pilha CR2025.';
 
   @override
-  String get h10BatteryCheck => 'Check battery';
+  String get h10BatteryCheck => 'Verificar bateria';
 
   @override
   String get h10BatteryUnreachable =>
-      'The H10 didn\'t answer. Put it on (or wet the contacts) and try again.';
+      'O H10 não respondeu. Coloca-o (ou humedece os contactos) e tenta novamente.';
 
   @override
-  String get shareRaceCalendar => 'Share race calendar';
+  String get shareRaceCalendar => 'Partilhar calendário de provas';
 
   @override
-  String get raceSeasonTitle => 'My race season';
+  String get raceSeasonTitle => 'A minha época de provas';
 
   @override
-  String get raceShareStylePoster => 'Poster';
+  String get raceShareStylePoster => 'Cartaz';
 
   @override
-  String get raceShareStyleTickets => 'Tickets';
+  String get raceShareStyleTickets => 'Bilhetes';
 
   @override
-  String get raceShareStyleTimeline => 'Neon timeline';
+  String get raceShareStyleTimeline => 'Cronologia néon';
 
   @override
-  String get raceShareStyleMagazine => 'Magazine';
+  String get raceShareStyleMagazine => 'Revista';
 
   @override
-  String get raceShareShowTarget => 'Show target times';
+  String get raceShareShowTarget => 'Mostrar tempos-objetivo';
 
   @override
-  String get bpOptimal => 'OPTIMAL';
+  String get bpOptimal => 'IDEAL';
 
   @override
-  String get bpHighNormal => 'HIGH NORMAL';
+  String get bpHighNormal => 'NORMAL-ALTA';
 
   @override
-  String get bpLow => 'LOW';
+  String get bpLow => 'BAIXA';
 
   @override
   String get bpLowHint =>
-      'Low blood pressure: only a concern if you feel dizzy or light-headed.';
+      'Tensão baixa: só preocupa se te sentires tonto ou com a cabeça leve.';
 
   @override
-  String get waistCircumference => 'Waist circumference';
+  String get waistCircumference => 'Perímetro da cintura';
 
   @override
-  String get hipOptional => 'Hip (optional)';
+  String get hipOptional => 'Anca (opcional)';
 
   @override
-  String get waistToHeightRatio => 'Waist-to-height ratio';
+  String get waistToHeightRatio => 'Relação cintura-altura';
 
   @override
-  String get waistToHipRatio => 'Waist-to-hip ratio';
+  String get waistToHipRatio => 'Relação cintura-anca';
 
   @override
-  String get waistRiskLow => 'Very slim';
+  String get waistRiskLow => 'Muito magro';
 
   @override
-  String get waistRiskHealthy => 'Healthy';
+  String get waistRiskHealthy => 'Saudável';
 
   @override
-  String get waistRiskIncreased => 'Increased risk';
+  String get waistRiskIncreased => 'Risco aumentado';
 
   @override
-  String get waistRiskHigh => 'High risk';
+  String get waistRiskHigh => 'Risco alto';
 
   @override
   String get waistHowToMeasure =>
-      'Measure in the morning, standing, after breathing out: waist midway between the lowest rib and the top of the hip bone, hip at the widest point.';
+      'Mede de manhã, de pé, depois de expirar: a cintura a meio entre a última costela e o topo do osso da anca, a anca no ponto mais largo.';
 
   @override
-  String get waistNeedsHeight => 'Add your height in Settings → Profile.';
+  String get waistNeedsHeight =>
+      'Adiciona a tua altura em Definições → Perfil.';
 
   @override
-  String get waistNeedsHip => 'Measure your hip once for the WHR.';
+  String get waistNeedsHip => 'Mede a anca uma vez para o WHR.';
 
   @override
   String get waistSyncsProfile =>
-      'The newest measurement is also your waist in Settings.';
+      'A medição mais recente é também a tua cintura nas Definições.';
 
   @override
-  String get waistChange30d => '30 days';
+  String get waistChange30d => '30 dias';
 
   @override
-  String get waistChange90d => '90 days';
+  String get waistChange90d => '90 dias';
 
   @override
-  String get waistChange1y => '1 year';
+  String get waistChange1y => '1 ano';
 
   @override
-  String get waistDeleteText => 'This removes the selected waist measurement.';
+  String get waistDeleteText => 'Isto remove a medição da cintura selecionada.';
 
   @override
   String waistAndHip(String waist, String hip) {
-    return '$waist cm · hip $hip cm';
+    return '$waist cm · anca $hip cm';
   }
 
   @override
   String hipValue(String hip) {
-    return 'Hip $hip cm';
+    return 'Anca $hip cm';
   }
 
   @override
-  String get whtrTargetHint => 'Keep your waist under half your height.';
+  String get whtrTargetHint =>
+      'Mantém a cintura abaixo de metade da tua altura.';
 
   @override
-  String get noWaistYet => 'No waist measured yet.';
+  String get noWaistYet => 'Ainda não mediste a cintura.';
 
   @override
-  String get enterValidWaist => 'Enter a waist and hip between 20 and 300 cm.';
+  String get enterValidWaist =>
+      'Introduz uma cintura e uma anca entre 20 e 300 cm.';
 
   @override
-  String get waistFromProfile => 'From your profile, not dated';
+  String get waistFromProfile => 'Do teu perfil, sem data';
 
   @override
   String get phaseBase => 'BASE';
 
   @override
-  String get phaseBuild => 'BUILD';
+  String get phaseBuild => 'CONSTRUÇÃO';
 
   @override
-  String get phasePeak => 'PEAK';
+  String get phasePeak => 'PICO';
 
   @override
-  String get phaseTaper => 'TAPER';
+  String get phaseTaper => 'AFINAÇÃO';
 
   @override
-  String get phaseRecovery => 'RECOVERY';
+  String get phaseRecovery => 'RECUPERAÇÃO';
 
   @override
-  String get phaseRace => 'RACE';
+  String get phaseRace => 'PROVA';
 
   @override
-  String get sessionTypeKey => 'KEY';
+  String get sessionTypeKey => 'CHAVE';
 
   @override
-  String get sessionTypeLong => 'LONG';
+  String get sessionTypeLong => 'LONGO';
 
   @override
-  String get sessionTypeRecovery => 'RECOVERY';
+  String get sessionTypeRecovery => 'RECUPERAÇÃO';
 
   @override
-  String get sessionTypeAssessment => 'TEST';
+  String get sessionTypeAssessment => 'TESTE';
 
   @override
-  String get sessionTypeEndurance => 'ENDURANCE';
+  String get sessionTypeEndurance => 'RESISTÊNCIA';
 
   @override
-  String get sessionTypeStrength => 'STRENGTH';
+  String get sessionTypeStrength => 'FORÇA';
 
   @override
-  String get sessionTypeYoga => 'YOGA';
+  String get sessionTypeYoga => 'IOGA';
 
   @override
-  String get sessionStatusCompleted => 'COMPLETED';
+  String get sessionStatusCompleted => 'CONCLUÍDO';
 
   @override
-  String get sessionStatusAdapted => 'ADAPTED';
+  String get sessionStatusAdapted => 'ADAPTADO';
 
   @override
-  String get stepWarmUp => 'Warm-up';
+  String get stepWarmUp => 'Aquecimento';
 
   @override
-  String get stepCoolDown => 'Cool-down';
+  String get stepCoolDown => 'Retorno à calma';
 
   @override
-  String get stepRecovery => 'Recovery';
+  String get stepRecovery => 'Recuperação';
 
   @override
-  String get stepRest => 'Rest';
+  String get stepRest => 'Descanso';
 
   @override
-  String get stepInterval => 'Interval';
+  String get stepInterval => 'Intervalo';
 
   @override
-  String get stepWorkout => 'Workout';
+  String get stepWorkout => 'Treino';
 
   @override
   String stepRepeat(int n) {
-    return '$n× repeat';
+    return 'Repetir $n×';
   }
 
   @override
-  String get stepOpenEnded => 'Open-ended';
+  String get stepOpenEnded => 'Sem fim definido';
 
   @override
   String stepSeconds(int n) {
-    return '$n sec';
+    return '$n s';
   }
 
   @override
   String get objectiveOptionalVariety =>
-      'Optional variety you chose in the settings';
+      'Variedade opcional que escolheste nas definições';
 
   @override
-  String get objectiveStrengthSupport => 'Strength to support your training';
+  String get objectiveStrengthSupport => 'Força para apoiar o teu treino';
 
   @override
   String objectiveIntervals(String goal) {
-    return 'Intervals for $goal';
+    return 'Intervalos para $goal';
   }
 
   @override
   String objectiveSteady(String sport, String goal) {
-    return 'Steady quality $sport for $goal';
+    return 'Qualidade contínua de $sport para $goal';
   }
 
   @override
   String objectiveEasyRecovery(String sport, String goal) {
-    return 'Easy $sport: recovery around $goal';
+    return '$sport leve: recuperação em torno de $goal';
   }
 
   @override
   String objectiveEasyEndurance(String sport, String goal) {
-    return 'Easy endurance $sport for $goal';
+    return 'Resistência leve de $sport para $goal';
   }
 
   @override
   String objectiveLong(String sport, String goal) {
-    return 'Long $sport for $goal';
+    return '$sport longo para $goal';
   }
 
   @override
   String unmetWeekMinutes(int minutes, String sport, String goal) {
-    return 'The week holds $minutes min, too little for a long $sport for $goal.';
+    return 'A semana tem $minutes min, pouco para um $sport longo para $goal.';
   }
 
   @override
   String unmetWeekHours(String hours, String what) {
-    return 'The week holds $hours h, too little for $what.';
+    return 'A semana tem $hours h, pouco para $what.';
   }
 
   @override
   String unmetTrainingDays(String what) {
-    return 'Not enough training days for $what.';
+    return 'Dias de treino insuficientes para $what.';
   }
 
   @override
-  String get altMoveOneEvent => 'Move one of the events';
+  String get altMoveOneEvent => 'Mover um dos eventos';
 
   @override
-  String get altMarkOneCancelled => 'Mark one as cancelled';
+  String get altMarkOneCancelled => 'Marcar um como cancelado';
 
   @override
   String altMakePriorityB(String goal) {
-    return 'Make $goal priority B';
+    return 'Dar prioridade B a $goal';
   }
 
   @override
   String altSkipGoal(String goal) {
-    return 'Skip $goal';
+    return 'Saltar $goal';
   }
 
   @override
   String altTreatAsTraining(String goal) {
-    return 'Treat $goal as a training event';
+    return 'Tratar $goal como evento de treino';
   }
 
   @override
   String altControlledEffort(String goal) {
-    return 'Ride $goal as a controlled effort';
+    return 'Fazer $goal como esforço controlado';
   }
 
   @override
   String conflictSameDay(String a, String b) {
-    return '$a and $b are on the same day. Only one can be raced.';
+    return '$a e $b são no mesmo dia. Só é possível competir num.';
   }
 
   @override
   String conflictBothPriorityA(String a, String b, int gap, int more) {
-    return '$a and $b are both priority A, $gap days apart. Recovery after the first and sharpening for the second need $more more days than that.';
+    return '$a e $b são ambos prioridade A, com $gap dias de intervalo. A recuperação depois do primeiro e a afinação para o segundo precisam de mais $more dias do que isso.';
   }
 
   @override
@@ -6781,32 +6839,32 @@ class AppLocalizationsPt extends AppLocalizations {
     int overlap,
     String skip,
   ) {
-    return '$a and $b are $gap days apart and overlap by $overlap days. $skip is marked flexible: dropping it would free the weeks before the other event.';
+    return '$a e $b estão a $gap dias de distância e sobrepõem-se $overlap dias. $skip está marcado como flexível: retirá-lo libertaria as semanas antes do outro evento.';
   }
 
   @override
   String conflictRecoveryOverlap(String a, String b, int gap, int overlap) {
-    return '$a and $b are $gap days apart: recovery after the first overlaps sharpening for the second by $overlap days. The lower priority preparation is limited to protect the other.';
+    return '$a e $b estão a $gap dias de distância: a recuperação depois do primeiro sobrepõe-se $overlap dias à afinação para o segundo. A preparação de menor prioridade é limitada para proteger a outra.';
   }
 
   @override
   String conflictTightSpacing(String a, String b, int gap, int spare) {
-    return '$a and $b are $gap days apart. Recovery and sharpening fit with $spare days to spare, so any setback leaves no room.';
+    return '$a e $b estão a $gap dias de distância. A recuperação e a afinação cabem com $spare dias de margem, por isso qualquer contratempo não deixa espaço.';
   }
 
   @override
   String seasonShortened(int n, int of) {
-    return 'In $n of $of weeks the weekly time cannot hold the full long sessions of every goal, so they are shortened together.';
+    return 'Em $n de $of semanas o tempo semanal não comporta os treinos longos completos de todos os objetivos, por isso são encurtados em conjunto.';
   }
 
   @override
   String seasonAlternating(int n) {
-    return 'In $n weeks the week cannot hold every long session; the sports take turns.';
+    return 'Em $n semanas a semana não comporta todos os treinos longos; os desportos alternam.';
   }
 
   @override
   String seasonLongAway(int n) {
-    return 'In $n weeks a long session of over two and a half hours sits away from its usual day, because of your rest days and the other sessions.';
+    return 'Em $n semanas um treino longo de mais de duas horas e meia fica fora do dia habitual, por causa dos teus dias de descanso e dos outros treinos.';
   }
 
   @override
@@ -6815,8 +6873,9 @@ class AppLocalizationsPt extends AppLocalizations {
       n,
       locale: localeName,
       other:
-          '$n sessions you moved sit on an event day or the rest day before it. The plan keeps them where you put them.',
-      one: '1 session you moved sits on an event day or the rest day before it. The plan keeps it where you put it.',
+          '$n treinos que moveste ficam num dia de evento ou no dia de descanso anterior. O plano mantém-nos onde os puseste.',
+      one:
+          '$n treino que moveste fica num dia de evento ou no dia de descanso anterior. O plano mantém-no onde o puseste.',
     );
     return '$_temp0';
   }
@@ -6827,8 +6886,9 @@ class AppLocalizationsPt extends AppLocalizations {
       n,
       locale: localeName,
       other:
-          '$n sessions were left out because the workouts chosen for them ran longer than the time left in the week.',
-      one: '1 session was left out because the workouts chosen for it ran longer than the time left in the week.',
+          '$n treinos ficaram de fora porque os exercícios escolhidos para eles eram mais longos do que o tempo que restava na semana.',
+      one:
+          '$n treino ficou de fora porque os exercícios escolhidos para ele eram mais longos do que o tempo que restava na semana.',
     );
     return '$_temp0';
   }
@@ -6839,222 +6899,223 @@ class AppLocalizationsPt extends AppLocalizations {
       n,
       locale: localeName,
       other:
-          '$n hard sessions you moved sit in the easy days after an event. The plan keeps them where you put them.',
-      one: '1 hard session you moved sits in the easy days after an event. The plan keeps it where you put it.',
+          '$n treinos duros que moveste ficam nos dias leves depois de um evento. O plano mantém-nos onde os puseste.',
+      one:
+          '$n treino duro que moveste fica nos dias leves depois de um evento. O plano mantém-no onde o puseste.',
     );
     return '$_temp0';
   }
 
   @override
   String get seasonEventWeeks =>
-      'Event weeks count the event as training, so the rest of the week is lighter.';
+      'Nas semanas com evento, o evento conta como treino, por isso o resto da semana é mais leve.';
 
   @override
   String seasonUnmet(int n, String detail) {
-    return 'In $n weeks the training days do not hold every protected session: $detail';
+    return 'Em $n semanas os dias de treino não comportam todos os treinos protegidos: $detail';
   }
 
   @override
   String seasonNoHistory(String sport, String priority) {
-    return 'There is no recent $sport in your history, so the plan for the $priority goal is provisional.';
+    return 'Não há $sport recente no teu histórico, por isso o plano para o objetivo $priority é provisório.';
   }
 
   @override
-  String get zoneRecovery => 'Recovery';
+  String get zoneRecovery => 'Recuperação';
 
   @override
   String workoutSentKeptInFjelia(String provider, String items) {
-    return 'Sent to $provider. Kept in Fjelia only: $items.';
+    return 'Enviado para $provider. Mantido só na Fjelia: $items.';
   }
 
   @override
   String paceGuideRange(String low, String high) {
-    return 'Pace guide $low to $high';
+    return 'Guia de ritmo $low a $high';
   }
 
   @override
-  String get paceGuideFromGoal => ', estimated from your goal';
+  String get paceGuideFromGoal => ', estimado a partir do teu objetivo';
 
   @override
   String paceGuideGoalFlat(String pace) {
-    return ' · goal pace on the flat $pace';
+    return ' · ritmo-objetivo em plano $pace';
   }
 
   @override
-  String get paceGuideHeartRateDecides => 'Heart rate decides.';
+  String get paceGuideHeartRateDecides => 'A FC decide.';
 
   @override
-  String get moveKeyRestDay => 'rest day';
+  String get moveKeyRestDay => 'dia de descanso';
 
   @override
-  String get moveKeyEvent => 'event';
+  String get moveKeyEvent => 'evento';
 
   @override
-  String get moveKeyEasyOnly => 'easy only';
+  String get moveKeyEasyOnly => 'só leve';
 
   @override
-  String get moveKeyHasSession => 'has a session';
+  String get moveKeyHasSession => 'tem um treino';
 
   @override
-  String get calendarCompleted => 'Completed';
+  String get calendarCompleted => 'Concluído';
 
   @override
-  String get calendarPlanned => 'Planned';
+  String get calendarPlanned => 'Planeado';
 
   @override
-  String get recentlyDeleted => 'Recently deleted';
+  String get recentlyDeleted => 'Eliminados recentemente';
 
   @override
   String get recentlyDeletedExplain =>
-      'Deleted activities stay deleted, also when your devices sync again. Restore one to bring it back; its source then sends route and curves again where it still has them.';
+      'As atividades eliminadas ficam eliminadas, mesmo quando os teus dispositivos voltam a sincronizar. Restaura uma para a recuperares; a fonte volta a enviar o percurso e as curvas, se ainda os tiver.';
 
   @override
-  String get noDeletedActivities => 'No deleted activities.';
+  String get noDeletedActivities => 'Sem atividades eliminadas.';
 
   @override
   String activityDeleted(String name) {
-    return '$name deleted';
+    return '$name eliminada';
   }
 
   @override
   String activityRestored(String name) {
-    return '$name restored';
+    return '$name restaurada';
   }
 
   @override
   String activityRestoredSummaryOnly(String name) {
-    return '$name restored with its totals; its source no longer sends route and curves.';
+    return '$name restaurada com os totais; a fonte já não envia percurso nem curvas.';
   }
 
   @override
   String deletedOn(String date) {
-    return 'deleted $date';
+    return 'eliminada $date';
   }
 
   @override
-  String get restore => 'Restore';
+  String get restore => 'Restaurar';
 
   @override
-  String get coachWhyThisToday => 'Why this workout today?';
+  String get coachWhyThisToday => 'Porquê este treino hoje?';
 
   @override
-  String get coachHowDidItGo => 'How did this session go?';
+  String get coachHowDidItGo => 'Como correu este treino?';
 
   @override
-  String get coachWhyRestDay => 'Why is this a rest day?';
+  String get coachWhyRestDay => 'Porque é que este é um dia de descanso?';
 
   @override
-  String get coachWhatInstead => 'What should I do instead?';
+  String get coachWhatInstead => 'O que devo fazer em vez disso?';
 
   @override
-  String get newChat => 'New chat';
+  String get newChat => 'Novo chat';
 
   @override
   String weekOfPlanned(String duration) {
-    return 'of $duration planned';
+    return 'de $duration planeados';
   }
 
   @override
-  String get weekDoneNothingPlanned => 'completed · no workouts planned';
+  String get weekDoneNothingPlanned => 'concluído · sem treinos planeados';
 
   @override
   String sessionDropped(String reason, String duration) {
-    return '$reason · $duration dropped';
+    return '$reason · $duration retirados';
   }
 
   @override
-  String get importTitle => 'Import';
+  String get importTitle => 'Importar';
 
   @override
-  String get stravaArchive => 'Strava archive';
+  String get stravaArchive => 'Arquivo Strava';
 
   @override
-  String get stravaArchiveZip => 'Strava archive (ZIP)';
+  String get stravaArchiveZip => 'Arquivo Strava (ZIP)';
 
   @override
   String get stravaArchiveSubtitle =>
-      'Your whole Strava history with routes and photos';
+      'Todo o teu histórico da Strava com percursos e fotos';
 
   @override
   String get stravaIntro =>
-      'Bring your whole Strava history to Fjelia: activities with route, heart rate and power, and their photos.';
+      'Traz todo o teu histórico da Strava para a Fjelia: atividades com percurso, FC e potência, e as respetivas fotos.';
 
   @override
   String get stravaHowTo =>
-      'On strava.com: Settings → My Account → Download or delete your account → Request your archive. Strava emails you a ZIP; choose it here as it is, without unpacking it.';
+      'Em strava.com: Definições → A minha conta → Transferir ou eliminar a tua conta → Pedir o teu arquivo. A Strava envia-te um ZIP por e-mail; escolhe-o aqui tal como está, sem o descomprimir.';
 
   @override
-  String get stravaChooseZip => 'Choose ZIP';
+  String get stravaChooseZip => 'Escolher ZIP';
 
   @override
-  String get stravaReading => 'Reading the archive…';
+  String get stravaReading => 'A ler o arquivo…';
 
   @override
   String get stravaNotArchive =>
-      'This ZIP is not a Strava account archive: activities.csv is missing.';
+      'Este ZIP não é um arquivo de conta Strava: falta activities.csv.';
 
   @override
   String stravaFound(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count activities found',
-      one: '1 activity found',
+      other: '$count atividades encontradas',
+      one: '$count atividade encontrada',
     );
     return '$_temp0';
   }
 
   @override
   String stravaWithFiles(int count) {
-    return '$count with a recording (route and curves)';
+    return '$count com gravação (percurso e curvas)';
   }
 
   @override
   String stravaPhotos(int photos, int videos) {
-    return '$photos photos, $videos videos';
+    return '$photos fotos, $videos vídeos';
   }
 
   @override
   String stravaAlready(int count) {
-    return '$count duplicates, already in Fjelia or twice in Strava: only their missing photos are added';
+    return '$count duplicados, já na Fjelia ou duas vezes na Strava: só são adicionadas as fotos em falta';
   }
 
   @override
   String stravaDeletedSkip(int count) {
-    return '$count deleted earlier, skipped';
+    return '$count eliminados antes, ignorados';
   }
 
   @override
   String stravaNew(int count) {
-    return '$count new';
+    return '$count novos';
   }
 
   @override
   String stravaStorage(int mb) {
-    return 'about $mb MB for photos and videos';
+    return 'cerca de $mb MB para fotos e vídeos';
   }
 
   @override
   String get stravaPrivacy =>
-      'Everything is read on this device. Nothing is uploaded, and no Strava login is needed.';
+      'Tudo é lido neste dispositivo. Nada é carregado e não é preciso iniciar sessão na Strava.';
 
   @override
   String stravaImportButton(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Import $count activities',
-      one: 'Import 1 activity',
+      other: 'Importar $count atividades',
+      one: 'Importar $count atividade',
     );
     return '$_temp0';
   }
 
   @override
-  String get stravaImporting => 'Importing Strava archive';
+  String get stravaImporting => 'A importar arquivo Strava';
 
   @override
   String stravaProgressActivities(String done, String total) {
-    return 'Activities: $done / $total';
+    return 'Atividades: $done / $total';
   }
 
   @override
@@ -7062,61 +7123,61 @@ class AppLocalizationsPt extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count activities imported',
-      one: '1 activity imported',
+      other: '$count atividades importadas',
+      one: '$count atividade importada',
     );
     return '$_temp0';
   }
 
   @override
   String stravaProgressPhotos(int count) {
-    return 'Photos: $count imported';
+    return 'Fotos: $count importadas';
   }
 
   @override
   String stravaProgressDuplicates(int count) {
-    return 'Duplicates: $count skipped';
+    return 'Duplicados: $count ignorados';
   }
 
   @override
   String stravaProgressDeleted(int count) {
-    return 'Deleted earlier: $count skipped';
+    return 'Eliminados antes: $count ignorados';
   }
 
   @override
   String stravaProgressErrors(int count) {
-    return 'Errors: $count';
+    return 'Erros: $count';
   }
 
   @override
   String get stravaKeepOpen =>
-      'You can use the app meanwhile. Keep Fjelia open until the import is finished.';
+      'Podes usar a app entretanto. Mantém a Fjelia aberta até a importação terminar.';
 
   @override
-  String get stravaComplete => 'Strava import complete';
+  String get stravaComplete => 'Importação da Strava concluída';
 
   @override
-  String get stravaPartial => 'Strava import incomplete';
+  String get stravaPartial => 'Importação da Strava incompleta';
 
   @override
-  String get stravaCancelled => 'Strava import cancelled';
+  String get stravaCancelled => 'Importação da Strava cancelada';
 
   @override
-  String get stravaShowErrors => 'Show errors';
+  String get stravaShowErrors => 'Mostrar erros';
 
   @override
   String get stravaAgainHint =>
-      'Importing the same archive again adds only what is still missing.';
+      'Importar o mesmo arquivo novamente só acrescenta o que ainda falta.';
 
   @override
-  String get renameActivity => 'Rename activity';
+  String get renameActivity => 'Mudar o nome da atividade';
 
   @override
-  String get activityTitleLabel => 'Title';
+  String get activityTitleLabel => 'Título';
 
   @override
   String get activityTitleKept =>
-      'Your title stays when the activity syncs again. It only changes in Fjelia, not on the platform it came from.';
+      'O teu título mantém-se quando a atividade voltar a sincronizar. Só muda na Fjelia, não na plataforma de origem.';
 
   @override
   String originalTitle(String name) {
@@ -7124,638 +7185,639 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get useOriginalTitle => 'Use original title';
+  String get useOriginalTitle => 'Usar título original';
 
   @override
-  String get loadOlderActivities => 'Load older activities';
+  String get loadOlderActivities => 'Carregar atividades mais antigas';
 
   @override
-  String get noOlderActivities => 'No older activities';
+  String get noOlderActivities => 'Sem atividades mais antigas';
 
   @override
-  String get maxSpeed => 'Max speed';
+  String get maxSpeed => 'Velocidade máx.';
 
   @override
-  String get caloriesLabel => 'Calories';
+  String get caloriesLabel => 'Calorias';
 
   @override
-  String get activityDescription => 'Description';
+  String get activityDescription => 'Descrição';
 
   @override
-  String get nightCurves => 'Night curves';
+  String get nightCurves => 'Curvas noturnas';
 
   @override
   String get noPhaseTimeline =>
-      'This watch does not provide when each sleep stage happened, only the totals above. These are the HRV and stress it measured through the night.';
+      'Este relógio não indica quando ocorreu cada fase do sono, apenas os totais acima. Estas são a HRV e o stress que mediu durante a noite.';
 
   @override
   String get stagesEstimated =>
-      'Estimated by Fjelia from the HRV and stress your COROS watch measured overnight. The stage totals are COROS\'s own; when each stage happened is an approximation.';
+      'Estimado pela Fjelia a partir da HRV e do stress que o teu relógio COROS mediu durante a noite. Os totais por fase são os da COROS; o momento de cada fase é uma aproximação.';
 
   @override
   String get nightCurvesBasis =>
-      'The HRV and stress measured overnight. The stage estimate above is built from them.';
+      'A HRV e o stress medidos durante a noite. A estimativa das fases acima baseia-se neles.';
 
   @override
   String get swimShort =>
-      'Water is generally sufficient. No energy gels needed: a normal meal before and after covers this swim.';
+      'A água costuma bastar. Não são precisos géis: uma refeição normal antes e depois cobre esta natação.';
 
   @override
   String get swimPoolLong =>
-      'Consider a carbohydrate-containing drink during longer breaks between sets, particularly if the session is intensive. Gels are not needed in the pool.';
+      'Considera uma bebida com hidratos nas pausas mais longas entre séries, sobretudo se o treino for intenso. Na piscina não são precisos géis.';
 
   @override
   String get swimOpenFeeds =>
-      'Plan carbohydrate and fluid intake around the available feeding opportunities (boat, kayak, shore). Avoid relying on nutrition you cannot reach safely during the swim.';
+      'Planeia hidratos e líquidos em torno das oportunidades de abastecimento (barco, caiaque, margem). Não contes com alimentação que não consigas alcançar em segurança durante a natação.';
 
   @override
   String get swimOpenUnsupported =>
-      'No feeds during an unsupported swim: fuel well beforehand, keep the swim within what that covers, and refuel right after.';
+      'Sem abastecimentos numa natação sem apoio: come bem antes, mantém a natação dentro do que isso cobre e reabastece logo a seguir.';
 
   @override
   String get swimOpenFeedsUnknown =>
-      'Open water: set whether feeds are possible (supported or unsupported) under Edit strategy.';
+      'Águas abertas: indica em Editar estratégia se é possível abastecer (com ou sem apoio).';
 
   @override
   String get swimFluidPool =>
-      'Hydration matters in the pool too: you sweat less in water than on land, but not nothing. Keep a labelled bottle on the deck and drink in set breaks.';
+      'A hidratação também conta na piscina: na água transpiras menos do que em terra, mas não nada. Deixa uma garrafa identificada no cais e bebe nas pausas.';
 
   @override
   String get swimFluidOpen =>
-      'Air forecasts do not give the water temperature, and cold water dulls thirst: drink before the start, at every feed and right after.';
+      'As previsões do ar não dão a temperatura da água, e a água fria tira a sede: bebe antes da partida, em cada abastecimento e logo a seguir.';
 
   @override
   String get swimBeforeAfter =>
-      'Before: a familiar carbohydrate meal 1–4 h ahead. After: about 1 g carbohydrate per kg with 20–25 g protein; if you weighed yourself, drink about 1.5 l per kg lost, with some sodium.';
+      'Antes: uma refeição de hidratos habitual 1–4 h antes. Depois: cerca de 1 g de hidratos por kg com 20–25 g de proteína; se te pesaste, bebe cerca de 1,5 l por kg perdido, com algum sódio.';
 
   @override
   String get swimNoDuration =>
-      'No planned duration: water at the pool edge is enough for most swims; add a carbohydrate drink only for swims over 90 minutes.';
+      'Sem duração planeada: água à beira da piscina basta para a maioria das natações; junta uma bebida com hidratos só em natações com mais de 90 minutos.';
 
   @override
   String swimCarryPool(String bottles, String bottleMl, String drinkCarbs) {
-    return 'No gels. Bottle at the pool edge: $bottles × $bottleMl ml; $drinkCarbs g carbohydrate comes from the drink mix.';
+    return 'Sem géis. Garrafa à beira da piscina: $bottles × $bottleMl ml; $drinkCarbs g de hidratos vêm da bebida.';
   }
 
   @override
   String swimCarryOpen(String bottles, String bottleMl, String drinkCarbs) {
-    return 'No gels while swimming. At feeds: $bottles × $bottleMl ml; $drinkCarbs g carbohydrate comes from the drink mix.';
+    return 'Sem géis durante a natação. Nos abastecimentos: $bottles × $bottleMl ml; $drinkCarbs g de hidratos vêm da bebida.';
   }
 
   @override
   String swimPerBreak(String carbs, String fluid) {
-    return 'Per 20 minutes, at a break or feed: about $carbs g carbs and $fluid ml.';
+    return 'Por cada 20 minutos, numa pausa ou abastecimento: cerca de $carbs g de hidratos e $fluid ml.';
   }
 
   @override
-  String get feedsLabel => 'Feeds (open water)';
+  String get feedsLabel => 'Abastecimentos (águas abertas)';
 
   @override
-  String get feedsSupported => 'Supported (boat, kayak, shore)';
+  String get feedsSupported => 'Com apoio (barco, caiaque, margem)';
 
   @override
-  String get feedsUnsupported => 'Unsupported';
+  String get feedsUnsupported => 'Sem apoio';
 
   @override
-  String get feedsUnknown => 'Not known';
+  String get feedsUnknown => 'Desconhecido';
 
   @override
   String get ecgTitle => 'ECG';
 
   @override
-  String get ecgChooseDevice => 'Choose Polar H10';
+  String get ecgChooseDevice => 'Escolher Polar H10';
 
   @override
-  String get ecgStart => 'Record ECG';
+  String get ecgStart => 'Gravar ECG';
 
   @override
-  String get ecgStopSave => 'Stop and save';
+  String get ecgStopSave => 'Parar e guardar';
 
   @override
-  String get ecgImport => 'Import ECG file';
+  String get ecgImport => 'Importar ficheiro de ECG';
 
   @override
-  String get ecgHistory => 'ECG history';
+  String get ecgHistory => 'Histórico de ECG';
 
   @override
-  String get ecgWaveform => 'Waveform';
+  String get ecgWaveform => 'Traçado';
 
   @override
-  String get ecgReport => 'Report';
+  String get ecgReport => 'Relatório';
 
   @override
-  String get ecgExportCsv => 'Export waveform (CSV)';
+  String get ecgExportCsv => 'Exportar traçado (CSV)';
 
   @override
-  String get ecgExportMetadata => 'Export ECG metadata';
+  String get ecgExportMetadata => 'Exportar metadados do ECG';
 
   @override
-  String get ecgExportOriginal => 'Share original file';
+  String get ecgExportOriginal => 'Partilhar ficheiro original';
 
   @override
-  String get ecgRecording => 'Recording ECG';
+  String get ecgRecording => 'A gravar ECG';
 
   @override
-  String get ecgRecordingDate => 'Recording date and time';
+  String get ecgRecordingDate => 'Data e hora da gravação';
 
   @override
-  String get ecgLinkedWorkout => 'Linked workout';
+  String get ecgLinkedWorkout => 'Treino associado';
 
   @override
-  String get ecgIndependent => 'No linked workout';
+  String get ecgIndependent => 'Sem treino associado';
 
   @override
-  String get ecgNoRecordings => 'No ECG recordings yet.';
+  String get ecgNoRecordings => 'Ainda não há gravações de ECG.';
 
   @override
   String ecgSamples(int count) {
-    return '$count samples';
+    return '$count amostras';
   }
 
   @override
   String ecgSignalGaps(int count) {
-    return '$count signal gaps';
+    return '$count falhas de sinal';
   }
 
   @override
   String get ecgDeleteConfirm =>
-      'Permanently delete this recording and its original file?';
+      'Eliminar definitivamente esta gravação e o ficheiro original?';
 
   @override
   String get ecgDescription =>
-      'Record with Polar H10, import CSV waveforms or keep PDF reports.';
+      'Grava com o Polar H10, importa traçados CSV ou guarda relatórios PDF.';
 
   @override
   String get ecgPrivacy =>
-      'Stored on this device and included in your backups. Raw signals are not sent to the coach.';
+      'Guardado neste dispositivo e incluído nas cópias de segurança. Os sinais em bruto não são enviados ao treinador.';
 
   @override
   String get ecgLimitations =>
-      'For personal recording and review. ECG-derived HRV and signal quality are not validated here; no diagnosis or recovery score is calculated.';
+      'Para gravação e revisão pessoais. A HRV derivada do ECG e a qualidade do sinal não são validadas aqui; não é calculado nenhum diagnóstico nem pontuação de recuperação.';
 
   @override
   String get ecgImportLimitations =>
-      'Garmin and Apple Watch PDF exports are reports. Waveforms require CSV columns time_seconds (or time_ms) and ecg_uv (or ecg_mv).';
+      'As exportações PDF da Garmin e do Apple Watch são relatórios. Os traçados exigem as colunas CSV time_seconds (ou time_ms) e ecg_uv (ou ecg_mv).';
 
   @override
   String get ecgReportOnly =>
-      'Report only. No raw waveform samples are available. Share the original file to view the report.';
+      'Apenas relatório. Não há amostras do traçado em bruto. Partilha o ficheiro original para ver o relatório.';
 
   @override
-  String get indoorTitle => 'Indoor Training';
+  String get indoorTitle => 'Treino indoor';
 
   @override
-  String get indoorEquipment => 'Fitness equipment';
+  String get indoorEquipment => 'Equipamento de fitness';
 
   @override
-  String get indoorChooseEquipment => 'Choose equipment';
+  String get indoorChooseEquipment => 'Escolher equipamento';
 
   @override
-  String get indoorChooseHeartRate => 'Choose heart-rate sensor';
+  String get indoorChooseHeartRate => 'Escolher sensor de FC';
 
   @override
-  String get indoorStart => 'Start recording';
+  String get indoorStart => 'Iniciar gravação';
 
   @override
-  String get indoorPause => 'Pause recording';
+  String get indoorPause => 'Pausar gravação';
 
   @override
-  String get indoorFinish => 'Finish and save';
+  String get indoorFinish => 'Terminar e guardar';
 
   @override
-  String get indoorSaved => 'Saved to activity history';
+  String get indoorSaved => 'Guardado no histórico de atividades';
 
   @override
-  String get indoorExportFit => 'Share FIT activity';
+  String get indoorExportFit => 'Partilhar atividade FIT';
 
   @override
-  String get indoorUnfinished => 'Unfinished recordings';
+  String get indoorUnfinished => 'Gravações por terminar';
 
   @override
-  String get indoorReviewResume => 'Review or resume';
+  String get indoorReviewResume => 'Rever ou retomar';
 
   @override
-  String get indoorDiscard => 'Discard recording';
+  String get indoorDiscard => 'Descartar gravação';
 
   @override
   String get indoorDiscardConfirm =>
-      'Permanently discard this unfinished recording?';
+      'Descartar definitivamente esta gravação por terminar?';
 
   @override
-  String get indoorExternalHeartRate => 'Use external heart-rate sensor';
+  String get indoorExternalHeartRate => 'Usar sensor de FC externo';
 
   @override
-  String get indoorEquipmentHeartRate =>
-      'Off: use heart rate from the equipment';
+  String get indoorEquipmentHeartRate => 'Desligado: usar a FC do equipamento';
 
   @override
-  String get indoorCurrentInterval => 'Current interval';
+  String get indoorCurrentInterval => 'Intervalo atual';
 
   @override
-  String get indoorNextInterval => 'Next interval';
+  String get indoorNextInterval => 'Intervalo seguinte';
 
   @override
-  String get indoorPlanComplete => 'Planned intervals complete';
+  String get indoorPlanComplete => 'Intervalos planeados concluídos';
 
   @override
-  String get indoorAuthorizeControl => 'Allow equipment control';
+  String get indoorAuthorizeControl => 'Permitir controlo do equipamento';
 
   @override
-  String get indoorManualOverride => 'Use manual control';
+  String get indoorManualOverride => 'Usar controlo manual';
 
   @override
-  String get indoorAutoPower => 'Follow interval power automatically';
+  String get indoorAutoPower =>
+      'Seguir automaticamente a potência do intervalo';
 
   @override
-  String get indoorApplyTarget => 'Apply target';
+  String get indoorApplyTarget => 'Aplicar objetivo';
 
   @override
   String get indoorDescription =>
-      'Connect Bluetooth FTMS equipment and record an indoor workout.';
+      'Liga equipamento Bluetooth FTMS e grava um treino indoor.';
 
   @override
   String get indoorKeepOpen =>
-      'Recording continues when you switch apps or lock the screen. Pause stops recording metrics; use the equipment controls to pause the machine.';
+      'A gravação continua quando mudas de app ou bloqueias o ecrã. A pausa para o registo de métricas; usa os comandos do equipamento para pausar a máquina.';
 
   @override
   String get indoorFitHint =>
-      'Save the FIT file or open it in a compatible training app using the share sheet.';
+      'Guarda o ficheiro FIT ou abre-o numa app de treino compatível através do menu de partilha.';
 
   @override
   String get indoorNoEquipment =>
-      'No FTMS equipment found. Wake the machine and enable its Bluetooth connection.';
+      'Nenhum equipamento FTMS encontrado. Ativa a máquina e liga o Bluetooth dela.';
 
   @override
   String get indoorControlPrompt =>
-      'Allow Fjelia to change targets for this session? Stay near the machine controls. You can switch to manual control at any time.';
+      'Permitir que a Fjelia altere os objetivos neste treino? Fica perto dos comandos da máquina. Podes mudar para controlo manual a qualquer momento.';
 
   @override
   String get indoorTreadmillSafety =>
-      'Attach the safety key and stay near the controls. Confirm only small changes, up to 0.5 km/h or 1% incline. Use the machine controls for larger changes.';
+      'Coloca a chave de segurança e fica perto dos comandos. Confirma só pequenas alterações, até 0,5 km/h ou 1% de inclinação. Usa os comandos da máquina para alterações maiores.';
 
   @override
-  String get recordingTime => 'Recording time';
+  String get recordingTime => 'Tempo de gravação';
 
   @override
-  String get recordingSpeed => 'Speed';
+  String get recordingSpeed => 'Velocidade';
 
   @override
-  String get recordingPower => 'Power';
+  String get recordingPower => 'Potência';
 
   @override
-  String get recordingCadence => 'Cadence / stroke rate';
+  String get recordingCadence => 'Cadência / ritmo de remada';
 
   @override
-  String get recordingIncline => 'Incline';
+  String get recordingIncline => 'Inclinação';
 
   @override
-  String get recordingResistance => 'Resistance';
+  String get recordingResistance => 'Resistência';
 
   @override
-  String get recordingSource => 'Source';
+  String get recordingSource => 'Fonte';
 
   @override
-  String get recordingNext => 'Next step';
+  String get recordingNext => 'Passo seguinte';
 
   @override
-  String get recordingConnecting => 'Connecting';
+  String get recordingConnecting => 'A ligar';
 
   @override
-  String get recordingReconnecting => 'Reconnecting';
+  String get recordingReconnecting => 'A voltar a ligar';
 
   @override
-  String get recordingInterrupted => 'Interrupted';
+  String get recordingInterrupted => 'Interrompido';
 
   @override
-  String get recordingPaused => 'Paused';
+  String get recordingPaused => 'Em pausa';
 
   @override
   String get indoorMatrixReadOnly =>
-      'Matrix treadmill recording only. Use the console for speed and incline; remote control has not been verified for this model.';
+      'Apenas gravação da passadeira Matrix. Usa a consola para a velocidade e a inclinação; o controlo remoto não foi verificado neste modelo.';
 
   @override
   String ecgCoverage(String value) {
-    return '$value% sample coverage';
+    return '$value% de cobertura de amostras';
   }
 
   @override
   String get recordingBeforeRestore =>
-      'Finish the device recording before restoring a backup.';
+      'Termina a gravação do dispositivo antes de restaurar uma cópia de segurança.';
 
   @override
-  String get gymTitle => 'Gym treadmills';
+  String get gymTitle => 'Passadeiras de ginásio';
 
   @override
   String get gymDescription =>
-      'Record with your phone, import xID workouts, or scan the console summary.';
+      'Grava com o telemóvel, importa treinos xID ou digitaliza o resumo da consola.';
 
   @override
-  String get gymDirectConnection => 'Direct connection';
+  String get gymDirectConnection => 'Ligação direta';
 
   @override
   String get gymConsoleSupport =>
-      'Connection options depend on the console. An older Matrix console may support xID instead of live Bluetooth data.';
+      'As opções de ligação dependem da consola. Uma consola Matrix mais antiga pode suportar xID em vez de dados Bluetooth em direto.';
 
   @override
-  String get gymFindEquipment => 'Find gym equipment';
+  String get gymFindEquipment => 'Procurar equipamento do ginásio';
 
   @override
   String get gymLiveAvailable =>
-      'This console can send workout data directly to Fjelia.';
+      'Esta consola pode enviar dados de treino diretamente para a Fjelia.';
 
   @override
   String get gymLiveUnavailable =>
-      'No supported live workout data found. Import xID workouts or save a console summary.';
+      'Não foram encontrados dados de treino em direto suportados. Importa treinos xID ou guarda um resumo da consola.';
 
   @override
   String get gymSpeedOnly =>
-      'Speed and cadence are available. This connection does not provide incline or remote control.';
+      'Estão disponíveis a velocidade e a cadência. Esta ligação não fornece inclinação nem controlo remoto.';
 
   @override
-  String get gymUseMachine => 'Use this machine';
+  String get gymUseMachine => 'Usar esta máquina';
 
   @override
-  String get gymConnectionReport => 'Connection report';
+  String get gymConnectionReport => 'Relatório de ligação';
 
   @override
-  String get gymShareReport => 'Share connection report';
+  String get gymShareReport => 'Partilhar relatório de ligação';
 
   @override
   String get gymXid => 'Matrix xID';
 
   @override
   String get gymXidDescription =>
-      'Import treadmill workouts saved by your gym’s xID network.';
+      'Importa treinos de passadeira guardados pela rede xID do teu ginásio.';
 
   @override
-  String get gymPortal => 'Gym Netpulse portal';
+  String get gymPortal => 'Portal Netpulse do ginásio';
 
   @override
   String get gymPortalHelp =>
-      'Enter the Netpulse portal address provided by your gym.';
+      'Introduz o endereço do portal Netpulse fornecido pelo teu ginásio.';
 
   @override
-  String get gymPasscode => 'xID passcode';
+  String get gymPasscode => 'Código xID';
 
   @override
   String get gymSessionHelp =>
-      'Your session is stored securely. Your passcode is not saved.';
+      'A tua sessão é guardada em segurança. O código não é guardado.';
 
   @override
-  String get gymAutoSync => 'Sync xID workouts automatically';
+  String get gymAutoSync => 'Sincronizar treinos xID automaticamente';
 
   @override
   String gymLastDays(int days) {
-    return 'Last $days days';
+    return 'Últimos $days dias';
   }
 
   @override
-  String get gymLoadWorkouts => 'Load workouts';
+  String get gymLoadWorkouts => 'Carregar treinos';
 
   @override
-  String get gymNoWorkouts => 'No treadmill workouts found for this period.';
+  String get gymNoWorkouts =>
+      'Não foram encontrados treinos de passadeira neste período.';
 
   @override
   String gymSkipped(int count) {
-    return '$count unreadable workouts skipped.';
+    return '$count treinos ilegíveis ignorados.';
   }
 
   @override
   String gymImported(int count, int duplicates) {
-    return '$count workouts imported; $duplicates duplicates skipped.';
+    return '$count treinos importados; $duplicates duplicados ignorados.';
   }
 
   @override
-  String get gymSummary => 'Treadmill summary';
+  String get gymSummary => 'Resumo da passadeira';
 
   @override
   String get gymSummaryDescription =>
-      'Photograph the final console screen, then review the values before saving.';
+      'Fotografa o ecrã final da consola e revê os valores antes de guardar.';
 
   @override
-  String get gymTakePhoto => 'Take photo';
+  String get gymTakePhoto => 'Tirar foto';
 
   @override
-  String get gymChoosePhoto => 'Choose photo';
+  String get gymChoosePhoto => 'Escolher foto';
 
   @override
   String get gymReview =>
-      'Check the units, start time and values. Photos are read on your phone. Only the workout summary is saved.';
+      'Verifica as unidades, a hora de início e os valores. As fotos são lidas no teu telemóvel. Só o resumo do treino é guardado.';
 
   @override
-  String get gymStartTime => 'Workout start';
+  String get gymStartTime => 'Início do treino';
 
   @override
-  String get gymDurationHelp => 'Enter mm:ss or hh:mm:ss, for example 30:00.';
+  String get gymDurationHelp =>
+      'Introduz mm:ss ou hh:mm:ss, por exemplo 30:00.';
 
   @override
-  String get gymDistanceUnit => 'Distance unit';
+  String get gymDistanceUnit => 'Unidade de distância';
 
   @override
-  String get gymCalories => 'Calories';
+  String get gymCalories => 'Calorias';
 
   @override
-  String get manualRecordTitle => 'Record activity';
+  String get manualRecordTitle => 'Gravar atividade';
 
   @override
   String get manualRecordDescription =>
-      'Record an activity with optional GPS, ECG and heart rate. Recording continues when you switch apps or lock the screen, until you press Pause or Stop.';
+      'Grava uma atividade com GPS, ECG e FC opcionais. A gravação continua quando mudas de app ou bloqueias o ecrã, até premires Pausa ou Parar.';
 
   @override
-  String get manualTreadmill => 'Treadmill run';
+  String get manualTreadmill => 'Corrida na passadeira';
 
   @override
-  String get manualChooseH10 => 'Choose Polar H10';
+  String get manualChooseH10 => 'Escolher Polar H10';
 
   @override
-  String get manualRecordEcg => 'Record ECG with Polar H10';
+  String get manualRecordEcg => 'Gravar ECG com o Polar H10';
 
   @override
-  String get manualChooseHelp =>
-      'Choose a Polar H10 to record ECG and heart rate.';
+  String get manualChooseHelp => 'Escolhe um Polar H10 para gravar ECG e FC.';
 
   @override
   String manualEcgSegments(int count) {
-    return 'Linked ECG segments: $count';
+    return 'Segmentos de ECG associados: $count';
   }
 
   @override
   String get manualEcgInterrupted =>
-      'ECG stopped. The activity timer is still running.';
+      'O ECG parou. O cronómetro da atividade continua.';
 
   @override
-  String get manualRestartEcg => 'Restart ECG recording';
+  String get manualRestartEcg => 'Reiniciar gravação de ECG';
 
   @override
-  String get manualFinalDistance => 'Final distance (optional)';
+  String get manualFinalDistance => 'Distância final (opcional)';
 
   @override
   String get manualDiscardNote =>
-      'Discard this activity? ECG recordings stay in ECG history.';
+      'Descartar esta atividade? As gravações de ECG ficam no histórico de ECG.';
 
   @override
-  String get manualRecordHeartRate => 'Record heart rate';
+  String get manualRecordHeartRate => 'Gravar FC';
 
   @override
-  String get manualChooseHr => 'Choose a heart-rate sensor';
+  String get manualChooseHr => 'Escolhe um sensor de FC';
 
   @override
-  String get manualHrWithEcg => 'Uses the same H10 connection as ECG.';
+  String get manualHrWithEcg => 'Usa a mesma ligação ao H10 que o ECG.';
 
   @override
-  String get manualRecordGps => 'Record GPS route and distance';
+  String get manualRecordGps => 'Gravar percurso e distância por GPS';
 
   @override
   String get manualGpsHelp =>
-      'For outdoor activities. Allow precise location to record your route with the screen off.';
+      'Para atividades ao ar livre. Permite a localização exata para gravar o percurso com o ecrã desligado.';
 
   @override
-  String get manualGpsWaiting => 'Waiting for an accurate GPS fix';
+  String get manualGpsWaiting => 'A aguardar uma posição GPS precisa';
 
   @override
   String manualGpsAccuracy(int meters) {
-    return 'GPS accuracy: $meters m';
+    return 'Precisão do GPS: $meters m';
   }
 
   @override
-  String get manualRecordBp => 'Include blood pressure readings';
+  String get manualRecordBp => 'Incluir medições de tensão arterial';
 
   @override
   String get manualBpHelp =>
-      'Shows Hilo, Aktiia and Health readings taken during this recording, including after later syncs.';
+      'Mostra as medições da Hilo, Aktiia e Saúde feitas durante esta gravação, incluindo depois de sincronizações posteriores.';
 
   @override
   String get manualBpUnavailable =>
-      'Blood pressure readings could not be loaded.';
+      'Não foi possível carregar as medições de tensão.';
 
   @override
-  String get manualBpEmpty =>
-      'No blood pressure readings during this recording.';
+  String get manualBpEmpty => 'Sem medições de tensão durante esta gravação.';
 
   @override
-  String get manualHrDisconnected => 'Heart-rate sensor disconnected.';
+  String get manualHrDisconnected => 'Sensor de FC desligado.';
 
   @override
-  String get manualReconnectHr => 'Reconnect heart-rate sensor';
+  String get manualReconnectHr => 'Voltar a ligar sensor de FC';
 
   @override
   String get manualBackgroundNotification =>
-      'Recording continues with the screen off';
+      'A gravação continua com o ecrã desligado';
 
   @override
-  String get ecgAskCoach => 'Discuss with AI Coach';
+  String get ecgAskCoach => 'Falar com o treinador IA';
 
   @override
-  String get ecgCoachWarningTitle => 'Not medical advice';
+  String get ecgCoachWarningTitle => 'Não é aconselhamento médico';
 
   @override
   String get ecgCoachWarningBody =>
-      'The AI Coach is not a doctor and cannot make a diagnosis. A chest-strap ECG has only one lead: it cannot rule out a heart attack or other heart disease, and the analysis can be wrong.\n\nChest pain or pressure, shortness of breath, pain in the arm, jaw or back, cold sweat or fainting: call 999 or 112 now. Do not wait for an answer from the AI.\n\nThe analysed figures and 10 seconds of the raw signal go to the AI model chosen in AI settings.';
+      'O treinador IA não é médico e não pode fazer diagnósticos. Um ECG de cinta peitoral tem apenas uma derivação: não exclui um ataque cardíaco nem outra doença cardíaca, e a análise pode estar errada.\n\nDor ou aperto no peito, falta de ar, dor no braço, maxilar ou costas, suores frios ou desmaio: liga já para o 112. Não esperes por uma resposta da IA.\n\nOs valores analisados e 10 segundos do sinal em bruto vão para o modelo de IA escolhido nas definições de IA.';
 
   @override
-  String get ecgCoachUnderstood => 'I understand';
+  String get ecgCoachUnderstood => 'Compreendo';
 
   @override
   String get ecgCoachBanner =>
-      'Not medical advice. The AI is not a doctor and cannot rule out a heart attack. Emergency: call 999 or 112.';
+      'Não é aconselhamento médico. A IA não é médica e não exclui um ataque cardíaco. Emergência: liga 112.';
 
   @override
-  String get ecgCoachCardTitle => 'ECG pre-analysis';
+  String get ecgCoachCardTitle => 'Pré-análise do ECG';
 
   @override
-  String get statusMeasured => 'Measured';
+  String get statusMeasured => 'Medido';
 
   @override
-  String get ecgQuestionOverview => 'What does my ECG show?';
+  String get ecgQuestionOverview => 'O que mostra o meu ECG?';
 
   @override
-  String get ecgQuestionRhythm => 'Is my heart rhythm regular?';
+  String get ecgQuestionRhythm => 'O meu ritmo cardíaco é regular?';
 
   @override
-  String get ecgQuestionDoctor => 'Should a doctor look at this?';
+  String get ecgQuestionDoctor => 'Um médico devia ver isto?';
 
   @override
-  String get ecgFollowSymptoms => 'Which symptoms mean I should see a doctor?';
+  String get ecgFollowSymptoms =>
+      'Que sintomas significam que devo ir ao médico?';
 
   @override
-  String get ecgFollowRiskFactors => 'How do my risk factors change this?';
+  String get ecgFollowRiskFactors =>
+      'Como é que os meus fatores de risco mudam isto?';
 
   @override
-  String get ecgFollowTraining => 'Can I train normally?';
+  String get ecgFollowTraining => 'Posso treinar normalmente?';
 
   @override
-  String get ecgFollowBetterRecording => 'How do I record a better ECG?';
+  String get ecgFollowBetterRecording => 'Como gravo um ECG melhor?';
 
   @override
-  String get manualTreadmillConnect =>
-      'Connect treadmill (Bluetooth, optional)';
+  String get manualTreadmillConnect => 'Ligar passadeira (Bluetooth, opcional)';
 
   @override
   String get manualTreadmillHelp =>
-      'Speed, distance and incline then come from the treadmill. Without a connection, enter the distance at the end.';
+      'A velocidade, a distância e a inclinação vêm então da passadeira. Sem ligação, introduz a distância no fim.';
 
   @override
-  String get sportIndoorCycling => 'Indoor cycling';
+  String get sportIndoorCycling => 'Ciclismo indoor';
 
   @override
-  String get sportElliptical => 'Elliptical';
+  String get sportElliptical => 'Elíptica';
 
   @override
-  String get sportStairClimber => 'Stair climber';
+  String get sportStairClimber => 'Simulador de escadas';
 
   @override
   String get manualWrongMachine =>
-      'This equipment does not match the chosen sport.';
+      'Este equipamento não corresponde ao desporto escolhido.';
 
   @override
   String get manualEquipmentHelp =>
-      'Connect Bluetooth (FTMS) equipment. Speed, power, cadence and distance come from the machine.';
+      'Liga equipamento Bluetooth (FTMS). A velocidade, a potência, a cadência e a distância vêm da máquina.';
 
   @override
-  String get plusTitle => 'Track';
+  String get plusTitle => 'Registar';
 
   @override
-  String get plusStartWorkout => 'Start workout';
+  String get plusStartWorkout => 'Iniciar treino';
 
   @override
   String get plusStartWorkoutHint =>
-      'Live with GPS, treadmill or indoor bike · ECG & heart rate';
+      'Em direto com GPS, passadeira ou bicicleta indoor · ECG e FC';
 
   @override
-  String get plusGroupTraining => 'Training';
+  String get plusGroupTraining => 'Treino';
 
   @override
-  String get plusGroupHeart => 'Heart & circulation';
+  String get plusGroupHeart => 'Coração e circulação';
 
   @override
-  String get plusGroupBody => 'Body';
+  String get plusGroupBody => 'Corpo';
 
   @override
-  String get plusGroupRecovery => 'Recovery';
+  String get plusGroupRecovery => 'Recuperação';
 
   @override
-  String get plusLogWorkout => 'Log a workout';
+  String get plusLogWorkout => 'Registar um treino';
 
   @override
-  String get plusLogWorkoutHint => 'Add a past session by hand';
+  String get plusLogWorkoutHint => 'Adiciona um treino passado à mão';
 
   @override
-  String get plusImport => 'Import';
+  String get plusImport => 'Importar';
 
   @override
-  String get plusImportHint => 'Strava, FIT, GPX, gym treadmill';
+  String get plusImportHint => 'Strava, FIT, GPX, passadeira do ginásio';
 
   @override
-  String get plusEcg => 'Record ECG';
+  String get plusEcg => 'Gravar ECG';
 
   @override
-  String get plusEcgHint => 'Polar H10 or ECG file';
+  String get plusEcgHint => 'Polar H10 ou ficheiro de ECG';
 
   @override
-  String get plusHrv => 'HRV check';
+  String get plusHrv => 'Verificação de HRV';
 
   @override
-  String get plusHrvHint => 'Short reading with Polar H10';
+  String get plusHrvHint => 'Medição curta com o Polar H10';
 
   @override
   String get plusBpMeasure => 'Medir com a braçadeira Hilo';
@@ -7764,100 +7826,100 @@ class AppLocalizationsPt extends AppLocalizations {
   String get plusBpMeasureHint => 'Emparelhe a braçadeira Hilo por Bluetooth';
 
   @override
-  String get plusBpLog => 'Log BP';
+  String get plusBpLog => 'Registar tensão';
 
   @override
-  String get plusBpLogHint => 'Type in a reading';
+  String get plusBpLogHint => 'Introduz uma medição';
 
   @override
-  String get plusBpReport => 'Hilo report';
+  String get plusBpReport => 'Relatório Hilo';
 
   @override
-  String get plusBpReportHint => 'Import the PDF';
+  String get plusBpReportHint => 'Importa o PDF';
 
   @override
-  String get plusSpo2 => 'SpO₂ & pulse';
+  String get plusSpo2 => 'SpO₂ e pulso';
 
   @override
-  String get plusSpo2Hint => 'From a pulse oximeter';
+  String get plusSpo2Hint => 'De um oxímetro';
 
   @override
-  String get plusWeigh => 'Weigh in';
+  String get plusWeigh => 'Pesar';
 
   @override
-  String get plusWeighHint => 'RENPHO scale via Bluetooth';
+  String get plusWeighHint => 'Balança RENPHO por Bluetooth';
 
   @override
-  String get plusWeightLog => 'Log weight';
+  String get plusWeightLog => 'Registar peso';
 
   @override
-  String get plusWeightLogHint => 'Weight, body fat, BMI';
+  String get plusWeightLogHint => 'Peso, gordura corporal, IMC';
 
   @override
-  String get plusWaist => 'Waist';
+  String get plusWaist => 'Cintura';
 
   @override
-  String get plusWaistHint => 'Circumference & ratios';
+  String get plusWaistHint => 'Perímetro e relações';
 
   @override
-  String get plusGrip => 'Grip strength';
+  String get plusGrip => 'Força de preensão';
 
   @override
-  String get plusGripHint => 'Dynamometer reading';
+  String get plusGripHint => 'Medição com dinamómetro';
 
   @override
-  String get plusSleep => 'Log sleep';
+  String get plusSleep => 'Registar sono';
 
   @override
-  String get plusSleepHint => 'Duration, deep and REM';
+  String get plusSleepHint => 'Duração, profundo e REM';
 
   @override
-  String get recPace => 'Pace (/km)';
+  String get recPace => 'Ritmo (/km)';
 
   @override
-  String get recAvgPace => 'Avg pace';
+  String get recAvgPace => 'Ritmo médio';
 
   @override
-  String get recPace500 => 'Pace (/500 m)';
+  String get recPace500 => 'Ritmo (/500 m)';
 
   @override
-  String get recSpeedKmh => 'Speed (km/h)';
+  String get recSpeedKmh => 'Velocidade (km/h)';
 
   @override
-  String get recPowerW => 'Power (W)';
+  String get recPowerW => 'Potência (W)';
 
   @override
-  String get recDistanceKm => 'Distance (km)';
+  String get recDistanceKm => 'Distância (km)';
 
   @override
-  String get recHeartRate => 'Heart rate';
+  String get recHeartRate => 'Frequência cardíaca';
 
   @override
-  String get recMap => 'Map';
+  String get recMap => 'Mapa';
 
   @override
-  String get recStart => 'Start';
+  String get recStart => 'Iniciar';
 
   @override
-  String get recResume => 'Resume';
+  String get recResume => 'Retomar';
 
   @override
-  String get recFinish => 'Finish';
+  String get recFinish => 'Terminar';
 
   @override
-  String get recDiscard => 'Discard';
+  String get recDiscard => 'Descartar';
 
   @override
-  String get recLive => 'Recording';
+  String get recLive => 'A gravar';
 
   @override
-  String get recNew => 'New activity';
+  String get recNew => 'Nova atividade';
 
   @override
-  String get recCadence => 'Cadence';
+  String get recCadence => 'Cadência';
 
   @override
-  String get recMachine => 'Equipment';
+  String get recMachine => 'Equipamento';
 
   @override
   String get recGps => 'GPS';
@@ -7866,205 +7928,206 @@ class AppLocalizationsPt extends AppLocalizations {
   String get recEcg => 'ECG';
 
   @override
-  String get recBloodPressure => 'Blood pressure';
+  String get recBloodPressure => 'Tensão arterial';
 
   @override
-  String get recBannerOpen => 'Tap to open';
+  String get recBannerOpen => 'Toca para abrir';
 
   @override
   String get bpActivityHint =>
-      'Cuffs often cannot measure while you move. Readings from before or after the activity are not shown here.';
+      'As braçadeiras muitas vezes não conseguem medir enquanto te mexes. As medições de antes ou depois da atividade não aparecem aqui.';
 
   @override
   String objectiveKeyLong(String sport, String goal) {
-    return 'Key long $sport for $goal';
+    return '$sport longo-chave para $goal';
   }
 
   @override
   String seasonKeyRides(int n) {
-    return 'In $n weeks a key long session steps up towards half the event, once per block and never next to another event.';
+    return 'Em $n semanas um treino longo-chave sobe até metade do evento, uma vez por bloco e nunca junto de outro evento.';
   }
 
   @override
   String seasonEventAsLong(int n) {
-    return 'In $n weeks another event is the long session for a bigger goal.';
+    return 'Em $n semanas outro evento é o treino longo para um objetivo maior.';
   }
 
   @override
   String objectiveThreshold(String sport, String goal) {
-    return 'Threshold $sport for $goal';
+    return '$sport de limiar para $goal';
   }
 
   @override
   String objectiveHills(String sport, String goal) {
-    return 'Hill $sport for $goal';
+    return '$sport em subidas para $goal';
   }
 
   @override
   String objectiveOpeners(String goal) {
-    return 'Openers for $goal';
+    return 'Ativação para $goal';
   }
 
   @override
-  String get planAdjustedTitle => 'Plan adjusted automatically';
+  String get planAdjustedTitle => 'Plano ajustado automaticamente';
 
   @override
   String planAdjSwap(String session, String day, String from) {
-    return '$session: done on $day instead of $from.';
+    return '$session: feito em $day em vez de $from.';
   }
 
   @override
   String planAdjSubstitute(String activity, String session, String from) {
-    return '$activity counts as $session from $from.';
+    return '$activity conta como $session de $from.';
   }
 
   @override
   String planAdjStrengthCredit(String activity, String session) {
-    return '$activity covers the leg strength of $session.';
+    return '$activity cobre a força de pernas de $session.';
   }
 
   @override
   String planAdjMoved(String session, String day) {
-    return '$session moves to $day, which became free.';
+    return '$session passa para $day, que ficou livre.';
   }
 
   @override
   String planAdjMovedEasy(String session, String day, String activity) {
-    return '$session moves to $day, easier: your legs recover from $activity.';
+    return '$session passa para $day, mais leve: as tuas pernas recuperam de $activity.';
   }
 
   @override
-  String get planAdjUndone => 'Change undone.';
+  String get planAdjUndone => 'Alteração anulada.';
 
   @override
-  String get shortSessionTitle => 'Shorter than planned – why?';
+  String get shortSessionTitle => 'Mais curto do que o planeado – porquê?';
 
   @override
   String shortSessionLine(String session, int done, int planned) {
-    return '$session: $done of $planned min';
+    return '$session: $done de $planned min';
   }
 
   @override
-  String get shortReasonTime => 'No time';
+  String get shortReasonTime => 'Sem tempo';
 
   @override
-  String get shortReasonWeather => 'Weather';
+  String get shortReasonWeather => 'Meteorologia';
 
   @override
-  String get shortReasonFatigue => 'Tired';
+  String get shortReasonFatigue => 'Cansado';
 
   @override
-  String get shortReasonPain => 'Pain';
+  String get shortReasonPain => 'Dor';
 
   @override
-  String get shortReasonOther => 'Other';
+  String get shortReasonOther => 'Outro';
 
   @override
-  String get styleTitle => 'Style';
+  String get styleTitle => 'Estilo';
 
   @override
-  String get styleAuto => 'Auto';
+  String get styleAuto => 'Automático';
 
   @override
   String get styleAutoHint =>
-      'Follows your phone: LightFjelia by day, DarkFjelia at night.';
+      'Segue o teu telemóvel: LightFjelia de dia, DarkFjelia à noite.';
 
   @override
-  String get connectMyWhoosh => 'Connect MyWhoosh';
+  String get connectMyWhoosh => 'Ligar MyWhoosh';
 
   @override
   String get myWhooshSubtitle =>
-      'Sign in with your MyWhoosh account to bring in your indoor rides with power, cadence and heart rate.';
+      'Inicia sessão com a tua conta MyWhoosh para trazer as saídas indoor com potência, cadência e FC.';
 
   @override
   String get myWhooshCredentialsInfo =>
-      'MyWhoosh credentials are stored encrypted on your device. Fjelia reads your rides directly from MyWhoosh, through the interface of the MyWhoosh app. Fjelia is not affiliated with MyWhoosh.';
+      'As credenciais da MyWhoosh são guardadas encriptadas no teu dispositivo. A Fjelia lê as tuas saídas diretamente da MyWhoosh, através da interface da app MyWhoosh. A Fjelia não tem ligação à MyWhoosh.';
 
   @override
-  String get myWhooshTile => 'Indoor rides';
+  String get myWhooshTile => 'Saídas indoor';
 
   @override
   String get myWhooshSignedInElsewhere =>
-      'MyWhoosh allows one session per account and you are signed in on another device. Close MyWhoosh there (sign out if needed), then try again.';
+      'A MyWhoosh permite uma sessão por conta e tens sessão iniciada noutro dispositivo. Fecha lá a MyWhoosh (termina sessão se for preciso) e tenta novamente.';
 
   @override
-  String get shareWorkout => 'Share workout';
+  String get shareWorkout => 'Partilhar treino';
 
   @override
-  String get shareFitFile => 'Share as FIT file';
+  String get shareFitFile => 'Partilhar como ficheiro FIT';
 
   @override
   String get shareFitFileHint =>
-      'For Strava, COROS, TrainingPeaks and other apps';
+      'Para Strava, COROS, TrainingPeaks e outras apps';
 
   @override
-  String get sendToGarmin => 'Send to Garmin Connect';
+  String get sendToGarmin => 'Enviar para o Garmin Connect';
 
   @override
-  String get sendToGarminHint => 'Uploads the workout to your Garmin account';
+  String get sendToGarminHint => 'Carrega o treino na tua conta Garmin';
 
   @override
-  String get sentToGarmin => 'Sent to Garmin Connect';
+  String get sentToGarmin => 'Enviado para o Garmin Connect';
 
   @override
-  String get alreadyOnGarmin => 'This workout is already in Garmin Connect';
+  String get alreadyOnGarmin => 'Este treino já está no Garmin Connect';
 
   @override
-  String get missedWorkoutPastTitle => 'Missed workout';
+  String get missedWorkoutPastTitle => 'Treino perdido';
 
   @override
-  String get leaveIt => 'Leave it';
+  String get leaveIt => 'Deixar estar';
 
   @override
-  String get reviewChange => 'Review';
+  String get reviewChange => 'Rever';
 
   @override
-  String get keepPlan => 'Keep plan';
+  String get keepPlan => 'Manter plano';
 
   @override
-  String get missedYesterdayTitle => 'Missed yesterday';
+  String get missedYesterdayTitle => 'Perdido ontem';
 
   @override
-  String get proposalReplanTitle => 'Rebuild your plan?';
+  String get proposalReplanTitle => 'Reconstruir o teu plano?';
 
   @override
-  String get proposalRestTitle => 'Rest day today?';
+  String get proposalRestTitle => 'Dia de descanso hoje?';
 
   @override
-  String get proposalRecoveryTitle => 'Only easy today?';
+  String get proposalRecoveryTitle => 'Só leve hoje?';
 
   @override
-  String get proposalEasierTitle => 'A bit easier today?';
+  String get proposalEasierTitle => 'Um pouco mais leve hoje?';
 
   @override
-  String get proposalReplanBody => 'Load or HRV point to a rebuilt plan.';
+  String get proposalReplanBody =>
+      'A carga ou a HRV apontam para um plano reconstruído.';
 
   @override
-  String get proposalCardTitle => 'Suggestion for today';
+  String get proposalCardTitle => 'Sugestão para hoje';
 
   @override
-  String get replanMissed => 'Reschedule';
+  String get replanMissed => 'Reagendar';
 
   @override
-  String get askBeforePlanChanges => 'Ask before plan changes';
+  String get askBeforePlanChanges => 'Perguntar antes de alterar o plano';
 
   @override
   String get askBeforePlanChangesHint =>
-      'Readiness and trends suggest changes, you decide. Off: Fjelia adjusts the plan by itself.';
+      'A prontidão e as tendências sugerem alterações, tu decides. Desligado: a Fjelia ajusta o plano sozinha.';
 
   @override
   String missedOnDayTitle(String day) {
-    return 'Missed on $day';
+    return 'Perdido em $day';
   }
 
   @override
   String missedPastBody(String names) {
-    return '$names. Move or skip?';
+    return '$names. Mover ou saltar?';
   }
 
   @override
   String proposalDropsLine(String title) {
-    return '$title is dropped';
+    return '$title é retirado';
   }
 
   @override
@@ -8073,81 +8136,81 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get proposalAnswered => 'Already answered, nothing left to decide.';
+  String get proposalAnswered => 'Já respondido, não há nada para decidir.';
 
   @override
-  String get ecgTrainingWarningTitle => 'For training only';
+  String get ecgTrainingWarningTitle => 'Apenas para treino';
 
   @override
   String get ecgTrainingWarningBody =>
-      'Fjelia does not read ECGs medically. The coach explains heart rate, HRV and signal quality for your training only. It says nothing about heart conditions or rhythm disorders: for that, export the recording and show it to a doctor.\n\nChest pain or pressure, shortness of breath, pain in the arm, jaw or back, cold sweat or fainting: call 999 or 112 now.\n\nHeart rate, HRV and signal quality go to the AI model chosen in AI settings.';
+      'A Fjelia não lê ECGs do ponto de vista médico. O treinador explica a FC, a HRV e a qualidade do sinal apenas para o teu treino. Não diz nada sobre doenças cardíacas ou alterações do ritmo: para isso, exporta a gravação e mostra-a a um médico.\n\nDor ou aperto no peito, falta de ar, dor no braço, maxilar ou costas, suores frios ou desmaio: liga já para o 112.\n\nA FC, a HRV e a qualidade do sinal vão para o modelo de IA escolhido nas definições de IA.';
 
   @override
-  String get ecgQuestionTraining => 'What does my ECG say for training?';
+  String get ecgQuestionTraining => 'O que diz o meu ECG sobre o treino?';
 
   @override
-  String get ecgFollowHrv => 'What does the HRV say about my recovery?';
+  String get ecgFollowHrv => 'O que diz a HRV sobre a minha recuperação?';
 
   @override
-  String get ecgFollowHeartRate => 'How did my heart rate develop?';
+  String get ecgFollowHeartRate => 'Como evoluiu a minha FC?';
 
   @override
-  String get bioLeanMuchYounger => 'Way younger on the road';
+  String get bioLeanMuchYounger => 'Muito mais jovem na estrada';
 
   @override
-  String get bioLeanYounger => 'Younger on the road';
+  String get bioLeanYounger => 'Mais jovem na estrada';
 
   @override
-  String get bioLeanEven => 'Right on track';
+  String get bioLeanEven => 'Mesmo no caminho certo';
 
   @override
-  String get bioLeanOlder => 'Some room to grow';
+  String get bioLeanOlder => 'Algum espaço para crescer';
 
   @override
-  String get bioLeanMuchOlder => 'Lots of room to grow';
+  String get bioLeanMuchOlder => 'Muito espaço para crescer';
 
   @override
-  String get fitnessSameAsAge => 'Fit like your age';
+  String get fitnessSameAsAge => 'Em forma para a tua idade';
 
   @override
-  String get lifespanBandTitle => 'Your life span';
+  String get lifespanBandTitle => 'A tua esperança de vida';
 
   @override
   String get lifespanBandNote =>
-      'A band from statistics for people with similar values, not a forecast for you.';
+      'Um intervalo de estatísticas para pessoas com valores semelhantes, não uma previsão para ti.';
 
   @override
-  String get factorHelps => 'Helps you';
+  String get factorHelps => 'Ajuda-te';
 
   @override
-  String get factorSlows => 'Holds you back';
+  String get factorSlows => 'Trava-te';
 
   @override
-  String get bioFactorBloodPressure => 'Blood pressure';
+  String get bioFactorBloodPressure => 'Tensão arterial';
 
   @override
-  String get bioFactorVisceralFat => 'Visceral fat';
+  String get bioFactorVisceralFat => 'Gordura visceral';
 
   @override
-  String get bioFactorLipids => 'Blood lipids';
+  String get bioFactorLipids => 'Lípidos no sangue';
 
   @override
-  String get bioFactorInflammation => 'Inflammation (CRP)';
+  String get bioFactorInflammation => 'Inflamação (PCR)';
 
   @override
-  String get bioFactorKidney => 'Kidney function';
+  String get bioFactorKidney => 'Função renal';
 
   @override
   String get bioAgeModelNote =>
-      'Fitness age compares your VO₂max with age norms. The life span comes from a model built on study values: no medical statement and no personal prediction.';
+      'A idade física compara o teu VO₂máx com normas por idade. A esperança de vida vem de um modelo baseado em valores de estudos: não é uma afirmação médica nem uma previsão pessoal.';
 
   @override
   String fitnessYoungerBy(int years) {
     String _temp0 = intl.Intl.pluralLogic(
       years,
       locale: localeName,
-      other: '$years years younger than your age',
-      one: '1 year younger than your age',
+      other: '$years anos mais novo do que a tua idade',
+      one: '$years ano mais novo do que a tua idade',
     );
     return '$_temp0';
   }
@@ -8157,8 +8220,8 @@ class AppLocalizationsPt extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       years,
       locale: localeName,
-      other: '$years years above your age',
-      one: '1 year above your age',
+      other: '$years anos acima da tua idade',
+      one: '$years ano acima da tua idade',
     );
     return '$_temp0';
   }
@@ -8170,344 +8233,346 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String todayAge(int age) {
-    return 'Today $age';
+    return 'Hoje $age';
   }
 
   @override
-  String get vo2ClassBelowAvg => 'below average';
+  String get vo2ClassBelowAvg => 'abaixo da média';
 
   @override
-  String get vo2ClassAverage => 'average';
+  String get vo2ClassAverage => 'média';
 
   @override
-  String get vo2ClassAboveAvg => 'above average';
+  String get vo2ClassAboveAvg => 'acima da média';
 
   @override
-  String get vo2ClassGood => 'good';
+  String get vo2ClassGood => 'bom';
 
   @override
-  String get vo2ClassExcellent => 'excellent';
+  String get vo2ClassExcellent => 'excelente';
 
   @override
   String get vo2ClassElite => 'elite';
 
   @override
   String get fjeliaProHint =>
-      'FjeliaPro gives you more detailed information and analyses.';
+      'O FjeliaPro dá-te informação e análises mais detalhadas.';
 
   @override
-  String get rowingStrokeRate => 'Strokes / min';
+  String get rowingStrokeRate => 'Remadas / min';
 
   @override
   String rowingStrokeAverage(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Ø $count strokes',
-      one: 'Ø 1 stroke',
+      other: 'Ø $count remadas',
+      one: 'Ø 1 remada',
     );
     return '$_temp0';
   }
 
   @override
-  String get rowingTapToSwitch => 'Tap to switch';
+  String get rowingTapToSwitch => 'Toca para alternar';
 
   @override
-  String get copyAnswer => 'Copy answer';
+  String get copyAnswer => 'Copiar resposta';
 
   @override
-  String get answerCopied => 'Copied ✨';
+  String get answerCopied => 'Copiado ✨';
 
   @override
   String get coachMemories => 'Memory Cards';
 
   @override
   String get coachMemoriesIntro =>
-      'Tell your coach what it should always know. Your cards go along with every chat.';
+      'Diz ao teu treinador o que deve saber sempre. Os teus cartões vão com cada chat.';
 
   @override
-  String get coachMemoryNew => 'New card';
+  String get coachMemoryNew => 'Novo cartão';
 
   @override
-  String get coachMemoryTitle => 'Title';
+  String get coachMemoryTitle => 'Título';
 
   @override
-  String get coachMemoryTitleHint => 'e.g. Left knee';
+  String get coachMemoryTitleHint => 'p. ex. Joelho esquerdo';
 
   @override
-  String get coachMemoryBody => 'What should your coach know?';
+  String get coachMemoryBody => 'O que deve saber o teu treinador?';
 
   @override
   String get coachMemoryBodyHint =>
-      'e.g. Runs downhill hurt since the spring. Climbs are fine.';
+      'p. ex. Correr a descer dói desde a primavera. As subidas estão bem.';
 
   @override
-  String get coachMemoryEmpty => 'No cards yet. Drop your first one 🔥';
+  String get coachMemoryEmpty => 'Ainda sem cartões. Cria o primeiro 🔥';
 
   @override
-  String get coachMemoryDeleteQuestion => 'Delete this card?';
+  String get coachMemoryDeleteQuestion => 'Eliminar este cartão?';
 
   @override
   String coachMemoryCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count cards in your coach\'s head',
-      one: '1 card in your coach\'s head',
-      zero: 'No cards',
+      other: '$count cartões na cabeça do treinador',
+      one: '1 cartão na cabeça do treinador',
+      zero: 'Sem cartões',
     );
     return '$_temp0';
   }
 
   @override
-  String get sportSkiErg => 'SkiErg (Nordic indoor)';
+  String get sportSkiErg => 'SkiErg (esqui de fundo indoor)';
 
   @override
-  String get weatherRain => 'RAIN';
+  String get weatherRain => 'CHUVA';
 
   @override
   String weatherLowHigh(int low, int high) {
-    return 'Low $low° · High $high°';
+    return 'Mín. $low° · Máx. $high°';
   }
 
   @override
-  String get weatherDayPeak => 'Peak of the day';
+  String get weatherDayPeak => 'Pico do dia';
 
   @override
-  String get weatherDayTotal => 'Total for the day';
+  String get weatherDayTotal => 'Total do dia';
 
   @override
-  String get proTagline => 'Your coach. On pro level.';
+  String get proTagline => 'O teu treinador. A nível pro.';
 
   @override
   String get proBenefitCoach =>
-      'AI Coach with the Pro model: faster, more thorough, its own budget';
+      'Treinador IA com o modelo Pro: mais rápido, mais completo, com orçamento próprio';
 
   @override
   String get proBenefitMemory =>
-      'Memory Cards: what your coach should always know';
+      'Memory Cards: o que o teu treinador deve saber sempre';
 
   @override
-  String get proBenefitEcg => 'Detailed ECG analysis';
+  String get proBenefitEcg => 'Análise detalhada do ECG';
 
   @override
-  String get proBenefitCopy => 'Copy answers with one tap';
+  String get proBenefitCopy => 'Copiar respostas com um toque';
 
   @override
-  String get proMonthly => 'Monthly';
+  String get proMonthly => 'Mensal';
 
   @override
-  String get proYearly => 'Yearly';
+  String get proYearly => 'Anual';
 
   @override
   String proPerMonth(String price) {
-    return '$price / month';
+    return '$price / mês';
   }
 
   @override
   String proPerYear(String price) {
-    return '$price / year';
+    return '$price / ano';
   }
 
   @override
-  String get proBestValue => 'BEST VALUE';
+  String get proBestValue => 'MELHOR VALOR';
 
   @override
-  String get proSubscribe => 'Get FjeliaPro';
+  String get proSubscribe => 'Obter FjeliaPro';
 
   @override
-  String get proRestore => 'Restore purchases';
+  String get proRestore => 'Restaurar compras';
 
   @override
-  String get proManage => 'Manage subscription';
+  String get proManage => 'Gerir subscrição';
 
   @override
   String proActiveUntil(String date) {
-    return 'Pro is on until $date';
+    return 'O Pro está ativo até $date';
   }
 
   @override
   String get proAutoRenew =>
-      'The subscription renews automatically unless you cancel it at least 24 hours before the end of the period in your Apple account settings. Payment is charged to your Apple account.';
+      'A subscrição renova-se automaticamente, a menos que a canceles pelo menos 24 horas antes do fim do período nas definições da tua conta Apple. O pagamento é cobrado na tua conta Apple.';
 
   @override
-  String get proTerms => 'Terms of Use';
+  String get proTerms => 'Termos de utilização';
 
   @override
-  String get proPrivacy => 'Privacy';
+  String get proPrivacy => 'Privacidade';
 
   @override
-  String get proProblemStore => 'The App Store did not complete the purchase.';
+  String get proProblemStore => 'A App Store não concluiu a compra.';
 
   @override
   String get proProblemService =>
-      'Your purchase is there, but it could not be checked yet. Fjelia tries again on the next start.';
+      'A tua compra existe, mas ainda não foi possível verificá-la. A Fjelia tenta novamente no próximo arranque.';
 
   @override
-  String get proProblemNothing => 'No FjeliaPro subscription to restore.';
+  String get proProblemNothing =>
+      'Não há nenhuma subscrição FjeliaPro para restaurar.';
 
   @override
-  String get proProblemNotActive => 'This subscription has ended.';
+  String get proProblemNotActive => 'Esta subscrição terminou.';
 
   @override
   String get proUnavailable =>
-      'The subscriptions cannot be loaded right now. Please try again later.';
+      'Não é possível carregar as subscrições neste momento. Tenta novamente mais tarde.';
 
   @override
-  String get proWelcome => 'Welcome to FjeliaPro 🔥';
+  String get proWelcome => 'Bem-vindo ao FjeliaPro 🔥';
 
   @override
   String get proUsesFjeliaAi =>
-      'The Pro model answers when \"Fjelia AI\" is chosen in the AI settings.';
+      'O modelo Pro responde quando \"Fjelia AI\" está escolhido nas definições de IA.';
 
   @override
-  String get proToolsTitle => 'Pro analyses';
+  String get proToolsTitle => 'Análises Pro';
 
   @override
-  String get proPlanCheck => 'Today\'s plan check';
+  String get proPlanCheck => 'Verificação do plano de hoje';
 
   @override
-  String get proPlanCheckHint => 'Does today\'s plan fit your recovery?';
+  String get proPlanCheckHint => 'O plano de hoje encaixa na tua recuperação?';
 
   @override
-  String get proWeekReview => 'Weekly review';
+  String get proWeekReview => 'Revisão semanal';
 
   @override
-  String get proWeekReviewHint => 'What worked, what to change next week';
+  String get proWeekReviewHint =>
+      'O que funcionou, o que mudar na próxima semana';
 
   @override
-  String get proRacePlan => 'Race plan';
+  String get proRacePlan => 'Plano de prova';
 
   @override
   String proRacePlanHint(String race) {
-    return '$race: taper, pacing, fuelling';
+    return '$race: afinação, ritmo, alimentação';
   }
 
   @override
-  String get proSeason => 'Season analysis';
+  String get proSeason => 'Análise da época';
 
   @override
-  String get proSeasonHint => 'Goals, phases and risks of your season';
+  String get proSeasonHint => 'Objetivos, fases e riscos da tua época';
 
   @override
-  String get proAnalysisCreate => 'Create analysis';
+  String get proAnalysisCreate => 'Criar análise';
 
   @override
-  String get proAnalysisRedo => 'Create again';
+  String get proAnalysisRedo => 'Criar novamente';
 
   @override
   String proAnalysisFrom(String time) {
-    return 'Created $time';
+    return 'Criada $time';
   }
 
   @override
-  String get proAnalysisWorking => 'The large model is analysing…';
+  String get proAnalysisWorking => 'O modelo grande está a analisar…';
 
   @override
-  String get proAnalysisFailed =>
-      'The analysis did not work. Please try again.';
+  String get proAnalysisFailed => 'A análise não funcionou. Tenta novamente.';
 
   @override
   String get proBenefitPlanCheck =>
-      'Morning proposal and plan check: the coach reworks the day\'s training';
+      'Proposta da manhã e verificação do plano: o treinador ajusta o treino do dia';
 
   @override
-  String get proBenefitReview => 'Weekly review and season analysis';
+  String get proBenefitReview => 'Revisão semanal e análise da época';
 
   @override
-  String get proBenefitRacePlan => 'Race plan: taper, pacing, fuelling';
+  String get proBenefitRacePlan =>
+      'Plano de prova: afinação, ritmo, alimentação';
 
   @override
-  String get statsTitle => 'Statistics';
+  String get statsTitle => 'Estatísticas';
 
   @override
-  String get statsLast4Weeks => 'Last 4 weeks · per week';
+  String get statsLast4Weeks => 'Últimas 4 semanas · por semana';
 
   @override
-  String get statsElevation => 'Elevation';
+  String get statsElevation => 'Desnível';
 
   @override
-  String get statsAllTimeTotals => 'All time';
+  String get statsAllTimeTotals => 'Desde sempre';
 
   @override
-  String get statsBestEfforts => 'Best efforts';
+  String get statsBestEfforts => 'Melhores marcas';
 
   @override
-  String get statsLongest => 'Longest';
+  String get statsLongest => 'Mais longo';
 
   @override
-  String get statsMostElevation => 'Most elevation';
+  String get statsMostElevation => 'Mais desnível';
 
   @override
-  String get statsNone => 'No activities yet.';
+  String get statsNone => 'Ainda sem atividades.';
 
   @override
   String get proBenefitStats =>
-      'Statistics: best efforts, this year and the last 4 weeks';
+      'Estatísticas: melhores marcas, este ano e as últimas 4 semanas';
 
   @override
-  String get statsFourWeeks => '4 weeks';
+  String get statsFourWeeks => '4 semanas';
 
   @override
-  String get statsTickerWeek => 'per week, last 4 weeks';
+  String get statsTickerWeek => 'por semana, últimas 4 semanas';
 
   @override
   String statsTickerYear(String year) {
-    return 'in $year';
+    return 'em $year';
   }
 
   @override
   String statsTickerBest(String distance) {
-    return 'Best $distance';
+    return 'Melhor $distance';
   }
 
   @override
-  String get statsPerWeekShort => '/ week';
+  String get statsPerWeekShort => '/ semana';
 
   @override
-  String get gripLeft => 'Left';
+  String get gripLeft => 'Esquerda';
 
   @override
-  String get gripRight => 'Right';
+  String get gripRight => 'Direita';
 
   @override
-  String get muscleShort => 'Muscle';
+  String get muscleShort => 'Músculo';
 
   @override
   String vsYesterday(String arrow) {
-    return '$arrow vs. yesterday';
+    return '$arrow vs. ontem';
   }
 
   @override
-  String get proposalProCoach => 'Coach writes the morning push';
+  String get proposalProCoach => 'O treinador escreve a notificação da manhã';
 
   @override
   String get proposalProCoachHint =>
-      'FjeliaPro: today\'s readiness, plan and health context go to Fjelia AI Pro, which words the proposal shortly after the morning sync.';
+      'FjeliaPro: a prontidão, o plano e o contexto de saúde de hoje vão para o Fjelia AI Pro, que redige a proposta pouco depois da sincronização da manhã.';
 
   @override
-  String get heatShort => 'Heat';
+  String get heatShort => 'Calor';
 
   @override
-  String get coachRevisionLabel => 'Coach proposal';
+  String get coachRevisionLabel => 'Proposta do treinador';
 
   @override
-  String get revisionBefore => 'Before';
+  String get revisionBefore => 'Antes';
 
   @override
-  String get revisionAfter => 'After';
+  String get revisionAfter => 'Depois';
 
   @override
-  String get revisionSwapped => 'Swapped';
+  String get revisionSwapped => 'Trocado';
 
   @override
-  String get revisionRestDay => 'Rest day instead';
+  String get revisionRestDay => 'Dia de descanso em vez disso';
 
   @override
-  String get revisionDropped => 'left out';
+  String get revisionDropped => 'retirado';
 
   @override
-  String get revisionAccept => 'Take it';
+  String get revisionAccept => 'Aceitar';
 
   @override
   String revisionSets(String sets, String reps) {
@@ -8515,92 +8580,92 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get testMorningProposal => 'Test morning proposal';
+  String get testMorningProposal => 'Testar proposta da manhã';
 
   @override
   String get testMorningProposalHint =>
-      'Runs the morning check now with readiness as yellow; the push comes in 5 seconds.';
+      'Faz agora a verificação da manhã com a prontidão em amarelo; a notificação chega em 5 segundos.';
 
   @override
   String get proposalRulesEasier =>
-      'Recovery is not quite there: today\'s sessions get shorter and easier, their purpose stays.';
+      'A recuperação ainda não está completa: os treinos de hoje ficam mais curtos e leves, o objetivo mantém-se.';
 
   @override
   String get proposalRulesRecovery =>
-      'Clear signs of fatigue: today only easy, or rest.';
+      'Sinais claros de cansaço: hoje só leve, ou descanso.';
 
   @override
   String get proposalCoachUnavailable =>
-      'The coach could not be reached just now; this is the proposal by the rules.';
+      'Não foi possível contactar o treinador agora; esta é a proposta segundo as regras.';
 
   @override
-  String get revisionKeep => 'Stays as planned';
+  String get revisionKeep => 'Fica como planeado';
 
   @override
-  String get revisionAlternative => 'Alternative';
+  String get revisionAlternative => 'Alternativa';
 
   @override
-  String get revisionTakeAlternative => 'Take this instead';
+  String get revisionTakeAlternative => 'Escolher esta em vez disso';
 
   @override
   String proposalForDay(String day) {
-    return 'Proposal for $day';
+    return 'Proposta para $day';
   }
 
   @override
-  String get proposalDayTomorrow => 'tomorrow';
+  String get proposalDayTomorrow => 'amanhã';
 
   @override
-  String get feelingQuestion => 'How do you feel today?';
+  String get feelingQuestion => 'Como te sentes hoje?';
 
   @override
-  String get feelingGood => 'Good';
+  String get feelingGood => 'Bem';
 
   @override
-  String get feelingTired => 'Tired';
+  String get feelingTired => 'Cansado';
 
   @override
-  String get feelingSore => 'Sore';
+  String get feelingSore => 'Dorido';
 
   @override
-  String get feelingIll => 'Ill';
+  String get feelingIll => 'Doente';
 
   @override
-  String get feelingShort => 'Short on time';
+  String get feelingShort => 'Pouco tempo';
 
   @override
-  String get feelingAsking => 'The coach is thinking again…';
+  String get feelingAsking => 'O treinador está a pensar de novo…';
 
   @override
-  String get proSwitchTitle => 'Use ProAI?';
+  String get proSwitchTitle => 'Usar ProAI?';
 
   @override
   String proSwitchBody(String provider) {
-    return 'Your FjeliaPro subscription is active. Should the coach use ProAI from now on instead of $provider?';
+    return 'A tua subscrição FjeliaPro está ativa. O treinador deve passar a usar o ProAI em vez de $provider?';
   }
 
   @override
   String get proAiRouting =>
-      'FjeliaPro uses a more powerful AI for race and season plans. Your coach and daily training suggestions use the regular Pro model.';
+      'O FjeliaPro usa uma IA mais potente para planos de prova e de época. O teu treinador e as sugestões diárias de treino usam o modelo Pro normal.';
 
   @override
   String proActiveUntilShort(String date) {
-    return 'Active until $date';
+    return 'Ativo até $date';
   }
 
   @override
   String shortSessionNote(int done, int planned) {
-    return 'Shorter than planned ($done of $planned min)';
+    return 'Mais curto do que o planeado ($done de $planned min)';
   }
 
   @override
-  String get noteForCoach => 'Note for the coach (optional)';
+  String get noteForCoach => 'Nota para o treinador (opcional)';
 
   @override
-  String get activityNote => 'Note';
+  String get activityNote => 'Nota';
 
   @override
-  String get activityNoteAdd => 'Add a note for the coach';
+  String get activityNoteAdd => 'Adicionar uma nota para o treinador';
 
   @override
   String get plusOmronBle => 'Procurar medidores de tensão BLE';
@@ -8610,33 +8675,33 @@ class AppLocalizationsPt extends AppLocalizations {
       'Procure dispositivos Bluetooth padrão para medir a tensão e perfis Omron compatíveis.';
 
   @override
-  String get sleepEcgTitle => 'Record sleep';
+  String get sleepEcgTitle => 'Gravar sono';
 
   @override
-  String get sleepEcgHint => 'ECG and movement with Polar H10';
+  String get sleepEcgHint => 'ECG e movimento com o Polar H10';
 
   @override
   String get sleepEcgDescription =>
       'Regista simultaneamente o ECG a 130 Hz e o movimento em três eixos a 25 Hz. Usa o Polar H10 e mantém o iPhone dentro do alcance do Bluetooth. A estimativa das fases do sono é opcional e executada separadamente; não são calculadas a frequência respiratória nem conclusões médicas.';
 
   @override
-  String get sleepEcgStart => 'Start overnight recording';
+  String get sleepEcgStart => 'Iniciar gravação noturna';
 
   @override
   String sleepEcgMotionSamples(int count) {
-    return 'Movement samples: $count';
+    return 'Amostras de movimento: $count';
   }
 
   @override
   String get sleepEcgKeepOpenHint =>
-      'You can leave this screen while recording continues. Keep Fjelia open in the app switcher and your iPhone near the H10. Force quitting the app interrupts the recording.';
+      'Podes sair deste ecrã enquanto a gravação continua. Mantém a Fjelia aberta no seletor de apps e o iPhone perto do H10. Forçar o fecho da app interrompe a gravação.';
 
   @override
   String get sleepEcgRawNote =>
       'Dados brutos do ECG e do movimento registados durante a noite. Podes iniciar separadamente uma estimativa experimental das fases do sono. Não são calculadas a frequência respiratória nem conclusões médicas.';
 
   @override
-  String get sleepEcgExportRaw => 'Export raw ECG + movement CSVs';
+  String get sleepEcgExportRaw => 'Exportar CSV em bruto de ECG + movimento';
 
   @override
   String get sleepEcgStagesTitle => 'Fases do sono estimadas';

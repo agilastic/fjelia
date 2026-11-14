@@ -1,0 +1,9 @@
+"NSBluetoothAlwaysUsageDescription" = "Fjelia łączy się z urządzeniami zdrowotnymi i treningowymi, aby nagrywać EKG, tętno i dane treningowe także przy zablokowanym ekranie.";
+"NSBluetoothPeripheralUsageDescription" = "Fjelia używa Bluetooth do łączenia się z Twoimi urządzeniami zdrowotnymi.";
+"NSHealthShareUsageDescription" = "Fjelia odczytuje Twoje dane o zdrowiu (sen, tętno, HRV, kroki, SpO2) z aplikacji Apple Zdrowie, aby dawać Ci osobiste wskazówki treningowe.";
+"NSHealthUpdateUsageDescription" = "Fjelia zapisuje zsynchronizowane dane o HRV, tętnie, śnie, krokach i treningach w Apple Zdrowie, aby nie przepadły przy zmianie aplikacji.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Gdy włączysz GPS, Fjelia nagrywa trasę treningu także po przełączeniu aplikacji i przy zablokowanym ekranie. Wstrzymanie lub zatrzymanie kończy rejestrowanie lokalizacji.";
+"NSLocationWhenInUseUsageDescription" = "Fjelia używa Twojej lokalizacji do tras treningowych przy włączonym GPS i do oceny ryzyka upału w zaplanowanych treningach.";
+"NSPhotoLibraryUsageDescription" = "Fjelia pozwala dodawać zdjęcia i filmy z biblioteki do treningów, celów startowych i zaplanowanych sesji.";
+"NSCameraUsageDescription" = "Fjelia używa aparatu, gdy robisz zdjęcie lub nagrywasz film do treningu, celu startowego lub zaplanowanej sesji.";
+"NSMicrophoneUsageDescription" = "Fjelia używa mikrofonu do dźwięku w filmach nagrywanych podczas treningu.";

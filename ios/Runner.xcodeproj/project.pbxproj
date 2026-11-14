@@ -78,6 +78,9 @@
 		A1F107000000000000000700 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A1F108000000000000000800 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A1F109000000000000000900 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A1F110000000000000001000 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A1F111000000000000001100 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A1F112000000000000001200 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A2F200000000000000000001 /* LocalModelChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalModelChannel.swift; sourceTree = "<group>"; };
 		B3396817D3FB832B33D50670 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 		C7E2AB8B4ABE7A1BC0C53312 /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -469,6 +472,9 @@
 				A1F107000000000000000700 /* sk */,
 				A1F108000000000000000800 /* fi */,
 				A1F109000000000000000900 /* da */,
+				A1F110000000000000001000 /* nl */,
+				A1F111000000000000001100 /* pl */,
+				A1F112000000000000001200 /* pt */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";

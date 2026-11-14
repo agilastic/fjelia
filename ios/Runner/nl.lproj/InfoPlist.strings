@@ -1,0 +1,9 @@
+"NSBluetoothAlwaysUsageDescription" = "Fjelia maakt verbinding met gezondheids- en trainingsapparaten om ECG, hartslag en trainingsgegevens ook bij een vergrendeld scherm op te nemen.";
+"NSBluetoothPeripheralUsageDescription" = "Fjelia gebruikt Bluetooth om verbinding te maken met je gezondheidsapparaten.";
+"NSHealthShareUsageDescription" = "Fjelia leest je gezondheidsgegevens (slaap, hartslag, HRV, stappen, SpO2) uit Apple Gezondheid om je persoonlijke trainingsinzichten te geven.";
+"NSHealthUpdateUsageDescription" = "Fjelia schrijft je gesynchroniseerde gegevens over HRV, hartslag, slaap, stappen en trainingen naar Apple Gezondheid, zodat ze niet verloren gaan als je van app wisselt.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Als je gps inschakelt, neemt Fjelia je trainingsroute ook op als je van app wisselt of het scherm vergrendelt. Pauze of Stop beëindigt de locatieregistratie.";
+"NSLocationWhenInUseUsageDescription" = "Fjelia gebruikt je locatie voor trainingsroutes bij ingeschakelde gps en om het hitterisico van geplande trainingen te beoordelen.";
+"NSPhotoLibraryUsageDescription" = "Met Fjelia kun je foto's en video's uit je bibliotheek toevoegen aan trainingen, wedstrijddoelen en geplande trainingen.";
+"NSCameraUsageDescription" = "Fjelia gebruikt de camera als je een foto of video maakt voor een training, een wedstrijddoel of een geplande training.";
+"NSMicrophoneUsageDescription" = "Fjelia gebruikt de microfoon voor het geluid van video's die je bij een training opneemt.";

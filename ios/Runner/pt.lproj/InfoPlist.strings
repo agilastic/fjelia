@@ -1,0 +1,9 @@
+"NSBluetoothAlwaysUsageDescription" = "A Fjelia liga-se a dispositivos de saúde e treino para gravar ECG, frequência cardíaca e dados de treino mesmo com o ecrã bloqueado.";
+"NSBluetoothPeripheralUsageDescription" = "A Fjelia usa o Bluetooth para se ligar aos teus dispositivos de saúde.";
+"NSHealthShareUsageDescription" = "A Fjelia lê os teus dados de saúde (sono, frequência cardíaca, HRV, passos, SpO2) do Apple Saúde para te dar conclusões de treino personalizadas.";
+"NSHealthUpdateUsageDescription" = "A Fjelia escreve no Apple Saúde os teus dados sincronizados de HRV, frequência cardíaca, sono, passos e treinos, para que não se percam quando mudas de app.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Quando ativas o GPS, a Fjelia grava o percurso do treino mesmo quando mudas de app ou bloqueias o ecrã. Pausa ou Parar terminam o registo da localização.";
+"NSLocationWhenInUseUsageDescription" = "A Fjelia usa a tua localização para os percursos de treino com o GPS ativado e para avaliar o risco de calor dos treinos planeados.";
+"NSPhotoLibraryUsageDescription" = "A Fjelia permite-te adicionar fotos e vídeos da tua biblioteca a treinos, objetivos de prova e sessões planeadas.";
+"NSCameraUsageDescription" = "A Fjelia usa a câmara quando tiras uma foto ou gravas um vídeo para um treino, um objetivo de prova ou uma sessão planeada.";
+"NSMicrophoneUsageDescription" = "A Fjelia usa o microfone para o som dos vídeos que gravas num treino.";
