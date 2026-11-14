@@ -23,11 +23,12 @@ class BriefingCard extends ConsumerStatefulWidget {
 
 class _BriefingCardState extends ConsumerState<BriefingCard> {
   bool _expanded = false;
+  bool _initialCloudConsentPromptStarted = false;
 
   @override
   Widget build(BuildContext context) {
     final settings = ref.watch(aiCoachSettingsProvider).valueOrNull;
-    if (settings == null || settings.briefingMode == BriefingMode.none) {
+    if (settings == null) {
       return const SizedBox.shrink();
     }
     final hour = DateTime.now().hour;
@@ -39,16 +40,24 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
         ? AiBriefingPeriod.afternoon
         : AiBriefingPeriod.evening;
     final briefing = ref.watch(aiBriefingProvider(period));
+    final source = ref.watch(aiBriefingSourceProvider(period));
+    if (settings.readyForBriefing &&
+        (!settings.onDeviceAvailable || briefing.hasError) &&
+        !_initialCloudConsentPromptStarted) {
+      _initialCloudConsentPromptStarted = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        runUiAction(context, () => _requestCloudConsent(settings, period));
+      });
+    }
     final summary = ref.watch(
       briefingSummaryProvider(ref.watch(selectedDateProvider)),
     );
-    final fallback =
-        settings.briefingMode == BriefingMode.ai && briefing.hasError;
-    final raw = settings.briefingMode == BriefingMode.static_ || fallback
-        ? summary
-        : briefing.valueOrNull;
+    final fallback = briefing.hasError;
+    final raw = fallback ? summary : briefing.valueOrNull ?? summary;
+    final canGenerate = briefing.valueOrNull == null || fallback;
     // Never markdown or line breaks, also for a briefing saved earlier.
-    final text = raw == null ? null : flattenBriefing(raw);
+    final text = flattenBriefing(raw);
     return SectionCard(
       title: switch (period) {
         AiBriefingPeriod.morning => context.l10n.morningBriefing,
@@ -60,47 +69,55 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (text != null)
-            Text(
-              text,
-              maxLines: _expanded ? null : 3,
-              overflow: _expanded ? null : TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 14, height: 1.55),
+          Text(
+            text,
+            maxLines: _expanded ? null : 3,
+            overflow: _expanded ? null : TextOverflow.ellipsis,
+            style: const TextStyle(fontSize: 14, height: 1.55),
+          ),
+          if (source != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: Text(
+                source,
+                style: TextStyle(
+                  color: muted,
+                  fontSize: 10,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
             ),
           if (briefing.isLoading) const LinearProgressIndicator(),
           if (briefing.hasError)
             Text(
-              settings.provider == AiProvider.localQwen
-                  ? context.l10n.localModelBriefingUnavailable
-                  : settings.usesOnDeviceBriefing
+              settings.onDeviceAvailable
                   ? context.l10n.appleIntelligenceIsUnavailableShowing
                   : context.l10n.aiBriefingUnavailableShowingA,
               style: TextStyle(fontSize: 12, color: muted),
             ),
-          if (settings.briefingMode == BriefingMode.ai &&
-              (text == null || fallback) &&
+          if (settings.readyForBriefing &&
+              canGenerate &&
               !briefing.isLoading)
             TextButton(
               onPressed: () => runUiAction(context, () async {
-                // Asked once per AI provider and model, not every time.
-                if (!settings.usesOnDeviceBriefing &&
-                    !await BriefingConsent.given(settings)) {
+                var cloudConsent = await BriefingConsent.given(settings);
+                // Apple is always attempted first. Ask for cloud use only if
+                // Apple is unavailable or its on-device generation failed.
+                if (!cloudConsent &&
+                    (!settings.onDeviceAvailable || briefing.hasError)) {
                   if (!context.mounted) return;
                   final message = context.l10n.shareBriefingContextWithName(
-                    settings.provider == AiProvider.freeAi
-                        ? '${context.l10n.freeAi} ($freeAiHost)'
-                        : settings.provider.name,
+                    '${context.l10n.freeAi} ($freeAiHost)',
                   );
                   if (!await confirmAction(
                     context,
                     context.l10n.generateAiBriefing,
-                    settings.provider == AiProvider.freeAi
-                        ? '$message\n\n${context.l10n.freeAiUsageTracking}'
-                        : message,
+                    message,
                   )) {
                     return;
                   }
                   await BriefingConsent.remember(settings);
+                  cloudConsent = true;
                 }
                 final profile = await ref.read(userProfileProvider.future);
                 await ref
@@ -108,7 +125,7 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
                     .load(
                       settings,
                       raceGoals: profile.raceGoals ?? '',
-                      cloudConsent: !settings.usesOnDeviceBriefing,
+                      cloudConsent: cloudConsent,
                     );
               }),
               child: Text(
@@ -117,9 +134,7 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
                     : context.l10n.generateBriefing,
               ),
             ),
-          if (text != null &&
-              settings.briefingMode == BriefingMode.ai &&
-              !fallback)
+          if (!fallback)
             TextButton(
               style: TextButton.styleFrom(
                 foregroundColor: mint,
@@ -130,10 +145,7 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
               onPressed: () => setState(() => _expanded = !_expanded),
               child: Text(_expanded ? 'show less' : 'read more'),
             ),
-          if (_expanded &&
-              text != null &&
-              settings.briefingMode == BriefingMode.ai &&
-              !fallback)
+          if (_expanded && !fallback)
             Padding(
               padding: const EdgeInsets.only(top: 6),
               child: OutlinedButton.icon(
@@ -152,10 +164,7 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
                 },
               ),
             ),
-          if (_expanded &&
-              text != null &&
-              settings.briefingMode == BriefingMode.ai &&
-              !fallback)
+          if (_expanded && !fallback)
             TextButton.icon(
               style: TextButton.styleFrom(foregroundColor: mint),
               icon: const Icon(Icons.help_outline, size: 18),
@@ -170,5 +179,28 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
         ],
       ),
     );
+  }
+
+  Future<void> _requestCloudConsent(
+    AiCoachSettings settings,
+    AiBriefingPeriod period,
+  ) async {
+    if (await BriefingConsent.given(settings)) return;
+    if (!mounted) return;
+    final message = context.l10n.shareBriefingContextWithName(
+      '${context.l10n.freeAi} ($freeAiHost)',
+    );
+    if (!await confirmAction(
+      context,
+      context.l10n.generateAiBriefing,
+      message,
+    )) {
+      return;
+    }
+    await BriefingConsent.remember(settings);
+    final profile = await ref.read(userProfileProvider.future);
+    await ref
+        .read(aiBriefingProvider(period).notifier)
+        .load(settings, raceGoals: profile.raceGoals ?? '', cloudConsent: true);
   }
 }

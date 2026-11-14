@@ -4048,6 +4048,24 @@ class AppLocalizationsFi extends AppLocalizations {
   String get markAsRest => 'Merkitse lepopäiväksi';
 
   @override
+  String get changeSport => 'Vaihda lajia';
+
+  @override
+  String get replacementSport => 'Korvaava laji';
+
+  @override
+  String get replacementLoadNote =>
+      'Kesto, suunnitellut sykealueet ja kuormitustavoite säilyvät. Vauhti- ja tehotavoitteet sovitetaan uuteen lajiin.';
+
+  @override
+  String replacementCalendarNote(String platforms) {
+    return 'Alkuperäinen harjoitus poistetaan näistä harjoituskalentereista: $platforms.';
+  }
+
+  @override
+  String get applySportChange => 'Suunnittele korvaava harjoitus';
+
+  @override
   String get restoreWorkout => 'Palauta harjoitus';
 
   @override
@@ -8665,4 +8683,88 @@ class AppLocalizationsFi extends AppLocalizations {
   @override
   String get sleepEcgStagesFailed =>
       'Univaiheita ei voitu arvioida. Tarkista, että tallennus on valmis, ja yritä uudelleen.';
+
+  @override
+  String get replacementPreviewTitle => 'Tarkista korvaava harjoitus';
+
+  @override
+  String replacementGoalLoad(String objective, int load) {
+    return 'Tavoite: $objective · suunniteltu kuormitus $load';
+  }
+
+  @override
+  String get replacementHistoryEstimate =>
+      'Kesto on arvioitu viimeaikaisen harjoittelusi perusteella tässä lajissa.';
+
+  @override
+  String get replacementFallbackEstimate =>
+      'Tästä lajista ei ole tarpeeksi tuoretta harjoitusdataa. Kesto on varovainen arvio.';
+
+  @override
+  String get replacementRestSuggestion =>
+      'Lepo voi olla parempi valinta nykyiseen harjoitusohjelmaasi.';
+
+  @override
+  String get replacementObjectiveRecovery => 'Palautuminen';
+
+  @override
+  String get replacementObjectiveBase => 'Peruskestävyys';
+
+  @override
+  String get replacementObjectiveTempo => 'Tempo';
+
+  @override
+  String get replacementObjectiveThreshold => 'Kynnys';
+
+  @override
+  String get replacementObjectiveVo2 => 'VO₂max';
+
+  @override
+  String get replacementObjectiveLong => 'Pitkä kestävyys';
+
+  @override
+  String get replacementWarningNoHistory =>
+      'Tästä lajista ei ole tarpeeksi tuoretta kuormitushistoriaa.';
+
+  @override
+  String get replacementWarningRunningCap =>
+      'Juoksumäärää on rajattu varovasti mekaanisen kuormituksen vähentämiseksi.';
+
+  @override
+  String get replacementWarningLong =>
+      'Pitkiä tai kilpailukohtaisia harjoituksia ei voi korvata täysin. Tarkista lyhyempi juoksu.';
+
+  @override
+  String get replacementWarningRace =>
+      'Tällä harjoituksella on kilpailuprioriteetti; sen lajikohtainen hyöty ei välttämättä säily.';
+
+  @override
+  String get replacementWarningSwim =>
+      'Osa aerobisesta ärsykkeestä siirtyy, mutta ei uintitekniikka eikä lajikohtainen lihaskuormitus.';
+
+  @override
+  String get replacementWarningStrength =>
+      'Voima- ja kestävyysharjoitukset eivät ole vastaavia eivätkä voi säilyttää samaa harjoitusvaikutusta.';
+
+  @override
+  String get replacementWarningNearby =>
+      'Toinen kova harjoitus osuu 72 tunnin sisälle. Tarkista palautuminen ja harjoitusten väli.';
+
+  @override
+  String get replacementWarningWeekly =>
+      'Tämä harjoitus on suuri osa tämän viikon muusta suunnitellusta harjoituskuormasta.';
+
+  @override
+  String get replacementWarningLowRecovery =>
+      'Viimeksi tallennettu palautumispisteesi on matala. Harkitse tehon vähentämistä tai lepoa.';
+
+  @override
+  String get replacementWarningRecentVolume =>
+      'Harjoituskuormasi viimeisten seitsemän päivän ajalta on selvästi suurempi kuin sitä edeltävien seitsemän päivän.';
+
+  @override
+  String get replacementTrainingGoal => 'HARJOITUSTAVOITE';
+
+  @override
+  String get replacementPreviewWarnings => 'HUOMIOT SUUNNITELMASTA';
 }

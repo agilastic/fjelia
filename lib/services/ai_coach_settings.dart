@@ -91,6 +91,7 @@ class AiCoachSettings {
     this.consentMode = AiConsentMode.everyMessage,
     this.briefingMode = BriefingMode.ai,
     this.appleIntelligenceForBriefing = true,
+    this.hasBriefingCloud = false,
     this.onDeviceAvailable = true,
     this.localModelAvailable = false,
     this.localModelInstalled = false,
@@ -107,6 +108,9 @@ class AiCoachSettings {
   /// whatever answers the chat: it costs no tokens and nothing leaves the
   /// phone. On by default; the athlete can switch it off.
   final bool appleIntelligenceForBriefing;
+
+  /// Whether this build has the Fjelia AI gateway key for briefing fallback.
+  final bool hasBriefingCloud;
 
   /// Whether Apple's on-device model can run here (device, OS, Apple
   /// Intelligence switched on, language), checked for every provider.
@@ -127,17 +131,17 @@ class AiCoachSettings {
 
   /// A local model writes the briefing itself; with Free AI or an own key,
   /// Apple Intelligence writes it when it runs on this device.
-  bool get usesOnDeviceBriefing =>
-      provider.isLocal || (appleIntelligenceForBriefing && onDeviceAvailable);
+  bool get usesOnDeviceBriefing => onDeviceAvailable;
 
+  /// Briefings follow neither the chat provider nor the old Apple switch, but
+  /// a "continue without AI" (any non-AI briefing mode) keeps them off.
   bool get readyForBriefing =>
       briefingMode == BriefingMode.ai &&
-      (provider == AiProvider.localQwen
-          ? ready
-          : (usesOnDeviceBriefing || ready));
+      (onDeviceAvailable || hasBriefingCloud);
 
   AiCoachSettings copyWith({
     bool? appleIntelligenceForBriefing,
+    bool? hasBriefingCloud,
     BriefingMode? briefingMode,
     AiConsentMode? consentMode,
     bool? enabled,
@@ -157,6 +161,7 @@ class AiCoachSettings {
       briefingMode: briefingMode ?? this.briefingMode,
       appleIntelligenceForBriefing:
           appleIntelligenceForBriefing ?? this.appleIntelligenceForBriefing,
+      hasBriefingCloud: hasBriefingCloud ?? this.hasBriefingCloud,
       onDeviceAvailable: onDeviceAvailable ?? this.onDeviceAvailable,
       localModelAvailable: localModelAvailable ?? this.localModelAvailable,
       localModelInstalled: localModelInstalled ?? this.localModelInstalled,
@@ -253,6 +258,7 @@ class AiCoachSettingsStore {
       ),
       appleIntelligenceForBriefing:
           await _storage.read(key: 'ai_apple_briefing') != 'false',
+      hasBriefingCloud: await readApiKey(AiProvider.freeAi) != null,
     );
   }
 
@@ -269,6 +275,17 @@ class AiCoachSettingsStore {
       _installationIdLoading ??= _loadFreeAiInstallationId().whenComplete(() {
         _installationIdLoading = null;
       });
+
+  /// The Free AI installation ID if one exists; never creates one. For uses
+  /// that must not start Free AI usage attribution, such as cache keys.
+  Future<String?> peekFreeAiInstallationId() async {
+    final saved = await _installationStorage.read(
+      key: freeAiInstallationIdStorageKey,
+    );
+    return saved != null && _installationIdPattern.hasMatch(saved)
+        ? saved
+        : null;
+  }
 
   Future<String> _loadFreeAiInstallationId() async {
     final saved = await _installationStorage.read(

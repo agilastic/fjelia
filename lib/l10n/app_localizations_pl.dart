@@ -4022,6 +4022,24 @@ class AppLocalizationsPl extends AppLocalizations {
   String get markAsRest => 'Mark as Rest';
 
   @override
+  String get changeSport => 'Zmień sport';
+
+  @override
+  String get replacementSport => 'Sport zastępczy';
+
+  @override
+  String get replacementLoadNote =>
+      'Czas trwania, planowane strefy tętna i cel obciążenia zostają zachowane. Cele tempa i mocy są dostosowywane do nowego sportu.';
+
+  @override
+  String replacementCalendarNote(String platforms) {
+    return 'Pierwotny trening zostanie usunięty z tych kalendarzy treningowych: $platforms.';
+  }
+
+  @override
+  String get applySportChange => 'Zaplanuj trening zastępczy';
+
+  @override
   String get restoreWorkout => 'Restore workout';
 
   @override
@@ -8644,4 +8662,88 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String get sleepEcgStagesFailed =>
       'Nie udało się oszacować faz snu. Sprawdź, czy nagranie jest kompletne, i spróbuj ponownie.';
+
+  @override
+  String get replacementPreviewTitle => 'Sprawdź trening zastępczy';
+
+  @override
+  String replacementGoalLoad(String objective, int load) {
+    return 'Cel: $objective · planowane obciążenie $load';
+  }
+
+  @override
+  String get replacementHistoryEstimate =>
+      'Czas trwania oszacowany na podstawie Twoich ostatnich treningów w tym sporcie.';
+
+  @override
+  String get replacementFallbackEstimate =>
+      'Brak wystarczających danych z ostatnich treningów w tym sporcie. Czas trwania to ostrożne oszacowanie.';
+
+  @override
+  String get replacementRestSuggestion =>
+      'Odpoczynek może być lepszym wyborem przy Twoim obecnym planie treningowym.';
+
+  @override
+  String get replacementObjectiveRecovery => 'Regeneracja';
+
+  @override
+  String get replacementObjectiveBase => 'Wytrzymałość podstawowa';
+
+  @override
+  String get replacementObjectiveTempo => 'Tempo';
+
+  @override
+  String get replacementObjectiveThreshold => 'Próg';
+
+  @override
+  String get replacementObjectiveVo2 => 'VO₂max';
+
+  @override
+  String get replacementObjectiveLong => 'Długa wytrzymałość';
+
+  @override
+  String get replacementWarningNoHistory =>
+      'Brak wystarczającej historii obciążeń z ostatniego czasu dla tego sportu.';
+
+  @override
+  String get replacementWarningRunningCap =>
+      'Objętość biegania została ostrożnie ograniczona, aby zmniejszyć obciążenie mechaniczne.';
+
+  @override
+  String get replacementWarningLong =>
+      'Długich lub startowo specyficznych treningów nie da się w pełni zastąpić. Sprawdź krótszy bieg.';
+
+  @override
+  String get replacementWarningRace =>
+      'Ten trening ma priorytet startowy; jego korzyść specyficzna dla sportu może nie zostać zachowana.';
+
+  @override
+  String get replacementWarningSwim =>
+      'Część bodźca tlenowego zostaje zachowana, ale nie technika pływania ani specyficzne obciążenie mięśni.';
+
+  @override
+  String get replacementWarningStrength =>
+      'Treningi siłowe i wytrzymałościowe nie są równoważne i nie mogą zachować tego samego efektu treningowego.';
+
+  @override
+  String get replacementWarningNearby =>
+      'W ciągu 72 godzin jest inny ciężki trening. Sprawdź regenerację i odstęp między treningami.';
+
+  @override
+  String get replacementWarningWeekly =>
+      'Ten trening stanowi dużą część pozostałego planowanego obciążenia w tym tygodniu.';
+
+  @override
+  String get replacementWarningLowRecovery =>
+      'Twój ostatnio zapisany wynik regeneracji jest niski. Rozważ zmniejszenie intensywności lub odpoczynek.';
+
+  @override
+  String get replacementWarningRecentVolume =>
+      'Twoje obciążenie treningowe z ostatnich siedmiu dni jest wyraźnie wyższe niż w poprzednich siedmiu dniach.';
+
+  @override
+  String get replacementTrainingGoal => 'CEL TRENINGOWY';
+
+  @override
+  String get replacementPreviewWarnings => 'UWAGI DO PLANU';
 }

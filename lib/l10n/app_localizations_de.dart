@@ -4059,6 +4059,24 @@ class AppLocalizationsDe extends AppLocalizations {
   String get markAsRest => 'Als Ruhe markieren';
 
   @override
+  String get changeSport => 'Sport ändern';
+
+  @override
+  String get replacementSport => 'Ersatzsportart';
+
+  @override
+  String get replacementLoadNote =>
+      'Dauer, geplante Herzfrequenzzonen und Belastungsziel bleiben erhalten. Tempo- und Leistungsvorgaben werden an die neue Sportart angepasst.';
+
+  @override
+  String replacementCalendarNote(String platforms) {
+    return 'Die ursprüngliche Einheit wird aus diesen Trainingskalendern entfernt: $platforms.';
+  }
+
+  @override
+  String get applySportChange => 'Ersatztraining einplanen';
+
+  @override
   String get restoreWorkout => 'Training wiederherstellen';
 
   @override
@@ -8699,7 +8717,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get sleepEcgStagesDisclaimer =>
-      'Experimentelle Schätzung aus dem Polar-H10-EKG mit einem EKG-Forschungsmodell. N1 und N2 werden als Leichtschlaf zusammengefasst. Keine PSG- oder medizinische Messung.';
+      'Experimentelle Schätzung aus dem Polar-H10-EKG. 30-Sekunden-Modellwerte werden für die Übersicht zu 5-Minuten-Abschnitten zusammengefasst. N1 und N2 gelten als Leichtschlaf. Keine PSG- oder medizinische Messung.';
 
   @override
   String get sleepEcgStagesWorking => 'Schlafphasen werden geschätzt …';
@@ -8707,4 +8725,88 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get sleepEcgStagesFailed =>
       'Schlafphasen konnten nicht geschätzt werden. Prüfe, ob die Aufzeichnung vollständig ist, und versuche es erneut.';
+
+  @override
+  String get replacementPreviewTitle => 'Ersatztraining prüfen';
+
+  @override
+  String replacementGoalLoad(String objective, int load) {
+    return 'Ziel: $objective · $load geplante Belastung';
+  }
+
+  @override
+  String get replacementHistoryEstimate =>
+      'Dauer anhand deines jüngsten Trainings in dieser Sportart geschätzt.';
+
+  @override
+  String get replacementFallbackEstimate =>
+      'Für diese Sportart liegen zu wenige aktuelle Trainingsdaten vor. Die Dauer ist eine vorsichtige Schätzung.';
+
+  @override
+  String get replacementRestSuggestion =>
+      'Für deinen aktuellen Trainingsplan könnte Ruhe die bessere Wahl sein.';
+
+  @override
+  String get replacementObjectiveRecovery => 'Erholung';
+
+  @override
+  String get replacementObjectiveBase => 'Grundlage';
+
+  @override
+  String get replacementObjectiveTempo => 'Tempo';
+
+  @override
+  String get replacementObjectiveThreshold => 'Schwelle';
+
+  @override
+  String get replacementObjectiveVo2 => 'VO₂max';
+
+  @override
+  String get replacementObjectiveLong => 'Lange Ausdauer';
+
+  @override
+  String get replacementWarningNoHistory =>
+      'Keine ausreichende aktuelle Belastungshistorie für diese Sportart.';
+
+  @override
+  String get replacementWarningRunningCap =>
+      'Der Laufumfang wurde wegen der mechanischen Belastung vorsichtig begrenzt.';
+
+  @override
+  String get replacementWarningLong =>
+      'Lange oder wettkampfspezifische Einheiten sind nicht vollständig ersetzbar. Prüfe die kürzere Laufeinheit.';
+
+  @override
+  String get replacementWarningRace =>
+      'Diese Einheit hat Wettkampfpriorität. Der sportartspezifische Nutzen bleibt möglicherweise nicht erhalten.';
+
+  @override
+  String get replacementWarningSwim =>
+      'Das Ausdauertraining bleibt teilweise erhalten, aber nicht die Schwimmtechnik und spezifische Muskelbelastung.';
+
+  @override
+  String get replacementWarningStrength =>
+      'Kraft- und Ausdauertraining sind nicht gleichwertig und erhalten nicht denselben Trainingseffekt.';
+
+  @override
+  String get replacementWarningNearby =>
+      'Innerhalb von 72 Stunden liegt eine weitere intensive Einheit. Prüfe Erholung und Belastungsabstand.';
+
+  @override
+  String get replacementWarningWeekly =>
+      'Diese Einheit macht einen großen Anteil der übrigen geplanten Wochenbelastung aus.';
+
+  @override
+  String get replacementWarningLowRecovery =>
+      'Deine zuletzt gespeicherte Erholung ist niedrig. Prüfe, ob du die Intensität reduzieren oder pausieren möchtest.';
+
+  @override
+  String get replacementWarningRecentVolume =>
+      'Dein Trainingsumfang der letzten sieben Tage liegt deutlich über dem vorherigen Sieben-Tage-Zeitraum.';
+
+  @override
+  String get replacementTrainingGoal => 'TRAININGSZIEL';
+
+  @override
+  String get replacementPreviewWarnings => 'HINWEISE ZUM PLAN';
 }

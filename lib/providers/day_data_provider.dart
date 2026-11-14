@@ -124,6 +124,7 @@ Future<List<List<(DateTime, double)>>> _nightHeartRate(
 SleepData sleepFromRecord(
   SleepRecord r, {
   List<List<(DateTime, double)>> heartRates = const [],
+  String? stageSource,
 }) {
   final phases = <SleepPhase>[];
   final json = r.phasesJson;
@@ -177,6 +178,7 @@ SleepData sleepFromRecord(
     hrvCurve: hrvCurve,
     stressCurve: stressCurve,
     phasesEstimated: estimated,
+    source: stageSource ?? r.source,
   );
 }
 
@@ -321,9 +323,21 @@ final sleepDataProvider = FutureProvider.family<SleepData?, DateTime>((
       ref.watch(healthConnectPermissionProvider).valueOrNull ?? false;
   final record = await db.getSleepForDate(date);
   if (record == null) return null;
+  final origins = await db.getMetricOrigins('sleep_records', record.date);
+  String? sourceFor(String metric) {
+    final source = origins[metric]?.source;
+    return source == null || source == 'unknown' || source == 'mixed'
+        ? null
+        : source;
+  }
+
   return sleepFromRecord(
     record,
     heartRates: await _nightHeartRate(db, record, health: health),
+    stageSource:
+        sourceFor('phases_json') ??
+        sourceFor('total_sleep_seconds') ??
+        record.source,
   );
 });
 

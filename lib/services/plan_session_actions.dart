@@ -1,8 +1,11 @@
 import 'package:drift/drift.dart';
+import 'package:uuid/uuid.dart';
+
 import '../db/database.dart';
 import '../utils/week.dart';
 import 'workout_providers/workout_providers.dart';
 import 'race_goal_service.dart';
+import 'workout_replacement_service.dart';
 
 class PlanSessionActions {
   PlanSessionActions(this.db, this.providers);
@@ -145,6 +148,80 @@ class PlanSessionActions {
     )..where((t) => t.id.equals(session.id))).getSingle();
   }
 
+  /// Skips the original session and creates a same-day replacement in another
+  /// endurance sport. Time blocks and HR-zone distribution carry over, while
+  /// pace/power targets are cleared and recalculated for the selected sport.
+  Future<TrainingSession> replaceWithSport(
+    WorkoutReplacementPreview preview, {
+    String reason = 'Replaced with another sport',
+  }) async {
+    final session = preview.source;
+    final sport = preview.targetSport;
+    final sportLabel = preview.targetLabel;
+    if (!const {'planned', 'adapted'}.contains(session.status)) {
+      throw StateError('Only a planned workout can be replaced.');
+    }
+    if (sport == session.sport) {
+      throw ArgumentError.value(sport, 'sport', 'Choose another sport.');
+    }
+    final now = DateTime.now();
+    final replacementId = const Uuid().v4();
+    final replacement = session
+        .toCompanion(true)
+        .copyWith(
+          id: Value(replacementId),
+          sport: Value(sport),
+          title: Value('$sportLabel · ${session.title}'),
+          sessionNotes: const Value(null),
+          athleteNotes: const Value(null),
+          warmUp: const Value(null),
+          mainSet: const Value(null),
+          coolDown: const Value(null),
+          plannedDurationMin: Value(preview.durationMin),
+          plannedTrimp: Value(preview.targetLoad),
+          stepsJson: Value(preview.stepsJson),
+          hrRangesJson: const Value(null),
+          paceRangesJson: const Value(null),
+          powerRangesJson: const Value(null),
+          targetMetric: const Value(null),
+          adaptationTrigger: const Value('athlete_replacement'),
+          originalSessionId: Value(session.id),
+          garminWorkoutId: const Value(null),
+          garminAlternativeId: const Value(null),
+          multiSportWorkoutId: const Value(null),
+          status: const Value('planned'),
+          createdByCoach: const Value(false),
+          adjustedByCoach: const Value(false),
+          addedByAthlete: const Value(true),
+          dateModified: Value(now),
+          modifiedBy: const Value('athlete'),
+        );
+    await db.transaction(() async {
+      await (db.update(
+        db.trainingSessions,
+      )..where((t) => t.id.equals(session.id))).write(
+        TrainingSessionsCompanion(
+          status: const Value('skipped'),
+          dateModified: Value(now),
+          modifiedBy: const Value('athlete'),
+        ),
+      );
+      await db
+          .into(db.sessionActuals)
+          .insertOnConflictUpdate(
+            SessionActualsCompanion.insert(
+              sessionId: session.id,
+              skipReason: Value(reason),
+            ),
+          );
+      await db.into(db.trainingSessions).insert(replacement);
+    });
+    await releaseDeliveries(session);
+    return (db.select(
+      db.trainingSessions,
+    )..where((t) => t.id.equals(replacementId))).getSingle();
+  }
+
   /// Takes the session off every platform's calendar that has it, best
   /// effort: a platform that cannot be reached keeps its entry for a later
   /// attempt. The workout stays on record, so restoring the session puts it
@@ -154,9 +231,38 @@ class PlanSessionActions {
 
   /// Undoes a skip. Only a skip with a recorded reason and no completed
   /// activity is undone; the session becomes planned again.
+  /// A sport replacement made from this session goes with the skip; a
+  /// replacement that is already done keeps the original skipped.
   Future<TrainingSession> restore(TrainingSession session) async {
     if (session.status != 'skipped') return session;
+    final replacements =
+        await (db.select(db.trainingSessions)..where(
+              (t) =>
+                  t.originalSessionId.equals(session.id) &
+                  t.adaptationTrigger.equals('athlete_replacement'),
+            ))
+            .get();
+    for (final r in replacements) {
+      final actual = await (db.select(
+        db.sessionActuals,
+      )..where((t) => t.sessionId.equals(r.id))).getSingleOrNull();
+      if (r.status == 'completed' || actual?.completedAt != null) {
+        throw StateError('The replacement workout is already done.');
+      }
+    }
+    // Off the watch calendars first, while the delivery records still exist.
+    for (final r in replacements) {
+      await releaseDeliveries(r);
+    }
     await db.transaction(() async {
+      for (final r in replacements) {
+        await (db.delete(
+          db.sessionActuals,
+        )..where((t) => t.sessionId.equals(r.id))).go();
+        await (db.delete(
+          db.trainingSessions,
+        )..where((t) => t.id.equals(r.id))).go();
+      }
       final actual = await (db.select(
         db.sessionActuals,
       )..where((t) => t.sessionId.equals(session.id))).getSingleOrNull();

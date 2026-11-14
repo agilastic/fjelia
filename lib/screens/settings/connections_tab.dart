@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import '../../l10n/l10n_ext.dart';
 import '../../providers/connection_actions_provider.dart';
 
@@ -7,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/source_priority_provider.dart';
 import '../../providers/health_connect_provider.dart';
+import '../../providers/sync_provider.dart';
 import '../../providers/hilo_sync_provider.dart';
 import '../../providers/coros_provider.dart';
 import '../../providers/suunto_provider.dart';
@@ -38,6 +41,8 @@ class ConnectionsTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final auth = ref.watch(authProvider);
+    final messenger = ScaffoldMessenger.of(context);
+    final syncMessage = context.l10n.syncingYourData;
     return SheetPage(
       title: context.l10n.connections,
       child: ListView(
@@ -173,12 +178,26 @@ class ConnectionsTab extends ConsumerWidget {
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: groups[group.name]!.length,
-                        onReorderItem: (a, b) => runUiAction(
-                          context,
-                          () => ref
+                        onReorderItem: (a, b) => runUiAction(context, () async {
+                          await ref
                               .read(sourcePriorityProvider.notifier)
-                              .reorder(group, a, b > a ? b + 1 : b),
-                        ),
+                              .reorder(group, a, b > a ? b + 1 : b);
+                          if (group == SourceGroup.sleep) {
+                            // Sleep summaries store the winning source only.
+                            // Re-sync now so providers are merged again using
+                            // the newly selected priority order.
+                            if (messenger.mounted) {
+                              messenger.showSnackBar(
+                                SnackBar(content: Text(syncMessage)),
+                              );
+                            }
+                            unawaited(
+                              ref
+                                  .read(syncProvider.notifier)
+                                  .sync(queueIfBusy: true),
+                            );
+                          }
+                        }),
                         itemBuilder: (c, i) {
                           final source = groups[group.name]![i];
                           return Card(

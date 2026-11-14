@@ -10,7 +10,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../services/ai_context_toon_builder.dart';
-import '../services/ai_coach_settings.dart';
 import '../services/briefing_consent.dart';
 import '../services/health_connect_service.dart' show HealthAccess;
 import '../services/sync_service.dart';
@@ -315,13 +314,19 @@ class SyncNotifier extends StateNotifier<SyncState> {
   final Ref _ref;
   final SyncService _service;
   bool _aktiiaRefreshing = false;
+  bool _syncQueued = false;
 
   void _bump(StateProvider<int> p) =>
       _ref.read(p.notifier).update((v) => v + 1);
 
-  Future<void> sync() async {
+  Future<void> sync({bool queueIfBusy = false}) async {
     if (state.status == SyncStatus.syncing) {
-      log('[Sync] already syncing — skipped');
+      if (queueIfBusy) {
+        _syncQueued = true;
+        log('[Sync] already syncing — queued one follow-up sync');
+      } else {
+        log('[Sync] already syncing — skipped');
+      }
       return;
     }
     log('[Sync] starting');
@@ -340,6 +345,10 @@ class SyncNotifier extends StateNotifier<SyncState> {
         status: SyncStatus.error,
         errorMessage: msg.length > 60 ? msg.substring(0, 60) : msg,
       );
+    }
+    if (_syncQueued && mounted) {
+      _syncQueued = false;
+      await sync();
     }
   }
 
@@ -724,13 +733,9 @@ class SyncNotifier extends StateNotifier<SyncState> {
   /// Builds a local briefing or a cloud briefing previously consented to.
   Future<void> _prewarmBriefing() async {
     final settings = _ref.read(aiCoachSettingsProvider).valueOrNull;
-    if (settings == null ||
-        !settings.readyForBriefing ||
-        settings.briefingMode != BriefingMode.ai) {
-      return;
-    }
-    final cloudConsent = !settings.usesOnDeviceBriefing;
-    if (cloudConsent && !await BriefingConsent.given(settings)) return;
+    if (settings == null || !settings.readyForBriefing) return;
+    final cloudConsent = await BriefingConsent.given(settings);
+    if (!settings.onDeviceAvailable && !cloudConsent) return;
     final hour = DateTime.now().hour;
     final period = hour < 11
         ? AiBriefingPeriod.morning

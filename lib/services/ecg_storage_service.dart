@@ -12,7 +12,8 @@ import '../db/database.dart';
 import '../models/ecg.dart';
 import '../models/ecg_sleep_staging.dart';
 import 'pdf_text_extractor.dart';
-import 'source_priority_service.dart' show SourceGroup, priorityForGroup;
+import 'source_priority_service.dart'
+    show SourceGroup, priorityForGroup, shouldOverwrite;
 
 class EcgImport {
   const EcgImport({
@@ -156,8 +157,28 @@ EcgImport decodeEcgImport(Uint8List bytes) {
 }
 
 class EcgStorageService {
-  EcgStorageService(this.db);
+  EcgStorageService(
+    this.db, {
+    Future<List<String>> Function(SourceGroup)? priorityReader,
+  }) : _priority = priorityReader ?? priorityForGroup;
   final AppDatabase db;
+  final Future<List<String>> Function(SourceGroup) _priority;
+
+  static const _source = 'fjelia_ecg';
+
+  /// The columns of one night's stage measurement; they move as one, the
+  /// same set the summary merge treats as a night.
+  static const _nightColumns = [
+    'total_sleep_seconds',
+    'deep_sleep_seconds',
+    'light_sleep_seconds',
+    'rem_sleep_seconds',
+    'awake_sleep_seconds',
+    'sleep_start',
+    'sleep_end',
+    'phases_json',
+    'night_curves_json',
+  ];
 
   Future<EcgRecording?> recording(String id) => (db.select(
     db.ecgRecordings,
@@ -390,17 +411,15 @@ class EcgStorageService {
     metadata['sleep_stage_estimate'] = estimate.toJson();
     metadata['sleep_stage_summary_version'] = 1;
     metadata['sleep_stage_summary_step_seconds'] = 300;
-    metadata['sleep_stage_summary_priority'] = await priorityForGroup(
+    metadata['sleep_stage_summary_priority'] = await _priority(
       SourceGroup.sleep,
-    );
-    await (db.update(
-      db.ecgRecordings,
-    )..where((t) => t.recordingId.equals(id))).write(
-      EcgRecordingsCompanion(metadataJson: Value(jsonEncode(metadata))),
     );
 
     final phases = estimate.fiveMinutePhases(row.recordedAt.toLocal());
-    if (phases.isEmpty) return;
+    if (phases.isEmpty) {
+      await _writeMetadata(id, metadata);
+      return;
+    }
     var deep = 0, light = 0, rem = 0, awake = 0;
     for (final phase in phases) {
       final seconds = phase.end.difference(phase.start).inSeconds;
@@ -418,38 +437,148 @@ class EcgStorageService {
     final sleepStart = phases.first.start;
     final sleepEnd = phases.last.end;
     final date = DateTime(sleepEnd.year, sleepEnd.month, sleepEnd.day);
-    await db.upsertSleep(
-      SleepRecordsCompanion(
-        date: Value(date),
-        totalSleepSeconds: Value(deep + light + rem),
-        deepSleepSeconds: Value(deep),
-        remSleepSeconds: Value(rem),
-        lightSleepSeconds: Value(light),
-        awakeSleepSeconds: Value(awake),
-        sleepStart: Value(sleepStart),
-        sleepEnd: Value(sleepEnd),
-        phasesJson: Value(
-          jsonEncode([
-            for (final phase in phases)
-              {
-                's': phase.start.toUtc().toIso8601String(),
-                'e': phase.end.toUtc().toIso8601String(),
-                'p': phase.phase,
-              },
-          ]),
+    await db.transaction(() async {
+      // The night this summary may replace: kept so it comes back when the
+      // athlete ranks its source above the H10 again.
+      final before = await _night(date);
+      await db.upsertSleep(
+        SleepRecordsCompanion(
+          date: Value(date),
+          totalSleepSeconds: Value(deep + light + rem),
+          deepSleepSeconds: Value(deep),
+          remSleepSeconds: Value(rem),
+          lightSleepSeconds: Value(light),
+          awakeSleepSeconds: Value(awake),
+          sleepStart: Value(sleepStart),
+          sleepEnd: Value(sleepEnd),
+          phasesJson: Value(
+            jsonEncode([
+              for (final phase in phases)
+                {
+                  's': phase.start.toUtc().toIso8601String(),
+                  'e': phase.end.toUtc().toIso8601String(),
+                  'p': phase.phase,
+                },
+            ]),
+          ),
+          source: const Value(_source),
         ),
-        source: const Value('fjelia_ecg'),
-      ),
+      );
+      if (before != null &&
+          before.source != _source &&
+          (await _night(date))?.source == _source) {
+        metadata['displaced_night'] = before.toJson();
+      }
+      await _writeMetadata(id, metadata);
+    });
+  }
+
+  Future<void> _writeMetadata(String id, Map<String, dynamic> metadata) =>
+      (db.update(
+        db.ecgRecordings,
+      )..where((t) => t.recordingId.equals(id))).write(
+        EcgRecordingsCompanion(metadataJson: Value(jsonEncode(metadata))),
+      );
+
+  /// The stored night for [date] with the source of its stages, or null when
+  /// there is no real night (nothing stored, or 0 s asleep).
+  Future<_StoredNight?> _night(DateTime date) async {
+    final day = DateTime(date.year, date.month, date.day);
+    final end = DateTime(day.year, day.month, day.day + 1);
+    final row = await db
+        .customSelect(
+          'SELECT * FROM sleep_records WHERE date >= ? AND date < ? LIMIT 1',
+          variables: [
+            Variable.withInt(day.millisecondsSinceEpoch ~/ 1000),
+            Variable.withInt(end.millisecondsSinceEpoch ~/ 1000),
+          ],
+        )
+        .getSingleOrNull();
+    final total = row?.data['total_sleep_seconds'];
+    if (row == null || total is! int || total <= 0) return null;
+    final origins = await db.getMetricOrigins('sleep_records', day);
+    final source = origins['total_sleep_seconds']?.source;
+    if (source == null) return null;
+    return _StoredNight(
+      source: source,
+      values: {for (final c in _nightColumns) c: row.data[c]},
+      origins: {
+        for (final c in _nightColumns)
+          if (origins[c] != null)
+            c: {'source': origins[c]!.source, 'quality': origins[c]!.quality},
+      },
     );
   }
 
-  /// One-time post-processing for completed sleep recordings that already
-  /// contain the raw model output but predate five-minute summary blocks.
-  /// No model inference is rerun; the active sleep-source priority still
-  /// governs whether each H10 summary may replace the current night.
+  /// Puts a night the H10 summary replaced back in place, with its origins.
+  Future<void> _restoreNight(DateTime date, _StoredNight night) async {
+    final day = DateTime(date.year, date.month, date.day);
+    final end = DateTime(day.year, day.month, day.day + 1);
+    await db.transaction(() async {
+      final columns = night.values.keys.toList();
+      await db.customUpdate(
+        'UPDATE sleep_records SET '
+        '${columns.map((c) => '"$c" = ?').join(', ')} '
+        'WHERE date >= ? AND date < ?',
+        variables: [
+          for (final c in columns) Variable<Object>(night.values[c]),
+          Variable.withInt(day.millisecondsSinceEpoch ~/ 1000),
+          Variable.withInt(end.millisecondsSinceEpoch ~/ 1000),
+        ],
+        updates: {db.sleepRecords},
+      );
+      for (final c in columns) {
+        final origin = night.origins[c];
+        if (origin == null) {
+          await (db.delete(db.summaryMetricOrigins)..where(
+                (t) =>
+                    t.summaryTable.equals('sleep_records') &
+                    t.date.equals(day) &
+                    t.metric.equals(c),
+              ))
+              .go();
+        } else {
+          await db
+              .into(db.summaryMetricOrigins)
+              .insertOnConflictUpdate(
+                SummaryMetricOriginsCompanion.insert(
+                  summaryTable: 'sleep_records',
+                  date: day,
+                  metric: c,
+                  source: origin['source']!,
+                  quality: origin['quality']!,
+                  updatedAt: DateTime.now(),
+                ),
+              );
+        }
+      }
+      final sources = {
+        for (final o in (await db.getMetricOrigins(
+          'sleep_records',
+          day,
+        )).values)
+          o.source,
+      };
+      await db.customUpdate(
+        'UPDATE sleep_records SET source = ? WHERE date >= ? AND date < ?',
+        variables: [
+          Variable<String>(sources.length == 1 ? sources.single : 'mixed'),
+          Variable.withInt(day.millisecondsSinceEpoch ~/ 1000),
+          Variable.withInt(end.millisecondsSinceEpoch ~/ 1000),
+        ],
+        updates: {db.sleepRecords},
+      );
+    });
+  }
+
+  /// Brings saved sleep recordings in line with the current sleep-source
+  /// order, without rerunning model inference: older recordings get their
+  /// five-minute summary, an H10 night the athlete now ranks above another
+  /// source replaces it, and a night the H10 replaced comes back when its
+  /// source is ranked above the H10 again.
   Future<int> reprocessSavedSleepStageSummaries() async {
     final rows = await history();
-    final currentPriority = await priorityForGroup(SourceGroup.sleep);
+    final currentPriority = await _priority(SourceGroup.sleep);
     var changed = 0;
     for (final row in rows.reversed) {
       if (row.status != 'complete' ||
@@ -476,6 +605,25 @@ class EcgStorageService {
         row.metadataJson,
       );
       if (estimate == null || estimate.epochs.isEmpty) continue;
+      final displaced = _StoredNight.fromJson(metadata['displaced_night']);
+      final phases = estimate.fiveMinutePhases(row.recordedAt.toLocal());
+      if (displaced != null &&
+          phases.isNotEmpty &&
+          shouldOverwrite(_source, displaced.source, currentPriority)) {
+        final end = phases.last.end;
+        final date = DateTime(end.year, end.month, end.day);
+        if ((await _night(date))?.source == _source) {
+          await _restoreNight(date, displaced);
+          metadata
+            ..remove('displaced_night')
+            ..['sleep_stage_summary_version'] = 1
+            ..['sleep_stage_summary_step_seconds'] = 300
+            ..['sleep_stage_summary_priority'] = currentPriority;
+          await _writeMetadata(row.recordingId, metadata);
+          changed++;
+          continue;
+        }
+      }
       await saveSleepStageEstimate(row.recordingId, estimate);
       changed++;
     }
@@ -703,5 +851,41 @@ class EcgStorageService {
     } finally {
       if (await file.exists()) await file.delete();
     }
+  }
+}
+
+/// One night's stage columns as stored, with the origin of each column.
+class _StoredNight {
+  const _StoredNight({
+    required this.source,
+    required this.values,
+    required this.origins,
+  });
+
+  final String source;
+  final Map<String, Object?> values;
+  final Map<String, Map<String, String>> origins;
+
+  Map<String, Object?> toJson() => {
+    'source': source,
+    'values': values,
+    'origins': origins,
+  };
+
+  static _StoredNight? fromJson(Object? json) {
+    if (json is! Map) return null;
+    final source = json['source'];
+    final values = json['values'];
+    final origins = json['origins'];
+    if (source is! String || values is! Map || origins is! Map) return null;
+    return _StoredNight(
+      source: source,
+      values: Map<String, Object?>.from(values),
+      origins: {
+        for (final e in origins.entries)
+          if (e.value is Map)
+            e.key as String: Map<String, String>.from(e.value as Map),
+      },
+    );
   }
 }

@@ -2365,7 +2365,20 @@ void main() {
     tester,
   ) async {
     await render(tester, const ManualEntrySheet(), 'entry');
-    await tester.ensureVisible(find.text('Log BP'));
+    // The new Sleep ECG and Omron entries moved it below the built rows;
+    // centre it so the sheet header does not cover it.
+    await tester.scrollUntilVisible(
+      find.text('Log BP'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.runAsync(
+      () => Scrollable.ensureVisible(
+        tester.element(find.text('Log BP')),
+        alignment: .5,
+      ),
+    );
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Log BP'));
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextField).at(0), '125');

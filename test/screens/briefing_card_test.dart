@@ -35,7 +35,7 @@ class _ReadyBriefing extends AiBriefingNotifier {
     String? weatherSummary,
     Object? bioAge,
     Object? planInfo,
-    bool force = false,
+    bool checkDataChanges = false,
     bool cloudConsent = false,
   }) async {}
 }
@@ -89,8 +89,9 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      await tester.scrollUntilVisible(find.text('AI Briefing'), 200);
+      // Briefings always try Apple first; there is no override to show.
       expect(find.text('Use Apple Intelligence for briefings'), findsNothing);
+      expect(find.byType(SwitchListTile), findsWidgets);
     },
   );
   testWidgets('read more expands the briefing and reveals the chat button', (

@@ -307,17 +307,17 @@ void main() {
   });
 
   test('the briefing keeps its own format, not the chat style', () async {
-    FlutterSecureStorage.setMockInitialValues({
-      'ai_coach_api_key_openai': 'test-key',
-    });
+    FlutterSecureStorage.setMockInitialValues({});
     late String body;
     final client = AiCoachClient(
+      store: const AiCoachSettingsStore(freeAiApiKey: 'test-free-ai-key'),
       client: MockClient((request) async {
         body = request.body;
         return http.Response('{}', 200);
       }),
     );
     try {
+      // Cloud briefings go to the Fjelia gateway, whatever the chat uses.
       await client.sendBriefing(
         const AiCoachSettings(
           provider: AiProvider.openai,
@@ -327,8 +327,10 @@ void main() {
           consentMode: AiConsentMode.session,
           // The cloud briefing's request is what this test reads.
           onDeviceAvailable: false,
+          hasBriefingCloud: true,
         ),
         '[Context:V4][Today:2026-11-03]',
+        cloudFallback: true,
       );
     } catch (_) {
       // Only the request matters.

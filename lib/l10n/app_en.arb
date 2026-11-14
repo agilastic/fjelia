@@ -2181,6 +2181,18 @@
     }
   },
   "markAsRest": "Mark as Rest",
+  "changeSport": "Change sport",
+  "replacementSport": "Replacement sport",
+  "replacementLoadNote": "Duration, planned heart-rate zones and load target are preserved. Pace and power targets are adapted to the new sport.",
+  "replacementCalendarNote": "The original workout will be removed from these training calendars: {platforms}.",
+  "@replacementCalendarNote": {
+    "placeholders": {
+      "platforms": {
+        "type": "String"
+      }
+    }
+  },
+  "applySportChange": "Plan replacement workout",
   "restoreWorkout": "Restore workout",
   "skipThisWorkout": "Skip this workout?",
   "previousWeek": "Previous week",
@@ -5211,5 +5223,29 @@
   "sleepEcgStagesAgain": "Estimate again",
   "sleepEcgStagesDisclaimer": "Experimental estimate from Polar H10 ECG. The model's 30-second outputs are grouped into five-minute blocks for the overview. N1 and N2 are grouped as light sleep. This is not a PSG or medical measurement.",
   "sleepEcgStagesWorking": "Estimating sleep stages…",
-  "sleepEcgStagesFailed": "Sleep stages could not be estimated. Check that the recording is complete and try again."
+  "sleepEcgStagesFailed": "Sleep stages could not be estimated. Check that the recording is complete and try again.",
+  "replacementPreviewTitle": "Review replacement workout",
+  "replacementGoalLoad": "Goal: {objective} · {load} planned load",
+  "@replacementGoalLoad": {"placeholders": {"objective": {"type": "String"}, "load": {"type": "int"}}},
+  "replacementHistoryEstimate": "Duration estimated from your recent training in this sport.",
+  "replacementFallbackEstimate": "There is not enough recent training data for this sport. Duration is a conservative estimate.",
+  "replacementRestSuggestion": "Rest may be the better choice for your current training schedule.",
+  "replacementObjectiveRecovery": "Recovery",
+  "replacementObjectiveBase": "Base",
+  "replacementObjectiveTempo": "Tempo",
+  "replacementObjectiveThreshold": "Threshold",
+  "replacementObjectiveVo2": "VO₂max",
+  "replacementObjectiveLong": "Long endurance",
+  "replacementWarningNoHistory": "There is not enough recent load history for this sport.",
+  "replacementWarningRunningCap": "Running volume was capped conservatively to limit mechanical stress.",
+  "replacementWarningLong": "Long or race-specific workouts are not fully replaceable. Review the shorter run.",
+  "replacementWarningRace": "This workout has race priority; its sport-specific benefit may not be preserved.",
+  "replacementWarningSwim": "Some aerobic stimulus carries over, but not swim technique or sport-specific muscular demands.",
+  "replacementWarningStrength": "Strength and endurance workouts are not equivalent and cannot preserve the same training effect.",
+  "replacementWarningNearby": "Another hard workout falls within 72 hours. Check recovery and spacing.",
+  "replacementWarningWeekly": "This workout is a large share of the other planned training load this week.",
+  "replacementWarningLowRecovery": "Your most recently stored recovery score is low. Consider reducing intensity or resting.",
+  "replacementWarningRecentVolume": "Your training load in the last seven days is notably higher than in the previous seven-day period.",
+  "replacementTrainingGoal": "TRAINING GOAL",
+  "replacementPreviewWarnings": "PLAN NOTES"
 }

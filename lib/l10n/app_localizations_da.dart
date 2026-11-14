@@ -4028,6 +4028,24 @@ class AppLocalizationsDa extends AppLocalizations {
   String get markAsRest => 'Markér som hvile';
 
   @override
+  String get changeSport => 'Skift sport';
+
+  @override
+  String get replacementSport => 'Erstatningssport';
+
+  @override
+  String get replacementLoadNote =>
+      'Varighed, planlagte pulszoner og belastningsmål bevares. Tempo- og wattmål tilpasses den nye sport.';
+
+  @override
+  String replacementCalendarNote(String platforms) {
+    return 'Den oprindelige træning fjernes fra disse træningskalendere: $platforms.';
+  }
+
+  @override
+  String get applySportChange => 'Planlæg erstatningstræning';
+
+  @override
   String get restoreWorkout => 'Gendan træning';
 
   @override
@@ -8631,4 +8649,88 @@ class AppLocalizationsDa extends AppLocalizations {
   @override
   String get sleepEcgStagesFailed =>
       'Søvnstadierne kunne ikke beregnes. Kontrollér, at optagelsen er fuldført, og prøv igen.';
+
+  @override
+  String get replacementPreviewTitle => 'Gennemgå erstatningstræningen';
+
+  @override
+  String replacementGoalLoad(String objective, int load) {
+    return 'Mål: $objective · $load planlagt belastning';
+  }
+
+  @override
+  String get replacementHistoryEstimate =>
+      'Varigheden er anslået ud fra din seneste træning i denne sport.';
+
+  @override
+  String get replacementFallbackEstimate =>
+      'Der er ikke nok nylige træningsdata for denne sport. Varigheden er et forsigtigt skøn.';
+
+  @override
+  String get replacementRestSuggestion =>
+      'Hvile kan være det bedre valg for din nuværende træningsplan.';
+
+  @override
+  String get replacementObjectiveRecovery => 'Restitution';
+
+  @override
+  String get replacementObjectiveBase => 'Grundudholdenhed';
+
+  @override
+  String get replacementObjectiveTempo => 'Tempo';
+
+  @override
+  String get replacementObjectiveThreshold => 'Tærskel';
+
+  @override
+  String get replacementObjectiveVo2 => 'VO₂max';
+
+  @override
+  String get replacementObjectiveLong => 'Lang udholdenhed';
+
+  @override
+  String get replacementWarningNoHistory =>
+      'Der er ikke nok nylig belastningshistorik for denne sport.';
+
+  @override
+  String get replacementWarningRunningCap =>
+      'Løbemængden er begrænset forsigtigt for at holde den mekaniske belastning nede.';
+
+  @override
+  String get replacementWarningLong =>
+      'Lange eller konkurrencespecifikke træninger kan ikke erstattes fuldt ud. Gennemgå den kortere løbetur.';
+
+  @override
+  String get replacementWarningRace =>
+      'Denne træning har konkurrenceprioritet; dens sportsspecifikke udbytte bevares måske ikke.';
+
+  @override
+  String get replacementWarningSwim =>
+      'Noget af den aerobe stimulus overføres, men ikke svømmeteknik eller sportsspecifikke muskelkrav.';
+
+  @override
+  String get replacementWarningStrength =>
+      'Styrke- og udholdenhedstræning er ikke ligeværdige og kan ikke give samme træningseffekt.';
+
+  @override
+  String get replacementWarningNearby =>
+      'En anden hård træning ligger inden for 72 timer. Tjek restitution og afstand mellem træningerne.';
+
+  @override
+  String get replacementWarningWeekly =>
+      'Denne træning udgør en stor del af den øvrige planlagte træningsbelastning i denne uge.';
+
+  @override
+  String get replacementWarningLowRecovery =>
+      'Din senest gemte restitutionsscore er lav. Overvej at sænke intensiteten eller holde hvil.';
+
+  @override
+  String get replacementWarningRecentVolume =>
+      'Din træningsbelastning de seneste syv dage er tydeligt højere end i de syv dage før.';
+
+  @override
+  String get replacementTrainingGoal => 'TRÆNINGSMÅL';
+
+  @override
+  String get replacementPreviewWarnings => 'BEMÆRKNINGER TIL PLANEN';
 }

@@ -180,42 +180,6 @@ class AiSettingsTab extends ConsumerWidget {
                     modelId: s.model,
                   ),
                 ],
-                SectionLabel(context.l10n.briefing),
-                for (final mode in BriefingMode.values)
-                  ListTile(
-                    title: Text(switch (mode) {
-                      BriefingMode.ai => context.l10n.aiBriefing,
-                      BriefingMode.static_ => context.l10n.nonAiBriefing,
-                      BriefingMode.none => context.l10n.noBriefing,
-                    }),
-                    subtitle: Text(switch (mode) {
-                      BriefingMode.ai =>
-                        context.l10n.personalisedMorningLunchAfternoonEvening,
-                      BriefingMode.static_ =>
-                        context.l10n.ruleBasedSummaryFromYour,
-                      BriefingMode.none => context.l10n.hideTheBriefingCard,
-                    }, style: TextStyle(color: muted, fontSize: 10)),
-                    leading: Icon(
-                      s.briefingMode == mode
-                          ? Icons.radio_button_checked
-                          : Icons.radio_button_off,
-                      color: mint,
-                    ),
-                    onTap: () =>
-                        runUiAction(context, () => n.setBriefingMode(mode)),
-                  ),
-                // Free AI and own keys alike: briefings on the device save
-                // tokens and keep the data on the phone.
-                if (!s.provider.isLocal && s.onDeviceAvailable)
-                  SwitchListTile(
-                    title: Text(context.l10n.useAppleIntelligenceForBriefings),
-                    subtitle: Text(context.l10n.useOnDeviceAiFor),
-                    value: s.appleIntelligenceForBriefing,
-                    onChanged: (v) => runUiAction(
-                      context,
-                      () => n.setAppleIntelligenceForBriefing(v),
-                    ),
-                  ),
                 if (!s.provider.isLocal) ...[
                   SectionLabel(context.l10n.healthDataSharing),
                   SwitchListTile(

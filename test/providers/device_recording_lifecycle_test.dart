@@ -25,13 +25,16 @@ class FakeEcgDevice extends EcgDeviceService {
   @override
   Stream<EcgFrame> get frames => data.stream;
   @override
-  Future<void> connect(TrainingDevice device) async {
+  Future<void> connect(
+    TrainingDevice device, {
+    bool withAcceleration = false,
+  }) async {
     entered.complete();
     await connecting?.future;
   }
 
   @override
-  Future<void> start() async {
+  Future<void> start({bool withAcceleration = false}) async {
     starts++;
   }
 

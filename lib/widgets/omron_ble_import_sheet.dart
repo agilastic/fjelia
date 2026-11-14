@@ -1,11 +1,8 @@
-import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../db/database.dart';
 import '../l10n/l10n_ext.dart';
-import '../providers/database_provider.dart';
-import '../providers/day_data_provider.dart';
+import '../providers/omron_ble_provider.dart';
 import '../services/omron_ble_service.dart';
 import '../theme/fjelia_style.dart';
 import 'app_widgets.dart';
@@ -18,7 +15,7 @@ class OmronBleImportSheet extends ConsumerStatefulWidget {
 }
 
 class _OmronBleImportState extends ConsumerState<OmronBleImportSheet> {
-  final service = OmronBleService();
+  OmronBleService get service => ref.read(omronBleServiceProvider);
   List<OmronFoundDevice> devices = [];
   List<OmronBpRecord> readings = [];
   String? model;
@@ -161,21 +158,10 @@ class _OmronBleImportState extends ConsumerState<OmronBleImportSheet> {
       error = null;
     });
     try {
-      final count = await ref.read(databaseProvider).insertBpMeasurements([
-        for (final r in selected)
-          BpMeasurementsCompanion.insert(
-            measuredAt: r.measuredAt,
-            systolic: r.systolic,
-            diastolic: r.diastolic,
-            heartRate: r.heartRate,
-            measurementType: Value(
-              selectedModel == null || selectedModel == standardBpModel
-                  ? 'BLE_STANDARD'
-                  : 'OMRON',
-            ),
-          ),
-      ]);
-      ref.read(syncStatusListenerProvider.notifier).state++;
+      final count = await ref
+          .read(omronReadingStoreProvider)
+          .save(selected, model: selectedModel);
+      if (!mounted) return;
       setState(() {
         savedCount = count;
         status = german

@@ -4016,6 +4016,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get markAsRest => 'Mark as Rest';
 
   @override
+  String get changeSport => 'Change sport';
+
+  @override
+  String get replacementSport => 'Replacement sport';
+
+  @override
+  String get replacementLoadNote =>
+      'Duration, planned heart-rate zones and load target are preserved. Pace and power targets are adapted to the new sport.';
+
+  @override
+  String replacementCalendarNote(String platforms) {
+    return 'The original workout will be removed from these training calendars: $platforms.';
+  }
+
+  @override
+  String get applySportChange => 'Plan replacement workout';
+
+  @override
   String get restoreWorkout => 'Restore workout';
 
   @override
@@ -8631,7 +8649,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sleepEcgStagesDisclaimer =>
-      'Experimental estimate from Polar H10 ECG using an ECG-only research model. N1 and N2 are grouped as light sleep. This is not a PSG or medical measurement.';
+      'Experimental estimate from Polar H10 ECG. The model\'s 30-second outputs are grouped into five-minute blocks for the overview. N1 and N2 are grouped as light sleep. This is not a PSG or medical measurement.';
 
   @override
   String get sleepEcgStagesWorking => 'Estimating sleep stages…';
@@ -8639,4 +8657,88 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get sleepEcgStagesFailed =>
       'Sleep stages could not be estimated. Check that the recording is complete and try again.';
+
+  @override
+  String get replacementPreviewTitle => 'Review replacement workout';
+
+  @override
+  String replacementGoalLoad(String objective, int load) {
+    return 'Goal: $objective · $load planned load';
+  }
+
+  @override
+  String get replacementHistoryEstimate =>
+      'Duration estimated from your recent training in this sport.';
+
+  @override
+  String get replacementFallbackEstimate =>
+      'There is not enough recent training data for this sport. Duration is a conservative estimate.';
+
+  @override
+  String get replacementRestSuggestion =>
+      'Rest may be the better choice for your current training schedule.';
+
+  @override
+  String get replacementObjectiveRecovery => 'Recovery';
+
+  @override
+  String get replacementObjectiveBase => 'Base';
+
+  @override
+  String get replacementObjectiveTempo => 'Tempo';
+
+  @override
+  String get replacementObjectiveThreshold => 'Threshold';
+
+  @override
+  String get replacementObjectiveVo2 => 'VO₂max';
+
+  @override
+  String get replacementObjectiveLong => 'Long endurance';
+
+  @override
+  String get replacementWarningNoHistory =>
+      'There is not enough recent load history for this sport.';
+
+  @override
+  String get replacementWarningRunningCap =>
+      'Running volume was capped conservatively to limit mechanical stress.';
+
+  @override
+  String get replacementWarningLong =>
+      'Long or race-specific workouts are not fully replaceable. Review the shorter run.';
+
+  @override
+  String get replacementWarningRace =>
+      'This workout has race priority; its sport-specific benefit may not be preserved.';
+
+  @override
+  String get replacementWarningSwim =>
+      'Some aerobic stimulus carries over, but not swim technique or sport-specific muscular demands.';
+
+  @override
+  String get replacementWarningStrength =>
+      'Strength and endurance workouts are not equivalent and cannot preserve the same training effect.';
+
+  @override
+  String get replacementWarningNearby =>
+      'Another hard workout falls within 72 hours. Check recovery and spacing.';
+
+  @override
+  String get replacementWarningWeekly =>
+      'This workout is a large share of the other planned training load this week.';
+
+  @override
+  String get replacementWarningLowRecovery =>
+      'Your most recently stored recovery score is low. Consider reducing intensity or resting.';
+
+  @override
+  String get replacementWarningRecentVolume =>
+      'Your training load in the last seven days is notably higher than in the previous seven-day period.';
+
+  @override
+  String get replacementTrainingGoal => 'TRAINING GOAL';
+
+  @override
+  String get replacementPreviewWarnings => 'PLAN NOTES';
 }

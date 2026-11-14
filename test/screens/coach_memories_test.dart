@@ -49,6 +49,7 @@ class _Client extends AiCoachClient {
     List<ChatMessage> messages,
     String toonContext, [
     AiConsentToken? consent,
+    void Function(String source)? onSource,
   ]) async {
     context = toonContext;
     return 'Keep the long run flat this week.';

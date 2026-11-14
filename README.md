@@ -17,8 +17,8 @@ Website: <https://agilastic.github.io/fjelia/> (source in [`docs/`](docs/); serv
   resting heart rate, blood pressure, weight and body composition.
 - **ECG recordings** — Polar H10 live waveforms, local history, CSV import/export
   and PDF reports. **Indoor Training** records Bluetooth FTMS equipment and
-  planned intervals into activity history, with FIT export. See
-  [capabilities, Matrix compatibility and limits](docs/device-recordings.md).
+  planned intervals into activity history, with FIT export. Open **+ → Indoor
+  Training** in the app for supported equipment and recording options.
 - **Training load** — load per week and day, zone polarization, fitness and
   fatigue, race predictions.
 - **Aerobic threshold (DFA α1)** — from the beat-to-beat data of a chest strap

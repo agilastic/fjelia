@@ -24,9 +24,11 @@ import '../../providers/workout_providers_provider.dart';
 import '../../providers/workout_push_provider.dart';
 import '../../providers/day_data_provider.dart';
 import '../../services/plan_session_actions.dart';
+import '../../services/workout_replacement_service.dart';
 import '../../services/season/goal_set.dart' show DayLoad;
 import '../../utils/target_time.dart';
 import '../../widgets/app_widgets.dart';
+import '../../widgets/plan_timeline.dart' show planGradient;
 import '../../widgets/move_workout_card.dart';
 import '../../widgets/workout_profile_bar.dart';
 import '../../widgets/workout_structure_list.dart';
@@ -825,33 +827,126 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
             },
           ),
           const SizedBox(height: 8),
-          OutlinedButton.icon(
-            style: style(Colors.grey),
-            onPressed: !editable || busy
-                ? null
-                : () async {
-                    final onPlatforms = [
-                      for (final p
-                          in await ref
-                              .read(workoutProvidersProvider)
-                              .deliveredTo(s))
-                        p.label,
-                    ];
-                    if (!context.mounted) return;
-                    final reason = await _pickSkipReason(
-                      context,
-                      platforms: onPlatforms,
-                    );
-                    if (reason == null || !mounted) return;
-                    await perform(() async {
-                      await actions.markRest(s, reason: reason);
-                    });
-                  },
-            icon: const Icon(Icons.bed_outlined, size: 20),
-            label: Text(
-              context.l10n.markAsRest,
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-            ),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  style: style(Colors.grey),
+                  onPressed: !editable || busy
+                      ? null
+                      : () async {
+                          final onPlatforms = [
+                            for (final p
+                                in await ref
+                                    .read(workoutProvidersProvider)
+                                    .deliveredTo(s))
+                              p.label,
+                          ];
+                          if (!context.mounted) return;
+                          final reason = await _pickSkipReason(
+                            context,
+                            platforms: onPlatforms,
+                          );
+                          if (reason == null || !context.mounted) return;
+                          await perform(() async {
+                            await actions.markRest(s, reason: reason);
+                          });
+                        },
+                  icon: const Icon(Icons.bed_outlined, size: 20),
+                  label: Text(
+                    context.l10n.markAsRest,
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+              if (_supportsSportChange(s.sport)) ...[
+                const SizedBox(width: 8),
+                Expanded(
+                  child: OutlinedButton.icon(
+                    style: style(mint),
+                    onPressed: !editable || busy
+                        ? null
+                        : () async {
+                            final onPlatforms = [
+                              for (final p
+                                  in await ref
+                                      .read(workoutProvidersProvider)
+                                      .deliveredTo(s))
+                                p.label,
+                            ];
+                            if (!context.mounted) return;
+                            final preferences =
+                                ref
+                                    .read(userProfileProvider)
+                                    .valueOrNull
+                                    ?.preferredSports ??
+                                const <String>[];
+                            final alternatives = _replacementSports(
+                              s.sport,
+                              preferences,
+                            );
+                            final sport = await _pickReplacementSport(
+                              context,
+                              alternatives: alternatives,
+                              initialSport: _defaultReplacementSport(
+                                preferences,
+                                alternatives,
+                              ),
+                              platforms: onPlatforms,
+                            );
+                            if (sport == null || !context.mounted) return;
+                            final selected = alternatives.firstWhere(
+                              (option) => option.id == sport,
+                            );
+                            final preview = await ref
+                                .read(workoutReplacementServiceProvider)
+                                .preview(
+                                  s,
+                                  targetSport: selected.id,
+                                  targetLabel: selected.label(context),
+                                );
+                            if (!context.mounted) return;
+                            final apply = await _confirmReplacement(
+                              context,
+                              preview,
+                              platforms: onPlatforms,
+                            );
+                            if (!context.mounted || apply == null) return;
+                            if (apply == false) {
+                              await perform(() async {
+                                await actions.markRest(
+                                  s,
+                                  reason: 'Rest recommended for replacement',
+                                );
+                              });
+                              return;
+                            }
+                            await perform(() async {
+                              await actions.replaceWithSport(
+                                preview,
+                                reason: 'My choice',
+                              );
+                            });
+                          },
+                    icon: const Icon(Icons.swap_horiz, size: 20),
+                    label: Text(
+                      context.l10n.changeSport,
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ],
           ),
           if (s.status == 'skipped') ...[
             const SizedBox(height: 8),
@@ -874,6 +969,195 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
     );
   }
 }
+
+Future<bool?> _confirmReplacement(
+  BuildContext context,
+  WorkoutReplacementPreview preview, {
+  required List<String> platforms,
+}) => showDialog<bool>(
+  context: context,
+  builder: (context) => AlertDialog(
+    title: Text(context.l10n.replacementPreviewTitle),
+    content: SingleChildScrollView(
+      child: SizedBox(
+        width: double.maxFinite,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SectionCard(
+              title: preview.targetLabel,
+              accent: planGradient,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            FigureLabel(context.l10n.duration),
+                            const SizedBox(height: 3),
+                            KeyFigure.hero(
+                              '${preview.durationMin}',
+                              unit: 'min',
+                              color: fjAccent(planGradient.last),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(width: 1, height: 48, color: fjInk12),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            FigureLabel(context.l10n.trainingLoad),
+                            const SizedBox(height: 3),
+                            KeyFigure(
+                              '${preview.targetLoad}',
+                              unit: 'TRIMP',
+                              color: fjInk,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  FigureLabel(context.l10n.replacementTrainingGoal),
+                  const SizedBox(height: 4),
+                  Text(
+                    _objectiveLabel(context, preview.objective),
+                    style: TextStyle(
+                      color: fjInk,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(Icons.info_outline, size: 16, color: fjInk70),
+                      const SizedBox(width: 7),
+                      Expanded(
+                        child: Text(
+                          preview.usedAthleteHistory
+                              ? context.l10n.replacementHistoryEstimate
+                              : context.l10n.replacementFallbackEstimate,
+                          style: TextStyle(fontSize: 12, color: fjInk70),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            if (preview.warnings.isNotEmpty || preview.suggestRest)
+              SectionCard(
+                title: context.l10n.replacementPreviewWarnings,
+                accent: const [Color(0xFFFFB13D), Color(0xFFFF4D8D)],
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    for (final warning in preview.warnings)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Icon(
+                              Icons.warning_amber_rounded,
+                              size: 17,
+                              color: fjAccent(const Color(0xFFFFB13D)),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                _replacementWarning(context, warning),
+                                style: TextStyle(fontSize: 13, color: fjInk),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    if (preview.suggestRest)
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(Icons.bed_outlined, size: 17, color: fjInk70),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              context.l10n.replacementRestSuggestion,
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: fjInk,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
+              ),
+            if (platforms.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(4, 0, 4, 4),
+                child: Text(
+                  context.l10n.replacementCalendarNote(platforms.join(', ')),
+                  style: TextStyle(fontSize: 12, color: fjInk70),
+                ),
+              ),
+          ],
+        ),
+      ),
+    ),
+    actions: [
+      TextButton(
+        onPressed: () => Navigator.pop(context),
+        child: Text(context.l10n.cancel),
+      ),
+      if (preview.suggestRest)
+        TextButton(
+          onPressed: () => Navigator.pop(context, false),
+          child: Text(context.l10n.markAsRest),
+        ),
+      FilledButton(
+        onPressed: () => Navigator.pop(context, true),
+        child: Text(context.l10n.applySportChange),
+      ),
+    ],
+  ),
+);
+
+String _objectiveLabel(BuildContext context, WorkoutObjective objective) =>
+    switch (objective) {
+      WorkoutObjective.recovery => context.l10n.replacementObjectiveRecovery,
+      WorkoutObjective.base => context.l10n.replacementObjectiveBase,
+      WorkoutObjective.tempo => context.l10n.replacementObjectiveTempo,
+      WorkoutObjective.threshold => context.l10n.replacementObjectiveThreshold,
+      WorkoutObjective.vo2max => context.l10n.replacementObjectiveVo2,
+      WorkoutObjective.longEndurance => context.l10n.replacementObjectiveLong,
+    };
+
+String _replacementWarning(BuildContext context, String code) => switch (code) {
+  'noHistory' => context.l10n.replacementWarningNoHistory,
+  'runningCap' => context.l10n.replacementWarningRunningCap,
+  'longRun' => context.l10n.replacementWarningLong,
+  'raceSpecific' => context.l10n.replacementWarningRace,
+  'swimTechnique' => context.l10n.replacementWarningSwim,
+  'strengthMismatch' => context.l10n.replacementWarningStrength,
+  'nearbyHard' => context.l10n.replacementWarningNearby,
+  'largeWeeklyShare' => context.l10n.replacementWarningWeekly,
+  'lowRecovery' => context.l10n.replacementWarningLowRecovery,
+  'highRecentVolume' => context.l10n.replacementWarningRecentVolume,
+  _ => code,
+};
 
 /// Asks why a session is skipped; null when cancelled.
 Future<String?> _pickSkipReason(
@@ -906,6 +1190,251 @@ Future<String?> _pickSkipReason(
     ],
   ),
 );
+
+class _ReplacementSport {
+  const _ReplacementSport(this.id, this.label);
+  final String id;
+  final String Function(BuildContext) label;
+}
+
+List<_ReplacementSport> _replacementSports(
+  String sourceSport,
+  List<String> preferences,
+) {
+  const supported = <String, _ReplacementSport>{
+    'running': _ReplacementSport('running', _runningLabel),
+    'trail_running': _ReplacementSport('trail_running', _trailRunningLabel),
+    'cycling_road': _ReplacementSport('cycling_road', _cyclingLabel),
+    'indoor_cycling': _ReplacementSport('indoor_cycling', _indoorCyclingLabel),
+    'swimming': _ReplacementSport('swimming', _swimmingLabel),
+    'indoor_rowing': _ReplacementSport('indoor_rowing', _rowingLabel),
+    'rowing': _ReplacementSport('rowing', _rowingLabel),
+    'hiking': _ReplacementSport('hiking', _hikingLabel),
+    'walking': _ReplacementSport('walking', _walkingLabel),
+    'elliptical': _ReplacementSport('elliptical', _ellipticalLabel),
+    'nordic_skiing': _ReplacementSport('nordic_skiing', _skiingLabel),
+    'skate_skiing': _ReplacementSport('skate_skiing', _skateSkiingLabel),
+  };
+  final source = _sportFamily(sourceSport);
+  if (!_replaceableSportFamilies.contains(source)) return const [];
+  final preferenceOrder = <String>[];
+  for (final preference in preferences) {
+    switch (preference) {
+      case 'triathlon':
+        preferenceOrder.addAll(const ['running', 'cycling_road', 'swimming']);
+      case 'running':
+      case 'trail_running':
+        preferenceOrder.add(preference);
+      case 'cycling':
+      case 'cycling_road':
+        preferenceOrder.add('cycling_road');
+      case 'indoor_cycling':
+        preferenceOrder.add('indoor_cycling');
+      case 'swimming':
+      case 'indoor_rowing':
+      case 'hiking':
+        preferenceOrder.add(preference);
+      case 'nordic_skiing':
+      case 'skate_skiing':
+      case 'elliptical':
+      case 'rowing':
+        preferenceOrder.add(preference);
+    }
+  }
+  final defaults = switch (source) {
+    'run' =>
+      sourceSport == 'trail_running'
+          ? const [
+              'running',
+              'cycling_road',
+              'indoor_cycling',
+              'elliptical',
+              'indoor_rowing',
+              'hiking',
+            ]
+          : const [
+              'trail_running',
+              'cycling_road',
+              'indoor_cycling',
+              'elliptical',
+              'indoor_rowing',
+              'swimming',
+              'hiking',
+              'nordic_skiing',
+            ],
+    'cycle' =>
+      sourceSport == 'cycling_road'
+          ? const [
+              'indoor_cycling',
+              'running',
+              'elliptical',
+              'indoor_rowing',
+              'swimming',
+            ]
+          : const [
+              'cycling_road',
+              'running',
+              'elliptical',
+              'indoor_rowing',
+              'swimming',
+            ],
+    'swim' => const ['cycling_road', 'running', 'indoor_rowing'],
+    'row' => const [
+      'rowing',
+      'indoor_rowing',
+      'nordic_skiing',
+      'cycling_road',
+      'running',
+    ],
+    'hike' => const ['walking', 'trail_running', 'running', 'nordic_skiing'],
+    'ski' => const [
+      'nordic_skiing',
+      'skate_skiing',
+      'indoor_rowing',
+      'cycling_road',
+      'running',
+    ],
+    'elliptical' => const ['running', 'cycling_road', 'indoor_rowing'],
+    _ => const ['running', 'cycling_road', 'indoor_rowing', 'swimming'],
+  };
+  final ordered = <String>{...preferenceOrder, ...defaults};
+  return [
+    for (final id in ordered)
+      if (supported.containsKey(id) && id != sourceSport) supported[id]!,
+  ];
+}
+
+const _replaceableSportFamilies = {
+  'run',
+  'cycle',
+  'swim',
+  'row',
+  'hike',
+  'ski',
+  'elliptical',
+};
+
+bool _supportsSportChange(String sport) =>
+    _replaceableSportFamilies.contains(_sportFamily(sport));
+
+String _sportFamily(String sport) {
+  final value = sport.toLowerCase();
+  if (value.contains('run')) return 'run';
+  if (value.contains('cycl') || value.contains('bik')) return 'cycle';
+  if (value.contains('swim')) return 'swim';
+  if (value.contains('row')) return 'row';
+  if (value.contains('ski')) return 'ski';
+  if (value.contains('ellipt')) return 'elliptical';
+  if (value.contains('hik') || value.contains('walk')) return 'hike';
+  return value;
+}
+
+String? _defaultReplacementSport(
+  List<String> preferences,
+  List<_ReplacementSport> alternatives,
+) {
+  final byId = {for (final sport in alternatives) sport.id: sport.id};
+  for (final preference in preferences) {
+    final candidates = preference == 'triathlon'
+        ? const ['running', 'cycling_road', 'swimming']
+        : [preference == 'cycling' ? 'cycling_road' : preference];
+    for (final candidate in candidates) {
+      if (byId.containsKey(candidate)) return candidate;
+    }
+  }
+  return alternatives.firstOrNull?.id;
+}
+
+String _runningLabel(BuildContext c) => c.l10n.running;
+String _trailRunningLabel(BuildContext c) => c.l10n.trailRunning;
+String _cyclingLabel(BuildContext c) => c.l10n.cycling;
+String _swimmingLabel(BuildContext c) => c.l10n.swimming;
+String _rowingLabel(BuildContext c) => c.l10n.indoorRowing;
+String _hikingLabel(BuildContext c) => c.l10n.hiking;
+String _walkingLabel(BuildContext c) => c.l10n.walking;
+String _indoorCyclingLabel(BuildContext c) => c.l10n.sportIndoorCycling;
+String _ellipticalLabel(BuildContext c) => c.l10n.sportElliptical;
+String _skiingLabel(BuildContext c) => c.l10n.skiing;
+String _skateSkiingLabel(BuildContext c) => c.l10n.skateSkiing;
+
+Future<String?> _pickReplacementSport(
+  BuildContext context, {
+  required List<_ReplacementSport> alternatives,
+  required String? initialSport,
+  required List<String> platforms,
+}) => showDialog<String>(
+  context: context,
+  builder: (context) => _ReplacementSportDialog(
+    alternatives: alternatives,
+    initialSport: initialSport,
+    platforms: platforms,
+  ),
+);
+
+class _ReplacementSportDialog extends StatefulWidget {
+  const _ReplacementSportDialog({
+    required this.alternatives,
+    required this.initialSport,
+    required this.platforms,
+  });
+  final List<_ReplacementSport> alternatives;
+  final String? initialSport;
+  final List<String> platforms;
+
+  @override
+  State<_ReplacementSportDialog> createState() =>
+      _ReplacementSportDialogState();
+}
+
+class _ReplacementSportDialogState extends State<_ReplacementSportDialog> {
+  late String? sport = widget.initialSport;
+
+  @override
+  Widget build(BuildContext context) => AlertDialog(
+    title: Text(context.l10n.changeSport),
+    content: Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        DropdownButtonFormField<String>(
+          initialValue: sport,
+          isExpanded: true,
+          decoration: InputDecoration(labelText: context.l10n.replacementSport),
+          items: [
+            for (final option in widget.alternatives)
+              DropdownMenuItem(
+                value: option.id,
+                child: Text(option.label(context)),
+              ),
+          ],
+          onChanged: (value) => setState(() => sport = value),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          context.l10n.replacementLoadNote,
+          style: TextStyle(fontSize: 12, color: fjInk70),
+        ),
+        if (widget.platforms.isNotEmpty) ...[
+          const SizedBox(height: 8),
+          Text(
+            context.l10n.replacementCalendarNote(widget.platforms.join(', ')),
+            style: TextStyle(fontSize: 12, color: fjInk70),
+          ),
+        ],
+      ],
+    ),
+    actions: [
+      TextButton(
+        onPressed: () => Navigator.pop(context),
+        child: Text(context.l10n.cancel),
+      ),
+      FilledButton(
+        onPressed: sport == null ? null : () => Navigator.pop(context, sport),
+        child: Text(context.l10n.applySportChange),
+      ),
+    ],
+  );
+}
 
 /// "Pace guide 5:20/km to 5:50/km, estimated from your goal" for a run that has
 /// one; heart rate stays the target.

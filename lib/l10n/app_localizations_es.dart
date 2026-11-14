@@ -4063,6 +4063,24 @@ class AppLocalizationsEs extends AppLocalizations {
   String get markAsRest => 'Marcar como descanso';
 
   @override
+  String get changeSport => 'Cambiar deporte';
+
+  @override
+  String get replacementSport => 'Deporte de sustitución';
+
+  @override
+  String get replacementLoadNote =>
+      'Se mantienen la duración, las zonas de frecuencia cardíaca previstas y el objetivo de carga. Los objetivos de ritmo y potencia se adaptan al nuevo deporte.';
+
+  @override
+  String replacementCalendarNote(String platforms) {
+    return 'El entrenamiento original se eliminará de estos calendarios de entrenamiento: $platforms.';
+  }
+
+  @override
+  String get applySportChange => 'Planificar entrenamiento de sustitución';
+
+  @override
   String get restoreWorkout => 'Restaurar entrenamiento';
 
   @override
@@ -8691,4 +8709,88 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get sleepEcgStagesFailed =>
       'No se pudieron estimar las fases del sueño. Comprueba que la grabación esté completa e inténtalo de nuevo.';
+
+  @override
+  String get replacementPreviewTitle => 'Revisar entrenamiento de sustitución';
+
+  @override
+  String replacementGoalLoad(String objective, int load) {
+    return 'Objetivo: $objective · carga prevista $load';
+  }
+
+  @override
+  String get replacementHistoryEstimate =>
+      'Duración estimada a partir de tu entrenamiento reciente en este deporte.';
+
+  @override
+  String get replacementFallbackEstimate =>
+      'No hay suficientes datos de entrenamiento recientes para este deporte. La duración es una estimación prudente.';
+
+  @override
+  String get replacementRestSuggestion =>
+      'Descansar podría ser la mejor opción para tu plan de entrenamiento actual.';
+
+  @override
+  String get replacementObjectiveRecovery => 'Recuperación';
+
+  @override
+  String get replacementObjectiveBase => 'Resistencia de base';
+
+  @override
+  String get replacementObjectiveTempo => 'Tempo';
+
+  @override
+  String get replacementObjectiveThreshold => 'Umbral';
+
+  @override
+  String get replacementObjectiveVo2 => 'VO₂máx';
+
+  @override
+  String get replacementObjectiveLong => 'Resistencia larga';
+
+  @override
+  String get replacementWarningNoHistory =>
+      'No hay suficiente historial de carga reciente para este deporte.';
+
+  @override
+  String get replacementWarningRunningCap =>
+      'El volumen de carrera se ha limitado con prudencia para reducir el estrés mecánico.';
+
+  @override
+  String get replacementWarningLong =>
+      'Los entrenamientos largos o específicos de competición no se pueden sustituir del todo. Revisa la carrera más corta.';
+
+  @override
+  String get replacementWarningRace =>
+      'Este entrenamiento tiene prioridad de competición; puede que no se conserve su beneficio específico del deporte.';
+
+  @override
+  String get replacementWarningSwim =>
+      'Se conserva parte del estímulo aeróbico, pero no la técnica de natación ni las exigencias musculares específicas.';
+
+  @override
+  String get replacementWarningStrength =>
+      'Los entrenamientos de fuerza y de resistencia no son equivalentes y no pueden conservar el mismo efecto de entrenamiento.';
+
+  @override
+  String get replacementWarningNearby =>
+      'Hay otro entrenamiento intenso en un plazo de 72 horas. Revisa la recuperación y la separación entre sesiones.';
+
+  @override
+  String get replacementWarningWeekly =>
+      'Este entrenamiento supone una gran parte de la carga de entrenamiento prevista esta semana.';
+
+  @override
+  String get replacementWarningLowRecovery =>
+      'Tu última puntuación de recuperación guardada es baja. Plantéate reducir la intensidad o descansar.';
+
+  @override
+  String get replacementWarningRecentVolume =>
+      'Tu carga de entrenamiento de los últimos siete días es claramente mayor que la de los siete días anteriores.';
+
+  @override
+  String get replacementTrainingGoal => 'OBJETIVO DE ENTRENAMIENTO';
+
+  @override
+  String get replacementPreviewWarnings => 'NOTAS DEL PLAN';
 }

@@ -4058,6 +4058,24 @@ class AppLocalizationsIt extends AppLocalizations {
   String get markAsRest => 'Segna come riposo';
 
   @override
+  String get changeSport => 'Cambia sport';
+
+  @override
+  String get replacementSport => 'Sport sostitutivo';
+
+  @override
+  String get replacementLoadNote =>
+      'Durata, zone di frequenza cardiaca previste e obiettivo di carico restano invariati. Gli obiettivi di passo e potenza vengono adattati al nuovo sport.';
+
+  @override
+  String replacementCalendarNote(String platforms) {
+    return 'L\'allenamento originale verrà rimosso da questi calendari di allenamento: $platforms.';
+  }
+
+  @override
+  String get applySportChange => 'Pianifica l\'allenamento sostitutivo';
+
+  @override
   String get restoreWorkout => 'Ripristina allenamento';
 
   @override
@@ -8682,4 +8700,88 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get sleepEcgStagesFailed =>
       'Impossibile stimare le fasi del sonno. Verifica che la registrazione sia completa e riprova.';
+
+  @override
+  String get replacementPreviewTitle => 'Controlla l\'allenamento sostitutivo';
+
+  @override
+  String replacementGoalLoad(String objective, int load) {
+    return 'Obiettivo: $objective · carico previsto $load';
+  }
+
+  @override
+  String get replacementHistoryEstimate =>
+      'Durata stimata in base ai tuoi allenamenti recenti in questo sport.';
+
+  @override
+  String get replacementFallbackEstimate =>
+      'Non ci sono abbastanza dati di allenamento recenti per questo sport. La durata è una stima prudente.';
+
+  @override
+  String get replacementRestSuggestion =>
+      'Il riposo potrebbe essere la scelta migliore per il tuo attuale programma di allenamento.';
+
+  @override
+  String get replacementObjectiveRecovery => 'Recupero';
+
+  @override
+  String get replacementObjectiveBase => 'Resistenza di base';
+
+  @override
+  String get replacementObjectiveTempo => 'Tempo';
+
+  @override
+  String get replacementObjectiveThreshold => 'Soglia';
+
+  @override
+  String get replacementObjectiveVo2 => 'VO₂max';
+
+  @override
+  String get replacementObjectiveLong => 'Resistenza lunga';
+
+  @override
+  String get replacementWarningNoHistory =>
+      'Lo storico di carico recente per questo sport non è sufficiente.';
+
+  @override
+  String get replacementWarningRunningCap =>
+      'Il volume di corsa è stato limitato per prudenza, per contenere lo stress meccanico.';
+
+  @override
+  String get replacementWarningLong =>
+      'Gli allenamenti lunghi o specifici per la gara non sono del tutto sostituibili. Controlla la corsa più breve.';
+
+  @override
+  String get replacementWarningRace =>
+      'Questo allenamento ha priorità gara; il suo beneficio specifico per lo sport potrebbe non essere mantenuto.';
+
+  @override
+  String get replacementWarningSwim =>
+      'Una parte dello stimolo aerobico si mantiene, ma non la tecnica di nuoto né le richieste muscolari specifiche.';
+
+  @override
+  String get replacementWarningStrength =>
+      'Allenamenti di forza e di resistenza non sono equivalenti e non possono mantenere lo stesso effetto allenante.';
+
+  @override
+  String get replacementWarningNearby =>
+      'Un altro allenamento intenso cade entro 72 ore. Controlla recupero e distanza tra le sedute.';
+
+  @override
+  String get replacementWarningWeekly =>
+      'Questo allenamento rappresenta una grande parte del carico di allenamento previsto questa settimana.';
+
+  @override
+  String get replacementWarningLowRecovery =>
+      'Il tuo ultimo punteggio di recupero salvato è basso. Valuta di ridurre l\'intensità o di riposare.';
+
+  @override
+  String get replacementWarningRecentVolume =>
+      'Il tuo carico di allenamento degli ultimi sette giorni è nettamente più alto rispetto ai sette giorni precedenti.';
+
+  @override
+  String get replacementTrainingGoal => 'OBIETTIVO DI ALLENAMENTO';
+
+  @override
+  String get replacementPreviewWarnings => 'NOTE SUL PIANO';
 }

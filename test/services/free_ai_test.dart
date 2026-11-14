@@ -4,12 +4,14 @@ import 'package:fjelia/config/free_ai.dart';
 import 'package:fjelia/providers/ai_coach_provider.dart';
 import 'package:fjelia/services/ai_coach_client.dart';
 import 'package:fjelia/services/ai_coach_settings.dart';
+import 'package:fjelia/services/briefing_consent.dart';
 import 'package:fjelia_service/fjelia_service.dart' as service;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 const _store = AiCoachSettingsStore(freeAiApiKey: 'test-free-ai-key');
 
@@ -25,7 +27,10 @@ const _free = AiCoachSettings(
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  setUp(() => FlutterSecureStorage.setMockInitialValues({}));
+  setUp(() {
+    FlutterSecureStorage.setMockInitialValues({});
+    SharedPreferences.setMockInitialValues({});
+  });
 
   ProviderContainer settingsContainer({
     Future<bool> Function()? availability,
@@ -65,14 +70,19 @@ void main() {
       expect(settings.usesOnDeviceBriefing, isTrue);
     });
 
-    test('the athlete can keep briefings on Free AI', () async {
+    test('an old "briefings on Free AI" preference no longer sends them to '
+        'the cloud', () async {
+      // Briefings are independent of the chat settings: where Apple
+      // Intelligence runs, it writes them on the device.
       FlutterSecureStorage.setMockInitialValues({
         'ai_coach_provider': 'freeAi',
         'ai_apple_briefing': 'false',
       });
       final container = settingsContainer(availability: () async => true);
       final settings = await container.read(aiCoachSettingsProvider.future);
-      expect(settings.usesOnDeviceBriefing, isFalse);
+      expect(settings.provider, AiProvider.freeAi);
+      expect(settings.usesOnDeviceBriefing, isTrue);
+      expect(settings.readyForBriefing, isTrue);
     });
 
     test('unavailable Apple Intelligence selects ready Free AI', () async {
@@ -128,8 +138,11 @@ void main() {
         final container = settingsContainer();
         final settings = await container.read(aiCoachSettingsProvider.future);
         expect(settings.provider, AiProvider.freeAi);
-        expect(settings.appleIntelligenceForBriefing, isFalse);
         expect(settings.usesOnDeviceBriefing, isFalse);
+        // The Fjelia gateway could write them, but only after the one-time
+        // cloud-briefing consent, which has not been given.
+        expect(settings.readyForBriefing, isTrue);
+        expect(await BriefingConsent.given(settings), isFalse);
         expect(
           await const FlutterSecureStorage().read(key: 'ai_coach_provider'),
           'appleIntelligence',
@@ -176,7 +189,10 @@ void main() {
       expect(settings.provider, AiProvider.freeAi);
       expect(settings.enabled, isFalse);
       expect(settings.ready, isFalse);
-      expect(settings.readyForBriefing, isFalse);
+      // Briefings do not depend on the chat coach; without Apple
+      // Intelligence they still need the cloud-briefing consent.
+      expect(settings.usesOnDeviceBriefing, isFalse);
+      expect(await BriefingConsent.given(settings), isFalse);
     });
 
     test('a build without Free AI credentials cannot send', () async {
@@ -226,7 +242,7 @@ void main() {
         final notifier = container.read(notifierProvider.notifier);
         await notifier.load(
           _free.copyWith(appleIntelligenceForBriefing: true),
-          force: true,
+          checkDataChanges: true,
         );
         expect(contextReads, 0);
         final state = container.read(notifierProvider);
@@ -383,7 +399,7 @@ void main() {
         }),
         appleSender: (_) async => fail('Free AI must not use Apple'),
       );
-      final settings = _free.copyWith(appleIntelligenceForBriefing: true);
+      final settings = _free.copyWith(hasBriefingCloud: true);
       expect(settings.usesOnDeviceBriefing, isFalse);
       for (final send in [
         client.sendBriefing,
@@ -391,7 +407,12 @@ void main() {
         client.sendAfternoonBriefing,
         client.sendEveningBriefing,
       ]) {
-        expect(await send(settings, ''), 'Your training summary is ready.');
+        // Without Apple Intelligence a briefing goes out only with consent.
+        await expectLater(send(settings, ''), throwsStateError);
+        expect(
+          await send(settings, '', cloudFallback: true),
+          'Your training summary is ready.',
+        );
       }
       expect(sent, hasLength(4));
       final installationId = await _store.readFreeAiInstallationId();

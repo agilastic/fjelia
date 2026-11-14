@@ -2152,6 +2152,18 @@
     }
   },
   "markAsRest": "Als Ruhe markieren",
+  "changeSport": "Sport ändern",
+  "replacementSport": "Ersatzsportart",
+  "replacementLoadNote": "Dauer, geplante Herzfrequenzzonen und Belastungsziel bleiben erhalten. Tempo- und Leistungsvorgaben werden an die neue Sportart angepasst.",
+  "replacementCalendarNote": "Die ursprüngliche Einheit wird aus diesen Trainingskalendern entfernt: {platforms}.",
+  "@replacementCalendarNote": {
+    "placeholders": {
+      "platforms": {
+        "type": "String"
+      }
+    }
+  },
+  "applySportChange": "Ersatztraining einplanen",
   "restoreWorkout": "Training wiederherstellen",
   "skipThisWorkout": "Dieses Training überspringen?",
   "previousWeek": "Vorherige Woche",
@@ -4041,5 +4053,29 @@
   "sleepEcgStagesAgain": "Neu schätzen",
   "sleepEcgStagesDisclaimer": "Experimentelle Schätzung aus dem Polar-H10-EKG. 30-Sekunden-Modellwerte werden für die Übersicht zu 5-Minuten-Abschnitten zusammengefasst. N1 und N2 gelten als Leichtschlaf. Keine PSG- oder medizinische Messung.",
   "sleepEcgStagesWorking": "Schlafphasen werden geschätzt …",
-  "sleepEcgStagesFailed": "Schlafphasen konnten nicht geschätzt werden. Prüfe, ob die Aufzeichnung vollständig ist, und versuche es erneut."
+  "sleepEcgStagesFailed": "Schlafphasen konnten nicht geschätzt werden. Prüfe, ob die Aufzeichnung vollständig ist, und versuche es erneut.",
+  "replacementPreviewTitle": "Ersatztraining prüfen",
+  "replacementGoalLoad": "Ziel: {objective} · {load} geplante Belastung",
+  "@replacementGoalLoad": {"placeholders": {"objective": {"type": "String"}, "load": {"type": "int"}}},
+  "replacementHistoryEstimate": "Dauer anhand deines jüngsten Trainings in dieser Sportart geschätzt.",
+  "replacementFallbackEstimate": "Für diese Sportart liegen zu wenige aktuelle Trainingsdaten vor. Die Dauer ist eine vorsichtige Schätzung.",
+  "replacementRestSuggestion": "Für deinen aktuellen Trainingsplan könnte Ruhe die bessere Wahl sein.",
+  "replacementObjectiveRecovery": "Erholung",
+  "replacementObjectiveBase": "Grundlage",
+  "replacementObjectiveTempo": "Tempo",
+  "replacementObjectiveThreshold": "Schwelle",
+  "replacementObjectiveVo2": "VO₂max",
+  "replacementObjectiveLong": "Lange Ausdauer",
+  "replacementWarningNoHistory": "Keine ausreichende aktuelle Belastungshistorie für diese Sportart.",
+  "replacementWarningRunningCap": "Der Laufumfang wurde wegen der mechanischen Belastung vorsichtig begrenzt.",
+  "replacementWarningLong": "Lange oder wettkampfspezifische Einheiten sind nicht vollständig ersetzbar. Prüfe die kürzere Laufeinheit.",
+  "replacementWarningRace": "Diese Einheit hat Wettkampfpriorität. Der sportartspezifische Nutzen bleibt möglicherweise nicht erhalten.",
+  "replacementWarningSwim": "Das Ausdauertraining bleibt teilweise erhalten, aber nicht die Schwimmtechnik und spezifische Muskelbelastung.",
+  "replacementWarningStrength": "Kraft- und Ausdauertraining sind nicht gleichwertig und erhalten nicht denselben Trainingseffekt.",
+  "replacementWarningNearby": "Innerhalb von 72 Stunden liegt eine weitere intensive Einheit. Prüfe Erholung und Belastungsabstand.",
+  "replacementWarningWeekly": "Diese Einheit macht einen großen Anteil der übrigen geplanten Wochenbelastung aus.",
+  "replacementWarningLowRecovery": "Deine zuletzt gespeicherte Erholung ist niedrig. Prüfe, ob du die Intensität reduzieren oder pausieren möchtest.",
+  "replacementWarningRecentVolume": "Dein Trainingsumfang der letzten sieben Tage liegt deutlich über dem vorherigen Sieben-Tage-Zeitraum.",
+  "replacementTrainingGoal": "TRAININGSZIEL",
+  "replacementPreviewWarnings": "HINWEISE ZUM PLAN"
 }

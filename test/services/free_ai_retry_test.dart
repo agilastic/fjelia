@@ -4,12 +4,30 @@ import 'dart:convert';
 import 'package:fjelia/config/free_ai.dart';
 import 'package:fjelia/services/ai_coach_client.dart';
 import 'package:fjelia/services/ai_coach_settings.dart';
+import 'package:fjelia/services/ai_response_cache.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 
 const _store = AiCoachSettingsStore(freeAiApiKey: 'test-free-ai-key');
+
+/// These tests run on fake time, where the file-backed cache never finishes;
+/// every request here must reach the server anyway.
+class _NoCache extends AiResponseCache {
+  @override
+  Future<AiCachedAnswer?> read(String key) async => null;
+
+  @override
+  Future<void> write(
+    String key,
+    AiCachedAnswer answer, {
+    required String kind,
+    required String model,
+    required int inputBytes,
+  }) async {}
+}
+
 const _settings = AiCoachSettings(
   provider: AiProvider.freeAi,
   model: 'default',
@@ -46,6 +64,7 @@ void main() {
     ) async {
       final sent = <http.Request>[];
       final client = AiCoachClient(
+        responseCache: _NoCache(),
         store: _store,
         client: MockClient((request) async {
           sent.add(request);
@@ -83,6 +102,7 @@ void main() {
   ) async {
     var calls = 0;
     final client = AiCoachClient(
+      responseCache: _NoCache(),
       store: _store,
       client: MockClient((_) async {
         calls++;
@@ -119,6 +139,7 @@ void main() {
     for (final status in [400, 401, 403, 429, 500]) {
       var calls = 0;
       final client = AiCoachClient(
+        responseCache: _NoCache(),
         store: _store,
         client: MockClient((request) async {
           calls++;
@@ -138,6 +159,7 @@ void main() {
   testWidgets('a dropped connection is retried', (tester) async {
     var calls = 0;
     final client = AiCoachClient(
+      responseCache: _NoCache(),
       store: _store,
       client: MockClient((_) async {
         calls++;
@@ -159,6 +181,7 @@ void main() {
     var calls = 0;
     final pending = Completer<http.Response>();
     final client = AiCoachClient(
+      responseCache: _NoCache(),
       store: _store,
       client: MockClient((_) {
         calls++;
@@ -180,6 +203,7 @@ void main() {
   ) async {
     var calls = 0;
     final client = AiCoachClient(
+      responseCache: _NoCache(),
       store: _store,
       client: MockClient((_) {
         calls++;
@@ -204,6 +228,7 @@ void main() {
   ) async {
     var calls = 0;
     final client = AiCoachClient(
+      responseCache: _NoCache(),
       store: _store,
       client: MockClient((_) async {
         calls++;
@@ -216,7 +241,12 @@ void main() {
       client.sendAfternoonBriefing,
       client.sendEveningBriefing,
     ]) {
-      final result = send(_settings, '');
+      // Without Apple Intelligence, a consented cloud briefing.
+      final result = send(
+        _settings.copyWith(hasBriefingCloud: true),
+        '',
+        cloudFallback: true,
+      );
       await tester.pump();
       await tester.pump(const Duration(seconds: 1));
       expect(await result, 'Training looks steady.');
@@ -233,6 +263,7 @@ void main() {
       var calls = 0;
       late Map sentBody;
       final client = AiCoachClient(
+        responseCache: _NoCache(),
         store: _store,
         client: MockClient((request) async {
           calls++;

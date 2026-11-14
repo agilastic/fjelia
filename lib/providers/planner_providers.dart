@@ -1,4 +1,5 @@
 import '../services/plan_session_actions.dart';
+import '../services/workout_replacement_service.dart';
 import 'day_data_provider.dart'
     show syncStatusListenerProvider, scheduledWorkoutsProvider;
 import '../services/plan_day.dart';
@@ -146,6 +147,10 @@ final planSessionActionsProvider = Provider<PlanSessionActions>(
     ref.watch(databaseProvider),
     ref.watch(workoutProvidersProvider),
   ),
+);
+
+final workoutReplacementServiceProvider = Provider<WorkoutReplacementService>(
+  (ref) => WorkoutReplacementService(ref.watch(databaseProvider)),
 );
 
 /// Places workouts done on another day than planned, or in place of a

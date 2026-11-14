@@ -29,14 +29,17 @@ class _H10 extends EcgDeviceService {
   @override
   Stream<H10HeartRatePacket> get heartRate => hr.stream;
   @override
-  Future<void> connect(TrainingDevice device) async {
+  Future<void> connect(
+    TrainingDevice device, {
+    bool withAcceleration = false,
+  }) async {
     entered.complete();
     await connecting?.future;
     if (fail) throw StateError('Sensor unavailable');
   }
 
   @override
-  Future<void> start() async {
+  Future<void> start({bool withAcceleration = false}) async {
     data.add(EcgFrame(1000000000, List.filled(130, 50)));
     hr.add(H10HeartRatePacket.decode([0, 145]));
   }

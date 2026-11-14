@@ -11,7 +11,6 @@ class BriefingConsent {
   static const _legacyKey = 'ai_briefing_cloud_consent_v1';
 
   static Future<bool> given(AiCoachSettings settings) async {
-    if (settings.usesOnDeviceBriefing) return true;
     try {
       final prefs = await SharedPreferences.getInstance();
       if (prefs.getBool(_key) == true) return true;
@@ -30,7 +29,6 @@ class BriefingConsent {
   }
 
   static Future<void> remember(AiCoachSettings settings) async {
-    if (settings.usesOnDeviceBriefing) return;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_key, true);
     await prefs.remove(_legacyKey);

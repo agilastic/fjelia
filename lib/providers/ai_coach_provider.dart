@@ -112,6 +112,9 @@ final toonCacheProvider = StateNotifierProvider<ToonCacheNotifier, _ToonCache?>(
 
 enum AiBriefingPeriod { morning, lunch, afternoon, evening }
 
+final aiBriefingSourceProvider =
+    StateProvider.family<String?, AiBriefingPeriod>((ref, period) => null);
+
 final aiBriefingProvider =
     StateNotifierProvider.family<
       AiBriefingNotifier,
@@ -122,19 +125,14 @@ final aiBriefingProvider =
       ref.listen(aiCoachSettingsProvider, (previous, next) {
         final settings = next.valueOrNull;
         if (settings == null || !settings.readyForBriefing) return;
-        if (settings.usesOnDeviceBriefing) {
-          Future.microtask(() => notifier.load(settings));
-          return;
-        }
-        // A cloud briefing writes itself after the athlete's one-time consent.
         Future.microtask(() async {
-          if (settings.briefingMode == BriefingMode.ai &&
-              await BriefingConsent.given(settings)) {
+          final cloudConsent = await BriefingConsent.given(settings);
+          if (settings.onDeviceAvailable || cloudConsent) {
             final profile = await ref.read(userProfileProvider.future);
             await notifier.load(
               settings,
               raceGoals: profile.raceGoals ?? '',
-              cloudConsent: true,
+              cloudConsent: cloudConsent,
             );
           }
         });
@@ -159,24 +157,54 @@ String _briefingKey(AiBriefingPeriod period) {
       '${now.day.toString().padLeft(2, '0')}';
   // The language is part of the key: a briefing is written in one language.
   // Bump the version when prompts or deterministic readiness rules change.
-  return 'ai_briefing_${period.name}_${day}_${activeLocale.languageCode}_v8';
+  return 'ai_briefing_${period.name}_${day}_${activeLocale.languageCode}_v9';
 }
 
 String _briefingInputHashKey(AiBriefingPeriod period) =>
     '${_briefingKey(period)}_input_hash';
 
-String _briefingInputHash(AiCoachSettings settings, String toon) {
-  // The clock changes on every refresh but does not change the substance of
-  // the briefing. Keep the date and all other context fields in the hash.
-  final stableToon = toon.replaceAll(
-    RegExp(r'TimeNow:[^\]]+'),
-    'TimeNow:<omitted>',
-  );
-  return sha256
-      .convert(
-        utf8.encode('${settings.provider.name}|${settings.model}|$stableToon'),
-      )
-      .toString();
+String _briefingSourceKey(AiBriefingPeriod period) =>
+    '${_briefingKey(period)}_source';
+
+/// Values that move with every sync during the day without changing what the
+/// briefing should say: the clock, today's running totals (steps, calories,
+/// Body Battery…) and the current-hour weather reading. Only inside their
+/// own blocks: `Steps:` also names a planned workout's structure, which must
+/// keep counting.
+const _intradayBriefingFields = {
+  '[Today:': ['TimeNow'],
+  '[Daily:': [
+    'Steps',
+    'ActiveCal',
+    'TotalCal',
+    'Floors',
+    'IntensityMin',
+    'BBHigh',
+    'BBLow',
+    'BBCharged',
+    'BBDrained',
+  ],
+  '[Weather:': ['TempNow', 'WindKmh', 'WindChill', 'WetBulb'],
+};
+
+/// The hash that decides whether today's briefing is written again. Only
+/// substantive changes (sleep, HRV, activities, plan, BP, forecast…) count.
+String briefingInputHash(String toon) {
+  final stableToon = toon.replaceAllMapped(RegExp(r'\[[A-Za-z]+:[^\]]*\]'), (
+    block,
+  ) {
+    final text = block[0]!;
+    final fields = _intradayBriefingFields.entries
+        .where((e) => text.startsWith(e.key))
+        .firstOrNull
+        ?.value;
+    if (fields == null) return text;
+    return text.replaceAllMapped(
+      RegExp('([\\[,:])(${fields.join('|')}):[^,\\]]*'),
+      (m) => '${m[1]}${m[2]}:<omitted>',
+    );
+  });
+  return sha256.convert(utf8.encode(stableToon)).toString();
 }
 
 /// Today's briefing for one period, cached in secure storage per day.
@@ -191,6 +219,10 @@ class AiBriefingNotifier extends StateNotifier<AsyncValue<String?>> {
 
   Future<void> _loadFromDisk() async {
     final cached = await _storage.read(key: _briefingKey(period));
+    final source = await _storage.read(key: _briefingSourceKey(period));
+    if (mounted && source != null) {
+      _ref.read(aiBriefingSourceProvider(period).notifier).state = source;
+    }
     if (mounted &&
         cached != null &&
         !state.isLoading &&
@@ -230,9 +262,13 @@ class AiBriefingNotifier extends StateNotifier<AsyncValue<String?>> {
     }
   }
 
-  Future<void> _persist(String text, String inputHash) async {
+  Future<void> _persist(String text, String inputHash, String? source) async {
     await _storage.write(key: _briefingKey(period), value: text);
     await _storage.write(key: _briefingInputHashKey(period), value: inputHash);
+    if (source != null) {
+      await _storage.write(key: _briefingSourceKey(period), value: source);
+      _ref.read(aiBriefingSourceProvider(period).notifier).state = source;
+    }
   }
 
   /// Refreshes an existing morning briefing after the athlete changes today's
@@ -242,14 +278,13 @@ class AiBriefingNotifier extends StateNotifier<AsyncValue<String?>> {
     if (period != AiBriefingPeriod.morning || !mounted) return;
     try {
       final settings = await _ref.read(aiCoachSettingsProvider.future);
-      if (!settings.readyForBriefing ||
-          settings.briefingMode != BriefingMode.ai) {
+      if (!settings.readyForBriefing) {
         return;
       }
       final cached =
           state.valueOrNull ?? await _storage.read(key: _briefingKey(period));
-      final cloudConsent = !settings.usesOnDeviceBriefing;
-      if (cloudConsent && !await BriefingConsent.given(settings)) return;
+      final cloudConsent = await BriefingConsent.given(settings);
+      if (!settings.onDeviceAvailable && !cloudConsent) return;
       final profile = await _ref.read(userProfileProvider.future);
       await load(
         settings,
@@ -276,7 +311,7 @@ class AiBriefingNotifier extends StateNotifier<AsyncValue<String?>> {
     bool checkDataChanges = false,
     bool cloudConsent = false,
   }) async {
-    if (!settings.usesOnDeviceBriefing && !cloudConsent) return;
+    if (!settings.onDeviceAvailable && !cloudConsent) return;
     if (!mounted || state.isLoading || _checkingInputs) {
       return;
     }
@@ -306,7 +341,7 @@ class AiBriefingNotifier extends StateNotifier<AsyncValue<String?>> {
             bioAge: bioAge,
             planInfo: planInfo,
           );
-      final inputHash = _briefingInputHash(settings, toon);
+      final inputHash = briefingInputHash(toon);
       final savedHash = await _storage.read(key: _briefingInputHashKey(period));
       if (!mounted) return;
       if (previousText != null && checkDataChanges && savedHash == inputHash) {
@@ -315,43 +350,41 @@ class AiBriefingNotifier extends StateNotifier<AsyncValue<String?>> {
       }
       state = const AsyncLoading();
       final client = _ref.read(aiCoachClientProvider);
+      String? generatedSource;
+      void recordSource(String source) => generatedSource = source;
       final future = switch (period) {
         AiBriefingPeriod.morning => client.sendBriefing(
           settings,
           toon,
           cloudFallback: cloudConsent,
+          onSource: recordSource,
         ),
         AiBriefingPeriod.lunch => client.sendLunchBriefing(
           settings,
           toon,
           cloudFallback: cloudConsent,
+          onSource: recordSource,
         ),
         AiBriefingPeriod.afternoon => client.sendAfternoonBriefing(
           settings,
           toon,
           cloudFallback: cloudConsent,
+          onSource: recordSource,
         ),
         AiBriefingPeriod.evening => client.sendEveningBriefing(
           settings,
           toon,
           cloudFallback: cloudConsent,
+          onSource: recordSource,
         ),
       };
-      final timeout = switch (settings.provider) {
-        // Apple Intelligence alone, without a cloud fallback.
-        _
-            when settings.usesOnDeviceBriefing &&
-                !settings.provider.isLocal &&
-                !cloudConsent =>
-          const Duration(seconds: 30),
-        AiProvider.freeAi => freeAiGenerationTimeout,
-        AiProvider.localQwen => const Duration(seconds: 120),
-        _ => const Duration(seconds: 30),
-      };
+      final timeout = settings.onDeviceAvailable && !cloudConsent
+          ? const Duration(seconds: 30)
+          : freeAiGenerationTimeout;
       final text = await future.timeout(timeout);
       if (!mounted) return;
       state = AsyncData(text);
-      await _persist(text, inputHash);
+      await _persist(text, inputHash, generatedSource);
     } catch (e, st) {
       log('[AiBriefing] ${period.name} error: $e');
       if (mounted) {
@@ -432,6 +465,7 @@ class AiCoachSettingsNotifier extends AsyncNotifier<AiCoachSettings> {
   @override
   Future<AiCoachSettings> build() async {
     final settings = await _store.load();
+    final available = await _appleAvailable();
     if (settings.provider == AiProvider.localQwen) {
       final local = await ref.watch(
         localModelProvider(settings.model).selectAsync(
@@ -442,9 +476,9 @@ class AiCoachSettingsNotifier extends AsyncNotifier<AiCoachSettings> {
       return settings.copyWith(
         localModelAvailable: local.$1,
         localModelInstalled: local.$2,
+        onDeviceAvailable: available,
       );
     }
-    final available = await _appleAvailable();
     // With Free AI or an own key the chat goes to the cloud, but briefings
     // are written on the device whenever Apple Intelligence runs here.
     if (settings.provider != AiProvider.appleIntelligence) {
@@ -458,7 +492,6 @@ class AiCoachSettingsNotifier extends AsyncNotifier<AiCoachSettings> {
       model: AiProvider.freeAi.defaultModel,
       hasApiKey: await _store.readApiKey(AiProvider.freeAi) != null,
       onDeviceAvailable: false,
-      appleIntelligenceForBriefing: false,
     );
   }
 

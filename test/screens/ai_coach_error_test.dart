@@ -36,6 +36,7 @@ class _Client extends AiCoachClient {
     List<ChatMessage> messages,
     String toonContext, [
     AiConsentToken? consent,
+    void Function(String source)? onSource,
   ]) async {
     calls++;
     expect(messages, hasLength(1));

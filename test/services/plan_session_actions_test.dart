@@ -7,7 +7,9 @@ import 'package:fjelia/services/daily_readiness_service.dart';
 import 'package:fjelia/services/plan_session_actions.dart';
 import 'package:fjelia/services/session_adaptation_service.dart';
 import 'package:fjelia/services/training_plan_service.dart';
+import 'package:fjelia/services/workout_replacement_service.dart';
 import 'package:fjelia/services/workout_template_library.dart';
+
 import '../support/fake_workout_garmin.dart';
 
 void main() {
@@ -228,6 +230,63 @@ void main() {
     expect(await db.select(db.sessionActuals).get(), isEmpty);
     // Only a skipped session is restored.
     expect((await actions.restore(back)).status, 'planned');
+  });
+  test('restore removes a sport replacement made from the session', () async {
+    final actions = PlanSessionActions(db, garminProviders(db, garmin));
+    final replacement = await actions.replaceWithSport(
+      WorkoutReplacementPreview(
+        source: session,
+        targetSport: 'cycling',
+        targetLabel: 'Cycling',
+        objective: WorkoutObjective.recovery,
+        durationMin: 45,
+        targetLoad: 36,
+        stepsJson: '[]',
+        usedAthleteHistory: false,
+        warnings: const [],
+        suggestRest: false,
+      ),
+    );
+    final skipped = await (db.select(
+      db.trainingSessions,
+    )..where((t) => t.id.equals(session.id))).getSingle();
+    expect(skipped.status, 'skipped');
+
+    final back = await actions.restore(skipped);
+    expect(back.status, 'planned');
+    final remaining = await db.select(db.trainingSessions).get();
+    expect(remaining.map((s) => s.id), [session.id]);
+    expect(remaining.any((s) => s.id == replacement.id), isFalse);
+  });
+  test('restore keeps the skip when the replacement is done', () async {
+    final actions = PlanSessionActions(db, garminProviders(db, garmin));
+    final replacement = await actions.replaceWithSport(
+      WorkoutReplacementPreview(
+        source: session,
+        targetSport: 'cycling',
+        targetLabel: 'Cycling',
+        objective: WorkoutObjective.recovery,
+        durationMin: 45,
+        targetLoad: 36,
+        stepsJson: '[]',
+        usedAthleteHistory: false,
+        warnings: const [],
+        suggestRest: false,
+      ),
+    );
+    await (db.update(db.trainingSessions)
+          ..where((t) => t.id.equals(replacement.id)))
+        .write(const TrainingSessionsCompanion(status: Value('completed')));
+    final skipped = await (db.select(
+      db.trainingSessions,
+    )..where((t) => t.id.equals(session.id))).getSingle();
+    await expectLater(actions.restore(skipped), throwsStateError);
+    expect(
+      (await (db.select(
+        db.trainingSessions,
+      )..where((t) => t.id.equals(session.id))).getSingle()).status,
+      'skipped',
+    );
   });
   test('retry after scheduling failure reuses the created workout', () async {
     garmin.failSchedule = true;

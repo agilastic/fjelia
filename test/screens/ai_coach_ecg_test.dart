@@ -41,6 +41,7 @@ class _Client extends AiCoachClient {
     List<ChatMessage> messages,
     String toonContext, [
     AiConsentToken? consent,
+    void Function(String source)? onSource,
   ]) async {
     contexts.add(toonContext);
     return 'Answer ${contexts.length}';

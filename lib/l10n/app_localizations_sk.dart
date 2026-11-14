@@ -4043,6 +4043,24 @@ class AppLocalizationsSk extends AppLocalizations {
   String get markAsRest => 'Označiť ako odpočinok';
 
   @override
+  String get changeSport => 'Zmeniť šport';
+
+  @override
+  String get replacementSport => 'Náhradný šport';
+
+  @override
+  String get replacementLoadNote =>
+      'Trvanie, plánované zóny srdcovej frekvencie a cieľ záťaže zostávajú zachované. Ciele tempa a výkonu sa prispôsobia novému športu.';
+
+  @override
+  String replacementCalendarNote(String platforms) {
+    return 'Pôvodný tréning sa odstráni z týchto tréningových kalendárov: $platforms.';
+  }
+
+  @override
+  String get applySportChange => 'Naplánovať náhradný tréning';
+
+  @override
   String get restoreWorkout => 'Obnoviť tréning';
 
   @override
@@ -8669,4 +8687,88 @@ class AppLocalizationsSk extends AppLocalizations {
   @override
   String get sleepEcgStagesFailed =>
       'Fázy spánku sa nepodarilo odhadnúť. Skontrolujte, či je záznam úplný, a skúste to znova.';
+
+  @override
+  String get replacementPreviewTitle => 'Skontrolovať náhradný tréning';
+
+  @override
+  String replacementGoalLoad(String objective, int load) {
+    return 'Cieľ: $objective · plánovaná záťaž $load';
+  }
+
+  @override
+  String get replacementHistoryEstimate =>
+      'Trvanie je odhadnuté podľa tvojho nedávneho tréningu v tomto športe.';
+
+  @override
+  String get replacementFallbackEstimate =>
+      'Pre tento šport nie je dosť nedávnych tréningových údajov. Trvanie je opatrný odhad.';
+
+  @override
+  String get replacementRestSuggestion =>
+      'Odpočinok môže byť pre tvoj aktuálny tréningový plán lepšou voľbou.';
+
+  @override
+  String get replacementObjectiveRecovery => 'Regenerácia';
+
+  @override
+  String get replacementObjectiveBase => 'Základná vytrvalosť';
+
+  @override
+  String get replacementObjectiveTempo => 'Tempo';
+
+  @override
+  String get replacementObjectiveThreshold => 'Prah';
+
+  @override
+  String get replacementObjectiveVo2 => 'VO₂max';
+
+  @override
+  String get replacementObjectiveLong => 'Dlhá vytrvalosť';
+
+  @override
+  String get replacementWarningNoHistory =>
+      'Pre tento šport nie je dosť nedávnej histórie záťaže.';
+
+  @override
+  String get replacementWarningRunningCap =>
+      'Bežecký objem bol opatrne obmedzený, aby sa znížila mechanická záťaž.';
+
+  @override
+  String get replacementWarningLong =>
+      'Dlhé alebo pretekovo špecifické tréningy sa nedajú úplne nahradiť. Skontroluj kratší beh.';
+
+  @override
+  String get replacementWarningRace =>
+      'Tento tréning má pretekovú prioritu; jeho prínos špecifický pre šport sa nemusí zachovať.';
+
+  @override
+  String get replacementWarningSwim =>
+      'Časť aeróbneho podnetu sa zachová, ale nie plavecká technika ani špecifické svalové nároky.';
+
+  @override
+  String get replacementWarningStrength =>
+      'Silový a vytrvalostný tréning nie sú rovnocenné a nemôžu zachovať rovnaký tréningový účinok.';
+
+  @override
+  String get replacementWarningNearby =>
+      'Do 72 hodín je ďalší náročný tréning. Skontroluj regeneráciu a odstup medzi tréningmi.';
+
+  @override
+  String get replacementWarningWeekly =>
+      'Tento tréning tvorí veľkú časť ostatnej plánovanej tréningovej záťaže tento týždeň.';
+
+  @override
+  String get replacementWarningLowRecovery =>
+      'Tvoje naposledy uložené skóre regenerácie je nízke. Zváž zníženie intenzity alebo odpočinok.';
+
+  @override
+  String get replacementWarningRecentVolume =>
+      'Tvoja tréningová záťaž za posledných sedem dní je výrazne vyššia ako v predchádzajúcich siedmich dňoch.';
+
+  @override
+  String get replacementTrainingGoal => 'TRÉNINGOVÝ CIEĽ';
+
+  @override
+  String get replacementPreviewWarnings => 'POZNÁMKY K PLÁNU';
 }

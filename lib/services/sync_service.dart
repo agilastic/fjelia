@@ -261,6 +261,7 @@ class SyncService {
     sleepScore: r.sleepScore,
     sleepStart: r.sleepStart,
     sleepEnd: r.sleepEnd,
+    source: r.source,
     avgOvernightHrv: r.avgOvernightHrv,
     sleepNeedSeconds: r.sleepNeedSeconds,
   );
@@ -785,10 +786,10 @@ class SyncService {
         final fitBytes = original == null
             ? null
             : activityFilesInZip(original)
-                  .where((f) => f.name.toLowerCase().endsWith('.fit'))
-                  .map((f) => f.bytes)
-                  .firstOrNull ??
-              original;
+                      .where((f) => f.name.toLowerCase().endsWith('.fit'))
+                      .map((f) => f.bytes)
+                      .firstOrNull ??
+                  original;
         // A FIT file with beat-to-beat data can hold tens of thousands of
         // messages; decode it away from the UI isolate.
         final fit = fitBytes == null
@@ -837,7 +838,9 @@ class SyncService {
         final merged = mergeGarminImport(existing, a.id, sets);
         if (merged == null) continue;
         await repo.saveLog(merged);
-        log('[Garmin] strength sets imported for ${a.id}: ${sets.length} exercises');
+        log(
+          '[Garmin] strength sets imported for ${a.id}: ${sets.length} exercises',
+        );
       } on StrengthUnreadableException {
         continue;
       } catch (e) {

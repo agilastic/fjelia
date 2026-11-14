@@ -93,7 +93,8 @@ void main() {
       expect(_ready.usesOnDeviceBriefing, isTrue);
       expect(_ready.copyWith(localModelInstalled: false).ready, isFalse);
       expect(_ready.copyWith(localModelAvailable: false).ready, isFalse);
-      expect(_ready.copyWith(enabled: false).readyForBriefing, isFalse);
+      // Briefings do not depend on the chat coach: Apple writes them.
+      expect(_ready.copyWith(enabled: false).readyForBriefing, isTrue);
     },
   );
 
@@ -141,11 +142,12 @@ void main() {
   });
 
   test(
-    'chat and briefings use the chosen 4B backend without a cloud request',
+    'chat uses the chosen 4B backend, briefings stay on the device',
     () async {
       final small = _LocalModel();
       final large = _LocalModel();
       final selected = <String>[];
+      var apple = 0;
       final client = AiCoachClient(
         localModelFor: (id) {
           selected.add(id);
@@ -154,35 +156,42 @@ void main() {
         client: MockClient(
           (_) async => fail('Local inference must not use HTTP'),
         ),
-        appleSender: (_) async => fail('Local inference must not use Apple'),
+        appleSender: (_) async {
+          apple++;
+          return 'Your training summary is ready.';
+        },
       );
       final settings = _ready.copyWith(model: localQwen4bModelId);
       await client.send(settings, [
         ChatMessage(text: 'Training?', isUser: true),
       ], '');
       await client.sendBriefing(settings, '');
-      expect(selected, [localQwen4bModelId, localQwen4bModelId]);
+      // Only the chat goes to Qwen; Apple writes the briefing.
+      expect(selected, [localQwen4bModelId]);
       expect(large.messages, isNotNull);
       expect(small.messages, isNull);
+      expect(apple, 1);
     },
   );
 
   test(
-    'briefings remain local even with a saved Apple briefing override',
+    'without Apple a briefing needs consent, not the local chat model',
     () async {
       final local = _LocalModel();
       final client = AiCoachClient(
         localModel: local,
         client: MockClient(
-          (_) async => fail('No cloud fallback for local briefings'),
+          (_) async => fail('No cloud briefing without consent'),
         ),
-        appleSender: (_) async => fail('Qwen selection must not call Apple'),
       );
-      await client.sendBriefing(
-        _ready.copyWith(appleIntelligenceForBriefing: true),
-        '',
+      await expectLater(
+        client.sendBriefing(
+          _ready.copyWith(onDeviceAvailable: false, hasBriefingCloud: true),
+          '',
+        ),
+        throwsStateError,
       );
-      expect(local.messages, isNotNull);
+      expect(local.messages, isNull);
     },
   );
 

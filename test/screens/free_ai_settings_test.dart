@@ -24,6 +24,7 @@ class _FreeSettings extends AiCoachSettingsNotifier {
     hasApiKey: true,
     // No Apple Intelligence here: briefings go to Free AI after consent.
     onDeviceAvailable: false,
+    hasBriefingCloud: true,
   );
 }
 
@@ -41,7 +42,7 @@ class _Briefing extends AiBriefingNotifier {
     String? weatherSummary,
     Object? bioAge,
     Object? planInfo,
-    bool force = false,
+    bool checkDataChanges = false,
     bool cloudConsent = false,
   }) async {
     calls++;
@@ -239,6 +240,11 @@ void main() {
     );
     await tester.pumpAndSettle();
     final l10n = tester.element(find.byType(BriefingCard)).l10n;
+    // Without Apple Intelligence the card asks once by itself.
+    expect(find.textContaining('Free AI (ai.fjelia.com)'), findsOneWidget);
+    expect(briefing.calls, 0);
+    await tester.tap(find.text(l10n.cancel));
+    await tester.pumpAndSettle();
     expect(briefing.calls, 0);
 
     await tester.tap(find.text(l10n.generateBriefing));

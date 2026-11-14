@@ -614,6 +614,7 @@ class AppLocalizationsPt extends AppLocalizations {
       locale: localeName,
       other: '$length medições',
       one: '$length medição',
+      zero: '$length medições',
     );
     return '$_temp0 · média / mín.–máx.';
   }
@@ -4014,6 +4015,24 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get markAsRest => 'Mark as Rest';
+
+  @override
+  String get changeSport => 'Mudar de desporto';
+
+  @override
+  String get replacementSport => 'Desporto de substituição';
+
+  @override
+  String get replacementLoadNote =>
+      'A duração, as zonas de frequência cardíaca previstas e o objetivo de carga mantêm-se. Os objetivos de ritmo e potência são adaptados ao novo desporto.';
+
+  @override
+  String replacementCalendarNote(String platforms) {
+    return 'O treino original será removido destes calendários de treino: $platforms.';
+  }
+
+  @override
+  String get applySportChange => 'Planear treino de substituição';
 
   @override
   String get restoreWorkout => 'Restore workout';
@@ -8638,4 +8657,88 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get sleepEcgStagesFailed =>
       'Não foi possível estimar as fases do sono. Confirme se a gravação está completa e tente novamente.';
+
+  @override
+  String get replacementPreviewTitle => 'Rever treino de substituição';
+
+  @override
+  String replacementGoalLoad(String objective, int load) {
+    return 'Objetivo: $objective · carga prevista $load';
+  }
+
+  @override
+  String get replacementHistoryEstimate =>
+      'Duração estimada a partir do teu treino recente neste desporto.';
+
+  @override
+  String get replacementFallbackEstimate =>
+      'Não há dados de treino recentes suficientes para este desporto. A duração é uma estimativa prudente.';
+
+  @override
+  String get replacementRestSuggestion =>
+      'Descansar pode ser a melhor opção para o teu plano de treino atual.';
+
+  @override
+  String get replacementObjectiveRecovery => 'Recuperação';
+
+  @override
+  String get replacementObjectiveBase => 'Resistência de base';
+
+  @override
+  String get replacementObjectiveTempo => 'Tempo';
+
+  @override
+  String get replacementObjectiveThreshold => 'Limiar';
+
+  @override
+  String get replacementObjectiveVo2 => 'VO₂máx';
+
+  @override
+  String get replacementObjectiveLong => 'Resistência longa';
+
+  @override
+  String get replacementWarningNoHistory =>
+      'Não há histórico de carga recente suficiente para este desporto.';
+
+  @override
+  String get replacementWarningRunningCap =>
+      'O volume de corrida foi limitado por prudência para reduzir o stress mecânico.';
+
+  @override
+  String get replacementWarningLong =>
+      'Treinos longos ou específicos de competição não são totalmente substituíveis. Revê a corrida mais curta.';
+
+  @override
+  String get replacementWarningRace =>
+      'Este treino tem prioridade de competição; o benefício específico do desporto pode não se manter.';
+
+  @override
+  String get replacementWarningSwim =>
+      'Parte do estímulo aeróbio mantém-se, mas não a técnica de natação nem as exigências musculares específicas.';
+
+  @override
+  String get replacementWarningStrength =>
+      'Treinos de força e de resistência não são equivalentes e não podem manter o mesmo efeito de treino.';
+
+  @override
+  String get replacementWarningNearby =>
+      'Há outro treino intenso dentro de 72 horas. Verifica a recuperação e o espaçamento entre treinos.';
+
+  @override
+  String get replacementWarningWeekly =>
+      'Este treino é uma grande parte da restante carga de treino prevista para esta semana.';
+
+  @override
+  String get replacementWarningLowRecovery =>
+      'A tua última pontuação de recuperação guardada é baixa. Considera reduzir a intensidade ou descansar.';
+
+  @override
+  String get replacementWarningRecentVolume =>
+      'A tua carga de treino dos últimos sete dias é claramente superior à dos sete dias anteriores.';
+
+  @override
+  String get replacementTrainingGoal => 'OBJETIVO DE TREINO';
+
+  @override
+  String get replacementPreviewWarnings => 'NOTAS DO PLANO';
 }

@@ -4064,6 +4064,24 @@ class AppLocalizationsCa extends AppLocalizations {
   String get markAsRest => 'Marca com a descans';
 
   @override
+  String get changeSport => 'Canvia d\'esport';
+
+  @override
+  String get replacementSport => 'Esport de substitució';
+
+  @override
+  String get replacementLoadNote =>
+      'Es mantenen la durada, les zones de freqüència cardíaca previstes i l\'objectiu de càrrega. Els objectius de ritme i potència s\'adapten al nou esport.';
+
+  @override
+  String replacementCalendarNote(String platforms) {
+    return 'L\'entrenament original s\'eliminarà d\'aquests calendaris d\'entrenament: $platforms.';
+  }
+
+  @override
+  String get applySportChange => 'Planifica l\'entrenament de substitució';
+
+  @override
   String get restoreWorkout => 'Restaura l\'entrenament';
 
   @override
@@ -8697,4 +8715,88 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get sleepEcgStagesFailed =>
       'No s’han pogut estimar les fases del son. Comprova que la gravació estigui completa i torna-ho a provar.';
+
+  @override
+  String get replacementPreviewTitle => 'Revisa l\'entrenament de substitució';
+
+  @override
+  String replacementGoalLoad(String objective, int load) {
+    return 'Objectiu: $objective · càrrega prevista $load';
+  }
+
+  @override
+  String get replacementHistoryEstimate =>
+      'Durada estimada a partir del teu entrenament recent en aquest esport.';
+
+  @override
+  String get replacementFallbackEstimate =>
+      'No hi ha prou dades d\'entrenament recents per a aquest esport. La durada és una estimació prudent.';
+
+  @override
+  String get replacementRestSuggestion =>
+      'Descansar podria ser la millor opció per al teu pla d\'entrenament actual.';
+
+  @override
+  String get replacementObjectiveRecovery => 'Recuperació';
+
+  @override
+  String get replacementObjectiveBase => 'Resistència de base';
+
+  @override
+  String get replacementObjectiveTempo => 'Tempo';
+
+  @override
+  String get replacementObjectiveThreshold => 'Llindar';
+
+  @override
+  String get replacementObjectiveVo2 => 'VO₂màx';
+
+  @override
+  String get replacementObjectiveLong => 'Resistència llarga';
+
+  @override
+  String get replacementWarningNoHistory =>
+      'No hi ha prou historial de càrrega recent per a aquest esport.';
+
+  @override
+  String get replacementWarningRunningCap =>
+      'El volum de cursa s\'ha limitat amb prudència per reduir l\'estrès mecànic.';
+
+  @override
+  String get replacementWarningLong =>
+      'Els entrenaments llargs o específics de competició no es poden substituir del tot. Revisa la cursa més curta.';
+
+  @override
+  String get replacementWarningRace =>
+      'Aquest entrenament té prioritat de competició; és possible que no se\'n conservi el benefici específic de l\'esport.';
+
+  @override
+  String get replacementWarningSwim =>
+      'Es conserva part de l\'estímul aeròbic, però no la tècnica de natació ni les exigències musculars específiques.';
+
+  @override
+  String get replacementWarningStrength =>
+      'Els entrenaments de força i de resistència no són equivalents i no poden conservar el mateix efecte d\'entrenament.';
+
+  @override
+  String get replacementWarningNearby =>
+      'Hi ha un altre entrenament intens en un termini de 72 hores. Revisa la recuperació i la separació entre sessions.';
+
+  @override
+  String get replacementWarningWeekly =>
+      'Aquest entrenament representa una gran part de la càrrega d\'entrenament prevista aquesta setmana.';
+
+  @override
+  String get replacementWarningLowRecovery =>
+      'La teva última puntuació de recuperació desada és baixa. Planteja\'t reduir la intensitat o descansar.';
+
+  @override
+  String get replacementWarningRecentVolume =>
+      'La teva càrrega d\'entrenament dels últims set dies és clarament més alta que la dels set dies anteriors.';
+
+  @override
+  String get replacementTrainingGoal => 'OBJECTIU D\'ENTRENAMENT';
+
+  @override
+  String get replacementPreviewWarnings => 'NOTES DEL PLA';
 }

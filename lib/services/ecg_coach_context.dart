@@ -268,7 +268,7 @@ List<String> ecgDetailLines(
       return [
         ecgAvailableLine(r),
         '[ECG:Summary,Kind:report,Source:imported PDF,Selectable report text unavailable]',
-        '[ECG:Report,Source:Imported PDF,The report text could not be extracted on this device. Do not claim to have read the report; ask the athlete to share a text-readable report or paste its findings.]',
+        '[ECG:Report,Source:Imported PDF,The report text could not be extracted on this device, so nothing about rhythm or beats is known. Do not claim to have read the report; ask the athlete to share a text-readable report or paste its findings.]',
       ];
     }
     return [

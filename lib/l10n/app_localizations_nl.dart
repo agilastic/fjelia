@@ -4016,6 +4016,24 @@ class AppLocalizationsNl extends AppLocalizations {
   String get markAsRest => 'Mark as Rest';
 
   @override
+  String get changeSport => 'Sport wijzigen';
+
+  @override
+  String get replacementSport => 'Vervangende sport';
+
+  @override
+  String get replacementLoadNote =>
+      'Duur, geplande hartslagzones en belastingsdoel blijven behouden. Tempo- en vermogensdoelen worden aangepast aan de nieuwe sport.';
+
+  @override
+  String replacementCalendarNote(String platforms) {
+    return 'De oorspronkelijke training wordt verwijderd uit deze trainingskalenders: $platforms.';
+  }
+
+  @override
+  String get applySportChange => 'Vervangende training inplannen';
+
+  @override
   String get restoreWorkout => 'Restore workout';
 
   @override
@@ -8639,4 +8657,88 @@ class AppLocalizationsNl extends AppLocalizations {
   @override
   String get sleepEcgStagesFailed =>
       'Slaapfasen konden niet worden geschat. Controleer of de opname compleet is en probeer het opnieuw.';
+
+  @override
+  String get replacementPreviewTitle => 'Vervangende training controleren';
+
+  @override
+  String replacementGoalLoad(String objective, int load) {
+    return 'Doel: $objective · geplande belasting $load';
+  }
+
+  @override
+  String get replacementHistoryEstimate =>
+      'Duur geschat op basis van je recente training in deze sport.';
+
+  @override
+  String get replacementFallbackEstimate =>
+      'Er zijn niet genoeg recente trainingsgegevens voor deze sport. De duur is een voorzichtige schatting.';
+
+  @override
+  String get replacementRestSuggestion =>
+      'Rust kan de betere keuze zijn voor je huidige trainingsschema.';
+
+  @override
+  String get replacementObjectiveRecovery => 'Herstel';
+
+  @override
+  String get replacementObjectiveBase => 'Basisuithoudingsvermogen';
+
+  @override
+  String get replacementObjectiveTempo => 'Tempo';
+
+  @override
+  String get replacementObjectiveThreshold => 'Drempel';
+
+  @override
+  String get replacementObjectiveVo2 => 'VO₂max';
+
+  @override
+  String get replacementObjectiveLong => 'Lange duur';
+
+  @override
+  String get replacementWarningNoHistory =>
+      'Er is niet genoeg recente belastingsgeschiedenis voor deze sport.';
+
+  @override
+  String get replacementWarningRunningCap =>
+      'De loopomvang is voorzichtig beperkt om de mechanische belasting te beperken.';
+
+  @override
+  String get replacementWarningLong =>
+      'Lange of wedstrijdspecifieke trainingen zijn niet volledig te vervangen. Controleer de kortere loop.';
+
+  @override
+  String get replacementWarningRace =>
+      'Deze training heeft wedstrijdprioriteit; het sportspecifieke effect blijft mogelijk niet behouden.';
+
+  @override
+  String get replacementWarningSwim =>
+      'Een deel van de aerobe prikkel blijft behouden, maar niet de zwemtechniek of de sportspecifieke spierbelasting.';
+
+  @override
+  String get replacementWarningStrength =>
+      'Kracht- en duurtrainingen zijn niet gelijkwaardig en kunnen niet hetzelfde trainingseffect behouden.';
+
+  @override
+  String get replacementWarningNearby =>
+      'Binnen 72 uur valt nog een zware training. Controleer herstel en spreiding.';
+
+  @override
+  String get replacementWarningWeekly =>
+      'Deze training is een groot deel van de overige geplande trainingsbelasting deze week.';
+
+  @override
+  String get replacementWarningLowRecovery =>
+      'Je laatst opgeslagen herstelscore is laag. Overweeg de intensiteit te verlagen of te rusten.';
+
+  @override
+  String get replacementWarningRecentVolume =>
+      'Je trainingsbelasting van de afgelopen zeven dagen is duidelijk hoger dan in de zeven dagen daarvoor.';
+
+  @override
+  String get replacementTrainingGoal => 'TRAININGSDOEL';
+
+  @override
+  String get replacementPreviewWarnings => 'OPMERKINGEN BIJ HET PLAN';
 }

@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:crypto/crypto.dart';
+
 import '../config/fjelia_pro.dart';
 import '../config/free_ai.dart';
 
@@ -9,6 +11,7 @@ import 'package:fjelia_service_api/fjelia_service_api.dart';
 import 'package:http/http.dart' as http;
 
 import 'ai_coach_rules.dart';
+import 'ai_response_cache.dart';
 import 'ai_coach_settings.dart';
 import 'apple_coach_request.dart';
 import 'briefing_brief.dart';
@@ -62,21 +65,28 @@ typedef AppleSender = Future<String> Function(AppleCoachRequest request);
 /// added, since they ask for prose.
 const _rawTask = '\u0000raw\u0000';
 
-String _system(String? taskPrompt, [String context = '']) =>
-    taskPrompt != null && taskPrompt.startsWith(_rawTask)
-    ? '${taskPrompt.substring(_rawTask.length)}\n\nDATE: ${coachTodayLine()}'
-    : (taskPrompt ?? _coachPrompt) +
-          coachAnswerStandard +
-          (taskPrompt == null ? coachTaskTemplate(coachTaskFor(context)) : '') +
-          (taskPrompt == null ? coachChatStyle : coachBriefingRules) +
-          (taskPrompt == null && coachTaskFor(context) == CoachTask.ecg
-              ? coachEcgRules
-              : '') +
-          (taskPrompt == null && context.contains('[Memory:')
-              ? coachMemoryRule
-              : '') +
-          '\n\nDATE: ${coachTodayLine()}' +
-          coachLanguageDirective(chat: taskPrompt == null);
+String _system(String? taskPrompt, [String context = '']) {
+  if (taskPrompt != null && taskPrompt.startsWith(_rawTask)) {
+    return '${taskPrompt.substring(_rawTask.length)}\n\nDATE: ${coachTodayLine()}';
+  }
+  final prompt = StringBuffer()
+    ..write(taskPrompt ?? _coachPrompt)
+    ..write(coachAnswerStandard);
+  if (taskPrompt == null) {
+    prompt.write(coachTaskTemplate(coachTaskFor(context)));
+  }
+  prompt.write(taskPrompt == null ? coachChatStyle : coachBriefingRules);
+  if (taskPrompt == null && coachTaskFor(context) == CoachTask.ecg) {
+    prompt.write(coachEcgRules);
+  }
+  if (taskPrompt == null && context.contains('[Memory:')) {
+    prompt.write(coachMemoryRule);
+  }
+  prompt
+    ..write('\n\nDATE: ${coachTodayLine()}')
+    ..write(coachLanguageDirective(chat: taskPrompt == null));
+  return prompt.toString();
+}
 
 /// The system prompt a cloud chat sends for [context], as the coach gets
 /// it. The model comparison in fjelia-service (`tools/ai_compare`) uses it,
@@ -105,6 +115,7 @@ class AiCoachClient {
     AppleSender? appleSender,
     LocalModelService? localModel,
     LocalModelService Function(String modelId)? localModelFor,
+    AiResponseCache? responseCache,
     ProAccessStore proAccess = const ProAccessStore(),
   }) : _http = client ?? http.Client(),
        _store = store ?? const AiCoachSettingsStore(),
@@ -115,7 +126,8 @@ class AiCoachClient {
        _localModelFor =
            localModelFor ??
            ((modelId) =>
-               localModel ?? LocalModelService(model: localModelSpec(modelId)));
+               localModel ?? LocalModelService(model: localModelSpec(modelId))),
+       _responseCache = responseCache ?? AiResponseCache();
 
   /// Replaces the on-device model, for tests.
   final AppleSender? _appleSender;
@@ -123,6 +135,8 @@ class AiCoachClient {
   final http.Client _http;
   final AiCoachSettingsStore _store;
   final ProAccessStore _proAccess;
+  final AiResponseCache _responseCache;
+  static final Map<String, Future<AiCachedAnswer>> _inFlightCacheRequests = {};
 
   /// The FjeliaPro access when the subscription is on and current.
   Future<ProAccess?> _activePro() async {
@@ -132,6 +146,108 @@ class AiCoachClient {
   }
 
   final LocalModelService Function(String modelId) _localModelFor;
+
+  Future<AiCachedAnswer> _cachedAnswer({
+    required String provider,
+    required String model,
+    required String kind,
+    required Object request,
+    required Future<AiCachedAnswer> Function() generate,
+  }) async {
+    final String key;
+    try {
+      // Scoped to this installation, but a cache key must not create the
+      // Free AI ID: with an own key or on-device models none should exist.
+      final installation =
+          await _store.peekFreeAiInstallationId() ?? 'device';
+      key = AiResponseCache.keyFor(
+        installationId: installation,
+        provider: provider,
+        model: model,
+        kind: kind,
+        request: request,
+      );
+    } catch (error) {
+      // The cache only saves requests; it must never stop one.
+      log('[AiCache] key_failed; continuing without cache: $error');
+      return generate();
+    }
+    final pending = _inFlightCacheRequests[key];
+    if (pending != null) return pending;
+    final future = _readOrGenerateCachedAnswer(
+      key: key,
+      model: model,
+      kind: kind,
+      request: request,
+      generate: generate,
+    );
+    _inFlightCacheRequests[key] = future;
+    try {
+      return await future;
+    } finally {
+      if (identical(_inFlightCacheRequests[key], future)) {
+        _inFlightCacheRequests.remove(key);
+      }
+    }
+  }
+
+  Future<AiCachedAnswer> _readOrGenerateCachedAnswer({
+    required String key,
+    required String model,
+    required String kind,
+    required Object request,
+    required Future<AiCachedAnswer> Function() generate,
+  }) async {
+    try {
+      final cached = await _responseCache.read(key);
+      if (cached != null) return cached;
+    } catch (error) {
+      log('[AiCache] read_failed; continuing without cache: $error');
+    }
+    final answer = await generate();
+    if (!answer.cacheable) {
+      log('[AiCache] skip_store kind=$kind reason=provider_fallback');
+      return answer;
+    }
+    try {
+      await _responseCache.write(
+        key,
+        AiCachedAnswer(
+          text: answer.text,
+          source: answer.source,
+          model: answer.model ?? model,
+          inputTokensEstimate: answer.inputTokensEstimate,
+          outputTokensEstimate: answer.outputTokensEstimate,
+          costUsdEstimate: answer.costUsdEstimate,
+        ),
+        kind: kind,
+        model: model,
+        inputBytes: utf8.encode(jsonEncode(request)).length,
+      );
+    } catch (error) {
+      log('[AiCache] write_failed; returning model answer: $error');
+    }
+    return answer;
+  }
+
+  Future<String> _credentialFingerprint(
+    AiProvider provider, {
+    ProAccess? pro,
+  }) async {
+    // On-device models have no credential to tell apart.
+    final credential =
+        pro?.key ??
+        (provider.isLocal ? null : await _store.readApiKey(provider)) ??
+        '';
+    return sha256.convert(utf8.encode(credential)).toString();
+  }
+
+  static List<Map<String, Object>> _cacheMessages(
+    List<ChatMessage> messages,
+  ) => [
+    for (final message in messages)
+      {'role': message.isUser ? 'user' : 'assistant', 'content': message.text},
+  ];
 
   static String _providerLabel(AiProvider p) => switch (p) {
     AiProvider.mistral => 'Mistral',
@@ -190,24 +306,100 @@ class AiCoachClient {
     List<ChatMessage> messages,
     String toonContext, [
     AiConsentToken? consent,
+    void Function(String source)? onSource,
+  ]) async {
+    if (!settings.ready) throw StateError('AI Coach is not configured.');
+    if (!settings.provider.isLocal &&
+        settings.consentMode == AiConsentMode.everyMessage &&
+        (consent == null || !consent.isFresh)) {
+      throw StateError('Explicit data transfer consent is required.');
+    }
+    final pro = settings.provider == AiProvider.freeAi
+        ? await _activePro()
+        : null;
+    final model = settings.provider == AiProvider.freeAi
+        ? pro == null
+              ? 'default'
+              : '$proAiModel|default'
+        : settings.model;
+    final credential = await _credentialFingerprint(
+      settings.provider,
+      pro: pro,
+    );
+    String? generatedSource;
+    final request = {
+      'messages': _cacheMessages(messages),
+      'healthContext': toonContext,
+      'systemPrompt': coachChatSystemPrompt(toonContext),
+      'settingsModel': settings.model,
+      'credentialFingerprint': credential,
+      'parameters': const {'temperature': 0.3, 'maxTokens': 512},
+      'language': coachLocaleTag(),
+    };
+    final answer = await _cachedAnswer(
+      provider: settings.provider.name,
+      model: model,
+      kind: 'chat',
+      request: request,
+      generate: () async {
+        final text = await _sendUncached(
+          settings,
+          messages,
+          toonContext,
+          consent,
+          (source) => generatedSource = source,
+        );
+        return AiCachedAnswer(
+          text: text,
+          source: generatedSource,
+          model: model,
+          cacheable: pro == null || generatedSource != 'Cloud · FreeAI',
+        );
+      },
+    );
+    onSource?.call(answer.source ?? 'Cache · ${answer.model ?? model}');
+    return answer.text;
+  }
+
+  Future<String> _sendUncached(
+    AiCoachSettings settings,
+    List<ChatMessage> messages,
+    String toonContext, [
+    AiConsentToken? consent,
+    void Function(String source)? onSource,
   ]) async {
     if (!settings.ready) throw StateError('AI Coach is not configured.');
     if (settings.provider == AiProvider.localQwen) {
-      return _sendLocalQwen(settings.model, messages, toonContext);
+      final reply = await _sendLocalQwen(settings.model, messages, toonContext);
+      onSource?.call('Lokal · ${_localModelName(settings.model)}');
+      return reply;
     }
     if (settings.provider == AiProvider.appleIntelligence) {
       final reply = await _sendAppleIntelligence(messages, toonContext);
       if (reply == null) {
         throw StateError(tr.appleNotAvailableOnDevice);
       }
+      onSource?.call('Lokal · Apple Intelligence');
       return reply;
     }
     if (settings.consentMode == AiConsentMode.everyMessage &&
         (consent == null || !consent.isFresh)) {
       throw StateError('Explicit data transfer consent is required.');
     }
-    return _sendCloud(settings, messages, toonContext, 'chat');
+    return _sendCloud(
+      settings,
+      messages,
+      toonContext,
+      'chat',
+      onSource: onSource,
+    );
   }
+
+  static String _localModelName(String model) => switch (model) {
+    localQwenModelId => 'Qwen3.5 2B',
+    localQwen4bModelId => 'Qwen3.5 4B',
+    _ => model.split('/').last,
+  };
 
   /// A FjeliaPro analysis: its own instructions, written by the large model
   /// on the subscription's key. A gateway or key without that model answers
@@ -222,20 +414,49 @@ class AiCoachClient {
   }) async {
     final pro = await _activePro();
     if (pro == null) throw StateError('FjeliaPro is not active.');
-    Future<String> ask(String model) => _sendOpenAiCompatible(
-      freeAiChatCompletionsUri,
-      pro.key,
-      model,
-      [ChatMessage(text: userPrompt, isUser: true)],
-      toonContext,
-      systemPrompt: '$_rawTask$systemPrompt',
-      freeAiKind: 'planning',
-      anonymous: true,
-    );
-    final refused = RegExp(r'failed \((400|401|403|404|429|5\d\d)\)');
+    Future<String> ask(
+      String model,
+      String apiKey, {
+      required bool anonymous,
+    }) async {
+      final request = {
+        'systemPrompt': systemPrompt,
+        'userQuestion': userPrompt,
+        'healthContext': toonContext,
+        'credentialFingerprint': sha256.convert(utf8.encode(apiKey)).toString(),
+        'deep': deep,
+        'anonymous': anonymous,
+        'parameters': const {'temperature': 0.3, 'freeAiKind': 'planning'},
+      };
+      final answer = await _cachedAnswer(
+        provider: 'freeAi',
+        model: model,
+        kind: deep ? 'proAnalysis.deep' : 'proAnalysis.quick',
+        request: request,
+        generate: () async => AiCachedAnswer(
+          text: await _sendOpenAiCompatible(
+            freeAiChatCompletionsUri,
+            apiKey,
+            model,
+            [ChatMessage(text: userPrompt, isUser: true)],
+            toonContext,
+            systemPrompt: '$_rawTask$systemPrompt',
+            freeAiKind: 'planning',
+            anonymous: anonymous,
+          ),
+          source: 'Cloud · $model',
+          model: model,
+        ),
+      );
+      return answer.text;
+    }
+
+    // LiteLLM returns 422 when a Pro virtual key exceeds its budget. Treat
+    // that like other Pro refusals so the normal Free AI fallback can answer.
+    final refused = RegExp(r'failed \((400|401|403|404|422|429|5\d\d)\)');
     for (final model in deep ? [proAiDeepModel, proAiModel] : [proAiModel]) {
       try {
-        return (text: await ask(model), model: model);
+        return (text: await ask(model, pro.key, anonymous: true), model: model);
       } on StateError catch (e) {
         if (!refused.hasMatch(e.message)) rethrow;
         log('[FjeliaPro] $model refused: ${e.message}');
@@ -249,15 +470,7 @@ class AiCoachClient {
     }
     log('[FjeliaPro] Pro models unavailable, Free AI answers');
     return (
-      text: await _sendOpenAiCompatible(
-        freeAiChatCompletionsUri,
-        key,
-        'default',
-        [ChatMessage(text: userPrompt, isUser: true)],
-        toonContext,
-        systemPrompt: '$_rawTask$systemPrompt',
-        freeAiKind: 'planning',
-      ),
+      text: await ask('default', key, anonymous: false),
       model: 'default',
     );
   }
@@ -266,6 +479,56 @@ class AiCoachClient {
   /// workout should go. Follows the coach's provider like the chat does; a
   /// cloud provider needs the athlete's consent for this request.
   Future<String> sendPlanning(
+    AiCoachSettings settings,
+    String systemPrompt,
+    String userPrompt,
+    String toonContext, [
+    AiConsentToken? consent,
+  ]) async {
+    if (!settings.ready) throw StateError('AI Coach is not configured.');
+    if (!settings.provider.isLocal && (consent == null || !consent.isFresh)) {
+      throw StateError('Explicit data transfer consent is required.');
+    }
+    final pro = settings.provider == AiProvider.freeAi
+        ? await _activePro()
+        : null;
+    final model = settings.provider == AiProvider.freeAi
+        ? pro == null
+              ? 'default'
+              : '$proAiModel|default'
+        : settings.model;
+    final request = {
+      'systemPrompt': systemPrompt,
+      'userQuestion': userPrompt,
+      'healthContext': toonContext,
+      'credentialFingerprint': await _credentialFingerprint(
+        settings.provider,
+        pro: pro,
+      ),
+      'settingsModel': settings.model,
+      'language': coachLocaleTag(),
+      'parameters': const {'temperature': 0.2, 'maxTokens': 500},
+    };
+    final answer = await _cachedAnswer(
+      provider: settings.provider.name,
+      model: model,
+      kind: 'planning',
+      request: request,
+      generate: () async => AiCachedAnswer(
+        text: await _sendPlanningUncached(
+          settings,
+          systemPrompt,
+          userPrompt,
+          toonContext,
+          consent,
+        ),
+        model: model,
+      ),
+    );
+    return answer.text;
+  }
+
+  Future<String> _sendPlanningUncached(
     AiCoachSettings settings,
     String systemPrompt,
     String userPrompt,
@@ -333,11 +596,12 @@ class AiCoachClient {
   }
 
   /// [cloudFallback]: the athlete agreed to a cloud briefing, so one that
-  /// Apple Intelligence cannot write may go to the chat's cloud model.
+  /// Apple Intelligence cannot write may use the fixed Fjelia AI route.
   Future<String> sendBriefing(
     AiCoachSettings settings,
     String toonContext, {
     bool cloudFallback = false,
+    void Function(String source)? onSource,
   }) => _sendBriefingRequest(
     settings,
     toonContext,
@@ -345,12 +609,14 @@ class AiCoachClient {
     _morningUserPrompt,
     'briefing.morning',
     cloudFallback: cloudFallback,
+    onSource: onSource,
   );
 
   Future<String> sendLunchBriefing(
     AiCoachSettings settings,
     String toonContext, {
     bool cloudFallback = false,
+    void Function(String source)? onSource,
   }) => _sendBriefingRequest(
     settings,
     toonContext,
@@ -358,12 +624,14 @@ class AiCoachClient {
     _lunchUserPrompt,
     'briefing.lunch',
     cloudFallback: cloudFallback,
+    onSource: onSource,
   );
 
   Future<String> sendAfternoonBriefing(
     AiCoachSettings settings,
     String toonContext, {
     bool cloudFallback = false,
+    void Function(String source)? onSource,
   }) => _sendBriefingRequest(
     settings,
     toonContext,
@@ -371,12 +639,14 @@ class AiCoachClient {
     _afternoonUserPrompt,
     'briefing.afternoon',
     cloudFallback: cloudFallback,
+    onSource: onSource,
   );
 
   Future<String> sendEveningBriefing(
     AiCoachSettings settings,
     String toonContext, {
     bool cloudFallback = false,
+    void Function(String source)? onSource,
   }) => _sendBriefingRequest(
     settings,
     toonContext,
@@ -384,11 +654,18 @@ class AiCoachClient {
     _eveningUserPrompt,
     'briefing.evening',
     cloudFallback: cloudFallback,
+    onSource: onSource,
   );
 
   /// One plain paragraph, or the app's own short text when the model's answer
   /// is too long, in the wrong language or just a copy of the facts.
-  String _finishBriefing(String raw, String toonContext, String kind) {
+  String _finishBriefing(
+    String raw,
+    String toonContext,
+    String kind, {
+    required String source,
+    void Function(String source)? onSource,
+  }) {
     final text = flattenBriefing(raw);
     final brief = BriefingBrief.parse(toonContext);
     final schedule = brief?.plannedTodaySentence(tr);
@@ -396,14 +673,19 @@ class AiCoachClient {
         schedule == null || text.toLowerCase().contains(schedule.toLowerCase());
     if (scheduleIncluded &&
         briefingIsUsable(text, languageCode: activeLocale.languageCode)) {
+      onSource?.call(source);
       return text;
     }
-    if (brief == null) return text;
+    if (brief == null) {
+      onSource?.call(source);
+      return text;
+    }
     log(
       '[AiGeneration] fallback kind=$kind provider=fjelia '
       'service=BriefingBrief.localText model=none '
       'reason=${scheduleIncluded ? 'unusable_reply' : 'missing_plan_count'}',
     );
+    onSource?.call('Lokal · Fjelia-Regeln');
     return brief.localText(tr);
   }
 
@@ -503,6 +785,77 @@ class AiCoachClient {
     String userPrompt,
     String kind, {
     bool cloudFallback = false,
+    void Function(String source)? onSource,
+  }) async {
+    if (!settings.readyForBriefing) {
+      throw StateError('AI Coach is not configured.');
+    }
+    final pro = cloudFallback || !settings.onDeviceAvailable
+        ? await _activePro()
+        : null;
+    final route = settings.onDeviceAvailable
+        ? cloudFallback
+              ? 'Apple Intelligence|${pro == null ? 'default' : proAiModel}'
+              : 'Apple Intelligence'
+        : pro == null
+        ? 'default'
+        : proAiModel;
+    final scheduledPrompt =
+        systemPrompt +
+        (BriefingBrief.parse(toonContext)?.scheduleInstruction(tr) ?? '');
+    String? generatedSource;
+    final request = {
+      'systemPrompt': scheduledPrompt,
+      'userQuestion': userPrompt,
+      'language': coachLanguageName(),
+      'healthContext': toonContext,
+      'cloudFallback': cloudFallback,
+      'onDeviceAvailable': settings.onDeviceAvailable,
+      'cloudCredentialFingerprint': await _credentialFingerprint(
+        AiProvider.freeAi,
+        pro: pro,
+      ),
+      'parameters': const {
+        'temperature': 0.3,
+        'appleMaxTokens': 160,
+        'cloudMaxTokens': 16000,
+      },
+    };
+    final answer = await _cachedAnswer(
+      provider: 'briefing',
+      model: route,
+      kind: kind,
+      request: request,
+      generate: () async {
+        final text = await _sendBriefingUncached(
+          settings,
+          toonContext,
+          systemPrompt,
+          userPrompt,
+          kind,
+          cloudFallback: cloudFallback,
+          onSource: (source) => generatedSource = source,
+        );
+        return AiCachedAnswer(
+          text: text,
+          source: generatedSource,
+          model: route,
+          cacheable: pro == null || generatedSource != 'Cloud · FreeAI',
+        );
+      },
+    );
+    onSource?.call(answer.source ?? 'Cache · ${answer.model ?? route}');
+    return answer.text;
+  }
+
+  Future<String> _sendBriefingUncached(
+    AiCoachSettings settings,
+    String toonContext,
+    String systemPrompt,
+    String userPrompt,
+    String kind, {
+    bool cloudFallback = false,
+    void Function(String source)? onSource,
   }) async {
     if (!settings.readyForBriefing) {
       throw StateError('AI Coach is not configured.');
@@ -515,50 +868,93 @@ class AiCoachClient {
         isUser: true,
       ),
     ];
-    if (settings.provider == AiProvider.localQwen) {
-      return _finishBriefing(
-        await _sendLocalQwen(
-          settings.model,
+    if (settings.onDeviceAvailable) {
+      try {
+        final reply = await _sendAppleIntelligence(
           messages,
           toonContext,
-          briefingInstructions: systemPrompt,
+          systemPrompt: systemPrompt,
           kind: kind,
-        ),
-        toonContext,
-        kind,
-      );
-    }
-    if (settings.usesOnDeviceBriefing) {
-      final reply = await _sendAppleIntelligence(
-        messages,
-        toonContext,
-        systemPrompt: systemPrompt,
-        kind: kind,
-      );
-      if (reply != null) {
-        return _finishBriefing(reply, toonContext, kind);
+        );
+        if (reply != null) {
+          return _finishBriefing(
+            reply,
+            toonContext,
+            kind,
+            source: 'Lokal · Apple Intelligence',
+            onSource: onSource,
+          );
+        }
+        if (!cloudFallback) throw StateError(tr.appleNotAvailableOnDevice);
+      } catch (e) {
+        if (!cloudFallback) rethrow;
+        log(
+          '[AiBriefing] Apple Intelligence failed; using consented cloud: $e',
+        );
       }
-      // Health data goes to the cloud only with the athlete's consent;
-      // without it an on-device briefing that fails stays unwritten.
-      if (settings.provider == AiProvider.appleIntelligence || !cloudFallback) {
-        throw StateError(tr.appleNotAvailableOnDevice);
-      }
-      log(
-        '[AiGeneration] fallback kind=$kind from=appleIntelligence '
-        'to=${settings.provider.name} reason=unavailable',
-      );
+    } else if (!cloudFallback) {
+      throw StateError(tr.appleNotAvailableOnDevice);
     }
-    return _finishBriefing(
-      await _sendCloud(
-        settings,
-        messages,
-        toonContext,
-        kind,
-        systemPrompt: systemPrompt,
-      ),
+    final result = await _sendBriefingCloud(
+      messages,
       toonContext,
       kind,
+      systemPrompt,
     );
+    return _finishBriefing(
+      result.text,
+      toonContext,
+      kind,
+      source: result.source,
+      onSource: onSource,
+    );
+  }
+
+  /// Fixed briefing routes: Apple Intelligence first, then the Fjelia gateway.
+  /// Free installations use `default`; active Pro installations use `ProAI`.
+  /// LiteLLM controls which upstream model each alias resolves to.
+  Future<({String text, String source})> _sendBriefingCloud(
+    List<ChatMessage> messages,
+    String toonContext,
+    String kind,
+    String systemPrompt,
+  ) async {
+    final refused = RegExp(r'failed \((400|401|403|404|422|429|5\d\d)\)');
+    final pro = await _activePro();
+    if (pro != null) {
+      for (final model in const [proAiModel]) {
+        try {
+          final reply = await _sendOpenAiCompatible(
+            freeAiChatCompletionsUri,
+            pro.key,
+            model,
+            messages,
+            toonContext,
+            systemPrompt: systemPrompt,
+            freeAiKind: kind,
+            anonymous: true,
+          );
+          return (text: reply, source: 'Cloud · $model');
+        } on StateError catch (e) {
+          if (!refused.hasMatch(e.message)) rethrow;
+          log('[FjeliaPro] briefing model $model refused: ${e.message}');
+        }
+      }
+    }
+    final key = (await _store.readApiKey(AiProvider.freeAi))?.trim();
+    if (key == null || key.isEmpty) {
+      throw StateError('Fjelia AI cloud is unavailable.');
+    }
+    final reply = await _sendOpenAiCompatible(
+      freeAiChatCompletionsUri,
+      key,
+      'default',
+      messages,
+      toonContext,
+      systemPrompt: systemPrompt,
+      freeAiKind: kind,
+    );
+    return (text: reply, source: 'Cloud · FreeAI');
   }
 
   Future<String> _sendCloud(
@@ -567,6 +963,7 @@ class AiCoachClient {
     String toonContext,
     String kind, {
     String? systemPrompt,
+    void Function(String source)? onSource,
   }) async {
     final provider = settings.provider;
     final key = (await _store.readApiKey(provider))?.trim();
@@ -585,7 +982,7 @@ class AiCoachClient {
         if (pro != null) {
           for (final model in const [proAiModel]) {
             try {
-              return await _sendOpenAiCompatible(
+              final reply = await _sendOpenAiCompatible(
                 freeAiChatCompletionsUri,
                 pro.key,
                 model,
@@ -596,18 +993,20 @@ class AiCoachClient {
                 // The free tier's per-installation budget does not apply.
                 anonymous: true,
               );
+              onSource?.call('Cloud · $model');
+              return reply;
             } on StateError catch (e) {
-              // A Pro key past its monthly budget, or blocked, is refused
-              // (4xx); the athlete still gets an answer from Free AI.
+              // A Pro key past its monthly budget (HTTP 422), or otherwise
+              // blocked, is refused; Free AI should still answer.
               final refused = RegExp(
-                r'failed \((400|401|403|404|429|503)\)',
+                r'failed \((400|401|403|404|422|429|503)\)',
               ).hasMatch(e.message);
               if (!refused) rethrow;
               log('[FjeliaPro] $model refused: ${e.message}');
             }
           }
         }
-        return _sendOpenAiCompatible(
+        final reply = await _sendOpenAiCompatible(
           freeAiChatCompletionsUri,
           key,
           'default',
@@ -616,54 +1015,86 @@ class AiCoachClient {
           systemPrompt: systemPrompt,
           freeAiKind: kind,
         );
+        onSource?.call('Cloud · FreeAI');
+        return reply;
       case AiProvider.mistral:
-        return _sendOpenAiCompatible(
-          Uri.parse('https://api.mistral.ai/v1/chat/completions'),
-          key,
-          settings.model,
-          messages,
-          toonContext,
-          systemPrompt: systemPrompt,
+        return _sendTaggedCloudReply(
+          _sendOpenAiCompatible(
+            Uri.parse('https://api.mistral.ai/v1/chat/completions'),
+            key,
+            settings.model,
+            messages,
+            toonContext,
+            systemPrompt: systemPrompt,
+          ),
+          'Cloud · Mistral · ${settings.model}',
+          onSource,
         );
       case AiProvider.openai:
-        return _sendOpenAiCompatible(
-          Uri.parse('https://api.openai.com/v1/chat/completions'),
-          key,
-          settings.model,
-          messages,
-          toonContext,
-          systemPrompt: systemPrompt,
+        return _sendTaggedCloudReply(
+          _sendOpenAiCompatible(
+            Uri.parse('https://api.openai.com/v1/chat/completions'),
+            key,
+            settings.model,
+            messages,
+            toonContext,
+            systemPrompt: systemPrompt,
+          ),
+          'Cloud · OpenAI · ${settings.model}',
+          onSource,
         );
       case AiProvider.anthropic:
-        return _sendAnthropic(
-          key,
-          settings.model,
-          messages,
-          toonContext,
-          systemPrompt: systemPrompt,
+        return _sendTaggedCloudReply(
+          _sendAnthropic(
+            key,
+            settings.model,
+            messages,
+            toonContext,
+            systemPrompt: systemPrompt,
+          ),
+          'Cloud · Anthropic · ${settings.model}',
+          onSource,
         );
       case AiProvider.gemini:
-        return _sendGemini(
-          key,
-          settings.model,
-          messages,
-          toonContext,
-          systemPrompt: systemPrompt,
+        return _sendTaggedCloudReply(
+          _sendGemini(
+            key,
+            settings.model,
+            messages,
+            toonContext,
+            systemPrompt: systemPrompt,
+          ),
+          'Cloud · Gemini · ${settings.model}',
+          onSource,
         );
       case AiProvider.deepseek:
-        return _sendOpenAiCompatible(
-          Uri.parse('https://api.deepseek.com/chat/completions'),
-          key,
-          settings.model,
-          messages,
-          toonContext,
-          systemPrompt: systemPrompt,
+        return _sendTaggedCloudReply(
+          _sendOpenAiCompatible(
+            Uri.parse('https://api.deepseek.com/chat/completions'),
+            key,
+            settings.model,
+            messages,
+            toonContext,
+            systemPrompt: systemPrompt,
+          ),
+          'Cloud · DeepSeek · ${settings.model}',
+          onSource,
         );
       case AiProvider.appleIntelligence:
         throw StateError(tr.appleNotAvailableOnDevice);
       case AiProvider.localQwen:
         throw StateError('Local Qwen must not be sent to a cloud endpoint.');
     }
+  }
+
+  Future<String> _sendTaggedCloudReply(
+    Future<String> request,
+    String source,
+    void Function(String source)? onSource,
+  ) async {
+    final reply = await request;
+    onSource?.call(source);
+    return reply;
   }
 
   Future<String> _sendOpenAiCompatible(

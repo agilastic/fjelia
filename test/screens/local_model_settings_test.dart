@@ -62,6 +62,11 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          // The settings check Apple Intelligence for every provider; the
+          // native check has no answer in widget tests.
+          appleIntelligenceAvailabilityProvider.overrideWithValue(
+            () async => false,
+          ),
           localModelServiceProvider(localQwenModelId).overrideWithValue(model),
           localModelServiceProvider(
             localQwen4bModelId,

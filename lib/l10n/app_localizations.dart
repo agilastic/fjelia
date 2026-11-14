@@ -7148,6 +7148,36 @@ abstract class AppLocalizations {
   /// **'Mark as Rest'**
   String get markAsRest;
 
+  /// No description provided for @changeSport.
+  ///
+  /// In en, this message translates to:
+  /// **'Change sport'**
+  String get changeSport;
+
+  /// No description provided for @replacementSport.
+  ///
+  /// In en, this message translates to:
+  /// **'Replacement sport'**
+  String get replacementSport;
+
+  /// No description provided for @replacementLoadNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration, planned heart-rate zones and load target are preserved. Pace and power targets are adapted to the new sport.'**
+  String get replacementLoadNote;
+
+  /// No description provided for @replacementCalendarNote.
+  ///
+  /// In en, this message translates to:
+  /// **'The original workout will be removed from these training calendars: {platforms}.'**
+  String replacementCalendarNote(String platforms);
+
+  /// No description provided for @applySportChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan replacement workout'**
+  String get applySportChange;
+
   /// No description provided for @restoreWorkout.
   ///
   /// In en, this message translates to:
@@ -14973,7 +15003,7 @@ abstract class AppLocalizations {
   /// No description provided for @sleepEcgStagesDisclaimer.
   ///
   /// In en, this message translates to:
-  /// **'Experimental estimate from Polar H10 ECG using an ECG-only research model. N1 and N2 are grouped as light sleep. This is not a PSG or medical measurement.'**
+  /// **'Experimental estimate from Polar H10 ECG. The model\'s 30-second outputs are grouped into five-minute blocks for the overview. N1 and N2 are grouped as light sleep. This is not a PSG or medical measurement.'**
   String get sleepEcgStagesDisclaimer;
 
   /// No description provided for @sleepEcgStagesWorking.
@@ -14987,6 +15017,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sleep stages could not be estimated. Check that the recording is complete and try again.'**
   String get sleepEcgStagesFailed;
+
+  /// No description provided for @replacementPreviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Review replacement workout'**
+  String get replacementPreviewTitle;
+
+  /// No description provided for @replacementGoalLoad.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal: {objective} · {load} planned load'**
+  String replacementGoalLoad(String objective, int load);
+
+  /// No description provided for @replacementHistoryEstimate.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration estimated from your recent training in this sport.'**
+  String get replacementHistoryEstimate;
+
+  /// No description provided for @replacementFallbackEstimate.
+  ///
+  /// In en, this message translates to:
+  /// **'There is not enough recent training data for this sport. Duration is a conservative estimate.'**
+  String get replacementFallbackEstimate;
+
+  /// No description provided for @replacementRestSuggestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Rest may be the better choice for your current training schedule.'**
+  String get replacementRestSuggestion;
+
+  /// No description provided for @replacementObjectiveRecovery.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery'**
+  String get replacementObjectiveRecovery;
+
+  /// No description provided for @replacementObjectiveBase.
+  ///
+  /// In en, this message translates to:
+  /// **'Base'**
+  String get replacementObjectiveBase;
+
+  /// No description provided for @replacementObjectiveTempo.
+  ///
+  /// In en, this message translates to:
+  /// **'Tempo'**
+  String get replacementObjectiveTempo;
+
+  /// No description provided for @replacementObjectiveThreshold.
+  ///
+  /// In en, this message translates to:
+  /// **'Threshold'**
+  String get replacementObjectiveThreshold;
+
+  /// No description provided for @replacementObjectiveVo2.
+  ///
+  /// In en, this message translates to:
+  /// **'VO₂max'**
+  String get replacementObjectiveVo2;
+
+  /// No description provided for @replacementObjectiveLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Long endurance'**
+  String get replacementObjectiveLong;
+
+  /// No description provided for @replacementWarningNoHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'There is not enough recent load history for this sport.'**
+  String get replacementWarningNoHistory;
+
+  /// No description provided for @replacementWarningRunningCap.
+  ///
+  /// In en, this message translates to:
+  /// **'Running volume was capped conservatively to limit mechanical stress.'**
+  String get replacementWarningRunningCap;
+
+  /// No description provided for @replacementWarningLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Long or race-specific workouts are not fully replaceable. Review the shorter run.'**
+  String get replacementWarningLong;
+
+  /// No description provided for @replacementWarningRace.
+  ///
+  /// In en, this message translates to:
+  /// **'This workout has race priority; its sport-specific benefit may not be preserved.'**
+  String get replacementWarningRace;
+
+  /// No description provided for @replacementWarningSwim.
+  ///
+  /// In en, this message translates to:
+  /// **'Some aerobic stimulus carries over, but not swim technique or sport-specific muscular demands.'**
+  String get replacementWarningSwim;
+
+  /// No description provided for @replacementWarningStrength.
+  ///
+  /// In en, this message translates to:
+  /// **'Strength and endurance workouts are not equivalent and cannot preserve the same training effect.'**
+  String get replacementWarningStrength;
+
+  /// No description provided for @replacementWarningNearby.
+  ///
+  /// In en, this message translates to:
+  /// **'Another hard workout falls within 72 hours. Check recovery and spacing.'**
+  String get replacementWarningNearby;
+
+  /// No description provided for @replacementWarningWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'This workout is a large share of the other planned training load this week.'**
+  String get replacementWarningWeekly;
+
+  /// No description provided for @replacementWarningLowRecovery.
+  ///
+  /// In en, this message translates to:
+  /// **'Your most recently stored recovery score is low. Consider reducing intensity or resting.'**
+  String get replacementWarningLowRecovery;
+
+  /// No description provided for @replacementWarningRecentVolume.
+  ///
+  /// In en, this message translates to:
+  /// **'Your training load in the last seven days is notably higher than in the previous seven-day period.'**
+  String get replacementWarningRecentVolume;
+
+  /// No description provided for @replacementTrainingGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'TRAINING GOAL'**
+  String get replacementTrainingGoal;
+
+  /// No description provided for @replacementPreviewWarnings.
+  ///
+  /// In en, this message translates to:
+  /// **'PLAN NOTES'**
+  String get replacementPreviewWarnings;
 }
 
 class _AppLocalizationsDelegate

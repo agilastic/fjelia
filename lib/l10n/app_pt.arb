@@ -300,7 +300,7 @@
       }
     }
   },
-  "lengthReadingsAverageMinMax": "{length, plural, one{{length} medição} other{{length} medições}} · média / mín.–máx.",
+  "lengthReadingsAverageMinMax": "{length, plural, =0{{length} medições} one{{length} medição} other{{length} medições}} · média / mín.–máx.",
   "@lengthReadingsAverageMinMax": {
     "placeholders": {
       "length": {
@@ -2181,6 +2181,11 @@
     }
   },
   "markAsRest": "Mark as Rest",
+  "changeSport": "Mudar de desporto",
+  "replacementSport": "Desporto de substituição",
+  "replacementLoadNote": "A duração, as zonas de frequência cardíaca previstas e o objetivo de carga mantêm-se. Os objetivos de ritmo e potência são adaptados ao novo desporto.",
+  "replacementCalendarNote": "O treino original será removido destes calendários de treino: {platforms}.",
+  "applySportChange": "Planear treino de substituição",
   "restoreWorkout": "Restore workout",
   "skipThisWorkout": "Skip this workout?",
   "previousWeek": "Previous week",
@@ -5204,5 +5209,28 @@
   "sleepEcgStagesAgain": "Estimar novamente",
   "sleepEcgStagesDisclaimer": "Estimativa experimental com base no ECG Polar H10, usando um modelo de investigação apenas com ECG. N1 e N2 são agrupados como sono leve. Não é uma polissonografia nem uma medição médica.",
   "sleepEcgStagesWorking": "A estimar fases do sono…",
-  "sleepEcgStagesFailed": "Não foi possível estimar as fases do sono. Confirme se a gravação está completa e tente novamente."
+  "sleepEcgStagesFailed": "Não foi possível estimar as fases do sono. Confirme se a gravação está completa e tente novamente.",
+  "replacementPreviewTitle": "Rever treino de substituição",
+  "replacementGoalLoad": "Objetivo: {objective} · carga prevista {load}",
+  "replacementHistoryEstimate": "Duração estimada a partir do teu treino recente neste desporto.",
+  "replacementFallbackEstimate": "Não há dados de treino recentes suficientes para este desporto. A duração é uma estimativa prudente.",
+  "replacementRestSuggestion": "Descansar pode ser a melhor opção para o teu plano de treino atual.",
+  "replacementObjectiveRecovery": "Recuperação",
+  "replacementObjectiveBase": "Resistência de base",
+  "replacementObjectiveTempo": "Tempo",
+  "replacementObjectiveThreshold": "Limiar",
+  "replacementObjectiveVo2": "VO₂máx",
+  "replacementObjectiveLong": "Resistência longa",
+  "replacementWarningNoHistory": "Não há histórico de carga recente suficiente para este desporto.",
+  "replacementWarningRunningCap": "O volume de corrida foi limitado por prudência para reduzir o stress mecânico.",
+  "replacementWarningLong": "Treinos longos ou específicos de competição não são totalmente substituíveis. Revê a corrida mais curta.",
+  "replacementWarningRace": "Este treino tem prioridade de competição; o benefício específico do desporto pode não se manter.",
+  "replacementWarningSwim": "Parte do estímulo aeróbio mantém-se, mas não a técnica de natação nem as exigências musculares específicas.",
+  "replacementWarningStrength": "Treinos de força e de resistência não são equivalentes e não podem manter o mesmo efeito de treino.",
+  "replacementWarningNearby": "Há outro treino intenso dentro de 72 horas. Verifica a recuperação e o espaçamento entre treinos.",
+  "replacementWarningWeekly": "Este treino é uma grande parte da restante carga de treino prevista para esta semana.",
+  "replacementWarningLowRecovery": "A tua última pontuação de recuperação guardada é baixa. Considera reduzir a intensidade ou descansar.",
+  "replacementWarningRecentVolume": "A tua carga de treino dos últimos sete dias é claramente superior à dos sete dias anteriores.",
+  "replacementTrainingGoal": "OBJETIVO DE TREINO",
+  "replacementPreviewWarnings": "NOTAS DO PLANO"
 }

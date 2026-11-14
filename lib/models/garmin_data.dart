@@ -438,7 +438,10 @@ class SleepData {
     this.hrvCurve = const [],
     this.stressCurve = const [],
     this.phasesEstimated = false,
+    this.source,
   });
+
+  final String? source;
 
   factory SleepData.fromGarminJson(Map<String, dynamic> json) {
     final dto = json['dailySleepDTO'] as Map<String, dynamic>? ?? json;
@@ -519,6 +522,7 @@ class SleepData {
           ? null
           : DateTime.fromMillisecondsSinceEpoch(endMs).toLocal(),
       phases: phases,
+      source: 'garmin_api',
       avgSpo2: spo2,
       avgRespiration: respiration,
       skinTempDelta: _toDouble(json['avgSkinTempDeviationC']),

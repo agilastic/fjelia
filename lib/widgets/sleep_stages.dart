@@ -44,6 +44,22 @@ String _duration(Duration d) {
 
 String _clock(DateTime t) => DateFormat.jm().format(t.toLocal()).toLowerCase();
 
+String _sleepSourceLabel(BuildContext context, String source) {
+  final normalized = source.toLowerCase();
+  if (normalized == 'fjelia_ecg') {
+    return 'Fjelia · Polar H10 · ${context.l10n.estimated}';
+  }
+  if (normalized.contains('garmin')) return 'Garmin';
+  if (normalized.contains('coros')) return 'COROS';
+  if (normalized.contains('polar')) return 'Polar';
+  if (normalized.contains('suunto')) return 'Suunto';
+  if (normalized.contains('aktiia') || normalized.contains('hilo')) {
+    return 'Hilo / Aktiia';
+  }
+  if (normalized.contains('health')) return 'Apple Health';
+  return source;
+}
+
 /// Sleep stages of one night: a timeline chart (when the night has stage
 /// data) and the time and share spent in each stage.
 class SleepStagesSection extends StatelessWidget {
@@ -90,6 +106,14 @@ class SleepStagesSection extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+          ),
+        if (sleep.source != null && sleep.source!.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(top: 2, bottom: 12),
+            child: Text(
+              context.l10n.source(_sleepSourceLabel(context, sleep.source!)),
+              style: TextStyle(fontSize: 10, color: muted, height: 1.3),
             ),
           ),
         if (phases.isEmpty)

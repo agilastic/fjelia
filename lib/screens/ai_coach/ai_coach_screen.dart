@@ -195,6 +195,7 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
           ? coachMemoryLines(await ref.read(coachMemoryStoreProvider).all())
           : const <String>[];
       final context = [...ecgLines, toon, ...memories].join('\n');
+      String? responseSource;
       final reply = await ref
           .read(aiCoachClientProvider)
           .send(
@@ -202,9 +203,14 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
             List.of(messages),
             widget.contextCard?.withContext(context) ?? context,
             consent,
+            (source) => responseSource = source,
           );
       if (mounted) {
-        setState(() => messages.add(ChatMessage(text: reply, isUser: false)));
+        setState(
+          () => messages.add(
+            ChatMessage(text: reply, isUser: false, source: responseSource),
+          ),
+        );
       }
       final recordingId = widget.contextCard?.ecgRecordingId;
       if (_saveInitialEcgSummary && recordingId != null && ecgClinicalMode) {
@@ -533,16 +539,28 @@ class _CoachState extends ConsumerState<AiCoachScreen> {
                                   fjEdge(const [mint, Color(0xFF3EE0FF)]),
                                 ),
                               ),
-                        child: m.isUser || !pro
+                        child: m.isUser
                             ? MarkdownBody(data: m.text, selectable: true)
                             : Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   MarkdownBody(data: m.text, selectable: true),
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: _CopyButton(text: m.text),
-                                  ),
+                                  if (m.source != null) ...[
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      m.source!,
+                                      style: TextStyle(
+                                        color: muted,
+                                        fontSize: 10,
+                                        fontStyle: FontStyle.italic,
+                                      ),
+                                    ),
+                                  ],
+                                  if (pro)
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: _CopyButton(text: m.text),
+                                    ),
                                 ],
                               ),
                       ),

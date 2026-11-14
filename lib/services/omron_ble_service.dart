@@ -308,9 +308,8 @@ class OmronBleService {
       await FlutterBluePlus.startScan(timeout: const Duration(seconds: 10));
       await FlutterBluePlus.isScanning.firstWhere((scanning) => !scanning);
       return found.values.toList()..sort((a, b) {
-        final byCompatibility = _compatibilityRank(
-          a,
-        ).compareTo(_compatibilityRank(b));
+        final byCompatibility = _compatibilityRank(a)
+            .compareTo(_compatibilityRank(b));
         return byCompatibility != 0
             ? byCompatibility
             : b.rssi.compareTo(a.rssi);
@@ -456,7 +455,7 @@ class OmronBleService {
       final storedRecordCount = Completer<int>();
       final reportDone = Completer<void>();
       measurementSub = bpMeasurement.onValueReceived.listen((bytes) {
-        final record = _parseStandardMeasurement(bytes);
+        final record = parseStandardBpMeasurement(bytes);
         if (record != null) {
           records.add(record);
           if (omronPushTransfer) {
@@ -479,14 +478,12 @@ class OmronBleService {
         });
       } else {
         racpSub = recordAccess!.onValueReceived.listen((bytes) {
-          if (bytes.length < 4 || bytes[1] != 0x00) return;
-          if (bytes[0] == 0x05 && !storedRecordCount.isCompleted) {
-            // Number Of Stored Records Response: opcode, operator, uint16 LE.
-            storedRecordCount.complete(bytes[2] | (bytes[3] << 8));
-          } else if (bytes[0] == 0x06) {
-            // Response Code: opcode, operator, request opcode, response value.
-            final requestOpcode = bytes[2];
-            final response = bytes[3];
+          final event = parseRacpNotification(bytes);
+          if (event is RacpStoredCount && !storedRecordCount.isCompleted) {
+            storedRecordCount.complete(event.count);
+          } else if (event is RacpResponse) {
+            final requestOpcode = event.request;
+            final response = event.code;
             if (requestOpcode == 0x04 && !storedRecordCount.isCompleted) {
               storedRecordCount.completeError(
                 StateError(
@@ -521,13 +518,7 @@ class OmronBleService {
             );
           }
         }
-        final unique = <String, OmronBpRecord>{};
-        for (final record in records) {
-          unique['${record.user}/${record.measuredAt.millisecondsSinceEpoch}'] =
-              record;
-        }
-        return unique.values.toList()
-          ..sort((a, b) => a.measuredAt.compareTo(b.measuredAt));
+        return uniqueOmronRecords(records);
       }
       await recordAccess!.setNotifyValue(true);
       onStatus?.call('Requesting stored-measurement count (RACP 04 01)…');
@@ -559,13 +550,7 @@ class OmronBleService {
         );
       }
       await reportDone.future.timeout(const Duration(seconds: 45));
-      final unique = <String, OmronBpRecord>{};
-      for (final record in records) {
-        unique['${record.user}/${record.measuredAt.millisecondsSinceEpoch}'] =
-            record;
-      }
-      return unique.values.toList()
-        ..sort((a, b) => a.measuredAt.compareTo(b.measuredAt));
+      return uniqueOmronRecords(records);
     } finally {
       await measurementSub?.cancel();
       await racpSub?.cancel();
@@ -582,97 +567,6 @@ class OmronBleService {
         } catch (_) {}
       }
       if (device.isConnected) await device.disconnect();
-    }
-  }
-
-  OmronBpRecord? _parseStandardMeasurement(List<int> bytes) {
-    if (bytes.length < 7) return null;
-    var offset = 0;
-    final flags = bytes[offset++];
-    final pressureIsKpa = (flags & 0x01) != 0;
-    double sfloat() {
-      if (offset + 1 >= bytes.length) throw const FormatException();
-      final raw = bytes[offset] | (bytes[offset + 1] << 8);
-      offset += 2;
-      var mantissa = raw & 0x0fff;
-      if ((mantissa & 0x0800) != 0) mantissa -= 0x1000;
-      var exponent = (raw >> 12) & 0x0f;
-      if ((exponent & 0x08) != 0) exponent -= 0x10;
-      return mantissa * pow(10, exponent).toDouble();
-    }
-
-    try {
-      double pressure() {
-        final value = sfloat();
-        return pressureIsKpa ? value * 7.50062 : value;
-      }
-
-      final sys = pressure();
-      final dia = pressure();
-      pressure(); // Mean arterial pressure, not persisted by this app.
-      // This importer reads historical records. Never assign the current time
-      // to a record whose device omitted its timestamp.
-      if ((flags & 0x02) == 0 || offset + 6 >= bytes.length) return null;
-      final year = bytes[offset] | (bytes[offset + 1] << 8);
-      final month = bytes[offset + 2];
-      final day = bytes[offset + 3];
-      final hour = bytes[offset + 4];
-      final minute = bytes[offset + 5];
-      final second = bytes[offset + 6];
-      offset += 7;
-      if (year < 1900 ||
-          month < 1 ||
-          month > 12 ||
-          day < 1 ||
-          day > 31 ||
-          hour > 23 ||
-          minute > 59 ||
-          second > 59) {
-        return null;
-      }
-      final measuredAt = DateTime(year, month, day, hour, minute, second);
-      if (measuredAt.year != year ||
-          measuredAt.month != month ||
-          measuredAt.day != day) {
-        return null;
-      }
-      var pulse = 0.0;
-      if ((flags & 0x04) != 0) pulse = sfloat();
-      var user = 1;
-      if ((flags & 0x08) != 0) {
-        if (offset >= bytes.length) return null;
-        user = max(1, bytes[offset++]);
-      }
-      var irregular = false;
-      var movement = false;
-      if ((flags & 0x10) != 0) {
-        if (offset >= bytes.length) return null;
-        irregular = (bytes[offset] & 0x04) != 0;
-        movement = (bytes[offset] & 0x01) != 0;
-      }
-      final systolic = sys.round();
-      final diastolic = dia.round();
-      final heartRate = pulse.round();
-      if (systolic < 50 ||
-          systolic > 300 ||
-          diastolic < 20 ||
-          diastolic > 200 ||
-          systolic <= diastolic ||
-          heartRate < 0 ||
-          heartRate > 240) {
-        return null;
-      }
-      return OmronBpRecord(
-        measuredAt: measuredAt,
-        systolic: systolic,
-        diastolic: diastolic,
-        heartRate: heartRate,
-        user: user,
-        irregularPulse: irregular,
-        movement: movement,
-      );
-    } on FormatException {
-      return null;
     }
   }
 
@@ -719,6 +613,7 @@ class OmronBleService {
 
 class _OmronConnection {
   _OmronConnection(this.device, this.profile, this.onStatus);
+  late final _memory = OmronMemoryReader(profile, _command, onStatus: onStatus);
   final BluetoothDevice device;
   final OmronModelProfile profile;
   final void Function(String)? onStatus;
@@ -726,7 +621,6 @@ class _OmronConnection {
   final _tx = <BluetoothCharacteristic>[];
   final _rxSubscriptions = <StreamSubscription<List<int>>>[];
   BluetoothCharacteristic? _unlock;
-  final _buffers = <int, List<int>>{};
   StreamSubscription<List<int>>? _unlockSub;
   Completer<List<int>>? _response;
   Completer<List<int>>? _unlockResponse;
@@ -772,27 +666,11 @@ class _OmronConnection {
     return null;
   }
 
+  late final _assembler = OmronPacketAssembler(profile.rx.length);
+
   void _onRx(int channel, List<int> chunk) {
-    _buffers[channel] = chunk;
-    if (_buffers[0] == null) return;
-    List<int> packet;
-    if (_rx.length == 1) {
-      packet = _buffers[0]!;
-      _buffers.clear();
-    } else {
-      final expectedBytes = _buffers[0]![0];
-      final channels = (expectedBytes + 15) ~/ 16;
-      if (List.generate(channels, (i) => _buffers[i]).any((v) => v == null)) {
-        return;
-      }
-      packet = [
-        for (var i = 0; i < channels; i++) ..._buffers[i]!,
-      ].take(expectedBytes).toList();
-      _buffers.clear();
-    }
-    if (packet.fold<int>(0, (sum, b) => sum ^ b) != 0 || packet.length < 8) {
-      return;
-    }
+    final packet = _assembler.add(channel, chunk);
+    if (packet == null) return;
     final completer = _response;
     if (completer != null && !completer.isCompleted) completer.complete(packet);
   }
@@ -801,13 +679,9 @@ class _OmronConnection {
     Object? lastError;
     for (var attempt = 0; attempt < 5; attempt++) {
       _response = Completer<List<int>>();
-      var rest = command;
-      var index = 0;
-      final width = _tx.length == 1 ? max(16, command.length) : 16;
-      while (rest.isNotEmpty) {
-        final part = rest.take(width).toList();
-        rest = rest.skip(part.length).toList();
-        await _tx[index++].write(part, withoutResponse: _tx.length == 1);
+      final parts = omronCommandParts(command, _tx.length);
+      for (var i = 0; i < parts.length; i++) {
+        await _tx[i].write(parts[i], withoutResponse: _tx.length == 1);
       }
       try {
         return await _response!.future.timeout(const Duration(seconds: 2));
@@ -882,190 +756,14 @@ class _OmronConnection {
     await unlock.setNotifyValue(false);
     await _unlockSub?.cancel();
     _unlockSub = null;
-    await startTransmission();
-    await endTransmission();
+    await _memory.startTransmission();
+    await _memory.endTransmission();
   }
 
   Future<List<OmronBpRecord>> readRecords({String? key}) async {
     if (profile.unlock) await _unlockWithKey(key!);
-    await startTransmission();
-    final records = <OmronBpRecord>[];
-    try {
-      for (var user = 0; user < profile.starts.length; user++) {
-        onStatus?.call('Reading user ${user + 1}…');
-        final length = profile.counts[user] * profile.recordSize;
-        final bytes = await _readContinuous(
-          profile.starts[user],
-          length,
-          profile.blockSize,
-        );
-        for (
-          var offset = 0;
-          offset + profile.recordSize <= bytes.length;
-          offset += profile.recordSize
-        ) {
-          final raw = bytes.sublist(offset, offset + profile.recordSize);
-          if (raw.every((b) => b == 0xff)) continue;
-          final record = _parse(raw, user + 1);
-          if (record != null) records.add(record);
-        }
-      }
-    } finally {
-      await endTransmission();
-    }
-    final unique = <String, OmronBpRecord>{};
-    for (final record in records) {
-      unique['${record.user}/${record.measuredAt.millisecondsSinceEpoch}'] =
-          record;
-    }
-    return unique.values.toList()
-      ..sort((a, b) => a.measuredAt.compareTo(b.measuredAt));
+    return _memory.readRecords();
   }
-
-  Future<void> startTransmission() async {
-    final packet = await _command([8, 0, 0, 0, 0, 16, 0, 24]);
-    if (packet[1] != 0x80 || packet[2] != 0) {
-      throw StateError('Omron data transfer could not start.');
-    }
-  }
-
-  Future<void> endTransmission() async {
-    final packet = await _command([8, 15, 0, 0, 0, 0, 0, 7]);
-    if (packet[1] != 0x8f || packet[2] != 0 || packet[6] != 0) {
-      throw StateError('Omron data transfer did not finish cleanly.');
-    }
-  }
-
-  Future<List<int>> _readContinuous(
-    int address,
-    int count,
-    int blockSize,
-  ) async {
-    final out = <int>[];
-    while (count > 0) {
-      final size = min(count, min(blockSize, 56));
-      final command = [8, 1, 0, (address >> 8) & 255, address & 255, size];
-      var crc = 0;
-      for (final byte in command) {
-        crc ^= byte;
-      }
-      command.addAll([0, crc]);
-      final packet = await _command(command);
-      if (packet[1] != 0x81 ||
-          packet[2] != 0 ||
-          packet[3] != ((address >> 8) & 255) ||
-          packet[4] != (address & 255)) {
-        throw StateError('Omron returned an invalid memory block.');
-      }
-      final received = packet[5];
-      if (received != size || packet.length < 8 + size) {
-        throw StateError('Omron returned an incomplete memory block.');
-      }
-      out.addAll(packet.sublist(6, 6 + size));
-      count -= size;
-      address += size;
-    }
-    return out;
-  }
-
-  OmronBpRecord? _parse(List<int> raw, int user) {
-    final bits = _bits(raw);
-    int b(int first, int last) =>
-        bits >> (raw.length * 8 - last - 1) & ((1 << (last - first + 1)) - 1);
-    int dia, sys, hr, year, month, day, hour, minute, second, mov = 0, ihb = 0;
-    switch (profile.layout) {
-      case 'classic14':
-        dia = b(0, 7);
-        sys = b(8, 15) + 25;
-        year = b(16, 23) + 2000;
-        hr = b(24, 31);
-        mov = b(32, 32);
-        ihb = b(33, 33);
-        month = b(34, 37);
-        day = b(38, 42);
-        hour = b(43, 47);
-        minute = b(52, 57);
-        second = min(b(58, 63), 59);
-      case 'modern14':
-        if ((raw.take(12).fold<int>(0, (a, v) => a + v) & 255) != raw[12] ||
-            raw[13] != (raw[12] ^ 255)) {
-          return null;
-        }
-        sys = b(104, 111) + 25;
-        dia = b(96, 103);
-        hr = b(88, 95);
-        year = b(82, 87) + 2000;
-        hour = b(75, 79);
-        day = b(70, 74);
-        month = b(66, 69);
-        ihb = b(65, 65);
-        mov = b(64, 64);
-        second = b(58, 63);
-        if (second == 63) {
-          return null;
-        }
-        minute = b(52, 57);
-      case 'packed16':
-      case 'modern16':
-        minute = b(68, 73);
-        second = min(b(74, 79), 59);
-        mov = b(80, 80);
-        ihb = b(81, 81);
-        month = b(82, 85);
-        day = b(86, 90);
-        hour = b(91, 95);
-        year = b(98, 103) + 2000;
-        hr = b(104, 111);
-        dia = b(112, 119);
-        sys = b(120, 127) + 25;
-      default:
-        return null;
-    }
-    if (year < 2000 ||
-        month < 1 ||
-        month > 12 ||
-        day < 1 ||
-        day > 31 ||
-        hour > 23 ||
-        minute > 59) {
-      return null;
-    }
-    if (profile.layout == 'modern16' && year < 2020) return null;
-    if (sys < 50 ||
-        sys > 300 ||
-        dia < 20 ||
-        dia > 200 ||
-        sys <= dia ||
-        hr < 25 ||
-        hr > 240) {
-      return null;
-    }
-    try {
-      final timestamp = DateTime(year, month, day, hour, minute, second);
-      if (timestamp.year != year ||
-          timestamp.month != month ||
-          timestamp.day != day) {
-        return null;
-      }
-      return OmronBpRecord(
-        measuredAt: timestamp,
-        systolic: sys,
-        diastolic: dia,
-        heartRate: hr,
-        user: user,
-        irregularPulse: ihb != 0,
-        movement: mov != 0,
-      );
-    } on ArgumentError {
-      return null;
-    }
-  }
-
-  int _bits(List<int> bytes) =>
-      (profile.endian == 'little' ? bytes.reversed : bytes).fold<int>(
-        0,
-        (value, byte) => (value << 8) | byte,
-      );
 
   List<int> _hex(String hex) => [
     for (var i = 0; i < hex.length; i += 2)
@@ -1088,5 +786,371 @@ class _OmronConnection {
       } catch (_) {}
     }
     if (device.isConnected) await device.disconnect();
+  }
+}
+
+/// Removes the copies a monitor sends twice (same user and second) and
+/// orders the readings oldest first.
+List<OmronBpRecord> uniqueOmronRecords(Iterable<OmronBpRecord> records) {
+  final unique = <String, OmronBpRecord>{};
+  for (final record in records) {
+    unique['${record.user}/${record.measuredAt.millisecondsSinceEpoch}'] =
+        record;
+  }
+  return unique.values.toList()
+    ..sort((a, b) => a.measuredAt.compareTo(b.measuredAt));
+}
+
+/// A Record Access Control Point notification of the standard BP profile.
+sealed class RacpEvent {
+  const RacpEvent();
+}
+
+/// Number Of Stored Records Response (opcode 0x05).
+class RacpStoredCount extends RacpEvent {
+  const RacpStoredCount(this.count);
+  final int count;
+}
+
+/// Response Code (opcode 0x06) to the request [request].
+class RacpResponse extends RacpEvent {
+  const RacpResponse(this.request, this.code);
+  final int request, code;
+}
+
+RacpEvent? parseRacpNotification(List<int> bytes) {
+  if (bytes.length < 4 || bytes[1] != 0x00) return null;
+  return switch (bytes[0]) {
+    // Opcode, operator, uint16 LE.
+    0x05 => RacpStoredCount(bytes[2] | (bytes[3] << 8)),
+    // Opcode, operator, request opcode, response value.
+    0x06 => RacpResponse(bytes[2], bytes[3]),
+    _ => null,
+  };
+}
+
+OmronBpRecord? parseStandardBpMeasurement(List<int> bytes) {
+  if (bytes.length < 7) return null;
+  var offset = 0;
+  final flags = bytes[offset++];
+  final pressureIsKpa = (flags & 0x01) != 0;
+  double sfloat() {
+    if (offset + 1 >= bytes.length) throw const FormatException();
+    final raw = bytes[offset] | (bytes[offset + 1] << 8);
+    offset += 2;
+    var mantissa = raw & 0x0fff;
+    if ((mantissa & 0x0800) != 0) mantissa -= 0x1000;
+    var exponent = (raw >> 12) & 0x0f;
+    if ((exponent & 0x08) != 0) exponent -= 0x10;
+    return mantissa * pow(10, exponent).toDouble();
+  }
+
+  try {
+    double pressure() {
+      final value = sfloat();
+      return pressureIsKpa ? value * 7.50062 : value;
+    }
+
+    final sys = pressure();
+    final dia = pressure();
+    pressure(); // Mean arterial pressure, not persisted by this app.
+    // This importer reads historical records. Never assign the current time
+    // to a record whose device omitted its timestamp.
+    if ((flags & 0x02) == 0 || offset + 6 >= bytes.length) return null;
+    final year = bytes[offset] | (bytes[offset + 1] << 8);
+    final month = bytes[offset + 2];
+    final day = bytes[offset + 3];
+    final hour = bytes[offset + 4];
+    final minute = bytes[offset + 5];
+    final second = bytes[offset + 6];
+    offset += 7;
+    if (year < 1900 ||
+        month < 1 ||
+        month > 12 ||
+        day < 1 ||
+        day > 31 ||
+        hour > 23 ||
+        minute > 59 ||
+        second > 59) {
+      return null;
+    }
+    final measuredAt = DateTime(year, month, day, hour, minute, second);
+    if (measuredAt.year != year ||
+        measuredAt.month != month ||
+        measuredAt.day != day) {
+      return null;
+    }
+    var pulse = 0.0;
+    if ((flags & 0x04) != 0) pulse = sfloat();
+    var user = 1;
+    if ((flags & 0x08) != 0) {
+      if (offset >= bytes.length) return null;
+      user = max(1, bytes[offset++]);
+    }
+    var irregular = false;
+    var movement = false;
+    if ((flags & 0x10) != 0) {
+      if (offset >= bytes.length) return null;
+      irregular = (bytes[offset] & 0x04) != 0;
+      movement = (bytes[offset] & 0x01) != 0;
+    }
+    final systolic = sys.round();
+    final diastolic = dia.round();
+    final heartRate = pulse.round();
+    if (systolic < 50 ||
+        systolic > 300 ||
+        diastolic < 20 ||
+        diastolic > 200 ||
+        systolic <= diastolic ||
+        heartRate < 0 ||
+        heartRate > 240) {
+      return null;
+    }
+    return OmronBpRecord(
+      measuredAt: measuredAt,
+      systolic: systolic,
+      diastolic: diastolic,
+      heartRate: heartRate,
+      user: user,
+      irregularPulse: irregular,
+      movement: movement,
+    );
+  } on FormatException {
+    return null;
+  }
+}
+
+/// Joins the notifications of an Omron monitor's response channels into one
+/// packet. With several channels, the first byte of channel 0 is the packet
+/// length and each channel carries up to 16 bytes of it. Packets with a bad
+/// XOR checksum are dropped.
+class OmronPacketAssembler {
+  OmronPacketAssembler(this.channels);
+  final int channels;
+  final _buffers = <int, List<int>>{};
+
+  List<int>? add(int channel, List<int> chunk) {
+    _buffers[channel] = chunk;
+    if (_buffers[0] == null) return null;
+    List<int> packet;
+    if (channels == 1) {
+      packet = _buffers[0]!;
+      _buffers.clear();
+    } else {
+      final expectedBytes = _buffers[0]![0];
+      final needed = (expectedBytes + 15) ~/ 16;
+      if (List.generate(needed, (i) => _buffers[i]).any((v) => v == null)) {
+        return null;
+      }
+      packet = [for (var i = 0; i < needed; i++) ..._buffers[i]!]
+          .take(expectedBytes)
+          .toList();
+      _buffers.clear();
+    }
+    if (packet.fold<int>(0, (sum, b) => sum ^ b) != 0 || packet.length < 8) {
+      return null;
+    }
+    return packet;
+  }
+}
+
+/// How a command is split over [txChannels] command characteristics: one
+/// write on a single channel, 16-byte parts over several.
+List<List<int>> omronCommandParts(List<int> command, int txChannels) {
+  final width = txChannels == 1 ? max(16, command.length) : 16;
+  return [
+    for (var i = 0; i < command.length; i += width)
+      command.sublist(i, min(i + width, command.length)),
+  ];
+}
+
+/// Omron's memory protocol over any command channel: start/end transmission,
+/// block reads and the per-model record layouts.
+class OmronMemoryReader {
+  OmronMemoryReader(this.profile, this.send, {this.onStatus});
+  final OmronModelProfile profile;
+
+  /// Sends one command packet and returns the monitor's response packet.
+  final Future<List<int>> Function(List<int> command) send;
+  final void Function(String)? onStatus;
+
+  Future<List<OmronBpRecord>> readRecords() async {
+    await startTransmission();
+    final records = <OmronBpRecord>[];
+    try {
+      for (var user = 0; user < profile.starts.length; user++) {
+        onStatus?.call('Reading user ${user + 1}…');
+        final length = profile.counts[user] * profile.recordSize;
+        final bytes = await _readContinuous(
+          profile.starts[user],
+          length,
+          profile.blockSize,
+        );
+        for (
+          var offset = 0;
+          offset + profile.recordSize <= bytes.length;
+          offset += profile.recordSize
+        ) {
+          final raw = bytes.sublist(offset, offset + profile.recordSize);
+          if (raw.every((b) => b == 0xff)) continue;
+          final record = decodeOmronRecord(profile, raw, user + 1);
+          if (record != null) records.add(record);
+        }
+      }
+    } finally {
+      await endTransmission();
+    }
+    return uniqueOmronRecords(records);
+  }
+
+  Future<void> startTransmission() async {
+    final packet = await send([8, 0, 0, 0, 0, 16, 0, 24]);
+    if (packet[1] != 0x80 || packet[2] != 0) {
+      throw StateError('Omron data transfer could not start.');
+    }
+  }
+
+  Future<void> endTransmission() async {
+    final packet = await send([8, 15, 0, 0, 0, 0, 0, 7]);
+    if (packet[1] != 0x8f || packet[2] != 0 || packet[6] != 0) {
+      throw StateError('Omron data transfer did not finish cleanly.');
+    }
+  }
+
+  Future<List<int>> _readContinuous(
+    int address,
+    int count,
+    int blockSize,
+  ) async {
+    final out = <int>[];
+    while (count > 0) {
+      final size = min(count, min(blockSize, 56));
+      final command = [8, 1, 0, (address >> 8) & 255, address & 255, size];
+      var crc = 0;
+      for (final byte in command) {
+        crc ^= byte;
+      }
+      command.addAll([0, crc]);
+      final packet = await send(command);
+      if (packet[1] != 0x81 ||
+          packet[2] != 0 ||
+          packet[3] != ((address >> 8) & 255) ||
+          packet[4] != (address & 255)) {
+        throw StateError('Omron returned an invalid memory block.');
+      }
+      final received = packet[5];
+      if (received != size || packet.length < 8 + size) {
+        throw StateError('Omron returned an incomplete memory block.');
+      }
+      out.addAll(packet.sublist(6, 6 + size));
+      count -= size;
+      address += size;
+    }
+    return out;
+  }
+}
+
+/// One stored record in [profile]'s layout, or null for an empty or invalid
+/// slot. Bit positions count from the first bit of the record; records are
+/// up to 128 bits, so they are read as a [BigInt].
+OmronBpRecord? decodeOmronRecord(
+  OmronModelProfile profile,
+  List<int> raw,
+  int user,
+) {
+  final bits = (profile.endian == 'little' ? raw.reversed : raw).fold<BigInt>(
+    BigInt.zero,
+    (value, byte) => (value << 8) | BigInt.from(byte),
+  );
+  int b(int first, int last) =>
+      ((bits >> (raw.length * 8 - last - 1)) &
+              ((BigInt.one << (last - first + 1)) - BigInt.one))
+          .toInt();
+  int dia, sys, hr, year, month, day, hour, minute, second, mov = 0, ihb = 0;
+  switch (profile.layout) {
+    case 'classic14':
+      dia = b(0, 7);
+      sys = b(8, 15) + 25;
+      year = b(16, 23) + 2000;
+      hr = b(24, 31);
+      mov = b(32, 32);
+      ihb = b(33, 33);
+      month = b(34, 37);
+      day = b(38, 42);
+      hour = b(43, 47);
+      minute = b(52, 57);
+      second = min(b(58, 63), 59);
+    case 'modern14':
+      if ((raw.take(12).fold<int>(0, (a, v) => a + v) & 255) != raw[12] ||
+          raw[13] != (raw[12] ^ 255)) {
+        return null;
+      }
+      sys = b(104, 111) + 25;
+      dia = b(96, 103);
+      hr = b(88, 95);
+      year = b(82, 87) + 2000;
+      hour = b(75, 79);
+      day = b(70, 74);
+      month = b(66, 69);
+      ihb = b(65, 65);
+      mov = b(64, 64);
+      second = b(58, 63);
+      if (second == 63) {
+        return null;
+      }
+      minute = b(52, 57);
+    case 'packed16':
+    case 'modern16':
+      minute = b(68, 73);
+      second = min(b(74, 79), 59);
+      mov = b(80, 80);
+      ihb = b(81, 81);
+      month = b(82, 85);
+      day = b(86, 90);
+      hour = b(91, 95);
+      year = b(98, 103) + 2000;
+      hr = b(104, 111);
+      dia = b(112, 119);
+      sys = b(120, 127) + 25;
+    default:
+      return null;
+  }
+  if (year < 2000 ||
+      month < 1 ||
+      month > 12 ||
+      day < 1 ||
+      day > 31 ||
+      hour > 23 ||
+      minute > 59) {
+    return null;
+  }
+  if (profile.layout == 'modern16' && year < 2020) return null;
+  if (sys < 50 ||
+      sys > 300 ||
+      dia < 20 ||
+      dia > 200 ||
+      sys <= dia ||
+      hr < 25 ||
+      hr > 240) {
+    return null;
+  }
+  try {
+    final timestamp = DateTime(year, month, day, hour, minute, second);
+    if (timestamp.year != year ||
+        timestamp.month != month ||
+        timestamp.day != day) {
+      return null;
+    }
+    return OmronBpRecord(
+      measuredAt: timestamp,
+      systolic: sys,
+      diastolic: dia,
+      heartRate: hr,
+      user: user,
+      irregularPulse: ihb != 0,
+      movement: mov != 0,
+    );
+  } on ArgumentError {
+    return null;
   }
 }

@@ -4,27 +4,34 @@ import 'dart:io';
 import 'package:fjelia/l10n/l10n_ext.dart';
 import 'package:fjelia/services/ai_coach_client.dart';
 import 'package:fjelia/services/ai_coach_settings.dart';
+import 'package:fjelia/services/apple_coach_request.dart';
 import 'package:fjelia/services/briefing_brief.dart';
 import 'package:fjelia/services/local_model_service.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 
-class _Reply extends LocalModelService {
+/// The on-device model that writes briefings, with a fixed reply.
+class _Reply {
   _Reply(this.reply);
   final String reply;
-  List<Map<String, String>>? messages;
+  AppleCoachRequest? request;
 
-  @override
-  Future<String> generate(
-    List<Map<String, String>> messages, {
-    int maxTokens = 512,
-  }) async {
-    this.messages = messages;
+  /// The request as chat messages, the shape the MLX fixture expects.
+  List<Map<String, String>>? get messages => request == null
+      ? null
+      : [
+          {'role': 'system', 'content': request!.instructions},
+          {'role': 'user', 'content': request!.prompt},
+        ];
+
+  Future<String> send(AppleCoachRequest request) async {
+    this.request = request;
     return reply;
   }
 }
 
+// Briefings are written on the device whatever the chat provider is.
 const _settings = AiCoachSettings(
   provider: AiProvider.localQwen,
   model: localQwenModelId,
@@ -48,15 +55,18 @@ String _context() {
 }
 
 AiCoachClient _client(_Reply model) => AiCoachClient(
-  localModel: model,
-  client: MockClient((_) async => fail('A local briefing must not use HTTP')),
+  appleSender: model.send,
+  localModelFor: (_) => fail('Briefings never use the local chat model'),
+  client: MockClient(
+    (_) async => fail('An on-device briefing must not use HTTP'),
+  ),
 );
 
 void main() {
   tearDown(() => setActiveLocale(const Locale('en')));
 
   test(
-    'a local daily briefing cannot omit two still planned sessions',
+    'an on-device briefing cannot omit two still planned sessions',
     () async {
       setActiveLocale(const Locale('de'));
       final rawPath = Platform.environment['FJELIA_QWEN_SCHEDULE_REPLY'];
@@ -104,7 +114,7 @@ void main() {
   });
 
   test(
-    'the plan remains correct in every app language when Qwen omits it',
+    'the plan remains correct in every app language when the model omits it',
     () async {
       for (final locale in [
         'en',
@@ -119,9 +129,8 @@ void main() {
         'da',
       ]) {
         setActiveLocale(Locale(locale));
-        final reply = await _client(
-          _Reply('Rest today.'),
-        ).sendBriefing(_settings, _context());
+        final reply = await _client(_Reply('Rest today.'))
+            .sendBriefing(_settings, _context());
         expect(reply, contains(tr.briefPlannedTodayCount(2)), reason: locale);
       }
     },
