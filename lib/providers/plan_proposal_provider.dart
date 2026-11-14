@@ -165,7 +165,7 @@ final revisionContextProvider = Provider(
     return RevisionContext(
       day: day,
       week: week,
-      restWeekdays: profile.restDays,
+      restWeekdays: profile.planRestDays,
       strengthWeekdays: profile.preferredStrengthDays,
       maxPerDay: profile.maxSessionsPerDay,
       strengthPlans: plans,

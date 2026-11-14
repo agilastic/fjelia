@@ -302,5 +302,6 @@ String skipReasonLabel(AppLocalizations l, String reason) => switch (reason) {
   'My choice' => l.skipReasonMyChoice,
   'Replaced with another sport' => l.skipReasonReplaced,
   'Rest recommended for replacement' => l.skipReasonRestInstead,
+  'Off-season' => l.absenceOffseason,
   _ => reason,
 };

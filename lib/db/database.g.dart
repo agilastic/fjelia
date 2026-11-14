@@ -15415,6 +15415,397 @@ class ActivitySportsCompanion extends UpdateCompanion<ActivitySport> {
   }
 }
 
+class $AbsencesTable extends Absences with TableInfo<$AbsencesTable, Absence> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $AbsencesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _kindMeta = const VerificationMeta('kind');
+  @override
+  late final GeneratedColumn<String> kind = GeneratedColumn<String>(
+    'kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _startDayMeta = const VerificationMeta(
+    'startDay',
+  );
+  @override
+  late final GeneratedColumn<DateTime> startDay = GeneratedColumn<DateTime>(
+    'start_day',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _endDayMeta = const VerificationMeta('endDay');
+  @override
+  late final GeneratedColumn<DateTime> endDay = GeneratedColumn<DateTime>(
+    'end_day',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+    'note',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    kind,
+    startDay,
+    endDay,
+    note,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'absences';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<Absence> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('kind')) {
+      context.handle(
+        _kindMeta,
+        kind.isAcceptableOrUnknown(data['kind']!, _kindMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_kindMeta);
+    }
+    if (data.containsKey('start_day')) {
+      context.handle(
+        _startDayMeta,
+        startDay.isAcceptableOrUnknown(data['start_day']!, _startDayMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_startDayMeta);
+    }
+    if (data.containsKey('end_day')) {
+      context.handle(
+        _endDayMeta,
+        endDay.isAcceptableOrUnknown(data['end_day']!, _endDayMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_endDayMeta);
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+        _noteMeta,
+        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Absence map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Absence(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      kind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}kind'],
+      )!,
+      startDay: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}start_day'],
+      )!,
+      endDay: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}end_day'],
+      )!,
+      note: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $AbsencesTable createAlias(String alias) {
+    return $AbsencesTable(attachedDatabase, alias);
+  }
+}
+
+class Absence extends DataClass implements Insertable<Absence> {
+  final int id;
+  final String kind;
+  final DateTime startDay;
+  final DateTime endDay;
+  final String? note;
+  final DateTime createdAt;
+  const Absence({
+    required this.id,
+    required this.kind,
+    required this.startDay,
+    required this.endDay,
+    this.note,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['kind'] = Variable<String>(kind);
+    map['start_day'] = Variable<DateTime>(startDay);
+    map['end_day'] = Variable<DateTime>(endDay);
+    if (!nullToAbsent || note != null) {
+      map['note'] = Variable<String>(note);
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  AbsencesCompanion toCompanion(bool nullToAbsent) {
+    return AbsencesCompanion(
+      id: Value(id),
+      kind: Value(kind),
+      startDay: Value(startDay),
+      endDay: Value(endDay),
+      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory Absence.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Absence(
+      id: serializer.fromJson<int>(json['id']),
+      kind: serializer.fromJson<String>(json['kind']),
+      startDay: serializer.fromJson<DateTime>(json['startDay']),
+      endDay: serializer.fromJson<DateTime>(json['endDay']),
+      note: serializer.fromJson<String?>(json['note']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'kind': serializer.toJson<String>(kind),
+      'startDay': serializer.toJson<DateTime>(startDay),
+      'endDay': serializer.toJson<DateTime>(endDay),
+      'note': serializer.toJson<String?>(note),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  Absence copyWith({
+    int? id,
+    String? kind,
+    DateTime? startDay,
+    DateTime? endDay,
+    Value<String?> note = const Value.absent(),
+    DateTime? createdAt,
+  }) => Absence(
+    id: id ?? this.id,
+    kind: kind ?? this.kind,
+    startDay: startDay ?? this.startDay,
+    endDay: endDay ?? this.endDay,
+    note: note.present ? note.value : this.note,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  Absence copyWithCompanion(AbsencesCompanion data) {
+    return Absence(
+      id: data.id.present ? data.id.value : this.id,
+      kind: data.kind.present ? data.kind.value : this.kind,
+      startDay: data.startDay.present ? data.startDay.value : this.startDay,
+      endDay: data.endDay.present ? data.endDay.value : this.endDay,
+      note: data.note.present ? data.note.value : this.note,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Absence(')
+          ..write('id: $id, ')
+          ..write('kind: $kind, ')
+          ..write('startDay: $startDay, ')
+          ..write('endDay: $endDay, ')
+          ..write('note: $note, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, kind, startDay, endDay, note, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Absence &&
+          other.id == this.id &&
+          other.kind == this.kind &&
+          other.startDay == this.startDay &&
+          other.endDay == this.endDay &&
+          other.note == this.note &&
+          other.createdAt == this.createdAt);
+}
+
+class AbsencesCompanion extends UpdateCompanion<Absence> {
+  final Value<int> id;
+  final Value<String> kind;
+  final Value<DateTime> startDay;
+  final Value<DateTime> endDay;
+  final Value<String?> note;
+  final Value<DateTime> createdAt;
+  const AbsencesCompanion({
+    this.id = const Value.absent(),
+    this.kind = const Value.absent(),
+    this.startDay = const Value.absent(),
+    this.endDay = const Value.absent(),
+    this.note = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  });
+  AbsencesCompanion.insert({
+    this.id = const Value.absent(),
+    required String kind,
+    required DateTime startDay,
+    required DateTime endDay,
+    this.note = const Value.absent(),
+    required DateTime createdAt,
+  }) : kind = Value(kind),
+       startDay = Value(startDay),
+       endDay = Value(endDay),
+       createdAt = Value(createdAt);
+  static Insertable<Absence> custom({
+    Expression<int>? id,
+    Expression<String>? kind,
+    Expression<DateTime>? startDay,
+    Expression<DateTime>? endDay,
+    Expression<String>? note,
+    Expression<DateTime>? createdAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (kind != null) 'kind': kind,
+      if (startDay != null) 'start_day': startDay,
+      if (endDay != null) 'end_day': endDay,
+      if (note != null) 'note': note,
+      if (createdAt != null) 'created_at': createdAt,
+    });
+  }
+
+  AbsencesCompanion copyWith({
+    Value<int>? id,
+    Value<String>? kind,
+    Value<DateTime>? startDay,
+    Value<DateTime>? endDay,
+    Value<String?>? note,
+    Value<DateTime>? createdAt,
+  }) {
+    return AbsencesCompanion(
+      id: id ?? this.id,
+      kind: kind ?? this.kind,
+      startDay: startDay ?? this.startDay,
+      endDay: endDay ?? this.endDay,
+      note: note ?? this.note,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (kind.present) {
+      map['kind'] = Variable<String>(kind.value);
+    }
+    if (startDay.present) {
+      map['start_day'] = Variable<DateTime>(startDay.value);
+    }
+    if (endDay.present) {
+      map['end_day'] = Variable<DateTime>(endDay.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AbsencesCompanion(')
+          ..write('id: $id, ')
+          ..write('kind: $kind, ')
+          ..write('startDay: $startDay, ')
+          ..write('endDay: $endDay, ')
+          ..write('note: $note, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $SpotHrvMeasurementsTable extends SpotHrvMeasurements
     with TableInfo<$SpotHrvMeasurementsTable, SpotHrvMeasurement> {
   @override
@@ -49737,6 +50128,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $DeletedActivitiesTable(this);
   late final $ActivityTitlesTable activityTitles = $ActivityTitlesTable(this);
   late final $ActivitySportsTable activitySports = $ActivitySportsTable(this);
+  late final $AbsencesTable absences = $AbsencesTable(this);
   late final $SpotHrvMeasurementsTable spotHrvMeasurements =
       $SpotHrvMeasurementsTable(this);
   late final $EcgRecordingsTable ecgRecordings = $EcgRecordingsTable(this);
@@ -49847,6 +50239,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     deletedActivities,
     activityTitles,
     activitySports,
+    absences,
     spotHrvMeasurements,
     ecgRecordings,
     ecgSampleChunks,
@@ -57780,6 +58173,220 @@ typedef $$ActivitySportsTableProcessedTableManager =
         BaseReferences<_$AppDatabase, $ActivitySportsTable, ActivitySport>,
       ),
       ActivitySport,
+      PrefetchHooks Function()
+    >;
+typedef $$AbsencesTableCreateCompanionBuilder = AbsencesCompanion Function({
+  Value<int> id,
+  required String kind,
+  required DateTime startDay,
+  required DateTime endDay,
+  Value<String?> note,
+  required DateTime createdAt,
+});
+typedef $$AbsencesTableUpdateCompanionBuilder = AbsencesCompanion Function({
+  Value<int> id,
+  Value<String> kind,
+  Value<DateTime> startDay,
+  Value<DateTime> endDay,
+  Value<String?> note,
+  Value<DateTime> createdAt,
+});
+
+class $$AbsencesTableFilterComposer
+    extends Composer<_$AppDatabase, $AbsencesTable> {
+  $$AbsencesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get startDay => $composableBuilder(
+    column: $table.startDay,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get endDay => $composableBuilder(
+    column: $table.endDay,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$AbsencesTableOrderingComposer
+    extends Composer<_$AppDatabase, $AbsencesTable> {
+  $$AbsencesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get startDay => $composableBuilder(
+    column: $table.startDay,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get endDay => $composableBuilder(
+    column: $table.endDay,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$AbsencesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $AbsencesTable> {
+  $$AbsencesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get kind =>
+      $composableBuilder(column: $table.kind, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get startDay =>
+      $composableBuilder(column: $table.startDay, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get endDay =>
+      $composableBuilder(column: $table.endDay, builder: (column) => column);
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$AbsencesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $AbsencesTable,
+          Absence,
+          $$AbsencesTableFilterComposer,
+          $$AbsencesTableOrderingComposer,
+          $$AbsencesTableAnnotationComposer,
+          $$AbsencesTableCreateCompanionBuilder,
+          $$AbsencesTableUpdateCompanionBuilder,
+          (Absence, BaseReferences<_$AppDatabase, $AbsencesTable, Absence>),
+          Absence,
+          PrefetchHooks Function()
+        > {
+  $$AbsencesTableTableManager(_$AppDatabase db, $AbsencesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$AbsencesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AbsencesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AbsencesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> kind = const Value.absent(),
+                Value<DateTime> startDay = const Value.absent(),
+                Value<DateTime> endDay = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => AbsencesCompanion(
+                id: id,
+                kind: kind,
+                startDay: startDay,
+                endDay: endDay,
+                note: note,
+                createdAt: createdAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String kind,
+                required DateTime startDay,
+                required DateTime endDay,
+                Value<String?> note = const Value.absent(),
+                required DateTime createdAt,
+              }) => AbsencesCompanion.insert(
+                id: id,
+                kind: kind,
+                startDay: startDay,
+                endDay: endDay,
+                note: note,
+                createdAt: createdAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$AbsencesTable, Absence>(table),
+                  BaseReferences<_$AppDatabase, $AbsencesTable, Absence>(
+                    db,
+                    table,
+                    e,
+                  ),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$AbsencesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $AbsencesTable,
+      Absence,
+      $$AbsencesTableFilterComposer,
+      $$AbsencesTableOrderingComposer,
+      $$AbsencesTableAnnotationComposer,
+      $$AbsencesTableCreateCompanionBuilder,
+      $$AbsencesTableUpdateCompanionBuilder,
+      (Absence, BaseReferences<_$AppDatabase, $AbsencesTable, Absence>),
+      Absence,
       PrefetchHooks Function()
     >;
 typedef $$SpotHrvMeasurementsTableCreateCompanionBuilder =
@@ -74288,6 +74895,8 @@ class $AppDatabaseManager {
       $$ActivityTitlesTableTableManager(_db, _db.activityTitles);
   $$ActivitySportsTableTableManager get activitySports =>
       $$ActivitySportsTableTableManager(_db, _db.activitySports);
+  $$AbsencesTableTableManager get absences =>
+      $$AbsencesTableTableManager(_db, _db.absences);
   $$SpotHrvMeasurementsTableTableManager get spotHrvMeasurements =>
       $$SpotHrvMeasurementsTableTableManager(_db, _db.spotHrvMeasurements);
   $$EcgRecordingsTableTableManager get ecgRecordings =>

@@ -1,4 +1,5 @@
 import '../theme/fjelia_style.dart';
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -202,12 +203,9 @@ class _ManualActivityState extends ConsumerState<ManualActivitySheet> {
             children: [
               for (final sport in _sports)
                 ChoiceChip(
-                  avatar: Icon(_sportIcon(sport), size: 18),
                   label: Text(label(context, sport)),
                   selected: sport == type,
                   showCheckmark: false,
-                  selectedColor: mint.withValues(alpha: .25),
-                  shape: const StadiumBorder(),
                   onSelected: (_) => Navigator.pop(sheet, sport),
                 ),
             ],

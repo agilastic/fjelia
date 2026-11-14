@@ -25,6 +25,7 @@ import '../../utils/target_time.dart';
 import 'missed_workout_settings_card.dart';
 import 'race_goal_editor.dart';
 import '../strength/strength_sections.dart';
+import 'training_windows_sheet.dart';
 
 class TrainingTab extends ConsumerWidget {
   const TrainingTab({super.key});
@@ -194,6 +195,26 @@ class TrainingTab extends ConsumerWidget {
                     }),
                   ),
               ],
+            ),
+            const SizedBox(height: 6),
+            // When in the week training fits; the plan and the reminder
+            // follow it.
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(Icons.schedule_rounded, color: Colors.orange),
+              title: Text(context.l10n.trainingWindowsTitle),
+              subtitle: Text(
+                p.trainingWindows.isEmpty
+                    ? context.l10n.trainingWindowsNotSet
+                    : [
+                        for (final d in [1, 2, 3, 4, 5, 6, 7])
+                          if (p.trainingWindows.hasWindow(d))
+                            '${[context.l10n.mon, context.l10n.tue, context.l10n.wed, context.l10n.thu, context.l10n.fri, context.l10n.sat, context.l10n.sun][d - 1]} ${trainingWindowsText(p.trainingWindows, d)}',
+                      ].join(' · '),
+                style: TextStyle(fontSize: 11, color: fjInk70),
+              ),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => showAppSheet(context, const TrainingWindowsSheet()),
             ),
             if (ref.watch(planScheduleOutdatedProvider).valueOrNull ?? false)
               Padding(

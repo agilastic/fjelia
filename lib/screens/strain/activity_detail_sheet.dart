@@ -283,49 +283,29 @@ class ActivityDetailSheet extends ConsumerWidget {
                       runSpacing: 4,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
-                        Tooltip(
-                          message: context.l10n.changeSport,
-                          child: Material(
-                            color: const Color(0xFF4FC3F7)
-                                .withValues(alpha: .12),
-                            shape: StadiumBorder(
-                              side: BorderSide(
-                                color: const Color(0xFF4FC3F7)
-                                    .withValues(alpha: .45),
-                              ),
-                            ),
-                            child: InkWell(
-                              customBorder: const StadiumBorder(),
-                              onTap: () => _changeSport(context, ref),
-                              child: Padding(
-                                padding: const EdgeInsets.fromLTRB(10, 4, 4, 4),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Flexible(
-                                      child: Text(
-                                        activitySportLabel(
-                                          context.l10n,
-                                          a.type,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w600,
-                                          color: Color(0xFF4FC3F7),
-                                        ),
-                                      ),
-                                    ),
-                                    const Icon(
-                                      Icons.arrow_drop_down_rounded,
-                                      size: 20,
-                                      color: Color(0xFF4FC3F7),
-                                    ),
-                                  ],
+                        // A standard chip with a drop-down arrow: it reads
+                        // as a choice, in the theme's look.
+                        ActionChip(
+                          tooltip: context.l10n.changeSport,
+                          visualDensity: VisualDensity.compact,
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
+                          onPressed: () => _changeSport(context, ref),
+                          label: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  activitySportLabel(context.l10n, a.type),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                            ),
+                              const Icon(
+                                Icons.arrow_drop_down_rounded,
+                                size: 20,
+                              ),
+                            ],
                           ),
                         ),
                         Text(

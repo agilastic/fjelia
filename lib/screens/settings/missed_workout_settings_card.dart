@@ -8,6 +8,7 @@ import '../../providers/fjelia_pro_provider.dart' show proSubscribedProvider;
 import '../../providers/hrv_reminder_provider.dart';
 import '../../providers/missed_workout_provider.dart';
 import '../../providers/plan_proposal_provider.dart';
+import '../../providers/user_profile_provider.dart';
 import '../../services/missed_workout_reminder_service.dart';
 import '../../services/notifications/local_notification_gateway.dart';
 import '../../widgets/app_widgets.dart';
@@ -104,6 +105,19 @@ class MissedWorkoutSettingsCard extends ConsumerWidget {
               contentPadding: EdgeInsets.zero,
               leading: const Icon(Icons.schedule),
               title: Text(l10n.time),
+              // With training windows the time is only for days without one.
+              subtitle:
+                  ref
+                          .watch(userProfileProvider)
+                          .valueOrNull
+                          ?.trainingWindows
+                          .isEmpty ??
+                      true
+                  ? null
+                  : Text(
+                      l10n.missedWorkoutWindowsNote,
+                      style: const TextStyle(fontSize: 11),
+                    ),
               trailing: Text(
                 TimeOfDay(hour: s.hour, minute: s.minute).format(context),
                 style: const TextStyle(

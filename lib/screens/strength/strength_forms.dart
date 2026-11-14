@@ -607,9 +607,9 @@ class _SetResultFormState extends State<_SetResultForm> {
                 StrengthSetStatus.unrecorded,
               ])
                 ChoiceChip(
-                  avatar: Icon(strengthStatusStyle(s).$1, size: 16),
                   label: Text(s.label),
                   selected: status == s,
+                  showCheckmark: false,
                   onSelected: (_) => setState(() => status = s),
                 ),
             ],

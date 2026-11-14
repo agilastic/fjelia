@@ -9035,4 +9035,77 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get markDoneWithoutActivity => 'Sin actividad';
+
+  @override
+  String get plusAbsence => 'Ausencia';
+
+  @override
+  String get plusAbsenceHint => 'Enfermedad, vacaciones, pretemporada';
+
+  @override
+  String get absenceIllness => 'Enfermo';
+
+  @override
+  String get absenceInjury => 'Lesionado';
+
+  @override
+  String get absenceVacation => 'Vacaciones';
+
+  @override
+  String get absenceOffseason => 'Fuera de temporada';
+
+  @override
+  String get absencePeriod => 'Elegir fechas';
+
+  @override
+  String get absenceNote => 'Nota (opcional)';
+
+  @override
+  String get absenceExplain =>
+      'Las sesiones previstas en este periodo se cancelan y el plan se rehace a su alrededor. Tras una enfermedad o lesión, la primera semana de vuelta es suave y corta.';
+
+  @override
+  String get absenceSave => 'Registrar ausencia';
+
+  @override
+  String get absenceEntered => 'Registradas';
+
+  @override
+  String get absenceRemove => 'Eliminar ausencia';
+
+  @override
+  String get trainingWindowsTitle => 'Horarios de entrenamiento';
+
+  @override
+  String get trainingWindowsHint =>
+      'Marca cuándo puedes entrenar. Los días sin franja pasan a ser de descanso, ninguna sesión dura más que la franja más larga del día y el recordatorio llega una hora antes de que acabe la última franja.';
+
+  @override
+  String get trainingWindowsPaint => 'Puedo entrenar';
+
+  @override
+  String get trainingWindowsErase => 'Sin tiempo';
+
+  @override
+  String get trainingWindowsNotSet =>
+      'Sin definir: el plan usa tus días de descanso';
+
+  @override
+  String get trainingWindowsClear => 'Borrar todo';
+
+  @override
+  String get windowPresetMorning => 'Antes del trabajo';
+
+  @override
+  String get windowPresetLunch => 'Pausa de comida';
+
+  @override
+  String get windowPresetEvening => 'Tarde';
+
+  @override
+  String get windowPresetWeekend => 'Fin de semana';
+
+  @override
+  String get missedWorkoutWindowsNote =>
+      'Con horarios definidos, el recordatorio llega una hora antes de que acabe la última franja; esta hora es para los días sin franja.';
 }

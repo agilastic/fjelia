@@ -9009,4 +9009,77 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get markDoneWithoutActivity => 'Ilman aktiviteettia';
+
+  @override
+  String get plusAbsence => 'Poissaolo';
+
+  @override
+  String get plusAbsenceHint => 'Sairaus, loma, kauden ulkopuoli';
+
+  @override
+  String get absenceIllness => 'Sairas';
+
+  @override
+  String get absenceInjury => 'Loukkaantunut';
+
+  @override
+  String get absenceVacation => 'Loma';
+
+  @override
+  String get absenceOffseason => 'Kauden ulkopuoli';
+
+  @override
+  String get absencePeriod => 'Valitse päivät';
+
+  @override
+  String get absenceNote => 'Muistiinpano (valinnainen)';
+
+  @override
+  String get absenceExplain =>
+      'Jakson suunnitellut harjoitukset perutaan ja suunnitelma rakennetaan uudelleen sen ympärille. Sairauden tai vamman jälkeen ensimmäinen paluuviikko on kevyt ja lyhyt.';
+
+  @override
+  String get absenceSave => 'Merkitse poissaolo';
+
+  @override
+  String get absenceEntered => 'Merkityt';
+
+  @override
+  String get absenceRemove => 'Poista poissaolo';
+
+  @override
+  String get trainingWindowsTitle => 'Harjoitusajat';
+
+  @override
+  String get trainingWindowsHint =>
+      'Merkitse, milloin voit harjoitella. Päivät ilman ikkunaa ovat lepopäiviä, mikään harjoitus ei ole päivän pisintä ikkunaa pidempi, ja muistutus tulee tuntia ennen viimeisen ikkunan loppua.';
+
+  @override
+  String get trainingWindowsPaint => 'Voin harjoitella';
+
+  @override
+  String get trainingWindowsErase => 'Ei aikaa';
+
+  @override
+  String get trainingWindowsNotSet =>
+      'Ei asetettu: suunnitelma käyttää lepopäiviäsi';
+
+  @override
+  String get trainingWindowsClear => 'Tyhjennä kaikki';
+
+  @override
+  String get windowPresetMorning => 'Ennen töitä';
+
+  @override
+  String get windowPresetLunch => 'Lounastauko';
+
+  @override
+  String get windowPresetEvening => 'Ilta';
+
+  @override
+  String get windowPresetWeekend => 'Viikonloppu';
+
+  @override
+  String get missedWorkoutWindowsNote =>
+      'Kun harjoitusajat on asetettu, muistutus tulee tuntia ennen viimeisen ikkunan loppua; tämä aika koskee päiviä ilman ikkunaa.';
 }

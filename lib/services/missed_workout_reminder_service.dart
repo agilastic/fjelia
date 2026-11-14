@@ -2,12 +2,15 @@ import '../l10n/formats.dart';
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math' as math;
 
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../db/database.dart';
+import '../models/training_windows.dart';
 import '../l10n/l10n_ext.dart';
 import '../providers/plan_week_provider.dart';
+import '../providers/user_profile_provider.dart' show UserProfileNotifier;
 import '../utils/log.dart';
 import 'notifications/local_notification_gateway.dart';
 
@@ -125,13 +128,40 @@ class MissedWorkoutReminderService {
     this.gateway, {
     DateTime Function()? now,
     Future<MissedWorkoutSettings> Function()? settings,
+    Future<TrainingWindows> Function()? windows,
   }) : now = now ?? DateTime.now,
-       settings = settings ?? MissedWorkoutSettings.load;
+       settings = settings ?? MissedWorkoutSettings.load,
+       windows = windows ?? _storedWindows;
 
   final AppDatabase db;
   final LocalNotificationGateway gateway;
   final DateTime Function() now;
   final Future<MissedWorkoutSettings> Function() settings;
+
+  /// When the athlete can train; the reminder comes before the day's last
+  /// window ends.
+  final Future<TrainingWindows> Function() windows;
+
+  static Future<TrainingWindows> _storedWindows() async {
+    try {
+      return (await UserProfileNotifier.load()).trainingWindows;
+    } catch (_) {
+      // No profile to read: the set time stands.
+      return const TrainingWindows();
+    }
+  }
+
+  /// When [day]'s reminder is due: an hour before its last training window
+  /// ends, or at the set time on a day without a window.
+  static DateTime dueOn(
+    DateTime day,
+    MissedWorkoutSettings settings,
+    TrainingWindows windows,
+  ) {
+    final end = windows.lastEnd(day.weekday);
+    final minutes = end == null ? settings.minutes : math.max(0, end - 60);
+    return DateTime(day.year, day.month, day.day, minutes ~/ 60, minutes % 60);
+  }
 
   Future<void> _pending = Future.value();
 
@@ -221,6 +251,7 @@ class MissedWorkoutReminderService {
   /// Safe to call often: after a sync, a plan change, a new Health workout.
   Future<void> reconcile() => _serial(() async {
     final s = await settings();
+    final w = await windows();
     final at = now();
     final today = _dateOnly(at);
     final allowed = (await gateway.permission()).allowed;
@@ -230,7 +261,7 @@ class MissedWorkoutReminderService {
     for (var offset = 0; offset < _scheduleDays; offset++) {
       final day = DateTime(today.year, today.month, today.day + offset);
       final id = missedWorkoutNotificationId(day);
-      final due = DateTime(day.year, day.month, day.day, s.hour, s.minute);
+      final due = dueOn(day, s, w);
       final items = await openItems(day, weeks);
       // Nothing open (done, moved, skipped): take it back, also from the
       // notification centre if it was already shown.

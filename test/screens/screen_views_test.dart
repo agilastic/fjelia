@@ -40,6 +40,10 @@ import 'package:fjelia/providers/source_priority_provider.dart';
 import 'package:fjelia/screens/onboarding/connect_garmin_screen.dart';
 import 'package:fjelia/screens/home/home_screen.dart';
 import 'package:fjelia/screens/strain/activity_detail_sheet.dart';
+import 'package:fjelia/screens/settings/training_windows_sheet.dart';
+import 'package:fjelia/widgets/absence_sheet.dart';
+import 'package:fjelia/theme/fjelia_style.dart';
+import 'package:fjelia/providers/user_profile_provider.dart' show UserProfile;
 import 'package:fjelia/screens/activities/activities_screen.dart';
 import 'package:fjelia/screens/strain/strain_screen.dart';
 import 'package:fjelia/screens/activities/load_metric_sheet.dart';
@@ -416,7 +420,11 @@ void main() {
     String name, {
     FakeWorkoutGarmin? garmin,
     Locale? locale,
+    bool light = false,
   }) async {
+    // LightFjelia for a check of both looks; the getters read it directly.
+    Fjelia.style = light ? FjeliaStyle.light : FjeliaStyle.dark;
+    addTearDown(() => Fjelia.style = FjeliaStyle.dark);
     final referenceLoad =
         Platform.environment['FJELIA_UI_PREVIEW_DIR'] != null &&
         name.startsWith('load');
@@ -493,7 +501,7 @@ void main() {
             supportedLocales: AppLocalizations.supportedLocales,
             locale: locale,
             debugShowCheckedModeBanner: false,
-            theme: AppTheme.dark(),
+            theme: light ? AppTheme.light() : AppTheme.dark(),
             home: Scaffold(body: SafeArea(child: view)),
           ),
         ),
@@ -1648,6 +1656,87 @@ void main() {
     await tester.tap(find.text('Use original title'));
     await tester.pumpAndSettle();
     expect((await db.getActivityById(row.activityId))!.name, original);
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(Duration.zero);
+    await tester.binding.setSurfaceSize(null);
+  });
+  testWidgets('training times are painted like a router schedule', (
+    tester,
+  ) async {
+    await render(tester, const TrainingWindowsSheet(), 'training-windows');
+    await tester.tap(find.textContaining('Evening'));
+    await tester.pump();
+    // Saturday morning, swiped from 8 to 12.
+    final saturday = find.byKey(const Key('training-window-day-6'));
+    final box = tester.getRect(saturday);
+    await tester.dragFrom(
+      Offset(box.left + box.width * 8 / 24 + 1, box.center.dy),
+      Offset(box.width * 4 / 24, 0),
+    );
+    await tester.pump();
+    await capture(tester, 'training-windows');
+    await tester.scrollUntilVisible(
+      find.text('Save'),
+      200,
+      scrollable: find.byType(Scrollable).last,
+    );
+    expect(find.textContaining(RegExp(r'^8:00–12:')), findsOneWidget);
+    expect(find.text('17:00–21:00'), findsNWidgets(5));
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    final raw = await const FlutterSecureStorage().read(key: 'user_profile_v1');
+    final saved = UserProfile.fromJson(
+      jsonDecode(raw!) as Map<String, dynamic>,
+    );
+    expect(saved.trainingWindows.lastEnd(1), 21 * 60);
+    expect(saved.planRestDays, containsAll([7]));
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(Duration.zero);
+    await tester.binding.setSurfaceSize(null);
+  });
+  testWidgets('an absence is entered from the plus menu', (tester) async {
+    await render(tester, const AbsenceSheet(), 'absence');
+    expect(find.text('Illness'), findsOneWidget);
+    expect(find.text('Off-season'), findsOneWidget);
+    await tester.tap(find.text('Holiday'));
+    await tester.pump();
+    await capture(tester, 'absence');
+    // Nothing to save before a period is chosen.
+    expect(
+      tester
+          .widget<FilledButton>(
+            find.ancestor(
+              of: find.text('Enter absence'),
+              matching: find.byType(FilledButton),
+            ),
+          )
+          .onPressed,
+      isNull,
+    );
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(Duration.zero);
+    await tester.binding.setSurfaceSize(null);
+  });
+  testWidgets('the new sheets read well in LightFjelia', (tester) async {
+    await render(
+      tester,
+      const TrainingWindowsSheet(),
+      'training-windows-light',
+      light: true,
+    );
+    await tester.tap(find.textContaining('Evening'));
+    await tester.tap(find.textContaining('Weekend'));
+    await tester.pump();
+    await capture(tester, 'training-windows-light');
+    await render(tester, const AbsenceSheet(), 'absence-light', light: true);
+    final row = (await db.select(db.activityRecords).get()).single;
+    await render(
+      tester,
+      ActivityDetailSheet(activity: row),
+      'activity-sport-light',
+      light: true,
+    );
+    expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox());
     await tester.pump(Duration.zero);
     await tester.binding.setSurfaceSize(null);

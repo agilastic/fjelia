@@ -8977,4 +8977,77 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get markDoneWithoutActivity => 'Uten aktivitet';
+
+  @override
+  String get plusAbsence => 'Fravær';
+
+  @override
+  String get plusAbsenceHint => 'Syk, ferie, off-season';
+
+  @override
+  String get absenceIllness => 'Syk';
+
+  @override
+  String get absenceInjury => 'Skadet';
+
+  @override
+  String get absenceVacation => 'Ferie';
+
+  @override
+  String get absenceOffseason => 'Off-season';
+
+  @override
+  String get absencePeriod => 'Velg datoer';
+
+  @override
+  String get absenceNote => 'Notat (valgfritt)';
+
+  @override
+  String get absenceExplain =>
+      'Planlagte økter i perioden avlyses, og planen bygges på nytt rundt den. Etter sykdom eller skade er den første uken tilbake rolig og kort.';
+
+  @override
+  String get absenceSave => 'Legg inn fravær';
+
+  @override
+  String get absenceEntered => 'Lagt inn';
+
+  @override
+  String get absenceRemove => 'Fjern fravær';
+
+  @override
+  String get trainingWindowsTitle => 'Treningstider';
+
+  @override
+  String get trainingWindowsHint =>
+      'Marker når du kan trene. Dager uten vindu blir hviledager, ingen økt planlegges lenger enn dagens lengste vindu, og påminnelsen kommer en time før det siste vinduet slutter.';
+
+  @override
+  String get trainingWindowsPaint => 'Kan trene';
+
+  @override
+  String get trainingWindowsErase => 'Ikke tid';
+
+  @override
+  String get trainingWindowsNotSet =>
+      'Ikke satt: planen bruker hviledagene dine';
+
+  @override
+  String get trainingWindowsClear => 'Fjern alt';
+
+  @override
+  String get windowPresetMorning => 'Før jobb';
+
+  @override
+  String get windowPresetLunch => 'Lunsjpause';
+
+  @override
+  String get windowPresetEvening => 'Kveld';
+
+  @override
+  String get windowPresetWeekend => 'Helg';
+
+  @override
+  String get missedWorkoutWindowsNote =>
+      'Med treningstider kommer påminnelsen en time før det siste vinduet slutter; dette klokkeslettet gjelder dager uten vindu.';
 }

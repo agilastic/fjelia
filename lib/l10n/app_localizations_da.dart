@@ -8974,4 +8974,76 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get markDoneWithoutActivity => 'Uden aktivitet';
+
+  @override
+  String get plusAbsence => 'Fravær';
+
+  @override
+  String get plusAbsenceHint => 'Syg, ferie, off-season';
+
+  @override
+  String get absenceIllness => 'Syg';
+
+  @override
+  String get absenceInjury => 'Skadet';
+
+  @override
+  String get absenceVacation => 'Ferie';
+
+  @override
+  String get absenceOffseason => 'Off-season';
+
+  @override
+  String get absencePeriod => 'Vælg datoer';
+
+  @override
+  String get absenceNote => 'Note (valgfri)';
+
+  @override
+  String get absenceExplain =>
+      'Planlagte træninger i perioden aflyses, og planen bygges igen omkring den. Efter sygdom eller skade er den første uge tilbage let og kort.';
+
+  @override
+  String get absenceSave => 'Registrér fravær';
+
+  @override
+  String get absenceEntered => 'Registreret';
+
+  @override
+  String get absenceRemove => 'Fjern fravær';
+
+  @override
+  String get trainingWindowsTitle => 'Træningstider';
+
+  @override
+  String get trainingWindowsHint =>
+      'Markér, hvornår du kan træne. Dage uden vindue bliver hviledage, ingen træning planlægges længere end dagens længste vindue, og påmindelsen kommer en time før det sidste vindue slutter.';
+
+  @override
+  String get trainingWindowsPaint => 'Kan træne';
+
+  @override
+  String get trainingWindowsErase => 'Ingen tid';
+
+  @override
+  String get trainingWindowsNotSet => 'Ikke sat: planen bruger dine hviledage';
+
+  @override
+  String get trainingWindowsClear => 'Ryd alt';
+
+  @override
+  String get windowPresetMorning => 'Før arbejde';
+
+  @override
+  String get windowPresetLunch => 'Frokostpause';
+
+  @override
+  String get windowPresetEvening => 'Aften';
+
+  @override
+  String get windowPresetWeekend => 'Weekend';
+
+  @override
+  String get missedWorkoutWindowsNote =>
+      'Med træningstider kommer påmindelsen en time før det sidste vindue slutter; dette tidspunkt gælder dage uden vindue.';
 }

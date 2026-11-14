@@ -9051,4 +9051,77 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get markDoneWithoutActivity => 'Ohne Aktivität';
+
+  @override
+  String get plusAbsence => 'Abwesenheit';
+
+  @override
+  String get plusAbsenceHint => 'Krank, Urlaub, Offseason';
+
+  @override
+  String get absenceIllness => 'Krankheit';
+
+  @override
+  String get absenceInjury => 'Verletzung';
+
+  @override
+  String get absenceVacation => 'Urlaub';
+
+  @override
+  String get absenceOffseason => 'Offseason';
+
+  @override
+  String get absencePeriod => 'Zeitraum wählen';
+
+  @override
+  String get absenceNote => 'Notiz (optional)';
+
+  @override
+  String get absenceExplain =>
+      'Geplante Einheiten in diesem Zeitraum werden abgesagt und der Plan wird darum herum neu gebaut. Nach Krankheit oder Verletzung ist die erste Woche danach locker und kurz.';
+
+  @override
+  String get absenceSave => 'Abwesenheit eintragen';
+
+  @override
+  String get absenceEntered => 'Eingetragen';
+
+  @override
+  String get absenceRemove => 'Abwesenheit entfernen';
+
+  @override
+  String get trainingWindowsTitle => 'Trainingszeiten';
+
+  @override
+  String get trainingWindowsHint =>
+      'Markiere, wann du trainieren kannst. Tage ohne Zeitfenster werden Ruhetage, keine Einheit wird länger geplant als das längste Fenster des Tages, und die Erinnerung kommt eine Stunde vor Ende des letzten Fensters.';
+
+  @override
+  String get trainingWindowsPaint => 'Training möglich';
+
+  @override
+  String get trainingWindowsErase => 'Keine Zeit';
+
+  @override
+  String get trainingWindowsNotSet =>
+      'Nicht festgelegt: Der Plan nutzt deine Ruhetage';
+
+  @override
+  String get trainingWindowsClear => 'Alles löschen';
+
+  @override
+  String get windowPresetMorning => 'Vor der Arbeit';
+
+  @override
+  String get windowPresetLunch => 'Mittagspause';
+
+  @override
+  String get windowPresetEvening => 'Abends';
+
+  @override
+  String get windowPresetWeekend => 'Wochenende';
+
+  @override
+  String get missedWorkoutWindowsNote =>
+      'Mit Trainingszeiten kommt die Erinnerung eine Stunde vor Ende des letzten Fensters; diese Uhrzeit gilt für Tage ohne Fenster.';
 }

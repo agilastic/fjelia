@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../models/training_windows.dart';
+
 final userProfileProvider =
     AsyncNotifierProvider<UserProfileNotifier, UserProfile>(
       UserProfileNotifier.new,
@@ -22,6 +24,7 @@ class UserProfile {
     this.raceGoals,
     this.trainingDaysPerWeek = 5,
     this.restDays = const [7],
+    this.trainingWindows = const TrainingWindows(),
     this.preferredStrengthDays = const [3],
     this.maxSessionsPerDay = 1,
     this.hoursPerWeek = 8,
@@ -59,6 +62,12 @@ class UserProfile {
 
   /// ISO weekdays (1 = Monday).
   final List<int> restDays;
+
+  /// When in the week training fits; empty when not set.
+  final TrainingWindows trainingWindows;
+
+  /// The rest days the plan uses, with the days without a training window.
+  List<int> get planRestDays => trainingWindows.restDaysWith(restDays);
   final List<int> preferredStrengthDays;
   final int maxSessionsPerDay;
   final double hoursPerWeek;
@@ -114,6 +123,7 @@ class UserProfile {
     'raceGoals': raceGoals,
     'trainingDaysPerWeek': trainingDaysPerWeek,
     'restDays': restDays,
+    'trainingWindows': trainingWindows.toJson(),
     'preferredStrengthDays': preferredStrengthDays,
     'maxSessionsPerDay': maxSessionsPerDay,
     'hoursPerWeek': hoursPerWeek,
@@ -150,6 +160,7 @@ class UserProfile {
       raceGoals: json['raceGoals'] as String?,
       trainingDaysPerWeek: (json['trainingDaysPerWeek'] as num?)?.toInt() ?? 5,
       restDays: (json['restDays'] as List?)?.cast<int>() ?? const [7],
+      trainingWindows: TrainingWindows.fromJson(json['trainingWindows']),
       preferredStrengthDays:
           (json['preferredStrengthDays'] as List?)?.cast<int>() ?? const [3],
       maxSessionsPerDay: (json['maxSessionsPerDay'] as num?)?.toInt() ?? 1,
@@ -190,6 +201,7 @@ class UserProfile {
     String? raceGoals,
     int? trainingDaysPerWeek,
     List<int>? restDays,
+    TrainingWindows? trainingWindows,
     List<int>? preferredStrengthDays,
     int? maxSessionsPerDay,
     double? hoursPerWeek,
@@ -218,6 +230,7 @@ class UserProfile {
     raceGoals: raceGoals ?? this.raceGoals,
     trainingDaysPerWeek: trainingDaysPerWeek ?? this.trainingDaysPerWeek,
     restDays: restDays ?? this.restDays,
+    trainingWindows: trainingWindows ?? this.trainingWindows,
     preferredStrengthDays: preferredStrengthDays ?? this.preferredStrengthDays,
     maxSessionsPerDay: maxSessionsPerDay ?? this.maxSessionsPerDay,
     hoursPerWeek: hoursPerWeek ?? this.hoursPerWeek,
@@ -242,7 +255,11 @@ class UserProfileNotifier extends AsyncNotifier<UserProfile> {
   static const _key = 'user_profile_v1';
 
   @override
-  Future<UserProfile> build() async {
+  Future<UserProfile> build() => load();
+
+  /// The stored profile, also where no provider is at hand (a background
+  /// wake-up scheduling reminders).
+  static Future<UserProfile> load() async {
     final raw = await _storage.read(key: _key);
     if (raw == null) return const UserProfile();
     try {

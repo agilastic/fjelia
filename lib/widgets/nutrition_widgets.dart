@@ -1071,22 +1071,10 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
 
   Widget _gutPicker(BuildContext context) {
     const options = [
-      (
-        'Comfortable',
-        Icons.sentiment_very_satisfied_rounded,
-        Color(0xFF66BB6A),
-      ),
-      ('Mild symptoms', Icons.sentiment_neutral_rounded, Color(0xFFFFCA28)),
-      (
-        'Moderate symptoms',
-        Icons.sentiment_dissatisfied_rounded,
-        Color(0xFFFF9800),
-      ),
-      (
-        'Severe symptoms',
-        Icons.sentiment_very_dissatisfied_rounded,
-        Color(0xFFEF5350),
-      ),
+      'Comfortable',
+      'Mild symptoms',
+      'Moderate symptoms',
+      'Severe symptoms',
     ];
     return Wrap(
       spacing: 8,
@@ -1095,15 +1083,12 @@ class _IntakeState extends ConsumerState<NutritionIntakeSheet> {
         for (final o in options)
           ChoiceChip(
             showCheckmark: false,
-            avatar: Icon(o.$2, size: 20, color: gut == o.$1 ? o.$3 : muted),
-            label: Text(_choiceLabel(context, o.$1)),
-            selected: gut == o.$1,
-            selectedColor: o.$3.withValues(alpha: .2),
-            side: BorderSide(color: gut == o.$1 ? o.$3 : fjInk12),
+            label: Text(_choiceLabel(context, o)),
+            selected: gut == o,
             onSelected: busy
                 // Tapping the chosen one again clears it.
                 ? null
-                : (on) => setState(() => gut = on ? o.$1 : 'Not recorded'),
+                : (on) => setState(() => gut = on ? o : 'Not recorded'),
           ),
       ],
     );

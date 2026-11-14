@@ -16,6 +16,7 @@ import '../../widgets/hilo_cuff_measurement_sheet.dart';
 import '../../widgets/omron_ble_import_sheet.dart';
 import '../../widgets/polar_h10_hrv_sheet.dart';
 import '../../widgets/waist_sheet.dart';
+import '../../widgets/absence_sheet.dart';
 import '../../widgets/ecg_sheet.dart';
 import '../../widgets/sleep_ecg_recording_sheet.dart';
 import '../../widgets/manual_activity_sheet.dart';
@@ -382,6 +383,8 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
         showAppSheet(context, const WaistSheet());
       case 'Import':
         showAppSheet(context, const ImportSheet());
+      case 'Absence':
+        showAppSheet(context, const AbsenceSheet());
       case 'Hilo Cuff (BLE)':
         showAppSheet(context, const HiloCuffMeasurementSheet());
       case 'Omron BLE':
@@ -413,6 +416,12 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
             Icons.download_rounded,
             l.plusImport,
             l.plusImportHint,
+          ),
+          _Entry(
+            'Absence',
+            Icons.event_busy_rounded,
+            l.plusAbsence,
+            l.plusAbsenceHint,
           ),
         ],
       ),

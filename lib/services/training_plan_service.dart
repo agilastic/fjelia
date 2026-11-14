@@ -1419,6 +1419,7 @@ class TrainingPlanService {
     int? targetFinishSeconds,
     int daysPerWeek = 5,
     List<int> restDays = const [7],
+    Map<int, int> dayCapMinutes = const {},
     List<int> strengthDays = const [3],
     double hoursPerWeek = 8.0,
     int maxSessionsPerDay = 1,
@@ -1439,6 +1440,7 @@ class TrainingPlanService {
       targetFinishSeconds: targetFinishSeconds,
       daysPerWeek: daysPerWeek,
       restDays: restDays,
+      dayCapMinutes: dayCapMinutes,
       strengthDays: strengthDays,
       hoursPerWeek: hoursPerWeek,
       maxSessionsPerDay: maxSessionsPerDay,
@@ -1461,6 +1463,7 @@ class TrainingPlanService {
     int? targetFinishSeconds,
     int daysPerWeek = 5,
     List<int> restDays = const [7],
+    Map<int, int> dayCapMinutes = const {},
     List<int> strengthDays = const [3],
     double hoursPerWeek = 8.0,
     int maxSessionsPerDay = 1,
@@ -1738,6 +1741,32 @@ class TrainingPlanService {
         if (k.status == 'skipped' && isHealth(skipReasons[k.id]))
           _day(k.sessionDate),
     };
+    // Absences the athlete entered: no session on their days. The first
+    // week back from an illness or injury is easy and short.
+    final easeInDays = <DateTime>{};
+    for (final a in await _db.absencesBetween(
+      _addDays(today, -7),
+      DateTime(today.year + 3),
+    )) {
+      final last = _day(a.endDay);
+      for (var d = _day(a.startDay); !d.isAfter(last); d = _addDays(d, 1)) {
+        healthDays.add(d);
+      }
+      if (a.kind == 'illness' || a.kind == 'injury') {
+        for (var i = 1; i <= 7; i++) {
+          easeInDays.add(_addDays(last, i));
+        }
+      }
+    }
+    easeInDays.removeAll(healthDays);
+    // The longest session a day has room for: its training window, and at
+    // most 45 minutes in a first week back.
+    int? capOn(DateTime date) {
+      final window = dayCapMinutes[date.weekday];
+      if (!easeInDays.contains(date)) return window;
+      return math.min(window ?? 45, 45);
+    }
+
     // Training already done today that no session accounts for: it is real
     // load, so it takes its day and its minutes out of the plan.
     final doneToday = <({DateTime day, int minutes})>[];
@@ -1914,7 +1943,15 @@ class TrainingPlanService {
       // Hard sessions: capped by experience; athletes who rarely train hard
       // get one moderate (tempo) key session in the first two weeks.
       final easyStart = history.mostlyEasy && w < 2;
-      final maxKeys = easyStart ? 1 : athlete.maxKeySessions;
+      final easingIn = List.generate(
+        7,
+        (i) => _addDays(_addDays(anchorWeek, g * 7), i),
+      ).any(easeInDays.contains);
+      final maxKeys = easingIn
+          ? 0
+          : easyStart
+          ? 1
+          : athlete.maxKeySessions;
       var keys = 0;
       for (var i = 0; i < slots.length; i++) {
         final s = slots[i];
@@ -2065,7 +2102,11 @@ class TrainingPlanService {
             capacities: capacities,
             weekInRun: w,
             weekIndex: g,
-            maxKeySessions: easyStart ? 1 : athlete.maxKeySessions,
+            maxKeySessions: easingIn
+                ? 0
+                : easyStart
+                ? 1
+                : athlete.maxKeySessions,
             easyStart: easyStart,
             varietySports: varietySports,
             footLongCap: (goal) => maxLongRunMinutes(
@@ -2129,7 +2170,30 @@ class TrainingPlanService {
           }
           candidates.add(off);
         }
+        // The first week back from an illness or injury has no hard or
+        // long session.
+        if (s.sessionType == 'key' || s.sessionType == 'long') {
+          candidates.removeWhere(
+            (off) => easeInDays.contains(_addDays(weekStart, off)),
+          );
+        }
         if (candidates.isEmpty) return null;
+        // A day whose training window is too short for the session is used
+        // only when no day has room for it.
+        final wanted = s.sport == 'strength'
+            ? null
+            : s.targetMin ?? (s.sessionType == 'long' ? 90 : null);
+        if (wanted != null) {
+          final fits = [
+            for (final off in candidates)
+              if ((capOn(_addDays(weekStart, off)) ?? wanted) >= wanted) off,
+          ];
+          if (fits.isNotEmpty) {
+            candidates
+              ..clear()
+              ..addAll(fits);
+          }
+        }
         // Strength days are the athlete's own choice in the settings: a
         // strength session takes its day whenever that day is open at all.
         if (s.sport == 'strength' && s.weekday != 0) {
@@ -2348,6 +2412,11 @@ class TrainingPlanService {
           }
         }
         duration = duration.clamp(slot.minMin ?? 20, slot.maxMin ?? 240);
+        // No longer than the day's training window or a first week back.
+        final dayCap = capOn(date);
+        if (dayCap != null && duration > dayCap) {
+          duration = math.max(20, dayCap);
+        }
 
         // The workout is chosen first and its steps decide the duration, so
         // what the app shows, what the load estimate counts and what the watch
@@ -2733,6 +2802,7 @@ class TrainingPlanService {
     required String reason,
     int daysPerWeek = 5,
     List<int> restDays = const [7],
+    Map<int, int> dayCapMinutes = const {},
     List<int> strengthDays = const [3],
     double hoursPerWeek = 8.0,
     int maxSessionsPerDay = 1,
@@ -2745,6 +2815,7 @@ class TrainingPlanService {
       reason: reason,
       daysPerWeek: daysPerWeek,
       restDays: restDays,
+      dayCapMinutes: dayCapMinutes,
       strengthDays: strengthDays,
       hoursPerWeek: hoursPerWeek,
       maxSessionsPerDay: maxSessionsPerDay,
@@ -2759,6 +2830,7 @@ class TrainingPlanService {
     required String reason,
     int daysPerWeek = 5,
     List<int> restDays = const [7],
+    Map<int, int> dayCapMinutes = const {},
     List<int> strengthDays = const [3],
     double hoursPerWeek = 8.0,
     int maxSessionsPerDay = 1,
@@ -2802,6 +2874,7 @@ class TrainingPlanService {
       targetFinishSeconds: goal?.targetSeconds,
       daysPerWeek: daysPerWeek,
       restDays: restDays,
+      dayCapMinutes: dayCapMinutes,
       strengthDays: strengthDays,
       hoursPerWeek: hoursPerWeek,
       maxSessionsPerDay: maxSessionsPerDay,

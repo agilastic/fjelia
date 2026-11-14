@@ -9055,4 +9055,77 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get markDoneWithoutActivity => 'Sans activité';
+
+  @override
+  String get plusAbsence => 'Absence';
+
+  @override
+  String get plusAbsenceHint => 'Malade, vacances, intersaison';
+
+  @override
+  String get absenceIllness => 'Malade';
+
+  @override
+  String get absenceInjury => 'Blessé';
+
+  @override
+  String get absenceVacation => 'Vacances';
+
+  @override
+  String get absenceOffseason => 'Intersaison';
+
+  @override
+  String get absencePeriod => 'Choisir les dates';
+
+  @override
+  String get absenceNote => 'Note (facultatif)';
+
+  @override
+  String get absenceExplain =>
+      'Les séances prévues pendant cette période sont annulées et le plan est reconstruit autour. Après une maladie ou une blessure, la première semaine de reprise est facile et courte.';
+
+  @override
+  String get absenceSave => 'Enregistrer l\'absence';
+
+  @override
+  String get absenceEntered => 'Enregistrées';
+
+  @override
+  String get absenceRemove => 'Supprimer l\'absence';
+
+  @override
+  String get trainingWindowsTitle => 'Créneaux d\'entraînement';
+
+  @override
+  String get trainingWindowsHint =>
+      'Indique quand tu peux t\'entraîner. Les jours sans créneau deviennent des jours de repos, aucune séance n\'est plus longue que le plus long créneau du jour, et le rappel arrive une heure avant la fin du dernier créneau.';
+
+  @override
+  String get trainingWindowsPaint => 'Entraînement possible';
+
+  @override
+  String get trainingWindowsErase => 'Pas de temps';
+
+  @override
+  String get trainingWindowsNotSet =>
+      'Non défini : le plan utilise tes jours de repos';
+
+  @override
+  String get trainingWindowsClear => 'Tout effacer';
+
+  @override
+  String get windowPresetMorning => 'Avant le travail';
+
+  @override
+  String get windowPresetLunch => 'Pause déjeuner';
+
+  @override
+  String get windowPresetEvening => 'Soir';
+
+  @override
+  String get windowPresetWeekend => 'Week-end';
+
+  @override
+  String get missedWorkoutWindowsNote =>
+      'Avec des créneaux définis, le rappel arrive une heure avant la fin du dernier créneau ; cette heure sert aux jours sans créneau.';
 }

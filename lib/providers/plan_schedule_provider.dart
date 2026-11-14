@@ -1,9 +1,15 @@
 import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'dart:async';
+
+import '../db/database.dart';
+import '../services/absence_service.dart';
 import '../services/replan_triggers.dart';
 import '../services/strength/strength_templates.dart';
 import 'database_provider.dart';
+import 'day_data_provider.dart' show scheduledWorkoutsProvider;
+import 'missed_workout_provider.dart' show missedWorkoutReminderProvider;
 import 'planner_providers.dart';
 import 'user_profile_provider.dart';
 import 'workout_generation_provider.dart' show planAthleteOf;
@@ -25,7 +31,7 @@ final planScheduleOutdatedProvider = FutureProvider<bool>((ref) async {
   return scheduleChanged(
     planRestDaysJson: plan.restDaysJson,
     planStrengthDaysJson: plan.strengthDaysJson,
-    restDays: profile.restDays,
+    restDays: profile.planRestDays,
     strengthDays: profile.preferredStrengthDays,
   );
 });
@@ -82,6 +88,57 @@ final applyScheduleProvider = Provider<Future<void> Function()>(
       () => _replanActive(ref, 'Your weekly schedule changed'),
 );
 
+/// Absences, the latest first.
+final absencesProvider = StreamProvider<List<Absence>>(
+  (ref) => ref.watch(databaseProvider).watchAbsences(),
+);
+
+final absenceServiceProvider = Provider(
+  (ref) => AbsenceService(
+    ref.watch(databaseProvider),
+    ref.watch(planSessionActionsProvider),
+  ),
+);
+
+/// Enters an absence, cancels its sessions and builds the plan around it.
+final addAbsenceProvider =
+    Provider<
+      Future<void> Function({
+        required String kind,
+        required DateTime start,
+        required DateTime end,
+        String? note,
+      })
+    >(
+      (ref) =>
+          ({
+            required String kind,
+            required DateTime start,
+            required DateTime end,
+            String? note,
+          }) async {
+            await ref
+                .read(absenceServiceProvider)
+                .add(kind: kind, start: start, end: end, note: note);
+            await _afterAbsenceChange(ref, 'Absence entered: $kind');
+          },
+    );
+
+/// Removes an absence; what it cancelled ahead is planned again.
+final removeAbsenceProvider = Provider<Future<void> Function(Absence)>(
+  (ref) => (absence) async {
+    await ref.read(absenceServiceProvider).remove(absence);
+    await _afterAbsenceChange(ref, 'Absence removed: ${absence.kind}');
+  },
+);
+
+Future<void> _afterAbsenceChange(Ref ref, String reason) async {
+  await _replanActive(ref, reason);
+  ref.invalidate(sessionSkipReasonsProvider);
+  ref.invalidate(scheduledWorkoutsProvider);
+  unawaited(ref.read(missedWorkoutReminderProvider).reconcile());
+}
+
 Future<void> _replanActive(Ref ref, String reason) async {
   final db = ref.read(databaseProvider);
   final plan =
@@ -99,7 +156,8 @@ Future<void> _replanActive(Ref ref, String reason) async {
         planId: plan.id,
         reason: reason,
         daysPerWeek: profile.trainingDaysPerWeek,
-        restDays: profile.restDays,
+        restDays: profile.planRestDays,
+        dayCapMinutes: profile.trainingWindows.dayCapMinutes(),
         strengthDays: profile.preferredStrengthDays,
         hoursPerWeek: profile.hoursPerWeek,
         maxSessionsPerDay: profile.maxSessionsPerDay,

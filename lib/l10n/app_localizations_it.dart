@@ -9027,4 +9027,77 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get markDoneWithoutActivity => 'Senza attività';
+
+  @override
+  String get plusAbsence => 'Assenza';
+
+  @override
+  String get plusAbsenceHint => 'Malattia, vacanza, off-season';
+
+  @override
+  String get absenceIllness => 'Malato';
+
+  @override
+  String get absenceInjury => 'Infortunato';
+
+  @override
+  String get absenceVacation => 'Vacanza';
+
+  @override
+  String get absenceOffseason => 'Off-season';
+
+  @override
+  String get absencePeriod => 'Scegli le date';
+
+  @override
+  String get absenceNote => 'Nota (facoltativa)';
+
+  @override
+  String get absenceExplain =>
+      'Le sessioni previste in questo periodo vengono annullate e il piano viene ricostruito attorno. Dopo una malattia o un infortunio la prima settimana di ripresa è facile e breve.';
+
+  @override
+  String get absenceSave => 'Inserisci l\'assenza';
+
+  @override
+  String get absenceEntered => 'Inserite';
+
+  @override
+  String get absenceRemove => 'Rimuovi l\'assenza';
+
+  @override
+  String get trainingWindowsTitle => 'Orari di allenamento';
+
+  @override
+  String get trainingWindowsHint =>
+      'Segna quando puoi allenarti. I giorni senza fascia diventano giorni di riposo, nessuna sessione è più lunga della fascia più lunga del giorno e il promemoria arriva un\'ora prima della fine dell\'ultima fascia.';
+
+  @override
+  String get trainingWindowsPaint => 'Posso allenarmi';
+
+  @override
+  String get trainingWindowsErase => 'Niente tempo';
+
+  @override
+  String get trainingWindowsNotSet =>
+      'Non impostato: il piano usa i tuoi giorni di riposo';
+
+  @override
+  String get trainingWindowsClear => 'Cancella tutto';
+
+  @override
+  String get windowPresetMorning => 'Prima del lavoro';
+
+  @override
+  String get windowPresetLunch => 'Pausa pranzo';
+
+  @override
+  String get windowPresetEvening => 'Sera';
+
+  @override
+  String get windowPresetWeekend => 'Weekend';
+
+  @override
+  String get missedWorkoutWindowsNote =>
+      'Con gli orari impostati, il promemoria arriva un\'ora prima della fine dell\'ultima fascia; quest\'ora vale per i giorni senza fascia.';
 }

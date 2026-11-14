@@ -914,12 +914,13 @@ class _SwipeSessionTile extends ConsumerWidget {
       borderRadius: 14,
       deleteLabel: context.l10n.done,
       deleteIcon: Icons.check_rounded,
-      deleteColors: const [Color(0xFF00D4A0), Color(0xFF22D3E6)],
+      deleteColors: doneGradient,
       foldOnDelete: false,
       onDelete: done ? null : () => _markDone(context, ref),
       coachLabel: context.l10n.markNotDone,
       coachIcon: Icons.undo_rounded,
-      coachColors: const [Color(0xFFFFAA42), Color(0xFFFF7A45)],
+      // Undoing is attention, not danger: the amber to pink pair.
+      coachColors: const [Color(0xFFFFB13D), Color(0xFFFF4D8D)],
       onCoach: done
           ? () => runUiAction(context, () async {
               await ref.read(postWorkoutScorerProvider).reopen(session);

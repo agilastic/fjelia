@@ -517,6 +517,19 @@ class ActivitySports extends Table {
   Set<Column> get primaryKey => {activityId};
 }
 
+/// A time the athlete cannot train as planned: `illness`, `injury`,
+/// `vacation` or `offseason`, from [startDay] to [endDay] (both included).
+/// Its days get no sessions; after an illness or injury the first week back
+/// is easy.
+class Absences extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get kind => text()();
+  DateTimeColumn get startDay => dateTime()();
+  DateTimeColumn get endDay => dateTime()();
+  TextColumn get note => text().nullable()();
+  DateTimeColumn get createdAt => dateTime()();
+}
+
 /// An activity the athlete deleted. It stays deleted: no sync brings it
 /// back while this row exists. [summaryJson] is the activity without its
 /// route and curves, enough to list it and to restore it before its source
@@ -1425,6 +1438,7 @@ List<BpMeasurement> _validBpRows(List<BpMeasurement> rows) =>
     DeletedActivities,
     ActivityTitles,
     ActivitySports,
+    Absences,
     SpotHrvMeasurements,
     EcgRecordings,
     EcgSampleChunks,
@@ -1479,7 +1493,7 @@ class AppDatabase extends _$AppDatabase {
       defaultSourcePriorities[group.name]!;
 
   @override
-  int get schemaVersion => 69;
+  int get schemaVersion => 70;
 
   Future<void> saveHeartRateSamples(List<TimedHeartRate> samples) async {
     if (samples.isEmpty) return;
@@ -2037,6 +2051,20 @@ class AppDatabase extends _$AppDatabase {
           ..where((t) => t.activityId.equals(activityId)))
         .write(ActivityRecordsCompanion(type: Value(had.originalType)));
   });
+
+  /// Absences, the latest first.
+  Stream<List<Absence>> watchAbsences() => (select(
+    absences,
+  )..orderBy([(t) => OrderingTerm.desc(t.startDay)])).watch();
+
+  /// Absences that touch [from] .. [to] (days, both included).
+  Future<List<Absence>> absencesBetween(DateTime from, DateTime to) =>
+      (select(absences)..where(
+            (t) =>
+                t.startDay.isSmallerOrEqualValue(to) &
+                t.endDay.isBiggerOrEqualValue(from),
+          ))
+          .get();
 
   Future<ActivitySport?> activitySport(String activityId) => (select(
     activitySports,
@@ -3455,6 +3483,7 @@ class AppDatabase extends _$AppDatabase {
         );
       }
       if (from < 69) await m.createTable(activitySports);
+      if (from < 70) await m.createTable(absences);
     },
   );
 

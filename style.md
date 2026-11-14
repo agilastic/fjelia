@@ -56,7 +56,11 @@ One card gets one pair. A screen should not use more than about three pairs.
 - **Accordion card**: long content folds. Folded, it shows a title, its switches and one line of highlights that take turns. Tap anywhere on it (title, figures, empty space) to unfold, and tap the content again to fold. Switches and chips inside keep their own taps. It unfolds with `AnimatedSize`.
 - **Chevron**: every foldable item uses the same chevron, like an `ExpansionTile`. It is `Icons.expand_more` at 26–28 in `fjInk`, centred vertically on the right of the folded item, never a small muted icon next to the chips. It turns half a turn when open. Examples: the season card on the plan, `SportStatsCard` on the LOAD screen.
 - **Figures**: no decimals in overview figures; thousands separators; whole hours from 100 h. Long numbers sit two by two, never four in one row.
-- **Chips**: glassy chips on painted backgrounds (`white` at 16 % with a 30 % border), plain `ChoiceChip`s elsewhere.
+- **Chips**: glassy chips on painted backgrounds (`white` at 16 % with a 30 % border), plain `ChoiceChip`s elsewhere. A choice chip is text only: no icon (`avatar`), no checkmark (`showCheckmark: false`), one or two words, nouns rather than adjectives ("Illness", not "Ill"). The chosen one is filled by the theme; colour per option goes into what is shown afterwards (a list row, a tile), not into the chip.
+- **Buttons**: always the theme's `FilledButton`, `OutlinedButton`, `TextButton` or `SegmentedButton`.
+  - A sheet or form has one main action, a plain `FilledButton` without an icon, full width at the end ("Save", "Enter absence"). It is disabled until the input is complete; while it works it shows a small spinner instead of its text.
+  - An icon goes into a button only when it says what happens on the tap: a picker it opens (calendar for dates), a share, a watch upload, a plan action that sits next to similar ones ("Mark as rest", "Change sport"). Then use `.icon(...)` with an 18–20 icon in the button's own colour, never a coloured icon of its own.
+  - Two or more modes or tools of one control (brush and eraser, units) are a `SegmentedButton` without the selected checkmark, never self-made toggles.
 
 ## One look on every tab
 
@@ -132,7 +136,8 @@ All four tabs follow this: STATUS (briefing, blood pressure, heart rate, grip, b
 
 ## Don'ts
 
-- No custom gradient, glowing or pill buttons. Use the theme's buttons.
+- No custom gradient, glowing or pill buttons, and no `Material`/`InkWell` made into a button. Use the theme's buttons.
+- No icons in choice chips, and no coloured icons in buttons.
 - No full-screen gradients, rainbow text or more than one sweep gradient per screen.
 - No coloured backgrounds behind long text. Long text sits on `panel`.
 - No hard drop shadows with an offset. Glows are centred, soft and slightly negative in spread.

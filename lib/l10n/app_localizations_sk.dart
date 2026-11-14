@@ -9014,4 +9014,77 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get markDoneWithoutActivity => 'Bez aktivity';
+
+  @override
+  String get plusAbsence => 'Neprítomnosť';
+
+  @override
+  String get plusAbsenceHint => 'Choroba, dovolenka, mimo sezóny';
+
+  @override
+  String get absenceIllness => 'Chorý';
+
+  @override
+  String get absenceInjury => 'Zranený';
+
+  @override
+  String get absenceVacation => 'Dovolenka';
+
+  @override
+  String get absenceOffseason => 'Mimo sezóny';
+
+  @override
+  String get absencePeriod => 'Vybrať obdobie';
+
+  @override
+  String get absenceNote => 'Poznámka (voliteľné)';
+
+  @override
+  String get absenceExplain =>
+      'Plánované tréningy v tomto období sa zrušia a plán sa okolo neho zostaví znova. Po chorobe alebo zranení je prvý týždeň návratu ľahký a krátky.';
+
+  @override
+  String get absenceSave => 'Zapísať neprítomnosť';
+
+  @override
+  String get absenceEntered => 'Zapísané';
+
+  @override
+  String get absenceRemove => 'Odstrániť neprítomnosť';
+
+  @override
+  String get trainingWindowsTitle => 'Tréningové časy';
+
+  @override
+  String get trainingWindowsHint =>
+      'Označ, kedy môžeš trénovať. Dni bez okna sa stanú dňami voľna, žiadny tréning nebude dlhší ako najdlhšie okno dňa a pripomienka príde hodinu pred koncom posledného okna.';
+
+  @override
+  String get trainingWindowsPaint => 'Môžem trénovať';
+
+  @override
+  String get trainingWindowsErase => 'Nemám čas';
+
+  @override
+  String get trainingWindowsNotSet =>
+      'Nenastavené: plán používa tvoje dni voľna';
+
+  @override
+  String get trainingWindowsClear => 'Vymazať všetko';
+
+  @override
+  String get windowPresetMorning => 'Pred prácou';
+
+  @override
+  String get windowPresetLunch => 'Obedňajšia prestávka';
+
+  @override
+  String get windowPresetEvening => 'Večer';
+
+  @override
+  String get windowPresetWeekend => 'Víkend';
+
+  @override
+  String get missedWorkoutWindowsNote =>
+      'S nastavenými časmi príde pripomienka hodinu pred koncom posledného okna; tento čas platí pre dni bez okna.';
 }

@@ -9041,4 +9041,77 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get markDoneWithoutActivity => 'Sense activitat';
+
+  @override
+  String get plusAbsence => 'Absència';
+
+  @override
+  String get plusAbsenceHint => 'Malaltia, vacances, fora de temporada';
+
+  @override
+  String get absenceIllness => 'Malalt';
+
+  @override
+  String get absenceInjury => 'Lesionat';
+
+  @override
+  String get absenceVacation => 'Vacances';
+
+  @override
+  String get absenceOffseason => 'Fora de temporada';
+
+  @override
+  String get absencePeriod => 'Tria les dates';
+
+  @override
+  String get absenceNote => 'Nota (opcional)';
+
+  @override
+  String get absenceExplain =>
+      'Les sessions previstes en aquest període es cancel·len i el pla es refà al voltant. Després d\'una malaltia o lesió, la primera setmana de tornada és suau i curta.';
+
+  @override
+  String get absenceSave => 'Registra l\'absència';
+
+  @override
+  String get absenceEntered => 'Registrades';
+
+  @override
+  String get absenceRemove => 'Elimina l\'absència';
+
+  @override
+  String get trainingWindowsTitle => 'Horaris d\'entrenament';
+
+  @override
+  String get trainingWindowsHint =>
+      'Marca quan pots entrenar. Els dies sense franja passen a ser de descans, cap sessió dura més que la franja més llarga del dia i el recordatori arriba una hora abans que acabi l\'última franja.';
+
+  @override
+  String get trainingWindowsPaint => 'Puc entrenar';
+
+  @override
+  String get trainingWindowsErase => 'Sense temps';
+
+  @override
+  String get trainingWindowsNotSet =>
+      'Sense definir: el pla fa servir els teus dies de descans';
+
+  @override
+  String get trainingWindowsClear => 'Esborra-ho tot';
+
+  @override
+  String get windowPresetMorning => 'Abans de la feina';
+
+  @override
+  String get windowPresetLunch => 'Pausa per dinar';
+
+  @override
+  String get windowPresetEvening => 'Vespre';
+
+  @override
+  String get windowPresetWeekend => 'Cap de setmana';
+
+  @override
+  String get missedWorkoutWindowsNote =>
+      'Amb horaris definits, el recordatori arriba una hora abans que acabi l\'última franja; aquesta hora és per als dies sense franja.';
 }

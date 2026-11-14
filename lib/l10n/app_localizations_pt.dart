@@ -9048,4 +9048,77 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get markDoneWithoutActivity => 'Sem atividade';
+
+  @override
+  String get plusAbsence => 'Ausência';
+
+  @override
+  String get plusAbsenceHint => 'Doença, férias, fora de época';
+
+  @override
+  String get absenceIllness => 'Doente';
+
+  @override
+  String get absenceInjury => 'Lesionado';
+
+  @override
+  String get absenceVacation => 'Férias';
+
+  @override
+  String get absenceOffseason => 'Fora de época';
+
+  @override
+  String get absencePeriod => 'Escolher datas';
+
+  @override
+  String get absenceNote => 'Nota (opcional)';
+
+  @override
+  String get absenceExplain =>
+      'As sessões previstas neste período são canceladas e o plano é refeito à volta dele. Depois de doença ou lesão, a primeira semana de regresso é leve e curta.';
+
+  @override
+  String get absenceSave => 'Registar ausência';
+
+  @override
+  String get absenceEntered => 'Registadas';
+
+  @override
+  String get absenceRemove => 'Remover ausência';
+
+  @override
+  String get trainingWindowsTitle => 'Horários de treino';
+
+  @override
+  String get trainingWindowsHint =>
+      'Marca quando podes treinar. Os dias sem janela passam a ser de descanso, nenhuma sessão é mais longa do que a janela mais longa do dia e o lembrete chega uma hora antes do fim da última janela.';
+
+  @override
+  String get trainingWindowsPaint => 'Posso treinar';
+
+  @override
+  String get trainingWindowsErase => 'Sem tempo';
+
+  @override
+  String get trainingWindowsNotSet =>
+      'Não definido: o plano usa os teus dias de descanso';
+
+  @override
+  String get trainingWindowsClear => 'Limpar tudo';
+
+  @override
+  String get windowPresetMorning => 'Antes do trabalho';
+
+  @override
+  String get windowPresetLunch => 'Pausa de almoço';
+
+  @override
+  String get windowPresetEvening => 'Noite';
+
+  @override
+  String get windowPresetWeekend => 'Fim de semana';
+
+  @override
+  String get missedWorkoutWindowsNote =>
+      'Com horários definidos, o lembrete chega uma hora antes do fim da última janela; esta hora é para os dias sem janela.';
 }

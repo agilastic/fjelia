@@ -8982,4 +8982,76 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get markDoneWithoutActivity => 'Without an activity';
+
+  @override
+  String get plusAbsence => 'Absence';
+
+  @override
+  String get plusAbsenceHint => 'Ill, holiday, off-season';
+
+  @override
+  String get absenceIllness => 'Illness';
+
+  @override
+  String get absenceInjury => 'Injury';
+
+  @override
+  String get absenceVacation => 'Holiday';
+
+  @override
+  String get absenceOffseason => 'Off-season';
+
+  @override
+  String get absencePeriod => 'Choose dates';
+
+  @override
+  String get absenceNote => 'Note (optional)';
+
+  @override
+  String get absenceExplain =>
+      'Planned sessions in this period are cancelled and the plan is built again around it. After an illness or injury the first week back is easy and short.';
+
+  @override
+  String get absenceSave => 'Enter absence';
+
+  @override
+  String get absenceEntered => 'Entered';
+
+  @override
+  String get absenceRemove => 'Remove absence';
+
+  @override
+  String get trainingWindowsTitle => 'Training times';
+
+  @override
+  String get trainingWindowsHint =>
+      'Mark when you can train. Days without a window become rest days, no session is planned longer than the day\'s longest window, and the reminder comes an hour before the day\'s last window ends.';
+
+  @override
+  String get trainingWindowsPaint => 'Can train';
+
+  @override
+  String get trainingWindowsErase => 'No time';
+
+  @override
+  String get trainingWindowsNotSet => 'Not set: the plan uses your rest days';
+
+  @override
+  String get trainingWindowsClear => 'Clear all';
+
+  @override
+  String get windowPresetMorning => 'Before work';
+
+  @override
+  String get windowPresetLunch => 'Lunch break';
+
+  @override
+  String get windowPresetEvening => 'Evening';
+
+  @override
+  String get windowPresetWeekend => 'Weekend';
+
+  @override
+  String get missedWorkoutWindowsNote =>
+      'With training times set, the reminder comes an hour before the day\'s last window ends; this time is for days without one.';
 }

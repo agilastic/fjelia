@@ -9069,4 +9069,77 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get markDoneWithoutActivity => 'Bez aktywności';
+
+  @override
+  String get plusAbsence => 'Nieobecność';
+
+  @override
+  String get plusAbsenceHint => 'Choroba, urlop, poza sezonem';
+
+  @override
+  String get absenceIllness => 'Choroba';
+
+  @override
+  String get absenceInjury => 'Kontuzja';
+
+  @override
+  String get absenceVacation => 'Urlop';
+
+  @override
+  String get absenceOffseason => 'Poza sezonem';
+
+  @override
+  String get absencePeriod => 'Wybierz daty';
+
+  @override
+  String get absenceNote => 'Notatka (opcjonalnie)';
+
+  @override
+  String get absenceExplain =>
+      'Zaplanowane treningi w tym okresie zostaną odwołane, a plan zostanie ułożony od nowa wokół niego. Po chorobie lub kontuzji pierwszy tydzień powrotu jest lekki i krótki.';
+
+  @override
+  String get absenceSave => 'Dodaj nieobecność';
+
+  @override
+  String get absenceEntered => 'Dodane';
+
+  @override
+  String get absenceRemove => 'Usuń nieobecność';
+
+  @override
+  String get trainingWindowsTitle => 'Godziny treningów';
+
+  @override
+  String get trainingWindowsHint =>
+      'Zaznacz, kiedy możesz trenować. Dni bez okna stają się dniami odpoczynku, żaden trening nie jest dłuższy niż najdłuższe okno dnia, a przypomnienie przychodzi godzinę przed końcem ostatniego okna.';
+
+  @override
+  String get trainingWindowsPaint => 'Mogę trenować';
+
+  @override
+  String get trainingWindowsErase => 'Brak czasu';
+
+  @override
+  String get trainingWindowsNotSet =>
+      'Nie ustawiono: plan korzysta z twoich dni odpoczynku';
+
+  @override
+  String get trainingWindowsClear => 'Wyczyść wszystko';
+
+  @override
+  String get windowPresetMorning => 'Przed pracą';
+
+  @override
+  String get windowPresetLunch => 'Przerwa obiadowa';
+
+  @override
+  String get windowPresetEvening => 'Wieczór';
+
+  @override
+  String get windowPresetWeekend => 'Weekend';
+
+  @override
+  String get missedWorkoutWindowsNote =>
+      'Przy ustawionych godzinach przypomnienie przychodzi godzinę przed końcem ostatniego okna; ta godzina dotyczy dni bez okna.';
 }

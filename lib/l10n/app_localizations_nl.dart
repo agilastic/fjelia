@@ -9041,4 +9041,77 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get markDoneWithoutActivity => 'Zonder activiteit';
+
+  @override
+  String get plusAbsence => 'Afwezigheid';
+
+  @override
+  String get plusAbsenceHint => 'Ziek, vakantie, off-season';
+
+  @override
+  String get absenceIllness => 'Ziek';
+
+  @override
+  String get absenceInjury => 'Geblesseerd';
+
+  @override
+  String get absenceVacation => 'Vakantie';
+
+  @override
+  String get absenceOffseason => 'Off-season';
+
+  @override
+  String get absencePeriod => 'Data kiezen';
+
+  @override
+  String get absenceNote => 'Notitie (optioneel)';
+
+  @override
+  String get absenceExplain =>
+      'Geplande trainingen in deze periode worden geannuleerd en het plan wordt eromheen opnieuw opgebouwd. Na ziekte of een blessure is de eerste week terug rustig en kort.';
+
+  @override
+  String get absenceSave => 'Afwezigheid invoeren';
+
+  @override
+  String get absenceEntered => 'Ingevoerd';
+
+  @override
+  String get absenceRemove => 'Afwezigheid verwijderen';
+
+  @override
+  String get trainingWindowsTitle => 'Trainingstijden';
+
+  @override
+  String get trainingWindowsHint =>
+      'Markeer wanneer je kunt trainen. Dagen zonder tijdvak worden rustdagen, geen training wordt langer gepland dan het langste tijdvak van de dag, en de herinnering komt een uur voor het einde van het laatste tijdvak.';
+
+  @override
+  String get trainingWindowsPaint => 'Kan trainen';
+
+  @override
+  String get trainingWindowsErase => 'Geen tijd';
+
+  @override
+  String get trainingWindowsNotSet =>
+      'Niet ingesteld: het plan gebruikt je rustdagen';
+
+  @override
+  String get trainingWindowsClear => 'Alles wissen';
+
+  @override
+  String get windowPresetMorning => 'Voor het werk';
+
+  @override
+  String get windowPresetLunch => 'Lunchpauze';
+
+  @override
+  String get windowPresetEvening => 'Avond';
+
+  @override
+  String get windowPresetWeekend => 'Weekend';
+
+  @override
+  String get missedWorkoutWindowsNote =>
+      'Met trainingstijden komt de herinnering een uur voor het einde van het laatste tijdvak; deze tijd geldt voor dagen zonder tijdvak.';
 }

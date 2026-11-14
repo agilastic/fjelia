@@ -15555,6 +15555,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Without an activity'**
   String get markDoneWithoutActivity;
+
+  /// No description provided for @plusAbsence.
+  ///
+  /// In en, this message translates to:
+  /// **'Absence'**
+  String get plusAbsence;
+
+  /// No description provided for @plusAbsenceHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Ill, holiday, off-season'**
+  String get plusAbsenceHint;
+
+  /// No description provided for @absenceIllness.
+  ///
+  /// In en, this message translates to:
+  /// **'Illness'**
+  String get absenceIllness;
+
+  /// No description provided for @absenceInjury.
+  ///
+  /// In en, this message translates to:
+  /// **'Injury'**
+  String get absenceInjury;
+
+  /// No description provided for @absenceVacation.
+  ///
+  /// In en, this message translates to:
+  /// **'Holiday'**
+  String get absenceVacation;
+
+  /// No description provided for @absenceOffseason.
+  ///
+  /// In en, this message translates to:
+  /// **'Off-season'**
+  String get absenceOffseason;
+
+  /// No description provided for @absencePeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose dates'**
+  String get absencePeriod;
+
+  /// No description provided for @absenceNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Note (optional)'**
+  String get absenceNote;
+
+  /// No description provided for @absenceExplain.
+  ///
+  /// In en, this message translates to:
+  /// **'Planned sessions in this period are cancelled and the plan is built again around it. After an illness or injury the first week back is easy and short.'**
+  String get absenceExplain;
+
+  /// No description provided for @absenceSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter absence'**
+  String get absenceSave;
+
+  /// No description provided for @absenceEntered.
+  ///
+  /// In en, this message translates to:
+  /// **'Entered'**
+  String get absenceEntered;
+
+  /// No description provided for @absenceRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove absence'**
+  String get absenceRemove;
+
+  /// No description provided for @trainingWindowsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Training times'**
+  String get trainingWindowsTitle;
+
+  /// No description provided for @trainingWindowsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark when you can train. Days without a window become rest days, no session is planned longer than the day\'s longest window, and the reminder comes an hour before the day\'s last window ends.'**
+  String get trainingWindowsHint;
+
+  /// No description provided for @trainingWindowsPaint.
+  ///
+  /// In en, this message translates to:
+  /// **'Can train'**
+  String get trainingWindowsPaint;
+
+  /// No description provided for @trainingWindowsErase.
+  ///
+  /// In en, this message translates to:
+  /// **'No time'**
+  String get trainingWindowsErase;
+
+  /// No description provided for @trainingWindowsNotSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not set: the plan uses your rest days'**
+  String get trainingWindowsNotSet;
+
+  /// No description provided for @trainingWindowsClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear all'**
+  String get trainingWindowsClear;
+
+  /// No description provided for @windowPresetMorning.
+  ///
+  /// In en, this message translates to:
+  /// **'Before work'**
+  String get windowPresetMorning;
+
+  /// No description provided for @windowPresetLunch.
+  ///
+  /// In en, this message translates to:
+  /// **'Lunch break'**
+  String get windowPresetLunch;
+
+  /// No description provided for @windowPresetEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'Evening'**
+  String get windowPresetEvening;
+
+  /// No description provided for @windowPresetWeekend.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekend'**
+  String get windowPresetWeekend;
+
+  /// No description provided for @missedWorkoutWindowsNote.
+  ///
+  /// In en, this message translates to:
+  /// **'With training times set, the reminder comes an hour before the day\'s last window ends; this time is for days without one.'**
+  String get missedWorkoutWindowsNote;
 }
 
 class _AppLocalizationsDelegate
