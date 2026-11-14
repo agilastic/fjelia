@@ -15531,6 +15531,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Use original sport'**
   String get useOriginalSport;
+
+  /// No description provided for @markNotDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Not done'**
+  String get markNotDone;
+
+  /// No description provided for @markDoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as done'**
+  String get markDoneTitle;
+
+  /// No description provided for @markDoneWhich.
+  ///
+  /// In en, this message translates to:
+  /// **'Which activity was it?'**
+  String get markDoneWhich;
+
+  /// No description provided for @markDoneWithoutActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Without an activity'**
+  String get markDoneWithoutActivity;
 }
 
 class _AppLocalizationsDelegate

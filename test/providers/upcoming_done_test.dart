@@ -6,6 +6,10 @@ import 'package:fjelia/models/garmin_data.dart';
 import 'package:fjelia/providers/upcoming_plan_provider.dart';
 import 'package:fjelia/screens/planner/plan_overview_cards.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fjelia/providers/database_provider.dart';
+import 'package:fjelia/services/post_workout_scorer.dart';
+import 'package:fjelia/widgets/swipe_action_tile.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 TrainingSession session(
@@ -290,5 +294,75 @@ void main() {
         expect(find.byIcon(Icons.chevron_right), findsOneWidget);
       },
     );
+
+    testWidgets('swiped left it is done, swiped right not done again', (
+      tester,
+    ) async {
+      final now = DateTime.now();
+      final day = DateTime(now.year, now.month, now.day);
+      final open = session('open', day, title: 'Evening spin');
+      await db.into(db.trainingSessions).insert(open.toCompanion(true));
+      // Done on the trainer, saved as a run: nothing matched it.
+      await activity(
+        'trainer',
+        'Morning trainer',
+        type: 'treadmill_running',
+        start: day.add(const Duration(hours: 7)),
+      );
+      Future<void> showIn(TrainingSession s) => tester.pumpWidget(
+        ProviderScope(
+          overrides: [databaseProvider.overrideWithValue(db)],
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Scaffold(
+              body: SingleChildScrollView(
+                child: UpcomingWorkoutList(
+                  entries: [UpcomingPlanEntry(date: day, session: s)],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      Future<TrainingSession> stored() => (db.select(
+        db.trainingSessions,
+      )..where((t) => t.id.equals('open'))).getSingle();
+
+      await showIn(open);
+      // A planned session does not swipe to the right.
+      await tester.drag(find.byType(SwipeActionTile), const Offset(300, 0));
+      await tester.pumpAndSettle();
+      expect((await stored()).status, 'planned');
+
+      await tester.drag(find.byType(SwipeActionTile), const Offset(-300, 0));
+      await tester.pumpAndSettle();
+      expect(find.text('Mark as done'), findsOneWidget);
+      await tester.tap(find.text('Morning trainer'));
+      await tester.pumpAndSettle();
+      expect((await stored()).status, 'completed');
+
+      await showIn(await stored());
+      await tester.pumpAndSettle();
+      await tester.drag(find.byType(SwipeActionTile), const Offset(300, 0));
+      await tester.pumpAndSettle();
+      final reopened = await stored();
+      expect(reopened.status, 'planned');
+      expect(reopened.modifiedBy, undoneByAthlete);
+      await tester.pumpWidget(const SizedBox());
+    });
+  });
+
+  test('a session marked as not done is not matched to an activity', () async {
+    final run = await activity('d1', 'Easy run');
+    final undone = session(
+      'undone',
+      today,
+    ).copyWith(modifiedBy: const Value(undoneByAthlete));
+    final rows = markDoneEntries(
+      [UpcomingPlanEntry(date: today, session: undone)],
+      [run],
+    );
+    expect(rows.single.done, isFalse);
   });
 }

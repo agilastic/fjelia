@@ -16,6 +16,10 @@ import 'control/stimulus.dart';
 /// something the athlete decided.
 const noActivityReason = 'No matching activity';
 
+/// `modifiedBy` of a session the athlete marked as not done: no activity
+/// completes it by itself any more, only by hand.
+const undoneByAthlete = 'athlete_undone';
+
 /// After a workout syncs: match it to the planned session, score execution,
 /// record zone time / XP / normalized training stress and refresh the week.
 class PostWorkoutScorer {
@@ -50,19 +54,23 @@ class PostWorkoutScorer {
     return score(activity);
   }
 
-  Future<bool> score(ActivityRecord activity) async {
+  /// Scores [activity] against its matched session, or against [chosen]
+  /// when the athlete chose it.
+  Future<bool> score(ActivityRecord activity, {TrainingSession? chosen}) async {
     // An activity completes one session, however often it syncs.
     // A gym-mode workout still in progress completes nothing yet.
     if (activity.source == 'fjelia_live' && activity.durationSeconds == 0) {
       return false;
     }
     if (await _isLinked(activity.activityId)) return false;
-    final session = await _matchSession(
-      activity.startDate,
-      activity.type,
-      activity.durationSeconds,
-      activity.activityId,
-    );
+    final session =
+        chosen ??
+        await _matchSession(
+          activity.startDate,
+          activity.type,
+          activity.durationSeconds,
+          activity.activityId,
+        );
     if (session == null) return false;
 
     final durationSec = activity.durationSeconds.toDouble();
@@ -618,6 +626,108 @@ class PostWorkoutScorer {
               .getSingleOrNull()) !=
           null;
 
+  /// Activities on [session]'s day that complete no session yet: what the
+  /// athlete can mark it done with. The same sport comes first.
+  Future<List<ActivityRecord>> unlinkedActivitiesFor(
+    TrainingSession session,
+  ) async {
+    final day = _day(session.sessionDate);
+    final linked = (await _db.select(_db.sessionActuals).get())
+        .map((a) => a.activityId)
+        .whereType<String>()
+        .toSet();
+    final activities =
+        (await (_db.select(_db.activityRecords)
+                  ..where(
+                    (t) =>
+                        t.startDate.isBiggerOrEqualValue(day) &
+                        t.startDate.isSmallerThanValue(
+                          DateTime(day.year, day.month, day.day + 1),
+                        ),
+                  )
+                  ..orderBy([(t) => OrderingTerm.asc(t.startDate)]))
+                .get())
+            .where((a) => !linked.contains(a.activityId))
+            .toList();
+    int rank(ActivityRecord a) =>
+        sportFamilyMatches(session.sport, a.type) ? 0 : 1;
+    return [...activities]..sort((a, b) => rank(a).compareTo(rank(b)));
+  }
+
+  /// Marks [session] done by hand: scored against [activity], or without
+  /// one as done as planned. Whatever was recorded for it before goes.
+  Future<void> completeByHand(
+    TrainingSession session, {
+    ActivityRecord? activity,
+  }) async {
+    await _clearCompletion(session.id);
+    await (_db.update(
+      _db.trainingSessions,
+    )..where((t) => t.id.equals(session.id))).write(
+      TrainingSessionsCompanion(
+        status: Value(session.status == 'adapted' ? 'adapted' : 'planned'),
+        modifiedBy: const Value('athlete'),
+        dateModified: Value(DateTime.now()),
+      ),
+    );
+    final open = await (_db.select(
+      _db.trainingSessions,
+    )..where((t) => t.id.equals(session.id))).getSingle();
+    if (activity != null && await score(activity, chosen: open)) return;
+    await _db.transaction(() async {
+      await _db
+          .into(_db.sessionActuals)
+          .insertOnConflictUpdate(
+            SessionActualsCompanion.insert(
+              sessionId: session.id,
+              durationRatio: const Value(1.0),
+              outcome: Value(ExecutionOutcome.completed.name),
+            ),
+          );
+      await (_db.update(
+        _db.trainingSessions,
+      )..where((t) => t.id.equals(session.id))).write(
+        TrainingSessionsCompanion(
+          status: const Value('completed'),
+          actualDurationMin: Value(session.plannedDurationMin),
+          dateModified: Value(DateTime.now()),
+        ),
+      );
+    });
+    await _aggregateWeek(_weekStart(session.sessionDate));
+  }
+
+  /// Marks [session] as not done: its completion goes, it is planned again
+  /// and no activity completes it by itself any more.
+  Future<void> reopen(TrainingSession session) async {
+    final actual = await (_db.select(
+      _db.sessionActuals,
+    )..where((t) => t.sessionId.equals(session.id))).getSingleOrNull();
+    await _clearCompletion(session.id);
+    await (_db.update(
+      _db.trainingSessions,
+    )..where((t) => t.id.equals(session.id))).write(
+      TrainingSessionsCompanion(
+        status: Value(actual?.scoredVsAdapted == true ? 'adapted' : 'planned'),
+        actualDurationMin: const Value(null),
+        modifiedBy: const Value(undoneByAthlete),
+        dateModified: Value(DateTime.now()),
+      ),
+    );
+    await _aggregateWeek(_weekStart(session.sessionDate));
+  }
+
+  Future<void> _clearCompletion(String sessionId) => _db.transaction(() async {
+    for (final delete in [
+      _db.delete(_db.sessionActuals)
+        ..where((t) => t.sessionId.equals(sessionId)),
+      _db.delete(_db.sessionNts)..where((t) => t.sessionId.equals(sessionId)),
+      _db.delete(_db.sessionXp)..where((t) => t.sessionId.equals(sessionId)),
+    ]) {
+      await delete.go();
+    }
+  });
+
   /// Links completions from before the link existed to their activity, only
   /// where it is certain: the activity starts at exactly the recorded start
   /// and no other activity does. Anything less stays unlinked and can be
@@ -748,7 +858,10 @@ class PostWorkoutScorer {
           TrainingSessionsCompanion(
             status: const Value('skipped'),
             dateModified: Value(DateTime.now()),
-            modifiedBy: const Value('system'),
+            // Still not to be completed by an activity by itself.
+            modifiedBy: Value(
+              s.modifiedBy == undoneByAthlete ? undoneByAthlete : 'system',
+            ),
           ),
         );
         await _db
@@ -785,7 +898,9 @@ class PostWorkoutScorer {
                         t.sessionDate.isSmallerThanValue(
                           DateTime(day.year, day.month, day.day + 1),
                         ) &
-                        t.status.isIn(const ['planned', 'adapted']),
+                        t.status.isIn(const ['planned', 'adapted']) &
+                        (t.modifiedBy.isNull() |
+                            t.modifiedBy.isNotValue(undoneByAthlete)),
                   )
                   ..orderBy([(t) => OrderingTerm(expression: t.sessionNumber)]))
                 .get())

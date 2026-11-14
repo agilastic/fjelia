@@ -9029,4 +9029,16 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get useOriginalSport => 'Fer servir l\'esport original';
+
+  @override
+  String get markNotDone => 'No fet';
+
+  @override
+  String get markDoneTitle => 'Marcar com a fet';
+
+  @override
+  String get markDoneWhich => 'Amb quina activitat?';
+
+  @override
+  String get markDoneWithoutActivity => 'Sense activitat';
 }

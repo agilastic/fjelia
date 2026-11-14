@@ -8962,4 +8962,16 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get useOriginalSport => 'Brug oprindelig sport';
+
+  @override
+  String get markNotDone => 'Ikke gjort';
+
+  @override
+  String get markDoneTitle => 'Markér som gjort';
+
+  @override
+  String get markDoneWhich => 'Med hvilken aktivitet?';
+
+  @override
+  String get markDoneWithoutActivity => 'Uden aktivitet';
 }

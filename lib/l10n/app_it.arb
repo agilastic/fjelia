@@ -4124,5 +4124,9 @@
   "sportVirtualRun": "Corsa virtuale",
   "sportMountainBike": "Mountain bike",
   "activitySportKept": "Cambia solo in Fjelia e resta quando l'attività si sincronizza di nuovo. Carico, zone e statistiche usano il nuovo sport.",
-  "useOriginalSport": "Usa lo sport originale"
+  "useOriginalSport": "Usa lo sport originale",
+  "markNotDone": "Non fatto",
+  "markDoneTitle": "Segna come fatto",
+  "markDoneWhich": "Con quale attività?",
+  "markDoneWithoutActivity": "Senza attività"
 }

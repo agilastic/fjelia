@@ -5287,5 +5287,9 @@
   "sportVirtualRun": "Virtuele loop",
   "sportMountainBike": "Mountainbike",
   "activitySportKept": "Verandert alleen in Fjelia en blijft staan als de activiteit opnieuw synchroniseert. Belasting, zones en statistieken gebruiken de nieuwe sport.",
-  "useOriginalSport": "Oorspronkelijke sport gebruiken"
+  "useOriginalSport": "Oorspronkelijke sport gebruiken",
+  "markNotDone": "Niet gedaan",
+  "markDoneTitle": "Markeren als gedaan",
+  "markDoneWhich": "Met welke activiteit?",
+  "markDoneWithoutActivity": "Zonder activiteit"
 }

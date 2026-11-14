@@ -302,12 +302,19 @@ class ActivityDetailSheet extends ConsumerWidget {
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Text(
-                                      activitySportLabel(context.l10n, a.type),
-                                      style: const TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w600,
-                                        color: Color(0xFF4FC3F7),
+                                    Flexible(
+                                      child: Text(
+                                        activitySportLabel(
+                                          context.l10n,
+                                          a.type,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600,
+                                          color: Color(0xFF4FC3F7),
+                                        ),
                                       ),
                                     ),
                                     const Icon(

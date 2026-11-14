@@ -9029,4 +9029,16 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get useOriginalSport => 'Oorspronkelijke sport gebruiken';
+
+  @override
+  String get markNotDone => 'Niet gedaan';
+
+  @override
+  String get markDoneTitle => 'Markeren als gedaan';
+
+  @override
+  String get markDoneWhich => 'Met welke activiteit?';
+
+  @override
+  String get markDoneWithoutActivity => 'Zonder activiteit';
 }

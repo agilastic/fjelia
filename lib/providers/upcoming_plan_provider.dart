@@ -6,7 +6,7 @@ import '../db/database.dart';
 import '../models/garmin_data.dart';
 import 'day_data_provider.dart';
 import '../services/post_workout_scorer.dart'
-    show PostWorkoutScorer, noActivityReason;
+    show PostWorkoutScorer, noActivityReason, undoneByAthlete;
 import 'database_provider.dart';
 import 'planner_providers.dart';
 
@@ -148,6 +148,8 @@ List<UpcomingPlanEntry> markDoneEntries(
       continue;
     }
     if (e.skipped && e.skipReason != noActivityReason) continue;
+    // Marked as not done: only the athlete completes it again.
+    if (e.session?.modifiedBy == undoneByAthlete) continue;
     final start = completionStarts[e.session?.id];
     if (start == null) continue;
     final exact = activities
@@ -172,7 +174,8 @@ List<UpcomingPlanEntry> markDoneEntries(
         !byId.containsKey(linkedActivity[e.session?.id]);
     if (done.containsKey(i) ||
         (hasLink && !orphanedCompletion) ||
-        (e.skipped && e.skipReason != noActivityReason)) {
+        (e.skipped && e.skipReason != noActivityReason) ||
+        e.session?.modifiedBy == undoneByAthlete) {
       continue;
     }
     for (final a in activities) {

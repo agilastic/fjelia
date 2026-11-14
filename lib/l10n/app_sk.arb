@@ -4124,5 +4124,9 @@
   "sportVirtualRun": "Virtuálny beh",
   "sportMountainBike": "Horský bicykel",
   "activitySportKept": "Mení sa len vo Fjelii a zostane aj po ďalšej synchronizácii. Záťaž, zóny a štatistiky počítajú s novým športom.",
-  "useOriginalSport": "Použiť pôvodný šport"
+  "useOriginalSport": "Použiť pôvodný šport",
+  "markNotDone": "Nesplnené",
+  "markDoneTitle": "Označiť ako splnené",
+  "markDoneWhich": "S ktorou aktivitou?",
+  "markDoneWithoutActivity": "Bez aktivity"
 }

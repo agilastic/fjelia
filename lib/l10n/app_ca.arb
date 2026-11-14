@@ -4124,5 +4124,9 @@
   "sportVirtualRun": "Cursa virtual",
   "sportMountainBike": "Bicicleta de muntanya",
   "activitySportKept": "Només canvia a Fjelia i es manté quan l'activitat es torna a sincronitzar. La càrrega, les zones i les estadístiques fan servir el nou esport.",
-  "useOriginalSport": "Fer servir l'esport original"
+  "useOriginalSport": "Fer servir l'esport original",
+  "markNotDone": "No fet",
+  "markDoneTitle": "Marcar com a fet",
+  "markDoneWhich": "Amb quina activitat?",
+  "markDoneWithoutActivity": "Sense activitat"
 }

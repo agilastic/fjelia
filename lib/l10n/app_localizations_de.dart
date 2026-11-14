@@ -9039,4 +9039,16 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get useOriginalSport => 'Ursprüngliche Sportart verwenden';
+
+  @override
+  String get markNotDone => 'Nicht erledigt';
+
+  @override
+  String get markDoneTitle => 'Als erledigt markieren';
+
+  @override
+  String get markDoneWhich => 'Mit welcher Aktivität?';
+
+  @override
+  String get markDoneWithoutActivity => 'Ohne Aktivität';
 }

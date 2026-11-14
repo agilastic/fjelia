@@ -4124,5 +4124,9 @@
   "sportVirtualRun": "Virtuaalijuoksu",
   "sportMountainBike": "Maastopyöräily",
   "activitySportKept": "Muuttuu vain Fjeliassa ja säilyy, kun aktiviteetti synkronoidaan uudelleen. Kuorma, alueet ja tilastot käyttävät uutta lajia.",
-  "useOriginalSport": "Käytä alkuperäistä lajia"
+  "useOriginalSport": "Käytä alkuperäistä lajia",
+  "markNotDone": "Ei tehty",
+  "markDoneTitle": "Merkitse tehdyksi",
+  "markDoneWhich": "Millä aktiviteetilla?",
+  "markDoneWithoutActivity": "Ilman aktiviteettia"
 }

@@ -4124,5 +4124,9 @@
   "sportVirtualRun": "Virtuelt løb",
   "sportMountainBike": "Mountainbike",
   "activitySportKept": "Ændres kun i Fjelia og bliver, når aktiviteten synkroniseres igen. Belastning, zoner og statistik bruger den nye sport.",
-  "useOriginalSport": "Brug oprindelig sport"
+  "useOriginalSport": "Brug oprindelig sport",
+  "markNotDone": "Ikke gjort",
+  "markDoneTitle": "Markér som gjort",
+  "markDoneWhich": "Med hvilken aktivitet?",
+  "markDoneWithoutActivity": "Uden aktivitet"
 }

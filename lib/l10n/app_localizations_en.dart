@@ -8970,4 +8970,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get useOriginalSport => 'Use original sport';
+
+  @override
+  String get markNotDone => 'Not done';
+
+  @override
+  String get markDoneTitle => 'Mark as done';
+
+  @override
+  String get markDoneWhich => 'Which activity was it?';
+
+  @override
+  String get markDoneWithoutActivity => 'Without an activity';
 }

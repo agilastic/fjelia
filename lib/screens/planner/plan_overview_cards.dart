@@ -1,5 +1,9 @@
 import '../../theme/fjelia_style.dart';
 import '../../l10n/plan_text.dart';
+import '../../l10n/sport_text.dart';
+import '../../providers/day_data_provider.dart';
+import '../../services/post_workout_scorer.dart' show noActivityReason;
+import '../../widgets/swipe_action_tile.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../l10n/formats.dart';
 import '../../providers/plan_weather_provider.dart';
@@ -683,7 +687,8 @@ class _UpcomingState extends State<UpcomingWorkoutList> {
           ),
           for (final s in e.value)
             if (s.session != null)
-              _SessionTile(
+              _SwipeSessionTile(
+                key: ValueKey(s.session!.id),
                 session: s.session!,
                 skipReason: s.skipReason,
                 doneBy: s.doneBy,
@@ -853,6 +858,138 @@ class _DoneCheck extends StatelessWidget {
   );
 }
 
+/// A session in the list that is marked done by swiping it to the left,
+/// for a workout that was done but not recognised, and marked as not done
+/// by swiping it to the right. A cancelled session does not swipe.
+class _SwipeSessionTile extends ConsumerWidget {
+  const _SwipeSessionTile({
+    super.key,
+    required this.session,
+    this.skipReason,
+    this.doneBy,
+  });
+  final TrainingSession session;
+  final String? skipReason;
+  final ActivityRecord? doneBy;
+
+  void _refresh(WidgetRef ref) {
+    ref.invalidate(plannedSessionProvider(session.id));
+    ref.invalidate(sessionSkipReasonsProvider);
+    ref.invalidate(upcomingSessionsProvider);
+    ref.read(syncStatusListenerProvider.notifier).state++;
+  }
+
+  Future<void> _markDone(BuildContext context, WidgetRef ref) async {
+    final scorer = ref.read(postWorkoutScorerProvider);
+    final candidates = await scorer.unlinkedActivitiesFor(session);
+    if (!context.mounted) return;
+    ActivityRecord? activity;
+    if (candidates.isNotEmpty) {
+      final picked = await showDialog<(ActivityRecord?,)>(
+        context: context,
+        builder: (_) => _DoneWithDialog(activities: candidates),
+      );
+      if (picked == null || !context.mounted) return;
+      activity = picked.$1;
+    }
+    await runUiAction(context, () async {
+      await scorer.completeByHand(session, activity: activity);
+      _refresh(ref);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tile = _SessionTile(
+      session: session,
+      skipReason: skipReason,
+      doneBy: doneBy,
+    );
+    final skipped = session.status == 'skipped';
+    final done = !skipped && (doneBy != null || session.status == 'completed');
+    if (skipped && skipReason != null && skipReason != noActivityReason) {
+      return tile;
+    }
+    return SwipeActionTile(
+      borderRadius: 14,
+      deleteLabel: context.l10n.done,
+      deleteIcon: Icons.check_rounded,
+      deleteColors: const [Color(0xFF00D4A0), Color(0xFF22D3E6)],
+      foldOnDelete: false,
+      onDelete: done ? null : () => _markDone(context, ref),
+      coachLabel: context.l10n.markNotDone,
+      coachIcon: Icons.undo_rounded,
+      coachColors: const [Color(0xFFFFAA42), Color(0xFFFF7A45)],
+      onCoach: done
+          ? () => runUiAction(context, () async {
+              await ref.read(postWorkoutScorerProvider).reopen(session);
+              _refresh(ref);
+            })
+          : null,
+      child: tile,
+    );
+  }
+}
+
+/// Which of the day's activities did the session; or none.
+class _DoneWithDialog extends StatelessWidget {
+  const _DoneWithDialog({required this.activities});
+  final List<ActivityRecord> activities;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    return AlertDialog(
+      title: Text(l.markDoneTitle),
+      contentPadding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Text(
+                l.markDoneWhich,
+                style: TextStyle(fontSize: 13, color: fjInk70),
+              ),
+            ),
+            const SizedBox(height: 4),
+            for (final a in activities)
+              ListTile(
+                leading: Icon(
+                  activitySportIcon(a.type),
+                  color: completedActivityColor(a.type),
+                ),
+                title: Text(
+                  a.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                subtitle: Text(
+                  '${activitySportLabel(l, a.type)} · '
+                  '${DateFormat.Hm().format(a.startDate.toLocal())} · '
+                  '${planDuration((a.durationSeconds / 60).round())}',
+                ),
+                onTap: () => Navigator.pop(context, (a,)),
+              ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(l.cancel),
+        ),
+        TextButton(
+          onPressed: () => Navigator.pop(context, (null,)),
+          child: Text(l.markDoneWithoutActivity),
+        ),
+      ],
+    );
+  }
+}
+
 class _SessionTile extends StatelessWidget {
   const _SessionTile({required this.session, this.skipReason, this.doneBy});
   final TrainingSession session;
@@ -941,7 +1078,7 @@ class _SessionTile extends StatelessWidget {
                             planDuration(s.plannedDurationMin),
                           )
                         : done
-                        ? 'Done${doneBy == null ? '' : ' · ${_doneSummary(doneBy!)}'}'
+                        ? '${context.l10n.done}${doneBy == null ? '' : ' · ${_doneSummary(doneBy!)}'}'
                         : '${planDuration(s.plannedDurationMin)} · TRIMP ${s.plannedTrimp} · Z${s.primaryZone}',
                     style: TextStyle(fontSize: 11, color: fjInk70),
                   ),

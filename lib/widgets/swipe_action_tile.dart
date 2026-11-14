@@ -1,4 +1,5 @@
 import '../theme/fjelia_style.dart';
+
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -11,6 +12,10 @@ const _coachColors = [Color(0xFF00D4A0), Color(0xFF22D3E6), Color(0xFF8B5CF6)];
 /// A card that does something when swiped: to the left it deletes, to the
 /// right it asks the coach. Past the point of no return the phone ticks and
 /// the icon pops; let go before it and the card springs back.
+///
+/// Both actions can be restyled, and a missing one turns its direction off:
+/// a planned session is marked done to the left and opened again to the
+/// right, and stays where it is.
 class SwipeActionTile extends StatefulWidget {
   const SwipeActionTile({
     super.key,
@@ -21,15 +26,28 @@ class SwipeActionTile extends StatefulWidget {
     required this.coachLabel,
     this.borderRadius = 12,
     this.peek = false,
+    this.deleteIcon = Icons.delete_rounded,
+    this.coachIcon = Icons.auto_awesome,
+    this.deleteColors = _deleteColors,
+    this.coachColors = _coachColors,
+    this.foldOnDelete = true,
   });
 
   final Widget child;
 
-  /// Called once the card has flown out and folded away.
-  final Future<void> Function() onDelete;
-  final VoidCallback onCoach;
+  /// Called once the card has flown out and folded away; null turns the
+  /// swipe to the left off.
+  final Future<void> Function()? onDelete;
+
+  /// Null turns the swipe to the right off.
+  final VoidCallback? onCoach;
   final String deleteLabel, coachLabel;
   final double borderRadius;
+  final IconData deleteIcon, coachIcon;
+  final List<Color> deleteColors, coachColors;
+
+  /// False: the left action keeps the card and it springs back.
+  final bool foldOnDelete;
 
   /// Wiggles once to show that the card can be swiped.
   final bool peek;
@@ -131,7 +149,12 @@ class _SwipeActionTileState extends State<SwipeActionTile>
     _settle.stop();
     // Past the trigger point the card follows the finger less: a rubber band.
     final raw = _dx + d.delta.dx * (_progress >= 1 ? .35 : 1);
-    setState(() => _dx = raw.clamp(-_width * .8, _width * .8));
+    setState(
+      () => _dx = raw.clamp(
+        widget.onDelete == null ? 0.0 : -_width * .8,
+        widget.onCoach == null ? 0.0 : _width * .8,
+      ),
+    );
     final armed = _progress >= 1;
     if (armed != _armed) {
       _armed = armed;
@@ -150,15 +173,26 @@ class _SwipeActionTileState extends State<SwipeActionTile>
     } else if (coaching) {
       HapticFeedback.lightImpact();
       await _animateTo(0, duration: const Duration(milliseconds: 600));
-      widget.onCoach();
+      widget.onCoach?.call();
     } else {
       await _animateTo(0);
     }
   }
 
   Future<void> _delete() async {
+    final onDelete = widget.onDelete;
+    if (onDelete == null) return;
     _busy = true;
     HapticFeedback.heavyImpact();
+    if (!widget.foldOnDelete) {
+      await _animateTo(0, duration: const Duration(milliseconds: 600));
+      try {
+        await onDelete();
+      } finally {
+        _busy = false;
+      }
+      return;
+    }
     await _animateTo(
       -_width * 1.1,
       duration: const Duration(milliseconds: 220),
@@ -167,7 +201,7 @@ class _SwipeActionTileState extends State<SwipeActionTile>
     if (!mounted) return;
     await _fold.forward().orCancel.catchError((_) {});
     try {
-      await widget.onDelete();
+      await onDelete();
     } catch (_) {
       // Still here: show it again.
       if (!mounted) return;
@@ -182,7 +216,7 @@ class _SwipeActionTileState extends State<SwipeActionTile>
   Widget build(BuildContext context) {
     final left = _dx < 0;
     final progress = _progress;
-    final colors = left ? _deleteColors : _coachColors;
+    final colors = left ? widget.deleteColors : widget.coachColors;
     final glow = colors.last.withValues(alpha: .45 * progress.clamp(0, 1));
     final radius = BorderRadius.circular(widget.borderRadius);
     return SizeTransition(
@@ -192,8 +226,10 @@ class _SwipeActionTileState extends State<SwipeActionTile>
       alignment: Alignment.topCenter,
       child: Semantics(
         customSemanticsActions: {
-          CustomSemanticsAction(label: widget.deleteLabel): _delete,
-          CustomSemanticsAction(label: widget.coachLabel): widget.onCoach,
+          if (widget.onDelete != null)
+            CustomSemanticsAction(label: widget.deleteLabel): _delete,
+          if (widget.onCoach != null)
+            CustomSemanticsAction(label: widget.coachLabel): widget.onCoach!,
         },
         child: LayoutBuilder(
           builder: (context, constraints) {
@@ -213,6 +249,7 @@ class _SwipeActionTileState extends State<SwipeActionTile>
                         colors: colors,
                         radius: radius,
                         label: left ? widget.deleteLabel : widget.coachLabel,
+                        icon: left ? widget.deleteIcon : widget.coachIcon,
                         revealed: _dx.abs(),
                       ),
                     ),
@@ -256,6 +293,7 @@ class _Backdrop extends StatelessWidget {
     required this.colors,
     required this.radius,
     required this.label,
+    required this.icon,
     required this.revealed,
   });
 
@@ -266,12 +304,12 @@ class _Backdrop extends StatelessWidget {
   final List<Color> colors;
   final BorderRadius radius;
   final String label;
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {
     final armed = progress >= 1;
     final reveal = progress.clamp(0, 1).toDouble();
-    final icon = left ? Icons.delete_rounded : Icons.auto_awesome;
     final badge = SizedBox(
       width: 40,
       height: 40,
@@ -290,7 +328,7 @@ class _Backdrop extends StatelessWidget {
             curve: Curves.elasticOut,
             child: Transform.rotate(
               // The trash can wobbles, the sparkle turns as it fills.
-              angle: left
+              angle: icon == Icons.delete_rounded
                   ? (armed ? math.sin(progress * 18) * .18 : 0)
                   : reveal * math.pi / 2,
               child: Icon(icon, color: fjInk, size: 20),

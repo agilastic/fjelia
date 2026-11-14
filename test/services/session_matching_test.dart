@@ -311,4 +311,77 @@ void main() {
       expect(await status('today'), 'planned');
     });
   });
+
+  group('done by hand', () {
+    final day = DateTime(2026, 11, 14);
+    Future<TrainingSession> session(String id) => (db.select(
+      db.trainingSessions,
+    )..where((t) => t.id.equals(id))).getSingle();
+    Future<SessionActual?> actual(String id) => (db.select(
+      db.sessionActuals,
+    )..where((t) => t.sessionId.equals(id))).getSingleOrNull();
+
+    test('a workout recorded as another sport completes it by hand', () async {
+      await plan('run', day, 'running');
+      final ride = await activity(
+        'ride',
+        day.add(const Duration(hours: 9)),
+        'indoor_cycling',
+        minutes: 55,
+      );
+      // Not the same sport: the sync does not match it.
+      expect(await scorer.score(ride), isFalse);
+      expect(
+        (await scorer.unlinkedActivitiesFor(await session('run')))
+            .map((a) => a.activityId),
+        ['ride'],
+      );
+      await scorer.completeByHand(await session('run'), activity: ride);
+      expect(await status('run'), 'completed');
+      expect((await actual('run'))!.activityId, 'ride');
+      expect(await scorer.unlinkedActivitiesFor(await session('run')), isEmpty);
+    });
+
+    test('without an activity it counts as done as planned', () async {
+      await plan('run', day, 'running', minutes: 45);
+      await scorer.completeByHand(await session('run'));
+      final s = await session('run');
+      expect(s.status, 'completed');
+      expect(s.actualDurationMin, 45);
+      expect((await actual('run'))!.activityId, isNull);
+    });
+
+    test('a missed session can be marked done', () async {
+      await plan('run', day, 'running');
+      await scorer.closePastSessions(now: day.add(const Duration(days: 3)));
+      expect(await status('run'), 'skipped');
+      await scorer.completeByHand(await session('run'));
+      expect(await status('run'), 'completed');
+      expect((await actual('run'))!.skipReason, isNull);
+    });
+
+    test('marked as not done, no activity completes it by itself', () async {
+      await plan('run', day, 'running');
+      final run = await activity(
+        'morning',
+        day.add(const Duration(hours: 7)),
+        'running',
+      );
+      expect(await scorer.score(run), isTrue);
+      await scorer.reopen(await session('run'));
+      expect(await status('run'), 'planned');
+      expect(await actual('run'), isNull);
+      expect((await session('run')).modifiedBy, undoneByAthlete);
+      // The sync sees the run again: it stays open.
+      expect(await scorer.score(run), isFalse);
+      expect(await status('run'), 'planned');
+      // Closed later, it keeps the mark.
+      await scorer.closePastSessions(now: day.add(const Duration(days: 3)));
+      expect((await session('run')).modifiedBy, undoneByAthlete);
+      // The athlete can still mark it done.
+      await scorer.completeByHand(await session('run'), activity: run);
+      expect(await status('run'), 'completed');
+      expect((await session('run')).modifiedBy, 'athlete');
+    });
+  });
 }

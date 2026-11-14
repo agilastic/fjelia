@@ -8997,4 +8997,16 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get useOriginalSport => 'Käytä alkuperäistä lajia';
+
+  @override
+  String get markNotDone => 'Ei tehty';
+
+  @override
+  String get markDoneTitle => 'Merkitse tehdyksi';
+
+  @override
+  String get markDoneWhich => 'Millä aktiviteetilla?';
+
+  @override
+  String get markDoneWithoutActivity => 'Ilman aktiviteettia';
 }

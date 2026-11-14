@@ -9002,4 +9002,16 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get useOriginalSport => 'Použiť pôvodný šport';
+
+  @override
+  String get markNotDone => 'Nesplnené';
+
+  @override
+  String get markDoneTitle => 'Označiť ako splnené';
+
+  @override
+  String get markDoneWhich => 'S ktorou aktivitou?';
+
+  @override
+  String get markDoneWithoutActivity => 'Bez aktivity';
 }

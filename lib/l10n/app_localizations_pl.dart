@@ -9057,4 +9057,16 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get useOriginalSport => 'Użyj pierwotnego sportu';
+
+  @override
+  String get markNotDone => 'Niezrobione';
+
+  @override
+  String get markDoneTitle => 'Oznacz jako zrobione';
+
+  @override
+  String get markDoneWhich => 'Z którą aktywnością?';
+
+  @override
+  String get markDoneWithoutActivity => 'Bez aktywności';
 }
