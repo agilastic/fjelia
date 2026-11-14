@@ -4830,11 +4830,6 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
-  String nowOnCurrentTapA(Object current) {
-    return 'Nå på $current. Trykk på en dag, eller dra økten til en. Trinnene forblir som de er.';
-  }
-
-  @override
   String get monthView => 'Månedsvisning';
 
   @override
@@ -8662,12 +8657,26 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
-  String get replacementHistoryEstimate =>
-      'Varigheten er anslått ut fra den siste treningen din i denne idretten.';
+  String replacementHistoryEstimate(
+    int count,
+    int sampleCount,
+    int averageCount,
+  ) {
+    return 'Beregnet fra $count nylige økter i denne idretten: $sampleCount med rå pulsdata sortert i sonene dine, $averageCount bare med snittpuls.';
+  }
+
+  @override
+  String replacementLimitedHistoryEstimate(int count) {
+    return 'Brukbare nylige økter i denne idretten: $count. Det er for få for din personlige historikk, så Fjelia bruker et forsiktig anslag for idretten.';
+  }
 
   @override
   String get replacementFallbackEstimate =>
       'Det finnes for lite nylig treningsdata for denne idretten. Varigheten er et forsiktig anslag.';
+
+  @override
+  String get replacementEstimateDisclaimer =>
+      'Varigheten anslår en lignende belastning på hjerte og kretsløp. Teknikk, muskelbelastning og mekanisk belastning kan likevel være forskjellig.';
 
   @override
   String get replacementRestSuggestion =>
@@ -8696,12 +8705,25 @@ class AppLocalizationsNb extends AppLocalizations {
       'Det finnes for lite nylig belastningshistorikk for denne idretten.';
 
   @override
+  String replacementWarningLimitedHistory(int count) {
+    return 'Brukbare nylige økter i denne idretten: $count av 5 nødvendige. Varigheten er et forsiktig anslag.';
+  }
+
+  @override
+  String get replacementWarningStructureMinimum =>
+      'Drag og pauser beholdes som planlagt, derfor er erstatningen lengre enn den beregnede varigheten.';
+
+  @override
+  String get replacementWarningRunningStructure =>
+      'Dragene ville gått over grensen for løping. Fjelia foreslår i stedet en rolig løpetur innenfor grensen.';
+
+  @override
   String get replacementWarningRunningCap =>
       'Løpsmengden er begrenset forsiktig for å holde den mekaniske belastningen nede.';
 
   @override
   String get replacementWarningLong =>
-      'Lange eller konkurransespesifikke økter kan ikke erstattes fullt ut. Se over den kortere løpeturen.';
+      'Lange økter kan ikke erstattes helt av en annen idrett. Sjekk varigheten, eller velg hvile.';
 
   @override
   String get replacementWarningRace =>
@@ -8736,4 +8758,53 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get replacementPreviewWarnings => 'MERKNADER TIL PLANEN';
+
+  @override
+  String get skipReasonReplaced => 'Erstattet med en annen idrett';
+
+  @override
+  String get skipReasonRestInstead => 'Hvile i stedet for erstatning';
+
+  @override
+  String replacesWorkout(String title) {
+    return 'Erstatter: $title';
+  }
+
+  @override
+  String replacedByWorkout(String title) {
+    return 'Erstattet av: $title';
+  }
+
+  @override
+  String get adaptationReadiness => 'Tilpasset dagsformen din.';
+
+  @override
+  String get adaptationMorningCheck => 'Tilpasset av morgensjekken av planen.';
+
+  @override
+  String get corosPushNote =>
+      'Synkroniser COROS med klokken etter sending. En endret eller flyttet økt erstatter den forrige i Training Hub.';
+
+  @override
+  String get polarPushNote =>
+      'Bruker pulssonene i Polar-sportsprofilen din; sjekk at de stemmer med Fjelia. Én økt: 16:00. To økter: 09:00 og 18:00. Synkroniser Polar Flow med klokken etter sending.';
+
+  @override
+  String skipAlsoRemovedFrom(String platforms) {
+    return 'Den fjernes også fra kalenderen din i $platforms. Ingenting legges til for å ta den igjen.';
+  }
+
+  @override
+  String strengthShareNote(String provider) {
+    return '$provider tar ikke imot styrkeøvelser fra Fjelia. Del listen og legg den inn i $provider-appen.';
+  }
+
+  @override
+  String get sharedAsText => 'Delt som tekst.';
+
+  @override
+  String get bpPeriodDay => 'Dag';
+
+  @override
+  String get bpTodaysReading => 'DAGENS MÅLING';
 }

@@ -4850,11 +4850,6 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String nowOnCurrentTapA(Object current) {
-    return 'Nyt $current. Napauta päivää tai vedä harjoitus sille. Vaiheet pysyvät ennallaan.';
-  }
-
-  @override
   String get monthView => 'Kuukausinäkymä';
 
   @override
@@ -8693,12 +8688,26 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get replacementHistoryEstimate =>
-      'Kesto on arvioitu viimeaikaisen harjoittelusi perusteella tässä lajissa.';
+  String replacementHistoryEstimate(
+    int count,
+    int sampleCount,
+    int averageCount,
+  ) {
+    return 'Arvioitu tämän lajin viimeaikaisista harjoituksista ($count): sykedata omilla alueillasi $sampleCount, vain keskisyke $averageCount.';
+  }
+
+  @override
+  String replacementLimitedHistoryEstimate(int count) {
+    return 'Käyttökelpoisia viimeaikaisia harjoituksia tässä lajissa: $count. Se on liian vähän henkilökohtaiseen historiaan, joten Fjelia käyttää varovaista lajikohtaista arviota.';
+  }
 
   @override
   String get replacementFallbackEstimate =>
       'Tästä lajista ei ole tarpeeksi tuoretta harjoitusdataa. Kesto on varovainen arvio.';
+
+  @override
+  String get replacementEstimateDisclaimer =>
+      'Kesto arvioi samankaltaista sydämen ja verenkierron kuormaa. Tekniikka, lihaskuormitus ja mekaaninen rasitus voivat silti erota.';
 
   @override
   String get replacementRestSuggestion =>
@@ -8727,12 +8736,25 @@ class AppLocalizationsFi extends AppLocalizations {
       'Tästä lajista ei ole tarpeeksi tuoretta kuormitushistoriaa.';
 
   @override
+  String replacementWarningLimitedHistory(int count) {
+    return 'Käyttökelpoisia viimeaikaisia harjoituksia tässä lajissa: $count/5 tarvittavasta. Kesto on varovainen arvio.';
+  }
+
+  @override
+  String get replacementWarningStructureMinimum =>
+      'Työ- ja palautusjaksot pidetään suunnitelman mukaisina, joten korvaava harjoitus on arvioitua kestoa pidempi.';
+
+  @override
+  String get replacementWarningRunningStructure =>
+      'Intervallit ylittäisivät juoksun rajan. Fjelia ehdottaa sen sijaan kevyttä juoksua rajan sisällä.';
+
+  @override
   String get replacementWarningRunningCap =>
       'Juoksumäärää on rajattu varovasti mekaanisen kuormituksen vähentämiseksi.';
 
   @override
   String get replacementWarningLong =>
-      'Pitkiä tai kilpailukohtaisia harjoituksia ei voi korvata täysin. Tarkista lyhyempi juoksu.';
+      'Pitkiä harjoituksia ei voi korvata kokonaan toisella lajilla. Tarkista kesto tai valitse lepo.';
 
   @override
   String get replacementWarningRace =>
@@ -8767,4 +8789,54 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get replacementPreviewWarnings => 'HUOMIOT SUUNNITELMASTA';
+
+  @override
+  String get skipReasonReplaced => 'Korvattu toisella lajilla';
+
+  @override
+  String get skipReasonRestInstead => 'Lepo korvaavan sijaan';
+
+  @override
+  String replacesWorkout(String title) {
+    return 'Korvaa: $title';
+  }
+
+  @override
+  String replacedByWorkout(String title) {
+    return 'Korvattu: $title';
+  }
+
+  @override
+  String get adaptationReadiness => 'Sovitettu päivän vireeseesi.';
+
+  @override
+  String get adaptationMorningCheck =>
+      'Sovitettu aamun suunnitelmatarkistuksessa.';
+
+  @override
+  String get corosPushNote =>
+      'Synkronoi COROS kelloosi lähettämisen jälkeen. Muutettu tai siirretty harjoitus korvaa aiemman Training Hubissa.';
+
+  @override
+  String get polarPushNote =>
+      'Käyttää Polar-urheiluprofiilisi sykealueita; tarkista, että ne vastaavat Fjeliaa. Yksi harjoitus: 16:00. Kaksi harjoitusta: 09:00 ja 18:00. Synkronoi Polar Flow kelloosi lähettämisen jälkeen.';
+
+  @override
+  String skipAlsoRemovedFrom(String platforms) {
+    return 'Se poistetaan myös kalenteristasi palvelussa $platforms. Mitään ei lisätä korvaamaan sitä.';
+  }
+
+  @override
+  String strengthShareNote(String provider) {
+    return '$provider ei ota vastaan voimaharjoitteita Fjeliasta. Jaa lista ja syötä se $provider-sovellukseen.';
+  }
+
+  @override
+  String get sharedAsText => 'Jaettu tekstinä.';
+
+  @override
+  String get bpPeriodDay => 'Päivä';
+
+  @override
+  String get bpTodaysReading => 'TÄMÄN PÄIVÄN MITTAUS';
 }

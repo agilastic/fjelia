@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import '../../db/database.dart';
 import '../../config/free_ai.dart' show planningTimeout;
 import '../../l10n/l10n_ext.dart';
+import '../../l10n/plan_text.dart';
 import '../../providers/ai_coach_provider.dart';
 import '../../providers/heat_acclimation_provider.dart';
 import '../../providers/missed_workout_provider.dart';
@@ -440,16 +441,8 @@ class _MissedWorkoutSheetState extends ConsumerState<MissedWorkoutSheet> {
         : l10n.summaryMove(day);
   }
 
-  String _reasonLabel(BuildContext context, String reason) => switch (reason) {
-    'Illness' => context.l10n.skipReasonIllness,
-    'Injury or pain' => context.l10n.skipReasonInjury,
-    'Fatigue' => context.l10n.skipReasonFatigue,
-    'No time' => context.l10n.skipReasonNoTime,
-    'Travel' => context.l10n.skipReasonTravel,
-    'Conditions' => context.l10n.skipReasonConditions,
-    'My choice' => context.l10n.skipReasonMyChoice,
-    _ => reason,
-  };
+  String _reasonLabel(BuildContext context, String reason) =>
+      skipReasonLabel(context.l10n, reason);
 
   static String _providerName(AiProvider p) => switch (p) {
     AiProvider.mistral => 'Mistral',

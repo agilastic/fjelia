@@ -4831,11 +4831,6 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
-  String nowOnCurrentTapA(Object current) {
-    return 'Nu på $current. Tryk på en dag, eller træk træningen hen på en. Trinene forbliver som de er.';
-  }
-
-  @override
   String get monthView => 'Månedsvisning';
 
   @override
@@ -8659,12 +8654,26 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
-  String get replacementHistoryEstimate =>
-      'Varigheden er anslået ud fra din seneste træning i denne sport.';
+  String replacementHistoryEstimate(
+    int count,
+    int sampleCount,
+    int averageCount,
+  ) {
+    return 'Anslået ud fra $count nylige træninger i denne sportsgren: $sampleCount med rå pulsdata sorteret i dine zoner, $averageCount kun med gennemsnitspuls.';
+  }
+
+  @override
+  String replacementLimitedHistoryEstimate(int count) {
+    return 'Brugbare nylige træninger i denne sportsgren: $count. Det er for få til din personlige historik, så Fjelia bruger et forsigtigt skøn for sportsgrenen.';
+  }
 
   @override
   String get replacementFallbackEstimate =>
       'Der er ikke nok nylige træningsdata for denne sport. Varigheden er et forsigtigt skøn.';
+
+  @override
+  String get replacementEstimateDisclaimer =>
+      'Varigheden anslår en lignende belastning af hjerte og kredsløb. Teknik, muskelbelastning og mekanisk belastning kan stadig være forskellig.';
 
   @override
   String get replacementRestSuggestion =>
@@ -8693,12 +8702,25 @@ class AppLocalizationsDa extends AppLocalizations {
       'Der er ikke nok nylig belastningshistorik for denne sport.';
 
   @override
+  String replacementWarningLimitedHistory(int count) {
+    return 'Brugbare nylige træninger i denne sportsgren: $count af 5 nødvendige. Varigheden er et forsigtigt skøn.';
+  }
+
+  @override
+  String get replacementWarningStructureMinimum =>
+      'Arbejds- og pauseintervaller bevares som planlagt, derfor er erstatningen længere end den anslåede varighed.';
+
+  @override
+  String get replacementWarningRunningStructure =>
+      'Intervallerne ville overskride grænsen for løb. Fjelia foreslår i stedet et roligt løb inden for grænsen.';
+
+  @override
   String get replacementWarningRunningCap =>
       'Løbemængden er begrænset forsigtigt for at holde den mekaniske belastning nede.';
 
   @override
   String get replacementWarningLong =>
-      'Lange eller konkurrencespecifikke træninger kan ikke erstattes fuldt ud. Gennemgå den kortere løbetur.';
+      'Lange træninger kan ikke erstattes helt af en anden sportsgren. Tjek varigheden, eller vælg hvile.';
 
   @override
   String get replacementWarningRace =>
@@ -8733,4 +8755,53 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get replacementPreviewWarnings => 'BEMÆRKNINGER TIL PLANEN';
+
+  @override
+  String get skipReasonReplaced => 'Erstattet med en anden sportsgren';
+
+  @override
+  String get skipReasonRestInstead => 'Hvile i stedet for erstatning';
+
+  @override
+  String replacesWorkout(String title) {
+    return 'Erstatter: $title';
+  }
+
+  @override
+  String replacedByWorkout(String title) {
+    return 'Erstattet af: $title';
+  }
+
+  @override
+  String get adaptationReadiness => 'Tilpasset din dagsform.';
+
+  @override
+  String get adaptationMorningCheck => 'Tilpasset af morgentjekket af planen.';
+
+  @override
+  String get corosPushNote =>
+      'Synkroniser COROS med dit ur efter afsendelse. En ændret eller flyttet træning erstatter den tidligere i Training Hub.';
+
+  @override
+  String get polarPushNote =>
+      'Bruger pulszonerne i din Polar-sportsprofil; tjek at de passer med Fjelia. Én træning: 16:00. To træninger: 09:00 og 18:00. Synkroniser Polar Flow med dit ur efter afsendelse.';
+
+  @override
+  String skipAlsoRemovedFrom(String platforms) {
+    return 'Den fjernes også fra din kalender i $platforms. Der lægges ikke noget ind for at indhente den.';
+  }
+
+  @override
+  String strengthShareNote(String provider) {
+    return '$provider modtager ikke styrkeøvelser fra Fjelia. Del listen, og indtast den i $provider-appen.';
+  }
+
+  @override
+  String get sharedAsText => 'Delt som tekst.';
+
+  @override
+  String get bpPeriodDay => 'Dag';
+
+  @override
+  String get bpTodaysReading => 'DAGENS MÅLING';
 }

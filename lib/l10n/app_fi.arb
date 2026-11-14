@@ -2731,14 +2731,6 @@
       }
     }
   },
-  "nowOnCurrentTapA": "Nyt {current}. Napauta päivää tai vedä harjoitus sille. Vaiheet pysyvät ennallaan.",
-  "@nowOnCurrentTapA": {
-    "placeholders": {
-      "current": {
-        "type": "Object"
-      }
-    }
-  },
   "monthView": "Kuukausinäkymä",
   "syncing": "Synkronoidaan",
   "trendUnavailable": "Trendi ei käytettävissä",
@@ -4049,7 +4041,7 @@
   "sleepEcgStagesFailed": "Univaiheita ei voitu arvioida. Tarkista, että tallennus on valmis, ja yritä uudelleen.",
   "replacementPreviewTitle": "Tarkista korvaava harjoitus",
   "replacementGoalLoad": "Tavoite: {objective} · suunniteltu kuormitus {load}",
-  "replacementHistoryEstimate": "Kesto on arvioitu viimeaikaisen harjoittelusi perusteella tässä lajissa.",
+  "replacementHistoryEstimate": "Arvioitu tämän lajin viimeaikaisista harjoituksista ({count}): sykedata omilla alueillasi {sampleCount}, vain keskisyke {averageCount}.",
   "replacementFallbackEstimate": "Tästä lajista ei ole tarpeeksi tuoretta harjoitusdataa. Kesto on varovainen arvio.",
   "replacementRestSuggestion": "Lepo voi olla parempi valinta nykyiseen harjoitusohjelmaasi.",
   "replacementObjectiveRecovery": "Palautuminen",
@@ -4060,7 +4052,7 @@
   "replacementObjectiveLong": "Pitkä kestävyys",
   "replacementWarningNoHistory": "Tästä lajista ei ole tarpeeksi tuoretta kuormitushistoriaa.",
   "replacementWarningRunningCap": "Juoksumäärää on rajattu varovasti mekaanisen kuormituksen vähentämiseksi.",
-  "replacementWarningLong": "Pitkiä tai kilpailukohtaisia harjoituksia ei voi korvata täysin. Tarkista lyhyempi juoksu.",
+  "replacementWarningLong": "Pitkiä harjoituksia ei voi korvata kokonaan toisella lajilla. Tarkista kesto tai valitse lepo.",
   "replacementWarningRace": "Tällä harjoituksella on kilpailuprioriteetti; sen lajikohtainen hyöty ei välttämättä säily.",
   "replacementWarningSwim": "Osa aerobisesta ärsykkeestä siirtyy, mutta ei uintitekniikka eikä lajikohtainen lihaskuormitus.",
   "replacementWarningStrength": "Voima- ja kestävyysharjoitukset eivät ole vastaavia eivätkä voi säilyttää samaa harjoitusvaikutusta.",
@@ -4069,5 +4061,23 @@
   "replacementWarningLowRecovery": "Viimeksi tallennettu palautumispisteesi on matala. Harkitse tehon vähentämistä tai lepoa.",
   "replacementWarningRecentVolume": "Harjoituskuormasi viimeisten seitsemän päivän ajalta on selvästi suurempi kuin sitä edeltävien seitsemän päivän.",
   "replacementTrainingGoal": "HARJOITUSTAVOITE",
-  "replacementPreviewWarnings": "HUOMIOT SUUNNITELMASTA"
+  "replacementPreviewWarnings": "HUOMIOT SUUNNITELMASTA",
+  "skipReasonReplaced": "Korvattu toisella lajilla",
+  "skipReasonRestInstead": "Lepo korvaavan sijaan",
+  "replacesWorkout": "Korvaa: {title}",
+  "replacedByWorkout": "Korvattu: {title}",
+  "adaptationReadiness": "Sovitettu päivän vireeseesi.",
+  "adaptationMorningCheck": "Sovitettu aamun suunnitelmatarkistuksessa.",
+  "corosPushNote": "Synkronoi COROS kelloosi lähettämisen jälkeen. Muutettu tai siirretty harjoitus korvaa aiemman Training Hubissa.",
+  "polarPushNote": "Käyttää Polar-urheiluprofiilisi sykealueita; tarkista, että ne vastaavat Fjeliaa. Yksi harjoitus: 16:00. Kaksi harjoitusta: 09:00 ja 18:00. Synkronoi Polar Flow kelloosi lähettämisen jälkeen.",
+  "skipAlsoRemovedFrom": "Se poistetaan myös kalenteristasi palvelussa {platforms}. Mitään ei lisätä korvaamaan sitä.",
+  "strengthShareNote": "{provider} ei ota vastaan voimaharjoitteita Fjeliasta. Jaa lista ja syötä se {provider}-sovellukseen.",
+  "sharedAsText": "Jaettu tekstinä.",
+  "replacementLimitedHistoryEstimate": "Käyttökelpoisia viimeaikaisia harjoituksia tässä lajissa: {count}. Se on liian vähän henkilökohtaiseen historiaan, joten Fjelia käyttää varovaista lajikohtaista arviota.",
+  "replacementEstimateDisclaimer": "Kesto arvioi samankaltaista sydämen ja verenkierron kuormaa. Tekniikka, lihaskuormitus ja mekaaninen rasitus voivat silti erota.",
+  "replacementWarningLimitedHistory": "Käyttökelpoisia viimeaikaisia harjoituksia tässä lajissa: {count}/5 tarvittavasta. Kesto on varovainen arvio.",
+  "replacementWarningStructureMinimum": "Työ- ja palautusjaksot pidetään suunnitelman mukaisina, joten korvaava harjoitus on arvioitua kestoa pidempi.",
+  "replacementWarningRunningStructure": "Intervallit ylittäisivät juoksun rajan. Fjelia ehdottaa sen sijaan kevyttä juoksua rajan sisällä.",
+  "bpPeriodDay": "Päivä",
+  "bpTodaysReading": "TÄMÄN PÄIVÄN MITTAUS"
 }

@@ -8498,12 +8498,6 @@ abstract class AppLocalizations {
   /// **'Last {days} days'**
   String lastDaysDays(Object days);
 
-  /// No description provided for @nowOnCurrentTapA.
-  ///
-  /// In en, this message translates to:
-  /// **'Now on {current}. Tap a day, or drag the workout onto one. The steps stay as they are.'**
-  String nowOnCurrentTapA(Object current);
-
   /// No description provided for @monthView.
   ///
   /// In en, this message translates to:
@@ -15033,14 +15027,30 @@ abstract class AppLocalizations {
   /// No description provided for @replacementHistoryEstimate.
   ///
   /// In en, this message translates to:
-  /// **'Duration estimated from your recent training in this sport.'**
-  String get replacementHistoryEstimate;
+  /// **'Estimated from {count} recent workouts in this sport: {sampleCount} with heart-rate samples sorted into your zones, {averageCount} with average heart rate only.'**
+  String replacementHistoryEstimate(
+    int count,
+    int sampleCount,
+    int averageCount,
+  );
+
+  /// No description provided for @replacementLimitedHistoryEstimate.
+  ///
+  /// In en, this message translates to:
+  /// **'Usable recent workouts in this sport: {count}. That is too few for your personal history, so Fjelia uses a conservative estimate for the sport.'**
+  String replacementLimitedHistoryEstimate(int count);
 
   /// No description provided for @replacementFallbackEstimate.
   ///
   /// In en, this message translates to:
   /// **'There is not enough recent training data for this sport. Duration is a conservative estimate.'**
   String get replacementFallbackEstimate;
+
+  /// No description provided for @replacementEstimateDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'The duration estimates a similar cardiovascular load. Technique, muscle demands and mechanical stress can still differ.'**
+  String get replacementEstimateDisclaimer;
 
   /// No description provided for @replacementRestSuggestion.
   ///
@@ -15090,6 +15100,24 @@ abstract class AppLocalizations {
   /// **'There is not enough recent load history for this sport.'**
   String get replacementWarningNoHistory;
 
+  /// No description provided for @replacementWarningLimitedHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Usable recent workouts in this sport: {count} of 5 needed. The duration is a conservative estimate.'**
+  String replacementWarningLimitedHistory(int count);
+
+  /// No description provided for @replacementWarningStructureMinimum.
+  ///
+  /// In en, this message translates to:
+  /// **'Work and recovery intervals were kept as planned, so the replacement is longer than the estimated duration.'**
+  String get replacementWarningStructureMinimum;
+
+  /// No description provided for @replacementWarningRunningStructure.
+  ///
+  /// In en, this message translates to:
+  /// **'The intervals would exceed the running limit. Fjelia suggests an easy run within the limit instead.'**
+  String get replacementWarningRunningStructure;
+
   /// No description provided for @replacementWarningRunningCap.
   ///
   /// In en, this message translates to:
@@ -15099,7 +15127,7 @@ abstract class AppLocalizations {
   /// No description provided for @replacementWarningLong.
   ///
   /// In en, this message translates to:
-  /// **'Long or race-specific workouts are not fully replaceable. Review the shorter run.'**
+  /// **'Long sessions cannot be fully replaced by another sport. Check the duration, or choose rest.'**
   String get replacementWarningLong;
 
   /// No description provided for @replacementWarningRace.
@@ -15155,6 +15183,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'PLAN NOTES'**
   String get replacementPreviewWarnings;
+
+  /// No description provided for @skipReasonReplaced.
+  ///
+  /// In en, this message translates to:
+  /// **'Replaced with another sport'**
+  String get skipReasonReplaced;
+
+  /// No description provided for @skipReasonRestInstead.
+  ///
+  /// In en, this message translates to:
+  /// **'Rest instead of a replacement'**
+  String get skipReasonRestInstead;
+
+  /// No description provided for @replacesWorkout.
+  ///
+  /// In en, this message translates to:
+  /// **'Replaces: {title}'**
+  String replacesWorkout(String title);
+
+  /// No description provided for @replacedByWorkout.
+  ///
+  /// In en, this message translates to:
+  /// **'Replaced by: {title}'**
+  String replacedByWorkout(String title);
+
+  /// No description provided for @adaptationReadiness.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjusted to your readiness.'**
+  String get adaptationReadiness;
+
+  /// No description provided for @adaptationMorningCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjusted by the morning plan check.'**
+  String get adaptationMorningCheck;
+
+  /// No description provided for @corosPushNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync COROS to your watch after sending. A changed or moved workout replaces the earlier one in the Training Hub.'**
+  String get corosPushNote;
+
+  /// No description provided for @polarPushNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Uses your Polar sport profile’s heart-rate zones; check they match Fjelia. One workout: 16:00. Two workouts: 09:00 and 18:00. Sync Polar Flow to your watch after sending.'**
+  String get polarPushNote;
+
+  /// No description provided for @skipAlsoRemovedFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'It is also taken off your calendar on {platforms}. Nothing is added to make it up.'**
+  String skipAlsoRemovedFrom(String platforms);
+
+  /// No description provided for @strengthShareNote.
+  ///
+  /// In en, this message translates to:
+  /// **'{provider} does not take strength exercises from Fjelia. Share the list and enter it in the {provider} app.'**
+  String strengthShareNote(String provider);
+
+  /// No description provided for @sharedAsText.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared as text.'**
+  String get sharedAsText;
+
+  /// No description provided for @bpPeriodDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Day'**
+  String get bpPeriodDay;
+
+  /// No description provided for @bpTodaysReading.
+  ///
+  /// In en, this message translates to:
+  /// **'TODAY’S READING'**
+  String get bpTodaysReading;
 }
 
 class _AppLocalizationsDelegate

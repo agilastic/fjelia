@@ -4,7 +4,29 @@ import 'package:drift/drift.dart';
 
 import '../db/database.dart';
 import '../models/workout_profile.dart' show secondsPerMetre;
-import '../providers/training_load_provider.dart' show effectiveLoad;
+import '../providers/training_load_provider.dart' show effectiveLoadFromSummary;
+import 'athlete_thresholds_service.dart';
+import 'hr_zone_model.dart'
+    show zonePercentFromActiveSamples, zonePercentFromSamples, zoneOf;
+
+class _InternalActivityLoad {
+  const _InternalActivityLoad(this.load, {required this.fromHeartRateSamples});
+
+  final double load;
+  final bool fromHeartRateSamples;
+}
+
+class _AdaptedWorkout {
+  const _AdaptedWorkout({
+    required this.durationMin,
+    required this.stepsJson,
+    this.exceededTargetForStructure = false,
+  });
+
+  final int durationMin;
+  final String stepsJson;
+  final bool exceededTargetForStructure;
+}
 
 enum WorkoutObjective {
   recovery,
@@ -25,6 +47,8 @@ class WorkoutReplacementPreview {
     required this.targetLoad,
     required this.stepsJson,
     required this.usedAthleteHistory,
+    required this.historyActivityCount,
+    required this.historySampleCount,
     required this.warnings,
     required this.suggestRest,
   });
@@ -37,6 +61,8 @@ class WorkoutReplacementPreview {
   final int targetLoad;
   final String stepsJson;
   final bool usedAthleteHistory;
+  final int historyActivityCount;
+  final int historySampleCount;
   final List<String> warnings;
   final bool suggestRest;
 }
@@ -54,26 +80,52 @@ class WorkoutReplacementService {
   }) async {
     final objective = _objective(source);
     final activities = await db.getActivitiesInRange(180);
+    final thresholdsService = AthleteThresholdsService(db);
+    final thresholds = await thresholdsService.get();
     final sourceFamily = _family(source.sport);
     final targetFamily = _family(targetSport);
     final targetRates = <double>[];
     final sourceRates = <double>[];
+    var targetSampleCount = 0;
+    final canonicalActivityLoads = <String, double>{};
     final sourceDay = DateTime(
       source.sessionDate.year,
       source.sessionDate.month,
       source.sessionDate.day,
     );
+    final recentActivities = activities.where((activity) {
+      final day = DateTime(
+        activity.startDate.year,
+        activity.startDate.month,
+        activity.startDate.day,
+      );
+      final daysAgo = sourceDay.difference(day).inDays;
+      return daysAgo >= 0 && daysAgo < 14;
+    }).toList();
     for (final activity in activities) {
       final minutes = activity.durationSeconds / 60;
       if (minutes < 10) continue;
       final family = _family(activity.type);
-      final rate = effectiveLoad(activity) / minutes;
+      final load = _internalActivityLoad(
+        activity,
+        thresholdsService,
+        thresholds,
+      );
+      if (load == null) continue;
+      canonicalActivityLoads[activity.activityId] = load.load;
+      final rate = load.load / minutes;
       if (!rate.isFinite || rate <= 0) continue;
-      if (family == targetFamily) targetRates.add(rate);
+      if (family == targetFamily) {
+        targetRates.add(rate);
+        if (load.fromHeartRateSamples) targetSampleCount++;
+      }
       if (family == sourceFamily) sourceRates.add(rate);
     }
 
-    final useHistory = targetRates.length >= 2;
+    // Five recent sessions is a modest minimum for an athlete-specific median;
+    // one or two unusual workouts should not dictate the conversion.
+    const minimumComparableActivities = 5;
+    final useHistory = targetRates.length >= minimumComparableActivities;
     final fallbackScale = _fallbackDurationScale(sourceFamily, targetFamily);
     final load = source.plannedTrimp;
     final estimate = useHistory
@@ -82,8 +134,8 @@ class WorkoutReplacementService {
     var duration = estimate.round().clamp(15, 240);
     final warnings = <String>[];
     if (!useHistory) {
-      warnings.add('noHistory');
-    } else if (sourceRates.length >= 2) {
+      warnings.add(targetRates.isEmpty ? 'noHistory' : 'limitedHistory');
+    } else if (sourceRates.length >= minimumComparableActivities) {
       // The activity rates are used as an athlete-specific calibration. A
       // broad clamp avoids implausible duration swings from noisy records.
       final expectedFromSource =
@@ -96,17 +148,25 @@ class WorkoutReplacementService {
     }
 
     final targetIsRun = targetFamily == 'run';
-    if (targetIsRun) {
-      final cap = mathMin(60, (source.plannedDurationMin * .75).round());
-      if (duration > cap) {
-        duration = cap.clamp(15, 240);
-        warnings.add('runningCap');
-      }
+    // Every switch to running is capped, trail to road included: the spec
+    // limits the running stress of a replacement, not only a new sport's.
+    final switchToRun = targetIsRun && targetSport != source.sport;
+    final runCap = mathMin(
+      60,
+      (source.plannedDurationMin * .75).round(),
+    ).clamp(15, 60);
+    var capped = false;
+    if (switchToRun && duration > runCap) {
+      duration = runCap;
+      capped = true;
+      warnings.add('runningCap');
     }
-    duration = ((duration / 5).round() * 5).clamp(15, 240);
-    if (objective == WorkoutObjective.longEndurance && targetIsRun) {
-      warnings.add('longRun');
-    }
+    // Five-minute steps; a capped run rounds down so it stays under the cap.
+    duration = capped
+        ? mathMax(15.0, (duration ~/ 5) * 5.0).round()
+        : ((duration / 5).round() * 5).clamp(15, 240);
+    // A long session is not fully replaceable by any other sport.
+    if (objective == WorkoutObjective.longEndurance) warnings.add('longRun');
     if ((source.goalRole == 'primary' ||
             source.phase == 'race' ||
             source.phase == 'taper') &&
@@ -135,9 +195,12 @@ class WorkoutReplacementService {
     final recovery = recoveryScores.firstOrNull?.recoveryScore;
     if (recovery != null && recovery < 40) warnings.add('lowRecovery');
 
-    final recentActivities = await db.getActivitiesInRange(14);
     var recentLoad = 0.0;
     var previousLoad = 0.0;
+    var recentCount = 0;
+    var recentWithHrCount = 0;
+    var previousCount = 0;
+    var previousWithHrCount = 0;
     for (final activity in recentActivities) {
       final day = DateTime(
         activity.startDate.year,
@@ -146,12 +209,33 @@ class WorkoutReplacementService {
       );
       final daysAgo = sourceDay.difference(day).inDays;
       if (daysAgo >= 0 && daysAgo < 7) {
-        recentLoad += effectiveLoad(activity);
+        recentCount++;
+        final load = canonicalActivityLoads[activity.activityId];
+        if (load != null) {
+          recentLoad += load;
+          recentWithHrCount++;
+        }
       } else if (daysAgo >= 7 && daysAgo < 14) {
-        previousLoad += effectiveLoad(activity);
+        previousCount++;
+        final load = canonicalActivityLoads[activity.activityId];
+        if (load != null) {
+          previousLoad += load;
+          previousWithHrCount++;
+        }
       }
     }
-    if (previousLoad > 0 && recentLoad > previousLoad * 1.3) {
+    final recentCoverage = recentCount == 0
+        ? 0
+        : recentWithHrCount / recentCount;
+    final previousCoverage = previousCount == 0
+        ? 0
+        : previousWithHrCount / previousCount;
+    if (previousLoad > 0 &&
+        recentLoad > previousLoad * 1.3 &&
+        recentWithHrCount >= 2 &&
+        previousWithHrCount >= 2 &&
+        recentCoverage >= .7 &&
+        previousCoverage >= .7) {
       warnings.add('highRecentVolume');
     }
 
@@ -191,15 +275,30 @@ class WorkoutReplacementService {
       warnings.add('largeWeeklyShare');
     }
 
+    var adapted = _adaptWorkout(source, duration, targetSport);
+    if (switchToRun && adapted.durationMin > runCap) {
+      // Preserve the running safety cap even when the original interval set
+      // cannot fit. Offer an easy run at the cap rather than overloading it.
+      adapted = _AdaptedWorkout(
+        durationMin: runCap,
+        stepsJson: _basicSteps(runCap, source.primaryZone.clamp(1, 2).toInt()),
+      );
+      warnings.add('runningStructure');
+    } else if (adapted.exceededTargetForStructure) {
+      warnings.add('structureMinimum');
+    }
+
     return WorkoutReplacementPreview(
       source: source,
       targetSport: targetSport,
       targetLabel: targetLabel,
       objective: objective,
-      durationMin: duration,
+      durationMin: adapted.durationMin,
       targetLoad: load,
-      stepsJson: _adaptSteps(source, duration, targetSport),
+      stepsJson: adapted.stepsJson,
       usedAthleteHistory: useHistory,
+      historyActivityCount: targetRates.length,
+      historySampleCount: targetSampleCount,
       warnings: warnings,
       suggestRest:
           duration < 20 ||
@@ -212,15 +311,67 @@ class WorkoutReplacementService {
     );
   }
 
+  /// Recalculates history with Fjelia's own zone weights. Vendor training-load
+  /// scores and stored zone summaries are intentionally ignored because their
+  /// scales and zone definitions differ between providers.
+  static _InternalActivityLoad? _internalActivityLoad(
+    ActivityRecord activity,
+    AthleteThresholdsService thresholdsService,
+    AthleteThreshold? thresholds,
+  ) {
+    if (activity.durationSeconds < 600) return null;
+    final floors = thresholds == null
+        ? null
+        : thresholdsService.hrZoneFloorsFor(thresholds, activity.type);
+    if (floors == null || floors.length < 5) return null;
+
+    Map<String, double>? zones;
+    final source = activity.source?.toLowerCase();
+    if (source == 'ftms' || source == 'manual_recording') {
+      zones = zonePercentFromActiveSamples(
+        activity.metricsJson,
+        floors,
+        activity.durationSeconds.toDouble(),
+      );
+    } else {
+      zones = zonePercentFromSamples(activity.metricsJson, floors);
+    }
+    if (zones != null) {
+      final load = effectiveLoadFromSummary(
+        durationSeconds: activity.durationSeconds,
+        hrZonesJson: jsonEncode(zones),
+      );
+      if (load.isFinite && load > 0) {
+        return _InternalActivityLoad(load, fromHeartRateSamples: true);
+      }
+    }
+
+    // Average-HR-only records cannot show how time was distributed across
+    // zones. Use a one-zone approximation and disclose the lower confidence.
+    final averageHr = activity.avgHeartRate;
+    if (averageHr == null || !averageHr.isFinite || averageHr <= 0) return null;
+    final zone = zoneOf(averageHr, floors);
+    final averageZone = jsonEncode({
+      for (var i = 1; i <= 5; i++) 'zone$i': i == zone ? 100.0 : 0.0,
+    });
+    final load = effectiveLoadFromSummary(
+      durationSeconds: activity.durationSeconds,
+      hrZonesJson: averageZone,
+    );
+    return load.isFinite && load > 0
+        ? _InternalActivityLoad(load, fromHeartRateSamples: false)
+        : null;
+  }
+
   static WorkoutObjective _objective(TrainingSession s) {
     final text = '${s.sessionType} ${s.subType ?? ''} ${s.title}'.toLowerCase();
-    if (text.contains('recovery') || text.contains('regeneration')) {
-      return WorkoutObjective.recovery;
-    }
-    if (text.contains('long') || text.contains('lang')) {
+    bool word(String pattern) => RegExp('\\b($pattern)\\b').hasMatch(text);
+    if (word('recovery|regeneration')) return WorkoutObjective.recovery;
+    // Whole words only: "Langlauf" is a sport, not a long session.
+    if (word('long|lang|lange|langer|langes')) {
       return WorkoutObjective.longEndurance;
     }
-    if (text.contains('vo2') || text.contains('max') || s.primaryZone >= 5) {
+    if (text.contains('vo2') || word('max') || s.primaryZone >= 5) {
       return WorkoutObjective.vo2max;
     }
     if (text.contains('threshold') ||
@@ -232,6 +383,9 @@ class WorkoutReplacementService {
       return WorkoutObjective.tempo;
     }
     if (s.primaryZone <= 1) return WorkoutObjective.recovery;
+    // An easy session this long is a long session, whatever its title says.
+    final longFrom = _family(s.sport) == 'run' ? 90 : 150;
+    if (s.plannedDurationMin >= longFrom) return WorkoutObjective.longEndurance;
     return WorkoutObjective.base;
   }
 
@@ -268,7 +422,6 @@ class WorkoutReplacementService {
       'cycle>row': .75,
       'row>ski': .90,
       'ski>row': 1.10,
-      'trail>hike': .95,
       'swim>cycle': 1.20,
     };
     return scales['$source>$target'] ?? 1.15;
@@ -282,18 +435,26 @@ class WorkoutReplacementService {
         : (sorted[middle - 1] + sorted[middle]) / 2;
   }
 
-  static String _adaptSteps(
+  static _AdaptedWorkout _adaptWorkout(
     TrainingSession source,
     int durationMin,
     String targetSport,
   ) {
     final input = source.stepsJson;
     if (input == null || input.isEmpty) {
-      return _basicSteps(durationMin, source.primaryZone);
+      return _AdaptedWorkout(
+        durationMin: durationMin,
+        stepsJson: _basicSteps(durationMin, source.primaryZone),
+      );
     }
     try {
       final decoded = jsonDecode(input);
-      if (decoded is! List) return _basicSteps(durationMin, source.primaryZone);
+      if (decoded is! List) {
+        return _AdaptedWorkout(
+          durationMin: durationMin,
+          stepsJson: _basicSteps(durationMin, source.primaryZone),
+        );
+      }
       final targetSeconds = durationMin * 60;
       final nodes = <({Map<String, dynamic> node, double repeat})>[];
       void convertDistanceSteps(List values, [double repeatMultiplier = 1]) {
@@ -343,16 +504,120 @@ class WorkoutReplacementService {
             v +
             ((n.node['endConditionValue'] as num?)?.toDouble() ?? 0) * n.repeat,
       );
-      if (sum <= 0) return _basicSteps(durationMin, source.primaryZone);
-      final factor = targetSeconds / sum;
-      for (final node in timeNodes) {
-        final value = node.node['endConditionValue'];
-        if (value is num) {
-          node.node['endConditionValue'] = (value * factor).round().clamp(
-            30,
-            targetSeconds,
-          );
+      if (sum <= 0) {
+        return _AdaptedWorkout(
+          durationMin: durationMin,
+          stepsJson: _basicSteps(durationMin, source.primaryZone),
+        );
+      }
+
+      final hasHardIntervals = nodes.any((entry) {
+        final zone = entry.node['zoneNumber'];
+        return zone is num && zone >= 3;
+      });
+      final hasRepeats = nodes.any((entry) => entry.repeat > 1);
+      final simpleAerobic = !hasHardIntervals && !hasRepeats;
+      var exceededTargetForStructure = false;
+
+      if (simpleAerobic) {
+        // For steady easy workouts, scale the single effort to the estimated
+        // equivalent duration. No interval/recovery pattern is being changed.
+        final factor = targetSeconds / sum;
+        for (final entry in timeNodes) {
+          final value = entry.node['endConditionValue'];
+          if (value is num) {
+            entry.node['endConditionValue'] = (value * factor).round().clamp(
+              30,
+              targetSeconds,
+            );
+          }
         }
+      } else if (targetSeconds > sum) {
+        // Keep work and recovery intervals intact. Add the extra aerobic volume
+        // as a separate Z2 block immediately before the cooldown.
+        final extra = (targetSeconds - sum).round();
+        final cooldownIndex = decoded.lastIndexWhere((item) {
+          if (item is! Map) return false;
+          final type = item['stepType'];
+          return type is Map && type['stepTypeKey'] == 'cooldown';
+        });
+        final easyStep = <String, dynamic>{
+          'type': 'ExecutableStepDTO',
+          'stepType': {'stepTypeId': 3, 'stepTypeKey': 'interval'},
+          'endCondition': {'conditionTypeId': 2, 'conditionTypeKey': 'time'},
+          'endConditionValue': extra,
+          'zoneNumber': 2,
+        };
+        decoded.insert(
+          cooldownIndex < 0 ? decoded.length : cooldownIndex,
+          easyStep,
+        );
+        timeNodes.add((node: easyStep, repeat: 1));
+      } else {
+        // When shortening structured work, reduce only the non-repeated easy
+        // portions. Hard intervals and their recoveries stay at their
+        // prescribed durations. Warm-up and cool-down retain at least 5 min.
+        final adjustable = <({Map<String, dynamic> node, int floor})>[];
+        for (final entry in timeNodes) {
+          if (entry.repeat > 1) continue;
+          final node = entry.node;
+          final value = node['endConditionValue'];
+          final type = _stepType(node);
+          final zone = node['zoneNumber'];
+          final z = zone is num ? zone.toInt() : 1;
+          if (value is! num || z > 2 || type == 'recovery' || type == 'rest') {
+            continue;
+          }
+          // Never below five minutes for warm-up and cool-down, but a shorter
+          // step is not lengthened either.
+          final minimum = type == 'warmup' || type == 'cooldown' ? 300 : 30;
+          adjustable.add((node: node, floor: mathMin(minimum, value.toInt())));
+        }
+        final fixed =
+            sum -
+            adjustable.fold<double>(
+              0,
+              (total, entry) =>
+                  total +
+                  ((entry.node['endConditionValue'] as num?)?.toDouble() ?? 0),
+            );
+        final desiredAdjustable = mathMax(0.0, targetSeconds - fixed);
+        final currentAdjustable = adjustable.fold<double>(
+          0,
+          (total, entry) =>
+              total +
+              ((entry.node['endConditionValue'] as num?)?.toDouble() ?? 0),
+        );
+        final floorTotal = adjustable.fold<int>(
+          0,
+          (total, entry) => total + entry.floor,
+        );
+        if (adjustable.isNotEmpty && desiredAdjustable < currentAdjustable) {
+          final reducible = mathMax(
+            0.0,
+            currentAdjustable - floorTotal.toDouble(),
+          );
+          final retained = mathMax(floorTotal.toDouble(), desiredAdjustable);
+          final factor = reducible == 0
+              ? 0.0
+              : ((retained - floorTotal) / reducible).clamp(0.0, 1.0);
+          for (final entry in adjustable) {
+            final current = (entry.node['endConditionValue'] as num).toDouble();
+            entry.node['endConditionValue'] =
+                (entry.floor + (current - entry.floor) * factor).round();
+          }
+        }
+        final adaptedSeconds = timeNodes.fold<double>(
+          0,
+          (total, entry) =>
+              total +
+              ((entry.node['endConditionValue'] as num?)?.toDouble() ?? 0) *
+                  entry.repeat,
+        );
+        exceededTargetForStructure = adaptedSeconds > targetSeconds + 1;
+      }
+
+      for (final entry in timeNodes) {
         for (final key in [
           'targetType',
           'targetValueOne',
@@ -361,16 +626,38 @@ class WorkoutReplacementService {
           'ftpLow',
           'ftpHigh',
         ]) {
-          node.node.remove(key);
+          entry.node.remove(key);
         }
       }
       // Keep the executable source structure and HR zones; unsupported sport
       // targets are removed and rebuilt by the platform from the new sport.
-      return jsonEncode(decoded);
+      final totalSeconds = timeNodes.fold<double>(
+        0,
+        (total, entry) =>
+            total +
+            ((entry.node['endConditionValue'] as num?)?.toDouble() ?? 0) *
+                entry.repeat,
+      );
+      final adaptedDuration = (totalSeconds / 60).round().clamp(1, 240);
+      return _AdaptedWorkout(
+        durationMin: adaptedDuration,
+        stepsJson: jsonEncode(decoded),
+        exceededTargetForStructure: exceededTargetForStructure,
+      );
     } catch (_) {
-      return _basicSteps(durationMin, source.primaryZone);
+      return _AdaptedWorkout(
+        durationMin: durationMin,
+        stepsJson: _basicSteps(durationMin, source.primaryZone),
+      );
     }
   }
+
+  static String? _stepType(Map<String, dynamic> node) {
+    final type = node['stepType'];
+    return type is Map ? type['stepTypeKey']?.toString() : type?.toString();
+  }
+
+  static double mathMax(double a, double b) => a > b ? a : b;
 
   static String _basicSteps(int durationMin, int zone) {
     final total = durationMin * 60;

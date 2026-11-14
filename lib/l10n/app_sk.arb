@@ -2731,14 +2731,6 @@
       }
     }
   },
-  "nowOnCurrentTapA": "Teraz na {current}. Ťuknite na deň alebo naň potiahnite tréning. Kroky zostanú nezmenené.",
-  "@nowOnCurrentTapA": {
-    "placeholders": {
-      "current": {
-        "type": "Object"
-      }
-    }
-  },
   "monthView": "Mesačné zobrazenie",
   "syncing": "Synchronizuje sa",
   "trendUnavailable": "Trend nie je k dispozícii",
@@ -4049,7 +4041,7 @@
   "sleepEcgStagesFailed": "Fázy spánku sa nepodarilo odhadnúť. Skontrolujte, či je záznam úplný, a skúste to znova.",
   "replacementPreviewTitle": "Skontrolovať náhradný tréning",
   "replacementGoalLoad": "Cieľ: {objective} · plánovaná záťaž {load}",
-  "replacementHistoryEstimate": "Trvanie je odhadnuté podľa tvojho nedávneho tréningu v tomto športe.",
+  "replacementHistoryEstimate": "Odhadnuté z posledných tréningov v tomto športe ({count}): s nespracovanými dátami srdcovej frekvencie v tvojich zónach {sampleCount}, len s priemerným tepom {averageCount}.",
   "replacementFallbackEstimate": "Pre tento šport nie je dosť nedávnych tréningových údajov. Trvanie je opatrný odhad.",
   "replacementRestSuggestion": "Odpočinok môže byť pre tvoj aktuálny tréningový plán lepšou voľbou.",
   "replacementObjectiveRecovery": "Regenerácia",
@@ -4060,7 +4052,7 @@
   "replacementObjectiveLong": "Dlhá vytrvalosť",
   "replacementWarningNoHistory": "Pre tento šport nie je dosť nedávnej histórie záťaže.",
   "replacementWarningRunningCap": "Bežecký objem bol opatrne obmedzený, aby sa znížila mechanická záťaž.",
-  "replacementWarningLong": "Dlhé alebo pretekovo špecifické tréningy sa nedajú úplne nahradiť. Skontroluj kratší beh.",
+  "replacementWarningLong": "Dlhé tréningy sa nedajú úplne nahradiť iným športom. Skontroluj trvanie alebo zvoľ odpočinok.",
   "replacementWarningRace": "Tento tréning má pretekovú prioritu; jeho prínos špecifický pre šport sa nemusí zachovať.",
   "replacementWarningSwim": "Časť aeróbneho podnetu sa zachová, ale nie plavecká technika ani špecifické svalové nároky.",
   "replacementWarningStrength": "Silový a vytrvalostný tréning nie sú rovnocenné a nemôžu zachovať rovnaký tréningový účinok.",
@@ -4069,5 +4061,23 @@
   "replacementWarningLowRecovery": "Tvoje naposledy uložené skóre regenerácie je nízke. Zváž zníženie intenzity alebo odpočinok.",
   "replacementWarningRecentVolume": "Tvoja tréningová záťaž za posledných sedem dní je výrazne vyššia ako v predchádzajúcich siedmich dňoch.",
   "replacementTrainingGoal": "TRÉNINGOVÝ CIEĽ",
-  "replacementPreviewWarnings": "POZNÁMKY K PLÁNU"
+  "replacementPreviewWarnings": "POZNÁMKY K PLÁNU",
+  "skipReasonReplaced": "Nahradené iným športom",
+  "skipReasonRestInstead": "Odpočinok namiesto náhrady",
+  "replacesWorkout": "Nahrádza: {title}",
+  "replacedByWorkout": "Nahradené: {title}",
+  "adaptationReadiness": "Prispôsobené tvojej dennej forme.",
+  "adaptationMorningCheck": "Prispôsobené rannou kontrolou plánu.",
+  "corosPushNote": "Po odoslaní zosynchronizuj COROS s hodinkami. Zmenený alebo presunutý tréning nahradí predchádzajúci v Training Hube.",
+  "polarPushNote": "Používa zóny srdcovej frekvencie z tvojho športového profilu Polar; skontroluj, či zodpovedajú Fjelii. Jeden tréning: 16:00. Dva tréningy: 09:00 a 18:00. Po odoslaní zosynchronizuj Polar Flow s hodinkami.",
+  "skipAlsoRemovedFrom": "Odstráni sa aj z tvojho kalendára v {platforms}. Nič sa nepridá ako náhrada.",
+  "strengthShareNote": "{provider} nepreberá silové cviky z Fjelie. Zdieľaj zoznam a zadaj ho v aplikácii {provider}.",
+  "sharedAsText": "Zdieľané ako text.",
+  "replacementLimitedHistoryEstimate": "Použiteľné posledné tréningy v tomto športe: {count}. To je na tvoju osobnú históriu príliš málo, preto Fjelia používa opatrný odhad pre daný šport.",
+  "replacementEstimateDisclaimer": "Trvanie odhaduje podobné zaťaženie srdca a obehu. Technika, zaťaženie svalov a mechanická záťaž sa aj tak môžu líšiť.",
+  "replacementWarningLimitedHistory": "Použiteľné posledné tréningy v tomto športe: {count} z 5 potrebných. Trvanie je opatrný odhad.",
+  "replacementWarningStructureMinimum": "Záťažové a oddychové intervaly zostávajú podľa plánu, preto je náhrada dlhšia než odhadované trvanie.",
+  "replacementWarningRunningStructure": "Intervaly by prekročili limit pre beh. Fjelia namiesto toho navrhuje ľahký beh v rámci limitu.",
+  "bpPeriodDay": "Deň",
+  "bpTodaysReading": "DNEŠNÉ MERANIE"
 }

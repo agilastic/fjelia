@@ -35,14 +35,13 @@ class MoveDay {
   final bool isEasyOnly;
 }
 
-/// Moves a workout to another day: a strip of days to tap, the workout itself
-/// as a chip to drag onto one, and a date picker for anything further away.
-/// Days show what is on them (rest day, other sessions), so a move is never
-/// blind.
+/// Moves a workout to another day: a compact strip of days to tap and a
+/// date picker for anything further away. Days show what is on them (rest
+/// day, event, other sessions), so a move is never blind; a move can be
+/// undone right on the card.
 class MoveWorkoutCard extends StatefulWidget {
   const MoveWorkoutCard({
     super.key,
-    required this.title,
     required this.current,
     required this.days,
     required this.onMove,
@@ -52,9 +51,6 @@ class MoveWorkoutCard extends StatefulWidget {
     this.onUndo,
     this.note,
   });
-
-  /// The workout's name, on the chip that is dragged.
-  final String title;
 
   /// The day the workout is on now.
   final DateTime current;
@@ -85,9 +81,8 @@ class MoveWorkoutCard extends StatefulWidget {
 }
 
 class _MoveWorkoutCardState extends State<MoveWorkoutCard> {
-  static const _chipWidth = 54.0, _gap = 8.0;
+  static const _chipWidth = 46.0, _gap = 6.0;
   final _scroll = ScrollController();
-  DateTime? _hover;
 
   @override
   void initState() {
@@ -142,23 +137,43 @@ class _MoveWorkoutCardState extends State<MoveWorkoutCard> {
   @override
   Widget build(BuildContext context) {
     final today = DateUtils.dateOnly(DateTime.now());
+    final days = widget.days;
+    // Only the marks that are on the strip need explaining.
+    final keys = [
+      if (days.any((d) => d.isRestDay && d.event == null))
+        _Key(
+          icon: Icons.nightlight_outlined,
+          text: context.l10n.moveKeyRestDay,
+        ),
+      if (days.any((d) => d.event != null))
+        _Key(icon: Icons.flag, text: context.l10n.moveKeyEvent),
+      if (days.any((d) => d.isEasyOnly && d.sessions == 0))
+        _Key(icon: Icons.self_improvement, text: context.l10n.moveKeyEasyOnly),
+      if (days.any((d) => d.sessions > 0))
+        _Key(
+          icon: Icons.circle,
+          text: context.l10n.moveKeyHasSession,
+          small: true,
+        ),
+    ];
     return Container(
-      padding: const EdgeInsets.fromLTRB(14, 14, 14, 12),
+      padding: const EdgeInsets.fromLTRB(12, 6, 6, 10),
       decoration: BoxDecoration(
         color: duo(0xFF282828, 0xFFEEF1F5),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: fjInk10),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const Icon(Icons.swap_horiz_rounded, size: 20, color: mint),
-              const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   context.l10n.moveThisWorkout,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
@@ -168,207 +183,94 @@ class _MoveWorkoutCardState extends State<MoveWorkoutCard> {
                 ),
               ),
               if (widget.onPickDate != null)
-                TextButton.icon(
-                  style: TextButton.styleFrom(
-                    foregroundColor: mint,
-                    visualDensity: VisualDensity.compact,
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                  ),
+                IconButton(
+                  tooltip: context.l10n.pickDate,
+                  visualDensity: VisualDensity.compact,
+                  color: mint,
                   onPressed: widget.enabled ? widget.onPickDate : null,
-                  icon: const Icon(Icons.calendar_month_outlined, size: 16),
-                  label: Text(
-                    context.l10n.pickDate,
-                    style: TextStyle(fontSize: 12),
-                  ),
+                  icon: const Icon(Icons.calendar_month_outlined, size: 20),
                 ),
             ],
           ),
-          const SizedBox(height: 4),
-          Text(
-            context.l10n.nowOnCurrentTapA(
-              DateFormat.MMMMEEEEd().format(widget.current),
-            ),
-            style: TextStyle(fontSize: 12, color: fjInk70, height: 1.4),
-          ),
           if (widget.movedFrom != null) ...[
-            const SizedBox(height: 10),
-            Container(
-              padding: const EdgeInsets.fromLTRB(12, 6, 4, 6),
-              decoration: BoxDecoration(
-                color: mint.withValues(alpha: .1),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: mint.withValues(alpha: .4)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.check_circle_outline,
-                        size: 16,
-                        color: mint,
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          context.l10n.movedFromMovedfrom(
-                            DateFormat.MMMMEEEEd().format(widget.movedFrom!),
+            Padding(
+              padding: const EdgeInsets.only(right: 6, bottom: 8),
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(10, 2, 2, 2),
+                decoration: BoxDecoration(
+                  color: mint.withValues(alpha: .1),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: mint.withValues(alpha: .4)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.check_circle_outline,
+                          size: 15,
+                          color: mint,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            context.l10n.movedFromMovedfrom(
+                              DateFormat.MMMMEEEEd().format(widget.movedFrom!),
+                            ),
+                            style: const TextStyle(fontSize: 12),
                           ),
-                          style: const TextStyle(fontSize: 12),
                         ),
-                      ),
-                      TextButton(
-                        style: TextButton.styleFrom(
-                          foregroundColor: mint,
-                          visualDensity: VisualDensity.compact,
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            foregroundColor: mint,
+                            visualDensity: VisualDensity.compact,
+                          ),
+                          onPressed: widget.enabled ? widget.onUndo : null,
+                          child: Text(context.l10n.undo),
                         ),
-                        onPressed: widget.enabled ? widget.onUndo : null,
-                        child: Text(context.l10n.undo),
-                      ),
-                    ],
-                  ),
-                  if (widget.note != null)
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8, bottom: 4),
-                      child: Text(
-                        widget.note!,
-                        style: TextStyle(fontSize: 11, color: fjInk70),
-                      ),
+                      ],
                     ),
-                ],
+                    if (widget.note != null)
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8, bottom: 6),
+                        child: Text(
+                          widget.note!,
+                          style: TextStyle(fontSize: 11, color: fjInk70),
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ),
           ],
-          const SizedBox(height: 12),
-          Center(
-            child: Draggable<DateTime>(
-              data: widget.current,
-              maxSimultaneousDrags: widget.enabled ? 1 : 0,
-              onDragStarted: HapticFeedback.mediumImpact,
-              feedback: Material(
-                color: Colors.transparent,
-                child: _Pill(title: widget.title, lifted: true),
-              ),
-              childWhenDragging: Opacity(
-                opacity: .35,
-                child: _Pill(title: widget.title),
-              ),
-              child: _Pill(title: widget.title, grip: true),
-            ),
-          ),
-          const SizedBox(height: 12),
           SizedBox(
-            height: 78,
+            height: 58,
             child: ListView.separated(
               controller: _scroll,
               scrollDirection: Axis.horizontal,
-              itemCount: widget.days.length,
+              padding: const EdgeInsets.only(right: 6),
+              itemCount: days.length,
               separatorBuilder: (_, _) => const SizedBox(width: _gap),
               itemBuilder: (context, i) {
-                final day = widget.days[i];
-                final isCurrent = DateUtils.isSameDay(day.date, widget.current);
-                return DragTarget<DateTime>(
-                  onWillAcceptWithDetails: (_) {
-                    if (!isCurrent) setState(() => _hover = day.date);
-                    return !isCurrent;
-                  },
-                  onLeave: (_) => setState(() => _hover = null),
-                  onAcceptWithDetails: (_) {
-                    setState(() => _hover = null);
-                    _move(day.date);
-                  },
-                  builder: (context, candidates, _) => _DayChip(
-                    day: day,
-                    isCurrent: isCurrent,
-                    isToday: DateUtils.isSameDay(day.date, today),
-                    hovered:
-                        _hover != null && DateUtils.isSameDay(_hover, day.date),
-                    onTap: widget.enabled ? () => _move(day.date) : null,
-                  ),
+                final day = days[i];
+                return _DayChip(
+                  day: day,
+                  isCurrent: DateUtils.isSameDay(day.date, widget.current),
+                  isToday: DateUtils.isSameDay(day.date, today),
+                  onTap: widget.enabled ? () => _move(day.date) : null,
                 );
               },
             ),
           ),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 14,
-            runSpacing: 4,
-            children: [
-              _Key(
-                icon: Icons.nightlight_outlined,
-                text: context.l10n.moveKeyRestDay,
-              ),
-              _Key(icon: Icons.flag, text: context.l10n.moveKeyEvent),
-              _Key(
-                icon: Icons.self_improvement,
-                text: context.l10n.moveKeyEasyOnly,
-              ),
-              _Key(
-                icon: Icons.circle,
-                text: context.l10n.moveKeyHasSession,
-                small: true,
-              ),
-            ],
-          ),
+          if (keys.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Wrap(spacing: 12, runSpacing: 4, children: keys),
+          ],
         ],
       ),
     );
   }
-}
-
-class _Pill extends StatelessWidget {
-  const _Pill({required this.title, this.grip = false, this.lifted = false});
-
-  final String title;
-  final bool grip;
-  final bool lifted;
-
-  @override
-  Widget build(BuildContext context) => Container(
-    constraints: const BoxConstraints(maxWidth: 280),
-    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
-    decoration: BoxDecoration(
-      gradient: LinearGradient(
-        colors: [
-          mint.withValues(alpha: lifted ? .95 : .22),
-          mint.withValues(alpha: lifted ? .75 : .1),
-        ],
-      ),
-      borderRadius: BorderRadius.circular(22),
-      border: Border.all(color: mint.withValues(alpha: lifted ? 1 : .6)),
-      boxShadow: lifted
-          ? const [
-              BoxShadow(
-                color: Colors.black54,
-                blurRadius: 14,
-                offset: Offset(0, 6),
-              ),
-            ]
-          : null,
-    ),
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (grip) ...[
-          const Icon(Icons.drag_indicator, size: 18, color: mint),
-          const SizedBox(width: 4),
-        ],
-        Flexible(
-          child: Text(
-            title,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
-              color: lifted ? Colors.black : fjInk,
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
 }
 
 class _DayChip extends StatelessWidget {
@@ -376,21 +278,16 @@ class _DayChip extends StatelessWidget {
     required this.day,
     required this.isCurrent,
     required this.isToday,
-    required this.hovered,
     required this.onTap,
   });
 
   final MoveDay day;
-  final bool isCurrent, isToday, hovered;
+  final bool isCurrent, isToday;
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final fill = isCurrent
-        ? mint
-        : hovered
-        ? mint.withValues(alpha: .28)
-        : fjInk.withValues(alpha: .05);
+    final fill = isCurrent ? mint : fjInk.withValues(alpha: .05);
     final textColor = isCurrent ? Colors.black : fjInk;
     return Semantics(
       button: true,
@@ -409,14 +306,10 @@ class _DayChip extends StatelessWidget {
           width: _MoveWorkoutCardState._chipWidth,
           decoration: BoxDecoration(
             color: fill,
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: hovered
-                  ? mint
-                  : isToday
-                  ? Colors.amber
-                  : fjInk12,
-              width: hovered || isToday ? 1.6 : 1,
+              color: isToday ? Colors.amber : fjInk12,
+              width: isToday ? 1.6 : 1,
             ),
           ),
           child: Column(
@@ -434,13 +327,13 @@ class _DayChip extends StatelessWidget {
               Text(
                 context.l10n.day(day.date.day),
                 style: TextStyle(
-                  fontSize: 19,
+                  fontSize: 16,
                   fontWeight: FontWeight.w800,
                   color: textColor,
                 ),
               ),
               SizedBox(
-                height: 14,
+                height: 12,
                 child: day.event != null
                     ? const Icon(Icons.flag, size: 12, color: Colors.orange)
                     : day.isRestDay

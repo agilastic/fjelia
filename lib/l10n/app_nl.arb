@@ -2760,14 +2760,6 @@
       }
     }
   },
-  "nowOnCurrentTapA": "Nu op {current}. Tik op een dag of sleep de training erheen. De stappen blijven zoals ze zijn.",
-  "@nowOnCurrentTapA": {
-    "placeholders": {
-      "current": {
-        "type": "Object"
-      }
-    }
-  },
   "monthView": "Maandweergave",
   "syncing": "Synchroniseren",
   "trendUnavailable": "Trend niet beschikbaar",
@@ -5212,7 +5204,7 @@
   "sleepEcgStagesFailed": "Slaapfasen konden niet worden geschat. Controleer of de opname compleet is en probeer het opnieuw.",
   "replacementPreviewTitle": "Vervangende training controleren",
   "replacementGoalLoad": "Doel: {objective} · geplande belasting {load}",
-  "replacementHistoryEstimate": "Duur geschat op basis van je recente training in deze sport.",
+  "replacementHistoryEstimate": "Geschat op basis van {count} recente trainingen in deze sport: {sampleCount} met ruwe hartslagdata in jouw zones, {averageCount} alleen met gemiddelde hartslag.",
   "replacementFallbackEstimate": "Er zijn niet genoeg recente trainingsgegevens voor deze sport. De duur is een voorzichtige schatting.",
   "replacementRestSuggestion": "Rust kan de betere keuze zijn voor je huidige trainingsschema.",
   "replacementObjectiveRecovery": "Herstel",
@@ -5223,7 +5215,7 @@
   "replacementObjectiveLong": "Lange duur",
   "replacementWarningNoHistory": "Er is niet genoeg recente belastingsgeschiedenis voor deze sport.",
   "replacementWarningRunningCap": "De loopomvang is voorzichtig beperkt om de mechanische belasting te beperken.",
-  "replacementWarningLong": "Lange of wedstrijdspecifieke trainingen zijn niet volledig te vervangen. Controleer de kortere loop.",
+  "replacementWarningLong": "Lange trainingen zijn niet volledig te vervangen door een andere sport. Controleer de duur of kies rust.",
   "replacementWarningRace": "Deze training heeft wedstrijdprioriteit; het sportspecifieke effect blijft mogelijk niet behouden.",
   "replacementWarningSwim": "Een deel van de aerobe prikkel blijft behouden, maar niet de zwemtechniek of de sportspecifieke spierbelasting.",
   "replacementWarningStrength": "Kracht- en duurtrainingen zijn niet gelijkwaardig en kunnen niet hetzelfde trainingseffect behouden.",
@@ -5232,5 +5224,23 @@
   "replacementWarningLowRecovery": "Je laatst opgeslagen herstelscore is laag. Overweeg de intensiteit te verlagen of te rusten.",
   "replacementWarningRecentVolume": "Je trainingsbelasting van de afgelopen zeven dagen is duidelijk hoger dan in de zeven dagen daarvoor.",
   "replacementTrainingGoal": "TRAININGSDOEL",
-  "replacementPreviewWarnings": "OPMERKINGEN BIJ HET PLAN"
+  "replacementPreviewWarnings": "OPMERKINGEN BIJ HET PLAN",
+  "skipReasonReplaced": "Vervangen door een andere sport",
+  "skipReasonRestInstead": "Rust in plaats van vervanging",
+  "replacesWorkout": "Vervangt: {title}",
+  "replacedByWorkout": "Vervangen door: {title}",
+  "adaptationReadiness": "Aangepast aan je dagvorm.",
+  "adaptationMorningCheck": "Aangepast door de ochtendcontrole van het plan.",
+  "corosPushNote": "Synchroniseer COROS na het versturen met je horloge. Een gewijzigde of verplaatste training vervangt de vorige in de Training Hub.",
+  "polarPushNote": "Gebruikt de hartslagzones van je Polar-sportprofiel; controleer of ze overeenkomen met Fjelia. Eén training: 16:00. Twee trainingen: 09:00 en 18:00. Synchroniseer Polar Flow na het versturen met je horloge.",
+  "skipAlsoRemovedFrom": "Hij wordt ook uit je agenda op {platforms} gehaald. Er wordt niets toegevoegd om hem in te halen.",
+  "strengthShareNote": "{provider} neemt geen krachtoefeningen van Fjelia over. Deel de lijst en voer hem in de {provider}-app in.",
+  "sharedAsText": "Gedeeld als tekst.",
+  "replacementLimitedHistoryEstimate": "Bruikbare recente trainingen in deze sport: {count}. Dat is te weinig voor je persoonlijke historie, dus Fjelia gebruikt een voorzichtige schatting voor de sport.",
+  "replacementEstimateDisclaimer": "De duur schat een vergelijkbare belasting van hart en bloedvaten. Techniek, spierbelasting en mechanische belasting kunnen toch verschillen.",
+  "replacementWarningLimitedHistory": "Bruikbare recente trainingen in deze sport: {count} van de 5 nodige. De duur is een voorzichtige schatting.",
+  "replacementWarningStructureMinimum": "Belasting- en herstelintervallen blijven zoals gepland, daarom is de vervanging langer dan de geschatte duur.",
+  "replacementWarningRunningStructure": "De intervallen zouden de hardlooplimiet overschrijden. Fjelia stelt in plaats daarvan een rustige loop binnen de limiet voor.",
+  "bpPeriodDay": "Dag",
+  "bpTodaysReading": "METING VANDAAG"
 }

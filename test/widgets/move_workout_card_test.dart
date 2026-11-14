@@ -50,7 +50,6 @@ void main() {
           body: Padding(
             padding: const EdgeInsets.all(16),
             child: MoveWorkoutCard(
-              title: 'Easy Recovery Run',
               current: day(current),
               days: days(rest: rest, sessions: sessions),
               enabled: enabled,
@@ -68,16 +67,17 @@ void main() {
     return moved;
   }
 
-  testWidgets('it says what it does and offers days to tap', (tester) async {
+  testWidgets('a compact strip of days and a calendar button', (tester) async {
     await pump(tester);
     expect(find.text('MOVE THIS WORKOUT'), findsOneWidget);
-    expect(
-      find.textContaining('Tap a day, or drag the workout'),
-      findsOneWidget,
-    );
-    expect(find.text('Pick date'), findsOneWidget);
-    expect(find.text('Easy Recovery Run'), findsOneWidget);
-    expect(find.byIcon(Icons.drag_indicator), findsOneWidget);
+    expect(find.byTooltip('Pick date'), findsOneWidget);
+    // No explanation, no drag chip: tapping a day is the whole interaction.
+    expect(find.textContaining('Tap a day'), findsNothing);
+    expect(find.byIcon(Icons.drag_indicator), findsNothing);
+    // Nothing on the strip to explain: no key.
+    expect(find.text('rest day'), findsNothing);
+    final card = tester.getSize(find.byType(MoveWorkoutCard));
+    expect(card.height, lessThan(130));
   });
 
   testWidgets('tapping another day moves, the current day does nothing', (
@@ -92,28 +92,10 @@ void main() {
     expect(moved, [day(4)]);
   });
 
-  testWidgets('dragging the workout onto a day moves it there', (tester) async {
-    final moved = await pump(tester);
-    final from = tester.getCenter(find.text('Easy Recovery Run'));
-    final to = tester.getCenter(chip(day(5)));
-    final gesture = await tester.startGesture(from);
-    await tester.pump(const Duration(milliseconds: 50));
-    await gesture.moveTo(to);
-    await tester.pump(const Duration(milliseconds: 50));
-    await gesture.up();
-    await tester.pumpAndSettle();
-    expect(moved, [day(5)]);
-  });
-
   testWidgets('a locked card moves nothing', (tester) async {
     final moved = await pump(tester, enabled: false);
     await tester.tap(chip(day(4)));
     await tester.pump();
-    final from = tester.getCenter(find.text('Easy Recovery Run'));
-    final gesture = await tester.startGesture(from);
-    await gesture.moveTo(tester.getCenter(chip(day(5))));
-    await gesture.up();
-    await tester.pumpAndSettle();
     expect(moved, isEmpty);
   });
 
@@ -123,6 +105,10 @@ void main() {
       find.byIcon(Icons.nightlight_outlined),
       findsNWidgets(2),
     ); // key + day
+    // Only the marks on the strip are explained.
+    expect(find.text('rest day'), findsOneWidget);
+    expect(find.text('has a session'), findsOneWidget);
+    expect(find.text('event'), findsNothing);
     final label = find.byWidgetPredicate(
       (w) =>
           w is Semantics &&

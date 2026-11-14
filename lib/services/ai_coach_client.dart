@@ -158,8 +158,7 @@ class AiCoachClient {
     try {
       // Scoped to this installation, but a cache key must not create the
       // Free AI ID: with an own key or on-device models none should exist.
-      final installation =
-          await _store.peekFreeAiInstallationId() ?? 'device';
+      final installation = await _store.peekFreeAiInstallationId() ?? 'device';
       key = AiResponseCache.keyFor(
         installationId: installation,
         provider: provider,
@@ -671,10 +670,27 @@ class AiCoachClient {
     final schedule = brief?.plannedTodaySentence(tr);
     final scheduleIncluded =
         schedule == null || text.toLowerCase().contains(schedule.toLowerCase());
-    if (scheduleIncluded &&
-        briefingIsUsable(text, languageCode: activeLocale.languageCode)) {
+    final usable = briefingIsUsable(
+      text,
+      languageCode: activeLocale.languageCode,
+    );
+    if (scheduleIncluded && usable) {
       onSource?.call(source);
       return text;
+    }
+    // Small models rephrase the plan sentence instead of repeating it. Keep
+    // their text and add the plan, unless they say there is no training.
+    if (usable &&
+        schedule != null &&
+        brief!.today.isNotEmpty &&
+        !briefingDeniesTraining(text)) {
+      log(
+        '[AiGeneration] completed kind=$kind '
+        'reason=plan_sentence_appended',
+      );
+      onSource?.call(source);
+      final end = RegExp(r'[.!?…]$').hasMatch(text) ? '' : '.';
+      return '$text$end $schedule';
     }
     if (brief == null) {
       onSource?.call(source);

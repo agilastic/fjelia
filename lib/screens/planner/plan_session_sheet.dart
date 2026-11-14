@@ -81,6 +81,15 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
   Widget build(BuildContext context) {
     final s = session;
     final skipReason = ref.watch(sessionSkipReasonsProvider).valueOrNull?[s.id];
+    // A sport change links the skipped original and its replacement.
+    final original =
+        s.adaptationTrigger == 'athlete_replacement' &&
+            s.originalSessionId != null
+        ? ref.watch(plannedSessionProvider(s.originalSessionId!)).valueOrNull
+        : null;
+    final replacement = s.status == 'skipped'
+        ? ref.watch(sessionReplacementProvider(s.id)).valueOrNull
+        : null;
     final sport = s.sport.toLowerCase();
     final zones = ref.watch(hrZonesProvider);
     final zoneBounds =
@@ -268,24 +277,25 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
         children: [
-          Row(
+          // Wraps: a translated skip reason can be long.
+          Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            spacing: 8,
+            runSpacing: 6,
             children: [
-              Expanded(
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: badge(
-                    '${planPhaseLabel(context.l10n, s.phase)} · '
-                    '${sessionTypeLabel(context.l10n, s.sessionType)}',
-                  ),
-                ),
+              badge(
+                '${planPhaseLabel(context.l10n, s.phase)} · '
+                '${sessionTypeLabel(context.l10n, s.sessionType)}',
               ),
-              const SizedBox(width: 8),
               badge(
                 s.status == 'skipped'
                     ? (skipReason == null
                           ? context.l10n.skipped2
                           : context.l10n.skippedTouppercase(
-                              skipReason.toUpperCase(),
+                              skipReasonLabel(
+                                context.l10n,
+                                skipReason,
+                              ).toUpperCase(),
                             ))
                     : sessionStatusLabel(context.l10n, s.status),
               ),
@@ -326,6 +336,17 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                 ],
               ),
             ),
+          // A sport change: straight to the other half.
+          if (s.adaptationTrigger == 'athlete_replacement' ||
+              replacement != null) ...[
+            const SizedBox(height: 14),
+            _ReplacementLink(
+              other: replacement ?? original,
+              text: replacement != null
+                  ? context.l10n.replacedByWorkout(replacement.title)
+                  : context.l10n.replacesWorkout(original?.title ?? '…'),
+            ),
+          ],
           const SizedBox(height: 20),
           WorkoutStatTiles(
             items: [
@@ -571,12 +592,14 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
               ),
             ),
           ],
-          if (s.adaptationTrigger?.isNotEmpty ?? false) ...[
+          if (s.adaptationTrigger != 'athlete_replacement' &&
+              (s.adaptationTrigger?.isNotEmpty ?? false)) ...[
             heading(context.l10n.adaptation),
-            Text(
-              s.adaptationTrigger!,
-              style: TextStyle(fontSize: 12, color: fjInk70),
-            ),
+            Text(switch (s.adaptationTrigger) {
+              'readiness' => context.l10n.adaptationReadiness,
+              'coach_morning' => context.l10n.adaptationMorningCheck,
+              final other => other!,
+            }, style: TextStyle(fontSize: 12, color: fjInk70)),
           ],
           const SizedBox(height: 12),
           PlannedNutritionCard(
@@ -591,41 +614,176 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
               indoor: s.indoor,
             ),
           ),
-          const SizedBox(height: 12),
-          MoveWorkoutCard(
-            title: s.title,
-            current: s.sessionDate,
-            days: moveDays,
-            enabled: editable && !busy,
-            onMove: moveTo,
-            movedFrom:
-                movedFrom != null &&
-                    !DateUtils.isSameDay(movedFrom, s.sessionDate)
-                ? movedFrom
-                : null,
-            note: movedOnWatch ? context.l10n.pushAgainToUpdateYour : null,
-            onUndo: () => perform(() async {
-              final back = movedFrom;
-              if (back == null) return;
-              await actions.moveToDate(session, back);
-              if (mounted) setState(() => movedFrom = null);
-            }),
-            onPickDate: () async {
-              final today = DateUtils.dateOnly(DateTime.now());
-              final last = moveDays.isEmpty ? today : moveDays.last.date;
-              final chosen = await showDatePicker(
-                context: context,
-                initialDate: s.sessionDate.isBefore(today)
-                    ? today
-                    : s.sessionDate.isAfter(last)
-                    ? last
-                    : s.sessionDate,
-                firstDate: today,
-                lastDate: last.isBefore(today) ? today : last,
-              );
-              if (chosen != null) await moveTo(chosen);
-            },
-          ),
+          // A skipped workout has nothing to move; restore it first.
+          if (s.status != 'skipped') ...[
+            const SizedBox(height: 12),
+            MoveWorkoutCard(
+              current: s.sessionDate,
+              days: moveDays,
+              enabled: editable && !busy,
+              onMove: moveTo,
+              movedFrom:
+                  movedFrom != null &&
+                      !DateUtils.isSameDay(movedFrom, s.sessionDate)
+                  ? movedFrom
+                  : null,
+              note: movedOnWatch ? context.l10n.pushAgainToUpdateYour : null,
+              onUndo: () => perform(() async {
+                final back = movedFrom;
+                if (back == null) return;
+                await actions.moveToDate(session, back);
+                if (mounted) setState(() => movedFrom = null);
+              }),
+              onPickDate: () async {
+                final today = DateUtils.dateOnly(DateTime.now());
+                final last = moveDays.isEmpty ? today : moveDays.last.date;
+                final chosen = await showDatePicker(
+                  context: context,
+                  initialDate: s.sessionDate.isBefore(today)
+                      ? today
+                      : s.sessionDate.isAfter(last)
+                      ? last
+                      : s.sessionDate,
+                  firstDate: today,
+                  lastDate: last.isBefore(today) ? today : last,
+                );
+                if (chosen != null) await moveTo(chosen);
+              },
+            ),
+          ],
+          // Plan actions next to moving: rest, another sport, or back.
+          if (s.status != 'skipped') ...[
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton.icon(
+                    style: style(Colors.grey),
+                    onPressed: !editable || busy
+                        ? null
+                        : () async {
+                            final onPlatforms = [
+                              for (final p
+                                  in await ref
+                                      .read(workoutProvidersProvider)
+                                      .deliveredTo(s))
+                                p.label,
+                            ];
+                            if (!context.mounted) return;
+                            final reason = await _pickSkipReason(
+                              context,
+                              platforms: onPlatforms,
+                            );
+                            if (reason == null || !context.mounted) return;
+                            await perform(() async {
+                              await actions.markRest(s, reason: reason);
+                            });
+                          },
+                    icon: const Icon(Icons.bed_outlined, size: 20),
+                    label: _oneLine(context.l10n.markAsRest),
+                  ),
+                ),
+                if (_supportsSportChange(s.sport)) ...[
+                  const SizedBox(width: 8),
+                  Expanded(
+                    // Rest and a sport change are equal choices (see
+                    // docs/workout-sport-replacement.md): same look.
+                    child: OutlinedButton.icon(
+                      style: style(Colors.grey),
+                      onPressed: !editable || busy
+                          ? null
+                          : () async {
+                              final onPlatforms = [
+                                for (final p
+                                    in await ref
+                                        .read(workoutProvidersProvider)
+                                        .deliveredTo(s))
+                                  p.label,
+                              ];
+                              if (!context.mounted) return;
+                              final preferences =
+                                  ref
+                                      .read(userProfileProvider)
+                                      .valueOrNull
+                                      ?.preferredSports ??
+                                  const <String>[];
+                              final alternatives = _replacementSports(
+                                s.sport,
+                                preferences,
+                              );
+                              final sport = await _pickReplacementSport(
+                                context,
+                                alternatives: alternatives,
+                                initialSport: _defaultReplacementSport(
+                                  preferences,
+                                  alternatives,
+                                ),
+                                platforms: onPlatforms,
+                              );
+                              if (sport == null || !context.mounted) return;
+                              final selected = alternatives.firstWhere(
+                                (option) => option.id == sport,
+                              );
+                              final preview = await ref
+                                  .read(workoutReplacementServiceProvider)
+                                  .preview(
+                                    s,
+                                    targetSport: selected.id,
+                                    targetLabel: selected.label(context),
+                                  );
+                              if (!context.mounted) return;
+                              final targetZones =
+                                  selected.id.contains('cycl') ||
+                                      selected.id.contains('bik')
+                                  ? zones.cycling
+                                  : zones.running;
+                              final apply = await _confirmReplacement(
+                                context,
+                                preview,
+                                platforms: onPlatforms,
+                                zoneTarget: (z) => zoneTargetText(
+                                  z,
+                                  hrFloors: targetZones.bounds,
+                                ),
+                              );
+                              if (!context.mounted || apply == null) return;
+                              if (apply == false) {
+                                await perform(() async {
+                                  await actions.markRest(
+                                    s,
+                                    reason: restInsteadOfReplacement,
+                                  );
+                                });
+                                return;
+                              }
+                              await perform(() async {
+                                await actions.replaceWithSport(preview);
+                              });
+                            },
+                      icon: const Icon(Icons.swap_horiz, size: 20),
+                      label: _oneLine(context.l10n.changeSport),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ],
+          if (s.status == 'skipped') ...[
+            const SizedBox(height: 8),
+            OutlinedButton.icon(
+              style: style(mint),
+              onPressed: busy
+                  ? null
+                  : () => perform(() async {
+                      await actions.restore(s);
+                    }),
+              icon: const Icon(Icons.undo, size: 20),
+              label: Text(
+                context.l10n.restoreWorkout,
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+              ),
+            ),
+          ],
           const SizedBox(height: 16),
           MediaGallery(owner: MediaOwner.session(s)),
           const SizedBox(height: 16),
@@ -694,6 +852,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                           ? null
                           : () async {
                               setState(() => pushingTo = provider.id);
+                              final sharedAsText = context.l10n.sharedAsText;
                               await perform(() async {
                                 if (!pushes) return share(null);
                                 if (!await ensureWorkoutDeliveryReady(
@@ -708,7 +867,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                                 )(s.id, provider);
                                 if (!result.sent) {
                                   return share(
-                                    '${result.shareReason} Shared as text.',
+                                    '${result.shareReason} $sharedAsText',
                                   );
                                 }
                                 final omitted = strength
@@ -761,7 +920,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                         padding: const EdgeInsets.only(top: 6),
                         child: Text(
                           strengthShare
-                              ? '${provider.label} does not take strength exercises from Fjelia. Share the list and enter it in the ${provider.label} app.'
+                              ? context.l10n.strengthShareNote(provider.label)
                               : provider.shareNote,
                           style: TextStyle(fontSize: 11, color: muted),
                         ),
@@ -806,10 +965,11 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                     if (pushes && provider.pushNote != null)
                       Padding(
                         padding: const EdgeInsets.only(top: 6),
-                        child: Text(
-                          provider.pushNote!,
-                          style: TextStyle(fontSize: 11, color: muted),
-                        ),
+                        child: Text(switch (provider.id) {
+                          'coros' => context.l10n.corosPushNote,
+                          'polar' => context.l10n.polarPushNote,
+                          _ => provider.pushNote!,
+                        }, style: TextStyle(fontSize: 11, color: muted)),
                       ),
                   ],
                 );
@@ -826,144 +986,6 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
               );
             },
           ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton.icon(
-                  style: style(Colors.grey),
-                  onPressed: !editable || busy
-                      ? null
-                      : () async {
-                          final onPlatforms = [
-                            for (final p
-                                in await ref
-                                    .read(workoutProvidersProvider)
-                                    .deliveredTo(s))
-                              p.label,
-                          ];
-                          if (!context.mounted) return;
-                          final reason = await _pickSkipReason(
-                            context,
-                            platforms: onPlatforms,
-                          );
-                          if (reason == null || !context.mounted) return;
-                          await perform(() async {
-                            await actions.markRest(s, reason: reason);
-                          });
-                        },
-                  icon: const Icon(Icons.bed_outlined, size: 20),
-                  label: Text(
-                    context.l10n.markAsRest,
-                    maxLines: 2,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-              if (_supportsSportChange(s.sport)) ...[
-                const SizedBox(width: 8),
-                Expanded(
-                  child: OutlinedButton.icon(
-                    style: style(mint),
-                    onPressed: !editable || busy
-                        ? null
-                        : () async {
-                            final onPlatforms = [
-                              for (final p
-                                  in await ref
-                                      .read(workoutProvidersProvider)
-                                      .deliveredTo(s))
-                                p.label,
-                            ];
-                            if (!context.mounted) return;
-                            final preferences =
-                                ref
-                                    .read(userProfileProvider)
-                                    .valueOrNull
-                                    ?.preferredSports ??
-                                const <String>[];
-                            final alternatives = _replacementSports(
-                              s.sport,
-                              preferences,
-                            );
-                            final sport = await _pickReplacementSport(
-                              context,
-                              alternatives: alternatives,
-                              initialSport: _defaultReplacementSport(
-                                preferences,
-                                alternatives,
-                              ),
-                              platforms: onPlatforms,
-                            );
-                            if (sport == null || !context.mounted) return;
-                            final selected = alternatives.firstWhere(
-                              (option) => option.id == sport,
-                            );
-                            final preview = await ref
-                                .read(workoutReplacementServiceProvider)
-                                .preview(
-                                  s,
-                                  targetSport: selected.id,
-                                  targetLabel: selected.label(context),
-                                );
-                            if (!context.mounted) return;
-                            final apply = await _confirmReplacement(
-                              context,
-                              preview,
-                              platforms: onPlatforms,
-                            );
-                            if (!context.mounted || apply == null) return;
-                            if (apply == false) {
-                              await perform(() async {
-                                await actions.markRest(
-                                  s,
-                                  reason: 'Rest recommended for replacement',
-                                );
-                              });
-                              return;
-                            }
-                            await perform(() async {
-                              await actions.replaceWithSport(
-                                preview,
-                                reason: 'My choice',
-                              );
-                            });
-                          },
-                    icon: const Icon(Icons.swap_horiz, size: 20),
-                    label: Text(
-                      context.l10n.changeSport,
-                      maxLines: 2,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ],
-          ),
-          if (s.status == 'skipped') ...[
-            const SizedBox(height: 8),
-            OutlinedButton.icon(
-              style: style(mint),
-              onPressed: busy
-                  ? null
-                  : () => perform(() async {
-                      await actions.restore(s);
-                    }),
-              icon: const Icon(Icons.undo, size: 20),
-              label: Text(
-                context.l10n.restoreWorkout,
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-              ),
-            ),
-          ],
         ],
       ),
     );
@@ -974,6 +996,7 @@ Future<bool?> _confirmReplacement(
   BuildContext context,
   WorkoutReplacementPreview preview, {
   required List<String> platforms,
+  required String Function(int zone) zoneTarget,
 }) => showDialog<bool>(
   context: context,
   builder: (context) => AlertDialog(
@@ -1046,24 +1069,63 @@ Future<bool?> _confirmReplacement(
                       Expanded(
                         child: Text(
                           preview.usedAthleteHistory
-                              ? context.l10n.replacementHistoryEstimate
+                              ? context.l10n.replacementHistoryEstimate(
+                                  preview.historyActivityCount,
+                                  preview.historySampleCount,
+                                  preview.historyActivityCount -
+                                      preview.historySampleCount,
+                                )
+                              : preview.historyActivityCount > 0
+                              ? context.l10n.replacementLimitedHistoryEstimate(
+                                  preview.historyActivityCount,
+                                )
                               : context.l10n.replacementFallbackEstimate,
                           style: TextStyle(fontSize: 12, color: fjInk70),
                         ),
                       ),
                     ],
                   ),
+                  const SizedBox(height: 8),
+                  Text(
+                    context.l10n.replacementEstimateDisclaimer,
+                    style: TextStyle(fontSize: 11, color: fjInk70),
+                  ),
                 ],
               ),
             ),
-            if (preview.warnings.isNotEmpty || preview.suggestRest)
+            // The steps and zones the replacement will have.
+            SectionCard(
+              title: context.l10n.workoutStructure,
+              accent: const [Color(0xFF3EE0FF), mint],
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  WorkoutProfileBar(
+                    blocks: workoutProfile(
+                      preview.stepsJson,
+                      primaryZone: preview.source.primaryZone,
+                      sport: preview.targetSport,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  WorkoutStructureList(
+                    steps: plannedStepLines(
+                      preview.stepsJson,
+                      primaryZone: preview.source.primaryZone,
+                      zoneTarget: zoneTarget,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (_shownWarnings(preview).isNotEmpty || preview.suggestRest)
               SectionCard(
                 title: context.l10n.replacementPreviewWarnings,
                 accent: const [Color(0xFFFFB13D), Color(0xFFFF4D8D)],
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    for (final warning in preview.warnings)
+                    for (final warning in _shownWarnings(preview))
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: Row(
@@ -1077,7 +1139,11 @@ Future<bool?> _confirmReplacement(
                             const SizedBox(width: 8),
                             Expanded(
                               child: Text(
-                                _replacementWarning(context, warning),
+                                _replacementWarning(
+                                  context,
+                                  warning,
+                                  preview.historyActivityCount,
+                                ),
                                 style: TextStyle(fontSize: 13, color: fjInk),
                               ),
                             ),
@@ -1135,6 +1201,12 @@ Future<bool?> _confirmReplacement(
   ),
 );
 
+/// The note on the estimate already says how much history there is.
+List<String> _shownWarnings(WorkoutReplacementPreview preview) => [
+  for (final warning in preview.warnings)
+    if (warning != 'noHistory' && warning != 'limitedHistory') warning,
+];
+
 String _objectiveLabel(BuildContext context, WorkoutObjective objective) =>
     switch (objective) {
       WorkoutObjective.recovery => context.l10n.replacementObjectiveRecovery,
@@ -1145,8 +1217,17 @@ String _objectiveLabel(BuildContext context, WorkoutObjective objective) =>
       WorkoutObjective.longEndurance => context.l10n.replacementObjectiveLong,
     };
 
-String _replacementWarning(BuildContext context, String code) => switch (code) {
+String _replacementWarning(
+  BuildContext context,
+  String code,
+  int historyActivityCount,
+) => switch (code) {
   'noHistory' => context.l10n.replacementWarningNoHistory,
+  'limitedHistory' => context.l10n.replacementWarningLimitedHistory(
+    historyActivityCount,
+  ),
+  'structureMinimum' => context.l10n.replacementWarningStructureMinimum,
+  'runningStructure' => context.l10n.replacementWarningRunningStructure,
   'runningCap' => context.l10n.replacementWarningRunningCap,
   'longRun' => context.l10n.replacementWarningLong,
   'raceSpecific' => context.l10n.replacementWarningRace,
@@ -1173,15 +1254,14 @@ Future<String?> _pickSkipReason(
         child: Text(
           platforms.isEmpty
               ? context.l10n.whyNothingIsAddedTo
-              : 'Why? It is also taken off your ${platforms.join(' and ')} '
-                    'calendar. Nothing is added to make it up.',
+              : context.l10n.skipAlsoRemovedFrom(platforms.join(', ')),
           style: TextStyle(fontSize: 13, color: fjInk70),
         ),
       ),
       for (final reason in skipReasons)
         SimpleDialogOption(
           onPressed: () => Navigator.pop(context, reason),
-          child: Text(reason),
+          child: Text(skipReasonLabel(context.l10n, reason)),
         ),
       SimpleDialogOption(
         onPressed: () => Navigator.pop(context),
@@ -1191,118 +1271,153 @@ Future<String?> _pickSkipReason(
   ),
 );
 
+/// One line in a button that shares its row: shrinks rather than wraps.
+Widget _oneLine(String text) => FittedBox(
+  fit: BoxFit.scaleDown,
+  child: Text(
+    text,
+    maxLines: 1,
+    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+  ),
+);
+
+/// The other half of a sport change; tapping opens it.
+class _ReplacementLink extends StatelessWidget {
+  const _ReplacementLink({required this.other, required this.text});
+  final TrainingSession? other;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) => InkWell(
+    borderRadius: BorderRadius.circular(12),
+    onTap: other == null
+        ? null
+        : () => showAppSheet(context, PlanSessionSheet(session: other!)),
+    child: Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: mint.withValues(alpha: .06),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: mint.withValues(alpha: .35)),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.swap_horiz_rounded, size: 18, color: mint),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(text, style: TextStyle(fontSize: 13, color: fjInk)),
+          ),
+          if (other != null)
+            Icon(Icons.chevron_right_rounded, size: 20, color: fjInk54),
+        ],
+      ),
+    ),
+  );
+}
+
 class _ReplacementSport {
   const _ReplacementSport(this.id, this.label);
   final String id;
   final String Function(BuildContext) label;
 }
 
+/// The sports offered instead of [sourceSport], following the table in
+/// docs/workout-sport-replacement.md. Preferred sports only come first; they
+/// never add a sport the table does not list as suitable.
 List<_ReplacementSport> _replacementSports(
   String sourceSport,
   List<String> preferences,
 ) {
   const supported = <String, _ReplacementSport>{
     'running': _ReplacementSport('running', _runningLabel),
+    'treadmill_running': _ReplacementSport(
+      'treadmill_running',
+      _treadmillLabel,
+    ),
     'trail_running': _ReplacementSport('trail_running', _trailRunningLabel),
     'cycling_road': _ReplacementSport('cycling_road', _cyclingLabel),
     'indoor_cycling': _ReplacementSport('indoor_cycling', _indoorCyclingLabel),
     'swimming': _ReplacementSport('swimming', _swimmingLabel),
-    'indoor_rowing': _ReplacementSport('indoor_rowing', _rowingLabel),
+    'swimming_open_water': _ReplacementSport(
+      'swimming_open_water',
+      _openWaterLabel,
+    ),
+    'indoor_rowing': _ReplacementSport('indoor_rowing', _indoorRowingLabel),
     'rowing': _ReplacementSport('rowing', _rowingLabel),
     'hiking': _ReplacementSport('hiking', _hikingLabel),
     'walking': _ReplacementSport('walking', _walkingLabel),
     'elliptical': _ReplacementSport('elliptical', _ellipticalLabel),
+    'stair_climbing': _ReplacementSport('stair_climbing', _stairLabel),
     'nordic_skiing': _ReplacementSport('nordic_skiing', _skiingLabel),
     'skate_skiing': _ReplacementSport('skate_skiing', _skateSkiingLabel),
   };
   final source = _sportFamily(sourceSport);
   if (!_replaceableSportFamilies.contains(source)) return const [];
-  final preferenceOrder = <String>[];
-  for (final preference in preferences) {
-    switch (preference) {
-      case 'triathlon':
-        preferenceOrder.addAll(const ['running', 'cycling_road', 'swimming']);
-      case 'running':
-      case 'trail_running':
-        preferenceOrder.add(preference);
-      case 'cycling':
-      case 'cycling_road':
-        preferenceOrder.add('cycling_road');
-      case 'indoor_cycling':
-        preferenceOrder.add('indoor_cycling');
-      case 'swimming':
-      case 'indoor_rowing':
-      case 'hiking':
-        preferenceOrder.add(preference);
-      case 'nordic_skiing':
-      case 'skate_skiing':
-      case 'elliptical':
-      case 'rowing':
-        preferenceOrder.add(preference);
-    }
-  }
-  final defaults = switch (source) {
-    'run' =>
-      sourceSport == 'trail_running'
-          ? const [
-              'running',
-              'cycling_road',
-              'indoor_cycling',
-              'elliptical',
-              'indoor_rowing',
-              'hiking',
-            ]
-          : const [
-              'trail_running',
-              'cycling_road',
-              'indoor_cycling',
-              'elliptical',
-              'indoor_rowing',
-              'swimming',
-              'hiking',
-              'nordic_skiing',
-            ],
-    'cycle' =>
-      sourceSport == 'cycling_road'
-          ? const [
-              'indoor_cycling',
-              'running',
-              'elliptical',
-              'indoor_rowing',
-              'swimming',
-            ]
-          : const [
-              'cycling_road',
-              'running',
-              'elliptical',
-              'indoor_rowing',
-              'swimming',
-            ],
-    'swim' => const ['cycling_road', 'running', 'indoor_rowing'],
-    'row' => const [
-      'rowing',
+  final suitable = switch (source) {
+    'run' when sourceSport == 'trail_running' => const [
+      'running',
+      'treadmill_running',
+      'hiking',
+      'stair_climbing',
+    ],
+    'run' => const [
+      'elliptical',
+      'cycling_road',
+      'indoor_cycling',
       'indoor_rowing',
-      'nordic_skiing',
+    ],
+    'cycle' => const [
+      'indoor_cycling',
       'cycling_road',
       'running',
+      'elliptical',
+      'indoor_rowing',
     ],
-    'hike' => const ['walking', 'trail_running', 'running', 'nordic_skiing'],
+    'swim' => const ['swimming', 'swimming_open_water'],
+    'row' => const ['rowing', 'indoor_rowing', 'nordic_skiing', 'cycling_road'],
     'ski' => const [
       'nordic_skiing',
       'skate_skiing',
+      'rowing',
       'indoor_rowing',
       'cycling_road',
       'running',
     ],
+    'hike' when sourceSport == 'walking' => const [
+      'hiking',
+      'running',
+      'cycling_road',
+    ],
+    'hike' => const ['walking', 'trail_running', 'treadmill_running'],
     'elliptical' => const ['running', 'cycling_road', 'indoor_rowing'],
-    _ => const ['running', 'cycling_road', 'indoor_rowing', 'swimming'],
+    _ => const <String>[],
   };
-  final ordered = <String>{...preferenceOrder, ...defaults};
+  final preferred = <String>{
+    for (final preference in preferences)
+      ...switch (preference) {
+        'triathlon' => const ['running', 'cycling_road', 'swimming'],
+        'cycling' => const ['cycling_road'],
+        _ => [preference],
+      },
+  };
+  final ordered = [
+    ...suitable.where(preferred.contains),
+    ...suitable.where((id) => !preferred.contains(id)),
+  ];
   return [
     for (final id in ordered)
       if (supported.containsKey(id) && id != sourceSport) supported[id]!,
   ];
 }
+
+/// The ids [_replacementSports] offers, for tests.
+@visibleForTesting
+List<String> replacementSportIds(
+  String sourceSport, [
+  List<String> preferences = const [],
+]) => [
+  for (final sport in _replacementSports(sourceSport, preferences)) sport.id,
+];
 
 const _replaceableSportFamilies = {
   'run',
@@ -1349,7 +1464,12 @@ String _runningLabel(BuildContext c) => c.l10n.running;
 String _trailRunningLabel(BuildContext c) => c.l10n.trailRunning;
 String _cyclingLabel(BuildContext c) => c.l10n.cycling;
 String _swimmingLabel(BuildContext c) => c.l10n.swimming;
-String _rowingLabel(BuildContext c) => c.l10n.indoorRowing;
+String _rowingLabel(BuildContext c) => c.l10n.rowing;
+String _indoorRowingLabel(BuildContext c) => c.l10n.indoorRowing;
+String _treadmillLabel(BuildContext c) => c.l10n.manualTreadmill;
+String _openWaterLabel(BuildContext c) =>
+    '${c.l10n.swimming} · ${c.l10n.openWater}';
+String _stairLabel(BuildContext c) => c.l10n.sportStairClimber;
 String _hikingLabel(BuildContext c) => c.l10n.hiking;
 String _walkingLabel(BuildContext c) => c.l10n.walking;
 String _indoorCyclingLabel(BuildContext c) => c.l10n.sportIndoorCycling;

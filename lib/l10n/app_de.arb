@@ -2738,14 +2738,6 @@
       }
     }
   },
-  "nowOnCurrentTapA": "Aktuell am {current}. Tippe auf einen Tag oder ziehe das Training auf einen. Die Schritte bleiben unverändert.",
-  "@nowOnCurrentTapA": {
-    "placeholders": {
-      "current": {
-        "type": "Object"
-      }
-    }
-  },
   "monthView": "Monatsansicht",
   "syncing": "Synchronisiere",
   "trendUnavailable": "Trend nicht verfügbar",
@@ -4057,8 +4049,12 @@
   "replacementPreviewTitle": "Ersatztraining prüfen",
   "replacementGoalLoad": "Ziel: {objective} · {load} geplante Belastung",
   "@replacementGoalLoad": {"placeholders": {"objective": {"type": "String"}, "load": {"type": "int"}}},
-  "replacementHistoryEstimate": "Dauer anhand deines jüngsten Trainings in dieser Sportart geschätzt.",
+  "replacementHistoryEstimate": "Geschätzt aus {count} jüngeren Einheiten dieser Sportart: {sampleCount} mit Herzfrequenz-Rohdaten in deinen Zonen, {averageCount} nur mit Durchschnittspuls.",
+  "@replacementHistoryEstimate": {"placeholders": {"count": {"type": "int"}, "sampleCount": {"type": "int"}, "averageCount": {"type": "int"}}},
+  "replacementLimitedHistoryEstimate": "Verwertbare jüngere Einheiten dieser Sportart: {count}. Das reicht nicht für deine persönliche Historie, deshalb nutzt Fjelia eine vorsichtige Schätzung für die Sportart.",
+  "@replacementLimitedHistoryEstimate": {"placeholders": {"count": {"type": "int"}}},
   "replacementFallbackEstimate": "Für diese Sportart liegen zu wenige aktuelle Trainingsdaten vor. Die Dauer ist eine vorsichtige Schätzung.",
+  "replacementEstimateDisclaimer": "Die Dauer schätzt eine ähnliche Herz-Kreislauf-Belastung. Technik, Muskelbeanspruchung und mechanische Belastung können trotzdem abweichen.",
   "replacementRestSuggestion": "Für deinen aktuellen Trainingsplan könnte Ruhe die bessere Wahl sein.",
   "replacementObjectiveRecovery": "Erholung",
   "replacementObjectiveBase": "Grundlage",
@@ -4067,8 +4063,12 @@
   "replacementObjectiveVo2": "VO₂max",
   "replacementObjectiveLong": "Lange Ausdauer",
   "replacementWarningNoHistory": "Keine ausreichende aktuelle Belastungshistorie für diese Sportart.",
+  "replacementWarningLimitedHistory": "Verwertbare jüngere Einheiten dieser Sportart: {count} von 5 nötigen. Die Dauer ist eine vorsichtige Schätzung.",
+  "@replacementWarningLimitedHistory": {"placeholders": {"count": {"type": "int"}}},
+  "replacementWarningStructureMinimum": "Belastungs- und Erholungsintervalle bleiben wie geplant. Deshalb ist das Ersatztraining länger als die geschätzte Dauer.",
+  "replacementWarningRunningStructure": "Die Intervalle würden die Laufbegrenzung überschreiten. Fjelia schlägt stattdessen einen lockeren Lauf innerhalb der Begrenzung vor.",
   "replacementWarningRunningCap": "Der Laufumfang wurde wegen der mechanischen Belastung vorsichtig begrenzt.",
-  "replacementWarningLong": "Lange oder wettkampfspezifische Einheiten sind nicht vollständig ersetzbar. Prüfe die kürzere Laufeinheit.",
+  "replacementWarningLong": "Lange Einheiten lassen sich nicht vollständig durch eine andere Sportart ersetzen. Prüfe die Dauer oder wähle Ruhe.",
   "replacementWarningRace": "Diese Einheit hat Wettkampfpriorität. Der sportartspezifische Nutzen bleibt möglicherweise nicht erhalten.",
   "replacementWarningSwim": "Das Ausdauertraining bleibt teilweise erhalten, aber nicht die Schwimmtechnik und spezifische Muskelbelastung.",
   "replacementWarningStrength": "Kraft- und Ausdauertraining sind nicht gleichwertig und erhalten nicht denselben Trainingseffekt.",
@@ -4077,5 +4077,22 @@
   "replacementWarningLowRecovery": "Deine zuletzt gespeicherte Erholung ist niedrig. Prüfe, ob du die Intensität reduzieren oder pausieren möchtest.",
   "replacementWarningRecentVolume": "Dein Trainingsumfang der letzten sieben Tage liegt deutlich über dem vorherigen Sieben-Tage-Zeitraum.",
   "replacementTrainingGoal": "TRAININGSZIEL",
-  "replacementPreviewWarnings": "HINWEISE ZUM PLAN"
+  "replacementPreviewWarnings": "HINWEISE ZUM PLAN",
+  "skipReasonReplaced": "Durch andere Sportart ersetzt",
+  "skipReasonRestInstead": "Ruhe statt Ersatztraining",
+  "replacesWorkout": "Ersetzt: {title}",
+  "@replacesWorkout": {"placeholders": {"title": {"type": "String"}}},
+  "replacedByWorkout": "Ersetzt durch: {title}",
+  "@replacedByWorkout": {"placeholders": {"title": {"type": "String"}}},
+  "adaptationReadiness": "An deine Tagesform angepasst.",
+  "adaptationMorningCheck": "Vom morgendlichen Plan-Check angepasst.",
+  "corosPushNote": "Synchronisiere COROS nach dem Senden mit deiner Uhr. Ein geändertes oder verschobenes Training ersetzt das frühere im Training Hub.",
+  "polarPushNote": "Nutzt die Herzfrequenzzonen deines Polar-Sportprofils; prüfe, ob sie zu Fjelia passen. Ein Training: 16:00. Zwei Trainings: 09:00 und 18:00. Synchronisiere Polar Flow nach dem Senden mit deiner Uhr.",
+  "skipAlsoRemovedFrom": "Es wird auch aus deinem Kalender bei {platforms} entfernt. Nichts wird nachgeholt.",
+  "@skipAlsoRemovedFrom": {"placeholders": {"platforms": {"type": "String"}}},
+  "strengthShareNote": "{provider} übernimmt keine Kraftübungen von Fjelia. Teile die Liste und trage sie in der {provider}-App ein.",
+  "@strengthShareNote": {"placeholders": {"provider": {"type": "String"}}},
+  "sharedAsText": "Als Text geteilt.",
+  "bpPeriodDay": "Tag",
+  "bpTodaysReading": "MESSUNG HEUTE"
 }

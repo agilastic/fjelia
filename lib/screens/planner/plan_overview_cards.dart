@@ -935,7 +935,9 @@ class _SessionTile extends StatelessWidget {
                   Text(
                     skipped
                         ? context.l10n.sessionDropped(
-                            skipReason ?? context.l10n.skipped,
+                            skipReason == null
+                                ? context.l10n.skipped
+                                : skipReasonLabel(context.l10n, skipReason!),
                             planDuration(s.plannedDurationMin),
                           )
                         : done

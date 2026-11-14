@@ -1,6 +1,7 @@
 import '../../theme/fjelia_style.dart';
 import '../../l10n/formats.dart';
 import '../../l10n/l10n_ext.dart';
+import '../../l10n/plan_text.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -346,7 +347,9 @@ class _ItemLine extends StatelessWidget {
             ? mint
             : plannedActivityColor(phase),
         detail: skipped
-            ? (item.skipReason ?? 'Skipped')
+            ? (item.skipReason == null
+                  ? context.l10n.skipped
+                  : skipReasonLabel(context.l10n, item.skipReason!))
             : missed
             ? context.l10n.notRecorded
             : item.title,

@@ -2731,14 +2731,6 @@
       }
     }
   },
-  "nowOnCurrentTapA": "Ora il {current}. Tocca un giorno o trascina l'allenamento su uno. I passaggi restano invariati.",
-  "@nowOnCurrentTapA": {
-    "placeholders": {
-      "current": {
-        "type": "Object"
-      }
-    }
-  },
   "monthView": "Vista mensile",
   "syncing": "Sincronizzazione",
   "trendUnavailable": "Tendenza non disponibile",
@@ -4049,7 +4041,7 @@
   "sleepEcgStagesFailed": "Impossibile stimare le fasi del sonno. Verifica che la registrazione sia completa e riprova.",
   "replacementPreviewTitle": "Controlla l'allenamento sostitutivo",
   "replacementGoalLoad": "Obiettivo: {objective} · carico previsto {load}",
-  "replacementHistoryEstimate": "Durata stimata in base ai tuoi allenamenti recenti in questo sport.",
+  "replacementHistoryEstimate": "Stimato da {count} allenamenti recenti in questo sport: {sampleCount} con dati grezzi di frequenza cardiaca assegnati alle tue zone, {averageCount} solo con la frequenza cardiaca media.",
   "replacementFallbackEstimate": "Non ci sono abbastanza dati di allenamento recenti per questo sport. La durata è una stima prudente.",
   "replacementRestSuggestion": "Il riposo potrebbe essere la scelta migliore per il tuo attuale programma di allenamento.",
   "replacementObjectiveRecovery": "Recupero",
@@ -4060,7 +4052,7 @@
   "replacementObjectiveLong": "Resistenza lunga",
   "replacementWarningNoHistory": "Lo storico di carico recente per questo sport non è sufficiente.",
   "replacementWarningRunningCap": "Il volume di corsa è stato limitato per prudenza, per contenere lo stress meccanico.",
-  "replacementWarningLong": "Gli allenamenti lunghi o specifici per la gara non sono del tutto sostituibili. Controlla la corsa più breve.",
+  "replacementWarningLong": "Le sessioni lunghe non si possono sostituire del tutto con un altro sport. Controlla la durata o scegli il riposo.",
   "replacementWarningRace": "Questo allenamento ha priorità gara; il suo beneficio specifico per lo sport potrebbe non essere mantenuto.",
   "replacementWarningSwim": "Una parte dello stimolo aerobico si mantiene, ma non la tecnica di nuoto né le richieste muscolari specifiche.",
   "replacementWarningStrength": "Allenamenti di forza e di resistenza non sono equivalenti e non possono mantenere lo stesso effetto allenante.",
@@ -4069,5 +4061,23 @@
   "replacementWarningLowRecovery": "Il tuo ultimo punteggio di recupero salvato è basso. Valuta di ridurre l'intensità o di riposare.",
   "replacementWarningRecentVolume": "Il tuo carico di allenamento degli ultimi sette giorni è nettamente più alto rispetto ai sette giorni precedenti.",
   "replacementTrainingGoal": "OBIETTIVO DI ALLENAMENTO",
-  "replacementPreviewWarnings": "NOTE SUL PIANO"
+  "replacementPreviewWarnings": "NOTE SUL PIANO",
+  "skipReasonReplaced": "Sostituito con un altro sport",
+  "skipReasonRestInstead": "Riposo invece della sostituzione",
+  "replacesWorkout": "Sostituisce: {title}",
+  "replacedByWorkout": "Sostituito da: {title}",
+  "adaptationReadiness": "Adattato alla tua forma del giorno.",
+  "adaptationMorningCheck": "Adattato dal controllo del piano del mattino.",
+  "corosPushNote": "Dopo l'invio sincronizza COROS con il tuo orologio. Un allenamento modificato o spostato sostituisce quello precedente nel Training Hub.",
+  "polarPushNote": "Usa le zone di frequenza cardiaca del tuo profilo sportivo Polar; verifica che corrispondano a Fjelia. Un allenamento: 16:00. Due allenamenti: 09:00 e 18:00. Dopo l'invio sincronizza Polar Flow con il tuo orologio.",
+  "skipAlsoRemovedFrom": "Viene tolto anche dal tuo calendario su {platforms}. Non viene aggiunto nulla per recuperarlo.",
+  "strengthShareNote": "{provider} non riceve gli esercizi di forza da Fjelia. Condividi l'elenco e inseriscilo nell'app {provider}.",
+  "sharedAsText": "Condiviso come testo.",
+  "replacementLimitedHistoryEstimate": "Allenamenti recenti utilizzabili in questo sport: {count}. Sono troppo pochi per il tuo storico personale, quindi Fjelia usa una stima prudente per lo sport.",
+  "replacementEstimateDisclaimer": "La durata stima un carico cardiovascolare simile. Tecnica, impegno muscolare e stress meccanico possono comunque essere diversi.",
+  "replacementWarningLimitedHistory": "Allenamenti recenti utilizzabili in questo sport: {count} su 5 necessari. La durata è una stima prudente.",
+  "replacementWarningStructureMinimum": "Gli intervalli di lavoro e di recupero restano come previsto, quindi la sostituzione è più lunga della durata stimata.",
+  "replacementWarningRunningStructure": "Gli intervalli supererebbero il limite di corsa. Fjelia propone invece una corsa facile entro il limite.",
+  "bpPeriodDay": "Giorno",
+  "bpTodaysReading": "MISURAZIONE DI OGGI"
 }

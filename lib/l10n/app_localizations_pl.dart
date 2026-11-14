@@ -4854,11 +4854,6 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
-  String nowOnCurrentTapA(Object current) {
-    return 'Obecnie: $current. Dotknij dnia lub przeciągnij na niego trening. Kroki pozostają bez zmian.';
-  }
-
-  @override
   String get monthView => 'Widok miesiąca';
 
   @override
@@ -8751,12 +8746,26 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
-  String get replacementHistoryEstimate =>
-      'Czas trwania oszacowany na podstawie Twoich ostatnich treningów w tym sporcie.';
+  String replacementHistoryEstimate(
+    int count,
+    int sampleCount,
+    int averageCount,
+  ) {
+    return 'Oszacowano na podstawie ostatnich treningów w tym sporcie (łącznie: $count): z surowymi danymi tętna w twoich strefach: $sampleCount, tylko ze średnim tętnem: $averageCount.';
+  }
+
+  @override
+  String replacementLimitedHistoryEstimate(int count) {
+    return 'Przydatne ostatnie treningi w tym sporcie: $count. To za mało na twoją osobistą historię, więc Fjelia stosuje ostrożne oszacowanie dla tego sportu.';
+  }
 
   @override
   String get replacementFallbackEstimate =>
       'Brak wystarczających danych z ostatnich treningów w tym sporcie. Czas trwania to ostrożne oszacowanie.';
+
+  @override
+  String get replacementEstimateDisclaimer =>
+      'Czas trwania szacuje podobne obciążenie układu krążenia. Technika, praca mięśni i obciążenie mechaniczne mogą się mimo to różnić.';
 
   @override
   String get replacementRestSuggestion =>
@@ -8785,12 +8794,25 @@ class AppLocalizationsPl extends AppLocalizations {
       'Brak wystarczającej historii obciążeń z ostatniego czasu dla tego sportu.';
 
   @override
+  String replacementWarningLimitedHistory(int count) {
+    return 'Przydatne ostatnie treningi w tym sporcie: $count z 5 potrzebnych. Czas trwania to ostrożne oszacowanie.';
+  }
+
+  @override
+  String get replacementWarningStructureMinimum =>
+      'Odcinki wysiłku i odpoczynku zostają zgodnie z planem, dlatego zamiennik jest dłuższy niż oszacowany czas.';
+
+  @override
+  String get replacementWarningRunningStructure =>
+      'Interwały przekroczyłyby limit biegania. Zamiast tego Fjelia proponuje spokojny bieg w ramach limitu.';
+
+  @override
   String get replacementWarningRunningCap =>
       'Objętość biegania została ostrożnie ograniczona, aby zmniejszyć obciążenie mechaniczne.';
 
   @override
   String get replacementWarningLong =>
-      'Długich lub startowo specyficznych treningów nie da się w pełni zastąpić. Sprawdź krótszy bieg.';
+      'Długich treningów nie da się w pełni zastąpić innym sportem. Sprawdź czas trwania albo wybierz odpoczynek.';
 
   @override
   String get replacementWarningRace =>
@@ -8825,4 +8847,54 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get replacementPreviewWarnings => 'UWAGI DO PLANU';
+
+  @override
+  String get skipReasonReplaced => 'Zastąpiony innym sportem';
+
+  @override
+  String get skipReasonRestInstead => 'Odpoczynek zamiast zamiany';
+
+  @override
+  String replacesWorkout(String title) {
+    return 'Zastępuje: $title';
+  }
+
+  @override
+  String replacedByWorkout(String title) {
+    return 'Zastąpiony przez: $title';
+  }
+
+  @override
+  String get adaptationReadiness => 'Dopasowany do twojej dyspozycji dnia.';
+
+  @override
+  String get adaptationMorningCheck =>
+      'Dopasowany przez poranną kontrolę planu.';
+
+  @override
+  String get corosPushNote =>
+      'Po wysłaniu zsynchronizuj COROS z zegarkiem. Zmieniony lub przeniesiony trening zastępuje wcześniejszy w Training Hub.';
+
+  @override
+  String get polarPushNote =>
+      'Korzysta ze stref tętna z twojego profilu sportowego Polar; sprawdź, czy zgadzają się z Fjelią. Jeden trening: 16:00. Dwa treningi: 09:00 i 18:00. Po wysłaniu zsynchronizuj Polar Flow z zegarkiem.';
+
+  @override
+  String skipAlsoRemovedFrom(String platforms) {
+    return 'Zostanie też usunięty z twojego kalendarza w $platforms. Nic nie zostanie dodane, aby go odrobić.';
+  }
+
+  @override
+  String strengthShareNote(String provider) {
+    return '$provider nie przyjmuje ćwiczeń siłowych z Fjelii. Udostępnij listę i wpisz ją w aplikacji $provider.';
+  }
+
+  @override
+  String get sharedAsText => 'Udostępniono jako tekst.';
+
+  @override
+  String get bpPeriodDay => 'Dzień';
+
+  @override
+  String get bpTodaysReading => 'DZISIEJSZY POMIAR';
 }

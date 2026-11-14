@@ -4858,11 +4858,6 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String nowOnCurrentTapA(Object current) {
-    return 'Nu op $current. Tik op een dag of sleep de training erheen. De stappen blijven zoals ze zijn.';
-  }
-
-  @override
   String get monthView => 'Maandweergave';
 
   @override
@@ -8725,12 +8720,26 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get replacementHistoryEstimate =>
-      'Duur geschat op basis van je recente training in deze sport.';
+  String replacementHistoryEstimate(
+    int count,
+    int sampleCount,
+    int averageCount,
+  ) {
+    return 'Geschat op basis van $count recente trainingen in deze sport: $sampleCount met ruwe hartslagdata in jouw zones, $averageCount alleen met gemiddelde hartslag.';
+  }
+
+  @override
+  String replacementLimitedHistoryEstimate(int count) {
+    return 'Bruikbare recente trainingen in deze sport: $count. Dat is te weinig voor je persoonlijke historie, dus Fjelia gebruikt een voorzichtige schatting voor de sport.';
+  }
 
   @override
   String get replacementFallbackEstimate =>
       'Er zijn niet genoeg recente trainingsgegevens voor deze sport. De duur is een voorzichtige schatting.';
+
+  @override
+  String get replacementEstimateDisclaimer =>
+      'De duur schat een vergelijkbare belasting van hart en bloedvaten. Techniek, spierbelasting en mechanische belasting kunnen toch verschillen.';
 
   @override
   String get replacementRestSuggestion =>
@@ -8759,12 +8768,25 @@ class AppLocalizationsNl extends AppLocalizations {
       'Er is niet genoeg recente belastingsgeschiedenis voor deze sport.';
 
   @override
+  String replacementWarningLimitedHistory(int count) {
+    return 'Bruikbare recente trainingen in deze sport: $count van de 5 nodige. De duur is een voorzichtige schatting.';
+  }
+
+  @override
+  String get replacementWarningStructureMinimum =>
+      'Belasting- en herstelintervallen blijven zoals gepland, daarom is de vervanging langer dan de geschatte duur.';
+
+  @override
+  String get replacementWarningRunningStructure =>
+      'De intervallen zouden de hardlooplimiet overschrijden. Fjelia stelt in plaats daarvan een rustige loop binnen de limiet voor.';
+
+  @override
   String get replacementWarningRunningCap =>
       'De loopomvang is voorzichtig beperkt om de mechanische belasting te beperken.';
 
   @override
   String get replacementWarningLong =>
-      'Lange of wedstrijdspecifieke trainingen zijn niet volledig te vervangen. Controleer de kortere loop.';
+      'Lange trainingen zijn niet volledig te vervangen door een andere sport. Controleer de duur of kies rust.';
 
   @override
   String get replacementWarningRace =>
@@ -8799,4 +8821,54 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get replacementPreviewWarnings => 'OPMERKINGEN BIJ HET PLAN';
+
+  @override
+  String get skipReasonReplaced => 'Vervangen door een andere sport';
+
+  @override
+  String get skipReasonRestInstead => 'Rust in plaats van vervanging';
+
+  @override
+  String replacesWorkout(String title) {
+    return 'Vervangt: $title';
+  }
+
+  @override
+  String replacedByWorkout(String title) {
+    return 'Vervangen door: $title';
+  }
+
+  @override
+  String get adaptationReadiness => 'Aangepast aan je dagvorm.';
+
+  @override
+  String get adaptationMorningCheck =>
+      'Aangepast door de ochtendcontrole van het plan.';
+
+  @override
+  String get corosPushNote =>
+      'Synchroniseer COROS na het versturen met je horloge. Een gewijzigde of verplaatste training vervangt de vorige in de Training Hub.';
+
+  @override
+  String get polarPushNote =>
+      'Gebruikt de hartslagzones van je Polar-sportprofiel; controleer of ze overeenkomen met Fjelia. Eén training: 16:00. Twee trainingen: 09:00 en 18:00. Synchroniseer Polar Flow na het versturen met je horloge.';
+
+  @override
+  String skipAlsoRemovedFrom(String platforms) {
+    return 'Hij wordt ook uit je agenda op $platforms gehaald. Er wordt niets toegevoegd om hem in te halen.';
+  }
+
+  @override
+  String strengthShareNote(String provider) {
+    return '$provider neemt geen krachtoefeningen van Fjelia over. Deel de lijst en voer hem in de $provider-app in.';
+  }
+
+  @override
+  String get sharedAsText => 'Gedeeld als tekst.';
+
+  @override
+  String get bpPeriodDay => 'Dag';
+
+  @override
+  String get bpTodaysReading => 'METING VANDAAG';
 }

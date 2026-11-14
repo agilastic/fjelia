@@ -4815,11 +4815,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String nowOnCurrentTapA(Object current) {
-    return 'Now on $current. Tap a day, or drag the workout onto one. The steps stay as they are.';
-  }
-
-  @override
   String get monthView => 'Month view';
 
   @override
@@ -8667,12 +8662,26 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get replacementHistoryEstimate =>
-      'Duration estimated from your recent training in this sport.';
+  String replacementHistoryEstimate(
+    int count,
+    int sampleCount,
+    int averageCount,
+  ) {
+    return 'Estimated from $count recent workouts in this sport: $sampleCount with heart-rate samples sorted into your zones, $averageCount with average heart rate only.';
+  }
+
+  @override
+  String replacementLimitedHistoryEstimate(int count) {
+    return 'Usable recent workouts in this sport: $count. That is too few for your personal history, so Fjelia uses a conservative estimate for the sport.';
+  }
 
   @override
   String get replacementFallbackEstimate =>
       'There is not enough recent training data for this sport. Duration is a conservative estimate.';
+
+  @override
+  String get replacementEstimateDisclaimer =>
+      'The duration estimates a similar cardiovascular load. Technique, muscle demands and mechanical stress can still differ.';
 
   @override
   String get replacementRestSuggestion =>
@@ -8701,12 +8710,25 @@ class AppLocalizationsEn extends AppLocalizations {
       'There is not enough recent load history for this sport.';
 
   @override
+  String replacementWarningLimitedHistory(int count) {
+    return 'Usable recent workouts in this sport: $count of 5 needed. The duration is a conservative estimate.';
+  }
+
+  @override
+  String get replacementWarningStructureMinimum =>
+      'Work and recovery intervals were kept as planned, so the replacement is longer than the estimated duration.';
+
+  @override
+  String get replacementWarningRunningStructure =>
+      'The intervals would exceed the running limit. Fjelia suggests an easy run within the limit instead.';
+
+  @override
   String get replacementWarningRunningCap =>
       'Running volume was capped conservatively to limit mechanical stress.';
 
   @override
   String get replacementWarningLong =>
-      'Long or race-specific workouts are not fully replaceable. Review the shorter run.';
+      'Long sessions cannot be fully replaced by another sport. Check the duration, or choose rest.';
 
   @override
   String get replacementWarningRace =>
@@ -8741,4 +8763,53 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get replacementPreviewWarnings => 'PLAN NOTES';
+
+  @override
+  String get skipReasonReplaced => 'Replaced with another sport';
+
+  @override
+  String get skipReasonRestInstead => 'Rest instead of a replacement';
+
+  @override
+  String replacesWorkout(String title) {
+    return 'Replaces: $title';
+  }
+
+  @override
+  String replacedByWorkout(String title) {
+    return 'Replaced by: $title';
+  }
+
+  @override
+  String get adaptationReadiness => 'Adjusted to your readiness.';
+
+  @override
+  String get adaptationMorningCheck => 'Adjusted by the morning plan check.';
+
+  @override
+  String get corosPushNote =>
+      'Sync COROS to your watch after sending. A changed or moved workout replaces the earlier one in the Training Hub.';
+
+  @override
+  String get polarPushNote =>
+      'Uses your Polar sport profile’s heart-rate zones; check they match Fjelia. One workout: 16:00. Two workouts: 09:00 and 18:00. Sync Polar Flow to your watch after sending.';
+
+  @override
+  String skipAlsoRemovedFrom(String platforms) {
+    return 'It is also taken off your calendar on $platforms. Nothing is added to make it up.';
+  }
+
+  @override
+  String strengthShareNote(String provider) {
+    return '$provider does not take strength exercises from Fjelia. Share the list and enter it in the $provider app.';
+  }
+
+  @override
+  String get sharedAsText => 'Shared as text.';
+
+  @override
+  String get bpPeriodDay => 'Day';
+
+  @override
+  String get bpTodaysReading => 'TODAY’S READING';
 }

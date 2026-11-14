@@ -224,6 +224,46 @@ class BriefingBrief {
   }
 }
 
+/// Whether [text] tells the athlete there is no training today. Such a reply
+/// cannot simply be completed with the planned sessions; it contradicts them.
+/// Phrases of all app languages are checked: a small model may mix languages.
+bool briefingDeniesTraining(String text) {
+  final lower = text.toLowerCase();
+  const phrases = [
+    // en
+    'no training', 'no workout', 'rest day', 'day off', 'rest today',
+    // de
+    'kein training', 'keine trainings', 'keine einheit', 'ruhetag',
+    'pausentag', 'trainingsfrei', 'erholungstag', 'zur erholung',
+    // fr
+    "pas d'entraînement", 'aucun entraînement', 'jour de repos',
+    'journée de repos',
+    // it
+    'nessun allenamento', 'niente allenamento', 'giorno di riposo',
+    'giornata di riposo',
+    // es
+    'sin entrenamiento', 'ningún entrenamiento', 'no entrenes',
+    'día de descanso',
+    // ca
+    'cap entrenament', 'sense entrenament', 'dia de descans',
+    // nb, da
+    'ingen trening', 'ingen træning', 'hviledag', 'fridag',
+    // sk
+    'žiadny tréning', 'bez tréningu', 'deň voľna', 'deň odpočinku',
+    'oddychový deň',
+    // fi
+    'ei treeniä', 'ei harjoitusta', 'lepopäivä', 'vapaapäivä',
+    // nl
+    'geen training', 'rustdag', 'vrije dag',
+    // pl
+    'bez treningu', 'żadnego treningu', 'dzień odpoczynku', 'dzień wolny',
+    'dzień regeneracji',
+    // pt
+    'sem treino', 'nenhum treino', 'dia de descanso', 'dia de folga',
+  ];
+  return phrases.any(lower.contains);
+}
+
 /// Whether a model's briefing can be shown: short, in the app language, and
 /// not a copy of the facts it was given.
 bool briefingIsUsable(String text, {required String languageCode}) {

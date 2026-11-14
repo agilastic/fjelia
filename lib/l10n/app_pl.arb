@@ -2760,14 +2760,6 @@
       }
     }
   },
-  "nowOnCurrentTapA": "Obecnie: {current}. Dotknij dnia lub przeciągnij na niego trening. Kroki pozostają bez zmian.",
-  "@nowOnCurrentTapA": {
-    "placeholders": {
-      "current": {
-        "type": "Object"
-      }
-    }
-  },
   "monthView": "Widok miesiąca",
   "syncing": "Synchronizacja",
   "trendUnavailable": "Trend niedostępny",
@@ -5212,7 +5204,7 @@
   "sleepEcgStagesFailed": "Nie udało się oszacować faz snu. Sprawdź, czy nagranie jest kompletne, i spróbuj ponownie.",
   "replacementPreviewTitle": "Sprawdź trening zastępczy",
   "replacementGoalLoad": "Cel: {objective} · planowane obciążenie {load}",
-  "replacementHistoryEstimate": "Czas trwania oszacowany na podstawie Twoich ostatnich treningów w tym sporcie.",
+  "replacementHistoryEstimate": "Oszacowano na podstawie ostatnich treningów w tym sporcie (łącznie: {count}): z surowymi danymi tętna w twoich strefach: {sampleCount}, tylko ze średnim tętnem: {averageCount}.",
   "replacementFallbackEstimate": "Brak wystarczających danych z ostatnich treningów w tym sporcie. Czas trwania to ostrożne oszacowanie.",
   "replacementRestSuggestion": "Odpoczynek może być lepszym wyborem przy Twoim obecnym planie treningowym.",
   "replacementObjectiveRecovery": "Regeneracja",
@@ -5223,7 +5215,7 @@
   "replacementObjectiveLong": "Długa wytrzymałość",
   "replacementWarningNoHistory": "Brak wystarczającej historii obciążeń z ostatniego czasu dla tego sportu.",
   "replacementWarningRunningCap": "Objętość biegania została ostrożnie ograniczona, aby zmniejszyć obciążenie mechaniczne.",
-  "replacementWarningLong": "Długich lub startowo specyficznych treningów nie da się w pełni zastąpić. Sprawdź krótszy bieg.",
+  "replacementWarningLong": "Długich treningów nie da się w pełni zastąpić innym sportem. Sprawdź czas trwania albo wybierz odpoczynek.",
   "replacementWarningRace": "Ten trening ma priorytet startowy; jego korzyść specyficzna dla sportu może nie zostać zachowana.",
   "replacementWarningSwim": "Część bodźca tlenowego zostaje zachowana, ale nie technika pływania ani specyficzne obciążenie mięśni.",
   "replacementWarningStrength": "Treningi siłowe i wytrzymałościowe nie są równoważne i nie mogą zachować tego samego efektu treningowego.",
@@ -5232,5 +5224,23 @@
   "replacementWarningLowRecovery": "Twój ostatnio zapisany wynik regeneracji jest niski. Rozważ zmniejszenie intensywności lub odpoczynek.",
   "replacementWarningRecentVolume": "Twoje obciążenie treningowe z ostatnich siedmiu dni jest wyraźnie wyższe niż w poprzednich siedmiu dniach.",
   "replacementTrainingGoal": "CEL TRENINGOWY",
-  "replacementPreviewWarnings": "UWAGI DO PLANU"
+  "replacementPreviewWarnings": "UWAGI DO PLANU",
+  "skipReasonReplaced": "Zastąpiony innym sportem",
+  "skipReasonRestInstead": "Odpoczynek zamiast zamiany",
+  "replacesWorkout": "Zastępuje: {title}",
+  "replacedByWorkout": "Zastąpiony przez: {title}",
+  "adaptationReadiness": "Dopasowany do twojej dyspozycji dnia.",
+  "adaptationMorningCheck": "Dopasowany przez poranną kontrolę planu.",
+  "corosPushNote": "Po wysłaniu zsynchronizuj COROS z zegarkiem. Zmieniony lub przeniesiony trening zastępuje wcześniejszy w Training Hub.",
+  "polarPushNote": "Korzysta ze stref tętna z twojego profilu sportowego Polar; sprawdź, czy zgadzają się z Fjelią. Jeden trening: 16:00. Dwa treningi: 09:00 i 18:00. Po wysłaniu zsynchronizuj Polar Flow z zegarkiem.",
+  "skipAlsoRemovedFrom": "Zostanie też usunięty z twojego kalendarza w {platforms}. Nic nie zostanie dodane, aby go odrobić.",
+  "strengthShareNote": "{provider} nie przyjmuje ćwiczeń siłowych z Fjelii. Udostępnij listę i wpisz ją w aplikacji {provider}.",
+  "sharedAsText": "Udostępniono jako tekst.",
+  "replacementLimitedHistoryEstimate": "Przydatne ostatnie treningi w tym sporcie: {count}. To za mało na twoją osobistą historię, więc Fjelia stosuje ostrożne oszacowanie dla tego sportu.",
+  "replacementEstimateDisclaimer": "Czas trwania szacuje podobne obciążenie układu krążenia. Technika, praca mięśni i obciążenie mechaniczne mogą się mimo to różnić.",
+  "replacementWarningLimitedHistory": "Przydatne ostatnie treningi w tym sporcie: {count} z 5 potrzebnych. Czas trwania to ostrożne oszacowanie.",
+  "replacementWarningStructureMinimum": "Odcinki wysiłku i odpoczynku zostają zgodnie z planem, dlatego zamiennik jest dłuższy niż oszacowany czas.",
+  "replacementWarningRunningStructure": "Interwały przekroczyłyby limit biegania. Zamiast tego Fjelia proponuje spokojny bieg w ramach limitu.",
+  "bpPeriodDay": "Dzień",
+  "bpTodaysReading": "DZISIEJSZY POMIAR"
 }

@@ -62,11 +62,23 @@ class GarminWorkoutProvider extends WorkoutProvider {
       );
 
   static String _sportName(String sport) => switch (sport) {
-    'running' || 'trail_running' => 'running',
-    'cycling_road' || 'cycling_gravel' || 'cycling_mtb' => 'cycling',
-    'swimming' => 'swimming',
+    'running' || 'trail_running' || 'treadmill_running' => 'running',
+    'cycling_road' ||
+    'cycling_gravel' ||
+    'cycling_mtb' ||
+    'indoor_cycling' => 'cycling',
+    'swimming' || 'swimming_open_water' => 'swimming',
     'strength' || 'pilates' || 'yoga' || 'stretching' => 'strength',
-    'indoor_rowing' => 'cardio',
+    // Garmin workouts have no own type for these; a replacement must not
+    // arrive on the watch as a run.
+    'indoor_rowing' ||
+    'rowing' ||
+    'elliptical' ||
+    'nordic_skiing' ||
+    'skate_skiing' ||
+    'stair_climbing' ||
+    'hiking' ||
+    'walking' => 'cardio',
     _ => 'running',
   };
 

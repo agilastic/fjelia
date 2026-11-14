@@ -114,6 +114,45 @@ void main() {
   });
 
   test(
+    'a reply that rephrases the plan keeps its text and gains the count',
+    () async {
+      setActiveLocale(const Locale('de'));
+      const text =
+          'Dein Schlaf war kurz. Halte den Lauf und das Krafttraining locker';
+      String? source;
+      final reply = await _client(_Reply(text))
+          .sendBriefing(_settings, _context(), onSource: (s) => source = s);
+      expect(reply, '$text. Für heute sind 2 Einheiten geplant.');
+      expect(source, isNot('Lokal · Fjelia-Regeln'));
+    },
+  );
+
+  test('a reply that denies training today is still replaced', () async {
+    for (final (locale, text) in [
+      ('de', 'Dein Schlaf war kurz. Heute ist ein Ruhetag.'),
+      ('nl', 'Je slaap was kort. Vandaag is een rustdag.'),
+      ('pl', 'Spałeś krótko. Dziś dzień odpoczynku.'),
+      ('pt', 'Dormiste pouco. Hoje é dia de descanso.'),
+      ('fr', 'Tu as peu dormi. Aujourd\'hui, jour de repos.'),
+    ]) {
+      setActiveLocale(Locale(locale));
+      String? source;
+      final reply = await _client(_Reply(text))
+          .sendBriefing(_settings, _context(), onSource: (s) => source = s);
+      expect(reply, isNot(contains(text)), reason: locale);
+      expect(reply, contains(tr.briefPlannedTodayCount(2)), reason: locale);
+      expect(source, 'Lokal · Fjelia-Regeln', reason: locale);
+    }
+  });
+
+  test('briefingDeniesTraining spots rest wording, not plain advice', () {
+    expect(briefingDeniesTraining('Take a rest day today.'), isTrue);
+    expect(briefingDeniesTraining('Kein Training heute.'), isTrue);
+    expect(briefingDeniesTraining('Keep both sessions easy.'), isFalse);
+    expect(briefingDeniesTraining('Halte beide Einheiten locker.'), isFalse);
+  });
+
+  test(
     'the plan remains correct in every app language when the model omits it',
     () async {
       for (final locale in [

@@ -415,6 +415,7 @@ void main() {
     Widget view,
     String name, {
     FakeWorkoutGarmin? garmin,
+    Locale? locale,
   }) async {
     final referenceLoad =
         Platform.environment['FJELIA_UI_PREVIEW_DIR'] != null &&
@@ -490,6 +491,7 @@ void main() {
           child: MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
+            locale: locale,
             debugShowCheckedModeBanner: false,
             theme: AppTheme.dark(),
             home: Scaffold(body: SafeArea(child: view)),
@@ -1899,6 +1901,83 @@ void main() {
     );
     expect(find.textContaining('3 sets · 8–10 reps · Rest 2:00'), findsWidgets);
     await capture(tester, 'planned-strength');
+    expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(Duration.zero);
+    await tester.binding.setSurfaceSize(null);
+  });
+  testWidgets('a sport change links the original and its replacement', (
+    tester,
+  ) async {
+    var session = await plannedSession(
+      'Endurance Ride (150 min)',
+      'cycling_road',
+      2,
+      150,
+      140,
+    );
+    final tomorrow = DateUtils.dateOnly(DateTime.now())
+        .add(const Duration(days: 1));
+    await (db.update(db.trainingSessions)
+          ..where((t) => t.id.equals(session.id)))
+        .write(TrainingSessionsCompanion(sessionDate: Value(tomorrow)));
+    session = session.copyWith(sessionDate: tomorrow);
+    await render(
+      tester,
+      PlanSessionSheet(session: session),
+      'replace-0-sheet',
+      locale: const Locale('de'),
+    );
+    Future<void> scrollTo(Finder finder) async {
+      await tester.scrollUntilVisible(
+        finder,
+        200,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.pumpAndSettle();
+    }
+
+    await scrollTo(find.text('Sport ändern'));
+    // Rest and a sport change sit side by side, each on one line.
+    expect(find.text('Als Ruhe markieren'), findsOneWidget);
+    await capture(tester, 'replace-1-buttons');
+    await tapLow(tester, find.text('Sport ändern'));
+    await tester.pumpAndSettle();
+    await capture(tester, 'replace-2-picker');
+    await tester.tap(find.text('Ersatztraining einplanen'));
+    await tester.pumpAndSettle();
+    expect(find.text('Ersatztraining prüfen'), findsOneWidget);
+    await capture(tester, 'replace-3-preview');
+    await tester.tap(find.text('Ersatztraining einplanen').last);
+    await tester.pump(const Duration(seconds: 2));
+    await tester.pumpAndSettle();
+    final sessions = await db.select(db.trainingSessions).get();
+    final replacement = sessions.singleWhere((s) => s.id != session.id);
+    expect(sessions.singleWhere((s) => s.id == session.id).status, 'skipped');
+    // No minutes of the original in the replacement's title.
+    expect(replacement.title, isNot(contains('150 min')));
+    expect(
+      (await db.select(db.sessionActuals).get()).single.skipReason,
+      'Replaced with another sport',
+    );
+    await tester.drag(find.byType(Scrollable).first, const Offset(0, 4000));
+    await tester.pumpAndSettle();
+    expect(
+      find.text('ÜBERSPRUNGEN · DURCH ANDERE SPORTART ERSETZT'),
+      findsOneWidget,
+    );
+    await capture(tester, 'replace-4-original-top');
+    await scrollTo(find.text('Ersetzt durch: ${replacement.title}'));
+    await capture(tester, 'replace-5-original-link');
+    await tester.tap(find.text('Ersetzt durch: ${replacement.title}'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.text('Ersetzt: ${session.title}'),
+      200,
+      scrollable: find.byType(Scrollable).last,
+    );
+    await tester.pumpAndSettle();
+    await capture(tester, 'replace-6-replacement-link');
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox());
     await tester.pump(Duration.zero);

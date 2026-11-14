@@ -88,7 +88,7 @@ class _BpState extends ConsumerState<BpScreen> {
                           : period == BpPeriod.month
                           ? context.l10n.monthlyAvg
                           : DateUtils.isSameDay(d, today)
-                          ? "TODAY’S READING"
+                          ? context.l10n.bpTodaysReading
                           : dayText(d),
                       style: TextStyle(
                         fontSize: 9,
@@ -157,9 +157,11 @@ class _BpState extends ConsumerState<BpScreen> {
                         children: [
                           for (final p in BpPeriod.values)
                             ChoiceChip(
-                              label: Text(
-                                p.name[0].toUpperCase() + p.name.substring(1),
-                              ),
+                              label: Text(switch (p) {
+                                BpPeriod.day => context.l10n.bpPeriodDay,
+                                BpPeriod.week => context.l10n.week,
+                                BpPeriod.month => context.l10n.month,
+                              }),
                               selected: period == p,
                               onSelected: (_) => setState(() {
                                 period = p;

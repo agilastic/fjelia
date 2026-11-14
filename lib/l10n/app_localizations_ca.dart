@@ -4871,11 +4871,6 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
-  String nowOnCurrentTapA(Object current) {
-    return 'Ara el $current. Toca un dia o arrossega l\'entrenament a un. Els passos es mantenen.';
-  }
-
-  @override
   String get monthView => 'Vista mensual';
 
   @override
@@ -8725,12 +8720,26 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
-  String get replacementHistoryEstimate =>
-      'Durada estimada a partir del teu entrenament recent en aquest esport.';
+  String replacementHistoryEstimate(
+    int count,
+    int sampleCount,
+    int averageCount,
+  ) {
+    return 'Estimat a partir de $count entrenaments recents en aquest esport: $sampleCount amb dades de freqüència cardíaca assignades a les teves zones, $averageCount només amb la freqüència cardíaca mitjana.';
+  }
+
+  @override
+  String replacementLimitedHistoryEstimate(int count) {
+    return 'Entrenaments recents aprofitables en aquest esport: $count. Són massa pocs per al teu historial personal, així que Fjelia fa servir una estimació prudent per a l\'esport.';
+  }
 
   @override
   String get replacementFallbackEstimate =>
       'No hi ha prou dades d\'entrenament recents per a aquest esport. La durada és una estimació prudent.';
+
+  @override
+  String get replacementEstimateDisclaimer =>
+      'La durada estima una càrrega cardiovascular semblant. La tècnica, l\'esforç muscular i la càrrega mecànica poden continuar sent diferents.';
 
   @override
   String get replacementRestSuggestion =>
@@ -8759,12 +8768,25 @@ class AppLocalizationsCa extends AppLocalizations {
       'No hi ha prou historial de càrrega recent per a aquest esport.';
 
   @override
+  String replacementWarningLimitedHistory(int count) {
+    return 'Entrenaments recents aprofitables en aquest esport: $count dels 5 necessaris. La durada és una estimació prudent.';
+  }
+
+  @override
+  String get replacementWarningStructureMinimum =>
+      'Els intervals d\'esforç i de recuperació es mantenen com estaven planificats, per això la substitució és més llarga que la durada estimada.';
+
+  @override
+  String get replacementWarningRunningStructure =>
+      'Els intervals superarien el límit de cursa. En lloc d\'això, Fjelia proposa una cursa suau dins del límit.';
+
+  @override
   String get replacementWarningRunningCap =>
       'El volum de cursa s\'ha limitat amb prudència per reduir l\'estrès mecànic.';
 
   @override
   String get replacementWarningLong =>
-      'Els entrenaments llargs o específics de competició no es poden substituir del tot. Revisa la cursa més curta.';
+      'Les sessions llargues no es poden substituir del tot per un altre esport. Revisa la durada o tria descansar.';
 
   @override
   String get replacementWarningRace =>
@@ -8799,4 +8821,54 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get replacementPreviewWarnings => 'NOTES DEL PLA';
+
+  @override
+  String get skipReasonReplaced => 'Substituït per un altre esport';
+
+  @override
+  String get skipReasonRestInstead => 'Descans en lloc de substitució';
+
+  @override
+  String replacesWorkout(String title) {
+    return 'Substitueix: $title';
+  }
+
+  @override
+  String replacedByWorkout(String title) {
+    return 'Substituït per: $title';
+  }
+
+  @override
+  String get adaptationReadiness => 'Ajustat a la teva forma del dia.';
+
+  @override
+  String get adaptationMorningCheck =>
+      'Ajustat per la revisió del pla del matí.';
+
+  @override
+  String get corosPushNote =>
+      'Després d\'enviar-lo, sincronitza COROS amb el rellotge. Un entrenament canviat o mogut substitueix l\'anterior al Training Hub.';
+
+  @override
+  String get polarPushNote =>
+      'Fa servir les zones de freqüència cardíaca del teu perfil esportiu de Polar; comprova que coincideixin amb Fjelia. Un entrenament: 16:00. Dos entrenaments: 09:00 i 18:00. Després d\'enviar-lo, sincronitza Polar Flow amb el rellotge.';
+
+  @override
+  String skipAlsoRemovedFrom(String platforms) {
+    return 'També es treu del teu calendari a $platforms. No s\'afegeix res per recuperar-lo.';
+  }
+
+  @override
+  String strengthShareNote(String provider) {
+    return '$provider no rep exercicis de força de Fjelia. Comparteix la llista i introdueix-la a l\'app de $provider.';
+  }
+
+  @override
+  String get sharedAsText => 'Compartit com a text.';
+
+  @override
+  String get bpPeriodDay => 'Dia';
+
+  @override
+  String get bpTodaysReading => 'MESURA D\'AVUI';
 }

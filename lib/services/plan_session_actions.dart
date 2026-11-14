@@ -153,7 +153,7 @@ class PlanSessionActions {
   /// pace/power targets are cleared and recalculated for the selected sport.
   Future<TrainingSession> replaceWithSport(
     WorkoutReplacementPreview preview, {
-    String reason = 'Replaced with another sport',
+    String reason = replacedWithAnotherSport,
   }) async {
     final session = preview.source;
     final sport = preview.targetSport;
@@ -171,7 +171,11 @@ class PlanSessionActions {
         .copyWith(
           id: Value(replacementId),
           sport: Value(sport),
-          title: Value('$sportLabel · ${session.title}'),
+          // The original's duration in its title would be wrong here.
+          title: Value(
+            '$sportLabel · '
+            '${session.title.replaceFirst(RegExp(r'\s*\(\d+\s*min\)$'), '')}',
+          ),
           sessionNotes: const Value(null),
           athleteNotes: const Value(null),
           warmUp: const Value(null),
@@ -288,6 +292,12 @@ class PlanSessionActions {
 }
 
 /// Reasons offered when a session is skipped.
+/// Stored when rest is chosen instead of a suggested sport change.
+const restInsteadOfReplacement = 'Rest recommended for replacement';
+
+/// Stored on the original when another sport replaces it.
+const replacedWithAnotherSport = 'Replaced with another sport';
+
 const skipReasons = [
   'Illness',
   'Injury or pain',

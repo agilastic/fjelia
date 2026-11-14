@@ -2767,14 +2767,6 @@
       }
     }
   },
-  "nowOnCurrentTapA": "Now on {current}. Tap a day, or drag the workout onto one. The steps stay as they are.",
-  "@nowOnCurrentTapA": {
-    "placeholders": {
-      "current": {
-        "type": "Object"
-      }
-    }
-  },
   "monthView": "Month view",
   "syncing": "Syncing",
   "trendUnavailable": "Trend unavailable",
@@ -5227,8 +5219,12 @@
   "replacementPreviewTitle": "Review replacement workout",
   "replacementGoalLoad": "Goal: {objective} · {load} planned load",
   "@replacementGoalLoad": {"placeholders": {"objective": {"type": "String"}, "load": {"type": "int"}}},
-  "replacementHistoryEstimate": "Duration estimated from your recent training in this sport.",
+  "replacementHistoryEstimate": "Estimated from {count} recent workouts in this sport: {sampleCount} with heart-rate samples sorted into your zones, {averageCount} with average heart rate only.",
+  "@replacementHistoryEstimate": {"placeholders": {"count": {"type": "int"}, "sampleCount": {"type": "int"}, "averageCount": {"type": "int"}}},
+  "replacementLimitedHistoryEstimate": "Usable recent workouts in this sport: {count}. That is too few for your personal history, so Fjelia uses a conservative estimate for the sport.",
+  "@replacementLimitedHistoryEstimate": {"placeholders": {"count": {"type": "int"}}},
   "replacementFallbackEstimate": "There is not enough recent training data for this sport. Duration is a conservative estimate.",
+  "replacementEstimateDisclaimer": "The duration estimates a similar cardiovascular load. Technique, muscle demands and mechanical stress can still differ.",
   "replacementRestSuggestion": "Rest may be the better choice for your current training schedule.",
   "replacementObjectiveRecovery": "Recovery",
   "replacementObjectiveBase": "Base",
@@ -5237,8 +5233,12 @@
   "replacementObjectiveVo2": "VO₂max",
   "replacementObjectiveLong": "Long endurance",
   "replacementWarningNoHistory": "There is not enough recent load history for this sport.",
+  "replacementWarningLimitedHistory": "Usable recent workouts in this sport: {count} of 5 needed. The duration is a conservative estimate.",
+  "@replacementWarningLimitedHistory": {"placeholders": {"count": {"type": "int"}}},
+  "replacementWarningStructureMinimum": "Work and recovery intervals were kept as planned, so the replacement is longer than the estimated duration.",
+  "replacementWarningRunningStructure": "The intervals would exceed the running limit. Fjelia suggests an easy run within the limit instead.",
   "replacementWarningRunningCap": "Running volume was capped conservatively to limit mechanical stress.",
-  "replacementWarningLong": "Long or race-specific workouts are not fully replaceable. Review the shorter run.",
+  "replacementWarningLong": "Long sessions cannot be fully replaced by another sport. Check the duration, or choose rest.",
   "replacementWarningRace": "This workout has race priority; its sport-specific benefit may not be preserved.",
   "replacementWarningSwim": "Some aerobic stimulus carries over, but not swim technique or sport-specific muscular demands.",
   "replacementWarningStrength": "Strength and endurance workouts are not equivalent and cannot preserve the same training effect.",
@@ -5247,5 +5247,22 @@
   "replacementWarningLowRecovery": "Your most recently stored recovery score is low. Consider reducing intensity or resting.",
   "replacementWarningRecentVolume": "Your training load in the last seven days is notably higher than in the previous seven-day period.",
   "replacementTrainingGoal": "TRAINING GOAL",
-  "replacementPreviewWarnings": "PLAN NOTES"
+  "replacementPreviewWarnings": "PLAN NOTES",
+  "skipReasonReplaced": "Replaced with another sport",
+  "skipReasonRestInstead": "Rest instead of a replacement",
+  "replacesWorkout": "Replaces: {title}",
+  "@replacesWorkout": {"placeholders": {"title": {"type": "String"}}},
+  "replacedByWorkout": "Replaced by: {title}",
+  "@replacedByWorkout": {"placeholders": {"title": {"type": "String"}}},
+  "adaptationReadiness": "Adjusted to your readiness.",
+  "adaptationMorningCheck": "Adjusted by the morning plan check.",
+  "corosPushNote": "Sync COROS to your watch after sending. A changed or moved workout replaces the earlier one in the Training Hub.",
+  "polarPushNote": "Uses your Polar sport profile’s heart-rate zones; check they match Fjelia. One workout: 16:00. Two workouts: 09:00 and 18:00. Sync Polar Flow to your watch after sending.",
+  "skipAlsoRemovedFrom": "It is also taken off your calendar on {platforms}. Nothing is added to make it up.",
+  "@skipAlsoRemovedFrom": {"placeholders": {"platforms": {"type": "String"}}},
+  "strengthShareNote": "{provider} does not take strength exercises from Fjelia. Share the list and enter it in the {provider} app.",
+  "@strengthShareNote": {"placeholders": {"provider": {"type": "String"}}},
+  "sharedAsText": "Shared as text.",
+  "bpPeriodDay": "Day",
+  "bpTodaysReading": "TODAY’S READING"
 }

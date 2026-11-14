@@ -290,3 +290,17 @@ String? _summaryLine(AppLocalizations l, Map c, List<String> names) {
     _ => null,
   };
 }
+
+/// A stored skip reason (English id) in the app language.
+String skipReasonLabel(AppLocalizations l, String reason) => switch (reason) {
+  'Illness' => l.skipReasonIllness,
+  'Injury or pain' => l.skipReasonInjury,
+  'Fatigue' => l.skipReasonFatigue,
+  'No time' => l.skipReasonNoTime,
+  'Travel' => l.skipReasonTravel,
+  'Conditions' => l.skipReasonConditions,
+  'My choice' => l.skipReasonMyChoice,
+  'Replaced with another sport' => l.skipReasonReplaced,
+  'Rest recommended for replacement' => l.skipReasonRestInstead,
+  _ => reason,
+};

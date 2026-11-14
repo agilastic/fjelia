@@ -2731,14 +2731,6 @@
       }
     }
   },
-  "nowOnCurrentTapA": "Nå på {current}. Trykk på en dag, eller dra økten til en. Trinnene forblir som de er.",
-  "@nowOnCurrentTapA": {
-    "placeholders": {
-      "current": {
-        "type": "Object"
-      }
-    }
-  },
   "monthView": "Månedsvisning",
   "syncing": "Synkroniserer",
   "trendUnavailable": "Trend utilgjengelig",
@@ -4049,7 +4041,7 @@
   "sleepEcgStagesFailed": "Kunne ikke beregne søvnfasene. Kontroller at opptaket er fullført, og prøv igjen.",
   "replacementPreviewTitle": "Se over erstatningsøkten",
   "replacementGoalLoad": "Mål: {objective} · {load} planlagt belastning",
-  "replacementHistoryEstimate": "Varigheten er anslått ut fra den siste treningen din i denne idretten.",
+  "replacementHistoryEstimate": "Beregnet fra {count} nylige økter i denne idretten: {sampleCount} med rå pulsdata sortert i sonene dine, {averageCount} bare med snittpuls.",
   "replacementFallbackEstimate": "Det finnes for lite nylig treningsdata for denne idretten. Varigheten er et forsiktig anslag.",
   "replacementRestSuggestion": "Hvile kan være det beste valget for treningsplanen din nå.",
   "replacementObjectiveRecovery": "Restitusjon",
@@ -4060,7 +4052,7 @@
   "replacementObjectiveLong": "Lang utholdenhet",
   "replacementWarningNoHistory": "Det finnes for lite nylig belastningshistorikk for denne idretten.",
   "replacementWarningRunningCap": "Løpsmengden er begrenset forsiktig for å holde den mekaniske belastningen nede.",
-  "replacementWarningLong": "Lange eller konkurransespesifikke økter kan ikke erstattes fullt ut. Se over den kortere løpeturen.",
+  "replacementWarningLong": "Lange økter kan ikke erstattes helt av en annen idrett. Sjekk varigheten, eller velg hvile.",
   "replacementWarningRace": "Denne økten har konkurranseprioritet; den idrettsspesifikke nytten blir kanskje ikke bevart.",
   "replacementWarningSwim": "Noe av den aerobe stimulansen overføres, men ikke svømmeteknikk eller idrettsspesifikk muskelbelastning.",
   "replacementWarningStrength": "Styrke- og utholdenhetsøkter er ikke likeverdige og kan ikke gi samme treningseffekt.",
@@ -4069,5 +4061,23 @@
   "replacementWarningLowRecovery": "Den sist lagrede restitusjonsverdien din er lav. Vurder å senke intensiteten eller hvile.",
   "replacementWarningRecentVolume": "Treningsbelastningen din de siste sju dagene er tydelig høyere enn i de sju dagene før.",
   "replacementTrainingGoal": "TRENINGSMÅL",
-  "replacementPreviewWarnings": "MERKNADER TIL PLANEN"
+  "replacementPreviewWarnings": "MERKNADER TIL PLANEN",
+  "skipReasonReplaced": "Erstattet med en annen idrett",
+  "skipReasonRestInstead": "Hvile i stedet for erstatning",
+  "replacesWorkout": "Erstatter: {title}",
+  "replacedByWorkout": "Erstattet av: {title}",
+  "adaptationReadiness": "Tilpasset dagsformen din.",
+  "adaptationMorningCheck": "Tilpasset av morgensjekken av planen.",
+  "corosPushNote": "Synkroniser COROS med klokken etter sending. En endret eller flyttet økt erstatter den forrige i Training Hub.",
+  "polarPushNote": "Bruker pulssonene i Polar-sportsprofilen din; sjekk at de stemmer med Fjelia. Én økt: 16:00. To økter: 09:00 og 18:00. Synkroniser Polar Flow med klokken etter sending.",
+  "skipAlsoRemovedFrom": "Den fjernes også fra kalenderen din i {platforms}. Ingenting legges til for å ta den igjen.",
+  "strengthShareNote": "{provider} tar ikke imot styrkeøvelser fra Fjelia. Del listen og legg den inn i {provider}-appen.",
+  "sharedAsText": "Delt som tekst.",
+  "replacementLimitedHistoryEstimate": "Brukbare nylige økter i denne idretten: {count}. Det er for få for din personlige historikk, så Fjelia bruker et forsiktig anslag for idretten.",
+  "replacementEstimateDisclaimer": "Varigheten anslår en lignende belastning på hjerte og kretsløp. Teknikk, muskelbelastning og mekanisk belastning kan likevel være forskjellig.",
+  "replacementWarningLimitedHistory": "Brukbare nylige økter i denne idretten: {count} av 5 nødvendige. Varigheten er et forsiktig anslag.",
+  "replacementWarningStructureMinimum": "Drag og pauser beholdes som planlagt, derfor er erstatningen lengre enn den beregnede varigheten.",
+  "replacementWarningRunningStructure": "Dragene ville gått over grensen for løping. Fjelia foreslår i stedet en rolig løpetur innenfor grensen.",
+  "bpPeriodDay": "Dag",
+  "bpTodaysReading": "DAGENS MÅLING"
 }

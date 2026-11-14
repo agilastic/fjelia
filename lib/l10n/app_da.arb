@@ -2731,14 +2731,6 @@
       }
     }
   },
-  "nowOnCurrentTapA": "Nu på {current}. Tryk på en dag, eller træk træningen hen på en. Trinene forbliver som de er.",
-  "@nowOnCurrentTapA": {
-    "placeholders": {
-      "current": {
-        "type": "Object"
-      }
-    }
-  },
   "monthView": "Månedsvisning",
   "syncing": "Synkroniserer",
   "trendUnavailable": "Tendens utilgængelig",
@@ -4049,7 +4041,7 @@
   "sleepEcgStagesFailed": "Søvnstadierne kunne ikke beregnes. Kontrollér, at optagelsen er fuldført, og prøv igen.",
   "replacementPreviewTitle": "Gennemgå erstatningstræningen",
   "replacementGoalLoad": "Mål: {objective} · {load} planlagt belastning",
-  "replacementHistoryEstimate": "Varigheden er anslået ud fra din seneste træning i denne sport.",
+  "replacementHistoryEstimate": "Anslået ud fra {count} nylige træninger i denne sportsgren: {sampleCount} med rå pulsdata sorteret i dine zoner, {averageCount} kun med gennemsnitspuls.",
   "replacementFallbackEstimate": "Der er ikke nok nylige træningsdata for denne sport. Varigheden er et forsigtigt skøn.",
   "replacementRestSuggestion": "Hvile kan være det bedre valg for din nuværende træningsplan.",
   "replacementObjectiveRecovery": "Restitution",
@@ -4060,7 +4052,7 @@
   "replacementObjectiveLong": "Lang udholdenhed",
   "replacementWarningNoHistory": "Der er ikke nok nylig belastningshistorik for denne sport.",
   "replacementWarningRunningCap": "Løbemængden er begrænset forsigtigt for at holde den mekaniske belastning nede.",
-  "replacementWarningLong": "Lange eller konkurrencespecifikke træninger kan ikke erstattes fuldt ud. Gennemgå den kortere løbetur.",
+  "replacementWarningLong": "Lange træninger kan ikke erstattes helt af en anden sportsgren. Tjek varigheden, eller vælg hvile.",
   "replacementWarningRace": "Denne træning har konkurrenceprioritet; dens sportsspecifikke udbytte bevares måske ikke.",
   "replacementWarningSwim": "Noget af den aerobe stimulus overføres, men ikke svømmeteknik eller sportsspecifikke muskelkrav.",
   "replacementWarningStrength": "Styrke- og udholdenhedstræning er ikke ligeværdige og kan ikke give samme træningseffekt.",
@@ -4069,5 +4061,23 @@
   "replacementWarningLowRecovery": "Din senest gemte restitutionsscore er lav. Overvej at sænke intensiteten eller holde hvil.",
   "replacementWarningRecentVolume": "Din træningsbelastning de seneste syv dage er tydeligt højere end i de syv dage før.",
   "replacementTrainingGoal": "TRÆNINGSMÅL",
-  "replacementPreviewWarnings": "BEMÆRKNINGER TIL PLANEN"
+  "replacementPreviewWarnings": "BEMÆRKNINGER TIL PLANEN",
+  "skipReasonReplaced": "Erstattet med en anden sportsgren",
+  "skipReasonRestInstead": "Hvile i stedet for erstatning",
+  "replacesWorkout": "Erstatter: {title}",
+  "replacedByWorkout": "Erstattet af: {title}",
+  "adaptationReadiness": "Tilpasset din dagsform.",
+  "adaptationMorningCheck": "Tilpasset af morgentjekket af planen.",
+  "corosPushNote": "Synkroniser COROS med dit ur efter afsendelse. En ændret eller flyttet træning erstatter den tidligere i Training Hub.",
+  "polarPushNote": "Bruger pulszonerne i din Polar-sportsprofil; tjek at de passer med Fjelia. Én træning: 16:00. To træninger: 09:00 og 18:00. Synkroniser Polar Flow med dit ur efter afsendelse.",
+  "skipAlsoRemovedFrom": "Den fjernes også fra din kalender i {platforms}. Der lægges ikke noget ind for at indhente den.",
+  "strengthShareNote": "{provider} modtager ikke styrkeøvelser fra Fjelia. Del listen, og indtast den i {provider}-appen.",
+  "sharedAsText": "Delt som tekst.",
+  "replacementLimitedHistoryEstimate": "Brugbare nylige træninger i denne sportsgren: {count}. Det er for få til din personlige historik, så Fjelia bruger et forsigtigt skøn for sportsgrenen.",
+  "replacementEstimateDisclaimer": "Varigheden anslår en lignende belastning af hjerte og kredsløb. Teknik, muskelbelastning og mekanisk belastning kan stadig være forskellig.",
+  "replacementWarningLimitedHistory": "Brugbare nylige træninger i denne sportsgren: {count} af 5 nødvendige. Varigheden er et forsigtigt skøn.",
+  "replacementWarningStructureMinimum": "Arbejds- og pauseintervaller bevares som planlagt, derfor er erstatningen længere end den anslåede varighed.",
+  "replacementWarningRunningStructure": "Intervallerne ville overskride grænsen for løb. Fjelia foreslår i stedet et roligt løb inden for grænsen.",
+  "bpPeriodDay": "Dag",
+  "bpTodaysReading": "DAGENS MÅLING"
 }

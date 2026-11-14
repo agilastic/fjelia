@@ -2731,14 +2731,6 @@
       }
     }
   },
-  "nowOnCurrentTapA": "Ara el {current}. Toca un dia o arrossega l'entrenament a un. Els passos es mantenen.",
-  "@nowOnCurrentTapA": {
-    "placeholders": {
-      "current": {
-        "type": "Object"
-      }
-    }
-  },
   "monthView": "Vista mensual",
   "syncing": "Sincronitzant",
   "trendUnavailable": "Tendència no disponible",
@@ -4049,7 +4041,7 @@
   "sleepEcgStagesFailed": "No s’han pogut estimar les fases del son. Comprova que la gravació estigui completa i torna-ho a provar.",
   "replacementPreviewTitle": "Revisa l'entrenament de substitució",
   "replacementGoalLoad": "Objectiu: {objective} · càrrega prevista {load}",
-  "replacementHistoryEstimate": "Durada estimada a partir del teu entrenament recent en aquest esport.",
+  "replacementHistoryEstimate": "Estimat a partir de {count} entrenaments recents en aquest esport: {sampleCount} amb dades de freqüència cardíaca assignades a les teves zones, {averageCount} només amb la freqüència cardíaca mitjana.",
   "replacementFallbackEstimate": "No hi ha prou dades d'entrenament recents per a aquest esport. La durada és una estimació prudent.",
   "replacementRestSuggestion": "Descansar podria ser la millor opció per al teu pla d'entrenament actual.",
   "replacementObjectiveRecovery": "Recuperació",
@@ -4060,7 +4052,7 @@
   "replacementObjectiveLong": "Resistència llarga",
   "replacementWarningNoHistory": "No hi ha prou historial de càrrega recent per a aquest esport.",
   "replacementWarningRunningCap": "El volum de cursa s'ha limitat amb prudència per reduir l'estrès mecànic.",
-  "replacementWarningLong": "Els entrenaments llargs o específics de competició no es poden substituir del tot. Revisa la cursa més curta.",
+  "replacementWarningLong": "Les sessions llargues no es poden substituir del tot per un altre esport. Revisa la durada o tria descansar.",
   "replacementWarningRace": "Aquest entrenament té prioritat de competició; és possible que no se'n conservi el benefici específic de l'esport.",
   "replacementWarningSwim": "Es conserva part de l'estímul aeròbic, però no la tècnica de natació ni les exigències musculars específiques.",
   "replacementWarningStrength": "Els entrenaments de força i de resistència no són equivalents i no poden conservar el mateix efecte d'entrenament.",
@@ -4069,5 +4061,23 @@
   "replacementWarningLowRecovery": "La teva última puntuació de recuperació desada és baixa. Planteja't reduir la intensitat o descansar.",
   "replacementWarningRecentVolume": "La teva càrrega d'entrenament dels últims set dies és clarament més alta que la dels set dies anteriors.",
   "replacementTrainingGoal": "OBJECTIU D'ENTRENAMENT",
-  "replacementPreviewWarnings": "NOTES DEL PLA"
+  "replacementPreviewWarnings": "NOTES DEL PLA",
+  "skipReasonReplaced": "Substituït per un altre esport",
+  "skipReasonRestInstead": "Descans en lloc de substitució",
+  "replacesWorkout": "Substitueix: {title}",
+  "replacedByWorkout": "Substituït per: {title}",
+  "adaptationReadiness": "Ajustat a la teva forma del dia.",
+  "adaptationMorningCheck": "Ajustat per la revisió del pla del matí.",
+  "corosPushNote": "Després d'enviar-lo, sincronitza COROS amb el rellotge. Un entrenament canviat o mogut substitueix l'anterior al Training Hub.",
+  "polarPushNote": "Fa servir les zones de freqüència cardíaca del teu perfil esportiu de Polar; comprova que coincideixin amb Fjelia. Un entrenament: 16:00. Dos entrenaments: 09:00 i 18:00. Després d'enviar-lo, sincronitza Polar Flow amb el rellotge.",
+  "skipAlsoRemovedFrom": "També es treu del teu calendari a {platforms}. No s'afegeix res per recuperar-lo.",
+  "strengthShareNote": "{provider} no rep exercicis de força de Fjelia. Comparteix la llista i introdueix-la a l'app de {provider}.",
+  "sharedAsText": "Compartit com a text.",
+  "replacementLimitedHistoryEstimate": "Entrenaments recents aprofitables en aquest esport: {count}. Són massa pocs per al teu historial personal, així que Fjelia fa servir una estimació prudent per a l'esport.",
+  "replacementEstimateDisclaimer": "La durada estima una càrrega cardiovascular semblant. La tècnica, l'esforç muscular i la càrrega mecànica poden continuar sent diferents.",
+  "replacementWarningLimitedHistory": "Entrenaments recents aprofitables en aquest esport: {count} dels 5 necessaris. La durada és una estimació prudent.",
+  "replacementWarningStructureMinimum": "Els intervals d'esforç i de recuperació es mantenen com estaven planificats, per això la substitució és més llarga que la durada estimada.",
+  "replacementWarningRunningStructure": "Els intervals superarien el límit de cursa. En lloc d'això, Fjelia proposa una cursa suau dins del límit.",
+  "bpPeriodDay": "Dia",
+  "bpTodaysReading": "MESURA D'AVUI"
 }

@@ -4879,11 +4879,6 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String nowOnCurrentTapA(Object current) {
-    return 'Actuellement le $current. Touche un jour ou fais glisser la séance dessus. Les étapes restent inchangées.';
-  }
-
-  @override
   String get monthView => 'Vue mensuelle';
 
   @override
@@ -8739,12 +8734,26 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get replacementHistoryEstimate =>
-      'Durée estimée d\'après ton entraînement récent dans ce sport.';
+  String replacementHistoryEstimate(
+    int count,
+    int sampleCount,
+    int averageCount,
+  ) {
+    return 'Estimé à partir de $count séances récentes dans ce sport : $sampleCount avec données cardiaques brutes classées dans tes zones, $averageCount avec la fréquence cardiaque moyenne seulement.';
+  }
+
+  @override
+  String replacementLimitedHistoryEstimate(int count) {
+    return 'Séances récentes exploitables dans ce sport : $count. C\'est trop peu pour ton historique personnel, Fjelia utilise donc une estimation prudente pour ce sport.';
+  }
 
   @override
   String get replacementFallbackEstimate =>
       'Il n\'y a pas assez de données d\'entraînement récentes pour ce sport. La durée est une estimation prudente.';
+
+  @override
+  String get replacementEstimateDisclaimer =>
+      'La durée estime une charge cardiovasculaire similaire. La technique, la sollicitation musculaire et le stress mécanique peuvent quand même différer.';
 
   @override
   String get replacementRestSuggestion =>
@@ -8773,12 +8782,25 @@ class AppLocalizationsFr extends AppLocalizations {
       'L\'historique de charge récent est insuffisant pour ce sport.';
 
   @override
+  String replacementWarningLimitedHistory(int count) {
+    return 'Séances récentes exploitables dans ce sport : $count sur les 5 nécessaires. La durée est une estimation prudente.';
+  }
+
+  @override
+  String get replacementWarningStructureMinimum =>
+      'Les intervalles d\'effort et de récupération sont gardés comme prévu, le remplacement est donc plus long que la durée estimée.';
+
+  @override
+  String get replacementWarningRunningStructure =>
+      'Les intervalles dépasseraient la limite de course à pied. Fjelia propose plutôt une course facile dans cette limite.';
+
+  @override
   String get replacementWarningRunningCap =>
       'Le volume de course a été limité par prudence pour réduire la contrainte mécanique.';
 
   @override
   String get replacementWarningLong =>
-      'Les séances longues ou spécifiques à la course ne sont pas entièrement remplaçables. Vérifie la sortie de course plus courte.';
+      'Les séances longues ne peuvent pas être entièrement remplacées par un autre sport. Vérifie la durée ou choisis le repos.';
 
   @override
   String get replacementWarningRace =>
@@ -8813,4 +8835,54 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get replacementPreviewWarnings => 'REMARQUES SUR LE PLAN';
+
+  @override
+  String get skipReasonReplaced => 'Remplacée par un autre sport';
+
+  @override
+  String get skipReasonRestInstead => 'Repos au lieu d\'un remplacement';
+
+  @override
+  String replacesWorkout(String title) {
+    return 'Remplace : $title';
+  }
+
+  @override
+  String replacedByWorkout(String title) {
+    return 'Remplacée par : $title';
+  }
+
+  @override
+  String get adaptationReadiness => 'Adaptée à ta forme du jour.';
+
+  @override
+  String get adaptationMorningCheck =>
+      'Adaptée par le contrôle du plan du matin.';
+
+  @override
+  String get corosPushNote =>
+      'Synchronise COROS avec ta montre après l\'envoi. Une séance modifiée ou déplacée remplace la précédente dans le Training Hub.';
+
+  @override
+  String get polarPushNote =>
+      'Utilise les zones de fréquence cardiaque de ton profil sportif Polar ; vérifie qu\'elles correspondent à Fjelia. Une séance : 16:00. Deux séances : 09:00 et 18:00. Synchronise Polar Flow avec ta montre après l\'envoi.';
+
+  @override
+  String skipAlsoRemovedFrom(String platforms) {
+    return 'Elle est aussi retirée de ton calendrier sur $platforms. Rien n\'est ajouté pour la rattraper.';
+  }
+
+  @override
+  String strengthShareNote(String provider) {
+    return '$provider ne reprend pas les exercices de musculation de Fjelia. Partage la liste et saisis-la dans l\'app $provider.';
+  }
+
+  @override
+  String get sharedAsText => 'Partagé en texte.';
+
+  @override
+  String get bpPeriodDay => 'Jour';
+
+  @override
+  String get bpTodaysReading => 'MESURE DU JOUR';
 }

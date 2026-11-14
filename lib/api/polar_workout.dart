@@ -15,7 +15,12 @@ Map<String, dynamic> buildPolarWorkout(
 }) {
   final sportId = switch (workout.sport) {
     'running' || 'trail_running' => workout.indoor ? 17 : 1,
-    'cycling' || 'cycling_road' || 'cycling_gravel' || 'cycling_mtb' => 2,
+    'treadmill_running' => 17,
+    'cycling' ||
+    'cycling_road' ||
+    'cycling_gravel' ||
+    'cycling_mtb' ||
+    'indoor_cycling' => 2,
     'swimming' => 23,
     'swimming_pool' => 103,
     'swimming_open_water' => 105,

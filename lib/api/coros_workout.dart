@@ -62,7 +62,9 @@ const _formatVersion = 2;
 const _sportCodes = {
   'running': 1,
   'trail_running': 1,
+  'treadmill_running': 1,
   'cycling_road': 2,
+  'indoor_cycling': 2,
   'cycling_gravel': 2,
   'cycling_mtb': 2,
   'swimming': 5,

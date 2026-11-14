@@ -4847,11 +4847,6 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
-  String nowOnCurrentTapA(Object current) {
-    return 'Teraz na $current. Ťuknite na deň alebo naň potiahnite tréning. Kroky zostanú nezmenené.';
-  }
-
-  @override
   String get monthView => 'Mesačné zobrazenie';
 
   @override
@@ -8697,12 +8692,26 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
-  String get replacementHistoryEstimate =>
-      'Trvanie je odhadnuté podľa tvojho nedávneho tréningu v tomto športe.';
+  String replacementHistoryEstimate(
+    int count,
+    int sampleCount,
+    int averageCount,
+  ) {
+    return 'Odhadnuté z posledných tréningov v tomto športe ($count): s nespracovanými dátami srdcovej frekvencie v tvojich zónach $sampleCount, len s priemerným tepom $averageCount.';
+  }
+
+  @override
+  String replacementLimitedHistoryEstimate(int count) {
+    return 'Použiteľné posledné tréningy v tomto športe: $count. To je na tvoju osobnú históriu príliš málo, preto Fjelia používa opatrný odhad pre daný šport.';
+  }
 
   @override
   String get replacementFallbackEstimate =>
       'Pre tento šport nie je dosť nedávnych tréningových údajov. Trvanie je opatrný odhad.';
+
+  @override
+  String get replacementEstimateDisclaimer =>
+      'Trvanie odhaduje podobné zaťaženie srdca a obehu. Technika, zaťaženie svalov a mechanická záťaž sa aj tak môžu líšiť.';
 
   @override
   String get replacementRestSuggestion =>
@@ -8731,12 +8740,25 @@ class AppLocalizationsSk extends AppLocalizations {
       'Pre tento šport nie je dosť nedávnej histórie záťaže.';
 
   @override
+  String replacementWarningLimitedHistory(int count) {
+    return 'Použiteľné posledné tréningy v tomto športe: $count z 5 potrebných. Trvanie je opatrný odhad.';
+  }
+
+  @override
+  String get replacementWarningStructureMinimum =>
+      'Záťažové a oddychové intervaly zostávajú podľa plánu, preto je náhrada dlhšia než odhadované trvanie.';
+
+  @override
+  String get replacementWarningRunningStructure =>
+      'Intervaly by prekročili limit pre beh. Fjelia namiesto toho navrhuje ľahký beh v rámci limitu.';
+
+  @override
   String get replacementWarningRunningCap =>
       'Bežecký objem bol opatrne obmedzený, aby sa znížila mechanická záťaž.';
 
   @override
   String get replacementWarningLong =>
-      'Dlhé alebo pretekovo špecifické tréningy sa nedajú úplne nahradiť. Skontroluj kratší beh.';
+      'Dlhé tréningy sa nedajú úplne nahradiť iným športom. Skontroluj trvanie alebo zvoľ odpočinok.';
 
   @override
   String get replacementWarningRace =>
@@ -8771,4 +8793,53 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get replacementPreviewWarnings => 'POZNÁMKY K PLÁNU';
+
+  @override
+  String get skipReasonReplaced => 'Nahradené iným športom';
+
+  @override
+  String get skipReasonRestInstead => 'Odpočinok namiesto náhrady';
+
+  @override
+  String replacesWorkout(String title) {
+    return 'Nahrádza: $title';
+  }
+
+  @override
+  String replacedByWorkout(String title) {
+    return 'Nahradené: $title';
+  }
+
+  @override
+  String get adaptationReadiness => 'Prispôsobené tvojej dennej forme.';
+
+  @override
+  String get adaptationMorningCheck => 'Prispôsobené rannou kontrolou plánu.';
+
+  @override
+  String get corosPushNote =>
+      'Po odoslaní zosynchronizuj COROS s hodinkami. Zmenený alebo presunutý tréning nahradí predchádzajúci v Training Hube.';
+
+  @override
+  String get polarPushNote =>
+      'Používa zóny srdcovej frekvencie z tvojho športového profilu Polar; skontroluj, či zodpovedajú Fjelii. Jeden tréning: 16:00. Dva tréningy: 09:00 a 18:00. Po odoslaní zosynchronizuj Polar Flow s hodinkami.';
+
+  @override
+  String skipAlsoRemovedFrom(String platforms) {
+    return 'Odstráni sa aj z tvojho kalendára v $platforms. Nič sa nepridá ako náhrada.';
+  }
+
+  @override
+  String strengthShareNote(String provider) {
+    return '$provider nepreberá silové cviky z Fjelie. Zdieľaj zoznam a zadaj ho v aplikácii $provider.';
+  }
+
+  @override
+  String get sharedAsText => 'Zdieľané ako text.';
+
+  @override
+  String get bpPeriodDay => 'Deň';
+
+  @override
+  String get bpTodaysReading => 'DNEŠNÉ MERANIE';
 }

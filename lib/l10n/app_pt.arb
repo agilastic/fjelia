@@ -2760,14 +2760,6 @@
       }
     }
   },
-  "nowOnCurrentTapA": "Agora em {current}. Toca num dia ou arrasta o treino para lá. Os passos ficam como estão.",
-  "@nowOnCurrentTapA": {
-    "placeholders": {
-      "current": {
-        "type": "Object"
-      }
-    }
-  },
   "monthView": "Vista mensal",
   "syncing": "A sincronizar",
   "trendUnavailable": "Tendência indisponível",
@@ -5212,7 +5204,7 @@
   "sleepEcgStagesFailed": "Não foi possível estimar as fases do sono. Confirme se a gravação está completa e tente novamente.",
   "replacementPreviewTitle": "Rever treino de substituição",
   "replacementGoalLoad": "Objetivo: {objective} · carga prevista {load}",
-  "replacementHistoryEstimate": "Duração estimada a partir do teu treino recente neste desporto.",
+  "replacementHistoryEstimate": "Estimado a partir de {count} treinos recentes neste desporto: {sampleCount} com dados de frequência cardíaca nas tuas zonas, {averageCount} só com a frequência cardíaca média.",
   "replacementFallbackEstimate": "Não há dados de treino recentes suficientes para este desporto. A duração é uma estimativa prudente.",
   "replacementRestSuggestion": "Descansar pode ser a melhor opção para o teu plano de treino atual.",
   "replacementObjectiveRecovery": "Recuperação",
@@ -5223,7 +5215,7 @@
   "replacementObjectiveLong": "Resistência longa",
   "replacementWarningNoHistory": "Não há histórico de carga recente suficiente para este desporto.",
   "replacementWarningRunningCap": "O volume de corrida foi limitado por prudência para reduzir o stress mecânico.",
-  "replacementWarningLong": "Treinos longos ou específicos de competição não são totalmente substituíveis. Revê a corrida mais curta.",
+  "replacementWarningLong": "Sessões longas não podem ser totalmente substituídas por outro desporto. Verifica a duração ou escolhe descansar.",
   "replacementWarningRace": "Este treino tem prioridade de competição; o benefício específico do desporto pode não se manter.",
   "replacementWarningSwim": "Parte do estímulo aeróbio mantém-se, mas não a técnica de natação nem as exigências musculares específicas.",
   "replacementWarningStrength": "Treinos de força e de resistência não são equivalentes e não podem manter o mesmo efeito de treino.",
@@ -5232,5 +5224,23 @@
   "replacementWarningLowRecovery": "A tua última pontuação de recuperação guardada é baixa. Considera reduzir a intensidade ou descansar.",
   "replacementWarningRecentVolume": "A tua carga de treino dos últimos sete dias é claramente superior à dos sete dias anteriores.",
   "replacementTrainingGoal": "OBJETIVO DE TREINO",
-  "replacementPreviewWarnings": "NOTAS DO PLANO"
+  "replacementPreviewWarnings": "NOTAS DO PLANO",
+  "skipReasonReplaced": "Substituído por outro desporto",
+  "skipReasonRestInstead": "Descanso em vez de substituição",
+  "replacesWorkout": "Substitui: {title}",
+  "replacedByWorkout": "Substituído por: {title}",
+  "adaptationReadiness": "Ajustado à tua forma do dia.",
+  "adaptationMorningCheck": "Ajustado pela verificação do plano da manhã.",
+  "corosPushNote": "Depois de enviar, sincroniza o COROS com o relógio. Um treino alterado ou movido substitui o anterior no Training Hub.",
+  "polarPushNote": "Usa as zonas de frequência cardíaca do teu perfil desportivo Polar; verifica se correspondem ao Fjelia. Um treino: 16:00. Dois treinos: 09:00 e 18:00. Depois de enviar, sincroniza o Polar Flow com o relógio.",
+  "skipAlsoRemovedFrom": "Também é retirado do teu calendário em {platforms}. Nada é acrescentado para o compensar.",
+  "strengthShareNote": "{provider} não recebe exercícios de força do Fjelia. Partilha a lista e introdu-la na app {provider}.",
+  "sharedAsText": "Partilhado como texto.",
+  "replacementLimitedHistoryEstimate": "Treinos recentes utilizáveis neste desporto: {count}. São poucos para o teu histórico pessoal, por isso o Fjelia usa uma estimativa prudente para o desporto.",
+  "replacementEstimateDisclaimer": "A duração estima uma carga cardiovascular semelhante. A técnica, o esforço muscular e a carga mecânica podem ainda assim ser diferentes.",
+  "replacementWarningLimitedHistory": "Treinos recentes utilizáveis neste desporto: {count} de 5 necessários. A duração é uma estimativa prudente.",
+  "replacementWarningStructureMinimum": "Os intervalos de esforço e recuperação mantêm-se como planeado, por isso a substituição é mais longa do que a duração estimada.",
+  "replacementWarningRunningStructure": "Os intervalos ultrapassariam o limite de corrida. Em vez disso, o Fjelia sugere uma corrida leve dentro do limite.",
+  "bpPeriodDay": "Dia",
+  "bpTodaysReading": "MEDIÇÃO DE HOJE"
 }

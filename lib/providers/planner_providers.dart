@@ -351,6 +351,21 @@ final plannedSessionProvider = FutureProvider.family<TrainingSession?, String>((
       .getSingleOrNull();
 });
 
+/// The workout that replaced session [id] in another sport, if any.
+final sessionReplacementProvider =
+    FutureProvider.family<TrainingSession?, String>((ref, id) {
+      ref.watch(syncStatusListenerProvider);
+      final db = ref.watch(databaseProvider);
+      return (db.select(db.trainingSessions)
+            ..where(
+              (t) =>
+                  t.originalSessionId.equals(id) &
+                  t.adaptationTrigger.equals('athlete_replacement'),
+            )
+            ..limit(1))
+          .getSingleOrNull();
+    });
+
 /// Whether today is a planned rest day: the plan covers it and schedules
 /// nothing. Refreshes with the plan.
 final plannedRestTodayProvider = FutureProvider<bool>((ref) async {
