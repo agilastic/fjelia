@@ -19,6 +19,7 @@ import 'race_goal_service.dart';
 import 'season/season_report.dart';
 import '../utils/target_time.dart';
 import '../models/race_profile.dart';
+import '../models/training_windows.dart';
 import 'open_meteo_client.dart';
 import '../models/waist_ratios.dart';
 import '../models/workout_nutrition.dart';
@@ -63,14 +64,62 @@ class AiContextPlanInfo {
 /// Only explicitly selected fields leave the database: names, coordinates,
 /// activity IDs, free-form notes and raw payloads are never serialized.
 class AiContextToonBuilder {
-  AiContextToonBuilder(this._db, {DateTime Function()? now, this.bodyFrame})
-    : _now = now ?? DateTime.now;
+  AiContextToonBuilder(
+    this._db, {
+    DateTime Function()? now,
+    this.bodyFrame,
+    this.trainingWindows,
+  }) : _now = now ?? DateTime.now;
   final AppDatabase _db;
   final DateTime Function() _now;
 
   /// Height and the profile's waist from the athlete profile, for the waist
   /// ratios. Only the ratios leave the device, not the height.
   final Future<({double? heightCm, double? waistCm})> Function()? bodyFrame;
+
+  /// When in the week the athlete can train (Settings → Training).
+  final Future<TrainingWindows> Function()? trainingWindows;
+
+  /// Absences that are still on or ended in the last two weeks, and the
+  /// weekly training times: what the athlete can do, not only what is
+  /// planned. The athlete's note on an absence stays on the device.
+  Future<List<String>> _availabilityLines(DateTime today) async {
+    final lines = <String>[];
+    final absences = await _db.absencesBetween(
+      today.subtract(const Duration(days: 14)),
+      DateTime(today.year + 2),
+    );
+    if (absences.isNotEmpty) {
+      lines.add('[Absences:${absences.length}]');
+      for (final a in [
+        ...absences,
+      ]..sort((x, y) => x.startDay.compareTo(y.startDay))) {
+        final now = !today.isBefore(a.startDay) && !today.isAfter(a.endDay);
+        lines.add(
+          '- [Kind:${a.kind},From:${_date(a.startDay)},To:${_date(a.endDay)}'
+          '${now ? ',Now' : ''}]',
+        );
+      }
+    }
+    TrainingWindows? windows;
+    try {
+      windows = await trainingWindows?.call();
+    } catch (_) {
+      // No profile to read: the context goes without training times.
+    }
+    if (windows != null && !windows.isEmpty) {
+      String hm(int m) =>
+          '${(m ~/ 60).toString().padLeft(2, '0')}:'
+          '${(m % 60).toString().padLeft(2, '0')}';
+      lines.add(
+        '[TrainingWindows:${[
+          for (var d = 1; d <= 7; d++) '${const ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][d - 1]}='
+                '${windows.hasWindow(d) ? [for (final (s, e) in windows.ranges(d)) '${hm(s)}-${hm(e)}'].join('+') : 'none'}',
+        ].join(',')}]',
+      );
+    }
+    return lines;
+  }
 
   Future<String> build(
     AiContextTrainingMonitor? monitor,
@@ -377,6 +426,7 @@ class AiContextToonBuilder {
         );
       }
     }
+    lines.addAll(await _availabilityLines(today));
     if (planInfo != null) {
       lines.add(
         '[TrainingPlan:DaysToRace:${_num(planInfo.daysToRace)},'

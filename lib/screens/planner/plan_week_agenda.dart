@@ -1,3 +1,7 @@
+import '../../db/database.dart' show Absence;
+import '../../providers/plan_schedule_provider.dart' show absencesProvider;
+import '../../services/absence_service.dart' show absenceOn;
+import '../../widgets/absence_sheet.dart' show absenceColor, absenceIcon;
 import '../../theme/fjelia_style.dart';
 import '../../l10n/formats.dart';
 import '../../l10n/l10n_ext.dart';
@@ -100,7 +104,11 @@ class PlanWeekAgenda extends ConsumerWidget {
             e,
             retry: () => ref.invalidate(planWeekProvider(start)),
           ),
-          data: (w) => _WeekTable(week: w),
+          data: (w) => _WeekTable(
+            week: w,
+            absences:
+                ref.watch(absencesProvider).valueOrNull ?? const <Absence>[],
+          ),
         ),
       ],
     );
@@ -108,8 +116,9 @@ class PlanWeekAgenda extends ConsumerWidget {
 }
 
 class _WeekTable extends StatelessWidget {
-  const _WeekTable({required this.week});
+  const _WeekTable({required this.week, this.absences = const []});
   final PlanWeek week;
+  final List<Absence> absences;
 
   @override
   Widget build(BuildContext context) {
@@ -177,7 +186,10 @@ class _WeekTable extends StatelessWidget {
           ),
           const Divider(height: 1, thickness: 1, color: _divider),
           for (var i = 0; i < week.days.length; i++) ...[
-            _DayRow(day: week.days[i]),
+            _DayRow(
+              day: week.days[i],
+              absence: absenceOn(absences, week.days[i].date),
+            ),
             if (i < week.days.length - 1)
               const Divider(height: 1, thickness: 1, color: _divider),
           ],
@@ -203,8 +215,11 @@ String sportLabel(String sport) => switch (activityKind(sport)) {
 };
 
 class _DayRow extends StatelessWidget {
-  const _DayRow({required this.day});
+  const _DayRow({required this.day, this.absence});
   final PlanWeekDay day;
+
+  /// The athlete's absence on this day: it says so instead of a rest day.
+  final Absence? absence;
 
   @override
   Widget build(BuildContext context) {
@@ -214,7 +229,10 @@ class _DayRow extends StatelessWidget {
         day.date.month == now.month &&
         day.date.day == now.day;
     final first = day.rest ? null : day.items.first;
-    final stripe = first == null
+    final away = absence;
+    final stripe = away != null
+        ? fjAccent(absenceColor(away.kind))
+        : first == null
         ? Colors.transparent
         : first.state == PlanWeekState.skipped ||
               first.state == PlanWeekState.missed
@@ -272,7 +290,21 @@ class _DayRow extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: day.rest
+            child: away != null
+                ? Column(
+                    children: [
+                      _Line(
+                        icon: absenceIcon(away.kind),
+                        color: fjAccent(absenceColor(away.kind)),
+                        label: absenceKindLabel(context.l10n, away.kind),
+                        trailing: '',
+                        dim: true,
+                      ),
+                      if (!day.rest)
+                        for (final item in day.items) _ItemLine(item: item),
+                    ],
+                  )
+                : day.rest
                 ? _Line(
                     icon: Icons.bedtime_outlined,
                     color: fjInk38,

@@ -1,3 +1,5 @@
+import 'package:fjelia/providers/plan_schedule_provider.dart'
+    show absencesProvider;
 import 'package:fjelia/l10n/app_localizations.dart';
 
 import 'dart:io';
@@ -130,6 +132,7 @@ void main() {
         overrides: [
           selectedDateProvider.overrideWith((ref) => DateTime(2026, 10, 27)),
           planWeekProvider.overrideWith((ref, start) => Stream.value(week())),
+          absencesProvider.overrideWith((ref) async => const []),
         ],
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -214,6 +217,7 @@ void main() {
         overrides: [
           selectedDateProvider.overrideWith((ref) => day(6)),
           planWeekProvider.overrideWith((ref, start) => Stream.value(combined)),
+          absencesProvider.overrideWith((ref) async => const []),
         ],
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,

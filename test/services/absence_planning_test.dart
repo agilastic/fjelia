@@ -126,4 +126,51 @@ void main() {
     )..where((t) => t.id.isIn([for (final s in inRange) s.id]))).get();
     expect(restored.every((s) => s.status == 'planned'), isTrue);
   });
+
+  test('an open illness goes on day by day until fit again', () async {
+    final planId = (await generate()).first.planId;
+    final absences = AbsenceService(
+      db,
+      PlanSessionActions(db, garminProviders(db, FakeWorkoutGarmin())),
+    );
+    await generate(existing: planId);
+    Future<List<TrainingSession>> openOn(int from, int to) async => [
+      for (final s in await (db.select(
+        db.trainingSessions,
+      )..where((t) => t.status.isIn(const ['planned', 'adapted']))).get())
+        if (within(s, day(from), day(to))) s,
+    ];
+    await absences.add(
+      kind: 'illness',
+      start: day(0),
+      end: day(0),
+      openEnd: true,
+    );
+    var ill = (await db.select(db.absences).get()).single;
+    expect(ill.openEnd, isTrue);
+    expect(ill.endDay, day(1));
+    expect(await openOn(0, 1), isEmpty);
+
+    // Three days later it still goes on: up to the day after.
+    final later = day(3);
+    expect(await absences.extendOpen(now: later), isTrue);
+    ill = (await db.select(db.absences).get()).single;
+    expect(ill.endDay, day(4));
+    expect(await openOn(0, 4), isEmpty);
+    expect(await absences.extendOpen(now: later), isFalse);
+
+    // Fit again on day 3: the illness ended yesterday, today is open again.
+    final cancelledAhead = [
+      for (final s in await db.select(db.trainingSessions).get())
+        if (within(s, day(3), day(4)) && s.status == 'skipped') s.id,
+    ];
+    await absences.endOpen(ill, now: later);
+    ill = (await db.select(db.absences).get()).single;
+    expect(ill.openEnd, isFalse);
+    expect(ill.endDay, day(2));
+    final back = await (db.select(
+      db.trainingSessions,
+    )..where((t) => t.id.isIn(cancelledAhead))).get();
+    expect(back.every((s) => s.status == 'planned'), isTrue);
+  });
 }

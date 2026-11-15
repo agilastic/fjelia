@@ -89,8 +89,8 @@ final applyScheduleProvider = Provider<Future<void> Function()>(
 );
 
 /// Absences, the latest first.
-final absencesProvider = StreamProvider<List<Absence>>(
-  (ref) => ref.watch(databaseProvider).watchAbsences(),
+final absencesProvider = FutureProvider<List<Absence>>(
+  (ref) => ref.watch(databaseProvider).absenceList(),
 );
 
 final absenceServiceProvider = Provider(
@@ -108,6 +108,7 @@ final addAbsenceProvider =
         required DateTime start,
         required DateTime end,
         String? note,
+        bool openEnd,
       })
     >(
       (ref) =>
@@ -116,13 +117,38 @@ final addAbsenceProvider =
             required DateTime start,
             required DateTime end,
             String? note,
+            bool openEnd = false,
           }) async {
             await ref
                 .read(absenceServiceProvider)
-                .add(kind: kind, start: start, end: end, note: note);
+                .add(
+                  kind: kind,
+                  start: start,
+                  end: end,
+                  note: note,
+                  openEnd: openEnd,
+                );
             await _afterAbsenceChange(ref, 'Absence entered: $kind');
           },
     );
+
+/// Carries open absences on to tomorrow; when one grew, the plan follows.
+/// Run at start and whenever the app comes back.
+final extendOpenAbsencesProvider = Provider<Future<void> Function()>(
+  (ref) => () async {
+    if (await ref.read(absenceServiceProvider).extendOpen()) {
+      await _afterAbsenceChange(ref, 'Absence goes on');
+    }
+  },
+);
+
+/// Fit again: the open absence ends yesterday and the plan starts easy.
+final endOpenAbsenceProvider = Provider<Future<void> Function(Absence)>(
+  (ref) => (absence) async {
+    await ref.read(absenceServiceProvider).endOpen(absence);
+    await _afterAbsenceChange(ref, 'Fit again after ${absence.kind}');
+  },
+);
 
 /// Removes an absence; what it cancelled ahead is planned again.
 final removeAbsenceProvider = Provider<Future<void> Function(Absence)>(
@@ -133,6 +159,7 @@ final removeAbsenceProvider = Provider<Future<void> Function(Absence)>(
 );
 
 Future<void> _afterAbsenceChange(Ref ref, String reason) async {
+  ref.invalidate(absencesProvider);
   await _replanActive(ref, reason);
   ref.invalidate(sessionSkipReasonsProvider);
   ref.invalidate(scheduledWorkoutsProvider);

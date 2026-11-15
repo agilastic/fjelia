@@ -9100,4 +9100,29 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get missedWorkoutWindowsNote =>
       'Con gli orari impostati, il promemoria arriva un\'ora prima della fine dell\'ultima fascia; quest\'ora vale per i giorni senza fascia.';
+
+  @override
+  String moveIntoAbsence(String kind) {
+    return 'Quel giorno cade durante la tua assenza ($kind). Scegli un altro giorno.';
+  }
+
+  @override
+  String get absenceOpenEnd => 'Fine non ancora nota';
+
+  @override
+  String get absenceOpenEndHint =>
+      'Fjelia lascia liberi i giorni uno alla volta finché non dici di stare di nuovo bene.';
+
+  @override
+  String absenceSince(String date) {
+    return 'Da $date';
+  }
+
+  @override
+  String get absenceFitAgain => 'Di nuovo in forma';
+
+  @override
+  String absenceOpenCard(String date, int days) {
+    return 'Da $date (giorno $days). Le sessioni restano annullate giorno per giorno; quando stai di nuovo bene, la prima settimana è facile.';
+  }
 }

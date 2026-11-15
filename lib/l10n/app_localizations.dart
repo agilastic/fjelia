@@ -15693,6 +15693,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'With training times set, the reminder comes an hour before the day\'s last window ends; this time is for days without one.'**
   String get missedWorkoutWindowsNote;
+
+  /// No description provided for @moveIntoAbsence.
+  ///
+  /// In en, this message translates to:
+  /// **'That day is during your absence ({kind}). Pick another day.'**
+  String moveIntoAbsence(String kind);
+
+  /// No description provided for @absenceOpenEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'End not known yet'**
+  String get absenceOpenEnd;
+
+  /// No description provided for @absenceOpenEndHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Fjelia keeps the days free one by one until you say you\'re fit again.'**
+  String get absenceOpenEndHint;
+
+  /// No description provided for @absenceSince.
+  ///
+  /// In en, this message translates to:
+  /// **'Since {date}'**
+  String absenceSince(String date);
+
+  /// No description provided for @absenceFitAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Fit again'**
+  String get absenceFitAgain;
+
+  /// No description provided for @absenceOpenCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Since {date} (day {days}). Sessions stay cancelled day by day; once you are fit again, the first week back is easy.'**
+  String absenceOpenCard(String date, int days);
 }
 
 class _AppLocalizationsDelegate

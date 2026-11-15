@@ -9128,4 +9128,29 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get missedWorkoutWindowsNote =>
       'Avec des créneaux définis, le rappel arrive une heure avant la fin du dernier créneau ; cette heure sert aux jours sans créneau.';
+
+  @override
+  String moveIntoAbsence(String kind) {
+    return 'Ce jour tombe pendant ton absence ($kind). Choisis un autre jour.';
+  }
+
+  @override
+  String get absenceOpenEnd => 'Fin pas encore connue';
+
+  @override
+  String get absenceOpenEndHint =>
+      'Fjelia libère les jours un par un jusqu\'à ce que tu dises que tu es rétabli.';
+
+  @override
+  String absenceSince(String date) {
+    return 'Depuis $date';
+  }
+
+  @override
+  String get absenceFitAgain => 'De nouveau en forme';
+
+  @override
+  String absenceOpenCard(String date, int days) {
+    return 'Depuis $date (jour $days). Les séances restent annulées jour après jour ; une fois rétabli, la première semaine de reprise est facile.';
+  }
 }

@@ -9124,4 +9124,29 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get missedWorkoutWindowsNote =>
       'Mit Trainingszeiten kommt die Erinnerung eine Stunde vor Ende des letzten Fensters; diese Uhrzeit gilt für Tage ohne Fenster.';
+
+  @override
+  String moveIntoAbsence(String kind) {
+    return 'Dieser Tag liegt in deiner Abwesenheit ($kind). Wähle einen anderen Tag.';
+  }
+
+  @override
+  String get absenceOpenEnd => 'Ende noch offen';
+
+  @override
+  String get absenceOpenEndHint =>
+      'Fjelia hält die Tage nacheinander frei, bis du sagst, dass du wieder fit bist.';
+
+  @override
+  String absenceSince(String date) {
+    return 'Seit $date';
+  }
+
+  @override
+  String get absenceFitAgain => 'Wieder fit';
+
+  @override
+  String absenceOpenCard(String date, int days) {
+    return 'Seit $date (Tag $days). Einheiten bleiben Tag für Tag abgesagt; sobald du wieder fit bist, ist die erste Woche locker.';
+  }
 }

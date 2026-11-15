@@ -4151,5 +4151,11 @@
   "windowPresetLunch": "Obedňajšia prestávka",
   "windowPresetEvening": "Večer",
   "windowPresetWeekend": "Víkend",
-  "missedWorkoutWindowsNote": "S nastavenými časmi príde pripomienka hodinu pred koncom posledného okna; tento čas platí pre dni bez okna."
+  "missedWorkoutWindowsNote": "S nastavenými časmi príde pripomienka hodinu pred koncom posledného okna; tento čas platí pre dni bez okna.",
+  "moveIntoAbsence": "Tento deň je počas tvojej neprítomnosti ({kind}). Vyber iný deň.",
+  "absenceOpenEnd": "Koniec zatiaľ neznámy",
+  "absenceOpenEndHint": "Fjelia uvoľňuje dni jeden po druhom, kým nepovieš, že si zase fit.",
+  "absenceSince": "Od {date}",
+  "absenceFitAgain": "Zase fit",
+  "absenceOpenCard": "Od {date} (deň {days}). Tréningy zostávajú zrušené deň po dni; keď budeš zase fit, prvý týždeň je ľahký."
 }

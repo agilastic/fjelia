@@ -4151,5 +4151,11 @@
   "windowPresetLunch": "Lounastauko",
   "windowPresetEvening": "Ilta",
   "windowPresetWeekend": "Viikonloppu",
-  "missedWorkoutWindowsNote": "Kun harjoitusajat on asetettu, muistutus tulee tuntia ennen viimeisen ikkunan loppua; tämä aika koskee päiviä ilman ikkunaa."
+  "missedWorkoutWindowsNote": "Kun harjoitusajat on asetettu, muistutus tulee tuntia ennen viimeisen ikkunan loppua; tämä aika koskee päiviä ilman ikkunaa.",
+  "moveIntoAbsence": "Päivä osuu poissaoloosi ({kind}). Valitse toinen päivä.",
+  "absenceOpenEnd": "Loppua ei vielä tiedetä",
+  "absenceOpenEndHint": "Fjelia pitää päivät vapaina yksi kerrallaan, kunnes kerrot olevasi taas kunnossa.",
+  "absenceSince": "{date} alkaen",
+  "absenceFitAgain": "Taas kunnossa",
+  "absenceOpenCard": "{date} alkaen (päivä {days}). Harjoitukset pysyvät peruttuina päivä kerrallaan; kun olet taas kunnossa, ensimmäinen viikko on kevyt."
 }

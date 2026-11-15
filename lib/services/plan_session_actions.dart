@@ -2,6 +2,8 @@ import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 
 import '../db/database.dart';
+import '../l10n/l10n_ext.dart';
+import '../l10n/plan_text.dart' show absenceKindLabel;
 import '../utils/week.dart';
 import 'workout_providers/workout_providers.dart';
 import 'race_goal_service.dart';
@@ -32,6 +34,13 @@ class PlanSessionActions {
     ).resolveGoalSet()).eventBlocking(target);
     if (event != null) {
       throw StateError('That day belongs to ${event.name}. Pick another day.');
+    }
+    // Nor onto a day the athlete is ill, injured or away.
+    final away = await db.absencesBetween(target, target);
+    if (away.isNotEmpty) {
+      throw StateError(
+        tr.moveIntoAbsence(absenceKindLabel(tr, away.first.kind)),
+      );
     }
     final plan = await (db.select(
       db.trainingPlans,

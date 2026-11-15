@@ -4151,5 +4151,11 @@
   "windowPresetLunch": "Lunsjpause",
   "windowPresetEvening": "Kveld",
   "windowPresetWeekend": "Helg",
-  "missedWorkoutWindowsNote": "Med treningstider kommer påminnelsen en time før det siste vinduet slutter; dette klokkeslettet gjelder dager uten vindu."
+  "missedWorkoutWindowsNote": "Med treningstider kommer påminnelsen en time før det siste vinduet slutter; dette klokkeslettet gjelder dager uten vindu.",
+  "moveIntoAbsence": "Den dagen er i fraværet ditt ({kind}). Velg en annen dag.",
+  "absenceOpenEnd": "Slutt ikke kjent ennå",
+  "absenceOpenEndHint": "Fjelia holder dagene frie én etter én til du sier at du er frisk igjen.",
+  "absenceSince": "Siden {date}",
+  "absenceFitAgain": "Frisk igjen",
+  "absenceOpenCard": "Siden {date} (dag {days}). Øktene forblir avlyst dag for dag; når du er frisk igjen, er den første uken rolig."
 }

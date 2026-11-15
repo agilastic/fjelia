@@ -4151,5 +4151,11 @@
   "windowPresetLunch": "Pausa de comida",
   "windowPresetEvening": "Tarde",
   "windowPresetWeekend": "Fin de semana",
-  "missedWorkoutWindowsNote": "Con horarios definidos, el recordatorio llega una hora antes de que acabe la última franja; esta hora es para los días sin franja."
+  "missedWorkoutWindowsNote": "Con horarios definidos, el recordatorio llega una hora antes de que acabe la última franja; esta hora es para los días sin franja.",
+  "moveIntoAbsence": "Ese día cae en tu ausencia ({kind}). Elige otro día.",
+  "absenceOpenEnd": "Fin aún sin saber",
+  "absenceOpenEndHint": "Fjelia deja libres los días uno a uno hasta que digas que vuelves a estar bien.",
+  "absenceSince": "Desde {date}",
+  "absenceFitAgain": "Otra vez en forma",
+  "absenceOpenCard": "Desde {date} (día {days}). Las sesiones siguen canceladas día a día; cuando vuelvas a estar bien, la primera semana es suave."
 }

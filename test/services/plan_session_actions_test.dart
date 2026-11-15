@@ -222,6 +222,32 @@ void main() {
     },
   );
 
+  test('a session does not move into an absence', () async {
+    final actions = PlanSessionActions(db, garminProviders(db, garmin));
+    final first = session.sessionDate;
+    final away = DateTime(first.year, first.month, first.day + 3);
+    await db
+        .into(db.absences)
+        .insert(
+          AbsencesCompanion.insert(
+            kind: 'vacation',
+            startDay: away,
+            endDay: away.add(const Duration(days: 2)),
+            createdAt: DateTime.now(),
+          ),
+        );
+    await expectLater(
+      actions.moveToDate(session, away.add(const Duration(days: 1))),
+      throwsStateError,
+    );
+    // The day after it is fine.
+    final moved = await actions.moveToDate(
+      session,
+      away.add(const Duration(days: 3)),
+    );
+    expect(moved.sessionDate, away.add(const Duration(days: 3)));
+  });
+
   test('restore undoes a skip and its reason', () async {
     final actions = PlanSessionActions(db, garminProviders(db, garmin));
     final rest = await actions.markRest(session, reason: 'Fatigue');

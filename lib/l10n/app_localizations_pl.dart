@@ -9142,4 +9142,29 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String get missedWorkoutWindowsNote =>
       'Przy ustawionych godzinach przypomnienie przychodzi godzinę przed końcem ostatniego okna; ta godzina dotyczy dni bez okna.';
+
+  @override
+  String moveIntoAbsence(String kind) {
+    return 'Ten dzień przypada na twoją nieobecność ($kind). Wybierz inny dzień.';
+  }
+
+  @override
+  String get absenceOpenEnd => 'Koniec jeszcze nieznany';
+
+  @override
+  String get absenceOpenEndHint =>
+      'Fjelia zwalnia kolejne dni, dopóki nie powiesz, że znów jesteś w formie.';
+
+  @override
+  String absenceSince(String date) {
+    return 'Od $date';
+  }
+
+  @override
+  String get absenceFitAgain => 'Znów w formie';
+
+  @override
+  String absenceOpenCard(String date, int days) {
+    return 'Od $date (dzień $days). Treningi pozostają odwołane dzień po dniu; gdy znów będziesz w formie, pierwszy tydzień jest lekki.';
+  }
 }

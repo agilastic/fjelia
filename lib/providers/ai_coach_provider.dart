@@ -58,6 +58,8 @@ final aiContextToonBuilderProvider = Provider<AiContextToonBuilder>(
       final p = await ref.read(userProfileProvider.future);
       return (heightCm: p.heightCm, waistCm: p.waistCm);
     },
+    trainingWindows: () async =>
+        (await ref.read(userProfileProvider.future)).trainingWindows,
   ),
 );
 

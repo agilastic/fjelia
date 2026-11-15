@@ -1,6 +1,8 @@
 import '../../theme/fjelia_style.dart';
 import '../../l10n/formats.dart';
 import '../../l10n/plan_text.dart';
+import '../../providers/plan_schedule_provider.dart' show absencesProvider;
+import '../../services/absence_service.dart' show absenceOn;
 import '../../l10n/l10n_ext.dart';
 
 import 'dart:convert';
@@ -132,7 +134,10 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
     // The days a move can go to: today up to the day before the race (or 60
     // days out), each with what is on it.
     final profileSettings = ref.watch(userProfileProvider).valueOrNull;
-    final restDays = profileSettings?.restDays ?? const <int>[];
+    // Days without a training window are rest days too.
+    final restDays = profileSettings?.planRestDays ?? const <int>[];
+    final absences =
+        ref.watch(absencesProvider).valueOrNull ?? const <Absence>[];
     final perDay = profileSettings?.maxSessionsPerDay ?? 1;
     // Every goal decides what a day can take, not only the one shown.
     final raceDay =
@@ -167,6 +172,10 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
             isRestDay: restDays.contains(d.weekday),
             isFull: count >= perDay,
             event: goals?.eventBlocking(d)?.name,
+            absence: switch (absenceOn(absences, d)) {
+              final a? => absenceKindLabel(context.l10n, a.kind),
+              null => null,
+            },
             isEasyOnly: goals?.loadOn(d) == DayLoad.easyOnly,
           );
         }(),
@@ -180,6 +189,19 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
             content: Text(
               '${DateFormat.MMMMEEEEd().format(day)} belongs to '
               '${event.name}. Pick another day.',
+            ),
+          ),
+        );
+        return;
+      }
+      final away = absenceOn(absences, day);
+      if (away != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              context.l10n.moveIntoAbsence(
+                absenceKindLabel(context.l10n, away.kind),
+              ),
             ),
           ),
         );

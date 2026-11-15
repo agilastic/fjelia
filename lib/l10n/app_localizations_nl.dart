@@ -9114,4 +9114,29 @@ class AppLocalizationsNl extends AppLocalizations {
   @override
   String get missedWorkoutWindowsNote =>
       'Met trainingstijden komt de herinnering een uur voor het einde van het laatste tijdvak; deze tijd geldt voor dagen zonder tijdvak.';
+
+  @override
+  String moveIntoAbsence(String kind) {
+    return 'Die dag valt in je afwezigheid ($kind). Kies een andere dag.';
+  }
+
+  @override
+  String get absenceOpenEnd => 'Einde nog onbekend';
+
+  @override
+  String get absenceOpenEndHint =>
+      'Fjelia houdt de dagen een voor een vrij tot je zegt dat je weer fit bent.';
+
+  @override
+  String absenceSince(String date) {
+    return 'Sinds $date';
+  }
+
+  @override
+  String get absenceFitAgain => 'Weer fit';
+
+  @override
+  String absenceOpenCard(String date, int days) {
+    return 'Sinds $date (dag $days). Trainingen blijven dag voor dag geannuleerd; zodra je weer fit bent, is de eerste week rustig.';
+  }
 }

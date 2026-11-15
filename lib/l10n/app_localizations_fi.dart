@@ -9082,4 +9082,29 @@ class AppLocalizationsFi extends AppLocalizations {
   @override
   String get missedWorkoutWindowsNote =>
       'Kun harjoitusajat on asetettu, muistutus tulee tuntia ennen viimeisen ikkunan loppua; tämä aika koskee päiviä ilman ikkunaa.';
+
+  @override
+  String moveIntoAbsence(String kind) {
+    return 'Päivä osuu poissaoloosi ($kind). Valitse toinen päivä.';
+  }
+
+  @override
+  String get absenceOpenEnd => 'Loppua ei vielä tiedetä';
+
+  @override
+  String get absenceOpenEndHint =>
+      'Fjelia pitää päivät vapaina yksi kerrallaan, kunnes kerrot olevasi taas kunnossa.';
+
+  @override
+  String absenceSince(String date) {
+    return '$date alkaen';
+  }
+
+  @override
+  String get absenceFitAgain => 'Taas kunnossa';
+
+  @override
+  String absenceOpenCard(String date, int days) {
+    return '$date alkaen (päivä $days). Harjoitukset pysyvät peruttuina päivä kerrallaan; kun olet taas kunnossa, ensimmäinen viikko on kevyt.';
+  }
 }

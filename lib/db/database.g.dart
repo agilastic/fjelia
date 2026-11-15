@@ -15482,6 +15482,21 @@ class $AbsencesTable extends Absences with TableInfo<$AbsencesTable, Absence> {
     type: DriftSqlType.dateTime,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _openEndMeta = const VerificationMeta(
+    'openEnd',
+  );
+  @override
+  late final GeneratedColumn<bool> openEnd = GeneratedColumn<bool>(
+    'open_end',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("open_end" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -15490,6 +15505,7 @@ class $AbsencesTable extends Absences with TableInfo<$AbsencesTable, Absence> {
     endDay,
     note,
     createdAt,
+    openEnd,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -15544,6 +15560,12 @@ class $AbsencesTable extends Absences with TableInfo<$AbsencesTable, Absence> {
     } else if (isInserting) {
       context.missing(_createdAtMeta);
     }
+    if (data.containsKey('open_end')) {
+      context.handle(
+        _openEndMeta,
+        openEnd.isAcceptableOrUnknown(data['open_end']!, _openEndMeta),
+      );
+    }
     return context;
   }
 
@@ -15577,6 +15599,10 @@ class $AbsencesTable extends Absences with TableInfo<$AbsencesTable, Absence> {
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
       )!,
+      openEnd: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}open_end'],
+      )!,
     );
   }
 
@@ -15593,6 +15619,10 @@ class Absence extends DataClass implements Insertable<Absence> {
   final DateTime endDay;
   final String? note;
   final DateTime createdAt;
+
+  /// Ill or injured with no end known yet: [endDay] moves on to tomorrow
+  /// every day until the athlete says they are fit again.
+  final bool openEnd;
   const Absence({
     required this.id,
     required this.kind,
@@ -15600,6 +15630,7 @@ class Absence extends DataClass implements Insertable<Absence> {
     required this.endDay,
     this.note,
     required this.createdAt,
+    required this.openEnd,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -15612,6 +15643,7 @@ class Absence extends DataClass implements Insertable<Absence> {
       map['note'] = Variable<String>(note);
     }
     map['created_at'] = Variable<DateTime>(createdAt);
+    map['open_end'] = Variable<bool>(openEnd);
     return map;
   }
 
@@ -15623,6 +15655,7 @@ class Absence extends DataClass implements Insertable<Absence> {
       endDay: Value(endDay),
       note: note == null && nullToAbsent ? const Value.absent() : Value(note),
       createdAt: Value(createdAt),
+      openEnd: Value(openEnd),
     );
   }
 
@@ -15638,6 +15671,7 @@ class Absence extends DataClass implements Insertable<Absence> {
       endDay: serializer.fromJson<DateTime>(json['endDay']),
       note: serializer.fromJson<String?>(json['note']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      openEnd: serializer.fromJson<bool>(json['openEnd']),
     );
   }
   @override
@@ -15650,6 +15684,7 @@ class Absence extends DataClass implements Insertable<Absence> {
       'endDay': serializer.toJson<DateTime>(endDay),
       'note': serializer.toJson<String?>(note),
       'createdAt': serializer.toJson<DateTime>(createdAt),
+      'openEnd': serializer.toJson<bool>(openEnd),
     };
   }
 
@@ -15660,6 +15695,7 @@ class Absence extends DataClass implements Insertable<Absence> {
     DateTime? endDay,
     Value<String?> note = const Value.absent(),
     DateTime? createdAt,
+    bool? openEnd,
   }) => Absence(
     id: id ?? this.id,
     kind: kind ?? this.kind,
@@ -15667,6 +15703,7 @@ class Absence extends DataClass implements Insertable<Absence> {
     endDay: endDay ?? this.endDay,
     note: note.present ? note.value : this.note,
     createdAt: createdAt ?? this.createdAt,
+    openEnd: openEnd ?? this.openEnd,
   );
   Absence copyWithCompanion(AbsencesCompanion data) {
     return Absence(
@@ -15676,6 +15713,7 @@ class Absence extends DataClass implements Insertable<Absence> {
       endDay: data.endDay.present ? data.endDay.value : this.endDay,
       note: data.note.present ? data.note.value : this.note,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      openEnd: data.openEnd.present ? data.openEnd.value : this.openEnd,
     );
   }
 
@@ -15687,13 +15725,15 @@ class Absence extends DataClass implements Insertable<Absence> {
           ..write('startDay: $startDay, ')
           ..write('endDay: $endDay, ')
           ..write('note: $note, ')
-          ..write('createdAt: $createdAt')
+          ..write('createdAt: $createdAt, ')
+          ..write('openEnd: $openEnd')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, kind, startDay, endDay, note, createdAt);
+  int get hashCode =>
+      Object.hash(id, kind, startDay, endDay, note, createdAt, openEnd);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -15703,7 +15743,8 @@ class Absence extends DataClass implements Insertable<Absence> {
           other.startDay == this.startDay &&
           other.endDay == this.endDay &&
           other.note == this.note &&
-          other.createdAt == this.createdAt);
+          other.createdAt == this.createdAt &&
+          other.openEnd == this.openEnd);
 }
 
 class AbsencesCompanion extends UpdateCompanion<Absence> {
@@ -15713,6 +15754,7 @@ class AbsencesCompanion extends UpdateCompanion<Absence> {
   final Value<DateTime> endDay;
   final Value<String?> note;
   final Value<DateTime> createdAt;
+  final Value<bool> openEnd;
   const AbsencesCompanion({
     this.id = const Value.absent(),
     this.kind = const Value.absent(),
@@ -15720,6 +15762,7 @@ class AbsencesCompanion extends UpdateCompanion<Absence> {
     this.endDay = const Value.absent(),
     this.note = const Value.absent(),
     this.createdAt = const Value.absent(),
+    this.openEnd = const Value.absent(),
   });
   AbsencesCompanion.insert({
     this.id = const Value.absent(),
@@ -15728,6 +15771,7 @@ class AbsencesCompanion extends UpdateCompanion<Absence> {
     required DateTime endDay,
     this.note = const Value.absent(),
     required DateTime createdAt,
+    this.openEnd = const Value.absent(),
   }) : kind = Value(kind),
        startDay = Value(startDay),
        endDay = Value(endDay),
@@ -15739,6 +15783,7 @@ class AbsencesCompanion extends UpdateCompanion<Absence> {
     Expression<DateTime>? endDay,
     Expression<String>? note,
     Expression<DateTime>? createdAt,
+    Expression<bool>? openEnd,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -15747,6 +15792,7 @@ class AbsencesCompanion extends UpdateCompanion<Absence> {
       if (endDay != null) 'end_day': endDay,
       if (note != null) 'note': note,
       if (createdAt != null) 'created_at': createdAt,
+      if (openEnd != null) 'open_end': openEnd,
     });
   }
 
@@ -15757,6 +15803,7 @@ class AbsencesCompanion extends UpdateCompanion<Absence> {
     Value<DateTime>? endDay,
     Value<String?>? note,
     Value<DateTime>? createdAt,
+    Value<bool>? openEnd,
   }) {
     return AbsencesCompanion(
       id: id ?? this.id,
@@ -15765,6 +15812,7 @@ class AbsencesCompanion extends UpdateCompanion<Absence> {
       endDay: endDay ?? this.endDay,
       note: note ?? this.note,
       createdAt: createdAt ?? this.createdAt,
+      openEnd: openEnd ?? this.openEnd,
     );
   }
 
@@ -15789,6 +15837,9 @@ class AbsencesCompanion extends UpdateCompanion<Absence> {
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
+    if (openEnd.present) {
+      map['open_end'] = Variable<bool>(openEnd.value);
+    }
     return map;
   }
 
@@ -15800,7 +15851,8 @@ class AbsencesCompanion extends UpdateCompanion<Absence> {
           ..write('startDay: $startDay, ')
           ..write('endDay: $endDay, ')
           ..write('note: $note, ')
-          ..write('createdAt: $createdAt')
+          ..write('createdAt: $createdAt, ')
+          ..write('openEnd: $openEnd')
           ..write(')'))
         .toString();
   }
@@ -58182,6 +58234,7 @@ typedef $$AbsencesTableCreateCompanionBuilder = AbsencesCompanion Function({
   required DateTime endDay,
   Value<String?> note,
   required DateTime createdAt,
+  Value<bool> openEnd,
 });
 typedef $$AbsencesTableUpdateCompanionBuilder = AbsencesCompanion Function({
   Value<int> id,
@@ -58190,6 +58243,7 @@ typedef $$AbsencesTableUpdateCompanionBuilder = AbsencesCompanion Function({
   Value<DateTime> endDay,
   Value<String?> note,
   Value<DateTime> createdAt,
+  Value<bool> openEnd,
 });
 
 class $$AbsencesTableFilterComposer
@@ -58228,6 +58282,11 @@ class $$AbsencesTableFilterComposer
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
     column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get openEnd => $composableBuilder(
+    column: $table.openEnd,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -58270,6 +58329,11 @@ class $$AbsencesTableOrderingComposer
     column: $table.createdAt,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<bool> get openEnd => $composableBuilder(
+    column: $table.openEnd,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$AbsencesTableAnnotationComposer
@@ -58298,6 +58362,9 @@ class $$AbsencesTableAnnotationComposer
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<bool> get openEnd =>
+      $composableBuilder(column: $table.openEnd, builder: (column) => column);
 }
 
 class $$AbsencesTableTableManager
@@ -58334,6 +58401,7 @@ class $$AbsencesTableTableManager
                 Value<DateTime> endDay = const Value.absent(),
                 Value<String?> note = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
+                Value<bool> openEnd = const Value.absent(),
               }) => AbsencesCompanion(
                 id: id,
                 kind: kind,
@@ -58341,6 +58409,7 @@ class $$AbsencesTableTableManager
                 endDay: endDay,
                 note: note,
                 createdAt: createdAt,
+                openEnd: openEnd,
               ),
           createCompanionCallback:
               ({
@@ -58350,6 +58419,7 @@ class $$AbsencesTableTableManager
                 required DateTime endDay,
                 Value<String?> note = const Value.absent(),
                 required DateTime createdAt,
+                Value<bool> openEnd = const Value.absent(),
               }) => AbsencesCompanion.insert(
                 id: id,
                 kind: kind,
@@ -58357,6 +58427,7 @@ class $$AbsencesTableTableManager
                 endDay: endDay,
                 note: note,
                 createdAt: createdAt,
+                openEnd: openEnd,
               ),
           withReferenceMapper: (p0) => p0
               .map(

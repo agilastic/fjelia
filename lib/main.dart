@@ -26,6 +26,7 @@ import 'providers/hrv_training_provider.dart';
 import 'providers/missed_workout_provider.dart';
 import 'providers/plan_proposal_provider.dart';
 import 'providers/nutrition_provider.dart';
+import 'providers/plan_schedule_provider.dart' show extendOpenAbsencesProvider;
 import 'providers/planner_providers.dart' show upcomingSessionsProvider;
 import 'screens/planner/missed_workout_sheet.dart';
 import 'screens/planner/plan_proposal_cards.dart';
@@ -156,6 +157,7 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
       _listenForActivityFiles();
       _triggerSync();
       unawaited(_startHrvReminders());
+      _extendOpenAbsences();
       // FjeliaPro listens to the App Store from the start (renewals,
       // interrupted purchases).
       ref.read(fjeliaProProvider);
@@ -190,6 +192,7 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
     // Permission, clock or time zone may have changed; an action may have
     // been left by the notification while the app was closed.
     unawaited(_startHrvReminders());
+    _extendOpenAbsences();
     final sync = ref.read(syncProvider);
     if (sync.status == SyncStatus.syncing) return;
     final last = sync.lastSync;
@@ -371,6 +374,11 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
       }
     });
   }
+
+  /// Ill with no end known yet: the absence goes on to tomorrow.
+  void _extendOpenAbsences() => unawaited(
+    ref.read(extendOpenAbsencesProvider)().catchError((Object _) {}),
+  );
 
   /// A moved, skipped or newly planned session changes which evenings need
   /// a reminder.

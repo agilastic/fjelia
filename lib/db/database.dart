@@ -528,6 +528,10 @@ class Absences extends Table {
   DateTimeColumn get endDay => dateTime()();
   TextColumn get note => text().nullable()();
   DateTimeColumn get createdAt => dateTime()();
+
+  /// Ill or injured with no end known yet: [endDay] moves on to tomorrow
+  /// every day until the athlete says they are fit again.
+  BoolColumn get openEnd => boolean().withDefault(const Constant(false))();
 }
 
 /// An activity the athlete deleted. It stays deleted: no sync brings it
@@ -1493,7 +1497,7 @@ class AppDatabase extends _$AppDatabase {
       defaultSourcePriorities[group.name]!;
 
   @override
-  int get schemaVersion => 70;
+  int get schemaVersion => 71;
 
   Future<void> saveHeartRateSamples(List<TimedHeartRate> samples) async {
     if (samples.isEmpty) return;
@@ -2053,9 +2057,9 @@ class AppDatabase extends _$AppDatabase {
   });
 
   /// Absences, the latest first.
-  Stream<List<Absence>> watchAbsences() => (select(
+  Future<List<Absence>> absenceList() => (select(
     absences,
-  )..orderBy([(t) => OrderingTerm.desc(t.startDay)])).watch();
+  )..orderBy([(t) => OrderingTerm.desc(t.startDay)])).get();
 
   /// Absences that touch [from] .. [to] (days, both included).
   Future<List<Absence>> absencesBetween(DateTime from, DateTime to) =>
@@ -3484,6 +3488,13 @@ class AppDatabase extends _$AppDatabase {
       }
       if (from < 69) await m.createTable(activitySports);
       if (from < 70) await m.createTable(absences);
+      if (from >= 70 && from < 71) {
+        await _addColumnIfMissing(
+          'absences',
+          'open_end',
+          () => m.addColumn(absences, absences.openEnd),
+        );
+      }
     },
   );
 

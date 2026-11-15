@@ -1,5 +1,6 @@
 import '../../theme/fjelia_style.dart';
 import '../../l10n/formats.dart';
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -14,16 +15,19 @@ import '../../providers/ai_coach_provider.dart';
 import '../../providers/heat_acclimation_provider.dart';
 import '../../providers/missed_workout_provider.dart';
 import '../../providers/plan_week_provider.dart';
+import '../../providers/plan_schedule_provider.dart' show absencesProvider;
 import '../../providers/planner_providers.dart';
 import '../../providers/sync_provider.dart';
 import '../../providers/user_profile_provider.dart';
 import '../../services/ai_coach_client.dart' show AiConsentToken;
 import '../../services/ai_coach_settings.dart';
 import '../../services/coach_language.dart';
+import '../../services/absence_service.dart' show absenceOn;
 import '../../services/missed_workout_planner.dart';
 import '../../services/missed_workout_reminder_service.dart';
 import '../../services/open_meteo_client.dart' show OpenMeteoPoint;
 import '../../services/plan_rebalance.dart';
+import '../../services/season/goal_set.dart' show DayLoad;
 import '../../services/plan_session_actions.dart' show skipReasons;
 import '../../theme/activity_colors.dart';
 import '../../utils/log.dart';
@@ -133,6 +137,8 @@ class _MissedWorkoutSheetState extends ConsumerState<MissedWorkoutSheet> {
     final profile = ref.watch(userProfileProvider).valueOrNull;
     final goals = ref.watch(goalSetProvider).valueOrNull;
     final race = ref.watch(primaryRaceGoalProvider).valueOrNull;
+    final absences =
+        ref.watch(absencesProvider).valueOrNull ?? const <Absence>[];
     final weather = ref.watch(heatHourlyWeatherProvider).valueOrNull;
     final settings =
         ref.watch(missedWorkoutSettingsProvider).valueOrNull ??
@@ -161,8 +167,12 @@ class _MissedWorkoutSheetState extends ConsumerState<MissedWorkoutSheet> {
           : widget.day,
       daysAhead: settings.daysAhead,
       maxPerDay: profile?.maxSessionsPerDay ?? 1,
-      restWeekdays: profile?.restDays ?? const [],
-      dayLoad: goals?.loadOn,
+      restWeekdays: profile?.planRestDays ?? const [],
+      // A day the athlete is ill, injured or away takes nothing, like an
+      // event day: no proposal, and the coach is told so.
+      dayLoad: (d) => absenceOn(absences, d) != null
+          ? DayLoad.blocked
+          : goals?.loadOn(d) ?? DayLoad.free,
       rainyOn: hours.isEmpty ? null : (d) => isRainyDay(hours, d),
       raceName: race?.name,
       raceDate: race?.raceDate,

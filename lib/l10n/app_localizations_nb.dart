@@ -9050,4 +9050,29 @@ class AppLocalizationsNb extends AppLocalizations {
   @override
   String get missedWorkoutWindowsNote =>
       'Med treningstider kommer påminnelsen en time før det siste vinduet slutter; dette klokkeslettet gjelder dager uten vindu.';
+
+  @override
+  String moveIntoAbsence(String kind) {
+    return 'Den dagen er i fraværet ditt ($kind). Velg en annen dag.';
+  }
+
+  @override
+  String get absenceOpenEnd => 'Slutt ikke kjent ennå';
+
+  @override
+  String get absenceOpenEndHint =>
+      'Fjelia holder dagene frie én etter én til du sier at du er frisk igjen.';
+
+  @override
+  String absenceSince(String date) {
+    return 'Siden $date';
+  }
+
+  @override
+  String get absenceFitAgain => 'Frisk igjen';
+
+  @override
+  String absenceOpenCard(String date, int days) {
+    return 'Siden $date (dag $days). Øktene forblir avlyst dag for dag; når du er frisk igjen, er den første uken rolig.';
+  }
 }

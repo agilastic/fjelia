@@ -9121,4 +9121,29 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get missedWorkoutWindowsNote =>
       'Com horários definidos, o lembrete chega uma hora antes do fim da última janela; esta hora é para os dias sem janela.';
+
+  @override
+  String moveIntoAbsence(String kind) {
+    return 'Esse dia calha na tua ausência ($kind). Escolhe outro dia.';
+  }
+
+  @override
+  String get absenceOpenEnd => 'Fim ainda desconhecido';
+
+  @override
+  String get absenceOpenEndHint =>
+      'O Fjelia deixa os dias livres um a um até dizeres que voltaste a estar bem.';
+
+  @override
+  String absenceSince(String date) {
+    return 'Desde $date';
+  }
+
+  @override
+  String get absenceFitAgain => 'De novo em forma';
+
+  @override
+  String absenceOpenCard(String date, int days) {
+    return 'Desde $date (dia $days). As sessões continuam canceladas dia a dia; quando voltares a estar bem, a primeira semana é leve.';
+  }
 }

@@ -9054,4 +9054,29 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get missedWorkoutWindowsNote =>
       'With training times set, the reminder comes an hour before the day\'s last window ends; this time is for days without one.';
+
+  @override
+  String moveIntoAbsence(String kind) {
+    return 'That day is during your absence ($kind). Pick another day.';
+  }
+
+  @override
+  String get absenceOpenEnd => 'End not known yet';
+
+  @override
+  String get absenceOpenEndHint =>
+      'Fjelia keeps the days free one by one until you say you\'re fit again.';
+
+  @override
+  String absenceSince(String date) {
+    return 'Since $date';
+  }
+
+  @override
+  String get absenceFitAgain => 'Fit again';
+
+  @override
+  String absenceOpenCard(String date, int days) {
+    return 'Since $date (day $days). Sessions stay cancelled day by day; once you are fit again, the first week back is easy.';
+  }
 }

@@ -186,7 +186,8 @@ void main() {
     );
     expect(find.textContaining('repeat'), findsNothing);
     expect(find.textContaining('Warm-up'), findsNothing);
-    expect(find.text('Ruhetag'), findsOneWidget);
+    // In German, once or more: on some weekdays today is a rest day too.
+    expect(find.text('Ruhetag'), findsWidgets);
     expect(find.text('rest day'), findsNothing);
     await tester.runAsync(db.close);
   });

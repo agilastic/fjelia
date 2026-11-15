@@ -13,6 +13,7 @@ import '../../providers/user_profile_provider.dart';
 import '../../providers/visibility_provider.dart';
 import '../../providers/body_measurements_provider.dart';
 import '../../providers/grip_strength_provider.dart';
+import '../../widgets/absence_sheet.dart' show OpenAbsenceCard;
 import '../../widgets/app_widgets.dart';
 import '../../widgets/history_sync_card.dart';
 import '../../widgets/recording_banner.dart';
@@ -328,6 +329,8 @@ class _HealthPage extends ConsumerWidget {
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 100),
       children: [
         DaySummaryCard(openLoad: openLoad),
+        // Ill or injured with no end known: the way back, near the top.
+        const OpenAbsenceCard(),
         BriefingCard(openCoach: openCoach),
         if (vis['health_monitor'] ?? true) const HealthMonitorGrid(),
         SectionCard(

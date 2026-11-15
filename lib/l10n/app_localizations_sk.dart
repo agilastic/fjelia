@@ -9087,4 +9087,29 @@ class AppLocalizationsSk extends AppLocalizations {
   @override
   String get missedWorkoutWindowsNote =>
       'S nastavenými časmi príde pripomienka hodinu pred koncom posledného okna; tento čas platí pre dni bez okna.';
+
+  @override
+  String moveIntoAbsence(String kind) {
+    return 'Tento deň je počas tvojej neprítomnosti ($kind). Vyber iný deň.';
+  }
+
+  @override
+  String get absenceOpenEnd => 'Koniec zatiaľ neznámy';
+
+  @override
+  String get absenceOpenEndHint =>
+      'Fjelia uvoľňuje dni jeden po druhom, kým nepovieš, že si zase fit.';
+
+  @override
+  String absenceSince(String date) {
+    return 'Od $date';
+  }
+
+  @override
+  String get absenceFitAgain => 'Zase fit';
+
+  @override
+  String absenceOpenCard(String date, int days) {
+    return 'Od $date (deň $days). Tréningy zostávajú zrušené deň po dni; keď budeš zase fit, prvý týždeň je ľahký.';
+  }
 }

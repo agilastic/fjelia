@@ -4151,5 +4151,11 @@
   "windowPresetLunch": "Pause déjeuner",
   "windowPresetEvening": "Soir",
   "windowPresetWeekend": "Week-end",
-  "missedWorkoutWindowsNote": "Avec des créneaux définis, le rappel arrive une heure avant la fin du dernier créneau ; cette heure sert aux jours sans créneau."
+  "missedWorkoutWindowsNote": "Avec des créneaux définis, le rappel arrive une heure avant la fin du dernier créneau ; cette heure sert aux jours sans créneau.",
+  "moveIntoAbsence": "Ce jour tombe pendant ton absence ({kind}). Choisis un autre jour.",
+  "absenceOpenEnd": "Fin pas encore connue",
+  "absenceOpenEndHint": "Fjelia libère les jours un par un jusqu'à ce que tu dises que tu es rétabli.",
+  "absenceSince": "Depuis {date}",
+  "absenceFitAgain": "De nouveau en forme",
+  "absenceOpenCard": "Depuis {date} (jour {days}). Les séances restent annulées jour après jour ; une fois rétabli, la première semaine de reprise est facile."
 }

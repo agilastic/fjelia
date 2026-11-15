@@ -4151,5 +4151,11 @@
   "windowPresetLunch": "Pausa pranzo",
   "windowPresetEvening": "Sera",
   "windowPresetWeekend": "Weekend",
-  "missedWorkoutWindowsNote": "Con gli orari impostati, il promemoria arriva un'ora prima della fine dell'ultima fascia; quest'ora vale per i giorni senza fascia."
+  "missedWorkoutWindowsNote": "Con gli orari impostati, il promemoria arriva un'ora prima della fine dell'ultima fascia; quest'ora vale per i giorni senza fascia.",
+  "moveIntoAbsence": "Quel giorno cade durante la tua assenza ({kind}). Scegli un altro giorno.",
+  "absenceOpenEnd": "Fine non ancora nota",
+  "absenceOpenEndHint": "Fjelia lascia liberi i giorni uno alla volta finché non dici di stare di nuovo bene.",
+  "absenceSince": "Da {date}",
+  "absenceFitAgain": "Di nuovo in forma",
+  "absenceOpenCard": "Da {date} (giorno {days}). Le sessioni restano annullate giorno per giorno; quando stai di nuovo bene, la prima settimana è facile."
 }

@@ -1,3 +1,6 @@
+import '../../db/database.dart' show Absence;
+import '../../providers/plan_schedule_provider.dart' show absencesProvider;
+import '../../services/absence_service.dart' show absenceOn;
 import 'pro_analysis_sheet.dart';
 import '../../providers/activity_history_provider.dart';
 import '../../l10n/l10n_ext.dart';
@@ -12,6 +15,9 @@ import '../../providers/planner_providers.dart';
 import '../../providers/plan_view_provider.dart';
 import '../../providers/day_data_provider.dart';
 import '../../providers/user_profile_provider.dart';
+import '../../widgets/absence_sheet.dart' show OpenAbsenceCard, absenceColor;
+import '../../l10n/plan_text.dart' show absenceKindLabel;
+import '../../theme/fjelia_style.dart' show fjAccent;
 import '../../widgets/app_widgets.dart';
 import '../../widgets/plan_timeline.dart';
 import 'plan_adjustments_card.dart';
@@ -42,6 +48,8 @@ class _PlanState extends ConsumerState<PlanScreen> {
     final view = defaultView[0].toUpperCase() + defaultView.substring(1);
     final upcoming = ref.watch(upcomingPlanProvider);
     final selected = ref.watch(selectedDateProvider);
+    final absences =
+        ref.watch(absencesProvider).valueOrNull ?? const <Absence>[];
     final calendar = view == 'Month'
         ? ref.watch(planCalendarActivitiesProvider(month)).valueOrNull ??
               <CalendarActivity>[]
@@ -62,6 +70,7 @@ class _PlanState extends ConsumerState<PlanScreen> {
         children: [
           // Waiting for an answer: first, above everything else.
           const PlanProposalCards(),
+          const OpenAbsenceCard(),
           const PlanWeatherStrip(),
           // FjeliaPro analyses (or the way to Pro while it is on offer).
           const ProToolsCard(),
@@ -133,10 +142,17 @@ class _PlanState extends ConsumerState<PlanScreen> {
                       final activities = calendar
                           .where((a) => DateUtils.isSameDay(a.date, d))
                           .toList();
-                      return Tooltip(
-                        message: activities.isEmpty
-                            ? dayText(d)
-                            : '${dayText(d)}\n${activities.map((a) => '${a.title} · ${a.statusLabel}').join('\n')}',
+                      final away = absenceOn(absences, d);
+                      final awayLabel = away == null
+                          ? null
+                          : absenceKindLabel(context.l10n, away.kind);
+                      final cell = Tooltip(
+                        message: [
+                          dayText(d),
+                          ?awayLabel,
+                          for (final a in activities)
+                            '${a.title} · ${a.statusLabel}',
+                        ].join('\n'),
                         child: InkWell(
                           onTap: () =>
                               ref.read(selectedDateProvider.notifier).state = d,
@@ -180,6 +196,31 @@ class _PlanState extends ConsumerState<PlanScreen> {
                             ),
                           ),
                         ),
+                      );
+                      if (away == null) return cell;
+                      // The absence as a band under its days: it runs on
+                      // from one day to the next and is round at its ends.
+                      final starts = DateUtils.isSameDay(d, away.startDay);
+                      final ends = DateUtils.isSameDay(d, away.endDay);
+                      return Stack(
+                        children: [
+                          Positioned.fill(child: cell),
+                          Positioned(
+                            left: starts ? 6 : 0,
+                            right: ends ? 6 : 0,
+                            bottom: 1,
+                            height: 3,
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                color: fjAccent(absenceColor(away.kind)),
+                                borderRadius: BorderRadius.horizontal(
+                                  left: Radius.circular(starts ? 2 : 0),
+                                  right: Radius.circular(ends ? 2 : 0),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       );
                     },
                   ),

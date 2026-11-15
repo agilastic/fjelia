@@ -5314,5 +5314,11 @@
   "windowPresetLunch": "Przerwa obiadowa",
   "windowPresetEvening": "Wieczór",
   "windowPresetWeekend": "Weekend",
-  "missedWorkoutWindowsNote": "Przy ustawionych godzinach przypomnienie przychodzi godzinę przed końcem ostatniego okna; ta godzina dotyczy dni bez okna."
+  "missedWorkoutWindowsNote": "Przy ustawionych godzinach przypomnienie przychodzi godzinę przed końcem ostatniego okna; ta godzina dotyczy dni bez okna.",
+  "moveIntoAbsence": "Ten dzień przypada na twoją nieobecność ({kind}). Wybierz inny dzień.",
+  "absenceOpenEnd": "Koniec jeszcze nieznany",
+  "absenceOpenEndHint": "Fjelia zwalnia kolejne dni, dopóki nie powiesz, że znów jesteś w formie.",
+  "absenceSince": "Od {date}",
+  "absenceFitAgain": "Znów w formie",
+  "absenceOpenCard": "Od {date} (dzień {days}). Treningi pozostają odwołane dzień po dniu; gdy znów będziesz w formie, pierwszy tydzień jest lekki."
 }

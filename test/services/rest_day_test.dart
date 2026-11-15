@@ -5,6 +5,7 @@ import 'package:fjelia/l10n/app_localizations_en.dart';
 import 'package:fjelia/services/ai_context_toon_builder.dart';
 import 'package:fjelia/services/briefing_brief.dart';
 import 'package:fjelia/services/plan_day.dart';
+import 'package:fjelia/models/training_windows.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -112,5 +113,33 @@ void main() {
     // A day with sessions never claims rest.
     const busy = BriefingBrief(readiness: 'green', today: ['running/45']);
     expect(busy.localText(l), isNot(contains('rest day')));
+  });
+
+  test('the coach sees absences and training times, not the note', () async {
+    await db
+        .into(db.absences)
+        .insert(
+          AbsencesCompanion.insert(
+            kind: 'illness',
+            startDay: day(-1),
+            endDay: day(2),
+            note: const Value('Fever, stayed in bed'),
+            createdAt: DateTime.now(),
+          ),
+        );
+    var windows = const TrainingWindows();
+    for (var slot = 34; slot < 40; slot++) {
+      windows = windows.withSlot(2, slot, true);
+    }
+    final text = await AiContextToonBuilder(
+      db,
+      trainingWindows: () async => windows,
+    ).build(null, '', null);
+    expect(text, contains('[Absences:1]'));
+    expect(text, contains('Kind:illness'));
+    expect(text, contains(',Now]'));
+    expect(text, isNot(contains('Fever')));
+    expect(text, contains('Tue=17:00-20:00'));
+    expect(text, contains('Mon=none'));
   });
 }

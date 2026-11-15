@@ -4166,5 +4166,11 @@
   "windowPresetLunch": "Mittagspause",
   "windowPresetEvening": "Abends",
   "windowPresetWeekend": "Wochenende",
-  "missedWorkoutWindowsNote": "Mit Trainingszeiten kommt die Erinnerung eine Stunde vor Ende des letzten Fensters; diese Uhrzeit gilt für Tage ohne Fenster."
+  "missedWorkoutWindowsNote": "Mit Trainingszeiten kommt die Erinnerung eine Stunde vor Ende des letzten Fensters; diese Uhrzeit gilt für Tage ohne Fenster.",
+  "moveIntoAbsence": "Dieser Tag liegt in deiner Abwesenheit ({kind}). Wähle einen anderen Tag.",
+  "absenceOpenEnd": "Ende noch offen",
+  "absenceOpenEndHint": "Fjelia hält die Tage nacheinander frei, bis du sagst, dass du wieder fit bist.",
+  "absenceSince": "Seit {date}",
+  "absenceFitAgain": "Wieder fit",
+  "absenceOpenCard": "Seit {date} (Tag {days}). Einheiten bleiben Tag für Tag abgesagt; sobald du wieder fit bist, ist die erste Woche locker."
 }

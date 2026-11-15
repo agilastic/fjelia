@@ -5344,5 +5344,14 @@
   "windowPresetLunch": "Lunch break",
   "windowPresetEvening": "Evening",
   "windowPresetWeekend": "Weekend",
-  "missedWorkoutWindowsNote": "With training times set, the reminder comes an hour before the day's last window ends; this time is for days without one."
+  "missedWorkoutWindowsNote": "With training times set, the reminder comes an hour before the day's last window ends; this time is for days without one.",
+  "moveIntoAbsence": "That day is during your absence ({kind}). Pick another day.",
+  "@moveIntoAbsence": {"placeholders": {"kind": {"type": "String"}}},
+  "absenceOpenEnd": "End not known yet",
+  "absenceOpenEndHint": "Fjelia keeps the days free one by one until you say you're fit again.",
+  "absenceSince": "Since {date}",
+  "@absenceSince": {"placeholders": {"date": {"type": "String"}}},
+  "absenceFitAgain": "Fit again",
+  "absenceOpenCard": "Since {date} (day {days}). Sessions stay cancelled day by day; once you are fit again, the first week back is easy.",
+  "@absenceOpenCard": {"placeholders": {"date": {"type": "String"}, "days": {"type": "int"}}}
 }

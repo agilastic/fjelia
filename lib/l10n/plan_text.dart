@@ -292,6 +292,14 @@ String? _summaryLine(AppLocalizations l, Map c, List<String> names) {
 }
 
 /// A stored skip reason (English id) in the app language.
+/// An absence kind (illness, injury, vacation, offseason) in the app language.
+String absenceKindLabel(AppLocalizations l, String kind) => switch (kind) {
+  'illness' => l.absenceIllness,
+  'injury' => l.absenceInjury,
+  'vacation' => l.absenceVacation,
+  _ => l.absenceOffseason,
+};
+
 String skipReasonLabel(AppLocalizations l, String reason) => switch (reason) {
   'Illness' => l.skipReasonIllness,
   'Injury or pain' => l.skipReasonInjury,

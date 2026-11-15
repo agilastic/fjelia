@@ -15,6 +15,7 @@ class MoveDay {
     this.isRestDay = false,
     this.isFull = false,
     this.event,
+    this.absence,
     this.isEasyOnly = false,
   });
 
@@ -30,6 +31,10 @@ class MoveDay {
   /// The event that owns the day (its day, or the rest day before); no
   /// workout can move there.
   final String? event;
+
+  /// The athlete's absence that covers the day (ill, injured, away), in
+  /// words; no workout can move there either.
+  final String? absence;
 
   /// Days just after an event: easy sessions only.
   final bool isEasyOnly;
@@ -140,13 +145,15 @@ class _MoveWorkoutCardState extends State<MoveWorkoutCard> {
     final days = widget.days;
     // Only the marks that are on the strip need explaining.
     final keys = [
-      if (days.any((d) => d.isRestDay && d.event == null))
+      if (days.any((d) => d.isRestDay && d.event == null && d.absence == null))
         _Key(
           icon: Icons.nightlight_outlined,
           text: context.l10n.moveKeyRestDay,
         ),
       if (days.any((d) => d.event != null))
         _Key(icon: Icons.flag, text: context.l10n.moveKeyEvent),
+      if (days.any((d) => d.absence != null && d.event == null))
+        _Key(icon: Icons.event_busy, text: context.l10n.plusAbsence),
       if (days.any((d) => d.isEasyOnly && d.sessions == 0))
         _Key(icon: Icons.self_improvement, text: context.l10n.moveKeyEasyOnly),
       if (days.any((d) => d.sessions > 0))
@@ -297,6 +304,7 @@ class _DayChip extends StatelessWidget {
           '${isCurrent ? ', where the workout is' : ''}'
           '${day.isRestDay ? ', rest day' : ''}'
           '${day.event != null ? ', ${day.event}, not available' : ''}'
+          '${day.absence != null ? ', ${day.absence}, not available' : ''}'
           '${day.isEasyOnly ? ', easy sessions only after an event' : ''}'
           '${day.sessions > 0 ? ', ${day.sessions} sessions planned' : ''}',
       child: GestureDetector(
@@ -336,6 +344,12 @@ class _DayChip extends StatelessWidget {
                 height: 12,
                 child: day.event != null
                     ? const Icon(Icons.flag, size: 12, color: Colors.orange)
+                    : day.absence != null
+                    ? Icon(
+                        Icons.event_busy,
+                        size: 12,
+                        color: isCurrent ? Colors.black87 : muted,
+                      )
                     : day.isRestDay
                     ? Icon(
                         Icons.nightlight_outlined,

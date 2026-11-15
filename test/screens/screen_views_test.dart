@@ -1171,6 +1171,49 @@ void main() {
     await tester.pump(Duration.zero);
     await tester.binding.setSurfaceSize(null);
   });
+  testWidgets('absences show as a band, a line and a way back', (
+    tester,
+  ) async {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    await db
+        .into(db.absences)
+        .insert(
+          AbsencesCompanion.insert(
+            kind: 'vacation',
+            startDay: today.add(const Duration(days: 2)),
+            endDay: today.add(const Duration(days: 5)),
+            createdAt: now,
+          ),
+        );
+    await db
+        .into(db.absences)
+        .insert(
+          AbsencesCompanion.insert(
+            kind: 'illness',
+            startDay: today.subtract(const Duration(days: 2)),
+            endDay: today.add(const Duration(days: 1)),
+            createdAt: now,
+            openEnd: const Value(true),
+          ),
+        );
+    for (final (view, name, light) in [
+      ('month', 'plan-absence-month', false),
+      ('month', 'plan-absence-month-light', true),
+      ('week', 'plan-absence-week', false),
+    ]) {
+      SharedPreferences.setMockInitialValues({
+        'plan_default_view': view,
+        'heat_acclimation_enabled': false,
+      });
+      await render(tester, const PlanScreen(), name, light: light);
+      expect(find.text('Fit again'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox());
+      await tester.pump(Duration.zero);
+    }
+    await tester.binding.setSurfaceSize(null);
+  });
   testWidgets(
     'Month calendar shows colored planned and completed sport bubbles',
     (tester) async {

@@ -5,6 +5,7 @@ import 'package:intl/intl.dart' show DateFormat;
 import '../db/database.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/l10n_ext.dart';
+import '../l10n/plan_text.dart' show absenceKindLabel;
 import '../providers/plan_schedule_provider.dart';
 import '../services/absence_service.dart';
 import '../theme/fjelia_style.dart';
@@ -17,15 +18,11 @@ IconData absenceIcon(String kind) => switch (kind) {
   _ => Icons.ac_unit_rounded,
 };
 
-String absenceLabel(AppLocalizations l, String kind) => switch (kind) {
-  'illness' => l.absenceIllness,
-  'injury' => l.absenceInjury,
-  'vacation' => l.absenceVacation,
-  _ => l.absenceOffseason,
-};
+String absenceLabel(AppLocalizations l, String kind) =>
+    absenceKindLabel(l, kind);
 
 /// From the Aurora palette: attention amber, warning pink, sky, plan violet.
-Color _absenceColor(String kind) => switch (kind) {
+Color absenceColor(String kind) => switch (kind) {
   'illness' => const Color(0xFFFFB13D),
   'injury' => const Color(0xFFFF4D8D),
   'vacation' => const Color(0xFF6FA8FF),
@@ -52,6 +49,12 @@ class AbsenceSheet extends ConsumerStatefulWidget {
 class _AbsenceState extends ConsumerState<AbsenceSheet> {
   String kind = 'illness';
   DateTimeRange? range;
+
+  /// Ill or injured with no end known: only the first day is chosen.
+  bool openEnd = false;
+  DateTime? since;
+
+  bool get _canBeOpen => kind == 'illness' || kind == 'injury';
   final note = TextEditingController();
   bool saving = false;
 
@@ -73,20 +76,40 @@ class _AbsenceState extends ConsumerState<AbsenceSheet> {
     if (picked != null) setState(() => range = picked);
   }
 
+  Future<void> _pickSince() async {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final picked = await showDatePicker(
+      context: context,
+      firstDate: today.subtract(const Duration(days: 60)),
+      lastDate: today,
+      initialDate: since ?? today,
+    );
+    if (picked != null) setState(() => since = picked);
+  }
+
   Future<void> _save() async {
-    final r = range;
-    if (r == null) return;
+    final now = DateTime.now();
+    final open = openEnd && _canBeOpen;
+    final start = open
+        ? since ?? DateTime(now.year, now.month, now.day)
+        : range?.start;
+    if (start == null) return;
     setState(() => saving = true);
     await runUiAction(context, () async {
       await ref.read(addAbsenceProvider)(
         kind: kind,
-        start: r.start,
-        end: r.end,
+        start: start,
+        end: open ? start : range!.end,
         note: note.text,
+        openEnd: open,
       );
       if (!mounted) return;
       note.clear();
-      setState(() => range = null);
+      setState(() {
+        range = null;
+        since = null;
+      });
     });
     if (mounted) setState(() => saving = false);
   }
@@ -102,6 +125,8 @@ class _AbsenceState extends ConsumerState<AbsenceSheet> {
         if (!a.endDay.isBefore(recent)) a,
     ];
     final r = range;
+    final open = openEnd && _canBeOpen;
+    final today = DateTime(now.year, now.month, now.day);
     return SheetPage(
       title: l.plusAbsence,
       child: ListView(
@@ -130,13 +155,29 @@ class _AbsenceState extends ConsumerState<AbsenceSheet> {
                       ),
                   ],
                 ),
-                const SizedBox(height: 14),
+                if (_canBeOpen)
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(l.absenceOpenEnd),
+                    subtitle: Text(
+                      l.absenceOpenEndHint,
+                      style: TextStyle(fontSize: 12, color: muted),
+                    ),
+                    value: openEnd,
+                    onChanged: (v) => setState(() => openEnd = v),
+                  )
+                else
+                  const SizedBox(height: 14),
                 OutlinedButton.icon(
                   key: const Key('absence-range'),
-                  onPressed: _pickRange,
+                  onPressed: open ? _pickSince : _pickRange,
                   icon: const Icon(Icons.date_range_rounded),
                   label: Text(
-                    r == null
+                    open
+                        ? l.absenceSince(
+                            _range(context, since ?? today, since ?? today),
+                          )
+                        : r == null
                         ? l.absencePeriod
                         : _range(context, r.start, r.end),
                   ),
@@ -154,7 +195,7 @@ class _AbsenceState extends ConsumerState<AbsenceSheet> {
                 const SizedBox(height: 14),
                 // The sheet's one action, plain like Save on training times.
                 FilledButton(
-                  onPressed: r == null || saving ? null : _save,
+                  onPressed: (r == null && !open) || saving ? null : _save,
                   child: saving
                       ? const SizedBox(
                           width: 16,
@@ -185,13 +226,13 @@ class _AbsenceState extends ConsumerState<AbsenceSheet> {
                             height: 28,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: _absenceColor(a.kind)
+                              color: absenceColor(a.kind)
                                   .withValues(alpha: .16),
                             ),
                             child: Icon(
                               absenceIcon(a.kind),
                               size: 14,
-                              color: fjAccent(_absenceColor(a.kind)),
+                              color: fjAccent(absenceColor(a.kind)),
                             ),
                           ),
                           const SizedBox(width: 10),
@@ -209,7 +250,15 @@ class _AbsenceState extends ConsumerState<AbsenceSheet> {
                                 ),
                                 Text(
                                   [
-                                    _range(context, a.startDay, a.endDay),
+                                    a.openEnd
+                                        ? l.absenceSince(
+                                            _range(
+                                              context,
+                                              a.startDay,
+                                              a.startDay,
+                                            ),
+                                          )
+                                        : _range(context, a.startDay, a.endDay),
                                     if (a.note != null) a.note!,
                                   ].join(' · '),
                                   style: TextStyle(fontSize: 12, color: muted),
@@ -217,6 +266,16 @@ class _AbsenceState extends ConsumerState<AbsenceSheet> {
                               ],
                             ),
                           ),
+                          if (a.openEnd)
+                            TextButton(
+                              onPressed: saving
+                                  ? null
+                                  : () => runUiAction(
+                                      context,
+                                      () => ref.read(endOpenAbsenceProvider)(a),
+                                    ),
+                              child: Text(l.absenceFitAgain),
+                            ),
                           IconButton(
                             tooltip: l.absenceRemove,
                             icon: Icon(
@@ -238,6 +297,53 @@ class _AbsenceState extends ConsumerState<AbsenceSheet> {
             ),
           ],
         ],
+      ),
+    );
+  }
+}
+
+/// Ill or injured with no end known yet: a card on top of Status and Plan,
+/// with the one thing to say when it is over.
+class OpenAbsenceCard extends ConsumerWidget {
+  const OpenAbsenceCard({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l = context.l10n;
+    final open = [
+      for (final a
+          in ref.watch(absencesProvider).valueOrNull ?? const <Absence>[])
+        if (a.openEnd) a,
+    ];
+    if (open.isEmpty) return const SizedBox.shrink();
+    final a = open.first;
+    final now = DateTime.now();
+    final days =
+        DateTime(now.year, now.month, now.day).difference(a.startDay).inDays +
+        1;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: SectionCard(
+        title: absenceLabel(l, a.kind),
+        accent: _sky,
+        onTap: () => showAppSheet(context, const AbsenceSheet()),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              l.absenceOpenCard(_range(context, a.startDay, a.startDay), days),
+              style: TextStyle(fontSize: 13, color: fjInk70),
+            ),
+            const SizedBox(height: 12),
+            FilledButton(
+              onPressed: () => runUiAction(
+                context,
+                () => ref.read(endOpenAbsenceProvider)(a),
+              ),
+              child: Text(l.absenceFitAgain),
+            ),
+          ],
+        ),
       ),
     );
   }

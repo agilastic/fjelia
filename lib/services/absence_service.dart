@@ -18,6 +18,15 @@ String absenceSkipReason(String kind) => switch (kind) {
   _ => offSeasonReason,
 };
 
+/// The absence that covers [day], if any.
+Absence? absenceOn(Iterable<Absence> absences, DateTime day) {
+  final d = DateTime(day.year, day.month, day.day);
+  for (final a in absences) {
+    if (!d.isBefore(a.startDay) && !d.isAfter(a.endDay)) return a;
+  }
+  return null;
+}
+
 /// Enters and removes absences. Sessions on their days are cancelled with
 /// the absence's reason; the plan is then built again around them.
 class AbsenceService {
@@ -41,14 +50,23 @@ class AbsenceService {
 
   /// Enters an absence and cancels what was planned on its days; a session
   /// already done stays. Returns how many were cancelled.
+  ///
+  /// With [openEnd] the end is not known: the absence covers [start] up to
+  /// tomorrow and [extendOpen] carries it on day by day.
   Future<int> add({
     required String kind,
     required DateTime start,
     required DateTime end,
     String? note,
+    bool openEnd = false,
+    DateTime? now,
   }) async {
     final from = _day(start.isAfter(end) ? end : start);
-    final to = _day(start.isAfter(end) ? start : end);
+    var to = _day(start.isAfter(end) ? start : end);
+    if (openEnd) {
+      final tomorrow = _day(now ?? DateTime.now()).add(const Duration(days: 1));
+      if (to.isBefore(tomorrow)) to = tomorrow;
+    }
     await db
         .into(db.absences)
         .insert(
@@ -58,8 +76,15 @@ class AbsenceService {
             endDay: to,
             note: Value(note?.trim().isEmpty ?? true ? null : note!.trim()),
             createdAt: DateTime.now(),
+            openEnd: Value(openEnd),
           ),
         );
+    return _cancel(from, to, absenceSkipReason(kind));
+  }
+
+  /// Cancels what is planned from [from] to [to] with [reason]; a session
+  /// already done stays, and a day closed as missed takes the reason.
+  Future<int> _cancel(DateTime from, DateTime to, String reason) async {
     final reasons = {
       for (final a in await db.select(db.sessionActuals).get())
         a.sessionId: a.skipReason,
@@ -67,37 +92,81 @@ class AbsenceService {
     var cancelled = 0;
     for (final s in await _sessions(from, to)) {
       final open = s.status == 'planned' || s.status == 'adapted';
-      // A day closed as missed was this absence: it says so now.
       final missed = s.status == 'skipped' && reasons[s.id] == noActivityReason;
       if (!open && !missed) continue;
-      await actions.markRest(s, reason: absenceSkipReason(kind));
+      await actions.markRest(s, reason: reason);
       cancelled++;
     }
     return cancelled;
   }
 
+  /// Carries every absence with an open end on to tomorrow and cancels what
+  /// the new days held. Returns whether any absence grew.
+  Future<bool> extendOpen({DateTime? now}) async {
+    final tomorrow = _day(now ?? DateTime.now()).add(const Duration(days: 1));
+    var grew = false;
+    for (final a in await (db.select(
+      db.absences,
+    )..where((t) => t.openEnd.equals(true))).get()) {
+      if (!a.endDay.isBefore(tomorrow)) continue;
+      await (db.update(db.absences)..where((t) => t.id.equals(a.id))).write(
+        AbsencesCompanion(endDay: Value(tomorrow)),
+      );
+      await _cancel(
+        a.endDay.add(const Duration(days: 1)),
+        tomorrow,
+        absenceSkipReason(a.kind),
+      );
+      grew = true;
+    }
+    return grew;
+  }
+
+  /// Fit again: an open absence ends yesterday, and what it cancelled from
+  /// today on is planned again. Begun only today, it goes altogether.
+  Future<void> endOpen(Absence absence, {DateTime? now}) async {
+    final today = _day(now ?? DateTime.now());
+    if (!absence.startDay.isBefore(today)) {
+      await remove(absence, now: now);
+      return;
+    }
+    await (db.update(db.absences)..where((t) => t.id.equals(absence.id))).write(
+      AbsencesCompanion(
+        endDay: Value(today.subtract(const Duration(days: 1))),
+        openEnd: const Value(false),
+      ),
+    );
+    await _restore(absence, today, absence.endDay);
+  }
+
   /// Removes an absence. Sessions still ahead that it cancelled are planned
   /// again; past ones stay cancelled.
-  Future<void> remove(Absence absence) async {
+  Future<void> remove(Absence absence, {DateTime? now}) async {
     await (db.delete(db.absences)..where((t) => t.id.equals(absence.id))).go();
-    final today = _day(DateTime.now());
-    final from = absence.startDay.isBefore(today) ? today : absence.startDay;
-    if (from.isAfter(absence.endDay)) return;
+    final today = _day(now ?? DateTime.now());
+    await _restore(
+      absence,
+      absence.startDay.isBefore(today) ? today : absence.startDay,
+      absence.endDay,
+    );
+  }
+
+  /// Plans again what [absence] cancelled from [from] to [to], unless
+  /// another absence still covers the day.
+  Future<void> _restore(Absence absence, DateTime from, DateTime to) async {
+    if (from.isAfter(to)) return;
     final reason = absenceSkipReason(absence.kind);
     final reasons = {
       for (final a in await db.select(db.sessionActuals).get())
         a.sessionId: a.skipReason,
     };
-    // Days another absence still covers stay cancelled.
-    final others = await db.absencesBetween(from, absence.endDay);
-    for (final s in await _sessions(from, absence.endDay)) {
+    final others = [
+      for (final o in await db.absencesBetween(from, to))
+        if (o.id != absence.id) o,
+    ];
+    for (final s in await _sessions(from, to)) {
       if (s.status != 'skipped' || reasons[s.id] != reason) continue;
-      final covered = others.any(
-        (o) =>
-            !s.sessionDate.isBefore(o.startDay) &&
-            !_day(s.sessionDate).isAfter(o.endDay),
-      );
-      if (covered) continue;
+      if (absenceOn(others, s.sessionDate) != null) continue;
       try {
         await actions.restore(s);
       } on StateError {

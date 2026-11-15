@@ -5314,5 +5314,11 @@
   "windowPresetLunch": "Lunchpauze",
   "windowPresetEvening": "Avond",
   "windowPresetWeekend": "Weekend",
-  "missedWorkoutWindowsNote": "Met trainingstijden komt de herinnering een uur voor het einde van het laatste tijdvak; deze tijd geldt voor dagen zonder tijdvak."
+  "missedWorkoutWindowsNote": "Met trainingstijden komt de herinnering een uur voor het einde van het laatste tijdvak; deze tijd geldt voor dagen zonder tijdvak.",
+  "moveIntoAbsence": "Die dag valt in je afwezigheid ({kind}). Kies een andere dag.",
+  "absenceOpenEnd": "Einde nog onbekend",
+  "absenceOpenEndHint": "Fjelia houdt de dagen een voor een vrij tot je zegt dat je weer fit bent.",
+  "absenceSince": "Sinds {date}",
+  "absenceFitAgain": "Weer fit",
+  "absenceOpenCard": "Sinds {date} (dag {days}). Trainingen blijven dag voor dag geannuleerd; zodra je weer fit bent, is de eerste week rustig."
 }

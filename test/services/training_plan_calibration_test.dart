@@ -9,6 +9,10 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../support/fake_workout_garmin.dart';
 
+/// A Wednesday: the plan's first week is the same whatever day the tests
+/// run on.
+final fixedNow = DateTime(2026, 11, 11, 10);
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   late AppDatabase db;
@@ -17,7 +21,7 @@ void main() {
     db = AppDatabase(NativeDatabase.memory());
     await WorkoutTemplateLibrary(db).seedIfEmpty();
     // Six weeks of easy running: 3 × 60 min per week, all zone 2.
-    final today = DateTime.now();
+    final today = fixedNow;
     var n = 0;
     for (var d = 41; d >= 1; d -= 2) {
       if (n++ % 7 >= 3) continue;
@@ -49,8 +53,12 @@ void main() {
   tearDown(() => db.close());
 
   test('plan respects experience, age and recent training history', () async {
-    final service = TrainingPlanService(db, garminProviders(db, FakeWorkoutGarmin()));
-    final today = DateTime.now();
+    final service = TrainingPlanService(
+      db,
+      garminProviders(db, FakeWorkoutGarmin()),
+      clock: () => fixedNow,
+    );
+    final today = fixedNow;
     final planId = await service.generatePlan(
       athleteId: 'self',
       raceDate: today.add(const Duration(days: 16 * 7)),
@@ -127,10 +135,14 @@ void main() {
               runHrZonesJson: Value(jsonEncode([120, 145, 155, 163, 171])),
             ),
           );
-      final service = TrainingPlanService(db, garminProviders(db, FakeWorkoutGarmin()));
+      final service = TrainingPlanService(
+        db,
+        garminProviders(db, FakeWorkoutGarmin()),
+        clock: () => fixedNow,
+      );
       final planId = await service.generatePlan(
         athleteId: 'self',
-        raceDate: DateTime.now().add(const Duration(days: 10 * 7)),
+        raceDate: fixedNow.add(const Duration(days: 10 * 7)),
         sport: 'running',
         raceDistanceM: 10000,
         hoursPerWeek: 4,
@@ -183,7 +195,7 @@ void main() {
   test(
     'with enough history the data decides the level, not the answer',
     () async {
-      final today = DateTime.now();
+      final today = fixedNow;
       // Fit athlete: 80 strain a day for ~4 months → high CTL.
       for (var d = 1; d <= 120; d++) {
         await db
@@ -212,7 +224,11 @@ void main() {
               );
         }
       }
-      final service = TrainingPlanService(db, garminProviders(db, FakeWorkoutGarmin()));
+      final service = TrainingPlanService(
+        db,
+        garminProviders(db, FakeWorkoutGarmin()),
+        clock: () => fixedNow,
+      );
       final planId = await service.generatePlan(
         athleteId: 'self',
         raceDate: today.add(const Duration(days: 16 * 7)),
