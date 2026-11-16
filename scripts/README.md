@@ -44,6 +44,21 @@ whose path is printed at startup. Press `r` to hot reload, `R` to hot restart,
 `q` to stop, or `d` to detach. The script starts Flutter in debug mode; enable
 Developer Mode and trust the developer profile on the iPhone beforehand.
 
+For new App Store screenshots, taken on the iPhone with your data in every app
+language and filed under `ios/screenshots/<locale>/`:
+
+```bash
+fjelia/scripts/store-screenshots.sh --device <udid>          # all 13 languages
+fjelia/scripts/store-screenshots.sh --langs en,de            # a quick check
+fjelia/scripts/store-screenshots.sh --upload-only            # send them with fastlane deliver
+```
+
+Leave the iPhone unlocked and untouched while it runs (about 25 minutes for all
+languages). `--upload` replaces all screenshots of the version being prepared.
+Uploading screenshots for a locale creates that localization in App Store
+Connect, so its description, keywords, support URL and release notes must be
+uploaded too (from `ios/metadata/`), or the version cannot be submitted.
+
 Settings → System → Developer is hidden by default. `dev-ios.sh` enables it
 with `FJELIA_DEVELOPER_MENU=true`, including when using `--release`. The
 distribution scripts strip this switch from define files, so tester builds
