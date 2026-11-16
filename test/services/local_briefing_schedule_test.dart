@@ -123,7 +123,7 @@ void main() {
       final reply = await _client(_Reply(text))
           .sendBriefing(_settings, _context(), onSource: (s) => source = s);
       expect(reply, '$text. Für heute sind 2 Einheiten geplant.');
-      expect(source, isNot('Lokal · Fjelia-Regeln'));
+      expect(source, isNot(briefingRulesSource));
     },
   );
 
@@ -141,8 +141,35 @@ void main() {
           .sendBriefing(_settings, _context(), onSource: (s) => source = s);
       expect(reply, isNot(contains(text)), reason: locale);
       expect(reply, contains(tr.briefPlannedTodayCount(2)), reason: locale);
-      expect(source, 'Lokal · Fjelia-Regeln', reason: locale);
+      expect(source, briefingRulesSource, reason: locale);
     }
+  });
+
+  test('Apple gets one firmer try before the rule text stands in', () async {
+    setActiveLocale(const Locale('de'));
+    const good =
+        'Dein Schlaf war kurz. Für heute sind 2 Einheiten geplant. '
+        'Halte beide locker.';
+    final requests = <AppleCoachRequest>[];
+    final client = AiCoachClient(
+      appleSender: (request) async {
+        requests.add(request);
+        return requests.length == 1
+            ? 'Dein Schlaf war kurz. Heute ist ein Ruhetag.'
+            : good;
+      },
+      localModelFor: (_) => fail('Briefings never use the local chat model'),
+      client: MockClient((_) async => fail('No HTTP for an on-device brief')),
+    );
+    String? source;
+    final reply = await client.sendBriefing(
+      _settings,
+      _context(),
+      onSource: (s) => source = s,
+    );
+    expect(reply, good);
+    expect(source, 'Lokal · Apple Intelligence');
+    expect(requests, hasLength(2));
   });
 
   test('briefingDeniesTraining spots rest wording, not plain advice', () {
@@ -168,8 +195,9 @@ void main() {
         'da',
       ]) {
         setActiveLocale(Locale(locale));
-        final reply = await _client(_Reply('Rest today.'))
-            .sendBriefing(_settings, _context());
+        final reply = await _client(
+          _Reply('Rest today.'),
+        ).sendBriefing(_settings, _context());
         expect(reply, contains(tr.briefPlannedTodayCount(2)), reason: locale);
       }
     },

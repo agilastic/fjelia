@@ -106,6 +106,10 @@ class AiConsentToken {
   bool get isFresh => DateTime.now().difference(confirmedAt).inMinutes < 10;
 }
 
+/// The source of a briefing the app wrote from its own rules because the
+/// model's answer could not be shown.
+const briefingRulesSource = 'Lokal · Fjelia-Regeln';
+
 /// Chat and daily briefings against the configured provider. Health data is
 /// sent as a compact TOON context appended to the system prompt.
 class AiCoachClient {
@@ -665,6 +669,28 @@ class AiCoachClient {
     required String source,
     void Function(String source)? onSource,
   }) {
+    final accepted = _acceptBriefing(raw, toonContext, kind);
+    if (accepted != null) {
+      onSource?.call(source);
+      return accepted;
+    }
+    final brief = BriefingBrief.parse(toonContext)!;
+    final schedule = brief.plannedTodaySentence(tr);
+    final scheduleIncluded =
+        schedule == null ||
+        flattenBriefing(raw).toLowerCase().contains(schedule.toLowerCase());
+    log(
+      '[AiGeneration] fallback kind=$kind provider=fjelia '
+      'service=BriefingBrief.localText model=none '
+      'reason=${scheduleIncluded ? 'unusable_reply' : 'missing_plan_count'}',
+    );
+    onSource?.call(briefingRulesSource);
+    return brief.localText(tr);
+  }
+
+  /// The model's briefing as shown, or null when the app's own text has to
+  /// stand in for it.
+  String? _acceptBriefing(String raw, String toonContext, String kind) {
     final text = flattenBriefing(raw);
     final brief = BriefingBrief.parse(toonContext);
     final schedule = brief?.plannedTodaySentence(tr);
@@ -674,10 +700,7 @@ class AiCoachClient {
       text,
       languageCode: activeLocale.languageCode,
     );
-    if (scheduleIncluded && usable) {
-      onSource?.call(source);
-      return text;
-    }
+    if (scheduleIncluded && usable) return text;
     // Small models rephrase the plan sentence instead of repeating it. Keep
     // their text and add the plan, unless they say there is no training.
     if (usable &&
@@ -688,21 +711,11 @@ class AiCoachClient {
         '[AiGeneration] completed kind=$kind '
         'reason=plan_sentence_appended',
       );
-      onSource?.call(source);
       final end = RegExp(r'[.!?…]$').hasMatch(text) ? '' : '.';
       return '$text$end $schedule';
     }
-    if (brief == null) {
-      onSource?.call(source);
-      return text;
-    }
-    log(
-      '[AiGeneration] fallback kind=$kind provider=fjelia '
-      'service=BriefingBrief.localText model=none '
-      'reason=${scheduleIncluded ? 'unusable_reply' : 'missing_plan_count'}',
-    );
-    onSource?.call('Lokal · Fjelia-Regeln');
-    return brief.localText(tr);
+    if (brief == null) return text;
+    return null;
   }
 
   String _finishLocalChat(
@@ -886,12 +899,33 @@ class AiCoachClient {
     ];
     if (settings.onDeviceAvailable) {
       try {
-        final reply = await _sendAppleIntelligence(
+        var reply = await _sendAppleIntelligence(
           messages,
           toonContext,
           systemPrompt: systemPrompt,
           kind: kind,
         );
+        // Apple Intelligence runs here, so the briefing is its own: an answer
+        // that cannot be shown gets one firmer try before the app's own text
+        // stands in, rather than a rule text now and Apple's at the next sync.
+        if (reply != null &&
+            _acceptBriefing(reply, toonContext, kind) == null) {
+          log('[AiBriefing] Apple reply not usable, asking once more firmly');
+          try {
+            reply =
+                await _sendAppleIntelligence(
+                  messages,
+                  toonContext,
+                  systemPrompt: systemPrompt,
+                  kind: kind,
+                  firmly: true,
+                ) ??
+                reply;
+          } catch (e) {
+            // The first answer is still there for the app's own text.
+            log('[AiBriefing] firmer Apple try failed: $e');
+          }
+        }
         if (reply != null) {
           return _finishBriefing(
             reply,
@@ -1314,6 +1348,7 @@ class AiCoachClient {
     String toonContext, {
     String? systemPrompt,
     String kind = 'chat',
+    bool firmly = false,
   }) async {
     final fm = FoundationModelsFramework.instance;
     if (_appleSender == null) {
@@ -1330,11 +1365,11 @@ class AiCoachClient {
     final isBriefing = systemPrompt != null;
     var budget = isBriefing ? 4600 : 3000;
     final retryBudget = isBriefing ? 3600 : 2200;
-    var strict = false;
+    var strict = firmly;
     var bare = false;
     var echoed = false;
     var languageRetried = false;
-    var forceLanguage = false;
+    var forceLanguage = firmly;
     for (var attempt = 0; attempt < 5; attempt++) {
       final request = AppleCoachRequest.build(
         messages,

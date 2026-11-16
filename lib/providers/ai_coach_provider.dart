@@ -350,7 +350,13 @@ class AiBriefingNotifier extends StateNotifier<AsyncValue<String?>> {
         state = AsyncData(previousText);
         return;
       }
-      state = const AsyncLoading();
+      // The briefing so far stays on the card until the new one is written,
+      // so a sync never shows a placeholder in between.
+      state = previousText == null
+          ? const AsyncLoading()
+          : const AsyncLoading<String?>().copyWithPrevious(
+              AsyncData(previousText),
+            );
       final client = _ref.read(aiCoachClientProvider);
       String? generatedSource;
       void recordSource(String source) => generatedSource = source;
