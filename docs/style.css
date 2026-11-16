@@ -3569,8 +3569,9 @@ body.previews-paused .capture-halo {
 .hero-ai-links a { border-color: transparent; background: none; padding-inline: 4px; color: var(--muted) }
 .hero-ai-links a:hover { border-color: transparent; color: #d6e3e4 }
 .hero-download .hero-note { text-align: center }
-.hero-copy .hero-sub strong { color: #e8f6f2; font-weight: 650 }
-.hero-copy .hero-sub strong:first-child { color: var(--accent) }
+/* One accent for who it is for, the promise on its own line. */
+.hero-copy .hero-sub strong { color: var(--accent); font-weight: 650 }
+.hero-copy .hero-sub .hero-promise { display: block; margin-top: 8px; color: #e8f6f2; font-weight: 700 }
 /* What stays free next to what Pro adds. */
 .pro-free { margin-bottom: 16px; padding: 15px; border: 1px solid var(--border); border-radius: 16px; background: #050b1977 }
 .pro-free h3, .pro-paid-title { margin: 0 0 8px; color: var(--muted); font-size: 12px; letter-spacing: .08em; text-transform: uppercase }
