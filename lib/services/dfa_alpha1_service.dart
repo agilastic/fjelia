@@ -26,16 +26,30 @@ class DfaAlpha1Service {
   Future<DfaAlpha1Analysis?> load(String activityId) async {
     final row = await _row(activityId);
     if (row == null || row.rrCount == 0) return null;
+    return _analysis(row);
+  }
+
+  /// The thresholds are read from the stored windows again, so a session
+  /// analysed before the progression check doesn't keep its old values.
+  static DfaAlpha1Analysis _analysis(DfaAlpha1Result row) {
     final raw = jsonDecode(row.windowsJson);
+    final windows = [
+      if (raw is List)
+        for (final w in raw) ?DfaWindow.fromJson(w),
+    ];
+    if (windows.isNotEmpty) {
+      return DfaAlpha1Analysis.of(
+        windows,
+        rrCount: row.rrCount,
+        artifacts: row.artifacts,
+      );
+    }
     DfaThreshold? threshold(double? bpm, double? watts, double? speed) =>
         bpm == null
         ? null
         : DfaThreshold(heartRate: bpm, watts: watts, speed: speed);
     return DfaAlpha1Analysis(
-      windows: [
-        if (raw is List)
-          for (final w in raw) ?DfaWindow.fromJson(w),
-      ],
+      windows: windows,
       rrCount: row.rrCount,
       artifacts: row.artifacts,
       hrvt1: threshold(row.hrvt1Bpm, row.hrvt1Watts, row.hrvt1Speed),
@@ -68,12 +82,49 @@ class DfaAlpha1Service {
     return [
       for (final row in await query.get())
         if (_isCycling(row.readTable(_db.activityRecords).type) == cycling)
-          (
-            date: row.readTable(_db.activityRecords).startDate,
-            hrvt1: row.readTable(_db.dfaAlpha1Results).hrvt1Bpm,
-            hrvt2: row.readTable(_db.dfaAlpha1Results).hrvt2Bpm,
-          ),
+          if (_analysis(row.readTable(_db.dfaAlpha1Results)) case final a
+              when a.hrvt1 != null || a.hrvt2 != null)
+            (
+              date: row.readTable(_db.activityRecords).startDate,
+              hrvt1: a.hrvt1?.heartRate,
+              hrvt2: a.hrvt2?.heartRate,
+            ),
     ];
+  }
+
+  /// For the ramp test in the plan: whether a chest strap recorded
+  /// beat-to-beat data in [cycling] sessions within [within], and when the
+  /// newest of them built from easy to hard.
+  Future<({bool strap, DateTime? lastProgression})> rampState({
+    required bool cycling,
+    DateTime? now,
+    Duration within = const Duration(days: 60),
+  }) async {
+    final since = (now ?? DateTime.now()).subtract(within);
+    final query =
+        _db.select(_db.dfaAlpha1Results).join([
+            innerJoin(
+              _db.activityRecords,
+              _db.activityRecords.activityId.equalsExp(
+                _db.dfaAlpha1Results.activityId,
+              ),
+            ),
+          ])
+          ..where(
+            _db.activityRecords.startDate.isBiggerOrEqualValue(since) &
+                _db.dfaAlpha1Results.rrCount.isBiggerThanValue(0),
+          )
+          ..orderBy([OrderingTerm.desc(_db.activityRecords.startDate)]);
+    var strap = false;
+    for (final row in await query.get()) {
+      final activity = row.readTable(_db.activityRecords);
+      if (_isCycling(activity.type) != cycling) continue;
+      strap = true;
+      if (_analysis(row.readTable(_db.dfaAlpha1Results)).progression) {
+        return (strap: true, lastProgression: activity.startDate);
+      }
+    }
+    return (strap: strap, lastProgression: null);
   }
 
   static bool _isCycling(String type) {

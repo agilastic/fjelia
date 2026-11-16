@@ -5,6 +5,7 @@ import 'package:drift/drift.dart';
 
 import '../db/database.dart';
 import '../providers/training_load_provider.dart' show effectiveLoad;
+import 'dfa_alpha1_service.dart';
 import 'hrv/hrv_ai_context_builder.dart';
 import 'hrv/hrv_comparison_service.dart';
 import 'hrv/hrv_training_service.dart';
@@ -115,14 +116,17 @@ class ActivityCoachContextBuilder {
 
   /// DFA alpha1 thresholds from the beat-to-beat data, when there were any.
   Future<String?> _dfaLine(ActivityRecord a) async {
-    final r = await (_db.select(
-      _db.dfaAlpha1Results,
-    )..where((t) => t.activityId.equals(a.activityId))).getSingleOrNull();
-    if (r == null || r.rrCount == 0) return null;
-    return '[DFAalpha1:Beats:${r.rrCount},Artifacts:${_dec(r.artifacts)}%,'
-        'HRVT1:${_int(r.hrvt1Bpm)}bpm,HRVT2:${_int(r.hrvt2Bpm)}bpm'
-        '${r.hrvt1Watts == null ? '' : ',HRVT1W:${_int(r.hrvt1Watts)}'}'
-        '${r.hrvt2Watts == null ? '' : ',HRVT2W:${_int(r.hrvt2Watts)}'}]';
+    final r = await DfaAlpha1Service(_db).load(a.activityId);
+    if (r == null) return null;
+    // Thresholds only from a session that built from easy to hard.
+    final thresholds = r.windows.isNotEmpty && !r.progression
+        ? 'NoThresholds:NotAProgression'
+        : 'HRVT1:${_int(r.hrvt1?.heartRate)}bpm,'
+              'HRVT2:${_int(r.hrvt2?.heartRate)}bpm'
+              '${r.hrvt1?.watts == null ? '' : ',HRVT1W:${_int(r.hrvt1!.watts)}'}'
+              '${r.hrvt2?.watts == null ? '' : ',HRVT2W:${_int(r.hrvt2!.watts)}'}';
+    return '[DFAalpha1:Beats:${r.rrCount},'
+        'Artifacts:${_dec(r.artifacts * 100)}%,$thresholds]';
   }
 
   /// The overnight HRV before and after the activity, when it was recorded.

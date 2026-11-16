@@ -3550,6 +3550,7 @@
     }
   },
   "dfaNoThreshold": "Trening nie przekroczył wyraźnie progu. Szacunek da test narastający lub trening przechodzący od lekkiego do ciężkiego.",
+  "dfaNoProgression": "Brak oszacowania progu: to nie był bieg z narastającą intensywnością. Progi wyznaczane są tylko z jednostek od łatwego do ciężkiego, np. 10 min rozgrzewki, potem co 3 min trochę szybciej.",
   "dfaBeats": "{beats} uderzeń · {artifacts} % artefaktów",
   "@dfaBeats": {
     "placeholders": {
@@ -3587,6 +3588,9 @@
   "lt2Cycling": "LT2 · Kolarstwo",
   "thresholdSourceTt": "30-minutowa próba czasowa",
   "thresholdSourceDrift": "Test dryfu tętna",
+  "thresholdSourceDfaRamp": "Test stopniowany DFA α1",
+  "rampTestsSetting": "Test stopniowany w planie",
+  "rampTestsSettingHint": "Mniej więcej co 4 tygodnie, pod koniec tygodnia regeneracji: progi z DFA α1. Tylko z pasem piersiowym.",
   "thresholdSourceDfa": "{count, plural, one{DFA α1, {count} trening} few{DFA α1, {count} treningi} many{DFA α1, {count} treningów} other{DFA α1, {count} treningu}}",
   "@thresholdSourceDfa": {
     "placeholders": {

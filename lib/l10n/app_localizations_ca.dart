@@ -6307,6 +6307,10 @@ class AppLocalizationsCa extends AppLocalizations {
       'La sessió no ha creuat clarament cap llindar. Una prova en rampa, o una sessió que progressa de suau a dur, en dona una estimació.';
 
   @override
+  String get dfaNoProgression =>
+      'Sense estimació de llindar: no és una progressió. Els llindars només surten de sessions que van de suau a dur, p. ex. 10 min d\'escalfament i després una mica més ràpid cada 3 min.';
+
+  @override
   String dfaBeats(int beats, String artifacts) {
     return '$beats batecs · $artifacts % d’artefactes';
   }
@@ -6344,6 +6348,16 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get thresholdSourceDrift => 'Prova de deriva de FC';
+
+  @override
+  String get thresholdSourceDfaRamp => 'Prova esglaonada DFA α1';
+
+  @override
+  String get rampTestsSetting => 'Prova esglaonada al pla';
+
+  @override
+  String get rampTestsSettingHint =>
+      'Cada 4 setmanes aprox., al final d\'una setmana de recuperació: llindars a partir de DFA α1. Només amb banda pectoral.';
 
   @override
   String thresholdSourceDfa(int count) {

@@ -94,7 +94,7 @@ void main() {
             DfaAlpha1ResultsCompanion.insert(
               activityId: 't',
               rrCount: 3600,
-              artifacts: 1.2,
+              artifacts: 0.012,
               windowsJson: '[]',
               hrvt1Bpm: const Value(141),
               hrvt2Bpm: const Value(163),

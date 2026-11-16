@@ -6290,6 +6290,10 @@ class AppLocalizationsNl extends AppLocalizations {
       'De training ging niet duidelijk over een drempel. Een ramp of een training die van rustig naar zwaar opbouwt, levert een schatting.';
 
   @override
+  String get dfaNoProgression =>
+      'Geen drempelschatting: geen opbouwende training. Drempels komen alleen uit trainingen die opbouwen van rustig naar zwaar, bijv. 10 min inlopen en dan elke 3 min iets sneller.';
+
+  @override
   String dfaBeats(int beats, String artifacts) {
     return '$beats slagen · $artifacts % artefacten';
   }
@@ -6327,6 +6331,16 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get thresholdSourceDrift => 'Hartslagdrifttest';
+
+  @override
+  String get thresholdSourceDfaRamp => 'DFA α1-stappentest';
+
+  @override
+  String get rampTestsSetting => 'Stappentest in het schema';
+
+  @override
+  String get rampTestsSettingHint =>
+      'Ongeveer elke 4 weken, aan het eind van een herstelweek: drempels uit DFA α1. Alleen met borstband.';
 
   @override
   String thresholdSourceDfa(int count) {

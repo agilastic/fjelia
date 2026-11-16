@@ -6305,6 +6305,10 @@ class AppLocalizationsEs extends AppLocalizations {
       'La sesión no cruzó claramente ningún umbral. Una prueba en rampa, o una sesión que progresa de suave a duro, da una estimación.';
 
   @override
+  String get dfaNoProgression =>
+      'Sin estimación de umbral: no es una progresión. Los umbrales solo salen de sesiones que van de suave a duro, p. ej. 10 min de calentamiento y luego algo más rápido cada 3 min.';
+
+  @override
   String dfaBeats(int beats, String artifacts) {
     return '$beats latidos · $artifacts % de artefactos';
   }
@@ -6342,6 +6346,16 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get thresholdSourceDrift => 'Prueba de deriva de FC';
+
+  @override
+  String get thresholdSourceDfaRamp => 'Prueba escalonada DFA α1';
+
+  @override
+  String get rampTestsSetting => 'Prueba escalonada en el plan';
+
+  @override
+  String get rampTestsSettingHint =>
+      'Cada 4 semanas aprox., al final de una semana de recuperación: umbrales a partir de DFA α1. Solo con banda pectoral.';
 
   @override
   String thresholdSourceDfa(int count) {

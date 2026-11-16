@@ -1,13 +1,16 @@
 /// One threshold value from one source, and which of them Fjelia proposes.
 ///
 /// Sources rank by how the value was obtained: the app's own tests first
-/// (30-minute time trial, HR drift test), then what a watch platform detected
-/// (Garmin, COROS), then DFA alpha1 over several sessions and the eFTP from
+/// (30-minute time trial, HR drift test, a planned DFA alpha1 ramp test),
+/// then what a watch platform detected (Garmin, COROS), then DFA alpha1 over
+/// several sessions and the eFTP from
 /// rides, then the values in the Polar profile (often age-based defaults),
 /// and formulas last. Within a rank the newest wins. A candidate never
 /// changes the value in use by itself: it is proposed and the athlete
 /// applies or keeps.
 library;
+
+import 'dart:math' as math;
 
 enum ThresholdKind {
   /// Aerobic threshold heart rate, running (top of zone 2).
@@ -27,6 +30,7 @@ enum ThresholdKind {
 const thresholdSourceRank = {
   'tt': 1,
   'drift': 1,
+  'dfa_ramp': 1,
   'garmin_api': 2,
   'coros': 2,
   'dfa': 3,
@@ -119,6 +123,30 @@ bool _wasKept(ThresholdCandidate c, Set<String> kept) {
 }
 
 /// Median of [values]; null when fewer than [minimum].
+/// A single DFA session further than this from the value in use is taken
+/// for a misreading (a steady run, a strap issue), not for a new threshold.
+const dfaMaxDeviation = 15;
+
+/// The sessions of [sessions] whose value ([read]) fits [inUse]. Sessions
+/// further off count only when at least three of them agree within 8 bpm
+/// and outnumber the rest: then the value in use is the one that's off.
+List<T> plausibleDfa<T>(
+  List<T> sessions, {
+  required double Function(T) read,
+  required int? inUse,
+}) {
+  if (inUse == null) return sessions;
+  final near = <T>[], far = <T>[];
+  for (final s in sessions) {
+    ((read(s) - inUse).abs() <= dfaMaxDeviation ? near : far).add(s);
+  }
+  if (far.length >= 3 && far.length > near.length) {
+    final values = far.map(read);
+    if (values.reduce(math.max) - values.reduce(math.min) <= 8) return far;
+  }
+  return near;
+}
+
 int? medianOf(List<double> values, {int minimum = 1}) {
   if (values.length < minimum) return null;
   final sorted = [...values]..sort();

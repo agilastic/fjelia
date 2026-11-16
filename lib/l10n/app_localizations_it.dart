@@ -6299,6 +6299,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'La sessione non ha superato chiaramente una soglia. Un test incrementale, o una sessione che sale da facile a dura, fornisce una stima.';
 
   @override
+  String get dfaNoProgression =>
+      'Nessuna stima della soglia: non è una progressione. Le soglie si ricavano solo da sedute che vanno da facile a duro, ad es. 10 min di riscaldamento e poi un po\' più veloce ogni 3 min.';
+
+  @override
   String dfaBeats(int beats, String artifacts) {
     return '$beats battiti · $artifacts % di artefatti';
   }
@@ -6336,6 +6340,16 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get thresholdSourceDrift => 'Test di deriva della FC';
+
+  @override
+  String get thresholdSourceDfaRamp => 'Test a gradini DFA α1';
+
+  @override
+  String get rampTestsSetting => 'Test a gradini nel piano';
+
+  @override
+  String get rampTestsSettingHint =>
+      'Circa ogni 4 settimane, a fine settimana di scarico: soglie da DFA α1. Solo con fascia cardio.';
 
   @override
   String thresholdSourceDfa(int count) {

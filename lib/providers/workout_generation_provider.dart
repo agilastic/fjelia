@@ -77,6 +77,7 @@ class WorkoutGenerationNotifier extends StateNotifier<AsyncValue<int?>> {
             hoursPerWeek: profile.hoursPerWeek,
             restDays: profile.planRestDays,
             dayCapMinutes: profile.trainingWindows.dayCapMinutes(),
+            rampTests: profile.rampTests,
             strengthDays: profile.preferredStrengthDays,
             maxSessionsPerDay: profile.maxSessionsPerDay,
             gadSports: profile.preferredSports,

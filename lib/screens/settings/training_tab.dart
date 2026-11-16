@@ -216,6 +216,27 @@ class TrainingTab extends ConsumerWidget {
               trailing: const Icon(Icons.chevron_right),
               onTap: () => showAppSheet(context, const TrainingWindowsSheet()),
             ),
+            // The DFA alpha1 ramp test every few weeks; the plan follows at
+            // once.
+            SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              secondary: const Icon(
+                Icons.monitor_heart_outlined,
+                color: Colors.orange,
+              ),
+              title: Text(context.l10n.rampTestsSetting),
+              subtitle: Text(
+                context.l10n.rampTestsSettingHint,
+                style: TextStyle(fontSize: 11, color: fjInk70),
+              ),
+              value: p.rampTests,
+              onChanged: (v) => runUiAction(context, () async {
+                await ref
+                    .read(userProfileProvider.notifier)
+                    .save(p.copyWith(rampTests: v));
+                await ref.read(applyScheduleProvider)();
+              }),
+            ),
             if (ref.watch(planScheduleOutdatedProvider).valueOrNull ?? false)
               Padding(
                 padding: const EdgeInsets.only(top: 8),

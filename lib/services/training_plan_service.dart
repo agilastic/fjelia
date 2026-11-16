@@ -22,7 +22,9 @@ import 'workout_semantics.dart';
 import '../providers/training_load_provider.dart';
 import '../utils/log.dart';
 import '../utils/week.dart';
+import 'dfa_alpha1_service.dart';
 import 'race_goal_service.dart';
+import 'ramp_test.dart';
 import 'season/goal_set.dart';
 import 'season/season_goal.dart';
 import 'season/season_report.dart';
@@ -1232,6 +1234,8 @@ class TrainingPlanService {
     }
 
     final out = Map<String, dynamic>.from(step);
+    // A ramp test stage keeps its own heart rates: they are not a zone.
+    if (out['fixedTarget'] == true) return out;
     final hasFraction =
         out.containsKey('ftpFraction') || out.containsKey('ftpLow');
     final fraction = _stepFraction(out, ftp);
@@ -1420,6 +1424,7 @@ class TrainingPlanService {
     int daysPerWeek = 5,
     List<int> restDays = const [7],
     Map<int, int> dayCapMinutes = const {},
+    bool rampTests = true,
     List<int> strengthDays = const [3],
     double hoursPerWeek = 8.0,
     int maxSessionsPerDay = 1,
@@ -1441,6 +1446,7 @@ class TrainingPlanService {
       daysPerWeek: daysPerWeek,
       restDays: restDays,
       dayCapMinutes: dayCapMinutes,
+      rampTests: rampTests,
       strengthDays: strengthDays,
       hoursPerWeek: hoursPerWeek,
       maxSessionsPerDay: maxSessionsPerDay,
@@ -1464,6 +1470,7 @@ class TrainingPlanService {
     int daysPerWeek = 5,
     List<int> restDays = const [7],
     Map<int, int> dayCapMinutes = const {},
+    bool rampTests = true,
     List<int> strengthDays = const [3],
     double hoursPerWeek = 8.0,
     int maxSessionsPerDay = 1,
@@ -1765,6 +1772,51 @@ class TrainingPlanService {
       final window = dayCapMinutes[date.weekday];
       if (!easeInDays.contains(date)) return window;
       return math.min(window ?? 45, 45);
+    }
+
+    // The DFA alpha1 ramp test: in running or cycling (a triathlon takes
+    // both, in turn), once a chest strap has recorded beat-to-beat data in
+    // that sport, about every four weeks. A progression the athlete ran on
+    // their own counts as a test.
+    String? rampFamilyOf(String sport) =>
+        sport == 'running' || sport == 'trail_running'
+        ? 'running'
+        : sport.startsWith('cycling')
+        ? 'cycling'
+        : null;
+    final lastRamp = <String, DateTime?>{};
+    if (rampTests) {
+      for (final family
+          in mainSport == 'triathlon'
+              ? const ['running', 'cycling']
+              : [?rampFamilyOf(mainSport)]) {
+        final state = await DfaAlpha1Service(
+          _db,
+        ).rampState(cycling: family == 'cycling', now: _now());
+        if (!state.strap) continue;
+        var last = state.lastProgression == null
+            ? null
+            : _day(state.lastProgression!);
+        for (final k in kept) {
+          if (k.subType != rampTestSubType ||
+              rampFamilyOf(k.sport) != family ||
+              k.status == 'skipped' ||
+              k.status == 'missed') {
+            continue;
+          }
+          final d = _day(k.sessionDate);
+          if (last == null || d.isAfter(last)) last = d;
+        }
+        lastRamp[family] = last;
+      }
+    }
+    // One test at a time, whatever the sport.
+    DateTime? nextRamp;
+    if (lastRamp.isNotEmpty) {
+      final dates = lastRamp.values.nonNulls.toList()..sort();
+      nextRamp = dates.isEmpty
+          ? today
+          : _addDays(dates.last, rampTestEvery.inDays);
     }
 
     // Training already done today that no session accounts for: it is real
@@ -2324,13 +2376,84 @@ class TrainingPlanService {
         }
       }
 
+      // The ramp test takes the week's first hard session in its sport, or in
+      // a recovery week an easy one late in the week: at the end of a
+      // recovery week or the start of a block, rested. Never in a taper, a
+      // race week or a first week back from illness or injury.
+      _SessionSlot? rampSlot, rampOriginal;
+      final due = nextRamp;
+      if (due != null &&
+          !_addDays(weekStart, 6).isBefore(due) &&
+          !easingIn &&
+          (phase == 'recovery' || weeksIntoBlock == 0) &&
+          phase != 'taper' &&
+          List.generate(7, (i) => _addDays(weekStart, i)).every(
+            (d) => multi
+                ? goalSet.loadOn(d) == DayLoad.free
+                : d.isBefore(_addDays(raceDay, -6)),
+          )) {
+        // The sport tested longest ago first.
+        final families = lastRamp.keys.toList()
+          ..sort((a, b) {
+            final x = lastRamp[a], y = lastRamp[b];
+            if (x == null) return y == null ? 0 : -1;
+            return y == null ? 1 : x.compareTo(y);
+          });
+        var i = -1;
+        for (final family in families) {
+          i = slots.indexWhere(
+            (s) => s.sessionType == 'key' && rampFamilyOf(s.sport) == family,
+          );
+          if (i >= 0) break;
+          for (var j = 0; j < slots.length; j++) {
+            final s = slots[j];
+            if (s.sessionType == 'recovery' &&
+                rampFamilyOf(s.sport) == family &&
+                (i < 0 || s.weekday > slots[i].weekday)) {
+              i = j;
+            }
+          }
+          if (i >= 0) break;
+        }
+        if (i >= 0) {
+          final old = slots[i];
+          rampOriginal = old;
+          rampSlot = _SessionSlot(
+            old.sport == 'trail_running' ? 'running' : old.sport,
+            'key',
+            rampTestSubType,
+            4,
+            old.sessionType == 'key' ? old.weekday : 5,
+            goalId: old.goalId,
+            goalRole: old.goalRole,
+            objective: 'Ramp test',
+            targetMin: 50,
+            rank: old.rank,
+            phase: old.phase,
+          );
+          slots[i] = rampSlot;
+          // The test is the week's hard session: the others are easy, so
+          // it is run rested and not next to another hard day.
+          for (var j = 0; j < slots.length; j++) {
+            final s = slots[j];
+            if (j != i && s.sessionType == 'key' && s.sport != 'strength') {
+              slots[j] = s.copyWith(
+                sessionType: 'recovery',
+                clearSubType: true,
+                zone: 2,
+              );
+            }
+          }
+        }
+      }
+
       // Strength first: its days are fixed by the athlete, the rest of the
       // week arranges itself around them.
       slots = [
         ...slots.where((s) => s.sport == 'strength'),
         ...slots.where((s) => s.sport != 'strength'),
       ];
-      for (final slot in slots) {
+      for (var slot in slots) {
         final off = bestOffset(slot);
         if (off == null) {
           log(
@@ -2341,6 +2464,21 @@ class TrainingPlanService {
         }
         final date = _addDays(weekStart, off);
         if (date.isBefore(today)) continue;
+        // The ramp test needs its whole length, known thresholds and its
+        // due date; otherwise the session it replaced is planned after all.
+        final sportFit = await fitnessFor(slot.sport);
+        final rampLt2 =
+            sportFit.lt2Bpm ??
+            sportFit.hrRangeForZone(5).low ??
+            sportFit.hrRangeForZone(4).high;
+        // A few days early is fine; a week early is not.
+        if (identical(slot, rampSlot) &&
+            (rampLt2 == null ||
+                (capOn(date) ?? 999) < 50 ||
+                date.isBefore(_addDays(due!, -3)))) {
+          slot = rampOriginal!;
+        }
+        final ramp = identical(slot, rampSlot);
         // A long session that could not take its usual day is said, not
         // hidden: the athlete's rest days and the other sessions decided it.
         if (multi &&
@@ -2454,6 +2592,37 @@ class TrainingPlanService {
             compileSteps(t.stepsJson, wantedMin);
 
         if (template != null) compile(template, duration);
+        if (ramp) {
+          final lt2 = rampLt2!;
+          final lt1 = fit.lt1Bpm ?? fit.hrRangeForZone(2).high ?? (lt2 - 30);
+          int zoneOf(int hr) {
+            for (var z = 5; z >= 1; z--) {
+              final low = fit.hrRangeForZone(z).low;
+              if (low != null && hr >= low) return z;
+            }
+            return hr >= lt2 ? 5 : (hr >= lt1 ? 3 : 2);
+          }
+
+          final usesPower = _usesPower(slot.sport, false) && ftp != null;
+          template = null;
+          stepsJson = _resolveStepsJson(
+            jsonEncode(
+              rampTestSteps(
+                lt1: lt1,
+                lt2: lt2,
+                zoneOf: zoneOf,
+                power: usesPower,
+              ),
+            ),
+            ftp,
+            fit,
+            power: usesPower,
+          );
+          scaled = false;
+          semantics = WorkoutSemantics.of(stepsJson, sport: slot.sport);
+          nextRamp = _addDays(date, rampTestEvery.inDays);
+          lastRamp[rampFamilyOf(slot.sport)!] = date;
+        }
         // No template is as long as a long session the allocator asked for:
         // a steady one is built, so the plan never shows a length the steps
         // do not run.
@@ -2533,7 +2702,7 @@ class TrainingPlanService {
         // The hours the athlete gave are a limit, not a hope: a workout whose
         // steps run longer than the week has left is made shorter, or left
         // out, and the report says which.
-        if (multi && slot.targetMin != null && weekBudget > 0) {
+        if (multi && !ramp && slot.targetMin != null && weekBudget > 0) {
           final actual = semantics.isEmpty
               ? duration
               : semantics.totalMinutes.clamp(
@@ -2598,6 +2767,7 @@ class TrainingPlanService {
           trimp = semantics.legacyLoad;
           if (scaled) title = retimeTitle(title, duration);
         }
+        if (ramp) title = rampTestTitle;
         if (synthetic) {
           title = _steadyTitle(
             slot.sport,
@@ -2692,8 +2862,10 @@ class TrainingPlanService {
                 phase: slotPhase,
                 primaryZone: zone,
                 title: title,
-                sessionNotes: Value(template?.description),
-                mainSet: Value(template?.coachingCues),
+                sessionNotes: Value(
+                  ramp ? rampTestDescription : template?.description,
+                ),
+                mainSet: Value(ramp ? rampTestCues : template?.coachingCues),
                 warmUp: Value(warm.text),
                 warmUpDurationMin: Value(warm.minutes),
                 stepsJson: Value(stepsJson),
@@ -2803,6 +2975,7 @@ class TrainingPlanService {
     int daysPerWeek = 5,
     List<int> restDays = const [7],
     Map<int, int> dayCapMinutes = const {},
+    bool rampTests = true,
     List<int> strengthDays = const [3],
     double hoursPerWeek = 8.0,
     int maxSessionsPerDay = 1,
@@ -2816,6 +2989,7 @@ class TrainingPlanService {
       daysPerWeek: daysPerWeek,
       restDays: restDays,
       dayCapMinutes: dayCapMinutes,
+      rampTests: rampTests,
       strengthDays: strengthDays,
       hoursPerWeek: hoursPerWeek,
       maxSessionsPerDay: maxSessionsPerDay,
@@ -2831,6 +3005,7 @@ class TrainingPlanService {
     int daysPerWeek = 5,
     List<int> restDays = const [7],
     Map<int, int> dayCapMinutes = const {},
+    bool rampTests = true,
     List<int> strengthDays = const [3],
     double hoursPerWeek = 8.0,
     int maxSessionsPerDay = 1,
@@ -2875,6 +3050,7 @@ class TrainingPlanService {
       daysPerWeek: daysPerWeek,
       restDays: restDays,
       dayCapMinutes: dayCapMinutes,
+      rampTests: rampTests,
       strengthDays: strengthDays,
       hoursPerWeek: hoursPerWeek,
       maxSessionsPerDay: maxSessionsPerDay,
@@ -3113,7 +3289,9 @@ class TrainingPlanService {
           .toList()
           .asMap()
           .entries
-          .map((e) => {...e.value, 'stepOrder': e.key + 1})
+          .map(
+            (e) => {...e.value, 'stepOrder': e.key + 1}..remove('fixedTarget'),
+          )
           .toList(),
     );
 

@@ -6298,6 +6298,10 @@ class AppLocalizationsDe extends AppLocalizations {
       'Die Einheit hat keine Schwelle deutlich überschritten. Ein Stufentest oder eine Einheit, die von locker bis hart steigert, liefert eine Schätzung.';
 
   @override
+  String get dfaNoProgression =>
+      'Keine Schwellenschätzung: kein Steigerungslauf. Schwellen liest Fjelia nur aus Einheiten, die von locker bis hart steigern, z. B. 10 min einlaufen, dann alle 3 min etwas schneller.';
+
+  @override
   String dfaBeats(int beats, String artifacts) {
     return '$beats Schläge · $artifacts % Artefakte';
   }
@@ -6335,6 +6339,16 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get thresholdSourceDrift => 'HF-Drift-Test';
+
+  @override
+  String get thresholdSourceDfaRamp => 'DFA-α1-Stufentest';
+
+  @override
+  String get rampTestsSetting => 'Stufentest im Plan';
+
+  @override
+  String get rampTestsSettingHint =>
+      'Etwa alle 4 Wochen am Ende einer Erholungswoche: Schwellen aus DFA α1. Nur mit Brustgurt.';
 
   @override
   String thresholdSourceDfa(int count) {

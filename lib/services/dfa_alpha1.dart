@@ -76,15 +76,38 @@ class DfaAlpha1Analysis {
     required this.windows,
     required this.rrCount,
     required this.artifacts,
+    this.progression = false,
     this.hrvt1,
     this.hrvt2,
   });
+
+  /// Thresholds read from [windows]: only a session that builds from easy
+  /// to hard says anything about them.
+  factory DfaAlpha1Analysis.of(
+    List<DfaWindow> windows, {
+    required int rrCount,
+    required double artifacts,
+  }) {
+    final ramp = rampWindows(windows);
+    return DfaAlpha1Analysis(
+      windows: windows,
+      rrCount: rrCount,
+      artifacts: artifacts,
+      progression: ramp != null,
+      hrvt1: ramp == null ? null : dfaThreshold(ramp, hrvt1Alpha),
+      hrvt2: ramp == null ? null : dfaThreshold(ramp, hrvt2Alpha),
+    );
+  }
 
   final List<DfaWindow> windows;
   final int rrCount;
 
   /// Share of all beats removed as artifacts.
   final double artifacts;
+
+  /// Whether the session built up from easy to hard, the only kind the
+  /// thresholds are read from.
+  final bool progression;
 
   /// Null unless the session covered the threshold clearly enough.
   final DfaThreshold? hrvt1, hrvt2;
@@ -167,13 +190,78 @@ DfaAlpha1Analysis analyseDfaAlpha1(
     }
   }
   final removed = artifact.where((a) => a).length;
-  return DfaAlpha1Analysis(
-    windows: windows,
+  return DfaAlpha1Analysis.of(
+    windows,
     rrCount: n,
     artifacts: n == 0 ? 0 : removed / n,
-    hrvt1: dfaThreshold(windows, hrvt1Alpha),
-    hrvt2: dfaThreshold(windows, hrvt2Alpha),
   );
+}
+
+/// alpha1 settles only after the first minutes; the warm-up is left out.
+const dfaWarmUp = Duration(minutes: 10);
+
+/// A window whose heart rate moves more than this from its first to its
+/// second minute mixes two intensities (a surge, a recovery).
+const dfaMaxHrShift = 10.0;
+
+/// The heart rate span a progression must cover after the warm-up.
+const dfaMinRampRange = 20.0;
+
+/// The windows of a session that built from easy to hard, from the end of
+/// the warm-up to the hardest point, without windows whose heart rate was
+/// still moving; null when the session was no such progression. A steady
+/// run (easy or not), intervals and a fartlek say nothing about the
+/// thresholds: the heart rate lags behind every change and alpha1 stays
+/// low after a hard piece.
+List<DfaWindow>? rampWindows(List<DfaWindow> windows) {
+  if (windows.length < 6) return null;
+  final from = windows.first.t - dfaWindow.inMilliseconds ~/ 2;
+  final warm = [
+    for (final w in windows)
+      if (w.t - dfaWindow.inMilliseconds ~/ 2 >=
+          from + dfaWarmUp.inMilliseconds)
+        w,
+  ];
+  if (warm.length < 6) return null;
+  // Up to the hardest point, by the heart rate over about two minutes:
+  // what comes after it is the cool-down.
+  var peak = 0;
+  var best = double.negativeInfinity;
+  for (var i = 0; i < warm.length; i++) {
+    final near = [
+      for (
+        var j = math.max(0, i - 2);
+        j <= math.min(warm.length - 1, i + 2);
+        j++
+      )
+        warm[j].heartRate,
+    ];
+    final mean = near.reduce((a, b) => a + b) / near.length;
+    if (mean > best) {
+      best = mean;
+      peak = i;
+    }
+  }
+  final build = warm.sublist(0, peak + 1);
+  // The windows a minute before and after: the heart rate going into and
+  // out of this one.
+  final byT = {for (final w in windows) w.t: w};
+  const half = 60000;
+  bool settled(DfaWindow w) {
+    final before = byT[w.t - half], after = byT[w.t + half];
+    return before == null ||
+        after == null ||
+        (after.heartRate - before.heartRate).abs() <= dfaMaxHrShift;
+  }
+
+  final steady = build.where(settled).toList();
+  if (steady.length < 6) return null;
+  final hr = steady.map((w) => w.heartRate).toList();
+  if (hr.reduce(math.max) - hr.reduce(math.min) < dfaMinRampRange) return null;
+  // Building up: the heart rate rises with the time.
+  final rise = _regression(steady.map((w) => w.t.toDouble()).toList(), hr);
+  if (rise == null || rise.slope <= 0 || rise.r < 0.8) return null;
+  return steady;
 }
 
 /// Where the regression of alpha1 on heart rate reaches [alpha]. Requires

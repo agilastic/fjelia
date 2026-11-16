@@ -48,7 +48,7 @@ class DfaAlpha1Card extends ConsumerWidget {
               Text(l10n.dfaEasyShare((easy * 100).round().toString())),
             const SizedBox(height: 4),
             Text(
-              l10n.dfaNoThreshold,
+              dfa.progression ? l10n.dfaNoThreshold : l10n.dfaNoProgression,
               style: TextStyle(color: muted, fontSize: 12),
             ),
           ],

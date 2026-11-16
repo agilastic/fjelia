@@ -6294,6 +6294,10 @@ class AppLocalizationsPl extends AppLocalizations {
       'Trening nie przekroczył wyraźnie progu. Szacunek da test narastający lub trening przechodzący od lekkiego do ciężkiego.';
 
   @override
+  String get dfaNoProgression =>
+      'Brak oszacowania progu: to nie był bieg z narastającą intensywnością. Progi wyznaczane są tylko z jednostek od łatwego do ciężkiego, np. 10 min rozgrzewki, potem co 3 min trochę szybciej.';
+
+  @override
   String dfaBeats(int beats, String artifacts) {
     return '$beats uderzeń · $artifacts % artefaktów';
   }
@@ -6331,6 +6335,16 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get thresholdSourceDrift => 'Test dryfu tętna';
+
+  @override
+  String get thresholdSourceDfaRamp => 'Test stopniowany DFA α1';
+
+  @override
+  String get rampTestsSetting => 'Test stopniowany w planie';
+
+  @override
+  String get rampTestsSettingHint =>
+      'Mniej więcej co 4 tygodnie, pod koniec tygodnia regeneracji: progi z DFA α1. Tylko z pasem piersiowym.';
 
   @override
   String thresholdSourceDfa(int count) {

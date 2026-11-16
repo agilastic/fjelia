@@ -6285,6 +6285,10 @@ class AppLocalizationsFi extends AppLocalizations {
       'Harjoitus ei ylittänyt kynnystä selvästi. Portaittainen testi tai harjoitus, joka kiristyy kevyestä kovaan, antaa arvion.';
 
   @override
+  String get dfaNoProgression =>
+      'Ei kynnysarviota: ei nousujohteinen harjoitus. Kynnykset saadaan vain harjoituksista, jotka etenevät kevyestä kovaan, esim. 10 min alkulämmittely ja sitten hieman kovempaa 3 min välein.';
+
+  @override
   String dfaBeats(int beats, String artifacts) {
     return '$beats lyöntiä · $artifacts % artefakteja';
   }
@@ -6322,6 +6326,16 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get thresholdSourceDrift => 'Sykedriftitesti';
+
+  @override
+  String get thresholdSourceDfaRamp => 'DFA α1 -portaittainen testi';
+
+  @override
+  String get rampTestsSetting => 'Portaittainen testi ohjelmassa';
+
+  @override
+  String get rampTestsSettingHint =>
+      'Noin 4 viikon välein palautusviikon lopussa: kynnykset DFA α1:stä. Vain sykevyön kanssa.';
 
   @override
   String thresholdSourceDfa(int count) {

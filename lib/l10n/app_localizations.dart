@@ -11016,6 +11016,12 @@ abstract class AppLocalizations {
   /// **'The session didn\'t cross a threshold clearly. A ramp, or a session that builds from easy to hard, gives an estimate.'**
   String get dfaNoThreshold;
 
+  /// No description provided for @dfaNoProgression.
+  ///
+  /// In en, this message translates to:
+  /// **'No threshold estimate: not a progression. Thresholds come only from sessions that build from easy to hard, e.g. 10 min warm-up, then a little faster every 3 min.'**
+  String get dfaNoProgression;
+
   /// No description provided for @dfaBeats.
   ///
   /// In en, this message translates to:
@@ -11075,6 +11081,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'HR drift test'**
   String get thresholdSourceDrift;
+
+  /// No description provided for @thresholdSourceDfaRamp.
+  ///
+  /// In en, this message translates to:
+  /// **'DFA α1 ramp test'**
+  String get thresholdSourceDfaRamp;
+
+  /// No description provided for @rampTestsSetting.
+  ///
+  /// In en, this message translates to:
+  /// **'Ramp test in the plan'**
+  String get rampTestsSetting;
+
+  /// No description provided for @rampTestsSettingHint.
+  ///
+  /// In en, this message translates to:
+  /// **'About every 4 weeks, at the end of a recovery week: thresholds from DFA α1. Only with a chest strap.'**
+  String get rampTestsSettingHint;
 
   /// No description provided for @thresholdSourceDfa.
   ///

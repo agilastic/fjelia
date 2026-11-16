@@ -3557,6 +3557,7 @@
     }
   },
   "dfaNoThreshold": "The session didn't cross a threshold clearly. A ramp, or a session that builds from easy to hard, gives an estimate.",
+  "dfaNoProgression": "No threshold estimate: not a progression. Thresholds come only from sessions that build from easy to hard, e.g. 10 min warm-up, then a little faster every 3 min.",
   "dfaBeats": "{beats} beats · {artifacts} % artifacts",
   "@dfaBeats": {
     "placeholders": {
@@ -3594,6 +3595,9 @@
   "lt2Cycling": "LT2 · Cycling",
   "thresholdSourceTt": "30-minute time trial",
   "thresholdSourceDrift": "HR drift test",
+  "thresholdSourceDfaRamp": "DFA α1 ramp test",
+  "rampTestsSetting": "Ramp test in the plan",
+  "rampTestsSettingHint": "About every 4 weeks, at the end of a recovery week: thresholds from DFA α1. Only with a chest strap.",
   "thresholdSourceDfa": "{count, plural, one{DFA α1, {count} session} other{DFA α1, {count} sessions}}",
   "@thresholdSourceDfa": {
     "placeholders": {

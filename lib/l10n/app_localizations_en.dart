@@ -6243,6 +6243,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'The session didn\'t cross a threshold clearly. A ramp, or a session that builds from easy to hard, gives an estimate.';
 
   @override
+  String get dfaNoProgression =>
+      'No threshold estimate: not a progression. Thresholds come only from sessions that build from easy to hard, e.g. 10 min warm-up, then a little faster every 3 min.';
+
+  @override
   String dfaBeats(int beats, String artifacts) {
     return '$beats beats · $artifacts % artifacts';
   }
@@ -6280,6 +6284,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get thresholdSourceDrift => 'HR drift test';
+
+  @override
+  String get thresholdSourceDfaRamp => 'DFA α1 ramp test';
+
+  @override
+  String get rampTestsSetting => 'Ramp test in the plan';
+
+  @override
+  String get rampTestsSettingHint =>
+      'About every 4 weeks, at the end of a recovery week: thresholds from DFA α1. Only with a chest strap.';
 
   @override
   String thresholdSourceDfa(int count) {

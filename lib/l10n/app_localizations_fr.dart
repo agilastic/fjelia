@@ -6321,6 +6321,10 @@ class AppLocalizationsFr extends AppLocalizations {
       'La séance n’a pas franchi de seuil nettement. Un test progressif, ou une séance qui monte du facile au difficile, donne une estimation.';
 
   @override
+  String get dfaNoProgression =>
+      'Pas d\'estimation de seuil : pas une progression. Les seuils ne viennent que des séances qui vont du facile au difficile, p. ex. 10 min d\'échauffement puis un peu plus vite toutes les 3 min.';
+
+  @override
   String dfaBeats(int beats, String artifacts) {
     return '$beats battements · $artifacts % d’artefacts';
   }
@@ -6358,6 +6362,16 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get thresholdSourceDrift => 'Test de dérive cardiaque';
+
+  @override
+  String get thresholdSourceDfaRamp => 'Test progressif DFA α1';
+
+  @override
+  String get rampTestsSetting => 'Test progressif dans le plan';
+
+  @override
+  String get rampTestsSettingHint =>
+      'Environ toutes les 4 semaines, en fin de semaine de récupération : seuils issus de DFA α1. Uniquement avec ceinture cardio.';
 
   @override
   String thresholdSourceDfa(int count) {

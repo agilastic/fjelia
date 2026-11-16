@@ -6262,6 +6262,10 @@ class AppLocalizationsDa extends AppLocalizations {
       'Træningen krydsede ikke en tærskel tydeligt. En trappetest, eller en træning der bygger op fra let til hårdt, giver et estimat.';
 
   @override
+  String get dfaNoProgression =>
+      'Intet tærskelestimat: ikke et progressivt løb. Tærskler kommer kun fra pas, der bygger op fra let til hårdt, fx 10 min opvarmning og derefter lidt hurtigere hvert 3. min.';
+
+  @override
   String dfaBeats(int beats, String artifacts) {
     return '$beats slag · $artifacts % artefakter';
   }
@@ -6299,6 +6303,16 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get thresholdSourceDrift => 'Pulsdrift-test';
+
+  @override
+  String get thresholdSourceDfaRamp => 'DFA α1-trappetest';
+
+  @override
+  String get rampTestsSetting => 'Trappetest i planen';
+
+  @override
+  String get rampTestsSettingHint =>
+      'Cirka hver 4. uge, sidst i en restitutionsuge: tærskler fra DFA α1. Kun med brystbælte.';
 
   @override
   String thresholdSourceDfa(int count) {

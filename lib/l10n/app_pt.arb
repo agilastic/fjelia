@@ -3550,6 +3550,7 @@
     }
   },
   "dfaNoThreshold": "O treino não ultrapassou claramente um limiar. Um teste em rampa, ou um treino que vai de leve a duro, dá uma estimativa.",
+  "dfaNoProgression": "Sem estimativa de limiar: não é uma progressão. Os limiares só vêm de sessões que vão de leve a forte, p. ex. 10 min de aquecimento e depois um pouco mais rápido a cada 3 min.",
   "dfaBeats": "{beats} batimentos · {artifacts} % de artefactos",
   "@dfaBeats": {
     "placeholders": {
@@ -3587,6 +3588,9 @@
   "lt2Cycling": "LT2 · Ciclismo",
   "thresholdSourceTt": "Contrarrelógio de 30 minutos",
   "thresholdSourceDrift": "Teste de deriva da FC",
+  "thresholdSourceDfaRamp": "Teste progressivo DFA α1",
+  "rampTestsSetting": "Teste progressivo no plano",
+  "rampTestsSettingHint": "Cerca de 4 em 4 semanas, no fim de uma semana de recuperação: limiares a partir de DFA α1. Só com cinta peitoral.",
   "thresholdSourceDfa": "{count, plural, one{DFA α1, {count} treino} other{DFA α1, {count} treinos}}",
   "@thresholdSourceDfa": {
     "placeholders": {

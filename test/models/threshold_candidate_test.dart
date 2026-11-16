@@ -199,6 +199,24 @@ void main() {
     expect(bikeZonesFollowDevice({ThresholdKind.lt2Bike: 'coros'}), isFalse);
   });
 
+  test('DFA sessions far from the value in use are left out', () {
+    double v(double x) => x;
+    // One steady run read as 135 against 165 in use.
+    expect(plausibleDfa([164.0, 135.0, 167.0], read: v, inUse: 165), [
+      164.0,
+      167.0,
+    ]);
+    // Three sessions that agree on 148: the value in use is off.
+    expect(plausibleDfa([148.0, 150.0, 147.0, 166.0], read: v, inUse: 166), [
+      148.0,
+      150.0,
+      147.0,
+    ]);
+    // Far off but not in agreement: still left out.
+    expect(plausibleDfa([130.0, 145.0, 120.0], read: v, inUse: 165), isEmpty);
+    expect(plausibleDfa([135.0], read: v, inUse: null), [135.0]);
+  });
+
   test('DFA sessions are listed per sport, newest first', () async {
     final db = AppDatabase(NativeDatabase.memory());
     addTearDown(db.close);

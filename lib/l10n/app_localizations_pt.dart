@@ -6298,6 +6298,10 @@ class AppLocalizationsPt extends AppLocalizations {
       'O treino não ultrapassou claramente um limiar. Um teste em rampa, ou um treino que vai de leve a duro, dá uma estimativa.';
 
   @override
+  String get dfaNoProgression =>
+      'Sem estimativa de limiar: não é uma progressão. Os limiares só vêm de sessões que vão de leve a forte, p. ex. 10 min de aquecimento e depois um pouco mais rápido a cada 3 min.';
+
+  @override
   String dfaBeats(int beats, String artifacts) {
     return '$beats batimentos · $artifacts % de artefactos';
   }
@@ -6335,6 +6339,16 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get thresholdSourceDrift => 'Teste de deriva da FC';
+
+  @override
+  String get thresholdSourceDfaRamp => 'Teste progressivo DFA α1';
+
+  @override
+  String get rampTestsSetting => 'Teste progressivo no plano';
+
+  @override
+  String get rampTestsSettingHint =>
+      'Cerca de 4 em 4 semanas, no fim de uma semana de recuperação: limiares a partir de DFA α1. Só com cinta peitoral.';
 
   @override
   String thresholdSourceDfa(int count) {

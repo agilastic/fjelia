@@ -6281,6 +6281,10 @@ class AppLocalizationsSk extends AppLocalizations {
       'Tréning neprekročil jasne žiadny prah. Stupňovaný test alebo tréning, ktorý sa stupňuje od ľahkého po ťažký, poskytne odhad.';
 
   @override
+  String get dfaNoProgression =>
+      'Bez odhadu prahu: nejde o stupňovaný beh. Prahy sa určujú len z tréningov, ktoré stupňujú od ľahkého po ťažké, napr. 10 min rozklus, potom každé 3 min trochu rýchlejšie.';
+
+  @override
   String dfaBeats(int beats, String artifacts) {
     return '$beats úderov · $artifacts % artefaktov';
   }
@@ -6318,6 +6322,16 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get thresholdSourceDrift => 'Test driftu TF';
+
+  @override
+  String get thresholdSourceDfaRamp => 'Stupňovaný test DFA α1';
+
+  @override
+  String get rampTestsSetting => 'Stupňovaný test v pláne';
+
+  @override
+  String get rampTestsSettingHint =>
+      'Približne každé 4 týždne na konci regeneračného týždňa: prahy z DFA α1. Len s hrudným pásom.';
 
   @override
   String thresholdSourceDfa(int count) {

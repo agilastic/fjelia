@@ -185,6 +185,7 @@ Future<void> _replanActive(Ref ref, String reason) async {
         daysPerWeek: profile.trainingDaysPerWeek,
         restDays: profile.planRestDays,
         dayCapMinutes: profile.trainingWindows.dayCapMinutes(),
+        rampTests: profile.rampTests,
         strengthDays: profile.preferredStrengthDays,
         hoursPerWeek: profile.hoursPerWeek,
         maxSessionsPerDay: profile.maxSessionsPerDay,

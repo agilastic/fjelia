@@ -7,7 +7,9 @@ import '../db/database.dart';
 import '../l10n/l10n_ext.dart';
 import '../models/threshold_candidate.dart';
 import '../services/device_threshold_store.dart';
+import '../services/dfa_alpha1.dart' show DfaThreshold;
 import '../services/dfa_alpha1_service.dart';
+import '../services/ramp_test.dart' show rampTestSubType;
 import '../services/hr_zone_model.dart';
 import '../services/threshold_choice_store.dart';
 import 'database_provider.dart';
@@ -115,33 +117,6 @@ final thresholdOverviewProvider = FutureProvider.autoDispose<ThresholdOverview>(
       add(ThresholdKind.ftp, t.source, t.ftpWatts, date: t.date);
     }
 
-    // DFA alpha1: the median of at least three recent sessions.
-    final dfa = DfaAlpha1Service(db);
-    void addDfa(
-      ThresholdKind kind,
-      List<({DateTime date, double? hrvt1, double? hrvt2})> sessions,
-      double? Function(({DateTime date, double? hrvt1, double? hrvt2})) read,
-    ) {
-      final usable = sessions.where((s) => read(s) != null).toList();
-      final median = medianOf([for (final s in usable) read(s)!], minimum: 3);
-      add(
-        kind,
-        'dfa',
-        median,
-        date: usable.firstOrNull?.date,
-        sessions: usable.length,
-      );
-    }
-
-    final runs = await dfa.recent(cycling: false);
-    addDfa(ThresholdKind.lt1, runs, (s) => s.hrvt1);
-    addDfa(ThresholdKind.lt2, runs, (s) => s.hrvt2);
-    addDfa(
-      ThresholdKind.lt2Bike,
-      await dfa.recent(cycling: true),
-      (s) => s.hrvt2,
-    );
-
     // The value in use, the eFTP and the formulas.
     final thresholds = await ref.watch(athleteThresholdsServiceProvider).get();
     add(
@@ -180,6 +155,91 @@ final thresholdOverviewProvider = FutureProvider.autoDispose<ThresholdOverview>(
       ThresholdKind.ftp:
           thresholds?.ftpWatts ?? thresholds?.estimatedFtp?.round(),
     };
+
+    // DFA alpha1: the median of at least three recent sessions that fit
+    // the value in use.
+    final dfa = DfaAlpha1Service(db);
+    void addDfa(
+      ThresholdKind kind,
+      List<({DateTime date, double? hrvt1, double? hrvt2})> sessions,
+      double? Function(({DateTime date, double? hrvt1, double? hrvt2})) read,
+    ) {
+      final usable = plausibleDfa(
+        sessions.where((s) => read(s) != null).toList(),
+        read: (s) => read(s)!,
+        inUse: inUse[kind],
+      );
+      final median = medianOf([for (final s in usable) read(s)!], minimum: 3);
+      add(
+        kind,
+        'dfa',
+        median,
+        date: usable.firstOrNull?.date,
+        sessions: usable.length,
+      );
+    }
+
+    final runs = await dfa.recent(cycling: false);
+    addDfa(ThresholdKind.lt1, runs, (s) => s.hrvt1);
+    addDfa(ThresholdKind.lt2, runs, (s) => s.hrvt2);
+    addDfa(
+      ThresholdKind.lt2Bike,
+      await dfa.recent(cycling: true),
+      (s) => s.hrvt2,
+    );
+
+    // A planned ramp test: one clean test is enough, like the time trial.
+    final rampSessions =
+        await (db.select(db.trainingSessions)..where(
+              (t) =>
+                  t.subType.equals(rampTestSubType) &
+                  t.status.equals('completed') &
+                  t.sessionDate.isBiggerOrEqualValue(
+                    now.subtract(const Duration(days: 42)),
+                  ),
+            ))
+            .get();
+    final rampDone = <String, TrainingSession>{
+      if (rampSessions.isNotEmpty)
+        for (final a
+            in await (db.select(db.sessionActuals)..where(
+                  (t) =>
+                      t.sessionId.isIn([for (final r in rampSessions) r.id]) &
+                      t.activityId.isNotNull(),
+                ))
+                .get())
+          a.activityId!: rampSessions.firstWhere((r) => r.id == a.sessionId),
+    };
+    final rampTaken = <ThresholdKind>{};
+    for (final e
+        in rampDone.entries.toList()..sort(
+          (a, b) => b.value.sessionDate.compareTo(a.value.sessionDate),
+        )) {
+      final result = await dfa.load(e.key);
+      if (result == null || !result.progression) continue;
+      final cycling = e.value.sport.startsWith('cycl');
+      void take(ThresholdKind kind, DfaThreshold? t, {bool pace = false}) {
+        if (t == null || !rampTaken.add(kind)) return;
+        final speed = t.speed;
+        add(
+          kind,
+          'dfa_ramp',
+          t.heartRate.round(),
+          date: e.value.sessionDate,
+          pace: pace && speed != null && speed > 0
+              ? (1000 / speed).round()
+              : null,
+        );
+      }
+
+      if (cycling) {
+        take(ThresholdKind.lt2Bike, result.hrvt2);
+      } else {
+        take(ThresholdKind.lt1, result.hrvt1);
+        take(ThresholdKind.lt2, result.hrvt2, pace: true);
+      }
+    }
+
     final kept = await const ThresholdChoiceStore().kept();
     return ThresholdOverview([
       for (final kind in ThresholdKind.values)

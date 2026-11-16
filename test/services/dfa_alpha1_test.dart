@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:archive/archive.dart';
@@ -136,6 +137,111 @@ void main() {
 
     test('power is left out when it was not recorded', () {
       expect(dfaThreshold(ramp(withPower: false), hrvt1Alpha)!.watts, isNull);
+    });
+  });
+
+  group('progressions only', () {
+    /// One window every 30 s from minute 1: heart rate and alpha1 by minute.
+    List<DfaWindow> session(
+      int minutes,
+      ({double hr, double a1}) Function(double minute) at,
+    ) => [
+      for (var t = 60000; t <= (minutes - 1) * 60000; t += 30000)
+        DfaWindow(
+          t: t,
+          alpha1: at(t / 60000).a1,
+          heartRate: at(t / 60000).hr,
+          artifacts: 0,
+          speed: at(t / 60000).hr / 50,
+        ),
+    ];
+
+    // alpha1 falling with heart rate: 0.75 at 145 bpm, 0.5 at 157.5.
+    double alphaAt(double hr) => (3.65 - 0.02 * hr).clamp(0.2, 1.5);
+
+    test('a step test after a warm-up gives both thresholds', () {
+      // 10 min easy, then 3-minute steps of 5 bpm from 125 to 175, then
+      // a cool-down.
+      final windows = session(56, (m) {
+        final hr = m < 10
+            ? 120.0
+            : m < 43
+            ? 125 + 5 * ((m - 10) ~/ 3).toDouble()
+            : 175 - 4 * (m - 43);
+        return (hr: hr, a1: m >= 43 ? 1.2 : alphaAt(hr));
+      });
+      final a = DfaAlpha1Analysis.of(windows, rrCount: 7000, artifacts: 0);
+      expect(a.progression, isTrue);
+      expect(a.hrvt1!.heartRate, closeTo(145, 3));
+      expect(a.hrvt2!.heartRate, closeTo(157.5, 3));
+    });
+
+    test('a steady easy run says nothing, low alpha1 or not', () {
+      // The case from 2026-11-15: warm-up and cool-down with high alpha1
+      // around a steady run at 130–138 bpm with alpha1 near 0.45. The old
+      // regression read HRVT1 122 and HRVT2 135 from it.
+      final windows = session(54, (m) {
+        if (m < 8) return (hr: 105 + 3 * m, a1: 0.9 - 0.05 * m);
+        if (m > 47) return (hr: 135 - 4 * (m - 47), a1: 0.8 + 0.12 * (m - 47));
+        return (hr: 130 + (m - 8) / 5, a1: 0.45 + 0.08 * math.sin(m));
+      });
+      final a = DfaAlpha1Analysis.of(windows, rrCount: 7473, artifacts: 0.008);
+      expect(a.progression, isFalse);
+      expect(a.hrvt1, isNull);
+      expect(a.hrvt2, isNull);
+      // The whole session would have given values before.
+      expect(dfaThreshold(windows, hrvt2Alpha), isNotNull);
+    });
+
+    test('a fartlek gives no thresholds', () {
+      final windows = session(50, (m) {
+        final hard = m >= 10 && (m ~/ 2).isOdd;
+        final hr = hard ? 168.0 : 135.0;
+        return (hr: hr, a1: hard ? 0.4 : 0.6);
+      });
+      final a = DfaAlpha1Analysis.of(windows, rrCount: 6000, artifacts: 0);
+      expect(a.progression, isFalse);
+      expect(a.hrvt2, isNull);
+    });
+
+    test('stored sessions are read again with the check', () async {
+      final db = AppDatabase(NativeDatabase.memory());
+      addTearDown(db.close);
+      final steady = session(54, (m) {
+        if (m < 8) return (hr: 105 + 3 * m, a1: 0.9 - 0.05 * m);
+        if (m > 47) return (hr: 135 - 4 * (m - 47), a1: 0.8 + 0.12 * (m - 47));
+        return (hr: 130 + (m - 8) / 5, a1: 0.45);
+      });
+      await db
+          .into(db.activityRecords)
+          .insert(
+            ActivityRecordsCompanion.insert(
+              activityId: 'easy',
+              name: 'easy',
+              type: 'running',
+              startDate: DateTime.now().subtract(const Duration(days: 1)),
+              durationSeconds: 3240,
+            ),
+          );
+      // Analysed before: thresholds stored from the whole session.
+      await db
+          .into(db.dfaAlpha1Results)
+          .insert(
+            DfaAlpha1ResultsCompanion.insert(
+              activityId: 'easy',
+              rrCount: 7473,
+              artifacts: 0.008,
+              windowsJson: jsonEncode([for (final w in steady) w.toJson()]),
+              hrvt1Bpm: const Value(122),
+              hrvt2Bpm: const Value(135),
+              computedAt: DateTime.now(),
+            ),
+          );
+      final service = DfaAlpha1Service(db);
+      final a = (await service.load('easy'))!;
+      expect(a.progression, isFalse);
+      expect(a.hrvt2, isNull);
+      expect(await service.recent(cycling: false), isEmpty);
     });
   });
 

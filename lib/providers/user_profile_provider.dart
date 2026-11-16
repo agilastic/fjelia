@@ -25,6 +25,7 @@ class UserProfile {
     this.trainingDaysPerWeek = 5,
     this.restDays = const [7],
     this.trainingWindows = const TrainingWindows(),
+    this.rampTests = true,
     this.preferredStrengthDays = const [3],
     this.maxSessionsPerDay = 1,
     this.hoursPerWeek = 8,
@@ -68,6 +69,10 @@ class UserProfile {
 
   /// The rest days the plan uses, with the days without a training window.
   List<int> get planRestDays => trainingWindows.restDaysWith(restDays);
+
+  /// Whether the plan schedules a DFA alpha1 ramp test every few weeks, once
+  /// a chest strap has recorded beat-to-beat data.
+  final bool rampTests;
   final List<int> preferredStrengthDays;
   final int maxSessionsPerDay;
   final double hoursPerWeek;
@@ -124,6 +129,7 @@ class UserProfile {
     'trainingDaysPerWeek': trainingDaysPerWeek,
     'restDays': restDays,
     'trainingWindows': trainingWindows.toJson(),
+    'rampTests': rampTests,
     'preferredStrengthDays': preferredStrengthDays,
     'maxSessionsPerDay': maxSessionsPerDay,
     'hoursPerWeek': hoursPerWeek,
@@ -161,6 +167,7 @@ class UserProfile {
       trainingDaysPerWeek: (json['trainingDaysPerWeek'] as num?)?.toInt() ?? 5,
       restDays: (json['restDays'] as List?)?.cast<int>() ?? const [7],
       trainingWindows: TrainingWindows.fromJson(json['trainingWindows']),
+      rampTests: json['rampTests'] as bool? ?? true,
       preferredStrengthDays:
           (json['preferredStrengthDays'] as List?)?.cast<int>() ?? const [3],
       maxSessionsPerDay: (json['maxSessionsPerDay'] as num?)?.toInt() ?? 1,
@@ -202,6 +209,7 @@ class UserProfile {
     int? trainingDaysPerWeek,
     List<int>? restDays,
     TrainingWindows? trainingWindows,
+    bool? rampTests,
     List<int>? preferredStrengthDays,
     int? maxSessionsPerDay,
     double? hoursPerWeek,
@@ -231,6 +239,7 @@ class UserProfile {
     trainingDaysPerWeek: trainingDaysPerWeek ?? this.trainingDaysPerWeek,
     restDays: restDays ?? this.restDays,
     trainingWindows: trainingWindows ?? this.trainingWindows,
+    rampTests: rampTests ?? this.rampTests,
     preferredStrengthDays: preferredStrengthDays ?? this.preferredStrengthDays,
     maxSessionsPerDay: maxSessionsPerDay ?? this.maxSessionsPerDay,
     hoursPerWeek: hoursPerWeek ?? this.hoursPerWeek,
