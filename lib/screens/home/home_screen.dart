@@ -114,30 +114,34 @@ class _HomeState extends ConsumerState<HomeScreen> {
                   children: [
                     // Where you are: the settings and the day (or the plan's
                     // view).
-                    Flexible(
-                      child: _GlassPill(
-                        children: [
-                          IconButton(
-                            tooltip: context.l10n.settings,
-                            visualDensity: VisualDensity.compact,
-                            icon: Icon(Icons.menu, size: 20, color: muted),
-                            onPressed: () => SettingsSheet.show(context),
-                          ),
-                          Flexible(
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 6),
-                              // A long date or large text shrinks to fit
-                              // instead of pushing the pills apart.
-                              child: FittedBox(
-                                fit: BoxFit.scaleDown,
-                                alignment: Alignment.centerLeft,
-                                child: current == 1
-                                    ? const PlanViewSwitcher()
-                                    : const DayNavigator(),
+                    // Takes the room left; the actions sit at the right edge.
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: _GlassPill(
+                          children: [
+                            IconButton(
+                              tooltip: context.l10n.settings,
+                              visualDensity: VisualDensity.compact,
+                              icon: Icon(Icons.menu, size: 20, color: muted),
+                              onPressed: () => SettingsSheet.show(context),
+                            ),
+                            Flexible(
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 6),
+                                // A long date or large text shrinks to fit
+                                // instead of pushing the pills apart.
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  alignment: Alignment.centerLeft,
+                                  child: current == 1
+                                      ? const PlanViewSwitcher()
+                                      : const DayNavigator(),
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                     const SizedBox(width: 8),
