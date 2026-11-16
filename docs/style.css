@@ -3562,3 +3562,18 @@ body.previews-paused .capture-halo {
 @media(max-width:700px) {
   .hero-copy h1 + .hero-ai-links { margin-top: 16px }
 }
+
+/* The one-line answer to "what is this" right under the headline. */
+.hero-copy .hero-sub { max-width: 640px; margin: 18px auto 16px; font-size: 18px; line-height: 1.5; color: var(--muted) }
+/* Facts, not buttons: the AI notes sit quietly, the beta button stays the one action. */
+.hero-ai-links a { border-color: transparent; background: none; padding-inline: 4px; color: var(--muted) }
+.hero-ai-links a:hover { border-color: transparent; color: #d6e3e4 }
+.hero-download .hero-note { text-align: center }
+/* What stays free next to what Pro adds. */
+.pro-free { margin-bottom: 16px; padding: 15px; border: 1px solid var(--border); border-radius: 16px; background: #050b1977 }
+.pro-free h3, .pro-paid-title { margin: 0 0 8px; color: var(--muted); font-size: 12px; letter-spacing: .08em; text-transform: uppercase }
+.pro-free ul { margin: 0; padding-left: 18px; color: #d6e3e4; font-size: 13px; line-height: 1.6 }
+.pro-infra { margin-top: 14px }
+@media(max-width:700px) {
+  .hero-copy .hero-sub { font-size: 15px; margin: 14px auto 12px }
+}
