@@ -1,7 +1,7 @@
+import 'package:fjelia/widgets/sync_orb.dart';
 import 'package:fjelia/screens/onboarding/connect_devices_screen.dart';
 import 'package:fjelia/services/bp_monitor_registry.dart';
 import 'package:fjelia/widgets/bp_monitors.dart';
-import 'package:fjelia/widgets/media_gallery.dart' show MediaThumb;
 import 'package:fjelia/screens/planner/pro_analysis_sheet.dart';
 import 'package:fjelia/services/pro_analysis.dart';
 import 'package:fjelia/l10n/app_localizations.dart';
@@ -1885,14 +1885,40 @@ void main() {
     await tester.pump(Duration.zero);
     await tester.binding.setSurfaceSize(null);
   });
+  testWidgets('a running sync fills the ring around the sync button', (
+    tester,
+  ) async {
+    await render(
+      tester,
+      Center(
+        child: Transform(
+          transform: Matrix4.diagonal3Values(6, 6, 1),
+          alignment: Alignment.center,
+          // Not spinning: the icon's turn never settles in a test.
+          child: const SyncOrb(
+            spinning: false,
+            freshness: SyncFreshness.fresh,
+            progress: .7,
+          ),
+        ),
+      ),
+      'sync-ring',
+    );
+    expect(find.byKey(const ValueKey('sync-progress-ring')), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(Duration.zero);
+    await tester.binding.setSurfaceSize(null);
+  });
   testWidgets('the week reviews read like a diary, in both looks', (
     tester,
   ) async {
     for (final (key, body, created) in [
       (
         '2026-W46',
-        '**A strong week.** You hit both key sessions and the long run felt '
-            'easy at the end. Keep the easy days easy next week.',
+        '## The week in short\n\n**A strong week.** You hit both key sessions '
+            'and the long run felt easy at the end.\n\n## Next week\n\n'
+            '- Keep the easy days easy.\n- One long run on Sunday.',
         DateTime(2026, 11, 16, 0, 20),
       ),
       (
@@ -1952,9 +1978,21 @@ void main() {
     await render(tester, sheet, 'week-diary');
     expect(find.textContaining('WEEK 46'), findsOneWidget);
     expect(find.textContaining('A strong week'), findsOneWidget);
-    // Five of the six pictures, one of them a video.
-    expect(find.byType(MediaThumb), findsNWidgets(5));
-    expect(find.byIcon(Icons.play_circle_fill_rounded), findsOneWidget);
+    // All six pictures in a slider, in the order of the runs; one of them
+    // is a video, further along.
+    final slider = find.byKey(const ValueKey('week-media-slider'));
+    expect(slider, findsOneWidget);
+    expect(find.byIcon(Icons.play_circle_fill_rounded), findsNothing);
+    for (
+      var i = 0;
+      i < 5 && find.byIcon(Icons.play_circle_fill_rounded).evaluate().isEmpty;
+      i++
+    ) {
+      await tester.drag(slider, const Offset(-320, 0));
+      await tester.pumpAndSettle();
+    }
+    expect(find.byIcon(Icons.play_circle_fill_rounded), findsWidgets);
+    await capture(tester, 'week-diary-slider');
     // No link: the older week is below, folded to its first lines.
     expect(find.text('Earlier reviews'), findsNothing);
     await tester.scrollUntilVisible(

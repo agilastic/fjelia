@@ -98,28 +98,39 @@ class WeekReviewEntryState extends ConsumerState<WeekReviewEntry> {
     final animate = !MediaQuery.disableAnimationsOf(context);
     // The accordion of style.md: the title, the figures and the first
     // lines; the large chevron centred on the right; a tap anywhere unfolds.
+    final chevron = AnimatedRotation(
+      turns: open ? .5 : 0,
+      duration: Duration(milliseconds: animate ? 220 : 0),
+      child: Icon(Icons.expand_more, size: 28, color: fjInk),
+    );
+    final title = GradientTitle(
+      '${l.weekDiaryWeek(week)} · $range'.toUpperCase(),
+      colors: accent,
+    );
+    // The accordion of style.md. Folded: title, figures and first lines with
+    // the chevron centred on the right. Open: the chevron moves up to the
+    // title, so the pictures, figures and text use the card's full width.
     return SectionCard(
       accent: accent,
-      padding: const EdgeInsets.fromLTRB(16, 14, 12, 14),
       onTap: () => setState(() => open = !open),
       child: AnimatedSize(
         duration: Duration(milliseconds: animate ? 260 : 0),
         curve: Curves.easeOutCubic,
         alignment: Alignment.topCenter,
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
+        child: open
+            ? Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  GradientTitle(
-                    '${l.weekDiaryWeek(week)} · $range'.toUpperCase(),
-                    colors: accent,
+                  Row(
+                    children: [
+                      Expanded(child: title),
+                      chevron,
+                    ],
                   ),
                   const SizedBox(height: 12),
                   if (media.isNotEmpty) ...[
                     _WeekMedia(items: media),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 14),
                   ],
                   if (figures != null && figures.sessions > 0) ...[
                     FigureGrid([
@@ -158,126 +169,226 @@ class WeekReviewEntryState extends ConsumerState<WeekReviewEntry> {
                     ]),
                     const SizedBox(height: 12),
                   ],
-                  if (open) ...[
-                    MarkdownBody(data: widget.report.body, selectable: true),
-                    const SizedBox(height: 8),
-                    Text(
-                      l.proAnalysisFrom(
-                        DateFormat.MMMd(
-                          locale,
-                        ).add_Hm().format(widget.report.createdAt),
-                      ),
-                      style: TextStyle(fontSize: 11, color: muted),
+                  MarkdownBody(
+                    data: widget.report.body,
+                    selectable: true,
+                    styleSheet: _reviewStyle(context),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    l.proAnalysisFrom(
+                      DateFormat.MMMd(
+                        locale,
+                      ).add_Hm().format(widget.report.createdAt),
                     ),
-                  ] else
-                    Text(
-                      _preview(widget.report.body),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 13,
-                        height: 1.4,
-                        color: fjInk70,
-                      ),
+                    style: TextStyle(fontSize: 11, color: muted),
+                  ),
+                ],
+              )
+            : Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        title,
+                        const SizedBox(height: 12),
+                        if (figures != null && figures.sessions > 0) ...[
+                          FigureGrid([
+                            FigureTile(
+                              icon: Icons.schedule_rounded,
+                              name: l.weekDiaryHours,
+                              value:
+                                  '${figures.minutes ~/ 60}:'
+                                  '${(figures.minutes % 60).toString().padLeft(2, '0')}',
+                              unit: 'h',
+                              color: const Color(0xFF6FA8FF),
+                            ),
+                            FigureTile(
+                              icon: Icons.check_circle_outline_rounded,
+                              name: l.sessions,
+                              value: '${figures.sessions}',
+                              color: mint,
+                            ),
+                            FigureTile(
+                              icon: Icons.route_rounded,
+                              name: l.distance,
+                              value: NumberFormat.decimalPattern(
+                                locale,
+                              ).format(figures.km.round()),
+                              unit: 'km',
+                              color: const Color(0xFF9D7BFF),
+                            ),
+                            FigureTile(
+                              icon: Icons.local_fire_department_outlined,
+                              name: l.load,
+                              value: NumberFormat.decimalPattern(
+                                locale,
+                              ).format(figures.load.round()),
+                              color: const Color(0xFFFFB13D),
+                            ),
+                          ]),
+                          const SizedBox(height: 12),
+                        ],
+                        Text(
+                          _preview(widget.report.body),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 13,
+                            height: 1.4,
+                            color: fjInk70,
+                          ),
+                        ),
+                      ],
                     ),
+                  ),
+                  const SizedBox(width: 12),
+                  chevron,
                 ],
               ),
-            ),
-            const SizedBox(width: 12),
-            AnimatedRotation(
-              turns: open ? .5 : 0,
-              duration: Duration(milliseconds: animate ? 220 : 0),
-              child: Icon(Icons.expand_more, size: 28, color: fjInk),
-            ),
-          ],
-        ),
       ),
+    );
+  }
+
+  /// The review in the app's own type: section heads in the card's accent,
+  /// calm body text, the figures it names in full ink.
+  MarkdownStyleSheet _reviewStyle(BuildContext context) {
+    final accent = widget.newest ? doneGradient : coachGradient;
+    final head = TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w800,
+      letterSpacing: .2,
+      color: fjAccent(accent.first),
+      height: 1.8,
+    );
+    final body = TextStyle(fontSize: 14, height: 1.55, color: fjInk70);
+    return MarkdownStyleSheet(
+      p: body,
+      listBullet: body,
+      strong: TextStyle(fontWeight: FontWeight.w700, color: fjInk),
+      h1: head,
+      h2: head,
+      h3: head,
+      h4: head,
+      blockSpacing: 10,
+      listIndent: 18,
     );
   }
 }
 
-/// The week's pictures like a post: the first one wide, up to four more in
-/// a row below. A tap opens them full screen.
-class _WeekMedia extends StatelessWidget {
+/// The week's pictures as a slider: swipe through them, a tap opens them
+/// full screen, where they can be swiped too.
+class _WeekMedia extends StatefulWidget {
   const _WeekMedia({required this.items});
   final List<MediaItem> items;
 
-  void _open(BuildContext context, int index) => Navigator.of(context).push(
+  @override
+  State<_WeekMedia> createState() => _WeekMediaState();
+}
+
+class _WeekMediaState extends State<_WeekMedia> {
+  // A little of the next picture shows, so it is clear there are more.
+  late final controller = PageController(
+    viewportFraction: widget.items.length > 1 ? .88 : 1,
+  );
+  int page = 0;
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  void _open(int index) => Navigator.of(context).push(
     MaterialPageRoute<void>(
       fullscreenDialog: true,
-      builder: (_) => MediaViewer(items: items, initialIndex: index),
+      builder: (_) => MediaViewer(items: widget.items, initialIndex: index),
     ),
   );
 
-  Widget _tile(BuildContext context, int index, {bool large = false}) {
-    final item = items[index];
-    final seconds = (item.durationMs ?? 0) ~/ 1000;
-    return GestureDetector(
-      onTap: () => _open(context, index),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            MediaThumb(item: item, large: large),
-            if (item.kind == 'video')
-              Positioned(
-                left: 8,
-                bottom: 6,
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.play_circle_fill_rounded,
-                      size: 18,
-                      color: Colors.white,
+  @override
+  Widget build(BuildContext context) {
+    final items = widget.items;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        AspectRatio(
+          aspectRatio: 4 / 3,
+          child: PageView.builder(
+            key: const ValueKey('week-media-slider'),
+            controller: controller,
+            padEnds: false,
+            itemCount: items.length,
+            onPageChanged: (i) => setState(() => page = i),
+            itemBuilder: (context, i) {
+              final item = items[i];
+              final seconds = (item.durationMs ?? 0) ~/ 1000;
+              return Padding(
+                padding: EdgeInsets.only(right: i == items.length - 1 ? 0 : 8),
+                child: GestureDetector(
+                  onTap: () => _open(i),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        MediaThumb(item: item, large: true),
+                        if (item.kind == 'video')
+                          Positioned(
+                            left: 10,
+                            bottom: 8,
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.play_circle_fill_rounded,
+                                  size: 22,
+                                  color: Colors.white,
+                                ),
+                                if (seconds > 0) ...[
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    '${seconds ~/ 60}:${(seconds % 60).toString().padLeft(2, '0')}',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w700,
+                                      shadows: [Shadow(blurRadius: 4)],
+                                    ),
+                                  ),
+                                ],
+                              ],
+                            ),
+                          ),
+                      ],
                     ),
-                    if (seconds > 0 && large) ...[
-                      const SizedBox(width: 4),
-                      Text(
-                        '${seconds ~/ 60}:${(seconds % 60).toString().padLeft(2, '0')}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                          shadows: [Shadow(blurRadius: 4)],
-                        ),
-                      ),
-                    ],
-                  ],
+                  ),
                 ),
-              ),
-          ],
+              );
+            },
+          ),
         ),
-      ),
+        if (items.length > 1) ...[
+          const SizedBox(height: 8),
+          // Where in the week's pictures the slider is.
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              for (var i = 0; i < items.length; i++)
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  margin: const EdgeInsets.symmetric(horizontal: 3),
+                  width: i == page ? 16 : 6,
+                  height: 6,
+                  decoration: BoxDecoration(
+                    color: i == page ? mint : fjInk24,
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                ),
+            ],
+          ),
+        ],
+      ],
     );
   }
-
-  @override
-  Widget build(BuildContext context) => Column(
-    crossAxisAlignment: CrossAxisAlignment.stretch,
-    children: [
-      AspectRatio(
-        aspectRatio: items.length == 1 ? 4 / 3 : 16 / 10,
-        child: _tile(context, 0, large: true),
-      ),
-      if (items.length > 1) ...[
-        const SizedBox(height: 6),
-        Row(
-          children: [
-            for (var i = 1; i < 5; i++) ...[
-              if (i > 1) const SizedBox(width: 6),
-              Expanded(
-                child: AspectRatio(
-                  aspectRatio: 1,
-                  child: i < items.length
-                      ? _tile(context, i)
-                      : const SizedBox.shrink(),
-                ),
-              ),
-            ],
-          ],
-        ),
-      ],
-    ],
-  );
 }

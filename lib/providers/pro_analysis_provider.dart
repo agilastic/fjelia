@@ -46,7 +46,7 @@ final weekFiguresProvider = FutureProvider.autoDispose
       );
     });
 
-/// Up to five photos and videos of the week's activities, in the order the
+/// The photos and videos of the week's activities, in the order the
 /// activities were done: the pictures of the diary.
 final weekMediaProvider = FutureProvider.autoDispose
     .family<List<MediaItem>, DateTime>((ref, start) async {
@@ -73,7 +73,7 @@ final weekMediaProvider = FutureProvider.autoDispose
         final byActivity = order[a.ownerId]!.compareTo(order[b.ownerId]!);
         return byActivity != 0 ? byActivity : a.position.compareTo(b.position);
       });
-      return items.take(5).toList();
+      return items;
     });
 
 /// Whether the week review is written by itself at the start of a week.

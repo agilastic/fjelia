@@ -77,11 +77,12 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
             children: [
-              Expanded(
-                child: GradientTitle(title.toUpperCase(), colors: accent),
-              ),
-              if (source != null)
-                Flexible(
+              // The title keeps its one line; the source takes what is left
+              // and is cut short before it pushes the title onto two.
+              GradientTitle(title.toUpperCase(), colors: accent),
+              if (source != null) ...[
+                const SizedBox(width: 12),
+                Expanded(
                   child: Text(
                     source,
                     key: const ValueKey('briefing-source'),
@@ -95,6 +96,7 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
                     ),
                   ),
                 ),
+              ],
             ],
           ),
           const SizedBox(height: 12),
@@ -112,9 +114,7 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
                   : context.l10n.aiBriefingUnavailableShowingA,
               style: TextStyle(fontSize: 12, color: muted),
             ),
-          if (settings.readyForBriefing &&
-              canGenerate &&
-              !briefing.isLoading)
+          if (settings.readyForBriefing && canGenerate && !briefing.isLoading)
             TextButton(
               onPressed: () => runUiAction(context, () async {
                 var cloudConsent = await BriefingConsent.given(settings);

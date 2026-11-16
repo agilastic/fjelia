@@ -165,6 +165,9 @@ class _HomeState extends ConsumerState<HomeScreen> {
                         PopupMenuButton<String>(
                           tooltip: context.l10n.syncLabel2,
                           icon: SyncOrb(
+                            progress: sync.status == SyncStatus.syncing
+                                ? sync.progress / 100
+                                : null,
                             spinning:
                                 sync.status == SyncStatus.syncing ||
                                 ref.watch(historicSyncProvider).running,
@@ -255,8 +258,9 @@ class _HomeState extends ConsumerState<HomeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                if (sync.status == SyncStatus.syncing ||
-                    sync.errorMessage != null)
+                // The sync's progress is the ring around the sync button;
+                // only a failure is said here.
+                if (sync.errorMessage != null)
                   Padding(
                     padding: const EdgeInsets.fromLTRB(12, 2, 12, 4),
                     child: DecoratedBox(
@@ -270,23 +274,6 @@ class _HomeState extends ConsumerState<HomeScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            if (sync.status == SyncStatus.syncing) ...[
-                              LinearProgressIndicator(
-                                value: sync.progress / 100,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                  14,
-                                  6,
-                                  14,
-                                  8,
-                                ),
-                                child: Text(
-                                  context.l10n.syncingYourData,
-                                  style: TextStyle(fontSize: 11, color: muted),
-                                ),
-                              ),
-                            ],
                             if (sync.errorMessage != null)
                               Padding(
                                 padding: const EdgeInsets.all(10),
