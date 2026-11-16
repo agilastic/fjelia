@@ -756,6 +756,54 @@ abstract class AppLocalizations {
   /// **'Race Goals'**
   String get raceGoals;
 
+  /// No description provided for @casualGoalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Without a race'**
+  String get casualGoalTitle;
+
+  /// No description provided for @casualGoalHint.
+  ///
+  /// In en, this message translates to:
+  /// **'No race planned? Fjelia plans anyway, from your current level. With no training yet, it starts with an easy 25-minute session.'**
+  String get casualGoalHint;
+
+  /// No description provided for @casualFun.
+  ///
+  /// In en, this message translates to:
+  /// **'Fun'**
+  String get casualFun;
+
+  /// No description provided for @casualFunHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy sessions in your sports, for the joy of moving.'**
+  String get casualFunHint;
+
+  /// No description provided for @casualFitness.
+  ///
+  /// In en, this message translates to:
+  /// **'Fitness'**
+  String get casualFitness;
+
+  /// No description provided for @casualFitnessHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Build up gently, with one harder session a week.'**
+  String get casualFitnessHint;
+
+  /// No description provided for @casualNone.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get casualNone;
+
+  /// No description provided for @casualGoalAfterRace.
+  ///
+  /// In en, this message translates to:
+  /// **'Applies once no race goal is set.'**
+  String get casualGoalAfterRace;
+
   /// No description provided for @yourActivities.
   ///
   /// In en, this message translates to:
@@ -773,6 +821,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Calendar week start'**
   String get calendarWeekStart;
+
+  /// No description provided for @trainingSecGoals.
+  ///
+  /// In en, this message translates to:
+  /// **'Goals & sports'**
+  String get trainingSecGoals;
+
+  /// No description provided for @trainingSecGoalsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Race goals and the sports you do'**
+  String get trainingSecGoalsHint;
+
+  /// No description provided for @trainingSecSchedule.
+  ///
+  /// In en, this message translates to:
+  /// **'Week & time'**
+  String get trainingSecSchedule;
+
+  /// No description provided for @trainingSecScheduleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Week start, rest and strength days, training times, hours'**
+  String get trainingSecScheduleHint;
+
+  /// No description provided for @trainingSecDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Strength & nutrition'**
+  String get trainingSecDetails;
+
+  /// No description provided for @trainingSecDetailsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Load unit and fuelling'**
+  String get trainingSecDetailsHint;
+
+  /// No description provided for @trainingSecReminders.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders & heat'**
+  String get trainingSecReminders;
+
+  /// No description provided for @trainingSecRemindersHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed workouts and heat acclimation'**
+  String get trainingSecRemindersHint;
+
+  /// No description provided for @trainingSecPlanHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Regenerate or delete planned workouts'**
+  String get trainingSecPlanHint;
 
   /// No description provided for @planDefaultView.
   ///
@@ -1277,6 +1379,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Bluetooth · blood pressure'**
   String get bluetoothBloodPressure;
+
+  /// No description provided for @onbBpMonitorTile.
+  ///
+  /// In en, this message translates to:
+  /// **'Bluetooth · Omron, standard, Hilo cuff'**
+  String get onbBpMonitorTile;
+
+  /// No description provided for @onbIndoorTile.
+  ///
+  /// In en, this message translates to:
+  /// **'Bluetooth · Concept2, rowers, bikes'**
+  String get onbIndoorTile;
 
   /// No description provided for @cloudCuffData.
   ///
@@ -4842,7 +4956,7 @@ abstract class AppLocalizations {
   /// No description provided for @addYourMainPriorityA.
   ///
   /// In en, this message translates to:
-  /// **'Add your main (priority A) race. The plan is periodised towards it: base, build, peak and taper. Without a race goal no plan is generated yet.'**
+  /// **'Add your main (priority A) race. The plan is periodised towards it: base, build, peak and taper.'**
   String get addYourMainPriorityA;
 
   /// No description provided for @noMeasurementsYet.
@@ -10662,6 +10776,12 @@ abstract class AppLocalizations {
   /// **'Notifications are off for Fjelia. Allow them to get this reminder.'**
   String get notificationsAreOff;
 
+  /// No description provided for @openNotificationSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open notification settings'**
+  String get openNotificationSettings;
+
   /// No description provided for @allowNotifications.
   ///
   /// In en, this message translates to:
@@ -10913,6 +11033,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Today is a planned rest day.'**
   String get briefRestDayToday;
+
+  /// No description provided for @briefAwayToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Entered for today: {kind}, no training.'**
+  String briefAwayToday(String kind);
+
+  /// No description provided for @briefAwayTomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Entered for tomorrow: {kind}, no training.'**
+  String briefAwayTomorrow(String kind);
+
+  /// No description provided for @briefRestDayTomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Tomorrow is a planned rest day.'**
+  String get briefRestDayTomorrow;
+
+  /// No description provided for @briefBackFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'First week after {kind}: keep it easy and short.'**
+  String briefBackFrom(String kind);
 
   /// No description provided for @restDayPlannedNote.
   ///
@@ -14538,6 +14682,84 @@ abstract class AppLocalizations {
   /// **'Weekly review'**
   String get proWeekReview;
 
+  /// No description provided for @weeklyReviewPushTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your week in review'**
+  String get weeklyReviewPushTitle;
+
+  /// No description provided for @weeklyReviewPushBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The week is over. Tap to see how it went.'**
+  String get weeklyReviewPushBody;
+
+  /// No description provided for @weeklyReviewReadyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your week in review is ready'**
+  String get weeklyReviewReadyTitle;
+
+  /// No description provided for @weeklyReviewReadyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to read how your week went.'**
+  String get weeklyReviewReadyBody;
+
+  /// No description provided for @weeklyReviewChannel.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly review'**
+  String get weeklyReviewChannel;
+
+  /// No description provided for @weeklyReviewAuto.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly review by itself'**
+  String get weeklyReviewAuto;
+
+  /// No description provided for @weeklyReviewAutoHint.
+  ///
+  /// In en, this message translates to:
+  /// **'At the start of each week (00:00) a push, and Fjelia AI Pro writes last week\'s review as soon as the app runs. Your training context is sent to Fjelia AI Pro for this.'**
+  String get weeklyReviewAutoHint;
+
+  /// No description provided for @weekDiaryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly reviews'**
+  String get weekDiaryTitle;
+
+  /// No description provided for @weekDiaryOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Earlier reviews'**
+  String get weekDiaryOpen;
+
+  /// No description provided for @weekDiaryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No reviews yet. Fjelia writes the first one at the start of the next week, or you write one now.'**
+  String get weekDiaryEmpty;
+
+  /// No description provided for @weekDiaryCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 week} other{{count} weeks}}'**
+  String weekDiaryCount(int count);
+
+  /// No description provided for @weekDiaryWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Week {week}'**
+  String weekDiaryWeek(int week);
+
+  /// No description provided for @weekDiaryHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Hours'**
+  String get weekDiaryHours;
+
   /// No description provided for @proWeekReviewHint.
   ///
   /// In en, this message translates to:
@@ -14951,6 +15173,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search for standard Bluetooth blood-pressure devices and supported Omron profiles.'**
   String get plusOmronBleHint;
+
+  /// No description provided for @bpMonitorsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Bluetooth blood-pressure monitors'**
+  String get bpMonitorsTitle;
+
+  /// No description provided for @bpMonitorsNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No monitor saved yet. Add your Hilo cuff, Omron or standard Bluetooth monitor.'**
+  String get bpMonitorsNone;
+
+  /// No description provided for @bpMonitorAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add monitor'**
+  String get bpMonitorAdd;
+
+  /// No description provided for @bpMonitorKindMemory.
+  ///
+  /// In en, this message translates to:
+  /// **'Omron or standard'**
+  String get bpMonitorKindMemory;
+
+  /// No description provided for @bpMonitorKindHiloCuff.
+  ///
+  /// In en, this message translates to:
+  /// **'Hilo cuff'**
+  String get bpMonitorKindHiloCuff;
+
+  /// No description provided for @bpMonitorKindOmron.
+  ///
+  /// In en, this message translates to:
+  /// **'Omron or Bluetooth BP monitor'**
+  String get bpMonitorKindOmron;
+
+  /// No description provided for @bpMonitorLive.
+  ///
+  /// In en, this message translates to:
+  /// **'Measures on request'**
+  String get bpMonitorLive;
+
+  /// No description provided for @bpMonitorMemory.
+  ///
+  /// In en, this message translates to:
+  /// **'Reads its stored readings'**
+  String get bpMonitorMemory;
+
+  /// No description provided for @bpMonitorModel.
+  ///
+  /// In en, this message translates to:
+  /// **'Monitor model'**
+  String get bpMonitorModel;
+
+  /// No description provided for @bpMonitorStandard.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard Bluetooth blood-pressure monitor'**
+  String get bpMonitorStandard;
+
+  /// No description provided for @bpMonitorFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Monitor found'**
+  String get bpMonitorFound;
+
+  /// No description provided for @bpMonitorSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for monitors'**
+  String get bpMonitorSearch;
+
+  /// No description provided for @bpMonitorNoneFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No monitor found. Turn on Bluetooth and wake the monitor.'**
+  String get bpMonitorNoneFound;
+
+  /// No description provided for @bpMonitorChoose.
+  ///
+  /// In en, this message translates to:
+  /// **'Which monitor do you measure with?'**
+  String get bpMonitorChoose;
+
+  /// No description provided for @plusBpBle.
+  ///
+  /// In en, this message translates to:
+  /// **'Blood pressure via Bluetooth'**
+  String get plusBpBle;
+
+  /// No description provided for @plusBpBleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Measure with your saved monitor or fetch its readings'**
+  String get plusBpBleHint;
 
   /// No description provided for @sleepEcgTitle.
   ///

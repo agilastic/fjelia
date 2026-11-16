@@ -26,6 +26,7 @@ class UserProfile {
     this.restDays = const [7],
     this.trainingWindows = const TrainingWindows(),
     this.rampTests = true,
+    this.casualGoal,
     this.preferredStrengthDays = const [3],
     this.maxSessionsPerDay = 1,
     this.hoursPerWeek = 8,
@@ -73,6 +74,11 @@ class UserProfile {
   /// Whether the plan schedules a DFA alpha1 ramp test every few weeks, once
   /// a chest strap has recorded beat-to-beat data.
   final bool rampTests;
+
+  /// Without a race goal, what the plan is for: `fun` (moving for the joy of
+  /// it, every session easy) or `fitness` (getting fitter). Null: no plan
+  /// without a race goal.
+  final String? casualGoal;
   final List<int> preferredStrengthDays;
   final int maxSessionsPerDay;
   final double hoursPerWeek;
@@ -130,6 +136,7 @@ class UserProfile {
     'restDays': restDays,
     'trainingWindows': trainingWindows.toJson(),
     'rampTests': rampTests,
+    'casualGoal': casualGoal,
     'preferredStrengthDays': preferredStrengthDays,
     'maxSessionsPerDay': maxSessionsPerDay,
     'hoursPerWeek': hoursPerWeek,
@@ -168,6 +175,7 @@ class UserProfile {
       restDays: (json['restDays'] as List?)?.cast<int>() ?? const [7],
       trainingWindows: TrainingWindows.fromJson(json['trainingWindows']),
       rampTests: json['rampTests'] as bool? ?? true,
+      casualGoal: json['casualGoal'] as String?,
       preferredStrengthDays:
           (json['preferredStrengthDays'] as List?)?.cast<int>() ?? const [3],
       maxSessionsPerDay: (json['maxSessionsPerDay'] as num?)?.toInt() ?? 1,
@@ -210,6 +218,8 @@ class UserProfile {
     List<int>? restDays,
     TrainingWindows? trainingWindows,
     bool? rampTests,
+    String? casualGoal,
+    bool clearCasualGoal = false,
     List<int>? preferredStrengthDays,
     int? maxSessionsPerDay,
     double? hoursPerWeek,
@@ -240,6 +250,7 @@ class UserProfile {
     restDays: restDays ?? this.restDays,
     trainingWindows: trainingWindows ?? this.trainingWindows,
     rampTests: rampTests ?? this.rampTests,
+    casualGoal: clearCasualGoal ? null : casualGoal ?? this.casualGoal,
     preferredStrengthDays: preferredStrengthDays ?? this.preferredStrengthDays,
     maxSessionsPerDay: maxSessionsPerDay ?? this.maxSessionsPerDay,
     hoursPerWeek: hoursPerWeek ?? this.hoursPerWeek,

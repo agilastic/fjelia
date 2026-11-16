@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:permission_handler/permission_handler.dart'
+    show openAppSettings;
 
 import '../services/missed_workout_reminder_service.dart';
 import '../services/plan_rebalance_applier.dart';
@@ -16,6 +18,12 @@ final missedWorkoutReminderProvider = Provider(
     ref.watch(databaseProvider),
     ref.watch(localNotificationGatewayProvider),
   ),
+);
+
+/// Opens Fjelia's page in the system settings, where notifications can be
+/// turned on after a "no".
+final openAppSettingsProvider = Provider<Future<bool> Function()>(
+  (ref) => openAppSettings,
 );
 
 /// The evening reminder's switch, time and look-ahead window.

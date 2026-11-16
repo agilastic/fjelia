@@ -3,6 +3,15 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
+<script>
+/* GitHub Pages copy: the site lives at www.fjelia.com. Same path, fixed host,
+   so the redirect cannot be pointed anywhere else. */
+(function () {
+  if (location.hostname !== 'agilastic.github.io') return;
+  var path = location.pathname.replace(/^\/fjelia(\/|$)/, '/');
+  location.replace('https://www.fjelia.com' + path + location.search + location.hash);
+})();
+</script>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Page not found — Fjelia</title>
 <meta content="noindex" name="robots"/>

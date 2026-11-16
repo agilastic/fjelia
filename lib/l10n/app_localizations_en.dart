@@ -363,6 +363,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String get raceGoals => 'Race Goals';
 
   @override
+  String get casualGoalTitle => 'Without a race';
+
+  @override
+  String get casualGoalHint =>
+      'No race planned? Fjelia plans anyway, from your current level. With no training yet, it starts with an easy 25-minute session.';
+
+  @override
+  String get casualFun => 'Fun';
+
+  @override
+  String get casualFunHint =>
+      'Easy sessions in your sports, for the joy of moving.';
+
+  @override
+  String get casualFitness => 'Fitness';
+
+  @override
+  String get casualFitnessHint =>
+      'Build up gently, with one harder session a week.';
+
+  @override
+  String get casualNone => 'None';
+
+  @override
+  String get casualGoalAfterRace => 'Applies once no race goal is set.';
+
+  @override
   String get yourActivities => 'Your Activities';
 
   @override
@@ -371,6 +398,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get calendarWeekStart => 'Calendar week start';
+
+  @override
+  String get trainingSecGoals => 'Goals & sports';
+
+  @override
+  String get trainingSecGoalsHint => 'Race goals and the sports you do';
+
+  @override
+  String get trainingSecSchedule => 'Week & time';
+
+  @override
+  String get trainingSecScheduleHint =>
+      'Week start, rest and strength days, training times, hours';
+
+  @override
+  String get trainingSecDetails => 'Strength & nutrition';
+
+  @override
+  String get trainingSecDetailsHint => 'Load unit and fuelling';
+
+  @override
+  String get trainingSecReminders => 'Reminders & heat';
+
+  @override
+  String get trainingSecRemindersHint => 'Missed workouts and heat acclimation';
+
+  @override
+  String get trainingSecPlanHint => 'Regenerate or delete planned workouts';
 
   @override
   String get planDefaultView => 'Plan Default View';
@@ -683,6 +738,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bluetoothBloodPressure => 'Bluetooth · blood pressure';
+
+  @override
+  String get onbBpMonitorTile => 'Bluetooth · Omron, standard, Hilo cuff';
+
+  @override
+  String get onbIndoorTile => 'Bluetooth · Concept2, rowers, bikes';
 
   @override
   String get cloudCuffData => 'Cloud · cuff data';
@@ -2677,7 +2738,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addYourMainPriorityA =>
-      'Add your main (priority A) race. The plan is periodised towards it: base, build, peak and taper. Without a race goal no plan is generated yet.';
+      'Add your main (priority A) race. The plan is periodised towards it: base, build, peak and taper.';
 
   @override
   String get noMeasurementsYet => 'No measurements yet';
@@ -6029,6 +6090,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Notifications are off for Fjelia. Allow them to get this reminder.';
 
   @override
+  String get openNotificationSettings => 'Open notification settings';
+
+  @override
   String get allowNotifications => 'Allow notifications';
 
   @override
@@ -6168,6 +6232,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get briefRestDayToday => 'Today is a planned rest day.';
+
+  @override
+  String briefAwayToday(String kind) {
+    return 'Entered for today: $kind, no training.';
+  }
+
+  @override
+  String briefAwayTomorrow(String kind) {
+    return 'Entered for tomorrow: $kind, no training.';
+  }
+
+  @override
+  String get briefRestDayTomorrow => 'Tomorrow is a planned rest day.';
+
+  @override
+  String briefBackFrom(String kind) {
+    return 'First week after $kind: keep it easy and short.';
+  }
 
   @override
   String get restDayPlannedNote => 'Recovery is part of your plan.';
@@ -8382,6 +8464,58 @@ class AppLocalizationsEn extends AppLocalizations {
   String get proWeekReview => 'Weekly review';
 
   @override
+  String get weeklyReviewPushTitle => 'Your week in review';
+
+  @override
+  String get weeklyReviewPushBody =>
+      'The week is over. Tap to see how it went.';
+
+  @override
+  String get weeklyReviewReadyTitle => 'Your week in review is ready';
+
+  @override
+  String get weeklyReviewReadyBody => 'Tap to read how your week went.';
+
+  @override
+  String get weeklyReviewChannel => 'Weekly review';
+
+  @override
+  String get weeklyReviewAuto => 'Weekly review by itself';
+
+  @override
+  String get weeklyReviewAutoHint =>
+      'At the start of each week (00:00) a push, and Fjelia AI Pro writes last week\'s review as soon as the app runs. Your training context is sent to Fjelia AI Pro for this.';
+
+  @override
+  String get weekDiaryTitle => 'Weekly reviews';
+
+  @override
+  String get weekDiaryOpen => 'Earlier reviews';
+
+  @override
+  String get weekDiaryEmpty =>
+      'No reviews yet. Fjelia writes the first one at the start of the next week, or you write one now.';
+
+  @override
+  String weekDiaryCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count weeks',
+      one: '1 week',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String weekDiaryWeek(int week) {
+    return 'Week $week';
+  }
+
+  @override
+  String get weekDiaryHours => 'Hours';
+
+  @override
   String get proWeekReviewHint => 'What worked, what to change next week';
 
   @override
@@ -8617,6 +8751,57 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get plusOmronBleHint =>
       'Search for standard Bluetooth blood-pressure devices and supported Omron profiles.';
+
+  @override
+  String get bpMonitorsTitle => 'Bluetooth blood-pressure monitors';
+
+  @override
+  String get bpMonitorsNone =>
+      'No monitor saved yet. Add your Hilo cuff, Omron or standard Bluetooth monitor.';
+
+  @override
+  String get bpMonitorAdd => 'Add monitor';
+
+  @override
+  String get bpMonitorKindMemory => 'Omron or standard';
+
+  @override
+  String get bpMonitorKindHiloCuff => 'Hilo cuff';
+
+  @override
+  String get bpMonitorKindOmron => 'Omron or Bluetooth BP monitor';
+
+  @override
+  String get bpMonitorLive => 'Measures on request';
+
+  @override
+  String get bpMonitorMemory => 'Reads its stored readings';
+
+  @override
+  String get bpMonitorModel => 'Monitor model';
+
+  @override
+  String get bpMonitorStandard => 'Standard Bluetooth blood-pressure monitor';
+
+  @override
+  String get bpMonitorFound => 'Monitor found';
+
+  @override
+  String get bpMonitorSearch => 'Search for monitors';
+
+  @override
+  String get bpMonitorNoneFound =>
+      'No monitor found. Turn on Bluetooth and wake the monitor.';
+
+  @override
+  String get bpMonitorChoose => 'Which monitor do you measure with?';
+
+  @override
+  String get plusBpBle => 'Blood pressure via Bluetooth';
+
+  @override
+  String get plusBpBleHint =>
+      'Measure with your saved monitor or fetch its readings';
 
   @override
   String get sleepEcgTitle => 'Record sleep';

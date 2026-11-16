@@ -18,7 +18,7 @@ import '../../providers/polar_h10_provider.dart';
 import '../../providers/polar_provider.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/scale_pairing_tile.dart';
-import '../../widgets/hilo_cuff_pairing_tile.dart';
+import '../../widgets/bp_monitors.dart' show BpConnectionTiles;
 import '../../widgets/hrv_reminder_tile.dart';
 import '../onboarding/connect_aktiia_screen.dart';
 import '../onboarding/connect_garmin_screen.dart';
@@ -117,12 +117,15 @@ class ConnectionsTab extends ConsumerWidget {
               disconnect: () =>
                   ref.read(connectionActionsProvider).disconnect(e.$1),
             ),
-          SectionLabel(context.l10n.hiloBloodPressureBle),
+          // Blood pressure over Bluetooth: the Hilo pod, the Hilo cuff and
+          // each Omron or standard monitor, one entry each.
+          SectionLabel(context.l10n.bpMonitorsTitle),
           _Connection(
-            context.l10n.hiloPodCuff,
+            'Hilo Pod',
             ref.watch(hiloBleConnectedProvider).valueOrNull ?? false,
             const ConnectHiloBleScreen(fromOnboarding: true),
           ),
+          const BpConnectionTiles(),
           SwitchListTile(
             title: Text(context.l10n.writeHeartDataToApple),
             value: ref.watch(hiloWriteHealthProvider),
@@ -135,7 +138,6 @@ class ConnectionsTab extends ConsumerWidget {
             onChanged: (_) =>
                 ref.read(renphoWriteHealthProvider.notifier).toggle(),
           ),
-          const HiloCuffPairingTile(),
           SectionLabel(context.l10n.renphoScaleBle),
           const ScalePairingTile(),
           SectionLabel(context.l10n.polarH10HrvStrapBle),

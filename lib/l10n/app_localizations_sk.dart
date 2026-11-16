@@ -365,6 +365,34 @@ class AppLocalizationsSk extends AppLocalizations {
   String get raceGoals => 'Ciele pretekov';
 
   @override
+  String get casualGoalTitle => 'Bez pretekov';
+
+  @override
+  String get casualGoalHint =>
+      'Neplánuješ preteky? Fjelia aj tak naplánuje podľa tvojej úrovne. Bez doterajšieho tréningu začne plán ľahkou 25-minútovou jednotkou.';
+
+  @override
+  String get casualFun => 'Radosť';
+
+  @override
+  String get casualFunHint =>
+      'Ľahké jednotky v tvojich športoch, pre radosť z pohybu.';
+
+  @override
+  String get casualFitness => 'Kondícia';
+
+  @override
+  String get casualFitnessHint =>
+      'Pozvoľný rozvoj s jednou náročnejšou jednotkou týždenne.';
+
+  @override
+  String get casualNone => 'Žiadny';
+
+  @override
+  String get casualGoalAfterRace =>
+      'Platí, keď nie je zadaný pretekársky cieľ.';
+
+  @override
   String get yourActivities => 'Vaše aktivity';
 
   @override
@@ -373,6 +401,36 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get calendarWeekStart => 'Začiatok týždňa v kalendári';
+
+  @override
+  String get trainingSecGoals => 'Ciele a športy';
+
+  @override
+  String get trainingSecGoalsHint => 'Pretekárske ciele a tvoje športy';
+
+  @override
+  String get trainingSecSchedule => 'Týždeň a časy';
+
+  @override
+  String get trainingSecScheduleHint =>
+      'Začiatok týždňa, dni oddychu a sily, tréningové časy, hodiny';
+
+  @override
+  String get trainingSecDetails => 'Sila a výživa';
+
+  @override
+  String get trainingSecDetailsHint => 'Jednotka hmotnosti a dopĺňanie energie';
+
+  @override
+  String get trainingSecReminders => 'Pripomienky a horúčava';
+
+  @override
+  String get trainingSecRemindersHint =>
+      'Vynechané tréningy a aklimatizácia na teplo';
+
+  @override
+  String get trainingSecPlanHint =>
+      'Znova vytvor alebo vymaž plánované tréningy';
 
   @override
   String get planDefaultView => 'Predvolené zobrazenie plánu';
@@ -693,6 +751,13 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get bluetoothBloodPressure => 'Bluetooth · krvný tlak';
+
+  @override
+  String get onbBpMonitorTile => 'Bluetooth · Omron, štandard, manžeta Hilo';
+
+  @override
+  String get onbIndoorTile =>
+      'Bluetooth · Concept2, veslovacie trenažéry, bicykle';
 
   @override
   String get cloudCuffData => 'Cloud · údaje z manžety';
@@ -2701,7 +2766,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get addYourMainPriorityA =>
-      'Pridajte svoje hlavné preteky (priorita A). Plán sa periodizuje smerom k nim: základ, budovanie, vrchol a zníženie záťaže. Bez cieľa pretekov sa zatiaľ plán nevytvorí.';
+      'Pridajte svoje hlavné preteky (priorita A). Plán sa periodizuje smerom k nim: základ, budovanie, vrchol a zníženie záťaže.';
 
   @override
   String get noMeasurementsYet => 'Zatiaľ žiadne merania';
@@ -6065,6 +6130,9 @@ class AppLocalizationsSk extends AppLocalizations {
       'Upozornenia sú pre Fjelia vypnuté. Povoľ ich, aby si dostal túto pripomienku.';
 
   @override
+  String get openNotificationSettings => 'Otvoriť nastavenia upozornení';
+
+  @override
   String get allowNotifications => 'Povoliť upozornenia';
 
   @override
@@ -6204,6 +6272,24 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get briefRestDayToday => 'Dnes je plánovaný deň voľna.';
+
+  @override
+  String briefAwayToday(String kind) {
+    return 'Zadané na dnes: $kind, bez tréningu.';
+  }
+
+  @override
+  String briefAwayTomorrow(String kind) {
+    return 'Zadané na zajtra: $kind, bez tréningu.';
+  }
+
+  @override
+  String get briefRestDayTomorrow => 'Zajtra je plánovaný deň voľna.';
+
+  @override
+  String briefBackFrom(String kind) {
+    return 'Prvý týždeň po: $kind. Ľahko a krátko.';
+  }
 
   @override
   String get restDayPlannedNote => 'Regenerácia je súčasťou tvojho plánu.';
@@ -8413,6 +8499,60 @@ class AppLocalizationsSk extends AppLocalizations {
   String get proWeekReview => 'Týždenný prehľad';
 
   @override
+  String get weeklyReviewPushTitle => 'Tvoj týždeň v skratke';
+
+  @override
+  String get weeklyReviewPushBody =>
+      'Týždeň skončil. Ťukni a pozri sa, ako prebehol.';
+
+  @override
+  String get weeklyReviewReadyTitle => 'Tvoj týždenný prehľad je hotový';
+
+  @override
+  String get weeklyReviewReadyBody =>
+      'Ťukni a prečítaj si, ako prebehol tvoj týždeň.';
+
+  @override
+  String get weeklyReviewChannel => 'Týždenný prehľad';
+
+  @override
+  String get weeklyReviewAuto => 'Týždenný prehľad automaticky';
+
+  @override
+  String get weeklyReviewAutoHint =>
+      'Na začiatku každého týždňa (00:00) upozornenie a Fjelia AI Pro napíše prehľad minulého týždňa, hneď ako aplikácia beží. Na to sa tvoj tréningový kontext posiela do Fjelia AI Pro.';
+
+  @override
+  String get weekDiaryTitle => 'Týždenné prehľady';
+
+  @override
+  String get weekDiaryOpen => 'Staršie prehľady';
+
+  @override
+  String get weekDiaryEmpty =>
+      'Zatiaľ žiadne prehľady. Prvý napíše Fjelia na začiatku budúceho týždňa, alebo ho vytvoríš teraz.';
+
+  @override
+  String weekDiaryCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count týždňov',
+      few: '$count týždne',
+      one: '1 týždeň',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String weekDiaryWeek(int week) {
+    return 'Týždeň $week';
+  }
+
+  @override
+  String get weekDiaryHours => 'Hodiny';
+
+  @override
   String get proWeekReviewHint => 'Čo fungovalo a čo zmeniť budúci týždeň';
 
   @override
@@ -8647,6 +8787,57 @@ class AppLocalizationsSk extends AppLocalizations {
   @override
   String get plusOmronBleHint =>
       'Vyhľadajte štandardné Bluetooth tlakové merače a podporované profily Omron.';
+
+  @override
+  String get bpMonitorsTitle => 'Bluetooth tlakomery';
+
+  @override
+  String get bpMonitorsNone =>
+      'Zatiaľ nie je uložené žiadne zariadenie. Pridaj manžetu Hilo, Omron alebo štandardný Bluetooth tlakomer.';
+
+  @override
+  String get bpMonitorAdd => 'Pridať zariadenie';
+
+  @override
+  String get bpMonitorKindMemory => 'Omron alebo štandard';
+
+  @override
+  String get bpMonitorKindHiloCuff => 'Manžeta Hilo';
+
+  @override
+  String get bpMonitorKindOmron => 'Omron alebo Bluetooth tlakomer';
+
+  @override
+  String get bpMonitorLive => 'Meria na požiadanie';
+
+  @override
+  String get bpMonitorMemory => 'Číta uložené merania';
+
+  @override
+  String get bpMonitorModel => 'Model zariadenia';
+
+  @override
+  String get bpMonitorStandard => 'Štandardný Bluetooth tlakomer';
+
+  @override
+  String get bpMonitorFound => 'Nájdené zariadenie';
+
+  @override
+  String get bpMonitorSearch => 'Hľadať zariadenia';
+
+  @override
+  String get bpMonitorNoneFound =>
+      'Nenašlo sa žiadne zariadenie. Zapni Bluetooth a zobuď tlakomer.';
+
+  @override
+  String get bpMonitorChoose => 'Ktorým zariadením meriaš?';
+
+  @override
+  String get plusBpBle => 'Krvný tlak cez Bluetooth';
+
+  @override
+  String get plusBpBleHint =>
+      'Meraj uloženým zariadením alebo načítaj jeho merania';
 
   @override
   String get sleepEcgTitle => 'Record sleep';

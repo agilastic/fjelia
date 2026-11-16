@@ -365,6 +365,33 @@ class AppLocalizationsPl extends AppLocalizations {
   String get raceGoals => 'Cele startowe';
 
   @override
+  String get casualGoalTitle => 'Bez startu';
+
+  @override
+  String get casualGoalHint =>
+      'Nie planujesz startu? Fjelia i tak zaplanuje trening według twojego poziomu. Bez wcześniejszych treningów plan zaczyna się od lekkiej, 25-minutowej jednostki.';
+
+  @override
+  String get casualFun => 'Przyjemność';
+
+  @override
+  String get casualFunHint =>
+      'Lekkie jednostki w twoich sportach, dla radości ruchu.';
+
+  @override
+  String get casualFitness => 'Kondycja';
+
+  @override
+  String get casualFitnessHint =>
+      'Spokojna progresja z jedną mocniejszą jednostką w tygodniu.';
+
+  @override
+  String get casualNone => 'Brak';
+
+  @override
+  String get casualGoalAfterRace => 'Obowiązuje, gdy nie ma celu startowego.';
+
+  @override
   String get yourActivities => 'Twoje aktywności';
 
   @override
@@ -373,6 +400,37 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get calendarWeekStart => 'Początek tygodnia w kalendarzu';
+
+  @override
+  String get trainingSecGoals => 'Cele i sporty';
+
+  @override
+  String get trainingSecGoalsHint => 'Cele startowe i twoje sporty';
+
+  @override
+  String get trainingSecSchedule => 'Tydzień i godziny';
+
+  @override
+  String get trainingSecScheduleHint =>
+      'Początek tygodnia, dni odpoczynku i siłowe, godziny treningów, liczba godzin';
+
+  @override
+  String get trainingSecDetails => 'Siła i odżywianie';
+
+  @override
+  String get trainingSecDetailsHint =>
+      'Jednostka ciężaru i uzupełnianie energii';
+
+  @override
+  String get trainingSecReminders => 'Przypomnienia i upał';
+
+  @override
+  String get trainingSecRemindersHint =>
+      'Pominięte treningi i aklimatyzacja do upału';
+
+  @override
+  String get trainingSecPlanHint =>
+      'Utwórz ponownie lub usuń zaplanowane treningi';
 
   @override
   String get planDefaultView => 'Domyślny widok planu';
@@ -696,6 +754,12 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get bluetoothBloodPressure => 'Bluetooth · ciśnienie krwi';
+
+  @override
+  String get onbBpMonitorTile => 'Bluetooth · Omron, standard, mankiet Hilo';
+
+  @override
+  String get onbIndoorTile => 'Bluetooth · Concept2, ergometry, rowery';
 
   @override
   String get cloudCuffData => 'Chmura · dane z mankietu';
@@ -2703,7 +2767,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get addYourMainPriorityA =>
-      'Dodaj swój główny start (priorytet A). Plan jest do niego okresowany: baza, budowanie, szczyt i taper. Bez celu startowego plan nie zostanie jeszcze utworzony.';
+      'Dodaj swój główny start (priorytet A). Plan jest do niego okresowany: baza, budowanie, szczyt i taper.';
 
   @override
   String get noMeasurementsYet => 'Brak pomiarów';
@@ -6076,6 +6140,9 @@ class AppLocalizationsPl extends AppLocalizations {
       'Powiadomienia dla Fjelia są wyłączone. Zezwól na nie, aby otrzymywać to przypomnienie.';
 
   @override
+  String get openNotificationSettings => 'Otwórz ustawienia powiadomień';
+
+  @override
   String get allowNotifications => 'Zezwól na powiadomienia';
 
   @override
@@ -6215,6 +6282,24 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get briefRestDayToday => 'Dziś jest zaplanowany dzień odpoczynku.';
+
+  @override
+  String briefAwayToday(String kind) {
+    return 'Wpisano na dziś: $kind, bez treningu.';
+  }
+
+  @override
+  String briefAwayTomorrow(String kind) {
+    return 'Wpisano na jutro: $kind, bez treningu.';
+  }
+
+  @override
+  String get briefRestDayTomorrow => 'Jutro jest zaplanowany dzień odpoczynku.';
+
+  @override
+  String briefBackFrom(String kind) {
+    return 'Pierwszy tydzień po: $kind. Lekko i krótko.';
+  }
 
   @override
   String get restDayPlannedNote => 'Regeneracja jest częścią Twojego planu.';
@@ -8466,6 +8551,62 @@ class AppLocalizationsPl extends AppLocalizations {
   String get proWeekReview => 'Przegląd tygodnia';
 
   @override
+  String get weeklyReviewPushTitle => 'Twój tydzień w skrócie';
+
+  @override
+  String get weeklyReviewPushBody =>
+      'Tydzień się skończył. Dotknij, aby zobaczyć, jak poszło.';
+
+  @override
+  String get weeklyReviewReadyTitle =>
+      'Twoje podsumowanie tygodnia jest gotowe';
+
+  @override
+  String get weeklyReviewReadyBody =>
+      'Dotknij, aby przeczytać, jak minął tydzień.';
+
+  @override
+  String get weeklyReviewChannel => 'Podsumowanie tygodnia';
+
+  @override
+  String get weeklyReviewAuto => 'Podsumowanie tygodnia automatycznie';
+
+  @override
+  String get weeklyReviewAutoHint =>
+      'Na początku każdego tygodnia (00:00) powiadomienie, a Fjelia AI Pro pisze podsumowanie poprzedniego tygodnia, gdy tylko aplikacja działa. W tym celu Twój kontekst treningowy trafia do Fjelia AI Pro.';
+
+  @override
+  String get weekDiaryTitle => 'Podsumowania tygodni';
+
+  @override
+  String get weekDiaryOpen => 'Wcześniejsze podsumowania';
+
+  @override
+  String get weekDiaryEmpty =>
+      'Jeszcze brak podsumowań. Fjelia napisze pierwsze na początku następnego tygodnia albo utworzysz je teraz.';
+
+  @override
+  String weekDiaryCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tygodnia',
+      many: '$count tygodni',
+      few: '$count tygodnie',
+      one: '1 tydzień',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String weekDiaryWeek(int week) {
+    return 'Tydzień $week';
+  }
+
+  @override
+  String get weekDiaryHours => 'Godziny';
+
+  @override
   String get proWeekReviewHint =>
       'Co zadziałało, co zmienić w przyszłym tygodniu';
 
@@ -8701,6 +8842,57 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String get plusOmronBleHint =>
       'Szukaj standardowych ciśnieniomierzy Bluetooth i obsługiwanych profili Omron.';
+
+  @override
+  String get bpMonitorsTitle => 'Ciśnieniomierze Bluetooth';
+
+  @override
+  String get bpMonitorsNone =>
+      'Brak zapisanego urządzenia. Dodaj mankiet Hilo, Omron lub standardowy ciśnieniomierz Bluetooth.';
+
+  @override
+  String get bpMonitorAdd => 'Dodaj urządzenie';
+
+  @override
+  String get bpMonitorKindMemory => 'Omron lub standardowy';
+
+  @override
+  String get bpMonitorKindHiloCuff => 'Mankiet Hilo';
+
+  @override
+  String get bpMonitorKindOmron => 'Omron lub ciśnieniomierz Bluetooth';
+
+  @override
+  String get bpMonitorLive => 'Mierzy na żądanie';
+
+  @override
+  String get bpMonitorMemory => 'Odczytuje zapisane pomiary';
+
+  @override
+  String get bpMonitorModel => 'Model urządzenia';
+
+  @override
+  String get bpMonitorStandard => 'Standardowy ciśnieniomierz Bluetooth';
+
+  @override
+  String get bpMonitorFound => 'Znalezione urządzenie';
+
+  @override
+  String get bpMonitorSearch => 'Szukaj urządzeń';
+
+  @override
+  String get bpMonitorNoneFound =>
+      'Nie znaleziono urządzenia. Włącz Bluetooth i wybudź ciśnieniomierz.';
+
+  @override
+  String get bpMonitorChoose => 'Którym urządzeniem mierzysz?';
+
+  @override
+  String get plusBpBle => 'Ciśnienie przez Bluetooth';
+
+  @override
+  String get plusBpBleHint =>
+      'Zmierz zapisanym urządzeniem lub pobierz jego pomiary';
 
   @override
   String get sleepEcgTitle => 'Nagraj sen';

@@ -3,14 +3,23 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
+<script>
+/* GitHub Pages copy: the site lives at www.fjelia.com. Same path, fixed host,
+   so the redirect cannot be pointed anywhere else. */
+(function () {
+  if (location.hostname !== 'agilastic.github.io') return;
+  var path = location.pathname.replace(/^\/fjelia(\/|$)/, '/');
+  location.replace('https://www.fjelia.com' + path + location.search + location.hash);
+})();
+</script>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Privacy policy — Fjelia</title>
 <meta content="Your health database stays on your device. No Fjelia account is required. You choose connected services and AI options. Data you approve for cloud AI, reports you send to support, and requests to weather or map providers are handled as described below." name="description"/>
 <meta content="#050b19" name="theme-color"/>
-<link href="https://agilastic.github.io/fjelia/privacy.html" rel="canonical"/>
+<link href="https://www.fjelia.com/privacy.html" rel="canonical"/>
 <link href="favicon.ico" rel="icon" sizes="any"/>
 <link href="apple-touch-icon.png" rel="apple-touch-icon"/>
-<link href="style.css?v=20261110imprint" rel="stylesheet"/>
+<link href="style.css?v=20261116trim" rel="stylesheet"/>
 </head>
 <body>
 <a class="skip" data-i18n="t000" href="#main">Skip to content</a>
@@ -105,5 +114,5 @@
 </nav>
 </div>
 </footer>
-<script defer="" src="i18n.js?v=20261110imprint"></script></body>
+<script defer="" src="i18n.js?v=20261116trim"></script></body>
 </html>

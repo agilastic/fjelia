@@ -17,6 +17,7 @@ enum NotificationFeature {
   missedWorkout,
   planProposal,
   shortSession,
+  weeklyReview,
 }
 
 class NutritionNotificationPayload {

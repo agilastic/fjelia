@@ -6,6 +6,7 @@ import '../utils/log.dart';
 import 'bright_sky_client.dart';
 import 'open_meteo_client.dart';
 import 'pirate_weather_client.dart';
+import 'weather_cache.dart';
 import 'weather_api_client.dart';
 
 export '../models/heat_acclimation.dart' show WeatherSnapshotData;
@@ -32,18 +33,25 @@ abstract class GlobalWeatherClient {
 /// Spreads requests over several free weather APIs. A provider that errors
 /// is paused for 24 h; Bright Sky (DWD) is preferred inside Germany.
 class WeatherRouter extends GlobalWeatherClient {
-  WeatherRouter({List<GlobalWeatherClient>? clients})
-    : _clients =
-          clients ??
-          [
-            BrightSkyClient(),
-            OpenMeteoClient(),
-            // Optional services: only with their keys in the build.
-            if (Secrets.pirateWeatherKey.isNotEmpty) PirateWeatherClient(),
-            if (Secrets.weatherApiKey.isNotEmpty) WeatherApiClient(),
-          ];
+  WeatherRouter({
+    List<GlobalWeatherClient>? clients,
+    WeatherCache? cache,
+    DateTime Function()? now,
+  }) : _cache = cache ?? WeatherCache(now: now),
+       _now = now ?? DateTime.now,
+       _clients =
+           clients ??
+           [
+             BrightSkyClient(),
+             OpenMeteoClient(),
+             // Optional services: only with their keys in the build.
+             if (Secrets.pirateWeatherKey.isNotEmpty) PirateWeatherClient(),
+             if (Secrets.weatherApiKey.isNotEmpty) WeatherApiClient(),
+           ];
 
   final List<GlobalWeatherClient> _clients;
+  final WeatherCache _cache;
+  final DateTime Function() _now;
   final Map<String, DateTime> _pausedUntil = {};
 
   @override
@@ -122,8 +130,76 @@ class WeatherRouter extends GlobalWeatherClient {
     );
   }
 
+  /// Kept for [weatherCacheTtl]. Today is the exception: its hours change
+  /// through the day, so they are always asked for again and laid over the
+  /// stored days.
   @override
   Future<OpenMeteoResult> fetchHourlyWeather({
+    required double latitude,
+    required double longitude,
+    required DateTime start,
+    required DateTime end,
+    double? elevation,
+  }) async {
+    final key = WeatherCache.key(
+      latitude: latitude,
+      longitude: longitude,
+      start: start,
+      end: end,
+      elevation: elevation,
+    );
+    final now = _now();
+    final today = DateTime(now.year, now.month, now.day);
+    final tomorrow = DateTime(now.year, now.month, now.day + 1);
+    final coversToday = start.isBefore(tomorrow) && !end.isBefore(today);
+    final cached = await _cache.read(key);
+    if (cached != null && !coversToday) {
+      log('[Weather] fetchHourlyWeather from cache');
+      return cached;
+    }
+    if (cached != null) {
+      try {
+        final fresh = await _fetchHourly(
+          latitude: latitude,
+          longitude: longitude,
+          start: today,
+          end: tomorrow,
+          elevation: elevation,
+        );
+        bool isToday(OpenMeteoPoint p) =>
+            !p.time.isBefore(today) && p.time.isBefore(tomorrow);
+        log('[Weather] today fresh, other days from cache');
+        return OpenMeteoResult(
+          points: [
+            ...cached.points.where((p) => !isToday(p)),
+            ...fresh.points.where(isToday),
+          ]..sort((a, b) => a.time.compareTo(b.time)),
+          sunrise: {...cached.sunrise, ...fresh.sunrise},
+          sunset: {...cached.sunset, ...fresh.sunset},
+          fetchedAt: fresh.fetchedAt,
+          rawJson: fresh.rawJson,
+          source: cached.source,
+          elevation: cached.elevation ?? fresh.elevation,
+        );
+      } catch (e) {
+        // Today could not be asked for: the stored hours are better than
+        // none.
+        log('[Weather] today fetch failed, using cache: $e');
+        return cached;
+      }
+    }
+    final result = await _fetchHourly(
+      latitude: latitude,
+      longitude: longitude,
+      start: start,
+      end: end,
+      elevation: elevation,
+    );
+    await _cache.write(key, result);
+    return result;
+  }
+
+  Future<OpenMeteoResult> _fetchHourly({
     required double latitude,
     required double longitude,
     required DateTime start,

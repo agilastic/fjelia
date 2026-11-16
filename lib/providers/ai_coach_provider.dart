@@ -60,6 +60,8 @@ final aiContextToonBuilderProvider = Provider<AiContextToonBuilder>(
     },
     trainingWindows: () async =>
         (await ref.read(userProfileProvider.future)).trainingWindows,
+    casualGoal: () async =>
+        (await ref.read(userProfileProvider.future)).casualGoal,
   ),
 );
 
@@ -159,7 +161,7 @@ String _briefingKey(AiBriefingPeriod period) {
       '${now.day.toString().padLeft(2, '0')}';
   // The language is part of the key: a briefing is written in one language.
   // Bump the version when prompts or deterministic readiness rules change.
-  return 'ai_briefing_${period.name}_${day}_${activeLocale.languageCode}_v10';
+  return 'ai_briefing_${period.name}_${day}_${activeLocale.languageCode}_v11';
 }
 
 String _briefingInputHashKey(AiBriefingPeriod period) =>

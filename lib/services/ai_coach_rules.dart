@@ -42,7 +42,8 @@ const coachBriefingRules = '''
 
 ━━━ BRIEFING RULES (MUST follow) ━━━
 FORMAT
-- Write ONE single paragraph of plain text: 2 or 3 short sentences, at most 45 words.
+- Write ONE single paragraph of plain text: 2 to 4 short sentences, at most 100 words.
+- Address the person directly and informally in the second person singular (German du, never Sie; French tu, never vous; Spanish tú; Italian tu; Portuguese tu; Catalan tu; Dutch jij; Polish ty; Slovak ty; Danish, Norwegian and Swedish du; Finnish sinä).
 - The person sees every metric on the screen already. DO NOT list or repeat values (HRV, resting heart rate, sleep hours, energy, stress); say what they mean TOGETHER and what to do. Use at most ONE figure. Prefer the Brief line: it holds the ranked findings.
 - NO line breaks, NO bullet points, NO lists, NO numbering, NO headings, NO markdown, NO emojis, NO quotation marks around the whole text. Do not greet and do not sign off.
 CONTENT
@@ -53,6 +54,7 @@ CONTENT
 - NEVER call a higher HRV, a lower RHR, more sleep or lower stress a sign of fatigue or strain. NEVER call a lower HRV, a higher RHR, less sleep or higher stress good.
 - Analysis:FormForecast and the Outlook in the Brief say what happens to form next (rest days, plan, race day): use them for one forward-looking sentence when it matters.
 - Analysis:Overall lists what is better and what is worse than the athlete's average. Open with the most important finding: a metric with Verdict clearlyWorse first, otherwise worse, otherwise better. Name the figure and its average once, for example HRV 40 ms against a 7-day average of 55 ms.
+- The Brief says when today or tomorrow is a planned rest day, or an absence the athlete entered (ill, injured, on holiday, off-season): respect it and suggest no workout on those days; after an illness or injury the first week back stays easy and short.
 - Today is the date in the Context line (Today:), taken from the phone clock. A record with DaysAgo above 0 is from an earlier day: say so and never call it today. A missing record means unknown, never rest.
 - Finish with exactly one concrete recommendation for today or tomorrow that fits the verdicts: mostly worse means easier training or rest, mostly normal or better means train as planned. Never diagnose; for worrying symptoms advise seeing a doctor.''';
 
@@ -75,7 +77,8 @@ const coachAnswerStandardShort =
 
 /// The briefing rules for Apple Intelligence: short, imperative, no nuance.
 const coachBriefingRulesShort =
-    'Write exactly 2 or 3 short sentences, at most 45 words, in plain text with NO line breaks, NO lists, NO markdown. '
+    'Write 2 to 4 short sentences, at most 100 words, in plain text with NO line breaks, NO lists, NO markdown. '
+    'Address the person directly and informally in the second person singular (German du, never Sie; French tu, never vous; Spanish tú; Italian tu; Portuguese tu; Catalan tu; Dutch jij; Polish ty; Slovak ty; Danish, Norwegian and Swedish du; Finnish sinä). '
     'The analysis is finished and given below: explain what the findings mean TOGETHER and what to do. '
     'The person sees every value on the screen already: DO NOT list or repeat metrics or numbers; use at most ONE number. '
     'DO NOT copy the words of the analysis and DO NOT write words like readiness, state or verdict. '
@@ -83,4 +86,5 @@ const coachBriefingRulesShort =
     'Follow the readiness: GREEN means train as planned; YELLOW means keep the plan with no extra intensity; RED means recovery first and no intense training. '
     'If TodayWorkout says cancelled, respect the athlete\'s decision to skip and do not suggest a replacement workout or extra activity. '
     'A record from an earlier day is NOT today. '
+    'When today or tomorrow is a rest day or an absence (ill, injured, holiday, off-season), suggest NO workout on that day. '
     'End with ONE concrete recommendation for today or tomorrow. ';

@@ -1,3 +1,9 @@
+import 'package:fjelia/screens/onboarding/connect_devices_screen.dart';
+import 'package:fjelia/services/bp_monitor_registry.dart';
+import 'package:fjelia/widgets/bp_monitors.dart';
+import 'package:fjelia/widgets/media_gallery.dart' show MediaThumb;
+import 'package:fjelia/screens/planner/pro_analysis_sheet.dart';
+import 'package:fjelia/services/pro_analysis.dart';
 import 'package:fjelia/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:fjelia/providers/health_monitor_alerts_provider.dart';
@@ -886,6 +892,9 @@ void main() {
       );
       await tester.pumpAndSettle();
       await tester.ensureVisible(find.text('VO2MAX RUNNING'));
+      // Out from under the floating header.
+      await tester.drag(find.byType(Scrollable).first, const Offset(0, 160));
+      await tester.pumpAndSettle();
       await tester.tap(find.text('VO2MAX RUNNING'));
       await tester.pumpAndSettle();
       expect(find.byType(BottomSheet), findsOneWidget);
@@ -925,6 +934,9 @@ void main() {
         );
         await tester.pumpAndSettle();
         await tester.ensureVisible(find.text(target.$1));
+        // Out from under the floating header.
+        await tester.drag(find.byType(Scrollable).first, const Offset(0, 160));
+        await tester.pumpAndSettle();
         await tester.tap(find.text(target.$1));
         await tester.pumpAndSettle();
         expect(
@@ -1622,7 +1634,7 @@ void main() {
       await tester.pump(Duration.zero);
       await render(tester, const ConnectionsTab(), 'connections');
       await tester.scrollUntilVisible(
-        find.textContaining('Hilo Blood Pressure BLE'),
+        find.text('Bluetooth blood-pressure monitors'),
         250,
         scrollable: find.byType(Scrollable).first,
       );
@@ -1779,6 +1791,182 @@ void main() {
       'activity-sport-light',
       light: true,
     );
+    expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(Duration.zero);
+    await tester.binding.setSurfaceSize(null);
+  });
+  testWidgets('the header floats over the content like the tab bar', (
+    tester,
+  ) async {
+    await render(tester, const HomeScreen(), 'header-glass');
+    expect(find.byTooltip('Settings'), findsOneWidget);
+    expect(find.byTooltip('Sync'), findsOneWidget);
+    // Scrolled: the cards run under the header.
+    await tester.drag(find.byType(ListView).first, const Offset(0, -260));
+    await tester.pumpAndSettle();
+    await capture(tester, 'header-glass-scrolled');
+    expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(Duration.zero);
+    await tester.binding.setSurfaceSize(null);
+  });
+  testWidgets('the header floats over the content like the tab bar (light)', (
+    tester,
+  ) async {
+    await render(tester, const HomeScreen(), 'header-glass-light', light: true);
+    expect(find.byTooltip('Settings'), findsOneWidget);
+    expect(find.byTooltip('Sync'), findsOneWidget);
+    // Scrolled: the cards run under the header.
+    await tester.drag(find.byType(ListView).first, const Offset(0, -260));
+    await tester.pumpAndSettle();
+    await capture(tester, 'header-glass-light-scrolled');
+    expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(Duration.zero);
+    await tester.binding.setSurfaceSize(null);
+  });
+  testWidgets('Bluetooth blood-pressure monitors: settings, add, choose', (
+    tester,
+  ) async {
+    const store = BpMonitorStore();
+    await tester.runAsync(() async {
+      await store.save(
+        const BpMonitor(
+          kind: 'memory',
+          id: '11:22',
+          name: 'BLESmart_0000',
+          model: 'HEM-7600T',
+        ),
+      );
+      await store.save(
+        const BpMonitor(kind: 'memory', id: 'AA:BB', name: 'BP Monitor'),
+      );
+    });
+    await render(tester, const ConnectionsTab(), 'bp-monitors-settings');
+    // One entry each, made like the other connections.
+    for (final entry in [
+      'Hilo Pod',
+      'Hilo cuff',
+      'BLESmart_0000',
+      'Omron or Bluetooth BP monitor',
+    ]) {
+      await tester.scrollUntilVisible(
+        find.text(entry),
+        120,
+        scrollable: find.byType(Scrollable).first,
+      );
+      expect(find.text(entry), findsOneWidget);
+    }
+    await tester.drag(find.byType(Scrollable).first, const Offset(0, 200));
+    await tester.pumpAndSettle();
+    await capture(tester, 'bp-monitors-settings');
+    await render(tester, const BpMeasureSheet(), 'bp-monitors-choose');
+    expect(find.text('BP Monitor'), findsOneWidget);
+    await render(tester, const AddBpMonitorSheet(), 'bp-monitors-add');
+    expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(Duration.zero);
+    await tester.binding.setSurfaceSize(null);
+  });
+  testWidgets('onboarding: the new Bluetooth devices have their tiles', (
+    tester,
+  ) async {
+    await render(tester, const ConnectDevicesScreen(), 'onboarding-devices');
+    await tester.scrollUntilVisible(
+      find.text('Omron · BLE'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    expect(find.text('Concept2 · FTMS'), findsOneWidget);
+    await capture(tester, 'onboarding-devices');
+    expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(Duration.zero);
+    await tester.binding.setSurfaceSize(null);
+  });
+  testWidgets('the week reviews read like a diary, in both looks', (
+    tester,
+  ) async {
+    for (final (key, body, created) in [
+      (
+        '2026-W46',
+        '**A strong week.** You hit both key sessions and the long run felt '
+            'easy at the end. Keep the easy days easy next week.',
+        DateTime(2026, 11, 16, 0, 20),
+      ),
+      (
+        '2026-W45',
+        'Less time than planned, but the threshold run was right on target. '
+            'Sleep was short on three nights.',
+        DateTime(2026, 11, 9, 7),
+      ),
+    ]) {
+      await db.saveProReport(
+        ProReport(
+          id: 'weekReview:$key',
+          kind: 'weekReview',
+          refKey: key,
+          body: body,
+          model: 'test',
+          createdAt: created,
+        ),
+      );
+    }
+    for (final (i, day) in [10, 12, 14, 15].indexed) {
+      await db
+          .into(db.activityRecords)
+          .insert(
+            ActivityRecordsCompanion.insert(
+              activityId: 'diary$i',
+              name: 'Run',
+              type: 'running',
+              startDate: DateTime(2026, 11, day, 7),
+              durationSeconds: 2700 + i * 900,
+              distanceMeters: Value(8000.0 + i * 3000),
+            ),
+          );
+    }
+    // Pictures of the week's runs: the first wide, the rest in a row.
+    for (var i = 0; i < 6; i++) {
+      await db
+          .into(db.mediaItems)
+          .insert(
+            MediaItemsCompanion.insert(
+              id: 'm$i',
+              ownerKind: 'activity',
+              ownerId: 'diary${i % 4}',
+              kind: i == 2 ? 'video' : 'photo',
+              fileName: 'm$i.jpg',
+              durationMs: Value(i == 2 ? 42000 : null),
+              position: i,
+              createdAt: DateTime(2026, 11, 15),
+            ),
+          );
+    }
+    // The review of week 46 as its card, the earlier weeks right below.
+    const sheet = ProAnalysisSheet(
+      analysis: ProAnalysisRef(ProAnalysisKind.weekReview, '2026-W46'),
+      title: 'Weekly review',
+    );
+    await render(tester, sheet, 'week-diary');
+    expect(find.textContaining('WEEK 46'), findsOneWidget);
+    expect(find.textContaining('A strong week'), findsOneWidget);
+    // Five of the six pictures, one of them a video.
+    expect(find.byType(MediaThumb), findsNWidgets(5));
+    expect(find.byIcon(Icons.play_circle_fill_rounded), findsOneWidget);
+    // No link: the older week is below, folded to its first lines.
+    expect(find.text('Earlier reviews'), findsNothing);
+    await tester.scrollUntilVisible(
+      find.textContaining('WEEK 45'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    expect(find.textContaining('Less time than planned'), findsOneWidget);
+    await tester.tap(find.textContaining('WEEK 45'));
+    await tester.pumpAndSettle();
+    await capture(tester, 'week-diary-open');
+    await render(tester, sheet, 'week-diary-light', light: true);
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox());
     await tester.pump(Duration.zero);
@@ -2577,6 +2765,13 @@ void main() {
         'heat_acclimation_fixed_longitude': 9.767329,
       });
       await render(tester, const TrainingTab(), 'training-overview');
+      // The menu of parts; the sessions setting lives under Week & time.
+      expect(find.text('Week & time'), findsOneWidget);
+      await render(
+        tester,
+        const TrainingTab(section: TrainingSection.schedule),
+        'training-schedule',
+      );
       final doubleDay = find.text('2 — Double day possible');
       await tester.scrollUntilVisible(
         doubleDay,
@@ -2589,6 +2784,11 @@ void main() {
         key: 'user_profile_v1',
       );
       expect(jsonDecode(raw!)['maxSessionsPerDay'], 2);
+      await render(
+        tester,
+        const TrainingTab(section: TrainingSection.plan),
+        'training-plan',
+      );
       await tester.scrollUntilVisible(
         find.text('Regenerate Workouts'),
         250,

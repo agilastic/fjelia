@@ -368,6 +368,34 @@ class AppLocalizationsCa extends AppLocalizations {
   String get raceGoals => 'Objectius de cursa';
 
   @override
+  String get casualGoalTitle => 'Sense cursa';
+
+  @override
+  String get casualGoalHint =>
+      'No tens cap cursa? Fjelia planifica igualment, segons el teu nivell. Sense entrenaments previs, comença amb una sessió suau de 25 minuts.';
+
+  @override
+  String get casualFun => 'Diversió';
+
+  @override
+  String get casualFunHint =>
+      'Sessions suaus als teus esports, pel plaer de moure\'t.';
+
+  @override
+  String get casualFitness => 'Forma física';
+
+  @override
+  String get casualFitnessHint =>
+      'Progressa amb calma, amb una sessió exigent a la setmana.';
+
+  @override
+  String get casualNone => 'Cap';
+
+  @override
+  String get casualGoalAfterRace =>
+      'S\'aplica quan no hi ha cap objectiu de cursa.';
+
+  @override
   String get yourActivities => 'Les teves activitats';
 
   @override
@@ -376,6 +404,36 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get calendarWeekStart => 'Inici de setmana del calendari';
+
+  @override
+  String get trainingSecGoals => 'Objectius i esports';
+
+  @override
+  String get trainingSecGoalsHint => 'Objectius de cursa i els teus esports';
+
+  @override
+  String get trainingSecSchedule => 'Setmana i horaris';
+
+  @override
+  String get trainingSecScheduleHint =>
+      'Inici de setmana, dies de descans i de força, horaris, hores';
+
+  @override
+  String get trainingSecDetails => 'Força i nutrició';
+
+  @override
+  String get trainingSecDetailsHint => 'Unitat de pes i avituallament';
+
+  @override
+  String get trainingSecReminders => 'Recordatoris i calor';
+
+  @override
+  String get trainingSecRemindersHint =>
+      'Sessions perdudes i aclimatació a la calor';
+
+  @override
+  String get trainingSecPlanHint =>
+      'Regenera o esborra les sessions planificades';
 
   @override
   String get planDefaultView => 'Vista predeterminada del pla';
@@ -693,6 +751,12 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get bluetoothBloodPressure => 'Bluetooth · pressió arterial';
+
+  @override
+  String get onbBpMonitorTile => 'Bluetooth · Omron, estàndard, maneguet Hilo';
+
+  @override
+  String get onbIndoorTile => 'Bluetooth · Concept2, rems, bicis';
 
   @override
   String get cloudCuffData => 'Núvol · dades del braçalet';
@@ -2706,7 +2770,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get addYourMainPriorityA =>
-      'Afegeix la teva cursa principal (prioritat A). El pla es periodifica cap a ella: base, desenvolupament, pic i afinament. Sense objectiu de cursa encara no es genera cap pla.';
+      'Afegeix la teva cursa principal (prioritat A). El pla es periodifica cap a ella: base, desenvolupament, pic i afinament.';
 
   @override
   String get noMeasurementsYet => 'Encara no hi ha mesuraments';
@@ -6093,6 +6157,9 @@ class AppLocalizationsCa extends AppLocalizations {
       'Les notificacions de Fjelia estan desactivades. Permet-les per rebre aquest recordatori.';
 
   @override
+  String get openNotificationSettings => 'Obre els ajustos de notificacions';
+
+  @override
   String get allowNotifications => 'Permet les notificacions';
 
   @override
@@ -6232,6 +6299,24 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get briefRestDayToday => 'Avui és un dia de descans previst.';
+
+  @override
+  String briefAwayToday(String kind) {
+    return 'Avui registrat: $kind, sense entrenament.';
+  }
+
+  @override
+  String briefAwayTomorrow(String kind) {
+    return 'Demà registrat: $kind, sense entrenament.';
+  }
+
+  @override
+  String get briefRestDayTomorrow => 'Demà és un dia de descans previst.';
+
+  @override
+  String briefBackFrom(String kind) {
+    return 'Primera setmana després de: $kind. Suau i curt.';
+  }
 
   @override
   String get restDayPlannedNote => 'La recuperació forma part del teu pla.';
@@ -8438,6 +8523,58 @@ class AppLocalizationsCa extends AppLocalizations {
   String get proWeekReview => 'Resum setmanal';
 
   @override
+  String get weeklyReviewPushTitle => 'La teva setmana en resum';
+
+  @override
+  String get weeklyReviewPushBody =>
+      'La setmana s\'ha acabat. Toca per veure com ha anat.';
+
+  @override
+  String get weeklyReviewReadyTitle => 'El resum de la teva setmana està llest';
+
+  @override
+  String get weeklyReviewReadyBody => 'Toca per llegir com ha anat la setmana.';
+
+  @override
+  String get weeklyReviewChannel => 'Resum setmanal';
+
+  @override
+  String get weeklyReviewAuto => 'Resum setmanal automàtic';
+
+  @override
+  String get weeklyReviewAutoHint =>
+      'A l\'inici de cada setmana (00:00) un avís, i Fjelia AI Pro escriu el resum de la setmana passada quan l\'app s\'executa. Per això, el teu context d\'entrenament s\'envia a Fjelia AI Pro.';
+
+  @override
+  String get weekDiaryTitle => 'Resums setmanals';
+
+  @override
+  String get weekDiaryOpen => 'Resums anteriors';
+
+  @override
+  String get weekDiaryEmpty =>
+      'Encara no hi ha resums. Fjelia escriu el primer a l\'inici de la propera setmana, o el pots crear ara.';
+
+  @override
+  String weekDiaryCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count setmanes',
+      one: '1 setmana',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String weekDiaryWeek(int week) {
+    return 'Setmana $week';
+  }
+
+  @override
+  String get weekDiaryHours => 'Hores';
+
+  @override
   String get proWeekReviewHint =>
       'Què ha funcionat i què canviar la setmana vinent';
 
@@ -8675,6 +8812,57 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get plusOmronBleHint =>
       'Cerca dispositius estàndard de pressió arterial i perfils Omron compatibles per Bluetooth.';
+
+  @override
+  String get bpMonitorsTitle => 'Tensiòmetres Bluetooth';
+
+  @override
+  String get bpMonitorsNone =>
+      'Encara no hi ha cap aparell desat. Afegeix el teu maneguet Hilo, Omron o tensiòmetre Bluetooth estàndard.';
+
+  @override
+  String get bpMonitorAdd => 'Afegeix aparell';
+
+  @override
+  String get bpMonitorKindMemory => 'Omron o estàndard';
+
+  @override
+  String get bpMonitorKindHiloCuff => 'Maneguet Hilo';
+
+  @override
+  String get bpMonitorKindOmron => 'Omron o tensiòmetre Bluetooth';
+
+  @override
+  String get bpMonitorLive => 'Mesura quan ho demanes';
+
+  @override
+  String get bpMonitorMemory => 'Llegeix les mesures desades';
+
+  @override
+  String get bpMonitorModel => 'Model de l\'aparell';
+
+  @override
+  String get bpMonitorStandard => 'Tensiòmetre Bluetooth estàndard';
+
+  @override
+  String get bpMonitorFound => 'Aparell trobat';
+
+  @override
+  String get bpMonitorSearch => 'Cerca aparells';
+
+  @override
+  String get bpMonitorNoneFound =>
+      'No s\'ha trobat cap aparell. Activa el Bluetooth i desperta el tensiòmetre.';
+
+  @override
+  String get bpMonitorChoose => 'Amb quin aparell mesures?';
+
+  @override
+  String get plusBpBle => 'Pressió arterial per Bluetooth';
+
+  @override
+  String get plusBpBleHint =>
+      'Mesura amb el teu aparell desat o recupera\'n les mesures';
 
   @override
   String get sleepEcgTitle => 'Record sleep';

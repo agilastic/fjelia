@@ -28,6 +28,11 @@ class MetricAnalysis {
     String? trainingHrv,
     String? outlook,
     bool restDay = false,
+    bool restTomorrow = false,
+    String? away,
+    String? awayTomorrow,
+    String? backFrom,
+    String? window,
   }) {
     final out = <String>[];
     // Findings for the Brief: id, severity (red, yellow, good) and a fixed
@@ -329,6 +334,11 @@ class MetricAnalysis {
       trainingHrv: trainingHrv,
       outlook: outlook,
       restDay: restDay,
+      restTomorrow: restTomorrow,
+      away: away,
+      awayTomorrow: awayTomorrow,
+      backFrom: backFrom,
+      window: window,
     );
     out.insert(0, brief.toLine());
     out.insert(

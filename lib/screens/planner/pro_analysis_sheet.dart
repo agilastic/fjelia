@@ -17,6 +17,8 @@ import '../../utils/log.dart';
 import '../../widgets/app_widgets.dart';
 import '../ai_coach/ai_coach_screen.dart' show coachGradient;
 import '../settings/fjelia_pro_sheet.dart';
+import '../../providers/week_start_provider.dart';
+import 'week_review_diary.dart';
 
 /// The FjeliaPro analyses on the plan: the week, the next race and the season.
 /// Today's plan check is part of the briefing. Without Pro each row leads to
@@ -63,12 +65,20 @@ class _ProToolsCardState extends ConsumerState<ProToolsCard> {
         .valueOrNull
         ?.where((g) => g.participation != 'cancelled')
         .firstOrNull;
+    // This week's review once there is one; until then the finished week's,
+    // which is the one written when a week begins.
+    final mondayFirst = ref.watch(weekStartsOnMondayProvider);
+    final thisWeek = ProAnalysisRef.weekReview(now, mondayFirst: mondayFirst);
+    final hasThisWeek =
+        ref.watch(proReportProvider(thisWeek.id)).valueOrNull != null;
     final rows = [
       (
         Icons.insights_rounded,
         l.proWeekReview,
         l.proWeekReviewHint,
-        ProAnalysisRef.weekReview(now),
+        hasThisWeek
+            ? thisWeek
+            : ProAnalysisRef.lastWeekReview(now, mondayFirst: mondayFirst),
       ),
       if (race != null)
         (
@@ -331,6 +341,17 @@ class _ProAnalysisSheetState extends ConsumerState<ProAnalysisSheet> {
                 ],
               ),
             )
+          // A week review as its diary card: pictures, figures and the text.
+          else if (report != null &&
+              widget.analysis.kind == ProAnalysisKind.weekReview &&
+              ProAnalysisRef.weekReviewMonday(report.refKey) != null &&
+              hasText)
+            WeekReviewEntry(
+              key: const ValueKey('pro-report'),
+              report: report,
+              mondayFirst: ref.watch(weekStartsOnMondayProvider),
+              newest: true,
+            )
           else if (report != null)
             SectionCard(
               key: const ValueKey('pro-report'),
@@ -366,6 +387,10 @@ class _ProAnalysisSheetState extends ConsumerState<ProAnalysisSheet> {
               onPressed: working ? null : _create,
               child: Text(hasText ? l.proAnalysisRedo : l.proAnalysisCreate),
             ),
+          // Every week written so far, like a diary.
+          // Every earlier week right below, like a diary.
+          if (widget.analysis.kind == ProAnalysisKind.weekReview)
+            WeekReviewList(exclude: widget.analysis.id),
         ],
       ),
     );

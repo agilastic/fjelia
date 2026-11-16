@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://agilastic.github.io/fjelia/sitemap.xml
+Sitemap: https://www.fjelia.com/sitemap.xml

@@ -66,110 +66,163 @@ class _HomeState extends ConsumerState<HomeScreen> {
     final sync = ref.watch(syncProvider),
         debug = ref.watch(userProfileProvider).valueOrNull?.debugMode ?? false;
     final current = tab == 4 && !debug ? 0 : tab;
+    // The coach keeps its input at the bottom and its chat on its own: it
+    // does not run under the bars.
+    final glass = current != 3 && current != 4;
+    final header = MediaQuery.paddingOf(context).top + _headerHeight;
     return Scaffold(
       extendBody: current < 3,
+      extendBodyBehindAppBar: glass,
+      // Like the tab bar: two floating pills, the content runs under them
+      // and shows between them as it scrolls.
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(58),
-        child: SafeArea(
-          child: Row(
-            children: [
-              IconButton(
-                tooltip: context.l10n.settings,
-                icon: Icon(Icons.menu, size: 20, color: muted),
-                onPressed: () => SettingsSheet.show(context),
-              ),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: current == 1
-                      ? const PlanViewSwitcher()
-                      : const DayNavigator(),
+        preferredSize: const Size.fromHeight(_headerHeight),
+        child: Stack(
+          children: [
+            // A soft fade behind the status bar only, so the clock stays
+            // readable over the content.
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              height: MediaQuery.paddingOf(context).top + 10,
+              child: IgnorePointer(
+                child: ClipRect(
+                  child: BackdropFilter(
+                    filter: ui.ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            fjBackground.withValues(alpha: .8),
+                            fjBackground.withValues(alpha: 0),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
-              IconButton(
-                tooltip: context.l10n.sendFeedbackOrReportA,
-                icon: Icon(Icons.feedback_outlined, size: 20, color: muted),
-                onPressed: () => showAppSheet(context, const BugReportSheet()),
-              ),
-              IconButton(
-                tooltip: context.l10n.addMeasurement2,
-                icon: Icon(Icons.add, size: 20, color: muted),
-                onPressed: () => showAppSheet(context, ManualEntrySheet()),
-              ),
-              PopupMenuButton<String>(
-                tooltip: context.l10n.syncLabel2,
-                icon: SyncOrb(
-                  spinning:
-                      sync.status == SyncStatus.syncing ||
-                      ref.watch(historicSyncProvider).running,
-                  freshness:
-                      sync.status == SyncStatus.error ||
-                          sync.errorMessage != null
-                      ? SyncFreshness.error
-                      : sync.lastSync != null &&
-                            DateTime.now().difference(sync.lastSync!) <
-                                const Duration(hours: 3)
-                      ? SyncFreshness.fresh
-                      : SyncFreshness.stale,
-                ),
-                onSelected: (choice) => runUiAction(context, () async {
-                  if (choice == 'today') {
-                    await ref.read(syncProvider.notifier).sync();
-                  } else {
-                    await ref
-                        .read(historicSyncProvider.notifier)
-                        .start(
-                          days: choice == 'year' ? 365 : 3650,
-                          force: true,
-                        );
-                  }
-                }),
-                itemBuilder: (_) => [
-                  PopupMenuItem(
-                    value: 'today',
-                    child: Text(context.l10n.syncToday),
-                  ),
-                  PopupMenuItem(
-                    value: 'year',
-                    child: Text(context.l10n.fullSync1Year),
-                  ),
-                  PopupMenuItem(
-                    value: 'all',
-                    child: Text(context.l10n.fullSyncComplete),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-      body: Column(
-        children: [
-          if (sync.status == SyncStatus.syncing) ...[
-            LinearProgressIndicator(value: sync.progress / 100),
-            Padding(
-              padding: EdgeInsets.fromLTRB(16, 4, 16, 0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  context.l10n.syncingYourData,
-                  style: TextStyle(fontSize: 11, color: muted),
+            ),
+            SafeArea(
+              bottom: false,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(12, 6, 12, 4),
+                child: Row(
+                  children: [
+                    // Where you are: the settings and the day (or the plan's
+                    // view).
+                    Flexible(
+                      child: _GlassPill(
+                        children: [
+                          IconButton(
+                            tooltip: context.l10n.settings,
+                            visualDensity: VisualDensity.compact,
+                            icon: Icon(Icons.menu, size: 20, color: muted),
+                            onPressed: () => SettingsSheet.show(context),
+                          ),
+                          Flexible(
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 6),
+                              // A long date or large text shrinks to fit
+                              // instead of pushing the pills apart.
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                alignment: Alignment.centerLeft,
+                                child: current == 1
+                                    ? const PlanViewSwitcher()
+                                    : const DayNavigator(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    // What you can do: report, add, sync.
+                    _GlassPill(
+                      children: [
+                        IconButton(
+                          tooltip: context.l10n.sendFeedbackOrReportA,
+                          visualDensity: VisualDensity.compact,
+                          icon: Icon(
+                            Icons.feedback_outlined,
+                            size: 20,
+                            color: muted,
+                          ),
+                          onPressed: () =>
+                              showAppSheet(context, const BugReportSheet()),
+                        ),
+                        IconButton(
+                          tooltip: context.l10n.addMeasurement2,
+                          visualDensity: VisualDensity.compact,
+                          icon: Icon(Icons.add, size: 20, color: muted),
+                          onPressed: () =>
+                              showAppSheet(context, ManualEntrySheet()),
+                        ),
+                        PopupMenuButton<String>(
+                          tooltip: context.l10n.syncLabel2,
+                          icon: SyncOrb(
+                            spinning:
+                                sync.status == SyncStatus.syncing ||
+                                ref.watch(historicSyncProvider).running,
+                            freshness:
+                                sync.status == SyncStatus.error ||
+                                    sync.errorMessage != null
+                                ? SyncFreshness.error
+                                : sync.lastSync != null &&
+                                      DateTime.now().difference(
+                                            sync.lastSync!,
+                                          ) <
+                                          const Duration(hours: 3)
+                                ? SyncFreshness.fresh
+                                : SyncFreshness.stale,
+                          ),
+                          onSelected: (choice) =>
+                              runUiAction(context, () async {
+                                if (choice == 'today') {
+                                  await ref.read(syncProvider.notifier).sync();
+                                } else {
+                                  await ref
+                                      .read(historicSyncProvider.notifier)
+                                      .start(
+                                        days: choice == 'year' ? 365 : 3650,
+                                        force: true,
+                                      );
+                                }
+                              }),
+                          itemBuilder: (_) => [
+                            PopupMenuItem(
+                              value: 'today',
+                              child: Text(context.l10n.syncToday),
+                            ),
+                            PopupMenuItem(
+                              value: 'year',
+                              child: Text(context.l10n.fullSync1Year),
+                            ),
+                            PopupMenuItem(
+                              value: 'all',
+                              child: Text(context.l10n.fullSyncComplete),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),
           ],
-          const RecordingBanner(),
-          const HistorySyncCard(),
-          if (sync.errorMessage != null)
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Text(
-                sync.errorMessage!,
-                style: const TextStyle(color: Colors.orange, fontSize: 11),
-              ),
-            ),
-          Expanded(
+        ),
+      ),
+      body: Stack(
+        children: [
+          Positioned.fill(
             child: RefreshIndicator(
+              // The pull spinner comes out below the header, not behind it.
+              edgeOffset: glass ? header : 0,
               onRefresh: () => ref.read(syncProvider.notifier).sync(),
               child: switch (current) {
                 0 => _HealthPage(
@@ -192,6 +245,67 @@ class _HomeState extends ConsumerState<HomeScreen> {
                 ),
                 _ => const DebugScreen(),
               },
+            ),
+          ),
+          // Sync progress and messages float below the header.
+          Positioned(
+            top: glass ? header : 0,
+            left: 0,
+            right: 0,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (sync.status == SyncStatus.syncing ||
+                    sync.errorMessage != null)
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 2, 12, 4),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: panel.withValues(alpha: .94),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: duo(0xFF333333, 0xFFE3E7EC)),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            if (sync.status == SyncStatus.syncing) ...[
+                              LinearProgressIndicator(
+                                value: sync.progress / 100,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                  14,
+                                  6,
+                                  14,
+                                  8,
+                                ),
+                                child: Text(
+                                  context.l10n.syncingYourData,
+                                  style: TextStyle(fontSize: 11, color: muted),
+                                ),
+                              ),
+                            ],
+                            if (sync.errorMessage != null)
+                              Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Text(
+                                  sync.errorMessage!,
+                                  style: const TextStyle(
+                                    color: Colors.orange,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                const RecordingBanner(),
+                const HistorySyncCard(),
+              ],
             ),
           ),
         ],
@@ -306,6 +420,35 @@ class _HomeState extends ConsumerState<HomeScreen> {
   }
 }
 
+/// The header's height below the status bar.
+const _headerHeight = 58.0;
+
+/// A floating pill of the header, made like the tab bar.
+class _GlassPill extends StatelessWidget {
+  const _GlassPill({required this.children});
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) => ClipRRect(
+    borderRadius: BorderRadius.circular(28),
+    // Frosted: what scrolls under the pill blurs, so its own text stays
+    // clear.
+    child: BackdropFilter(
+      filter: ui.ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+      child: Container(
+        height: 46,
+        padding: const EdgeInsets.symmetric(horizontal: 2),
+        decoration: BoxDecoration(
+          color: panel.withValues(alpha: .82),
+          borderRadius: BorderRadius.circular(28),
+          border: Border.all(color: duo(0xFF333333, 0xFFE3E7EC)),
+        ),
+        child: Row(mainAxisSize: MainAxisSize.min, children: children),
+      ),
+    ),
+  );
+}
+
 class _HealthPage extends ConsumerWidget {
   const _HealthPage({required this.openCoach, required this.openLoad});
   final VoidCallback openCoach, openLoad;
@@ -326,7 +469,13 @@ class _HealthPage extends ConsumerWidget {
     final last = ref.watch(syncProvider).lastSync;
     return ListView(
       physics: const AlwaysScrollableScrollPhysics(),
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 100),
+      // Under the floating header: it starts below it and scrolls under it.
+      padding: EdgeInsets.fromLTRB(
+        16,
+        MediaQuery.paddingOf(context).top + 4,
+        16,
+        100,
+      ),
       children: [
         DaySummaryCard(openLoad: openLoad),
         // Ill or injured with no end known: the way back, near the top.

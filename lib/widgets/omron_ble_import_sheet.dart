@@ -8,7 +8,16 @@ import '../theme/fjelia_style.dart';
 import 'app_widgets.dart';
 
 class OmronBleImportSheet extends ConsumerStatefulWidget {
-  const OmronBleImportSheet({super.key});
+  const OmronBleImportSheet({
+    super.key,
+    this.deviceId,
+    this.deviceName,
+    this.model,
+  });
+
+  /// A monitor saved in the settings: read at once, no search, no model
+  /// choice.
+  final String? deviceId, deviceName, model;
 
   @override
   ConsumerState<OmronBleImportSheet> createState() => _OmronBleImportState();
@@ -27,6 +36,20 @@ class _OmronBleImportState extends ConsumerState<OmronBleImportSheet> {
   Set<int> selectedReadingIndices = {};
 
   bool get german => Localizations.localeOf(context).languageCode == 'de';
+
+  bool get saved => widget.deviceId != null;
+
+  @override
+  void initState() {
+    super.initState();
+    if (saved) {
+      deviceId = widget.deviceId;
+      model = widget.model ?? standardBpModel;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) import();
+      });
+    }
+  }
 
   Future<void> scan() async {
     setState(() {
@@ -207,39 +230,47 @@ class _OmronBleImportState extends ConsumerState<OmronBleImportSheet> {
           style: TextStyle(color: fjInk70, fontSize: 12, height: 1.35),
         ),
         const SizedBox(height: 24),
-        DropdownButtonFormField<String>(
-          isExpanded: true,
-          initialValue: model,
-          decoration: InputDecoration(
-            labelText: german ? 'Gerätemodell' : 'Monitor model',
-            hintText: german
-                ? 'Modellnummer auswählen'
-                : 'Select exact model number',
-            border: const OutlineInputBorder(),
-          ),
-          items: [
-            DropdownMenuItem(
-              value: standardBpModel,
-              child: Text(
-                german
-                    ? 'Standard-Bluetooth-Blutdruckgerät'
-                    : 'Standard Bluetooth blood-pressure monitor',
-                overflow: TextOverflow.ellipsis,
-              ),
+        if (saved)
+          Text(
+            '${widget.deviceName ?? ''} · '
+            '${model == standardBpModel ? context.l10n.bpMonitorStandard : model}',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontWeight: FontWeight.w700, color: fjInk),
+          )
+        else
+          DropdownButtonFormField<String>(
+            isExpanded: true,
+            initialValue: model,
+            decoration: InputDecoration(
+              labelText: german ? 'Gerätemodell' : 'Monitor model',
+              hintText: german
+                  ? 'Modellnummer auswählen'
+                  : 'Select exact model number',
+              border: const OutlineInputBorder(),
             ),
-            for (final p in omronModelProfiles)
+            items: [
               DropdownMenuItem(
-                value: p.model,
+                value: standardBpModel,
                 child: Text(
-                  '${p.model} · ${p.alias}',
+                  german
+                      ? 'Standard-Bluetooth-Blutdruckgerät'
+                      : 'Standard Bluetooth blood-pressure monitor',
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-          ],
-          onChanged: busy ? null : (value) => setState(() => model = value),
-        ),
+              for (final p in omronModelProfiles)
+                DropdownMenuItem(
+                  value: p.model,
+                  child: Text(
+                    '${p.model} · ${p.alias}',
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+            ],
+            onChanged: busy ? null : (value) => setState(() => model = value),
+          ),
         const SizedBox(height: 12),
-        if (devices.isNotEmpty)
+        if (devices.isNotEmpty && !saved)
           DropdownButtonFormField<String>(
             isExpanded: true,
             initialValue: deviceId,
@@ -293,15 +324,16 @@ class _OmronBleImportState extends ConsumerState<OmronBleImportSheet> {
                   },
           ),
         const SizedBox(height: 12),
-        OutlinedButton.icon(
-          onPressed: busy ? null : scan,
-          icon: const Icon(Icons.bluetooth_searching),
-          label: Text(
-            german
-                ? 'BLE-Blutdruckgeräte suchen'
-                : 'Search BLE blood-pressure monitors',
+        if (!saved)
+          OutlinedButton.icon(
+            onPressed: busy ? null : scan,
+            icon: const Icon(Icons.bluetooth_searching),
+            label: Text(
+              german
+                  ? 'BLE-Blutdruckgeräte suchen'
+                  : 'Search BLE blood-pressure monitors',
+            ),
           ),
-        ),
         const SizedBox(height: 8),
         FilledButton.icon(
           onPressed:

@@ -13,6 +13,11 @@ import '../../providers/polar_h10_provider.dart';
 import '../../providers/polar_provider.dart';
 import '../../providers/suunto_provider.dart';
 import '../../providers/mywhoosh_provider.dart';
+import '../../providers/bp_monitor_provider.dart';
+import '../../providers/indoor_recording_provider.dart'
+    show indoorPairedProvider;
+import '../../widgets/bp_monitors.dart' show AddBpMonitorSheet;
+import '../../widgets/manual_activity_sheet.dart' show ManualActivitySheet;
 import 'connect_aktiia_screen.dart';
 import 'connect_coros_screen.dart';
 import 'connect_garmin_screen.dart';
@@ -45,6 +50,8 @@ class ConnectDevicesScreen extends ConsumerWidget {
     required bool health,
     required bool renphoBle,
     required bool polarH10,
+    required bool bpMonitor,
+    required bool indoor,
   }) {
     final tiles = [
       _DeviceTile(
@@ -55,6 +62,24 @@ class ConnectDevicesScreen extends ConsumerWidget {
         connected: hiloBle,
         onTap: () =>
             _push(context, const ConnectHiloBleScreen(fromOnboarding: true)),
+      ),
+      // Omron, standard monitors and the Hilo cuff: saved in one place.
+      _DeviceTile(
+        icon: Icons.monitor_heart_rounded,
+        color: const Color(0xFFFF5A7A),
+        name: 'Omron · BLE',
+        subtitle: context.l10n.onbBpMonitorTile,
+        connected: bpMonitor,
+        onTap: () => _push(context, const AddBpMonitorSheet()),
+      ),
+      // Concept2 PM5 and FTMS rowers, bikes and treadmills.
+      _DeviceTile(
+        icon: Icons.rowing_rounded,
+        color: const Color(0xFF3EE0FF),
+        name: 'Concept2 · FTMS',
+        subtitle: context.l10n.onbIndoorTile,
+        connected: indoor,
+        onTap: () => _push(context, const ManualActivitySheet()),
       ),
       _DeviceTile(
         icon: Icons.favorite_rounded,
@@ -201,6 +226,9 @@ class ConnectDevicesScreen extends ConsumerWidget {
       health: ref.watch(healthConnectPermissionProvider).valueOrNull ?? false,
       renphoBle: ref.watch(renphoBleConnectedProvider).valueOrNull ?? false,
       polarH10: ref.watch(polarH10PairedProvider).valueOrNull != null,
+      bpMonitor:
+          (ref.watch(bpMonitorsProvider).valueOrNull ?? const []).isNotEmpty,
+      indoor: ref.watch(indoorPairedProvider).valueOrNull != null,
     );
     return Scaffold(
       backgroundColor: duo(0xFF111111, 0xFFF2F4F7),
@@ -359,6 +387,8 @@ class _DeviceTile extends StatelessWidget {
             const Spacer(),
             Text(
               name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 color: fjInk,
                 fontSize: 14,
@@ -368,6 +398,8 @@ class _DeviceTile extends StatelessWidget {
             const SizedBox(height: 2),
             Text(
               subtitle,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 color: duo(0xFF888888, 0xFF6B7280),
                 fontSize: 11,

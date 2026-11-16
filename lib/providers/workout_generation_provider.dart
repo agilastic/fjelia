@@ -17,6 +17,23 @@ PlanAthleteProfile planAthleteOf(UserProfile? profile) => PlanAthleteProfile(
   age: profile?.age?.floor(),
 );
 
+/// The main sport of a plan without a race: the athlete's first sport the
+/// planner knows, running when none.
+String casualSport(List<String> sports) => sports.firstWhere(
+  (s) => const {
+    'running',
+    'trail_running',
+    'cycling_road',
+    'cycling_gravel',
+    'cycling_mtb',
+    'swimming',
+    'triathlon',
+    'indoor_rowing',
+    'hiking',
+  }.contains(s),
+  orElse: () => 'running',
+);
+
 /// One generation job at a time; replaces the active plan's future workouts.
 final workoutGenerationProvider =
     StateNotifierProvider<WorkoutGenerationNotifier, AsyncValue<int?>>(
@@ -48,10 +65,12 @@ class WorkoutGenerationNotifier extends StateNotifier<AsyncValue<int?>> {
       // Every goal the season carries, not only the first A.
       final goals = await ref.read(raceGoalServiceProvider).resolveGoalSet();
       final goal = goals.display;
-      if (goal == null) {
+      final profile = await ref.read(userProfileProvider.future);
+      // Without a race goal only a plan for the athlete's own aim.
+      final casual = goal == null ? profile.casualGoal : null;
+      if (goal == null && casual == null) {
         throw StateError('Add a future race goal first.');
       }
-      final profile = await ref.read(userProfileProvider.future);
       final db = ref.read(databaseProvider);
       await ref.read(workoutTemplateLibraryProvider).seedIfEmpty();
       final active =
@@ -66,13 +85,16 @@ class WorkoutGenerationNotifier extends StateNotifier<AsyncValue<int?>> {
           .read(trainingPlanServiceProvider)
           .generatePlan(
             athleteId: 'self',
-            raceGoalId: goal.id,
-            raceDate: goal.date,
-            sport: goal.sport,
-            raceDistanceM: goal.distanceM,
-            raceElevationM: goal.elevationM,
-            targetFinishSeconds: goal.targetSeconds,
-            goals: goals,
+            raceGoalId: goal?.id,
+            raceDate:
+                goal?.date ??
+                DateTime.now().add(const Duration(days: casualHorizonDays)),
+            sport: goal?.sport ?? casualSport(profile.preferredSports),
+            raceDistanceM: goal?.distanceM,
+            raceElevationM: goal?.elevationM,
+            targetFinishSeconds: goal?.targetSeconds,
+            goals: goal == null ? null : goals,
+            casualGoal: casual,
             daysPerWeek: profile.trainingDaysPerWeek,
             hoursPerWeek: profile.hoursPerWeek,
             restDays: profile.planRestDays,

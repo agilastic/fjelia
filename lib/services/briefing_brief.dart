@@ -1,4 +1,5 @@
 import '../l10n/app_localizations.dart';
+import '../l10n/plan_text.dart' show absenceKindLabel;
 
 /// What the daily briefing is about, decided by the app and not by a model:
 /// the readiness colour, the few findings that matter (worst first) and what
@@ -18,6 +19,11 @@ class BriefingBrief {
     this.trainingHrv,
     this.outlook,
     this.restDay = false,
+    this.restTomorrow = false,
+    this.away,
+    this.awayTomorrow,
+    this.backFrom,
+    this.window,
   });
 
   /// green, yellow or red.
@@ -36,13 +42,33 @@ class BriefingBrief {
   /// Today is a planned rest day: the plan covers it and schedules nothing.
   final bool restDay;
 
+  /// Tomorrow is a planned rest day.
+  final bool restTomorrow;
+
+  /// An absence the athlete entered for today or tomorrow: illness, injury,
+  /// vacation or offseason. The plan holds nothing on those days.
+  final String? away, awayTomorrow;
+
+  /// Back within the last seven days from an illness or injury: the plan
+  /// keeps the first week easy and short.
+  final String? backFrom;
+
+  /// Today's training times from the settings, e.g. `17:00-20:00` or
+  /// `06:00-07:30+17:00-20:00`.
+  final String? window;
+
   static String _list(List<String> v) => v.isEmpty ? 'none' : v.join('|');
 
   String toLine() =>
       '[Brief:Readiness:$readiness,Findings:${_list(findings)},'
       'Good:${_list(good)},Done:${_list(done)},Today:${_list(today)},'
       'Tomorrow:${_list(tomorrow)},TrainingHrv:${trainingHrv ?? 'none'},'
-      'Outlook:${outlook ?? 'none'}${restDay ? ',Rest:planned' : ''}]';
+      'Outlook:${outlook ?? 'none'}${restDay ? ',Rest:planned' : ''}'
+      '${restTomorrow ? ',RestTomorrow:planned' : ''}'
+      '${away == null ? '' : ',Away:$away'}'
+      '${awayTomorrow == null ? '' : ',AwayTomorrow:$awayTomorrow'}'
+      '${backFrom == null ? '' : ',Back:$backFrom'}'
+      '${window == null ? '' : ',Window:$window'}]';
 
   static BriefingBrief? parse(String toon) {
     final m = RegExp(r'\[Brief:([^\]]*)\]').firstMatch(toon);
@@ -68,6 +94,11 @@ class BriefingBrief {
       trainingHrv: hrv == null || hrv == 'none' ? null : hrv,
       outlook: out == null || out == 'none' ? null : out,
       restDay: f['Rest'] == 'planned',
+      restTomorrow: f['RestTomorrow'] == 'planned',
+      away: f['Away'],
+      awayTomorrow: f['AwayTomorrow'],
+      backFrom: f['Back'],
+      window: f['Window'],
     );
   }
 
@@ -94,6 +125,14 @@ class BriefingBrief {
       _ => null,
     };
   }
+
+  /// An absence in English words, for a model.
+  static String awayEnglish(String kind) => switch (kind) {
+    'illness' => 'ill',
+    'injury' => 'injured',
+    'vacation' => 'on holiday',
+    _ => 'in the off-season',
+  };
 
   /// A finding in English words, for a model.
   static String englishFinding(String id) => _english[id] ?? id;
@@ -137,13 +176,24 @@ class BriefingBrief {
         'Main findings, most important first: ${names(findings)}',
       if (good.isNotEmpty) 'Good: ${names(good)}',
       if (done.isNotEmpty) 'Done today: ${plan(done)}',
-      if (today.isNotEmpty)
-        'Still planned today: ${today.length} scheduled ${today.length == 1 ? 'session' : 'sessions'}, ${plan(today)}',
-      if (today.isEmpty && restDay)
+      if (away != null)
+        'Today the athlete is ${awayEnglish(away!)} (entered by the athlete), so the plan holds no training today'
+      else if (today.isNotEmpty)
+        'Still planned today: ${today.length} scheduled ${today.length == 1 ? 'session' : 'sessions'}, ${plan(today)}'
+      else if (restDay)
         'Today is a planned rest day in the training plan'
-      else if (today.isEmpty)
+      else
         'No further scheduled sessions today',
-      if (tomorrow.isNotEmpty) 'Planned tomorrow: ${plan(tomorrow)}',
+      if (backFrom != null)
+        'First week back after being ${awayEnglish(backFrom!)}: the plan keeps it easy and short',
+      if (window != null && away == null)
+        'The athlete can train today ${window!.replaceAll('+', ' and ').replaceAll('-', ' to ')}',
+      if (awayTomorrow != null)
+        'Tomorrow the athlete is ${awayEnglish(awayTomorrow!)}, so no training is planned tomorrow'
+      else if (tomorrow.isNotEmpty)
+        'Planned tomorrow: ${plan(tomorrow)}'
+      else if (restTomorrow)
+        'Tomorrow is a planned rest day in the training plan',
       if (trainingHrv != null)
         'HRV before and after the workout ${trainingHrv == 'up' ? 'rose (favourable)' : 'fell (less favourable)'}',
       if (outlook != null) 'Outlook: ${outlookEnglish(outlook!)}',
@@ -151,16 +201,30 @@ class BriefingBrief {
     return '${parts.join('. ')}.';
   }
 
-  String? plannedTodaySentence(AppLocalizations l) => today.isNotEmpty
+  String? plannedTodaySentence(AppLocalizations l) => away != null
+      ? l.briefAwayToday(absenceKindLabel(l, away!))
+      : today.isNotEmpty
       ? l.briefPlannedTodayCount(today.length)
       : restDay
       ? l.briefRestDayToday
+      : null;
+
+  /// Tomorrow's absence or rest day as a sentence, for the app's own text.
+  String? tomorrowSentence(AppLocalizations l) => awayTomorrow != null
+      ? l.briefAwayTomorrow(absenceKindLabel(l, awayTomorrow!))
+      : tomorrow.isEmpty && restTomorrow
+      ? l.briefRestDayTomorrow
       : null;
 
   /// The plan is a database fact, even when recovery advice suggests reducing
   /// it. A small model must not turn several sessions into one optional idea.
   String scheduleInstruction(AppLocalizations l) {
     final sentence = plannedTodaySentence(l);
+    if (sentence != null && away != null) {
+      return 'Today the athlete is ${awayEnglish(away!)}; the plan holds no training. '
+          'Include this exact sentence as one of your sentences: "$sentence" '
+          'Do not suggest a workout for today${away == 'illness' || away == 'injury' ? '; recovery comes first' : ''}. ';
+    }
     if (sentence != null && today.isEmpty) {
       return 'Today is a planned rest day in the training plan. '
           'Include this exact sentence as one of your sentences: "$sentence" '
@@ -219,8 +283,13 @@ class BriefingBrief {
         : ' ${trainingHrv == 'up' ? l.briefTrainingHrvUp : l.briefTrainingHrvDown}';
     final outlookSentence = outlookText(l, outlook);
     final schedule = plannedTodaySentence(l);
+    final back = backFrom == null
+        ? null
+        : l.briefBackFrom(absenceKindLabel(l, backFrom!));
+    final next = tomorrowSentence(l);
     return '$head $why$training${outlookSentence == null ? '' : ' $outlookSentence'}'
-        '${schedule == null ? '' : ' $schedule'} $advice';
+        '${schedule == null ? '' : ' $schedule'}${back == null ? '' : ' $back'}'
+        '${next == null ? '' : ' $next'} $advice';
   }
 }
 
@@ -270,7 +339,7 @@ bool briefingIsUsable(String text, {required String languageCode}) {
   final t = text.trim();
   if (t.isEmpty) return false;
   final words = t.split(RegExp(r'\s+'));
-  if (words.length > 65) return false;
+  if (words.length > 110) return false;
   final lower = t.toLowerCase();
   const echoes = [
     '(state ',
@@ -287,7 +356,7 @@ bool briefingIsUsable(String text, {required String languageCode}) {
   ];
   if (echoes.any(lower.contains)) return false;
   // Many figures means it is listing values the person already sees.
-  if (RegExp(r'\d+[.,]?\d*').allMatches(t).length > 4) return false;
+  if (RegExp(r'\d+[.,]?\d*').allMatches(t).length > 6) return false;
   if (looksWrongLanguage(t, languageCode)) return false;
   return true;
 }

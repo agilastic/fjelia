@@ -66,7 +66,12 @@ class _PlanState extends ConsumerState<PlanScreen> {
       },
       child: ListView(
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 128),
+        padding: EdgeInsets.fromLTRB(
+          16,
+          MediaQuery.paddingOf(context).top + 16,
+          16,
+          128,
+        ),
         children: [
           // Waiting for an answer: first, above everything else.
           const PlanProposalCards(),

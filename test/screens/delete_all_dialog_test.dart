@@ -42,7 +42,7 @@ void main() {
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: Scaffold(body: TrainingTab()),
+          home: Scaffold(body: TrainingTab(section: TrainingSection.plan)),
         ),
       ),
     );

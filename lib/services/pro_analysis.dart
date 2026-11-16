@@ -3,6 +3,7 @@ import 'package:fjelia_service_api/fjelia_service_api.dart';
 import 'package:intl/intl.dart';
 
 import '../db/database.dart';
+import '../utils/week.dart';
 import 'coach_language.dart';
 
 export 'package:fjelia_service_api/fjelia_service_api.dart'
@@ -12,10 +13,14 @@ export 'package:fjelia_service_api/fjelia_service_api.dart'
 /// ISO week, the race goal, the season's year), so a day's plan check or a
 /// race's plan is kept and read again rather than written anew.
 class ProAnalysisRef {
-  const ProAnalysisRef(this.kind, this.key, {this.goal});
+  const ProAnalysisRef(this.kind, this.key, {this.goal, this.until});
   final ProAnalysisKind kind;
   final String key;
   final RaceGoal? goal;
+
+  /// The last day a week review covers, for a finished week; null for the
+  /// seven days up to now.
+  final DateTime? until;
 
   String get id => '${kind.name}:$key';
 
@@ -24,14 +29,53 @@ class ProAnalysisRef {
     DateFormat('yyyy-MM-dd').format(day),
   );
 
-  /// The seven days up to [day], named after its ISO week.
-  static ProAnalysisRef weekReview(DateTime day) {
-    final thursday = day.add(Duration(days: DateTime.thursday - day.weekday));
-    final week =
-        ((thursday.difference(DateTime(thursday.year)).inDays) ~/ 7) + 1;
+  /// The seven days up to [day], named after the ISO week of the athlete's
+  /// week that holds it. A week that starts on Sunday is named after its
+  /// Monday, so every week of either kind has one name.
+  static ProAnalysisRef weekReview(DateTime day, {bool mondayFirst = true}) =>
+      ProAnalysisRef(
+        ProAnalysisKind.weekReview,
+        weekReviewKey(day, mondayFirst: mondayFirst),
+      );
+
+  /// The finished week before the one [day] is in: the review written when
+  /// a new week begins.
+  static ProAnalysisRef lastWeekReview(
+    DateTime day, {
+    bool mondayFirst = true,
+  }) {
+    final start = weekStartOf(day, mondayFirst: mondayFirst);
+    final last = DateTime(start.year, start.month, start.day - 1);
     return ProAnalysisRef(
       ProAnalysisKind.weekReview,
-      '${thursday.year}-W${week.toString().padLeft(2, '0')}',
+      weekReviewKey(last, mondayFirst: mondayFirst),
+      until: last,
+    );
+  }
+
+  static String weekReviewKey(DateTime day, {bool mondayFirst = true}) {
+    final start = weekStartOf(day, mondayFirst: mondayFirst);
+    final monday = DateTime(start.year, start.month, start.day + 1);
+    final thursday = monday.add(
+      Duration(days: DateTime.thursday - monday.weekday),
+    );
+    final week =
+        ((thursday.difference(DateTime(thursday.year)).inDays) ~/ 7) + 1;
+    return '${thursday.year}-W${week.toString().padLeft(2, '0')}';
+  }
+
+  /// The Monday of the ISO week [key] names ("2026-W46"), or null.
+  static DateTime? weekReviewMonday(String key) {
+    final m = RegExp(r'^(\d{4})-W(\d{2})$').firstMatch(key);
+    if (m == null) return null;
+    final year = int.parse(m[1]!), week = int.parse(m[2]!);
+    // ISO week 1 holds January 4th.
+    final jan4 = DateTime(year, 1, 4);
+    final firstMonday = DateTime(year, 1, 4 - (jan4.weekday - 1));
+    return DateTime(
+      firstMonday.year,
+      firstMonday.month,
+      firstMonday.day + 7 * (week - 1),
     );
   }
 
@@ -57,7 +101,11 @@ String proAnalysisRequest(ProAnalysisRef ref, DateTime now) {
     case ProAnalysisKind.planCheck:
       return 'Plan check for today, $today.';
     case ProAnalysisKind.weekReview:
-      return 'Review of my last 7 days up to today, $today.';
+      final until = ref.until;
+      return until == null
+          ? 'Review of my last 7 days up to today, $today.'
+          : 'Review of my finished training week, the 7 days up to '
+                '${DateFormat('yyyy-MM-dd (EEEE)', 'en').format(until)}.';
     case ProAnalysisKind.season:
       return 'Season analysis, today is $today.';
     case ProAnalysisKind.racePlan:

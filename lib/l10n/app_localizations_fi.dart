@@ -366,6 +366,33 @@ class AppLocalizationsFi extends AppLocalizations {
   String get raceGoals => 'Kisatavoitteet';
 
   @override
+  String get casualGoalTitle => 'Ilman kilpailua';
+
+  @override
+  String get casualGoalHint =>
+      'Ei kilpailua tiedossa? Fjelia suunnittelee silti tasosi mukaan. Jos harjoituksia ei vielä ole, aloitetaan kevyellä 25 minuutin harjoituksella.';
+
+  @override
+  String get casualFun => 'Ilo';
+
+  @override
+  String get casualFunHint =>
+      'Kevyitä harjoituksia lajeissasi, liikkumisen ilosta.';
+
+  @override
+  String get casualFitness => 'Kunto';
+
+  @override
+  String get casualFitnessHint =>
+      'Rakenna maltillisesti, yksi kovempi harjoitus viikossa.';
+
+  @override
+  String get casualNone => 'Ei mitään';
+
+  @override
+  String get casualGoalAfterRace => 'Käytössä, kun kilpailutavoitetta ei ole.';
+
+  @override
   String get yourActivities => 'Aktiviteettisi';
 
   @override
@@ -374,6 +401,36 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get calendarWeekStart => 'Kalenterin viikon alku';
+
+  @override
+  String get trainingSecGoals => 'Tavoitteet ja lajit';
+
+  @override
+  String get trainingSecGoalsHint => 'Kilpailutavoitteet ja lajisi';
+
+  @override
+  String get trainingSecSchedule => 'Viikko ja ajat';
+
+  @override
+  String get trainingSecScheduleHint =>
+      'Viikon alku, lepo- ja voimapäivät, harjoitusajat, tunnit';
+
+  @override
+  String get trainingSecDetails => 'Voima ja ravinto';
+
+  @override
+  String get trainingSecDetailsHint => 'Painoyksikkö ja tankkaus';
+
+  @override
+  String get trainingSecReminders => 'Muistutukset ja kuumuus';
+
+  @override
+  String get trainingSecRemindersHint =>
+      'Väliin jääneet harjoitukset ja kuumuuteen sopeutuminen';
+
+  @override
+  String get trainingSecPlanHint =>
+      'Luo uudelleen tai poista suunnitellut harjoitukset';
 
   @override
   String get planDefaultView => 'Suunnitelman oletusnäkymä';
@@ -689,6 +746,12 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get bluetoothBloodPressure => 'Bluetooth · verenpaine';
+
+  @override
+  String get onbBpMonitorTile => 'Bluetooth · Omron, tavallinen, Hilo-mansetti';
+
+  @override
+  String get onbIndoorTile => 'Bluetooth · Concept2, soutulaitteet, pyörät';
 
   @override
   String get cloudCuffData => 'Pilvi · mansettitiedot';
@@ -2693,7 +2756,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get addYourMainPriorityA =>
-      'Lisää päätapahtumasi (prioriteetti A). Suunnitelma jaksotetaan sitä kohti: peruskunto, kehitys, huippu ja kevennys. Ilman kisatavoitetta suunnitelmaa ei vielä luoda.';
+      'Lisää päätapahtumasi (prioriteetti A). Suunnitelma jaksotetaan sitä kohti: peruskunto, kehitys, huippu ja kevennys.';
 
   @override
   String get noMeasurementsYet => 'Ei vielä mittauksia';
@@ -6071,6 +6134,9 @@ class AppLocalizationsFi extends AppLocalizations {
       'Fjelian ilmoitukset ovat pois päältä. Salli ne saadaksesi tämän muistutuksen.';
 
   @override
+  String get openNotificationSettings => 'Avaa ilmoitusasetukset';
+
+  @override
   String get allowNotifications => 'Salli ilmoitukset';
 
   @override
@@ -6210,6 +6276,24 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get briefRestDayToday => 'Tänään on suunniteltu lepopäivä.';
+
+  @override
+  String briefAwayToday(String kind) {
+    return 'Merkitty tälle päivälle: $kind, ei harjoittelua.';
+  }
+
+  @override
+  String briefAwayTomorrow(String kind) {
+    return 'Merkitty huomiselle: $kind, ei harjoittelua.';
+  }
+
+  @override
+  String get briefRestDayTomorrow => 'Huomenna on suunniteltu lepopäivä.';
+
+  @override
+  String briefBackFrom(String kind) {
+    return 'Ensimmäinen viikko jälkeen: $kind. Kevyesti ja lyhyesti.';
+  }
 
   @override
   String get restDayPlannedNote => 'Palautuminen kuuluu suunnitelmaasi.';
@@ -8408,6 +8492,58 @@ class AppLocalizationsFi extends AppLocalizations {
   String get proWeekReview => 'Viikkokatsaus';
 
   @override
+  String get weeklyReviewPushTitle => 'Viikkosi katsauksena';
+
+  @override
+  String get weeklyReviewPushBody =>
+      'Viikko on ohi. Napauta ja katso, miten se meni.';
+
+  @override
+  String get weeklyReviewReadyTitle => 'Viikkokatsauksesi on valmis';
+
+  @override
+  String get weeklyReviewReadyBody => 'Napauta ja lue, miten viikkosi meni.';
+
+  @override
+  String get weeklyReviewChannel => 'Viikkokatsaus';
+
+  @override
+  String get weeklyReviewAuto => 'Viikkokatsaus automaattisesti';
+
+  @override
+  String get weeklyReviewAutoHint =>
+      'Jokaisen viikon alussa (00:00) ilmoitus, ja Fjelia AI Pro kirjoittaa viime viikon katsauksen heti, kun sovellus on käynnissä. Harjoituskontekstisi lähetetään tätä varten Fjelia AI Prolle.';
+
+  @override
+  String get weekDiaryTitle => 'Viikkokatsaukset';
+
+  @override
+  String get weekDiaryOpen => 'Aiemmat katsaukset';
+
+  @override
+  String get weekDiaryEmpty =>
+      'Ei vielä katsauksia. Fjelia kirjoittaa ensimmäisen ensi viikon alussa, tai voit luoda sen nyt.';
+
+  @override
+  String weekDiaryCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count viikkoa',
+      one: '1 viikko',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String weekDiaryWeek(int week) {
+    return 'Viikko $week';
+  }
+
+  @override
+  String get weekDiaryHours => 'Tunnit';
+
+  @override
   String get proWeekReviewHint => 'Mikä toimi ja mitä muuttaa ensi viikolla';
 
   @override
@@ -8643,6 +8779,57 @@ class AppLocalizationsFi extends AppLocalizations {
   @override
   String get plusOmronBleHint =>
       'Etsi tavallisia Bluetooth-verenpainemittareita ja tuettuja Omron-profiileja.';
+
+  @override
+  String get bpMonitorsTitle => 'Bluetooth-verenpainemittarit';
+
+  @override
+  String get bpMonitorsNone =>
+      'Mittaria ei ole vielä tallennettu. Lisää Hilo-mansetti, Omron- tai tavallinen Bluetooth-mittari.';
+
+  @override
+  String get bpMonitorAdd => 'Lisää mittari';
+
+  @override
+  String get bpMonitorKindMemory => 'Omron tai tavallinen';
+
+  @override
+  String get bpMonitorKindHiloCuff => 'Hilo-mansetti';
+
+  @override
+  String get bpMonitorKindOmron => 'Omron tai Bluetooth-verenpainemittari';
+
+  @override
+  String get bpMonitorLive => 'Mittaa pyydettäessä';
+
+  @override
+  String get bpMonitorMemory => 'Lukee tallennetut mittaukset';
+
+  @override
+  String get bpMonitorModel => 'Mittarin malli';
+
+  @override
+  String get bpMonitorStandard => 'Tavallinen Bluetooth-verenpainemittari';
+
+  @override
+  String get bpMonitorFound => 'Löydetty mittari';
+
+  @override
+  String get bpMonitorSearch => 'Etsi mittareita';
+
+  @override
+  String get bpMonitorNoneFound =>
+      'Mittaria ei löytynyt. Kytke Bluetooth päälle ja herätä mittari.';
+
+  @override
+  String get bpMonitorChoose => 'Millä mittarilla mittaat?';
+
+  @override
+  String get plusBpBle => 'Verenpaine Bluetoothilla';
+
+  @override
+  String get plusBpBleHint =>
+      'Mittaa tallennetulla mittarilla tai hae sen mittaukset';
 
   @override
   String get sleepEcgTitle => 'Record sleep';

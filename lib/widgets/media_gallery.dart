@@ -267,19 +267,24 @@ class _AddTile extends StatelessWidget {
 
 /// The small picture of a photo or video (its thumbnail, else the photo).
 class MediaThumb extends StatelessWidget {
-  const MediaThumb({super.key, required this.item});
+  const MediaThumb({super.key, required this.item, this.large = false});
   final MediaItem item;
+
+  /// Shown wide: a photo is read from its full file, not the thumbnail.
+  final bool large;
 
   @override
   Widget build(BuildContext context) =>
       item.thumbName == null && item.kind == 'video'
       ? ColoredBox(color: duo(0xFF282828, 0xFFEEF1F5))
       : _MediaFile(
-          name: item.thumbName ?? item.fileName,
+          name: large && item.kind == 'photo'
+              ? item.fileName
+              : item.thumbName ?? item.fileName,
           builder: (file) => Image.file(
             file,
             fit: BoxFit.cover,
-            cacheWidth: 264,
+            cacheWidth: large ? 1080 : 264,
             errorBuilder: (_, _, _) =>
                 ColoredBox(color: duo(0xFF282828, 0xFFEEF1F5)),
           ),

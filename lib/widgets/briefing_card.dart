@@ -12,6 +12,7 @@ import '../providers/day_data_provider.dart';
 import '../providers/user_profile_provider.dart';
 import '../services/ai_coach_settings.dart';
 import '../services/briefing_consent.dart';
+import '../theme/fjelia_style.dart' show GradientTitle;
 import 'app_widgets.dart';
 
 class BriefingCard extends ConsumerStatefulWidget {
@@ -58,35 +59,51 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
     final canGenerate = briefing.valueOrNull == null || fallback;
     // Never markdown or line breaks, also for a briefing saved earlier.
     final text = flattenBriefing(raw);
+    final title = switch (period) {
+      AiBriefingPeriod.morning => context.l10n.morningBriefing,
+      AiBriefingPeriod.lunch => context.l10n.lunchBriefing,
+      AiBriefingPeriod.afternoon => context.l10n.afternoonBriefing,
+      AiBriefingPeriod.evening => context.l10n.eveningBriefing,
+    };
+    const accent = [Color(0xFF9D7BFF), Color(0xFF3EE0FF)];
     return SectionCard(
-      title: switch (period) {
-        AiBriefingPeriod.morning => context.l10n.morningBriefing,
-        AiBriefingPeriod.lunch => context.l10n.lunchBriefing,
-        AiBriefingPeriod.afternoon => context.l10n.afternoonBriefing,
-        AiBriefingPeriod.evening => context.l10n.eveningBriefing,
-      },
-      accent: const [Color(0xFF9D7BFF), Color(0xFF3EE0FF)],
+      accent: accent,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // The title row of the card, with who wrote the briefing small in
+          // its right corner.
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Expanded(
+                child: GradientTitle(title.toUpperCase(), colors: accent),
+              ),
+              if (source != null)
+                Flexible(
+                  child: Text(
+                    source,
+                    key: const ValueKey('briefing-source'),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      color: muted,
+                      fontSize: 9,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 12),
           Text(
             text,
-            maxLines: _expanded ? null : 3,
+            maxLines: _expanded ? null : 5,
             overflow: _expanded ? null : TextOverflow.ellipsis,
             style: const TextStyle(fontSize: 14, height: 1.55),
           ),
-          if (source != null)
-            Padding(
-              padding: const EdgeInsets.only(top: 5),
-              child: Text(
-                source,
-                style: TextStyle(
-                  color: muted,
-                  fontSize: 10,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-            ),
           if (briefing.isLoading) const LinearProgressIndicator(),
           if (briefing.hasError)
             Text(

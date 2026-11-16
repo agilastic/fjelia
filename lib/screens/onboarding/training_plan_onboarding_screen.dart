@@ -1,3 +1,7 @@
+import '../../widgets/casual_goal_picker.dart';
+import '../../widgets/app_widgets.dart' show showAppSheet;
+import '../settings/training_windows_sheet.dart'
+    show TrainingWindowsSheet, trainingWindowsText;
 import '../../l10n/formats.dart';
 import 'missed_workout_onboarding_screen.dart';
 import '../../l10n/l10n_ext.dart';
@@ -125,6 +129,18 @@ class _TrainingPlanOnboardingScreenState
               const HistorySyncCard(),
               OnboardingInputLabel(context.l10n.raceGoal),
               _RaceGoalStep(enabled: !_saving),
+              // No race: Fjelia plans for the athlete's own aim.
+              if (ref.watch(primaryRaceGoalProvider).valueOrNull == null) ...[
+                const SizedBox(height: 20),
+                OnboardingInputLabel(context.l10n.casualGoalTitle),
+                CasualGoalPicker(
+                  value: p.casualGoal,
+                  enabled: !_saving,
+                  onChanged: (v) => update(
+                    p.copyWith(casualGoal: v, clearCasualGoal: v == null),
+                  ),
+                ),
+              ],
               const SizedBox(height: 24),
               if (!hasHistory) ...[
                 OnboardingInputLabel(context.l10n.experienceLevel),
@@ -209,6 +225,50 @@ class _TrainingPlanOnboardingScreenState
                             },
                     ),
                 ],
+              ),
+              const SizedBox(height: 16),
+              // When in the week training fits: rest days, session length and
+              // the evening reminder follow it.
+              OnboardingInputLabel(context.l10n.trainingWindowsTitle),
+              Text(
+                p.trainingWindows.isEmpty
+                    ? context.l10n.trainingWindowsNotSet
+                    : [
+                        for (final d in [1, 2, 3, 4, 5, 6, 7])
+                          if (p.trainingWindows.hasWindow(d))
+                            '${[context.l10n.mon, context.l10n.tue, context.l10n.wed, context.l10n.thu, context.l10n.fri, context.l10n.sat, context.l10n.sun][d - 1]} ${trainingWindowsText(p.trainingWindows, d)}',
+                      ].join(' · '),
+                style: const TextStyle(fontSize: 12, height: 1.4),
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: OutlinedButton.icon(
+                  key: const ValueKey('onboarding-training-windows'),
+                  onPressed: _saving
+                      ? null
+                      : () async {
+                          // The sheet saves the profile itself: keep the
+                          // answers given so far, then read its result.
+                          await ref.read(userProfileProvider.notifier).save(p);
+                          if (!context.mounted) return;
+                          await showAppSheet(
+                            context,
+                            const TrainingWindowsSheet(),
+                          );
+                          final saved = await ref.read(
+                            userProfileProvider.future,
+                          );
+                          if (mounted) {
+                            update(
+                              p.copyWith(
+                                trainingWindows: saved.trainingWindows,
+                              ),
+                            );
+                          }
+                        },
+                  icon: const Icon(Icons.schedule_rounded, size: 18),
+                  label: Text(context.l10n.trainingWindowsTitle),
+                ),
               ),
               const SizedBox(height: 24),
               OnboardingInputLabel(context.l10n.sessionsPerDay2),
@@ -302,7 +362,9 @@ class _TrainingPlanOnboardingScreenState
                 child: Text(
                   _saving
                       ? context.l10n.buildingYourPlan
-                      : ref.watch(primaryRaceGoalProvider).valueOrNull == null
+                      : ref.watch(primaryRaceGoalProvider).valueOrNull ==
+                                null &&
+                            p.casualGoal == null
                       ? context.l10n.saveContinue
                       : context.l10n.buildMyPlan,
                 ),

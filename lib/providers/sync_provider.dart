@@ -1,3 +1,4 @@
+import 'pro_analysis_provider.dart' show weeklyReviewSchedulerProvider;
 import '../services/auto_plan_pause.dart';
 import 'weather_radar_provider.dart';
 
@@ -19,6 +20,7 @@ import '../utils/log.dart';
 import 'ai_coach_provider.dart';
 import 'auth_provider.dart';
 import 'coros_provider.dart';
+import '../db/database.dart' show TrainingPlan;
 import 'database_provider.dart';
 import 'day_data_provider.dart';
 import 'health_connect_provider.dart';
@@ -126,7 +128,8 @@ Future<bool> _importAttemptedToday() async {
 final buildPlanNowProvider = Provider<Future<int?> Function()>(
   (ref) => () async {
     final goal = await ref.read(raceGoalServiceProvider).getPrimaryGoal();
-    if (goal == null) return null;
+    final casual = (await ref.read(userProfileProvider.future)).casualGoal;
+    if (goal == null && casual == null) return null;
     final count = await ref.read(workoutGenerationProvider.notifier).generate();
     if (count != null && !await _historyDownloaded()) {
       await _storage.write(key: _planNeedsHistoryKey, value: '1');
@@ -134,6 +137,25 @@ final buildPlanNowProvider = Provider<Future<int?> Function()>(
     return count;
   },
 );
+
+/// Whether a plan without a race needs building on: nothing planned from
+/// today on, or less than a week of it left.
+Future<bool> _casualPlanRunsShort(Ref ref, TrainingPlan plan) async {
+  final db = ref.read(databaseProvider);
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
+  final ahead =
+      await (db.select(db.trainingSessions)
+            ..where(
+              (t) =>
+                  t.planId.equals(plan.id) &
+                  t.sessionDate.isBiggerOrEqualValue(today) &
+                  (t.status.equals('planned') | t.status.equals('adapted')),
+            )
+            ..limit(1))
+          .getSingleOrNull();
+  return ahead == null || plan.endDate.difference(today).inDays < 7;
+}
 
 /// Generates a plan for the primary race goal when none is active yet.
 ///
@@ -150,10 +172,6 @@ Future<void> _autoGeneratePlanIfNeeded(
   }
   final db = ref.read(databaseProvider);
   final needsHistory = await _storage.read(key: _planNeedsHistoryKey) != null;
-  if (!afterHistory && !await _historyDownloaded()) {
-    log('[Sync] auto-plan waits for the historic sync');
-    return;
-  }
   final active =
       await (db.select(db.trainingPlans)
             ..where(
@@ -161,15 +179,31 @@ Future<void> _autoGeneratePlanIfNeeded(
             )
             ..limit(1))
           .getSingleOrNull();
-  if (active != null && !(afterHistory && needsHistory)) return;
   final goal = await ref.read(raceGoalServiceProvider).getPrimaryGoal();
-  if (goal == null) return;
-  if (active != null) {
+  final profile = ref.read(userProfileProvider).valueOrNull;
+  final casual = goal == null ? profile?.casualGoal : null;
+  // A plan without a race runs four weeks ahead: it is built on when it
+  // runs short, and after the first session of a new athlete is done. That
+  // needs no history import: the plan learns from what was just done.
+  final casualDue =
+      active != null &&
+      casual != null &&
+      active.raceGoalId == null &&
+      await _casualPlanRunsShort(ref, active);
+  if (!casualDue && !afterHistory && !await _historyDownloaded()) {
+    log('[Sync] auto-plan waits for the historic sync');
+    return;
+  }
+  if (active != null && !(afterHistory && needsHistory) && !casualDue) return;
+  if (goal == null && casual == null) return;
+  if (active != null && !casualDue) {
     log('[Sync] recalibrating plan with downloaded history');
   }
-  final profile = ref.read(userProfileProvider).valueOrNull;
   final days = profile?.trainingDaysPerWeek ?? 5;
-  log('[Sync] auto-generating plan for ${goal.name}, $days days/week');
+  log(
+    '[Sync] auto-generating plan for ${goal?.name ?? 'no race ($casual)'}, '
+    '$days days/week',
+  );
   final plans = ref.read(trainingPlanServiceProvider);
   final generated = await ref
       .read(workoutGenerationProvider.notifier)
@@ -693,6 +727,8 @@ class SyncNotifier extends StateNotifier<SyncState> {
         return (bpRemoved: 0, hrRemoved: 0);
       }),
     );
+    // The week's training is in: last week's review, if a new week began.
+    unawaited(_ref.read(weeklyReviewSchedulerProvider).runIfDue());
     // A workout that arrived with the sync takes tonight's reminder back.
     unawaited(
       _ref.read(missedWorkoutReminderProvider).reconcile().catchError((

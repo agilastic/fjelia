@@ -368,6 +368,33 @@ class AppLocalizationsNl extends AppLocalizations {
   String get raceGoals => 'Wedstrijddoelen';
 
   @override
+  String get casualGoalTitle => 'Zonder wedstrijd';
+
+  @override
+  String get casualGoalHint =>
+      'Geen wedstrijd gepland? Fjelia plant toch, op jouw niveau. Zonder eerdere training begint het schema met een rustige training van 25 minuten.';
+
+  @override
+  String get casualFun => 'Plezier';
+
+  @override
+  String get casualFunHint =>
+      'Rustige trainingen in je sporten, voor het plezier van bewegen.';
+
+  @override
+  String get casualFitness => 'Fitheid';
+
+  @override
+  String get casualFitnessHint =>
+      'Rustig opbouwen, met één zwaardere training per week.';
+
+  @override
+  String get casualNone => 'Geen';
+
+  @override
+  String get casualGoalAfterRace => 'Geldt zodra er geen wedstrijddoel is.';
+
+  @override
   String get yourActivities => 'Je activiteiten';
 
   @override
@@ -376,6 +403,36 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get calendarWeekStart => 'Begin van de kalenderweek';
+
+  @override
+  String get trainingSecGoals => 'Doelen en sporten';
+
+  @override
+  String get trainingSecGoalsHint => 'Wedstrijddoelen en je sporten';
+
+  @override
+  String get trainingSecSchedule => 'Week en tijden';
+
+  @override
+  String get trainingSecScheduleHint =>
+      'Weekbegin, rust- en krachtdagen, trainingstijden, uren';
+
+  @override
+  String get trainingSecDetails => 'Kracht en voeding';
+
+  @override
+  String get trainingSecDetailsHint => 'Gewichtseenheid en voeding';
+
+  @override
+  String get trainingSecReminders => 'Herinneringen en hitte';
+
+  @override
+  String get trainingSecRemindersHint =>
+      'Gemiste trainingen en hitte-acclimatisatie';
+
+  @override
+  String get trainingSecPlanHint =>
+      'Geplande trainingen opnieuw maken of verwijderen';
 
   @override
   String get planDefaultView => 'Standaardweergave plan';
@@ -691,6 +748,12 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get bluetoothBloodPressure => 'Bluetooth · bloeddruk';
+
+  @override
+  String get onbBpMonitorTile => 'Bluetooth · Omron, standaard, Hilo-manchet';
+
+  @override
+  String get onbIndoorTile => 'Bluetooth · Concept2, roeitrainers, fietsen';
 
   @override
   String get cloudCuffData => 'Cloud · manchetgegevens';
@@ -2700,7 +2763,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get addYourMainPriorityA =>
-      'Voeg je hoofdwedstrijd toe (prioriteit A). Het plan wordt daarop afgestemd: basis, opbouw, piek en afbouw. Zonder wedstrijddoel wordt nog geen plan gemaakt.';
+      'Voeg je hoofdwedstrijd toe (prioriteit A). Het plan wordt daarop afgestemd: basis, opbouw, piek en afbouw.';
 
   @override
   String get noMeasurementsYet => 'Nog geen metingen';
@@ -6076,6 +6139,9 @@ class AppLocalizationsNl extends AppLocalizations {
       'Meldingen staan uit voor Fjelia. Sta ze toe om deze herinnering te krijgen.';
 
   @override
+  String get openNotificationSettings => 'Meldingsinstellingen openen';
+
+  @override
   String get allowNotifications => 'Meldingen toestaan';
 
   @override
@@ -6215,6 +6281,24 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get briefRestDayToday => 'Vandaag is een geplande rustdag.';
+
+  @override
+  String briefAwayToday(String kind) {
+    return 'Vandaag ingevoerd: $kind, geen training.';
+  }
+
+  @override
+  String briefAwayTomorrow(String kind) {
+    return 'Morgen ingevoerd: $kind, geen training.';
+  }
+
+  @override
+  String get briefRestDayTomorrow => 'Morgen is een geplande rustdag.';
+
+  @override
+  String briefBackFrom(String kind) {
+    return 'Eerste week na $kind: rustig en kort.';
+  }
 
   @override
   String get restDayPlannedNote => 'Herstel hoort bij je plan.';
@@ -8441,6 +8525,58 @@ class AppLocalizationsNl extends AppLocalizations {
   String get proWeekReview => 'Weekoverzicht';
 
   @override
+  String get weeklyReviewPushTitle => 'Je week in terugblik';
+
+  @override
+  String get weeklyReviewPushBody =>
+      'De week is voorbij. Tik om te zien hoe het ging.';
+
+  @override
+  String get weeklyReviewReadyTitle => 'Je weekterugblik is klaar';
+
+  @override
+  String get weeklyReviewReadyBody => 'Tik om te lezen hoe je week ging.';
+
+  @override
+  String get weeklyReviewChannel => 'Weekterugblik';
+
+  @override
+  String get weeklyReviewAuto => 'Weekterugblik automatisch';
+
+  @override
+  String get weeklyReviewAutoHint =>
+      'Aan het begin van elke week (00:00) een melding, en Fjelia AI Pro schrijft de terugblik op vorige week zodra de app draait. Je trainingscontext gaat hiervoor naar Fjelia AI Pro.';
+
+  @override
+  String get weekDiaryTitle => 'Weekterugblikken';
+
+  @override
+  String get weekDiaryOpen => 'Eerdere terugblikken';
+
+  @override
+  String get weekDiaryEmpty =>
+      'Nog geen terugblikken. Fjelia schrijft de eerste aan het begin van volgende week, of je maakt er nu een.';
+
+  @override
+  String weekDiaryCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count weken',
+      one: '1 week',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String weekDiaryWeek(int week) {
+    return 'Week $week';
+  }
+
+  @override
+  String get weekDiaryHours => 'Uren';
+
+  @override
   String get proWeekReviewHint => 'Wat werkte, wat volgende week anders moet';
 
   @override
@@ -8675,6 +8811,57 @@ class AppLocalizationsNl extends AppLocalizations {
   @override
   String get plusOmronBleHint =>
       'Zoek naar standaard Bluetooth-bloeddrukmeters en ondersteunde Omron-profielen.';
+
+  @override
+  String get bpMonitorsTitle => 'Bluetooth-bloeddrukmeters';
+
+  @override
+  String get bpMonitorsNone =>
+      'Nog geen meter opgeslagen. Voeg je Hilo-manchet, Omron- of standaard-Bluetooth-meter toe.';
+
+  @override
+  String get bpMonitorAdd => 'Meter toevoegen';
+
+  @override
+  String get bpMonitorKindMemory => 'Omron of standaard';
+
+  @override
+  String get bpMonitorKindHiloCuff => 'Hilo-manchet';
+
+  @override
+  String get bpMonitorKindOmron => 'Omron of Bluetooth-bloeddrukmeter';
+
+  @override
+  String get bpMonitorLive => 'Meet op verzoek';
+
+  @override
+  String get bpMonitorMemory => 'Leest opgeslagen metingen';
+
+  @override
+  String get bpMonitorModel => 'Model van de meter';
+
+  @override
+  String get bpMonitorStandard => 'Standaard Bluetooth-bloeddrukmeter';
+
+  @override
+  String get bpMonitorFound => 'Gevonden meter';
+
+  @override
+  String get bpMonitorSearch => 'Meters zoeken';
+
+  @override
+  String get bpMonitorNoneFound =>
+      'Geen meter gevonden. Zet Bluetooth aan en wek de meter.';
+
+  @override
+  String get bpMonitorChoose => 'Met welke meter meet je?';
+
+  @override
+  String get plusBpBle => 'Bloeddruk via Bluetooth';
+
+  @override
+  String get plusBpBleHint =>
+      'Meet met je opgeslagen meter of haal de metingen op';
 
   @override
   String get sleepEcgTitle => 'Slaap opnemen';

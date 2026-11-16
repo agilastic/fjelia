@@ -395,6 +395,7 @@ class MorningAdaptationNotifier extends StateNotifier<MorningAdaptationState> {
             restDays: profile?.planRestDays ?? const [7],
             dayCapMinutes: profile?.trainingWindows.dayCapMinutes() ?? const {},
             rampTests: profile?.rampTests ?? true,
+            casualGoal: profile?.casualGoal,
             strengthDays: profile?.preferredStrengthDays ?? const [3],
             hoursPerWeek: profile?.hoursPerWeek ?? 8.0,
             maxSessionsPerDay: profile?.maxSessionsPerDay ?? 1,

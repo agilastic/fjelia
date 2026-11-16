@@ -338,6 +338,13 @@ double _weeklyTssFactor(String phase, String tier) {
 String _phase(int week, int totalWeeks, {int cycle = 4}) =>
     seasonPhase(week, totalWeeks, cycle: cycle);
 
+/// A plan without a race is built this many days ahead, and again when it
+/// runs short.
+const casualHorizonDays = 29;
+
+/// The first session of an athlete with no training history.
+const firstCasualMinutes = 25;
+
 String _tierFor(double ctl) => ctl < 35
     ? 'beginner'
     : ctl >= 50
@@ -1425,6 +1432,7 @@ class TrainingPlanService {
     List<int> restDays = const [7],
     Map<int, int> dayCapMinutes = const {},
     bool rampTests = true,
+    String? casualGoal,
     List<int> strengthDays = const [3],
     double hoursPerWeek = 8.0,
     int maxSessionsPerDay = 1,
@@ -1447,6 +1455,7 @@ class TrainingPlanService {
       restDays: restDays,
       dayCapMinutes: dayCapMinutes,
       rampTests: rampTests,
+      casualGoal: casualGoal,
       strengthDays: strengthDays,
       hoursPerWeek: hoursPerWeek,
       maxSessionsPerDay: maxSessionsPerDay,
@@ -1471,6 +1480,7 @@ class TrainingPlanService {
     List<int> restDays = const [7],
     Map<int, int> dayCapMinutes = const {},
     bool rampTests = true,
+    String? casualGoal,
     List<int> strengthDays = const [3],
     double hoursPerWeek = 8.0,
     int maxSessionsPerDay = 1,
@@ -1501,7 +1511,12 @@ class TrainingPlanService {
     // More than one goal on the calendar, or one just behind us whose
     // recovery still counts: the season planner takes over from the weekly
     // template.
+    // No race goal: a plan for the athlete's own aim (`fun` or `fitness`),
+    // built four weeks ahead and again as it runs out.
+    final casual =
+        casualGoal != null && raceGoalId == null && (goals?.isEmpty ?? true);
     final multi =
+        !casual &&
         SeasonPolicy.multiGoalPlanning &&
         (goalSet.active.length > 1 || goalSet.recent.isNotEmpty);
     final display = goalSet.display;
@@ -1774,6 +1789,33 @@ class TrainingPlanService {
       return math.min(window ?? 45, 45);
     }
 
+    // No race and no training at all yet: one easy 25-minute session to
+    // start with. Once it is done, the history it leaves plans the rest.
+    if (casual && history.sessions12w == 0) {
+      final waiting = kept.any(
+        (k) =>
+            (k.status == 'planned' || k.status == 'adapted') &&
+            !k.sessionDate.isBefore(today),
+      );
+      if (!waiting) {
+        await _firstCasualSession(
+          planId: planId,
+          athleteId: athleteId,
+          coachId: coachId,
+          sports: gadSports.isEmpty ? [sport] : gadSports,
+          restDays: restDays,
+          blocked: healthDays,
+          fitness: fitness,
+          ftp: ftp,
+          capOn: capOn,
+        );
+      }
+      await (_db.update(_db.trainingPlans)..where((t) => t.id.equals(planId)))
+          .write(const TrainingPlansCompanion(seasonJson: Value(null)));
+      log('[Plan] casual ($casualGoal): first easy session, no history yet');
+      return planId;
+    }
+
     // The DFA alpha1 ramp test: in running or cycling (a triathlon takes
     // both, in turn), once a chest strap has recorded beat-to-beat data in
     // that sport, about every four weeks. A progression the athlete ran on
@@ -1926,6 +1968,11 @@ class TrainingPlanService {
       }
       var phase = (prependRecovery && w == 0)
           ? 'recovery'
+          : casual
+          // No race: base training, with the usual recovery weeks.
+          ? (g % athlete.recoveryCycle == athlete.recoveryCycle - 1
+                ? 'recovery'
+                : 'base')
           : multi
           ? (needs.isEmpty ? 'base' : needs.first.intent.phase)
           : _phase(g, weeks, cycle: athlete.recoveryCycle);
@@ -2001,6 +2048,12 @@ class TrainingPlanService {
       ).any(easeInDays.contains);
       final maxKeys = easingIn
           ? 0
+          // For the fun of it: every session easy. To get fitter: one hard
+          // session a week, two for an advanced athlete.
+          : casualGoal == 'fun' && casual
+          ? 0
+          : casual
+          ? (athlete.isAdvanced ? 2 : 1)
           : easyStart
           ? 1
           : athlete.maxKeySessions;
@@ -2937,7 +2990,8 @@ class TrainingPlanService {
     )..where((t) => t.id.equals(planId))).write(
       TrainingPlansCompanion(
         goalSetRevision: Value(goalSet.revision),
-        seasonJson: Value(report.encode()),
+        // Without a race there is no season to explain.
+        seasonJson: Value(casual ? null : report.encode()),
       ),
     );
     await (_db.delete(
@@ -2967,6 +3021,86 @@ class TrainingPlanService {
     return planId;
   }
 
+  /// The very first session of a plan without a race or any history: 25
+  /// minutes easy, running or cycling when the athlete chose one, else
+  /// their first sport, on the next day free for it.
+  Future<void> _firstCasualSession({
+    required String planId,
+    required String athleteId,
+    required String? coachId,
+    required List<String> sports,
+    required List<int> restDays,
+    required Set<DateTime> blocked,
+    required _AthleteFitnessSnapshot fitness,
+    required int? ftp,
+    required int? Function(DateTime) capOn,
+  }) async {
+    const preferred = [
+      'running',
+      'cycling_road',
+      'cycling_gravel',
+      'cycling_mtb',
+      'trail_running',
+    ];
+    final sport =
+        preferred.where(sports.contains).firstOrNull ??
+        _gadSportRotation(sports).first;
+    final now = _now();
+    var day = _day(now);
+    // Too late today for a first session: tomorrow.
+    if (now.hour >= 18) day = _addDays(day, 1);
+    for (var i = 0; i < 7; i++) {
+      final cap = capOn(day);
+      if (!restDays.contains(day.weekday) &&
+          !blocked.contains(day) &&
+          (cap == null || cap >= 25)) {
+        break;
+      }
+      day = _addDays(day, 1);
+    }
+    final stepsJson = _resolveStepsJson(
+      _steadySteps(firstCasualMinutes, 2),
+      ftp,
+      fitness,
+      power: _usesPower(sport, false),
+    );
+    final semantics = WorkoutSemantics.of(stepsJson, sport: sport);
+    final hr = fitness.hrRangeForZone(2);
+    await _db
+        .into(_db.trainingSessions)
+        .insert(
+          TrainingSessionsCompanion.insert(
+            id: const Uuid().v4(),
+            planId: planId,
+            athleteId: athleteId,
+            coachId: Value(coachId),
+            sessionDate: day,
+            sessionNumber: 1,
+            weekNumber: 1,
+            sport: sport,
+            sessionType: 'recovery',
+            phase: 'base',
+            primaryZone: 2,
+            title: _steadyTitle(sport, firstCasualMinutes, lead: 'Easy'),
+            sessionNotes: const Value(
+              'A first easy session: relaxed, you could talk the whole time. '
+              'Once it is done, Fjelia plans the weeks after it from it.',
+            ),
+            stepsJson: Value(stepsJson),
+            hrRangesJson: Value(
+              jsonEncode({'low': hr.low, 'high': hr.high, 'zone': 2}),
+            ),
+            plannedDurationMin: firstCasualMinutes,
+            plannedTrimp: semantics.legacyLoad.round(),
+            sessionLevel: _sessionLevel('recovery', 2, 'base'),
+            goalRole: const Value('primary'),
+            status: const Value('planned'),
+          ),
+        );
+    await (_db.update(_db.trainingPlans)..where((t) => t.id.equals(planId)))
+        .write(TrainingPlansCompanion(endDate: Value(day)));
+  }
+
   /// Rebuilds the remaining weeks of [planId] (e.g. after a readiness
   /// trigger or a settings change), bumping the plan version.
   Future<void> replan({
@@ -2976,6 +3110,7 @@ class TrainingPlanService {
     List<int> restDays = const [7],
     Map<int, int> dayCapMinutes = const {},
     bool rampTests = true,
+    String? casualGoal,
     List<int> strengthDays = const [3],
     double hoursPerWeek = 8.0,
     int maxSessionsPerDay = 1,
@@ -2990,6 +3125,7 @@ class TrainingPlanService {
       restDays: restDays,
       dayCapMinutes: dayCapMinutes,
       rampTests: rampTests,
+      casualGoal: casualGoal,
       strengthDays: strengthDays,
       hoursPerWeek: hoursPerWeek,
       maxSessionsPerDay: maxSessionsPerDay,
@@ -3006,6 +3142,7 @@ class TrainingPlanService {
     List<int> restDays = const [7],
     Map<int, int> dayCapMinutes = const {},
     bool rampTests = true,
+    String? casualGoal,
     List<int> strengthDays = const [3],
     double hoursPerWeek = 8.0,
     int maxSessionsPerDay = 1,
@@ -3038,11 +3175,15 @@ class TrainingPlanService {
         .resolveGoalSet(athleteId: plan.athleteId, today: today);
     final goal = goalSet.display;
     final rotation = _gadSportRotation(preferredSports);
+    // No race to prepare for: the athlete's own aim, four weeks at a time.
+    final casual = goal == null && casualGoal != null;
 
     await _generatePlan(
       athleteId: plan.athleteId,
-      raceGoalId: goal?.id ?? plan.raceGoalId,
-      raceDate: goal?.date ?? plan.endDate,
+      raceGoalId: casual ? null : goal?.id ?? plan.raceGoalId,
+      raceDate: casual
+          ? _addDays(today, casualHorizonDays)
+          : goal?.date ?? plan.endDate,
       sport: goal?.sport ?? rotation.first,
       raceDistanceM: goal?.distanceM,
       raceElevationM: goal?.elevationM,
@@ -3060,6 +3201,7 @@ class TrainingPlanService {
       weekStartsOnMonday: weekStartsOnMonday,
       athlete: athlete,
       goals: goalSet.isEmpty ? null : goalSet,
+      casualGoal: casual ? casualGoal : null,
     );
   }
 

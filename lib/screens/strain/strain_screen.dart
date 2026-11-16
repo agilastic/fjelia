@@ -37,7 +37,12 @@ class StrainScreen extends ConsumerWidget {
         false;
     final content = ListView(
       physics: const AlwaysScrollableScrollPhysics(),
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
+      padding: EdgeInsets.fromLTRB(
+        16,
+        MediaQuery.paddingOf(context).top + 16,
+        16,
+        100,
+      ),
       children: [
         if (rows.isLoading) const LinearProgressIndicator(),
         if (rows.hasError)
@@ -56,7 +61,10 @@ class StrainScreen extends ConsumerWidget {
                   padding: const EdgeInsets.all(14),
                   onTap: () => heatEnabled || heat != null
                       ? showLoadSheet(context, HeatWeatherSheet(), height: .82)
-                      : showAppSheet(context, TrainingTab()),
+                      : showAppSheet(
+                          context,
+                          const TrainingTab(section: TrainingSection.reminders),
+                        ),
                   child: TweenAnimationBuilder<double>(
                     tween: Tween(begin: 0, end: 1),
                     duration: const Duration(milliseconds: 700),

@@ -316,7 +316,7 @@ header.site .btn {
 }
 .product-hero {
   overflow: hidden;
-  padding: 152px 0 42px;
+  padding: 116px 0 42px;
   background: var(--bg);
   isolation: isolate
 }
@@ -3467,7 +3467,7 @@ body.previews-paused .capture-halo {
 
 /* Hero composition at each size; only app recordings move automatically. */
 @media(min-width:1600px) {
-  .product-hero { padding: 158px 0 44px }
+  .product-hero { padding: 120px 0 44px }
   .hero-visual { height: 670px }
 }
 @media(max-width:1180px) {
@@ -3482,7 +3482,7 @@ body.previews-paused .capture-halo {
 @media(max-width:1050px) {
   .marketing header.site .wrap { gap: 0; min-height: 60px }
   .marketing header.site { top: 14px; border-radius: 20px }
-  .product-hero { padding-top: 138px }
+  .product-hero { padding-top: 106px }
   .hero-copy h1 { font-size: clamp(60px,9.2vw,94px) }
   .hero-copy .lead { font-size: 17px }
   .hero-visual { height: 610px }
@@ -3514,7 +3514,7 @@ body.previews-paused .capture-halo {
   .marketing .language-picker { margin-right: 7px }
   .marketing .language-picker select { max-width: 91px; padding-left: 8px; padding-right: 25px; border-color: transparent; background: none; min-height: 40px; height: 40px }
   .marketing .menu-toggle:not([hidden]) { border-color: #ffffff18; min-height: 38px; font-size: 11px; padding-inline: 9px }
-  .product-hero { padding: 110px 0 28px }
+  .product-hero { padding: 90px 0 28px }
   .hero-kicker { gap: 8px; font-size: 8px; letter-spacing: .09em; margin-bottom: 24px }
   .hero-beta { padding: 5px 8px }
   .hero-copy h1 { font-size: clamp(42px,11.5vw,63px); letter-spacing: -.06em; line-height: 1.05 }
@@ -3555,4 +3555,10 @@ body.previews-paused .capture-halo {
 @media(prefers-reduced-motion:reduce) {
   .hero-phone.phone-ai { transform: translateX(-50%) }
   .hero-phone.phone-front,.hero-phone.phone-threshold { transform: none }
+}
+
+/* Without the lead line the AI links follow the headline directly. */
+.hero-copy h1 + .hero-ai-links { margin-top: 26px }
+@media(max-width:700px) {
+  .hero-copy h1 + .hero-ai-links { margin-top: 16px }
 }

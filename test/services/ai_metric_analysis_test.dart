@@ -163,7 +163,8 @@ void main() {
     expect(prompt, isNot(contains('+3.3')));
     expect(prompt, isNot(contains('Night:40ms')));
     expect(prompt, contains('planned rest day'));
-    expect(request.instructions, contains('at most 45 words'));
+    expect(request.instructions, contains('at most 100 words'));
+    expect(request.instructions, contains('German du, never Sie'));
     expect(request.instructions, contains('DO NOT list or repeat'));
   });
 
@@ -219,14 +220,14 @@ void main() {
       () {
         expect(
           briefingIsUsable(
-            List.filled(80, 'wort').join(' '),
+            List.filled(120, 'wort').join(' '),
             languageCode: 'de',
           ),
           isFalse,
         );
         expect(
           briefingIsUsable(
-            'HRV 40 und RHR 47 bei Schlaf 6,1 und Energie 5 und Stress 22.',
+            'HRV 40 und RHR 47 bei Schlaf 6,1, Energie 5, Stress 22, Atmung 14 und SpO2 96.',
             languageCode: 'de',
           ),
           isFalse,
@@ -270,6 +271,64 @@ void main() {
     );
     const green = BriefingBrief(readiness: 'green');
     expect(green.localText(de), contains('Keiner deiner Werte'));
+  });
+
+  test('rest days and absences today and tomorrow reach the briefing', () {
+    final de = lookupAppLocalizations(const Locale('de'));
+    // Ill today, a rest day tomorrow.
+    final ill = BriefingBrief.parse(
+      const BriefingBrief(
+        readiness: 'yellow',
+        away: 'illness',
+        restTomorrow: true,
+      ).toLine(),
+    )!;
+    expect(ill.away, 'illness');
+    expect(ill.restTomorrow, isTrue);
+    expect(ill.toModelText(), contains('Today the athlete is ill'));
+    expect(ill.toModelText(), contains('Tomorrow is a planned rest day'));
+    expect(ill.scheduleInstruction(de), contains('recovery comes first'));
+    expect(
+      ill.plannedTodaySentence(de),
+      'Heute eingetragen: Krankheit, kein Training.',
+    );
+    final text = ill.localText(de);
+    expect(text, contains('Heute eingetragen: Krankheit, kein Training.'));
+    expect(text, contains('Morgen ist ein geplanter Ruhetag.'));
+
+    // Holiday from tomorrow; back from an injury this week.
+    final back = BriefingBrief.parse(
+      const BriefingBrief(
+        readiness: 'green',
+        today: ['running/40'],
+        awayTomorrow: 'vacation',
+        backFrom: 'injury',
+      ).toLine(),
+    )!;
+    expect(back.toModelText(), contains('Tomorrow the athlete is on holiday'));
+    expect(back.toModelText(), contains('First week back after being injured'));
+    expect(
+      back.localText(de),
+      contains('Morgen eingetragen: Urlaub, kein Training.'),
+    );
+    expect(
+      back.localText(de),
+      contains('Erste Woche nach Verletzung: locker und kurz.'),
+    );
+    // Today's training times reach the model, not the app's own text.
+    final window = BriefingBrief.parse(
+      const BriefingBrief(
+        readiness: 'green',
+        window: '06:00-07:30+17:00-20:00',
+      ).toLine(),
+    )!;
+    expect(window.window, '06:00-07:30+17:00-20:00');
+    expect(
+      window.toModelText(),
+      contains('can train today 06:00 to 07:30 and 17:00 to 20:00'),
+    );
+    // Today's plan sentence stays the one the model must include.
+    expect(back.plannedTodaySentence(de), 'Für heute ist 1 Einheit geplant.');
   });
 
   BriefingBrief brief(List<HrvRecord> hrv) => BriefingBrief.parse(

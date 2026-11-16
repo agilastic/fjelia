@@ -3516,6 +3516,12 @@ class AppDatabase extends _$AppDatabase {
   Stream<ProReport?> watchProReport(String id) =>
       (select(proReports)..where((t) => t.id.equals(id))).watchSingleOrNull();
 
+  Future<List<ProReport>> proReportsOfKind(String kind) =>
+      (select(proReports)
+            ..where((t) => t.kind.equals(kind))
+            ..orderBy([(t) => OrderingTerm.desc(t.refKey)]))
+          .get();
+
   Future<void> saveProReport(ProReport report) =>
       into(proReports).insertOnConflictUpdate(report);
 

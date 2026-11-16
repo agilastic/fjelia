@@ -1,3 +1,7 @@
+import '../../providers/fjelia_edition_provider.dart';
+import '../../providers/pro_analysis_provider.dart'
+    show weeklyReviewAutoProvider, weeklyReviewSchedulerProvider;
+import '../../services/weekly_review_scheduler.dart' show WeeklyReviewSettings;
 import '../../theme/fjelia_style.dart';
 import 'dart:math' as math;
 
@@ -30,6 +34,10 @@ class _MissedWorkoutOnboardingScreenState
   MissedWorkoutSettings _settings = const MissedWorkoutSettings();
   bool _saving = false;
 
+  /// FjeliaPro: the week review written when a week begins. Turning it on
+  /// here, with its text, is the consent to send the week to Fjelia AI Pro.
+  bool _weeklyReview = false;
+
   @override
   void initState() {
     super.initState();
@@ -57,9 +65,16 @@ class _MissedWorkoutOnboardingScreenState
     setState(() => _saving = true);
     try {
       await ref.read(missedWorkoutSettingsProvider.notifier).save(_settings);
-      if (_settings.enabled) {
+      if (_settings.enabled || _weeklyReview) {
         await ref.read(localNotificationGatewayProvider).requestPermission();
+      }
+      if (_settings.enabled) {
         await ref.read(missedWorkoutReminderProvider).reconcile();
+      }
+      if (_weeklyReview) {
+        await WeeklyReviewSettings.setAuto(true);
+        ref.invalidate(weeklyReviewAutoProvider);
+        await ref.read(weeklyReviewSchedulerProvider).reconcile();
       }
     } catch (e) {
       log('[Onboarding] missed-workout reminder: $e');
@@ -195,6 +210,42 @@ class _MissedWorkoutOnboardingScreenState
                                 ],
                               ),
                             ),
+                            if (ref.watch(fjeliaEditionProvider).isPro) ...[
+                              const SizedBox(height: 16),
+                              _Panel(
+                                child: SwitchListTile(
+                                  key: const ValueKey(
+                                    'onboarding-weekly-review',
+                                  ),
+                                  contentPadding: EdgeInsets.zero,
+                                  secondary: const Icon(
+                                    Icons.auto_stories_outlined,
+                                    color: _lilac,
+                                  ),
+                                  title: Text(
+                                    l10n.weeklyReviewAuto,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  subtitle: Text(
+                                    l10n.weeklyReviewAutoHint,
+                                    style: const TextStyle(
+                                      color: _muted,
+                                      fontSize: 12,
+                                      height: 1.4,
+                                    ),
+                                  ),
+                                  activeThumbColor: _mint,
+                                  activeTrackColor: _mint.withAlpha(90),
+                                  value: _weeklyReview,
+                                  onChanged: _saving
+                                      ? null
+                                      : (v) =>
+                                            setState(() => _weeklyReview = v),
+                                ),
+                              ),
+                            ],
                           ],
                         ),
                       ),

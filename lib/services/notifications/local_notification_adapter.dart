@@ -12,6 +12,7 @@ import 'package:timezone/timezone.dart' as tz;
 
 import '../missed_workout_reminder_service.dart' show MissedWorkoutPayload;
 import '../plan_proposal_notifications.dart' show PlanProposalPayload;
+import '../weekly_review_scheduler.dart' show WeeklyReviewPayload;
 import 'local_notification_gateway.dart';
 
 const _channelId = 'hrv_post_reminder';
@@ -82,7 +83,8 @@ void hrvNotificationBackgroundHandler(fln.NotificationResponse response) {
   if (payload == null &&
       NutritionNotificationPayload.decode(response.payload) == null &&
       MissedWorkoutPayload.decode(response.payload) == null &&
-      PlanProposalPayload.decode(response.payload) == null) {
+      PlanProposalPayload.decode(response.payload) == null &&
+      WeeklyReviewPayload.decode(response.payload) == null) {
     return;
   }
   unawaited(
@@ -294,6 +296,9 @@ class FlutterLocalNotificationGateway implements LocalNotificationGateway {
     if (n.feature == NotificationFeature.shortSession) {
       return _scheduleShortSession(n);
     }
+    if (n.feature == NotificationFeature.weeklyReview) {
+      return _scheduleWeeklyReview(n);
+    }
     final nutrition = n.feature == NotificationFeature.nutrition;
     await _plugin.zonedSchedule(
       id: n.id,
@@ -417,6 +422,30 @@ class FlutterLocalNotificationGateway implements LocalNotificationGateway {
         iOS: const fln.DarwinNotificationDetails(
           categoryIdentifier: 'plan_proposal',
           threadIdentifier: 'plan_proposal',
+          presentBadge: false,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _scheduleWeeklyReview(ScheduledNotification n) async {
+    await _plugin.zonedSchedule(
+      id: n.id,
+      title: n.title,
+      body: n.body,
+      payload: n.payload,
+      scheduledDate: tz.TZDateTime.from(n.at.toUtc(), tz.UTC),
+      androidScheduleMode: fln.AndroidScheduleMode.inexactAllowWhileIdle,
+      notificationDetails: fln.NotificationDetails(
+        android: fln.AndroidNotificationDetails(
+          'weekly_review',
+          tr.weeklyReviewChannel,
+          importance: fln.Importance.defaultImportance,
+          priority: fln.Priority.defaultPriority,
+          category: fln.AndroidNotificationCategory.recommendation,
+        ),
+        iOS: const fln.DarwinNotificationDetails(
+          threadIdentifier: 'weekly_review',
           presentBadge: false,
         ),
       ),

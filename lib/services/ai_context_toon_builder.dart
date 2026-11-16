@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:drift/drift.dart' hide isNull, isNotNull;
 
 import '../db/database.dart';
+import 'absence_service.dart' show absenceOn;
 import 'plan_day.dart';
 import '../providers/training_load_provider.dart';
 import 'bio_age_service.dart';
@@ -69,6 +70,7 @@ class AiContextToonBuilder {
     DateTime Function()? now,
     this.bodyFrame,
     this.trainingWindows,
+    this.casualGoal,
   }) : _now = now ?? DateTime.now;
   final AppDatabase _db;
   final DateTime Function() _now;
@@ -79,6 +81,9 @@ class AiContextToonBuilder {
 
   /// When in the week the athlete can train (Settings → Training).
   final Future<TrainingWindows> Function()? trainingWindows;
+
+  /// Without a race goal, what the plan is for: `fun` or `fitness`.
+  final Future<String?> Function()? casualGoal;
 
   /// Absences that are still on or ended in the last two weeks, and the
   /// weekly training times: what the athlete can do, not only what is
@@ -149,6 +154,36 @@ class AiContextToonBuilder {
     // must not read as a rest day.
     final todayAll = await sessionsOn(_db, today);
     final restToday = await isPlannedRestDay(_db, today);
+    final tomorrowDay = DateTime(today.year, today.month, today.day + 1);
+    final restTomorrow = await isPlannedRestDay(_db, tomorrowDay);
+    // Absences the athlete entered: today, tomorrow, and the first week back
+    // from an illness or injury.
+    final absences = await _db.absencesBetween(
+      today.subtract(const Duration(days: 7)),
+      tomorrowDay,
+    );
+    // When the athlete can train today (Settings → Training).
+    String? windowToday;
+    try {
+      final w = await trainingWindows?.call();
+      if (w != null && w.hasWindow(today.weekday)) {
+        String hm(int m) =>
+            '${(m ~/ 60).toString().padLeft(2, '0')}:'
+            '${(m % 60).toString().padLeft(2, '0')}';
+        windowToday = [
+          for (final (s, e) in w.ranges(today.weekday)) '${hm(s)}-${hm(e)}',
+        ].join('+');
+      }
+    } catch (_) {
+      // No profile to read: the brief goes without training times.
+    }
+    String? backFrom;
+    for (final a in absences) {
+      if ((a.kind == 'illness' || a.kind == 'injury') &&
+          a.endDay.isBefore(today)) {
+        backFrom = a.kind;
+      }
+    }
     hrv.sort((a, b) => b.date.compareTo(a.date));
     sleep.sort((a, b) => b.date.compareTo(a.date));
     wellness.sort((a, b) => b.date.compareTo(a.date));
@@ -394,8 +429,13 @@ class AiContextToonBuilder {
         // One recorded activity does not complete every session of the day.
         // The query already excludes completed and skipped plan sessions.
         plannedToday: plannedOn(today),
-        tomorrow: plannedOn(DateTime(today.year, today.month, today.day + 1)),
+        tomorrow: plannedOn(tomorrowDay),
         restDay: restToday,
+        restTomorrow: restTomorrow,
+        away: absenceOn(absences, today)?.kind,
+        awayTomorrow: absenceOn(absences, tomorrowDay)?.kind,
+        backFrom: absenceOn(absences, today) == null ? backFrom : null,
+        window: windowToday,
         trainingHrv: trainingVerdict == null
             ? null
             : trainingVerdict == 'better'
@@ -551,6 +591,21 @@ class AiContextToonBuilder {
         'Participation:${seasonGoal.participation.name},'
         'Ambition:${seasonGoal.ambition?.name ?? 'unknown'}]',
       );
+    }
+    // No race on the calendar: the athlete's own aim, so the coach does not
+    // ask about a race or push for one.
+    if (ordered.isEmpty) {
+      String? aim;
+      try {
+        aim = await casualGoal?.call();
+      } catch (_) {
+        // No profile to read: the context goes without the aim.
+      }
+      if (aim != null) {
+        lines.add(
+          '[Goal:NoRace,Aim:$aim,Means:${aim == 'fun' ? 'moving for the joy of it, every session easy' : 'getting fitter, gently building up with one harder session a week'}]',
+        );
+      }
     }
     final season = await _seasonLine();
     if (season != null) lines.add(season);

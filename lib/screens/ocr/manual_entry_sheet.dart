@@ -12,8 +12,7 @@ import '../../providers/user_profile_provider.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/grip_strength_sheet.dart';
 import '../../widgets/hilo_report_import_sheet.dart';
-import '../../widgets/hilo_cuff_measurement_sheet.dart';
-import '../../widgets/omron_ble_import_sheet.dart';
+import '../../widgets/bp_monitors.dart' show BpMeasureSheet;
 import '../../widgets/polar_h10_hrv_sheet.dart';
 import '../../widgets/waist_sheet.dart';
 import '../../widgets/absence_sheet.dart';
@@ -385,10 +384,8 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
         showAppSheet(context, const ImportSheet());
       case 'Absence':
         showAppSheet(context, const AbsenceSheet());
-      case 'Hilo Cuff (BLE)':
-        showAppSheet(context, const HiloCuffMeasurementSheet());
-      case 'Omron BLE':
-        showAppSheet(context, const OmronBleImportSheet());
+      case 'BLE blood pressure':
+        showAppSheet(context, const BpMeasureSheet());
       case 'RENPHO Scale (BLE)':
         scale();
       default:
@@ -452,18 +449,12 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
               l.plusHrvHint,
               badge: 'LIVE',
             ),
+          // One entry for every Bluetooth monitor: Hilo, Omron, standard.
           _Entry(
-            'Hilo Cuff (BLE)',
+            'BLE blood pressure',
             Icons.bluetooth_rounded,
-            l.plusBpMeasure,
-            l.plusBpMeasureHint,
-            badge: 'BLE',
-          ),
-          _Entry(
-            'Omron BLE',
-            Icons.monitor_heart_rounded,
-            l.plusOmronBle,
-            l.plusOmronBleHint,
+            l.plusBpBle,
+            l.plusBpBleHint,
             badge: 'BLE',
           ),
           _Entry(

@@ -69,7 +69,11 @@ STATUS, PLAN, LOAD and COACH look like one app. A card on the LOAD tab must be i
 ### Page
 
 - Background `fjBackground`. Side gutter 16, 12 between cards, 100 at the bottom for the tab bar.
-- The top bar is the same on every tab: menu, the date switch (`< HEUTE >`, the arrows on a 14-radius `fjInk10` square), actions as plain icons.
+- The top bar is the same on every tab: two floating glass pills, made like the tab bar (`panel` at 82 %, the bar's 1-px edge, radius 28, a 16 blur behind).
+  - Left pill: the menu and the date switch (`< HEUTE >`, the arrows on a 14-radius `fjInk10` square), or the plan's view switch.
+  - Right pill: report, add, sync, as plain icons.
+  - The content starts below the pills and scrolls under them and between them. Only the status bar gets a soft fade so the clock stays readable. The coach tab keeps a plain bar.
+  - A tab's scroll view adds `MediaQuery.paddingOf(context).top` to its top padding.
 - Hero figures without a card (the day's gauges on STATUS) only at the top of a tab, once.
 
 ### Card (the only frame)

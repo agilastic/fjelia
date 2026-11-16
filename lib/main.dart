@@ -33,6 +33,12 @@ import 'screens/planner/plan_proposal_cards.dart';
 import 'services/missed_workout_reminder_service.dart';
 import 'services/plan_proposal_notifications.dart' show PlanProposalPayload;
 import 'services/short_session_reminder.dart' show ShortSessionPayload;
+import 'services/weekly_review_scheduler.dart' show WeeklyReviewPayload;
+import 'providers/week_start_provider.dart';
+import 'services/pro_analysis.dart' show ProAnalysisRef;
+import 'providers/pro_analysis_provider.dart'
+    show weeklyReviewSchedulerProvider;
+import 'screens/planner/pro_analysis_sheet.dart' show ProAnalysisSheet;
 import 'services/control/execution.dart' show shortReasons;
 import 'providers/short_session_provider.dart';
 import 'screens/planner/short_session_sheet.dart';
@@ -214,6 +220,8 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
           ? _onPlanProposalAction(r)
           : ShortSessionPayload.decode(r.payload) != null
           ? _onShortSessionAction(r)
+          : WeeklyReviewPayload.decode(r.payload) != null
+          ? _onWeeklyReviewAction(r)
           : _onNutritionAction(r);
       await Future.wait([
         ref
@@ -230,6 +238,8 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
             .catchError((Object _) {}),
       ]);
       await router.markReady();
+      unawaited(_askNotificationsOnce());
+      _weeklyReview();
     } catch (_) {
       // Reminders are optional; the rest of the app does not depend on them.
     }
@@ -373,6 +383,57 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
         await notifier.setModel(proAiModel);
       }
     });
+  }
+
+  /// Once, on the home screen: when iOS has never asked whether Fjelia may
+  /// show notifications, ask now, so reminders that are on by default reach
+  /// the athlete. iOS shows the question only one time; after a "no" the
+  /// reminder settings point to the system settings.
+  Future<void> _askNotificationsOnce() async {
+    try {
+      final gateway = ref.read(localNotificationGatewayProvider);
+      if (await gateway.permission() !=
+          notifications.NotificationPermission.notDetermined) {
+        return;
+      }
+      final context = await _homeContext();
+      if (context == null || !mounted) return;
+      final answer = await gateway.requestPermission();
+      ref.invalidate(notificationPermissionProvider);
+      if (!answer.allowed) return;
+      unawaited(ref.read(missedWorkoutReminderProvider).reconcile());
+      unawaited(ref.read(weeklyReviewSchedulerProvider).reconcile());
+    } catch (_) {
+      // Notifications are optional.
+    }
+  }
+
+  /// A new week: last week's review is written if it is not yet, and the
+  /// push for the next week is set.
+  void _weeklyReview() {
+    final scheduler = ref.read(weeklyReviewSchedulerProvider);
+    unawaited(scheduler.reconcile().then((_) => scheduler.runIfDue()));
+  }
+
+  /// The push at the start of a week: last week's review, written now if
+  /// the app could not do it before.
+  Future<void> _onWeeklyReviewAction(
+    notifications.NotificationResponse response,
+  ) async {
+    final p = WeeklyReviewPayload.decode(response.payload);
+    if (p == null || !mounted) return;
+    final mondayFirst = ref.read(weekStartsOnMondayProvider);
+    final analysis = ProAnalysisRef.lastWeekReview(
+      p.weekStart,
+      mondayFirst: mondayFirst,
+    );
+    unawaited(ref.read(weeklyReviewSchedulerProvider).runIfDue());
+    final context = await _homeContext();
+    if (context == null || !context.mounted) return;
+    await showAppSheet(
+      context,
+      ProAnalysisSheet(analysis: analysis, title: context.l10n.proWeekReview),
+    );
   }
 
   /// Ill with no end known yet: the absence goes on to tomorrow.

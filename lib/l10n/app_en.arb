@@ -165,9 +165,26 @@
   "restoreFromBackup": "Restore from backup",
   "backupRestoredRestartTheApp": "Backup restored. Restart the app to reload all settings.",
   "raceGoals": "Race Goals",
+  "casualGoalTitle": "Without a race",
+  "casualGoalHint": "No race planned? Fjelia plans anyway, from your current level. With no training yet, it starts with an easy 25-minute session.",
+  "casualFun": "Fun",
+  "casualFunHint": "Easy sessions in your sports, for the joy of moving.",
+  "casualFitness": "Fitness",
+  "casualFitnessHint": "Build up gently, with one harder session a week.",
+  "casualNone": "None",
+  "casualGoalAfterRace": "Applies once no race goal is set.",
   "yourActivities": "Your Activities",
   "usedByAiCoachAnd": "Used by AI Coach and training plan. Plan sports marked with ✦.",
   "calendarWeekStart": "Calendar week start",
+  "trainingSecGoals": "Goals & sports",
+  "trainingSecGoalsHint": "Race goals and the sports you do",
+  "trainingSecSchedule": "Week & time",
+  "trainingSecScheduleHint": "Week start, rest and strength days, training times, hours",
+  "trainingSecDetails": "Strength & nutrition",
+  "trainingSecDetailsHint": "Load unit and fuelling",
+  "trainingSecReminders": "Reminders & heat",
+  "trainingSecRemindersHint": "Missed workouts and heat acclimation",
+  "trainingSecPlanHint": "Regenerate or delete planned workouts",
   "planDefaultView": "Plan Default View",
   "weeklySchedule": "Weekly Schedule",
   "trainingdaysperweekTrainingDaysTapTo": "{trainingDaysPerWeek, plural, one{{trainingDaysPerWeek} training day} other{{trainingDaysPerWeek} training days}} · tap to cycle Training / Rest / Strength",
@@ -345,6 +362,8 @@
   "unitedStates": "United States",
   "asia": "Asia",
   "bluetoothBloodPressure": "Bluetooth · blood pressure",
+  "onbBpMonitorTile": "Bluetooth · Omron, standard, Hilo cuff",
+  "onbIndoorTile": "Bluetooth · Concept2, rowers, bikes",
   "cloudCuffData": "Cloud · cuff data",
   "apiSync": "API sync",
   "bluetoothHrvStrap": "Bluetooth · HRV strap",
@@ -1419,7 +1438,7 @@
   "yourPastActivitiesAreStill": "Your past activities are still being imported. You can build your plan now — it is refined automatically when the import finishes.",
   "buildingYourPlan": "Building your plan…",
   "saveContinue": "Save & Continue",
-  "addYourMainPriorityA": "Add your main (priority A) race. The plan is periodised towards it: base, build, peak and taper. Without a race goal no plan is generated yet.",
+  "addYourMainPriorityA": "Add your main (priority A) race. The plan is periodised towards it: base, build, peak and taper.",
   "noMeasurementsYet": "No measurements yet",
   "date": "Date",
   "deepSleepIsBelowOptimal": "Deep sleep is below optimal ({round}%). Avoid alcohol and heavy meals 3h before bed.",
@@ -3435,6 +3454,7 @@
     }
   },
   "notificationsAreOff": "Notifications are off for Fjelia. Allow them to get this reminder.",
+  "openNotificationSettings": "Open notification settings",
   "allowNotifications": "Allow notifications",
   "openWorkoutToday": "Still open today",
   "checkingForWorkout": "Looking for your workout…",
@@ -3512,6 +3532,31 @@
     }
   },
   "briefRestDayToday": "Today is a planned rest day.",
+  "briefAwayToday": "Entered for today: {kind}, no training.",
+  "@briefAwayToday": {
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
+  "briefAwayTomorrow": "Entered for tomorrow: {kind}, no training.",
+  "@briefAwayTomorrow": {
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
+  "briefRestDayTomorrow": "Tomorrow is a planned rest day.",
+  "briefBackFrom": "First week after {kind}: keep it easy and short.",
+  "@briefBackFrom": {
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
   "restDayPlannedNote": "Recovery is part of your plan.",
   "restDayTitle": "Rest day",
   "importActivityFile": "Import activity file",
@@ -5054,6 +5099,33 @@
   "proPlanCheck": "Today's plan check",
   "proPlanCheckHint": "Does today's plan fit your recovery?",
   "proWeekReview": "Weekly review",
+  "weeklyReviewPushTitle": "Your week in review",
+  "weeklyReviewPushBody": "The week is over. Tap to see how it went.",
+  "weeklyReviewReadyTitle": "Your week in review is ready",
+  "weeklyReviewReadyBody": "Tap to read how your week went.",
+  "weeklyReviewChannel": "Weekly review",
+  "weeklyReviewAuto": "Weekly review by itself",
+  "weeklyReviewAutoHint": "At the start of each week (00:00) a push, and Fjelia AI Pro writes last week's review as soon as the app runs. Your training context is sent to Fjelia AI Pro for this.",
+  "weekDiaryTitle": "Weekly reviews",
+  "weekDiaryOpen": "Earlier reviews",
+  "weekDiaryEmpty": "No reviews yet. Fjelia writes the first one at the start of the next week, or you write one now.",
+  "weekDiaryCount": "{count, plural, =1{1 week} other{{count} weeks}}",
+  "@weekDiaryCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "weekDiaryWeek": "Week {week}",
+  "@weekDiaryWeek": {
+    "placeholders": {
+      "week": {
+        "type": "int"
+      }
+    }
+  },
+  "weekDiaryHours": "Hours",
   "proWeekReviewHint": "What worked, what to change next week",
   "proRacePlan": "Race plan",
   "proRacePlanHint": "{race}: taper, pacing, fuelling",
@@ -5199,6 +5271,22 @@
   "activityNoteAdd": "Add a note for the coach",
   "plusOmronBle": "Find BLE blood-pressure monitors",
   "plusOmronBleHint": "Search for standard Bluetooth blood-pressure devices and supported Omron profiles.",
+  "bpMonitorsTitle": "Bluetooth blood-pressure monitors",
+  "bpMonitorsNone": "No monitor saved yet. Add your Hilo cuff, Omron or standard Bluetooth monitor.",
+  "bpMonitorAdd": "Add monitor",
+  "bpMonitorKindMemory": "Omron or standard",
+  "bpMonitorKindHiloCuff": "Hilo cuff",
+  "bpMonitorKindOmron": "Omron or Bluetooth BP monitor",
+  "bpMonitorLive": "Measures on request",
+  "bpMonitorMemory": "Reads its stored readings",
+  "bpMonitorModel": "Monitor model",
+  "bpMonitorStandard": "Standard Bluetooth blood-pressure monitor",
+  "bpMonitorFound": "Monitor found",
+  "bpMonitorSearch": "Search for monitors",
+  "bpMonitorNoneFound": "No monitor found. Turn on Bluetooth and wake the monitor.",
+  "bpMonitorChoose": "Which monitor do you measure with?",
+  "plusBpBle": "Blood pressure via Bluetooth",
+  "plusBpBleHint": "Measure with your saved monitor or fetch its readings",
   "sleepEcgTitle": "Record sleep",
   "sleepEcgHint": "ECG and movement with Polar H10",
   "sleepEcgDescription": "Records ECG at 130 Hz and three-axis movement at 25 Hz at the same time. Wear the Polar H10 and keep your iPhone within Bluetooth range. Sleep-stage estimation is optional and runs separately; breathing rate and medical findings are not calculated.",

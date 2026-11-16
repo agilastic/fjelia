@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import '../../theme/fjelia_style.dart';
 import '../../l10n/formats.dart';
 import '../../l10n/l10n_ext.dart';
@@ -19,449 +21,631 @@ import '../../providers/heat_acclimation_provider.dart';
 import '../../providers/workout_generation_provider.dart';
 import '../../providers/plan_goal_sync_provider.dart';
 import '../../providers/workout_push_provider.dart';
+import '../../providers/fjelia_edition_provider.dart';
+import '../../providers/hrv_reminder_provider.dart'
+    show localNotificationGatewayProvider;
+import '../../providers/pro_analysis_provider.dart';
+import '../../services/weekly_review_scheduler.dart' show WeeklyReviewSettings;
 import '../../widgets/app_widgets.dart';
+import '../../widgets/settings_widgets.dart' show SettingsGroup, SettingsIcon;
 import '../../widgets/nutrition_widgets.dart';
 import '../../utils/target_time.dart';
 import 'missed_workout_settings_card.dart';
 import 'race_goal_editor.dart';
 import '../strength/strength_sections.dart';
 import 'training_windows_sheet.dart';
+import '../../widgets/casual_goal_picker.dart';
 
+/// The parts of Settings → Training, each a page of its own.
+enum TrainingSection { goals, schedule, details, reminders, plan }
+
+/// Settings → Training: a short menu of its parts; [section] opens one.
 class TrainingTab extends ConsumerWidget {
-  const TrainingTab({super.key});
+  const TrainingTab({super.key, this.section});
+  final TrainingSection? section;
+
+  static (String, String, IconData, Color) _entry(
+    BuildContext context,
+    TrainingSection s,
+  ) {
+    final l = context.l10n;
+    return switch (s) {
+      TrainingSection.goals => (
+        l.trainingSecGoals,
+        l.trainingSecGoalsHint,
+        Icons.flag_outlined,
+        Colors.orange,
+      ),
+      TrainingSection.schedule => (
+        l.trainingSecSchedule,
+        l.trainingSecScheduleHint,
+        Icons.calendar_month_outlined,
+        Colors.blue,
+      ),
+      TrainingSection.details => (
+        l.trainingSecDetails,
+        l.trainingSecDetailsHint,
+        Icons.fitness_center,
+        Colors.purpleAccent,
+      ),
+      TrainingSection.reminders => (
+        l.trainingSecReminders,
+        l.trainingSecRemindersHint,
+        Icons.notifications_none_rounded,
+        Colors.teal,
+      ),
+      TrainingSection.plan => (
+        l.trainingPlan,
+        l.trainingSecPlanHint,
+        Icons.event_repeat_rounded,
+        Colors.redAccent,
+      ),
+    };
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final section = this.section;
+    if (section == null) {
+      return SheetPage(
+        title: context.l10n.training,
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            SettingsGroup(
+              dividerIndent: 58,
+              children: [
+                for (final s in TrainingSection.values)
+                  if (_entry(context, s) case (
+                    final title,
+                    final hint,
+                    final icon,
+                    final color,
+                  ))
+                    ListTile(
+                      key: ValueKey('training-section-${s.name}'),
+                      leading: SettingsIcon(icon, color),
+                      title: Text(title),
+                      subtitle: Text(
+                        hint,
+                        style: TextStyle(fontSize: 12, color: muted),
+                      ),
+                      trailing: const Icon(Icons.chevron_right, size: 20),
+                      onTap: () =>
+                          showAppSheet(context, TrainingTab(section: s)),
+                    ),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
     final p = ref.watch(userProfileProvider).valueOrNull;
     final heat = ref.watch(heatAcclimationSettingsProvider).valueOrNull;
     final generation = ref.watch(workoutGenerationProvider);
     return SheetPage(
-      title: context.l10n.training,
+      title: _entry(context, section).$1,
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          SectionLabel(context.l10n.raceGoals, color: Colors.orange),
-          const RaceGoalsCard(),
-          SectionLabel(context.l10n.yourActivities, color: Colors.orange),
+          if (section == TrainingSection.goals) ...[
+            SectionLabel(context.l10n.raceGoals, color: Colors.orange),
+            const RaceGoalsCard(),
+            // No race: a plan for the athlete's own aim.
+            if (p != null) ...[
+              SectionLabel(context.l10n.casualGoalTitle, color: Colors.orange),
+              SectionCard(
+                child: CasualGoalPicker(
+                  value: p.casualGoal,
+                  hasRaceGoal:
+                      (ref.watch(upcomingRaceGoalsProvider).valueOrNull ??
+                              const [])
+                          .isNotEmpty,
+                  onChanged: (v) => runUiAction(context, () async {
+                    await ref
+                        .read(userProfileProvider.notifier)
+                        .save(
+                          p.copyWith(casualGoal: v, clearCasualGoal: v == null),
+                        );
+                    await ref.read(applyCasualGoalProvider)();
+                  }),
+                ),
+              ),
+            ],
+            SectionLabel(context.l10n.yourActivities, color: Colors.orange),
+          ],
           if (p != null) ...[
-            Padding(
-              padding: EdgeInsets.only(bottom: 10),
-              child: Text(
-                context.l10n.usedByAiCoachAnd,
-                style: TextStyle(fontSize: 12, color: fjInk70),
+            if (section == TrainingSection.goals) ...[
+              Padding(
+                padding: EdgeInsets.only(bottom: 10),
+                child: Text(
+                  context.l10n.usedByAiCoachAnd,
+                  style: TextStyle(fontSize: 12, color: fjInk70),
+                ),
               ),
-            ),
-            Wrap(
-              spacing: 6,
-              children: [
-                for (final e in {
-                  'running': context.l10n.running,
-                  'trail_running': context.l10n.trail,
-                  'cycling_road': context.l10n.cycling,
-                  'cycling_gravel': context.l10n.gravel,
-                  'cycling_mtb': context.l10n.mtb,
-                  'swimming': context.l10n.swimming,
-                  'triathlon': context.l10n.triathlon,
-                  'indoor_rowing': context.l10n.rowing,
-                  'hiking': context.l10n.hiking,
-                  'inline_skating': context.l10n.inlineSkating,
-                  'nordic_skiing': context.l10n.nordicClassic,
-                  'skate_skiing': context.l10n.skateSkiing,
-                  'strength': context.l10n.strength,
-                  'walking': context.l10n.walking,
-                  'yoga': context.l10n.yoga,
-                  'skiing': context.l10n.skiing,
-                  'climbing': context.l10n.climbing,
-                  'other': context.l10n.other,
-                }.entries)
-                  FilterChip(
-                    label: Text(
-                      '${_sportEmoji[e.key] ?? ''} ${e.value}${_planSports.contains(e.key) ? ' ✦' : ''}${p.preferredSports.contains(e.key) ? ' ✓' : ''}',
+              Wrap(
+                spacing: 6,
+                children: [
+                  for (final e in {
+                    'running': context.l10n.running,
+                    'trail_running': context.l10n.trail,
+                    'cycling_road': context.l10n.cycling,
+                    'cycling_gravel': context.l10n.gravel,
+                    'cycling_mtb': context.l10n.mtb,
+                    'swimming': context.l10n.swimming,
+                    'triathlon': context.l10n.triathlon,
+                    'indoor_rowing': context.l10n.rowing,
+                    'hiking': context.l10n.hiking,
+                    'inline_skating': context.l10n.inlineSkating,
+                    'nordic_skiing': context.l10n.nordicClassic,
+                    'skate_skiing': context.l10n.skateSkiing,
+                    'strength': context.l10n.strength,
+                    'walking': context.l10n.walking,
+                    'yoga': context.l10n.yoga,
+                    'skiing': context.l10n.skiing,
+                    'climbing': context.l10n.climbing,
+                    'other': context.l10n.other,
+                  }.entries)
+                    FilterChip(
+                      label: Text(
+                        '${_sportEmoji[e.key] ?? ''} ${e.value}${_planSports.contains(e.key) ? ' ✦' : ''}${p.preferredSports.contains(e.key) ? ' ✓' : ''}',
+                      ),
+                      selectedColor: Colors.orange.withValues(alpha: .14),
+                      backgroundColor: panel,
+                      side: BorderSide(
+                        color: p.preferredSports.contains(e.key)
+                            ? Colors.orange
+                            : fjInk12,
+                      ),
+                      labelStyle: TextStyle(
+                        fontFamily: 'Roboto',
+                        fontSize: 12,
+                        color: p.preferredSports.contains(e.key)
+                            ? Colors.orange
+                            : fjInk,
+                      ),
+                      selected: p.preferredSports.contains(e.key),
+                      onSelected: (selected) => runUiAction(context, () async {
+                        final current = await ref.read(
+                          userProfileProvider.future,
+                        );
+                        final sports = current.preferredSports.toSet();
+                        if (selected) {
+                          sports.add(e.key);
+                        } else if (sports.length > 1) {
+                          sports.remove(e.key);
+                        }
+                        await ref
+                            .read(userProfileProvider.notifier)
+                            .save(
+                              current.copyWith(
+                                preferredSports: sports.toList(),
+                              ),
+                            );
+                      }),
                     ),
-                    selectedColor: Colors.orange.withValues(alpha: .14),
-                    backgroundColor: panel,
-                    side: BorderSide(
-                      color: p.preferredSports.contains(e.key)
-                          ? Colors.orange
-                          : fjInk12,
-                    ),
-                    labelStyle: TextStyle(
-                      fontFamily: 'Roboto',
-                      fontSize: 12,
-                      color: p.preferredSports.contains(e.key)
-                          ? Colors.orange
-                          : fjInk,
-                    ),
-                    selected: p.preferredSports.contains(e.key),
-                    onSelected: (selected) => runUiAction(context, () async {
-                      final current = await ref.read(
-                        userProfileProvider.future,
-                      );
-                      final sports = current.preferredSports.toSet();
-                      if (selected) {
-                        sports.add(e.key);
-                      } else if (sports.length > 1) {
-                        sports.remove(e.key);
-                      }
-                      await ref
-                          .read(userProfileProvider.notifier)
-                          .save(
-                            current.copyWith(preferredSports: sports.toList()),
-                          );
-                    }),
-                  ),
-              ],
-            ),
-            SectionLabel(context.l10n.calendarWeekStart, color: Colors.orange),
-            SettingsSegments(
-              values: {
-                'monday': context.l10n.monday,
-                'sunday': context.l10n.sunday,
-              },
-              selected: p.weekStartsOnMonday ? 'monday' : 'sunday',
-              onSelect: (v) => runUiAction(
-                context,
-                () => ref
-                    .read(userProfileProvider.notifier)
-                    .save(p.copyWith(weekStartsOnMonday: v == 'monday')),
+                ],
               ),
-            ),
-            SectionLabel(context.l10n.planDefaultView, color: Colors.orange),
-            SettingsSegments(
-              values: {
-                'month': context.l10n.month,
-                'week': context.l10n.week,
-                'list': context.l10n.list,
-              },
-              selected: ref.watch(planViewProvider).valueOrNull ?? 'list',
-              onSelect: (v) => runUiAction(
-                context,
-                () => ref.read(planViewProvider.notifier).setView(v),
-              ),
-            ),
-            SectionLabel(context.l10n.weeklySchedule, color: Colors.orange),
-            Text(
-              context.l10n.trainingdaysperweekTrainingDaysTapTo(
-                p.trainingDaysPerWeek,
-              ),
-              style: TextStyle(color: muted, fontSize: 10),
-            ),
-            Wrap(
-              spacing: 5,
-              children: [
-                for (final day
-                    in p.weekStartsOnMonday
-                        ? [1, 2, 3, 4, 5, 6, 7]
-                        : [7, 1, 2, 3, 4, 5, 6])
-                  ActionChip(
-                    backgroundColor:
-                        (p.restDays.contains(day)
-                                ? Colors.grey
-                                : p.preferredStrengthDays.contains(day)
-                                ? Colors.orange
-                                : mint)
-                            .withValues(alpha: .12),
-                    side: BorderSide(
-                      color: p.restDays.contains(day)
-                          ? Colors.grey
-                          : p.preferredStrengthDays.contains(day)
-                          ? Colors.orange
-                          : mint,
-                    ),
-                    label: Text(
-                      '${[context.l10n.mon, context.l10n.tue, context.l10n.wed, context.l10n.thu, context.l10n.fri, context.l10n.sat, context.l10n.sun][day - 1]} ${p.restDays.contains(day)
-                          ? context.l10n.restDay
-                          : p.preferredStrengthDays.contains(day)
-                          ? context.l10n.strength
-                          : context.l10n.train}',
-                      style: const TextStyle(fontSize: 10),
-                    ),
-                    onPressed: () => runUiAction(context, () async {
-                      final rest = p.restDays.toSet(),
-                          strength = p.preferredStrengthDays.toSet();
-                      if (rest.remove(day)) {
-                        strength.add(day);
-                      } else if (!strength.remove(day) && rest.length < 6) {
-                        rest.add(day);
-                      }
-                      await ref
-                          .read(userProfileProvider.notifier)
-                          .save(
-                            p.copyWith(
-                              restDays: rest.toList()..sort(),
-                              preferredStrengthDays: strength.toList()..sort(),
-                              trainingDaysPerWeek: 7 - rest.length,
-                            ),
-                          );
-                    }),
-                  ),
-              ],
-            ),
-            const SizedBox(height: 6),
-            // When in the week training fits; the plan and the reminder
-            // follow it.
-            ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: const Icon(Icons.schedule_rounded, color: Colors.orange),
-              title: Text(context.l10n.trainingWindowsTitle),
-              subtitle: Text(
-                p.trainingWindows.isEmpty
-                    ? context.l10n.trainingWindowsNotSet
-                    : [
-                        for (final d in [1, 2, 3, 4, 5, 6, 7])
-                          if (p.trainingWindows.hasWindow(d))
-                            '${[context.l10n.mon, context.l10n.tue, context.l10n.wed, context.l10n.thu, context.l10n.fri, context.l10n.sat, context.l10n.sun][d - 1]} ${trainingWindowsText(p.trainingWindows, d)}',
-                      ].join(' · '),
-                style: TextStyle(fontSize: 11, color: fjInk70),
-              ),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () => showAppSheet(context, const TrainingWindowsSheet()),
-            ),
-            // The DFA alpha1 ramp test every few weeks; the plan follows at
-            // once.
-            SwitchListTile(
-              contentPadding: EdgeInsets.zero,
-              secondary: const Icon(
-                Icons.monitor_heart_outlined,
+            ],
+            if (section == TrainingSection.schedule) ...[
+              SectionLabel(
+                context.l10n.calendarWeekStart,
                 color: Colors.orange,
               ),
-              title: Text(context.l10n.rampTestsSetting),
-              subtitle: Text(
-                context.l10n.rampTestsSettingHint,
-                style: TextStyle(fontSize: 11, color: fjInk70),
+              SettingsSegments(
+                values: {
+                  'monday': context.l10n.monday,
+                  'sunday': context.l10n.sunday,
+                },
+                selected: p.weekStartsOnMonday ? 'monday' : 'sunday',
+                onSelect: (v) => runUiAction(context, () async {
+                  await ref
+                      .read(userProfileProvider.notifier)
+                      .save(p.copyWith(weekStartsOnMonday: v == 'monday'));
+                  // The review's push follows the new first day.
+                  await ref.read(weeklyReviewSchedulerProvider).reconcile();
+                }),
               ),
-              value: p.rampTests,
-              onChanged: (v) => runUiAction(context, () async {
-                await ref
-                    .read(userProfileProvider.notifier)
-                    .save(p.copyWith(rampTests: v));
-                await ref.read(applyScheduleProvider)();
-              }),
-            ),
-            if (ref.watch(planScheduleOutdatedProvider).valueOrNull ?? false)
-              Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: FilledButton.tonalIcon(
-                  onPressed: () => runUiAction(
-                    context,
-                    () => ref.read(applyScheduleProvider)(),
-                  ),
-                  icon: const Icon(Icons.event_repeat_rounded, size: 18),
-                  label: Text(context.l10n.updatePlanToThisSchedule),
-                ),
-              ),
-            if (ref.watch(strengthProgrammeOutdatedProvider).valueOrNull ??
-                false)
-              Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: FilledButton.tonalIcon(
-                  onPressed: () => confirmStrengthUpdate(context, ref),
-                  icon: const Icon(Icons.fitness_center, size: 18),
-                  label: Text(context.l10n.updateStrengthSessions),
-                ),
-              ),
-            SectionLabel(context.l10n.sessionsPerDay, color: Colors.orange),
-            Padding(
-              padding: EdgeInsets.only(bottom: 12),
-              child: Text(
-                context.l10n.canYouFitTwoWorkouts,
-                style: TextStyle(color: fjInk70, fontSize: 12),
-              ),
-            ),
-            SettingsSegments(
-              values: const {
-                '1': '1 — Single session',
-                '2': '2 — Double day possible',
-              },
-              selected: '${p.maxSessionsPerDay}',
-              color: Colors.orange,
-              onSelect: (v) => runUiAction(
-                context,
-                () => ref
-                    .read(userProfileProvider.notifier)
-                    .save(p.copyWith(maxSessionsPerDay: int.parse(v))),
-              ),
-            ),
-            NutritionPreferencesTile(),
-            SectionLabel(context.l10n.strengthLoadUnit, color: Colors.orange),
-            Padding(
-              padding: EdgeInsets.only(bottom: 12),
-              child: Text(
-                context.l10n.weightsThemselvesAreSetIn,
-                style: TextStyle(color: fjInk70, fontSize: 12),
-              ),
-            ),
-            SettingsSegments(
-              values: {
-                'kg': context.l10n.kilogramsKg,
-                'lb': context.l10n.poundsLb,
-              },
-              selected: p.massUnit,
-              color: Colors.orange,
-              onSelect: (v) => runUiAction(
-                context,
-                () => ref
-                    .read(userProfileProvider.notifier)
-                    .save(p.copyWith(massUnit: v)),
-              ),
-            ),
-            SectionLabel(context.l10n.hoursAvailableWeek, color: Colors.orange),
-            Text(
-              context.l10n.hoursperweekHWeek(valueText(p.hoursPerWeek)),
-              style: TextStyle(fontSize: 12, color: fjInk70),
-            ),
-            Slider(
-              value: p.hoursPerWeek.clamp(3, 25),
-              min: 3,
-              max: 25,
-              divisions: 22,
-              activeColor: Colors.orange,
-              label: context.l10n.hoursperweekH(valueText(p.hoursPerWeek)),
-              onChanged: (v) => ref
-                  .read(userProfileProvider.notifier)
-                  .save(p.copyWith(hoursPerWeek: v)),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('3 h', style: TextStyle(color: muted, fontSize: 10)),
-                Text('25 h', style: TextStyle(color: muted, fontSize: 10)),
-              ],
-            ),
-            Builder(
-              builder: (context) {
-                final recent = WeeklyHours.of(
-                  [
-                    for (final a
-                        in ref.watch(loadActivitiesProvider).valueOrNull ??
-                            const <ActivityRecord>[])
-                      (a.startDate, a.durationSeconds),
-                  ],
-                  now: DateTime.now(),
-                  mondayFirst: ref.watch(weekStartsOnMondayProvider),
-                );
-                if (recent == null) return const SizedBox.shrink();
-                final far = recent.isFarAbove(p.hoursPerWeek);
-                return Padding(
-                  padding: const EdgeInsets.only(top: 6),
-                  child: Text(
-                    'Your last 12 weeks: ${valueText(recent.average)} h on average, '
-                    'busiest week ${valueText(recent.peak)} h.'
-                    '${far ? ' ${valueText(p.hoursPerWeek)} h is far above that; the plan builds up from what you do and will stay below it.' : ''}',
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: far ? Colors.orangeAccent : muted,
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
-          SectionLabel(
-            context.l10n.missedWorkoutReminder,
-            color: Colors.orange,
-          ),
-          const MissedWorkoutSettingsCard(),
-          SectionLabel(context.l10n.heatAcclimation, color: Colors.orange),
-          SectionCard(
-            color: duo(0xFF282828, 0xFFEEF1F5),
-            child: Column(
-              children: [
+              // FjeliaPro: last week's review when a new week begins.
+              if (ref.watch(fjeliaEditionProvider).isPro)
                 SwitchListTile(
                   contentPadding: EdgeInsets.zero,
-                  secondary: const Icon(Icons.thermostat, color: Colors.orange),
-                  title: Text(
-                    context.l10n.showHeatAcclimation,
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                  secondary: const Icon(
+                    Icons.auto_stories_outlined,
+                    color: Colors.orange,
                   ),
+                  title: Text(context.l10n.weeklyReviewAuto),
                   subtitle: Text(
-                    context.l10n.weatherEvaluatedAgainstAConfigurable,
-                    style: TextStyle(fontSize: 12, color: fjInk70),
+                    context.l10n.weeklyReviewAutoHint,
+                    style: TextStyle(fontSize: 11, color: fjInk70),
                   ),
-                  activeThumbColor: Colors.orange,
-                  activeTrackColor: Colors.orangeAccent.withValues(alpha: .4),
-                  value: heat?.enabled ?? false,
-                  onChanged: (v) => runUiAction(
-                    context,
-                    () => ref
-                        .read(heatAcclimationSettingsProvider.notifier)
-                        .setEnabled(v),
+                  value:
+                      ref.watch(weeklyReviewAutoProvider).valueOrNull ?? false,
+                  onChanged: (v) => runUiAction(context, () async {
+                    // Turning it on is the consent to send the week to Fjelia
+                    // AI Pro without asking each time.
+                    if (v &&
+                        !await confirmAction(
+                          context,
+                          context.l10n.shareHealthContextWithName(
+                            'Fjelia AI Pro',
+                          ),
+                          context.l10n.yourMessageAndAHealth,
+                        )) {
+                      return;
+                    }
+                    await WeeklyReviewSettings.setAuto(v);
+                    ref.invalidate(weeklyReviewAutoProvider);
+                    if (v) {
+                      await ref
+                          .read(localNotificationGatewayProvider)
+                          .requestPermission();
+                    }
+                    final scheduler = ref.read(weeklyReviewSchedulerProvider);
+                    await scheduler.reconcile();
+                    if (v) unawaited(scheduler.runIfDue());
+                  }),
+                ),
+              SectionLabel(context.l10n.planDefaultView, color: Colors.orange),
+              SettingsSegments(
+                values: {
+                  'month': context.l10n.month,
+                  'week': context.l10n.week,
+                  'list': context.l10n.list,
+                },
+                selected: ref.watch(planViewProvider).valueOrNull ?? 'list',
+                onSelect: (v) => runUiAction(
+                  context,
+                  () => ref.read(planViewProvider.notifier).setView(v),
+                ),
+              ),
+              SectionLabel(context.l10n.weeklySchedule, color: Colors.orange),
+              Text(
+                context.l10n.trainingdaysperweekTrainingDaysTapTo(
+                  p.trainingDaysPerWeek,
+                ),
+                style: TextStyle(color: muted, fontSize: 10),
+              ),
+              Wrap(
+                spacing: 5,
+                children: [
+                  for (final day
+                      in p.weekStartsOnMonday
+                          ? [1, 2, 3, 4, 5, 6, 7]
+                          : [7, 1, 2, 3, 4, 5, 6])
+                    ActionChip(
+                      backgroundColor:
+                          (p.restDays.contains(day)
+                                  ? Colors.grey
+                                  : p.preferredStrengthDays.contains(day)
+                                  ? Colors.orange
+                                  : mint)
+                              .withValues(alpha: .12),
+                      side: BorderSide(
+                        color: p.restDays.contains(day)
+                            ? Colors.grey
+                            : p.preferredStrengthDays.contains(day)
+                            ? Colors.orange
+                            : mint,
+                      ),
+                      label: Text(
+                        '${[context.l10n.mon, context.l10n.tue, context.l10n.wed, context.l10n.thu, context.l10n.fri, context.l10n.sat, context.l10n.sun][day - 1]} ${p.restDays.contains(day)
+                            ? context.l10n.restDay
+                            : p.preferredStrengthDays.contains(day)
+                            ? context.l10n.strength
+                            : context.l10n.train}',
+                        style: const TextStyle(fontSize: 10),
+                      ),
+                      onPressed: () => runUiAction(context, () async {
+                        final rest = p.restDays.toSet(),
+                            strength = p.preferredStrengthDays.toSet();
+                        if (rest.remove(day)) {
+                          strength.add(day);
+                        } else if (!strength.remove(day) && rest.length < 6) {
+                          rest.add(day);
+                        }
+                        await ref
+                            .read(userProfileProvider.notifier)
+                            .save(
+                              p.copyWith(
+                                restDays: rest.toList()..sort(),
+                                preferredStrengthDays: strength.toList()
+                                  ..sort(),
+                                trainingDaysPerWeek: 7 - rest.length,
+                              ),
+                            );
+                      }),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 6),
+              // When in the week training fits; the plan and the reminder
+              // follow it.
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: const Icon(
+                  Icons.schedule_rounded,
+                  color: Colors.orange,
+                ),
+                title: Text(context.l10n.trainingWindowsTitle),
+                subtitle: Text(
+                  p.trainingWindows.isEmpty
+                      ? context.l10n.trainingWindowsNotSet
+                      : [
+                          for (final d in [1, 2, 3, 4, 5, 6, 7])
+                            if (p.trainingWindows.hasWindow(d))
+                              '${[context.l10n.mon, context.l10n.tue, context.l10n.wed, context.l10n.thu, context.l10n.fri, context.l10n.sat, context.l10n.sun][d - 1]} ${trainingWindowsText(p.trainingWindows, d)}',
+                        ].join(' · '),
+                  style: TextStyle(fontSize: 11, color: fjInk70),
+                ),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () =>
+                    showAppSheet(context, const TrainingWindowsSheet()),
+              ),
+              // The DFA alpha1 ramp test every few weeks; the plan follows at
+              // once.
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                secondary: const Icon(
+                  Icons.monitor_heart_outlined,
+                  color: Colors.orange,
+                ),
+                title: Text(context.l10n.rampTestsSetting),
+                subtitle: Text(
+                  context.l10n.rampTestsSettingHint,
+                  style: TextStyle(fontSize: 11, color: fjInk70),
+                ),
+                value: p.rampTests,
+                onChanged: (v) => runUiAction(context, () async {
+                  await ref
+                      .read(userProfileProvider.notifier)
+                      .save(p.copyWith(rampTests: v));
+                  await ref.read(applyScheduleProvider)();
+                }),
+              ),
+              if (ref.watch(planScheduleOutdatedProvider).valueOrNull ?? false)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: FilledButton.tonalIcon(
+                    onPressed: () => runUiAction(
+                      context,
+                      () => ref.read(applyScheduleProvider)(),
+                    ),
+                    icon: const Icon(Icons.event_repeat_rounded, size: 18),
+                    label: Text(context.l10n.updatePlanToThisSchedule),
                   ),
                 ),
-              ],
-            ),
-          ),
-          SectionLabel(context.l10n.trainingPlan, color: Colors.orange),
-          Padding(
-            padding: EdgeInsets.only(bottom: 14),
-            child: Text(
-              context.l10n.regenerateReplacesFutureSessionsAnd,
-              style: TextStyle(fontSize: 12, height: 1.5, color: fjInk70),
-            ),
-          ),
-          OutlinedButton.icon(
-            style: OutlinedButton.styleFrom(
-              foregroundColor: Colors.orange,
-              side: const BorderSide(color: Colors.orange),
-              minimumSize: const Size(double.infinity, 46),
-            ),
-            onPressed: generation.isLoading
-                ? null
-                : () => runUiAction(
-                    context,
-                    () => generateTrainingPlan(context, ref),
+              if (ref.watch(strengthProgrammeOutdatedProvider).valueOrNull ??
+                  false)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: FilledButton.tonalIcon(
+                    onPressed: () => confirmStrengthUpdate(context, ref),
+                    icon: const Icon(Icons.fitness_center, size: 18),
+                    label: Text(context.l10n.updateStrengthSessions),
                   ),
-            icon: generation.isLoading
-                ? const SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : const Icon(Icons.refresh, size: 20),
-            label: Text(
-              generation.isLoading
-                  ? 'Generating workouts…'
-                  : context.l10n.regenerateWorkouts,
-            ),
-          ),
-          if (generation.valueOrNull != null)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Text(
-                context.l10n.valueUpcomingWorkoutsGenerated(
-                  generation.value ?? 0,
                 ),
-                style: const TextStyle(color: mint, fontSize: 12),
+              SectionLabel(context.l10n.sessionsPerDay, color: Colors.orange),
+              Padding(
+                padding: EdgeInsets.only(bottom: 12),
+                child: Text(
+                  context.l10n.canYouFitTwoWorkouts,
+                  style: TextStyle(color: fjInk70, fontSize: 12),
+                ),
+              ),
+              SettingsSegments(
+                values: const {
+                  '1': '1 — Single session',
+                  '2': '2 — Double day possible',
+                },
+                selected: '${p.maxSessionsPerDay}',
+                color: Colors.orange,
+                onSelect: (v) => runUiAction(
+                  context,
+                  () => ref
+                      .read(userProfileProvider.notifier)
+                      .save(p.copyWith(maxSessionsPerDay: int.parse(v))),
+                ),
+              ),
+            ],
+            if (section == TrainingSection.details) ...[
+              NutritionPreferencesTile(),
+              SectionLabel(context.l10n.strengthLoadUnit, color: Colors.orange),
+              Padding(
+                padding: EdgeInsets.only(bottom: 12),
+                child: Text(
+                  context.l10n.weightsThemselvesAreSetIn,
+                  style: TextStyle(color: fjInk70, fontSize: 12),
+                ),
+              ),
+              SettingsSegments(
+                values: {
+                  'kg': context.l10n.kilogramsKg,
+                  'lb': context.l10n.poundsLb,
+                },
+                selected: p.massUnit,
+                color: Colors.orange,
+                onSelect: (v) => runUiAction(
+                  context,
+                  () => ref
+                      .read(userProfileProvider.notifier)
+                      .save(p.copyWith(massUnit: v)),
+                ),
+              ),
+            ],
+            if (section == TrainingSection.schedule) ...[
+              SectionLabel(
+                context.l10n.hoursAvailableWeek,
+                color: Colors.orange,
+              ),
+              Text(
+                context.l10n.hoursperweekHWeek(valueText(p.hoursPerWeek)),
+                style: TextStyle(fontSize: 12, color: fjInk70),
+              ),
+              Slider(
+                value: p.hoursPerWeek.clamp(3, 25),
+                min: 3,
+                max: 25,
+                divisions: 22,
+                activeColor: Colors.orange,
+                label: context.l10n.hoursperweekH(valueText(p.hoursPerWeek)),
+                onChanged: (v) => ref
+                    .read(userProfileProvider.notifier)
+                    .save(p.copyWith(hoursPerWeek: v)),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('3 h', style: TextStyle(color: muted, fontSize: 10)),
+                  Text('25 h', style: TextStyle(color: muted, fontSize: 10)),
+                ],
+              ),
+              Builder(
+                builder: (context) {
+                  final recent = WeeklyHours.of(
+                    [
+                      for (final a
+                          in ref.watch(loadActivitiesProvider).valueOrNull ??
+                              const <ActivityRecord>[])
+                        (a.startDate, a.durationSeconds),
+                    ],
+                    now: DateTime.now(),
+                    mondayFirst: ref.watch(weekStartsOnMondayProvider),
+                  );
+                  if (recent == null) return const SizedBox.shrink();
+                  final far = recent.isFarAbove(p.hoursPerWeek);
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: Text(
+                      'Your last 12 weeks: ${valueText(recent.average)} h on average, '
+                      'busiest week ${valueText(recent.peak)} h.'
+                      '${far ? ' ${valueText(p.hoursPerWeek)} h is far above that; the plan builds up from what you do and will stay below it.' : ''}',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: far ? Colors.orangeAccent : muted,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ],
+          if (section == TrainingSection.reminders) ...[
+            SectionLabel(
+              context.l10n.missedWorkoutReminder,
+              color: Colors.orange,
+            ),
+            const MissedWorkoutSettingsCard(),
+            SectionLabel(context.l10n.heatAcclimation, color: Colors.orange),
+            SectionCard(
+              color: duo(0xFF282828, 0xFFEEF1F5),
+              child: Column(
+                children: [
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    secondary: const Icon(
+                      Icons.thermostat,
+                      color: Colors.orange,
+                    ),
+                    title: Text(
+                      context.l10n.showHeatAcclimation,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    subtitle: Text(
+                      context.l10n.weatherEvaluatedAgainstAConfigurable,
+                      style: TextStyle(fontSize: 12, color: fjInk70),
+                    ),
+                    activeThumbColor: Colors.orange,
+                    activeTrackColor: Colors.orangeAccent.withValues(alpha: .4),
+                    value: heat?.enabled ?? false,
+                    onChanged: (v) => runUiAction(
+                      context,
+                      () => ref
+                          .read(heatAcclimationSettingsProvider.notifier)
+                          .setEnabled(v),
+                    ),
+                  ),
+                ],
               ),
             ),
-          if (generation.hasError)
-            Text(
-              context.l10n.generationFailedCheckYourRace,
-              style: TextStyle(color: Colors.redAccent, fontSize: 12),
+          ],
+          if (section == TrainingSection.plan) ...[
+            SectionLabel(context.l10n.trainingPlan, color: Colors.orange),
+            Padding(
+              padding: EdgeInsets.only(bottom: 14),
+              child: Text(
+                context.l10n.regenerateReplacesFutureSessionsAnd,
+                style: TextStyle(fontSize: 12, height: 1.5, color: fjInk70),
+              ),
             ),
-          const SizedBox(height: 12),
-          OutlinedButton.icon(
-            style: OutlinedButton.styleFrom(
-              foregroundColor: Colors.redAccent,
-              side: const BorderSide(color: Colors.redAccent),
-              minimumSize: const Size(double.infinity, 46),
-            ),
-            icon: const Icon(Icons.delete_outline, size: 20),
-            onPressed: generation.isLoading
-                ? null
-                : () async {
-                    if (await confirmAction(
+            OutlinedButton.icon(
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Colors.orange,
+                side: const BorderSide(color: Colors.orange),
+                minimumSize: const Size(double.infinity, 46),
+              ),
+              onPressed: generation.isLoading
+                  ? null
+                  : () => runUiAction(
                       context,
-                      context.l10n.deleteAllWorkouts2,
-                      context.l10n.thisDeletesPlannedWorkoutsOn,
-                    )) {
-                      if (context.mounted) await _deleteAll(context, ref);
-                    }
-                  },
-            label: Text(
-              context.l10n.deleteAllWorkouts,
-              style: TextStyle(color: Colors.red),
+                      () => generateTrainingPlan(context, ref),
+                    ),
+              icon: generation.isLoading
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.refresh, size: 20),
+              label: Text(
+                generation.isLoading
+                    ? 'Generating workouts…'
+                    : context.l10n.regenerateWorkouts,
+              ),
             ),
-          ),
+            if (generation.valueOrNull != null)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Text(
+                  context.l10n.valueUpcomingWorkoutsGenerated(
+                    generation.value ?? 0,
+                  ),
+                  style: const TextStyle(color: mint, fontSize: 12),
+                ),
+              ),
+            if (generation.hasError)
+              Text(
+                context.l10n.generationFailedCheckYourRace,
+                style: TextStyle(color: Colors.redAccent, fontSize: 12),
+              ),
+            const SizedBox(height: 12),
+            OutlinedButton.icon(
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Colors.redAccent,
+                side: const BorderSide(color: Colors.redAccent),
+                minimumSize: const Size(double.infinity, 46),
+              ),
+              icon: const Icon(Icons.delete_outline, size: 20),
+              onPressed: generation.isLoading
+                  ? null
+                  : () async {
+                      if (await confirmAction(
+                        context,
+                        context.l10n.deleteAllWorkouts2,
+                        context.l10n.thisDeletesPlannedWorkoutsOn,
+                      )) {
+                        if (context.mounted) await _deleteAll(context, ref);
+                      }
+                    },
+              label: Text(
+                context.l10n.deleteAllWorkouts,
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+          ],
           Padding(
             padding: EdgeInsets.symmetric(vertical: 18),
             child: Text(
@@ -477,7 +661,8 @@ class TrainingTab extends ConsumerWidget {
 
 Future<void> generateTrainingPlan(BuildContext context, WidgetRef ref) async {
   final goal = await ref.read(primaryRaceGoalProvider.future);
-  if (goal == null) {
+  final casual = (await ref.read(userProfileProvider.future)).casualGoal;
+  if (goal == null && casual == null) {
     throw StateError(tr.addAFutureRaceGoal);
   }
   final goals = await ref.read(goalSetProvider.future);
@@ -486,9 +671,12 @@ Future<void> generateTrainingPlan(BuildContext context, WidgetRef ref) async {
       !await confirmAction(
         context,
         context.l10n.regenerateWorkouts2,
-        'Replace future workouts and rebuild toward ${goal.name}'
-        '${others > 0 ? ' and your $others other goal${others == 1 ? '' : 's'}' : ''}'
-        ' using your current schedule?',
+        goal == null
+            ? 'Replace future workouts and rebuild them using your current '
+                  'schedule?'
+            : 'Replace future workouts and rebuild toward ${goal.name}'
+                  '${others > 0 ? ' and your $others other goal${others == 1 ? '' : 's'}' : ''}'
+                  ' using your current schedule?',
       )) {
     return;
   }

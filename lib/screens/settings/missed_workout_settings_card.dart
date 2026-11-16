@@ -165,6 +165,13 @@ class MissedWorkoutSettingsCard extends ConsumerWidget {
                     await ref.read(missedWorkoutReminderProvider).reconcile();
                   },
                   child: Text(l10n.allowNotifications),
+                )
+              else
+                // iOS asks only once: after a "no" only the system settings
+                // can turn them on.
+                TextButton(
+                  onPressed: () => ref.read(openAppSettingsProvider)(),
+                  child: Text(l10n.openNotificationSettings),
                 ),
             ],
           ],

@@ -363,6 +363,32 @@ class AppLocalizationsDa extends AppLocalizations {
   String get raceGoals => 'Løbsmål';
 
   @override
+  String get casualGoalTitle => 'Uden løb';
+
+  @override
+  String get casualGoalHint =>
+      'Intet løb planlagt? Fjelia planlægger alligevel ud fra dit niveau. Uden tidligere træning starter planen med et roligt pas på 25 minutter.';
+
+  @override
+  String get casualFun => 'Sjov';
+
+  @override
+  String get casualFunHint =>
+      'Rolige pas i dine sportsgrene, for glæden ved at bevæge dig.';
+
+  @override
+  String get casualFitness => 'Form';
+
+  @override
+  String get casualFitnessHint => 'Byg roligt op med ét hårdere pas om ugen.';
+
+  @override
+  String get casualNone => 'Intet';
+
+  @override
+  String get casualGoalAfterRace => 'Gælder, når der ikke er et løbsmål.';
+
+  @override
   String get yourActivities => 'Dine aktiviteter';
 
   @override
@@ -371,6 +397,34 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get calendarWeekStart => 'Ugestart i kalenderen';
+
+  @override
+  String get trainingSecGoals => 'Mål og sportsgrene';
+
+  @override
+  String get trainingSecGoalsHint => 'Løbsmål og dine sportsgrene';
+
+  @override
+  String get trainingSecSchedule => 'Uge og tider';
+
+  @override
+  String get trainingSecScheduleHint =>
+      'Ugestart, hvile- og styrkedage, træningstider, timer';
+
+  @override
+  String get trainingSecDetails => 'Styrke og ernæring';
+
+  @override
+  String get trainingSecDetailsHint => 'Vægtenhed og energi';
+
+  @override
+  String get trainingSecReminders => 'Påmindelser og varme';
+
+  @override
+  String get trainingSecRemindersHint => 'Mistede pas og varmetilvænning';
+
+  @override
+  String get trainingSecPlanHint => 'Generér eller slet planlagte pas';
 
   @override
   String get planDefaultView => 'Standardvisning for planen';
@@ -681,6 +735,12 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get bluetoothBloodPressure => 'Bluetooth · blodtryk';
+
+  @override
+  String get onbBpMonitorTile => 'Bluetooth · Omron, standard, Hilo-manchet';
+
+  @override
+  String get onbIndoorTile => 'Bluetooth · Concept2, romaskiner, cykler';
 
   @override
   String get cloudCuffData => 'Cloud · manchetdata';
@@ -2679,7 +2739,7 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get addYourMainPriorityA =>
-      'Tilføj dit hovedløb (prioritet A). Planen periodiseres frem mod det: grundlag, opbygning, top og nedtrapning. Uden løbsmål oprettes der endnu ingen plan.';
+      'Tilføj dit hovedløb (prioritet A). Planen periodiseres frem mod det: grundlag, opbygning, top og nedtrapning.';
 
   @override
   String get noMeasurementsYet => 'Ingen målinger endnu';
@@ -6048,6 +6108,9 @@ class AppLocalizationsDa extends AppLocalizations {
       'Notifikationer er slået fra for Fjelia. Tillad dem for at få denne påmindelse.';
 
   @override
+  String get openNotificationSettings => 'Åbn indstillinger for notifikationer';
+
+  @override
   String get allowNotifications => 'Tillad notifikationer';
 
   @override
@@ -6187,6 +6250,24 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get briefRestDayToday => 'I dag er en planlagt hviledag.';
+
+  @override
+  String briefAwayToday(String kind) {
+    return 'Registreret i dag: $kind, ingen træning.';
+  }
+
+  @override
+  String briefAwayTomorrow(String kind) {
+    return 'Registreret i morgen: $kind, ingen træning.';
+  }
+
+  @override
+  String get briefRestDayTomorrow => 'I morgen er en planlagt hviledag.';
+
+  @override
+  String briefBackFrom(String kind) {
+    return 'Første uge efter $kind: let og kort.';
+  }
 
   @override
   String get restDayPlannedNote => 'Restitution er en del af din plan.';
@@ -8375,6 +8456,58 @@ class AppLocalizationsDa extends AppLocalizations {
   String get proWeekReview => 'Ugentlig tilbageblik';
 
   @override
+  String get weeklyReviewPushTitle => 'Din uge i tilbageblik';
+
+  @override
+  String get weeklyReviewPushBody =>
+      'Ugen er slut. Tryk for at se, hvordan den gik.';
+
+  @override
+  String get weeklyReviewReadyTitle => 'Dit ugetilbageblik er klar';
+
+  @override
+  String get weeklyReviewReadyBody => 'Tryk for at læse, hvordan ugen gik.';
+
+  @override
+  String get weeklyReviewChannel => 'Ugens tilbageblik';
+
+  @override
+  String get weeklyReviewAuto => 'Ugens tilbageblik automatisk';
+
+  @override
+  String get weeklyReviewAutoHint =>
+      'Ved starten af hver uge (00:00) en notifikation, og Fjelia AI Pro skriver sidste uges tilbageblik, så snart appen kører. Din træningskontekst sendes til Fjelia AI Pro til dette.';
+
+  @override
+  String get weekDiaryTitle => 'Ugens tilbageblik';
+
+  @override
+  String get weekDiaryOpen => 'Tidligere tilbageblik';
+
+  @override
+  String get weekDiaryEmpty =>
+      'Ingen tilbageblik endnu. Fjelia skriver det første ved starten af næste uge, eller du laver et nu.';
+
+  @override
+  String weekDiaryCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count uger',
+      one: '1 uge',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String weekDiaryWeek(int week) {
+    return 'Uge $week';
+  }
+
+  @override
+  String get weekDiaryHours => 'Timer';
+
+  @override
   String get proWeekReviewHint => 'Hvad virkede, og hvad du ændrer næste uge';
 
   @override
@@ -8609,6 +8742,57 @@ class AppLocalizationsDa extends AppLocalizations {
   @override
   String get plusOmronBleHint =>
       'Søg efter standard Bluetooth-blodtryksmålere og understøttede Omron-profiler.';
+
+  @override
+  String get bpMonitorsTitle => 'Bluetooth-blodtryksmålere';
+
+  @override
+  String get bpMonitorsNone =>
+      'Ingen måler gemt endnu. Tilføj din Hilo-manchet, Omron- eller standard-Bluetooth-måler.';
+
+  @override
+  String get bpMonitorAdd => 'Tilføj måler';
+
+  @override
+  String get bpMonitorKindMemory => 'Omron eller standard';
+
+  @override
+  String get bpMonitorKindHiloCuff => 'Hilo-manchet';
+
+  @override
+  String get bpMonitorKindOmron => 'Omron eller Bluetooth-blodtryksmåler';
+
+  @override
+  String get bpMonitorLive => 'Måler på forespørgsel';
+
+  @override
+  String get bpMonitorMemory => 'Læser gemte målinger';
+
+  @override
+  String get bpMonitorModel => 'Målermodel';
+
+  @override
+  String get bpMonitorStandard => 'Standard-Bluetooth-blodtryksmåler';
+
+  @override
+  String get bpMonitorFound => 'Fundet måler';
+
+  @override
+  String get bpMonitorSearch => 'Søg efter målere';
+
+  @override
+  String get bpMonitorNoneFound =>
+      'Ingen måler fundet. Slå Bluetooth til, og væk måleren.';
+
+  @override
+  String get bpMonitorChoose => 'Hvilken måler måler du med?';
+
+  @override
+  String get plusBpBle => 'Blodtryk via Bluetooth';
+
+  @override
+  String get plusBpBleHint =>
+      'Mål med din gemte måler, eller hent dens målinger';
 
   @override
   String get sleepEcgTitle => 'Record sleep';

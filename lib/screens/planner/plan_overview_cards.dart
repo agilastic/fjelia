@@ -531,7 +531,10 @@ class _GoalCard extends ConsumerWidget {
       accent: primary
           ? const [Color(0xFFFFB13D), Color(0xFFFFE066)]
           : const [Color(0xFF6FA8FF), Color(0xFF3EE0FF)],
-      onTap: () => showAppSheet(context, const TrainingTab()),
+      onTap: () => showAppSheet(
+        context,
+        const TrainingTab(section: TrainingSection.goals),
+      ),
       child: Row(
         children: [
           Container(

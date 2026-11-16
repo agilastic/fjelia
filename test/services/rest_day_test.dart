@@ -141,5 +141,37 @@ void main() {
     expect(text, isNot(contains('Fever')));
     expect(text, contains('Tue=17:00-20:00'));
     expect(text, contains('Mon=none'));
+    // The briefing knows today and tomorrow are taken by the illness.
+    final brief = BriefingBrief.parse(text)!;
+    expect(brief.away, 'illness');
+    expect(brief.awayTomorrow, 'illness');
+    expect(brief.backFrom, isNull);
+  });
+
+  test('the first week back from an illness reaches the brief', () async {
+    await db
+        .into(db.absences)
+        .insert(
+          AbsencesCompanion.insert(
+            kind: 'illness',
+            startDay: day(-6),
+            endDay: day(-2),
+            createdAt: DateTime.now(),
+          ),
+        );
+    final brief = BriefingBrief.parse(
+      await AiContextToonBuilder(db).build(null, '', null),
+    )!;
+    expect(brief.away, isNull);
+    expect(brief.backFrom, 'illness');
+  });
+
+  test('without a race the coach knows the own aim of the athlete', () async {
+    final text = await AiContextToonBuilder(
+      db,
+      casualGoal: () async => 'fun',
+    ).build(null, '', null);
+    expect(text, contains('[Goal:NoRace,Aim:fun'));
+    expect(text, contains('every session easy'));
   });
 }
