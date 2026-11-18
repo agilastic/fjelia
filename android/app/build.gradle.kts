@@ -6,7 +6,10 @@ plugins {
 
 android {
     namespace = "com.aeh.fjelia"
-    compileSdk = flutter.compileSdkVersion
+    // permission_handler_android and androidx.glance (home_widget) need API 37,
+    // above Flutter's default; the SDK ships it as android-37.0.
+    compileSdk = 37
+    compileSdkMinor = 0
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -21,7 +24,8 @@ android {
         applicationId = "com.aeh.fjelia"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        // The health plugin (Health Connect) needs Android 8.0.
+        minSdk = 26
         targetSdk = flutter.targetSdkVersion
         // Uses the version code from pubspec.yaml. When using split APKs, 1000 * ABI_VERSION
         // is added automatically by Flutter. (https://developer.android.com/studio/build/configure-apk-splits#configure-APK-versions)

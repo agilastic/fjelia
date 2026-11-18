@@ -43,7 +43,9 @@ fi
 command -v flutter >/dev/null
 flutter pub get
 flutter pub run build_runner build
-flutter build "$format" --release --no-pub ${DEFINES[@]+"${DEFINES[@]}"}
+# Without --no-pub: the build's own pub step writes GeneratedPluginRegistrant
+# for release, without dev-only plugins such as integration_test.
+flutter build "$format" --release ${DEFINES[@]+"${DEFINES[@]}"}
 if [ "$format" = apk ]; then
   echo "APK: $PWD/build/app/outputs/flutter-apk/app-release.apk"
 else
