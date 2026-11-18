@@ -6,6 +6,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../config/build_features.dart';
 import '../../providers/ai_coach_provider.dart';
 import '../../providers/day_data_provider.dart';
 import '../../providers/sync_provider.dart';
@@ -80,7 +81,11 @@ class _HomeState extends ConsumerState<HomeScreen> {
       ref.read(coachRequestProvider.notifier).state = null;
     });
     final sync = ref.watch(syncProvider),
-        debug = ref.watch(userProfileProvider).valueOrNull?.debugMode ?? false;
+            // The switch lives in the developer menu: without it the stored
+            // setting cannot be turned off again, so it does not count.
+            debug =
+            developerMenuEnabled &&
+            (ref.watch(userProfileProvider).valueOrNull?.debugMode ?? false);
     final current = tab == 4 && !debug ? 0 : tab;
     // The coach keeps its input at the bottom and its chat on its own: it
     // does not run under the bars.
