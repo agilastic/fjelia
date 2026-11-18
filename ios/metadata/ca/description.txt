@@ -33,3 +33,6 @@ Accedeix a coaching i anàlisis avançats amb un model Pro dedicat i el seu prop
 Les funcions i mètriques depenen dels dispositius connectats, les fonts de dades i les capacitats del dispositiu. La disponibilitat dels proveïdors d’IA pot variar.
 
 Fjelia ofereix informació general sobre activitat física i benestar. No és un dispositiu mèdic ni proporciona consell mèdic, diagnòstic o tractament. Consulta un professional sanitari qualificat per a qüestions de salut.
+
+Condicions d’ús (EULA): https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Política de privacitat: https://www.fjelia.com/privacy.html

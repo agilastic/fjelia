@@ -8665,6 +8665,19 @@ class AppLocalizationsSk extends AppLocalizations {
       'FjeliaPro: dnešná pripravenosť, plán a zdravotný kontext idú do Fjelia AI Pro, ktoré sformuluje návrh krátko po rannej synchronizácii.';
 
   @override
+  String get proCoachAskTitle => 'Má kouč písať rannú notifikáciu?';
+
+  @override
+  String get proCoachAskBody =>
+      'Keď kontrola pripravenosti navrhne zmeniť dnešný tréning, FjeliaPro môže sformulovať rannú notifikáciu. Fjelia na to posiela tréningy na daný a nasledujúci deň, zvyšok týždňa, tvoje nastavenia tréningu, predpoveď počasia, pretekové ciele bez názvu a zdravotný prehľad do Fjelia AI Pro (Mistral v EÚ, OpenAI ako záloha), bez pýtania sa zakaždým.\n\nBez toho sa návrhy vytvárajú v tvojom zariadení podľa pevných pravidiel. Kedykoľvek to môžeš zmeniť v Nastavenia → Tréning.';
+
+  @override
+  String get proCoachAskAllow => 'Povoliť';
+
+  @override
+  String get proCoachAskDeny => 'Ponechať v zariadení';
+
+  @override
   String get heatShort => 'Teplo';
 
   @override

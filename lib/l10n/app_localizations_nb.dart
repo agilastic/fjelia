@@ -8623,6 +8623,19 @@ class AppLocalizationsNb extends AppLocalizations {
       'FjeliaPro: dagens beredskap, plan og helsekontekst sendes til Fjelia AI Pro, som formulerer forslaget kort etter morgensynkroniseringen.';
 
   @override
+  String get proCoachAskTitle => 'Skal coachen skrive morgenvarselet?';
+
+  @override
+  String get proCoachAskBody =>
+      'Når formsjekken foreslår å endre dagens trening, kan FjeliaPro formulere morgenvarselet. Da sender Fjelia øktene for dagen og dagen etter, resten av uken, treningsinnstillingene dine, værmeldingen, løpsmål uten navn og helseoversikten til Fjelia AI Pro (Mistral i EU, OpenAI som reserve), uten å spørre hver gang.\n\nUten dette lages forslagene på enheten din etter faste regler. Du kan endre dette når som helst under Innstillinger → Trening.';
+
+  @override
+  String get proCoachAskAllow => 'Tillat';
+
+  @override
+  String get proCoachAskDeny => 'Behold på enheten';
+
+  @override
   String get heatShort => 'Varme';
 
   @override

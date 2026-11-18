@@ -14958,6 +14958,30 @@ abstract class AppLocalizations {
   /// **'FjeliaPro: today\'s readiness, plan and health context go to Fjelia AI Pro, which words the proposal shortly after the morning sync.'**
   String get proposalProCoachHint;
 
+  /// No description provided for @proCoachAskTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Coach writes the morning push?'**
+  String get proCoachAskTitle;
+
+  /// No description provided for @proCoachAskBody.
+  ///
+  /// In en, this message translates to:
+  /// **'When the readiness check suggests changing the day\'s training, FjeliaPro can word the morning push. For this, Fjelia sends that day\'s and the next day\'s sessions, the rest of the week, your training settings, the weather forecast, race goals without names and the health summary to Fjelia AI Pro (Mistral in the EU, OpenAI as fallback), without asking each time.\n\nWithout it, proposals are made on your device by fixed rules. You can change this any time in Settings → Training.'**
+  String get proCoachAskBody;
+
+  /// No description provided for @proCoachAskAllow.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow'**
+  String get proCoachAskAllow;
+
+  /// No description provided for @proCoachAskDeny.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep on device'**
+  String get proCoachAskDeny;
+
   /// No description provided for @heatShort.
   ///
   /// In en, this message translates to:

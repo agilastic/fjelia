@@ -8657,6 +8657,19 @@ class AppLocalizationsFi extends AppLocalizations {
       'FjeliaPro: tämän päivän valmius, suunnitelma ja terveystiedot lähetetään Fjelia AI Prolle, joka muotoilee ehdotuksen pian aamun synkronoinnin jälkeen.';
 
   @override
+  String get proCoachAskTitle => 'Kirjoittaako valmentaja aamuilmoituksen?';
+
+  @override
+  String get proCoachAskBody =>
+      'Kun valmiustarkistus ehdottaa päivän harjoituksen muuttamista, FjeliaPro voi muotoilla aamuilmoituksen. Tätä varten Fjelia lähettää päivän ja seuraavan päivän harjoitukset, loppuviikon, harjoitusasetuksesi, sääennusteen, kilpailutavoitteet ilman nimiä ja terveysyhteenvedon Fjelia AI Prolle (Mistral EU:ssa, varalla OpenAI) kysymättä joka kerta.\n\nIlman tätä ehdotukset tehdään laitteellasi kiinteillä säännöillä. Voit muuttaa tämän milloin tahansa kohdassa Asetukset → Harjoittelu.';
+
+  @override
+  String get proCoachAskAllow => 'Salli';
+
+  @override
+  String get proCoachAskDeny => 'Pidä laitteella';
+
+  @override
   String get heatShort => 'Helle';
 
   @override

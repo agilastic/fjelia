@@ -72,7 +72,7 @@ class ReadinessProposalSheet extends ConsumerWidget {
               proposal: proposal,
               coachUnavailable:
                   ref.watch(proSubscribedProvider) &&
-                  (ref.watch(proposalProCoachProvider).valueOrNull ?? true),
+                  (ref.watch(proposalProCoachProvider).valueOrNull ?? false),
               onDone: () => Navigator.of(context).pop(),
             )
           else if (busy)

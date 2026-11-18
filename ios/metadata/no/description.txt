@@ -33,3 +33,6 @@ Få avansert coaching og analyse med en egen Pro-modell og separat bruksbudsjett
 Tilgjengelige funksjoner og målinger avhenger av tilkoblede enheter, datakilder og enhetens muligheter. Tilgjengeligheten til AI-leverandører kan variere.
 
 Fjelia gir generell informasjon om trening og velvære. Appen er ikke medisinsk utstyr og gir ikke medisinske råd, diagnoser eller behandling. Kontakt kvalifisert helsepersonell ved medisinske spørsmål.
+
+Bruksvilkår (EULA): https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Personvernerklæring: https://www.fjelia.com/privacy.html

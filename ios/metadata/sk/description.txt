@@ -33,3 +33,6 @@ Získaj pokročilé koučovanie a analýzy s vlastným modelom Pro a samostatný
 Dostupné funkcie a metriky závisia od pripojených zariadení, zdrojov dát a možností zariadenia. Dostupnosť AI služieb sa môže líšiť.
 
 Fjelia poskytuje všeobecné informácie o kondícii a zdravom životnom štýle. Nie je zdravotníckou pomôckou a neposkytuje lekárske rady, diagnózu ani liečbu. Pri zdravotných otázkach sa obráť na kvalifikovaného zdravotníckeho pracovníka.
+
+Podmienky používania (EULA): https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Zásady ochrany osobných údajov: https://www.fjelia.com/privacy.html

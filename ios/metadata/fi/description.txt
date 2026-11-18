@@ -33,3 +33,6 @@ Saat käyttöösi edistyneen valmennuksen ja analyysit erillisellä Pro-mallilla
 Toiminnot ja mittarit riippuvat yhdistetyistä laitteista, tietolähteistä ja laitteen ominaisuuksista. Tekoälypalveluiden saatavuus voi vaihdella.
 
 Fjelia tarjoaa yleistä liikuntaan ja hyvinvointiin liittyvää tietoa. Se ei ole lääkinnällinen laite eikä tarjoa lääketieteellistä neuvontaa, diagnoosia tai hoitoa. Käänny terveyshuolissa pätevän terveydenhuollon ammattilaisen puoleen.
+
+Käyttöehdot (EULA): https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Tietosuojakäytäntö: https://www.fjelia.com/privacy.html

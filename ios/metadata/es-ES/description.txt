@@ -1,51 +1,38 @@
-¡Gratis durante el acceso anticipado! Todos los usuarios que se unan ahora conservarán el acceso completo a todas las funciones, incluso cuando Fjelia pase a ser una aplicación de pago único.
+Entrena mejor. Recupérate mejor. Ten una visión de conjunto.
 
-Fjelia reúne tus datos de entrenamiento, sueño, recuperación y salud en un solo lugar para ayudarte a conocer mejor tu cuerpo y tomar decisiones más inteligentes sobre tu próximo entrenamiento.
+Fjelia reúne tus datos de entrenamiento, sueño, recuperación y salud en un solo lugar para ayudarte a entender tu progreso y planificar lo que viene.
 
-Ya sea que corras, montes en bicicleta, nades, patines, levantes pesas o entrenes para un triatlón, Fjelia te ayuda a comprender cómo se relacionan tu actividad física y tu recuperación.
+Las funciones principales de entrenamiento y salud son gratuitas e incluyen acceso básico a Free AI. También puedes elegir un modelo de IA disponible que se ejecuta en tu dispositivo. Algunos modelos y funciones requieren un dispositivo compatible.
 
-CONOCE TU CUERPO
+PLANIFICA TU TEMPORADA
 
-Consulta la variabilidad de la frecuencia cardíaca (VFC/HRV), la frecuencia cardíaca en reposo y las tendencias de sueño y recuperación en un solo lugar.
+Crea un plan de entrenamiento multideporte adaptable a tus deportes, tu experiencia, tu agenda y tus objetivos. Planifica varias competiciones en una misma temporada, controla tu carga de entrenamiento, revisa tus actividades y consulta tus zonas de frecuencia cardiaca. Tu historial y las sesiones completadas ayudan a ajustar el plan a medida que avanzas.
 
-Ve más allá de cada sesión de entrenamiento y descubre cómo responde tu cuerpo al esfuerzo y al descanso a lo largo del tiempo.
+ENTIENDE TU RECUPERACIÓN
 
-ENTRENA DE FORMA MÁS INTELIGENTE
+Sigue la variabilidad de la frecuencia cardiaca (VFC/HRV), la frecuencia cardiaca en reposo, el sueño y las tendencias de recuperación junto a tu entrenamiento. Descubre cómo responde tu cuerpo al esfuerzo con el tiempo, más allá de un solo entrenamiento.
 
-Controla tu carga de entrenamiento, analiza tus actividades y explora tus zonas de frecuencia cardíaca.
+REÚNE TUS DATOS
 
-Crea un plan de entrenamiento adaptado a tus objetivos, experiencia y disponibilidad. Ajusta tu planificación utilizando la información de tus entrenamientos anteriores.
+Conecta Apple Health y servicios compatibles como Garmin, Polar, Suunto, COROS y MyWhoosh. Importa un archivo ZIP de Strava o archivos FIT, GPX y TCX sueltos. Registra sesiones de remo indoor y SkiErg con monitores Concept2 PM5. Consulta actividad, sueño, tensión arterial, composición corporal y evolución de tu forma física en un solo lugar.
 
-TEN UNA VISIÓN MÁS COMPLETA
+ELIGE TU COACH DE IA
 
-Reúne los datos de Apple Health y de los dispositivos y servicios compatibles.
+Pregunta sobre entrenamiento y recuperación y pon tus tendencias en contexto. Usa el acceso básico a Free AI, un modelo disponible en tu dispositivo o tu propio proveedor de IA compatible. La IA en el dispositivo requiere hardware y configuración compatibles.
 
-Analiza tu sueño, presión arterial, composición corporal y evolución física junto con tus entrenamientos para comprender mejor tu estado general.
+FJELIAPRO (SUSCRIPCIÓN OPCIONAL)
 
-APROVECHA AL MÁXIMO TUS DATOS
+Accede a coaching y análisis avanzados con un modelo Pro dedicado y un presupuesto de uso propio:
+• Sugerencias diarias que pueden adaptar las sesiones planificadas
+• Resúmenes semanales y análisis de temporada
+• Planes de competición: puesta a punto, ritmo y nutrición
+• Estadísticas, mejores marcas y progreso reciente
+• Memory Cards con información importante para tu coach
+• Análisis detallado del ECG
 
-Utiliza el entrenador de inteligencia artificial para analizar tus entrenamientos y tu recuperación, hacer preguntas y comprender mejor tus tendencias personales.
+Las funciones y métricas disponibles dependen de los dispositivos conectados, las fuentes de datos y las capacidades del dispositivo. La disponibilidad de los proveedores de IA puede variar.
 
-En dispositivos compatibles, el entrenador puede funcionar directamente en tu dispositivo mediante Apple Intelligence.
+Fjelia ofrece información general sobre actividad física y bienestar. No es un dispositivo médico y no ofrece asesoramiento médico, diagnósticos ni tratamientos. Consulta a un profesional sanitario cualificado si tienes dudas sobre tu salud.
 
-Tú decides qué inteligencia artificial utilizar: procesamiento privado en tu dispositivo, un servicio gratuito de IA en la nube o tus propias claves API de OpenAI, Anthropic, Gemini o Mistral.
-
-DISEÑADA PARA TU PROGRESO DIARIO
-
-Tanto si estás empezando a hacer ejercicio de forma regular como si te preparas para tu próxima competición, Fjelia te ayuda a encontrar el equilibrio entre entrenamiento y recuperación.
-
-Comprende tu evolución, toma decisiones fundamentadas y sigue avanzando hacia tus objetivos.
-
-TUS DATOS. TU ENTRENAMIENTO. TÚ DECIDES.
-
-Las funciones y métricas disponibles dependen de los dispositivos conectados, las fuentes de datos y las capacidades de tu dispositivo.
-
-Las funciones de Apple Intelligence requieren un dispositivo compatible y una configuración adecuada.
-
-AVISO SOBRE SALUD
-
-Fjelia está diseñada exclusivamente para proporcionar información general sobre actividad física, bienestar y salud.
-
-No es un dispositivo médico y no ofrece asesoramiento médico, diagnósticos ni tratamientos.
-
-Consulta siempre a un profesional sanitario cualificado si tienes dudas o problemas relacionados con tu salud.
+Condiciones de uso (EULA): https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Política de privacidad: https://www.fjelia.com/privacy.html

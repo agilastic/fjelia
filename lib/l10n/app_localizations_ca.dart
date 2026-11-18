@@ -8690,6 +8690,19 @@ class AppLocalizationsCa extends AppLocalizations {
       'FjeliaPro: la preparació, el pla i el context de salut d\'avui s\'envien a Fjelia AI Pro, que redacta la proposta poc després de la sincronització del matí.';
 
   @override
+  String get proCoachAskTitle => 'El coach redacta la notificació del matí?';
+
+  @override
+  String get proCoachAskBody =>
+      'Quan el control de forma suggereix canviar l’entrenament del dia, FjeliaPro pot redactar la notificació del matí. Per fer-ho, Fjelia envia les sessions del dia i de l’endemà, la resta de la setmana, la teva configuració d’entrenament, la previsió del temps, els objectius de cursa sense nom i el resum de salut a Fjelia AI Pro (Mistral a la UE, OpenAI com a alternativa), sense preguntar cada vegada.\n\nSense això, les propostes es fan al teu dispositiu amb regles fixes. Pots canviar-ho quan vulguis a Configuració → Entrenament.';
+
+  @override
+  String get proCoachAskAllow => 'Permetre';
+
+  @override
+  String get proCoachAskDeny => 'Mantenir al dispositiu';
+
+  @override
   String get heatShort => 'Calor';
 
   @override

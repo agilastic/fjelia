@@ -33,3 +33,6 @@ Uzyskaj zaawansowany coaching i analizy z dedykowanym modelem Pro oraz osobnym l
 Dostępne funkcje i pomiary zależą od połączonych urządzeń, źródeł danych i możliwości urządzenia. Dostępność dostawców AI może się różnić.
 
 Fjelia dostarcza ogólnych informacji o aktywności i samopoczuciu. Nie jest wyrobem medycznym i nie udziela porad medycznych ani nie diagnozuje czy leczy. W sprawach zdrowotnych skonsultuj się z wykwalifikowanym pracownikiem ochrony zdrowia.
+
+Warunki korzystania (EULA): https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Polityka prywatności: https://www.fjelia.com/privacy.html

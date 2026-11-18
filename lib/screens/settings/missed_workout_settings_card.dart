@@ -94,7 +94,7 @@ class MissedWorkoutSettingsCard extends ConsumerWidget {
                 l10n.proposalProCoachHint,
                 style: TextStyle(fontSize: 12, color: fjInk70),
               ),
-              value: ref.watch(proposalProCoachProvider).valueOrNull ?? true,
+              value: ref.watch(proposalProCoachProvider).valueOrNull ?? false,
               onChanged: (v) => runUiAction(
                 context,
                 () => ref.read(proposalProCoachProvider.notifier).set(v),

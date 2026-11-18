@@ -33,3 +33,6 @@ Tenha coaching e análises avançadas com um modelo Pro dedicado e um orçamento
 Os recursos e métricas disponíveis dependem dos dispositivos conectados, das fontes de dados e das capacidades do aparelho. A disponibilidade de provedores de IA pode variar.
 
 O Fjelia oferece informações gerais sobre atividade física e bem-estar. Não é um dispositivo médico e não oferece orientação médica, diagnóstico ou tratamento. Consulte um profissional de saúde qualificado para questões médicas.
+
+Termos de uso (EULA): https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Política de privacidade: https://www.fjelia.com/privacy.html

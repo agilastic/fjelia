@@ -33,3 +33,6 @@ Obține coaching și analize avansate cu un model Pro dedicat și un buget de ut
 Funcțiile și valorile disponibile depind de dispozitivele conectate, sursele de date și capacitățile dispozitivului. Disponibilitatea furnizorilor AI poate varia.
 
 Fjelia oferă informații generale despre fitness și bunăstare. Nu este un dispozitiv medical și nu oferă sfaturi medicale, diagnostic sau tratament. Pentru probleme de sănătate, consultă un profesionist medical calificat.
+
+Termeni de utilizare (EULA): https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Politica de confidențialitate: https://www.fjelia.com/privacy.html

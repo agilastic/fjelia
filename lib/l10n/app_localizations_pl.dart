@@ -8720,6 +8720,19 @@ class AppLocalizationsPl extends AppLocalizations {
       'FjeliaPro: dzisiejsza gotowość, plan i kontekst zdrowotny trafiają do Fjelia AI Pro, które formułuje propozycję wkrótce po porannej synchronizacji.';
 
   @override
+  String get proCoachAskTitle => 'Czy trener ma pisać poranne powiadomienie?';
+
+  @override
+  String get proCoachAskBody =>
+      'Gdy kontrola gotowości proponuje zmianę dzisiejszego treningu, FjeliaPro może sformułować poranne powiadomienie. W tym celu Fjelia wysyła treningi z danego i następnego dnia, resztę tygodnia, twoje ustawienia treningu, prognozę pogody, cele startowe bez nazw i podsumowanie zdrowia do Fjelia AI Pro (Mistral w UE, OpenAI jako zapas), bez pytania za każdym razem.\n\nBez tego propozycje powstają na twoim urządzeniu według stałych reguł. Możesz to zmienić w każdej chwili w Ustawienia → Trening.';
+
+  @override
+  String get proCoachAskAllow => 'Zezwól';
+
+  @override
+  String get proCoachAskDeny => 'Zostaw na urządzeniu';
+
+  @override
   String get heatShort => 'Upał';
 
   @override

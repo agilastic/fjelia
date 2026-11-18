@@ -8684,6 +8684,20 @@ class AppLocalizationsEs extends AppLocalizations {
       'FjeliaPro: la preparación, el plan y el contexto de salud de hoy se envían a Fjelia AI Pro, que redacta la propuesta poco después de la sincronización matinal.';
 
   @override
+  String get proCoachAskTitle =>
+      '¿El coach redacta la notificación de la mañana?';
+
+  @override
+  String get proCoachAskBody =>
+      'Cuando el control de forma sugiere cambiar el entrenamiento del día, FjeliaPro puede redactar la notificación de la mañana. Para ello, Fjelia envía las sesiones del día y del día siguiente, el resto de la semana, tus ajustes de entrenamiento, la previsión del tiempo, los objetivos de competición sin nombre y el resumen de salud a Fjelia AI Pro (Mistral en la UE, OpenAI como alternativa), sin preguntar cada vez.\n\nSin esto, las propuestas se crean en tu dispositivo con reglas fijas. Puedes cambiarlo cuando quieras en Ajustes → Entrenamiento.';
+
+  @override
+  String get proCoachAskAllow => 'Permitir';
+
+  @override
+  String get proCoachAskDeny => 'Mantener en el dispositivo';
+
+  @override
   String get heatShort => 'Calor';
 
   @override

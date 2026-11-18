@@ -27,6 +27,8 @@ import '../../widgets/grip_strength_sheet.dart';
 import '../../widgets/bio_age_card.dart';
 import '../../widgets/briefing_card.dart';
 import '../settings/settings_sheet.dart';
+import '../settings/pro_coach_consent.dart';
+import '../../providers/fjelia_pro_provider.dart';
 import '../settings/bug_report_sheet.dart';
 import '../ocr/manual_entry_sheet.dart';
 import '../bloodpressure/bp_screen.dart';
@@ -51,6 +53,20 @@ class _HomeState extends ConsumerState<HomeScreen> {
 
   /// Counts new chats, so each one starts with an empty conversation.
   int coachChat = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // FjeliaPro: once a subscription is active (bought, restored or on
+    // another device), ask once whether the coach may write the morning push.
+    ref.listenManual<bool>(proSubscribedProvider, (_, subscribed) {
+      if (!subscribed) return;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) askProCoachOnce(context, ref);
+      });
+    }, fireImmediately: true);
+  }
+
   @override
   Widget build(BuildContext context) {
     // "Ask the coach about this session" from anywhere in the app: show the

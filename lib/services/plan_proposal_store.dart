@@ -19,10 +19,15 @@ abstract final class PlanProposalStore {
   static Future<void> setAskFirst(bool value) async =>
       (await SharedPreferences.getInstance()).setBool(_askFirstKey, value);
 
-  /// FjeliaPro: the coach writes the morning push. On by default for Pro;
-  /// the switch in Settings → Training says what is sent and turns it off.
+  /// FjeliaPro: the coach writes the morning push. Off until the athlete
+  /// allows it: the app asks once after a subscription becomes active, and
+  /// the switch in Settings → Training changes the answer later.
   static Future<bool> proCoach() async =>
-      (await SharedPreferences.getInstance()).getBool(_proCoachKey) ?? true;
+      (await SharedPreferences.getInstance()).getBool(_proCoachKey) ?? false;
+
+  /// Whether the athlete has answered, in the question or with the switch.
+  static Future<bool> proCoachAsked() async =>
+      (await SharedPreferences.getInstance()).containsKey(_proCoachKey);
 
   static Future<void> setProCoach(bool value) async =>
       (await SharedPreferences.getInstance()).setBool(_proCoachKey, value);

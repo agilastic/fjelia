@@ -8689,6 +8689,19 @@ class AppLocalizationsNl extends AppLocalizations {
       'FjeliaPro: de readiness, het plan en de gezondheidscontext van vandaag gaan naar Fjelia AI Pro, dat het voorstel kort na de ochtendsynchronisatie formuleert.';
 
   @override
+  String get proCoachAskTitle => 'Coach schrijft de ochtendmelding?';
+
+  @override
+  String get proCoachAskBody =>
+      'Als de readiness-check voorstelt de training van de dag aan te passen, kan FjeliaPro de ochtendmelding formuleren. Daarvoor stuurt Fjelia de trainingen van die dag en de dag erna, de rest van de week, je trainingsinstellingen, de weersverwachting, wedstrijddoelen zonder naam en het gezondheidsoverzicht naar Fjelia AI Pro (Mistral in de EU, OpenAI als reserve), zonder elke keer te vragen.\n\nZonder dit worden voorstellen op je apparaat gemaakt met vaste regels. Je kunt dit altijd wijzigen in Instellingen → Training.';
+
+  @override
+  String get proCoachAskAllow => 'Toestaan';
+
+  @override
+  String get proCoachAskDeny => 'Op apparaat houden';
+
+  @override
   String get heatShort => 'Hitte';
 
   @override

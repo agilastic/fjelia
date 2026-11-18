@@ -8702,6 +8702,19 @@ class AppLocalizationsDe extends AppLocalizations {
       'FjeliaPro: Readiness, Plan und Gesundheitskontext von heute gehen an Fjelia AI Pro, das den Vorschlag kurz nach dem Morgen-Sync formuliert.';
 
   @override
+  String get proCoachAskTitle => 'Coach schreibt den Morgen-Push?';
+
+  @override
+  String get proCoachAskBody =>
+      'Wenn der Readiness-Check vorschlägt, das Training des Tages zu ändern, kann FjeliaPro den Morgen-Push formulieren. Dafür sendet Fjelia die Einheiten des Tages und des Folgetags, den Rest der Woche, deine Trainingseinstellungen, die Wettervorhersage, Wettkampfziele ohne Namen und die Gesundheitsübersicht an Fjelia AI Pro (Mistral in der EU, OpenAI als Ausweichlösung), ohne jedes Mal zu fragen.\n\nOhne das entstehen die Vorschläge auf deinem Gerät nach festen Regeln. Du kannst das jederzeit unter Einstellungen → Training ändern.';
+
+  @override
+  String get proCoachAskAllow => 'Erlauben';
+
+  @override
+  String get proCoachAskDeny => 'Auf dem Gerät lassen';
+
+  @override
   String get heatShort => 'Hitze';
 
   @override

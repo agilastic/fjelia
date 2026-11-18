@@ -60,7 +60,7 @@ class AskBeforePlanChangesNotifier extends AsyncNotifier<bool> {
   }
 }
 
-/// FjeliaPro: the coach writes the morning push (on by default for Pro).
+/// FjeliaPro: the coach writes the morning push (off until allowed).
 final proposalProCoachProvider =
     AsyncNotifierProvider<ProposalProCoachNotifier, bool>(
       ProposalProCoachNotifier.new,
