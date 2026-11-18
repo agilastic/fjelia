@@ -162,3 +162,6 @@ dependency_overrides:
   # 1.1.3 with proguard-android-optimize.txt: AGP 9 rejects proguard-android.txt.
   flutter_inappwebview_android:
     path: third_party/flutter_inappwebview_android
+  # 1.9.0 loading ONNX Runtime on first use, behind a device guard (Android).
+  flutter_onnxruntime:
+    path: third_party/flutter_onnxruntime
