@@ -1,3 +1,4 @@
+import '../config/build_features.dart';
 import 'pro_analysis_provider.dart' show weeklyReviewSchedulerProvider;
 import '../services/auto_plan_pause.dart';
 import 'weather_radar_provider.dart';
@@ -448,6 +449,8 @@ class SyncNotifier extends StateNotifier<SyncState> {
     }
 
     Future<void> health() async {
+      // Hidden on Android: there would only be a permission prompt that fails.
+      if (!systemHealthAvailable) return;
       try {
         final hc = _ref.read(healthConnectServiceProvider);
         final permission = _ref.read(healthConnectPermissionProvider.notifier);
@@ -1114,6 +1117,7 @@ class HistoricSyncNotifier extends StateNotifier<HistoricSyncState> {
   /// 60-day Health backfill once, then 14-day top-ups. Deferred while a
   /// Garmin backfill ran this session to keep the first launch responsive.
   Future<void> _syncHealth(List<String> sleepPriority) async {
+    if (!systemHealthAvailable) return;
     try {
       final hc = _ref.read(healthConnectServiceProvider);
       var granted =

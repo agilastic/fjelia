@@ -1,3 +1,5 @@
+import '../../config/build_features.dart';
+
 import 'dart:async';
 
 import '../../l10n/l10n_ext.dart';
@@ -48,12 +50,14 @@ class ConnectionsTab extends ConsumerWidget {
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          SectionLabel(context.l10n.appleHealth),
-          _Connection(
-            context.l10n.appleHealth,
-            ref.watch(healthConnectPermissionProvider).valueOrNull ?? false,
-            const ConnectHealthScreen(fromOnboarding: true),
-          ),
+          if (systemHealthAvailable) ...[
+            SectionLabel(context.l10n.appleHealth),
+            _Connection(
+              context.l10n.appleHealth,
+              ref.watch(healthConnectPermissionProvider).valueOrNull ?? false,
+              const ConnectHealthScreen(fromOnboarding: true),
+            ),
+          ],
           SectionLabel(context.l10n.connectedServices),
           ListTile(
             leading: const Icon(Icons.fitness_center, color: mint),
@@ -126,18 +130,20 @@ class ConnectionsTab extends ConsumerWidget {
             const ConnectHiloBleScreen(fromOnboarding: true),
           ),
           const BpConnectionTiles(),
-          SwitchListTile(
-            title: Text(context.l10n.writeHeartDataToApple),
-            value: ref.watch(hiloWriteHealthProvider),
-            onChanged: (_) =>
-                ref.read(hiloWriteHealthProvider.notifier).toggle(),
-          ),
-          SwitchListTile(
-            title: Text(context.l10n.writeWeightDataToApple),
-            value: ref.watch(renphoWriteHealthProvider),
-            onChanged: (_) =>
-                ref.read(renphoWriteHealthProvider.notifier).toggle(),
-          ),
+          if (systemHealthAvailable) ...[
+            SwitchListTile(
+              title: Text(context.l10n.writeHeartDataToApple),
+              value: ref.watch(hiloWriteHealthProvider),
+              onChanged: (_) =>
+                  ref.read(hiloWriteHealthProvider.notifier).toggle(),
+            ),
+            SwitchListTile(
+              title: Text(context.l10n.writeWeightDataToApple),
+              value: ref.watch(renphoWriteHealthProvider),
+              onChanged: (_) =>
+                  ref.read(renphoWriteHealthProvider.notifier).toggle(),
+            ),
+          ],
           SectionLabel(context.l10n.renphoScaleBle),
           const ScalePairingTile(),
           SectionLabel(context.l10n.polarH10HrvStrapBle),

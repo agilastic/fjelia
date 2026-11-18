@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io' show HttpClient, HttpOverrides, Platform, SecurityContext;
 import 'dart:ui' show DartPluginRegistrant;
 
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'l10n/app_localizations.dart';
 import 'l10n/l10n_ext.dart';
+import 'config/build_features.dart' show ignoreCertificatesForTesting;
 import 'config/fjelia_pro.dart' show proAiModel;
 import 'providers/activity_file_import_provider.dart';
 import 'providers/ai_coach_provider.dart' show aiCoachSettingsProvider;
@@ -74,9 +76,21 @@ import 'widgets/health_access_lost_dialog.dart';
 import 'widgets/hilo_device_picker.dart';
 import 'widgets/keyboard_dismiss.dart';
 
+/// dev-android.sh --ignore-certs only: trusts every TLS certificate.
+class _TrustAllCertificates extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) =>
+      super.createHttpClient(context)
+        ..badCertificateCallback = (_, _, _) => true;
+}
+
 void main() {
   DebugLog.install(() async {
     WidgetsFlutterBinding.ensureInitialized();
+    if (ignoreCertificatesForTesting && Platform.isAndroid) {
+      HttpOverrides.global = _TrustAllCertificates();
+      log('[Net] TLS certificate checks are OFF (--ignore-certs test build)');
+    }
     registerLocalModelLicenses();
     await initializeDateFormatting();
     SystemChrome.setSystemUIOverlayStyle(

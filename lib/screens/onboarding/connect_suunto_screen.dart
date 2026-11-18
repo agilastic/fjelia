@@ -1,3 +1,4 @@
+import '../../config/build_features.dart';
 import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../providers/connection_actions_provider.dart';
@@ -39,7 +40,7 @@ class _ConnectSuuntoScreenState extends ConsumerState<ConnectSuuntoScreen> {
   }
 
   void _next() {
-    if (widget.fromOnboarding) {
+    if (widget.fromOnboarding || !systemHealthAvailable) {
       Navigator.of(context).pop();
     } else {
       Navigator.of(context).push(

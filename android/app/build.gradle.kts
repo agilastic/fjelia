@@ -25,7 +25,9 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         // The health plugin (Health Connect) needs Android 8.0.
-        minSdk = 26
+        // scripts/dev-android.sh --legacy (-P fjelia.legacySdk=true) builds
+        // for Android 7 test phones; the manifest lets the health libraries in.
+        minSdk = if (project.findProperty("fjelia.legacySdk") == "true") 24 else 26
         targetSdk = flutter.targetSdkVersion
         // Uses the version code from pubspec.yaml. When using split APKs, 1000 * ABI_VERSION
         // is added automatically by Flutter. (https://developer.android.com/studio/build/configure-apk-splits#configure-APK-versions)

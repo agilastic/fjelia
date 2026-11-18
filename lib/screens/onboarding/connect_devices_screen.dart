@@ -1,3 +1,4 @@
+import '../../config/build_features.dart';
 import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 
@@ -35,9 +36,9 @@ import 'ai_coach_onboarding_screen.dart';
 class ConnectDevicesScreen extends ConsumerWidget {
   const ConnectDevicesScreen({super.key});
 
-  void _push(BuildContext context, Widget screen) => Navigator.of(
-    context,
-  ).push(MaterialPageRoute<void>(builder: (_) => screen));
+  void _push(BuildContext context, Widget screen) =>
+      Navigator.of(context)
+          .push(MaterialPageRoute<void>(builder: (_) => screen));
 
   ({List<_DeviceTile> ble, List<_DeviceTile> api}) _tiles(
     BuildContext context, {
@@ -143,15 +144,16 @@ class ConnectDevicesScreen extends ConsumerWidget {
         onTap: () =>
             _push(context, const ConnectPolarScreen(fromOnboarding: true)),
       ),
-      _DeviceTile(
-        icon: Icons.favorite_border_rounded,
-        color: const Color(0xFFFF4444),
-        name: context.l10n.appleHealth,
-        subtitle: context.l10n.systemHealthData,
-        connected: health,
-        onTap: () =>
-            _push(context, const ConnectHealthScreen(fromOnboarding: true)),
-      ),
+      if (systemHealthAvailable)
+        _DeviceTile(
+          icon: Icons.favorite_border_rounded,
+          color: const Color(0xFFFF4444),
+          name: context.l10n.appleHealth,
+          subtitle: context.l10n.systemHealthData,
+          connected: health,
+          onTap: () =>
+              _push(context, const ConnectHealthScreen(fromOnboarding: true)),
+        ),
       _DeviceTile(
         icon: Icons.monitor_weight_rounded,
         color: const Color(0xFF9C27B0),
