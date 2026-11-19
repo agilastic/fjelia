@@ -419,6 +419,8 @@ class SyncNotifier extends StateNotifier<SyncState> {
       } catch (e) {
         log('[Sync] Polar error: $e');
       }
+      // Keeps this iPhone registered for "new Polar workout" pushes.
+      unawaited(_ref.read(polarPushServiceProvider).register());
     }
 
     Future<void> suunto() async {

@@ -28,6 +28,8 @@ import 'providers/hrv_reminder_provider.dart';
 import 'providers/hrv_training_provider.dart';
 import 'providers/missed_workout_provider.dart';
 import 'providers/plan_proposal_provider.dart';
+import 'providers/polar_provider.dart' show polarPushServiceProvider;
+import 'services/polar_push_service.dart' show polarPushChannel;
 import 'providers/nutrition_provider.dart';
 import 'providers/plan_schedule_provider.dart' show extendOpenAbsencesProvider;
 import 'providers/planner_providers.dart' show upcomingSessionsProvider;
@@ -177,6 +179,7 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
       _listenForPlanChanges();
       _listenForPro();
       _listenForActivityFiles();
+      _listenForPolarPush();
       _triggerSync();
       unawaited(_startHrvReminders());
       _extendOpenAbsences();
@@ -481,6 +484,21 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
       if (context == null || !context.mounted) return;
       await showAppSheet(context, ActivityFileImportSheet(files: files));
     });
+  }
+
+  /// A "new Polar workout" push (iOS) syncs at once, whether it arrived while
+  /// the app was open or was tapped. A tap that launched the app is covered
+  /// by the startup sync; taking it only clears the flag.
+  void _listenForPolarPush() {
+    polarPushChannel.setMethodCallHandler((call) async {
+      if (call.method != 'received' && call.method != 'opened') return null;
+      if (call.method == 'opened') {
+        await ref.read(polarPushServiceProvider).takeOpened();
+      }
+      unawaited(ref.read(syncProvider.notifier).sync(queueIfBusy: true));
+      return null;
+    });
+    unawaited(ref.read(polarPushServiceProvider).takeOpened());
   }
 
   void _triggerSync() {

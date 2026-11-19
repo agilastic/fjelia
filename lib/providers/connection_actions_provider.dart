@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
@@ -107,6 +109,7 @@ class ConnectionActions {
       }
       ref.invalidate(polarConnectedProvider);
       ref.invalidate(polarEmailProvider);
+      unawaited(ref.read(polarPushServiceProvider).register());
     } on PlatformException catch (e) {
       throw ConnectionFailure(
         e.code.toLowerCase().contains('cancel')
@@ -167,6 +170,7 @@ class ConnectionActions {
         ref.invalidate(myWhooshConnectedProvider);
         ref.invalidate(myWhooshEmailProvider);
       case ConnectionType.polar:
+        await ref.read(polarPushServiceProvider).unregister();
         await ref.read(polarServiceProvider).disconnect();
         ref.invalidate(polarFlowConnectedProvider);
         ref.invalidate(polarConnectedProvider);

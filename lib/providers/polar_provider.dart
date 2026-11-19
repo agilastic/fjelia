@@ -1,10 +1,15 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../services/polar_push_service.dart';
 import '../services/polar_service.dart';
 import 'database_provider.dart';
 
 final polarServiceProvider = Provider<PolarService>(
   (ref) => PolarService(ref.read(databaseProvider)),
+);
+
+final polarPushServiceProvider = Provider<PolarPushService>(
+  (ref) => PolarPushService(ref.read(polarServiceProvider)),
 );
 
 final polarConnectedProvider = FutureProvider<bool>(

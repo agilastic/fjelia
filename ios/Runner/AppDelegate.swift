@@ -57,6 +57,105 @@ import shared_preferences_foundation
     if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "HealthWorkoutObserver") {
       HealthWorkoutObserver.shared.attach(messenger: registrar.messenger())
     }
+    if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "PolarPushChannel") {
+      PolarPushChannel.shared.attach(registrar: registrar)
+    }
+  }
+}
+
+/// "New Polar workout" pushes: push.fjelia.com turns Polar's webhook into an
+/// APNs push. This hands the device token to Dart and reports a push that
+/// arrived or was tapped; Dart then syncs Polar. A tap that launched the app
+/// waits in `pendingOpen` until Dart asks for it.
+final class PolarPushChannel: NSObject, FlutterPlugin {
+  static let shared = PolarPushChannel()
+  private var channel: FlutterMethodChannel?
+  private var tokenResult: FlutterResult?
+  private var pendingOpen = false
+
+  static func register(with registrar: FlutterPluginRegistrar) {}
+
+  func attach(registrar: FlutterPluginRegistrar) {
+    let channel = FlutterMethodChannel(name: "fjelia/polar_push", binaryMessenger: registrar.messenger())
+    self.channel = channel
+    registrar.addApplicationDelegate(self)
+    channel.setMethodCallHandler { [weak self] call, result in
+      guard let self else { return }
+      switch call.method {
+      case "register":
+        // Answered by the didRegister/didFail callbacks below.
+        self.tokenResult?(FlutterError(code: "superseded", message: nil, details: nil))
+        self.tokenResult = result
+        UIApplication.shared.registerForRemoteNotifications()
+      case "environment":
+        result(PolarPushChannel.apnsEnvironment)
+      case "takeOpened":
+        result(self.pendingOpen)
+        self.pendingOpen = false
+      default:
+        result(FlutterMethodNotImplemented)
+      }
+    }
+  }
+
+  func application(
+    _ application: UIApplication,
+    didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
+  ) {
+    tokenResult?(deviceToken.map { String(format: "%02x", $0) }.joined())
+    tokenResult = nil
+  }
+
+  func application(
+    _ application: UIApplication,
+    didFailToRegisterForRemoteNotificationsWithError error: Error
+  ) {
+    tokenResult?(FlutterError(code: "apns_unavailable", message: error.localizedDescription, details: nil))
+    tokenResult = nil
+  }
+
+  /// The APNs environment the device token belongs to. A development-signed
+  /// build (Xcode, flutter run) embeds a profile with aps-environment
+  /// development and gets sandbox tokens; TestFlight and App Store builds
+  /// carry no embedded profile and use production.
+  static let apnsEnvironment: String = {
+    guard let url = Bundle.main.url(forResource: "embedded", withExtension: "mobileprovision"),
+      let data = try? Data(contentsOf: url),
+      let text = String(data: data, encoding: .isoLatin1),
+      let start = text.range(of: "<?xml"),
+      let end = text.range(of: "</plist>"),
+      let plist = try? PropertyListSerialization.propertyList(
+        from: Data(text[start.lowerBound..<end.upperBound].utf8), format: nil) as? [String: Any],
+      let entitlements = plist["Entitlements"] as? [String: Any]
+    else { return "production" }
+    return entitlements["aps-environment"] as? String == "development" ? "sandbox" : "production"
+  }()
+
+  private static func isPolar(_ notification: UNNotification) -> Bool {
+    notification.request.content.userInfo["type"] as? String == "polar_exercise"
+  }
+
+  // flutter_local_notifications ignores pushes that are not its own and
+  // leaves the completion handler to us.
+  func userNotificationCenter(
+    _ center: UNUserNotificationCenter,
+    willPresent notification: UNNotification,
+    withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+  ) {
+    guard PolarPushChannel.isPolar(notification) else { return }
+    channel?.invokeMethod("received", arguments: nil)
+    completionHandler([.banner, .list, .sound])
+  }
+
+  func userNotificationCenter(
+    _ center: UNUserNotificationCenter,
+    didReceive response: UNNotificationResponse,
+    withCompletionHandler completionHandler: @escaping () -> Void
+  ) {
+    guard PolarPushChannel.isPolar(response.notification) else { return }
+    pendingOpen = true
+    channel?.invokeMethod("opened", arguments: nil)
+    completionHandler()
   }
 }
 

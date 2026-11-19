@@ -1196,6 +1196,16 @@ class PolarService {
     return true;
   }
 
+  /// The Polar user and a fresh access token, which push.fjelia.com checks
+  /// once against AccessLink when this device registers for workout pushes.
+  Future<({int userId, String accessToken})?> pushCredentials() async {
+    if (!await _refreshIfNeeded()) return null;
+    final token = await oauthTokenStore.load(_source);
+    final userId = int.tryParse((await _loadUser())?.userId ?? '');
+    if (token == null || userId == null) return null;
+    return (userId: userId, accessToken: token.accessToken);
+  }
+
   Future<_PolarUser?> _loadUser() async {
     final raw = await _storage.read(key: _userKey);
     if (raw == null) return null;
