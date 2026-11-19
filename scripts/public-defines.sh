@@ -3,7 +3,8 @@
 # without the developer switches: FJELIA_ECG_CLINICAL (medical ECG reading
 # outside FjeliaPro), FJELIA_PRO (Pro without a purchase),
 # FJELIA_DEVELOPER_MENU (Settings > System > Developer) and FJELIA_IGNORE_CERTS
-# (no TLS certificate checks, dev-android.sh --ignore-certs).
+# (no TLS certificate checks, dev-android.sh --ignore-certs), and
+# POLAR_CLIENT_SECRET (unused since push.fjelia.com exchanges Polar tokens).
 public_defines() {
   local base out
   # Portable between BSD and GNU mktemp; the define file must end in .json.
@@ -12,7 +13,7 @@ public_defines() {
   mv "$base" "$out"
   python3 -I -c 'import json, sys
 d = json.load(open(sys.argv[1]))
-for k in ("FJELIA_ECG_CLINICAL", "FJELIA_PRO", "FJELIA_DEVELOPER_MENU", "FJELIA_IGNORE_CERTS"):
+for k in ("FJELIA_ECG_CLINICAL", "FJELIA_PRO", "FJELIA_DEVELOPER_MENU", "FJELIA_IGNORE_CERTS", "POLAR_CLIENT_SECRET"):
     d.pop(k, None)
 json.dump(d, open(sys.argv[2], "w"))' "$1" "$out"
   printf '%s\n' "$out"

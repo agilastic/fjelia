@@ -90,7 +90,7 @@ flutter run --dart-define-from-file=secrets.json
 
 | Key | Used for |
 | --- | --- |
-| `POLAR_CLIENT_ID`, `POLAR_CLIENT_SECRET` | Polar AccessLink (register your own client at <https://admin.polaraccesslink.com>) |
+| `POLAR_CLIENT_ID` | Fjelia's Polar AccessLink client. Its secret never ships in the app: `push.fjelia.com` exchanges the sign-in code and refresh tokens. With your own client (<https://admin.polaraccesslink.com>), enter its ID and secret in Fjelia CE under Settings → Own keys. |
 | `RENPHO_AES_KEY` | Renpho cloud |
 | `PIRATE_WEATHER_KEY`, `WEATHER_API_KEY` | optional extra weather providers |
 

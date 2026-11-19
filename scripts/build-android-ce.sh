@@ -54,7 +54,7 @@ defines="$(mktemp "${TMPDIR:-/tmp}/fjelia-ce-defines.XXXXXX")"
 python3 -I - "$with_keys" secrets.json "$defines" <<'PY'
 import json, os, sys
 with_keys, source, out = sys.argv[1] == "1", sys.argv[2], sys.argv[3]
-keys = ("POLAR_CLIENT_ID", "POLAR_CLIENT_SECRET", "PIRATE_WEATHER_KEY", "WEATHER_API_KEY")
+keys = ("POLAR_CLIENT_ID", "PIRATE_WEATHER_KEY", "WEATHER_API_KEY")
 d = {"FJELIA_CE": True}
 if with_keys and os.path.exists(source):
     s = json.load(open(source))

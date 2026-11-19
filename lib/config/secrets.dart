@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'build_features.dart';
@@ -37,15 +38,32 @@ class Secrets {
 
   static String _pick(OwnKey key, String built) => _own[key] ?? built;
 
-  /// Polar AccessLink API client (https://admin.polaraccesslink.com).
-  static String get polarClientId => _pick(
-    OwnKey.polarClientId,
-    const String.fromEnvironment('POLAR_CLIENT_ID'),
-  );
-  static String get polarClientSecret => _pick(
-    OwnKey.polarClientSecret,
-    const String.fromEnvironment('POLAR_CLIENT_SECRET'),
-  );
+  /// Polar AccessLink API client (https://admin.polaraccesslink.com). Its
+  /// secret is never built in: push.fjelia.com exchanges tokens for the
+  /// build's client id and keeps Fjelia's secret. Only a client the user
+  /// entered under Own keys (Fjelia CE) is used directly, with its secret.
+  static String get _builtPolarClientId =>
+      debugBuiltPolarClientId ??
+      const String.fromEnvironment('POLAR_CLIENT_ID');
+
+  /// Tests stand in for the build's Polar client id.
+  @visibleForTesting
+  static String? debugBuiltPolarClientId;
+
+  static String get polarClientId =>
+      _pick(OwnKey.polarClientId, _builtPolarClientId);
+  static String get polarClientSecret => _own[OwnKey.polarClientSecret] ?? '';
+
+  /// The user's own Polar client: both halves entered in the app.
+  static bool get polarOwnClient =>
+      _own.containsKey(OwnKey.polarClientId) &&
+      _own.containsKey(OwnKey.polarClientSecret);
+
+  /// No own client entered: the build's client, exchanged on push.fjelia.com.
+  static bool get polarViaServer =>
+      !_own.containsKey(OwnKey.polarClientId) &&
+      !_own.containsKey(OwnKey.polarClientSecret) &&
+      _builtPolarClientId.isNotEmpty;
 
   /// AES-128 key of the Renpho cloud protocol.
   static const renphoAesKey = String.fromEnvironment('RENPHO_AES_KEY');
@@ -59,8 +77,7 @@ class Secrets {
     const String.fromEnvironment('WEATHER_API_KEY'),
   );
 
-  static bool get hasPolar =>
-      polarClientId.isNotEmpty && polarClientSecret.isNotEmpty;
+  static bool get hasPolar => polarOwnClient || polarViaServer;
   static bool get hasRenpho => renphoAesKey.length == 16;
 
   /// Error shown when a service is used in a build without its credentials.

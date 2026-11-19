@@ -65,6 +65,15 @@ class PolarService {
 
   static const _api = 'https://www.polaraccesslink.com/v3';
   static const _tokenUrl = 'https://polarremote.com/v2/oauth2/token';
+  // push.fjelia.com adds Fjelia's client secret, which never ships in the app.
+  static final _serverTokenUri = Uri.https(
+    'push.fjelia.com',
+    '/v1/polar/token',
+  );
+  static final _serverRefreshUri = Uri.https(
+    'push.fjelia.com',
+    '/v1/polar/refresh',
+  );
   static String get _clientId => Secrets.polarClientId;
   static String get _clientSecret => Secrets.polarClientSecret;
   static const _source = 'polar';
@@ -74,9 +83,39 @@ class PolarService {
   static const _timeout = Duration(seconds: 20);
   static const _storage = FlutterSecureStorage();
 
-  static String get _basic {
+  /// Asks for tokens with Polar's [grant]: directly with the user's own
+  /// client (Fjelia CE), otherwise through push.fjelia.com, which answers
+  /// with Polar's JSON unchanged (400 for a refused code or refresh token).
+  Future<http.Response> _requestToken(
+    String grant,
+    String field,
+    String value,
+  ) {
     if (!Secrets.hasPolar) throw Secrets.missing('Polar');
-    return 'Basic ${base64Encode(utf8.encode('$_clientId:$_clientSecret'))}';
+    if (Secrets.polarOwnClient) {
+      final basic = base64Encode(utf8.encode('$_clientId:$_clientSecret'));
+      return _http
+          .post(
+            Uri.parse(_tokenUrl),
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Accept': 'application/json;charset=UTF-8',
+              'Authorization': 'Basic $basic',
+            },
+            body: {'grant_type': grant, field: value},
+          )
+          .timeout(_timeout);
+    }
+    return _http
+        .post(
+          field == 'code' ? _serverTokenUri : _serverRefreshUri,
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: jsonEncode({field: value}),
+        )
+        .timeout(_timeout);
   }
 
   static String buildAuthUrl() {
@@ -412,17 +451,7 @@ class PolarService {
   /// Exchanges the OAuth code and registers the user with AccessLink.
   Future<bool> handleAuthCallback(String code) async {
     try {
-      final response = await _http
-          .post(
-            Uri.parse(_tokenUrl),
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-              'Accept': 'application/json;charset=UTF-8',
-              'Authorization': _basic,
-            },
-            body: {'grant_type': 'authorization_code', 'code': code},
-          )
-          .timeout(_timeout);
+      final response = await _requestToken('authorization_code', 'code', code);
       if (response.statusCode != 200) {
         log(
           '[Polar] token exchange failed: ${response.statusCode} ${response.body}',
@@ -525,17 +554,11 @@ class PolarService {
     final refresh = token?.refreshToken;
     if (refresh == null) return false;
     try {
-      final response = await _http
-          .post(
-            Uri.parse(_tokenUrl),
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-              'Accept': 'application/json',
-              'Authorization': _basic,
-            },
-            body: {'grant_type': 'refresh_token', 'refresh_token': refresh},
-          )
-          .timeout(_timeout);
+      final response = await _requestToken(
+        'refresh_token',
+        'refresh_token',
+        refresh,
+      );
       if (response.statusCode != 200) {
         log('[Polar] token refresh failed: ${response.statusCode}');
         return false;
