@@ -31,17 +31,17 @@ class DisplayTab extends ConsumerWidget {
                       ButtonSegment(
                         value: StyleChoice.auto,
                         icon: const Icon(Icons.brightness_auto_outlined),
-                        label: Text(context.l10n.styleAuto),
+                        label: _label(context.l10n.styleAuto),
                       ),
-                      const ButtonSegment(
+                      ButtonSegment(
                         value: StyleChoice.dark,
-                        icon: Icon(Icons.dark_mode_outlined),
-                        label: Text('DarkFjelia'),
+                        icon: const Icon(Icons.dark_mode_outlined),
+                        label: _label('DarkFjelia'),
                       ),
-                      const ButtonSegment(
+                      ButtonSegment(
                         value: StyleChoice.light,
-                        icon: Icon(Icons.light_mode_outlined),
-                        label: Text('LightFjelia'),
+                        icon: const Icon(Icons.light_mode_outlined),
+                        label: _label('LightFjelia'),
                       ),
                     ],
                     selected: {
@@ -124,6 +124,12 @@ class DisplayTab extends ConsumerWidget {
       ),
     );
   }
+
+  // On narrow phones the label shrinks instead of breaking mid-word.
+  static Widget _label(String text) => FittedBox(
+    fit: BoxFit.scaleDown,
+    child: Text(text, maxLines: 1, softWrap: false),
+  );
 }
 
 class _MonitorVisibility extends ConsumerWidget {

@@ -9282,4 +9282,34 @@ class AppLocalizationsDa extends AppLocalizations {
   String absenceOpenCard(String date, int days) {
     return 'Siden $date (dag $days). Træningerne forbliver aflyst dag for dag; når du er rask igen, er den første uge let.';
   }
+
+  @override
+  String get ownKeys => 'Egne nøgler';
+
+  @override
+  String get ownKeysIntro =>
+      'Fjelia CE bruger dine egne nøgler til disse tjenester. De bliver på denne telefon og sendes kun til den tjeneste, de hører til.';
+
+  @override
+  String get ownKeysGet => 'Hent nøgle';
+
+  @override
+  String get ownKeysSaved => 'Gemt. Gem et tomt felt for at fjerne den.';
+
+  @override
+  String ownKeysPolarHint(String url) {
+    return 'Opret en AccessLink-klient, og angiv $url som omdirigerings-URL. Indtast derefter klient-id og hemmelighed her; du logger ind med din Polar-konto under Forbindelser.';
+  }
+
+  @override
+  String get ownKeysWeatherHint =>
+      'Valgfrit: endnu en vejrkilde ud over Open-Meteo og Bright Sky.';
+
+  @override
+  String ownKeysAiHint(String section) {
+    return 'AI-nøgler indtastes under $section.';
+  }
+
+  @override
+  String get aiOnboardingMoreBodyCloud => 'Din egen cloududbyder med API-nøgle';
 }

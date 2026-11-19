@@ -1,3 +1,4 @@
+import '../../config/build_features.dart';
 import '../../config/fjelia_pro.dart';
 import '../../l10n/l10n_ext.dart';
 
@@ -57,23 +58,28 @@ class AiSettingsTab extends ConsumerWidget {
                   children: [
                     // With an active subscription Fjelia AI is ProAI; the
                     // larger ProAI-deep is taken by itself for the race plan
-                    // and the season, never chosen here.
-                    ChoiceChip(
-                      key: const ValueKey('provider-fjelia'),
-                      label: Text(
-                        subscribed ? 'ProAI / ProAI-deep' : context.l10n.freeAi,
+                    // and the season, never chosen here. Not in Fjelia CE.
+                    if (!communityEdition)
+                      ChoiceChip(
+                        key: const ValueKey('provider-fjelia'),
+                        label: Text(
+                          subscribed
+                              ? 'ProAI / ProAI-deep'
+                              : context.l10n.freeAi,
+                        ),
+                        selected: s.provider == AiProvider.freeAi,
+                        onSelected: (_) => runUiAction(context, () async {
+                          if (s.provider != AiProvider.freeAi) {
+                            await n.setProvider(AiProvider.freeAi);
+                          }
+                          await n.setModel(subscribed ? proAiModel : 'default');
+                        }),
                       ),
-                      selected: s.provider == AiProvider.freeAi,
-                      onSelected: (_) => runUiAction(context, () async {
-                        if (s.provider != AiProvider.freeAi) {
-                          await n.setProvider(AiProvider.freeAi);
-                        }
-                        await n.setModel(subscribed ? proAiModel : 'default');
-                      }),
-                    ),
                     for (final p in [
-                      AiProvider.appleIntelligence,
-                      AiProvider.localQwen,
+                      if (onDeviceAiAvailable) ...[
+                        AiProvider.appleIntelligence,
+                        AiProvider.localQwen,
+                      ],
                       ...AiProvider.values.where((p) => p.requiresUserApiKey),
                     ])
                       ChoiceChip(

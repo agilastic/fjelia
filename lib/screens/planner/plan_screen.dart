@@ -174,30 +174,34 @@ class _PlanState extends ConsumerState<PlanScreen> {
                                   : null,
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  context.l10n.day(day),
-                                  style: TextStyle(
-                                    color:
-                                        DateUtils.isSameDay(d, DateTime.now())
-                                        ? Colors.amber
-                                        : null,
-                                    fontWeight:
-                                        DateUtils.isSameDay(d, DateTime.now())
-                                        ? FontWeight.bold
-                                        : null,
+                            // Short cells on small phones shrink the content.
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    context.l10n.day(day),
+                                    style: TextStyle(
+                                      color:
+                                          DateUtils.isSameDay(d, DateTime.now())
+                                          ? Colors.amber
+                                          : null,
+                                      fontWeight:
+                                          DateUtils.isSameDay(d, DateTime.now())
+                                          ? FontWeight.bold
+                                          : null,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(height: 3),
-                                SizedBox(
-                                  height: 6,
-                                  child: CalendarActivityBubbles(
-                                    activities: activities,
+                                  const SizedBox(height: 3),
+                                  SizedBox(
+                                    height: 6,
+                                    child: CalendarActivityBubbles(
+                                      activities: activities,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),

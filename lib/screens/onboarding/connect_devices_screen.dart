@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import '../../config/build_features.dart';
 import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
@@ -36,9 +38,9 @@ import 'ai_coach_onboarding_screen.dart';
 class ConnectDevicesScreen extends ConsumerWidget {
   const ConnectDevicesScreen({super.key});
 
-  void _push(BuildContext context, Widget screen) =>
-      Navigator.of(context)
-          .push(MaterialPageRoute<void>(builder: (_) => screen));
+  void _push(BuildContext context, Widget screen) => Navigator.of(
+    context,
+  ).push(MaterialPageRoute<void>(builder: (_) => screen));
 
   ({List<_DeviceTile> ble, List<_DeviceTile> api}) _tiles(
     BuildContext context, {
@@ -55,15 +57,17 @@ class ConnectDevicesScreen extends ConsumerWidget {
     required bool indoor,
   }) {
     final tiles = [
-      _DeviceTile(
-        icon: Icons.bluetooth_rounded,
-        color: const Color(0xFF00C4B4),
-        name: context.l10n.hiloPod,
-        subtitle: context.l10n.bluetoothBloodPressure,
-        connected: hiloBle,
-        onTap: () =>
-            _push(context, const ConnectHiloBleScreen(fromOnboarding: true)),
-      ),
+      // Not in Fjelia CE (private service package / app key).
+      if (!communityEdition)
+        _DeviceTile(
+          icon: Icons.bluetooth_rounded,
+          color: const Color(0xFF00C4B4),
+          name: context.l10n.hiloPod,
+          subtitle: context.l10n.bluetoothBloodPressure,
+          connected: hiloBle,
+          onTap: () =>
+              _push(context, const ConnectHiloBleScreen(fromOnboarding: true)),
+        ),
       // Omron, standard monitors and the Hilo cuff: saved in one place.
       _DeviceTile(
         icon: Icons.monitor_heart_rounded,
@@ -82,15 +86,17 @@ class ConnectDevicesScreen extends ConsumerWidget {
         connected: indoor,
         onTap: () => _push(context, const ManualActivitySheet()),
       ),
-      _DeviceTile(
-        icon: Icons.favorite_rounded,
-        color: const Color(0xFFFF4444),
-        name: context.l10n.hiloAccount,
-        subtitle: context.l10n.cloudCuffData,
-        connected: auth.aktiiaConnected,
-        onTap: () =>
-            _push(context, const ConnectAktiiaScreen(fromOnboarding: true)),
-      ),
+      // Not in Fjelia CE (private service package / app key).
+      if (!communityEdition)
+        _DeviceTile(
+          icon: Icons.favorite_rounded,
+          color: const Color(0xFFFF4444),
+          name: context.l10n.hiloAccount,
+          subtitle: context.l10n.cloudCuffData,
+          connected: auth.aktiiaConnected,
+          onTap: () =>
+              _push(context, const ConnectAktiiaScreen(fromOnboarding: true)),
+        ),
       _DeviceTile(
         icon: Icons.watch_rounded,
         color: const Color(0xFF1A73E8),
@@ -109,15 +115,17 @@ class ConnectDevicesScreen extends ConsumerWidget {
         onTap: () =>
             _push(context, const ConnectCorosScreen(fromOnboarding: true)),
       ),
-      _DeviceTile(
-        icon: Icons.watch_rounded,
-        color: const Color(0xFFE84C22),
-        name: context.l10n.suunto,
-        subtitle: context.l10n.apiSync,
-        connected: suunto,
-        onTap: () =>
-            _push(context, const ConnectSuuntoScreen(fromOnboarding: true)),
-      ),
+      // Not in Fjelia CE (private service package / app key).
+      if (!communityEdition)
+        _DeviceTile(
+          icon: Icons.watch_rounded,
+          color: const Color(0xFFE84C22),
+          name: context.l10n.suunto,
+          subtitle: context.l10n.apiSync,
+          connected: suunto,
+          onTap: () =>
+              _push(context, const ConnectSuuntoScreen(fromOnboarding: true)),
+        ),
       _DeviceTile(
         icon: Icons.directions_bike_rounded,
         color: const Color(0xFFFF6B1A),
@@ -154,15 +162,17 @@ class ConnectDevicesScreen extends ConsumerWidget {
           onTap: () =>
               _push(context, const ConnectHealthScreen(fromOnboarding: true)),
         ),
-      _DeviceTile(
-        icon: Icons.monitor_weight_rounded,
-        color: const Color(0xFF9C27B0),
-        name: context.l10n.renphoAccount,
-        subtitle: context.l10n.cloudScaleHistory,
-        connected: auth.renphoConnected,
-        onTap: () =>
-            _push(context, const ConnectRenphoScreen(fromOnboarding: true)),
-      ),
+      // Not in Fjelia CE (private service package / app key).
+      if (!communityEdition)
+        _DeviceTile(
+          icon: Icons.monitor_weight_rounded,
+          color: const Color(0xFF9C27B0),
+          name: context.l10n.renphoAccount,
+          subtitle: context.l10n.cloudScaleHistory,
+          connected: auth.renphoConnected,
+          onTap: () =>
+              _push(context, const ConnectRenphoScreen(fromOnboarding: true)),
+        ),
       _DeviceTile(
         icon: Icons.monitor_weight_rounded,
         color: const Color(0xFF9C27B0),
@@ -203,14 +213,25 @@ class ConnectDevicesScreen extends ConsumerWidget {
           ),
         ),
       ),
-      GridView.count(
-        crossAxisCount: 2,
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        mainAxisSpacing: 12,
-        crossAxisSpacing: 12,
-        childAspectRatio: 1.35,
-        children: tiles,
+      LayoutBuilder(
+        builder: (context, box) {
+          // Wide enough phones keep the 1.35 shape; narrow ones or a large
+          // font grow the tile to fit the icon, name and two subtitle lines.
+          final scale = MediaQuery.textScalerOf(context);
+          final content =
+              38 + 40 + 8 + scale.scale(14) * 1.5 + 2 + scale.scale(11) * 3;
+          return GridView(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 12,
+              mainAxisExtent: max((box.maxWidth - 12) / 2 / 1.35, content),
+            ),
+            children: tiles,
+          );
+        },
       ),
     ],
   );

@@ -4218,5 +4218,13 @@
   "absenceOpenEndHint": "Fjelia uvoľňuje dni jeden po druhom, kým nepovieš, že si zase fit.",
   "absenceSince": "Od {date}",
   "absenceFitAgain": "Zase fit",
-  "absenceOpenCard": "Od {date} (deň {days}). Tréningy zostávajú zrušené deň po dni; keď budeš zase fit, prvý týždeň je ľahký."
+  "absenceOpenCard": "Od {date} (deň {days}). Tréningy zostávajú zrušené deň po dni; keď budeš zase fit, prvý týždeň je ľahký.",
+  "ownKeys": "Vlastné kľúče",
+  "ownKeysIntro": "Fjelia CE používa pre tieto služby tvoje vlastné kľúče. Zostávajú v tomto telefóne a posielajú sa len príslušnej službe.",
+  "ownKeysGet": "Získať kľúč",
+  "ownKeysSaved": "Uložené. Uložením prázdneho poľa ho odstrániš.",
+  "ownKeysPolarHint": "Vytvor klienta AccessLink a ako URL presmerovania zadaj {url}. Potom sem zadaj jeho ID klienta a tajný kľúč; prihlásenie kontom Polar je v časti Pripojenia.",
+  "ownKeysWeatherHint": "Voliteľné: ďalší zdroj počasia popri Open-Meteo a Bright Sky.",
+  "ownKeysAiHint": "Kľúče AI zadáš v časti {section}.",
+  "aiOnboardingMoreBodyCloud": "Vlastný cloudový poskytovateľ s kľúčom API"
 }

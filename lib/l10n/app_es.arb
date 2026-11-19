@@ -4218,5 +4218,13 @@
   "absenceOpenEndHint": "Fjelia deja libres los días uno a uno hasta que digas que vuelves a estar bien.",
   "absenceSince": "Desde {date}",
   "absenceFitAgain": "Otra vez en forma",
-  "absenceOpenCard": "Desde {date} (día {days}). Las sesiones siguen canceladas día a día; cuando vuelvas a estar bien, la primera semana es suave."
+  "absenceOpenCard": "Desde {date} (día {days}). Las sesiones siguen canceladas día a día; cuando vuelvas a estar bien, la primera semana es suave.",
+  "ownKeys": "Claves propias",
+  "ownKeysIntro": "Fjelia CE usa tus propias claves para estos servicios. Se quedan en este teléfono y solo se envían al servicio correspondiente.",
+  "ownKeysGet": "Obtener clave",
+  "ownKeysSaved": "Guardada. Guarda un campo vacío para eliminarla.",
+  "ownKeysPolarHint": "Crea un cliente de AccessLink e indica {url} como URL de redirección. Después introduce aquí su ID de cliente y su secreto; el inicio de sesión con tu cuenta Polar se hace en Conexiones.",
+  "ownKeysWeatherHint": "Opcional: otra fuente meteorológica además de Open-Meteo y Bright Sky.",
+  "ownKeysAiHint": "Las claves de IA se introducen en {section}.",
+  "aiOnboardingMoreBodyCloud": "Tu propio proveedor en la nube con clave API"
 }

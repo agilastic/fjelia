@@ -51,6 +51,8 @@ class _Model extends LocalModelService {
 }
 
 void main() {
+  // Apple Intelligence and the MLX models are only offered on Apple devices.
+  final onApple = TargetPlatformVariant.only(TargetPlatform.iOS);
   TestWidgetsFlutterBinding.ensureInitialized();
   const storage = FlutterSecureStorage();
   final previewKey = GlobalKey();
@@ -203,6 +205,7 @@ void main() {
 
   testWidgets(
     'Apple Intelligence can be selected without changing settings yet',
+    variant: onApple,
     (tester) async {
       final container = await show(tester);
       await tester.tap(find.byKey(const ValueKey('onboarding-apple-ai')));
@@ -291,33 +294,44 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('unsupported Apple platforms still offer Free AI', (
-    tester,
-  ) async {
-    await show(tester, appleCheckThrows: true);
-    expect(find.text('Mit Free AI weiter'), findsOneWidget);
-    expect(find.text('Derzeit nicht verfügbar'), findsOneWidget);
-    await tester.tap(find.byKey(const ValueKey('onboarding-apple-ai')));
-    await tester.pumpAndSettle();
+  testWidgets(
+    'unsupported Apple platforms still offer Free AI',
+    variant: onApple,
+    (tester) async {
+      await show(tester, appleCheckThrows: true);
+      expect(find.text('Mit Free AI weiter'), findsOneWidget);
+      expect(find.text('Derzeit nicht verfügbar'), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey('onboarding-apple-ai')));
+      await tester.pumpAndSettle();
+      expect(find.text('Mit Free AI weiter'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets('Android offers no Apple Intelligence', (tester) async {
+    await show(tester);
+    expect(find.byKey(const ValueKey('onboarding-apple-ai')), findsNothing);
     expect(find.text('Mit Free AI weiter'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('without either default AI users can still finish this step', (
-    tester,
-  ) async {
-    final container = await show(tester, appleAvailable: false, freeKey: '');
-    expect(find.text('Ohne KI fortfahren'), findsOneWidget);
-    expect(find.text('Derzeit nicht verfügbar'), findsNWidgets(2));
-    await tester.tap(getContinue());
-    await tester.pumpAndSettle();
-    expect(find.byType(TrainingPlanOnboardingScreen), findsOneWidget);
-    expect(
-      (await container.read(aiCoachSettingsProvider.future)).enabled,
-      isFalse,
-    );
-    expect(tester.takeException(), isNull);
-  });
+  testWidgets(
+    'without either default AI users can still finish this step',
+    variant: onApple,
+    (tester) async {
+      final container = await show(tester, appleAvailable: false, freeKey: '');
+      expect(find.text('Ohne KI fortfahren'), findsOneWidget);
+      expect(find.text('Derzeit nicht verfügbar'), findsNWidgets(2));
+      await tester.tap(getContinue());
+      await tester.pumpAndSettle();
+      expect(find.byType(TrainingPlanOnboardingScreen), findsOneWidget);
+      expect(
+        (await container.read(aiCoachSettingsProvider.future)).enabled,
+        isFalse,
+      );
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets(
     'uninstalled Qwen opens configuration and never downloads itself',
@@ -343,40 +357,44 @@ void main() {
     },
   );
 
-  testWidgets('closing model settings preserves an unsaved onboarding choice', (
-    tester,
-  ) async {
-    await show(tester);
-    await tester.tap(find.byKey(const ValueKey('onboarding-apple-ai')));
-    await tester.pumpAndSettle();
-    final more = find.byKey(const ValueKey('onboarding-more-ai'));
-    await tester.ensureVisible(more);
-    await tester.tap(more);
-    await tester.pumpAndSettle();
-    Navigator.of(tester.element(find.byType(AiSettingsTab))).pop();
-    await tester.pumpAndSettle();
-    expect(find.text('Mit Apple Intelligence weiter'), findsOneWidget);
-    expect(await storage.read(key: 'ai_coach_provider'), isNull);
-    expect(tester.takeException(), isNull);
-  });
+  testWidgets(
+    'closing model settings preserves an unsaved onboarding choice',
+    variant: onApple,
+    (tester) async {
+      await show(tester);
+      await tester.tap(find.byKey(const ValueKey('onboarding-apple-ai')));
+      await tester.pumpAndSettle();
+      final more = find.byKey(const ValueKey('onboarding-more-ai'));
+      await tester.ensureVisible(more);
+      await tester.tap(more);
+      await tester.pumpAndSettle();
+      Navigator.of(tester.element(find.byType(AiSettingsTab))).pop();
+      await tester.pumpAndSettle();
+      expect(find.text('Mit Apple Intelligence weiter'), findsOneWidget);
+      expect(await storage.read(key: 'ai_coach_provider'), isNull);
+      expect(tester.takeException(), isNull);
+    },
+  );
 
-  testWidgets('an explicit provider choice in Settings replaces the draft', (
-    tester,
-  ) async {
-    await show(tester);
-    final more = find.byKey(const ValueKey('onboarding-more-ai'));
-    await tester.ensureVisible(more);
-    await tester.tap(more);
-    await tester.pumpAndSettle();
-    // Apple was already the runtime default, but saving it is a new choice.
-    await tester.tap(find.widgetWithText(ChoiceChip, 'Apple Intelligence'));
-    await tester.pumpAndSettle();
-    Navigator.of(tester.element(find.byType(AiSettingsTab))).pop();
-    await tester.pumpAndSettle();
-    expect(find.text('Mit Apple Intelligence weiter'), findsOneWidget);
-    expect(await storage.read(key: 'ai_coach_provider'), 'appleIntelligence');
-    expect(tester.takeException(), isNull);
-  });
+  testWidgets(
+    'an explicit provider choice in Settings replaces the draft',
+    variant: onApple,
+    (tester) async {
+      await show(tester);
+      final more = find.byKey(const ValueKey('onboarding-more-ai'));
+      await tester.ensureVisible(more);
+      await tester.tap(more);
+      await tester.pumpAndSettle();
+      // Apple was already the runtime default, but saving it is a new choice.
+      await tester.tap(find.widgetWithText(ChoiceChip, 'Apple Intelligence'));
+      await tester.pumpAndSettle();
+      Navigator.of(tester.element(find.byType(AiSettingsTab))).pop();
+      await tester.pumpAndSettle();
+      expect(find.text('Mit Apple Intelligence weiter'), findsOneWidget);
+      expect(await storage.read(key: 'ai_coach_provider'), 'appleIntelligence');
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets('own-key providers require configuration before continuing', (
     tester,

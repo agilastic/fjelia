@@ -7,7 +7,9 @@ import '../api/garmin_client.dart';
 import '../api/renpho_client.dart';
 import '../services/oauth_token_store.dart';
 
-final aktiiaClientProvider = Provider<AktiiaClient>((ref) => createAktiiaClient());
+final aktiiaClientProvider = Provider<AktiiaClient>(
+  (ref) => createAktiiaClient(),
+);
 final garminClientProvider = Provider<GarminClient>((ref) => GarminClient());
 final renphoClientProvider = Provider<RenphoClient>((ref) => RenphoClient());
 
@@ -71,7 +73,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   static const _storage = FlutterSecureStorage();
 
+  /// Setup was finished once, also without an account (Bluetooth devices,
+  /// imports): the app then opens on Home, not in setup, at every start.
+  static const _setupDoneKey = 'setup_finished_v1';
+  bool _setupDone = false;
+
   Future<void> _checkExistingLogin() async {
+    _setupDone = await _storage.read(key: _setupDoneKey) == 'true';
     final aktiia = await _aktiia.isLoggedIn;
     final garmin = await _garmin.isLoggedIn;
     final renpho = await _renpho.isLoggedIn;
@@ -92,7 +100,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
       garminEmail: garminEmail,
       renphoConnected: renpho,
       renphoEmail: renphoEmail,
-      status: anyConnected ? LoginStatus.loggedIn : LoginStatus.needsOnboarding,
+      status: anyConnected || _setupDone
+          ? LoginStatus.loggedIn
+          : LoginStatus.needsOnboarding,
     );
   }
 
@@ -148,8 +158,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
     );
   }
 
-  /// Finishes onboarding without connecting Garmin.
+  /// Finishes setup, with or without an account; remembered for later starts.
   Future<void> skipGarmin() async {
+    _setupDone = true;
+    await _storage.write(key: _setupDoneKey, value: 'true');
     state = state.copyWith(status: LoginStatus.loggedIn);
   }
 
@@ -173,7 +185,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       garminEmail: state.garminEmail,
       renphoConnected: state.renphoConnected,
       renphoEmail: state.renphoEmail,
-      status: state.garminConnected
+      status: state.garminConnected || _setupDone
           ? LoginStatus.loggedIn
           : LoginStatus.needsOnboarding,
     );
@@ -187,7 +199,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       aktiiaEmail: state.aktiiaEmail,
       renphoConnected: state.renphoConnected,
       renphoEmail: state.renphoEmail,
-      status: state.aktiiaConnected
+      status: state.aktiiaConnected || _setupDone
           ? LoginStatus.loggedIn
           : LoginStatus.needsOnboarding,
     );

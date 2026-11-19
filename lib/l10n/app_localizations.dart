@@ -16095,6 +16095,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Since {date} (day {days}). Sessions stay cancelled day by day; once you are fit again, the first week back is easy.'**
   String absenceOpenCard(String date, int days);
+
+  /// No description provided for @ownKeys.
+  ///
+  /// In en, this message translates to:
+  /// **'Own keys'**
+  String get ownKeys;
+
+  /// No description provided for @ownKeysIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Fjelia CE talks to these services with your own keys. They stay on this phone and are only sent to the service they belong to.'**
+  String get ownKeysIntro;
+
+  /// No description provided for @ownKeysGet.
+  ///
+  /// In en, this message translates to:
+  /// **'Get key'**
+  String get ownKeysGet;
+
+  /// No description provided for @ownKeysSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved. Save an empty field to remove it.'**
+  String get ownKeysSaved;
+
+  /// No description provided for @ownKeysPolarHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Create an AccessLink client and enter {url} as its redirect URL. Then enter its client ID and secret here; you sign in with your Polar account under Connections.'**
+  String ownKeysPolarHint(String url);
+
+  /// No description provided for @ownKeysWeatherHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional: one more weather source besides Open-Meteo and Bright Sky.'**
+  String get ownKeysWeatherHint;
+
+  /// No description provided for @ownKeysAiHint.
+  ///
+  /// In en, this message translates to:
+  /// **'AI keys are entered under {section}.'**
+  String ownKeysAiHint(String section);
+
+  /// No description provided for @aiOnboardingMoreBodyCloud.
+  ///
+  /// In en, this message translates to:
+  /// **'Your own cloud provider and API key'**
+  String get aiOnboardingMoreBodyCloud;
 }
 
 class _AppLocalizationsDelegate

@@ -45,6 +45,8 @@ class _Model extends LocalModelService {
 }
 
 void main() {
+  // Apple Intelligence and the MLX models are only offered on Apple devices.
+  final onApple = TargetPlatformVariant.only(TargetPlatform.iOS);
   tearDown(() => setActiveLocale(const Locale('en')));
 
   Future<ProviderContainer> showSettings(
@@ -86,47 +88,49 @@ void main() {
     );
   }
 
-  testWidgets('local model can be downloaded and deleted without an API key', (
-    tester,
-  ) async {
-    final model = _Model();
-    final container = await showSettings(tester, model);
-    expect(
-      (await container.read(aiCoachSettingsProvider.future)).ready,
-      isFalse,
-    );
-    expect(find.text('API-Schlüssel'), findsNothing);
-    expect(find.text('Weitergabe von Gesundheitsdaten'), findsNothing);
-    final chips = tester
-        .widgetList<ChoiceChip>(find.byType(ChoiceChip))
-        .toList();
-    expect((chips[0].label as Text).data, 'Free AI');
-    expect((chips[1].label as Text).data, 'Apple Intelligence');
-    expect((chips[2].label as Text).data, 'Qwen3.5 · lokal');
-    expect(find.textContaining('1749 MB'), findsOneWidget);
-    final download = find.text('Modell herunterladen');
-    await tester.ensureVisible(download);
-    await tester.pumpAndSettle();
-    await tester.tap(download);
-    await tester.pumpAndSettle();
-    expect(model.downloads, 1);
-    expect(
-      (await container.read(aiCoachSettingsProvider.future)).ready,
-      isTrue,
-    );
-    expect(find.text('Heruntergeladen · offline verfügbar'), findsOneWidget);
-    final remove = find.text('Modell löschen');
-    await tester.ensureVisible(remove);
-    await tester.pumpAndSettle();
-    await tester.tap(remove);
-    await tester.pumpAndSettle();
-    expect(model.removals, 1);
-    expect(
-      (await container.read(aiCoachSettingsProvider.future)).ready,
-      isFalse,
-    );
-    expect(tester.takeException(), isNull);
-  });
+  testWidgets(
+    'local model can be downloaded and deleted without an API key',
+    variant: onApple,
+    (tester) async {
+      final model = _Model();
+      final container = await showSettings(tester, model);
+      expect(
+        (await container.read(aiCoachSettingsProvider.future)).ready,
+        isFalse,
+      );
+      expect(find.text('API-Schlüssel'), findsNothing);
+      expect(find.text('Weitergabe von Gesundheitsdaten'), findsNothing);
+      final chips = tester
+          .widgetList<ChoiceChip>(find.byType(ChoiceChip))
+          .toList();
+      expect((chips[0].label as Text).data, 'Free AI');
+      expect((chips[1].label as Text).data, 'Apple Intelligence');
+      expect((chips[2].label as Text).data, 'Qwen3.5 · lokal');
+      expect(find.textContaining('1749 MB'), findsOneWidget);
+      final download = find.text('Modell herunterladen');
+      await tester.ensureVisible(download);
+      await tester.pumpAndSettle();
+      await tester.tap(download);
+      await tester.pumpAndSettle();
+      expect(model.downloads, 1);
+      expect(
+        (await container.read(aiCoachSettingsProvider.future)).ready,
+        isTrue,
+      );
+      expect(find.text('Heruntergeladen · offline verfügbar'), findsOneWidget);
+      final remove = find.text('Modell löschen');
+      await tester.ensureVisible(remove);
+      await tester.pumpAndSettle();
+      await tester.tap(remove);
+      await tester.pumpAndSettle();
+      expect(model.removals, 1);
+      expect(
+        (await container.read(aiCoachSettingsProvider.future)).ready,
+        isFalse,
+      );
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets('unsupported hardware cannot start the large download', (
     tester,

@@ -9366,4 +9366,36 @@ class AppLocalizationsDe extends AppLocalizations {
   String absenceOpenCard(String date, int days) {
     return 'Seit $date (Tag $days). Einheiten bleiben Tag für Tag abgesagt; sobald du wieder fit bist, ist die erste Woche locker.';
   }
+
+  @override
+  String get ownKeys => 'Eigene Schlüssel';
+
+  @override
+  String get ownKeysIntro =>
+      'Fjelia CE spricht diese Dienste mit deinen eigenen Schlüsseln an. Sie bleiben auf diesem Telefon und gehen nur an den jeweiligen Dienst.';
+
+  @override
+  String get ownKeysGet => 'Schlüssel holen';
+
+  @override
+  String get ownKeysSaved =>
+      'Gespeichert. Leeres Feld speichern, um ihn zu entfernen.';
+
+  @override
+  String ownKeysPolarHint(String url) {
+    return 'Lege einen AccessLink-Client an und trage $url als Redirect-URL ein. Dann hier Client-ID und Secret eingeben; angemeldet wird unter Verbindungen mit deinem Polar-Konto.';
+  }
+
+  @override
+  String get ownKeysWeatherHint =>
+      'Optional: eine weitere Wetterquelle neben Open-Meteo und Bright Sky.';
+
+  @override
+  String ownKeysAiHint(String section) {
+    return 'KI-Schlüssel gibst du unter $section ein.';
+  }
+
+  @override
+  String get aiOnboardingMoreBodyCloud =>
+      'Dein eigener Cloud-Anbieter mit API-Schlüssel';
 }

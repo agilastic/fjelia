@@ -9353,4 +9353,36 @@ class AppLocalizationsNl extends AppLocalizations {
   String absenceOpenCard(String date, int days) {
     return 'Sinds $date (dag $days). Trainingen blijven dag voor dag geannuleerd; zodra je weer fit bent, is de eerste week rustig.';
   }
+
+  @override
+  String get ownKeys => 'Eigen sleutels';
+
+  @override
+  String get ownKeysIntro =>
+      'Fjelia CE gebruikt je eigen sleutels voor deze diensten. Ze blijven op deze telefoon en gaan alleen naar de dienst waar ze bij horen.';
+
+  @override
+  String get ownKeysGet => 'Sleutel ophalen';
+
+  @override
+  String get ownKeysSaved =>
+      'Opgeslagen. Sla een leeg veld op om hem te verwijderen.';
+
+  @override
+  String ownKeysPolarHint(String url) {
+    return 'Maak een AccessLink-client aan en vul $url in als redirect-URL. Vul hier daarna de client-ID en het secret in; inloggen met je Polar-account doe je onder Verbindingen.';
+  }
+
+  @override
+  String get ownKeysWeatherHint =>
+      'Optioneel: nog een weerbron naast Open-Meteo en Bright Sky.';
+
+  @override
+  String ownKeysAiHint(String section) {
+    return 'AI-sleutels vul je in onder $section.';
+  }
+
+  @override
+  String get aiOnboardingMoreBodyCloud =>
+      'Je eigen cloudaanbieder met API-sleutel';
 }

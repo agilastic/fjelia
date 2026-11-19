@@ -65,8 +65,8 @@ class PolarService {
 
   static const _api = 'https://www.polaraccesslink.com/v3';
   static const _tokenUrl = 'https://polarremote.com/v2/oauth2/token';
-  static const _clientId = Secrets.polarClientId;
-  static const _clientSecret = Secrets.polarClientSecret;
+  static String get _clientId => Secrets.polarClientId;
+  static String get _clientSecret => Secrets.polarClientSecret;
   static const _source = 'polar';
   static const _userKey = 'polar_auth_v1';
   static const _flowEmailKey = 'polar_flow_email';

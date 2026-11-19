@@ -12,6 +12,7 @@ import 'l10n/app_localizations.dart';
 import 'l10n/l10n_ext.dart';
 import 'config/build_features.dart' show ignoreCertificatesForTesting;
 import 'config/fjelia_pro.dart' show proAiModel;
+import 'config/secrets.dart';
 import 'providers/activity_file_import_provider.dart';
 import 'providers/ai_coach_provider.dart' show aiCoachSettingsProvider;
 import 'services/ai_coach_settings.dart' show AiProvider;
@@ -92,6 +93,7 @@ void main() {
       log('[Net] TLS certificate checks are OFF (--ignore-certs test build)');
     }
     registerLocalModelLicenses();
+    await Secrets.load();
     await initializeDateFormatting();
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(

@@ -9339,4 +9339,35 @@ class AppLocalizationsIt extends AppLocalizations {
   String absenceOpenCard(String date, int days) {
     return 'Da $date (giorno $days). Le sessioni restano annullate giorno per giorno; quando stai di nuovo bene, la prima settimana è facile.';
   }
+
+  @override
+  String get ownKeys => 'Chiavi personali';
+
+  @override
+  String get ownKeysIntro =>
+      'Fjelia CE usa le tue chiavi per questi servizi. Restano su questo telefono e vengono inviate solo al servizio a cui appartengono.';
+
+  @override
+  String get ownKeysGet => 'Ottieni chiave';
+
+  @override
+  String get ownKeysSaved => 'Salvata. Salva un campo vuoto per rimuoverla.';
+
+  @override
+  String ownKeysPolarHint(String url) {
+    return 'Crea un client AccessLink e inserisci $url come URL di reindirizzamento. Poi inserisci qui ID client e secret; l’accesso con il tuo account Polar avviene in Connessioni.';
+  }
+
+  @override
+  String get ownKeysWeatherHint =>
+      'Facoltativo: un’altra fonte meteo oltre a Open-Meteo e Bright Sky.';
+
+  @override
+  String ownKeysAiHint(String section) {
+    return 'Le chiavi IA si inseriscono in $section.';
+  }
+
+  @override
+  String get aiOnboardingMoreBodyCloud =>
+      'Il tuo provider cloud con chiave API';
 }

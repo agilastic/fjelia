@@ -77,30 +77,35 @@ class ConnectionsTab extends ConsumerWidget {
               auth.garminConnected,
               const ConnectGarminScreen(fromOnboarding: true),
             ),
-            (
-              ConnectionType.bloodPressure,
-              context.l10n.hiloBloodPressure,
-              auth.aktiiaConnected,
-              const ConnectAktiiaScreen(fromOnboarding: true),
-            ),
-            (
-              ConnectionType.bodyScale,
-              context.l10n.renphoBodyScale,
-              auth.renphoConnected,
-              const ConnectRenphoScreen(fromOnboarding: true),
-            ),
+            // Hilo, Suunto and the Renpho cloud need the private service
+            // package or app key: not in Fjelia CE.
+            if (!communityEdition)
+              (
+                ConnectionType.bloodPressure,
+                context.l10n.hiloBloodPressure,
+                auth.aktiiaConnected,
+                const ConnectAktiiaScreen(fromOnboarding: true),
+              ),
+            if (!communityEdition)
+              (
+                ConnectionType.bodyScale,
+                context.l10n.renphoBodyScale,
+                auth.renphoConnected,
+                const ConnectRenphoScreen(fromOnboarding: true),
+              ),
             (
               ConnectionType.coros,
               context.l10n.coros,
               ref.watch(corosConnectedProvider).valueOrNull ?? false,
               const ConnectCorosScreen(fromOnboarding: true),
             ),
-            (
-              ConnectionType.suunto,
-              context.l10n.suunto,
-              ref.watch(suuntoConnectedProvider).valueOrNull ?? false,
-              const ConnectSuuntoScreen(fromOnboarding: true),
-            ),
+            if (!communityEdition)
+              (
+                ConnectionType.suunto,
+                context.l10n.suunto,
+                ref.watch(suuntoConnectedProvider).valueOrNull ?? false,
+                const ConnectSuuntoScreen(fromOnboarding: true),
+              ),
             (
               ConnectionType.myWhoosh,
               'MyWhoosh',
@@ -124,11 +129,12 @@ class ConnectionsTab extends ConsumerWidget {
           // Blood pressure over Bluetooth: the Hilo pod, the Hilo cuff and
           // each Omron or standard monitor, one entry each.
           SectionLabel(context.l10n.bpMonitorsTitle),
-          _Connection(
-            'Hilo Pod',
-            ref.watch(hiloBleConnectedProvider).valueOrNull ?? false,
-            const ConnectHiloBleScreen(fromOnboarding: true),
-          ),
+          if (!communityEdition)
+            _Connection(
+              'Hilo Pod',
+              ref.watch(hiloBleConnectedProvider).valueOrNull ?? false,
+              const ConnectHiloBleScreen(fromOnboarding: true),
+            ),
           const BpConnectionTiles(),
           if (systemHealthAvailable) ...[
             SwitchListTile(

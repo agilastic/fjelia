@@ -1,3 +1,4 @@
+import '../../config/build_features.dart';
 import '../../widgets/strava_import_sheet.dart';
 import '../../l10n/formats.dart';
 import '../../l10n/l10n_ext.dart';
@@ -463,13 +464,14 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
             l.plusBpLog,
             l.plusBpLogHint,
           ),
-          _Entry(
-            'Add Hilo BP report (PDF)',
-            Icons.picture_as_pdf_rounded,
-            l.plusBpReport,
-            l.plusBpReportHint,
-            badge: 'PDF',
-          ),
+          if (pdfReportsAvailable)
+            _Entry(
+              'Add Hilo BP report (PDF)',
+              Icons.picture_as_pdf_rounded,
+              l.plusBpReport,
+              l.plusBpReportHint,
+              badge: 'PDF',
+            ),
           _Entry(
             'SpO₂ / Pulse Oximeter',
             Icons.air_rounded,

@@ -5381,5 +5381,13 @@
   "absenceOpenEndHint": "Fjelia zwalnia kolejne dni, dopóki nie powiesz, że znów jesteś w formie.",
   "absenceSince": "Od {date}",
   "absenceFitAgain": "Znów w formie",
-  "absenceOpenCard": "Od {date} (dzień {days}). Treningi pozostają odwołane dzień po dniu; gdy znów będziesz w formie, pierwszy tydzień jest lekki."
+  "absenceOpenCard": "Od {date} (dzień {days}). Treningi pozostają odwołane dzień po dniu; gdy znów będziesz w formie, pierwszy tydzień jest lekki.",
+  "ownKeys": "Własne klucze",
+  "ownKeysIntro": "Fjelia CE korzysta z tych usług za pomocą Twoich kluczy. Pozostają na tym telefonie i trafiają tylko do właściwej usługi.",
+  "ownKeysGet": "Uzyskaj klucz",
+  "ownKeysSaved": "Zapisano. Zapisz puste pole, aby go usunąć.",
+  "ownKeysPolarHint": "Utwórz klienta AccessLink i podaj {url} jako adres przekierowania. Następnie wpisz tutaj jego identyfikator klienta i sekret; logowanie kontem Polar odbywa się w Połączeniach.",
+  "ownKeysWeatherHint": "Opcjonalnie: dodatkowe źródło pogody obok Open-Meteo i Bright Sky.",
+  "ownKeysAiHint": "Klucze AI wpisujesz w {section}.",
+  "aiOnboardingMoreBodyCloud": "Własny dostawca w chmurze z kluczem API"
 }

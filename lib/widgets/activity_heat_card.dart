@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import '../theme/fjelia_style.dart';
 import '../l10n/l10n_ext.dart';
 import '../providers/activity_heat_provider.dart';
@@ -124,19 +126,32 @@ class ActivityHeatCard extends ConsumerWidget {
             style: TextStyle(fontSize: 12, color: fjInk70),
           ),
           const SizedBox(height: 14),
-          GridView.count(
-            crossAxisCount: 2,
-            childAspectRatio: 2.3,
-            mainAxisSpacing: 8,
-            crossAxisSpacing: 8,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            children: [
-              cell(context.l10n.temp, temperature),
-              cell(context.l10n.humidity2, '${valueText(h.humidityPct)}%'),
-              cell(context.l10n.pressure, '${valueText(h.pressureHpa)} hPa'),
-              cell(context.l10n.wetBulb, '${valueText(h.wetBulbC, 1)} °C'),
-            ],
+          LayoutBuilder(
+            builder: (context, box) {
+              // Narrow phones or a large font grow the cells to fit both lines.
+              final scale = MediaQuery.textScalerOf(context);
+              final content =
+                  28 + 5 + scale.scale(9) * 1.5 + scale.scale(15) * 1.5;
+              return GridView(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8,
+                  mainAxisExtent: max((box.maxWidth - 8) / 2 / 2.3, content),
+                ),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                children: [
+                  cell(context.l10n.temp, temperature),
+                  cell(context.l10n.humidity2, '${valueText(h.humidityPct)}%'),
+                  cell(
+                    context.l10n.pressure,
+                    '${valueText(h.pressureHpa)} hPa',
+                  ),
+                  cell(context.l10n.wetBulb, '${valueText(h.wetBulbC, 1)} °C'),
+                ],
+              );
+            },
           ),
           if (samples.length > 1) ...[
             const SizedBox(height: 26),

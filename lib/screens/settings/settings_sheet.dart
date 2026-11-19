@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../config/build_features.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/fjelia_edition_provider.dart';
 import '../../providers/fjelia_pro_provider.dart';
@@ -19,6 +20,7 @@ import 'fjelia_pro_sheet.dart';
 import 'system_tab.dart';
 import 'language_page.dart';
 import 'credits_page.dart';
+import 'own_keys_page.dart';
 import '../onboarding/welcome_screen.dart';
 
 class SettingsSheet extends ConsumerWidget {
@@ -104,6 +106,15 @@ class SettingsSheet extends ConsumerWidget {
                 Colors.purpleAccent,
                 const AiSettingsTab(),
               ),
+              // Fjelia CE: Polar and weather keys of the user's own.
+              if (communityEdition)
+                _row(
+                  context,
+                  l10n.ownKeys,
+                  Icons.key_outlined,
+                  Colors.amber,
+                  const OwnKeysPage(),
+                ),
               _row(
                 context,
                 l10n.system,

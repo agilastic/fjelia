@@ -9321,4 +9321,34 @@ class AppLocalizationsFi extends AppLocalizations {
   String absenceOpenCard(String date, int days) {
     return '$date alkaen (päivä $days). Harjoitukset pysyvät peruttuina päivä kerrallaan; kun olet taas kunnossa, ensimmäinen viikko on kevyt.';
   }
+
+  @override
+  String get ownKeys => 'Omat avaimet';
+
+  @override
+  String get ownKeysIntro =>
+      'Fjelia CE käyttää näihin palveluihin omia avaimiasi. Ne pysyvät tässä puhelimessa ja lähetetään vain omalle palvelulleen.';
+
+  @override
+  String get ownKeysGet => 'Hae avain';
+
+  @override
+  String get ownKeysSaved => 'Tallennettu. Poista tallentamalla tyhjä kenttä.';
+
+  @override
+  String ownKeysPolarHint(String url) {
+    return 'Luo AccessLink-asiakas ja anna uudelleenohjaus-URL-osoitteeksi $url. Syötä sitten tähän sen asiakastunnus ja salaisuus; Polar-tilillä kirjaudutaan kohdassa Yhteydet.';
+  }
+
+  @override
+  String get ownKeysWeatherHint =>
+      'Valinnainen: yksi sääpalvelu lisää Open-Meteon ja Bright Skyn lisäksi.';
+
+  @override
+  String ownKeysAiHint(String section) {
+    return 'Tekoälyavaimet syötetään kohdassa $section.';
+  }
+
+  @override
+  String get aiOnboardingMoreBodyCloud => 'Oma pilvipalvelusi ja API-avain';
 }

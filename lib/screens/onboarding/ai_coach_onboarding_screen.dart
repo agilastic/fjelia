@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../config/build_features.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../providers/ai_coach_provider.dart';
 import '../../services/ai_coach_settings.dart';
@@ -243,46 +244,56 @@ class _AiCoachOnboardingScreenState
                                         letterSpacing: 1.6,
                                       ),
                                     ),
-                                    const SizedBox(height: 12),
-                                    _CoachOption(
-                                      key: const ValueKey('onboarding-free-ai'),
-                                      title: l10n.freeAi,
-                                      detail: l10n.aiOnboardingFreeDetail,
-                                      description: l10n.aiOnboardingFreeBody,
-                                      badge: _freeAvailable
-                                          ? l10n.aiOnboardingRecommended
-                                          : null,
-                                      unavailable: _freeAvailable
-                                          ? null
-                                          : l10n.aiOnboardingUnavailable,
-                                      icon: Icons.auto_awesome_rounded,
-                                      accent: _mint,
-                                      selected: _selected == AiProvider.freeAi,
-                                      onTap: _saving || !_freeAvailable
-                                          ? null
-                                          : () => _select(AiProvider.freeAi),
-                                    ),
-                                    const SizedBox(height: 12),
-                                    _CoachOption(
-                                      key: const ValueKey(
-                                        'onboarding-apple-ai',
+                                    // Fjelia CE has no Free AI.
+                                    if (!communityEdition) ...[
+                                      const SizedBox(height: 12),
+                                      _CoachOption(
+                                        key: const ValueKey(
+                                          'onboarding-free-ai',
+                                        ),
+                                        title: l10n.freeAi,
+                                        detail: l10n.aiOnboardingFreeDetail,
+                                        description: l10n.aiOnboardingFreeBody,
+                                        badge: _freeAvailable
+                                            ? l10n.aiOnboardingRecommended
+                                            : null,
+                                        unavailable: _freeAvailable
+                                            ? null
+                                            : l10n.aiOnboardingUnavailable,
+                                        icon: Icons.auto_awesome_rounded,
+                                        accent: _mint,
+                                        selected:
+                                            _selected == AiProvider.freeAi,
+                                        onTap: _saving || !_freeAvailable
+                                            ? null
+                                            : () => _select(AiProvider.freeAi),
                                       ),
-                                      title: l10n.appleIntelligence,
-                                      detail: l10n.aiOnboardingOnDevice,
-                                      unavailable: _appleAvailable
-                                          ? null
-                                          : l10n.aiOnboardingUnavailable,
-                                      icon: Icons.apple_rounded,
-                                      accent: _lilac,
-                                      selected:
-                                          _selected ==
-                                          AiProvider.appleIntelligence,
-                                      onTap: _saving || !_appleAvailable
-                                          ? null
-                                          : () => _select(
-                                              AiProvider.appleIntelligence,
-                                            ),
-                                    ),
+                                    ],
+                                    // Apple's on-device model only exists on
+                                    // Apple devices.
+                                    if (onDeviceAiAvailable) ...[
+                                      const SizedBox(height: 12),
+                                      _CoachOption(
+                                        key: const ValueKey(
+                                          'onboarding-apple-ai',
+                                        ),
+                                        title: l10n.appleIntelligence,
+                                        detail: l10n.aiOnboardingOnDevice,
+                                        unavailable: _appleAvailable
+                                            ? null
+                                            : l10n.aiOnboardingUnavailable,
+                                        icon: Icons.apple_rounded,
+                                        accent: _lilac,
+                                        selected:
+                                            _selected ==
+                                            AiProvider.appleIntelligence,
+                                        onTap: _saving || !_appleAvailable
+                                            ? null
+                                            : () => _select(
+                                                AiProvider.appleIntelligence,
+                                              ),
+                                      ),
+                                    ],
                                     const SizedBox(height: 12),
                                     _CoachOption(
                                       key: const ValueKey('onboarding-more-ai'),
@@ -295,7 +306,9 @@ class _AiCoachOnboardingScreenState
                                                     _settings!.model,
                                                   ).label
                                                 : _settings!.model
-                                          : l10n.aiOnboardingMoreBody,
+                                          : onDeviceAiAvailable
+                                          ? l10n.aiOnboardingMoreBody
+                                          : l10n.aiOnboardingMoreBodyCloud,
                                       icon: Icons.tune_rounded,
                                       accent: const Color(0xFF9FB8FF),
                                       selected: _advancedSelected,

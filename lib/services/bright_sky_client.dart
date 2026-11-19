@@ -104,7 +104,7 @@ class BrightSkyClient extends GlobalWeatherClient {
       points.add(OpenMeteoPoint(
         time: local,
         temperatureC: d('temperature', 0.0),
-        humidityPct: d('relative_humidity', 0.0),
+        humidityPct: _humidity(row),
         pressureHpa: d('pressure_msl', 1013.0),
         precipitationMm: d('precipitation', 0.0),
         precipitationProbability:
@@ -234,4 +234,16 @@ class BrightSkyClient extends GlobalWeatherClient {
         b -
         1524.5;
   }
+}
+
+/// Forecast hours (MOSMIX) often come without relative humidity; it follows
+/// from temperature and dew point (Magnus formula) instead of reading as 0 %.
+double _humidity(Map<String, dynamic> row) {
+  final rh = (row['relative_humidity'] as num?)?.toDouble();
+  if (rh != null) return rh;
+  final t = (row['temperature'] as num?)?.toDouble();
+  final dew = (row['dew_point'] as num?)?.toDouble();
+  if (t == null || dew == null) return 0;
+  double e(double c) => math.exp(17.625 * c / (243.04 + c));
+  return (100 * e(dew) / e(t)).clamp(0, 100).toDouble();
 }

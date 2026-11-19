@@ -9291,4 +9291,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String absenceOpenCard(String date, int days) {
     return 'Since $date (day $days). Sessions stay cancelled day by day; once you are fit again, the first week back is easy.';
   }
+
+  @override
+  String get ownKeys => 'Own keys';
+
+  @override
+  String get ownKeysIntro =>
+      'Fjelia CE talks to these services with your own keys. They stay on this phone and are only sent to the service they belong to.';
+
+  @override
+  String get ownKeysGet => 'Get key';
+
+  @override
+  String get ownKeysSaved => 'Saved. Save an empty field to remove it.';
+
+  @override
+  String ownKeysPolarHint(String url) {
+    return 'Create an AccessLink client and enter $url as its redirect URL. Then enter its client ID and secret here; you sign in with your Polar account under Connections.';
+  }
+
+  @override
+  String get ownKeysWeatherHint =>
+      'Optional: one more weather source besides Open-Meteo and Bright Sky.';
+
+  @override
+  String ownKeysAiHint(String section) {
+    return 'AI keys are entered under $section.';
+  }
+
+  @override
+  String get aiOnboardingMoreBodyCloud => 'Your own cloud provider and API key';
 }

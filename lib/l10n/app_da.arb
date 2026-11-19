@@ -4218,5 +4218,13 @@
   "absenceOpenEndHint": "Fjelia holder dagene fri én ad gangen, indtil du siger, at du er rask igen.",
   "absenceSince": "Siden {date}",
   "absenceFitAgain": "Rask igen",
-  "absenceOpenCard": "Siden {date} (dag {days}). Træningerne forbliver aflyst dag for dag; når du er rask igen, er den første uge let."
+  "absenceOpenCard": "Siden {date} (dag {days}). Træningerne forbliver aflyst dag for dag; når du er rask igen, er den første uge let.",
+  "ownKeys": "Egne nøgler",
+  "ownKeysIntro": "Fjelia CE bruger dine egne nøgler til disse tjenester. De bliver på denne telefon og sendes kun til den tjeneste, de hører til.",
+  "ownKeysGet": "Hent nøgle",
+  "ownKeysSaved": "Gemt. Gem et tomt felt for at fjerne den.",
+  "ownKeysPolarHint": "Opret en AccessLink-klient, og angiv {url} som omdirigerings-URL. Indtast derefter klient-id og hemmelighed her; du logger ind med din Polar-konto under Forbindelser.",
+  "ownKeysWeatherHint": "Valgfrit: endnu en vejrkilde ud over Open-Meteo og Bright Sky.",
+  "ownKeysAiHint": "AI-nøgler indtastes under {section}.",
+  "aiOnboardingMoreBodyCloud": "Din egen cloududbyder med API-nøgle"
 }

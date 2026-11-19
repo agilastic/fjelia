@@ -4,6 +4,7 @@ import 'package:fjelia_service/fjelia_service.dart' as service;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
+import '../config/build_features.dart';
 import '../config/free_ai.dart';
 import 'local_model_catalog.dart';
 
@@ -77,9 +78,12 @@ extension AiProviderLabel on AiProvider {
 }
 
 /// Apple devices prefer Apple Intelligence; its runtime availability is checked
-/// by the settings notifier. Other platforms start with Free AI.
+/// by the settings notifier. Other platforms start with Free AI, Fjelia CE
+/// (no Free AI) with Mistral, which waits for the user's own key.
 AiProvider get defaultAiProvider => Platform.isIOS || Platform.isMacOS
     ? AiProvider.appleIntelligence
+    : communityEdition
+    ? AiProvider.mistral
     : AiProvider.freeAi;
 
 class AiCoachSettings {

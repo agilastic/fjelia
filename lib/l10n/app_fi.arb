@@ -4218,5 +4218,13 @@
   "absenceOpenEndHint": "Fjelia pitää päivät vapaina yksi kerrallaan, kunnes kerrot olevasi taas kunnossa.",
   "absenceSince": "{date} alkaen",
   "absenceFitAgain": "Taas kunnossa",
-  "absenceOpenCard": "{date} alkaen (päivä {days}). Harjoitukset pysyvät peruttuina päivä kerrallaan; kun olet taas kunnossa, ensimmäinen viikko on kevyt."
+  "absenceOpenCard": "{date} alkaen (päivä {days}). Harjoitukset pysyvät peruttuina päivä kerrallaan; kun olet taas kunnossa, ensimmäinen viikko on kevyt.",
+  "ownKeys": "Omat avaimet",
+  "ownKeysIntro": "Fjelia CE käyttää näihin palveluihin omia avaimiasi. Ne pysyvät tässä puhelimessa ja lähetetään vain omalle palvelulleen.",
+  "ownKeysGet": "Hae avain",
+  "ownKeysSaved": "Tallennettu. Poista tallentamalla tyhjä kenttä.",
+  "ownKeysPolarHint": "Luo AccessLink-asiakas ja anna uudelleenohjaus-URL-osoitteeksi {url}. Syötä sitten tähän sen asiakastunnus ja salaisuus; Polar-tilillä kirjaudutaan kohdassa Yhteydet.",
+  "ownKeysWeatherHint": "Valinnainen: yksi sääpalvelu lisää Open-Meteon ja Bright Skyn lisäksi.",
+  "ownKeysAiHint": "Tekoälyavaimet syötetään kohdassa {section}.",
+  "aiOnboardingMoreBodyCloud": "Oma pilvipalvelusi ja API-avain"
 }

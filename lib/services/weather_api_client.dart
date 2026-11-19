@@ -13,7 +13,7 @@ class WeatherApiClient extends GlobalWeatherClient {
   final http.Client _http;
 
   static const _baseUrl = 'https://api.weatherapi.com/v1';
-  static const _apiKey = Secrets.weatherApiKey;
+  static String get _apiKey => Secrets.weatherApiKey;
 
   @override
   String get serviceName => 'WeatherAPI';

@@ -1,7 +1,18 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
+}
+
+// Fjelia CE (scripts/build-android-ce.sh: -P fjelia.ce=true): own app ID,
+// name and sign-in scheme, so it installs next to Fjelia, signed with the CE
+// release key from the git-ignored android/key-ce.properties when present.
+val communityEdition = project.findProperty("fjelia.ce") == "true"
+val ceSigning = Properties().apply {
+    val file = rootProject.file("key-ce.properties")
+    if (communityEdition && file.exists()) file.inputStream().use { load(it) }
 }
 
 android {
@@ -35,13 +46,27 @@ android {
         // flag during build.
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        if (communityEdition) applicationIdSuffix = ".ce"
+        manifestPlaceholders["appLabel"] = if (communityEdition) "Fjelia CE" else "fjelia"
+        manifestPlaceholders["authScheme"] = if (communityEdition) "fjeliace" else "fjelia"
+    }
+
+    signingConfigs {
+        if (!ceSigning.isEmpty) {
+            create("ce") {
+                storeFile = file(ceSigning.getProperty("storeFile"))
+                storePassword = ceSigning.getProperty("storePassword")
+                keyAlias = ceSigning.getProperty("keyAlias")
+                keyPassword = ceSigning.getProperty("keyPassword")
+            }
+        }
     }
 
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.findByName("ce") ?: signingConfigs.getByName("debug")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",

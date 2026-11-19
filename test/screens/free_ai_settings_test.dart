@@ -51,6 +51,8 @@ class _Briefing extends AiBriefingNotifier {
 }
 
 void main() {
+  // Apple Intelligence and the MLX models are only offered on Apple devices.
+  final onApple = TargetPlatformVariant.only(TargetPlatform.iOS);
   setUp(() {
     FlutterSecureStorage.setMockInitialValues({});
     setActiveLocale(const Locale('de'));
@@ -86,40 +88,42 @@ void main() {
     );
   }
 
-  testWidgets('Free AI is first and selectable on an Apple-compatible device', (
-    tester,
-  ) async {
-    final container = await showSettings(tester, appleAvailable: true);
-    final chips = tester
-        .widgetList<ChoiceChip>(find.byType(ChoiceChip))
-        .toList();
-    expect((chips.first.label as Text).data, 'Free AI');
-    expect(chips.first.selected, isFalse);
-    expect(chips[1].selected, isTrue);
+  testWidgets(
+    'Free AI is first and selectable on an Apple-compatible device',
+    variant: onApple,
+    (tester) async {
+      final container = await showSettings(tester, appleAvailable: true);
+      final chips = tester
+          .widgetList<ChoiceChip>(find.byType(ChoiceChip))
+          .toList();
+      expect((chips.first.label as Text).data, 'Free AI');
+      expect(chips.first.selected, isFalse);
+      expect(chips[1].selected, isTrue);
 
-    await tester.tap(find.widgetWithText(ChoiceChip, 'Free AI'));
-    await tester.pumpAndSettle();
-    final settings = await container.read(aiCoachSettingsProvider.future);
-    expect(settings.provider, AiProvider.freeAi);
-    expect(settings.ready, isTrue);
-    expect(settings.consentMode, AiConsentMode.session);
-    expect(find.text('API-Schlüssel'), findsNothing);
-    expect(find.byType(DropdownButtonFormField<String>), findsNothing);
-    expect(find.textContaining('ai.fjelia.com'), findsOneWidget);
-    expect(find.text('Modell herunterladen'), findsNothing);
-    final askOnce = find.widgetWithText(
-      SwitchListTile,
-      'Einmal pro Chat-Sitzung fragen',
-    );
-    await tester.scrollUntilVisible(
-      askOnce,
-      300,
-      scrollable: find.byType(Scrollable).first,
-    );
-    await tester.pumpAndSettle();
-    expect(tester.widget<SwitchListTile>(askOnce).value, isTrue);
-    expect(tester.takeException(), isNull);
-  });
+      await tester.tap(find.widgetWithText(ChoiceChip, 'Free AI'));
+      await tester.pumpAndSettle();
+      final settings = await container.read(aiCoachSettingsProvider.future);
+      expect(settings.provider, AiProvider.freeAi);
+      expect(settings.ready, isTrue);
+      expect(settings.consentMode, AiConsentMode.session);
+      expect(find.text('API-Schlüssel'), findsNothing);
+      expect(find.byType(DropdownButtonFormField<String>), findsNothing);
+      expect(find.textContaining('ai.fjelia.com'), findsOneWidget);
+      expect(find.text('Modell herunterladen'), findsNothing);
+      final askOnce = find.widgetWithText(
+        SwitchListTile,
+        'Einmal pro Chat-Sitzung fragen',
+      );
+      await tester.scrollUntilVisible(
+        askOnce,
+        300,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.pumpAndSettle();
+      expect(tester.widget<SwitchListTile>(askOnce).value, isTrue);
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets('without Apple Intelligence Free AI is selected automatically', (
     tester,

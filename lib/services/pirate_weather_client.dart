@@ -12,7 +12,7 @@ class PirateWeatherClient extends GlobalWeatherClient {
 
   final http.Client _http;
 
-  static const _apiKey = Secrets.pirateWeatherKey;
+  static String get _apiKey => Secrets.pirateWeatherKey;
 
   @override
   String get serviceName => 'Pirate Weather';

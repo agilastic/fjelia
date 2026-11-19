@@ -5381,5 +5381,13 @@
   "absenceOpenEndHint": "Fjelia houdt de dagen een voor een vrij tot je zegt dat je weer fit bent.",
   "absenceSince": "Sinds {date}",
   "absenceFitAgain": "Weer fit",
-  "absenceOpenCard": "Sinds {date} (dag {days}). Trainingen blijven dag voor dag geannuleerd; zodra je weer fit bent, is de eerste week rustig."
+  "absenceOpenCard": "Sinds {date} (dag {days}). Trainingen blijven dag voor dag geannuleerd; zodra je weer fit bent, is de eerste week rustig.",
+  "ownKeys": "Eigen sleutels",
+  "ownKeysIntro": "Fjelia CE gebruikt je eigen sleutels voor deze diensten. Ze blijven op deze telefoon en gaan alleen naar de dienst waar ze bij horen.",
+  "ownKeysGet": "Sleutel ophalen",
+  "ownKeysSaved": "Opgeslagen. Sla een leeg veld op om hem te verwijderen.",
+  "ownKeysPolarHint": "Maak een AccessLink-client aan en vul {url} in als redirect-URL. Vul hier daarna de client-ID en het secret in; inloggen met je Polar-account doe je onder Verbindingen.",
+  "ownKeysWeatherHint": "Optioneel: nog een weerbron naast Open-Meteo en Bright Sky.",
+  "ownKeysAiHint": "AI-sleutels vul je in onder {section}.",
+  "aiOnboardingMoreBodyCloud": "Je eigen cloudaanbieder met API-sleutel"
 }

@@ -135,6 +135,44 @@ manual build, pass that file with an additional `--dart-define-from-file`.
 The public stub always supplies an empty Free AI credential; the shared key
 does not belong in this repository, its example configuration, or user settings.
 
+## Fjelia CE (Android community edition)
+
+Fjelia CE is the open Android build of this repository without the private
+service package: no Free AI / ProAI, no FjeliaPro and its Pro features, no
+Hilo/Aktiia, Suunto or Renpho cloud. It installs next to Fjelia
+(`com.aeh.fjelia.ce`, "Fjelia CE", sign-in scheme `fjeliace://`).
+
+Garmin, COROS and MyWhoosh (your account), Bluetooth devices (Polar H10,
+Omron/standard BP monitors, Concept2/FTMS, RENPHO scale), Strava archive
+import, Open-Meteo and Bright Sky weather work without any key. Everything else uses **your own keys**:
+
+| Service | Where to get the key | Where it goes |
+| --- | --- | --- |
+| Polar Flow | <https://admin.polaraccesslink.com>: create an AccessLink client, redirect URL `fjeliace://polar-callback` | Settings → Own keys (client ID and secret) |
+| Pirate Weather (optional) | <https://pirateweather.net> | Settings → Own keys |
+| WeatherAPI (optional) | <https://www.weatherapi.com/signup.aspx> | Settings → Own keys |
+| Mistral | <https://console.mistral.ai> | Settings → AI & More |
+| OpenAI | <https://platform.openai.com/api-keys> | Settings → AI & More |
+| Anthropic | <https://console.anthropic.com> | Settings → AI & More |
+| Gemini | <https://aistudio.google.com/apikey> | Settings → AI & More |
+| DeepSeek | <https://platform.deepseek.com> | Settings → AI & More |
+
+Keys stay on the phone (Android Keystore) and only go to their own service.
+Without an AI key the coach is off and briefings show a summary without AI.
+
+Install the APK for your phone from the GitHub release (`app-arm64-v8a-release.apk`
+for almost all current phones). To build it yourself:
+
+```bash
+scripts/build-android-ce.sh               # split APKs, no service keys inside
+scripts/build-android-ce.sh --with-keys   # Polar/weather keys from secrets.json, for yourself only
+scripts/test-pages-android-ce.sh          # walk every page of CE on a connected phone
+```
+
+Release signing reads the git-ignored `android/key-ce.properties`
+(`storeFile`, `storePassword`, `keyAlias`, `keyPassword`); keep that keystore
+safe, Android only installs updates signed with the same key.
+
 ## Disclaimer
 
 - **Not a medical device.** Values and recommendations (recovery, readiness,

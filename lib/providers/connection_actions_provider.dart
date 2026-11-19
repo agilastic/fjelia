@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 
+import '../config/build_features.dart';
 import '../models/device_connection.dart';
 import 'package:fjelia_service_api/fjelia_service_api.dart';
 import '../api/garmin_client.dart';
@@ -93,7 +94,7 @@ class ConnectionActions {
     try {
       final result = await FlutterWebAuth2.authenticate(
         url: PolarService.buildAuthUrl(),
-        callbackUrlScheme: 'fjelia',
+        callbackUrlScheme: authCallbackScheme,
       );
       final code = Uri.parse(result).queryParameters['code'];
       if (code == null) {

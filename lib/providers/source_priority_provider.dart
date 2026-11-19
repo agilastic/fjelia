@@ -3,14 +3,20 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../config/build_features.dart';
 import '../services/source_priority_service.dart';
 export '../services/source_priority_service.dart';
 
 const _storage = FlutterSecureStorage();
 const _key = 'source_priority_v3';
 
+// Without Apple Health (Android) its entry is not offered for ordering.
 Map<String, List<String>> _deepCopy(Map<String, List<String>> m) => {
-  for (final e in m.entries) e.key: List<String>.of(e.value),
+  for (final e in m.entries)
+    e.key: [
+      for (final s in e.value)
+        if (systemHealthAvailable || s != 'health_connect') s,
+    ],
 };
 
 class SourcePriorityNotifier extends AsyncNotifier<Map<String, List<String>>> {
@@ -30,7 +36,7 @@ class SourcePriorityNotifier extends AsyncNotifier<Map<String, List<String>>> {
       ];
       result[group] = merged;
     }
-    return result;
+    return _deepCopy(result);
   }
 
   Future<void> reorder(SourceGroup group, int oldIndex, int newIndex) async {

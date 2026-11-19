@@ -5449,5 +5449,15 @@
   "@absenceSince": {"placeholders": {"date": {"type": "String"}}},
   "absenceFitAgain": "Fit again",
   "absenceOpenCard": "Since {date} (day {days}). Sessions stay cancelled day by day; once you are fit again, the first week back is easy.",
-  "@absenceOpenCard": {"placeholders": {"date": {"type": "String"}, "days": {"type": "int"}}}
+  "@absenceOpenCard": {"placeholders": {"date": {"type": "String"}, "days": {"type": "int"}}},
+  "ownKeys": "Own keys",
+  "ownKeysIntro": "Fjelia CE talks to these services with your own keys. They stay on this phone and are only sent to the service they belong to.",
+  "ownKeysGet": "Get key",
+  "ownKeysSaved": "Saved. Save an empty field to remove it.",
+  "ownKeysPolarHint": "Create an AccessLink client and enter {url} as its redirect URL. Then enter its client ID and secret here; you sign in with your Polar account under Connections.",
+  "@ownKeysPolarHint": {"placeholders": {"url": {"type": "String"}}},
+  "ownKeysWeatherHint": "Optional: one more weather source besides Open-Meteo and Bright Sky.",
+  "ownKeysAiHint": "AI keys are entered under {section}.",
+  "@ownKeysAiHint": {"placeholders": {"section": {"type": "String"}}},
+  "aiOnboardingMoreBodyCloud": "Your own cloud provider and API key"
 }

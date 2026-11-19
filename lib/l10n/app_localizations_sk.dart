@@ -9330,4 +9330,35 @@ class AppLocalizationsSk extends AppLocalizations {
   String absenceOpenCard(String date, int days) {
     return 'Od $date (deň $days). Tréningy zostávajú zrušené deň po dni; keď budeš zase fit, prvý týždeň je ľahký.';
   }
+
+  @override
+  String get ownKeys => 'Vlastné kľúče';
+
+  @override
+  String get ownKeysIntro =>
+      'Fjelia CE používa pre tieto služby tvoje vlastné kľúče. Zostávajú v tomto telefóne a posielajú sa len príslušnej službe.';
+
+  @override
+  String get ownKeysGet => 'Získať kľúč';
+
+  @override
+  String get ownKeysSaved => 'Uložené. Uložením prázdneho poľa ho odstrániš.';
+
+  @override
+  String ownKeysPolarHint(String url) {
+    return 'Vytvor klienta AccessLink a ako URL presmerovania zadaj $url. Potom sem zadaj jeho ID klienta a tajný kľúč; prihlásenie kontom Polar je v časti Pripojenia.';
+  }
+
+  @override
+  String get ownKeysWeatherHint =>
+      'Voliteľné: ďalší zdroj počasia popri Open-Meteo a Bright Sky.';
+
+  @override
+  String ownKeysAiHint(String section) {
+    return 'Kľúče AI zadáš v časti $section.';
+  }
+
+  @override
+  String get aiOnboardingMoreBodyCloud =>
+      'Vlastný cloudový poskytovateľ s kľúčom API';
 }

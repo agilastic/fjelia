@@ -59,6 +59,31 @@ Uploading screenshots for a locale creates that localization in App Store
 Connect, so its description, keywords, support URL and release notes must be
 uploaded too (from `ios/metadata/`), or the version cannot be submitted.
 
+To open every page of the app on a phone with your data, scroll each one and
+list the pages on which Flutter reported an exception or overflow (with a
+screenshot of each page):
+
+```bash
+fjelia/scripts/test-pages-all.sh      # every connected phone, one after the other
+fjelia/scripts/test-pages-ios.sh      # FJELIA_IOS_DEVICE
+fjelia/scripts/test-pages-ios-i11.sh  # FJELIA_IOS_DEVICEI11
+fjelia/scripts/test-pages-android.sh  # the adb phone; Android 7 gets --legacy --ignore-certs
+fjelia/scripts/test-pages.sh ios|android [--device ID] [--out DIR]   # the underlying runner
+```
+
+Fjelia CE, the Android community edition (see the README), has its own
+scripts. Both build on the public service stub and put the private
+`fjelia-service` override back afterwards:
+
+```bash
+fjelia/scripts/build-android-ce.sh              # split APKs for GitHub Releases, no keys inside
+fjelia/scripts/build-android-ce.sh --with-keys  # with your secrets.json keys, never publish
+fjelia/scripts/test-pages-android-ce.sh         # page walk of CE
+```
+
+The wrappers file screenshots and `walk.log` under `build/test-pages/<phone>/`.
+Each exits with 1 when a page had problems.
+
 Settings → System → Developer is hidden by default. `dev-ios.sh` enables it
 with `FJELIA_DEVELOPER_MENU=true`, including when using `--release`. The
 distribution scripts strip this switch from define files, so tester builds

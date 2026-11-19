@@ -9354,4 +9354,35 @@ class AppLocalizationsCa extends AppLocalizations {
   String absenceOpenCard(String date, int days) {
     return 'Des de $date (dia $days). Les sessions continuen cancel·lades dia a dia; quan tornis a estar bé, la primera setmana és suau.';
   }
+
+  @override
+  String get ownKeys => 'Claus pròpies';
+
+  @override
+  String get ownKeysIntro =>
+      'Fjelia CE fa servir les teves claus per a aquests serveis. Es queden en aquest telèfon i només s’envien al servei corresponent.';
+
+  @override
+  String get ownKeysGet => 'Obtenir la clau';
+
+  @override
+  String get ownKeysSaved => 'Desada. Desa un camp buit per eliminar-la.';
+
+  @override
+  String ownKeysPolarHint(String url) {
+    return 'Crea un client d’AccessLink i indica $url com a URL de redirecció. Després introdueix aquí l’ID de client i el secret; l’inici de sessió amb el teu compte Polar es fa a Connexions.';
+  }
+
+  @override
+  String get ownKeysWeatherHint =>
+      'Opcional: una altra font meteorològica a més d’Open-Meteo i Bright Sky.';
+
+  @override
+  String ownKeysAiHint(String section) {
+    return 'Les claus d’IA s’introdueixen a $section.';
+  }
+
+  @override
+  String get aiOnboardingMoreBodyCloud =>
+      'El teu propi proveïdor al núvol amb clau API';
 }
