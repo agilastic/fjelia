@@ -19,7 +19,8 @@ Usage: scripts/release-ios.sh [--team TEAM_ID] [--build-number N] [--no-upload]
 Builds a signed release IPA into build/ios/ipa/. Unless --no-upload is given it
 is uploaded to App Store Connect (TestFlight) in the same step.
 
-Build number defaults to the git commit count (must increase on every upload).
+Build number defaults to one above the last upload from this checkout
+(scripts/.ios-last-build), or the git commit count if that is higher.
 
 Authentication for the upload, either:
   * an App Store Connect API key: set ASC_KEY_ID, ASC_ISSUER_ID and ASC_KEY_PATH
@@ -29,7 +30,10 @@ Team: --team, FJELIA_TEAM_ID, or the project's signing team.
 EOF
 }
 team="${FJELIA_TEAM_ID:-}"
-build_number="$(git rev-list --count HEAD)"
+# Git-ignored: the commit count alone falls behind once several builds are
+# uploaded from one commit, and App Store Connect refuses a used number.
+last_build_file=scripts/.ios-last-build
+build_number=""
 upload=1
 while [ "$#" -gt 0 ]; do
   case "$1" in
@@ -42,6 +46,12 @@ while [ "$#" -gt 0 ]; do
     *) usage >&2; exit 2 ;;
   esac
 done
+if [ -z "$build_number" ]; then
+  commits="$(git rev-list --count HEAD)"
+  last="$(cat "$last_build_file" 2>/dev/null || echo 0)"
+  build_number=$(( commits > last ? commits : last + 1 ))
+fi
+echo "Build number: $build_number"
 command -v flutter >/dev/null
 command -v xcodebuild >/dev/null
 bash scripts/ensure-metal-toolchain.sh
@@ -93,5 +103,6 @@ if [ "$upload" -eq 1 ]; then
   xcodebuild -exportArchive -archivePath build/ios/archive/Runner.xcarchive \
     -exportOptionsPlist "$options" -exportPath build/ios/upload \
     -allowProvisioningUpdates ${auth[@]+"${auth[@]}"}
+  echo "$build_number" >"$last_build_file"
   echo "Uploaded build $build_number. It appears in TestFlight after Apple's processing (~5-30 min)."
 fi

@@ -50,6 +50,7 @@ app.*.map.json
 # Build-time credentials (see README)
 secrets.json
 scripts/local.env
+scripts/.ios-last-build
 ios/Flutter/Local.xcconfig
 
 #Images
