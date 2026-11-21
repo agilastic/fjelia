@@ -9361,4 +9361,12 @@ class AppLocalizationsSk extends AppLocalizations {
   @override
   String get aiOnboardingMoreBodyCloud =>
       'Vlastný cloudový poskytovateľ s kľúčom API';
+
+  @override
+  String get raceLibraryWhichDistance => 'Ktorá trať?';
+
+  @override
+  String raceLibraryFilledFrom(String source) {
+    return 'Vyplnené z knižnice pretekov ($source). Pred registráciou si over web organizátora.';
+  }
 }

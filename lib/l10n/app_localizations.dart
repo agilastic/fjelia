@@ -16143,6 +16143,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your own cloud provider and API key'**
   String get aiOnboardingMoreBodyCloud;
+
+  /// No description provided for @raceLibraryWhichDistance.
+  ///
+  /// In en, this message translates to:
+  /// **'Which distance?'**
+  String get raceLibraryWhichDistance;
+
+  /// No description provided for @raceLibraryFilledFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'Filled in from the race library ({source}). Check the organiser\'s website before you register.'**
+  String raceLibraryFilledFrom(String source);
 }
 
 class _AppLocalizationsDelegate

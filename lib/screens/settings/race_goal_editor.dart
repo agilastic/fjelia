@@ -16,6 +16,8 @@ import '../../models/race_profile.dart';
 import '../../utils/decimal.dart';
 import '../../utils/target_time.dart';
 import '../../providers/media_provider.dart';
+import '../../providers/race_library_provider.dart';
+import '../../services/race_library.dart';
 import '../../widgets/media_gallery.dart';
 
 /// Opens the race goal sheet: a new goal, or [goal] to change.
@@ -55,6 +57,9 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
   String? dateError;
   bool saving = false, more = false;
 
+  /// Where the race library's facts came from, shown under the name.
+  String? librarySource;
+
   @override
   void initState() {
     super.initState();
@@ -82,6 +87,72 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
     target.dispose();
     super.dispose();
   }
+
+  /// Fills the form from a race library hit; several distances ask which.
+  Future<void> _fillFromLibrary(RaceHit hit) async {
+    final edition = hit.editionId == null
+        ? null
+        : await ref.read(raceLibraryProvider).edition(hit.editionId!);
+    if (!mounted) return;
+    final races =
+        edition?.races ??
+        [
+          for (final km in hit.distancesKm)
+            RaceDistance(
+              distanceKm: km,
+              elevationGainM: hit.distancesKm.length == 1 ? hit.maxGainM : null,
+            ),
+        ];
+    final race = races.length <= 1
+        ? races.firstOrNull
+        : await _chooseDistance(races);
+    if (!mounted) return;
+    setState(() {
+      name.text = hit.title;
+      sport = race?.sport ?? edition?.sport ?? hit.sport ?? sport;
+      if (race != null) {
+        km.text = _km(race.distanceKm);
+        elevation.text = race.elevationGainM?.toString() ?? '';
+      }
+      if (hit.upcoming && hit.date != null) {
+        date = hit.date;
+        dateError = null;
+      }
+      librarySource = edition?.sourceName ?? 'races.fjelia.com';
+    });
+  }
+
+  Future<RaceDistance?> _chooseDistance(List<RaceDistance> races) =>
+      showModalBottomSheet<RaceDistance>(
+        context: context,
+        useSafeArea: true,
+        backgroundColor: panel,
+        builder: (context) => ListView(
+          shrinkWrap: true,
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
+              child: Text(
+                context.l10n.raceLibraryWhichDistance,
+                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
+              ),
+            ),
+            for (final race in races)
+              ListTile(
+                title: Text(race.name ?? '${_km(race.distanceKm)} km'),
+                subtitle: Text(
+                  [
+                    '${_km(race.distanceKm)} km',
+                    if (race.elevationGainM case final gain?) '↑ $gain m',
+                  ].join(' · '),
+                  style: TextStyle(color: muted),
+                ),
+                onTap: () => Navigator.pop(context, race),
+              ),
+          ],
+        ),
+      );
 
   /// What the target time means as a pace or speed, shown above the field.
   String _paceHint() {
@@ -202,14 +273,20 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
                   ),
                   label(context.l10n.raceName),
-                  TextFormField(
+                  _RaceNameField(
                     controller: name,
                     decoration: decoration('e.g. UTMB 2027'),
-                    style: TextStyle(fontSize: 14),
-                    validator: (v) => v == null || v.trim().isEmpty
-                        ? context.l10n.enterARaceName
-                        : null,
+                    enabled: !saving,
+                    onPicked: _fillFromLibrary,
                   ),
+                  if (librarySource case final source?)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 6),
+                      child: Text(
+                        context.l10n.raceLibraryFilledFrom(source),
+                        style: TextStyle(fontSize: 11, color: muted),
+                      ),
+                    ),
                   label(context.l10n.sport2),
                   Wrap(
                     spacing: 6,
@@ -586,6 +663,107 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
       ),
     );
   }
+}
+
+/// Race name with typeahead from the race library (from 3 characters).
+class _RaceNameField extends ConsumerStatefulWidget {
+  const _RaceNameField({
+    required this.controller,
+    required this.decoration,
+    required this.enabled,
+    required this.onPicked,
+  });
+
+  final TextEditingController controller;
+  final InputDecoration decoration;
+  final bool enabled;
+  final ValueChanged<RaceHit> onPicked;
+
+  @override
+  ConsumerState<_RaceNameField> createState() => _RaceNameFieldState();
+}
+
+class _RaceNameFieldState extends ConsumerState<_RaceNameField> {
+  final focus = FocusNode();
+  int query = 0;
+
+  @override
+  void dispose() {
+    focus.dispose();
+    super.dispose();
+  }
+
+  Future<Iterable<RaceHit>> _options(TextEditingValue value) async {
+    final text = value.text.trim();
+    final ticket = ++query;
+    if (text.length < 3) return const [];
+    // Wait for a pause in typing; a newer keystroke drops this request.
+    await Future<void>.delayed(const Duration(milliseconds: 300));
+    if (ticket != query || !mounted) return const [];
+    final hits = await ref.read(raceLibraryProvider).search(text);
+    return ticket == query ? hits : const [];
+  }
+
+  @override
+  Widget build(BuildContext context) => LayoutBuilder(
+    builder: (context, constraints) => RawAutocomplete<RaceHit>(
+      textEditingController: widget.controller,
+      focusNode: focus,
+      displayStringForOption: (hit) => hit.title,
+      optionsBuilder: _options,
+      onSelected: widget.onPicked,
+      fieldViewBuilder: (context, controller, focusNode, onSubmitted) =>
+          TextFormField(
+            controller: controller,
+            focusNode: focusNode,
+            enabled: widget.enabled,
+            decoration: widget.decoration,
+            style: TextStyle(fontSize: 14),
+            textInputAction: TextInputAction.next,
+            validator: (v) => v == null || v.trim().isEmpty
+                ? context.l10n.enterARaceName
+                : null,
+          ),
+      optionsViewBuilder: (context, onSelected, options) => Align(
+        alignment: Alignment.topLeft,
+        child: Material(
+          color: panel,
+          elevation: 6,
+          borderRadius: BorderRadius.circular(10),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: 280,
+              maxWidth: constraints.maxWidth,
+            ),
+            child: ListView(
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+              children: [
+                for (final hit in options)
+                  ListTile(
+                    dense: true,
+                    title: Text(hit.title, style: TextStyle(fontSize: 14)),
+                    subtitle: Text(
+                      [
+                        if (hit.date case final day?) dayText(day),
+                        if (hit.distancesKm.isNotEmpty)
+                          hit.distancesKm
+                              .map((d) => '${_km(d)} km')
+                              .join(' / '),
+                        if (hit.maxGainM case final gain? when gain > 0)
+                          '↑ $gain m',
+                      ].join(' · '),
+                      style: TextStyle(fontSize: 12, color: muted),
+                    ),
+                    onTap: () => onSelected(hit),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
 }
 
 /// Keep the app's English date labels and parsing, changing only week order.

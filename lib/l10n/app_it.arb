@@ -4226,5 +4226,8 @@
   "ownKeysPolarHint": "Crea un client AccessLink e inserisci {url} come URL di reindirizzamento. Poi inserisci qui ID client e secret; l’accesso con il tuo account Polar avviene in Connessioni.",
   "ownKeysWeatherHint": "Facoltativo: un’altra fonte meteo oltre a Open-Meteo e Bright Sky.",
   "ownKeysAiHint": "Le chiavi IA si inseriscono in {section}.",
-  "aiOnboardingMoreBodyCloud": "Il tuo provider cloud con chiave API"
+  "aiOnboardingMoreBodyCloud": "Il tuo provider cloud con chiave API",
+  "raceLibraryWhichDistance": "Quale distanza?",
+  "raceLibraryFilledFrom": "Compilato dalla libreria gare ({source}). Controlla il sito dell'organizzatore prima di iscriverti.",
+  "@raceLibraryFilledFrom": {"placeholders": {"source": {"type": "String"}}}
 }

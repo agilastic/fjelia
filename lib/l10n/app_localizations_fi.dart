@@ -9351,4 +9351,12 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get aiOnboardingMoreBodyCloud => 'Oma pilvipalvelusi ja API-avain';
+
+  @override
+  String get raceLibraryWhichDistance => 'Mikä matka?';
+
+  @override
+  String raceLibraryFilledFrom(String source) {
+    return 'Täytetty kilpailukirjastosta ($source). Tarkista järjestäjän sivut ennen ilmoittautumista.';
+  }
 }

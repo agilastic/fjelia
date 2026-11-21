@@ -9417,4 +9417,12 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String get aiOnboardingMoreBodyCloud =>
       'Własny dostawca w chmurze z kluczem API';
+
+  @override
+  String get raceLibraryWhichDistance => 'Który dystans?';
+
+  @override
+  String raceLibraryFilledFrom(String source) {
+    return 'Uzupełniono z biblioteki zawodów ($source). Przed zapisem sprawdź stronę organizatora.';
+  }
 }

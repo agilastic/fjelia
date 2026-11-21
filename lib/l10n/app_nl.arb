@@ -5389,5 +5389,8 @@
   "ownKeysPolarHint": "Maak een AccessLink-client aan en vul {url} in als redirect-URL. Vul hier daarna de client-ID en het secret in; inloggen met je Polar-account doe je onder Verbindingen.",
   "ownKeysWeatherHint": "Optioneel: nog een weerbron naast Open-Meteo en Bright Sky.",
   "ownKeysAiHint": "AI-sleutels vul je in onder {section}.",
-  "aiOnboardingMoreBodyCloud": "Je eigen cloudaanbieder met API-sleutel"
+  "aiOnboardingMoreBodyCloud": "Je eigen cloudaanbieder met API-sleutel",
+  "raceLibraryWhichDistance": "Welke afstand?",
+  "raceLibraryFilledFrom": "Ingevuld uit de wedstrijdbibliotheek ({source}). Controleer de website van de organisator voordat je je inschrijft.",
+  "@raceLibraryFilledFrom": {"placeholders": {"source": {"type": "String"}}}
 }

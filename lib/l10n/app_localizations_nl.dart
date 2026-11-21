@@ -9385,4 +9385,12 @@ class AppLocalizationsNl extends AppLocalizations {
   @override
   String get aiOnboardingMoreBodyCloud =>
       'Je eigen cloudaanbieder met API-sleutel';
+
+  @override
+  String get raceLibraryWhichDistance => 'Welke afstand?';
+
+  @override
+  String raceLibraryFilledFrom(String source) {
+    return 'Ingevuld uit de wedstrijdbibliotheek ($source). Controleer de website van de organisator voordat je je inschrijft.';
+  }
 }

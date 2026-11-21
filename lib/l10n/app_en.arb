@@ -5459,5 +5459,8 @@
   "ownKeysWeatherHint": "Optional: one more weather source besides Open-Meteo and Bright Sky.",
   "ownKeysAiHint": "AI keys are entered under {section}.",
   "@ownKeysAiHint": {"placeholders": {"section": {"type": "String"}}},
-  "aiOnboardingMoreBodyCloud": "Your own cloud provider and API key"
+  "aiOnboardingMoreBodyCloud": "Your own cloud provider and API key",
+  "raceLibraryWhichDistance": "Which distance?",
+  "raceLibraryFilledFrom": "Filled in from the race library ({source}). Check the organiser's website before you register.",
+  "@raceLibraryFilledFrom": {"placeholders": {"source": {"type": "String"}}}
 }

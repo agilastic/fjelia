@@ -9317,4 +9317,12 @@ class AppLocalizationsNb extends AppLocalizations {
   @override
   String get aiOnboardingMoreBodyCloud =>
       'Din egen skyleverandør med API-nøkkel';
+
+  @override
+  String get raceLibraryWhichDistance => 'Hvilken distanse?';
+
+  @override
+  String raceLibraryFilledFrom(String source) {
+    return 'Fylt ut fra løpsbiblioteket ($source). Sjekk arrangørens nettside før du melder deg på.';
+  }
 }

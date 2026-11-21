@@ -4226,5 +4226,8 @@
   "ownKeysPolarHint": "Opprett en AccessLink-klient og oppgi {url} som omdirigerings-URL. Skriv deretter inn klient-ID og hemmelighet her; du logger inn med Polar-kontoen under Tilkoblinger.",
   "ownKeysWeatherHint": "Valgfritt: én værkilde til i tillegg til Open-Meteo og Bright Sky.",
   "ownKeysAiHint": "AI-nøkler legges inn under {section}.",
-  "aiOnboardingMoreBodyCloud": "Din egen skyleverandør med API-nøkkel"
+  "aiOnboardingMoreBodyCloud": "Din egen skyleverandør med API-nøkkel",
+  "raceLibraryWhichDistance": "Hvilken distanse?",
+  "raceLibraryFilledFrom": "Fylt ut fra løpsbiblioteket ({source}). Sjekk arrangørens nettside før du melder deg på.",
+  "@raceLibraryFilledFrom": {"placeholders": {"source": {"type": "String"}}}
 }

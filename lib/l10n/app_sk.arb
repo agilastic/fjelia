@@ -4226,5 +4226,8 @@
   "ownKeysPolarHint": "Vytvor klienta AccessLink a ako URL presmerovania zadaj {url}. Potom sem zadaj jeho ID klienta a tajný kľúč; prihlásenie kontom Polar je v časti Pripojenia.",
   "ownKeysWeatherHint": "Voliteľné: ďalší zdroj počasia popri Open-Meteo a Bright Sky.",
   "ownKeysAiHint": "Kľúče AI zadáš v časti {section}.",
-  "aiOnboardingMoreBodyCloud": "Vlastný cloudový poskytovateľ s kľúčom API"
+  "aiOnboardingMoreBodyCloud": "Vlastný cloudový poskytovateľ s kľúčom API",
+  "raceLibraryWhichDistance": "Ktorá trať?",
+  "raceLibraryFilledFrom": "Vyplnené z knižnice pretekov ({source}). Pred registráciou si over web organizátora.",
+  "@raceLibraryFilledFrom": {"placeholders": {"source": {"type": "String"}}}
 }

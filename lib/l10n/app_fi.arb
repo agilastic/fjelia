@@ -4226,5 +4226,8 @@
   "ownKeysPolarHint": "Luo AccessLink-asiakas ja anna uudelleenohjaus-URL-osoitteeksi {url}. Syötä sitten tähän sen asiakastunnus ja salaisuus; Polar-tilillä kirjaudutaan kohdassa Yhteydet.",
   "ownKeysWeatherHint": "Valinnainen: yksi sääpalvelu lisää Open-Meteon ja Bright Skyn lisäksi.",
   "ownKeysAiHint": "Tekoälyavaimet syötetään kohdassa {section}.",
-  "aiOnboardingMoreBodyCloud": "Oma pilvipalvelusi ja API-avain"
+  "aiOnboardingMoreBodyCloud": "Oma pilvipalvelusi ja API-avain",
+  "raceLibraryWhichDistance": "Mikä matka?",
+  "raceLibraryFilledFrom": "Täytetty kilpailukirjastosta ({source}). Tarkista järjestäjän sivut ennen ilmoittautumista.",
+  "@raceLibraryFilledFrom": {"placeholders": {"source": {"type": "String"}}}
 }

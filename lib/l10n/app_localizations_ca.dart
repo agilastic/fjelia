@@ -9385,4 +9385,12 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get aiOnboardingMoreBodyCloud =>
       'El teu propi proveïdor al núvol amb clau API';
+
+  @override
+  String get raceLibraryWhichDistance => 'Quina distància?';
+
+  @override
+  String raceLibraryFilledFrom(String source) {
+    return 'Emplenat des de la biblioteca de curses ($source). Consulta el web de l\'organitzador abans d\'inscriure\'t.';
+  }
 }

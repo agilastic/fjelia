@@ -5389,5 +5389,8 @@
   "ownKeysPolarHint": "Utwórz klienta AccessLink i podaj {url} jako adres przekierowania. Następnie wpisz tutaj jego identyfikator klienta i sekret; logowanie kontem Polar odbywa się w Połączeniach.",
   "ownKeysWeatherHint": "Opcjonalnie: dodatkowe źródło pogody obok Open-Meteo i Bright Sky.",
   "ownKeysAiHint": "Klucze AI wpisujesz w {section}.",
-  "aiOnboardingMoreBodyCloud": "Własny dostawca w chmurze z kluczem API"
+  "aiOnboardingMoreBodyCloud": "Własny dostawca w chmurze z kluczem API",
+  "raceLibraryWhichDistance": "Który dystans?",
+  "raceLibraryFilledFrom": "Uzupełniono z biblioteki zawodów ({source}). Przed zapisem sprawdź stronę organizatora.",
+  "@raceLibraryFilledFrom": {"placeholders": {"source": {"type": "String"}}}
 }

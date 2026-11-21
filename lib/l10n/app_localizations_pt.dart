@@ -9392,4 +9392,12 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get aiOnboardingMoreBodyCloud =>
       'O teu próprio fornecedor na nuvem com chave API';
+
+  @override
+  String get raceLibraryWhichDistance => 'Que distância?';
+
+  @override
+  String raceLibraryFilledFrom(String source) {
+    return 'Preenchido a partir da biblioteca de provas ($source). Confirma o site do organizador antes de te inscreveres.';
+  }
 }
