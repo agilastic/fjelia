@@ -185,6 +185,17 @@ class GoalSet {
     return load;
   }
 
+  /// The share of an ordinary training day that fits [day] while an event's
+  /// recovery holds the volume back (the lowest of all events), or null.
+  double? volumeFactorOn(DateTime day) {
+    double? factor;
+    for (final g in relevant) {
+      final f = g.demand.volumeFactorAfter(daysBetween(g.date, day));
+      if (f != null && (factor == null || f < factor)) factor = f;
+    }
+    return factor;
+  }
+
   /// Problems between goals: events on one day, recovery that meets the next
   /// event's sharpening, and spacing with no slack. Found from the goals'
   /// own demands, not from a fixed number of days.

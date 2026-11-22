@@ -18,6 +18,7 @@ import 'strength/strength_plan_edits.dart';
 import 'strength/strength_repository.dart';
 import '../models/race_profile.dart';
 import '../utils/target_time.dart';
+import 'session_stress.dart';
 import 'workout_semantics.dart';
 import '../providers/training_load_provider.dart';
 import '../utils/log.dart';
@@ -215,8 +216,10 @@ const _weekTemplates = <String, List<_SessionSlot>>{
     _SessionSlot('running', 'long', 'endurance', 2, 6),
     _SessionSlot('cycling_road', 'long', 'endurance', 2, 7),
     _SessionSlot('swimming', 'key', 'poolSwim', 4, 2),
-    _SessionSlot('running', 'key', 'tempo', 4, 3),
+    // The bike before the run: with two hard sessions allowed the bike keeps
+    // its quality (and its zone 5 every other week), the run its long run.
     _SessionSlot('cycling_road', 'key', 'tempo', 4, 4),
+    _SessionSlot('running', 'key', 'tempo', 4, 3),
     _strengthCore,
   ],
   'indoor_rowing': [
@@ -411,19 +414,40 @@ class PlanAthleteProfile {
   /// [experienceLevel] was derived from the training data, not self-reported.
   final bool levelFromData;
 
-  /// The data-derived [tier] replaces the self-reported level once the
-  /// history is substantial enough to judge it.
+  /// The level the plan uses, from the self-reported one and the data
+  /// (step 3 of docs/training-plan-rethink.md). Load and fitness say what
+  /// the athlete can do, not how used they are to structured hard training:
+  /// a beginner with a good 10 km pace is still a beginner.
+  /// - The data can lower the level ([tier] from CTL, once [enoughData]).
+  /// - It raises it only one step at a time and only with proven training
+  ///   experience: [activeWeeks] of the last year (26 for intermediate, 40
+  ///   for advanced) and real intensity in the last 12 weeks, not
+  ///   [mostlyEasy]. Missing experience never counts as experience.
   PlanAthleteProfile withDataLevel({
     required String tier,
     required bool enoughData,
-  }) => enoughData
-      ? PlanAthleteProfile(
-          experienceLevel: tier,
-          sex: sex,
-          age: age,
-          levelFromData: true,
-        )
-      : this;
+    int activeWeeks = 0,
+    bool mostlyEasy = true,
+  }) {
+    if (!enoughData) return this;
+    const order = ['beginner', 'intermediate', 'advanced'];
+    final own = order.indexOf(experienceLevel).clamp(0, 2);
+    final data = order.indexOf(tier).clamp(0, 2);
+    var level = own;
+    if (data < own) {
+      level = data;
+    } else if (data > own && !mostlyEasy) {
+      final next = own + 1;
+      if (activeWeeks >= (next == 1 ? 26 : 40)) level = next;
+    }
+    if (level == own) return this;
+    return PlanAthleteProfile(
+      experienceLevel: order[level],
+      sex: sex,
+      age: age,
+      levelFromData: true,
+    );
+  }
 
   /// 'm', 'f' or other; only used for the max-HR estimate.
   final String? sex;
@@ -519,9 +543,15 @@ class _TrainingHistory {
     this.peakWeeklyMinutes = 0,
     this.sports = const {},
     this.hardShare,
+    this.hardMinutesPerWeek,
     this.sessions12w = 0,
     this.activeWeeks12w = 0,
+    this.activeWeeks52 = 0,
   });
+
+  /// Weeks of the last year with at least an hour of training: how long
+  /// the athlete has trained regularly.
+  final int activeWeeks52;
 
   /// Sessions and distinct active weeks in the last 12 weeks.
   final int sessions12w, activeWeeks12w;
@@ -540,10 +570,16 @@ class _TrainingHistory {
   /// zone data.
   final double? hardShare;
 
+  /// Minutes in zones 4–5 per week over the last 12 weeks (or the weeks
+  /// covered); null without zone data.
+  final double? hardMinutesPerWeek;
+
   bool get isEmpty => sports.isEmpty;
 
-  /// Rarely trains hard: introduce intensity gradually.
-  bool get mostlyEasy => hardShare != null && hardShare! < 0.05;
+  /// Rarely trains hard: introduce intensity gradually. Judged by the hard
+  /// minutes themselves, not their share: long easy events make the share
+  /// tiny even for an athlete who does intervals every week.
+  bool get mostlyEasy => hardMinutesPerWeek != null && hardMinutesPerWeek! < 10;
 
   /// History for [sport], falling back to the closest related sport.
   _SportHistory? forSport(String sport) {
@@ -627,6 +663,10 @@ class _TrainingHistory {
           ),
       },
       hardShare: zoneMin > 0 ? hardMin / zoneMin : null,
+      activeWeeks52: weekMinutes.values.where((m) => m >= 60).length,
+      hardMinutesPerWeek: zoneMin > 0
+          ? hardMin / (now.difference(earliest).inDays / 7).ceil().clamp(1, 12)
+          : null,
       sessions12w: sessions12w,
       activeWeeks12w: activeWeeks.length,
     );
@@ -882,23 +922,36 @@ class TrainingPlanService {
                 .getSingleOrNull())
             ?.vo2max;
 
-    // CTL/ATL (42/7-day EWMA) over a year of daily strain.
-    final since = DateTime.now().subtract(const Duration(days: 365));
+    // CTL/ATL (42/7-day EWMA) over a year of daily strain, every calendar
+    // day: a day without training decays both, as on the Form screen and in
+    // the daily readiness (finding 1 of docs/training-plan-rethink.md).
+    // Counting only days with a score made athletes fitter than they are.
+    final today = _day(_now());
+    final since = today.subtract(const Duration(days: 365));
     final scores =
         await (_db.select(_db.dayScoreRecords)
               ..where((t) => t.date.isBiggerOrEqualValue(since))
               ..orderBy([(t) => OrderingTerm.asc(t.date)]))
             .get();
+    final strainOn = <DateTime, double>{
+      for (final s in scores) _day(s.date): s.strainScore ?? 0.0,
+    };
     var ctl = 0.0, atl = 0.0;
-    for (final s in scores) {
-      final load = s.strainScore ?? 0.0;
-      ctl += (load - ctl) * (2 / 43);
-      atl += (load - atl) * 0.25;
+    if (scores.isNotEmpty) {
+      for (
+        var d = _day(scores.first.date);
+        !d.isAfter(today);
+        d = _addDays(d, 1)
+      ) {
+        final load = strainOn[d] ?? 0.0;
+        ctl += (load - ctl) * (2 / 43);
+        atl += (load - atl) * 0.25;
+      }
     }
     final tsb = ctl - atl;
 
     // Average weekly load over the last 6 weeks.
-    final sixWeeks = DateTime.now().subtract(const Duration(days: 42));
+    final sixWeeks = _now().subtract(const Duration(days: 42));
     final recent =
         await (_db.select(_db.activityRecords)
               ..where((t) => t.startDate.isBiggerOrEqualValue(sixWeeks))
@@ -913,7 +966,7 @@ class TrainingPlanService {
         ? ctl * 7
         : perWeek.values.fold<double>(0, (a, b) => a + b) / perWeek.length;
 
-    final now = DateTime.now();
+    final now = _now();
     final readiness =
         await (_db.select(_db.dailyReadinessRecords)
               ..where(
@@ -1136,6 +1189,9 @@ class TrainingPlanService {
   // Templates & steps
   // ---------------------------------------------------------------------------
 
+  /// Each template's working zone and zone 5 minutes, from its steps.
+  final _templateSemantics = <String, WorkoutSemantics>{};
+
   WorkoutTemplate? _pickTemplateFromCache(
     List<WorkoutTemplate> templates,
     String sport,
@@ -1143,8 +1199,11 @@ class TrainingPlanService {
     String? subType,
     String phase,
     int durationMin,
-    int seed,
-  ) {
+    int seed, {
+    int? minZone,
+    double? maxZone5Min,
+    bool baseIntervals = false,
+  }) {
     final templateSport =
         sport.startsWith('cycling') && !templates.any((t) => t.sport == sport)
         ? 'cycling_road'
@@ -1153,6 +1212,7 @@ class TrainingPlanService {
         .where((t) => t.sport == templateSport && t.sessionType == sessionType)
         .toList();
     if (pool.isEmpty) return null;
+    final ofSport = pool;
 
     // Phase match, widening to neighbouring phases if needed.
     final idx = _phaseOrder.indexOf(phase);
@@ -1177,12 +1237,102 @@ class TrainingPlanService {
     var wanted = subType;
     if (wanted == 'intervals' &&
         phase == 'base' &&
+        !baseIntervals &&
         sport.startsWith('cycling')) {
       wanted = 'threshold';
+      if (minZone != null) minZone = math.min(minZone, 4);
     }
     if (wanted != null) {
       final bySub = pool.where((t) => t.subType == wanted).toList();
       if (bySub.isNotEmpty) pool = bySub;
+    }
+    // A quality session as hard as its slot asks: threshold must not become
+    // a zone 3 tempo template, nor race intensity a zone 2 "fast finish". The
+    // phase's own templates first, then a neighbouring phase's, then any.
+    if (minZone != null) {
+      int? zoneOf(WorkoutTemplate t) => _templateSemantics
+          .putIfAbsent(
+            t.id,
+            () => WorkoutSemantics.of(t.stepsJson, sport: t.sport),
+          )
+          .topZone;
+      // Its zone exactly first (threshold no zone 5 workout either), with
+      // its sub-type, then of any sub-type, then at least its zone; and only
+      // one of about the wanted length: a structured workout is not cut to
+      // fit the day.
+      final atLeast = minZone;
+      // A shorter one of the right zone comes before a harder one: it
+      // always fits the day.
+      bool fits(
+        WorkoutTemplate t, {
+        required bool exact,
+        required bool subType,
+        bool shorter = false,
+        bool anyLength = false,
+      }) {
+        final zone = zoneOf(t) ?? 0;
+        final length = t.estimatedDurationMin;
+        return (!subType || wanted == null || t.subType == wanted) &&
+            zone >= atLeast &&
+            (!exact || zone <= math.max(atLeast, 4)) &&
+            (anyLength ||
+                (shorter
+                    ? length >= durationMin * 0.4 &&
+                          length <= durationMin * 1.15
+                    : (length - durationMin).abs() <= durationMin * 0.4));
+      }
+
+      search:
+      // When no length fits (a week with 20 min left), the right zone still
+      // comes first; the length choice below then takes the closest.
+      for (final (exact, subType, shorter, anyLength) in [
+        (true, true, false, false),
+        (true, false, false, false),
+        (true, true, true, false),
+        (true, false, true, false),
+        (false, true, false, false),
+        (true, true, false, true),
+        (true, false, false, true),
+      ]) {
+        for (final candidates in [
+          pool,
+          ofSport.where((t) => t.targetPhase.split(',').any(phases.contains)),
+          ofSport,
+        ]) {
+          final hardEnough = candidates
+              .where(
+                (t) => fits(
+                  t,
+                  exact: exact,
+                  subType: subType,
+                  shorter: shorter,
+                  anyLength: anyLength,
+                ),
+              )
+              .toList();
+          if (hardEnough.isNotEmpty) {
+            pool = hardEnough;
+            break search;
+          }
+        }
+      }
+    }
+    // A short dose of zone 5 where the goal asks for one, not the biggest
+    // VO2max workout of the library.
+    if (maxZone5Min != null) {
+      final dosed = pool
+          .where(
+            (t) =>
+                _templateSemantics
+                    .putIfAbsent(
+                      t.id,
+                      () => WorkoutSemantics.of(t.stepsJson, sport: t.sport),
+                    )
+                    .zone5Minutes <=
+                maxZone5Min,
+          )
+          .toList();
+      if (dosed.isNotEmpty) pool = dosed;
     }
 
     // Close to the wanted length: within 15 %, else within 40 %, else the
@@ -1556,6 +1706,8 @@ class TrainingPlanService {
     athlete = athlete.withDataLevel(
       tier: fitness.tier,
       enoughData: history.enoughForLevel,
+      activeWeeks: history.activeWeeks52,
+      mostlyEasy: history.mostlyEasy,
     );
     log(
       '[Plan] athlete: level=${athlete.experienceLevel} '
@@ -1565,7 +1717,9 @@ class TrainingPlanService {
       'cycle=${athlete.recoveryCycle} | history: '
       '${history.weeklyMinutes.round()} min/week '
       '(peak ${history.peakWeeklyMinutes.round()}), '
-      'hard=${history.hardShare?.toStringAsFixed(2)}, sports='
+      'hard=${history.hardShare?.toStringAsFixed(2)} '
+      '(${history.hardMinutesPerWeek?.round()} min/week'
+      '${history.mostlyEasy ? ', mostly easy' : ''}), sports='
       '${history.sports.map((k, v) => MapEntry(k, '${v.sessions}x med${v.medianMin.round()} max${v.longestMin.round()} year${v.yearLongestMin.round()}'))}',
     );
     final thresholds = await (_db.select(
@@ -1783,8 +1937,17 @@ class TrainingPlanService {
     easeInDays.removeAll(healthDays);
     // The longest session a day has room for: its training window, and at
     // most 45 minutes in a first week back.
+    // An ordinary training day of this plan, for the volume held back after
+    // an event (GoalSet.volumeFactorOn): 20 % of it the first days, then 40,
+    // 60 and 80 %.
+    final ordinaryDayMin = hoursPerWeek * 60 / math.max(1, daysPerWeek);
     int? capOn(DateTime date) {
-      final window = dayCapMinutes[date.weekday];
+      var window = dayCapMinutes[date.weekday];
+      final factor = goalSet.volumeFactorOn(date);
+      if (factor != null) {
+        final cap = math.max(20, (ordinaryDayMin * factor).round());
+        window = window == null ? cap : math.min(window, cap);
+      }
       if (!easeInDays.contains(date)) return window;
       return math.min(window ?? 45, 45);
     }
@@ -1927,6 +2090,45 @@ class TrainingPlanService {
         if (g.demand.planningMinutes >= 150)
           g.date: g.demand.planningMinutes.round(),
     };
+    // Days that already hold a quality (key, not strength) session.
+    final keyDates = <DateTime>{};
+    // The load of each day (session_stress.dart), events included: a key
+    // session does not go next to a day that, with it, is too much.
+    final dayStress = <DateTime, double>{
+      for (final g in goalSet.relevant)
+        localDay(g.date): sessionStress(
+          sport: g.demand.sport,
+          minutes: g.demand.planningMinutes.round(),
+          zone: 3,
+        ),
+    };
+    // The load a slot will have before its workout exists: a key session
+    // at zone 4 or more, since its template may reach zone 4 (a steady slot
+    // can get a tempo workout), and at least 50 min.
+    double plannedStress(_SessionSlot s) {
+      final key = s.sessionType == 'key' && s.sport != 'strength';
+      return sessionStress(
+        sport: s.sport,
+        minutes: key ? math.max(50, s.targetMin ?? 60) : s.targetMin ?? 60,
+        zone: key ? math.max(4, s.zone) : s.zone,
+      );
+    }
+
+    bool heavyNextTo(DateTime day, double stress) => [-1, 1].any(
+      (n) => heavyPair(stress, dayStress[_addDays(day, n)] ?? 0, margin: 0.9),
+    );
+    // A long event raced to finish (6 h on foot, 4 h otherwise, without the
+    // ambition "performance") needs a short dose of zone 5, not a big one.
+    bool longFinish(String? goalId) {
+      final g =
+          goalSet.all
+              .where((g) => g.id == (goalId ?? raceGoalId))
+              .firstOrNull ??
+          goalSet.display;
+      if (g == null || g.ambition == Ambition.performance) return false;
+      return g.demand.planningMinutes >= (g.demand.isFoot ? 360 : 240);
+    }
+
     final sportFitness = <String, _AthleteFitnessSnapshot>{mainSport: fitness};
     Future<_AthleteFitnessSnapshot> fitnessFor(String sport) async {
       if (!multi) return fitness;
@@ -2040,8 +2242,11 @@ class TrainingPlanService {
         }).toList();
       }
       // Hard sessions: capped by experience; athletes who rarely train hard
-      // get one moderate (tempo) key session in the first two weeks.
-      final easyStart = history.mostlyEasy && w < 2;
+      // get one moderate (tempo) key session in the first two weeks of the
+      // season. Counted from the season, not from this plan run: a replan
+      // would otherwise start over, and the easy weeks it plans keep the
+      // history easy for the next one.
+      final easyStart = history.mostlyEasy && g < 2;
       final easingIn = List.generate(
         7,
         (i) => _addDays(_addDays(anchorWeek, g * 7), i),
@@ -2057,20 +2262,35 @@ class TrainingPlanService {
           : easyStart
           ? 1
           : athlete.maxKeySessions;
-      var keys = 0;
+      // Fewer hard sessions allowed than the week has: they take turns by
+      // week, so a beginner's one session is threshold one week and zone 5
+      // the next, not the template's first one every week.
+      final keySlots = [
+        for (var i = 0; i < slots.length; i++)
+          if (slots[i].sessionType == 'key' && slots[i].sport != 'strength') i,
+      ];
+      final keep = maxKeys == null || maxKeys >= keySlots.length
+          ? keySlots.toSet()
+          : {
+              for (var k = 0; k < maxKeys; k++)
+                keySlots[(g + k) % keySlots.length],
+            };
       for (var i = 0; i < slots.length; i++) {
         final s = slots[i];
         if (s.sessionType != 'key' || s.sport == 'strength') continue;
-        if (maxKeys != null && keys >= maxKeys) {
+        if (!keep.contains(i)) {
           slots[i] = s.copyWith(
             sessionType: 'recovery',
             clearSubType: true,
             zone: 2,
           );
         } else {
-          keys++;
           if (easyStart) {
-            slots[i] = s.copyWith(subType: 'tempo', zone: math.min(s.zone, 3));
+            // A hike keeps its hills: its effort comes from climbing.
+            slots[i] = s.copyWith(
+              subType: s.sport == 'hiking' ? 'hills' : 'tempo',
+              zone: math.min(s.zone, 3),
+            );
           }
         }
       }
@@ -2088,6 +2308,19 @@ class TrainingPlanService {
               _footSports.contains(s.sport),
         );
         if (i >= 0) slots[i] = slots[i].copyWith(subType: 'hills', zone: 4);
+      }
+      // A triathlon keeps the top end too: the bike key session is zone 5
+      // intervals every other week, tempo in between. One discipline is
+      // enough; swim and run stay at threshold (finding 10 of the review).
+      if (mainSport == 'triathlon' &&
+          const {'base', 'build', 'peak'}.contains(phase) &&
+          g.isOdd) {
+        final i = slots.indexWhere(
+          (s) => s.sessionType == 'key' && s.sport == 'cycling_road',
+        );
+        if (i >= 0) {
+          slots[i] = slots[i].copyWith(subType: 'intervals', zone: 5);
+        }
       }
       // Strength goes on every strength day the athlete chose, aimed at the
       // race: base and build use each day, peak at most two, taper one
@@ -2265,6 +2498,13 @@ class TrainingPlanService {
           }
           // Days already gone cannot take a session.
           if (date.isBefore(today)) continue;
+          // After an event a day holds only what its recovery allows: no
+          // second session on a day that has less than 20 min of it left.
+          if (s.sport != 'strength' &&
+              goalSet.volumeFactorOn(date) != null &&
+              (capOn(date) ?? 999) - (dayMinutes[off] ?? 0) < 20) {
+            continue;
+          }
           if (restDays.contains(date.weekday)) continue;
           if (healthDays.contains(date)) continue;
           if (!multi && isPreRaceRest(date)) continue;
@@ -2338,6 +2578,42 @@ class TrainingPlanService {
               cost += 80;
             }
           }
+          // Never a hard session the day before or after another one, in
+          // either path (≥ 48 h between them, §3 #5 of the plan review),
+          // unless no other day is open. A very long day counts as hard
+          // too: hours in zone 2 tire as much as intervals.
+          final day = _addDays(weekStart, off);
+          bool nextTo(bool Function(DateTime) hard) =>
+              hard(_addDays(day, -1)) || hard(_addDays(day, 1));
+          final key = s.sessionType == 'key' && s.sport != 'strength';
+          // No key session the day before or after another (§3 #5): a
+          // zone 3 slot can still get a template with zone 5 in it.
+          if (key && nextTo(keyDates.contains)) cost += 100;
+          // One quality session a day: a tempo run and trail intervals are
+          // two sports but one pair of legs.
+          if (key && keyDates.contains(day)) cost += 200;
+          // Nor next to a heavy day that, together with it, is too much:
+          // minutes × intensity × the sport's impact, so 3 h on a trail
+          // weighs and 150 min of easy riding does not (§3 #5).
+          final stress = plannedStress(s);
+          if (key && heavyNextTo(day, stress)) cost += 100;
+          // Nor on a day that is heavy already (the long run's day).
+          if (key && (dayStress[day] ?? 0) >= heavyDayStress * 0.9) {
+            cost += 100;
+          }
+          // A heavy session does not go next to a key day the same way.
+          if (!key &&
+              [-1, 1].any(
+                (n) =>
+                    keyDates.contains(_addDays(day, n)) &&
+                    heavyPair(
+                      dayStress[_addDays(day, n)] ?? 0,
+                      stress,
+                      margin: 0.9,
+                    ),
+              )) {
+            cost += 100;
+          }
           return cost;
         }
 
@@ -2394,9 +2670,25 @@ class TrainingPlanService {
         weekSessions++;
         sessionNumber++;
         dayMinutes[off] = (dayMinutes[off] ?? 0) + minutes;
-        if (multi && minutes >= 100) {
-          longDates[_day(p.sessionDate)] = minutes;
+        if (minutes >= 100) longDates[_day(p.sessionDate)] = minutes;
+        if (p.sessionType == 'key' && p.sport != 'strength') {
+          keyDates.add(_day(p.sessionDate));
         }
+        dayStress.update(
+          _day(p.sessionDate),
+          (v) =>
+              v +
+              sessionStress(
+                sport: p.sport,
+                minutes: minutes,
+                zone: p.primaryZone,
+              ),
+          ifAbsent: () => sessionStress(
+            sport: p.sport,
+            minutes: minutes,
+            zone: p.primaryZone,
+          ),
+        );
         // A moved session that sits on an event, or hard next to one, stays
         // where the athlete put it, and the report says so.
         if (multi && (p.status == 'planned' || p.status == 'adapted')) {
@@ -2500,14 +2792,65 @@ class TrainingPlanService {
         }
       }
 
+      // A long event raced to finish needs one short zone 5 dose a week, not
+      // two: a second zone 5 slot for such a goal becomes threshold work.
+      var topSlots = 0;
+      for (var i = 0; i < slots.length; i++) {
+        final s = slots[i];
+        if (s.sessionType != 'key' || s.sport == 'strength' || s.zone < 5) {
+          continue;
+        }
+        if (longFinish(s.goalId) && ++topSlots > 1) {
+          slots[i] = s.copyWith(
+            subType: s.sport == 'cycling_road' ? 'threshold' : 'tempo',
+            zone: 4,
+          );
+        }
+      }
       // Strength first: its days are fixed by the athlete, the rest of the
-      // week arranges itself around them.
+      // week arranges itself around them. Then the long sessions, so a key
+      // session knows which days are heavy and keeps away from them.
       slots = [
         ...slots.where((s) => s.sport == 'strength'),
-        ...slots.where((s) => s.sport != 'strength'),
+        ...slots.where((s) => s.sport != 'strength' && s.sessionType == 'long'),
+        // Key sessions the hardest first (in a crowded week zone 5 is the
+        // rarer one), then by their preferred day, so the second takes a day
+        // two apart (Tuesday and Thursday).
+        ...slots
+            .where((s) => s.sport != 'strength' && s.sessionType == 'key')
+            .toList()
+          ..sort((a, b) {
+            final byZone = b.zone.compareTo(a.zone);
+            return byZone != 0 ? byZone : a.weekday.compareTo(b.weekday);
+          }),
+        ...slots.where(
+          (s) =>
+              s.sport != 'strength' &&
+              s.sessionType != 'long' &&
+              s.sessionType != 'key',
+        ),
       ];
       for (var slot in slots) {
         final off = bestOffset(slot);
+        // A key session that only fits next to a hard or very long day (a
+        // race week, or the easy days after an event, leave few open days)
+        // is run easy instead (§3 #5).
+        if (off != null &&
+            slot.sessionType == 'key' &&
+            slot.sport != 'strength' &&
+            slot.zone >= 3) {
+          final day = _addDays(weekStart, off);
+          final stress = plannedStress(slot);
+          if (keyDates.contains(_addDays(day, -1)) ||
+              keyDates.contains(_addDays(day, 1)) ||
+              heavyNextTo(day, stress)) {
+            slot = slot.copyWith(
+              sessionType: 'recovery',
+              clearSubType: true,
+              zone: 2,
+            );
+          }
+        }
         if (off == null) {
           log(
             '[Plan] w$w ${slot.sport}/${slot.sessionType}'
@@ -2603,8 +2946,13 @@ class TrainingPlanService {
           }
         }
         duration = duration.clamp(slot.minMin ?? 20, slot.maxMin ?? 240);
-        // No longer than the day's training window or a first week back.
-        final dayCap = capOn(date);
+        // No longer than the day's training window or a first week back,
+        // and after an event no more than its recovery allows that day, all
+        // sessions of the day together.
+        var dayCap = capOn(date);
+        if (dayCap != null && goalSet.volumeFactorOn(date) != null) {
+          dayCap -= dayMinutes[off] ?? 0;
+        }
         if (dayCap != null && duration > dayCap) {
           duration = math.max(20, dayCap);
         }
@@ -2624,6 +2972,21 @@ class TrainingPlanService {
           slotPhase,
           duration,
           w + sessionNumber,
+          // Endurance quality only: a strength session keeps its programme.
+          minZone:
+              slot.sessionType == 'key' &&
+                  slot.sport != 'strength' &&
+                  slot.zone >= 3
+              ? math.min(slot.zone, slot.maxZone ?? 5)
+              : null,
+          maxZone5Min:
+              slot.sessionType == 'key' &&
+                  slot.sport != 'strength' &&
+                  slot.zone >= 5
+              ? (longFinish(slot.goalId) ? 25 : 40)
+              : null,
+          // The triathlon's bike alternates threshold and zone 5 also in base.
+          baseIntervals: mainSport == 'triathlon',
         );
         String? stepsJson;
         var scaled = false;
@@ -2743,6 +3106,18 @@ class TrainingPlanService {
           synthetic = true;
           steadyLead = 'Steady';
         }
+        // Nor longer than an event's recovery allows that day: then a steady
+        // session of the allowed length.
+        if (dayCap != null &&
+            goalSet.volumeFactorOn(date) != null &&
+            semantics.totalMinutes > math.max(20, dayCap)) {
+          compileSteps(
+            _steadySteps(math.max(20, dayCap), math.min(slot.zone, 2)),
+            math.max(20, dayCap),
+          );
+          template = null;
+          synthetic = true;
+        }
         // A structured long session is left whole, but never longer than the
         // athlete's history allows: then a steady one of the allowed length.
         if (historyLongCap != null &&
@@ -2829,7 +3204,13 @@ class TrainingPlanService {
           );
         }
 
-        var zone = semantics.dominantZone ?? slot.zone;
+        // A quality session is stored with the zone it works at; an easy one
+        // with the zone it mostly is.
+        var zone =
+            (slot.sessionType == 'key' && slot.sport != 'strength'
+                ? semantics.topZone
+                : semantics.dominantZone) ??
+            slot.zone;
         // An easy run is run in the lower half of zone 2, not in zone 1.
         final easyRun = fit.easyRunZ2 && zone == 1;
         if (easyRun) zone = 2;
@@ -2890,7 +3271,16 @@ class TrainingPlanService {
         used[off] = (used[off] ?? 0) + 1;
         usedSports.putIfAbsent(off, () => <String>{}).add(slot.sport);
         dayMinutes[off] = (dayMinutes[off] ?? 0) + duration;
-        if (multi && duration >= 100) longDates[date] = duration;
+        if (duration >= 100) longDates[date] = duration;
+        final stress = sessionStress(
+          sport: slot.sport,
+          minutes: duration,
+          zone: zone,
+        );
+        dayStress.update(date, (v) => v + stress, ifAbsent: () => stress);
+        if (slot.sessionType == 'key' && slot.sport != 'strength') {
+          keyDates.add(date);
+        }
 
         await _db
             .into(_db.trainingSessions)

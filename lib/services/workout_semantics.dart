@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math' as math;
 
 import '../models/workout_profile.dart' show secondsPerMetre;
 
@@ -47,6 +48,25 @@ class WorkoutSemantics {
         .reduce((a, b) => a.value >= b.value ? a : b)
         .key;
   }
+
+  /// The highest zone a quality session really works in, or null: the
+  /// highest zone with at least 15 % of the main set, counted from two
+  /// minutes (8 × 20 s strides are not a zone 5 session) and at most five
+  /// (24 × 30 s in a long ride is one). Short intervals have more recovery
+  /// time than work, so their [dominantZone] is the recovery zone.
+  int? get topZone {
+    final main = mainZoneSeconds.values.fold(0.0, (a, b) => a + b);
+    final enough = (main * 0.15).clamp(120.0, 300.0);
+    final worked = [
+      for (final e in mainZoneSeconds.entries)
+        if (e.value >= enough) e.key,
+    ];
+    return worked.isEmpty ? dominantZone : worked.reduce(math.max);
+  }
+
+  /// Minutes of zone 5 work (sprints written as zone 6 included).
+  double get zone5Minutes =>
+      ((zoneSeconds[5] ?? 0) + (zoneSeconds[6] ?? 0)) / 60;
 
   static const _openStepSeconds = 300.0;
   static const _maxDepth = 8;

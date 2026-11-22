@@ -115,7 +115,10 @@ class GoalDemand {
       sport == 'running' || sport == 'trail_running' || sport == 'hiking';
 
   /// Days after the event with no ordinary hard work. Grows with how long the
-  /// event takes; a policy, to be tuned with athlete response.
+  /// event takes; a policy, to be tuned with athlete response. Beyond seven
+  /// hours it keeps growing, to 10-14 days (§3 #7 of the plan review): on
+  /// foot by a day for every two more hours and more with steep courses
+  /// (descents), on the bike half as fast (less muscle damage).
   int get recoveryDays {
     final m = planningMinutes;
     if (m < 60) return 1;
@@ -123,7 +126,9 @@ class GoalDemand {
     if (m < 180) return 3;
     if (m < 270) return 5;
     if (m < 420) return 6;
-    return 7;
+    final extra = (m - 420) / 120 * (isFoot ? 1.0 : 0.5);
+    final steep = isFoot && (climbPerKm ?? 0) >= 30 ? 2 : 0;
+    return (7 + extra + steep).round().clamp(7, 14);
   }
 
   /// Days before the event that are sharpening for a goal of [priority].
@@ -136,8 +141,28 @@ class GoalDemand {
     };
   }
 
-  /// Whole days after the event on which only easy sessions fit.
-  int get easyDaysAfter => (recoveryDays / 2).ceil().clamp(1, 4);
+  /// Whole days after the event on which only easy sessions fit: half the
+  /// recovery, at most a week (after an 18 h ultra the first week is easy,
+  /// the second builds again).
+  int get easyDaysAfter => (recoveryDays / 2).ceil().clamp(1, 7);
+
+  /// How much of an ordinary training day fits [daysAfter] days after the
+  /// event, or null when the volume is no longer held back. Easy movement
+  /// comes back before intensity does: an hour's easy ride can be fine while
+  /// intervals are not. Starting values from the plan review, spread over the
+  /// recovery: the first fifth up to 20 %, then 40 %, 60 % and 80 % (for 14
+  /// days: days 1-3, 4-7, 8-10, 11-14). Only after events of three hours or
+  /// more; a policy, to be tuned with athlete response.
+  double? volumeFactorAfter(int daysAfter) {
+    if (planningMinutes < 180 || daysAfter <= 0 || daysAfter > recoveryDays) {
+      return null;
+    }
+    final share = daysAfter / recoveryDays;
+    if (share <= 0.22) return 0.2;
+    if (share <= 0.5) return 0.4;
+    if (share <= 0.72) return 0.6;
+    return 0.8;
+  }
 }
 
 /// One race goal as the season planner sees it.

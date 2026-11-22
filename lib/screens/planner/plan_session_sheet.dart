@@ -1459,7 +1459,13 @@ List<_ReplacementSport> _replacementSports(
       'running',
       'cycling_road',
     ],
-    'hike' => const ['walking', 'trail_running', 'treadmill_running'],
+    // Hill hikes indoors: the stepper climbs, the treadmill on an incline.
+    'hike' => const [
+      'walking',
+      'trail_running',
+      'treadmill_running',
+      'stair_climbing',
+    ],
     'elliptical' => const ['running', 'cycling_road', 'indoor_rowing'],
     _ => const <String>[],
   };

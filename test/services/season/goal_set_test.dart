@@ -64,6 +64,78 @@ void main() {
       expect(marathon().demand.sharpenDays(GoalPriority.a), 14);
       expect(marathon().demand.sharpenDays(GoalPriority.c), 3);
     });
+
+    test('easy movement comes back before the volume does', () {
+      // An 18 h ultra with 6000 m: 14 days of recovery, of them 7 easy. The
+      // volume comes back in steps: 20 % of an ordinary day, then 40, 60, 80.
+      const ultra = GoalDemand(
+        sport: 'trail_running',
+        distanceKm: 110,
+        ascentM: 6000,
+        estimatedMinutes: 18 * 60,
+      );
+      expect(ultra.recoveryDays, 14);
+      expect(
+        [for (var d = 0; d <= 15; d++) ultra.volumeFactorAfter(d)],
+        [
+          null,
+          0.2,
+          0.2,
+          0.2,
+          0.4,
+          0.4,
+          0.4,
+          0.4,
+          0.6,
+          0.6,
+          0.6,
+          0.8,
+          0.8,
+          0.8,
+          0.8,
+          null,
+        ],
+      );
+      // A 10 km race holds nothing back.
+      const tenK = GoalDemand(
+        sport: 'running',
+        distanceKm: 10,
+        estimatedMinutes: 50,
+      );
+      expect(tenK.volumeFactorAfter(1), isNull);
+    });
+
+    test('the lowest volume of all recent events counts', () {
+      final set = GoalSet([marathon(), brevet()], today: today);
+      final day = brevet().date.add(const Duration(days: 1));
+      expect(set.volumeFactorOn(day), brevet().demand.volumeFactorAfter(1));
+      expect(
+        set.volumeFactorOn(brevet().date.subtract(const Duration(days: 3))),
+        isNull,
+      );
+    });
+
+    test(
+      'recovery grows beyond seven hours, more on foot than on the bike',
+      () {
+        // §3 #7 of docs/training-plan-rethink.md: 10-14 days after very long
+        // events, descents adding to it on foot.
+        GoalDemand demand(String sport, double hours, {double? ascentM}) =>
+            GoalDemand(
+              sport: sport,
+              distanceKm: 100,
+              ascentM: ascentM,
+              estimatedMinutes: hours * 60,
+            );
+        expect(demand('trail_running', 6).recoveryDays, 6);
+        expect(demand('trail_running', 13).recoveryDays, 10);
+        expect(demand('trail_running', 18, ascentM: 6000).recoveryDays, 14);
+        expect(demand('cycling_road', 18).recoveryDays, 10);
+        expect(demand('cycling_road', 30).recoveryDays, 13);
+        // The first week after an 18 h ultra is easy, the second builds again.
+        expect(demand('trail_running', 18, ascentM: 6000).easyDaysAfter, 7);
+      },
+    );
   });
 
   group('dates', () {

@@ -4702,7 +4702,9 @@ class WorkoutTemplateLibrary {
       targetPhase: 'base,build',
       name: 'Uphill Power-Hike Intervals 4×10min',
       description:
-          '4 × 10 min sustained uphill power-hike at Z3–Z4 with easy descent recovery.',
+          '4 × 10 min sustained uphill power-hike at Z3–Z4 with easy descent recovery. '
+          'The climb makes the effort, not speed on the flat; without a hill, a stair '
+          'stepper or a treadmill at 10–15 % incline.',
       coachingCues:
           'Lean forward, short steps, drive with poles. Descent is recovery — don\'t rush.',
       parameterizedFor: 'hr',
@@ -4722,7 +4724,8 @@ class WorkoutTemplateLibrary {
       targetPhase: 'peak',
       name: 'Uphill Power-Hike Intervals 6×10min',
       description:
-          '6 × 10 min Z4 uphill power-hike blocks. Race-specific strength.',
+          '6 × 10 min Z4 uphill power-hike blocks. Race-specific strength. '
+          'Without a long hill, a stair stepper or a treadmill at 10–15 % incline.',
       coachingCues:
           'Consistent effort across all reps. Trekking poles mandatory. Fuelling mid-session.',
       parameterizedFor: 'hr',
@@ -4742,7 +4745,8 @@ class WorkoutTemplateLibrary {
       targetPhase: 'taper',
       name: 'Taper Uphill Activations 3×5min',
       description:
-          'Short uphill activations. Keeps legs sharp without fatigue.',
+          'Short uphill activations. Keeps legs sharp without fatigue. '
+          'Indoors on a stair stepper or an inclined treadmill.',
       coachingCues:
           'Race-effort power-hike for 5 min. Full walk recovery. Confidence session.',
       parameterizedFor: 'hr',

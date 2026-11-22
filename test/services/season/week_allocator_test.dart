@@ -184,6 +184,30 @@ void main() {
       expect(a.longTargets.keys, containsAll(['running', 'cycling_road']));
     });
 
+    test('a tight week keeps its quality and shortens the long sessions', () {
+      // Two long sessions and the week's quality do not fit 5 h: the easy
+      // sessions go first, the long ones shrink below their own minimum
+      // before the quality session would go.
+      final a = allocator.allocate(
+        input(
+          [
+            need(marathon, GoalIntent.build, progress: 0.6),
+            need(brevet, GoalIntent.build, progress: 0.6),
+          ],
+          budget: 300,
+          w: 20,
+        ),
+      );
+      expect(
+        a.slots.where((s) => s.sessionType == 'key' && s.sport != 'strength'),
+        isNotEmpty,
+      );
+      expect(
+        a.slots.fold(0, (t, s) => t + s.targetMin),
+        lessThanOrEqualTo(300),
+      );
+    });
+
     test('MG-T11: when both cannot fit the week they take turns', () {
       final needs = [
         need(marathon, GoalIntent.specificPreparation, progress: 0.9),
@@ -212,16 +236,23 @@ void main() {
           a.slots.where((s) => s.sessionType == 'key'),
           hasLength(lessThanOrEqualTo(1)),
         );
-        final ride = allocator.allocate(
-          input([need(brevet, GoalIntent.build)], budget: 700),
-        );
-        // A 7.5 h event with no stated ambition: one steady key ride, no intervals.
-        expect(
-          ride.slots.where(
-            (s) => s.sessionType == 'key' && s.subType == 'intervals',
-          ),
-          isEmpty,
-        );
+        // A 7.5 h event raced to finish with one hard session allowed: race
+        // intensity and intervals take turns, never both in one week.
+        for (final w in [8, 9]) {
+          final ride = allocator.allocate(
+            input(
+              [need(brevet, GoalIntent.build)],
+              budget: 700,
+              maxKeys: 1,
+              w: w,
+            ),
+          );
+          expect(
+            ride.slots.where((s) => s.sessionType == 'key'),
+            hasLength(1),
+            reason: 'week $w',
+          );
+        }
       },
     );
 
@@ -840,15 +871,27 @@ void main() {
         .where((s) => s.sessionType == 'key')
         .toList();
 
-    test('a long ride raced to finish takes tempo and intervals in turns', () {
+    test('a long ride raced to finish keeps zone 5 besides race intensity', () {
+      // Finding 12 of docs/training-plan-rethink.md: both each build week
+      // when two hard sessions fit, else in turn; late in the build zone 5
+      // every other week instead of never.
       final ultra = goal('cycling_road', 600, targetH: 28);
-      final even = keys(ultra, GoalIntent.build, progress: 0.4);
-      final odd = keys(ultra, GoalIntent.build, progress: 0.4, w: 9);
-      expect(even.map((s) => (s.subType, s.zone)), [('tempo', 3)]);
-      expect(odd.map((s) => (s.subType, s.zone)), [('intervals', 5)]);
-      // Late in the build only race intensity is left.
-      final late = keys(ultra, GoalIntent.build, progress: 0.8, w: 9);
-      expect(late.map((s) => s.zone), [3]);
+      expect(keys(ultra, GoalIntent.build, progress: 0.4).map((s) => s.zone), [
+        3,
+        5,
+      ]);
+      final one = [
+        for (final w in [8, 9])
+          keys(ultra, GoalIntent.build, progress: 0.4, w: w, maxKeys: 1),
+      ];
+      expect(one.map((k) => k.single.zone), [3, 5]);
+      expect(keys(ultra, GoalIntent.build, progress: 0.8).map((s) => s.zone), [
+        3,
+      ]);
+      expect(
+        keys(ultra, GoalIntent.build, progress: 0.8, w: 9).map((s) => s.zone),
+        [3, 5],
+      );
     });
 
     test('a short ride with a target time has threshold and intervals', () {
@@ -906,15 +949,19 @@ void main() {
       expect(long.single.zone, 3);
     });
 
-    test('base alternates tempo with a touch of the top end', () {
+    test('base alternates threshold with zone 5', () {
       final run = goal('running', 21);
-      expect(keys(run, GoalIntent.foundation).single.zone, 3);
+      expect(keys(run, GoalIntent.foundation).single.zone, 4);
       expect(keys(run, GoalIntent.foundation, w: 9).single.zone, 5);
       final ride = goal('cycling_road', 100, targetH: 3);
-      expect(
-        keys(ride, GoalIntent.foundation, w: 9).single.subType,
-        'threshold',
-      );
+      expect(keys(ride, GoalIntent.foundation).single.subType, 'threshold');
+      expect(keys(ride, GoalIntent.foundation, w: 9).single.zone, 5);
+    });
+
+    test('a maintained goal has one session every week, in turn', () {
+      final run = goal('running', 21);
+      expect(keys(run, GoalIntent.maintain).single.zone, 4);
+      expect(keys(run, GoalIntent.maintain, w: 9).single.zone, 5);
     });
   });
 }

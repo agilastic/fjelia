@@ -116,6 +116,10 @@ These are concrete issues, independent of any research debate.
     - *Events take the weeks.* Before an A or B goal the last two weeks (one in a short preparation) sharpen with steady sessions only; the event week has no quality session; the recovery days after it (up to 7) give that goal's sport none, and after an event of 4 h or more the whole week at most one. C goals only "maintain": race intensity every other week. With a long event every one to two months, two to four ordinary weeks remain between them, and only every other one has zone 5.
 
     Read from the code, not run against a real plan; it matches an athlete's report (an 88 km run, then a long event every one to two months: almost only easy runs and road rides).
+
+    **Measured with the benchmark (2026-11-22): the three rules above barely matter.** Changing them as step 1 describes moved four weeks of the long-event series slightly and none of the other athletes. Two causes the reading missed decide it:
+    - *Quality loses to the long sessions.* Between events each goal sport has its long session (here road run, trail run and ride, together more than a 10 h week). The allocator fits the long sessions first and splits the rest by weight; a sport left with under 60 min gets no quality session, and the week report says "No room for a quality run for trail60 this week" for every goal. Seven of eleven ordinary weeks of the series had no quality session in zone 3 or above.
+    - *The workout template does not match the slot.* A slot asks for a zone (threshold 4, intervals 5, race intensity 3), but the template is chosen by sport, type, sub-type, phase and length only, and the session takes the template's zone. Running threshold has the sub-type `tempo`, whose base-phase templates are zone 3; race intensity for long goals often became a zone 2 "fast finish". Zone 5 came in 2 of 11 ordinary weeks of the series and in none of the triathlete's.
 13. **A replan restarts the long-session growth.** The history cap grows by 5–8 % per week of the plan run (`weekInRun`), which starts at 0 at every replan. Completed long sessions raise the longest session itself, so the effect is smaller than it looks, but a session that is planned and not yet done no longer counts.
 
 ## 3. Against current research
@@ -183,21 +187,63 @@ Each step should come with a plan comparison on a few fixed athlete histories (b
 
 ## 6. Implementation plan
 
-Derived from the code read on 2026-11-22; nothing of it is built yet. Each step is measured with the benchmark (step 0) before and after.
+Derived from the code read on 2026-11-22. Built so far: steps 0 and 1, and the hard-day spacing of step 2. Each step is measured with the benchmark (step 0) before and after.
 
-**Step 0 – Benchmark (test, not product code).** `test/plan_benchmark/plan_benchmark_test.dart` with fixed athletes: long-event series (an 88 km run, then a long event every one to two months, road bike as second sport), beginner 10 km, intermediate marathon, beginner long-distance triathlete, brevet rider. Per plan week: hours and sessions per sport, longest session per sport, hard sessions (zone ≥ 4), hard days in a row, recovery weeks, taper volume. Prints a table per athlete; asserts only clear rules (no hard days in a row, at least one quality session in ordinary weeks). Ranges from coach plans as in the benchmark section below.
+**Step 0 – Benchmark (test, not product code).** Done 2026-11-22. `test/plan_benchmark/plan_benchmark_test.dart` with fixed athletes: long-event series (an 88 km run, then a long event every one to two months, road bike as second sport), beginner 10 km, intermediate marathon, beginner long-distance triathlete, brevet rider. Per plan week: hours and sessions per sport, longest session per sport, hard sessions (zone ≥ 4), hard days in a row, recovery weeks, taper volume. Prints a table per athlete and checks the targets below. Ranges from coach plans as in the benchmark section below.
 
-**Step 1 – Intensity in event series (finding 12).**
+Daily strain is seeded with the activities (about 1.2 TRIMP a minute easy), so the level comes from the data as in the app. With CTL over training days only (finding 1) every athlete comes out one level higher than self-reported (the 10 km beginner intermediate, the triathlon beginner advanced); the targets assume the self-reported level and are met only together with step 3.
+
+**Benchmark targets** (an ordinary week: no event in it or next to it, no recovery, taper or race phase, past the first two weeks):
+
+| Rule | Target | Source |
+|---|---|---|
+| Quality | every ordinary week has a quality session of the kind its goal asks for: race intensity (zone 3) for a long event raced to finish, hills for a hike, threshold or zone 5 otherwise; a key session planned in zone 2 does not count | finding 12, §1.6 |
+| Zone 5 | long events raced to finish and beginners: in at least 40 % of ordinary weeks (every other week); short or performance goals: at least 60 % (both kinds each build week) | finding 12, step 1 |
+| Hard days | no two days with a zone 4–5 session in a row, for every athlete | finding 3, §3 #5 |
+| Heavy days | no key session next to a heavy day (load ≥ 150: minutes × intensity × sport impact, `session_stress.dart`) when the two together reach 300: VO₂max running before 3 h of trail is too much, bike intervals before 150 min of easy riding are not, a hard day followed by an easy one never is; no key session on a heavy day and no two key sessions on one day | §3 #5, review 2026-11-22 |
+| Recovery | no zone 4–5 or very long session in the easy days after any event, and no day over the volume the recovery allows (20 % of an ordinary day in the first fifth of it, then 40, 60, 80 %) | §3 #7, review 2026-11-22 |
+| Hiking | never above zone 4, at least 80 % in zone 1–2, zone 3–4 only in uphill sessions (outdoors on a climb, indoors on a stair stepper or an inclined treadmill) | review 2026-11-22 |
+| Zone 5 dose | a range, not a quota: long events raced to finish and beginners 30–80 % of ordinary weeks, at most one zone 5 session and 30 min of zone 5 work a week; shorter or performance goals at least 40 %, at most two sessions and 45 min | review 2026-11-22: frequency alone does not judge the dose |
+
+Athletes (eleven, with a hiking challenge alone, which may have no zone 5 at all): the long-event series; trail 100 km (A) with a 50 km hiking challenge (B) and a 200 km brevet (C); an 18 h ultra trail with a 400 km brevet three weeks later; a BRM series 200–600 with the 600 as A; a marathon (A) with a half (B) and a 10 km (C); a marathon and a 50 km trail, both A, five weeks apart; and the four single goals below. Zone 5 is counted from the workout steps: a session's zone is its highest zone with at least five minutes of work (24 × 30 s is zone 5, not the zone 1 of its recoveries).
+
+| Athlete | Zone 5 target | Baseline 2026-11-22 (before step 1; step 1 as written changes only what the table notes) |
+|---|---|---|
+| Long-event series (advanced, 88 km run, 60 km trail, 300 km brevet, 100 km run) | 40 % | 7 of 11 ordinary weeks without quality (6 with step 1), zone 5 in 18 %, hard days in a row 0 |
+| Beginner 10 km | 40 % | 1 week without quality, zone 5 in 20 %, 1 hard pair |
+| Intermediate marathon | 60 % | zone 5 in 43 %, 4 hard pairs |
+| Beginner long triathlon | 40 % | zone 5 in 0 %, 5 hard pairs |
+| Brevet rider | 40 % | 1 week without quality (met with step 1) |
+
+**After step 1 and the fixes below (2026-11-22):** all ten athletes meet every target: a quality session in every ordinary week, no hard days in a row or next to a very long day, nothing hard in the easy days after an event, zone 5 within its range and dose (series 6 of 11 ordinary weeks, triathlon 8 of 22). With step 3 the beginner 10 km stays beginner: one quality session a week, zone 5 in 4 of 9 ordinary weeks. The zone 5 corridor now only warns; it warns for the two A races (36 %) and the triathlon beginner (20 %: one hard session a week takes turns over swim, bike and run, and only the bike has zone 5).
+
+**Step 1 – Intensity in event series (finding 12).** Done 2026-11-22, with three fixes the benchmark showed were needed (below the list).
 - `training_plan_service.dart:2044`: count the cautious start from the season anchor (`g < 2`), not from the replan (`w < 2`).
 - `_TrainingHistory.mostlyEasy`: judge by zone 4–5 minutes per week (e.g. under 10 min on average over 12 weeks) instead of a share of all zone time.
 - `_qualityKinds` (`week_allocator.dart`): foundation threshold and zone 5 in turn instead of steady every other week; build for long finish goals race intensity and zone 5 each week when the hard-session cap allows two, else in turn, and a short zone 5 session every other week after 70 % instead of none; maintain one session every week, threshold and zone 5 in turn. Event, sharpen and recovery weeks stay as they are.
 
-**Step 2 – Clear defects (small each).**
+Fixes found with the benchmark, done with step 1:
+- *Quality against long sessions* (`WeekAllocator.allocate`, step 3b): when no sport has room left for a quality session, the most important goal that asks for one this week keeps it, and the longest long session gives up 45 min. Not in event, sharpen or recovery weeks.
+- *Template zone* (`_pickTemplateFromCache`, `minZone`): a key session gets a template whose dominant zone reaches the slot's zone (race intensity 3, threshold 4, intervals 5), from its phase, a neighbouring phase or any, and only one of about the wanted length (±40 %).
+- *Hard-day spacing in both paths* (finding 3; part of step 2): day placement adds a large cost for a zone 4–5 session next to another, and for any key session or very long session (150 min or more) next to a hard or very long day, across weeks; a key session that only fits there becomes an easy session. Two quality sessions of one sport go on Tuesday and Thursday. Each sport keeps its own odd/even rhythm, so two goals with zone 5 every other week take opposite weeks.
+- *Quality against long sessions, adaptive*: the kept quality session takes its time through the budget fit (easy sessions first, then strength, then the long sessions only to their own minimum), not by a fixed cut. A long session keeps at least 60 % of its length in a tight week, a key long session (towards a 600 km brevet) 90 %.
+- *Zone 5 dose*: a long event raced to finish gets at most one zone 5 session a week (a second becomes threshold) and a template with at most 25 min of zone 5 work (else 40 min). The template choice takes the slot's zone exactly before a harder one: a shorter template of the right zone, or the closest in length when none fits, before a threshold slot gets an over-under with zone 5 in it.
+- *Recovery in two phases* (review 2026-11-22): the easy days (no intensity) and the reduced volume are separate. `GoalDemand.volumeFactorAfter` holds a day to 20/40/60/80 % of an ordinary training day over the recovery after events of 3 h or more; the planner caps the day's sessions together and puts no second session on a day with less than 20 min left. Easy movement comes back before intensity.
+- *Load check instead of a fixed 150 min* (`session_stress.dart`): see the benchmark target "Heavy days". The planner estimates a key slot at zone 4 or more and judges with a 10 % margin (the workout is not chosen yet); long sessions are placed before key sessions, key sessions the hardest first (zone 5 is the rarer one in a crowded week), first on Tuesday and second on Thursday.
+- *A long session's minimum is a preference*: when a week still does not fit, long sessions shrink to half of what was planned before a quality session goes.
+- *Zone of a quality session*: the highest zone with at least 15 % of the main set, counted from two minutes and at most five (24 × 30 s is zone 5, six strides in an easy run are not).
+- *Hiking*: hill hikes name the indoor option (stair stepper, treadmill at 10–15 %), the sport change offers stair climbing for hikes, and the cautious start keeps a hike's hills.
+- *Race-aware recovery* (§3 #7): recovery days keep growing beyond 7 h, on foot by a day for every two hours and two more on steep courses (≥ 30 m/km), on the bike half as fast, up to 14 days; the easy days after an event are half of them, up to 7 (were at most 4).
+- *Triathlon zone 5* (from step 6): the bike key session alternates threshold and zone 5 intervals in base, build and peak, and comes before the run key session, so an athlete with two hard sessions keeps it. Swim and run stay at threshold.
+
+**Step 2 – Clear defects (small each).** Hard-day spacing is done (above).
 - Hard-day spacing in both paths (finding 3): `bestOffset`/`dist()` keeps a set of hard days and makes the neighbours of a hard or long day expensive, not only in the multi path.
 - `PlanAthleteProfile.maxKeySessions`: 2 for intermediates (finding 4a).
 - One long session per week for 5k/10k/half goals (finding 4): the Sunday long slot becomes easy.
 - Fallback zones from LTHR via `zoneUpperBounds(lthrZoneFloors(...))` (finding 7).
 - Multi-path strength by phase via `strengthProgrammeId` after `_slotOf`, counts per phase as in the single path (finding 8).
+
+**Step 3 – Classification (review 2026-11-22), done.** The planner's CTL now walks every calendar day of the last year (a day without training decays it) and uses the plan's clock. The level is kept apart from load: `PlanAthleteProfile.withDataLevel` lets the data lower the self-reported level, but raises it only one step and only with proven experience (26 active weeks of the last year for intermediate, 40 for advanced, and real intensity in the last 12 weeks, not "mostly easy"); missing experience never counts. A beginner keeps one hard session a week, and when the template has more, they take turns by week (threshold one week, zone 5 the next). Benchmark: the level the planner logs must be the athlete's (fail), a beginner has at most one quality session a week (fail), the zone 5 corridor only warns. Not done: one shared load function for planner, readiness and Form screen, and the tier thresholds calibrated on real TRIMP histories (finding 2).
 
 **Step 3 – One load model (findings 1, 2).** `lib/services/load_model.dart` with one CTL/ATL function that walks every calendar day; used by the planner, `DailyReadinessService`, the Form screen and `form_forecast.dart`. Recalibrate the tiers on real TRIMP histories, or derive the level from weekly hours and training years.
 

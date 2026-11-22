@@ -185,4 +185,40 @@ void main() {
       expect(retimeTitle('Fast Finish 45+12min', 70), 'Fast Finish 45+12min');
     });
   });
+
+  group('the zone a quality session works at', () {
+    test('short intervals are zone 5, though their recoveries take longer', () {
+      final s = WorkoutSemantics.of(
+        json([
+          timed('warmup', 900, 1),
+          repeat(24, [timed('interval', 30, 5), timed('recovery', 45, 1)]),
+          timed('cooldown', 600, 1),
+        ]),
+      );
+      expect(s.dominantZone, 1);
+      expect(s.topZone, 5);
+      expect(s.zone5Minutes, 12);
+    });
+
+    test('a few strides do not make an easy run a zone 5 session', () {
+      final s = WorkoutSemantics.of(
+        json([
+          timed('main', 3000, 2),
+          repeat(6, [timed('interval', 15, 5), timed('recovery', 45, 1)]),
+        ]),
+      );
+      expect(s.topZone, 2);
+    });
+
+    test('a long tempo run is zone 4', () {
+      final s = WorkoutSemantics.of(
+        json([
+          timed('warmup', 900, 1),
+          repeat(3, [timed('interval', 600, 4), timed('recovery', 180, 2)]),
+          timed('cooldown', 600, 1),
+        ]),
+      );
+      expect(s.topZone, 4);
+    });
+  });
 }

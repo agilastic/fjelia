@@ -193,7 +193,7 @@ void main() {
   });
 
   test(
-    'with enough history the data decides the level, not the answer',
+    'high load without a year of training keeps a beginner a beginner',
     () async {
       final today = fixedNow;
       // Fit athlete: 80 strain a day for ~4 months → high CTL.
@@ -252,17 +252,19 @@ void main() {
                 s.sport != 'strength',
           )
           .length;
-      // Advanced from data: two hard sessions in a week (a beginner gets one)
-      // and a recovery week only every fourth week.
+      // Step 3 of docs/training-plan-rethink.md: load says what the athlete
+      // can do, not how used they are to hard training. Ten weeks are no
+      // year of experience, so the beginner keeps one hard session a week
+      // and a recovery week every third week.
       final maxKeys = [
         for (var w = first; w < first + 12; w++) keysIn(w),
       ].reduce((a, b) => a > b ? a : b);
-      expect(maxKeys, 2);
+      expect(maxKeys, 1);
       expect(
         sessions
             .where((s) => s.weekNumber == first + 2)
             .every((s) => s.phase == 'recovery'),
-        isFalse,
+        isTrue,
       );
     },
   );

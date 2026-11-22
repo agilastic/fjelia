@@ -385,7 +385,10 @@ class WeekAllocator {
     // takes a second: a sport with a goal never loses all its quality to
     // another.
     final share = List.filled(needs.length, 0);
-    final wants = [for (final n in needs) _qualityKinds(n, input).length];
+    final wants = [
+      for (final (i, n) in needs.indexed)
+        _qualityKinds(n, input, order: i).length,
+    ];
     for (var round = 1; round <= 2; round++) {
       for (var i = 0; i < needs.length && keysLeft > 0; i++) {
         if (wants[i] < round) continue;
@@ -403,6 +406,7 @@ class WeekAllocator {
         keyRide: keyRides.contains(n.sport),
         restMin: sportRest,
         keysLeft: share[i] + spare,
+        order: i,
         input: input,
         longRank: longRank,
         unmet: unmet,
@@ -412,6 +416,46 @@ class WeekAllocator {
       if (longs[n.sport] != null) longRank++;
       slots.addAll(built.slots);
       minutesBySport[n.sport] = built.slots.fold(0, (a, s) => a + s.targetMin);
+    }
+
+    // 3b. The long sessions are fitted first, and several of them can fill
+    // the week: each sport is then left too little for a quality session,
+    // and months between long events pass without any (finding 12, as
+    // measured). The most important goal that asks for quality this week
+    // keeps one; the budget fit below takes its time from the easy sessions
+    // first and from the long ones only down to their own minimum.
+    final quality = slots.any(
+      (s) => s.sessionType == 'key' && s.sport != 'strength',
+    );
+    if (!quality &&
+        input.events.isEmpty &&
+        !input.recoveringFromEvent &&
+        (input.maxKeySessions ?? 1) > 0) {
+      final asking = [
+        for (final (i, n) in needs.indexed)
+          if (wants[i] > 0) n,
+      ]..sort((a, b) => b.weight.compareTo(a.weight));
+      if (asking.isNotEmpty) {
+        final need = asking.first;
+        slots.add(
+          _qualitySlot(
+            need,
+            _qualityKinds(need, input).first,
+            45,
+            input,
+            weekday: need.sport.startsWith('cycl') ? 2 : 3,
+          ),
+        );
+        tradeoffs
+          ..remove(
+            'No room for a quality ${_noun(need.sport)} for ${need.goal.name} '
+            'this week.',
+          )
+          ..add(
+            'The week keeps one quality ${_noun(need.sport)} for '
+            '${need.goal.name}; the easy sessions are shorter for it.',
+          );
+      }
     }
 
     // 4. Variety, only where there is room: it never takes a goal's time.
@@ -795,6 +839,7 @@ class WeekAllocator {
     bool keyRide = false,
     required double restMin,
     required int keysLeft,
+    int order = 0,
     required AllocationInput input,
     required int longRank,
     required List<String> unmet,
@@ -818,7 +863,10 @@ class WeekAllocator {
           zone: 2,
           weekday: longRank == 0 ? 6 : 7,
           targetMin: long,
-          minMin: 45,
+          // A tight week shortens a long session only so far: a key long
+          // session (the long ride towards a 600 km brevet) keeps nearly all
+          // of it, an ordinary one at least 60 %.
+          minMin: math.max(45, (long * (keyRide ? 0.9 : 0.6)).round()),
           maxMin: longestSessionMin,
           goalId: goal.id,
           role: role,
@@ -833,10 +881,10 @@ class WeekAllocator {
 
     // Quality sessions: as many as the allowance from the allocation, of the
     // kinds [_qualityKinds] picks for the goal and the week.
-    var kinds = _qualityKinds(need, input);
+    var kinds = _qualityKinds(need, input, order: order);
     // Fewer hard sessions allowed than the goal wants: they take turns.
     if (keysLeft > 0 && keysLeft < kinds.length) {
-      final from = input.weekIndex % kinds.length;
+      final from = (input.weekIndex + order) % kinds.length;
       kinds = [...kinds.skip(from), ...kinds.take(from)];
     }
     kinds = kinds.take(math.max(0, keysLeft)).toList();
@@ -862,36 +910,15 @@ class WeekAllocator {
         }
         break;
       }
-      final noun = _noun(sport);
-      final (subType, zone, objective) = switch (kind) {
-        _Quality.steady => ('tempo', 3, 'Steady quality $noun for $label'),
-        // Only the road bike has threshold workouts of its own; elsewhere
-        // threshold is a tempo session ridden or run in zone 4.
-        _Quality.threshold => (
-          sport == 'cycling_road' ? 'threshold' : 'tempo',
-          4,
-          'Threshold $noun for $label',
-        ),
-        _Quality.vo2 => ('intervals', 5, 'Intervals for $label'),
-        _Quality.hills => ('hills', 4, 'Hill $noun for $label'),
-        _Quality.openers => ('intervals', 5, 'Openers for $label'),
-      };
       slots.add(
-        AllocatedSlot(
-          sport: sport,
-          sessionType: 'key',
-          subType: subType,
-          zone: zone,
-          maxZone: input.easyStart ? 3 : null,
-          weekday: first ? (ride ? 2 : 3) : 4,
-          targetMin: minutes,
-          minMin: 40,
-          maxMin: ride ? 150 : 90,
-          goalId: goal.id,
-          role: role,
-          objective: objective,
-          phase: phase,
-          rank: 2,
+        _qualitySlot(
+          need,
+          kind,
+          minutes,
+          input,
+          // The first on Tuesday, a second on Thursday: a day apart and
+          // away from the weekend's long sessions, also across sports.
+          weekday: first ? 2 : 4,
         ),
       );
       keys++;
@@ -947,13 +974,62 @@ class WeekAllocator {
     return (slots: slots, keys: keys);
   }
 
+  /// One quality session of [kind] for [need]'s goal.
+  static AllocatedSlot _qualitySlot(
+    SportNeed need,
+    _Quality kind,
+    int minutes,
+    AllocationInput input, {
+    required int weekday,
+  }) {
+    final sport = need.sport;
+    final label = need.goal.name;
+    final noun = _noun(sport);
+    final (subType, zone, objective) = switch (kind) {
+      _Quality.steady => ('tempo', 3, 'Steady quality $noun for $label'),
+      // Only the road bike has threshold workouts of its own; elsewhere
+      // threshold is a tempo session ridden or run in zone 4.
+      _Quality.threshold => (
+        sport == 'cycling_road' ? 'threshold' : 'tempo',
+        4,
+        'Threshold $noun for $label',
+      ),
+      _Quality.vo2 => ('intervals', 5, 'Intervals for $label'),
+      _Quality.hills => ('hills', 4, 'Hill $noun for $label'),
+      _Quality.openers => ('intervals', 5, 'Openers for $label'),
+    };
+    final ride = sport.startsWith('cycl');
+    return AllocatedSlot(
+      sport: sport,
+      sessionType: 'key',
+      subType: subType,
+      zone: zone,
+      maxZone: input.easyStart ? 3 : null,
+      weekday: weekday,
+      targetMin: minutes,
+      minMin: 40,
+      maxMin: ride ? 150 : 90,
+      goalId: need.goal.id,
+      role: need.intent == GoalIntent.maintain ? 'maintenance' : 'primary',
+      objective: objective,
+      phase: need.intent.phase,
+      rank: 2,
+    );
+  }
+
   /// The quality sessions a sport's goal wants this week, most important
   /// first. Every endurance sport keeps some work near its ceiling, short
-  /// intervals in zone 5, besides the work at race intensity. A long event
-  /// raced to finish takes the two in turns and late in its build only race
-  /// intensity; a shorter or ambitious one has both each build week. Hiking
-  /// has hills in place of intervals.
-  static List<_Quality> _qualityKinds(SportNeed n, AllocationInput input) {
+  /// intervals in zone 5, besides the work at race intensity: also between
+  /// long events (docs/training-plan-rethink.md, finding 12). A long event
+  /// raced to finish has both each build week when two hard sessions fit,
+  /// else the two in turn, and late in its build zone 5 every other week; a
+  /// shorter or ambitious one has both each build week. Hiking has hills in
+  /// place of intervals.
+  static List<_Quality> _qualityKinds(
+    SportNeed n,
+    AllocationInput input, {
+    int order = 0,
+  }) {
     final goal = n.goal;
     final planning = goal.demand.planningMinutes;
     final hike = n.sport == 'hiking';
@@ -972,24 +1048,39 @@ class WeekAllocator {
         ? _Quality.threshold
         : _Quality.steady;
     final top = hike ? _Quality.hills : _Quality.vo2;
-    final odd = input.weekIndex.isOdd;
+    // Each sport keeps its own rhythm ([order]: its place among the week's
+    // needs): two goals with zone 5 every other week take opposite weeks.
+    final odd = (input.weekIndex + order).isOdd;
+    // Two quality sessions of one sport in a week only when the athlete's
+    // hard-session cap allows two.
+    final both = (input.maxKeySessions ?? 2) >= 2;
     final kinds = switch (n.intent) {
-      // Base: aerobic tempo, every other week a touch of the top end (on the
-      // bike threshold, its base workouts).
+      // Base: threshold and zone 5 in turn; a hike keeps aerobic tempo and
+      // hills.
       GoalIntent.foundation => [
-        !odd
-            ? _Quality.steady
-            : n.sport.startsWith('cycl')
-            ? _Quality.threshold
-            : top,
+        hike
+            ? (odd ? top : _Quality.steady)
+            : odd
+            ? top
+            : _Quality.threshold,
       ],
       GoalIntent.build || GoalIntent.specificPreparation =>
         hike
             ? [race]
             : long && goal.ambition != Ambition.performance
-            ? [n.progress >= 0.7 || !odd ? race : top]
+            ? (both
+                  ? (n.progress >= 0.7 && !odd ? [race] : [race, top])
+                  : [odd ? top : race])
             : [race, top],
-      GoalIntent.maintain => input.weekIndex.isEven ? [race] : <_Quality>[],
+      // A goal kept up between others: one session every week, threshold
+      // and zone 5 in turn (hills for a hike).
+      GoalIntent.maintain => [
+        hike
+            ? top
+            : odd
+            ? top
+            : _Quality.threshold,
+      ],
       // Short openers keep a short race sharp; a long one only needs to feel
       // its pace.
       GoalIntent.sharpen => [long || hike ? _Quality.steady : _Quality.openers],
@@ -1088,6 +1179,23 @@ class WeekAllocator {
             : math.min(share, (cut * share / room).round());
         list[i] = list[i].copyWith(targetMin: list[i].targetMin - by);
         cutDone += by;
+      }
+    }
+
+    // 1b. The minimum of a long session is a preference, not a wall: a week
+    // that still does not fit shortens the long sessions further, to half
+    // of what was planned, before a quality session has to go.
+    if (total() > limit) {
+      final longs = [
+        for (var i = 0; i < list.length; i++)
+          if (list[i].sessionType == 'long') i,
+      ];
+      for (final i in longs) {
+        final over = total() - limit;
+        if (over <= 0) break;
+        final floor = math.max(45, slots[i].targetMin ~/ 2);
+        final by = math.min(over, math.max(0, list[i].targetMin - floor));
+        list[i] = list[i].copyWith(targetMin: list[i].targetMin - by);
       }
     }
 
