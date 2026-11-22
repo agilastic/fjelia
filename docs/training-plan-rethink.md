@@ -1,7 +1,6 @@
 # Training plan generator: recap and rethink
 
-As of 2026-11-22. Read-only review of the code, checked against current research.
-No code was changed for this document.
+As of 2026-11-22. Review of the code, checked against current research, with an implementation plan (section 6). No planner code was changed for this document.
 
 ## 1. What is there
 
@@ -61,14 +60,14 @@ Multi-goal: each goal gets a `GoalIntent` per week (foundation, build, specificP
 | Base length | 90 min × CTL factor (0.7–1.3) × tier (0.9–1.1), together 0.6–1.4; ×0.7 in taper and recovery weeks | from the event: foot = race cap × (0.5 + 0.5 × progress); other = `_longPeak` (110 % of a 3 h event falling to 55 % at 8 h; rides ≥ 150 min) × ramp |
 | Progression | none in base/build; ×1.4 in peak | grows with progress through the preparation |
 | Race cap (foot) | 5k 60, 10k 90, half 120, marathon 180, ultra 600 min; with a target 85 % of it, within 70–120 % of the cap | same |
-| History cap | longest of last 12 weeks × (1.12 + 0.05 per plan week; 0.08 towards last year's longest) | same |
+| History cap | longest of last 12 weeks × (1.12 + 0.05 per week of the current plan run, restarting at every replan; 0.08 towards last year's longest) | same |
 | Ultra (≥ 8 h, not foot) | — | regular long = 25 % of event (3–5 h); key long once per block towards 50 % of the event, reached at 75 % of the preparation, never next to another event |
 | Per week | two long slots (Sat + Sun) in most templates; trail running one; triathlon a long run Sat and a long ride Sun; beginners one; taper keeps only Saturday's | one long per goal sport, the longest on Saturday |
 
 ### 1.6 Intensity
 
 - Hard sessions per week: beginner 1, advanced 2, intermediate = the template's count: 2 in most sports, 1 for hiking, 3 for trail running (Monday intervals, Wednesday hills, Thursday tempo) and triathlon (swim, run tempo, bike tempo).
-- Athletes with < 5 % zone 4–5 time: one tempo (zone ≤ 3) session in the first two weeks.
+- Athletes with < 5 % of their heart-rate zone time in zones 4–5 over 12 weeks: one tempo session, held to zone 3, in the first two weeks of a plan run. A run starts at every replan (finding 12).
 - Single path templates: running = tempo Z4 Wednesday, intervals Z5 Thursday, two long runs at the weekend, one recovery run, yoga, strength. Hilly race: one tempo becomes hills in build/peak.
 - Multi path `_qualityKinds`: base = steady (Z3) alternating with Z5 (bike: threshold); build/peak = race intensity + Z5 (long "finish" goals alternate, late build race intensity only); maintain = race intensity every other week; sharpen = openers, or steady for long events; hiking = hills.
 - The week load cap (`weekTss × 1.1`) swaps a key workout for a lighter one; it is the only use of the progression factor and of the readiness factor.
@@ -109,6 +108,15 @@ These are concrete issues, independent of any research debate.
 7. **Fallback HR zones disagree with the rest of the app.** Without stored zones but with an LTHR, the planner uses upper bounds of 76/82/88/92 % LTHR. The app's own model (`hr_zone_model.dart`) uses Friel floors of 85/90/95/100 % (running). In the fallback, zone 5 starts at 92 % of LTHR, i.e. below threshold, and zone 2 ends at 82 %.
 8. **Strength depends on the path.** Single plans get the periodised programme, multi-goal plans a generic session every week, including taper weeks.
 9. **Taper length lives in two places.** `sharpenDays` (A: 14 or 7 days, B: 7 or 4) is only used for C goals and conflicts; A and B tapers come from `seasonPhase` (2 weeks or 1).
+10. **Triathlon: one swim a week, and a hard one (single path).** The `triathlon` template has a long run (Sat), a long ride (Sun), run tempo (Wed), bike tempo (Thu), core strength and exactly one swim: a zone 4 key session on Tuesday. No easy or technique swim. Swimming depends on frequency and technique; coach plans give it two to three sessions and about a quarter of the week (a beginner long-distance plan, weeks 1–5: 2:00–2:45 h swimming of 7–9 h). The multi path weights swimming 0.8 (`SeasonTimeline.sportsOf`); how many swims it plans was not checked.
+11. **Triathlon long sessions are sized from the whole race (read from the code, not run).** A triathlon goal has one distance and one duration. Without a target time the duration is estimated at running pace over the total distance (`SeasonGoal._typicalSecondsPerMetre` has no triathlon case: 0.36 s/m), so a 226 km long distance counts as about 22 h. The multi path then treats swim and bike as an ultra event (`_ultraLong`: regular long session a quarter of the event, 3–5 h, key session towards half of it) and sizes the long run from the total distance (`maxLongRunMinutes` → category `ultra`, cap 600 min); the single path caps the long run the same way. Only the history caps keep these sessions realistic. A triathlon needs per-discipline demand: each leg's distance and expected time.
+12. **Long-event series get almost no high intensity.** Three rules add up (multi path, `_qualityKinds` and `allocate` in `week_allocator.dart`, `easyStart` at `training_plan_service.dart:2044`):
+    - *A cautious start that never ends.* With less than 5 % of the zone time of the last 12 weeks in zones 4–5, the first two weeks of a plan run have one quality session, a tempo held to zone 3. The weeks count from the last replan, and a plan is rebuilt whenever goals, the weekly schedule or absences change, the zone time jumps or HRV drops on two nights (the last two at most every 3 days). With frequent replans the start lasts. It also feeds itself: a plan without zone 4–5 keeps the share under 5 %, and 5 % is little for high volume (10 h a week with 30 min of intervals is about 5 %).
+    - *Long goals raced to finish.* From 6 h on foot (4 h otherwise) without the ambition "performance", race intensity is a steady session in zone 3; zone 5 comes only every other build week and stops at 70 % of the preparation.
+    - *Events take the weeks.* Before an A or B goal the last two weeks (one in a short preparation) sharpen with steady sessions only; the event week has no quality session; the recovery days after it (up to 7) give that goal's sport none, and after an event of 4 h or more the whole week at most one. C goals only "maintain": race intensity every other week. With a long event every one to two months, two to four ordinary weeks remain between them, and only every other one has zone 5.
+
+    Read from the code, not run against a real plan; it matches an athlete's report (an 88 km run, then a long event every one to two months: almost only easy runs and road rides).
+13. **A replan restarts the long-session growth.** The history cap grows by 5–8 % per week of the plan run (`weekInRun`), which starts at 0 at every replan. Completed long sessions raise the longest session itself, so the effect is smaller than it looks, but a session that is planned and not yet done no longer counts.
 
 ## 3. Against current research
 
@@ -167,7 +175,79 @@ One generator, one rule core.
 | 8 | Strength placement and phase dose for all plans | medium | |
 | 9 | Long-event recovery, downhill work, HRV-shifted recovery week | medium | smaller evidence base |
 
+Intensity in event series (finding 12) is small and comes with step 3: count the cautious start from the season, not from the replan, and judge it by zone time per week rather than share; give ordinary weeks between events at least one quality session, threshold and zone 5 in turn, independent of odd and even weeks.
+
+Triathlon (findings 10, 11) comes before step 6: per-discipline demand from the leg distances, at least two swims a week (one easy or technique), and the hard-session cap of finding 4a.
+
 Each step should come with a plan comparison on a few fixed athlete histories (beginner 10k, intermediate marathon, advanced ultra trail, brevet rider, triathlete), so changes in plans are visible before they ship.
+
+## 6. Implementation plan
+
+Derived from the code read on 2026-11-22; nothing of it is built yet. Each step is measured with the benchmark (step 0) before and after.
+
+**Step 0 – Benchmark (test, not product code).** `test/plan_benchmark/plan_benchmark_test.dart` with fixed athletes: long-event series (an 88 km run, then a long event every one to two months, road bike as second sport), beginner 10 km, intermediate marathon, beginner long-distance triathlete, brevet rider. Per plan week: hours and sessions per sport, longest session per sport, hard sessions (zone ≥ 4), hard days in a row, recovery weeks, taper volume. Prints a table per athlete; asserts only clear rules (no hard days in a row, at least one quality session in ordinary weeks). Ranges from coach plans as in the benchmark section below.
+
+**Step 1 – Intensity in event series (finding 12).**
+- `training_plan_service.dart:2044`: count the cautious start from the season anchor (`g < 2`), not from the replan (`w < 2`).
+- `_TrainingHistory.mostlyEasy`: judge by zone 4–5 minutes per week (e.g. under 10 min on average over 12 weeks) instead of a share of all zone time.
+- `_qualityKinds` (`week_allocator.dart`): foundation threshold and zone 5 in turn instead of steady every other week; build for long finish goals race intensity and zone 5 each week when the hard-session cap allows two, else in turn, and a short zone 5 session every other week after 70 % instead of none; maintain one session every week, threshold and zone 5 in turn. Event, sharpen and recovery weeks stay as they are.
+
+**Step 2 – Clear defects (small each).**
+- Hard-day spacing in both paths (finding 3): `bestOffset`/`dist()` keeps a set of hard days and makes the neighbours of a hard or long day expensive, not only in the multi path.
+- `PlanAthleteProfile.maxKeySessions`: 2 for intermediates (finding 4a).
+- One long session per week for 5k/10k/half goals (finding 4): the Sunday long slot becomes easy.
+- Fallback zones from LTHR via `zoneUpperBounds(lthrZoneFloors(...))` (finding 7).
+- Multi-path strength by phase via `strengthProgrammeId` after `_slotOf`, counts per phase as in the single path (finding 8).
+
+**Step 3 – One load model (findings 1, 2).** `lib/services/load_model.dart` with one CTL/ATL function that walks every calendar day; used by the planner, `DailyReadinessService`, the Form screen and `form_forecast.dart`. Recalibrate the tiers on real TRIMP histories, or derive the level from weekly hours and training years.
+
+**Step 4 – Single-session cap in the planner (§3 #1, finding 13).** Use `single_session_cap.dart` instead of "+12 % plus 5–8 % per plan week" in `_longWanted` and the single path. The week loop keeps the longest session per sport, seeded from 60 days of history and raised by each planned week; the cap is that × 1.1. `weekInRun` growth goes, so a replan resets nothing. Running stricter: 30 days, every session.
+
+**Step 5 – Taper (§3 #2).** Single path −30 % then −50 % instead of ×0.7, same number of sessions, intensity kept; `budgetFactor` for `sharpen` 0.7 two weeks out and 0.5 in the last week; a short race-pace dose also before long events.
+
+**Step 6 – Triathlon (findings 10, 11).**
+- Data: `RaceGoals.legsJson` (schema 72, nullable): per leg sport, distance, optional target seconds and elevation. Room for duathlon, aquathlon and swimrun later. Goals without legs get them inferred from the total distance (standard formats below), so no migration of existing goals is needed.
+- Planner: `SeasonGoal.legs`; `GoalDemand` per discipline (leg distance, expected time from the leg target or typical speed); `SeasonTimeline.sportsOf` returns each discipline with its own demand; `_longWanted` uses the leg's demand, so no ultra rule for a 3.8 km swim. `_typicalSecondsPerMetre` gets a triathlon case for the total. At least two swims a week, one easy or technique: in the template and as a minimum in the allocator.
+- Goal editor (`race_goal_editor.dart`): when the sport is triathlon, a row of format chips replaces the distance field: Sprint (0.75 / 20 / 5), Olympic (1.5 / 40 / 10), Middle / 70.3 (1.9 / 90 / 21.1), Long (3.8 / 180 / 42.2), Custom. A format fills the three legs, shown as one line ("1.5 km swim · 40 km bike · 10 km run"); Custom opens three distance fields. The total distance is their sum and is not edited directly. One total target time stays the default; "Targets per discipline (optional)" opens swim, bike and run targets plus bike and run climbing. A goal from the race library or Garmin preselects the format whose total is within 10 % of the given distance.
+- races.fjelia.com (fjelia-service): today the extractor stores each leg of a triathlon as a race of its own (Triathlon Ingolstadt "SPRINTDISTANZ" as 0.75, 20 and 5 km; BerlinTriathlon "Mitteldistanz" as 1.9 and 19 km), so the typeahead would offer a 0.75 km triathlon. Change: `race.legs` (JSON: sport, distance, climbing per leg) with `distance_km` as their sum; the API returns `legs` for a race and the search hit (`docs/races/openapi.yaml`, `SPEC.md`); the extractor prompt asks for legs of multisport races (triathlon, duathlon, aquathlon, swimrun) and the verify rules check every leg distance on the page; the 14 triathlon/duathlon events are repaired by grouping rows with the same race name into one race with legs.
+- The app's library fill (`_fillFromLibrary`, `race_library` client): takes `legs` when the race has them and sets format and legs; without them the format is inferred from the total distance as for older goals. The distance chooser lists one entry per format ("Sprint · 0.75 / 20 / 5 km"), never single legs.
+- Onboarding (`training_plan_onboarding_screen.dart`): the same format chips (shared widget), without the custom fields; details later in the editor. The race search in onboarding fills the format from the library like the editor.
+- Display: goal cards show the format and legs ("Olympic · 1.5 / 40 / 10 km").
+- New texts (format names, leg labels, hint) in all 13 languages.
+
+**Step 7 – One path (§4).** `SeasonPolicy.singleGoalThroughAllocator` routes a single goal through the allocator; benchmark with the switch on and off; then retire the templates.
+
+**Step 8 – Zone distribution (§3 #3).** After a week is built, compute the planned time below LT1 from `WorkoutSemantics`; under 75 %, lengthen easy sessions or shorten a quality one. Later the done zone time feeds the next week (closed-loop controller).
+
+**Step 9 – Readiness factor (finding 6).** Remove it; the morning adaptation does the work.
+
+| Step | Size |
+|---|---|
+| 0 Benchmark | medium |
+| 1 Intensity in event series | small |
+| 2 Clear defects | small |
+| 3 Load model | small to medium |
+| 4 Single-session cap | medium |
+| 5 Taper | small |
+| 6 Triathlon (data, planner, editor, onboarding) | medium to large |
+| 7 One path | large |
+| 8 Zone distribution | medium |
+| 9 Readiness factor | small |
+
+### Benchmark against coach plans
+
+A test, not product code: fixed example athletes go through the generator, and each plan week is measured against ranges taken from coach plans. A deviation is a prompt to look, not an error; coach plans are practice, not evidence.
+
+| Measure per week | Example range (triathlon, beginner long distance, 8–10 h) |
+|---|---|
+| Hours per sport and share of the week | swim 20–30 %, bike 35–45 %, run 25–35 % |
+| Sessions per sport | swim ≥ 2, bike ≥ 2, run ≥ 2 |
+| Longest session per sport | growing with the plan, within the history caps |
+| Recovery weeks | every 3rd or 4th week, volume clearly lower, short intensity kept |
+| Taper | last 1–2 weeks, volume −40 to −60 %, intensity kept |
+| Hard sessions | at most 2, zone time mostly below LT1 |
+
+Example athletes: beginner long-distance triathlete (8–10 h), olympic distance (7–8 h), and the five histories above. References: a commercial beginner long-distance plan (34 weeks: preparation 5, base 16, build 10, race-specific 3; recovery every 3rd week; weeks 1–5 between 7:10 and 9:20 h) and the free DTU/TIME2TRI plans (sprint, olympic, middle distance; not yet looked at in detail). Only aggregate numbers go into the ranges; no coach plan is copied into the app or the repo.
 
 ## References
 

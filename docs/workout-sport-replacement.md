@@ -15,7 +15,9 @@ Technik, Muskelbeanspruchung oder mechanischer Belastung.
    vor. Die Auswahl bleibt änderbar.
 3. Eine Vorschau zeigt Sport, geschätzte Dauer, Trainingsziel, Zonen und Schritte
    sowie relevante Hinweise.
-4. Der Nutzer bestätigt die Änderung oder kehrt zurück. **Als Ruhe markieren**
+4. Der Nutzer bestätigt die Änderung oder kehrt zurück. Ersetzt der Wechsel die
+   Einheit nur teilweise, wählt er zwischen Aufteilen und der kürzeren Einheit
+   (siehe „Teilersatz und Aufteilung“). **Als Ruhe markieren**
    bleibt eine separate, gleichrangige Alternative; „My Choice“ gehört nicht in
    diesen Ablauf, da der Nutzer den Sport bereits im Sportwechsel auswählt.
 5. Nach der Bestätigung wird die ursprüngliche Einheit als ersetzt/übersprungen
@@ -33,16 +35,21 @@ technische oder muskuläre Gleichwertigkeit.
 | Trailrunning | Laufen, Steigungslaufband, Wandern, Stair Climber | Höhenmeter und Untergrund gehen nicht vollständig über |
 | Rad | Indoor-Rad, Laufen, Crosstrainer, Rudern | Individuelle Laufverträglichkeit beachten |
 | Schwimmen | Pool, Freiwasser | Technik und Wassergefühl bleiben sportartspezifisch |
-| Rudern / Indoor Rowing | Rudern, SkiErg, Rad | Ruder- und SkiErg-Technik unterscheiden sich |
-| SkiErg | Langlauf, Rudern, Indoor Rowing, Rad | Oberkörperbelastung kann abweichen |
-| Langlauf | SkiErg, Rudern, Rad, Laufen | Schnee, Gelände und Technik gehen nicht über |
+| Rudern / Indoor Rowing | Rudern, Indoor Rowing, Langlauf (auch SkiErg), Rad | Ruder- und SkiErg-Technik unterscheiden sich |
+| Langlauf / SkiErg / Skating | Langlauf, Skating, Rudern, Indoor Rowing, Rad, Laufen | Schnee, Gelände und Technik gehen nicht über; am SkiErg fehlt die Beinarbeit des Langlaufs |
 | Wandern | Gehen, Trailrunning, Steigungslaufband | Laufbelastung vorsichtig dosieren |
 | Gehen | Wandern, lockeres Laufen, Rad | Mechanische Belastung beachten |
-| Krafttraining | Krafttraining, Körpergewichtstraining | Nicht durch ein aerobes Workout ersetzen |
+| Krafttraining | kein Sportwechsel | Nicht durch ein aerobes Workout ersetzen |
 | Crosstrainer | Laufen, Rad, Rudern | Nur grobe aerobe Entsprechung |
 
 Gibt es keine geeignete Ersatzsportart, soll Fjelia Ruhe oder eine passende
 Alternative empfehlen, statt eine falsche Gleichwertigkeit vorzutäuschen.
+Die Tabelle entspricht `_replacementSports` in `plan_session_sheet.dart`. Ein
+SkiErg (Concept2 PM5) wird als `nordic_skiing` aufgezeichnet und gehört damit zur
+Familie Ski wie Langlauf: Im Sportwechsel steht er unter „Langlauf“, seine
+Einheiten zählen für Belastungsvergleich und Grenze als Ski. Eine eigene Auswahl
+„SkiErg“ gibt es im Sportwechsel nicht. Krafttraining bietet keinen
+Sportwechsel an.
 
 ## Dauer und Belastung
 
@@ -82,7 +89,7 @@ Intensität ist der Energieumsatz pro Minute in beiden Sportarten ähnlich, der
 Vergleich ergäbe also etwa die Originaldauer. Fjelia hat bessere Daten:
 Herzfrequenz, Leistung und die Zonen je Sportart.
 
-### Belastungsvergleich (umgesetzt)
+### Belastungsvergleich
 
 - Aktivitäten der letzten 180 Tage werden nach Sportfamilie ausgewertet.
 - Herstellerwerte wie Garmin Training Load oder herstellerspezifische Zonenwerte
@@ -115,8 +122,8 @@ gedeckelt:
 | Laufen → Crosstrainer | 1,10 × Laufdauer |
 | Crosstrainer → Laufen | 0,85 × Crosstrainerdauer |
 | Rad → Rudern | 0,75 × Raddauer |
-| Rudern → SkiErg | 0,90 × Ruderdauer |
-| SkiErg → Rudern | 1,10 × SkiErg-Dauer |
+| Rudern → Langlauf/SkiErg | 0,90 × Ruderdauer |
+| Langlauf/SkiErg → Rudern | 1,10 × Langlauf-/SkiErg-Dauer |
 | Schwimmen → Rad | 1,20 × Schwimmdauer |
 | andere Paare | 1,15 × Ausgangsdauer |
 
