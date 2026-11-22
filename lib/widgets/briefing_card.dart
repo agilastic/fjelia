@@ -100,9 +100,11 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
             ],
           ),
           const SizedBox(height: 12),
+          // A preview of three lines: the briefing opens with its main point
+          // and today's action, the rest follows under "read more".
           Text(
             text,
-            maxLines: _expanded ? null : 5,
+            maxLines: _expanded ? null : 3,
             overflow: _expanded ? null : TextOverflow.ellipsis,
             style: const TextStyle(fontSize: 14, height: 1.55),
           ),

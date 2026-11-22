@@ -163,7 +163,7 @@ void main() {
     expect(prompt, isNot(contains('+3.3')));
     expect(prompt, isNot(contains('Night:40ms')));
     expect(prompt, contains('planned rest day'));
-    expect(request.instructions, contains('at most 100 words'));
+    expect(request.instructions, contains('at most 260 words'));
     expect(request.instructions, contains('German du, never Sie'));
     expect(request.instructions, contains('DO NOT list or repeat'));
   });

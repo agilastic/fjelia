@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 
 import '../config/fjelia_pro.dart';
 import '../config/free_ai.dart';
@@ -44,16 +45,16 @@ const _eveningSysPrompt =
     'You are Fjelia AI Coach. Generate a short evening briefing. Be a cautious coach: reflect on today, prepare for tomorrow.\n\nTOON CONTEXT FORMAT: compact key:value blocks. "na" = unavailable.\n- HRV, Sleep, Recovery, Stress, TrainingMonitor (CTL/ATL/TSB), Activities (today), TodayWorkout/TomorrowWorkout options, Body (BMR/calories), HeatAcclimation, Weather.\n- TodayWorkout/upcoming: Src:plan = internal training plan, Src:garmin = Garmin-synced workout. Both are valid options.\n\nEVENING BRIEFING RULES — plain text, 2–4 short sentences, no markdown, no bullet points:\n1. Open with today: activity type + duration/distance if done, or "rest day". One sentence.\n2. If today\'s session was ≥75 min: one sentence on post-workout recovery nutrition (20–40g protein + carbs; note if the 60-min window has passed).\n3. If ATL spiked this week or TSB is very negative: flag accumulated fatigue with numbers.\n4. Check tomorrow\'s scheduled sessions (upcoming). Fjelia is the primary plan; Garmin can contain copies. Keep all scheduled sessions when giving advice. Give ONE recommendation:\n   - Hard today + negative TSB → scale back tomorrow or swap to easy.\n   - Easy/rest today + neutral/positive TSB → confirm tomorrow\'s plan.\n   - Tomorrow has no session: count consecutive training days in Activities. If ≥3 days in a row (including today), confirm rest — do NOT suggest an opportunistic workout.\n   - No strength in recent Activities + tomorrow is easy/rest + <3 consecutive training days → suggest a short strength block.\n5. One sleep/recovery tip: target sleep duration, wind-down routine, or nutrition timing.\n- Mention tomorrow\'s weather or heat if it affects the session.\n- No guilt about today. No streak language. Frame tomorrow as an opportunity, not an obligation.\n- Do not diagnose medical conditions.\n';
 
 const _morningUserPrompt =
-    'Give me my morning briefing. Check if I have a workout scheduled today and tell me whether to do it as planned, modify it, add something, or skip it — based on my recovery, HRV, and fatigue. If TodayWorkout says cancelled, respect my decision to skip and do not suggest a replacement workout. Plain text only, no markdown, no bullet points, 2-4 short sentences max, at most 100 words.';
+    'Give me my morning briefing. Check if I have a workout scheduled today and tell me whether to do it as planned, modify it, add something, or skip it — based on my recovery, HRV, and fatigue. If TodayWorkout says cancelled, respect my decision to skip and do not suggest a replacement workout. Plain text only, no markdown, no bullet points, 4-7 short sentences max, at most 260 words.';
 
 const _lunchUserPrompt =
-    'Give me my lunch briefing. Use the latest synced morning and midday data. Reassess today\'s plan, recovery, fueling, hydration, and whether the rest of the day should stay as planned or be adjusted. Plain text only, no markdown, no bullet points, 2-4 short sentences max, at most 100 words.';
+    'Give me my lunch briefing. Use the latest synced morning and midday data. Reassess today\'s plan, recovery, fueling, hydration, and whether the rest of the day should stay as planned or be adjusted. Plain text only, no markdown, no bullet points, 4-7 short sentences max, at most 260 words.';
 
 const _afternoonUserPrompt =
-    'Give me my afternoon briefing. Use the latest synced day data. Reassess fatigue, completed activity, remaining workout plans, recovery needs, and whether evening training should continue, be reduced, or be skipped. Plain text only, no markdown, no bullet points, 2-4 short sentences max, at most 100 words.';
+    'Give me my afternoon briefing. Use the latest synced day data. Reassess fatigue, completed activity, remaining workout plans, recovery needs, and whether evening training should continue, be reduced, or be skipped. Plain text only, no markdown, no bullet points, 4-7 short sentences max, at most 260 words.';
 
 const _eveningUserPrompt =
-    'Give me my evening briefing. Reflect on today\'s training and recovery. Check tomorrow\'s scheduled workout and tell me whether to do it as planned or adjust — based on today\'s fatigue and HRV trend. Give one sleep/recovery tip for tonight. Plain text only, no markdown, no bullet points, 2-4 short sentences max, at most 100 words.';
+    'Give me my evening briefing. Reflect on today\'s training and recovery. Check tomorrow\'s scheduled workout and tell me whether to do it as planned or adjust — based on today\'s fatigue and HRV trend. Give one sleep/recovery tip for tonight. Plain text only, no markdown, no bullet points, 4-7 short sentences max, at most 260 words.';
 
 /// Sends one prepared prompt to the on-device model and returns its reply.
 typedef AppleSender = Future<String> Function(AppleCoachRequest request);
@@ -1370,7 +1371,11 @@ class AiCoachClient {
     var echoed = false;
     var languageRetried = false;
     var forceLanguage = firmly;
-    for (var attempt = 0; attempt < 5; attempt++) {
+    // After Apple's safety filter blocked a request: first its guardrails for
+    // rewording the person's own data, then the same data in plain words.
+    var permissive = false;
+    var neutral = false;
+    for (var attempt = 0; attempt < 6; attempt++) {
       final request = AppleCoachRequest.build(
         messages,
         toonContext,
@@ -1380,10 +1385,13 @@ class AiCoachClient {
         strict: strict,
         includeContext: !bare,
         forceLanguage: forceLanguage,
+        permissive: permissive,
+        neutral: neutral,
       );
       log(
         '[AiCoach] Apple input=${request.inputBytes} bytes, '
-        'attempt=${attempt + 1}, locale=$locale, strict=$strict, bare=$bare',
+        'attempt=${attempt + 1}, locale=$locale, strict=$strict, bare=$bare'
+        '${permissive ? ', permissive' : ''}${neutral ? ', neutral' : ''}',
       );
       try {
         _logGeneration(
@@ -1405,8 +1413,13 @@ class AiCoachClient {
                         // prompt, as Apple advises).
                         options: GenerationOptionsRequest(
                           temperature: 0.3,
-                          maximumResponseTokens: 400,
+                          // A briefing may run to 260 words (about 600 tokens
+                          // in German).
+                          maximumResponseTokens: isBriefing ? 800 : 400,
                         ),
+                        guardrailLevel: request.permissive
+                            ? GuardrailLevel.permissive
+                            : null,
                       )).content)
                 .trim();
         if (looksLikeContextEcho(text) || looksLikeRepetition(text)) {
@@ -1434,7 +1447,8 @@ class AiCoachClient {
           continue;
         }
         log(
-          '[AiCoach] Apple ✓ attempt=${attempt + 1} strict=$strict bare=$bare',
+          '[AiCoach] Apple ✓ attempt=${attempt + 1} strict=$strict bare=$bare'
+          '${permissive ? ' permissive' : ''}${neutral ? ' neutral' : ''}',
         );
         final reply = text.isEmpty ? 'No response.' : text;
         return isBriefing
@@ -1464,6 +1478,30 @@ class AiCoachClient {
         if (language && !strict) {
           strict = true;
           continue;
+        }
+        if (isAppleGuardrailViolation(e)) {
+          // Which topics were in it: names only. The text itself (health data)
+          // only in debug builds, never in a release log.
+          log(
+            '[AiCoach] Apple safety filter blocked ${isBriefing ? 'the briefing' : 'the reply'} '
+            '(permissive=$permissive, neutral=$neutral); topics: '
+            '${appleSensitiveTopics(request).join(', ')}',
+          );
+          if (kDebugMode) {
+            log(
+              '[AiCoach] Blocked request (debug only)\n'
+              '--- instructions ---\n${request.instructions}\n'
+              '--- prompt ---\n${request.prompt}',
+            );
+          }
+          if (!permissive) {
+            permissive = true;
+            continue;
+          }
+          if (!neutral) {
+            neutral = true;
+            continue;
+          }
         }
         // Last resort: without health data, to tell a content trigger
         // apart from a device-level language problem.

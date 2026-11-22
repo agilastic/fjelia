@@ -592,6 +592,11 @@ class AiContextToonBuilder {
         'Ambition:${seasonGoal.ambition?.name ?? 'unknown'}]',
       );
     }
+    // With goals on the race calendar, the old free-text profile field is out:
+    // it repeats or contradicts them ("marathon Hannover 422km").
+    if (ordered.isNotEmpty) {
+      lines.removeWhere((line) => line.startsWith('[RaceGoals:'));
+    }
     // No race on the calendar: the athlete's own aim, so the coach does not
     // ask about a race or push for one.
     if (ordered.isEmpty) {

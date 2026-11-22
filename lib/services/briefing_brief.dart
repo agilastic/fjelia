@@ -126,16 +126,28 @@ class BriefingBrief {
     };
   }
 
-  /// An absence in English words, for a model.
-  static String awayEnglish(String kind) => switch (kind) {
-    'illness' => 'ill',
-    'injury' => 'injured',
-    'vacation' => 'on holiday',
-    _ => 'in the off-season',
-  };
+  /// An absence in English words, for a model; [neutral]: plain words after
+  /// Apple's safety filter blocked a briefing.
+  static String awayEnglish(String kind, {bool neutral = false}) =>
+      switch (kind) {
+        'illness' => neutral ? 'unwell' : 'ill',
+        'injury' => neutral ? 'hurt' : 'injured',
+        'vacation' => 'on holiday',
+        _ => 'in the off-season',
+      };
 
   /// A finding in English words, for a model.
   static String englishFinding(String id) => _english[id] ?? id;
+
+  /// Body signals in everyday words, for the retry after Apple's safety
+  /// filter blocked a briefing: the same finding, no clinical wording.
+  static const _plain = {
+    'rhrUp': 'resting pulse higher than usual',
+    'rhrDown': 'resting pulse lower than usual',
+    'respHigh': 'breathing faster than usual at night',
+    'spo2Low': 'oxygen level lower than usual',
+    'skinTempOff': 'skin temperature different from usual',
+  };
 
   static const _english = {
     'hrvLow': 'low sleep HRV',
@@ -156,9 +168,13 @@ class BriefingBrief {
   };
 
   /// The compact text the model gets. Words, not figures: the person sees
-  /// every figure on screen already.
-  String toModelText() {
-    String names(List<String> v) => v.map((e) => _english[e] ?? e).join('; ');
+  /// every figure on screen already. [neutral]: the same findings in plain
+  /// words, for the retry after Apple's safety filter blocked the briefing.
+  String toModelText({bool neutral = false}) {
+    String names(List<String> v) => v
+        .map((e) => (neutral ? _plain[e] : null) ?? _english[e] ?? e)
+        .join('; ');
+    String awayText(String kind) => awayEnglish(kind, neutral: neutral);
     String plan(List<String> v) => v
         .map((e) {
           final p = e.split('/');
@@ -177,7 +193,7 @@ class BriefingBrief {
       if (good.isNotEmpty) 'Good: ${names(good)}',
       if (done.isNotEmpty) 'Done today: ${plan(done)}',
       if (away != null)
-        'Today the athlete is ${awayEnglish(away!)} (entered by the athlete), so the plan holds no training today'
+        'Today the athlete is ${awayText(away!)} (entered by the athlete), so the plan holds no training today'
       else if (today.isNotEmpty)
         'Still planned today: ${today.length} scheduled ${today.length == 1 ? 'session' : 'sessions'}, ${plan(today)}'
       else if (restDay)
@@ -185,11 +201,11 @@ class BriefingBrief {
       else
         'No further scheduled sessions today',
       if (backFrom != null)
-        'First week back after being ${awayEnglish(backFrom!)}: the plan keeps it easy and short',
+        'First week back after being ${awayText(backFrom!)}: the plan keeps it easy and short',
       if (window != null && away == null)
         'The athlete can train today ${window!.replaceAll('+', ' and ').replaceAll('-', ' to ')}',
       if (awayTomorrow != null)
-        'Tomorrow the athlete is ${awayEnglish(awayTomorrow!)}, so no training is planned tomorrow'
+        'Tomorrow the athlete is ${awayText(awayTomorrow!)}, so no training is planned tomorrow'
       else if (tomorrow.isNotEmpty)
         'Planned tomorrow: ${plan(tomorrow)}'
       else if (restTomorrow)

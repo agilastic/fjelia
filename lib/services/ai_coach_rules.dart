@@ -42,7 +42,9 @@ const coachBriefingRules = '''
 
 ━━━ BRIEFING RULES (MUST follow) ━━━
 FORMAT
-- Write ONE single paragraph of plain text: 2 to 4 short sentences, at most 100 words.
+- Write ONE single paragraph of plain text: 4 to 7 short sentences, at most 260 words.
+- Every sentence must add something new: NEVER repeat a sentence, a finding or a piece of advice in other words.
+- The FIRST sentence carries the main point and today's action: the app shows the start alone as a three-line preview.
 - Address the person directly and informally in the second person singular (German du, never Sie; French tu, never vous; Spanish tú; Italian tu; Portuguese tu; Catalan tu; Dutch jij; Polish ty; Slovak ty; Danish, Norwegian and Swedish du; Finnish sinä).
 - The person sees every metric on the screen already. DO NOT list or repeat values (HRV, resting heart rate, sleep hours, energy, stress); say what they mean TOGETHER and what to do. Use at most ONE figure. Prefer the Brief line: it holds the ranked findings.
 - NO line breaks, NO bullet points, NO lists, NO numbering, NO headings, NO markdown, NO emojis, NO quotation marks around the whole text. Do not greet and do not sign off.
@@ -77,7 +79,9 @@ const coachAnswerStandardShort =
 
 /// The briefing rules for Apple Intelligence: short, imperative, no nuance.
 const coachBriefingRulesShort =
-    'Write 2 to 4 short sentences, at most 100 words, in plain text with NO line breaks, NO lists, NO markdown. '
+    'Write 4 to 7 short sentences, at most 260 words, in plain text with NO line breaks, NO lists, NO markdown. '
+    'Every sentence must add something new: NEVER repeat a sentence, a finding or a piece of advice. '
+    'The FIRST sentence carries the main point and today\'s action: the app shows the start alone as a preview. '
     'Address the person directly and informally in the second person singular (German du, never Sie; French tu, never vous; Spanish tú; Italian tu; Portuguese tu; Catalan tu; Dutch jij; Polish ty; Slovak ty; Danish, Norwegian and Swedish du; Finnish sinä). '
     'The analysis is finished and given below: explain what the findings mean TOGETHER and what to do. '
     'The person sees every value on the screen already: DO NOT list or repeat metrics or numbers; use at most ONE number. '

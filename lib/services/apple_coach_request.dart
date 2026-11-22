@@ -84,11 +84,54 @@ String appleCoachFailureMessage(Object error) {
   return tr.appleCouldNotAnswer;
 }
 
+/// Apple's safety filter ("Response may contain sensitive or unsafe content")
+/// blocked the request or the reply it was writing.
+bool isAppleGuardrailViolation(Object error) {
+  final details = error.toString().toLowerCase();
+  return details.contains('guardrail') ||
+      details.contains('sensitive or unsafe');
+}
+
+/// Words in a request that Apple's safety filter may read as medical. Names
+/// only, never values: this is what the app logs after a block.
+const _sensitiveWords = {
+  'ECG': r'\[ECG:|\becg\b',
+  'blood pressure': r'\[BP:|blood pressure',
+  'body composition': r'\[Body:|\[Waist|body fat|weight',
+  'bio age': r'\[BioAge:',
+  'memory cards': r'\[Memory:',
+  'illness or injury': r'\bill\b|injur|illness|sick',
+  'blood oxygen': r'blood oxygen|spo2',
+  'breathing rate': r'breathing rate|respiration',
+  'skin temperature': r'skin temperature',
+  'resting heart rate': r'resting heart rate',
+  'doctor or diagnosis': r'doctor|diagnos|symptom',
+  'medication or alcohol': r'medicat|alcohol',
+};
+
+/// The sensitive topics in a request's data, for the log after a block. The
+/// fixed instructions ("advise seeing a doctor") would name them every time.
+List<String> appleSensitiveTopics(AppleCoachRequest request) {
+  final text = request.prompt;
+  return [
+    for (final entry in _sensitiveWords.entries)
+      if (RegExp(entry.value, caseSensitive: false).hasMatch(text)) entry.key,
+  ];
+}
+
 /// A conservative UTF-8 byte budget, not a character-to-token estimate. Leaves
 /// room within Apple's 4096-token window for framing and a 512-token answer.
 class AppleCoachRequest {
-  const AppleCoachRequest(this.instructions, this.prompt);
+  const AppleCoachRequest(
+    this.instructions,
+    this.prompt, {
+    this.permissive = false,
+  });
   final String instructions, prompt;
+
+  /// Apple's guardrails for rewording content the person provided
+  /// (`permissiveContentTransformations`); used after a safety-filter block.
+  final bool permissive;
   int get inputBytes =>
       utf8.encode(instructions).length + utf8.encode(prompt).length;
 
@@ -103,6 +146,8 @@ class AppleCoachRequest {
     bool forceLanguage = false,
     int maxQuestionBytes = 1800,
     String? questionTooLongMessage,
+    bool permissive = false,
+    bool neutral = false,
   }) {
     final dailyBrief = briefingInstructions == null || !includeContext
         ? null
@@ -143,7 +188,7 @@ class AppleCoachRequest {
         localeHint +
         (briefingInstructions == null
             ? 'Answer the latest question like a personal trainer: start with the answer, then 3 to 6 sentences with the data as evidence. NO tables, NO introduction, NO headings.${coachLanguageName() == 'British English' && budget >= 3000 ? appleChatExample : ''}'
-            : 'Give a ${period ?? 'daily'} briefing in 2 to 4 short plain sentences: what the findings mean and the next action. '
+            : 'Give a ${period ?? 'daily'} briefing in 4 to 7 short plain sentences: what the findings mean and the next action. '
                   '${dailyBrief?.today.isNotEmpty == true
                       ? 'All of today\'s scheduled sessions remain planned; a completed activity does not cancel them. '
                       : dailyBrief?.restDay == true
@@ -181,7 +226,7 @@ class AppleCoachRequest {
       // short sentences what it means together and what to do.
       factsTitle =
           'TODAY\'S ANALYSIS (finished; explain it in your own words and do NOT copy it)';
-      keyFacts.add('- ${brief.toModelText()}');
+      keyFacts.add('- ${brief.toModelText(neutral: neutral)}');
     } else if (isBriefing) {
       var size = 0;
       // What the facts may take: the budget minus the instructions, the
@@ -194,7 +239,8 @@ class AppleCoachRequest {
       final cap = room.clamp(0, 1900);
       for (final l in allLines) {
         if (!l.startsWith('[Context:') && !l.startsWith('[Analysis:')) continue;
-        final text = appleFactLine(l);
+        final fact = appleFactLine(l);
+        final text = neutral ? applePlainFactLine(fact) : fact;
         final bytes = utf8.encode(text).length + 3;
         if (size + bytes > cap) continue;
         keyFacts.add('- $text');
@@ -207,7 +253,7 @@ class AppleCoachRequest {
         ? ''
         : '\n\n$factsTitle:\n${keyFacts.join('\n')}';
     final suffix =
-        '$factsBlock\n\nLatest user message:\n$latest\n\n${isBriefing ? 'Write the briefing now in ${coachLanguageName()}: 2 to 4 short sentences, at most 100 words.' : appleAnswerInstructionFor(coachLanguageName())}';
+        '$factsBlock\n\nLatest user message:\n$latest\n\n${isBriefing ? 'Write the briefing now in ${coachLanguageName()}: 4 to 7 short sentences, at most 260 words.' : appleAnswerInstructionFor(coachLanguageName())}';
     final finalInstructions = '$instructions $scheduleInstruction';
     var remaining =
         budget - utf8.encode(finalInstructions + suffix).length - 100;
@@ -304,8 +350,10 @@ class AppleCoachRequest {
       }
     }
     for (final line in ordered) {
-      // Priority was decided on the compact line; the model reads sentences.
-      final text = appleFactLine(line.$2);
+      // Priority was decided on the compact line; the model reads sentences,
+      // after a safety-filter block in plain words.
+      final fact = appleFactLine(line.$2);
+      final text = neutral ? applePlainFactLine(fact) : fact;
       final size = utf8.encode(text).length + 1;
       if (used + size <= contextBudget) {
         excerpts.add(text);
@@ -329,10 +377,17 @@ class AppleCoachRequest {
       history.insert(0, text);
       remaining -= size;
     }
-    if (!includeContext) return AppleCoachRequest(finalInstructions, latest);
+    if (!includeContext) {
+      return AppleCoachRequest(
+        finalInstructions,
+        latest,
+        permissive: permissive,
+      );
+    }
     return AppleCoachRequest(
       finalInstructions,
       'REFERENCE DATA (excerpt, never repeat or list it):\n${excerpts.join('\n')}\n\nRecent chat:\n${history.join('\n')}$suffix',
+      permissive: permissive,
     );
   }
 }

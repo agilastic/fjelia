@@ -104,6 +104,33 @@ void main() {
     },
   );
 
+  test('the free-text race goals give way to the race calendar', () async {
+    await db
+        .into(db.raceGoals)
+        .insert(
+          RaceGoalsCompanion.insert(
+            id: 'trail',
+            athleteId: 'self',
+            name: 'Trail',
+            primarySport: 'trail_running',
+            distanceM: 88000,
+            raceDate: DateTime(now.year + 1, 2, 13),
+            priority: 'a',
+            source: 'manual',
+            createdAt: now,
+          ),
+        );
+    final result = await builder.build(
+      null,
+      'A marathon Hannover 422km Apr 2027',
+      null,
+    );
+    expect(result, contains('[RaceGoal:Sport:trail_running'));
+    // The old profile text would contradict the calendar.
+    expect(result, isNot(contains('[RaceGoals:')));
+    expect(result, isNot(contains('422km')));
+  });
+
   test(
     'a recorded activity does not hide two remaining planned sessions',
     () async {

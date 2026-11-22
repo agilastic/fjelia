@@ -43,6 +43,10 @@ void main() {
           .write(const RaceGoalsCompanion(targetFinishSeconds: Value(14400)));
       final updated = await cache.getOrBuild(null, '', null);
       expect(updated, contains('Target:4:00:00'));
+      // The free-text profile goal only counts without calendar goals.
+      await (db.delete(
+        db.raceGoals,
+      )..where((t) => t.id.equals('marathon'))).go();
       final profile = await cache.getOrBuild(null, 'A new profile goal', null);
       expect(profile, contains('[RaceGoals:A new profile goal]'));
     },

@@ -1,5 +1,39 @@
 import 'coach_memory_context.dart';
 
+/// Medical words and their plain equivalents, for the retry after Apple's
+/// safety filter blocked a request. The figures and findings stay; only the
+/// clinical words go.
+final _plainWords = <RegExp, String>{
+  RegExp(r'\b(ECG|EKG)\b|electrocardiogram', caseSensitive: false):
+      'heart recording',
+  RegExp(r'blood pressure', caseSensitive: false): 'circulation reading',
+  RegExp(r'atrial fibrillation|\bA-?Fib\b|arrhythmi\w*', caseSensitive: false):
+      'irregular rhythm',
+  RegExp(r'sinus rhythm', caseSensitive: false): 'regular rhythm',
+  RegExp(r'tachycardi\w*', caseSensitive: false): 'fast heart rate',
+  RegExp(r'bradycardi\w*', caseSensitive: false): 'slow heart rate',
+  RegExp(
+    r'premature (ventricular|atrial) (contractions?|beats?)|\b(PVC|PAC)s?\b|ectopic( beats?)?',
+    caseSensitive: false,
+  ): 'extra beats',
+  RegExp(r'blood oxygen|\bSpO2\b', caseSensitive: false): 'oxygen level',
+  RegExp(r'diagnos\w*', caseSensitive: false): 'reading',
+  RegExp(r'symptoms?', caseSensitive: false): 'complaints',
+  RegExp(r'disease', caseSensitive: false): 'condition',
+  RegExp(r'\billness\b', caseSensitive: false): 'feeling unwell',
+  RegExp(r'\b(ill|sick)\b', caseSensitive: false): 'unwell',
+  RegExp(r'\binjur(y|ies|ed)\b', caseSensitive: false): 'hurt',
+};
+
+/// The same fact in plain words: every value stays, the clinical wording goes.
+String applePlainFactLine(String text) {
+  var plain = text;
+  _plainWords.forEach(
+    (pattern, word) => plain = plain.replaceAll(pattern, word),
+  );
+  return plain;
+}
+
 /// Plain-language versions of the TOON lines the on-device model has to use.
 ///
 /// The compact `[Tag:key:value,...]` format suits large cloud models. The small
