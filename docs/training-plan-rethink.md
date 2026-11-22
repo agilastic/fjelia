@@ -11,7 +11,7 @@ About 15,400 lines in five layers:
 |---|---|---|---|
 | Plan service | `lib/services/training_plan_service.dart` | 3,767 | Entry point, fitness snapshot, weekly templates, day placement, session length, template choice, watch delivery |
 | Season | `lib/services/season/*.dart` | 2,213 | Goals (A/B/C), phases, intent per goal and week, the week allocator |
-| Workout library | `lib/services/workout_template_library.dart` | 5,226 | About 170 structured workouts (intervals 58, endurance 44, tempo 37, hills 13, threshold 10, swim 10, …) |
+| Workout library | `lib/services/workout_template_library.dart` | 5,226 | 176 workout templates (intervals 58, endurance 44, tempo 37, hills 13, threshold 10, pool swim 10, …); the strength programmes come from `strength_templates.dart` |
 | Strength | `lib/services/strength/*.dart` | 3,068 | Programmes by focus and phase, progression proposals, gym mode |
 | Adaptation | `session_adaptation_service.dart`, `plan_rebalance.dart`, `missed_workout_planner.dart` | 1,168 | Morning readiness, missed sessions |
 
@@ -30,7 +30,7 @@ Consequence: adding a C race to a marathon plan switches the whole logic, includ
 
 | Input | Source | Used for |
 |---|---|---|
-| CTL / ATL / TSB | 42/7-day EWMA of `dayScoreRecords.strainScore` (summed Banister TRIMP since the migration), line 885 | tier (CTL < 35 beginner, ≥ 50 advanced), prepended recovery week (TSB < −20), readiness factor |
+| CTL / ATL / TSB | 42/7-day EWMA of `dayScoreRecords.strainScore` (summed Banister TRIMP since the migration), line 895 | tier (CTL < 35 beginner, ≥ 50 advanced), prepended recovery week (TSB < −20), readiness factor |
 | Weekly load | `effectiveLoad` of activities, last 6 weeks | weekly load cap for key sessions |
 | History | `_TrainingHistory` (6 / 12 / 52 weeks) | weekly minutes, 4-week peak, per sport longest/median/year-longest session, share of zone 4–5 time |
 | Level | self-reported, replaced by data tier once ≥ 12 sessions in ≥ 6 weeks | key sessions, ramp, recovery cycle |
@@ -58,16 +58,16 @@ Multi-goal: each goal gets a `GoalIntent` per week (foundation, build, specificP
 
 | | Single path | Multi path |
 |---|---|---|
-| Base length | 90 min × CTL factor (0.7–1.3) × tier (0.9–1.1) | from the event: foot = race cap × (0.5 + 0.5 × progress); other = `_longPeak` (110 % of a 3 h event falling to 55 % at 8 h; rides ≥ 150 min) × ramp |
+| Base length | 90 min × CTL factor (0.7–1.3) × tier (0.9–1.1), together 0.6–1.4; ×0.7 in taper and recovery weeks | from the event: foot = race cap × (0.5 + 0.5 × progress); other = `_longPeak` (110 % of a 3 h event falling to 55 % at 8 h; rides ≥ 150 min) × ramp |
 | Progression | none in base/build; ×1.4 in peak | grows with progress through the preparation |
 | Race cap (foot) | 5k 60, 10k 90, half 120, marathon 180, ultra 600 min; with a target 85 % of it, within 70–120 % of the cap | same |
 | History cap | longest of last 12 weeks × (1.12 + 0.05 per plan week; 0.08 towards last year's longest) | same |
 | Ultra (≥ 8 h, not foot) | — | regular long = 25 % of event (3–5 h); key long once per block towards 50 % of the event, reached at 75 % of the preparation, never next to another event |
-| Per week | two long slots (Sat + Sun) for everyone but beginners | one long per goal sport, the longest on Saturday |
+| Per week | two long slots (Sat + Sun) in most templates; trail running one; triathlon a long run Sat and a long ride Sun; beginners one; taper keeps only Saturday's | one long per goal sport, the longest on Saturday |
 
 ### 1.6 Intensity
 
-- Hard sessions per week: beginner 1, advanced 2, intermediate = the template's count (2 for running).
+- Hard sessions per week: beginner 1, advanced 2, intermediate = the template's count: 2 in most sports, 1 for hiking, 3 for trail running (Monday intervals, Wednesday hills, Thursday tempo) and triathlon (swim, run tempo, bike tempo).
 - Athletes with < 5 % zone 4–5 time: one tempo (zone ≤ 3) session in the first two weeks.
 - Single path templates: running = tempo Z4 Wednesday, intervals Z5 Thursday, two long runs at the weekend, one recovery run, yoga, strength. Hilly race: one tempo becomes hills in build/peak.
 - Multi path `_qualityKinds`: base = steady (Z3) alternating with Z5 (bike: threshold); build/peak = race intensity + Z5 (long "finish" goals alternate, late build race intensity only); maintain = race intensity every other week; sharpen = openers, or steady for long events; hiking = hills.
@@ -76,7 +76,7 @@ Multi-goal: each goal gets a `GoalIntent` per week (foundation, build, specificP
 
 ### 1.7 Taper
 
-- Single: last 2 weeks, only Saturday's long run stays, budget ×0.7, all durations ×0.7, the key sessions keep their zones. The day before the race is free.
+- Single: last 2 weeks (1 week in plans shorter than 8 weeks). Only Saturday's long session stays, durations ×0.7, the weekly budget ×0.7 (it only shortens non-long sessions), so volume falls by roughly a third, more where the Sunday long session goes. The key sessions keep their zones. The day before the race is free.
 - Multi: `sharpen` intent, budget ×0.7, openers (45 min) or steady for long events, a long session only while ≥ 1 week out.
 
 ### 1.8 Strength
@@ -84,13 +84,13 @@ Multi-goal: each goal gets a `GoalIntent` per week (foundation, build, specificP
 | | Single path | Multi path |
 |---|---|---|
 | Sessions | every chosen strength day: base/build ≤ 3, peak ≤ 2, taper 1, race week 0, recovery core | first two strength days, 45 min each, every week |
-| Content | programme by focus (run / trail / bike / full) and phase: base 3 × 12–15 at RIR 3, build heavy 4–6 at RIR 2 with long rests, peak 3–5 plus jump squats, A/B alternating | generic `strengthFull` (3 × 8–10), no phase |
+| Content | programme by focus (run / trail / bike / full) and phase, A/B alternating. Main lifts: base 3 × 10–12 at RIR 3, build 4 × 4–6 at RIR 2 with 3 min rest, peak 3 × 3–5 at RIR 3 plus jump squats (first main lift, first accessory, core only), taper the two main lifts 2 × 5 plus core. Accessories lighter (base 3 × 12–15, build 3 × 6–8) | generic `strengthFull` template (3 × 8–10), no phase |
 | Placement | the athlete's strength days | same |
 
 ### 1.9 Daily adaptation
 
-- Morning readiness yellow: −15 % and every zone one lower. Red: easy zone 2 session instead.
-- Missed sessions: moved by rules or coach JSON, otherwise dropped. Nothing is made up.
+- Morning readiness yellow: every zone one lower and 15 % shorter (or one repetition fewer). Red: a 30-minute easy zone 1 session instead, or no session when readiness says rest.
+- Missed sessions: the rules (or the coach, checked against the same limits) propose a move to a later day, a bit easier or indoors on rain where that makes it fit, or dropping it when it is easy or nothing fits. A move never puts two hard sessions on one day, and a hard day next to another costs points. The athlete decides. A replan does not make up skipped sessions.
 - Illness/injury absences: no sessions on those days, the first week back has no key or long sessions and at most 45 min a day.
 - DFA α1 ramp test about every 28 days, in a rested week, as that week's only hard session.
 
@@ -98,10 +98,12 @@ Multi-goal: each goal gets a `GoalIntent` per week (foundation, build, specificP
 
 These are concrete issues, independent of any research debate.
 
-1. **Planner CTL ignores days without a score row.** `_readFitnessSnapshot` loops over stored rows only (line 893), so a day without a row does not decay CTL/ATL. `DailyReadinessService._computeTsb` and the Form screen (`day_data_provider.dart:806`) walk every calendar day. After a break the planner sees more fitness and a different TSB than the app shows. It also uses `DateTime.now()` instead of `_now()`.
-2. **Load units do not match the thresholds.** CTL is built from summed TRIMP, but the tier cut-offs (35 / 50), `isFatigued` (TSB < −20) and `_weeklyTssFactor` are TSS-style numbers. A TRIMP-based CTL runs higher than TSS for the same training, so athletes are labelled advanced sooner. This needs calibrating against real histories.
-3. **No rule keeps two hard days apart, in either path.** The running template aims tempo at Wednesday and intervals at Thursday (road cycling, gravel, inline and skiing the same); the allocator aims its first quality session at Wednesday (rides Tuesday) and the second at Thursday. The only spacing cost (line 2323, multi path only) keeps hard sessions off the days next to a long session of about 150 min or more, not next to each other. Whether two hard days end up in a row depends on the settings: in a probe with strength on Wednesday and one session per day, the strength session took Wednesday and no hard pair appeared; strength on another day or two sessions per day was not tested.
-4. **Two long sessions every weekend (single path).** Every non-beginner gets a long run on Saturday and on Sunday, also for a 5 km goal. With 90 min each that is most of an 8-hour week in two runs.
+1. **Planner CTL ignores days without a score row.** `_readFitnessSnapshot` loops over stored rows only (line 895), so a day without a row does not decay CTL/ATL. `DailyReadinessService._computeTsb` and the Form screen (`day_data_provider.dart:806`) walk every calendar day. After a break the planner sees more fitness and a different TSB than the app shows. It also uses `DateTime.now()` instead of `_now()`.
+2. **Load units do not match the thresholds.** CTL is built from summed TRIMP, but the tier cut-offs (35 / 50), `isFatigued` (TSB < −20) and `_weeklyTssFactor` are TSS-style numbers. Banister TRIMP is usually higher than TSS for the same session, so athletes are likely labelled advanced sooner. This needs calibrating against real histories.
+3. **No rule keeps two hard days apart, in either path.** The running template aims tempo at Wednesday and intervals at Thursday (road cycling, gravel, inline and skiing the same); the allocator aims its first quality session at Wednesday (rides Tuesday) and the second at Thursday. The only spacing cost (line 2326, multi path only) keeps hard sessions off the days next to a long session of about 150 min or more, not next to each other. (Moving a missed session does check hard neighbours; the generator does not.) Whether two hard days end up in a row depends on the settings: in a probe with strength on Wednesday and one session per day, the strength session took Wednesday and no hard pair appeared; strength on another day or two sessions per day was not tested.
+4. **Two long sessions every weekend (single path).** Most templates give every non-beginner a long session on Saturday and on Sunday, also for a 5 km goal (trail running has one). With 90 min each that is most of an 8-hour week in two sessions.
+
+    4a. **Three hard sessions for intermediate trail runners and triathletes.** `maxKeySessions` is null for intermediates, so the template count stands: 3 in these two templates, 2 elsewhere.
 5. **The single-path long run does not build.** It is 90 min × CTL/tier factor all through base and build, jumps ×1.4 in peak, and is then cut by the history cap. A half and a full marathon get the same long run until the race cap applies. The multi path does build it.
 6. **The readiness factor barely acts.** It scales `weekTss`, which is only used for the key-session load cap, in week 0. Durations do not change.
 7. **Fallback HR zones disagree with the rest of the app.** Without stored zones but with an LTHR, the planner uses upper bounds of 76/82/88/92 % LTHR. The app's own model (`hr_zone_model.dart`) uses Friel floors of 85/90/95/100 % (running). In the fallback, zone 5 starts at 92 % of LTHR, i.e. below threshold, and zone 2 ends at 82 %.
@@ -117,7 +119,7 @@ These are concrete issues, independent of any research debate.
 | Planning by event duration, not distance | Physiological demand follows time and climbing |
 | Long sessions placed first, ultra key long session once per block | Matches common ultra practice; avoids weekly 50 % sessions |
 | Zones anchored on LT1/LT2 (DFA α1 ramp, LT1 as top of zone 2), age formulas only as fallback | Thresholds individualise intensity better than % HRmax |
-| 1–2 hard sessions per week, mostly easy | All successful distributions share a large low-intensity share |
+| Hard sessions capped by level (beginner 1, advanced 2; intermediates see finding 4a) | All successful distributions share a large low-intensity share |
 | Strength periodised heavy → explosive (single path) | High-load (≥ 80 % 1RM) training and plyometrics improve running economy (Llanos-Lagos et al. 2024, moderate certainty); submaximal and isometric work less so |
 | Morning readiness adjustment | HRV-guided training is at least as good as fixed plans; group benefits are small (SMD ≈ 0.2, n.s.), but there are fewer non-responders (Manresa-Rocamora 2021; Düking 2021) |
 
@@ -125,8 +127,8 @@ These are concrete issues, independent of any research debate.
 
 | # | Topic | Today | Evidence | Proposal |
 |---|---|---|---|---|
-| 1 | **Single-session spikes** | long session up to 12 % above the longest of 12 weeks, plus 5–8 % per plan week | Frandsen et al. 2025 (BJSM, 5,205 runners, 588,071 runs): a run more than 10 % longer than the longest run of the **last 30 days** raised overuse injury rate (HR 1.64 for +10–30 %, 2.28 for > +100 %). Weekly ratios did not explain it. Observational, self-reported injuries. | For foot sports: every session ≤ 110 % of the longest of the last 30 days (planned sessions count once done). Applies to all sessions, not only "long". |
-| 2 | **Taper** | 2 weeks, volume −30 % | Bosquet et al. 2007 (MSSE, 27 studies): best = 2 weeks, volume reduced **41–60 %**, progressively, **intensity and frequency kept**. Confirmed for endurance athletes in a 2023 meta-analysis (PLoS One). | Volume −40 to −60 % over the last 2 weeks (≈ −30 % then −50 %), the same number of sessions, short race-pace or Z5 doses also for long events. |
+| 1 | **Single-session spikes** | long session up to 12 % above the longest of 12 weeks, plus 5–8 % per plan week | Frandsen et al. 2025 (BJSM, 5,205 runners, 588,071 runs): a run more than 10 % longer than the longest run of the **last 30 days** raised overuse injury rate (HR 1.64 for +10–30 %, 2.28 for > +100 %). Weekly ratios did not explain it. Observational, self-reported injuries. | For foot sports: every session ≤ 110 % of the longest of the last 30 days (planned sessions count once done). Applies to all sessions, not only "long". The sport change of a session uses the same cap in the target sport (a 3 h ride became 160 min of rowing; see `docs/workout-sport-replacement.md`). |
+| 2 | **Taper** | 2 weeks, volume about −30 % | Bosquet et al. 2007 (MSSE, 27 studies): best = 2 weeks, volume reduced **41–60 %**, progressively, **intensity and frequency kept**. Confirmed for endurance athletes in a 2023 meta-analysis (PLoS One). | Volume −40 to −60 % over the last 2 weeks (≈ −30 % then −50 %), the same number of sessions, short race-pace or Z5 doses also for long events. |
 | 3 | **Intensity distribution** | counts hard sessions only | Polarised vs others: no significant difference overall (Rosenblat et al. 2025, IPD network meta-analysis); polarised slightly better for VO₂peak in shorter interventions (Oliveira et al. 2024). Recreational athletes may do better with pyramidal, competitive ones with polarised (Rosenblat 2025). | Target ≥ 75–80 % of time below LT1 every week; pyramidal for recreational athletes and in base/build, more polarised in the last 4–6 weeks for advanced athletes. Measure planned and done zone time, show it, adjust the next week. |
 | 4 | **Weekly ramp / ACWR** | 8–15 % weekly ramp | The 10 % rule has no solid basis; the ACWR has methodological flaws (Impellizzeri et al. 2020) and did not predict injuries in Frandsen 2025 | Keep the weekly ramp as a coarse limit only. Steer by #1 and by readiness. |
 | 5 | **Hard-day spacing** | Wed + Thu preferred for hard sessions in both paths, no rule against a hard pair | Common practice: ≥ 48 h between high-intensity sessions; long session counts as a load day | One rule for both paths: no key session the day before or after another key or the long session. |
@@ -140,7 +142,7 @@ These are concrete issues, independent of any research debate.
 
 One generator, one rule core.
 
-1. **Retire the weekly-template path.** A single goal is a goal set of one and goes through the allocator. The templates survive only as the per-sport list of what kinds of session exist. This removes findings 3–5, 8 and 9 at once.
+1. **Retire the weekly-template path.** A single goal is a goal set of one and goes through the allocator. The templates survive only as the per-sport list of what kinds of session exist. This removes findings 4, 4a, 5, 8 and 9 at once; finding 3 needs its own rule in both paths.
 2. **Rule core** (pure functions, unit-tested, one place):
    - *Event demand*: duration, climbing, descent, priority, ambition.
    - *Load guard*: 30-day single-session cap (#1), coarse weekly ramp (#4), readiness.
@@ -157,7 +159,7 @@ One generator, one rule core.
 |---|---|---|---|
 | 1 | One CTL/ATL function with gap days; recalibrate tiers | small | wrong inputs skew everything else |
 | 2 | 30-day single-session cap for foot sports | small | strongest injury evidence |
-| 3 | Hard-day spacing in both paths; one long session per week for short goals | small | clear defects |
+| 3 | Hard-day spacing in both paths; one long session per week for short goals; at most 2 hard sessions for intermediates | small | clear defects |
 | 4 | Taper −40 to −60 %, intensity and frequency kept | small | clear evidence, local change |
 | 5 | Fallback LTHR zones from `hr_zone_model.dart` | small | one zone model |
 | 6 | Single goal through the allocator; templates retired | large | before adding more rules |

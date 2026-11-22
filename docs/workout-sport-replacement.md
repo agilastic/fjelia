@@ -46,7 +46,43 @@ Alternative empfehlen, statt eine falsche Gleichwertigkeit vorzutäuschen.
 
 ## Dauer und Belastung
 
-### Persönliche Schätzung
+Stand 22.11.2026: Der Code (`workout_replacement_service.dart`) setzt bisher nur
+den Belastungsvergleich unten um; dazu kommt die Grenze beim Wechsel zum Laufen.
+Die Grenze für alle Zielsportarten, der Teilersatz und die Aufteilung sind
+geplant und noch nicht gebaut.
+
+### Ausgangsproblem
+
+Eine geplante dreistündige Z2-Radfahrt wurde durch 160 Minuten Rudern ersetzt.
+Für Herz und Kreislauf war das rechnerisch ähnlich, praktisch nicht: Nach einer
+Stunde war der Athlet ermüdet, während drei Stunden auf dem Rad kein Problem
+sind. Die Ausdauer der Muskeln, die Technik und die Gewöhnung gehören zur
+Sportart. Gleiche Herzfrequenz heißt nicht gleicher Reiz. Grund im Code: Nur der
+Wechsel zum Laufen ist begrenzt; für alle anderen Zielsportarten bestimmt allein
+der Belastungsvergleich die Dauer (bis 240 Minuten).
+
+### Zwei Größen statt eines Faktors
+
+1. **Belastungsvergleich** (intern): die Dauer im Zielsport für eine ähnliche
+   Herz-Kreislauf-Belastung (unten). Sie dient als Vergleichswert und zeigt,
+   wie viel der ursprünglichen Einheit ein Ersatz abdeckt.
+2. **Empfohlene Dauer**: was im Zielsport realistisch ist. Sie richtet sich nach
+   der Historie im Zielsport (unten) und darf deutlich unter dem
+   Belastungsvergleich liegen.
+
+Die Vorschau zeigt die empfohlene Dauer. Der Belastungsvergleich erscheint nur
+als ein Satz zur Einordnung, wenn er deutlich darüber liegt; keine weiteren
+Vergleichsdauern oder Prozentwerte, die eine Genauigkeit vortäuschen, die es
+nicht gibt.
+
+**Kein MET-Vergleich.** Die MET-Werte des Compendium of Physical Activities
+gelten für absolute Leistungsbereiche und Durchschnittspersonen. Z2 ist eine
+relative Intensität (eigene Schwellen und Zonen); bei gleicher relativer
+Intensität ist der Energieumsatz pro Minute in beiden Sportarten ähnlich, der
+Vergleich ergäbe also etwa die Originaldauer. Fjelia hat bessere Daten:
+Herzfrequenz, Leistung und die Zonen je Sportart.
+
+### Belastungsvergleich (umgesetzt)
 
 - Aktivitäten der letzten 180 Tage werden nach Sportfamilie ausgewertet.
 - Herstellerwerte wie Garmin Training Load oder herstellerspezifische Zonenwerte
@@ -57,17 +93,20 @@ Alternative empfehlen, statt eine falsche Gleichwertigkeit vorzutäuschen.
   zugeordnet werden. Das ist eine gröbere Ein-Zonen-Näherung und wird in der
   Vorschau offengelegt.
 - Erst ab fünf verwertbaren Aktivitäten der Zielsportart wird die persönliche
-  Belastung pro Minute zur Dauerschätzung verwendet. Bei weniger Daten nutzt
-  Fjelia eine vorsichtige Sportpaar-Schätzung und weist auf die geringe
-  Datenbasis hin.
+  Belastung pro Minute verwendet: geplante Belastung geteilt durch die typische
+  (Median) Belastung pro Minute im Zielsport, zu 35 % gemischt mit dem Wert aus
+  der eigenen Ausgangssportart. Bei weniger Daten nutzt Fjelia die Startwerte
+  unten und weist auf die geringe Datenbasis hin.
 - Die Lastschätzung nutzt dieselben Fjelia-Zonengewichte wie die geplante
   Trainingslast. Sie ist ein internes Vergleichsmaß, kein validierter Nachweis
   für identischen Trainingseffekt.
 
 ### Grobe Startwerte ohne ausreichende Historie
 
-Die folgenden Faktoren sind Ausgangswerte und keine wissenschaftlich
-abgesicherten Umrechnungsregeln:
+Die folgenden Faktoren sind Produktheuristiken, keine wissenschaftlich
+abgesicherten Umrechnungsregeln. Sie werden nur ohne ausreichende Historie
+genutzt, in der Vorschau so gekennzeichnet und durch die Grenze unten
+gedeckelt:
 
 | Wechsel | Startwert für die Dauer |
 |---|---:|
@@ -78,10 +117,83 @@ abgesicherten Umrechnungsregeln:
 | Rad → Rudern | 0,75 × Raddauer |
 | Rudern → SkiErg | 0,90 × Ruderdauer |
 | SkiErg → Rudern | 1,10 × SkiErg-Dauer |
+| Schwimmen → Rad | 1,20 × Schwimmdauer |
+| andere Paare | 1,15 × Ausgangsdauer |
 
 Zum Beispiel ergeben 100 Minuten Rad ohne persönliche Indoor-Rowing-Historie
-zunächst ungefähr 75 Minuten Rudern. Mit ausreichender Historie kann Fjelia einen
-anderen Wert vorschlagen.
+zunächst ungefähr 75 Minuten Rudern; mit der geplanten Grenze ohne Historie
+werden daraus höchstens 60 Minuten.
+
+### Grenze im Zielsport (geplant)
+
+Die empfohlene Dauer ist höchstens:
+
+- **110–120 % der längsten Einheit im Zielsport in den letzten 30–60 Tagen**,
+- **etwa 45–60 Minuten ohne solche Historie**,
+- beim Wechsel zum Laufen zusätzlich wie bisher höchstens 60 Minuten und 75 %
+  der ursprünglichen Dauer.
+
+Das ist eine vorläufige, vorsichtige Heuristik, keine validierte
+Sicherheitsregel. Sie folgt dem Befund von Frandsen et al. 2025 (BJSM, 5.205
+Läufer): Eine einzelne Einheit, die mehr als 10 % über der längsten der letzten
+30 Tage liegt, erhöht das Risiko einer Überlastungsverletzung. Die Studie betrifft
+nur das Laufen; für andere Sportarten ist die Grenze eine Übertragung und wird
+später kalibriert (siehe Validierung). Der Trainingsplan deckelt lange Einheiten
+nach demselben Prinzip; beide sollen dieselbe Funktion nutzen
+(`docs/training-plan-rethink.md`, Abschnitt 3, Punkt 1).
+
+### Teilersatz und Aufteilung (geplant)
+
+Liegt der Belastungsvergleich deutlich über der empfohlenen Dauer, ersetzt der
+Wechsel die Einheit nur teilweise. Die Vorschau sagt das und bietet an:
+
+1. **Aufteilen:** die empfohlene Dauer im Zielsport plus der Rest in der
+   ursprünglichen Sportart, auch indoor (Rad → Indoor-Rad, Laufen →
+   Laufband). Der Rest ist die ursprüngliche Dauer mal dem Anteil, den der
+   Ersatz nicht abdeckt.
+2. **Kürzer trainieren:** nur die empfohlene Dauer im Zielsport.
+3. **Als Ruhe markieren**, wie bisher.
+
+Was nicht trainiert wird, gilt nicht als erledigt und wird nicht automatisch auf
+andere Tage oder Sportarten verschoben.
+
+Eine lange Ausdauereinheit (zum Beispiel die lange Radfahrt für ein Brevet) ist
+in keiner anderen Sportart vollständig ersetzbar: Allgemeine aerobe Ausdauer
+überträgt sich teilweise, Muskelausdauer und Technik der Sportart nicht. Bei
+solchen Einheiten schlägt Fjelia die Aufteilung zuerst vor.
+
+### Beispiel: 180 Minuten Rad Z2 → Rudern
+
+| | |
+|---|---:|
+| Geplante Radfahrt | 180 min Z2 |
+| Belastungsvergleich Rudern | etwa 160 min |
+| Längste Rudereinheit der letzten 60 Tage | 55 min |
+| Empfohlene Dauer (Grenze 110 %) | 60 min Rudern Z2 |
+| Abgedeckt | etwa 60 / 160 ≈ 40 % |
+| Aufteilung | 60 min Rudern + etwa 110 min Rad (oder Indoor-Rad) Z2 |
+| Kürzer | nur 60 min Rudern |
+
+Vorschautext:
+
+> **60 Minuten Rudern Z2.** Deine längste Rudereinheit der letzten 60 Tage
+> dauerte 55 Minuten. Für eine ähnliche Belastung wie die Radfahrt wären etwa
+> 160 Minuten nötig; das ist für deine Rudermuskulatur zu viel auf einmal. Die
+> lange Radausdauer wird nur teilweise ersetzt.
+> [60 min Rudern + 110 min Indoor-Rad] [Nur 60 min Rudern] [Als Ruhe markieren]
+
+Die Zahlen sind ein Beispiel für die Regel, keine validierte Einzeldosis.
+
+### Validierung
+
+1. Die Herzfrequenzbelastung je Sportart und Intensität auf stimmige Zonen und
+   Messqualität prüfen.
+2. Die Grenzen mit echten Daten kalibrieren: Rückmeldung nach dem Ersatz
+   (Anstrengung, Beschwerden, Erholung am nächsten Tag).
+3. Sonderfälle testen: keine Historie, seltene Sportart, lange Z2-Einheit, hohe
+   Intensität, Rückkehr nach Pause, SkiErg und Rudern.
+4. Erst wenn Ersatzvorschläge über längere Zeit gut vertragen werden, lässt sich
+   etwas über die Güte der Regel sagen.
 
 ## Workout-Schritte und Intervalle
 
