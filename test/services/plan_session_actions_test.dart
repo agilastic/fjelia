@@ -286,6 +286,90 @@ void main() {
     expect(remaining.map((s) => s.id), [session.id]);
     expect(remaining.any((s) => s.id == replacement.id), isFalse);
   });
+  test(
+    'a split plans the rest of the original next to the replacement',
+    () async {
+      final actions = PlanSessionActions(db, garminProviders(db, garmin));
+      final preview = WorkoutReplacementPreview(
+        source: session,
+        targetSport: 'indoor_rowing',
+        targetLabel: 'Indoor rowing',
+        objective: WorkoutObjective.longEndurance,
+        durationMin: 60,
+        targetLoad: 89,
+        stepsJson: '[]',
+        usedAthleteHistory: false,
+        historyActivityCount: 0,
+        historySampleCount: 0,
+        warnings: const ['targetHistoryCap'],
+        suggestRest: false,
+        equivalentMin: 135,
+        longestRecentMin: 55,
+        remainderMin: 100,
+        remainderSport: 'indoor_cycling',
+        remainderLoad: 111,
+        remainderStepsJson: '[{"zoneNumber": 2}]',
+      );
+      // Training shorter: the replacement alone.
+      final shorter = await actions.replaceWithSport(preview);
+      expect(shorter.plannedDurationMin, 60);
+      var linked = await (db.select(
+        db.trainingSessions,
+      )..where((t) => t.originalSessionId.equals(session.id))).get();
+      expect(linked, hasLength(1));
+      var original = await (db.select(
+        db.trainingSessions,
+      )..where((t) => t.id.equals(session.id))).getSingle();
+      await actions.restore(original);
+
+      original = await (db.select(
+        db.trainingSessions,
+      )..where((t) => t.id.equals(session.id))).getSingle();
+      await actions.replaceWithSport(
+        WorkoutReplacementPreview(
+          source: original,
+          targetSport: preview.targetSport,
+          targetLabel: preview.targetLabel,
+          objective: preview.objective,
+          durationMin: 60,
+          targetLoad: 89,
+          stepsJson: '[]',
+          usedAthleteHistory: false,
+          historyActivityCount: 0,
+          historySampleCount: 0,
+          warnings: const [],
+          suggestRest: false,
+          equivalentMin: 135,
+          remainderMin: 100,
+          remainderSport: 'indoor_cycling',
+          remainderLoad: 111,
+          remainderStepsJson: '[{"zoneNumber": 2}]',
+        ),
+        remainderLabel: 'Indoor cycling',
+      );
+      linked = await (db.select(
+        db.trainingSessions,
+      )..where((t) => t.originalSessionId.equals(session.id))).get();
+      final rest = linked.singleWhere((s) => s.sport == 'indoor_cycling');
+      expect(
+        linked.map((s) => s.sport),
+        containsAll(['indoor_rowing', 'indoor_cycling']),
+      );
+      expect(rest.plannedDurationMin, 100);
+      expect(rest.plannedTrimp, 111);
+      expect(rest.title, startsWith('Indoor cycling · '));
+      expect(rest.sessionDate, session.sessionDate);
+      expect(rest.primaryZone, lessThanOrEqualTo(2));
+      // Restoring the original removes both.
+      final skipped = await (db.select(
+        db.trainingSessions,
+      )..where((t) => t.id.equals(session.id))).getSingle();
+      await actions.restore(skipped);
+      expect((await db.select(db.trainingSessions).get()).map((s) => s.id), [
+        session.id,
+      ]);
+    },
+  );
   test('restore keeps the skip when the replacement is done', () async {
     final actions = PlanSessionActions(db, garminProviders(db, garmin));
     final replacement = await actions.replaceWithSport(

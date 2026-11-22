@@ -160,9 +160,14 @@ class PlanSessionActions {
   /// Skips the original session and creates a same-day replacement in another
   /// endurance sport. Time blocks and HR-zone distribution carry over, while
   /// pace/power targets are cleared and recalculated for the selected sport.
+  /// Replaces the session with [preview]'s. With [remainderLabel] and a
+  /// partial replacement the rest of the original is planned too, on the same
+  /// day in the original sport ([WorkoutReplacementPreview.remainderSport]);
+  /// both are linked to the original, so restoring it removes both.
   Future<TrainingSession> replaceWithSport(
     WorkoutReplacementPreview preview, {
     String reason = replacedWithAnotherSport,
+    String? remainderLabel,
   }) async {
     final session = preview.source;
     final sport = preview.targetSport;
@@ -228,6 +233,26 @@ class PlanSessionActions {
             ),
           );
       await db.into(db.trainingSessions).insert(replacement);
+      if (remainderLabel != null && preview.isPartial) {
+        await db
+            .into(db.trainingSessions)
+            .insert(
+              replacement.copyWith(
+                id: Value(const Uuid().v4()),
+                sport: Value(preview.remainderSport),
+                title: Value(
+                  '$remainderLabel · '
+                  '${session.title.replaceFirst(RegExp(r'\s*\(\d+\s*min\)$'), '')}',
+                ),
+                plannedDurationMin: Value(preview.remainderMin),
+                plannedTrimp: Value(preview.remainderLoad),
+                stepsJson: Value(preview.remainderStepsJson),
+                // The rest is easy volume; the hard part went with the
+                // replacement.
+                primaryZone: Value(session.primaryZone.clamp(1, 2)),
+              ),
+            );
+      }
     });
     await releaseDeliveries(session);
     return (db.select(

@@ -8999,6 +8999,29 @@ class AppLocalizationsFi extends AppLocalizations {
       'Harjoituskuormasi viimeisten seitsemän päivän ajalta on selvästi suurempi kuin sitä edeltävien seitsemän päivän.';
 
   @override
+  String replacementPartial(int minutes) {
+    return 'Samanlaiseen kuormaan tarvittaisiin noin $minutes min. Tämä korvaava harjoitus kattaa vain osan alkuperäisestä harjoituksesta.';
+  }
+
+  @override
+  String replacementWarningTargetHistory(int minutes) {
+    return 'Pisin harjoituksesi tässä lajissa viimeisten 60 päivän aikana kesti $minutes min, joten korvaava harjoitus on enintään noin 10 % pidempi: lihaksesi eivät ole vielä tottuneet enempään tässä lajissa.';
+  }
+
+  @override
+  String get replacementWarningNoTargetHistory =>
+      'Et ole harjoitellut tätä lajia viimeisten 60 päivän aikana, joten korvaava harjoitus kestää enintään 60 min.';
+
+  @override
+  String get replacementWarningTargetHistoryStructure =>
+      'Intervallit eivät mahdu tähän rajaan. Fjelia ehdottaa sen sijaan kevyttä harjoitusta rajan sisällä.';
+
+  @override
+  String replacementOnlyShorter(int minutes) {
+    return 'Vain $minutes min';
+  }
+
+  @override
   String get replacementTrainingGoal => 'HARJOITUSTAVOITE';
 
   @override

@@ -9016,6 +9016,29 @@ class AppLocalizationsIt extends AppLocalizations {
       'Il tuo carico di allenamento degli ultimi sette giorni è nettamente più alto rispetto ai sette giorni precedenti.';
 
   @override
+  String replacementPartial(int minutes) {
+    return 'Per un carico simile servirebbero circa $minutes min. Questa sostituzione copre solo una parte dell\'allenamento originale.';
+  }
+
+  @override
+  String replacementWarningTargetHistory(int minutes) {
+    return 'La tua sessione più lunga in questo sport negli ultimi 60 giorni è durata $minutes min, quindi la sostituzione è al massimo circa il 10 % più lunga: i tuoi muscoli non sono ancora abituati a di più in questo sport.';
+  }
+
+  @override
+  String get replacementWarningNoTargetHistory =>
+      'Non hai praticato questo sport negli ultimi 60 giorni, quindi la sostituzione dura al massimo 60 min.';
+
+  @override
+  String get replacementWarningTargetHistoryStructure =>
+      'Gli intervalli non rientrano in questo limite. Fjelia propone invece una sessione facile entro il limite.';
+
+  @override
+  String replacementOnlyShorter(int minutes) {
+    return 'Solo $minutes min';
+  }
+
+  @override
   String get replacementTrainingGoal => 'OBIETTIVO DI ALLENAMENTO';
 
   @override

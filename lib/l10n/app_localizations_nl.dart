@@ -9031,6 +9031,29 @@ class AppLocalizationsNl extends AppLocalizations {
       'Je trainingsbelasting van de afgelopen zeven dagen is duidelijk hoger dan in de zeven dagen daarvoor.';
 
   @override
+  String replacementPartial(int minutes) {
+    return 'Voor een vergelijkbare belasting zou ongeveer $minutes min nodig zijn. Deze vervanging dekt maar een deel van de oorspronkelijke training.';
+  }
+
+  @override
+  String replacementWarningTargetHistory(int minutes) {
+    return 'Je langste training in deze sport in de afgelopen 60 dagen duurde $minutes min, dus de vervanging is hooguit ongeveer 10 % langer: je spieren zijn in deze sport nog niet aan meer gewend.';
+  }
+
+  @override
+  String get replacementWarningNoTargetHistory =>
+      'Je hebt deze sport de afgelopen 60 dagen niet getraind, dus de vervanging duurt hooguit 60 min.';
+
+  @override
+  String get replacementWarningTargetHistoryStructure =>
+      'De intervallen passen niet binnen die grens. Fjelia stelt in plaats daarvan een rustige training binnen de grens voor.';
+
+  @override
+  String replacementOnlyShorter(int minutes) {
+    return 'Alleen $minutes min';
+  }
+
+  @override
   String get replacementTrainingGoal => 'TRAININGSDOEL';
 
   @override

@@ -8971,6 +8971,29 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your training load in the last seven days is notably higher than in the previous seven-day period.';
 
   @override
+  String replacementPartial(int minutes) {
+    return 'For a similar load about $minutes min would be needed. This replacement covers only part of the original workout.';
+  }
+
+  @override
+  String replacementWarningTargetHistory(int minutes) {
+    return 'Your longest session in this sport in the last 60 days lasted $minutes min, so the replacement is at most about 10 % longer: your muscles are not used to more in this sport yet.';
+  }
+
+  @override
+  String get replacementWarningNoTargetHistory =>
+      'You have not trained this sport in the last 60 days, so the replacement is at most 60 min.';
+
+  @override
+  String get replacementWarningTargetHistoryStructure =>
+      'The intervals would not fit within that limit. Fjelia suggests an easy session within it instead.';
+
+  @override
+  String replacementOnlyShorter(int minutes) {
+    return 'Only $minutes min';
+  }
+
+  @override
   String get replacementTrainingGoal => 'TRAINING GOAL';
 
   @override

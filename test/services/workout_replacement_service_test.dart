@@ -111,6 +111,9 @@ void main() {
       service.preview(s, targetSport: target, targetLabel: target);
 
   test('without history the starter ratio sets the duration', () async {
+    // A long ride recently: the limit from the target sport stays out of it.
+    // Without Fjelia zones it is no history for the load estimate.
+    await activity('cycling', 120, 10);
     final p = await replace(await session(), 'cycling_road');
     // 60 min run × 1.65 → 99 → nearest 5 minutes.
     expect(p.durationMin, 100);
@@ -150,7 +153,11 @@ void main() {
     expect(p.usedAthleteHistory, isFalse);
     expect(p.historyActivityCount, 4);
     expect(p.warnings, contains('limitedHistory'));
-    expect(p.durationMin, 100);
+    // The starter ratio says 100 min; the longest ride was 60 min, so at most
+    // 66 → 65.
+    expect(p.durationMin, 65);
+    expect(p.warnings, contains('targetHistoryCap'));
+    expect(p.longestRecentMin, 60);
   });
 
   test('without Fjelia zones no workout counts as history', () async {
@@ -273,6 +280,7 @@ void main() {
       },
       step('cooldown', 2, 'time', 300),
     ]);
+    await activity('cycling', 120, 10);
     final p = await replace(
       await session(
         title: 'Threshold 4×1 km',
@@ -438,5 +446,136 @@ void main() {
     expect(out.last['stepType']['stepTypeKey'], 'cooldown');
     final group = (out[1]['workoutSteps'] as List).cast<Map>();
     expect([for (final s in group) s['endConditionValue']], [240, 120]);
+  });
+
+  group('limit from the target sport', () {
+    // The case that started it: a 3 h Z2 ride became 160 min of rowing.
+    Future<TrainingSession> longRide() => session(
+      sport: 'cycling_road',
+      title: 'Long endurance ride',
+      minutes: 180,
+      trimp: 200,
+    );
+
+    test('a long ride becomes as much rowing as rowing has been', () async {
+      await activity('indoor_rowing', 55, 12);
+      await activity('indoor_rowing', 40, 30);
+      // Older than 60 days: not counted.
+      await activity('indoor_rowing', 150, 70);
+      final p = await replace(await longRide(), 'indoor_rowing');
+      // 180 × 0.75 = 135 min for a similar load; 55 × 1.1 = 60 at most.
+      expect(p.equivalentMin, 135);
+      expect(p.longestRecentMin, 55);
+      expect(p.durationMin, 60);
+      expect(p.warnings, contains('targetHistoryCap'));
+      // 60 of 135 minutes cover 44 % of the ride: the rest stays a ride,
+      // indoors because the rowing is.
+      expect(p.isPartial, isTrue);
+      expect(p.remainderSport, 'indoor_cycling');
+      expect(p.remainderMin, 100);
+      expect(p.targetLoad + p.remainderLoad, 200);
+      expect(p.targetLoad, closeTo(200 * 60 / 135, 1));
+      final rest = jsonDecode(p.remainderStepsJson) as List;
+      expect(
+        rest.map((s) => s['zoneNumber']),
+        everyElement(lessThanOrEqualTo(2)),
+      );
+    });
+
+    test('without the target sport in 60 days at most an hour', () async {
+      final p = await replace(await longRide(), 'rowing');
+      expect(p.longestRecentMin, isNull);
+      expect(p.durationMin, 60);
+      expect(p.warnings, contains('noTargetHistory'));
+      // An outdoor replacement leaves the rest in the original sport.
+      expect(p.remainderSport, 'cycling_road');
+    });
+
+    test('the same family is not limited by it', () async {
+      final p = await replace(await longRide(), 'indoor_cycling');
+      expect(p.durationMin, 180);
+      expect(p.isPartial, isFalse);
+      expect(p.warnings, isNot(contains('targetHistoryCap')));
+      expect(p.targetLoad, 200);
+    });
+
+    test('a little short of the load is no split', () async {
+      await activity('indoor_rowing', 120, 5);
+      // 100 min ride → 75 min rowing; the limit (132) does not apply.
+      final p = await replace(
+        await session(
+          sport: 'cycling_road',
+          title: 'Endurance ride',
+          minutes: 100,
+        ),
+        'indoor_rowing',
+      );
+      expect(p.durationMin, 75);
+      expect(p.isPartial, isFalse);
+      expect(p.remainderMin, 0);
+    });
+
+    test(
+      'intervals that do not fit become an easy session within it',
+      () async {
+        final steps = jsonEncode([
+          {
+            'type': 'ExecutableStepDTO',
+            'stepType': {'stepTypeId': 1, 'stepTypeKey': 'warmup'},
+            'endCondition': {'conditionTypeKey': 'time'},
+            'endConditionValue': 900,
+            'zoneNumber': 1,
+          },
+          {
+            'type': 'RepeatGroupDTO',
+            'numberOfIterations': 6,
+            'workoutSteps': [
+              {
+                'type': 'ExecutableStepDTO',
+                'stepType': {'stepTypeId': 3, 'stepTypeKey': 'interval'},
+                'endCondition': {'conditionTypeKey': 'time'},
+                'endConditionValue': 480,
+                'zoneNumber': 4,
+              },
+              {
+                'type': 'ExecutableStepDTO',
+                'stepType': {'stepTypeId': 4, 'stepTypeKey': 'recovery'},
+                'endCondition': {'conditionTypeKey': 'time'},
+                'endConditionValue': 240,
+                'zoneNumber': 2,
+              },
+            ],
+          },
+        ]);
+        await activity('indoor_rowing', 30, 8);
+        final p = await replace(
+          await session(
+            sport: 'cycling_road',
+            title: 'Threshold 6×8 min',
+            zone: 4,
+            minutes: 90,
+            steps: steps,
+          ),
+          'indoor_rowing',
+        );
+        // 30 × 1.1 = 33 → 30 min; the 72 min of intervals cannot be kept.
+        expect(p.durationMin, 30);
+        expect(p.warnings, contains('targetHistoryStructure'));
+        final out = jsonDecode(p.stepsJson) as List;
+        expect(
+          out.map((s) => s['zoneNumber']),
+          everyElement(lessThanOrEqualTo(2)),
+        );
+      },
+    );
+
+    test('a switch to running keeps its own, stricter limit', () async {
+      await activity('running', 150, 6);
+      final p = await replace(await longRide(), 'running');
+      expect(p.durationMin, 60);
+      expect(p.warnings, contains('runningCap'));
+      expect(p.warnings, isNot(contains('targetHistoryCap')));
+      expect(p.isPartial, isTrue);
+    });
   });
 }

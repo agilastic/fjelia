@@ -9032,6 +9032,29 @@ class AppLocalizationsCa extends AppLocalizations {
       'La teva càrrega d\'entrenament dels últims set dies és clarament més alta que la dels set dies anteriors.';
 
   @override
+  String replacementPartial(int minutes) {
+    return 'Per a una càrrega similar caldrien uns $minutes min. Aquest reemplaçament només cobreix una part de l\'entrenament original.';
+  }
+
+  @override
+  String replacementWarningTargetHistory(int minutes) {
+    return 'La teva sessió més llarga en aquest esport els últims 60 dies va durar $minutes min, així que el reemplaçament és com a molt un 10 % més llarg: els teus músculs encara no estan acostumats a més en aquest esport.';
+  }
+
+  @override
+  String get replacementWarningNoTargetHistory =>
+      'No has practicat aquest esport els últims 60 dies, així que el reemplaçament dura com a molt 60 min.';
+
+  @override
+  String get replacementWarningTargetHistoryStructure =>
+      'Els intervals no hi caben dins d\'aquest límit. Fjelia proposa en canvi una sessió suau dins del límit.';
+
+  @override
+  String replacementOnlyShorter(int minutes) {
+    return 'Només $minutes min';
+  }
+
+  @override
   String get replacementTrainingGoal => 'OBJECTIU D\'ENTRENAMENT';
 
   @override

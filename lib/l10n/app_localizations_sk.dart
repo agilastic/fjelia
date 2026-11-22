@@ -9007,6 +9007,29 @@ class AppLocalizationsSk extends AppLocalizations {
       'Tvoja tréningová záťaž za posledných sedem dní je výrazne vyššia ako v predchádzajúcich siedmich dňoch.';
 
   @override
+  String replacementPartial(int minutes) {
+    return 'Na podobnú záťaž by bolo treba asi $minutes min. Táto náhrada pokrýva len časť pôvodného tréningu.';
+  }
+
+  @override
+  String replacementWarningTargetHistory(int minutes) {
+    return 'Tvoj najdlhší tréning v tomto športe za posledných 60 dní trval $minutes min, preto je náhrada najviac asi o 10 % dlhšia: tvoje svaly ešte nie sú v tomto športe zvyknuté na viac.';
+  }
+
+  @override
+  String get replacementWarningNoTargetHistory =>
+      'Za posledných 60 dní nebol v tomto športe žiadny tréning, preto náhrada trvá najviac 60 min.';
+
+  @override
+  String get replacementWarningTargetHistoryStructure =>
+      'Intervaly sa do tohto limitu nezmestia. Fjelia namiesto toho navrhuje ľahký tréning v rámci limitu.';
+
+  @override
+  String replacementOnlyShorter(int minutes) {
+    return 'Len $minutes min';
+  }
+
+  @override
   String get replacementTrainingGoal => 'TRÉNINGOVÝ CIEĽ';
 
   @override

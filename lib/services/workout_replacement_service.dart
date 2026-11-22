@@ -8,6 +8,7 @@ import '../providers/training_load_provider.dart' show effectiveLoadFromSummary;
 import 'athlete_thresholds_service.dart';
 import 'hr_zone_model.dart'
     show zonePercentFromActiveSamples, zonePercentFromSamples, zoneOf;
+import 'single_session_cap.dart';
 
 class _InternalActivityLoad {
   const _InternalActivityLoad(this.load, {required this.fromHeartRateSamples});
@@ -51,6 +52,12 @@ class WorkoutReplacementPreview {
     required this.historySampleCount,
     required this.warnings,
     required this.suggestRest,
+    this.equivalentMin = 0,
+    this.longestRecentMin,
+    this.remainderMin = 0,
+    this.remainderSport = '',
+    this.remainderLoad = 0,
+    this.remainderStepsJson = '',
   });
 
   final TrainingSession source;
@@ -58,6 +65,9 @@ class WorkoutReplacementPreview {
   final String targetLabel;
   final WorkoutObjective objective;
   final int durationMin;
+
+  /// The load this replacement carries: the original's, or the part of it the
+  /// shorter replacement covers.
   final int targetLoad;
   final String stepsJson;
   final bool usedAthleteHistory;
@@ -65,6 +75,26 @@ class WorkoutReplacementPreview {
   final int historySampleCount;
   final List<String> warnings;
   final bool suggestRest;
+
+  /// Minutes in the target sport for a load similar to the original's, before
+  /// any limit. A comparison, not a recommendation.
+  final int equivalentMin;
+
+  /// The longest session in the target sport's family in the last
+  /// [singleSessionCapDays] days; null when there is none.
+  final int? longestRecentMin;
+
+  /// What the replacement leaves of the original when it only covers part of
+  /// it: minutes, sport (the original's, indoors when the replacement is),
+  /// load and an easy workout for them. Zero minutes when it covers it all.
+  final int remainderMin;
+  final String remainderSport;
+  final int remainderLoad;
+  final String remainderStepsJson;
+
+  /// The replacement covers only part of the original: a split into the
+  /// replacement plus the rest in the original sport can be offered.
+  bool get isPartial => remainderMin > 0;
 }
 
 /// Estimates a sport-specific replacement using the athlete's recent activity
@@ -147,6 +177,10 @@ class WorkoutReplacementService {
       );
     }
 
+    // What a similar load would take, before any limit: shown for comparison
+    // and the measure of how much of the original a shorter one covers.
+    final equivalent = duration;
+
     final targetIsRun = targetFamily == 'run';
     // Every switch to running is capped, trail to road included: the spec
     // limits the running stress of a replacement, not only a new sport's.
@@ -155,11 +189,29 @@ class WorkoutReplacementService {
       60,
       (source.plannedDurationMin * .75).round(),
     ).clamp(15, 60);
+    // A sport of another family is held to the athlete's longest recent
+    // session in it: the heart may be trained for three hours, the muscles
+    // of a sport rarely done long are not. The same family needs no limit:
+    // the plan sized the session for it.
+    final longest = longestRecentSessionMin(
+      activities,
+      sourceDay,
+      sameSport: (type) => _family(type) == targetFamily,
+    );
+    final historyCap = targetFamily == sourceFamily
+        ? null
+        : singleSessionCapMin(longest).clamp(15, 240);
+    final limit = mathMin(switchToRun ? runCap : 240, historyCap ?? 240);
     var capped = false;
-    if (switchToRun && duration > runCap) {
-      duration = runCap;
+    if (duration > limit) {
+      duration = limit;
       capped = true;
-      warnings.add('runningCap');
+      if (switchToRun && runCap <= (historyCap ?? 240)) {
+        warnings.add('runningCap');
+      }
+      if (historyCap != null && historyCap <= (switchToRun ? runCap : 240)) {
+        warnings.add(longest == null ? 'noTargetHistory' : 'targetHistoryCap');
+      }
     }
     // Five-minute steps; a capped run rounds down so it stays under the cap.
     duration = capped
@@ -284,9 +336,32 @@ class WorkoutReplacementService {
         stepsJson: _basicSteps(runCap, source.primaryZone.clamp(1, 2).toInt()),
       );
       warnings.add('runningStructure');
+    } else if (capped && adapted.durationMin > limit) {
+      // The same for the limit from the target sport's history.
+      adapted = _AdaptedWorkout(
+        durationMin: duration,
+        stepsJson: _basicSteps(
+          duration,
+          source.primaryZone.clamp(1, 2).toInt(),
+        ),
+      );
+      warnings.add('targetHistoryStructure');
     } else if (adapted.exceededTargetForStructure) {
       warnings.add('structureMinimum');
     }
+
+    // A limited replacement covers only its share of the original load. Well
+    // short of it, the rest can be trained in the original sport (indoors
+    // when the replacement is indoors); nothing is added on its own.
+    final coverage = capped && equivalent > 0
+        ? (adapted.durationMin / equivalent).clamp(0.0, 1.0)
+        : 1.0;
+    final replacementLoad = (load * coverage).round();
+    var remainder = coverage < .85
+        ? ((source.plannedDurationMin * (1 - coverage)) / 5).round() * 5
+        : 0;
+    if (remainder < 20) remainder = 0;
+    final remainderSport = remainderSportFor(source.sport, targetSport);
 
     return WorkoutReplacementPreview(
       source: source,
@@ -294,7 +369,15 @@ class WorkoutReplacementService {
       targetLabel: targetLabel,
       objective: objective,
       durationMin: adapted.durationMin,
-      targetLoad: load,
+      targetLoad: replacementLoad,
+      equivalentMin: ((equivalent / 5).round() * 5).clamp(15, 240),
+      longestRecentMin: longest,
+      remainderMin: remainder,
+      remainderSport: remainderSport,
+      remainderLoad: remainder == 0 ? 0 : load - replacementLoad,
+      remainderStepsJson: remainder == 0
+          ? ''
+          : _basicSteps(remainder, source.primaryZone.clamp(1, 2).toInt()),
       stepsJson: adapted.stepsJson,
       usedAthleteHistory: useHistory,
       historyActivityCount: targetRates.length,
@@ -387,6 +470,26 @@ class WorkoutReplacementService {
     final longFrom = _family(s.sport) == 'run' ? 90 : 150;
     if (s.plannedDurationMin >= longFrom) return WorkoutObjective.longEndurance;
     return WorkoutObjective.base;
+  }
+
+  /// The sport the rest of a partly replaced session is trained in: the
+  /// original sport, indoors when the replacement is an indoor sport (the
+  /// weather was likely the reason to switch).
+  static String remainderSportFor(String sourceSport, String targetSport) {
+    const indoor = {
+      'indoor_rowing',
+      'indoor_cycling',
+      'treadmill_running',
+      'elliptical',
+      'stair_climbing',
+    };
+    if (!indoor.contains(targetSport)) return sourceSport;
+    return switch (_family(sourceSport)) {
+      'cycle' => 'indoor_cycling',
+      'run' => 'treadmill_running',
+      'row' => 'indoor_rowing',
+      _ => sourceSport,
+    };
   }
 
   static bool _isHard(TrainingSession s) =>

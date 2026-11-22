@@ -40,6 +40,7 @@ import '../ai_coach/ai_coach_screen.dart';
 import '../strength/strength_sections.dart';
 import '../../services/strength/strength_repository.dart';
 import '../../services/strength/strength_templates.dart';
+import 'plan_week_agenda.dart' show sportLabel;
 import 'workout_delivery_setup.dart';
 import '../../providers/media_provider.dart';
 import '../../widgets/media_gallery.dart';
@@ -769,7 +770,7 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                                 ),
                               );
                               if (!context.mounted || apply == null) return;
-                              if (apply == false) {
+                              if (apply == _ReplacementChoice.rest) {
                                 await perform(() async {
                                   await actions.markRest(
                                     s,
@@ -778,8 +779,18 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                                 });
                                 return;
                               }
+                              final remainderLabel =
+                                  apply == _ReplacementChoice.split
+                                  ? _sportOptionLabel(
+                                      context,
+                                      preview.remainderSport,
+                                    )
+                                  : null;
                               await perform(() async {
-                                await actions.replaceWithSport(preview);
+                                await actions.replaceWithSport(
+                                  preview,
+                                  remainderLabel: remainderLabel,
+                                );
                               });
                             },
                       icon: const Icon(Icons.swap_horiz, size: 20),
@@ -1014,12 +1025,17 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
   }
 }
 
-Future<bool?> _confirmReplacement(
+/// What the athlete decides in the replacement preview. [replace] plans the
+/// replacement alone (for a partial one: train shorter), [split] adds the
+/// rest of the original in its own sport.
+enum _ReplacementChoice { replace, split, rest }
+
+Future<_ReplacementChoice?> _confirmReplacement(
   BuildContext context,
   WorkoutReplacementPreview preview, {
   required List<String> platforms,
   required String Function(int zone) zoneTarget,
-}) => showDialog<bool>(
+}) => showDialog<_ReplacementChoice>(
   context: context,
   builder: (context) => AlertDialog(
     title: Text(context.l10n.replacementPreviewTitle),
@@ -1071,6 +1087,17 @@ Future<bool?> _confirmReplacement(
                       ),
                     ],
                   ),
+                  if (preview.isPartial) ...[
+                    const SizedBox(height: 12),
+                    Text(
+                      context.l10n.replacementPartial(preview.equivalentMin),
+                      style: TextStyle(
+                        color: fjInk,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
                   const SizedBox(height: 16),
                   FigureLabel(context.l10n.replacementTrainingGoal),
                   const SizedBox(height: 4),
@@ -1161,11 +1188,7 @@ Future<bool?> _confirmReplacement(
                             const SizedBox(width: 8),
                             Expanded(
                               child: Text(
-                                _replacementWarning(
-                                  context,
-                                  warning,
-                                  preview.historyActivityCount,
-                                ),
+                                _replacementWarning(context, warning, preview),
                                 style: TextStyle(fontSize: 13, color: fjInk),
                               ),
                             ),
@@ -1212,13 +1235,28 @@ Future<bool?> _confirmReplacement(
       ),
       if (preview.suggestRest)
         TextButton(
-          onPressed: () => Navigator.pop(context, false),
+          onPressed: () => Navigator.pop(context, _ReplacementChoice.rest),
           child: Text(context.l10n.markAsRest),
         ),
-      FilledButton(
-        onPressed: () => Navigator.pop(context, true),
-        child: Text(context.l10n.applySportChange),
-      ),
+      // A partial replacement: the split first, training shorter second.
+      if (preview.isPartial) ...[
+        TextButton(
+          onPressed: () => Navigator.pop(context, _ReplacementChoice.replace),
+          child: Text(context.l10n.replacementOnlyShorter(preview.durationMin)),
+        ),
+        FilledButton(
+          onPressed: () => Navigator.pop(context, _ReplacementChoice.split),
+          child: Text(
+            '${preview.durationMin} min ${preview.targetLabel} + '
+            '${preview.remainderMin} min '
+            '${_sportOptionLabel(context, preview.remainderSport)}',
+          ),
+        ),
+      ] else
+        FilledButton(
+          onPressed: () => Navigator.pop(context, _ReplacementChoice.replace),
+          child: Text(context.l10n.applySportChange),
+        ),
     ],
   ),
 );
@@ -1242,12 +1280,18 @@ String _objectiveLabel(BuildContext context, WorkoutObjective objective) =>
 String _replacementWarning(
   BuildContext context,
   String code,
-  int historyActivityCount,
+  WorkoutReplacementPreview preview,
 ) => switch (code) {
   'noHistory' => context.l10n.replacementWarningNoHistory,
   'limitedHistory' => context.l10n.replacementWarningLimitedHistory(
-    historyActivityCount,
+    preview.historyActivityCount,
   ),
+  'targetHistoryCap' => context.l10n.replacementWarningTargetHistory(
+    preview.longestRecentMin ?? 0,
+  ),
+  'noTargetHistory' => context.l10n.replacementWarningNoTargetHistory,
+  'targetHistoryStructure' =>
+    context.l10n.replacementWarningTargetHistoryStructure,
   'structureMinimum' => context.l10n.replacementWarningStructureMinimum,
   'runningStructure' => context.l10n.replacementWarningRunningStructure,
   'runningCap' => context.l10n.replacementWarningRunningCap,
@@ -1343,6 +1387,33 @@ class _ReplacementSport {
   final String Function(BuildContext) label;
 }
 
+/// Every sport a session can be changed to, with its label.
+const _replacementSportOptions = <String, _ReplacementSport>{
+  'running': _ReplacementSport('running', _runningLabel),
+  'treadmill_running': _ReplacementSport('treadmill_running', _treadmillLabel),
+  'trail_running': _ReplacementSport('trail_running', _trailRunningLabel),
+  'cycling_road': _ReplacementSport('cycling_road', _cyclingLabel),
+  'indoor_cycling': _ReplacementSport('indoor_cycling', _indoorCyclingLabel),
+  'swimming': _ReplacementSport('swimming', _swimmingLabel),
+  'swimming_open_water': _ReplacementSport(
+    'swimming_open_water',
+    _openWaterLabel,
+  ),
+  'indoor_rowing': _ReplacementSport('indoor_rowing', _indoorRowingLabel),
+  'rowing': _ReplacementSport('rowing', _rowingLabel),
+  'hiking': _ReplacementSport('hiking', _hikingLabel),
+  'walking': _ReplacementSport('walking', _walkingLabel),
+  'elliptical': _ReplacementSport('elliptical', _ellipticalLabel),
+  'stair_climbing': _ReplacementSport('stair_climbing', _stairLabel),
+  'nordic_skiing': _ReplacementSport('nordic_skiing', _skiingLabel),
+  'skate_skiing': _ReplacementSport('skate_skiing', _skateSkiingLabel),
+};
+
+/// The label of [sport]: its own when it is one of the replacement sports,
+/// else its general sport name (a gravel ride is "Cycling").
+String _sportOptionLabel(BuildContext context, String sport) =>
+    _replacementSportOptions[sport]?.label(context) ?? sportLabel(sport);
+
 /// The sports offered instead of [sourceSport], following the table in
 /// docs/workout-sport-replacement.md. Preferred sports only come first; they
 /// never add a sport the table does not list as suitable.
@@ -1350,29 +1421,7 @@ List<_ReplacementSport> _replacementSports(
   String sourceSport,
   List<String> preferences,
 ) {
-  const supported = <String, _ReplacementSport>{
-    'running': _ReplacementSport('running', _runningLabel),
-    'treadmill_running': _ReplacementSport(
-      'treadmill_running',
-      _treadmillLabel,
-    ),
-    'trail_running': _ReplacementSport('trail_running', _trailRunningLabel),
-    'cycling_road': _ReplacementSport('cycling_road', _cyclingLabel),
-    'indoor_cycling': _ReplacementSport('indoor_cycling', _indoorCyclingLabel),
-    'swimming': _ReplacementSport('swimming', _swimmingLabel),
-    'swimming_open_water': _ReplacementSport(
-      'swimming_open_water',
-      _openWaterLabel,
-    ),
-    'indoor_rowing': _ReplacementSport('indoor_rowing', _indoorRowingLabel),
-    'rowing': _ReplacementSport('rowing', _rowingLabel),
-    'hiking': _ReplacementSport('hiking', _hikingLabel),
-    'walking': _ReplacementSport('walking', _walkingLabel),
-    'elliptical': _ReplacementSport('elliptical', _ellipticalLabel),
-    'stair_climbing': _ReplacementSport('stair_climbing', _stairLabel),
-    'nordic_skiing': _ReplacementSport('nordic_skiing', _skiingLabel),
-    'skate_skiing': _ReplacementSport('skate_skiing', _skateSkiingLabel),
-  };
+  const supported = _replacementSportOptions;
   final source = _sportFamily(sourceSport);
   if (!_replaceableSportFamilies.contains(source)) return const [];
   final suitable = switch (source) {

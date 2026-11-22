@@ -15538,6 +15538,36 @@ abstract class AppLocalizations {
   /// **'Your training load in the last seven days is notably higher than in the previous seven-day period.'**
   String get replacementWarningRecentVolume;
 
+  /// No description provided for @replacementPartial.
+  ///
+  /// In en, this message translates to:
+  /// **'For a similar load about {minutes} min would be needed. This replacement covers only part of the original workout.'**
+  String replacementPartial(int minutes);
+
+  /// No description provided for @replacementWarningTargetHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Your longest session in this sport in the last 60 days lasted {minutes} min, so the replacement is at most about 10 % longer: your muscles are not used to more in this sport yet.'**
+  String replacementWarningTargetHistory(int minutes);
+
+  /// No description provided for @replacementWarningNoTargetHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'You have not trained this sport in the last 60 days, so the replacement is at most 60 min.'**
+  String get replacementWarningNoTargetHistory;
+
+  /// No description provided for @replacementWarningTargetHistoryStructure.
+  ///
+  /// In en, this message translates to:
+  /// **'The intervals would not fit within that limit. Fjelia suggests an easy session within it instead.'**
+  String get replacementWarningTargetHistoryStructure;
+
+  /// No description provided for @replacementOnlyShorter.
+  ///
+  /// In en, this message translates to:
+  /// **'Only {minutes} min'**
+  String replacementOnlyShorter(int minutes);
+
   /// No description provided for @replacementTrainingGoal.
   ///
   /// In en, this message translates to:

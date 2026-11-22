@@ -8962,6 +8962,29 @@ class AppLocalizationsDa extends AppLocalizations {
       'Din træningsbelastning de seneste syv dage er tydeligt højere end i de syv dage før.';
 
   @override
+  String replacementPartial(int minutes) {
+    return 'For en lignende belastning ville der skulle bruges omkring $minutes min. Denne erstatning dækker kun en del af den oprindelige træning.';
+  }
+
+  @override
+  String replacementWarningTargetHistory(int minutes) {
+    return 'Din længste træning i denne sportsgren de seneste 60 dage varede $minutes min, så erstatningen er højst omkring 10 % længere: dine muskler er endnu ikke vant til mere i denne sportsgren.';
+  }
+
+  @override
+  String get replacementWarningNoTargetHistory =>
+      'Du har ikke trænet denne sportsgren de seneste 60 dage, så erstatningen varer højst 60 min.';
+
+  @override
+  String get replacementWarningTargetHistoryStructure =>
+      'Intervallerne kan ikke være inden for denne grænse. Fjelia foreslår i stedet en rolig træning inden for grænsen.';
+
+  @override
+  String replacementOnlyShorter(int minutes) {
+    return 'Kun $minutes min';
+  }
+
+  @override
   String get replacementTrainingGoal => 'TRÆNINGSMÅL';
 
   @override

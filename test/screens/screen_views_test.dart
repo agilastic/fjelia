@@ -2340,7 +2340,10 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Ersatztraining prüfen'), findsOneWidget);
     await capture(tester, 'replace-3-preview');
-    await tester.tap(find.text('Ersatztraining einplanen').last);
+    // 150 min of riding is more than the other sport has been trained for:
+    // the replacement is shorter and the rest of the ride is offered with it.
+    expect(find.textContaining(RegExp(r'^\d+ min .+ \+ \d+ min ')), findsOneWidget);
+    await tester.tap(find.textContaining(RegExp(r'^Nur \d+ min$')));
     await tester.pump(const Duration(seconds: 2));
     await tester.pumpAndSettle();
     final sessions = await db.select(db.trainingSessions).get();

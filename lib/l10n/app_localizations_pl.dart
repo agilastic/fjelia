@@ -9062,6 +9062,29 @@ class AppLocalizationsPl extends AppLocalizations {
       'Twoje obciążenie treningowe z ostatnich siedmiu dni jest wyraźnie wyższe niż w poprzednich siedmiu dniach.';
 
   @override
+  String replacementPartial(int minutes) {
+    return 'Przy podobnym obciążeniu potrzeba by około $minutes min. To zastępstwo obejmuje tylko część pierwotnego treningu.';
+  }
+
+  @override
+  String replacementWarningTargetHistory(int minutes) {
+    return 'Twój najdłuższy trening w tym sporcie w ostatnich 60 dniach trwał $minutes min, więc zastępstwo jest najwyżej o około 10 % dłuższe: twoje mięśnie nie są jeszcze przyzwyczajone do więcej w tym sporcie.';
+  }
+
+  @override
+  String get replacementWarningNoTargetHistory =>
+      'W ostatnich 60 dniach nie było treningu w tym sporcie, więc zastępstwo trwa najwyżej 60 min.';
+
+  @override
+  String get replacementWarningTargetHistoryStructure =>
+      'Interwały nie mieszczą się w tym limicie. Fjelia proponuje zamiast tego spokojny trening w jego granicach.';
+
+  @override
+  String replacementOnlyShorter(int minutes) {
+    return 'Tylko $minutes min';
+  }
+
+  @override
   String get replacementTrainingGoal => 'CEL TRENINGOWY';
 
   @override
