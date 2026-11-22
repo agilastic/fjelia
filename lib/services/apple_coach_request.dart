@@ -188,7 +188,7 @@ class AppleCoachRequest {
         localeHint +
         (briefingInstructions == null
             ? 'Answer the latest question like a personal trainer: start with the answer, then 3 to 6 sentences with the data as evidence. NO tables, NO introduction, NO headings.${coachLanguageName() == 'British English' && budget >= 3000 ? appleChatExample : ''}'
-            : 'Give a ${period ?? 'daily'} briefing in 4 to 7 short plain sentences: what the findings mean and the next action. '
+            : 'Give a ${period ?? 'daily'} briefing in $appleBriefingLength: what the findings mean and the next action. '
                   '${dailyBrief?.today.isNotEmpty == true
                       ? 'All of today\'s scheduled sessions remain planned; a completed activity does not cancel them. '
                       : dailyBrief?.restDay == true
@@ -253,7 +253,7 @@ class AppleCoachRequest {
         ? ''
         : '\n\n$factsTitle:\n${keyFacts.join('\n')}';
     final suffix =
-        '$factsBlock\n\nLatest user message:\n$latest\n\n${isBriefing ? 'Write the briefing now in ${coachLanguageName()}: 4 to 7 short sentences, at most 260 words.' : appleAnswerInstructionFor(coachLanguageName())}';
+        '$factsBlock\n\nLatest user message:\n$latest\n\n${isBriefing ? 'Write the briefing now in ${coachLanguageName()}: $appleBriefingLength.' : appleAnswerInstructionFor(coachLanguageName())}';
     final finalInstructions = '$instructions $scheduleInstruction';
     var remaining =
         budget - utf8.encode(finalInstructions + suffix).length - 100;

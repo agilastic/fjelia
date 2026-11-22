@@ -355,7 +355,8 @@ bool briefingIsUsable(String text, {required String languageCode}) {
   final t = text.trim();
   if (t.isEmpty) return false;
   final words = t.split(RegExp(r'\s+'));
-  if (words.length > 110) return false;
+  // Cloud briefings may run to 260 words; beyond that it is a runaway reply.
+  if (words.length > 280) return false;
   final lower = t.toLowerCase();
   const echoes = [
     '(state ',

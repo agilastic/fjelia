@@ -1,5 +1,6 @@
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/l10n/app_localizations.dart';
+import 'package:fjelia/services/ai_coach_client.dart' show mentionsSchedule;
 import 'package:fjelia/services/ai_metric_analysis.dart';
 import 'package:fjelia/services/briefing_brief.dart';
 import 'package:fjelia/models/chat_message.dart';
@@ -163,7 +164,10 @@ void main() {
     expect(prompt, isNot(contains('+3.3')));
     expect(prompt, isNot(contains('Night:40ms')));
     expect(prompt, contains('planned rest day'));
-    expect(request.instructions, contains('at most 260 words'));
+    expect(request.instructions, contains('at most 90 words'));
+    // The note about the app's preview is not for the model: it wrote it
+    // into the briefing ("Du siehst die Startvorschau allein").
+    expect(request.instructions, isNot(contains('preview')));
     expect(request.instructions, contains('German du, never Sie'));
     expect(request.instructions, contains('DO NOT list or repeat'));
   });
@@ -220,7 +224,7 @@ void main() {
       () {
         expect(
           briefingIsUsable(
-            List.filled(120, 'wort').join(' '),
+            List.filled(300, 'wort').join(' '),
             languageCode: 'de',
           ),
           isFalse,
@@ -329,6 +333,18 @@ void main() {
     );
     // Today's plan sentence stays the one the model must include.
     expect(back.plannedTodaySentence(de), 'Für heute ist 1 Einheit geplant.');
+  });
+
+  test('a plan sentence the model went on after counts as included', () {
+    const plan = 'Für heute ist 1 Einheit geplant.';
+    expect(
+      mentionsSchedule(
+        'Für heute ist 1 Einheit geplant und sie bleibt locker.',
+        plan,
+      ),
+      isTrue,
+    );
+    expect(mentionsSchedule('Heute bleibt es locker.', plan), isFalse);
   });
 
   BriefingBrief brief(List<HrvRecord> hrv) => BriefingBrief.parse(
