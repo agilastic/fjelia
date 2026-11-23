@@ -2021,30 +2021,7 @@
   "expandTrainingForm": "Trainingsvorm uitvouwen",
   "calculatedFromTheFirstAvailable": "Berekend vanaf de eerste beschikbare belastingsgegevens. Dagen zonder vastgelegde belasting tellen als nul; eerdere training is onbekend.",
   "trainingMonitor2": "TRAININGSMONITOR",
-  "pfitzingerZones": "PFITZINGER-ZONES",
   "cyclingPowerZones": "VERMOGENSZONES FIETSEN",
-  "znumber": "Z{number}",
-  "@znumber": {
-    "placeholders": {
-      "number": {
-        "type": "Object"
-      }
-    }
-  },
-  "paceHrDescription": "{pace} · {hr}\n{description}",
-  "@paceHrDescription": {
-    "placeholders": {
-      "pace": {
-        "type": "Object"
-      },
-      "hr": {
-        "type": "Object"
-      },
-      "description": {
-        "type": "Object"
-      }
-    }
-  },
   "weeklyTrainingLoad2": "TRAININGSBELASTING PER WEEK",
   "prevWeek": "VORIGE WEEK",
   "bySport": "PER SPORT",
@@ -2534,8 +2511,6 @@
   "tap5MinuteMaxTest": "Tik · maximaaltest van 5 minuten",
   "setFtpToCalculatePower": "Stel FTP in om vermogenszones te berekenen",
   "cyclingPowerZones2": "Vermogenszones fietsen",
-  "pfitzingerZones2": "Pfitzinger-zones",
-  "completeAnLt2TestTo": "Doe een LT2-test om looptzones te berekenen.",
   "setFtpToCalculatePower2": "Stel FTP in om vermogenszones te berekenen.",
   "endurance": "Duur",
   "threshold": "Drempel",
@@ -5397,5 +5372,52 @@
   "aiOnboardingMoreBodyCloud": "Je eigen cloudaanbieder met API-sleutel",
   "raceLibraryWhichDistance": "Welke afstand?",
   "raceLibraryFilledFrom": "Ingevuld uit de wedstrijdbibliotheek ({source}). Controleer de website van de organisator voordat je je inschrijft.",
-  "@raceLibraryFilledFrom": {"placeholders": {"source": {"type": "String"}}}
+  "@raceLibraryFilledFrom": {"placeholders": {"source": {"type": "String"}}},
+  "hrZoneTrendsTitle": "Hartslagzones in de tijd",
+  "hrZoneTrendsHint": "Tijd in Z1–Z5 over weken en maanden, vergeleken met je plan",
+  "hrZoneWindowDays": "{count} dagen",
+  "hrZoneWindowMonths": "{count} maanden",
+  "hrZoneUnitTime": "Tijd",
+  "hrZoneUnitShare": "Aandeel",
+  "hrZoneAllSports": "Alle sporten",
+  "hrZoneOtherSports": "Andere sporten",
+  "hrZoneNoHr": "Geen hartslag",
+  "hrZoneDetail": "{hr} met hartslag van {total} trainingstijd ({coverage} %)",
+  "hrZoneWorkouts": "Trainingen: {count}",
+  "hrZonePartial": "Periode niet volledig",
+  "hrZoneMixedSports": "Alle sporten samen: de zonegrenzen verschillen per sport.",
+  "hrZoneHistoricalNote": "Elke training houdt de zones die golden toen hij werd opgenomen.",
+  "hrZoneEmpty": "Geen trainingen met hartslag in deze periode.",
+  "hrZoneTapHint": "Tik op een balk voor de exacte tijden.",
+  "hrZoneCompareTitle": "Laatste 28 dagen tegenover de 28 daarvoor",
+  "hrZoneTrainingTime": "Trainingstijd",
+  "hrZoneCoverageLabel": "Hartslagdekking",
+  "hrZonePerZone": "Per zone",
+  "hrZoneObservationsNote": "Observaties, geen oordelen: wat ze betekenen hangt af van je doel, fase en herstel.",
+  "hrZoneObsInsufficient": "Te weinig hartslagtijd in een van de twee periodes om te vergelijken.",
+  "hrZoneObsVolumeUp": "De trainingstijd steeg met {pct} %.",
+  "hrZoneObsVolumeDown": "De trainingstijd daalde met {pct} %.",
+  "hrZoneObsVolumeSteady": "De trainingstijd bleef ongeveer gelijk.",
+  "hrZoneObsHardUpVolumeUp": "De tijd in Z4+Z5 steeg terwijl ook de totale trainingstijd steeg.",
+  "hrZoneObsHardUpVolumeDown": "De tijd in Z4+Z5 steeg terwijl de totale trainingstijd daalde.",
+  "hrZoneObsHardUpVolumeSteady": "De tijd in Z4+Z5 steeg bij ongeveer gelijke trainingstijd.",
+  "hrZoneObsHardDown": "De tijd in Z4+Z5 daalde.",
+  "hrZoneObsEasyShareUp": "Rustige tijd (Z1+Z2) is een groter deel van de hartslagtijd.",
+  "hrZoneObsEasyShareDown": "Rustige tijd (Z1+Z2) is een kleiner deel van de hartslagtijd.",
+  "hrZoneObsMiddleUp": "De tijd in Z3 steeg.",
+  "hrZoneObsMiddleDown": "De tijd in Z3 daalde.",
+  "hrZoneObsCoverage": "De hartslagdekking verschilt tussen de periodes: een deel van een verandering kan aan ontbrekende data liggen.",
+  "hrZonePlanTitle": "Gepland en opgenomen",
+  "hrZoneThisWeek": "Deze week",
+  "hrZoneLastWeek": "Vorige week",
+  "hrZonePlanned": "Gepland",
+  "hrZoneRecorded": "Opgenomen",
+  "hrZonePlanCoverage": "Vergelijkbaar: {comparable} van {total} geplande trainingen",
+  "hrZonePlanMissed": "Gemist: {count} (buiten de geplande tijd gelaten)",
+  "hrZoneGapPower": "Gepland op vermogen: {count}",
+  "hrZoneGapPace": "Gepland op tempo: {count}",
+  "hrZoneGapNoHr": "Zonder hartslagdoelen: {count}",
+  "hrZonePlanNone": "Geen vergelijkbare geplande trainingen deze week.",
+  "hrZoneDeviation": "Duidelijk verschil",
+  "hrZonePlanNote": "Alleen trainingen die in hartslagzones gepland zijn worden vergeleken; de opgenomen tijd komt uit dezelfde sporten."
 }

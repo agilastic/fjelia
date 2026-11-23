@@ -55,6 +55,64 @@ class _NoProAnalysisPrompts implements ProAnalysisPrompts {
   String get morningRevision => '';
 }
 
+/// Public builds have no FjeliaPro heart-rate zone trends.
+HrZoneTrends createHrZoneTrends() => const _NoHrZoneTrends();
+
+class _NoHrZoneTrends implements HrZoneTrends {
+  const _NoHrZoneTrends();
+
+  @override
+  bool get isAvailable => false;
+
+  @override
+  List<HrZonePeriod> periods(
+    List<HrZoneWorkout> workouts, {
+    required DateTime from,
+    required DateTime to,
+    required HrZoneGrouping grouping,
+    String? sport,
+    bool mondayFirst = true,
+  }) => const [];
+
+  @override
+  HrZoneComparison compare28(
+    List<HrZoneWorkout> workouts, {
+    required DateTime today,
+    String? sport,
+  }) => HrZoneComparison(
+    previousStart: today,
+    recentStart: today,
+    end: today,
+    previous: HrZoneTotals.empty,
+    recent: HrZoneTotals.empty,
+    observations: const [HrZoneObservation.insufficientData],
+  );
+
+  @override
+  HrZonePlanComparison planVsActual(
+    List<PlannedZoneSession> planned,
+    List<HrZoneWorkout> workouts, {
+    required DateTime from,
+    required DateTime to,
+    String? sport,
+  }) => const HrZonePlanComparison(
+    planned: [0, 0, 0, 0, 0],
+    actual: HrZoneTotals.empty,
+    sessions: 0,
+    comparableSessions: 0,
+    missedSessions: 0,
+    gaps: {},
+    deviations: [],
+  );
+
+  @override
+  List<String> coachContext(
+    List<HrZoneWorkout> workouts,
+    List<PlannedZoneSession> planned, {
+    required DateTime today,
+  }) => const [];
+}
+
 /// Public builds are always the free edition and never offer FjeliaPro.
 FjeliaEdition createFjeliaEdition() => const _FreeEdition();
 

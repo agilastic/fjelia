@@ -15,8 +15,8 @@ import 'threshold_overview_section.dart';
 import '../../widgets/app_widgets.dart';
 import 'threshold_sheets.dart';
 import 'load_metric_sheet.dart';
-import '../../services/pfitzinger_zones.dart';
 import 'load_visuals.dart';
+import 'hr_zone_trends_sheet.dart';
 
 class TrainingMonitorCard extends ConsumerWidget {
   const TrainingMonitorCard({super.key});
@@ -267,16 +267,7 @@ class TrainingMonitorCard extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 12),
-          _ZoneStrip(
-            title: context.l10n.pfitzingerZones,
-            running: true,
-            subtitle:
-                'LT2 ${lt2Row?.inUse ?? lt2?.lt2 ?? '—'} bpm · '
-                '${lt2Row?.inUsePaceSecPerKm != null ? pace(lt2Row!.inUsePaceSecPerKm) : lt2?.pace ?? '—'}',
-            onTap: () =>
-                showLoadSheet(context, const LoadZonesSheet(), height: .7),
-          ),
-          const SizedBox(height: 8),
+          const HrZoneTrendsTile(),
           _ZoneStrip(
             title: context.l10n.cyclingPowerZones,
             subtitle: ftp == null
@@ -285,11 +276,8 @@ class TrainingMonitorCard extends ConsumerWidget {
                     ftp.ftpWatts,
                     valueText(ftp.wattsPerKg, 2),
                   ),
-            onTap: () => showLoadSheet(
-              context,
-              const LoadZonesSheet(power: true),
-              height: .7,
-            ),
+            onTap: () =>
+                showLoadSheet(context, const LoadZonesSheet(), height: .7),
           ),
           Divider(height: 24, color: fjInk10),
         ],
@@ -306,24 +294,14 @@ List<Color> get _zoneColors => [
   loadOrange,
   loadRed,
 ];
-List<Color> get _runningColors => [
-  mint,
-  mint,
-  Color(0xFF81B784),
-  Color(0xFFFFCC00),
-  loadOrange,
-  duo(0xFF777777, 0xFF6B7280),
-];
 
 class _ZoneStrip extends StatelessWidget {
   const _ZoneStrip({
     required this.title,
     required this.subtitle,
     required this.onTap,
-    this.running = false,
   });
   final String title, subtitle;
-  final bool running;
   final VoidCallback onTap;
   @override
   Widget build(BuildContext context) => Material(
@@ -347,11 +325,7 @@ class _ZoneStrip extends StatelessWidget {
             const SizedBox(height: 8),
             Row(
               children: [
-                Icon(
-                  running ? Icons.table_chart_outlined : Icons.directions_bike,
-                  size: 14,
-                  color: muted,
-                ),
+                Icon(Icons.directions_bike, size: 14, color: muted),
                 const SizedBox(width: 8),
                 for (var i = 0; i < 6; i++)
                   Expanded(
@@ -359,23 +333,16 @@ class _ZoneStrip extends StatelessWidget {
                       margin: const EdgeInsets.only(right: 4),
                       padding: const EdgeInsets.symmetric(vertical: 6),
                       decoration: BoxDecoration(
-                        color: (running ? _runningColors : _zoneColors)[i]
-                            .withValues(alpha: .15),
+                        color: _zoneColors[i].withValues(alpha: .15),
                         borderRadius: BorderRadius.circular(5),
                         border: Border.all(
-                          color: (running ? _runningColors : _zoneColors)[i]
-                              .withValues(alpha: .35),
+                          color: _zoneColors[i].withValues(alpha: .35),
                         ),
                       ),
                       child: Text(
-                        running && i >= 4
-                            ? (i == 4 ? '5A' : '5B')
-                            : 'Z${i + 1}',
+                        'Z${i + 1}',
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 9,
-                          color: (running ? _runningColors : _zoneColors)[i],
-                        ),
+                        style: TextStyle(fontSize: 9, color: _zoneColors[i]),
                       ),
                     ),
                   ),
@@ -394,59 +361,20 @@ class _ZoneStrip extends StatelessWidget {
   );
 }
 
+/// The cycling power zones from the FTP in use.
 class LoadZonesSheet extends ConsumerWidget {
-  const LoadZonesSheet({super.key, this.power = false});
-  final bool power;
+  const LoadZonesSheet({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final lt2 = ref.watch(lt2TtProvider).valueOrNull;
-    final vo2 = ref.watch(vo2MaxProvider).valueOrNull;
     final ftp = ref.watch(ftpProvider).valueOrNull;
-    // The LT2 in use (any source the athlete applied, or the device's),
-    // else the app's own time trial.
-    final inUse = ref
-        .watch(thresholdOverviewProvider)
-        .valueOrNull
-        ?.rows
-        .where((r) => r.kind == ThresholdKind.lt2)
-        .firstOrNull;
-    final lt2Hr = inUse?.inUse ?? lt2?.lt2;
-    final zones = lt2Hr == null
-        ? <PfitzingerZone>[]
-        : PfitzingerZones.calculate(
-            lt2Hr: lt2Hr,
-            lt2PaceSec: inUse?.inUsePaceSecPerKm ?? lt2?.paceSec,
-            vo2PaceSec: vo2?.paceSec,
-          );
     return LoadSheet(
       close: true,
-      title: power
-          ? context.l10n.cyclingPowerZones2
-          : context.l10n.pfitzingerZones2,
+      title: context.l10n.cyclingPowerZones2,
       child: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          if (!power && lt2Hr == null)
-            EmptyState(context.l10n.completeAnLt2TestTo),
-          if (power && ftp == null)
-            EmptyState(context.l10n.setFtpToCalculatePower2),
-          if (!power)
-            for (final zone in zones)
-              ListTile(
-                leading: Text(
-                  context.l10n.znumber(zone.number),
-                  style: TextStyle(color: _zoneColors[zone.number - 1]),
-                ),
-                title: Text(zone.name),
-                subtitle: Text(
-                  context.l10n.paceHrDescription(
-                    zone.pace,
-                    zone.hr,
-                    zone.description,
-                  ),
-                ),
-              ),
-          if (power && ftp != null)
+          if (ftp == null) EmptyState(context.l10n.setFtpToCalculatePower2),
+          if (ftp != null)
             for (var i = 0; i < 6; i++)
               ListTile(
                 leading: Text(

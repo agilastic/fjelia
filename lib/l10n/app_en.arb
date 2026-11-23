@@ -2021,30 +2021,7 @@
   "expandTrainingForm": "Expand training form",
   "calculatedFromTheFirstAvailable": "Calculated from the first available load record. Days without recorded load count as zero; earlier training is unknown.",
   "trainingMonitor2": "TRAINING MONITOR",
-  "pfitzingerZones": "PFITZINGER ZONES",
   "cyclingPowerZones": "CYCLING POWER ZONES",
-  "znumber": "Z{number}",
-  "@znumber": {
-    "placeholders": {
-      "number": {
-        "type": "Object"
-      }
-    }
-  },
-  "paceHrDescription": "{pace} · {hr}\n{description}",
-  "@paceHrDescription": {
-    "placeholders": {
-      "pace": {
-        "type": "Object"
-      },
-      "hr": {
-        "type": "Object"
-      },
-      "description": {
-        "type": "Object"
-      }
-    }
-  },
   "weeklyTrainingLoad2": "WEEKLY TRAINING LOAD",
   "prevWeek": "PREV WEEK",
   "bySport": "BY SPORT",
@@ -2541,8 +2518,6 @@
   "tap5MinuteMaxTest": "Tap · 5-minute max test",
   "setFtpToCalculatePower": "Set FTP to calculate power zones",
   "cyclingPowerZones2": "Cycling power zones",
-  "pfitzingerZones2": "Pfitzinger zones",
-  "completeAnLt2TestTo": "Complete an LT2 test to calculate running zones.",
   "setFtpToCalculatePower2": "Set FTP to calculate power zones.",
   "endurance": "Endurance",
   "threshold": "Threshold",
@@ -5470,5 +5445,63 @@
   "aiOnboardingMoreBodyCloud": "Your own cloud provider and API key",
   "raceLibraryWhichDistance": "Which distance?",
   "raceLibraryFilledFrom": "Filled in from the race library ({source}). Check the organiser's website before you register.",
-  "@raceLibraryFilledFrom": {"placeholders": {"source": {"type": "String"}}}
+  "@raceLibraryFilledFrom": {"placeholders": {"source": {"type": "String"}}},
+  "hrZoneTrendsTitle": "Heart rate zone trends",
+  "hrZoneTrendsHint": "Time in Z1–Z5 over weeks and months, against your plan",
+  "hrZoneWindowDays": "{count} days",
+  "@hrZoneWindowDays": {"placeholders": {"count": {"type": "int"}}},
+  "hrZoneWindowMonths": "{count} months",
+  "@hrZoneWindowMonths": {"placeholders": {"count": {"type": "int"}}},
+  "hrZoneUnitTime": "Time",
+  "hrZoneUnitShare": "Share",
+  "hrZoneAllSports": "All sports",
+  "hrZoneOtherSports": "Other sports",
+  "hrZoneNoHr": "No heart rate",
+  "hrZoneDetail": "{hr} with heart rate of {total} workout time ({coverage} %)",
+  "@hrZoneDetail": {"placeholders": {"hr": {"type": "String"}, "total": {"type": "String"}, "coverage": {"type": "int"}}},
+  "hrZoneWorkouts": "Workouts: {count}",
+  "@hrZoneWorkouts": {"placeholders": {"count": {"type": "int"}}},
+  "hrZonePartial": "Period not complete",
+  "hrZoneMixedSports": "All sports together: the zone boundaries differ by sport.",
+  "hrZoneHistoricalNote": "Each workout keeps the zones that were in force when it was recorded.",
+  "hrZoneEmpty": "No workouts with heart rate in this period.",
+  "hrZoneTapHint": "Tap a bar for the exact times.",
+  "hrZoneCompareTitle": "Last 28 days vs the 28 before",
+  "hrZoneTrainingTime": "Training time",
+  "hrZoneCoverageLabel": "Heart rate coverage",
+  "hrZonePerZone": "Per zone",
+  "hrZoneObservationsNote": "Observations, not verdicts: what they mean depends on your goal, phase and recovery.",
+  "hrZoneObsInsufficient": "Too little heart rate time in one of the two periods to compare.",
+  "hrZoneObsVolumeUp": "Training time rose by {pct} %.",
+  "@hrZoneObsVolumeUp": {"placeholders": {"pct": {"type": "int"}}},
+  "hrZoneObsVolumeDown": "Training time fell by {pct} %.",
+  "@hrZoneObsVolumeDown": {"placeholders": {"pct": {"type": "int"}}},
+  "hrZoneObsVolumeSteady": "Training time stayed about the same.",
+  "hrZoneObsHardUpVolumeUp": "Time in Z4+Z5 rose while total training time rose as well.",
+  "hrZoneObsHardUpVolumeDown": "Time in Z4+Z5 rose while total training time fell.",
+  "hrZoneObsHardUpVolumeSteady": "Time in Z4+Z5 rose at about the same training time.",
+  "hrZoneObsHardDown": "Time in Z4+Z5 fell.",
+  "hrZoneObsEasyShareUp": "Easy time (Z1+Z2) is a larger share of the heart rate time.",
+  "hrZoneObsEasyShareDown": "Easy time (Z1+Z2) is a smaller share of the heart rate time.",
+  "hrZoneObsMiddleUp": "Time in Z3 rose.",
+  "hrZoneObsMiddleDown": "Time in Z3 fell.",
+  "hrZoneObsCoverage": "Heart rate coverage differs between the periods: part of a change can be missing data.",
+  "hrZonePlanTitle": "Planned vs recorded",
+  "hrZoneThisWeek": "This week",
+  "hrZoneLastWeek": "Last week",
+  "hrZonePlanned": "Planned",
+  "hrZoneRecorded": "Recorded",
+  "hrZonePlanCoverage": "Comparable: {comparable} of {total} planned sessions",
+  "@hrZonePlanCoverage": {"placeholders": {"comparable": {"type": "int"}, "total": {"type": "int"}}},
+  "hrZonePlanMissed": "Missed: {count} (left out of the planned time)",
+  "@hrZonePlanMissed": {"placeholders": {"count": {"type": "int"}}},
+  "hrZoneGapPower": "Planned by power: {count}",
+  "@hrZoneGapPower": {"placeholders": {"count": {"type": "int"}}},
+  "hrZoneGapPace": "Planned by pace: {count}",
+  "@hrZoneGapPace": {"placeholders": {"count": {"type": "int"}}},
+  "hrZoneGapNoHr": "Without heart rate targets: {count}",
+  "@hrZoneGapNoHr": {"placeholders": {"count": {"type": "int"}}},
+  "hrZonePlanNone": "No comparable planned sessions in this week.",
+  "hrZoneDeviation": "Notable difference",
+  "hrZonePlanNote": "Only sessions planned in heart rate zones are compared; recorded time comes from the same sports."
 }

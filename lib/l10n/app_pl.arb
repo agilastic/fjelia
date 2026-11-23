@@ -2021,30 +2021,7 @@
   "expandTrainingForm": "Rozwiń formę treningową",
   "calculatedFromTheFirstAvailable": "Obliczono od pierwszego dostępnego zapisu obciążenia. Dni bez zapisanego obciążenia liczą się jako zero; wcześniejszy trening jest nieznany.",
   "trainingMonitor2": "MONITOR TRENINGU",
-  "pfitzingerZones": "STREFY PFITZINGERA",
   "cyclingPowerZones": "STREFY MOCY W KOLARSTWIE",
-  "znumber": "Z{number}",
-  "@znumber": {
-    "placeholders": {
-      "number": {
-        "type": "Object"
-      }
-    }
-  },
-  "paceHrDescription": "{pace} · {hr}\n{description}",
-  "@paceHrDescription": {
-    "placeholders": {
-      "pace": {
-        "type": "Object"
-      },
-      "hr": {
-        "type": "Object"
-      },
-      "description": {
-        "type": "Object"
-      }
-    }
-  },
   "weeklyTrainingLoad2": "TYGODNIOWE OBCIĄŻENIE TRENINGOWE",
   "prevWeek": "POPRZ. TYDZIEŃ",
   "bySport": "WG SPORTU",
@@ -2534,8 +2511,6 @@
   "tap5MinuteMaxTest": "Dotknij · 5-minutowy test maksymalny",
   "setFtpToCalculatePower": "Ustaw FTP, aby obliczyć strefy mocy",
   "cyclingPowerZones2": "Strefy mocy w kolarstwie",
-  "pfitzingerZones2": "Strefy Pfitzingera",
-  "completeAnLt2TestTo": "Wykonaj test LT2, aby obliczyć strefy biegowe.",
   "setFtpToCalculatePower2": "Ustaw FTP, aby obliczyć strefy mocy.",
   "endurance": "Wytrzymałość",
   "threshold": "Próg",
@@ -5397,5 +5372,52 @@
   "aiOnboardingMoreBodyCloud": "Własny dostawca w chmurze z kluczem API",
   "raceLibraryWhichDistance": "Który dystans?",
   "raceLibraryFilledFrom": "Uzupełniono z biblioteki zawodów ({source}). Przed zapisem sprawdź stronę organizatora.",
-  "@raceLibraryFilledFrom": {"placeholders": {"source": {"type": "String"}}}
+  "@raceLibraryFilledFrom": {"placeholders": {"source": {"type": "String"}}},
+  "hrZoneTrendsTitle": "Trendy stref tętna",
+  "hrZoneTrendsHint": "Czas w Z1–Z5 w kolejnych tygodniach i miesiącach, w porównaniu z planem",
+  "hrZoneWindowDays": "Dni: {count}",
+  "hrZoneWindowMonths": "Miesiące: {count}",
+  "hrZoneUnitTime": "Czas",
+  "hrZoneUnitShare": "Udział",
+  "hrZoneAllSports": "Wszystkie sporty",
+  "hrZoneOtherSports": "Inne sporty",
+  "hrZoneNoHr": "Brak tętna",
+  "hrZoneDetail": "{hr} z tętnem z {total} czasu treningu ({coverage} %)",
+  "hrZoneWorkouts": "Treningi: {count}",
+  "hrZonePartial": "Okres niepełny",
+  "hrZoneMixedSports": "Wszystkie sporty razem: granice stref różnią się w zależności od sportu.",
+  "hrZoneHistoricalNote": "Każdy trening zachowuje strefy obowiązujące w chwili jego zapisu.",
+  "hrZoneEmpty": "Brak treningów z tętnem w tym okresie.",
+  "hrZoneTapHint": "Dotknij słupka, aby zobaczyć dokładne czasy.",
+  "hrZoneCompareTitle": "Ostatnie 28 dni wobec 28 wcześniejszych",
+  "hrZoneTrainingTime": "Czas treningu",
+  "hrZoneCoverageLabel": "Pokrycie tętnem",
+  "hrZonePerZone": "Według stref",
+  "hrZoneObservationsNote": "Obserwacje, nie oceny: ich znaczenie zależy od celu, fazy i regeneracji.",
+  "hrZoneObsInsufficient": "Za mało czasu z tętnem w jednym z okresów, aby porównać.",
+  "hrZoneObsVolumeUp": "Czas treningu wzrósł o {pct} %.",
+  "hrZoneObsVolumeDown": "Czas treningu spadł o {pct} %.",
+  "hrZoneObsVolumeSteady": "Czas treningu pozostał podobny.",
+  "hrZoneObsHardUpVolumeUp": "Czas w Z4+Z5 wzrósł, a łączny czas treningu też wzrósł.",
+  "hrZoneObsHardUpVolumeDown": "Czas w Z4+Z5 wzrósł, a łączny czas treningu spadł.",
+  "hrZoneObsHardUpVolumeSteady": "Czas w Z4+Z5 wzrósł przy podobnym czasie treningu.",
+  "hrZoneObsHardDown": "Czas w Z4+Z5 spadł.",
+  "hrZoneObsEasyShareUp": "Spokojny czas (Z1+Z2) stanowi większą część czasu z tętnem.",
+  "hrZoneObsEasyShareDown": "Spokojny czas (Z1+Z2) stanowi mniejszą część czasu z tętnem.",
+  "hrZoneObsMiddleUp": "Czas w Z3 wzrósł.",
+  "hrZoneObsMiddleDown": "Czas w Z3 spadł.",
+  "hrZoneObsCoverage": "Pokrycie tętnem różni się między okresami: część zmiany może wynikać z brakujących danych.",
+  "hrZonePlanTitle": "Zaplanowane i zapisane",
+  "hrZoneThisWeek": "Ten tydzień",
+  "hrZoneLastWeek": "Poprzedni tydzień",
+  "hrZonePlanned": "Zaplanowane",
+  "hrZoneRecorded": "Zapisane",
+  "hrZonePlanCoverage": "Porównywalne: {comparable} z {total} zaplanowanych treningów",
+  "hrZonePlanMissed": "Pominięte: {count} (poza zaplanowanym czasem)",
+  "hrZoneGapPower": "Planowane mocą: {count}",
+  "hrZoneGapPace": "Planowane tempem: {count}",
+  "hrZoneGapNoHr": "Bez celów tętna: {count}",
+  "hrZonePlanNone": "Brak porównywalnych zaplanowanych treningów w tym tygodniu.",
+  "hrZoneDeviation": "Wyraźna różnica",
+  "hrZonePlanNote": "Porównywane są tylko treningi zaplanowane w strefach tętna; zapisany czas pochodzi z tych samych sportów."
 }

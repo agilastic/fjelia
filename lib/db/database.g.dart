@@ -15858,6 +15858,1111 @@ class AbsencesCompanion extends UpdateCompanion<Absence> {
   }
 }
 
+class $HrZoneDefinitionsTable extends HrZoneDefinitions
+    with TableInfo<$HrZoneDefinitionsTable, HrZoneDefinition> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $HrZoneDefinitionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _sportMeta = const VerificationMeta('sport');
+  @override
+  late final GeneratedColumn<String> sport = GeneratedColumn<String>(
+    'sport',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _floorsJsonMeta = const VerificationMeta(
+    'floorsJson',
+  );
+  @override
+  late final GeneratedColumn<String> floorsJson = GeneratedColumn<String>(
+    'floors_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _methodMeta = const VerificationMeta('method');
+  @override
+  late final GeneratedColumn<String> method = GeneratedColumn<String>(
+    'method',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _unitMeta = const VerificationMeta('unit');
+  @override
+  late final GeneratedColumn<String> unit = GeneratedColumn<String>(
+    'unit',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('bpm'),
+  );
+  static const VerificationMeta _sourceMeta = const VerificationMeta('source');
+  @override
+  late final GeneratedColumn<String> source = GeneratedColumn<String>(
+    'source',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _effectiveFromMeta = const VerificationMeta(
+    'effectiveFrom',
+  );
+  @override
+  late final GeneratedColumn<DateTime> effectiveFrom =
+      GeneratedColumn<DateTime>(
+        'effective_from',
+        aliasedName,
+        false,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: true,
+      );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    sport,
+    floorsJson,
+    method,
+    unit,
+    source,
+    effectiveFrom,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'hr_zone_definitions';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<HrZoneDefinition> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('sport')) {
+      context.handle(
+        _sportMeta,
+        sport.isAcceptableOrUnknown(data['sport']!, _sportMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sportMeta);
+    }
+    if (data.containsKey('floors_json')) {
+      context.handle(
+        _floorsJsonMeta,
+        floorsJson.isAcceptableOrUnknown(data['floors_json']!, _floorsJsonMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_floorsJsonMeta);
+    }
+    if (data.containsKey('method')) {
+      context.handle(
+        _methodMeta,
+        method.isAcceptableOrUnknown(data['method']!, _methodMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_methodMeta);
+    }
+    if (data.containsKey('unit')) {
+      context.handle(
+        _unitMeta,
+        unit.isAcceptableOrUnknown(data['unit']!, _unitMeta),
+      );
+    }
+    if (data.containsKey('source')) {
+      context.handle(
+        _sourceMeta,
+        source.isAcceptableOrUnknown(data['source']!, _sourceMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sourceMeta);
+    }
+    if (data.containsKey('effective_from')) {
+      context.handle(
+        _effectiveFromMeta,
+        effectiveFrom.isAcceptableOrUnknown(
+          data['effective_from']!,
+          _effectiveFromMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_effectiveFromMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  HrZoneDefinition map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return HrZoneDefinition(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      sport: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}sport'],
+      )!,
+      floorsJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}floors_json'],
+      )!,
+      method: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}method'],
+      )!,
+      unit: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}unit'],
+      )!,
+      source: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source'],
+      )!,
+      effectiveFrom: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}effective_from'],
+      )!,
+    );
+  }
+
+  @override
+  $HrZoneDefinitionsTable createAlias(String alias) {
+    return $HrZoneDefinitionsTable(attachedDatabase, alias);
+  }
+}
+
+class HrZoneDefinition extends DataClass
+    implements Insertable<HrZoneDefinition> {
+  final int id;
+
+  /// `running`, `cycling` or `swimming`.
+  final String sport;
+
+  /// Five lower bounds of Z1–Z5 (or, from older settings, four upper bounds
+  /// of Z1–Z4), in [unit].
+  final String floorsJson;
+
+  /// How the boundaries came about: `settings` (the athlete's zones in
+  /// Fjelia, threshold- or device-based) or `initial` (the zones in force
+  /// when the history began, applied to every earlier workout).
+  final String method;
+  final String unit;
+  final String source;
+  final DateTime effectiveFrom;
+  const HrZoneDefinition({
+    required this.id,
+    required this.sport,
+    required this.floorsJson,
+    required this.method,
+    required this.unit,
+    required this.source,
+    required this.effectiveFrom,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['sport'] = Variable<String>(sport);
+    map['floors_json'] = Variable<String>(floorsJson);
+    map['method'] = Variable<String>(method);
+    map['unit'] = Variable<String>(unit);
+    map['source'] = Variable<String>(source);
+    map['effective_from'] = Variable<DateTime>(effectiveFrom);
+    return map;
+  }
+
+  HrZoneDefinitionsCompanion toCompanion(bool nullToAbsent) {
+    return HrZoneDefinitionsCompanion(
+      id: Value(id),
+      sport: Value(sport),
+      floorsJson: Value(floorsJson),
+      method: Value(method),
+      unit: Value(unit),
+      source: Value(source),
+      effectiveFrom: Value(effectiveFrom),
+    );
+  }
+
+  factory HrZoneDefinition.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return HrZoneDefinition(
+      id: serializer.fromJson<int>(json['id']),
+      sport: serializer.fromJson<String>(json['sport']),
+      floorsJson: serializer.fromJson<String>(json['floorsJson']),
+      method: serializer.fromJson<String>(json['method']),
+      unit: serializer.fromJson<String>(json['unit']),
+      source: serializer.fromJson<String>(json['source']),
+      effectiveFrom: serializer.fromJson<DateTime>(json['effectiveFrom']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'sport': serializer.toJson<String>(sport),
+      'floorsJson': serializer.toJson<String>(floorsJson),
+      'method': serializer.toJson<String>(method),
+      'unit': serializer.toJson<String>(unit),
+      'source': serializer.toJson<String>(source),
+      'effectiveFrom': serializer.toJson<DateTime>(effectiveFrom),
+    };
+  }
+
+  HrZoneDefinition copyWith({
+    int? id,
+    String? sport,
+    String? floorsJson,
+    String? method,
+    String? unit,
+    String? source,
+    DateTime? effectiveFrom,
+  }) => HrZoneDefinition(
+    id: id ?? this.id,
+    sport: sport ?? this.sport,
+    floorsJson: floorsJson ?? this.floorsJson,
+    method: method ?? this.method,
+    unit: unit ?? this.unit,
+    source: source ?? this.source,
+    effectiveFrom: effectiveFrom ?? this.effectiveFrom,
+  );
+  HrZoneDefinition copyWithCompanion(HrZoneDefinitionsCompanion data) {
+    return HrZoneDefinition(
+      id: data.id.present ? data.id.value : this.id,
+      sport: data.sport.present ? data.sport.value : this.sport,
+      floorsJson: data.floorsJson.present
+          ? data.floorsJson.value
+          : this.floorsJson,
+      method: data.method.present ? data.method.value : this.method,
+      unit: data.unit.present ? data.unit.value : this.unit,
+      source: data.source.present ? data.source.value : this.source,
+      effectiveFrom: data.effectiveFrom.present
+          ? data.effectiveFrom.value
+          : this.effectiveFrom,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HrZoneDefinition(')
+          ..write('id: $id, ')
+          ..write('sport: $sport, ')
+          ..write('floorsJson: $floorsJson, ')
+          ..write('method: $method, ')
+          ..write('unit: $unit, ')
+          ..write('source: $source, ')
+          ..write('effectiveFrom: $effectiveFrom')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, sport, floorsJson, method, unit, source, effectiveFrom);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is HrZoneDefinition &&
+          other.id == this.id &&
+          other.sport == this.sport &&
+          other.floorsJson == this.floorsJson &&
+          other.method == this.method &&
+          other.unit == this.unit &&
+          other.source == this.source &&
+          other.effectiveFrom == this.effectiveFrom);
+}
+
+class HrZoneDefinitionsCompanion extends UpdateCompanion<HrZoneDefinition> {
+  final Value<int> id;
+  final Value<String> sport;
+  final Value<String> floorsJson;
+  final Value<String> method;
+  final Value<String> unit;
+  final Value<String> source;
+  final Value<DateTime> effectiveFrom;
+  const HrZoneDefinitionsCompanion({
+    this.id = const Value.absent(),
+    this.sport = const Value.absent(),
+    this.floorsJson = const Value.absent(),
+    this.method = const Value.absent(),
+    this.unit = const Value.absent(),
+    this.source = const Value.absent(),
+    this.effectiveFrom = const Value.absent(),
+  });
+  HrZoneDefinitionsCompanion.insert({
+    this.id = const Value.absent(),
+    required String sport,
+    required String floorsJson,
+    required String method,
+    this.unit = const Value.absent(),
+    required String source,
+    required DateTime effectiveFrom,
+  }) : sport = Value(sport),
+       floorsJson = Value(floorsJson),
+       method = Value(method),
+       source = Value(source),
+       effectiveFrom = Value(effectiveFrom);
+  static Insertable<HrZoneDefinition> custom({
+    Expression<int>? id,
+    Expression<String>? sport,
+    Expression<String>? floorsJson,
+    Expression<String>? method,
+    Expression<String>? unit,
+    Expression<String>? source,
+    Expression<DateTime>? effectiveFrom,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (sport != null) 'sport': sport,
+      if (floorsJson != null) 'floors_json': floorsJson,
+      if (method != null) 'method': method,
+      if (unit != null) 'unit': unit,
+      if (source != null) 'source': source,
+      if (effectiveFrom != null) 'effective_from': effectiveFrom,
+    });
+  }
+
+  HrZoneDefinitionsCompanion copyWith({
+    Value<int>? id,
+    Value<String>? sport,
+    Value<String>? floorsJson,
+    Value<String>? method,
+    Value<String>? unit,
+    Value<String>? source,
+    Value<DateTime>? effectiveFrom,
+  }) {
+    return HrZoneDefinitionsCompanion(
+      id: id ?? this.id,
+      sport: sport ?? this.sport,
+      floorsJson: floorsJson ?? this.floorsJson,
+      method: method ?? this.method,
+      unit: unit ?? this.unit,
+      source: source ?? this.source,
+      effectiveFrom: effectiveFrom ?? this.effectiveFrom,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (sport.present) {
+      map['sport'] = Variable<String>(sport.value);
+    }
+    if (floorsJson.present) {
+      map['floors_json'] = Variable<String>(floorsJson.value);
+    }
+    if (method.present) {
+      map['method'] = Variable<String>(method.value);
+    }
+    if (unit.present) {
+      map['unit'] = Variable<String>(unit.value);
+    }
+    if (source.present) {
+      map['source'] = Variable<String>(source.value);
+    }
+    if (effectiveFrom.present) {
+      map['effective_from'] = Variable<DateTime>(effectiveFrom.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HrZoneDefinitionsCompanion(')
+          ..write('id: $id, ')
+          ..write('sport: $sport, ')
+          ..write('floorsJson: $floorsJson, ')
+          ..write('method: $method, ')
+          ..write('unit: $unit, ')
+          ..write('source: $source, ')
+          ..write('effectiveFrom: $effectiveFrom')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $HrZoneSummariesTable extends HrZoneSummaries
+    with TableInfo<$HrZoneSummariesTable, HrZoneSummary> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $HrZoneSummariesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _activityIdMeta = const VerificationMeta(
+    'activityId',
+  );
+  @override
+  late final GeneratedColumn<String> activityId = GeneratedColumn<String>(
+    'activity_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _definitionIdMeta = const VerificationMeta(
+    'definitionId',
+  );
+  @override
+  late final GeneratedColumn<int> definitionId = GeneratedColumn<int>(
+    'definition_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _algorithmVersionMeta = const VerificationMeta(
+    'algorithmVersion',
+  );
+  @override
+  late final GeneratedColumn<int> algorithmVersion = GeneratedColumn<int>(
+    'algorithm_version',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _sportMeta = const VerificationMeta('sport');
+  @override
+  late final GeneratedColumn<String> sport = GeneratedColumn<String>(
+    'sport',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _startDateMeta = const VerificationMeta(
+    'startDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> startDate = GeneratedColumn<DateTime>(
+    'start_date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _elapsedSecondsMeta = const VerificationMeta(
+    'elapsedSeconds',
+  );
+  @override
+  late final GeneratedColumn<double> elapsedSeconds = GeneratedColumn<double>(
+    'elapsed_seconds',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _coveredSecondsMeta = const VerificationMeta(
+    'coveredSeconds',
+  );
+  @override
+  late final GeneratedColumn<double> coveredSeconds = GeneratedColumn<double>(
+    'covered_seconds',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _zoneSecondsJsonMeta = const VerificationMeta(
+    'zoneSecondsJson',
+  );
+  @override
+  late final GeneratedColumn<String> zoneSecondsJson = GeneratedColumn<String>(
+    'zone_seconds_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _duplicateMeta = const VerificationMeta(
+    'duplicate',
+  );
+  @override
+  late final GeneratedColumn<bool> duplicate = GeneratedColumn<bool>(
+    'duplicate',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("duplicate" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _computedAtMeta = const VerificationMeta(
+    'computedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> computedAt = GeneratedColumn<DateTime>(
+    'computed_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    activityId,
+    definitionId,
+    algorithmVersion,
+    sport,
+    startDate,
+    elapsedSeconds,
+    coveredSeconds,
+    zoneSecondsJson,
+    duplicate,
+    computedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'hr_zone_summaries';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<HrZoneSummary> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('activity_id')) {
+      context.handle(
+        _activityIdMeta,
+        activityId.isAcceptableOrUnknown(data['activity_id']!, _activityIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_activityIdMeta);
+    }
+    if (data.containsKey('definition_id')) {
+      context.handle(
+        _definitionIdMeta,
+        definitionId.isAcceptableOrUnknown(
+          data['definition_id']!,
+          _definitionIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_definitionIdMeta);
+    }
+    if (data.containsKey('algorithm_version')) {
+      context.handle(
+        _algorithmVersionMeta,
+        algorithmVersion.isAcceptableOrUnknown(
+          data['algorithm_version']!,
+          _algorithmVersionMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_algorithmVersionMeta);
+    }
+    if (data.containsKey('sport')) {
+      context.handle(
+        _sportMeta,
+        sport.isAcceptableOrUnknown(data['sport']!, _sportMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sportMeta);
+    }
+    if (data.containsKey('start_date')) {
+      context.handle(
+        _startDateMeta,
+        startDate.isAcceptableOrUnknown(data['start_date']!, _startDateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_startDateMeta);
+    }
+    if (data.containsKey('elapsed_seconds')) {
+      context.handle(
+        _elapsedSecondsMeta,
+        elapsedSeconds.isAcceptableOrUnknown(
+          data['elapsed_seconds']!,
+          _elapsedSecondsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_elapsedSecondsMeta);
+    }
+    if (data.containsKey('covered_seconds')) {
+      context.handle(
+        _coveredSecondsMeta,
+        coveredSeconds.isAcceptableOrUnknown(
+          data['covered_seconds']!,
+          _coveredSecondsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_coveredSecondsMeta);
+    }
+    if (data.containsKey('zone_seconds_json')) {
+      context.handle(
+        _zoneSecondsJsonMeta,
+        zoneSecondsJson.isAcceptableOrUnknown(
+          data['zone_seconds_json']!,
+          _zoneSecondsJsonMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_zoneSecondsJsonMeta);
+    }
+    if (data.containsKey('duplicate')) {
+      context.handle(
+        _duplicateMeta,
+        duplicate.isAcceptableOrUnknown(data['duplicate']!, _duplicateMeta),
+      );
+    }
+    if (data.containsKey('computed_at')) {
+      context.handle(
+        _computedAtMeta,
+        computedAt.isAcceptableOrUnknown(data['computed_at']!, _computedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_computedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {activityId};
+  @override
+  HrZoneSummary map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return HrZoneSummary(
+      activityId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}activity_id'],
+      )!,
+      definitionId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}definition_id'],
+      )!,
+      algorithmVersion: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}algorithm_version'],
+      )!,
+      sport: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}sport'],
+      )!,
+      startDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}start_date'],
+      )!,
+      elapsedSeconds: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}elapsed_seconds'],
+      )!,
+      coveredSeconds: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}covered_seconds'],
+      )!,
+      zoneSecondsJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}zone_seconds_json'],
+      )!,
+      duplicate: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}duplicate'],
+      )!,
+      computedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}computed_at'],
+      )!,
+    );
+  }
+
+  @override
+  $HrZoneSummariesTable createAlias(String alias) {
+    return $HrZoneSummariesTable(attachedDatabase, alias);
+  }
+}
+
+class HrZoneSummary extends DataClass implements Insertable<HrZoneSummary> {
+  final String activityId;
+  final int definitionId;
+  final int algorithmVersion;
+
+  /// The sport family of the zones: running, cycling, swimming or other.
+  final String sport;
+  final DateTime startDate;
+  final double elapsedSeconds;
+
+  /// Seconds with valid heart rate; the rest of [elapsedSeconds] is missing.
+  final double coveredSeconds;
+
+  /// Seconds in Z1–Z5, adding up to [coveredSeconds].
+  final String zoneSecondsJson;
+
+  /// Another recording of the same workout counts instead (an overlapping
+  /// import): left out of every total.
+  final bool duplicate;
+  final DateTime computedAt;
+  const HrZoneSummary({
+    required this.activityId,
+    required this.definitionId,
+    required this.algorithmVersion,
+    required this.sport,
+    required this.startDate,
+    required this.elapsedSeconds,
+    required this.coveredSeconds,
+    required this.zoneSecondsJson,
+    required this.duplicate,
+    required this.computedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['activity_id'] = Variable<String>(activityId);
+    map['definition_id'] = Variable<int>(definitionId);
+    map['algorithm_version'] = Variable<int>(algorithmVersion);
+    map['sport'] = Variable<String>(sport);
+    map['start_date'] = Variable<DateTime>(startDate);
+    map['elapsed_seconds'] = Variable<double>(elapsedSeconds);
+    map['covered_seconds'] = Variable<double>(coveredSeconds);
+    map['zone_seconds_json'] = Variable<String>(zoneSecondsJson);
+    map['duplicate'] = Variable<bool>(duplicate);
+    map['computed_at'] = Variable<DateTime>(computedAt);
+    return map;
+  }
+
+  HrZoneSummariesCompanion toCompanion(bool nullToAbsent) {
+    return HrZoneSummariesCompanion(
+      activityId: Value(activityId),
+      definitionId: Value(definitionId),
+      algorithmVersion: Value(algorithmVersion),
+      sport: Value(sport),
+      startDate: Value(startDate),
+      elapsedSeconds: Value(elapsedSeconds),
+      coveredSeconds: Value(coveredSeconds),
+      zoneSecondsJson: Value(zoneSecondsJson),
+      duplicate: Value(duplicate),
+      computedAt: Value(computedAt),
+    );
+  }
+
+  factory HrZoneSummary.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return HrZoneSummary(
+      activityId: serializer.fromJson<String>(json['activityId']),
+      definitionId: serializer.fromJson<int>(json['definitionId']),
+      algorithmVersion: serializer.fromJson<int>(json['algorithmVersion']),
+      sport: serializer.fromJson<String>(json['sport']),
+      startDate: serializer.fromJson<DateTime>(json['startDate']),
+      elapsedSeconds: serializer.fromJson<double>(json['elapsedSeconds']),
+      coveredSeconds: serializer.fromJson<double>(json['coveredSeconds']),
+      zoneSecondsJson: serializer.fromJson<String>(json['zoneSecondsJson']),
+      duplicate: serializer.fromJson<bool>(json['duplicate']),
+      computedAt: serializer.fromJson<DateTime>(json['computedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'activityId': serializer.toJson<String>(activityId),
+      'definitionId': serializer.toJson<int>(definitionId),
+      'algorithmVersion': serializer.toJson<int>(algorithmVersion),
+      'sport': serializer.toJson<String>(sport),
+      'startDate': serializer.toJson<DateTime>(startDate),
+      'elapsedSeconds': serializer.toJson<double>(elapsedSeconds),
+      'coveredSeconds': serializer.toJson<double>(coveredSeconds),
+      'zoneSecondsJson': serializer.toJson<String>(zoneSecondsJson),
+      'duplicate': serializer.toJson<bool>(duplicate),
+      'computedAt': serializer.toJson<DateTime>(computedAt),
+    };
+  }
+
+  HrZoneSummary copyWith({
+    String? activityId,
+    int? definitionId,
+    int? algorithmVersion,
+    String? sport,
+    DateTime? startDate,
+    double? elapsedSeconds,
+    double? coveredSeconds,
+    String? zoneSecondsJson,
+    bool? duplicate,
+    DateTime? computedAt,
+  }) => HrZoneSummary(
+    activityId: activityId ?? this.activityId,
+    definitionId: definitionId ?? this.definitionId,
+    algorithmVersion: algorithmVersion ?? this.algorithmVersion,
+    sport: sport ?? this.sport,
+    startDate: startDate ?? this.startDate,
+    elapsedSeconds: elapsedSeconds ?? this.elapsedSeconds,
+    coveredSeconds: coveredSeconds ?? this.coveredSeconds,
+    zoneSecondsJson: zoneSecondsJson ?? this.zoneSecondsJson,
+    duplicate: duplicate ?? this.duplicate,
+    computedAt: computedAt ?? this.computedAt,
+  );
+  HrZoneSummary copyWithCompanion(HrZoneSummariesCompanion data) {
+    return HrZoneSummary(
+      activityId: data.activityId.present
+          ? data.activityId.value
+          : this.activityId,
+      definitionId: data.definitionId.present
+          ? data.definitionId.value
+          : this.definitionId,
+      algorithmVersion: data.algorithmVersion.present
+          ? data.algorithmVersion.value
+          : this.algorithmVersion,
+      sport: data.sport.present ? data.sport.value : this.sport,
+      startDate: data.startDate.present ? data.startDate.value : this.startDate,
+      elapsedSeconds: data.elapsedSeconds.present
+          ? data.elapsedSeconds.value
+          : this.elapsedSeconds,
+      coveredSeconds: data.coveredSeconds.present
+          ? data.coveredSeconds.value
+          : this.coveredSeconds,
+      zoneSecondsJson: data.zoneSecondsJson.present
+          ? data.zoneSecondsJson.value
+          : this.zoneSecondsJson,
+      duplicate: data.duplicate.present ? data.duplicate.value : this.duplicate,
+      computedAt: data.computedAt.present
+          ? data.computedAt.value
+          : this.computedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HrZoneSummary(')
+          ..write('activityId: $activityId, ')
+          ..write('definitionId: $definitionId, ')
+          ..write('algorithmVersion: $algorithmVersion, ')
+          ..write('sport: $sport, ')
+          ..write('startDate: $startDate, ')
+          ..write('elapsedSeconds: $elapsedSeconds, ')
+          ..write('coveredSeconds: $coveredSeconds, ')
+          ..write('zoneSecondsJson: $zoneSecondsJson, ')
+          ..write('duplicate: $duplicate, ')
+          ..write('computedAt: $computedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    activityId,
+    definitionId,
+    algorithmVersion,
+    sport,
+    startDate,
+    elapsedSeconds,
+    coveredSeconds,
+    zoneSecondsJson,
+    duplicate,
+    computedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is HrZoneSummary &&
+          other.activityId == this.activityId &&
+          other.definitionId == this.definitionId &&
+          other.algorithmVersion == this.algorithmVersion &&
+          other.sport == this.sport &&
+          other.startDate == this.startDate &&
+          other.elapsedSeconds == this.elapsedSeconds &&
+          other.coveredSeconds == this.coveredSeconds &&
+          other.zoneSecondsJson == this.zoneSecondsJson &&
+          other.duplicate == this.duplicate &&
+          other.computedAt == this.computedAt);
+}
+
+class HrZoneSummariesCompanion extends UpdateCompanion<HrZoneSummary> {
+  final Value<String> activityId;
+  final Value<int> definitionId;
+  final Value<int> algorithmVersion;
+  final Value<String> sport;
+  final Value<DateTime> startDate;
+  final Value<double> elapsedSeconds;
+  final Value<double> coveredSeconds;
+  final Value<String> zoneSecondsJson;
+  final Value<bool> duplicate;
+  final Value<DateTime> computedAt;
+  final Value<int> rowid;
+  const HrZoneSummariesCompanion({
+    this.activityId = const Value.absent(),
+    this.definitionId = const Value.absent(),
+    this.algorithmVersion = const Value.absent(),
+    this.sport = const Value.absent(),
+    this.startDate = const Value.absent(),
+    this.elapsedSeconds = const Value.absent(),
+    this.coveredSeconds = const Value.absent(),
+    this.zoneSecondsJson = const Value.absent(),
+    this.duplicate = const Value.absent(),
+    this.computedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  HrZoneSummariesCompanion.insert({
+    required String activityId,
+    required int definitionId,
+    required int algorithmVersion,
+    required String sport,
+    required DateTime startDate,
+    required double elapsedSeconds,
+    required double coveredSeconds,
+    required String zoneSecondsJson,
+    this.duplicate = const Value.absent(),
+    required DateTime computedAt,
+    this.rowid = const Value.absent(),
+  }) : activityId = Value(activityId),
+       definitionId = Value(definitionId),
+       algorithmVersion = Value(algorithmVersion),
+       sport = Value(sport),
+       startDate = Value(startDate),
+       elapsedSeconds = Value(elapsedSeconds),
+       coveredSeconds = Value(coveredSeconds),
+       zoneSecondsJson = Value(zoneSecondsJson),
+       computedAt = Value(computedAt);
+  static Insertable<HrZoneSummary> custom({
+    Expression<String>? activityId,
+    Expression<int>? definitionId,
+    Expression<int>? algorithmVersion,
+    Expression<String>? sport,
+    Expression<DateTime>? startDate,
+    Expression<double>? elapsedSeconds,
+    Expression<double>? coveredSeconds,
+    Expression<String>? zoneSecondsJson,
+    Expression<bool>? duplicate,
+    Expression<DateTime>? computedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (activityId != null) 'activity_id': activityId,
+      if (definitionId != null) 'definition_id': definitionId,
+      if (algorithmVersion != null) 'algorithm_version': algorithmVersion,
+      if (sport != null) 'sport': sport,
+      if (startDate != null) 'start_date': startDate,
+      if (elapsedSeconds != null) 'elapsed_seconds': elapsedSeconds,
+      if (coveredSeconds != null) 'covered_seconds': coveredSeconds,
+      if (zoneSecondsJson != null) 'zone_seconds_json': zoneSecondsJson,
+      if (duplicate != null) 'duplicate': duplicate,
+      if (computedAt != null) 'computed_at': computedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  HrZoneSummariesCompanion copyWith({
+    Value<String>? activityId,
+    Value<int>? definitionId,
+    Value<int>? algorithmVersion,
+    Value<String>? sport,
+    Value<DateTime>? startDate,
+    Value<double>? elapsedSeconds,
+    Value<double>? coveredSeconds,
+    Value<String>? zoneSecondsJson,
+    Value<bool>? duplicate,
+    Value<DateTime>? computedAt,
+    Value<int>? rowid,
+  }) {
+    return HrZoneSummariesCompanion(
+      activityId: activityId ?? this.activityId,
+      definitionId: definitionId ?? this.definitionId,
+      algorithmVersion: algorithmVersion ?? this.algorithmVersion,
+      sport: sport ?? this.sport,
+      startDate: startDate ?? this.startDate,
+      elapsedSeconds: elapsedSeconds ?? this.elapsedSeconds,
+      coveredSeconds: coveredSeconds ?? this.coveredSeconds,
+      zoneSecondsJson: zoneSecondsJson ?? this.zoneSecondsJson,
+      duplicate: duplicate ?? this.duplicate,
+      computedAt: computedAt ?? this.computedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (activityId.present) {
+      map['activity_id'] = Variable<String>(activityId.value);
+    }
+    if (definitionId.present) {
+      map['definition_id'] = Variable<int>(definitionId.value);
+    }
+    if (algorithmVersion.present) {
+      map['algorithm_version'] = Variable<int>(algorithmVersion.value);
+    }
+    if (sport.present) {
+      map['sport'] = Variable<String>(sport.value);
+    }
+    if (startDate.present) {
+      map['start_date'] = Variable<DateTime>(startDate.value);
+    }
+    if (elapsedSeconds.present) {
+      map['elapsed_seconds'] = Variable<double>(elapsedSeconds.value);
+    }
+    if (coveredSeconds.present) {
+      map['covered_seconds'] = Variable<double>(coveredSeconds.value);
+    }
+    if (zoneSecondsJson.present) {
+      map['zone_seconds_json'] = Variable<String>(zoneSecondsJson.value);
+    }
+    if (duplicate.present) {
+      map['duplicate'] = Variable<bool>(duplicate.value);
+    }
+    if (computedAt.present) {
+      map['computed_at'] = Variable<DateTime>(computedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HrZoneSummariesCompanion(')
+          ..write('activityId: $activityId, ')
+          ..write('definitionId: $definitionId, ')
+          ..write('algorithmVersion: $algorithmVersion, ')
+          ..write('sport: $sport, ')
+          ..write('startDate: $startDate, ')
+          ..write('elapsedSeconds: $elapsedSeconds, ')
+          ..write('coveredSeconds: $coveredSeconds, ')
+          ..write('zoneSecondsJson: $zoneSecondsJson, ')
+          ..write('duplicate: $duplicate, ')
+          ..write('computedAt: $computedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $SpotHrvMeasurementsTable extends SpotHrvMeasurements
     with TableInfo<$SpotHrvMeasurementsTable, SpotHrvMeasurement> {
   @override
@@ -50181,6 +51286,11 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $ActivityTitlesTable activityTitles = $ActivityTitlesTable(this);
   late final $ActivitySportsTable activitySports = $ActivitySportsTable(this);
   late final $AbsencesTable absences = $AbsencesTable(this);
+  late final $HrZoneDefinitionsTable hrZoneDefinitions =
+      $HrZoneDefinitionsTable(this);
+  late final $HrZoneSummariesTable hrZoneSummaries = $HrZoneSummariesTable(
+    this,
+  );
   late final $SpotHrvMeasurementsTable spotHrvMeasurements =
       $SpotHrvMeasurementsTable(this);
   late final $EcgRecordingsTable ecgRecordings = $EcgRecordingsTable(this);
@@ -50292,6 +51402,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     activityTitles,
     activitySports,
     absences,
+    hrZoneDefinitions,
+    hrZoneSummaries,
     spotHrvMeasurements,
     ecgRecordings,
     ecgSampleChunks,
@@ -58458,6 +59570,584 @@ typedef $$AbsencesTableProcessedTableManager =
       $$AbsencesTableUpdateCompanionBuilder,
       (Absence, BaseReferences<_$AppDatabase, $AbsencesTable, Absence>),
       Absence,
+      PrefetchHooks Function()
+    >;
+typedef $$HrZoneDefinitionsTableCreateCompanionBuilder =
+    HrZoneDefinitionsCompanion Function({
+      Value<int> id,
+      required String sport,
+      required String floorsJson,
+      required String method,
+      Value<String> unit,
+      required String source,
+      required DateTime effectiveFrom,
+    });
+typedef $$HrZoneDefinitionsTableUpdateCompanionBuilder =
+    HrZoneDefinitionsCompanion Function({
+      Value<int> id,
+      Value<String> sport,
+      Value<String> floorsJson,
+      Value<String> method,
+      Value<String> unit,
+      Value<String> source,
+      Value<DateTime> effectiveFrom,
+    });
+
+class $$HrZoneDefinitionsTableFilterComposer
+    extends Composer<_$AppDatabase, $HrZoneDefinitionsTable> {
+  $$HrZoneDefinitionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get sport => $composableBuilder(
+    column: $table.sport,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get floorsJson => $composableBuilder(
+    column: $table.floorsJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get method => $composableBuilder(
+    column: $table.method,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get unit => $composableBuilder(
+    column: $table.unit,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get source => $composableBuilder(
+    column: $table.source,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get effectiveFrom => $composableBuilder(
+    column: $table.effectiveFrom,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$HrZoneDefinitionsTableOrderingComposer
+    extends Composer<_$AppDatabase, $HrZoneDefinitionsTable> {
+  $$HrZoneDefinitionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get sport => $composableBuilder(
+    column: $table.sport,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get floorsJson => $composableBuilder(
+    column: $table.floorsJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get method => $composableBuilder(
+    column: $table.method,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get unit => $composableBuilder(
+    column: $table.unit,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get source => $composableBuilder(
+    column: $table.source,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get effectiveFrom => $composableBuilder(
+    column: $table.effectiveFrom,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$HrZoneDefinitionsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $HrZoneDefinitionsTable> {
+  $$HrZoneDefinitionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get sport =>
+      $composableBuilder(column: $table.sport, builder: (column) => column);
+
+  GeneratedColumn<String> get floorsJson => $composableBuilder(
+    column: $table.floorsJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get method =>
+      $composableBuilder(column: $table.method, builder: (column) => column);
+
+  GeneratedColumn<String> get unit =>
+      $composableBuilder(column: $table.unit, builder: (column) => column);
+
+  GeneratedColumn<String> get source =>
+      $composableBuilder(column: $table.source, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get effectiveFrom => $composableBuilder(
+    column: $table.effectiveFrom,
+    builder: (column) => column,
+  );
+}
+
+class $$HrZoneDefinitionsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $HrZoneDefinitionsTable,
+          HrZoneDefinition,
+          $$HrZoneDefinitionsTableFilterComposer,
+          $$HrZoneDefinitionsTableOrderingComposer,
+          $$HrZoneDefinitionsTableAnnotationComposer,
+          $$HrZoneDefinitionsTableCreateCompanionBuilder,
+          $$HrZoneDefinitionsTableUpdateCompanionBuilder,
+          (
+            HrZoneDefinition,
+            BaseReferences<
+              _$AppDatabase,
+              $HrZoneDefinitionsTable,
+              HrZoneDefinition
+            >,
+          ),
+          HrZoneDefinition,
+          PrefetchHooks Function()
+        > {
+  $$HrZoneDefinitionsTableTableManager(
+    _$AppDatabase db,
+    $HrZoneDefinitionsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$HrZoneDefinitionsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$HrZoneDefinitionsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$HrZoneDefinitionsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> sport = const Value.absent(),
+                Value<String> floorsJson = const Value.absent(),
+                Value<String> method = const Value.absent(),
+                Value<String> unit = const Value.absent(),
+                Value<String> source = const Value.absent(),
+                Value<DateTime> effectiveFrom = const Value.absent(),
+              }) => HrZoneDefinitionsCompanion(
+                id: id,
+                sport: sport,
+                floorsJson: floorsJson,
+                method: method,
+                unit: unit,
+                source: source,
+                effectiveFrom: effectiveFrom,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String sport,
+                required String floorsJson,
+                required String method,
+                Value<String> unit = const Value.absent(),
+                required String source,
+                required DateTime effectiveFrom,
+              }) => HrZoneDefinitionsCompanion.insert(
+                id: id,
+                sport: sport,
+                floorsJson: floorsJson,
+                method: method,
+                unit: unit,
+                source: source,
+                effectiveFrom: effectiveFrom,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$HrZoneDefinitionsTable, HrZoneDefinition>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $HrZoneDefinitionsTable,
+                    HrZoneDefinition
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$HrZoneDefinitionsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $HrZoneDefinitionsTable,
+      HrZoneDefinition,
+      $$HrZoneDefinitionsTableFilterComposer,
+      $$HrZoneDefinitionsTableOrderingComposer,
+      $$HrZoneDefinitionsTableAnnotationComposer,
+      $$HrZoneDefinitionsTableCreateCompanionBuilder,
+      $$HrZoneDefinitionsTableUpdateCompanionBuilder,
+      (
+        HrZoneDefinition,
+        BaseReferences<
+          _$AppDatabase,
+          $HrZoneDefinitionsTable,
+          HrZoneDefinition
+        >,
+      ),
+      HrZoneDefinition,
+      PrefetchHooks Function()
+    >;
+typedef $$HrZoneSummariesTableCreateCompanionBuilder =
+    HrZoneSummariesCompanion Function({
+      required String activityId,
+      required int definitionId,
+      required int algorithmVersion,
+      required String sport,
+      required DateTime startDate,
+      required double elapsedSeconds,
+      required double coveredSeconds,
+      required String zoneSecondsJson,
+      Value<bool> duplicate,
+      required DateTime computedAt,
+      Value<int> rowid,
+    });
+typedef $$HrZoneSummariesTableUpdateCompanionBuilder =
+    HrZoneSummariesCompanion Function({
+      Value<String> activityId,
+      Value<int> definitionId,
+      Value<int> algorithmVersion,
+      Value<String> sport,
+      Value<DateTime> startDate,
+      Value<double> elapsedSeconds,
+      Value<double> coveredSeconds,
+      Value<String> zoneSecondsJson,
+      Value<bool> duplicate,
+      Value<DateTime> computedAt,
+      Value<int> rowid,
+    });
+
+class $$HrZoneSummariesTableFilterComposer
+    extends Composer<_$AppDatabase, $HrZoneSummariesTable> {
+  $$HrZoneSummariesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get activityId => $composableBuilder(
+    column: $table.activityId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get definitionId => $composableBuilder(
+    column: $table.definitionId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get algorithmVersion => $composableBuilder(
+    column: $table.algorithmVersion,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get sport => $composableBuilder(
+    column: $table.sport,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get startDate => $composableBuilder(
+    column: $table.startDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get elapsedSeconds => $composableBuilder(
+    column: $table.elapsedSeconds,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get coveredSeconds => $composableBuilder(
+    column: $table.coveredSeconds,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get zoneSecondsJson => $composableBuilder(
+    column: $table.zoneSecondsJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get duplicate => $composableBuilder(
+    column: $table.duplicate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get computedAt => $composableBuilder(
+    column: $table.computedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$HrZoneSummariesTableOrderingComposer
+    extends Composer<_$AppDatabase, $HrZoneSummariesTable> {
+  $$HrZoneSummariesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get activityId => $composableBuilder(
+    column: $table.activityId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get definitionId => $composableBuilder(
+    column: $table.definitionId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get algorithmVersion => $composableBuilder(
+    column: $table.algorithmVersion,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get sport => $composableBuilder(
+    column: $table.sport,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get startDate => $composableBuilder(
+    column: $table.startDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get elapsedSeconds => $composableBuilder(
+    column: $table.elapsedSeconds,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get coveredSeconds => $composableBuilder(
+    column: $table.coveredSeconds,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get zoneSecondsJson => $composableBuilder(
+    column: $table.zoneSecondsJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get duplicate => $composableBuilder(
+    column: $table.duplicate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get computedAt => $composableBuilder(
+    column: $table.computedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$HrZoneSummariesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $HrZoneSummariesTable> {
+  $$HrZoneSummariesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get activityId => $composableBuilder(
+    column: $table.activityId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get definitionId => $composableBuilder(
+    column: $table.definitionId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get algorithmVersion => $composableBuilder(
+    column: $table.algorithmVersion,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get sport =>
+      $composableBuilder(column: $table.sport, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get startDate =>
+      $composableBuilder(column: $table.startDate, builder: (column) => column);
+
+  GeneratedColumn<double> get elapsedSeconds => $composableBuilder(
+    column: $table.elapsedSeconds,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get coveredSeconds => $composableBuilder(
+    column: $table.coveredSeconds,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get zoneSecondsJson => $composableBuilder(
+    column: $table.zoneSecondsJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get duplicate =>
+      $composableBuilder(column: $table.duplicate, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get computedAt => $composableBuilder(
+    column: $table.computedAt,
+    builder: (column) => column,
+  );
+}
+
+class $$HrZoneSummariesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $HrZoneSummariesTable,
+          HrZoneSummary,
+          $$HrZoneSummariesTableFilterComposer,
+          $$HrZoneSummariesTableOrderingComposer,
+          $$HrZoneSummariesTableAnnotationComposer,
+          $$HrZoneSummariesTableCreateCompanionBuilder,
+          $$HrZoneSummariesTableUpdateCompanionBuilder,
+          (
+            HrZoneSummary,
+            BaseReferences<_$AppDatabase, $HrZoneSummariesTable, HrZoneSummary>,
+          ),
+          HrZoneSummary,
+          PrefetchHooks Function()
+        > {
+  $$HrZoneSummariesTableTableManager(
+    _$AppDatabase db,
+    $HrZoneSummariesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$HrZoneSummariesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$HrZoneSummariesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$HrZoneSummariesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> activityId = const Value.absent(),
+                Value<int> definitionId = const Value.absent(),
+                Value<int> algorithmVersion = const Value.absent(),
+                Value<String> sport = const Value.absent(),
+                Value<DateTime> startDate = const Value.absent(),
+                Value<double> elapsedSeconds = const Value.absent(),
+                Value<double> coveredSeconds = const Value.absent(),
+                Value<String> zoneSecondsJson = const Value.absent(),
+                Value<bool> duplicate = const Value.absent(),
+                Value<DateTime> computedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => HrZoneSummariesCompanion(
+                activityId: activityId,
+                definitionId: definitionId,
+                algorithmVersion: algorithmVersion,
+                sport: sport,
+                startDate: startDate,
+                elapsedSeconds: elapsedSeconds,
+                coveredSeconds: coveredSeconds,
+                zoneSecondsJson: zoneSecondsJson,
+                duplicate: duplicate,
+                computedAt: computedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String activityId,
+                required int definitionId,
+                required int algorithmVersion,
+                required String sport,
+                required DateTime startDate,
+                required double elapsedSeconds,
+                required double coveredSeconds,
+                required String zoneSecondsJson,
+                Value<bool> duplicate = const Value.absent(),
+                required DateTime computedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => HrZoneSummariesCompanion.insert(
+                activityId: activityId,
+                definitionId: definitionId,
+                algorithmVersion: algorithmVersion,
+                sport: sport,
+                startDate: startDate,
+                elapsedSeconds: elapsedSeconds,
+                coveredSeconds: coveredSeconds,
+                zoneSecondsJson: zoneSecondsJson,
+                duplicate: duplicate,
+                computedAt: computedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$HrZoneSummariesTable, HrZoneSummary>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $HrZoneSummariesTable,
+                    HrZoneSummary
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$HrZoneSummariesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $HrZoneSummariesTable,
+      HrZoneSummary,
+      $$HrZoneSummariesTableFilterComposer,
+      $$HrZoneSummariesTableOrderingComposer,
+      $$HrZoneSummariesTableAnnotationComposer,
+      $$HrZoneSummariesTableCreateCompanionBuilder,
+      $$HrZoneSummariesTableUpdateCompanionBuilder,
+      (
+        HrZoneSummary,
+        BaseReferences<_$AppDatabase, $HrZoneSummariesTable, HrZoneSummary>,
+      ),
+      HrZoneSummary,
       PrefetchHooks Function()
     >;
 typedef $$SpotHrvMeasurementsTableCreateCompanionBuilder =
@@ -74968,6 +76658,10 @@ class $AppDatabaseManager {
       $$ActivitySportsTableTableManager(_db, _db.activitySports);
   $$AbsencesTableTableManager get absences =>
       $$AbsencesTableTableManager(_db, _db.absences);
+  $$HrZoneDefinitionsTableTableManager get hrZoneDefinitions =>
+      $$HrZoneDefinitionsTableTableManager(_db, _db.hrZoneDefinitions);
+  $$HrZoneSummariesTableTableManager get hrZoneSummaries =>
+      $$HrZoneSummariesTableTableManager(_db, _db.hrZoneSummaries);
   $$SpotHrvMeasurementsTableTableManager get spotHrvMeasurements =>
       $$SpotHrvMeasurementsTableTableManager(_db, _db.spotHrvMeasurements);
   $$EcgRecordingsTableTableManager get ecgRecordings =>

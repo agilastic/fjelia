@@ -3958,20 +3958,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get trainingMonitor2 => 'SUIVI D\'ENTRAÎNEMENT';
 
   @override
-  String get pfitzingerZones => 'ZONES DE PFITZINGER';
-
-  @override
   String get cyclingPowerZones => 'ZONES DE PUISSANCE EN CYCLISME';
-
-  @override
-  String znumber(Object number) {
-    return 'Z$number';
-  }
-
-  @override
-  String paceHrDescription(Object pace, Object hr, Object description) {
-    return '$pace · $hr\n$description';
-  }
 
   @override
   String get weeklyTrainingLoad2 => 'CHARGE D\'ENTRAÎNEMENT HEBDOMADAIRE';
@@ -4582,13 +4569,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get cyclingPowerZones2 => 'Zones de puissance en cyclisme';
-
-  @override
-  String get pfitzingerZones2 => 'Zones de Pfitzinger';
-
-  @override
-  String get completeAnLt2TestTo =>
-      'Effectue un test LT2 pour calculer les zones de course.';
 
   @override
   String get setFtpToCalculatePower2 =>
@@ -9433,4 +9413,181 @@ class AppLocalizationsFr extends AppLocalizations {
   String raceLibraryFilledFrom(String source) {
     return 'Rempli depuis la bibliothèque de courses ($source). Vérifie le site de l\'organisateur avant de t\'inscrire.';
   }
+
+  @override
+  String get hrZoneTrendsTitle => 'Évolution des zones de fréquence cardiaque';
+
+  @override
+  String get hrZoneTrendsHint =>
+      'Temps en Z1–Z5 par semaines et mois, face à ton plan';
+
+  @override
+  String hrZoneWindowDays(int count) {
+    return '$count jours';
+  }
+
+  @override
+  String hrZoneWindowMonths(int count) {
+    return '$count mois';
+  }
+
+  @override
+  String get hrZoneUnitTime => 'Temps';
+
+  @override
+  String get hrZoneUnitShare => 'Part';
+
+  @override
+  String get hrZoneAllSports => 'Tous les sports';
+
+  @override
+  String get hrZoneOtherSports => 'Autres sports';
+
+  @override
+  String get hrZoneNoHr => 'Sans fréquence cardiaque';
+
+  @override
+  String hrZoneDetail(String hr, String total, int coverage) {
+    return '$hr avec fréquence cardiaque sur $total d\'entraînement ($coverage %)';
+  }
+
+  @override
+  String hrZoneWorkouts(int count) {
+    return 'Séances : $count';
+  }
+
+  @override
+  String get hrZonePartial => 'Période incomplète';
+
+  @override
+  String get hrZoneMixedSports =>
+      'Tous les sports ensemble : les limites de zones diffèrent selon le sport.';
+
+  @override
+  String get hrZoneHistoricalNote =>
+      'Chaque séance garde les zones en vigueur lors de son enregistrement.';
+
+  @override
+  String get hrZoneEmpty =>
+      'Aucune séance avec fréquence cardiaque sur cette période.';
+
+  @override
+  String get hrZoneTapHint => 'Touche une barre pour voir les temps exacts.';
+
+  @override
+  String get hrZoneCompareTitle => '28 derniers jours face aux 28 précédents';
+
+  @override
+  String get hrZoneTrainingTime => 'Temps d\'entraînement';
+
+  @override
+  String get hrZoneCoverageLabel => 'Couverture de la fréquence cardiaque';
+
+  @override
+  String get hrZonePerZone => 'Par zone';
+
+  @override
+  String get hrZoneObservationsNote =>
+      'Des observations, pas des jugements : leur sens dépend de ton objectif, de ta phase et de ta récupération.';
+
+  @override
+  String get hrZoneObsInsufficient =>
+      'Trop peu de temps avec fréquence cardiaque dans l\'une des deux périodes pour comparer.';
+
+  @override
+  String hrZoneObsVolumeUp(int pct) {
+    return 'Le temps d\'entraînement a augmenté de $pct %.';
+  }
+
+  @override
+  String hrZoneObsVolumeDown(int pct) {
+    return 'Le temps d\'entraînement a baissé de $pct %.';
+  }
+
+  @override
+  String get hrZoneObsVolumeSteady =>
+      'Le temps d\'entraînement est resté à peu près stable.';
+
+  @override
+  String get hrZoneObsHardUpVolumeUp =>
+      'Le temps en Z4+Z5 a augmenté alors que le temps total augmentait aussi.';
+
+  @override
+  String get hrZoneObsHardUpVolumeDown =>
+      'Le temps en Z4+Z5 a augmenté alors que le temps total baissait.';
+
+  @override
+  String get hrZoneObsHardUpVolumeSteady =>
+      'Le temps en Z4+Z5 a augmenté à temps d\'entraînement à peu près égal.';
+
+  @override
+  String get hrZoneObsHardDown => 'Le temps en Z4+Z5 a baissé.';
+
+  @override
+  String get hrZoneObsEasyShareUp =>
+      'Le temps facile (Z1+Z2) représente une plus grande part du temps avec fréquence cardiaque.';
+
+  @override
+  String get hrZoneObsEasyShareDown =>
+      'Le temps facile (Z1+Z2) représente une plus petite part du temps avec fréquence cardiaque.';
+
+  @override
+  String get hrZoneObsMiddleUp => 'Le temps en Z3 a augmenté.';
+
+  @override
+  String get hrZoneObsMiddleDown => 'Le temps en Z3 a baissé.';
+
+  @override
+  String get hrZoneObsCoverage =>
+      'La couverture de la fréquence cardiaque diffère entre les périodes : une partie d\'un changement peut venir de données manquantes.';
+
+  @override
+  String get hrZonePlanTitle => 'Prévu et enregistré';
+
+  @override
+  String get hrZoneThisWeek => 'Cette semaine';
+
+  @override
+  String get hrZoneLastWeek => 'Semaine dernière';
+
+  @override
+  String get hrZonePlanned => 'Prévu';
+
+  @override
+  String get hrZoneRecorded => 'Enregistré';
+
+  @override
+  String hrZonePlanCoverage(int comparable, int total) {
+    return 'Comparables : $comparable sur $total séances prévues';
+  }
+
+  @override
+  String hrZonePlanMissed(int count) {
+    return 'Manquées : $count (hors du temps prévu)';
+  }
+
+  @override
+  String hrZoneGapPower(int count) {
+    return 'Prévues en puissance : $count';
+  }
+
+  @override
+  String hrZoneGapPace(int count) {
+    return 'Prévues en allure : $count';
+  }
+
+  @override
+  String hrZoneGapNoHr(int count) {
+    return 'Sans cible de fréquence cardiaque : $count';
+  }
+
+  @override
+  String get hrZonePlanNone => 'Aucune séance prévue comparable cette semaine.';
+
+  @override
+  String get hrZoneDeviation => 'Écart notable';
+
+  @override
+  String get hrZonePlanNote =>
+      'Seules les séances prévues en zones de fréquence cardiaque sont comparées ; le temps enregistré vient des mêmes sports.';
 }

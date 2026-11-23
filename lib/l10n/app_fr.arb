@@ -1992,30 +1992,7 @@
   "expandTrainingForm": "Agrandir la forme d'entraînement",
   "calculatedFromTheFirstAvailable": "Calculé à partir du premier enregistrement de charge disponible. Les jours sans charge enregistrée comptent pour zéro ; l'entraînement antérieur est inconnu.",
   "trainingMonitor2": "SUIVI D'ENTRAÎNEMENT",
-  "pfitzingerZones": "ZONES DE PFITZINGER",
   "cyclingPowerZones": "ZONES DE PUISSANCE EN CYCLISME",
-  "znumber": "Z{number}",
-  "@znumber": {
-    "placeholders": {
-      "number": {
-        "type": "Object"
-      }
-    }
-  },
-  "paceHrDescription": "{pace} · {hr}\n{description}",
-  "@paceHrDescription": {
-    "placeholders": {
-      "pace": {
-        "type": "Object"
-      },
-      "hr": {
-        "type": "Object"
-      },
-      "description": {
-        "type": "Object"
-      }
-    }
-  },
   "weeklyTrainingLoad2": "CHARGE D'ENTRAÎNEMENT HEBDOMADAIRE",
   "prevWeek": "SEM. PRÉC.",
   "bySport": "PAR SPORT",
@@ -2505,8 +2482,6 @@
   "tap5MinuteMaxTest": "Touche · test max de 5 min",
   "setFtpToCalculatePower": "Définis la FTP pour calculer les zones de puissance",
   "cyclingPowerZones2": "Zones de puissance en cyclisme",
-  "pfitzingerZones2": "Zones de Pfitzinger",
-  "completeAnLt2TestTo": "Effectue un test LT2 pour calculer les zones de course.",
   "setFtpToCalculatePower2": "Définis la FTP pour calculer les zones de puissance.",
   "endurance": "Endurance",
   "threshold": "Seuil",
@@ -4234,5 +4209,52 @@
   "aiOnboardingMoreBodyCloud": "Votre propre fournisseur cloud et clé API",
   "raceLibraryWhichDistance": "Quelle distance ?",
   "raceLibraryFilledFrom": "Rempli depuis la bibliothèque de courses ({source}). Vérifie le site de l'organisateur avant de t'inscrire.",
-  "@raceLibraryFilledFrom": {"placeholders": {"source": {"type": "String"}}}
+  "@raceLibraryFilledFrom": {"placeholders": {"source": {"type": "String"}}},
+  "hrZoneTrendsTitle": "Évolution des zones de fréquence cardiaque",
+  "hrZoneTrendsHint": "Temps en Z1–Z5 par semaines et mois, face à ton plan",
+  "hrZoneWindowDays": "{count} jours",
+  "hrZoneWindowMonths": "{count} mois",
+  "hrZoneUnitTime": "Temps",
+  "hrZoneUnitShare": "Part",
+  "hrZoneAllSports": "Tous les sports",
+  "hrZoneOtherSports": "Autres sports",
+  "hrZoneNoHr": "Sans fréquence cardiaque",
+  "hrZoneDetail": "{hr} avec fréquence cardiaque sur {total} d'entraînement ({coverage} %)",
+  "hrZoneWorkouts": "Séances : {count}",
+  "hrZonePartial": "Période incomplète",
+  "hrZoneMixedSports": "Tous les sports ensemble : les limites de zones diffèrent selon le sport.",
+  "hrZoneHistoricalNote": "Chaque séance garde les zones en vigueur lors de son enregistrement.",
+  "hrZoneEmpty": "Aucune séance avec fréquence cardiaque sur cette période.",
+  "hrZoneTapHint": "Touche une barre pour voir les temps exacts.",
+  "hrZoneCompareTitle": "28 derniers jours face aux 28 précédents",
+  "hrZoneTrainingTime": "Temps d'entraînement",
+  "hrZoneCoverageLabel": "Couverture de la fréquence cardiaque",
+  "hrZonePerZone": "Par zone",
+  "hrZoneObservationsNote": "Des observations, pas des jugements : leur sens dépend de ton objectif, de ta phase et de ta récupération.",
+  "hrZoneObsInsufficient": "Trop peu de temps avec fréquence cardiaque dans l'une des deux périodes pour comparer.",
+  "hrZoneObsVolumeUp": "Le temps d'entraînement a augmenté de {pct} %.",
+  "hrZoneObsVolumeDown": "Le temps d'entraînement a baissé de {pct} %.",
+  "hrZoneObsVolumeSteady": "Le temps d'entraînement est resté à peu près stable.",
+  "hrZoneObsHardUpVolumeUp": "Le temps en Z4+Z5 a augmenté alors que le temps total augmentait aussi.",
+  "hrZoneObsHardUpVolumeDown": "Le temps en Z4+Z5 a augmenté alors que le temps total baissait.",
+  "hrZoneObsHardUpVolumeSteady": "Le temps en Z4+Z5 a augmenté à temps d'entraînement à peu près égal.",
+  "hrZoneObsHardDown": "Le temps en Z4+Z5 a baissé.",
+  "hrZoneObsEasyShareUp": "Le temps facile (Z1+Z2) représente une plus grande part du temps avec fréquence cardiaque.",
+  "hrZoneObsEasyShareDown": "Le temps facile (Z1+Z2) représente une plus petite part du temps avec fréquence cardiaque.",
+  "hrZoneObsMiddleUp": "Le temps en Z3 a augmenté.",
+  "hrZoneObsMiddleDown": "Le temps en Z3 a baissé.",
+  "hrZoneObsCoverage": "La couverture de la fréquence cardiaque diffère entre les périodes : une partie d'un changement peut venir de données manquantes.",
+  "hrZonePlanTitle": "Prévu et enregistré",
+  "hrZoneThisWeek": "Cette semaine",
+  "hrZoneLastWeek": "Semaine dernière",
+  "hrZonePlanned": "Prévu",
+  "hrZoneRecorded": "Enregistré",
+  "hrZonePlanCoverage": "Comparables : {comparable} sur {total} séances prévues",
+  "hrZonePlanMissed": "Manquées : {count} (hors du temps prévu)",
+  "hrZoneGapPower": "Prévues en puissance : {count}",
+  "hrZoneGapPace": "Prévues en allure : {count}",
+  "hrZoneGapNoHr": "Sans cible de fréquence cardiaque : {count}",
+  "hrZonePlanNone": "Aucune séance prévue comparable cette semaine.",
+  "hrZoneDeviation": "Écart notable",
+  "hrZonePlanNote": "Seules les séances prévues en zones de fréquence cardiaque sont comparées ; le temps enregistré vient des mêmes sports."
 }

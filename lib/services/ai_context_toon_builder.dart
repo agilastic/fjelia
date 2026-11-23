@@ -7,6 +7,9 @@ import '../db/database.dart';
 import 'absence_service.dart' show absenceOn;
 import 'plan_day.dart';
 import '../providers/training_load_provider.dart';
+import '../providers/hr_zone_trends_provider.dart';
+import 'fjelia_edition.dart';
+import 'hr_zone_summary_service.dart';
 import 'bio_age_service.dart';
 import 'hrv/hrv_ai_context_builder.dart';
 import 'hrv/hrv_training_service.dart';
@@ -508,6 +511,32 @@ class AiContextToonBuilder {
       ),
     );
     lines.addAll(trainingHrvAnalysis);
+    // FjeliaPro: how the time in zones changed and how it compares with the
+    // plan, as observations with their evidence. A failure never blocks the
+    // coach.
+    if (fjeliaEdition.isPro && hrZoneTrends.isAvailable) {
+      try {
+        final summaries = HrZoneSummaryService(_db);
+        final since = today.subtract(const Duration(days: 60));
+        await summaries.update(since: since);
+        lines.addAll(
+          hrZoneTrends.coachContext(
+            await summaries.workouts(since: since),
+            [
+              for (final s in await (_db.select(_db.trainingSessions)..where(
+                    (t) => t.sessionDate.isBetweenValues(
+                      today.subtract(const Duration(days: 7)),
+                      today.add(const Duration(days: 1)),
+                    ),
+                  ))
+                  .get())
+                plannedZoneSession(s, today: today),
+            ],
+            today: today,
+          ),
+        );
+      } catch (_) {}
+    }
     if (heat != null) {
       lines.add(
         '[HeatAcclimation:Today:Score:${_num(heat.score)},'

@@ -1992,30 +1992,7 @@
   "expandTrainingForm": "Amplia la forma d'entrenament",
   "calculatedFromTheFirstAvailable": "Calculat des del primer registre de càrrega disponible. Els dies sense càrrega registrada compten com a zero; l'entrenament anterior es desconeix.",
   "trainingMonitor2": "MONITOR D'ENTRENAMENT",
-  "pfitzingerZones": "ZONES DE PFITZINGER",
   "cyclingPowerZones": "ZONES DE POTÈNCIA EN CICLISME",
-  "znumber": "Z{number}",
-  "@znumber": {
-    "placeholders": {
-      "number": {
-        "type": "Object"
-      }
-    }
-  },
-  "paceHrDescription": "{pace} · {hr}\n{description}",
-  "@paceHrDescription": {
-    "placeholders": {
-      "pace": {
-        "type": "Object"
-      },
-      "hr": {
-        "type": "Object"
-      },
-      "description": {
-        "type": "Object"
-      }
-    }
-  },
   "weeklyTrainingLoad2": "CÀRREGA D'ENTRENAMENT SETMANAL",
   "prevWeek": "SETM. ANT.",
   "bySport": "PER ESPORT",
@@ -2505,8 +2482,6 @@
   "tap5MinuteMaxTest": "Toca · prova màxima de 5 min",
   "setFtpToCalculatePower": "Defineix la FTP per calcular les zones de potència",
   "cyclingPowerZones2": "Zones de potència en ciclisme",
-  "pfitzingerZones2": "Zones de Pfitzinger",
-  "completeAnLt2TestTo": "Completa una prova de LT2 per calcular les zones de cursa.",
   "setFtpToCalculatePower2": "Defineix la FTP per calcular les zones de potència.",
   "endurance": "Resistència",
   "threshold": "Llindar",
@@ -4234,5 +4209,52 @@
   "aiOnboardingMoreBodyCloud": "El teu propi proveïdor al núvol amb clau API",
   "raceLibraryWhichDistance": "Quina distància?",
   "raceLibraryFilledFrom": "Emplenat des de la biblioteca de curses ({source}). Consulta el web de l'organitzador abans d'inscriure't.",
-  "@raceLibraryFilledFrom": {"placeholders": {"source": {"type": "String"}}}
+  "@raceLibraryFilledFrom": {"placeholders": {"source": {"type": "String"}}},
+  "hrZoneTrendsTitle": "Evolució de les zones de freqüència cardíaca",
+  "hrZoneTrendsHint": "Temps a Z1–Z5 per setmanes i mesos, davant del teu pla",
+  "hrZoneWindowDays": "{count} dies",
+  "hrZoneWindowMonths": "{count} mesos",
+  "hrZoneUnitTime": "Temps",
+  "hrZoneUnitShare": "Proporció",
+  "hrZoneAllSports": "Tots els esports",
+  "hrZoneOtherSports": "Altres esports",
+  "hrZoneNoHr": "Sense freqüència cardíaca",
+  "hrZoneDetail": "{hr} amb freqüència cardíaca de {total} d'entrenament ({coverage} %)",
+  "hrZoneWorkouts": "Sessions: {count}",
+  "hrZonePartial": "Període incomplet",
+  "hrZoneMixedSports": "Tots els esports junts: els límits de zona varien segons l'esport.",
+  "hrZoneHistoricalNote": "Cada sessió conserva les zones vigents quan es va registrar.",
+  "hrZoneEmpty": "No hi ha sessions amb freqüència cardíaca en aquest període.",
+  "hrZoneTapHint": "Toca una barra per veure els temps exactes.",
+  "hrZoneCompareTitle": "Últims 28 dies davant dels 28 anteriors",
+  "hrZoneTrainingTime": "Temps d'entrenament",
+  "hrZoneCoverageLabel": "Cobertura de freqüència cardíaca",
+  "hrZonePerZone": "Per zona",
+  "hrZoneObservationsNote": "Observacions, no valoracions: el que signifiquen depèn del teu objectiu, fase i recuperació.",
+  "hrZoneObsInsufficient": "Massa poc temps amb freqüència cardíaca en un dels dos períodes per comparar.",
+  "hrZoneObsVolumeUp": "El temps d'entrenament va pujar un {pct} %.",
+  "hrZoneObsVolumeDown": "El temps d'entrenament va baixar un {pct} %.",
+  "hrZoneObsVolumeSteady": "El temps d'entrenament es va mantenir semblant.",
+  "hrZoneObsHardUpVolumeUp": "El temps a Z4+Z5 va pujar mentre el temps total també pujava.",
+  "hrZoneObsHardUpVolumeDown": "El temps a Z4+Z5 va pujar mentre el temps total baixava.",
+  "hrZoneObsHardUpVolumeSteady": "El temps a Z4+Z5 va pujar amb un temps d'entrenament semblant.",
+  "hrZoneObsHardDown": "El temps a Z4+Z5 va baixar.",
+  "hrZoneObsEasyShareUp": "El temps suau (Z1+Z2) és una part més gran del temps amb freqüència cardíaca.",
+  "hrZoneObsEasyShareDown": "El temps suau (Z1+Z2) és una part més petita del temps amb freqüència cardíaca.",
+  "hrZoneObsMiddleUp": "El temps a Z3 va pujar.",
+  "hrZoneObsMiddleDown": "El temps a Z3 va baixar.",
+  "hrZoneObsCoverage": "La cobertura de freqüència cardíaca és diferent entre els períodes: part d'un canvi pot ser per dades que falten.",
+  "hrZonePlanTitle": "Planificat i registrat",
+  "hrZoneThisWeek": "Aquesta setmana",
+  "hrZoneLastWeek": "Setmana passada",
+  "hrZonePlanned": "Planificat",
+  "hrZoneRecorded": "Registrat",
+  "hrZonePlanCoverage": "Comparables: {comparable} de {total} sessions planificades",
+  "hrZonePlanMissed": "Perdudes: {count} (fora del temps planificat)",
+  "hrZoneGapPower": "Planificades per potència: {count}",
+  "hrZoneGapPace": "Planificades per ritme: {count}",
+  "hrZoneGapNoHr": "Sense objectius de freqüència cardíaca: {count}",
+  "hrZonePlanNone": "No hi ha sessions planificades comparables aquesta setmana.",
+  "hrZoneDeviation": "Diferència notable",
+  "hrZonePlanNote": "Només es comparen les sessions planificades en zones de freqüència cardíaca; el temps registrat prové dels mateixos esports."
 }

@@ -6976,29 +6976,11 @@ abstract class AppLocalizations {
   /// **'TRAINING MONITOR'**
   String get trainingMonitor2;
 
-  /// No description provided for @pfitzingerZones.
-  ///
-  /// In en, this message translates to:
-  /// **'PFITZINGER ZONES'**
-  String get pfitzingerZones;
-
   /// No description provided for @cyclingPowerZones.
   ///
   /// In en, this message translates to:
   /// **'CYCLING POWER ZONES'**
   String get cyclingPowerZones;
-
-  /// No description provided for @znumber.
-  ///
-  /// In en, this message translates to:
-  /// **'Z{number}'**
-  String znumber(Object number);
-
-  /// No description provided for @paceHrDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'{pace} · {hr}\n{description}'**
-  String paceHrDescription(Object pace, Object hr, Object description);
 
   /// No description provided for @weeklyTrainingLoad2.
   ///
@@ -8020,18 +8002,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cycling power zones'**
   String get cyclingPowerZones2;
-
-  /// No description provided for @pfitzingerZones2.
-  ///
-  /// In en, this message translates to:
-  /// **'Pfitzinger zones'**
-  String get pfitzingerZones2;
-
-  /// No description provided for @completeAnLt2TestTo.
-  ///
-  /// In en, this message translates to:
-  /// **'Complete an LT2 test to calculate running zones.'**
-  String get completeAnLt2TestTo;
 
   /// No description provided for @setFtpToCalculatePower2.
   ///
@@ -16185,6 +16155,288 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Filled in from the race library ({source}). Check the organiser\'s website before you register.'**
   String raceLibraryFilledFrom(String source);
+
+  /// No description provided for @hrZoneTrendsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Heart rate zone trends'**
+  String get hrZoneTrendsTitle;
+
+  /// No description provided for @hrZoneTrendsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Time in Z1–Z5 over weeks and months, against your plan'**
+  String get hrZoneTrendsHint;
+
+  /// No description provided for @hrZoneWindowDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} days'**
+  String hrZoneWindowDays(int count);
+
+  /// No description provided for @hrZoneWindowMonths.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} months'**
+  String hrZoneWindowMonths(int count);
+
+  /// No description provided for @hrZoneUnitTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get hrZoneUnitTime;
+
+  /// No description provided for @hrZoneUnitShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get hrZoneUnitShare;
+
+  /// No description provided for @hrZoneAllSports.
+  ///
+  /// In en, this message translates to:
+  /// **'All sports'**
+  String get hrZoneAllSports;
+
+  /// No description provided for @hrZoneOtherSports.
+  ///
+  /// In en, this message translates to:
+  /// **'Other sports'**
+  String get hrZoneOtherSports;
+
+  /// No description provided for @hrZoneNoHr.
+  ///
+  /// In en, this message translates to:
+  /// **'No heart rate'**
+  String get hrZoneNoHr;
+
+  /// No description provided for @hrZoneDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'{hr} with heart rate of {total} workout time ({coverage} %)'**
+  String hrZoneDetail(String hr, String total, int coverage);
+
+  /// No description provided for @hrZoneWorkouts.
+  ///
+  /// In en, this message translates to:
+  /// **'Workouts: {count}'**
+  String hrZoneWorkouts(int count);
+
+  /// No description provided for @hrZonePartial.
+  ///
+  /// In en, this message translates to:
+  /// **'Period not complete'**
+  String get hrZonePartial;
+
+  /// No description provided for @hrZoneMixedSports.
+  ///
+  /// In en, this message translates to:
+  /// **'All sports together: the zone boundaries differ by sport.'**
+  String get hrZoneMixedSports;
+
+  /// No description provided for @hrZoneHistoricalNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Each workout keeps the zones that were in force when it was recorded.'**
+  String get hrZoneHistoricalNote;
+
+  /// No description provided for @hrZoneEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No workouts with heart rate in this period.'**
+  String get hrZoneEmpty;
+
+  /// No description provided for @hrZoneTapHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap a bar for the exact times.'**
+  String get hrZoneTapHint;
+
+  /// No description provided for @hrZoneCompareTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Last 28 days vs the 28 before'**
+  String get hrZoneCompareTitle;
+
+  /// No description provided for @hrZoneTrainingTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Training time'**
+  String get hrZoneTrainingTime;
+
+  /// No description provided for @hrZoneCoverageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Heart rate coverage'**
+  String get hrZoneCoverageLabel;
+
+  /// No description provided for @hrZonePerZone.
+  ///
+  /// In en, this message translates to:
+  /// **'Per zone'**
+  String get hrZonePerZone;
+
+  /// No description provided for @hrZoneObservationsNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Observations, not verdicts: what they mean depends on your goal, phase and recovery.'**
+  String get hrZoneObservationsNote;
+
+  /// No description provided for @hrZoneObsInsufficient.
+  ///
+  /// In en, this message translates to:
+  /// **'Too little heart rate time in one of the two periods to compare.'**
+  String get hrZoneObsInsufficient;
+
+  /// No description provided for @hrZoneObsVolumeUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Training time rose by {pct} %.'**
+  String hrZoneObsVolumeUp(int pct);
+
+  /// No description provided for @hrZoneObsVolumeDown.
+  ///
+  /// In en, this message translates to:
+  /// **'Training time fell by {pct} %.'**
+  String hrZoneObsVolumeDown(int pct);
+
+  /// No description provided for @hrZoneObsVolumeSteady.
+  ///
+  /// In en, this message translates to:
+  /// **'Training time stayed about the same.'**
+  String get hrZoneObsVolumeSteady;
+
+  /// No description provided for @hrZoneObsHardUpVolumeUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Time in Z4+Z5 rose while total training time rose as well.'**
+  String get hrZoneObsHardUpVolumeUp;
+
+  /// No description provided for @hrZoneObsHardUpVolumeDown.
+  ///
+  /// In en, this message translates to:
+  /// **'Time in Z4+Z5 rose while total training time fell.'**
+  String get hrZoneObsHardUpVolumeDown;
+
+  /// No description provided for @hrZoneObsHardUpVolumeSteady.
+  ///
+  /// In en, this message translates to:
+  /// **'Time in Z4+Z5 rose at about the same training time.'**
+  String get hrZoneObsHardUpVolumeSteady;
+
+  /// No description provided for @hrZoneObsHardDown.
+  ///
+  /// In en, this message translates to:
+  /// **'Time in Z4+Z5 fell.'**
+  String get hrZoneObsHardDown;
+
+  /// No description provided for @hrZoneObsEasyShareUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy time (Z1+Z2) is a larger share of the heart rate time.'**
+  String get hrZoneObsEasyShareUp;
+
+  /// No description provided for @hrZoneObsEasyShareDown.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy time (Z1+Z2) is a smaller share of the heart rate time.'**
+  String get hrZoneObsEasyShareDown;
+
+  /// No description provided for @hrZoneObsMiddleUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Time in Z3 rose.'**
+  String get hrZoneObsMiddleUp;
+
+  /// No description provided for @hrZoneObsMiddleDown.
+  ///
+  /// In en, this message translates to:
+  /// **'Time in Z3 fell.'**
+  String get hrZoneObsMiddleDown;
+
+  /// No description provided for @hrZoneObsCoverage.
+  ///
+  /// In en, this message translates to:
+  /// **'Heart rate coverage differs between the periods: part of a change can be missing data.'**
+  String get hrZoneObsCoverage;
+
+  /// No description provided for @hrZonePlanTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Planned vs recorded'**
+  String get hrZonePlanTitle;
+
+  /// No description provided for @hrZoneThisWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'This week'**
+  String get hrZoneThisWeek;
+
+  /// No description provided for @hrZoneLastWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Last week'**
+  String get hrZoneLastWeek;
+
+  /// No description provided for @hrZonePlanned.
+  ///
+  /// In en, this message translates to:
+  /// **'Planned'**
+  String get hrZonePlanned;
+
+  /// No description provided for @hrZoneRecorded.
+  ///
+  /// In en, this message translates to:
+  /// **'Recorded'**
+  String get hrZoneRecorded;
+
+  /// No description provided for @hrZonePlanCoverage.
+  ///
+  /// In en, this message translates to:
+  /// **'Comparable: {comparable} of {total} planned sessions'**
+  String hrZonePlanCoverage(int comparable, int total);
+
+  /// No description provided for @hrZonePlanMissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed: {count} (left out of the planned time)'**
+  String hrZonePlanMissed(int count);
+
+  /// No description provided for @hrZoneGapPower.
+  ///
+  /// In en, this message translates to:
+  /// **'Planned by power: {count}'**
+  String hrZoneGapPower(int count);
+
+  /// No description provided for @hrZoneGapPace.
+  ///
+  /// In en, this message translates to:
+  /// **'Planned by pace: {count}'**
+  String hrZoneGapPace(int count);
+
+  /// No description provided for @hrZoneGapNoHr.
+  ///
+  /// In en, this message translates to:
+  /// **'Without heart rate targets: {count}'**
+  String hrZoneGapNoHr(int count);
+
+  /// No description provided for @hrZonePlanNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No comparable planned sessions in this week.'**
+  String get hrZonePlanNone;
+
+  /// No description provided for @hrZoneDeviation.
+  ///
+  /// In en, this message translates to:
+  /// **'Notable difference'**
+  String get hrZoneDeviation;
+
+  /// No description provided for @hrZonePlanNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Only sessions planned in heart rate zones are compared; recorded time comes from the same sports.'**
+  String get hrZonePlanNote;
 }
 
 class _AppLocalizationsDelegate

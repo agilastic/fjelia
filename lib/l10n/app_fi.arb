@@ -1992,30 +1992,7 @@
   "expandTrainingForm": "Laajenna harjoituskunto",
   "calculatedFromTheFirstAvailable": "Laskettu ensimmäisestä saatavilla olevasta kuormitustiedosta. Päivät ilman kirjattua kuormitusta lasketaan nollaksi; aiempi harjoittelu on tuntematonta.",
   "trainingMonitor2": "HARJOITUSSEURANTA",
-  "pfitzingerZones": "PFITZINGER-ALUEET",
   "cyclingPowerZones": "PYÖRÄILYN TEHOALUEET",
-  "znumber": "Z{number}",
-  "@znumber": {
-    "placeholders": {
-      "number": {
-        "type": "Object"
-      }
-    }
-  },
-  "paceHrDescription": "{pace} · {hr}\n{description}",
-  "@paceHrDescription": {
-    "placeholders": {
-      "pace": {
-        "type": "Object"
-      },
-      "hr": {
-        "type": "Object"
-      },
-      "description": {
-        "type": "Object"
-      }
-    }
-  },
   "weeklyTrainingLoad2": "VIIKOITTAINEN HARJOITUSKUORMITUS",
   "prevWeek": "EDELL. VK",
   "bySport": "LAJEITTAIN",
@@ -2505,8 +2482,6 @@
   "tap5MinuteMaxTest": "Napauta · 5 min maksimitesti",
   "setFtpToCalculatePower": "Aseta FTP laskeaksesi tehoalueet",
   "cyclingPowerZones2": "Pyöräilyn tehoalueet",
-  "pfitzingerZones2": "Pfitzinger-alueet",
-  "completeAnLt2TestTo": "Tee LT2-testi laskeaksesi juoksualueet.",
   "setFtpToCalculatePower2": "Aseta FTP laskeaksesi tehoalueet.",
   "endurance": "Kestävyys",
   "threshold": "Kynnys",
@@ -4234,5 +4209,52 @@
   "aiOnboardingMoreBodyCloud": "Oma pilvipalvelusi ja API-avain",
   "raceLibraryWhichDistance": "Mikä matka?",
   "raceLibraryFilledFrom": "Täytetty kilpailukirjastosta ({source}). Tarkista järjestäjän sivut ennen ilmoittautumista.",
-  "@raceLibraryFilledFrom": {"placeholders": {"source": {"type": "String"}}}
+  "@raceLibraryFilledFrom": {"placeholders": {"source": {"type": "String"}}},
+  "hrZoneTrendsTitle": "Sykealueiden kehitys",
+  "hrZoneTrendsHint": "Aika alueilla Z1–Z5 viikoittain ja kuukausittain verrattuna suunnitelmaasi",
+  "hrZoneWindowDays": "{count} päivää",
+  "hrZoneWindowMonths": "{count} kuukautta",
+  "hrZoneUnitTime": "Aika",
+  "hrZoneUnitShare": "Osuus",
+  "hrZoneAllSports": "Kaikki lajit",
+  "hrZoneOtherSports": "Muut lajit",
+  "hrZoneNoHr": "Ei sykettä",
+  "hrZoneDetail": "{hr} sykkeen kanssa, harjoitusaikaa {total} ({coverage} %)",
+  "hrZoneWorkouts": "Harjoitukset: {count}",
+  "hrZonePartial": "Jakso ei ole täysi",
+  "hrZoneMixedSports": "Kaikki lajit yhdessä: aluerajat vaihtelevat lajeittain.",
+  "hrZoneHistoricalNote": "Jokainen harjoitus säilyttää alueet, jotka olivat voimassa sitä tallennettaessa.",
+  "hrZoneEmpty": "Ei sykkeellisiä harjoituksia tällä jaksolla.",
+  "hrZoneTapHint": "Napauta pylvästä nähdäksesi tarkat ajat.",
+  "hrZoneCompareTitle": "Viimeiset 28 päivää verrattuna sitä edeltäviin 28",
+  "hrZoneTrainingTime": "Harjoitusaika",
+  "hrZoneCoverageLabel": "Sykkeen kattavuus",
+  "hrZonePerZone": "Alueittain",
+  "hrZoneObservationsNote": "Havaintoja, ei arvioita: niiden merkitys riippuu tavoitteestasi, vaiheesta ja palautumisesta.",
+  "hrZoneObsInsufficient": "Liian vähän sykeaikaa toisella jaksolla vertailuun.",
+  "hrZoneObsVolumeUp": "Harjoitusaika kasvoi {pct} %.",
+  "hrZoneObsVolumeDown": "Harjoitusaika väheni {pct} %.",
+  "hrZoneObsVolumeSteady": "Harjoitusaika pysyi suunnilleen samana.",
+  "hrZoneObsHardUpVolumeUp": "Aika alueilla Z4+Z5 kasvoi, kun myös kokonaisaika kasvoi.",
+  "hrZoneObsHardUpVolumeDown": "Aika alueilla Z4+Z5 kasvoi, kun kokonaisaika väheni.",
+  "hrZoneObsHardUpVolumeSteady": "Aika alueilla Z4+Z5 kasvoi suunnilleen samalla harjoitusajalla.",
+  "hrZoneObsHardDown": "Aika alueilla Z4+Z5 väheni.",
+  "hrZoneObsEasyShareUp": "Kevyt aika (Z1+Z2) on suurempi osa sykeajasta.",
+  "hrZoneObsEasyShareDown": "Kevyt aika (Z1+Z2) on pienempi osa sykeajasta.",
+  "hrZoneObsMiddleUp": "Aika alueella Z3 kasvoi.",
+  "hrZoneObsMiddleDown": "Aika alueella Z3 väheni.",
+  "hrZoneObsCoverage": "Sykkeen kattavuus eroaa jaksojen välillä: osa muutoksesta voi johtua puuttuvista tiedoista.",
+  "hrZonePlanTitle": "Suunniteltu ja tallennettu",
+  "hrZoneThisWeek": "Tämä viikko",
+  "hrZoneLastWeek": "Viime viikko",
+  "hrZonePlanned": "Suunniteltu",
+  "hrZoneRecorded": "Tallennettu",
+  "hrZonePlanCoverage": "Vertailukelpoisia: {comparable} / {total} suunniteltua harjoitusta",
+  "hrZonePlanMissed": "Väliin jääneet: {count} (ei mukana suunnitellussa ajassa)",
+  "hrZoneGapPower": "Tehon mukaan suunnitellut: {count}",
+  "hrZoneGapPace": "Vauhdin mukaan suunnitellut: {count}",
+  "hrZoneGapNoHr": "Ilman sykettä tavoitteena: {count}",
+  "hrZonePlanNone": "Ei vertailukelpoisia suunniteltuja harjoituksia tällä viikolla.",
+  "hrZoneDeviation": "Selvä ero",
+  "hrZonePlanNote": "Vain sykealueilla suunnitellut harjoitukset verrataan; tallennettu aika tulee samoista lajeista."
 }

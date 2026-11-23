@@ -534,6 +534,57 @@ class Absences extends Table {
   BoolColumn get openEnd => boolean().withDefault(const Constant(false))();
 }
 
+/// Heart-rate zone boundaries of one sport as they were in force from
+/// [effectiveFrom] on (FjeliaPro zone trends). A trigger on
+/// athlete_thresholds adds a row whenever the zones change, so a workout's
+/// time in zones keeps the zones it was recorded under.
+class HrZoneDefinitions extends Table {
+  IntColumn get id => integer().autoIncrement()();
+
+  /// `running`, `cycling` or `swimming`.
+  TextColumn get sport => text()();
+
+  /// Five lower bounds of Z1–Z5 (or, from older settings, four upper bounds
+  /// of Z1–Z4), in [unit].
+  TextColumn get floorsJson => text()();
+
+  /// How the boundaries came about: `settings` (the athlete's zones in
+  /// Fjelia, threshold- or device-based) or `initial` (the zones in force
+  /// when the history began, applied to every earlier workout).
+  TextColumn get method => text()();
+  TextColumn get unit => text().withDefault(const Constant('bpm'))();
+  TextColumn get source => text()();
+  DateTimeColumn get effectiveFrom => dateTime()();
+}
+
+/// One workout's time in Z1–Z5, computed once from its timestamped heart
+/// rate with the zone definition in force at its start and then kept: a
+/// later zone change does not rewrite it.
+class HrZoneSummaries extends Table {
+  TextColumn get activityId => text()();
+  IntColumn get definitionId => integer()();
+  IntColumn get algorithmVersion => integer()();
+
+  /// The sport family of the zones: running, cycling, swimming or other.
+  TextColumn get sport => text()();
+  DateTimeColumn get startDate => dateTime()();
+  RealColumn get elapsedSeconds => real()();
+
+  /// Seconds with valid heart rate; the rest of [elapsedSeconds] is missing.
+  RealColumn get coveredSeconds => real()();
+
+  /// Seconds in Z1–Z5, adding up to [coveredSeconds].
+  TextColumn get zoneSecondsJson => text()();
+
+  /// Another recording of the same workout counts instead (an overlapping
+  /// import): left out of every total.
+  BoolColumn get duplicate => boolean().withDefault(const Constant(false))();
+  DateTimeColumn get computedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {activityId};
+}
+
 /// An activity the athlete deleted. It stays deleted: no sync brings it
 /// back while this row exists. [summaryJson] is the activity without its
 /// route and curves, enough to list it and to restore it before its source
@@ -1443,6 +1494,8 @@ List<BpMeasurement> _validBpRows(List<BpMeasurement> rows) =>
     ActivityTitles,
     ActivitySports,
     Absences,
+    HrZoneDefinitions,
+    HrZoneSummaries,
     SpotHrvMeasurements,
     EcgRecordings,
     EcgSampleChunks,
@@ -1497,7 +1550,7 @@ class AppDatabase extends _$AppDatabase {
       defaultSourcePriorities[group.name]!;
 
   @override
-  int get schemaVersion => 71;
+  int get schemaVersion => 72;
 
   Future<void> saveHeartRateSamples(List<TimedHeartRate> samples) async {
     if (samples.isEmpty) return;
@@ -2879,6 +2932,7 @@ class AppDatabase extends _$AppDatabase {
         'AFTER UPDATE OF type ON activity_records WHEN $changedSport '
         'BEGIN $keepSport',
       );
+      await _recordHrZoneDefinitions();
     },
     onUpgrade: (m, from, to) async {
       if (from < 62) {
@@ -3495,8 +3549,58 @@ class AppDatabase extends _$AppDatabase {
           () => m.addColumn(absences, absences.openEnd),
         );
       }
+      if (from < 72) {
+        await m.createTable(hrZoneDefinitions);
+        await m.createTable(hrZoneSummaries);
+      }
     },
   );
+
+  /// Keeps a history of the athlete's heart-rate zones per sport (FjeliaPro
+  /// zone trends): the zones in force today become the first definition,
+  /// applied to every earlier workout, and every later change, from any of
+  /// the places that write zones, a new one from that moment on.
+  Future<void> _recordHrZoneDefinitions() async {
+    for (final (sport, column) in const [
+      ('running', 'run_hr_zones_json'),
+      ('cycling', 'bike_hr_zones_json'),
+      ('swimming', 'swim_hr_zones_json'),
+    ]) {
+      const latest =
+          '(SELECT floors_json FROM hr_zone_definitions WHERE sport = ? '
+          'ORDER BY effective_from DESC, id DESC LIMIT 1)';
+      await customStatement(
+        'INSERT INTO hr_zone_definitions '
+        '(sport, floors_json, method, unit, source, effective_from) '
+        "SELECT ?, $column, 'initial', 'bpm', 'athlete_thresholds', 0 "
+        'FROM athlete_thresholds WHERE $column IS NOT NULL AND NOT EXISTS '
+        '(SELECT 1 FROM hr_zone_definitions WHERE sport = ?) LIMIT 1',
+        [sport, sport],
+      );
+      final changed =
+          "NEW.$column IS NOT NULL AND NEW.$column IS NOT "
+          "${latest.replaceFirst('?', "'$sport'")}";
+      // The first zones of a sport apply to every earlier workout too; a
+      // change applies from the moment it is made.
+      const first =
+          'NOT EXISTS (SELECT 1 FROM hr_zone_definitions WHERE sport = ';
+      final insert =
+          'INSERT INTO hr_zone_definitions '
+          '(sport, floors_json, method, unit, source, effective_from) '
+          "SELECT '$sport', NEW.$column, "
+          "CASE WHEN $first'$sport') THEN 'initial' ELSE 'settings' END, "
+          "'bpm', 'athlete_thresholds', "
+          "CASE WHEN $first'$sport') THEN 0 "
+          "ELSE CAST(strftime('%s', 'now') AS INTEGER) END; END";
+      for (final event in ['INSERT', 'UPDATE OF $column']) {
+        await customStatement(
+          'CREATE TRIGGER IF NOT EXISTS '
+          'trg_hr_zones_${sport}_${event.startsWith('INSERT') ? 'insert' : 'update'} '
+          'AFTER $event ON athlete_thresholds WHEN $changed BEGIN $insert',
+        );
+      }
+    }
+  }
 
   /// The athlete's memory cards for the coach, the newest change first.
   Stream<List<CoachMemory>> watchCoachMemories() => (select(

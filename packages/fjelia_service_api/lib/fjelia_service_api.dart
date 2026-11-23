@@ -6,5 +6,6 @@ export 'src/blood_pressure.dart';
 export 'src/ecg.dart';
 export 'src/edition.dart';
 export 'src/hilo.dart';
+export 'src/hr_zone_trends.dart';
 export 'src/pro_analysis.dart';
 export 'src/suunto.dart';

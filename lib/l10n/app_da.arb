@@ -1992,30 +1992,7 @@
   "expandTrainingForm": "Udvid træningsformen",
   "calculatedFromTheFirstAvailable": "Beregnet fra den første tilgængelige belastningsregistrering. Dage uden registreret belastning tæller som nul; tidligere træning er ukendt.",
   "trainingMonitor2": "TRÆNINGSMONITOR",
-  "pfitzingerZones": "PFITZINGER-ZONER",
   "cyclingPowerZones": "EFFEKTZONER I CYKLING",
-  "znumber": "Z{number}",
-  "@znumber": {
-    "placeholders": {
-      "number": {
-        "type": "Object"
-      }
-    }
-  },
-  "paceHrDescription": "{pace} · {hr}\n{description}",
-  "@paceHrDescription": {
-    "placeholders": {
-      "pace": {
-        "type": "Object"
-      },
-      "hr": {
-        "type": "Object"
-      },
-      "description": {
-        "type": "Object"
-      }
-    }
-  },
   "weeklyTrainingLoad2": "UGENTLIG TRÆNINGSBELASTNING",
   "prevWeek": "FORRIGE UGE",
   "bySport": "EFTER SPORTSGREN",
@@ -2505,8 +2482,6 @@
   "tap5MinuteMaxTest": "Tryk · 5-min maksimaltest",
   "setFtpToCalculatePower": "Angiv FTP for at beregne effektzoner",
   "cyclingPowerZones2": "Effektzoner i cykling",
-  "pfitzingerZones2": "Pfitzinger-zoner",
-  "completeAnLt2TestTo": "Gennemfør en LT2-test for at beregne løbezoner.",
   "setFtpToCalculatePower2": "Angiv FTP for at beregne effektzoner.",
   "endurance": "Udholdenhed",
   "threshold": "Tærskel",
@@ -4234,5 +4209,52 @@
   "aiOnboardingMoreBodyCloud": "Din egen cloududbyder med API-nøgle",
   "raceLibraryWhichDistance": "Hvilken distance?",
   "raceLibraryFilledFrom": "Udfyldt fra løbsbiblioteket ({source}). Tjek arrangørens hjemmeside, før du tilmelder dig.",
-  "@raceLibraryFilledFrom": {"placeholders": {"source": {"type": "String"}}}
+  "@raceLibraryFilledFrom": {"placeholders": {"source": {"type": "String"}}},
+  "hrZoneTrendsTitle": "Pulszoner over tid",
+  "hrZoneTrendsHint": "Tid i Z1–Z5 over uger og måneder, sammenlignet med din plan",
+  "hrZoneWindowDays": "{count} dage",
+  "hrZoneWindowMonths": "{count} måneder",
+  "hrZoneUnitTime": "Tid",
+  "hrZoneUnitShare": "Andel",
+  "hrZoneAllSports": "Alle sportsgrene",
+  "hrZoneOtherSports": "Andre sportsgrene",
+  "hrZoneNoHr": "Ingen puls",
+  "hrZoneDetail": "{hr} med puls af {total} træningstid ({coverage} %)",
+  "hrZoneWorkouts": "Træninger: {count}",
+  "hrZonePartial": "Perioden er ikke færdig",
+  "hrZoneMixedSports": "Alle sportsgrene samlet: zonegrænserne er forskellige for hver sportsgren.",
+  "hrZoneHistoricalNote": "Hver træning beholder de zoner, der gjaldt, da den blev optaget.",
+  "hrZoneEmpty": "Ingen træninger med puls i denne periode.",
+  "hrZoneTapHint": "Tryk på en søjle for de præcise tider.",
+  "hrZoneCompareTitle": "Seneste 28 dage mod de 28 før",
+  "hrZoneTrainingTime": "Træningstid",
+  "hrZoneCoverageLabel": "Pulsdækning",
+  "hrZonePerZone": "Per zone",
+  "hrZoneObservationsNote": "Observationer, ikke vurderinger: hvad de betyder, afhænger af dit mål, din fase og din restitution.",
+  "hrZoneObsInsufficient": "For lidt pulstid i en af de to perioder til at sammenligne.",
+  "hrZoneObsVolumeUp": "Træningstiden steg med {pct} %.",
+  "hrZoneObsVolumeDown": "Træningstiden faldt med {pct} %.",
+  "hrZoneObsVolumeSteady": "Træningstiden var omtrent den samme.",
+  "hrZoneObsHardUpVolumeUp": "Tiden i Z4+Z5 steg, mens den samlede træningstid også steg.",
+  "hrZoneObsHardUpVolumeDown": "Tiden i Z4+Z5 steg, mens den samlede træningstid faldt.",
+  "hrZoneObsHardUpVolumeSteady": "Tiden i Z4+Z5 steg ved omtrent samme træningstid.",
+  "hrZoneObsHardDown": "Tiden i Z4+Z5 faldt.",
+  "hrZoneObsEasyShareUp": "Rolig tid (Z1+Z2) udgør en større del af pulstiden.",
+  "hrZoneObsEasyShareDown": "Rolig tid (Z1+Z2) udgør en mindre del af pulstiden.",
+  "hrZoneObsMiddleUp": "Tiden i Z3 steg.",
+  "hrZoneObsMiddleDown": "Tiden i Z3 faldt.",
+  "hrZoneObsCoverage": "Pulsdækningen er forskellig mellem perioderne: en del af en ændring kan skyldes manglende data.",
+  "hrZonePlanTitle": "Planlagt og optaget",
+  "hrZoneThisWeek": "Denne uge",
+  "hrZoneLastWeek": "Sidste uge",
+  "hrZonePlanned": "Planlagt",
+  "hrZoneRecorded": "Optaget",
+  "hrZonePlanCoverage": "Sammenlignelige: {comparable} af {total} planlagte træninger",
+  "hrZonePlanMissed": "Misset: {count} (ikke med i den planlagte tid)",
+  "hrZoneGapPower": "Planlagt efter watt: {count}",
+  "hrZoneGapPace": "Planlagt efter tempo: {count}",
+  "hrZoneGapNoHr": "Uden pulsmål: {count}",
+  "hrZonePlanNone": "Ingen sammenlignelige planlagte træninger i denne uge.",
+  "hrZoneDeviation": "Tydelig forskel",
+  "hrZonePlanNote": "Kun træninger planlagt i pulszoner sammenlignes; den optagne tid kommer fra de samme sportsgrene."
 }

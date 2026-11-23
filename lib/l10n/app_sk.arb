@@ -1992,30 +1992,7 @@
   "expandTrainingForm": "Rozbaliť formu tréningu",
   "calculatedFromTheFirstAvailable": "Vypočítané od prvého dostupného záznamu záťaže. Dni bez zaznamenanej záťaže sa počítajú ako nula; skorší tréning nie je známy.",
   "trainingMonitor2": "TRÉNINGOVÝ MONITOR",
-  "pfitzingerZones": "ZÓNY PODĽA PFITZINGERA",
   "cyclingPowerZones": "VÝKONNOSTNÉ ZÓNY V CYKLISTIKE",
-  "znumber": "Z{number}",
-  "@znumber": {
-    "placeholders": {
-      "number": {
-        "type": "Object"
-      }
-    }
-  },
-  "paceHrDescription": "{pace} · {hr}\n{description}",
-  "@paceHrDescription": {
-    "placeholders": {
-      "pace": {
-        "type": "Object"
-      },
-      "hr": {
-        "type": "Object"
-      },
-      "description": {
-        "type": "Object"
-      }
-    }
-  },
   "weeklyTrainingLoad2": "TÝŽDENNÁ TRÉNINGOVÁ ZÁŤAŽ",
   "prevWeek": "MIN. TÝŽDEŇ",
   "bySport": "PODĽA ŠPORTU",
@@ -2505,8 +2482,6 @@
   "tap5MinuteMaxTest": "Ťuknite · 5-min maximálny test",
   "setFtpToCalculatePower": "Nastavte FTP na výpočet výkonnostných zón",
   "cyclingPowerZones2": "Výkonnostné zóny v cyklistike",
-  "pfitzingerZones2": "Zóny podľa Pfitzingera",
-  "completeAnLt2TestTo": "Dokončite test LT2 na výpočet bežeckých zón.",
   "setFtpToCalculatePower2": "Nastavte FTP na výpočet výkonnostných zón.",
   "endurance": "Vytrvalosť",
   "threshold": "Prah",
@@ -4234,5 +4209,52 @@
   "aiOnboardingMoreBodyCloud": "Vlastný cloudový poskytovateľ s kľúčom API",
   "raceLibraryWhichDistance": "Ktorá trať?",
   "raceLibraryFilledFrom": "Vyplnené z knižnice pretekov ({source}). Pred registráciou si over web organizátora.",
-  "@raceLibraryFilledFrom": {"placeholders": {"source": {"type": "String"}}}
+  "@raceLibraryFilledFrom": {"placeholders": {"source": {"type": "String"}}},
+  "hrZoneTrendsTitle": "Vývoj zón srdcovej frekvencie",
+  "hrZoneTrendsHint": "Čas v Z1–Z5 po týždňoch a mesiacoch v porovnaní s plánom",
+  "hrZoneWindowDays": "Dni: {count}",
+  "hrZoneWindowMonths": "Mesiace: {count}",
+  "hrZoneUnitTime": "Čas",
+  "hrZoneUnitShare": "Podiel",
+  "hrZoneAllSports": "Všetky športy",
+  "hrZoneOtherSports": "Iné športy",
+  "hrZoneNoHr": "Bez srdcovej frekvencie",
+  "hrZoneDetail": "{hr} so srdcovou frekvenciou z {total} času tréningu ({coverage} %)",
+  "hrZoneWorkouts": "Tréningy: {count}",
+  "hrZonePartial": "Obdobie nie je úplné",
+  "hrZoneMixedSports": "Všetky športy spolu: hranice zón sa líšia podľa športu.",
+  "hrZoneHistoricalNote": "Každý tréning si ponecháva zóny platné v čase jeho záznamu.",
+  "hrZoneEmpty": "V tomto období nie sú tréningy so srdcovou frekvenciou.",
+  "hrZoneTapHint": "Ťukni na stĺpec pre presné časy.",
+  "hrZoneCompareTitle": "Posledných 28 dní oproti 28 predtým",
+  "hrZoneTrainingTime": "Čas tréningu",
+  "hrZoneCoverageLabel": "Pokrytie srdcovou frekvenciou",
+  "hrZonePerZone": "Podľa zón",
+  "hrZoneObservationsNote": "Pozorovania, nie hodnotenia: ich význam závisí od cieľa, fázy a regenerácie.",
+  "hrZoneObsInsufficient": "Príliš málo času so srdcovou frekvenciou v jednom z období na porovnanie.",
+  "hrZoneObsVolumeUp": "Čas tréningu vzrástol o {pct} %.",
+  "hrZoneObsVolumeDown": "Čas tréningu klesol o {pct} %.",
+  "hrZoneObsVolumeSteady": "Čas tréningu zostal približne rovnaký.",
+  "hrZoneObsHardUpVolumeUp": "Čas v Z4+Z5 vzrástol a celkový čas tréningu tiež vzrástol.",
+  "hrZoneObsHardUpVolumeDown": "Čas v Z4+Z5 vzrástol, zatiaľ čo celkový čas tréningu klesol.",
+  "hrZoneObsHardUpVolumeSteady": "Čas v Z4+Z5 vzrástol pri približne rovnakom čase tréningu.",
+  "hrZoneObsHardDown": "Čas v Z4+Z5 klesol.",
+  "hrZoneObsEasyShareUp": "Pokojný čas (Z1+Z2) tvorí väčšiu časť času so srdcovou frekvenciou.",
+  "hrZoneObsEasyShareDown": "Pokojný čas (Z1+Z2) tvorí menšiu časť času so srdcovou frekvenciou.",
+  "hrZoneObsMiddleUp": "Čas v Z3 vzrástol.",
+  "hrZoneObsMiddleDown": "Čas v Z3 klesol.",
+  "hrZoneObsCoverage": "Pokrytie srdcovou frekvenciou sa medzi obdobiami líši: časť zmeny môže pochádzať z chýbajúcich údajov.",
+  "hrZonePlanTitle": "Plánované a zaznamenané",
+  "hrZoneThisWeek": "Tento týždeň",
+  "hrZoneLastWeek": "Minulý týždeň",
+  "hrZonePlanned": "Plánované",
+  "hrZoneRecorded": "Zaznamenané",
+  "hrZonePlanCoverage": "Porovnateľné: {comparable} z {total} plánovaných tréningov",
+  "hrZonePlanMissed": "Vynechané: {count} (mimo plánovaného času)",
+  "hrZoneGapPower": "Plánované podľa výkonu: {count}",
+  "hrZoneGapPace": "Plánované podľa tempa: {count}",
+  "hrZoneGapNoHr": "Bez cieľov srdcovej frekvencie: {count}",
+  "hrZonePlanNone": "Tento týždeň nie sú porovnateľné plánované tréningy.",
+  "hrZoneDeviation": "Výrazný rozdiel",
+  "hrZonePlanNote": "Porovnávajú sa len tréningy plánované v zónach srdcovej frekvencie; zaznamenaný čas pochádza z rovnakých športov."
 }

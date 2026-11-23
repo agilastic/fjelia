@@ -3933,20 +3933,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get trainingMonitor2 => 'HARJOITUSSEURANTA';
 
   @override
-  String get pfitzingerZones => 'PFITZINGER-ALUEET';
-
-  @override
   String get cyclingPowerZones => 'PYÖRÄILYN TEHOALUEET';
-
-  @override
-  String znumber(Object number) {
-    return 'Z$number';
-  }
-
-  @override
-  String paceHrDescription(Object pace, Object hr, Object description) {
-    return '$pace · $hr\n$description';
-  }
 
   @override
   String get weeklyTrainingLoad2 => 'VIIKOITTAINEN HARJOITUSKUORMITUS';
@@ -4556,12 +4543,6 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get cyclingPowerZones2 => 'Pyöräilyn tehoalueet';
-
-  @override
-  String get pfitzingerZones2 => 'Pfitzinger-alueet';
-
-  @override
-  String get completeAnLt2TestTo => 'Tee LT2-testi laskeaksesi juoksualueet.';
 
   @override
   String get setFtpToCalculatePower2 => 'Aseta FTP laskeaksesi tehoalueet.';
@@ -9382,4 +9363,181 @@ class AppLocalizationsFi extends AppLocalizations {
   String raceLibraryFilledFrom(String source) {
     return 'Täytetty kilpailukirjastosta ($source). Tarkista järjestäjän sivut ennen ilmoittautumista.';
   }
+
+  @override
+  String get hrZoneTrendsTitle => 'Sykealueiden kehitys';
+
+  @override
+  String get hrZoneTrendsHint =>
+      'Aika alueilla Z1–Z5 viikoittain ja kuukausittain verrattuna suunnitelmaasi';
+
+  @override
+  String hrZoneWindowDays(int count) {
+    return '$count päivää';
+  }
+
+  @override
+  String hrZoneWindowMonths(int count) {
+    return '$count kuukautta';
+  }
+
+  @override
+  String get hrZoneUnitTime => 'Aika';
+
+  @override
+  String get hrZoneUnitShare => 'Osuus';
+
+  @override
+  String get hrZoneAllSports => 'Kaikki lajit';
+
+  @override
+  String get hrZoneOtherSports => 'Muut lajit';
+
+  @override
+  String get hrZoneNoHr => 'Ei sykettä';
+
+  @override
+  String hrZoneDetail(String hr, String total, int coverage) {
+    return '$hr sykkeen kanssa, harjoitusaikaa $total ($coverage %)';
+  }
+
+  @override
+  String hrZoneWorkouts(int count) {
+    return 'Harjoitukset: $count';
+  }
+
+  @override
+  String get hrZonePartial => 'Jakso ei ole täysi';
+
+  @override
+  String get hrZoneMixedSports =>
+      'Kaikki lajit yhdessä: aluerajat vaihtelevat lajeittain.';
+
+  @override
+  String get hrZoneHistoricalNote =>
+      'Jokainen harjoitus säilyttää alueet, jotka olivat voimassa sitä tallennettaessa.';
+
+  @override
+  String get hrZoneEmpty => 'Ei sykkeellisiä harjoituksia tällä jaksolla.';
+
+  @override
+  String get hrZoneTapHint => 'Napauta pylvästä nähdäksesi tarkat ajat.';
+
+  @override
+  String get hrZoneCompareTitle =>
+      'Viimeiset 28 päivää verrattuna sitä edeltäviin 28';
+
+  @override
+  String get hrZoneTrainingTime => 'Harjoitusaika';
+
+  @override
+  String get hrZoneCoverageLabel => 'Sykkeen kattavuus';
+
+  @override
+  String get hrZonePerZone => 'Alueittain';
+
+  @override
+  String get hrZoneObservationsNote =>
+      'Havaintoja, ei arvioita: niiden merkitys riippuu tavoitteestasi, vaiheesta ja palautumisesta.';
+
+  @override
+  String get hrZoneObsInsufficient =>
+      'Liian vähän sykeaikaa toisella jaksolla vertailuun.';
+
+  @override
+  String hrZoneObsVolumeUp(int pct) {
+    return 'Harjoitusaika kasvoi $pct %.';
+  }
+
+  @override
+  String hrZoneObsVolumeDown(int pct) {
+    return 'Harjoitusaika väheni $pct %.';
+  }
+
+  @override
+  String get hrZoneObsVolumeSteady => 'Harjoitusaika pysyi suunnilleen samana.';
+
+  @override
+  String get hrZoneObsHardUpVolumeUp =>
+      'Aika alueilla Z4+Z5 kasvoi, kun myös kokonaisaika kasvoi.';
+
+  @override
+  String get hrZoneObsHardUpVolumeDown =>
+      'Aika alueilla Z4+Z5 kasvoi, kun kokonaisaika väheni.';
+
+  @override
+  String get hrZoneObsHardUpVolumeSteady =>
+      'Aika alueilla Z4+Z5 kasvoi suunnilleen samalla harjoitusajalla.';
+
+  @override
+  String get hrZoneObsHardDown => 'Aika alueilla Z4+Z5 väheni.';
+
+  @override
+  String get hrZoneObsEasyShareUp =>
+      'Kevyt aika (Z1+Z2) on suurempi osa sykeajasta.';
+
+  @override
+  String get hrZoneObsEasyShareDown =>
+      'Kevyt aika (Z1+Z2) on pienempi osa sykeajasta.';
+
+  @override
+  String get hrZoneObsMiddleUp => 'Aika alueella Z3 kasvoi.';
+
+  @override
+  String get hrZoneObsMiddleDown => 'Aika alueella Z3 väheni.';
+
+  @override
+  String get hrZoneObsCoverage =>
+      'Sykkeen kattavuus eroaa jaksojen välillä: osa muutoksesta voi johtua puuttuvista tiedoista.';
+
+  @override
+  String get hrZonePlanTitle => 'Suunniteltu ja tallennettu';
+
+  @override
+  String get hrZoneThisWeek => 'Tämä viikko';
+
+  @override
+  String get hrZoneLastWeek => 'Viime viikko';
+
+  @override
+  String get hrZonePlanned => 'Suunniteltu';
+
+  @override
+  String get hrZoneRecorded => 'Tallennettu';
+
+  @override
+  String hrZonePlanCoverage(int comparable, int total) {
+    return 'Vertailukelpoisia: $comparable / $total suunniteltua harjoitusta';
+  }
+
+  @override
+  String hrZonePlanMissed(int count) {
+    return 'Väliin jääneet: $count (ei mukana suunnitellussa ajassa)';
+  }
+
+  @override
+  String hrZoneGapPower(int count) {
+    return 'Tehon mukaan suunnitellut: $count';
+  }
+
+  @override
+  String hrZoneGapPace(int count) {
+    return 'Vauhdin mukaan suunnitellut: $count';
+  }
+
+  @override
+  String hrZoneGapNoHr(int count) {
+    return 'Ilman sykettä tavoitteena: $count';
+  }
+
+  @override
+  String get hrZonePlanNone =>
+      'Ei vertailukelpoisia suunniteltuja harjoituksia tällä viikolla.';
+
+  @override
+  String get hrZoneDeviation => 'Selvä ero';
+
+  @override
+  String get hrZonePlanNote =>
+      'Vain sykealueilla suunnitellut harjoitukset verrataan; tallennettu aika tulee samoista lajeista.';
 }

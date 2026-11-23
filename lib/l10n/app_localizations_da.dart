@@ -3910,20 +3910,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get trainingMonitor2 => 'TRÆNINGSMONITOR';
 
   @override
-  String get pfitzingerZones => 'PFITZINGER-ZONER';
-
-  @override
   String get cyclingPowerZones => 'EFFEKTZONER I CYKLING';
-
-  @override
-  String znumber(Object number) {
-    return 'Z$number';
-  }
-
-  @override
-  String paceHrDescription(Object pace, Object hr, Object description) {
-    return '$pace · $hr\n$description';
-  }
 
   @override
   String get weeklyTrainingLoad2 => 'UGENTLIG TRÆNINGSBELASTNING';
@@ -4531,13 +4518,6 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get cyclingPowerZones2 => 'Effektzoner i cykling';
-
-  @override
-  String get pfitzingerZones2 => 'Pfitzinger-zoner';
-
-  @override
-  String get completeAnLt2TestTo =>
-      'Gennemfør en LT2-test for at beregne løbezoner.';
 
   @override
   String get setFtpToCalculatePower2 => 'Angiv FTP for at beregne effektzoner.';
@@ -9343,4 +9323,180 @@ class AppLocalizationsDa extends AppLocalizations {
   String raceLibraryFilledFrom(String source) {
     return 'Udfyldt fra løbsbiblioteket ($source). Tjek arrangørens hjemmeside, før du tilmelder dig.';
   }
+
+  @override
+  String get hrZoneTrendsTitle => 'Pulszoner over tid';
+
+  @override
+  String get hrZoneTrendsHint =>
+      'Tid i Z1–Z5 over uger og måneder, sammenlignet med din plan';
+
+  @override
+  String hrZoneWindowDays(int count) {
+    return '$count dage';
+  }
+
+  @override
+  String hrZoneWindowMonths(int count) {
+    return '$count måneder';
+  }
+
+  @override
+  String get hrZoneUnitTime => 'Tid';
+
+  @override
+  String get hrZoneUnitShare => 'Andel';
+
+  @override
+  String get hrZoneAllSports => 'Alle sportsgrene';
+
+  @override
+  String get hrZoneOtherSports => 'Andre sportsgrene';
+
+  @override
+  String get hrZoneNoHr => 'Ingen puls';
+
+  @override
+  String hrZoneDetail(String hr, String total, int coverage) {
+    return '$hr med puls af $total træningstid ($coverage %)';
+  }
+
+  @override
+  String hrZoneWorkouts(int count) {
+    return 'Træninger: $count';
+  }
+
+  @override
+  String get hrZonePartial => 'Perioden er ikke færdig';
+
+  @override
+  String get hrZoneMixedSports =>
+      'Alle sportsgrene samlet: zonegrænserne er forskellige for hver sportsgren.';
+
+  @override
+  String get hrZoneHistoricalNote =>
+      'Hver træning beholder de zoner, der gjaldt, da den blev optaget.';
+
+  @override
+  String get hrZoneEmpty => 'Ingen træninger med puls i denne periode.';
+
+  @override
+  String get hrZoneTapHint => 'Tryk på en søjle for de præcise tider.';
+
+  @override
+  String get hrZoneCompareTitle => 'Seneste 28 dage mod de 28 før';
+
+  @override
+  String get hrZoneTrainingTime => 'Træningstid';
+
+  @override
+  String get hrZoneCoverageLabel => 'Pulsdækning';
+
+  @override
+  String get hrZonePerZone => 'Per zone';
+
+  @override
+  String get hrZoneObservationsNote =>
+      'Observationer, ikke vurderinger: hvad de betyder, afhænger af dit mål, din fase og din restitution.';
+
+  @override
+  String get hrZoneObsInsufficient =>
+      'For lidt pulstid i en af de to perioder til at sammenligne.';
+
+  @override
+  String hrZoneObsVolumeUp(int pct) {
+    return 'Træningstiden steg med $pct %.';
+  }
+
+  @override
+  String hrZoneObsVolumeDown(int pct) {
+    return 'Træningstiden faldt med $pct %.';
+  }
+
+  @override
+  String get hrZoneObsVolumeSteady => 'Træningstiden var omtrent den samme.';
+
+  @override
+  String get hrZoneObsHardUpVolumeUp =>
+      'Tiden i Z4+Z5 steg, mens den samlede træningstid også steg.';
+
+  @override
+  String get hrZoneObsHardUpVolumeDown =>
+      'Tiden i Z4+Z5 steg, mens den samlede træningstid faldt.';
+
+  @override
+  String get hrZoneObsHardUpVolumeSteady =>
+      'Tiden i Z4+Z5 steg ved omtrent samme træningstid.';
+
+  @override
+  String get hrZoneObsHardDown => 'Tiden i Z4+Z5 faldt.';
+
+  @override
+  String get hrZoneObsEasyShareUp =>
+      'Rolig tid (Z1+Z2) udgør en større del af pulstiden.';
+
+  @override
+  String get hrZoneObsEasyShareDown =>
+      'Rolig tid (Z1+Z2) udgør en mindre del af pulstiden.';
+
+  @override
+  String get hrZoneObsMiddleUp => 'Tiden i Z3 steg.';
+
+  @override
+  String get hrZoneObsMiddleDown => 'Tiden i Z3 faldt.';
+
+  @override
+  String get hrZoneObsCoverage =>
+      'Pulsdækningen er forskellig mellem perioderne: en del af en ændring kan skyldes manglende data.';
+
+  @override
+  String get hrZonePlanTitle => 'Planlagt og optaget';
+
+  @override
+  String get hrZoneThisWeek => 'Denne uge';
+
+  @override
+  String get hrZoneLastWeek => 'Sidste uge';
+
+  @override
+  String get hrZonePlanned => 'Planlagt';
+
+  @override
+  String get hrZoneRecorded => 'Optaget';
+
+  @override
+  String hrZonePlanCoverage(int comparable, int total) {
+    return 'Sammenlignelige: $comparable af $total planlagte træninger';
+  }
+
+  @override
+  String hrZonePlanMissed(int count) {
+    return 'Misset: $count (ikke med i den planlagte tid)';
+  }
+
+  @override
+  String hrZoneGapPower(int count) {
+    return 'Planlagt efter watt: $count';
+  }
+
+  @override
+  String hrZoneGapPace(int count) {
+    return 'Planlagt efter tempo: $count';
+  }
+
+  @override
+  String hrZoneGapNoHr(int count) {
+    return 'Uden pulsmål: $count';
+  }
+
+  @override
+  String get hrZonePlanNone =>
+      'Ingen sammenlignelige planlagte træninger i denne uge.';
+
+  @override
+  String get hrZoneDeviation => 'Tydelig forskel';
+
+  @override
+  String get hrZonePlanNote =>
+      'Kun træninger planlagt i pulszoner sammenlignes; den optagne tid kommer fra de samme sportsgrene.';
 }

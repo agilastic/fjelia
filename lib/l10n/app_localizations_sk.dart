@@ -3929,20 +3929,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get trainingMonitor2 => 'TRÉNINGOVÝ MONITOR';
 
   @override
-  String get pfitzingerZones => 'ZÓNY PODĽA PFITZINGERA';
-
-  @override
   String get cyclingPowerZones => 'VÝKONNOSTNÉ ZÓNY V CYKLISTIKE';
-
-  @override
-  String znumber(Object number) {
-    return 'Z$number';
-  }
-
-  @override
-  String paceHrDescription(Object pace, Object hr, Object description) {
-    return '$pace · $hr\n$description';
-  }
 
   @override
   String get weeklyTrainingLoad2 => 'TÝŽDENNÁ TRÉNINGOVÁ ZÁŤAŽ';
@@ -4552,13 +4539,6 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get cyclingPowerZones2 => 'Výkonnostné zóny v cyklistike';
-
-  @override
-  String get pfitzingerZones2 => 'Zóny podľa Pfitzingera';
-
-  @override
-  String get completeAnLt2TestTo =>
-      'Dokončite test LT2 na výpočet bežeckých zón.';
 
   @override
   String get setFtpToCalculatePower2 =>
@@ -9392,4 +9372,181 @@ class AppLocalizationsSk extends AppLocalizations {
   String raceLibraryFilledFrom(String source) {
     return 'Vyplnené z knižnice pretekov ($source). Pred registráciou si over web organizátora.';
   }
+
+  @override
+  String get hrZoneTrendsTitle => 'Vývoj zón srdcovej frekvencie';
+
+  @override
+  String get hrZoneTrendsHint =>
+      'Čas v Z1–Z5 po týždňoch a mesiacoch v porovnaní s plánom';
+
+  @override
+  String hrZoneWindowDays(int count) {
+    return 'Dni: $count';
+  }
+
+  @override
+  String hrZoneWindowMonths(int count) {
+    return 'Mesiace: $count';
+  }
+
+  @override
+  String get hrZoneUnitTime => 'Čas';
+
+  @override
+  String get hrZoneUnitShare => 'Podiel';
+
+  @override
+  String get hrZoneAllSports => 'Všetky športy';
+
+  @override
+  String get hrZoneOtherSports => 'Iné športy';
+
+  @override
+  String get hrZoneNoHr => 'Bez srdcovej frekvencie';
+
+  @override
+  String hrZoneDetail(String hr, String total, int coverage) {
+    return '$hr so srdcovou frekvenciou z $total času tréningu ($coverage %)';
+  }
+
+  @override
+  String hrZoneWorkouts(int count) {
+    return 'Tréningy: $count';
+  }
+
+  @override
+  String get hrZonePartial => 'Obdobie nie je úplné';
+
+  @override
+  String get hrZoneMixedSports =>
+      'Všetky športy spolu: hranice zón sa líšia podľa športu.';
+
+  @override
+  String get hrZoneHistoricalNote =>
+      'Každý tréning si ponecháva zóny platné v čase jeho záznamu.';
+
+  @override
+  String get hrZoneEmpty =>
+      'V tomto období nie sú tréningy so srdcovou frekvenciou.';
+
+  @override
+  String get hrZoneTapHint => 'Ťukni na stĺpec pre presné časy.';
+
+  @override
+  String get hrZoneCompareTitle => 'Posledných 28 dní oproti 28 predtým';
+
+  @override
+  String get hrZoneTrainingTime => 'Čas tréningu';
+
+  @override
+  String get hrZoneCoverageLabel => 'Pokrytie srdcovou frekvenciou';
+
+  @override
+  String get hrZonePerZone => 'Podľa zón';
+
+  @override
+  String get hrZoneObservationsNote =>
+      'Pozorovania, nie hodnotenia: ich význam závisí od cieľa, fázy a regenerácie.';
+
+  @override
+  String get hrZoneObsInsufficient =>
+      'Príliš málo času so srdcovou frekvenciou v jednom z období na porovnanie.';
+
+  @override
+  String hrZoneObsVolumeUp(int pct) {
+    return 'Čas tréningu vzrástol o $pct %.';
+  }
+
+  @override
+  String hrZoneObsVolumeDown(int pct) {
+    return 'Čas tréningu klesol o $pct %.';
+  }
+
+  @override
+  String get hrZoneObsVolumeSteady => 'Čas tréningu zostal približne rovnaký.';
+
+  @override
+  String get hrZoneObsHardUpVolumeUp =>
+      'Čas v Z4+Z5 vzrástol a celkový čas tréningu tiež vzrástol.';
+
+  @override
+  String get hrZoneObsHardUpVolumeDown =>
+      'Čas v Z4+Z5 vzrástol, zatiaľ čo celkový čas tréningu klesol.';
+
+  @override
+  String get hrZoneObsHardUpVolumeSteady =>
+      'Čas v Z4+Z5 vzrástol pri približne rovnakom čase tréningu.';
+
+  @override
+  String get hrZoneObsHardDown => 'Čas v Z4+Z5 klesol.';
+
+  @override
+  String get hrZoneObsEasyShareUp =>
+      'Pokojný čas (Z1+Z2) tvorí väčšiu časť času so srdcovou frekvenciou.';
+
+  @override
+  String get hrZoneObsEasyShareDown =>
+      'Pokojný čas (Z1+Z2) tvorí menšiu časť času so srdcovou frekvenciou.';
+
+  @override
+  String get hrZoneObsMiddleUp => 'Čas v Z3 vzrástol.';
+
+  @override
+  String get hrZoneObsMiddleDown => 'Čas v Z3 klesol.';
+
+  @override
+  String get hrZoneObsCoverage =>
+      'Pokrytie srdcovou frekvenciou sa medzi obdobiami líši: časť zmeny môže pochádzať z chýbajúcich údajov.';
+
+  @override
+  String get hrZonePlanTitle => 'Plánované a zaznamenané';
+
+  @override
+  String get hrZoneThisWeek => 'Tento týždeň';
+
+  @override
+  String get hrZoneLastWeek => 'Minulý týždeň';
+
+  @override
+  String get hrZonePlanned => 'Plánované';
+
+  @override
+  String get hrZoneRecorded => 'Zaznamenané';
+
+  @override
+  String hrZonePlanCoverage(int comparable, int total) {
+    return 'Porovnateľné: $comparable z $total plánovaných tréningov';
+  }
+
+  @override
+  String hrZonePlanMissed(int count) {
+    return 'Vynechané: $count (mimo plánovaného času)';
+  }
+
+  @override
+  String hrZoneGapPower(int count) {
+    return 'Plánované podľa výkonu: $count';
+  }
+
+  @override
+  String hrZoneGapPace(int count) {
+    return 'Plánované podľa tempa: $count';
+  }
+
+  @override
+  String hrZoneGapNoHr(int count) {
+    return 'Bez cieľov srdcovej frekvencie: $count';
+  }
+
+  @override
+  String get hrZonePlanNone =>
+      'Tento týždeň nie sú porovnateľné plánované tréningy.';
+
+  @override
+  String get hrZoneDeviation => 'Výrazný rozdiel';
+
+  @override
+  String get hrZonePlanNote =>
+      'Porovnávajú sa len tréningy plánované v zónach srdcovej frekvencie; zaznamenaný čas pochádza z rovnakých športov.';
 }

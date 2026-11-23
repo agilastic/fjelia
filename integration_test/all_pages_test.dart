@@ -379,8 +379,7 @@ void main() {
       await sheet('lt2-test', const Lt2TestSheet(), load: true);
       await sheet('threshold-test', const ThresholdTestSheet(), load: true);
       await sheet('vo2-test', const ThresholdTestSheet(vo2: true), load: true);
-      await sheet('zones-hr', const LoadZonesSheet(), load: true);
-      await sheet('zones-power', const LoadZonesSheet(power: true), load: true);
+      await sheet('zones-power', const LoadZonesSheet(), load: true);
       for (final m in [
         'VO₂max running',
         'VO₂max cycling',

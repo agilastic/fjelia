@@ -3942,20 +3942,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get trainingMonitor2 => 'MONITOR DI ALLENAMENTO';
 
   @override
-  String get pfitzingerZones => 'ZONE DI PFITZINGER';
-
-  @override
   String get cyclingPowerZones => 'ZONE DI POTENZA NEL CICLISMO';
-
-  @override
-  String znumber(Object number) {
-    return 'Z$number';
-  }
-
-  @override
-  String paceHrDescription(Object pace, Object hr, Object description) {
-    return '$pace · $hr\n$description';
-  }
 
   @override
   String get weeklyTrainingLoad2 => 'CARICO DI ALLENAMENTO SETTIMANALE';
@@ -4567,13 +4554,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get cyclingPowerZones2 => 'Zone di potenza nel ciclismo';
-
-  @override
-  String get pfitzingerZones2 => 'Zone di Pfitzinger';
-
-  @override
-  String get completeAnLt2TestTo =>
-      'Completa un test LT2 per calcolare le zone di corsa.';
 
   @override
   String get setFtpToCalculatePower2 =>
@@ -9401,4 +9381,182 @@ class AppLocalizationsIt extends AppLocalizations {
   String raceLibraryFilledFrom(String source) {
     return 'Compilato dalla libreria gare ($source). Controlla il sito dell\'organizzatore prima di iscriverti.';
   }
+
+  @override
+  String get hrZoneTrendsTitle => 'Andamento delle zone di frequenza cardiaca';
+
+  @override
+  String get hrZoneTrendsHint =>
+      'Tempo in Z1–Z5 per settimane e mesi, rispetto al tuo piano';
+
+  @override
+  String hrZoneWindowDays(int count) {
+    return '$count giorni';
+  }
+
+  @override
+  String hrZoneWindowMonths(int count) {
+    return '$count mesi';
+  }
+
+  @override
+  String get hrZoneUnitTime => 'Tempo';
+
+  @override
+  String get hrZoneUnitShare => 'Quota';
+
+  @override
+  String get hrZoneAllSports => 'Tutti gli sport';
+
+  @override
+  String get hrZoneOtherSports => 'Altri sport';
+
+  @override
+  String get hrZoneNoHr => 'Nessuna frequenza cardiaca';
+
+  @override
+  String hrZoneDetail(String hr, String total, int coverage) {
+    return '$hr con frequenza cardiaca su $total di allenamento ($coverage %)';
+  }
+
+  @override
+  String hrZoneWorkouts(int count) {
+    return 'Sessioni: $count';
+  }
+
+  @override
+  String get hrZonePartial => 'Periodo incompleto';
+
+  @override
+  String get hrZoneMixedSports =>
+      'Tutti gli sport insieme: i limiti delle zone variano a seconda dello sport.';
+
+  @override
+  String get hrZoneHistoricalNote =>
+      'Ogni sessione mantiene le zone in vigore al momento della registrazione.';
+
+  @override
+  String get hrZoneEmpty =>
+      'Nessuna sessione con frequenza cardiaca in questo periodo.';
+
+  @override
+  String get hrZoneTapHint => 'Tocca una barra per vedere i tempi esatti.';
+
+  @override
+  String get hrZoneCompareTitle => 'Ultimi 28 giorni rispetto ai 28 precedenti';
+
+  @override
+  String get hrZoneTrainingTime => 'Tempo di allenamento';
+
+  @override
+  String get hrZoneCoverageLabel => 'Copertura della frequenza cardiaca';
+
+  @override
+  String get hrZonePerZone => 'Per zona';
+
+  @override
+  String get hrZoneObservationsNote =>
+      'Osservazioni, non giudizi: il loro significato dipende da obiettivo, fase e recupero.';
+
+  @override
+  String get hrZoneObsInsufficient =>
+      'Troppo poco tempo con frequenza cardiaca in uno dei due periodi per confrontare.';
+
+  @override
+  String hrZoneObsVolumeUp(int pct) {
+    return 'Il tempo di allenamento è aumentato del $pct %.';
+  }
+
+  @override
+  String hrZoneObsVolumeDown(int pct) {
+    return 'Il tempo di allenamento è diminuito del $pct %.';
+  }
+
+  @override
+  String get hrZoneObsVolumeSteady =>
+      'Il tempo di allenamento è rimasto simile.';
+
+  @override
+  String get hrZoneObsHardUpVolumeUp =>
+      'Il tempo in Z4+Z5 è aumentato mentre aumentava anche il tempo totale.';
+
+  @override
+  String get hrZoneObsHardUpVolumeDown =>
+      'Il tempo in Z4+Z5 è aumentato mentre il tempo totale diminuiva.';
+
+  @override
+  String get hrZoneObsHardUpVolumeSteady =>
+      'Il tempo in Z4+Z5 è aumentato con un tempo di allenamento simile.';
+
+  @override
+  String get hrZoneObsHardDown => 'Il tempo in Z4+Z5 è diminuito.';
+
+  @override
+  String get hrZoneObsEasyShareUp =>
+      'Il tempo facile (Z1+Z2) è una quota maggiore del tempo con frequenza cardiaca.';
+
+  @override
+  String get hrZoneObsEasyShareDown =>
+      'Il tempo facile (Z1+Z2) è una quota minore del tempo con frequenza cardiaca.';
+
+  @override
+  String get hrZoneObsMiddleUp => 'Il tempo in Z3 è aumentato.';
+
+  @override
+  String get hrZoneObsMiddleDown => 'Il tempo in Z3 è diminuito.';
+
+  @override
+  String get hrZoneObsCoverage =>
+      'La copertura della frequenza cardiaca differisce tra i periodi: parte di un cambiamento può dipendere da dati mancanti.';
+
+  @override
+  String get hrZonePlanTitle => 'Pianificato e registrato';
+
+  @override
+  String get hrZoneThisWeek => 'Questa settimana';
+
+  @override
+  String get hrZoneLastWeek => 'Settimana scorsa';
+
+  @override
+  String get hrZonePlanned => 'Pianificato';
+
+  @override
+  String get hrZoneRecorded => 'Registrato';
+
+  @override
+  String hrZonePlanCoverage(int comparable, int total) {
+    return 'Confrontabili: $comparable di $total sessioni pianificate';
+  }
+
+  @override
+  String hrZonePlanMissed(int count) {
+    return 'Saltate: $count (escluse dal tempo pianificato)';
+  }
+
+  @override
+  String hrZoneGapPower(int count) {
+    return 'Pianificate a potenza: $count';
+  }
+
+  @override
+  String hrZoneGapPace(int count) {
+    return 'Pianificate a ritmo: $count';
+  }
+
+  @override
+  String hrZoneGapNoHr(int count) {
+    return 'Senza obiettivi di frequenza cardiaca: $count';
+  }
+
+  @override
+  String get hrZonePlanNone =>
+      'Nessuna sessione pianificata confrontabile questa settimana.';
+
+  @override
+  String get hrZoneDeviation => 'Differenza rilevante';
+
+  @override
+  String get hrZonePlanNote =>
+      'Si confrontano solo le sessioni pianificate in zone di frequenza cardiaca; il tempo registrato proviene dagli stessi sport.';
 }
