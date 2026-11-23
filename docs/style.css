@@ -3655,3 +3655,20 @@ body.previews-paused .capture-halo {
   .connection-table tbody th { position: sticky; left: 0; box-shadow: 1px 0 var(--border) }
   .connection-explainer { grid-template-columns: 1fr; gap: 16px; margin-bottom: 30px }
 }
+
+/* Hero, readable (WCAG): one solid headline colour, no gradient text, no
+   colour as emphasis in running text, nothing below 14 px. */
+.hero-copy h1 .accent { display: inline; color: var(--white); background: none; -webkit-text-fill-color: currentColor }
+.hero-copy .hero-sub { max-width: 680px; color: var(--text); font-size: 19px; line-height: 1.6 }
+.hero-copy .hero-sub strong { color: inherit; font-weight: inherit }
+.hero-download .hero-note { font-size: 15px; color: var(--text) }
+.hero-copy .badges { font-size: 15px; color: var(--text); gap: 8px 22px }
+/* The QR code in the hero's top right corner, clear of the text. */
+.hero-layout { position: relative }
+.hero-download, .hero-copy { position: static }
+.hero-qr { position: absolute; top: 0; right: 0; left: auto; width: 104px; font-size: 12px; line-height: 1.35; color: var(--text) }
+.hero-qr img { width: 90px; height: 90px }
+@media(max-width:560px) {
+  .hero-copy .hero-sub { font-size: 16px }
+  .hero-download .hero-note,.hero-copy .badges { font-size: 14px }
+}
