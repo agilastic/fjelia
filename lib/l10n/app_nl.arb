@@ -5419,5 +5419,15 @@
   "hrZoneGapNoHr": "Zonder hartslagdoelen: {count}",
   "hrZonePlanNone": "Geen vergelijkbare geplande trainingen deze week.",
   "hrZoneDeviation": "Duidelijk verschil",
-  "hrZonePlanNote": "Alleen trainingen die in hartslagzones gepland zijn worden vergeleken; de opgenomen tijd komt uit dezelfde sporten."
+  "hrZonePlanNote": "Alleen trainingen die in hartslagzones gepland zijn worden vergeleken; de opgenomen tijd komt uit dezelfde sporten.",
+  "hrZoneBoundsTitle": "Gebruikte zones",
+  "hrZoneHistoryTitle": "Zonegrenzen in de tijd",
+  "hrZoneSince": "vanaf {date}",
+  "hrZoneFromStart": "vanaf het begin",
+  "polarizationEasyShare": "{percent} % rustig",
+  "polarizationZoneTime": "{time} met hartslag",
+  "elevationThisWeek": "{meters} m deze week",
+  "myZones": "Mijn zones",
+  "myZonesHeartRate": "Hartslag",
+  "myZonesPower": "Vermogen"
 }

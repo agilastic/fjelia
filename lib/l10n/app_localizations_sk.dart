@@ -9549,4 +9549,42 @@ class AppLocalizationsSk extends AppLocalizations {
   @override
   String get hrZonePlanNote =>
       'Porovnávajú sa len tréningy plánované v zónach srdcovej frekvencie; zaznamenaný čas pochádza z rovnakých športov.';
+
+  @override
+  String get hrZoneBoundsTitle => 'Použité zóny';
+
+  @override
+  String get hrZoneHistoryTitle => 'Hranice zón v čase';
+
+  @override
+  String hrZoneSince(String date) {
+    return 'od $date';
+  }
+
+  @override
+  String get hrZoneFromStart => 'od začiatku';
+
+  @override
+  String polarizationEasyShare(int percent) {
+    return '$percent % ľahko';
+  }
+
+  @override
+  String polarizationZoneTime(String time) {
+    return '$time so srdcovou frekvenciou';
+  }
+
+  @override
+  String elevationThisWeek(String meters) {
+    return '$meters m tento týždeň';
+  }
+
+  @override
+  String get myZones => 'Moje zóny';
+
+  @override
+  String get myZonesHeartRate => 'Srdcová frekvencia';
+
+  @override
+  String get myZonesPower => 'Výkon';
 }

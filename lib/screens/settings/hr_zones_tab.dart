@@ -4,12 +4,30 @@ import '../../l10n/l10n_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:drift/drift.dart' show Value;
+
+import '../../db/database.dart';
 import '../../providers/hr_zones_provider.dart';
+import '../../providers/planner_providers.dart';
 import '../../providers/hr_zone_autoadjust_provider.dart';
 import '../../providers/lt2_tt_provider.dart';
 import '../../providers/lt1_provider.dart';
 import '../../providers/user_profile_provider.dart';
 import '../../widgets/app_widgets.dart';
+
+/// Saves zones set here, and in the athlete thresholds the plan and the
+/// zone history read: a change made in Settings is a change like any other.
+Future<void> _save(WidgetRef ref, HrZones zones, {required bool bike}) async {
+  final notifier = ref.read(hrZonesProvider.notifier);
+  await (bike ? notifier.saveCycling(zones) : notifier.saveRunning(zones));
+  await ref
+      .read(athleteThresholdsServiceProvider)
+      .save(
+        bike
+            ? AthleteThresholdsCompanion(bikeHrZonesJson: Value(zones.toJson()))
+            : AthleteThresholdsCompanion(runHrZonesJson: Value(zones.toJson())),
+      );
+}
 
 class HrZonesTab extends ConsumerWidget {
   const HrZonesTab({super.key});
@@ -78,15 +96,13 @@ class HrZonesTab extends ConsumerWidget {
                   if (max == null) {
                     throw StateError(tr.notEnoughRecentHeartRate);
                   }
-                  if (bike) {
-                    await ref
-                        .read(hrZonesProvider.notifier)
-                        .saveCycling(HrZones.fromMaxHrCycling(max));
-                  } else {
-                    await ref
-                        .read(hrZonesProvider.notifier)
-                        .saveRunning(HrZones.fromMaxHr(max));
-                  }
+                  await _save(
+                    ref,
+                    bike: bike,
+                    bike
+                        ? HrZones.fromMaxHrCycling(max)
+                        : HrZones.fromMaxHr(max),
+                  );
                 }),
                 child: Text(context.l10n.autoadjust),
               ),
@@ -167,15 +183,7 @@ class HrZonesTab extends ConsumerWidget {
                                 (i < 4 && b[i] >= b[i + 1])) {
                               return;
                             }
-                            if (bike) {
-                              await ref
-                                  .read(hrZonesProvider.notifier)
-                                  .saveCycling(HrZones(b));
-                            } else {
-                              await ref
-                                  .read(hrZonesProvider.notifier)
-                                  .saveRunning(HrZones(b));
-                            }
+                            await _save(ref, bike: bike, HrZones(b));
                           }),
                         ),
                   ],

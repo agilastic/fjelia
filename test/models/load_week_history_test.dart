@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fjelia_service_api/fjelia_service_api.dart';
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/models/load_week_history.dart';
 
@@ -143,4 +144,34 @@ void main() {
     expect(weeks[10].start, DateTime(2026, 12, 27));
     expect(weeks.every((w) => w.activities == 0), isTrue);
   });
+  test(
+    'zone weeks come from the kept summaries; no heart rate is not easy',
+    () {
+      HrZoneWorkout w(String id, DateTime at, List<double> minutes) =>
+          HrZoneWorkout(
+            activityId: id,
+            sport: 'running',
+            start: at,
+            elapsedSeconds: 3600,
+            coveredSeconds: minutes.fold(0.0, (a, b) => a + b) * 60,
+            zoneSeconds: [for (final m in minutes) m * 60],
+            definitionId: 1,
+          );
+      final weeks = buildZoneWeekHistory(
+        through: selected,
+        workouts: [
+          w('mixed', DateTime(2026, 10, 20, 7), [10, 30, 10, 6, 4]),
+          w('no hr', DateTime(2026, 10, 21, 7), [0, 0, 0, 0, 0]),
+          w('too old', DateTime(2026, 9, 1, 7), [60, 0, 0, 0, 0]),
+        ],
+      );
+      expect(weeks, hasLength(5));
+      expect(weeks.last.start, DateTime(2026, 10, 19));
+      expect(weeks.last.activities, 2);
+      expect(weeks.last.activitiesWithZones, 1);
+      expect(weeks.last.zoneMinutes, [40, 10, 10]);
+      expect(weeks.last.easyPercent, closeTo(66.7, .1));
+      expect(weeks.fold<int>(0, (n, w) => n + w.activities), 2);
+    },
+  );
 }

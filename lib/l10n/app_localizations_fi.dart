@@ -9540,4 +9540,42 @@ class AppLocalizationsFi extends AppLocalizations {
   @override
   String get hrZonePlanNote =>
       'Vain sykealueilla suunnitellut harjoitukset verrataan; tallennettu aika tulee samoista lajeista.';
+
+  @override
+  String get hrZoneBoundsTitle => 'Käytetyt alueet';
+
+  @override
+  String get hrZoneHistoryTitle => 'Aluerajat ajan mittaan';
+
+  @override
+  String hrZoneSince(String date) {
+    return '$date alkaen';
+  }
+
+  @override
+  String get hrZoneFromStart => 'alusta alkaen';
+
+  @override
+  String polarizationEasyShare(int percent) {
+    return '$percent % kevyttä';
+  }
+
+  @override
+  String polarizationZoneTime(String time) {
+    return '$time sykkeen kanssa';
+  }
+
+  @override
+  String elevationThisWeek(String meters) {
+    return '$meters m tällä viikolla';
+  }
+
+  @override
+  String get myZones => 'Omat alueet';
+
+  @override
+  String get myZonesHeartRate => 'Syke';
+
+  @override
+  String get myZonesPower => 'Teho';
 }

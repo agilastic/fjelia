@@ -133,6 +133,8 @@ class ActivityHeatCard extends ConsumerWidget {
               final content =
                   28 + 5 + scale.scale(9) * 1.5 + scale.scale(15) * 1.5;
               return GridView(
+                // No safe-area padding of its own: it sits inside other content.
+                padding: EdgeInsets.zero,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   mainAxisSpacing: 8,

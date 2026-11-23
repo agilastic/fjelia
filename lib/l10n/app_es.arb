@@ -4256,5 +4256,15 @@
   "hrZoneGapNoHr": "Sin objetivos de frecuencia cardiaca: {count}",
   "hrZonePlanNone": "No hay sesiones planificadas comparables esta semana.",
   "hrZoneDeviation": "Diferencia notable",
-  "hrZonePlanNote": "Solo se comparan sesiones planificadas en zonas de frecuencia cardiaca; el tiempo registrado procede de los mismos deportes."
+  "hrZonePlanNote": "Solo se comparan sesiones planificadas en zonas de frecuencia cardiaca; el tiempo registrado procede de los mismos deportes.",
+  "hrZoneBoundsTitle": "Zonas usadas",
+  "hrZoneHistoryTitle": "Límites de zona a lo largo del tiempo",
+  "hrZoneSince": "desde el {date}",
+  "hrZoneFromStart": "desde el principio",
+  "polarizationEasyShare": "{percent} % suave",
+  "polarizationZoneTime": "{time} con frecuencia cardíaca",
+  "elevationThisWeek": "{meters} m esta semana",
+  "myZones": "Mis zonas",
+  "myZonesHeartRate": "Frecuencia cardíaca",
+  "myZonesPower": "Potencia"
 }

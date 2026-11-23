@@ -5503,5 +5503,19 @@
   "@hrZoneGapNoHr": {"placeholders": {"count": {"type": "int"}}},
   "hrZonePlanNone": "No comparable planned sessions in this week.",
   "hrZoneDeviation": "Notable difference",
-  "hrZonePlanNote": "Only sessions planned in heart rate zones are compared; recorded time comes from the same sports."
+  "hrZonePlanNote": "Only sessions planned in heart rate zones are compared; recorded time comes from the same sports.",
+  "hrZoneBoundsTitle": "Zones used",
+  "hrZoneHistoryTitle": "Zone limits over time",
+  "hrZoneSince": "from {date}",
+  "@hrZoneSince": {"placeholders": {"date": {"type": "String"}}},
+  "hrZoneFromStart": "from the start",
+  "polarizationEasyShare": "{percent} % easy",
+  "@polarizationEasyShare": {"placeholders": {"percent": {"type": "int"}}},
+  "polarizationZoneTime": "{time} with heart rate",
+  "@polarizationZoneTime": {"placeholders": {"time": {"type": "String"}}},
+  "elevationThisWeek": "{meters} m this week",
+  "@elevationThisWeek": {"placeholders": {"meters": {"type": "String"}}},
+  "myZones": "My zones",
+  "myZonesHeartRate": "Heart rate",
+  "myZonesPower": "Power"
 }

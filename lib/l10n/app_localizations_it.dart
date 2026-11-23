@@ -9559,4 +9559,42 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get hrZonePlanNote =>
       'Si confrontano solo le sessioni pianificate in zone di frequenza cardiaca; il tempo registrato proviene dagli stessi sport.';
+
+  @override
+  String get hrZoneBoundsTitle => 'Zone usate';
+
+  @override
+  String get hrZoneHistoryTitle => 'Limiti delle zone nel tempo';
+
+  @override
+  String hrZoneSince(String date) {
+    return 'dal $date';
+  }
+
+  @override
+  String get hrZoneFromStart => 'dall\'inizio';
+
+  @override
+  String polarizationEasyShare(int percent) {
+    return '$percent % facile';
+  }
+
+  @override
+  String polarizationZoneTime(String time) {
+    return '$time con frequenza cardiaca';
+  }
+
+  @override
+  String elevationThisWeek(String meters) {
+    return '$meters m questa settimana';
+  }
+
+  @override
+  String get myZones => 'Le mie zone';
+
+  @override
+  String get myZonesHeartRate => 'Frequenza cardiaca';
+
+  @override
+  String get myZonesPower => 'Potenza';
 }

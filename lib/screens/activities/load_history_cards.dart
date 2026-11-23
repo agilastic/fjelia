@@ -9,8 +9,9 @@ import '../../models/load_week_history.dart';
 import '../../providers/activity_history_provider.dart';
 import '../../providers/day_data_provider.dart';
 import '../../providers/week_start_provider.dart';
-import '../../providers/hr_zones_provider.dart';
+import '../../providers/hr_zone_trends_provider.dart';
 import '../../widgets/app_widgets.dart';
+import 'hr_zone_trends_sheet.dart';
 import 'load_visuals.dart';
 
 class LoadHistoryCards extends ConsumerWidget {
@@ -19,6 +20,7 @@ class LoadHistoryCards extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    if (polarization) return const _PolarizationCard();
     final selected = ref.watch(selectedDateProvider);
     final mondayFirst = ref.watch(weekStartsOnMondayProvider);
     return ref
@@ -28,12 +30,7 @@ class LoadHistoryCards extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  polarization
-                      ? context.l10n.zonePolarization2
-                      : context.l10n.elevation,
-                  style: loadLabel,
-                ),
+                Text(context.l10n.elevation, style: loadLabel),
                 const SizedBox(height: 16),
                 const LinearProgressIndicator(),
               ],
@@ -46,57 +43,85 @@ class LoadHistoryCards extends ConsumerWidget {
             ),
           ),
           data: (activities) {
-            final zones =
-                polarization && activities.any((a) => a.metricsJson != null)
-                ? ref.watch(hrZonesProvider)
-                : null;
             final weeks = buildLoadWeekHistory(
               through: selected,
               activities: activities,
               mondayFirst: mondayFirst,
-              runningZones: zones?.running.bounds,
-              cyclingZones: zones?.cycling.bounds,
             );
-            if (!polarization) {
-              final elevation = weeks.last.elevation;
-              return LoadCard(
-                accent: const [Color(0xFFC6FF4D), Color(0xFF00D4A0)],
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: GradientTitle(
-                            context.l10n.elevation,
-                            colors: const [
-                              Color(0xFFC6FF4D),
-                              Color(0xFF00D4A0),
-                            ],
-                          ),
+            final elevation = weeks.last.elevation;
+            return LoadCard(
+              accent: const [Color(0xFFC6FF4D), Color(0xFF00D4A0)],
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: GradientTitle(
+                          context.l10n.elevation,
+                          colors: const [Color(0xFFC6FF4D), Color(0xFF00D4A0)],
                         ),
-                        Text(context.l10n.t12WeekHistory, style: loadCaption),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    LoadWeekBars(
-                      dates: [for (final week in weeks) week.start],
-                      values: [for (final week in weeks) week.elevation],
-                      mondayFirst: mondayFirst,
-                    ),
-                    Divider(height: 30, color: fjInk10),
-                    Text(
-                      elevation == 0
-                          ? context.l10n.noElevationThisWeek
-                          : '${valueText(elevation)} m this week',
-                      style: TextStyle(fontSize: 13, color: muted),
-                    ),
-                    const SizedBox(height: 10),
-                  ],
-                ),
-              );
-            }
-            final zoneWeeks = weeks.reversed.take(5).toList();
+                      ),
+                      Text(context.l10n.t12WeekHistory, style: loadCaption),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  LoadWeekBars(
+                    dates: [for (final week in weeks) week.start],
+                    values: [for (final week in weeks) week.elevation],
+                    mondayFirst: mondayFirst,
+                  ),
+                  Divider(height: 30, color: fjInk10),
+                  Text(
+                    elevation == 0
+                        ? context.l10n.noElevationThisWeek
+                        : context.l10n.elevationThisWeek(valueText(elevation)),
+                    style: TextStyle(fontSize: 13, color: muted),
+                  ),
+                  const SizedBox(height: 10),
+                ],
+              ),
+            );
+          },
+        );
+  }
+}
+
+/// Easy, moderate and hard time of the last five weeks, from the kept zone
+/// summaries: each workout with the zones in force when it was done, the
+/// same numbers the FjeliaPro zone trends show.
+class _PolarizationCard extends ConsumerWidget {
+  const _PolarizationCard();
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selected = ref.watch(selectedDateProvider);
+    final mondayFirst = ref.watch(weekStartsOnMondayProvider);
+    return ref
+        .watch(hrZoneWorkoutsProvider)
+        .when(
+          loading: () => LoadCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(context.l10n.zonePolarization2, style: loadLabel),
+                const SizedBox(height: 16),
+                const LinearProgressIndicator(),
+              ],
+            ),
+          ),
+          error: (error, _) => LoadCard(
+            child: DataError(
+              error,
+              retry: () => ref.invalidate(hrZoneWorkoutsProvider),
+            ),
+          ),
+          data: (workouts) {
+            final weeks = buildZoneWeekHistory(
+              through: selected,
+              workouts: workouts,
+              mondayFirst: mondayFirst,
+            );
+            final zoneWeeks = weeks.reversed.toList();
             final recorded = zoneWeeks.fold<int>(
               0,
               (sum, week) => sum + week.activities,
@@ -104,10 +129,6 @@ class LoadHistoryCards extends ConsumerWidget {
             final withZones = zoneWeeks.fold<int>(
               0,
               (sum, week) => sum + week.activitiesWithZones,
-            );
-            final fromSamples = zoneWeeks.fold<int>(
-              0,
-              (sum, week) => sum + week.activitiesFromSamples,
             );
             return LoadCard(
               accent: const [Color(0xFF3EE0FF), Color(0xFF00D4A0)],
@@ -155,15 +176,6 @@ class LoadHistoryCards extends ConsumerWidget {
                     ),
                     style: loadCaption,
                   ),
-                  if (fromSamples > 0) ...[
-                    const SizedBox(height: 5),
-                    Text(
-                      context.l10n.fromsamplesReconstructedFromRecordedHr(
-                        fromSamples,
-                      ),
-                      style: loadCaption,
-                    ),
-                  ],
                   const SizedBox(height: 5),
                   Text(context.l10n.easyZ12ModerateZ3, style: loadCaption),
                   if (withZones < recorded) ...[
@@ -173,6 +185,10 @@ class LoadHistoryCards extends ConsumerWidget {
                       style: loadCaption,
                     ),
                   ],
+                  // FjeliaPro: the same zone time over months, by zone and
+                  // sport, against the plan.
+                  const SizedBox(height: 12),
+                  const HrZoneTrendsTile(),
                 ],
               ),
             );
@@ -195,16 +211,22 @@ class _ZoneWeekRow extends StatelessWidget {
     final easy = week.easyPercent;
     final end = DateTime(week.start.year, week.start.month, week.start.day + 6);
     final label = 'W${loadWeekNumber(week.start, mondayFirst: mondayFirst)}';
-    final coverage =
-        '${week.activitiesWithZones} of ${week.activities} activities with HR-zone data';
+    final l = context.l10n;
+    final coverage = l.withzonesOfRecordedActivitiesWith(
+      week.activitiesWithZones,
+      week.activities,
+    );
     final status = week.activities == 0
         ? context.l10n.noActivitiesSynced
         : context.l10n.noHrZoneData;
-    final recordedTime = week.classifiedMinutes < 1
-        ? '${(week.classifiedMinutes * 60).round()} sec'
-        : '${week.classifiedMinutes.round()} min';
-    final description =
-        '${loadDate(week.start)} – ${loadDate(end)} · $coverage${easy == null ? '' : ' · ${easy.round()}% easy · $recordedTime recorded zone time'}';
+    final description = [
+      '${loadDate(week.start)} – ${loadDate(end)}',
+      coverage,
+      if (easy != null) ...[
+        l.polarizationEasyShare(easy.round()),
+        l.polarizationZoneTime(hrZoneDuration(week.classifiedMinutes * 60)),
+      ],
+    ].join(' · ');
     const colors = [loadBlue, Color(0xFFFFCC00), loadRed];
     return Tooltip(
       message: description,

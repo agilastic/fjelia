@@ -9575,4 +9575,42 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get hrZonePlanNote =>
       'Només es comparen les sessions planificades en zones de freqüència cardíaca; el temps registrat prové dels mateixos esports.';
+
+  @override
+  String get hrZoneBoundsTitle => 'Zones utilitzades';
+
+  @override
+  String get hrZoneHistoryTitle => 'Límits de zona al llarg del temps';
+
+  @override
+  String hrZoneSince(String date) {
+    return 'des del $date';
+  }
+
+  @override
+  String get hrZoneFromStart => 'des del principi';
+
+  @override
+  String polarizationEasyShare(int percent) {
+    return '$percent % suau';
+  }
+
+  @override
+  String polarizationZoneTime(String time) {
+    return '$time amb freqüència cardíaca';
+  }
+
+  @override
+  String elevationThisWeek(String meters) {
+    return '$meters m aquesta setmana';
+  }
+
+  @override
+  String get myZones => 'Les meves zones';
+
+  @override
+  String get myZonesHeartRate => 'Freqüència cardíaca';
+
+  @override
+  String get myZonesPower => 'Potència';
 }

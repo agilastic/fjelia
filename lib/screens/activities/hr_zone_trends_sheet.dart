@@ -8,7 +8,9 @@ import 'package:intl/intl.dart';
 
 import '../../l10n/l10n_ext.dart';
 import '../../providers/fjelia_edition_provider.dart';
+import '../../db/database.dart';
 import '../../providers/hr_zone_trends_provider.dart';
+import '../../services/hr_zone_summary_service.dart';
 import '../settings/fjelia_pro_sheet.dart';
 import '../../theme/fjelia_style.dart';
 import '../../widgets/app_widgets.dart';
@@ -36,6 +38,17 @@ String hrZoneDuration(double seconds) {
 String _signed(double seconds) =>
     '${seconds >= 0 ? '+' : '−'}${hrZoneDuration(seconds.abs())}';
 
+/// "Z1 < 130 · Z2 130–144 · Z3 145–159 · Z4 160–169 · Z5 ≥ 170 bpm".
+String hrZoneLimits(String floorsJson) {
+  final f = HrZoneSummaryService.floorsOf(floorsJson);
+  if (f == null) return '—';
+  return [
+    'Z1 < ${f[1]}',
+    for (var z = 2; z <= 4; z++) 'Z$z ${f[z - 1]}–${f[z] - 1}',
+    'Z5 ≥ ${f[4]} bpm',
+  ].join(' · ');
+}
+
 String _relative(double? r) =>
     r == null ? '—' : '${r >= 0 ? '+' : '−'}${(r.abs() * 100).round()} %';
 
@@ -55,6 +68,28 @@ class _HrZoneTrendsSheetState extends ConsumerState<HrZoneTrendsSheet> {
   int? _selected;
   bool _perZone = false;
   String _planWeek = 'this';
+  List<HrZoneDefinition> _definitions = const [];
+
+  /// The definitions [workouts] were computed with, oldest first.
+  List<HrZoneDefinition> _used(Iterable<HrZoneWorkout> workouts) {
+    final ids = {for (final w in workouts) w.definitionId};
+    return [
+      for (final d in _definitions)
+        if (ids.contains(d.id)) d,
+    ];
+  }
+
+  String _since(HrZoneDefinition d) =>
+      d.effectiveFrom.millisecondsSinceEpoch <= 0
+      ? context.l10n.hrZoneFromStart
+      : context.l10n.hrZoneSince(DateFormat.yMMMd().format(d.effectiveFrom));
+
+  bool _inPeriod(HrZoneWorkout w, HrZonePeriod p) {
+    final d = DateTime(w.start.year, w.start.month, w.start.day);
+    return (_sport == null || w.sport == _sport) &&
+        !d.isBefore(p.start) &&
+        d.isBefore(p.end);
+  }
 
   DateTime get _today {
     final n = DateTime.now();
@@ -99,6 +134,7 @@ class _HrZoneTrendsSheetState extends ConsumerState<HrZoneTrendsSheet> {
     final l = context.l10n;
     final workouts = ref.watch(hrZoneWorkoutsProvider);
     final planned = ref.watch(hrZonePlannedProvider).valueOrNull ?? const [];
+    _definitions = ref.watch(hrZoneDefinitionsProvider).valueOrNull ?? const [];
     return LoadSheet(
       close: true,
       title: l.hrZoneTrendsTitle,
@@ -188,7 +224,19 @@ class _HrZoneTrendsSheetState extends ConsumerState<HrZoneTrendsSheet> {
           Text(l.hrZoneTapHint, style: loadCaption),
           if (selected >= 0) ...[
             const SizedBox(height: 12),
-            _PeriodDetail(period: periods[selected], grouping: r.grouping),
+            _PeriodDetail(
+              period: periods[selected],
+              grouping: r.grouping,
+              limits: [
+                for (final d in _used(
+                  all.where((w) => _inPeriod(w, periods[selected])),
+                ))
+                  (
+                    '${_sportName(d.sport)}, ${_since(d)}',
+                    hrZoneLimits(d.floorsJson),
+                  ),
+              ],
+            ),
           ],
         ],
         const SizedBox(height: 16),
@@ -202,6 +250,19 @@ class _HrZoneTrendsSheetState extends ConsumerState<HrZoneTrendsSheet> {
           week: _planWeek,
           onWeek: (w) => setState(() => _planWeek = w),
           comparison: _planComparison(all, planned),
+        ),
+        const SizedBox(height: 16),
+        _LimitsHistory(
+          rows: [
+            for (final d in _definitions.reversed)
+              if (_sport == null ||
+                  d.sport == _sport ||
+                  (_sport == 'other' && d.sport == 'running'))
+                (
+                  '${_sportName(d.sport)}, ${_since(d)}',
+                  hrZoneLimits(d.floorsJson),
+                ),
+          ],
         ),
         const SizedBox(height: 16),
         Text(l.hrZoneHistoricalNote, style: loadCaption),
@@ -473,8 +534,58 @@ class _Chart extends StatelessWidget {
   }
 }
 
+/// The zone limits per sport and since when, newest first.
+class _LimitsHistory extends StatelessWidget {
+  const _LimitsHistory({required this.rows});
+  final List<(String, String)> rows;
+  @override
+  Widget build(BuildContext context) {
+    if (rows.isEmpty) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: LoadCard(
+        title: context.l10n.hrZoneHistoryTitle,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [for (final row in rows) _LimitsRow(row)],
+        ),
+      ),
+    );
+  }
+}
+
+class _LimitsRow extends StatelessWidget {
+  const _LimitsRow(this.row);
+  final (String, String) row;
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(bottom: 8),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          row.$1,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: fjInk,
+          ),
+        ),
+        Text(row.$2, style: loadCaption),
+      ],
+    ),
+  );
+}
+
 class _PeriodDetail extends StatelessWidget {
-  const _PeriodDetail({required this.period, required this.grouping});
+  const _PeriodDetail({
+    required this.period,
+    required this.grouping,
+    this.limits = const [],
+  });
+
+  /// The zone limits the period's workouts were computed with.
+  final List<(String, String)> limits;
   final HrZonePeriod period;
   final HrZoneGrouping grouping;
 
@@ -527,6 +638,12 @@ class _PeriodDetail extends StatelessWidget {
           Text(l.hrZoneWorkouts(t.workouts), style: loadCaption),
           if (period.partial) Text(l.hrZonePartial, style: loadCaption),
           if (t.mixedSports) Text(l.hrZoneMixedSports, style: loadCaption),
+          if (limits.isNotEmpty) ...[
+            const SizedBox(height: 10),
+            Text(l.hrZoneBoundsTitle, style: loadLabel.copyWith(fontSize: 10)),
+            const SizedBox(height: 4),
+            for (final row in limits) _LimitsRow(row),
+          ],
         ],
       ),
     );

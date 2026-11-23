@@ -137,6 +137,25 @@ void main() {
     expect([for (final w in await service.workouts()) w.activityId], ['watch']);
   });
 
+  test('a deleted recording leaves its partner counted again', () async {
+    await setZones([100, 130, 145, 160, 170]);
+    await run('watch', start, minutes: 60, bpm: (_) => 140);
+    await run(
+      'phone',
+      start.add(const Duration(minutes: 2)),
+      minutes: 55,
+      recordedMinutes: 30,
+      bpm: (_) => 140,
+    );
+    await service.update();
+    await (db.delete(
+      db.activityRecords,
+    )..where((t) => t.activityId.equals('watch'))).go();
+    // Nothing new to compute: the duplicates are still looked at again.
+    expect(await service.update(), 0);
+    expect([for (final w in await service.workouts()) w.activityId], ['phone']);
+  });
+
   test('no zones yet: nothing is guessed', () async {
     await run('a', start, minutes: 60, bpm: (_) => 140);
     expect(await service.update(), 0);

@@ -5419,5 +5419,15 @@
   "hrZoneGapNoHr": "Bez celów tętna: {count}",
   "hrZonePlanNone": "Brak porównywalnych zaplanowanych treningów w tym tygodniu.",
   "hrZoneDeviation": "Wyraźna różnica",
-  "hrZonePlanNote": "Porównywane są tylko treningi zaplanowane w strefach tętna; zapisany czas pochodzi z tych samych sportów."
+  "hrZonePlanNote": "Porównywane są tylko treningi zaplanowane w strefach tętna; zapisany czas pochodzi z tych samych sportów.",
+  "hrZoneBoundsTitle": "Użyte strefy",
+  "hrZoneHistoryTitle": "Granice stref w czasie",
+  "hrZoneSince": "od {date}",
+  "hrZoneFromStart": "od początku",
+  "polarizationEasyShare": "{percent} % łatwo",
+  "polarizationZoneTime": "{time} z tętnem",
+  "elevationThisWeek": "{meters} m w tym tygodniu",
+  "myZones": "Moje strefy",
+  "myZonesHeartRate": "Tętno",
+  "myZonesPower": "Moc"
 }

@@ -9572,4 +9572,42 @@ class AppLocalizationsNl extends AppLocalizations {
   @override
   String get hrZonePlanNote =>
       'Alleen trainingen die in hartslagzones gepland zijn worden vergeleken; de opgenomen tijd komt uit dezelfde sporten.';
+
+  @override
+  String get hrZoneBoundsTitle => 'Gebruikte zones';
+
+  @override
+  String get hrZoneHistoryTitle => 'Zonegrenzen in de tijd';
+
+  @override
+  String hrZoneSince(String date) {
+    return 'vanaf $date';
+  }
+
+  @override
+  String get hrZoneFromStart => 'vanaf het begin';
+
+  @override
+  String polarizationEasyShare(int percent) {
+    return '$percent % rustig';
+  }
+
+  @override
+  String polarizationZoneTime(String time) {
+    return '$time met hartslag';
+  }
+
+  @override
+  String elevationThisWeek(String meters) {
+    return '$meters m deze week';
+  }
+
+  @override
+  String get myZones => 'Mijn zones';
+
+  @override
+  String get myZonesHeartRate => 'Hartslag';
+
+  @override
+  String get myZonesPower => 'Vermogen';
 }

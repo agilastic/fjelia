@@ -4256,5 +4256,15 @@
   "hrZoneGapNoHr": "Uden pulsmål: {count}",
   "hrZonePlanNone": "Ingen sammenlignelige planlagte træninger i denne uge.",
   "hrZoneDeviation": "Tydelig forskel",
-  "hrZonePlanNote": "Kun træninger planlagt i pulszoner sammenlignes; den optagne tid kommer fra de samme sportsgrene."
+  "hrZonePlanNote": "Kun træninger planlagt i pulszoner sammenlignes; den optagne tid kommer fra de samme sportsgrene.",
+  "hrZoneBoundsTitle": "Brugte zoner",
+  "hrZoneHistoryTitle": "Zonegrænser over tid",
+  "hrZoneSince": "fra {date}",
+  "hrZoneFromStart": "fra starten",
+  "polarizationEasyShare": "{percent} % let",
+  "polarizationZoneTime": "{time} med puls",
+  "elevationThisWeek": "{meters} m denne uge",
+  "myZones": "Mine zoner",
+  "myZonesHeartRate": "Puls",
+  "myZonesPower": "Watt"
 }

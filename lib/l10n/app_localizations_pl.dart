@@ -9604,4 +9604,42 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String get hrZonePlanNote =>
       'Porównywane są tylko treningi zaplanowane w strefach tętna; zapisany czas pochodzi z tych samych sportów.';
+
+  @override
+  String get hrZoneBoundsTitle => 'Użyte strefy';
+
+  @override
+  String get hrZoneHistoryTitle => 'Granice stref w czasie';
+
+  @override
+  String hrZoneSince(String date) {
+    return 'od $date';
+  }
+
+  @override
+  String get hrZoneFromStart => 'od początku';
+
+  @override
+  String polarizationEasyShare(int percent) {
+    return '$percent % łatwo';
+  }
+
+  @override
+  String polarizationZoneTime(String time) {
+    return '$time z tętnem';
+  }
+
+  @override
+  String elevationThisWeek(String meters) {
+    return '$meters m w tym tygodniu';
+  }
+
+  @override
+  String get myZones => 'Moje strefy';
+
+  @override
+  String get myZonesHeartRate => 'Tętno';
+
+  @override
+  String get myZonesPower => 'Moc';
 }

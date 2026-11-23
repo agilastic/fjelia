@@ -25,6 +25,19 @@ final hrZoneWorkoutsProvider = FutureProvider.autoDispose<List<HrZoneWorkout>>((
   return service.workouts(since: since);
 });
 
+/// The athlete's zone definitions per sport, oldest first: the bpm limits
+/// each workout was computed with.
+final hrZoneDefinitionsProvider =
+    FutureProvider.autoDispose<List<HrZoneDefinition>>((ref) async {
+      ref.watch(hrZoneWorkoutsProvider);
+      final db = ref.watch(databaseProvider);
+      return (db.select(db.hrZoneDefinitions)..orderBy([
+            (t) => OrderingTerm.asc(t.effectiveFrom),
+            (t) => OrderingTerm.asc(t.id),
+          ]))
+          .get();
+    });
+
 /// The plan's sessions as the planned-against-recorded comparison sees them.
 final hrZonePlannedProvider =
     FutureProvider.autoDispose<List<PlannedZoneSession>>((ref) async {

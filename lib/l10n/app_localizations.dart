@@ -16437,6 +16437,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Only sessions planned in heart rate zones are compared; recorded time comes from the same sports.'**
   String get hrZonePlanNote;
+
+  /// No description provided for @hrZoneBoundsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Zones used'**
+  String get hrZoneBoundsTitle;
+
+  /// No description provided for @hrZoneHistoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Zone limits over time'**
+  String get hrZoneHistoryTitle;
+
+  /// No description provided for @hrZoneSince.
+  ///
+  /// In en, this message translates to:
+  /// **'from {date}'**
+  String hrZoneSince(String date);
+
+  /// No description provided for @hrZoneFromStart.
+  ///
+  /// In en, this message translates to:
+  /// **'from the start'**
+  String get hrZoneFromStart;
+
+  /// No description provided for @polarizationEasyShare.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent} % easy'**
+  String polarizationEasyShare(int percent);
+
+  /// No description provided for @polarizationZoneTime.
+  ///
+  /// In en, this message translates to:
+  /// **'{time} with heart rate'**
+  String polarizationZoneTime(String time);
+
+  /// No description provided for @elevationThisWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'{meters} m this week'**
+  String elevationThisWeek(String meters);
+
+  /// No description provided for @myZones.
+  ///
+  /// In en, this message translates to:
+  /// **'My zones'**
+  String get myZones;
+
+  /// No description provided for @myZonesHeartRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Heart rate'**
+  String get myZonesHeartRate;
+
+  /// No description provided for @myZonesPower.
+  ///
+  /// In en, this message translates to:
+  /// **'Power'**
+  String get myZonesPower;
 }
 
 class _AppLocalizationsDelegate

@@ -4256,5 +4256,15 @@
   "hrZoneGapNoHr": "Ilman sykettä tavoitteena: {count}",
   "hrZonePlanNone": "Ei vertailukelpoisia suunniteltuja harjoituksia tällä viikolla.",
   "hrZoneDeviation": "Selvä ero",
-  "hrZonePlanNote": "Vain sykealueilla suunnitellut harjoitukset verrataan; tallennettu aika tulee samoista lajeista."
+  "hrZonePlanNote": "Vain sykealueilla suunnitellut harjoitukset verrataan; tallennettu aika tulee samoista lajeista.",
+  "hrZoneBoundsTitle": "Käytetyt alueet",
+  "hrZoneHistoryTitle": "Aluerajat ajan mittaan",
+  "hrZoneSince": "{date} alkaen",
+  "hrZoneFromStart": "alusta alkaen",
+  "polarizationEasyShare": "{percent} % kevyttä",
+  "polarizationZoneTime": "{time} sykkeen kanssa",
+  "elevationThisWeek": "{meters} m tällä viikolla",
+  "myZones": "Omat alueet",
+  "myZonesHeartRate": "Syke",
+  "myZonesPower": "Teho"
 }

@@ -221,6 +221,8 @@ class ConnectDevicesScreen extends ConsumerWidget {
           final content =
               38 + 40 + 8 + scale.scale(14) * 1.5 + 2 + scale.scale(11) * 3;
           return GridView(
+            // No safe-area padding of its own: it sits inside other content.
+            padding: EdgeInsets.zero,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

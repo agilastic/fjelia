@@ -1,3 +1,4 @@
+import 'package:fjelia/db/database.dart';
 import 'package:fjelia/l10n/app_localizations.dart';
 import 'package:fjelia/providers/fjelia_edition_provider.dart';
 import 'package:fjelia/providers/hr_zone_trends_provider.dart';
@@ -42,6 +43,28 @@ void main() {
             ],
           ),
           hrZonePlannedProvider.overrideWith((ref) async => const []),
+          hrZoneDefinitionsProvider.overrideWith(
+            (ref) async => [
+              HrZoneDefinition(
+                id: 1,
+                sport: 'running',
+                floorsJson: '[100,130,145,160,170]',
+                method: 'initial',
+                unit: 'bpm',
+                source: 'athlete_thresholds',
+                effectiveFrom: DateTime.fromMillisecondsSinceEpoch(0),
+              ),
+              HrZoneDefinition(
+                id: 2,
+                sport: 'running',
+                floorsJson: '[100,128,142,156,168]',
+                method: 'settings',
+                unit: 'bpm',
+                source: 'athlete_thresholds',
+                effectiveFrom: DateTime(2026, 11, 1),
+              ),
+            ],
+          ),
         ],
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -97,6 +120,26 @@ void main() {
       find.text('No comparable planned sessions in this week.'),
       300,
       scrollable: list.first,
+    );
+    // The bpm limits change over time: both are listed with their dates.
+    await tester.scrollUntilVisible(
+      find.text('ZONE LIMITS OVER TIME'),
+      300,
+      scrollable: list.first,
+    );
+    expect(
+      find.text(
+        'Z1 < 128 · Z2 128–141 · Z3 142–155 · Z4 156–167 · Z5 ≥ 168 bpm',
+      ),
+      findsOneWidget,
+    );
+    expect(find.text('Running, from the start'), findsWidgets);
+    // The selected week names the limits its workouts were computed with.
+    expect(
+      find.text(
+        'Z1 < 130 · Z2 130–144 · Z3 145–159 · Z4 160–169 · Z5 ≥ 170 bpm',
+      ),
+      findsWidgets,
     );
   });
 }

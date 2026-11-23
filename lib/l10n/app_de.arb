@@ -4285,5 +4285,19 @@
   "@hrZoneGapNoHr": {"placeholders": {"count": {"type": "int"}}},
   "hrZonePlanNone": "Keine vergleichbaren geplanten Einheiten in dieser Woche.",
   "hrZoneDeviation": "Deutlicher Unterschied",
-  "hrZonePlanNote": "Verglichen werden nur Einheiten, die in Herzfrequenzzonen geplant sind; die aufgezeichnete Zeit stammt aus denselben Sportarten."
+  "hrZonePlanNote": "Verglichen werden nur Einheiten, die in Herzfrequenzzonen geplant sind; die aufgezeichnete Zeit stammt aus denselben Sportarten.",
+  "hrZoneBoundsTitle": "Verwendete Zonen",
+  "hrZoneHistoryTitle": "Zonengrenzen im Verlauf",
+  "hrZoneSince": "ab {date}",
+  "@hrZoneSince": {"placeholders": {"date": {"type": "String"}}},
+  "hrZoneFromStart": "von Beginn an",
+  "polarizationEasyShare": "{percent} % leicht",
+  "@polarizationEasyShare": {"placeholders": {"percent": {"type": "int"}}},
+  "polarizationZoneTime": "{time} mit Herzfrequenz",
+  "@polarizationZoneTime": {"placeholders": {"time": {"type": "String"}}},
+  "elevationThisWeek": "{meters} m diese Woche",
+  "@elevationThisWeek": {"placeholders": {"meters": {"type": "String"}}},
+  "myZones": "Meine Zonen",
+  "myZonesHeartRate": "Herzfrequenz",
+  "myZonesPower": "Leistung"
 }

@@ -57,21 +57,38 @@ class HrZoneSummaryService {
   Future<int> update({DateTime? since}) async {
     final definitions = await _db.select(_db.hrZoneDefinitions).get();
     if (definitions.isEmpty) return 0;
-    final existing = {
-      for (final s in await _db.select(_db.hrZoneSummaries).get())
-        s.activityId: s,
+    final current = {
+      for (final row
+          in await (_db.selectOnly(_db.hrZoneSummaries)
+                ..addColumns([_db.hrZoneSummaries.activityId])
+                ..where(
+                  _db.hrZoneSummaries.algorithmVersion.equals(algorithmVersion),
+                ))
+              .get())
+        row.read(_db.hrZoneSummaries.activityId)!,
     };
-    final activities =
-        await (_db.select(_db.activityRecords)..where(
-              (t) => since == null
-                  ? const Constant(true)
-                  : t.startDate.isBiggerOrEqualValue(since),
-            ))
-            .get();
+    // Ids and types first: the samples are read only for what is missing.
+    final a0 = _db.activityRecords;
+    final candidates = _db.selectOnly(a0)
+      ..addColumns([a0.activityId, a0.type, a0.durationSeconds]);
+    if (since != null) {
+      candidates.where(a0.startDate.isBiggerOrEqualValue(since));
+    }
+    final missing = [
+      for (final row in await candidates.get())
+        if (!current.contains(row.read(a0.activityId)) &&
+            sportFamily(row.read(a0.type)!) != null &&
+            (row.read(a0.durationSeconds) ?? 0) > 0)
+          row.read(a0.activityId)!,
+    ];
+    final activities = [
+      for (var i = 0; i < missing.length; i += 200)
+        ...await (_db.select(
+          _db.activityRecords,
+        )..where((t) => t.activityId.isIn(missing.skip(i).take(200)))).get(),
+    ];
     var computed = 0;
     for (final a in activities) {
-      final known = existing[a.activityId];
-      if (known != null && known.algorithmVersion == algorithmVersion) continue;
       final family = sportFamily(a.type);
       if (family == null || a.durationSeconds <= 0) continue;
       final definition = definitionAt(
@@ -80,7 +97,7 @@ class HrZoneSummaryService {
         a.startDate,
       );
       if (definition == null) continue;
-      final floors = _floors(definition.floorsJson);
+      final floors = floorsOf(definition.floorsJson);
       if (floors == null) continue;
       final samples = await _samplesOf(a);
       final zones = zoneTime(
@@ -129,7 +146,7 @@ class HrZoneSummaryService {
   }
 
   /// Five lower bounds, also from the older four upper bounds of Z1–Z4.
-  static List<int>? _floors(String json) {
+  static List<int>? floorsOf(String json) {
     try {
       final v = [for (final x in jsonDecode(json) as List) (x as num).round()];
       if (v.length >= 5) return v.sublist(0, 5);
@@ -209,11 +226,14 @@ class HrZoneSummaryService {
     return [for (final s in use) (s.measuredAt, s.bpm)];
   }
 
-  /// Marks the weaker of two overlapping recordings of one workout.
+  /// Marks the weaker of two overlapping recordings of one workout; a
+  /// deleted recording leaves its partner counted again.
   Future<void> _markDuplicates() async {
-    final rows = await (_db.select(
-      _db.hrZoneSummaries,
-    )..orderBy([(t) => OrderingTerm.asc(t.startDate)])).get();
+    final rows =
+        await (_db.select(_db.hrZoneSummaries)
+              ..where((t) => t.activityId.isInQuery(_existing()))
+              ..orderBy([(t) => OrderingTerm.asc(t.startDate)]))
+            .get();
     final duplicate = <String>{};
     for (var i = 0; i < rows.length; i++) {
       final a = rows[i];
@@ -244,35 +264,35 @@ class HrZoneSummaryService {
     }
   }
 
+  /// The ids of the activities that still exist.
+  BaseSelectStatement _existing() =>
+      _db.selectOnly(_db.activityRecords)
+        ..addColumns([_db.activityRecords.activityId]);
+
   /// The kept summaries as the trends read them: no duplicates and no
   /// workouts deleted since.
   Future<List<HrZoneWorkout>> workouts({DateTime? since}) async {
-    final query = _db.select(_db.hrZoneSummaries).join([
-      innerJoin(
-        _db.activityRecords,
-        _db.activityRecords.activityId.equalsExp(
-          _db.hrZoneSummaries.activityId,
-        ),
-      ),
-    ])..where(_db.hrZoneSummaries.duplicate.equals(false));
+    final query = _db.select(_db.hrZoneSummaries)
+      ..where(
+        (t) => t.duplicate.equals(false) & t.activityId.isInQuery(_existing()),
+      );
     if (since != null) {
-      query.where(_db.hrZoneSummaries.startDate.isBiggerOrEqualValue(since));
+      query.where((t) => t.startDate.isBiggerOrEqualValue(since));
     }
     return [
-      for (final row in await query.get())
-        if (row.readTable(_db.hrZoneSummaries) case final s)
-          HrZoneWorkout(
-            activityId: s.activityId,
-            sport: s.sport,
-            start: s.startDate.toLocal(),
-            elapsedSeconds: s.elapsedSeconds,
-            coveredSeconds: s.coveredSeconds,
-            zoneSeconds: [
-              for (final x in jsonDecode(s.zoneSecondsJson) as List)
-                (x as num).toDouble(),
-            ],
-            definitionId: s.definitionId,
-          ),
+      for (final s in await query.get())
+        HrZoneWorkout(
+          activityId: s.activityId,
+          sport: s.sport,
+          start: s.startDate.toLocal(),
+          elapsedSeconds: s.elapsedSeconds,
+          coveredSeconds: s.coveredSeconds,
+          zoneSeconds: [
+            for (final x in jsonDecode(s.zoneSecondsJson) as List)
+              (x as num).toDouble(),
+          ],
+          definitionId: s.definitionId,
+        ),
     ];
   }
 }

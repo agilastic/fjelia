@@ -9,12 +9,18 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:fjelia/db/database.dart';
-import 'package:fjelia/providers/activity_history_provider.dart';
+import 'package:fjelia/providers/fjelia_edition_provider.dart';
+import 'package:fjelia/providers/hr_zone_trends_provider.dart';
+import 'package:fjelia_service_api/fjelia_service_api.dart';
 import 'package:fjelia/providers/day_data_provider.dart';
 import 'package:fjelia/providers/week_start_provider.dart';
 import 'package:fjelia/screens/activities/load_history_cards.dart';
 import 'package:fjelia/theme/app_theme.dart';
+
+class _Free implements FjeliaEdition {
+  @override
+  final bool isPro = false, proOffered = false;
+}
 
 void main() {
   setUpAll(() async {
@@ -32,23 +38,26 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
-    ActivityRecord a(String id, DateTime at, String? zones) => ActivityRecord(
-      id: 0,
-      activityId: id,
-      name: id,
-      type: 'running',
-      startDate: at,
-      durationSeconds: 3600,
-      hrZonesJson: zones,
-    );
+    // Minutes in Z1–Z5 from the kept summaries; none: no heart rate.
+    HrZoneWorkout a(String id, DateTime at, List<double> minutes) =>
+        HrZoneWorkout(
+          activityId: id,
+          sport: 'running',
+          start: at,
+          elapsedSeconds: 3600,
+          coveredSeconds: minutes.fold(0.0, (x, y) => x + y) * 60,
+          zoneSeconds: [for (final m in minutes) m * 60],
+          definitionId: 1,
+        );
     final key = GlobalKey();
-    final ready = Completer<List<ActivityRecord>>();
+    final ready = Completer<List<HrZoneWorkout>>();
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
           selectedDateProvider.overrideWith((ref) => DateTime(2026, 10, 25)),
           weekStartsOnMondayProvider.overrideWithValue(true),
-          loadActivitiesProvider.overrideWith((ref) => ready.future),
+          hrZoneWorkoutsProvider.overrideWith((ref) => ready.future),
+          fjeliaEditionProvider.overrideWithValue(_Free()),
         ],
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -70,10 +79,10 @@ void main() {
     expect(find.byType(LinearProgressIndicator), findsOneWidget);
     expect(find.text('No activities synced'), findsNothing);
     ready.complete([
-      a('current', DateTime(2026, 10, 25), '{"zone2":90,"zone4":10}'),
-      a('last', DateTime(2026, 10, 14), '{"zone2":70,"zone3":10,"zone4":20}'),
-      a('missing', DateTime(2026, 10, 7), null),
-      a('older', DateTime(2026, 8, 26), '{"zone2":100}'),
+      a('current', DateTime(2026, 10, 25), [0, 54, 0, 6, 0]),
+      a('last', DateTime(2026, 10, 14), [0, 42, 6, 12, 0]),
+      a('missing', DateTime(2026, 10, 7), [0, 0, 0, 0, 0]),
+      a('older', DateTime(2026, 8, 26), [0, 60, 0, 0, 0]),
     ]);
     await tester.pumpAndSettle();
     for (final label in ['W43', 'W42', 'W41', 'W40', 'W39']) {
@@ -96,8 +105,9 @@ void main() {
         final image = await boundary.toImage(pixelRatio: 2);
         final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
         await Directory(output).create(recursive: true);
-        await File('$output/polarization.png')
-            .writeAsBytes(bytes!.buffer.asUint8List());
+        await File(
+          '$output/polarization.png',
+        ).writeAsBytes(bytes!.buffer.asUint8List());
         image.dispose();
       });
     }

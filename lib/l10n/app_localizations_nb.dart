@@ -9504,4 +9504,42 @@ class AppLocalizationsNb extends AppLocalizations {
   @override
   String get hrZonePlanNote =>
       'Bare økter planlagt i pulssoner sammenlignes; den registrerte tiden kommer fra de samme idrettene.';
+
+  @override
+  String get hrZoneBoundsTitle => 'Brukte soner';
+
+  @override
+  String get hrZoneHistoryTitle => 'Sonegrenser over tid';
+
+  @override
+  String hrZoneSince(String date) {
+    return 'fra $date';
+  }
+
+  @override
+  String get hrZoneFromStart => 'fra starten';
+
+  @override
+  String polarizationEasyShare(int percent) {
+    return '$percent % lett';
+  }
+
+  @override
+  String polarizationZoneTime(String time) {
+    return '$time med puls';
+  }
+
+  @override
+  String elevationThisWeek(String meters) {
+    return '$meters m denne uken';
+  }
+
+  @override
+  String get myZones => 'Mine soner';
+
+  @override
+  String get myZonesHeartRate => 'Puls';
+
+  @override
+  String get myZonesPower => 'Watt';
 }

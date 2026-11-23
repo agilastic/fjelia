@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:fjelia_service_api/fjelia_service_api.dart';
+
 import '../db/database.dart';
 import '../utils/week.dart';
 import '../services/hr_zone_model.dart';
@@ -92,6 +94,40 @@ List<LoadWeekHistory> buildLoadWeekHistory({
           activity.durationSeconds / 60 * zones[i] / 100;
     }
     week.activitiesWithZones++;
+  }
+  return weeks.values.toList();
+}
+
+/// The last [count] weeks, oldest first, from the kept zone summaries: each
+/// workout with the zones in force when it was done, never today's. A
+/// workout without heart rate counts as recorded, not as easy.
+List<LoadWeekHistory> buildZoneWeekHistory({
+  required DateTime through,
+  required Iterable<HrZoneWorkout> workouts,
+  bool mondayFirst = true,
+  int count = 5,
+}) {
+  final last = weekStartOf(through, mondayFirst: mondayFirst);
+  final weeks = {
+    for (var i = count - 1; i >= 0; i--)
+      DateTime(last.year, last.month, last.day - i * 7): LoadWeekHistory(
+        DateTime(last.year, last.month, last.day - i * 7),
+      ),
+  };
+  for (final w in workouts) {
+    final week = weeks[weekStartOf(w.start, mondayFirst: mondayFirst)];
+    if (week == null) continue;
+    week.activities++;
+    if (w.coveredSeconds <= 0) continue;
+    week.activitiesWithZones++;
+    for (var i = 0; i < w.zoneSeconds.length; i++) {
+      week.zoneMinutes[i < 2
+              ? 0
+              : i == 2
+              ? 1
+              : 2] +=
+          w.zoneSeconds[i] / 60;
+    }
   }
   return weeks.values.toList();
 }
