@@ -101,7 +101,9 @@ class HealthMonitorGrid extends ConsumerWidget {
                       },
                       higherIsBetter: const {'hrv', 'spo2'}.contains(e.key),
                       deviationIsBad: e.key == 'skin_temp',
-                      helper: e.key == 'sleep'
+                      helper: e.value.$2 == null
+                          ? context.l10n.metricNoReading
+                          : e.key == 'sleep'
                           ? context.l10n.metricRecommended
                           : e.key == 'steps'
                           ? context.l10n.metricStepGoal

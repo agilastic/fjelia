@@ -12939,6 +12939,725 @@ class StrengthProposalDecisionsCompanion
   }
 }
 
+class $StrengthExerciseNotesTable extends StrengthExerciseNotes
+    with TableInfo<$StrengthExerciseNotesTable, StrengthExerciseNoteRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $StrengthExerciseNotesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _variantIdMeta = const VerificationMeta(
+    'variantId',
+  );
+  @override
+  late final GeneratedColumn<String> variantId = GeneratedColumn<String>(
+    'variant_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+    'note',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [variantId, note, updatedAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'strength_exercise_notes';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<StrengthExerciseNoteRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('variant_id')) {
+      context.handle(
+        _variantIdMeta,
+        variantId.isAcceptableOrUnknown(data['variant_id']!, _variantIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_variantIdMeta);
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+        _noteMeta,
+        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_noteMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {variantId};
+  @override
+  StrengthExerciseNoteRow map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return StrengthExerciseNoteRow(
+      variantId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}variant_id'],
+      )!,
+      note: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+    );
+  }
+
+  @override
+  $StrengthExerciseNotesTable createAlias(String alias) {
+    return $StrengthExerciseNotesTable(attachedDatabase, alias);
+  }
+}
+
+class StrengthExerciseNoteRow extends DataClass
+    implements Insertable<StrengthExerciseNoteRow> {
+  final String variantId;
+  final String note;
+  final DateTime updatedAt;
+  const StrengthExerciseNoteRow({
+    required this.variantId,
+    required this.note,
+    required this.updatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['variant_id'] = Variable<String>(variantId);
+    map['note'] = Variable<String>(note);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    return map;
+  }
+
+  StrengthExerciseNotesCompanion toCompanion(bool nullToAbsent) {
+    return StrengthExerciseNotesCompanion(
+      variantId: Value(variantId),
+      note: Value(note),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory StrengthExerciseNoteRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return StrengthExerciseNoteRow(
+      variantId: serializer.fromJson<String>(json['variantId']),
+      note: serializer.fromJson<String>(json['note']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'variantId': serializer.toJson<String>(variantId),
+      'note': serializer.toJson<String>(note),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+    };
+  }
+
+  StrengthExerciseNoteRow copyWith({
+    String? variantId,
+    String? note,
+    DateTime? updatedAt,
+  }) => StrengthExerciseNoteRow(
+    variantId: variantId ?? this.variantId,
+    note: note ?? this.note,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+  StrengthExerciseNoteRow copyWithCompanion(
+    StrengthExerciseNotesCompanion data,
+  ) {
+    return StrengthExerciseNoteRow(
+      variantId: data.variantId.present ? data.variantId.value : this.variantId,
+      note: data.note.present ? data.note.value : this.note,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('StrengthExerciseNoteRow(')
+          ..write('variantId: $variantId, ')
+          ..write('note: $note, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(variantId, note, updatedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is StrengthExerciseNoteRow &&
+          other.variantId == this.variantId &&
+          other.note == this.note &&
+          other.updatedAt == this.updatedAt);
+}
+
+class StrengthExerciseNotesCompanion
+    extends UpdateCompanion<StrengthExerciseNoteRow> {
+  final Value<String> variantId;
+  final Value<String> note;
+  final Value<DateTime> updatedAt;
+  final Value<int> rowid;
+  const StrengthExerciseNotesCompanion({
+    this.variantId = const Value.absent(),
+    this.note = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  StrengthExerciseNotesCompanion.insert({
+    required String variantId,
+    required String note,
+    required DateTime updatedAt,
+    this.rowid = const Value.absent(),
+  }) : variantId = Value(variantId),
+       note = Value(note),
+       updatedAt = Value(updatedAt);
+  static Insertable<StrengthExerciseNoteRow> custom({
+    Expression<String>? variantId,
+    Expression<String>? note,
+    Expression<DateTime>? updatedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (variantId != null) 'variant_id': variantId,
+      if (note != null) 'note': note,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  StrengthExerciseNotesCompanion copyWith({
+    Value<String>? variantId,
+    Value<String>? note,
+    Value<DateTime>? updatedAt,
+    Value<int>? rowid,
+  }) {
+    return StrengthExerciseNotesCompanion(
+      variantId: variantId ?? this.variantId,
+      note: note ?? this.note,
+      updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (variantId.present) {
+      map['variant_id'] = Variable<String>(variantId.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('StrengthExerciseNotesCompanion(')
+          ..write('variantId: $variantId, ')
+          ..write('note: $note, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $CoachMessagesTable extends CoachMessages
+    with TableInfo<$CoachMessagesTable, CoachMessage> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CoachMessagesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _dayMeta = const VerificationMeta('day');
+  @override
+  late final GeneratedColumn<DateTime> day = GeneratedColumn<DateTime>(
+    'day',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _kindMeta = const VerificationMeta('kind');
+  @override
+  late final GeneratedColumn<String> kind = GeneratedColumn<String>(
+    'kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _periodMeta = const VerificationMeta('period');
+  @override
+  late final GeneratedColumn<String> period = GeneratedColumn<String>(
+    'period',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _bodyMeta = const VerificationMeta('body');
+  @override
+  late final GeneratedColumn<String> body = GeneratedColumn<String>(
+    'body',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _sourceMeta = const VerificationMeta('source');
+  @override
+  late final GeneratedColumn<String> source = GeneratedColumn<String>(
+    'source',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    day,
+    kind,
+    period,
+    body,
+    source,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'coach_messages';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<CoachMessage> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('day')) {
+      context.handle(
+        _dayMeta,
+        day.isAcceptableOrUnknown(data['day']!, _dayMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_dayMeta);
+    }
+    if (data.containsKey('kind')) {
+      context.handle(
+        _kindMeta,
+        kind.isAcceptableOrUnknown(data['kind']!, _kindMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_kindMeta);
+    }
+    if (data.containsKey('period')) {
+      context.handle(
+        _periodMeta,
+        period.isAcceptableOrUnknown(data['period']!, _periodMeta),
+      );
+    }
+    if (data.containsKey('body')) {
+      context.handle(
+        _bodyMeta,
+        body.isAcceptableOrUnknown(data['body']!, _bodyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_bodyMeta);
+    }
+    if (data.containsKey('source')) {
+      context.handle(
+        _sourceMeta,
+        source.isAcceptableOrUnknown(data['source']!, _sourceMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  CoachMessage map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CoachMessage(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      day: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}day'],
+      )!,
+      kind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}kind'],
+      )!,
+      period: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}period'],
+      ),
+      body: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}body'],
+      )!,
+      source: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $CoachMessagesTable createAlias(String alias) {
+    return $CoachMessagesTable(attachedDatabase, alias);
+  }
+}
+
+class CoachMessage extends DataClass implements Insertable<CoachMessage> {
+  final int id;
+  final DateTime day;
+
+  /// `briefing` for now.
+  final String kind;
+
+  /// The briefing period (`morning`, `lunch`, `afternoon`, `evening`).
+  final String? period;
+  final String body;
+
+  /// Who wrote it, as shown on the card ("Local · Apple Intelligence").
+  final String? source;
+  final DateTime createdAt;
+  const CoachMessage({
+    required this.id,
+    required this.day,
+    required this.kind,
+    this.period,
+    required this.body,
+    this.source,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['day'] = Variable<DateTime>(day);
+    map['kind'] = Variable<String>(kind);
+    if (!nullToAbsent || period != null) {
+      map['period'] = Variable<String>(period);
+    }
+    map['body'] = Variable<String>(body);
+    if (!nullToAbsent || source != null) {
+      map['source'] = Variable<String>(source);
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  CoachMessagesCompanion toCompanion(bool nullToAbsent) {
+    return CoachMessagesCompanion(
+      id: Value(id),
+      day: Value(day),
+      kind: Value(kind),
+      period: period == null && nullToAbsent
+          ? const Value.absent()
+          : Value(period),
+      body: Value(body),
+      source: source == null && nullToAbsent
+          ? const Value.absent()
+          : Value(source),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory CoachMessage.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CoachMessage(
+      id: serializer.fromJson<int>(json['id']),
+      day: serializer.fromJson<DateTime>(json['day']),
+      kind: serializer.fromJson<String>(json['kind']),
+      period: serializer.fromJson<String?>(json['period']),
+      body: serializer.fromJson<String>(json['body']),
+      source: serializer.fromJson<String?>(json['source']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'day': serializer.toJson<DateTime>(day),
+      'kind': serializer.toJson<String>(kind),
+      'period': serializer.toJson<String?>(period),
+      'body': serializer.toJson<String>(body),
+      'source': serializer.toJson<String?>(source),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  CoachMessage copyWith({
+    int? id,
+    DateTime? day,
+    String? kind,
+    Value<String?> period = const Value.absent(),
+    String? body,
+    Value<String?> source = const Value.absent(),
+    DateTime? createdAt,
+  }) => CoachMessage(
+    id: id ?? this.id,
+    day: day ?? this.day,
+    kind: kind ?? this.kind,
+    period: period.present ? period.value : this.period,
+    body: body ?? this.body,
+    source: source.present ? source.value : this.source,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  CoachMessage copyWithCompanion(CoachMessagesCompanion data) {
+    return CoachMessage(
+      id: data.id.present ? data.id.value : this.id,
+      day: data.day.present ? data.day.value : this.day,
+      kind: data.kind.present ? data.kind.value : this.kind,
+      period: data.period.present ? data.period.value : this.period,
+      body: data.body.present ? data.body.value : this.body,
+      source: data.source.present ? data.source.value : this.source,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CoachMessage(')
+          ..write('id: $id, ')
+          ..write('day: $day, ')
+          ..write('kind: $kind, ')
+          ..write('period: $period, ')
+          ..write('body: $body, ')
+          ..write('source: $source, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, day, kind, period, body, source, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CoachMessage &&
+          other.id == this.id &&
+          other.day == this.day &&
+          other.kind == this.kind &&
+          other.period == this.period &&
+          other.body == this.body &&
+          other.source == this.source &&
+          other.createdAt == this.createdAt);
+}
+
+class CoachMessagesCompanion extends UpdateCompanion<CoachMessage> {
+  final Value<int> id;
+  final Value<DateTime> day;
+  final Value<String> kind;
+  final Value<String?> period;
+  final Value<String> body;
+  final Value<String?> source;
+  final Value<DateTime> createdAt;
+  const CoachMessagesCompanion({
+    this.id = const Value.absent(),
+    this.day = const Value.absent(),
+    this.kind = const Value.absent(),
+    this.period = const Value.absent(),
+    this.body = const Value.absent(),
+    this.source = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  });
+  CoachMessagesCompanion.insert({
+    this.id = const Value.absent(),
+    required DateTime day,
+    required String kind,
+    this.period = const Value.absent(),
+    required String body,
+    this.source = const Value.absent(),
+    required DateTime createdAt,
+  }) : day = Value(day),
+       kind = Value(kind),
+       body = Value(body),
+       createdAt = Value(createdAt);
+  static Insertable<CoachMessage> custom({
+    Expression<int>? id,
+    Expression<DateTime>? day,
+    Expression<String>? kind,
+    Expression<String>? period,
+    Expression<String>? body,
+    Expression<String>? source,
+    Expression<DateTime>? createdAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (day != null) 'day': day,
+      if (kind != null) 'kind': kind,
+      if (period != null) 'period': period,
+      if (body != null) 'body': body,
+      if (source != null) 'source': source,
+      if (createdAt != null) 'created_at': createdAt,
+    });
+  }
+
+  CoachMessagesCompanion copyWith({
+    Value<int>? id,
+    Value<DateTime>? day,
+    Value<String>? kind,
+    Value<String?>? period,
+    Value<String>? body,
+    Value<String?>? source,
+    Value<DateTime>? createdAt,
+  }) {
+    return CoachMessagesCompanion(
+      id: id ?? this.id,
+      day: day ?? this.day,
+      kind: kind ?? this.kind,
+      period: period ?? this.period,
+      body: body ?? this.body,
+      source: source ?? this.source,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (day.present) {
+      map['day'] = Variable<DateTime>(day.value);
+    }
+    if (kind.present) {
+      map['kind'] = Variable<String>(kind.value);
+    }
+    if (period.present) {
+      map['period'] = Variable<String>(period.value);
+    }
+    if (body.present) {
+      map['body'] = Variable<String>(body.value);
+    }
+    if (source.present) {
+      map['source'] = Variable<String>(source.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CoachMessagesCompanion(')
+          ..write('id: $id, ')
+          ..write('day: $day, ')
+          ..write('kind: $kind, ')
+          ..write('period: $period, ')
+          ..write('body: $body, ')
+          ..write('source: $source, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $DayScoreRecordsTable extends DayScoreRecords
     with TableInfo<$DayScoreRecordsTable, DayScoreRecord> {
   @override
@@ -51274,6 +51993,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $StrengthPerformedSetsTable(this);
   late final $StrengthProposalDecisionsTable strengthProposalDecisions =
       $StrengthProposalDecisionsTable(this);
+  late final $StrengthExerciseNotesTable strengthExerciseNotes =
+      $StrengthExerciseNotesTable(this);
+  late final $CoachMessagesTable coachMessages = $CoachMessagesTable(this);
   late final $DayScoreRecordsTable dayScoreRecords = $DayScoreRecordsTable(
     this,
   );
@@ -51395,6 +52117,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     strengthPerformedExercises,
     strengthPerformedSets,
     strengthProposalDecisions,
+    strengthExerciseNotes,
+    coachMessages,
     dayScoreRecords,
     gripStrengthRecords,
     waistMeasurements,
@@ -57924,6 +58648,440 @@ typedef $$StrengthProposalDecisionsTableProcessedTableManager =
         >,
       ),
       StrengthProposalDecisionRow,
+      PrefetchHooks Function()
+    >;
+typedef $$StrengthExerciseNotesTableCreateCompanionBuilder =
+    StrengthExerciseNotesCompanion Function({
+      required String variantId,
+      required String note,
+      required DateTime updatedAt,
+      Value<int> rowid,
+    });
+typedef $$StrengthExerciseNotesTableUpdateCompanionBuilder =
+    StrengthExerciseNotesCompanion Function({
+      Value<String> variantId,
+      Value<String> note,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
+
+class $$StrengthExerciseNotesTableFilterComposer
+    extends Composer<_$AppDatabase, $StrengthExerciseNotesTable> {
+  $$StrengthExerciseNotesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get variantId => $composableBuilder(
+    column: $table.variantId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$StrengthExerciseNotesTableOrderingComposer
+    extends Composer<_$AppDatabase, $StrengthExerciseNotesTable> {
+  $$StrengthExerciseNotesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get variantId => $composableBuilder(
+    column: $table.variantId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$StrengthExerciseNotesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $StrengthExerciseNotesTable> {
+  $$StrengthExerciseNotesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get variantId =>
+      $composableBuilder(column: $table.variantId, builder: (column) => column);
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+}
+
+class $$StrengthExerciseNotesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $StrengthExerciseNotesTable,
+          StrengthExerciseNoteRow,
+          $$StrengthExerciseNotesTableFilterComposer,
+          $$StrengthExerciseNotesTableOrderingComposer,
+          $$StrengthExerciseNotesTableAnnotationComposer,
+          $$StrengthExerciseNotesTableCreateCompanionBuilder,
+          $$StrengthExerciseNotesTableUpdateCompanionBuilder,
+          (
+            StrengthExerciseNoteRow,
+            BaseReferences<
+              _$AppDatabase,
+              $StrengthExerciseNotesTable,
+              StrengthExerciseNoteRow
+            >,
+          ),
+          StrengthExerciseNoteRow,
+          PrefetchHooks Function()
+        > {
+  $$StrengthExerciseNotesTableTableManager(
+    _$AppDatabase db,
+    $StrengthExerciseNotesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$StrengthExerciseNotesTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$StrengthExerciseNotesTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$StrengthExerciseNotesTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> variantId = const Value.absent(),
+                Value<String> note = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => StrengthExerciseNotesCompanion(
+                variantId: variantId,
+                note: note,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String variantId,
+                required String note,
+                required DateTime updatedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => StrengthExerciseNotesCompanion.insert(
+                variantId: variantId,
+                note: note,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<
+                    $StrengthExerciseNotesTable,
+                    StrengthExerciseNoteRow
+                  >(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $StrengthExerciseNotesTable,
+                    StrengthExerciseNoteRow
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$StrengthExerciseNotesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $StrengthExerciseNotesTable,
+      StrengthExerciseNoteRow,
+      $$StrengthExerciseNotesTableFilterComposer,
+      $$StrengthExerciseNotesTableOrderingComposer,
+      $$StrengthExerciseNotesTableAnnotationComposer,
+      $$StrengthExerciseNotesTableCreateCompanionBuilder,
+      $$StrengthExerciseNotesTableUpdateCompanionBuilder,
+      (
+        StrengthExerciseNoteRow,
+        BaseReferences<
+          _$AppDatabase,
+          $StrengthExerciseNotesTable,
+          StrengthExerciseNoteRow
+        >,
+      ),
+      StrengthExerciseNoteRow,
+      PrefetchHooks Function()
+    >;
+typedef $$CoachMessagesTableCreateCompanionBuilder =
+    CoachMessagesCompanion Function({
+      Value<int> id,
+      required DateTime day,
+      required String kind,
+      Value<String?> period,
+      required String body,
+      Value<String?> source,
+      required DateTime createdAt,
+    });
+typedef $$CoachMessagesTableUpdateCompanionBuilder =
+    CoachMessagesCompanion Function({
+      Value<int> id,
+      Value<DateTime> day,
+      Value<String> kind,
+      Value<String?> period,
+      Value<String> body,
+      Value<String?> source,
+      Value<DateTime> createdAt,
+    });
+
+class $$CoachMessagesTableFilterComposer
+    extends Composer<_$AppDatabase, $CoachMessagesTable> {
+  $$CoachMessagesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get day => $composableBuilder(
+    column: $table.day,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get period => $composableBuilder(
+    column: $table.period,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get body => $composableBuilder(
+    column: $table.body,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get source => $composableBuilder(
+    column: $table.source,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$CoachMessagesTableOrderingComposer
+    extends Composer<_$AppDatabase, $CoachMessagesTable> {
+  $$CoachMessagesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get day => $composableBuilder(
+    column: $table.day,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get period => $composableBuilder(
+    column: $table.period,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get body => $composableBuilder(
+    column: $table.body,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get source => $composableBuilder(
+    column: $table.source,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$CoachMessagesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CoachMessagesTable> {
+  $$CoachMessagesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get day =>
+      $composableBuilder(column: $table.day, builder: (column) => column);
+
+  GeneratedColumn<String> get kind =>
+      $composableBuilder(column: $table.kind, builder: (column) => column);
+
+  GeneratedColumn<String> get period =>
+      $composableBuilder(column: $table.period, builder: (column) => column);
+
+  GeneratedColumn<String> get body =>
+      $composableBuilder(column: $table.body, builder: (column) => column);
+
+  GeneratedColumn<String> get source =>
+      $composableBuilder(column: $table.source, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$CoachMessagesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $CoachMessagesTable,
+          CoachMessage,
+          $$CoachMessagesTableFilterComposer,
+          $$CoachMessagesTableOrderingComposer,
+          $$CoachMessagesTableAnnotationComposer,
+          $$CoachMessagesTableCreateCompanionBuilder,
+          $$CoachMessagesTableUpdateCompanionBuilder,
+          (
+            CoachMessage,
+            BaseReferences<_$AppDatabase, $CoachMessagesTable, CoachMessage>,
+          ),
+          CoachMessage,
+          PrefetchHooks Function()
+        > {
+  $$CoachMessagesTableTableManager(_$AppDatabase db, $CoachMessagesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CoachMessagesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CoachMessagesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CoachMessagesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<DateTime> day = const Value.absent(),
+                Value<String> kind = const Value.absent(),
+                Value<String?> period = const Value.absent(),
+                Value<String> body = const Value.absent(),
+                Value<String?> source = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => CoachMessagesCompanion(
+                id: id,
+                day: day,
+                kind: kind,
+                period: period,
+                body: body,
+                source: source,
+                createdAt: createdAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required DateTime day,
+                required String kind,
+                Value<String?> period = const Value.absent(),
+                required String body,
+                Value<String?> source = const Value.absent(),
+                required DateTime createdAt,
+              }) => CoachMessagesCompanion.insert(
+                id: id,
+                day: day,
+                kind: kind,
+                period: period,
+                body: body,
+                source: source,
+                createdAt: createdAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$CoachMessagesTable, CoachMessage>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $CoachMessagesTable,
+                    CoachMessage
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$CoachMessagesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $CoachMessagesTable,
+      CoachMessage,
+      $$CoachMessagesTableFilterComposer,
+      $$CoachMessagesTableOrderingComposer,
+      $$CoachMessagesTableAnnotationComposer,
+      $$CoachMessagesTableCreateCompanionBuilder,
+      $$CoachMessagesTableUpdateCompanionBuilder,
+      (
+        CoachMessage,
+        BaseReferences<_$AppDatabase, $CoachMessagesTable, CoachMessage>,
+      ),
+      CoachMessage,
       PrefetchHooks Function()
     >;
 typedef $$DayScoreRecordsTableCreateCompanionBuilder =
@@ -76644,6 +77802,10 @@ class $AppDatabaseManager {
         _db,
         _db.strengthProposalDecisions,
       );
+  $$StrengthExerciseNotesTableTableManager get strengthExerciseNotes =>
+      $$StrengthExerciseNotesTableTableManager(_db, _db.strengthExerciseNotes);
+  $$CoachMessagesTableTableManager get coachMessages =>
+      $$CoachMessagesTableTableManager(_db, _db.coachMessages);
   $$DayScoreRecordsTableTableManager get dayScoreRecords =>
       $$DayScoreRecordsTableTableManager(_db, _db.dayScoreRecords);
   $$GripStrengthRecordsTableTableManager get gripStrengthRecords =>

@@ -386,6 +386,7 @@ class ActivityDetailSheet extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 16),
+          ActivityNoteCard(activityId: activity.activityId),
           if (strength) CompletedStrengthSection(activity: activity),
           ActivityNutritionCard(activity: activity),
           ActivityHeatCard(activityId: a.id),
@@ -462,7 +463,6 @@ class ActivityDetailSheet extends ConsumerWidget {
               card: CoachContextCard.completed(a),
             ),
           ),
-          ActivityNoteCard(activityId: activity.activityId),
           if (activity.description?.trim().isNotEmpty ?? false)
             SectionCard(
               title: context.l10n.activityDescription,
@@ -637,8 +637,10 @@ class _RenameDialogState extends State<_RenameDialog> {
   }
 }
 
-/// The athlete's own note on the activity, e.g. why it was shorter than
-/// planned; the coach reads it. Tap to write or change it.
+/// The athlete's reflection on the activity: how it felt, why it was
+/// shorter than planned. It is the activity's own note, which the coach
+/// reads. Tap to write or change it; while empty, a chip writes a first
+/// line in one tap.
 class ActivityNoteCard extends ConsumerWidget {
   const ActivityNoteCard({super.key, required this.activityId});
   final String activityId;
@@ -648,14 +650,15 @@ class ActivityNoteCard extends ConsumerWidget {
     final saved = await showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(context.l10n.activityNote),
+        title: Text(context.l10n.reflectionTitle),
         content: TextField(
           controller: controller,
           autofocus: true,
           minLines: 2,
           maxLines: 6,
           maxLength: 400,
-          decoration: InputDecoration(hintText: context.l10n.noteForCoach),
+          textCapitalization: TextCapitalization.sentences,
+          decoration: InputDecoration(hintText: context.l10n.reflectionPrompt),
         ),
         actions: [
           TextButton(
@@ -676,15 +679,45 @@ class ActivityNoteCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = context.l10n;
     final note = ref.watch(activityNoteProvider(activityId)).valueOrNull;
     final has = note?.trim().isNotEmpty ?? false;
     return SectionCard(
       key: const ValueKey('activity-note'),
-      title: context.l10n.activityNote,
+      title: l.reflectionTitle,
+      accent: const [Color(0xFF9D7BFF), Color(0xFF3EE0FF)],
       onTap: () => _edit(context, ref, note),
-      child: Text(
-        has ? note!.trim() : context.l10n.activityNoteAdd,
-        style: TextStyle(height: 1.4, color: has ? fjInk : muted),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            has ? note!.trim() : l.reflectionPrompt,
+            style: TextStyle(height: 1.4, color: has ? fjInk : muted),
+          ),
+          if (!has) ...[
+            const SizedBox(height: 10),
+            Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              children: [
+                for (final chip in [
+                  l.reflectionFeltStrong,
+                  l.reflectionLegsHeavy,
+                  l.reflectionTired,
+                  l.reflectionSleptBadly,
+                  l.reflectionPain,
+                  l.reflectionHeat,
+                ])
+                  ActionChip(
+                    label: Text(chip, style: const TextStyle(fontSize: 12)),
+                    visualDensity: VisualDensity.compact,
+                    onPressed: () =>
+                        ref.read(saveActivityNoteProvider)(activityId, chip),
+                  ),
+              ],
+            ),
+          ],
+        ],
       ),
     );
   }

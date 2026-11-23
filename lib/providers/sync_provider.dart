@@ -22,6 +22,7 @@ import 'ai_coach_provider.dart';
 import 'auth_provider.dart';
 import 'coros_provider.dart';
 import '../db/database.dart' show TrainingPlan;
+import 'coach_day_message_provider.dart';
 import 'database_provider.dart';
 import 'day_data_provider.dart';
 import 'health_connect_provider.dart';
@@ -769,6 +770,8 @@ class SyncNotifier extends StateNotifier<SyncState> {
   Future<void> _prewarmBriefingAfterSync() async {
     await waitForSyncToSettle(_ref, stillWanted: () => mounted);
     if (mounted) await _prewarmBriefing();
+    // FjeliaPro: a message when stress or energy changed during the day.
+    if (mounted) await _ref.read(coachDayMessageRunnerProvider).run();
   }
 
   /// Builds a local briefing or a cloud briefing previously consented to.

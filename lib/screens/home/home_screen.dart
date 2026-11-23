@@ -14,6 +14,7 @@ import '../../providers/user_profile_provider.dart';
 import '../../providers/visibility_provider.dart';
 import '../../providers/body_measurements_provider.dart';
 import '../../providers/grip_strength_provider.dart';
+import '../../widgets/home_sky.dart';
 import '../../widgets/absence_sheet.dart' show OpenAbsenceCard;
 import '../../widgets/app_widgets.dart';
 import '../../widgets/history_sync_card.dart';
@@ -247,6 +248,16 @@ class _HomeState extends ConsumerState<HomeScreen> {
       ),
       body: Stack(
         children: [
+          // Today's weather as a soft sky behind the top of every main tab;
+          // the pages scroll over it.
+          if (current != 4)
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              height: MediaQuery.paddingOf(context).top + 320,
+              child: const HomeSkyBand(),
+            ),
           Positioned.fill(
             child: RefreshIndicator(
               // The pull spinner comes out below the header, not behind it.

@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/day_data_provider.dart';
 import 'app_widgets.dart';
+import 'data_gap_card.dart';
 import 'hrv_combined_card.dart';
 import '../screens/activities/load_visuals.dart';
 import '../l10n/metric_text.dart';
@@ -63,6 +64,23 @@ class _MetricDetailState extends ConsumerState<MetricDetailSheet> {
         data: (window) {
           final start = window.start, end = window.end;
           final points = window.points, latest = window.latest;
+          // A daily value is the selected day's own; an older one is never
+          // shown as if it were that day's. Body measurements are taken now
+          // and then, so their latest stands.
+          final reason = offset == 0
+              ? healthMetricGapReason(context.l10n, widget.metric)
+              : null;
+          final gap = reason != null && window.onSelectedDay == null;
+          final shown = reason == null ? latest : window.onSelectedDay;
+          final digits =
+              widget.metric.isBody ||
+                  [
+                    HealthMetric.skinTemperature,
+                    HealthMetric.respiration,
+                    HealthMetric.sleep,
+                  ].contains(widget.metric)
+              ? 1
+              : 0;
           return ListView(
             padding: const EdgeInsets.all(20),
             children: [
@@ -74,7 +92,7 @@ class _MetricDetailState extends ConsumerState<MetricDetailSheet> {
                       context.l10n,
                       widget.metric,
                     ).toUpperCase(),
-                    '${valueText(latest?.value, widget.metric.isBody || [HealthMetric.skinTemperature, HealthMetric.respiration, HealthMetric.sleep].contains(widget.metric) ? 1 : 0)} ${widget.metric.unit}',
+                    '${valueText(shown?.value, digits)} ${widget.metric.unit}',
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -108,6 +126,21 @@ class _MetricDetailState extends ConsumerState<MetricDetailSheet> {
                   ),
                 ],
               ),
+              if (gap)
+                Padding(
+                  padding: const EdgeInsets.only(top: 14),
+                  child: DataGapCard(
+                    title: context.l10n.metricGapTitle(dayText(selected)),
+                    reason: reason,
+                    last: latest == null
+                        ? null
+                        : context.l10n.metricGapLast(
+                            '${valueText(latest.value, digits)} ${widget.metric.unit}'
+                                .trim(),
+                            dayText(latest.at),
+                          ),
+                  ),
+                ),
               if (healthMetricHint(context.l10n, widget.metric)
                   case final String hint)
                 Padding(

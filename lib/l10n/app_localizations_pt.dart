@@ -9618,4 +9618,187 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get myZonesPower => 'Potência';
+
+  @override
+  String get exerciseAbout => 'Sobre';
+
+  @override
+  String get exerciseMuscles => 'Músculos';
+
+  @override
+  String get exerciseNoMuscleData =>
+      'Sem dados de músculos para os teus próprios exercícios.';
+
+  @override
+  String get musclePrimary => 'Principais';
+
+  @override
+  String get muscleSecondary => 'Secundários';
+
+  @override
+  String get muscleQuads => 'Quadríceps';
+
+  @override
+  String get muscleHamstrings => 'Isquiotibiais';
+
+  @override
+  String get muscleGlutes => 'Glúteos';
+
+  @override
+  String get muscleCalves => 'Gémeos';
+
+  @override
+  String get muscleAdductors => 'Adutores';
+
+  @override
+  String get muscleCore => 'Core';
+
+  @override
+  String get muscleObliques => 'Oblíquos';
+
+  @override
+  String get muscleLowerBack => 'Lombar';
+
+  @override
+  String get muscleLats => 'Dorsais';
+
+  @override
+  String get muscleUpperBack => 'Parte superior das costas';
+
+  @override
+  String get muscleChest => 'Peito';
+
+  @override
+  String get muscleShoulders => 'Ombros';
+
+  @override
+  String get muscleTriceps => 'Tríceps';
+
+  @override
+  String get muscleBiceps => 'Bíceps';
+
+  @override
+  String get muscleForearms => 'Antebraços';
+
+  @override
+  String get pinnedNote => 'Nota fixada';
+
+  @override
+  String get pinnedNoteHint =>
+      'Aparece sempre que fazes este exercício, em cada treino.';
+
+  @override
+  String get searchYoutube => 'Pesquisar no YouTube';
+
+  @override
+  String get searchYoutubeHint =>
+      'Abre o YouTube com o nome do exercício. Mais nada sai da app.';
+
+  @override
+  String get workoutNote => 'Nota do treino';
+
+  @override
+  String get exerciseNoteToday => 'Nota de hoje';
+
+  @override
+  String get routineNote => 'Nota da rotina';
+
+  @override
+  String get routineNoteHint =>
+      'Aparece no modo ginásio sempre que começas este treino.';
+
+  @override
+  String get quickStartEmpty =>
+      'Ainda sem exercícios. Adiciona cada um quando o começares.';
+
+  @override
+  String get plusQuickStrength => 'Força livre';
+
+  @override
+  String get plusQuickStrengthHint => 'Modo ginásio sem plano';
+
+  @override
+  String get reflectionTitle => 'Reflexão';
+
+  @override
+  String get reflectionPrompt =>
+      'Como correu? Algumas palavras ajudam o treinador.';
+
+  @override
+  String get reflectionFeltStrong => 'Senti-me forte';
+
+  @override
+  String get reflectionLegsHeavy => 'Pernas pesadas';
+
+  @override
+  String get reflectionTired => 'Cansado';
+
+  @override
+  String get reflectionSleptBadly => 'Dormi mal';
+
+  @override
+  String get reflectionPain => 'Algo doeu';
+
+  @override
+  String get reflectionHeat => 'Demasiado calor';
+
+  @override
+  String get metricNoReading => 'Sem medição';
+
+  @override
+  String metricGapTitle(String date) {
+    return 'Sem medição para $date';
+  }
+
+  @override
+  String get metricGapNight =>
+      'Nada chegou desta noite. Usa o relógio ou o anel durante a noite e sincroniza – a noite aparece quando uma fonte a enviar.';
+
+  @override
+  String get metricGapDay =>
+      'Ainda nada chegou deste dia. Sincroniza para o obter; estes valores vêm do relógio durante o dia.';
+
+  @override
+  String metricGapLast(String value, String date) {
+    return 'Última medição: $value a $date.';
+  }
+
+  @override
+  String sleepGapTitle(String date) {
+    return 'Sem sono registado para $date';
+  }
+
+  @override
+  String get coachMessage => 'Mensagem do treinador';
+
+  @override
+  String coachDayTitle(String date) {
+    return '$date · Resumo';
+  }
+
+  @override
+  String get coachDayEmpty =>
+      'O treinador não deixou nenhum briefing para este dia.';
+
+  @override
+  String get coachDayKept => 'Os briefings ficam 400 dias neste dispositivo.';
+
+  @override
+  String coachDayOverview(int count) {
+    return 'Resumo do dia ($count)';
+  }
+
+  @override
+  String get coachDayMessages => 'Mensagens do treinador durante o dia';
+
+  @override
+  String get coachDayMessagesHint =>
+      'FjeliaPro: quando o teu stress sobe claramente ou a energia fica baixa, os valores de hoje e o resumo de saúde vão para o Fjelia AI Pro, que deixa uma mensagem curta no Início. No máximo 3 por dia, sem notificações.';
+
+  @override
+  String get homeSky => 'Céu do tempo no Início';
+
+  @override
+  String get homeSkyHint =>
+      'Um céu suave no topo do Início que segue o tempo de hoje e a hora do dia.';
 }

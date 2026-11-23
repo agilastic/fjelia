@@ -56,6 +56,16 @@ class MetricHistoryWindow {
         .where((p) => !p.at.isBefore(start) && p.at.isBefore(end))
         .toList();
     latest = sorted.where((p) => p.at.isBefore(end)).lastOrNull;
+    final day = DateTime(selected.year, selected.month, selected.day);
+    onSelectedDay = offset != 0
+        ? null
+        : sorted
+              .where(
+                (p) =>
+                    !p.at.isBefore(day) &&
+                    p.at.isBefore(DateTime(day.year, day.month, day.day + 1)),
+              )
+              .lastOrNull;
     average = mean(points);
     final baselineDays = metric == HealthMetric.hrv
         ? 7
@@ -83,6 +93,10 @@ class MetricHistoryWindow {
   late final DateTime start, end;
   late final List<ChartPoint> points;
   late final ChartPoint? latest;
+
+  /// The reading of the selected day itself; null when that day has none
+  /// (or when an earlier period is shown). [latest] may then be older.
+  late final ChartPoint? onSelectedDay;
   late final double? average, baseline;
   late final MetricChartRange range;
 }

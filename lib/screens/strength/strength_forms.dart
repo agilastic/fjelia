@@ -1082,6 +1082,9 @@ class _FieldsDialogState extends State<_FieldsDialog> {
               keyboardType: widget.fields[i].number
                   ? const TextInputType.numberWithOptions(decimal: true)
                   : TextInputType.text,
+              // Text fields hold names and notes: they may wrap.
+              minLines: 1,
+              maxLines: widget.fields[i].number ? 1 : 4,
               textInputAction: i == widget.fields.length - 1
                   ? TextInputAction.done
                   : TextInputAction.next,

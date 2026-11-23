@@ -186,6 +186,32 @@ void main() {
     await BackupService(db).restore(zip);
     expect(await db.select(db.nutritionRecords).get(), isEmpty);
   });
+  test('a schema 68 backup can omit the tables added since', () async {
+    final file = await BackupService(db).export(directory: dir);
+    final backup = jsonDecode(
+      utf8.decode(
+        ZipDecoder()
+                .decodeBytes(await file.readAsBytes())
+                .findFile('backup.json')!
+                .content
+            as List<int>,
+      ),
+    ) as Map<String, dynamic>;
+    backup['schema'] = 68;
+    (backup['tables'] as Map)
+      ..remove('activity_sports')
+      ..remove('absences')
+      ..remove('hr_zone_definitions')
+      ..remove('hr_zone_summaries')
+      ..remove('strength_exercise_notes');
+    final bytes = utf8.encode(jsonEncode(backup));
+    final zip = ZipEncoder().encode(
+      Archive()..addFile(ArchiveFile('backup.json', bytes.length, bytes)),
+    );
+    await BackupService(db).restore(zip);
+    expect(await db.select(db.strengthExerciseNotes).get(), isEmpty);
+  });
+
   test(
     'a backup of the previous schema restores, newer or older ones do not',
     () async {

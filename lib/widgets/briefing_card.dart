@@ -12,7 +12,14 @@ import '../providers/day_data_provider.dart';
 import '../providers/user_profile_provider.dart';
 import '../services/ai_coach_settings.dart';
 import '../services/briefing_consent.dart';
-import '../theme/fjelia_style.dart' show GradientTitle;
+import '../theme/fjelia_style.dart' show GradientTitle, fjAccent;
+
+import 'package:intl/intl.dart';
+
+import '../db/database.dart' show CoachMessage;
+import '../providers/coach_day_message_provider.dart';
+import '../providers/coach_messages_provider.dart';
+import 'coach_day_sheet.dart';
 import 'app_widgets.dart';
 
 class BriefingCard extends ConsumerStatefulWidget {
@@ -32,6 +39,19 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
     if (settings == null) {
       return const SizedBox.shrink();
     }
+    final selected = DateUtils.dateOnly(ref.watch(selectedDateProvider));
+    if (selected.isBefore(DateUtils.dateOnly(DateTime.now()))) {
+      return _pastDay(context, selected);
+    }
+    // Today's kept messages matter only once the card is open.
+    final kept = _expanded
+        ? ref
+                  .watch(
+                    coachMessagesProvider(DateUtils.dateOnly(DateTime.now())),
+                  )
+                  .valueOrNull ??
+              const <CoachMessage>[]
+        : const <CoachMessage>[];
     final hour = DateTime.now().hour;
     final period = hour < 11
         ? AiBriefingPeriod.morning
@@ -108,6 +128,7 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
             overflow: _expanded ? null : TextOverflow.ellipsis,
             style: const TextStyle(fontSize: 14, height: 1.55),
           ),
+          const CoachDayMessageLine(),
           if (briefing.isLoading) const LinearProgressIndicator(),
           if (briefing.hasError)
             Text(
@@ -199,6 +220,84 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
                 widget.openCoach();
               },
             ),
+          if (_expanded && kept.length > 1)
+            _overviewButton(context, DateUtils.dateOnly(DateTime.now()), kept),
+        ],
+      ),
+    );
+  }
+
+  Widget _overviewButton(
+    BuildContext context,
+    DateTime day,
+    List<CoachMessage> kept,
+  ) => TextButton.icon(
+    key: const ValueKey('coach-day-overview'),
+    style: TextButton.styleFrom(foregroundColor: mint),
+    icon: const Icon(Icons.history, size: 18),
+    label: Text(context.l10n.coachDayOverview(kept.length)),
+    onPressed: () => showAppSheet<void>(context, CoachDaySheet(day: day)),
+  );
+
+  /// An earlier day: the briefing the coach left that day, as it was, with
+  /// the way to everything else said that day. Nothing is generated.
+  Widget _pastDay(BuildContext context, DateTime day) {
+    final l = context.l10n;
+    final kept = ref.watch(coachMessagesProvider(day)).valueOrNull ?? const [];
+    final last = kept.lastOrNull;
+    final title = last == null ? l.coachMessage : coachMessageTitle(l, last);
+    return SectionCard(
+      key: const ValueKey('briefing-past-day'),
+      accent: coachDayAccent,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              GradientTitle(title.toUpperCase(), colors: coachDayAccent),
+              if (last != null)
+                Expanded(
+                  child: Text(
+                    DateFormat.Hm().format(last.createdAt),
+                    textAlign: TextAlign.right,
+                    style: TextStyle(color: muted, fontSize: 10),
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Text(
+            last == null ? l.coachDayEmpty : flattenBriefing(last.body),
+            maxLines: _expanded ? null : 3,
+            overflow: _expanded ? null : TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 14,
+              height: 1.55,
+              color: last == null ? muted : null,
+            ),
+          ),
+          if (last != null)
+            // Wraps on narrow phones and large text.
+            Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [
+                TextButton(
+                  style: TextButton.styleFrom(
+                    foregroundColor: mint,
+                    padding: EdgeInsets.zero,
+                    minimumSize: const Size(0, 30),
+                  ),
+                  onPressed: () => setState(() => _expanded = !_expanded),
+                  child: Text(
+                    _expanded ? l.briefingShowLess : l.briefingReadMore,
+                  ),
+                ),
+                _overviewButton(context, day, kept),
+              ],
+            ),
         ],
       ),
     );
@@ -225,5 +324,63 @@ class _BriefingCardState extends ConsumerState<BriefingCard> {
     await ref
         .read(aiBriefingProvider(period).notifier)
         .load(settings, raceGoals: profile.raceGoals ?? '', cloudConsent: true);
+  }
+}
+
+/// FjeliaPro: the coach's latest message of today under the briefing, when
+/// the athlete turned these messages on.
+class CoachDayMessageLine extends ConsumerWidget {
+  const CoachDayMessageLine({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (!(ref.watch(coachDayMessagesEnabledProvider).valueOrNull ?? false)) {
+      return const SizedBox.shrink();
+    }
+    final today = DateUtils.dateOnly(DateTime.now());
+    final last = (ref.watch(coachMessagesProvider(today)).valueOrNull ?? [])
+        .where((m) => m.kind == coachDayKind)
+        .lastOrNull;
+    if (last == null) return const SizedBox.shrink();
+    return Container(
+      key: const ValueKey('coach-day-message'),
+      margin: const EdgeInsets.only(top: 12),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: const Color(0xFF3EE0FF).withValues(alpha: .08),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: const Color(0xFF3EE0FF).withValues(alpha: .35),
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            Icons.chat_bubble_outline,
+            size: 18,
+            color: fjAccent(const Color(0xFF3EE0FF)),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${context.l10n.coachMessage} · '
+                  '${DateFormat.Hm().format(last.createdAt)}',
+                  style: TextStyle(fontSize: 11, color: muted),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  last.body,
+                  style: const TextStyle(fontSize: 13, height: 1.45),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

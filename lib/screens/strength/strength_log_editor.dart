@@ -10,6 +10,7 @@ import '../../services/strength/strength_repository.dart';
 import '../../theme/activity_colors.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/strength_widgets.dart';
+import 'strength_exercise_sheet.dart';
 import 'strength_forms.dart';
 
 enum _SaveState { idle, saving, saved, failed }
@@ -111,27 +112,8 @@ class _LogEditorState extends ConsumerState<StrengthLogEditor> {
   }
 
   Future<void> addExercise() async {
-    final custom = await ref.read(strengthCustomVariantsProvider.future);
-    if (!mounted) return;
-    final picked = await showExercisePicker(context, custom: custom);
-    if (picked == null || !mounted) return;
-    var v = picked.variant;
-    if (v == null) {
-      final d = await showExerciseForm(
-        context,
-        name: picked.customName!,
-        equipment: '',
-        convention: const StrengthConvention(),
-        unit: unit,
-      );
-      if (d == null || !mounted) return;
-      v = await repo.addCustomVariant(
-        name: d.name,
-        equipment: d.equipment,
-        convention: d.convention,
-      );
-      ref.invalidate(strengthCustomVariantsProvider);
-    }
+    final v = await pickOrCreateStrengthVariant(context, ref, unit);
+    if (v == null || !mounted) return;
     await persist(
       log.copyWith(
         exercises: [

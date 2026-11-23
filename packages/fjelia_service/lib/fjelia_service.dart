@@ -53,6 +53,9 @@ class _NoProAnalysisPrompts implements ProAnalysisPrompts {
 
   @override
   String get morningRevision => '';
+
+  @override
+  String get dayMessage => '';
 }
 
 /// Public builds have no FjeliaPro heart-rate zone trends.

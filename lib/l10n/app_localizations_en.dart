@@ -9545,4 +9545,184 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get myZonesPower => 'Power';
+
+  @override
+  String get exerciseAbout => 'About';
+
+  @override
+  String get exerciseMuscles => 'Muscles';
+
+  @override
+  String get exerciseNoMuscleData => 'No muscle data for your own exercises.';
+
+  @override
+  String get musclePrimary => 'Primary';
+
+  @override
+  String get muscleSecondary => 'Secondary';
+
+  @override
+  String get muscleQuads => 'Quads';
+
+  @override
+  String get muscleHamstrings => 'Hamstrings';
+
+  @override
+  String get muscleGlutes => 'Glutes';
+
+  @override
+  String get muscleCalves => 'Calves';
+
+  @override
+  String get muscleAdductors => 'Adductors';
+
+  @override
+  String get muscleCore => 'Core';
+
+  @override
+  String get muscleObliques => 'Obliques';
+
+  @override
+  String get muscleLowerBack => 'Lower back';
+
+  @override
+  String get muscleLats => 'Lats';
+
+  @override
+  String get muscleUpperBack => 'Upper back';
+
+  @override
+  String get muscleChest => 'Chest';
+
+  @override
+  String get muscleShoulders => 'Shoulders';
+
+  @override
+  String get muscleTriceps => 'Triceps';
+
+  @override
+  String get muscleBiceps => 'Biceps';
+
+  @override
+  String get muscleForearms => 'Forearms';
+
+  @override
+  String get pinnedNote => 'Pinned note';
+
+  @override
+  String get pinnedNoteHint =>
+      'Shows every time you do this exercise, in every workout.';
+
+  @override
+  String get searchYoutube => 'Search on YouTube';
+
+  @override
+  String get searchYoutubeHint =>
+      'Opens YouTube with the exercise name. Nothing else leaves the app.';
+
+  @override
+  String get workoutNote => 'Workout note';
+
+  @override
+  String get exerciseNoteToday => 'Note for today';
+
+  @override
+  String get routineNote => 'Routine note';
+
+  @override
+  String get routineNoteHint =>
+      'Shows in gym mode every time you start this workout.';
+
+  @override
+  String get quickStartEmpty =>
+      'No exercises yet. Add each one as you start it.';
+
+  @override
+  String get plusQuickStrength => 'Quick strength';
+
+  @override
+  String get plusQuickStrengthHint => 'Gym mode without a plan';
+
+  @override
+  String get reflectionTitle => 'Reflection';
+
+  @override
+  String get reflectionPrompt => 'How did it go? A few words help the coach.';
+
+  @override
+  String get reflectionFeltStrong => 'Felt strong';
+
+  @override
+  String get reflectionLegsHeavy => 'Heavy legs';
+
+  @override
+  String get reflectionTired => 'Tired';
+
+  @override
+  String get reflectionSleptBadly => 'Slept badly';
+
+  @override
+  String get reflectionPain => 'Something hurt';
+
+  @override
+  String get reflectionHeat => 'Too hot';
+
+  @override
+  String get metricNoReading => 'No reading';
+
+  @override
+  String metricGapTitle(String date) {
+    return 'No reading for $date';
+  }
+
+  @override
+  String get metricGapNight =>
+      'Nothing arrived for this night. Wear the watch or ring overnight and sync – the night appears once a source sends it.';
+
+  @override
+  String get metricGapDay =>
+      'Nothing arrived for this day yet. Sync to fetch it; these values come from the watch during the day.';
+
+  @override
+  String metricGapLast(String value, String date) {
+    return 'Last reading: $value on $date.';
+  }
+
+  @override
+  String sleepGapTitle(String date) {
+    return 'No sleep recorded for $date';
+  }
+
+  @override
+  String get coachMessage => 'Coach message';
+
+  @override
+  String coachDayTitle(String date) {
+    return '$date · Overview';
+  }
+
+  @override
+  String get coachDayEmpty => 'The coach left no briefing for this day.';
+
+  @override
+  String get coachDayKept => 'Briefings are kept on this device for 400 days.';
+
+  @override
+  String coachDayOverview(int count) {
+    return 'Day overview ($count)';
+  }
+
+  @override
+  String get coachDayMessages => 'Coach messages during the day';
+
+  @override
+  String get coachDayMessagesHint =>
+      'FjeliaPro: when your stress rises clearly or your energy runs low, today\'s values and the health summary go to Fjelia AI Pro, which leaves a short message on Home. At most 3 a day, no pushes.';
+
+  @override
+  String get homeSky => 'Weather sky on Home';
+
+  @override
+  String get homeSkyHint =>
+      'A soft sky at the top of Home that follows today\'s weather and the time of day.';
 }

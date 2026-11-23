@@ -1373,6 +1373,19 @@ class StrengthProposalDecisions extends Table {
   Set<Column> get primaryKey => {fingerprint};
 }
 
+/// The athlete's pinned note on one exercise, by built-in or own variant
+/// id ("keep the ribs down"). It belongs to the exercise, not to a workout,
+/// so it shows in every routine and session that uses it.
+@DataClassName('StrengthExerciseNoteRow')
+class StrengthExerciseNotes extends Table {
+  TextColumn get variantId => text()();
+  TextColumn get note => text()();
+  DateTimeColumn get updatedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {variantId};
+}
+
 /// DFA alpha1 of an activity whose file carried beat-to-beat intervals. A
 /// row with `rrCount` 0 records that the activity's file had none, so it is
 /// not downloaded again.
@@ -1425,6 +1438,25 @@ class CoachMemories extends Table {
 
   @override
   Set<Column> get primaryKey => {id};
+}
+
+/// What the coach said on a day, kept so it can be read again later: each
+/// distinct briefing text of a period (a later rewrite is a new row), and
+/// later other coach messages. `day` is local midnight.
+class CoachMessages extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  DateTimeColumn get day => dateTime()();
+
+  /// `briefing` for now.
+  TextColumn get kind => text()();
+
+  /// The briefing period (`morning`, `lunch`, `afternoon`, `evening`).
+  TextColumn get period => text().nullable()();
+  TextColumn get body => text()();
+
+  /// Who wrote it, as shown on the card ("Local · Apple Intelligence").
+  TextColumn get source => text().nullable()();
+  DateTimeColumn get createdAt => dateTime()();
 }
 
 class MediaItems extends Table {
@@ -1487,6 +1519,8 @@ List<BpMeasurement> _validBpRows(List<BpMeasurement> rows) =>
     StrengthPerformedExercises,
     StrengthPerformedSets,
     StrengthProposalDecisions,
+    StrengthExerciseNotes,
+    CoachMessages,
     DayScoreRecords,
     GripStrengthRecords,
     WaistMeasurements,
@@ -1550,7 +1584,7 @@ class AppDatabase extends _$AppDatabase {
       defaultSourcePriorities[group.name]!;
 
   @override
-  int get schemaVersion => 72;
+  int get schemaVersion => 74;
 
   Future<void> saveHeartRateSamples(List<TimedHeartRate> samples) async {
     if (samples.isEmpty) return;
@@ -3553,6 +3587,8 @@ class AppDatabase extends _$AppDatabase {
         await m.createTable(hrZoneDefinitions);
         await m.createTable(hrZoneSummaries);
       }
+      if (from < 73) await m.createTable(strengthExerciseNotes);
+      if (from < 74) await m.createTable(coachMessages);
     },
   );
 
@@ -3616,6 +3652,62 @@ class AppDatabase extends _$AppDatabase {
 
   Future<void> deleteCoachMemory(String id) =>
       (delete(coachMemories)..where((t) => t.id.equals(id))).go();
+
+  /// How long coach messages are kept.
+  static const coachMessageDays = 400;
+
+  /// Keeps [body] as a message of [day]; the same text as the period's last
+  /// one that day is not stored twice. Drops messages past
+  /// [coachMessageDays].
+  Future<void> archiveCoachMessage({
+    required DateTime day,
+    required String kind,
+    String? period,
+    required String body,
+    String? source,
+    DateTime? now,
+  }) => transaction(() async {
+    final date = DateTime(day.year, day.month, day.day);
+    final text = body.trim();
+    if (text.isEmpty) return;
+    final last =
+        await (select(coachMessages)
+              ..where(
+                (t) =>
+                    t.day.equals(date) &
+                    t.kind.equals(kind) &
+                    (period == null
+                        ? t.period.isNull()
+                        : t.period.equals(period)),
+              )
+              ..orderBy([(t) => OrderingTerm.desc(t.id)])
+              ..limit(1))
+            .getSingleOrNull();
+    if (last?.body == text) return;
+    await into(coachMessages).insert(
+      CoachMessagesCompanion.insert(
+        day: date,
+        kind: kind,
+        period: Value(period),
+        body: text,
+        source: Value(source),
+        createdAt: now ?? DateTime.now(),
+      ),
+    );
+    await (delete(coachMessages)..where(
+          (t) => t.day.isSmallerThanValue(
+            DateTime(date.year, date.month, date.day - coachMessageDays),
+          ),
+        ))
+        .go();
+  });
+
+  /// The coach's messages of [day], oldest first.
+  Future<List<CoachMessage>> coachMessagesOn(DateTime day) =>
+      (select(coachMessages)
+            ..where((t) => t.day.equals(DateTime(day.year, day.month, day.day)))
+            ..orderBy([(t) => OrderingTerm.asc(t.createdAt)]))
+          .get();
 
   Stream<ProReport?> watchProReport(String id) =>
       (select(proReports)..where((t) => t.id.equals(id))).watchSingleOrNull();

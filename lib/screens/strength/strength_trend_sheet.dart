@@ -17,7 +17,7 @@ const _oneRmColor = Color(0xFFC87000);
 
 /// One exercise's history in one context: top working load and estimated
 /// 1RM per session on one kg/lb axis, with the same numbers as a table.
-class StrengthTrendSheet extends ConsumerWidget {
+class StrengthTrendSheet extends StatelessWidget {
   const StrengthTrendSheet({
     super.key,
     required this.name,
@@ -26,6 +26,28 @@ class StrengthTrendSheet extends ConsumerWidget {
     required this.equipment,
   });
   final String name, contextKey, equipment;
+  final StrengthConvention convention;
+
+  @override
+  Widget build(BuildContext context) => SheetPage(
+    title: name,
+    child: StrengthTrendView(
+      contextKey: contextKey,
+      convention: convention,
+      equipment: equipment,
+    ),
+  );
+}
+
+/// The trend and the session table, as the body of a sheet or a tab.
+class StrengthTrendView extends ConsumerWidget {
+  const StrengthTrendView({
+    super.key,
+    required this.contextKey,
+    required this.convention,
+    required this.equipment,
+  });
+  final String contextKey, equipment;
   final StrengthConvention convention;
 
   Widget _legend(Color color, String label) => Row(
@@ -50,108 +72,104 @@ class StrengthTrendSheet extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final unit = ref.watch(massUnitProvider);
     final async = ref.watch(strengthTrendSessionsProvider(contextKey));
-    return SheetPage(
-      title: name,
-      child: async.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => DataError(
-          e,
-          retry: () =>
-              ref.invalidate(strengthTrendSessionsProvider(contextKey)),
-        ),
-        data: (sessions) {
-          final points = strengthTrend(sessions, convention);
-          final load = [
-            for (final p in points)
-              if (p.topLoadKg != null)
-                ChartPoint(p.date, unit.fromKg(p.topLoadKg!)),
-          ];
-          final oneRm = [
-            for (final p in points)
-              if (p.oneRm != null)
-                ChartPoint(
-                  p.date,
-                  unit.fromKg((p.oneRm!.lowKg + p.oneRm!.highKg) / 2),
-                ),
-          ];
-          return ListView(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
-            children: [
-              Text(
-                [
-                  if (equipment.isNotEmpty) equipment,
-                  convention.text,
-                ].join(' · '),
-                style: TextStyle(fontSize: 12, color: muted),
-              ),
-              const SizedBox(height: 16),
-              if (load.length < 2)
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12),
-                  child: Text(
-                    'A trend appears after two logged sessions with this '
-                    'exercise, equipment and load setup.',
-                    style: TextStyle(color: fjInk70, fontSize: 13),
-                  ),
-                )
-              else ...[
-                Wrap(
-                  spacing: 16,
-                  runSpacing: 6,
-                  children: [
-                    _legend(
-                      _topLoadColor,
-                      context.l10n.topWorkingLoadName(unit.name),
-                    ),
-                    if (oneRm.isNotEmpty)
-                      _legend(
-                        _oneRmColor,
-                        context.l10n.estimated1rmMiddleOfRange,
-                      ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                ExcludeSemantics(
-                  child: HistoryChart(
-                    points: load,
-                    secondary: oneRm,
-                    color: _topLoadColor,
-                    secondaryColor: _oneRmColor,
-                    height: 220,
-                  ),
-                ),
-              ],
-              const SizedBox(height: 8),
-              Text(
-                context.l10n.estimated1rmUsesEpleyAnd,
-                style: TextStyle(fontSize: 11, color: muted),
-              ),
-              const SizedBox(height: 16),
-              SectionLabel(context.l10n.sessions),
-              if (points.isEmpty) EmptyState(context.l10n.noLoggedSessionsYet),
-              for (final p in points.reversed)
-                Semantics(
-                  container: true,
-                  child: ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(DateFormat.yMMMEd().format(p.date)),
-                    subtitle: Text(
-                      [
-                        '${p.completedSets} completed ${p.completedSets == 1 ? 'set' : 'sets'}',
-                        if (p.topLoadKg != null)
-                          'top ${formatStrengthLoad(p.topLoadKg!, unit)}',
-                        if (p.oneRm != null) '1RM ${oneRmText(p.oneRm!, unit)}',
-                      ].join(' · '),
-                      style: const TextStyle(
-                        fontFeatures: [FontFeature.tabularFigures()],
-                      ),
-                    ),
-                  ),
-                ),
-            ],
-          );
-        },
+    return async.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (e, _) => DataError(
+        e,
+        retry: () => ref.invalidate(strengthTrendSessionsProvider(contextKey)),
       ),
+      data: (sessions) {
+        final points = strengthTrend(sessions, convention);
+        final load = [
+          for (final p in points)
+            if (p.topLoadKg != null)
+              ChartPoint(p.date, unit.fromKg(p.topLoadKg!)),
+        ];
+        final oneRm = [
+          for (final p in points)
+            if (p.oneRm != null)
+              ChartPoint(
+                p.date,
+                unit.fromKg((p.oneRm!.lowKg + p.oneRm!.highKg) / 2),
+              ),
+        ];
+        return ListView(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
+          children: [
+            Text(
+              [
+                if (equipment.isNotEmpty) equipment,
+                convention.text,
+              ].join(' · '),
+              style: TextStyle(fontSize: 12, color: muted),
+            ),
+            const SizedBox(height: 16),
+            if (load.length < 2)
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 12),
+                child: Text(
+                  'A trend appears after two logged sessions with this '
+                  'exercise, equipment and load setup.',
+                  style: TextStyle(color: fjInk70, fontSize: 13),
+                ),
+              )
+            else ...[
+              Wrap(
+                spacing: 16,
+                runSpacing: 6,
+                children: [
+                  _legend(
+                    _topLoadColor,
+                    context.l10n.topWorkingLoadName(unit.name),
+                  ),
+                  if (oneRm.isNotEmpty)
+                    _legend(
+                      _oneRmColor,
+                      context.l10n.estimated1rmMiddleOfRange,
+                    ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              ExcludeSemantics(
+                child: HistoryChart(
+                  points: load,
+                  secondary: oneRm,
+                  color: _topLoadColor,
+                  secondaryColor: _oneRmColor,
+                  height: 220,
+                ),
+              ),
+            ],
+            const SizedBox(height: 8),
+            Text(
+              context.l10n.estimated1rmUsesEpleyAnd,
+              style: TextStyle(fontSize: 11, color: muted),
+            ),
+            const SizedBox(height: 16),
+            SectionLabel(context.l10n.sessions),
+            if (points.isEmpty) EmptyState(context.l10n.noLoggedSessionsYet),
+            for (final p in points.reversed)
+              Semantics(
+                container: true,
+                child: ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(DateFormat.yMMMEd().format(p.date)),
+                  subtitle: Text(
+                    [
+                      '${p.completedSets} completed ${p.completedSets == 1 ? 'set' : 'sets'}',
+                      if (p.topLoadKg != null)
+                        'top ${formatStrengthLoad(p.topLoadKg!, unit)}',
+                      if (p.oneRm != null) '1RM ${oneRmText(p.oneRm!, unit)}',
+                    ].join(' · '),
+                    style: const TextStyle(
+                      fontFeatures: [FontFeature.tabularFigures()],
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 }

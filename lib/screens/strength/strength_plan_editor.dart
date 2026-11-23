@@ -85,6 +85,53 @@ class _PlanEditorState extends ConsumerState<StrengthPlanEditor> {
     }
   }
 
+  /// The routine's note: it travels with this plan and shows in gym mode
+  /// every time the workout is started.
+  Widget _routineNote() {
+    final note = plan.notes;
+    return SectionCard(
+      title: context.l10n.routineNote,
+      child: Row(
+        children: [
+          const Icon(
+            Icons.description_outlined,
+            size: 18,
+            color: strengthColor,
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              note ?? context.l10n.routineNoteHint,
+              style: TextStyle(
+                fontSize: 13,
+                color: note == null ? muted : fjInk70,
+              ),
+            ),
+          ),
+          Icon(Icons.edit_outlined, size: 16, color: muted),
+        ],
+      ),
+      onTap: () async {
+        final values = await showStrengthFieldsDialog(
+          context,
+          title: context.l10n.routineNote,
+          message: context.l10n.routineNoteHint,
+          fields: [
+            strengthDialogField(
+              context.l10n.routineNote,
+              initial: note ?? '',
+              number: false,
+            ),
+          ],
+          confirm: context.l10n.save,
+        );
+        final v = values?.single.trim();
+        if (v == null || v == (note ?? '')) return;
+        edit(plan.copyWith(notes: () => v.isEmpty ? null : v));
+      },
+    );
+  }
+
   Future<void> saveAsTemplate() async {
     final values = await showStrengthFieldsDialog(
       context,
@@ -439,6 +486,8 @@ class _PlanEditorState extends ConsumerState<StrengthPlanEditor> {
               const SizedBox(height: 12),
             ],
             ...cards,
+            _routineNote(),
+            const SizedBox(height: 8),
             OutlinedButton.icon(
               style: OutlinedButton.styleFrom(
                 foregroundColor: strengthColor,

@@ -41,3 +41,17 @@ String hrvSeriesLabel(AppLocalizations l, HrvSeries s) => switch (s) {
   HrvSeries.after => l.hrvSeriesAfter,
   HrvSeries.resting => l.hrvSeriesResting,
 };
+
+/// Why a day usually has no reading of [m]; null for body measurements,
+/// which are taken now and then, so an older one is not a gap.
+String? healthMetricGapReason(AppLocalizations l, HealthMetric m) =>
+    switch (m) {
+      HealthMetric.hrv ||
+      HealthMetric.rhr ||
+      HealthMetric.spo2 ||
+      HealthMetric.respiration ||
+      HealthMetric.skinTemperature ||
+      HealthMetric.sleep => l.metricGapNight,
+      HealthMetric.stress || HealthMetric.steps => l.metricGapDay,
+      _ => null,
+    };

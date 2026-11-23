@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../providers/device_actions_provider.dart';
 import '../../providers/polar_h10_provider.dart';
+import '../../providers/strength_provider.dart';
 import '../../providers/user_profile_provider.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/grip_strength_sheet.dart';
@@ -20,6 +21,7 @@ import '../../widgets/absence_sheet.dart';
 import '../../widgets/ecg_sheet.dart';
 import '../../widgets/sleep_ecg_recording_sheet.dart';
 import '../../widgets/manual_activity_sheet.dart';
+import '../strength/strength_focus_screen.dart';
 import '../../utils/decimal.dart';
 
 class ManualEntrySheet extends ConsumerStatefulWidget {
@@ -363,6 +365,21 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
     );
   }
 
+  /// Quick Start: gym mode without a plan, resuming one left open.
+  Future<void> _quickStrength() async {
+    final repo = ref.read(strengthRepositoryProvider);
+    final live =
+        await repo.openQuickSession() ??
+        await repo.startQuickSession(title: tr.strengthTraining);
+    final started = await repo.activityStart(live.activityId) ?? DateTime.now();
+    if (!mounted) return;
+    await showAppSheet<bool>(
+      context,
+      StrengthFocusScreen(initial: live, startedAt: started),
+    );
+    invalidateStrength(ref.invalidate);
+  }
+
   /// Opens what an entry of the menu stands for. [id] is an identifier,
   /// never the translated label: the forms and the save look it up.
   void _open(String id) {
@@ -387,6 +404,8 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
         showAppSheet(context, const AbsenceSheet());
       case 'BLE blood pressure':
         showAppSheet(context, const BpMeasureSheet());
+      case 'Quick strength':
+        _quickStrength();
       case 'RENPHO Scale (BLE)':
         scale();
       default:
@@ -408,6 +427,13 @@ class _EntryState extends ConsumerState<ManualEntrySheet> {
             Icons.edit_calendar_rounded,
             l.plusLogWorkout,
             l.plusLogWorkoutHint,
+          ),
+          _Entry(
+            'Quick strength',
+            Icons.fitness_center_rounded,
+            l.plusQuickStrength,
+            l.plusQuickStrengthHint,
+            badge: 'LIVE',
           ),
           _Entry(
             'Import',

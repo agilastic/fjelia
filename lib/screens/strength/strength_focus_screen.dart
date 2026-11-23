@@ -16,6 +16,7 @@ import '../../utils/decimal.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/strength_demo.dart';
 import '../../widgets/strength_widgets.dart';
+import 'strength_exercise_sheet.dart';
 import 'strength_forms.dart';
 
 const _tabular = [FontFeature.tabularFigures()];
@@ -282,6 +283,180 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
     });
   }
 
+  /// Quick Start and extra work: an exercise added in the gym gets one open
+  /// set and becomes the current one.
+  Future<void> _addExercise() async {
+    final v = await pickOrCreateStrengthVariant(
+      context,
+      ref,
+      ref.read(massUnitProvider),
+    );
+    if (v == null || !mounted) return;
+    final set = StrengthSetResult(id: newStrengthId('ps'));
+    final next = log.copyWith(
+      exercises: [
+        ...log.exercises,
+        StrengthPerformedExercise(
+          id: newStrengthId('pe'),
+          variantId: v.id,
+          name: v.name,
+          equipment: v.equipment,
+          convention: v.convention,
+          sets: [set],
+        ),
+      ],
+    );
+    if (await _save(next)) _goTo(set.id);
+  }
+
+  /// One more set of the current exercise, right after its last one.
+  Future<void> _addSet() async {
+    final e = step.exercise;
+    final set = StrengthSetResult(id: newStrengthId('ps'));
+    final next = log.copyWith(
+      exercises: [
+        for (final x in log.exercises)
+          x.id == e.id ? x.copyWith(sets: [...x.sets, set]) : x,
+      ],
+    );
+    if (await _save(next)) _goTo(set.id);
+  }
+
+  void _goTo(String setId) {
+    final i = order.indexWhere((o) => o.set.id == setId);
+    if (i < 0) return;
+    _go(i);
+    setState(() => reviewing = false);
+  }
+
+  Future<String?> _note(String title, String? current) async {
+    final values = await showStrengthFieldsDialog(
+      context,
+      title: title,
+      fields: [
+        strengthDialogField(title, initial: current ?? '', number: false),
+      ],
+      confirm: context.l10n.save,
+    );
+    return values?.single.trim();
+  }
+
+  Future<void> _workoutNote() async {
+    final v = await _note(context.l10n.workoutNote, log.notes);
+    if (v == null) return;
+    await _save(log.copyWith(notes: () => v.isEmpty ? null : v));
+  }
+
+  /// Today's note on the current exercise; the pinned note is separate.
+  Future<void> _exerciseNote() async {
+    final e = step.exercise;
+    final v = await _note(context.l10n.exerciseNoteToday, e.notes);
+    if (v == null) return;
+    await _save(
+      log.copyWith(
+        exercises: [
+          for (final x in log.exercises)
+            x.id == e.id ? x.copyWith(notes: () => v.isEmpty ? null : v) : x,
+        ],
+      ),
+    );
+  }
+
+  void _menu(String v) {
+    switch (v) {
+      case 'discard':
+        _discard();
+      case 'addExercise':
+        _addExercise();
+      case 'addSet':
+        _addSet();
+      case 'workoutNote':
+        _workoutNote();
+      case 'exerciseNote':
+        _exerciseNote();
+      case 'pin':
+        final e = step.exercise;
+        editPinnedNote(
+          context,
+          ref,
+          variantId: e.variantId,
+          exerciseName: e.name,
+          current: ref
+              .read(strengthExerciseNotesProvider)
+              .valueOrNull?[e.variantId],
+        );
+    }
+  }
+
+  List<PopupMenuEntry<String>> _menuItems() {
+    final l = context.l10n;
+    PopupMenuItem<String> item(String v, IconData icon, String label) =>
+        PopupMenuItem(
+          value: v,
+          child: ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: Icon(icon, size: 20),
+            title: Text(label),
+          ),
+        );
+    return [
+      item('addExercise', Icons.add, l.addExercise),
+      if (order.isNotEmpty) ...[
+        item('addSet', Icons.playlist_add, l.addSet),
+        item('exerciseNote', Icons.edit_note, l.exerciseNoteToday),
+        item('pin', Icons.push_pin_outlined, l.pinnedNote),
+      ],
+      item('workoutNote', Icons.notes, l.workoutNote),
+      const PopupMenuDivider(),
+      item('discard', Icons.delete_outline, l.discardWorkout),
+    ];
+  }
+
+  /// The plan's note on this exercise (routine level).
+  String? _plannedNote(StrengthPerformedExercise e) => log
+      .baseline
+      ?.plan
+      .exercises
+      .where((p) => p.id == e.plannedExerciseId)
+      .firstOrNull
+      ?.notes;
+
+  /// The routine's own note and the workout note, above the sets.
+  Widget? _notesCard() {
+    final routine = log.baseline?.plan.notes;
+    final workout = log.notes;
+    if (routine == null && workout == null) return null;
+    Widget line(IconData icon, String label, String text) => Padding(
+      padding: const EdgeInsets.only(top: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 14, color: strengthColor),
+          const SizedBox(width: 6),
+          Expanded(
+            child: Text(
+              text,
+              semanticsLabel: '$label: $text',
+              style: TextStyle(fontSize: 12, color: fjInk70),
+            ),
+          ),
+        ],
+      ),
+    );
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (routine != null)
+            line(Icons.description_outlined, context.l10n.routineNote, routine),
+          if (workout != null)
+            line(Icons.notes, context.l10n.workoutNote, workout),
+        ],
+      ),
+    );
+  }
+
   Widget _stepper({
     required String label,
     required String value,
@@ -341,10 +516,60 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
   @override
   Widget build(BuildContext context) {
     final unit = ref.watch(massUnitProvider);
+    final menu = PopupMenuButton<String>(
+      tooltip: context.l10n.workoutActions,
+      onSelected: _menu,
+      itemBuilder: (_) => _menuItems(),
+    );
     if (order.isEmpty) {
-      return SheetPage(
-        title: context.l10n.gymMode,
-        child: EmptyState(context.l10n.thisWorkoutHasNoSets),
+      // Quick Start, or a plan without sets: exercises come as they are done.
+      return PopScope(
+        canPop: !saving,
+        child: SheetPage(
+          title: context.l10n.gymMode,
+          actions: [menu],
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(16, 24, 16, 32),
+            children: [
+              Icon(Icons.fitness_center, size: 44, color: strengthColor),
+              const SizedBox(height: 12),
+              Text(
+                context.l10n.quickStartEmpty,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 15, color: fjInk70),
+              ),
+              ?_notesCard(),
+              const SizedBox(height: 20),
+              FilledButton.icon(
+                style: FilledButton.styleFrom(
+                  backgroundColor: strengthColor,
+                  foregroundColor: Colors.black,
+                  minimumSize: const Size(0, 56),
+                ),
+                onPressed: saving ? null : _addExercise,
+                icon: const Icon(Icons.add),
+                label: Text(
+                  context.l10n.addExercise,
+                  style: TextStyle(fontSize: 17),
+                ),
+              ),
+              if (error != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Text(
+                    error!,
+                    style: const TextStyle(color: Colors.redAccent),
+                  ),
+                ),
+              const SizedBox(height: 8),
+              TextButton(
+                style: TextButton.styleFrom(minimumSize: const Size(0, 48)),
+                onPressed: saving ? null : _discard,
+                child: Text(context.l10n.discardWorkout),
+              ),
+            ],
+          ),
+        ),
       );
     }
     final s = step, c = s.exercise.convention;
@@ -390,16 +615,7 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
             onPressed: saving ? null : _finish,
             icon: const Icon(Icons.flag_outlined),
           ),
-          PopupMenuButton<String>(
-            tooltip: context.l10n.workoutActions,
-            onSelected: (v) => v == 'discard' ? _discard() : null,
-            itemBuilder: (_) => [
-              PopupMenuItem(
-                value: 'discard',
-                child: Text(context.l10n.discardWorkout),
-              ),
-            ],
-          ),
+          menu,
         ],
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
@@ -440,6 +656,7 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
                   style: const TextStyle(color: Colors.redAccent),
                 ),
               ),
+            ?_notesCard(),
             if (allDone && !reviewing) ...[
               const SizedBox(height: 28),
               Semantics(
@@ -491,6 +708,12 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
                 onPressed: () => setState(() => reviewing = true),
                 child: Text(context.l10n.reviewSets),
               ),
+              TextButton.icon(
+                style: TextButton.styleFrom(minimumSize: const Size(0, 48)),
+                onPressed: saving ? null : _addExercise,
+                icon: const Icon(Icons.add, size: 18),
+                label: Text(context.l10n.addExercise),
+              ),
             ],
             if (showSet) ...[
               const SizedBox(height: 14),
@@ -507,11 +730,33 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
               const SizedBox(height: 4),
               Semantics(
                 header: true,
-                child: Text(
-                  s.exercise.name,
-                  style: const TextStyle(
-                    fontSize: 26,
-                    fontWeight: FontWeight.w800,
+                button: true,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(8),
+                  onTap: () => showAppSheet<void>(
+                    context,
+                    StrengthExerciseSheet(
+                      variantId: s.exercise.variantId,
+                      name: s.exercise.name,
+                      equipment: s.exercise.equipment,
+                      convention: c,
+                      contextKey: s.exercise.contextKey,
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          s.exercise.name,
+                          style: const TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Icon(Icons.info_outline, size: 20, color: muted),
+                    ],
                   ),
                 ),
               ),
@@ -522,6 +767,15 @@ class _FocusState extends ConsumerState<StrengthFocusScreen> {
                 ].join(' · '),
                 style: TextStyle(color: muted, fontSize: 12),
               ),
+              PinnedNoteLine(variantId: s.exercise.variantId),
+              for (final n in [?_plannedNote(s.exercise), ?s.exercise.notes])
+                Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Text(
+                    n,
+                    style: TextStyle(fontSize: 12, color: fjInk70),
+                  ),
+                ),
               if (StrengthExerciseDemo.has(s.exercise.variantId))
                 Padding(
                   padding: const EdgeInsets.only(top: 12),

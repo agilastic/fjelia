@@ -15,4 +15,9 @@ abstract class ProAnalysisPrompts {
   /// session (or swaps it within the week) and writes the push, answering in
   /// the app's JSON format; empty when not available.
   String get morningRevision;
+
+  /// The instructions for a coach message during the day, written when
+  /// stress or energy changes noticeably: one short plain-text message for
+  /// the Home screen; empty when not available.
+  String get dayMessage;
 }

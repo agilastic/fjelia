@@ -63,6 +63,20 @@ class DisplayTab extends ConsumerWidget {
                       style: TextStyle(fontSize: 11, color: muted),
                     ),
                   ),
+                SwitchListTile(
+                  key: const ValueKey('home-sky'),
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(context.l10n.homeSky),
+                  subtitle: Text(
+                    context.l10n.homeSkyHint,
+                    style: TextStyle(fontSize: 11, color: muted),
+                  ),
+                  value: ref.watch(homeSkyProvider).valueOrNull ?? true,
+                  onChanged: (v) => runUiAction(
+                    context,
+                    () => ref.read(homeSkyProvider.notifier).set(v),
+                  ),
+                ),
               ],
             ),
           ),

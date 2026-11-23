@@ -483,6 +483,30 @@ class StrengthRepository {
     required StoredStrengthPlan stored,
     required String title,
     DateTime? now,
+  }) => _startLive(
+    title,
+    now,
+    baseline: StrengthPlanBaseline(
+      ownerKind: stored.owner.kind,
+      ownerKey: stored.owner.key,
+      revisionId: stored.revisionId,
+      plan: stored.plan,
+    ),
+    exercises: logLayoutFromPlan(stored.plan),
+  );
+
+  /// Quick Start: a live workout without a plan. Exercises are added in gym
+  /// mode as they are done; nothing is compared with a plan.
+  Future<StrengthActivityLog> startQuickSession({
+    required String title,
+    DateTime? now,
+  }) => _startLive(title, now);
+
+  Future<StrengthActivityLog> _startLive(
+    String title,
+    DateTime? now, {
+    StrengthPlanBaseline? baseline,
+    List<StrengthPerformedExercise> exercises = const [],
   }) => db.transaction(() async {
     final id = 'fjelia-live:${newStrengthId('act')}';
     await db
@@ -500,13 +524,8 @@ class StrengthRepository {
     return saveLog(
       StrengthActivityLog(
         activityId: id,
-        baseline: StrengthPlanBaseline(
-          ownerKind: stored.owner.kind,
-          ownerKey: stored.owner.key,
-          revisionId: stored.revisionId,
-          plan: stored.plan,
-        ),
-        exercises: logLayoutFromPlan(stored.plan),
+        baseline: baseline,
+        exercises: exercises,
       ),
     );
   });
@@ -515,7 +534,19 @@ class StrengthRepository {
       (await db.getActivityById(activityId))?.startDate;
 
   /// An unfinished live workout of [owner], to resume.
-  Future<StrengthActivityLog?> openLiveSession(StrengthPlanOwner owner) async {
+  Future<StrengthActivityLog?> openLiveSession(StrengthPlanOwner owner) =>
+      _openLive(
+        (b) =>
+            b != null && b.ownerKind == owner.kind && b.ownerKey == owner.key,
+      );
+
+  /// An unfinished Quick Start workout, to resume.
+  Future<StrengthActivityLog?> openQuickSession() =>
+      _openLive((b) => b == null);
+
+  Future<StrengthActivityLog?> _openLive(
+    bool Function(StrengthPlanBaseline?) matches,
+  ) async {
     final open =
         await (db.select(db.activityRecords)
               ..where(
@@ -526,12 +557,35 @@ class StrengthRepository {
             .get();
     for (final a in open) {
       final log = await loadLog(a.activityId);
-      final b = log?.baseline;
-      if (b != null && b.ownerKind == owner.kind && b.ownerKey == owner.key) {
-        return log;
-      }
+      if (log != null && matches(log.baseline)) return log;
     }
     return null;
+  }
+
+  /// Pinned exercise notes by variant id.
+  Future<Map<String, String>> exerciseNotes() async => {
+    for (final r in await db.select(db.strengthExerciseNotes).get())
+      r.variantId: r.note,
+  };
+
+  /// Pins [note] on the exercise [variantId]; an empty note removes it.
+  Future<void> setExerciseNote(String variantId, String? note) async {
+    final text = note?.trim() ?? '';
+    if (text.isEmpty) {
+      await (db.delete(
+        db.strengthExerciseNotes,
+      )..where((t) => t.variantId.equals(variantId))).go();
+      return;
+    }
+    await db
+        .into(db.strengthExerciseNotes)
+        .insertOnConflictUpdate(
+          StrengthExerciseNotesCompanion.insert(
+            variantId: variantId,
+            note: text,
+            updatedAt: DateTime.now(),
+          ),
+        );
   }
 
   /// Ends a live workout: its duration is the time since it started. When

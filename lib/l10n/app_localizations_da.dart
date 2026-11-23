@@ -9537,4 +9537,184 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get myZonesPower => 'Watt';
+
+  @override
+  String get exerciseAbout => 'Om';
+
+  @override
+  String get exerciseMuscles => 'Muskler';
+
+  @override
+  String get exerciseNoMuscleData => 'Ingen muskeldata for dine egne øvelser.';
+
+  @override
+  String get musclePrimary => 'Primære';
+
+  @override
+  String get muscleSecondary => 'Sekundære';
+
+  @override
+  String get muscleQuads => 'Forlår';
+
+  @override
+  String get muscleHamstrings => 'Baglår';
+
+  @override
+  String get muscleGlutes => 'Baller';
+
+  @override
+  String get muscleCalves => 'Lægge';
+
+  @override
+  String get muscleAdductors => 'Adduktorer';
+
+  @override
+  String get muscleCore => 'Core';
+
+  @override
+  String get muscleObliques => 'Skrå mavemuskler';
+
+  @override
+  String get muscleLowerBack => 'Lænd';
+
+  @override
+  String get muscleLats => 'Latissimus';
+
+  @override
+  String get muscleUpperBack => 'Øvre ryg';
+
+  @override
+  String get muscleChest => 'Bryst';
+
+  @override
+  String get muscleShoulders => 'Skuldre';
+
+  @override
+  String get muscleTriceps => 'Triceps';
+
+  @override
+  String get muscleBiceps => 'Biceps';
+
+  @override
+  String get muscleForearms => 'Underarme';
+
+  @override
+  String get pinnedNote => 'Fastgjort note';
+
+  @override
+  String get pinnedNoteHint =>
+      'Vises hver gang du laver denne øvelse, i hver træning.';
+
+  @override
+  String get searchYoutube => 'Søg på YouTube';
+
+  @override
+  String get searchYoutubeHint =>
+      'Åbner YouTube med øvelsens navn. Intet andet forlader appen.';
+
+  @override
+  String get workoutNote => 'Træningsnote';
+
+  @override
+  String get exerciseNoteToday => 'Note for i dag';
+
+  @override
+  String get routineNote => 'Rutinenote';
+
+  @override
+  String get routineNoteHint =>
+      'Vises i træningsmodus hver gang du starter denne træning.';
+
+  @override
+  String get quickStartEmpty =>
+      'Ingen øvelser endnu. Tilføj hver, når du starter den.';
+
+  @override
+  String get plusQuickStrength => 'Fri styrke';
+
+  @override
+  String get plusQuickStrengthHint => 'Træningsmodus uden plan';
+
+  @override
+  String get reflectionTitle => 'Refleksion';
+
+  @override
+  String get reflectionPrompt => 'Hvordan gik det? Et par ord hjælper coachen.';
+
+  @override
+  String get reflectionFeltStrong => 'Følte mig stærk';
+
+  @override
+  String get reflectionLegsHeavy => 'Tunge ben';
+
+  @override
+  String get reflectionTired => 'Træt';
+
+  @override
+  String get reflectionSleptBadly => 'Sov dårligt';
+
+  @override
+  String get reflectionPain => 'Noget gjorde ondt';
+
+  @override
+  String get reflectionHeat => 'For varmt';
+
+  @override
+  String get metricNoReading => 'Ingen måling';
+
+  @override
+  String metricGapTitle(String date) {
+    return 'Ingen måling for $date';
+  }
+
+  @override
+  String get metricGapNight =>
+      'Der kom intet for denne nat. Bær uret eller ringen om natten og synkroniser – natten vises, når en kilde sender den.';
+
+  @override
+  String get metricGapDay =>
+      'Der er endnu intet kommet for denne dag. Synkroniser for at hente det; disse værdier kommer fra uret i løbet af dagen.';
+
+  @override
+  String metricGapLast(String value, String date) {
+    return 'Seneste måling: $value den $date.';
+  }
+
+  @override
+  String sleepGapTitle(String date) {
+    return 'Ingen søvn registreret for $date';
+  }
+
+  @override
+  String get coachMessage => 'Besked fra coachen';
+
+  @override
+  String coachDayTitle(String date) {
+    return '$date · Overblik';
+  }
+
+  @override
+  String get coachDayEmpty => 'Coachen efterlod ingen briefing for denne dag.';
+
+  @override
+  String get coachDayKept => 'Briefinger gemmes i 400 dage på denne enhed.';
+
+  @override
+  String coachDayOverview(int count) {
+    return 'Dagens overblik ($count)';
+  }
+
+  @override
+  String get coachDayMessages => 'Beskeder fra coachen i løbet af dagen';
+
+  @override
+  String get coachDayMessagesHint =>
+      'FjeliaPro: når dit stress stiger tydeligt, eller din energi bliver lav, sendes dagens værdier og sundhedsoversigten til Fjelia AI Pro, som efterlader en kort besked på Hjem. Højst 3 om dagen, ingen notifikationer.';
+
+  @override
+  String get homeSky => 'Vejrhimmel på Hjem';
+
+  @override
+  String get homeSkyHint =>
+      'En blød himmel øverst på Hjem, der følger dagens vejr og tidspunktet på dagen.';
 }

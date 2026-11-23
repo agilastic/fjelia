@@ -46,4 +46,36 @@ void main() {
       isNull,
     );
   });
+
+  test('the selected day has its own reading or none, never an older one', () {
+    final points = [
+      ChartPoint(DateTime(2026, 11, 8, 7), 52),
+      ChartPoint(DateTime(2026, 11, 10, 6, 30), 48),
+    ];
+    final withValue = MetricHistoryWindow(
+      points,
+      HealthMetric.hrv,
+      14,
+      0,
+      DateTime(2026, 11, 10),
+    );
+    expect(withValue.onSelectedDay?.value, 48);
+    final gap = MetricHistoryWindow(
+      points,
+      HealthMetric.hrv,
+      14,
+      0,
+      DateTime(2026, 11, 11),
+    );
+    expect(gap.onSelectedDay, isNull);
+    expect(gap.latest?.value, 48);
+    final earlier = MetricHistoryWindow(
+      points,
+      HealthMetric.hrv,
+      14,
+      14,
+      DateTime(2026, 11, 10),
+    );
+    expect(earlier.onSelectedDay, isNull);
+  });
 }

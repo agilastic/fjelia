@@ -1,3 +1,5 @@
+import 'package:fjelia/services/open_meteo_client.dart';
+import 'package:fjelia/widgets/home_sky.dart';
 import 'package:fjelia/widgets/sync_orb.dart';
 import 'package:fjelia/screens/onboarding/connect_devices_screen.dart';
 import 'package:fjelia/services/bp_monitor_registry.dart';
@@ -427,6 +429,7 @@ void main() {
     FakeWorkoutGarmin? garmin,
     Locale? locale,
     bool light = false,
+    List<Override> extra = const [],
   }) async {
     // LightFjelia for a check of both looks; the getters read it directly.
     Fjelia.style = light ? FjeliaStyle.light : FjeliaStyle.dark;
@@ -444,6 +447,7 @@ void main() {
       ProviderScope(
         overrides: [
           databaseProvider.overrideWithValue(db),
+          ...extra,
           nutritionConditionsProvider.overrideWith(
             (ref, workout) async => const NutritionConditions(),
           ),
@@ -1659,6 +1663,64 @@ void main() {
       await tester.binding.setSurfaceSize(null);
     },
   );
+  for (final light in [false, true]) {
+    testWidgets(
+      'the weather sky shows behind every main tab (${light ? 'light' : 'dark'})',
+      (tester) async {
+        final now = DateTime.now();
+        final hour = DateTime(now.year, now.month, now.day, now.hour);
+        final day =
+            '${now.year.toString().padLeft(4, '0')}-'
+            '${now.month.toString().padLeft(2, '0')}-'
+            '${now.day.toString().padLeft(2, '0')}';
+        // The sky follows the Plan's forecast: rain this hour, sun all day.
+        final weather = OpenMeteoResult(
+          points: [
+            OpenMeteoPoint(
+              time: hour,
+              temperatureC: 9,
+              humidityPct: 80,
+              pressureHpa: 1012,
+              precipitationMm: 1.5,
+              windSpeedKmh: 12,
+              windDirection: 230,
+              weatherCode: 61,
+            ),
+          ],
+          sunrise: {day: DateTime(now.year, now.month, now.day)},
+          sunset: {day: DateTime(now.year, now.month, now.day, 23, 59)},
+          fetchedAt: now,
+          rawJson: '{}',
+          source: 'test',
+        );
+        await render(
+          tester,
+          const HomeScreen(),
+          'sky-health-${light ? 'light' : 'dark'}',
+          light: light,
+          extra: [heatHourlyWeatherProvider.overrideWith((_) async => weather)],
+        );
+        for (final title in ['PLAN', 'LOAD', 'COACH']) {
+          await tester.tap(find.text(title));
+          await tester.pumpAndSettle();
+          expect(find.byType(HomeSkyBand), findsOneWidget, reason: title);
+          expect(
+            find.byKey(const ValueKey('home-sky')),
+            findsOneWidget,
+            reason: title,
+          );
+          await capture(
+            tester,
+            'sky-${title.toLowerCase()}-${light ? 'light' : 'dark'}',
+          );
+          expect(tester.takeException(), isNull, reason: title);
+        }
+        await tester.pumpWidget(const SizedBox());
+        await tester.pump(Duration.zero);
+        await tester.binding.setSurfaceSize(null);
+      },
+    );
+  }
   testWidgets('all main tabs open and settings is reachable', (tester) async {
     await render(tester, const HomeScreen(), 'navigation');
     for (final title in ['PLAN', 'LOAD', 'COACH', 'DEBUG', 'HEALTH']) {

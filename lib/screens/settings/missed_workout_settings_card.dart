@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../l10n/l10n_ext.dart';
+import '../../providers/coach_day_message_provider.dart';
 import '../../providers/fjelia_pro_provider.dart' show proSubscribedProvider;
 import '../../providers/hrv_reminder_provider.dart';
 import '../../providers/missed_workout_provider.dart';
@@ -98,6 +99,33 @@ class MissedWorkoutSettingsCard extends ConsumerWidget {
               onChanged: (v) => runUiAction(
                 context,
                 () => ref.read(proposalProCoachProvider.notifier).set(v),
+              ),
+            ),
+          if (ref.watch(proSubscribedProvider))
+            SwitchListTile(
+              key: const ValueKey('coach-day-messages'),
+              contentPadding: EdgeInsets.zero,
+              secondary: const Icon(
+                Icons.chat_bubble_outline,
+                color: Color(0xFF3EE0FF),
+              ),
+              title: Text(
+                l10n.coachDayMessages,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              subtitle: Text(
+                l10n.coachDayMessagesHint,
+                style: TextStyle(fontSize: 12, color: fjInk70),
+              ),
+              value:
+                  ref.watch(coachDayMessagesEnabledProvider).valueOrNull ??
+                  false,
+              onChanged: (v) => runUiAction(
+                context,
+                () => ref.read(coachDayMessagesEnabledProvider.notifier).set(v),
               ),
             ),
           if (s.enabled) ...[

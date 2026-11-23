@@ -9587,4 +9587,185 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get myZonesPower => 'Výkon';
+
+  @override
+  String get exerciseAbout => 'Info';
+
+  @override
+  String get exerciseMuscles => 'Svaly';
+
+  @override
+  String get exerciseNoMuscleData =>
+      'Pre vlastné cviky nie sú údaje o svaloch.';
+
+  @override
+  String get musclePrimary => 'Hlavné';
+
+  @override
+  String get muscleSecondary => 'Pomocné';
+
+  @override
+  String get muscleQuads => 'Štvorhlavý sval';
+
+  @override
+  String get muscleHamstrings => 'Zadná strana stehna';
+
+  @override
+  String get muscleGlutes => 'Sedacie svaly';
+
+  @override
+  String get muscleCalves => 'Lýtka';
+
+  @override
+  String get muscleAdductors => 'Adduktory';
+
+  @override
+  String get muscleCore => 'Stred tela';
+
+  @override
+  String get muscleObliques => 'Šikmé brušné svaly';
+
+  @override
+  String get muscleLowerBack => 'Spodný chrbát';
+
+  @override
+  String get muscleLats => 'Široký chrbtový sval';
+
+  @override
+  String get muscleUpperBack => 'Horný chrbát';
+
+  @override
+  String get muscleChest => 'Hrudník';
+
+  @override
+  String get muscleShoulders => 'Ramená';
+
+  @override
+  String get muscleTriceps => 'Triceps';
+
+  @override
+  String get muscleBiceps => 'Biceps';
+
+  @override
+  String get muscleForearms => 'Predlaktia';
+
+  @override
+  String get pinnedNote => 'Pripnutá poznámka';
+
+  @override
+  String get pinnedNoteHint =>
+      'Zobrazí sa pri každom vykonaní tohto cviku, v každom tréningu.';
+
+  @override
+  String get searchYoutube => 'Hľadať na YouTube';
+
+  @override
+  String get searchYoutubeHint =>
+      'Otvorí YouTube s názvom cviku. Nič iné neopustí aplikáciu.';
+
+  @override
+  String get workoutNote => 'Poznámka k tréningu';
+
+  @override
+  String get exerciseNoteToday => 'Poznámka na dnes';
+
+  @override
+  String get routineNote => 'Poznámka k rutine';
+
+  @override
+  String get routineNoteHint =>
+      'Zobrazí sa v režime posilňovne pri každom spustení tohto tréningu.';
+
+  @override
+  String get quickStartEmpty =>
+      'Zatiaľ žiadne cviky. Pridaj každý, keď ho začneš.';
+
+  @override
+  String get plusQuickStrength => 'Voľná sila';
+
+  @override
+  String get plusQuickStrengthHint => 'Režim posilňovne bez plánu';
+
+  @override
+  String get reflectionTitle => 'Reflexia';
+
+  @override
+  String get reflectionPrompt => 'Ako to šlo? Pár slov pomôže trénerovi.';
+
+  @override
+  String get reflectionFeltStrong => 'Cítil som sa silný';
+
+  @override
+  String get reflectionLegsHeavy => 'Ťažké nohy';
+
+  @override
+  String get reflectionTired => 'Unavený';
+
+  @override
+  String get reflectionSleptBadly => 'Zle som spal';
+
+  @override
+  String get reflectionPain => 'Niečo bolelo';
+
+  @override
+  String get reflectionHeat => 'Príliš teplo';
+
+  @override
+  String get metricNoReading => 'Bez merania';
+
+  @override
+  String metricGapTitle(String date) {
+    return 'Bez merania pre $date';
+  }
+
+  @override
+  String get metricGapNight =>
+      'Za túto noc neprišlo nič. Nos hodinky alebo prsteň cez noc a synchronizuj – noc sa zobrazí, keď ju niektorý zdroj pošle.';
+
+  @override
+  String get metricGapDay =>
+      'Za tento deň zatiaľ nič neprišlo. Synchronizuj, aby sa načítalo; tieto hodnoty merajú hodinky počas dňa.';
+
+  @override
+  String metricGapLast(String value, String date) {
+    return 'Posledné meranie: $value dňa $date.';
+  }
+
+  @override
+  String sleepGapTitle(String date) {
+    return 'Žiadny spánok zaznamenaný pre $date';
+  }
+
+  @override
+  String get coachMessage => 'Správa od trénera';
+
+  @override
+  String coachDayTitle(String date) {
+    return '$date · Prehľad';
+  }
+
+  @override
+  String get coachDayEmpty => 'Tréner pre tento deň nenechal žiadny briefing.';
+
+  @override
+  String get coachDayKept => 'Briefingy zostávajú v tomto zariadení 400 dní.';
+
+  @override
+  String coachDayOverview(int count) {
+    return 'Prehľad dňa ($count)';
+  }
+
+  @override
+  String get coachDayMessages => 'Správy od trénera počas dňa';
+
+  @override
+  String get coachDayMessagesHint =>
+      'FjeliaPro: keď tvoj stres výrazne stúpne alebo ti dochádza energia, dnešné hodnoty a súhrn zdravia idú do Fjelia AI Pro, ktoré nechá krátku správu na Domov. Najviac 3 denne, žiadne notifikácie.';
+
+  @override
+  String get homeSky => 'Obloha s počasím na Domov';
+
+  @override
+  String get homeSkyHint =>
+      'Jemná obloha v hornej časti Domov, ktorá sleduje dnešné počasie a dennú dobu.';
 }

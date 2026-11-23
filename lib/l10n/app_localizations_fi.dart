@@ -9578,4 +9578,185 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get myZonesPower => 'Teho';
+
+  @override
+  String get exerciseAbout => 'Tietoa';
+
+  @override
+  String get exerciseMuscles => 'Lihakset';
+
+  @override
+  String get exerciseNoMuscleData => 'Omille liikkeille ei ole lihastietoja.';
+
+  @override
+  String get musclePrimary => 'Pää';
+
+  @override
+  String get muscleSecondary => 'Avustavat';
+
+  @override
+  String get muscleQuads => 'Etureidet';
+
+  @override
+  String get muscleHamstrings => 'Takareidet';
+
+  @override
+  String get muscleGlutes => 'Pakarat';
+
+  @override
+  String get muscleCalves => 'Pohkeet';
+
+  @override
+  String get muscleAdductors => 'Lähentäjät';
+
+  @override
+  String get muscleCore => 'Keskivartalo';
+
+  @override
+  String get muscleObliques => 'Vinot vatsalihakset';
+
+  @override
+  String get muscleLowerBack => 'Alaselkä';
+
+  @override
+  String get muscleLats => 'Leveät selkälihakset';
+
+  @override
+  String get muscleUpperBack => 'Yläselkä';
+
+  @override
+  String get muscleChest => 'Rinta';
+
+  @override
+  String get muscleShoulders => 'Hartiat';
+
+  @override
+  String get muscleTriceps => 'Ojentajat';
+
+  @override
+  String get muscleBiceps => 'Hauikset';
+
+  @override
+  String get muscleForearms => 'Kyynärvarret';
+
+  @override
+  String get pinnedNote => 'Kiinnitetty muistiinpano';
+
+  @override
+  String get pinnedNoteHint =>
+      'Näkyy aina kun teet tämän liikkeen, joka treenissä.';
+
+  @override
+  String get searchYoutube => 'Hae YouTubesta';
+
+  @override
+  String get searchYoutubeHint =>
+      'Avaa YouTuben liikkeen nimellä. Mitään muuta ei lähde sovelluksesta.';
+
+  @override
+  String get workoutNote => 'Treenin muistiinpano';
+
+  @override
+  String get exerciseNoteToday => 'Tämän päivän muistiinpano';
+
+  @override
+  String get routineNote => 'Rutiinin muistiinpano';
+
+  @override
+  String get routineNoteHint =>
+      'Näkyy salitilassa aina kun aloitat tämän treenin.';
+
+  @override
+  String get quickStartEmpty =>
+      'Ei vielä liikkeitä. Lisää kukin, kun aloitat sen.';
+
+  @override
+  String get plusQuickStrength => 'Vapaa voima';
+
+  @override
+  String get plusQuickStrengthHint => 'Salitila ilman suunnitelmaa';
+
+  @override
+  String get reflectionTitle => 'Pohdinta';
+
+  @override
+  String get reflectionPrompt => 'Miten meni? Muutama sana auttaa valmentajaa.';
+
+  @override
+  String get reflectionFeltStrong => 'Tunsin itseni vahvaksi';
+
+  @override
+  String get reflectionLegsHeavy => 'Raskaat jalat';
+
+  @override
+  String get reflectionTired => 'Väsynyt';
+
+  @override
+  String get reflectionSleptBadly => 'Nukuin huonosti';
+
+  @override
+  String get reflectionPain => 'Jokin sattui';
+
+  @override
+  String get reflectionHeat => 'Liian kuuma';
+
+  @override
+  String get metricNoReading => 'Ei mittausta';
+
+  @override
+  String metricGapTitle(String date) {
+    return 'Ei mittausta päivälle $date';
+  }
+
+  @override
+  String get metricGapNight =>
+      'Tältä yöltä ei tullut mitään. Pidä kelloa tai sormusta yön yli ja synkronoi – yö näkyy, kun jokin lähde lähettää sen.';
+
+  @override
+  String get metricGapDay =>
+      'Tältä päivältä ei ole vielä tullut mitään. Synkronoi hakeaksesi sen; nämä arvot tulevat kellosta päivän aikana.';
+
+  @override
+  String metricGapLast(String value, String date) {
+    return 'Viimeisin mittaus: $value ($date).';
+  }
+
+  @override
+  String sleepGapTitle(String date) {
+    return 'Ei unta kirjattu päivälle $date';
+  }
+
+  @override
+  String get coachMessage => 'Valmentajan viesti';
+
+  @override
+  String coachDayTitle(String date) {
+    return '$date · Yleiskatsaus';
+  }
+
+  @override
+  String get coachDayEmpty =>
+      'Valmentaja ei jättänyt tälle päivälle katsausta.';
+
+  @override
+  String get coachDayKept => 'Katsaukset säilyvät tällä laitteella 400 päivää.';
+
+  @override
+  String coachDayOverview(int count) {
+    return 'Päivän yleiskatsaus ($count)';
+  }
+
+  @override
+  String get coachDayMessages => 'Valmentajan viestit päivän aikana';
+
+  @override
+  String get coachDayMessagesHint =>
+      'FjeliaPro: kun stressisi nousee selvästi tai energia käy vähiin, päivän arvot ja terveysyhteenveto lähtevät Fjelia AI Prolle, joka jättää lyhyen viestin Koti-näkymään. Enintään 3 päivässä, ei ilmoituksia.';
+
+  @override
+  String get homeSky => 'Sään taivas Kotinäkymässä';
+
+  @override
+  String get homeSkyHint =>
+      'Pehmeä taivas Kotinäkymän yläosassa, joka seuraa päivän säätä ja vuorokaudenaikaa.';
 }

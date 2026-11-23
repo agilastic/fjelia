@@ -35,3 +35,21 @@ final themeModeProvider = Provider<ThemeMode>(
     _ => ThemeMode.dark,
   },
 );
+
+const _skyKey = 'home_sky_v1';
+
+/// The weather sky at the top of Home (on unless turned off).
+final homeSkyProvider = AsyncNotifierProvider<HomeSkyNotifier, bool>(
+  HomeSkyNotifier.new,
+);
+
+class HomeSkyNotifier extends AsyncNotifier<bool> {
+  @override
+  Future<bool> build() async =>
+      (await SharedPreferences.getInstance()).getBool(_skyKey) ?? true;
+
+  Future<void> set(bool value) async {
+    await (await SharedPreferences.getInstance()).setBool(_skyKey, value);
+    state = AsyncData(value);
+  }
+}

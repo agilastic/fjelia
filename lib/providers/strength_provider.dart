@@ -87,6 +87,18 @@ final strengthIncrementProvider = FutureProvider.autoDispose
       (ref, key) => ref.watch(strengthRepositoryProvider).increment(key),
     );
 
+/// An unfinished Quick Start workout, or null.
+final strengthQuickSessionProvider =
+    FutureProvider.autoDispose<StrengthActivityLog?>(
+      (ref) => ref.watch(strengthRepositoryProvider).openQuickSession(),
+    );
+
+/// Pinned exercise notes by variant id.
+final strengthExerciseNotesProvider =
+    FutureProvider.autoDispose<Map<String, String>>(
+      (ref) => ref.watch(strengthRepositoryProvider).exerciseNotes(),
+    );
+
 final strengthCustomVariantsProvider =
     FutureProvider.autoDispose<List<StrengthExerciseVariant>>(
       (ref) => ref.watch(strengthRepositoryProvider).customVariants(),
@@ -108,6 +120,8 @@ void invalidateStrength(void Function(ProviderOrFamily) invalidate) {
     strengthRecentSessionsProvider,
     strengthProposalDecisionsProvider,
     strengthLiveSessionProvider,
+    strengthQuickSessionProvider,
+    strengthExerciseNotesProvider,
     strengthTrendSessionsProvider,
     strengthIncrementProvider,
     strengthCustomVariantsProvider,

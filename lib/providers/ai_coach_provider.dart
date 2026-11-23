@@ -20,6 +20,7 @@ import '../services/ai_context_toon_builder.dart';
 import '../services/bio_age_service.dart';
 import '../services/race_goal_service.dart';
 import '../utils/log.dart';
+import 'coach_messages_provider.dart';
 import 'database_provider.dart';
 import 'local_model_provider.dart';
 import 'sync_provider.dart' show waitForSyncToSettle;
@@ -272,6 +273,21 @@ class AiBriefingNotifier extends StateNotifier<AsyncValue<String?>> {
     if (source != null) {
       await _storage.write(key: _briefingSourceKey(period), value: source);
       _ref.read(aiBriefingSourceProvider(period).notifier).state = source;
+    }
+    // Kept for the day's overview; a failure never costs the briefing.
+    try {
+      await _ref
+          .read(databaseProvider)
+          .archiveCoachMessage(
+            day: DateTime.now(),
+            kind: 'briefing',
+            period: period.name,
+            body: text,
+            source: source ?? _ref.read(aiBriefingSourceProvider(period)),
+          );
+      _ref.invalidate(coachMessagesProvider);
+    } catch (e) {
+      log('[AiBriefing] archive: $e');
     }
   }
 

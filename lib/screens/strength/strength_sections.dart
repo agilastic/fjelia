@@ -20,7 +20,7 @@ import '../../widgets/strength_demo.dart';
 import '../../widgets/strength_widgets.dart';
 import 'strength_focus_screen.dart';
 import 'strength_forms.dart';
-import 'strength_trend_sheet.dart';
+import 'strength_exercise_sheet.dart';
 import 'strength_log_editor.dart';
 import 'strength_plan_editor.dart';
 
@@ -61,33 +61,48 @@ ButtonStyle _outlined() => OutlinedButton.styleFrom(
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
 );
 
-/// Opens the exercise's trend in its own comparable context.
-Widget _historyButton(
+/// Opens the exercise sheet: About (muscles, pinned note, YouTube) and
+/// History (the trend in its own comparable context).
+Widget _exerciseButtons(
   BuildContext context, {
+  required String variantId,
   required String name,
   required String contextKey,
   required String equipment,
   required StrengthConvention convention,
-}) => Align(
-  alignment: Alignment.centerLeft,
-  child: TextButton.icon(
-    style: TextButton.styleFrom(
-      foregroundColor: strengthColor,
-      minimumSize: const Size(0, 48),
-    ),
-    onPressed: () => showAppSheet<void>(
-      context,
-      StrengthTrendSheet(
-        name: name,
-        contextKey: contextKey,
-        equipment: equipment,
-        convention: convention,
+}) {
+  Widget button(IconData icon, String label, int tab, String semantics) =>
+      TextButton.icon(
+        style: TextButton.styleFrom(
+          foregroundColor: strengthColor,
+          minimumSize: const Size(0, 48),
+        ),
+        onPressed: () => showAppSheet<void>(
+          context,
+          StrengthExerciseSheet(
+            variantId: variantId,
+            name: name,
+            contextKey: contextKey,
+            equipment: equipment,
+            convention: convention,
+            initialTab: tab,
+          ),
+        ),
+        icon: Icon(icon, size: 18),
+        label: Text(label, semanticsLabel: semantics),
+      );
+  return Wrap(
+    children: [
+      button(
+        Icons.info_outline,
+        context.l10n.exerciseAbout,
+        0,
+        '${context.l10n.exerciseAbout}: $name',
       ),
-    ),
-    icon: const Icon(Icons.show_chart, size: 18),
-    label: Text(context.l10n.history, semanticsLabel: 'History of $name'),
-  ),
-);
+      button(Icons.show_chart, context.l10n.history, 1, 'History of $name'),
+    ],
+  );
+}
 
 List<StrengthTile> plannedStrengthTiles(StrengthPlanSummary s, MassUnit unit) {
   final d = s.duration;
@@ -570,10 +585,12 @@ class _PlannedExerciseCard extends ConsumerWidget {
             padding: const EdgeInsets.only(top: 6),
             child: Text(e.notes!, style: TextStyle(fontSize: 12, color: muted)),
           ),
+        PinnedNoteLine(variantId: e.variantId),
       ],
       footer: [
-        _historyButton(
+        _exerciseButtons(
           context,
+          variantId: e.variantId,
           name: e.name,
           contextKey: e.contextKey,
           equipment: e.equipment,
@@ -797,6 +814,7 @@ class CompletedStrengthSection extends ConsumerWidget {
                   ),
                 if (e.notes != null)
                   Text(e.notes!, style: TextStyle(fontSize: 12, color: muted)),
+                PinnedNoteLine(variantId: e.variantId),
                 if (oneRm != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 6),
@@ -807,8 +825,9 @@ class CompletedStrengthSection extends ConsumerWidget {
                   ),
               ],
               footer: [
-                _historyButton(
+                _exerciseButtons(
                   context,
+                  variantId: e.variantId,
                   name: e.name,
                   contextKey: e.contextKey,
                   equipment: e.equipment,

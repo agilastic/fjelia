@@ -16497,6 +16497,330 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Power'**
   String get myZonesPower;
+
+  /// No description provided for @exerciseAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get exerciseAbout;
+
+  /// No description provided for @exerciseMuscles.
+  ///
+  /// In en, this message translates to:
+  /// **'Muscles'**
+  String get exerciseMuscles;
+
+  /// No description provided for @exerciseNoMuscleData.
+  ///
+  /// In en, this message translates to:
+  /// **'No muscle data for your own exercises.'**
+  String get exerciseNoMuscleData;
+
+  /// No description provided for @musclePrimary.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary'**
+  String get musclePrimary;
+
+  /// No description provided for @muscleSecondary.
+  ///
+  /// In en, this message translates to:
+  /// **'Secondary'**
+  String get muscleSecondary;
+
+  /// No description provided for @muscleQuads.
+  ///
+  /// In en, this message translates to:
+  /// **'Quads'**
+  String get muscleQuads;
+
+  /// No description provided for @muscleHamstrings.
+  ///
+  /// In en, this message translates to:
+  /// **'Hamstrings'**
+  String get muscleHamstrings;
+
+  /// No description provided for @muscleGlutes.
+  ///
+  /// In en, this message translates to:
+  /// **'Glutes'**
+  String get muscleGlutes;
+
+  /// No description provided for @muscleCalves.
+  ///
+  /// In en, this message translates to:
+  /// **'Calves'**
+  String get muscleCalves;
+
+  /// No description provided for @muscleAdductors.
+  ///
+  /// In en, this message translates to:
+  /// **'Adductors'**
+  String get muscleAdductors;
+
+  /// No description provided for @muscleCore.
+  ///
+  /// In en, this message translates to:
+  /// **'Core'**
+  String get muscleCore;
+
+  /// No description provided for @muscleObliques.
+  ///
+  /// In en, this message translates to:
+  /// **'Obliques'**
+  String get muscleObliques;
+
+  /// No description provided for @muscleLowerBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Lower back'**
+  String get muscleLowerBack;
+
+  /// No description provided for @muscleLats.
+  ///
+  /// In en, this message translates to:
+  /// **'Lats'**
+  String get muscleLats;
+
+  /// No description provided for @muscleUpperBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Upper back'**
+  String get muscleUpperBack;
+
+  /// No description provided for @muscleChest.
+  ///
+  /// In en, this message translates to:
+  /// **'Chest'**
+  String get muscleChest;
+
+  /// No description provided for @muscleShoulders.
+  ///
+  /// In en, this message translates to:
+  /// **'Shoulders'**
+  String get muscleShoulders;
+
+  /// No description provided for @muscleTriceps.
+  ///
+  /// In en, this message translates to:
+  /// **'Triceps'**
+  String get muscleTriceps;
+
+  /// No description provided for @muscleBiceps.
+  ///
+  /// In en, this message translates to:
+  /// **'Biceps'**
+  String get muscleBiceps;
+
+  /// No description provided for @muscleForearms.
+  ///
+  /// In en, this message translates to:
+  /// **'Forearms'**
+  String get muscleForearms;
+
+  /// No description provided for @pinnedNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Pinned note'**
+  String get pinnedNote;
+
+  /// No description provided for @pinnedNoteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Shows every time you do this exercise, in every workout.'**
+  String get pinnedNoteHint;
+
+  /// No description provided for @searchYoutube.
+  ///
+  /// In en, this message translates to:
+  /// **'Search on YouTube'**
+  String get searchYoutube;
+
+  /// No description provided for @searchYoutubeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Opens YouTube with the exercise name. Nothing else leaves the app.'**
+  String get searchYoutubeHint;
+
+  /// No description provided for @workoutNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Workout note'**
+  String get workoutNote;
+
+  /// No description provided for @exerciseNoteToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Note for today'**
+  String get exerciseNoteToday;
+
+  /// No description provided for @routineNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Routine note'**
+  String get routineNote;
+
+  /// No description provided for @routineNoteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Shows in gym mode every time you start this workout.'**
+  String get routineNoteHint;
+
+  /// No description provided for @quickStartEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No exercises yet. Add each one as you start it.'**
+  String get quickStartEmpty;
+
+  /// No description provided for @plusQuickStrength.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick strength'**
+  String get plusQuickStrength;
+
+  /// No description provided for @plusQuickStrengthHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Gym mode without a plan'**
+  String get plusQuickStrengthHint;
+
+  /// No description provided for @reflectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reflection'**
+  String get reflectionTitle;
+
+  /// No description provided for @reflectionPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'How did it go? A few words help the coach.'**
+  String get reflectionPrompt;
+
+  /// No description provided for @reflectionFeltStrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Felt strong'**
+  String get reflectionFeltStrong;
+
+  /// No description provided for @reflectionLegsHeavy.
+  ///
+  /// In en, this message translates to:
+  /// **'Heavy legs'**
+  String get reflectionLegsHeavy;
+
+  /// No description provided for @reflectionTired.
+  ///
+  /// In en, this message translates to:
+  /// **'Tired'**
+  String get reflectionTired;
+
+  /// No description provided for @reflectionSleptBadly.
+  ///
+  /// In en, this message translates to:
+  /// **'Slept badly'**
+  String get reflectionSleptBadly;
+
+  /// No description provided for @reflectionPain.
+  ///
+  /// In en, this message translates to:
+  /// **'Something hurt'**
+  String get reflectionPain;
+
+  /// No description provided for @reflectionHeat.
+  ///
+  /// In en, this message translates to:
+  /// **'Too hot'**
+  String get reflectionHeat;
+
+  /// No description provided for @metricNoReading.
+  ///
+  /// In en, this message translates to:
+  /// **'No reading'**
+  String get metricNoReading;
+
+  /// No description provided for @metricGapTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No reading for {date}'**
+  String metricGapTitle(String date);
+
+  /// No description provided for @metricGapNight.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing arrived for this night. Wear the watch or ring overnight and sync – the night appears once a source sends it.'**
+  String get metricGapNight;
+
+  /// No description provided for @metricGapDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing arrived for this day yet. Sync to fetch it; these values come from the watch during the day.'**
+  String get metricGapDay;
+
+  /// No description provided for @metricGapLast.
+  ///
+  /// In en, this message translates to:
+  /// **'Last reading: {value} on {date}.'**
+  String metricGapLast(String value, String date);
+
+  /// No description provided for @sleepGapTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No sleep recorded for {date}'**
+  String sleepGapTitle(String date);
+
+  /// No description provided for @coachMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Coach message'**
+  String get coachMessage;
+
+  /// No description provided for @coachDayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{date} · Overview'**
+  String coachDayTitle(String date);
+
+  /// No description provided for @coachDayEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'The coach left no briefing for this day.'**
+  String get coachDayEmpty;
+
+  /// No description provided for @coachDayKept.
+  ///
+  /// In en, this message translates to:
+  /// **'Briefings are kept on this device for 400 days.'**
+  String get coachDayKept;
+
+  /// No description provided for @coachDayOverview.
+  ///
+  /// In en, this message translates to:
+  /// **'Day overview ({count})'**
+  String coachDayOverview(int count);
+
+  /// No description provided for @coachDayMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'Coach messages during the day'**
+  String get coachDayMessages;
+
+  /// No description provided for @coachDayMessagesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'FjeliaPro: when your stress rises clearly or your energy runs low, today\'s values and the health summary go to Fjelia AI Pro, which leaves a short message on Home. At most 3 a day, no pushes.'**
+  String get coachDayMessagesHint;
+
+  /// No description provided for @homeSky.
+  ///
+  /// In en, this message translates to:
+  /// **'Weather sky on Home'**
+  String get homeSky;
+
+  /// No description provided for @homeSkyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A soft sky at the top of Home that follows today\'s weather and the time of day.'**
+  String get homeSkyHint;
 }
 
 class _AppLocalizationsDelegate

@@ -9610,4 +9610,187 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get myZonesPower => 'Vermogen';
+
+  @override
+  String get exerciseAbout => 'Info';
+
+  @override
+  String get exerciseMuscles => 'Spieren';
+
+  @override
+  String get exerciseNoMuscleData =>
+      'Geen spiergegevens voor je eigen oefeningen.';
+
+  @override
+  String get musclePrimary => 'Primair';
+
+  @override
+  String get muscleSecondary => 'Secundair';
+
+  @override
+  String get muscleQuads => 'Quadriceps';
+
+  @override
+  String get muscleHamstrings => 'Hamstrings';
+
+  @override
+  String get muscleGlutes => 'Bilspieren';
+
+  @override
+  String get muscleCalves => 'Kuiten';
+
+  @override
+  String get muscleAdductors => 'Adductoren';
+
+  @override
+  String get muscleCore => 'Core';
+
+  @override
+  String get muscleObliques => 'Schuine buikspieren';
+
+  @override
+  String get muscleLowerBack => 'Onderrug';
+
+  @override
+  String get muscleLats => 'Latissimus';
+
+  @override
+  String get muscleUpperBack => 'Bovenrug';
+
+  @override
+  String get muscleChest => 'Borst';
+
+  @override
+  String get muscleShoulders => 'Schouders';
+
+  @override
+  String get muscleTriceps => 'Triceps';
+
+  @override
+  String get muscleBiceps => 'Biceps';
+
+  @override
+  String get muscleForearms => 'Onderarmen';
+
+  @override
+  String get pinnedNote => 'Vastgezette notitie';
+
+  @override
+  String get pinnedNoteHint =>
+      'Verschijnt elke keer dat je deze oefening doet, in elke training.';
+
+  @override
+  String get searchYoutube => 'Zoeken op YouTube';
+
+  @override
+  String get searchYoutubeHint =>
+      'Opent YouTube met de naam van de oefening. Verder verlaat niets de app.';
+
+  @override
+  String get workoutNote => 'Trainingsnotitie';
+
+  @override
+  String get exerciseNoteToday => 'Notitie voor vandaag';
+
+  @override
+  String get routineNote => 'Routinenotitie';
+
+  @override
+  String get routineNoteHint =>
+      'Verschijnt in sportschoolmodus elke keer dat je deze training start.';
+
+  @override
+  String get quickStartEmpty =>
+      'Nog geen oefeningen. Voeg ze toe terwijl je begint.';
+
+  @override
+  String get plusQuickStrength => 'Vrije kracht';
+
+  @override
+  String get plusQuickStrengthHint => 'Sportschoolmodus zonder plan';
+
+  @override
+  String get reflectionTitle => 'Terugblik';
+
+  @override
+  String get reflectionPrompt =>
+      'Hoe ging het? Een paar woorden helpen de coach.';
+
+  @override
+  String get reflectionFeltStrong => 'Voelde me sterk';
+
+  @override
+  String get reflectionLegsHeavy => 'Zware benen';
+
+  @override
+  String get reflectionTired => 'Moe';
+
+  @override
+  String get reflectionSleptBadly => 'Slecht geslapen';
+
+  @override
+  String get reflectionPain => 'Iets deed pijn';
+
+  @override
+  String get reflectionHeat => 'Te warm';
+
+  @override
+  String get metricNoReading => 'Geen meting';
+
+  @override
+  String metricGapTitle(String date) {
+    return 'Geen meting voor $date';
+  }
+
+  @override
+  String get metricGapNight =>
+      'Voor deze nacht is niets binnengekomen. Draag het horloge of de ring \'s nachts en synchroniseer – de nacht verschijnt zodra een bron hem stuurt.';
+
+  @override
+  String get metricGapDay =>
+      'Voor deze dag is nog niets binnengekomen. Synchroniseer om het op te halen; deze waarden komen overdag van het horloge.';
+
+  @override
+  String metricGapLast(String value, String date) {
+    return 'Laatste meting: $value op $date.';
+  }
+
+  @override
+  String sleepGapTitle(String date) {
+    return 'Geen slaap geregistreerd voor $date';
+  }
+
+  @override
+  String get coachMessage => 'Bericht van de coach';
+
+  @override
+  String coachDayTitle(String date) {
+    return '$date · Overzicht';
+  }
+
+  @override
+  String get coachDayEmpty =>
+      'De coach liet voor deze dag geen briefing achter.';
+
+  @override
+  String get coachDayKept => 'Briefings blijven 400 dagen op dit apparaat.';
+
+  @override
+  String coachDayOverview(int count) {
+    return 'Dagoverzicht ($count)';
+  }
+
+  @override
+  String get coachDayMessages => 'Berichten van de coach overdag';
+
+  @override
+  String get coachDayMessagesHint =>
+      'FjeliaPro: als je stress duidelijk stijgt of je energie laag wordt, gaan de waarden van vandaag en de gezondheidssamenvatting naar Fjelia AI Pro, dat een kort bericht op Home achterlaat. Maximaal 3 per dag, geen meldingen.';
+
+  @override
+  String get homeSky => 'Weerhemel op Home';
+
+  @override
+  String get homeSkyHint =>
+      'Een zachte hemel bovenaan Home die het weer van vandaag en het tijdstip volgt.';
 }

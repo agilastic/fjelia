@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 
 import '../../providers/day_data_provider.dart';
 import '../../widgets/app_widgets.dart';
+import '../../widgets/data_gap_card.dart';
 import '../../widgets/metric_detail_sheet.dart';
 import '../../widgets/sleep_stages.dart';
 import '../../widgets/night_curves.dart';
@@ -239,6 +240,14 @@ class SleepScreen extends ConsumerWidget {
                             ],
                           ),
                           const SizedBox(height: 45),
+                          if (sleep == null)
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 16),
+                              child: DataGapCard(
+                                title: context.l10n.sleepGapTitle(dayText(day)),
+                                reason: context.l10n.metricGapNight,
+                              ),
+                            ),
                           if (tip != null)
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,

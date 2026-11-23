@@ -9613,4 +9613,187 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get myZonesPower => 'Potència';
+
+  @override
+  String get exerciseAbout => 'Info';
+
+  @override
+  String get exerciseMuscles => 'Músculs';
+
+  @override
+  String get exerciseNoMuscleData =>
+      'No hi ha dades de músculs per als teus exercicis.';
+
+  @override
+  String get musclePrimary => 'Principals';
+
+  @override
+  String get muscleSecondary => 'Secundaris';
+
+  @override
+  String get muscleQuads => 'Quàdriceps';
+
+  @override
+  String get muscleHamstrings => 'Isquiotibials';
+
+  @override
+  String get muscleGlutes => 'Glutis';
+
+  @override
+  String get muscleCalves => 'Bessons';
+
+  @override
+  String get muscleAdductors => 'Adductors';
+
+  @override
+  String get muscleCore => 'Core';
+
+  @override
+  String get muscleObliques => 'Oblics';
+
+  @override
+  String get muscleLowerBack => 'Zona lumbar';
+
+  @override
+  String get muscleLats => 'Dorsals';
+
+  @override
+  String get muscleUpperBack => 'Esquena alta';
+
+  @override
+  String get muscleChest => 'Pit';
+
+  @override
+  String get muscleShoulders => 'Espatlles';
+
+  @override
+  String get muscleTriceps => 'Tríceps';
+
+  @override
+  String get muscleBiceps => 'Bíceps';
+
+  @override
+  String get muscleForearms => 'Avantbraços';
+
+  @override
+  String get pinnedNote => 'Nota fixada';
+
+  @override
+  String get pinnedNoteHint =>
+      'Apareix cada cop que fas aquest exercici, a cada entrenament.';
+
+  @override
+  String get searchYoutube => 'Cerca a YouTube';
+
+  @override
+  String get searchYoutubeHint =>
+      'Obre YouTube amb el nom de l\'exercici. Res més surt de l\'app.';
+
+  @override
+  String get workoutNote => 'Nota de l\'entrenament';
+
+  @override
+  String get exerciseNoteToday => 'Nota d\'avui';
+
+  @override
+  String get routineNote => 'Nota de la rutina';
+
+  @override
+  String get routineNoteHint =>
+      'Apareix en mode gimnàs cada cop que comences aquest entrenament.';
+
+  @override
+  String get quickStartEmpty =>
+      'Encara no hi ha exercicis. Afegeix-los a mesura que els comencis.';
+
+  @override
+  String get plusQuickStrength => 'Força lliure';
+
+  @override
+  String get plusQuickStrengthHint => 'Mode gimnàs sense pla';
+
+  @override
+  String get reflectionTitle => 'Reflexió';
+
+  @override
+  String get reflectionPrompt => 'Com ha anat? Unes paraules ajuden el coach.';
+
+  @override
+  String get reflectionFeltStrong => 'M\'he sentit fort';
+
+  @override
+  String get reflectionLegsHeavy => 'Cames pesades';
+
+  @override
+  String get reflectionTired => 'Cansat';
+
+  @override
+  String get reflectionSleptBadly => 'He dormit malament';
+
+  @override
+  String get reflectionPain => 'Alguna cosa feia mal';
+
+  @override
+  String get reflectionHeat => 'Massa calor';
+
+  @override
+  String get metricNoReading => 'Sense dada';
+
+  @override
+  String metricGapTitle(String date) {
+    return 'Sense dada per al $date';
+  }
+
+  @override
+  String get metricGapNight =>
+      'No ha arribat res d\'aquesta nit. Porta el rellotge o l\'anell a la nit i sincronitza: la nit apareix quan una font l\'envia.';
+
+  @override
+  String get metricGapDay =>
+      'Encara no ha arribat res d\'aquest dia. Sincronitza per obtenir-ho; aquests valors vénen del rellotge durant el dia.';
+
+  @override
+  String metricGapLast(String value, String date) {
+    return 'Última dada: $value el $date.';
+  }
+
+  @override
+  String sleepGapTitle(String date) {
+    return 'No hi ha son registrat per al $date';
+  }
+
+  @override
+  String get coachMessage => 'Missatge del coach';
+
+  @override
+  String coachDayTitle(String date) {
+    return '$date · Resum';
+  }
+
+  @override
+  String get coachDayEmpty =>
+      'El coach no va deixar cap briefing per a aquest dia.';
+
+  @override
+  String get coachDayKept =>
+      'Els briefings es guarden 400 dies en aquest dispositiu.';
+
+  @override
+  String coachDayOverview(int count) {
+    return 'Resum del dia ($count)';
+  }
+
+  @override
+  String get coachDayMessages => 'Missatges del coach durant el dia';
+
+  @override
+  String get coachDayMessagesHint =>
+      'FjeliaPro: quan el teu estrès puja clarament o l\'energia baixa, els valors d\'avui i el resum de salut van a Fjelia AI Pro, que deixa un missatge breu a Inici. Com a màxim 3 al dia, sense notificacions.';
+
+  @override
+  String get homeSky => 'Cel del temps a Inici';
+
+  @override
+  String get homeSkyHint =>
+      'Un cel suau a la part superior d\'Inici que segueix el temps d\'avui i l\'hora del dia.';
 }
