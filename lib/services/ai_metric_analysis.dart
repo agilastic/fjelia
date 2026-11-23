@@ -33,13 +33,26 @@ class MetricAnalysis {
     String? awayTomorrow,
     String? backFrom,
     String? window,
+    String? session,
+    String? goal,
+    String? yesterday,
   }) {
     final out = <String>[];
-    // Findings for the Brief: id, severity (red, yellow, good) and a fixed
-    // rank that orders equally severe ones.
-    final flags = <(String, String, num)>[];
-    void flag(String id, String severity, num rank) =>
-        flags.add((id, severity, rank));
+    // Findings for the Brief: id, severity (red, yellow, good), a fixed rank
+    // that orders equally severe ones, and the figure behind it against the
+    // athlete's own average (the briefing's one number).
+    final flags = <(String, String, num, String?)>[];
+    void flag(String id, String severity, num rank, [String? why]) =>
+        flags.add((id, severity, rank, why));
+    // "sleep HRV 39 ms against your 7-day average of 47 ms", from a judged line.
+    String? against(_Judged? j, String label) {
+      if (j == null) return null;
+      final latest = RegExp(r'Latest:([^,\]]+)').firstMatch(j.line)?[1];
+      final avg = RegExp(r'Avg7d:([^,\]]+)').firstMatch(j.line)?[1];
+      if (latest == null || avg == null) return null;
+      return '$label $latest against your 7-day average of $avg';
+    }
+
     String sev(String? verdict) => switch (verdict) {
       'clearlyWorse' => 'red',
       'worse' => 'yellow',
@@ -74,8 +87,9 @@ class MetricAnalysis {
     add(r1?.line, 'SleepHRV', r1?.verdict);
     if (r1 != null) {
       final v = sev(r1.verdict);
-      if (v == 'good') flag('hrvHigh', 'good', 0);
-      if (v == 'red' || v == 'yellow') flag('hrvLow', v, 0);
+      final why = against(r1, 'sleep HRV');
+      if (v == 'good') flag('hrvHigh', 'good', 0, why);
+      if (v == 'red' || v == 'yellow') flag('hrvLow', v, 0, why);
     }
 
     final rhr = _judge(
@@ -95,8 +109,9 @@ class MetricAnalysis {
     add(rhr?.line, 'RHR', rhr?.verdict);
     if (rhr != null) {
       final v = sev(rhr.verdict);
-      if (v == 'good') flag('rhrDown', 'good', 1);
-      if (v == 'red' || v == 'yellow') flag('rhrUp', v, 1);
+      final why = against(rhr, 'resting heart rate');
+      if (v == 'good') flag('rhrDown', 'good', 1, why);
+      if (v == 'red' || v == 'yellow') flag('rhrUp', v, 1, why);
     }
 
     final sleepRows = [
@@ -119,12 +134,15 @@ class MetricAnalysis {
       final need = s.sleepNeedSeconds;
       if (need != null && need > 0) {
         final gap = (s.totalSleepSeconds - need) / 3600;
+        final why =
+            'slept ${_n(s.totalSleepSeconds / 3600, 1)} h against a need of '
+            '${_n(need / 3600, 1)} h';
         if (gap < -1) {
-          flag('sleepShort', 'red', 2);
+          flag('sleepShort', 'red', 2, why);
         } else if (gap < -0.25) {
-          flag('sleepShort', 'yellow', 2);
+          flag('sleepShort', 'yellow', 2, why);
         } else {
-          flag('sleepGood', 'good', 2);
+          flag('sleepGood', 'good', 2, why);
         }
         out.add(
           '[Analysis:SleepVsNeed,Slept:${_n(s.totalSleepSeconds / 3600, 1)}h,'
@@ -156,8 +174,9 @@ class MetricAnalysis {
     add(energy?.line, 'Energy', energy?.verdict);
     if (energy != null) {
       final v = sev(energy.verdict);
-      if (v == 'good') flag('energyHigh', 'good', 3);
-      if (v == 'red' || v == 'yellow') flag('energyLow', v, 3);
+      final why = against(energy, 'energy');
+      if (v == 'good') flag('energyHigh', 'good', 3, why);
+      if (v == 'red' || v == 'yellow') flag('energyLow', v, 3, why);
     }
 
     final stress = _judge(
@@ -185,7 +204,9 @@ class MetricAnalysis {
     // compares with the week.
     if (stress != null && (latestStress ?? 0) >= 40) {
       final v = sev(stress.verdict);
-      if (v == 'red' || v == 'yellow') flag('stressHigh', v, 5);
+      if (v == 'red' || v == 'yellow') {
+        flag('stressHigh', v, 5, against(stress, 'stress'));
+      }
     }
 
     final resp = _judge(
@@ -207,7 +228,9 @@ class MetricAnalysis {
     add(resp?.line, 'RespRate', resp?.verdict);
     if (resp != null) {
       final v = sev(resp.verdict);
-      if (v == 'red' || v == 'yellow') flag('respHigh', v, 6);
+      if (v == 'red' || v == 'yellow') {
+        flag('respHigh', v, 6, against(resp, 'breathing rate'));
+      }
     }
 
     final spo = hrv.where((r) => r.spo2 != null).toList();
@@ -225,8 +248,9 @@ class MetricAnalysis {
         '${verdict == 'normal' ? 'normal (95% or more)' : 'below the normal 95%; mention it and advise a doctor if it stays low'}.]',
       );
       if (verdict != 'normal') verdicts['SpO2'] = 'worse';
-      if (verdict == 'low') flag('spo2Low', 'red', 7);
-      if (verdict == 'slightlyLow') flag('spo2Low', 'yellow', 7);
+      final why = 'overnight SpO2 ${_n(v, 0)} %';
+      if (verdict == 'low') flag('spo2Low', 'red', 7, why);
+      if (verdict == 'slightlyLow') flag('spo2Low', 'yellow', 7, why);
     }
 
     final skin = hrv.where((r) => r.skinTempDelta != null).toList();
@@ -243,7 +267,12 @@ class MetricAnalysis {
       // Often the first sign of an infection: right after HRV and resting
       // heart rate, and red from a full degree.
       if (verdict != 'normal') {
-        flag('skinTempOff', v.abs() >= 1 ? 'red' : 'yellow', 1.5);
+        flag(
+          'skinTempOff',
+          v.abs() >= 1 ? 'red' : 'yellow',
+          1.5,
+          'skin temperature ${_n(v, 1)} C from your baseline',
+        );
       }
     }
 
@@ -275,9 +304,10 @@ class MetricAnalysis {
       );
       if (band == 'tired' || band == 'veryFatigued') verdicts['Form'] = 'worse';
       if (band == 'fresh') verdicts['Form'] = 'better';
-      if (band == 'tired') flag('formTired', 'yellow', 4);
-      if (band == 'veryFatigued') flag('formVeryTired', 'red', 4);
-      if (band == 'fresh') flag('formFresh', 'good', 4);
+      final why = 'training form (TSB) ${_n(tsb, 0)}';
+      if (band == 'tired') flag('formTired', 'yellow', 4, why);
+      if (band == 'veryFatigued') flag('formVeryTired', 'red', 4, why);
+      if (band == 'fresh') flag('formFresh', 'good', 4, why);
     }
 
     final better = [
@@ -310,7 +340,10 @@ class MetricAnalysis {
       _ => 'GREEN: train as planned; hard sessions are fine',
     };
     // The Brief: what matters, ranked, decided here and not by a model.
-    int bySeverity((String, String, num) a, (String, String, num) b) {
+    int bySeverity(
+      (String, String, num, String?) a,
+      (String, String, num, String?) b,
+    ) {
       const order = {'red': 0, 'yellow': 1, 'good': 2};
       final c = order[a.$2]!.compareTo(order[b.$2]!);
       return c != 0 ? c : a.$3.compareTo(b.$3);
@@ -339,6 +372,12 @@ class MetricAnalysis {
       awayTomorrow: awayTomorrow,
       backFrom: backFrom,
       window: window,
+      // The reason behind the day: the worst finding's figure, or the best
+      // one's on a good day.
+      why: [...bad, ...good].map((f) => f.$4).whereType<String>().firstOrNull,
+      session: session,
+      goal: goal,
+      yesterday: yesterday,
     );
     out.insert(0, brief.toLine());
     out.insert(

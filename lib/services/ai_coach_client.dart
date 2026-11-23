@@ -1532,9 +1532,28 @@ class AiCoachClient {
   }
 }
 
-/// Whether a briefing already names today's plan: the app's sentence
-/// ("Für heute ist 1 Einheit geplant.") also counts when the model went on
-/// after it ("… geplant und die Belastung …"), so it is not added twice.
-bool mentionsSchedule(String text, String schedule) => text
-    .toLowerCase()
-    .contains(schedule.toLowerCase().replaceFirst(RegExp(r'[.!?…]+$'), ''));
+/// Whether a briefing already names today's plan, so the app's sentence
+/// ("Für heute ist 1 Einheit geplant.") is not added a second time. Small
+/// models rephrase it ("Heute ist 1 Einheit geplant.", "… geplant und die
+/// Belastung …"): it counts when one sentence of the briefing has the
+/// sentence's number and its longer words, in any order and language.
+bool mentionsSchedule(String text, String schedule) {
+  final lower = text.toLowerCase();
+  final wanted = schedule.toLowerCase().replaceFirst(RegExp(r'[.!?…]+$'), '');
+  if (lower.contains(wanted)) return true;
+  final numbers = RegExp(r'\d+').allMatches(wanted).map((m) => m.group(0)!);
+  final words = RegExp(
+    r'[\p{L}]{5,}',
+    unicode: true,
+  ).allMatches(wanted).map((m) => m.group(0)!).toSet();
+  if (words.isEmpty) return false;
+  return lower
+      .split(RegExp(r'(?<=[.!?…])\s+'))
+      .any(
+        (sentence) =>
+            numbers.every(
+              (n) => RegExp('(?<!\\d)$n(?!\\d)').hasMatch(sentence),
+            ) &&
+            words.every(sentence.contains),
+      );
+}

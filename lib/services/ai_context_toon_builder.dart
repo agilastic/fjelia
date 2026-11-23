@@ -406,6 +406,61 @@ class AiContextToonBuilder {
         if (_day(a.startDate) == today)
           '${sportId(a.type)}/${(a.durationSeconds / 60).round()}',
     ];
+    // What gives the briefing depth besides the numbers: what today's session
+    // is (kind, length, zone, phase), the goal it serves and what yesterday
+    // held. No session titles or race names: the athlete may have written
+    // anything there (Excludes:PlanNames).
+    String kindOf(TrainingSession s) {
+      final sub = s.subType ?? '';
+      if (s.sport == 'strength') {
+        final focus = switch (sub) {
+          'strengthFull' => 'full body',
+          'strengthLower' => 'lower body',
+          'strengthUpper' => 'upper body',
+          'strengthCore' => 'core',
+          _ when sub.startsWith('str-') => sub.split('-')[1],
+          _ => '',
+        };
+        return '${focus.isEmpty ? '' : '$focus '}strength';
+      }
+      final kind = sub.isEmpty || sub == 'endurance' ? s.sessionType : sub;
+      return '${s.sport.replaceAll('_', ' ')} ${kind == 'recovery' ? 'easy' : kind}';
+    }
+
+    final ownToday = sessions.where((s) => _day(s.sessionDate) == today);
+    final sessionToday = ownToday.isEmpty
+        ? null
+        : ownToday
+              .map(
+                (s) =>
+                    '${kindOf(s)} ${s.plannedDurationMin} min'
+                    '${s.sport == 'strength' ? '' : ' zone ${s.primaryZone}'}'
+                    ' in the ${s.phase} phase',
+              )
+              .join(' and ');
+    final yesterdayDay = today.subtract(const Duration(days: 1));
+    final yesterdayDone = [
+      for (final a in activities)
+        if (_day(a.startDate) == yesterdayDay)
+          '${_clean(a.type).replaceAll('_', ' ')} '
+              '${(a.durationSeconds / 60).round()} min',
+    ];
+    String? nextGoal;
+    try {
+      final goals = await RaceGoalService(_db).resolveGoalSet(today: today);
+      final upcoming = [
+        for (final g in goals.active)
+          if (!_day(g.date).isBefore(today)) g,
+      ]..sort((a, b) => a.date.compareTo(b.date));
+      if (upcoming.isNotEmpty) {
+        final g = upcoming.first;
+        final days = _day(g.date).difference(today).inDays;
+        nextGoal =
+            '${g.priority.name.toUpperCase()} goal ${g.sport.replaceAll('_', ' ')} '
+            '${(g.distanceM / 1000).toStringAsFixed(g.distanceM < 10000 ? 1 : 0)} km '
+            'in ${days < 14 ? '$days days' : '${(days / 7).round()} weeks'}';
+      }
+    } catch (_) {}
     final trainingVerdict = trainingHrvAnalysis.isEmpty
         ? null
         : RegExp(
@@ -436,6 +491,9 @@ class AiContextToonBuilder {
         awayTomorrow: absenceOn(absences, tomorrowDay)?.kind,
         backFrom: absenceOn(absences, today) == null ? backFrom : null,
         window: windowToday,
+        session: sessionToday,
+        goal: nextGoal,
+        yesterday: yesterdayDone.isEmpty ? null : yesterdayDone.join(' and '),
         trainingHrv: trainingVerdict == null
             ? null
             : trainingVerdict == 'better'

@@ -24,6 +24,10 @@ class BriefingBrief {
     this.awayTomorrow,
     this.backFrom,
     this.window,
+    this.why,
+    this.session,
+    this.goal,
+    this.yesterday,
   });
 
   /// green, yellow or red.
@@ -57,6 +61,28 @@ class BriefingBrief {
   /// `06:00-07:30+17:00-20:00`.
   final String? window;
 
+  /// The figure behind the day against the athlete's own average, e.g.
+  /// `sleep HRV 39 ms against your 7-day average of 47 ms`: the briefing's
+  /// one number, so it says why and not only what.
+  final String? why;
+
+  /// Today's planned session by name and phase, e.g. `Lower Body Power —
+  /// Build (strength, build phase)`: what the day's work is for.
+  final String? session;
+
+  /// The next race goal and how far away it is, e.g. `trail100 (A) in 12
+  /// weeks`.
+  final String? goal;
+
+  /// What was done yesterday, e.g. `trail running 120 min`.
+  final String? yesterday;
+
+  /// Free text in the line format: no separators, no brackets.
+  static String _text(String v) => v
+      .replaceAll(RegExp(r'[,\[\]|]'), ' ')
+      .replaceAll(RegExp(r'\s+'), ' ')
+      .trim();
+
   static String _list(List<String> v) => v.isEmpty ? 'none' : v.join('|');
 
   String toLine() =>
@@ -68,7 +94,11 @@ class BriefingBrief {
       '${away == null ? '' : ',Away:$away'}'
       '${awayTomorrow == null ? '' : ',AwayTomorrow:$awayTomorrow'}'
       '${backFrom == null ? '' : ',Back:$backFrom'}'
-      '${window == null ? '' : ',Window:$window'}]';
+      '${window == null ? '' : ',Window:$window'}'
+      '${why == null ? '' : ',Why:${_text(why!)}'}'
+      '${session == null ? '' : ',Session:${_text(session!)}'}'
+      '${goal == null ? '' : ',Goal:${_text(goal!)}'}'
+      '${yesterday == null ? '' : ',Yesterday:${_text(yesterday!)}'}]';
 
   static BriefingBrief? parse(String toon) {
     final m = RegExp(r'\[Brief:([^\]]*)\]').firstMatch(toon);
@@ -99,6 +129,10 @@ class BriefingBrief {
       awayTomorrow: f['AwayTomorrow'],
       backFrom: f['Back'],
       window: f['Window'],
+      why: f['Why'],
+      session: f['Session'],
+      goal: f['Goal'],
+      yesterday: f['Yesterday'],
     );
   }
 
@@ -213,6 +247,12 @@ class BriefingBrief {
       if (trainingHrv != null)
         'HRV before and after the workout ${trainingHrv == 'up' ? 'rose (favourable)' : 'fell (less favourable)'}',
       if (outlook != null) 'Outlook: ${outlookEnglish(outlook!)}',
+      // What gives the briefing depth: the reason with its one figure, what
+      // today's session is for, the goal it serves and the day before.
+      if (why != null) 'Why: $why',
+      if (session != null && away == null) "Today's session: $session",
+      if (goal != null) 'Next goal: $goal',
+      if (yesterday != null) 'Yesterday: $yesterday',
     ];
     return '${parts.join('. ')}.';
   }

@@ -135,9 +135,12 @@ void main() {
     expect(text, contains('Done today: running 88 min'));
     expect(text, contains('cycling road 36 min and strength 35 min'));
     expect(text, contains('rose (favourable)'));
-    // Words, not the figures the screen already shows.
-    expect(text, isNot(contains('55')));
-    expect(text, isNot(contains('27%')));
+    // Words, not the figures the screen already shows: the one figure
+    // against the average is the "Why", and nothing else carries numbers.
+    final withoutWhy = text.replaceAll(RegExp(r'Why: [^.]*\.'), '');
+    expect(text, contains('Why: sleep HRV 40ms against your 7-day average'));
+    expect(withoutWhy, isNot(contains('55')));
+    expect(withoutWhy, isNot(contains('27%')));
   });
 
   test('the Apple briefing gets the finished analysis before the question', () {
@@ -159,8 +162,9 @@ void main() {
       lessThan(prompt.indexOf('Latest user message')),
     );
     expect(prompt, contains('Readiness RED'));
-    // The long per-metric sentences and the old HRV lines stay out.
-    expect(prompt, isNot(contains('7-day average')));
+    // The long per-metric sentences and the old HRV lines stay out; the one
+    // comparison with the average comes as the brief's "Why".
+    expect('7-day average'.allMatches(prompt).length, lessThanOrEqualTo(1));
     expect(prompt, isNot(contains('+3.3')));
     expect(prompt, isNot(contains('Night:40ms')));
     expect(prompt, contains('planned rest day'));
@@ -345,6 +349,22 @@ void main() {
       isTrue,
     );
     expect(mentionsSchedule('Heute bleibt es locker.', plan), isFalse);
+    // Rephrased, as Apple's model does: not added a second time.
+    expect(
+      mentionsSchedule(
+        'Du sollst den Plan einhalten. Heute ist 1 Einheit geplant. Mach das '
+        'Krafttraining so, wie es vorgesehen ist.',
+        plan,
+      ),
+      isTrue,
+    );
+    // Another number of sessions is not today's plan.
+    expect(mentionsSchedule('Morgen sind 2 Einheiten geplant.', plan), isFalse);
+    // The words spread over two sentences are not the plan sentence.
+    expect(
+      mentionsSchedule('Eine Einheit steht an. Es ist 1 Tag geplant.', plan),
+      isFalse,
+    );
   });
 
   BriefingBrief brief(List<HrvRecord> hrv) => BriefingBrief.parse(
@@ -379,5 +399,34 @@ void main() {
         _row(i, hrv: 55, rhr: 47, stress: 28, skin: 0),
     ]);
     expect(b.findings, ['hrvLow', 'rhrUp', 'skinTempOff']);
+  });
+
+  test('the brief gives the model the why, the session, the goal and yesterday', () {
+    // HRV 39 against about 47: the briefing says why, with that one figure,
+    // and what today's session does for the next goal.
+    final lines = MetricAnalysis(DateTime(2026, 10, 28, 21)).lines(
+      hrv: [
+        _row(0, hrv: 39, rhr: 48, stress: 20, skin: 0),
+        for (var i = 1; i <= 8; i++)
+          _row(i, hrv: 47, rhr: 48, stress: 20, skin: 0),
+      ],
+      sleep: const [],
+      wellness: const [],
+      plannedToday: const ['strength/45'],
+      session: 'lower body strength 45 min, in the build phase',
+      goal: 'A goal trail running 100 km in 12 weeks',
+      yesterday: 'trail running 120 min',
+    );
+    final b = BriefingBrief.parse(lines.join('\n'))!;
+    expect(b.findings.first, 'hrvLow');
+    expect(b.why, startsWith('sleep HRV 39'));
+    expect(b.why, contains('against your 7-day average of 47'));
+    // Commas would break the line format; they are dropped from free text.
+    expect(b.session, 'lower body strength 45 min in the build phase');
+    final text = b.toModelText();
+    expect(text, contains('Why: sleep HRV 39'));
+    expect(text, contains("Today's session: lower body strength 45 min"));
+    expect(text, contains('Next goal: A goal trail running 100 km'));
+    expect(text, contains('Yesterday: trail running 120 min'));
   });
 }

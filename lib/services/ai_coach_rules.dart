@@ -45,6 +45,7 @@ FORMAT
 - Write ONE single paragraph of plain text: 4 to 7 short sentences, at most 260 words.
 - Every sentence must add something new: NEVER repeat a sentence, a finding or a piece of advice in other words.
 - The FIRST sentence carries the main point and today's action.
+- Then WHY: the Brief's "Why" gives the one figure against the athlete's own average; use it. Then what today's session does for the next goal in its phase, and yesterday's training when it explains how the athlete feels.
 - Address the person directly and informally in the second person singular (German du, never Sie; French tu, never vous; Spanish tú; Italian tu; Portuguese tu; Catalan tu; Dutch jij; Polish ty; Slovak ty; Danish, Norwegian and Swedish du; Finnish sinä).
 - The person sees every metric on the screen already. DO NOT list or repeat values (HRV, resting heart rate, sleep hours, energy, stress); say what they mean TOGETHER and what to do. Use at most ONE figure. Prefer the Brief line: it holds the ranked findings.
 - NO line breaks, NO bullet points, NO lists, NO numbering, NO headings, NO markdown, NO emojis, NO quotation marks around the whole text. Do not greet and do not sign off.
@@ -86,6 +87,8 @@ const coachBriefingRulesShort =
     'Write $appleBriefingLength, in plain text with NO line breaks, NO lists, NO markdown. '
     'Every sentence must add something new: NEVER repeat a sentence, a finding or a piece of advice. '
     'The FIRST sentence carries the main point and today\'s action. '
+    'The SECOND sentence says WHY, with the one figure from "Why" against the average. '
+    'The THIRD says what today\'s session does for the next goal and its phase; mention yesterday only when it explains the day. '
     'Address the person directly and informally in the second person singular (German du, never Sie; French tu, never vous; Spanish tú; Italian tu; Portuguese tu; Catalan tu; Dutch jij; Polish ty; Slovak ty; Danish, Norwegian and Swedish du; Finnish sinä). '
     'The analysis is finished and given below: explain what the findings mean TOGETHER and what to do. '
     'The person sees every value on the screen already: DO NOT list or repeat metrics or numbers; use at most ONE number. '
