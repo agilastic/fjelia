@@ -869,6 +869,42 @@ class AppLocalizationsSk extends AppLocalizations {
       'Ťuknutím na deň prepnete Tréning / Odpočinok / Sila.';
 
   @override
+  String get wipeAllData => 'Vymazať všetky údaje';
+
+  @override
+  String get wipeAllDataSubtitle =>
+      'Všetko v tomto zariadení, ako po novej inštalácii';
+
+  @override
+  String get wipeTitle => 'Vymazať všetky údaje?';
+
+  @override
+  String get wipeMessage =>
+      'Týmto sa vymaže všetko, čo Fjelia ukladá v tomto zariadení: aktivity, plány, zdravotné hodnoty, fotky a videá, nastavenia a prihlásenia. Nedá sa to vrátiť späť. Ak si chceš údaje ponechať, najprv vytvor zálohu.';
+
+  @override
+  String get wipeMakeBackup => 'Vytvoriť zálohu';
+
+  @override
+  String get wipeContinue => 'Pokračovať';
+
+  @override
+  String get wipeSureTitle => 'Naozaj všetko vymazať?';
+
+  @override
+  String get wipeSureMessage =>
+      'Fjelia sa potom spustí ako po novej inštalácii. Apple Zdravie a pripojené služby si ponechajú vlastné údaje; stiahnuté modely AI zostanú.';
+
+  @override
+  String get wipeConfirm => 'Vymazať všetko';
+
+  @override
+  String get wipeRunning => 'Mažú sa všetky údaje…';
+
+  @override
+  String get wipeRecordingActive => 'Najprv zastav nahrávanie.';
+
+  @override
   String get doubleDayOk => 'Dvojitý deň ok';
 
   @override

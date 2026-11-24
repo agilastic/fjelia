@@ -1590,6 +1590,72 @@ abstract class AppLocalizations {
   /// **'Tap a day to cycle Training / Rest / Strength.'**
   String get tapADayToCycle;
 
+  /// No description provided for @wipeAllData.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete all data'**
+  String get wipeAllData;
+
+  /// No description provided for @wipeAllDataSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Everything on this device, as after a new install'**
+  String get wipeAllDataSubtitle;
+
+  /// No description provided for @wipeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete all data?'**
+  String get wipeTitle;
+
+  /// No description provided for @wipeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This deletes everything Fjelia keeps on this device: activities, plans, health values, photos and videos, settings and sign-ins. It cannot be undone. Make a backup first if you want to keep your data.'**
+  String get wipeMessage;
+
+  /// No description provided for @wipeMakeBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Make a backup'**
+  String get wipeMakeBackup;
+
+  /// No description provided for @wipeContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get wipeContinue;
+
+  /// No description provided for @wipeSureTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Really delete everything?'**
+  String get wipeSureTitle;
+
+  /// No description provided for @wipeSureMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Fjelia then starts again as after a new install. Apple Health and the connected services keep their own data; downloaded AI models stay.'**
+  String get wipeSureMessage;
+
+  /// No description provided for @wipeConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete everything'**
+  String get wipeConfirm;
+
+  /// No description provided for @wipeRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleting all data…'**
+  String get wipeRunning;
+
+  /// No description provided for @wipeRecordingActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop the recording first.'**
+  String get wipeRecordingActive;
+
   /// No description provided for @doubleDayOk.
   ///
   /// In en, this message translates to:

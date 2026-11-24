@@ -22,6 +22,10 @@ import '../../l10n/app_localizations.dart';
 import '../../providers/ecg_provider.dart';
 import 'bug_report_sheet.dart';
 
+import 'dart:developer' show log;
+
+import '../../widgets/app_restart.dart';
+
 class SystemTab extends StatelessWidget {
   const SystemTab({super.key});
   @override
@@ -58,9 +62,112 @@ class SystemTab extends StatelessWidget {
                 ),
             ],
           ),
+          const SizedBox(height: 16),
+          const SettingsGroup(dividerIndent: 58, children: [_WipeTile()]),
         ],
       ),
     );
+  }
+}
+
+/// Settings → System → Delete all data: asks twice and offers a backup
+/// first, signs out of the services, deletes everything and starts the app
+/// again as after a new install.
+class _WipeTile extends ConsumerWidget {
+  const _WipeTile();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l = context.l10n;
+    return ListTile(
+      key: const ValueKey('wipe-all-data'),
+      leading: const SettingsIcon(Icons.delete_forever_outlined, Colors.red),
+      title: Text(l.wipeAllData, style: const TextStyle(color: Colors.red)),
+      subtitle: Text(l.wipeAllDataSubtitle),
+      onTap: () => _wipe(context, ref),
+    );
+  }
+
+  Future<void> _wipe(BuildContext context, WidgetRef ref) async {
+    final l = context.l10n;
+    final first = await showDialog<String>(
+      context: context,
+      builder: (dialog) => AlertDialog(
+        title: Text(l.wipeTitle),
+        content: Text(l.wipeMessage),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialog),
+            child: Text(l.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(dialog, 'backup'),
+            child: Text(l.wipeMakeBackup),
+          ),
+          TextButton(
+            key: const ValueKey('wipe-continue'),
+            onPressed: () => Navigator.pop(dialog, 'continue'),
+            child: Text(
+              l.wipeContinue,
+              style: const TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
+      ),
+    );
+    if (!context.mounted || first == null) return;
+    if (first == 'backup') {
+      // The backup lives on the export page; the athlete comes back here.
+      await showAppSheet(context, const DataExportPage());
+      return;
+    }
+    final sure = await showDialog<bool>(
+      context: context,
+      builder: (dialog) => AlertDialog(
+        title: Text(l.wipeSureTitle),
+        content: Text(l.wipeSureMessage),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialog, false),
+            child: Text(l.cancel),
+          ),
+          FilledButton(
+            key: const ValueKey('wipe-confirm'),
+            style: FilledButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () => Navigator.pop(dialog, true),
+            child: Text(l.wipeConfirm),
+          ),
+        ],
+      ),
+    );
+    if (!context.mounted || sure != true) return;
+    if (ref.read(deviceRecordingOwnerProvider) != null) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(l.wipeRecordingActive)));
+      return;
+    }
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => PopScope(
+        canPop: false,
+        child: AlertDialog(
+          content: Row(
+            children: [
+              const CircularProgressIndicator(),
+              const SizedBox(width: 20),
+              Expanded(child: Text(l.wipeRunning)),
+            ],
+          ),
+        ),
+      ),
+    );
+    try {
+      await ref.read(dataWipeProvider)();
+    } catch (e) {
+      log('[Wipe] failed: $e');
+    }
+    if (context.mounted) AppRestart.restart(context);
   }
 }
 
@@ -98,9 +205,8 @@ class DeveloperPage extends ConsumerWidget {
                   .read(planProposalLifecycleProvider)
                   .testMorning();
               if (!context.mounted) return;
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text(result)));
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text(result)));
             }),
           ),
           SectionLabel(l10n.support),

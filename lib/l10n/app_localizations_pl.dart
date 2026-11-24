@@ -871,6 +871,42 @@ class AppLocalizationsPl extends AppLocalizations {
       'Dotknij dnia, aby przełączać trening / odpoczynek / siła.';
 
   @override
+  String get wipeAllData => 'Usuń wszystkie dane';
+
+  @override
+  String get wipeAllDataSubtitle =>
+      'Wszystko na tym urządzeniu, jak po nowej instalacji';
+
+  @override
+  String get wipeTitle => 'Usunąć wszystkie dane?';
+
+  @override
+  String get wipeMessage =>
+      'Spowoduje to usunięcie wszystkiego, co Fjelia przechowuje na tym urządzeniu: aktywności, planów, wartości zdrowotnych, zdjęć i filmów, ustawień i logowań. Tego nie można cofnąć. Najpierw utwórz kopię zapasową, jeśli chcesz zachować dane.';
+
+  @override
+  String get wipeMakeBackup => 'Utwórz kopię zapasową';
+
+  @override
+  String get wipeContinue => 'Dalej';
+
+  @override
+  String get wipeSureTitle => 'Na pewno usunąć wszystko?';
+
+  @override
+  String get wipeSureMessage =>
+      'Fjelia uruchomi się potem jak po nowej instalacji. Apple Zdrowie i połączone usługi zachowują własne dane; pobrane modele AI pozostają.';
+
+  @override
+  String get wipeConfirm => 'Usuń wszystko';
+
+  @override
+  String get wipeRunning => 'Usuwanie wszystkich danych…';
+
+  @override
+  String get wipeRecordingActive => 'Najpierw zatrzymaj nagrywanie.';
+
+  @override
   String get doubleDayOk => 'Podwójny dzień OK';
 
   @override

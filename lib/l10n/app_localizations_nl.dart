@@ -865,6 +865,42 @@ class AppLocalizationsNl extends AppLocalizations {
       'Tik op een dag om te wisselen tussen training / rust / kracht.';
 
   @override
+  String get wipeAllData => 'Alle gegevens wissen';
+
+  @override
+  String get wipeAllDataSubtitle =>
+      'Alles op dit apparaat, zoals na een nieuwe installatie';
+
+  @override
+  String get wipeTitle => 'Alle gegevens wissen?';
+
+  @override
+  String get wipeMessage =>
+      'Dit wist alles wat Fjelia op dit apparaat bewaart: activiteiten, plannen, gezondheidswaarden, foto’s en video’s, instellingen en aanmeldingen. Dit kan niet ongedaan worden gemaakt. Maak eerst een back-up als je je gegevens wilt houden.';
+
+  @override
+  String get wipeMakeBackup => 'Back-up maken';
+
+  @override
+  String get wipeContinue => 'Doorgaan';
+
+  @override
+  String get wipeSureTitle => 'Echt alles wissen?';
+
+  @override
+  String get wipeSureMessage =>
+      'Fjelia start daarna zoals na een nieuwe installatie. Apple Gezondheid en de gekoppelde diensten houden hun eigen gegevens; gedownloade AI-modellen blijven.';
+
+  @override
+  String get wipeConfirm => 'Alles wissen';
+
+  @override
+  String get wipeRunning => 'Alle gegevens worden gewist…';
+
+  @override
+  String get wipeRecordingActive => 'Stop eerst de opname.';
+
+  @override
   String get doubleDayOk => 'Dubbele dag oké';
 
   @override

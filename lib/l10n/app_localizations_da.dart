@@ -852,6 +852,42 @@ class AppLocalizationsDa extends AppLocalizations {
       'Tryk på en dag for at skifte mellem Træning / Hvile / Styrke.';
 
   @override
+  String get wipeAllData => 'Slet alle data';
+
+  @override
+  String get wipeAllDataSubtitle =>
+      'Alt på denne enhed, som efter en ny installation';
+
+  @override
+  String get wipeTitle => 'Slet alle data?';
+
+  @override
+  String get wipeMessage =>
+      'Dette sletter alt, hvad Fjelia gemmer på denne enhed: aktiviteter, planer, sundhedsværdier, fotos og videoer, indstillinger og logins. Det kan ikke fortrydes. Lav en sikkerhedskopi først, hvis du vil beholde dine data.';
+
+  @override
+  String get wipeMakeBackup => 'Lav sikkerhedskopi';
+
+  @override
+  String get wipeContinue => 'Fortsæt';
+
+  @override
+  String get wipeSureTitle => 'Vil du virkelig slette alt?';
+
+  @override
+  String get wipeSureMessage =>
+      'Fjelia starter derefter som efter en ny installation. Apple Health og de tilsluttede tjenester beholder deres egne data; downloadede AI-modeller bliver.';
+
+  @override
+  String get wipeConfirm => 'Slet alt';
+
+  @override
+  String get wipeRunning => 'Sletter alle data…';
+
+  @override
+  String get wipeRecordingActive => 'Stop optagelsen først.';
+
+  @override
   String get doubleDayOk => 'Dobbeltdag ok';
 
   @override

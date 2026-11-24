@@ -867,6 +867,42 @@ class AppLocalizationsPt extends AppLocalizations {
       'Toca num dia para alternar treino / descanso / força.';
 
   @override
+  String get wipeAllData => 'Apagar todos os dados';
+
+  @override
+  String get wipeAllDataSubtitle =>
+      'Tudo neste dispositivo, como após uma nova instalação';
+
+  @override
+  String get wipeTitle => 'Apagar todos os dados?';
+
+  @override
+  String get wipeMessage =>
+      'Isto apaga tudo o que a Fjelia guarda neste dispositivo: atividades, planos, valores de saúde, fotos e vídeos, definições e inícios de sessão. Não pode ser desfeito. Faz primeiro uma cópia de segurança se quiseres manter os teus dados.';
+
+  @override
+  String get wipeMakeBackup => 'Fazer cópia de segurança';
+
+  @override
+  String get wipeContinue => 'Continuar';
+
+  @override
+  String get wipeSureTitle => 'Apagar mesmo tudo?';
+
+  @override
+  String get wipeSureMessage =>
+      'A Fjelia arranca depois como após uma nova instalação. O Apple Saúde e os serviços ligados mantêm os seus próprios dados; os modelos de IA transferidos ficam.';
+
+  @override
+  String get wipeConfirm => 'Apagar tudo';
+
+  @override
+  String get wipeRunning => 'A apagar todos os dados…';
+
+  @override
+  String get wipeRecordingActive => 'Para primeiro a gravação.';
+
+  @override
   String get doubleDayOk => 'Dia duplo ok';
 
   @override

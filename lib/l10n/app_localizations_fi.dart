@@ -863,6 +863,42 @@ class AppLocalizationsFi extends AppLocalizations {
       'Napauta päivää vaihtaaksesi Harjoitus / Lepo / Voima.';
 
   @override
+  String get wipeAllData => 'Poista kaikki tiedot';
+
+  @override
+  String get wipeAllDataSubtitle =>
+      'Kaikki tällä laitteella, kuten uuden asennuksen jälkeen';
+
+  @override
+  String get wipeTitle => 'Poistetaanko kaikki tiedot?';
+
+  @override
+  String get wipeMessage =>
+      'Tämä poistaa kaiken, mitä Fjelia säilyttää tällä laitteella: aktiviteetit, suunnitelmat, terveysarvot, kuvat ja videot, asetukset ja kirjautumiset. Toimintoa ei voi kumota. Tee ensin varmuuskopio, jos haluat säilyttää tietosi.';
+
+  @override
+  String get wipeMakeBackup => 'Tee varmuuskopio';
+
+  @override
+  String get wipeContinue => 'Jatka';
+
+  @override
+  String get wipeSureTitle => 'Poistetaanko todella kaikki?';
+
+  @override
+  String get wipeSureMessage =>
+      'Fjelia käynnistyy sen jälkeen kuin uuden asennuksen jälkeen. Apple Health ja yhdistetyt palvelut säilyttävät omat tietonsa; ladatut tekoälymallit säilyvät.';
+
+  @override
+  String get wipeConfirm => 'Poista kaikki';
+
+  @override
+  String get wipeRunning => 'Poistetaan kaikkia tietoja…';
+
+  @override
+  String get wipeRecordingActive => 'Lopeta ensin tallennus.';
+
+  @override
   String get doubleDayOk => 'Tuplapäivä ok';
 
   @override

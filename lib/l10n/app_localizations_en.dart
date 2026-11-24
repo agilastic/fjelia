@@ -854,6 +854,42 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tapADayToCycle => 'Tap a day to cycle Training / Rest / Strength.';
 
   @override
+  String get wipeAllData => 'Delete all data';
+
+  @override
+  String get wipeAllDataSubtitle =>
+      'Everything on this device, as after a new install';
+
+  @override
+  String get wipeTitle => 'Delete all data?';
+
+  @override
+  String get wipeMessage =>
+      'This deletes everything Fjelia keeps on this device: activities, plans, health values, photos and videos, settings and sign-ins. It cannot be undone. Make a backup first if you want to keep your data.';
+
+  @override
+  String get wipeMakeBackup => 'Make a backup';
+
+  @override
+  String get wipeContinue => 'Continue';
+
+  @override
+  String get wipeSureTitle => 'Really delete everything?';
+
+  @override
+  String get wipeSureMessage =>
+      'Fjelia then starts again as after a new install. Apple Health and the connected services keep their own data; downloaded AI models stay.';
+
+  @override
+  String get wipeConfirm => 'Delete everything';
+
+  @override
+  String get wipeRunning => 'Deleting all data…';
+
+  @override
+  String get wipeRecordingActive => 'Stop the recording first.';
+
+  @override
   String get doubleDayOk => 'Double day ok';
 
   @override

@@ -60,6 +60,7 @@ import 'providers/sync_provider.dart';
 import 'screens/home/home_screen.dart';
 import 'screens/startup_splash.dart';
 import 'screens/onboarding/welcome_screen.dart';
+import 'widgets/app_restart.dart';
 import 'services/debug_log.dart';
 import 'services/health_connect_service.dart';
 import 'services/hrv/hrv_training_service.dart';
@@ -108,7 +109,7 @@ void main() {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    runApp(const ProviderScope(child: FjeliaApp()));
+    runApp(const AppRestart(child: FjeliaApp()));
   });
 }
 
