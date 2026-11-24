@@ -928,6 +928,56 @@ class AppLocalizationsPl extends AppLocalizations {
   String get hrZoneConflictCheck => 'Sprawdź swoje strefy';
 
   @override
+  String hrZonesMeasuredWith(String date) {
+    return 'Zmierzono strefami z $date';
+  }
+
+  @override
+  String get hrZonesMeasuredWithFirst => 'Zmierzono twoimi pierwszymi strefami';
+
+  @override
+  String get zoneSourceManual => 'ustawione przez ciebie';
+
+  @override
+  String get zoneSourceDevice => 'z twojego zegarka';
+
+  @override
+  String get zoneSourceLt1 => 'test LT1';
+
+  @override
+  String get zoneSourceLt2 => 'test LT2';
+
+  @override
+  String get zoneSourceLt2Bike => 'próg rowerowy';
+
+  @override
+  String get zoneSourceDerived => 'z twoich stref biegowych';
+
+  @override
+  String get zoneSourceEstimate => 'szacunek (Karvonen)';
+
+  @override
+  String get zoneSourceResolved => 'twój wybór';
+
+  @override
+  String get zoneSourceInitial => 'pierwsze strefy';
+
+  @override
+  String get hrZoneHistoryTitle => 'Granice stref w czasie';
+
+  @override
+  String hrZoneFarFromEstimate(String sport, String zones) {
+    return '$sport: twoje strefy różnią się od szacunku o ponad 10 uderzeń ($zones). Sprawdzić?';
+  }
+
+  @override
+  String get hrZoneCyclingAboveRunning =>
+      'Twoje strefy rowerowe są wyżej niż biegowe. Zwykle są ok. 5 uderzeń niższe. Sprawdzić?';
+
+  @override
+  String get hrZoneUseEstimate => 'Użyj szacunku';
+
+  @override
   String get doubleDayOk => 'Podwójny dzień OK';
 
   @override
@@ -9695,9 +9745,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get hrZoneBoundsTitle => 'Użyte strefy';
-
-  @override
-  String get hrZoneHistoryTitle => 'Granice stref w czasie';
 
   @override
   String hrZoneSince(String date) {

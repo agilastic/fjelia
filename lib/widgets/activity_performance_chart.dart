@@ -7,11 +7,13 @@ import 'dart:math' as math;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart' show DateFormat;
 
 import '../models/activity_axis.dart';
 import '../models/garmin_data.dart';
 import '../models/pace_series.dart';
 import '../providers/hr_zones_provider.dart';
+import '../services/hr_zone_history.dart' show zoneSport;
 import 'app_widgets.dart';
 
 const _zoneColors = [
@@ -21,11 +23,22 @@ const _zoneColors = [
   Colors.orange,
   Colors.redAccent,
 ];
-List<int> _bounds(WidgetRef ref, String type) {
-  final zones = ref.watch(hrZonesProvider);
-  return RegExp('cycl|bik').hasMatch(type.toLowerCase())
-      ? zones.cycling.bounds
-      : zones.running.bounds;
+
+/// The zones the activity is measured with: those of its day.
+List<int> _bounds(WidgetRef ref, GarminActivity activity) =>
+    ref.watch(hrZonesProvider).forActivity(activity.type, activity.startTime);
+
+/// When the activity's zones are not today's: since when they were in
+/// force (the epoch for the first zones), else null.
+DateTime? _olderZonesSince(WidgetRef ref, GarminActivity activity) {
+  final state = ref.watch(hrZonesProvider);
+  final sport = zoneSport(activity.type);
+  if (sport == null) return null;
+  final then = state.book.definitionAt(sport, activity.startTime);
+  if (then == null) return null;
+  final now = state.forSport(sport).bounds;
+  final used = _bounds(ref, activity);
+  return used.join(',') == now.join(',') ? null : then.effectiveFrom;
 }
 
 /// A readable step for the pace axis, in minutes.
@@ -56,7 +69,7 @@ class ActivityPerformanceChart extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final running = activity.type.toLowerCase().contains('run');
-    final bounds = _bounds(ref, activity.type);
+    final bounds = _bounds(ref, activity);
     final axis = activityAxisFor(activity.samples);
     final byTime = axis == ActivityAxis.time;
     final minutes = byTime
@@ -357,7 +370,7 @@ class ActivityZoneChart extends ConsumerWidget {
   final GarminActivity activity;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bounds = _bounds(ref, activity.type);
+    final bounds = _bounds(ref, activity);
     // The historical DB field hrZoneSeconds stores percentages, not seconds.
     final values = List.generate(
       5,
@@ -450,6 +463,18 @@ class ActivityZoneChart extends ConsumerWidget {
                     ),
                   ),
                 ],
+              ),
+            ),
+          if (_olderZonesSince(ref, activity) case final since?)
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                since.millisecondsSinceEpoch <= 0
+                    ? context.l10n.hrZonesMeasuredWithFirst
+                    : context.l10n.hrZonesMeasuredWith(
+                        DateFormat.yMMMd().format(since),
+                      ),
+                style: TextStyle(fontSize: 10, color: muted),
               ),
             ),
         ],

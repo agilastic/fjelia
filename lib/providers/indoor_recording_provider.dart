@@ -1127,11 +1127,11 @@ class IndoorRecorder extends StateNotifier<IndoorRecorderState>
           .read(indoorStorageProvider)
           .save(
             _capture!,
-            zones:
-                (_capture!.machine == FtmsMachine.bike
-                        ? zones.cycling
-                        : zones.running)
-                    .bounds,
+            // The zones of the session's day (the history's).
+            zones: zones.forActivity(
+              _capture!.machine == FtmsMachine.bike ? 'cycling' : 'running',
+              _capture!.startedAt,
+            ),
           );
       _publish(phase: IndoorPhase.saved, connected: false);
       ref.read(deviceRecordingOwnerProvider.notifier).state = null;

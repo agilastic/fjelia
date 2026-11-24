@@ -17,6 +17,7 @@ import 'ai_data_status.dart';
 import 'ai_metric_analysis.dart';
 import 'form_forecast.dart';
 import 'day_order.dart';
+import 'hr_zone_history.dart';
 import '../providers/day_data_provider.dart'
     show readTrainingFormSeries, scheduledWorkoutFromRecord;
 import '../providers/upcoming_plan_provider.dart'
@@ -630,6 +631,28 @@ class AiContextToonBuilder {
         );
       }
     }
+    // The heart-rate zones in force, and a change of the last two weeks:
+    // workouts before it were measured with the older zones.
+    try {
+      final zones = await HrZoneHistory(_db).book();
+      if (!zones.isEmpty) {
+        final changed = [
+          for (final sport in zoneSports)
+            if (zones.latest(sport) case final d?
+                when d.method != ZoneMethod.derived &&
+                    today.difference(_day(d.effectiveFrom)).inDays <= 14 &&
+                    d.effectiveFrom.millisecondsSinceEpoch > 0)
+              '$sport ${_date(d.effectiveFrom)} ${d.method}',
+        ];
+        String floors(String sport) =>
+            zones.current(sport)?.join('/') ?? 'none';
+        lines.add(
+          '[HrZones:Floors:Z1-Z5,Run:${floors('running')},'
+          'Bike:${floors('cycling')},Swim:${floors('swimming')}'
+          '${changed.isEmpty ? '' : ',ChangedRecently:${changed.join('|')}'}]',
+        );
+      }
+    } catch (_) {}
     lines.addAll(await _availabilityLines(today));
     if (planInfo != null) {
       lines.add(

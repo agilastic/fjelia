@@ -62,11 +62,7 @@ class ActivityFileImportActions {
     var added = 0;
     for (final preview in previews) {
       if (!preview.canImport) continue;
-      if (await _service.import(
-        preview,
-        runningZones: zones.running.bounds,
-        cyclingZones: zones.cycling.bounds,
-      )) {
+      if (await _service.import(preview, zonesAt: zones.forActivity)) {
         added++;
         final start = preview.file!.start.toLocal();
         days.add(DateTime(start.year, start.month, start.day));

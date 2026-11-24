@@ -1692,6 +1692,96 @@ abstract class AppLocalizations {
   /// **'Please check your zones'**
   String get hrZoneConflictCheck;
 
+  /// No description provided for @hrZonesMeasuredWith.
+  ///
+  /// In en, this message translates to:
+  /// **'Measured with the zones from {date}'**
+  String hrZonesMeasuredWith(String date);
+
+  /// No description provided for @hrZonesMeasuredWithFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Measured with your first zones'**
+  String get hrZonesMeasuredWithFirst;
+
+  /// No description provided for @zoneSourceManual.
+  ///
+  /// In en, this message translates to:
+  /// **'set by you'**
+  String get zoneSourceManual;
+
+  /// No description provided for @zoneSourceDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'from your watch'**
+  String get zoneSourceDevice;
+
+  /// No description provided for @zoneSourceLt1.
+  ///
+  /// In en, this message translates to:
+  /// **'LT1 test'**
+  String get zoneSourceLt1;
+
+  /// No description provided for @zoneSourceLt2.
+  ///
+  /// In en, this message translates to:
+  /// **'LT2 test'**
+  String get zoneSourceLt2;
+
+  /// No description provided for @zoneSourceLt2Bike.
+  ///
+  /// In en, this message translates to:
+  /// **'cycling threshold'**
+  String get zoneSourceLt2Bike;
+
+  /// No description provided for @zoneSourceDerived.
+  ///
+  /// In en, this message translates to:
+  /// **'from your running zones'**
+  String get zoneSourceDerived;
+
+  /// No description provided for @zoneSourceEstimate.
+  ///
+  /// In en, this message translates to:
+  /// **'estimate (Karvonen)'**
+  String get zoneSourceEstimate;
+
+  /// No description provided for @zoneSourceResolved.
+  ///
+  /// In en, this message translates to:
+  /// **'your choice'**
+  String get zoneSourceResolved;
+
+  /// No description provided for @zoneSourceInitial.
+  ///
+  /// In en, this message translates to:
+  /// **'first zones'**
+  String get zoneSourceInitial;
+
+  /// No description provided for @hrZoneHistoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Zone limits over time'**
+  String get hrZoneHistoryTitle;
+
+  /// No description provided for @hrZoneFarFromEstimate.
+  ///
+  /// In en, this message translates to:
+  /// **'{sport}: your zones are more than 10 bpm away from the estimate ({zones}). Check them?'**
+  String hrZoneFarFromEstimate(String sport, String zones);
+
+  /// No description provided for @hrZoneCyclingAboveRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'Your cycling zones are above your running zones. They are usually about 5 bpm lower. Check them?'**
+  String get hrZoneCyclingAboveRunning;
+
+  /// No description provided for @hrZoneUseEstimate.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the estimate'**
+  String get hrZoneUseEstimate;
+
   /// No description provided for @doubleDayOk.
   ///
   /// In en, this message translates to:
@@ -16586,12 +16676,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Zones used'**
   String get hrZoneBoundsTitle;
-
-  /// No description provided for @hrZoneHistoryTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Zone limits over time'**
-  String get hrZoneHistoryTitle;
 
   /// No description provided for @hrZoneSince.
   ///

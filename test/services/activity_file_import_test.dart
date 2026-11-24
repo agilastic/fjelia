@@ -152,7 +152,7 @@ void main() {
         );
 
     Future<bool> import(ActivityFilePreview p) =>
-        service.import(p, runningZones: _zones, cyclingZones: _zones);
+        service.import(p, zonesAt: (_, _) => _zones);
 
     test(
       'stores the activity with zones and reports a second import',

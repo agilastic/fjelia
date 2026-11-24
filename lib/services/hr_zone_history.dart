@@ -5,6 +5,10 @@ import 'package:drift/drift.dart';
 
 import '../db/database.dart';
 
+/// The zones an activity of [type] that started at [start] is measured
+/// with (the zone history's), or null for none.
+typedef ZonesAt = List<int>? Function(String type, DateTime start);
+
 /// The sports with their own heart-rate zones.
 const zoneSports = ['running', 'cycling', 'swimming'];
 

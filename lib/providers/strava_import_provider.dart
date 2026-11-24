@@ -48,8 +48,7 @@ class StravaImportNotifier extends StateNotifier<StravaImportState> {
     return StravaArchiveImporter(
       _ref.read(databaseProvider),
       _ref.read(mediaServiceProvider),
-      runningZones: zones.running.bounds,
-      cyclingZones: zones.cycling.bounds,
+      zonesAt: zones.forActivity,
     );
   }
 

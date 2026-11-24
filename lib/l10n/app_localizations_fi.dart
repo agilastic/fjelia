@@ -920,6 +920,56 @@ class AppLocalizationsFi extends AppLocalizations {
   String get hrZoneConflictCheck => 'Tarkista vyöhykkeesi';
 
   @override
+  String hrZonesMeasuredWith(String date) {
+    return 'Mitattu $date alkaen voimassa olleilla vyöhykkeillä';
+  }
+
+  @override
+  String get hrZonesMeasuredWithFirst => 'Mitattu ensimmäisillä vyöhykkeilläsi';
+
+  @override
+  String get zoneSourceManual => 'itse asetettu';
+
+  @override
+  String get zoneSourceDevice => 'kellostasi';
+
+  @override
+  String get zoneSourceLt1 => 'LT1-testi';
+
+  @override
+  String get zoneSourceLt2 => 'LT2-testi';
+
+  @override
+  String get zoneSourceLt2Bike => 'pyöräilyn kynnys';
+
+  @override
+  String get zoneSourceDerived => 'juoksuvyöhykkeistäsi';
+
+  @override
+  String get zoneSourceEstimate => 'arvio (Karvonen)';
+
+  @override
+  String get zoneSourceResolved => 'valintasi';
+
+  @override
+  String get zoneSourceInitial => 'ensimmäiset vyöhykkeet';
+
+  @override
+  String get hrZoneHistoryTitle => 'Aluerajat ajan mittaan';
+
+  @override
+  String hrZoneFarFromEstimate(String sport, String zones) {
+    return '$sport: vyöhykkeesi poikkeavat arviosta yli 10 lyöntiä ($zones). Tarkistetaanko?';
+  }
+
+  @override
+  String get hrZoneCyclingAboveRunning =>
+      'Pyöräilyvyöhykkeesi ovat juoksuvyöhykkeitä korkeammat. Yleensä ne ovat noin 5 lyöntiä alempana. Tarkistetaanko?';
+
+  @override
+  String get hrZoneUseEstimate => 'Käytä arviota';
+
+  @override
   String get doubleDayOk => 'Tuplapäivä ok';
 
   @override
@@ -9631,9 +9681,6 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get hrZoneBoundsTitle => 'Käytetyt alueet';
-
-  @override
-  String get hrZoneHistoryTitle => 'Aluerajat ajan mittaan';
 
   @override
   String hrZoneSince(String date) {

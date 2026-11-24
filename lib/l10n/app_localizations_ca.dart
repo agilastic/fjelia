@@ -926,6 +926,56 @@ class AppLocalizationsCa extends AppLocalizations {
   String get hrZoneConflictCheck => 'Revisa les teves zones';
 
   @override
+  String hrZonesMeasuredWith(String date) {
+    return 'Mesurat amb les zones del $date';
+  }
+
+  @override
+  String get hrZonesMeasuredWithFirst => 'Mesurat amb les teves primeres zones';
+
+  @override
+  String get zoneSourceManual => 'definides per tu';
+
+  @override
+  String get zoneSourceDevice => 'del teu rellotge';
+
+  @override
+  String get zoneSourceLt1 => 'prova LT1';
+
+  @override
+  String get zoneSourceLt2 => 'prova LT2';
+
+  @override
+  String get zoneSourceLt2Bike => 'llindar de ciclisme';
+
+  @override
+  String get zoneSourceDerived => 'de les teves zones de cursa';
+
+  @override
+  String get zoneSourceEstimate => 'estimació (Karvonen)';
+
+  @override
+  String get zoneSourceResolved => 'la teva tria';
+
+  @override
+  String get zoneSourceInitial => 'primeres zones';
+
+  @override
+  String get hrZoneHistoryTitle => 'Límits de zona al llarg del temps';
+
+  @override
+  String hrZoneFarFromEstimate(String sport, String zones) {
+    return '$sport: les teves zones estan a més de 10 ppm de l’estimació ($zones). Les revises?';
+  }
+
+  @override
+  String get hrZoneCyclingAboveRunning =>
+      'Les teves zones de ciclisme estan per sobre de les de cursa. Normalment són uns 5 ppm més baixes. Les revises?';
+
+  @override
+  String get hrZoneUseEstimate => 'Usa l’estimació';
+
+  @override
   String get doubleDayOk => 'Dia doble ok';
 
   @override
@@ -9666,9 +9716,6 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get hrZoneBoundsTitle => 'Zones utilitzades';
-
-  @override
-  String get hrZoneHistoryTitle => 'Límits de zona al llarg del temps';
 
   @override
   String hrZoneSince(String date) {

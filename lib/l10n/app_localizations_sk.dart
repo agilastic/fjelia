@@ -926,6 +926,56 @@ class AppLocalizationsSk extends AppLocalizations {
   String get hrZoneConflictCheck => 'Skontroluj si zóny';
 
   @override
+  String hrZonesMeasuredWith(String date) {
+    return 'Merané zónami z $date';
+  }
+
+  @override
+  String get hrZonesMeasuredWithFirst => 'Merané tvojimi prvými zónami';
+
+  @override
+  String get zoneSourceManual => 'nastavené tebou';
+
+  @override
+  String get zoneSourceDevice => 'z tvojich hodiniek';
+
+  @override
+  String get zoneSourceLt1 => 'test LT1';
+
+  @override
+  String get zoneSourceLt2 => 'test LT2';
+
+  @override
+  String get zoneSourceLt2Bike => 'cyklistický prah';
+
+  @override
+  String get zoneSourceDerived => 'z tvojich bežeckých zón';
+
+  @override
+  String get zoneSourceEstimate => 'odhad (Karvonen)';
+
+  @override
+  String get zoneSourceResolved => 'tvoja voľba';
+
+  @override
+  String get zoneSourceInitial => 'prvé zóny';
+
+  @override
+  String get hrZoneHistoryTitle => 'Hranice zón v čase';
+
+  @override
+  String hrZoneFarFromEstimate(String sport, String zones) {
+    return '$sport: tvoje zóny sú od odhadu ďalej ako 10 úderov ($zones). Skontrolovať?';
+  }
+
+  @override
+  String get hrZoneCyclingAboveRunning =>
+      'Tvoje cyklistické zóny sú nad bežeckými. Zvyčajne sú asi o 5 úderov nižšie. Skontrolovať?';
+
+  @override
+  String get hrZoneUseEstimate => 'Použiť odhad';
+
+  @override
   String get doubleDayOk => 'Dvojitý deň ok';
 
   @override
@@ -9639,9 +9689,6 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get hrZoneBoundsTitle => 'Použité zóny';
-
-  @override
-  String get hrZoneHistoryTitle => 'Hranice zón v čase';
 
   @override
   String hrZoneSince(String date) {

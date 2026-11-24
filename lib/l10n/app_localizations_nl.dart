@@ -922,6 +922,56 @@ class AppLocalizationsNl extends AppLocalizations {
   String get hrZoneConflictCheck => 'Controleer je zones';
 
   @override
+  String hrZonesMeasuredWith(String date) {
+    return 'Gemeten met de zones van $date';
+  }
+
+  @override
+  String get hrZonesMeasuredWithFirst => 'Gemeten met je eerste zones';
+
+  @override
+  String get zoneSourceManual => 'door jou ingesteld';
+
+  @override
+  String get zoneSourceDevice => 'van je horloge';
+
+  @override
+  String get zoneSourceLt1 => 'LT1-test';
+
+  @override
+  String get zoneSourceLt2 => 'LT2-test';
+
+  @override
+  String get zoneSourceLt2Bike => 'fietsdrempel';
+
+  @override
+  String get zoneSourceDerived => 'uit je loopzones';
+
+  @override
+  String get zoneSourceEstimate => 'schatting (Karvonen)';
+
+  @override
+  String get zoneSourceResolved => 'jouw keuze';
+
+  @override
+  String get zoneSourceInitial => 'eerste zones';
+
+  @override
+  String get hrZoneHistoryTitle => 'Zonegrenzen in de tijd';
+
+  @override
+  String hrZoneFarFromEstimate(String sport, String zones) {
+    return '$sport: je zones liggen meer dan 10 slagen naast de schatting ($zones). Controleren?';
+  }
+
+  @override
+  String get hrZoneCyclingAboveRunning =>
+      'Je fietszones liggen boven je loopzones. Meestal zijn ze zo’n 5 slagen lager. Controleren?';
+
+  @override
+  String get hrZoneUseEstimate => 'Schatting gebruiken';
+
+  @override
   String get doubleDayOk => 'Dubbele dag oké';
 
   @override
@@ -9663,9 +9713,6 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get hrZoneBoundsTitle => 'Gebruikte zones';
-
-  @override
-  String get hrZoneHistoryTitle => 'Zonegrenzen in de tijd';
 
   @override
   String hrZoneSince(String date) {

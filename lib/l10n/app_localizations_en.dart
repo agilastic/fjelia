@@ -911,6 +911,56 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hrZoneConflictCheck => 'Please check your zones';
 
   @override
+  String hrZonesMeasuredWith(String date) {
+    return 'Measured with the zones from $date';
+  }
+
+  @override
+  String get hrZonesMeasuredWithFirst => 'Measured with your first zones';
+
+  @override
+  String get zoneSourceManual => 'set by you';
+
+  @override
+  String get zoneSourceDevice => 'from your watch';
+
+  @override
+  String get zoneSourceLt1 => 'LT1 test';
+
+  @override
+  String get zoneSourceLt2 => 'LT2 test';
+
+  @override
+  String get zoneSourceLt2Bike => 'cycling threshold';
+
+  @override
+  String get zoneSourceDerived => 'from your running zones';
+
+  @override
+  String get zoneSourceEstimate => 'estimate (Karvonen)';
+
+  @override
+  String get zoneSourceResolved => 'your choice';
+
+  @override
+  String get zoneSourceInitial => 'first zones';
+
+  @override
+  String get hrZoneHistoryTitle => 'Zone limits over time';
+
+  @override
+  String hrZoneFarFromEstimate(String sport, String zones) {
+    return '$sport: your zones are more than 10 bpm away from the estimate ($zones). Check them?';
+  }
+
+  @override
+  String get hrZoneCyclingAboveRunning =>
+      'Your cycling zones are above your running zones. They are usually about 5 bpm lower. Check them?';
+
+  @override
+  String get hrZoneUseEstimate => 'Use the estimate';
+
+  @override
   String get doubleDayOk => 'Double day ok';
 
   @override
@@ -9597,9 +9647,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hrZoneBoundsTitle => 'Zones used';
-
-  @override
-  String get hrZoneHistoryTitle => 'Zone limits over time';
 
   @override
   String hrZoneSince(String date) {

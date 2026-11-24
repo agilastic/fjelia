@@ -12,7 +12,7 @@ import 'activity_file_import_service.dart';
 import 'dfa_alpha1_service.dart';
 import 'hr_zone_model.dart';
 import 'media_service.dart';
-import '../theme/activity_colors.dart';
+import 'hr_zone_history.dart';
 
 /// Source of activities imported from a Strava account archive.
 const stravaSource = 'strava';
@@ -371,16 +371,13 @@ enum _Match { none, imported, duplicate, deleted }
 /// or TCX, gzipped or not) and their photos, next to what other sources
 /// already brought. Nothing leaves the device.
 class StravaArchiveImporter {
-  StravaArchiveImporter(
-    this._db,
-    this._media, {
-    this.runningZones = const [],
-    this.cyclingZones = const [],
-  });
+  StravaArchiveImporter(this._db, this._media, {this.zonesAt});
 
   final AppDatabase _db;
   final MediaService _media;
-  final List<int> runningZones, cyclingZones;
+
+  /// The zones of each workout's day, for its time in zones.
+  final ZonesAt? zonesAt;
 
   late List<ActivityRecord> _known;
   late Map<String, ActivityRecord> _byId;
@@ -645,14 +642,10 @@ class StravaArchiveImporter {
     final metrics = file == null || file.samples.isEmpty
         ? null
         : jsonEncode(file.samples);
-    final zones = metrics == null || type == 'swimming'
+    final floors = zonesAt?.call(type, start);
+    final zones = metrics == null || type == 'swimming' || floors == null
         ? null
-        : zonePercentFromSamples(
-            metrics,
-            activityKind(type) == ActivityKind.cycling
-                ? cyclingZones
-                : runningZones,
-          );
+        : zonePercentFromSamples(metrics, floors);
     final moving = r.movingSeconds ?? file?.movingSeconds;
     await _db
         .into(_db.activityRecords)

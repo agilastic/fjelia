@@ -11,6 +11,7 @@ import 'fit_activity_data.dart';
 import 'gpx_parser.dart';
 import 'hr_zone_model.dart';
 import 'tcx_parser.dart';
+import 'hr_zone_history.dart';
 
 /// Source of activities the athlete imported from a FIT, GPX or TCX file.
 const activityFileSource = 'file';
@@ -284,8 +285,7 @@ class ActivityFileImportService {
   /// rate. An Apple Health copy of the same workout is removed afterwards.
   Future<bool> import(
     ActivityFilePreview preview, {
-    required List<int> runningZones,
-    required List<int> cyclingZones,
+    required ZonesAt zonesAt,
   }) async {
     final file = preview.file;
     if (file == null || !preview.canImport) return false;
@@ -296,13 +296,11 @@ class ActivityFileImportService {
     await (_db.delete(
       _db.deletedActivities,
     )..where((t) => t.activityId.equals(file.activityId))).go();
-    final cyclingLike = activityKind(type) == ActivityKind.cycling;
-    final zones = type == 'swimming'
+    // Measured with the zones of the workout's day.
+    final floors = zonesAt(type, file.start);
+    final zones = type == 'swimming' || floors == null
         ? null
-        : zonePercentFromSamples(
-            metrics,
-            cyclingLike ? cyclingZones : runningZones,
-          );
+        : zonePercentFromSamples(metrics, floors);
     await _db
         .into(_db.activityRecords)
         .insert(

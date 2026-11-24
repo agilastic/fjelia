@@ -910,6 +910,56 @@ class AppLocalizationsNb extends AppLocalizations {
   String get hrZoneConflictCheck => 'Sjekk sonene dine';
 
   @override
+  String hrZonesMeasuredWith(String date) {
+    return 'Målt med sonene fra $date';
+  }
+
+  @override
+  String get hrZonesMeasuredWithFirst => 'Målt med dine første soner';
+
+  @override
+  String get zoneSourceManual => 'satt av deg';
+
+  @override
+  String get zoneSourceDevice => 'fra klokken din';
+
+  @override
+  String get zoneSourceLt1 => 'LT1-test';
+
+  @override
+  String get zoneSourceLt2 => 'LT2-test';
+
+  @override
+  String get zoneSourceLt2Bike => 'sykkelterskel';
+
+  @override
+  String get zoneSourceDerived => 'fra løpesonene dine';
+
+  @override
+  String get zoneSourceEstimate => 'anslag (Karvonen)';
+
+  @override
+  String get zoneSourceResolved => 'ditt valg';
+
+  @override
+  String get zoneSourceInitial => 'første soner';
+
+  @override
+  String get hrZoneHistoryTitle => 'Sonegrenser over tid';
+
+  @override
+  String hrZoneFarFromEstimate(String sport, String zones) {
+    return '$sport: Sonene dine ligger over 10 slag fra anslaget ($zones). Sjekke dem?';
+  }
+
+  @override
+  String get hrZoneCyclingAboveRunning =>
+      'Sykkelsonene dine ligger over løpesonene. Vanligvis er de rundt 5 slag lavere. Sjekke dem?';
+
+  @override
+  String get hrZoneUseEstimate => 'Bruk anslaget';
+
+  @override
   String get doubleDayOk => 'Dobbeltdag ok';
 
   @override
@@ -9594,9 +9644,6 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get hrZoneBoundsTitle => 'Brukte soner';
-
-  @override
-  String get hrZoneHistoryTitle => 'Sonegrenser over tid';
 
   @override
   String hrZoneSince(String date) {

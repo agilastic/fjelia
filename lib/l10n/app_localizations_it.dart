@@ -920,6 +920,56 @@ class AppLocalizationsIt extends AppLocalizations {
   String get hrZoneConflictCheck => 'Controlla le tue zone';
 
   @override
+  String hrZonesMeasuredWith(String date) {
+    return 'Misurato con le zone del $date';
+  }
+
+  @override
+  String get hrZonesMeasuredWithFirst => 'Misurato con le tue prime zone';
+
+  @override
+  String get zoneSourceManual => 'impostate da te';
+
+  @override
+  String get zoneSourceDevice => 'dal tuo orologio';
+
+  @override
+  String get zoneSourceLt1 => 'test LT1';
+
+  @override
+  String get zoneSourceLt2 => 'test LT2';
+
+  @override
+  String get zoneSourceLt2Bike => 'soglia bici';
+
+  @override
+  String get zoneSourceDerived => 'dalle tue zone di corsa';
+
+  @override
+  String get zoneSourceEstimate => 'stima (Karvonen)';
+
+  @override
+  String get zoneSourceResolved => 'la tua scelta';
+
+  @override
+  String get zoneSourceInitial => 'prime zone';
+
+  @override
+  String get hrZoneHistoryTitle => 'Limiti delle zone nel tempo';
+
+  @override
+  String hrZoneFarFromEstimate(String sport, String zones) {
+    return '$sport: le tue zone si discostano di oltre 10 bpm dalla stima ($zones). Le controlli?';
+  }
+
+  @override
+  String get hrZoneCyclingAboveRunning =>
+      'Le tue zone bici sono sopra quelle di corsa. Di solito sono circa 5 bpm più basse. Le controlli?';
+
+  @override
+  String get hrZoneUseEstimate => 'Usa la stima';
+
+  @override
   String get doubleDayOk => 'Doppio allenamento ok';
 
   @override
@@ -9650,9 +9700,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get hrZoneBoundsTitle => 'Zone usate';
-
-  @override
-  String get hrZoneHistoryTitle => 'Limiti delle zone nel tempo';
 
   @override
   String hrZoneSince(String date) {

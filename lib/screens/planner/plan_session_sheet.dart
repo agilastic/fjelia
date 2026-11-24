@@ -94,14 +94,12 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
         ? ref.watch(sessionReplacementProvider(s.id)).valueOrNull
         : null;
     final sport = s.sport.toLowerCase();
-    final zones = ref.watch(hrZonesProvider);
-    final zoneBounds =
-        (sport.contains('cycl') || sport.contains('bik')
-                ? zones.cycling
-                : zones.running)
-            .bounds;
-    // Ranges are worked out from today's zones and FTP, not from what was
-    // stored when the plan was made; both change over time.
+    // Ranges come from the zones of the session's day (a past session keeps
+    // the zones it was trained with, a coming one has today's) and today's
+    // FTP, not from what was stored when the plan was made.
+    final zoneBounds = ref
+        .watch(hrZonesProvider)
+        .forActivity(sport, s.sessionDate);
     final isRide = sport.contains('cycl') || sport.contains('bik');
     // The goal this session prepares for, when the plan has more than one.
     final goals = ref.watch(goalSetProvider).valueOrNull;
@@ -755,19 +753,15 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                                     targetLabel: selected.label(context),
                                   );
                               if (!context.mounted) return;
-                              final targetZones =
-                                  selected.id.contains('cycl') ||
-                                      selected.id.contains('bik')
-                                  ? zones.cycling
-                                  : zones.running;
+                              final targetZones = ref
+                                  .read(hrZonesProvider)
+                                  .forActivity(selected.id, s.sessionDate);
                               final apply = await _confirmReplacement(
                                 context,
                                 preview,
                                 platforms: onPlatforms,
-                                zoneTarget: (z) => zoneTargetText(
-                                  z,
-                                  hrFloors: targetZones.bounds,
-                                ),
+                                zoneTarget: (z) =>
+                                    zoneTargetText(z, hrFloors: targetZones),
                               );
                               if (!context.mounted || apply == null) return;
                               if (apply == _ReplacementChoice.rest) {
@@ -852,9 +846,8 @@ class _SessionState extends ConsumerState<PlanSessionSheet> {
                 if (!context.mounted || !buttonContext.mounted) return;
                 final box = buttonContext.findRenderObject() as RenderBox?;
                 if (why != null) {
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text(why)));
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(why)));
                 }
                 await SharePlus.instance.share(
                   ShareParams(
