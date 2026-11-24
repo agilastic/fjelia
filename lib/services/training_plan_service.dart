@@ -1995,9 +1995,8 @@ class TrainingPlanService {
           in mainSport == 'triathlon'
               ? const ['running', 'cycling']
               : [?rampFamilyOf(mainSport)]) {
-        final state = await DfaAlpha1Service(
-          _db,
-        ).rampState(cycling: family == 'cycling', now: _now());
+        final state = await DfaAlpha1Service(_db)
+            .rampState(cycling: family == 'cycling', now: _now());
         if (!state.strap) continue;
         var last = state.lastProgression == null
             ? null
@@ -2352,7 +2351,18 @@ class TrainingPlanService {
           );
         }
       }
-      final maxSessions = math.max(1, daysPerWeek * maxSessionsPerDay);
+      // Few hours a week (under three): no more sessions than the week's
+      // minutes hold at half an hour each. One hour a week is two sessions
+      // of 30 minutes or one of an hour, not five short ones that add up to
+      // well over the hour.
+      final smallWeek = targetWeeklyMin < 180;
+      final maxSessions = math.max(
+        1,
+        math.min(
+          daysPerWeek * maxSessionsPerDay,
+          smallWeek ? weeklyBudgetMin ~/ 30 : 1 << 30,
+        ),
+      );
       // Keep long and key sessions first when trimming.
       int rank(_SessionSlot s) => switch (s.sessionType) {
         'long' => 0,
@@ -2946,6 +2956,14 @@ class TrainingPlanService {
           }
         }
         duration = duration.clamp(slot.minMin ?? 20, slot.maxMin ?? 240);
+        // A small week: every session, the long one too, gets its share of
+        // the week's minutes and at least half an hour.
+        final smallWeekShare = smallWeek
+            ? math.max(30, weeklyBudgetMin / slots.length).round()
+            : null;
+        if (smallWeekShare != null) {
+          duration = math.min(duration, smallWeekShare);
+        }
         // No longer than the day's training window or a first week back,
         // and after an event no more than its recovery allows that day, all
         // sessions of the day together.
@@ -3179,6 +3197,17 @@ class TrainingPlanService {
               continue;
             }
           }
+        }
+        // The share of a small week holds also when the chosen workout's
+        // steps run longer: then a steady session of that length.
+        if (smallWeekShare != null &&
+            !ramp &&
+            slot.sport != 'strength' &&
+            semantics.totalMinutes > smallWeekShare) {
+          compileSteps(_steadySteps(smallWeekShare, slot.zone), smallWeekShare);
+          template = null;
+          synthetic = true;
+          duration = smallWeekShare;
         }
         var title =
             template?.name ??

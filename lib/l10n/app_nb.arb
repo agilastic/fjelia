@@ -412,6 +412,7 @@
   },
   "tapADayToCycle": "Trykk på en dag for å bytte mellom Trening / Hvile / Styrke.",
   "doubleDayOk": "Dobbeltdag ok",
+  "doubleDayNeedsHours": "Dobbeltdager krever minst 5 t i uken.",
   "birthYearOptional": "Fødselsår (valgfritt)",
   "addAnother": "Legg til en til",
   "knowYourBodyTrainSmarter": "Kjenn kroppen din.\nTren smartere.",
@@ -3169,6 +3170,8 @@
       }
     }
   },
+  "briefOrderTwo": "Først {first} ({firstWhen}), deretter {second} ({secondWhen}).",
+  "briefOrderTwoNoTimes": "Først {first}, deretter {second}, helst med noen timers mellomrom.",
   "briefOutlookLongRest": "Formen din trenger mer enn noen få rolige dager for å komme seg.",
   "briefOutlookPlanTired": "Hvis du følger planen, holder formen din seg lav de neste dagene.",
   "localQwen": "Qwen3.5 · lokal",

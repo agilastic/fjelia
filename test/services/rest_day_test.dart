@@ -96,6 +96,105 @@ void main() {
       expect(BriefingBrief.parse(text)!.restDay, isFalse);
     });
 
+    test('a synced activity that does the session finishes it, as in the '
+        'Plan', () async {
+      await plan();
+      await session('run', today, 'planned');
+      // Still `planned` in the database: the Plan matches it by sport, day
+      // and length.
+      await db
+          .into(db.activityRecords)
+          .insert(
+            ActivityRecordsCompanion.insert(
+              activityId: 'garmin-1',
+              name: 'Morning run',
+              type: 'running',
+              startDate: today.add(const Duration(hours: 7)),
+              durationSeconds: 47 * 60,
+            ),
+          );
+      final text = await AiContextToonBuilder(
+        db,
+        openProposal: () => 'rest',
+      ).build(null, '', null);
+      expect(text, contains('[TodayWorkout:Status:done,PlanSessionsDone:1'));
+      final brief = BriefingBrief.parse(text)!;
+      expect(brief.today, isEmpty);
+      expect(brief.done, ['running/47']);
+      // The morning proposal to drop the session has nothing left to change.
+      expect(brief.proposal, isNull);
+      expect(brief.toModelText(), contains('No further scheduled sessions'));
+      expect(
+        brief.localText(AppLocalizationsEn()),
+        isNot(contains('planned today')),
+      );
+    });
+
+    test('two sessions today: the brief says which first and when', () async {
+      await plan();
+      await session('run', today, 'planned');
+      await db
+          .into(db.trainingSessions)
+          .insert(
+            TrainingSessionsCompanion.insert(
+              id: 'gym',
+              planId: 'p',
+              athleteId: 'self',
+              sessionDate: today,
+              sessionNumber: 2,
+              weekNumber: 1,
+              sport: 'strength',
+              sessionType: 'key',
+              phase: 'base',
+              primaryZone: 3,
+              title: 'Gym',
+              plannedDurationMin: 45,
+              plannedTrimp: 40,
+              sessionLevel: 4,
+            ),
+          );
+      // The whole day open, so the order does not depend on the clock.
+      var windows = const TrainingWindows();
+      for (var slot = 0; slot < TrainingWindows.slotsPerDay; slot++) {
+        windows = windows.withSlot(today.weekday, slot, true);
+      }
+      final brief = BriefingBrief.parse(
+        await AiContextToonBuilder(
+          db,
+          trainingWindows: () async => windows,
+        ).build(null, '', null),
+      )!;
+      expect(brief.order.map((o) => o.split('@').first), [
+        'running/45',
+        'strength/45',
+      ]);
+      expect(brief.toModelText(), contains('Order today'));
+    });
+
+    test('a different sport does not finish the session', () async {
+      await plan();
+      await session('run', today, 'planned');
+      await db
+          .into(db.activityRecords)
+          .insert(
+            ActivityRecordsCompanion.insert(
+              activityId: 'garmin-2',
+              name: 'Ride',
+              type: 'cycling',
+              startDate: today.add(const Duration(hours: 7)),
+              durationSeconds: 45 * 60,
+            ),
+          );
+      final brief = BriefingBrief.parse(
+        await AiContextToonBuilder(
+          db,
+          openProposal: () => 'rest',
+        ).build(null, '', null),
+      )!;
+      expect(brief.today, ['running/45']);
+      expect(brief.proposal, 'rest');
+    });
+
     test('without a plan nothing is scheduled, and no rest day', () async {
       final text = await context();
       expect(text, contains('[TodayWorkout:Status:none'));

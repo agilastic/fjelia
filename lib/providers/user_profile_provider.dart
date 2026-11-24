@@ -28,7 +28,7 @@ class UserProfile {
     this.rampTests = true,
     this.casualGoal,
     this.preferredStrengthDays = const [3],
-    this.maxSessionsPerDay = 1,
+    int maxSessionsPerDay = 1,
     this.hoursPerWeek = 8,
     this.weekStartsOnMonday = true,
     this.bikeMetric = 'hr',
@@ -43,7 +43,7 @@ class UserProfile {
     this.apoB,
     this.hsCrp,
     this.eGfr,
-  });
+  }) : _maxSessionsPerDay = maxSessionsPerDay;
 
   final int? birthYear;
 
@@ -80,7 +80,19 @@ class UserProfile {
   /// without a race goal.
   final String? casualGoal;
   final List<int> preferredStrengthDays;
-  final int maxSessionsPerDay;
+
+  /// Below this weekly time two sessions on one day do not fit sensibly.
+  static const doubleDayMinHours = 5.0;
+
+  /// The athlete's choice of one or two sessions a day, kept as chosen.
+  final int _maxSessionsPerDay;
+
+  /// Two sessions a day can be chosen from [doubleDayMinHours] a week.
+  bool get doubleDayAllowed => hoursPerWeek >= doubleDayMinHours;
+
+  /// Sessions a day the plan may use: one below [doubleDayMinHours], else
+  /// the athlete's choice, which comes back when the hours go up again.
+  int get maxSessionsPerDay => doubleDayAllowed ? _maxSessionsPerDay : 1;
   final double hoursPerWeek;
   final bool weekStartsOnMonday;
 
@@ -138,7 +150,7 @@ class UserProfile {
     'rampTests': rampTests,
     'casualGoal': casualGoal,
     'preferredStrengthDays': preferredStrengthDays,
-    'maxSessionsPerDay': maxSessionsPerDay,
+    'maxSessionsPerDay': _maxSessionsPerDay,
     'hoursPerWeek': hoursPerWeek,
     'weekStartsOnMonday': weekStartsOnMonday,
     'bikeMetric': bikeMetric,
@@ -252,7 +264,7 @@ class UserProfile {
     rampTests: rampTests ?? this.rampTests,
     casualGoal: clearCasualGoal ? null : casualGoal ?? this.casualGoal,
     preferredStrengthDays: preferredStrengthDays ?? this.preferredStrengthDays,
-    maxSessionsPerDay: maxSessionsPerDay ?? this.maxSessionsPerDay,
+    maxSessionsPerDay: maxSessionsPerDay ?? _maxSessionsPerDay,
     hoursPerWeek: hoursPerWeek ?? this.hoursPerWeek,
     weekStartsOnMonday: weekStartsOnMonday ?? this.weekStartsOnMonday,
     bikeMetric: bikeMetric ?? this.bikeMetric,

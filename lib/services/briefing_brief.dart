@@ -1,5 +1,6 @@
 import '../l10n/app_localizations.dart';
 import '../l10n/plan_text.dart' show absenceKindLabel;
+import '../theme/activity_colors.dart';
 
 /// What the daily briefing is about, decided by the app and not by a model:
 /// the readiness colour, the few findings that matter (worst first) and what
@@ -29,6 +30,8 @@ class BriefingBrief {
     this.goal,
     this.yesterday,
     this.proposal,
+    this.order = const [],
+    this.orderWhy,
   });
 
   /// green, yellow or red.
@@ -83,6 +86,15 @@ class BriefingBrief {
   /// `replan` (the plan should be rebuilt). The briefing must say the same.
   final String? proposal;
 
+  /// Two or more open sessions today in the order to do them, each with the
+  /// training window it goes in: `strength/45@06:00-07:30`, or `strength/45`
+  /// without training times (see [dayOrder]).
+  final List<String> order;
+
+  /// `priority` (key endurance first, strength after it), `fit` (the
+  /// windows' lengths decide the order) or `together` (one window for both).
+  final String? orderWhy;
+
   /// Free text in the line format: no separators, no brackets.
   static String _text(String v) => v
       .replaceAll(RegExp(r'[,\[\]|]'), ' ')
@@ -105,7 +117,9 @@ class BriefingBrief {
       '${session == null ? '' : ',Session:${_text(session!)}'}'
       '${goal == null ? '' : ',Goal:${_text(goal!)}'}'
       '${yesterday == null ? '' : ',Yesterday:${_text(yesterday!)}'}'
-      '${proposal == null ? '' : ',Proposal:$proposal'}]';
+      '${proposal == null ? '' : ',Proposal:$proposal'}'
+      '${order.isEmpty ? '' : ',Order:${order.join('|')}'}'
+      '${orderWhy == null ? '' : ',OrderWhy:$orderWhy'}]';
 
   static BriefingBrief? parse(String toon) {
     final m = RegExp(r'\[Brief:([^\]]*)\]').firstMatch(toon);
@@ -141,7 +155,75 @@ class BriefingBrief {
       goal: f['Goal'],
       yesterday: f['Yesterday'],
       proposal: f['Proposal'],
+      order: list(f['Order']),
+      orderWhy: f['OrderWhy'],
     );
+  }
+
+  /// One `sport/minutes@HH:MM-HH:MM` of [order]: sport, minutes and the
+  /// window's start and end in minutes of the day, when it has one.
+  static ({String sport, String minutes, int? start, int? end}) _orderItem(
+    String item,
+  ) {
+    final at = item.split('@');
+    final p = at.first.split('/');
+    int? minute(String hm) {
+      final t = hm.split(':');
+      if (t.length != 2) return null;
+      final h = int.tryParse(t[0]), m = int.tryParse(t[1]);
+      return h == null || m == null ? null : h * 60 + m;
+    }
+
+    final window = at.length == 2 ? at[1].split('-') : const <String>[];
+    return (
+      sport: p.first,
+      minutes: p.length > 1 ? p[1] : '',
+      start: window.length == 2 ? minute(window[0]) : null,
+      end: window.length == 2 ? minute(window[1]) : null,
+    );
+  }
+
+  /// The part of the day a window starts in, for a model: clock times would
+  /// read as figures the briefing must not list.
+  static String _partOfDay(int start) => start < 11 * 60
+      ? 'morning'
+      : start < 14 * 60
+      ? 'midday'
+      : start < 17 * 60
+      ? 'afternoon'
+      : 'evening';
+
+  static String _sportName(AppLocalizations l, String sport) =>
+      switch (activityKind(sport)) {
+        ActivityKind.running => l.running,
+        ActivityKind.cycling => l.cycling,
+        ActivityKind.swimming => l.swimming,
+        ActivityKind.strength => l.strength,
+        ActivityKind.rowing => l.rowing,
+        ActivityKind.hiking => l.hiking,
+        ActivityKind.walking => l.walking,
+        ActivityKind.yoga => l.yoga,
+        ActivityKind.other => l.workout,
+      };
+
+  /// The order of today's sessions as a sentence in the app language, with
+  /// the training windows' times.
+  String? orderText(AppLocalizations l) {
+    if (order.length < 2) return null;
+    final first = _orderItem(order[0]), second = _orderItem(order[1]);
+    String name(({String sport, String minutes, int? start, int? end}) i) =>
+        '${_sportName(l, i.sport)} ${i.minutes} min';
+    String hm(int m) =>
+        '${(m ~/ 60).toString().padLeft(2, '0')}:'
+        '${(m % 60).toString().padLeft(2, '0')}';
+    String? when(({String sport, String minutes, int? start, int? end}) i) =>
+        i.start == null || i.end == null
+        ? null
+        : '${hm(i.start!)}–${hm(i.end!)}';
+    final a = when(first), b = when(second);
+    return a == null || b == null
+        ? l.briefOrderTwoNoTimes(name(first), name(second))
+        : l.briefOrderTwo(name(first), a, name(second), b);
   }
 
   /// The load forecast's outlook in English, for a model.
@@ -266,8 +348,29 @@ class BriefingBrief {
       if (session != null && away == null) "Today's session: $session",
       if (goal != null) 'Next goal: $goal',
       if (yesterday != null) 'Yesterday: $yesterday',
+      if (order.length >= 2 && away == null) _orderEnglish(),
     ];
     return '${parts.join('. ')}.';
+  }
+
+  /// Which session first and when, for a model: parts of the day instead of
+  /// clock times, and why.
+  String _orderEnglish() {
+    final items = order.map(_orderItem).toList();
+    String one(({String sport, String minutes, int? start, int? end}) i) =>
+        '${i.sport.replaceAll('_', ' ')} ${i.minutes} min'
+        '${i.start == null ? '' : ' in the ${_partOfDay(i.start!)} training window'}';
+    final why = switch (orderWhy) {
+      'fit' => 'only this way does each session fit the time its window has',
+      'together' => 'both fit one window: the endurance session first, strength right after it',
+      _ =>
+        items.any((i) => i.sport == 'strength')
+            ? 'the endurance session comes first while fresh, strength after it with hours in between'
+            : 'the most important session comes first while fresh',
+    };
+    return 'Order today, tell the athlete which session to do first and when: '
+        'first ${one(items[0])}, then '
+        '${items.skip(1).map(one).join(', then ')}; why: $why';
   }
 
   String? plannedTodaySentence(AppLocalizations l) => away != null
@@ -364,8 +467,10 @@ class BriefingBrief {
         ? null
         : l.briefBackFrom(absenceKindLabel(l, backFrom!));
     final next = tomorrowSentence(l);
+    final orderSentence = away == null ? orderText(l) : null;
     return '$head $why$training${outlookSentence == null ? '' : ' $outlookSentence'}'
-        '${schedule == null ? '' : ' $schedule'}${back == null ? '' : ' $back'}'
+        '${schedule == null ? '' : ' $schedule'}'
+        '${orderSentence == null ? '' : ' $orderSentence'}${back == null ? '' : ' $back'}'
         '${next == null ? '' : ' $next'} $advice';
   }
 }

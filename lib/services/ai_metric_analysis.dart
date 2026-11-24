@@ -24,6 +24,8 @@ class MetricAnalysis {
     double? ctl,
     List<String> done = const [],
     List<String> plannedToday = const [],
+    List<String> order = const [],
+    String? orderWhy,
     List<String> tomorrow = const [],
     String? trainingHrv,
     String? outlook,
@@ -380,6 +382,8 @@ class MetricAnalysis {
       goal: goal,
       yesterday: yesterday,
       proposal: proposal,
+      order: order,
+      orderWhy: orderWhy,
     );
     out.insert(0, brief.toLine());
     out.insert(

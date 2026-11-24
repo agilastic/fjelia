@@ -426,6 +426,7 @@
   },
   "tapADayToCycle": "Tik op een dag om te wisselen tussen training / rust / kracht.",
   "doubleDayOk": "Dubbele dag oké",
+  "doubleDayNeedsHours": "Dubbele dagen vragen minstens 5 u per week.",
   "birthYearOptional": "Geboortejaar (optioneel)",
   "addAnother": "Nog een toevoegen",
   "knowYourBodyTrainSmarter": "Ken je lichaam.\nTrain slimmer.",
@@ -3198,6 +3199,8 @@
       }
     }
   },
+  "briefOrderTwo": "Eerst {first} ({firstWhen}), daarna {second} ({secondWhen}).",
+  "briefOrderTwoNoTimes": "Eerst {first}, daarna {second}, het liefst een paar uur ertussen.",
   "briefOutlookLongRest": "Je vorm heeft meer dan een paar rustige dagen nodig om te herstellen.",
   "briefOutlookPlanTired": "Als je het plan volgt, blijft je vorm de komende dagen laag.",
   "localQwen": "Qwen3.5 · lokaal",

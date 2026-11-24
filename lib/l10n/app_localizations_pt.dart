@@ -870,6 +870,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get doubleDayOk => 'Dia duplo ok';
 
   @override
+  String get doubleDayNeedsHours =>
+      'Os dias duplos exigem pelo menos 5 h por semana.';
+
+  @override
   String get birthYearOptional => 'Ano de nascimento (opcional)';
 
   @override
@@ -5734,6 +5738,21 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String briefOutlookRest(Object days) {
     return 'Com cerca de $days dias leves, a tua forma volta ao intervalo ideal.';
+  }
+
+  @override
+  String briefOrderTwo(
+    Object first,
+    Object firstWhen,
+    Object second,
+    Object secondWhen,
+  ) {
+    return 'Primeiro $first ($firstWhen), depois $second ($secondWhen).';
+  }
+
+  @override
+  String briefOrderTwoNoTimes(Object first, Object second) {
+    return 'Primeiro $first, depois $second, de preferência com algumas horas de intervalo.';
   }
 
   @override

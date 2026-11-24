@@ -16,7 +16,11 @@ import 'hrv/hrv_training_service.dart';
 import 'ai_data_status.dart';
 import 'ai_metric_analysis.dart';
 import 'form_forecast.dart';
-import '../providers/day_data_provider.dart' show readTrainingFormSeries;
+import 'day_order.dart';
+import '../providers/day_data_provider.dart'
+    show readTrainingFormSeries, scheduledWorkoutFromRecord;
+import '../providers/upcoming_plan_provider.dart'
+    show markDoneToday, mergeUpcomingPlan;
 import 'post_workout_scorer.dart' show noActivityReason;
 import 'race_predictor.dart';
 import 'race_goal_service.dart';
@@ -150,12 +154,51 @@ class AiContextToonBuilder {
     final body = await _db.getRenphoRange(60);
     final activities = await _db.getActivitiesInRange(60);
     final scores = await _db.getScoreRange();
-    final workouts = await _db.getUpcomingWorkouts();
+    final upcomingWorkouts = await _db.getUpcomingWorkouts();
     final grip = await _db.getGripStrengthRange();
     final thresholds = await _db.getAllThresholdRecords();
     final heat = await _db.getHeatStateForDate(today);
     final readiness = await _db.getTodayReadiness();
-    final sessions = await _db.getUpcomingTrainingSessions();
+    final upcomingSessions = await _db.getUpcomingTrainingSessions();
+    // The Plan counts a session as done once a synced activity matches it,
+    // while its status can still say planned: the briefing must agree with
+    // the Plan and not call a finished session still planned.
+    final doneToday = (await markDoneToday(
+      _db,
+      mergeUpcomingPlan(
+        [
+          for (final s in upcomingSessions)
+            if (_day(s.sessionDate) == today) s,
+        ],
+        [
+          for (final w in upcomingWorkouts)
+            if (_day(w.scheduledDate) == today) scheduledWorkoutFromRecord(w),
+        ],
+      ),
+    )).where((e) => e.done && !e.skipped).toList();
+    final doneSessionIds = {for (final e in doneToday) ?e.session?.id};
+    final doneScheduleIds = {for (final e in doneToday) ?e.workout?.scheduleId};
+    // The watch copy of a finished session is finished with it.
+    final doneWatchIds = {
+      for (final e in doneToday)
+        for (final id in [
+          e.session?.garminWorkoutId,
+          e.session?.garminAlternativeId,
+        ])
+          ?id,
+    };
+    final sessions = [
+      for (final s in upcomingSessions)
+        if (!doneSessionIds.contains(s.id)) s,
+    ];
+    final workouts = [
+      for (final w in upcomingWorkouts)
+        if (!doneScheduleIds.contains(w.scheduleId) &&
+            !(_day(w.scheduledDate) == today &&
+                (doneWatchIds.contains(w.workoutId) ||
+                    doneWatchIds.contains(w.scheduleId))))
+          w,
+    ];
     final fuel = await _fuel(sessions);
     final cancelled = await _cancelledSessions(today);
     // Every plan session of today, also completed ones: a finished session
@@ -172,9 +215,11 @@ class AiContextToonBuilder {
     );
     // When the athlete can train today (Settings → Training).
     String? windowToday;
+    var rangesToday = const <(int, int)>[];
     try {
       final w = await trainingWindows?.call();
       if (w != null && w.hasWindow(today.weekday)) {
+        rangesToday = w.ranges(today.weekday);
         String hm(int m) =>
             '${(m ~/ 60).toString().padLeft(2, '0')}:'
             '${(m % 60).toString().padLeft(2, '0')}';
@@ -409,7 +454,7 @@ class AiContextToonBuilder {
       ];
     }
 
-    final doneToday = [
+    final recordedToday = [
       for (final a in activities)
         if (_day(a.startDate) == today)
           '${sportId(a.type)}/${(a.durationSeconds / 60).round()}',
@@ -436,6 +481,29 @@ class AiContextToonBuilder {
     }
 
     final ownToday = sessions.where((s) => _day(s.sessionDate) == today);
+    // Two sessions today: which first and in which training window.
+    final order = dayOrder(
+      ownToday.isNotEmpty
+          ? [
+              for (final s in ownToday)
+                (
+                  sport: sportId(s.sport),
+                  minutes: s.plannedDurationMin,
+                  type: s.sessionType,
+                ),
+            ]
+          : [
+              for (final w in workouts)
+                if (_day(w.scheduledDate) == today)
+                  (
+                    sport: sportId(w.sportType),
+                    minutes: ((w.estimatedDurationSeconds ?? 0) / 60).round(),
+                    type: 'workout',
+                  ),
+            ],
+      rangesToday,
+      nowMinute: now.hour * 60 + now.minute,
+    );
     final sessionToday = ownToday.isEmpty
         ? null
         : ownToday
@@ -471,9 +539,8 @@ class AiContextToonBuilder {
     } catch (_) {}
     final trainingVerdict = trainingHrvAnalysis.isEmpty
         ? null
-        : RegExp(
-            r'Verdict:(better|worse)',
-          ).firstMatch(trainingHrvAnalysis.first)?[1];
+        : RegExp(r'Verdict:(better|worse)')
+              .firstMatch(trainingHrvAnalysis.first)?[1];
     // The load chart as background: form, trend and what rest or the plan do
     // to it. A failure here never blocks the coach.
     FormForecast? forecast;
@@ -488,7 +555,7 @@ class AiContextToonBuilder {
     lines.addAll(
       MetricAnalysis(today).lines(
         outlook: forecast?.outlook,
-        done: doneToday,
+        done: recordedToday,
         // One recorded activity does not complete every session of the day.
         // The query already excludes completed and skipped plan sessions.
         plannedToday: plannedOn(today),
@@ -499,10 +566,17 @@ class AiContextToonBuilder {
         awayTomorrow: absenceOn(absences, tomorrowDay)?.kind,
         backFrom: absenceOn(absences, today) == null ? backFrom : null,
         window: windowToday,
+        order: order == null ? const [] : dayOrderLine(order).split('|'),
+        orderWhy: order?.reason,
         session: sessionToday,
         goal: nextGoal,
         yesterday: yesterdayDone.isEmpty ? null : yesterdayDone.join(' and '),
-        proposal: openProposal?.call(),
+        // A readiness proposal is about today's open sessions; once they are
+        // done it has nothing left to change.
+        proposal: switch (openProposal?.call()) {
+          'shorter' || 'rest' when plannedOn(today).isEmpty => null,
+          final p => p,
+        },
         trainingHrv: trainingVerdict == null
             ? null
             : trainingVerdict == 'better'
@@ -600,7 +674,9 @@ class AiContextToonBuilder {
         'By:${cancelledToday.first.by},GarminScheduled:0,PlanSessions:0]',
       );
     } else if (todayWorkouts.isEmpty && todaySessions.isEmpty) {
-      final completed = todayAll.where((s) => s.status == 'completed');
+      final completed = todayAll.where(
+        (s) => s.status == 'completed' || doneSessionIds.contains(s.id),
+      );
       final doneActivities = activities.where(
         (a) => _day(a.startDate) == today,
       );

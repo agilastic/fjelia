@@ -412,6 +412,7 @@
   },
   "tapADayToCycle": "Toca un dia per alternar Entrenament / Descans / Força.",
   "doubleDayOk": "Dia doble ok",
+  "doubleDayNeedsHours": "Els dies dobles necessiten com a mínim 5 h a la setmana.",
   "birthYearOptional": "Any de naixement (opcional)",
   "addAnother": "Afegeix-ne un altre",
   "knowYourBodyTrainSmarter": "Coneix el teu cos.\nEntrena millor.",
@@ -3169,6 +3170,8 @@
       }
     }
   },
+  "briefOrderTwo": "Primer {first} ({firstWhen}), després {second} ({secondWhen}).",
+  "briefOrderTwoNoTimes": "Primer {first}, després {second}, idealment amb unes hores de diferència.",
   "briefOutlookLongRest": "La teva forma necessita més que uns quants dies suaus per recuperar-se.",
   "briefOutlookPlanTired": "Si segueixes el pla, la teva forma continuarà baixa els propers dies.",
   "localQwen": "Qwen3.5 · local",

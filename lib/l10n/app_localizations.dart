@@ -1596,6 +1596,12 @@ abstract class AppLocalizations {
   /// **'Double day ok'**
   String get doubleDayOk;
 
+  /// No description provided for @doubleDayNeedsHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Double days need at least 5 h a week.'**
+  String get doubleDayNeedsHours;
+
   /// No description provided for @birthYearOptional.
   ///
   /// In en, this message translates to:
@@ -10091,6 +10097,23 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'With about {days} easy days your form is back in the optimal range.'**
   String briefOutlookRest(Object days);
+
+  /// No description provided for @briefOrderTwo.
+  ///
+  /// In en, this message translates to:
+  /// **'First {first} ({firstWhen}), then {second} ({secondWhen}).'**
+  String briefOrderTwo(
+    Object first,
+    Object firstWhen,
+    Object second,
+    Object secondWhen,
+  );
+
+  /// No description provided for @briefOrderTwoNoTimes.
+  ///
+  /// In en, this message translates to:
+  /// **'First {first}, then {second}, ideally a few hours apart.'**
+  String briefOrderTwoNoTimes(Object first, Object second);
 
   /// No description provided for @briefOutlookLongRest.
   ///

@@ -342,21 +342,13 @@ List<UpcomingPlanEntry> mergeUpcomingPlan(
   ]..sort((a, b) => a.date.compareTo(b.date));
 }
 
-final upcomingPlanProvider = FutureProvider<List<UpcomingPlanEntry>>((
-  ref,
+/// [markDoneEntries] with today's recorded activities and their links to
+/// plan sessions: the Plan's view of what is done today. The briefing uses
+/// the same so both agree.
+Future<List<UpcomingPlanEntry>> markDoneToday(
+  AppDatabase db,
+  List<UpcomingPlanEntry> merged,
 ) async {
-  final sessions = ref.watch(upcomingSessionsProvider.future);
-  final workouts = ref.watch(scheduledWorkoutsProvider.future);
-  final reasons = ref.watch(sessionSkipReasonsProvider.future);
-  final merged = mergeUpcomingPlan(
-    await sessions,
-    await workouts,
-    skipReasons: await reasons,
-  );
-  // What was done today shows against what was planned for today; read again
-  // when a sync brings new activities.
-  ref.watch(syncStatusListenerProvider);
-  final db = ref.watch(databaseProvider);
   final now = DateTime.now();
   final today = DateTime(now.year, now.month, now.day);
   final activities =
@@ -393,4 +385,21 @@ final upcomingPlanProvider = FutureProvider<List<UpcomingPlanEntry>>((
         if (a.startedAt != null) a.sessionId: a.startedAt!,
     },
   );
+}
+
+final upcomingPlanProvider = FutureProvider<List<UpcomingPlanEntry>>((
+  ref,
+) async {
+  final sessions = ref.watch(upcomingSessionsProvider.future);
+  final workouts = ref.watch(scheduledWorkoutsProvider.future);
+  final reasons = ref.watch(sessionSkipReasonsProvider.future);
+  final merged = mergeUpcomingPlan(
+    await sessions,
+    await workouts,
+    skipReasons: await reasons,
+  );
+  // What was done today shows against what was planned for today; read again
+  // when a sync brings new activities.
+  ref.watch(syncStatusListenerProvider);
+  return markDoneToday(ref.watch(databaseProvider), merged);
 });

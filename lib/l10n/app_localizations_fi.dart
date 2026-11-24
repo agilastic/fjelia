@@ -866,6 +866,10 @@ class AppLocalizationsFi extends AppLocalizations {
   String get doubleDayOk => 'Tuplapäivä ok';
 
   @override
+  String get doubleDayNeedsHours =>
+      'Tuplapäivät vaativat vähintään 5 h viikossa.';
+
+  @override
   String get birthYearOptional => 'Syntymävuosi (valinnainen)';
 
   @override
@@ -5721,6 +5725,21 @@ class AppLocalizationsFi extends AppLocalizations {
   @override
   String briefOutlookRest(Object days) {
     return 'Noin $days kevyen päivän jälkeen kuntosi on taas optimaalisella alueella.';
+  }
+
+  @override
+  String briefOrderTwo(
+    Object first,
+    Object firstWhen,
+    Object second,
+    Object secondWhen,
+  ) {
+    return 'Ensin $first ($firstWhen), sitten $second ($secondWhen).';
+  }
+
+  @override
+  String briefOrderTwoNoTimes(Object first, Object second) {
+    return 'Ensin $first, sitten $second, mieluiten muutaman tunnin välein.';
   }
 
   @override

@@ -97,9 +97,9 @@ final aiCoachSettingsProvider =
 /// the year's progression.
 final activityCoachContextProvider = FutureProvider.autoDispose
     .family<String, ActivityRecord>(
-      (ref, activity) => ActivityCoachContextBuilder(
-        ref.read(databaseProvider),
-      ).build(activity),
+      (ref, activity) =>
+          ActivityCoachContextBuilder(ref.read(databaseProvider))
+              .build(activity),
     );
 
 /// A request to open the coach tab about one session: the draft question,
@@ -184,7 +184,7 @@ String _briefingKey(AiBriefingPeriod period) {
       '${now.day.toString().padLeft(2, '0')}';
   // The language is part of the key: a briefing is written in one language.
   // Bump the version when prompts or deterministic readiness rules change.
-  return 'ai_briefing_${period.name}_${day}_${activeLocale.languageCode}_v11';
+  return 'ai_briefing_${period.name}_${day}_${activeLocale.languageCode}_v12';
 }
 
 String _briefingInputHashKey(AiBriefingPeriod period) =>
@@ -214,9 +214,33 @@ const _intradayBriefingFields = {
   '[Weather:': ['TempNow', 'WindKmh', 'WindChill', 'WetBulb'],
 };
 
-/// The hash that decides whether today's briefing is written again. Only
-/// substantive changes (sleep, HRV, activities, plan, BP, forecast…) count.
+/// The hash that decides whether today's briefing is written again: only
+/// when what it has to say changes. The app decides that in the `[Brief:…]`
+/// line (readiness, findings, done and planned sessions, proposal, outlook)
+/// and today's planned sessions; the model only phrases it. The rest of the
+/// context (weather forecast, the day's stress and heart rate, data ages…)
+/// moves with nearly every sync and used to rewrite the briefing each time.
+/// `Why` carries live figures; a changed verdict shows in the findings.
 String briefingInputHash(String toon) {
+  final brief = RegExp(r'\[Brief:[^\]]*\]').firstMatch(toon)?[0];
+  if (brief == null) return _contextHash(toon);
+  final lines = toon.split('\n');
+  final start = lines.indexWhere((l) => l.startsWith('[TodayWorkout:'));
+  final todayWorkout = [
+    if (start >= 0) lines[start],
+    if (start >= 0)
+      ...lines.skip(start + 1).takeWhile((l) => l.startsWith('- [')),
+  ];
+  final substance = [
+    brief.replaceAll(RegExp(r',Why:[^,\]]*'), ''),
+    ...todayWorkout,
+  ].join('\n');
+  return sha256.convert(utf8.encode(substance)).toString();
+}
+
+/// Without a brief: the whole context minus the values that move with every
+/// sync.
+String _contextHash(String toon) {
   final stableToon = toon.replaceAllMapped(RegExp(r'\[[A-Za-z]+:[^\]]*\]'), (
     block,
   ) {
@@ -265,9 +289,8 @@ class AiBriefingNotifier extends StateNotifier<AsyncValue<String?>> {
       final now = DateTime.now();
       final m = await _ref
           .read(
-            trainingMonitorProvider(
-              DateTime(now.year, now.month, now.day),
-            ).future,
+            trainingMonitorProvider(DateTime(now.year, now.month, now.day))
+                .future,
           )
           .timeout(const Duration(seconds: 5));
       return AiContextTrainingMonitor(
@@ -485,9 +508,8 @@ class ToonCacheNotifier extends StateNotifier<_ToonCache?> {
   }) async {
     final cached = state;
     // Goals can change between two chat messages, without a device sync.
-    final goals = await RaceGoalService(
-      _ref.read(databaseProvider),
-    ).resolveGoalSet();
+    final goals = await RaceGoalService(_ref.read(databaseProvider))
+        .resolveGoalSet();
     if (cached != null &&
         !cached.isStale &&
         cached.goalRevision == goals.revision &&

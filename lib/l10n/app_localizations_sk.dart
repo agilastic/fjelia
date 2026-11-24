@@ -872,6 +872,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get doubleDayOk => 'Dvojitý deň ok';
 
   @override
+  String get doubleDayNeedsHours => 'Dvojité dni vyžadujú aspoň 5 h týždenne.';
+
+  @override
   String get birthYearOptional => 'Rok narodenia (voliteľné)';
 
   @override
@@ -5716,6 +5719,21 @@ class AppLocalizationsSk extends AppLocalizations {
   @override
   String briefOutlookRest(Object days) {
     return 'Približne po $days ľahkých dňoch bude vaša forma späť v optimálnom rozsahu.';
+  }
+
+  @override
+  String briefOrderTwo(
+    Object first,
+    Object firstWhen,
+    Object second,
+    Object secondWhen,
+  ) {
+    return 'Najprv $first ($firstWhen), potom $second ($secondWhen).';
+  }
+
+  @override
+  String briefOrderTwoNoTimes(Object first, Object second) {
+    return 'Najprv $first, potom $second, ideálne s odstupom niekoľkých hodín.';
   }
 
   @override

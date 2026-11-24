@@ -42,4 +42,57 @@ void main() {
       isNot(briefingInputHash(toon())),
     );
   });
+
+  group('with a brief', () {
+    String withBrief({
+      String findings = 'sleepShort',
+      String done = 'none',
+      String today = 'strength/45|trail_running/114',
+      String why = 'sleep 6.8 h against your need of 8 h',
+      String rainChance = '40',
+      int stress = 31,
+      String workout = 'Warm10m:Z1+Main40m:Z2',
+    }) => [
+      '[Context:V4][Today:2026-11-24,Weekday:Tue,TimeNow:13:46]',
+      '[Brief:Readiness:yellow,Findings:$findings,Good:none,Done:$done,'
+          'Today:$today,Tomorrow:none,TrainingHrv:none,Outlook:none,'
+          'Why:$why,Proposal:rest]',
+      '[Weather:Today:TempNow:6°C,RainChance:$rainChance%,RainMm:1]',
+      '[Stress:Today:Avg:$stress]',
+      '[TodayWorkout:Status:planned,Source:plan,SessionCount:2]',
+      '- [Run,Planned:45min,Steps:$workout]',
+      '[TrainingPlan:Upcoming:9]',
+    ].join('\n');
+
+    test('a sync that changes only the rest of the context keeps it', () {
+      expect(
+        briefingInputHash(
+          withBrief(
+            rainChance: '80',
+            stress: 44,
+            why: 'sleep 6.7 h against your need of 8 h',
+          ),
+        ),
+        briefingInputHash(withBrief()),
+      );
+    });
+
+    test('a finished workout, a new finding or a changed session do not', () {
+      final base = briefingInputHash(withBrief());
+      expect(
+        briefingInputHash(
+          withBrief(done: 'strength/47', today: 'trail_running/114'),
+        ),
+        isNot(base),
+      );
+      expect(
+        briefingInputHash(withBrief(findings: 'sleepShort|rhrUp')),
+        isNot(base),
+      );
+      expect(
+        briefingInputHash(withBrief(workout: 'Warm10m:Z1+Main20m:Z4')),
+        isNot(base),
+      );
+    });
+  });
 }

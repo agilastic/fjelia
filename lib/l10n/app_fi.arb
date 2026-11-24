@@ -412,6 +412,7 @@
   },
   "tapADayToCycle": "Napauta päivää vaihtaaksesi Harjoitus / Lepo / Voima.",
   "doubleDayOk": "Tuplapäivä ok",
+  "doubleDayNeedsHours": "Tuplapäivät vaativat vähintään 5 h viikossa.",
   "birthYearOptional": "Syntymävuosi (valinnainen)",
   "addAnother": "Lisää toinen",
   "knowYourBodyTrainSmarter": "Tunne kehosi.\nHarjoittele viisaammin.",
@@ -3169,6 +3170,8 @@
       }
     }
   },
+  "briefOrderTwo": "Ensin {first} ({firstWhen}), sitten {second} ({secondWhen}).",
+  "briefOrderTwoNoTimes": "Ensin {first}, sitten {second}, mieluiten muutaman tunnin välein.",
   "briefOutlookLongRest": "Kuntosi tarvitsee palautuakseen enemmän kuin muutaman kevyen päivän.",
   "briefOutlookPlanTired": "Jos noudatat suunnitelmaa, kuntosi pysyy matalana tulevina päivinä.",
   "localQwen": "Qwen3.5 · paikallinen",

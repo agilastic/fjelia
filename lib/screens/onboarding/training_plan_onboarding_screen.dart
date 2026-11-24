@@ -176,10 +176,10 @@ class _TrainingPlanOnboardingScreenState
                 ),
               ),
               Slider(
-                value: p.hoursPerWeek.clamp(2, 20),
-                min: 2,
+                value: p.hoursPerWeek.clamp(1, 20),
+                min: 1,
                 max: 20,
-                divisions: 36,
+                divisions: 38,
                 onChanged: _saving
                     ? null
                     : (v) => update(p.copyWith(hoursPerWeek: v)),
@@ -275,8 +275,12 @@ class _TrainingPlanOnboardingScreenState
               SwitchListTile(
                 contentPadding: EdgeInsets.zero,
                 title: Text(context.l10n.doubleDayOk),
+                subtitle: p.doubleDayAllowed
+                    ? null
+                    : Text(context.l10n.doubleDayNeedsHours),
                 value: p.maxSessionsPerDay == 2,
-                onChanged: _saving
+                // Under 5 h a week a double day does not fit sensibly.
+                onChanged: _saving || !p.doubleDayAllowed
                     ? null
                     : (v) => update(p.copyWith(maxSessionsPerDay: v ? 2 : 1)),
               ),

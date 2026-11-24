@@ -429,7 +429,9 @@ class TrainingTab extends ConsumerWidget {
               Padding(
                 padding: EdgeInsets.only(bottom: 12),
                 child: Text(
-                  context.l10n.canYouFitTwoWorkouts,
+                  p.doubleDayAllowed
+                      ? context.l10n.canYouFitTwoWorkouts
+                      : context.l10n.doubleDayNeedsHours,
                   style: TextStyle(color: fjInk70, fontSize: 12),
                 ),
               ),
@@ -440,12 +442,15 @@ class TrainingTab extends ConsumerWidget {
                 },
                 selected: '${p.maxSessionsPerDay}',
                 color: Colors.orange,
-                onSelect: (v) => runUiAction(
-                  context,
-                  () => ref
-                      .read(userProfileProvider.notifier)
-                      .save(p.copyWith(maxSessionsPerDay: int.parse(v))),
-                ),
+                // Under 5 h a week a double day does not fit sensibly.
+                onSelect: !p.doubleDayAllowed
+                    ? null
+                    : (v) => runUiAction(
+                        context,
+                        () => ref
+                            .read(userProfileProvider.notifier)
+                            .save(p.copyWith(maxSessionsPerDay: int.parse(v))),
+                      ),
               ),
             ],
             if (section == TrainingSection.details) ...[
@@ -483,10 +488,10 @@ class TrainingTab extends ConsumerWidget {
                 style: TextStyle(fontSize: 12, color: fjInk70),
               ),
               Slider(
-                value: p.hoursPerWeek.clamp(3, 25),
-                min: 3,
+                value: p.hoursPerWeek.clamp(1, 25),
+                min: 1,
                 max: 25,
-                divisions: 22,
+                divisions: 24,
                 activeColor: Colors.orange,
                 label: context.l10n.hoursperweekH(valueText(p.hoursPerWeek)),
                 onChanged: (v) => ref
@@ -496,7 +501,7 @@ class TrainingTab extends ConsumerWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('3 h', style: TextStyle(color: muted, fontSize: 10)),
+                  Text('1 h', style: TextStyle(color: muted, fontSize: 10)),
                   Text('25 h', style: TextStyle(color: muted, fontSize: 10)),
                 ],
               ),
@@ -848,7 +853,9 @@ class SettingsSegments extends StatelessWidget {
   });
   final Map<String, String> values;
   final String selected;
-  final ValueChanged<String> onSelect;
+
+  /// Null: shown but not changeable.
+  final ValueChanged<String>? onSelect;
   final Color color;
   @override
   Widget build(BuildContext context) => Row(
@@ -870,7 +877,7 @@ class SettingsSegments extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              onPressed: () => onSelect(e.key),
+              onPressed: onSelect == null ? null : () => onSelect!(e.key),
               child: Text(e.value, style: const TextStyle(fontSize: 12)),
             ),
           ),

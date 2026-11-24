@@ -412,6 +412,7 @@
   },
   "tapADayToCycle": "Ťuknutím na deň prepnete Tréning / Odpočinok / Sila.",
   "doubleDayOk": "Dvojitý deň ok",
+  "doubleDayNeedsHours": "Dvojité dni vyžadujú aspoň 5 h týždenne.",
   "birthYearOptional": "Rok narodenia (voliteľné)",
   "addAnother": "Pridať ďalší",
   "knowYourBodyTrainSmarter": "Poznajte svoje telo.\nTrénujte múdrejšie.",
@@ -3169,6 +3170,8 @@
       }
     }
   },
+  "briefOrderTwo": "Najprv {first} ({firstWhen}), potom {second} ({secondWhen}).",
+  "briefOrderTwoNoTimes": "Najprv {first}, potom {second}, ideálne s odstupom niekoľkých hodín.",
   "briefOutlookLongRest": "Vaša forma potrebuje na zotavenie viac než pár ľahkých dní.",
   "briefOutlookPlanTired": "Ak budete dodržiavať plán, vaša forma zostane nízka aj v najbližších dňoch.",
   "localQwen": "Qwen3.5 · lokálne",

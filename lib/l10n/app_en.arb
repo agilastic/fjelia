@@ -426,6 +426,7 @@
   },
   "tapADayToCycle": "Tap a day to cycle Training / Rest / Strength.",
   "doubleDayOk": "Double day ok",
+  "doubleDayNeedsHours": "Double days need at least 5 h a week.",
   "birthYearOptional": "Birth year (optional)",
   "addAnother": "Add another",
   "knowYourBodyTrainSmarter": "Know your body.\nTrain smarter.",
@@ -3205,6 +3206,10 @@
       }
     }
   },
+  "briefOrderTwo": "First {first} ({firstWhen}), then {second} ({secondWhen}).",
+  "@briefOrderTwo": {"placeholders": {"first": {"type": "Object"}, "firstWhen": {"type": "Object"}, "second": {"type": "Object"}, "secondWhen": {"type": "Object"}}},
+  "briefOrderTwoNoTimes": "First {first}, then {second}, ideally a few hours apart.",
+  "@briefOrderTwoNoTimes": {"placeholders": {"first": {"type": "Object"}, "second": {"type": "Object"}}},
   "briefOutlookLongRest": "Your form needs more than a few easy days to recover.",
   "briefOutlookPlanTired": "Following the plan keeps your form low for the next days.",
   "localQwen": "Qwen3.5 · local",

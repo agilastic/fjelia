@@ -412,6 +412,7 @@
   },
   "tapADayToCycle": "Tippe auf einen Tag, um zwischen Training / Ruhe / Kraft zu wechseln.",
   "doubleDayOk": "Doppeltag okay",
+  "doubleDayNeedsHours": "Doppeltage gibt es ab 5 h pro Woche.",
   "birthYearOptional": "Geburtsjahr (optional)",
   "addAnother": "Weiteres hinzufügen",
   "knowYourBodyTrainSmarter": "Kenne deinen Körper.\nTrainiere klüger.",
@@ -3176,6 +3177,8 @@
       }
     }
   },
+  "briefOrderTwo": "Zuerst {first} ({firstWhen}), danach {second} ({secondWhen}).",
+  "briefOrderTwoNoTimes": "Zuerst {first}, danach {second}, am besten mit einigen Stunden Abstand.",
   "briefOutlookLongRest": "Deine Form braucht mehr als ein paar lockere Tage, um sich zu erholen.",
   "briefOutlookPlanTired": "Wenn du dem Plan folgst, bleibt deine Form die nächsten Tage niedrig.",
   "localQwen": "Qwen3.5 · lokal",

@@ -412,6 +412,7 @@
   },
   "tapADayToCycle": "Tocca un giorno per alternare Allenamento / Riposo / Forza.",
   "doubleDayOk": "Doppio allenamento ok",
+  "doubleDayNeedsHours": "I giorni doppi richiedono almeno 5 h a settimana.",
   "birthYearOptional": "Anno di nascita (facoltativo)",
   "addAnother": "Aggiungi un altro",
   "knowYourBodyTrainSmarter": "Conosci il tuo corpo.\nAllenati meglio.",
@@ -3169,6 +3170,8 @@
       }
     }
   },
+  "briefOrderTwo": "Prima {first} ({firstWhen}), poi {second} ({secondWhen}).",
+  "briefOrderTwoNoTimes": "Prima {first}, poi {second}, possibilmente a qualche ora di distanza.",
   "briefOutlookLongRest": "La tua forma ha bisogno di più di qualche giorno leggero per recuperare.",
   "briefOutlookPlanTired": "Seguendo il piano la tua forma resta bassa nei prossimi giorni.",
   "localQwen": "Qwen3.5 · locale",
