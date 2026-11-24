@@ -2227,7 +2227,7 @@ function text(key) { return copy[current][key] || copy.en[key] || key; }
 function plain(html) { var temp = document.createElement('div'); temp.innerHTML = html; return temp.textContent; }
 // Client-side obfuscation only: the browser decodes these for the imprint.
 var imprintAddressParts = ['U3RlaW5icmluayAyOQ==','MzA5NjYgSGVtbWluZ2Vu','RGV1dHNjaGxhbmQ='];
-var imprintEmail = 'ZWJlbGluZy1ob3BwZUBhZ2lsYXN0aWMuZGU=';
+var imprintEmail = 'YWxleGFuZGVyQGViZWxpbmctaG9wcGUuZGU=';
 function revealImprintAddress() {
   document.querySelectorAll('[data-address-part]').forEach(function (el) {
     var part = imprintAddressParts[Number(el.dataset.addressPart)];
