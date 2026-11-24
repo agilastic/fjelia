@@ -3737,7 +3737,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get steps => 'Passes';
 
   @override
-  String get tonightsSleep => 'Son d\'aquesta nit';
+  String get tonightsSleep => 'Necessitat de son';
 
   @override
   String get activityLog => 'Registre d\'activitat';
@@ -5539,6 +5539,18 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get briefAdviceRed => 'Primer la recuperació: dia suau o descans.';
+
+  @override
+  String get briefProposalShorter =>
+      'Fjelia proposa fer les sessions d\'avui més curtes i suaus; mira\'t la proposta.';
+
+  @override
+  String get briefProposalRest =>
+      'Fjelia proposa saltar-te una sessió avui; mira\'t la proposta.';
+
+  @override
+  String get briefProposalReplan =>
+      'Fjelia proposa refer el teu pla d\'entrenament; mira\'t la proposta.';
 
   @override
   String get briefReasonHrvLow => 'VFC de la son baixa';
@@ -9106,7 +9118,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get metricSkinTemp => 'Temp. de la pell';
 
   @override
-  String get metricTonightSleep => 'Son aquesta nit';
+  String get metricTonightSleep => 'Necessitat de son';
 
   @override
   String get metricMuscleMass => 'Massa muscular';
@@ -9163,7 +9175,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get metricAverage => 'Mitjana';
 
   @override
-  String get metricRecommended => 'recomanat';
+  String get metricRecommended => 'per a aquesta nit';
 
   @override
   String get metricStepGoal => '/ 10.000 passos';
@@ -9789,6 +9801,13 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get coachDayMessagesHint =>
       'FjeliaPro: quan el teu estrès puja clarament o l\'energia baixa, els valors d\'avui i el resum de salut van a Fjelia AI Pro, que deixa un missatge breu a Inici. Com a màxim 3 al dia, sense notificacions.';
+
+  @override
+  String get proBriefing => 'El coach escriu el resum';
+
+  @override
+  String get proBriefingHint =>
+      'FjeliaPro: Fjelia AI Pro (el model petit) escriu els teus resums en lloc d\'Apple Intelligence. La preparació, el pla i el resum de salut van a Fjelia AI Pro (Mistral a la UE, OpenAI com a alternativa). Si no respon, Apple Intelligence l\'escriu com fins ara.';
 
   @override
   String get homeSky => 'Cel del temps a Inici';

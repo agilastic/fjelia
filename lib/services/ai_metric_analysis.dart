@@ -36,6 +36,7 @@ class MetricAnalysis {
     String? session,
     String? goal,
     String? yesterday,
+    String? proposal,
   }) {
     final out = <String>[];
     // Findings for the Brief: id, severity (red, yellow, good), a fixed rank
@@ -378,6 +379,7 @@ class MetricAnalysis {
       session: session,
       goal: goal,
       yesterday: yesterday,
+      proposal: proposal,
     );
     out.insert(0, brief.toLine());
     out.insert(

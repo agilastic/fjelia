@@ -28,6 +28,7 @@ class BriefingBrief {
     this.session,
     this.goal,
     this.yesterday,
+    this.proposal,
   });
 
   /// green, yellow or red.
@@ -77,6 +78,11 @@ class BriefingBrief {
   /// What was done yesterday, e.g. `trail running 120 min`.
   final String? yesterday;
 
+  /// The readiness proposal still waiting for the athlete's answer today:
+  /// `shorter` (sessions shorter and easier), `rest` (a session dropped) or
+  /// `replan` (the plan should be rebuilt). The briefing must say the same.
+  final String? proposal;
+
   /// Free text in the line format: no separators, no brackets.
   static String _text(String v) => v
       .replaceAll(RegExp(r'[,\[\]|]'), ' ')
@@ -98,7 +104,8 @@ class BriefingBrief {
       '${why == null ? '' : ',Why:${_text(why!)}'}'
       '${session == null ? '' : ',Session:${_text(session!)}'}'
       '${goal == null ? '' : ',Goal:${_text(goal!)}'}'
-      '${yesterday == null ? '' : ',Yesterday:${_text(yesterday!)}'}]';
+      '${yesterday == null ? '' : ',Yesterday:${_text(yesterday!)}'}'
+      '${proposal == null ? '' : ',Proposal:$proposal'}]';
 
   static BriefingBrief? parse(String toon) {
     final m = RegExp(r'\[Brief:([^\]]*)\]').firstMatch(toon);
@@ -133,6 +140,7 @@ class BriefingBrief {
       session: f['Session'],
       goal: f['Goal'],
       yesterday: f['Yesterday'],
+      proposal: f['Proposal'],
     );
   }
 
@@ -217,10 +225,15 @@ class BriefingBrief {
         .join(' and ');
     final parts = <String>[
       'Readiness ${readiness.toUpperCase()}',
-      'Advice: ${switch (readiness) {
-        'red' => 'prioritise recovery and avoid intense training',
-        'yellow' => 'keep the scheduled plan without extra intensity',
-        _ => 'train as planned',
+      'Advice: ${switch (proposal) {
+        'shorter' => "the app proposes to make today's sessions shorter and easier and waits for the athlete's answer; recommend taking the proposal",
+        'rest' => "the app proposes to drop today's session and waits for the athlete's answer; recommend taking the proposal",
+        'replan' => "the app proposes to rebuild the training plan and waits for the athlete's answer; recommend looking at the proposal",
+        _ => switch (readiness) {
+          'red' => 'prioritise recovery and avoid intense training',
+          'yellow' => 'keep the scheduled plan without extra intensity',
+          _ => 'train as planned',
+        },
       }}',
       if (findings.isNotEmpty)
         'Main findings, most important first: ${names(findings)}',
@@ -290,7 +303,8 @@ class BriefingBrief {
         ? ''
         : 'Today has ${today.length} scheduled ${today.length == 1 ? 'session' : 'sessions'}, not alternatives. '
               'Include this exact sentence as one of your sentences: "$sentence" '
-              'The schedule exists even if you recommend reducing it or resting. ';
+              'The schedule exists even if you recommend reducing it or resting. '
+              'Mention the number of sessions ONLY in that sentence, nowhere else. ';
   }
 
   String _reason(AppLocalizations l, String id) => switch (id) {
@@ -320,10 +334,17 @@ class BriefingBrief {
       'yellow' => l.briefHeadYellow,
       _ => l.briefHeadGreen,
     };
-    final advice = switch (readiness) {
-      'red' => l.briefAdviceRed,
-      'yellow' => l.briefAdviceYellow,
-      _ => l.briefAdviceGreen,
+    // An open proposal is the advice: the briefing must not tell the athlete
+    // to keep a plan the app has just offered to change.
+    final advice = switch (proposal) {
+      'shorter' => l.briefProposalShorter,
+      'rest' => l.briefProposalRest,
+      'replan' => l.briefProposalReplan,
+      _ => switch (readiness) {
+        'red' => l.briefAdviceRed,
+        'yellow' => l.briefAdviceYellow,
+        _ => l.briefAdviceGreen,
+      },
     };
     final reasons = [
       for (final e in (readiness == 'green' ? good.take(2) : findings.take(3)))
@@ -360,6 +381,7 @@ bool briefingDeniesTraining(String text) {
     // de
     'kein training', 'keine trainings', 'keine einheit', 'ruhetag',
     'pausentag', 'trainingsfrei', 'erholungstag', 'zur erholung',
+    'ruhephase',
     // fr
     "pas d'entraînement", 'aucun entraînement', 'jour de repos',
     'journée de repos',
@@ -415,7 +437,43 @@ bool briefingIsUsable(String text, {required String languageCode}) {
   // Many figures means it is listing values the person already sees.
   if (RegExp(r'\d+[.,]?\d*').allMatches(t).length > 6) return false;
   if (looksWrongLanguage(t, languageCode)) return false;
+  if (briefingRepeats(t)) return false;
   return true;
+}
+
+/// Whether a briefing says the same thing twice: a sentence whose content
+/// words all reappear in another one ("you have two sessions planned today"
+/// and later "there are 2 sessions planned for today"). Numbers count as
+/// words, written out or not.
+bool briefingRepeats(String text) {
+  const numberWords = {
+    'one': '1', 'two': '2', 'three': '3', 'four': '4', //
+    'eins': '1', 'eine': '1', 'einen': '1', 'zwei': '2', 'drei': '3',
+    'vier': '4',
+  };
+  Set<String> words(String sentence) => {
+    for (final m in RegExp(
+      r'[\p{L}\d]+',
+      unicode: true,
+    ).allMatches(sentence.toLowerCase()))
+      if (m[0]!.length > 3 ||
+          RegExp(r'^\d+$').hasMatch(m[0]!) ||
+          numberWords.containsKey(m[0]))
+        numberWords[m[0]] ?? m[0]!,
+  };
+  final sentences = [
+    for (final s in text.split(RegExp(r'(?<=[.!?…])\s+')))
+      if (words(s).length >= 3) words(s),
+  ];
+  for (var i = 0; i < sentences.length; i++) {
+    for (var j = 0; j < sentences.length; j++) {
+      if (i == j) continue;
+      final a = sentences[i], b = sentences[j];
+      if (a.length > b.length || (a.length == b.length && i > j)) continue;
+      if (a.where(b.contains).length / a.length >= .8) return true;
+    }
+  }
+  return false;
 }
 
 /// Whether [text] reads as English although the app is not English: a small

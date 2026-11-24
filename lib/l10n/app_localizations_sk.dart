@@ -3715,7 +3715,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get steps => 'Kroky';
 
   @override
-  String get tonightsSleep => 'Dnešný spánok';
+  String get tonightsSleep => 'Potreba spánku';
 
   @override
   String get activityLog => 'Záznam aktivít';
@@ -5516,6 +5516,18 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get briefAdviceRed => 'Najprv regenerácia: ľahký deň alebo odpočinok.';
+
+  @override
+  String get briefProposalShorter =>
+      'Fjelia navrhuje skrátiť a odľahčiť dnešné tréningy; pozri si návrh.';
+
+  @override
+  String get briefProposalRest =>
+      'Fjelia navrhuje dnes jeden tréning vynechať; pozri si návrh.';
+
+  @override
+  String get briefProposalReplan =>
+      'Fjelia navrhuje znovu zostaviť tvoj tréningový plán; pozri si návrh.';
 
   @override
   String get briefReasonHrvLow => 'nízke HRV v spánku';
@@ -9080,7 +9092,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get metricSkinTemp => 'Teplota pokožky';
 
   @override
-  String get metricTonightSleep => 'Spánok dnes v noci';
+  String get metricTonightSleep => 'Potreba spánku';
 
   @override
   String get metricMuscleMass => 'Svalová hmota';
@@ -9137,7 +9149,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get metricAverage => 'Priemer';
 
   @override
-  String get metricRecommended => 'odporúčané';
+  String get metricRecommended => 'na dnešnú noc';
 
   @override
   String get metricStepGoal => '/ 10 000 krokov';
@@ -9761,6 +9773,13 @@ class AppLocalizationsSk extends AppLocalizations {
   @override
   String get coachDayMessagesHint =>
       'FjeliaPro: keď tvoj stres výrazne stúpne alebo ti dochádza energia, dnešné hodnoty a súhrn zdravia idú do Fjelia AI Pro, ktoré nechá krátku správu na Domov. Najviac 3 denne, žiadne notifikácie.';
+
+  @override
+  String get proBriefing => 'Tréner píše prehľad';
+
+  @override
+  String get proBriefingHint =>
+      'FjeliaPro: Tvoje prehľady píše Fjelia AI Pro (malý model) namiesto Apple Intelligence. Pripravenosť, plán a súhrn zdravia idú do Fjelia AI Pro (Mistral v EÚ, OpenAI ako záloha). Ak neodpovie, Apple Intelligence ho napíše ako doteraz.';
 
   @override
   String get homeSky => 'Obloha s počasím na Domov';

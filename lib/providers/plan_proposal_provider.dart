@@ -369,16 +369,30 @@ class PlanProposalLifecycle {
         general,
         ...await planWeekLines(ref.read(databaseProvider), p.day),
       ].join('\n');
-      final answer = await ref
+      Future<({String text, String model})> ask(String question) => ref
           .read(aiCoachClientProvider)
           .sendProAnalysis(
             '${proAnalysisPrompts.morningRevision}\n${coachLanguageDirective()}',
-            'QUESTION: ${revisionInputJson(c)}',
+            question,
             toon,
             deep: false,
           )
           .timeout(const Duration(seconds: 40));
-      final parsed = parseMorningRevision(answer.text);
+      final question = 'QUESTION: ${revisionInputJson(c)}';
+      var answer = await ask(question);
+      var parsed = parseMorningRevision(answer.text);
+      if (parsed == null) {
+        // An answer that is not the JSON asked for gets one more try; the
+        // changed question also keeps the cached answer out.
+        log('[PlanProposal] coach revision unreadable, asking again');
+        answer = await ask(
+          '$question\n'
+          'Your last answer was not valid. Reply with the JSON object only '
+          '("version": 1, title at most 60 characters, body at most 240), '
+          'no other text.',
+        );
+        parsed = parseMorningRevision(answer.text);
+      }
       final r = parsed == null
           ? null
           : checkedRevision(

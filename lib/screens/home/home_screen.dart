@@ -92,268 +92,285 @@ class _HomeState extends ConsumerState<HomeScreen> {
     // does not run under the bars.
     final glass = current != 3 && current != 4;
     final header = MediaQuery.paddingOf(context).top + _headerHeight;
-    return Scaffold(
-      extendBody: current < 3,
-      extendBodyBehindAppBar: glass,
-      // Like the tab bar: two floating pills, the content runs under them
-      // and shows between them as it scrolls.
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(_headerHeight),
-        child: Stack(
-          children: [
-            // A soft fade behind the status bar only, so the clock stays
-            // readable over the content.
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              height: MediaQuery.paddingOf(context).top + 10,
-              child: IgnorePointer(
-                child: ClipRect(
-                  child: BackdropFilter(
-                    filter: ui.ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+    // Today's weather as a soft sky behind the top of every main tab, the
+    // header included: the coach does not run under the bars, so the sky
+    // sits behind the whole page and not in its body.
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: ColoredBox(color: Theme.of(context).scaffoldBackgroundColor),
+        ),
+        if (current != 4)
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            height: MediaQuery.paddingOf(context).top + 320,
+            child: const HomeSkyBand(),
+          ),
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          extendBody: current < 3,
+          extendBodyBehindAppBar: glass,
+          // Like the tab bar: two floating pills, the content runs under them
+          // and shows between them as it scrolls.
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(_headerHeight),
+            child: Stack(
+              children: [
+                // A soft fade behind the status bar, so the clock stays
+                // readable over the content. No blur: a blur cannot fade out
+                // and leaves a hard edge over the sky.
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: MediaQuery.paddingOf(context).top + 30,
+                  child: IgnorePointer(
                     child: DecoratedBox(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
+                          // Eased, so no line shows where it ends.
                           colors: [
-                            fjBackground.withValues(alpha: .8),
+                            fjBackground.withValues(alpha: .7),
+                            fjBackground.withValues(alpha: .45),
+                            fjBackground.withValues(alpha: .15),
                             fjBackground.withValues(alpha: 0),
                           ],
+                          stops: const [0, .45, .8, 1],
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ),
-            SafeArea(
-              bottom: false,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(12, 6, 12, 4),
-                child: Row(
-                  children: [
-                    // Where you are: the settings and the day (or the plan's
-                    // view).
-                    // Takes the room left; the actions sit at the right edge.
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: _GlassPill(
+                SafeArea(
+                  bottom: false,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 6, 12, 4),
+                    child: Row(
+                      children: [
+                        // Where you are: the settings and the day (or the plan's
+                        // view).
+                        // Takes the room left; the actions sit at the right edge.
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: _GlassPill(
+                              children: [
+                                IconButton(
+                                  tooltip: context.l10n.settings,
+                                  visualDensity: VisualDensity.compact,
+                                  icon: Icon(
+                                    Icons.menu,
+                                    size: 20,
+                                    color: muted,
+                                  ),
+                                  onPressed: () => SettingsSheet.show(context),
+                                ),
+                                Flexible(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 6),
+                                    // A long date or large text shrinks to fit
+                                    // instead of pushing the pills apart.
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      alignment: Alignment.centerLeft,
+                                      child: current == 1
+                                          ? const PlanViewSwitcher()
+                                          : const DayNavigator(),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        // What you can do: report, add, sync.
+                        _GlassPill(
                           children: [
                             IconButton(
-                              tooltip: context.l10n.settings,
+                              tooltip: context.l10n.sendFeedbackOrReportA,
                               visualDensity: VisualDensity.compact,
-                              icon: Icon(Icons.menu, size: 20, color: muted),
-                              onPressed: () => SettingsSheet.show(context),
-                            ),
-                            Flexible(
-                              child: Padding(
-                                padding: const EdgeInsets.only(right: 6),
-                                // A long date or large text shrinks to fit
-                                // instead of pushing the pills apart.
-                                child: FittedBox(
-                                  fit: BoxFit.scaleDown,
-                                  alignment: Alignment.centerLeft,
-                                  child: current == 1
-                                      ? const PlanViewSwitcher()
-                                      : const DayNavigator(),
-                                ),
+                              icon: Icon(
+                                Icons.feedback_outlined,
+                                size: 20,
+                                color: muted,
                               ),
+                              onPressed: () =>
+                                  showAppSheet(context, const BugReportSheet()),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    // What you can do: report, add, sync.
-                    _GlassPill(
-                      children: [
-                        IconButton(
-                          tooltip: context.l10n.sendFeedbackOrReportA,
-                          visualDensity: VisualDensity.compact,
-                          icon: Icon(
-                            Icons.feedback_outlined,
-                            size: 20,
-                            color: muted,
-                          ),
-                          onPressed: () =>
-                              showAppSheet(context, const BugReportSheet()),
-                        ),
-                        IconButton(
-                          tooltip: context.l10n.addMeasurement2,
-                          visualDensity: VisualDensity.compact,
-                          icon: Icon(Icons.add, size: 20, color: muted),
-                          onPressed: () =>
-                              showAppSheet(context, ManualEntrySheet()),
-                        ),
-                        PopupMenuButton<String>(
-                          tooltip: context.l10n.syncLabel2,
-                          icon: SyncOrb(
-                            progress: sync.status == SyncStatus.syncing
-                                ? sync.progress / 100
-                                : null,
-                            spinning:
-                                sync.status == SyncStatus.syncing ||
-                                ref.watch(historicSyncProvider).running,
-                            freshness:
-                                sync.status == SyncStatus.error ||
-                                    sync.errorMessage != null
-                                ? SyncFreshness.error
-                                : sync.lastSync != null &&
-                                      DateTime.now().difference(
-                                            sync.lastSync!,
-                                          ) <
-                                          const Duration(hours: 3)
-                                ? SyncFreshness.fresh
-                                : SyncFreshness.stale,
-                          ),
-                          onSelected: (choice) =>
-                              runUiAction(context, () async {
-                                if (choice == 'today') {
-                                  await ref.read(syncProvider.notifier).sync();
-                                } else {
-                                  await ref
-                                      .read(historicSyncProvider.notifier)
-                                      .start(
-                                        days: choice == 'year' ? 365 : 3650,
-                                        force: true,
-                                      );
-                                }
-                              }),
-                          itemBuilder: (_) => [
-                            PopupMenuItem(
-                              value: 'today',
-                              child: Text(context.l10n.syncToday),
+                            IconButton(
+                              tooltip: context.l10n.addMeasurement2,
+                              visualDensity: VisualDensity.compact,
+                              icon: Icon(Icons.add, size: 20, color: muted),
+                              onPressed: () =>
+                                  showAppSheet(context, ManualEntrySheet()),
                             ),
-                            PopupMenuItem(
-                              value: 'year',
-                              child: Text(context.l10n.fullSync1Year),
-                            ),
-                            PopupMenuItem(
-                              value: 'all',
-                              child: Text(context.l10n.fullSyncComplete),
+                            PopupMenuButton<String>(
+                              tooltip: context.l10n.syncLabel2,
+                              icon: SyncOrb(
+                                progress: sync.status == SyncStatus.syncing
+                                    ? sync.progress / 100
+                                    : null,
+                                spinning:
+                                    sync.status == SyncStatus.syncing ||
+                                    ref.watch(historicSyncProvider).running,
+                                freshness:
+                                    sync.status == SyncStatus.error ||
+                                        sync.errorMessage != null
+                                    ? SyncFreshness.error
+                                    : sync.lastSync != null &&
+                                          DateTime.now().difference(
+                                                sync.lastSync!,
+                                              ) <
+                                              const Duration(hours: 3)
+                                    ? SyncFreshness.fresh
+                                    : SyncFreshness.stale,
+                              ),
+                              onSelected: (choice) =>
+                                  runUiAction(context, () async {
+                                    if (choice == 'today') {
+                                      await ref
+                                          .read(syncProvider.notifier)
+                                          .sync();
+                                    } else {
+                                      await ref
+                                          .read(historicSyncProvider.notifier)
+                                          .start(
+                                            days: choice == 'year' ? 365 : 3650,
+                                            force: true,
+                                          );
+                                    }
+                                  }),
+                              itemBuilder: (_) => [
+                                PopupMenuItem(
+                                  value: 'today',
+                                  child: Text(context.l10n.syncToday),
+                                ),
+                                PopupMenuItem(
+                                  value: 'year',
+                                  child: Text(context.l10n.fullSync1Year),
+                                ),
+                                PopupMenuItem(
+                                  value: 'all',
+                                  child: Text(context.l10n.fullSyncComplete),
+                                ),
+                              ],
                             ),
                           ],
                         ),
                       ],
                     ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      body: Stack(
-        children: [
-          // Today's weather as a soft sky behind the top of every main tab;
-          // the pages scroll over it.
-          if (current != 4)
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              height: MediaQuery.paddingOf(context).top + 320,
-              child: const HomeSkyBand(),
-            ),
-          Positioned.fill(
-            child: RefreshIndicator(
-              // The pull spinner comes out below the header, not behind it.
-              edgeOffset: glass ? header : 0,
-              onRefresh: () => ref.read(syncProvider.notifier).sync(),
-              child: switch (current) {
-                0 => _HealthPage(
-                  openCoach: () => setState(() => tab = 3),
-                  openLoad: () => setState(() => tab = 2),
-                ),
-                1 => const PlanScreen(),
-                2 => const StrainScreen(embedded: true),
-                3 => AiCoachScreen(
-                  key: ValueKey('${coachRequest?.id ?? 0}-$coachChat'),
-                  initialPrompt: coachRequest?.prompt,
-                  activity: coachRequest?.activity,
-                  contextCard: coachRequest?.card,
-                  autoSend: coachRequest?.autoSend ?? false,
-                  onAutoSent: () => coachRequest?.autoSend = false,
-                  onNewChat: () => setState(() {
-                    coachRequest = null;
-                    coachChat++;
-                  }),
-                ),
-                _ => const DebugScreen(),
-              },
-            ),
-          ),
-          // Sync progress and messages float below the header.
-          Positioned(
-            top: glass ? header : 0,
-            left: 0,
-            right: 0,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // The sync's progress is the ring around the sync button;
-                // only a failure is said here.
-                if (sync.errorMessage != null)
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 2, 12, 4),
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: panel.withValues(alpha: .94),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: duo(0xFF333333, 0xFFE3E7EC)),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            if (sync.errorMessage != null)
-                              Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Text(
-                                  sync.errorMessage!,
-                                  style: const TextStyle(
-                                    color: Colors.orange,
-                                    fontSize: 11,
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
                   ),
-                const RecordingBanner(),
-                const HistorySyncCard(),
+                ),
               ],
             ),
           ),
-        ],
-      ),
-      bottomNavigationBar: Stack(
-        children: [
-          Positioned.fill(
-            child: IgnorePointer(
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: FractionallySizedBox(
-                  heightFactor: .5,
-                  widthFactor: 1,
-                  child: ClipRect(
-                    child: BackdropFilter(
-                      filter: ui.ImageFilter.blur(sigmaX: 14, sigmaY: 14),
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Colors.transparent,
-                              fjBackground.withValues(alpha: .55),
-                            ],
+          body: Stack(
+            children: [
+              Positioned.fill(
+                child: RefreshIndicator(
+                  // The pull spinner comes out below the header, not behind it.
+                  edgeOffset: glass ? header : 0,
+                  onRefresh: () => ref.read(syncProvider.notifier).sync(),
+                  child: switch (current) {
+                    0 => _HealthPage(
+                      openCoach: () => setState(() => tab = 3),
+                      openLoad: () => setState(() => tab = 2),
+                    ),
+                    1 => const PlanScreen(),
+                    2 => const StrainScreen(embedded: true),
+                    3 => AiCoachScreen(
+                      key: ValueKey('${coachRequest?.id ?? 0}-$coachChat'),
+                      initialPrompt: coachRequest?.prompt,
+                      activity: coachRequest?.activity,
+                      contextCard: coachRequest?.card,
+                      autoSend: coachRequest?.autoSend ?? false,
+                      onAutoSent: () => coachRequest?.autoSend = false,
+                      onNewChat: () => setState(() {
+                        coachRequest = null;
+                        coachChat++;
+                      }),
+                    ),
+                    _ => const DebugScreen(),
+                  },
+                ),
+              ),
+              // Sync progress and messages float below the header.
+              Positioned(
+                top: glass ? header : 0,
+                left: 0,
+                right: 0,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // The sync's progress is the ring around the sync button;
+                    // only a failure is said here.
+                    if (sync.errorMessage != null)
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(12, 2, 12, 4),
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: panel.withValues(alpha: .94),
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              color: duo(0xFF333333, 0xFFE3E7EC),
+                            ),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                if (sync.errorMessage != null)
+                                  Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Text(
+                                      sync.errorMessage!,
+                                      style: const TextStyle(
+                                        color: Colors.orange,
+                                        fontSize: 11,
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    const RecordingBanner(),
+                    const HistorySyncCard(),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          bottomNavigationBar: Stack(
+            children: [
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: FractionallySizedBox(
+                      heightFactor: .5,
+                      widthFactor: 1,
+                      child: ClipRect(
+                        child: BackdropFilter(
+                          filter: ui.ImageFilter.blur(sigmaX: 14, sigmaY: 14),
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Colors.transparent,
+                                  fjBackground.withValues(alpha: .55),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -361,84 +378,85 @@ class _HomeState extends ConsumerState<HomeScreen> {
                   ),
                 ),
               ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(
-              bottom: (MediaQuery.viewPaddingOf(context).bottom - 12)
-                  .clamp(8.0, double.infinity)
-                  .toDouble(),
-            ),
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 12),
-              decoration: BoxDecoration(
-                color: panel.withValues(alpha: .94),
-                borderRadius: BorderRadius.circular(28),
-                border: Border.all(color: duo(0xFF333333, 0xFFE3E7EC)),
-              ),
-              child: Row(
-                children: [
-                  for (final e in <(String, IconData)>[
-                    (context.l10n.health2, Icons.favorite_border),
-                    (context.l10n.tabPlan, Icons.calendar_month_outlined),
-                    (context.l10n.tabLoad, Icons.bar_chart),
-                    (context.l10n.tabCoach, Icons.smart_toy_outlined),
-                    if (debug) ('DEBUG', Icons.bug_report_outlined),
-                  ].indexed)
-                    Expanded(
-                      child: InkWell(
-                        onTap: () => setState(() => tab = e.$1),
-                        borderRadius: BorderRadius.circular(20),
-                        child: Container(
-                          margin: const EdgeInsets.all(5),
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          decoration: BoxDecoration(
-                            color: current == e.$1
-                                ? mint.withValues(alpha: .13)
-                                : null,
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              if (e.$2.$1 != 'DEBUG') ...[
-                                Icon(
-                                  e.$2.$2,
-                                  color: current == e.$1 ? mint : muted,
-                                  size: 20,
-                                ),
-                                const SizedBox(height: 3),
-                              ] else
-                                const SizedBox(height: 12),
-                              Text(
-                                e.$2.$1,
-                                maxLines: 1,
-                                softWrap: false,
-                                overflow: TextOverflow.fade,
-                                style: TextStyle(
-                                  color: current == e.$1 || e.$2.$1 == 'DEBUG'
-                                      ? mint
-                                      : muted,
-                                  fontSize: e.$2.$1 == 'DEBUG' ? 13 : 11,
-                                  fontWeight:
-                                      current == e.$1 || e.$2.$1 == 'DEBUG'
-                                      ? FontWeight.w700
-                                      : FontWeight.w500,
-                                ),
+              Padding(
+                padding: EdgeInsets.only(
+                  bottom: (MediaQuery.viewPaddingOf(context).bottom - 12)
+                      .clamp(8.0, double.infinity)
+                      .toDouble(),
+                ),
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 12),
+                  decoration: BoxDecoration(
+                    color: panel.withValues(alpha: .94),
+                    borderRadius: BorderRadius.circular(28),
+                    border: Border.all(color: duo(0xFF333333, 0xFFE3E7EC)),
+                  ),
+                  child: Row(
+                    children: [
+                      for (final e in <(String, IconData)>[
+                        (context.l10n.health2, Icons.favorite_border),
+                        (context.l10n.tabPlan, Icons.calendar_month_outlined),
+                        (context.l10n.tabLoad, Icons.bar_chart),
+                        (context.l10n.tabCoach, Icons.smart_toy_outlined),
+                        if (debug) ('DEBUG', Icons.bug_report_outlined),
+                      ].indexed)
+                        Expanded(
+                          child: InkWell(
+                            onTap: () => setState(() => tab = e.$1),
+                            borderRadius: BorderRadius.circular(20),
+                            child: Container(
+                              margin: const EdgeInsets.all(5),
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              decoration: BoxDecoration(
+                                color: current == e.$1
+                                    ? mint.withValues(alpha: .13)
+                                    : null,
+                                borderRadius: BorderRadius.circular(25),
                               ),
-                              if (e.$2.$1 == 'DEBUG')
-                                const SizedBox(height: 12),
-                            ],
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  if (e.$2.$1 != 'DEBUG') ...[
+                                    Icon(
+                                      e.$2.$2,
+                                      color: current == e.$1 ? mint : muted,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(height: 3),
+                                  ] else
+                                    const SizedBox(height: 12),
+                                  Text(
+                                    e.$2.$1,
+                                    maxLines: 1,
+                                    softWrap: false,
+                                    overflow: TextOverflow.fade,
+                                    style: TextStyle(
+                                      color:
+                                          current == e.$1 || e.$2.$1 == 'DEBUG'
+                                          ? mint
+                                          : muted,
+                                      fontSize: e.$2.$1 == 'DEBUG' ? 13 : 11,
+                                      fontWeight:
+                                          current == e.$1 || e.$2.$1 == 'DEBUG'
+                                          ? FontWeight.w700
+                                          : FontWeight.w500,
+                                    ),
+                                  ),
+                                  if (e.$2.$1 == 'DEBUG')
+                                    const SizedBox(height: 12),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                ],
+                    ],
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

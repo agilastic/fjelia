@@ -3697,7 +3697,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get steps => 'Skridt';
 
   @override
-  String get tonightsSleep => 'Nattens søvn';
+  String get tonightsSleep => 'Søvnbehov';
 
   @override
   String get activityLog => 'Aktivitetslog';
@@ -5495,6 +5495,18 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get briefAdviceRed => 'Restitution først: tag en let dag eller hvil.';
+
+  @override
+  String get briefProposalShorter =>
+      'Fjelia foreslår at gøre dagens træninger kortere og lettere; se forslaget.';
+
+  @override
+  String get briefProposalRest =>
+      'Fjelia foreslår at springe en træning over i dag; se forslaget.';
+
+  @override
+  String get briefProposalReplan =>
+      'Fjelia foreslår at bygge din træningsplan op på ny; se forslaget.';
 
   @override
   String get briefReasonHrvLow => 'lav søvn-HRV';
@@ -9035,7 +9047,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get metricSkinTemp => 'Hudtemperatur';
 
   @override
-  String get metricTonightSleep => 'Søvn i nat';
+  String get metricTonightSleep => 'Søvnbehov';
 
   @override
   String get metricMuscleMass => 'Muskelmasse';
@@ -9092,7 +9104,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get metricAverage => 'Gennemsnit';
 
   @override
-  String get metricRecommended => 'anbefalet';
+  String get metricRecommended => 'til i nat';
 
   @override
   String get metricStepGoal => '/ 10.000 skridt';
@@ -9710,6 +9722,13 @@ class AppLocalizationsDa extends AppLocalizations {
   @override
   String get coachDayMessagesHint =>
       'FjeliaPro: når dit stress stiger tydeligt, eller din energi bliver lav, sendes dagens værdier og sundhedsoversigten til Fjelia AI Pro, som efterlader en kort besked på Hjem. Højst 3 om dagen, ingen notifikationer.';
+
+  @override
+  String get proBriefing => 'Coachen skriver briefingen';
+
+  @override
+  String get proBriefingHint =>
+      'FjeliaPro: Fjelia AI Pro (den lille model) skriver dine briefinger i stedet for Apple Intelligence. Parathed, plan og sundhedsoversigt sendes til Fjelia AI Pro (Mistral i EU, OpenAI som reserve). Svarer den ikke, skriver Apple Intelligence den som hidtil.';
 
   @override
   String get homeSky => 'Vejrhimmel på Hjem';

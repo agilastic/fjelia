@@ -6622,7 +6622,7 @@ abstract class AppLocalizations {
   /// No description provided for @tonightsSleep.
   ///
   /// In en, this message translates to:
-  /// **'Tonight\'s Sleep'**
+  /// **'Sleep need'**
   String get tonightsSleep;
 
   /// No description provided for @activityLog.
@@ -9719,6 +9719,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Recovery comes first: take an easy day or rest.'**
   String get briefAdviceRed;
+
+  /// No description provided for @briefProposalShorter.
+  ///
+  /// In en, this message translates to:
+  /// **'Fjelia suggests making today\'s sessions shorter and easier; take a look at the proposal.'**
+  String get briefProposalShorter;
+
+  /// No description provided for @briefProposalRest.
+  ///
+  /// In en, this message translates to:
+  /// **'Fjelia suggests dropping a session today; take a look at the proposal.'**
+  String get briefProposalRest;
+
+  /// No description provided for @briefProposalReplan.
+  ///
+  /// In en, this message translates to:
+  /// **'Fjelia suggests rebuilding your training plan; take a look at the proposal.'**
+  String get briefProposalReplan;
 
   /// No description provided for @briefReasonHrvLow.
   ///
@@ -15661,7 +15679,7 @@ abstract class AppLocalizations {
   /// No description provided for @metricTonightSleep.
   ///
   /// In en, this message translates to:
-  /// **'Tonight’s Sleep'**
+  /// **'Sleep need'**
   String get metricTonightSleep;
 
   /// No description provided for @metricMuscleMass.
@@ -15763,7 +15781,7 @@ abstract class AppLocalizations {
   /// No description provided for @metricRecommended.
   ///
   /// In en, this message translates to:
-  /// **'recommended'**
+  /// **'for tonight'**
   String get metricRecommended;
 
   /// No description provided for @metricStepGoal.
@@ -16809,6 +16827,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'FjeliaPro: when your stress rises clearly or your energy runs low, today\'s values and the health summary go to Fjelia AI Pro, which leaves a short message on Home. At most 3 a day, no pushes.'**
   String get coachDayMessagesHint;
+
+  /// No description provided for @proBriefing.
+  ///
+  /// In en, this message translates to:
+  /// **'Coach writes the briefing'**
+  String get proBriefing;
+
+  /// No description provided for @proBriefingHint.
+  ///
+  /// In en, this message translates to:
+  /// **'FjeliaPro: Fjelia AI Pro (the small model) writes your briefings instead of Apple Intelligence. Readiness, plan and the health summary go to Fjelia AI Pro (Mistral in the EU, OpenAI as fallback). If it does not answer, Apple Intelligence writes it as before.'**
+  String get proBriefingHint;
 
   /// No description provided for @homeSky.
   ///

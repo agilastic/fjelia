@@ -74,6 +74,7 @@ class AiContextToonBuilder {
     this.bodyFrame,
     this.trainingWindows,
     this.casualGoal,
+    this.openProposal,
   }) : _now = now ?? DateTime.now;
   final AppDatabase _db;
   final DateTime Function() _now;
@@ -87,6 +88,10 @@ class AiContextToonBuilder {
 
   /// Without a race goal, what the plan is for: `fun` or `fitness`.
   final Future<String?> Function()? casualGoal;
+
+  /// Today's readiness proposal while it waits for an answer: `shorter`,
+  /// `rest` or `replan` (see [BriefingBrief.proposal]).
+  final String? Function()? openProposal;
 
   /// Absences that are still on or ended in the last two weeks, and the
   /// weekly training times: what the athlete can do, not only what is
@@ -497,6 +502,7 @@ class AiContextToonBuilder {
         session: sessionToday,
         goal: nextGoal,
         yesterday: yesterdayDone.isEmpty ? null : yesterdayDone.join(' and '),
+        proposal: openProposal?.call(),
         trainingHrv: trainingVerdict == null
             ? null
             : trainingVerdict == 'better'
@@ -520,20 +526,17 @@ class AiContextToonBuilder {
         final since = today.subtract(const Duration(days: 60));
         await summaries.update(since: since);
         lines.addAll(
-          hrZoneTrends.coachContext(
-            await summaries.workouts(since: since),
-            [
-              for (final s in await (_db.select(_db.trainingSessions)..where(
-                    (t) => t.sessionDate.isBetweenValues(
-                      today.subtract(const Duration(days: 7)),
-                      today.add(const Duration(days: 1)),
-                    ),
-                  ))
-                  .get())
-                plannedZoneSession(s, today: today),
-            ],
-            today: today,
-          ),
+          hrZoneTrends.coachContext(await summaries.workouts(since: since), [
+            for (final s
+                in await (_db.select(_db.trainingSessions)..where(
+                      (t) => t.sessionDate.isBetweenValues(
+                        today.subtract(const Duration(days: 7)),
+                        today.add(const Duration(days: 1)),
+                      ),
+                    ))
+                    .get())
+              plannedZoneSession(s, today: today),
+          ], today: today),
         );
       } catch (_) {}
     }

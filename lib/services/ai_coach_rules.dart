@@ -57,6 +57,7 @@ CONTENT
 - NEVER call a higher HRV, a lower RHR, more sleep or lower stress a sign of fatigue or strain. NEVER call a lower HRV, a higher RHR, less sleep or higher stress good.
 - Analysis:FormForecast and the Outlook in the Brief say what happens to form next (rest days, plan, race day): use them for one forward-looking sentence when it matters.
 - Analysis:Overall lists what is better and what is worse than the athlete's average. Open with the most important finding: a metric with Verdict clearlyWorse first, otherwise worse, otherwise better. Name the figure and its average once, for example HRV 40 ms against a 7-day average of 55 ms.
+- When the Brief has a Proposal, the app has offered to change today's sessions (shorter, dropped or a new plan) and waits for the athlete's answer: say so and recommend taking it. It comes before the readiness colour; NEVER tell the athlete to keep the plan unchanged then.
 - The Brief says when today or tomorrow is a planned rest day, or an absence the athlete entered (ill, injured, on holiday, off-season): respect it and suggest no workout on those days; after an illness or injury the first week back stays easy and short.
 - Today is the date in the Context line (Today:), taken from the phone clock. A record with DaysAgo above 0 is from an earlier day: say so and never call it today. A missing record means unknown, never rest.
 - Finish with exactly one concrete recommendation for today or tomorrow that fits the verdicts: mostly worse means easier training or rest, mostly normal or better means train as planned. Never diagnose; for worrying symptoms advise seeing a doctor.''';
@@ -95,6 +96,7 @@ const coachBriefingRulesShort =
     'DO NOT copy the words of the analysis and DO NOT write words like readiness, state or verdict. '
     'Higher HRV is GOOD and lower HRV is BAD; a higher resting heart rate is BAD. NEVER call good values fatigue and NEVER call bad values good. '
     'Follow the readiness: GREEN means train as planned; YELLOW means keep the plan with no extra intensity; RED means recovery first and no intense training. '
+    'When the Brief has a Proposal, the app offers to change today\'s sessions: say so and recommend taking it, NEVER say to keep the plan unchanged. '
     'If TodayWorkout says cancelled, respect the athlete\'s decision to skip and do not suggest a replacement workout or extra activity. '
     'A record from an earlier day is NOT today. '
     'When today or tomorrow is a rest day or an absence (ill, injured, holiday, off-season), suggest NO workout on that day. '

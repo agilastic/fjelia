@@ -34,3 +34,23 @@ class BriefingConsent {
     await prefs.remove(_legacyKey);
   }
 }
+
+/// FjeliaPro: Fjelia AI Pro (the small model) writes the briefings instead of
+/// Apple Intelligence. Off until the athlete switches it on in Settings →
+/// Training; switching it on is the consent to send the briefing context.
+class ProBriefing {
+  const ProBriefing._();
+
+  static const _key = 'ai_briefing_pro_v1';
+
+  static Future<bool> enabled() async {
+    try {
+      return (await SharedPreferences.getInstance()).getBool(_key) ?? false;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  static Future<void> set(bool value) async =>
+      (await SharedPreferences.getInstance()).setBool(_key, value);
+}

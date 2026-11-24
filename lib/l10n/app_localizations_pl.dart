@@ -3723,7 +3723,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get steps => 'Kroki';
 
   @override
-  String get tonightsSleep => 'Sen tej nocy';
+  String get tonightsSleep => 'Potrzeba snu';
 
   @override
   String get activityLog => 'Dziennik aktywności';
@@ -5524,6 +5524,18 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String get briefAdviceRed =>
       'Najpierw regeneracja: zrób lekki dzień lub odpocznij.';
+
+  @override
+  String get briefProposalShorter =>
+      'Fjelia proponuje skrócić i ułatwić dzisiejsze treningi; zajrzyj do propozycji.';
+
+  @override
+  String get briefProposalRest =>
+      'Fjelia proponuje opuścić dziś jeden trening; zajrzyj do propozycji.';
+
+  @override
+  String get briefProposalReplan =>
+      'Fjelia proponuje zbudować twój plan treningowy od nowa; zajrzyj do propozycji.';
 
   @override
   String get briefReasonHrvLow => 'niskie HRV we śnie';
@@ -9136,7 +9148,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get metricSkinTemp => 'Temp. skóry';
 
   @override
-  String get metricTonightSleep => 'Sen dzisiejszej nocy';
+  String get metricTonightSleep => 'Potrzeba snu';
 
   @override
   String get metricMuscleMass => 'Masa mięśniowa';
@@ -9193,7 +9205,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get metricAverage => 'Średnia';
 
   @override
-  String get metricRecommended => 'zalecane';
+  String get metricRecommended => 'na dzisiejszą noc';
 
   @override
   String get metricStepGoal => '/ 10 000 kroków';
@@ -9817,6 +9829,13 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String get coachDayMessagesHint =>
       'FjeliaPro: gdy twój stres wyraźnie rośnie lub kończy się energia, dzisiejsze wartości i podsumowanie zdrowia trafiają do Fjelia AI Pro, które zostawia krótką wiadomość na ekranie głównym. Najwyżej 3 dziennie, bez powiadomień.';
+
+  @override
+  String get proBriefing => 'Trener pisze podsumowanie';
+
+  @override
+  String get proBriefingHint =>
+      'FjeliaPro: Fjelia AI Pro (mały model) pisze twoje podsumowania zamiast Apple Intelligence. Gotowość, plan i podsumowanie zdrowia trafiają do Fjelia AI Pro (Mistral w UE, OpenAI jako zapas). Jeśli nie odpowie, Apple Intelligence napisze je jak dotąd.';
 
   @override
   String get homeSky => 'Niebo pogodowe na ekranie głównym';

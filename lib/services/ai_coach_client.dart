@@ -16,6 +16,7 @@ import 'ai_response_cache.dart';
 import 'ai_coach_settings.dart';
 import 'apple_coach_request.dart';
 import 'briefing_brief.dart';
+import 'briefing_consent.dart' show ProBriefing;
 import 'briefing_text.dart';
 import 'coach_language.dart';
 import 'coach_memory_context.dart';
@@ -696,10 +697,15 @@ class AiCoachClient {
     final schedule = brief?.plannedTodaySentence(tr);
     final scheduleIncluded =
         schedule == null || mentionsSchedule(text, schedule);
-    final usable = briefingIsUsable(
-      text,
-      languageCode: activeLocale.languageCode,
-    );
+    // Sessions are planned and no proposal drops one: a reply that calls the
+    // day a rest day contradicts the plan, whatever else it says.
+    final usable =
+        briefingIsUsable(text, languageCode: activeLocale.languageCode) &&
+        !(brief != null &&
+            brief.today.isNotEmpty &&
+            brief.away == null &&
+            brief.proposal != 'rest' &&
+            briefingDeniesTraining(text));
     if (scheduleIncluded && usable) return text;
     // Small models rephrase the plan sentence instead of repeating it. Keep
     // their text and add the plan, unless they say there is no training.
@@ -712,7 +718,9 @@ class AiCoachClient {
         'reason=plan_sentence_appended',
       );
       final end = RegExp(r'[.!?…]$').hasMatch(text) ? '' : '.';
-      return '$text$end $schedule';
+      final completed = '$text$end $schedule';
+      // The reply named the plan in its own words after all.
+      return briefingRepeats(completed) ? null : completed;
     }
     if (brief == null) return text;
     return null;
@@ -819,10 +827,18 @@ class AiCoachClient {
     if (!settings.readyForBriefing) {
       throw StateError('AI Coach is not configured.');
     }
-    final pro = cloudFallback || !settings.onDeviceAvailable
-        ? await _activePro()
+    // FjeliaPro with its briefing switch on: the small Pro model writes it,
+    // Apple Intelligence only when that fails.
+    final active = await _activePro();
+    final proFirst = active != null && await ProBriefing.enabled()
+        ? active
         : null;
-    final route = settings.onDeviceAvailable
+    final pro =
+        proFirst ??
+        (cloudFallback || !settings.onDeviceAvailable ? active : null);
+    final route = proFirst != null
+        ? 'Pro first|$proAiModel'
+        : settings.onDeviceAvailable
         ? cloudFallback
               ? 'Apple Intelligence|${pro == null ? 'default' : proAiModel}'
               : 'Apple Intelligence'
@@ -863,6 +879,7 @@ class AiCoachClient {
           userPrompt,
           kind,
           cloudFallback: cloudFallback,
+          proFirst: proFirst != null,
           onSource: (source) => generatedSource = source,
         );
         return AiCachedAnswer(
@@ -884,6 +901,7 @@ class AiCoachClient {
     String userPrompt,
     String kind, {
     bool cloudFallback = false,
+    bool proFirst = false,
     void Function(String source)? onSource,
   }) async {
     if (!settings.readyForBriefing) {
@@ -897,6 +915,26 @@ class AiCoachClient {
         isUser: true,
       ),
     ];
+    if (proFirst) {
+      try {
+        final result = await _sendBriefingCloud(
+          messages,
+          toonContext,
+          kind,
+          systemPrompt,
+          proOnly: true,
+        );
+        return _finishBriefing(
+          result.text,
+          toonContext,
+          kind,
+          source: result.source,
+          onSource: onSource,
+        );
+      } catch (e) {
+        log('[AiBriefing] Fjelia AI Pro failed; the usual route writes it: $e');
+      }
+    }
     if (settings.onDeviceAvailable) {
       try {
         var reply = await _sendAppleIntelligence(
@@ -967,8 +1005,9 @@ class AiCoachClient {
     List<ChatMessage> messages,
     String toonContext,
     String kind,
-    String systemPrompt,
-  ) async {
+    String systemPrompt, {
+    bool proOnly = false,
+  }) async {
     final refused = RegExp(r'failed \((400|401|403|404|422|429|5\d\d)\)');
     final pro = await _activePro();
     if (pro != null) {
@@ -991,6 +1030,7 @@ class AiCoachClient {
         }
       }
     }
+    if (proOnly) throw StateError('Fjelia AI Pro did not answer.');
     final key = (await _store.readApiKey(AiProvider.freeAi))?.trim();
     if (key == null || key.isEmpty) {
       throw StateError('Fjelia AI cloud is unavailable.');

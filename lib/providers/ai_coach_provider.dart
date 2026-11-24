@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:fjelia_service_api/fjelia_service_api.dart'
+    show FjeliaProEntitlement;
+
 import 'day_data_provider.dart' show dayScoresProvider, trainingMonitorProvider;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,6 +26,7 @@ import '../utils/log.dart';
 import 'coach_messages_provider.dart';
 import 'database_provider.dart';
 import 'local_model_provider.dart';
+import 'readiness_provider.dart' show morningAdaptationProvider;
 import 'sync_provider.dart' show waitForSyncToSettle;
 import '../services/briefing_consent.dart';
 import 'user_profile_provider.dart';
@@ -63,7 +67,25 @@ final aiContextToonBuilderProvider = Provider<AiContextToonBuilder>(
         (await ref.read(userProfileProvider.future)).trainingWindows,
     casualGoal: () async =>
         (await ref.read(userProfileProvider.future)).casualGoal,
+    openProposal: () {
+      final p = ref.read(morningAdaptationProvider).proposal;
+      final now = DateTime.now();
+      if (p == null ||
+          p.day.year != now.year ||
+          p.day.month != now.month ||
+          p.day.day != now.day) {
+        return null;
+      }
+      if (p.changes.any((c) => c.rest)) return 'rest';
+      if (p.changes.isNotEmpty) return 'shorter';
+      return p.replanReason == null ? null : 'replan';
+    },
   ),
+);
+
+/// FjeliaPro: Fjelia AI Pro writes the briefings (off by default).
+final proBriefingProvider = FutureProvider<bool>(
+  (ref) => ProBriefing.enabled(),
 );
 
 final aiCoachSettingsProvider =
@@ -404,7 +426,11 @@ class AiBriefingNotifier extends StateNotifier<AsyncValue<String?>> {
           onSource: recordSource,
         ),
       };
-      final timeout = settings.onDeviceAvailable && !cloudConsent
+      // Fjelia AI Pro may write it first (and Apple after a failure).
+      final timeout =
+          settings.onDeviceAvailable &&
+              !cloudConsent &&
+              !(FjeliaProEntitlement.active && await ProBriefing.enabled())
           ? const Duration(seconds: 30)
           : freeAiGenerationTimeout;
       final text = await future.timeout(timeout);
@@ -578,6 +604,12 @@ class AiCoachSettingsNotifier extends AsyncNotifier<AiCoachSettings> {
   Future<void> setBriefingMode(BriefingMode mode) async {
     await _store.saveBriefingMode(mode);
     state = AsyncData(_current.copyWith(briefingMode: mode));
+  }
+
+  /// FjeliaPro: whether Fjelia AI Pro writes the briefings.
+  Future<void> setProBriefing(bool value) async {
+    await ProBriefing.set(value);
+    ref.invalidate(proBriefingProvider);
   }
 
   Future<void> setAppleIntelligenceForBriefing(bool value) async {

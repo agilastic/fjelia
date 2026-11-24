@@ -3743,7 +3743,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get steps => 'Pas';
 
   @override
-  String get tonightsSleep => 'Sommeil de cette nuit';
+  String get tonightsSleep => 'Besoin de sommeil';
 
   @override
   String get activityLog => 'Journal d\'activité';
@@ -5550,6 +5550,18 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get briefAdviceRed =>
       'La récupération d\'abord : journée facile ou repos.';
+
+  @override
+  String get briefProposalShorter =>
+      'Fjelia propose de raccourcir et d\'alléger les séances d\'aujourd\'hui ; jette un œil à la proposition.';
+
+  @override
+  String get briefProposalRest =>
+      'Fjelia propose de supprimer une séance aujourd\'hui ; jette un œil à la proposition.';
+
+  @override
+  String get briefProposalReplan =>
+      'Fjelia propose de reconstruire ton plan d\'entraînement ; jette un œil à la proposition.';
 
   @override
   String get briefReasonHrvLow => 'VFC du sommeil basse';
@@ -9122,7 +9134,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get metricSkinTemp => 'Temp. cutanée';
 
   @override
-  String get metricTonightSleep => 'Sommeil cette nuit';
+  String get metricTonightSleep => 'Besoin de sommeil';
 
   @override
   String get metricMuscleMass => 'Masse musculaire';
@@ -9179,7 +9191,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get metricAverage => 'Moyenne';
 
   @override
-  String get metricRecommended => 'recommandé';
+  String get metricRecommended => 'pour cette nuit';
 
   @override
   String get metricStepGoal => '/ 10 000 pas';
@@ -9804,6 +9816,13 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get coachDayMessagesHint =>
       'FjeliaPro : quand ton stress monte nettement ou que ton énergie baisse, les valeurs du jour et le résumé santé partent vers Fjelia AI Pro, qui laisse un court message sur l\'accueil. 3 par jour au plus, sans notification.';
+
+  @override
+  String get proBriefing => 'Le coach rédige le briefing';
+
+  @override
+  String get proBriefingHint =>
+      'FjeliaPro : Fjelia AI Pro (le petit modèle) rédige tes briefings à la place d\'Apple Intelligence. La forme du jour, le plan et le résumé santé sont envoyés à Fjelia AI Pro (Mistral dans l\'UE, OpenAI en secours). S\'il ne répond pas, Apple Intelligence le rédige comme avant.';
 
   @override
   String get homeSky => 'Ciel météo sur l\'accueil';

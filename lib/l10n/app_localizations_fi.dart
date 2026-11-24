@@ -3718,7 +3718,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get steps => 'Askeleet';
 
   @override
-  String get tonightsSleep => 'Tämän yön uni';
+  String get tonightsSleep => 'Unentarve';
 
   @override
   String get activityLog => 'Aktiviteettiloki';
@@ -5517,6 +5517,18 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get briefAdviceRed => 'Palautuminen ensin: kevyt päivä tai lepo.';
+
+  @override
+  String get briefProposalShorter =>
+      'Fjelia ehdottaa tämän päivän harjoitusten lyhentämistä ja keventämistä; katso ehdotus.';
+
+  @override
+  String get briefProposalRest =>
+      'Fjelia ehdottaa yhden harjoituksen jättämistä väliin tänään; katso ehdotus.';
+
+  @override
+  String get briefProposalReplan =>
+      'Fjelia ehdottaa harjoitussuunnitelman rakentamista uudelleen; katso ehdotus.';
 
   @override
   String get briefReasonHrvLow => 'matala unen HRV';
@@ -9074,7 +9086,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get metricSkinTemp => 'Ihon lämpötila';
 
   @override
-  String get metricTonightSleep => 'Uni tänä yönä';
+  String get metricTonightSleep => 'Unentarve';
 
   @override
   String get metricMuscleMass => 'Lihasmassa';
@@ -9131,7 +9143,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get metricAverage => 'Keskiarvo';
 
   @override
-  String get metricRecommended => 'suositus';
+  String get metricRecommended => 'tälle yölle';
 
   @override
   String get metricStepGoal => '/ 10 000 askelta';
@@ -9752,6 +9764,13 @@ class AppLocalizationsFi extends AppLocalizations {
   @override
   String get coachDayMessagesHint =>
       'FjeliaPro: kun stressisi nousee selvästi tai energia käy vähiin, päivän arvot ja terveysyhteenveto lähtevät Fjelia AI Prolle, joka jättää lyhyen viestin Koti-näkymään. Enintään 3 päivässä, ei ilmoituksia.';
+
+  @override
+  String get proBriefing => 'Valmentaja kirjoittaa katsauksen';
+
+  @override
+  String get proBriefingHint =>
+      'FjeliaPro: Fjelia AI Pro (pieni malli) kirjoittaa katsauksesi Apple Intelligencen sijaan. Valmius, suunnitelma ja terveysyhteenveto lähetetään Fjelia AI Prolle (Mistral EU:ssa, OpenAI varalla). Jos se ei vastaa, Apple Intelligence kirjoittaa sen kuten ennenkin.';
 
   @override
   String get homeSky => 'Sään taivas Kotinäkymässä';

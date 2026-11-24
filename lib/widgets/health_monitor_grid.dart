@@ -110,14 +110,10 @@ class HealthMonitorGrid extends ConsumerWidget {
                           : null,
                       value: e.key == 'sleep' && need != null
                           ? '${need.inHours}h ${(need.inMinutes % 60).toString().padLeft(2, '0')}min'
-                          : valueText(
-                              e.value.$2,
-                              e.key == 'resp' ||
-                                      e.key == 'skin_temp' ||
-                                      e.key == 'sleep'
-                                  ? 1
-                                  : 0,
-                            ),
+                          // Skin temperature is a shift from the baseline:
+                          // a rise carries its sign.
+                          : '${e.key == 'skin_temp' && (e.value.$2 ?? 0) >= .05 ? '+' : ''}'
+                                '${valueText(e.value.$2, e.key == 'resp' || e.key == 'skin_temp' || e.key == 'sleep' ? 1 : 0)}',
                       unit: e.key == 'steps'
                           ? context.l10n.unitSteps
                           : e.value.$3,

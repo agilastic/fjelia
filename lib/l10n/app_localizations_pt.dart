@@ -3729,7 +3729,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get steps => 'Passos';
 
   @override
-  String get tonightsSleep => 'Sono desta noite';
+  String get tonightsSleep => 'Necessidade de sono';
 
   @override
   String get activityLog => 'Registo de atividades';
@@ -5531,6 +5531,18 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get briefAdviceRed =>
       'A recuperação vem primeiro: faz um dia leve ou descansa.';
+
+  @override
+  String get briefProposalShorter =>
+      'O Fjelia propõe tornar as sessões de hoje mais curtas e leves; vê a proposta.';
+
+  @override
+  String get briefProposalRest =>
+      'O Fjelia propõe saltar uma sessão hoje; vê a proposta.';
+
+  @override
+  String get briefProposalReplan =>
+      'O Fjelia propõe reconstruir o teu plano de treino; vê a proposta.';
 
   @override
   String get briefReasonHrvLow => 'HRV do sono baixa';
@@ -9113,7 +9125,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get metricSkinTemp => 'Temp. da pele';
 
   @override
-  String get metricTonightSleep => 'Sono esta noite';
+  String get metricTonightSleep => 'Necessidade de sono';
 
   @override
   String get metricMuscleMass => 'Massa muscular';
@@ -9170,7 +9182,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get metricAverage => 'Média';
 
   @override
-  String get metricRecommended => 'recomendado';
+  String get metricRecommended => 'para esta noite';
 
   @override
   String get metricStepGoal => '/ 10 000 passos';
@@ -9794,6 +9806,13 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get coachDayMessagesHint =>
       'FjeliaPro: quando o teu stress sobe claramente ou a energia fica baixa, os valores de hoje e o resumo de saúde vão para o Fjelia AI Pro, que deixa uma mensagem curta no Início. No máximo 3 por dia, sem notificações.';
+
+  @override
+  String get proBriefing => 'O coach escreve o resumo';
+
+  @override
+  String get proBriefingHint =>
+      'FjeliaPro: o Fjelia AI Pro (o modelo pequeno) escreve os teus resumos em vez do Apple Intelligence. A prontidão, o plano e o resumo de saúde vão para o Fjelia AI Pro (Mistral na UE, OpenAI como alternativa). Se não responder, o Apple Intelligence escreve-o como até agora.';
 
   @override
   String get homeSky => 'Céu do tempo no Início';
