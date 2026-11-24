@@ -163,6 +163,8 @@ class _SkyTile extends StatelessWidget {
                   kind,
                   rainMm: day.rainMm ?? 0,
                   windKmh: day.windKmh ?? 0,
+                  // The glyph shows the sun or moon.
+                  showSunAndMoon: false,
                 ),
               ),
               Positioned(

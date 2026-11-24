@@ -51,7 +51,7 @@ One card gets one pair. A screen should not use more than about three pairs.
 - **`GradientTitle`**: upper-case section titles in the card's accent pair. A larger size (18–24) for sheet heroes.
 - **`SheetPage` / `showAppSheet`**: every detail view is a bottom sheet with a title bar.
 - **Hero orb**: a circle filled with the accent gradient, with a soft double glow and a white icon. It scales in once. It is used in the empty coach chat (`_CoachOrb`) and the Pro sheet (`_Hero`).
-- **Sky tiles**: weather days as a small painted sky (`WeatherSkyPainter`) with only the figures written on them. The chosen tile gets a gradient edge.
+- **Sky tiles**: weather days as a small painted sky (`WeatherSkyPainter`: clouds, rain, snow, fog, lightning; the glyph shows sun or moon) with only the figures written on them. The same painter draws the sky band behind the main tabs. The chosen tile gets a gradient edge.
 - **Neon tiles**: a figure card with a thin gradient border, a panel inside and a glow (weather detail `_NeonTile`). Use them sparingly, for a grid of 2–4 key figures.
 - **Accordion card**: long content folds. Folded, it shows a title, its switches and one line of highlights that take turns. Tap anywhere on it (title, figures, empty space) to unfold, and tap the content again to fold. Switches and chips inside keep their own taps. It unfolds with `AnimatedSize`.
 - **Chevron**: every foldable item uses the same chevron, like an `ExpansionTile`. It is `Icons.expand_more` at 26–28 in `fjInk`, centred vertically on the right of the folded item, never a small muted icon next to the chips. It turns half a turn when open. Examples: the season card on the plan, `SportStatsCard` on the LOAD screen.

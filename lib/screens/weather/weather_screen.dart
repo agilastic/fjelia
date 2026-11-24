@@ -558,6 +558,8 @@ class _DayPill extends StatelessWidget {
                   kind,
                   rainMm: day.rainMm ?? 0,
                   windKmh: day.windKmh ?? 0,
+                  // The glyph shows the sun or moon.
+                  showSunAndMoon: false,
                 ),
               ),
               Padding(
@@ -660,6 +662,8 @@ class _Hero extends StatelessWidget {
                   kind,
                   rainMm: rainMm,
                   windKmh: windKmh,
+                  // The glyph shows the sun or moon.
+                  showSunAndMoon: false,
                 ),
               ),
             ),

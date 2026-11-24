@@ -105,7 +105,7 @@ class _HomeState extends ConsumerState<HomeScreen> {
             top: 0,
             left: 0,
             right: 0,
-            height: MediaQuery.paddingOf(context).top + 320,
+            height: MediaQuery.paddingOf(context).top + 250,
             child: const HomeSkyBand(),
           ),
         Scaffold(
