@@ -17,12 +17,9 @@ import 'threshold_sheets.dart';
 import 'load_metric_sheet.dart';
 import 'load_visuals.dart';
 import 'hr_zone_trends_sheet.dart';
-import 'package:intl/intl.dart';
 
-import '../../db/database.dart';
-import '../../providers/hr_zone_trends_provider.dart';
 import '../../providers/hr_zones_provider.dart';
-import '../../services/hr_zone_summary_service.dart';
+import '../../widgets/hr_zone_labels.dart';
 import '../settings/hr_zones_tab.dart';
 
 class TrainingMonitorCard extends ConsumerWidget {
@@ -294,37 +291,24 @@ List<Color> get _zoneColors => [
   loadRed,
 ];
 
-/// The zones in use now: heart rate per sport in bpm with the date of their
-/// last change, and the cycling power zones from the FTP.
+/// The zones in use now: heart rate per sport in bpm with where they came
+/// from and since when (the zone history, as everywhere), and the cycling
+/// power zones from the FTP.
 class _MyZones extends ConsumerWidget {
   const _MyZones();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = context.l10n;
-    final definitions =
-        ref.watch(hrZoneDefinitionsProvider).valueOrNull ?? const [];
     final current = ref.watch(hrZonesProvider);
     final ftp = ref.watch(ftpProvider).valueOrNull;
-    HrZoneDefinition? latest(String sport) =>
-        definitions.where((d) => d.sport == sport).lastOrNull;
-    Widget hr(String sport, String name, IconData icon, List<int>? fallback) {
-      final d = latest(sport);
-      final floors = d == null
-          ? fallback
-          : HrZoneSummaryService.floorsOf(d.floorsJson);
-      if (floors == null) return const SizedBox.shrink();
+    Widget hr(String sport, String name, IconData icon) {
+      final floors = current.forSport(sport).bounds;
       return _ZoneRow(
         icon: icon,
         label: '$name · ${l.myZonesHeartRate}',
         values: ['<${floors[1]}', for (var z = 1; z < 5; z++) '${floors[z]}'],
         colors: hrZoneColors,
-        caption: [
-          'bpm',
-          if (d != null)
-            d.effectiveFrom.millisecondsSinceEpoch <= 0
-                ? l.hrZoneFromStart
-                : l.hrZoneSince(DateFormat.yMMMd().format(d.effectiveFrom)),
-        ].join(' · '),
+        caption: ['bpm', ?zoneOriginText(l, current, sport)].join(' · '),
         onTap: () => showAppSheet(context, const HrZonesTab()),
       );
     }
@@ -348,19 +332,9 @@ class _MyZones extends ConsumerWidget {
                 style: loadLabel.copyWith(fontSize: 10),
               ),
             ),
-            hr(
-              'running',
-              l.running,
-              Icons.directions_run,
-              current.running.bounds,
-            ),
-            hr(
-              'cycling',
-              l.cycling,
-              Icons.directions_bike,
-              current.cycling.bounds,
-            ),
-            hr('swimming', l.swimming, Icons.pool, null),
+            hr('running', l.running, Icons.directions_run),
+            hr('cycling', l.cycling, Icons.directions_bike),
+            hr('swimming', l.swimming, Icons.pool),
             _ZoneRow(
               icon: Icons.bolt,
               label: '${l.cycling} · ${l.myZonesPower}',

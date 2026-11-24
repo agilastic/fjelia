@@ -961,9 +961,6 @@ class AppLocalizationsSk extends AppLocalizations {
   String get zoneSourceInitial => 'prvé zóny';
 
   @override
-  String get hrZoneHistoryTitle => 'Hranice zón v čase';
-
-  @override
   String hrZoneFarFromEstimate(String sport, String zones) {
     return '$sport: tvoje zóny sú od odhadu ďalej ako 10 úderov ($zones). Skontrolovať?';
   }
@@ -974,6 +971,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get hrZoneUseEstimate => 'Použiť odhad';
+
+  @override
+  String get zoneChangeStart => 'Zmeniť dátum začiatku';
 
   @override
   String get doubleDayOk => 'Dvojitý deň ok';
@@ -9689,6 +9689,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get hrZoneBoundsTitle => 'Použité zóny';
+
+  @override
+  String get hrZoneHistoryTitle => 'Hranice zón v čase';
 
   @override
   String hrZoneSince(String date) {

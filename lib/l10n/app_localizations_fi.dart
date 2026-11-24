@@ -955,9 +955,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String get zoneSourceInitial => 'ensimmäiset vyöhykkeet';
 
   @override
-  String get hrZoneHistoryTitle => 'Aluerajat ajan mittaan';
-
-  @override
   String hrZoneFarFromEstimate(String sport, String zones) {
     return '$sport: vyöhykkeesi poikkeavat arviosta yli 10 lyöntiä ($zones). Tarkistetaanko?';
   }
@@ -968,6 +965,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get hrZoneUseEstimate => 'Käytä arviota';
+
+  @override
+  String get zoneChangeStart => 'Muuta alkamispäivää';
 
   @override
   String get doubleDayOk => 'Tuplapäivä ok';
@@ -9681,6 +9681,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get hrZoneBoundsTitle => 'Käytetyt alueet';
+
+  @override
+  String get hrZoneHistoryTitle => 'Aluerajat ajan mittaan';
 
   @override
   String hrZoneSince(String date) {

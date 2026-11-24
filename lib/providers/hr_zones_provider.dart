@@ -74,6 +74,32 @@ class HrZonesState {
     _ => running,
   };
 
+  /// Whether [sport]'s zones look wrong: `cyclingAboveRunning` (cycling
+  /// zones should sit about 5 bpm below running), `estimate` (Z2–Z4 more
+  /// than 10 bpm from the Karvonen estimate) or null. Only zones the
+  /// athlete has, not derived or estimated ones; never changes anything.
+  String? check(String sport) {
+    final method = book.latest(sport)?.method;
+    if (method == null ||
+        method == ZoneMethod.derived ||
+        method == ZoneMethod.estimate) {
+      return null;
+    }
+    final zones = forSport(sport).bounds;
+    if (sport == 'cycling' &&
+        [for (var i = 1; i < 4; i++) zones[i] >= running.bounds[i]]
+            .every((above) => above)) {
+      return 'cyclingAboveRunning';
+    }
+    final e = estimateFor(sport);
+    if (e != null &&
+        [for (var i = 1; i < 4; i++) (zones[i] - e[i]).abs() > 10]
+            .any((far) => far)) {
+      return 'estimate';
+    }
+    return null;
+  }
+
   /// The zones an activity is measured with: those of its day.
   List<int> forActivity(String type, DateTime start) =>
       book.forActivity(type, start) ??
@@ -262,6 +288,22 @@ class HrZonesNotifier extends StateNotifier<HrZonesState> {
       await _storage.write(key: _conflictsKey, value: jsonEncode(rest));
     }
     await _reload();
+  }
+
+  /// The zones of [sport] in force today, in force from [from] on instead:
+  /// a change dated back, e.g. to the day of a test.
+  Future<void> backdate(String sport, DateTime from) async {
+    await loaded;
+    final latest = state.book.latest(sport);
+    final floors = latest == null ? null : zoneFloorsOf(latest.floorsJson);
+    if (latest == null || floors == null) return;
+    await record(
+      sport,
+      floors,
+      method: latest.method,
+      source: latest.source,
+      from: from,
+    );
   }
 
   /// Karvonen zones for [maxHr] with the resting heart rate of the last

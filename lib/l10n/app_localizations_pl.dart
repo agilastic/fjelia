@@ -963,9 +963,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get zoneSourceInitial => 'pierwsze strefy';
 
   @override
-  String get hrZoneHistoryTitle => 'Granice stref w czasie';
-
-  @override
   String hrZoneFarFromEstimate(String sport, String zones) {
     return '$sport: twoje strefy różnią się od szacunku o ponad 10 uderzeń ($zones). Sprawdzić?';
   }
@@ -976,6 +973,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get hrZoneUseEstimate => 'Użyj szacunku';
+
+  @override
+  String get zoneChangeStart => 'Zmień datę początkową';
 
   @override
   String get doubleDayOk => 'Podwójny dzień OK';
@@ -9745,6 +9745,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get hrZoneBoundsTitle => 'Użyte strefy';
+
+  @override
+  String get hrZoneHistoryTitle => 'Granice stref w czasie';
 
   @override
   String hrZoneSince(String date) {

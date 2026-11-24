@@ -9,14 +9,26 @@ import '../../providers/hr_zone_autoadjust_provider.dart';
 import '../../providers/lt2_tt_provider.dart';
 import '../../providers/lt1_provider.dart';
 import '../../providers/user_profile_provider.dart';
+import '../../providers/hr_zone_sync_provider.dart';
+import '../../services/hr_zone_history.dart';
 import '../../widgets/app_widgets.dart';
+import '../../widgets/hr_zone_labels.dart';
 
 /// Saves zones set here as a new entry of the zone history, from now on.
-Future<void> _save(WidgetRef ref, HrZones zones, {required bool bike}) {
-  final notifier = ref.read(hrZonesProvider.notifier);
-  return bike ? notifier.saveCycling(zones) : notifier.saveRunning(zones);
-}
+Future<void> _save(WidgetRef ref, HrZones zones, {required String sport}) => ref
+    .read(hrZonesProvider.notifier)
+    .record(sport, zones.bounds, method: ZoneMethod.manual);
 
+const _zoneColors = [
+  Colors.blue,
+  mint,
+  Colors.yellow,
+  Colors.orange,
+  Colors.red,
+];
+
+/// Settings → HF-Zonen: per sport the zones in force with where they came
+/// from, a hint when they look wrong, the editable zones and their history.
 class HrZonesTab extends ConsumerWidget {
   const HrZonesTab({super.key});
   @override
@@ -62,6 +74,7 @@ class HrZonesTab extends ConsumerWidget {
                       if (lt1 != null) {
                         await n.applyLt1Ceiling(lt1.bpm, from: tt.at);
                       }
+                      await ref.read(zoneRecalculationProvider)();
                     }),
                     child: Text(
                       context.l10n.syncLabel,
@@ -71,19 +84,61 @@ class HrZonesTab extends ConsumerWidget {
                 ],
               ),
             ),
-          for (final bike in [false, true]) ...[
-            SectionLabel(
-              bike ? context.l10n.cycling : context.l10n.running,
-              color: bike ? Colors.blue : Colors.red,
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
+          for (final sport in zoneSports)
+            _SportZones(sport: sport, zones: zones, maxHr: maxHr),
+        ],
+      ),
+    );
+  }
+}
+
+/// One sport: name, origin, the hint when the zones look wrong, the five
+/// zones to adjust and the history.
+class _SportZones extends ConsumerWidget {
+  const _SportZones({
+    required this.sport,
+    required this.zones,
+    required this.maxHr,
+  });
+  final String sport;
+  final HrZonesState zones;
+  final int? maxHr;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l = context.l10n;
+    final color = switch (sport) {
+      'cycling' => Colors.blue,
+      'swimming' => Colors.cyan,
+      _ => Colors.red,
+    };
+    final current = zones.forSport(sport);
+    final origin = zoneOriginText(l, zones, sport);
+    final check = zoneCheckText(l, zones, sport);
+    final estimate = zones.estimateFor(sport);
+    final history = zones.book.of(sport).reversed.toList();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SectionLabel(zoneSportName(l, sport), color: color),
+        Row(
+          children: [
+            if (origin != null)
+              Expanded(
+                child: Text(
+                  origin,
+                  style: TextStyle(fontSize: 11, color: muted),
+                ),
+              )
+            else
+              const Spacer(),
+            if (sport != 'swimming')
+              TextButton(
                 onPressed: () => runUiAction(context, () async {
                   final suggestion = await ref.read(
                     hrAutoAdjustProvider.future,
                   );
-                  final max = bike
+                  final max = sport == 'cycling'
                       ? suggestion?.cyclingMaxHr
                       : suggestion?.runningMaxHr;
                   if (max == null) {
@@ -91,108 +146,148 @@ class HrZonesTab extends ConsumerWidget {
                   }
                   // Karvonen from that sport's maximum and the resting
                   // heart rate of the last nights.
-                  final zones = await ref
+                  final karvonen = await ref
                       .read(hrZonesProvider.notifier)
                       .karvonen(max);
-                  await _save(ref, bike: bike, HrZones(zones));
+                  await _save(ref, sport: sport, HrZones(karvonen));
                 }),
-                child: Text(context.l10n.autoadjust),
-              ),
-            ),
-            for (var i = 0; i < 5; i++)
-              SectionCard(
-                child: Row(
-                  children: [
-                    Container(
-                      width: 3,
-                      height: 42,
-                      color: const [
-                        Colors.blue,
-                        mint,
-                        Colors.yellow,
-                        Colors.orange,
-                        Colors.red,
-                      ][i],
-                    ),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            context.l10n.zoneI(i + 1),
-                            style: TextStyle(
-                              color: [
-                                Colors.blue,
-                                mint,
-                                Colors.yellow,
-                                Colors.orange,
-                                Colors.red,
-                              ][i],
-                            ),
-                          ),
-                          Text(
-                            [
-                              'Recovery / Easy',
-                              context.l10n.aerobicBase,
-                              context.l10n.tempo,
-                              context.l10n.lactateThreshold,
-                              'VO₂max',
-                            ][i],
-                            style: TextStyle(fontSize: 10, color: muted),
-                          ),
-                          Text(
-                            hrZoneRange(
-                              bike ? zones.cycling : zones.running,
-                              i,
-                              maxHr,
-                            ),
-                            style: TextStyle(fontSize: 9, color: fjInk),
-                          ),
-                        ],
-                      ),
-                    ),
-                    for (final delta in [-1, 0, 1])
-                      if (delta == 0)
-                        Text(
-                          '${(bike ? zones.cycling : zones.running).bounds[i]}',
-                        )
-                      else
-                        IconButton(
-                          icon: Icon(
-                            delta < 0 ? Icons.remove : Icons.add,
-                            size: 16,
-                          ),
-                          onPressed: () => runUiAction(context, () async {
-                            final z = bike
-                                ? ref.read(hrZonesProvider).cycling
-                                : ref.read(hrZonesProvider).running;
-                            final b = [...z.bounds];
-                            b[i] += delta;
-                            if (b[i] < 30 ||
-                                b[i] > 240 ||
-                                (i > 0 && b[i] <= b[i - 1]) ||
-                                (i < 4 && b[i] >= b[i + 1])) {
-                              return;
-                            }
-                            await _save(ref, bike: bike, HrZones(b));
-                          }),
-                        ),
-                  ],
-                ),
+                child: Text(l.autoadjust),
               ),
           ],
-        ],
-      ),
+        ),
+        if (check != null)
+          SectionCard(
+            key: ValueKey('zone-check-$sport'),
+            color: Colors.orange.withValues(alpha: .08),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(check, style: const TextStyle(fontSize: 12)),
+                if (estimate != null)
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () => runUiAction(
+                        context,
+                        () => _save(ref, sport: sport, HrZones(estimate)),
+                      ),
+                      child: Text(l.hrZoneUseEstimate),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        for (var i = 0; i < 5; i++)
+          SectionCard(
+            child: Row(
+              children: [
+                Container(width: 3, height: 42, color: _zoneColors[i]),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l.zoneI(i + 1),
+                        style: TextStyle(color: _zoneColors[i]),
+                      ),
+                      Text(
+                        [
+                          'Recovery / Easy',
+                          l.aerobicBase,
+                          l.tempo,
+                          l.lactateThreshold,
+                          'VO₂max',
+                        ][i],
+                        style: TextStyle(fontSize: 10, color: muted),
+                      ),
+                      Text(
+                        hrZoneRange(current, i, maxHr),
+                        style: TextStyle(fontSize: 9, color: fjInk),
+                      ),
+                    ],
+                  ),
+                ),
+                for (final delta in [-1, 0, 1])
+                  if (delta == 0)
+                    Text('${current.bounds[i]}')
+                  else
+                    IconButton(
+                      icon: Icon(
+                        delta < 0 ? Icons.remove : Icons.add,
+                        size: 16,
+                      ),
+                      onPressed: () => runUiAction(context, () async {
+                        final b = [
+                          ...ref.read(hrZonesProvider).forSport(sport).bounds,
+                        ];
+                        b[i] += delta;
+                        if (b[i] < 30 ||
+                            b[i] > 240 ||
+                            (i > 0 && b[i] <= b[i - 1]) ||
+                            (i < 4 && b[i] >= b[i + 1])) {
+                          return;
+                        }
+                        await _save(ref, sport: sport, HrZones(b));
+                      }),
+                    ),
+              ],
+            ),
+          ),
+        if (history.isNotEmpty)
+          ExpansionTile(
+            key: ValueKey('zone-history-$sport'),
+            tilePadding: EdgeInsets.zero,
+            title: Text(
+              l.hrZoneHistoryTitle,
+              style: const TextStyle(fontSize: 13),
+            ),
+            children: [
+              for (final d in history)
+                ListTile(
+                  dense: true,
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(
+                    zoneFloorsOf(d.floorsJson)?.join(' · ') ?? d.floorsJson,
+                  ),
+                  subtitle: Text(
+                    '${zoneSourceLabel(l, d.method)} · ${zoneSinceText(l, d)}',
+                  ),
+                ),
+              // The zones in force from an earlier day on, e.g. the day of
+              // a test: the workouts since then are measured again.
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton.icon(
+                  icon: const Icon(Icons.event, size: 16),
+                  label: Text(l.zoneChangeStart),
+                  onPressed: () async {
+                    final now = DateTime.now();
+                    final from = await showDatePicker(
+                      context: context,
+                      initialDate:
+                          history.first.effectiveFrom.isAfter(DateTime(2000))
+                          ? history.first.effectiveFrom
+                          : now,
+                      firstDate: DateTime(2000),
+                      lastDate: now,
+                    );
+                    if (from == null || !context.mounted) return;
+                    await runUiAction(context, () async {
+                      await ref
+                          .read(hrZonesProvider.notifier)
+                          .backdate(sport, from);
+                      await ref.read(zoneRecalculationProvider)();
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+      ],
     );
   }
 }
-
-String _sportName(BuildContext context, String sport) => switch (sport) {
-  'cycling' => context.l10n.cycling,
-  'swimming' => context.l10n.swimming,
-  _ => context.l10n.running,
-};
 
 /// The older settings and the zone history held different zones for a
 /// sport: the athlete chooses (neither had a reliable date), with the
@@ -215,8 +310,10 @@ class _ZoneConflictCard extends ConsumerWidget {
       title: Text(label),
       subtitle: Text(zones.join(' · ')),
       trailing: const Icon(Icons.chevron_right, size: 18),
-      onTap: () =>
-          runUiAction(context, () => notifier.resolveConflict(sport, choose)),
+      onTap: () => runUiAction(context, () async {
+        await notifier.resolveConflict(sport, choose);
+        await ref.read(zoneRecalculationProvider)();
+      }),
     );
     return SectionCard(
       key: ValueKey('zone-conflict-$sport'),
@@ -225,7 +322,7 @@ class _ZoneConflictCard extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            l.hrZoneConflictTitle(_sportName(context, sport)),
+            l.hrZoneConflictTitle(zoneSportName(l, sport)),
             style: const TextStyle(
               color: Colors.orange,
               fontWeight: FontWeight.w700,
@@ -252,6 +349,9 @@ class HrZonesPreview extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(hrZonesProvider);
     final maxHr = ref.watch(userProfileProvider).valueOrNull?.maxHrEstimate;
+    final check =
+        state.conflicts.isNotEmpty ||
+        zoneSports.any((sport) => state.check(sport) != null);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -259,7 +359,7 @@ class HrZonesPreview extends ConsumerWidget {
           context.l10n.hrZones2,
           style: TextStyle(color: muted, fontSize: 9, letterSpacing: 1),
         ),
-        if (state.conflicts.isNotEmpty)
+        if (check)
           Padding(
             padding: const EdgeInsets.only(top: 4),
             child: Text(
@@ -268,16 +368,16 @@ class HrZonesPreview extends ConsumerWidget {
             ),
           ),
         const SizedBox(height: 10),
-        for (final bike in [false, true])
+        for (final (sport, icon, color) in const [
+          ('running', Icons.directions_run, Colors.red),
+          ('cycling', Icons.directions_bike, Colors.blue),
+          ('swimming', Icons.pool, Colors.cyan),
+        ])
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 3),
             child: Row(
               children: [
-                Icon(
-                  bike ? Icons.directions_bike : Icons.directions_run,
-                  color: bike ? Colors.blue : Colors.red,
-                  size: 14,
-                ),
+                Icon(icon, color: color, size: 14),
                 const SizedBox(width: 6),
                 for (var i = 0; i < 5; i++)
                   Expanded(
@@ -285,13 +385,7 @@ class HrZonesPreview extends ConsumerWidget {
                       margin: const EdgeInsets.symmetric(horizontal: 2),
                       padding: const EdgeInsets.symmetric(vertical: 7),
                       decoration: BoxDecoration(
-                        color: const [
-                          Colors.blue,
-                          mint,
-                          Colors.yellow,
-                          Colors.orange,
-                          Colors.red,
-                        ][i].withValues(alpha: .18),
+                        color: _zoneColors[i].withValues(alpha: .18),
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: Column(
@@ -301,7 +395,7 @@ class HrZonesPreview extends ConsumerWidget {
                             style: TextStyle(fontSize: 8, color: muted),
                           ),
                           Text(
-                            '${(bike ? state.cycling : state.running).bounds[i]}',
+                            '${state.forSport(sport).bounds[i]}',
                             style: const TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
@@ -309,12 +403,9 @@ class HrZonesPreview extends ConsumerWidget {
                           ),
                           Text(
                             i < 4
-                                ? '${(bike ? state.cycling : state.running).bounds[i + 1] - 1}'
+                                ? '${state.forSport(sport).bounds[i + 1] - 1}'
                                 : maxHr != null &&
-                                      maxHr >
-                                          (bike ? state.cycling : state.running)
-                                              .bounds
-                                              .last
+                                      maxHr > state.forSport(sport).bounds.last
                                 ? '$maxHr'
                                 : '+',
                             style: TextStyle(fontSize: 7, color: muted),

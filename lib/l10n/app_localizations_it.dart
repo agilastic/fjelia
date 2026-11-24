@@ -955,9 +955,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get zoneSourceInitial => 'prime zone';
 
   @override
-  String get hrZoneHistoryTitle => 'Limiti delle zone nel tempo';
-
-  @override
   String hrZoneFarFromEstimate(String sport, String zones) {
     return '$sport: le tue zone si discostano di oltre 10 bpm dalla stima ($zones). Le controlli?';
   }
@@ -968,6 +965,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get hrZoneUseEstimate => 'Usa la stima';
+
+  @override
+  String get zoneChangeStart => 'Cambia data di inizio';
 
   @override
   String get doubleDayOk => 'Doppio allenamento ok';
@@ -9700,6 +9700,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get hrZoneBoundsTitle => 'Zone usate';
+
+  @override
+  String get hrZoneHistoryTitle => 'Limiti delle zone nel tempo';
 
   @override
   String hrZoneSince(String date) {

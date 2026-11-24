@@ -1758,12 +1758,6 @@ abstract class AppLocalizations {
   /// **'first zones'**
   String get zoneSourceInitial;
 
-  /// No description provided for @hrZoneHistoryTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Zone limits over time'**
-  String get hrZoneHistoryTitle;
-
   /// No description provided for @hrZoneFarFromEstimate.
   ///
   /// In en, this message translates to:
@@ -1781,6 +1775,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Use the estimate'**
   String get hrZoneUseEstimate;
+
+  /// No description provided for @zoneChangeStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Change start date'**
+  String get zoneChangeStart;
 
   /// No description provided for @doubleDayOk.
   ///
@@ -16676,6 +16676,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Zones used'**
   String get hrZoneBoundsTitle;
+
+  /// No description provided for @hrZoneHistoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Zone limits over time'**
+  String get hrZoneHistoryTitle;
 
   /// No description provided for @hrZoneSince.
   ///
