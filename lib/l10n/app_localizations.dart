@@ -1656,6 +1656,42 @@ abstract class AppLocalizations {
   /// **'Stop the recording first.'**
   String get wipeRecordingActive;
 
+  /// No description provided for @hrZoneConflictTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{sport}: two different zone sets'**
+  String hrZoneConflictTitle(String sport);
+
+  /// No description provided for @hrZoneConflictBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Fjelia kept your zones in two places, and they differ. Which ones are right? Your choice applies from the start of the zones in use.'**
+  String get hrZoneConflictBody;
+
+  /// No description provided for @hrZoneConflictHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Zone history'**
+  String get hrZoneConflictHistory;
+
+  /// No description provided for @hrZoneConflictSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Earlier settings'**
+  String get hrZoneConflictSettings;
+
+  /// No description provided for @hrZoneConflictEstimate.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimate (Karvonen)'**
+  String get hrZoneConflictEstimate;
+
+  /// No description provided for @hrZoneConflictCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Please check your zones'**
+  String get hrZoneConflictCheck;
+
   /// No description provided for @doubleDayOk.
   ///
   /// In en, this message translates to:

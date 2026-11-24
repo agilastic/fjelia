@@ -901,6 +901,27 @@ class AppLocalizationsNl extends AppLocalizations {
   String get wipeRecordingActive => 'Stop eerst de opname.';
 
   @override
+  String hrZoneConflictTitle(String sport) {
+    return '$sport: twee verschillende zones';
+  }
+
+  @override
+  String get hrZoneConflictBody =>
+      'Fjelia bewaarde je zones op twee plekken en ze verschillen. Welke kloppen? Je keuze geldt vanaf het begin van de huidige zones.';
+
+  @override
+  String get hrZoneConflictHistory => 'Zonegeschiedenis';
+
+  @override
+  String get hrZoneConflictSettings => 'Eerdere instellingen';
+
+  @override
+  String get hrZoneConflictEstimate => 'Schatting (Karvonen)';
+
+  @override
+  String get hrZoneConflictCheck => 'Controleer je zones';
+
+  @override
   String get doubleDayOk => 'Dubbele dag oké';
 
   @override

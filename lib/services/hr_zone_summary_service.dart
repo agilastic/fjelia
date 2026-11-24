@@ -5,6 +5,7 @@ import 'package:drift/drift.dart';
 import 'package:fjelia_service_api/fjelia_service_api.dart';
 
 import '../db/database.dart';
+import 'hr_zone_history.dart';
 import 'hr_zone_model.dart';
 
 /// The time in Z1–Z5 of every workout, computed once and kept (FjeliaPro
@@ -34,23 +35,7 @@ class HrZoneSummaryService {
   static const minBpm = 30.0, maxBpm = 240.0;
 
   /// The zones' sport family of an activity type, or null for none.
-  static String? sportFamily(String type) {
-    final t = type.toLowerCase();
-    if (t.contains('swim')) return 'swimming';
-    if (t.contains('cycl') ||
-        t.contains('bik') ||
-        t.contains('ride') ||
-        t.contains('spin')) {
-      return 'cycling';
-    }
-    if (t.contains('run') || t.contains('hik') || t.contains('walk')) {
-      return 'running';
-    }
-    if (t.contains('strength') || t.contains('yoga') || t.contains('sleep')) {
-      return null;
-    }
-    return 'other';
-  }
+  static String? sportFamily(String type) => zoneFamily(type);
 
   /// Computes the summaries that are missing or from an older algorithm,
   /// then marks duplicates. Returns how many were (re)computed.
@@ -132,28 +117,10 @@ class HrZoneSummaryService {
     List<HrZoneDefinition> all,
     String sport,
     DateTime at,
-  ) {
-    final ofSport = all.where((d) => d.sport == sport).toList()
-      ..sort((a, b) {
-        final c = a.effectiveFrom.compareTo(b.effectiveFrom);
-        return c != 0 ? c : a.id.compareTo(b.id);
-      });
-    if (ofSport.isEmpty) return null;
-    return ofSport.lastWhere(
-      (d) => !d.effectiveFrom.isAfter(at),
-      orElse: () => ofSport.first,
-    );
-  }
+  ) => HrZoneBook(all).definitionAt(sport, at);
 
   /// Five lower bounds, also from the older four upper bounds of Z1–Z4.
-  static List<int>? floorsOf(String json) {
-    try {
-      final v = [for (final x in jsonDecode(json) as List) (x as num).round()];
-      if (v.length >= 5) return v.sublist(0, 5);
-      if (v.length == 4) return [0, v[0] + 1, v[1] + 1, v[2] + 1, v[3] + 1];
-    } catch (_) {}
-    return null;
-  }
+  static List<int>? floorsOf(String json) => zoneFloorsOf(json);
 
   /// Time in Z1–Z5 from [samples] (time, bpm), with the gap policy above.
   static ({List<double> seconds, double covered}) zoneTime(

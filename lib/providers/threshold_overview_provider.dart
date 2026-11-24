@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,6 +14,7 @@ import 'database_provider.dart';
 import 'ftp_provider.dart';
 import 'hr_zone_sync_provider.dart';
 import 'hr_zones_provider.dart';
+import '../services/hr_zone_history.dart' show ZoneMethod;
 import 'lt1_drift_provider.dart';
 import 'lt2_tt_provider.dart';
 import 'planner_providers.dart';
@@ -291,14 +290,10 @@ class ThresholdActions {
     await zones.loaded;
     switch (c.kind) {
       case ThresholdKind.lt1:
+        // The zone history keeps the athlete thresholds' copy.
         await zones.applyLt1Ceiling(c.value);
         await service.save(
-          AthleteThresholdsCompanion(
-            runHrZonesJson: Value(
-              jsonEncode(ref.read(hrZonesProvider).running.bounds),
-            ),
-            lastUpdatedAt: Value(DateTime.now()),
-          ),
+          AthleteThresholdsCompanion(lastUpdatedAt: Value(DateTime.now())),
         );
       case ThresholdKind.lt2:
         // New zones from LTHR move the top of zone 2; an LT1 the athlete
@@ -319,19 +314,17 @@ class ThresholdActions {
             thresholdPaceMps: pace != null && pace > 0
                 ? Value(1000 / pace)
                 : const Value.absent(),
-            runHrZonesJson: Value(
-              jsonEncode(ref.read(hrZonesProvider).running.bounds),
-            ),
             lastUpdatedAt: Value(DateTime.now()),
           ),
         );
       case ThresholdKind.lt2Bike:
-        final floors = lthrZoneFloors(c.value, cycling: true);
-        await zones.saveCycling(HrZones(floors));
+        await zones.saveCycling(
+          HrZones(lthrZoneFloors(c.value, cycling: true)),
+          method: ZoneMethod.lt2Bike,
+        );
         await service.save(
           AthleteThresholdsCompanion(
             thresholdHrCyclingBpm: Value(c.value),
-            bikeHrZonesJson: Value(jsonEncode(floors)),
             lastUpdatedAt: Value(DateTime.now()),
           ),
         );

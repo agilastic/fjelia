@@ -888,6 +888,27 @@ class AppLocalizationsDa extends AppLocalizations {
   String get wipeRecordingActive => 'Stop optagelsen først.';
 
   @override
+  String hrZoneConflictTitle(String sport) {
+    return '$sport: to forskellige zonesæt';
+  }
+
+  @override
+  String get hrZoneConflictBody =>
+      'Fjelia havde gemt dine zoner to steder, og de er forskellige. Hvilke er rigtige? Dit valg gælder fra starten af de nuværende zoner.';
+
+  @override
+  String get hrZoneConflictHistory => 'Zonehistorik';
+
+  @override
+  String get hrZoneConflictSettings => 'Tidligere indstillinger';
+
+  @override
+  String get hrZoneConflictEstimate => 'Skøn (Karvonen)';
+
+  @override
+  String get hrZoneConflictCheck => 'Tjek dine zoner';
+
+  @override
   String get doubleDayOk => 'Dobbeltdag ok';
 
   @override

@@ -889,6 +889,27 @@ class AppLocalizationsNb extends AppLocalizations {
   String get wipeRecordingActive => 'Stopp opptaket først.';
 
   @override
+  String hrZoneConflictTitle(String sport) {
+    return '$sport: to ulike sett med soner';
+  }
+
+  @override
+  String get hrZoneConflictBody =>
+      'Fjelia hadde lagret sonene dine to steder, og de er ulike. Hvilke stemmer? Valget ditt gjelder fra starten av de nåværende sonene.';
+
+  @override
+  String get hrZoneConflictHistory => 'Sonehistorikk';
+
+  @override
+  String get hrZoneConflictSettings => 'Tidligere innstillinger';
+
+  @override
+  String get hrZoneConflictEstimate => 'Anslag (Karvonen)';
+
+  @override
+  String get hrZoneConflictCheck => 'Sjekk sonene dine';
+
+  @override
   String get doubleDayOk => 'Dobbeltdag ok';
 
   @override

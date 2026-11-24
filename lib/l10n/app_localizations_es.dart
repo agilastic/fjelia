@@ -903,6 +903,27 @@ class AppLocalizationsEs extends AppLocalizations {
   String get wipeRecordingActive => 'Detén primero la grabación.';
 
   @override
+  String hrZoneConflictTitle(String sport) {
+    return '$sport: dos juegos de zonas distintos';
+  }
+
+  @override
+  String get hrZoneConflictBody =>
+      'Fjelia guardaba tus zonas en dos sitios y no coinciden. ¿Cuáles son las correctas? Tu elección se aplica desde el inicio de las zonas actuales.';
+
+  @override
+  String get hrZoneConflictHistory => 'Historial de zonas';
+
+  @override
+  String get hrZoneConflictSettings => 'Ajustes anteriores';
+
+  @override
+  String get hrZoneConflictEstimate => 'Estimación (Karvonen)';
+
+  @override
+  String get hrZoneConflictCheck => 'Revisa tus zonas';
+
+  @override
   String get doubleDayOk => 'Día doble ok';
 
   @override

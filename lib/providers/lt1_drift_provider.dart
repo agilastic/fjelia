@@ -52,7 +52,9 @@ class Lt1DriftNotifier extends StateNotifier<AsyncValue<Lt1DriftResult?>> {
           source: 'drift',
           lt1Bpm: result.lt1,
         );
-    await _ref.read(hrZonesProvider.notifier).applyLt1Ceiling(result.lt1);
+    await _ref
+        .read(hrZonesProvider.notifier)
+        .applyLt1Ceiling(result.lt1, from: activity.startDate);
     // The athlete ran the test on purpose: a device sync must not undo it.
     await const ThresholdChoiceStore().markApplied(
       ThresholdCandidate(

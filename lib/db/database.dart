@@ -535,9 +535,9 @@ class Absences extends Table {
 }
 
 /// Heart-rate zone boundaries of one sport as they were in force from
-/// [effectiveFrom] on (FjeliaPro zone trends). A trigger on
-/// athlete_thresholds adds a row whenever the zones change, so a workout's
-/// time in zones keeps the zones it was recorded under.
+/// [effectiveFrom] on: the single source of the athlete's zones
+/// (HrZoneHistory writes it). A workout is measured with the zones of its
+/// day, so a later change does not rewrite it.
 class HrZoneDefinitions extends Table {
   IntColumn get id => integer().autoIncrement()();
 
@@ -548,9 +548,10 @@ class HrZoneDefinitions extends Table {
   /// of Z1–Z4), in [unit].
   TextColumn get floorsJson => text()();
 
-  /// How the boundaries came about: `settings` (the athlete's zones in
-  /// Fjelia, threshold- or device-based) or `initial` (the zones in force
-  /// when the history began, applied to every earlier workout).
+  /// How the boundaries came about (ZoneMethod): `manual`, `device`,
+  /// `lt1`, `lt2`, `lt2_bike`, `derived` (from the running zones),
+  /// `estimate` (Karvonen), `resolved`, `initial` (in force when the history
+  /// began, applied to every earlier workout) or the older `settings`.
   TextColumn get method => text()();
   TextColumn get unit => text().withDefault(const Constant('bpm'))();
   TextColumn get source => text()();
@@ -3592,47 +3593,15 @@ class AppDatabase extends _$AppDatabase {
     },
   );
 
-  /// Keeps a history of the athlete's heart-rate zones per sport (FjeliaPro
-  /// zone trends): the zones in force today become the first definition,
-  /// applied to every earlier workout, and every later change, from any of
-  /// the places that write zones, a new one from that moment on.
+  /// The heart-rate zone history (hr_zone_definitions) is written by
+  /// HrZoneHistory alone. Earlier versions added a row from triggers on
+  /// athlete_thresholds; that copy now follows the history, so the triggers
+  /// would record every change twice.
   Future<void> _recordHrZoneDefinitions() async {
-    for (final (sport, column) in const [
-      ('running', 'run_hr_zones_json'),
-      ('cycling', 'bike_hr_zones_json'),
-      ('swimming', 'swim_hr_zones_json'),
-    ]) {
-      const latest =
-          '(SELECT floors_json FROM hr_zone_definitions WHERE sport = ? '
-          'ORDER BY effective_from DESC, id DESC LIMIT 1)';
-      await customStatement(
-        'INSERT INTO hr_zone_definitions '
-        '(sport, floors_json, method, unit, source, effective_from) '
-        "SELECT ?, $column, 'initial', 'bpm', 'athlete_thresholds', 0 "
-        'FROM athlete_thresholds WHERE $column IS NOT NULL AND NOT EXISTS '
-        '(SELECT 1 FROM hr_zone_definitions WHERE sport = ?) LIMIT 1',
-        [sport, sport],
-      );
-      final changed =
-          "NEW.$column IS NOT NULL AND NEW.$column IS NOT "
-          "${latest.replaceFirst('?', "'$sport'")}";
-      // The first zones of a sport apply to every earlier workout too; a
-      // change applies from the moment it is made.
-      const first =
-          'NOT EXISTS (SELECT 1 FROM hr_zone_definitions WHERE sport = ';
-      final insert =
-          'INSERT INTO hr_zone_definitions '
-          '(sport, floors_json, method, unit, source, effective_from) '
-          "SELECT '$sport', NEW.$column, "
-          "CASE WHEN $first'$sport') THEN 'initial' ELSE 'settings' END, "
-          "'bpm', 'athlete_thresholds', "
-          "CASE WHEN $first'$sport') THEN 0 "
-          "ELSE CAST(strftime('%s', 'now') AS INTEGER) END; END";
-      for (final event in ['INSERT', 'UPDATE OF $column']) {
+    for (final sport in const ['running', 'cycling', 'swimming']) {
+      for (final event in const ['insert', 'update']) {
         await customStatement(
-          'CREATE TRIGGER IF NOT EXISTS '
-          'trg_hr_zones_${sport}_${event.startsWith('INSERT') ? 'insert' : 'update'} '
-          'AFTER $event ON athlete_thresholds WHEN $changed BEGIN $insert',
+          'DROP TRIGGER IF EXISTS trg_hr_zones_${sport}_$event',
         );
       }
     }

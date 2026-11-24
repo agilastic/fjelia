@@ -899,6 +899,27 @@ class AppLocalizationsFi extends AppLocalizations {
   String get wipeRecordingActive => 'Lopeta ensin tallennus.';
 
   @override
+  String hrZoneConflictTitle(String sport) {
+    return '$sport: kaksi erilaista vyöhykettä';
+  }
+
+  @override
+  String get hrZoneConflictBody =>
+      'Fjelia oli tallentanut vyöhykkeesi kahteen paikkaan, ja ne eroavat. Kumpi on oikea? Valintasi on voimassa nykyisten vyöhykkeiden alusta.';
+
+  @override
+  String get hrZoneConflictHistory => 'Vyöhykehistoria';
+
+  @override
+  String get hrZoneConflictSettings => 'Aiemmat asetukset';
+
+  @override
+  String get hrZoneConflictEstimate => 'Arvio (Karvonen)';
+
+  @override
+  String get hrZoneConflictCheck => 'Tarkista vyöhykkeesi';
+
+  @override
   String get doubleDayOk => 'Tuplapäivä ok';
 
   @override

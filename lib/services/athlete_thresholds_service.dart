@@ -37,7 +37,9 @@ class AthleteThresholdsService {
   }
 
   /// Creates the row from the latest detected thresholds when none exists.
-  Future<void> seedFromExistingData({int? maxHr, List<int>? runZoneFloors}) async {
+  /// The zones are not seeded here: the zone history keeps them (it once
+  /// copied the running zones into the cycling ones).
+  Future<void> seedFromExistingData({int? maxHr}) async {
     if (await get() != null) return;
     final latest = await (_db.select(_db.thresholdRecords)
           ..orderBy([(t) => OrderingTerm.desc(t.date)])
@@ -52,10 +54,6 @@ class AthleteThresholdsService {
             thresholdPaceMps: Value(
                 lt2Pace != null && lt2Pace > 0 ? 1000.0 / lt2Pace : null),
             ftpWatts: Value(latest?.ftpWatts),
-            runHrZonesJson: Value(
-                runZoneFloors != null ? jsonEncode(runZoneFloors) : null),
-            bikeHrZonesJson: Value(
-                runZoneFloors != null ? jsonEncode(runZoneFloors) : null),
             lastUpdatedAt: Value(DateTime.now()),
           ),
         );

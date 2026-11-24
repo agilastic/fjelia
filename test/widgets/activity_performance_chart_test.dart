@@ -1,3 +1,4 @@
+import 'package:fjelia/providers/hr_zones_provider.dart';
 import 'package:fjelia/l10n/app_localizations.dart';
 
 import 'dart:io';
@@ -75,6 +76,8 @@ void main() {
     final key = GlobalKey();
     await tester.pumpWidget(
       ProviderScope(
+        // Default zones, no database.
+        overrides: [hrZonesProvider.overrideWith((ref) => HrZonesNotifier())],
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
@@ -142,6 +145,8 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
     await tester.pumpWidget(
       ProviderScope(
+        // Default zones, no database.
+        overrides: [hrZonesProvider.overrideWith((ref) => HrZonesNotifier())],
         child: MaterialApp(
           locale: const Locale('de'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -181,6 +186,8 @@ void main() {
     );
     await tester.pumpWidget(
       ProviderScope(
+        // Default zones, no database.
+        overrides: [hrZonesProvider.overrideWith((ref) => HrZonesNotifier())],
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,

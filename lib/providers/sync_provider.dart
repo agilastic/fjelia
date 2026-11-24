@@ -30,7 +30,7 @@ import 'gym_treadmill_provider.dart';
 import 'heat_acclimation_provider.dart';
 import 'hilo_sync_provider.dart';
 import 'hr_zone_sync_provider.dart';
-import 'hr_zones_provider.dart';
+import '../services/hr_zone_history.dart';
 import 'hrv_reminder_provider.dart';
 import 'missed_workout_provider.dart';
 import '../services/vitals_retention.dart';
@@ -1077,10 +1077,11 @@ class HistoricSyncNotifier extends StateNotifier<HistoricSyncState> {
         log('[HistoricSync] HR zone sync error: $e');
       }
       try {
-        final zones = _ref.read(hrZonesProvider);
         await _ref
             .read(athleteThresholdsServiceProvider)
-            .seedFromExistingData(runZoneFloors: zones.running.bounds);
+            .seedFromExistingData();
+        // The zone history keeps the thresholds' copy of the zones.
+        await HrZoneHistory(_ref.read(databaseProvider)).mirror();
       } catch (e) {
         log('[HistoricSync] threshold seed error: $e');
       }

@@ -905,6 +905,27 @@ class AppLocalizationsCa extends AppLocalizations {
   String get wipeRecordingActive => 'Primer atura l’enregistrament.';
 
   @override
+  String hrZoneConflictTitle(String sport) {
+    return '$sport: dues zones diferents';
+  }
+
+  @override
+  String get hrZoneConflictBody =>
+      'Fjelia tenia les teves zones desades en dos llocs i són diferents. Quines són correctes? La teva tria s’aplica des de l’inici de les zones actuals.';
+
+  @override
+  String get hrZoneConflictHistory => 'Historial de zones';
+
+  @override
+  String get hrZoneConflictSettings => 'Configuració anterior';
+
+  @override
+  String get hrZoneConflictEstimate => 'Estimació (Karvonen)';
+
+  @override
+  String get hrZoneConflictCheck => 'Revisa les teves zones';
+
+  @override
   String get doubleDayOk => 'Dia doble ok';
 
   @override

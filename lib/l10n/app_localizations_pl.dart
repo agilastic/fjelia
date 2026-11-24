@@ -907,6 +907,27 @@ class AppLocalizationsPl extends AppLocalizations {
   String get wipeRecordingActive => 'Najpierw zatrzymaj nagrywanie.';
 
   @override
+  String hrZoneConflictTitle(String sport) {
+    return '$sport: dwa różne zestawy stref';
+  }
+
+  @override
+  String get hrZoneConflictBody =>
+      'Fjelia przechowywała twoje strefy w dwóch miejscach i się różnią. Które są właściwe? Twój wybór obowiązuje od początku obecnych stref.';
+
+  @override
+  String get hrZoneConflictHistory => 'Historia stref';
+
+  @override
+  String get hrZoneConflictSettings => 'Wcześniejsze ustawienia';
+
+  @override
+  String get hrZoneConflictEstimate => 'Szacunek (Karvonen)';
+
+  @override
+  String get hrZoneConflictCheck => 'Sprawdź swoje strefy';
+
+  @override
   String get doubleDayOk => 'Podwójny dzień OK';
 
   @override

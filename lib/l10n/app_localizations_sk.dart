@@ -905,6 +905,27 @@ class AppLocalizationsSk extends AppLocalizations {
   String get wipeRecordingActive => 'Najprv zastav nahrávanie.';
 
   @override
+  String hrZoneConflictTitle(String sport) {
+    return '$sport: dve rôzne sady zón';
+  }
+
+  @override
+  String get hrZoneConflictBody =>
+      'Fjelia mala tvoje zóny uložené na dvoch miestach a líšia sa. Ktoré sú správne? Tvoja voľba platí od začiatku aktuálnych zón.';
+
+  @override
+  String get hrZoneConflictHistory => 'História zón';
+
+  @override
+  String get hrZoneConflictSettings => 'Predchádzajúce nastavenia';
+
+  @override
+  String get hrZoneConflictEstimate => 'Odhad (Karvonen)';
+
+  @override
+  String get hrZoneConflictCheck => 'Skontroluj si zóny';
+
+  @override
   String get doubleDayOk => 'Dvojitý deň ok';
 
   @override

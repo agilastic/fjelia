@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
+import 'package:fjelia/services/hr_zone_history.dart';
 import 'package:fjelia/services/hr_zone_summary_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -17,14 +18,18 @@ void main() {
   });
   tearDown(() => db.close());
 
-  Future<void> setZones(List<int> running) => db
-      .into(db.athleteThresholds)
-      .insertOnConflictUpdate(
-        AthleteThresholdsCompanion.insert(
-          athleteId: 'self',
-          runHrZonesJson: Value(jsonEncode(running)),
-        ),
-      );
+  /// The athlete's running zones: the first ones for every earlier
+  /// workout, later ones from now on.
+  Future<void> setZones(List<int> running) async {
+    final history = HrZoneHistory(db);
+    final first = (await history.book()).isEmpty;
+    await history.record(
+      'running',
+      running,
+      method: first ? ZoneMethod.initial : ZoneMethod.manual,
+      from: first ? DateTime.fromMillisecondsSinceEpoch(0) : null,
+    );
+  }
 
   /// A run with one sample every [every] seconds at [bpm] for [minutes].
   Future<void> run(
@@ -74,8 +79,8 @@ void main() {
       expect(w['a']!.zoneSeconds[2], closeTo(3600, 5));
       expect(w['b']!.zoneSeconds[3], closeTo(3600, 5));
       expect(w['a']!.definitionId, isNot(w['b']!.definitionId));
-      final definitions = await db.select(db.hrZoneDefinitions).get();
-      expect([for (final d in definitions) d.method], ['initial', 'settings']);
+      final running = (await HrZoneHistory(db).book()).of('running');
+      expect([for (final d in running) d.method], ['initial', 'manual']);
     },
   );
 

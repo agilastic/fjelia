@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -60,19 +58,20 @@ class Lt2TtNotifier extends StateNotifier<AsyncValue<Lt2TtResult?>> {
           lt2Bpm: result.lt2,
           lt2PaceSec: result.paceSec,
         );
+    // The zones of the test's day on: workouts since then are measured
+    // with them.
     final zones = _ref.read(hrZonesProvider.notifier);
-    await zones.applyFromLt2Hr(result.lt2);
+    await zones.applyFromLt2Hr(result.lt2, from: activity.startDate);
     final lt1 = _ref.read(lt1Provider);
-    if (lt1 != null) await zones.applyLt1Ceiling(lt1.bpm);
+    if (lt1 != null) {
+      await zones.applyLt1Ceiling(lt1.bpm, from: activity.startDate);
+    }
     // The app-detected threshold now takes precedence over Garmin's LTHR.
     final thresholds = _ref.read(athleteThresholdsServiceProvider);
     if (!((await thresholds.get())?.coachLocked ?? false)) {
       await thresholds.save(
         AthleteThresholdsCompanion(
           thresholdHrBpm: Value(result.lt2),
-          runHrZonesJson: Value(
-            jsonEncode(_ref.read(hrZonesProvider).running.bounds),
-          ),
           lastUpdatedAt: Value(DateTime.now()),
         ),
       );
