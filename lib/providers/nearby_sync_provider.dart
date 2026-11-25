@@ -9,6 +9,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../services/bonjour_peer_locator.dart';
 import 'database_provider.dart';
+import 'day_data_provider.dart'
+    show fullSyncListenerProvider, syncStatusListenerProvider;
 import 'sync_provider.dart' show waitForSyncToSettle;
 
 /// Settings → System → Computers: this phone pairs with Fjelia on a Mac or
@@ -48,8 +50,9 @@ class NearbySyncing extends NearbySyncStatus {
 }
 
 class NearbySynced extends NearbySyncStatus {
-  const NearbySynced(this.sent);
+  const NearbySynced(this.sent, this.received);
   final int sent;
+  final int received;
 }
 
 class NearbySyncFailed extends NearbySyncStatus {
@@ -92,11 +95,16 @@ class NearbySyncNotifier extends Notifier<Map<String, NearbySyncStatus>> {
     if (state[peer.deviceId] is NearbySyncing) return;
     _set(peer.deviceId, const NearbySyncing(0));
     try {
-      final sent = await (await _client()).push(
+      final result = await (await _client()).sync(
         peer,
         onPage: (sent) => _set(peer.deviceId, NearbySyncing(sent)),
       );
-      _set(peer.deviceId, NearbySynced(sent));
+      _set(peer.deviceId, NearbySynced(result.sent, result.received));
+      if (result.received > 0) {
+        // Edits made on the computer: the screens read again.
+        ref.read(syncStatusListenerProvider.notifier).state++;
+        ref.read(fullSyncListenerProvider.notifier).state++;
+      }
     } on Object catch (e) {
       log('[NearbySync] sync with ${peer.name} failed: $e');
       _set(peer.deviceId, NearbySyncFailed(_problem(e)));

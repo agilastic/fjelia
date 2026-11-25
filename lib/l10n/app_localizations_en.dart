@@ -9962,4 +9962,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get syncNoComputers => 'No computer paired yet.';
+
+  @override
+  String syncDoneBoth(int sent, int received) {
+    return 'Up to date · $sent sent, $received received';
+  }
 }

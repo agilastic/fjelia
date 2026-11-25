@@ -9961,4 +9961,9 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get syncNoComputers => 'Ingen datamaskin tilkoblet ennå.';
+
+  @override
+  String syncDoneBoth(int sent, int received) {
+    return 'Oppdatert · $sent sendt, $received mottatt';
+  }
 }

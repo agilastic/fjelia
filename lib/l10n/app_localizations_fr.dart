@@ -10050,4 +10050,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get syncNoComputers => 'Aucun ordinateur jumelé pour l\'instant.';
+
+  @override
+  String syncDoneBoth(int sent, int received) {
+    return 'À jour · $sent envoyées, $received reçues';
+  }
 }

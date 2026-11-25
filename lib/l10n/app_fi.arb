@@ -4389,5 +4389,6 @@
   "syncCodeExpired": "Koodi ei ole enää voimassa. Näytä uusi koodi tietokoneella.",
   "syncUpdateBoth": "Päivitä Fjelia molempiin laitteisiin ja synkronoi uudelleen.",
   "syncPairAgain": "Tietokone ei enää tunnista tätä puhelinta. Muodosta pari uudelleen.",
-  "syncNoComputers": "Ei vielä paritettua tietokonetta."
+  "syncNoComputers": "Ei vielä paritettua tietokonetta.",
+  "syncDoneBoth": "Ajan tasalla · {sent} lähetetty, {received} vastaanotettu"
 }

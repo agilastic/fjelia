@@ -10040,4 +10040,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get syncNoComputers => 'Ainda não há nenhum computador emparelhado.';
+
+  @override
+  String syncDoneBoth(int sent, int received) {
+    return 'Atualizado · $sent enviadas, $received recebidas';
+  }
 }

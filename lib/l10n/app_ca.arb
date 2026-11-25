@@ -4389,5 +4389,6 @@
   "syncCodeExpired": "Aquest codi ja no és vàlid. Mostra un codi nou a l'ordinador.",
   "syncUpdateBoth": "Actualitza Fjelia als dos dispositius i torna a sincronitzar.",
   "syncPairAgain": "L'ordinador ja no reconeix aquest telèfon. Torna'l a vincular.",
-  "syncNoComputers": "Encara no hi ha cap ordinador vinculat."
+  "syncNoComputers": "Encara no hi ha cap ordinador vinculat.",
+  "syncDoneBoth": "Al dia · {sent} enviats, {received} rebuts"
 }

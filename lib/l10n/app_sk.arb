@@ -4389,5 +4389,6 @@
   "syncCodeExpired": "Tento kód už nie je platný. Zobraz v počítači nový kód.",
   "syncUpdateBoth": "Aktualizuj Fjeliu na oboch zariadeniach a synchronizuj znova.",
   "syncPairAgain": "Počítač už tento telefón nepozná. Spáruj ho znova.",
-  "syncNoComputers": "Zatiaľ nie je spárovaný žiadny počítač."
+  "syncNoComputers": "Zatiaľ nie je spárovaný žiadny počítač.",
+  "syncDoneBoth": "Aktuálne · odoslané: {sent}, prijaté: {received}"
 }

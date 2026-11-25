@@ -17210,6 +17210,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No computer paired yet.'**
   String get syncNoComputers;
+
+  /// No description provided for @syncDoneBoth.
+  ///
+  /// In en, this message translates to:
+  /// **'Up to date · {sent} sent, {received} received'**
+  String syncDoneBoth(int sent, int received);
 }
 
 class _AppLocalizationsDelegate

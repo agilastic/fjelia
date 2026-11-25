@@ -10032,4 +10032,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get syncNoComputers => 'Nog geen computer gekoppeld.';
+
+  @override
+  String syncDoneBoth(int sent, int received) {
+    return 'Bijgewerkt · $sent verstuurd, $received ontvangen';
+  }
 }

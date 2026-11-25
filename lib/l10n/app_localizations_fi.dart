@@ -9997,4 +9997,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get syncNoComputers => 'Ei vielä paritettua tietokonetta.';
+
+  @override
+  String syncDoneBoth(int sent, int received) {
+    return 'Ajan tasalla · $sent lähetetty, $received vastaanotettu';
+  }
 }

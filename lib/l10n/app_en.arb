@@ -5652,5 +5652,7 @@
   "syncCodeExpired": "This code is no longer valid. Show a new code on the computer.",
   "syncUpdateBoth": "Update Fjelia on both devices, then sync again.",
   "syncPairAgain": "The computer no longer knows this phone. Pair it again.",
-  "syncNoComputers": "No computer paired yet."
+  "syncNoComputers": "No computer paired yet.",
+  "syncDoneBoth": "Up to date · {sent} sent, {received} received",
+  "@syncDoneBoth": {"placeholders": {"sent": {"type": "int"}, "received": {"type": "int"}}}
 }

@@ -10035,4 +10035,9 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get syncNoComputers => 'Encara no hi ha cap ordinador vinculat.';
+
+  @override
+  String syncDoneBoth(int sent, int received) {
+    return 'Al dia · $sent enviats, $received rebuts';
+  }
 }

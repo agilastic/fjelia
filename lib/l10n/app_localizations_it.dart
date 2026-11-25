@@ -10020,4 +10020,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get syncNoComputers => 'Nessun computer abbinato.';
+
+  @override
+  String syncDoneBoth(int sent, int received) {
+    return 'Aggiornato · $sent inviate, $received ricevute';
+  }
 }

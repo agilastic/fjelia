@@ -10006,4 +10006,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get syncNoComputers => 'Zatiaľ nie je spárovaný žiadny počítač.';
+
+  @override
+  String syncDoneBoth(int sent, int received) {
+    return 'Aktuálne · odoslané: $sent, prijaté: $received';
+  }
 }

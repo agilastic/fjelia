@@ -52,7 +52,11 @@ class ComputersPage extends ConsumerWidget {
       switch (s) {
         null => null,
         NearbySyncing(:final sent) => Text(l10n.syncInProgress(sent)),
-        NearbySynced(:final sent) => Text(l10n.syncDone(sent)),
+        NearbySynced(:final sent, :final received) => Text(
+          received == 0
+              ? l10n.syncDone(sent)
+              : l10n.syncDoneBoth(sent, received),
+        ),
         NearbySyncFailed(:final problem) => Text(
           problemText(l10n, problem),
           style: const TextStyle(color: Colors.red),

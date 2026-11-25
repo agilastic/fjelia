@@ -4389,5 +4389,6 @@
   "syncCodeExpired": "Koden er ikke længere gyldig. Vis en ny kode på computeren.",
   "syncUpdateBoth": "Opdater Fjelia på begge enheder, og synkroniser igen.",
   "syncPairAgain": "Computeren kender ikke længere denne telefon. Par den igen.",
-  "syncNoComputers": "Ingen computer parret endnu."
+  "syncNoComputers": "Ingen computer parret endnu.",
+  "syncDoneBoth": "Opdateret · {sent} sendt, {received} modtaget"
 }

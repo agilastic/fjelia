@@ -5552,5 +5552,6 @@
   "syncCodeExpired": "Ten kod jest już nieważny. Wyświetl nowy kod na komputerze.",
   "syncUpdateBoth": "Zaktualizuj Fjelię na obu urządzeniach i zsynchronizuj ponownie.",
   "syncPairAgain": "Komputer nie rozpoznaje już tego telefonu. Sparuj go ponownie.",
-  "syncNoComputers": "Brak sparowanego komputera."
+  "syncNoComputers": "Brak sparowanego komputera.",
+  "syncDoneBoth": "Aktualne · wysłano: {sent}, odebrano: {received}"
 }

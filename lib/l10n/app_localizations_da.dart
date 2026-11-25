@@ -9955,4 +9955,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get syncNoComputers => 'Ingen computer parret endnu.';
+
+  @override
+  String syncDoneBoth(int sent, int received) {
+    return 'Opdateret · $sent sendt, $received modtaget';
+  }
 }

@@ -10062,4 +10062,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get syncNoComputers => 'Brak sparowanego komputera.';
+
+  @override
+  String syncDoneBoth(int sent, int received) {
+    return 'Aktualne · wysłano: $sent, odebrano: $received';
+  }
 }

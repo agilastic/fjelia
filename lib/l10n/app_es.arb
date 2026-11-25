@@ -4389,5 +4389,6 @@
   "syncCodeExpired": "Este código ya no es válido. Muestra un código nuevo en el ordenador.",
   "syncUpdateBoth": "Actualiza Fjelia en ambos dispositivos y vuelve a sincronizar.",
   "syncPairAgain": "El ordenador ya no reconoce este teléfono. Vuelve a enlazarlo.",
-  "syncNoComputers": "Aún no hay ningún ordenador enlazado."
+  "syncNoComputers": "Aún no hay ningún ordenador enlazado.",
+  "syncDoneBoth": "Al día · {sent} enviados, {received} recibidos"
 }
