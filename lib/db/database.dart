@@ -255,8 +255,12 @@ class SpotHrvMeasurements extends Table {
   IntColumn get revision => integer().withDefault(const Constant(0))();
 }
 
+/// Lets fjelia_core read a recording through [EcgRecordingView].
+abstract class EcgRecordingBase extends DataClass implements EcgRecordingView {}
+
 /// ECG is kept apart from daily recovery summaries. Waveforms never become
 /// recovery scores or AI context merely because a recording was saved.
+@DataClassName('EcgRecording', extending: EcgRecordingBase)
 class EcgRecordings extends Table {
   TextColumn get recordingId => text()();
   DateTimeColumn get recordedAt => dateTime()();

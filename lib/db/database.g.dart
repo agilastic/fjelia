@@ -19825,7 +19825,8 @@ class $EcgRecordingsTable extends EcgRecordings
   }
 }
 
-class EcgRecording extends DataClass implements Insertable<EcgRecording> {
+class EcgRecording extends EcgRecordingBase
+    implements Insertable<EcgRecording> {
   final String recordingId;
   final DateTime recordedAt;
   final String source;
@@ -19842,7 +19843,7 @@ class EcgRecording extends DataClass implements Insertable<EcgRecording> {
   final String? originalFileName;
   final String? originalBase64;
   final String? note;
-  const EcgRecording({
+  EcgRecording({
     required this.recordingId,
     required this.recordedAt,
     required this.source,

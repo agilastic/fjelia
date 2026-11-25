@@ -11,7 +11,7 @@ import '../providers/hr_zone_trends_provider.dart';
 import 'fjelia_edition.dart';
 import 'hr_zone_summary_service.dart';
 import 'package:fjelia_core/services/bio_age_service.dart';
-import 'hrv/hrv_ai_context_builder.dart';
+import 'package:fjelia_core/services/hrv/hrv_ai_context_builder.dart';
 import 'hrv/hrv_training_service.dart';
 import 'package:fjelia_core/services/ai_data_status.dart';
 import 'package:fjelia_core/services/ai_metric_analysis.dart';

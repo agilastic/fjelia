@@ -6,7 +6,7 @@ import 'package:drift/drift.dart';
 import '../db/database.dart';
 import '../providers/training_load_provider.dart' show effectiveLoad;
 import 'dfa_alpha1_service.dart';
-import 'hrv/hrv_ai_context_builder.dart';
+import 'package:fjelia_core/services/hrv/hrv_ai_context_builder.dart';
 import 'package:fjelia_core/services/hrv/hrv_comparison_service.dart';
 import 'hrv/hrv_training_service.dart';
 
