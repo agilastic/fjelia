@@ -10011,4 +10011,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String syncDoneBoth(int sent, int received) {
     return 'Aktuálne · odoslané: $sent, prijaté: $received';
   }
+
+  @override
+  String get thresholdSourceLab => 'Laboratórny test';
 }

@@ -4390,5 +4390,6 @@
   "syncUpdateBoth": "Actualitza Fjelia als dos dispositius i torna a sincronitzar.",
   "syncPairAgain": "L'ordinador ja no reconeix aquest telèfon. Torna'l a vincular.",
   "syncNoComputers": "Encara no hi ha cap ordinador vinculat.",
-  "syncDoneBoth": "Al dia · {sent} enviats, {received} rebuts"
+  "syncDoneBoth": "Al dia · {sent} enviats, {received} rebuts",
+  "thresholdSourceLab": "Prova de laboratori"
 }

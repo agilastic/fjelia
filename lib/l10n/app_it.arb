@@ -4390,5 +4390,6 @@
   "syncUpdateBoth": "Aggiorna Fjelia su entrambi i dispositivi, poi sincronizza di nuovo.",
   "syncPairAgain": "Il computer non riconosce più questo telefono. Abbinalo di nuovo.",
   "syncNoComputers": "Nessun computer abbinato.",
-  "syncDoneBoth": "Aggiornato · {sent} inviate, {received} ricevute"
+  "syncDoneBoth": "Aggiornato · {sent} inviate, {received} ricevute",
+  "thresholdSourceLab": "Test di laboratorio"
 }

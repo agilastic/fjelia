@@ -9966,4 +9966,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String syncDoneBoth(int sent, int received) {
     return 'Oppdatert · $sent sendt, $received mottatt';
   }
+
+  @override
+  String get thresholdSourceLab => 'Laboratorietest';
 }

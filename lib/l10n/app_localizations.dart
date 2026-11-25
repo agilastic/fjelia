@@ -17216,6 +17216,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Up to date · {sent} sent, {received} received'**
   String syncDoneBoth(int sent, int received);
+
+  /// No description provided for @thresholdSourceLab.
+  ///
+  /// In en, this message translates to:
+  /// **'Lab test'**
+  String get thresholdSourceLab;
 }
 
 class _AppLocalizationsDelegate

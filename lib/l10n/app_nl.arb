@@ -5553,5 +5553,6 @@
   "syncUpdateBoth": "Werk Fjelia op beide apparaten bij en synchroniseer opnieuw.",
   "syncPairAgain": "De computer kent deze telefoon niet meer. Koppel hem opnieuw.",
   "syncNoComputers": "Nog geen computer gekoppeld.",
-  "syncDoneBoth": "Bijgewerkt · {sent} verstuurd, {received} ontvangen"
+  "syncDoneBoth": "Bijgewerkt · {sent} verstuurd, {received} ontvangen",
+  "thresholdSourceLab": "Labtest"
 }

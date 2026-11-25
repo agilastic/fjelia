@@ -5654,5 +5654,6 @@
   "syncPairAgain": "The computer no longer knows this phone. Pair it again.",
   "syncNoComputers": "No computer paired yet.",
   "syncDoneBoth": "Up to date · {sent} sent, {received} received",
-  "@syncDoneBoth": {"placeholders": {"sent": {"type": "int"}, "received": {"type": "int"}}}
+  "@syncDoneBoth": {"placeholders": {"sent": {"type": "int"}, "received": {"type": "int"}}},
+  "thresholdSourceLab": "Lab test"
 }

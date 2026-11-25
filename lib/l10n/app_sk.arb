@@ -4390,5 +4390,6 @@
   "syncUpdateBoth": "Aktualizuj Fjeliu na oboch zariadeniach a synchronizuj znova.",
   "syncPairAgain": "Počítač už tento telefón nepozná. Spáruj ho znova.",
   "syncNoComputers": "Zatiaľ nie je spárovaný žiadny počítač.",
-  "syncDoneBoth": "Aktuálne · odoslané: {sent}, prijaté: {received}"
+  "syncDoneBoth": "Aktuálne · odoslané: {sent}, prijaté: {received}",
+  "thresholdSourceLab": "Laboratórny test"
 }

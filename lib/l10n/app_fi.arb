@@ -4390,5 +4390,6 @@
   "syncUpdateBoth": "Päivitä Fjelia molempiin laitteisiin ja synkronoi uudelleen.",
   "syncPairAgain": "Tietokone ei enää tunnista tätä puhelinta. Muodosta pari uudelleen.",
   "syncNoComputers": "Ei vielä paritettua tietokonetta.",
-  "syncDoneBoth": "Ajan tasalla · {sent} lähetetty, {received} vastaanotettu"
+  "syncDoneBoth": "Ajan tasalla · {sent} lähetetty, {received} vastaanotettu",
+  "thresholdSourceLab": "Laboratoriotesti"
 }

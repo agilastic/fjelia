@@ -10025,4 +10025,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String syncDoneBoth(int sent, int received) {
     return 'Aggiornato · $sent inviate, $received ricevute';
   }
+
+  @override
+  String get thresholdSourceLab => 'Test di laboratorio';
 }

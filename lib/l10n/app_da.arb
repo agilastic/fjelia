@@ -4390,5 +4390,6 @@
   "syncUpdateBoth": "Opdater Fjelia på begge enheder, og synkroniser igen.",
   "syncPairAgain": "Computeren kender ikke længere denne telefon. Par den igen.",
   "syncNoComputers": "Ingen computer parret endnu.",
-  "syncDoneBoth": "Opdateret · {sent} sendt, {received} modtaget"
+  "syncDoneBoth": "Opdateret · {sent} sendt, {received} modtaget",
+  "thresholdSourceLab": "Laboratorietest"
 }

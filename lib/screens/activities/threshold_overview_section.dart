@@ -57,6 +57,7 @@ String thresholdSourceLabel(ThresholdCandidate c) => switch (c.source) {
   'dfa' => tr.thresholdSourceDfa(c.sessions ?? 0),
   'dfa_ramp' => tr.thresholdSourceDfaRamp,
   'eftp' => tr.thresholdSourceEftp,
+  'lab' => tr.thresholdSourceLab,
   'polar_profile' => tr.thresholdSourcePolarProfile,
   _ => c.note ?? c.source,
 };

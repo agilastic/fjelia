@@ -10002,4 +10002,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String syncDoneBoth(int sent, int received) {
     return 'Ajan tasalla · $sent lähetetty, $received vastaanotettu';
   }
+
+  @override
+  String get thresholdSourceLab => 'Laboratoriotesti';
 }

@@ -9960,4 +9960,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String syncDoneBoth(int sent, int received) {
     return 'Opdateret · $sent sendt, $received modtaget';
   }
+
+  @override
+  String get thresholdSourceLab => 'Laboratorietest';
 }

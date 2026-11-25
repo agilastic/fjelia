@@ -5553,5 +5553,6 @@
   "syncUpdateBoth": "Zaktualizuj Fjelię na obu urządzeniach i zsynchronizuj ponownie.",
   "syncPairAgain": "Komputer nie rozpoznaje już tego telefonu. Sparuj go ponownie.",
   "syncNoComputers": "Brak sparowanego komputera.",
-  "syncDoneBoth": "Aktualne · wysłano: {sent}, odebrano: {received}"
+  "syncDoneBoth": "Aktualne · wysłano: {sent}, odebrano: {received}",
+  "thresholdSourceLab": "Test laboratoryjny"
 }

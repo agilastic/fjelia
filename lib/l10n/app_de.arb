@@ -4423,5 +4423,6 @@
   "syncUpdateBoth": "Aktualisiere Fjelia auf beiden Geräten und synchronisiere dann erneut.",
   "syncPairAgain": "Der Computer kennt dieses Telefon nicht mehr. Kopple es erneut.",
   "syncNoComputers": "Noch kein Computer gekoppelt.",
-  "syncDoneBoth": "Aktuell · {sent} gesendet, {received} empfangen"
+  "syncDoneBoth": "Aktuell · {sent} gesendet, {received} empfangen",
+  "thresholdSourceLab": "Labortest"
 }
