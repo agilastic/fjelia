@@ -6,7 +6,7 @@ import 'package:fjelia/db/database.dart';
 import 'package:fjelia_core/services/plan_rebalance.dart';
 import 'package:fjelia/services/plan_rebalance_applier.dart';
 import 'package:fjelia/services/plan_session_actions.dart';
-import 'package:fjelia/services/season/goal_set.dart' show DayLoad;
+import 'package:fjelia_core/services/season/goal_set.dart' show DayLoad;
 import 'package:fjelia/services/session_adaptation_service.dart';
 import 'package:fjelia/services/workout_providers/workout_providers.dart';
 import 'package:flutter_test/flutter_test.dart';

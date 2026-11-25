@@ -12,7 +12,7 @@ import '../../providers/week_start_provider.dart';
 import '../../widgets/app_widgets.dart';
 import '../../services/race_goal_service.dart';
 import '../../db/database.dart' show RaceGoal;
-import '../../models/race_profile.dart';
+import 'package:fjelia_core/models/race_profile.dart';
 import 'package:fjelia_core/utils/decimal.dart';
 import 'package:fjelia_core/utils/target_time.dart';
 import '../../providers/media_provider.dart';

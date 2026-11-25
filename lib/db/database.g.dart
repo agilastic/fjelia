@@ -33012,7 +33012,7 @@ class $RaceGoalsTable extends RaceGoals
   }
 }
 
-class RaceGoal extends DataClass implements Insertable<RaceGoal> {
+class RaceGoal extends RaceGoalBase implements Insertable<RaceGoal> {
   final String id;
   final String athleteId;
   final String name;
@@ -33035,7 +33035,7 @@ class RaceGoal extends DataClass implements Insertable<RaceGoal> {
   /// What the athlete wants from the event: `finish` or `performance`; null
   /// while unknown. Never inferred from the name or the target time.
   final String? ambition;
-  const RaceGoal({
+  RaceGoal({
     required this.id,
     required this.athleteId,
     required this.name,

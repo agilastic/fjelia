@@ -8,6 +8,7 @@ import 'package:uuid/uuid.dart';
 
 import '../db/database.dart';
 import 'package:fjelia_core/services/hr_zone_model.dart';
+import 'package:fjelia_core/services/plan_rules.dart';
 import 'package:fjelia_core/models/workout_profile.dart' show formatBlockDuration;
 import 'package:fjelia_core/models/prepared_workout.dart';
 import '../models/strength_workout.dart';
@@ -16,7 +17,7 @@ import 'strength/strength_templates.dart';
 import 'workout_template_library.dart';
 import 'strength/strength_plan_edits.dart';
 import 'strength/strength_repository.dart';
-import '../models/race_profile.dart';
+import 'package:fjelia_core/models/race_profile.dart';
 import 'package:fjelia_core/utils/target_time.dart';
 import 'package:fjelia_core/services/session_stress.dart';
 import 'package:fjelia_core/services/workout_semantics.dart';
@@ -26,761 +27,23 @@ import 'package:fjelia_core/utils/week.dart';
 import 'dfa_alpha1_service.dart';
 import 'race_goal_service.dart';
 import 'package:fjelia_core/services/ramp_test.dart';
-import 'season/goal_set.dart';
-import 'season/season_goal.dart';
-import 'season/season_report.dart';
-import 'season/season_timeline.dart';
-import 'season/week_allocator.dart';
+import 'package:fjelia_core/services/season/goal_set.dart';
+import 'package:fjelia_core/services/season/season_goal.dart';
+import 'package:fjelia_core/services/season/season_report.dart';
+import 'package:fjelia_core/services/season/season_timeline.dart';
+import 'package:fjelia_core/services/season/week_allocator.dart';
 import 'workout_providers/workout_providers.dart';
 
-/// Every sport the planner can schedule.
-const _supportedSports = {
-  'running',
-  'trail_running',
-  'cycling_road',
-  'cycling_gravel',
-  'cycling_mtb',
-  'swimming',
-  'triathlon',
-  'indoor_rowing',
-  'hiking',
-  'inline_skating',
-  'nordic_skiing',
-  'skate_skiing',
-};
-
-/// Sports whose fitness is judged by running-style HR/pace metrics.
-const _footSports = {
-  'running',
-  'trail_running',
-  'hiking',
-  'inline_skating',
-  'nordic_skiing',
-  'skate_skiing',
-};
-
-const _phaseOrder = ['base', 'build', 'peak', 'taper', 'race', 'recovery'];
-
-/// Garmin step type → index used for ordering / zone defaults.
-const _stepTypeIndex = {
-  'warmup': 0,
-  'rest': 1,
-  'interval': 2,
-  'active': 2,
-  'recovery': 3,
-  'cooldown': 4,
-};
-
-/// Power zones as a fraction of FTP.
-const _powerZones = <int, ({double lo, double hi})>{
-  1: (lo: 0.45, hi: 0.55),
-  2: (lo: 0.56, hi: 0.75),
-  3: (lo: 0.76, hi: 0.9),
-  4: (lo: 0.91, hi: 1.05),
-  5: (lo: 1.06, hi: 1.2),
-};
-
-/// Run pace zones as a fraction of threshold speed.
-const _paceZones = <int, ({double lo, double hi})>{
-  1: (lo: 0.6, hi: 0.75),
-  2: (lo: 0.76, hi: 0.82),
-  3: (lo: 0.83, hi: 0.88),
-  4: (lo: 0.89, hi: 0.94),
-  5: (lo: 0.95, hi: 1.05),
-};
-
-const _zoneWeights = [1.0, 1.1, 1.2, 3.1, 8.0];
-
-class _SessionSlot {
-  const _SessionSlot(
-    this.sport,
-    this.sessionType,
-    this.subType,
-    this.zone,
-    this.weekday, {
-    this.goalId,
-    this.goalRole,
-    this.objective,
-    this.targetMin,
-    this.minMin,
-    this.maxMin,
-    this.rank,
-    this.phase,
-    this.maxZone,
-  });
-
-  /// Set when the season allocator made the slot: the goal it prepares for,
-  /// how, why, how long, and the phase its workout is chosen for. Slots of the
-  /// weekly templates carry none of it.
-  final String? goalId, goalRole, objective, phase;
-  final int? targetMin, minMin, maxMin, rank;
-
-  /// The highest zone the finished workout may reach; null for no limit.
-  final int? maxZone;
-
-  final String sport;
-  final String sessionType;
-  final String? subType;
-  final int zone;
-
-  /// Preferred ISO weekday (1 = Monday); 0 means any day.
-  final int weekday;
-
-  _SessionSlot copyWith({
-    String? sport,
-    int? weekday,
-    String? sessionType,
-    String? subType,
-    bool clearSubType = false,
-    int? zone,
-  }) => _SessionSlot(
-    sport ?? this.sport,
-    sessionType ?? this.sessionType,
-    clearSubType ? null : subType ?? this.subType,
-    zone ?? this.zone,
-    weekday ?? this.weekday,
-    goalId: goalId,
-    goalRole: goalRole,
-    objective: objective,
-    targetMin: targetMin,
-    minMin: minMin,
-    maxMin: maxMin,
-    rank: rank,
-    phase: phase,
-    maxZone: maxZone,
-  );
-}
-
-const _strengthFull = _SessionSlot('strength', 'key', 'strengthFull', 3, 0);
-const _strengthLower = _SessionSlot('strength', 'key', 'strengthLower', 3, 0);
-const _strengthCore = _SessionSlot('strength', 'key', 'strengthCore', 3, 0);
-const _yoga = _SessionSlot('yoga', 'recovery', null, 1, 5);
-
-/// Default week per sport: (sport, type, subType, zone, weekday).
-const _weekTemplates = <String, List<_SessionSlot>>{
-  'running': [
-    _SessionSlot('running', 'long', 'endurance', 2, 6),
-    _SessionSlot('running', 'key', 'intervals', 5, 4),
-    _SessionSlot('running', 'key', 'tempo', 4, 3),
-    _strengthFull,
-    _SessionSlot('running', 'recovery', null, 1, 2),
-    _yoga,
-    _SessionSlot('running', 'long', 'endurance', 2, 7),
-  ],
-  'trail_running': [
-    _SessionSlot('trail_running', 'long', 'endurance', 2, 6),
-    _SessionSlot('trail_running', 'key', 'hills', 4, 3),
-    _SessionSlot('running', 'key', 'tempo', 3, 4),
-    _strengthLower,
-    _SessionSlot('trail_running', 'recovery', null, 1, 2),
-    _SessionSlot('trail_running', 'key', 'intervals', 5, 1),
-    _yoga,
-  ],
-  'cycling_road': [
-    _SessionSlot('cycling_road', 'long', 'endurance', 2, 6),
-    _SessionSlot('cycling_road', 'key', 'intervals', 5, 4),
-    _SessionSlot('cycling_road', 'key', 'tempo', 4, 3),
-    _strengthFull,
-    _SessionSlot('cycling_road', 'recovery', null, 1, 2),
-    _yoga,
-    _SessionSlot('cycling_road', 'long', 'endurance', 2, 7),
-  ],
-  'cycling_gravel': [
-    _SessionSlot('cycling_gravel', 'long', 'endurance', 2, 6),
-    _SessionSlot('cycling_road', 'key', 'intervals', 5, 4),
-    _SessionSlot('cycling_road', 'key', 'tempo', 4, 3),
-    _strengthFull,
-    _SessionSlot('cycling_gravel', 'recovery', null, 1, 2),
-    _yoga,
-    _SessionSlot('cycling_gravel', 'long', 'endurance', 2, 7),
-  ],
-  'cycling_mtb': [
-    _SessionSlot('cycling_mtb', 'long', 'endurance', 2, 6),
-    _SessionSlot('cycling_mtb', 'key', 'intervals', 5, 3),
-    _SessionSlot('cycling_road', 'key', 'tempo', 4, 4),
-    _strengthLower,
-    _SessionSlot('cycling_mtb', 'recovery', null, 1, 2),
-    _yoga,
-    _SessionSlot('cycling_mtb', 'long', 'endurance', 2, 7),
-  ],
-  'swimming': [
-    _SessionSlot('swimming', 'long', 'poolSwim', 2, 6),
-    _SessionSlot('swimming', 'key', 'poolSwim', 4, 4),
-    _SessionSlot('swimming', 'key', 'poolSwim', 4, 3),
-    _strengthFull,
-    _SessionSlot('swimming', 'recovery', null, 1, 2),
-    _yoga,
-    _SessionSlot('swimming', 'long', 'poolSwim', 2, 7),
-  ],
-  'triathlon': [
-    _SessionSlot('running', 'long', 'endurance', 2, 6),
-    _SessionSlot('cycling_road', 'long', 'endurance', 2, 7),
-    _SessionSlot('swimming', 'key', 'poolSwim', 4, 2),
-    // The bike before the run: with two hard sessions allowed the bike keeps
-    // its quality (and its zone 5 every other week), the run its long run.
-    _SessionSlot('cycling_road', 'key', 'tempo', 4, 4),
-    _SessionSlot('running', 'key', 'tempo', 4, 3),
-    _strengthCore,
-  ],
-  'indoor_rowing': [
-    _SessionSlot('indoor_rowing', 'long', 'endurance', 2, 6),
-    _SessionSlot('indoor_rowing', 'key', 'intervals', 5, 4),
-    _SessionSlot('indoor_rowing', 'key', 'intervals', 4, 3),
-    _strengthFull,
-    _SessionSlot('indoor_rowing', 'recovery', null, 1, 2),
-    _yoga,
-    _SessionSlot('indoor_rowing', 'long', 'endurance', 2, 7),
-  ],
-  'hiking': [
-    _SessionSlot('hiking', 'long', 'endurance', 2, 6),
-    _SessionSlot('hiking', 'key', 'hills', 4, 3),
-    _SessionSlot('hiking', 'recovery', null, 1, 2),
-    _strengthLower,
-    _yoga,
-    _SessionSlot('hiking', 'long', 'endurance', 2, 7),
-  ],
-  'inline_skating': [
-    _SessionSlot('inline_skating', 'long', 'endurance', 2, 6),
-    _SessionSlot('inline_skating', 'key', 'intervals', 5, 4),
-    _SessionSlot('inline_skating', 'key', 'tempo', 3, 3),
-    _strengthFull,
-    _SessionSlot('inline_skating', 'recovery', null, 1, 2),
-    _yoga,
-    _SessionSlot('inline_skating', 'long', 'endurance', 2, 7),
-  ],
-  'nordic_skiing': [
-    _SessionSlot('nordic_skiing', 'long', 'endurance', 2, 6),
-    _SessionSlot('nordic_skiing', 'key', 'intervals', 5, 4),
-    _SessionSlot('nordic_skiing', 'key', 'tempo', 3, 3),
-    _strengthFull,
-    _SessionSlot('nordic_skiing', 'recovery', null, 1, 2),
-    _yoga,
-    _SessionSlot('nordic_skiing', 'long', 'endurance', 2, 7),
-  ],
-  'skate_skiing': [
-    _SessionSlot('skate_skiing', 'long', 'endurance', 2, 6),
-    _SessionSlot('skate_skiing', 'key', 'intervals', 5, 4),
-    _SessionSlot('skate_skiing', 'key', 'tempo', 3, 3),
-    _strengthFull,
-    _SessionSlot('skate_skiing', 'recovery', null, 1, 2),
-    _yoga,
-    _SessionSlot('skate_skiing', 'long', 'endurance', 2, 7),
-  ],
-};
-
-/// Sports that may appear in a plan: the ones the athlete chose plus the race
-/// sport. A triathlon brings running, cycling and swimming with it.
-Set<String> allowedPlanSports({
-  required String mainSport,
-  required List<String> chosen,
-}) {
-  final allowed = {mainSport, ...chosen};
-  if (allowed.contains('triathlon')) {
-    allowed.addAll(const ['running', 'cycling_road', 'swimming']);
-  }
-  return allowed;
-}
-
-/// Keeps a week's slots to the sports the athlete asked for. A slot of another
-/// endurance sport (a road ride in a gravel week) becomes [mainSport]; yoga,
-/// pilates and stretching are dropped unless chosen. Strength is planned only
-/// with strength days, which are the athlete's own setting for it.
-List<_SessionSlot> _restrictSlotsToSports(
-  List<_SessionSlot> slots, {
-  required Set<String> allowed,
-  required String mainSport,
-  required bool strength,
-}) {
-  const optional = {'yoga', 'pilates', 'stretching'};
-  final out = <_SessionSlot>[];
-  for (final s in slots) {
-    if (s.sport == 'strength') {
-      if (strength || allowed.contains('strength')) out.add(s);
-    } else if (allowed.contains(s.sport)) {
-      out.add(s);
-    } else if (optional.contains(s.sport)) {
-      continue;
-    } else {
-      out.add(s.copyWith(sport: mainSport));
-    }
-  }
-  return out;
-}
-
-/// Sports used for general athletic development; running-type sports first.
-List<String> _gadSportRotation(List<String> sports) {
-  final valid = sports.where(_supportedSports.contains).toList();
-  if (valid.isEmpty) return ['running'];
-  final foot = valid.where(_footSports.contains).toList();
-  final other = valid.where((s) => !_footSports.contains(s)).toList();
-  return [...foot, ...other];
-}
-
-double _weeklyTssFactor(String phase, String tier) {
-  final phaseF = switch (phase) {
-    'base' => 0.9,
-    'build' => 1.1,
-    'peak' => 1.15,
-    'taper' => 0.6,
-    'recovery' => 0.5,
-    'race' => 0.4,
-    _ => 0.9,
-  };
-  final easy = phase == 'taper' || phase == 'recovery' || phase == 'race';
-  final tierF = easy
-      ? 1.0
-      : switch (tier) {
-          'beginner' => 0.85,
-          'advanced' => 1.05,
-          _ => 1.0,
-        };
-  return (phaseF * tierF).clamp(0.5, 1.25);
-}
-
-/// Periodisation, see [seasonPhase].
-String _phase(int week, int totalWeeks, {int cycle = 4}) =>
-    seasonPhase(week, totalWeeks, cycle: cycle);
-
-/// A plan without a race is built this many days ahead, and again when it
-/// runs short.
-const casualHorizonDays = 29;
-
-/// The first session of an athlete with no training history.
-const firstCasualMinutes = 25;
-
-String _tierFor(double ctl) => ctl < 35
-    ? 'beginner'
-    : ctl >= 50
-    ? 'advanced'
-    : 'intermediate';
-
-String _distanceCategory(double? meters) {
-  if (meters == null || meters <= 0) return 'general';
-  if (meters < 5000) return 'sprint';
-  if (meters < 8000) return '5k';
-  if (meters < 16000) return '10k';
-  if (meters < 30000) return 'half';
-  if (meters < 55000) return 'marathon';
-  return 'ultra';
-}
-
-/// The longest long run for a race of [category]. With a target time the cap
-/// follows it: about 85 % of the race time, but no less than 70 % and no more
-/// than 120 % of the category's cap, so a slow marathon is not capped as for a
-/// fast one and a six-hour ultra is not capped as for a four-hour one.
-int maxLongRunMinutes(String category, {int? targetMin}) {
-  final base = _maxLongRunMin(category);
-  if (targetMin == null || targetMin <= 0) return base;
-  return (targetMin * 0.85).round().clamp(
-    (base * 0.7).round(),
-    (base * 1.2).round(),
-  );
-}
-
-int _maxLongRunMin(String category) => switch (category) {
-  'sprint' => 45,
-  '5k' => 60,
-  '10k' => 90,
-  'half' => 120,
-  'marathon' => 180,
-  'ultra' => 600,
-  _ => 180,
-};
-
-/// The zone a share of FTP belongs to (Coggan: up to 55 %, 75 %, 90 %, 105 %,
-/// above). Used for templates written as a share of FTP, which carry no zone.
-int zoneForFtpFraction(double fraction) {
-  if (fraction <= 0.55) return 1;
-  if (fraction <= 0.75) return 2;
-  if (fraction <= 0.90) return 3;
-  if (fraction <= 1.05) return 4;
-  return 5;
-}
-
-/// Athlete attributes from the user profile that shape the plan.
-class PlanAthleteProfile {
-  const PlanAthleteProfile({
-    this.experienceLevel = 'intermediate',
-    this.sex,
-    this.age,
-    this.levelFromData = false,
-  });
-
-  /// beginner | intermediate | advanced. The athlete's own answer only
-  /// counts while there is too little training history; with enough, the
-  /// level is derived from the data ([withDataLevel]).
-  final String experienceLevel;
-
-  /// [experienceLevel] was derived from the training data, not self-reported.
-  final bool levelFromData;
-
-  /// The level the plan uses, from the self-reported one and the data
-  /// (step 3 of docs/training-plan-rethink.md). Load and fitness say what
-  /// the athlete can do, not how used they are to structured hard training:
-  /// a beginner with a good 10 km pace is still a beginner.
-  /// - The data can lower the level ([tier] from CTL, once [enoughData]).
-  /// - It raises it only one step at a time and only with proven training
-  ///   experience: [activeWeeks] of the last year (26 for intermediate, 40
-  ///   for advanced) and real intensity in the last 12 weeks, not
-  ///   [mostlyEasy]. Missing experience never counts as experience.
-  PlanAthleteProfile withDataLevel({
-    required String tier,
-    required bool enoughData,
-    int activeWeeks = 0,
-    bool mostlyEasy = true,
-  }) {
-    if (!enoughData) return this;
-    const order = ['beginner', 'intermediate', 'advanced'];
-    final own = order.indexOf(experienceLevel).clamp(0, 2);
-    final data = order.indexOf(tier).clamp(0, 2);
-    var level = own;
-    if (data < own) {
-      level = data;
-    } else if (data > own && !mostlyEasy) {
-      final next = own + 1;
-      if (activeWeeks >= (next == 1 ? 26 : 40)) level = next;
-    }
-    if (level == own) return this;
-    return PlanAthleteProfile(
-      experienceLevel: order[level],
-      sex: sex,
-      age: age,
-      levelFromData: true,
-    );
-  }
-
-  /// 'm', 'f' or other; only used for the max-HR estimate.
-  final String? sex;
-  final int? age;
-
-  bool get isBeginner => experienceLevel == 'beginner';
-  bool get isAdvanced => experienceLevel == 'advanced';
-
-  /// Hard (key) sessions per week; null keeps the week template's count.
-  int? get maxKeySessions => isBeginner
-      ? 1
-      : isAdvanced
-      ? 2
-      : null;
-
-  /// Load increase per week within a block.
-  double get progressionPerWeek => isBeginner
-      ? 0.04
-      : isAdvanced
-      ? 0.07
-      : 0.06;
-
-  /// Weekly volume ramp from current training towards the target hours.
-  double get volumeRampPerWeek => isBeginner ? 0.08 : 0.10;
-
-  /// Every n-th week of base/build is a recovery week.
-  int get recoveryCycle => isBeginner || (age ?? 0) >= 50 ? 3 : 4;
-
-  /// Tanaka (208 − 0.7·age), Gulati for women (206 − 0.88·age).
-  int? get maxHrEstimate {
-    final a = age;
-    if (a == null || a <= 0) return null;
-    return sex == 'f' ? (206 - 0.88 * a).round() : (208 - 0.7 * a).round();
-  }
-
-  /// Upper bounds of HR zones 1–4 from the estimated max HR.
-  List<int> get estimatedHrZones {
-    final max = maxHrEstimate;
-    if (max == null) return const [];
-    return [
-      for (final f in const [0.68, 0.78, 0.86, 0.93]) (max * f).round(),
-    ];
-  }
-}
-
-/// Planner sport for an activity type, or null when it has no equivalent.
-String? _plannerSport(String type) {
-  final t = type.toLowerCase();
-  if (t.contains('trail')) return 'trail_running';
-  if (t.contains('run')) return 'running';
-  if (t.contains('gravel')) return 'cycling_gravel';
-  if (t.contains('mountain') || t.contains('mtb')) return 'cycling_mtb';
-  if (t.contains('cycl') || t.contains('bik') || t.contains('ride')) {
-    return 'cycling_road';
-  }
-  if (t.contains('swim')) return 'swimming';
-  if (t.contains('row')) return 'indoor_rowing';
-  if (t.contains('hik')) return 'hiking';
-  if (t.contains('inline')) return 'inline_skating';
-  if (t.contains('skate_ski') || t.contains('skating_ski')) {
-    return 'skate_skiing';
-  }
-  if (t.contains('ski')) return 'nordic_skiing';
-  return null;
-}
-
-/// One sport's sessions: typical (last 12 weeks) and best (last year).
-class _SportHistory {
-  const _SportHistory(
-    this.sessions,
-    this.longestMin,
-    this.medianMin,
-    this.yearLongestMin,
-  );
-  final int sessions;
-
-  /// Last 12 weeks.
-  final double longestMin, medianMin;
-
-  /// Longest session of the last year.
-  final double yearLongestMin;
-
-  /// Clearly longer sessions last year than now: rebuild faster.
-  bool get hasYearCapacity => yearLongestMin > longestMin * 1.2;
-}
-
-/// What the athlete actually did, in three windows: the last 6 weeks
-/// (current volume), 12 weeks (typical sessions and intensity) and a year
-/// (peak volume and longest sessions, i.e. what they have handled before).
-class _TrainingHistory {
-  const _TrainingHistory({
-    this.weeklyMinutes = 0,
-    this.peakWeeklyMinutes = 0,
-    this.sports = const {},
-    this.hardShare,
-    this.hardMinutesPerWeek,
-    this.sessions12w = 0,
-    this.activeWeeks12w = 0,
-    this.activeWeeks52 = 0,
-  });
-
-  /// Weeks of the last year with at least an hour of training: how long
-  /// the athlete has trained regularly.
-  final int activeWeeks52;
-
-  /// Sessions and distinct active weeks in the last 12 weeks.
-  final int sessions12w, activeWeeks12w;
-
-  /// Enough training history to judge the athlete's level from data.
-  bool get enoughForLevel => sessions12w >= 12 && activeWeeks12w >= 6;
-
-  /// Average of the last 6 weeks.
-  final double weeklyMinutes;
-
-  /// Highest 4-week average of the last year.
-  final double peakWeeklyMinutes;
-  final Map<String, _SportHistory> sports;
-
-  /// Fraction of HR-zone time in zones 4–5 (last 12 weeks); null without
-  /// zone data.
-  final double? hardShare;
-
-  /// Minutes in zones 4–5 per week over the last 12 weeks (or the weeks
-  /// covered); null without zone data.
-  final double? hardMinutesPerWeek;
-
-  bool get isEmpty => sports.isEmpty;
-
-  /// Rarely trains hard: introduce intensity gradually. Judged by the hard
-  /// minutes themselves, not their share: long easy events make the share
-  /// tiny even for an athlete who does intervals every week.
-  bool get mostlyEasy => hardMinutesPerWeek != null && hardMinutesPerWeek! < 10;
-
-  /// History for [sport], falling back to the closest related sport.
-  _SportHistory? forSport(String sport) {
-    final direct = sports[sport];
-    if (direct != null) return direct;
-    const related = {
-      'trail_running': 'running',
-      'running': 'trail_running',
-      'cycling_gravel': 'cycling_road',
-      'cycling_mtb': 'cycling_road',
-      'cycling_road': 'cycling_gravel',
-    };
-    final alt = related[sport];
-    return alt == null ? null : sports[alt];
-  }
-
-  static _TrainingHistory fromActivities(
-    List<ActivityRecord> activities,
-    DateTime now,
-  ) {
-    if (activities.isEmpty) return const _TrainingHistory();
-    final six = now.subtract(const Duration(days: 42));
-    final twelve = now.subtract(const Duration(days: 84));
-    final recent = <String, List<double>>{};
-    final yearLongest = <String, double>{};
-    final weekMinutes = <int, double>{};
-    var sixMin = 0.0, zoneMin = 0.0, hardMin = 0.0;
-    var sessions12w = 0;
-    final activeWeeks = <int>{};
-    var earliest = now;
-    for (final a in activities) {
-      final minutes = a.durationSeconds / 60;
-      if (minutes <= 0) continue;
-      if (a.startDate.isBefore(earliest)) earliest = a.startDate;
-      final week = now.difference(a.startDate).inDays ~/ 7;
-      weekMinutes[week] = (weekMinutes[week] ?? 0) + minutes;
-      final sport = _plannerSport(a.type);
-      if (sport != null) {
-        yearLongest[sport] = math.max(yearLongest[sport] ?? 0, minutes);
-      }
-      if (a.startDate.isBefore(twelve)) continue;
-      sessions12w++;
-      activeWeeks.add(week);
-      if (!a.startDate.isBefore(six)) sixMin += minutes;
-      if (sport != null) recent.putIfAbsent(sport, () => []).add(minutes);
-      final zonesJson = a.hrZonesJson;
-      if (zonesJson == null) continue;
-      try {
-        final zones = jsonDecode(zonesJson) as Map<String, dynamic>;
-        double pct(String k) => (zones[k] as num?)?.toDouble() ?? 0;
-        final all = [
-          'zone1',
-          'zone2',
-          'zone3',
-          'zone4',
-          'zone5',
-        ].map(pct).fold<double>(0, (x, y) => x + y);
-        if (all <= 0) continue;
-        zoneMin += minutes;
-        hardMin += minutes * (pct('zone4') + pct('zone5')) / all;
-      } catch (_) {}
-    }
-    // Average over the weeks actually covered (at most 6).
-    final sixWeeks = (now.difference(earliest).inDays / 7).ceil().clamp(1, 6);
-    var peak = 0.0;
-    for (var w = 0; w + 3 <= 52; w++) {
-      final sum = [for (var i = w; i < w + 4; i++) weekMinutes[i] ?? 0]
-          .fold<double>(0, (a, b) => a + b);
-      peak = math.max(peak, sum / 4);
-    }
-    return _TrainingHistory(
-      weeklyMinutes: sixMin / sixWeeks,
-      peakWeeklyMinutes: peak,
-      sports: {
-        for (final e in recent.entries)
-          e.key: _SportHistory(
-            e.value.length,
-            e.value.reduce(math.max),
-            (List.of(e.value)..sort())[e.value.length ~/ 2],
-            yearLongest[e.key] ?? e.value.reduce(math.max),
-          ),
-      },
-      hardShare: zoneMin > 0 ? hardMin / zoneMin : null,
-      activeWeeks52: weekMinutes.values.where((m) => m >= 60).length,
-      hardMinutesPerWeek: zoneMin > 0
-          ? hardMin / (now.difference(earliest).inDays / 7).ceil().clamp(1, 12)
-          : null,
-      sessions12w: sessions12w,
-      activeWeeks12w: activeWeeks.length,
-    );
-  }
-}
-
-/// Weekly ramp rate: volume handled within the last year ([peakMin]) can be
-/// rebuilt faster (15 %/week), otherwise the experience-based rate.
-@visibleForTesting
-double volumeRampRate({
-  required double targetMin,
-  required double peakMin,
-  required PlanAthleteProfile athlete,
-}) => targetMin <= peakMin * 1.05 ? 0.15 : athlete.volumeRampPerWeek;
-
-/// Weekly minutes for week [week]: from current volume towards [targetMin],
-/// growing by [rate] per week. Without history start at 70% of the target.
-@visibleForTesting
-double rampedWeeklyMinutes({
-  required double targetMin,
-  required double recentMin,
-  required int week,
-  required double rate,
-}) {
-  final start = recentMin > 0
-      ? math.min(targetMin, recentMin * (1 + rate))
-      : targetMin * 0.7;
-  return math.min(targetMin, start * math.pow(1 + rate, week)).toDouble();
-}
-
-class _AthleteFitnessSnapshot {
-  const _AthleteFitnessSnapshot({
-    required this.ctl,
-    required this.tsb,
-    this.vo2max,
-    this.lt2Bpm,
-    this.lt1Bpm,
-    this.hrZones = const [],
-    this.hrFloors = const [],
-    this.maxHr,
-    required this.tier,
-    this.hrvRatio = 1.0,
-    this.sleepScore,
-    this.weeklyTss = 0,
-    this.easyRunZ2 = false,
-  });
-
-  final double ctl;
-  final double tsb;
-  final double? vo2max;
-  final int? lt2Bpm;
-  final int? lt1Bpm;
-
-  /// Upper HR bound of zones 1–4 (zone 5 is open-ended).
-  final List<int> hrZones;
-
-  /// Lower HR bound of zones 1 to 5, when known. Preferred over [hrZones]:
-  /// a zone then runs from its floor to the next floor minus one.
-  final List<int> hrFloors;
-
-  /// The athlete's maximum heart rate, the upper end of zone 5.
-  final int? maxHr;
-  final String tier;
-  final double hrvRatio;
-  final int? sleepScore;
-  final double weeklyTss;
-
-  /// Running at zone-1 heart rate is close to walking and few runners can do
-  /// it. For runs, an "easy" zone 1 is therefore planned as the lower half of
-  /// zone 2, which is where an easy run really sits.
-  final bool easyRunZ2;
-
-  /// The lower half of zone 2: where a recovery or easy run is run.
-  ({int? low, int? high}) easyRunRange() {
-    final z2 = hrRangeForZone(2);
-    if (z2.low == null || z2.high == null) return z2;
-    return (low: z2.low, high: z2.low! + ((z2.high! - z2.low!) / 2).round());
-  }
-
-  bool get isFatigued => tsb < -20;
-
-  _AthleteFitnessSnapshot withHrZones(List<int> zones) =>
-      _AthleteFitnessSnapshot(
-        ctl: ctl,
-        tsb: tsb,
-        vo2max: vo2max,
-        lt2Bpm: lt2Bpm,
-        lt1Bpm: lt1Bpm,
-        hrZones: zones,
-        hrFloors: hrFloors,
-        maxHr: maxHr,
-        tier: tier,
-        hrvRatio: hrvRatio,
-        sleepScore: sleepScore,
-        weeklyTss: weeklyTss,
-        easyRunZ2: easyRunZ2,
-      );
-
-  ({int? low, int? high}) hrRangeForZone(int zone) {
-    if (hrFloors.length >= 5 && zone >= 1) {
-      final z = zone.clamp(1, 5);
-      final low = hrFloors[z - 1];
-      final high = z == 5
-          ? (maxHr != null && maxHr! > low ? maxHr : null)
-          : hrFloors[z] - 1;
-      return (low: low, high: high);
-    }
-    if (hrZones.length < 4 || zone < 1) return (low: null, high: null);
-    final z = zone.clamp(1, 5);
-    final low = z == 1 ? null : hrZones[z - 2];
-    final high = z == 5 ? null : hrZones[z - 1];
-    return (low: low, high: high);
-  }
-}
+export 'package:fjelia_core/services/plan_rules.dart'
+    show
+        allowedPlanSports,
+        casualHorizonDays,
+        firstCasualMinutes,
+        maxLongRunMinutes,
+        zoneForFtpFraction,
+        PlanAthleteProfile,
+        volumeRampRate,
+        rampedWeeklyMinutes;
 
 class TrainingPlanService {
   /// [usesPower] says whether a workout of a sport, indoors or not, carries
@@ -836,7 +99,7 @@ class TrainingPlanService {
   // Fitness snapshot
   // ---------------------------------------------------------------------------
 
-  Future<_AthleteFitnessSnapshot> _readFitnessSnapshot(
+  Future<PlanAthleteFitnessSnapshot> _readFitnessSnapshot(
     String athleteId,
     String sport,
   ) async {
@@ -979,8 +242,8 @@ class TrainingPlanService {
         ? (readiness!.hrvToday! / readiness.hrv7dBaseline!).clamp(0.7, 1.2)
         : 1.0;
 
-    final tier = _tierFor(ctl);
-    final snapshot = _AthleteFitnessSnapshot(
+    final tier = planTierFor(ctl);
+    final snapshot = PlanAthleteFitnessSnapshot(
       ctl: ctl,
       tsb: tsb,
       vo2max: vo2max,
@@ -1006,7 +269,7 @@ class TrainingPlanService {
   }
 
   /// 0.7–1.1 multiplier from form (TSB), HRV ratio and sleep.
-  double _readinessFactor(_AthleteFitnessSnapshot s) {
+  double _readinessFactor(PlanAthleteFitnessSnapshot s) {
     final form = ((s.tsb + 20) / 40).clamp(0.0, 1.0);
     final hrv = ((s.hrvRatio - 0.9) / 0.15).clamp(0.0, 1.0);
     final sleep = s.sleepScore == null
@@ -1049,12 +312,12 @@ class TrainingPlanService {
   /// Drops the least important sessions until the rest fits in [limit]
   /// minutes. Used when time has already been spent that no session stands
   /// for.
-  static ({List<_SessionSlot> kept, List<_SessionSlot> removed}) _makeRoom(
-    List<_SessionSlot> slots,
+  static ({List<PlanSessionSlot> kept, List<PlanSessionSlot> removed}) _makeRoom(
+    List<PlanSessionSlot> slots,
     double limit,
   ) {
     final list = [...slots];
-    final removed = <_SessionSlot>[];
+    final removed = <PlanSessionSlot>[];
     int total() => list.fold(0, (a, s) => a + (s.targetMin ?? 0));
     while (list.isNotEmpty && total() > limit) {
       var worst = 0;
@@ -1076,7 +339,7 @@ class TrainingPlanService {
   /// goal never sets a run's pace.
   static RaceProfile? _paceProfile(
     GoalSet goals,
-    _SessionSlot slot,
+    PlanSessionSlot slot,
     RaceProfile? single,
     bool multi,
   ) {
@@ -1096,7 +359,7 @@ class TrainingPlanService {
   }
 
   /// What the athlete has done in each sport, as the allocator reads it.
-  static Map<String, SportCapacity> _capacitiesOf(_TrainingHistory history) => {
+  static Map<String, SportCapacity> _capacitiesOf(PlanTrainingHistory history) => {
     for (final e in history.sports.entries)
       e.key: SportCapacity(
         sessions: e.value.sessions,
@@ -1107,7 +370,7 @@ class TrainingPlanService {
   };
 
   /// The allocator's session as a slot of the weekly scheduling loop.
-  static _SessionSlot _slotOf(AllocatedSlot a) => _SessionSlot(
+  static PlanSessionSlot _slotOf(AllocatedSlot a) => PlanSessionSlot(
     a.sport,
     a.sessionType,
     a.subType,
@@ -1125,7 +388,7 @@ class TrainingPlanService {
   );
 
   /// Days after an event take easy sessions only, and short ones.
-  static bool _easyEnough(_SessionSlot s) =>
+  static bool _easyEnough(PlanSessionSlot s) =>
       s.sport != 'strength' &&
       s.zone <= 2 &&
       (s.targetMin ?? 60) <= 60 &&
@@ -1169,7 +432,7 @@ class TrainingPlanService {
     return '$lead $noun ($minutes min)';
   }
 
-  List<_SessionSlot> _recoveryWeekSlots(String sport) {
+  List<PlanSessionSlot> _recoveryWeekSlots(String sport) {
     final main = switch (sport) {
       'cycling_road' || 'cycling_gravel' || 'cycling_mtb' => sport,
       'swimming' => 'swimming',
@@ -1178,10 +441,10 @@ class TrainingPlanService {
       _ => sport,
     };
     return [
-      _SessionSlot(main, 'long', 'endurance', 2, 6),
-      _SessionSlot(main, 'recovery', null, 1, 3),
-      _yoga,
-      _SessionSlot(main, 'recovery', null, 1, 1),
+      PlanSessionSlot(main, 'long', 'endurance', 2, 6),
+      PlanSessionSlot(main, 'recovery', null, 1, 3),
+      planYoga,
+      PlanSessionSlot(main, 'recovery', null, 1, 1),
     ];
   }
 
@@ -1215,11 +478,11 @@ class TrainingPlanService {
     final ofSport = pool;
 
     // Phase match, widening to neighbouring phases if needed.
-    final idx = _phaseOrder.indexOf(phase);
+    final idx = planPhaseOrder.indexOf(phase);
     final phases = <String>{phase};
-    if (idx > 0) phases.add(_phaseOrder[idx - 1]);
-    if (idx >= 0 && idx < _phaseOrder.length - 1) {
-      phases.add(_phaseOrder[idx + 1]);
+    if (idx > 0) phases.add(planPhaseOrder[idx - 1]);
+    if (idx >= 0 && idx < planPhaseOrder.length - 1) {
+      phases.add(planPhaseOrder[idx + 1]);
     }
     final exact = pool
         .where((t) => t.targetPhase.split(',').contains(phase))
@@ -1371,7 +634,7 @@ class TrainingPlanService {
   Map<String, dynamic> _resolveStep(
     Map<String, dynamic> step,
     int? ftp,
-    _AthleteFitnessSnapshot fitness, {
+    PlanAthleteFitnessSnapshot fitness, {
     required bool power,
   }) {
     if (step['type'] == 'RepeatGroupDTO') {
@@ -1445,7 +708,7 @@ class TrainingPlanService {
         zone <= 5) {
       // Planned as heart rate, ridden on a smart trainer: the zone gives the
       // watts, and the heart-rate range stays as the guide beside them.
-      final w = _powerZones[zone]!;
+      final w = planPowerZones[zone]!;
       final hr = fitness.hrRangeForZone(zone);
       out['targetValueOne'] = (ftp * w.lo).round().toDouble();
       out['targetValueTwo'] = (ftp * w.hi).round().toDouble();
@@ -1534,7 +797,7 @@ class TrainingPlanService {
   String _resolveStepsJson(
     String stepsJson,
     int? ftp,
-    _AthleteFitnessSnapshot fitness, {
+    PlanAthleteFitnessSnapshot fitness, {
     required bool power,
   }) {
     final steps = (jsonDecode(stepsJson) as List).cast<Map<String, dynamic>>();
@@ -1679,8 +942,8 @@ class TrainingPlanService {
       raceElevationM = display.elevationM;
       targetFinishSeconds = display.targetSeconds;
     }
-    final rotation = _gadSportRotation(gadSports.isEmpty ? [sport] : gadSports);
-    final mainSport = _supportedSports.contains(sport) ? sport : rotation.first;
+    final rotation = planGadSportRotation(gadSports.isEmpty ? [sport] : gadSports);
+    final mainSport = planSupportedSports.contains(sport) ? sport : rotation.first;
     final allowedSports = {
       ...allowedPlanSports(mainSport: mainSport, chosen: gadSports),
       if (multi)
@@ -1691,7 +954,7 @@ class TrainingPlanService {
     if (fitness.hrZones.length < 4 && athlete.estimatedHrZones.isNotEmpty) {
       fitness = fitness.withHrZones(athlete.estimatedHrZones);
     }
-    final history = _TrainingHistory.fromActivities(
+    final history = PlanTrainingHistory.fromActivities(
       await (_db.select(_db.activityRecords)..where(
             (t) => t.startDate.isBiggerOrEqualValue(
               today.subtract(const Duration(days: 365)),
@@ -1867,7 +1130,7 @@ class TrainingPlanService {
     // by an app update are there even when no historic sync ran since.
     await WorkoutTemplateLibrary(_db).seedIfEmpty();
     final templates = await _db.select(_db.workoutTemplates).get();
-    final category = _distanceCategory(raceDistanceM);
+    final category = planDistanceCategory(raceDistanceM);
     final raceProfile = raceDistanceM != null && raceDistanceM > 0
         ? RaceProfile(
             sport: mainSport,
@@ -1883,7 +1146,7 @@ class TrainingPlanService {
           ? null
           : (targetFinishSeconds / 60).round(),
     );
-    final baseSlots = _weekTemplates[mainSport] ?? _weekTemplates['running']!;
+    final baseSlots = planWeekTemplates[mainSport] ?? planWeekTemplates['running']!;
     final targetWeeklyMin = hoursPerWeek * 60;
     final baseWeeklyTss = math.max(fitness.weeklyTss, 50.0);
     final readiness = _readinessFactor(fitness);
@@ -2077,7 +1340,7 @@ class TrainingPlanService {
         : s;
     final goalFamilies = {for (final s in goalSports) family(s)};
     final varietySports = [
-      for (final s in _gadSportRotation(gadSports))
+      for (final s in planGadSportRotation(gadSports))
         if (!goalFamilies.contains(family(s)) && history.sports[s] != null) s,
     ];
     final allocations = <WeekAllocation>[];
@@ -2104,7 +1367,7 @@ class TrainingPlanService {
     // The load a slot will have before its workout exists: a key session
     // at zone 4 or more, since its template may reach zone 4 (a steady slot
     // can get a tempo workout), and at least 50 min.
-    double plannedStress(_SessionSlot s) {
+    double plannedStress(PlanSessionSlot s) {
       final key = s.sessionType == 'key' && s.sport != 'strength';
       return sessionStress(
         sport: s.sport,
@@ -2128,8 +1391,8 @@ class TrainingPlanService {
       return g.demand.planningMinutes >= (g.demand.isFoot ? 360 : 240);
     }
 
-    final sportFitness = <String, _AthleteFitnessSnapshot>{mainSport: fitness};
-    Future<_AthleteFitnessSnapshot> fitnessFor(String sport) async {
+    final sportFitness = <String, PlanAthleteFitnessSnapshot>{mainSport: fitness};
+    Future<PlanAthleteFitnessSnapshot> fitnessFor(String sport) async {
       if (!multi) return fitness;
       final key = sport.contains('cycl')
           ? 'cycling'
@@ -2176,7 +1439,7 @@ class TrainingPlanService {
                 : 'base')
           : multi
           ? (needs.isEmpty ? 'base' : needs.first.intent.phase)
-          : _phase(g, weeks, cycle: athlete.recoveryCycle);
+          : planPhase(g, weeks, cycle: athlete.recoveryCycle);
       final weeksIntoBlock = g % athlete.recoveryCycle;
       final progression = phase == 'taper' || phase == 'recovery'
           ? 1.0
@@ -2197,7 +1460,7 @@ class TrainingPlanService {
       }
       final weekTss =
           (baseWeeklyTss *
-                  _weeklyTssFactor(phase, fitness.tier) *
+                  planWeeklyTssFactor(phase, fitness.tier) *
                   progression *
                   (w == 0 ? readiness : 1.0))
               .round();
@@ -2206,8 +1469,8 @@ class TrainingPlanService {
       // Choose slots for the week.
       var slots = phase == 'recovery'
           ? _recoveryWeekSlots(mainSport)
-          : List<_SessionSlot>.of(baseSlots);
-      slots = _restrictSlotsToSports(
+          : List<PlanSessionSlot>.of(baseSlots);
+      slots = planRestrictSlotsToSports(
         slots,
         allowed: allowedSports,
         mainSport: mainSport,
@@ -2297,14 +1560,14 @@ class TrainingPlanService {
       // becomes a hill session, every other week on rolling to hilly courses
       // and every week on mountainous ones.
       if ((phase == 'build' || phase == 'peak') &&
-          _footSports.contains(mainSport) &&
+          planFootSports.contains(mainSport) &&
           (terrain == Terrain.mountainous ||
               (terrain == Terrain.hilly && g.isEven))) {
         final i = slots.indexWhere(
           (s) =>
               s.sessionType == 'key' &&
               s.subType == 'tempo' &&
-              _footSports.contains(s.sport),
+              planFootSports.contains(s.sport),
         );
         if (i >= 0) slots[i] = slots[i].copyWith(subType: 'hills', zone: 4);
       }
@@ -2342,7 +1605,7 @@ class TrainingPlanService {
         );
         for (var i = 0; i < count; i++) {
           slots.add(
-            _strengthFull.copyWith(
+            planStrengthFull.copyWith(
               subType: phase == 'recovery'
                   ? 'strengthCore'
                   : strengthProgrammeId(focus, phase, g + i),
@@ -2364,7 +1627,7 @@ class TrainingPlanService {
         ),
       );
       // Keep long and key sessions first when trimming.
-      int rank(_SessionSlot s) => switch (s.sessionType) {
+      int rank(PlanSessionSlot s) => switch (s.sessionType) {
         'long' => 0,
         'key' => s.sport == 'strength' ? 2 : 1,
         _ => 3,
@@ -2381,7 +1644,7 @@ class TrainingPlanService {
       var weekPartial = false;
       final actualRows =
           <({String sport, String type, String? sub, int minutes})>[];
-      void dropped(_SessionSlot slot, String why) {
+      void dropped(PlanSessionSlot slot, String why) {
         final allocation = weekAllocation;
         if (allocation == null) return;
         final what = (slot.objective ?? '${slot.sport} session').toLowerCase();
@@ -2458,7 +1721,7 @@ class TrainingPlanService {
             easyStart: easyStart,
             varietySports: varietySports,
             footLongCap: (goal) => maxLongRunMinutes(
-              _distanceCategory(goal.distanceM),
+              planDistanceCategory(goal.distanceM),
               targetMin: goal.targetSeconds == null
                   ? null
                   : (goal.targetSeconds! / 60).round(),
@@ -2493,7 +1756,7 @@ class TrainingPlanService {
       final usedSports = <int, Set<String>>{};
       bool isPreRaceRest(DateTime d) => d == _addDays(raceDay, -1);
 
-      int? bestOffset(_SessionSlot s) {
+      int? bestOffset(PlanSessionSlot s) {
         final candidates = <int>[];
         for (var off = 0; off < 7; off++) {
           final date = _addDays(weekStart, off);
@@ -2735,7 +1998,7 @@ class TrainingPlanService {
       // a recovery week an easy one late in the week: at the end of a
       // recovery week or the start of a block, rested. Never in a taper, a
       // race week or a first week back from illness or injury.
-      _SessionSlot? rampSlot, rampOriginal;
+      PlanSessionSlot? rampSlot, rampOriginal;
       final due = nextRamp;
       if (due != null &&
           !_addDays(weekStart, 6).isBefore(due) &&
@@ -2773,7 +2036,7 @@ class TrainingPlanService {
         if (i >= 0) {
           final old = slots[i];
           rampOriginal = old;
-          rampSlot = _SessionSlot(
+          rampSlot = PlanSessionSlot(
             old.sport == 'trail_running' ? 'running' : old.sport,
             'key',
             rampTestSubType,
@@ -2913,12 +2176,12 @@ class TrainingPlanService {
         if (slot.targetMin == null) {
           if (phase == 'taper') duration = (duration * 0.7).round();
           if (phase == 'recovery') duration = (duration * 0.7).round();
-          if (slot.sessionType == 'long' && _footSports.contains(slot.sport)) {
+          if (slot.sessionType == 'long' && planFootSports.contains(slot.sport)) {
             duration = math.min(duration, longRunCap);
           }
           if (slot.sessionType == 'long' && phase == 'peak') {
             duration = (duration * 1.4).round();
-            if (_footSports.contains(slot.sport)) {
+            if (planFootSports.contains(slot.sport)) {
               duration = math.min(duration, longRunCap);
             }
           }
@@ -3215,7 +2478,7 @@ class TrainingPlanService {
                 '${slot.sport.replaceAll('_', ' ')}';
         var trimp = 0.0;
         if (semantics.isEmpty) {
-          trimp = duration * _zoneWeights[(slot.zone - 1).clamp(0, 4)];
+          trimp = duration * planZoneWeights[(slot.zone - 1).clamp(0, 4)];
         } else {
           duration = semantics.totalMinutes.clamp(
             1,
@@ -3261,7 +2524,7 @@ class TrainingPlanService {
         if ((slot.sport == 'running' || slot.sport == 'trail_running') &&
             pace != null &&
             pace > 0) {
-          final z = _paceZones[zone.clamp(1, 5)]!;
+          final z = planPaceZones[zone.clamp(1, 5)]!;
           paceJson = jsonEncode({
             'low_sec_per_km': (1000 / (pace * z.hi)).round(),
             'high_sec_per_km': (1000 / (pace * z.lo)).round(),
@@ -3274,7 +2537,7 @@ class TrainingPlanService {
         }
         String? powerJson;
         if (slot.sport.contains('cycl') && ftp != null) {
-          final z = _powerZones[zone.clamp(1, 5)]!;
+          final z = planPowerZones[zone.clamp(1, 5)]!;
           powerJson = jsonEncode({
             'low_watts': (ftp * z.lo).round(),
             'high_watts': (ftp * z.hi).round(),
@@ -3450,7 +2713,7 @@ class TrainingPlanService {
     required List<String> sports,
     required List<int> restDays,
     required Set<DateTime> blocked,
-    required _AthleteFitnessSnapshot fitness,
+    required PlanAthleteFitnessSnapshot fitness,
     required int? ftp,
     required int? Function(DateTime) capOn,
   }) async {
@@ -3463,7 +2726,7 @@ class TrainingPlanService {
     ];
     final sport =
         preferred.where(sports.contains).firstOrNull ??
-        _gadSportRotation(sports).first;
+        planGadSportRotation(sports).first;
     final now = _now();
     var day = _day(now);
     // Too late today for a first session: tomorrow.
@@ -3593,7 +2856,7 @@ class TrainingPlanService {
     final goalSet = await RaceGoalService(_db)
         .resolveGoalSet(athleteId: plan.athleteId, today: today);
     final goal = goalSet.display;
-    final rotation = _gadSportRotation(preferredSports);
+    final rotation = planGadSportRotation(preferredSports);
     // No race to prepare for: the athlete's own aim, four weeks at a time.
     final casual = goal == null && casualGoal != null;
 
@@ -3830,7 +3093,7 @@ class TrainingPlanService {
     );
     // Five stored values are the zone floors; the planner's upper-bound list
     // is derived from them, never the floors passed off as upper bounds.
-    final fitness = _AthleteFitnessSnapshot(
+    final fitness = PlanAthleteFitnessSnapshot(
       ctl: 0,
       tsb: 0,
       tier: 'intermediate',
@@ -4183,4 +3446,4 @@ class TrainingPlanService {
 }
 
 /// Exposed for the planner UI's step legend ordering.
-int stepTypeIndex(String type) => _stepTypeIndex[type] ?? 2;
+int stepTypeIndex(String type) => planStepTypeIndex[type] ?? 2;

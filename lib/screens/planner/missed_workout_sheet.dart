@@ -27,7 +27,7 @@ import 'package:fjelia_core/services/missed_workout_planner.dart';
 import '../../services/missed_workout_reminder_service.dart';
 import '../../services/open_meteo_client.dart' show OpenMeteoPoint;
 import 'package:fjelia_core/services/plan_rebalance.dart';
-import '../../services/season/goal_set.dart' show DayLoad;
+import 'package:fjelia_core/services/season/goal_set.dart' show DayLoad;
 import '../../services/plan_session_actions.dart' show skipReasons;
 import '../../theme/activity_colors.dart';
 import 'package:fjelia_core/utils/log.dart';

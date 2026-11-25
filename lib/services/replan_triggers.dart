@@ -3,7 +3,7 @@
 
 import 'dart:convert';
 
-import 'season/goal_set.dart';
+import 'package:fjelia_core/services/season/goal_set.dart';
 
 /// Whether the goals changed since the plan was built, so its future no
 /// longer prepares for what the athlete now has on the calendar. A plan built

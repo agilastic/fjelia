@@ -31,7 +31,7 @@ import '../../widgets/plan_timeline.dart';
 import '../settings/training_tab.dart';
 import 'plan_session_sheet.dart';
 import 'package:fjelia_core/utils/target_time.dart';
-import '../../models/race_profile.dart';
+import 'package:fjelia_core/models/race_profile.dart';
 
 /// The coming week as small skies: the day's weather is the picture
 /// (sun glow, clouds, rain falling as hard as forecast, wind streaks) and

@@ -10,7 +10,7 @@ import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/services/race_goal_service.dart';
-import 'package:fjelia/services/season/goal_set.dart';
+import 'package:fjelia_core/services/season/goal_set.dart';
 import 'package:fjelia_core/services/session_stress.dart';
 import 'package:fjelia/services/training_plan_service.dart';
 import 'package:fjelia_core/services/workout_semantics.dart';

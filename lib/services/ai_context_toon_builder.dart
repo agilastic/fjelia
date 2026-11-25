@@ -25,9 +25,9 @@ import '../providers/upcoming_plan_provider.dart'
 import 'post_workout_scorer.dart' show noActivityReason;
 import 'race_predictor.dart';
 import 'race_goal_service.dart';
-import 'season/season_report.dart';
+import 'package:fjelia_core/services/season/season_report.dart';
 import 'package:fjelia_core/utils/target_time.dart';
-import '../models/race_profile.dart';
+import 'package:fjelia_core/models/race_profile.dart';
 import 'package:fjelia_core/models/training_windows.dart';
 import 'open_meteo_client.dart';
 import 'package:fjelia_core/models/waist_ratios.dart';

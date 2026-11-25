@@ -709,6 +709,10 @@ class ThresholdRecords extends Table {
   IntColumn get ftpWatts => integer().nullable()();
 }
 
+/// Lets fjelia_core read a race goal row through [RaceGoalView].
+abstract class RaceGoalBase extends DataClass implements RaceGoalView {}
+
+@DataClassName('RaceGoal', extending: RaceGoalBase)
 class RaceGoals extends Table {
   TextColumn get id => text()();
   TextColumn get athleteId => text()();

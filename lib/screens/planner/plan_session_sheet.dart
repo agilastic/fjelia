@@ -27,7 +27,7 @@ import '../../providers/workout_push_provider.dart';
 import '../../providers/day_data_provider.dart';
 import '../../services/plan_session_actions.dart';
 import '../../services/workout_replacement_service.dart';
-import '../../services/season/goal_set.dart' show DayLoad;
+import 'package:fjelia_core/services/season/goal_set.dart' show DayLoad;
 import 'package:fjelia_core/utils/target_time.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/plan_timeline.dart' show planGradient;
