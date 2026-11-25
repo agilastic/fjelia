@@ -63,7 +63,7 @@ class TrainingPlanService {
     bool Function(String sport, bool indoor)? usesPower,
     DateTime Function()? clock,
   }) : _usesPower = usesPower ?? ((_, _) => false),
-       _build = PlanWorkoutBuilder(usesPower: usesPower),
+       _build = PlanWorkoutBuilder(),
        _now = clock ?? DateTime.now;
 
   final AppDatabase _db;
