@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:drift/drift.dart';
 
 import 'package:fjelia_core/models/heart_rate.dart';
+import 'package:fjelia_core/models/health_views.dart';
 import 'package:fjelia_core/models/plan_views.dart';
 import '../theme/activity_colors.dart' show activityKind;
 import '../services/source_priority_service.dart'
@@ -57,6 +58,10 @@ class DailyBpSummaries extends Table {
   TextColumn get rawJson => text()();
 }
 
+/// Lets fjelia_core read this row through [HrvDayView].
+abstract class HrvRecordBase extends DataClass implements HrvDayView {}
+
+@DataClassName('HrvRecord', extending: HrvRecordBase)
 class HrvRecords extends Table {
   IntColumn get id => integer().autoIncrement()();
   DateTimeColumn get date => dateTime()();
@@ -73,6 +78,10 @@ class HrvRecords extends Table {
   TextColumn get source => text().nullable()();
 }
 
+/// Lets fjelia_core read this row through [SleepNightView].
+abstract class SleepRecordBase extends DataClass implements SleepNightView {}
+
+@DataClassName('SleepRecord', extending: SleepRecordBase)
 class SleepRecords extends Table {
   IntColumn get id => integer().autoIncrement()();
   DateTimeColumn get date => dateTime()();
@@ -94,6 +103,10 @@ class SleepRecords extends Table {
   TextColumn get source => text().nullable()();
 }
 
+/// Lets fjelia_core read this row through [WellnessDayView].
+abstract class WellnessRecordBase extends DataClass implements WellnessDayView {}
+
+@DataClassName('WellnessRecord', extending: WellnessRecordBase)
 class WellnessRecords extends Table {
   IntColumn get id => integer().autoIncrement()();
   DateTimeColumn get date => dateTime()();

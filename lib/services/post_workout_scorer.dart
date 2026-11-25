@@ -3,13 +3,17 @@ import 'dart:math' as math;
 
 import 'package:drift/drift.dart';
 import 'package:fjelia_core/services/planned_zones.dart' as core;
+import 'package:fjelia_core/services/execution_scoring.dart';
 import 'package:uuid/uuid.dart';
 
 import '../db/database.dart';
 import '../models/strength_workout.dart';
 import '../providers/training_load_provider.dart';
+
 import 'package:fjelia_core/utils/log.dart';
+
 import 'athlete_thresholds_service.dart';
+
 import 'package:fjelia_core/services/control/execution.dart';
 import 'package:fjelia_core/services/control/stimulus.dart';
 
@@ -84,7 +88,7 @@ class PostWorkoutScorer {
     final strength = isStrengthSport(session.sport);
     final executionScore = strength
         ? null
-        : _executionScore3Axis(session, actualMin, zoneSec, planned);
+        : ExecutionScoring.score3Axis(session, actualMin, zoneSec, planned);
     final scoredVsAdapted = session.status == 'adapted';
     final durationRatio = session.plannedDurationMin > 0
         ? actualMin / session.plannedDurationMin
@@ -93,10 +97,10 @@ class PostWorkoutScorer {
     final tssRatio = session.plannedTrimp > 0
         ? load / session.plannedTrimp
         : null;
-    final pi = _polarizationIndex(zoneSec);
+    final pi = ExecutionScoring.polarizationIndex(zoneSec);
     final verdict = strength
         ? null
-        : _executionVerdict(durationRatio, zoneSec, planned);
+        : ExecutionScoring.verdict(durationRatio, zoneSec, planned);
     // Intensity on its own: an hour at Z4 for an hour planned at Z2 is not
     // a completed session, however long it was.
     final intensity = strength
@@ -313,22 +317,18 @@ class PostWorkoutScorer {
     ActivityRecord activity,
     String sport,
   ) async {
-    final durationSec = activity.durationSeconds.toDouble();
-    var zoneSec = _parseZoneSec(activity.hrZonesJson, durationSec);
-    if (zoneSec == null && activity.metricsJson != null) {
+    List<int>? floors;
+    final split = ExecutionScoring.zoneSecFromSplit(
+      activity.hrZonesJson,
+      activity.durationSeconds.toDouble(),
+    );
+    if (split == null && activity.metricsJson != null) {
       final thresholds = await _thresholds.get();
-      final floors = thresholds == null
+      floors = thresholds == null
           ? null
           : _thresholds.hrZoneFloorsFor(thresholds, sport);
-      if (floors != null) {
-        zoneSec = _zoneSecFromSamples(
-          activity.metricsJson!,
-          floors,
-          durationSec,
-        );
-      }
     }
-    return zoneSec ?? List<double>.filled(6, 0.0);
+    return ExecutionScoring.zoneSeconds(activity, floors);
   }
 
   /// The morning readiness level of [at]'s day, if it was scored.
@@ -484,80 +484,6 @@ class PostWorkoutScorer {
         );
   }
 
-  /// `off_plan` (< 40 % of planned), `under` (< 80 %), `over` (> 125 %)
-  /// or `on_target`.
-  String _executionVerdict(
-    double durationRatio,
-    List<double> zoneSec,
-    List<double>? planned,
-  ) {
-    if (durationRatio < 0.4) return 'off_plan';
-    if (durationRatio < 0.8) return 'under';
-    if (durationRatio > 1.25) return 'over';
-    return 'on_target';
-  }
-
-  /// Treff polarization index: log10((Z1/Z2) × Z3 × 100) on a 3-zone model.
-  double? _polarizationIndex(List<double> zoneSec) {
-    final total = zoneSec.fold<double>(0.0, (a, b) => a + b);
-    if (total < 300) return null;
-    final z1 = (zoneSec[0] + zoneSec[1]) / total;
-    final z2 = zoneSec[2] / total;
-    final z3 = zoneSec.skip(3).fold<double>(0.0, (a, b) => a + b) / total;
-    if (z2 <= 0 || z3 <= 0) return null;
-    final pi = math.log((z1 / z2) * z3 * 100) / math.ln10;
-    return double.parse(pi.toStringAsFixed(2));
-  }
-
-  /// Duration (30 %), zone distribution (30 %) and intensity (40 %), 0–100.
-  int? _executionScore3Axis(
-    TrainingSession session,
-    double actualMin,
-    List<double> zoneSec,
-    List<double>? planned,
-  ) {
-    if (session.plannedDurationMin <= 0) return null;
-    final durationAxis =
-        (1 - (actualMin / session.plannedDurationMin - 1).abs()).clamp(
-          0.0,
-          1.0,
-        );
-
-    final total = zoneSec.reduce((a, b) => a + b);
-    double? zoneAxis;
-    if (planned != null && total > 0) {
-      var diff = 0.0;
-      for (var i = 0; i < 6 && i < planned.length; i++) {
-        diff += (zoneSec[i] / total - planned[i]).abs();
-      }
-      zoneAxis = (1 - diff / 2).clamp(0.0, 1.0);
-    }
-
-    double? intensityAxis;
-    if (total > 0) {
-      final target = session.primaryZone.clamp(1, 6);
-      final weighted =
-          [
-            for (var i = 0; i < 6; i++) zoneSec[i] * (i + 1),
-          ].reduce((a, b) => a + b) /
-          total;
-      intensityAxis = (1 - (weighted - target).abs() / 3).clamp(0.0, 1.0);
-    }
-
-    var score = 0.0, weight = 0.0;
-    score += durationAxis * 0.3;
-    weight += 0.3;
-    if (zoneAxis != null) {
-      score += zoneAxis * 0.3;
-      weight += 0.3;
-    }
-    if (intensityAxis != null) {
-      score += intensityAxis * 0.4;
-      weight += 0.4;
-    }
-    return (score / weight * 100).round();
-  }
-
   List<double>? _plannedZoneDistribution(String? json) =>
       plannedZoneDistribution(json);
 
@@ -565,52 +491,13 @@ class PostWorkoutScorer {
   static List<double>? plannedZoneDistribution(String? json) =>
       core.plannedZoneDistribution(json);
 
-  /// Seconds per zone from per-sample HR against the athlete's zone floors.
-  List<double> _zoneSecFromSamples(
-    String metricsJson,
-    List<int> floors,
-    double durationSec,
-  ) {
-    final hrs = (jsonDecode(metricsJson) as List)
-        .whereType<Map<String, dynamic>>()
-        .map((s) => (s['hr'] as num?)?.toDouble())
-        .where((hr) => hr != null && hr > 0)
-        .cast<double>()
-        .toList();
-    final zones = List<double>.filled(6, 0.0);
-    if (hrs.isEmpty) return zones;
-    final perSample = durationSec / hrs.length;
-    for (final hr in hrs) {
-      var z = 0;
-      for (var i = 0; i < floors.length; i++) {
-        if (hr >= floors[i]) z = i;
-      }
-      zones[z] += perSample;
-    }
-    return zones;
-  }
-
-  /// `{zone1: %, …}` → seconds per zone.
-  List<double>? _parseZoneSec(String? json, double durationSec) {
-    if (json == null) return null;
-    final m = jsonDecode(json) as Map<String, dynamic>;
-    final zones = List<double>.filled(6, 0.0);
-    var any = false;
-    for (var i = 1; i <= 5; i++) {
-      final pct = (m['zone$i'] as num?)?.toDouble() ?? 0.0;
-      if (pct > 0) any = true;
-      zones[i - 1] = durationSec * pct / 100;
-    }
-    return any ? zones : null;
-  }
-
   /// Whether [activityId] already completed a session.
   Future<bool> _isLinked(String activityId) async =>
       (await (_db.select(_db.sessionActuals)
-                ..where((t) => t.activityId.equals(activityId))
-                ..limit(1))
-              .getSingleOrNull()) !=
-          null;
+            ..where((t) => t.activityId.equals(activityId))
+            ..limit(1))
+          .getSingleOrNull()) !=
+      null;
 
   /// Activities on [session]'s day that complete no session yet: what the
   /// athlete can mark it done with. The same sport comes first.
@@ -719,9 +606,9 @@ class PostWorkoutScorer {
   /// and no other activity does. Anything less stays unlinked and can be
   /// corrected later. Returns how many were linked.
   Future<int> linkExistingCompletions() async {
-    final open = await (_db.select(_db.sessionActuals)
-          ..where((t) => t.activityId.isNull() & t.startedAt.isNotNull()))
-        .get();
+    final open = await (_db.select(
+      _db.sessionActuals,
+    )..where((t) => t.activityId.isNull() & t.startedAt.isNotNull())).get();
     if (open.isEmpty) return 0;
     final taken = (await _db.select(_db.sessionActuals).get())
         .map((a) => a.activityId)
@@ -729,9 +616,9 @@ class PostWorkoutScorer {
         .toSet();
     var linked = 0;
     for (final a in open) {
-      final candidates = await (_db.select(_db.activityRecords)
-            ..where((t) => t.startDate.equals(a.startedAt!)))
-          .get();
+      final candidates = await (_db.select(
+        _db.activityRecords,
+      )..where((t) => t.startDate.equals(a.startedAt!))).get();
       final free = candidates.where((c) => !taken.contains(c.activityId));
       if (candidates.length != 1 || free.length != 1) continue;
       final id = free.single.activityId;
@@ -909,36 +796,7 @@ class PostWorkoutScorer {
     return sorted.first;
   }
 
-  /// Whether an activity of [activityType] can be the planned [sport]. A sport
-  /// without a family of its own matches only an activity of that name, never
-  /// everything.
-  static bool sportFamilyMatches(String sport, String activityType) {
-    final t = activityType.toLowerCase();
-    bool any(List<String> keys) => keys.any(t.contains);
-    switch (sport) {
-      case 'running' || 'trail_running':
-        return any(['run', 'trail', 'treadmill']);
-      case 'cycling_road' || 'cycling_gravel' || 'cycling_mtb':
-        return any(['cycl', 'bike', 'biking', 'ride', 'virtual']);
-      case 'swimming':
-        return any(['swim']);
-      case 'strength':
-        return any(['strength', 'gym', 'weight']);
-      case 'indoor_rowing':
-        return any(['row']);
-      case 'hiking' || 'walking':
-        return any(['hik', 'walk']);
-      case 'inline_skating':
-        return any(['skat', 'inline']);
-      case 'nordic_skiing' || 'skate_skiing' || 'skiing':
-        return any(['ski']);
-      case 'yoga' || 'pilates' || 'stretching':
-        return any(['yoga', 'pilates', 'stretch', 'mobility', 'flexib']);
-      case 'triathlon':
-        return any(['run', 'cycl', 'bike', 'swim']);
-      default:
-        final name = sport.replaceAll('_', '');
-        return name.isNotEmpty && t.replaceAll('_', '').contains(name);
-    }
-  }
+  /// Whether an activity of [activityType] can be the planned [sport].
+  static bool sportFamilyMatches(String sport, String activityType) =>
+      ExecutionScoring.sportFamilyMatches(sport, activityType);
 }

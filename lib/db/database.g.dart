@@ -2327,7 +2327,7 @@ class $HrvRecordsTable extends HrvRecords
   }
 }
 
-class HrvRecord extends DataClass implements Insertable<HrvRecord> {
+class HrvRecord extends HrvRecordBase implements Insertable<HrvRecord> {
   final int id;
   final DateTime date;
   final double? hrvLastNight;
@@ -2341,7 +2341,7 @@ class HrvRecord extends DataClass implements Insertable<HrvRecord> {
   final double? skinTempDelta;
   final String? hrvIntradayJson;
   final String? source;
-  const HrvRecord({
+  HrvRecord({
     required this.id,
     required this.date,
     this.hrvLastNight,
@@ -3180,7 +3180,7 @@ class $SleepRecordsTable extends SleepRecords
   }
 }
 
-class SleepRecord extends DataClass implements Insertable<SleepRecord> {
+class SleepRecord extends SleepRecordBase implements Insertable<SleepRecord> {
   final int id;
   final DateTime date;
   final int totalSleepSeconds;
@@ -3199,7 +3199,7 @@ class SleepRecord extends DataClass implements Insertable<SleepRecord> {
   final double? avgOvernightHrv;
   final int? sleepNeedSeconds;
   final String? source;
-  const SleepRecord({
+  SleepRecord({
     required this.id,
     required this.date,
     required this.totalSleepSeconds,
@@ -4137,7 +4137,8 @@ class $WellnessRecordsTable extends WellnessRecords
   }
 }
 
-class WellnessRecord extends DataClass implements Insertable<WellnessRecord> {
+class WellnessRecord extends WellnessRecordBase
+    implements Insertable<WellnessRecord> {
   final int id;
   final DateTime date;
   final int? steps;
@@ -4156,7 +4157,7 @@ class WellnessRecord extends DataClass implements Insertable<WellnessRecord> {
   final double? avgSpo2;
   final String? source;
   final double? vo2maxCycling;
-  const WellnessRecord({
+  WellnessRecord({
     required this.id,
     required this.date,
     this.steps,
