@@ -33,7 +33,8 @@ Sync now, Unpair), with a sync whenever the app comes to the foreground.
 
 ## Computer (fjelia-desktop)
 
-- [ ] A list of paired phones with Unpair (only Pair Phone… exists).
+- [ ] A list of paired phones with Unpair (only Pair Phone… and Add Athlete…
+      exist).
 - [ ] Keep the identity in the keychain once the app is signed with a team;
       Windows and Linux credential stores (today a file in the app folder).
 - [ ] Ask for ECG waveforms on demand (the log supports it; nothing asks).
@@ -47,7 +48,13 @@ Sync now, Unpair), with a sync whenever the app comes to the foreground.
 
 - [ ] Different schema versions refuse to sync ("Update Fjelia on both
       devices"); allow a newer computer to accept an older phone.
-- [ ] Two-way sync (M2): edits on the computer, newest change per field,
-      edit rights per record, then the computer as a hub for several phones.
+- [x] Two-way sync (M2): edits on the computer reach the phone; the newer
+      change of a record both may edit wins (per record, not yet per field).
+- [ ] Newest change per field instead of per record.
+- [ ] Sessions the computer adds have `sessionType: custom` and may sit in
+      plan `athlete` when no plan is active; check how the phone's planner
+      and watch delivery treat them.
+- [ ] A moved or skipped session reaches the phone by sync; confirm the
+      phone updates or releases the watch entry on its next push.
 - [ ] Certificate renewal (the certificate is valid for ten years).
 - [ ] Coach relay through fjelia-service, end-to-end encrypted.
