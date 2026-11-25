@@ -145,6 +145,7 @@ flutter:
     - assets/splash/
     - assets/licenses/
     - assets/branding/app-icon-original.png
+    - assets/branding/splash-lockup.png
     - assets/models/ecg_sleep_staging.onnx
 
   # To add assets to your application, add an assets section, like this:
