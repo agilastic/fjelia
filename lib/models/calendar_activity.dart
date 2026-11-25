@@ -1,26 +1,10 @@
+import 'package:fjelia_core/models/calendar_activity.dart';
+
 import '../l10n/l10n_ext.dart';
 
-class CalendarActivity {
-  const CalendarActivity({
-    required this.date,
-    required this.sport,
-    required this.title,
-    required this.completed,
-    this.phase,
-    this.skipped = false,
-    this.skipReason,
-  });
-  final DateTime date;
-  final String sport, title;
-  final bool completed;
-  final String? phase;
+export 'package:fjelia_core/models/calendar_activity.dart';
 
-  /// A planned session the athlete (or the readiness check) cancelled.
-  final bool skipped;
-
-  /// Why it was cancelled, when known.
-  final String? skipReason;
-
+extension CalendarActivityLabel on CalendarActivity {
   /// Short status for tooltips and screen readers.
   String get statusLabel => skipped
       ? (skipReason == null ? tr.skipped : '${tr.skipped} · $skipReason')
