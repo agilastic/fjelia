@@ -4,9 +4,9 @@ import 'dart:math' as math;
 import 'package:drift/drift.dart';
 
 import '../db/database.dart';
-import '../models/garmin_data.dart' show LatLng;
-import '../models/heat_acclimation.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/models/garmin_data.dart' show LatLng;
+import 'package:fjelia_core/models/heat_acclimation.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'global_weather_client.dart';
 import 'heat_acclimation_settings.dart';
 import 'location_service.dart';

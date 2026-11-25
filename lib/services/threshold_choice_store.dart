@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../models/threshold_candidate.dart';
+import 'package:fjelia_core/models/threshold_candidate.dart';
 
 /// What the athlete decided about threshold proposals: the candidates they
 /// applied (per kind) and the ones they kept the current value against.

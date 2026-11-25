@@ -10,7 +10,7 @@ import 'package:fjelia/providers/plan_goal_sync_provider.dart';
 import 'package:fjelia/providers/planner_providers.dart';
 import 'package:fjelia/services/plan_session_actions.dart';
 import 'package:fjelia/services/replan_triggers.dart';
-import 'package:fjelia/services/workout_semantics.dart';
+import 'package:fjelia_core/services/workout_semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fjelia/services/race_goal_service.dart';
 import 'package:fjelia/services/season/goal_set.dart';

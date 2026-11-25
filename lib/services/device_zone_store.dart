@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../models/device_hr_zones.dart';
+import 'package:fjelia_core/models/device_hr_zones.dart';
 
 /// Latest HR zone setup reported by each connected platform, so zones from
 /// Garmin, Polar, … are available side by side in one shape.

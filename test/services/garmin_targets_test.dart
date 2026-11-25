@@ -7,7 +7,7 @@ import 'package:fjelia/db/database.dart';
 import 'package:fjelia/providers/user_profile_provider.dart';
 import 'package:fjelia/services/plan_session_actions.dart';
 import 'package:fjelia/services/training_plan_service.dart';
-import 'package:fjelia/services/workout_semantics.dart';
+import 'package:fjelia_core/services/workout_semantics.dart';
 import 'package:fjelia/services/workout_template_library.dart';
 import 'package:flutter_test/flutter_test.dart';
 

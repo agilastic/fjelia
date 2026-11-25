@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:fjelia/services/fit_activity_data.dart';
-import 'package:fjelia/services/polar_exercise_data.dart';
+import 'package:fjelia_core/services/fit_activity_data.dart';
+import 'package:fjelia_core/services/polar_exercise_data.dart';
 
 import '../support/polar_fit_fixture.dart';
 

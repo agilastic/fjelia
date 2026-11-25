@@ -11,7 +11,7 @@ import 'package:foundation_models_framework/foundation_models_framework.dart';
 import 'package:fjelia_service_api/fjelia_service_api.dart';
 import 'package:http/http.dart' as http;
 
-import 'ai_coach_rules.dart';
+import 'package:fjelia_core/services/ai_coach_rules.dart';
 import 'ai_response_cache.dart';
 import 'ai_coach_settings.dart';
 import 'apple_coach_request.dart';
@@ -25,9 +25,9 @@ import 'fjelia_pro.dart';
 import 'local_model_service.dart';
 import 'local_coach_reply.dart';
 import '../l10n/l10n_ext.dart';
-import '../models/chat_message.dart';
-import '../utils/log.dart';
-export '../models/chat_message.dart';
+import 'package:fjelia_core/models/chat_message.dart';
+import 'package:fjelia_core/utils/log.dart';
+export 'package:fjelia_core/models/chat_message.dart';
 export 'apple_coach_request.dart' show AiCoachException;
 
 const _coachPrompt =

@@ -2,7 +2,7 @@ import 'package:fjelia_service_api/fjelia_service_api.dart';
 
 import '../db/database.dart';
 import 'coach_tasks.dart' show ecgClinicalMode;
-import 'ecg_analysis.dart';
+import 'package:fjelia_core/services/ecg_analysis.dart';
 
 /// ECG context for the coach chat, in two stages. By default the coach only
 /// learns that a recording exists ([ecgAvailableLine]); its analysis is added

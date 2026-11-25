@@ -13,7 +13,7 @@ import '../../providers/pro_analysis_provider.dart';
 import '../../services/ai_coach_settings.dart';
 import '../../services/pro_analysis.dart';
 import '../../theme/fjelia_style.dart';
-import '../../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import '../../widgets/app_widgets.dart';
 import '../ai_coach/ai_coach_screen.dart' show coachGradient;
 import '../settings/fjelia_pro_sheet.dart';

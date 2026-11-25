@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:fjelia/models/activity_location.dart';
+import 'package:fjelia_core/models/activity_location.dart';
 import 'package:fjelia/services/activity_background.dart';
 import 'package:flutter/services.dart';
 

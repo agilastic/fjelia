@@ -1,9 +1,9 @@
 import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../db/database.dart';
-import '../models/hrv_training_episode.dart';
+import 'package:fjelia_core/models/hrv_training_episode.dart';
 import '../models/spot_hrv.dart';
-import '../services/hrv/hrv_timing_policy.dart';
+import 'package:fjelia_core/services/hrv/hrv_timing_policy.dart';
 import 'database_provider.dart';
 
 final spotHrvProvider = StreamProvider<List<SpotHrvMeasurement>>((ref) {

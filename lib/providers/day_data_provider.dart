@@ -8,13 +8,14 @@ import 'package:health/health.dart';
 
 import '../api/garmin_client.dart';
 import '../db/database.dart' hide DailyBpSummary;
-import '../models/garmin_data.dart';
-import '../models/scores.dart';
+import 'package:fjelia_core/models/garmin_data.dart';
+import 'package:fjelia_core/models/scores.dart';
 import '../services/activity_decoder.dart';
-import '../services/score_calculator.dart';
-import '../services/sleep_stage_estimate.dart';
+import 'package:fjelia_core/services/score_calculator.dart';
+import 'package:fjelia_core/services/sleep_stage_estimate.dart';
+import 'package:fjelia_core/services/training_form.dart';
 import '../services/ecg_storage_service.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'auth_provider.dart';
 import 'health_connect_provider.dart';
 import 'database_provider.dart';
@@ -22,7 +23,9 @@ import 'source_priority_provider.dart';
 import 'training_load_provider.dart';
 import 'user_profile_provider.dart';
 import 'week_start_provider.dart';
-import '../utils/week.dart';
+import 'package:fjelia_core/utils/week.dart';
+
+export 'package:fjelia_core/services/training_form.dart' show FormPoint, buildTrainingFormSeries;
 
 DateTime _day(DateTime d) => DateTime(d.year, d.month, d.day);
 
@@ -743,84 +746,6 @@ final peakLoadProvider = FutureProvider<double>((ref) async {
     (m, s) => math.max(m, (s.strainScore ?? 0).clamp(0.0, 2000.0)),
   );
 });
-
-/// One day of the form chart.
-class FormPoint {
-  const FormPoint({
-    required this.date,
-    required this.ctl,
-    required this.atl,
-    required this.load,
-    this.historyStart,
-  });
-
-  final DateTime date;
-  final double ctl;
-  final double atl;
-  final double load;
-  final DateTime? historyStart;
-
-  /// Calendar days of available history, including rest days. Null for points
-  /// supplied without initialization metadata (for example, imported series).
-  int? get historyDays => historyStart == null
-      ? null
-      : DateTime.utc(date.year, date.month, date.day)
-                .difference(
-                  DateTime.utc(
-                    historyStart!.year,
-                    historyStart!.month,
-                    historyStart!.day,
-                  ),
-                )
-                .inDays +
-            1;
-
-  double get tsb => ctl - atl;
-}
-
-/// Initialize from the earliest usable load record, then process every local
-/// calendar day through [through]. The visible chart range never resets the
-/// calculation. Keep the existing smoothing coefficients used by Fjelia.
-List<FormPoint> buildTrainingFormSeries({
-  required Map<DateTime, double> dailyLoads,
-  required DateTime through,
-}) {
-  final end = _day(through);
-  final daily = <DateTime, double>{};
-  // Ignore Unix-epoch placeholder dates while retaining all real imported
-  // history. A sentinel row otherwise makes the chart claim to start in 1970.
-  final earliestUsableDate = DateTime(1970, 1, 2);
-  for (final entry in dailyLoads.entries) {
-    final d = _day(entry.key);
-    final load = entry.value;
-    if (d.isBefore(earliestUsableDate) ||
-        d.isAfter(end) ||
-        !load.isFinite ||
-        load < 0) {
-      continue;
-    }
-    daily[d] = (daily[d] ?? 0) + load;
-  }
-  if (daily.isEmpty) return [];
-  final start = (daily.keys.toList()..sort()).first;
-  final span = DateTime.utc(
-    end.year,
-    end.month,
-    end.day,
-  ).difference(DateTime.utc(start.year, start.month, start.day)).inDays;
-  var ctl = 0.0, atl = 0.0;
-  final points = <FormPoint>[];
-  for (var i = 0; i <= span; i++) {
-    final d = DateTime(start.year, start.month, start.day + i);
-    final load = daily[d] ?? 0;
-    ctl += (load - ctl) * (2 / 43);
-    atl += (load - atl) * 0.25;
-    points.add(
-      FormPoint(date: d, ctl: ctl, atl: atl, load: load, historyStart: start),
-    );
-  }
-  return points;
-}
 
 class _TrainingLoadHistory {
   const _TrainingLoadHistory(this.daily, this.points);

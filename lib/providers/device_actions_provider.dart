@@ -5,14 +5,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../db/database.dart';
-import '../models/device_connection.dart';
+import 'package:fjelia_core/models/device_connection.dart';
 import '../services/renpho_ble_scale_service.dart';
 import 'database_provider.dart';
 import 'day_data_provider.dart';
 import 'hilo_sync_provider.dart';
 import 'user_profile_provider.dart';
 import 'body_measurements_provider.dart';
-export '../models/device_connection.dart';
+export 'package:fjelia_core/models/device_connection.dart';
 
 final deviceActionsProvider = Provider<DeviceActions>(
   (ref) => DeviceActions(ref),

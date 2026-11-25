@@ -15,7 +15,7 @@ import '../../providers/auth_provider.dart';
 import '../../providers/planner_providers.dart';
 import '../../providers/sync_provider.dart';
 import '../../providers/user_profile_provider.dart';
-import '../../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import '../../widgets/history_sync_card.dart';
 import '../settings/race_goal_editor.dart';
 import 'onboarding_widgets.dart';

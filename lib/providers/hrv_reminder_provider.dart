@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../services/hrv/hrv_notification_action_router.dart';
 import '../services/hrv/hrv_post_reminder_coordinator.dart';
-import '../services/hrv/hrv_timing_policy.dart';
+import 'package:fjelia_core/services/hrv/hrv_timing_policy.dart';
 import '../services/notifications/local_notification_adapter.dart';
 import '../services/notifications/local_notification_gateway.dart';
 import '../services/polar_h10_service.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../db/database.dart';
-import '../models/threshold_candidate.dart';
+import 'package:fjelia_core/models/threshold_candidate.dart';
 import '../services/lt1_drift_service.dart';
 import '../services/threshold_choice_store.dart';
 import 'database_provider.dart';

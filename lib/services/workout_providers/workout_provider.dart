@@ -1,5 +1,5 @@
 import '../../db/database.dart';
-import '../../models/prepared_workout.dart';
+import 'package:fjelia_core/models/prepared_workout.dart';
 
 /// How a platform takes a workout.
 enum DeliveryMode {

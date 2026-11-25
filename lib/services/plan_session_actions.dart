@@ -4,7 +4,7 @@ import 'package:uuid/uuid.dart';
 import '../db/database.dart';
 import '../l10n/l10n_ext.dart';
 import '../l10n/plan_text.dart' show absenceKindLabel;
-import '../utils/week.dart';
+import 'package:fjelia_core/utils/week.dart';
 import 'workout_providers/workout_providers.dart';
 import 'race_goal_service.dart';
 import 'workout_replacement_service.dart';

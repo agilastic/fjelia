@@ -23,7 +23,7 @@ import '../../providers/day_data_provider.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/plan_timeline.dart';
 import '../strain/activity_detail_sheet.dart';
-import '../../utils/week.dart';
+import 'package:fjelia_core/utils/week.dart';
 import '../../providers/week_start_provider.dart';
 
 class ActivitiesScreen extends ConsumerWidget {

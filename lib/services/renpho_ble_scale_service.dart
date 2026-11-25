@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 
 class RenphoFoundScale {
   const RenphoFoundScale(this.mac, this.name, this.rssi);

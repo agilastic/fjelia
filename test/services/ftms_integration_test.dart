@@ -1,11 +1,11 @@
-import 'package:fjelia/models/concept2.dart';
-import 'package:fjelia/models/ftms.dart';
-import 'package:fjelia/models/indoor_recording.dart';
+import 'package:fjelia_core/models/concept2.dart';
+import 'package:fjelia_core/models/ftms.dart';
+import 'package:fjelia_core/models/indoor_recording.dart';
 import 'package:fjelia/services/training_ble.dart';
 import 'package:fjelia/services/indoor_fit_export.dart';
-import 'package:fjelia/services/fit_activity_data.dart';
-import 'package:fjelia/services/fit_decode.dart';
-import 'package:fjelia/services/hr_zone_model.dart';
+import 'package:fjelia_core/services/fit_activity_data.dart';
+import 'package:fjelia_core/services/fit_decode.dart';
+import 'package:fjelia_core/services/hr_zone_model.dart';
 
 import 'dart:convert';
 

@@ -7,18 +7,18 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 import '../api/coros_workout.dart';
-import '../models/prepared_workout.dart';
+import 'package:fjelia_core/models/prepared_workout.dart';
 import '../api/coros_client.dart';
 import '../api/coros_mcp_client.dart';
 import 'coros_health_text.dart';
 import '../db/database.dart';
 import 'device_threshold_store.dart';
-import '../models/heart_rate.dart';
+import 'package:fjelia_core/models/heart_rate.dart';
 import '../theme/activity_colors.dart' show activityKind;
 import 'activity_file_import_service.dart'
     show ActivityFile, decodeActivityFile;
 import 'dfa_alpha1_service.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'workout_providers/cleanup_queue.dart';
 import 'workout_providers/delivery_ledger.dart';
 

@@ -11,7 +11,7 @@ import '../../providers/lt2_tt_provider.dart';
 import '../../providers/vo2max_provider.dart';
 import '../../providers/ftp_provider.dart';
 import '../../widgets/app_widgets.dart';
-import '../../services/activity_power_estimator.dart';
+import 'package:fjelia_core/services/activity_power_estimator.dart';
 import 'load_visuals.dart';
 import 'training_monitor_card.dart' show LoadZonesSheet;
 import 'lt2_test_sheet.dart';

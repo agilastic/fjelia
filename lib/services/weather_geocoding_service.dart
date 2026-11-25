@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../models/weather_place.dart';
+import 'package:fjelia_core/models/weather_place.dart';
 
 class WeatherGeocodingService {
   WeatherGeocodingService({http.Client? client})

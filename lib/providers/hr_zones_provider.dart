@@ -7,8 +7,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../db/database.dart';
 import '../services/hr_zone_change_notice.dart';
 import '../services/hr_zone_history.dart';
-import '../services/hr_zone_model.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/services/hr_zone_model.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'database_provider.dart';
 import 'user_profile_provider.dart';
 

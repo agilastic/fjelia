@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
 
-import '../models/gym_workout.dart';
+import 'package:fjelia_core/models/gym_workout.dart';
 
 /// Original interoperability code based on the supplied Matrix Home build's
 /// LoginClient, WorkoutsParameters, Interval and DistanceMetric wire formats.

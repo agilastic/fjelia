@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 
 import '../db/database.dart';
-import '../models/gym_workout.dart';
+import 'package:fjelia_core/models/gym_workout.dart';
 
 class GymWorkoutImportResult {
   const GymWorkoutImportResult(this.imported, this.duplicates);

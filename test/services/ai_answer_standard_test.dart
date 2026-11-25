@@ -6,7 +6,7 @@ import 'package:fjelia/services/activity_coach_context.dart';
 import 'package:fjelia/services/ai_coach_client.dart';
 import 'package:fjelia/services/ai_coach_settings.dart';
 import 'package:fjelia/services/ai_context_toon_builder.dart';
-import 'package:fjelia/services/ai_data_status.dart';
+import 'package:fjelia_core/services/ai_data_status.dart';
 import 'package:fjelia/services/apple_coach_request.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';

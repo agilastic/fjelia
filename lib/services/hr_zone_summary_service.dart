@@ -6,7 +6,7 @@ import 'package:fjelia_service_api/fjelia_service_api.dart';
 
 import '../db/database.dart';
 import 'hr_zone_history.dart';
-import 'hr_zone_model.dart';
+import 'package:fjelia_core/services/hr_zone_model.dart';
 
 /// The time in Z1–Z5 of every workout, computed once and kept (FjeliaPro
 /// zone trends). The rules, documented here:

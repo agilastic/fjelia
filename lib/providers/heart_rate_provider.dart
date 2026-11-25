@@ -1,4 +1,4 @@
-import '../models/heart_rate_summary.dart';
+import 'package:fjelia_core/models/heart_rate_summary.dart';
 
 import 'package:health/health.dart';
 
@@ -11,10 +11,10 @@ import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../db/database.dart';
-import '../models/heart_rate.dart';
+import 'package:fjelia_core/models/heart_rate.dart';
 import 'database_provider.dart';
 import 'day_data_provider.dart';
-import '../models/chart_point.dart';
+import 'package:fjelia_core/models/chart_point.dart';
 
 final hrActivitiesProvider =
     FutureProvider.family<List<ActivityRecord>, DateTime>((ref, date) {

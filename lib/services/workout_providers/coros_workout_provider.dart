@@ -1,6 +1,6 @@
 import '../../api/coros_workout.dart' show CorosUnsupportedWorkout;
 import '../../db/database.dart';
-import '../../models/prepared_workout.dart';
+import 'package:fjelia_core/models/prepared_workout.dart';
 import '../coros_service.dart';
 import '../workout_destination.dart';
 import 'workout_provider.dart';

@@ -2,7 +2,7 @@ import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fjelia/db/database.dart';
-import 'package:fjelia/models/planned_workout_presentation.dart';
+import 'package:fjelia_core/models/planned_workout_presentation.dart';
 import 'package:fjelia/services/daily_readiness_service.dart';
 import 'package:fjelia/services/plan_session_actions.dart';
 import 'package:fjelia/services/session_adaptation_service.dart';

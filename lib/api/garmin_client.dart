@@ -9,11 +9,11 @@ import 'package:cupertino_http/cupertino_http.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/device_hr_zones.dart';
-import '../models/garmin_data.dart';
-import '../models/heart_rate.dart';
+import 'package:fjelia_core/models/device_hr_zones.dart';
+import 'package:fjelia_core/models/garmin_data.dart';
+import 'package:fjelia_core/models/heart_rate.dart';
 import '../services/device_threshold_store.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 
 class GarminApiException implements Exception {
   GarminApiException(this.message);

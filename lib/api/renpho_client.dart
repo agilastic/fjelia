@@ -6,8 +6,8 @@ import 'package:encrypt/encrypt.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/renpho_data.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/models/renpho_data.dart';
+import 'package:fjelia_core/utils/log.dart';
 
 class RenphoApiException implements Exception {
   const RenphoApiException(this.operation, this.message, {this.code});

@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../services/dfa_alpha1.dart';
+import 'package:fjelia_core/services/dfa_alpha1.dart';
 import '../services/dfa_alpha1_service.dart';
 import 'database_provider.dart';
 

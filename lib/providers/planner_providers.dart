@@ -19,7 +19,7 @@ import '../services/season/goal_set.dart';
 import '../services/season/season_report.dart';
 import '../services/training_plan_service.dart';
 import '../services/workout_template_library.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'auth_provider.dart';
 import 'database_provider.dart';
 import 'user_profile_provider.dart';

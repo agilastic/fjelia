@@ -11,9 +11,9 @@ import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/services/race_goal_service.dart';
 import 'package:fjelia/services/season/goal_set.dart';
-import 'package:fjelia/services/session_stress.dart';
+import 'package:fjelia_core/services/session_stress.dart';
 import 'package:fjelia/services/training_plan_service.dart';
-import 'package:fjelia/services/workout_semantics.dart';
+import 'package:fjelia_core/services/workout_semantics.dart';
 import 'package:fjelia/services/workout_template_library.dart';
 import 'package:flutter_test/flutter_test.dart';
 

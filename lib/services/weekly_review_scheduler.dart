@@ -4,8 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../db/database.dart';
 import '../l10n/l10n_ext.dart';
-import '../utils/log.dart';
-import '../utils/week.dart';
+import 'package:fjelia_core/utils/log.dart';
+import 'package:fjelia_core/utils/week.dart';
 import 'notifications/local_notification_gateway.dart';
 import 'pro_analysis.dart';
 

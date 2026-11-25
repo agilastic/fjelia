@@ -1,6 +1,6 @@
 import '../db/database.dart';
 import '../providers/training_load_provider.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 
 class _EnergieResult {
   const _EnergieResult(this.end, this.charge, this.drain);

@@ -1,7 +1,7 @@
 import 'package:drift/native.dart';
 import 'package:fjelia/api/garmin_client.dart';
 import 'package:fjelia/db/database.dart';
-import 'package:fjelia/models/garmin_data.dart';
+import 'package:fjelia_core/models/garmin_data.dart';
 import 'package:fjelia/providers/auth_provider.dart';
 import 'package:fjelia/providers/database_provider.dart';
 import 'package:fjelia/providers/sync_provider.dart';

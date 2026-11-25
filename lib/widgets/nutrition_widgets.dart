@@ -11,7 +11,7 @@ import '../providers/nutrition_provider.dart';
 import '../providers/hrv_reminder_provider.dart';
 import '../services/nutrition_service.dart';
 import '../theme/activity_colors.dart';
-import '../utils/decimal.dart';
+import 'package:fjelia_core/utils/decimal.dart';
 import 'app_widgets.dart';
 import 'drink_mix_sheet.dart';
 

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:fjelia/models/chat_message.dart';
+import 'package:fjelia_core/models/chat_message.dart';
 import 'package:fjelia/services/apple_coach_request.dart';
 
 void main() {

@@ -6,12 +6,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../l10n/l10n_ext.dart';
-import '../models/gym_workout.dart';
-import '../models/training_ble_profile.dart';
+import 'package:fjelia_core/models/gym_workout.dart';
+import 'package:fjelia_core/models/training_ble_profile.dart';
 import '../providers/gym_treadmill_provider.dart';
 import '../providers/indoor_recording_provider.dart';
 import '../services/matrix_xid_client.dart';
-import '../utils/decimal.dart';
+import 'package:fjelia_core/utils/decimal.dart';
 import 'app_widgets.dart';
 import 'ecg_sheet.dart'
     show chooseTrainingDevice, recordingDuration, shareRecordingFile;

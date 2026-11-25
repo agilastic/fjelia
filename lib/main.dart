@@ -73,7 +73,7 @@ import 'services/nutrition_reminder_service.dart';
 import 'services/nutrition_service.dart';
 import 'services/workout_background.dart';
 import 'providers/database_provider.dart';
-import 'utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 
 import 'package:fjelia_service_api/fjelia_service_api.dart';
 

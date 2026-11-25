@@ -1,8 +1,8 @@
 import 'package:fjelia/l10n/app_localizations.dart';
-import 'package:fjelia/models/garmin_data.dart';
-import 'package:fjelia/models/planned_workout_presentation.dart';
-import 'package:fjelia/models/workout_presentation.dart';
-import 'package:fjelia/models/workout_profile.dart';
+import 'package:fjelia_core/models/garmin_data.dart';
+import 'package:fjelia_core/models/planned_workout_presentation.dart';
+import 'package:fjelia_core/models/workout_presentation.dart';
+import 'package:fjelia_core/models/workout_profile.dart';
 import 'package:fjelia/screens/activities/workout_detail_sheet.dart';
 import 'package:fjelia/widgets/workout_profile_bar.dart';
 import 'package:fjelia/widgets/workout_structure_list.dart';

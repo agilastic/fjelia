@@ -6,7 +6,7 @@ import 'package:drift/drift.dart' hide isNull;
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/models/coach_context_card.dart';
-import 'package:fjelia/models/garmin_data.dart';
+import 'package:fjelia_core/models/garmin_data.dart';
 import 'package:fjelia/providers/ai_coach_provider.dart';
 import 'package:fjelia/providers/database_provider.dart';
 import 'package:fjelia/screens/ai_coach/ai_coach_screen.dart';

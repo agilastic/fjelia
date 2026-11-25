@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../widgets/app_widgets.dart';
-import '../../utils/week.dart';
+import 'package:fjelia_core/utils/week.dart';
 
 const loadBlue = Color(0xFF4BC0EB);
 const loadOrange = Color(0xFFFF9100);

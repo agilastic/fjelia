@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../db/database.dart';
-import '../models/renpho_data.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/models/renpho_data.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'database_provider.dart';
 import 'day_data_provider.dart';
 

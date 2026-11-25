@@ -1,5 +1,5 @@
 import '../services/weather_geocoding_service.dart';
-import '../models/weather_place.dart';
+import 'package:fjelia_core/models/weather_place.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

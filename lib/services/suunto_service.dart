@@ -8,8 +8,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 import '../db/database.dart';
-import '../models/heart_rate.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/models/heart_rate.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'source_priority_service.dart';
 
 class _DayActivity {

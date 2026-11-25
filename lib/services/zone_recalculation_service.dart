@@ -4,7 +4,7 @@ import 'package:drift/drift.dart';
 
 import '../db/database.dart';
 import 'hr_zone_history.dart';
-import 'hr_zone_model.dart';
+import 'package:fjelia_core/services/hr_zone_model.dart';
 
 /// Recomputes activities' time-in-zone from HR samples with the zones in
 /// force on each workout's day (the zone history), so workouts from

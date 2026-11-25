@@ -4,7 +4,7 @@ import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/models/spot_hrv.dart';
 import 'package:fjelia/services/hrv/hrv_post_reminder_coordinator.dart';
-import 'package:fjelia/services/hrv/hrv_post_reminder_policy.dart';
+import 'package:fjelia_core/services/hrv/hrv_post_reminder_policy.dart';
 import 'package:fjelia/services/notifications/local_notification_gateway.dart';
 import 'package:flutter_test/flutter_test.dart';
 

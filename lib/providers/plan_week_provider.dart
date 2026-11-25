@@ -2,7 +2,7 @@ import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../db/database.dart';
-import '../models/garmin_data.dart';
+import 'package:fjelia_core/models/garmin_data.dart';
 import '../services/post_workout_scorer.dart' show noActivityReason;
 import 'database_provider.dart';
 import 'day_data_provider.dart';

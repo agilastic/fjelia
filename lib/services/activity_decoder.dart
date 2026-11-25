@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import '../db/database.dart';
-import '../models/garmin_data.dart';
-import '../models/heart_rate.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/models/garmin_data.dart';
+import 'package:fjelia_core/models/heart_rate.dart';
+import 'package:fjelia_core/utils/log.dart';
 
 /// Decodes a stored JSON column. A missing or blank value means there is no
 /// data; an unreadable value is logged. Both give null, so one damaged field

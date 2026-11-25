@@ -7,7 +7,7 @@ import 'database_provider.dart';
 import 'day_data_provider.dart';
 import 'body_measurements_provider.dart';
 import '../l10n/l10n_ext.dart';
-import '../utils/decimal.dart';
+import 'package:fjelia_core/utils/decimal.dart';
 
 final manualMeasurementActionsProvider = Provider<ManualMeasurementActions>(
   (ref) => ManualMeasurementActions(ref),

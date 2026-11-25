@@ -7,7 +7,7 @@ import '../db/database.dart';
 import '../providers/training_load_provider.dart' show effectiveLoad;
 import 'dfa_alpha1_service.dart';
 import 'hrv/hrv_ai_context_builder.dart';
-import 'hrv/hrv_comparison_service.dart';
+import 'package:fjelia_core/services/hrv/hrv_comparison_service.dart';
 import 'hrv/hrv_training_service.dart';
 
 /// Compact TOON context for chatting about one activity: the activity with

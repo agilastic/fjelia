@@ -1,7 +1,7 @@
 import '../l10n/l10n_ext.dart';
-import '../models/health_metric.dart';
+import 'package:fjelia_core/models/health_metric.dart';
 import '../providers/metric_history_provider.dart';
-export '../models/health_metric.dart';
+export 'package:fjelia_core/models/health_metric.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

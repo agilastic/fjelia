@@ -2,12 +2,12 @@ import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../db/database.dart';
-import '../../models/hrv_pair_assessment.dart';
-import '../../models/hrv_training_episode.dart';
-import 'activity_interval_resolver.dart';
-import 'hrv_pair_assessment_service.dart';
-import 'hrv_pairing_service.dart';
-import 'hrv_timing_policy.dart';
+import 'package:fjelia_core/models/hrv_pair_assessment.dart';
+import 'package:fjelia_core/models/hrv_training_episode.dart';
+import 'package:fjelia_core/services/hrv/activity_interval_resolver.dart';
+import 'package:fjelia_core/services/hrv/hrv_pair_assessment_service.dart';
+import 'package:fjelia_core/services/hrv/hrv_pairing_service.dart';
+import 'package:fjelia_core/services/hrv/hrv_timing_policy.dart';
 
 /// Everything the card, the chart, the reminder and the AI read, built from
 /// the same facts in one pass.

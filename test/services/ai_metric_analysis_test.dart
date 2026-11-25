@@ -3,7 +3,7 @@ import 'package:fjelia/l10n/app_localizations.dart';
 import 'package:fjelia/services/ai_coach_client.dart' show mentionsSchedule;
 import 'package:fjelia/services/ai_metric_analysis.dart';
 import 'package:fjelia/services/briefing_brief.dart';
-import 'package:fjelia/models/chat_message.dart';
+import 'package:fjelia_core/models/chat_message.dart';
 import 'package:fjelia/services/apple_coach_request.dart';
 import 'package:fjelia/services/apple_context_facts.dart';
 import 'package:fjelia/services/briefing_text.dart';

@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:fjelia_service_api/fjelia_service_api.dart';
 
 import '../db/database.dart';
-import '../utils/week.dart';
-import '../services/hr_zone_model.dart';
+import 'package:fjelia_core/utils/week.dart';
+import 'package:fjelia_core/services/hr_zone_model.dart';
 
 /// Recorded activity totals for one calendar week. Missing zones are not zero
 /// intensity: keep their activity count so the UI can show missing coverage.

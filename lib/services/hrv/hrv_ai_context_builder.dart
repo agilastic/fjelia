@@ -1,7 +1,7 @@
-import '../../models/hrv_pair_assessment.dart';
-import '../../models/hrv_training_episode.dart';
-import 'hrv_comparison_service.dart';
-import 'hrv_timing_policy.dart';
+import 'package:fjelia_core/models/hrv_pair_assessment.dart';
+import 'package:fjelia_core/models/hrv_training_episode.dart';
+import 'package:fjelia_core/services/hrv/hrv_comparison_service.dart';
+import 'package:fjelia_core/services/hrv/hrv_timing_policy.dart';
 import 'hrv_training_service.dart';
 
 /// Renders the shared HRV assessment as compact context lines for every AI

@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
-import 'package:fjelia/models/health_metric.dart';
+import 'package:fjelia_core/models/health_metric.dart';
 import 'package:fjelia/providers/database_provider.dart';
 import 'package:fjelia/providers/metric_history_provider.dart';
 import 'package:fjelia/providers/user_profile_provider.dart';

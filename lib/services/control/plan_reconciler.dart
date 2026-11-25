@@ -5,7 +5,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../db/database.dart';
 import '../../models/strength_workout.dart' show isStrengthSport;
-import '../../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import '../missed_workout_planner.dart' show SessionWeight, weightOf;
 import '../plan_session_actions.dart';
 import '../post_workout_scorer.dart';

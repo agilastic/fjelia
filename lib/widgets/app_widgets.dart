@@ -2,8 +2,8 @@ import 'dart:math' as math;
 
 import '../theme/fjelia_style.dart';
 import '../l10n/formats.dart';
-import '../models/chart_point.dart';
-export '../models/chart_point.dart';
+import 'package:fjelia_core/models/chart_point.dart';
+export 'package:fjelia_core/models/chart_point.dart';
 
 import 'package:flutter/material.dart';
 

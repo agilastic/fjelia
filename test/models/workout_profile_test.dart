@@ -2,7 +2,7 @@ import 'package:fjelia/l10n/app_localizations.dart';
 
 import 'dart:convert';
 
-import 'package:fjelia/models/workout_profile.dart';
+import 'package:fjelia_core/models/workout_profile.dart';
 import 'package:fjelia/widgets/workout_profile_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

@@ -3,11 +3,11 @@ import 'dart:typed_data';
 
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
-import '../models/concept2.dart';
-import '../models/ftms.dart';
+import 'package:fjelia_core/models/concept2.dart';
+import 'package:fjelia_core/models/ftms.dart';
 import '../models/spot_hrv.dart';
-import '../models/running_speed.dart';
-import '../models/training_ble_profile.dart';
+import 'package:fjelia_core/models/running_speed.dart';
+import 'package:fjelia_core/models/training_ble_profile.dart';
 import 'training_ble.dart';
 
 class FtmsDeviceService {

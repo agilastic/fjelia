@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../db/database.dart';
-import '../models/hrv_pair_assessment.dart';
-import '../models/hrv_training_episode.dart';
-import '../services/hrv/hrv_comparison_service.dart';
-import '../services/hrv/hrv_timing_policy.dart';
+import 'package:fjelia_core/models/hrv_pair_assessment.dart';
+import 'package:fjelia_core/models/hrv_training_episode.dart';
+import 'package:fjelia_core/services/hrv/hrv_comparison_service.dart';
+import 'package:fjelia_core/services/hrv/hrv_timing_policy.dart';
 import '../services/hrv/hrv_training_service.dart';
 import 'database_provider.dart';
 import 'spot_hrv_provider.dart';

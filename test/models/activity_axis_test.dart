@@ -1,6 +1,6 @@
 import 'package:fjelia/l10n/app_localizations.dart';
-import 'package:fjelia/models/activity_axis.dart';
-import 'package:fjelia/models/garmin_data.dart';
+import 'package:fjelia_core/models/activity_axis.dart';
+import 'package:fjelia_core/models/garmin_data.dart';
 import 'package:fjelia/providers/hr_zones_provider.dart';
 import 'package:fjelia/widgets/activity_performance_chart.dart';
 import 'package:fl_chart/fl_chart.dart';

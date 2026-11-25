@@ -6,10 +6,10 @@ import 'package:intl/intl.dart' show DateFormat;
 import '../db/database.dart';
 import '../l10n/formats.dart';
 import '../l10n/l10n_ext.dart';
-import '../models/waist_ratios.dart';
+import 'package:fjelia_core/models/waist_ratios.dart';
 import '../providers/user_profile_provider.dart';
 import '../providers/waist_provider.dart';
-import '../utils/decimal.dart';
+import 'package:fjelia_core/utils/decimal.dart';
 import 'app_widgets.dart';
 
 const _hipColor = Colors.orange;

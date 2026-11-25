@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../models/hrv_pair_assessment.dart';
-import '../models/hrv_training_episode.dart';
+import 'package:fjelia_core/models/hrv_pair_assessment.dart';
+import 'package:fjelia_core/models/hrv_training_episode.dart';
 import '../providers/hrv_training_provider.dart';
-import '../services/hrv/hrv_comparison_service.dart';
-import '../services/hrv/hrv_post_reminder_policy.dart';
+import 'package:fjelia_core/services/hrv/hrv_comparison_service.dart';
+import 'package:fjelia_core/services/hrv/hrv_post_reminder_policy.dart';
 import '../services/hrv/hrv_texts.dart';
 import '../theme/activity_colors.dart';
 import '../theme/hrv_colors.dart';

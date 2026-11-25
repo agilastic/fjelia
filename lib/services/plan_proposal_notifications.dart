@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../l10n/formats.dart';
 import '../l10n/l10n_ext.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'missed_workout_reminder_service.dart';
 import 'notifications/local_notification_gateway.dart';
 import 'plan_proposal_store.dart';

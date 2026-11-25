@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fjelia/db/database.dart';
-import 'package:fjelia/models/hrv_training_episode.dart';
+import 'package:fjelia_core/models/hrv_training_episode.dart';
 import 'package:fjelia/models/spot_hrv.dart';
 import 'package:fjelia/providers/hrv_reminder_provider.dart';
 import 'package:fjelia/providers/database_provider.dart';

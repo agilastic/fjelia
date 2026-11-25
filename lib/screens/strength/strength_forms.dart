@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../models/strength_workout.dart';
 import '../../theme/activity_colors.dart';
-import '../../utils/decimal.dart';
+import 'package:fjelia_core/utils/decimal.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/strength_widgets.dart';
 

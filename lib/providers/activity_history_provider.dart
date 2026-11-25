@@ -8,7 +8,7 @@ import 'nutrition_provider.dart';
 import 'strength_provider.dart';
 import 'day_data_provider.dart';
 import 'training_load_provider.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'planner_providers.dart';
 import 'coros_provider.dart';
 import 'health_connect_provider.dart';

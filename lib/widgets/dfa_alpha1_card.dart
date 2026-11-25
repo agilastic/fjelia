@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../l10n/formats.dart';
 import '../l10n/l10n_ext.dart';
 import '../providers/dfa_alpha1_provider.dart';
-import '../services/dfa_alpha1.dart';
+import 'package:fjelia_core/services/dfa_alpha1.dart';
 import 'app_widgets.dart';
 
 /// DFA alpha1 over the session and, when the session crossed them, the heart

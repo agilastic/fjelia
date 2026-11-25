@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
-import 'package:fjelia/models/hrv_training_episode.dart';
+import 'package:fjelia_core/models/hrv_training_episode.dart';
 import 'package:fjelia/models/spot_hrv.dart';
 import 'package:fjelia/providers/spot_hrv_provider.dart';
 import 'package:fjelia/services/hrv/hrv_training_service.dart';

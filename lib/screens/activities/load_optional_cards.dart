@@ -12,7 +12,7 @@ import '../../providers/day_data_provider.dart';
 import '../../widgets/app_widgets.dart';
 import 'activities_screen.dart';
 import 'load_visuals.dart';
-import '../../utils/week.dart';
+import 'package:fjelia_core/utils/week.dart';
 import '../../providers/week_start_provider.dart';
 
 class WeekdayLoadCard extends ConsumerStatefulWidget {

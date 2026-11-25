@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'health_connect_service.dart';
 import 'missed_workout_reminder_service.dart';
 import 'nutrition_reminder_service.dart';

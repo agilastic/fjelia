@@ -5,7 +5,7 @@ import 'package:fjelia/l10n/app_localizations_en.dart';
 import 'package:fjelia/services/ai_context_toon_builder.dart';
 import 'package:fjelia/services/briefing_brief.dart';
 import 'package:fjelia/services/plan_day.dart';
-import 'package:fjelia/models/training_windows.dart';
+import 'package:fjelia_core/models/training_windows.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

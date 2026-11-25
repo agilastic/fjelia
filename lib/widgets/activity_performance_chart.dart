@@ -9,9 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
-import '../models/activity_axis.dart';
-import '../models/garmin_data.dart';
-import '../models/pace_series.dart';
+import 'package:fjelia_core/models/activity_axis.dart';
+import 'package:fjelia_core/models/garmin_data.dart';
+import 'package:fjelia_core/models/pace_series.dart';
 import '../providers/hr_zones_provider.dart';
 import '../services/hr_zone_history.dart' show zoneSport;
 import 'app_widgets.dart';

@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:drift/drift.dart';
 
 import '../db/database.dart';
-import '../models/indoor_recording.dart';
+import 'package:fjelia_core/models/indoor_recording.dart';
 import 'activity_blood_pressure.dart';
-import 'hr_zone_model.dart' show zonePercentFromActiveSamples;
+import 'package:fjelia_core/services/hr_zone_model.dart' show zonePercentFromActiveSamples;
 
 class IndoorRecordingService {
   IndoorRecordingService(this.db);

@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../db/database.dart';
 import '../services/hr_zone_summary_service.dart';
-import '../services/workout_semantics.dart';
+import 'package:fjelia_core/services/workout_semantics.dart';
 import 'database_provider.dart';
 
 /// FjeliaPro heart-rate zone trends; unavailable in builds without Pro.

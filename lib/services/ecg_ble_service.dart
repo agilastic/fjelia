@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
-import '../models/ecg.dart';
+import 'package:fjelia_core/models/ecg.dart';
 import '../models/spot_hrv.dart';
 import 'training_ble.dart';
 

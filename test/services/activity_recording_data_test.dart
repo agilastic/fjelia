@@ -3,12 +3,12 @@ import 'dart:async';
 
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
-import 'package:fjelia/models/activity_location.dart';
-import 'package:fjelia/models/ftms.dart';
-import 'package:fjelia/models/indoor_recording.dart';
-import 'package:fjelia/models/training_device.dart';
-import 'package:fjelia/services/fit_decode.dart';
-import 'package:fjelia/services/fit_activity_data.dart';
+import 'package:fjelia_core/models/activity_location.dart';
+import 'package:fjelia_core/models/ftms.dart';
+import 'package:fjelia_core/models/indoor_recording.dart';
+import 'package:fjelia_core/models/training_device.dart';
+import 'package:fjelia_core/services/fit_decode.dart';
+import 'package:fjelia_core/services/fit_activity_data.dart';
 import 'package:fjelia/services/indoor_fit_export.dart';
 import 'package:fjelia/services/indoor_recording_service.dart';
 import 'package:fit_sdk/fit_sdk.dart' as fit;

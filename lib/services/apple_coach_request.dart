@@ -3,8 +3,8 @@ import 'dart:convert';
 import '../l10n/l10n_ext.dart';
 import 'coach_language.dart';
 
-import '../models/chat_message.dart';
-import 'ai_coach_rules.dart';
+import 'package:fjelia_core/models/chat_message.dart';
+import 'package:fjelia_core/services/ai_coach_rules.dart';
 import 'briefing_brief.dart';
 import 'apple_context_facts.dart';
 import 'coach_tasks.dart';

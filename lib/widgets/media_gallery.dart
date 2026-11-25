@@ -10,7 +10,7 @@ import 'package:video_player/video_player.dart';
 import '../db/database.dart';
 import '../l10n/l10n_ext.dart';
 import '../providers/media_provider.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'app_widgets.dart';
 import 'media_share_card.dart';
 

@@ -1,11 +1,11 @@
 import 'dart:math' as math;
 
 import 'package:fjelia/db/database.dart';
-import 'package:fjelia/models/chat_message.dart';
-import 'package:fjelia/models/ecg.dart';
+import 'package:fjelia_core/models/chat_message.dart';
+import 'package:fjelia_core/models/ecg.dart';
 import 'package:fjelia/services/apple_coach_request.dart';
 import 'package:fjelia/services/coach_tasks.dart';
-import 'package:fjelia/services/ecg_analysis.dart';
+import 'package:fjelia_core/services/ecg_analysis.dart';
 import 'package:fjelia/services/ecg_coach_context.dart';
 import 'package:flutter_test/flutter_test.dart';
 

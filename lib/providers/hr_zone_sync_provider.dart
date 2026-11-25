@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../db/database.dart';
-import '../models/device_hr_zones.dart';
+import 'package:fjelia_core/models/device_hr_zones.dart';
 import '../services/device_threshold_store.dart';
 import '../services/device_zone_store.dart';
 import '../services/hr_zone_change_notice.dart';
@@ -13,7 +13,7 @@ import '../l10n/l10n_ext.dart';
 import '../services/threshold_choice_store.dart';
 import '../services/source_priority_service.dart';
 import '../services/zone_recalculation_service.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'auth_provider.dart';
 import 'database_provider.dart';
 import 'hr_zones_provider.dart';

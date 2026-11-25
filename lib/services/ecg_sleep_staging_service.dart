@@ -4,8 +4,8 @@ import 'dart:isolate';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_onnxruntime/flutter_onnxruntime.dart';
 
-import '../models/ecg.dart';
-import '../models/ecg_sleep_staging.dart';
+import 'package:fjelia_core/models/ecg.dart';
+import 'package:fjelia_core/models/ecg_sleep_staging.dart';
 
 const ecgSleepModelAsset = 'assets/models/ecg_sleep_staging.onnx';
 const _modelEpochSamples = 30 * 256;

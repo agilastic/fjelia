@@ -7,7 +7,7 @@ import 'package:fjelia/providers/database_provider.dart';
 import 'package:fjelia/providers/fjelia_pro_provider.dart';
 import 'package:fjelia/services/ai_coach_client.dart';
 import 'package:fjelia/services/ai_context_toon_builder.dart';
-import 'package:fjelia/services/bio_age_service.dart';
+import 'package:fjelia_core/services/bio_age_service.dart';
 import 'package:fjelia/services/coach_day_message.dart';
 import 'package:fjelia_service/fjelia_service.dart' show hasServicePackage;
 import 'package:flutter_riverpod/flutter_riverpod.dart';

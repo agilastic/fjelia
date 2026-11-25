@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:drift/drift.dart';
 
-import '../models/heart_rate.dart';
+import 'package:fjelia_core/models/heart_rate.dart';
 import '../theme/activity_colors.dart' show activityKind;
 import '../services/source_priority_service.dart'
     show SourceGroup, defaultSourcePriorities, shouldOverwrite;

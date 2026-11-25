@@ -1,4 +1,4 @@
-import 'package:fjelia/models/training_windows.dart';
+import 'package:fjelia_core/models/training_windows.dart';
 import 'package:fjelia/services/missed_workout_reminder_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 

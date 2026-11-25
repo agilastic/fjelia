@@ -1,4 +1,4 @@
-import '../models/prepared_workout.dart';
+import 'package:fjelia_core/models/prepared_workout.dart';
 
 /// The workout cannot be expressed for COROS, for a reason to tell the
 /// athlete.

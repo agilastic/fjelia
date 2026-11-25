@@ -17,7 +17,7 @@ import '../services/health_connect_service.dart' show HealthAccess;
 import '../services/sync_service.dart';
 import '../services/workout_background.dart';
 import '../services/widget_data_service.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'ai_coach_provider.dart';
 import 'auth_provider.dart';
 import 'coros_provider.dart';

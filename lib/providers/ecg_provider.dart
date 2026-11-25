@@ -9,15 +9,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/widgets.dart';
 
 import '../db/database.dart';
-import '../models/ecg.dart';
+import 'package:fjelia_core/models/ecg.dart';
 import '../services/coach_tasks.dart' show ecgClinical, ecgClinicalMode;
-import '../services/ecg_analysis.dart';
+import 'package:fjelia_core/services/ecg_analysis.dart';
 import '../services/ecg_coach_context.dart';
 import '../services/ecg_ble_service.dart';
 import '../services/ecg_storage_service.dart';
 import '../services/ecg_sleep_staging_service.dart';
 import '../services/ecg_respiration_review.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import '../services/training_ble.dart';
 import '../services/activity_background.dart';
 import 'activity_background_provider.dart';
@@ -27,7 +27,7 @@ import 'polar_h10_provider.dart';
 import 'device_recording_owner_provider.dart';
 import 'hrv_reminder_provider.dart' show hrvCaptureActiveProvider;
 
-export '../models/ecg.dart';
+export 'package:fjelia_core/models/ecg.dart';
 export 'device_recording_owner_provider.dart';
 export '../services/ecg_storage_service.dart' show EcgImport, decodeEcgImport;
 export '../services/training_ble.dart' show TrainingDevice;

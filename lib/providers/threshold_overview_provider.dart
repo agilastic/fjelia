@@ -3,12 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../db/database.dart';
 import '../l10n/l10n_ext.dart';
-import '../models/threshold_candidate.dart';
+import 'package:fjelia_core/models/threshold_candidate.dart';
 import '../services/device_threshold_store.dart';
-import '../services/dfa_alpha1.dart' show DfaThreshold;
+import 'package:fjelia_core/services/dfa_alpha1.dart' show DfaThreshold;
 import '../services/dfa_alpha1_service.dart';
-import '../services/ramp_test.dart' show rampTestSubType;
-import '../services/hr_zone_model.dart';
+import 'package:fjelia_core/services/ramp_test.dart' show rampTestSubType;
+import 'package:fjelia_core/services/hr_zone_model.dart';
 import '../services/threshold_choice_store.dart';
 import 'database_provider.dart';
 import 'ftp_provider.dart';
@@ -20,7 +20,7 @@ import 'lt2_tt_provider.dart';
 import 'planner_providers.dart';
 import 'user_profile_provider.dart';
 
-export '../models/threshold_candidate.dart';
+export 'package:fjelia_core/models/threshold_candidate.dart';
 
 /// One threshold: every candidate, the value in use and what is proposed.
 class ThresholdRow {

@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/grip_strength_provider.dart';
 import 'app_widgets.dart';
-import '../utils/decimal.dart';
+import 'package:fjelia_core/utils/decimal.dart';
 
 class GripStrengthSheet extends ConsumerStatefulWidget {
   const GripStrengthSheet({super.key});

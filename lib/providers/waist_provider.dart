@@ -2,8 +2,8 @@ import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../db/database.dart';
-import '../models/health_metric.dart';
-import '../models/waist_ratios.dart';
+import 'package:fjelia_core/models/health_metric.dart';
+import 'package:fjelia_core/models/waist_ratios.dart';
 import 'ai_coach_provider.dart';
 import 'database_provider.dart';
 import 'metric_history_provider.dart';

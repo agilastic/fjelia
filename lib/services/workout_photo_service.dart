@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../models/gym_workout.dart';
+import 'package:fjelia_core/models/gym_workout.dart';
 
 class WorkoutTextLine {
   const WorkoutTextLine(

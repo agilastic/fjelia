@@ -2,13 +2,13 @@ import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../services/replan_triggers.dart';
-import '../utils/week.dart';
+import 'package:fjelia_core/utils/week.dart';
 
 import '../db/database.dart';
 import '../services/daily_readiness_service.dart';
 import '../services/readiness_notification_service.dart';
 import '../services/session_adaptation_service.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'database_provider.dart';
 import 'planner_providers.dart';
 import 'user_profile_provider.dart';

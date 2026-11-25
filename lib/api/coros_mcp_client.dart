@@ -4,7 +4,7 @@ import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 
 /// Fjelia's sign-in to COROS's official MCP service (`mcp.coros.com`):
 /// OAuth with PKCE and a device-style login on COROS's own page, the way

@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:drift/drift.dart';
 
 import '../db/database.dart';
-import '../models/workout_profile.dart' show secondsPerMetre;
+import 'package:fjelia_core/models/workout_profile.dart' show secondsPerMetre;
 import '../providers/training_load_provider.dart' show effectiveLoadFromSummary;
 import 'athlete_thresholds_service.dart';
-import 'hr_zone_model.dart'
+import 'package:fjelia_core/services/hr_zone_model.dart'
     show zonePercentFromActiveSamples, zonePercentFromSamples, zoneOf;
 import 'single_session_cap.dart';
 

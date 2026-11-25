@@ -1,8 +1,8 @@
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/l10n/app_localizations.dart';
-import 'package:fjelia/models/gym_workout.dart';
-import 'package:fjelia/models/training_ble_profile.dart';
+import 'package:fjelia_core/models/gym_workout.dart';
+import 'package:fjelia_core/models/training_ble_profile.dart';
 import 'package:fjelia/providers/database_provider.dart';
 import 'package:fjelia/providers/gym_treadmill_provider.dart';
 import 'package:fjelia/services/gym_workout_import_service.dart';

@@ -2,7 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../db/database.dart';
-import '../models/indoor_recording.dart';
+import 'package:fjelia_core/models/indoor_recording.dart';
 import 'database_provider.dart';
 import 'indoor_recording_provider.dart' show indoorStorageProvider;
 export '../services/activity_blood_pressure.dart'

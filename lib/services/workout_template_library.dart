@@ -4,7 +4,7 @@ import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 
 import '../db/database.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'strength/strength_templates.dart';
 
 /// Built-in Garmin-format workout templates for every supported sport.

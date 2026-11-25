@@ -6,10 +6,10 @@ import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../db/database.dart';
-import '../../models/hrv_training_episode.dart';
+import 'package:fjelia_core/models/hrv_training_episode.dart';
 import '../notifications/local_notification_gateway.dart';
-import 'hrv_post_reminder_policy.dart';
-import 'hrv_timing_policy.dart';
+import 'package:fjelia_core/services/hrv/hrv_post_reminder_policy.dart';
+import 'package:fjelia_core/services/hrv/hrv_timing_policy.dart';
 import 'hrv_training_service.dart';
 
 /// Native ids of this feature live in their own range, so a cleanup can never

@@ -1,5 +1,5 @@
 import 'package:fjelia/l10n/l10n_ext.dart';
-import 'package:fjelia/models/chat_message.dart';
+import 'package:fjelia_core/models/chat_message.dart';
 import 'package:fjelia/services/apple_coach_request.dart';
 import 'package:fjelia/services/briefing_brief.dart';
 import 'package:fjelia/services/coach_language.dart';

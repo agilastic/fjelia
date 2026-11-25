@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
 
 import '../services/activity_file_import_service.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'database_provider.dart';
 import 'day_data_provider.dart';
 import 'hr_zones_provider.dart';

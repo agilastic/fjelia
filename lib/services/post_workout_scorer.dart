@@ -7,7 +7,7 @@ import 'package:uuid/uuid.dart';
 import '../db/database.dart';
 import '../models/strength_workout.dart';
 import '../providers/training_load_provider.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'athlete_thresholds_service.dart';
 import 'control/execution.dart';
 import 'control/stimulus.dart';

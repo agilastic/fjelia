@@ -20,7 +20,7 @@ import '../services/strength/strength_repository.dart'
 import '../services/pro_analysis.dart' show proAnalysisPrompts;
 import '../services/plan_proposal_notifications.dart';
 import '../services/plan_proposal_store.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'ai_coach_provider.dart';
 import 'database_provider.dart';
 import 'day_data_provider.dart' show activityListProvider;

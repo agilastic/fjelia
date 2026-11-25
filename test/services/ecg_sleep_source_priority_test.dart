@@ -4,7 +4,7 @@ import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fjelia/db/database.dart';
-import 'package:fjelia/models/ecg_sleep_staging.dart';
+import 'package:fjelia_core/models/ecg_sleep_staging.dart';
 import 'package:fjelia/services/ecg_storage_service.dart';
 import 'package:fjelia/services/source_priority_service.dart';
 

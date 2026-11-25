@@ -4,8 +4,8 @@ import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
 import 'package:fit_sdk/fit_sdk.dart' as fit;
 
-import '../models/ftms.dart';
-import '../models/indoor_recording.dart';
+import 'package:fjelia_core/models/ftms.dart';
+import 'package:fjelia_core/models/indoor_recording.dart';
 import '../db/database.dart' show BpMeasurement;
 import 'activity_blood_pressure.dart';
 

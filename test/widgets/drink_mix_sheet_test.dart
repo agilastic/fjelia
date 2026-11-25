@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/l10n/app_localizations.dart';
-import 'package:fjelia/models/drink_mix.dart';
+import 'package:fjelia_core/models/drink_mix.dart';
 import 'package:fjelia/providers/database_provider.dart';
 import 'package:fjelia/widgets/drink_mix_sheet.dart';
 import 'package:flutter/material.dart';

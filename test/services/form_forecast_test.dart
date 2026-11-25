@@ -1,6 +1,6 @@
 import 'package:fjelia/providers/day_data_provider.dart';
 import 'package:fjelia/services/briefing_brief.dart';
-import 'package:fjelia/services/form_forecast.dart';
+import 'package:fjelia_core/services/form_forecast.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// 60 days of history ending today, with [load] for each day (oldest first).

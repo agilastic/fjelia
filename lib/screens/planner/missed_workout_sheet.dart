@@ -30,7 +30,7 @@ import '../../services/plan_rebalance.dart';
 import '../../services/season/goal_set.dart' show DayLoad;
 import '../../services/plan_session_actions.dart' show skipReasons;
 import '../../theme/activity_colors.dart';
-import '../../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/rain_nowcast_line.dart';
 

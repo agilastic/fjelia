@@ -6,7 +6,7 @@ import 'package:uuid/uuid.dart';
 
 import '../db/database.dart';
 import 'daily_readiness_service.dart';
-import 'workout_semantics.dart';
+import 'package:fjelia_core/services/workout_semantics.dart';
 
 /// Session intensity tiers, easiest first.
 const _levels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];

@@ -74,6 +74,9 @@ dependencies:
   cupertino_http: ^2.4.0
   fjelia_service_api:
     path: packages/fjelia_service_api
+  # Shared domain models and algorithms; checked out next to this repository.
+  fjelia_core:
+    path: ../fjelia-core/packages/fjelia_core
   # Stub without Aktiia / Hilo. Private builds override this with the real
   # package, see pubspec_overrides.yaml (git-ignored) and the README.
   fjelia_service:

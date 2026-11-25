@@ -7,10 +7,10 @@ import 'package:drift/drift.dart';
 import '../db/database.dart';
 import '../theme/activity_colors.dart';
 import 'dfa_alpha1_service.dart';
-import 'fit_activity_data.dart';
-import 'gpx_parser.dart';
-import 'hr_zone_model.dart';
-import 'tcx_parser.dart';
+import 'package:fjelia_core/services/fit_activity_data.dart';
+import 'package:fjelia_core/services/gpx_parser.dart';
+import 'package:fjelia_core/services/hr_zone_model.dart';
+import 'package:fjelia_core/services/tcx_parser.dart';
 import 'hr_zone_history.dart';
 
 /// Source of activities the athlete imported from a FIT, GPX or TCX file.

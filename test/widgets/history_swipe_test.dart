@@ -4,7 +4,7 @@ import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/l10n/app_localizations.dart';
-import 'package:fjelia/models/ecg.dart';
+import 'package:fjelia_core/models/ecg.dart';
 import 'package:fjelia/providers/ai_coach_provider.dart';
 import 'package:fjelia/providers/database_provider.dart';
 import 'package:fjelia/providers/ecg_provider.dart' show ecgStorageProvider;

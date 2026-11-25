@@ -1,15 +1,15 @@
 import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../l10n/formats.dart';
-import '../../models/workout_presentation.dart';
+import 'package:fjelia_core/models/workout_presentation.dart';
 
 import 'package:flutter/material.dart';
 
 import '../../models/coach_context_card.dart';
-import '../../models/garmin_data.dart';
+import 'package:fjelia_core/models/garmin_data.dart';
 import '../../models/strength_workout.dart';
 import '../../services/strength/strength_repository.dart';
-import '../../models/workout_profile.dart';
+import 'package:fjelia_core/models/workout_profile.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/workout_profile_bar.dart';
 import '../../widgets/workout_structure_list.dart';
