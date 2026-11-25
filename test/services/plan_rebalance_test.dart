@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
-import 'package:fjelia/services/plan_rebalance.dart';
+import 'package:fjelia_core/services/plan_rebalance.dart';
 import 'package:fjelia/services/plan_rebalance_applier.dart';
 import 'package:fjelia/services/plan_session_actions.dart';
 import 'package:fjelia/services/season/goal_set.dart' show DayLoad;

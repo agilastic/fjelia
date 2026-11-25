@@ -7,7 +7,7 @@ import '../db/database.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/l10n_ext.dart';
 import 'package:fjelia_core/utils/log.dart';
-import 'control/execution.dart' show shortReasons;
+import 'package:fjelia_core/services/control/execution.dart' show shortReasons;
 import 'notifications/local_notification_gateway.dart';
 import 'post_workout_scorer.dart';
 

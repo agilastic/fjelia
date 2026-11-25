@@ -46,7 +46,7 @@ import 'services/pro_analysis.dart' show ProAnalysisRef;
 import 'providers/pro_analysis_provider.dart'
     show weeklyReviewSchedulerProvider;
 import 'screens/planner/pro_analysis_sheet.dart' show ProAnalysisSheet;
-import 'services/control/execution.dart' show shortReasons;
+import 'package:fjelia_core/services/control/execution.dart' show shortReasons;
 import 'providers/short_session_provider.dart';
 import 'screens/planner/short_session_sheet.dart';
 import 'widgets/nutrition_widgets.dart';

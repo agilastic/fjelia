@@ -1,7 +1,8 @@
+import 'package:fjelia_core/services/season/day_load.dart';
+
 import 'season_goal.dart';
 
-/// What a day can take, because of an event close to it.
-enum DayLoad { free, easyOnly, blocked }
+export 'package:fjelia_core/services/season/day_load.dart';
 
 /// What came of combining the goals into one season.
 enum FeasibilityOutcome {

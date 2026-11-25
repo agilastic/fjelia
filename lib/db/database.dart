@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:drift/drift.dart';
 
 import 'package:fjelia_core/models/heart_rate.dart';
+import 'package:fjelia_core/models/plan_views.dart';
 import '../theme/activity_colors.dart' show activityKind;
 import '../services/source_priority_service.dart'
     show SourceGroup, defaultSourcePriorities, shouldOverwrite;
@@ -138,6 +139,10 @@ class RenphoRecords extends Table {
   TextColumn get rawJson => text()();
 }
 
+/// Lets fjelia_core read an activity row through [ActivityView].
+abstract class ActivityRecordBase extends DataClass implements ActivityView {}
+
+@DataClassName('ActivityRecord', extending: ActivityRecordBase)
 class ActivityRecords extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get activityId => text().unique()();
@@ -820,6 +825,11 @@ class TrainingPlans extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+/// Lets fjelia_core read a session row through [PlannedSessionView].
+abstract class TrainingSessionBase extends DataClass
+    implements PlannedSessionView {}
+
+@DataClassName('TrainingSession', extending: TrainingSessionBase)
 class TrainingSessions extends Table {
   TextColumn get id => text()();
   TextColumn get planId => text()();

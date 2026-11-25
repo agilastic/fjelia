@@ -1,4 +1,4 @@
-import 'package:fjelia/services/missed_workout_planner.dart';
+import 'package:fjelia_core/services/missed_workout_planner.dart';
 import 'package:fjelia/services/season/goal_set.dart' show DayLoad;
 import 'package:flutter_test/flutter_test.dart';
 

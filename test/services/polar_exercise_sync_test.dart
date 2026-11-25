@@ -10,7 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/services/polar_service.dart';
 import 'package:fjelia/services/oauth_token_store.dart';
-import 'package:fjelia/services/activity_decoder.dart';
+import 'package:fjelia_core/services/activity_decoder.dart';
 import 'package:fjelia/screens/strain/activity_detail_sheet.dart';
 
 import '../support/polar_fit_fixture.dart';

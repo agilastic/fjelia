@@ -1,6 +1,6 @@
 import '../../theme/fjelia_style.dart';
 import '../ai_coach/ai_coach_screen.dart' show openCoachTab;
-import '../../services/activity_decoder.dart';
+import 'package:fjelia_core/services/activity_decoder.dart';
 import '../../models/coach_context_card.dart';
 import '../../widgets/recently_deleted_sheet.dart';
 import '../../widgets/swipe_action_tile.dart';

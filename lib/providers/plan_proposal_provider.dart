@@ -11,7 +11,7 @@ import '../l10n/app_localizations.dart';
 import '../l10n/l10n_ext.dart';
 import '../services/coach_language.dart';
 import '../services/daily_readiness_service.dart';
-import '../services/missed_workout_planner.dart' show isRainyDay;
+import 'package:fjelia_core/services/missed_workout_planner.dart' show isRainyDay;
 import '../services/morning_revision.dart';
 import '../services/open_meteo_client.dart' show OpenMeteoPoint;
 import '../services/plan_week_context.dart';

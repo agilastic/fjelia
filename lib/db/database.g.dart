@@ -6708,7 +6708,8 @@ class $ActivityRecordsTable extends ActivityRecords
   }
 }
 
-class ActivityRecord extends DataClass implements Insertable<ActivityRecord> {
+class ActivityRecord extends ActivityRecordBase
+    implements Insertable<ActivityRecord> {
   final int id;
   final String activityId;
   final String name;
@@ -6746,7 +6747,7 @@ class ActivityRecord extends DataClass implements Insertable<ActivityRecord> {
   /// The athlete's own note in Fjelia, e.g. why it was shorter than planned.
   /// Written for the coach: unlike [description] it goes into its context.
   final String? athleteNote;
-  const ActivityRecord({
+  ActivityRecord({
     required this.id,
     required this.activityId,
     required this.name,
@@ -35925,7 +35926,8 @@ class $TrainingSessionsTable extends TrainingSessions
   }
 }
 
-class TrainingSession extends DataClass implements Insertable<TrainingSession> {
+class TrainingSession extends TrainingSessionBase
+    implements Insertable<TrainingSession> {
   final String id;
   final String planId;
   final String athleteId;
@@ -35990,7 +35992,7 @@ class TrainingSession extends DataClass implements Insertable<TrainingSession> {
   /// Kept as the athlete set it: automatic plan changes leave it alone.
   final bool locked;
   final String? sessionDateOriginal;
-  const TrainingSession({
+  TrainingSession({
     required this.id,
     required this.planId,
     required this.athleteId,

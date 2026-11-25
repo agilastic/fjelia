@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../l10n/l10n_ext.dart';
 import '../../providers/short_session_provider.dart';
-import '../../services/control/execution.dart' show shortReasons;
+import 'package:fjelia_core/services/control/execution.dart' show shortReasons;
 import '../../services/short_session_reminder.dart';
 import '../../theme/fjelia_style.dart';
 import '../../widgets/app_widgets.dart';

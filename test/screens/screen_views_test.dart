@@ -64,7 +64,7 @@ import 'package:fjelia/screens/planner/plan_screen.dart';
 import 'package:fjelia/screens/planner/plan_session_sheet.dart';
 import 'package:fjelia/screens/ai_coach/ai_coach_screen.dart';
 import 'package:fjelia/widgets/coach_context_card.dart';
-import 'package:fjelia/services/activity_decoder.dart';
+import 'package:fjelia_core/services/activity_decoder.dart';
 import 'package:fjelia/models/coach_context_card.dart';
 import 'package:fjelia/providers/ai_coach_provider.dart';
 import 'package:fjelia/providers/auth_provider.dart';

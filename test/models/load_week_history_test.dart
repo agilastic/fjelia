@@ -3,7 +3,7 @@ import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fjelia_service_api/fjelia_service_api.dart';
 import 'package:fjelia/db/database.dart';
-import 'package:fjelia/models/load_week_history.dart';
+import 'package:fjelia_core/models/load_week_history.dart';
 
 ActivityRecord activity(
   String id,

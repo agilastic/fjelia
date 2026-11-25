@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:drift/drift.dart';
+import 'package:fjelia_core/services/planned_zones.dart' as core;
 import 'package:uuid/uuid.dart';
 
 import '../db/database.dart';
@@ -9,8 +10,8 @@ import '../models/strength_workout.dart';
 import '../providers/training_load_provider.dart';
 import 'package:fjelia_core/utils/log.dart';
 import 'athlete_thresholds_service.dart';
-import 'control/execution.dart';
-import 'control/stimulus.dart';
+import 'package:fjelia_core/services/control/execution.dart';
+import 'package:fjelia_core/services/control/stimulus.dart';
 
 /// The reason stored for a past session nothing was recorded for. It is not
 /// something the athlete decided.
@@ -561,23 +562,8 @@ class PostWorkoutScorer {
       plannedZoneDistribution(json);
 
   /// Planned share of time per zone (fractions summing to 1).
-  static List<double>? plannedZoneDistribution(String? json) {
-    if (json == null) return null;
-    final decoded = jsonDecode(json);
-    List<double> values;
-    if (decoded is List) {
-      values = decoded.map((e) => (e as num).toDouble()).toList();
-    } else if (decoded is Map) {
-      values = [
-        for (var i = 1; i <= 6; i++) ((decoded['z$i'] ?? 0) as num).toDouble(),
-      ];
-    } else {
-      return null;
-    }
-    final sum = values.fold<double>(0.0, (a, b) => a + b);
-    if (sum <= 0) return null;
-    return values.map((v) => v / sum).toList();
-  }
+  static List<double>? plannedZoneDistribution(String? json) =>
+      core.plannedZoneDistribution(json);
 
   /// Seconds per zone from per-sample HR against the athlete's zone floors.
   List<double> _zoneSecFromSamples(

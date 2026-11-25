@@ -11,7 +11,7 @@ import 'global_weather_client.dart';
 import 'heat_acclimation_settings.dart';
 import 'location_service.dart';
 import 'open_meteo_client.dart';
-import 'activity_decoder.dart';
+import 'package:fjelia_core/services/activity_decoder.dart';
 
 /// Heat acclimation score (0–100). Decays 6 % per day; outdoor workouts of
 /// at least 30 minutes at ≥ 22 °C add 8–15 points depending on heat,

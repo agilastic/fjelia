@@ -10,7 +10,7 @@ import '../api/garmin_client.dart';
 import '../db/database.dart' hide DailyBpSummary;
 import 'package:fjelia_core/models/garmin_data.dart';
 import 'package:fjelia_core/models/scores.dart';
-import '../services/activity_decoder.dart';
+import 'package:fjelia_core/services/activity_decoder.dart';
 import 'package:fjelia_core/services/score_calculator.dart';
 import 'package:fjelia_core/services/sleep_stage_estimate.dart';
 import 'package:fjelia_core/services/training_form.dart';

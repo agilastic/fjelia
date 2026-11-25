@@ -5,7 +5,7 @@ import 'package:drift/drift.dart';
 
 import '../db/database.dart';
 import '../models/strength_workout.dart';
-import 'missed_workout_planner.dart'
+import 'package:fjelia_core/services/missed_workout_planner.dart'
     show SessionWeight, hasIndoorAlternative, weightOf;
 import 'strength/strength_repository.dart';
 import 'package:fjelia_core/services/workout_semantics.dart';

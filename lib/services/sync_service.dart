@@ -15,7 +15,7 @@ import 'package:fjelia_core/models/renpho_data.dart';
 import 'package:fjelia_core/models/scores.dart';
 import 'package:fjelia_core/utils/log.dart';
 import '../theme/activity_colors.dart';
-import 'activity_decoder.dart';
+import 'package:fjelia_core/services/activity_decoder.dart';
 import 'activity_file_import_service.dart' show activityFilesInZip;
 import 'dfa_alpha1_service.dart';
 import 'energie_calculator.dart';

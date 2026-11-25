@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 
 import '../db/database.dart';
-import 'plan_rebalance.dart';
+import 'package:fjelia_core/services/plan_rebalance.dart';
 import 'plan_session_actions.dart';
 import 'session_adaptation_service.dart';
 
