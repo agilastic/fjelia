@@ -23,9 +23,17 @@ class ProfileTab extends ConsumerWidget {
               for (final e in [
                 (
                   context.l10n.basics,
-                  ref.watch(userProfileProvider).valueOrNull?.birthYear == null
-                      ? context.l10n.birthYearHeightWaist
-                      : '${ref.watch(userProfileProvider).valueOrNull!.birthYear} · age ${ref.watch(userProfileProvider).valueOrNull!.age?.round()}',
+                  // What the page holds: birth year, age and the HR zones.
+                  [
+                    if (ref.watch(userProfileProvider).valueOrNull
+                        case final p? when p.birthYear != null) ...[
+                      '${p.birthYear}',
+                      if (p.age case final age?)
+                        context.l10n.ageRound(age.round()),
+                    ] else
+                      context.l10n.birthYearHeightWaist,
+                    context.l10n.hrZones,
+                  ].join(' · '),
                   0,
                 ),
                 (context.l10n.habits, context.l10n.smokingAlcohol, 1),
