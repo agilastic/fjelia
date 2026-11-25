@@ -4,7 +4,7 @@ import 'package:fjelia/db/database.dart';
 import 'package:fjelia/models/coach_context_card.dart';
 import 'package:fjelia_core/services/ai_coach_rules.dart';
 import 'package:fjelia/services/ai_context_toon_builder.dart';
-import 'package:fjelia/services/apple_context_facts.dart';
+import 'package:fjelia_core/services/apple_context_facts.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

@@ -1,6 +1,6 @@
 import 'package:fjelia/services/ai_coach_client.dart';
 import 'package:fjelia/services/ai_coach_settings.dart';
-import 'package:fjelia/services/apple_context_facts.dart';
+import 'package:fjelia_core/services/apple_context_facts.dart';
 import 'package:fjelia/services/apple_coach_request.dart';
 import 'package:fjelia/services/briefing_brief.dart';
 import 'package:flutter_test/flutter_test.dart';
