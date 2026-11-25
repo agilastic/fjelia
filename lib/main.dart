@@ -18,6 +18,7 @@ import 'providers/ai_coach_provider.dart' show aiCoachSettingsProvider;
 import 'services/ai_coach_settings.dart' show AiProvider;
 import 'providers/auth_provider.dart';
 import 'providers/fjelia_pro_provider.dart';
+import 'providers/nearby_sync_provider.dart';
 import 'providers/locale_provider.dart';
 import 'providers/style_provider.dart';
 import 'theme/fjelia_style.dart';
@@ -203,6 +204,7 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
     if (state == AppLifecycleState.resumed) {
       unawaited(ref.read(planProposalLifecycleProvider).foreground());
       unawaited(ref.read(fjeliaProProvider.notifier).refresh());
+      unawaited(ref.read(nearbySyncProvider.notifier).syncAll());
       _onResume();
     } else if (state == AppLifecycleState.paused) {
       // Proposals not answered yet are told a few minutes later.

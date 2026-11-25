@@ -21,6 +21,7 @@ import '../../widgets/settings_widgets.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/ecg_provider.dart';
 import 'bug_report_sheet.dart';
+import 'computers_page.dart';
 
 import 'dart:developer' show log;
 
@@ -48,6 +49,13 @@ class SystemTab extends StatelessWidget {
                 subtitle: Text(l10n.dataExportSubtitle),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => showAppSheet(context, const DataExportPage()),
+              ),
+              ListTile(
+                leading: const SettingsIcon(Icons.computer, Colors.indigo),
+                title: Text(l10n.syncComputers),
+                subtitle: Text(l10n.syncComputersSubtitle),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => showAppSheet(context, const ComputersPage()),
               ),
               if (developerMenuEnabled)
                 ListTile(
@@ -142,8 +150,9 @@ class _WipeTile extends ConsumerWidget {
     );
     if (!context.mounted || sure != true) return;
     if (ref.read(deviceRecordingOwnerProvider) != null) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(l.wipeRecordingActive)));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l.wipeRecordingActive)));
       return;
     }
     showDialog<void>(
@@ -205,8 +214,9 @@ class DeveloperPage extends ConsumerWidget {
                   .read(planProposalLifecycleProvider)
                   .testMorning();
               if (!context.mounted) return;
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text(result)));
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(result)));
             }),
           ),
           SectionLabel(l10n.support),

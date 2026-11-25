@@ -9984,4 +9984,70 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get homeSkyHint =>
       'Un ciel doux en haut de l\'accueil qui suit la météo du jour et l\'heure.';
+
+  @override
+  String get syncComputers => 'Ordinateurs';
+
+  @override
+  String get syncComputersSubtitle =>
+      'Synchroniser avec Fjelia sur un Mac ou un PC';
+
+  @override
+  String get syncComputersFooter =>
+      'Votre ordinateur reçoit une copie de vos activités, plans et données de santé via le réseau local. Rien ne passe par Internet.';
+
+  @override
+  String get syncPairComputer => 'Jumeler avec un ordinateur';
+
+  @override
+  String get syncScanHint =>
+      'Sur votre ordinateur, ouvrez Fjelia et choisissez Jumeler un téléphone. Scannez ensuite le code affiché.';
+
+  @override
+  String get syncNotAPairingCode => 'Ce n\'est pas un code de jumelage Fjelia.';
+
+  @override
+  String get syncNow => 'Synchroniser maintenant';
+
+  @override
+  String get syncUnpair => 'Dissocier';
+
+  @override
+  String syncUnpairTitle(String name) {
+    return 'Dissocier $name ?';
+  }
+
+  @override
+  String syncUnpairMessage(String name) {
+    return '$name conserve les données qu\'il a déjà, mais ne reçoit plus les modifications de ce téléphone.';
+  }
+
+  @override
+  String syncInProgress(int count) {
+    return 'Synchronisation… $count modifications envoyées';
+  }
+
+  @override
+  String syncDone(int count) {
+    return 'À jour · $count modifications envoyées';
+  }
+
+  @override
+  String get syncUnreachable =>
+      'Impossible de joindre l\'ordinateur. Vérifiez que Fjelia y est ouvert et que les deux appareils sont sur le même réseau.';
+
+  @override
+  String get syncCodeExpired =>
+      'Ce code n\'est plus valide. Affichez un nouveau code sur l\'ordinateur.';
+
+  @override
+  String get syncUpdateBoth =>
+      'Mettez à jour Fjelia sur les deux appareils, puis synchronisez à nouveau.';
+
+  @override
+  String get syncPairAgain =>
+      'L\'ordinateur ne reconnaît plus ce téléphone. Jumelez-le à nouveau.';
+
+  @override
+  String get syncNoComputers => 'Aucun ordinateur jumelé pour l\'instant.';
 }

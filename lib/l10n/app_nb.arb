@@ -4372,5 +4372,22 @@
   "proBriefing": "Coachen skriver briefingen",
   "proBriefingHint": "FjeliaPro: Fjelia AI Pro (den lille modellen) skriver briefingene dine i stedet for Apple Intelligence. Beredskap, plan og helseoversikt sendes til Fjelia AI Pro (Mistral i EU, OpenAI som reserve). Svarer den ikke, skriver Apple Intelligence den som før.",
   "homeSky": "Værhimmel på Hjem",
-  "homeSkyHint": "En myk himmel øverst på Hjem som følger dagens vær og tiden på døgnet."
+  "homeSkyHint": "En myk himmel øverst på Hjem som følger dagens vær og tiden på døgnet.",
+  "syncComputers": "Datamaskiner",
+  "syncComputersSubtitle": "Synkroniser med Fjelia på en Mac eller PC",
+  "syncComputersFooter": "Datamaskinen får en kopi av aktivitetene, planene og helsedataene dine over det lokale nettverket. Ingenting går via internett.",
+  "syncPairComputer": "Koble til en datamaskin",
+  "syncScanHint": "Åpne Fjelia på datamaskinen og velg Koble til telefon. Skann deretter koden som vises.",
+  "syncNotAPairingCode": "Dette er ikke en Fjelia-tilkoblingskode.",
+  "syncNow": "Synkroniser nå",
+  "syncUnpair": "Koble fra",
+  "syncUnpairTitle": "Koble fra {name}?",
+  "syncUnpairMessage": "{name} beholder dataene den allerede har, men får ikke flere endringer fra denne telefonen.",
+  "syncInProgress": "Synkroniserer … {count} endringer sendt",
+  "syncDone": "Oppdatert · {count} endringer sendt",
+  "syncUnreachable": "Får ikke kontakt med datamaskinen. Sjekk at Fjelia er åpen der og at begge enhetene er på samme nettverk.",
+  "syncCodeExpired": "Koden er ikke lenger gyldig. Vis en ny kode på datamaskinen.",
+  "syncUpdateBoth": "Oppdater Fjelia på begge enhetene, og synkroniser på nytt.",
+  "syncPairAgain": "Datamaskinen kjenner ikke lenger denne telefonen. Koble den til på nytt.",
+  "syncNoComputers": "Ingen datamaskin tilkoblet ennå."
 }

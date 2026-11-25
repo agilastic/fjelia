@@ -17108,6 +17108,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'A soft sky at the top of Home that follows today\'s weather and the time of day.'**
   String get homeSkyHint;
+
+  /// No description provided for @syncComputers.
+  ///
+  /// In en, this message translates to:
+  /// **'Computers'**
+  String get syncComputers;
+
+  /// No description provided for @syncComputersSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync with Fjelia on a Mac or PC'**
+  String get syncComputersSubtitle;
+
+  /// No description provided for @syncComputersFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'Your computer gets a copy of your activities, plans and health data over the local network. Nothing goes through the internet.'**
+  String get syncComputersFooter;
+
+  /// No description provided for @syncPairComputer.
+  ///
+  /// In en, this message translates to:
+  /// **'Pair with a computer'**
+  String get syncPairComputer;
+
+  /// No description provided for @syncScanHint.
+  ///
+  /// In en, this message translates to:
+  /// **'On your computer, open Fjelia and choose Pair Phone. Then scan the code it shows.'**
+  String get syncScanHint;
+
+  /// No description provided for @syncNotAPairingCode.
+  ///
+  /// In en, this message translates to:
+  /// **'This isn\'t a Fjelia pairing code.'**
+  String get syncNotAPairingCode;
+
+  /// No description provided for @syncNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync now'**
+  String get syncNow;
+
+  /// No description provided for @syncUnpair.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpair'**
+  String get syncUnpair;
+
+  /// No description provided for @syncUnpairTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpair {name}?'**
+  String syncUnpairTitle(String name);
+
+  /// No description provided for @syncUnpairMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} keeps the data it already has but gets no more changes from this phone.'**
+  String syncUnpairMessage(String name);
+
+  /// No description provided for @syncInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Syncing… {count} changes sent'**
+  String syncInProgress(int count);
+
+  /// No description provided for @syncDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Up to date · {count} changes sent'**
+  String syncDone(int count);
+
+  /// No description provided for @syncUnreachable.
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t reach the computer. Make sure Fjelia is open on it and both devices are on the same network.'**
+  String get syncUnreachable;
+
+  /// No description provided for @syncCodeExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'This code is no longer valid. Show a new code on the computer.'**
+  String get syncCodeExpired;
+
+  /// No description provided for @syncUpdateBoth.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Fjelia on both devices, then sync again.'**
+  String get syncUpdateBoth;
+
+  /// No description provided for @syncPairAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'The computer no longer knows this phone. Pair it again.'**
+  String get syncPairAgain;
+
+  /// No description provided for @syncNoComputers.
+  ///
+  /// In en, this message translates to:
+  /// **'No computer paired yet.'**
+  String get syncNoComputers;
 }
 
 class _AppLocalizationsDelegate

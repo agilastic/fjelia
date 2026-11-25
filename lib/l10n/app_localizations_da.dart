@@ -9889,4 +9889,70 @@ class AppLocalizationsDa extends AppLocalizations {
   @override
   String get homeSkyHint =>
       'En blød himmel øverst på Hjem, der følger dagens vejr og tidspunktet på dagen.';
+
+  @override
+  String get syncComputers => 'Computere';
+
+  @override
+  String get syncComputersSubtitle =>
+      'Synkroniser med Fjelia på en Mac eller pc';
+
+  @override
+  String get syncComputersFooter =>
+      'Din computer får en kopi af dine aktiviteter, planer og sundhedsdata over det lokale netværk. Intet går via internettet.';
+
+  @override
+  String get syncPairComputer => 'Par med en computer';
+
+  @override
+  String get syncScanHint =>
+      'Åbn Fjelia på din computer, og vælg Par telefon. Scan derefter den viste kode.';
+
+  @override
+  String get syncNotAPairingCode => 'Det er ikke en Fjelia-parringskode.';
+
+  @override
+  String get syncNow => 'Synkroniser nu';
+
+  @override
+  String get syncUnpair => 'Ophæv parring';
+
+  @override
+  String syncUnpairTitle(String name) {
+    return 'Ophæv parring med $name?';
+  }
+
+  @override
+  String syncUnpairMessage(String name) {
+    return '$name beholder de data, den allerede har, men får ikke flere ændringer fra denne telefon.';
+  }
+
+  @override
+  String syncInProgress(int count) {
+    return 'Synkroniserer … $count ændringer sendt';
+  }
+
+  @override
+  String syncDone(int count) {
+    return 'Opdateret · $count ændringer sendt';
+  }
+
+  @override
+  String get syncUnreachable =>
+      'Computeren kan ikke nås. Sørg for, at Fjelia er åben på den, og at begge enheder er på samme netværk.';
+
+  @override
+  String get syncCodeExpired =>
+      'Koden er ikke længere gyldig. Vis en ny kode på computeren.';
+
+  @override
+  String get syncUpdateBoth =>
+      'Opdater Fjelia på begge enheder, og synkroniser igen.';
+
+  @override
+  String get syncPairAgain =>
+      'Computeren kender ikke længere denne telefon. Par den igen.';
+
+  @override
+  String get syncNoComputers => 'Ingen computer parret endnu.';
 }

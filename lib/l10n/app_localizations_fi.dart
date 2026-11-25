@@ -9932,4 +9932,69 @@ class AppLocalizationsFi extends AppLocalizations {
   @override
   String get homeSkyHint =>
       'Pehmeä taivas Kotinäkymän yläosassa, joka seuraa päivän säätä ja vuorokaudenaikaa.';
+
+  @override
+  String get syncComputers => 'Tietokoneet';
+
+  @override
+  String get syncComputersSubtitle => 'Synkronoi Macin tai PC:n Fjelian kanssa';
+
+  @override
+  String get syncComputersFooter =>
+      'Tietokoneesi saa kopion suorituksistasi, suunnitelmistasi ja terveystiedoistasi lähiverkon kautta. Mitään ei kulje internetin kautta.';
+
+  @override
+  String get syncPairComputer => 'Muodosta pari tietokoneen kanssa';
+
+  @override
+  String get syncScanHint =>
+      'Avaa Fjelia tietokoneella ja valitse Muodosta pari puhelimen kanssa. Skannaa sitten näkyvä koodi.';
+
+  @override
+  String get syncNotAPairingCode => 'Tämä ei ole Fjelian parikoodi.';
+
+  @override
+  String get syncNow => 'Synkronoi nyt';
+
+  @override
+  String get syncUnpair => 'Pura pari';
+
+  @override
+  String syncUnpairTitle(String name) {
+    return 'Puretaanko pari laitteen $name kanssa?';
+  }
+
+  @override
+  String syncUnpairMessage(String name) {
+    return '$name säilyttää jo saamansa tiedot, mutta ei saa enää muutoksia tästä puhelimesta.';
+  }
+
+  @override
+  String syncInProgress(int count) {
+    return 'Synkronoidaan… $count muutosta lähetetty';
+  }
+
+  @override
+  String syncDone(int count) {
+    return 'Ajan tasalla · $count muutosta lähetetty';
+  }
+
+  @override
+  String get syncUnreachable =>
+      'Tietokonetta ei tavoiteta. Varmista, että Fjelia on auki ja molemmat laitteet ovat samassa verkossa.';
+
+  @override
+  String get syncCodeExpired =>
+      'Koodi ei ole enää voimassa. Näytä uusi koodi tietokoneella.';
+
+  @override
+  String get syncUpdateBoth =>
+      'Päivitä Fjelia molempiin laitteisiin ja synkronoi uudelleen.';
+
+  @override
+  String get syncPairAgain =>
+      'Tietokone ei enää tunnista tätä puhelinta. Muodosta pari uudelleen.';
+
+  @override
+  String get syncNoComputers => 'Ei vielä paritettua tietokonetta.';
 }

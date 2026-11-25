@@ -4372,5 +4372,22 @@
   "proBriefing": "Valmentaja kirjoittaa katsauksen",
   "proBriefingHint": "FjeliaPro: Fjelia AI Pro (pieni malli) kirjoittaa katsauksesi Apple Intelligencen sijaan. Valmius, suunnitelma ja terveysyhteenveto lähetetään Fjelia AI Prolle (Mistral EU:ssa, OpenAI varalla). Jos se ei vastaa, Apple Intelligence kirjoittaa sen kuten ennenkin.",
   "homeSky": "Sään taivas Kotinäkymässä",
-  "homeSkyHint": "Pehmeä taivas Kotinäkymän yläosassa, joka seuraa päivän säätä ja vuorokaudenaikaa."
+  "homeSkyHint": "Pehmeä taivas Kotinäkymän yläosassa, joka seuraa päivän säätä ja vuorokaudenaikaa.",
+  "syncComputers": "Tietokoneet",
+  "syncComputersSubtitle": "Synkronoi Macin tai PC:n Fjelian kanssa",
+  "syncComputersFooter": "Tietokoneesi saa kopion suorituksistasi, suunnitelmistasi ja terveystiedoistasi lähiverkon kautta. Mitään ei kulje internetin kautta.",
+  "syncPairComputer": "Muodosta pari tietokoneen kanssa",
+  "syncScanHint": "Avaa Fjelia tietokoneella ja valitse Muodosta pari puhelimen kanssa. Skannaa sitten näkyvä koodi.",
+  "syncNotAPairingCode": "Tämä ei ole Fjelian parikoodi.",
+  "syncNow": "Synkronoi nyt",
+  "syncUnpair": "Pura pari",
+  "syncUnpairTitle": "Puretaanko pari laitteen {name} kanssa?",
+  "syncUnpairMessage": "{name} säilyttää jo saamansa tiedot, mutta ei saa enää muutoksia tästä puhelimesta.",
+  "syncInProgress": "Synkronoidaan… {count} muutosta lähetetty",
+  "syncDone": "Ajan tasalla · {count} muutosta lähetetty",
+  "syncUnreachable": "Tietokonetta ei tavoiteta. Varmista, että Fjelia on auki ja molemmat laitteet ovat samassa verkossa.",
+  "syncCodeExpired": "Koodi ei ole enää voimassa. Näytä uusi koodi tietokoneella.",
+  "syncUpdateBoth": "Päivitä Fjelia molempiin laitteisiin ja synkronoi uudelleen.",
+  "syncPairAgain": "Tietokone ei enää tunnista tätä puhelinta. Muodosta pari uudelleen.",
+  "syncNoComputers": "Ei vielä paritettua tietokonetta."
 }

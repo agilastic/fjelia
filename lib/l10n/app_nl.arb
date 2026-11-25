@@ -5535,5 +5535,22 @@
   "proBriefing": "Coach schrijft de briefing",
   "proBriefingHint": "FjeliaPro: Fjelia AI Pro (het kleine model) schrijft je briefings in plaats van Apple Intelligence. Paraatheid, plan en gezondheidsoverzicht gaan naar Fjelia AI Pro (Mistral in de EU, OpenAI als terugval). Antwoordt het niet, dan schrijft Apple Intelligence hem zoals voorheen.",
   "homeSky": "Weerhemel op Home",
-  "homeSkyHint": "Een zachte hemel bovenaan Home die het weer van vandaag en het tijdstip volgt."
+  "homeSkyHint": "Een zachte hemel bovenaan Home die het weer van vandaag en het tijdstip volgt.",
+  "syncComputers": "Computers",
+  "syncComputersSubtitle": "Synchroniseren met Fjelia op een Mac of pc",
+  "syncComputersFooter": "Je computer krijgt een kopie van je activiteiten, plannen en gezondheidsgegevens via het lokale netwerk. Niets gaat via internet.",
+  "syncPairComputer": "Koppelen met een computer",
+  "syncScanHint": "Open Fjelia op je computer en kies Telefoon koppelen. Scan daarna de getoonde code.",
+  "syncNotAPairingCode": "Dit is geen Fjelia-koppelcode.",
+  "syncNow": "Nu synchroniseren",
+  "syncUnpair": "Ontkoppelen",
+  "syncUnpairTitle": "{name} ontkoppelen?",
+  "syncUnpairMessage": "{name} houdt de gegevens die hij al heeft, maar krijgt geen wijzigingen meer van deze telefoon.",
+  "syncInProgress": "Synchroniseren… {count} wijzigingen verstuurd",
+  "syncDone": "Bijgewerkt · {count} wijzigingen verstuurd",
+  "syncUnreachable": "Computer niet bereikbaar. Controleer of Fjelia daar geopend is en beide apparaten op hetzelfde netwerk zitten.",
+  "syncCodeExpired": "Deze code is niet meer geldig. Toon een nieuwe code op de computer.",
+  "syncUpdateBoth": "Werk Fjelia op beide apparaten bij en synchroniseer opnieuw.",
+  "syncPairAgain": "De computer kent deze telefoon niet meer. Koppel hem opnieuw.",
+  "syncNoComputers": "Nog geen computer gekoppeld."
 }

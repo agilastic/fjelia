@@ -5,5 +5,6 @@
 "NSLocationAlwaysAndWhenInUseUsageDescription" = "Med GPS aktiveret optager Fjelia din rute, også i en anden app eller med låst skærm. Pause eller Stop afslutter placeringsoptagelsen.";
 "NSLocationWhenInUseUsageDescription" = "Fjelia bruger placering til ruter med GPS aktiveret og til at vurdere varmerisiko ved planlagte træninger.";
 "NSPhotoLibraryUsageDescription" = "Fjelia lader dig tilføje fotos og videoer fra dit bibliotek til træninger, løbsmål og planlagte træninger.";
-"NSCameraUsageDescription" = "Fjelia bruger kameraet, når du tager et foto eller en video til en træning, et løbsmål eller en planlagt træning.";
+"NSCameraUsageDescription" = "Fjelia bruger kameraet, når du tager et foto eller en video til en træning, et løbsmål eller en planlagt træning, og til at scanne koden, der parrer den med en computer.";
+"NSLocalNetworkUsageDescription" = "Fjelia sender dine aktiviteter, planer og sundhedsdata til din parrede computer over det lokale netværk.";
 "NSMicrophoneUsageDescription" = "Fjelia bruger mikrofonen til lyden i videoer, du optager til en træning.";

@@ -9974,4 +9974,70 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get homeSkyHint =>
       'Um céu suave no topo do Início que segue o tempo de hoje e a hora do dia.';
+
+  @override
+  String get syncComputers => 'Computadores';
+
+  @override
+  String get syncComputersSubtitle => 'Sincronizar com o Fjelia num Mac ou PC';
+
+  @override
+  String get syncComputersFooter =>
+      'O computador recebe uma cópia das suas atividades, planos e dados de saúde pela rede local. Nada passa pela internet.';
+
+  @override
+  String get syncPairComputer => 'Emparelhar com um computador';
+
+  @override
+  String get syncScanHint =>
+      'No computador, abra o Fjelia e escolha Emparelhar telefone. Depois, leia o código apresentado.';
+
+  @override
+  String get syncNotAPairingCode =>
+      'Este não é um código de emparelhamento do Fjelia.';
+
+  @override
+  String get syncNow => 'Sincronizar agora';
+
+  @override
+  String get syncUnpair => 'Desemparelhar';
+
+  @override
+  String syncUnpairTitle(String name) {
+    return 'Desemparelhar $name?';
+  }
+
+  @override
+  String syncUnpairMessage(String name) {
+    return '$name mantém os dados que já tem, mas deixa de receber alterações deste telefone.';
+  }
+
+  @override
+  String syncInProgress(int count) {
+    return 'A sincronizar… $count alterações enviadas';
+  }
+
+  @override
+  String syncDone(int count) {
+    return 'Atualizado · $count alterações enviadas';
+  }
+
+  @override
+  String get syncUnreachable =>
+      'Não é possível contactar o computador. Confirme que o Fjelia está aberto nele e que ambos os dispositivos estão na mesma rede.';
+
+  @override
+  String get syncCodeExpired =>
+      'Este código já não é válido. Mostre um novo código no computador.';
+
+  @override
+  String get syncUpdateBoth =>
+      'Atualize o Fjelia em ambos os dispositivos e sincronize novamente.';
+
+  @override
+  String get syncPairAgain =>
+      'O computador já não reconhece este telefone. Emparelhe-o novamente.';
+
+  @override
+  String get syncNoComputers => 'Ainda não há nenhum computador emparelhado.';
 }

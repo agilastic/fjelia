@@ -4372,5 +4372,22 @@
   "proBriefing": "El coach escriu el resum",
   "proBriefingHint": "FjeliaPro: Fjelia AI Pro (el model petit) escriu els teus resums en lloc d'Apple Intelligence. La preparació, el pla i el resum de salut van a Fjelia AI Pro (Mistral a la UE, OpenAI com a alternativa). Si no respon, Apple Intelligence l'escriu com fins ara.",
   "homeSky": "Cel del temps a Inici",
-  "homeSkyHint": "Un cel suau a la part superior d'Inici que segueix el temps d'avui i l'hora del dia."
+  "homeSkyHint": "Un cel suau a la part superior d'Inici que segueix el temps d'avui i l'hora del dia.",
+  "syncComputers": "Ordinadors",
+  "syncComputersSubtitle": "Sincronitza amb Fjelia en un Mac o PC",
+  "syncComputersFooter": "El teu ordinador rep una còpia de les activitats, els plans i les dades de salut per la xarxa local. Res no passa per internet.",
+  "syncPairComputer": "Vincula amb un ordinador",
+  "syncScanHint": "A l'ordinador, obre Fjelia i tria Vincula el telèfon. Després escaneja el codi que mostra.",
+  "syncNotAPairingCode": "Aquest no és un codi de vinculació de Fjelia.",
+  "syncNow": "Sincronitza ara",
+  "syncUnpair": "Desvincula",
+  "syncUnpairTitle": "Vols desvincular {name}?",
+  "syncUnpairMessage": "{name} conserva les dades que ja té, però no rebrà més canvis d'aquest telèfon.",
+  "syncInProgress": "Sincronitzant… {count} canvis enviats",
+  "syncDone": "Al dia · {count} canvis enviats",
+  "syncUnreachable": "No es pot accedir a l'ordinador. Comprova que Fjelia hi estigui obert i que tots dos dispositius siguin a la mateixa xarxa.",
+  "syncCodeExpired": "Aquest codi ja no és vàlid. Mostra un codi nou a l'ordinador.",
+  "syncUpdateBoth": "Actualitza Fjelia als dos dispositius i torna a sincronitzar.",
+  "syncPairAgain": "L'ordinador ja no reconeix aquest telèfon. Torna'l a vincular.",
+  "syncNoComputers": "Encara no hi ha cap ordinador vinculat."
 }

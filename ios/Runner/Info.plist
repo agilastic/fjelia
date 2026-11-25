@@ -66,7 +66,9 @@
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Fjelia lets you add photos and videos from your library to your workouts, race goals and planned sessions.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Fjelia uses the camera when you take a photo or video for a workout, race goal or planned session.</string>
+	<string>Fjelia uses the camera when you take a photo or video for a workout, race goal or planned session, and to scan the code that pairs it with a computer.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Fjelia sends your activities, plans and health data to your paired computer over the local network.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Fjelia uses the microphone for the sound of videos you record for a workout.</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>

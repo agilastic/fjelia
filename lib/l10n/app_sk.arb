@@ -4372,5 +4372,22 @@
   "proBriefing": "Tréner píše prehľad",
   "proBriefingHint": "FjeliaPro: Tvoje prehľady píše Fjelia AI Pro (malý model) namiesto Apple Intelligence. Pripravenosť, plán a súhrn zdravia idú do Fjelia AI Pro (Mistral v EÚ, OpenAI ako záloha). Ak neodpovie, Apple Intelligence ho napíše ako doteraz.",
   "homeSky": "Obloha s počasím na Domov",
-  "homeSkyHint": "Jemná obloha v hornej časti Domov, ktorá sleduje dnešné počasie a dennú dobu."
+  "homeSkyHint": "Jemná obloha v hornej časti Domov, ktorá sleduje dnešné počasie a dennú dobu.",
+  "syncComputers": "Počítače",
+  "syncComputersSubtitle": "Synchronizovať s Fjeliou na Macu alebo PC",
+  "syncComputersFooter": "Počítač dostane kópiu tvojich aktivít, plánov a zdravotných údajov cez lokálnu sieť. Nič neprechádza internetom.",
+  "syncPairComputer": "Spárovať s počítačom",
+  "syncScanHint": "V počítači otvor Fjeliu a vyber Spárovať telefón. Potom naskenuj zobrazený kód.",
+  "syncNotAPairingCode": "Toto nie je párovací kód Fjelie.",
+  "syncNow": "Synchronizovať teraz",
+  "syncUnpair": "Zrušiť spárovanie",
+  "syncUnpairTitle": "Zrušiť spárovanie s {name}?",
+  "syncUnpairMessage": "{name} si ponechá údaje, ktoré už má, ale nebude dostávať ďalšie zmeny z tohto telefónu.",
+  "syncInProgress": "Synchronizuje sa… odoslané zmeny: {count}",
+  "syncDone": "Aktuálne · odoslané zmeny: {count}",
+  "syncUnreachable": "Počítač nie je dostupný. Skontroluj, či je na ňom otvorená Fjelia a či sú obe zariadenia v rovnakej sieti.",
+  "syncCodeExpired": "Tento kód už nie je platný. Zobraz v počítači nový kód.",
+  "syncUpdateBoth": "Aktualizuj Fjeliu na oboch zariadeniach a synchronizuj znova.",
+  "syncPairAgain": "Počítač už tento telefón nepozná. Spáruj ho znova.",
+  "syncNoComputers": "Zatiaľ nie je spárovaný žiadny počítač."
 }

@@ -9966,4 +9966,70 @@ class AppLocalizationsNl extends AppLocalizations {
   @override
   String get homeSkyHint =>
       'Een zachte hemel bovenaan Home die het weer van vandaag en het tijdstip volgt.';
+
+  @override
+  String get syncComputers => 'Computers';
+
+  @override
+  String get syncComputersSubtitle =>
+      'Synchroniseren met Fjelia op een Mac of pc';
+
+  @override
+  String get syncComputersFooter =>
+      'Je computer krijgt een kopie van je activiteiten, plannen en gezondheidsgegevens via het lokale netwerk. Niets gaat via internet.';
+
+  @override
+  String get syncPairComputer => 'Koppelen met een computer';
+
+  @override
+  String get syncScanHint =>
+      'Open Fjelia op je computer en kies Telefoon koppelen. Scan daarna de getoonde code.';
+
+  @override
+  String get syncNotAPairingCode => 'Dit is geen Fjelia-koppelcode.';
+
+  @override
+  String get syncNow => 'Nu synchroniseren';
+
+  @override
+  String get syncUnpair => 'Ontkoppelen';
+
+  @override
+  String syncUnpairTitle(String name) {
+    return '$name ontkoppelen?';
+  }
+
+  @override
+  String syncUnpairMessage(String name) {
+    return '$name houdt de gegevens die hij al heeft, maar krijgt geen wijzigingen meer van deze telefoon.';
+  }
+
+  @override
+  String syncInProgress(int count) {
+    return 'Synchroniseren… $count wijzigingen verstuurd';
+  }
+
+  @override
+  String syncDone(int count) {
+    return 'Bijgewerkt · $count wijzigingen verstuurd';
+  }
+
+  @override
+  String get syncUnreachable =>
+      'Computer niet bereikbaar. Controleer of Fjelia daar geopend is en beide apparaten op hetzelfde netwerk zitten.';
+
+  @override
+  String get syncCodeExpired =>
+      'Deze code is niet meer geldig. Toon een nieuwe code op de computer.';
+
+  @override
+  String get syncUpdateBoth =>
+      'Werk Fjelia op beide apparaten bij en synchroniseer opnieuw.';
+
+  @override
+  String get syncPairAgain =>
+      'De computer kent deze telefoon niet meer. Koppel hem opnieuw.';
+
+  @override
+  String get syncNoComputers => 'Nog geen computer gekoppeld.';
 }

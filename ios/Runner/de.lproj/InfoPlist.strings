@@ -5,5 +5,6 @@
 "NSLocationAlwaysAndWhenInUseUsageDescription" = "Wenn du GPS aktivierst, zeichnet Fjelia deine Trainingsroute auch beim App-Wechsel und bei gesperrtem Bildschirm auf. Pause oder Stopp beendet die Standortaufzeichnung.";
 "NSLocationWhenInUseUsageDescription" = "Fjelia nutzt deinen Standort für Trainingsrouten bei aktiviertem GPS und zur Bewertung des Hitzerisikos geplanter Trainings.";
 "NSPhotoLibraryUsageDescription" = "Fjelia lässt dich Fotos und Videos aus deiner Mediathek zu Trainings, Wettkampfzielen und geplanten Einheiten hinzufügen.";
-"NSCameraUsageDescription" = "Fjelia verwendet die Kamera, wenn du ein Foto oder Video für ein Training, ein Wettkampfziel oder eine geplante Einheit aufnimmst.";
+"NSCameraUsageDescription" = "Fjelia verwendet die Kamera, wenn du ein Foto oder Video für ein Training, ein Wettkampfziel oder eine geplante Einheit aufnimmst, und um den Code zu scannen, der es mit einem Computer koppelt.";
+"NSLocalNetworkUsageDescription" = "Fjelia sendet deine Aktivitäten, Pläne und Gesundheitsdaten über das lokale Netzwerk an deinen gekoppelten Computer.";
 "NSMicrophoneUsageDescription" = "Fjelia verwendet das Mikrofon für den Ton von Videos, die du zu einem Training aufnimmst.";

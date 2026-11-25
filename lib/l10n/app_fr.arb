@@ -4372,5 +4372,22 @@
   "proBriefing": "Le coach rédige le briefing",
   "proBriefingHint": "FjeliaPro : Fjelia AI Pro (le petit modèle) rédige tes briefings à la place d'Apple Intelligence. La forme du jour, le plan et le résumé santé sont envoyés à Fjelia AI Pro (Mistral dans l'UE, OpenAI en secours). S'il ne répond pas, Apple Intelligence le rédige comme avant.",
   "homeSky": "Ciel météo sur l'accueil",
-  "homeSkyHint": "Un ciel doux en haut de l'accueil qui suit la météo du jour et l'heure."
+  "homeSkyHint": "Un ciel doux en haut de l'accueil qui suit la météo du jour et l'heure.",
+  "syncComputers": "Ordinateurs",
+  "syncComputersSubtitle": "Synchroniser avec Fjelia sur un Mac ou un PC",
+  "syncComputersFooter": "Votre ordinateur reçoit une copie de vos activités, plans et données de santé via le réseau local. Rien ne passe par Internet.",
+  "syncPairComputer": "Jumeler avec un ordinateur",
+  "syncScanHint": "Sur votre ordinateur, ouvrez Fjelia et choisissez Jumeler un téléphone. Scannez ensuite le code affiché.",
+  "syncNotAPairingCode": "Ce n'est pas un code de jumelage Fjelia.",
+  "syncNow": "Synchroniser maintenant",
+  "syncUnpair": "Dissocier",
+  "syncUnpairTitle": "Dissocier {name} ?",
+  "syncUnpairMessage": "{name} conserve les données qu'il a déjà, mais ne reçoit plus les modifications de ce téléphone.",
+  "syncInProgress": "Synchronisation… {count} modifications envoyées",
+  "syncDone": "À jour · {count} modifications envoyées",
+  "syncUnreachable": "Impossible de joindre l'ordinateur. Vérifiez que Fjelia y est ouvert et que les deux appareils sont sur le même réseau.",
+  "syncCodeExpired": "Ce code n'est plus valide. Affichez un nouveau code sur l'ordinateur.",
+  "syncUpdateBoth": "Mettez à jour Fjelia sur les deux appareils, puis synchronisez à nouveau.",
+  "syncPairAgain": "L'ordinateur ne reconnaît plus ce téléphone. Jumelez-le à nouveau.",
+  "syncNoComputers": "Aucun ordinateur jumelé pour l'instant."
 }

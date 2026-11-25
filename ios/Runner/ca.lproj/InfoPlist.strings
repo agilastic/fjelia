@@ -5,5 +5,6 @@
 "NSLocationAlwaysAndWhenInUseUsageDescription" = "Amb GPS actiu, Fjelia enregistra el recorregut en fer servir una altra app o bloquejar la pantalla. Pausa o Atura finalitza el registre de la ubicació.";
 "NSLocationWhenInUseUsageDescription" = "Fjelia utilitza la ubicació per als recorreguts amb GPS actiu i per avaluar el risc de calor dels entrenaments previstos.";
 "NSPhotoLibraryUsageDescription" = "Fjelia et permet afegir fotos i vídeos de la teva fototeca als teus entrenaments, objectius de cursa i sessions planificades.";
-"NSCameraUsageDescription" = "Fjelia fa servir la càmera quan fas una foto o graves un vídeo per a un entrenament, un objectiu de cursa o una sessió planificada.";
+"NSCameraUsageDescription" = "Fjelia fa servir la càmera quan fas una foto o graves un vídeo per a un entrenament, un objectiu de cursa o una sessió planificada i per escanejar el codi que la vincula amb un ordinador.";
+"NSLocalNetworkUsageDescription" = "Fjelia envia les teves activitats, plans i dades de salut a l'ordinador vinculat per la xarxa local.";
 "NSMicrophoneUsageDescription" = "Fjelia fa servir el micròfon per al so dels vídeos que graves per a un entrenament.";

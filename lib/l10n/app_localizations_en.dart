@@ -9897,4 +9897,69 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get homeSkyHint =>
       'A soft sky at the top of Home that follows today\'s weather and the time of day.';
+
+  @override
+  String get syncComputers => 'Computers';
+
+  @override
+  String get syncComputersSubtitle => 'Sync with Fjelia on a Mac or PC';
+
+  @override
+  String get syncComputersFooter =>
+      'Your computer gets a copy of your activities, plans and health data over the local network. Nothing goes through the internet.';
+
+  @override
+  String get syncPairComputer => 'Pair with a computer';
+
+  @override
+  String get syncScanHint =>
+      'On your computer, open Fjelia and choose Pair Phone. Then scan the code it shows.';
+
+  @override
+  String get syncNotAPairingCode => 'This isn\'t a Fjelia pairing code.';
+
+  @override
+  String get syncNow => 'Sync now';
+
+  @override
+  String get syncUnpair => 'Unpair';
+
+  @override
+  String syncUnpairTitle(String name) {
+    return 'Unpair $name?';
+  }
+
+  @override
+  String syncUnpairMessage(String name) {
+    return '$name keeps the data it already has but gets no more changes from this phone.';
+  }
+
+  @override
+  String syncInProgress(int count) {
+    return 'Syncing… $count changes sent';
+  }
+
+  @override
+  String syncDone(int count) {
+    return 'Up to date · $count changes sent';
+  }
+
+  @override
+  String get syncUnreachable =>
+      'Can\'t reach the computer. Make sure Fjelia is open on it and both devices are on the same network.';
+
+  @override
+  String get syncCodeExpired =>
+      'This code is no longer valid. Show a new code on the computer.';
+
+  @override
+  String get syncUpdateBoth =>
+      'Update Fjelia on both devices, then sync again.';
+
+  @override
+  String get syncPairAgain =>
+      'The computer no longer knows this phone. Pair it again.';
+
+  @override
+  String get syncNoComputers => 'No computer paired yet.';
 }

@@ -9969,4 +9969,70 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get homeSkyHint =>
       'Un cel suau a la part superior d\'Inici que segueix el temps d\'avui i l\'hora del dia.';
+
+  @override
+  String get syncComputers => 'Ordinadors';
+
+  @override
+  String get syncComputersSubtitle => 'Sincronitza amb Fjelia en un Mac o PC';
+
+  @override
+  String get syncComputersFooter =>
+      'El teu ordinador rep una còpia de les activitats, els plans i les dades de salut per la xarxa local. Res no passa per internet.';
+
+  @override
+  String get syncPairComputer => 'Vincula amb un ordinador';
+
+  @override
+  String get syncScanHint =>
+      'A l\'ordinador, obre Fjelia i tria Vincula el telèfon. Després escaneja el codi que mostra.';
+
+  @override
+  String get syncNotAPairingCode =>
+      'Aquest no és un codi de vinculació de Fjelia.';
+
+  @override
+  String get syncNow => 'Sincronitza ara';
+
+  @override
+  String get syncUnpair => 'Desvincula';
+
+  @override
+  String syncUnpairTitle(String name) {
+    return 'Vols desvincular $name?';
+  }
+
+  @override
+  String syncUnpairMessage(String name) {
+    return '$name conserva les dades que ja té, però no rebrà més canvis d\'aquest telèfon.';
+  }
+
+  @override
+  String syncInProgress(int count) {
+    return 'Sincronitzant… $count canvis enviats';
+  }
+
+  @override
+  String syncDone(int count) {
+    return 'Al dia · $count canvis enviats';
+  }
+
+  @override
+  String get syncUnreachable =>
+      'No es pot accedir a l\'ordinador. Comprova que Fjelia hi estigui obert i que tots dos dispositius siguin a la mateixa xarxa.';
+
+  @override
+  String get syncCodeExpired =>
+      'Aquest codi ja no és vàlid. Mostra un codi nou a l\'ordinador.';
+
+  @override
+  String get syncUpdateBoth =>
+      'Actualitza Fjelia als dos dispositius i torna a sincronitzar.';
+
+  @override
+  String get syncPairAgain =>
+      'L\'ordinador ja no reconeix aquest telèfon. Torna\'l a vincular.';
+
+  @override
+  String get syncNoComputers => 'Encara no hi ha cap ordinador vinculat.';
 }

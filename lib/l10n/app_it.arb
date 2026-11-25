@@ -4372,5 +4372,22 @@
   "proBriefing": "Il coach scrive il briefing",
   "proBriefingHint": "FjeliaPro: Fjelia AI Pro (il modello piccolo) scrive i tuoi briefing al posto di Apple Intelligence. Prontezza, piano e riepilogo della salute vengono inviati a Fjelia AI Pro (Mistral nell'UE, OpenAI come riserva). Se non risponde, Apple Intelligence lo scrive come prima.",
   "homeSky": "Cielo meteo nella Home",
-  "homeSkyHint": "Un cielo tenue in cima alla Home che segue il meteo di oggi e l'ora del giorno."
+  "homeSkyHint": "Un cielo tenue in cima alla Home che segue il meteo di oggi e l'ora del giorno.",
+  "syncComputers": "Computer",
+  "syncComputersSubtitle": "Sincronizza con Fjelia su un Mac o PC",
+  "syncComputersFooter": "Il computer riceve una copia di attività, piani e dati sulla salute tramite la rete locale. Nulla passa da internet.",
+  "syncPairComputer": "Abbina a un computer",
+  "syncScanHint": "Sul computer apri Fjelia e scegli Abbina telefono. Poi scansiona il codice mostrato.",
+  "syncNotAPairingCode": "Questo non è un codice di abbinamento Fjelia.",
+  "syncNow": "Sincronizza ora",
+  "syncUnpair": "Dissocia",
+  "syncUnpairTitle": "Dissociare {name}?",
+  "syncUnpairMessage": "{name} conserva i dati che ha già, ma non riceve più modifiche da questo telefono.",
+  "syncInProgress": "Sincronizzazione… {count} modifiche inviate",
+  "syncDone": "Aggiornato · {count} modifiche inviate",
+  "syncUnreachable": "Impossibile raggiungere il computer. Verifica che Fjelia sia aperto e che entrambi i dispositivi siano sulla stessa rete.",
+  "syncCodeExpired": "Questo codice non è più valido. Mostra un nuovo codice sul computer.",
+  "syncUpdateBoth": "Aggiorna Fjelia su entrambi i dispositivi, poi sincronizza di nuovo.",
+  "syncPairAgain": "Il computer non riconosce più questo telefono. Abbinalo di nuovo.",
+  "syncNoComputers": "Nessun computer abbinato."
 }

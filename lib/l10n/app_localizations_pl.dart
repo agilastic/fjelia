@@ -9997,4 +9997,69 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String get homeSkyHint =>
       'Delikatne niebo u góry ekranu głównego, które podąża za dzisiejszą pogodą i porą dnia.';
+
+  @override
+  String get syncComputers => 'Komputery';
+
+  @override
+  String get syncComputersSubtitle => 'Synchronizuj z Fjelią na Macu lub PC';
+
+  @override
+  String get syncComputersFooter =>
+      'Komputer otrzymuje kopię Twoich aktywności, planów i danych zdrowotnych przez sieć lokalną. Nic nie przechodzi przez internet.';
+
+  @override
+  String get syncPairComputer => 'Sparuj z komputerem';
+
+  @override
+  String get syncScanHint =>
+      'Na komputerze otwórz Fjelię i wybierz Sparuj telefon. Następnie zeskanuj wyświetlony kod.';
+
+  @override
+  String get syncNotAPairingCode => 'To nie jest kod parowania Fjelii.';
+
+  @override
+  String get syncNow => 'Synchronizuj teraz';
+
+  @override
+  String get syncUnpair => 'Rozłącz';
+
+  @override
+  String syncUnpairTitle(String name) {
+    return 'Rozłączyć $name?';
+  }
+
+  @override
+  String syncUnpairMessage(String name) {
+    return '$name zachowa posiadane dane, ale nie będzie już otrzymywać zmian z tego telefonu.';
+  }
+
+  @override
+  String syncInProgress(int count) {
+    return 'Synchronizacja… wysłano zmian: $count';
+  }
+
+  @override
+  String syncDone(int count) {
+    return 'Aktualne · wysłano zmian: $count';
+  }
+
+  @override
+  String get syncUnreachable =>
+      'Nie można połączyć się z komputerem. Sprawdź, czy Fjelia jest na nim otwarta i czy oba urządzenia są w tej samej sieci.';
+
+  @override
+  String get syncCodeExpired =>
+      'Ten kod jest już nieważny. Wyświetl nowy kod na komputerze.';
+
+  @override
+  String get syncUpdateBoth =>
+      'Zaktualizuj Fjelię na obu urządzeniach i zsynchronizuj ponownie.';
+
+  @override
+  String get syncPairAgain =>
+      'Komputer nie rozpoznaje już tego telefonu. Sparuj go ponownie.';
+
+  @override
+  String get syncNoComputers => 'Brak sparowanego komputera.';
 }

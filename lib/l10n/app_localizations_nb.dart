@@ -9895,4 +9895,70 @@ class AppLocalizationsNb extends AppLocalizations {
   @override
   String get homeSkyHint =>
       'En myk himmel øverst på Hjem som følger dagens vær og tiden på døgnet.';
+
+  @override
+  String get syncComputers => 'Datamaskiner';
+
+  @override
+  String get syncComputersSubtitle =>
+      'Synkroniser med Fjelia på en Mac eller PC';
+
+  @override
+  String get syncComputersFooter =>
+      'Datamaskinen får en kopi av aktivitetene, planene og helsedataene dine over det lokale nettverket. Ingenting går via internett.';
+
+  @override
+  String get syncPairComputer => 'Koble til en datamaskin';
+
+  @override
+  String get syncScanHint =>
+      'Åpne Fjelia på datamaskinen og velg Koble til telefon. Skann deretter koden som vises.';
+
+  @override
+  String get syncNotAPairingCode => 'Dette er ikke en Fjelia-tilkoblingskode.';
+
+  @override
+  String get syncNow => 'Synkroniser nå';
+
+  @override
+  String get syncUnpair => 'Koble fra';
+
+  @override
+  String syncUnpairTitle(String name) {
+    return 'Koble fra $name?';
+  }
+
+  @override
+  String syncUnpairMessage(String name) {
+    return '$name beholder dataene den allerede har, men får ikke flere endringer fra denne telefonen.';
+  }
+
+  @override
+  String syncInProgress(int count) {
+    return 'Synkroniserer … $count endringer sendt';
+  }
+
+  @override
+  String syncDone(int count) {
+    return 'Oppdatert · $count endringer sendt';
+  }
+
+  @override
+  String get syncUnreachable =>
+      'Får ikke kontakt med datamaskinen. Sjekk at Fjelia er åpen der og at begge enhetene er på samme nettverk.';
+
+  @override
+  String get syncCodeExpired =>
+      'Koden er ikke lenger gyldig. Vis en ny kode på datamaskinen.';
+
+  @override
+  String get syncUpdateBoth =>
+      'Oppdater Fjelia på begge enhetene, og synkroniser på nytt.';
+
+  @override
+  String get syncPairAgain =>
+      'Datamaskinen kjenner ikke lenger denne telefonen. Koble den til på nytt.';
+
+  @override
+  String get syncNoComputers => 'Ingen datamaskin tilkoblet ennå.';
 }

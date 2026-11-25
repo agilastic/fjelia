@@ -9979,4 +9979,70 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get homeSkyHint =>
       'Ein sanfter Himmel oben auf Home, der dem heutigen Wetter und der Tageszeit folgt.';
+
+  @override
+  String get syncComputers => 'Computer';
+
+  @override
+  String get syncComputersSubtitle =>
+      'Mit Fjelia auf einem Mac oder PC synchronisieren';
+
+  @override
+  String get syncComputersFooter =>
+      'Dein Computer erhält eine Kopie deiner Aktivitäten, Pläne und Gesundheitsdaten über das lokale Netzwerk. Nichts geht über das Internet.';
+
+  @override
+  String get syncPairComputer => 'Mit einem Computer koppeln';
+
+  @override
+  String get syncScanHint =>
+      'Öffne Fjelia auf deinem Computer und wähle „Telefon koppeln“. Scanne dann den angezeigten Code.';
+
+  @override
+  String get syncNotAPairingCode => 'Das ist kein Fjelia-Kopplungscode.';
+
+  @override
+  String get syncNow => 'Jetzt synchronisieren';
+
+  @override
+  String get syncUnpair => 'Entkoppeln';
+
+  @override
+  String syncUnpairTitle(String name) {
+    return '$name entkoppeln?';
+  }
+
+  @override
+  String syncUnpairMessage(String name) {
+    return '$name behält die vorhandenen Daten, erhält aber keine Änderungen mehr von diesem Telefon.';
+  }
+
+  @override
+  String syncInProgress(int count) {
+    return 'Synchronisiere … $count Änderungen gesendet';
+  }
+
+  @override
+  String syncDone(int count) {
+    return 'Aktuell · $count Änderungen gesendet';
+  }
+
+  @override
+  String get syncUnreachable =>
+      'Computer nicht erreichbar. Prüfe, ob Fjelia dort geöffnet ist und beide Geräte im selben Netzwerk sind.';
+
+  @override
+  String get syncCodeExpired =>
+      'Dieser Code ist nicht mehr gültig. Zeige auf dem Computer einen neuen Code an.';
+
+  @override
+  String get syncUpdateBoth =>
+      'Aktualisiere Fjelia auf beiden Geräten und synchronisiere dann erneut.';
+
+  @override
+  String get syncPairAgain =>
+      'Der Computer kennt dieses Telefon nicht mehr. Kopple es erneut.';
+
+  @override
+  String get syncNoComputers => 'Noch kein Computer gekoppelt.';
 }

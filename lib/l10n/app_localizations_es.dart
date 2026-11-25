@@ -9963,4 +9963,69 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get homeSkyHint =>
       'Un cielo suave en la parte superior de Inicio que sigue el tiempo de hoy y la hora del día.';
+
+  @override
+  String get syncComputers => 'Ordenadores';
+
+  @override
+  String get syncComputersSubtitle => 'Sincroniza con Fjelia en un Mac o PC';
+
+  @override
+  String get syncComputersFooter =>
+      'Tu ordenador recibe una copia de tus actividades, planes y datos de salud por la red local. Nada pasa por internet.';
+
+  @override
+  String get syncPairComputer => 'Enlazar con un ordenador';
+
+  @override
+  String get syncScanHint =>
+      'En tu ordenador, abre Fjelia y elige Enlazar teléfono. Luego escanea el código que aparece.';
+
+  @override
+  String get syncNotAPairingCode => 'Esto no es un código de enlace de Fjelia.';
+
+  @override
+  String get syncNow => 'Sincronizar ahora';
+
+  @override
+  String get syncUnpair => 'Desenlazar';
+
+  @override
+  String syncUnpairTitle(String name) {
+    return '¿Desenlazar $name?';
+  }
+
+  @override
+  String syncUnpairMessage(String name) {
+    return '$name conserva los datos que ya tiene, pero no recibirá más cambios de este teléfono.';
+  }
+
+  @override
+  String syncInProgress(int count) {
+    return 'Sincronizando… $count cambios enviados';
+  }
+
+  @override
+  String syncDone(int count) {
+    return 'Al día · $count cambios enviados';
+  }
+
+  @override
+  String get syncUnreachable =>
+      'No se puede conectar con el ordenador. Comprueba que Fjelia esté abierto en él y que ambos dispositivos estén en la misma red.';
+
+  @override
+  String get syncCodeExpired =>
+      'Este código ya no es válido. Muestra un código nuevo en el ordenador.';
+
+  @override
+  String get syncUpdateBoth =>
+      'Actualiza Fjelia en ambos dispositivos y vuelve a sincronizar.';
+
+  @override
+  String get syncPairAgain =>
+      'El ordenador ya no reconoce este teléfono. Vuelve a enlazarlo.';
+
+  @override
+  String get syncNoComputers => 'Aún no hay ningún ordenador enlazado.';
 }

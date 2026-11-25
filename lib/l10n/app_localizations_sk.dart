@@ -9940,4 +9940,70 @@ class AppLocalizationsSk extends AppLocalizations {
   @override
   String get homeSkyHint =>
       'Jemná obloha v hornej časti Domov, ktorá sleduje dnešné počasie a dennú dobu.';
+
+  @override
+  String get syncComputers => 'Počítače';
+
+  @override
+  String get syncComputersSubtitle =>
+      'Synchronizovať s Fjeliou na Macu alebo PC';
+
+  @override
+  String get syncComputersFooter =>
+      'Počítač dostane kópiu tvojich aktivít, plánov a zdravotných údajov cez lokálnu sieť. Nič neprechádza internetom.';
+
+  @override
+  String get syncPairComputer => 'Spárovať s počítačom';
+
+  @override
+  String get syncScanHint =>
+      'V počítači otvor Fjeliu a vyber Spárovať telefón. Potom naskenuj zobrazený kód.';
+
+  @override
+  String get syncNotAPairingCode => 'Toto nie je párovací kód Fjelie.';
+
+  @override
+  String get syncNow => 'Synchronizovať teraz';
+
+  @override
+  String get syncUnpair => 'Zrušiť spárovanie';
+
+  @override
+  String syncUnpairTitle(String name) {
+    return 'Zrušiť spárovanie s $name?';
+  }
+
+  @override
+  String syncUnpairMessage(String name) {
+    return '$name si ponechá údaje, ktoré už má, ale nebude dostávať ďalšie zmeny z tohto telefónu.';
+  }
+
+  @override
+  String syncInProgress(int count) {
+    return 'Synchronizuje sa… odoslané zmeny: $count';
+  }
+
+  @override
+  String syncDone(int count) {
+    return 'Aktuálne · odoslané zmeny: $count';
+  }
+
+  @override
+  String get syncUnreachable =>
+      'Počítač nie je dostupný. Skontroluj, či je na ňom otvorená Fjelia a či sú obe zariadenia v rovnakej sieti.';
+
+  @override
+  String get syncCodeExpired =>
+      'Tento kód už nie je platný. Zobraz v počítači nový kód.';
+
+  @override
+  String get syncUpdateBoth =>
+      'Aktualizuj Fjeliu na oboch zariadeniach a synchronizuj znova.';
+
+  @override
+  String get syncPairAgain =>
+      'Počítač už tento telefón nepozná. Spáruj ho znova.';
+
+  @override
+  String get syncNoComputers => 'Zatiaľ nie je spárovaný žiadny počítač.';
 }

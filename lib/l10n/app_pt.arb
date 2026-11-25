@@ -5535,5 +5535,22 @@
   "proBriefing": "O coach escreve o resumo",
   "proBriefingHint": "FjeliaPro: o Fjelia AI Pro (o modelo pequeno) escreve os teus resumos em vez do Apple Intelligence. A prontidão, o plano e o resumo de saúde vão para o Fjelia AI Pro (Mistral na UE, OpenAI como alternativa). Se não responder, o Apple Intelligence escreve-o como até agora.",
   "homeSky": "Céu do tempo no Início",
-  "homeSkyHint": "Um céu suave no topo do Início que segue o tempo de hoje e a hora do dia."
+  "homeSkyHint": "Um céu suave no topo do Início que segue o tempo de hoje e a hora do dia.",
+  "syncComputers": "Computadores",
+  "syncComputersSubtitle": "Sincronizar com o Fjelia num Mac ou PC",
+  "syncComputersFooter": "O computador recebe uma cópia das suas atividades, planos e dados de saúde pela rede local. Nada passa pela internet.",
+  "syncPairComputer": "Emparelhar com um computador",
+  "syncScanHint": "No computador, abra o Fjelia e escolha Emparelhar telefone. Depois, leia o código apresentado.",
+  "syncNotAPairingCode": "Este não é um código de emparelhamento do Fjelia.",
+  "syncNow": "Sincronizar agora",
+  "syncUnpair": "Desemparelhar",
+  "syncUnpairTitle": "Desemparelhar {name}?",
+  "syncUnpairMessage": "{name} mantém os dados que já tem, mas deixa de receber alterações deste telefone.",
+  "syncInProgress": "A sincronizar… {count} alterações enviadas",
+  "syncDone": "Atualizado · {count} alterações enviadas",
+  "syncUnreachable": "Não é possível contactar o computador. Confirme que o Fjelia está aberto nele e que ambos os dispositivos estão na mesma rede.",
+  "syncCodeExpired": "Este código já não é válido. Mostre um novo código no computador.",
+  "syncUpdateBoth": "Atualize o Fjelia em ambos os dispositivos e sincronize novamente.",
+  "syncPairAgain": "O computador já não reconhece este telefone. Emparelhe-o novamente.",
+  "syncNoComputers": "Ainda não há nenhum computador emparelhado."
 }

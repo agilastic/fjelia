@@ -5535,5 +5535,22 @@
   "proBriefing": "Trener pisze podsumowanie",
   "proBriefingHint": "FjeliaPro: Fjelia AI Pro (mały model) pisze twoje podsumowania zamiast Apple Intelligence. Gotowość, plan i podsumowanie zdrowia trafiają do Fjelia AI Pro (Mistral w UE, OpenAI jako zapas). Jeśli nie odpowie, Apple Intelligence napisze je jak dotąd.",
   "homeSky": "Niebo pogodowe na ekranie głównym",
-  "homeSkyHint": "Delikatne niebo u góry ekranu głównego, które podąża za dzisiejszą pogodą i porą dnia."
+  "homeSkyHint": "Delikatne niebo u góry ekranu głównego, które podąża za dzisiejszą pogodą i porą dnia.",
+  "syncComputers": "Komputery",
+  "syncComputersSubtitle": "Synchronizuj z Fjelią na Macu lub PC",
+  "syncComputersFooter": "Komputer otrzymuje kopię Twoich aktywności, planów i danych zdrowotnych przez sieć lokalną. Nic nie przechodzi przez internet.",
+  "syncPairComputer": "Sparuj z komputerem",
+  "syncScanHint": "Na komputerze otwórz Fjelię i wybierz Sparuj telefon. Następnie zeskanuj wyświetlony kod.",
+  "syncNotAPairingCode": "To nie jest kod parowania Fjelii.",
+  "syncNow": "Synchronizuj teraz",
+  "syncUnpair": "Rozłącz",
+  "syncUnpairTitle": "Rozłączyć {name}?",
+  "syncUnpairMessage": "{name} zachowa posiadane dane, ale nie będzie już otrzymywać zmian z tego telefonu.",
+  "syncInProgress": "Synchronizacja… wysłano zmian: {count}",
+  "syncDone": "Aktualne · wysłano zmian: {count}",
+  "syncUnreachable": "Nie można połączyć się z komputerem. Sprawdź, czy Fjelia jest na nim otwarta i czy oba urządzenia są w tej samej sieci.",
+  "syncCodeExpired": "Ten kod jest już nieważny. Wyświetl nowy kod na komputerze.",
+  "syncUpdateBoth": "Zaktualizuj Fjelię na obu urządzeniach i zsynchronizuj ponownie.",
+  "syncPairAgain": "Komputer nie rozpoznaje już tego telefonu. Sparuj go ponownie.",
+  "syncNoComputers": "Brak sparowanego komputera."
 }

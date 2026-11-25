@@ -5,5 +5,6 @@
 "NSLocationAlwaysAndWhenInUseUsageDescription" = "Pri zapnutom GPS Fjelia zaznamenáva trasu aj v inej aplikácii alebo pri zamknutej obrazovke. Pozastavenie alebo zastavenie ukončí záznam polohy.";
 "NSLocationWhenInUseUsageDescription" = "Fjelia používa polohu na trasy pri zapnutom GPS a na vyhodnotenie rizika tepla pri plánovaných tréningoch.";
 "NSPhotoLibraryUsageDescription" = "Fjelia ti umožňuje pridať fotky a videá z knižnice k tréningom, pretekárskym cieľom a plánovaným tréningom.";
-"NSCameraUsageDescription" = "Fjelia používa fotoaparát, keď fotíš alebo nahrávaš video k tréningu, pretekárskemu cieľu alebo plánovanému tréningu.";
+"NSCameraUsageDescription" = "Fjelia používa fotoaparát, keď fotíš alebo nahrávaš video k tréningu, pretekárskemu cieľu alebo plánovanému tréningu a na naskenovanie kódu, ktorým ju spáruješ s počítačom.";
+"NSLocalNetworkUsageDescription" = "Fjelia posiela tvoje aktivity, plány a zdravotné údaje do spárovaného počítača cez lokálnu sieť.";
 "NSMicrophoneUsageDescription" = "Fjelia používa mikrofón na zvuk videí, ktoré nahráš k tréningu.";

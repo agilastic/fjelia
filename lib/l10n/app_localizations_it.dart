@@ -9954,4 +9954,70 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get homeSkyHint =>
       'Un cielo tenue in cima alla Home che segue il meteo di oggi e l\'ora del giorno.';
+
+  @override
+  String get syncComputers => 'Computer';
+
+  @override
+  String get syncComputersSubtitle => 'Sincronizza con Fjelia su un Mac o PC';
+
+  @override
+  String get syncComputersFooter =>
+      'Il computer riceve una copia di attività, piani e dati sulla salute tramite la rete locale. Nulla passa da internet.';
+
+  @override
+  String get syncPairComputer => 'Abbina a un computer';
+
+  @override
+  String get syncScanHint =>
+      'Sul computer apri Fjelia e scegli Abbina telefono. Poi scansiona il codice mostrato.';
+
+  @override
+  String get syncNotAPairingCode =>
+      'Questo non è un codice di abbinamento Fjelia.';
+
+  @override
+  String get syncNow => 'Sincronizza ora';
+
+  @override
+  String get syncUnpair => 'Dissocia';
+
+  @override
+  String syncUnpairTitle(String name) {
+    return 'Dissociare $name?';
+  }
+
+  @override
+  String syncUnpairMessage(String name) {
+    return '$name conserva i dati che ha già, ma non riceve più modifiche da questo telefono.';
+  }
+
+  @override
+  String syncInProgress(int count) {
+    return 'Sincronizzazione… $count modifiche inviate';
+  }
+
+  @override
+  String syncDone(int count) {
+    return 'Aggiornato · $count modifiche inviate';
+  }
+
+  @override
+  String get syncUnreachable =>
+      'Impossibile raggiungere il computer. Verifica che Fjelia sia aperto e che entrambi i dispositivi siano sulla stessa rete.';
+
+  @override
+  String get syncCodeExpired =>
+      'Questo codice non è più valido. Mostra un nuovo codice sul computer.';
+
+  @override
+  String get syncUpdateBoth =>
+      'Aggiorna Fjelia su entrambi i dispositivi, poi sincronizza di nuovo.';
+
+  @override
+  String get syncPairAgain =>
+      'Il computer non riconosce più questo telefono. Abbinalo di nuovo.';
+
+  @override
+  String get syncNoComputers => 'Nessun computer abbinato.';
 }
