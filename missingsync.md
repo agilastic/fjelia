@@ -37,6 +37,10 @@ Sync now, Unpair), with a sync whenever the app comes to the foreground.
       Windows and Linux credential stores (today a file in the app folder).
 - [ ] Ask for ECG waveforms on demand (the log supports it; nothing asks).
 - [ ] Photos and videos: the list syncs, the files do not yet (on demand).
+- [ ] A second copy of the app on the same computer shares the identity and
+      the database, announces the same device id on another port, and a
+      phone may reach either. Allow one copy only (bring the running one to
+      the front).
 
 ## Protocol
 
