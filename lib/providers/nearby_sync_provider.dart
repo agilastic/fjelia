@@ -9,6 +9,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../services/bonjour_peer_locator.dart';
 import 'database_provider.dart';
+import 'sync_provider.dart' show waitForSyncToSettle;
 
 /// Settings → System → Computers: this phone pairs with Fjelia on a Mac or
 /// PC by its QR code and sends it its changes over the local network.
@@ -102,11 +103,25 @@ class NearbySyncNotifier extends Notifier<Map<String, NearbySyncStatus>> {
     }
   }
 
-  /// Syncs every paired computer, quietly: when the app comes back.
+  /// Syncs every paired computer, quietly.
   Future<void> syncAll() async {
     final peers = await ref.read(databaseProvider).syncPeers();
     await Future.wait(peers.map(sync));
   }
+
+  Future<void>? _afterOtherSyncs;
+
+  /// Syncs every paired computer once the watch, health and history syncs
+  /// are done, so the computer gets what they brought in. Calls while one is
+  /// still waiting share it.
+  Future<void> syncAfterOtherSyncs() => _afterOtherSyncs ??= () async {
+    try {
+      await waitForSyncToSettle(ref);
+    } finally {
+      _afterOtherSyncs = null;
+    }
+    await syncAll();
+  }();
 
   Future<void> unpair(SyncPeer peer) async {
     await (await _client()).unpair(peer);

@@ -207,8 +207,8 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
     if (state == AppLifecycleState.resumed) {
       unawaited(ref.read(planProposalLifecycleProvider).foreground());
       unawaited(ref.read(fjeliaProProvider.notifier).refresh());
-      unawaited(ref.read(nearbySyncProvider.notifier).syncAll());
       _onResume();
+      unawaited(ref.read(nearbySyncProvider.notifier).syncAfterOtherSyncs());
     } else if (state == AppLifecycleState.paused) {
       // Proposals not answered yet are told a few minutes later.
       unawaited(ref.read(planProposalLifecycleProvider).background());

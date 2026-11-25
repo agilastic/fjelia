@@ -15,8 +15,9 @@ Sync now, Unpair), with a sync whenever the app comes to the foreground.
 
 ## Phone
 
-- [ ] Sync after a workout import, not only when the app comes back
-      (`sync_provider` does not call `nearbySyncProvider.syncAll()`).
+- [x] Sync after a workout import, not only when the app comes back: the
+      computers sync once the watch, health and history syncs are done
+      (`NearbySyncNotifier.syncAfterOtherSyncs`), also on resume.
 - [ ] Remember the last successful sync per computer; it is only in memory,
       so after a restart the page shows nothing.
 - [ ] Show progress as "n of m" for the first sync; the total is not known.
