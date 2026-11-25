@@ -3,8 +3,8 @@ import 'package:uuid/uuid.dart';
 
 import '../api/garmin_client.dart';
 import '../db/database.dart';
-import 'season/goal_set.dart';
-import 'season/season_goal.dart';
+import 'package:fjelia_core/services/season/goal_set.dart';
+import 'package:fjelia_core/services/season/season_goal.dart';
 import 'media_service.dart';
 
 /// Usual race distances in km.

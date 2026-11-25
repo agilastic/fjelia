@@ -1,6 +1,6 @@
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
-import 'package:fjelia/models/strength_muscles.dart';
+import 'package:fjelia_core/models/strength_muscles.dart';
 import 'package:fjelia/models/strength_workout.dart';
 import 'package:fjelia/screens/strength/strength_exercise_sheet.dart';
 import 'package:fjelia/services/strength/strength_focus.dart';

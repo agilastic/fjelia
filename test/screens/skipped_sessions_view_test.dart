@@ -8,7 +8,7 @@ import 'package:fjelia/providers/database_provider.dart';
 import 'package:fjelia/providers/upcoming_plan_provider.dart';
 import 'package:fjelia/screens/planner/plan_calendar_markers.dart';
 import 'package:fjelia/screens/planner/plan_overview_cards.dart';
-import 'package:fjelia/models/garmin_data.dart';
+import 'package:fjelia_core/models/garmin_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';

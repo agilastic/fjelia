@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fjelia/db/database.dart';
-import 'package:fjelia/models/heart_rate.dart';
+import 'package:fjelia_core/models/heart_rate.dart';
 import 'package:fjelia/providers/database_provider.dart';
 import 'package:fjelia/widgets/hr_timeline_card.dart';
 

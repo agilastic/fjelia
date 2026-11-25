@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:drift/drift.dart';
 
 import '../db/database.dart';
-import '../utils/log.dart';
-import 'dfa_alpha1.dart';
-import 'fit_activity_data.dart';
+import 'package:fjelia_core/utils/log.dart';
+import 'package:fjelia_core/services/dfa_alpha1.dart';
+import 'package:fjelia_core/services/fit_activity_data.dart';
 
 /// Stores the DFA alpha1 of activities whose FIT file carries beat-to-beat
 /// intervals (file import, Polar and Garmin sync).

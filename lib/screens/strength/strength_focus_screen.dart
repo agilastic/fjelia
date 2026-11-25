@@ -12,7 +12,7 @@ import '../../providers/strength_provider.dart';
 import '../../services/strength/strength_focus.dart';
 import '../../services/strength/strength_repository.dart';
 import '../../theme/activity_colors.dart';
-import '../../utils/decimal.dart';
+import 'package:fjelia_core/utils/decimal.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/strength_demo.dart';
 import '../../widgets/strength_widgets.dart';

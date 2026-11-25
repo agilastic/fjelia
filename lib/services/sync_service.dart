@@ -9,20 +9,20 @@ import 'package:fjelia_service_api/fjelia_service_api.dart';
 import '../api/garmin_client.dart';
 import '../api/renpho_client.dart';
 import '../db/database.dart' hide DailyBpSummary;
-import '../models/garmin_data.dart';
+import 'package:fjelia_core/models/garmin_data.dart';
 import '../models/strength_workout.dart';
-import '../models/renpho_data.dart';
-import '../models/scores.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/models/renpho_data.dart';
+import 'package:fjelia_core/models/scores.dart';
+import 'package:fjelia_core/utils/log.dart';
 import '../theme/activity_colors.dart';
-import 'activity_decoder.dart';
+import 'package:fjelia_core/services/activity_decoder.dart';
 import 'activity_file_import_service.dart' show activityFilesInZip;
 import 'dfa_alpha1_service.dart';
 import 'energie_calculator.dart';
-import 'fit_activity_data.dart';
+import 'package:fjelia_core/services/fit_activity_data.dart';
 import 'heat_acclimation_service.dart';
-import 'score_calculator.dart';
-import 'strength/garmin_strength.dart';
+import 'package:fjelia_core/services/score_calculator.dart';
+import 'package:fjelia_core/services/strength/garmin_strength.dart';
 import 'strength/strength_repository.dart';
 
 /// Top level, so the isolate's closure holds only the bytes.

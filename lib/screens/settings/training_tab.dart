@@ -10,7 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/plan_schedule_provider.dart';
 
 import '../../db/database.dart';
-import '../../models/weekly_hours.dart';
+import 'package:fjelia_core/models/weekly_hours.dart';
 import '../../providers/activity_history_provider.dart';
 import '../../providers/user_profile_provider.dart';
 import '../../providers/week_start_provider.dart';
@@ -30,7 +30,7 @@ import '../../services/hr_zone_change_notice.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/settings_widgets.dart' show SettingsGroup, SettingsIcon;
 import '../../widgets/nutrition_widgets.dart';
-import '../../utils/target_time.dart';
+import 'package:fjelia_core/utils/target_time.dart';
 import 'missed_workout_settings_card.dart';
 import 'race_goal_editor.dart';
 import '../strength/strength_sections.dart';

@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../db/database.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 
 /// What a photo or video belongs to.
 class MediaOwner {

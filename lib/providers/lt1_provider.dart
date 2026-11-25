@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../services/lt1_estimate_service.dart';
+import 'package:fjelia_core/services/lt1_estimate_service.dart';
 import 'lt1_drift_provider.dart';
 import 'lt2_tt_provider.dart';
 import 'user_profile_provider.dart';

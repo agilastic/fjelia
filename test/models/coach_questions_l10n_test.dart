@@ -1,6 +1,6 @@
 import 'package:fjelia/l10n/l10n_ext.dart';
 import 'package:fjelia/models/coach_context_card.dart';
-import 'package:fjelia/models/garmin_data.dart';
+import 'package:fjelia_core/models/garmin_data.dart';
 import 'package:fjelia/services/coach_tasks.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';

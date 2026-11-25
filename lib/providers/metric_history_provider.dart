@@ -1,9 +1,9 @@
-import '../models/metric_chart_data.dart';
+import 'package:fjelia_core/models/metric_chart_data.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../models/chart_point.dart';
-import '../models/health_metric.dart';
+import 'package:fjelia_core/models/chart_point.dart';
+import 'package:fjelia_core/models/health_metric.dart';
 import 'database_provider.dart';
 import 'day_data_provider.dart';
 

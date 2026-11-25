@@ -4,7 +4,7 @@ import '../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
 
-import '../models/planned_workout_presentation.dart';
+import 'package:fjelia_core/models/planned_workout_presentation.dart';
 import 'app_widgets.dart';
 import 'workout_profile_bar.dart';
 

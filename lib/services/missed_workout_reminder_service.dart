@@ -7,11 +7,11 @@ import 'dart:math' as math;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../db/database.dart';
-import '../models/training_windows.dart';
+import 'package:fjelia_core/models/training_windows.dart';
 import '../l10n/l10n_ext.dart';
 import '../providers/plan_week_provider.dart';
 import '../providers/user_profile_provider.dart' show UserProfileNotifier;
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'notifications/local_notification_gateway.dart';
 
 /// Notification ids of this reminder: the base plus the day number, so each

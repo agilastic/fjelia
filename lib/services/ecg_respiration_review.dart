@@ -1,8 +1,8 @@
 import 'dart:isolate';
 import 'dart:math' as math;
 
-import '../models/ecg.dart';
-import 'ecg_analysis.dart';
+import 'package:fjelia_core/models/ecg.dart';
+import 'package:fjelia_core/services/ecg_analysis.dart';
 
 class EcgRespirationReview {
   const EcgRespirationReview({

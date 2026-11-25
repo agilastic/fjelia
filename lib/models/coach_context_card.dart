@@ -5,8 +5,8 @@ import 'package:intl/intl.dart';
 import '../l10n/l10n_ext.dart';
 
 import '../db/database.dart';
-import 'garmin_data.dart';
-import 'planned_workout_presentation.dart';
+import 'package:fjelia_core/models/garmin_data.dart';
+import 'package:fjelia_core/models/planned_workout_presentation.dart';
 
 enum CoachCardStatus {
   planned,

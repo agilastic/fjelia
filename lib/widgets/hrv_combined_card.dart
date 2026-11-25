@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../db/database.dart' show SpotHrvMeasurement;
-import '../models/hrv_series.dart';
+import 'package:fjelia_core/models/hrv_series.dart';
 import '../models/spot_hrv.dart';
 import '../providers/hrv_training_provider.dart';
 import '../providers/polar_h10_provider.dart';

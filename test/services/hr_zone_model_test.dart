@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:fjelia/models/device_hr_zones.dart';
+import 'package:fjelia_core/models/device_hr_zones.dart';
 import 'package:fjelia/services/polar_service.dart';
-import 'package:fjelia/services/hr_zone_model.dart';
+import 'package:fjelia_core/services/hr_zone_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

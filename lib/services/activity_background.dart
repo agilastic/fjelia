@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:location/location.dart';
 import 'package:permission_handler/permission_handler.dart' as permissions;
 
-import '../models/activity_location.dart';
+import 'package:fjelia_core/models/activity_location.dart';
 import '../l10n/app_localizations.dart';
 
 /// One native recording session shared by a workout and its ECG segments.

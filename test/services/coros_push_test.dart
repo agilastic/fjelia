@@ -4,7 +4,7 @@ import 'package:drift/native.dart';
 import 'package:fjelia/api/coros_client.dart';
 import 'package:fjelia/api/coros_workout.dart';
 import 'package:fjelia/db/database.dart';
-import 'package:fjelia/models/prepared_workout.dart';
+import 'package:fjelia_core/models/prepared_workout.dart';
 import 'package:fjelia/services/coros_service.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';

@@ -7,10 +7,10 @@ import 'package:drift/drift.dart';
 import 'package:path/path.dart' as p;
 
 import '../db/database.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'activity_file_import_service.dart';
 import 'dfa_alpha1_service.dart';
-import 'hr_zone_model.dart';
+import 'package:fjelia_core/services/hr_zone_model.dart';
 import 'media_service.dart';
 import 'hr_zone_history.dart';
 

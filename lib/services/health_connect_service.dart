@@ -8,8 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../db/database.dart';
 import 'vitals_retention.dart' show bpForExport;
-import '../models/heart_rate.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/models/heart_rate.dart';
+import 'package:fjelia_core/utils/log.dart';
 
 const _source = 'health_connect';
 

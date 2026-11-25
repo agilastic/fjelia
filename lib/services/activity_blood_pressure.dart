@@ -1,5 +1,5 @@
 import '../db/database.dart';
-import '../models/indoor_recording.dart';
+import 'package:fjelia_core/models/indoor_recording.dart';
 
 /// Existing observations only, within the actual active portions of a
 /// recording. A paused interval is not reconstructed from its timer total.

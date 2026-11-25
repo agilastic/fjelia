@@ -14,7 +14,7 @@ import '../../widgets/app_widgets.dart';
 import '../../widgets/weather_visuals.dart';
 import '../settings/weather_location_tab.dart';
 import 'weather_radar.dart';
-import '../../services/moon_phase.dart';
+import 'package:fjelia_core/services/moon_phase.dart';
 import '../../services/open_meteo_client.dart';
 import '../../widgets/weather_glyph.dart';
 import '../../widgets/weather_sky.dart';

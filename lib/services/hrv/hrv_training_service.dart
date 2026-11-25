@@ -2,52 +2,15 @@ import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../db/database.dart';
-import '../../models/hrv_pair_assessment.dart';
-import '../../models/hrv_training_episode.dart';
-import 'activity_interval_resolver.dart';
-import 'hrv_pair_assessment_service.dart';
-import 'hrv_pairing_service.dart';
-import 'hrv_timing_policy.dart';
+import 'package:fjelia_core/models/hrv_pair_assessment.dart';
+import 'package:fjelia_core/models/hrv_training_episode.dart';
+import 'package:fjelia_core/services/hrv/activity_interval_resolver.dart';
+import 'package:fjelia_core/services/hrv/hrv_pair_assessment_service.dart';
+import 'package:fjelia_core/services/hrv/hrv_pairing_service.dart';
+import 'package:fjelia_core/services/hrv/hrv_snapshot.dart';
+import 'package:fjelia_core/services/hrv/hrv_timing_policy.dart';
 
-/// Everything the card, the chart, the reminder and the AI read, built from
-/// the same facts in one pass.
-class HrvSnapshot {
-  const HrvSnapshot({
-    required this.episodes,
-    required this.measurements,
-    required this.pairings,
-    required this.assessments,
-    required this.intervening,
-    required this.asOf,
-  });
-  final List<EpisodeFact> episodes;
-  final List<MeasurementFact> measurements;
-  final Map<String, EpisodePairing> pairings;
-  final Map<String, HrvPairAssessment> assessments;
-
-  /// Episodes followed by another workout before a post was taken.
-  final Set<String> intervening;
-  final DateTime asOf;
-
-  EpisodeFact? episode(String id) {
-    for (final e in episodes) {
-      if (e.id == id) return e;
-    }
-    return null;
-  }
-
-  /// The episode a measurement is the pre or post of, or null.
-  String? episodeOfMeasurement(String uid) {
-    for (final p in pairings.values) {
-      if (p.pre?.uid == uid ||
-          p.post?.uid == uid ||
-          p.additionalPosts.any((m) => m.uid == uid)) {
-        return p.episodeId;
-      }
-    }
-    return null;
-  }
-}
+export 'package:fjelia_core/services/hrv/hrv_snapshot.dart';
 
 /// The stable id of a stored reading. Rows written before ids existed get a
 /// deterministic stand-in, so a view never loses track of them.

@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../l10n/l10n_ext.dart';
-import '../models/indoor_recording.dart';
+import 'package:fjelia_core/models/indoor_recording.dart';
 import '../providers/activity_blood_pressure_provider.dart';
 import 'app_widgets.dart';
 

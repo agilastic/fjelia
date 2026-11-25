@@ -5,7 +5,7 @@ import 'package:fjelia/db/database.dart';
 import 'package:fjelia/models/spot_hrv.dart';
 import 'package:fjelia/providers/database_provider.dart';
 import 'package:fjelia/providers/activity_background_provider.dart';
-import 'package:fjelia/models/activity_location.dart';
+import 'package:fjelia_core/models/activity_location.dart';
 import 'package:fjelia/providers/ecg_provider.dart';
 import 'package:fjelia/providers/indoor_recording_provider.dart';
 import 'package:fjelia/services/ecg_ble_service.dart';

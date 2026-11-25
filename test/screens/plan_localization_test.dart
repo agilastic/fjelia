@@ -7,7 +7,7 @@ import 'package:fjelia/l10n/plan_text.dart';
 import 'package:fjelia/providers/database_provider.dart';
 import 'package:fjelia/screens/planner/plan_screen.dart';
 import 'package:fjelia/services/race_goal_service.dart';
-import 'package:fjelia/services/season/season_report.dart';
+import 'package:fjelia_core/services/season/season_report.dart';
 import 'package:fjelia/services/training_plan_service.dart';
 import 'package:fjelia/services/workout_template_library.dart';
 import 'package:fjelia/theme/app_theme.dart';

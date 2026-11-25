@@ -6,7 +6,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
-import '../models/heart_rate_summary.dart';
+import 'package:fjelia_core/models/heart_rate_summary.dart';
 import 'app_widgets.dart';
 
 class HrTimelinePlot extends StatelessWidget {

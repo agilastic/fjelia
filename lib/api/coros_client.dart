@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 
 import 'coros_workout.dart';
 

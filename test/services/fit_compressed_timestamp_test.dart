@@ -1,4 +1,4 @@
-import 'package:fjelia/services/fit_activity_data.dart';
+import 'package:fjelia_core/services/fit_activity_data.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../support/coros_fit_fixture.dart';

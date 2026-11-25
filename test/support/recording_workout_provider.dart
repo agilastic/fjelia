@@ -1,5 +1,5 @@
 import 'package:fjelia/db/database.dart';
-import 'package:fjelia/models/prepared_workout.dart';
+import 'package:fjelia_core/models/prepared_workout.dart';
 import 'package:fjelia/services/workout_providers/cleanup_queue.dart';
 import 'package:fjelia/services/workout_providers/delivery_ledger.dart';
 import 'package:fjelia/services/workout_providers/workout_provider.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../models/heat_acclimation.dart';
+import 'package:fjelia_core/models/heat_acclimation.dart';
 import '../services/bright_sky_client.dart';
 import '../services/global_weather_client.dart';
 import '../services/heat_acclimation_service.dart';

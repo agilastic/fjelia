@@ -22,7 +22,7 @@ import '../../widgets/ecg_sheet.dart';
 import '../../widgets/sleep_ecg_recording_sheet.dart';
 import '../../widgets/manual_activity_sheet.dart';
 import '../strength/strength_focus_screen.dart';
-import '../../utils/decimal.dart';
+import 'package:fjelia_core/utils/decimal.dart';
 
 class ManualEntrySheet extends ConsumerStatefulWidget {
   const ManualEntrySheet({super.key});

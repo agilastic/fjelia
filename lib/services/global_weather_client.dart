@@ -1,15 +1,15 @@
 import '../config/secrets.dart';
 import 'dart:math';
 
-import '../models/heat_acclimation.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/models/heat_acclimation.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'bright_sky_client.dart';
 import 'open_meteo_client.dart';
 import 'pirate_weather_client.dart';
 import 'weather_cache.dart';
 import 'weather_api_client.dart';
 
-export '../models/heat_acclimation.dart' show WeatherSnapshotData;
+export 'package:fjelia_core/models/heat_acclimation.dart' show WeatherSnapshotData;
 
 /// A weather provider with Open-Meteo-shaped hourly output.
 abstract class GlobalWeatherClient {

@@ -1,22 +1,20 @@
-import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:drift/drift.dart' hide isNull, isNotNull;
 
 import '../db/database.dart';
-import 'absence_service.dart' show absenceOn;
 import 'plan_day.dart';
-import '../providers/training_load_provider.dart';
 import '../providers/hr_zone_trends_provider.dart';
 import 'fjelia_edition.dart';
 import 'hr_zone_summary_service.dart';
-import 'bio_age_service.dart';
-import 'hrv/hrv_ai_context_builder.dart';
+
+import 'package:fjelia_core/services/bio_age_service.dart';
+import 'package:fjelia_core/services/ai_context_toon.dart';
+import 'package:fjelia_core/services/hrv/hrv_snapshot.dart';
+import 'package:fjelia_core/services/season/goal_set.dart';
+import 'package:fjelia_core/services/training_form.dart';
+
 import 'hrv/hrv_training_service.dart';
-import 'ai_data_status.dart';
-import 'ai_metric_analysis.dart';
-import 'form_forecast.dart';
-import 'day_order.dart';
 import 'hr_zone_history.dart';
 import '../providers/day_data_provider.dart'
     show readTrainingFormSeries, scheduledWorkoutFromRecord;
@@ -25,53 +23,18 @@ import '../providers/upcoming_plan_provider.dart'
 import 'post_workout_scorer.dart' show noActivityReason;
 import 'race_predictor.dart';
 import 'race_goal_service.dart';
-import 'season/season_report.dart';
-import '../utils/target_time.dart';
-import '../models/race_profile.dart';
-import '../models/training_windows.dart';
+
+import 'package:fjelia_core/models/training_windows.dart';
+
 import 'open_meteo_client.dart';
-import '../models/waist_ratios.dart';
 import '../models/workout_nutrition.dart';
 import 'nutrition_service.dart';
 
-/// Inputs from the training monitor.
-class AiContextTrainingMonitor {
-  const AiContextTrainingMonitor({
-    this.ctl,
-    this.atl,
-    this.tsb,
-    this.dailyLoad,
-    this.optMin,
-    this.optMax,
-    this.curWeekH,
-    this.prevWeekH,
-    this.curWeekKm,
-    this.prevWeekKm,
-    this.vo2maxRun,
-    this.vo2maxCycle,
-  });
-  final double? ctl,
-      atl,
-      tsb,
-      dailyLoad,
-      optMin,
-      optMax,
-      curWeekH,
-      prevWeekH,
-      curWeekKm,
-      prevWeekKm,
-      vo2maxRun,
-      vo2maxCycle;
-}
+export 'package:fjelia_core/services/ai_context_toon.dart'
+    show AiContextPlanInfo, AiContextTrainingMonitor, waistContextLine;
 
-class AiContextPlanInfo {
-  const AiContextPlanInfo({this.daysToRace, this.week, this.totalWeeks});
-  final int? daysToRace, week, totalWeeks;
-}
-
-/// Compact health context.
-/// Only explicitly selected fields leave the database: names, coordinates,
-/// activity IDs, free-form notes and raw payloads are never serialized.
+/// Loads what the AI Coach context is written from and writes it with
+/// [AiContextToon] from fjelia_core.
 class AiContextToonBuilder {
   AiContextToonBuilder(
     this._db, {
@@ -97,47 +60,6 @@ class AiContextToonBuilder {
   /// Today's readiness proposal while it waits for an answer: `shorter`,
   /// `rest` or `replan` (see [BriefingBrief.proposal]).
   final String? Function()? openProposal;
-
-  /// Absences that are still on or ended in the last two weeks, and the
-  /// weekly training times: what the athlete can do, not only what is
-  /// planned. The athlete's note on an absence stays on the device.
-  Future<List<String>> _availabilityLines(DateTime today) async {
-    final lines = <String>[];
-    final absences = await _db.absencesBetween(
-      today.subtract(const Duration(days: 14)),
-      DateTime(today.year + 2),
-    );
-    if (absences.isNotEmpty) {
-      lines.add('[Absences:${absences.length}]');
-      for (final a in [
-        ...absences,
-      ]..sort((x, y) => x.startDay.compareTo(y.startDay))) {
-        final now = !today.isBefore(a.startDay) && !today.isAfter(a.endDay);
-        lines.add(
-          '- [Kind:${a.kind},From:${_date(a.startDay)},To:${_date(a.endDay)}'
-          '${now ? ',Now' : ''}]',
-        );
-      }
-    }
-    TrainingWindows? windows;
-    try {
-      windows = await trainingWindows?.call();
-    } catch (_) {
-      // No profile to read: the context goes without training times.
-    }
-    if (windows != null && !windows.isEmpty) {
-      String hm(int m) =>
-          '${(m ~/ 60).toString().padLeft(2, '0')}:'
-          '${(m % 60).toString().padLeft(2, '0')}';
-      lines.add(
-        '[TrainingWindows:${[
-          for (var d = 1; d <= 7; d++) '${const ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][d - 1]}='
-                '${windows.hasWindow(d) ? [for (final (s, e) in windows.ranges(d)) '${hm(s)}-${hm(e)}'].join('+') : 'none'}',
-        ].join(',')}]',
-      );
-    }
-    return lines;
-  }
 
   Future<String> build(
     AiContextTrainingMonitor? monitor,
@@ -202,406 +124,55 @@ class AiContextToonBuilder {
     ];
     final fuel = await _fuel(sessions);
     final cancelled = await _cancelledSessions(today);
-    // Every plan session of today, also completed ones: a finished session
-    // must not read as a rest day.
     final todayAll = await sessionsOn(_db, today);
     final restToday = await isPlannedRestDay(_db, today);
     final tomorrowDay = DateTime(today.year, today.month, today.day + 1);
     final restTomorrow = await isPlannedRestDay(_db, tomorrowDay);
-    // Absences the athlete entered: today, tomorrow, and the first week back
-    // from an illness or injury.
     final absences = await _db.absencesBetween(
       today.subtract(const Duration(days: 7)),
       tomorrowDay,
     );
-    // When the athlete can train today (Settings → Training).
-    String? windowToday;
-    var rangesToday = const <(int, int)>[];
+    TrainingWindows? windowsToday;
     try {
-      final w = await trainingWindows?.call();
-      if (w != null && w.hasWindow(today.weekday)) {
-        rangesToday = w.ranges(today.weekday);
-        String hm(int m) =>
-            '${(m ~/ 60).toString().padLeft(2, '0')}:'
-            '${(m % 60).toString().padLeft(2, '0')}';
-        windowToday = [
-          for (final (s, e) in w.ranges(today.weekday)) '${hm(s)}-${hm(e)}',
-        ].join('+');
-      }
+      windowsToday = await trainingWindows?.call();
     } catch (_) {
       // No profile to read: the brief goes without training times.
     }
-    String? backFrom;
-    for (final a in absences) {
-      if ((a.kind == 'illness' || a.kind == 'injury') &&
-          a.endDay.isBefore(today)) {
-        backFrom = a.kind;
-      }
-    }
-    hrv.sort((a, b) => b.date.compareTo(a.date));
-    sleep.sort((a, b) => b.date.compareTo(a.date));
-    wellness.sort((a, b) => b.date.compareTo(a.date));
-    bp.sort((a, b) => b.measuredAt.compareTo(a.measuredAt));
-    body.sort((a, b) => b.measuredAt.compareTo(a.measuredAt));
-    scores.sort((a, b) => b.date.compareTo(a.date));
-    grip.sort((a, b) => b.measuredAt.compareTo(a.measuredAt));
-    thresholds.sort((a, b) => b.date.compareTo(a.date));
-    activities.sort((a, b) => b.startDate.compareTo(a.startDate));
-    final lines = <String>[
-      '[Context:V4][Today:${_date(today)},Weekday:${_weekday(today)},'
-          'TimeNow:${_time(now)}][Range:60d,Grip:90d]'
-          '[Excludes:PII,GPS,GPX,ActivityNames,PlanNames]',
-      aiDataStatusLine(
-        now: now,
-        activityDays: [for (final a in activities) a.startDate],
-        hrvDays: [
-          for (final r in hrv)
-            if (r.hrvLastNight != null) r.date,
-        ],
-        sleepDays: [
-          for (final r in sleep)
-            if (r.totalSleepSeconds > 0) r.date,
-        ],
-        dailyDays: [for (final r in wellness) r.date],
-      ),
-      if (raceGoals.trim().isNotEmpty) '[RaceGoals:${_clean(raceGoals)}]',
-      if (weatherSummary != null && weatherSummary.trim().isNotEmpty)
-        weatherSummary.trim(),
-    ];
-    if (hrv.isNotEmpty) {
-      final r = hrv.first;
-      lines.add(
-        '[HRV:Latest:${_date(r.date)},Night:${_num(r.hrvLastNight)}ms,'
-        'Weekly7d:${_num(r.hrvWeeklyAvg)}ms,RHR:${_num(r.restingHeartRate)}bpm,'
-        'Stress:${_num(r.stressLevel)},SpO2:${_num(r.spo2)}%,'
-        'Resp:${_num(r.respirationRate)}brpm,Energy:${_num(r.computedEnergie)}]',
-      );
-      lines.add(
-        '[HRV:7dTrend:${hrv.take(7).map((r) => '${_date(r.date).substring(5)}:${_num(r.hrvLastNight)}').join(',')}]',
-      );
-    }
-    var trainingHrvAnalysis = const <String>[];
-    // HRV before and after the recent workouts, from the same assessment the
-    // workout card shows. Optional context: a failure here never blocks the
-    // coach.
+    // HRV before and after the recent workouts. Optional context: a failure
+    // here never blocks the coach.
+    HrvSnapshot? hrvSnapshot;
     try {
-      final snapshot = await HrvTrainingService(_db, clock: _now).reconcile();
-      lines.addAll(const HrvAiContextBuilder().recentLines(snapshot, now));
-      trainingHrvAnalysis = const HrvAiContextBuilder().analysisLines(
-        snapshot,
-        now,
-      );
+      hrvSnapshot = await HrvTrainingService(_db, clock: _now).reconcile();
     } catch (_) {}
-    if (sleep.isNotEmpty) {
-      final r = sleep.first;
-      lines.add(
-        '[Sleep:Latest:${_date(r.date)},Dur:${_hours(r.totalSleepSeconds)}h,'
-        'Deep:${_hours(r.deepSleepSeconds)}h,REM:${_hours(r.remSleepSeconds)}h,'
-        'Score:${_num(r.sleepScore)},Need:${_hours(r.sleepNeedSeconds)}h,'
-        'OvernightHRV:${_num(r.avgOvernightHrv)}ms,'
-        'Start:${r.sleepStart == null ? 'na' : _time(r.sleepStart!)},'
-        'End:${r.sleepEnd == null ? 'na' : _time(r.sleepEnd!)}]',
-      );
-      lines.add(
-        '[Sleep:7dTrend:${sleep.take(7).map((r) => '${_date(r.date).substring(5)}:${_hours(r.totalSleepSeconds)}h:'
-            '${_num(r.sleepScore)}').join(',')}]',
-      );
-    }
-    if (wellness.isNotEmpty) {
-      final r = wellness.first;
-      lines.add(
-        '[Daily:Latest:${_date(r.date)},Steps:${_num(r.steps)},'
-        'ActiveCal:${_num(r.activeCalories)},TotalCal:${_num(r.totalCalories)},'
-        'Floors:${_num(r.floorsAscended)},IntensityMin:${_num(r.intensityMinutes)},'
-        'BBHigh:${_num(r.bodyBatteryHighest)},BBLow:${_num(r.bodyBatteryLowest)},'
-        'BBCharged:${_num(r.bodyBatteryCharged)},BBDrained:${_num(r.bodyBatteryDrained)},'
-        'VO2maxRun:${_num(r.vo2max)},FitnessAge:${_num(r.fitnessAge)}]',
-      );
-    }
-    if (bp.isNotEmpty) {
-      final r = bp.first;
-      lines.add(
-        '[BP:Latest:${_date(r.measuredAt)},Sys:${r.systolic},'
-        'Dia:${r.diastolic},HR:${r.heartRate > 0 ? r.heartRate : "unknown"}]',
-      );
-      final weeks = <int, List<BpMeasurement>>{};
-      for (final reading in bp) {
-        final week =
-            reading.measuredAt.millisecondsSinceEpoch ~/
-            const Duration(days: 7).inMilliseconds;
-        (weeks[week] ??= []).add(reading);
-      }
-      final keys = weeks.keys.toList()..sort((a, b) => b.compareTo(a));
-      lines.add(
-        '[BP:WeeklyAvg:${keys.map((key) {
-          final values = weeks[key]!;
-          final sys = values.fold(0, (s, r) => s + r.systolic) / values.length;
-          final dia = values.fold(0, (s, r) => s + r.diastolic) / values.length;
-          final date = DateTime.fromMillisecondsSinceEpoch(key * const Duration(days: 7).inMilliseconds);
-          return 'W${_date(date).substring(0, 7)}:${sys.round()}/${dia.round()}'
-              '(n=${values.length})';
-        }).join(',')}]',
-      );
-    }
-    if (body.isNotEmpty) {
-      final r = body.first;
-      lines.add(
-        '[Body:Latest:${_date(r.measuredAt)},Weight:${_num(r.weight)}kg,'
-        'BMI:${_num(r.bmi)},Fat:${_num(r.bodyFat)}%,BodyWater:${_num(r.bodyWater)}%,'
-        'Muscle:${_num(r.muscleMass)}kg,VFat:${_num(r.visceralFat)},'
-        'BMR:${_num(r.bmr)}kcal,BodyAge:${_num(r.bodyAge)}]',
-      );
-    }
     // Without the profile the waist line simply has no ratios.
     ({double? heightCm, double? waistCm})? frame;
     try {
       frame = await bodyFrame?.call();
     } catch (_) {}
-    final waist = waistContextLine(
-      [
-        for (final m in await _db.getWaistMeasurements())
-          (at: m.measuredAt, waistCm: m.waistCm, hipCm: m.hipCm),
-      ],
-      heightCm: frame?.heightCm,
-      profileWaistCm: frame?.waistCm,
-    );
-    if (waist != null) lines.add(waist);
-    final recentGrip = grip
-        .where(
-          (r) =>
-              !r.measuredAt.isBefore(today.subtract(const Duration(days: 90))),
-        )
-        .take(5);
-    if (recentGrip.isNotEmpty) {
-      lines.add('[GripStrength:Recent90d]');
-      for (final r in recentGrip) {
-        lines.add(
-          '- [D:${_date(r.measuredAt)},Left:${_num(r.leftKg)}kg,'
-          'Right:${_num(r.rightKg)}kg]',
-        );
-      }
-    }
-    if (scores.isNotEmpty) {
-      final r = scores.first;
-      lines.add(
-        '[Scores:Latest:${_date(r.date)},Recovery:${_num(r.recoveryScore)},'
-        'Sleep:${_num(r.sleepScore)},Strain:${_num(r.strainScore)},'
-        'BP:${_num(r.bpScore)},Readiness:${_num(r.readinessScore)},'
-        'Level:${_clean(r.recoveryLevel)}]',
-      );
-    }
-    if (readiness != null) {
-      final flags = [
-        if (readiness.flagHrv) 'hrv',
-        if (readiness.flagHr) 'hr',
-        if (readiness.flagSleep) 'sleep',
-        if (readiness.flagBattery) 'battery',
-        if (readiness.flagSkinTemp) 'skinTemp',
-        if (readiness.flagFatigue) 'fatigue',
-      ];
-      lines.add(
-        '[DailyReadiness:Level:${_clean(readiness.level)},'
-        'Flags:${flags.isEmpty ? 'none' : flags.join('+')},'
-        'FlagCount:${readiness.flagCount}]',
-      );
-    }
-    if (bioAge != null) {
-      // The lifespan is a wide statistical band, never a personal age: the
-      // model is not validated as a whole. The coach gets only the band and
-      // the direction of each factor, so it cannot name a single age either.
-      final band = bioAge.lifespanBand;
-      lines.add(
-        '[BioAge:FitnessAge:${_num(bioAge.fitnessAge)},'
-        'VO2max:${_num(bioAge.vo2max)},VO2maxClass:${_clean(bioAge.vo2Class)},'
-        'Lean:${bioAge.lean.name},'
-        'LifespanBand:${band.low}-${band.high} (population statistics for '
-        'similar values; never state a single age, a predicted death age or '
-        'years gained or lost)]',
-      );
-      lines.add(
-        '[BioAge:Factors:${bioAge.pushes.map((p) => '${_clean(p.factor)}:${p.push.name}').join(',')}]',
-      );
-    }
-    if (monitor != null) {
-      lines.add(
-        '[TrainingMonitor:CTL:${_num(monitor.ctl)},ATL:${_num(monitor.atl)},'
-        'TSB:${_num(monitor.tsb)},DailyLoad:${_num(monitor.dailyLoad)},'
-        'OptMin:${_num(monitor.optMin)},OptMax:${_num(monitor.optMax)},'
-        'CurWeekH:${_num(monitor.curWeekH)},PrevWeekH:${_num(monitor.prevWeekH)},'
-        'CurWeekKm:${_num(monitor.curWeekKm)},PrevWeekKm:${_num(monitor.prevWeekKm)},'
-        'VO2maxRun:${_num(monitor.vo2maxRun)},VO2maxCycle:${_num(monitor.vo2maxCycle)}]',
-      );
-    }
-    // The comparison with the athlete's own averages is worked out here, so
-    // no model has to decide what "higher" or "lower" means for each metric.
-    String sportId(String? raw) =>
-        _clean(raw).replaceAll(RegExp(r'\s+'), '_').toLowerCase();
-    List<String> plannedOn(DateTime day) {
-      final ownPlan = sessions
-          .where((s) => _day(s.sessionDate) == day)
-          .toList();
-      // Fjelia's pending sessions are the primary schedule. Garmin can carry
-      // exported copies; counting both would duplicate the same workout.
-      if (ownPlan.isNotEmpty) {
-        return [
-          for (final s in ownPlan)
-            '${sportId(s.sport)}/${s.plannedDurationMin}',
-        ];
-      }
-      return [
-        for (final w in workouts)
-          if (_day(w.scheduledDate) == day)
-            '${sportId(w.sportType)}/${((w.estimatedDurationSeconds ?? 0) / 60).round()}',
-      ];
-    }
-
-    final recordedToday = [
-      for (final a in activities)
-        if (_day(a.startDate) == today)
-          '${sportId(a.type)}/${(a.durationSeconds / 60).round()}',
+    final waistHistory = [
+      for (final m in await _db.getWaistMeasurements())
+        (at: m.measuredAt, waistCm: m.waistCm, hipCm: m.hipCm),
     ];
-    // What gives the briefing depth besides the numbers: what today's session
-    // is (kind, length, zone, phase), the goal it serves and what yesterday
-    // held. No session titles or race names: the athlete may have written
-    // anything there (Excludes:PlanNames).
-    String kindOf(TrainingSession s) {
-      final sub = s.subType ?? '';
-      if (s.sport == 'strength') {
-        final focus = switch (sub) {
-          'strengthFull' => 'full body',
-          'strengthLower' => 'lower body',
-          'strengthUpper' => 'upper body',
-          'strengthCore' => 'core',
-          _ when sub.startsWith('str-') => sub.split('-')[1],
-          _ => '',
-        };
-        return '${focus.isEmpty ? '' : '$focus '}strength';
-      }
-      final kind = sub.isEmpty || sub == 'endurance' ? s.sessionType : sub;
-      return '${s.sport.replaceAll('_', ' ')} ${kind == 'recovery' ? 'easy' : kind}';
-    }
-
-    final ownToday = sessions.where((s) => _day(s.sessionDate) == today);
-    // Two sessions today: which first and in which training window.
-    final order = dayOrder(
-      ownToday.isNotEmpty
-          ? [
-              for (final s in ownToday)
-                (
-                  sport: sportId(s.sport),
-                  minutes: s.plannedDurationMin,
-                  type: s.sessionType,
-                ),
-            ]
-          : [
-              for (final w in workouts)
-                if (_day(w.scheduledDate) == today)
-                  (
-                    sport: sportId(w.sportType),
-                    minutes: ((w.estimatedDurationSeconds ?? 0) / 60).round(),
-                    type: 'workout',
-                  ),
-            ],
-      rangesToday,
-      nowMinute: now.hour * 60 + now.minute,
-    );
-    final sessionToday = ownToday.isEmpty
-        ? null
-        : ownToday
-              .map(
-                (s) =>
-                    '${kindOf(s)} ${s.plannedDurationMin} min'
-                    '${s.sport == 'strength' ? '' : ' zone ${s.primaryZone}'}'
-                    ' in the ${s.phase} phase',
-              )
-              .join(' and ');
-    final yesterdayDay = today.subtract(const Duration(days: 1));
-    final yesterdayDone = [
-      for (final a in activities)
-        if (_day(a.startDate) == yesterdayDay)
-          '${_clean(a.type).replaceAll('_', ' ')} '
-              '${(a.durationSeconds / 60).round()} min',
-    ];
-    String? nextGoal;
+    GoalSet? nextGoals;
     try {
-      final goals = await RaceGoalService(_db).resolveGoalSet(today: today);
-      final upcoming = [
-        for (final g in goals.active)
-          if (!_day(g.date).isBefore(today)) g,
-      ]..sort((a, b) => a.date.compareTo(b.date));
-      if (upcoming.isNotEmpty) {
-        final g = upcoming.first;
-        final days = _day(g.date).difference(today).inDays;
-        nextGoal =
-            '${g.priority.name.toUpperCase()} goal ${g.sport.replaceAll('_', ' ')} '
-            '${(g.distanceM / 1000).toStringAsFixed(g.distanceM < 10000 ? 1 : 0)} km '
-            'in ${days < 14 ? '$days days' : '${(days / 7).round()} weeks'}';
-      }
+      nextGoals = await RaceGoalService(_db).resolveGoalSet(today: today);
     } catch (_) {}
-    final trainingVerdict = trainingHrvAnalysis.isEmpty
-        ? null
-        : RegExp(r'Verdict:(better|worse)')
-              .firstMatch(trainingHrvAnalysis.first)?[1];
-    // The load chart as background: form, trend and what rest or the plan do
-    // to it. A failure here never blocks the coach.
-    FormForecast? forecast;
+    List<FormPoint>? formSeries;
     try {
-      forecast = FormForecast.compute(
-        await readTrainingFormSeries(_db),
-        planned: _plannedLoadByDay(sessions),
-        raceInDays: planInfo?.daysToRace,
-      );
+      formSeries = await readTrainingFormSeries(_db);
     } catch (_) {}
-    if (forecast != null) lines.add(forecast.toLine());
-    lines.addAll(
-      MetricAnalysis(today).lines(
-        outlook: forecast?.outlook,
-        done: recordedToday,
-        // One recorded activity does not complete every session of the day.
-        // The query already excludes completed and skipped plan sessions.
-        plannedToday: plannedOn(today),
-        tomorrow: plannedOn(tomorrowDay),
-        restDay: restToday,
-        restTomorrow: restTomorrow,
-        away: absenceOn(absences, today)?.kind,
-        awayTomorrow: absenceOn(absences, tomorrowDay)?.kind,
-        backFrom: absenceOn(absences, today) == null ? backFrom : null,
-        window: windowToday,
-        order: order == null ? const [] : dayOrderLine(order).split('|'),
-        orderWhy: order?.reason,
-        session: sessionToday,
-        goal: nextGoal,
-        yesterday: yesterdayDone.isEmpty ? null : yesterdayDone.join(' and '),
-        // A readiness proposal is about today's open sessions; once they are
-        // done it has nothing left to change.
-        proposal: switch (openProposal?.call()) {
-          'shorter' || 'rest' when plannedOn(today).isEmpty => null,
-          final p => p,
-        },
-        trainingHrv: trainingVerdict == null
-            ? null
-            : trainingVerdict == 'better'
-            ? 'up'
-            : 'down',
-        hrv: hrv,
-        sleep: sleep,
-        wellness: wellness,
-        tsb: monitor?.tsb ?? forecast?.tsb,
-        atl: monitor?.atl ?? forecast?.atl,
-        ctl: monitor?.ctl ?? forecast?.ctl,
-      ),
-    );
-    lines.addAll(trainingHrvAnalysis);
     // FjeliaPro: how the time in zones changed and how it compares with the
     // plan, as observations with their evidence. A failure never blocks the
     // coach.
+    var zoneTrendLines = const <String>[];
     if (fjeliaEdition.isPro && hrZoneTrends.isAvailable) {
       try {
         final summaries = HrZoneSummaryService(_db);
         final since = today.subtract(const Duration(days: 60));
         await summaries.update(since: since);
-        lines.addAll(
-          hrZoneTrends.coachContext(await summaries.workouts(since: since), [
+        zoneTrendLines = hrZoneTrends.coachContext(
+          await summaries.workouts(since: since),
+          [
             for (final s
                 in await (_db.select(_db.trainingSessions)..where(
                       (t) => t.sessionDate.isBetweenValues(
@@ -611,28 +182,14 @@ class AiContextToonBuilder {
                     ))
                     .get())
               plannedZoneSession(s, today: today),
-          ], today: today),
-        );
+          ],
+          today: today,
+        ).toList();
       } catch (_) {}
-    }
-    if (heat != null) {
-      lines.add(
-        '[HeatAcclimation:Today:Score:${_num(heat.score)},'
-        'Status:${_clean(heat.status)},Recommendation:${_clean(heat.recommendation)}]',
-      );
-    }
-    if (thresholds.isNotEmpty) {
-      lines.add('[LactateThresholds:Recent]');
-      for (final r in thresholds.take(3)) {
-        lines.add(
-          '- [D:${_date(r.date)},Src:${_clean(r.source)},'
-          'LT1:${_num(r.lt1Bpm)}bpm,LT2:${_num(r.lt2Bpm)}bpm,'
-          'LT2Pace:${_pace(r.lt2PaceSec)},VO2Pace:${_pace(r.vo2PaceSec)}]',
-        );
-      }
     }
     // The heart-rate zones in force, and a change of the last two weeks:
     // workouts before it were measured with the older zones.
+    String? hrZonesLine;
     try {
       final zones = await HrZoneHistory(_db).book();
       if (!zones.isEmpty) {
@@ -642,204 +199,105 @@ class AiContextToonBuilder {
                 when d.method != ZoneMethod.derived &&
                     today.difference(_day(d.effectiveFrom)).inDays <= 14 &&
                     d.effectiveFrom.millisecondsSinceEpoch > 0)
-              '$sport ${_date(d.effectiveFrom)} ${d.method}',
+              '$sport ${AiContextToon.date(d.effectiveFrom)} ${d.method}',
         ];
         String floors(String sport) =>
             zones.current(sport)?.join('/') ?? 'none';
-        lines.add(
-          '[HrZones:Floors:Z1-Z5,Run:${floors('running')},'
-          'Bike:${floors('cycling')},Swim:${floors('swimming')}'
-          '${changed.isEmpty ? '' : ',ChangedRecently:${changed.join('|')}'}]',
-        );
+        hrZonesLine =
+            '[HrZones:Floors:Z1-Z5,Run:${floors('running')},'
+            'Bike:${floors('cycling')},Swim:${floors('swimming')}'
+            '${changed.isEmpty ? '' : ',ChangedRecently:${changed.join('|')}'}]';
       }
     } catch (_) {}
-    lines.addAll(await _availabilityLines(today));
-    if (planInfo != null) {
-      lines.add(
-        '[TrainingPlan:DaysToRace:${_num(planInfo.daysToRace)},'
-        'Week:${_num(planInfo.week)},TotalWeeks:${_num(planInfo.totalWeeks)}]',
-      );
-    }
-    lines.add(
-      '[Activities:Last60d:shown=${math.min(activities.length, 20)}'
-      'of${activities.length}]',
+    // Absences that are still on or ended in the last two weeks, and the
+    // weekly training times.
+    final availabilityAbsences = await _db.absencesBetween(
+      today.subtract(const Duration(days: 14)),
+      DateTime(today.year + 2),
     );
-    for (final a in activities.take(20).toList().reversed) {
-      lines.add(
-        '- [D:${_date(a.startDate)},Type:${_clean(a.type)},'
-        'Dur:${_num(a.durationSeconds / 60)}m,DistKm:${_num(_km(a.distanceMeters))},'
-        'AvgHR:${_num(a.avgHeartRate)},MaxHR:${_num(a.maxHeartRate)},'
-        'Load:${_num(_load(a))},Watts:${_num(a.avgWatts)},'
-        'ElevM:${_num(a.totalElevation)}${_parseHrZones(a.hrZonesJson)},'
-        'Src:${_clean(a.source)},PlannedDur:${_minutes(a.plannedDurationSeconds)},'
-        'PlannedKm:${_num(_km(a.plannedDistanceMeters))}'
-        '${_parseStepsSummary(a.plannedStepsJson)}'
-        // The athlete's own note for the coach (not the platform text).
-        '${_note(a.athleteNote)}]',
-      );
-    }
-    final todayWorkouts = workouts
-        .where((w) => _day(w.scheduledDate) == today)
-        .toList();
-    final todaySessions = sessions
-        .where((s) => _day(s.sessionDate) == today)
-        .toList();
-    final cancelledToday = cancelled
-        .where((c) => _day(c.session.sessionDate) == today)
-        .toList();
-    if (todayWorkouts.isEmpty &&
-        todaySessions.isEmpty &&
-        cancelledToday.isNotEmpty) {
-      // Not a plain rest day: a planned session was dropped, and why matters.
-      lines.add(
-        '[TodayWorkout:Status:cancelled,Reason:'
-        '${_clean(cancelledToday.first.reason)},'
-        'By:${cancelledToday.first.by},GarminScheduled:0,PlanSessions:0]',
-      );
-    } else if (todayWorkouts.isEmpty && todaySessions.isEmpty) {
-      final completed = todayAll.where(
-        (s) => s.status == 'completed' || doneSessionIds.contains(s.id),
-      );
-      final doneActivities = activities.where(
-        (a) => _day(a.startDate) == today,
-      );
-      lines.add(
-        completed.isNotEmpty
-            // The plan's training for today is finished, not a rest day.
-            ? '[TodayWorkout:Status:done,PlanSessionsDone:${completed.length},'
-                  'GarminScheduled:0,PlanSessions:0]'
-            : restToday
-            ? '[TodayWorkout:Status:rest_day,Planned:yes,'
-                  'Note:planned_rest_day_in_the_training_plan,'
-                  'GarminScheduled:0,PlanSessions:0]'
-            : '[TodayWorkout:Status:none,'
-                  'Note:${doneActivities.isEmpty ? 'no_session_scheduled' : 'no_session_scheduled_activity_recorded'},'
-                  'GarminScheduled:0,PlanSessions:0]',
-      );
-    } else {
-      lines.add(
-        '[TodayWorkout:Status:planned,Source:${todaySessions.isNotEmpty ? 'plan' : 'garmin'},'
-        'SessionCount:${todaySessions.isNotEmpty ? todaySessions.length : todayWorkouts.length},GarminScheduled:'
-        '${todayWorkouts.length},PlanSessions:${todaySessions.length},'
-        'Note:Scheduled_sessions_not_alternatives_Garmin_may_mirror_plan]',
-      );
-      for (final w in todayWorkouts) {
-        lines.add(
-          '- [${_workout(w).replaceFirst(',PlannedSteps:', ',Steps:')}]',
-        );
-      }
-      for (final s in todaySessions) {
-        lines.add('- [${_session(s)}${fuel[s.id] ?? ''}]');
-      }
-    }
-    // Sessions dropped in the last two weeks and the next two, with the reason
-    // given. Illness and injury are health facts the coach has to respect.
-    if (cancelled.isNotEmpty) {
-      final reasons = {for (final c in cancelled) _clean(c.reason)}.join('/');
-      lines.add(
-        '[Cancelled:Sessions:${cancelled.length},Window:±14d,Reasons:$reasons]',
-      );
-      for (final c in cancelled) {
-        lines.add(
-          '- [D:${_date(c.session.sessionDate)},Src:plan,'
-          'Sport:${_clean(c.session.sport)},Type:${_clean(c.session.sessionType)},'
-          'Planned:${c.session.plannedDurationMin}m,'
-          'Reason:${_clean(c.reason)},By:${c.by}]',
-        );
-      }
+    TrainingWindows? windows;
+    try {
+      windows = await trainingWindows?.call();
+    } catch (_) {
+      // No profile to read: the context goes without training times.
     }
     final goalSet = await RaceGoalService(_db).resolveGoalSet(today: today);
     final rows = {for (final g in await RaceGoalService(_db).getAll()) g.id: g};
-    // Every goal of the season, the plan's own first, so the coach never
-    // reasons from one race while another is on the calendar.
+    // Every goal of the season, the plan's own first.
     final ordered = [
       if (goalSet.display != null) goalSet.display!,
       ...goalSet.active.where((g) => g.id != goalSet.display?.id),
     ];
+    final estimates = <String, int?>{};
     for (final seasonGoal in ordered) {
       final goal = rows[seasonGoal.id];
       if (goal == null) continue;
-      final profile = RaceProfile(
-        sport: goal.primarySport,
-        distanceM: goal.distanceM,
-        elevationM: goal.elevationM,
-        targetSeconds: goal.targetFinishSeconds,
-      );
-      final estimate = await RacePredictor.estimateFinish(_db, goal);
-      final flat = profile.flatEquivalentPaceSecPerKm;
-      lines.add(
-        '[RaceGoal:Sport:${_clean(goal.primarySport)},'
-        'DistKm:${_num(profile.distanceKm)},ElevM:${_num(goal.elevationM)},'
-        'ClimbMPerKm:${_num(profile.climbPerKm)},Terrain:${profile.terrain.name},'
-        'Date:${_date(goal.raceDate)},'
-        'Target:${goal.targetFinishSeconds == null ? 'none' : formatTargetTime(goal.targetFinishSeconds!)},'
-        'PaceSecKm:${_num(profile.goalPaceSecPerKm)},FlatPaceSecKm:${_num(flat)},'
-        'Estimate:${estimate == null ? 'na' : formatTargetTime(estimate)},'
-        'GoalAheadOfEstimate%:${estimate == null || profile.aheadOfPrediction(estimate) == null ? 'na' : (profile.aheadOfPrediction(estimate)! * 100).round()},'
-        'Priority:${goal.priority.toUpperCase()},'
-        'Participation:${seasonGoal.participation.name},'
-        'Ambition:${seasonGoal.ambition?.name ?? 'unknown'}]',
-      );
+      estimates[goal.id] = await RacePredictor.estimateFinish(_db, goal);
     }
-    // With goals on the race calendar, the old free-text profile field is out:
-    // it repeats or contradicts them ("marathon Hannover 422km").
-    if (ordered.isNotEmpty) {
-      lines.removeWhere((line) => line.startsWith('[RaceGoals:'));
-    }
-    // No race on the calendar: the athlete's own aim, so the coach does not
-    // ask about a race or push for one.
+    String? aim;
     if (ordered.isEmpty) {
-      String? aim;
       try {
         aim = await casualGoal?.call();
       } catch (_) {
         // No profile to read: the context goes without the aim.
       }
-      if (aim != null) {
-        lines.add(
-          '[Goal:NoRace,Aim:$aim,Means:${aim == 'fun' ? 'moving for the joy of it, every session easy' : 'getting fitter, gently building up with one harder session a week'}]',
-        );
-      }
     }
-    final season = await _seasonLine();
-    if (season != null) lines.add(season);
-    lines.add('[GarminScheduled:Upcoming:${workouts.length}]');
-    for (final w in workouts) {
-      lines.add('- [D:${_date(w.scheduledDate)},${_workout(w)}]');
-    }
-    lines.add('[TrainingPlan:Upcoming:${sessions.length}]');
-    for (final s in sessions) {
-      lines.add(
-        '- [D:${_date(s.sessionDate)},${_session(s)}${fuel[s.id] ?? ''}]',
-      );
-    }
-    lines.add(
-      '[Schedule:Next14d:Today=${_date(today)},Weekday:${_weekday(today)}]',
+    final plan =
+        await (_db.select(_db.trainingPlans)
+              ..where(
+                (t) => t.athleteId.equals('self') & t.status.equals('active'),
+              )
+              ..limit(1))
+            .getSingleOrNull();
+    return AiContextToon.build(
+      AiContextData(
+        now: now,
+        monitor: monitor,
+        raceGoals: raceGoals,
+        weatherSummary: weatherSummary,
+        bioAge: bioAge,
+        planInfo: planInfo,
+        hrv: hrv,
+        sleep: sleep,
+        wellness: wellness,
+        bp: bp,
+        body: body,
+        activities: activities,
+        scores: scores,
+        grip: grip,
+        thresholds: thresholds,
+        heat: heat,
+        readiness: readiness,
+        sessions: sessions,
+        workouts: workouts,
+        doneSessionIds: doneSessionIds,
+        fuel: fuel,
+        cancelled: cancelled,
+        todayAll: todayAll,
+        restToday: restToday,
+        restTomorrow: restTomorrow,
+        absences: absences,
+        trainingWindowsToday: windowsToday,
+        hrvSnapshot: hrvSnapshot,
+        bodyFrame: frame,
+        waistHistory: waistHistory,
+        formSeries: formSeries,
+        zoneTrendLines: zoneTrendLines,
+        hrZonesLine: hrZonesLine,
+        availabilityAbsences: availabilityAbsences,
+        trainingWindows: windows,
+        goalSet: goalSet,
+        nextGoalSet: nextGoals,
+        goalRows: rows,
+        estimates: estimates,
+        casualAim: aim,
+        seasonJson: plan?.seasonJson,
+        openProposal: openProposal?.call(),
+      ),
     );
-    for (var i = 0; i < 14; i++) {
-      final day = DateTime(today.year, today.month, today.day + i);
-      final prefix = '- [D:${_date(day)},Weekday:${_weekday(day)}';
-      final ws = workouts.where((w) => _day(w.scheduledDate) == day);
-      final ss = sessions.where((s) => _day(s.sessionDate) == day);
-      final dropped = cancelled.where(
-        (c) => _day(c.session.sessionDate) == day,
-      );
-      if (ws.isEmpty && ss.isEmpty) {
-        lines.add(
-          dropped.isEmpty
-              ? '$prefix,Status:rest]'
-              : '$prefix,Status:cancelled,Reason:${_clean(dropped.first.reason)}]',
-        );
-      }
-      for (final w in ws) {
-        lines.add('$prefix,${_workout(w)}]');
-      }
-      for (final s in ss) {
-        lines.add('$prefix,${_session(s)}]');
-      }
-    }
-    return lines.join('\n');
   }
+
+  static DateTime _day(DateTime date) => AiContextToon.day(date);
 
   /// Planned sessions the athlete or the readiness check dropped, two weeks
   /// either side of [today], each with its reason. A past session nothing was
@@ -878,10 +336,6 @@ class AiContextToonBuilder {
     ];
   }
 
-  static String _workout(ScheduledWorkoutRecord w) =>
-      'Src:garmin,Type:${_clean(w.sportType)},Dur:${_minutes(w.estimatedDurationSeconds)},'
-      'DistKm:${_num(_km(w.estimatedDistanceMeters))}${_parseStepsSummary(w.stepsJson)}';
-
   /// Fjelia's own fuelling plan per session, from the nutrition engine (a
   /// saved or edited strategy first): the coach explains it, it does not
   /// work out its own. Gels:no where they are no option, e.g. in the water.
@@ -911,175 +365,12 @@ class AiContextToonBuilder {
                 : const NutritionConditions(),
           );
       out[s.id] =
-          ',Fuel:CarbsGh:${_num(plan.carbs)},FluidMlH:${_num(plan.fluid)},'
+          ',Fuel:CarbsGh:${AiContextToon.number(plan.carbs)},FluidMlH:${AiContextToon.number(plan.fluid)},'
           'Gels:${plan.gelsPractical ? plan.gels : 'no'}'
           '${swimDiscipline(plan.workout, plan.conditions) == null ? '' : ',Swim:${swimDiscipline(plan.workout, plan.conditions)},Feeds:${plan.conditions.feeds}'}';
     }
     return out;
   }
-
-  static String _session(TrainingSession s) =>
-      'Src:plan,Sport:${_clean(s.sport)},Type:${_clean(s.sessionType)},'
-      'Phase:${_clean(s.phase)},Zone:${s.primaryZone},Dur:${s.plannedDurationMin}m,'
-      'TRIMP:${s.plannedTrimp}'
-      '${s.tspAdjusted ? ',Adapted:${_clean(s.adaptationTrigger)}' : ''}';
-
-  static String _parseStepsSummary(String? raw) {
-    if (raw == null || raw.isEmpty) return '';
-    try {
-      final decoded = jsonDecode(raw);
-      if (decoded is! List) return '';
-      final steps = <String>[];
-      for (final step in decoded.whereType<Map>()) {
-        final type = _clean(
-          (step['intensity'] ?? step['type'] ?? 'step').toString(),
-        );
-        final seconds = step['durationValue'];
-        final duration = seconds is num ? '${_num(seconds / 60)}m' : '';
-        final from = step['targetFrom'];
-        final to = step['targetTo'];
-        final target = step['targetType'] == null
-            ? ''
-            : '${_clean(step['targetType'].toString())}:${_clean(from?.toString())}'
-                  '${to == null || to == from ? '' : '-${_clean(to.toString())}'}';
-        steps.add(
-          [
-            type,
-            if (duration.isNotEmpty) duration,
-            if (target.isNotEmpty) target,
-          ].join('/'),
-        );
-      }
-      return steps.isEmpty ? '' : ',PlannedSteps:${steps.join('+')}';
-    } on FormatException {
-      return '';
-    }
-  }
-
-  static String _parseHrZones(String? raw) {
-    if (raw == null || raw.isEmpty) return '';
-    try {
-      final decoded = jsonDecode(raw);
-      if (decoded is! Map) return '';
-      final values = <String>[];
-      for (var zone = 1; zone <= 5; zone++) {
-        final value = decoded['zone$zone'];
-        if (value is num && value.isFinite) {
-          values.add('Z$zone:${_num(value)}%');
-        }
-      }
-      return values.isEmpty ? '' : ',HRZones:${values.join('/')}';
-    } on FormatException {
-      return '';
-    }
-  }
-
-  static double _load(ActivityRecord activity) {
-    try {
-      return effectiveLoad(activity);
-    } on FormatException {
-      return activity.trainingLoad ?? 0;
-    } on TypeError {
-      return activity.trainingLoad ?? 0;
-    }
-  }
-
-  static double? _km(num? meters) => meters == null ? null : meters / 1000;
-  static String _minutes(int? seconds) =>
-      seconds == null ? 'na' : '${_num(seconds / 60)}m';
-  static String _hours(int? seconds) =>
-      _num(seconds == null ? null : seconds / 3600);
-  static String _num(num? value) => value == null || !value.isFinite
-      ? 'na'
-      : value == value.roundToDouble()
-      ? value.toInt().toString()
-      : value.toStringAsFixed(1);
-
-  /// The plan's season in one line: how the goals were combined, what was
-  /// limited and what is open. The coach explains this; it never invents
-  /// its own policy about which race comes first.
-  Future<String?> _seasonLine() async {
-    final plan =
-        await (_db.select(_db.trainingPlans)
-              ..where(
-                (t) => t.athleteId.equals('self') & t.status.equals('active'),
-              )
-              ..limit(1))
-            .getSingleOrNull();
-    final data = SeasonReport.decode(plan?.seasonJson);
-    if (data == null) return null;
-    String joined(Object? list, String Function(Object?) read) =>
-        list is List && list.isNotEmpty ? list.map(read).join('|') : 'none';
-    final goals = data['goals'];
-    String goal(Object? g) => g is Map
-        ? '${_clean('${g['priority']}')}-${_clean('${g['sport']}')}-${_clean('${g['date']}')}'
-        : 'na';
-    // Names stay out of the context, as for the race goal: the gap and the
-    // slack say what the coach needs.
-    String conflict(Object? c) => c is Map
-        ? '${_clean('${c['kind']}')}-gap${c['gapDays'] ?? 'na'}-slack${c['slackDays'] ?? 'na'}'
-        : 'na';
-    return '[Season:Outcome:${_clean(data['outcome'] as String?)},'
-        'Goals:${goals is Map ? goals.values.map(goal).join('|') : 'none'},'
-        'Conflicts:${joined(data['conflicts'], conflict)},'
-        'Tradeoffs:${joined(data['summary'], (c) => _clean(c as String?))}]';
-  }
-
-  /// The athlete's note on an activity, short and on one line; empty when
-  /// there is none.
-  static String _note(String? note) {
-    final t = note?.trim() ?? '';
-    if (t.isEmpty) return '';
-    final one = _clean(t);
-    return ',Note:${one.length > 160 ? '${one.substring(0, 157)}…' : one}';
-  }
-
-  static String _clean(String? value) {
-    if (value == null || value.trim().isEmpty) return 'na';
-    return value
-        .replaceAll(RegExp(r'[\[\]\n\r,:]'), ' ')
-        .replaceAll(RegExp(r'\s+'), ' ')
-        .trim();
-  }
-
-  /// The planned TRIMP of every upcoming day (several sessions add up).
-  static Map<DateTime, double> _plannedLoadByDay(List<TrainingSession> all) {
-    final out = <DateTime, double>{};
-    for (final x in all) {
-      final d = _day(x.sessionDate);
-      out[d] = (out[d] ?? 0) + x.plannedTrimp.toDouble();
-    }
-    return out;
-  }
-
-  static DateTime _day(DateTime date) {
-    final local = date.toLocal();
-    return DateTime(local.year, local.month, local.day);
-  }
-
-  static String _date(DateTime date) {
-    final local = date.toLocal();
-    return '${local.year.toString().padLeft(4, '0')}-'
-        '${local.month.toString().padLeft(2, '0')}-${local.day.toString().padLeft(2, '0')}';
-  }
-
-  static String _time(DateTime date) {
-    final local = date.toLocal();
-    return '${local.hour.toString().padLeft(2, '0')}:${local.minute.toString().padLeft(2, '0')}';
-  }
-
-  static String _weekday(DateTime date) => const [
-    'Mon',
-    'Tue',
-    'Wed',
-    'Thu',
-    'Fri',
-    'Sat',
-    'Sun',
-  ][date.toLocal().weekday - 1];
-  static String _pace(int? seconds) => seconds == null
-      ? 'na'
-      : '${seconds ~/ 60}:${(seconds % 60).toString().padLeft(2, '0')}/km';
 
   static String? buildWeatherSummary(
     OpenMeteoResult? weather, {
@@ -1088,7 +379,7 @@ class AiContextToonBuilder {
     if (weather == null) return null;
     final time = now ?? DateTime.now();
     final points = weather.points
-        .where((p) => _day(p.time) == _day(time))
+        .where((p) => AiContextToon.day(p.time) == AiContextToon.day(time))
         .toList();
     if (points.isEmpty) return null;
     final current = points.where((p) => p.time.hour == time.hour).firstOrNull;
@@ -1111,46 +402,9 @@ class AiContextToonBuilder {
     final wetBulb = current == null
         ? null
         : OpenMeteoClient.wetBulbC(current.temperatureC, current.humidityPct);
-    return '[Weather:Today:TempNow:${_num(temp)}°C,TempMin:${_num(min)}°C,'
-        'TempMax:${_num(max)}°C,AvgHumidity:${humidity.toStringAsFixed(0)}%,'
-        'WindKmh:${_num(wind)},WindChill:${_num(chill)}°C,RainChance:$rainChance%,'
-        'RainMm:${_num(rain)},WetBulb:${_num(wetBulb)}°C]';
+    return '[Weather:Today:TempNow:${AiContextToon.number(temp)}°C,TempMin:${AiContextToon.number(min)}°C,'
+        'TempMax:${AiContextToon.number(max)}°C,AvgHumidity:${humidity.toStringAsFixed(0)}%,'
+        'WindKmh:${AiContextToon.number(wind)},WindChill:${AiContextToon.number(chill)}°C,RainChance:$rainChance%,'
+        'RainMm:${AiContextToon.number(rain)},WetBulb:${AiContextToon.number(wetBulb)}°C]';
   }
-}
-
-/// Waist now, its ratios and how it moved over the whole history (oldest
-/// first). Without measurements the profile's waist, undated. Null with
-/// neither.
-String? waistContextLine(
-  List<WaistPoint> history, {
-  double? heightCm,
-  double? profileWaistCm,
-}) {
-  String ratio(double? v) => v == null ? 'na' : v.toStringAsFixed(2);
-  String cm(num? v) => v == null
-      ? 'na'
-      : v == v.roundToDouble()
-      ? v.toInt().toString()
-      : v.toStringAsFixed(1);
-  String change(Duration period) {
-    final d = waistChange(history, period);
-    return d == null ? 'na' : '${d > 0 ? '+' : ''}${cm(d)}cm';
-  }
-
-  final latest = history.lastOrNull;
-  final waist = latest?.waistCm ?? profileWaistCm;
-  if (waist == null) return null;
-  final hip = latestHip(history);
-  final head =
-      '[Waist:${latest == null ? 'FromProfile,Date:na' : 'Latest:${latest.at.toIso8601String().substring(0, 10)}'},'
-      'Cm:${cm(waist)},HipCm:${cm(hip)},'
-      'WHtR:${ratio(waistToHeight(waist, heightCm))},'
-      'WHR:${ratio(waistToHip(waist, hip))}';
-  if (history.length < 2) return '$head,n=${history.length}]';
-  final first = history.first;
-  return '$head,Chg30d:${change(const Duration(days: 30))},'
-      'Chg90d:${change(const Duration(days: 90))},'
-      'Chg365d:${change(const Duration(days: 365))},'
-      'First:${first.at.toIso8601String().substring(0, 10)}:${cm(first.waistCm)}cm,'
-      'n=${history.length}]';
 }

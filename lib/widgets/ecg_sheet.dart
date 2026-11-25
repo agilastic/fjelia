@@ -12,14 +12,14 @@ import 'package:share_plus/share_plus.dart';
 import '../db/database.dart' show EcgRecording;
 import '../l10n/l10n_ext.dart';
 import '../models/coach_context_card.dart';
-import '../models/ecg_sleep_staging.dart';
+import 'package:fjelia_core/models/ecg_sleep_staging.dart';
 import '../providers/ecg_provider.dart';
 import '../providers/day_data_provider.dart' show syncStatusListenerProvider;
 import '../providers/polar_h10_provider.dart';
 import '../screens/ai_coach/ai_coach_screen.dart' show openCoachTab;
 import '../services/coach_tasks.dart' show ecgClinicalMode;
 import '../services/ecg_sleep_staging_service.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'app_widgets.dart';
 import 'swipe_action_tile.dart';
 import 'sleep_stages.dart'

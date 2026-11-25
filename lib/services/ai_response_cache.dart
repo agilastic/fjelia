@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:crypto/crypto.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 
 /// Persistent, device-local cache for completed AI answers.
 ///

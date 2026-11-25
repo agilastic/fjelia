@@ -3,7 +3,7 @@ import '../l10n/l10n_ext.dart';
 
 import 'package:flutter/material.dart';
 
-import '../models/workout_profile.dart';
+import 'package:fjelia_core/models/workout_profile.dart';
 import 'app_widgets.dart';
 
 /// Colour of intensity zone 1 to 5.

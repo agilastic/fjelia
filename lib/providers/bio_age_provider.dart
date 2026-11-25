@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../services/bio_age_service.dart';
-import '../services/bio_age_activity.dart';
+import 'package:fjelia_core/services/bio_age_service.dart';
+import 'package:fjelia_core/services/bio_age_activity.dart';
 import 'database_provider.dart';
 import 'day_data_provider.dart';
 import 'user_profile_provider.dart';

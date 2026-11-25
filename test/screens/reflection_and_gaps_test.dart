@@ -4,7 +4,7 @@ import 'dart:ui' as ui;
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/l10n/app_localizations.dart';
-import 'package:fjelia/models/chart_point.dart';
+import 'package:fjelia_core/models/chart_point.dart';
 import 'package:fjelia/providers/database_provider.dart';
 import 'package:fjelia/providers/day_data_provider.dart';
 import 'package:fjelia/providers/metric_history_provider.dart';

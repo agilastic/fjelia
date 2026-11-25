@@ -5,7 +5,7 @@ import 'dart:io';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 
-import 'package:fjelia/models/garmin_data.dart';
+import 'package:fjelia_core/models/garmin_data.dart';
 import 'package:fjelia/theme/app_theme.dart';
 import 'package:fjelia/widgets/activity_performance_chart.dart';
 import 'package:fl_chart/fl_chart.dart';

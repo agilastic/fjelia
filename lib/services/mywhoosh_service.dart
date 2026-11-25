@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 import '../api/mywhoosh_client.dart';
 import '../db/database.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'activity_file_import_service.dart';
 import 'dfa_alpha1_service.dart';
 import 'source_priority_service.dart';

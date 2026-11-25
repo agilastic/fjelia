@@ -4,14 +4,14 @@ import 'dart:math' as math;
 import 'package:drift/drift.dart';
 
 import '../db/database.dart';
-import '../models/garmin_data.dart' show LatLng;
-import '../models/heat_acclimation.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/models/garmin_data.dart' show LatLng;
+import 'package:fjelia_core/models/heat_acclimation.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'global_weather_client.dart';
 import 'heat_acclimation_settings.dart';
 import 'location_service.dart';
 import 'open_meteo_client.dart';
-import 'activity_decoder.dart';
+import 'package:fjelia_core/services/activity_decoder.dart';
 
 /// Heat acclimation score (0–100). Decays 6 % per day; outdoor workouts of
 /// at least 30 minutes at ≥ 22 °C add 8–15 points depending on heat,

@@ -10,7 +10,7 @@ import 'package:fjelia/screens/ai_coach/coach_memories_screen.dart';
 import 'package:fjelia/services/ai_coach_client.dart';
 import 'package:fjelia/services/ai_coach_settings.dart';
 import 'package:fjelia/services/apple_coach_request.dart';
-import 'package:fjelia/services/coach_memory_context.dart';
+import 'package:fjelia_core/services/coach_memory_context.dart';
 import 'package:fjelia/widgets/app_widgets.dart';
 import 'package:fjelia_service_api/fjelia_service_api.dart';
 import 'package:flutter/material.dart';

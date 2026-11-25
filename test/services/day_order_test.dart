@@ -1,7 +1,7 @@
 import 'package:fjelia/l10n/app_localizations_de.dart';
 import 'package:fjelia/l10n/app_localizations_en.dart';
 import 'package:fjelia/services/briefing_brief.dart';
-import 'package:fjelia/services/day_order.dart';
+import 'package:fjelia_core/services/day_order.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

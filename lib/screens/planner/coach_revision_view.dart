@@ -11,7 +11,7 @@ import '../../providers/plan_proposal_provider.dart';
 import '../../providers/readiness_provider.dart';
 import '../../services/daily_readiness_service.dart' show ReadinessLevel;
 import '../../services/morning_revision.dart';
-import '../../services/workout_semantics.dart';
+import 'package:fjelia_core/services/workout_semantics.dart';
 import '../../theme/fjelia_style.dart';
 import '../../widgets/app_widgets.dart';
 

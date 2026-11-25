@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
 import '../l10n/l10n_ext.dart';
-import '../models/garmin_data.dart';
+import 'package:fjelia_core/models/garmin_data.dart';
 import 'app_widgets.dart';
 
 const _hrvColor = Color(0xFF4FD1C5);

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../models/waist_ratios.dart';
+import 'package:fjelia_core/models/waist_ratios.dart';
 import '../../providers/body_measurements_provider.dart';
 import '../../providers/user_profile_provider.dart';
 import '../../providers/waist_provider.dart';

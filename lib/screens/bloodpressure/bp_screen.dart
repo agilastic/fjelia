@@ -14,7 +14,7 @@ import '../../widgets/app_widgets.dart';
 import 'package:intl/intl.dart';
 
 import 'bp_variation_chart.dart';
-import '../../utils/week.dart';
+import 'package:fjelia_core/utils/week.dart';
 import '../../providers/week_start_provider.dart';
 import '../../models/bp_category.dart';
 

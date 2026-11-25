@@ -1,8 +1,11 @@
 import 'package:drift/drift.dart';
+import 'package:fjelia_core/services/absence.dart';
 
 import '../db/database.dart';
 import 'plan_session_actions.dart';
 import 'post_workout_scorer.dart' show noActivityReason;
+
+export 'package:fjelia_core/services/absence.dart';
 
 /// The kinds of absence, in the order they are offered.
 const absenceKinds = ['illness', 'injury', 'vacation', 'offseason'];
@@ -17,15 +20,6 @@ String absenceSkipReason(String kind) => switch (kind) {
   'vacation' => 'Travel',
   _ => offSeasonReason,
 };
-
-/// The absence that covers [day], if any.
-Absence? absenceOn(Iterable<Absence> absences, DateTime day) {
-  final d = DateTime(day.year, day.month, day.day);
-  for (final a in absences) {
-    if (!d.isBefore(a.startDay) && !d.isAfter(a.endDay)) return a;
-  }
-  return null;
-}
 
 /// Enters and removes absences. Sessions on their days are cancelled with
 /// the absence's reason; the plan is then built again around them.

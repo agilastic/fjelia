@@ -441,6 +441,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
+  fjelia_core:
+    dependency: "direct main"
+    description:
+      path: "../fjelia-core/packages/fjelia_core"
+      relative: true
+    source: path
+    version: "0.1.0"
   fjelia_service:
     dependency: "direct main"
     description:
@@ -451,7 +458,7 @@ packages:
   fjelia_service_api:
     dependency: "direct main"
     description:
-      path: "packages/fjelia_service_api"
+      path: "../fjelia-core/packages/fjelia_service_api"
       relative: true
     source: path
     version: "0.1.0"

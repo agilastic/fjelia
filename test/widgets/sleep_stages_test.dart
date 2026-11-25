@@ -1,5 +1,5 @@
 import 'package:fjelia/l10n/app_localizations.dart';
-import 'package:fjelia/models/garmin_data.dart';
+import 'package:fjelia_core/models/garmin_data.dart';
 import 'package:fjelia/widgets/sleep_stages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

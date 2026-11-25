@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:drift/drift.dart' hide isNull;
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
-import 'package:fjelia/services/control/execution.dart';
-import 'package:fjelia/services/control/stimulus.dart';
+import 'package:fjelia_core/services/control/execution.dart';
+import 'package:fjelia_core/services/control/stimulus.dart';
 import 'package:fjelia/services/post_workout_scorer.dart';
 import 'package:flutter_test/flutter_test.dart';
 

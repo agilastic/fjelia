@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:fjelia/models/garmin_data.dart';
+import 'package:fjelia_core/models/garmin_data.dart';
 import 'package:fjelia/providers/upcoming_plan_provider.dart';
 
 void main() {

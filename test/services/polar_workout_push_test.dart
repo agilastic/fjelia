@@ -4,7 +4,7 @@ import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
 import 'package:fjelia/api/polar_flow_web_client.dart';
 import 'package:fjelia/db/database.dart';
-import 'package:fjelia/models/prepared_workout.dart';
+import 'package:fjelia_core/models/prepared_workout.dart';
 import 'package:fjelia/services/polar_service.dart';
 import 'package:fjelia/services/workout_providers/polar_workout_provider.dart';
 import 'package:fjelia/services/workout_providers/workout_providers.dart';

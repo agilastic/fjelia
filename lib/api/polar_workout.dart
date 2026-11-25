@@ -1,4 +1,4 @@
-import '../models/prepared_workout.dart';
+import 'package:fjelia_core/models/prepared_workout.dart';
 
 class PolarUnsupportedWorkout implements Exception {
   const PolarUnsupportedWorkout(this.reason);

@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fjelia/db/database.dart';
-import 'package:fjelia/models/ecg.dart';
+import 'package:fjelia_core/models/ecg.dart';
 import 'package:fjelia/services/ecg_ble_service.dart';
 import 'package:fjelia/services/ecg_storage_service.dart';
 

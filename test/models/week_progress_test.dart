@@ -1,5 +1,5 @@
 import 'package:fjelia/l10n/app_localizations.dart';
-import 'package:fjelia/models/week_progress.dart';
+import 'package:fjelia_core/models/week_progress.dart';
 import 'package:fjelia/screens/activities/load_visuals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

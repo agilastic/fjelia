@@ -9,10 +9,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../db/database.dart' show TrainingSession;
-import '../models/concept2.dart';
-import '../models/ftms.dart';
-import '../models/indoor_recording.dart';
-import '../models/rowing_stroke_average.dart';
+import 'package:fjelia_core/models/concept2.dart';
+import 'package:fjelia_core/models/ftms.dart';
+import 'package:fjelia_core/models/indoor_recording.dart';
+import 'package:fjelia_core/models/rowing_stroke_average.dart';
 import '../services/ftms_device_service.dart';
 import '../services/indoor_fit_export.dart';
 import '../services/indoor_recording_service.dart';
@@ -29,9 +29,9 @@ import 'hrv_training_provider.dart';
 import 'planner_providers.dart';
 import 'sync_provider.dart';
 
-export '../models/ftms.dart';
-export '../models/indoor_recording.dart';
-export '../models/rowing_stroke_average.dart';
+export 'package:fjelia_core/models/ftms.dart';
+export 'package:fjelia_core/models/indoor_recording.dart';
+export 'package:fjelia_core/models/rowing_stroke_average.dart';
 export '../services/training_ble.dart' show TrainingDevice;
 
 final indoorStorageProvider = Provider(

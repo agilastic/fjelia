@@ -1,6 +1,6 @@
 import '../../theme/fjelia_style.dart';
 import '../ai_coach/ai_coach_screen.dart' show openCoachTab;
-import '../../services/activity_decoder.dart';
+import 'package:fjelia_core/services/activity_decoder.dart';
 import '../../models/coach_context_card.dart';
 import '../../widgets/recently_deleted_sheet.dart';
 import '../../widgets/swipe_action_tile.dart';
@@ -23,7 +23,7 @@ import '../../providers/day_data_provider.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/plan_timeline.dart';
 import '../strain/activity_detail_sheet.dart';
-import '../../utils/week.dart';
+import 'package:fjelia_core/utils/week.dart';
 import '../../providers/week_start_provider.dart';
 
 class ActivitiesScreen extends ConsumerWidget {

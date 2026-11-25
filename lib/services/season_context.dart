@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import '../db/database.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/plan_text.dart';
-import '../services/season/season_report.dart';
+import 'package:fjelia_core/services/season/season_report.dart';
 import '../theme/activity_colors.dart';
 
 /// The season by weeks, for the Pro season analysis and race plan: what was

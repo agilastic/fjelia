@@ -19,7 +19,7 @@ import 'package:fjelia/providers/activity_calendar_provider.dart';
 import 'package:fjelia/providers/database_provider.dart';
 import 'package:fjelia/providers/day_data_provider.dart';
 import 'package:fjelia/providers/planner_providers.dart';
-import 'package:fjelia/models/backup_restore.dart';
+import 'package:fjelia_core/models/backup_restore.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart' show DateUtils;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../db/database.dart';
-import '../models/garmin_data.dart';
+import 'package:fjelia_core/models/garmin_data.dart';
 import 'day_data_provider.dart';
 import '../services/post_workout_scorer.dart'
     show PostWorkoutScorer, noActivityReason, undoneByAthlete;

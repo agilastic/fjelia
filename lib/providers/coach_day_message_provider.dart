@@ -8,7 +8,7 @@ import '../services/hr_zone_change_notice.dart';
 import '../services/coach_day_message.dart';
 import '../services/coach_language.dart';
 import '../services/pro_analysis.dart' show proAnalysisPrompts;
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'ai_coach_provider.dart';
 import 'coach_messages_provider.dart';
 import 'database_provider.dart';

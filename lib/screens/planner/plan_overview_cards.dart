@@ -13,8 +13,8 @@ import '../../widgets/weather_glyph.dart';
 import '../../widgets/weather_sky.dart';
 import '../weather/weather_screen.dart';
 import '../../providers/upcoming_plan_provider.dart';
-import '../../models/garmin_data.dart';
-import '../../models/workout_presentation.dart';
+import 'package:fjelia_core/models/garmin_data.dart';
+import 'package:fjelia_core/models/workout_presentation.dart';
 import '../activities/workout_detail_sheet.dart';
 import '../../theme/activity_colors.dart'
     show plannedActivityColor, completedActivityColor, activitySportIcon;
@@ -30,8 +30,8 @@ import '../../widgets/app_widgets.dart';
 import '../../widgets/plan_timeline.dart';
 import '../settings/training_tab.dart';
 import 'plan_session_sheet.dart';
-import '../../utils/target_time.dart';
-import '../../models/race_profile.dart';
+import 'package:fjelia_core/utils/target_time.dart';
+import 'package:fjelia_core/models/race_profile.dart';
 
 /// The coming week as small skies: the day's weather is the picture
 /// (sun glow, clouds, rain falling as hard as forecast, wind streaks) and

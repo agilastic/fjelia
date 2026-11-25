@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 
 import '../db/database.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 
 /// How long heart-rate samples and blood pressure readings stay as recorded.
 /// Two days, because Hilo uploads and platform syncs often arrive a day late.

@@ -1,6 +1,6 @@
 import '../../db/database.dart';
-import '../../models/prepared_workout.dart';
-import '../../utils/log.dart';
+import 'package:fjelia_core/models/prepared_workout.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'workout_provider.dart';
 
 export 'workout_provider.dart';

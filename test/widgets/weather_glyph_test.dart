@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:fjelia/services/moon_phase.dart';
+import 'package:fjelia_core/services/moon_phase.dart';
 import 'package:fjelia/widgets/weather_glyph.dart';
 
 void main() {

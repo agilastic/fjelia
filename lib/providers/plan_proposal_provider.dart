@@ -11,7 +11,7 @@ import '../l10n/app_localizations.dart';
 import '../l10n/l10n_ext.dart';
 import '../services/coach_language.dart';
 import '../services/daily_readiness_service.dart';
-import '../services/missed_workout_planner.dart' show isRainyDay;
+import 'package:fjelia_core/services/missed_workout_planner.dart' show isRainyDay;
 import '../services/morning_revision.dart';
 import '../services/open_meteo_client.dart' show OpenMeteoPoint;
 import '../services/plan_week_context.dart';
@@ -20,7 +20,7 @@ import '../services/strength/strength_repository.dart'
 import '../services/pro_analysis.dart' show proAnalysisPrompts;
 import '../services/plan_proposal_notifications.dart';
 import '../services/plan_proposal_store.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'ai_coach_provider.dart';
 import 'database_provider.dart';
 import 'day_data_provider.dart' show activityListProvider;

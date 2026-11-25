@@ -8,7 +8,7 @@ import 'package:fjelia/providers/user_profile_provider.dart';
 import 'package:fjelia/screens/ai_coach/ai_coach_screen.dart';
 import 'package:fjelia/services/ai_coach_client.dart';
 import 'package:fjelia/services/ai_coach_settings.dart';
-import 'package:fjelia/services/ecg_analysis.dart';
+import 'package:fjelia_core/services/ecg_analysis.dart';
 import 'package:fjelia/services/ecg_coach_context.dart';
 import 'package:fjelia/widgets/coach_context_card.dart';
 import 'package:flutter/material.dart';

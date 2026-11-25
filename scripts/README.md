@@ -143,3 +143,18 @@ a production keystore before publishing an app bundle to Google Play.
 
 The existing `build.sh ios` and `build.sh android` commands accept the same
 options. `build.sh sim` continues to launch the iOS simulator.
+
+## Desktop build
+
+The desktop app lives in the sibling repository `fjelia-desktop` and shares
+`fjelia-core` with this app; check both out next to this repository. From
+here:
+
+```bash
+fjelia/scripts/build-desktop.sh            # release for this machine
+fjelia/scripts/build-desktop.sh --profile  # profile build
+```
+
+It runs `../fjelia-desktop/scripts/build.sh`, which builds for the machine it
+runs on (macOS universal app, Linux or Windows) and prints the result's path.
+`fjelia-desktop/scripts/` also has `dev.sh`, `test.sh` and `bench.sh`.

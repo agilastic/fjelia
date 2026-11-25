@@ -1,5 +1,5 @@
-import '../models/health_metric.dart';
-import '../models/hrv_series.dart';
+import 'package:fjelia_core/models/health_metric.dart';
+import 'package:fjelia_core/models/hrv_series.dart';
 import 'app_localizations.dart';
 
 /// [HealthMetric.label] in the app language.

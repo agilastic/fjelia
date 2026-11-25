@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/l10n/app_localizations.dart';
-import 'package:fjelia/models/ftms.dart';
-import 'package:fjelia/models/indoor_recording.dart';
-import 'package:fjelia/models/training_device.dart';
+import 'package:fjelia_core/models/ftms.dart';
+import 'package:fjelia_core/models/indoor_recording.dart';
+import 'package:fjelia_core/models/training_device.dart';
 import 'package:fjelia/providers/activity_blood_pressure_provider.dart';
 import 'package:fjelia/widgets/activity_blood_pressure_card.dart';
 import 'package:flutter/material.dart';

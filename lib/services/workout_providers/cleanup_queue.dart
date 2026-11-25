@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 
 import '../../db/database.dart';
-import '../../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 
 /// Removals on one platform that failed, kept in `provider_cleanups` so a
 /// later run can try again even though the session and its ids are gone from

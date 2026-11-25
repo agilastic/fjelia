@@ -4,7 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:fjelia/db/database.dart';
-import 'package:fjelia/models/threshold_candidate.dart';
+import 'package:fjelia_core/models/threshold_candidate.dart';
 import 'package:fjelia/services/device_threshold_store.dart';
 import 'package:fjelia/services/dfa_alpha1_service.dart';
 import 'package:fjelia/services/threshold_choice_store.dart';

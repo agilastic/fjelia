@@ -117,13 +117,25 @@ the server-side protection.
 Some integrations are not part of this repository. The app depends on the
 package `fjelia_service`; this repository contains only a stub of it
 (`packages/fjelia_service`), whose features report that they are unavailable.
-The interfaces live in `packages/fjelia_service_api`. A build that has a real
+The interfaces live in the package `fjelia_service_api` of
+[fjelia-core](https://github.com/agilastic/fjelia-core), the shared core this
+app builds on. A build that has a real
 implementation replaces the stub with a `pubspec_overrides.yaml` (git-ignored):
 
 ```yaml
 dependency_overrides:
   fjelia_service:
     path: ../fjelia-service   # your own implementation of the same API
+```
+
+To work on fjelia-core together with the app, check it out next to this
+repository and add to the same file:
+
+```yaml
+  fjelia_core:
+    path: ../fjelia-core/packages/fjelia_core
+  fjelia_service_api:
+    path: ../fjelia-core/packages/fjelia_service_api
 ```
 
 Without it everything else works as described above.

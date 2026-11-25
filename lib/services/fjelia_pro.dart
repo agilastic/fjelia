@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:in_app_purchase/in_app_purchase.dart';
 
 import '../config/fjelia_pro.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 
 /// What a verified FjeliaPro subscription gives this device: the
 /// subscription's own key for the Pro AI route, until [expiresAt]. The key

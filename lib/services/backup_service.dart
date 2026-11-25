@@ -12,8 +12,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 import '../db/database.dart';
-import '../models/backup_restore.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/models/backup_restore.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'media_service.dart';
 
 // Decompression and JSON parsing must not block the progress indicator.

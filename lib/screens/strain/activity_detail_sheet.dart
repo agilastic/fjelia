@@ -17,7 +17,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../db/database.dart';
 import '../../models/strength_workout.dart';
-import '../../services/activity_decoder.dart';
+import 'package:fjelia_core/services/activity_decoder.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/activity_performance_chart.dart';
 import '../../widgets/activity_route_map.dart';

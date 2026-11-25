@@ -7,7 +7,7 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 
 import '../config/fjelia_pro.dart';
 import '../services/fjelia_pro.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 
 /// The App Store on iOS; elsewhere none (Pro is sold on iOS only for now).
 final proStoreProvider = Provider<ProStore>(

@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart' hide isNull;
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
-import 'package:fjelia/services/activity_decoder.dart';
+import 'package:fjelia_core/services/activity_decoder.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

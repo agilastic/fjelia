@@ -7,7 +7,7 @@ import 'package:fjelia/services/strength/strength_estimates.dart';
 import 'package:fjelia/services/strength/strength_focus.dart';
 import 'package:fjelia/services/strength/strength_repository.dart';
 import 'package:fjelia/services/strength/strength_statistics.dart';
-import 'package:fjelia/services/strength/strength_templates.dart';
+import 'package:fjelia_core/services/strength/strength_templates.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 StrengthSetResult _set(

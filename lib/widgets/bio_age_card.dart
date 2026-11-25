@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/bio_age_provider.dart';
-import '../services/bio_age_activity.dart';
-import '../services/bio_age_service.dart';
+import 'package:fjelia_core/services/bio_age_activity.dart';
+import 'package:fjelia_core/services/bio_age_service.dart';
 import 'app_widgets.dart';
 
 const _accent = [Color(0xFF9D7BFF), Color(0xFFFF7AD9)];

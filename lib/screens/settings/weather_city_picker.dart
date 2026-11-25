@@ -3,7 +3,7 @@ import '../../l10n/l10n_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../models/weather_place.dart';
+import 'package:fjelia_core/models/weather_place.dart';
 import '../../providers/weather_location_provider.dart';
 import '../../widgets/app_widgets.dart';
 

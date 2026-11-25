@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
 
 import '../config/secrets.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'polar_service.dart';
 
 const polarPushChannel = MethodChannel('fjelia/polar_push');

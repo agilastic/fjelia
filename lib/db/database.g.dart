@@ -286,7 +286,8 @@ class $BpMeasurementsTable extends BpMeasurements
   }
 }
 
-class BpMeasurement extends DataClass implements Insertable<BpMeasurement> {
+class BpMeasurement extends BpMeasurementBase
+    implements Insertable<BpMeasurement> {
   final int id;
   final DateTime measuredAt;
   final String timezone;
@@ -297,7 +298,7 @@ class BpMeasurement extends DataClass implements Insertable<BpMeasurement> {
   final String? dayNightTag;
   final bool? isBedTime;
   final bool? isWakeUpTime;
-  const BpMeasurement({
+  BpMeasurement({
     required this.id,
     required this.measuredAt,
     required this.timezone,
@@ -2327,7 +2328,7 @@ class $HrvRecordsTable extends HrvRecords
   }
 }
 
-class HrvRecord extends DataClass implements Insertable<HrvRecord> {
+class HrvRecord extends HrvRecordBase implements Insertable<HrvRecord> {
   final int id;
   final DateTime date;
   final double? hrvLastNight;
@@ -2341,7 +2342,7 @@ class HrvRecord extends DataClass implements Insertable<HrvRecord> {
   final double? skinTempDelta;
   final String? hrvIntradayJson;
   final String? source;
-  const HrvRecord({
+  HrvRecord({
     required this.id,
     required this.date,
     this.hrvLastNight,
@@ -3180,7 +3181,7 @@ class $SleepRecordsTable extends SleepRecords
   }
 }
 
-class SleepRecord extends DataClass implements Insertable<SleepRecord> {
+class SleepRecord extends SleepRecordBase implements Insertable<SleepRecord> {
   final int id;
   final DateTime date;
   final int totalSleepSeconds;
@@ -3199,7 +3200,7 @@ class SleepRecord extends DataClass implements Insertable<SleepRecord> {
   final double? avgOvernightHrv;
   final int? sleepNeedSeconds;
   final String? source;
-  const SleepRecord({
+  SleepRecord({
     required this.id,
     required this.date,
     required this.totalSleepSeconds,
@@ -4137,7 +4138,8 @@ class $WellnessRecordsTable extends WellnessRecords
   }
 }
 
-class WellnessRecord extends DataClass implements Insertable<WellnessRecord> {
+class WellnessRecord extends WellnessRecordBase
+    implements Insertable<WellnessRecord> {
   final int id;
   final DateTime date;
   final int? steps;
@@ -4156,7 +4158,7 @@ class WellnessRecord extends DataClass implements Insertable<WellnessRecord> {
   final double? avgSpo2;
   final String? source;
   final double? vo2maxCycling;
-  const WellnessRecord({
+  WellnessRecord({
     required this.id,
     required this.date,
     this.steps,
@@ -5266,7 +5268,8 @@ class $RenphoRecordsTable extends RenphoRecords
   }
 }
 
-class RenphoRecord extends DataClass implements Insertable<RenphoRecord> {
+class RenphoRecord extends RenphoRecordBase
+    implements Insertable<RenphoRecord> {
   final int id;
   final DateTime measuredAt;
   final String? scaleName;
@@ -5288,7 +5291,7 @@ class RenphoRecord extends DataClass implements Insertable<RenphoRecord> {
   final double? cardiacIndex;
   final String? bodyShape;
   final String rawJson;
-  const RenphoRecord({
+  RenphoRecord({
     required this.id,
     required this.measuredAt,
     this.scaleName,
@@ -6708,7 +6711,8 @@ class $ActivityRecordsTable extends ActivityRecords
   }
 }
 
-class ActivityRecord extends DataClass implements Insertable<ActivityRecord> {
+class ActivityRecord extends ActivityRecordBase
+    implements Insertable<ActivityRecord> {
   final int id;
   final String activityId;
   final String name;
@@ -6746,7 +6750,7 @@ class ActivityRecord extends DataClass implements Insertable<ActivityRecord> {
   /// The athlete's own note in Fjelia, e.g. why it was shorter than planned.
   /// Written for the coach: unlike [description] it goes into its context.
   final String? athleteNote;
-  const ActivityRecord({
+  ActivityRecord({
     required this.id,
     required this.activityId,
     required this.name,
@@ -13910,7 +13914,8 @@ class $DayScoreRecordsTable extends DayScoreRecords
   }
 }
 
-class DayScoreRecord extends DataClass implements Insertable<DayScoreRecord> {
+class DayScoreRecord extends DayScoreRecordBase
+    implements Insertable<DayScoreRecord> {
   final int id;
   final DateTime date;
   final double? recoveryScore;
@@ -13920,7 +13925,7 @@ class DayScoreRecord extends DataClass implements Insertable<DayScoreRecord> {
   final double? readinessScore;
   final String? recoveryLevel;
   final String? recommendation;
-  const DayScoreRecord({
+  DayScoreRecord({
     required this.id,
     required this.date,
     this.recoveryScore,
@@ -14370,13 +14375,13 @@ class $GripStrengthRecordsTable extends GripStrengthRecords
   }
 }
 
-class GripStrengthRecord extends DataClass
+class GripStrengthRecord extends GripStrengthRecordBase
     implements Insertable<GripStrengthRecord> {
   final int id;
   final DateTime measuredAt;
   final double? leftKg;
   final double? rightKg;
-  const GripStrengthRecord({
+  GripStrengthRecord({
     required this.id,
     required this.measuredAt,
     this.leftKg,
@@ -16331,7 +16336,7 @@ class $AbsencesTable extends Absences with TableInfo<$AbsencesTable, Absence> {
   }
 }
 
-class Absence extends DataClass implements Insertable<Absence> {
+class Absence extends AbsenceBase implements Insertable<Absence> {
   final int id;
   final String kind;
   final DateTime startDay;
@@ -16342,7 +16347,7 @@ class Absence extends DataClass implements Insertable<Absence> {
   /// Ill or injured with no end known yet: [endDay] moves on to tomorrow
   /// every day until the athlete says they are fit again.
   final bool openEnd;
-  const Absence({
+  Absence({
     required this.id,
     required this.kind,
     required this.startDay,
@@ -19823,7 +19828,8 @@ class $EcgRecordingsTable extends EcgRecordings
   }
 }
 
-class EcgRecording extends DataClass implements Insertable<EcgRecording> {
+class EcgRecording extends EcgRecordingBase
+    implements Insertable<EcgRecording> {
   final String recordingId;
   final DateTime recordedAt;
   final String source;
@@ -19840,7 +19846,7 @@ class EcgRecording extends DataClass implements Insertable<EcgRecording> {
   final String? originalFileName;
   final String? originalBase64;
   final String? note;
-  const EcgRecording({
+  EcgRecording({
     required this.recordingId,
     required this.recordedAt,
     required this.source,
@@ -29444,7 +29450,7 @@ class $ScheduledWorkoutRecordsTable extends ScheduledWorkoutRecords
   }
 }
 
-class ScheduledWorkoutRecord extends DataClass
+class ScheduledWorkoutRecord extends ScheduledWorkoutRecordBase
     implements Insertable<ScheduledWorkoutRecord> {
   final int id;
   final String workoutId;
@@ -29460,7 +29466,7 @@ class ScheduledWorkoutRecord extends DataClass
   final String? seriesName;
   final String? stepsJson;
   final String? userNote;
-  const ScheduledWorkoutRecord({
+  ScheduledWorkoutRecord({
     required this.id,
     required this.workoutId,
     required this.scheduleId,
@@ -31744,7 +31750,7 @@ class $HeatDailyStateRecordsTable extends HeatDailyStateRecords
   }
 }
 
-class HeatDailyStateRecord extends DataClass
+class HeatDailyStateRecord extends HeatDailyStateRecordBase
     implements Insertable<HeatDailyStateRecord> {
   final int id;
   final DateTime date;
@@ -31755,7 +31761,7 @@ class HeatDailyStateRecord extends DataClass
   final String? lastActivityId;
   final String? recommendation;
   final DateTime updatedAt;
-  const HeatDailyStateRecord({
+  HeatDailyStateRecord({
     required this.id,
     required this.date,
     required this.score,
@@ -32302,7 +32308,8 @@ class $ThresholdRecordsTable extends ThresholdRecords
   }
 }
 
-class ThresholdRecord extends DataClass implements Insertable<ThresholdRecord> {
+class ThresholdRecord extends ThresholdRecordBase
+    implements Insertable<ThresholdRecord> {
   final int id;
   final DateTime date;
   final String activityId;
@@ -32312,7 +32319,7 @@ class ThresholdRecord extends DataClass implements Insertable<ThresholdRecord> {
   final int? lt2PaceSec;
   final int? vo2PaceSec;
   final int? ftpWatts;
-  const ThresholdRecord({
+  ThresholdRecord({
     required this.id,
     required this.date,
     required this.activityId,
@@ -33011,7 +33018,7 @@ class $RaceGoalsTable extends RaceGoals
   }
 }
 
-class RaceGoal extends DataClass implements Insertable<RaceGoal> {
+class RaceGoal extends RaceGoalBase implements Insertable<RaceGoal> {
   final String id;
   final String athleteId;
   final String name;
@@ -33034,7 +33041,7 @@ class RaceGoal extends DataClass implements Insertable<RaceGoal> {
   /// What the athlete wants from the event: `finish` or `performance`; null
   /// while unknown. Never inferred from the name or the target time.
   final String? ambition;
-  const RaceGoal({
+  RaceGoal({
     required this.id,
     required this.athleteId,
     required this.name,
@@ -35925,7 +35932,8 @@ class $TrainingSessionsTable extends TrainingSessions
   }
 }
 
-class TrainingSession extends DataClass implements Insertable<TrainingSession> {
+class TrainingSession extends TrainingSessionBase
+    implements Insertable<TrainingSession> {
   final String id;
   final String planId;
   final String athleteId;
@@ -35990,7 +35998,7 @@ class TrainingSession extends DataClass implements Insertable<TrainingSession> {
   /// Kept as the athlete set it: automatic plan changes leave it alone.
   final bool locked;
   final String? sessionDateOriginal;
-  const TrainingSession({
+  TrainingSession({
     required this.id,
     required this.planId,
     required this.athleteId,
@@ -40880,7 +40888,7 @@ class $DailyReadinessRecordsTable extends DailyReadinessRecords
   }
 }
 
-class DailyReadinessRecord extends DataClass
+class DailyReadinessRecord extends DailyReadinessRecordBase
     implements Insertable<DailyReadinessRecord> {
   final String id;
   final String athleteId;
@@ -40905,7 +40913,7 @@ class DailyReadinessRecord extends DataClass
   final String level;
   final bool athleteOverrode;
   final DateTime computedAt;
-  const DailyReadinessRecord({
+  DailyReadinessRecord({
     required this.id,
     required this.athleteId,
     required this.date,
@@ -48943,7 +48951,8 @@ class $WorkoutTemplatesTable extends WorkoutTemplates
   }
 }
 
-class WorkoutTemplate extends DataClass implements Insertable<WorkoutTemplate> {
+class WorkoutTemplate extends WorkoutTemplateBase
+    implements Insertable<WorkoutTemplate> {
   final String id;
   final String sport;
   final String sessionType;
@@ -48962,7 +48971,7 @@ class WorkoutTemplate extends DataClass implements Insertable<WorkoutTemplate> {
   final bool isPublic;
   final int usageCount;
   final DateTime createdAt;
-  const WorkoutTemplate({
+  WorkoutTemplate({
     required this.id,
     required this.sport,
     required this.sessionType,
@@ -51342,13 +51351,13 @@ class $CoachMemoriesTable extends CoachMemories
   }
 }
 
-class CoachMemory extends DataClass implements Insertable<CoachMemory> {
+class CoachMemory extends CoachMemoryBase implements Insertable<CoachMemory> {
   final String id;
   final String title;
   final String body;
   final DateTime createdAt;
   final DateTime updatedAt;
-  const CoachMemory({
+  CoachMemory({
     required this.id,
     required this.title,
     required this.body,

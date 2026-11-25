@@ -2,7 +2,7 @@ import '../db/database.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../models/metric_provenance.dart';
+import 'package:fjelia_core/models/metric_provenance.dart';
 import 'database_provider.dart';
 import 'day_data_provider.dart';
 

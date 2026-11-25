@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../db/database.dart';
 import '../l10n/app_localizations.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'hr_zone_history.dart';
 import 'notifications/local_notification_gateway.dart';
 

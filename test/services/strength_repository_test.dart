@@ -2,7 +2,7 @@ import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/models/strength_workout.dart';
 import 'package:fjelia/services/strength/strength_repository.dart';
-import 'package:fjelia/services/strength/strength_templates.dart';
+import 'package:fjelia_core/services/strength/strength_templates.dart';
 import 'package:fjelia/services/workout_template_library.dart';
 import 'package:flutter_test/flutter_test.dart';
 

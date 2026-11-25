@@ -1,5 +1,5 @@
 import '../../db/database.dart';
-import 'hrv_post_reminder_policy.dart' show ReminderState;
+import 'package:fjelia_core/services/hrv/hrv_post_reminder_policy.dart' show ReminderState;
 import 'hrv_training_service.dart';
 
 /// Of [activityIds], those whose post-workout HRV is still owed: a pre

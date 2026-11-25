@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../models/training_device.dart';
-import '../models/training_ble_profile.dart';
-export '../models/training_device.dart';
+import 'package:fjelia_core/models/training_device.dart';
+import 'package:fjelia_core/models/training_ble_profile.dart';
+export 'package:fjelia_core/models/training_device.dart';
 
 /// Shared scan ownership prevents these recording flows from stopping a scan
 /// belonging to another Fjelia device. Discovery never opens a connection.

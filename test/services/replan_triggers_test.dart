@@ -1,6 +1,6 @@
 import 'package:fjelia/services/replan_triggers.dart';
-import 'package:fjelia/services/season/goal_set.dart';
-import 'package:fjelia/services/season/season_goal.dart';
+import 'package:fjelia_core/services/season/goal_set.dart';
+import 'package:fjelia_core/services/season/season_goal.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

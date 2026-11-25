@@ -1,4 +1,4 @@
-import '../../models/hrv_pair_assessment.dart';
+import 'package:fjelia_core/models/hrv_pair_assessment.dart';
 
 /// Short, plain wording of why a pair is incomplete or limited. The card and
 /// the AI context are built from the same reason codes.

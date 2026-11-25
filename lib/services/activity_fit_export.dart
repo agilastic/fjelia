@@ -6,7 +6,7 @@ import 'package:fit_sdk/fit_sdk.dart' as fit;
 
 import '../db/database.dart' show ActivityRecord;
 import '../theme/activity_colors.dart';
-import 'activity_decoder.dart';
+import 'package:fjelia_core/services/activity_decoder.dart';
 
 /// A FIT activity rebuilt from a stored workout of any source: one record
 /// per stored sample, the route laid onto them, and the summary as one lap

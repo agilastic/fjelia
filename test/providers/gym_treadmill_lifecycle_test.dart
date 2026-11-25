@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:fjelia/models/training_ble_profile.dart';
+import 'package:fjelia_core/models/training_ble_profile.dart';
 import 'package:fjelia/providers/device_recording_owner_provider.dart';
 import 'package:fjelia/providers/gym_treadmill_provider.dart';
 import 'package:fjelia/providers/hrv_reminder_provider.dart';

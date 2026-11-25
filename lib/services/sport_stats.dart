@@ -5,7 +5,7 @@ import 'dart:math' as math;
 import 'package:intl/intl.dart';
 
 import '../db/database.dart';
-import '../models/heart_rate.dart';
+import 'package:fjelia_core/models/heart_rate.dart';
 import '../theme/activity_colors.dart';
 
 /// The two sports with records: running and riding.

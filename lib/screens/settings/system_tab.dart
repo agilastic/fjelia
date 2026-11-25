@@ -6,7 +6,7 @@ import '../../widgets/recently_deleted_sheet.dart';
 import '../../l10n/formats.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../providers/data_export_provider.dart';
-import '../../models/backup_restore.dart';
+import 'package:fjelia_core/models/backup_restore.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

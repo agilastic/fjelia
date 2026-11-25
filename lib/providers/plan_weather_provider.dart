@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../services/open_meteo_client.dart';
 import '../services/rain_nowcast.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'heat_acclimation_provider.dart';
 
 class PlanWeatherData {

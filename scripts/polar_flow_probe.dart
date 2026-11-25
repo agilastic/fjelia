@@ -9,7 +9,7 @@
 import 'dart:io';
 
 import 'package:fjelia/api/polar_flow_web_client.dart';
-import 'package:fjelia/services/tcx_parser.dart';
+import 'package:fjelia_core/services/tcx_parser.dart';
 
 Future<void> main(List<String> args) async {
   final email = Platform.environment['POLAR_EMAIL'];

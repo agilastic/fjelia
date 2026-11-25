@@ -6,7 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../db/database.dart';
-import '../models/hrv_training_episode.dart';
+import 'package:fjelia_core/models/hrv_training_episode.dart';
 import '../models/spot_hrv.dart';
 import '../services/polar_h10_service.dart';
 import '../services/spot_hrv_export.dart';

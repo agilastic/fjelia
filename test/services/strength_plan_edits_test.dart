@@ -1,6 +1,6 @@
 import 'package:fjelia/models/strength_workout.dart';
 import 'package:fjelia/services/strength/strength_plan_edits.dart';
-import 'package:fjelia/services/strength/strength_templates.dart';
+import 'package:fjelia_core/services/strength/strength_templates.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

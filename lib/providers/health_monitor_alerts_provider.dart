@@ -1,8 +1,8 @@
 import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../models/health_metric.dart';
-import '../models/metric_range_alert.dart';
+import 'package:fjelia_core/models/health_metric.dart';
+import 'package:fjelia_core/models/metric_range_alert.dart';
 import 'database_provider.dart';
 import 'day_data_provider.dart';
 

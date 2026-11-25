@@ -5,7 +5,7 @@ import 'package:fjelia/db/database.dart';
 import 'package:fjelia/models/strength_workout.dart';
 import 'package:fjelia/services/morning_revision.dart';
 import 'package:fjelia/services/strength/strength_repository.dart';
-import 'package:fjelia/services/workout_semantics.dart';
+import 'package:fjelia_core/services/workout_semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Map<String, dynamic> step(String type, int seconds, int zone) => {

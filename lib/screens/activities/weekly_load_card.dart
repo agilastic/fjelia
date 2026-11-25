@@ -11,8 +11,8 @@ import '../../widgets/app_widgets.dart';
 import '../ai_coach/ai_coach_screen.dart';
 import 'activities_screen.dart';
 import 'load_visuals.dart';
-import '../../models/week_progress.dart';
-import '../../utils/week.dart';
+import 'package:fjelia_core/models/week_progress.dart';
+import 'package:fjelia_core/utils/week.dart';
 import '../../providers/week_start_provider.dart';
 
 class WeeklyLoadCard extends ConsumerStatefulWidget {

@@ -1,5 +1,5 @@
 import 'package:fjelia/api/polar_workout.dart';
-import 'package:fjelia/models/prepared_workout.dart';
+import 'package:fjelia_core/models/prepared_workout.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Map<String, dynamic> polarTestStep({int seconds = 600, int zone = 2}) => {

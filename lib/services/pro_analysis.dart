@@ -3,7 +3,7 @@ import 'package:fjelia_service_api/fjelia_service_api.dart';
 import 'package:intl/intl.dart';
 
 import '../db/database.dart';
-import '../utils/week.dart';
+import 'package:fjelia_core/utils/week.dart';
 import 'coach_language.dart';
 
 export 'package:fjelia_service_api/fjelia_service_api.dart'

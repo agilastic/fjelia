@@ -23,14 +23,14 @@ import '../../services/ai_coach_client.dart' show AiConsentToken;
 import '../../services/ai_coach_settings.dart';
 import '../../services/coach_language.dart';
 import '../../services/absence_service.dart' show absenceOn;
-import '../../services/missed_workout_planner.dart';
+import 'package:fjelia_core/services/missed_workout_planner.dart';
 import '../../services/missed_workout_reminder_service.dart';
 import '../../services/open_meteo_client.dart' show OpenMeteoPoint;
-import '../../services/plan_rebalance.dart';
-import '../../services/season/goal_set.dart' show DayLoad;
+import 'package:fjelia_core/services/plan_rebalance.dart';
+import 'package:fjelia_core/services/season/goal_set.dart' show DayLoad;
 import '../../services/plan_session_actions.dart' show skipReasons;
 import '../../theme/activity_colors.dart';
-import '../../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/rain_nowcast_line.dart';
 

@@ -8,9 +8,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/services/activity_file_import_service.dart';
-import 'package:fjelia/services/dfa_alpha1.dart';
+import 'package:fjelia_core/services/dfa_alpha1.dart';
 import 'package:fjelia/services/dfa_alpha1_service.dart';
-import 'package:fjelia/services/fit_activity_data.dart';
+import 'package:fjelia_core/services/fit_activity_data.dart';
 
 import '../support/polar_fit_fixture.dart';
 

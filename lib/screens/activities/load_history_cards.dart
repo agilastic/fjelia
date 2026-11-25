@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../models/load_week_history.dart';
+import 'package:fjelia_core/models/load_week_history.dart';
 import '../../providers/activity_history_provider.dart';
 import '../../providers/day_data_provider.dart';
 import '../../providers/week_start_provider.dart';

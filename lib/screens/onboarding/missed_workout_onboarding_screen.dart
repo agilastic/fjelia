@@ -12,7 +12,7 @@ import '../../l10n/l10n_ext.dart';
 import '../../providers/hrv_reminder_provider.dart';
 import '../../providers/missed_workout_provider.dart';
 import '../../services/missed_workout_reminder_service.dart';
-import '../../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import '../home/home_screen.dart';
 
 const _mint = Color(0xFF70F3C8);

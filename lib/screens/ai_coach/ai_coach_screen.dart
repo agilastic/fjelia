@@ -19,13 +19,13 @@ import '../../providers/fjelia_edition_provider.dart';
 import '../../providers/user_profile_provider.dart';
 import '../../services/ai_coach_client.dart';
 import '../../services/ai_coach_settings.dart';
-import '../../services/coach_memory_context.dart';
+import 'package:fjelia_core/services/coach_memory_context.dart';
 import '../../services/coach_tasks.dart';
 import '../../services/ecg_coach_context.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/coach_context_card.dart';
 import '../../widgets/ecg_sheet.dart' show confirmEcgCoachWarning;
-import '../../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import '../settings/ai_settings_tab.dart';
 import 'coach_memories_screen.dart';
 

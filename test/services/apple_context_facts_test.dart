@@ -1,4 +1,4 @@
-import 'package:fjelia/services/apple_context_facts.dart';
+import 'package:fjelia_core/services/apple_context_facts.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

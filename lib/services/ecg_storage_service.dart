@@ -9,8 +9,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../db/database.dart';
-import '../models/ecg.dart';
-import '../models/ecg_sleep_staging.dart';
+import 'package:fjelia_core/models/ecg.dart';
+import 'package:fjelia_core/models/ecg_sleep_staging.dart';
 import 'pdf_text_extractor.dart';
 import 'source_priority_service.dart'
     show SourceGroup, priorityForGroup, shouldOverwrite;

@@ -4,9 +4,9 @@ import 'package:drift/drift.dart' hide isNull;
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/services/training_plan_service.dart';
-import 'package:fjelia/services/workout_semantics.dart';
+import 'package:fjelia_core/services/workout_semantics.dart';
 import 'package:fjelia/services/workout_template_library.dart';
-import 'package:fjelia/utils/week.dart';
+import 'package:fjelia_core/utils/week.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../support/fake_workout_garmin.dart';

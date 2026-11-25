@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:fjelia/api/coros_client.dart';
 import 'package:fjelia/api/coros_workout.dart';
-import 'package:fjelia/models/prepared_workout.dart';
+import 'package:fjelia_core/models/prepared_workout.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';

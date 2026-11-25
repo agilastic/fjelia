@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../l10n/l10n_ext.dart';
-import '../../models/training_windows.dart';
+import 'package:fjelia_core/models/training_windows.dart';
 import '../../providers/missed_workout_provider.dart'
     show missedWorkoutReminderProvider;
 import '../../providers/plan_schedule_provider.dart';

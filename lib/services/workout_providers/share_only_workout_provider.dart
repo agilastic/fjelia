@@ -1,5 +1,5 @@
 import '../../db/database.dart';
-import '../../models/prepared_workout.dart';
+import 'package:fjelia_core/models/prepared_workout.dart';
 import 'workout_provider.dart';
 
 /// A platform Fjelia cannot send to yet (Polar, Suunto, and any other that is

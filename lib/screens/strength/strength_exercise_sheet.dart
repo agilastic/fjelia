@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../l10n/app_localizations.dart';
-import '../../models/strength_muscles.dart';
+import 'package:fjelia_core/models/strength_muscles.dart';
 import '../../models/strength_workout.dart';
 import '../../providers/strength_provider.dart';
 import '../../theme/activity_colors.dart';

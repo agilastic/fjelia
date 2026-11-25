@@ -1,4 +1,4 @@
-import 'package:fjelia/models/waist_ratios.dart';
+import 'package:fjelia_core/models/waist_ratios.dart';
 import 'package:fjelia/services/ai_context_toon_builder.dart';
 import 'package:flutter_test/flutter_test.dart';
 

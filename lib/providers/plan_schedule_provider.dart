@@ -6,7 +6,7 @@ import 'dart:async';
 import '../db/database.dart';
 import '../services/absence_service.dart';
 import '../services/replan_triggers.dart';
-import '../services/strength/strength_templates.dart';
+import 'package:fjelia_core/services/strength/strength_templates.dart';
 import 'database_provider.dart';
 import 'day_data_provider.dart' show scheduledWorkoutsProvider;
 import 'missed_workout_provider.dart' show missedWorkoutReminderProvider;

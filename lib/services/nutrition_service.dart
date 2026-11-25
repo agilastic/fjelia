@@ -4,7 +4,7 @@ import 'dart:convert';
 
 import '../db/database.dart';
 import '../models/workout_nutrition.dart';
-import '../models/heart_rate.dart';
+import 'package:fjelia_core/models/heart_rate.dart';
 
 /// Recorded timestamps can include pauses omitted from the imported timer.
 int nutritionElapsedSeconds(ActivityRecord activity) {

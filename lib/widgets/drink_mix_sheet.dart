@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../l10n/formats.dart';
 import '../l10n/l10n_ext.dart';
-import '../models/drink_mix.dart';
+import 'package:fjelia_core/models/drink_mix.dart';
 import '../providers/nutrition_provider.dart';
 import 'app_widgets.dart';
 

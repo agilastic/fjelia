@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:fjelia/models/ecg.dart';
+import 'package:fjelia_core/models/ecg.dart';
 import 'package:fjelia/services/ecg_ble_service.dart';
 import 'package:fjelia/services/ecg_storage_service.dart';
 import 'package:flutter_test/flutter_test.dart';

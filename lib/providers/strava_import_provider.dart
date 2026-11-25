@@ -4,7 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../services/strava_archive_import.dart';
-import '../utils/log.dart';
+import 'package:fjelia_core/utils/log.dart';
 import 'activity_history_provider.dart';
 import 'database_provider.dart';
 import 'day_data_provider.dart';

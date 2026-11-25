@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../models/gym_workout.dart';
-import '../models/training_ble_profile.dart';
+import 'package:fjelia_core/models/gym_workout.dart';
+import 'package:fjelia_core/models/training_ble_profile.dart';
 import '../services/gym_workout_import_service.dart';
 import '../services/matrix_xid_client.dart';
 import '../services/training_ble.dart';

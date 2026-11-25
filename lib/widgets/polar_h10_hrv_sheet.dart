@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../models/hrv_training_episode.dart';
+import 'package:fjelia_core/models/hrv_training_episode.dart';
 import '../models/spot_hrv.dart';
 import '../db/database.dart';
 import '../providers/hrv_reminder_provider.dart';
