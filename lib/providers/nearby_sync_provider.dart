@@ -7,6 +7,7 @@ import 'package:fjelia_sync/fjelia_sync.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../services/bonjour_peer_locator.dart';
 import 'database_provider.dart';
 
 /// Settings → System → Computers: this phone pairs with Fjelia on a Mac or
@@ -65,6 +66,7 @@ class NearbySyncNotifier extends Notifier<Map<String, NearbySyncStatus>> {
     identity: await ref.read(syncIdentityProvider.future),
     name: await _deviceName(),
     secrets: const _SecureSecrets(),
+    locator: const BonjourPeerLocator(),
   );
 
   void _set(String id, NearbySyncStatus status) =>

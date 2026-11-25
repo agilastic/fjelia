@@ -78,22 +78,22 @@ dependencies:
   fjelia_core:
     git:
       url: https://github.com/agilastic/fjelia-core.git
-      ref: f03c497b0573160beef9ce54fa575aa04069fed4 # v0.5.1
+      ref: 002bd5e954065a4a752962239a091aec4253ab2f # v0.6.0
       path: packages/fjelia_core
   fjelia_data:
     git:
       url: https://github.com/agilastic/fjelia-core.git
-      ref: f03c497b0573160beef9ce54fa575aa04069fed4 # v0.5.1
+      ref: 002bd5e954065a4a752962239a091aec4253ab2f # v0.6.0
       path: packages/fjelia_data
   fjelia_sync:
     git:
       url: https://github.com/agilastic/fjelia-core.git
-      ref: f03c497b0573160beef9ce54fa575aa04069fed4 # v0.5.1
+      ref: 002bd5e954065a4a752962239a091aec4253ab2f # v0.6.0
       path: packages/fjelia_sync
   fjelia_service_api:
     git:
       url: https://github.com/agilastic/fjelia-core.git
-      ref: f03c497b0573160beef9ce54fa575aa04069fed4 # v0.5.1
+      ref: 002bd5e954065a4a752962239a091aec4253ab2f # v0.6.0
       path: packages/fjelia_service_api
   # Stub without Aktiia / Hilo. Private builds override this with the real
   # package, see pubspec_overrides.yaml (git-ignored) and the README.
@@ -108,6 +108,7 @@ dependencies:
   in_app_purchase_storekit: ^0.4.17
   flutter_onnxruntime: ^1.9.0
   mobile_scanner: ^7.5.0
+  bonsoir: ^7.1.6
 dev_dependencies:
   flutter_test:
     sdk: flutter
