@@ -48945,7 +48945,8 @@ class $WorkoutTemplatesTable extends WorkoutTemplates
   }
 }
 
-class WorkoutTemplate extends DataClass implements Insertable<WorkoutTemplate> {
+class WorkoutTemplate extends WorkoutTemplateBase
+    implements Insertable<WorkoutTemplate> {
   final String id;
   final String sport;
   final String sessionType;
@@ -48964,7 +48965,7 @@ class WorkoutTemplate extends DataClass implements Insertable<WorkoutTemplate> {
   final bool isPublic;
   final int usageCount;
   final DateTime createdAt;
-  const WorkoutTemplate({
+  WorkoutTemplate({
     required this.id,
     required this.sport,
     required this.sessionType,

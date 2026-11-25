@@ -4,7 +4,7 @@ import '../../api/garmin_client.dart';
 import '../../db/database.dart';
 import 'package:fjelia_core/models/prepared_workout.dart';
 import '../../models/strength_workout.dart';
-import '../strength/garmin_strength.dart';
+import 'package:fjelia_core/services/strength/garmin_strength.dart';
 import 'package:fjelia_core/utils/log.dart';
 import '../workout_destination.dart';
 import 'cleanup_queue.dart';

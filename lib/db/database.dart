@@ -1197,6 +1197,11 @@ class CoachReviews extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+/// Lets fjelia_core read a template row through [WorkoutTemplateView].
+abstract class WorkoutTemplateBase extends DataClass
+    implements WorkoutTemplateView {}
+
+@DataClassName('WorkoutTemplate', extending: WorkoutTemplateBase)
 class WorkoutTemplates extends Table {
   TextColumn get id => text()();
   TextColumn get sport => text()();

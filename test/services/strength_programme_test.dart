@@ -1,7 +1,8 @@
 import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
-import 'package:fjelia/services/strength/strength_templates.dart';
+import 'package:fjelia/models/strength_workout.dart';
+import 'package:fjelia_core/services/strength/strength_templates.dart';
 import 'package:fjelia/services/training_plan_service.dart';
 import 'package:fjelia/services/workout_providers/workout_providers.dart';
 import 'package:fjelia/services/workout_template_library.dart';

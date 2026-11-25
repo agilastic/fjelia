@@ -22,7 +22,7 @@ import 'energie_calculator.dart';
 import 'package:fjelia_core/services/fit_activity_data.dart';
 import 'heat_acclimation_service.dart';
 import 'package:fjelia_core/services/score_calculator.dart';
-import 'strength/garmin_strength.dart';
+import 'package:fjelia_core/services/strength/garmin_strength.dart';
 import 'strength/strength_repository.dart';
 
 /// Top level, so the isolate's closure holds only the bytes.

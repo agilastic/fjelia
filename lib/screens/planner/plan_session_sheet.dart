@@ -39,7 +39,7 @@ import '../../models/workout_nutrition.dart';
 import '../ai_coach/ai_coach_screen.dart';
 import '../strength/strength_sections.dart';
 import '../../services/strength/strength_repository.dart';
-import '../../services/strength/strength_templates.dart';
+import 'package:fjelia_core/services/strength/strength_templates.dart';
 import 'plan_week_agenda.dart' show sportLabel;
 import 'workout_delivery_setup.dart';
 import '../../providers/media_provider.dart';

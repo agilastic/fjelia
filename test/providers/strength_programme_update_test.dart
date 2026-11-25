@@ -7,7 +7,7 @@ import 'package:fjelia/providers/auth_provider.dart';
 import 'package:fjelia/providers/database_provider.dart';
 import 'package:fjelia/providers/plan_schedule_provider.dart';
 import 'package:fjelia/providers/user_profile_provider.dart';
-import 'package:fjelia/services/strength/strength_templates.dart';
+import 'package:fjelia_core/services/strength/strength_templates.dart';
 import 'package:fjelia/services/training_plan_service.dart';
 import 'package:fjelia/services/workout_providers/workout_providers.dart';
 import 'package:fjelia/services/workout_template_library.dart';

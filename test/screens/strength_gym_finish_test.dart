@@ -5,7 +5,7 @@ import 'package:fjelia/models/strength_workout.dart';
 import 'package:fjelia/providers/database_provider.dart';
 import 'package:fjelia/screens/strength/strength_focus_screen.dart';
 import 'package:fjelia/services/strength/strength_repository.dart';
-import 'package:fjelia/services/strength/strength_templates.dart';
+import 'package:fjelia_core/services/strength/strength_templates.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

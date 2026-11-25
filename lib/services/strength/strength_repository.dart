@@ -6,7 +6,7 @@ import 'package:drift/drift.dart';
 
 import '../../db/database.dart';
 import '../../models/strength_workout.dart';
-import 'strength_templates.dart';
+import 'package:fjelia_core/services/strength/strength_templates.dart';
 
 /// Who a planned strength document belongs to. Never a date or a title.
 class StrengthPlanOwner {
