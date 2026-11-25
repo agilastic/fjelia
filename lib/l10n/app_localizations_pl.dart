@@ -978,6 +978,34 @@ class AppLocalizationsPl extends AppLocalizations {
   String get zoneChangeStart => 'Zmień datę początkową';
 
   @override
+  String get hrZoneNoticeTitle => 'Twoje strefy tętna się zmieniły';
+
+  @override
+  String hrZoneNoticeLine(String sport, String source, String changes) {
+    return '$sport ($source): $changes';
+  }
+
+  @override
+  String hrZoneNoticeFrom(String zone, String bpm) {
+    return '$zone od $bpm';
+  }
+
+  @override
+  String get hrZoneNoticeChannel => 'Strefy tętna';
+
+  @override
+  String get hrZoneNoticeSetting => 'Powiadom, gdy zmienią się moje strefy';
+
+  @override
+  String get hrZoneNoticeSettingHint =>
+      'Gdy zegarek zmieni twoje strefy tętna. Najwyżej raz dziennie.';
+
+  @override
+  String hrZonesNewSince(String sport, String date) {
+    return '$sport: nowe strefy tętna od $date';
+  }
+
+  @override
   String get doubleDayOk => 'Podwójny dzień OK';
 
   @override

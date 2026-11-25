@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'hr_zone_change_notice.dart' show HrZoneChange;
+
 /// What makes the coach speak up during the day (FjeliaPro).
 enum CoachDaySignal {
   /// Today's stress clearly above the athlete's usual level.
@@ -10,6 +12,9 @@ enum CoachDaySignal {
 
   /// Stress back near the usual level after a stress message today.
   stressEased,
+
+  /// The athlete's watch changed their heart-rate zones.
+  zones,
 }
 
 /// At most this many coach messages a day.
@@ -25,6 +30,7 @@ CoachDaySignal? dueCoachDaySignal({
   double? stress,
   double? stressUsual,
   double? energy,
+  bool zonesChanged = false,
 }) {
   if (sentToday.length >= coachDayMessageLimit) return null;
   if (now.hour < 9 || now.hour >= 20) return null;
@@ -49,6 +55,9 @@ CoachDaySignal? dueCoachDaySignal({
       stress < stressUsual + 5) {
     return CoachDaySignal.stressEased;
   }
+  if (zonesChanged && !sentToday.contains(CoachDaySignal.zones)) {
+    return CoachDaySignal.zones;
+  }
   return null;
 }
 
@@ -59,11 +68,13 @@ String coachDayQuestion(
   double? stress,
   double? stressUsual,
   double? energy,
+  HrZoneChange? zones,
 }) => jsonEncode({
   'signal': switch (signal) {
     CoachDaySignal.stress => 'stress',
     CoachDaySignal.energy => 'energy',
     CoachDaySignal.stressEased => 'stress_eased',
+    CoachDaySignal.zones => 'zones',
   },
   'time':
       '${now.hour.toString().padLeft(2, '0')}:'
@@ -71,6 +82,12 @@ String coachDayQuestion(
   'stress_today': ?stress?.round(),
   'stress_usual': ?stressUsual?.round(),
   'energy_now': ?energy?.round(),
+  if (zones != null && signal == CoachDaySignal.zones) ...{
+    'zones_sport': zones.sport,
+    'zones_before': ?zones.before?.join('/'),
+    'zones_now': zones.after.join('/'),
+    'zones_source': 'watch',
+  },
 });
 
 /// The coach's answer as it may be shown: one short plain paragraph, or

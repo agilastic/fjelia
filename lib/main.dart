@@ -39,6 +39,8 @@ import 'services/missed_workout_reminder_service.dart';
 import 'services/plan_proposal_notifications.dart' show PlanProposalPayload;
 import 'services/short_session_reminder.dart' show ShortSessionPayload;
 import 'services/weekly_review_scheduler.dart' show WeeklyReviewPayload;
+import 'services/hr_zone_change_notice.dart' show HrZonesPayload;
+import 'screens/settings/hr_zones_tab.dart' show HrZonesTab;
 import 'providers/week_start_provider.dart';
 import 'services/pro_analysis.dart' show ProAnalysisRef;
 import 'providers/pro_analysis_provider.dart'
@@ -242,6 +244,8 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
           ? _onShortSessionAction(r)
           : WeeklyReviewPayload.decode(r.payload) != null
           ? _onWeeklyReviewAction(r)
+          : HrZonesPayload.decode(r.payload) != null
+          ? _onHrZonesAction()
           : _onNutritionAction(r);
       await Future.wait([
         ref
@@ -454,6 +458,13 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
       context,
       ProAnalysisSheet(analysis: analysis, title: context.l10n.proWeekReview),
     );
+  }
+
+  /// The watch changed the heart-rate zones: show them.
+  Future<void> _onHrZonesAction() async {
+    final context = await _homeContext();
+    if (context == null || !context.mounted) return;
+    await showAppSheet(context, const HrZonesTab());
   }
 
   /// Ill with no end known yet: the absence goes on to tomorrow.

@@ -26,6 +26,7 @@ import '../../providers/hrv_reminder_provider.dart'
     show localNotificationGatewayProvider;
 import '../../providers/pro_analysis_provider.dart';
 import '../../services/weekly_review_scheduler.dart' show WeeklyReviewSettings;
+import '../../services/hr_zone_change_notice.dart';
 import '../../widgets/app_widgets.dart';
 import '../../widgets/settings_widgets.dart' show SettingsGroup, SettingsIcon;
 import '../../widgets/nutrition_widgets.dart';
@@ -541,6 +542,11 @@ class TrainingTab extends ConsumerWidget {
               color: Colors.orange,
             ),
             const MissedWorkoutSettingsCard(),
+            SectionLabel(
+              context.l10n.hrZoneNoticeChannel,
+              color: Colors.orange,
+            ),
+            const _HrZoneNoticeSwitch(),
             SectionLabel(context.l10n.heatAcclimation, color: Colors.orange),
             SectionCard(
               color: duo(0xFF282828, 0xFFEEF1F5),
@@ -945,4 +951,51 @@ Future<void> _deleteAll(BuildContext context, WidgetRef ref) async {
       ? tr.allPlannedWorkoutsDeletedRemoved(removed)
       : tr.allPlannedWorkoutsDeleted;
   messenger.showSnackBar(SnackBar(content: Text(message)));
+}
+
+/// Settings → Training → reminders: the notice when the watch changes the
+/// heart-rate zones (on by default).
+class _HrZoneNoticeSwitch extends StatefulWidget {
+  const _HrZoneNoticeSwitch();
+  @override
+  State<_HrZoneNoticeSwitch> createState() => _HrZoneNoticeSwitchState();
+}
+
+class _HrZoneNoticeSwitchState extends State<_HrZoneNoticeSwitch> {
+  bool? _on;
+
+  @override
+  void initState() {
+    super.initState();
+    HrZoneChangeNotice.enabled().then((v) {
+      if (mounted) setState(() => _on = v);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) => SectionCard(
+    color: duo(0xFF282828, 0xFFEEF1F5),
+    child: SwitchListTile(
+      key: const ValueKey('hr-zone-notice'),
+      contentPadding: EdgeInsets.zero,
+      secondary: const Icon(Icons.favorite_border, color: Colors.orange),
+      title: Text(
+        context.l10n.hrZoneNoticeSetting,
+        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+      ),
+      subtitle: Text(
+        context.l10n.hrZoneNoticeSettingHint,
+        style: TextStyle(fontSize: 12, color: fjInk70),
+      ),
+      activeThumbColor: Colors.orange,
+      activeTrackColor: Colors.orangeAccent.withValues(alpha: .4),
+      value: _on ?? true,
+      onChanged: _on == null
+          ? null
+          : (v) async {
+              setState(() => _on = v);
+              await HrZoneChangeNotice.setEnabled(v);
+            },
+    ),
+  );
 }

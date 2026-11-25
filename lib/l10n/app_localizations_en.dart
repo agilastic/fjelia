@@ -961,6 +961,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get zoneChangeStart => 'Change start date';
 
   @override
+  String get hrZoneNoticeTitle => 'Your heart-rate zones changed';
+
+  @override
+  String hrZoneNoticeLine(String sport, String source, String changes) {
+    return '$sport ($source): $changes';
+  }
+
+  @override
+  String hrZoneNoticeFrom(String zone, String bpm) {
+    return '$zone from $bpm';
+  }
+
+  @override
+  String get hrZoneNoticeChannel => 'Heart-rate zones';
+
+  @override
+  String get hrZoneNoticeSetting => 'Tell me when my zones change';
+
+  @override
+  String get hrZoneNoticeSettingHint =>
+      'When your watch changes your heart-rate zones. At most once a day.';
+
+  @override
+  String hrZonesNewSince(String sport, String date) {
+    return '$sport: new heart-rate zones since $date';
+  }
+
+  @override
   String get doubleDayOk => 'Double day ok';
 
   @override

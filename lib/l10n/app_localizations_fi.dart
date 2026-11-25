@@ -970,6 +970,34 @@ class AppLocalizationsFi extends AppLocalizations {
   String get zoneChangeStart => 'Muuta alkamispäivää';
 
   @override
+  String get hrZoneNoticeTitle => 'Sykealueesi ovat muuttuneet';
+
+  @override
+  String hrZoneNoticeLine(String sport, String source, String changes) {
+    return '$sport ($source): $changes';
+  }
+
+  @override
+  String hrZoneNoticeFrom(String zone, String bpm) {
+    return '$zone alkaen $bpm';
+  }
+
+  @override
+  String get hrZoneNoticeChannel => 'Sykealueet';
+
+  @override
+  String get hrZoneNoticeSetting => 'Ilmoita, kun alueeni muuttuvat';
+
+  @override
+  String get hrZoneNoticeSettingHint =>
+      'Kun kellosi muuttaa sykealueitasi. Enintään kerran päivässä.';
+
+  @override
+  String hrZonesNewSince(String sport, String date) {
+    return '$sport: uudet sykealueet $date alkaen';
+  }
+
+  @override
   String get doubleDayOk => 'Tuplapäivä ok';
 
   @override

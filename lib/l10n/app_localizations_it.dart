@@ -970,6 +970,34 @@ class AppLocalizationsIt extends AppLocalizations {
   String get zoneChangeStart => 'Cambia data di inizio';
 
   @override
+  String get hrZoneNoticeTitle => 'Le tue zone FC sono cambiate';
+
+  @override
+  String hrZoneNoticeLine(String sport, String source, String changes) {
+    return '$sport ($source): $changes';
+  }
+
+  @override
+  String hrZoneNoticeFrom(String zone, String bpm) {
+    return '$zone da $bpm';
+  }
+
+  @override
+  String get hrZoneNoticeChannel => 'Zone FC';
+
+  @override
+  String get hrZoneNoticeSetting => 'Avvisami quando le zone cambiano';
+
+  @override
+  String get hrZoneNoticeSettingHint =>
+      'Quando l’orologio cambia le tue zone FC. Al massimo una volta al giorno.';
+
+  @override
+  String hrZonesNewSince(String sport, String date) {
+    return '$sport: nuove zone FC dal $date';
+  }
+
+  @override
   String get doubleDayOk => 'Doppio allenamento ok';
 
   @override

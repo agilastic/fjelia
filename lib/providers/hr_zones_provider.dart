@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../db/database.dart';
+import '../services/hr_zone_change_notice.dart';
 import '../services/hr_zone_history.dart';
 import '../services/hr_zone_model.dart';
 import '../utils/log.dart';
@@ -234,14 +235,21 @@ class HrZonesNotifier extends StateNotifier<HrZonesState> {
   }
 
   /// Makes [floors] the zones of [sport] from [from] on (now when null).
+  /// With [notify], a change is kept for the zone notice and the coach (the
+  /// athlete did not make it).
   Future<void> record(
     String sport,
     List<int> floors, {
     required String method,
     String source = 'fjelia',
     DateTime? from,
+    bool notify = false,
   }) async {
     await loaded;
+    final before = state.book.at(sport, from ?? DateTime.now());
+    // The first measured zones after the estimate are no change to report.
+    final latest = state.book.latest('running')?.method;
+    final firstReal = latest == null || latest == ZoneMethod.estimate;
     final history = _history;
     if (history == null) {
       // Screen tests without a database: only what is shown changes.
@@ -263,6 +271,17 @@ class HrZonesNotifier extends StateNotifier<HrZonesState> {
       from: from,
     )) {
       log('[HrZones] $sport $floors ($method, from ${from ?? 'now'})');
+      if (notify && !firstReal) {
+        await HrZoneChangeNotice.add(
+          HrZoneChange(
+            sport: sport,
+            before: before,
+            after: floors,
+            method: method,
+            at: DateTime.now(),
+          ),
+        );
+      }
     }
     await _reload();
   }
@@ -375,7 +394,13 @@ class HrZonesNotifier extends StateNotifier<HrZonesState> {
       ('swimming', swimming),
     ]) {
       if (zones == null) continue;
-      await record(sport, zones, method: ZoneMethod.device, source: source);
+      await record(
+        sport,
+        zones,
+        method: ZoneMethod.device,
+        source: source,
+        notify: true,
+      );
     }
   }
 

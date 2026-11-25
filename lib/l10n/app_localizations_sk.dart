@@ -976,6 +976,34 @@ class AppLocalizationsSk extends AppLocalizations {
   String get zoneChangeStart => 'Zmeniť dátum začiatku';
 
   @override
+  String get hrZoneNoticeTitle => 'Tvoje zóny TF sa zmenili';
+
+  @override
+  String hrZoneNoticeLine(String sport, String source, String changes) {
+    return '$sport ($source): $changes';
+  }
+
+  @override
+  String hrZoneNoticeFrom(String zone, String bpm) {
+    return '$zone od $bpm';
+  }
+
+  @override
+  String get hrZoneNoticeChannel => 'Zóny TF';
+
+  @override
+  String get hrZoneNoticeSetting => 'Upozorniť, keď sa zmenia moje zóny';
+
+  @override
+  String get hrZoneNoticeSettingHint =>
+      'Keď hodinky zmenia tvoje zóny TF. Najviac raz denne.';
+
+  @override
+  String hrZonesNewSince(String sport, String date) {
+    return '$sport: nové zóny TF od $date';
+  }
+
+  @override
   String get doubleDayOk => 'Dvojitý deň ok';
 
   @override

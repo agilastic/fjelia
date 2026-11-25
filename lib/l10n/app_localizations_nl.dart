@@ -972,6 +972,34 @@ class AppLocalizationsNl extends AppLocalizations {
   String get zoneChangeStart => 'Startdatum wijzigen';
 
   @override
+  String get hrZoneNoticeTitle => 'Je hartslagzones zijn gewijzigd';
+
+  @override
+  String hrZoneNoticeLine(String sport, String source, String changes) {
+    return '$sport ($source): $changes';
+  }
+
+  @override
+  String hrZoneNoticeFrom(String zone, String bpm) {
+    return '$zone vanaf $bpm';
+  }
+
+  @override
+  String get hrZoneNoticeChannel => 'Hartslagzones';
+
+  @override
+  String get hrZoneNoticeSetting => 'Laat het weten als mijn zones veranderen';
+
+  @override
+  String get hrZoneNoticeSettingHint =>
+      'Als je horloge je hartslagzones wijzigt. Hooguit één keer per dag.';
+
+  @override
+  String hrZonesNewSince(String sport, String date) {
+    return '$sport: nieuwe hartslagzones sinds $date';
+  }
+
+  @override
   String get doubleDayOk => 'Dubbele dag oké';
 
   @override

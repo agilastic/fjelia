@@ -1782,6 +1782,48 @@ abstract class AppLocalizations {
   /// **'Change start date'**
   String get zoneChangeStart;
 
+  /// No description provided for @hrZoneNoticeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your heart-rate zones changed'**
+  String get hrZoneNoticeTitle;
+
+  /// No description provided for @hrZoneNoticeLine.
+  ///
+  /// In en, this message translates to:
+  /// **'{sport} ({source}): {changes}'**
+  String hrZoneNoticeLine(String sport, String source, String changes);
+
+  /// No description provided for @hrZoneNoticeFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'{zone} from {bpm}'**
+  String hrZoneNoticeFrom(String zone, String bpm);
+
+  /// No description provided for @hrZoneNoticeChannel.
+  ///
+  /// In en, this message translates to:
+  /// **'Heart-rate zones'**
+  String get hrZoneNoticeChannel;
+
+  /// No description provided for @hrZoneNoticeSetting.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell me when my zones change'**
+  String get hrZoneNoticeSetting;
+
+  /// No description provided for @hrZoneNoticeSettingHint.
+  ///
+  /// In en, this message translates to:
+  /// **'When your watch changes your heart-rate zones. At most once a day.'**
+  String get hrZoneNoticeSettingHint;
+
+  /// No description provided for @hrZonesNewSince.
+  ///
+  /// In en, this message translates to:
+  /// **'{sport}: new heart-rate zones since {date}'**
+  String hrZonesNewSince(String sport, String date);
+
   /// No description provided for @doubleDayOk.
   ///
   /// In en, this message translates to:

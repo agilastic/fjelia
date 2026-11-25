@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../db/database.dart';
+import '../services/hr_zone_change_notice.dart';
 import '../services/coach_day_message.dart';
 import '../services/coach_language.dart';
 import '../services/pro_analysis.dart' show proAnalysisPrompts;
@@ -79,12 +80,14 @@ class CoachDayMessageRunner {
           ? null
           : week.reduce((a, b) => a + b) / week.length;
       final stress = today?.stressLevel, energy = today?.computedEnergie;
+      final zoneChanges = await HrZoneChangeNotice.forCoach();
       final signal = dueCoachDaySignal(
         now: at,
         sentToday: sent,
         stress: stress,
         stressUsual: usual,
         energy: energy,
+        zonesChanged: zoneChanges.isNotEmpty,
       );
       if (signal == null) return null;
       final profile = await _ref.read(userProfileProvider.future);
@@ -95,7 +98,7 @@ class CoachDayMessageRunner {
           .read(aiCoachClientProvider)
           .sendProAnalysis(
             '${proAnalysisPrompts.dayMessage}\n${coachLanguageDirective()}',
-            'QUESTION: ${coachDayQuestion(signal, now: at, stress: stress, stressUsual: usual, energy: energy)}',
+            'QUESTION: ${coachDayQuestion(signal, now: at, stress: stress, stressUsual: usual, energy: energy, zones: zoneChanges.firstOrNull)}',
             context,
             deep: false,
           )
@@ -114,6 +117,7 @@ class CoachDayMessageRunner {
         now: at,
       );
       _ref.invalidate(coachMessagesProvider);
+      if (signal == CoachDaySignal.zones) await HrZoneChangeNotice.coachDone();
       log('[CoachDay] ${signal.name} message written');
       return text;
     } catch (e) {

@@ -13,6 +13,7 @@ import '../../providers/ftp_provider.dart';
 import '../../widgets/app_widgets.dart';
 import '../../services/activity_power_estimator.dart';
 import 'load_visuals.dart';
+import 'training_monitor_card.dart' show LoadZonesSheet;
 import 'lt2_test_sheet.dart';
 import 'threshold_overview_section.dart';
 import '../../providers/threshold_overview_provider.dart' show ThresholdKind;
@@ -235,6 +236,17 @@ class FtpDetailSheet extends ConsumerWidget {
                 '${ftp.source == 'manual' ? context.l10n.manual : context.l10n.estimated} · ${loadDate(ftp.updatedAt)}',
                 style: loadCaption,
               ),
+            ),
+          // The power zones from this FTP (no longer listed on LOAD itself).
+          if (ftp != null)
+            ListTile(
+              key: const ValueKey('ftp-power-zones'),
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(Icons.bolt, color: loadBlue),
+              title: Text(context.l10n.cyclingPowerZones2),
+              trailing: const Icon(Icons.chevron_right, size: 18),
+              onTap: () =>
+                  showLoadSheet(context, const LoadZonesSheet(), height: .7),
             ),
           const SizedBox(height: 16),
           Text(context.l10n.ftpHistory, style: loadLabel),

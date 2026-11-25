@@ -299,6 +299,9 @@ class FlutterLocalNotificationGateway implements LocalNotificationGateway {
     if (n.feature == NotificationFeature.weeklyReview) {
       return _scheduleWeeklyReview(n);
     }
+    if (n.feature == NotificationFeature.hrZones) {
+      return _scheduleHrZones(n);
+    }
     final nutrition = n.feature == NotificationFeature.nutrition;
     await _plugin.zonedSchedule(
       id: n.id,
@@ -422,6 +425,32 @@ class FlutterLocalNotificationGateway implements LocalNotificationGateway {
         iOS: const fln.DarwinNotificationDetails(
           categoryIdentifier: 'plan_proposal',
           threadIdentifier: 'plan_proposal',
+          presentBadge: false,
+        ),
+      ),
+    );
+  }
+
+  /// The athlete's watch changed their heart-rate zones: a tap opens them.
+  Future<void> _scheduleHrZones(ScheduledNotification n) async {
+    await _plugin.zonedSchedule(
+      id: n.id,
+      title: n.title,
+      body: n.body,
+      payload: n.payload,
+      scheduledDate: tz.TZDateTime.from(n.at.toUtc(), tz.UTC),
+      androidScheduleMode: fln.AndroidScheduleMode.inexactAllowWhileIdle,
+      notificationDetails: fln.NotificationDetails(
+        android: fln.AndroidNotificationDetails(
+          'hr_zones',
+          n.actionLabels['channel'] ?? 'Heart-rate zones',
+          importance: fln.Importance.defaultImportance,
+          priority: fln.Priority.defaultPriority,
+          category: fln.AndroidNotificationCategory.status,
+          styleInformation: const fln.BigTextStyleInformation(''),
+        ),
+        iOS: const fln.DarwinNotificationDetails(
+          threadIdentifier: 'hr_zones',
           presentBadge: false,
         ),
       ),

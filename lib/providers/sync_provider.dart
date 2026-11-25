@@ -547,6 +547,7 @@ class SyncNotifier extends StateNotifier<SyncState> {
     try {
       await _ref.read(hrZoneSyncProvider)();
       await _ref.read(zoneRecalculationProvider)();
+      await _ref.read(hrZoneNoticeProvider)();
     } catch (e) {
       log('[Sync] HR zone sync error: $e');
     }

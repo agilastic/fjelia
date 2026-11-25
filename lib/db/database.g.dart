@@ -16787,9 +16787,10 @@ class HrZoneDefinition extends DataClass
   /// of Z1–Z4), in [unit].
   final String floorsJson;
 
-  /// How the boundaries came about: `settings` (the athlete's zones in
-  /// Fjelia, threshold- or device-based) or `initial` (the zones in force
-  /// when the history began, applied to every earlier workout).
+  /// How the boundaries came about (ZoneMethod): `manual`, `device`,
+  /// `lt1`, `lt2`, `lt2_bike`, `derived` (from the running zones),
+  /// `estimate` (Karvonen), `resolved`, `initial` (in force when the history
+  /// began, applied to every earlier workout) or the older `settings`.
   final String method;
   final String unit;
   final String source;

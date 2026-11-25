@@ -18,6 +18,7 @@ enum NotificationFeature {
   planProposal,
   shortSession,
   weeklyReview,
+  hrZones,
 }
 
 class NutritionNotificationPayload {

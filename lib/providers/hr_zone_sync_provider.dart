@@ -8,6 +8,8 @@ import '../db/database.dart';
 import '../models/device_hr_zones.dart';
 import '../services/device_threshold_store.dart';
 import '../services/device_zone_store.dart';
+import '../services/hr_zone_change_notice.dart';
+import '../l10n/l10n_ext.dart';
 import '../services/threshold_choice_store.dart';
 import '../services/source_priority_service.dart';
 import '../services/zone_recalculation_service.dart';
@@ -15,6 +17,7 @@ import '../utils/log.dart';
 import 'auth_provider.dart';
 import 'database_provider.dart';
 import 'hr_zones_provider.dart';
+import 'hrv_reminder_provider.dart' show localNotificationGatewayProvider;
 import 'planner_providers.dart';
 
 /// Applies the athlete's device HR zones (display, load, planner targets).
@@ -150,4 +153,14 @@ final zoneRecalculationProvider = Provider<Future<void> Function()>(
       '${since.toIso8601String().substring(0, 10)}',
     );
   },
+);
+
+/// After a sync: the notice of zones the watch changed, when one is due
+/// (HrZoneChangeNotice).
+final hrZoneNoticeProvider = Provider<Future<bool> Function()>(
+  (ref) =>
+      () => HrZoneChangeNotice(
+        ref.read(databaseProvider),
+        ref.read(localNotificationGatewayProvider),
+      ).run(tr),
 );

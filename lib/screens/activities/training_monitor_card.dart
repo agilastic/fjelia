@@ -16,10 +16,13 @@ import '../../widgets/app_widgets.dart';
 import 'threshold_sheets.dart';
 import 'load_metric_sheet.dart';
 import 'load_visuals.dart';
-import 'hr_zone_trends_sheet.dart';
 
 import '../../providers/hr_zones_provider.dart';
 import '../../widgets/hr_zone_labels.dart';
+import '../../services/hr_zone_history.dart' show zoneSports, ZoneMethod;
+
+import 'package:intl/intl.dart' show DateFormat;
+
 import '../settings/hr_zones_tab.dart';
 
 class TrainingMonitorCard extends ConsumerWidget {
@@ -273,8 +276,7 @@ class TrainingMonitorCard extends ConsumerWidget {
                 ),
             ],
           ),
-          const SizedBox(height: 12),
-          const _MyZones(),
+          const _ZoneHint(),
           Divider(height: 24, color: fjInk10),
         ],
       ),
@@ -291,66 +293,52 @@ List<Color> get _zoneColors => [
   loadRed,
 ];
 
-/// The zones in use now: heart rate per sport in bpm with where they came
-/// from and since when (the zone history, as everywhere), and the cycling
-/// power zones from the FTP.
-class _MyZones extends ConsumerWidget {
-  const _MyZones();
+/// One line under the thresholds, only when the heart-rate zones need a
+/// look: a question or a hint is open, or the zones of a sport changed in
+/// the last 14 days. The zones themselves are in Settings → HF-Zonen.
+class _ZoneHint extends ConsumerWidget {
+  const _ZoneHint();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = context.l10n;
-    final current = ref.watch(hrZonesProvider);
-    final ftp = ref.watch(ftpProvider).valueOrNull;
-    Widget hr(String sport, String name, IconData icon) {
-      final floors = current.forSport(sport).bounds;
-      return _ZoneRow(
-        icon: icon,
-        label: '$name · ${l.myZonesHeartRate}',
-        values: ['<${floors[1]}', for (var z = 1; z < 5; z++) '${floors[z]}'],
-        colors: hrZoneColors,
-        caption: ['bpm', ?zoneOriginText(l, current, sport)].join(' · '),
-        onTap: () => showAppSheet(context, const HrZonesTab()),
-      );
+    final state = ref.watch(hrZonesProvider);
+    String? text;
+    if (state.conflicts.isNotEmpty ||
+        zoneSports.any((sport) => state.check(sport) != null)) {
+      text = l.hrZoneConflictCheck;
+    } else {
+      final now = DateTime.now();
+      final recent = [
+        for (final sport in zoneSports)
+          if (state.book.latest(sport) case final d?
+              when d.method != ZoneMethod.derived &&
+                  d.method != ZoneMethod.estimate &&
+                  d.effectiveFrom.millisecondsSinceEpoch > 0 &&
+                  now.difference(d.effectiveFrom).inDays < 14)
+            d,
+      ]..sort((a, b) => b.effectiveFrom.compareTo(a.effectiveFrom));
+      if (recent.isNotEmpty) {
+        final d = recent.first;
+        text = l.hrZonesNewSince(
+          zoneSportName(l, d.sport),
+          DateFormat.MMMd().format(d.effectiveFrom),
+        );
+      }
     }
-
-    return Material(
-      color: loadInset,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: fjInk10),
-      ),
-      clipBehavior: Clip.antiAlias,
+    if (text == null) return const SizedBox(height: 12);
+    return InkWell(
+      key: const ValueKey('zone-hint'),
+      onTap: () => showAppSheet(context, const HrZonesTab()),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 6),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        padding: const EdgeInsets.fromLTRB(4, 12, 4, 0),
+        child: Row(
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10, 4, 10, 2),
-              child: Text(
-                l.myZones.toUpperCase(),
-                style: loadLabel.copyWith(fontSize: 10),
-              ),
+            Icon(Icons.favorite_border, size: 14, color: muted),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(text, style: TextStyle(fontSize: 12, color: fjInk70)),
             ),
-            hr('running', l.running, Icons.directions_run),
-            hr('cycling', l.cycling, Icons.directions_bike),
-            hr('swimming', l.swimming, Icons.pool),
-            _ZoneRow(
-              icon: Icons.bolt,
-              label: '${l.cycling} · ${l.myZonesPower}',
-              values: ftp == null
-                  ? const []
-                  : [
-                      '<${ftp.powerZoneFloors.first}',
-                      for (final f in ftp.powerZoneFloors) '$f',
-                    ],
-              colors: _zoneColors,
-              caption: ftp == null
-                  ? l.setFtpToCalculatePower
-                  : 'W · ${l.ftpFtpwattsWWattsperkgW(ftp.ftpWatts, valueText(ftp.wattsPerKg, 2))}',
-              onTap: () =>
-                  showLoadSheet(context, const LoadZonesSheet(), height: .7),
-            ),
+            Icon(Icons.chevron_right, size: 16, color: muted),
           ],
         ),
       ),
@@ -358,97 +346,6 @@ class _MyZones extends ConsumerWidget {
   }
 }
 
-/// One zone set: a chip per zone with its lower limit (Z1 with its upper).
-class _ZoneRow extends StatelessWidget {
-  const _ZoneRow({
-    required this.icon,
-    required this.label,
-    required this.values,
-    required this.colors,
-    required this.caption,
-    required this.onTap,
-  });
-  final IconData icon;
-  final String label, caption;
-  final List<String> values;
-  final List<Color> colors;
-  final VoidCallback onTap;
-  @override
-  Widget build(BuildContext context) => InkWell(
-    onTap: onTap,
-    child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      child: Row(
-        children: [
-          Icon(icon, size: 14, color: muted),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color: fjInk,
-                  ),
-                ),
-                const SizedBox(height: 5),
-                if (values.isNotEmpty)
-                  Row(
-                    children: [
-                      for (var i = 0; i < values.length; i++)
-                        Expanded(
-                          child: Container(
-                            margin: const EdgeInsets.only(right: 3),
-                            padding: const EdgeInsets.symmetric(vertical: 4),
-                            decoration: BoxDecoration(
-                              color: colors[i].withValues(alpha: .15),
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(
-                                color: colors[i].withValues(alpha: .4),
-                              ),
-                            ),
-                            child: Column(
-                              children: [
-                                Text(
-                                  'Z${i + 1}',
-                                  style: TextStyle(
-                                    fontSize: 8,
-                                    color: colors[i],
-                                  ),
-                                ),
-                                FittedBox(
-                                  fit: BoxFit.scaleDown,
-                                  child: Text(
-                                    values[i],
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.w600,
-                                      color: fjInk,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                const SizedBox(height: 4),
-                Text(caption, style: loadCaption.copyWith(fontSize: 9)),
-              ],
-            ),
-          ),
-          Icon(Icons.chevron_right, size: 16, color: muted),
-        ],
-      ),
-    ),
-  );
-}
-
-/// The cycling power zones from the FTP in use.
 class LoadZonesSheet extends ConsumerWidget {
   const LoadZonesSheet({super.key});
   @override
