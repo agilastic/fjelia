@@ -14,7 +14,7 @@ import 'package:fjelia_core/services/bio_age_service.dart';
 import 'hrv/hrv_ai_context_builder.dart';
 import 'hrv/hrv_training_service.dart';
 import 'package:fjelia_core/services/ai_data_status.dart';
-import 'ai_metric_analysis.dart';
+import 'package:fjelia_core/services/ai_metric_analysis.dart';
 import 'package:fjelia_core/services/form_forecast.dart';
 import 'package:fjelia_core/services/day_order.dart';
 import 'hr_zone_history.dart';

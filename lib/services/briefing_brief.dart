@@ -1,216 +1,19 @@
+import 'package:fjelia_core/services/briefing_brief.dart';
+
 import '../l10n/app_localizations.dart';
 import '../l10n/plan_text.dart' show absenceKindLabel;
 import '../theme/activity_colors.dart';
 
-/// What the daily briefing is about, decided by the app and not by a model:
-/// the readiness colour, the few findings that matter (worst first) and what
-/// was done and is planned. A small on-device model only turns this into two
-/// short sentences; if its answer is unusable the app writes them itself.
-///
-/// Line form: `[Brief:Readiness:yellow,Findings:energyLow|sleepShort,Good:none,
-/// Done:running/88,Today:none,Tomorrow:cycling_road/36|strength/35,TrainingHrv:up]`
-class BriefingBrief {
-  const BriefingBrief({
-    required this.readiness,
-    this.findings = const [],
-    this.good = const [],
-    this.done = const [],
-    this.today = const [],
-    this.tomorrow = const [],
-    this.trainingHrv,
-    this.outlook,
-    this.restDay = false,
-    this.restTomorrow = false,
-    this.away,
-    this.awayTomorrow,
-    this.backFrom,
-    this.window,
-    this.why,
-    this.session,
-    this.goal,
-    this.yesterday,
-    this.proposal,
-    this.order = const [],
-    this.orderWhy,
-  });
+export 'package:fjelia_core/services/briefing_brief.dart';
 
-  /// green, yellow or red.
-  final String readiness;
-
-  /// Worst first, at most three.
-  final List<String> findings;
-  final List<String> good, done, today, tomorrow;
-
-  /// `up` or `down`: the chest-strap reading before and after a workout.
-  final String? trainingHrv;
-
-  /// What the load forecast says happens next (see [FormForecast.outlook]).
-  final String? outlook;
-
-  /// Today is a planned rest day: the plan covers it and schedules nothing.
-  final bool restDay;
-
-  /// Tomorrow is a planned rest day.
-  final bool restTomorrow;
-
-  /// An absence the athlete entered for today or tomorrow: illness, injury,
-  /// vacation or offseason. The plan holds nothing on those days.
-  final String? away, awayTomorrow;
-
-  /// Back within the last seven days from an illness or injury: the plan
-  /// keeps the first week easy and short.
-  final String? backFrom;
-
-  /// Today's training times from the settings, e.g. `17:00-20:00` or
-  /// `06:00-07:30+17:00-20:00`.
-  final String? window;
-
-  /// The figure behind the day against the athlete's own average, e.g.
-  /// `sleep HRV 39 ms against your 7-day average of 47 ms`: the briefing's
-  /// one number, so it says why and not only what.
-  final String? why;
-
-  /// Today's planned session by name and phase, e.g. `Lower Body Power —
-  /// Build (strength, build phase)`: what the day's work is for.
-  final String? session;
-
-  /// The next race goal and how far away it is, e.g. `trail100 (A) in 12
-  /// weeks`.
-  final String? goal;
-
-  /// What was done yesterday, e.g. `trail running 120 min`.
-  final String? yesterday;
-
-  /// The readiness proposal still waiting for the athlete's answer today:
-  /// `shorter` (sessions shorter and easier), `rest` (a session dropped) or
-  /// `replan` (the plan should be rebuilt). The briefing must say the same.
-  final String? proposal;
-
-  /// Two or more open sessions today in the order to do them, each with the
-  /// training window it goes in: `strength/45@06:00-07:30`, or `strength/45`
-  /// without training times (see [dayOrder]).
-  final List<String> order;
-
-  /// `priority` (key endurance first, strength after it), `fit` (the
-  /// windows' lengths decide the order) or `together` (one window for both).
-  final String? orderWhy;
-
-  /// Free text in the line format: no separators, no brackets.
-  static String _text(String v) => v
-      .replaceAll(RegExp(r'[,\[\]|]'), ' ')
-      .replaceAll(RegExp(r'\s+'), ' ')
-      .trim();
-
-  static String _list(List<String> v) => v.isEmpty ? 'none' : v.join('|');
-
-  String toLine() =>
-      '[Brief:Readiness:$readiness,Findings:${_list(findings)},'
-      'Good:${_list(good)},Done:${_list(done)},Today:${_list(today)},'
-      'Tomorrow:${_list(tomorrow)},TrainingHrv:${trainingHrv ?? 'none'},'
-      'Outlook:${outlook ?? 'none'}${restDay ? ',Rest:planned' : ''}'
-      '${restTomorrow ? ',RestTomorrow:planned' : ''}'
-      '${away == null ? '' : ',Away:$away'}'
-      '${awayTomorrow == null ? '' : ',AwayTomorrow:$awayTomorrow'}'
-      '${backFrom == null ? '' : ',Back:$backFrom'}'
-      '${window == null ? '' : ',Window:$window'}'
-      '${why == null ? '' : ',Why:${_text(why!)}'}'
-      '${session == null ? '' : ',Session:${_text(session!)}'}'
-      '${goal == null ? '' : ',Goal:${_text(goal!)}'}'
-      '${yesterday == null ? '' : ',Yesterday:${_text(yesterday!)}'}'
-      '${proposal == null ? '' : ',Proposal:$proposal'}'
-      '${order.isEmpty ? '' : ',Order:${order.join('|')}'}'
-      '${orderWhy == null ? '' : ',OrderWhy:$orderWhy'}]';
-
-  static BriefingBrief? parse(String toon) {
-    final m = RegExp(r'\[Brief:([^\]]*)\]').firstMatch(toon);
-    if (m == null) return null;
-    final f = <String, String>{};
-    for (final part in m[1]!.split(',')) {
-      final i = part.indexOf(':');
-      if (i > 0) f[part.substring(0, i)] = part.substring(i + 1);
-    }
-    List<String> list(String? v) =>
-        v == null || v == 'none' ? const [] : v.split('|');
-    final readiness = f['Readiness'];
-    if (readiness == null) return null;
-    final hrv = f['TrainingHrv'];
-    final out = f['Outlook'];
-    return BriefingBrief(
-      readiness: readiness,
-      findings: list(f['Findings']),
-      good: list(f['Good']),
-      done: list(f['Done']),
-      today: list(f['Today']),
-      tomorrow: list(f['Tomorrow']),
-      trainingHrv: hrv == null || hrv == 'none' ? null : hrv,
-      outlook: out == null || out == 'none' ? null : out,
-      restDay: f['Rest'] == 'planned',
-      restTomorrow: f['RestTomorrow'] == 'planned',
-      away: f['Away'],
-      awayTomorrow: f['AwayTomorrow'],
-      backFrom: f['Back'],
-      window: f['Window'],
-      why: f['Why'],
-      session: f['Session'],
-      goal: f['Goal'],
-      yesterday: f['Yesterday'],
-      proposal: f['Proposal'],
-      order: list(f['Order']),
-      orderWhy: f['OrderWhy'],
-    );
-  }
-
-  /// One `sport/minutes@HH:MM-HH:MM` of [order]: sport, minutes and the
-  /// window's start and end in minutes of the day, when it has one.
-  static ({String sport, String minutes, int? start, int? end}) _orderItem(
-    String item,
-  ) {
-    final at = item.split('@');
-    final p = at.first.split('/');
-    int? minute(String hm) {
-      final t = hm.split(':');
-      if (t.length != 2) return null;
-      final h = int.tryParse(t[0]), m = int.tryParse(t[1]);
-      return h == null || m == null ? null : h * 60 + m;
-    }
-
-    final window = at.length == 2 ? at[1].split('-') : const <String>[];
-    return (
-      sport: p.first,
-      minutes: p.length > 1 ? p[1] : '',
-      start: window.length == 2 ? minute(window[0]) : null,
-      end: window.length == 2 ? minute(window[1]) : null,
-    );
-  }
-
-  /// The part of the day a window starts in, for a model: clock times would
-  /// read as figures the briefing must not list.
-  static String _partOfDay(int start) => start < 11 * 60
-      ? 'morning'
-      : start < 14 * 60
-      ? 'midday'
-      : start < 17 * 60
-      ? 'afternoon'
-      : 'evening';
-
-  static String _sportName(AppLocalizations l, String sport) =>
-      switch (activityKind(sport)) {
-        ActivityKind.running => l.running,
-        ActivityKind.cycling => l.cycling,
-        ActivityKind.swimming => l.swimming,
-        ActivityKind.strength => l.strength,
-        ActivityKind.rowing => l.rowing,
-        ActivityKind.hiking => l.hiking,
-        ActivityKind.walking => l.walking,
-        ActivityKind.yoga => l.yoga,
-        ActivityKind.other => l.workout,
-      };
-
+/// The briefing in the app language.
+extension BriefingBriefText on BriefingBrief {
   /// The order of today's sessions as a sentence in the app language, with
   /// the training windows' times.
   String? orderText(AppLocalizations l) {
     if (order.length < 2) return null;
-    final first = _orderItem(order[0]), second = _orderItem(order[1]);
+    final first = BriefingBrief.orderItem(order[0]),
+        second = BriefingBrief.orderItem(order[1]);
     String name(({String sport, String minutes, int? start, int? end}) i) =>
         '${_sportName(l, i.sport)} ${i.minutes} min';
     String hm(int m) =>
@@ -224,153 +27,6 @@ class BriefingBrief {
     return a == null || b == null
         ? l.briefOrderTwoNoTimes(name(first), name(second))
         : l.briefOrderTwo(name(first), a, name(second), b);
-  }
-
-  /// The load forecast's outlook in English, for a model.
-  static String outlookEnglish(String id) {
-    if (id.startsWith('restFixes:')) {
-      return 'about ${id.substring(10)} easy days bring form back to the optimal range';
-    }
-    return switch (id) {
-      'needsLongRest' => 'form needs more than a few easy days to recover',
-      'planKeepsTired' => 'the plan keeps form low for the next days',
-      _ => id,
-    };
-  }
-
-  /// The outlook as a sentence in the app language.
-  static String? outlookText(AppLocalizations l, String? id) {
-    if (id == null) return null;
-    if (id.startsWith('restFixes:'))
-      return l.briefOutlookRest(id.substring(10));
-    return switch (id) {
-      'needsLongRest' => l.briefOutlookLongRest,
-      'planKeepsTired' => l.briefOutlookPlanTired,
-      _ => null,
-    };
-  }
-
-  /// An absence in English words, for a model; [neutral]: plain words after
-  /// Apple's safety filter blocked a briefing.
-  static String awayEnglish(String kind, {bool neutral = false}) =>
-      switch (kind) {
-        'illness' => neutral ? 'unwell' : 'ill',
-        'injury' => neutral ? 'hurt' : 'injured',
-        'vacation' => 'on holiday',
-        _ => 'in the off-season',
-      };
-
-  /// A finding in English words, for a model.
-  static String englishFinding(String id) => _english[id] ?? id;
-
-  /// Body signals in everyday words, for the retry after Apple's safety
-  /// filter blocked a briefing: the same finding, no clinical wording.
-  static const _plain = {
-    'rhrUp': 'resting pulse higher than usual',
-    'rhrDown': 'resting pulse lower than usual',
-    'respHigh': 'breathing faster than usual at night',
-    'spo2Low': 'oxygen level lower than usual',
-    'skinTempOff': 'skin temperature different from usual',
-  };
-
-  static const _english = {
-    'hrvLow': 'low sleep HRV',
-    'hrvHigh': 'high sleep HRV',
-    'rhrUp': 'resting heart rate raised',
-    'rhrDown': 'resting heart rate low',
-    'sleepShort': 'too little sleep',
-    'sleepGood': 'sleep need met',
-    'energyLow': 'very low energy',
-    'energyHigh': 'good energy',
-    'stressHigh': 'high stress',
-    'respHigh': 'breathing rate raised',
-    'spo2Low': 'low blood oxygen',
-    'skinTempOff': 'unusual skin temperature',
-    'formTired': 'accumulated training fatigue',
-    'formVeryTired': 'very high training fatigue',
-    'formFresh': 'fresh and rested',
-  };
-
-  /// The compact text the model gets. Words, not figures: the person sees
-  /// every figure on screen already. [neutral]: the same findings in plain
-  /// words, for the retry after Apple's safety filter blocked the briefing.
-  String toModelText({bool neutral = false}) {
-    String names(List<String> v) => v
-        .map((e) => (neutral ? _plain[e] : null) ?? _english[e] ?? e)
-        .join('; ');
-    String awayText(String kind) => awayEnglish(kind, neutral: neutral);
-    String plan(List<String> v) => v
-        .map((e) {
-          final p = e.split('/');
-          return p.length == 2 ? '${p[0].replaceAll('_', ' ')} ${p[1]} min' : e;
-        })
-        .join(' and ');
-    final parts = <String>[
-      'Readiness ${readiness.toUpperCase()}',
-      'Advice: ${switch (proposal) {
-        'shorter' => "the app proposes to make today's sessions shorter and easier and waits for the athlete's answer; recommend taking the proposal",
-        'rest' => "the app proposes to drop today's session and waits for the athlete's answer; recommend taking the proposal",
-        'replan' => "the app proposes to rebuild the training plan and waits for the athlete's answer; recommend looking at the proposal",
-        _ => switch (readiness) {
-          'red' => 'prioritise recovery and avoid intense training',
-          'yellow' => 'keep the scheduled plan without extra intensity',
-          _ => 'train as planned',
-        },
-      }}',
-      if (findings.isNotEmpty)
-        'Main findings, most important first: ${names(findings)}',
-      if (good.isNotEmpty) 'Good: ${names(good)}',
-      if (done.isNotEmpty) 'Done today: ${plan(done)}',
-      if (away != null)
-        'Today the athlete is ${awayText(away!)} (entered by the athlete), so the plan holds no training today'
-      else if (today.isNotEmpty)
-        'Still planned today: ${today.length} scheduled ${today.length == 1 ? 'session' : 'sessions'}, ${plan(today)}'
-      else if (restDay)
-        'Today is a planned rest day in the training plan'
-      else
-        'No further scheduled sessions today',
-      if (backFrom != null)
-        'First week back after being ${awayText(backFrom!)}: the plan keeps it easy and short',
-      if (window != null && away == null)
-        'The athlete can train today ${window!.replaceAll('+', ' and ').replaceAll('-', ' to ')}',
-      if (awayTomorrow != null)
-        'Tomorrow the athlete is ${awayText(awayTomorrow!)}, so no training is planned tomorrow'
-      else if (tomorrow.isNotEmpty)
-        'Planned tomorrow: ${plan(tomorrow)}'
-      else if (restTomorrow)
-        'Tomorrow is a planned rest day in the training plan',
-      if (trainingHrv != null)
-        'HRV before and after the workout ${trainingHrv == 'up' ? 'rose (favourable)' : 'fell (less favourable)'}',
-      if (outlook != null) 'Outlook: ${outlookEnglish(outlook!)}',
-      // What gives the briefing depth: the reason with its one figure, what
-      // today's session is for, the goal it serves and the day before.
-      if (why != null) 'Why: $why',
-      if (session != null && away == null) "Today's session: $session",
-      if (goal != null) 'Next goal: $goal',
-      if (yesterday != null) 'Yesterday: $yesterday',
-      if (order.length >= 2 && away == null) _orderEnglish(),
-    ];
-    return '${parts.join('. ')}.';
-  }
-
-  /// Which session first and when, for a model: parts of the day instead of
-  /// clock times, and why.
-  String _orderEnglish() {
-    final items = order.map(_orderItem).toList();
-    String one(({String sport, String minutes, int? start, int? end}) i) =>
-        '${i.sport.replaceAll('_', ' ')} ${i.minutes} min'
-        '${i.start == null ? '' : ' in the ${_partOfDay(i.start!)} training window'}';
-    final why = switch (orderWhy) {
-      'fit' => 'only this way does each session fit the time its window has',
-      'together' => 'both fit one window: the endurance session first, strength right after it',
-      _ =>
-        items.any((i) => i.sport == 'strength')
-            ? 'the endurance session comes first while fresh, strength after it with hours in between'
-            : 'the most important session comes first while fresh',
-    };
-    return 'Order today, tell the athlete which session to do first and when: '
-        'first ${one(items[0])}, then '
-        '${items.skip(1).map(one).join(', then ')}; why: $why';
   }
 
   String? plannedTodaySentence(AppLocalizations l) => away != null
@@ -393,7 +49,7 @@ class BriefingBrief {
   String scheduleInstruction(AppLocalizations l) {
     final sentence = plannedTodaySentence(l);
     if (sentence != null && away != null) {
-      return 'Today the athlete is ${awayEnglish(away!)}; the plan holds no training. '
+      return 'Today the athlete is ${BriefingBrief.awayEnglish(away!)}; the plan holds no training. '
           'Include this exact sentence as one of your sentences: "$sentence" '
           'Do not suggest a workout for today${away == 'illness' || away == 'injury' ? '; recovery comes first' : ''}. ';
     }
@@ -461,7 +117,7 @@ class BriefingBrief {
     final training = trainingHrv == null
         ? ''
         : ' ${trainingHrv == 'up' ? l.briefTrainingHrvUp : l.briefTrainingHrvDown}';
-    final outlookSentence = outlookText(l, outlook);
+    final outlookSentence = _outlookText(l, outlook);
     final schedule = plannedTodaySentence(l);
     final back = backFrom == null
         ? null
@@ -475,124 +131,26 @@ class BriefingBrief {
   }
 }
 
-/// Whether [text] tells the athlete there is no training today. Such a reply
-/// cannot simply be completed with the planned sessions; it contradicts them.
-/// Phrases of all app languages are checked: a small model may mix languages.
-bool briefingDeniesTraining(String text) {
-  final lower = text.toLowerCase();
-  const phrases = [
-    // en
-    'no training', 'no workout', 'rest day', 'day off', 'rest today',
-    // de
-    'kein training', 'keine trainings', 'keine einheit', 'ruhetag',
-    'pausentag', 'trainingsfrei', 'erholungstag', 'zur erholung',
-    'ruhephase',
-    // fr
-    "pas d'entraînement", 'aucun entraînement', 'jour de repos',
-    'journée de repos',
-    // it
-    'nessun allenamento', 'niente allenamento', 'giorno di riposo',
-    'giornata di riposo',
-    // es
-    'sin entrenamiento', 'ningún entrenamiento', 'no entrenes',
-    'día de descanso',
-    // ca
-    'cap entrenament', 'sense entrenament', 'dia de descans',
-    // nb, da
-    'ingen trening', 'ingen træning', 'hviledag', 'fridag',
-    // sk
-    'žiadny tréning', 'bez tréningu', 'deň voľna', 'deň odpočinku',
-    'oddychový deň',
-    // fi
-    'ei treeniä', 'ei harjoitusta', 'lepopäivä', 'vapaapäivä',
-    // nl
-    'geen training', 'rustdag', 'vrije dag',
-    // pl
-    'bez treningu', 'żadnego treningu', 'dzień odpoczynku', 'dzień wolny',
-    'dzień regeneracji',
-    // pt
-    'sem treino', 'nenhum treino', 'dia de descanso', 'dia de folga',
-  ];
-  return phrases.any(lower.contains);
-}
+String _sportName(AppLocalizations l, String sport) =>
+    switch (activityKind(sport)) {
+      ActivityKind.running => l.running,
+      ActivityKind.cycling => l.cycling,
+      ActivityKind.swimming => l.swimming,
+      ActivityKind.strength => l.strength,
+      ActivityKind.rowing => l.rowing,
+      ActivityKind.hiking => l.hiking,
+      ActivityKind.walking => l.walking,
+      ActivityKind.yoga => l.yoga,
+      ActivityKind.other => l.workout,
+    };
 
-/// Whether a model's briefing can be shown: short, in the app language, and
-/// not a copy of the facts it was given.
-bool briefingIsUsable(String text, {required String languageCode}) {
-  final t = text.trim();
-  if (t.isEmpty) return false;
-  final words = t.split(RegExp(r'\s+'));
-  // Cloud briefings may run to 260 words; beyond that it is a runaway reply.
-  if (words.length > 280) return false;
-  final lower = t.toLowerCase();
-  const echoes = [
-    '(state ',
-    'readiness',
-    'verdict',
-    'average of',
-    'key facts',
-    'analysis',
-    'sleephrv',
-    'chest strap',
-    'brief:',
-    'findings',
-    'never compare',
-  ];
-  if (echoes.any(lower.contains)) return false;
-  // Many figures means it is listing values the person already sees.
-  if (RegExp(r'\d+[.,]?\d*').allMatches(t).length > 6) return false;
-  if (looksWrongLanguage(t, languageCode)) return false;
-  if (briefingRepeats(t)) return false;
-  return true;
-}
-
-/// Whether a briefing says the same thing twice: a sentence whose content
-/// words all reappear in another one ("you have two sessions planned today"
-/// and later "there are 2 sessions planned for today"). Numbers count as
-/// words, written out or not.
-bool briefingRepeats(String text) {
-  const numberWords = {
-    'one': '1', 'two': '2', 'three': '3', 'four': '4', //
-    'eins': '1', 'eine': '1', 'einen': '1', 'zwei': '2', 'drei': '3',
-    'vier': '4',
+/// The outlook as a sentence in the app language.
+String? _outlookText(AppLocalizations l, String? id) {
+  if (id == null) return null;
+  if (id.startsWith('restFixes:')) return l.briefOutlookRest(id.substring(10));
+  return switch (id) {
+    'needsLongRest' => l.briefOutlookLongRest,
+    'planKeepsTired' => l.briefOutlookPlanTired,
+    _ => null,
   };
-  Set<String> words(String sentence) => {
-    for (final m in RegExp(
-      r'[\p{L}\d]+',
-      unicode: true,
-    ).allMatches(sentence.toLowerCase()))
-      if (m[0]!.length > 3 ||
-          RegExp(r'^\d+$').hasMatch(m[0]!) ||
-          numberWords.containsKey(m[0]))
-        numberWords[m[0]] ?? m[0]!,
-  };
-  final sentences = [
-    for (final s in text.split(RegExp(r'(?<=[.!?…])\s+')))
-      if (words(s).length >= 3) words(s),
-  ];
-  for (var i = 0; i < sentences.length; i++) {
-    for (var j = 0; j < sentences.length; j++) {
-      if (i == j) continue;
-      final a = sentences[i], b = sentences[j];
-      if (a.length > b.length || (a.length == b.length && i > j)) continue;
-      if (a.where(b.contains).length / a.length >= .8) return true;
-    }
-  }
-  return false;
-}
-
-/// Whether [text] reads as English although the app is not English: a small
-/// model tends to slip back into the language of the data it was given.
-bool looksWrongLanguage(String text, String languageCode) {
-  if (languageCode == 'en') return false;
-  const english = {
-    'the', 'and', 'is', 'your', 'today', 'was', 'are', 'with', 'from', 'you', //
-    'which', 'this', 'that', 'should', 'athlete', 'suggests', 'of', 'to',
-  };
-  final hits = text
-      .split(RegExp(r'\s+'))
-      .map((w) => w.toLowerCase().replaceAll(RegExp(r'[^a-z]'), ''))
-      .where(english.contains)
-      .length;
-  return hits >= 3;
 }

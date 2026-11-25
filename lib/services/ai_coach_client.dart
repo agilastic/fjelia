@@ -19,7 +19,7 @@ import 'briefing_brief.dart';
 import 'briefing_consent.dart' show ProBriefing;
 import 'briefing_text.dart';
 import 'coach_language.dart';
-import 'coach_memory_context.dart';
+import 'package:fjelia_core/services/coach_memory_context.dart';
 import 'coach_tasks.dart';
 import 'fjelia_pro.dart';
 import 'local_model_service.dart';

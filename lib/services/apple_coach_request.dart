@@ -6,7 +6,7 @@ import 'coach_language.dart';
 import 'package:fjelia_core/models/chat_message.dart';
 import 'package:fjelia_core/services/ai_coach_rules.dart';
 import 'briefing_brief.dart';
-import 'apple_context_facts.dart';
+import 'package:fjelia_core/services/apple_context_facts.dart';
 import 'coach_tasks.dart';
 
 /// Closes every Apple prompt, after the user's question.

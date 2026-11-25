@@ -4,6 +4,7 @@ import 'package:drift/drift.dart';
 
 import 'package:fjelia_core/models/heart_rate.dart';
 import 'package:fjelia_core/models/health_views.dart';
+import 'package:fjelia_core/models/memory_card.dart';
 import 'package:fjelia_core/models/plan_views.dart';
 import '../theme/activity_colors.dart' show activityKind;
 import '../services/source_priority_service.dart'
@@ -1460,8 +1461,12 @@ class ProReports extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+/// Lets fjelia_core read a memory card through [MemoryCardView].
+abstract class CoachMemoryBase extends DataClass implements MemoryCardView {}
+
 /// The athlete's own notes for the AI coach (FjeliaPro): whatever they want
 /// it to know, sent along as additional information.
+@DataClassName('CoachMemory', extending: CoachMemoryBase)
 class CoachMemories extends Table {
   TextColumn get id => text()();
   TextColumn get title => text()();

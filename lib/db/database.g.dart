@@ -51346,13 +51346,13 @@ class $CoachMemoriesTable extends CoachMemories
   }
 }
 
-class CoachMemory extends DataClass implements Insertable<CoachMemory> {
+class CoachMemory extends CoachMemoryBase implements Insertable<CoachMemory> {
   final String id;
   final String title;
   final String body;
   final DateTime createdAt;
   final DateTime updatedAt;
-  const CoachMemory({
+  CoachMemory({
     required this.id,
     required this.title,
     required this.body,
