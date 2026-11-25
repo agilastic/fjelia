@@ -6,6 +6,7 @@ import 'package:fjelia_core/models/heart_rate.dart';
 import 'package:fjelia_core/models/health_views.dart';
 import 'package:fjelia_core/models/memory_card.dart';
 import 'package:fjelia_core/models/plan_views.dart';
+import 'package:fjelia_core/models/record_views.dart';
 import '../theme/activity_colors.dart' show activityKind;
 import '../services/source_priority_service.dart'
     show SourceGroup, defaultSourcePriorities, shouldOverwrite;
@@ -32,6 +33,10 @@ class HeartRateSamples extends Table {
   Set<Column> get primaryKey => {source, measuredAt};
 }
 
+/// Lets fjelia_core read this row through [BpMeasurementView].
+abstract class BpMeasurementBase extends DataClass implements BpMeasurementView {}
+
+@DataClassName('BpMeasurement', extending: BpMeasurementBase)
 class BpMeasurements extends Table {
   IntColumn get id => integer().autoIncrement()();
   DateTimeColumn get measuredAt => dateTime()();
@@ -129,6 +134,10 @@ class WellnessRecords extends Table {
   RealColumn get vo2maxCycling => real().nullable()();
 }
 
+/// Lets fjelia_core read this row through [BodyCompositionView].
+abstract class RenphoRecordBase extends DataClass implements BodyCompositionView {}
+
+@DataClassName('RenphoRecord', extending: RenphoRecordBase)
 class RenphoRecords extends Table {
   IntColumn get id => integer().autoIncrement()();
   DateTimeColumn get measuredAt => dateTime().unique()();
@@ -197,6 +206,10 @@ class ActivityRecords extends Table {
   TextColumn get athleteNote => text().nullable()();
 }
 
+/// Lets fjelia_core read this row through [DayScoreView].
+abstract class DayScoreRecordBase extends DataClass implements DayScoreView {}
+
+@DataClassName('DayScoreRecord', extending: DayScoreRecordBase)
 class DayScoreRecords extends Table {
   IntColumn get id => integer().autoIncrement()();
   DateTimeColumn get date => dateTime().unique()();
@@ -507,6 +520,10 @@ class HrvNativeCleanups extends Table {
   Set<Column> get primaryKey => {nativeNotificationId};
 }
 
+/// Lets fjelia_core read this row through [GripStrengthView].
+abstract class GripStrengthRecordBase extends DataClass implements GripStrengthView {}
+
+@DataClassName('GripStrengthRecord', extending: GripStrengthRecordBase)
 class GripStrengthRecords extends Table {
   IntColumn get id => integer().autoIncrement()();
   DateTimeColumn get measuredAt => dateTime()();
@@ -540,10 +557,14 @@ class ActivitySports extends Table {
   Set<Column> get primaryKey => {activityId};
 }
 
+/// Lets fjelia_core read this row through [AbsenceView].
+abstract class AbsenceBase extends DataClass implements AbsenceView {}
+
 /// A time the athlete cannot train as planned: `illness`, `injury`,
 /// `vacation` or `offseason`, from [startDay] to [endDay] (both included).
 /// Its days get no sessions; after an illness or injury the first week back
 /// is easy.
+@DataClassName('Absence', extending: AbsenceBase)
 class Absences extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get kind => text()();
@@ -654,6 +675,10 @@ class OcrMeasurements extends Table {
   TextColumn get rawValuesJson => text().nullable()();
 }
 
+/// Lets fjelia_core read this row through [ScheduledWorkoutView].
+abstract class ScheduledWorkoutRecordBase extends DataClass implements ScheduledWorkoutView {}
+
+@DataClassName('ScheduledWorkoutRecord', extending: ScheduledWorkoutRecordBase)
 class ScheduledWorkoutRecords extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get workoutId => text()();
@@ -703,6 +728,10 @@ class HeatWorkoutContexts extends Table {
   TextColumn get rawJson => text().nullable()();
 }
 
+/// Lets fjelia_core read this row through [HeatStateView].
+abstract class HeatDailyStateRecordBase extends DataClass implements HeatStateView {}
+
+@DataClassName('HeatDailyStateRecord', extending: HeatDailyStateRecordBase)
 class HeatDailyStateRecords extends Table {
   IntColumn get id => integer().autoIncrement()();
   DateTimeColumn get date => dateTime().unique()();
@@ -715,6 +744,10 @@ class HeatDailyStateRecords extends Table {
   DateTimeColumn get updatedAt => dateTime()();
 }
 
+/// Lets fjelia_core read this row through [ThresholdTestView].
+abstract class ThresholdRecordBase extends DataClass implements ThresholdTestView {}
+
+@DataClassName('ThresholdRecord', extending: ThresholdRecordBase)
 class ThresholdRecords extends Table {
   IntColumn get id => integer().autoIncrement()();
   DateTimeColumn get date => dateTime()();
@@ -1006,6 +1039,10 @@ class SessionXp extends Table {
   Set<Column> get primaryKey => {sessionId};
 }
 
+/// Lets fjelia_core read this row through [ReadinessRecordView].
+abstract class DailyReadinessRecordBase extends DataClass implements ReadinessRecordView {}
+
+@DataClassName('DailyReadinessRecord', extending: DailyReadinessRecordBase)
 class DailyReadinessRecords extends Table {
   TextColumn get id => text()();
   TextColumn get athleteId => text()();
