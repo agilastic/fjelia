@@ -31,6 +31,7 @@ import 'package:fjelia_core/utils/log.dart';
 import 'package:fjelia_core/utils/week.dart';
 
 import 'dfa_alpha1_service.dart';
+import 'hr_zone_history.dart' show zoneSport;
 import 'race_goal_service.dart';
 
 import 'package:fjelia_core/services/ramp_test.dart';
@@ -1202,7 +1203,10 @@ class TrainingPlanService {
           if (!await provider.hasDelivered(s)) s,
       ];
       try {
-        final adopted = await provider.adoptExisting(open);
+        final adopted = await provider.adoptExisting(
+          open,
+          prepare: _prepareWorkout,
+        );
         open = [
           for (final s in open)
             if (!adopted.contains(s.id)) s,
@@ -1218,6 +1222,46 @@ class TrainingPlanService {
         }
       }
     }
+  }
+
+  /// New heart-rate zones of [sports] (zone families: running, cycling,
+  /// swimming): the coming workouts of those sports that are already on a
+  /// platform go up again, with targets in the new zones. Platforms that
+  /// cannot be sent to are left alone; a platform sends only what changed.
+  /// Returns how many workouts were brought up to date.
+  Future<int> redeliverForZones(Set<String> sports) async {
+    if (sports.isEmpty) return 0;
+    final today = _day(_now());
+    final sessions =
+        await (_db.select(_db.trainingSessions)
+              ..where(
+                (t) =>
+                    t.athleteId.equals('self') &
+                    t.sessionDate.isBiggerOrEqualValue(today) &
+                    t.status.isIn(const ['planned', 'adapted']),
+              )
+              ..orderBy([(t) => OrderingTerm.asc(t.sessionDate)]))
+            .get();
+    final senders = [
+      for (final p in await _providers.connected())
+        if (await p.mode() == DeliveryMode.push) p,
+    ];
+    var sent = 0;
+    for (final s in sessions) {
+      if (isStrengthSport(s.sport) || !sports.contains(zoneSport(s.sport))) {
+        continue;
+      }
+      for (final p in senders) {
+        if (!await p.hasDelivered(s)) continue;
+        try {
+          await deliver(s.id, p);
+          sent++;
+        } catch (e) {
+          log('[Planner] ${p.label} zone update failed for ${s.id}: $e');
+        }
+      }
+    }
+    return sent;
   }
 
   /// Puts the session's workout on [provider]'s platform, replacing what was
@@ -1332,9 +1376,7 @@ class TrainingPlanService {
           .toList()
           .asMap()
           .entries
-          .map(
-            (e) => {...e.value, 'stepOrder': e.key + 1}..remove('fixedTarget'),
-          )
+          .map((e) => _withoutPlanKeys({...e.value, 'stepOrder': e.key + 1}))
           .toList(),
     );
 
@@ -1376,6 +1418,20 @@ class TrainingPlanService {
       thresholdHr: thresholdHr,
       indoor: s.indoor,
     );
+  }
+
+  /// [step] without the keys only the planner reads, in repeats too.
+  static Map<String, dynamic> _withoutPlanKeys(Map<String, dynamic> step) {
+    final out = Map<String, dynamic>.of(step)
+      ..remove('fixedTarget')
+      ..remove('easyRun');
+    final inner = out['workoutSteps'];
+    if (inner is List) {
+      out['workoutSteps'] = [
+        for (final s in inner.cast<Map<String, dynamic>>()) _withoutPlanKeys(s),
+      ];
+    }
+    return out;
   }
 
   /// A strength session as exercise steps, from its saved or verified

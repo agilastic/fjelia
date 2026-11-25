@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:drift/drift.dart';
@@ -164,3 +165,47 @@ final hrZoneNoticeProvider = Provider<Future<bool> Function()>(
         ref.read(localNotificationGatewayProvider),
       ).run(tr),
 );
+
+/// Sends the coming workouts already on a watch again when the zones in force
+/// change, so the watch shows targets in the new zones.
+final zoneRedeliveryProvider = Provider<ZoneRedelivery>((ref) {
+  final redelivery = ZoneRedelivery(
+    (sports) => ref.read(trainingPlanServiceProvider).redeliverForZones(sports),
+  );
+  ref.onDispose(redelivery.cancel);
+  return redelivery;
+});
+
+/// Collects zone changes that come in a row (one sync sets several sports)
+/// and sends once they have settled, one round after the other.
+class ZoneRedelivery {
+  ZoneRedelivery(this._send, {this.delay = const Duration(seconds: 5)});
+
+  final Future<int> Function(Set<String> sports) _send;
+  final Duration delay;
+  final _pending = <String>{};
+  Timer? _timer;
+  Future<void> _running = Future.value();
+
+  void zonesChanged(Set<String> sports) {
+    if (sports.isEmpty) return;
+    _pending.addAll(sports);
+    _timer?.cancel();
+    _timer = Timer(delay, _flush);
+  }
+
+  void _flush() {
+    final sports = {..._pending};
+    _pending.clear();
+    _running = _running.then((_) async {
+      try {
+        final sent = await _send(sports);
+        log('[HrZones] new zones for $sports: $sent workouts brought up to date');
+      } catch (e) {
+        log('[HrZones] workouts not sent again: $e');
+      }
+    });
+  }
+
+  void cancel() => _timer?.cancel();
+}

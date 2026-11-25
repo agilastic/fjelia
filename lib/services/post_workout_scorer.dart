@@ -13,6 +13,7 @@ import '../providers/training_load_provider.dart';
 import 'package:fjelia_core/utils/log.dart';
 
 import 'athlete_thresholds_service.dart';
+import 'hr_zone_history.dart';
 
 import 'package:fjelia_core/services/control/execution.dart';
 import 'package:fjelia_core/services/control/stimulus.dart';
@@ -311,8 +312,8 @@ class PostWorkoutScorer {
   }
 
   /// Seconds in each of six zones: from the activity's own zone split, else
-  /// from its heart-rate samples against the athlete's zones for [sport].
-  /// All zero when neither is known.
+  /// from its heart-rate samples against the athlete's zones for [sport] on
+  /// the workout's day (the zone history). All zero when neither is known.
   Future<List<double>> zoneSeconds(
     ActivityRecord activity,
     String sport,
@@ -323,10 +324,15 @@ class PostWorkoutScorer {
       activity.durationSeconds.toDouble(),
     );
     if (split == null && activity.metricsJson != null) {
-      final thresholds = await _thresholds.get();
-      floors = thresholds == null
-          ? null
-          : _thresholds.hrZoneFloorsFor(thresholds, sport);
+      floors = (await HrZoneHistory(
+        _db,
+      ).book()).forActivity(sport, activity.startDate);
+      if (floors == null) {
+        final thresholds = await _thresholds.get();
+        floors = thresholds == null
+            ? null
+            : _thresholds.hrZoneFloorsFor(thresholds, sport);
+      }
     }
     return ExecutionScoring.zoneSeconds(activity, floors);
   }

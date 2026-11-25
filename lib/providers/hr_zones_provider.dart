@@ -101,6 +101,14 @@ class HrZonesState {
     return null;
   }
 
+  /// The sports whose zones in force today differ from [before]'s.
+  Set<String> changedFrom(HrZonesState before) => {
+    for (final sport in zoneSports)
+      if (forSport(sport).bounds.join(',') !=
+          before.forSport(sport).bounds.join(','))
+        sport,
+  };
+
   /// The zones an activity is measured with: those of its day.
   List<int> forActivity(String type, DateTime start) =>
       book.forActivity(type, start) ??

@@ -25,6 +25,8 @@ import 'theme/fjelia_style.dart';
 import 'providers/day_data_provider.dart';
 import 'providers/health_connect_provider.dart';
 import 'providers/hilo_sync_provider.dart';
+import 'providers/hr_zone_sync_provider.dart' show zoneRedeliveryProvider;
+import 'providers/hr_zones_provider.dart';
 import 'providers/hrv_reminder_provider.dart';
 import 'providers/hrv_training_provider.dart';
 import 'providers/missed_workout_provider.dart';
@@ -181,6 +183,7 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
       _listenForHealthAccessLost();
       _listenForHealthWorkouts();
       _listenForPlanChanges();
+      _listenForZoneChanges();
       _listenForPro();
       _listenForActivityFiles();
       _listenForPolarPush();
@@ -490,6 +493,18 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
       if (next.hasValue) reconcile();
     });
   }
+
+  /// New heart-rate zones in force (set here or from the watch): the coming
+  /// workouts already on a watch go up again with targets in the new zones.
+  /// Only changes after the stored zones are loaded count.
+  void _listenForZoneChanges() => unawaited(() async {
+    await ref.read(hrZonesProvider.notifier).loaded;
+    if (!mounted) return;
+    ref.listenManual(hrZonesProvider, (prev, next) {
+      if (prev == null) return;
+      ref.read(zoneRedeliveryProvider).zonesChanged(next.changedFrom(prev));
+    });
+  }());
 
   /// FIT, GPX or TCX files opened in Fjelia from the share sheet or Files.
   void _listenForActivityFiles() {
