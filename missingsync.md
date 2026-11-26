@@ -37,9 +37,10 @@ Sync now, Unpair), with a sync whenever the app comes to the foreground.
       when each last synced.
 - [ ] Keep the identity in the keychain once the app is signed with a team;
       Windows and Linux credential stores (today a file in the app folder).
-- [ ] Ask for ECG waveforms on demand: the protocol is there (`GET
-      /v1/wanted`, `POST /v1/extra`, `SyncServer(wanted:)`); the desktop
-      ECG view to ask from is not built yet.
+- [x] Ask for ECG waveforms on demand: Health › ECG Recordings opens a
+      recording; "Get Waveform from Phone" asks for it (`sync_wanted`,
+      `GET /v1/wanted`) and the phone sends it on its next sync. The sheet
+      shows ten-second strips, heart rate, HRV and signal quality.
 - [ ] Photos and videos: the list syncs, the files do not yet (on demand).
 - [x] One copy at a time: the database is locked while a copy has it; a
       second copy says "Fjelia Is Already Open" and quits (it cannot bring
