@@ -33,18 +33,17 @@ Sync now, Unpair), with a sync whenever the app comes to the foreground.
 
 ## Computer (fjelia-desktop)
 
-- [ ] A list of paired phones with Unpair (only Pair Phone… and Add Athlete…
-      exist).
+- [x] A list of paired phones with Unpair: File › Paired Devices…, with
+      when each last synced.
 - [ ] Keep the identity in the keychain once the app is signed with a team;
       Windows and Linux credential stores (today a file in the app folder).
 - [ ] Ask for ECG waveforms on demand: the protocol is there (`GET
       /v1/wanted`, `POST /v1/extra`, `SyncServer(wanted:)`); the desktop
       ECG view to ask from is not built yet.
 - [ ] Photos and videos: the list syncs, the files do not yet (on demand).
-- [ ] A second copy of the app on the same computer shares the identity and
-      the database, announces the same device id on another port, and a
-      phone may reach either. Allow one copy only (bring the running one to
-      the front).
+- [x] One copy at a time: the database is locked while a copy has it; a
+      second copy says "Fjelia Is Already Open" and quits (it cannot bring
+      the first to the front from the sandbox).
 
 ## Protocol
 
