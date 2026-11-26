@@ -10053,4 +10053,167 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get thresholdSourceLab => 'Labortest';
+
+  @override
+  String get gearTitle => 'Ausrüstung';
+
+  @override
+  String get gearEmpty =>
+      'Füge Schuhe und Räder hinzu, um zu sehen, wie weit sie gelaufen sind und wann du sie ersetzen solltest.';
+
+  @override
+  String get gearAdd => 'Ausrüstung hinzufügen';
+
+  @override
+  String get gearEdit => 'Ausrüstung bearbeiten';
+
+  @override
+  String get gearKindShoes => 'Schuhe';
+
+  @override
+  String get gearKindBike => 'Rad';
+
+  @override
+  String get gearKindOther => 'Sonstiges';
+
+  @override
+  String get gearName => 'Name';
+
+  @override
+  String get gearBrand => 'Marke';
+
+  @override
+  String get gearStartKm => 'Strecke vor Fjelia (km)';
+
+  @override
+  String get gearRetireAt => 'Ersetzen bei (km)';
+
+  @override
+  String get gearDefault =>
+      'Jeden Lauf oder jede Fahrt dafür zählen, wenn nichts anderes gewählt ist';
+
+  @override
+  String get gearRetire => 'Ausmustern';
+
+  @override
+  String get gearUseAgain => 'Wieder nutzen';
+
+  @override
+  String get gearRetired => 'Ausgemustert';
+
+  @override
+  String gearLeft(int km, int limit) {
+    return 'Noch $km km von $limit';
+  }
+
+  @override
+  String gearDue(int limit) {
+    return 'Zeit zum Ersetzen: über $limit km';
+  }
+
+  @override
+  String gearActivities(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Aktivitäten',
+      one: '1 Aktivität',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get gearNone => 'Keine';
+
+  @override
+  String get diaryTitle => 'Tagebuch';
+
+  @override
+  String get diaryEmpty =>
+      'Notizen zu Aktivitäten, Einheiten und wie sich ein Training angefühlt hat, erscheinen hier an einem Ort.';
+
+  @override
+  String get diarySearch => 'Notizen durchsuchen';
+
+  @override
+  String get diaryKindActivity => 'Aktivitätsnotiz';
+
+  @override
+  String get diaryKindSession => 'Einheitennotiz';
+
+  @override
+  String get diaryKindFeeling => 'Wie es sich anfühlte';
+
+  @override
+  String get diaryKindCoach => 'Notiz für den Coach';
+
+  @override
+  String get diaryKindAbsence => 'Auszeit';
+
+  @override
+  String get diaryKindEcg => 'EKG-Notiz';
+
+  @override
+  String diaryEffort(int n) {
+    return 'Anstrengung $n von 10';
+  }
+
+  @override
+  String get diaryNoResults => 'Keine Notiz enthält das.';
+
+  @override
+  String get labTitle => 'Labortests';
+
+  @override
+  String get labEmpty =>
+      'Gib einen Laktat-Stufentest ein, um deine aerobe und anaerobe Schwelle zu finden.';
+
+  @override
+  String get labEnter => 'Test eingeben';
+
+  @override
+  String get labBike => 'Rad';
+
+  @override
+  String get labRun => 'Lauf';
+
+  @override
+  String get labPower => 'Leistung (W)';
+
+  @override
+  String get labPace => 'Tempo (min:s pro km)';
+
+  @override
+  String get labHr => 'Herzfrequenz';
+
+  @override
+  String get labLactate => 'Laktat (mmol/l)';
+
+  @override
+  String get labAddStep => 'Stufe hinzufügen';
+
+  @override
+  String get labSave => 'Test speichern';
+
+  @override
+  String get labLt1 => 'Aerobe Schwelle (LT1)';
+
+  @override
+  String get labLt2 => 'Anaerobe Schwelle (LT2)';
+
+  @override
+  String get labUse => 'Als Schwellen verwenden';
+
+  @override
+  String get labUsed => 'In deinen Schwellen gespeichert.';
+
+  @override
+  String get labDelete => 'Test löschen';
+
+  @override
+  String get labTooFew => 'Mindestens drei Stufen sind nötig.';
+
+  @override
+  String get labExplain =>
+      'LT1 ist, wo das Laktat zuerst 0,5 mmol/l über den Ruhewert steigt; LT2, wo es steil ansteigt. Lockeres Training bleibt unter LT1.';
 }

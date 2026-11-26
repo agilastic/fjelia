@@ -10043,4 +10043,161 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get thresholdSourceLab => 'Prova de laboratori';
+
+  @override
+  String get gearTitle => 'Equipament';
+
+  @override
+  String get gearEmpty =>
+      'Afegeix les sabatilles i les bicis per veure quant han fet i quan cal canviar-les.';
+
+  @override
+  String get gearAdd => 'Afegeix equipament';
+
+  @override
+  String get gearEdit => 'Edita l\'equipament';
+
+  @override
+  String get gearKindShoes => 'Sabatilles';
+
+  @override
+  String get gearKindBike => 'Bici';
+
+  @override
+  String get gearKindOther => 'Altres';
+
+  @override
+  String get gearName => 'Nom';
+
+  @override
+  String get gearBrand => 'Marca';
+
+  @override
+  String get gearStartKm => 'Distància abans de Fjelia (km)';
+
+  @override
+  String get gearRetireAt => 'Canvia als (km)';
+
+  @override
+  String get gearDefault =>
+      'Compta-hi cada cursa o sortida si no se n\'ha triat un altre';
+
+  @override
+  String get gearRetire => 'Retira';
+
+  @override
+  String get gearUseAgain => 'Torna a fer servir';
+
+  @override
+  String get gearRetired => 'Retirat';
+
+  @override
+  String gearLeft(int km, int limit) {
+    return 'Queden $km km de $limit';
+  }
+
+  @override
+  String gearDue(int limit) {
+    return 'Cal canviar-lo: més de $limit km';
+  }
+
+  @override
+  String gearActivities(int count) {
+    return '$count activitats';
+  }
+
+  @override
+  String get gearNone => 'Cap';
+
+  @override
+  String get diaryTitle => 'Diari';
+
+  @override
+  String get diaryEmpty =>
+      'Les notes de les activitats, les sessions i com t\'has sentit apareixen aquí, en un sol lloc.';
+
+  @override
+  String get diarySearch => 'Cerca notes';
+
+  @override
+  String get diaryKindActivity => 'Nota d\'activitat';
+
+  @override
+  String get diaryKindSession => 'Nota de sessió';
+
+  @override
+  String get diaryKindFeeling => 'Com t\'has sentit';
+
+  @override
+  String get diaryKindCoach => 'Nota per a l\'entrenador';
+
+  @override
+  String get diaryKindAbsence => 'Temps fora';
+
+  @override
+  String get diaryKindEcg => 'Nota d\'ECG';
+
+  @override
+  String diaryEffort(int n) {
+    return 'Esforç $n de 10';
+  }
+
+  @override
+  String get diaryNoResults => 'Cap nota no ho conté.';
+
+  @override
+  String get labTitle => 'Proves de laboratori';
+
+  @override
+  String get labEmpty =>
+      'Introdueix una prova de lactat per esglaons per trobar els teus llindars aeròbic i anaeròbic.';
+
+  @override
+  String get labEnter => 'Introdueix una prova';
+
+  @override
+  String get labBike => 'Bici';
+
+  @override
+  String get labRun => 'Cursa';
+
+  @override
+  String get labPower => 'Potència (W)';
+
+  @override
+  String get labPace => 'Ritme (min:s per km)';
+
+  @override
+  String get labHr => 'Freqüència cardíaca';
+
+  @override
+  String get labLactate => 'Lactat (mmol/l)';
+
+  @override
+  String get labAddStep => 'Afegeix un esglaó';
+
+  @override
+  String get labSave => 'Desa la prova';
+
+  @override
+  String get labLt1 => 'Llindar aeròbic (LT1)';
+
+  @override
+  String get labLt2 => 'Llindar anaeròbic (LT2)';
+
+  @override
+  String get labUse => 'Fes servir com a llindars';
+
+  @override
+  String get labUsed => 'Desat als teus llindars.';
+
+  @override
+  String get labDelete => 'Suprimeix la prova';
+
+  @override
+  String get labTooFew => 'Calen almenys tres esglaons.';
+
+  @override
+  String get labExplain =>
+      'LT1 és on el lactat puja per primer cop 0,5 mmol/l sobre el repòs; LT2, on comença a pujar de pressa. L\'entrenament suau queda per sota de LT1.';
 }

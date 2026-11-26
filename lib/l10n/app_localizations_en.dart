@@ -9970,4 +9970,167 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get thresholdSourceLab => 'Lab test';
+
+  @override
+  String get gearTitle => 'Gear';
+
+  @override
+  String get gearEmpty =>
+      'Add your shoes and bikes to see how far each has gone and when to replace it.';
+
+  @override
+  String get gearAdd => 'Add gear';
+
+  @override
+  String get gearEdit => 'Edit gear';
+
+  @override
+  String get gearKindShoes => 'Shoes';
+
+  @override
+  String get gearKindBike => 'Bike';
+
+  @override
+  String get gearKindOther => 'Other';
+
+  @override
+  String get gearName => 'Name';
+
+  @override
+  String get gearBrand => 'Brand';
+
+  @override
+  String get gearStartKm => 'Distance before Fjelia (km)';
+
+  @override
+  String get gearRetireAt => 'Replace at (km)';
+
+  @override
+  String get gearDefault =>
+      'Count every run or ride for it unless another is chosen';
+
+  @override
+  String get gearRetire => 'Retire';
+
+  @override
+  String get gearUseAgain => 'Use again';
+
+  @override
+  String get gearRetired => 'Retired';
+
+  @override
+  String gearLeft(int km, int limit) {
+    return '$km km left of $limit';
+  }
+
+  @override
+  String gearDue(int limit) {
+    return 'Time to replace: past $limit km';
+  }
+
+  @override
+  String gearActivities(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count activities',
+      one: '1 activity',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get gearNone => 'None';
+
+  @override
+  String get diaryTitle => 'Diary';
+
+  @override
+  String get diaryEmpty =>
+      'Notes you write on activities, sessions and how a workout felt appear here, all in one place.';
+
+  @override
+  String get diarySearch => 'Search notes';
+
+  @override
+  String get diaryKindActivity => 'Activity note';
+
+  @override
+  String get diaryKindSession => 'Session note';
+
+  @override
+  String get diaryKindFeeling => 'How it felt';
+
+  @override
+  String get diaryKindCoach => 'Note for the coach';
+
+  @override
+  String get diaryKindAbsence => 'Time away';
+
+  @override
+  String get diaryKindEcg => 'ECG note';
+
+  @override
+  String diaryEffort(int n) {
+    return 'Effort $n of 10';
+  }
+
+  @override
+  String get diaryNoResults => 'No note contains that.';
+
+  @override
+  String get labTitle => 'Lab tests';
+
+  @override
+  String get labEmpty =>
+      'Enter a lactate step test to find your aerobic and anaerobic thresholds.';
+
+  @override
+  String get labEnter => 'Enter a test';
+
+  @override
+  String get labBike => 'Bike';
+
+  @override
+  String get labRun => 'Run';
+
+  @override
+  String get labPower => 'Power (W)';
+
+  @override
+  String get labPace => 'Pace (min:s per km)';
+
+  @override
+  String get labHr => 'Heart rate';
+
+  @override
+  String get labLactate => 'Lactate (mmol/l)';
+
+  @override
+  String get labAddStep => 'Add step';
+
+  @override
+  String get labSave => 'Save test';
+
+  @override
+  String get labLt1 => 'Aerobic threshold (LT1)';
+
+  @override
+  String get labLt2 => 'Anaerobic threshold (LT2)';
+
+  @override
+  String get labUse => 'Use as thresholds';
+
+  @override
+  String get labUsed => 'Saved to your thresholds.';
+
+  @override
+  String get labDelete => 'Delete test';
+
+  @override
+  String get labTooFew => 'At least three steps are needed.';
+
+  @override
+  String get labExplain =>
+      'LT1 is where lactate first rises 0.5 mmol/l above resting; LT2 is where it starts to climb steeply. Easy training stays below LT1.';
 }

@@ -9963,4 +9963,161 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get thresholdSourceLab => 'Laboratorietest';
+
+  @override
+  String get gearTitle => 'Udstyr';
+
+  @override
+  String get gearEmpty =>
+      'Tilføj sko og cykler for at se, hvor langt de har været, og hvornår de skal udskiftes.';
+
+  @override
+  String get gearAdd => 'Tilføj udstyr';
+
+  @override
+  String get gearEdit => 'Rediger udstyr';
+
+  @override
+  String get gearKindShoes => 'Sko';
+
+  @override
+  String get gearKindBike => 'Cykel';
+
+  @override
+  String get gearKindOther => 'Andet';
+
+  @override
+  String get gearName => 'Navn';
+
+  @override
+  String get gearBrand => 'Mærke';
+
+  @override
+  String get gearStartKm => 'Distance før Fjelia (km)';
+
+  @override
+  String get gearRetireAt => 'Udskift ved (km)';
+
+  @override
+  String get gearDefault =>
+      'Tæl hvert løb eller hver tur med, medmindre andet er valgt';
+
+  @override
+  String get gearRetire => 'Pensioner';
+
+  @override
+  String get gearUseAgain => 'Brug igen';
+
+  @override
+  String get gearRetired => 'Pensioneret';
+
+  @override
+  String gearLeft(int km, int limit) {
+    return '$km km tilbage af $limit';
+  }
+
+  @override
+  String gearDue(int limit) {
+    return 'Tid til udskiftning: over $limit km';
+  }
+
+  @override
+  String gearActivities(int count) {
+    return '$count aktiviteter';
+  }
+
+  @override
+  String get gearNone => 'Ingen';
+
+  @override
+  String get diaryTitle => 'Dagbog';
+
+  @override
+  String get diaryEmpty =>
+      'Noter om aktiviteter, træninger og hvordan en træning føltes, samles her ét sted.';
+
+  @override
+  String get diarySearch => 'Søg i noter';
+
+  @override
+  String get diaryKindActivity => 'Aktivitetsnote';
+
+  @override
+  String get diaryKindSession => 'Træningsnote';
+
+  @override
+  String get diaryKindFeeling => 'Sådan føltes det';
+
+  @override
+  String get diaryKindCoach => 'Note til træneren';
+
+  @override
+  String get diaryKindAbsence => 'Fravær';
+
+  @override
+  String get diaryKindEcg => 'EKG-note';
+
+  @override
+  String diaryEffort(int n) {
+    return 'Anstrengelse $n af 10';
+  }
+
+  @override
+  String get diaryNoResults => 'Ingen note indeholder det.';
+
+  @override
+  String get labTitle => 'Laboratorietests';
+
+  @override
+  String get labEmpty =>
+      'Indtast en laktat-trinstest for at finde din aerobe og anaerobe tærskel.';
+
+  @override
+  String get labEnter => 'Indtast en test';
+
+  @override
+  String get labBike => 'Cykel';
+
+  @override
+  String get labRun => 'Løb';
+
+  @override
+  String get labPower => 'Watt (W)';
+
+  @override
+  String get labPace => 'Tempo (min:s pr. km)';
+
+  @override
+  String get labHr => 'Puls';
+
+  @override
+  String get labLactate => 'Laktat (mmol/l)';
+
+  @override
+  String get labAddStep => 'Tilføj trin';
+
+  @override
+  String get labSave => 'Gem test';
+
+  @override
+  String get labLt1 => 'Aerob tærskel (LT1)';
+
+  @override
+  String get labLt2 => 'Anaerob tærskel (LT2)';
+
+  @override
+  String get labUse => 'Brug som tærskler';
+
+  @override
+  String get labUsed => 'Gemt i dine tærskler.';
+
+  @override
+  String get labDelete => 'Slet test';
+
+  @override
+  String get labTooFew => 'Der skal mindst tre trin til.';
+
+  @override
+  String get labExplain =>
+      'LT1 er, hvor laktat først stiger 0,5 mmol/l over hvile; LT2, hvor det begynder at stige stejlt. Rolig træning holdes under LT1.';
 }

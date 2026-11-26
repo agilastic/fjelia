@@ -18,6 +18,8 @@ const loadItemLabels = <String, String>{
   'weekday_load': 'Weekday Comparison',
   'weekly_load': 'Weekly Training Load',
   'sport_stats': 'Statistics',
+  'gear': 'Gear',
+  'diary': 'Diary',
   'zone_polarization': 'Zone Polarization',
   'elevation': 'Elevation Overview',
   'strain': 'Training Monitor',

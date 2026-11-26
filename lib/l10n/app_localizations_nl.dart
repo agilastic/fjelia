@@ -10040,4 +10040,161 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get thresholdSourceLab => 'Labtest';
+
+  @override
+  String get gearTitle => 'Uitrusting';
+
+  @override
+  String get gearEmpty =>
+      'Voeg je schoenen en fietsen toe om te zien hoe ver ze zijn gekomen en wanneer je ze vervangt.';
+
+  @override
+  String get gearAdd => 'Uitrusting toevoegen';
+
+  @override
+  String get gearEdit => 'Uitrusting bewerken';
+
+  @override
+  String get gearKindShoes => 'Schoenen';
+
+  @override
+  String get gearKindBike => 'Fiets';
+
+  @override
+  String get gearKindOther => 'Overig';
+
+  @override
+  String get gearName => 'Naam';
+
+  @override
+  String get gearBrand => 'Merk';
+
+  @override
+  String get gearStartKm => 'Afstand vóór Fjelia (km)';
+
+  @override
+  String get gearRetireAt => 'Vervangen bij (km)';
+
+  @override
+  String get gearDefault =>
+      'Elke loop of rit hiervoor tellen, tenzij iets anders is gekozen';
+
+  @override
+  String get gearRetire => 'Afdanken';
+
+  @override
+  String get gearUseAgain => 'Weer gebruiken';
+
+  @override
+  String get gearRetired => 'Afgedankt';
+
+  @override
+  String gearLeft(int km, int limit) {
+    return 'Nog $km km van $limit';
+  }
+
+  @override
+  String gearDue(int limit) {
+    return 'Tijd om te vervangen: meer dan $limit km';
+  }
+
+  @override
+  String gearActivities(int count) {
+    return '$count activiteiten';
+  }
+
+  @override
+  String get gearNone => 'Geen';
+
+  @override
+  String get diaryTitle => 'Dagboek';
+
+  @override
+  String get diaryEmpty =>
+      'Notities bij activiteiten, trainingen en hoe een training voelde staan hier bij elkaar.';
+
+  @override
+  String get diarySearch => 'Notities doorzoeken';
+
+  @override
+  String get diaryKindActivity => 'Activiteitnotitie';
+
+  @override
+  String get diaryKindSession => 'Trainingsnotitie';
+
+  @override
+  String get diaryKindFeeling => 'Hoe het voelde';
+
+  @override
+  String get diaryKindCoach => 'Notitie voor de coach';
+
+  @override
+  String get diaryKindAbsence => 'Afwezig';
+
+  @override
+  String get diaryKindEcg => 'ECG-notitie';
+
+  @override
+  String diaryEffort(int n) {
+    return 'Inspanning $n van 10';
+  }
+
+  @override
+  String get diaryNoResults => 'Geen notitie bevat dat.';
+
+  @override
+  String get labTitle => 'Labtests';
+
+  @override
+  String get labEmpty =>
+      'Voer een lactaat-staptest in om je aerobe en anaerobe drempel te vinden.';
+
+  @override
+  String get labEnter => 'Test invoeren';
+
+  @override
+  String get labBike => 'Fiets';
+
+  @override
+  String get labRun => 'Hardlopen';
+
+  @override
+  String get labPower => 'Vermogen (W)';
+
+  @override
+  String get labPace => 'Tempo (min:s per km)';
+
+  @override
+  String get labHr => 'Hartslag';
+
+  @override
+  String get labLactate => 'Lactaat (mmol/l)';
+
+  @override
+  String get labAddStep => 'Stap toevoegen';
+
+  @override
+  String get labSave => 'Test bewaren';
+
+  @override
+  String get labLt1 => 'Aerobe drempel (LT1)';
+
+  @override
+  String get labLt2 => 'Anaerobe drempel (LT2)';
+
+  @override
+  String get labUse => 'Als drempels gebruiken';
+
+  @override
+  String get labUsed => 'Bewaard bij je drempels.';
+
+  @override
+  String get labDelete => 'Test verwijderen';
+
+  @override
+  String get labTooFew => 'Er zijn minstens drie stappen nodig.';
+
+  @override
+  String get labExplain =>
+      'LT1 is waar lactaat voor het eerst 0,5 mmol/l boven rust stijgt; LT2 waar het steil begint te stijgen. Rustige training blijft onder LT1.';
 }

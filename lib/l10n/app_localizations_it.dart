@@ -10028,4 +10028,161 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get thresholdSourceLab => 'Test di laboratorio';
+
+  @override
+  String get gearTitle => 'Attrezzatura';
+
+  @override
+  String get gearEmpty =>
+      'Aggiungi scarpe e bici per vedere quanta strada hanno fatto e quando sostituirle.';
+
+  @override
+  String get gearAdd => 'Aggiungi attrezzatura';
+
+  @override
+  String get gearEdit => 'Modifica attrezzatura';
+
+  @override
+  String get gearKindShoes => 'Scarpe';
+
+  @override
+  String get gearKindBike => 'Bici';
+
+  @override
+  String get gearKindOther => 'Altro';
+
+  @override
+  String get gearName => 'Nome';
+
+  @override
+  String get gearBrand => 'Marca';
+
+  @override
+  String get gearStartKm => 'Distanza prima di Fjelia (km)';
+
+  @override
+  String get gearRetireAt => 'Sostituisci a (km)';
+
+  @override
+  String get gearDefault =>
+      'Conta ogni corsa o uscita per questa, se non ne è scelta un\'altra';
+
+  @override
+  String get gearRetire => 'Ritira';
+
+  @override
+  String get gearUseAgain => 'Usa di nuovo';
+
+  @override
+  String get gearRetired => 'Ritirata';
+
+  @override
+  String gearLeft(int km, int limit) {
+    return 'Restano $km km su $limit';
+  }
+
+  @override
+  String gearDue(int limit) {
+    return 'Da sostituire: oltre $limit km';
+  }
+
+  @override
+  String gearActivities(int count) {
+    return '$count attività';
+  }
+
+  @override
+  String get gearNone => 'Nessuna';
+
+  @override
+  String get diaryTitle => 'Diario';
+
+  @override
+  String get diaryEmpty =>
+      'Le note su attività, sessioni e sensazioni compaiono qui, in un unico posto.';
+
+  @override
+  String get diarySearch => 'Cerca nelle note';
+
+  @override
+  String get diaryKindActivity => 'Nota attività';
+
+  @override
+  String get diaryKindSession => 'Nota sessione';
+
+  @override
+  String get diaryKindFeeling => 'Sensazioni';
+
+  @override
+  String get diaryKindCoach => 'Nota per il coach';
+
+  @override
+  String get diaryKindAbsence => 'Assenza';
+
+  @override
+  String get diaryKindEcg => 'Nota ECG';
+
+  @override
+  String diaryEffort(int n) {
+    return 'Sforzo $n su 10';
+  }
+
+  @override
+  String get diaryNoResults => 'Nessuna nota lo contiene.';
+
+  @override
+  String get labTitle => 'Test di laboratorio';
+
+  @override
+  String get labEmpty =>
+      'Inserisci un test del lattato a gradini per trovare le tue soglie aerobica e anaerobica.';
+
+  @override
+  String get labEnter => 'Inserisci un test';
+
+  @override
+  String get labBike => 'Bici';
+
+  @override
+  String get labRun => 'Corsa';
+
+  @override
+  String get labPower => 'Potenza (W)';
+
+  @override
+  String get labPace => 'Passo (min:s al km)';
+
+  @override
+  String get labHr => 'Frequenza cardiaca';
+
+  @override
+  String get labLactate => 'Lattato (mmol/l)';
+
+  @override
+  String get labAddStep => 'Aggiungi gradino';
+
+  @override
+  String get labSave => 'Salva test';
+
+  @override
+  String get labLt1 => 'Soglia aerobica (LT1)';
+
+  @override
+  String get labLt2 => 'Soglia anaerobica (LT2)';
+
+  @override
+  String get labUse => 'Usa come soglie';
+
+  @override
+  String get labUsed => 'Salvato nelle tue soglie.';
+
+  @override
+  String get labDelete => 'Elimina test';
+
+  @override
+  String get labTooFew => 'Servono almeno tre gradini.';
+
+  @override
+  String get labExplain =>
+      'LT1 è dove il lattato sale per la prima volta di 0,5 mmol/l sopra il riposo; LT2 dove inizia a salire ripidamente. L\'allenamento facile resta sotto LT1.';
 }

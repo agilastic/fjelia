@@ -17222,6 +17222,294 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Lab test'**
   String get thresholdSourceLab;
+
+  /// No description provided for @gearTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Gear'**
+  String get gearTitle;
+
+  /// No description provided for @gearEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your shoes and bikes to see how far each has gone and when to replace it.'**
+  String get gearEmpty;
+
+  /// No description provided for @gearAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add gear'**
+  String get gearAdd;
+
+  /// No description provided for @gearEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit gear'**
+  String get gearEdit;
+
+  /// No description provided for @gearKindShoes.
+  ///
+  /// In en, this message translates to:
+  /// **'Shoes'**
+  String get gearKindShoes;
+
+  /// No description provided for @gearKindBike.
+  ///
+  /// In en, this message translates to:
+  /// **'Bike'**
+  String get gearKindBike;
+
+  /// No description provided for @gearKindOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get gearKindOther;
+
+  /// No description provided for @gearName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get gearName;
+
+  /// No description provided for @gearBrand.
+  ///
+  /// In en, this message translates to:
+  /// **'Brand'**
+  String get gearBrand;
+
+  /// No description provided for @gearStartKm.
+  ///
+  /// In en, this message translates to:
+  /// **'Distance before Fjelia (km)'**
+  String get gearStartKm;
+
+  /// No description provided for @gearRetireAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace at (km)'**
+  String get gearRetireAt;
+
+  /// No description provided for @gearDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Count every run or ride for it unless another is chosen'**
+  String get gearDefault;
+
+  /// No description provided for @gearRetire.
+  ///
+  /// In en, this message translates to:
+  /// **'Retire'**
+  String get gearRetire;
+
+  /// No description provided for @gearUseAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Use again'**
+  String get gearUseAgain;
+
+  /// No description provided for @gearRetired.
+  ///
+  /// In en, this message translates to:
+  /// **'Retired'**
+  String get gearRetired;
+
+  /// No description provided for @gearLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{km} km left of {limit}'**
+  String gearLeft(int km, int limit);
+
+  /// No description provided for @gearDue.
+  ///
+  /// In en, this message translates to:
+  /// **'Time to replace: past {limit} km'**
+  String gearDue(int limit);
+
+  /// No description provided for @gearActivities.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 activity} other{{count} activities}}'**
+  String gearActivities(int count);
+
+  /// No description provided for @gearNone.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get gearNone;
+
+  /// No description provided for @diaryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Diary'**
+  String get diaryTitle;
+
+  /// No description provided for @diaryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes you write on activities, sessions and how a workout felt appear here, all in one place.'**
+  String get diaryEmpty;
+
+  /// No description provided for @diarySearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search notes'**
+  String get diarySearch;
+
+  /// No description provided for @diaryKindActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity note'**
+  String get diaryKindActivity;
+
+  /// No description provided for @diaryKindSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Session note'**
+  String get diaryKindSession;
+
+  /// No description provided for @diaryKindFeeling.
+  ///
+  /// In en, this message translates to:
+  /// **'How it felt'**
+  String get diaryKindFeeling;
+
+  /// No description provided for @diaryKindCoach.
+  ///
+  /// In en, this message translates to:
+  /// **'Note for the coach'**
+  String get diaryKindCoach;
+
+  /// No description provided for @diaryKindAbsence.
+  ///
+  /// In en, this message translates to:
+  /// **'Time away'**
+  String get diaryKindAbsence;
+
+  /// No description provided for @diaryKindEcg.
+  ///
+  /// In en, this message translates to:
+  /// **'ECG note'**
+  String get diaryKindEcg;
+
+  /// No description provided for @diaryEffort.
+  ///
+  /// In en, this message translates to:
+  /// **'Effort {n} of 10'**
+  String diaryEffort(int n);
+
+  /// No description provided for @diaryNoResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No note contains that.'**
+  String get diaryNoResults;
+
+  /// No description provided for @labTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Lab tests'**
+  String get labTitle;
+
+  /// No description provided for @labEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a lactate step test to find your aerobic and anaerobic thresholds.'**
+  String get labEmpty;
+
+  /// No description provided for @labEnter.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a test'**
+  String get labEnter;
+
+  /// No description provided for @labBike.
+  ///
+  /// In en, this message translates to:
+  /// **'Bike'**
+  String get labBike;
+
+  /// No description provided for @labRun.
+  ///
+  /// In en, this message translates to:
+  /// **'Run'**
+  String get labRun;
+
+  /// No description provided for @labPower.
+  ///
+  /// In en, this message translates to:
+  /// **'Power (W)'**
+  String get labPower;
+
+  /// No description provided for @labPace.
+  ///
+  /// In en, this message translates to:
+  /// **'Pace (min:s per km)'**
+  String get labPace;
+
+  /// No description provided for @labHr.
+  ///
+  /// In en, this message translates to:
+  /// **'Heart rate'**
+  String get labHr;
+
+  /// No description provided for @labLactate.
+  ///
+  /// In en, this message translates to:
+  /// **'Lactate (mmol/l)'**
+  String get labLactate;
+
+  /// No description provided for @labAddStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Add step'**
+  String get labAddStep;
+
+  /// No description provided for @labSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save test'**
+  String get labSave;
+
+  /// No description provided for @labLt1.
+  ///
+  /// In en, this message translates to:
+  /// **'Aerobic threshold (LT1)'**
+  String get labLt1;
+
+  /// No description provided for @labLt2.
+  ///
+  /// In en, this message translates to:
+  /// **'Anaerobic threshold (LT2)'**
+  String get labLt2;
+
+  /// No description provided for @labUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Use as thresholds'**
+  String get labUse;
+
+  /// No description provided for @labUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to your thresholds.'**
+  String get labUsed;
+
+  /// No description provided for @labDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete test'**
+  String get labDelete;
+
+  /// No description provided for @labTooFew.
+  ///
+  /// In en, this message translates to:
+  /// **'At least three steps are needed.'**
+  String get labTooFew;
+
+  /// No description provided for @labExplain.
+  ///
+  /// In en, this message translates to:
+  /// **'LT1 is where lactate first rises 0.5 mmol/l above resting; LT2 is where it starts to climb steeply. Easy training stays below LT1.'**
+  String get labExplain;
 }
 
 class _AppLocalizationsDelegate

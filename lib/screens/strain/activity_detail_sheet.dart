@@ -4,6 +4,7 @@ import '../../providers/short_session_provider.dart';
 import '../../providers/activity_history_provider.dart';
 import '../../widgets/recently_deleted_sheet.dart';
 import '../../l10n/l10n_ext.dart';
+import '../body/gear_sheet.dart' show ActivityGearPicker;
 import '../../l10n/sport_text.dart';
 
 import 'dart:io';
@@ -387,6 +388,7 @@ class ActivityDetailSheet extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
           ActivityNoteCard(activityId: activity.activityId),
+          ActivityGearPicker(activityId: activity.activityId),
           if (strength) CompletedStrengthSection(activity: activity),
           ActivityNutritionCard(activity: activity),
           ActivityHeatCard(activityId: a.id),

@@ -10014,4 +10014,161 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get thresholdSourceLab => 'Laboratórny test';
+
+  @override
+  String get gearTitle => 'Výstroj';
+
+  @override
+  String get gearEmpty =>
+      'Pridaj topánky a bicykle a uvidíš, koľko najazdili a kedy ich vymeniť.';
+
+  @override
+  String get gearAdd => 'Pridať výstroj';
+
+  @override
+  String get gearEdit => 'Upraviť výstroj';
+
+  @override
+  String get gearKindShoes => 'Topánky';
+
+  @override
+  String get gearKindBike => 'Bicykel';
+
+  @override
+  String get gearKindOther => 'Iné';
+
+  @override
+  String get gearName => 'Názov';
+
+  @override
+  String get gearBrand => 'Značka';
+
+  @override
+  String get gearStartKm => 'Vzdialenosť pred Fjeliou (km)';
+
+  @override
+  String get gearRetireAt => 'Vymeniť pri (km)';
+
+  @override
+  String get gearDefault =>
+      'Počítať každý beh alebo jazdu preň, ak nie je vybraté iné';
+
+  @override
+  String get gearRetire => 'Vyradiť';
+
+  @override
+  String get gearUseAgain => 'Znova používať';
+
+  @override
+  String get gearRetired => 'Vyradené';
+
+  @override
+  String gearLeft(int km, int limit) {
+    return 'Zostáva $km km z $limit';
+  }
+
+  @override
+  String gearDue(int limit) {
+    return 'Čas na výmenu: viac ako $limit km';
+  }
+
+  @override
+  String gearActivities(int count) {
+    return 'Aktivity: $count';
+  }
+
+  @override
+  String get gearNone => 'Žiadna';
+
+  @override
+  String get diaryTitle => 'Denník';
+
+  @override
+  String get diaryEmpty =>
+      'Poznámky k aktivitám, tréningom a pocitom z tréningu sú tu na jednom mieste.';
+
+  @override
+  String get diarySearch => 'Hľadať v poznámkach';
+
+  @override
+  String get diaryKindActivity => 'Poznámka k aktivite';
+
+  @override
+  String get diaryKindSession => 'Poznámka k tréningu';
+
+  @override
+  String get diaryKindFeeling => 'Ako sa to cítilo';
+
+  @override
+  String get diaryKindCoach => 'Poznámka pre trénera';
+
+  @override
+  String get diaryKindAbsence => 'Neprítomnosť';
+
+  @override
+  String get diaryKindEcg => 'Poznámka k EKG';
+
+  @override
+  String diaryEffort(int n) {
+    return 'Námaha $n z 10';
+  }
+
+  @override
+  String get diaryNoResults => 'Žiadna poznámka to neobsahuje.';
+
+  @override
+  String get labTitle => 'Laboratórne testy';
+
+  @override
+  String get labEmpty =>
+      'Zadaj stupňovitý laktátový test a zisti svoj aeróbny a anaeróbny prah.';
+
+  @override
+  String get labEnter => 'Zadať test';
+
+  @override
+  String get labBike => 'Bicykel';
+
+  @override
+  String get labRun => 'Beh';
+
+  @override
+  String get labPower => 'Výkon (W)';
+
+  @override
+  String get labPace => 'Tempo (min:s na km)';
+
+  @override
+  String get labHr => 'Tep';
+
+  @override
+  String get labLactate => 'Laktát (mmol/l)';
+
+  @override
+  String get labAddStep => 'Pridať stupeň';
+
+  @override
+  String get labSave => 'Uložiť test';
+
+  @override
+  String get labLt1 => 'Aeróbny prah (LT1)';
+
+  @override
+  String get labLt2 => 'Anaeróbny prah (LT2)';
+
+  @override
+  String get labUse => 'Použiť ako prahy';
+
+  @override
+  String get labUsed => 'Uložené k tvojim prahom.';
+
+  @override
+  String get labDelete => 'Vymazať test';
+
+  @override
+  String get labTooFew => 'Treba aspoň tri stupne.';
+
+  @override
+  String get labExplain =>
+      'LT1 je tam, kde laktát prvýkrát stúpne o 0,5 mmol/l nad pokoj; LT2 tam, kde začne prudko stúpať. Ľahký tréning zostáva pod LT1.';
 }

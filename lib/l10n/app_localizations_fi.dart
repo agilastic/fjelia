@@ -10005,4 +10005,161 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get thresholdSourceLab => 'Laboratoriotesti';
+
+  @override
+  String get gearTitle => 'Varusteet';
+
+  @override
+  String get gearEmpty =>
+      'Lisää kengät ja pyörät nähdäksesi, paljonko niillä on ajettu ja milloin ne kannattaa vaihtaa.';
+
+  @override
+  String get gearAdd => 'Lisää varuste';
+
+  @override
+  String get gearEdit => 'Muokkaa varustetta';
+
+  @override
+  String get gearKindShoes => 'Kengät';
+
+  @override
+  String get gearKindBike => 'Pyörä';
+
+  @override
+  String get gearKindOther => 'Muu';
+
+  @override
+  String get gearName => 'Nimi';
+
+  @override
+  String get gearBrand => 'Merkki';
+
+  @override
+  String get gearStartKm => 'Matka ennen Fjeliaa (km)';
+
+  @override
+  String get gearRetireAt => 'Vaihda kohdassa (km)';
+
+  @override
+  String get gearDefault =>
+      'Laske jokainen lenkki tai ajo tälle, ellei toista valita';
+
+  @override
+  String get gearRetire => 'Poista käytöstä';
+
+  @override
+  String get gearUseAgain => 'Ota taas käyttöön';
+
+  @override
+  String get gearRetired => 'Poistettu käytöstä';
+
+  @override
+  String gearLeft(int km, int limit) {
+    return '$km km jäljellä / $limit';
+  }
+
+  @override
+  String gearDue(int limit) {
+    return 'Vaihdon aika: yli $limit km';
+  }
+
+  @override
+  String gearActivities(int count) {
+    return '$count suoritusta';
+  }
+
+  @override
+  String get gearNone => 'Ei mitään';
+
+  @override
+  String get diaryTitle => 'Päiväkirja';
+
+  @override
+  String get diaryEmpty =>
+      'Merkinnät suorituksista, harjoituksista ja tuntemuksista näkyvät täällä yhdessä paikassa.';
+
+  @override
+  String get diarySearch => 'Hae merkinnöistä';
+
+  @override
+  String get diaryKindActivity => 'Suoritusmerkintä';
+
+  @override
+  String get diaryKindSession => 'Harjoitusmerkintä';
+
+  @override
+  String get diaryKindFeeling => 'Tuntemus';
+
+  @override
+  String get diaryKindCoach => 'Merkintä valmentajalle';
+
+  @override
+  String get diaryKindAbsence => 'Poissaolo';
+
+  @override
+  String get diaryKindEcg => 'EKG-merkintä';
+
+  @override
+  String diaryEffort(int n) {
+    return 'Rasitus $n/10';
+  }
+
+  @override
+  String get diaryNoResults => 'Mikään merkintä ei sisällä sitä.';
+
+  @override
+  String get labTitle => 'Laboratoriotestit';
+
+  @override
+  String get labEmpty =>
+      'Syötä laktaattiportastesti löytääksesi aerobisen ja anaerobisen kynnyksesi.';
+
+  @override
+  String get labEnter => 'Syötä testi';
+
+  @override
+  String get labBike => 'Pyörä';
+
+  @override
+  String get labRun => 'Juoksu';
+
+  @override
+  String get labPower => 'Teho (W)';
+
+  @override
+  String get labPace => 'Vauhti (min:s/km)';
+
+  @override
+  String get labHr => 'Syke';
+
+  @override
+  String get labLactate => 'Laktaatti (mmol/l)';
+
+  @override
+  String get labAddStep => 'Lisää porras';
+
+  @override
+  String get labSave => 'Tallenna testi';
+
+  @override
+  String get labLt1 => 'Aerobinen kynnys (LT1)';
+
+  @override
+  String get labLt2 => 'Anaerobinen kynnys (LT2)';
+
+  @override
+  String get labUse => 'Käytä kynnyksinä';
+
+  @override
+  String get labUsed => 'Tallennettu kynnyksiisi.';
+
+  @override
+  String get labDelete => 'Poista testi';
+
+  @override
+  String get labTooFew => 'Vähintään kolme porrasta tarvitaan.';
+
+  @override
+  String get labExplain =>
+      'LT1 on kohta, jossa laktaatti nousee ensin 0,5 mmol/l lepotason yli; LT2, jossa se alkaa nousta jyrkästi. Kevyt harjoittelu pysyy LT1:n alla.';
 }

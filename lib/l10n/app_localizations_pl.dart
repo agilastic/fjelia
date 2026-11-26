@@ -10070,4 +10070,161 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get thresholdSourceLab => 'Test laboratoryjny';
+
+  @override
+  String get gearTitle => 'Sprzęt';
+
+  @override
+  String get gearEmpty =>
+      'Dodaj buty i rowery, aby widzieć ich przebieg i wiedzieć, kiedy je wymienić.';
+
+  @override
+  String get gearAdd => 'Dodaj sprzęt';
+
+  @override
+  String get gearEdit => 'Edytuj sprzęt';
+
+  @override
+  String get gearKindShoes => 'Buty';
+
+  @override
+  String get gearKindBike => 'Rower';
+
+  @override
+  String get gearKindOther => 'Inne';
+
+  @override
+  String get gearName => 'Nazwa';
+
+  @override
+  String get gearBrand => 'Marka';
+
+  @override
+  String get gearStartKm => 'Dystans przed Fjelią (km)';
+
+  @override
+  String get gearRetireAt => 'Wymień przy (km)';
+
+  @override
+  String get gearDefault =>
+      'Licz każdy bieg lub jazdę dla niego, chyba że wybrano inny';
+
+  @override
+  String get gearRetire => 'Wycofaj';
+
+  @override
+  String get gearUseAgain => 'Używaj ponownie';
+
+  @override
+  String get gearRetired => 'Wycofany';
+
+  @override
+  String gearLeft(int km, int limit) {
+    return 'Zostało $km km z $limit';
+  }
+
+  @override
+  String gearDue(int limit) {
+    return 'Czas na wymianę: ponad $limit km';
+  }
+
+  @override
+  String gearActivities(int count) {
+    return 'Aktywności: $count';
+  }
+
+  @override
+  String get gearNone => 'Brak';
+
+  @override
+  String get diaryTitle => 'Dziennik';
+
+  @override
+  String get diaryEmpty =>
+      'Notatki do aktywności, sesji i odczuć z treningu są tutaj w jednym miejscu.';
+
+  @override
+  String get diarySearch => 'Szukaj w notatkach';
+
+  @override
+  String get diaryKindActivity => 'Notatka do aktywności';
+
+  @override
+  String get diaryKindSession => 'Notatka do sesji';
+
+  @override
+  String get diaryKindFeeling => 'Odczucia';
+
+  @override
+  String get diaryKindCoach => 'Notatka dla trenera';
+
+  @override
+  String get diaryKindAbsence => 'Nieobecność';
+
+  @override
+  String get diaryKindEcg => 'Notatka EKG';
+
+  @override
+  String diaryEffort(int n) {
+    return 'Wysiłek $n z 10';
+  }
+
+  @override
+  String get diaryNoResults => 'Żadna notatka tego nie zawiera.';
+
+  @override
+  String get labTitle => 'Testy laboratoryjne';
+
+  @override
+  String get labEmpty =>
+      'Wprowadź schodkowy test mleczanowy, aby wyznaczyć progi tlenowy i beztlenowy.';
+
+  @override
+  String get labEnter => 'Wprowadź test';
+
+  @override
+  String get labBike => 'Rower';
+
+  @override
+  String get labRun => 'Bieg';
+
+  @override
+  String get labPower => 'Moc (W)';
+
+  @override
+  String get labPace => 'Tempo (min:s na km)';
+
+  @override
+  String get labHr => 'Tętno';
+
+  @override
+  String get labLactate => 'Mleczan (mmol/l)';
+
+  @override
+  String get labAddStep => 'Dodaj stopień';
+
+  @override
+  String get labSave => 'Zapisz test';
+
+  @override
+  String get labLt1 => 'Próg tlenowy (LT1)';
+
+  @override
+  String get labLt2 => 'Próg beztlenowy (LT2)';
+
+  @override
+  String get labUse => 'Użyj jako progów';
+
+  @override
+  String get labUsed => 'Zapisano w twoich progach.';
+
+  @override
+  String get labDelete => 'Usuń test';
+
+  @override
+  String get labTooFew => 'Potrzebne są co najmniej trzy stopnie.';
+
+  @override
+  String get labExplain =>
+      'LT1 to miejsce, gdzie mleczan po raz pierwszy rośnie o 0,5 mmol/l ponad spoczynek; LT2 – gdzie zaczyna gwałtownie rosnąć. Lekki trening pozostaje poniżej LT1.';
 }

@@ -2,6 +2,8 @@ import '../activities/sport_stats_card.dart';
 import '../../theme/fjelia_style.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../providers/activity_history_provider.dart';
+import '../body/diary_sheet.dart' show DiaryCard;
+import '../body/gear_sheet.dart' show GearCard;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -129,6 +131,8 @@ class StrainScreen extends ConsumerWidget {
         if (vis['weekday_load'] ?? true) const WeekdayLoadCard(),
         if (vis['weekly_load'] ?? true) const WeeklyLoadCard(),
         if (vis['sport_stats'] ?? true) const SportStatsCard(),
+        if (vis['gear'] ?? true) const GearCard(),
+        if (vis['diary'] ?? true) const DiaryCard(),
         if (vis['zone_polarization'] ?? true)
           const LoadHistoryCards(polarization: true),
         if (vis['elevation'] ?? true)
