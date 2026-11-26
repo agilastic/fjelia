@@ -10438,4 +10438,37 @@ class AppLocalizationsFi extends AppLocalizations {
   String courseSlower(String time) {
     return '$time hitaammin';
   }
+
+  @override
+  String get crewCard => 'Huoltokortti';
+
+  @override
+  String get crewCheckpoint => 'Tarkastuspiste';
+
+  @override
+  String get crewUpDown => 'Nousu / lasku';
+
+  @override
+  String get crewDue => 'Odotettu';
+
+  @override
+  String get crewHandOver => 'Ojenna seuraavaa osuutta varten';
+
+  @override
+  String crewStart(String time) {
+    return 'Lähtö $time';
+  }
+
+  @override
+  String crewFinishRange(String time, String from, String to) {
+    return 'Maali $time ($from–$to)';
+  }
+
+  @override
+  String crewFuel(int carbs, String litres, int sodium) {
+    return '$carbs g hiilihydraattia · $litres l · $sodium mg natriumia';
+  }
+
+  @override
+  String get crewFooter => 'Suunniteltu Fjelialla omista mäkijuoksuistani.';
 }

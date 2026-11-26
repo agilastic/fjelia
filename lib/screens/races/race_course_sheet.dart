@@ -19,6 +19,7 @@ import '../../providers/race_course_provider.dart';
 import '../../services/race_library.dart';
 import '../../theme/fjelia_style.dart';
 import '../../widgets/app_widgets.dart';
+import '../../widgets/ecg_sheet.dart' show shareRecordingFile;
 import '../settings/fjelia_pro_sheet.dart';
 
 const _accent = [Color(0xFFFFB13D), Color(0xFFE5383B)];
@@ -804,6 +805,21 @@ class _Plan extends ConsumerWidget {
                 ),
                 child: Text(l.courseCheckpoints),
               ),
+              if (r != null)
+                Builder(
+                  builder: (context) => TextButton.icon(
+                    icon: const Icon(Icons.ios_share, size: 18),
+                    label: Text(l.crewCard),
+                    onPressed: () async {
+                      final path = await ref
+                          .read(raceCourseActionsProvider)
+                          .crewCardFile(view);
+                      if (path != null && context.mounted) {
+                        await shareRecordingFile(context, path);
+                      }
+                    },
+                  ),
+                ),
             ],
           ),
         ],

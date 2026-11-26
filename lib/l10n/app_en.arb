@@ -5800,5 +5800,17 @@
   "courseFaster": "{time} faster",
   "@courseFaster": {"placeholders": {"time": {"type": "String"}}},
   "courseSlower": "{time} slower",
-  "@courseSlower": {"placeholders": {"time": {"type": "String"}}}
+  "@courseSlower": {"placeholders": {"time": {"type": "String"}}},
+  "crewCard": "Crew card",
+  "crewCheckpoint": "Checkpoint",
+  "crewUpDown": "Up / down",
+  "crewDue": "Due",
+  "crewHandOver": "Hand over for the next leg",
+  "crewStart": "Start {time}",
+  "@crewStart": {"placeholders": {"time": {"type": "String"}}},
+  "crewFinishRange": "Finish {time} ({from}–{to})",
+  "@crewFinishRange": {"placeholders": {"time": {"type": "String"}, "from": {"type": "String"}, "to": {"type": "String"}}},
+  "crewFuel": "{carbs} g carbohydrate · {litres} l · {sodium} mg sodium",
+  "@crewFuel": {"placeholders": {"carbs": {"type": "int"}, "litres": {"type": "String"}, "sodium": {"type": "int"}}},
+  "crewFooter": "Planned with Fjelia from my own running on hills."
 }

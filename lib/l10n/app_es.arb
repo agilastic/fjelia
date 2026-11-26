@@ -4517,5 +4517,14 @@
   "courseResult": "Previsto y corrido",
   "courseResultNote": "Cada control a la misma parte de la distancia del reloj que del recorrido.",
   "courseFaster": "{time} más rápido",
-  "courseSlower": "{time} más lento"
+  "courseSlower": "{time} más lento",
+  "crewCard": "Ficha para el equipo",
+  "crewCheckpoint": "Control",
+  "crewUpDown": "Subida / bajada",
+  "crewDue": "Previsto",
+  "crewHandOver": "Entregar para el siguiente tramo",
+  "crewStart": "Salida {time}",
+  "crewFinishRange": "Meta {time} ({from}–{to})",
+  "crewFuel": "{carbs} g de carbohidratos · {litres} l · {sodium} mg de sodio",
+  "crewFooter": "Planificado con Fjelia a partir de mis carreras en cuesta."
 }

@@ -4517,5 +4517,14 @@
   "courseResult": "Previst i corregut",
   "courseResultNote": "Cada control a la mateixa part de la distància del rellotge que del recorregut.",
   "courseFaster": "{time} més ràpid",
-  "courseSlower": "{time} més lent"
+  "courseSlower": "{time} més lent",
+  "crewCard": "Fitxa per a l'equip",
+  "crewCheckpoint": "Control",
+  "crewUpDown": "Pujada / baixada",
+  "crewDue": "Previst",
+  "crewHandOver": "Per lliurar per al tram següent",
+  "crewStart": "Sortida {time}",
+  "crewFinishRange": "Meta {time} ({from}–{to})",
+  "crewFuel": "{carbs} g d'hidrats · {litres} l · {sodium} mg de sodi",
+  "crewFooter": "Planificat amb Fjelia a partir de les meves curses en pujada."
 }

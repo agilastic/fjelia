@@ -4517,5 +4517,14 @@
   "courseResult": "Suunniteltu ja juostu",
   "courseResultNote": "Jokainen tarkastuspiste samalla osuudella kellon matkasta kuin reitin.",
   "courseFaster": "{time} nopeammin",
-  "courseSlower": "{time} hitaammin"
+  "courseSlower": "{time} hitaammin",
+  "crewCard": "Huoltokortti",
+  "crewCheckpoint": "Tarkastuspiste",
+  "crewUpDown": "Nousu / lasku",
+  "crewDue": "Odotettu",
+  "crewHandOver": "Ojenna seuraavaa osuutta varten",
+  "crewStart": "Lähtö {time}",
+  "crewFinishRange": "Maali {time} ({from}–{to})",
+  "crewFuel": "{carbs} g hiilihydraattia · {litres} l · {sodium} mg natriumia",
+  "crewFooter": "Suunniteltu Fjelialla omista mäkijuoksuistani."
 }

@@ -17978,6 +17978,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{time} slower'**
   String courseSlower(String time);
+
+  /// No description provided for @crewCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Crew card'**
+  String get crewCard;
+
+  /// No description provided for @crewCheckpoint.
+  ///
+  /// In en, this message translates to:
+  /// **'Checkpoint'**
+  String get crewCheckpoint;
+
+  /// No description provided for @crewUpDown.
+  ///
+  /// In en, this message translates to:
+  /// **'Up / down'**
+  String get crewUpDown;
+
+  /// No description provided for @crewDue.
+  ///
+  /// In en, this message translates to:
+  /// **'Due'**
+  String get crewDue;
+
+  /// No description provided for @crewHandOver.
+  ///
+  /// In en, this message translates to:
+  /// **'Hand over for the next leg'**
+  String get crewHandOver;
+
+  /// No description provided for @crewStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start {time}'**
+  String crewStart(String time);
+
+  /// No description provided for @crewFinishRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish {time} ({from}–{to})'**
+  String crewFinishRange(String time, String from, String to);
+
+  /// No description provided for @crewFuel.
+  ///
+  /// In en, this message translates to:
+  /// **'{carbs} g carbohydrate · {litres} l · {sodium} mg sodium'**
+  String crewFuel(int carbs, String litres, int sodium);
+
+  /// No description provided for @crewFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'Planned with Fjelia from my own running on hills.'**
+  String get crewFooter;
 }
 
 class _AppLocalizationsDelegate

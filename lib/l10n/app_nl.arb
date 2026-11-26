@@ -5680,5 +5680,14 @@
   "courseResult": "Gepland en gelopen",
   "courseResultNote": "Elke post op hetzelfde deel van de afstand van je horloge als van het parcours.",
   "courseFaster": "{time} sneller",
-  "courseSlower": "{time} langzamer"
+  "courseSlower": "{time} langzamer",
+  "crewCard": "Crewkaart",
+  "crewCheckpoint": "Controlepost",
+  "crewUpDown": "Op / af",
+  "crewDue": "Verwacht",
+  "crewHandOver": "Aangeven voor de volgende etappe",
+  "crewStart": "Start {time}",
+  "crewFinishRange": "Finish {time} ({from}–{to})",
+  "crewFuel": "{carbs} g koolhydraten · {litres} l · {sodium} mg natrium",
+  "crewFooter": "Gepland met Fjelia uit mijn eigen heuvellopen."
 }

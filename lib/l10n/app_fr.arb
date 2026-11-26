@@ -4517,5 +4517,14 @@
   "courseResult": "Prévu et couru",
   "courseResultNote": "Chaque point de contrôle à la même part de la distance de la montre que du parcours.",
   "courseFaster": "{time} plus vite",
-  "courseSlower": "{time} plus lent"
+  "courseSlower": "{time} plus lent",
+  "crewCard": "Fiche d'assistance",
+  "crewCheckpoint": "Point de contrôle",
+  "crewUpDown": "Montée / descente",
+  "crewDue": "Prévu",
+  "crewHandOver": "À remettre pour la section suivante",
+  "crewStart": "Départ {time}",
+  "crewFinishRange": "Arrivée {time} ({from}–{to})",
+  "crewFuel": "{carbs} g de glucides · {litres} l · {sodium} mg de sodium",
+  "crewFooter": "Planifié avec Fjelia d'après mes propres sorties en côte."
 }

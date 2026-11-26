@@ -130,5 +130,6 @@ void main() {
     expect(find.text('Summit'), findsOneWidget);
     expect(find.textContaining('Grade-adjusted pace'), findsOneWidget);
     expect(find.text('Biggest climb in one go'), findsOneWidget);
+    expect(find.text('Crew card'), findsOneWidget);
   });
 }

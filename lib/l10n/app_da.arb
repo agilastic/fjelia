@@ -4517,5 +4517,14 @@
   "courseResult": "Planlagt og løbet",
   "courseResultNote": "Hvert kontrolpunkt ved samme andel af urets distance som af rutens.",
   "courseFaster": "{time} hurtigere",
-  "courseSlower": "{time} langsommere"
+  "courseSlower": "{time} langsommere",
+  "crewCard": "Crew-kort",
+  "crewCheckpoint": "Kontrolpunkt",
+  "crewUpDown": "Op / ned",
+  "crewDue": "Forventet",
+  "crewHandOver": "Udlevér til næste etape",
+  "crewStart": "Start {time}",
+  "crewFinishRange": "Mål {time} ({from}–{to})",
+  "crewFuel": "{carbs} g kulhydrat · {litres} l · {sodium} mg natrium",
+  "crewFooter": "Planlagt med Fjelia ud fra mine egne løb i bakker."
 }

@@ -10478,4 +10478,38 @@ class AppLocalizationsCa extends AppLocalizations {
   String courseSlower(String time) {
     return '$time més lent';
   }
+
+  @override
+  String get crewCard => 'Fitxa per a l\'equip';
+
+  @override
+  String get crewCheckpoint => 'Control';
+
+  @override
+  String get crewUpDown => 'Pujada / baixada';
+
+  @override
+  String get crewDue => 'Previst';
+
+  @override
+  String get crewHandOver => 'Per lliurar per al tram següent';
+
+  @override
+  String crewStart(String time) {
+    return 'Sortida $time';
+  }
+
+  @override
+  String crewFinishRange(String time, String from, String to) {
+    return 'Meta $time ($from–$to)';
+  }
+
+  @override
+  String crewFuel(int carbs, String litres, int sodium) {
+    return '$carbs g d\'hidrats · $litres l · $sodium mg de sodi';
+  }
+
+  @override
+  String get crewFooter =>
+      'Planificat amb Fjelia a partir de les meves curses en pujada.';
 }

@@ -10448,4 +10448,37 @@ class AppLocalizationsSk extends AppLocalizations {
   String courseSlower(String time) {
     return '$time pomalšie';
   }
+
+  @override
+  String get crewCard => 'Karta pre podporu';
+
+  @override
+  String get crewCheckpoint => 'Kontrolný bod';
+
+  @override
+  String get crewUpDown => 'Hore / dole';
+
+  @override
+  String get crewDue => 'Očakávaný';
+
+  @override
+  String get crewHandOver => 'Podať na ďalší úsek';
+
+  @override
+  String crewStart(String time) {
+    return 'Štart $time';
+  }
+
+  @override
+  String crewFinishRange(String time, String from, String to) {
+    return 'Cieľ $time ($from–$to)';
+  }
+
+  @override
+  String crewFuel(int carbs, String litres, int sodium) {
+    return '$carbs g sacharidov · $litres l · $sodium mg sodíka';
+  }
+
+  @override
+  String get crewFooter => 'Naplánované vo Fjelii z mojich behov do kopca.';
 }

@@ -4550,5 +4550,14 @@
   "courseResult": "Geplant und gelaufen",
   "courseResultNote": "Jeder Kontrollpunkt beim gleichen Anteil der Uhr-Distanz wie der Strecke.",
   "courseFaster": "{time} schneller",
-  "courseSlower": "{time} langsamer"
+  "courseSlower": "{time} langsamer",
+  "crewCard": "Crew-Karte",
+  "crewCheckpoint": "Kontrollpunkt",
+  "crewUpDown": "Auf / ab",
+  "crewDue": "Erwartet",
+  "crewHandOver": "Übergabe für den nächsten Abschnitt",
+  "crewStart": "Start {time}",
+  "crewFinishRange": "Ziel {time} ({from}–{to})",
+  "crewFuel": "{carbs} g Kohlenhydrate · {litres} l · {sodium} mg Natrium",
+  "crewFooter": "Mit Fjelia aus meinen eigenen Läufen am Berg geplant."
 }

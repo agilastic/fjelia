@@ -4517,5 +4517,14 @@
   "courseResult": "Plánované a odbehnuté",
   "courseResultNote": "Každý kontrolný bod v rovnakej časti vzdialenosti hodiniek ako trasy.",
   "courseFaster": "{time} rýchlejšie",
-  "courseSlower": "{time} pomalšie"
+  "courseSlower": "{time} pomalšie",
+  "crewCard": "Karta pre podporu",
+  "crewCheckpoint": "Kontrolný bod",
+  "crewUpDown": "Hore / dole",
+  "crewDue": "Očakávaný",
+  "crewHandOver": "Podať na ďalší úsek",
+  "crewStart": "Štart {time}",
+  "crewFinishRange": "Cieľ {time} ({from}–{to})",
+  "crewFuel": "{carbs} g sacharidov · {litres} l · {sodium} mg sodíka",
+  "crewFooter": "Naplánované vo Fjelii z mojich behov do kopca."
 }

@@ -10409,4 +10409,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String courseSlower(String time) {
     return '$time slower';
   }
+
+  @override
+  String get crewCard => 'Crew card';
+
+  @override
+  String get crewCheckpoint => 'Checkpoint';
+
+  @override
+  String get crewUpDown => 'Up / down';
+
+  @override
+  String get crewDue => 'Due';
+
+  @override
+  String get crewHandOver => 'Hand over for the next leg';
+
+  @override
+  String crewStart(String time) {
+    return 'Start $time';
+  }
+
+  @override
+  String crewFinishRange(String time, String from, String to) {
+    return 'Finish $time ($from–$to)';
+  }
+
+  @override
+  String crewFuel(int carbs, String litres, int sodium) {
+    return '$carbs g carbohydrate · $litres l · $sodium mg sodium';
+  }
+
+  @override
+  String get crewFooter => 'Planned with Fjelia from my own running on hills.';
 }

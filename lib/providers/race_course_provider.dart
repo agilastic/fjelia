@@ -1,9 +1,14 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:fjelia_views/fjelia_views.dart';
+import 'package:flutter/services.dart' show ByteData, rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path_provider/path_provider.dart';
 
+import '../l10n/l10n_ext.dart';
+import '../models/crew_card_texts.dart';
 import '../models/workout_nutrition.dart' show AppNutritionTexts;
 import '../services/race_library.dart';
 import 'database_provider.dart';
@@ -85,6 +90,26 @@ class RaceCourseActions {
   Future<void> remove(String goalId) async {
     await edits.remove(goalId);
     _changed(goalId);
+  }
+
+  /// The crew card of [view] as a PDF in the temporary folder, for the
+  /// share sheet; null without a plan.
+  Future<String?> crewCardFile(RaceCourseView view) async {
+    Future<ByteData> font(String name) =>
+        rootBundle.load('packages/fjelia_views/fonts/NotoSans-$name.ttf');
+    final pdf = await crewCardPdf(
+      view,
+      const AppCrewCardTexts(),
+      regular: await font('Regular'),
+      bold: await font('Bold'),
+      locale: tr.localeName,
+    );
+    if (pdf == null) return null;
+    final dir = await getTemporaryDirectory();
+    final name = view.goal.name.replaceAll(RegExp(r'[^\w-]+'), '_');
+    final file = File('${dir.path}/crew_card_$name.pdf');
+    await file.writeAsBytes(pdf, flush: true);
+    return file.path;
   }
 
   void _changed(String goalId) => ref.invalidate(raceCourseProvider(goalId));

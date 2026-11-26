@@ -5680,5 +5680,14 @@
   "courseResult": "Zaplanowane i przebiegnięte",
   "courseResultNote": "Każdy punkt kontrolny w tej samej części dystansu zegarka co trasy.",
   "courseFaster": "{time} szybciej",
-  "courseSlower": "{time} wolniej"
+  "courseSlower": "{time} wolniej",
+  "crewCard": "Karta dla ekipy",
+  "crewCheckpoint": "Punkt kontrolny",
+  "crewUpDown": "Podbieg / zbieg",
+  "crewDue": "Planowo",
+  "crewHandOver": "Do podania na następny odcinek",
+  "crewStart": "Start {time}",
+  "crewFinishRange": "Meta {time} ({from}–{to})",
+  "crewFuel": "{carbs} g węglowodanów · {litres} l · {sodium} mg sodu",
+  "crewFooter": "Zaplanowane w Fjelii na podstawie moich biegów pod górę."
 }
