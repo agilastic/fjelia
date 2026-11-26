@@ -10275,7 +10275,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get coursePlanNote =>
-      'Tid i bevegelse i ditt tempo i hver helning, senket for løpets lengde; pauser, natt og varme er ikke med.';
+      'Tid i bevegelse i ditt tempo i hver helning, senket for løpets lengde, mørket og varmen du oppgir, med pausene dine ved matstasjonene.';
 
   @override
   String get coursePace => 'Ditt tempo i bakker';
@@ -10326,5 +10326,40 @@ class AppLocalizationsNb extends AppLocalizations {
   @override
   String courseRun(String km) {
     return '$km km løpt';
+  }
+
+  @override
+  String get courseRaceDay => 'Løpsdag';
+
+  @override
+  String get courseHigh => 'Forventet høyeste temperatur (°C)';
+
+  @override
+  String get courseHighNote =>
+      'Over 15 °C senker hver grad dagslyset med omtrent 0,55 % (0,34–0,77 %, Wegelin & Hoffman 2011).';
+
+  @override
+  String get courseNight => 'Langsommere i mørket';
+
+  @override
+  String get courseNightNote =>
+      'Ditt eget anslag: hvor mye langsommere du løper med hodelykt.';
+
+  @override
+  String get courseStop => 'Minutter ved hver matstasjon';
+
+  @override
+  String courseInDark(String time) {
+    return '$time i mørket';
+  }
+
+  @override
+  String courseFuelPerHour(int carbs, int fluid, int sodium) {
+    return '$carbs g karbohydrat, $fluid ml, $sodium mg natrium i timen';
+  }
+
+  @override
+  String courseLegFuel(int carbs, String litres) {
+    return '$carbs g · $litres l';
   }
 }

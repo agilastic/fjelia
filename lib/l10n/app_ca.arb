@@ -4483,7 +4483,7 @@
   "courseCutoff": "Tall horari",
   "courseAhead": "{time} de marge",
   "courseLate": "{time} tard",
-  "coursePlanNote": "Temps en moviment al teu ritme a cada pendent, alentit per la llargada de la cursa; les parades, la nit i la calor no hi són.",
+  "coursePlanNote": "Temps en moviment al teu ritme a cada pendent, alentit per la llargada de la cursa, la foscor i la calor que indiques, amb les teves parades als avituallaments.",
   "coursePace": "El teu ritme en pujada",
   "coursePaceNote": "Ritme ajustat al pendent {pace} · als pendents amb menys de 2 km s'aplica la fórmula de Minetti",
   "courseProTeaser": "El teu temps final, el temps a cada control i el marge a cada tall horari, a partir de les teves curses en pujada.",
@@ -4497,5 +4497,14 @@
   "courseSearchLibrary": "Nom de la cursa o població",
   "courseNoRaceFound": "No s'ha trobat cap cursa. Prova la població o afegeix tu el fitxer GPX.",
   "courseAidStations": "{count} avituallaments",
-  "courseRun": "{km} km correguts"
+  "courseRun": "{km} km correguts",
+  "courseRaceDay": "Dia de cursa",
+  "courseHigh": "Màxima prevista (°C)",
+  "courseHighNote": "Per sobre de 15 °C cada grau alenteix les hores de llum un 0,55 % (0,34–0,77 %, Wegelin i Hoffman 2011).",
+  "courseNight": "Més lent a les fosques",
+  "courseNightNote": "La teva estimació: quant més lent corres amb frontal.",
+  "courseStop": "Minuts a cada avituallament",
+  "courseInDark": "{time} a les fosques",
+  "courseFuelPerHour": "{carbs} g d'hidrats, {fluid} ml, {sodium} mg de sodi per hora",
+  "courseLegFuel": "{carbs} g · {litres} l"
 }

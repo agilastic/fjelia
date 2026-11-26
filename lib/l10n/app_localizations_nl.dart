@@ -10346,7 +10346,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get coursePlanNote =>
-      'Bewegingstijd in jouw tempo op elke helling, vertraagd voor de lengte van de wedstrijd; stops, nacht en hitte zitten er niet in.';
+      'Bewegingstijd in jouw tempo op elke helling, vertraagd voor de lengte van de wedstrijd, het donker en de hitte die je opgeeft, met je stops bij de verzorgingsposten.';
 
   @override
   String get coursePace => 'Jouw tempo op heuvels';
@@ -10397,5 +10397,40 @@ class AppLocalizationsNl extends AppLocalizations {
   @override
   String courseRun(String km) {
     return '$km km gelopen';
+  }
+
+  @override
+  String get courseRaceDay => 'Wedstrijddag';
+
+  @override
+  String get courseHigh => 'Verwachte maximumtemperatuur (°C)';
+
+  @override
+  String get courseHighNote =>
+      'Boven 15 °C vertraagt elke graad de daguren met ongeveer 0,55 % (0,34–0,77 %, Wegelin & Hoffman 2011).';
+
+  @override
+  String get courseNight => 'Langzamer in het donker';
+
+  @override
+  String get courseNightNote =>
+      'Je eigen schatting: hoeveel langzamer je loopt met een hoofdlamp.';
+
+  @override
+  String get courseStop => 'Minuten bij elke verzorgingspost';
+
+  @override
+  String courseInDark(String time) {
+    return '$time in het donker';
+  }
+
+  @override
+  String courseFuelPerHour(int carbs, int fluid, int sodium) {
+    return '$carbs g koolhydraten, $fluid ml, $sodium mg natrium per uur';
+  }
+
+  @override
+  String courseLegFuel(int carbs, String litres) {
+    return '$carbs g · $litres l';
   }
 }

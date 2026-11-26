@@ -5646,7 +5646,7 @@
   "courseCutoff": "Tijdslimiet",
   "courseAhead": "{time} voor",
   "courseLate": "{time} te laat",
-  "coursePlanNote": "Bewegingstijd in jouw tempo op elke helling, vertraagd voor de lengte van de wedstrijd; stops, nacht en hitte zitten er niet in.",
+  "coursePlanNote": "Bewegingstijd in jouw tempo op elke helling, vertraagd voor de lengte van de wedstrijd, het donker en de hitte die je opgeeft, met je stops bij de verzorgingsposten.",
   "coursePace": "Jouw tempo op heuvels",
   "coursePaceNote": "Hellinggecorrigeerd tempo {pace} · hellingen onder 2 km gebruiken de Minetti-formule",
   "courseProTeaser": "Je eindtijd, de tijd bij elke post en de marge op elke tijdslimiet, uit je eigen heuvellopen.",
@@ -5660,5 +5660,14 @@
   "courseSearchLibrary": "Naam van de wedstrijd of plaats",
   "courseNoRaceFound": "Geen wedstrijd gevonden. Probeer de plaats of voeg het GPX-bestand zelf toe.",
   "courseAidStations": "{count} verzorgingsposten",
-  "courseRun": "{km} km gelopen"
+  "courseRun": "{km} km gelopen",
+  "courseRaceDay": "Wedstrijddag",
+  "courseHigh": "Verwachte maximumtemperatuur (°C)",
+  "courseHighNote": "Boven 15 °C vertraagt elke graad de daguren met ongeveer 0,55 % (0,34–0,77 %, Wegelin & Hoffman 2011).",
+  "courseNight": "Langzamer in het donker",
+  "courseNightNote": "Je eigen schatting: hoeveel langzamer je loopt met een hoofdlamp.",
+  "courseStop": "Minuten bij elke verzorgingspost",
+  "courseInDark": "{time} in het donker",
+  "courseFuelPerHour": "{carbs} g koolhydraten, {fluid} ml, {sodium} mg natrium per uur",
+  "courseLegFuel": "{carbs} g · {litres} l"
 }

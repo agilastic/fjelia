@@ -10365,7 +10365,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get coursePlanNote =>
-      'Bewegungszeit in deinem Tempo je Steigung, verlangsamt für die Länge des Rennens; Pausen, Nacht und Hitze sind nicht enthalten.';
+      'Bewegungszeit in deinem Tempo je Steigung, verlangsamt für die Länge des Rennens, die Dunkelheit und die Hitze, die du angibst, mit deinen Pausen an den Verpflegungsstellen.';
 
   @override
   String get coursePace => 'Dein Tempo am Berg';
@@ -10416,5 +10416,40 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String courseRun(String km) {
     return '$km km gelaufen';
+  }
+
+  @override
+  String get courseRaceDay => 'Renntag';
+
+  @override
+  String get courseHigh => 'Erwartete Höchsttemperatur (°C)';
+
+  @override
+  String get courseHighNote =>
+      'Über 15 °C verlangsamt jedes Grad den Tag um etwa 0,55 % (0,34–0,77 %, Wegelin & Hoffman 2011).';
+
+  @override
+  String get courseNight => 'Langsamer im Dunkeln';
+
+  @override
+  String get courseNightNote =>
+      'Deine eigene Schätzung: wie viel langsamer du mit Stirnlampe läufst.';
+
+  @override
+  String get courseStop => 'Minuten an jeder Verpflegungsstelle';
+
+  @override
+  String courseInDark(String time) {
+    return '$time im Dunkeln';
+  }
+
+  @override
+  String courseFuelPerHour(int carbs, int fluid, int sodium) {
+    return '$carbs g Kohlenhydrate, $fluid ml, $sodium mg Natrium pro Stunde';
+  }
+
+  @override
+  String courseLegFuel(int carbs, String litres) {
+    return '$carbs g · $litres l';
   }
 }

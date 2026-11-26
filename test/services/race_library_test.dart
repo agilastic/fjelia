@@ -50,8 +50,8 @@ void main() {
 
   test('search sends only the typed text and maps the hit', () async {
     final seen = <Uri>[];
-    final library = RaceLibrary(
-      client: MockClient((request) async {
+    final library = httpRaceLibrary(
+      MockClient((request) async {
         seen.add(request.url);
         return http.Response.bytes(utf8.encode(jsonEncode(hit)), 200);
       }),
@@ -68,8 +68,8 @@ void main() {
   });
 
   test('edition lists the distances with their climb and source', () async {
-    final library = RaceLibrary(
-      client: MockClient(
+    final library = httpRaceLibrary(
+      MockClient(
         (_) async => http.Response.bytes(utf8.encode(jsonEncode(edition)), 200),
       ),
     );
@@ -82,13 +82,13 @@ void main() {
   });
 
   test('failures give no suggestions instead of errors', () async {
-    final down = RaceLibrary(
-      client: MockClient((_) async => throw http.ClientException('offline')),
+    final down = httpRaceLibrary(
+      MockClient((_) async => throw http.ClientException('offline')),
     );
     expect(await down.search('hannover'), isEmpty);
     expect(await down.edition('x'), isNull);
-    final busy = RaceLibrary(
-      client: MockClient((_) async => http.Response('slow down', 429)),
+    final busy = httpRaceLibrary(
+      MockClient((_) async => http.Response('slow down', 429)),
     );
     expect(await busy.search('hannover'), isEmpty);
   });

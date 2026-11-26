@@ -4483,7 +4483,7 @@
   "courseCutoff": "Časový limit",
   "courseAhead": "{time} náskok",
   "courseLate": "{time} neskoro",
-  "coursePlanNote": "Čas v pohybe tvojím tempom na každom sklone, spomalený podľa dĺžky pretekov; prestávky, noc a horúčava nie sú zahrnuté.",
+  "coursePlanNote": "Čas v pohybe tvojím tempom na každom sklone, spomalený podľa dĺžky pretekov, tmy a horúčavy, ktoré zadáš, s tvojimi zastávkami na občerstvovačkách.",
   "coursePace": "Tvoje tempo do kopca",
   "coursePaceNote": "Tempo upravené o sklon {pace} · sklony prebehnuté menej ako 2 km používajú Minettiho vzorec",
   "courseProTeaser": "Tvoj čas v cieli, čas na každom kontrolnom bode a rezerva voči každému limitu z tvojich vlastných behov do kopca.",
@@ -4497,5 +4497,14 @@
   "courseSearchLibrary": "Názov pretekov alebo obec",
   "courseNoRaceFound": "Žiadne preteky sa nenašli. Skús obec alebo pridaj súbor GPX sám.",
   "courseAidStations": "Občerstvovačky: {count}",
-  "courseRun": "Odbehnuté {km} km"
+  "courseRun": "Odbehnuté {km} km",
+  "courseRaceDay": "Deň pretekov",
+  "courseHigh": "Očakávaná najvyššia teplota (°C)",
+  "courseHighNote": "Nad 15 °C každý stupeň spomalí denné svetlo asi o 0,55 % (0,34–0,77 %, Wegelin a Hoffman 2011).",
+  "courseNight": "Pomalšie v tme",
+  "courseNightNote": "Tvoj vlastný odhad: o koľko pomalšie bežíš s čelovkou.",
+  "courseStop": "Minúty na každej občerstvovačke",
+  "courseInDark": "{time} v tme",
+  "courseFuelPerHour": "{carbs} g sacharidov, {fluid} ml, {sodium} mg sodíka za hodinu",
+  "courseLegFuel": "{carbs} g · {litres} l"
 }

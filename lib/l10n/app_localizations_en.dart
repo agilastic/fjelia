@@ -10282,7 +10282,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get coursePlanNote =>
-      'Moving time at your pace on each grade, slowed for the length of the race; stops, night and heat are not in it.';
+      'Moving time at your pace on each grade, slowed for the length of the race, the dark and the heat you set, with your aid station stops.';
 
   @override
   String get coursePace => 'Your pace on hills';
@@ -10332,5 +10332,40 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String courseRun(String km) {
     return '$km km run';
+  }
+
+  @override
+  String get courseRaceDay => 'Race day';
+
+  @override
+  String get courseHigh => 'Expected high (°C)';
+
+  @override
+  String get courseHighNote =>
+      'Above 15 °C each degree slows the daylight by about 0.55 % (0.34–0.77 %, Wegelin & Hoffman 2011).';
+
+  @override
+  String get courseNight => 'Slower in the dark';
+
+  @override
+  String get courseNightNote =>
+      'Your own estimate: how much slower you run with a headlamp.';
+
+  @override
+  String get courseStop => 'Minutes at each aid station';
+
+  @override
+  String courseInDark(String time) {
+    return '$time in the dark';
+  }
+
+  @override
+  String courseFuelPerHour(int carbs, int fluid, int sodium) {
+    return '$carbs g carbohydrate, $fluid ml, $sodium mg sodium per hour';
+  }
+
+  @override
+  String courseLegFuel(int carbs, String litres) {
+    return '$carbs g · $litres l';
   }
 }

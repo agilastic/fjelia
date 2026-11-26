@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:fjelia_views/fjelia_views.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../models/workout_nutrition.dart' show AppNutritionTexts;
 import '../services/race_library.dart';
 import 'database_provider.dart';
 import 'day_data_provider.dart' show syncStatusListenerProvider;
@@ -16,7 +17,11 @@ final raceCourseProvider = FutureProvider.family<RaceCourseView?, String>((
   goalId,
 ) {
   ref.watch(syncStatusListenerProvider);
-  return loadRaceCourse(ref.watch(databaseProvider), goalId);
+  return loadRaceCourse(
+    ref.watch(databaseProvider),
+    goalId,
+    texts: const AppNutritionTexts(),
+  );
 });
 
 /// Adding and changing courses.
@@ -64,6 +69,11 @@ class RaceCourseActions {
 
   Future<void> setCheckpoints(String goalId, List<CourseCheckpoint> c) async {
     await edits.setCheckpoints(goalId, c);
+    _changed(goalId);
+  }
+
+  Future<void> setSettings(String goalId, RacePlanSettings settings) async {
+    await edits.setSettings(goalId, settings);
     _changed(goalId);
   }
 

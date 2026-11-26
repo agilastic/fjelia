@@ -10,9 +10,10 @@ import 'package:fjelia/screens/races/race_course_sheet.dart';
 import 'package:fjelia_service_api/fjelia_service_api.dart';
 import 'package:fjelia_views/fjelia_views.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import '../support/blank_tiles.dart';
 
 class _Edition implements FjeliaEdition {
   const _Edition(this.isPro);
@@ -20,17 +21,6 @@ class _Edition implements FjeliaEdition {
   final bool isPro;
   @override
   bool get proOffered => true;
-}
-
-class _NoTiles extends TileProvider {
-  @override
-  ImageProvider getImage(TileCoordinates coordinates, TileLayer options) =>
-      MemoryImage(
-        base64Decode(
-          'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGPYcunOfwAI'
-          'AgNiJBgw5wAAAABJRU5ErkJggg==',
-        ),
-      );
 }
 
 /// 10 km: up 500 m at 10 % to a checkpoint, then down.
@@ -50,7 +40,7 @@ void main() {
   late AppDatabase db;
   late RaceGoal goal;
   setUp(() async {
-    courseTileProvider = _NoTiles();
+    courseTileProvider = BlankTiles();
     db = AppDatabase(NativeDatabase.memory());
     final now = DateTime.now();
     await db
@@ -125,7 +115,7 @@ void main() {
 
   testWidgets('the course is analysed for everyone', (tester) async {
     await show(tester, pro: false);
-    expect(find.text('10 km'), findsOneWidget);
+    expect(find.text('10.0 km'), findsOneWidget);
     expect(find.textContaining('of 50 m or more').evaluate(), isEmpty);
     expect(find.text('+10 %'), findsWidgets);
     expect(

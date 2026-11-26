@@ -10320,7 +10320,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get coursePlanNote =>
-      'Čas v pohybe tvojím tempom na každom sklone, spomalený podľa dĺžky pretekov; prestávky, noc a horúčava nie sú zahrnuté.';
+      'Čas v pohybe tvojím tempom na každom sklone, spomalený podľa dĺžky pretekov, tmy a horúčavy, ktoré zadáš, s tvojimi zastávkami na občerstvovačkách.';
 
   @override
   String get coursePace => 'Tvoje tempo do kopca';
@@ -10371,5 +10371,40 @@ class AppLocalizationsSk extends AppLocalizations {
   @override
   String courseRun(String km) {
     return 'Odbehnuté $km km';
+  }
+
+  @override
+  String get courseRaceDay => 'Deň pretekov';
+
+  @override
+  String get courseHigh => 'Očakávaná najvyššia teplota (°C)';
+
+  @override
+  String get courseHighNote =>
+      'Nad 15 °C každý stupeň spomalí denné svetlo asi o 0,55 % (0,34–0,77 %, Wegelin a Hoffman 2011).';
+
+  @override
+  String get courseNight => 'Pomalšie v tme';
+
+  @override
+  String get courseNightNote =>
+      'Tvoj vlastný odhad: o koľko pomalšie bežíš s čelovkou.';
+
+  @override
+  String get courseStop => 'Minúty na každej občerstvovačke';
+
+  @override
+  String courseInDark(String time) {
+    return '$time v tme';
+  }
+
+  @override
+  String courseFuelPerHour(int carbs, int fluid, int sodium) {
+    return '$carbs g sacharidov, $fluid ml, $sodium mg sodíka za hodinu';
+  }
+
+  @override
+  String courseLegFuel(int carbs, String litres) {
+    return '$carbs g · $litres l';
   }
 }

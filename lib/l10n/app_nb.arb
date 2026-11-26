@@ -4483,7 +4483,7 @@
   "courseCutoff": "Tidsgrense",
   "courseAhead": "{time} foran",
   "courseLate": "{time} for sent",
-  "coursePlanNote": "Tid i bevegelse i ditt tempo i hver helning, senket for løpets lengde; pauser, natt og varme er ikke med.",
+  "coursePlanNote": "Tid i bevegelse i ditt tempo i hver helning, senket for løpets lengde, mørket og varmen du oppgir, med pausene dine ved matstasjonene.",
   "coursePace": "Ditt tempo i bakker",
   "coursePaceNote": "Helningsjustert tempo {pace} · helninger under 2 km bruker Minetti-formelen",
   "courseProTeaser": "Sluttiden din, tiden ved hvert kontrollpunkt og marginen til hver tidsgrense ut fra dine egne løp i bakker.",
@@ -4497,5 +4497,14 @@
   "courseSearchLibrary": "Løpsnavn eller sted",
   "courseNoRaceFound": "Fant ikke noe løp. Prøv stedet, eller legg til GPX-filen selv.",
   "courseAidStations": "{count} matstasjoner",
-  "courseRun": "{km} km løpt"
+  "courseRun": "{km} km løpt",
+  "courseRaceDay": "Løpsdag",
+  "courseHigh": "Forventet høyeste temperatur (°C)",
+  "courseHighNote": "Over 15 °C senker hver grad dagslyset med omtrent 0,55 % (0,34–0,77 %, Wegelin & Hoffman 2011).",
+  "courseNight": "Langsommere i mørket",
+  "courseNightNote": "Ditt eget anslag: hvor mye langsommere du løper med hodelykt.",
+  "courseStop": "Minutter ved hver matstasjon",
+  "courseInDark": "{time} i mørket",
+  "courseFuelPerHour": "{carbs} g karbohydrat, {fluid} ml, {sodium} mg natrium i timen",
+  "courseLegFuel": "{carbs} g · {litres} l"
 }

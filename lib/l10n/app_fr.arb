@@ -4483,7 +4483,7 @@
   "courseCutoff": "Barrière",
   "courseAhead": "{time} d'avance",
   "courseLate": "{time} de retard",
-  "coursePlanNote": "Temps en mouvement à votre allure sur chaque pente, ralenti selon la longueur de la course ; arrêts, nuit et chaleur non compris.",
+  "coursePlanNote": "Temps en mouvement à votre allure sur chaque pente, ralenti selon la longueur de la course, la nuit et la chaleur indiquées, avec vos arrêts aux ravitaillements.",
   "coursePace": "Votre allure en côte",
   "coursePaceNote": "Allure ajustée à la pente {pace} · les pentes courues moins de 2 km utilisent la formule de Minetti",
   "courseProTeaser": "Votre temps final, le temps à chaque point de contrôle et la marge sur chaque barrière, d'après vos propres sorties en côte.",
@@ -4497,5 +4497,14 @@
   "courseSearchLibrary": "Nom de la course ou ville",
   "courseNoRaceFound": "Aucune course trouvée. Essayez la ville ou ajoutez vous-même le fichier GPX.",
   "courseAidStations": "{count} ravitaillements",
-  "courseRun": "{km} km courus"
+  "courseRun": "{km} km courus",
+  "courseRaceDay": "Jour de course",
+  "courseHigh": "Maximale prévue (°C)",
+  "courseHighNote": "Au-dessus de 15 °C, chaque degré ralentit les heures de jour d'environ 0,55 % (0,34–0,77 %, Wegelin et Hoffman 2011).",
+  "courseNight": "Plus lent de nuit",
+  "courseNightNote": "Votre propre estimation : de combien vous courez plus lentement à la frontale.",
+  "courseStop": "Minutes à chaque ravitaillement",
+  "courseInDark": "{time} de nuit",
+  "courseFuelPerHour": "{carbs} g de glucides, {fluid} ml, {sodium} mg de sodium par heure",
+  "courseLegFuel": "{carbs} g · {litres} l"
 }

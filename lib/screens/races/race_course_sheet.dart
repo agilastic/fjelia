@@ -7,6 +7,8 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 import 'package:latlong2/latlong.dart' hide Path;
+import 'package:fjelia_core/utils/distance_format.dart';
+import 'package:fjelia_core/utils/target_time.dart';
 
 import '../../db/database.dart' show RaceGoal;
 import '../../l10n/app_localizations.dart';
@@ -23,42 +25,6 @@ const _accent = [Color(0xFFFFB13D), Color(0xFFE5383B)];
 /// Where map tiles come from; tests set one that loads nothing.
 @visibleForTesting
 TileProvider? courseTileProvider;
-
-String _hm(double seconds) {
-  final m = (seconds / 60).round();
-  return '${m ~/ 60}:${(m % 60).toString().padLeft(2, '0')}';
-}
-
-/// One decimal under 10 km, whole kilometres above.
-String _km(double km) =>
-    km < 9.95 ? '${km.toStringAsFixed(1)} km' : '${km.round()} km';
-
-String _grade(double g) => '${g >= 0 ? '+' : '−'}${(g.abs() * 100).round()} %';
-
-String _pace(double secondsPerKm) {
-  final s = secondsPerKm.round();
-  return '${s ~/ 60}:${(s % 60).toString().padLeft(2, '0')} /km';
-}
-
-/// Blue going down steeply, green on the flat, red going up steeply.
-Color gradeColor(double grade) {
-  const stops = [
-    (-0.20, Color(0xFF1E5BD8)),
-    (-0.08, Color(0xFF4FA8F0)),
-    (0.0, Color(0xFF34C759)),
-    (0.08, Color(0xFFFFB13D)),
-    (0.20, Color(0xFFE5383B)),
-  ];
-  if (grade <= stops.first.$1) return stops.first.$2;
-  if (grade >= stops.last.$1) return stops.last.$2;
-  for (var i = 1; i < stops.length; i++) {
-    if (grade <= stops[i].$1) {
-      final t = (grade - stops[i - 1].$1) / (stops[i].$1 - stops[i - 1].$1);
-      return Color.lerp(stops[i - 1].$2, stops[i].$2, t)!;
-    }
-  }
-  return stops.last.$2;
-}
 
 /// The course of a race goal: its profile, climbs and gradients, and with
 /// FjeliaPro the finish and checkpoint times from the athlete's own running
@@ -275,13 +241,13 @@ class _Stats extends StatelessWidget {
       spacing: 12,
       runSpacing: 12,
       children: [
-        stat(l.courseDistance, _km(p.distanceKm)),
+        stat(l.courseDistance, formatKm(p.distanceKm * 1000)),
         stat(l.courseClimb, '${p.gain.round()} m'),
         stat(l.courseDescent, '${p.loss.round()} m'),
         stat(l.courseEffort, '${p.effortKm.round()} km', l.courseEffortNote),
         stat(
           l.courseSteep,
-          '${_grade(p.steepestUp)} / ${_grade(-p.steepestDown)}',
+          '${formatGrade(p.steepestUp)} / ${formatGrade(-p.steepestDown)}',
           l.courseSteepNote,
         ),
         stat(l.courseHighest, '${p.maxEle.round()} m'),
@@ -304,7 +270,7 @@ class _HoverLine extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 4),
       child: Text(
-        '${km.toStringAsFixed(1)} km · ${p.ele.round()} m · ${_grade(p.grade)}',
+        '${km.toStringAsFixed(1)} km · ${p.ele.round()} m · ${formatGrade(p.grade)}',
         style: TextStyle(fontSize: 12, color: fjInk70),
       ),
     );
@@ -414,7 +380,7 @@ class _ProfilePainter extends CustomPainter {
       }
       canvas.drawRect(
         Rect.fromLTRB(left + col, y(pts[i].ele), left + col + 1.2, h),
-        Paint()..color = gradeColor(pts[i].grade).withValues(alpha: .85),
+        Paint()..color = Color(gradeArgb(pts[i].grade)).withValues(alpha: .85),
       );
     }
     for (final c in checkpoints) {
@@ -559,9 +525,9 @@ class _Climbs extends StatelessWidget {
                         SizedBox(
                           width: 56,
                           child: Text(
-                            _grade(c.grade),
+                            formatGrade(c.grade),
                             textAlign: TextAlign.end,
-                            style: TextStyle(color: gradeColor(c.grade)),
+                            style: TextStyle(color: Color(gradeArgb(c.grade))),
                           ),
                         ),
                       ],
@@ -611,7 +577,7 @@ class _Bands extends StatelessWidget {
                         child: Container(
                           height: 8,
                           decoration: BoxDecoration(
-                            color: gradeColor(_grades[i]),
+                            color: Color(gradeArgb(_grades[i])),
                             borderRadius: BorderRadius.circular(3),
                           ),
                         ),
@@ -621,7 +587,7 @@ class _Bands extends StatelessWidget {
                   SizedBox(
                     width: 64,
                     child: Text(
-                      _km(profile.bands[i]),
+                      formatKm(profile.bands[i] * 1000),
                       textAlign: TextAlign.end,
                     ),
                   ),
@@ -658,7 +624,7 @@ class _Plan extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = context.l10n;
-    final r = view.prediction;
+    final r = view.plan;
     final start = view.startAt;
     final clock = DateFormat.E().add_Hm();
     return SectionCard(
@@ -686,14 +652,14 @@ class _Plan extends ConsumerWidget {
                         style: TextStyle(fontSize: 12, color: fjInk70),
                       ),
                       Text(
-                        _hm(r.seconds),
+                        formatHoursMinutes(r.seconds),
                         style: const TextStyle(
                           fontSize: 26,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                       Text(
-                        '${_hm(r.fastest)}–${_hm(r.slowest)}',
+                        '${formatHoursMinutes(r.fastest)}–${formatHoursMinutes(r.slowest)}',
                         style: TextStyle(fontSize: 12, color: fjInk70),
                       ),
                     ],
@@ -720,10 +686,24 @@ class _Plan extends ConsumerWidget {
                   ),
               ],
             ),
+            if (r.darkHours > 0.05)
+              Text(
+                l.courseInDark(formatHoursMinutes(r.darkHours * 3600)),
+                style: TextStyle(fontSize: 12, color: fjInk70),
+              ),
+            if (view.fuel case final f?)
+              Text(
+                l.courseFuelPerHour(
+                  f.carbs.round(),
+                  f.fluid.round(),
+                  f.sodium.round(),
+                ),
+                style: TextStyle(fontSize: 12, color: fjInk70),
+              ),
             const SizedBox(height: 10),
             for (final (i, leg) in r.legs.indexed)
               _LegRow(
-                name: i == r.legs.length - 1 ? l.courseFinish : leg.to,
+                name: i == r.legs.length - 1 ? l.courseFinish : leg.leg.to,
                 leg: leg,
                 clock: start == null
                     ? null
@@ -731,6 +711,13 @@ class _Plan extends ConsumerWidget {
                         start.add(Duration(seconds: leg.arrival.round())),
                       ),
                 margin: view.marginAt(leg),
+                fuel: switch (view.fuelFor(leg)) {
+                  null => null,
+                  final f => l.courseLegFuel(
+                    f.carbs.round(),
+                    (f.fluid / 1000).toStringAsFixed(1),
+                  ),
+                },
               ),
             const SizedBox(height: 6),
             Text(
@@ -738,7 +725,8 @@ class _Plan extends ConsumerWidget {
               style: TextStyle(fontSize: 11, color: fjInk70),
             ),
           ],
-          Row(
+          // Three actions: they wrap onto a second line on a narrow phone.
+          Wrap(
             children: [
               TextButton(
                 onPressed: () => _start(context, ref),
@@ -748,7 +736,15 @@ class _Plan extends ConsumerWidget {
                       : l.courseStartAt(DateFormat.Hm().format(start)),
                 ),
               ),
-              const Spacer(),
+              TextButton(
+                onPressed: () => showModalBottomSheet<void>(
+                  context: context,
+                  isScrollControlled: true,
+                  useSafeArea: true,
+                  builder: (_) => _RaceDayEditor(view: view),
+                ),
+                child: Text(l.courseRaceDay),
+              ),
               TextButton(
                 onPressed: () => showModalBottomSheet<void>(
                   context: context,
@@ -772,11 +768,15 @@ class _LegRow extends StatelessWidget {
     required this.leg,
     required this.clock,
     required this.margin,
+    this.fuel,
   });
   final String name;
-  final CourseLeg leg;
+  final PlannedLeg leg;
   final String? clock;
   final Duration? margin;
+
+  /// What to take on the leg, written out.
+  final String? fuel;
 
   @override
   Widget build(BuildContext context) {
@@ -793,8 +793,14 @@ class _LegRow extends StatelessWidget {
               children: [
                 Text(name, style: const TextStyle(fontWeight: FontWeight.w600)),
                 Text(
-                  '${leg.km.toStringAsFixed(1)} km · +${leg.gain.round()} / '
-                  '−${leg.loss.round()} m · ${_hm(leg.seconds)}',
+                  [
+                    '${leg.leg.km.toStringAsFixed(1)} km',
+                    '+${leg.leg.gain.round()} / −${leg.leg.loss.round()} m',
+                    formatHoursMinutes(leg.seconds),
+                    if (leg.darkHours >= 0.05)
+                      l.courseInDark(formatHoursMinutes(leg.darkHours * 3600)),
+                    ?fuel,
+                  ].join(' · '),
                   style: TextStyle(fontSize: 12, color: fjInk70),
                 ),
               ],
@@ -804,14 +810,18 @@ class _LegRow extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                clock ?? _hm(leg.arrival),
+                clock ?? formatHoursMinutes(leg.arrival),
                 style: const TextStyle(fontWeight: FontWeight.w600),
               ),
               if (m != null)
                 Text(
                   m.isNegative
-                      ? l.courseLate(_hm(-m.inSeconds.toDouble()))
-                      : l.courseAhead(_hm(m.inSeconds.toDouble())),
+                      ? l.courseLate(
+                          formatHoursMinutes(-m.inSeconds.toDouble()),
+                        )
+                      : l.courseAhead(
+                          formatHoursMinutes(m.inSeconds.toDouble()),
+                        ),
                   style: TextStyle(
                     fontSize: 12,
                     color: m.isNegative
@@ -843,7 +853,7 @@ class _PaceTable extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            l.coursePaceNote(_pace(table.flatPace)),
+            l.coursePaceNote(formatPace(table.flatPace)),
             style: TextStyle(fontSize: 12, color: fjInk70),
           ),
           const SizedBox(height: 6),
@@ -855,11 +865,11 @@ class _PaceTable extends StatelessWidget {
                   SizedBox(
                     width: 120,
                     child: Text(
-                      '${_grade(b.from)}…${_grade(b.to)}',
-                      style: TextStyle(color: gradeColor(b.grade)),
+                      '${formatGrade(b.from)}…${formatGrade(b.to)}',
+                      style: TextStyle(color: Color(gradeArgb(b.grade))),
                     ),
                   ),
-                  Expanded(child: Text(_pace(b.pace))),
+                  Expanded(child: Text(formatPace(b.pace))),
                   Text(
                     b.grade.abs() < 0.03
                         ? ''
@@ -976,7 +986,8 @@ class _LibraryPickerState extends ConsumerState<_LibraryPicker> {
                             [
                               if (h.date != null)
                                 DateFormat.yMMMd().format(h.date!),
-                              for (final km in h.distancesKm) _km(km),
+                              for (final km in h.distancesKm)
+                                formatKm(km * 1000),
                             ].join(' · '),
                           ),
                           trailing: const Icon(Icons.chevron_right),
@@ -993,7 +1004,7 @@ class _LibraryPickerState extends ConsumerState<_LibraryPicker> {
                         ListTile(
                           enabled: r.hasCourse,
                           title: Text(
-                            '${r.name ?? e.title} · ${_km(r.distanceKm)}',
+                            '${r.name ?? e.title} · ${formatKm(r.distanceKm * 1000)}',
                           ),
                           subtitle: Text(
                             r.hasCourse
@@ -1037,7 +1048,9 @@ class _CheckpointRow {
       cutoff = TextEditingController(
         text: c.cutoff == null || start == null
             ? ''
-            : _hm(c.cutoff!.difference(start).inSeconds.toDouble()),
+            : formatHoursMinutes(
+                c.cutoff!.difference(start).inSeconds.toDouble(),
+              ),
       );
   final TextEditingController name, km, cutoff;
 
@@ -1167,6 +1180,100 @@ class _CheckpointEditorState extends ConsumerState<_CheckpointEditor> {
               ),
             ),
           ),
+          FilledButton(onPressed: _save, child: Text(l.save)),
+        ],
+      ),
+    );
+  }
+}
+
+/// Race-day expectations: the day's high, how much slower in the dark,
+/// minutes at each aid station.
+class _RaceDayEditor extends ConsumerStatefulWidget {
+  const _RaceDayEditor({required this.view});
+  final RaceCourseView view;
+
+  @override
+  ConsumerState<_RaceDayEditor> createState() => _RaceDayEditorState();
+}
+
+class _RaceDayEditorState extends ConsumerState<_RaceDayEditor> {
+  late final RacePlanSettings _start = widget.view.course.settings;
+  late final _high = TextEditingController(
+    text: _start.highTempC?.round().toString() ?? '',
+  );
+  late final _stop = TextEditingController(
+    text: _start.stopMinutes == 0 ? '' : '${_start.stopMinutes}',
+  );
+  late var _night = (_start.nightSlowdown * 100).round();
+
+  @override
+  void dispose() {
+    _high.dispose();
+    _stop.dispose();
+    super.dispose();
+  }
+
+  Future<void> _save() async {
+    await ref
+        .read(raceCourseActionsProvider)
+        .setSettings(
+          widget.view.goal.id,
+          RacePlanSettings(
+            highTempC: double.tryParse(_high.text.trim().replaceAll(',', '.')),
+            nightSlowdown: _night / 100,
+            stopMinutes: (int.tryParse(_stop.text.trim()) ?? 0).clamp(0, 120),
+          ),
+        );
+    if (mounted) Navigator.pop(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    return Padding(
+      padding: EdgeInsets.only(
+        left: 16,
+        right: 16,
+        top: 16,
+        bottom: MediaQuery.viewInsetsOf(context).bottom + 16,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(l.courseRaceDay, style: Theme.of(context).textTheme.titleLarge),
+          TextField(
+            controller: _high,
+            keyboardType: const TextInputType.numberWithOptions(
+              decimal: true,
+              signed: true,
+            ),
+            decoration: InputDecoration(
+              labelText: l.courseHigh,
+              helperText: l.courseHighNote,
+              helperMaxLines: 3,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(l.courseNight),
+          Slider(
+            value: _night.toDouble(),
+            max: 30,
+            divisions: 6,
+            label: '$_night %',
+            onChanged: (v) => setState(() => _night = v.round()),
+          ),
+          Text(
+            l.courseNightNote,
+            style: TextStyle(fontSize: 12, color: fjInk70),
+          ),
+          TextField(
+            controller: _stop,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(labelText: l.courseStop),
+          ),
+          const SizedBox(height: 12),
           FilledButton(onPressed: _save, child: Text(l.save)),
         ],
       ),

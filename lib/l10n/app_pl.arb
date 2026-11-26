@@ -5646,7 +5646,7 @@
   "courseCutoff": "Limit czasu",
   "courseAhead": "{time} zapasu",
   "courseLate": "{time} spóźnienia",
-  "coursePlanNote": "Czas ruchu w twoim tempie na każdym nachyleniu, spowolniony o długość biegu; postoje, noc i upał nie są uwzględnione.",
+  "coursePlanNote": "Czas ruchu w twoim tempie na każdym nachyleniu, spowolniony o długość biegu, ciemność i upał, które podajesz, z postojami na punktach odżywczych.",
   "coursePace": "Twoje tempo pod górę",
   "coursePaceNote": "Tempo skorygowane o nachylenie {pace} · nachylenia przebiegnięte na mniej niż 2 km liczone wzorem Minettiego",
   "courseProTeaser": "Twój czas na mecie, czas na każdym punkcie kontrolnym i zapas na każdym limicie, z twoich własnych biegów pod górę.",
@@ -5660,5 +5660,14 @@
   "courseSearchLibrary": "Nazwa biegu lub miejscowość",
   "courseNoRaceFound": "Nie znaleziono biegu. Spróbuj miejscowości lub dodaj plik GPX samodzielnie.",
   "courseAidStations": "Punkty odżywcze: {count}",
-  "courseRun": "Przebiegnięto {km} km"
+  "courseRun": "Przebiegnięto {km} km",
+  "courseRaceDay": "Dzień zawodów",
+  "courseHigh": "Spodziewana temperatura maksymalna (°C)",
+  "courseHighNote": "Powyżej 15 °C każdy stopień spowalnia godziny dzienne o około 0,55 % (0,34–0,77 %, Wegelin i Hoffman 2011).",
+  "courseNight": "Wolniej po ciemku",
+  "courseNightNote": "Twoja własna ocena: o ile wolniej biegniesz z czołówką.",
+  "courseStop": "Minuty na każdym punkcie odżywczym",
+  "courseInDark": "{time} po ciemku",
+  "courseFuelPerHour": "{carbs} g węglowodanów, {fluid} ml, {sodium} mg sodu na godzinę",
+  "courseLegFuel": "{carbs} g · {litres} l"
 }

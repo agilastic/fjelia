@@ -10364,7 +10364,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get coursePlanNote =>
-      'Temps en mouvement à votre allure sur chaque pente, ralenti selon la longueur de la course ; arrêts, nuit et chaleur non compris.';
+      'Temps en mouvement à votre allure sur chaque pente, ralenti selon la longueur de la course, la nuit et la chaleur indiquées, avec vos arrêts aux ravitaillements.';
 
   @override
   String get coursePace => 'Votre allure en côte';
@@ -10415,5 +10415,40 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String courseRun(String km) {
     return '$km km courus';
+  }
+
+  @override
+  String get courseRaceDay => 'Jour de course';
+
+  @override
+  String get courseHigh => 'Maximale prévue (°C)';
+
+  @override
+  String get courseHighNote =>
+      'Au-dessus de 15 °C, chaque degré ralentit les heures de jour d\'environ 0,55 % (0,34–0,77 %, Wegelin et Hoffman 2011).';
+
+  @override
+  String get courseNight => 'Plus lent de nuit';
+
+  @override
+  String get courseNightNote =>
+      'Votre propre estimation : de combien vous courez plus lentement à la frontale.';
+
+  @override
+  String get courseStop => 'Minutes à chaque ravitaillement';
+
+  @override
+  String courseInDark(String time) {
+    return '$time de nuit';
+  }
+
+  @override
+  String courseFuelPerHour(int carbs, int fluid, int sodium) {
+    return '$carbs g de glucides, $fluid ml, $sodium mg de sodium par heure';
+  }
+
+  @override
+  String courseLegFuel(int carbs, String litres) {
+    return '$carbs g · $litres l';
   }
 }

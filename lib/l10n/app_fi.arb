@@ -4483,7 +4483,7 @@
   "courseCutoff": "Aikaraja",
   "courseAhead": "{time} etua",
   "courseLate": "{time} myöhässä",
-  "coursePlanNote": "Liikkumisaika vauhdillasi kullakin kaltevuudella, hidastettuna kisan pituuden mukaan; tauot, yö ja helle eivät ole mukana.",
+  "coursePlanNote": "Liikkumisaika vauhdillasi kullakin kaltevuudella, hidastettuna kisan pituuden, pimeyden ja antamasi helteen mukaan, huoltopistetaukoinesi.",
   "coursePace": "Vauhtisi mäissä",
   "coursePaceNote": "Kaltevuuskorjattu vauhti {pace} · alle 2 km juostuilla kaltevuuksilla käytetään Minettin kaavaa",
   "courseProTeaser": "Loppuaikasi, aika kullakin tarkastuspisteellä ja marginaali kuhunkin aikarajaan omista mäkijuoksuistasi laskettuna.",
@@ -4497,5 +4497,14 @@
   "courseSearchLibrary": "Kisan nimi tai paikkakunta",
   "courseNoRaceFound": "Kisaa ei löytynyt. Kokeile paikkakuntaa tai lisää GPX-tiedosto itse.",
   "courseAidStations": "{count} huoltopistettä",
-  "courseRun": "{km} km juostu"
+  "courseRun": "{km} km juostu",
+  "courseRaceDay": "Kisapäivä",
+  "courseHigh": "Odotettu ylin lämpötila (°C)",
+  "courseHighNote": "Yli 15 °C:ssa jokainen aste hidastaa valoisaa aikaa noin 0,55 % (0,34–0,77 %, Wegelin & Hoffman 2011).",
+  "courseNight": "Hitaampi pimeässä",
+  "courseNightNote": "Oma arviosi: kuinka paljon hitaammin juokset otsalampun kanssa.",
+  "courseStop": "Minuuttia kullakin huoltopisteellä",
+  "courseInDark": "{time} pimeässä",
+  "courseFuelPerHour": "{carbs} g hiilihydraattia, {fluid} ml, {sodium} mg natriumia tunnissa",
+  "courseLegFuel": "{carbs} g · {litres} l"
 }

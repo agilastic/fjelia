@@ -10376,7 +10376,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get coursePlanNote =>
-      'Czas ruchu w twoim tempie na każdym nachyleniu, spowolniony o długość biegu; postoje, noc i upał nie są uwzględnione.';
+      'Czas ruchu w twoim tempie na każdym nachyleniu, spowolniony o długość biegu, ciemność i upał, które podajesz, z postojami na punktach odżywczych.';
 
   @override
   String get coursePace => 'Twoje tempo pod górę';
@@ -10426,5 +10426,40 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String courseRun(String km) {
     return 'Przebiegnięto $km km';
+  }
+
+  @override
+  String get courseRaceDay => 'Dzień zawodów';
+
+  @override
+  String get courseHigh => 'Spodziewana temperatura maksymalna (°C)';
+
+  @override
+  String get courseHighNote =>
+      'Powyżej 15 °C każdy stopień spowalnia godziny dzienne o około 0,55 % (0,34–0,77 %, Wegelin i Hoffman 2011).';
+
+  @override
+  String get courseNight => 'Wolniej po ciemku';
+
+  @override
+  String get courseNightNote =>
+      'Twoja własna ocena: o ile wolniej biegniesz z czołówką.';
+
+  @override
+  String get courseStop => 'Minuty na każdym punkcie odżywczym';
+
+  @override
+  String courseInDark(String time) {
+    return '$time po ciemku';
+  }
+
+  @override
+  String courseFuelPerHour(int carbs, int fluid, int sodium) {
+    return '$carbs g węglowodanów, $fluid ml, $sodium mg sodu na godzinę';
+  }
+
+  @override
+  String courseLegFuel(int carbs, String litres) {
+    return '$carbs g · $litres l';
   }
 }

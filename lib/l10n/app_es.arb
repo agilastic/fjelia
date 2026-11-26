@@ -4483,7 +4483,7 @@
   "courseCutoff": "Corte",
   "courseAhead": "{time} de margen",
   "courseLate": "{time} tarde",
-  "coursePlanNote": "Tiempo en movimiento a tu ritmo en cada pendiente, ralentizado por la longitud de la carrera; paradas, noche y calor no se incluyen.",
+  "coursePlanNote": "Tiempo en movimiento a tu ritmo en cada pendiente, ralentizado por la longitud de la carrera, la oscuridad y el calor que indicas, con tus paradas en los avituallamientos.",
   "coursePace": "Tu ritmo en cuesta",
   "coursePaceNote": "Ritmo ajustado a la pendiente {pace} · las pendientes con menos de 2 km usan la fórmula de Minetti",
   "courseProTeaser": "Tu tiempo final, el tiempo en cada control y el margen a cada corte, a partir de tus propias carreras en cuesta.",
@@ -4497,5 +4497,14 @@
   "courseSearchLibrary": "Nombre de la carrera o población",
   "courseNoRaceFound": "No se encontró ninguna carrera. Prueba la población o añade tú el archivo GPX.",
   "courseAidStations": "{count} avituallamientos",
-  "courseRun": "{km} km corridos"
+  "courseRun": "{km} km corridos",
+  "courseRaceDay": "Día de carrera",
+  "courseHigh": "Máxima prevista (°C)",
+  "courseHighNote": "Por encima de 15 °C cada grado ralentiza las horas de luz un 0,55 % (0,34–0,77 %, Wegelin y Hoffman 2011).",
+  "courseNight": "Más lento a oscuras",
+  "courseNightNote": "Tu propia estimación: cuánto más lento corres con frontal.",
+  "courseStop": "Minutos en cada avituallamiento",
+  "courseInDark": "{time} a oscuras",
+  "courseFuelPerHour": "{carbs} g de carbohidratos, {fluid} ml, {sodium} mg de sodio por hora",
+  "courseLegFuel": "{carbs} g · {litres} l"
 }

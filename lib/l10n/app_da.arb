@@ -4483,7 +4483,7 @@
   "courseCutoff": "Tidsgrænse",
   "courseAhead": "{time} foran",
   "courseLate": "{time} for sent",
-  "coursePlanNote": "Tid i bevægelse i dit tempo på hver hældning, sat ned for løbets længde; pauser, nat og varme er ikke med.",
+  "coursePlanNote": "Tid i bevægelse i dit tempo på hver hældning, sat ned for løbets længde, mørket og varmen du angiver, med dine pauser ved depoterne.",
   "coursePace": "Dit tempo i bakker",
   "coursePaceNote": "Hældningsjusteret tempo {pace} · hældninger under 2 km bruger Minetti-formlen",
   "courseProTeaser": "Din sluttid, tiden ved hvert kontrolpunkt og marginen til hver tidsgrænse ud fra dine egne løb i bakker.",
@@ -4497,5 +4497,14 @@
   "courseSearchLibrary": "Løbsnavn eller by",
   "courseNoRaceFound": "Intet løb fundet. Prøv byen, eller tilføj selv GPX-filen.",
   "courseAidStations": "{count} depoter",
-  "courseRun": "{km} km løbet"
+  "courseRun": "{km} km løbet",
+  "courseRaceDay": "Løbsdag",
+  "courseHigh": "Forventet højeste temperatur (°C)",
+  "courseHighNote": "Over 15 °C sinker hver grad dagslyset med omkring 0,55 % (0,34–0,77 %, Wegelin & Hoffman 2011).",
+  "courseNight": "Langsommere i mørke",
+  "courseNightNote": "Dit eget skøn: hvor meget langsommere du løber med pandelampe.",
+  "courseStop": "Minutter ved hvert depot",
+  "courseInDark": "{time} i mørke",
+  "courseFuelPerHour": "{carbs} g kulhydrat, {fluid} ml, {sodium} mg natrium i timen",
+  "courseLegFuel": "{carbs} g · {litres} l"
 }

@@ -17772,7 +17772,7 @@ abstract class AppLocalizations {
   /// No description provided for @coursePlanNote.
   ///
   /// In en, this message translates to:
-  /// **'Moving time at your pace on each grade, slowed for the length of the race; stops, night and heat are not in it.'**
+  /// **'Moving time at your pace on each grade, slowed for the length of the race, the dark and the heat you set, with your aid station stops.'**
   String get coursePlanNote;
 
   /// No description provided for @coursePace.
@@ -17858,6 +17858,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{km} km run'**
   String courseRun(String km);
+
+  /// No description provided for @courseRaceDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Race day'**
+  String get courseRaceDay;
+
+  /// No description provided for @courseHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected high (°C)'**
+  String get courseHigh;
+
+  /// No description provided for @courseHighNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Above 15 °C each degree slows the daylight by about 0.55 % (0.34–0.77 %, Wegelin & Hoffman 2011).'**
+  String get courseHighNote;
+
+  /// No description provided for @courseNight.
+  ///
+  /// In en, this message translates to:
+  /// **'Slower in the dark'**
+  String get courseNight;
+
+  /// No description provided for @courseNightNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Your own estimate: how much slower you run with a headlamp.'**
+  String get courseNightNote;
+
+  /// No description provided for @courseStop.
+  ///
+  /// In en, this message translates to:
+  /// **'Minutes at each aid station'**
+  String get courseStop;
+
+  /// No description provided for @courseInDark.
+  ///
+  /// In en, this message translates to:
+  /// **'{time} in the dark'**
+  String courseInDark(String time);
+
+  /// No description provided for @courseFuelPerHour.
+  ///
+  /// In en, this message translates to:
+  /// **'{carbs} g carbohydrate, {fluid} ml, {sodium} mg sodium per hour'**
+  String courseFuelPerHour(int carbs, int fluid, int sodium);
+
+  /// No description provided for @courseLegFuel.
+  ///
+  /// In en, this message translates to:
+  /// **'{carbs} g · {litres} l'**
+  String courseLegFuel(int carbs, String litres);
 }
 
 class _AppLocalizationsDelegate

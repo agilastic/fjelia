@@ -5757,7 +5757,7 @@
   "@courseAhead": {"placeholders": {"time": {"type": "String"}}},
   "courseLate": "{time} late",
   "@courseLate": {"placeholders": {"time": {"type": "String"}}},
-  "coursePlanNote": "Moving time at your pace on each grade, slowed for the length of the race; stops, night and heat are not in it.",
+  "coursePlanNote": "Moving time at your pace on each grade, slowed for the length of the race, the dark and the heat you set, with your aid station stops.",
   "coursePace": "Your pace on hills",
   "coursePaceNote": "Grade-adjusted pace {pace} · grades you ran less than 2 km on use the Minetti formula",
   "@coursePaceNote": {"placeholders": {"pace": {"type": "String"}}},
@@ -5774,5 +5774,17 @@
   "courseAidStations": "{count} aid stations",
   "@courseAidStations": {"placeholders": {"count": {"type": "int"}}},
   "courseRun": "{km} km run",
-  "@courseRun": {"placeholders": {"km": {"type": "String"}}}
+  "@courseRun": {"placeholders": {"km": {"type": "String"}}},
+  "courseRaceDay": "Race day",
+  "courseHigh": "Expected high (°C)",
+  "courseHighNote": "Above 15 °C each degree slows the daylight by about 0.55 % (0.34–0.77 %, Wegelin & Hoffman 2011).",
+  "courseNight": "Slower in the dark",
+  "courseNightNote": "Your own estimate: how much slower you run with a headlamp.",
+  "courseStop": "Minutes at each aid station",
+  "courseInDark": "{time} in the dark",
+  "@courseInDark": {"placeholders": {"time": {"type": "String"}}},
+  "courseFuelPerHour": "{carbs} g carbohydrate, {fluid} ml, {sodium} mg sodium per hour",
+  "@courseFuelPerHour": {"placeholders": {"carbs": {"type": "int"}, "fluid": {"type": "int"}, "sodium": {"type": "int"}}},
+  "courseLegFuel": "{carbs} g · {litres} l",
+  "@courseLegFuel": {"placeholders": {"carbs": {"type": "int"}, "litres": {"type": "String"}}}
 }

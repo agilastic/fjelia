@@ -1,5 +1,7 @@
 import 'dart:math' as math;
 
+import 'package:fjelia_core/utils/geo.dart';
+
 /// A point of a recorded route.
 typedef RoutePoint = ({double lat, double lng});
 
@@ -45,14 +47,5 @@ RoutePoint? mediaRoutePoint({
 }
 
 /// Great-circle distance in metres.
-double distanceMeters(RoutePoint a, RoutePoint b) {
-  const r = 6371000.0;
-  double rad(double d) => d * math.pi / 180;
-  final dLat = rad(b.lat - a.lat), dLng = rad(b.lng - a.lng);
-  final h =
-      math.pow(math.sin(dLat / 2), 2) +
-      math.cos(rad(a.lat)) *
-          math.cos(rad(b.lat)) *
-          math.pow(math.sin(dLng / 2), 2);
-  return 2 * r * math.asin(math.sqrt(h));
-}
+double distanceMeters(RoutePoint a, RoutePoint b) =>
+    greatCircleMeters(a.lat, a.lng, b.lat, b.lng);

@@ -4483,7 +4483,7 @@
   "courseCutoff": "Cancello",
   "courseAhead": "{time} di margine",
   "courseLate": "{time} in ritardo",
-  "coursePlanNote": "Tempo in movimento al tuo passo su ogni pendenza, rallentato per la lunghezza della gara; soste, notte e caldo non sono compresi.",
+  "coursePlanNote": "Tempo in movimento al tuo passo su ogni pendenza, rallentato per la lunghezza della gara, il buio e il caldo che indichi, con le tue soste ai ristori.",
   "coursePace": "Il tuo passo in salita",
   "coursePaceNote": "Passo corretto per la pendenza {pace} · le pendenze corse per meno di 2 km usano la formula di Minetti",
   "courseProTeaser": "Il tuo tempo finale, il tempo a ogni punto di controllo e il margine su ogni cancello, dalle tue corse in salita.",
@@ -4497,5 +4497,14 @@
   "courseSearchLibrary": "Nome della gara o località",
   "courseNoRaceFound": "Nessuna gara trovata. Prova la località o aggiungi tu il file GPX.",
   "courseAidStations": "{count} ristori",
-  "courseRun": "{km} km corsi"
+  "courseRun": "{km} km corsi",
+  "courseRaceDay": "Giorno di gara",
+  "courseHigh": "Massima prevista (°C)",
+  "courseHighNote": "Sopra i 15 °C ogni grado rallenta le ore di luce di circa lo 0,55 % (0,34–0,77 %, Wegelin e Hoffman 2011).",
+  "courseNight": "Più lento al buio",
+  "courseNightNote": "La tua stima: quanto corri più lento con la frontale.",
+  "courseStop": "Minuti a ogni ristoro",
+  "courseInDark": "{time} al buio",
+  "courseFuelPerHour": "{carbs} g di carboidrati, {fluid} ml, {sodium} mg di sodio all'ora",
+  "courseLegFuel": "{carbs} g · {litres} l"
 }

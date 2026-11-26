@@ -10311,7 +10311,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get coursePlanNote =>
-      'Liikkumisaika vauhdillasi kullakin kaltevuudella, hidastettuna kisan pituuden mukaan; tauot, yö ja helle eivät ole mukana.';
+      'Liikkumisaika vauhdillasi kullakin kaltevuudella, hidastettuna kisan pituuden, pimeyden ja antamasi helteen mukaan, huoltopistetaukoinesi.';
 
   @override
   String get coursePace => 'Vauhtisi mäissä';
@@ -10361,5 +10361,40 @@ class AppLocalizationsFi extends AppLocalizations {
   @override
   String courseRun(String km) {
     return '$km km juostu';
+  }
+
+  @override
+  String get courseRaceDay => 'Kisapäivä';
+
+  @override
+  String get courseHigh => 'Odotettu ylin lämpötila (°C)';
+
+  @override
+  String get courseHighNote =>
+      'Yli 15 °C:ssa jokainen aste hidastaa valoisaa aikaa noin 0,55 % (0,34–0,77 %, Wegelin & Hoffman 2011).';
+
+  @override
+  String get courseNight => 'Hitaampi pimeässä';
+
+  @override
+  String get courseNightNote =>
+      'Oma arviosi: kuinka paljon hitaammin juokset otsalampun kanssa.';
+
+  @override
+  String get courseStop => 'Minuuttia kullakin huoltopisteellä';
+
+  @override
+  String courseInDark(String time) {
+    return '$time pimeässä';
+  }
+
+  @override
+  String courseFuelPerHour(int carbs, int fluid, int sodium) {
+    return '$carbs g hiilihydraattia, $fluid ml, $sodium mg natriumia tunnissa';
+  }
+
+  @override
+  String courseLegFuel(int carbs, String litres) {
+    return '$carbs g · $litres l';
   }
 }

@@ -4516,7 +4516,7 @@
   "courseCutoff": "Zeitlimit",
   "courseAhead": "{time} Vorsprung",
   "courseLate": "{time} zu spät",
-  "coursePlanNote": "Bewegungszeit in deinem Tempo je Steigung, verlangsamt für die Länge des Rennens; Pausen, Nacht und Hitze sind nicht enthalten.",
+  "coursePlanNote": "Bewegungszeit in deinem Tempo je Steigung, verlangsamt für die Länge des Rennens, die Dunkelheit und die Hitze, die du angibst, mit deinen Pausen an den Verpflegungsstellen.",
   "coursePace": "Dein Tempo am Berg",
   "coursePaceNote": "Steigungsbereinigtes Tempo {pace} · für Steigungen unter 2 km gilt die Minetti-Formel",
   "courseProTeaser": "Deine Zielzeit, die Zeit an jedem Kontrollpunkt und der Vorsprung auf jedes Zeitlimit, aus deinen eigenen Läufen am Berg.",
@@ -4530,5 +4530,14 @@
   "courseSearchLibrary": "Rennname oder Ort",
   "courseNoRaceFound": "Kein Rennen gefunden. Versuch den Ort oder füge die GPX-Datei selbst hinzu.",
   "courseAidStations": "{count} Verpflegungsstellen",
-  "courseRun": "{km} km gelaufen"
+  "courseRun": "{km} km gelaufen",
+  "courseRaceDay": "Renntag",
+  "courseHigh": "Erwartete Höchsttemperatur (°C)",
+  "courseHighNote": "Über 15 °C verlangsamt jedes Grad den Tag um etwa 0,55 % (0,34–0,77 %, Wegelin & Hoffman 2011).",
+  "courseNight": "Langsamer im Dunkeln",
+  "courseNightNote": "Deine eigene Schätzung: wie viel langsamer du mit Stirnlampe läufst.",
+  "courseStop": "Minuten an jeder Verpflegungsstelle",
+  "courseInDark": "{time} im Dunkeln",
+  "courseFuelPerHour": "{carbs} g Kohlenhydrate, {fluid} ml, {sodium} mg Natrium pro Stunde",
+  "courseLegFuel": "{carbs} g · {litres} l"
 }
