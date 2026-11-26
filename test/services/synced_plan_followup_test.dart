@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:fjelia/db/database.dart';
 import 'package:fjelia/services/synced_plan_followup.dart';
@@ -82,5 +83,46 @@ void main() {
     ).run('mac', afterSeq: before);
     expect(acme.released, [sent[0]]);
     expect(acme.delivered, [sent[1]]);
+  });
+
+  test('a session deleted on the computer comes off the platform', () async {
+    await service.generatePlan(
+      athleteId: 'self',
+      raceDate: clock.add(const Duration(days: 70)),
+      sport: 'running',
+      raceDistanceM: 21097,
+      daysPerWeek: 5,
+      restDays: const [1],
+      strengthDays: const [],
+      hoursPerWeek: 6,
+      gadSports: const ['running'],
+    );
+    await service.deliverPlan('self');
+    final gone = acme.delivered.first;
+    // Acme keeps a remote id for what it holds, as a real platform does.
+    await (db.update(db.workoutDeliveries)
+          ..where((t) => t.sessionId.equals(gone)))
+        .write(const WorkoutDeliveriesCompanion(remoteId: Value('acme-1')));
+    final before = await db.syncHeadSeq();
+    final change = (await db.syncChangesSince(
+      0,
+    )).lastWhere((c) => c.table == 'training_sessions' && c.key.first == gone);
+    await db.applySyncChanges([
+      SyncChange(
+        seq: change.seq,
+        table: change.table,
+        key: change.key,
+        op: SyncOp.delete,
+        category: change.category,
+        athleteId: change.athleteId,
+        changedAt: DateTime.now().add(const Duration(minutes: 1)),
+      ),
+    ], fromDevice: 'mac');
+    await SyncedPlanFollowUp(
+      db,
+      service,
+      WorkoutProviders([acme]),
+    ).run('mac', afterSeq: before);
+    expect(acme.removed, contains('acme-1'));
   });
 }

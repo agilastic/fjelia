@@ -8,8 +8,9 @@ import 'workout_providers/workout_providers.dart';
 
 /// Sessions a computer changed reach the phone by sync, past the planner
 /// that would update the watch calendars. This does it afterwards: a
-/// skipped session comes off, a moved or edited one goes up again, and new
-/// sessions of the active plan go out as after any other change.
+/// skipped or deleted session comes off, a moved or edited one goes up
+/// again, and new sessions of the active plan go out as after any other
+/// change.
 class SyncedPlanFollowUp {
   SyncedPlanFollowUp(this._db, this._plans, this._providers);
 
@@ -27,6 +28,13 @@ class SyncedPlanFollowUp {
       afterSeq: afterSeq,
     );
     if (keys.isEmpty) return;
+    // Sessions deleted on the computer were queued for removal from the
+    // platforms as the sync deleted them; take them off now.
+    try {
+      await _providers.retryCleanup();
+    } catch (e) {
+      log('[NearbySync] cleanup failed: $e');
+    }
     for (final key in keys) {
       final s = await (_db.select(
         _db.trainingSessions,

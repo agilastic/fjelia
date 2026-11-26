@@ -59,7 +59,8 @@ Sync now, Unpair), with a sync whenever the app comes to the foreground.
       phone.
 - [x] A moved, edited or skipped session reaches the phone by sync: the
       watch entry moves, is sent again or comes off (`SyncedPlanFollowUp`).
-- [ ] A session deleted on the computer leaves its watch entry: the
-      platform ids went with the row.
+- [x] A session deleted on the computer comes off the watch: the sync
+      queues its platform ids in provider_cleanups before deleting the row,
+      and the follow-up after a computer sync runs the cleanup.
 - [ ] Certificate renewal (the certificate is valid for ten years).
 - [ ] Coach relay through fjelia-service, end-to-end encrypted.
