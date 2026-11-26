@@ -3,8 +3,11 @@ import PackageDescription
 
 let package = Package(
   name: "flutter_onnxruntime",
+  // 15.0, as ONNX Runtime itself: Flutter generates its plugin package for
+  // iOS 15.0 and only raises it to the app's target during a build, so a
+  // flutter command running alongside an archive would otherwise break it.
   platforms: [
-    .iOS("16.0")
+    .iOS("15.0")
   ],
   products: [
     // The Flutter tooling requires the library product name to be the
