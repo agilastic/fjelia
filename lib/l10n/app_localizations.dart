@@ -17510,6 +17510,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'LT1 is where lactate first rises 0.5 mmol/l above resting; LT2 is where it starts to climb steeply. Easy training stays below LT1.'**
   String get labExplain;
+
+  /// No description provided for @syncProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Syncing… {sent} of {total}'**
+  String syncProgress(int sent, int total);
+
+  /// No description provided for @syncLastAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Last synced {when}'**
+  String syncLastAt(String when);
 }
 
 class _AppLocalizationsDelegate

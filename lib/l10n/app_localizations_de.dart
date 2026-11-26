@@ -10216,4 +10216,14 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get labExplain =>
       'LT1 ist, wo das Laktat zuerst 0,5 mmol/l über den Ruhewert steigt; LT2, wo es steil ansteigt. Lockeres Training bleibt unter LT1.';
+
+  @override
+  String syncProgress(int sent, int total) {
+    return 'Synchronisiere… $sent von $total';
+  }
+
+  @override
+  String syncLastAt(String when) {
+    return 'Zuletzt synchronisiert $when';
+  }
 }

@@ -25,8 +25,8 @@ class ProfileTab extends ConsumerWidget {
                   context.l10n.basics,
                   // What the page holds: birth year, age and the HR zones.
                   [
-                    if (ref.watch(userProfileProvider).valueOrNull
-                        case final p? when p.birthYear != null) ...[
+                    if (ref.watch(userProfileProvider).valueOrNull case final p?
+                        when p.birthYear != null) ...[
                       '${p.birthYear}',
                       if (p.age case final age?)
                         context.l10n.ageRound(age.round()),

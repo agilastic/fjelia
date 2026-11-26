@@ -4439,5 +4439,7 @@
   "labUsed": "Gemt i dine tærskler.",
   "labDelete": "Slet test",
   "labTooFew": "Der skal mindst tre trin til.",
-  "labExplain": "LT1 er, hvor laktat først stiger 0,5 mmol/l over hvile; LT2, hvor det begynder at stige stejlt. Rolig træning holdes under LT1."
+  "labExplain": "LT1 er, hvor laktat først stiger 0,5 mmol/l over hvile; LT2, hvor det begynder at stige stejlt. Rolig træning holdes under LT1.",
+  "syncProgress": "Synkroniserer… {sent} af {total}",
+  "syncLastAt": "Sidst synkroniseret {when}"
 }

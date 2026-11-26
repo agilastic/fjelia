@@ -10120,4 +10120,14 @@ class AppLocalizationsDa extends AppLocalizations {
   @override
   String get labExplain =>
       'LT1 er, hvor laktat først stiger 0,5 mmol/l over hvile; LT2, hvor det begynder at stige stejlt. Rolig træning holdes under LT1.';
+
+  @override
+  String syncProgress(int sent, int total) {
+    return 'Synkroniserer… $sent af $total';
+  }
+
+  @override
+  String syncLastAt(String when) {
+    return 'Sidst synkroniseret $when';
+  }
 }

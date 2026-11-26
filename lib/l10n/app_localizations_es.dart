@@ -10193,4 +10193,14 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get labExplain =>
       'LT1 es donde el lactato sube por primera vez 0,5 mmol/l sobre el reposo; LT2, donde empieza a subir con fuerza. El entrenamiento suave queda por debajo de LT1.';
+
+  @override
+  String syncProgress(int sent, int total) {
+    return 'Sincronizando… $sent de $total';
+  }
+
+  @override
+  String syncLastAt(String when) {
+    return 'Última sincronización $when';
+  }
 }

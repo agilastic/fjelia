@@ -4439,5 +4439,7 @@
   "labUsed": "Guardado en tus umbrales.",
   "labDelete": "Eliminar prueba",
   "labTooFew": "Se necesitan al menos tres escalones.",
-  "labExplain": "LT1 es donde el lactato sube por primera vez 0,5 mmol/l sobre el reposo; LT2, donde empieza a subir con fuerza. El entrenamiento suave queda por debajo de LT1."
+  "labExplain": "LT1 es donde el lactato sube por primera vez 0,5 mmol/l sobre el reposo; LT2, donde empieza a subir con fuerza. El entrenamiento suave queda por debajo de LT1.",
+  "syncProgress": "Sincronizando… {sent} de {total}",
+  "syncLastAt": "Última sincronización {when}"
 }

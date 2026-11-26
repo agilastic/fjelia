@@ -10171,4 +10171,14 @@ class AppLocalizationsSk extends AppLocalizations {
   @override
   String get labExplain =>
       'LT1 je tam, kde laktát prvýkrát stúpne o 0,5 mmol/l nad pokoj; LT2 tam, kde začne prudko stúpať. Ľahký tréning zostáva pod LT1.';
+
+  @override
+  String syncProgress(int sent, int total) {
+    return 'Synchronizuje sa… $sent z $total';
+  }
+
+  @override
+  String syncLastAt(String when) {
+    return 'Naposledy synchronizované $when';
+  }
 }

@@ -27,7 +27,8 @@ import 'user_profile_provider.dart';
 import 'week_start_provider.dart';
 import 'package:fjelia_core/utils/week.dart';
 
-export 'package:fjelia_core/services/training_form.dart' show FormPoint, buildTrainingFormSeries;
+export 'package:fjelia_core/services/training_form.dart'
+    show FormPoint, buildTrainingFormSeries;
 
 DateTime _day(DateTime d) => DateTime(d.year, d.month, d.day);
 

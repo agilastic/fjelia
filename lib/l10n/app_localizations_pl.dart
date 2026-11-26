@@ -10227,4 +10227,14 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String get labExplain =>
       'LT1 to miejsce, gdzie mleczan po raz pierwszy rośnie o 0,5 mmol/l ponad spoczynek; LT2 – gdzie zaczyna gwałtownie rosnąć. Lekki trening pozostaje poniżej LT1.';
+
+  @override
+  String syncProgress(int sent, int total) {
+    return 'Synchronizacja… $sent z $total';
+  }
+
+  @override
+  String syncLastAt(String when) {
+    return 'Ostatnia synchronizacja $when';
+  }
 }

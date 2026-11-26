@@ -27,10 +27,9 @@ final bioAgeProvider = FutureProvider<BioAgeResult?>((ref) async {
         .toList(),
   );
   final systolic = _median(
-    (await db.getRecentBp(14))
-        .where((b) => b.systolic > 0)
-        .map((b) => b.systolic.toDouble())
-        .toList(),
+    (await db.getRecentBp(
+      14,
+    )).where((b) => b.systolic > 0).map((b) => b.systolic.toDouble()).toList(),
   );
 
   final scale = await db.getRenphoRange(90);

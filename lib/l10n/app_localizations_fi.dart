@@ -10162,4 +10162,14 @@ class AppLocalizationsFi extends AppLocalizations {
   @override
   String get labExplain =>
       'LT1 on kohta, jossa laktaatti nousee ensin 0,5 mmol/l lepotason yli; LT2, jossa se alkaa nousta jyrkästi. Kevyt harjoittelu pysyy LT1:n alla.';
+
+  @override
+  String syncProgress(int sent, int total) {
+    return 'Synkronoidaan… $sent/$total';
+  }
+
+  @override
+  String syncLastAt(String when) {
+    return 'Viimeksi synkronoitu $when';
+  }
 }

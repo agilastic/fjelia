@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'nearby_sync_provider.dart' show nearbySyncProvider;
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -75,6 +76,8 @@ class ActivityFileImportActions {
     }
     ref.read(syncStatusListenerProvider.notifier).state++;
     ref.read(hrvActivitiesChangedProvider.notifier).state++;
+    // The paired computers get the imported workouts.
+    unawaited(ref.read(nearbySyncProvider.notifier).syncAfterOtherSyncs());
     unawaited(
       ref
           .read(missedWorkoutReminderProvider)

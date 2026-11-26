@@ -18,9 +18,9 @@ import '../../widgets/app_widgets.dart';
 const _sky = [Color(0xFF6FA8FF), Color(0xFF3EE0FF)];
 
 /// [weekday]'s windows as text, e.g. "6:00–7:30, 17:00–20:00".
-String trainingWindowsText(TrainingWindows w, int weekday) =>
-    [for (final (start, end) in w.ranges(weekday)) '${_hm(start)}–${_hm(end)}']
-        .join(', ');
+String trainingWindowsText(TrainingWindows w, int weekday) => [
+  for (final (start, end) in w.ranges(weekday)) '${_hm(start)}–${_hm(end)}',
+].join(', ');
 
 String _hm(int minutes) =>
     '${minutes ~/ 60}:${(minutes % 60).toString().padLeft(2, '0')}';

@@ -5602,5 +5602,7 @@
   "labUsed": "Zapisano w twoich progach.",
   "labDelete": "Usuń test",
   "labTooFew": "Potrzebne są co najmniej trzy stopnie.",
-  "labExplain": "LT1 to miejsce, gdzie mleczan po raz pierwszy rośnie o 0,5 mmol/l ponad spoczynek; LT2 – gdzie zaczyna gwałtownie rosnąć. Lekki trening pozostaje poniżej LT1."
+  "labExplain": "LT1 to miejsce, gdzie mleczan po raz pierwszy rośnie o 0,5 mmol/l ponad spoczynek; LT2 – gdzie zaczyna gwałtownie rosnąć. Lekki trening pozostaje poniżej LT1.",
+  "syncProgress": "Synchronizacja… {sent} z {total}",
+  "syncLastAt": "Ostatnia synchronizacja {when}"
 }

@@ -45,8 +45,11 @@ sealed class NearbySyncStatus {
 }
 
 class NearbySyncing extends NearbySyncStatus {
-  const NearbySyncing(this.sent);
+  const NearbySyncing(this.sent, [this.total]);
   final int sent;
+
+  /// All that is due, once known.
+  final int? total;
 }
 
 class NearbySynced extends NearbySyncStatus {
@@ -90,31 +93,69 @@ class NearbySyncNotifier extends Notifier<Map<String, NearbySyncStatus>> {
     }
   }
 
-  /// Sends [peer] what it does not have yet.
-  Future<void> sync(SyncPeer peer) async {
+  /// Waits before each retry of a sync the computer did not answer.
+  static const retryDelays = [
+    Duration(seconds: 5),
+    Duration(seconds: 30),
+    Duration(minutes: 2),
+  ];
+
+  /// Sends [peer] what it does not have yet and takes its changes. A sync
+  /// started on its own ([retry]) tries again later while the computer is
+  /// out of reach, such as asleep or on another network for a moment.
+  Future<void> sync(SyncPeer peer, {bool retry = false}) async {
     if (state[peer.deviceId] is NearbySyncing) return;
-    _set(peer.deviceId, const NearbySyncing(0));
-    try {
-      final result = await (await _client()).sync(
-        peer,
-        onPage: (sent) => _set(peer.deviceId, NearbySyncing(sent)),
-      );
-      _set(peer.deviceId, NearbySynced(result.sent, result.received));
-      if (result.received > 0) {
-        // Edits made on the computer: the screens read again.
-        ref.read(syncStatusListenerProvider.notifier).state++;
-        ref.read(fullSyncListenerProvider.notifier).state++;
+    for (var attempt = 0; ; attempt++) {
+      _set(peer.deviceId, const NearbySyncing(0));
+      try {
+        final result = await (await _client()).sync(
+          peer,
+          onProgress: (sent, total) =>
+              _set(peer.deviceId, NearbySyncing(sent, total)),
+        );
+        _set(peer.deviceId, NearbySynced(result.sent, result.received));
+        ref.invalidate(syncPeersProvider);
+        if (result.received > 0) {
+          // Edits made on the computer: the screens read again.
+          ref.read(syncStatusListenerProvider.notifier).state++;
+          ref.read(fullSyncListenerProvider.notifier).state++;
+        }
+        return;
+      } on Object catch (e) {
+        log('[NearbySync] sync with ${peer.name} failed: $e');
+        final problem = _problem(e);
+        _set(peer.deviceId, NearbySyncFailed(problem));
+        if (!retry ||
+            problem != NearbySyncProblem.unreachable ||
+            attempt >= retryDelays.length) {
+          return;
+        }
+        await Future<void>.delayed(retryDelays[attempt]);
+        // Unpaired or synced by hand meanwhile.
+        if (state[peer.deviceId] is! NearbySyncFailed) return;
       }
-    } on Object catch (e) {
-      log('[NearbySync] sync with ${peer.name} failed: $e');
-      _set(peer.deviceId, NearbySyncFailed(_problem(e)));
     }
   }
 
-  /// Syncs every paired computer, quietly.
+  /// Syncs every paired computer, quietly, trying again while one is out
+  /// of reach.
   Future<void> syncAll() async {
     final peers = await ref.read(databaseProvider).syncPeers();
-    await Future.wait(peers.map(sync));
+    await Future.wait(peers.map((p) => sync(p, retry: true)));
+  }
+
+  /// Before all data is deleted: each computer forgets this phone, so no
+  /// pairing is left behind there. A computer out of reach keeps it until
+  /// it is unpaired there.
+  Future<void> unpairAll() async {
+    final peers = await ref.read(databaseProvider).syncPeers();
+    for (final peer in peers) {
+      try {
+        await unpair(peer).timeout(const Duration(seconds: 5));
+      } on Object catch (e) {
+        log('[NearbySync] ${peer.name} not told about the unpairing: $e');
+      }
+    }
   }
 
   Future<void>? _afterOtherSyncs;

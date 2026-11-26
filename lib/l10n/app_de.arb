@@ -4472,5 +4472,7 @@
   "labUsed": "In deinen Schwellen gespeichert.",
   "labDelete": "Test löschen",
   "labTooFew": "Mindestens drei Stufen sind nötig.",
-  "labExplain": "LT1 ist, wo das Laktat zuerst 0,5 mmol/l über den Ruhewert steigt; LT2, wo es steil ansteigt. Lockeres Training bleibt unter LT1."
+  "labExplain": "LT1 ist, wo das Laktat zuerst 0,5 mmol/l über den Ruhewert steigt; LT2, wo es steil ansteigt. Lockeres Training bleibt unter LT1.",
+  "syncProgress": "Synchronisiere… {sent} von {total}",
+  "syncLastAt": "Zuletzt synchronisiert {when}"
 }

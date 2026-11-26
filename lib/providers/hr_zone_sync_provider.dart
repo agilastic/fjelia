@@ -146,8 +146,9 @@ final zoneRecalculationProvider = Provider<Future<void> Function()>(
     // Older workouts have no heart-rate samples worth reading again.
     final oldest = now.subtract(const Duration(days: 400));
     if (since.isBefore(oldest)) since = oldest;
-    final updated = await ZoneRecalculationService(ref.read(databaseProvider))
-        .recalculate(book: book, since: since);
+    final updated = await ZoneRecalculationService(
+      ref.read(databaseProvider),
+    ).recalculate(book: book, since: since);
     await storage.write(key: key, value: '$newest');
     log(
       '[HrZones] time-in-zone recalculated for $updated activities since '
@@ -200,7 +201,9 @@ class ZoneRedelivery {
     _running = _running.then((_) async {
       try {
         final sent = await _send(sports);
-        log('[HrZones] new zones for $sports: $sent workouts brought up to date');
+        log(
+          '[HrZones] new zones for $sports: $sent workouts brought up to date',
+        );
       } catch (e) {
         log('[HrZones] workouts not sent again: $e');
       }

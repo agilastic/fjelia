@@ -1,5 +1,6 @@
 import 'package:fjelia_sync/fjelia_sync.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
@@ -33,7 +34,16 @@ class ComputersPage extends ConsumerWidget {
                 ListTile(
                   leading: const SettingsIcon(Icons.computer, Colors.indigo),
                   title: Text(peer.name),
-                  subtitle: _statusText(l10n, status[peer.deviceId]),
+                  subtitle:
+                      _statusText(l10n, status[peer.deviceId]) ??
+                      switch (peer.lastSynced) {
+                        null => null,
+                        final at => Text(
+                          l10n.syncLastAt(
+                            DateFormat.yMMMd().add_Hm().format(at),
+                          ),
+                        ),
+                      },
                   trailing: _PeerMenu(peer),
                 ),
               ListTile(
@@ -51,6 +61,9 @@ class ComputersPage extends ConsumerWidget {
   static Widget? _statusText(AppLocalizations l10n, NearbySyncStatus? s) =>
       switch (s) {
         null => null,
+        NearbySyncing(:final sent, total: final total?) when total > 0 => Text(
+          l10n.syncProgress(sent, total),
+        ),
         NearbySyncing(:final sent) => Text(l10n.syncInProgress(sent)),
         NearbySynced(:final sent, :final received) => Text(
           received == 0

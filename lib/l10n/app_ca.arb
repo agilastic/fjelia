@@ -4439,5 +4439,7 @@
   "labUsed": "Desat als teus llindars.",
   "labDelete": "Suprimeix la prova",
   "labTooFew": "Calen almenys tres esglaons.",
-  "labExplain": "LT1 és on el lactat puja per primer cop 0,5 mmol/l sobre el repòs; LT2, on comença a pujar de pressa. L'entrenament suau queda per sota de LT1."
+  "labExplain": "LT1 és on el lactat puja per primer cop 0,5 mmol/l sobre el repòs; LT2, on comença a pujar de pressa. L'entrenament suau queda per sota de LT1.",
+  "syncProgress": "Sincronitzant… {sent} de {total}",
+  "syncLastAt": "Darrera sincronització {when}"
 }

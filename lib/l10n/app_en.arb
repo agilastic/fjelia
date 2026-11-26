@@ -5707,5 +5707,9 @@
   "labUsed": "Saved to your thresholds.",
   "labDelete": "Delete test",
   "labTooFew": "At least three steps are needed.",
-  "labExplain": "LT1 is where lactate first rises 0.5 mmol/l above resting; LT2 is where it starts to climb steeply. Easy training stays below LT1."
+  "labExplain": "LT1 is where lactate first rises 0.5 mmol/l above resting; LT2 is where it starts to climb steeply. Easy training stays below LT1.",
+  "syncProgress": "Syncing… {sent} of {total}",
+  "@syncProgress": {"placeholders": {"sent": {"type": "int"}, "total": {"type": "int"}}},
+  "syncLastAt": "Last synced {when}",
+  "@syncLastAt": {"placeholders": {"when": {"type": "String"}}}
 }

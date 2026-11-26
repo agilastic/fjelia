@@ -5602,5 +5602,7 @@
   "labUsed": "Bewaard bij je drempels.",
   "labDelete": "Test verwijderen",
   "labTooFew": "Er zijn minstens drie stappen nodig.",
-  "labExplain": "LT1 is waar lactaat voor het eerst 0,5 mmol/l boven rust stijgt; LT2 waar het steil begint te stijgen. Rustige training blijft onder LT1."
+  "labExplain": "LT1 is waar lactaat voor het eerst 0,5 mmol/l boven rust stijgt; LT2 waar het steil begint te stijgen. Rustige training blijft onder LT1.",
+  "syncProgress": "Synchroniseren… {sent} van {total}",
+  "syncLastAt": "Laatst gesynchroniseerd {when}"
 }

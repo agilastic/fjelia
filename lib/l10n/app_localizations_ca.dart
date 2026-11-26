@@ -10200,4 +10200,14 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get labExplain =>
       'LT1 és on el lactat puja per primer cop 0,5 mmol/l sobre el repòs; LT2, on comença a pujar de pressa. L\'entrenament suau queda per sota de LT1.';
+
+  @override
+  String syncProgress(int sent, int total) {
+    return 'Sincronitzant… $sent de $total';
+  }
+
+  @override
+  String syncLastAt(String when) {
+    return 'Darrera sincronització $when';
+  }
 }
