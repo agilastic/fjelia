@@ -12,6 +12,6 @@ dependencies:
   fjelia_service_api:
     git:
       url: https://github.com/agilastic/fjelia-core.git
-      ref: f95638eb13a9bcce1610eb257ff07b0cf38d3b26 # v0.13.0
+      ref: 6a890ccde7905241f08c5a400b018f88e4ab4cb4 # v0.14.0
       path: packages/fjelia_service_api
   flutter_secure_storage: ^11.2.0
