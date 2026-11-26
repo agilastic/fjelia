@@ -9,6 +9,7 @@ import 'package:fjelia_core/services/missed_workout_planner.dart'
     show SessionWeight, hasIndoorAlternative, weightOf;
 import 'strength/strength_repository.dart';
 import 'package:fjelia_core/services/workout_semantics.dart';
+import 'package:fjelia_core/utils/days.dart';
 
 /// FjeliaPro's morning revision: when the readiness check asks for a change,
 /// the coach reworks today's session itself (its steps, or the sets of a
@@ -160,7 +161,7 @@ class RevisionContext {
 
   List<TrainingSession> get today => [
     for (final s in week)
-      if (_sameDay(s.sessionDate, day) && _open(s)) s,
+      if (isSameDay(s.sessionDate, day) && _open(s)) s,
   ];
 
   /// The day after [day]: the coach may rework it too.
@@ -168,7 +169,7 @@ class RevisionContext {
 
   List<TrainingSession> get next => [
     for (final s in week)
-      if (_sameDay(s.sessionDate, nextDay) && _open(s)) s,
+      if (isSameDay(s.sessionDate, nextDay) && _open(s)) s,
   ];
 
   /// The sessions the coach may change: the day's and the next day's.
@@ -184,12 +185,6 @@ class RevisionContext {
 
 bool _open(TrainingSession s) =>
     const {'planned', 'adapted'}.contains(s.status);
-
-bool _sameDay(DateTime a, DateTime b) =>
-    a.year == b.year && a.month == b.month && a.day == b.day;
-
-String _date(DateTime d) =>
-    DateTime(d.year, d.month, d.day).toIso8601String().substring(0, 10);
 
 bool isStrengthSession(TrainingSession s) => isStrengthSport(s.sport);
 
@@ -231,7 +226,7 @@ String revisionInputJson(RevisionContext c) {
 
   Map<String, Object?> session(TrainingSession s, {bool detail = false}) => {
     'id': s.id,
-    'date': _date(s.sessionDate),
+    'date': isoDay(s.sessionDate),
     'sport': s.sport,
     'type': s.sessionType,
     'zone': s.primaryZone,
@@ -262,13 +257,13 @@ String revisionInputJson(RevisionContext c) {
   };
 
   return jsonEncode({
-    'day': _date(c.day),
-    'today': _date(c.realToday),
-    'day_is_today': _sameDay(c.day, c.realToday),
+    'day': isoDay(c.day),
+    'today': isoDay(c.realToday),
+    'day_is_today': isSameDay(c.day, c.realToday),
     'readiness': c.readinessLevel,
     if (c.reason.isNotEmpty) 'reason': c.reason,
     'day_sessions': [for (final s in c.today) session(s, detail: true)],
-    'next_day': _date(c.nextDay),
+    'next_day': isoDay(c.nextDay),
     'next_day_sessions': [for (final s in c.next) session(s, detail: true)],
     'week': [
       for (final s in c.week)
@@ -279,7 +274,7 @@ String revisionInputJson(RevisionContext c) {
       'races': [
         for (final r in c.races.take(4))
           {
-            'date': _date(r.date),
+            'date': isoDay(r.date),
             'priority': r.priority,
             'sport': r.sport,
             'days_from_day': DateTime(
@@ -294,7 +289,7 @@ String revisionInputJson(RevisionContext c) {
         for (final e in c.weather.entries)
           if (!e.key.isBefore(c.day))
             {
-              'date': _date(e.key),
+              'date': isoDay(e.key),
               'rain': e.value.rain,
               if (e.value.maxC != null) 'max_c': e.value.maxC!.round(),
             },
@@ -573,8 +568,8 @@ String? revisionProblem(MorningRevision r, RevisionContext c) {
     if (s == null || !_open(s)) {
       return 'unknown session ${x.sessionId} (${x.op.name})';
     }
-    if (!_sameDay(s.sessionDate, c.day) &&
-        !_sameDay(s.sessionDate, c.nextDay)) {
+    if (!isSameDay(s.sessionDate, c.day) &&
+        !isSameDay(s.sessionDate, c.nextDay)) {
       return 'not the day or the next ${x.sessionId}';
     }
     // A session the athlete fixed stays as it is.
@@ -599,7 +594,7 @@ String? revisionProblem(MorningRevision r, RevisionContext c) {
       case RevisionOp.swap:
         final other = c.byId(x.withId!);
         if (other == null || !_open(other)) return 'unknown swap partner';
-        if (_sameDay(other.sessionDate, s.sessionDate) ||
+        if (isSameDay(other.sessionDate, s.sessionDate) ||
             other.sessionDate.isBefore(s.sessionDate)) {
           return 'swap partner not later';
         }
@@ -695,21 +690,21 @@ String? revisionProblem(MorningRevision r, RevisionContext c) {
   for (final d in days) {
     final on = [
       for (final s in c.week)
-        if (!gone.contains(s.id) && _open(s) && _sameDay(dayOf[s.id]!, d)) s,
+        if (!gone.contains(s.id) && _open(s) && isSameDay(dayOf[s.id]!, d)) s,
     ];
     final was = [
       for (final s in c.week)
-        if (_open(s) && _sameDay(s.sessionDate, d)) s,
+        if (_open(s) && isSameDay(s.sessionDate, d)) s,
     ];
     if (on.length > c.maxPerDay.clamp(1, 3) && on.length > was.length) {
-      return 'too many on ${_date(d)}';
+      return 'too many on ${isoDay(d)}';
     }
   }
   bool hardOn(DateTime d, bool after) => c.week.any(
     (s) =>
         _open(s) &&
         !(after && gone.contains(s.id)) &&
-        _sameDay(after ? dayOf[s.id]! : s.sessionDate, d) &&
+        isSameDay(after ? dayOf[s.id]! : s.sessionDate, d) &&
         weightOf(s) == SessionWeight.hard,
   );
   for (final d in days) {
@@ -734,12 +729,12 @@ String? revisionProblem(MorningRevision r, RevisionContext c) {
       for (final s in c.week)
         if (_open(s) && !(after && gone.contains(s.id))) s,
     ];
-    return live.any((s) => isStrengthSession(s) && _sameDay(on(s), d)) &&
+    return live.any((s) => isStrengthSession(s) && isSameDay(on(s), d)) &&
         live.any(
           (s) =>
               !isStrengthSession(s) &&
               weightOf(s) == SessionWeight.hard &&
-              _sameDay(on(s), next),
+              isSameDay(on(s), next),
         );
   }
 

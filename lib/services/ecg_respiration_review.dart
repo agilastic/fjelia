@@ -3,6 +3,7 @@ import 'dart:math' as math;
 
 import 'package:fjelia_core/models/ecg.dart';
 import 'package:fjelia_core/services/ecg_analysis.dart';
+import 'package:fjelia_core/utils/stats.dart';
 
 class EcgRespirationReview {
   const EcgRespirationReview({
@@ -59,13 +60,14 @@ EcgRespirationReview _reviewH10Signals(
       ? (accelerationOrigin - deviceOrigin) / 1e9
       : 0.0;
   final amplitudes = deriveEcgRespirationAmplitude(ecg, ecgRateHz);
-  final median = _median([for (final point in amplitudes) point.microvolts]);
+  final typical =
+      (median([for (final point in amplitudes) point.microvolts]) ?? 0);
   final ecgPoints = <({double seconds, double value})>[
     for (final point in amplitudes)
-      if (median > 0)
+      if (typical > 0)
         (
           seconds: point.seconds + ecgShift,
-          value: (point.microvolts / median).clamp(0, 3).toDouble(),
+          value: (point.microvolts / typical).clamp(0, 3).toDouble(),
         ),
   ];
 
@@ -96,7 +98,7 @@ EcgRespirationReview _reviewH10Signals(
     for (final entry in motionSums.entries)
       math.sqrt(entry.value / motionCounts[entry.key]!),
   ];
-  final motionScale = _percentile(rms, .9);
+  final motionScale = (percentile(rms, .9) ?? 0);
   for (final entry in motionSums.entries) {
     final value = math.sqrt(entry.value / motionCounts[entry.key]!);
     motion.add((
@@ -126,19 +128,4 @@ int? _streamOriginNs(List<(int, int?, int)> chunks, double rate) {
     }
   }
   return null;
-}
-
-double _median(List<double> values) {
-  if (values.isEmpty) return 0;
-  final sorted = [...values]..sort();
-  final mid = sorted.length ~/ 2;
-  return sorted.length.isOdd
-      ? sorted[mid]
-      : (sorted[mid - 1] + sorted[mid]) / 2;
-}
-
-double _percentile(List<double> values, double fraction) {
-  if (values.isEmpty) return 0;
-  final sorted = [...values]..sort();
-  return sorted[((sorted.length - 1) * fraction).round()];
 }

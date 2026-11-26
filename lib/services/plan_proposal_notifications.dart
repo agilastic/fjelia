@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import '../l10n/formats.dart';
 import '../l10n/l10n_ext.dart';
 import 'package:fjelia_core/utils/log.dart';
+import 'package:fjelia_core/utils/days.dart';
 import 'missed_workout_reminder_service.dart';
 import 'notifications/local_notification_gateway.dart';
 import 'plan_proposal_store.dart';
@@ -18,16 +19,13 @@ const planProposalNotificationLimit = 7520000;
 int _dayNumber(DateTime d) =>
     DateTime.utc(d.year, d.month, d.day).difference(DateTime.utc(2020)).inDays;
 
-String _dayKey(DateTime d) =>
-    DateTime(d.year, d.month, d.day).toIso8601String().substring(0, 10);
-
 /// The readiness proposal of a day, in the notification.
 class PlanProposalPayload {
   const PlanProposalPayload(this.day);
   final DateTime day;
 
   String encode() =>
-      jsonEncode({'v': 1, 'feature': 'plan_proposal', 'day': _dayKey(day)});
+      jsonEncode({'v': 1, 'feature': 'plan_proposal', 'day': isoDay(day)});
 
   static PlanProposalPayload? decode(String? raw) {
     if (raw == null || raw.length > 200) return null;
@@ -133,7 +131,7 @@ class PlanProposalNotifications {
     // Missed sessions follow the evening reminder's switch.
     final missedOn = (await missed.settings()).enabled;
     for (final m in missedOn ? await missed.pastMissed() : const []) {
-      final key = 'm:${_dayKey(m.day)}';
+      final key = 'm:${isoDay(m.day)}';
       if (await PlanProposalStore.notifiedAt(key) != null) continue;
       final names = [
         for (final i in m.items)
@@ -190,6 +188,6 @@ class PlanProposalNotifications {
     };
   }
 
-  static String readinessKey(DateTime day) => 'r:${_dayKey(day)}';
-  static String missedKey(DateTime day) => 'm:${_dayKey(day)}';
+  static String readinessKey(DateTime day) => 'r:${isoDay(day)}';
+  static String missedKey(DateTime day) => 'm:${isoDay(day)}';
 }

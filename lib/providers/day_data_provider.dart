@@ -26,15 +26,14 @@ import 'training_load_provider.dart';
 import 'user_profile_provider.dart';
 import 'week_start_provider.dart';
 import 'package:fjelia_core/utils/week.dart';
+import 'package:fjelia_core/utils/days.dart';
 
 export 'package:fjelia_core/services/training_form.dart'
     show FormPoint, buildTrainingFormSeries;
 
-DateTime _day(DateTime d) => DateTime(d.year, d.month, d.day);
-
 /// The day shown on the dashboard.
 final selectedDateProvider = StateProvider<DateTime>(
-  (ref) => _day(DateTime.now()),
+  (ref) => dayOf(DateTime.now()),
 );
 
 /// Bumped after every sync so data providers refetch.
@@ -425,18 +424,18 @@ final _bpLastFetch = <DateTime, DateTime>{};
 final bpSummaryForDateProvider =
     FutureProvider.family<DailyBpSummary?, DateTime>((ref, date) async {
       final readings = await ref.watch(bpForDateProvider(date).future);
-      final today = _day(DateTime.now());
-      if (!_day(date).isBefore(today)) {
+      final today = dayOf(DateTime.now());
+      if (!dayOf(date).isBefore(today)) {
         final aktiia = ref.read(aktiiaClientProvider);
-        final last = _bpLastFetch[_day(date)];
+        final last = _bpLastFetch[dayOf(date)];
         final throttled =
             last != null &&
             DateTime.now().difference(last) < const Duration(seconds: 30);
         if (!throttled && await aktiia.isLoggedIn) {
-          _bpLastFetch[_day(date)] = DateTime.now();
+          _bpLastFetch[dayOf(date)] = DateTime.now();
           Future(() async {
             try {
-              final from = _day(date);
+              final from = dayOf(date);
               final fresh = await aktiia.getMeasurements(
                 from,
                 from.add(const Duration(days: 1)),
@@ -495,7 +494,7 @@ final bpWeekSummaryProvider =
           .getBpForWeek(weekStart);
       final byDay = <DateTime, List<BpMeasurement>>{};
       for (final m in readings) {
-        byDay.putIfAbsent(_day(m.measuredAt.toLocal()), () => []).add(m);
+        byDay.putIfAbsent(dayOf(m.measuredAt.toLocal()), () => []).add(m);
       }
       final days = byDay.keys.toList()..sort();
       return [for (final d in days) buildBpSummaryFromRecords(d, byDay[d]!)!];
@@ -567,7 +566,7 @@ final bodyBatteryReportProvider =
             );
             await db.upsertWellness(
               WellnessRecordsCompanion(
-                date: Value(_day(date)),
+                date: Value(dayOf(date)),
                 source: const Value('garmin_api'),
                 bodyBatteryJson: Value(json),
                 bodyBatteryCharged: Value(report.charged),
@@ -603,7 +602,7 @@ final dayScoresProvider = FutureProvider.family<DayScores, DateTime>((
 ) async {
   final db = ref.watch(databaseProvider);
   ref.watch(syncStatusListenerProvider);
-  final day = _day(date);
+  final day = dayOf(date);
 
   final hrv = await ref.watch(hrvForDateProvider(day).future);
   var sleep = await db.getSleepForDate(day);
@@ -611,7 +610,7 @@ final dayScoresProvider = FutureProvider.family<DayScores, DateTime>((
   final wellness = await ref.watch(wellnessForDateProvider(day).future);
   final activities = await db.getActivitiesForDate(day);
   // Before last night's sleep has synced, fall back to the previous night.
-  if (sleep == null && day == _day(DateTime.now())) {
+  if (sleep == null && day == dayOf(DateTime.now())) {
     sleep = await db.getSleepForDate(day.subtract(const Duration(days: 1)));
   }
 
@@ -770,7 +769,7 @@ final trainingMonitorProvider =
         vo2Bike ??= w.vo2maxCycling;
       }
 
-      final day = _day(date);
+      final day = dayOf(date);
       final monday = weekStartOf(
         day,
         mondayFirst: ref.watch(weekStartsOnMondayProvider),
@@ -784,7 +783,7 @@ final trainingMonitorProvider =
           prevM = 0.0,
           weekLoad = 0.0;
       for (final a in activities) {
-        final d = _day(a.startDate);
+        final d = dayOf(a.startDate);
         if (!d.isBefore(monday) && d.isBefore(nextMonday)) {
           weekSec += a.durationSeconds;
           weekM += a.distanceMeters ?? 0;

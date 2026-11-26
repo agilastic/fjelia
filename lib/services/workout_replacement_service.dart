@@ -9,6 +9,7 @@ import 'athlete_thresholds_service.dart';
 import 'package:fjelia_core/services/hr_zone_model.dart'
     show zonePercentFromActiveSamples, zonePercentFromSamples, zoneOf;
 import 'package:fjelia_core/services/single_session_cap.dart';
+import 'package:fjelia_core/utils/stats.dart';
 
 class _InternalActivityLoad {
   const _InternalActivityLoad(this.load, {required this.fromHeartRateSamples});
@@ -159,7 +160,7 @@ class WorkoutReplacementService {
     final fallbackScale = _fallbackDurationScale(sourceFamily, targetFamily);
     final load = source.plannedTrimp;
     final estimate = useHistory
-        ? load / _median(targetRates)
+        ? load / median(targetRates)!
         : source.plannedDurationMin * fallbackScale;
     var duration = estimate.round().clamp(15, 240);
     final warnings = <String>[];
@@ -170,7 +171,7 @@ class WorkoutReplacementService {
       // broad clamp avoids implausible duration swings from noisy records.
       final expectedFromSource =
           source.plannedDurationMin *
-          (_median(sourceRates) / _median(targetRates));
+          (median(sourceRates)! / median(targetRates)!);
       duration = ((duration * .65) + (expectedFromSource * .35)).round().clamp(
         15,
         240,
@@ -528,14 +529,6 @@ class WorkoutReplacementService {
       'swim>cycle': 1.20,
     };
     return scales['$source>$target'] ?? 1.15;
-  }
-
-  static double _median(List<double> values) {
-    final sorted = [...values]..sort();
-    final middle = sorted.length ~/ 2;
-    return sorted.length.isOdd
-        ? sorted[middle]
-        : (sorted[middle - 1] + sorted[middle]) / 2;
   }
 
   static _AdaptedWorkout _adaptWorkout(
