@@ -78,27 +78,27 @@ dependencies:
   fjelia_core:
     git:
       url: https://github.com/agilastic/fjelia-core.git
-      ref: 6a890ccde7905241f08c5a400b018f88e4ab4cb4 # v0.14.0
+      ref: 5d47be542a34bc07b417112456cbf429de37677f # v0.15.0
       path: packages/fjelia_core
   fjelia_data:
     git:
       url: https://github.com/agilastic/fjelia-core.git
-      ref: 6a890ccde7905241f08c5a400b018f88e4ab4cb4 # v0.14.0
+      ref: 5d47be542a34bc07b417112456cbf429de37677f # v0.15.0
       path: packages/fjelia_data
   fjelia_sync:
     git:
       url: https://github.com/agilastic/fjelia-core.git
-      ref: 6a890ccde7905241f08c5a400b018f88e4ab4cb4 # v0.14.0
+      ref: 5d47be542a34bc07b417112456cbf429de37677f # v0.15.0
       path: packages/fjelia_sync
   fjelia_views:
     git:
       url: https://github.com/agilastic/fjelia-core.git
-      ref: 6a890ccde7905241f08c5a400b018f88e4ab4cb4 # v0.14.0
+      ref: 5d47be542a34bc07b417112456cbf429de37677f # v0.15.0
       path: packages/fjelia_views
   fjelia_service_api:
     git:
       url: https://github.com/agilastic/fjelia-core.git
-      ref: 6a890ccde7905241f08c5a400b018f88e4ab4cb4 # v0.14.0
+      ref: 5d47be542a34bc07b417112456cbf429de37677f # v0.15.0
       path: packages/fjelia_service_api
   # Stub without Aktiia / Hilo. Private builds override this with the real
   # package, see pubspec_overrides.yaml (git-ignored) and the README.
