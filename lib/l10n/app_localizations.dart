@@ -17912,6 +17912,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{carbs} g · {litres} l'**
   String courseLegFuel(int carbs, String litres);
+
+  /// No description provided for @courseReadiness.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready for this course?'**
+  String get courseReadiness;
+
+  /// No description provided for @courseReadinessNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Your last eight weeks of running next to what the course asks for.'**
+  String get courseReadinessNote;
+
+  /// No description provided for @courseLongestRun.
+  ///
+  /// In en, this message translates to:
+  /// **'Longest run'**
+  String get courseLongestRun;
+
+  /// No description provided for @courseWeekClimb.
+  ///
+  /// In en, this message translates to:
+  /// **'Most climbing in a week'**
+  String get courseWeekClimb;
+
+  /// No description provided for @courseBiggestClimb.
+  ///
+  /// In en, this message translates to:
+  /// **'Biggest climb in one go'**
+  String get courseBiggestClimb;
+
+  /// No description provided for @courseBiggestDescent.
+  ///
+  /// In en, this message translates to:
+  /// **'Biggest descent in one go'**
+  String get courseBiggestDescent;
+
+  /// No description provided for @courseVersus.
+  ///
+  /// In en, this message translates to:
+  /// **'{you} · course {course}'**
+  String courseVersus(String you, String course);
+
+  /// No description provided for @courseResult.
+  ///
+  /// In en, this message translates to:
+  /// **'As planned and as run'**
+  String get courseResult;
+
+  /// No description provided for @courseResultNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Each checkpoint at the same share of your watch\'s distance as of the course\'s.'**
+  String get courseResultNote;
+
+  /// No description provided for @courseFaster.
+  ///
+  /// In en, this message translates to:
+  /// **'{time} faster'**
+  String courseFaster(String time);
+
+  /// No description provided for @courseSlower.
+  ///
+  /// In en, this message translates to:
+  /// **'{time} slower'**
+  String courseSlower(String time);
 }
 
 class _AppLocalizationsDelegate

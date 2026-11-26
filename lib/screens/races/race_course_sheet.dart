@@ -150,7 +150,9 @@ class _RaceCourseSheetState extends ConsumerState<RaceCourseSheet> {
                   _Climbs(profile: v.profile!),
                   _Bands(profile: v.profile!),
                   if (pro) ...[
+                    if (v.result case final r?) _Result(result: r),
                     _Plan(view: v),
+                    if (v.readiness case final r?) _Readiness(readiness: r),
                     if (v.table case final t?) _PaceTable(table: t),
                   ] else
                     SectionCard(
@@ -1275,6 +1277,120 @@ class _RaceDayEditorState extends ConsumerState<_RaceDayEditor> {
           ),
           const SizedBox(height: 12),
           FilledButton(onPressed: _save, child: Text(l.save)),
+        ],
+      ),
+    );
+  }
+}
+
+/// The last eight weeks of running next to what the course asks for.
+class _Readiness extends StatelessWidget {
+  const _Readiness({required this.readiness});
+  final RaceReadiness readiness;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final r = readiness;
+    Widget row(String label, String you, String course) => Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          Expanded(child: Text(label)),
+          Text(
+            l.courseVersus(you, course),
+            style: const TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ],
+      ),
+    );
+    return SectionCard(
+      title: l.courseReadiness,
+      accent: _accent,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l.courseReadinessNote,
+            style: TextStyle(fontSize: 12, color: fjInk70),
+          ),
+          const SizedBox(height: 6),
+          row(
+            l.courseLongestRun,
+            formatHoursMinutes(r.longestRun),
+            formatHoursMinutes(r.raceTime),
+          ),
+          row(
+            l.courseWeekClimb,
+            '${r.bestWeekClimb.round()} m',
+            '${r.courseClimb.round()} m',
+          ),
+          row(
+            l.courseBiggestClimb,
+            '${r.longestClimb.round()} m',
+            '${r.courseLongestClimb.round()} m',
+          ),
+          row(
+            l.courseBiggestDescent,
+            '${r.longestDescent.round()} m',
+            '${r.courseLongestDescent.round()} m',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// After the race: each checkpoint as planned and as run.
+class _Result extends StatelessWidget {
+  const _Result({required this.result});
+  final RaceResult result;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    return SectionCard(
+      title: l.courseResult,
+      accent: _accent,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l.courseResultNote,
+            style: TextStyle(fontSize: 12, color: fjInk70),
+          ),
+          for (final (i, leg) in result.legs.indexed)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      i == result.legs.length - 1
+                          ? l.courseFinish
+                          : leg.planned.leg.to,
+                    ),
+                  ),
+                  Text(
+                    '${formatHoursMinutes(leg.planned.arrival)} → '
+                    '${formatHoursMinutes(leg.arrival)}',
+                  ),
+                  SizedBox(
+                    width: 90,
+                    child: Text(
+                      leg.behind > 0
+                          ? l.courseSlower(formatHoursMinutes(leg.behind))
+                          : l.courseFaster(formatHoursMinutes(-leg.behind)),
+                      textAlign: TextAlign.end,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: leg.behind > 0 ? Colors.orange : Colors.green,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
         ],
       ),
     );

@@ -10452,4 +10452,45 @@ class AppLocalizationsDe extends AppLocalizations {
   String courseLegFuel(int carbs, String litres) {
     return '$carbs g · $litres l';
   }
+
+  @override
+  String get courseReadiness => 'Bereit für diese Strecke?';
+
+  @override
+  String get courseReadinessNote =>
+      'Deine Läufe der letzten acht Wochen neben dem, was die Strecke verlangt.';
+
+  @override
+  String get courseLongestRun => 'Längster Lauf';
+
+  @override
+  String get courseWeekClimb => 'Meiste Höhenmeter in einer Woche';
+
+  @override
+  String get courseBiggestClimb => 'Größter Anstieg am Stück';
+
+  @override
+  String get courseBiggestDescent => 'Größter Abstieg am Stück';
+
+  @override
+  String courseVersus(String you, String course) {
+    return '$you · Strecke $course';
+  }
+
+  @override
+  String get courseResult => 'Geplant und gelaufen';
+
+  @override
+  String get courseResultNote =>
+      'Jeder Kontrollpunkt beim gleichen Anteil der Uhr-Distanz wie der Strecke.';
+
+  @override
+  String courseFaster(String time) {
+    return '$time schneller';
+  }
+
+  @override
+  String courseSlower(String time) {
+    return '$time langsamer';
+  }
 }

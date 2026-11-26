@@ -5669,5 +5669,16 @@
   "courseStop": "Minuty na każdym punkcie odżywczym",
   "courseInDark": "{time} po ciemku",
   "courseFuelPerHour": "{carbs} g węglowodanów, {fluid} ml, {sodium} mg sodu na godzinę",
-  "courseLegFuel": "{carbs} g · {litres} l"
+  "courseLegFuel": "{carbs} g · {litres} l",
+  "courseReadiness": "Gotowy na tę trasę?",
+  "courseReadinessNote": "Twoje biegi z ostatnich ośmiu tygodni obok tego, czego wymaga trasa.",
+  "courseLongestRun": "Najdłuższy bieg",
+  "courseWeekClimb": "Najwięcej przewyższeń w tygodniu",
+  "courseBiggestClimb": "Największy podbieg naraz",
+  "courseBiggestDescent": "Największy zbieg naraz",
+  "courseVersus": "{you} · trasa {course}",
+  "courseResult": "Zaplanowane i przebiegnięte",
+  "courseResultNote": "Każdy punkt kontrolny w tej samej części dystansu zegarka co trasy.",
+  "courseFaster": "{time} szybciej",
+  "courseSlower": "{time} wolniej"
 }

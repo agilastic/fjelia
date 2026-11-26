@@ -10397,4 +10397,45 @@ class AppLocalizationsFi extends AppLocalizations {
   String courseLegFuel(int carbs, String litres) {
     return '$carbs g · $litres l';
   }
+
+  @override
+  String get courseReadiness => 'Valmis tälle reitille?';
+
+  @override
+  String get courseReadinessNote =>
+      'Viimeisen kahdeksan viikon juoksusi sen rinnalla, mitä reitti vaatii.';
+
+  @override
+  String get courseLongestRun => 'Pisin juoksu';
+
+  @override
+  String get courseWeekClimb => 'Eniten nousua viikossa';
+
+  @override
+  String get courseBiggestClimb => 'Suurin yhtäjaksoinen nousu';
+
+  @override
+  String get courseBiggestDescent => 'Suurin yhtäjaksoinen lasku';
+
+  @override
+  String courseVersus(String you, String course) {
+    return '$you · reitti $course';
+  }
+
+  @override
+  String get courseResult => 'Suunniteltu ja juostu';
+
+  @override
+  String get courseResultNote =>
+      'Jokainen tarkastuspiste samalla osuudella kellon matkasta kuin reitin.';
+
+  @override
+  String courseFaster(String time) {
+    return '$time nopeammin';
+  }
+
+  @override
+  String courseSlower(String time) {
+    return '$time hitaammin';
+  }
 }

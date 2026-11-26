@@ -5669,5 +5669,16 @@
   "courseStop": "Minuten bij elke verzorgingspost",
   "courseInDark": "{time} in het donker",
   "courseFuelPerHour": "{carbs} g koolhydraten, {fluid} ml, {sodium} mg natrium per uur",
-  "courseLegFuel": "{carbs} g · {litres} l"
+  "courseLegFuel": "{carbs} g · {litres} l",
+  "courseReadiness": "Klaar voor dit parcours?",
+  "courseReadinessNote": "Je lopen van de afgelopen acht weken naast wat het parcours vraagt.",
+  "courseLongestRun": "Langste loop",
+  "courseWeekClimb": "Meeste stijging in een week",
+  "courseBiggestClimb": "Grootste klim in één keer",
+  "courseBiggestDescent": "Grootste afdaling in één keer",
+  "courseVersus": "{you} · parcours {course}",
+  "courseResult": "Gepland en gelopen",
+  "courseResultNote": "Elke post op hetzelfde deel van de afstand van je horloge als van het parcours.",
+  "courseFaster": "{time} sneller",
+  "courseSlower": "{time} langzamer"
 }

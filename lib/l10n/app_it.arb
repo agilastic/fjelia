@@ -4506,5 +4506,16 @@
   "courseStop": "Minuti a ogni ristoro",
   "courseInDark": "{time} al buio",
   "courseFuelPerHour": "{carbs} g di carboidrati, {fluid} ml, {sodium} mg di sodio all'ora",
-  "courseLegFuel": "{carbs} g · {litres} l"
+  "courseLegFuel": "{carbs} g · {litres} l",
+  "courseReadiness": "Pronto per questo percorso?",
+  "courseReadinessNote": "Le tue corse delle ultime otto settimane accanto a quello che chiede il percorso.",
+  "courseLongestRun": "Corsa più lunga",
+  "courseWeekClimb": "Più dislivello in una settimana",
+  "courseBiggestClimb": "Salita più grande di fila",
+  "courseBiggestDescent": "Discesa più grande di fila",
+  "courseVersus": "{you} · percorso {course}",
+  "courseResult": "Previsto e corso",
+  "courseResultNote": "Ogni punto di controllo alla stessa quota della distanza dell'orologio che del percorso.",
+  "courseFaster": "{time} più veloce",
+  "courseSlower": "{time} più lento"
 }

@@ -4539,5 +4539,16 @@
   "courseStop": "Minuten an jeder Verpflegungsstelle",
   "courseInDark": "{time} im Dunkeln",
   "courseFuelPerHour": "{carbs} g Kohlenhydrate, {fluid} ml, {sodium} mg Natrium pro Stunde",
-  "courseLegFuel": "{carbs} g · {litres} l"
+  "courseLegFuel": "{carbs} g · {litres} l",
+  "courseReadiness": "Bereit für diese Strecke?",
+  "courseReadinessNote": "Deine Läufe der letzten acht Wochen neben dem, was die Strecke verlangt.",
+  "courseLongestRun": "Längster Lauf",
+  "courseWeekClimb": "Meiste Höhenmeter in einer Woche",
+  "courseBiggestClimb": "Größter Anstieg am Stück",
+  "courseBiggestDescent": "Größter Abstieg am Stück",
+  "courseVersus": "{you} · Strecke {course}",
+  "courseResult": "Geplant und gelaufen",
+  "courseResultNote": "Jeder Kontrollpunkt beim gleichen Anteil der Uhr-Distanz wie der Strecke.",
+  "courseFaster": "{time} schneller",
+  "courseSlower": "{time} langsamer"
 }

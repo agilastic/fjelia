@@ -4506,5 +4506,16 @@
   "courseStop": "Minuts a cada avituallament",
   "courseInDark": "{time} a les fosques",
   "courseFuelPerHour": "{carbs} g d'hidrats, {fluid} ml, {sodium} mg de sodi per hora",
-  "courseLegFuel": "{carbs} g · {litres} l"
+  "courseLegFuel": "{carbs} g · {litres} l",
+  "courseReadiness": "Preparat per a aquest recorregut?",
+  "courseReadinessNote": "Les teves curses de les últimes vuit setmanes al costat del que demana el recorregut.",
+  "courseLongestRun": "Cursa més llarga",
+  "courseWeekClimb": "Més desnivell en una setmana",
+  "courseBiggestClimb": "Pujada més gran d'un cop",
+  "courseBiggestDescent": "Baixada més gran d'un cop",
+  "courseVersus": "{you} · recorregut {course}",
+  "courseResult": "Previst i corregut",
+  "courseResultNote": "Cada control a la mateixa part de la distància del rellotge que del recorregut.",
+  "courseFaster": "{time} més ràpid",
+  "courseSlower": "{time} més lent"
 }

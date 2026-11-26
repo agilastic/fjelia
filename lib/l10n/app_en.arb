@@ -5786,5 +5786,19 @@
   "courseFuelPerHour": "{carbs} g carbohydrate, {fluid} ml, {sodium} mg sodium per hour",
   "@courseFuelPerHour": {"placeholders": {"carbs": {"type": "int"}, "fluid": {"type": "int"}, "sodium": {"type": "int"}}},
   "courseLegFuel": "{carbs} g · {litres} l",
-  "@courseLegFuel": {"placeholders": {"carbs": {"type": "int"}, "litres": {"type": "String"}}}
+  "@courseLegFuel": {"placeholders": {"carbs": {"type": "int"}, "litres": {"type": "String"}}},
+  "courseReadiness": "Ready for this course?",
+  "courseReadinessNote": "Your last eight weeks of running next to what the course asks for.",
+  "courseLongestRun": "Longest run",
+  "courseWeekClimb": "Most climbing in a week",
+  "courseBiggestClimb": "Biggest climb in one go",
+  "courseBiggestDescent": "Biggest descent in one go",
+  "courseVersus": "{you} · course {course}",
+  "@courseVersus": {"placeholders": {"you": {"type": "String"}, "course": {"type": "String"}}},
+  "courseResult": "As planned and as run",
+  "courseResultNote": "Each checkpoint at the same share of your watch's distance as of the course's.",
+  "courseFaster": "{time} faster",
+  "@courseFaster": {"placeholders": {"time": {"type": "String"}}},
+  "courseSlower": "{time} slower",
+  "@courseSlower": {"placeholders": {"time": {"type": "String"}}}
 }

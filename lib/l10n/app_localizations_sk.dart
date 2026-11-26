@@ -10407,4 +10407,45 @@ class AppLocalizationsSk extends AppLocalizations {
   String courseLegFuel(int carbs, String litres) {
     return '$carbs g · $litres l';
   }
+
+  @override
+  String get courseReadiness => 'Pripravený na túto trasu?';
+
+  @override
+  String get courseReadinessNote =>
+      'Tvoje behy za posledných osem týždňov vedľa toho, čo trasa vyžaduje.';
+
+  @override
+  String get courseLongestRun => 'Najdlhší beh';
+
+  @override
+  String get courseWeekClimb => 'Najviac stúpania za týždeň';
+
+  @override
+  String get courseBiggestClimb => 'Najväčšie stúpanie naraz';
+
+  @override
+  String get courseBiggestDescent => 'Najväčšie klesanie naraz';
+
+  @override
+  String courseVersus(String you, String course) {
+    return '$you · trasa $course';
+  }
+
+  @override
+  String get courseResult => 'Plánované a odbehnuté';
+
+  @override
+  String get courseResultNote =>
+      'Každý kontrolný bod v rovnakej časti vzdialenosti hodiniek ako trasy.';
+
+  @override
+  String courseFaster(String time) {
+    return '$time rýchlejšie';
+  }
+
+  @override
+  String courseSlower(String time) {
+    return '$time pomalšie';
+  }
 }

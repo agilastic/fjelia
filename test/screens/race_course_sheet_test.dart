@@ -129,5 +129,6 @@ void main() {
     await show(tester, pro: true);
     expect(find.text('Summit'), findsOneWidget);
     expect(find.textContaining('Grade-adjusted pace'), findsOneWidget);
+    expect(find.text('Biggest climb in one go'), findsOneWidget);
   });
 }

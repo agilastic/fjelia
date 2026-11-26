@@ -4506,5 +4506,16 @@
   "courseStop": "Minuuttia kullakin huoltopisteellä",
   "courseInDark": "{time} pimeässä",
   "courseFuelPerHour": "{carbs} g hiilihydraattia, {fluid} ml, {sodium} mg natriumia tunnissa",
-  "courseLegFuel": "{carbs} g · {litres} l"
+  "courseLegFuel": "{carbs} g · {litres} l",
+  "courseReadiness": "Valmis tälle reitille?",
+  "courseReadinessNote": "Viimeisen kahdeksan viikon juoksusi sen rinnalla, mitä reitti vaatii.",
+  "courseLongestRun": "Pisin juoksu",
+  "courseWeekClimb": "Eniten nousua viikossa",
+  "courseBiggestClimb": "Suurin yhtäjaksoinen nousu",
+  "courseBiggestDescent": "Suurin yhtäjaksoinen lasku",
+  "courseVersus": "{you} · reitti {course}",
+  "courseResult": "Suunniteltu ja juostu",
+  "courseResultNote": "Jokainen tarkastuspiste samalla osuudella kellon matkasta kuin reitin.",
+  "courseFaster": "{time} nopeammin",
+  "courseSlower": "{time} hitaammin"
 }

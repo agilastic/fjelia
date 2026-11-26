@@ -4506,5 +4506,16 @@
   "courseStop": "Minutter ved hver matstasjon",
   "courseInDark": "{time} i mørket",
   "courseFuelPerHour": "{carbs} g karbohydrat, {fluid} ml, {sodium} mg natrium i timen",
-  "courseLegFuel": "{carbs} g · {litres} l"
+  "courseLegFuel": "{carbs} g · {litres} l",
+  "courseReadiness": "Klar for denne løypa?",
+  "courseReadinessNote": "Løpene dine de siste åtte ukene ved siden av det løypa krever.",
+  "courseLongestRun": "Lengste løp",
+  "courseWeekClimb": "Mest stigning på en uke",
+  "courseBiggestClimb": "Største stigning i ett strekk",
+  "courseBiggestDescent": "Største nedstigning i ett strekk",
+  "courseVersus": "{you} · løype {course}",
+  "courseResult": "Planlagt og løpt",
+  "courseResultNote": "Hvert kontrollpunkt ved samme andel av klokkas distanse som av løypas.",
+  "courseFaster": "{time} raskere",
+  "courseSlower": "{time} saktere"
 }
