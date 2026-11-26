@@ -10130,4 +10130,194 @@ class AppLocalizationsDa extends AppLocalizations {
   String syncLastAt(String when) {
     return 'Sidst synkroniseret $when';
   }
+
+  @override
+  String get courseTitle => 'Rute';
+
+  @override
+  String get courseAdd => 'Tilføj ruten';
+
+  @override
+  String get courseAddHint =>
+      'Mange løb har deres rute i løbsbiblioteket med depoter og tidsgrænser. Ellers tilføj arrangørens GPX-fil.';
+
+  @override
+  String get courseFromLibrary => 'Find i løbsbiblioteket';
+
+  @override
+  String get courseFromFile => 'Åbn GPX-fil';
+
+  @override
+  String get courseNoLibraryCourse => 'Ingen rute i biblioteket';
+
+  @override
+  String get courseNotFetched =>
+      'Arrangørens rute kunne ikke hentes. Prøv igen, eller tilføj selv GPX-filen.';
+
+  @override
+  String get courseUnreadable => 'Der er ingen rute i denne fil.';
+
+  @override
+  String get courseNoElevation =>
+      'Denne rute har ingen højder, så stigningerne kan ikke vises. Prøv arrangørens fil.';
+
+  @override
+  String get courseDistance => 'Distance';
+
+  @override
+  String get courseClimb => 'Stigning';
+
+  @override
+  String get courseDescent => 'Nedstigning';
+
+  @override
+  String get courseEffort => 'Indsats';
+
+  @override
+  String get courseEffortNote => 'km + stigning / 100 (ITRA)';
+
+  @override
+  String get courseSteep => 'Stejle stykker';
+
+  @override
+  String get courseSteepNote => 'stejleste 5 % af 100 m';
+
+  @override
+  String get courseHighest => 'Højeste punkt';
+
+  @override
+  String get courseClimbs => 'Stigninger';
+
+  @override
+  String courseClimbsCount(int count) {
+    return '$count på 50 m eller mere';
+  }
+
+  @override
+  String get courseNoClimbs => 'Ingen stigning på 50 m eller mere';
+
+  @override
+  String get courseGradients => 'Hældninger';
+
+  @override
+  String get courseBandSteepDown => 'Stejlt ned';
+
+  @override
+  String get courseBandDown => 'Ned';
+
+  @override
+  String get courseBandGentlyDown => 'Svagt ned';
+
+  @override
+  String get courseBandFlat => 'Fladt';
+
+  @override
+  String get courseBandGentlyUp => 'Svagt op';
+
+  @override
+  String get courseBandUp => 'Op';
+
+  @override
+  String get courseBandSteepUp => 'Stejlt op';
+
+  @override
+  String get coursePlan => 'Dit løb';
+
+  @override
+  String get coursePlanFrom => 'Fra dine løb i bakker de seneste seks måneder';
+
+  @override
+  String get coursePlanNeedsRuns =>
+      'Optag et par løb med højde i bakker: din tid på ruten beregnes ud fra dem.';
+
+  @override
+  String get courseFinish => 'Mål';
+
+  @override
+  String get courseArrival => 'Ankomst';
+
+  @override
+  String get courseSetStart => 'Angiv start';
+
+  @override
+  String courseStartAt(String time) {
+    return 'Start $time';
+  }
+
+  @override
+  String get courseLegTo => 'Til';
+
+  @override
+  String get courseLeg => 'Etape';
+
+  @override
+  String get courseTotal => 'I alt';
+
+  @override
+  String get courseCutoff => 'Tidsgrænse';
+
+  @override
+  String courseAhead(String time) {
+    return '$time foran';
+  }
+
+  @override
+  String courseLate(String time) {
+    return '$time for sent';
+  }
+
+  @override
+  String get coursePlanNote =>
+      'Tid i bevægelse i dit tempo på hver hældning, sat ned for løbets længde; pauser, nat og varme er ikke med.';
+
+  @override
+  String get coursePace => 'Dit tempo i bakker';
+
+  @override
+  String coursePaceNote(String pace) {
+    return 'Hældningsjusteret tempo $pace · hældninger under 2 km bruger Minetti-formlen';
+  }
+
+  @override
+  String get courseProTeaser =>
+      'Din sluttid, tiden ved hvert kontrolpunkt og marginen til hver tidsgrænse ud fra dine egne løb i bakker.';
+
+  @override
+  String get courseCheckpoints => 'Kontrolpunkter';
+
+  @override
+  String get courseCheckpointAdd => 'Tilføj kontrolpunkt';
+
+  @override
+  String get courseCheckpointName => 'Navn';
+
+  @override
+  String get courseCutoffAfterStart => 'Tidsgrænse (t:mm efter start)';
+
+  @override
+  String get courseSetStartFirst =>
+      'Angiv starttidspunktet for at indtaste tidsgrænser.';
+
+  @override
+  String get courseReplace => 'Erstat rute';
+
+  @override
+  String get courseRemove => 'Fjern rute';
+
+  @override
+  String get courseSearchLibrary => 'Løbsnavn eller by';
+
+  @override
+  String get courseNoRaceFound =>
+      'Intet løb fundet. Prøv byen, eller tilføj selv GPX-filen.';
+
+  @override
+  String courseAidStations(int count) {
+    return '$count depoter';
+  }
+
+  @override
+  String courseRun(String km) {
+    return '$km km løbet';
+  }
 }

@@ -10207,4 +10207,195 @@ class AppLocalizationsNl extends AppLocalizations {
   String syncLastAt(String when) {
     return 'Laatst gesynchroniseerd $when';
   }
+
+  @override
+  String get courseTitle => 'Parcours';
+
+  @override
+  String get courseAdd => 'Parcours toevoegen';
+
+  @override
+  String get courseAddHint =>
+      'Veel wedstrijden hebben hun parcours in de wedstrijdbibliotheek, met verzorgingsposten en tijdslimieten. Voeg anders het GPX-bestand van de organisatie toe.';
+
+  @override
+  String get courseFromLibrary => 'Zoeken in de wedstrijdbibliotheek';
+
+  @override
+  String get courseFromFile => 'GPX-bestand openen';
+
+  @override
+  String get courseNoLibraryCourse => 'Geen parcours in de bibliotheek';
+
+  @override
+  String get courseNotFetched =>
+      'Het parcours van de organisatie kon niet worden opgehaald. Probeer het opnieuw of voeg het GPX-bestand zelf toe.';
+
+  @override
+  String get courseUnreadable => 'Dit bestand bevat geen parcours.';
+
+  @override
+  String get courseNoElevation =>
+      'Dit parcours heeft geen hoogtes, dus de klimmen kunnen niet worden getoond. Probeer het bestand van de organisatie.';
+
+  @override
+  String get courseDistance => 'Afstand';
+
+  @override
+  String get courseClimb => 'Stijging';
+
+  @override
+  String get courseDescent => 'Daling';
+
+  @override
+  String get courseEffort => 'Inspanning';
+
+  @override
+  String get courseEffortNote => 'km + stijging / 100 (ITRA)';
+
+  @override
+  String get courseSteep => 'Steile stukken';
+
+  @override
+  String get courseSteepNote => 'steilste 5 % van 100 m';
+
+  @override
+  String get courseHighest => 'Hoogste punt';
+
+  @override
+  String get courseClimbs => 'Klimmen';
+
+  @override
+  String courseClimbsCount(int count) {
+    return '$count van 50 m of meer';
+  }
+
+  @override
+  String get courseNoClimbs => 'Geen klim van 50 m of meer';
+
+  @override
+  String get courseGradients => 'Hellingen';
+
+  @override
+  String get courseBandSteepDown => 'Steil omlaag';
+
+  @override
+  String get courseBandDown => 'Omlaag';
+
+  @override
+  String get courseBandGentlyDown => 'Licht omlaag';
+
+  @override
+  String get courseBandFlat => 'Vlak';
+
+  @override
+  String get courseBandGentlyUp => 'Licht omhoog';
+
+  @override
+  String get courseBandUp => 'Omhoog';
+
+  @override
+  String get courseBandSteepUp => 'Steil omhoog';
+
+  @override
+  String get coursePlan => 'Jouw wedstrijd';
+
+  @override
+  String get coursePlanFrom =>
+      'Uit je heuvellopen van de afgelopen zes maanden';
+
+  @override
+  String get coursePlanNeedsRuns =>
+      'Neem een paar lopen met hoogte in de heuvels op: je tijd op dit parcours wordt daaruit berekend.';
+
+  @override
+  String get courseFinish => 'Finish';
+
+  @override
+  String get courseArrival => 'Aankomst';
+
+  @override
+  String get courseSetStart => 'Start instellen';
+
+  @override
+  String courseStartAt(String time) {
+    return 'Start $time';
+  }
+
+  @override
+  String get courseLegTo => 'Naar';
+
+  @override
+  String get courseLeg => 'Etappe';
+
+  @override
+  String get courseTotal => 'Totaal';
+
+  @override
+  String get courseCutoff => 'Tijdslimiet';
+
+  @override
+  String courseAhead(String time) {
+    return '$time voor';
+  }
+
+  @override
+  String courseLate(String time) {
+    return '$time te laat';
+  }
+
+  @override
+  String get coursePlanNote =>
+      'Bewegingstijd in jouw tempo op elke helling, vertraagd voor de lengte van de wedstrijd; stops, nacht en hitte zitten er niet in.';
+
+  @override
+  String get coursePace => 'Jouw tempo op heuvels';
+
+  @override
+  String coursePaceNote(String pace) {
+    return 'Hellinggecorrigeerd tempo $pace · hellingen onder 2 km gebruiken de Minetti-formule';
+  }
+
+  @override
+  String get courseProTeaser =>
+      'Je eindtijd, de tijd bij elke post en de marge op elke tijdslimiet, uit je eigen heuvellopen.';
+
+  @override
+  String get courseCheckpoints => 'Controleposten';
+
+  @override
+  String get courseCheckpointAdd => 'Controlepost toevoegen';
+
+  @override
+  String get courseCheckpointName => 'Naam';
+
+  @override
+  String get courseCutoffAfterStart => 'Tijdslimiet (u:mm na de start)';
+
+  @override
+  String get courseSetStartFirst =>
+      'Stel de starttijd in om tijdslimieten in te voeren.';
+
+  @override
+  String get courseReplace => 'Parcours vervangen';
+
+  @override
+  String get courseRemove => 'Parcours verwijderen';
+
+  @override
+  String get courseSearchLibrary => 'Naam van de wedstrijd of plaats';
+
+  @override
+  String get courseNoRaceFound =>
+      'Geen wedstrijd gevonden. Probeer de plaats of voeg het GPX-bestand zelf toe.';
+
+  @override
+  String courseAidStations(int count) {
+    return '$count verzorgingsposten';
+  }
+
+  @override
+  String courseRun(String km) {
+    return '$km km gelopen';
+  }
 }

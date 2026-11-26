@@ -10,6 +10,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../services/bonjour_peer_locator.dart';
 import '../services/synced_plan_followup.dart';
 import 'database_provider.dart';
+import 'fjelia_pro_provider.dart' show fjeliaProProvider;
 import 'planner_providers.dart' show trainingPlanServiceProvider;
 import 'workout_providers_provider.dart';
 import 'day_data_provider.dart'
@@ -77,6 +78,13 @@ class NearbySyncNotifier extends Notifier<Map<String, NearbySyncStatus>> {
     name: await _deviceName(),
     secrets: const _SecureSecrets(),
     locator: const BonjourPeerLocator(),
+    // FjeliaPro for the computers, while this phone has it.
+    proPass: () async {
+      final access = ref.read(fjeliaProProvider).access;
+      return access != null && access.activeAt(DateTime.now())
+          ? access.pass
+          : null;
+    },
   );
 
   void _set(String id, NearbySyncStatus status) =>

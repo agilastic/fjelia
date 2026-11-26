@@ -10210,4 +10210,196 @@ class AppLocalizationsCa extends AppLocalizations {
   String syncLastAt(String when) {
     return 'Darrera sincronització $when';
   }
+
+  @override
+  String get courseTitle => 'Recorregut';
+
+  @override
+  String get courseAdd => 'Afegeix el recorregut';
+
+  @override
+  String get courseAddHint =>
+      'Moltes curses tenen el recorregut a la biblioteca de curses, amb avituallaments i talls horaris. Si no, afegeix el fitxer GPX de l\'organització.';
+
+  @override
+  String get courseFromLibrary => 'Cerca a la biblioteca de curses';
+
+  @override
+  String get courseFromFile => 'Obre un fitxer GPX';
+
+  @override
+  String get courseNoLibraryCourse => 'No hi ha recorregut a la biblioteca';
+
+  @override
+  String get courseNotFetched =>
+      'No s\'ha pogut obtenir el recorregut de l\'organització. Torna-ho a provar o afegeix tu el fitxer GPX.';
+
+  @override
+  String get courseUnreadable => 'Aquest fitxer no té cap recorregut.';
+
+  @override
+  String get courseNoElevation =>
+      'Aquest recorregut no té altituds, així que no se\'n poden mostrar les pujades. Prova el fitxer de l\'organització.';
+
+  @override
+  String get courseDistance => 'Distància';
+
+  @override
+  String get courseClimb => 'Pujada';
+
+  @override
+  String get courseDescent => 'Baixada';
+
+  @override
+  String get courseEffort => 'Esforç';
+
+  @override
+  String get courseEffortNote => 'km + pujada / 100 (ITRA)';
+
+  @override
+  String get courseSteep => 'Trams drets';
+
+  @override
+  String get courseSteepNote => 'el 5 % més dret de 100 m';
+
+  @override
+  String get courseHighest => 'Punt més alt';
+
+  @override
+  String get courseClimbs => 'Pujades';
+
+  @override
+  String courseClimbsCount(int count) {
+    return '$count de 50 m o més';
+  }
+
+  @override
+  String get courseNoClimbs => 'Cap pujada de 50 m o més';
+
+  @override
+  String get courseGradients => 'Pendents';
+
+  @override
+  String get courseBandSteepDown => 'Baixada forta';
+
+  @override
+  String get courseBandDown => 'Baixada';
+
+  @override
+  String get courseBandGentlyDown => 'Baixada suau';
+
+  @override
+  String get courseBandFlat => 'Pla';
+
+  @override
+  String get courseBandGentlyUp => 'Pujada suau';
+
+  @override
+  String get courseBandUp => 'Pujada';
+
+  @override
+  String get courseBandSteepUp => 'Pujada forta';
+
+  @override
+  String get coursePlan => 'La teva cursa';
+
+  @override
+  String get coursePlanFrom =>
+      'De les teves curses en pujada dels últims sis mesos';
+
+  @override
+  String get coursePlanNeedsRuns =>
+      'Enregistra algunes curses amb altitud en pujada: el teu temps en aquest recorregut es calcula a partir d\'elles.';
+
+  @override
+  String get courseFinish => 'Meta';
+
+  @override
+  String get courseArrival => 'Arribada';
+
+  @override
+  String get courseSetStart => 'Fixa la sortida';
+
+  @override
+  String courseStartAt(String time) {
+    return 'Sortida $time';
+  }
+
+  @override
+  String get courseLegTo => 'Fins a';
+
+  @override
+  String get courseLeg => 'Tram';
+
+  @override
+  String get courseTotal => 'Total';
+
+  @override
+  String get courseCutoff => 'Tall horari';
+
+  @override
+  String courseAhead(String time) {
+    return '$time de marge';
+  }
+
+  @override
+  String courseLate(String time) {
+    return '$time tard';
+  }
+
+  @override
+  String get coursePlanNote =>
+      'Temps en moviment al teu ritme a cada pendent, alentit per la llargada de la cursa; les parades, la nit i la calor no hi són.';
+
+  @override
+  String get coursePace => 'El teu ritme en pujada';
+
+  @override
+  String coursePaceNote(String pace) {
+    return 'Ritme ajustat al pendent $pace · als pendents amb menys de 2 km s\'aplica la fórmula de Minetti';
+  }
+
+  @override
+  String get courseProTeaser =>
+      'El teu temps final, el temps a cada control i el marge a cada tall horari, a partir de les teves curses en pujada.';
+
+  @override
+  String get courseCheckpoints => 'Controls';
+
+  @override
+  String get courseCheckpointAdd => 'Afegeix un control';
+
+  @override
+  String get courseCheckpointName => 'Nom';
+
+  @override
+  String get courseCutoffAfterStart =>
+      'Tall horari (h:mm després de la sortida)';
+
+  @override
+  String get courseSetStartFirst =>
+      'Fixa la sortida per introduir talls horaris.';
+
+  @override
+  String get courseReplace => 'Substitueix el recorregut';
+
+  @override
+  String get courseRemove => 'Elimina el recorregut';
+
+  @override
+  String get courseSearchLibrary => 'Nom de la cursa o població';
+
+  @override
+  String get courseNoRaceFound =>
+      'No s\'ha trobat cap cursa. Prova la població o afegeix tu el fitxer GPX.';
+
+  @override
+  String courseAidStations(int count) {
+    return '$count avituallaments';
+  }
+
+  @override
+  String courseRun(String km) {
+    return '$km km correguts';
+  }
 }

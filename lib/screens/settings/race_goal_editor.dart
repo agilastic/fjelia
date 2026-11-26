@@ -1,6 +1,7 @@
 import '../../theme/fjelia_style.dart';
 import '../../l10n/formats.dart';
 import '../../l10n/l10n_ext.dart';
+import '../races/race_course_sheet.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -531,6 +532,21 @@ class _RaceEditorState extends ConsumerState<RaceGoalEditor> {
                   ],
                   if (widget.goal case final goal?) ...[
                     const SizedBox(height: 16),
+                    // Its course: climbs, and with FjeliaPro the time at
+                    // each checkpoint.
+                    // Its own Material: the editor paints a background.
+                    Material(
+                      type: MaterialType.transparency,
+                      child: ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: const Icon(Icons.terrain_outlined),
+                        title: Text(context.l10n.courseTitle),
+                        trailing: const Icon(Icons.chevron_right),
+                        onTap: () =>
+                            showAppSheet(context, RaceCourseSheet(goal: goal)),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
                     MediaGallery(owner: MediaOwner.raceGoal(goal.id)),
                   ],
                   SizedBox(height: more ? 24 : 12),

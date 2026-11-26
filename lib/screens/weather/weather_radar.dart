@@ -3,6 +3,7 @@ import '../../l10n/l10n_ext.dart';
 
 import 'dart:async';
 
+import 'package:fjelia_core/config/map_tiles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -66,14 +67,13 @@ class _RadarState extends ConsumerState<WeatherRadar> {
                 ),
                 children: [
                   TileLayer(
-                    urlTemplate:
-                        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                    userAgentPackageName: 'de.ebeling-hoppe.fjelia',
+                    urlTemplate: mapTileUrl,
+                    userAgentPackageName: mapUserAgentPackage,
                   ),
                   TileLayer(
                     key: ValueKey(frames[selected].tileUrl),
                     urlTemplate: frames[selected].tileUrl,
-                    userAgentPackageName: 'de.ebeling-hoppe.fjelia',
+                    userAgentPackageName: mapUserAgentPackage,
                     maxNativeZoom: 7,
                   ),
                   MarkerLayer(

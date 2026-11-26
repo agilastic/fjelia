@@ -10143,4 +10143,194 @@ class AppLocalizationsEn extends AppLocalizations {
   String syncLastAt(String when) {
     return 'Last synced $when';
   }
+
+  @override
+  String get courseTitle => 'Course';
+
+  @override
+  String get courseAdd => 'Add the course';
+
+  @override
+  String get courseAddHint =>
+      'Many races have their course in the race library, with aid stations and cut-offs. Otherwise add the organiser\'s GPX file.';
+
+  @override
+  String get courseFromLibrary => 'Find in race library';
+
+  @override
+  String get courseFromFile => 'Open GPX file';
+
+  @override
+  String get courseNoLibraryCourse => 'No course in the library';
+
+  @override
+  String get courseNotFetched =>
+      'The organiser\'s course could not be fetched. Try again, or add the GPX file yourself.';
+
+  @override
+  String get courseUnreadable => 'This file has no course in it.';
+
+  @override
+  String get courseNoElevation =>
+      'This course has no heights, so its climbs can\'t be shown. Try the organiser\'s file.';
+
+  @override
+  String get courseDistance => 'Distance';
+
+  @override
+  String get courseClimb => 'Climb';
+
+  @override
+  String get courseDescent => 'Descent';
+
+  @override
+  String get courseEffort => 'Effort';
+
+  @override
+  String get courseEffortNote => 'km + climb / 100 (ITRA)';
+
+  @override
+  String get courseSteep => 'Steep parts';
+
+  @override
+  String get courseSteepNote => 'steepest 5 % of 100 m';
+
+  @override
+  String get courseHighest => 'Highest point';
+
+  @override
+  String get courseClimbs => 'Climbs';
+
+  @override
+  String courseClimbsCount(int count) {
+    return '$count of 50 m or more';
+  }
+
+  @override
+  String get courseNoClimbs => 'No climb of 50 m or more';
+
+  @override
+  String get courseGradients => 'Gradients';
+
+  @override
+  String get courseBandSteepDown => 'Steep down';
+
+  @override
+  String get courseBandDown => 'Down';
+
+  @override
+  String get courseBandGentlyDown => 'Gently down';
+
+  @override
+  String get courseBandFlat => 'Flat';
+
+  @override
+  String get courseBandGentlyUp => 'Gently up';
+
+  @override
+  String get courseBandUp => 'Up';
+
+  @override
+  String get courseBandSteepUp => 'Steep up';
+
+  @override
+  String get coursePlan => 'Your race';
+
+  @override
+  String get coursePlanFrom =>
+      'From your running on hills in the last six months';
+
+  @override
+  String get coursePlanNeedsRuns =>
+      'Record a few runs with altitude on hills: your time on this course is worked out from them.';
+
+  @override
+  String get courseFinish => 'Finish';
+
+  @override
+  String get courseArrival => 'Arrival';
+
+  @override
+  String get courseSetStart => 'Set start';
+
+  @override
+  String courseStartAt(String time) {
+    return 'Start $time';
+  }
+
+  @override
+  String get courseLegTo => 'To';
+
+  @override
+  String get courseLeg => 'Leg';
+
+  @override
+  String get courseTotal => 'Total';
+
+  @override
+  String get courseCutoff => 'Cut-off';
+
+  @override
+  String courseAhead(String time) {
+    return '$time ahead';
+  }
+
+  @override
+  String courseLate(String time) {
+    return '$time late';
+  }
+
+  @override
+  String get coursePlanNote =>
+      'Moving time at your pace on each grade, slowed for the length of the race; stops, night and heat are not in it.';
+
+  @override
+  String get coursePace => 'Your pace on hills';
+
+  @override
+  String coursePaceNote(String pace) {
+    return 'Grade-adjusted pace $pace · grades you ran less than 2 km on use the Minetti formula';
+  }
+
+  @override
+  String get courseProTeaser =>
+      'Your finish time, the time at each checkpoint and the margin to each cut-off, from your own running on hills.';
+
+  @override
+  String get courseCheckpoints => 'Checkpoints';
+
+  @override
+  String get courseCheckpointAdd => 'Add checkpoint';
+
+  @override
+  String get courseCheckpointName => 'Name';
+
+  @override
+  String get courseCutoffAfterStart => 'Cut-off (h:mm after start)';
+
+  @override
+  String get courseSetStartFirst => 'Set the race start to enter cut-offs.';
+
+  @override
+  String get courseReplace => 'Replace course';
+
+  @override
+  String get courseRemove => 'Remove course';
+
+  @override
+  String get courseSearchLibrary => 'Race name or town';
+
+  @override
+  String get courseNoRaceFound =>
+      'No race found. Try the town, or add the GPX file yourself.';
+
+  @override
+  String courseAidStations(int count) {
+    return '$count aid stations';
+  }
+
+  @override
+  String courseRun(String km) {
+    return '$km km run';
+  }
 }

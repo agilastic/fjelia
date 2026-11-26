@@ -81,6 +81,7 @@ const _oldestRestorableSchema = 44;
 /// added them. A backup older than that has no such table, and none is owed.
 const _tableAddedIn = {
   'lab_tests': 76,
+  'race_courses': 77,
   'gear': 75,
   'activity_gear': 75,
   'coach_messages': 74,

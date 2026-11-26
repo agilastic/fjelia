@@ -10237,4 +10237,194 @@ class AppLocalizationsPl extends AppLocalizations {
   String syncLastAt(String when) {
     return 'Ostatnia synchronizacja $when';
   }
+
+  @override
+  String get courseTitle => 'Trasa';
+
+  @override
+  String get courseAdd => 'Dodaj trasę';
+
+  @override
+  String get courseAddHint =>
+      'Wiele biegów ma trasę w bibliotece biegów, z punktami odżywczymi i limitami czasu. W przeciwnym razie dodaj plik GPX organizatora.';
+
+  @override
+  String get courseFromLibrary => 'Szukaj w bibliotece biegów';
+
+  @override
+  String get courseFromFile => 'Otwórz plik GPX';
+
+  @override
+  String get courseNoLibraryCourse => 'Brak trasy w bibliotece';
+
+  @override
+  String get courseNotFetched =>
+      'Nie udało się pobrać trasy organizatora. Spróbuj ponownie lub dodaj plik GPX samodzielnie.';
+
+  @override
+  String get courseUnreadable => 'Ten plik nie zawiera trasy.';
+
+  @override
+  String get courseNoElevation =>
+      'Ta trasa nie ma wysokości, więc nie można pokazać podbiegów. Spróbuj pliku organizatora.';
+
+  @override
+  String get courseDistance => 'Dystans';
+
+  @override
+  String get courseClimb => 'Przewyższenie';
+
+  @override
+  String get courseDescent => 'Zbieg';
+
+  @override
+  String get courseEffort => 'Wysiłek';
+
+  @override
+  String get courseEffortNote => 'km + przewyższenie / 100 (ITRA)';
+
+  @override
+  String get courseSteep => 'Strome odcinki';
+
+  @override
+  String get courseSteepNote => 'najbardziej strome 5 % ze 100 m';
+
+  @override
+  String get courseHighest => 'Najwyższy punkt';
+
+  @override
+  String get courseClimbs => 'Podbiegi';
+
+  @override
+  String courseClimbsCount(int count) {
+    return '$count od 50 m';
+  }
+
+  @override
+  String get courseNoClimbs => 'Brak podbiegu od 50 m';
+
+  @override
+  String get courseGradients => 'Nachylenia';
+
+  @override
+  String get courseBandSteepDown => 'Stromo w dół';
+
+  @override
+  String get courseBandDown => 'W dół';
+
+  @override
+  String get courseBandGentlyDown => 'Łagodnie w dół';
+
+  @override
+  String get courseBandFlat => 'Płasko';
+
+  @override
+  String get courseBandGentlyUp => 'Łagodnie w górę';
+
+  @override
+  String get courseBandUp => 'W górę';
+
+  @override
+  String get courseBandSteepUp => 'Stromo w górę';
+
+  @override
+  String get coursePlan => 'Twój bieg';
+
+  @override
+  String get coursePlanFrom =>
+      'Z twoich biegów pod górę z ostatnich sześciu miesięcy';
+
+  @override
+  String get coursePlanNeedsRuns =>
+      'Nagraj kilka biegów z wysokością pod górę: twój czas na tej trasie zostanie z nich obliczony.';
+
+  @override
+  String get courseFinish => 'Meta';
+
+  @override
+  String get courseArrival => 'Przybycie';
+
+  @override
+  String get courseSetStart => 'Ustaw start';
+
+  @override
+  String courseStartAt(String time) {
+    return 'Start $time';
+  }
+
+  @override
+  String get courseLegTo => 'Do';
+
+  @override
+  String get courseLeg => 'Odcinek';
+
+  @override
+  String get courseTotal => 'Razem';
+
+  @override
+  String get courseCutoff => 'Limit czasu';
+
+  @override
+  String courseAhead(String time) {
+    return '$time zapasu';
+  }
+
+  @override
+  String courseLate(String time) {
+    return '$time spóźnienia';
+  }
+
+  @override
+  String get coursePlanNote =>
+      'Czas ruchu w twoim tempie na każdym nachyleniu, spowolniony o długość biegu; postoje, noc i upał nie są uwzględnione.';
+
+  @override
+  String get coursePace => 'Twoje tempo pod górę';
+
+  @override
+  String coursePaceNote(String pace) {
+    return 'Tempo skorygowane o nachylenie $pace · nachylenia przebiegnięte na mniej niż 2 km liczone wzorem Minettiego';
+  }
+
+  @override
+  String get courseProTeaser =>
+      'Twój czas na mecie, czas na każdym punkcie kontrolnym i zapas na każdym limicie, z twoich własnych biegów pod górę.';
+
+  @override
+  String get courseCheckpoints => 'Punkty kontrolne';
+
+  @override
+  String get courseCheckpointAdd => 'Dodaj punkt kontrolny';
+
+  @override
+  String get courseCheckpointName => 'Nazwa';
+
+  @override
+  String get courseCutoffAfterStart => 'Limit (h:mm od startu)';
+
+  @override
+  String get courseSetStartFirst => 'Ustaw godzinę startu, aby wpisać limity.';
+
+  @override
+  String get courseReplace => 'Zastąp trasę';
+
+  @override
+  String get courseRemove => 'Usuń trasę';
+
+  @override
+  String get courseSearchLibrary => 'Nazwa biegu lub miejscowość';
+
+  @override
+  String get courseNoRaceFound =>
+      'Nie znaleziono biegu. Spróbuj miejscowości lub dodaj plik GPX samodzielnie.';
+
+  @override
+  String courseAidStations(int count) {
+    return 'Punkty odżywcze: $count';
+  }
+
+  @override
+  String courseRun(String km) {
+    return 'Przebiegnięto $km km';
+  }
 }

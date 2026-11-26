@@ -17522,6 +17522,342 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Last synced {when}'**
   String syncLastAt(String when);
+
+  /// No description provided for @courseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Course'**
+  String get courseTitle;
+
+  /// No description provided for @courseAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add the course'**
+  String get courseAdd;
+
+  /// No description provided for @courseAddHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Many races have their course in the race library, with aid stations and cut-offs. Otherwise add the organiser\'s GPX file.'**
+  String get courseAddHint;
+
+  /// No description provided for @courseFromLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Find in race library'**
+  String get courseFromLibrary;
+
+  /// No description provided for @courseFromFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Open GPX file'**
+  String get courseFromFile;
+
+  /// No description provided for @courseNoLibraryCourse.
+  ///
+  /// In en, this message translates to:
+  /// **'No course in the library'**
+  String get courseNoLibraryCourse;
+
+  /// No description provided for @courseNotFetched.
+  ///
+  /// In en, this message translates to:
+  /// **'The organiser\'s course could not be fetched. Try again, or add the GPX file yourself.'**
+  String get courseNotFetched;
+
+  /// No description provided for @courseUnreadable.
+  ///
+  /// In en, this message translates to:
+  /// **'This file has no course in it.'**
+  String get courseUnreadable;
+
+  /// No description provided for @courseNoElevation.
+  ///
+  /// In en, this message translates to:
+  /// **'This course has no heights, so its climbs can\'t be shown. Try the organiser\'s file.'**
+  String get courseNoElevation;
+
+  /// No description provided for @courseDistance.
+  ///
+  /// In en, this message translates to:
+  /// **'Distance'**
+  String get courseDistance;
+
+  /// No description provided for @courseClimb.
+  ///
+  /// In en, this message translates to:
+  /// **'Climb'**
+  String get courseClimb;
+
+  /// No description provided for @courseDescent.
+  ///
+  /// In en, this message translates to:
+  /// **'Descent'**
+  String get courseDescent;
+
+  /// No description provided for @courseEffort.
+  ///
+  /// In en, this message translates to:
+  /// **'Effort'**
+  String get courseEffort;
+
+  /// No description provided for @courseEffortNote.
+  ///
+  /// In en, this message translates to:
+  /// **'km + climb / 100 (ITRA)'**
+  String get courseEffortNote;
+
+  /// No description provided for @courseSteep.
+  ///
+  /// In en, this message translates to:
+  /// **'Steep parts'**
+  String get courseSteep;
+
+  /// No description provided for @courseSteepNote.
+  ///
+  /// In en, this message translates to:
+  /// **'steepest 5 % of 100 m'**
+  String get courseSteepNote;
+
+  /// No description provided for @courseHighest.
+  ///
+  /// In en, this message translates to:
+  /// **'Highest point'**
+  String get courseHighest;
+
+  /// No description provided for @courseClimbs.
+  ///
+  /// In en, this message translates to:
+  /// **'Climbs'**
+  String get courseClimbs;
+
+  /// No description provided for @courseClimbsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of 50 m or more'**
+  String courseClimbsCount(int count);
+
+  /// No description provided for @courseNoClimbs.
+  ///
+  /// In en, this message translates to:
+  /// **'No climb of 50 m or more'**
+  String get courseNoClimbs;
+
+  /// No description provided for @courseGradients.
+  ///
+  /// In en, this message translates to:
+  /// **'Gradients'**
+  String get courseGradients;
+
+  /// No description provided for @courseBandSteepDown.
+  ///
+  /// In en, this message translates to:
+  /// **'Steep down'**
+  String get courseBandSteepDown;
+
+  /// No description provided for @courseBandDown.
+  ///
+  /// In en, this message translates to:
+  /// **'Down'**
+  String get courseBandDown;
+
+  /// No description provided for @courseBandGentlyDown.
+  ///
+  /// In en, this message translates to:
+  /// **'Gently down'**
+  String get courseBandGentlyDown;
+
+  /// No description provided for @courseBandFlat.
+  ///
+  /// In en, this message translates to:
+  /// **'Flat'**
+  String get courseBandFlat;
+
+  /// No description provided for @courseBandGentlyUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Gently up'**
+  String get courseBandGentlyUp;
+
+  /// No description provided for @courseBandUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Up'**
+  String get courseBandUp;
+
+  /// No description provided for @courseBandSteepUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Steep up'**
+  String get courseBandSteepUp;
+
+  /// No description provided for @coursePlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Your race'**
+  String get coursePlan;
+
+  /// No description provided for @coursePlanFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From your running on hills in the last six months'**
+  String get coursePlanFrom;
+
+  /// No description provided for @coursePlanNeedsRuns.
+  ///
+  /// In en, this message translates to:
+  /// **'Record a few runs with altitude on hills: your time on this course is worked out from them.'**
+  String get coursePlanNeedsRuns;
+
+  /// No description provided for @courseFinish.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish'**
+  String get courseFinish;
+
+  /// No description provided for @courseArrival.
+  ///
+  /// In en, this message translates to:
+  /// **'Arrival'**
+  String get courseArrival;
+
+  /// No description provided for @courseSetStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Set start'**
+  String get courseSetStart;
+
+  /// No description provided for @courseStartAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Start {time}'**
+  String courseStartAt(String time);
+
+  /// No description provided for @courseLegTo.
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get courseLegTo;
+
+  /// No description provided for @courseLeg.
+  ///
+  /// In en, this message translates to:
+  /// **'Leg'**
+  String get courseLeg;
+
+  /// No description provided for @courseTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get courseTotal;
+
+  /// No description provided for @courseCutoff.
+  ///
+  /// In en, this message translates to:
+  /// **'Cut-off'**
+  String get courseCutoff;
+
+  /// No description provided for @courseAhead.
+  ///
+  /// In en, this message translates to:
+  /// **'{time} ahead'**
+  String courseAhead(String time);
+
+  /// No description provided for @courseLate.
+  ///
+  /// In en, this message translates to:
+  /// **'{time} late'**
+  String courseLate(String time);
+
+  /// No description provided for @coursePlanNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Moving time at your pace on each grade, slowed for the length of the race; stops, night and heat are not in it.'**
+  String get coursePlanNote;
+
+  /// No description provided for @coursePace.
+  ///
+  /// In en, this message translates to:
+  /// **'Your pace on hills'**
+  String get coursePace;
+
+  /// No description provided for @coursePaceNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Grade-adjusted pace {pace} · grades you ran less than 2 km on use the Minetti formula'**
+  String coursePaceNote(String pace);
+
+  /// No description provided for @courseProTeaser.
+  ///
+  /// In en, this message translates to:
+  /// **'Your finish time, the time at each checkpoint and the margin to each cut-off, from your own running on hills.'**
+  String get courseProTeaser;
+
+  /// No description provided for @courseCheckpoints.
+  ///
+  /// In en, this message translates to:
+  /// **'Checkpoints'**
+  String get courseCheckpoints;
+
+  /// No description provided for @courseCheckpointAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add checkpoint'**
+  String get courseCheckpointAdd;
+
+  /// No description provided for @courseCheckpointName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get courseCheckpointName;
+
+  /// No description provided for @courseCutoffAfterStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Cut-off (h:mm after start)'**
+  String get courseCutoffAfterStart;
+
+  /// No description provided for @courseSetStartFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Set the race start to enter cut-offs.'**
+  String get courseSetStartFirst;
+
+  /// No description provided for @courseReplace.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace course'**
+  String get courseReplace;
+
+  /// No description provided for @courseRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove course'**
+  String get courseRemove;
+
+  /// No description provided for @courseSearchLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Race name or town'**
+  String get courseSearchLibrary;
+
+  /// No description provided for @courseNoRaceFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No race found. Try the town, or add the GPX file yourself.'**
+  String get courseNoRaceFound;
+
+  /// No description provided for @courseAidStations.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} aid stations'**
+  String courseAidStations(int count);
+
+  /// No description provided for @courseRun.
+  ///
+  /// In en, this message translates to:
+  /// **'{km} km run'**
+  String courseRun(String km);
 }
 
 class _AppLocalizationsDelegate

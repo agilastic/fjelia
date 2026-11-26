@@ -10203,4 +10203,195 @@ class AppLocalizationsEs extends AppLocalizations {
   String syncLastAt(String when) {
     return 'Última sincronización $when';
   }
+
+  @override
+  String get courseTitle => 'Recorrido';
+
+  @override
+  String get courseAdd => 'Añadir el recorrido';
+
+  @override
+  String get courseAddHint =>
+      'Muchas carreras tienen su recorrido en la biblioteca de carreras, con avituallamientos y cortes. Si no, añade el GPX de la organización.';
+
+  @override
+  String get courseFromLibrary => 'Buscar en la biblioteca de carreras';
+
+  @override
+  String get courseFromFile => 'Abrir archivo GPX';
+
+  @override
+  String get courseNoLibraryCourse => 'Sin recorrido en la biblioteca';
+
+  @override
+  String get courseNotFetched =>
+      'No se pudo obtener el recorrido de la organización. Inténtalo de nuevo o añade tú el archivo GPX.';
+
+  @override
+  String get courseUnreadable => 'Este archivo no contiene ningún recorrido.';
+
+  @override
+  String get courseNoElevation =>
+      'Este recorrido no tiene altitudes, así que no se pueden mostrar sus subidas. Prueba el archivo de la organización.';
+
+  @override
+  String get courseDistance => 'Distancia';
+
+  @override
+  String get courseClimb => 'Subida';
+
+  @override
+  String get courseDescent => 'Bajada';
+
+  @override
+  String get courseEffort => 'Esfuerzo';
+
+  @override
+  String get courseEffortNote => 'km + subida / 100 (ITRA)';
+
+  @override
+  String get courseSteep => 'Tramos empinados';
+
+  @override
+  String get courseSteepNote => 'el 5 % más empinado de 100 m';
+
+  @override
+  String get courseHighest => 'Punto más alto';
+
+  @override
+  String get courseClimbs => 'Subidas';
+
+  @override
+  String courseClimbsCount(int count) {
+    return '$count de 50 m o más';
+  }
+
+  @override
+  String get courseNoClimbs => 'Ninguna subida de 50 m o más';
+
+  @override
+  String get courseGradients => 'Pendientes';
+
+  @override
+  String get courseBandSteepDown => 'Bajada fuerte';
+
+  @override
+  String get courseBandDown => 'Bajada';
+
+  @override
+  String get courseBandGentlyDown => 'Bajada suave';
+
+  @override
+  String get courseBandFlat => 'Llano';
+
+  @override
+  String get courseBandGentlyUp => 'Subida suave';
+
+  @override
+  String get courseBandUp => 'Subida';
+
+  @override
+  String get courseBandSteepUp => 'Subida fuerte';
+
+  @override
+  String get coursePlan => 'Tu carrera';
+
+  @override
+  String get coursePlanFrom =>
+      'De tus carreras en cuesta de los últimos seis meses';
+
+  @override
+  String get coursePlanNeedsRuns =>
+      'Registra algunas carreras con altitud en cuesta: tu tiempo en este recorrido se calcula a partir de ellas.';
+
+  @override
+  String get courseFinish => 'Meta';
+
+  @override
+  String get courseArrival => 'Llegada';
+
+  @override
+  String get courseSetStart => 'Fijar salida';
+
+  @override
+  String courseStartAt(String time) {
+    return 'Salida $time';
+  }
+
+  @override
+  String get courseLegTo => 'Hasta';
+
+  @override
+  String get courseLeg => 'Tramo';
+
+  @override
+  String get courseTotal => 'Total';
+
+  @override
+  String get courseCutoff => 'Corte';
+
+  @override
+  String courseAhead(String time) {
+    return '$time de margen';
+  }
+
+  @override
+  String courseLate(String time) {
+    return '$time tarde';
+  }
+
+  @override
+  String get coursePlanNote =>
+      'Tiempo en movimiento a tu ritmo en cada pendiente, ralentizado por la longitud de la carrera; paradas, noche y calor no se incluyen.';
+
+  @override
+  String get coursePace => 'Tu ritmo en cuesta';
+
+  @override
+  String coursePaceNote(String pace) {
+    return 'Ritmo ajustado a la pendiente $pace · las pendientes con menos de 2 km usan la fórmula de Minetti';
+  }
+
+  @override
+  String get courseProTeaser =>
+      'Tu tiempo final, el tiempo en cada control y el margen a cada corte, a partir de tus propias carreras en cuesta.';
+
+  @override
+  String get courseCheckpoints => 'Controles';
+
+  @override
+  String get courseCheckpointAdd => 'Añadir control';
+
+  @override
+  String get courseCheckpointName => 'Nombre';
+
+  @override
+  String get courseCutoffAfterStart => 'Corte (h:mm tras la salida)';
+
+  @override
+  String get courseSetStartFirst =>
+      'Fija la hora de salida para introducir cortes.';
+
+  @override
+  String get courseReplace => 'Sustituir recorrido';
+
+  @override
+  String get courseRemove => 'Quitar recorrido';
+
+  @override
+  String get courseSearchLibrary => 'Nombre de la carrera o población';
+
+  @override
+  String get courseNoRaceFound =>
+      'No se encontró ninguna carrera. Prueba la población o añade tú el archivo GPX.';
+
+  @override
+  String courseAidStations(int count) {
+    return '$count avituallamientos';
+  }
+
+  @override
+  String courseRun(String km) {
+    return '$km km corridos';
+  }
 }

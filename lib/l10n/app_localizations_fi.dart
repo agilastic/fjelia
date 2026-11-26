@@ -10172,4 +10172,194 @@ class AppLocalizationsFi extends AppLocalizations {
   String syncLastAt(String when) {
     return 'Viimeksi synkronoitu $when';
   }
+
+  @override
+  String get courseTitle => 'Reitti';
+
+  @override
+  String get courseAdd => 'Lisää reitti';
+
+  @override
+  String get courseAddHint =>
+      'Monen kisan reitti löytyy kisakirjastosta huoltopisteineen ja aikarajoineen. Muuten lisää järjestäjän GPX-tiedosto.';
+
+  @override
+  String get courseFromLibrary => 'Etsi kisakirjastosta';
+
+  @override
+  String get courseFromFile => 'Avaa GPX-tiedosto';
+
+  @override
+  String get courseNoLibraryCourse => 'Kirjastossa ei ole reittiä';
+
+  @override
+  String get courseNotFetched =>
+      'Järjestäjän reittiä ei saatu haettua. Yritä uudelleen tai lisää GPX-tiedosto itse.';
+
+  @override
+  String get courseUnreadable => 'Tiedostossa ei ole reittiä.';
+
+  @override
+  String get courseNoElevation =>
+      'Reitillä ei ole korkeustietoja, joten nousuja ei voi näyttää. Kokeile järjestäjän tiedostoa.';
+
+  @override
+  String get courseDistance => 'Matka';
+
+  @override
+  String get courseClimb => 'Nousu';
+
+  @override
+  String get courseDescent => 'Lasku';
+
+  @override
+  String get courseEffort => 'Kuormitus';
+
+  @override
+  String get courseEffortNote => 'km + nousu / 100 (ITRA)';
+
+  @override
+  String get courseSteep => 'Jyrkät kohdat';
+
+  @override
+  String get courseSteepNote => 'jyrkimmät 5 % 100 metrin pätkistä';
+
+  @override
+  String get courseHighest => 'Korkein kohta';
+
+  @override
+  String get courseClimbs => 'Nousut';
+
+  @override
+  String courseClimbsCount(int count) {
+    return '$count vähintään 50 m';
+  }
+
+  @override
+  String get courseNoClimbs => 'Ei yhtään vähintään 50 m nousua';
+
+  @override
+  String get courseGradients => 'Kaltevuudet';
+
+  @override
+  String get courseBandSteepDown => 'Jyrkkää alamäkeä';
+
+  @override
+  String get courseBandDown => 'Alamäkeä';
+
+  @override
+  String get courseBandGentlyDown => 'Loivaa alamäkeä';
+
+  @override
+  String get courseBandFlat => 'Tasaista';
+
+  @override
+  String get courseBandGentlyUp => 'Loivaa ylämäkeä';
+
+  @override
+  String get courseBandUp => 'Ylämäkeä';
+
+  @override
+  String get courseBandSteepUp => 'Jyrkkää ylämäkeä';
+
+  @override
+  String get coursePlan => 'Sinun kisasi';
+
+  @override
+  String get coursePlanFrom =>
+      'Mäkijuoksuistasi viimeisen kuuden kuukauden ajalta';
+
+  @override
+  String get coursePlanNeedsRuns =>
+      'Tallenna muutama juoksu korkeustiedoin mäissä: aikasi tällä reitillä lasketaan niistä.';
+
+  @override
+  String get courseFinish => 'Maali';
+
+  @override
+  String get courseArrival => 'Saapuminen';
+
+  @override
+  String get courseSetStart => 'Aseta lähtö';
+
+  @override
+  String courseStartAt(String time) {
+    return 'Lähtö $time';
+  }
+
+  @override
+  String get courseLegTo => 'Kohde';
+
+  @override
+  String get courseLeg => 'Osuus';
+
+  @override
+  String get courseTotal => 'Yhteensä';
+
+  @override
+  String get courseCutoff => 'Aikaraja';
+
+  @override
+  String courseAhead(String time) {
+    return '$time etua';
+  }
+
+  @override
+  String courseLate(String time) {
+    return '$time myöhässä';
+  }
+
+  @override
+  String get coursePlanNote =>
+      'Liikkumisaika vauhdillasi kullakin kaltevuudella, hidastettuna kisan pituuden mukaan; tauot, yö ja helle eivät ole mukana.';
+
+  @override
+  String get coursePace => 'Vauhtisi mäissä';
+
+  @override
+  String coursePaceNote(String pace) {
+    return 'Kaltevuuskorjattu vauhti $pace · alle 2 km juostuilla kaltevuuksilla käytetään Minettin kaavaa';
+  }
+
+  @override
+  String get courseProTeaser =>
+      'Loppuaikasi, aika kullakin tarkastuspisteellä ja marginaali kuhunkin aikarajaan omista mäkijuoksuistasi laskettuna.';
+
+  @override
+  String get courseCheckpoints => 'Tarkastuspisteet';
+
+  @override
+  String get courseCheckpointAdd => 'Lisää tarkastuspiste';
+
+  @override
+  String get courseCheckpointName => 'Nimi';
+
+  @override
+  String get courseCutoffAfterStart => 'Aikaraja (t:mm lähdöstä)';
+
+  @override
+  String get courseSetStartFirst => 'Aseta lähtöaika syöttääksesi aikarajat.';
+
+  @override
+  String get courseReplace => 'Vaihda reitti';
+
+  @override
+  String get courseRemove => 'Poista reitti';
+
+  @override
+  String get courseSearchLibrary => 'Kisan nimi tai paikkakunta';
+
+  @override
+  String get courseNoRaceFound =>
+      'Kisaa ei löytynyt. Kokeile paikkakuntaa tai lisää GPX-tiedosto itse.';
+
+  @override
+  String courseAidStations(int count) {
+    return '$count huoltopistettä';
+  }
+
+  @override
+  String courseRun(String km) {
+    return '$km km juostu';
+  }
 }

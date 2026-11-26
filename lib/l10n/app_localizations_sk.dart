@@ -10181,4 +10181,195 @@ class AppLocalizationsSk extends AppLocalizations {
   String syncLastAt(String when) {
     return 'Naposledy synchronizované $when';
   }
+
+  @override
+  String get courseTitle => 'Trasa';
+
+  @override
+  String get courseAdd => 'Pridať trasu';
+
+  @override
+  String get courseAddHint =>
+      'Mnohé preteky majú trasu v knižnici pretekov aj s občerstvovačkami a časovými limitmi. Inak pridaj súbor GPX od organizátora.';
+
+  @override
+  String get courseFromLibrary => 'Hľadať v knižnici pretekov';
+
+  @override
+  String get courseFromFile => 'Otvoriť súbor GPX';
+
+  @override
+  String get courseNoLibraryCourse => 'V knižnici nie je trasa';
+
+  @override
+  String get courseNotFetched =>
+      'Trasu organizátora sa nepodarilo načítať. Skús to znova alebo pridaj súbor GPX sám.';
+
+  @override
+  String get courseUnreadable => 'V tomto súbore nie je žiadna trasa.';
+
+  @override
+  String get courseNoElevation =>
+      'Táto trasa nemá výšky, takže stúpania sa nedajú zobraziť. Skús súbor organizátora.';
+
+  @override
+  String get courseDistance => 'Vzdialenosť';
+
+  @override
+  String get courseClimb => 'Stúpanie';
+
+  @override
+  String get courseDescent => 'Klesanie';
+
+  @override
+  String get courseEffort => 'Náročnosť';
+
+  @override
+  String get courseEffortNote => 'km + stúpanie / 100 (ITRA)';
+
+  @override
+  String get courseSteep => 'Strmé úseky';
+
+  @override
+  String get courseSteepNote => 'najstrmších 5 % zo 100 m';
+
+  @override
+  String get courseHighest => 'Najvyšší bod';
+
+  @override
+  String get courseClimbs => 'Stúpania';
+
+  @override
+  String courseClimbsCount(int count) {
+    return '$count od 50 m';
+  }
+
+  @override
+  String get courseNoClimbs => 'Žiadne stúpanie od 50 m';
+
+  @override
+  String get courseGradients => 'Sklony';
+
+  @override
+  String get courseBandSteepDown => 'Strmo dole';
+
+  @override
+  String get courseBandDown => 'Dole';
+
+  @override
+  String get courseBandGentlyDown => 'Mierne dole';
+
+  @override
+  String get courseBandFlat => 'Rovina';
+
+  @override
+  String get courseBandGentlyUp => 'Mierne hore';
+
+  @override
+  String get courseBandUp => 'Hore';
+
+  @override
+  String get courseBandSteepUp => 'Strmo hore';
+
+  @override
+  String get coursePlan => 'Tvoje preteky';
+
+  @override
+  String get coursePlanFrom =>
+      'Z tvojich behov do kopca za posledných šesť mesiacov';
+
+  @override
+  String get coursePlanNeedsRuns =>
+      'Zaznamenaj zopár behov s výškou do kopca: tvoj čas na tejto trase sa z nich vypočíta.';
+
+  @override
+  String get courseFinish => 'Cieľ';
+
+  @override
+  String get courseArrival => 'Príchod';
+
+  @override
+  String get courseSetStart => 'Nastaviť štart';
+
+  @override
+  String courseStartAt(String time) {
+    return 'Štart $time';
+  }
+
+  @override
+  String get courseLegTo => 'Do';
+
+  @override
+  String get courseLeg => 'Úsek';
+
+  @override
+  String get courseTotal => 'Spolu';
+
+  @override
+  String get courseCutoff => 'Časový limit';
+
+  @override
+  String courseAhead(String time) {
+    return '$time náskok';
+  }
+
+  @override
+  String courseLate(String time) {
+    return '$time neskoro';
+  }
+
+  @override
+  String get coursePlanNote =>
+      'Čas v pohybe tvojím tempom na každom sklone, spomalený podľa dĺžky pretekov; prestávky, noc a horúčava nie sú zahrnuté.';
+
+  @override
+  String get coursePace => 'Tvoje tempo do kopca';
+
+  @override
+  String coursePaceNote(String pace) {
+    return 'Tempo upravené o sklon $pace · sklony prebehnuté menej ako 2 km používajú Minettiho vzorec';
+  }
+
+  @override
+  String get courseProTeaser =>
+      'Tvoj čas v cieli, čas na každom kontrolnom bode a rezerva voči každému limitu z tvojich vlastných behov do kopca.';
+
+  @override
+  String get courseCheckpoints => 'Kontrolné body';
+
+  @override
+  String get courseCheckpointAdd => 'Pridať kontrolný bod';
+
+  @override
+  String get courseCheckpointName => 'Názov';
+
+  @override
+  String get courseCutoffAfterStart => 'Limit (h:mm od štartu)';
+
+  @override
+  String get courseSetStartFirst =>
+      'Nastav čas štartu, aby si mohol zadať limity.';
+
+  @override
+  String get courseReplace => 'Nahradiť trasu';
+
+  @override
+  String get courseRemove => 'Odstrániť trasu';
+
+  @override
+  String get courseSearchLibrary => 'Názov pretekov alebo obec';
+
+  @override
+  String get courseNoRaceFound =>
+      'Žiadne preteky sa nenašli. Skús obec alebo pridaj súbor GPX sám.';
+
+  @override
+  String courseAidStations(int count) {
+    return 'Občerstvovačky: $count';
+  }
+
+  @override
+  String courseRun(String km) {
+    return 'Odbehnuté $km km';
+  }
 }
