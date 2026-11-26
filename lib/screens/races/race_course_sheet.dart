@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:fjelia_core/config/map_tiles.dart';
+import 'package:fjelia_core/utils/label_rows.dart';
 import 'package:fjelia_views/fjelia_views.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -131,7 +132,7 @@ class _RaceCourseSheetState extends ConsumerState<RaceCourseSheet> {
                   _Stats(profile: v.profile!),
                   const SizedBox(height: 12),
                   SizedBox(
-                    height: 170,
+                    height: 200,
                     child: _ProfileChart(
                       profile: v.profile!,
                       checkpoints: v.course.checkpoints,
@@ -339,11 +340,14 @@ class _ProfilePainter extends CustomPainter {
     if (pts.length < 2) return;
     const left = 38.0, bottom = 16.0;
     final w = size.width - left, h = size.height - bottom;
+    // Room above the profile for the checkpoint names, two rows.
+    const rowHeight = 12.0;
+    final band = checkpoints.isEmpty ? 0.0 : rowHeight * 2 + 4;
     final step = profile.maxEle - profile.minEle > 1000 ? 500.0 : 100.0;
     final lo = (profile.minEle / step).floor() * step;
     final hi = math.max(lo + step, (profile.maxEle / step).ceil() * step);
     double x(double km) => left + km / profile.distanceKm * w;
-    double y(double ele) => h - (ele - lo) / (hi - lo) * h * 0.92;
+    double y(double ele) => h - (ele - lo) / (hi - lo) * (h - band) * 0.95;
     void label(String s, Offset at, {bool right = false}) {
       final p = TextPainter(
         text: TextSpan(
@@ -385,13 +389,57 @@ class _ProfilePainter extends CustomPainter {
         Paint()..color = Color(gradeArgb(pts[i].grade)).withValues(alpha: .85),
       );
     }
-    for (final c in checkpoints) {
-      canvas.drawLine(
-        Offset(x(c.km), 0),
-        Offset(x(c.km), h),
+    // Each checkpoint: its name above the profile (rows shared by
+    // placeLabels from fjelia_core), a dashed line down to a dot on it.
+    final marks = [...checkpoints]..sort((a, b) => a.km.compareTo(b.km));
+    final names = [
+      for (final c in marks)
+        TextPainter(
+          text: TextSpan(
+            text: c.name,
+            style: TextStyle(fontSize: 9, color: ink),
+          ),
+          textDirection: TextDirection.ltr,
+          maxLines: 1,
+          ellipsis: '…',
+        )..layout(maxWidth: 90),
+    ];
+    final places = placeLabels(
+      [
+        for (final (i, c) in marks.indexed)
+          (centre: x(c.km.clamp(0, profile.distanceKm)), width: names[i].width),
+      ],
+      left: left,
+      right: size.width,
+    );
+    for (final (i, c) in marks.indexed) {
+      final cx = x(c.km.clamp(0, profile.distanceKm));
+      final at =
+          pts[((c.km / profile.distanceKm) * (pts.length - 1)).round().clamp(
+            0,
+            pts.length - 1,
+          )];
+      final row = places[i].row;
+      names[i].paint(canvas, Offset(places[i].x, row * rowHeight));
+      final dot = y(at.ele);
+      final dash = Paint()
+        ..color = ink.withValues(alpha: .7)
+        ..strokeWidth = 1;
+      for (var d = row * rowHeight + rowHeight; d < dot - 4; d += 6) {
+        canvas.drawLine(
+          Offset(cx, d),
+          Offset(cx, math.min(d + 3, dot - 4)),
+          dash,
+        );
+      }
+      canvas.drawCircle(Offset(cx, dot), 3.5, Paint()..color = Colors.white);
+      canvas.drawCircle(
+        Offset(cx, dot),
+        3.5,
         Paint()
-          ..color = ink.withValues(alpha: .4)
-          ..strokeWidth = 1,
+          ..color = ink
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.5,
       );
     }
     if (hoverKm case final km?) {
