@@ -8,7 +8,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../services/bonjour_peer_locator.dart';
+import '../services/synced_plan_followup.dart';
 import 'database_provider.dart';
+import 'planner_providers.dart' show trainingPlanServiceProvider;
+import 'workout_providers_provider.dart';
 import 'day_data_provider.dart'
     show fullSyncListenerProvider, syncStatusListenerProvider;
 import 'sync_provider.dart' show waitForSyncToSettle;
@@ -108,6 +111,7 @@ class NearbySyncNotifier extends Notifier<Map<String, NearbySyncStatus>> {
     for (var attempt = 0; ; attempt++) {
       _set(peer.deviceId, const NearbySyncing(0));
       try {
+        final before = await ref.read(databaseProvider).syncHeadSeq();
         final result = await (await _client()).sync(
           peer,
           onProgress: (sent, total) =>
@@ -119,6 +123,14 @@ class NearbySyncNotifier extends Notifier<Map<String, NearbySyncStatus>> {
           // Edits made on the computer: the screens read again.
           ref.read(syncStatusListenerProvider.notifier).state++;
           ref.read(fullSyncListenerProvider.notifier).state++;
+          // The watch calendars follow the sessions the computer changed.
+          unawaited(
+            SyncedPlanFollowUp(
+              ref.read(databaseProvider),
+              ref.read(trainingPlanServiceProvider),
+              ref.read(workoutProvidersProvider),
+            ).run(peer.deviceId, afterSeq: before),
+          );
         }
         return;
       } on Object catch (e) {

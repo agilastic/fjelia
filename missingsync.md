@@ -17,17 +17,17 @@ Sync now, Unpair), with a sync whenever the app comes to the foreground.
 
 - [x] Sync after a workout import, not only when the app comes back: the
       computers sync once the watch, health and history syncs are done
-      (`NearbySyncNotifier.syncAfterOtherSyncs`), also on resume.
-- [ ] Remember the last successful sync per computer; it is only in memory,
-      so after a restart the page shows nothing.
-- [ ] Show progress as "n of m" for the first sync; the total is not known.
-- [ ] Retry with back-off when the computer is not reachable; today a resume
-      tries once (up to 4 s connect plus 5 s Bonjour).
+      (`NearbySyncNotifier.syncAfterOtherSyncs`), also on resume, and after
+      a file or Strava import.
+- [x] Remember the last successful sync per computer (`sync_peers.
+      last_synced_ms`, on both sides); the page shows "Last synced …".
+- [x] Show progress as "n of m" (`SyncClient.sync(onProgress:)`).
+- [x] Retry with back-off when the computer is not reachable: syncs the
+      phone starts itself try again after 5 s, 30 s and 2 min.
 - [ ] Android: sync from a foreground service, so the phone does not need to
       be open (iOS cannot listen in the background).
-- [ ] "Delete all data" deletes the device identity from secure storage, so
-      the computer keeps an orphaned pairing; tell the computer, or say so
-      in the wipe dialog.
+- [x] "Delete all data" first unpairs every computer it can reach
+      (`unpairAll`); one out of reach keeps the pairing until unpaired there.
 - [ ] A restore from backup on the same phone resends everything (by design);
       confirm it does not leave stale rows on the computer.
 
@@ -37,7 +37,9 @@ Sync now, Unpair), with a sync whenever the app comes to the foreground.
       exist).
 - [ ] Keep the identity in the keychain once the app is signed with a team;
       Windows and Linux credential stores (today a file in the app folder).
-- [ ] Ask for ECG waveforms on demand (the log supports it; nothing asks).
+- [ ] Ask for ECG waveforms on demand: the protocol is there (`GET
+      /v1/wanted`, `POST /v1/extra`, `SyncServer(wanted:)`); the desktop
+      ECG view to ask from is not built yet.
 - [ ] Photos and videos: the list syncs, the files do not yet (on demand).
 - [ ] A second copy of the app on the same computer shares the identity and
       the database, announces the same device id on another port, and a
@@ -46,15 +48,18 @@ Sync now, Unpair), with a sync whenever the app comes to the foreground.
 
 ## Protocol
 
-- [ ] Different schema versions refuse to sync ("Update Fjelia on both
-      devices"); allow a newer computer to accept an older phone.
+- [x] A newer computer accepts an older phone; only a phone newer than the
+      computer is refused ("Update Fjelia on both devices").
 - [x] Two-way sync (M2): edits on the computer reach the phone; the newer
       change of a record both may edit wins (per record, not yet per field).
 - [ ] Newest change per field instead of per record.
-- [ ] Sessions the computer adds have `sessionType: custom` and may sit in
-      plan `athlete` when no plan is active; check how the phone's planner
-      and watch delivery treat them.
-- [ ] A moved or skipped session reaches the phone by sync; confirm the
-      phone updates or releases the watch entry on its next push.
+- [x] Sessions the computer adds to the active plan go to the watch after
+      the sync (`SyncedPlanFollowUp` runs `deliverPlan`). Sessions outside
+      an active plan (plan `athlete`) go only when sent by hand, as on the
+      phone.
+- [x] A moved, edited or skipped session reaches the phone by sync: the
+      watch entry moves, is sent again or comes off (`SyncedPlanFollowUp`).
+- [ ] A session deleted on the computer leaves its watch entry: the
+      platform ids went with the row.
 - [ ] Certificate renewal (the certificate is valid for ten years).
 - [ ] Coach relay through fjelia-service, end-to-end encrypted.
