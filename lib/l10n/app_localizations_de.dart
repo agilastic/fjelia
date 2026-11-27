@@ -10527,4 +10527,73 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get crewFooter =>
       'Mit Fjelia aus meinen eigenen Läufen am Berg geplant.';
+
+  @override
+  String get messagesTitle => 'Nachrichten';
+
+  @override
+  String get messagesEmpty =>
+      'Du und dein Coach lernt euch kennen, wenn dieses Handy in der Nähe mit dem Computer des Coachs synchronisiert. Danach könnt ihr euch von überall schreiben.';
+
+  @override
+  String get messagesNoThreads => 'Noch keine Nachrichten.';
+
+  @override
+  String messagesWriteTo(String name) {
+    return '$name schreiben';
+  }
+
+  @override
+  String get messagesYourName => 'Dein Name';
+
+  @override
+  String get messagesYourNameHelp =>
+      'Der Name, den dein Coach und deine Gruppe sehen.';
+
+  @override
+  String get messagesHint => 'Nachricht';
+
+  @override
+  String get messagesSend => 'Senden';
+
+  @override
+  String get messagesWaiting => 'wird gesendet, sobald möglich';
+
+  @override
+  String get messagesLeaveGroup => 'Gruppe verlassen';
+
+  @override
+  String get messagesGone => 'Du bist nicht mehr in dieser Gruppe.';
+
+  @override
+  String get messagesYou => 'Du';
+
+  @override
+  String messagesStarted(String who, String title) {
+    return '$who hat „$title“ gestartet';
+  }
+
+  @override
+  String messagesAdded(String who, String names) {
+    return '$who hat $names hinzugefügt';
+  }
+
+  @override
+  String messagesRemoved(String who, String names) {
+    return '$who hat $names entfernt';
+  }
+
+  @override
+  String messagesLeft(String who) {
+    return '$who hat die Gruppe verlassen';
+  }
+
+  @override
+  String messagesRenamed(String who, String title) {
+    return '$who hat die Gruppe in „$title“ umbenannt';
+  }
+
+  @override
+  String get messagesPrivacy =>
+      'Auf diesem Handy für jedes Gerät im Gespräch verschlüsselt. Fjelias Server leitet Nachrichten nur weiter und kann sie nicht lesen.';
 }

@@ -10471,4 +10471,73 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get crewFooter => 'Suunniteltu Fjelialla omista mäkijuoksuistani.';
+
+  @override
+  String get messagesTitle => 'Viestit';
+
+  @override
+  String get messagesEmpty =>
+      'Sinä ja valmentajasi tutustutte, kun tämä puhelin synkronoi valmentajan tietokoneen lähellä. Sen jälkeen voitte kirjoittaa toisillenne mistä tahansa.';
+
+  @override
+  String get messagesNoThreads => 'Ei vielä viestejä.';
+
+  @override
+  String messagesWriteTo(String name) {
+    return 'Kirjoita: $name';
+  }
+
+  @override
+  String get messagesYourName => 'Nimesi';
+
+  @override
+  String get messagesYourNameHelp =>
+      'Nimi, jonka valmentajasi ja ryhmäsi näkevät.';
+
+  @override
+  String get messagesHint => 'Viesti';
+
+  @override
+  String get messagesSend => 'Lähetä';
+
+  @override
+  String get messagesWaiting => 'odottaa lähetystä';
+
+  @override
+  String get messagesLeaveGroup => 'Poistu ryhmästä';
+
+  @override
+  String get messagesGone => 'Et ole enää tässä ryhmässä.';
+
+  @override
+  String get messagesYou => 'Sinä';
+
+  @override
+  String messagesStarted(String who, String title) {
+    return '$who aloitti ryhmän ”$title”';
+  }
+
+  @override
+  String messagesAdded(String who, String names) {
+    return '$who lisäsi: $names';
+  }
+
+  @override
+  String messagesRemoved(String who, String names) {
+    return '$who poisti: $names';
+  }
+
+  @override
+  String messagesLeft(String who) {
+    return '$who poistui ryhmästä';
+  }
+
+  @override
+  String messagesRenamed(String who, String title) {
+    return '$who nimesi ryhmän uudelleen: ”$title”';
+  }
+
+  @override
+  String get messagesPrivacy =>
+      'Salattu tällä puhelimella jokaiselle keskustelun laitteelle. Fjelian palvelin vain välittää viestit eikä voi lukea niitä.';
 }

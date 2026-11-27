@@ -11,6 +11,7 @@ import '../services/bonjour_peer_locator.dart';
 import '../services/synced_plan_followup.dart';
 import 'database_provider.dart';
 import 'fjelia_pro_provider.dart' show fjeliaProProvider;
+import 'messages_provider.dart' show messagesProvider;
 import 'planner_providers.dart' show trainingPlanServiceProvider;
 import 'workout_providers_provider.dart';
 import 'day_data_provider.dart'
@@ -19,6 +20,10 @@ import 'sync_provider.dart' show waitForSyncToSettle;
 
 /// Settings → System → Computers: this phone pairs with Fjelia on a Mac or
 /// PC by its QR code and sends it its changes over the local network.
+
+/// The keychain (iOS) or keystore (Android): this phone's sync identity
+/// and its person.
+const secureSecrets = _SecureSecrets();
 
 class _SecureSecrets implements SecretStore {
   const _SecureSecrets();
@@ -85,6 +90,8 @@ class NearbySyncNotifier extends Notifier<Map<String, NearbySyncStatus>> {
           ? access.pass
           : null;
     },
+    // Meets the computer's person: a coach, or this athlete's own computer.
+    person: await ref.read(messagesProvider.notifier).side(),
   );
 
   void _set(String id, NearbySyncStatus status) =>
@@ -126,6 +133,8 @@ class NearbySyncNotifier extends Notifier<Map<String, NearbySyncStatus>> {
               _set(peer.deviceId, NearbySyncing(sent, total)),
         );
         _set(peer.deviceId, NearbySynced(result.sent, result.received));
+        // The computer may have brought a coach: people and threads.
+        ref.read(messagesProvider.notifier).changed();
         ref.invalidate(syncPeersProvider);
         if (result.received > 0) {
           // Edits made on the computer: the screens read again.
@@ -204,6 +213,8 @@ class NearbySyncNotifier extends Notifier<Map<String, NearbySyncStatus>> {
     SyncRefused(reason: 'unknown_device') => NearbySyncProblem.pairAgain,
     _ => NearbySyncProblem.unreachable,
   };
+
+  static Future<String> deviceName() => _deviceName();
 
   static Future<String> _deviceName() async {
     final info = DeviceInfoPlugin();

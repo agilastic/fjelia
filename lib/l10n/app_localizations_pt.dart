@@ -10516,4 +10516,73 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get crewFooter =>
       'Planeado com o Fjelia a partir das minhas corridas em subida.';
+
+  @override
+  String get messagesTitle => 'Mensagens';
+
+  @override
+  String get messagesEmpty =>
+      'Você e o seu treinador se conhecem quando este telefone sincroniza perto do computador do treinador. Depois podem escrever um ao outro de qualquer lugar.';
+
+  @override
+  String get messagesNoThreads => 'Ainda não há mensagens.';
+
+  @override
+  String messagesWriteTo(String name) {
+    return 'Escrever para $name';
+  }
+
+  @override
+  String get messagesYourName => 'O seu nome';
+
+  @override
+  String get messagesYourNameHelp =>
+      'O nome que o seu treinador e o seu grupo veem.';
+
+  @override
+  String get messagesHint => 'Mensagem';
+
+  @override
+  String get messagesSend => 'Enviar';
+
+  @override
+  String get messagesWaiting => 'aguardando envio';
+
+  @override
+  String get messagesLeaveGroup => 'Sair do grupo';
+
+  @override
+  String get messagesGone => 'Você não está mais neste grupo.';
+
+  @override
+  String get messagesYou => 'Você';
+
+  @override
+  String messagesStarted(String who, String title) {
+    return '$who criou \"$title\"';
+  }
+
+  @override
+  String messagesAdded(String who, String names) {
+    return '$who adicionou $names';
+  }
+
+  @override
+  String messagesRemoved(String who, String names) {
+    return '$who removeu $names';
+  }
+
+  @override
+  String messagesLeft(String who) {
+    return '$who saiu do grupo';
+  }
+
+  @override
+  String messagesRenamed(String who, String title) {
+    return '$who renomeou o grupo para \"$title\"';
+  }
+
+  @override
+  String get messagesPrivacy =>
+      'Criptografado neste telefone para cada dispositivo da conversa. O servidor da Fjelia apenas repassa as mensagens e não consegue lê-las.';
 }

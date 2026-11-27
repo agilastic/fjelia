@@ -18032,6 +18032,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Planned with Fjelia from my own running on hills.'**
   String get crewFooter;
+
+  /// No description provided for @messagesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages'**
+  String get messagesTitle;
+
+  /// No description provided for @messagesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'You and your coach meet when this phone syncs with the coach\'s computer nearby. Then you can write to each other from anywhere.'**
+  String get messagesEmpty;
+
+  /// No description provided for @messagesNoThreads.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages yet.'**
+  String get messagesNoThreads;
+
+  /// No description provided for @messagesWriteTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Write to {name}'**
+  String messagesWriteTo(String name);
+
+  /// No description provided for @messagesYourName.
+  ///
+  /// In en, this message translates to:
+  /// **'Your name'**
+  String get messagesYourName;
+
+  /// No description provided for @messagesYourNameHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'The name your coach and group see.'**
+  String get messagesYourNameHelp;
+
+  /// No description provided for @messagesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Message'**
+  String get messagesHint;
+
+  /// No description provided for @messagesSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get messagesSend;
+
+  /// No description provided for @messagesWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'waiting to send'**
+  String get messagesWaiting;
+
+  /// No description provided for @messagesLeaveGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave group'**
+  String get messagesLeaveGroup;
+
+  /// No description provided for @messagesGone.
+  ///
+  /// In en, this message translates to:
+  /// **'You are no longer in this group.'**
+  String get messagesGone;
+
+  /// No description provided for @messagesYou.
+  ///
+  /// In en, this message translates to:
+  /// **'You'**
+  String get messagesYou;
+
+  /// No description provided for @messagesStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'{who} started \"{title}\"'**
+  String messagesStarted(String who, String title);
+
+  /// No description provided for @messagesAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'{who} added {names}'**
+  String messagesAdded(String who, String names);
+
+  /// No description provided for @messagesRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'{who} removed {names}'**
+  String messagesRemoved(String who, String names);
+
+  /// No description provided for @messagesLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{who} left'**
+  String messagesLeft(String who);
+
+  /// No description provided for @messagesRenamed.
+  ///
+  /// In en, this message translates to:
+  /// **'{who} renamed the group \"{title}\"'**
+  String messagesRenamed(String who, String title);
+
+  /// No description provided for @messagesPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Encrypted on this phone for each device in the conversation. Fjelia\'s server only passes messages on and cannot read them.'**
+  String get messagesPrivacy;
 }
 
 class _AppLocalizationsDelegate

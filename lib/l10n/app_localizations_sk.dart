@@ -10481,4 +10481,73 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get crewFooter => 'Naplánované vo Fjelii z mojich behov do kopca.';
+
+  @override
+  String get messagesTitle => 'Správy';
+
+  @override
+  String get messagesEmpty =>
+      'Ty a tvoj tréner sa spoznáte, keď sa tento telefón synchronizuje v blízkosti trénerovho počítača. Potom si môžete písať odkiaľkoľvek.';
+
+  @override
+  String get messagesNoThreads => 'Zatiaľ žiadne správy.';
+
+  @override
+  String messagesWriteTo(String name) {
+    return 'Napísať: $name';
+  }
+
+  @override
+  String get messagesYourName => 'Tvoje meno';
+
+  @override
+  String get messagesYourNameHelp =>
+      'Meno, ktoré vidí tvoj tréner a tvoja skupina.';
+
+  @override
+  String get messagesHint => 'Správa';
+
+  @override
+  String get messagesSend => 'Odoslať';
+
+  @override
+  String get messagesWaiting => 'čaká na odoslanie';
+
+  @override
+  String get messagesLeaveGroup => 'Opustiť skupinu';
+
+  @override
+  String get messagesGone => 'Už nie si v tejto skupine.';
+
+  @override
+  String get messagesYou => 'Ty';
+
+  @override
+  String messagesStarted(String who, String title) {
+    return '$who založil(a) „$title“';
+  }
+
+  @override
+  String messagesAdded(String who, String names) {
+    return '$who pridal(a): $names';
+  }
+
+  @override
+  String messagesRemoved(String who, String names) {
+    return '$who odstránil(a): $names';
+  }
+
+  @override
+  String messagesLeft(String who) {
+    return '$who opustil(a) skupinu';
+  }
+
+  @override
+  String messagesRenamed(String who, String title) {
+    return '$who premenoval(a) skupinu na „$title“';
+  }
+
+  @override
+  String get messagesPrivacy =>
+      'Šifrované v tomto telefóne pre každé zariadenie v konverzácii. Server Fjelie správy iba odovzdáva a nemôže ich čítať.';
 }
