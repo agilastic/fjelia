@@ -10510,4 +10510,37 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get messagesPrivacy =>
       'Encrypted on this phone for each device in the conversation. Fjelia\'s server only passes messages on and cannot read them.';
+
+  @override
+  String get messagesRecovery => 'Recovery code';
+
+  @override
+  String get messagesRecoveryMake => 'Make a new recovery code';
+
+  @override
+  String get messagesRecoveryHelp =>
+      'If this phone is lost, a new one continues as you with this code: your coach, your groups, your messages to come. A new code stops the old one.';
+
+  @override
+  String get messagesRecoveryShown =>
+      'Write this code down or keep it in your password manager. It is shown only now.';
+
+  @override
+  String get messagesRecoveryUnreachable =>
+      'No connection to Fjelia\'s server. Try again later.';
+
+  @override
+  String get messagesRestore => 'I have a recovery code';
+
+  @override
+  String get messagesRestoreHint => 'Recovery code';
+
+  @override
+  String get messagesRestoreWrong => 'This code was not found or does not fit.';
+
+  @override
+  String get messagesCopy => 'Copy';
+
+  @override
+  String get messagesDone => 'Done';
 }

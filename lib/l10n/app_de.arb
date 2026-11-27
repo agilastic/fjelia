@@ -4577,5 +4577,15 @@
   "messagesRemoved": "{who} hat {names} entfernt",
   "messagesLeft": "{who} hat die Gruppe verlassen",
   "messagesRenamed": "{who} hat die Gruppe in „{title}“ umbenannt",
-  "messagesPrivacy": "Auf diesem Handy für jedes Gerät im Gespräch verschlüsselt. Fjelias Server leitet Nachrichten nur weiter und kann sie nicht lesen."
+  "messagesPrivacy": "Auf diesem Handy für jedes Gerät im Gespräch verschlüsselt. Fjelias Server leitet Nachrichten nur weiter und kann sie nicht lesen.",
+  "messagesRecovery": "Wiederherstellungscode",
+  "messagesRecoveryMake": "Neuen Wiederherstellungscode erstellen",
+  "messagesRecoveryHelp": "Geht dieses Handy verloren, macht ein neues mit diesem Code als du weiter: dein Coach, deine Gruppen, deine künftigen Nachrichten. Ein neuer Code macht den alten ungültig.",
+  "messagesRecoveryShown": "Schreib dir diesen Code auf oder bewahre ihn in deinem Passwortmanager auf. Er wird nur jetzt angezeigt.",
+  "messagesRecoveryUnreachable": "Keine Verbindung zum Server von Fjelia. Versuch es später noch einmal.",
+  "messagesRestore": "Ich habe einen Wiederherstellungscode",
+  "messagesRestoreHint": "Wiederherstellungscode",
+  "messagesRestoreWrong": "Dieser Code wurde nicht gefunden oder passt nicht.",
+  "messagesCopy": "Kopieren",
+  "messagesDone": "Fertig"
 }

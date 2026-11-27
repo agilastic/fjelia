@@ -5836,5 +5836,15 @@
   "@messagesLeft": {"placeholders": {"who": {"type": "String"}}},
   "messagesRenamed": "{who} renamed the group \"{title}\"",
   "@messagesRenamed": {"placeholders": {"who": {"type": "String"}, "title": {"type": "String"}}},
-  "messagesPrivacy": "Encrypted on this phone for each device in the conversation. Fjelia's server only passes messages on and cannot read them."
+  "messagesPrivacy": "Encrypted on this phone for each device in the conversation. Fjelia's server only passes messages on and cannot read them.",
+  "messagesRecovery": "Recovery code",
+  "messagesRecoveryMake": "Make a new recovery code",
+  "messagesRecoveryHelp": "If this phone is lost, a new one continues as you with this code: your coach, your groups, your messages to come. A new code stops the old one.",
+  "messagesRecoveryShown": "Write this code down or keep it in your password manager. It is shown only now.",
+  "messagesRecoveryUnreachable": "No connection to Fjelia's server. Try again later.",
+  "messagesRestore": "I have a recovery code",
+  "messagesRestoreHint": "Recovery code",
+  "messagesRestoreWrong": "This code was not found or does not fit.",
+  "messagesCopy": "Copy",
+  "messagesDone": "Done"
 }

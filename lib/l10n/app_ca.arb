@@ -4544,5 +4544,15 @@
   "messagesRemoved": "{who} ha tret {names}",
   "messagesLeft": "{who} ha sortit del grup",
   "messagesRenamed": "{who} ha canviat el nom del grup a «{title}»",
-  "messagesPrivacy": "Xifrat en aquest telèfon per a cada dispositiu de la conversa. El servidor de Fjelia només reenvia els missatges i no els pot llegir."
+  "messagesPrivacy": "Xifrat en aquest telèfon per a cada dispositiu de la conversa. El servidor de Fjelia només reenvia els missatges i no els pot llegir.",
+  "messagesRecovery": "Codi de recuperació",
+  "messagesRecoveryMake": "Crea un nou codi de recuperació",
+  "messagesRecoveryHelp": "Si perds aquest telèfon, un de nou continua com tu amb aquest codi: el teu entrenador, els teus grups, els teus propers missatges. Un codi nou anul·la l'antic.",
+  "messagesRecoveryShown": "Apunta aquest codi o guarda'l al teu gestor de contrasenyes. Només es mostra ara.",
+  "messagesRecoveryUnreachable": "No hi ha connexió amb el servidor de Fjelia. Torna-ho a provar més tard.",
+  "messagesRestore": "Tinc un codi de recuperació",
+  "messagesRestoreHint": "Codi de recuperació",
+  "messagesRestoreWrong": "Aquest codi no s'ha trobat o no coincideix.",
+  "messagesCopy": "Copia",
+  "messagesDone": "Fet"
 }

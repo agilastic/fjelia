@@ -4544,5 +4544,15 @@
   "messagesRemoved": "{who} a retiré {names}",
   "messagesLeft": "{who} a quitté le groupe",
   "messagesRenamed": "{who} a renommé le groupe « {title} »",
-  "messagesPrivacy": "Chiffré sur ce téléphone pour chaque appareil de la conversation. Le serveur de Fjelia ne fait que transmettre les messages et ne peut pas les lire."
+  "messagesPrivacy": "Chiffré sur ce téléphone pour chaque appareil de la conversation. Le serveur de Fjelia ne fait que transmettre les messages et ne peut pas les lire.",
+  "messagesRecovery": "Code de récupération",
+  "messagesRecoveryMake": "Créer un nouveau code de récupération",
+  "messagesRecoveryHelp": "Si ce téléphone est perdu, un nouveau continue avec ce code en tant que toi : ton coach, tes groupes, tes prochains messages. Un nouveau code annule l'ancien.",
+  "messagesRecoveryShown": "Note ce code ou garde-le dans ton gestionnaire de mots de passe. Il n'est affiché que maintenant.",
+  "messagesRecoveryUnreachable": "Pas de connexion au serveur de Fjelia. Réessaie plus tard.",
+  "messagesRestore": "J'ai un code de récupération",
+  "messagesRestoreHint": "Code de récupération",
+  "messagesRestoreWrong": "Ce code est introuvable ou ne correspond pas.",
+  "messagesCopy": "Copier",
+  "messagesDone": "Terminé"
 }

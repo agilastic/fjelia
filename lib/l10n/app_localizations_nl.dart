@@ -10575,4 +10575,38 @@ class AppLocalizationsNl extends AppLocalizations {
   @override
   String get messagesPrivacy =>
       'Op deze telefoon versleuteld voor elk apparaat in het gesprek. De server van Fjelia geeft berichten alleen door en kan ze niet lezen.';
+
+  @override
+  String get messagesRecovery => 'Herstelcode';
+
+  @override
+  String get messagesRecoveryMake => 'Nieuwe herstelcode maken';
+
+  @override
+  String get messagesRecoveryHelp =>
+      'Raakt deze telefoon kwijt, dan gaat een nieuwe met deze code verder als jou: je coach, je groepen, je volgende berichten. Een nieuwe code maakt de oude ongeldig.';
+
+  @override
+  String get messagesRecoveryShown =>
+      'Schrijf deze code op of bewaar hem in je wachtwoordmanager. Hij wordt alleen nu getoond.';
+
+  @override
+  String get messagesRecoveryUnreachable =>
+      'Geen verbinding met de server van Fjelia. Probeer het later opnieuw.';
+
+  @override
+  String get messagesRestore => 'Ik heb een herstelcode';
+
+  @override
+  String get messagesRestoreHint => 'Herstelcode';
+
+  @override
+  String get messagesRestoreWrong =>
+      'Deze code is niet gevonden of klopt niet.';
+
+  @override
+  String get messagesCopy => 'Kopiëren';
+
+  @override
+  String get messagesDone => 'Klaar';
 }

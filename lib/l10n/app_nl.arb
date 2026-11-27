@@ -5707,5 +5707,15 @@
   "messagesRemoved": "{who} heeft {names} verwijderd",
   "messagesLeft": "{who} heeft de groep verlaten",
   "messagesRenamed": "{who} heeft de groep hernoemd naar \"{title}\"",
-  "messagesPrivacy": "Op deze telefoon versleuteld voor elk apparaat in het gesprek. De server van Fjelia geeft berichten alleen door en kan ze niet lezen."
+  "messagesPrivacy": "Op deze telefoon versleuteld voor elk apparaat in het gesprek. De server van Fjelia geeft berichten alleen door en kan ze niet lezen.",
+  "messagesRecovery": "Herstelcode",
+  "messagesRecoveryMake": "Nieuwe herstelcode maken",
+  "messagesRecoveryHelp": "Raakt deze telefoon kwijt, dan gaat een nieuwe met deze code verder als jou: je coach, je groepen, je volgende berichten. Een nieuwe code maakt de oude ongeldig.",
+  "messagesRecoveryShown": "Schrijf deze code op of bewaar hem in je wachtwoordmanager. Hij wordt alleen nu getoond.",
+  "messagesRecoveryUnreachable": "Geen verbinding met de server van Fjelia. Probeer het later opnieuw.",
+  "messagesRestore": "Ik heb een herstelcode",
+  "messagesRestoreHint": "Herstelcode",
+  "messagesRestoreWrong": "Deze code is niet gevonden of klopt niet.",
+  "messagesCopy": "Kopiëren",
+  "messagesDone": "Klaar"
 }

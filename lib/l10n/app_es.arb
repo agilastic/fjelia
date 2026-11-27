@@ -4544,5 +4544,15 @@
   "messagesRemoved": "{who} quitó a {names}",
   "messagesLeft": "{who} salió del grupo",
   "messagesRenamed": "{who} cambió el nombre del grupo a «{title}»",
-  "messagesPrivacy": "Cifrado en este teléfono para cada dispositivo de la conversación. El servidor de Fjelia solo reenvía los mensajes y no puede leerlos."
+  "messagesPrivacy": "Cifrado en este teléfono para cada dispositivo de la conversación. El servidor de Fjelia solo reenvía los mensajes y no puede leerlos.",
+  "messagesRecovery": "Código de recuperación",
+  "messagesRecoveryMake": "Crear un nuevo código de recuperación",
+  "messagesRecoveryHelp": "Si pierdes este teléfono, uno nuevo continúa como tú con este código: tu entrenador, tus grupos, tus próximos mensajes. Un código nuevo anula el anterior.",
+  "messagesRecoveryShown": "Apunta este código o guárdalo en tu gestor de contraseñas. Solo se muestra ahora.",
+  "messagesRecoveryUnreachable": "Sin conexión con el servidor de Fjelia. Inténtalo más tarde.",
+  "messagesRestore": "Tengo un código de recuperación",
+  "messagesRestoreHint": "Código de recuperación",
+  "messagesRestoreWrong": "Este código no se encontró o no coincide.",
+  "messagesCopy": "Copiar",
+  "messagesDone": "Hecho"
 }

@@ -42,6 +42,22 @@ void main() {
   testWidgets('before meeting a coach it says how to', (tester) async {
     await open(tester);
     expect(find.textContaining('syncs with the coach'), findsOneWidget);
+    // A new phone can come back as someone with their code.
+    expect(find.text('I have a recovery code'), findsOneWidget);
+    await tester.tap(find.text('I have a recovery code'));
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.enterText(find.byType(TextField).last, 'not a code');
+    await tester.tap(find.text('Done'));
+    for (var i = 0; i < 5; i++) {
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 100)),
+      );
+      await tester.pump(const Duration(milliseconds: 200));
+    }
+    expect(
+      find.text('This code was not found or does not fit.'),
+      findsOneWidget,
+    );
     await tester.pumpWidget(const SizedBox());
   });
 
@@ -77,6 +93,25 @@ void main() {
     }
     expect(find.text('Knee hurts a bit'), findsOneWidget);
     expect(find.textContaining('waiting to send'), findsOneWidget);
+    // Without the server, no recovery code is made, and it says so.
+    await tester.pageBack();
+    for (var i = 0; i < 5; i++) {
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 100)),
+      );
+      await tester.pump(const Duration(milliseconds: 200));
+    }
+    await tester.tap(find.text('Make a new recovery code'));
+    for (var i = 0; i < 10; i++) {
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 100)),
+      );
+      await tester.pump(const Duration(milliseconds: 200));
+    }
+    expect(
+      find.textContaining("No connection to Fjelia's server"),
+      findsOneWidget,
+    );
     await tester.pumpWidget(const SizedBox());
   });
 }

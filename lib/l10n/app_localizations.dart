@@ -18140,6 +18140,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Encrypted on this phone for each device in the conversation. Fjelia\'s server only passes messages on and cannot read them.'**
   String get messagesPrivacy;
+
+  /// No description provided for @messagesRecovery.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery code'**
+  String get messagesRecovery;
+
+  /// No description provided for @messagesRecoveryMake.
+  ///
+  /// In en, this message translates to:
+  /// **'Make a new recovery code'**
+  String get messagesRecoveryMake;
+
+  /// No description provided for @messagesRecoveryHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'If this phone is lost, a new one continues as you with this code: your coach, your groups, your messages to come. A new code stops the old one.'**
+  String get messagesRecoveryHelp;
+
+  /// No description provided for @messagesRecoveryShown.
+  ///
+  /// In en, this message translates to:
+  /// **'Write this code down or keep it in your password manager. It is shown only now.'**
+  String get messagesRecoveryShown;
+
+  /// No description provided for @messagesRecoveryUnreachable.
+  ///
+  /// In en, this message translates to:
+  /// **'No connection to Fjelia\'s server. Try again later.'**
+  String get messagesRecoveryUnreachable;
+
+  /// No description provided for @messagesRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'I have a recovery code'**
+  String get messagesRestore;
+
+  /// No description provided for @messagesRestoreHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery code'**
+  String get messagesRestoreHint;
+
+  /// No description provided for @messagesRestoreWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'This code was not found or does not fit.'**
+  String get messagesRestoreWrong;
+
+  /// No description provided for @messagesCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get messagesCopy;
+
+  /// No description provided for @messagesDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get messagesDone;
 }
 
 class _AppLocalizationsDelegate

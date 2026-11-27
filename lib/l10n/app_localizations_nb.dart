@@ -10504,4 +10504,37 @@ class AppLocalizationsNb extends AppLocalizations {
   @override
   String get messagesPrivacy =>
       'Kryptert på denne telefonen for hver enhet i samtalen. Fjelias server sender bare meldingene videre og kan ikke lese dem.';
+
+  @override
+  String get messagesRecovery => 'Gjenopprettingskode';
+
+  @override
+  String get messagesRecoveryMake => 'Lag en ny gjenopprettingskode';
+
+  @override
+  String get messagesRecoveryHelp =>
+      'Hvis denne telefonen blir borte, fortsetter en ny som deg med denne koden: treneren din, gruppene dine, de neste meldingene dine. En ny kode gjør den gamle ugyldig.';
+
+  @override
+  String get messagesRecoveryShown =>
+      'Skriv ned koden eller lagre den i passordbehandleren din. Den vises bare nå.';
+
+  @override
+  String get messagesRecoveryUnreachable =>
+      'Ingen forbindelse til Fjelias server. Prøv igjen senere.';
+
+  @override
+  String get messagesRestore => 'Jeg har en gjenopprettingskode';
+
+  @override
+  String get messagesRestoreHint => 'Gjenopprettingskode';
+
+  @override
+  String get messagesRestoreWrong => 'Koden ble ikke funnet eller passer ikke.';
+
+  @override
+  String get messagesCopy => 'Kopier';
+
+  @override
+  String get messagesDone => 'Ferdig';
 }

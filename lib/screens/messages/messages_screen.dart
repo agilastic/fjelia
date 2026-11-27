@@ -1,5 +1,7 @@
+import 'package:fjelia_sync/fjelia_sync.dart' show RestoreProblem;
 import 'package:fjelia_views/fjelia_views.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
@@ -57,6 +59,91 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
   Future<void> _write(MessagePerson coach) async {
     final id = await ref.read(messagesProvider.notifier).startDirect(coach);
     await _open(id);
+  }
+
+  Future<void> _newCode() async {
+    final l10n = context.l10n;
+    final code = await ref.read(messagesProvider.notifier).newRecoveryCode();
+    if (!mounted) return;
+    if (code == null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.messagesRecoveryUnreachable)));
+      return;
+    }
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.messagesRecovery),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SelectableText(
+              code,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontFamily: 'Menlo',
+                fontSize: 18,
+                letterSpacing: 1,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text(l10n.messagesRecoveryShown),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Clipboard.setData(ClipboardData(text: code)),
+            child: Text(l10n.messagesCopy),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l10n.messagesDone),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _restore() async {
+    final l10n = context.l10n;
+    final field = TextEditingController();
+    final code = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.messagesRestore),
+        content: TextField(
+          controller: field,
+          autofocus: true,
+          textCapitalization: TextCapitalization.characters,
+          autocorrect: false,
+          decoration: InputDecoration(hintText: l10n.messagesRestoreHint),
+        ),
+        actions: [
+          FilledButton(
+            onPressed: () => Navigator.pop(context, field.text),
+            child: Text(l10n.messagesDone),
+          ),
+        ],
+      ),
+    );
+    field.dispose();
+    if (code == null || code.trim().isEmpty) return;
+    final problem = await ref.read(messagesProvider.notifier).restore(code);
+    if (!mounted) return;
+    if (problem != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            problem == RestoreProblem.unreachable
+                ? l10n.messagesRecoveryUnreachable
+                : l10n.messagesRestoreWrong,
+          ),
+        ),
+      );
+    }
+    await _load();
   }
 
   @override
@@ -127,6 +214,20 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
                 ),
               ),
             ],
+            const Divider(height: 32),
+            if (_threads.isEmpty && _coaches.isEmpty)
+              ListTile(
+                leading: const Icon(Icons.restore),
+                title: Text(l10n.messagesRestore),
+                onTap: _restore,
+              )
+            else
+              ListTile(
+                leading: const Icon(Icons.key_outlined),
+                title: Text(l10n.messagesRecoveryMake),
+                subtitle: Text(l10n.messagesRecoveryHelp),
+                onTap: _newCode,
+              ),
             Padding(
               padding: const EdgeInsets.all(16),
               child: Row(

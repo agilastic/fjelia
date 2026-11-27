@@ -21,6 +21,7 @@ import '../../widgets/settings_widgets.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/ecg_provider.dart';
 import 'bug_report_sheet.dart';
+import '../messages/messages_screen.dart';
 import 'computers_page.dart';
 
 import 'dart:developer' show log;
@@ -56,6 +57,20 @@ class SystemTab extends StatelessWidget {
                 subtitle: Text(l10n.syncComputersSubtitle),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => showAppSheet(context, const ComputersPage()),
+              ),
+              ListTile(
+                leading: const SettingsIcon(
+                  Icons.chat_bubble_outline,
+                  Colors.teal,
+                ),
+                title: Text(l10n.messagesTitle),
+                subtitle: Text(l10n.messagesRecovery),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => const MessagesScreen(),
+                  ),
+                ),
               ),
               if (developerMenuEnabled)
                 ListTile(

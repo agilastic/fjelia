@@ -10540,4 +10540,37 @@ class AppLocalizationsFi extends AppLocalizations {
   @override
   String get messagesPrivacy =>
       'Salattu tällä puhelimella jokaiselle keskustelun laitteelle. Fjelian palvelin vain välittää viestit eikä voi lukea niitä.';
+
+  @override
+  String get messagesRecovery => 'Palautuskoodi';
+
+  @override
+  String get messagesRecoveryMake => 'Luo uusi palautuskoodi';
+
+  @override
+  String get messagesRecoveryHelp =>
+      'Jos tämä puhelin katoaa, uusi jatkaa tällä koodilla sinuna: valmentajasi, ryhmäsi, tulevat viestisi. Uusi koodi mitätöi vanhan.';
+
+  @override
+  String get messagesRecoveryShown =>
+      'Kirjoita koodi muistiin tai tallenna se salasanojen hallintaan. Se näytetään vain nyt.';
+
+  @override
+  String get messagesRecoveryUnreachable =>
+      'Ei yhteyttä Fjelian palvelimeen. Yritä myöhemmin uudelleen.';
+
+  @override
+  String get messagesRestore => 'Minulla on palautuskoodi';
+
+  @override
+  String get messagesRestoreHint => 'Palautuskoodi';
+
+  @override
+  String get messagesRestoreWrong => 'Koodia ei löytynyt tai se ei täsmää.';
+
+  @override
+  String get messagesCopy => 'Kopioi';
+
+  @override
+  String get messagesDone => 'Valmis';
 }

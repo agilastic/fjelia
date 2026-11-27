@@ -10497,4 +10497,38 @@ class AppLocalizationsDa extends AppLocalizations {
   @override
   String get messagesPrivacy =>
       'Krypteret på denne telefon til hver enhed i samtalen. Fjelias server videresender kun beskederne og kan ikke læse dem.';
+
+  @override
+  String get messagesRecovery => 'Gendannelseskode';
+
+  @override
+  String get messagesRecoveryMake => 'Lav en ny gendannelseskode';
+
+  @override
+  String get messagesRecoveryHelp =>
+      'Hvis denne telefon bliver væk, fortsætter en ny som dig med denne kode: din træner, dine grupper, dine kommende beskeder. En ny kode gør den gamle ugyldig.';
+
+  @override
+  String get messagesRecoveryShown =>
+      'Skriv koden ned, eller gem den i din adgangskodeadministrator. Den vises kun nu.';
+
+  @override
+  String get messagesRecoveryUnreachable =>
+      'Ingen forbindelse til Fjelias server. Prøv igen senere.';
+
+  @override
+  String get messagesRestore => 'Jeg har en gendannelseskode';
+
+  @override
+  String get messagesRestoreHint => 'Gendannelseskode';
+
+  @override
+  String get messagesRestoreWrong =>
+      'Koden blev ikke fundet eller passer ikke.';
+
+  @override
+  String get messagesCopy => 'Kopiér';
+
+  @override
+  String get messagesDone => 'Færdig';
 }

@@ -5707,5 +5707,15 @@
   "messagesRemoved": "{who} usunął(-ęła): {names}",
   "messagesLeft": "{who} opuścił(a) grupę",
   "messagesRenamed": "{who} zmienił(a) nazwę grupy na „{title}”",
-  "messagesPrivacy": "Szyfrowane na tym telefonie dla każdego urządzenia w rozmowie. Serwer Fjelii tylko przekazuje wiadomości i nie może ich odczytać."
+  "messagesPrivacy": "Szyfrowane na tym telefonie dla każdego urządzenia w rozmowie. Serwer Fjelii tylko przekazuje wiadomości i nie może ich odczytać.",
+  "messagesRecovery": "Kod odzyskiwania",
+  "messagesRecoveryMake": "Utwórz nowy kod odzyskiwania",
+  "messagesRecoveryHelp": "Jeśli zgubisz ten telefon, nowy będzie z tym kodem działać jako ty: twój trener, twoje grupy, twoje kolejne wiadomości. Nowy kod unieważnia stary.",
+  "messagesRecoveryShown": "Zapisz ten kod lub przechowuj go w menedżerze haseł. Jest wyświetlany tylko teraz.",
+  "messagesRecoveryUnreachable": "Brak połączenia z serwerem Fjelii. Spróbuj ponownie później.",
+  "messagesRestore": "Mam kod odzyskiwania",
+  "messagesRestoreHint": "Kod odzyskiwania",
+  "messagesRestoreWrong": "Nie znaleziono tego kodu lub nie pasuje.",
+  "messagesCopy": "Kopiuj",
+  "messagesDone": "Gotowe"
 }

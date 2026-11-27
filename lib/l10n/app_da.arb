@@ -4544,5 +4544,15 @@
   "messagesRemoved": "{who} fjernede {names}",
   "messagesLeft": "{who} forlod gruppen",
   "messagesRenamed": "{who} omdøbte gruppen til \"{title}\"",
-  "messagesPrivacy": "Krypteret på denne telefon til hver enhed i samtalen. Fjelias server videresender kun beskederne og kan ikke læse dem."
+  "messagesPrivacy": "Krypteret på denne telefon til hver enhed i samtalen. Fjelias server videresender kun beskederne og kan ikke læse dem.",
+  "messagesRecovery": "Gendannelseskode",
+  "messagesRecoveryMake": "Lav en ny gendannelseskode",
+  "messagesRecoveryHelp": "Hvis denne telefon bliver væk, fortsætter en ny som dig med denne kode: din træner, dine grupper, dine kommende beskeder. En ny kode gør den gamle ugyldig.",
+  "messagesRecoveryShown": "Skriv koden ned, eller gem den i din adgangskodeadministrator. Den vises kun nu.",
+  "messagesRecoveryUnreachable": "Ingen forbindelse til Fjelias server. Prøv igen senere.",
+  "messagesRestore": "Jeg har en gendannelseskode",
+  "messagesRestoreHint": "Gendannelseskode",
+  "messagesRestoreWrong": "Koden blev ikke fundet eller passer ikke.",
+  "messagesCopy": "Kopiér",
+  "messagesDone": "Færdig"
 }

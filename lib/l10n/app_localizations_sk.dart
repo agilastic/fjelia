@@ -10550,4 +10550,37 @@ class AppLocalizationsSk extends AppLocalizations {
   @override
   String get messagesPrivacy =>
       'Šifrované v tomto telefóne pre každé zariadenie v konverzácii. Server Fjelie správy iba odovzdáva a nemôže ich čítať.';
+
+  @override
+  String get messagesRecovery => 'Kód na obnovenie';
+
+  @override
+  String get messagesRecoveryMake => 'Vytvoriť nový kód na obnovenie';
+
+  @override
+  String get messagesRecoveryHelp =>
+      'Ak tento telefón stratíš, nový s týmto kódom pokračuje ako ty: tvoj tréner, tvoje skupiny, tvoje ďalšie správy. Nový kód zruší starý.';
+
+  @override
+  String get messagesRecoveryShown =>
+      'Zapíš si tento kód alebo ho ulož v správcovi hesiel. Zobrazí sa iba teraz.';
+
+  @override
+  String get messagesRecoveryUnreachable =>
+      'Žiadne pripojenie k serveru Fjelie. Skús to neskôr.';
+
+  @override
+  String get messagesRestore => 'Mám kód na obnovenie';
+
+  @override
+  String get messagesRestoreHint => 'Kód na obnovenie';
+
+  @override
+  String get messagesRestoreWrong => 'Tento kód sa nenašiel alebo nesedí.';
+
+  @override
+  String get messagesCopy => 'Kopírovať';
+
+  @override
+  String get messagesDone => 'Hotovo';
 }

@@ -131,6 +131,47 @@ class MessagesNotifier extends Notifier<MessagesState>
 
   // What the screens read and do; they never touch the database.
 
+  /// A new recovery code, to show once; the previous one stops working.
+  /// Null when Fjelia's server cannot be reached.
+  Future<String?> newRecoveryCode() async {
+    try {
+      return await makeRecoveryCode(await _open(), _relay, secureSecrets);
+    } on Object catch (e) {
+      log('[Messages] recovery code: $e');
+      return null;
+    }
+  }
+
+  /// This phone continues as the person of [code]. Null when it worked.
+  Future<RestoreProblem?> restore(String code) async {
+    final db = ref.read(databaseProvider);
+    try {
+      final r = await restoreWithCode(
+        code,
+        relay: _relay,
+        store: secureSecrets,
+        deviceName: await NearbySyncNotifier.deviceName(),
+        platform: Platform.operatingSystem,
+      );
+      final me = r.identity;
+      if (me == null) return r.problem;
+      final old = await db.self();
+      if (old != null && old.person != me.personId) {
+        await db.forgetPerson(old.person);
+      }
+      await db.savePerson(
+        MessagePerson(person: me.personId, name: _name, role: PersonRole.self),
+      );
+      _me = me;
+      _opening = Future.value(me);
+      changed();
+      return null;
+    } on Object catch (e) {
+      log('[Messages] restore: $e');
+      return RestoreProblem.unreachable;
+    }
+  }
+
   Future<List<views.ThreadRow>> threads() async {
     await _open();
     return views.loadThreads(ref.read(databaseProvider));

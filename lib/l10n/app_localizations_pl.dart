@@ -10606,4 +10606,37 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String get messagesPrivacy =>
       'Szyfrowane na tym telefonie dla każdego urządzenia w rozmowie. Serwer Fjelii tylko przekazuje wiadomości i nie może ich odczytać.';
+
+  @override
+  String get messagesRecovery => 'Kod odzyskiwania';
+
+  @override
+  String get messagesRecoveryMake => 'Utwórz nowy kod odzyskiwania';
+
+  @override
+  String get messagesRecoveryHelp =>
+      'Jeśli zgubisz ten telefon, nowy będzie z tym kodem działać jako ty: twój trener, twoje grupy, twoje kolejne wiadomości. Nowy kod unieważnia stary.';
+
+  @override
+  String get messagesRecoveryShown =>
+      'Zapisz ten kod lub przechowuj go w menedżerze haseł. Jest wyświetlany tylko teraz.';
+
+  @override
+  String get messagesRecoveryUnreachable =>
+      'Brak połączenia z serwerem Fjelii. Spróbuj ponownie później.';
+
+  @override
+  String get messagesRestore => 'Mam kod odzyskiwania';
+
+  @override
+  String get messagesRestoreHint => 'Kod odzyskiwania';
+
+  @override
+  String get messagesRestoreWrong => 'Nie znaleziono tego kodu lub nie pasuje.';
+
+  @override
+  String get messagesCopy => 'Kopiuj';
+
+  @override
+  String get messagesDone => 'Gotowe';
 }

@@ -10564,4 +10564,38 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get messagesPrivacy =>
       'Cifrato su questo telefono per ogni dispositivo della conversazione. Il server di Fjelia inoltra solo i messaggi e non può leggerli.';
+
+  @override
+  String get messagesRecovery => 'Codice di recupero';
+
+  @override
+  String get messagesRecoveryMake => 'Crea un nuovo codice di recupero';
+
+  @override
+  String get messagesRecoveryHelp =>
+      'Se perdi questo telefono, uno nuovo continua come te con questo codice: il tuo coach, i tuoi gruppi, i tuoi prossimi messaggi. Un nuovo codice annulla quello vecchio.';
+
+  @override
+  String get messagesRecoveryShown =>
+      'Annota questo codice o conservalo nel tuo gestore di password. Viene mostrato solo ora.';
+
+  @override
+  String get messagesRecoveryUnreachable =>
+      'Nessuna connessione al server di Fjelia. Riprova più tardi.';
+
+  @override
+  String get messagesRestore => 'Ho un codice di recupero';
+
+  @override
+  String get messagesRestoreHint => 'Codice di recupero';
+
+  @override
+  String get messagesRestoreWrong =>
+      'Questo codice non è stato trovato o non corrisponde.';
+
+  @override
+  String get messagesCopy => 'Copia';
+
+  @override
+  String get messagesDone => 'Fatto';
 }

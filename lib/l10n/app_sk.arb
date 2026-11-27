@@ -4544,5 +4544,15 @@
   "messagesRemoved": "{who} odstránil(a): {names}",
   "messagesLeft": "{who} opustil(a) skupinu",
   "messagesRenamed": "{who} premenoval(a) skupinu na „{title}“",
-  "messagesPrivacy": "Šifrované v tomto telefóne pre každé zariadenie v konverzácii. Server Fjelie správy iba odovzdáva a nemôže ich čítať."
+  "messagesPrivacy": "Šifrované v tomto telefóne pre každé zariadenie v konverzácii. Server Fjelie správy iba odovzdáva a nemôže ich čítať.",
+  "messagesRecovery": "Kód na obnovenie",
+  "messagesRecoveryMake": "Vytvoriť nový kód na obnovenie",
+  "messagesRecoveryHelp": "Ak tento telefón stratíš, nový s týmto kódom pokračuje ako ty: tvoj tréner, tvoje skupiny, tvoje ďalšie správy. Nový kód zruší starý.",
+  "messagesRecoveryShown": "Zapíš si tento kód alebo ho ulož v správcovi hesiel. Zobrazí sa iba teraz.",
+  "messagesRecoveryUnreachable": "Žiadne pripojenie k serveru Fjelie. Skús to neskôr.",
+  "messagesRestore": "Mám kód na obnovenie",
+  "messagesRestoreHint": "Kód na obnovenie",
+  "messagesRestoreWrong": "Tento kód sa nenašiel alebo nesedí.",
+  "messagesCopy": "Kopírovať",
+  "messagesDone": "Hotovo"
 }
