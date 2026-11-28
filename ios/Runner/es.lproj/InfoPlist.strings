@@ -4,7 +4,7 @@
 "NSHealthUpdateUsageDescription" = "Fjelia escribe en Apple Salud tus datos sincronizados de VFC, frecuencia cardíaca, sueño, pasos y entrenamientos para que no los pierdas si cambias de app.";
 "NSLocationAlwaysAndWhenInUseUsageDescription" = "Con GPS activo, Fjelia graba tu ruta al usar otra app o bloquear la pantalla. Pausa o Detener finaliza el registro de ubicación.";
 "NSLocationWhenInUseUsageDescription" = "Fjelia usa la ubicación para las rutas con GPS activo y para evaluar el riesgo por calor de los entrenamientos previstos.";
-"NSPhotoLibraryUsageDescription" = "Fjelia te permite añadir fotos y vídeos de tu fototeca a tus entrenamientos, objetivos de carrera y sesiones planificadas.";
+"NSPhotoLibraryUsageDescription" = "Fjelia te permite añadir fotos y vídeos de tu fototeca a tus entrenamientos, objetivos de carrera, sesiones planificadas y a la foto que ven tu entrenador y tus atletas.";
 "NSCameraUsageDescription" = "Fjelia usa la cámara cuando haces una foto o grabas un vídeo para un entrenamiento, un objetivo de carrera o una sesión planificada y para escanear el código que lo enlaza con un ordenador.";
 "NSLocalNetworkUsageDescription" = "Fjelia envía tus actividades, planes y datos de salud a tu ordenador enlazado por la red local.";
 "NSMicrophoneUsageDescription" = "Fjelia usa el micrófono para el sonido de los vídeos que grabas para un entrenamiento.";

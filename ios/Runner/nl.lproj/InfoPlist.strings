@@ -4,7 +4,7 @@
 "NSHealthUpdateUsageDescription" = "Fjelia schrijft je gesynchroniseerde gegevens over HRV, hartslag, slaap, stappen en trainingen naar Apple Gezondheid, zodat ze niet verloren gaan als je van app wisselt.";
 "NSLocationAlwaysAndWhenInUseUsageDescription" = "Als je gps inschakelt, neemt Fjelia je trainingsroute ook op als je van app wisselt of het scherm vergrendelt. Pauze of Stop beëindigt de locatieregistratie.";
 "NSLocationWhenInUseUsageDescription" = "Fjelia gebruikt je locatie voor trainingsroutes bij ingeschakelde gps en om het hitterisico van geplande trainingen te beoordelen.";
-"NSPhotoLibraryUsageDescription" = "Met Fjelia kun je foto's en video's uit je bibliotheek toevoegen aan trainingen, wedstrijddoelen en geplande trainingen.";
+"NSPhotoLibraryUsageDescription" = "Met Fjelia kun je foto's en video's uit je bibliotheek toevoegen aan trainingen, wedstrijddoelen, geplande trainingen en de foto die je coach en je atleten zien.";
 "NSCameraUsageDescription" = "Fjelia gebruikt de camera als je een foto of video maakt voor een training, een wedstrijddoel of een geplande training en om de code te scannen waarmee je hem aan een computer koppelt.";
 "NSLocalNetworkUsageDescription" = "Fjelia stuurt je activiteiten, plannen en gezondheidsgegevens via het lokale netwerk naar je gekoppelde computer.";
 "NSMicrophoneUsageDescription" = "Fjelia gebruikt de microfoon voor het geluid van video's die je bij een training opneemt.";

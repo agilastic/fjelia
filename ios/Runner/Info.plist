@@ -75,7 +75,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Fjelia lets you add photos and videos from your library to your workouts, race goals and planned sessions.</string>
+	<string>Fjelia lets you add photos and videos from your library to your workouts, race goals, planned sessions and the photo your coach and athletes see.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Fjelia uses the camera when you take a photo or video for a workout, race goal or planned session, and to scan the code that pairs it with a computer.</string>
 	<key>NSBonjourServices</key>
