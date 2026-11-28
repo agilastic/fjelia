@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../config/build_features.dart';
 import '../../providers/ai_coach_provider.dart';
 import '../../providers/day_data_provider.dart';
+import '../../providers/messages_provider.dart';
 import '../../providers/sync_provider.dart';
 import '../../providers/user_profile_provider.dart';
 import '../../providers/visibility_provider.dart';
@@ -32,6 +33,7 @@ import '../settings/settings_sheet.dart';
 import '../settings/pro_coach_consent.dart';
 import '../../providers/fjelia_pro_provider.dart';
 import '../settings/bug_report_sheet.dart';
+import '../messages/messages_screen.dart';
 import '../ocr/manual_entry_sheet.dart';
 import '../bloodpressure/bp_screen.dart';
 import '../renpho/renpho_screen.dart';
@@ -191,6 +193,29 @@ class _HomeState extends ConsumerState<HomeScreen> {
                         // What you can do: report, add, sync.
                         _GlassPill(
                           children: [
+                            // Messages, once there is a coach to write to.
+                            if (ref.watch(messagesProvider).hasCoach)
+                              IconButton(
+                                tooltip: context.l10n.messagesTitle,
+                                visualDensity: VisualDensity.compact,
+                                icon: Badge(
+                                  isLabelVisible:
+                                      ref.watch(messagesProvider).unread > 0,
+                                  label: Text(
+                                    '${ref.watch(messagesProvider).unread}',
+                                  ),
+                                  child: Icon(
+                                    Icons.chat_bubble_outline,
+                                    size: 20,
+                                    color: muted,
+                                  ),
+                                ),
+                                onPressed: () => Navigator.of(context).push(
+                                  MaterialPageRoute<void>(
+                                    builder: (_) => const MessagesScreen(),
+                                  ),
+                                ),
+                              ),
                             IconButton(
                               tooltip: context.l10n.sendFeedbackOrReportA,
                               visualDensity: VisualDensity.compact,

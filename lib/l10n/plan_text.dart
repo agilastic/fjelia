@@ -146,13 +146,15 @@ String planUnmetLabel(
       _goal(minutes[3]!, goalNames),
     );
   }
-  final hours = RegExp(r'^The week holds ([\d.]+) h, too little for (.+)\.$')
-      .firstMatch(text);
+  final hours = RegExp(
+    r'^The week holds ([\d.]+) h, too little for (.+)\.$',
+  ).firstMatch(text);
   if (hours != null) {
     return l.unmetWeekHours(hours[1]!, objective(hours[2]!));
   }
-  final days = RegExp(r'^Not enough training days for (.+)\.$')
-      .firstMatch(text);
+  final days = RegExp(
+    r'^Not enough training days for (.+)\.$',
+  ).firstMatch(text);
   if (days != null) return l.unmetTrainingDays(objective(days[1]!));
   return text;
 }

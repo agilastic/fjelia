@@ -126,7 +126,10 @@ abstract class WorkoutProvider {
 
   /// Sessions that are already on the platform though Fjelia has no record of
   /// it (an identical workout on the calendar). They are recorded, and not
-  /// sent again. Returns their ids. By default none.
-  Future<Set<String>> adoptExisting(List<TrainingSession> sessions) async =>
-      const {};
+  /// sent again; [prepare] builds what sending them would send, for the
+  /// record. Returns their ids. By default none.
+  Future<Set<String>> adoptExisting(
+    List<TrainingSession> sessions, {
+    Future<PreparedWorkout> Function(TrainingSession s)? prepare,
+  }) async => const {};
 }

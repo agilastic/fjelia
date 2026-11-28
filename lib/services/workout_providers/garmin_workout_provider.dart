@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:drift/drift.dart';
 
 import '../../api/garmin_client.dart';
@@ -53,13 +55,22 @@ class GarminWorkoutProvider extends WorkoutProvider {
   @override
   bool get supportsStrength => true;
 
-  Future<String> _fingerprint(TrainingSession s) async =>
-      sessionContentFingerprint(
-        s,
-        extra: isStrengthSport(s.sport)
-            ? 'strength:${await strengthRevision?.call(s) ?? ''}'
-            : '',
-      );
+  /// What was sent: the session, and with [prepared] the targets it went up
+  /// with, so new heart-rate zones send it again.
+  Future<String> _fingerprint(
+    TrainingSession s, [
+    PreparedWorkout? prepared,
+  ]) async => sessionContentFingerprint(
+    s,
+    extra: [
+      if (isStrengthSport(s.sport))
+        'strength:${await strengthRevision?.call(s) ?? ''}',
+      if (prepared != null) ...[
+        jsonEncode(prepared.steps),
+        prepared.description,
+      ],
+    ].join('\u0001'),
+  );
 
   static String _sportName(String sport) => switch (sport) {
     'running' || 'trail_running' || 'treadmill_running' => 'running',
@@ -96,7 +107,11 @@ class GarminWorkoutProvider extends WorkoutProvider {
     TrainingSession s,
     Future<PreparedWorkout> Function() prepare,
   ) async {
-    final fingerprint = await _fingerprint(s);
+    if (s.stepsJson == null && !isStrengthSport(s.sport)) {
+      throw StateError('No workout structure is available to push.');
+    }
+    final prepared = await prepare();
+    final fingerprint = await _fingerprint(s, prepared);
     final record = await _ledger.get(s.id);
     // Without a record the content is taken as unchanged: it went up before
     // records were kept.
@@ -140,9 +155,6 @@ class GarminWorkoutProvider extends WorkoutProvider {
       await _ledger.put(s.id, fingerprint: fingerprint, name: s.title);
       return;
     }
-    if (s.stepsJson == null && !isStrengthSport(s.sport)) {
-      throw StateError('No workout structure is available to push.');
-    }
     // A calendar entry of an earlier definition (the session changed since)
     // comes down before the new one goes up, and so does the old definition.
     if (s.garminAlternativeId != null) {
@@ -164,7 +176,6 @@ class GarminWorkoutProvider extends WorkoutProvider {
         const TrainingSessionsCompanion(garminWorkoutId: Value(null)),
       );
     }
-    final prepared = await prepare();
     String workoutId;
     try {
       workoutId = await _client.createWorkout(
@@ -298,7 +309,10 @@ class GarminWorkoutProvider extends WorkoutProvider {
   }
 
   @override
-  Future<Set<String>> adoptExisting(List<TrainingSession> sessions) async {
+  Future<Set<String>> adoptExisting(
+    List<TrainingSession> sessions, {
+    Future<PreparedWorkout> Function(TrainingSession s)? prepare,
+  }) async {
     if (sessions.isEmpty) return const {};
     List<GarminCalendarWorkout> calendar;
     try {
@@ -328,9 +342,16 @@ class GarminWorkoutProvider extends WorkoutProvider {
           garminAlternativeId: Value(entry.scheduleId),
         ),
       );
+      // Recorded as if sent now, so only a later change sends it again.
+      PreparedWorkout? prepared;
+      try {
+        prepared = await prepare?.call(s);
+      } catch (e) {
+        log('[Garmin] adopted "${s.title}" without its targets: $e');
+      }
       await _ledger.put(
         s.id,
-        fingerprint: await _fingerprint(s),
+        fingerprint: await _fingerprint(s, prepared),
         name: s.title,
       );
       await _dropCopies(s, found, keep: {entry.scheduleId});

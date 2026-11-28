@@ -12,6 +12,7 @@ import '../../providers/readiness_provider.dart';
 import '../../services/daily_readiness_service.dart' show ReadinessLevel;
 import '../../services/morning_revision.dart';
 import 'package:fjelia_core/services/workout_semantics.dart';
+import 'package:fjelia_core/utils/days.dart';
 import '../../theme/fjelia_style.dart';
 import '../../widgets/app_widgets.dart';
 
@@ -68,7 +69,7 @@ class _CoachRevisionViewState extends ConsumerState<CoachRevisionView> {
           title: r.title,
           body: r.body,
           level: c.readinessLevel,
-          label: _sameDay(c.day, c.realToday)
+          label: isSameDay(c.day, c.realToday)
               ? null
               : '${l.coachRevisionLabel} · ${dayName(context, c.day, c.realToday)}',
         ),
@@ -81,7 +82,7 @@ class _CoachRevisionViewState extends ConsumerState<CoachRevisionView> {
             Padding(
               padding: const EdgeInsets.fromLTRB(4, 4, 4, 8),
               child: FigureLabel(
-                _sameDay(d, c.realToday)
+                isSameDay(d, c.realToday)
                     ? l.today
                     : dayName(context, d, c.realToday),
               ),
@@ -684,7 +685,7 @@ class _RulesProposalViewState extends ConsumerState<RulesProposalView> {
           title: text.title,
           body: red ? l.proposalRulesRecovery : l.proposalRulesEasier,
           level: p.readiness.level.name,
-          label: _sameDay(p.day, DateTime.now())
+          label: isSameDay(p.day, DateTime.now())
               ? l.proposalCardTitle
               : l.proposalForDay(dayName(context, p.day, DateTime.now())),
           icon: Icons.battery_charging_full_rounded,
@@ -774,15 +775,12 @@ class _MinutesCard extends StatelessWidget {
   }
 }
 
-bool _sameDay(DateTime a, DateTime b) =>
-    a.year == b.year && a.month == b.month && a.day == b.day;
-
 /// "tomorrow, Tue 10 Nov" or the weekday and date of a later day.
 String dayName(BuildContext context, DateTime day, DateTime today) {
   final l = context.l10n;
   final date = DateFormat('EEE d. MMM').format(day);
   final tomorrow = DateTime(today.year, today.month, today.day + 1);
-  return _sameDay(day, tomorrow) ? '${l.proposalDayTomorrow}, $date' : date;
+  return isSameDay(day, tomorrow) ? '${l.proposalDayTomorrow}, $date' : date;
 }
 
 /// The coach's reason under a card.

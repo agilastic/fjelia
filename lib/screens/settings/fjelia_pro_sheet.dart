@@ -39,8 +39,9 @@ class _FjeliaProSheetState extends ConsumerState<FjeliaProSheet> {
     ref.listen(fjeliaProProvider, (before, now) {
       final clock = ref.read(proClockProvider);
       if (before?.activeAt(clock()) != true && now.activeAt(clock())) {
-        ScaffoldMessenger.maybeOf(context)
-            ?.showSnackBar(SnackBar(content: Text(l.proWelcome)));
+        ScaffoldMessenger.maybeOf(
+          context,
+        )?.showSnackBar(SnackBar(content: Text(l.proWelcome)));
       }
     });
     return SheetPage(

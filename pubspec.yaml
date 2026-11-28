@@ -78,12 +78,27 @@ dependencies:
   fjelia_core:
     git:
       url: https://github.com/agilastic/fjelia-core.git
-      ref: 8c2393f4edd9489cf8c0d7655a852b3c963531e5 # v0.2.0
+      ref: 3895e179e5996cd0690f4c50cc318d1d2a9424df # v0.16.0
       path: packages/fjelia_core
+  fjelia_data:
+    git:
+      url: https://github.com/agilastic/fjelia-core.git
+      ref: 3895e179e5996cd0690f4c50cc318d1d2a9424df # v0.16.0
+      path: packages/fjelia_data
+  fjelia_sync:
+    git:
+      url: https://github.com/agilastic/fjelia-core.git
+      ref: 3895e179e5996cd0690f4c50cc318d1d2a9424df # v0.16.0
+      path: packages/fjelia_sync
+  fjelia_views:
+    git:
+      url: https://github.com/agilastic/fjelia-core.git
+      ref: 3895e179e5996cd0690f4c50cc318d1d2a9424df # v0.16.0
+      path: packages/fjelia_views
   fjelia_service_api:
     git:
       url: https://github.com/agilastic/fjelia-core.git
-      ref: 8c2393f4edd9489cf8c0d7655a852b3c963531e5 # v0.2.0
+      ref: 3895e179e5996cd0690f4c50cc318d1d2a9424df # v0.16.0
       path: packages/fjelia_service_api
   # Stub without Aktiia / Hilo. Private builds override this with the real
   # package, see pubspec_overrides.yaml (git-ignored) and the README.
@@ -92,11 +107,13 @@ dependencies:
   flutter_local_notifications: ^22.3.3
   timezone: ^0.11.0
   fit_sdk: ^0.3.0
-  xml: ^6.5.0
+  xml: ^7.0.1
   video_player: ^2.8.0
   in_app_purchase: ^3.3.1
   in_app_purchase_storekit: ^0.4.17
   flutter_onnxruntime: ^1.9.0
+  mobile_scanner: ^7.5.0
+  bonsoir: ^7.1.6
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -133,6 +150,7 @@ flutter:
     - assets/splash/
     - assets/licenses/
     - assets/branding/app-icon-original.png
+    - assets/branding/splash-lockup.png
     - assets/models/ecg_sleep_staging.onnx
 
   # To add assets to your application, add an assets section, like this:

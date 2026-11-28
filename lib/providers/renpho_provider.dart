@@ -1,1 +1,2 @@
-export 'body_measurements_provider.dart' show bodyMeasurementsProvider, latestBodyMeasurementProvider;
+export 'body_measurements_provider.dart'
+    show bodyMeasurementsProvider, latestBodyMeasurementProvider;

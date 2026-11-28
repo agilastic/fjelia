@@ -4,6 +4,7 @@
 "NSHealthUpdateUsageDescription" = "Fjelia zapisuje zsynchronizowane dane o HRV, tętnie, śnie, krokach i treningach w Apple Zdrowie, aby nie przepadły przy zmianie aplikacji.";
 "NSLocationAlwaysAndWhenInUseUsageDescription" = "Gdy włączysz GPS, Fjelia nagrywa trasę treningu także po przełączeniu aplikacji i przy zablokowanym ekranie. Wstrzymanie lub zatrzymanie kończy rejestrowanie lokalizacji.";
 "NSLocationWhenInUseUsageDescription" = "Fjelia używa Twojej lokalizacji do tras treningowych przy włączonym GPS i do oceny ryzyka upału w zaplanowanych treningach.";
-"NSPhotoLibraryUsageDescription" = "Fjelia pozwala dodawać zdjęcia i filmy z biblioteki do treningów, celów startowych i zaplanowanych sesji.";
-"NSCameraUsageDescription" = "Fjelia używa aparatu, gdy robisz zdjęcie lub nagrywasz film do treningu, celu startowego lub zaplanowanej sesji.";
+"NSPhotoLibraryUsageDescription" = "Fjelia pozwala dodawać zdjęcia i filmy z biblioteki do treningów, celów startowych, zaplanowanych sesji i zdjęcia, które widzą twój trener i twoi sportowcy.";
+"NSCameraUsageDescription" = "Fjelia używa aparatu, gdy robisz zdjęcie lub nagrywasz film do treningu, celu startowego lub zaplanowanej sesji oraz do zeskanowania kodu parowania z komputerem.";
+"NSLocalNetworkUsageDescription" = "Fjelia wysyła Twoje aktywności, plany i dane zdrowotne do sparowanego komputera przez sieć lokalną.";
 "NSMicrophoneUsageDescription" = "Fjelia używa mikrofonu do dźwięku w filmach nagrywanych podczas treningu.";

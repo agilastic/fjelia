@@ -1,6 +1,7 @@
 import '../theme/fjelia_style.dart';
 import '../l10n/l10n_ext.dart';
 
+import 'package:fjelia_core/config/map_tiles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -93,8 +94,8 @@ class _RouteMapState extends State<ActivityRouteMap> {
         ),
         children: [
           TileLayer(
-            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-            userAgentPackageName: 'de.ebeling-hoppe.fjelia',
+            urlTemplate: mapTileUrl,
+            userAgentPackageName: mapUserAgentPackage,
             tileProvider: widget.tileProvider,
           ),
           PolylineLayer(

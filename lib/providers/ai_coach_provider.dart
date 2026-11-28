@@ -97,9 +97,9 @@ final aiCoachSettingsProvider =
 /// the year's progression.
 final activityCoachContextProvider = FutureProvider.autoDispose
     .family<String, ActivityRecord>(
-      (ref, activity) =>
-          ActivityCoachContextBuilder(ref.read(databaseProvider))
-              .build(activity),
+      (ref, activity) => ActivityCoachContextBuilder(
+        ref.read(databaseProvider),
+      ).build(activity),
     );
 
 /// A request to open the coach tab about one session: the draft question,
@@ -289,8 +289,9 @@ class AiBriefingNotifier extends StateNotifier<AsyncValue<String?>> {
       final now = DateTime.now();
       final m = await _ref
           .read(
-            trainingMonitorProvider(DateTime(now.year, now.month, now.day))
-                .future,
+            trainingMonitorProvider(
+              DateTime(now.year, now.month, now.day),
+            ).future,
           )
           .timeout(const Duration(seconds: 5));
       return AiContextTrainingMonitor(
@@ -508,8 +509,9 @@ class ToonCacheNotifier extends StateNotifier<_ToonCache?> {
   }) async {
     final cached = state;
     // Goals can change between two chat messages, without a device sync.
-    final goals = await RaceGoalService(_ref.read(databaseProvider))
-        .resolveGoalSet();
+    final goals = await RaceGoalService(
+      _ref.read(databaseProvider),
+    ).resolveGoalSet();
     if (cached != null &&
         !cached.isStale &&
         cached.goalRevision == goals.revision &&

@@ -5,12 +5,7 @@ import 'package:fjelia_core/services/bio_age_activity.dart';
 import 'database_provider.dart';
 import 'day_data_provider.dart';
 import 'user_profile_provider.dart';
-
-double? _median(List<double> values) {
-  if (values.isEmpty) return null;
-  values.sort();
-  return values[values.length ~/ 2];
-}
+import 'package:fjelia_core/utils/stats.dart';
 
 /// Biological age from the latest wearable, scale, BP and lab data.
 final bioAgeProvider = FutureProvider<BioAgeResult?>((ref) async {
@@ -20,17 +15,16 @@ final bioAgeProvider = FutureProvider<BioAgeResult?>((ref) async {
   final age = profile?.age;
   if (profile == null || age == null) return null;
 
-  final rhr = _median(
+  final rhr = median(
     (await db.getHrvRange(7))
         .where((h) => h.restingHeartRate != null)
         .map((h) => h.restingHeartRate!.toDouble())
         .toList(),
   );
-  final systolic = _median(
-    (await db.getRecentBp(14))
-        .where((b) => b.systolic > 0)
-        .map((b) => b.systolic.toDouble())
-        .toList(),
+  final systolic = median(
+    (await db.getRecentBp(
+      14,
+    )).where((b) => b.systolic > 0).map((b) => b.systolic.toDouble()).toList(),
   );
 
   final scale = await db.getRenphoRange(90);

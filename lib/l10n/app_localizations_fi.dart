@@ -9932,4 +9932,777 @@ class AppLocalizationsFi extends AppLocalizations {
   @override
   String get homeSkyHint =>
       'Pehmeä taivas Kotinäkymän yläosassa, joka seuraa päivän säätä ja vuorokaudenaikaa.';
+
+  @override
+  String get syncComputers => 'Tietokoneet';
+
+  @override
+  String get syncComputersSubtitle => 'Synkronoi Macin tai PC:n Fjelian kanssa';
+
+  @override
+  String get syncComputersFooter =>
+      'Tietokoneesi saa kopion suorituksistasi, suunnitelmistasi ja terveystiedoistasi lähiverkon kautta. Mitään ei kulje internetin kautta.';
+
+  @override
+  String get syncPairComputer => 'Muodosta pari tietokoneen kanssa';
+
+  @override
+  String get syncScanHint =>
+      'Avaa Fjelia tietokoneella ja valitse Muodosta pari puhelimen kanssa. Skannaa sitten näkyvä koodi.';
+
+  @override
+  String get syncNotAPairingCode => 'Tämä ei ole Fjelian parikoodi.';
+
+  @override
+  String get syncNow => 'Synkronoi nyt';
+
+  @override
+  String get syncUnpair => 'Pura pari';
+
+  @override
+  String syncUnpairTitle(String name) {
+    return 'Puretaanko pari laitteen $name kanssa?';
+  }
+
+  @override
+  String syncUnpairMessage(String name) {
+    return '$name säilyttää jo saamansa tiedot, mutta ei saa enää muutoksia tästä puhelimesta.';
+  }
+
+  @override
+  String syncInProgress(int count) {
+    return 'Synkronoidaan… $count muutosta lähetetty';
+  }
+
+  @override
+  String syncDone(int count) {
+    return 'Ajan tasalla · $count muutosta lähetetty';
+  }
+
+  @override
+  String get syncUnreachable =>
+      'Tietokonetta ei tavoiteta. Varmista, että Fjelia on auki ja molemmat laitteet ovat samassa verkossa.';
+
+  @override
+  String get syncCodeExpired =>
+      'Koodi ei ole enää voimassa. Näytä uusi koodi tietokoneella.';
+
+  @override
+  String get syncUpdateBoth =>
+      'Päivitä Fjelia molempiin laitteisiin ja synkronoi uudelleen.';
+
+  @override
+  String get syncPairAgain =>
+      'Tietokone ei enää tunnista tätä puhelinta. Muodosta pari uudelleen.';
+
+  @override
+  String get syncNoComputers => 'Ei vielä paritettua tietokonetta.';
+
+  @override
+  String syncDoneBoth(int sent, int received) {
+    return 'Ajan tasalla · $sent lähetetty, $received vastaanotettu';
+  }
+
+  @override
+  String get thresholdSourceLab => 'Laboratoriotesti';
+
+  @override
+  String get gearTitle => 'Varusteet';
+
+  @override
+  String get gearEmpty =>
+      'Lisää kengät ja pyörät nähdäksesi, paljonko niillä on ajettu ja milloin ne kannattaa vaihtaa.';
+
+  @override
+  String get gearAdd => 'Lisää varuste';
+
+  @override
+  String get gearEdit => 'Muokkaa varustetta';
+
+  @override
+  String get gearKindShoes => 'Kengät';
+
+  @override
+  String get gearKindBike => 'Pyörä';
+
+  @override
+  String get gearKindOther => 'Muu';
+
+  @override
+  String get gearName => 'Nimi';
+
+  @override
+  String get gearBrand => 'Merkki';
+
+  @override
+  String get gearStartKm => 'Matka ennen Fjeliaa (km)';
+
+  @override
+  String get gearRetireAt => 'Vaihda kohdassa (km)';
+
+  @override
+  String get gearDefault =>
+      'Laske jokainen lenkki tai ajo tälle, ellei toista valita';
+
+  @override
+  String get gearRetire => 'Poista käytöstä';
+
+  @override
+  String get gearUseAgain => 'Ota taas käyttöön';
+
+  @override
+  String get gearRetired => 'Poistettu käytöstä';
+
+  @override
+  String gearLeft(int km, int limit) {
+    return '$km km jäljellä / $limit';
+  }
+
+  @override
+  String gearDue(int limit) {
+    return 'Vaihdon aika: yli $limit km';
+  }
+
+  @override
+  String gearActivities(int count) {
+    return '$count suoritusta';
+  }
+
+  @override
+  String get gearNone => 'Ei mitään';
+
+  @override
+  String get diaryTitle => 'Päiväkirja';
+
+  @override
+  String get diaryEmpty =>
+      'Merkinnät suorituksista, harjoituksista ja tuntemuksista näkyvät täällä yhdessä paikassa.';
+
+  @override
+  String get diarySearch => 'Hae merkinnöistä';
+
+  @override
+  String get diaryKindActivity => 'Suoritusmerkintä';
+
+  @override
+  String get diaryKindSession => 'Harjoitusmerkintä';
+
+  @override
+  String get diaryKindFeeling => 'Tuntemus';
+
+  @override
+  String get diaryKindCoach => 'Merkintä valmentajalle';
+
+  @override
+  String get diaryKindAbsence => 'Poissaolo';
+
+  @override
+  String get diaryKindEcg => 'EKG-merkintä';
+
+  @override
+  String diaryEffort(int n) {
+    return 'Rasitus $n/10';
+  }
+
+  @override
+  String get diaryNoResults => 'Mikään merkintä ei sisällä sitä.';
+
+  @override
+  String get labTitle => 'Laboratoriotestit';
+
+  @override
+  String get labEmpty =>
+      'Syötä laktaattiportastesti löytääksesi aerobisen ja anaerobisen kynnyksesi.';
+
+  @override
+  String get labEnter => 'Syötä testi';
+
+  @override
+  String get labBike => 'Pyörä';
+
+  @override
+  String get labRun => 'Juoksu';
+
+  @override
+  String get labPower => 'Teho (W)';
+
+  @override
+  String get labPace => 'Vauhti (min:s/km)';
+
+  @override
+  String get labHr => 'Syke';
+
+  @override
+  String get labLactate => 'Laktaatti (mmol/l)';
+
+  @override
+  String get labAddStep => 'Lisää porras';
+
+  @override
+  String get labSave => 'Tallenna testi';
+
+  @override
+  String get labLt1 => 'Aerobinen kynnys (LT1)';
+
+  @override
+  String get labLt2 => 'Anaerobinen kynnys (LT2)';
+
+  @override
+  String get labUse => 'Käytä kynnyksinä';
+
+  @override
+  String get labUsed => 'Tallennettu kynnyksiisi.';
+
+  @override
+  String get labDelete => 'Poista testi';
+
+  @override
+  String get labTooFew => 'Vähintään kolme porrasta tarvitaan.';
+
+  @override
+  String get labExplain =>
+      'LT1 on kohta, jossa laktaatti nousee ensin 0,5 mmol/l lepotason yli; LT2, jossa se alkaa nousta jyrkästi. Kevyt harjoittelu pysyy LT1:n alla.';
+
+  @override
+  String syncProgress(int sent, int total) {
+    return 'Synkronoidaan… $sent/$total';
+  }
+
+  @override
+  String syncLastAt(String when) {
+    return 'Viimeksi synkronoitu $when';
+  }
+
+  @override
+  String get courseTitle => 'Reitti';
+
+  @override
+  String get courseAdd => 'Lisää reitti';
+
+  @override
+  String get courseAddHint =>
+      'Monen kisan reitti löytyy kisakirjastosta huoltopisteineen ja aikarajoineen. Muuten lisää järjestäjän GPX-tiedosto.';
+
+  @override
+  String get courseFromLibrary => 'Etsi kisakirjastosta';
+
+  @override
+  String get courseFromFile => 'Avaa GPX-tiedosto';
+
+  @override
+  String get courseNoLibraryCourse => 'Kirjastossa ei ole reittiä';
+
+  @override
+  String get courseNotFetched =>
+      'Järjestäjän reittiä ei saatu haettua. Yritä uudelleen tai lisää GPX-tiedosto itse.';
+
+  @override
+  String get courseUnreadable => 'Tiedostossa ei ole reittiä.';
+
+  @override
+  String get courseNoElevation =>
+      'Reitillä ei ole korkeustietoja, joten nousuja ei voi näyttää. Kokeile järjestäjän tiedostoa.';
+
+  @override
+  String get courseDistance => 'Matka';
+
+  @override
+  String get courseClimb => 'Nousu';
+
+  @override
+  String get courseDescent => 'Lasku';
+
+  @override
+  String get courseEffort => 'Kuormitus';
+
+  @override
+  String get courseEffortNote => 'km + nousu / 100 (ITRA)';
+
+  @override
+  String get courseSteep => 'Jyrkät kohdat';
+
+  @override
+  String get courseSteepNote => 'jyrkimmät 5 % 100 metrin pätkistä';
+
+  @override
+  String get courseHighest => 'Korkein kohta';
+
+  @override
+  String get courseClimbs => 'Nousut';
+
+  @override
+  String courseClimbsCount(int count) {
+    return '$count vähintään 50 m';
+  }
+
+  @override
+  String get courseNoClimbs => 'Ei yhtään vähintään 50 m nousua';
+
+  @override
+  String get courseGradients => 'Kaltevuudet';
+
+  @override
+  String get courseBandSteepDown => 'Jyrkkää alamäkeä';
+
+  @override
+  String get courseBandDown => 'Alamäkeä';
+
+  @override
+  String get courseBandGentlyDown => 'Loivaa alamäkeä';
+
+  @override
+  String get courseBandFlat => 'Tasaista';
+
+  @override
+  String get courseBandGentlyUp => 'Loivaa ylämäkeä';
+
+  @override
+  String get courseBandUp => 'Ylämäkeä';
+
+  @override
+  String get courseBandSteepUp => 'Jyrkkää ylämäkeä';
+
+  @override
+  String get coursePlan => 'Sinun kisasi';
+
+  @override
+  String get coursePlanFrom =>
+      'Mäkijuoksuistasi viimeisen kuuden kuukauden ajalta';
+
+  @override
+  String get coursePlanNeedsRuns =>
+      'Tallenna muutama juoksu korkeustiedoin mäissä: aikasi tällä reitillä lasketaan niistä.';
+
+  @override
+  String get courseFinish => 'Maali';
+
+  @override
+  String get courseArrival => 'Saapuminen';
+
+  @override
+  String get courseSetStart => 'Aseta lähtö';
+
+  @override
+  String courseStartAt(String time) {
+    return 'Lähtö $time';
+  }
+
+  @override
+  String get courseLegTo => 'Kohde';
+
+  @override
+  String get courseLeg => 'Osuus';
+
+  @override
+  String get courseTotal => 'Yhteensä';
+
+  @override
+  String get courseCutoff => 'Aikaraja';
+
+  @override
+  String courseAhead(String time) {
+    return '$time etua';
+  }
+
+  @override
+  String courseLate(String time) {
+    return '$time myöhässä';
+  }
+
+  @override
+  String get coursePlanNote =>
+      'Liikkumisaika vauhdillasi kullakin kaltevuudella, hidastettuna kisan pituuden, pimeyden ja antamasi helteen mukaan, huoltopistetaukoinesi.';
+
+  @override
+  String get coursePace => 'Vauhtisi mäissä';
+
+  @override
+  String coursePaceNote(String pace) {
+    return 'Kaltevuuskorjattu vauhti $pace · alle 2 km juostuilla kaltevuuksilla käytetään Minettin kaavaa';
+  }
+
+  @override
+  String get courseProTeaser =>
+      'Loppuaikasi, aika kullakin tarkastuspisteellä ja marginaali kuhunkin aikarajaan omista mäkijuoksuistasi laskettuna.';
+
+  @override
+  String get courseCheckpoints => 'Tarkastuspisteet';
+
+  @override
+  String get courseCheckpointAdd => 'Lisää tarkastuspiste';
+
+  @override
+  String get courseCheckpointName => 'Nimi';
+
+  @override
+  String get courseCutoffAfterStart => 'Aikaraja (t:mm lähdöstä)';
+
+  @override
+  String get courseSetStartFirst => 'Aseta lähtöaika syöttääksesi aikarajat.';
+
+  @override
+  String get courseReplace => 'Vaihda reitti';
+
+  @override
+  String get courseRemove => 'Poista reitti';
+
+  @override
+  String get courseSearchLibrary => 'Kisan nimi tai paikkakunta';
+
+  @override
+  String get courseNoRaceFound =>
+      'Kisaa ei löytynyt. Kokeile paikkakuntaa tai lisää GPX-tiedosto itse.';
+
+  @override
+  String courseAidStations(int count) {
+    return '$count huoltopistettä';
+  }
+
+  @override
+  String courseRun(String km) {
+    return '$km km juostu';
+  }
+
+  @override
+  String get courseRaceDay => 'Kisapäivä';
+
+  @override
+  String get courseHigh => 'Odotettu ylin lämpötila (°C)';
+
+  @override
+  String get courseHighNote =>
+      'Yli 15 °C:ssa jokainen aste hidastaa valoisaa aikaa noin 0,55 % (0,34–0,77 %, Wegelin & Hoffman 2011).';
+
+  @override
+  String get courseNight => 'Hitaampi pimeässä';
+
+  @override
+  String get courseNightNote =>
+      'Oma arviosi: kuinka paljon hitaammin juokset otsalampun kanssa.';
+
+  @override
+  String get courseStop => 'Minuuttia kullakin huoltopisteellä';
+
+  @override
+  String courseInDark(String time) {
+    return '$time pimeässä';
+  }
+
+  @override
+  String courseFuelPerHour(int carbs, int fluid, int sodium) {
+    return '$carbs g hiilihydraattia, $fluid ml, $sodium mg natriumia tunnissa';
+  }
+
+  @override
+  String courseLegFuel(int carbs, String litres) {
+    return '$carbs g · $litres l';
+  }
+
+  @override
+  String get courseReadiness => 'Valmis tälle reitille?';
+
+  @override
+  String get courseReadinessNote =>
+      'Viimeisen kahdeksan viikon juoksusi sen rinnalla, mitä reitti vaatii.';
+
+  @override
+  String get courseLongestRun => 'Pisin juoksu';
+
+  @override
+  String get courseWeekClimb => 'Eniten nousua viikossa';
+
+  @override
+  String get courseBiggestClimb => 'Suurin yhtäjaksoinen nousu';
+
+  @override
+  String get courseBiggestDescent => 'Suurin yhtäjaksoinen lasku';
+
+  @override
+  String courseVersus(String you, String course) {
+    return '$you · reitti $course';
+  }
+
+  @override
+  String get courseResult => 'Suunniteltu ja juostu';
+
+  @override
+  String get courseResultNote =>
+      'Jokainen tarkastuspiste samalla osuudella kellon matkasta kuin reitin.';
+
+  @override
+  String courseFaster(String time) {
+    return '$time nopeammin';
+  }
+
+  @override
+  String courseSlower(String time) {
+    return '$time hitaammin';
+  }
+
+  @override
+  String get crewCard => 'Huoltokortti';
+
+  @override
+  String get crewCheckpoint => 'Tarkastuspiste';
+
+  @override
+  String get crewUpDown => 'Nousu / lasku';
+
+  @override
+  String get crewDue => 'Odotettu';
+
+  @override
+  String get crewHandOver => 'Ojenna seuraavaa osuutta varten';
+
+  @override
+  String crewStart(String time) {
+    return 'Lähtö $time';
+  }
+
+  @override
+  String crewFinishRange(String time, String from, String to) {
+    return 'Maali $time ($from–$to)';
+  }
+
+  @override
+  String crewFuel(int carbs, String litres, int sodium) {
+    return '$carbs g hiilihydraattia · $litres l · $sodium mg natriumia';
+  }
+
+  @override
+  String get crewFooter => 'Suunniteltu Fjelialla omista mäkijuoksuistani.';
+
+  @override
+  String get messagesTitle => 'Viestit';
+
+  @override
+  String get messagesEmpty =>
+      'Sinä ja valmentajasi tutustutte, kun tämä puhelin synkronoi valmentajan tietokoneen lähellä. Sen jälkeen voitte kirjoittaa toisillenne mistä tahansa.';
+
+  @override
+  String get messagesNoThreads => 'Ei vielä viestejä.';
+
+  @override
+  String messagesWriteTo(String name) {
+    return 'Kirjoita: $name';
+  }
+
+  @override
+  String get messagesYourName => 'Nimesi';
+
+  @override
+  String get messagesYourNameHelp =>
+      'Nimi, jonka valmentajasi ja ryhmäsi näkevät.';
+
+  @override
+  String get messagesHint => 'Viesti';
+
+  @override
+  String get messagesSend => 'Lähetä';
+
+  @override
+  String get messagesWaiting => 'odottaa lähetystä';
+
+  @override
+  String get messagesLeaveGroup => 'Poistu ryhmästä';
+
+  @override
+  String get messagesGone => 'Et ole enää tässä ryhmässä.';
+
+  @override
+  String get messagesYou => 'Sinä';
+
+  @override
+  String messagesStarted(String who, String title) {
+    return '$who aloitti ryhmän ”$title”';
+  }
+
+  @override
+  String messagesAdded(String who, String names) {
+    return '$who lisäsi: $names';
+  }
+
+  @override
+  String messagesRemoved(String who, String names) {
+    return '$who poisti: $names';
+  }
+
+  @override
+  String messagesLeft(String who) {
+    return '$who poistui ryhmästä';
+  }
+
+  @override
+  String messagesRenamed(String who, String title) {
+    return '$who nimesi ryhmän uudelleen: ”$title”';
+  }
+
+  @override
+  String get messagesPrivacy =>
+      'Salattu tällä puhelimella jokaiselle keskustelun laitteelle. Fjelian palvelin vain välittää viestit eikä voi lukea niitä.';
+
+  @override
+  String get messagesRecovery => 'Palautuskoodi';
+
+  @override
+  String get messagesRecoveryMake => 'Luo uusi palautuskoodi';
+
+  @override
+  String get messagesRecoveryHelp =>
+      'Jos tämä puhelin katoaa, uusi jatkaa tällä koodilla sinuna: valmentajasi, ryhmäsi, tulevat viestisi. Uusi koodi mitätöi vanhan.';
+
+  @override
+  String get messagesRecoveryShown =>
+      'Kirjoita koodi muistiin tai tallenna se salasanojen hallintaan. Se näytetään vain nyt.';
+
+  @override
+  String get messagesRecoveryUnreachable =>
+      'Ei yhteyttä Fjelian palvelimeen. Yritä myöhemmin uudelleen.';
+
+  @override
+  String get messagesRestore => 'Minulla on palautuskoodi';
+
+  @override
+  String get messagesRestoreHint => 'Palautuskoodi';
+
+  @override
+  String get messagesRestoreWrong => 'Koodia ei löytynyt tai se ei täsmää.';
+
+  @override
+  String get messagesCopy => 'Kopioi';
+
+  @override
+  String get messagesDone => 'Valmis';
+
+  @override
+  String get coachingTitle => 'Valmennus';
+
+  @override
+  String get coachingSubtitle => 'Valmentajasi ja mitä hän näkee';
+
+  @override
+  String get coachingNone =>
+      'Ei vielä valmentajaa. Kun valmentaja kutsuu sinut, avaa hänen linkkinsä täällä.';
+
+  @override
+  String get coachingJoin => 'Liity valmentajalle';
+
+  @override
+  String get coachingJoinHelp => 'Liitä valmentajasi lähettämä kutsulinkki.';
+
+  @override
+  String get coachingNotInvite => 'Tämä ei ole Fjelian valmennuskutsu.';
+
+  @override
+  String get coachingOwnInvite => 'Tämä kutsu on omasi.';
+
+  @override
+  String get coachingCoachUnknown =>
+      'Valmentajan laitteita ei vielä tunneta. Pyydä häntä avaamaan Fjelia ja yritä uudelleen.';
+
+  @override
+  String get coachingUnreachable =>
+      'Fjelian palvelimeen ei saada yhteyttä. Yritä uudelleen, kun olet verkossa.';
+
+  @override
+  String coachingConsentTitle(String name) {
+    return 'Valmentaako $name sinua?';
+  }
+
+  @override
+  String coachingConsentIntro(String name) {
+    return '$name kutsui sinut. Valitse, mitä $name saa nähdä. Voit muuttaa sitä tai lopettaa valmennuksen milloin tahansa.';
+  }
+
+  @override
+  String coachingConsentHealth(String name) {
+    return 'Terveys, EKG ja ravinto ovat terveystietoja: ne näkyvät käyttäjälle $name vain, jos laitat ne päälle.';
+  }
+
+  @override
+  String coachingConsentPrivacy(String name) {
+    return 'Salattu tässä puhelimessa käyttäjän $name laitteille. Fjelian palvelin vain välittää sen eikä voi lukea sitä.';
+  }
+
+  @override
+  String coachingConsentCode(String name) {
+    return 'Käyttäjän $name näytöllä on tämä koodi. Lue se hänelle, kasvokkain tai puhelimessa:';
+  }
+
+  @override
+  String get coachingConsentShare => 'Jaa ja lähetä';
+
+  @override
+  String get coachingCancel => 'Peruuta';
+
+  @override
+  String get coachingContinue => 'Jatka';
+
+  @override
+  String coachingReadCode(String name, String code) {
+    return 'Lue tämä koodi käyttäjälle $name: $code. Kun $name hyväksyy, hän näkee valitsemasi.';
+  }
+
+  @override
+  String coachingWaiting(String name) {
+    return 'Odotetaan, että $name hyväksyy';
+  }
+
+  @override
+  String coachingSince(String date) {
+    return 'Valmennettu $date alkaen';
+  }
+
+  @override
+  String coachingEnded(String date) {
+    return 'Päättyi $date';
+  }
+
+  @override
+  String coachingShares(String name) {
+    return 'Mitä $name näkee';
+  }
+
+  @override
+  String get coachingEnd => 'Lopeta valmennus';
+
+  @override
+  String coachingEndConfirm(String name) {
+    return 'Lopetetaanko valmennus käyttäjän $name kanssa?';
+  }
+
+  @override
+  String coachingEndBody(String name) {
+    return 'Mitään uutta ei enää välity käyttäjälle $name. Jo saatu jää hänelle.';
+  }
+
+  @override
+  String get coachingEndAction => 'Lopeta';
+
+  @override
+  String get coachingScopePlan => 'Suunnitelma';
+
+  @override
+  String get coachingScopeActivities => 'Harjoitukset';
+
+  @override
+  String get coachingScopeHealth => 'Terveys';
+
+  @override
+  String get coachingScopeEcg => 'EKG';
+
+  @override
+  String get coachingScopeNutrition => 'Ravinto';
+
+  @override
+  String get coachingScopeAiCoach => 'AI-valmentajan muistiinpanot';
+
+  @override
+  String get coachingScopeMedia => 'Kuvat ja tiedostot';
+
+  @override
+  String get messagesChoosePhoto => 'Valitse kuva';
+
+  @override
+  String get messagesRemovePhoto => 'Poista kuva';
 }

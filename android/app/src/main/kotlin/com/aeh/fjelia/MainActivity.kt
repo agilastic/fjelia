@@ -8,14 +8,49 @@ import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import android.net.Uri
 import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import java.io.File
 
 class MainActivity : FlutterActivity() {
     override fun provideFlutterEngine(context: Context): FlutterEngine? = ActivityRecordingService.engine
     // The service retains the same isolate if Android destroys just the UI.
     override fun shouldDestroyEngineWithHost(): Boolean = false
+
+    // Coaching invitations (fjelia://link?…) until Dart takes them
+    // (CoachLinkInbox in coach_link_inbox.dart).
+    private val links = mutableListOf<String>()
+    private var linkChannel: MethodChannel? = null
+
+    private fun receiveLink(intent: Intent?) {
+        val uri = intent?.data ?: return
+        if (intent.action != Intent.ACTION_VIEW || uri.host != "link") return
+        links.add(uri.toString())
+        linkChannel?.invokeMethod("opened", null)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        receiveLink(intent)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        receiveLink(intent)
+    }
+
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
+        linkChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "fjelia/links").also {
+            it.setMethodCallHandler { call, result ->
+                if (call.method == "takePending") {
+                    result.success(ArrayList(links))
+                    links.clear()
+                } else {
+                    result.notImplemented()
+                }
+            }
+        }
         ActivityRecordingService.engine = flutterEngine
         val recordingChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "fjelia/activity_recording")
         ActivityRecordingService.channel = recordingChannel

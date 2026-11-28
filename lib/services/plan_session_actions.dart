@@ -4,103 +4,49 @@ import 'package:uuid/uuid.dart';
 import '../db/database.dart';
 import '../l10n/l10n_ext.dart';
 import '../l10n/plan_text.dart' show absenceKindLabel;
-import 'package:fjelia_core/utils/week.dart';
+import 'package:fjelia_views/fjelia_views.dart'
+    show
+        AbsenceRefused,
+        DoneRefused,
+        EventDayRefused,
+        PlanEdits,
+        PlanEditRefused,
+        PlanShiftRefused;
 import 'workout_providers/workout_providers.dart';
-import 'race_goal_service.dart';
 import 'workout_replacement_service.dart';
 
 class PlanSessionActions {
   PlanSessionActions(this.db, this.providers);
   final AppDatabase db;
   final WorkoutProviders providers;
+
+  /// The database part of every edit, shared with the computer.
+  late final _edits = PlanEdits(db);
+
   Future<TrainingSession> moveDay(TrainingSession session, int days) {
     final d = session.sessionDate;
     return moveToDate(session, DateTime(d.year, d.month, d.day + days));
   }
 
   /// Moves a session to [day] (the date only; the steps stay as they are).
-  /// The first date it was planned for is kept, and the week number follows
-  /// the plan's calendar weeks.
+  /// The rules are fjelia_views' [PlanEdits.moveToDate]: never onto an event
+  /// day, the rest day before one, or a day away.
   Future<TrainingSession> moveToDate(
     TrainingSession session,
     DateTime day,
   ) async {
-    final d = session.sessionDate;
-    final target = DateTime(day.year, day.month, day.day);
-    // An event day, or the rest day before it, belongs to the event: no
-    // session is moved onto it, whichever goal the plan shows.
-    final event = (await RaceGoalService(
-      db,
-    ).resolveGoalSet()).eventBlocking(target);
-    if (event != null) {
-      throw StateError('That day belongs to ${event.name}. Pick another day.');
+    try {
+      return await _edits.moveToDate(session, day);
+    } on PlanEditRefused catch (e) {
+      throw StateError(refusalText(e));
     }
-    // Nor onto a day the athlete is ill, injured or away.
-    final away = await db.absencesBetween(target, target);
-    if (away.isNotEmpty) {
-      throw StateError(
-        tr.moveIntoAbsence(absenceKindLabel(tr, away.first.kind)),
-      );
-    }
-    final plan = await (db.select(
-      db.trainingPlans,
-    )..where((t) => t.id.equals(session.planId))).getSingleOrNull();
-    // Counted like the generator does: calendar weeks from the plan's anchor.
-    final week = plan == null
-        ? session.weekNumber
-        : (DateTime.utc(target.year, target.month, target.day)
-                          .difference(
-                            DateTime.utc(
-                              weekStartOf(plan.startDate).year,
-                              weekStartOf(plan.startDate).month,
-                              weekStartOf(plan.startDate).day,
-                            ),
-                          )
-                          .inDays ~/
-                      7 +
-                  1)
-              .clamp(1, 156);
-    await (db.update(
-      db.trainingSessions,
-    )..where((t) => t.id.equals(session.id))).write(
-      TrainingSessionsCompanion(
-        sessionDate: Value(target),
-        sessionDateOriginal: Value(
-          session.sessionDateOriginal ?? d.toIso8601String(),
-        ),
-        priorSessionDate: Value(d.toIso8601String()),
-        weekNumber: Value(week),
-        isMovedFromDifferentWeek: Value(week != session.weekNumber),
-        dateModified: Value(DateTime.now()),
-        modifiedBy: const Value('athlete'),
-      ),
-    );
-    return (db.select(
-      db.trainingSessions,
-    )..where((t) => t.id.equals(session.id))).getSingle();
   }
 
   /// Turns an outdoor session into its indoor form (treadmill, trainer) or
   /// back. The steps stay; the content changed, so a platform that has the
   /// session sends it again at the next push.
-  Future<TrainingSession> setIndoor(
-    TrainingSession session,
-    bool indoor,
-  ) async {
-    if (session.indoor == indoor) return session;
-    await (db.update(
-      db.trainingSessions,
-    )..where((t) => t.id.equals(session.id))).write(
-      TrainingSessionsCompanion(
-        indoor: Value(indoor),
-        dateModified: Value(DateTime.now()),
-        modifiedBy: const Value('athlete'),
-      ),
-    );
-    return (db.select(
-      db.trainingSessions,
-    )..where((t) => t.id.equals(session.id))).getSingle();
-  }
+  Future<TrainingSession> setIndoor(TrainingSession session, bool indoor) =>
+      _edits.setIndoor(session, indoor);
 
   /// Sets the main target of a ride, `hr` or `power`. The steps keep their
   /// zones and the other value stays in the step note, so the same session
@@ -109,21 +55,7 @@ class PlanSessionActions {
   Future<TrainingSession> setTargetMetric(
     TrainingSession session,
     String metric,
-  ) async {
-    if (session.targetMetric == metric) return session;
-    await (db.update(
-      db.trainingSessions,
-    )..where((t) => t.id.equals(session.id))).write(
-      TrainingSessionsCompanion(
-        targetMetric: Value(metric),
-        dateModified: Value(DateTime.now()),
-        modifiedBy: const Value('athlete'),
-      ),
-    );
-    return (db.select(
-      db.trainingSessions,
-    )..where((t) => t.id.equals(session.id))).getSingle();
-  }
+  ) => _edits.setTargetMetric(session, metric);
 
   /// Skips a session. The decision is stored first, so it works without a
   /// connection; the calendar entry is released afterwards, and if that fails
@@ -132,29 +64,10 @@ class PlanSessionActions {
     TrainingSession session, {
     String reason = 'Marked as rest',
   }) async {
-    await db.transaction(() async {
-      await (db.update(
-        db.trainingSessions,
-      )..where((t) => t.id.equals(session.id))).write(
-        TrainingSessionsCompanion(
-          status: const Value('skipped'),
-          dateModified: Value(DateTime.now()),
-          modifiedBy: const Value('athlete'),
-        ),
-      );
-      await db
-          .into(db.sessionActuals)
-          .insertOnConflictUpdate(
-            SessionActualsCompanion.insert(
-              sessionId: session.id,
-              skipReason: Value(reason),
-            ),
-          );
-    });
+    await _edits.markRest(session, reason: reason);
+    // Releasing it from the watch calendars changes the row again.
     await releaseDeliveries(session);
-    return (db.select(
-      db.trainingSessions,
-    )..where((t) => t.id.equals(session.id))).getSingle();
+    return _edits.session(session.id);
   }
 
   /// Skips the original session and creates a same-day replacement in another
@@ -341,3 +254,12 @@ const skipReasons = [
   'Conditions',
   'My choice',
 ];
+
+/// A refused plan edit in the app's words.
+String refusalText(PlanEditRefused e) => switch (e) {
+  EventDayRefused(:final event) =>
+    'That day belongs to $event. Pick another day.',
+  AbsenceRefused(:final kind) => tr.moveIntoAbsence(absenceKindLabel(tr, kind)),
+  DoneRefused() => 'That workout is already done.',
+  PlanShiftRefused(:final reason) => refusalText(reason),
+};

@@ -18,9 +18,14 @@ class ProAccess {
     required this.productId,
     required this.expiresAt,
     required this.checkedAt,
+    this.pass,
   });
 
   final String transactionId, key, productId;
+
+  /// The pass fjelia-service signed for the athlete's computers; handed to
+  /// them on each sync so they show the Pro features too.
+  final String? pass;
   final DateTime expiresAt, checkedAt;
 
   bool activeAt(DateTime now) => now.isBefore(expiresAt);
@@ -36,6 +41,7 @@ class ProAccess {
     'product_id': productId,
     'expires_at': expiresAt.millisecondsSinceEpoch ~/ 1000,
     'checked_at': checkedAt.millisecondsSinceEpoch ~/ 1000,
+    'pass': ?pass,
   };
 
   static ProAccess? fromJson(Map<String, dynamic> j) {
@@ -48,6 +54,7 @@ class ProAccess {
       productId: j['product_id'] as String? ?? '',
       expiresAt: at(expires),
       checkedAt: at(j['checked_at'] as int? ?? 0),
+      pass: j['pass'] as String?,
     );
   }
 }
@@ -119,6 +126,7 @@ class ProServer {
           (j['expires_at'] as int) * 1000,
         ),
         checkedAt: _clock(),
+        pass: j['pass'] as String?,
       ),
     );
   }

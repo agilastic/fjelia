@@ -187,6 +187,8 @@ String _visibilityLabel(BuildContext context, String key, String fallback) {
     'weekday_load' => l10n.weekdayComparison,
     'weekly_load' => l10n.weeklyTrainingLoad,
     'sport_stats' => l10n.statsTitle,
+    'gear' => l10n.gearTitle,
+    'diary' => l10n.diaryTitle,
     'zone_polarization' => l10n.zonePolarization,
     'elevation' => l10n.elevationOverview,
     'strain' => l10n.trainingMonitor,

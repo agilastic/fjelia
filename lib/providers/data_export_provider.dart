@@ -7,6 +7,7 @@ import '../services/backup_service.dart';
 import '../services/data_wipe_service.dart';
 import 'connection_actions_provider.dart';
 import 'database_provider.dart';
+import 'nearby_sync_provider.dart' show nearbySyncProvider;
 import 'hrv_reminder_provider.dart';
 import 'nutrition_provider.dart';
 import 'strength_provider.dart';
@@ -61,6 +62,7 @@ final dataWipeProvider = Provider<Future<void> Function()>(
         log('[Wipe] ${type.name} not signed out: $e');
       }
     }
+    await ref.read(nearbySyncProvider.notifier).unpairAll();
     await DataWipeService(ref.read(databaseProvider)).wipe();
   },
 );

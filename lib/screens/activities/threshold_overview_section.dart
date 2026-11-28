@@ -2,6 +2,7 @@ import '../../theme/fjelia_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart' show DateFormat;
+import '../body/lab_tests_sheet.dart';
 
 import '../../l10n/l10n_ext.dart';
 import '../../providers/threshold_overview_provider.dart';
@@ -36,6 +37,16 @@ class ThresholdOverviewSection extends ConsumerWidget {
                   locked: overview.coachLocked,
                   footer: footers[row.kind],
                 ),
+              // Measured thresholds: lactate tests, entered here or on the
+              // computer.
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton.icon(
+                  icon: const Icon(Icons.science_outlined, size: 18),
+                  label: Text(context.l10n.labTitle),
+                  onPressed: () => showAppSheet(context, const LabTestsSheet()),
+                ),
+              ),
             ],
           ),
         );
@@ -57,6 +68,7 @@ String thresholdSourceLabel(ThresholdCandidate c) => switch (c.source) {
   'dfa' => tr.thresholdSourceDfa(c.sessions ?? 0),
   'dfa_ramp' => tr.thresholdSourceDfaRamp,
   'eftp' => tr.thresholdSourceEftp,
+  'lab' => tr.thresholdSourceLab,
   'polar_profile' => tr.thresholdSourcePolarProfile,
   _ => c.note ?? c.source,
 };

@@ -9966,4 +9966,780 @@ class AppLocalizationsNl extends AppLocalizations {
   @override
   String get homeSkyHint =>
       'Een zachte hemel bovenaan Home die het weer van vandaag en het tijdstip volgt.';
+
+  @override
+  String get syncComputers => 'Computers';
+
+  @override
+  String get syncComputersSubtitle =>
+      'Synchroniseren met Fjelia op een Mac of pc';
+
+  @override
+  String get syncComputersFooter =>
+      'Je computer krijgt een kopie van je activiteiten, plannen en gezondheidsgegevens via het lokale netwerk. Niets gaat via internet.';
+
+  @override
+  String get syncPairComputer => 'Koppelen met een computer';
+
+  @override
+  String get syncScanHint =>
+      'Open Fjelia op je computer en kies Telefoon koppelen. Scan daarna de getoonde code.';
+
+  @override
+  String get syncNotAPairingCode => 'Dit is geen Fjelia-koppelcode.';
+
+  @override
+  String get syncNow => 'Nu synchroniseren';
+
+  @override
+  String get syncUnpair => 'Ontkoppelen';
+
+  @override
+  String syncUnpairTitle(String name) {
+    return '$name ontkoppelen?';
+  }
+
+  @override
+  String syncUnpairMessage(String name) {
+    return '$name houdt de gegevens die hij al heeft, maar krijgt geen wijzigingen meer van deze telefoon.';
+  }
+
+  @override
+  String syncInProgress(int count) {
+    return 'Synchroniseren… $count wijzigingen verstuurd';
+  }
+
+  @override
+  String syncDone(int count) {
+    return 'Bijgewerkt · $count wijzigingen verstuurd';
+  }
+
+  @override
+  String get syncUnreachable =>
+      'Computer niet bereikbaar. Controleer of Fjelia daar geopend is en beide apparaten op hetzelfde netwerk zitten.';
+
+  @override
+  String get syncCodeExpired =>
+      'Deze code is niet meer geldig. Toon een nieuwe code op de computer.';
+
+  @override
+  String get syncUpdateBoth =>
+      'Werk Fjelia op beide apparaten bij en synchroniseer opnieuw.';
+
+  @override
+  String get syncPairAgain =>
+      'De computer kent deze telefoon niet meer. Koppel hem opnieuw.';
+
+  @override
+  String get syncNoComputers => 'Nog geen computer gekoppeld.';
+
+  @override
+  String syncDoneBoth(int sent, int received) {
+    return 'Bijgewerkt · $sent verstuurd, $received ontvangen';
+  }
+
+  @override
+  String get thresholdSourceLab => 'Labtest';
+
+  @override
+  String get gearTitle => 'Uitrusting';
+
+  @override
+  String get gearEmpty =>
+      'Voeg je schoenen en fietsen toe om te zien hoe ver ze zijn gekomen en wanneer je ze vervangt.';
+
+  @override
+  String get gearAdd => 'Uitrusting toevoegen';
+
+  @override
+  String get gearEdit => 'Uitrusting bewerken';
+
+  @override
+  String get gearKindShoes => 'Schoenen';
+
+  @override
+  String get gearKindBike => 'Fiets';
+
+  @override
+  String get gearKindOther => 'Overig';
+
+  @override
+  String get gearName => 'Naam';
+
+  @override
+  String get gearBrand => 'Merk';
+
+  @override
+  String get gearStartKm => 'Afstand vóór Fjelia (km)';
+
+  @override
+  String get gearRetireAt => 'Vervangen bij (km)';
+
+  @override
+  String get gearDefault =>
+      'Elke loop of rit hiervoor tellen, tenzij iets anders is gekozen';
+
+  @override
+  String get gearRetire => 'Afdanken';
+
+  @override
+  String get gearUseAgain => 'Weer gebruiken';
+
+  @override
+  String get gearRetired => 'Afgedankt';
+
+  @override
+  String gearLeft(int km, int limit) {
+    return 'Nog $km km van $limit';
+  }
+
+  @override
+  String gearDue(int limit) {
+    return 'Tijd om te vervangen: meer dan $limit km';
+  }
+
+  @override
+  String gearActivities(int count) {
+    return '$count activiteiten';
+  }
+
+  @override
+  String get gearNone => 'Geen';
+
+  @override
+  String get diaryTitle => 'Dagboek';
+
+  @override
+  String get diaryEmpty =>
+      'Notities bij activiteiten, trainingen en hoe een training voelde staan hier bij elkaar.';
+
+  @override
+  String get diarySearch => 'Notities doorzoeken';
+
+  @override
+  String get diaryKindActivity => 'Activiteitnotitie';
+
+  @override
+  String get diaryKindSession => 'Trainingsnotitie';
+
+  @override
+  String get diaryKindFeeling => 'Hoe het voelde';
+
+  @override
+  String get diaryKindCoach => 'Notitie voor de coach';
+
+  @override
+  String get diaryKindAbsence => 'Afwezig';
+
+  @override
+  String get diaryKindEcg => 'ECG-notitie';
+
+  @override
+  String diaryEffort(int n) {
+    return 'Inspanning $n van 10';
+  }
+
+  @override
+  String get diaryNoResults => 'Geen notitie bevat dat.';
+
+  @override
+  String get labTitle => 'Labtests';
+
+  @override
+  String get labEmpty =>
+      'Voer een lactaat-staptest in om je aerobe en anaerobe drempel te vinden.';
+
+  @override
+  String get labEnter => 'Test invoeren';
+
+  @override
+  String get labBike => 'Fiets';
+
+  @override
+  String get labRun => 'Hardlopen';
+
+  @override
+  String get labPower => 'Vermogen (W)';
+
+  @override
+  String get labPace => 'Tempo (min:s per km)';
+
+  @override
+  String get labHr => 'Hartslag';
+
+  @override
+  String get labLactate => 'Lactaat (mmol/l)';
+
+  @override
+  String get labAddStep => 'Stap toevoegen';
+
+  @override
+  String get labSave => 'Test bewaren';
+
+  @override
+  String get labLt1 => 'Aerobe drempel (LT1)';
+
+  @override
+  String get labLt2 => 'Anaerobe drempel (LT2)';
+
+  @override
+  String get labUse => 'Als drempels gebruiken';
+
+  @override
+  String get labUsed => 'Bewaard bij je drempels.';
+
+  @override
+  String get labDelete => 'Test verwijderen';
+
+  @override
+  String get labTooFew => 'Er zijn minstens drie stappen nodig.';
+
+  @override
+  String get labExplain =>
+      'LT1 is waar lactaat voor het eerst 0,5 mmol/l boven rust stijgt; LT2 waar het steil begint te stijgen. Rustige training blijft onder LT1.';
+
+  @override
+  String syncProgress(int sent, int total) {
+    return 'Synchroniseren… $sent van $total';
+  }
+
+  @override
+  String syncLastAt(String when) {
+    return 'Laatst gesynchroniseerd $when';
+  }
+
+  @override
+  String get courseTitle => 'Parcours';
+
+  @override
+  String get courseAdd => 'Parcours toevoegen';
+
+  @override
+  String get courseAddHint =>
+      'Veel wedstrijden hebben hun parcours in de wedstrijdbibliotheek, met verzorgingsposten en tijdslimieten. Voeg anders het GPX-bestand van de organisatie toe.';
+
+  @override
+  String get courseFromLibrary => 'Zoeken in de wedstrijdbibliotheek';
+
+  @override
+  String get courseFromFile => 'GPX-bestand openen';
+
+  @override
+  String get courseNoLibraryCourse => 'Geen parcours in de bibliotheek';
+
+  @override
+  String get courseNotFetched =>
+      'Het parcours van de organisatie kon niet worden opgehaald. Probeer het opnieuw of voeg het GPX-bestand zelf toe.';
+
+  @override
+  String get courseUnreadable => 'Dit bestand bevat geen parcours.';
+
+  @override
+  String get courseNoElevation =>
+      'Dit parcours heeft geen hoogtes, dus de klimmen kunnen niet worden getoond. Probeer het bestand van de organisatie.';
+
+  @override
+  String get courseDistance => 'Afstand';
+
+  @override
+  String get courseClimb => 'Stijging';
+
+  @override
+  String get courseDescent => 'Daling';
+
+  @override
+  String get courseEffort => 'Inspanning';
+
+  @override
+  String get courseEffortNote => 'km + stijging / 100 (ITRA)';
+
+  @override
+  String get courseSteep => 'Steile stukken';
+
+  @override
+  String get courseSteepNote => 'steilste 5 % van 100 m';
+
+  @override
+  String get courseHighest => 'Hoogste punt';
+
+  @override
+  String get courseClimbs => 'Klimmen';
+
+  @override
+  String courseClimbsCount(int count) {
+    return '$count van 50 m of meer';
+  }
+
+  @override
+  String get courseNoClimbs => 'Geen klim van 50 m of meer';
+
+  @override
+  String get courseGradients => 'Hellingen';
+
+  @override
+  String get courseBandSteepDown => 'Steil omlaag';
+
+  @override
+  String get courseBandDown => 'Omlaag';
+
+  @override
+  String get courseBandGentlyDown => 'Licht omlaag';
+
+  @override
+  String get courseBandFlat => 'Vlak';
+
+  @override
+  String get courseBandGentlyUp => 'Licht omhoog';
+
+  @override
+  String get courseBandUp => 'Omhoog';
+
+  @override
+  String get courseBandSteepUp => 'Steil omhoog';
+
+  @override
+  String get coursePlan => 'Jouw wedstrijd';
+
+  @override
+  String get coursePlanFrom =>
+      'Uit je heuvellopen van de afgelopen zes maanden';
+
+  @override
+  String get coursePlanNeedsRuns =>
+      'Neem een paar lopen met hoogte in de heuvels op: je tijd op dit parcours wordt daaruit berekend.';
+
+  @override
+  String get courseFinish => 'Finish';
+
+  @override
+  String get courseArrival => 'Aankomst';
+
+  @override
+  String get courseSetStart => 'Start instellen';
+
+  @override
+  String courseStartAt(String time) {
+    return 'Start $time';
+  }
+
+  @override
+  String get courseLegTo => 'Naar';
+
+  @override
+  String get courseLeg => 'Etappe';
+
+  @override
+  String get courseTotal => 'Totaal';
+
+  @override
+  String get courseCutoff => 'Tijdslimiet';
+
+  @override
+  String courseAhead(String time) {
+    return '$time voor';
+  }
+
+  @override
+  String courseLate(String time) {
+    return '$time te laat';
+  }
+
+  @override
+  String get coursePlanNote =>
+      'Bewegingstijd in jouw tempo op elke helling, vertraagd voor de lengte van de wedstrijd, het donker en de hitte die je opgeeft, met je stops bij de verzorgingsposten.';
+
+  @override
+  String get coursePace => 'Jouw tempo op heuvels';
+
+  @override
+  String coursePaceNote(String pace) {
+    return 'Hellinggecorrigeerd tempo $pace · hellingen onder 2 km gebruiken de Minetti-formule';
+  }
+
+  @override
+  String get courseProTeaser =>
+      'Je eindtijd, de tijd bij elke post en de marge op elke tijdslimiet, uit je eigen heuvellopen.';
+
+  @override
+  String get courseCheckpoints => 'Controleposten';
+
+  @override
+  String get courseCheckpointAdd => 'Controlepost toevoegen';
+
+  @override
+  String get courseCheckpointName => 'Naam';
+
+  @override
+  String get courseCutoffAfterStart => 'Tijdslimiet (u:mm na de start)';
+
+  @override
+  String get courseSetStartFirst =>
+      'Stel de starttijd in om tijdslimieten in te voeren.';
+
+  @override
+  String get courseReplace => 'Parcours vervangen';
+
+  @override
+  String get courseRemove => 'Parcours verwijderen';
+
+  @override
+  String get courseSearchLibrary => 'Naam van de wedstrijd of plaats';
+
+  @override
+  String get courseNoRaceFound =>
+      'Geen wedstrijd gevonden. Probeer de plaats of voeg het GPX-bestand zelf toe.';
+
+  @override
+  String courseAidStations(int count) {
+    return '$count verzorgingsposten';
+  }
+
+  @override
+  String courseRun(String km) {
+    return '$km km gelopen';
+  }
+
+  @override
+  String get courseRaceDay => 'Wedstrijddag';
+
+  @override
+  String get courseHigh => 'Verwachte maximumtemperatuur (°C)';
+
+  @override
+  String get courseHighNote =>
+      'Boven 15 °C vertraagt elke graad de daguren met ongeveer 0,55 % (0,34–0,77 %, Wegelin & Hoffman 2011).';
+
+  @override
+  String get courseNight => 'Langzamer in het donker';
+
+  @override
+  String get courseNightNote =>
+      'Je eigen schatting: hoeveel langzamer je loopt met een hoofdlamp.';
+
+  @override
+  String get courseStop => 'Minuten bij elke verzorgingspost';
+
+  @override
+  String courseInDark(String time) {
+    return '$time in het donker';
+  }
+
+  @override
+  String courseFuelPerHour(int carbs, int fluid, int sodium) {
+    return '$carbs g koolhydraten, $fluid ml, $sodium mg natrium per uur';
+  }
+
+  @override
+  String courseLegFuel(int carbs, String litres) {
+    return '$carbs g · $litres l';
+  }
+
+  @override
+  String get courseReadiness => 'Klaar voor dit parcours?';
+
+  @override
+  String get courseReadinessNote =>
+      'Je lopen van de afgelopen acht weken naast wat het parcours vraagt.';
+
+  @override
+  String get courseLongestRun => 'Langste loop';
+
+  @override
+  String get courseWeekClimb => 'Meeste stijging in een week';
+
+  @override
+  String get courseBiggestClimb => 'Grootste klim in één keer';
+
+  @override
+  String get courseBiggestDescent => 'Grootste afdaling in één keer';
+
+  @override
+  String courseVersus(String you, String course) {
+    return '$you · parcours $course';
+  }
+
+  @override
+  String get courseResult => 'Gepland en gelopen';
+
+  @override
+  String get courseResultNote =>
+      'Elke post op hetzelfde deel van de afstand van je horloge als van het parcours.';
+
+  @override
+  String courseFaster(String time) {
+    return '$time sneller';
+  }
+
+  @override
+  String courseSlower(String time) {
+    return '$time langzamer';
+  }
+
+  @override
+  String get crewCard => 'Crewkaart';
+
+  @override
+  String get crewCheckpoint => 'Controlepost';
+
+  @override
+  String get crewUpDown => 'Op / af';
+
+  @override
+  String get crewDue => 'Verwacht';
+
+  @override
+  String get crewHandOver => 'Aangeven voor de volgende etappe';
+
+  @override
+  String crewStart(String time) {
+    return 'Start $time';
+  }
+
+  @override
+  String crewFinishRange(String time, String from, String to) {
+    return 'Finish $time ($from–$to)';
+  }
+
+  @override
+  String crewFuel(int carbs, String litres, int sodium) {
+    return '$carbs g koolhydraten · $litres l · $sodium mg natrium';
+  }
+
+  @override
+  String get crewFooter => 'Gepland met Fjelia uit mijn eigen heuvellopen.';
+
+  @override
+  String get messagesTitle => 'Berichten';
+
+  @override
+  String get messagesEmpty =>
+      'Jij en je coach leren elkaar kennen wanneer deze telefoon in de buurt synchroniseert met de computer van de coach. Daarna kunnen jullie elkaar overal vandaan schrijven.';
+
+  @override
+  String get messagesNoThreads => 'Nog geen berichten.';
+
+  @override
+  String messagesWriteTo(String name) {
+    return '$name schrijven';
+  }
+
+  @override
+  String get messagesYourName => 'Je naam';
+
+  @override
+  String get messagesYourNameHelp => 'De naam die je coach en je groep zien.';
+
+  @override
+  String get messagesHint => 'Bericht';
+
+  @override
+  String get messagesSend => 'Versturen';
+
+  @override
+  String get messagesWaiting => 'wacht op verzenden';
+
+  @override
+  String get messagesLeaveGroup => 'Groep verlaten';
+
+  @override
+  String get messagesGone => 'Je zit niet meer in deze groep.';
+
+  @override
+  String get messagesYou => 'Jij';
+
+  @override
+  String messagesStarted(String who, String title) {
+    return '$who heeft \"$title\" gestart';
+  }
+
+  @override
+  String messagesAdded(String who, String names) {
+    return '$who heeft $names toegevoegd';
+  }
+
+  @override
+  String messagesRemoved(String who, String names) {
+    return '$who heeft $names verwijderd';
+  }
+
+  @override
+  String messagesLeft(String who) {
+    return '$who heeft de groep verlaten';
+  }
+
+  @override
+  String messagesRenamed(String who, String title) {
+    return '$who heeft de groep hernoemd naar \"$title\"';
+  }
+
+  @override
+  String get messagesPrivacy =>
+      'Op deze telefoon versleuteld voor elk apparaat in het gesprek. De server van Fjelia geeft berichten alleen door en kan ze niet lezen.';
+
+  @override
+  String get messagesRecovery => 'Herstelcode';
+
+  @override
+  String get messagesRecoveryMake => 'Nieuwe herstelcode maken';
+
+  @override
+  String get messagesRecoveryHelp =>
+      'Raakt deze telefoon kwijt, dan gaat een nieuwe met deze code verder als jou: je coach, je groepen, je volgende berichten. Een nieuwe code maakt de oude ongeldig.';
+
+  @override
+  String get messagesRecoveryShown =>
+      'Schrijf deze code op of bewaar hem in je wachtwoordmanager. Hij wordt alleen nu getoond.';
+
+  @override
+  String get messagesRecoveryUnreachable =>
+      'Geen verbinding met de server van Fjelia. Probeer het later opnieuw.';
+
+  @override
+  String get messagesRestore => 'Ik heb een herstelcode';
+
+  @override
+  String get messagesRestoreHint => 'Herstelcode';
+
+  @override
+  String get messagesRestoreWrong =>
+      'Deze code is niet gevonden of klopt niet.';
+
+  @override
+  String get messagesCopy => 'Kopiëren';
+
+  @override
+  String get messagesDone => 'Klaar';
+
+  @override
+  String get coachingTitle => 'Coaching';
+
+  @override
+  String get coachingSubtitle => 'Je coach en wat die ziet';
+
+  @override
+  String get coachingNone =>
+      'Nog geen coach. Als een coach je uitnodigt, open je zijn link hier.';
+
+  @override
+  String get coachingJoin => 'Een coach volgen';
+
+  @override
+  String get coachingJoinHelp =>
+      'Plak de uitnodigingslink die je coach je stuurde.';
+
+  @override
+  String get coachingNotInvite => 'Dit is geen Fjelia-coachinguitnodiging.';
+
+  @override
+  String get coachingOwnInvite => 'Deze uitnodiging is van jezelf.';
+
+  @override
+  String get coachingCoachUnknown =>
+      'De apparaten van deze coach zijn nog niet bekend. Vraag of die Fjelia opent en probeer het daarna opnieuw.';
+
+  @override
+  String get coachingUnreachable =>
+      'De server van Fjelia is niet bereikbaar. Probeer het opnieuw als je online bent.';
+
+  @override
+  String coachingConsentTitle(String name) {
+    return 'Gecoacht worden door $name?';
+  }
+
+  @override
+  String coachingConsentIntro(String name) {
+    return '$name heeft je uitgenodigd. Kies wat $name mag zien. Je kunt dit altijd wijzigen of de coaching beëindigen.';
+  }
+
+  @override
+  String coachingConsentHealth(String name) {
+    return 'Gezondheid, ECG en voeding zijn gezondheidsgegevens: ze bereiken $name alleen als je ze aanzet.';
+  }
+
+  @override
+  String coachingConsentPrivacy(String name) {
+    return 'Op deze telefoon versleuteld voor de apparaten van $name. De server van Fjelia geeft het alleen door en kan het niet lezen.';
+  }
+
+  @override
+  String coachingConsentCode(String name) {
+    return 'Het scherm van $name toont deze code. Lees hem voor, persoonlijk of telefonisch:';
+  }
+
+  @override
+  String get coachingConsentShare => 'Delen en versturen';
+
+  @override
+  String get coachingCancel => 'Annuleren';
+
+  @override
+  String get coachingContinue => 'Doorgaan';
+
+  @override
+  String coachingReadCode(String name, String code) {
+    return 'Lees deze code voor aan $name: $code. Zodra $name accepteert, ziet die wat je koos.';
+  }
+
+  @override
+  String coachingWaiting(String name) {
+    return 'Wachten tot $name accepteert';
+  }
+
+  @override
+  String coachingSince(String date) {
+    return 'Gecoacht sinds $date';
+  }
+
+  @override
+  String coachingEnded(String date) {
+    return 'Beëindigd op $date';
+  }
+
+  @override
+  String coachingShares(String name) {
+    return 'Wat $name ziet';
+  }
+
+  @override
+  String get coachingEnd => 'Coaching beëindigen';
+
+  @override
+  String coachingEndConfirm(String name) {
+    return 'Coaching met $name beëindigen?';
+  }
+
+  @override
+  String coachingEndBody(String name) {
+    return 'Er komt niets nieuws meer bij $name. Wat al ontvangen is, blijft daar.';
+  }
+
+  @override
+  String get coachingEndAction => 'Beëindigen';
+
+  @override
+  String get coachingScopePlan => 'Plan';
+
+  @override
+  String get coachingScopeActivities => 'Activiteiten';
+
+  @override
+  String get coachingScopeHealth => 'Gezondheid';
+
+  @override
+  String get coachingScopeEcg => 'ECG';
+
+  @override
+  String get coachingScopeNutrition => 'Voeding';
+
+  @override
+  String get coachingScopeAiCoach => 'AI-coachnotities';
+
+  @override
+  String get coachingScopeMedia => 'Foto\'s en bestanden';
+
+  @override
+  String get messagesChoosePhoto => 'Foto kiezen';
+
+  @override
+  String get messagesRemovePhoto => 'Foto verwijderen';
 }

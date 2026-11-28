@@ -14,6 +14,8 @@ import 'package:fjelia_core/services/activity_decoder.dart';
 import 'package:fjelia_core/services/score_calculator.dart';
 import 'package:fjelia_core/services/sleep_stage_estimate.dart';
 import 'package:fjelia_core/services/training_form.dart';
+import 'package:fjelia_views/fjelia_views.dart'
+    show TrainingLoadSummary, readTrainingLoadHistory;
 import '../services/ecg_storage_service.dart';
 import 'package:fjelia_core/utils/log.dart';
 import 'auth_provider.dart';
@@ -24,14 +26,14 @@ import 'training_load_provider.dart';
 import 'user_profile_provider.dart';
 import 'week_start_provider.dart';
 import 'package:fjelia_core/utils/week.dart';
+import 'package:fjelia_core/utils/days.dart';
 
-export 'package:fjelia_core/services/training_form.dart' show FormPoint, buildTrainingFormSeries;
-
-DateTime _day(DateTime d) => DateTime(d.year, d.month, d.day);
+export 'package:fjelia_core/services/training_form.dart'
+    show FormPoint, buildTrainingFormSeries;
 
 /// The day shown on the dashboard.
 final selectedDateProvider = StateProvider<DateTime>(
-  (ref) => _day(DateTime.now()),
+  (ref) => dayOf(DateTime.now()),
 );
 
 /// Bumped after every sync so data providers refetch.
@@ -422,18 +424,18 @@ final _bpLastFetch = <DateTime, DateTime>{};
 final bpSummaryForDateProvider =
     FutureProvider.family<DailyBpSummary?, DateTime>((ref, date) async {
       final readings = await ref.watch(bpForDateProvider(date).future);
-      final today = _day(DateTime.now());
-      if (!_day(date).isBefore(today)) {
+      final today = dayOf(DateTime.now());
+      if (!dayOf(date).isBefore(today)) {
         final aktiia = ref.read(aktiiaClientProvider);
-        final last = _bpLastFetch[_day(date)];
+        final last = _bpLastFetch[dayOf(date)];
         final throttled =
             last != null &&
             DateTime.now().difference(last) < const Duration(seconds: 30);
         if (!throttled && await aktiia.isLoggedIn) {
-          _bpLastFetch[_day(date)] = DateTime.now();
+          _bpLastFetch[dayOf(date)] = DateTime.now();
           Future(() async {
             try {
-              final from = _day(date);
+              final from = dayOf(date);
               final fresh = await aktiia.getMeasurements(
                 from,
                 from.add(const Duration(days: 1)),
@@ -492,7 +494,7 @@ final bpWeekSummaryProvider =
           .getBpForWeek(weekStart);
       final byDay = <DateTime, List<BpMeasurement>>{};
       for (final m in readings) {
-        byDay.putIfAbsent(_day(m.measuredAt.toLocal()), () => []).add(m);
+        byDay.putIfAbsent(dayOf(m.measuredAt.toLocal()), () => []).add(m);
       }
       final days = byDay.keys.toList()..sort();
       return [for (final d in days) buildBpSummaryFromRecords(d, byDay[d]!)!];
@@ -564,7 +566,7 @@ final bodyBatteryReportProvider =
             );
             await db.upsertWellness(
               WellnessRecordsCompanion(
-                date: Value(_day(date)),
+                date: Value(dayOf(date)),
                 source: const Value('garmin_api'),
                 bodyBatteryJson: Value(json),
                 bodyBatteryCharged: Value(report.charged),
@@ -600,7 +602,7 @@ final dayScoresProvider = FutureProvider.family<DayScores, DateTime>((
 ) async {
   final db = ref.watch(databaseProvider);
   ref.watch(syncStatusListenerProvider);
-  final day = _day(date);
+  final day = dayOf(date);
 
   final hrv = await ref.watch(hrvForDateProvider(day).future);
   var sleep = await db.getSleepForDate(day);
@@ -608,7 +610,7 @@ final dayScoresProvider = FutureProvider.family<DayScores, DateTime>((
   final wellness = await ref.watch(wellnessForDateProvider(day).future);
   final activities = await db.getActivitiesForDate(day);
   // Before last night's sleep has synced, fall back to the previous night.
-  if (sleep == null && day == _day(DateTime.now())) {
+  if (sleep == null && day == dayOf(DateTime.now())) {
     sleep = await db.getSleepForDate(day.subtract(const Duration(days: 1)));
   }
 
@@ -686,54 +688,14 @@ final dayScoresProvider = FutureProvider.family<DayScores, DateTime>((
 });
 
 /// Acute/chronic load (ATL 7-day, CTL 42-day EWMA) and the athlete's
-/// typical daily range.
-class TrainingLoadMetrics {
-  const TrainingLoadMetrics({
-    required this.ctl,
-    required this.atl,
-    required this.optimalLow,
-    required this.optimalHigh,
-    required this.peak,
-  });
-
-  final double ctl;
-  final double atl;
-
-  /// Productive daily-load band around the chronic load.
-  final double optimalLow;
-  final double optimalHigh;
-
-  /// 90th percentile of daily load.
-  final double peak;
-
-  double get tsb => ctl - atl;
-}
+/// typical daily range, shared with the desktop app.
+typedef TrainingLoadMetrics = TrainingLoadSummary;
 
 final trainingLoadProvider = FutureProvider<TrainingLoadMetrics>((ref) async {
   ref.watch(syncStatusListenerProvider);
   ref.watch(fullSyncListenerProvider);
-  final history = await _readTrainingLoadHistory(ref.watch(databaseProvider));
-  final latest = history.points.lastOrNull;
-  if (latest == null) {
-    return const TrainingLoadMetrics(
-      ctl: 0,
-      atl: 0,
-      optimalLow: 0,
-      optimalHigh: 0,
-      peak: 0,
-    );
-  }
-  final ctl = latest.ctl, atl = latest.atl;
-  final sorted = history.daily.values.where((v) => v > 0).toList()..sort();
-  final peak = sorted.isEmpty
-      ? ctl * 1.1
-      : sorted[((sorted.length - 1) * 0.9).round()];
-  return TrainingLoadMetrics(
-    ctl: ctl,
-    atl: atl,
-    optimalLow: ctl * 0.8,
-    optimalHigh: (ctl * 1.1).clamp(ctl * 0.8, ctl * 2),
-    peak: peak * 1.1,
+  return TrainingLoadSummary.of(
+    await readTrainingLoadHistory(ref.watch(databaseProvider)),
   );
 });
 
@@ -747,75 +709,17 @@ final peakLoadProvider = FutureProvider<double>((ref) async {
   );
 });
 
-class _TrainingLoadHistory {
-  const _TrainingLoadHistory(this.daily, this.points);
-  final Map<DateTime, double> daily;
-  final List<FormPoint> points;
-}
-
-/// Shared history for the chart and dashboard. Cache-only daily loads remain
-/// available; actual activities replace the cache for their day.
-Future<_TrainingLoadHistory> _readTrainingLoadHistory(AppDatabase db) async {
-  final today = _day(DateTime.now());
-  final daily = <DateTime, double>{};
-  for (final score in await db.getAllScores()) {
-    // Scores use UTC calendar keys, rather than activity timestamps.
-    final d = _day(score.date.toUtc());
-    final load = score.strainScore;
-    if (d.isAfter(today) || load == null || !load.isFinite || load < 0) {
-      continue;
-    }
-    daily[d] = load.clamp(0.0, 2000.0);
-  }
-  // Read all dates, but only the load inputs: GPS and sample arrays can be large.
-  final t = db.activityRecords;
-  final activities =
-      await (db.selectOnly(t)
-            ..addColumns([
-              t.startDate,
-              t.durationSeconds,
-              t.trainingLoad,
-              t.totalElevation,
-              t.hrZonesJson,
-              t.avgHeartRate,
-            ])
-            ..where(
-              t.startDate.isSmallerThanValue(
-                DateTime(today.year, today.month, today.day + 1),
-              ),
-            ))
-          .get();
-  final activityDaily = <DateTime, double>{};
-  for (final activity in activities) {
-    final d = _day(activity.read(t.startDate)!.toLocal());
-    final load = effectiveLoadFromSummary(
-      durationSeconds: activity.read(t.durationSeconds)!,
-      recordedLoad: activity.read(t.trainingLoad),
-      elevationMeters: activity.read(t.totalElevation),
-      hrZonesJson: activity.read(t.hrZonesJson),
-      averageHeartRate: activity.read(t.avgHeartRate),
-    );
-    if (!load.isFinite || load < 0) continue;
-    activityDaily[d] = (activityDaily[d] ?? 0) + load;
-  }
-  daily.addAll(activityDaily);
-  return _TrainingLoadHistory(
-    daily,
-    buildTrainingFormSeries(dailyLoads: daily, through: today),
-  );
-}
-
 /// The daily CTL/ATL/TSB history through today, for code outside the
 /// providers (the coach context).
 Future<List<FormPoint>> readTrainingFormSeries(AppDatabase db) async =>
-    (await _readTrainingLoadHistory(db)).points;
+    (await readTrainingLoadHistory(db)).points;
 
 /// CTL/ATL/TSB from the first available load through today. The card independently
 /// selects its display window (60 days by default), preserving all earlier load.
 final trainingFormSeriesProvider = FutureProvider<List<FormPoint>>((ref) async {
   ref.watch(syncStatusListenerProvider);
   ref.watch(fullSyncListenerProvider);
-  return (await _readTrainingLoadHistory(ref.watch(databaseProvider))).points;
+  return (await readTrainingLoadHistory(ref.watch(databaseProvider))).points;
 });
 
 /// Dashboard training-monitor card.
@@ -865,7 +769,7 @@ final trainingMonitorProvider =
         vo2Bike ??= w.vo2maxCycling;
       }
 
-      final day = _day(date);
+      final day = dayOf(date);
       final monday = weekStartOf(
         day,
         mondayFirst: ref.watch(weekStartsOnMondayProvider),
@@ -879,7 +783,7 @@ final trainingMonitorProvider =
           prevM = 0.0,
           weekLoad = 0.0;
       for (final a in activities) {
-        final d = _day(a.startDate);
+        final d = dayOf(a.startDate);
         if (!d.isBefore(monday) && d.isBefore(nextMonday)) {
           weekSec += a.durationSeconds;
           weekM += a.distanceMeters ?? 0;

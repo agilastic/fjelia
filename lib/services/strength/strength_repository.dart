@@ -9,50 +9,18 @@ import '../../models/strength_workout.dart';
 
 import 'package:fjelia_core/services/strength/strength_history.dart';
 import 'package:fjelia_core/services/strength/strength_templates.dart';
+import 'package:fjelia_views/fjelia_views.dart'
+    show
+        StoredStrengthPlan,
+        StrengthPlanConflict,
+        StrengthPlanInvalid,
+        StrengthPlanOwner,
+        StrengthPlanUnreadable,
+        StrengthPlans;
 
 export 'package:fjelia_core/services/strength/strength_history.dart';
-
-/// Who a planned strength document belongs to. Never a date or a title.
-class StrengthPlanOwner {
-  const StrengthPlanOwner(this.kind, this.key);
-
-  /// An app-planned session.
-  factory StrengthPlanOwner.session(String sessionId) =>
-      StrengthPlanOwner('session', sessionId);
-
-  /// One scheduled occurrence of a provider workout; a repeated workout
-  /// definition is not one shared session.
-  factory StrengthPlanOwner.scheduled(String provider, String scheduleId) =>
-      StrengthPlanOwner('scheduled', '$provider:$scheduleId');
-
-  /// The athlete's own reusable template.
-  factory StrengthPlanOwner.template(String id) =>
-      StrengthPlanOwner('template', id);
-
-  final String kind, key;
-
-  @override
-  bool operator ==(Object other) =>
-      other is StrengthPlanOwner && other.kind == kind && other.key == key;
-  @override
-  int get hashCode => Object.hash(kind, key);
-  @override
-  String toString() => '$kind:$key';
-}
-
-/// A saved plan revision.
-class StoredStrengthPlan {
-  const StoredStrengthPlan({
-    required this.owner,
-    required this.revisionId,
-    required this.revision,
-    required this.plan,
-  });
-  final StrengthPlanOwner owner;
-  final String revisionId;
-  final int revision;
-  final StrengthWorkoutPlan plan;
-}
+export 'package:fjelia_views/fjelia_views.dart'
+    show StrengthPlanOwner, StoredStrengthPlan;
 
 /// A save based on an outdated revision; the athlete's draft is kept.
 class StrengthConflictException implements Exception {
@@ -83,41 +51,15 @@ class StrengthRepository {
 
   // ── Plans ───────────────────────────────────────────────────────────────
 
+  StrengthPlans get _plans => StrengthPlans(db);
+
   /// The current plan of [owner], or null when none was saved.
   /// Throws [StrengthUnreadableException] for a malformed stored document.
-  Future<StoredStrengthPlan?> loadPlan(StrengthPlanOwner owner) async {
-    final head =
-        await (db.select(db.strengthPlanHeads)..where(
-              (t) =>
-                  t.ownerKind.equals(owner.kind) & t.ownerKey.equals(owner.key),
-            ))
-            .getSingleOrNull();
-    if (head == null) return null;
-    return revision(head.revisionId);
-  }
+  Future<StoredStrengthPlan?> loadPlan(StrengthPlanOwner owner) =>
+      _worded(() => _plans.load(owner));
 
-  Future<StoredStrengthPlan?> revision(String revisionId) async {
-    final row = await (db.select(
-      db.strengthPlanRevisions,
-    )..where((t) => t.revisionId.equals(revisionId))).getSingleOrNull();
-    if (row == null) return null;
-    return StoredStrengthPlan(
-      owner: StrengthPlanOwner(row.ownerKind, row.ownerKey),
-      revisionId: row.revisionId,
-      revision: row.revision,
-      plan: _decodePlan(row.planJson),
-    );
-  }
-
-  StrengthWorkoutPlan _decodePlan(String json) {
-    try {
-      return StrengthWorkoutPlan.fromJson(jsonDecode(json) as Map);
-    } on FormatException catch (e) {
-      throw StrengthUnreadableException(tr.thisStrengthPlanCannotBe(e.message));
-    } on TypeError {
-      throw StrengthUnreadableException(tr.thisStrengthPlanCannotBe2);
-    }
-  }
+  Future<StoredStrengthPlan?> revision(String revisionId) =>
+      _worded(() => _plans.revision(revisionId));
 
   /// Saves [plan] as the next revision of [owner], atomically with its head.
   /// [expectedRevision] is the revision the editor started from (0 for none).
@@ -125,73 +67,30 @@ class StrengthRepository {
     StrengthPlanOwner owner,
     StrengthWorkoutPlan plan, {
     required int expectedRevision,
-  }) async {
-    final errors = plan.validate();
-    if (plan.isEmpty) errors.add(tr.addAtLeastOneExercise);
-    if (errors.isNotEmpty) throw StrengthValidationException(errors.first);
-    return db.transaction(() async {
-      final head =
-          await (db.select(db.strengthPlanHeads)..where(
-                (t) =>
-                    t.ownerKind.equals(owner.kind) &
-                    t.ownerKey.equals(owner.key),
-              ))
-              .getSingleOrNull();
-      final current = head?.revision ?? 0;
-      if (current != expectedRevision) {
-        throw StrengthConflictException(tr.thisWorkoutWasChangedElsewhere);
-      }
-      final now = DateTime.now();
-      final id = newStrengthId('rev');
-      final next = current + 1;
-      await db
-          .into(db.strengthPlanRevisions)
-          .insert(
-            StrengthPlanRevisionsCompanion.insert(
-              revisionId: id,
-              ownerKind: owner.kind,
-              ownerKey: owner.key,
-              revision: next,
-              schemaVersion: plan.schemaVersion,
-              planJson: jsonEncode(plan.toJson()),
-              createdAt: now,
-            ),
-          );
-      await db
-          .into(db.strengthPlanHeads)
-          .insertOnConflictUpdate(
-            StrengthPlanHeadsCompanion.insert(
-              ownerKind: owner.kind,
-              ownerKey: owner.key,
-              revisionId: id,
-              revision: next,
-              updatedAt: now,
-            ),
-          );
-      return StoredStrengthPlan(
-        owner: owner,
-        revisionId: id,
-        revision: next,
-        plan: plan,
-      );
-    });
-  }
+  }) => _worded(
+    () => _plans.save(owner, plan, expectedRevision: expectedRevision),
+  );
 
   /// The athlete's saved templates.
-  Future<List<StoredStrengthPlan>> templates() async {
-    final heads = await (db.select(
-      db.strengthPlanHeads,
-    )..where((t) => t.ownerKind.equals('template'))).get();
-    final out = <StoredStrengthPlan>[];
-    for (final h in heads) {
-      try {
-        final p = await revision(h.revisionId);
-        if (p != null) out.add(p);
-      } on StrengthUnreadableException {
-        continue;
-      }
+  Future<List<StoredStrengthPlan>> templates() => _plans.templates();
+
+  /// The shared plan store's refusals, in the app's words.
+  static Future<T> _worded<T>(Future<T> Function() f) async {
+    try {
+      return await f();
+    } on StrengthPlanInvalid catch (e) {
+      throw StrengthValidationException(
+        e.issues.isEmpty ? tr.addAtLeastOneExercise : e.issues.first.text,
+      );
+    } on StrengthPlanConflict {
+      throw StrengthConflictException(tr.thisWorkoutWasChangedElsewhere);
+    } on StrengthPlanUnreadable catch (e) {
+      throw StrengthUnreadableException(
+        e.detail == null
+            ? tr.thisStrengthPlanCannotBe2
+            : tr.thisStrengthPlanCannotBe(e.detail!),
+      );
     }
-    return out;
   }
 
   // ── Logs ────────────────────────────────────────────────────────────────
@@ -960,21 +859,8 @@ class StrengthRepository {
         );
   }
 
-  Future<List<StrengthExerciseVariant>> customVariants() async {
-    final rows = await (db.select(
-      db.strengthExerciseVariants,
-    )..where((t) => t.archived.equals(false))).get();
-    return [
-      for (final r in rows)
-        StrengthExerciseVariant(
-          id: r.id,
-          name: r.name,
-          equipment: r.equipment,
-          convention: StrengthConvention.fromJson(jsonDecode(r.conventionJson)),
-          timed: r.timed,
-        ),
-    ];
-  }
+  Future<List<StrengthExerciseVariant>> customVariants() =>
+      _plans.customExercises();
 
   /// A new custom exercise with a fresh id; ids are never reused.
   Future<StrengthExerciseVariant> addCustomVariant({
@@ -986,33 +872,15 @@ class StrengthRepository {
     if (name.trim().isEmpty) {
       throw StrengthValidationException(tr.nameTheExercise);
     }
-    final v = StrengthExerciseVariant(
-      id: newStrengthId('custom'),
-      name: name.trim(),
-      equipment: equipment.trim(),
+    return _plans.addCustomExercise(
+      name: name,
+      equipment: equipment,
       convention: convention,
       timed: timed,
     );
-    await db
-        .into(db.strengthExerciseVariants)
-        .insert(
-          StrengthExerciseVariantsCompanion.insert(
-            id: v.id,
-            name: v.name,
-            equipment: v.equipment,
-            conventionJson: jsonEncode(convention.toJson()),
-            timed: Value(timed),
-            createdAt: DateTime.now(),
-          ),
-        );
-    return v;
   }
 
   /// Hides a custom exercise from the picker; history keeps its snapshots.
   Future<void> archiveCustomVariant(String id) =>
-      (db.update(
-        db.strengthExerciseVariants,
-      )..where((t) => t.id.equals(id))).write(
-        const StrengthExerciseVariantsCompanion(archived: Value(true)),
-      );
+      _plans.archiveCustomExercise(id);
 }

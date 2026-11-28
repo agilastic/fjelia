@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'nearby_sync_provider.dart' show nearbySyncProvider;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -130,6 +132,8 @@ class StravaImportNotifier extends StateNotifier<StravaImportState> {
       _close();
       _ref.invalidate(loadActivitiesProvider);
       _ref.read(syncStatusListenerProvider.notifier).state++;
+      // The paired computers get the imported workouts.
+      unawaited(_ref.read(nearbySyncProvider.notifier).syncAfterOtherSyncs());
     }
   }
 
@@ -150,8 +154,9 @@ class StravaImportNotifier extends StateNotifier<StravaImportState> {
     // app's temporary folder: where a picker hands out the original file,
     // that file stays untouched.
     if (picked != null &&
-        File(picked).absolute.path
-            .startsWith(Directory.systemTemp.absolute.path)) {
+        File(
+          picked,
+        ).absolute.path.startsWith(Directory.systemTemp.absolute.path)) {
       try {
         File(picked).deleteSync();
       } catch (_) {}

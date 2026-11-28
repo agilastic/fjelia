@@ -25,7 +25,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:fjelia/widgets/activity_route_map.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -92,6 +91,8 @@ import 'package:fjelia/screens/ocr/manual_entry_sheet.dart';
 import 'package:fjelia/widgets/grip_strength_sheet.dart';
 import 'package:fjelia/widgets/metric_detail_sheet.dart';
 import 'package:fjelia/theme/app_theme.dart';
+
+import '../support/blank_tiles.dart';
 
 /// Scrolls [target] clear of the bottom edge and taps it. A plain
 /// `ensureVisible` leaves a button at the very edge of a short test screen.
@@ -645,7 +646,7 @@ void main() {
         LatLng(39.78, 3.10),
         LatLng(39.77, 3.18),
       ],
-      tileProvider: AuditTiles(),
+      tileProvider: BlankTiles(),
       exportGpx: (_) async {},
     ),
   };
@@ -1186,9 +1187,7 @@ void main() {
     await tester.pump(Duration.zero);
     await tester.binding.setSurfaceSize(null);
   });
-  testWidgets('absences show as a band, a line and a way back', (
-    tester,
-  ) async {
+  testWidgets('absences show as a band, a line and a way back', (tester) async {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     await db
@@ -2369,8 +2368,9 @@ void main() {
       150,
       140,
     );
-    final tomorrow = DateUtils.dateOnly(DateTime.now())
-        .add(const Duration(days: 1));
+    final tomorrow = DateUtils.dateOnly(
+      DateTime.now(),
+    ).add(const Duration(days: 1));
     await (db.update(db.trainingSessions)
           ..where((t) => t.id.equals(session.id)))
         .write(TrainingSessionsCompanion(sessionDate: Value(tomorrow)));
@@ -2403,7 +2403,10 @@ void main() {
     await capture(tester, 'replace-3-preview');
     // 150 min of riding is more than the other sport has been trained for:
     // the replacement is shorter and the rest of the ride is offered with it.
-    expect(find.textContaining(RegExp(r'^\d+ min .+ \+ \d+ min ')), findsOneWidget);
+    expect(
+      find.textContaining(RegExp(r'^\d+ min .+ \+ \d+ min ')),
+      findsOneWidget,
+    );
     await tester.tap(find.textContaining(RegExp(r'^Nur \d+ min$')));
     await tester.pump(const Duration(seconds: 2));
     await tester.pumpAndSettle();
@@ -2940,16 +2943,4 @@ void main() {
     await tester.pump(Duration.zero);
     await tester.binding.setSurfaceSize(null);
   });
-}
-
-class AuditTiles extends TileProvider {
-  @override
-  ImageProvider getImage(
-    TileCoordinates coordinates,
-    TileLayer options,
-  ) => MemoryImage(
-    base64Decode(
-      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGPYcunOfwAIAgNiJBgw5wAAAABJRU5ErkJggg==',
-    ),
-  );
 }

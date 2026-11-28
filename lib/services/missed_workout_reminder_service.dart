@@ -12,6 +12,7 @@ import '../l10n/l10n_ext.dart';
 import '../providers/plan_week_provider.dart';
 import '../providers/user_profile_provider.dart' show UserProfileNotifier;
 import 'package:fjelia_core/utils/log.dart';
+import 'package:fjelia_core/utils/days.dart';
 import 'notifications/local_notification_gateway.dart';
 
 /// Notification ids of this reminder: the base plus the day number, so each
@@ -83,7 +84,7 @@ class MissedWorkoutPayload {
   final DateTime day;
 
   String encode() =>
-      jsonEncode({'v': 1, 'feature': 'missed_workout', 'day': _dayKey(day)});
+      jsonEncode({'v': 1, 'feature': 'missed_workout', 'day': isoDay(day)});
 
   static MissedWorkoutPayload? decode(String? raw) {
     if (raw == null || raw.length > 200) return null;
@@ -93,7 +94,7 @@ class MissedWorkoutPayload {
         return null;
       }
       final day = DateTime.tryParse('${j['day']}');
-      return day == null ? null : MissedWorkoutPayload(_dateOnly(day));
+      return day == null ? null : MissedWorkoutPayload(dayOf(day));
     } catch (_) {
       return null;
     }
@@ -108,9 +109,6 @@ class MissedWorkoutAction {
   final DateTime day;
   final MissedWorkoutActionKind kind;
 }
-
-DateTime _dateOnly(DateTime d) => DateTime(d.year, d.month, d.day);
-String _dayKey(DateTime d) => _dateOnly(d).toIso8601String().substring(0, 10);
 
 /// The id of the reminder for [day].
 int missedWorkoutNotificationId(DateTime day) =>
@@ -177,16 +175,16 @@ class MissedWorkoutReminderService {
     DateTime day, [
     Map<DateTime, Future<PlanWeek>>? weeks,
   ]) async {
-    final d = _dateOnly(day);
+    final d = dayOf(day);
     // Sessions of the day before yesterday are closed as missed by then;
     // a skip the athlete chose today stays a skip.
-    final past = d.isBefore(_dateOnly(now()));
+    final past = d.isBefore(dayOf(now()));
     final start = weekStartFor(d);
     final week = await (weeks == null
         ? loadPlanWeek(db, start)
         : weeks.putIfAbsent(start, () => loadPlanWeek(db, start)));
     for (final w in week.days) {
-      if (_dayKey(w.date) != _dayKey(d)) continue;
+      if (isoDay(w.date) != isoDay(d)) continue;
       return [
         for (final i in w.items)
           if (i.hasPlan &&
@@ -203,13 +201,13 @@ class MissedWorkoutReminderService {
   Future<List<({DateTime day, List<PlanWeekItem> items})>> pastMissed({
     int days = 2,
   }) async {
-    final today = _dateOnly(now());
+    final today = dayOf(now());
     final acked = await _acknowledged();
     final weeks = <DateTime, Future<PlanWeek>>{};
     return [
       for (var back = 1; back <= days; back++)
         if (DateTime(today.year, today.month, today.day - back) case final day
-            when !acked.contains(_dayKey(day)))
+            when !acked.contains(isoDay(day)))
           if (await openItems(day, weeks) case final items
               when items.isNotEmpty)
             (day: day, items: items),
@@ -229,7 +227,7 @@ class MissedWorkoutReminderService {
   static Future<void> _acknowledge(DateTime day) async {
     final prefs = await SharedPreferences.getInstance();
     final list = prefs.getStringList(_ackKey) ?? <String>[];
-    if (!list.contains(_dayKey(day))) list.add(_dayKey(day));
+    if (!list.contains(isoDay(day))) list.add(isoDay(day));
     await prefs.setStringList(
       _ackKey,
       list.length > 14 ? list.sublist(list.length - 14) : list,
@@ -253,7 +251,7 @@ class MissedWorkoutReminderService {
     final s = await settings();
     final w = await windows();
     final at = now();
-    final today = _dateOnly(at);
+    final today = dayOf(at);
     final allowed = (await gateway.permission()).allowed;
     final acked = await _acknowledged();
     // Seven days touch at most two weeks; each is read once.
@@ -270,7 +268,7 @@ class MissedWorkoutReminderService {
         continue;
       }
       // Shown already, or answered: leave it as it is.
-      if (!due.isAfter(at) || acked.contains(_dayKey(day))) continue;
+      if (!due.isAfter(at) || acked.contains(isoDay(day))) continue;
       final text = textFor(items);
       await gateway.schedule(
         ScheduledNotification(
@@ -298,7 +296,7 @@ class MissedWorkoutReminderService {
   Future<DateTime> scheduleTest({
     Duration delay = const Duration(seconds: 10),
   }) async {
-    final today = _dateOnly(now());
+    final today = dayOf(now());
     var day = today;
     var items = const <PlanWeekItem>[];
     final weeks = <DateTime, Future<PlanWeek>>{};
@@ -336,7 +334,7 @@ class MissedWorkoutReminderService {
       ),
     );
     log(
-      '[MissedWorkout] test reminder for ${_dayKey(day)} in ${delay.inSeconds}s',
+      '[MissedWorkout] test reminder for ${isoDay(day)} in ${delay.inSeconds}s',
     );
     return day;
   }

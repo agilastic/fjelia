@@ -5,6 +5,7 @@
 import FlutterMacOS
 import Foundation
 
+import bonsoir_darwin
 import desktop_webview_window
 import device_info_plus
 import file_picker_darwin
@@ -18,6 +19,7 @@ import flutter_web_auth_2
 import foundation_models_framework
 import in_app_purchase_storekit
 import location
+import mobile_scanner
 import share_plus
 import shared_preferences_foundation
 import url_launcher_macos
@@ -25,6 +27,7 @@ import video_player_avfoundation
 import window_to_front
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
+  SwiftBonsoirPlugin.register(with: registry.registrar(forPlugin: "SwiftBonsoirPlugin"))
   DesktopWebviewWindowPlugin.register(with: registry.registrar(forPlugin: "DesktopWebviewWindowPlugin"))
   DeviceInfoPlusMacosPlugin.register(with: registry.registrar(forPlugin: "DeviceInfoPlusMacosPlugin"))
   FilePickerPlugin.register(with: registry.registrar(forPlugin: "FilePickerPlugin"))
@@ -38,6 +41,7 @@ func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   SwiftFoundationModelsFrameworkPlugin.register(with: registry.registrar(forPlugin: "SwiftFoundationModelsFrameworkPlugin"))
   InAppPurchasePlugin.register(with: registry.registrar(forPlugin: "InAppPurchasePlugin"))
   LocationPlugin.register(with: registry.registrar(forPlugin: "LocationPlugin"))
+  MobileScannerPlugin.register(with: registry.registrar(forPlugin: "MobileScannerPlugin"))
   SharePlusMacosPlugin.register(with: registry.registrar(forPlugin: "SharePlusMacosPlugin"))
   SharedPreferencesPlugin.register(with: registry.registrar(forPlugin: "SharedPreferencesPlugin"))
   UrlLauncherPlugin.register(with: registry.registrar(forPlugin: "UrlLauncherPlugin"))

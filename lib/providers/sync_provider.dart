@@ -33,6 +33,7 @@ import 'hr_zone_sync_provider.dart';
 import '../services/hr_zone_history.dart';
 import 'hrv_reminder_provider.dart';
 import 'missed_workout_provider.dart';
+import 'nearby_sync_provider.dart';
 import '../services/vitals_retention.dart';
 import 'nutrition_provider.dart';
 import 'strength_provider.dart';
@@ -753,6 +754,8 @@ class SyncNotifier extends StateNotifier<SyncState> {
     // coarse: a sync can import irrelevant rows or change inputs without those
     // counters, while identical context should never trigger a new AI request.
     unawaited(_prewarmBriefingAfterSync());
+    // The paired computers get what this sync brought in.
+    unawaited(_ref.read(nearbySyncProvider.notifier).syncAfterOtherSyncs());
     final errors = result.errors.join('\n');
     state = state.copyWith(
       status: result.hasErrors ? SyncStatus.error : SyncStatus.done,

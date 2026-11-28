@@ -252,9 +252,8 @@ Future<PlanWeek> loadPlanWeek(AppDatabase db, DateTime start) async {
   final loadedIds = activities.map((a) => a.activityId).toSet();
   if (linkedIds.difference(loadedIds).isNotEmpty) {
     activities.addAll(
-      await (db.select(db.activityRecords)..where(
-            (t) => t.activityId.isIn(linkedIds.difference(loadedIds)),
-          ))
+      await (db.select(db.activityRecords)
+            ..where((t) => t.activityId.isIn(linkedIds.difference(loadedIds))))
           .get(),
     );
   }
@@ -303,4 +302,3 @@ Future<PlanWeek> loadPlanWeek(AppDatabase db, DateTime start) async {
     ownedScheduleIds: owned,
   );
 }
-

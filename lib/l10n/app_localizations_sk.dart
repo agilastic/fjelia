@@ -9940,4 +9940,780 @@ class AppLocalizationsSk extends AppLocalizations {
   @override
   String get homeSkyHint =>
       'Jemná obloha v hornej časti Domov, ktorá sleduje dnešné počasie a dennú dobu.';
+
+  @override
+  String get syncComputers => 'Počítače';
+
+  @override
+  String get syncComputersSubtitle =>
+      'Synchronizovať s Fjeliou na Macu alebo PC';
+
+  @override
+  String get syncComputersFooter =>
+      'Počítač dostane kópiu tvojich aktivít, plánov a zdravotných údajov cez lokálnu sieť. Nič neprechádza internetom.';
+
+  @override
+  String get syncPairComputer => 'Spárovať s počítačom';
+
+  @override
+  String get syncScanHint =>
+      'V počítači otvor Fjeliu a vyber Spárovať telefón. Potom naskenuj zobrazený kód.';
+
+  @override
+  String get syncNotAPairingCode => 'Toto nie je párovací kód Fjelie.';
+
+  @override
+  String get syncNow => 'Synchronizovať teraz';
+
+  @override
+  String get syncUnpair => 'Zrušiť spárovanie';
+
+  @override
+  String syncUnpairTitle(String name) {
+    return 'Zrušiť spárovanie s $name?';
+  }
+
+  @override
+  String syncUnpairMessage(String name) {
+    return '$name si ponechá údaje, ktoré už má, ale nebude dostávať ďalšie zmeny z tohto telefónu.';
+  }
+
+  @override
+  String syncInProgress(int count) {
+    return 'Synchronizuje sa… odoslané zmeny: $count';
+  }
+
+  @override
+  String syncDone(int count) {
+    return 'Aktuálne · odoslané zmeny: $count';
+  }
+
+  @override
+  String get syncUnreachable =>
+      'Počítač nie je dostupný. Skontroluj, či je na ňom otvorená Fjelia a či sú obe zariadenia v rovnakej sieti.';
+
+  @override
+  String get syncCodeExpired =>
+      'Tento kód už nie je platný. Zobraz v počítači nový kód.';
+
+  @override
+  String get syncUpdateBoth =>
+      'Aktualizuj Fjeliu na oboch zariadeniach a synchronizuj znova.';
+
+  @override
+  String get syncPairAgain =>
+      'Počítač už tento telefón nepozná. Spáruj ho znova.';
+
+  @override
+  String get syncNoComputers => 'Zatiaľ nie je spárovaný žiadny počítač.';
+
+  @override
+  String syncDoneBoth(int sent, int received) {
+    return 'Aktuálne · odoslané: $sent, prijaté: $received';
+  }
+
+  @override
+  String get thresholdSourceLab => 'Laboratórny test';
+
+  @override
+  String get gearTitle => 'Výstroj';
+
+  @override
+  String get gearEmpty =>
+      'Pridaj topánky a bicykle a uvidíš, koľko najazdili a kedy ich vymeniť.';
+
+  @override
+  String get gearAdd => 'Pridať výstroj';
+
+  @override
+  String get gearEdit => 'Upraviť výstroj';
+
+  @override
+  String get gearKindShoes => 'Topánky';
+
+  @override
+  String get gearKindBike => 'Bicykel';
+
+  @override
+  String get gearKindOther => 'Iné';
+
+  @override
+  String get gearName => 'Názov';
+
+  @override
+  String get gearBrand => 'Značka';
+
+  @override
+  String get gearStartKm => 'Vzdialenosť pred Fjeliou (km)';
+
+  @override
+  String get gearRetireAt => 'Vymeniť pri (km)';
+
+  @override
+  String get gearDefault =>
+      'Počítať každý beh alebo jazdu preň, ak nie je vybraté iné';
+
+  @override
+  String get gearRetire => 'Vyradiť';
+
+  @override
+  String get gearUseAgain => 'Znova používať';
+
+  @override
+  String get gearRetired => 'Vyradené';
+
+  @override
+  String gearLeft(int km, int limit) {
+    return 'Zostáva $km km z $limit';
+  }
+
+  @override
+  String gearDue(int limit) {
+    return 'Čas na výmenu: viac ako $limit km';
+  }
+
+  @override
+  String gearActivities(int count) {
+    return 'Aktivity: $count';
+  }
+
+  @override
+  String get gearNone => 'Žiadna';
+
+  @override
+  String get diaryTitle => 'Denník';
+
+  @override
+  String get diaryEmpty =>
+      'Poznámky k aktivitám, tréningom a pocitom z tréningu sú tu na jednom mieste.';
+
+  @override
+  String get diarySearch => 'Hľadať v poznámkach';
+
+  @override
+  String get diaryKindActivity => 'Poznámka k aktivite';
+
+  @override
+  String get diaryKindSession => 'Poznámka k tréningu';
+
+  @override
+  String get diaryKindFeeling => 'Ako sa to cítilo';
+
+  @override
+  String get diaryKindCoach => 'Poznámka pre trénera';
+
+  @override
+  String get diaryKindAbsence => 'Neprítomnosť';
+
+  @override
+  String get diaryKindEcg => 'Poznámka k EKG';
+
+  @override
+  String diaryEffort(int n) {
+    return 'Námaha $n z 10';
+  }
+
+  @override
+  String get diaryNoResults => 'Žiadna poznámka to neobsahuje.';
+
+  @override
+  String get labTitle => 'Laboratórne testy';
+
+  @override
+  String get labEmpty =>
+      'Zadaj stupňovitý laktátový test a zisti svoj aeróbny a anaeróbny prah.';
+
+  @override
+  String get labEnter => 'Zadať test';
+
+  @override
+  String get labBike => 'Bicykel';
+
+  @override
+  String get labRun => 'Beh';
+
+  @override
+  String get labPower => 'Výkon (W)';
+
+  @override
+  String get labPace => 'Tempo (min:s na km)';
+
+  @override
+  String get labHr => 'Tep';
+
+  @override
+  String get labLactate => 'Laktát (mmol/l)';
+
+  @override
+  String get labAddStep => 'Pridať stupeň';
+
+  @override
+  String get labSave => 'Uložiť test';
+
+  @override
+  String get labLt1 => 'Aeróbny prah (LT1)';
+
+  @override
+  String get labLt2 => 'Anaeróbny prah (LT2)';
+
+  @override
+  String get labUse => 'Použiť ako prahy';
+
+  @override
+  String get labUsed => 'Uložené k tvojim prahom.';
+
+  @override
+  String get labDelete => 'Vymazať test';
+
+  @override
+  String get labTooFew => 'Treba aspoň tri stupne.';
+
+  @override
+  String get labExplain =>
+      'LT1 je tam, kde laktát prvýkrát stúpne o 0,5 mmol/l nad pokoj; LT2 tam, kde začne prudko stúpať. Ľahký tréning zostáva pod LT1.';
+
+  @override
+  String syncProgress(int sent, int total) {
+    return 'Synchronizuje sa… $sent z $total';
+  }
+
+  @override
+  String syncLastAt(String when) {
+    return 'Naposledy synchronizované $when';
+  }
+
+  @override
+  String get courseTitle => 'Trasa';
+
+  @override
+  String get courseAdd => 'Pridať trasu';
+
+  @override
+  String get courseAddHint =>
+      'Mnohé preteky majú trasu v knižnici pretekov aj s občerstvovačkami a časovými limitmi. Inak pridaj súbor GPX od organizátora.';
+
+  @override
+  String get courseFromLibrary => 'Hľadať v knižnici pretekov';
+
+  @override
+  String get courseFromFile => 'Otvoriť súbor GPX';
+
+  @override
+  String get courseNoLibraryCourse => 'V knižnici nie je trasa';
+
+  @override
+  String get courseNotFetched =>
+      'Trasu organizátora sa nepodarilo načítať. Skús to znova alebo pridaj súbor GPX sám.';
+
+  @override
+  String get courseUnreadable => 'V tomto súbore nie je žiadna trasa.';
+
+  @override
+  String get courseNoElevation =>
+      'Táto trasa nemá výšky, takže stúpania sa nedajú zobraziť. Skús súbor organizátora.';
+
+  @override
+  String get courseDistance => 'Vzdialenosť';
+
+  @override
+  String get courseClimb => 'Stúpanie';
+
+  @override
+  String get courseDescent => 'Klesanie';
+
+  @override
+  String get courseEffort => 'Náročnosť';
+
+  @override
+  String get courseEffortNote => 'km + stúpanie / 100 (ITRA)';
+
+  @override
+  String get courseSteep => 'Strmé úseky';
+
+  @override
+  String get courseSteepNote => 'najstrmších 5 % zo 100 m';
+
+  @override
+  String get courseHighest => 'Najvyšší bod';
+
+  @override
+  String get courseClimbs => 'Stúpania';
+
+  @override
+  String courseClimbsCount(int count) {
+    return '$count od 50 m';
+  }
+
+  @override
+  String get courseNoClimbs => 'Žiadne stúpanie od 50 m';
+
+  @override
+  String get courseGradients => 'Sklony';
+
+  @override
+  String get courseBandSteepDown => 'Strmo dole';
+
+  @override
+  String get courseBandDown => 'Dole';
+
+  @override
+  String get courseBandGentlyDown => 'Mierne dole';
+
+  @override
+  String get courseBandFlat => 'Rovina';
+
+  @override
+  String get courseBandGentlyUp => 'Mierne hore';
+
+  @override
+  String get courseBandUp => 'Hore';
+
+  @override
+  String get courseBandSteepUp => 'Strmo hore';
+
+  @override
+  String get coursePlan => 'Tvoje preteky';
+
+  @override
+  String get coursePlanFrom =>
+      'Z tvojich behov do kopca za posledných šesť mesiacov';
+
+  @override
+  String get coursePlanNeedsRuns =>
+      'Zaznamenaj zopár behov s výškou do kopca: tvoj čas na tejto trase sa z nich vypočíta.';
+
+  @override
+  String get courseFinish => 'Cieľ';
+
+  @override
+  String get courseArrival => 'Príchod';
+
+  @override
+  String get courseSetStart => 'Nastaviť štart';
+
+  @override
+  String courseStartAt(String time) {
+    return 'Štart $time';
+  }
+
+  @override
+  String get courseLegTo => 'Do';
+
+  @override
+  String get courseLeg => 'Úsek';
+
+  @override
+  String get courseTotal => 'Spolu';
+
+  @override
+  String get courseCutoff => 'Časový limit';
+
+  @override
+  String courseAhead(String time) {
+    return '$time náskok';
+  }
+
+  @override
+  String courseLate(String time) {
+    return '$time neskoro';
+  }
+
+  @override
+  String get coursePlanNote =>
+      'Čas v pohybe tvojím tempom na každom sklone, spomalený podľa dĺžky pretekov, tmy a horúčavy, ktoré zadáš, s tvojimi zastávkami na občerstvovačkách.';
+
+  @override
+  String get coursePace => 'Tvoje tempo do kopca';
+
+  @override
+  String coursePaceNote(String pace) {
+    return 'Tempo upravené o sklon $pace · sklony prebehnuté menej ako 2 km používajú Minettiho vzorec';
+  }
+
+  @override
+  String get courseProTeaser =>
+      'Tvoj čas v cieli, čas na každom kontrolnom bode a rezerva voči každému limitu z tvojich vlastných behov do kopca.';
+
+  @override
+  String get courseCheckpoints => 'Kontrolné body';
+
+  @override
+  String get courseCheckpointAdd => 'Pridať kontrolný bod';
+
+  @override
+  String get courseCheckpointName => 'Názov';
+
+  @override
+  String get courseCutoffAfterStart => 'Limit (h:mm od štartu)';
+
+  @override
+  String get courseSetStartFirst =>
+      'Nastav čas štartu, aby si mohol zadať limity.';
+
+  @override
+  String get courseReplace => 'Nahradiť trasu';
+
+  @override
+  String get courseRemove => 'Odstrániť trasu';
+
+  @override
+  String get courseSearchLibrary => 'Názov pretekov alebo obec';
+
+  @override
+  String get courseNoRaceFound =>
+      'Žiadne preteky sa nenašli. Skús obec alebo pridaj súbor GPX sám.';
+
+  @override
+  String courseAidStations(int count) {
+    return 'Občerstvovačky: $count';
+  }
+
+  @override
+  String courseRun(String km) {
+    return 'Odbehnuté $km km';
+  }
+
+  @override
+  String get courseRaceDay => 'Deň pretekov';
+
+  @override
+  String get courseHigh => 'Očakávaná najvyššia teplota (°C)';
+
+  @override
+  String get courseHighNote =>
+      'Nad 15 °C každý stupeň spomalí denné svetlo asi o 0,55 % (0,34–0,77 %, Wegelin a Hoffman 2011).';
+
+  @override
+  String get courseNight => 'Pomalšie v tme';
+
+  @override
+  String get courseNightNote =>
+      'Tvoj vlastný odhad: o koľko pomalšie bežíš s čelovkou.';
+
+  @override
+  String get courseStop => 'Minúty na každej občerstvovačke';
+
+  @override
+  String courseInDark(String time) {
+    return '$time v tme';
+  }
+
+  @override
+  String courseFuelPerHour(int carbs, int fluid, int sodium) {
+    return '$carbs g sacharidov, $fluid ml, $sodium mg sodíka za hodinu';
+  }
+
+  @override
+  String courseLegFuel(int carbs, String litres) {
+    return '$carbs g · $litres l';
+  }
+
+  @override
+  String get courseReadiness => 'Pripravený na túto trasu?';
+
+  @override
+  String get courseReadinessNote =>
+      'Tvoje behy za posledných osem týždňov vedľa toho, čo trasa vyžaduje.';
+
+  @override
+  String get courseLongestRun => 'Najdlhší beh';
+
+  @override
+  String get courseWeekClimb => 'Najviac stúpania za týždeň';
+
+  @override
+  String get courseBiggestClimb => 'Najväčšie stúpanie naraz';
+
+  @override
+  String get courseBiggestDescent => 'Najväčšie klesanie naraz';
+
+  @override
+  String courseVersus(String you, String course) {
+    return '$you · trasa $course';
+  }
+
+  @override
+  String get courseResult => 'Plánované a odbehnuté';
+
+  @override
+  String get courseResultNote =>
+      'Každý kontrolný bod v rovnakej časti vzdialenosti hodiniek ako trasy.';
+
+  @override
+  String courseFaster(String time) {
+    return '$time rýchlejšie';
+  }
+
+  @override
+  String courseSlower(String time) {
+    return '$time pomalšie';
+  }
+
+  @override
+  String get crewCard => 'Karta pre podporu';
+
+  @override
+  String get crewCheckpoint => 'Kontrolný bod';
+
+  @override
+  String get crewUpDown => 'Hore / dole';
+
+  @override
+  String get crewDue => 'Očakávaný';
+
+  @override
+  String get crewHandOver => 'Podať na ďalší úsek';
+
+  @override
+  String crewStart(String time) {
+    return 'Štart $time';
+  }
+
+  @override
+  String crewFinishRange(String time, String from, String to) {
+    return 'Cieľ $time ($from–$to)';
+  }
+
+  @override
+  String crewFuel(int carbs, String litres, int sodium) {
+    return '$carbs g sacharidov · $litres l · $sodium mg sodíka';
+  }
+
+  @override
+  String get crewFooter => 'Naplánované vo Fjelii z mojich behov do kopca.';
+
+  @override
+  String get messagesTitle => 'Správy';
+
+  @override
+  String get messagesEmpty =>
+      'Ty a tvoj tréner sa spoznáte, keď sa tento telefón synchronizuje v blízkosti trénerovho počítača. Potom si môžete písať odkiaľkoľvek.';
+
+  @override
+  String get messagesNoThreads => 'Zatiaľ žiadne správy.';
+
+  @override
+  String messagesWriteTo(String name) {
+    return 'Napísať: $name';
+  }
+
+  @override
+  String get messagesYourName => 'Tvoje meno';
+
+  @override
+  String get messagesYourNameHelp =>
+      'Meno, ktoré vidí tvoj tréner a tvoja skupina.';
+
+  @override
+  String get messagesHint => 'Správa';
+
+  @override
+  String get messagesSend => 'Odoslať';
+
+  @override
+  String get messagesWaiting => 'čaká na odoslanie';
+
+  @override
+  String get messagesLeaveGroup => 'Opustiť skupinu';
+
+  @override
+  String get messagesGone => 'Už nie si v tejto skupine.';
+
+  @override
+  String get messagesYou => 'Ty';
+
+  @override
+  String messagesStarted(String who, String title) {
+    return '$who založil(a) „$title“';
+  }
+
+  @override
+  String messagesAdded(String who, String names) {
+    return '$who pridal(a): $names';
+  }
+
+  @override
+  String messagesRemoved(String who, String names) {
+    return '$who odstránil(a): $names';
+  }
+
+  @override
+  String messagesLeft(String who) {
+    return '$who opustil(a) skupinu';
+  }
+
+  @override
+  String messagesRenamed(String who, String title) {
+    return '$who premenoval(a) skupinu na „$title“';
+  }
+
+  @override
+  String get messagesPrivacy =>
+      'Šifrované v tomto telefóne pre každé zariadenie v konverzácii. Server Fjelie správy iba odovzdáva a nemôže ich čítať.';
+
+  @override
+  String get messagesRecovery => 'Kód na obnovenie';
+
+  @override
+  String get messagesRecoveryMake => 'Vytvoriť nový kód na obnovenie';
+
+  @override
+  String get messagesRecoveryHelp =>
+      'Ak tento telefón stratíš, nový s týmto kódom pokračuje ako ty: tvoj tréner, tvoje skupiny, tvoje ďalšie správy. Nový kód zruší starý.';
+
+  @override
+  String get messagesRecoveryShown =>
+      'Zapíš si tento kód alebo ho ulož v správcovi hesiel. Zobrazí sa iba teraz.';
+
+  @override
+  String get messagesRecoveryUnreachable =>
+      'Žiadne pripojenie k serveru Fjelie. Skús to neskôr.';
+
+  @override
+  String get messagesRestore => 'Mám kód na obnovenie';
+
+  @override
+  String get messagesRestoreHint => 'Kód na obnovenie';
+
+  @override
+  String get messagesRestoreWrong => 'Tento kód sa nenašiel alebo nesedí.';
+
+  @override
+  String get messagesCopy => 'Kopírovať';
+
+  @override
+  String get messagesDone => 'Hotovo';
+
+  @override
+  String get coachingTitle => 'Koučing';
+
+  @override
+  String get coachingSubtitle => 'Tvoj tréner a čo vidí';
+
+  @override
+  String get coachingNone =>
+      'Zatiaľ žiadny tréner. Keď ťa tréner pozve, otvor jeho odkaz tu.';
+
+  @override
+  String get coachingJoin => 'Pripojiť sa k trénerovi';
+
+  @override
+  String get coachingJoinHelp =>
+      'Vlož odkaz s pozvánkou, ktorý ti poslal tréner.';
+
+  @override
+  String get coachingNotInvite => 'Toto nie je pozvánka na koučing Fjelia.';
+
+  @override
+  String get coachingOwnInvite => 'Táto pozvánka je tvoja vlastná.';
+
+  @override
+  String get coachingCoachUnknown =>
+      'Zariadenia tohto trénera zatiaľ nie sú známe. Popros ho, nech otvorí Fjeliu, a skús to znova.';
+
+  @override
+  String get coachingUnreachable =>
+      'Server Fjelie je nedostupný. Skús to znova, keď budeš online.';
+
+  @override
+  String coachingConsentTitle(String name) {
+    return 'Trénovať s $name?';
+  }
+
+  @override
+  String coachingConsentIntro(String name) {
+    return '$name ťa pozýva. Vyber, čo môže $name vidieť. Môžeš to kedykoľvek zmeniť alebo koučing ukončiť.';
+  }
+
+  @override
+  String coachingConsentHealth(String name) {
+    return 'Zdravie, EKG a výživa sú zdravotné údaje: k $name sa dostanú, iba ak ich zapneš.';
+  }
+
+  @override
+  String coachingConsentPrivacy(String name) {
+    return 'Zašifrované v tomto telefóne pre zariadenia $name. Server Fjelie to iba odovzdá a nemôže to prečítať.';
+  }
+
+  @override
+  String coachingConsentCode(String name) {
+    return 'Obrazovka $name ukazuje tento kód. Prečítaj mu ho, osobne alebo telefonicky:';
+  }
+
+  @override
+  String get coachingConsentShare => 'Zdieľať a odoslať';
+
+  @override
+  String get coachingCancel => 'Zrušiť';
+
+  @override
+  String get coachingContinue => 'Pokračovať';
+
+  @override
+  String coachingReadCode(String name, String code) {
+    return 'Prečítaj $name tento kód: $code. Keď $name prijme, uvidí, čo si vybral.';
+  }
+
+  @override
+  String coachingWaiting(String name) {
+    return 'Čaká sa, kým $name prijme';
+  }
+
+  @override
+  String coachingSince(String date) {
+    return 'Trénuje od $date';
+  }
+
+  @override
+  String coachingEnded(String date) {
+    return 'Ukončené $date';
+  }
+
+  @override
+  String coachingShares(String name) {
+    return 'Čo vidí $name';
+  }
+
+  @override
+  String get coachingEnd => 'Ukončiť koučing';
+
+  @override
+  String coachingEndConfirm(String name) {
+    return 'Ukončiť koučing s $name?';
+  }
+
+  @override
+  String coachingEndBody(String name) {
+    return 'K $name už nepríde nič nové. Čo už dostal, zostáva mu.';
+  }
+
+  @override
+  String get coachingEndAction => 'Ukončiť';
+
+  @override
+  String get coachingScopePlan => 'Plán';
+
+  @override
+  String get coachingScopeActivities => 'Aktivity';
+
+  @override
+  String get coachingScopeHealth => 'Zdravie';
+
+  @override
+  String get coachingScopeEcg => 'EKG';
+
+  @override
+  String get coachingScopeNutrition => 'Výživa';
+
+  @override
+  String get coachingScopeAiCoach => 'Poznámky AI trénera';
+
+  @override
+  String get coachingScopeMedia => 'Fotky a súbory';
+
+  @override
+  String get messagesChoosePhoto => 'Vybrať fotku';
+
+  @override
+  String get messagesRemovePhoto => 'Odstrániť fotku';
 }

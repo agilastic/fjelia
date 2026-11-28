@@ -88,18 +88,28 @@ class HrZonesState {
     }
     final zones = forSport(sport).bounds;
     if (sport == 'cycling' &&
-        [for (var i = 1; i < 4; i++) zones[i] >= running.bounds[i]]
-            .every((above) => above)) {
+        [
+          for (var i = 1; i < 4; i++) zones[i] >= running.bounds[i],
+        ].every((above) => above)) {
       return 'cyclingAboveRunning';
     }
     final e = estimateFor(sport);
     if (e != null &&
-        [for (var i = 1; i < 4; i++) (zones[i] - e[i]).abs() > 10]
-            .any((far) => far)) {
+        [
+          for (var i = 1; i < 4; i++) (zones[i] - e[i]).abs() > 10,
+        ].any((far) => far)) {
       return 'estimate';
     }
     return null;
   }
+
+  /// The sports whose zones in force today differ from [before]'s.
+  Set<String> changedFrom(HrZonesState before) => {
+    for (final sport in zoneSports)
+      if (forSport(sport).bounds.join(',') !=
+          before.forSport(sport).bounds.join(','))
+        sport,
+  };
 
   /// The zones an activity is measured with: those of its day.
   List<int> forActivity(String type, DateTime start) =>

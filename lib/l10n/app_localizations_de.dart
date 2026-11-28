@@ -9979,4 +9979,788 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get homeSkyHint =>
       'Ein sanfter Himmel oben auf Home, der dem heutigen Wetter und der Tageszeit folgt.';
+
+  @override
+  String get syncComputers => 'Computer';
+
+  @override
+  String get syncComputersSubtitle =>
+      'Mit Fjelia auf einem Mac oder PC synchronisieren';
+
+  @override
+  String get syncComputersFooter =>
+      'Dein Computer erhält eine Kopie deiner Aktivitäten, Pläne und Gesundheitsdaten über das lokale Netzwerk. Nichts geht über das Internet.';
+
+  @override
+  String get syncPairComputer => 'Mit einem Computer koppeln';
+
+  @override
+  String get syncScanHint =>
+      'Öffne Fjelia auf deinem Computer und wähle „Telefon koppeln“. Scanne dann den angezeigten Code.';
+
+  @override
+  String get syncNotAPairingCode => 'Das ist kein Fjelia-Kopplungscode.';
+
+  @override
+  String get syncNow => 'Jetzt synchronisieren';
+
+  @override
+  String get syncUnpair => 'Entkoppeln';
+
+  @override
+  String syncUnpairTitle(String name) {
+    return '$name entkoppeln?';
+  }
+
+  @override
+  String syncUnpairMessage(String name) {
+    return '$name behält die vorhandenen Daten, erhält aber keine Änderungen mehr von diesem Telefon.';
+  }
+
+  @override
+  String syncInProgress(int count) {
+    return 'Synchronisiere … $count Änderungen gesendet';
+  }
+
+  @override
+  String syncDone(int count) {
+    return 'Aktuell · $count Änderungen gesendet';
+  }
+
+  @override
+  String get syncUnreachable =>
+      'Computer nicht erreichbar. Prüfe, ob Fjelia dort geöffnet ist und beide Geräte im selben Netzwerk sind.';
+
+  @override
+  String get syncCodeExpired =>
+      'Dieser Code ist nicht mehr gültig. Zeige auf dem Computer einen neuen Code an.';
+
+  @override
+  String get syncUpdateBoth =>
+      'Aktualisiere Fjelia auf beiden Geräten und synchronisiere dann erneut.';
+
+  @override
+  String get syncPairAgain =>
+      'Der Computer kennt dieses Telefon nicht mehr. Kopple es erneut.';
+
+  @override
+  String get syncNoComputers => 'Noch kein Computer gekoppelt.';
+
+  @override
+  String syncDoneBoth(int sent, int received) {
+    return 'Aktuell · $sent gesendet, $received empfangen';
+  }
+
+  @override
+  String get thresholdSourceLab => 'Labortest';
+
+  @override
+  String get gearTitle => 'Ausrüstung';
+
+  @override
+  String get gearEmpty =>
+      'Füge Schuhe und Räder hinzu, um zu sehen, wie weit sie gelaufen sind und wann du sie ersetzen solltest.';
+
+  @override
+  String get gearAdd => 'Ausrüstung hinzufügen';
+
+  @override
+  String get gearEdit => 'Ausrüstung bearbeiten';
+
+  @override
+  String get gearKindShoes => 'Schuhe';
+
+  @override
+  String get gearKindBike => 'Rad';
+
+  @override
+  String get gearKindOther => 'Sonstiges';
+
+  @override
+  String get gearName => 'Name';
+
+  @override
+  String get gearBrand => 'Marke';
+
+  @override
+  String get gearStartKm => 'Strecke vor Fjelia (km)';
+
+  @override
+  String get gearRetireAt => 'Ersetzen bei (km)';
+
+  @override
+  String get gearDefault =>
+      'Jeden Lauf oder jede Fahrt dafür zählen, wenn nichts anderes gewählt ist';
+
+  @override
+  String get gearRetire => 'Ausmustern';
+
+  @override
+  String get gearUseAgain => 'Wieder nutzen';
+
+  @override
+  String get gearRetired => 'Ausgemustert';
+
+  @override
+  String gearLeft(int km, int limit) {
+    return 'Noch $km km von $limit';
+  }
+
+  @override
+  String gearDue(int limit) {
+    return 'Zeit zum Ersetzen: über $limit km';
+  }
+
+  @override
+  String gearActivities(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Aktivitäten',
+      one: '1 Aktivität',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get gearNone => 'Keine';
+
+  @override
+  String get diaryTitle => 'Tagebuch';
+
+  @override
+  String get diaryEmpty =>
+      'Notizen zu Aktivitäten, Einheiten und wie sich ein Training angefühlt hat, erscheinen hier an einem Ort.';
+
+  @override
+  String get diarySearch => 'Notizen durchsuchen';
+
+  @override
+  String get diaryKindActivity => 'Aktivitätsnotiz';
+
+  @override
+  String get diaryKindSession => 'Einheitennotiz';
+
+  @override
+  String get diaryKindFeeling => 'Wie es sich anfühlte';
+
+  @override
+  String get diaryKindCoach => 'Notiz für den Coach';
+
+  @override
+  String get diaryKindAbsence => 'Auszeit';
+
+  @override
+  String get diaryKindEcg => 'EKG-Notiz';
+
+  @override
+  String diaryEffort(int n) {
+    return 'Anstrengung $n von 10';
+  }
+
+  @override
+  String get diaryNoResults => 'Keine Notiz enthält das.';
+
+  @override
+  String get labTitle => 'Labortests';
+
+  @override
+  String get labEmpty =>
+      'Gib einen Laktat-Stufentest ein, um deine aerobe und anaerobe Schwelle zu finden.';
+
+  @override
+  String get labEnter => 'Test eingeben';
+
+  @override
+  String get labBike => 'Rad';
+
+  @override
+  String get labRun => 'Lauf';
+
+  @override
+  String get labPower => 'Leistung (W)';
+
+  @override
+  String get labPace => 'Tempo (min:s pro km)';
+
+  @override
+  String get labHr => 'Herzfrequenz';
+
+  @override
+  String get labLactate => 'Laktat (mmol/l)';
+
+  @override
+  String get labAddStep => 'Stufe hinzufügen';
+
+  @override
+  String get labSave => 'Test speichern';
+
+  @override
+  String get labLt1 => 'Aerobe Schwelle (LT1)';
+
+  @override
+  String get labLt2 => 'Anaerobe Schwelle (LT2)';
+
+  @override
+  String get labUse => 'Als Schwellen verwenden';
+
+  @override
+  String get labUsed => 'In deinen Schwellen gespeichert.';
+
+  @override
+  String get labDelete => 'Test löschen';
+
+  @override
+  String get labTooFew => 'Mindestens drei Stufen sind nötig.';
+
+  @override
+  String get labExplain =>
+      'LT1 ist, wo das Laktat zuerst 0,5 mmol/l über den Ruhewert steigt; LT2, wo es steil ansteigt. Lockeres Training bleibt unter LT1.';
+
+  @override
+  String syncProgress(int sent, int total) {
+    return 'Synchronisiere… $sent von $total';
+  }
+
+  @override
+  String syncLastAt(String when) {
+    return 'Zuletzt synchronisiert $when';
+  }
+
+  @override
+  String get courseTitle => 'Strecke';
+
+  @override
+  String get courseAdd => 'Strecke hinzufügen';
+
+  @override
+  String get courseAddHint =>
+      'Viele Rennen haben ihre Strecke in der Rennbibliothek, mit Verpflegungsstellen und Zeitlimits. Sonst füge die GPX-Datei des Veranstalters hinzu.';
+
+  @override
+  String get courseFromLibrary => 'In der Rennbibliothek suchen';
+
+  @override
+  String get courseFromFile => 'GPX-Datei öffnen';
+
+  @override
+  String get courseNoLibraryCourse => 'Keine Strecke in der Bibliothek';
+
+  @override
+  String get courseNotFetched =>
+      'Die Strecke des Veranstalters konnte nicht geladen werden. Versuch es noch einmal oder füge die GPX-Datei selbst hinzu.';
+
+  @override
+  String get courseUnreadable => 'In dieser Datei ist keine Strecke.';
+
+  @override
+  String get courseNoElevation =>
+      'Diese Strecke hat keine Höhen, daher lassen sich ihre Anstiege nicht zeigen. Versuch die Datei des Veranstalters.';
+
+  @override
+  String get courseDistance => 'Distanz';
+
+  @override
+  String get courseClimb => 'Anstieg';
+
+  @override
+  String get courseDescent => 'Abstieg';
+
+  @override
+  String get courseEffort => 'Aufwand';
+
+  @override
+  String get courseEffortNote => 'km + Anstieg / 100 (ITRA)';
+
+  @override
+  String get courseSteep => 'Steile Stellen';
+
+  @override
+  String get courseSteepNote => 'steilste 5 % von 100 m';
+
+  @override
+  String get courseHighest => 'Höchster Punkt';
+
+  @override
+  String get courseClimbs => 'Anstiege';
+
+  @override
+  String courseClimbsCount(int count) {
+    return '$count ab 50 m';
+  }
+
+  @override
+  String get courseNoClimbs => 'Kein Anstieg ab 50 m';
+
+  @override
+  String get courseGradients => 'Steigungen';
+
+  @override
+  String get courseBandSteepDown => 'Steil bergab';
+
+  @override
+  String get courseBandDown => 'Bergab';
+
+  @override
+  String get courseBandGentlyDown => 'Leicht bergab';
+
+  @override
+  String get courseBandFlat => 'Flach';
+
+  @override
+  String get courseBandGentlyUp => 'Leicht bergauf';
+
+  @override
+  String get courseBandUp => 'Bergauf';
+
+  @override
+  String get courseBandSteepUp => 'Steil bergauf';
+
+  @override
+  String get coursePlan => 'Dein Rennen';
+
+  @override
+  String get coursePlanFrom =>
+      'Aus deinen Läufen am Berg der letzten sechs Monate';
+
+  @override
+  String get coursePlanNeedsRuns =>
+      'Zeichne ein paar Läufe mit Höhe am Berg auf: Deine Zeit auf dieser Strecke wird daraus berechnet.';
+
+  @override
+  String get courseFinish => 'Ziel';
+
+  @override
+  String get courseArrival => 'Ankunft';
+
+  @override
+  String get courseSetStart => 'Start festlegen';
+
+  @override
+  String courseStartAt(String time) {
+    return 'Start $time';
+  }
+
+  @override
+  String get courseLegTo => 'Bis';
+
+  @override
+  String get courseLeg => 'Abschnitt';
+
+  @override
+  String get courseTotal => 'Gesamt';
+
+  @override
+  String get courseCutoff => 'Zeitlimit';
+
+  @override
+  String courseAhead(String time) {
+    return '$time Vorsprung';
+  }
+
+  @override
+  String courseLate(String time) {
+    return '$time zu spät';
+  }
+
+  @override
+  String get coursePlanNote =>
+      'Bewegungszeit in deinem Tempo je Steigung, verlangsamt für die Länge des Rennens, die Dunkelheit und die Hitze, die du angibst, mit deinen Pausen an den Verpflegungsstellen.';
+
+  @override
+  String get coursePace => 'Dein Tempo am Berg';
+
+  @override
+  String coursePaceNote(String pace) {
+    return 'Steigungsbereinigtes Tempo $pace · für Steigungen unter 2 km gilt die Minetti-Formel';
+  }
+
+  @override
+  String get courseProTeaser =>
+      'Deine Zielzeit, die Zeit an jedem Kontrollpunkt und der Vorsprung auf jedes Zeitlimit, aus deinen eigenen Läufen am Berg.';
+
+  @override
+  String get courseCheckpoints => 'Kontrollpunkte';
+
+  @override
+  String get courseCheckpointAdd => 'Kontrollpunkt hinzufügen';
+
+  @override
+  String get courseCheckpointName => 'Name';
+
+  @override
+  String get courseCutoffAfterStart => 'Zeitlimit (h:mm nach Start)';
+
+  @override
+  String get courseSetStartFirst =>
+      'Leg die Startzeit fest, um Zeitlimits einzutragen.';
+
+  @override
+  String get courseReplace => 'Strecke ersetzen';
+
+  @override
+  String get courseRemove => 'Strecke entfernen';
+
+  @override
+  String get courseSearchLibrary => 'Rennname oder Ort';
+
+  @override
+  String get courseNoRaceFound =>
+      'Kein Rennen gefunden. Versuch den Ort oder füge die GPX-Datei selbst hinzu.';
+
+  @override
+  String courseAidStations(int count) {
+    return '$count Verpflegungsstellen';
+  }
+
+  @override
+  String courseRun(String km) {
+    return '$km km gelaufen';
+  }
+
+  @override
+  String get courseRaceDay => 'Renntag';
+
+  @override
+  String get courseHigh => 'Erwartete Höchsttemperatur (°C)';
+
+  @override
+  String get courseHighNote =>
+      'Über 15 °C verlangsamt jedes Grad den Tag um etwa 0,55 % (0,34–0,77 %, Wegelin & Hoffman 2011).';
+
+  @override
+  String get courseNight => 'Langsamer im Dunkeln';
+
+  @override
+  String get courseNightNote =>
+      'Deine eigene Schätzung: wie viel langsamer du mit Stirnlampe läufst.';
+
+  @override
+  String get courseStop => 'Minuten an jeder Verpflegungsstelle';
+
+  @override
+  String courseInDark(String time) {
+    return '$time im Dunkeln';
+  }
+
+  @override
+  String courseFuelPerHour(int carbs, int fluid, int sodium) {
+    return '$carbs g Kohlenhydrate, $fluid ml, $sodium mg Natrium pro Stunde';
+  }
+
+  @override
+  String courseLegFuel(int carbs, String litres) {
+    return '$carbs g · $litres l';
+  }
+
+  @override
+  String get courseReadiness => 'Bereit für diese Strecke?';
+
+  @override
+  String get courseReadinessNote =>
+      'Deine Läufe der letzten acht Wochen neben dem, was die Strecke verlangt.';
+
+  @override
+  String get courseLongestRun => 'Längster Lauf';
+
+  @override
+  String get courseWeekClimb => 'Meiste Höhenmeter in einer Woche';
+
+  @override
+  String get courseBiggestClimb => 'Größter Anstieg am Stück';
+
+  @override
+  String get courseBiggestDescent => 'Größter Abstieg am Stück';
+
+  @override
+  String courseVersus(String you, String course) {
+    return '$you · Strecke $course';
+  }
+
+  @override
+  String get courseResult => 'Geplant und gelaufen';
+
+  @override
+  String get courseResultNote =>
+      'Jeder Kontrollpunkt beim gleichen Anteil der Uhr-Distanz wie der Strecke.';
+
+  @override
+  String courseFaster(String time) {
+    return '$time schneller';
+  }
+
+  @override
+  String courseSlower(String time) {
+    return '$time langsamer';
+  }
+
+  @override
+  String get crewCard => 'Crew-Karte';
+
+  @override
+  String get crewCheckpoint => 'Kontrollpunkt';
+
+  @override
+  String get crewUpDown => 'Auf / ab';
+
+  @override
+  String get crewDue => 'Erwartet';
+
+  @override
+  String get crewHandOver => 'Übergabe für den nächsten Abschnitt';
+
+  @override
+  String crewStart(String time) {
+    return 'Start $time';
+  }
+
+  @override
+  String crewFinishRange(String time, String from, String to) {
+    return 'Ziel $time ($from–$to)';
+  }
+
+  @override
+  String crewFuel(int carbs, String litres, int sodium) {
+    return '$carbs g Kohlenhydrate · $litres l · $sodium mg Natrium';
+  }
+
+  @override
+  String get crewFooter =>
+      'Mit Fjelia aus meinen eigenen Läufen am Berg geplant.';
+
+  @override
+  String get messagesTitle => 'Nachrichten';
+
+  @override
+  String get messagesEmpty =>
+      'Du und dein Coach lernt euch kennen, wenn dieses Handy in der Nähe mit dem Computer des Coachs synchronisiert. Danach könnt ihr euch von überall schreiben.';
+
+  @override
+  String get messagesNoThreads => 'Noch keine Nachrichten.';
+
+  @override
+  String messagesWriteTo(String name) {
+    return '$name schreiben';
+  }
+
+  @override
+  String get messagesYourName => 'Dein Name';
+
+  @override
+  String get messagesYourNameHelp =>
+      'Der Name, den dein Coach und deine Gruppe sehen.';
+
+  @override
+  String get messagesHint => 'Nachricht';
+
+  @override
+  String get messagesSend => 'Senden';
+
+  @override
+  String get messagesWaiting => 'wird gesendet, sobald möglich';
+
+  @override
+  String get messagesLeaveGroup => 'Gruppe verlassen';
+
+  @override
+  String get messagesGone => 'Du bist nicht mehr in dieser Gruppe.';
+
+  @override
+  String get messagesYou => 'Du';
+
+  @override
+  String messagesStarted(String who, String title) {
+    return '$who hat „$title“ gestartet';
+  }
+
+  @override
+  String messagesAdded(String who, String names) {
+    return '$who hat $names hinzugefügt';
+  }
+
+  @override
+  String messagesRemoved(String who, String names) {
+    return '$who hat $names entfernt';
+  }
+
+  @override
+  String messagesLeft(String who) {
+    return '$who hat die Gruppe verlassen';
+  }
+
+  @override
+  String messagesRenamed(String who, String title) {
+    return '$who hat die Gruppe in „$title“ umbenannt';
+  }
+
+  @override
+  String get messagesPrivacy =>
+      'Auf diesem Handy für jedes Gerät im Gespräch verschlüsselt. Fjelias Server leitet Nachrichten nur weiter und kann sie nicht lesen.';
+
+  @override
+  String get messagesRecovery => 'Wiederherstellungscode';
+
+  @override
+  String get messagesRecoveryMake => 'Neuen Wiederherstellungscode erstellen';
+
+  @override
+  String get messagesRecoveryHelp =>
+      'Geht dieses Handy verloren, macht ein neues mit diesem Code als du weiter: dein Coach, deine Gruppen, deine künftigen Nachrichten. Ein neuer Code macht den alten ungültig.';
+
+  @override
+  String get messagesRecoveryShown =>
+      'Schreib dir diesen Code auf oder bewahre ihn in deinem Passwortmanager auf. Er wird nur jetzt angezeigt.';
+
+  @override
+  String get messagesRecoveryUnreachable =>
+      'Keine Verbindung zum Server von Fjelia. Versuch es später noch einmal.';
+
+  @override
+  String get messagesRestore => 'Ich habe einen Wiederherstellungscode';
+
+  @override
+  String get messagesRestoreHint => 'Wiederherstellungscode';
+
+  @override
+  String get messagesRestoreWrong =>
+      'Dieser Code wurde nicht gefunden oder passt nicht.';
+
+  @override
+  String get messagesCopy => 'Kopieren';
+
+  @override
+  String get messagesDone => 'Fertig';
+
+  @override
+  String get coachingTitle => 'Coaching';
+
+  @override
+  String get coachingSubtitle => 'Dein Coach und was er sieht';
+
+  @override
+  String get coachingNone =>
+      'Noch kein Coach. Wenn dich ein Coach einlädt, öffne seinen Link hier.';
+
+  @override
+  String get coachingJoin => 'Einem Coach beitreten';
+
+  @override
+  String get coachingJoinHelp =>
+      'Füge den Einladungslink ein, den dein Coach dir geschickt hat.';
+
+  @override
+  String get coachingNotInvite => 'Das ist keine Fjelia-Coaching-Einladung.';
+
+  @override
+  String get coachingOwnInvite => 'Das ist deine eigene Einladung.';
+
+  @override
+  String get coachingCoachUnknown =>
+      'Die Geräte dieses Coachs sind noch nicht bekannt. Bitte ihn, Fjelia zu öffnen, und versuche es dann erneut.';
+
+  @override
+  String get coachingUnreachable =>
+      'Fjelias Server ist nicht erreichbar. Versuche es erneut, wenn du online bist.';
+
+  @override
+  String coachingConsentTitle(String name) {
+    return 'Von $name coachen lassen?';
+  }
+
+  @override
+  String coachingConsentIntro(String name) {
+    return '$name hat dich eingeladen. Wähle, was $name sehen darf. Du kannst das jederzeit ändern oder das Coaching beenden.';
+  }
+
+  @override
+  String coachingConsentHealth(String name) {
+    return 'Gesundheit, EKG und Ernährung sind Gesundheitsdaten: Sie erreichen $name nur, wenn du sie einschaltest.';
+  }
+
+  @override
+  String coachingConsentPrivacy(String name) {
+    return 'Auf diesem Telefon für die Geräte von $name verschlüsselt. Fjelias Server leitet es nur weiter und kann es nicht lesen.';
+  }
+
+  @override
+  String coachingConsentCode(String name) {
+    return 'Auf dem Bildschirm von $name steht dieser Code. Lies ihn vor, persönlich oder am Telefon:';
+  }
+
+  @override
+  String get coachingConsentShare => 'Teilen und senden';
+
+  @override
+  String get coachingCancel => 'Abbrechen';
+
+  @override
+  String get coachingContinue => 'Weiter';
+
+  @override
+  String coachingReadCode(String name, String code) {
+    return 'Lies $name diesen Code vor: $code. Sobald $name annimmt, sieht $name, was du gewählt hast.';
+  }
+
+  @override
+  String coachingWaiting(String name) {
+    return 'Warte, bis $name annimmt';
+  }
+
+  @override
+  String coachingSince(String date) {
+    return 'Gecoacht seit $date';
+  }
+
+  @override
+  String coachingEnded(String date) {
+    return 'Beendet am $date';
+  }
+
+  @override
+  String coachingShares(String name) {
+    return 'Was $name sieht';
+  }
+
+  @override
+  String get coachingEnd => 'Coaching beenden';
+
+  @override
+  String coachingEndConfirm(String name) {
+    return 'Coaching mit $name beenden?';
+  }
+
+  @override
+  String coachingEndBody(String name) {
+    return 'Nichts Neues erreicht $name mehr. Was bereits angekommen ist, bleibt dort.';
+  }
+
+  @override
+  String get coachingEndAction => 'Beenden';
+
+  @override
+  String get coachingScopePlan => 'Plan';
+
+  @override
+  String get coachingScopeActivities => 'Aktivitäten';
+
+  @override
+  String get coachingScopeHealth => 'Gesundheit';
+
+  @override
+  String get coachingScopeEcg => 'EKG';
+
+  @override
+  String get coachingScopeNutrition => 'Ernährung';
+
+  @override
+  String get coachingScopeAiCoach => 'KI-Coach-Notizen';
+
+  @override
+  String get coachingScopeMedia => 'Fotos und Dateien';
+
+  @override
+  String get messagesChoosePhoto => 'Foto wählen';
+
+  @override
+  String get messagesRemovePhoto => 'Foto entfernen';
 }

@@ -1,13 +1,11 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fjelia_core/utils/days.dart';
 
 const _askFirstKey = 'plan_changes_ask_first_v1';
 const _decidedKey = 'readiness_proposal_decided_v1';
 const _notifiedKey = 'plan_proposal_notified_v1';
 const _proCoachKey = 'plan_proposal_pro_coach_v1';
 const _revisionKey = 'plan_proposal_revision_v1';
-
-String _dayKey(DateTime d) =>
-    DateTime(d.year, d.month, d.day).toIso8601String().substring(0, 10);
 
 /// What the athlete said about plan changes Fjelia proposes.
 abstract final class PlanProposalStore {
@@ -36,14 +34,14 @@ abstract final class PlanProposalStore {
   /// still opens it after the app was closed.
   static Future<String?> revision(DateTime day) async {
     final raw = (await SharedPreferences.getInstance()).getString(_revisionKey);
-    if (raw == null || !raw.startsWith('${_dayKey(day)}|')) return null;
+    if (raw == null || !raw.startsWith('${isoDay(day)}|')) return null;
     return raw.substring(11);
   }
 
   static Future<void> saveRevision(DateTime day, String json) async =>
       (await SharedPreferences.getInstance()).setString(
         _revisionKey,
-        '${_dayKey(day)}|$json',
+        '${isoDay(day)}|$json',
       );
 
   static Future<void> clearRevision() async =>
@@ -53,9 +51,9 @@ abstract final class PlanProposalStore {
   static Future<bool> decided(DateTime day) async =>
       ((await SharedPreferences.getInstance()).getStringList(_decidedKey) ??
               const <String>[])
-          .contains(_dayKey(day));
+          .contains(isoDay(day));
 
-  static Future<void> decide(DateTime day) => _add(_decidedKey, _dayKey(day));
+  static Future<void> decide(DateTime day) => _add(_decidedKey, isoDay(day));
 
   /// When the notification about [key] was set to appear; each proposal
   /// gets one, however often the app goes to the background.

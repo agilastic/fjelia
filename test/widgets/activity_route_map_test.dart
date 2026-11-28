@@ -1,6 +1,5 @@
 import 'package:fjelia/l10n/app_localizations.dart';
 
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -8,15 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:fjelia/widgets/activity_route_map.dart';
 
-class _TestTiles extends TileProvider {
-  @override
-  ImageProvider getImage(TileCoordinates coordinates, TileLayer options) =>
-      MemoryImage(
-        base64Decode(
-          'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGPYcunOfwAIAgNiJBgw5wAAAABJRU5ErkJggg==',
-        ),
-      );
-}
+import '../support/blank_tiles.dart';
 
 void main() {
   testWidgets('map zoom, fit, fullscreen, attribution and GPX controls work', (
@@ -36,7 +27,7 @@ void main() {
                 LatLng(39.78, 3.10),
                 LatLng(39.77, 3.18),
               ],
-              tileProvider: _TestTiles(),
+              tileProvider: BlankTiles(),
               exportGpx: (_) async {
                 exports++;
               },
@@ -102,7 +93,7 @@ void main() {
         home: Scaffold(
           body: ActivityRouteMap(
             route: const [],
-            tileProvider: _TestTiles(),
+            tileProvider: BlankTiles(),
             exportGpx: (_) async {
               fail('An empty route cannot export');
             },

@@ -17108,6 +17108,1308 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'A soft sky at the top of Home that follows today\'s weather and the time of day.'**
   String get homeSkyHint;
+
+  /// No description provided for @syncComputers.
+  ///
+  /// In en, this message translates to:
+  /// **'Computers'**
+  String get syncComputers;
+
+  /// No description provided for @syncComputersSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync with Fjelia on a Mac or PC'**
+  String get syncComputersSubtitle;
+
+  /// No description provided for @syncComputersFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'Your computer gets a copy of your activities, plans and health data over the local network. Nothing goes through the internet.'**
+  String get syncComputersFooter;
+
+  /// No description provided for @syncPairComputer.
+  ///
+  /// In en, this message translates to:
+  /// **'Pair with a computer'**
+  String get syncPairComputer;
+
+  /// No description provided for @syncScanHint.
+  ///
+  /// In en, this message translates to:
+  /// **'On your computer, open Fjelia and choose Pair Phone. Then scan the code it shows.'**
+  String get syncScanHint;
+
+  /// No description provided for @syncNotAPairingCode.
+  ///
+  /// In en, this message translates to:
+  /// **'This isn\'t a Fjelia pairing code.'**
+  String get syncNotAPairingCode;
+
+  /// No description provided for @syncNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync now'**
+  String get syncNow;
+
+  /// No description provided for @syncUnpair.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpair'**
+  String get syncUnpair;
+
+  /// No description provided for @syncUnpairTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpair {name}?'**
+  String syncUnpairTitle(String name);
+
+  /// No description provided for @syncUnpairMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} keeps the data it already has but gets no more changes from this phone.'**
+  String syncUnpairMessage(String name);
+
+  /// No description provided for @syncInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Syncing… {count} changes sent'**
+  String syncInProgress(int count);
+
+  /// No description provided for @syncDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Up to date · {count} changes sent'**
+  String syncDone(int count);
+
+  /// No description provided for @syncUnreachable.
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t reach the computer. Make sure Fjelia is open on it and both devices are on the same network.'**
+  String get syncUnreachable;
+
+  /// No description provided for @syncCodeExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'This code is no longer valid. Show a new code on the computer.'**
+  String get syncCodeExpired;
+
+  /// No description provided for @syncUpdateBoth.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Fjelia on both devices, then sync again.'**
+  String get syncUpdateBoth;
+
+  /// No description provided for @syncPairAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'The computer no longer knows this phone. Pair it again.'**
+  String get syncPairAgain;
+
+  /// No description provided for @syncNoComputers.
+  ///
+  /// In en, this message translates to:
+  /// **'No computer paired yet.'**
+  String get syncNoComputers;
+
+  /// No description provided for @syncDoneBoth.
+  ///
+  /// In en, this message translates to:
+  /// **'Up to date · {sent} sent, {received} received'**
+  String syncDoneBoth(int sent, int received);
+
+  /// No description provided for @thresholdSourceLab.
+  ///
+  /// In en, this message translates to:
+  /// **'Lab test'**
+  String get thresholdSourceLab;
+
+  /// No description provided for @gearTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Gear'**
+  String get gearTitle;
+
+  /// No description provided for @gearEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your shoes and bikes to see how far each has gone and when to replace it.'**
+  String get gearEmpty;
+
+  /// No description provided for @gearAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add gear'**
+  String get gearAdd;
+
+  /// No description provided for @gearEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit gear'**
+  String get gearEdit;
+
+  /// No description provided for @gearKindShoes.
+  ///
+  /// In en, this message translates to:
+  /// **'Shoes'**
+  String get gearKindShoes;
+
+  /// No description provided for @gearKindBike.
+  ///
+  /// In en, this message translates to:
+  /// **'Bike'**
+  String get gearKindBike;
+
+  /// No description provided for @gearKindOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get gearKindOther;
+
+  /// No description provided for @gearName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get gearName;
+
+  /// No description provided for @gearBrand.
+  ///
+  /// In en, this message translates to:
+  /// **'Brand'**
+  String get gearBrand;
+
+  /// No description provided for @gearStartKm.
+  ///
+  /// In en, this message translates to:
+  /// **'Distance before Fjelia (km)'**
+  String get gearStartKm;
+
+  /// No description provided for @gearRetireAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace at (km)'**
+  String get gearRetireAt;
+
+  /// No description provided for @gearDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Count every run or ride for it unless another is chosen'**
+  String get gearDefault;
+
+  /// No description provided for @gearRetire.
+  ///
+  /// In en, this message translates to:
+  /// **'Retire'**
+  String get gearRetire;
+
+  /// No description provided for @gearUseAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Use again'**
+  String get gearUseAgain;
+
+  /// No description provided for @gearRetired.
+  ///
+  /// In en, this message translates to:
+  /// **'Retired'**
+  String get gearRetired;
+
+  /// No description provided for @gearLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{km} km left of {limit}'**
+  String gearLeft(int km, int limit);
+
+  /// No description provided for @gearDue.
+  ///
+  /// In en, this message translates to:
+  /// **'Time to replace: past {limit} km'**
+  String gearDue(int limit);
+
+  /// No description provided for @gearActivities.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 activity} other{{count} activities}}'**
+  String gearActivities(int count);
+
+  /// No description provided for @gearNone.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get gearNone;
+
+  /// No description provided for @diaryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Diary'**
+  String get diaryTitle;
+
+  /// No description provided for @diaryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes you write on activities, sessions and how a workout felt appear here, all in one place.'**
+  String get diaryEmpty;
+
+  /// No description provided for @diarySearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search notes'**
+  String get diarySearch;
+
+  /// No description provided for @diaryKindActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity note'**
+  String get diaryKindActivity;
+
+  /// No description provided for @diaryKindSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Session note'**
+  String get diaryKindSession;
+
+  /// No description provided for @diaryKindFeeling.
+  ///
+  /// In en, this message translates to:
+  /// **'How it felt'**
+  String get diaryKindFeeling;
+
+  /// No description provided for @diaryKindCoach.
+  ///
+  /// In en, this message translates to:
+  /// **'Note for the coach'**
+  String get diaryKindCoach;
+
+  /// No description provided for @diaryKindAbsence.
+  ///
+  /// In en, this message translates to:
+  /// **'Time away'**
+  String get diaryKindAbsence;
+
+  /// No description provided for @diaryKindEcg.
+  ///
+  /// In en, this message translates to:
+  /// **'ECG note'**
+  String get diaryKindEcg;
+
+  /// No description provided for @diaryEffort.
+  ///
+  /// In en, this message translates to:
+  /// **'Effort {n} of 10'**
+  String diaryEffort(int n);
+
+  /// No description provided for @diaryNoResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No note contains that.'**
+  String get diaryNoResults;
+
+  /// No description provided for @labTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Lab tests'**
+  String get labTitle;
+
+  /// No description provided for @labEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a lactate step test to find your aerobic and anaerobic thresholds.'**
+  String get labEmpty;
+
+  /// No description provided for @labEnter.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a test'**
+  String get labEnter;
+
+  /// No description provided for @labBike.
+  ///
+  /// In en, this message translates to:
+  /// **'Bike'**
+  String get labBike;
+
+  /// No description provided for @labRun.
+  ///
+  /// In en, this message translates to:
+  /// **'Run'**
+  String get labRun;
+
+  /// No description provided for @labPower.
+  ///
+  /// In en, this message translates to:
+  /// **'Power (W)'**
+  String get labPower;
+
+  /// No description provided for @labPace.
+  ///
+  /// In en, this message translates to:
+  /// **'Pace (min:s per km)'**
+  String get labPace;
+
+  /// No description provided for @labHr.
+  ///
+  /// In en, this message translates to:
+  /// **'Heart rate'**
+  String get labHr;
+
+  /// No description provided for @labLactate.
+  ///
+  /// In en, this message translates to:
+  /// **'Lactate (mmol/l)'**
+  String get labLactate;
+
+  /// No description provided for @labAddStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Add step'**
+  String get labAddStep;
+
+  /// No description provided for @labSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save test'**
+  String get labSave;
+
+  /// No description provided for @labLt1.
+  ///
+  /// In en, this message translates to:
+  /// **'Aerobic threshold (LT1)'**
+  String get labLt1;
+
+  /// No description provided for @labLt2.
+  ///
+  /// In en, this message translates to:
+  /// **'Anaerobic threshold (LT2)'**
+  String get labLt2;
+
+  /// No description provided for @labUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Use as thresholds'**
+  String get labUse;
+
+  /// No description provided for @labUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to your thresholds.'**
+  String get labUsed;
+
+  /// No description provided for @labDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete test'**
+  String get labDelete;
+
+  /// No description provided for @labTooFew.
+  ///
+  /// In en, this message translates to:
+  /// **'At least three steps are needed.'**
+  String get labTooFew;
+
+  /// No description provided for @labExplain.
+  ///
+  /// In en, this message translates to:
+  /// **'LT1 is where lactate first rises 0.5 mmol/l above resting; LT2 is where it starts to climb steeply. Easy training stays below LT1.'**
+  String get labExplain;
+
+  /// No description provided for @syncProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Syncing… {sent} of {total}'**
+  String syncProgress(int sent, int total);
+
+  /// No description provided for @syncLastAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Last synced {when}'**
+  String syncLastAt(String when);
+
+  /// No description provided for @courseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Course'**
+  String get courseTitle;
+
+  /// No description provided for @courseAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add the course'**
+  String get courseAdd;
+
+  /// No description provided for @courseAddHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Many races have their course in the race library, with aid stations and cut-offs. Otherwise add the organiser\'s GPX file.'**
+  String get courseAddHint;
+
+  /// No description provided for @courseFromLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Find in race library'**
+  String get courseFromLibrary;
+
+  /// No description provided for @courseFromFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Open GPX file'**
+  String get courseFromFile;
+
+  /// No description provided for @courseNoLibraryCourse.
+  ///
+  /// In en, this message translates to:
+  /// **'No course in the library'**
+  String get courseNoLibraryCourse;
+
+  /// No description provided for @courseNotFetched.
+  ///
+  /// In en, this message translates to:
+  /// **'The organiser\'s course could not be fetched. Try again, or add the GPX file yourself.'**
+  String get courseNotFetched;
+
+  /// No description provided for @courseUnreadable.
+  ///
+  /// In en, this message translates to:
+  /// **'This file has no course in it.'**
+  String get courseUnreadable;
+
+  /// No description provided for @courseNoElevation.
+  ///
+  /// In en, this message translates to:
+  /// **'This course has no heights, so its climbs can\'t be shown. Try the organiser\'s file.'**
+  String get courseNoElevation;
+
+  /// No description provided for @courseDistance.
+  ///
+  /// In en, this message translates to:
+  /// **'Distance'**
+  String get courseDistance;
+
+  /// No description provided for @courseClimb.
+  ///
+  /// In en, this message translates to:
+  /// **'Climb'**
+  String get courseClimb;
+
+  /// No description provided for @courseDescent.
+  ///
+  /// In en, this message translates to:
+  /// **'Descent'**
+  String get courseDescent;
+
+  /// No description provided for @courseEffort.
+  ///
+  /// In en, this message translates to:
+  /// **'Effort'**
+  String get courseEffort;
+
+  /// No description provided for @courseEffortNote.
+  ///
+  /// In en, this message translates to:
+  /// **'km + climb / 100 (ITRA)'**
+  String get courseEffortNote;
+
+  /// No description provided for @courseSteep.
+  ///
+  /// In en, this message translates to:
+  /// **'Steep parts'**
+  String get courseSteep;
+
+  /// No description provided for @courseSteepNote.
+  ///
+  /// In en, this message translates to:
+  /// **'steepest 5 % of 100 m'**
+  String get courseSteepNote;
+
+  /// No description provided for @courseHighest.
+  ///
+  /// In en, this message translates to:
+  /// **'Highest point'**
+  String get courseHighest;
+
+  /// No description provided for @courseClimbs.
+  ///
+  /// In en, this message translates to:
+  /// **'Climbs'**
+  String get courseClimbs;
+
+  /// No description provided for @courseClimbsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of 50 m or more'**
+  String courseClimbsCount(int count);
+
+  /// No description provided for @courseNoClimbs.
+  ///
+  /// In en, this message translates to:
+  /// **'No climb of 50 m or more'**
+  String get courseNoClimbs;
+
+  /// No description provided for @courseGradients.
+  ///
+  /// In en, this message translates to:
+  /// **'Gradients'**
+  String get courseGradients;
+
+  /// No description provided for @courseBandSteepDown.
+  ///
+  /// In en, this message translates to:
+  /// **'Steep down'**
+  String get courseBandSteepDown;
+
+  /// No description provided for @courseBandDown.
+  ///
+  /// In en, this message translates to:
+  /// **'Down'**
+  String get courseBandDown;
+
+  /// No description provided for @courseBandGentlyDown.
+  ///
+  /// In en, this message translates to:
+  /// **'Gently down'**
+  String get courseBandGentlyDown;
+
+  /// No description provided for @courseBandFlat.
+  ///
+  /// In en, this message translates to:
+  /// **'Flat'**
+  String get courseBandFlat;
+
+  /// No description provided for @courseBandGentlyUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Gently up'**
+  String get courseBandGentlyUp;
+
+  /// No description provided for @courseBandUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Up'**
+  String get courseBandUp;
+
+  /// No description provided for @courseBandSteepUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Steep up'**
+  String get courseBandSteepUp;
+
+  /// No description provided for @coursePlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Your race'**
+  String get coursePlan;
+
+  /// No description provided for @coursePlanFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From your running on hills in the last six months'**
+  String get coursePlanFrom;
+
+  /// No description provided for @coursePlanNeedsRuns.
+  ///
+  /// In en, this message translates to:
+  /// **'Record a few runs with altitude on hills: your time on this course is worked out from them.'**
+  String get coursePlanNeedsRuns;
+
+  /// No description provided for @courseFinish.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish'**
+  String get courseFinish;
+
+  /// No description provided for @courseArrival.
+  ///
+  /// In en, this message translates to:
+  /// **'Arrival'**
+  String get courseArrival;
+
+  /// No description provided for @courseSetStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Set start'**
+  String get courseSetStart;
+
+  /// No description provided for @courseStartAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Start {time}'**
+  String courseStartAt(String time);
+
+  /// No description provided for @courseLegTo.
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get courseLegTo;
+
+  /// No description provided for @courseLeg.
+  ///
+  /// In en, this message translates to:
+  /// **'Leg'**
+  String get courseLeg;
+
+  /// No description provided for @courseTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get courseTotal;
+
+  /// No description provided for @courseCutoff.
+  ///
+  /// In en, this message translates to:
+  /// **'Cut-off'**
+  String get courseCutoff;
+
+  /// No description provided for @courseAhead.
+  ///
+  /// In en, this message translates to:
+  /// **'{time} ahead'**
+  String courseAhead(String time);
+
+  /// No description provided for @courseLate.
+  ///
+  /// In en, this message translates to:
+  /// **'{time} late'**
+  String courseLate(String time);
+
+  /// No description provided for @coursePlanNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Moving time at your pace on each grade, slowed for the length of the race, the dark and the heat you set, with your aid station stops.'**
+  String get coursePlanNote;
+
+  /// No description provided for @coursePace.
+  ///
+  /// In en, this message translates to:
+  /// **'Your pace on hills'**
+  String get coursePace;
+
+  /// No description provided for @coursePaceNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Grade-adjusted pace {pace} · grades you ran less than 2 km on use the Minetti formula'**
+  String coursePaceNote(String pace);
+
+  /// No description provided for @courseProTeaser.
+  ///
+  /// In en, this message translates to:
+  /// **'Your finish time, the time at each checkpoint and the margin to each cut-off, from your own running on hills.'**
+  String get courseProTeaser;
+
+  /// No description provided for @courseCheckpoints.
+  ///
+  /// In en, this message translates to:
+  /// **'Checkpoints'**
+  String get courseCheckpoints;
+
+  /// No description provided for @courseCheckpointAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add checkpoint'**
+  String get courseCheckpointAdd;
+
+  /// No description provided for @courseCheckpointName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get courseCheckpointName;
+
+  /// No description provided for @courseCutoffAfterStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Cut-off (h:mm after start)'**
+  String get courseCutoffAfterStart;
+
+  /// No description provided for @courseSetStartFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Set the race start to enter cut-offs.'**
+  String get courseSetStartFirst;
+
+  /// No description provided for @courseReplace.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace course'**
+  String get courseReplace;
+
+  /// No description provided for @courseRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove course'**
+  String get courseRemove;
+
+  /// No description provided for @courseSearchLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Race name or town'**
+  String get courseSearchLibrary;
+
+  /// No description provided for @courseNoRaceFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No race found. Try the town, or add the GPX file yourself.'**
+  String get courseNoRaceFound;
+
+  /// No description provided for @courseAidStations.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} aid stations'**
+  String courseAidStations(int count);
+
+  /// No description provided for @courseRun.
+  ///
+  /// In en, this message translates to:
+  /// **'{km} km run'**
+  String courseRun(String km);
+
+  /// No description provided for @courseRaceDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Race day'**
+  String get courseRaceDay;
+
+  /// No description provided for @courseHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected high (°C)'**
+  String get courseHigh;
+
+  /// No description provided for @courseHighNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Above 15 °C each degree slows the daylight by about 0.55 % (0.34–0.77 %, Wegelin & Hoffman 2011).'**
+  String get courseHighNote;
+
+  /// No description provided for @courseNight.
+  ///
+  /// In en, this message translates to:
+  /// **'Slower in the dark'**
+  String get courseNight;
+
+  /// No description provided for @courseNightNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Your own estimate: how much slower you run with a headlamp.'**
+  String get courseNightNote;
+
+  /// No description provided for @courseStop.
+  ///
+  /// In en, this message translates to:
+  /// **'Minutes at each aid station'**
+  String get courseStop;
+
+  /// No description provided for @courseInDark.
+  ///
+  /// In en, this message translates to:
+  /// **'{time} in the dark'**
+  String courseInDark(String time);
+
+  /// No description provided for @courseFuelPerHour.
+  ///
+  /// In en, this message translates to:
+  /// **'{carbs} g carbohydrate, {fluid} ml, {sodium} mg sodium per hour'**
+  String courseFuelPerHour(int carbs, int fluid, int sodium);
+
+  /// No description provided for @courseLegFuel.
+  ///
+  /// In en, this message translates to:
+  /// **'{carbs} g · {litres} l'**
+  String courseLegFuel(int carbs, String litres);
+
+  /// No description provided for @courseReadiness.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready for this course?'**
+  String get courseReadiness;
+
+  /// No description provided for @courseReadinessNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Your last eight weeks of running next to what the course asks for.'**
+  String get courseReadinessNote;
+
+  /// No description provided for @courseLongestRun.
+  ///
+  /// In en, this message translates to:
+  /// **'Longest run'**
+  String get courseLongestRun;
+
+  /// No description provided for @courseWeekClimb.
+  ///
+  /// In en, this message translates to:
+  /// **'Most climbing in a week'**
+  String get courseWeekClimb;
+
+  /// No description provided for @courseBiggestClimb.
+  ///
+  /// In en, this message translates to:
+  /// **'Biggest climb in one go'**
+  String get courseBiggestClimb;
+
+  /// No description provided for @courseBiggestDescent.
+  ///
+  /// In en, this message translates to:
+  /// **'Biggest descent in one go'**
+  String get courseBiggestDescent;
+
+  /// No description provided for @courseVersus.
+  ///
+  /// In en, this message translates to:
+  /// **'{you} · course {course}'**
+  String courseVersus(String you, String course);
+
+  /// No description provided for @courseResult.
+  ///
+  /// In en, this message translates to:
+  /// **'As planned and as run'**
+  String get courseResult;
+
+  /// No description provided for @courseResultNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Each checkpoint at the same share of your watch\'s distance as of the course\'s.'**
+  String get courseResultNote;
+
+  /// No description provided for @courseFaster.
+  ///
+  /// In en, this message translates to:
+  /// **'{time} faster'**
+  String courseFaster(String time);
+
+  /// No description provided for @courseSlower.
+  ///
+  /// In en, this message translates to:
+  /// **'{time} slower'**
+  String courseSlower(String time);
+
+  /// No description provided for @crewCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Crew card'**
+  String get crewCard;
+
+  /// No description provided for @crewCheckpoint.
+  ///
+  /// In en, this message translates to:
+  /// **'Checkpoint'**
+  String get crewCheckpoint;
+
+  /// No description provided for @crewUpDown.
+  ///
+  /// In en, this message translates to:
+  /// **'Up / down'**
+  String get crewUpDown;
+
+  /// No description provided for @crewDue.
+  ///
+  /// In en, this message translates to:
+  /// **'Due'**
+  String get crewDue;
+
+  /// No description provided for @crewHandOver.
+  ///
+  /// In en, this message translates to:
+  /// **'Hand over for the next leg'**
+  String get crewHandOver;
+
+  /// No description provided for @crewStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start {time}'**
+  String crewStart(String time);
+
+  /// No description provided for @crewFinishRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish {time} ({from}–{to})'**
+  String crewFinishRange(String time, String from, String to);
+
+  /// No description provided for @crewFuel.
+  ///
+  /// In en, this message translates to:
+  /// **'{carbs} g carbohydrate · {litres} l · {sodium} mg sodium'**
+  String crewFuel(int carbs, String litres, int sodium);
+
+  /// No description provided for @crewFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'Planned with Fjelia from my own running on hills.'**
+  String get crewFooter;
+
+  /// No description provided for @messagesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages'**
+  String get messagesTitle;
+
+  /// No description provided for @messagesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'You and your coach meet when this phone syncs with the coach\'s computer nearby. Then you can write to each other from anywhere.'**
+  String get messagesEmpty;
+
+  /// No description provided for @messagesNoThreads.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages yet.'**
+  String get messagesNoThreads;
+
+  /// No description provided for @messagesWriteTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Write to {name}'**
+  String messagesWriteTo(String name);
+
+  /// No description provided for @messagesYourName.
+  ///
+  /// In en, this message translates to:
+  /// **'Your name'**
+  String get messagesYourName;
+
+  /// No description provided for @messagesYourNameHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'The name your coach and group see.'**
+  String get messagesYourNameHelp;
+
+  /// No description provided for @messagesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Message'**
+  String get messagesHint;
+
+  /// No description provided for @messagesSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get messagesSend;
+
+  /// No description provided for @messagesWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'waiting to send'**
+  String get messagesWaiting;
+
+  /// No description provided for @messagesLeaveGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave group'**
+  String get messagesLeaveGroup;
+
+  /// No description provided for @messagesGone.
+  ///
+  /// In en, this message translates to:
+  /// **'You are no longer in this group.'**
+  String get messagesGone;
+
+  /// No description provided for @messagesYou.
+  ///
+  /// In en, this message translates to:
+  /// **'You'**
+  String get messagesYou;
+
+  /// No description provided for @messagesStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'{who} started \"{title}\"'**
+  String messagesStarted(String who, String title);
+
+  /// No description provided for @messagesAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'{who} added {names}'**
+  String messagesAdded(String who, String names);
+
+  /// No description provided for @messagesRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'{who} removed {names}'**
+  String messagesRemoved(String who, String names);
+
+  /// No description provided for @messagesLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{who} left'**
+  String messagesLeft(String who);
+
+  /// No description provided for @messagesRenamed.
+  ///
+  /// In en, this message translates to:
+  /// **'{who} renamed the group \"{title}\"'**
+  String messagesRenamed(String who, String title);
+
+  /// No description provided for @messagesPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Encrypted on this phone for each device in the conversation. Fjelia\'s server only passes messages on and cannot read them.'**
+  String get messagesPrivacy;
+
+  /// No description provided for @messagesRecovery.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery code'**
+  String get messagesRecovery;
+
+  /// No description provided for @messagesRecoveryMake.
+  ///
+  /// In en, this message translates to:
+  /// **'Make a new recovery code'**
+  String get messagesRecoveryMake;
+
+  /// No description provided for @messagesRecoveryHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'If this phone is lost, a new one continues as you with this code: your coach, your groups, your messages to come. A new code stops the old one.'**
+  String get messagesRecoveryHelp;
+
+  /// No description provided for @messagesRecoveryShown.
+  ///
+  /// In en, this message translates to:
+  /// **'Write this code down or keep it in your password manager. It is shown only now.'**
+  String get messagesRecoveryShown;
+
+  /// No description provided for @messagesRecoveryUnreachable.
+  ///
+  /// In en, this message translates to:
+  /// **'No connection to Fjelia\'s server. Try again later.'**
+  String get messagesRecoveryUnreachable;
+
+  /// No description provided for @messagesRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'I have a recovery code'**
+  String get messagesRestore;
+
+  /// No description provided for @messagesRestoreHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery code'**
+  String get messagesRestoreHint;
+
+  /// No description provided for @messagesRestoreWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'This code was not found or does not fit.'**
+  String get messagesRestoreWrong;
+
+  /// No description provided for @messagesCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get messagesCopy;
+
+  /// No description provided for @messagesDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get messagesDone;
+
+  /// No description provided for @coachingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Coaching'**
+  String get coachingTitle;
+
+  /// No description provided for @coachingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your coach and what they see'**
+  String get coachingSubtitle;
+
+  /// No description provided for @coachingNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No coach yet. When a coach invites you, open their link here.'**
+  String get coachingNone;
+
+  /// No description provided for @coachingJoin.
+  ///
+  /// In en, this message translates to:
+  /// **'Join a coach'**
+  String get coachingJoin;
+
+  /// No description provided for @coachingJoinHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste the invitation link your coach sent you.'**
+  String get coachingJoinHelp;
+
+  /// No description provided for @coachingNotInvite.
+  ///
+  /// In en, this message translates to:
+  /// **'This is not a Fjelia coaching invitation.'**
+  String get coachingNotInvite;
+
+  /// No description provided for @coachingOwnInvite.
+  ///
+  /// In en, this message translates to:
+  /// **'This invitation is your own.'**
+  String get coachingOwnInvite;
+
+  /// No description provided for @coachingCoachUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'This coach\'s devices are not known yet. Ask them to open Fjelia, then try again.'**
+  String get coachingCoachUnknown;
+
+  /// No description provided for @coachingUnreachable.
+  ///
+  /// In en, this message translates to:
+  /// **'Fjelia\'s server cannot be reached. Try again when you are online.'**
+  String get coachingUnreachable;
+
+  /// No description provided for @coachingConsentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Be coached by {name}?'**
+  String coachingConsentTitle(String name);
+
+  /// No description provided for @coachingConsentIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} invited you. Choose what {name} may see. You can change it or end coaching at any time.'**
+  String coachingConsentIntro(String name);
+
+  /// No description provided for @coachingConsentHealth.
+  ///
+  /// In en, this message translates to:
+  /// **'Health, ECG and nutrition are health data: they reach {name} only if you turn them on.'**
+  String coachingConsentHealth(String name);
+
+  /// No description provided for @coachingConsentPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Encrypted on this phone for {name}\'s devices. Fjelia\'s server passes it on and cannot read it.'**
+  String coachingConsentPrivacy(String name);
+
+  /// No description provided for @coachingConsentCode.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}\'s screen shows this code. Read it to them, in person or by phone:'**
+  String coachingConsentCode(String name);
+
+  /// No description provided for @coachingConsentShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share and send'**
+  String get coachingConsentShare;
+
+  /// No description provided for @coachingCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get coachingCancel;
+
+  /// No description provided for @coachingContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get coachingContinue;
+
+  /// No description provided for @coachingReadCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Read this code to {name}: {code}. Once {name} accepts, they see what you chose.'**
+  String coachingReadCode(String name, String code);
+
+  /// No description provided for @coachingWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for {name} to accept'**
+  String coachingWaiting(String name);
+
+  /// No description provided for @coachingSince.
+  ///
+  /// In en, this message translates to:
+  /// **'Coached since {date}'**
+  String coachingSince(String date);
+
+  /// No description provided for @coachingEnded.
+  ///
+  /// In en, this message translates to:
+  /// **'Ended {date}'**
+  String coachingEnded(String date);
+
+  /// No description provided for @coachingShares.
+  ///
+  /// In en, this message translates to:
+  /// **'What {name} sees'**
+  String coachingShares(String name);
+
+  /// No description provided for @coachingEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'End coaching'**
+  String get coachingEnd;
+
+  /// No description provided for @coachingEndConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'End coaching with {name}?'**
+  String coachingEndConfirm(String name);
+
+  /// No description provided for @coachingEndBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing new reaches {name}. What they already received stays with them.'**
+  String coachingEndBody(String name);
+
+  /// No description provided for @coachingEndAction.
+  ///
+  /// In en, this message translates to:
+  /// **'End'**
+  String get coachingEndAction;
+
+  /// No description provided for @coachingScopePlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan'**
+  String get coachingScopePlan;
+
+  /// No description provided for @coachingScopeActivities.
+  ///
+  /// In en, this message translates to:
+  /// **'Activities'**
+  String get coachingScopeActivities;
+
+  /// No description provided for @coachingScopeHealth.
+  ///
+  /// In en, this message translates to:
+  /// **'Health'**
+  String get coachingScopeHealth;
+
+  /// No description provided for @coachingScopeEcg.
+  ///
+  /// In en, this message translates to:
+  /// **'ECG'**
+  String get coachingScopeEcg;
+
+  /// No description provided for @coachingScopeNutrition.
+  ///
+  /// In en, this message translates to:
+  /// **'Nutrition'**
+  String get coachingScopeNutrition;
+
+  /// No description provided for @coachingScopeAiCoach.
+  ///
+  /// In en, this message translates to:
+  /// **'AI coach notes'**
+  String get coachingScopeAiCoach;
+
+  /// No description provided for @coachingScopeMedia.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos and files'**
+  String get coachingScopeMedia;
+
+  /// No description provided for @messagesChoosePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose photo'**
+  String get messagesChoosePhoto;
+
+  /// No description provided for @messagesRemovePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove photo'**
+  String get messagesRemovePhoto;
 }
 
 class _AppLocalizationsDelegate

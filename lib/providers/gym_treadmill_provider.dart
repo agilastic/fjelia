@@ -146,8 +146,9 @@ class GymTreadmillActions {
   }
 
   Future<GymWorkoutImportResult> save(List<GymWorkout> workouts) async {
-    final result = await GymWorkoutImportService(ref.read(databaseProvider))
-        .save(workouts);
+    final result = await GymWorkoutImportService(
+      ref.read(databaseProvider),
+    ).save(workouts);
     if (result.imported > 0) {
       final days = workouts
           .map((w) => w.startedAt.toLocal())

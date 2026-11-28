@@ -3,6 +3,7 @@ import '../../l10n/l10n_ext.dart';
 
 import 'dart:async';
 
+import 'package:fjelia_core/services/training_form.dart' show FormStatus;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -342,14 +343,11 @@ class _TrainingFormFullscreenPageState
 }
 
 // Form status label thresholds.
-String formStatus(double? tsb) => tsb == null
-    ? tr.noHistory
-    : tsb > 15
-    ? tr.fresh
-    : tsb > 5
-    ? tr.optimal
-    : tsb > -10
-    ? tr.neutral
-    : tsb > -20
-    ? tr.tired
-    : tr.veryFatigued;
+String formStatus(double? tsb) => switch (FormStatus.of(tsb)) {
+  FormStatus.noHistory => tr.noHistory,
+  FormStatus.fresh => tr.fresh,
+  FormStatus.optimal => tr.optimal,
+  FormStatus.neutral => tr.neutral,
+  FormStatus.tired => tr.tired,
+  FormStatus.veryFatigued => tr.veryFatigued,
+};

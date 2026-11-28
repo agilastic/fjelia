@@ -9895,4 +9895,779 @@ class AppLocalizationsNb extends AppLocalizations {
   @override
   String get homeSkyHint =>
       'En myk himmel øverst på Hjem som følger dagens vær og tiden på døgnet.';
+
+  @override
+  String get syncComputers => 'Datamaskiner';
+
+  @override
+  String get syncComputersSubtitle =>
+      'Synkroniser med Fjelia på en Mac eller PC';
+
+  @override
+  String get syncComputersFooter =>
+      'Datamaskinen får en kopi av aktivitetene, planene og helsedataene dine over det lokale nettverket. Ingenting går via internett.';
+
+  @override
+  String get syncPairComputer => 'Koble til en datamaskin';
+
+  @override
+  String get syncScanHint =>
+      'Åpne Fjelia på datamaskinen og velg Koble til telefon. Skann deretter koden som vises.';
+
+  @override
+  String get syncNotAPairingCode => 'Dette er ikke en Fjelia-tilkoblingskode.';
+
+  @override
+  String get syncNow => 'Synkroniser nå';
+
+  @override
+  String get syncUnpair => 'Koble fra';
+
+  @override
+  String syncUnpairTitle(String name) {
+    return 'Koble fra $name?';
+  }
+
+  @override
+  String syncUnpairMessage(String name) {
+    return '$name beholder dataene den allerede har, men får ikke flere endringer fra denne telefonen.';
+  }
+
+  @override
+  String syncInProgress(int count) {
+    return 'Synkroniserer … $count endringer sendt';
+  }
+
+  @override
+  String syncDone(int count) {
+    return 'Oppdatert · $count endringer sendt';
+  }
+
+  @override
+  String get syncUnreachable =>
+      'Får ikke kontakt med datamaskinen. Sjekk at Fjelia er åpen der og at begge enhetene er på samme nettverk.';
+
+  @override
+  String get syncCodeExpired =>
+      'Koden er ikke lenger gyldig. Vis en ny kode på datamaskinen.';
+
+  @override
+  String get syncUpdateBoth =>
+      'Oppdater Fjelia på begge enhetene, og synkroniser på nytt.';
+
+  @override
+  String get syncPairAgain =>
+      'Datamaskinen kjenner ikke lenger denne telefonen. Koble den til på nytt.';
+
+  @override
+  String get syncNoComputers => 'Ingen datamaskin tilkoblet ennå.';
+
+  @override
+  String syncDoneBoth(int sent, int received) {
+    return 'Oppdatert · $sent sendt, $received mottatt';
+  }
+
+  @override
+  String get thresholdSourceLab => 'Laboratorietest';
+
+  @override
+  String get gearTitle => 'Utstyr';
+
+  @override
+  String get gearEmpty =>
+      'Legg til sko og sykler for å se hvor langt de har gått og når de bør byttes.';
+
+  @override
+  String get gearAdd => 'Legg til utstyr';
+
+  @override
+  String get gearEdit => 'Rediger utstyr';
+
+  @override
+  String get gearKindShoes => 'Sko';
+
+  @override
+  String get gearKindBike => 'Sykkel';
+
+  @override
+  String get gearKindOther => 'Annet';
+
+  @override
+  String get gearName => 'Navn';
+
+  @override
+  String get gearBrand => 'Merke';
+
+  @override
+  String get gearStartKm => 'Distanse før Fjelia (km)';
+
+  @override
+  String get gearRetireAt => 'Bytt ved (km)';
+
+  @override
+  String get gearDefault =>
+      'Tell hver løpetur eller sykkeltur for dette med mindre noe annet er valgt';
+
+  @override
+  String get gearRetire => 'Pensjoner';
+
+  @override
+  String get gearUseAgain => 'Bruk igjen';
+
+  @override
+  String get gearRetired => 'Pensjonert';
+
+  @override
+  String gearLeft(int km, int limit) {
+    return '$km km igjen av $limit';
+  }
+
+  @override
+  String gearDue(int limit) {
+    return 'På tide å bytte: over $limit km';
+  }
+
+  @override
+  String gearActivities(int count) {
+    return '$count aktiviteter';
+  }
+
+  @override
+  String get gearNone => 'Ingen';
+
+  @override
+  String get diaryTitle => 'Dagbok';
+
+  @override
+  String get diaryEmpty =>
+      'Notater om aktiviteter, økter og hvordan en økt føltes, samles her på ett sted.';
+
+  @override
+  String get diarySearch => 'Søk i notater';
+
+  @override
+  String get diaryKindActivity => 'Aktivitetsnotat';
+
+  @override
+  String get diaryKindSession => 'Øktnotat';
+
+  @override
+  String get diaryKindFeeling => 'Slik føltes det';
+
+  @override
+  String get diaryKindCoach => 'Notat til treneren';
+
+  @override
+  String get diaryKindAbsence => 'Fravær';
+
+  @override
+  String get diaryKindEcg => 'EKG-notat';
+
+  @override
+  String diaryEffort(int n) {
+    return 'Anstrengelse $n av 10';
+  }
+
+  @override
+  String get diaryNoResults => 'Ingen notater inneholder det.';
+
+  @override
+  String get labTitle => 'Laboratorietester';
+
+  @override
+  String get labEmpty =>
+      'Legg inn en laktat-trinntest for å finne aerob og anaerob terskel.';
+
+  @override
+  String get labEnter => 'Legg inn en test';
+
+  @override
+  String get labBike => 'Sykkel';
+
+  @override
+  String get labRun => 'Løp';
+
+  @override
+  String get labPower => 'Watt (W)';
+
+  @override
+  String get labPace => 'Tempo (min:s per km)';
+
+  @override
+  String get labHr => 'Puls';
+
+  @override
+  String get labLactate => 'Laktat (mmol/l)';
+
+  @override
+  String get labAddStep => 'Legg til trinn';
+
+  @override
+  String get labSave => 'Lagre test';
+
+  @override
+  String get labLt1 => 'Aerob terskel (LT1)';
+
+  @override
+  String get labLt2 => 'Anaerob terskel (LT2)';
+
+  @override
+  String get labUse => 'Bruk som terskler';
+
+  @override
+  String get labUsed => 'Lagret i tersklene dine.';
+
+  @override
+  String get labDelete => 'Slett test';
+
+  @override
+  String get labTooFew => 'Minst tre trinn trengs.';
+
+  @override
+  String get labExplain =>
+      'LT1 er der laktat først stiger 0,5 mmol/l over hvile; LT2 der det begynner å stige bratt. Rolig trening holdes under LT1.';
+
+  @override
+  String syncProgress(int sent, int total) {
+    return 'Synkroniserer… $sent av $total';
+  }
+
+  @override
+  String syncLastAt(String when) {
+    return 'Sist synkronisert $when';
+  }
+
+  @override
+  String get courseTitle => 'Løype';
+
+  @override
+  String get courseAdd => 'Legg til løypa';
+
+  @override
+  String get courseAddHint =>
+      'Mange løp har løypa i løpsbiblioteket, med matstasjoner og tidsgrenser. Ellers legg til arrangørens GPX-fil.';
+
+  @override
+  String get courseFromLibrary => 'Finn i løpsbiblioteket';
+
+  @override
+  String get courseFromFile => 'Åpne GPX-fil';
+
+  @override
+  String get courseNoLibraryCourse => 'Ingen løype i biblioteket';
+
+  @override
+  String get courseNotFetched =>
+      'Arrangørens løype kunne ikke hentes. Prøv igjen, eller legg til GPX-filen selv.';
+
+  @override
+  String get courseUnreadable => 'Det er ingen løype i denne filen.';
+
+  @override
+  String get courseNoElevation =>
+      'Denne løypa har ingen høyder, så stigningene kan ikke vises. Prøv arrangørens fil.';
+
+  @override
+  String get courseDistance => 'Distanse';
+
+  @override
+  String get courseClimb => 'Stigning';
+
+  @override
+  String get courseDescent => 'Nedstigning';
+
+  @override
+  String get courseEffort => 'Innsats';
+
+  @override
+  String get courseEffortNote => 'km + stigning / 100 (ITRA)';
+
+  @override
+  String get courseSteep => 'Bratte partier';
+
+  @override
+  String get courseSteepNote => 'bratteste 5 % av 100 m';
+
+  @override
+  String get courseHighest => 'Høyeste punkt';
+
+  @override
+  String get courseClimbs => 'Stigninger';
+
+  @override
+  String courseClimbsCount(int count) {
+    return '$count på 50 m eller mer';
+  }
+
+  @override
+  String get courseNoClimbs => 'Ingen stigning på 50 m eller mer';
+
+  @override
+  String get courseGradients => 'Helninger';
+
+  @override
+  String get courseBandSteepDown => 'Bratt ned';
+
+  @override
+  String get courseBandDown => 'Ned';
+
+  @override
+  String get courseBandGentlyDown => 'Svakt ned';
+
+  @override
+  String get courseBandFlat => 'Flatt';
+
+  @override
+  String get courseBandGentlyUp => 'Svakt opp';
+
+  @override
+  String get courseBandUp => 'Opp';
+
+  @override
+  String get courseBandSteepUp => 'Bratt opp';
+
+  @override
+  String get coursePlan => 'Ditt løp';
+
+  @override
+  String get coursePlanFrom =>
+      'Fra løpene dine i bakker de siste seks månedene';
+
+  @override
+  String get coursePlanNeedsRuns =>
+      'Ta opp noen løp med høyde i bakker: tiden din i løypa regnes ut fra dem.';
+
+  @override
+  String get courseFinish => 'Mål';
+
+  @override
+  String get courseArrival => 'Ankomst';
+
+  @override
+  String get courseSetStart => 'Angi start';
+
+  @override
+  String courseStartAt(String time) {
+    return 'Start $time';
+  }
+
+  @override
+  String get courseLegTo => 'Til';
+
+  @override
+  String get courseLeg => 'Etappe';
+
+  @override
+  String get courseTotal => 'Totalt';
+
+  @override
+  String get courseCutoff => 'Tidsgrense';
+
+  @override
+  String courseAhead(String time) {
+    return '$time foran';
+  }
+
+  @override
+  String courseLate(String time) {
+    return '$time for sent';
+  }
+
+  @override
+  String get coursePlanNote =>
+      'Tid i bevegelse i ditt tempo i hver helning, senket for løpets lengde, mørket og varmen du oppgir, med pausene dine ved matstasjonene.';
+
+  @override
+  String get coursePace => 'Ditt tempo i bakker';
+
+  @override
+  String coursePaceNote(String pace) {
+    return 'Helningsjustert tempo $pace · helninger under 2 km bruker Minetti-formelen';
+  }
+
+  @override
+  String get courseProTeaser =>
+      'Sluttiden din, tiden ved hvert kontrollpunkt og marginen til hver tidsgrense ut fra dine egne løp i bakker.';
+
+  @override
+  String get courseCheckpoints => 'Kontrollpunkter';
+
+  @override
+  String get courseCheckpointAdd => 'Legg til kontrollpunkt';
+
+  @override
+  String get courseCheckpointName => 'Navn';
+
+  @override
+  String get courseCutoffAfterStart => 'Tidsgrense (t:mm etter start)';
+
+  @override
+  String get courseSetStartFirst =>
+      'Angi starttiden for å legge inn tidsgrenser.';
+
+  @override
+  String get courseReplace => 'Erstatt løype';
+
+  @override
+  String get courseRemove => 'Fjern løype';
+
+  @override
+  String get courseSearchLibrary => 'Løpsnavn eller sted';
+
+  @override
+  String get courseNoRaceFound =>
+      'Fant ikke noe løp. Prøv stedet, eller legg til GPX-filen selv.';
+
+  @override
+  String courseAidStations(int count) {
+    return '$count matstasjoner';
+  }
+
+  @override
+  String courseRun(String km) {
+    return '$km km løpt';
+  }
+
+  @override
+  String get courseRaceDay => 'Løpsdag';
+
+  @override
+  String get courseHigh => 'Forventet høyeste temperatur (°C)';
+
+  @override
+  String get courseHighNote =>
+      'Over 15 °C senker hver grad dagslyset med omtrent 0,55 % (0,34–0,77 %, Wegelin & Hoffman 2011).';
+
+  @override
+  String get courseNight => 'Langsommere i mørket';
+
+  @override
+  String get courseNightNote =>
+      'Ditt eget anslag: hvor mye langsommere du løper med hodelykt.';
+
+  @override
+  String get courseStop => 'Minutter ved hver matstasjon';
+
+  @override
+  String courseInDark(String time) {
+    return '$time i mørket';
+  }
+
+  @override
+  String courseFuelPerHour(int carbs, int fluid, int sodium) {
+    return '$carbs g karbohydrat, $fluid ml, $sodium mg natrium i timen';
+  }
+
+  @override
+  String courseLegFuel(int carbs, String litres) {
+    return '$carbs g · $litres l';
+  }
+
+  @override
+  String get courseReadiness => 'Klar for denne løypa?';
+
+  @override
+  String get courseReadinessNote =>
+      'Løpene dine de siste åtte ukene ved siden av det løypa krever.';
+
+  @override
+  String get courseLongestRun => 'Lengste løp';
+
+  @override
+  String get courseWeekClimb => 'Mest stigning på en uke';
+
+  @override
+  String get courseBiggestClimb => 'Største stigning i ett strekk';
+
+  @override
+  String get courseBiggestDescent => 'Største nedstigning i ett strekk';
+
+  @override
+  String courseVersus(String you, String course) {
+    return '$you · løype $course';
+  }
+
+  @override
+  String get courseResult => 'Planlagt og løpt';
+
+  @override
+  String get courseResultNote =>
+      'Hvert kontrollpunkt ved samme andel av klokkas distanse som av løypas.';
+
+  @override
+  String courseFaster(String time) {
+    return '$time raskere';
+  }
+
+  @override
+  String courseSlower(String time) {
+    return '$time saktere';
+  }
+
+  @override
+  String get crewCard => 'Crew-kort';
+
+  @override
+  String get crewCheckpoint => 'Kontrollpunkt';
+
+  @override
+  String get crewUpDown => 'Opp / ned';
+
+  @override
+  String get crewDue => 'Forventet';
+
+  @override
+  String get crewHandOver => 'Lever for neste etappe';
+
+  @override
+  String crewStart(String time) {
+    return 'Start $time';
+  }
+
+  @override
+  String crewFinishRange(String time, String from, String to) {
+    return 'Mål $time ($from–$to)';
+  }
+
+  @override
+  String crewFuel(int carbs, String litres, int sodium) {
+    return '$carbs g karbohydrat · $litres l · $sodium mg natrium';
+  }
+
+  @override
+  String get crewFooter => 'Planlagt med Fjelia ut fra mine egne løp i bakker.';
+
+  @override
+  String get messagesTitle => 'Meldinger';
+
+  @override
+  String get messagesEmpty =>
+      'Du og treneren din blir kjent når denne telefonen synkroniserer i nærheten av trenerens datamaskin. Etterpå kan dere skrive til hverandre fra hvor som helst.';
+
+  @override
+  String get messagesNoThreads => 'Ingen meldinger ennå.';
+
+  @override
+  String messagesWriteTo(String name) {
+    return 'Skriv til $name';
+  }
+
+  @override
+  String get messagesYourName => 'Navnet ditt';
+
+  @override
+  String get messagesYourNameHelp => 'Navnet treneren og gruppen din ser.';
+
+  @override
+  String get messagesHint => 'Melding';
+
+  @override
+  String get messagesSend => 'Send';
+
+  @override
+  String get messagesWaiting => 'venter på å bli sendt';
+
+  @override
+  String get messagesLeaveGroup => 'Forlat gruppen';
+
+  @override
+  String get messagesGone => 'Du er ikke lenger med i denne gruppen.';
+
+  @override
+  String get messagesYou => 'Du';
+
+  @override
+  String messagesStarted(String who, String title) {
+    return '$who opprettet «$title»';
+  }
+
+  @override
+  String messagesAdded(String who, String names) {
+    return '$who la til $names';
+  }
+
+  @override
+  String messagesRemoved(String who, String names) {
+    return '$who fjernet $names';
+  }
+
+  @override
+  String messagesLeft(String who) {
+    return '$who forlot gruppen';
+  }
+
+  @override
+  String messagesRenamed(String who, String title) {
+    return '$who ga gruppen nytt navn: «$title»';
+  }
+
+  @override
+  String get messagesPrivacy =>
+      'Kryptert på denne telefonen for hver enhet i samtalen. Fjelias server sender bare meldingene videre og kan ikke lese dem.';
+
+  @override
+  String get messagesRecovery => 'Gjenopprettingskode';
+
+  @override
+  String get messagesRecoveryMake => 'Lag en ny gjenopprettingskode';
+
+  @override
+  String get messagesRecoveryHelp =>
+      'Hvis denne telefonen blir borte, fortsetter en ny som deg med denne koden: treneren din, gruppene dine, de neste meldingene dine. En ny kode gjør den gamle ugyldig.';
+
+  @override
+  String get messagesRecoveryShown =>
+      'Skriv ned koden eller lagre den i passordbehandleren din. Den vises bare nå.';
+
+  @override
+  String get messagesRecoveryUnreachable =>
+      'Ingen forbindelse til Fjelias server. Prøv igjen senere.';
+
+  @override
+  String get messagesRestore => 'Jeg har en gjenopprettingskode';
+
+  @override
+  String get messagesRestoreHint => 'Gjenopprettingskode';
+
+  @override
+  String get messagesRestoreWrong => 'Koden ble ikke funnet eller passer ikke.';
+
+  @override
+  String get messagesCopy => 'Kopier';
+
+  @override
+  String get messagesDone => 'Ferdig';
+
+  @override
+  String get coachingTitle => 'Coaching';
+
+  @override
+  String get coachingSubtitle => 'Treneren din og hva de ser';
+
+  @override
+  String get coachingNone =>
+      'Ingen trener ennå. Når en trener inviterer deg, åpner du lenken deres her.';
+
+  @override
+  String get coachingJoin => 'Bli med hos en trener';
+
+  @override
+  String get coachingJoinHelp =>
+      'Lim inn invitasjonslenken treneren sendte deg.';
+
+  @override
+  String get coachingNotInvite => 'Dette er ikke en Fjelia-coachinginvitasjon.';
+
+  @override
+  String get coachingOwnInvite => 'Denne invitasjonen er din egen.';
+
+  @override
+  String get coachingCoachUnknown =>
+      'Enhetene til denne treneren er ikke kjent ennå. Be dem åpne Fjelia, og prøv igjen.';
+
+  @override
+  String get coachingUnreachable =>
+      'Fjelias server kan ikke nås. Prøv igjen når du er på nett.';
+
+  @override
+  String coachingConsentTitle(String name) {
+    return 'Vil du trenes av $name?';
+  }
+
+  @override
+  String coachingConsentIntro(String name) {
+    return '$name har invitert deg. Velg hva $name får se. Du kan endre det eller avslutte når som helst.';
+  }
+
+  @override
+  String coachingConsentHealth(String name) {
+    return 'Helse, EKG og ernæring er helsedata: de når bare $name hvis du slår dem på.';
+  }
+
+  @override
+  String coachingConsentPrivacy(String name) {
+    return 'Kryptert på denne telefonen for enhetene til $name. Fjelias server sender det bare videre og kan ikke lese det.';
+  }
+
+  @override
+  String coachingConsentCode(String name) {
+    return 'Skjermen til $name viser denne koden. Les den opp, ansikt til ansikt eller på telefon:';
+  }
+
+  @override
+  String get coachingConsentShare => 'Del og send';
+
+  @override
+  String get coachingCancel => 'Avbryt';
+
+  @override
+  String get coachingContinue => 'Fortsett';
+
+  @override
+  String coachingReadCode(String name, String code) {
+    return 'Les denne koden for $name: $code. Når $name godtar, ser de det du valgte.';
+  }
+
+  @override
+  String coachingWaiting(String name) {
+    return 'Venter på at $name godtar';
+  }
+
+  @override
+  String coachingSince(String date) {
+    return 'Trent siden $date';
+  }
+
+  @override
+  String coachingEnded(String date) {
+    return 'Avsluttet $date';
+  }
+
+  @override
+  String coachingShares(String name) {
+    return 'Hva $name ser';
+  }
+
+  @override
+  String get coachingEnd => 'Avslutt coaching';
+
+  @override
+  String coachingEndConfirm(String name) {
+    return 'Avslutte coaching med $name?';
+  }
+
+  @override
+  String coachingEndBody(String name) {
+    return 'Ikke noe nytt når $name. Det de allerede har fått, blir hos dem.';
+  }
+
+  @override
+  String get coachingEndAction => 'Avslutt';
+
+  @override
+  String get coachingScopePlan => 'Plan';
+
+  @override
+  String get coachingScopeActivities => 'Aktiviteter';
+
+  @override
+  String get coachingScopeHealth => 'Helse';
+
+  @override
+  String get coachingScopeEcg => 'EKG';
+
+  @override
+  String get coachingScopeNutrition => 'Ernæring';
+
+  @override
+  String get coachingScopeAiCoach => 'AI-trenernotater';
+
+  @override
+  String get coachingScopeMedia => 'Bilder og filer';
+
+  @override
+  String get messagesChoosePhoto => 'Velg bilde';
+
+  @override
+  String get messagesRemovePhoto => 'Fjern bilde';
 }
