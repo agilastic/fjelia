@@ -1,5 +1,5 @@
 import 'package:fjelia_core/services/sync/sync_tables.dart';
-import 'package:fjelia_sync/fjelia_sync.dart' show CoachLink;
+import 'package:fjelia_sync/fjelia_sync.dart' show CoachLink, LinkInvite;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show Clipboard;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,7 +38,10 @@ String spacedCode(String code) =>
 /// Coaching: this athlete's coaches, what each sees, ending it, and joining
 /// a coach by the invitation they sent.
 class CoachingScreen extends ConsumerStatefulWidget {
-  const CoachingScreen({super.key});
+  const CoachingScreen({super.key, this.invite});
+
+  /// An invitation opened in Fjelia, to answer right away.
+  final String? invite;
 
   @override
   ConsumerState<CoachingScreen> createState() => _CoachingScreenState();
@@ -53,6 +56,9 @@ class _CoachingScreenState extends ConsumerState<CoachingScreen> {
   void initState() {
     super.initState();
     _load();
+    if (widget.invite case final invite?) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _answer(invite));
+    }
   }
 
   Future<void> _load() async {
@@ -66,10 +72,15 @@ class _CoachingScreenState extends ConsumerState<CoachingScreen> {
     final text = await showDialog<String>(
       context: context,
       builder: (_) => _JoinDialog(
-        initial: pasted.contains('fjelia://link') ? pasted.trim() : '',
+        initial: LinkInvite.parse(pasted) != null ? pasted.trim() : '',
       ),
     );
     if (text == null || text.trim().isEmpty || !mounted) return;
+    await _answer(text);
+  }
+
+  /// The consent screen for the invitation in [text], or why not.
+  Future<void> _answer(String text) async {
     final l10n = context.l10n;
     final (answer, problem) = await _messages.readInvite(text);
     if (!mounted) return;

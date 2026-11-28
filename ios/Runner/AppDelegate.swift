@@ -54,6 +54,9 @@ import shared_preferences_foundation
     if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "ActivityFileChannel") {
       ActivityFileChannel.shared.attach(registrar: registrar)
     }
+    if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "CoachLinkChannel") {
+      CoachLinkChannel.shared.attach(registrar: registrar)
+    }
     if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "HealthWorkoutObserver") {
       HealthWorkoutObserver.shared.attach(messenger: registrar.messenger())
     }
@@ -537,6 +540,51 @@ final class ActivityFileChannel: NSObject, FlutterSceneLifeCycleDelegate {
     }
     if received { channel?.invokeMethod("opened", arguments: nil) }
     return received
+  }
+}
+
+/// Receives coaching invitations opened in Fjelia (fjelia://link?…, from the
+/// page at www.fjelia.com/link/). Each is kept until Dart takes it
+/// (`CoachLinkInbox` in coach_link_inbox.dart).
+final class CoachLinkChannel: NSObject, FlutterSceneLifeCycleDelegate {
+  static let shared = CoachLinkChannel()
+
+  private var channel: FlutterMethodChannel?
+  private var pending: [String] = []
+
+  func attach(registrar: FlutterPluginRegistrar) {
+    let channel = FlutterMethodChannel(
+      name: "fjelia/links", binaryMessenger: registrar.messenger())
+    channel.setMethodCallHandler { [weak self] call, result in
+      guard call.method == "takePending", let self else {
+        result(FlutterMethodNotImplemented)
+        return
+      }
+      result(self.pending)
+      self.pending.removeAll()
+    }
+    self.channel = channel
+    registrar.addSceneDelegate(self)
+  }
+
+  func scene(
+    _ scene: UIScene, willConnectTo session: UISceneSession,
+    options connectionOptions: UIScene.ConnectionOptions?
+  ) -> Bool {
+    _ = receive(connectionOptions?.urlContexts ?? [])
+    return false
+  }
+
+  func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) -> Bool {
+    return receive(URLContexts)
+  }
+
+  private func receive(_ contexts: Set<UIOpenURLContext>) -> Bool {
+    let links = contexts.map(\.url).filter { $0.scheme == "fjelia" && $0.host == "link" }
+    guard !links.isEmpty else { return false }
+    pending.append(contentsOf: links.map(\.absoluteString))
+    channel?.invokeMethod("opened", arguments: nil)
+    return true
   }
 }
 

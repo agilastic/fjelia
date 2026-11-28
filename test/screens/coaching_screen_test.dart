@@ -44,14 +44,14 @@ void main() {
     }
   }
 
-  Future<void> open(WidgetTester tester) async {
+  Future<void> open(WidgetTester tester, {String? invite}) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [databaseProvider.overrideWithValue(db)],
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: const CoachingScreen(),
+          home: CoachingScreen(invite: invite),
         ),
       ),
     );
@@ -227,6 +227,36 @@ void main() {
       'plan',
       'health',
     ]);
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('an invitation opened in Fjelia goes straight to consent', (
+    tester,
+  ) async {
+    late PersonIdentity coach;
+    await tester.runAsync(() async {
+      final store = _Memory();
+      await PersonIdentity.create(
+        store,
+        deviceName: 'Ana phone',
+        platform: 'ios',
+      );
+      FlutterSecureStorage.setMockInitialValues(store.values);
+      coach = (await PersonIdentity.create(
+        _Memory(),
+        deviceName: 'Kim Mac',
+        platform: 'macos',
+      )).identity;
+      MessagesNotifier.relayTransport = (method, url, body, headers) async =>
+          url.path == '/v1/relay/lists/${coach.personId}'
+          ? (200, coach.signedList)
+          : (404, null);
+    });
+    final invite = LinkInvite.create(coach: coach.personId, name: 'Kim Berg');
+    // As the page at www.fjelia.com/link/ opens the app.
+    await open(tester, invite: invite.appUri().toString());
+    await settle(tester);
+    expect(find.text('Be coached by Kim Berg?'), findsOneWidget);
     await tester.pumpWidget(const SizedBox());
   });
 }

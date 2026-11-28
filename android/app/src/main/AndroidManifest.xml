@@ -50,9 +50,18 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <!-- Coaching invitations: fjelia://link?… from the page at
+                 www.fjelia.com/link/ (MainActivity hands them to Dart). -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="${authScheme}" android:host="link" />
+            </intent-filter>
         </activity>
         <!-- OAuth sign-in (Polar): flutter_web_auth_2 receives fjelia://polar-callback
-             here (fjeliace:// in Fjelia CE, see build.gradle.kts). -->
+             here (fjeliace:// in Fjelia CE, see build.gradle.kts). Only that host,
+             so fjelia://link reaches MainActivity. -->
         <activity
             android:name="com.linusu.flutter_web_auth_2.CallbackActivity"
             android:exported="true"
@@ -61,7 +70,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="${authScheme}" />
+                <data android:scheme="${authScheme}" android:host="polar-callback" />
             </intent-filter>
         </activity>
         <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />

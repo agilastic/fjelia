@@ -14,6 +14,7 @@ import 'config/build_features.dart' show ignoreCertificatesForTesting;
 import 'config/fjelia_pro.dart' show proAiModel;
 import 'config/secrets.dart';
 import 'providers/activity_file_import_provider.dart';
+import 'providers/coach_link_inbox.dart';
 import 'providers/ai_coach_provider.dart' show aiCoachSettingsProvider;
 import 'services/ai_coach_settings.dart' show AiProvider;
 import 'providers/auth_provider.dart';
@@ -36,6 +37,7 @@ import 'services/polar_push_service.dart' show polarPushChannel;
 import 'providers/nutrition_provider.dart';
 import 'providers/plan_schedule_provider.dart' show extendOpenAbsencesProvider;
 import 'providers/planner_providers.dart' show upcomingSessionsProvider;
+import 'screens/messages/coaching_screen.dart';
 import 'screens/planner/missed_workout_sheet.dart';
 import 'screens/planner/plan_proposal_cards.dart';
 import 'services/missed_workout_reminder_service.dart';
@@ -186,6 +188,7 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
       _listenForZoneChanges();
       _listenForPro();
       _listenForActivityFiles();
+      _listenForCoachLinks();
       _listenForPolarPush();
       _triggerSync();
       unawaited(_startHrvReminders());
@@ -512,6 +515,19 @@ class _FjeliaAppState extends ConsumerState<FjeliaApp>
       final context = await _homeContext();
       if (context == null || !context.mounted) return;
       await showAppSheet(context, ActivityFileImportSheet(files: files));
+    });
+  }
+
+  /// A coaching invitation opened in Fjelia: Coaching, answering it.
+  void _listenForCoachLinks() {
+    CoachLinkInbox().listen((links) async {
+      final context = await _homeContext();
+      if (context == null || !context.mounted) return;
+      await Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (_) => CoachingScreen(invite: links.last),
+        ),
+      );
     });
   }
 

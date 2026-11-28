@@ -49,6 +49,17 @@
 	</array>
 	<key>CFBundleName</key>
 	<string>fjelia</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.aeh.fjelia.link</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fjelia</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
