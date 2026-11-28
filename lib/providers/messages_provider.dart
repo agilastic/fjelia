@@ -132,11 +132,9 @@ class MessagesNotifier extends Notifier<MessagesState>
     final me = _me;
     if (n.isEmpty || n.length > 80 || me == null) return;
     _name = n;
-    await ref
-        .read(databaseProvider)
-        .savePerson(
-          MessagePerson(person: me.personId, name: n, role: PersonRole.self),
-        );
+    // Signed, so the coach and this person's other devices take it.
+    final self = await ref.read(databaseProvider).self();
+    await _book.publishProfile(name: n, photo: self?.photo);
     changed();
   }
 
