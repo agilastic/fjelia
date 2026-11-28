@@ -355,12 +355,19 @@ class MessagesNotifier extends Notifier<MessagesState>
     String? problem;
     try {
       final me = await _open();
+      final db = ref.read(databaseProvider);
       await MessageRelay(
-        ref.read(databaseProvider),
+        db,
         me,
         _relay,
         secureSecrets,
         links: _book,
+        // This athlete's training to their coaches, plan changes back.
+        changes: ChangeRelay(
+          me: me,
+          book: _book,
+          databaseOf: (athlete) => athlete == me.personId ? db : null,
+        ),
       ).run();
     } on Object catch (e) {
       problem = '$e';
