@@ -1,12 +1,17 @@
-import 'package:fjelia_sync/fjelia_sync.dart' show RestoreProblem;
+import 'dart:typed_data';
+
+import 'package:fjelia_sync/fjelia_sync.dart'
+    show RestoreProblem, maxProfilePhotoBytes;
 import 'package:fjelia_views/fjelia_views.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../../l10n/l10n_ext.dart';
 import '../../providers/messages_provider.dart';
+import '../../widgets/person_avatar.dart';
 import 'coaching_screen.dart';
 import 'thread_screen.dart';
 
@@ -20,7 +25,8 @@ class MessagesScreen extends ConsumerStatefulWidget {
 
 class _MessagesScreenState extends ConsumerState<MessagesScreen> {
   List<ThreadRow> _threads = const [];
-  List<MessagePerson> _coaches = const [];
+  List<MessagePerson> _contacts = const [];
+  Uint8List? _photo;
   final _name = TextEditingController();
 
   @override
@@ -39,14 +45,16 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
   Future<void> _load() async {
     final messages = ref.read(messagesProvider.notifier);
     final threads = await messages.threads();
-    final coaches = await messages.coaches();
+    final contacts = await messages.contacts();
+    final photo = await messages.photo();
     if (!mounted) return;
     if (_name.text.isEmpty) {
       _name.text = ref.read(messagesProvider.notifier).name;
     }
     setState(() {
       _threads = threads;
-      _coaches = coaches;
+      _contacts = contacts;
+      _photo = photo;
     });
   }
 
@@ -60,6 +68,50 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
   Future<void> _write(MessagePerson coach) async {
     final id = await ref.read(messagesProvider.notifier).startDirect(coach);
     await _open(id);
+  }
+
+  /// The photo coaches and athletes see: a new one, or none.
+  Future<void> _changePhoto() async {
+    final l10n = context.l10n;
+    final remove = await showModalBottomSheet<bool>(
+      context: context,
+      builder: (sheet) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.photo_library_outlined),
+              title: Text(l10n.messagesChoosePhoto),
+              onTap: () => Navigator.pop(sheet, false),
+            ),
+            if (_photo != null)
+              ListTile(
+                leading: const Icon(Icons.delete_outline),
+                title: Text(l10n.messagesRemovePhoto),
+                onTap: () => Navigator.pop(sheet, true),
+              ),
+          ],
+        ),
+      ),
+    );
+    if (remove == null) return;
+    final messages = ref.read(messagesProvider.notifier);
+    if (remove) {
+      await messages.setPhoto(null);
+    } else {
+      // Small before it travels: a profile photo is shown small anyway.
+      final picked = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 256,
+        maxHeight: 256,
+        imageQuality: 80,
+      );
+      if (picked == null) return;
+      final bytes = await picked.readAsBytes();
+      if (bytes.length > maxProfilePhotoBytes) return;
+      await messages.setPhoto(bytes);
+    }
+    await _load();
   }
 
   Future<void> _newCode() async {
@@ -164,18 +216,16 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
         child: ListView(
           padding: const EdgeInsets.symmetric(vertical: 8),
           children: [
-            if (_threads.isEmpty && _coaches.isEmpty)
+            if (_threads.isEmpty && _contacts.isEmpty)
               Padding(
                 padding: const EdgeInsets.all(24),
                 child: Text(l10n.messagesEmpty, textAlign: TextAlign.center),
               ),
             for (final t in _threads)
               ListTile(
-                leading: CircleAvatar(
-                  child: Icon(
-                    t.kind == ThreadKind.group ? Icons.groups : Icons.person,
-                  ),
-                ),
+                leading: t.kind == ThreadKind.group
+                    ? const CircleAvatar(child: Icon(Icons.groups))
+                    : PersonAvatar(name: t.title, photo: t.photo),
                 title: Text(t.title),
                 subtitle: t.lastText == null
                     ? null
@@ -191,30 +241,49 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
                     : Text(day.format(t.lastAt)),
                 onTap: () => _open(t.id),
               ),
-            for (final c in _coaches)
+            for (final c in _contacts)
               if (!direct.contains(c.person))
                 ListTile(
-                  leading: const CircleAvatar(child: Icon(Icons.edit)),
-                  title: Text(l10n.messagesWriteTo(c.name)),
+                  leading: PersonAvatar(name: c.shownName, photo: c.photo),
+                  title: Text(l10n.messagesWriteTo(c.shownName)),
                   onTap: () => _write(c),
                 ),
-            if (_coaches.isNotEmpty || _threads.isNotEmpty) ...[
-              const Divider(height: 32),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: TextField(
-                  controller: _name,
-                  maxLength: 80,
-                  decoration: InputDecoration(
-                    labelText: l10n.messagesYourName,
-                    helperText: l10n.messagesYourNameHelp,
-                    counterText: '',
+            const Divider(height: 32),
+            // What coaches and athletes see of this person.
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  InkWell(
+                    customBorder: const CircleBorder(),
+                    onTap: _changePhoto,
+                    child: Semantics(
+                      button: true,
+                      label: l10n.messagesChoosePhoto,
+                      child: PersonAvatar(
+                        name: _name.text,
+                        photo: _photo,
+                        radius: 28,
+                      ),
+                    ),
                   ),
-                  onSubmitted: (v) =>
-                      ref.read(messagesProvider.notifier).rename(v),
-                ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: TextField(
+                      controller: _name,
+                      maxLength: 80,
+                      decoration: InputDecoration(
+                        labelText: l10n.messagesYourName,
+                        helperText: l10n.messagesYourNameHelp,
+                        counterText: '',
+                      ),
+                      onSubmitted: (v) =>
+                          ref.read(messagesProvider.notifier).rename(v),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
             const Divider(height: 32),
             ListTile(
               leading: const Icon(Icons.sports),
@@ -229,7 +298,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
                 await _load();
               },
             ),
-            if (_threads.isEmpty && _coaches.isEmpty)
+            if (_threads.isEmpty && _contacts.isEmpty)
               ListTile(
                 leading: const Icon(Icons.restore),
                 title: Text(l10n.messagesRestore),

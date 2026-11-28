@@ -10725,4 +10725,10 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get coachingScopeMedia => 'Foto e file';
+
+  @override
+  String get messagesChoosePhoto => 'Scegli foto';
+
+  @override
+  String get messagesRemovePhoto => 'Rimuovi foto';
 }

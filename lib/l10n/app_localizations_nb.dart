@@ -10664,4 +10664,10 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get coachingScopeMedia => 'Bilder og filer';
+
+  @override
+  String get messagesChoosePhoto => 'Velg bilde';
+
+  @override
+  String get messagesRemovePhoto => 'Fjern bilde';
 }

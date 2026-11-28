@@ -4587,5 +4587,7 @@
   "coachingScopeEcg": "EKG",
   "coachingScopeNutrition": "Ravinto",
   "coachingScopeAiCoach": "AI-valmentajan muistiinpanot",
-  "coachingScopeMedia": "Kuvat ja tiedostot"
+  "coachingScopeMedia": "Kuvat ja tiedostot",
+  "messagesChoosePhoto": "Valitse kuva",
+  "messagesRemovePhoto": "Poista kuva"
 }

@@ -4620,5 +4620,7 @@
   "coachingScopeEcg": "EKG",
   "coachingScopeNutrition": "Ernährung",
   "coachingScopeAiCoach": "KI-Coach-Notizen",
-  "coachingScopeMedia": "Fotos und Dateien"
+  "coachingScopeMedia": "Fotos und Dateien",
+  "messagesChoosePhoto": "Foto wählen",
+  "messagesRemovePhoto": "Foto entfernen"
 }

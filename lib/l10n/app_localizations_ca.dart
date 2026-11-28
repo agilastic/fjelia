@@ -10742,4 +10742,10 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get coachingScopeMedia => 'Fotos i fitxers';
+
+  @override
+  String get messagesChoosePhoto => 'Tria una foto';
+
+  @override
+  String get messagesRemovePhoto => 'Elimina la foto';
 }

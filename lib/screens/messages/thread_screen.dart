@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../../l10n/l10n_ext.dart';
 import '../../providers/messages_provider.dart';
+import '../../widgets/person_avatar.dart';
 
 /// One conversation: with the coach, or a coach's group.
 class ThreadScreen extends ConsumerStatefulWidget {
@@ -18,6 +19,7 @@ class ThreadScreen extends ConsumerStatefulWidget {
 class _ThreadScreenState extends ConsumerState<ThreadScreen> {
   ThreadRow? _row;
   List<StoredEvent> _events = const [];
+  Map<String, MessagePerson> _people = const {};
   final _text = TextEditingController();
   final _scroll = ScrollController();
 
@@ -40,10 +42,12 @@ class _ThreadScreenState extends ConsumerState<ThreadScreen> {
         .where((t) => t.id == widget.thread)
         .firstOrNull;
     final events = await messages.openThread(widget.thread);
+    final people = await messages.people();
     if (!mounted) return;
     setState(() {
       _row = row;
       _events = events;
+      _people = people;
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scroll.hasClients) _scroll.jumpTo(_scroll.position.maxScrollExtent);
@@ -70,9 +74,11 @@ class _ThreadScreenState extends ConsumerState<ThreadScreen> {
     final row = _row;
     final me = ref.read(messagesProvider.notifier).personId;
     final member = row?.members.any((m) => m.person == me) ?? false;
+    // As this person knows them now, else as the thread named them.
     String nameOf(String person) => person == me
         ? l10n.messagesYou
-        : row?.members.where((m) => m.person == person).firstOrNull?.name ??
+        : _people[person]?.shownName ??
+              row?.members.where((m) => m.person == person).firstOrNull?.name ??
               '?';
     String? change(ThreadEvent e) {
       final who = nameOf(e.sender);
@@ -92,7 +98,17 @@ class _ThreadScreenState extends ConsumerState<ThreadScreen> {
     final scheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
-        title: Text(row?.title ?? ''),
+        title: Row(
+          children: [
+            if (row != null && row.kind == ThreadKind.direct) ...[
+              PersonAvatar(name: row.title, photo: row.photo, radius: 16),
+              const SizedBox(width: 10),
+            ],
+            Expanded(
+              child: Text(row?.title ?? '', overflow: TextOverflow.ellipsis),
+            ),
+          ],
+        ),
         actions: [
           if (row != null &&
               row.kind == ThreadKind.group &&

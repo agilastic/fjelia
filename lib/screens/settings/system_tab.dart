@@ -21,6 +21,7 @@ import '../../widgets/settings_widgets.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/ecg_provider.dart';
 import 'bug_report_sheet.dart';
+import '../messages/coaching_screen.dart';
 import '../messages/messages_screen.dart';
 import 'computers_page.dart';
 
@@ -57,6 +58,17 @@ class SystemTab extends StatelessWidget {
                 subtitle: Text(l10n.syncComputersSubtitle),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => showAppSheet(context, const ComputersPage()),
+              ),
+              ListTile(
+                leading: const SettingsIcon(Icons.sports, Colors.deepOrange),
+                title: Text(l10n.coachingTitle),
+                subtitle: Text(l10n.coachingSubtitle),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => const CoachingScreen(),
+                  ),
+                ),
               ),
               ListTile(
                 leading: const SettingsIcon(

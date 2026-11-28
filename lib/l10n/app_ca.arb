@@ -4587,5 +4587,7 @@
   "coachingScopeEcg": "ECG",
   "coachingScopeNutrition": "Nutrició",
   "coachingScopeAiCoach": "Notes de l'entrenador IA",
-  "coachingScopeMedia": "Fotos i fitxers"
+  "coachingScopeMedia": "Fotos i fitxers",
+  "messagesChoosePhoto": "Tria una foto",
+  "messagesRemovePhoto": "Elimina la foto"
 }

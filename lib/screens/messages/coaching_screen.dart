@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import '../../l10n/app_localizations.dart';
 import '../../l10n/l10n_ext.dart';
 import '../../providers/messages_provider.dart';
+import '../../widgets/person_avatar.dart';
 
 /// The categories an athlete can share, in the order the switches show.
 const _scopeOrder = [
@@ -161,8 +162,11 @@ class _CoachingScreenState extends ConsumerState<CoachingScreen> {
                     ),
                   for (final row in rows) ...[
                     ListTile(
-                      leading: const CircleAvatar(child: Icon(Icons.person)),
-                      title: Text(row.coach.name),
+                      leading: PersonAvatar(
+                        name: row.coach.shownName,
+                        photo: row.coach.photo,
+                      ),
+                      title: Text(row.coach.shownName),
                       subtitle: Text(switch (row.link) {
                         null => l10n.coachingWaiting(row.coach.name),
                         final l when !l.active => l10n.coachingEnded(

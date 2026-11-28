@@ -4587,5 +4587,7 @@
   "coachingScopeEcg": "EKG",
   "coachingScopeNutrition": "Ernæring",
   "coachingScopeAiCoach": "AI-coachnoter",
-  "coachingScopeMedia": "Fotos og filer"
+  "coachingScopeMedia": "Fotos og filer",
+  "messagesChoosePhoto": "Vælg foto",
+  "messagesRemovePhoto": "Fjern foto"
 }

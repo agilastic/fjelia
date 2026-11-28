@@ -18398,6 +18398,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Photos and files'**
   String get coachingScopeMedia;
+
+  /// No description provided for @messagesChoosePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose photo'**
+  String get messagesChoosePhoto;
+
+  /// No description provided for @messagesRemovePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove photo'**
+  String get messagesRemovePhoto;
 }
 
 class _AppLocalizationsDelegate

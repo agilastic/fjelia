@@ -10710,4 +10710,10 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get coachingScopeMedia => 'Fotky a súbory';
+
+  @override
+  String get messagesChoosePhoto => 'Vybrať fotku';
+
+  @override
+  String get messagesRemovePhoto => 'Odstrániť fotku';
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer' show log;
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:fjelia_core/services/sync/sync_tables.dart';
 import 'package:fjelia_data/messages.dart';
@@ -262,6 +263,39 @@ class MessagesNotifier extends Notifier<MessagesState>
   Future<List<MessagePerson>> coaches() async {
     await _open();
     return ref.read(databaseProvider).people(role: PersonRole.coach);
+  }
+
+  /// Everyone this person can write to directly: their coaches and, when
+  /// they coach, their athletes.
+  Future<List<MessagePerson>> contacts() async {
+    await _open();
+    return [
+      for (final p in await ref.read(databaseProvider).people())
+        if (p.role == PersonRole.coach || p.role == PersonRole.athlete) p,
+    ];
+  }
+
+  /// Everyone known here by person id, this person too: names as this
+  /// person knows them, photos.
+  Future<Map<String, MessagePerson>> people() async {
+    await _open();
+    return {
+      for (final p in await ref.read(databaseProvider).people()) p.person: p,
+    };
+  }
+
+  /// This person's photo, as coaches and athletes see it; null for none.
+  Future<Uint8List?> photo() async {
+    await _open();
+    return (await ref.read(databaseProvider).self())?.photo;
+  }
+
+  /// [photo] (small already, see [maxProfilePhotoBytes]) or none from now
+  /// on; it goes to the coach signed, with the name.
+  Future<void> setPhoto(Uint8List? photo) async {
+    await _open();
+    await _book.publishProfile(name: _name, photo: photo);
+    changed();
   }
 
   /// The thread's events; opening it marks it read.

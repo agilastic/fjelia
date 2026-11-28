@@ -10699,4 +10699,10 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get coachingScopeMedia => 'Kuvat ja tiedostot';
+
+  @override
+  String get messagesChoosePhoto => 'Valitse kuva';
+
+  @override
+  String get messagesRemovePhoto => 'Poista kuva';
 }

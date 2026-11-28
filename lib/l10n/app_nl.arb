@@ -5750,5 +5750,7 @@
   "coachingScopeEcg": "ECG",
   "coachingScopeNutrition": "Voeding",
   "coachingScopeAiCoach": "AI-coachnotities",
-  "coachingScopeMedia": "Foto's en bestanden"
+  "coachingScopeMedia": "Foto's en bestanden",
+  "messagesChoosePhoto": "Foto kiezen",
+  "messagesRemovePhoto": "Foto verwijderen"
 }

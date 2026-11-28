@@ -5750,5 +5750,7 @@
   "coachingScopeEcg": "EKG",
   "coachingScopeNutrition": "Odżywianie",
   "coachingScopeAiCoach": "Notatki trenera AI",
-  "coachingScopeMedia": "Zdjęcia i pliki"
+  "coachingScopeMedia": "Zdjęcia i pliki",
+  "messagesChoosePhoto": "Wybierz zdjęcie",
+  "messagesRemovePhoto": "Usuń zdjęcie"
 }
