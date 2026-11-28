@@ -10543,4 +10543,131 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get messagesDone => 'Done';
+
+  @override
+  String get coachingTitle => 'Coaching';
+
+  @override
+  String get coachingSubtitle => 'Your coach and what they see';
+
+  @override
+  String get coachingNone =>
+      'No coach yet. When a coach invites you, open their link here.';
+
+  @override
+  String get coachingJoin => 'Join a coach';
+
+  @override
+  String get coachingJoinHelp =>
+      'Paste the invitation link your coach sent you.';
+
+  @override
+  String get coachingNotInvite => 'This is not a Fjelia coaching invitation.';
+
+  @override
+  String get coachingOwnInvite => 'This invitation is your own.';
+
+  @override
+  String get coachingCoachUnknown =>
+      'This coach\'s devices are not known yet. Ask them to open Fjelia, then try again.';
+
+  @override
+  String get coachingUnreachable =>
+      'Fjelia\'s server cannot be reached. Try again when you are online.';
+
+  @override
+  String coachingConsentTitle(String name) {
+    return 'Be coached by $name?';
+  }
+
+  @override
+  String coachingConsentIntro(String name) {
+    return '$name invited you. Choose what $name may see. You can change it or end coaching at any time.';
+  }
+
+  @override
+  String coachingConsentHealth(String name) {
+    return 'Health, ECG and nutrition are health data: they reach $name only if you turn them on.';
+  }
+
+  @override
+  String coachingConsentPrivacy(String name) {
+    return 'Encrypted on this phone for $name\'s devices. Fjelia\'s server passes it on and cannot read it.';
+  }
+
+  @override
+  String coachingConsentCode(String name) {
+    return '$name\'s screen shows this code. Read it to them, in person or by phone:';
+  }
+
+  @override
+  String get coachingConsentShare => 'Share and send';
+
+  @override
+  String get coachingCancel => 'Cancel';
+
+  @override
+  String get coachingContinue => 'Continue';
+
+  @override
+  String coachingReadCode(String name, String code) {
+    return 'Read this code to $name: $code. Once $name accepts, they see what you chose.';
+  }
+
+  @override
+  String coachingWaiting(String name) {
+    return 'Waiting for $name to accept';
+  }
+
+  @override
+  String coachingSince(String date) {
+    return 'Coached since $date';
+  }
+
+  @override
+  String coachingEnded(String date) {
+    return 'Ended $date';
+  }
+
+  @override
+  String coachingShares(String name) {
+    return 'What $name sees';
+  }
+
+  @override
+  String get coachingEnd => 'End coaching';
+
+  @override
+  String coachingEndConfirm(String name) {
+    return 'End coaching with $name?';
+  }
+
+  @override
+  String coachingEndBody(String name) {
+    return 'Nothing new reaches $name. What they already received stays with them.';
+  }
+
+  @override
+  String get coachingEndAction => 'End';
+
+  @override
+  String get coachingScopePlan => 'Plan';
+
+  @override
+  String get coachingScopeActivities => 'Activities';
+
+  @override
+  String get coachingScopeHealth => 'Health';
+
+  @override
+  String get coachingScopeEcg => 'ECG';
+
+  @override
+  String get coachingScopeNutrition => 'Nutrition';
+
+  @override
+  String get coachingScopeAiCoach => 'AI coach notes';
+
+  @override
+  String get coachingScopeMedia => 'Photos and files';
 }

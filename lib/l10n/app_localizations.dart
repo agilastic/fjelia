@@ -18200,6 +18200,204 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Done'**
   String get messagesDone;
+
+  /// No description provided for @coachingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Coaching'**
+  String get coachingTitle;
+
+  /// No description provided for @coachingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your coach and what they see'**
+  String get coachingSubtitle;
+
+  /// No description provided for @coachingNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No coach yet. When a coach invites you, open their link here.'**
+  String get coachingNone;
+
+  /// No description provided for @coachingJoin.
+  ///
+  /// In en, this message translates to:
+  /// **'Join a coach'**
+  String get coachingJoin;
+
+  /// No description provided for @coachingJoinHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste the invitation link your coach sent you.'**
+  String get coachingJoinHelp;
+
+  /// No description provided for @coachingNotInvite.
+  ///
+  /// In en, this message translates to:
+  /// **'This is not a Fjelia coaching invitation.'**
+  String get coachingNotInvite;
+
+  /// No description provided for @coachingOwnInvite.
+  ///
+  /// In en, this message translates to:
+  /// **'This invitation is your own.'**
+  String get coachingOwnInvite;
+
+  /// No description provided for @coachingCoachUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'This coach\'s devices are not known yet. Ask them to open Fjelia, then try again.'**
+  String get coachingCoachUnknown;
+
+  /// No description provided for @coachingUnreachable.
+  ///
+  /// In en, this message translates to:
+  /// **'Fjelia\'s server cannot be reached. Try again when you are online.'**
+  String get coachingUnreachable;
+
+  /// No description provided for @coachingConsentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Be coached by {name}?'**
+  String coachingConsentTitle(String name);
+
+  /// No description provided for @coachingConsentIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} invited you. Choose what {name} may see. You can change it or end coaching at any time.'**
+  String coachingConsentIntro(String name);
+
+  /// No description provided for @coachingConsentHealth.
+  ///
+  /// In en, this message translates to:
+  /// **'Health, ECG and nutrition are health data: they reach {name} only if you turn them on.'**
+  String coachingConsentHealth(String name);
+
+  /// No description provided for @coachingConsentPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Encrypted on this phone for {name}\'s devices. Fjelia\'s server passes it on and cannot read it.'**
+  String coachingConsentPrivacy(String name);
+
+  /// No description provided for @coachingConsentCode.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}\'s screen shows this code. Read it to them, in person or by phone:'**
+  String coachingConsentCode(String name);
+
+  /// No description provided for @coachingConsentShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share and send'**
+  String get coachingConsentShare;
+
+  /// No description provided for @coachingCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get coachingCancel;
+
+  /// No description provided for @coachingContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get coachingContinue;
+
+  /// No description provided for @coachingReadCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Read this code to {name}: {code}. Once {name} accepts, they see what you chose.'**
+  String coachingReadCode(String name, String code);
+
+  /// No description provided for @coachingWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for {name} to accept'**
+  String coachingWaiting(String name);
+
+  /// No description provided for @coachingSince.
+  ///
+  /// In en, this message translates to:
+  /// **'Coached since {date}'**
+  String coachingSince(String date);
+
+  /// No description provided for @coachingEnded.
+  ///
+  /// In en, this message translates to:
+  /// **'Ended {date}'**
+  String coachingEnded(String date);
+
+  /// No description provided for @coachingShares.
+  ///
+  /// In en, this message translates to:
+  /// **'What {name} sees'**
+  String coachingShares(String name);
+
+  /// No description provided for @coachingEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'End coaching'**
+  String get coachingEnd;
+
+  /// No description provided for @coachingEndConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'End coaching with {name}?'**
+  String coachingEndConfirm(String name);
+
+  /// No description provided for @coachingEndBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing new reaches {name}. What they already received stays with them.'**
+  String coachingEndBody(String name);
+
+  /// No description provided for @coachingEndAction.
+  ///
+  /// In en, this message translates to:
+  /// **'End'**
+  String get coachingEndAction;
+
+  /// No description provided for @coachingScopePlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan'**
+  String get coachingScopePlan;
+
+  /// No description provided for @coachingScopeActivities.
+  ///
+  /// In en, this message translates to:
+  /// **'Activities'**
+  String get coachingScopeActivities;
+
+  /// No description provided for @coachingScopeHealth.
+  ///
+  /// In en, this message translates to:
+  /// **'Health'**
+  String get coachingScopeHealth;
+
+  /// No description provided for @coachingScopeEcg.
+  ///
+  /// In en, this message translates to:
+  /// **'ECG'**
+  String get coachingScopeEcg;
+
+  /// No description provided for @coachingScopeNutrition.
+  ///
+  /// In en, this message translates to:
+  /// **'Nutrition'**
+  String get coachingScopeNutrition;
+
+  /// No description provided for @coachingScopeAiCoach.
+  ///
+  /// In en, this message translates to:
+  /// **'AI coach notes'**
+  String get coachingScopeAiCoach;
+
+  /// No description provided for @coachingScopeMedia.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos and files'**
+  String get coachingScopeMedia;
 }
 
 class _AppLocalizationsDelegate

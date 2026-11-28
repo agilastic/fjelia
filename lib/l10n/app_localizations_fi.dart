@@ -10573,4 +10573,130 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get messagesDone => 'Valmis';
+
+  @override
+  String get coachingTitle => 'Valmennus';
+
+  @override
+  String get coachingSubtitle => 'Valmentajasi ja mitä hän näkee';
+
+  @override
+  String get coachingNone =>
+      'Ei vielä valmentajaa. Kun valmentaja kutsuu sinut, avaa hänen linkkinsä täällä.';
+
+  @override
+  String get coachingJoin => 'Liity valmentajalle';
+
+  @override
+  String get coachingJoinHelp => 'Liitä valmentajasi lähettämä kutsulinkki.';
+
+  @override
+  String get coachingNotInvite => 'Tämä ei ole Fjelian valmennuskutsu.';
+
+  @override
+  String get coachingOwnInvite => 'Tämä kutsu on omasi.';
+
+  @override
+  String get coachingCoachUnknown =>
+      'Valmentajan laitteita ei vielä tunneta. Pyydä häntä avaamaan Fjelia ja yritä uudelleen.';
+
+  @override
+  String get coachingUnreachable =>
+      'Fjelian palvelimeen ei saada yhteyttä. Yritä uudelleen, kun olet verkossa.';
+
+  @override
+  String coachingConsentTitle(String name) {
+    return 'Valmentaako $name sinua?';
+  }
+
+  @override
+  String coachingConsentIntro(String name) {
+    return '$name kutsui sinut. Valitse, mitä $name saa nähdä. Voit muuttaa sitä tai lopettaa valmennuksen milloin tahansa.';
+  }
+
+  @override
+  String coachingConsentHealth(String name) {
+    return 'Terveys, EKG ja ravinto ovat terveystietoja: ne näkyvät käyttäjälle $name vain, jos laitat ne päälle.';
+  }
+
+  @override
+  String coachingConsentPrivacy(String name) {
+    return 'Salattu tässä puhelimessa käyttäjän $name laitteille. Fjelian palvelin vain välittää sen eikä voi lukea sitä.';
+  }
+
+  @override
+  String coachingConsentCode(String name) {
+    return 'Käyttäjän $name näytöllä on tämä koodi. Lue se hänelle, kasvokkain tai puhelimessa:';
+  }
+
+  @override
+  String get coachingConsentShare => 'Jaa ja lähetä';
+
+  @override
+  String get coachingCancel => 'Peruuta';
+
+  @override
+  String get coachingContinue => 'Jatka';
+
+  @override
+  String coachingReadCode(String name, String code) {
+    return 'Lue tämä koodi käyttäjälle $name: $code. Kun $name hyväksyy, hän näkee valitsemasi.';
+  }
+
+  @override
+  String coachingWaiting(String name) {
+    return 'Odotetaan, että $name hyväksyy';
+  }
+
+  @override
+  String coachingSince(String date) {
+    return 'Valmennettu $date alkaen';
+  }
+
+  @override
+  String coachingEnded(String date) {
+    return 'Päättyi $date';
+  }
+
+  @override
+  String coachingShares(String name) {
+    return 'Mitä $name näkee';
+  }
+
+  @override
+  String get coachingEnd => 'Lopeta valmennus';
+
+  @override
+  String coachingEndConfirm(String name) {
+    return 'Lopetetaanko valmennus käyttäjän $name kanssa?';
+  }
+
+  @override
+  String coachingEndBody(String name) {
+    return 'Mitään uutta ei enää välity käyttäjälle $name. Jo saatu jää hänelle.';
+  }
+
+  @override
+  String get coachingEndAction => 'Lopeta';
+
+  @override
+  String get coachingScopePlan => 'Suunnitelma';
+
+  @override
+  String get coachingScopeActivities => 'Harjoitukset';
+
+  @override
+  String get coachingScopeHealth => 'Terveys';
+
+  @override
+  String get coachingScopeEcg => 'EKG';
+
+  @override
+  String get coachingScopeNutrition => 'Ravinto';
+
+  @override
+  String get coachingScopeAiCoach => 'AI-valmentajan muistiinpanot';
+
+  @override
+  String get coachingScopeMedia => 'Kuvat ja tiedostot';
 }

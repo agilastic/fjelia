@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 
 import '../../l10n/l10n_ext.dart';
 import '../../providers/messages_provider.dart';
+import 'coaching_screen.dart';
 import 'thread_screen.dart';
 
 /// Messages with the coach and the coach's groups.
@@ -215,6 +216,19 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
               ),
             ],
             const Divider(height: 32),
+            ListTile(
+              leading: const Icon(Icons.sports),
+              title: Text(l10n.coachingTitle),
+              subtitle: Text(l10n.coachingSubtitle),
+              onTap: () async {
+                await Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => const CoachingScreen(),
+                  ),
+                );
+                await _load();
+              },
+            ),
             if (_threads.isEmpty && _coaches.isEmpty)
               ListTile(
                 leading: const Icon(Icons.restore),

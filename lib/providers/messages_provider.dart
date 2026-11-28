@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer' show log;
 import 'dart:io';
 
+import 'package:fjelia_core/services/sync/sync_tables.dart';
 import 'package:fjelia_data/messages.dart';
 import 'package:fjelia_sync/fjelia_sync.dart';
 import 'package:fjelia_views/fjelia_views.dart' as views;
@@ -32,6 +33,28 @@ class MessagesState {
   final int version;
 }
 
+/// Why an invitation cannot be answered.
+enum InviteProblem { notInvite, ownInvite, coachUnknown, unreachable }
+
+/// An invitation read and its coach found: what the consent screen shows.
+class InviteToAnswer {
+  const InviteToAnswer(this.invite, this.coachList, this.code);
+  final LinkInvite invite;
+  final Map<String, dynamic> coachList;
+
+  /// The six-digit code the coach's screen shows too.
+  final String code;
+}
+
+/// A coach of this athlete, with the link when one holds or held.
+class CoachRow {
+  const CoachRow(this.coach, this.link);
+  final MessagePerson coach;
+
+  /// Null while the coach has not accepted yet.
+  final CoachLink? link;
+}
+
 class MessagesNotifier extends Notifier<MessagesState>
     with WidgetsBindingObserver {
   PersonIdentity? _me;
@@ -39,10 +62,12 @@ class MessagesNotifier extends Notifier<MessagesState>
   Timer? _timer;
   bool _running = false;
 
-  /// The relay; tests point it at a closed port.
+  /// The relay; tests point it at a closed port, or answer for it.
   @visibleForTesting
   static Uri relayBase = RelayClient.defaultBase;
-  final _relay = RelayClient(relayBase);
+  @visibleForTesting
+  static RelayTransport? relayTransport;
+  final _relay = RelayClient(relayBase, transport: relayTransport);
 
   @override
   MessagesState build() {
@@ -128,6 +153,65 @@ class MessagesNotifier extends Notifier<MessagesState>
   }
 
   String? get personId => _me?.personId;
+
+  LinkBook get _book => LinkBook(ref.read(databaseProvider), () => _me);
+
+  /// This athlete's coaches, with what each link shares.
+  Future<List<CoachRow>> coachRows() async {
+    await _open();
+    final links = await _book.links();
+    return [
+      for (final c
+          in await ref.read(databaseProvider).people(role: PersonRole.coach))
+        CoachRow(c, links.where((l) => l.coach == c.person).firstOrNull),
+    ];
+  }
+
+  /// The invitation in [text], with the coach's devices from the relay.
+  Future<(InviteToAnswer?, InviteProblem?)> readInvite(String text) async {
+    final invite = LinkInvite.parse(text);
+    if (invite == null) return (null, InviteProblem.notInvite);
+    final me = await _open();
+    if (invite.coach == me.personId) return (null, InviteProblem.ownInvite);
+    try {
+      final list = await _relay.list(invite.coach);
+      if (list == null) return (null, InviteProblem.coachUnknown);
+      return (InviteToAnswer(invite, list, invite.code(me.personId)), null);
+    } on Object catch (e) {
+      log('[Messages] invitation: $e');
+      return (null, InviteProblem.unreachable);
+    }
+  }
+
+  /// Answers [answer] sharing [scopes]; it goes to the coach now. False
+  /// when the coach's list does not fit the invitation.
+  Future<bool> answerInvite(
+    InviteToAnswer answer,
+    Set<SyncCategory> scopes,
+  ) async {
+    await _open();
+    final code = await _book.answer(
+      answer.invite,
+      answer.coachList,
+      name: _name,
+      scopes: scopes,
+    );
+    changed();
+    return code != null;
+  }
+
+  /// From now on [link] shares [scopes].
+  Future<void> share(CoachLink link, Set<SyncCategory> scopes) async {
+    await _open();
+    await _book.changeSharing(link.id, scopes);
+    changed();
+  }
+
+  Future<void> endCoaching(CoachLink link) async {
+    await _open();
+    await _book.endLink(link.id);
+    changed();
+  }
 
   // What the screens read and do; they never touch the database.
 
@@ -240,6 +324,7 @@ class MessagesNotifier extends Notifier<MessagesState>
         me,
         _relay,
         secureSecrets,
+        links: _book,
       ).run();
     } on Object catch (e) {
       problem = '$e';

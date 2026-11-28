@@ -10619,4 +10619,131 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get messagesDone => 'Concluído';
+
+  @override
+  String get coachingTitle => 'Treino';
+
+  @override
+  String get coachingSubtitle => 'O teu treinador e o que vê';
+
+  @override
+  String get coachingNone =>
+      'Ainda sem treinador. Quando um treinador te convidar, abre aqui o link dele.';
+
+  @override
+  String get coachingJoin => 'Juntar-me a um treinador';
+
+  @override
+  String get coachingJoinHelp =>
+      'Cola o link de convite que o teu treinador te enviou.';
+
+  @override
+  String get coachingNotInvite => 'Isto não é um convite de treino do Fjelia.';
+
+  @override
+  String get coachingOwnInvite => 'Este convite é teu.';
+
+  @override
+  String get coachingCoachUnknown =>
+      'Os dispositivos deste treinador ainda não são conhecidos. Pede-lhe para abrir o Fjelia e tenta de novo.';
+
+  @override
+  String get coachingUnreachable =>
+      'Não é possível contactar o servidor do Fjelia. Tenta de novo quando estiveres online.';
+
+  @override
+  String coachingConsentTitle(String name) {
+    return 'Ser treinado por $name?';
+  }
+
+  @override
+  String coachingConsentIntro(String name) {
+    return '$name convidou-te. Escolhe o que $name pode ver. Podes alterar isto ou terminar o treino a qualquer momento.';
+  }
+
+  @override
+  String coachingConsentHealth(String name) {
+    return 'Saúde, ECG e nutrição são dados de saúde: só chegam a $name se os ativares.';
+  }
+
+  @override
+  String coachingConsentPrivacy(String name) {
+    return 'Cifrado neste telemóvel para os dispositivos de $name. O servidor do Fjelia apenas o reencaminha e não o consegue ler.';
+  }
+
+  @override
+  String coachingConsentCode(String name) {
+    return 'O ecrã de $name mostra este código. Lê-o, pessoalmente ou ao telefone:';
+  }
+
+  @override
+  String get coachingConsentShare => 'Partilhar e enviar';
+
+  @override
+  String get coachingCancel => 'Cancelar';
+
+  @override
+  String get coachingContinue => 'Continuar';
+
+  @override
+  String coachingReadCode(String name, String code) {
+    return 'Lê este código a $name: $code. Quando $name aceitar, vê o que escolheste.';
+  }
+
+  @override
+  String coachingWaiting(String name) {
+    return 'À espera que $name aceite';
+  }
+
+  @override
+  String coachingSince(String date) {
+    return 'Treinado desde $date';
+  }
+
+  @override
+  String coachingEnded(String date) {
+    return 'Terminado a $date';
+  }
+
+  @override
+  String coachingShares(String name) {
+    return 'O que $name vê';
+  }
+
+  @override
+  String get coachingEnd => 'Terminar treino';
+
+  @override
+  String coachingEndConfirm(String name) {
+    return 'Terminar o treino com $name?';
+  }
+
+  @override
+  String coachingEndBody(String name) {
+    return 'Nada de novo chega a $name. O que já recebeu fica com $name.';
+  }
+
+  @override
+  String get coachingEndAction => 'Terminar';
+
+  @override
+  String get coachingScopePlan => 'Plano';
+
+  @override
+  String get coachingScopeActivities => 'Atividades';
+
+  @override
+  String get coachingScopeHealth => 'Saúde';
+
+  @override
+  String get coachingScopeEcg => 'ECG';
+
+  @override
+  String get coachingScopeNutrition => 'Nutrição';
+
+  @override
+  String get coachingScopeAiCoach => 'Notas do treinador IA';
+
+  @override
+  String get coachingScopeMedia => 'Fotos e ficheiros';
 }

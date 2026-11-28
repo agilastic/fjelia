@@ -10639,4 +10639,131 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get messagesDone => 'Gotowe';
+
+  @override
+  String get coachingTitle => 'Coaching';
+
+  @override
+  String get coachingSubtitle => 'Twój trener i to, co widzi';
+
+  @override
+  String get coachingNone =>
+      'Nie masz jeszcze trenera. Gdy trener cię zaprosi, otwórz tu jego link.';
+
+  @override
+  String get coachingJoin => 'Dołącz do trenera';
+
+  @override
+  String get coachingJoinHelp => 'Wklej link z zaproszeniem od trenera.';
+
+  @override
+  String get coachingNotInvite =>
+      'To nie jest zaproszenie do coachingu Fjelia.';
+
+  @override
+  String get coachingOwnInvite => 'To twoje własne zaproszenie.';
+
+  @override
+  String get coachingCoachUnknown =>
+      'Urządzenia tego trenera nie są jeszcze znane. Poproś go o otwarcie Fjelii i spróbuj ponownie.';
+
+  @override
+  String get coachingUnreachable =>
+      'Nie można połączyć się z serwerem Fjelii. Spróbuj ponownie, gdy będziesz online.';
+
+  @override
+  String coachingConsentTitle(String name) {
+    return 'Trenować z $name?';
+  }
+
+  @override
+  String coachingConsentIntro(String name) {
+    return '$name zaprasza cię. Wybierz, co $name może widzieć. Możesz to zmienić lub zakończyć coaching w każdej chwili.';
+  }
+
+  @override
+  String coachingConsentHealth(String name) {
+    return 'Zdrowie, EKG i odżywianie to dane o zdrowiu: trafiają do $name tylko wtedy, gdy je włączysz.';
+  }
+
+  @override
+  String coachingConsentPrivacy(String name) {
+    return 'Szyfrowane na tym telefonie dla urządzeń $name. Serwer Fjelii tylko to przekazuje i nie może tego odczytać.';
+  }
+
+  @override
+  String coachingConsentCode(String name) {
+    return 'Ekran $name pokazuje ten kod. Przeczytaj go, osobiście lub przez telefon:';
+  }
+
+  @override
+  String get coachingConsentShare => 'Udostępnij i wyślij';
+
+  @override
+  String get coachingCancel => 'Anuluj';
+
+  @override
+  String get coachingContinue => 'Dalej';
+
+  @override
+  String coachingReadCode(String name, String code) {
+    return 'Przeczytaj $name ten kod: $code. Gdy $name zaakceptuje, zobaczy to, co wybrano.';
+  }
+
+  @override
+  String coachingWaiting(String name) {
+    return 'Czekam, aż $name zaakceptuje';
+  }
+
+  @override
+  String coachingSince(String date) {
+    return 'Trening od $date';
+  }
+
+  @override
+  String coachingEnded(String date) {
+    return 'Zakończono $date';
+  }
+
+  @override
+  String coachingShares(String name) {
+    return 'Co widzi $name';
+  }
+
+  @override
+  String get coachingEnd => 'Zakończ coaching';
+
+  @override
+  String coachingEndConfirm(String name) {
+    return 'Zakończyć coaching z $name?';
+  }
+
+  @override
+  String coachingEndBody(String name) {
+    return 'Nic nowego nie trafi już do $name. To, co już otrzymano, zostaje.';
+  }
+
+  @override
+  String get coachingEndAction => 'Zakończ';
+
+  @override
+  String get coachingScopePlan => 'Plan';
+
+  @override
+  String get coachingScopeActivities => 'Aktywności';
+
+  @override
+  String get coachingScopeHealth => 'Zdrowie';
+
+  @override
+  String get coachingScopeEcg => 'EKG';
+
+  @override
+  String get coachingScopeNutrition => 'Odżywianie';
+
+  @override
+  String get coachingScopeAiCoach => 'Notatki trenera AI';
+
+  @override
+  String get coachingScopeMedia => 'Zdjęcia i pliki';
 }

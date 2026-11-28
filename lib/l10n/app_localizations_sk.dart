@@ -10583,4 +10583,131 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get messagesDone => 'Hotovo';
+
+  @override
+  String get coachingTitle => 'Koučing';
+
+  @override
+  String get coachingSubtitle => 'Tvoj tréner a čo vidí';
+
+  @override
+  String get coachingNone =>
+      'Zatiaľ žiadny tréner. Keď ťa tréner pozve, otvor jeho odkaz tu.';
+
+  @override
+  String get coachingJoin => 'Pripojiť sa k trénerovi';
+
+  @override
+  String get coachingJoinHelp =>
+      'Vlož odkaz s pozvánkou, ktorý ti poslal tréner.';
+
+  @override
+  String get coachingNotInvite => 'Toto nie je pozvánka na koučing Fjelia.';
+
+  @override
+  String get coachingOwnInvite => 'Táto pozvánka je tvoja vlastná.';
+
+  @override
+  String get coachingCoachUnknown =>
+      'Zariadenia tohto trénera zatiaľ nie sú známe. Popros ho, nech otvorí Fjeliu, a skús to znova.';
+
+  @override
+  String get coachingUnreachable =>
+      'Server Fjelie je nedostupný. Skús to znova, keď budeš online.';
+
+  @override
+  String coachingConsentTitle(String name) {
+    return 'Trénovať s $name?';
+  }
+
+  @override
+  String coachingConsentIntro(String name) {
+    return '$name ťa pozýva. Vyber, čo môže $name vidieť. Môžeš to kedykoľvek zmeniť alebo koučing ukončiť.';
+  }
+
+  @override
+  String coachingConsentHealth(String name) {
+    return 'Zdravie, EKG a výživa sú zdravotné údaje: k $name sa dostanú, iba ak ich zapneš.';
+  }
+
+  @override
+  String coachingConsentPrivacy(String name) {
+    return 'Zašifrované v tomto telefóne pre zariadenia $name. Server Fjelie to iba odovzdá a nemôže to prečítať.';
+  }
+
+  @override
+  String coachingConsentCode(String name) {
+    return 'Obrazovka $name ukazuje tento kód. Prečítaj mu ho, osobne alebo telefonicky:';
+  }
+
+  @override
+  String get coachingConsentShare => 'Zdieľať a odoslať';
+
+  @override
+  String get coachingCancel => 'Zrušiť';
+
+  @override
+  String get coachingContinue => 'Pokračovať';
+
+  @override
+  String coachingReadCode(String name, String code) {
+    return 'Prečítaj $name tento kód: $code. Keď $name prijme, uvidí, čo si vybral.';
+  }
+
+  @override
+  String coachingWaiting(String name) {
+    return 'Čaká sa, kým $name prijme';
+  }
+
+  @override
+  String coachingSince(String date) {
+    return 'Trénuje od $date';
+  }
+
+  @override
+  String coachingEnded(String date) {
+    return 'Ukončené $date';
+  }
+
+  @override
+  String coachingShares(String name) {
+    return 'Čo vidí $name';
+  }
+
+  @override
+  String get coachingEnd => 'Ukončiť koučing';
+
+  @override
+  String coachingEndConfirm(String name) {
+    return 'Ukončiť koučing s $name?';
+  }
+
+  @override
+  String coachingEndBody(String name) {
+    return 'K $name už nepríde nič nové. Čo už dostal, zostáva mu.';
+  }
+
+  @override
+  String get coachingEndAction => 'Ukončiť';
+
+  @override
+  String get coachingScopePlan => 'Plán';
+
+  @override
+  String get coachingScopeActivities => 'Aktivity';
+
+  @override
+  String get coachingScopeHealth => 'Zdravie';
+
+  @override
+  String get coachingScopeEcg => 'EKG';
+
+  @override
+  String get coachingScopeNutrition => 'Výživa';
+
+  @override
+  String get coachingScopeAiCoach => 'Poznámky AI trénera';
+
+  @override
+  String get coachingScopeMedia => 'Fotky a súbory';
 }

@@ -10531,4 +10531,131 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get messagesDone => 'Færdig';
+
+  @override
+  String get coachingTitle => 'Coaching';
+
+  @override
+  String get coachingSubtitle => 'Din coach og hvad de ser';
+
+  @override
+  String get coachingNone =>
+      'Ingen coach endnu. Når en coach inviterer dig, så åbn deres link her.';
+
+  @override
+  String get coachingJoin => 'Følg en coach';
+
+  @override
+  String get coachingJoinHelp =>
+      'Indsæt det invitationslink, din coach sendte dig.';
+
+  @override
+  String get coachingNotInvite => 'Dette er ikke en Fjelia-coachinginvitation.';
+
+  @override
+  String get coachingOwnInvite => 'Denne invitation er din egen.';
+
+  @override
+  String get coachingCoachUnknown =>
+      'Denne coachs enheder kendes ikke endnu. Bed dem åbne Fjelia, og prøv igen.';
+
+  @override
+  String get coachingUnreachable =>
+      'Fjelias server kan ikke nås. Prøv igen, når du er online.';
+
+  @override
+  String coachingConsentTitle(String name) {
+    return 'Vil du coaches af $name?';
+  }
+
+  @override
+  String coachingConsentIntro(String name) {
+    return '$name har inviteret dig. Vælg, hvad $name må se. Du kan ændre det eller stoppe coachingen når som helst.';
+  }
+
+  @override
+  String coachingConsentHealth(String name) {
+    return 'Sundhed, EKG og ernæring er helbredsdata: de når kun $name, hvis du slår dem til.';
+  }
+
+  @override
+  String coachingConsentPrivacy(String name) {
+    return 'Krypteret på denne telefon til ${name}s enheder. Fjelias server sender det kun videre og kan ikke læse det.';
+  }
+
+  @override
+  String coachingConsentCode(String name) {
+    return '${name}s skærm viser denne kode. Læs den op, personligt eller i telefonen:';
+  }
+
+  @override
+  String get coachingConsentShare => 'Del og send';
+
+  @override
+  String get coachingCancel => 'Annuller';
+
+  @override
+  String get coachingContinue => 'Fortsæt';
+
+  @override
+  String coachingReadCode(String name, String code) {
+    return 'Læs denne kode for $name: $code. Når $name accepterer, ser de det, du valgte.';
+  }
+
+  @override
+  String coachingWaiting(String name) {
+    return 'Venter på, at $name accepterer';
+  }
+
+  @override
+  String coachingSince(String date) {
+    return 'Coachet siden $date';
+  }
+
+  @override
+  String coachingEnded(String date) {
+    return 'Stoppet $date';
+  }
+
+  @override
+  String coachingShares(String name) {
+    return 'Hvad $name ser';
+  }
+
+  @override
+  String get coachingEnd => 'Stop coaching';
+
+  @override
+  String coachingEndConfirm(String name) {
+    return 'Stop coaching med $name?';
+  }
+
+  @override
+  String coachingEndBody(String name) {
+    return 'Intet nyt når $name. Det, de allerede har fået, bliver hos dem.';
+  }
+
+  @override
+  String get coachingEndAction => 'Stop';
+
+  @override
+  String get coachingScopePlan => 'Plan';
+
+  @override
+  String get coachingScopeActivities => 'Aktiviteter';
+
+  @override
+  String get coachingScopeHealth => 'Sundhed';
+
+  @override
+  String get coachingScopeEcg => 'EKG';
+
+  @override
+  String get coachingScopeNutrition => 'Ernæring';
+
+  @override
+  String get coachingScopeAiCoach => 'AI-coachnoter';
+
+  @override
+  String get coachingScopeMedia => 'Fotos og filer';
 }
