@@ -26,7 +26,7 @@ class MessagesState {
 
   final int unread;
 
-  /// Whether this athlete has met a coach (or a group) yet.
+  /// Whether there is anyone to write to yet: a coach, athletes, a group.
   final bool hasCoach;
   final String? relayProblem;
 
@@ -337,8 +337,12 @@ class MessagesNotifier extends Notifier<MessagesState>
     final people = await db.people();
     state = MessagesState(
       unread: threads.fold(0, (n, t) => n + t.unread),
+      // A coach, or athletes for someone who coaches from the phone.
       hasCoach:
-          threads.isNotEmpty || people.any((p) => p.role == PersonRole.coach),
+          threads.isNotEmpty ||
+          people.any(
+            (p) => p.role == PersonRole.coach || p.role == PersonRole.athlete,
+          ),
       relayProblem: state.relayProblem,
       version: bump ? state.version + 1 : state.version,
     );
