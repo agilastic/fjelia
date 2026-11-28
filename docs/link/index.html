@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<script>
+/* GitHub Pages copy: the site lives at www.fjelia.com. Same path, fixed host,
+   so the redirect cannot be pointed anywhere else. The invitation after '#'
+   comes along; browsers never send it to a server. */
+(function () {
+  if (location.hostname !== 'agilastic.github.io') return;
+  var path = location.pathname.replace(/^\/fjelia(\/|$)/, '/');
+  location.replace('https://www.fjelia.com' + path + location.search + location.hash);
+})();
+</script>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="noindex" name="robots"/>
+<meta content="no-referrer" name="referrer"/>
+<title>Coaching invitation — Fjelia</title>
+<link href="../favicon.ico" rel="icon" sizes="any"/>
+<link href="../style.css?v=20261105experience3" rel="stylesheet"/>
+</head>
+<body>
+<main class="page">
+<div class="wrap" style="text-align:center;padding-top:4rem;max-width:34rem">
+<img alt="" height="72" src="../img/logo-96.png" style="border-radius:18px" width="72"/>
+<h1 id="title">Coaching invitation</h1>
+<p id="lead"></p>
+<p><a class="btn primary" hidden id="open">Open in Fjelia</a></p>
+<p id="paste"></p>
+<p><a class="btn" href="https://apps.apple.com/app/fjelia/id6825674249" id="store">Get Fjelia</a></p>
+<p id="private" style="opacity:.7;font-size:.9em"></p>
+</div>
+</main>
+<script>
+/* The invitation (coach id, name, one-time token) is in the fragment and
+   stays on this device: nothing here loads it anywhere or stores it. */
+(function () {
+  'use strict';
+  var text = {
+    en: {
+      title: 'Coaching invitation',
+      lead: '{name} invites you to be coached in Fjelia.',
+      bad: 'This link is incomplete. Ask your coach to send it again.',
+      open: 'Open in Fjelia',
+      paste: 'If Fjelia does not open, copy this page’s address and paste it in Fjelia under Messages › Coaching › Join a coach.',
+      store: 'Get Fjelia',
+      private: 'Nothing is shared until you choose what to share in Fjelia and your coach confirms the code you both see.'
+    },
+    de: {
+      title: 'Coaching-Einladung',
+      lead: '{name} lädt dich ein, dich in Fjelia coachen zu lassen.',
+      bad: 'Dieser Link ist unvollständig. Bitte deinen Coach, ihn erneut zu senden.',
+      open: 'In Fjelia öffnen',
+      paste: 'Falls Fjelia sich nicht öffnet: Kopiere die Adresse dieser Seite und füge sie in Fjelia unter Nachrichten › Coaching › Einem Coach beitreten ein.',
+      store: 'Fjelia laden',
+      private: 'Nichts wird geteilt, bevor du in Fjelia wählst, was du teilst, und dein Coach den Code bestätigt, den ihr beide seht.'
+    },
+    es: {
+      title: 'Invitación de coaching',
+      lead: '{name} te invita a entrenar con Fjelia.',
+      bad: 'Este enlace está incompleto. Pide a tu entrenador que lo envíe de nuevo.',
+      open: 'Abrir en Fjelia',
+      paste: 'Si Fjelia no se abre, copia la dirección de esta página y pégala en Fjelia en Mensajes › Coaching › Unirse a un entrenador.',
+      store: 'Descargar Fjelia',
+      private: 'No se comparte nada hasta que elijas qué compartir en Fjelia y tu entrenador confirme el código que ambos veis.'
+    },
+    fr: {
+      title: 'Invitation de coaching',
+      lead: '{name} t’invite à être coaché dans Fjelia.',
+      bad: 'Ce lien est incomplet. Demande à ton coach de le renvoyer.',
+      open: 'Ouvrir dans Fjelia',
+      paste: 'Si Fjelia ne s’ouvre pas, copie l’adresse de cette page et colle-la dans Fjelia sous Messages › Coaching › Rejoindre un coach.',
+      store: 'Obtenir Fjelia',
+      private: 'Rien n’est partagé tant que tu n’as pas choisi quoi partager dans Fjelia et que ton coach n’a pas confirmé le code que vous voyez tous les deux.'
+    },
+    it: {
+      title: 'Invito al coaching',
+      lead: '{name} ti invita a farti allenare in Fjelia.',
+      bad: 'Questo link è incompleto. Chiedi al tuo coach di inviarlo di nuovo.',
+      open: 'Apri in Fjelia',
+      paste: 'Se Fjelia non si apre, copia l’indirizzo di questa pagina e incollalo in Fjelia in Messaggi › Coaching › Unisciti a un coach.',
+      store: 'Scarica Fjelia',
+      private: 'Non viene condiviso nulla finché non scegli cosa condividere in Fjelia e il tuo coach non conferma il codice che vedete entrambi.'
+    }
+  };
+  var lang = (navigator.language || 'en').slice(0, 2).toLowerCase();
+  var t = text[lang] || text.en;
+  document.documentElement.lang = text[lang] ? lang : 'en';
+
+  var fields = new URLSearchParams(location.hash.slice(1));
+  var name = (fields.get('n') || '').trim().slice(0, 80);
+  var ok = fields.get('v') === '1' && /^[0-9a-f]{32}$/.test(fields.get('c') || '') &&
+    /^[A-Za-z0-9_-]{16,64}$/.test(fields.get('t') || '') && name !== '';
+
+  function set(id, value) { document.getElementById(id).textContent = value; }
+  set('title', t.title);
+  document.title = t.title + ' — Fjelia';
+  set('store', t.store);
+  set('private', t.private);
+  if (!ok) {
+    set('lead', t.bad);
+    return;
+  }
+  set('lead', t.lead.replace('{name}', name));
+  set('paste', t.paste);
+  var open = document.getElementById('open');
+  open.textContent = t.open;
+  open.href = 'fjelia://link?' + location.hash.slice(1);
+  open.hidden = false;
+})();
+</script>
+</body>
+</html>
